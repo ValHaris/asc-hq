@@ -90,9 +90,6 @@ tmap :: tmap ( void )
 
       network = 0;
 
-      for ( i = 0; i< 8; i++ )
-         alliance_names_not_used_any_more[i] = 0;
-
       for ( i = 0; i < 8; i++ ) {
          cursorpos.position[i].cx = 0;
          cursorpos.position[i].sx = 0;
@@ -100,7 +97,6 @@ tmap :: tmap ( void )
          cursorpos.position[i].sy = 0;
       }
 
-      tribute = NULL;
       unsentmessage = NULL;
       message = NULL;
       messageid = 0;
@@ -182,10 +178,9 @@ void tmap :: read ( tnstream& stream )
    unitnetworkid = stream.readInt();
    levelfinished = stream.readChar();
    network = (pnetwork) stream.readInt();
-   for ( i = 0; i < 8; i++ ) {
-      stream.readInt(); // dummy
-      alliance_names_not_used_any_more[i] = 0;
-   }
+   bool alliance_names_not_used_any_more[8];
+   for ( i = 0; i < 8; i++ )
+      alliance_names_not_used_any_more[i] = stream.readInt(); // dummy
 
    for ( i = 0; i< 8; i++ ) {
       cursorpos.position[i].cx = stream.readWord();
@@ -194,7 +189,7 @@ void tmap :: read ( tnstream& stream )
       cursorpos.position[i].sy = stream.readWord();
    }
 
-   tribute = (presourcetribute) stream.readInt();
+   bool loadtribute = stream.readInt();
    unsentmessage = (pmessagelist) stream.readInt();
    message = (pmessage) stream.readInt();
 
@@ -287,28 +282,15 @@ void tmap :: read ( tnstream& stream )
 
     } /* endfor */
 
-    tribute = new ( tresourcetribute );
     if ( stream.readInt() )
-       stream.readdata2 ( *tribute );
-    else
-       memset ( tribute, 0, sizeof ( *tribute ));
-
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / vor alliances" );
-       #endif
+       tribute.read ( stream );
 
     for ( int aa = 0; aa < 8; aa++ )
        if ( alliance_names_not_used_any_more[aa] ) {
           char* tempname = NULL;
           stream.readpchar ( &tempname );
           delete[] tempname;
-
-          alliance_names_not_used_any_more[aa] = 0;
        }
-
-
-
 
     int h = stream.readInt();
 
@@ -483,7 +465,7 @@ void tmap :: write ( tnstream& stream )
       stream.writeWord( cursorpos.position[i].sy );
    }
 
-   stream.writeInt( tribute != NULL );
+   stream.writeInt( -1 );
    stream.writeInt( unsentmessage != NULL );
    stream.writeInt( message != NULL );
 
@@ -569,34 +551,19 @@ void tmap :: write ( tnstream& stream )
        logtofile ( "loaders / tspfldloaders::writemap / names written" );
        #endif
 
-       int t = 0;
-       if ( tribute )
-          for (int i = 0; i < 8; i++) {
-             for (int j = 0; j < 8; j++) {
-                for (int k = 0; k < 3; k++) {
-                   if ( tribute->avail.resource[k][i][j] )
-                      t++;
-                   if ( tribute->paid.resource[k][i][j] )
-                      t++;
-                }
-             }
-          }
+       if ( !tribute.empty() ) {
+           stream.writeInt ( -1 );
+           tribute.write ( stream );
+       } else
+           stream.writeInt ( 0 );
 
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::writemap / tribute written" );
-       #endif
-
-        stream.writedata2 ( t );
-        if ( t )
-           stream.writedata2 ( *tribute );
-
+        /*
         for ( int bb = 0; bb < 8; bb++ )
            if ( alliance_names_not_used_any_more[bb] ) {
               char nl = 0;
               stream.writedata2 ( nl );
            }
-
+        */
 
         int h = 0;
         stream.writedata2 ( h );
@@ -1040,3 +1007,55 @@ tmap :: ~tmap ()
    }
 }
 
+/*
+gamemap :: ResourceTribute :: tresourcetribute ( )
+{
+   for ( int a = 0; a < 3; a++ )
+      for ( int b = 0; b < 8; b++ )
+         for ( int c = 0; c < 8; c++ ) {
+            avail.resource[a][b][c] = 0;
+            paid.resource[a][b][c] = 0;
+         }
+}
+*/
+
+bool tmap :: ResourceTribute :: empty ( )
+{
+   for (int i = 0; i < 8; i++)
+      for (int j = 0; j < 8; j++)
+         for (int k = 0; k < 3; k++) {
+            if ( avail[i][j].resource(k) )
+               return true;
+            if ( paid[i][j].resource(k) )
+               return true;
+         }
+
+   return false;
+}
+
+void tmap :: ResourceTribute :: read ( tnstream& stream )
+{
+   int a,b,c;
+   for ( a = 0; a < 3; a++ )
+      for ( b = 0; b < 8; b++ )
+         for ( c = 0; c < 8; c++ )
+             avail[b][c].resource(a) = stream.readInt();
+   for ( a = 0; a < 3; a++ )
+      for ( b = 0; b < 8; b++ )
+         for ( c = 0; c < 8; c++ )
+             paid[b][c].resource(a) = stream.readInt();
+}
+
+void tmap :: ResourceTribute :: write ( tnstream& stream )
+{
+   int a,b,c;
+   for ( a = 0; a < 3; a++ )
+      for ( b = 0; b < 8; b++ )
+         for ( c = 0; c < 8; c++ )
+             stream.writeInt ( avail[b][c].resource(a) );
+
+   for ( a = 0; a < 3; a++ )
+      for ( b = 0; b < 8; b++ )
+         for ( c = 0; c < 8; c++ )
+             stream.writeInt ( paid[b][c].resource(a) );
+}

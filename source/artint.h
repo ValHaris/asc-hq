@@ -1,6 +1,10 @@
-//     $Id: artint.h,v 1.17 2000-10-26 18:55:28 mbickel Exp $
+//     $Id: artint.h,v 1.18 2000-11-11 11:05:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/10/26 18:55:28  mbickel
+//      Fixed crash when editing the properties of a vehicle inside a building
+//      Added mapeditorFullscreen switch to asc.ini
+//
 //     Revision 1.16  2000/10/26 18:14:55  mbickel
 //      AI moves damaged units to repair
 //      tmap is not memory layout sensitive any more
@@ -96,6 +100,7 @@
 #ifdef __WATCOM_CPLUSPLUS__
  typedef less<int> lessint;
 #endif
+ typedef less<float> lessfloat;
 
 
 
@@ -125,7 +130,17 @@
                   ServiceOrder ( AI* _ai, VehicleService::Service _requiredService, int UnitID, int _pos = -1 );
                   pvehicle getTargetUnit ( ) const { return ai->getMap()->getUnit ( targetUnitID );};
                   pvehicle getServiceUnit ( ) const { return ai->getMap()->getUnit ( serviceUnitID );};
+                  int possible ( pvehicle supplier );
            };
+           /*
+           struct ServiceOrderRating {
+             float val;
+             AI::ServiceOrder* so;
+             bool operator> ( const ServiceOrderRating& a ) { return val > a.val; };
+           };
+           std::greater<ServiceOrderRating> scomp;
+           */
+
            typedef PointerList<ServiceOrder*> ServiceOrderContainer;
            ServiceOrderContainer serviceOrders;
            void issueServices ( );

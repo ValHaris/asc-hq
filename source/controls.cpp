@@ -1,6 +1,12 @@
-//     $Id: controls.cpp,v 1.83 2000-11-08 19:30:56 mbickel Exp $
+//     $Id: controls.cpp,v 1.84 2000-11-11 11:05:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.83  2000/11/08 19:30:56  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.82  2000/10/31 10:42:39  mbickel
 //      Added building->vehicle service to vehicle controls
 //      Moved tmap methods to gamemap.cpp
@@ -5459,35 +5465,31 @@ void GetResource :: checkbuilding ( pbuilding b )
             b->actstorage.resource( resourcetype ) -= toget;
          got += toget;
       }
-   } else
-      if ( actmap->tribute ) {
-         int gettable = actmap->tribute->avail.resource[resourcetype][ b->color / 8 ][ player ] - tributegot[ resourcetype ][ b->color / 8];
-         if ( gettable > 0 ) {
-            int toget = need-got;
-            if ( toget > gettable )
-               toget = gettable;
- 
-            // int found = b->getResource( toget, resourcetype, queryonly );
-            int found = b->actstorage.resource(resourcetype);
-            if ( toget < found )
-               found = toget;
-            
-            if ( !queryonly )
-               b->actstorage.resource(resourcetype) -= found;
+   } else {
+      int gettable = actmap->tribute.avail[ b->color / 8 ][ player ].resource(resourcetype) - tributegot[ resourcetype ][ b->color / 8];
+      if ( gettable > 0 ) {
+         int toget = need-got;
+         if ( toget > gettable )
+            toget = gettable;
 
-            tributegot[ resourcetype ][ b->color / 8] += found;
-   
-            if ( !queryonly ) {
-               actmap->tribute->avail.resource[ resourcetype ][ b->color / 8 ][ player ] -= found;
-               actmap->tribute->paid .resource[ resourcetype ][ b->color / 8 ][ player ] += found;
-            }
- 
-            got += found;
+         // int found = b->getResource( toget, resourcetype, queryonly );
+         int found = b->actstorage.resource(resourcetype);
+         if ( toget < found )
+            found = toget;
+
+         if ( !queryonly )
+            b->actstorage.resource(resourcetype) -= found;
+
+         tributegot[ resourcetype ][ b->color / 8] += found;
+
+         if ( !queryonly ) {
+            actmap->tribute.avail[ b->color / 8 ][ player ].resource( resourcetype ) -= found;
+            actmap->tribute.paid [ b->color / 8 ][ player ].resource( resourcetype ) += found;
          }
+
+         got += found;
       }
- 
-
-
+   }
 }
 
 void GetResource :: start ( int x, int y )
@@ -5556,8 +5558,8 @@ void PutTribute :: checkbuilding ( pbuilding b )
       
          if ( !queryonly ) {
             b->actstorage.resource( resourcetype ) += tostore;
-            actmap->tribute->avail.resource[ resourcetype ][ player ][ targplayer ] -= tostore;
-            actmap->tribute->paid .resource[ resourcetype ][ targplayer ][ player ] += tostore;
+            actmap->tribute.avail[ player ][ targplayer ].resource( resourcetype ) -= tostore;
+            actmap->tribute.paid [ targplayer ][ player ].resource( resourcetype ) += tostore;
          }
          got += tostore;
       }
@@ -5571,42 +5573,41 @@ void PutTribute :: start ( int x, int y )
    if ( pl == -1 )
       targplayer = 0;
 
-   if ( actmap->tribute )
-      do {
-         if ( targplayer != player )
-            if ( actmap->player[targplayer].existent ) {
-               need = actmap->tribute->avail.resource[ resourcetype ][ player ][ targplayer ];
-               if ( need > 0 ) {
-                  if ( scope == 3 ) {
-               
-                     got = need;
-                     if ( got > maxint - actmap->bi_resource[targplayer].resource( resourcetype ) )
-                        got = maxint - actmap->bi_resource[targplayer].resource( resourcetype );
+   do {
+      if ( targplayer != player )
+         if ( actmap->player[targplayer].existent ) {
+            need = actmap->tribute.avail[ player ][ targplayer ].resource( resourcetype );
+            if ( need > 0 ) {
+               if ( scope == 3 ) {
 
-                     if ( got > actmap->bi_resource[player].resource( resourcetype ) )
-                        got = actmap->bi_resource[player].resource( resourcetype );
+                  got = need;
+                  if ( got > maxint - actmap->bi_resource[targplayer].resource( resourcetype ) )
+                     got = maxint - actmap->bi_resource[targplayer].resource( resourcetype );
 
-                     if ( !queryonly ) {
-                        actmap->bi_resource[targplayer].resource( resourcetype ) += got;
-                        actmap->bi_resource[player].resource( resourcetype ) -= got;
-                        
-                        actmap->tribute->avail.resource[ resourcetype ][ player ][ targplayer ] -= got;
-                        actmap->tribute->paid .resource[ resourcetype ][ targplayer ][ player ] += got;
-                     }
-               
-                  } else {
-                     int avail = startbuilding->getResource ( need, resourcetype, 1, 0 );
-                     if ( need > avail )
-                        need = avail;
-                     MapNetwork :: start ( x, y );
-                     if ( !queryonly ) 
-                        startbuilding->getResource ( got, resourcetype, queryonly, 0 );
-                     
+                  if ( got > actmap->bi_resource[player].resource( resourcetype ) )
+                     got = actmap->bi_resource[player].resource( resourcetype );
+
+                  if ( !queryonly ) {
+                     actmap->bi_resource[targplayer].resource( resourcetype ) += got;
+                     actmap->bi_resource[player].resource( resourcetype ) -= got;
+
+                     actmap->tribute.avail[ player ][ targplayer ].resource( resourcetype ) -= got;
+                     actmap->tribute.paid [ targplayer ][ player ].resource( resourcetype ) += got;
                   }
+
+               } else {
+                  int avail = startbuilding->getResource ( need, resourcetype, 1, 0 );
+                  if ( need > avail )
+                     need = avail;
+                  MapNetwork :: start ( x, y );
+                  if ( !queryonly )
+                     startbuilding->getResource ( got, resourcetype, queryonly, 0 );
+
                }
             }
-         targplayer++;
-      } while ( targplayer < 8  && pl == -1 );
+         }
+      targplayer++;
+   } while ( targplayer < 8  && pl == -1 );
 }
 
 int PutTribute :: puttribute ( pbuilding start, int resource, int _queryonly, int _forplayer, int _fromplayer, int _scope )
@@ -5620,99 +5621,98 @@ int PutTribute :: puttribute ( pbuilding start, int resource, int _queryonly, in
 void transfer_all_outstanding_tribute ( void )
 {
    int targplayer = actmap->actplayer;
-   if ( actmap->tribute ) 
      // for ( int player = 0; player < 8; player++ )
-         if ( actmap->player[targplayer].existent ) {
-            char text[10000];
-            text[0] = 0;
+   if ( actmap->player[targplayer].existent ) {
+      char text[10000];
+      text[0] = 0;
 
-            for ( int player = 0; player < 8; player++ ) {
-               if ( targplayer != player )
-                  if ( actmap->player[player].existent ) {
-                     int topay[3];
-                     int got[3];
-                     for ( int resourcetype = 0; resourcetype < 3; resourcetype++ ) {
-                        topay[ resourcetype ] = actmap->tribute->avail.resource[ resourcetype ][ player ][ targplayer ];
-                        got[ resourcetype ] = 0;
+      for ( int player = 0; player < 8; player++ ) {
+         if ( targplayer != player )
+            if ( actmap->player[player].existent ) {
+               int topay[3];
+               int got[3];
+               for ( int resourcetype = 0; resourcetype < 3; resourcetype++ ) {
+                  topay[ resourcetype ] = actmap->tribute.avail[ player ][ targplayer ].resource( resourcetype );
+                  got[ resourcetype ] = 0;
 
-                        if ( !actmap->isResourceGlobal (resourcetype) ) {
-                           pbuilding bld = actmap->player[ player ].firstbuilding;
-                           while ( bld  &&  topay[resourcetype] > got[resourcetype] ) {
-                              PutTribute pt;
-                              got[resourcetype] += pt.puttribute ( bld, resourcetype, 0, targplayer, player, 1 );
-                              bld = bld->next;
-                           }
-                        } else {
-                           int i;
-                           if ( actmap->bi_resource[ player ].resource(resourcetype) < topay[resourcetype] )
-                              i = actmap->bi_resource[ player ].resource(resourcetype);
-                           else
-                              i = topay[resourcetype];
-                           got [resourcetype ] = i;
-                           actmap->bi_resource[ player ].resource(resourcetype) -= i;
-                           actmap->bi_resource[ targplayer ].resource(resourcetype) += i;
-                        }
-
-                        actmap->tribute->avail.resource[ resourcetype ][ player ][ targplayer ] -= got[resourcetype];
-                        actmap->tribute->paid.resource[ resourcetype ][ targplayer ][ player ] += got[resourcetype];
-
-                     }   
-                     if ( topay[0] || topay[1] || topay[2] ) {
-                        char txt1b[1000];
-                        char txt_topay[100];
-                        txt_topay[0] = 0;
-                        int r;
-                        int cnt = 0;
-                        for ( r = 0; r < 3; r++ )
-                           if ( topay[r] ) 
-                              cnt++;
-
-                        int ps = 0;
-                        for ( r = 0; r < 3; r++ )
-                           if ( topay[r] ) {
-                              ps++;
-                              char txt3[100];
-                              sprintf( txt3, "%d %s", topay[r], resourceNames[r] );
-                              if ( ps>1 && ps < cnt )
-                                 strcat ( txt_topay, ", ");
-                              if ( ps>1 && ps == cnt )
-                                 strcat ( txt_topay, " and ");
-                              strcat ( txt_topay, txt3 );
-                           }
-
-                        char txt_got[100];
-                        txt_got[0] = 0;
-                        cnt = 0;
-                        ps = 0;
-                        for ( r = 0; r < 3; r++ )
-                           if ( got[r] ) 
-                              cnt++;
-
-                        for ( r = 0; r < 3; r++ )
-                           if ( got[r] ) {
-                              ps++;
-                              char txt3[100];
-                              sprintf( txt3, "%d %s", got[r], resourceNames[r] );
-                              if ( ps>1  && ps < cnt )
-                                 strcat ( txt_got, ", ");
-                              if ( ps>1 && ps == cnt )
-                                 strcat ( txt_got, " and ");
-                              strcat ( txt_got, txt3 );
-                           }
-                        if ( !txt_got[0] )
-                           strcpy ( txt_got, "nothing" );
-
-                        char* sp = getmessage( 10020 ); 
-                        sprintf ( txt1b, sp, txt_topay, actmap->player[player].getName().c_str(), txt_got );
-                        strcat ( text, txt1b );
+                  if ( !actmap->isResourceGlobal (resourcetype) ) {
+                     pbuilding bld = actmap->player[ player ].firstbuilding;
+                     while ( bld  &&  topay[resourcetype] > got[resourcetype] ) {
+                        PutTribute pt;
+                        got[resourcetype] += pt.puttribute ( bld, resourcetype, 0, targplayer, player, 1 );
+                        bld = bld->next;
                      }
+                  } else {
+                     int i;
+                     if ( actmap->bi_resource[ player ].resource(resourcetype) < topay[resourcetype] )
+                        i = actmap->bi_resource[ player ].resource(resourcetype);
+                     else
+                        i = topay[resourcetype];
+                     got [resourcetype ] = i;
+                     actmap->bi_resource[ player ].resource(resourcetype) -= i;
+                     actmap->bi_resource[ targplayer ].resource(resourcetype) += i;
                   }
+
+                  actmap->tribute.avail[ player ][ targplayer ].resource( resourcetype ) -= got[resourcetype];
+                  actmap->tribute.paid[ targplayer ][ player ].resource( resourcetype ) += got[resourcetype];
+
+               }
+               if ( topay[0] || topay[1] || topay[2] ) {
+                  char txt1b[1000];
+                  char txt_topay[100];
+                  txt_topay[0] = 0;
+                  int r;
+                  int cnt = 0;
+                  for ( r = 0; r < 3; r++ )
+                     if ( topay[r] )
+                        cnt++;
+
+                  int ps = 0;
+                  for ( r = 0; r < 3; r++ )
+                     if ( topay[r] ) {
+                        ps++;
+                        char txt3[100];
+                        sprintf( txt3, "%d %s", topay[r], resourceNames[r] );
+                        if ( ps>1 && ps < cnt )
+                           strcat ( txt_topay, ", ");
+                        if ( ps>1 && ps == cnt )
+                           strcat ( txt_topay, " and ");
+                        strcat ( txt_topay, txt3 );
+                     }
+
+                  char txt_got[100];
+                  txt_got[0] = 0;
+                  cnt = 0;
+                  ps = 0;
+                  for ( r = 0; r < 3; r++ )
+                     if ( got[r] )
+                        cnt++;
+
+                  for ( r = 0; r < 3; r++ )
+                     if ( got[r] ) {
+                        ps++;
+                        char txt3[100];
+                        sprintf( txt3, "%d %s", got[r], resourceNames[r] );
+                        if ( ps>1  && ps < cnt )
+                           strcat ( txt_got, ", ");
+                        if ( ps>1 && ps == cnt )
+                           strcat ( txt_got, " and ");
+                        strcat ( txt_got, txt3 );
+                     }
+                  if ( !txt_got[0] )
+                     strcpy ( txt_got, "nothing" );
+
+                  char* sp = getmessage( 10020 );
+                  sprintf ( txt1b, sp, txt_topay, actmap->player[player].getName().c_str(), txt_got );
+                  strcat ( text, txt1b );
+               }
             }
-            if ( text[0] ) {
-               char* sp = strdup ( text );
-               new tmessage ( sp, 1 << targplayer );
-            }
-         }
+      }
+      if ( text[0] ) {
+         char* sp = strdup ( text );
+         new tmessage ( sp, 1 << targplayer );
+      }
+   }
 }
 
 

@@ -507,6 +507,12 @@ int beeline ( const pvehicle a, const pvehicle b )
    return beeline ( a->xpos, a->ypos, b->xpos, b->ypos );
 }
 
+int beeline ( const MapCoordinate& a, const MapCoordinate& b )
+{
+   return beeline ( a.x, a.y, b.x, b.y );
+}
+
+
 int beeline ( int x1, int y1, int x2, int y2 )
 {
 #ifdef HEXAGON

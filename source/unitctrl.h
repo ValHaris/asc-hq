@@ -1,6 +1,12 @@
-//     $Id: unitctrl.h,v 1.16 2000-11-08 19:31:18 mbickel Exp $
+//     $Id: unitctrl.h,v 1.17 2000-11-11 11:05:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/11/08 19:31:18  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.15  2000/10/31 10:42:48  mbickel
 //      Added building->vehicle service to vehicle controls
 //      Moved tmap methods to gamemap.cpp
@@ -406,18 +412,24 @@ class VehicleService : public VehicleAction {
               pbuilding building;
               int status;
 
+          public:
               class FieldSearch : public tsearchfields {
                      VehicleService& vs;
                      pvehicle        veh;
                      pbuilding       bld;
                   public:
+                     struct {
+                       bool distance;
+                       bool height;
+                     } bypassChecks;
                      virtual void     testfield ( void );
                      void             checkVehicle2Vehicle ( pvehicle veh );
                      void             checkBuilding2Vehicle ( pvehicle veh );
                      void             initrefuelling( int xp1, int yp1 );
                      void             startsuche ( void );
-                     void run ( pvehicle _veh, pbuilding _bld );
-                     FieldSearch ( VehicleService& _vs ) : vs ( _vs ) {};
+                     void             init ( pvehicle _veh, pbuilding _bld );
+                     void             run (  );
+                     FieldSearch ( VehicleService& _vs ) : vs ( _vs ) { bypassChecks.distance = false; bypassChecks.height = false; };
                   } fieldSearch;
 
 
@@ -439,6 +451,7 @@ class VehicleService : public VehicleAction {
                       int curAmount;  //!< current amount at target
                       int maxAmount;  //!< maximum amount at target
                       int minAmount;  //!< minimum amount at target
+                      int maxPercentage;
                       int orgSourceAmount;
                     };
                     vector<Service> service;

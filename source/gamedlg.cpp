@@ -1,6 +1,12 @@
-//     $Id: gamedlg.cpp,v 1.51 2000-11-08 19:31:05 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.52 2000-11-11 11:05:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2000/11/08 19:31:05  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.50  2000/10/31 10:42:42  mbickel
 //      Added building->vehicle service to vehicle controls
 //      Moved tmap methods to gamemap.cpp
@@ -1738,7 +1744,7 @@ void         tchoosenewcampaign::init(void)
 } 
 
      class ttributepayments : public tdialogbox {
-                       tresourcetribute trib;
+                       tmap::ResourceTribute trib;
                        int oldplayer;
                        int player;
                        void paintactplayer ( void );
@@ -1767,7 +1773,7 @@ void  ttributepayments :: init ( void )
    ysize = 400;
    title = "transfer resources";
 
-   trib = *actmap->tribute;
+   trib = actmap->tribute;
 
    memset ( &players, -1, sizeof( players ));
 
@@ -1874,15 +1880,15 @@ void  ttributepayments :: paintvalues ( void )
    activefontsettings.background = dblue;
 
    for ( int i = 0; i < 3; i++) {
-      addeingabe ( 3+i, &trib.avail.resource[i][actmap->actplayer][players[player]], 0, maxint );
+      addeingabe ( 3+i, &trib.avail[actmap->actplayer][players[player]].resource(i), 0, maxint );
       enablebutton ( 3+i );
 
       activefontsettings.length = xsize - 40 - wind2x;
-      showtext2 ( strrr ( trib.paid.resource[i][actmap->actplayer][players[player]]), x1 + wind2x + 5, y1 + wind2y + 16 + i * 40 );
-      showtext2 ( strrr ( trib.paid.resource[i][players[player]][actmap->actplayer]), x1 + wind2x + 5, y1 + wind1y + 16 + i * 40 );
+      showtext2 ( strrr ( trib.paid[actmap->actplayer][players[player]].resource(i)), x1 + wind2x + 5, y1 + wind2y + 16 + i * 40 );
+      showtext2 ( strrr ( trib.paid[players[player]][actmap->actplayer].resource(i)), x1 + wind2x + 5, y1 + wind1y + 16 + i * 40 );
 
       activefontsettings.length = wind2x - wind1x - 35;
-      showtext2 ( strrr ( trib.avail.resource[i][players[player]][actmap->actplayer]), x1 + wind1x + 5, y1 + wind2y + 16 + i * 40 );
+      showtext2 ( strrr ( trib.avail[players[player]][actmap->actplayer].resource(i)), x1 + wind1x + 5, y1 + wind2y + 16 + i * 40 );
    } /* endfor */
 
    getinvisiblemouserectanglestk ();
@@ -1934,7 +1940,7 @@ void  ttributepayments :: run ( void )
    } while ( status < 10 ); /* enddo */
 
    if ( status >= 11 )
-      *actmap->tribute = trib;
+      actmap->tribute = trib;
 }
    
 

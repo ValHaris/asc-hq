@@ -88,6 +88,7 @@ extern int beeline ( int x1, int y1, int x2, int y2 );
 
 //! returns the distance the units a and b; Awfully unoptimized !!
 extern int beeline ( const pvehicle a, const pvehicle b );
+extern int beeline ( const MapCoordinate& a, const MapCoordinate& b );
 
 
 #endif

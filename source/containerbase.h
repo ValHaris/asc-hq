@@ -55,6 +55,7 @@ class ContainerBase {
       int getMaxRepair ( const ContainerBase* item );
       int getMaxRepair ( const ContainerBase* item, int newDamage, Resources& cost  );
       int repairItem   ( ContainerBase* item, int newDamage = 0 );
+      virtual MapCoordinate getPosition ( ) = 0;
       virtual ~ContainerBase() {};
 };
 

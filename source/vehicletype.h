@@ -259,6 +259,7 @@ extern const char*  cvehiclefunctions[];
     SingleWeapon *getWeapon( unsigned weaponNum );
     int buildingconstructable ( pbuildingtype bld );
     int searchForMineralResources( void );
+    MapCoordinate getPosition ( );
 
     // int attackpossible ( int x, int y );
     // int getstrongestweapon( int aheight, int distance );

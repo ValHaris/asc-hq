@@ -210,6 +210,7 @@ class  Building : public ContainerBase {
     void produceAmmo ( int type, int num );
 
     void resetPicturePointers ( void );
+    MapCoordinate getPosition ( ) { return getEntry(); };
 
   protected:
      ResourceMatrix repairEfficiency;

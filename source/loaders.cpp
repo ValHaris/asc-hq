@@ -1,6 +1,12 @@
-//     $Id: loaders.cpp,v 1.33 2000-11-08 19:31:09 mbickel Exp $
+//     $Id: loaders.cpp,v 1.34 2000-11-11 11:05:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/11/08 19:31:09  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.32  2000/10/26 18:14:57  mbickel
 //      AI moves damaged units to repair
 //      tmap is not memory layout sensitive any more
@@ -2611,7 +2617,6 @@ void treplayloaders :: savereplay ( int num )
    replayfield->firsteventtocome = NULL;
    replayfield->firsteventpassed = NULL;
    replayfield->network = NULL;
-   replayfield->tribute = NULL;
    replayfield->unsentmessage = NULL;
    replayfield->message = NULL;
    replayfield->journal = NULL;

@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.65 2000-11-08 19:37:40 mbickel Exp $
+//     $Id: typen.h,v 1.66 2000-11-11 11:05:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.65  2000/11/08 19:37:40  mbickel
+//      Changed the terrain types (again): "lava" now replaces "small trench"
+//
 //     Revision 1.64  2000/11/08 19:31:16  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -347,7 +350,6 @@ typedef class tnetwork* pnetwork;
 typedef struct tquickview* pquickview;
 typedef struct tterraintype* pterraintype;
 typedef class  twterraintype* pwterraintype ;
-typedef struct tresourcetribute* presourcetribute ;
 typedef class tfield* pfield ;
 typedef class tobjectcontainer* pobjectcontainer;
 typedef struct tresourceview* presourceview;
@@ -625,21 +627,6 @@ struct tquickview {
 
 
 
-  struct tresourcetribute {
-    struct {
-      union {
-         struct {
-           int   energy[8][8];
-           int   material[8][8];
-           int   fuel[8][8];
-         }a;
-         int resource[3][8][8];
-      };
-    } avail, paid;
-  };
-  //  resourcetribute.avail.energy[a][b] gibt an, wieviel energie spieler b aus dem netz von spieler a noch abbuchen darf
-  //  resourcetribute.paid.energy[a][b] gibt an, wieviel energie spieler b aus dem netz von spieler a bereits abgebucht hat
-  //  a ist spender, b empf„nger
 
 
   struct thexpic {
@@ -767,6 +754,7 @@ class AiParameter {
            int value;
            int valueType;
            enum Task { tsk_nothing, tsk_tactics, tsk_tactwait, tsk_stratwait, tsk_wait, tsk_strategy, tsk_serviceRetreat } task;
+           enum Job { job_undefined, job_fight, job_supply, job_conquer, job_build } job;
 
            int xtogo;
            int ytogo;
@@ -1340,7 +1328,7 @@ class tmap {
    public:
       word         xsize, ysize;   /*  Groesse in fielder  */
       word         xpos, ypos;     /*  aktuelle Dargestellte Position  */
-      pfield        field;           /*  die fielder selber */
+      pfield       field;           /*  die fielder selber */
       char         codeword[11]; 
       char*        title;
 
@@ -1367,7 +1355,7 @@ class tmap {
       char         alliances[8][8];
       class Player {
         public:
-         char      existent; 
+         bool         existent;
          pvehicle     firstvehicle; 
          pbuilding    firstbuilding; 
    
@@ -1401,13 +1389,10 @@ class tmap {
       int eventpassed ( int saveas, int action, int mapid );
       int eventpassed ( int id, int mapid );
   
-      int      unitnetworkid; 
-  
-      char      levelfinished; 
-  
+      int          unitnetworkid;
+      char         levelfinished;
       pnetwork     network;
-  
-      int           alliance_names_not_used_any_more[8];
+      // int          alliance_names_not_used_any_more[8];
   
       struct tcursorpos {
         struct {
@@ -1417,8 +1402,20 @@ class tmap {
           integer sy;
         } position[8];
       } cursorpos;
-  
-      presourcetribute tribute;
+
+
+      class ResourceTribute {
+        public:
+           Resources avail[8][8];
+           Resources paid[8][8];
+           bool empty ( );
+           void read ( tnstream& stream );
+           void write ( tnstream& stream );
+      } tribute;
+      //  resourcetribute.avail.energy[a][b] gibt an, wieviel energie spieler b aus dem netz von spieler a noch abbuchen darf
+      //  resourcetribute.paid.energy[a][b] gibt an, wieviel energie spieler b aus dem netz von spieler a bereits abgebucht hat
+      //  a ist spender, b empf„nger
+
       pmessagelist  unsentmessage;
       pmessage      message;
       int           messageid;
@@ -1432,7 +1429,7 @@ class tmap {
       treplayinfo*  replayinfo;
       int           playerView;
       tgametime     lastjournalchange;
-      Resources    bi_resource[8];
+      Resources     bi_resource[8];
       PreferredFilenames* preferredfilenames;
       EllipseOnScreen* ellipse;
       int           graphicset;

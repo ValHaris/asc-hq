@@ -2048,3 +2048,11 @@ void   Vehicle::read ( pnstream stream )
     }
     #endif
 }
+
+MapCoordinate Vehicle :: getPosition ( )
+{
+   MapCoordinate mc;
+   mc.x = xpos;
+   mc.y = ypos;
+   return mc;
+}

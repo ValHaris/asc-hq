@@ -1,6 +1,12 @@
-//     $Id: missions.cpp,v 1.16 2000-11-08 19:31:11 mbickel Exp $
+//     $Id: missions.cpp,v 1.17 2000-11-11 11:05:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/11/08 19:31:11  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.15  2000/10/26 18:14:59  mbickel
 //      AI moves damaged units to repair
 //      tmap is not memory layout sensitive any more
@@ -484,7 +490,7 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
                                                  sp = actmap->actplayer;
                                               int amountrequired = ev->trigger_data[b]->id & 0x00ffffff;
                                               int player = ev->trigger_data[b]->id >> 24;
-                                              if ( actmap->tribute->avail.a.energy[player][sp] < amountrequired )
+                                              if ( actmap->tribute.avail[player][sp].energy < amountrequired )
                                                  ev->triggerstatus[b] = 1; 
                                               else 
                                                  ev->triggerstatus[b] = 0; 
@@ -497,7 +503,7 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
    
                                               int amountrequired = ev->trigger_data[b]->id & 0x00ffffff;
                                               int player = ev->trigger_data[b]->id >> 24;
-                                              if ( actmap->tribute->avail.a.material[player][sp] < amountrequired )
+                                              if ( actmap->tribute.avail[player][sp].material < amountrequired )
                                                  ev->triggerstatus[b] = 1; 
                                               else 
                                                  ev->triggerstatus[b] = 0; 
@@ -510,7 +516,7 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
    
                                               int amountrequired = ev->trigger_data[b]->id & 0x00ffffff;
                                               int player = ev->trigger_data[b]->id >> 24;
-                                              if ( actmap->tribute->avail.a.fuel[player][sp] < amountrequired )
+                                              if ( actmap->tribute.avail[player][sp].fuel < amountrequired )
                                                  ev->triggerstatus[b] = 1; 
                                               else 
                                                  ev->triggerstatus[b] = 0; 
