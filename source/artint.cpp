@@ -1,6 +1,13 @@
-//     $Id: artint.cpp,v 1.51 2001-01-23 21:05:05 mbickel Exp $
+//     $Id: artint.cpp,v 1.52 2001-01-24 11:53:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2001/01/23 21:05:05  mbickel
+//      Speed up of AI
+//      Lot of bugfixes in AI
+//      Moved Research to own files (research.*)
+//      Rewrote storing of developed technologies
+//      Some cleanup and documentation
+//
 //     Revision 1.50  2001/01/21 12:48:33  mbickel
 //      Some cleanup and documentation
 //
@@ -2702,21 +2709,23 @@ void AI:: run ( void )
    if ( !mapDisplay )
       displaymap();
    int duration = ticker-startTime;
-   if ( duration > 100*60 )
-      displaymessage ("The AI took %d seconds to run\n"
-                      " setup: %d \n"
-                      " service: %d \n"
-                      " conquer: %d \n"
-                      " container: %d \n"
-                      " tactics: %d \n"
-                      " strategy: %d \n",
-        3, duration / 100,
-           setupTime / 100,
-           serviceTime/100,
-           conquerTime /100,
-           containerTime/100,
-           tacticsTime/100,
-           strategyTime/100 );
+
+   if ( CGameOptions::Instance()->runAI == 2 )
+      if ( duration > 100*60 )
+         displaymessage ("The AI took %d seconds to run\n"
+                         " setup: %d \n"
+                         " service: %d \n"
+                         " conquer: %d \n"
+                         " container: %d \n"
+                         " tactics: %d \n"
+                         " strategy: %d \n",
+           3, duration / 100,
+              setupTime / 100,
+              serviceTime/100,
+              conquerTime /100,
+              containerTime/100,
+              tacticsTime/100,
+              strategyTime/100 );
 }
 
 bool AI :: isRunning ( void )

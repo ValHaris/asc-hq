@@ -1,6 +1,9 @@
-//     $Id: building.h,v 1.17 2000-12-21 11:00:46 mbickel Exp $
+//     $Id: building.h,v 1.18 2001-01-24 11:53:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/12/21 11:00:46  mbickel
+//      Added some code documentation
+//
 //     Revision 1.16  2000/09/17 15:20:29  mbickel
 //      AI is now automatically invoked (depending on gameoptions)
 //      Some cleanup
@@ -107,14 +110,6 @@
    as the implementation of the base logic, which is defined in 
    #building_controls.h
 */
-
-
-#include "gui.h"
-#include "controls.h"
-#include "gamedlg.h"
-
-
-
 
 
 extern int recursiondepth;

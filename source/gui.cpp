@@ -1,6 +1,10 @@
-//     $Id: gui.cpp,v 1.48 2001-01-21 16:37:17 mbickel Exp $
+//     $Id: gui.cpp,v 1.49 2001-01-24 11:53:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2001/01/21 16:37:17  mbickel
+//      Moved replay code to own file ( replay.cpp )
+//      Fixed compile problems done by cleanup
+//
 //     Revision 1.47  2001/01/04 15:13:55  mbickel
 //      configure now checks for libSDL_image
 //      AI only conquers building that cannot be conquered back immediately
@@ -257,6 +261,7 @@
 #include "sg.h"
 #include "gameoptions.h"
 #include "replay.h"
+#include "gamedlg.h"
 
 tguihoststandard          gui;
 tselectbuildingguihost    selectbuildinggui;
@@ -361,8 +366,10 @@ void   GuiHost<T>::returncoordinates ( void* icn, int* x, int * y )
 template<class T> 
 void   GuiHost<T>::chainiconstohost ( T icn )
 {
-   setfirsticon( (T) icn->frst() );
-   getfirsticon()->sethost ( this );
+   if ( icn ) {
+      setfirsticon( (T) icn->frst() );
+      getfirsticon()->sethost ( this );
+   }
 }
 
 
@@ -3207,5 +3214,5 @@ void   treplayguihost :: bi2control (  )
 #ifdef __BORLANDC__
    // Borland C++ Builder forgets to instantiate these templates...
    treplayguihost Borland_Cpp_builder_sucks;
-   ContainerBaseGuiHost Borland_Cpp_builder_sucks2;
 #endif
+   ContainerBaseGuiHost Borland_Cpp_builder_sucks2;

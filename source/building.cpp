@@ -1,6 +1,13 @@
-//     $Id: building.cpp,v 1.61 2001-01-23 21:05:09 mbickel Exp $
+//     $Id: building.cpp,v 1.62 2001-01-24 11:53:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2001/01/23 21:05:09  mbickel
+//      Speed up of AI
+//      Lot of bugfixes in AI
+//      Moved Research to own files (research.*)
+//      Rewrote storing of developed technologies
+//      Some cleanup and documentation
+//
 //     Revision 1.60  2001/01/21 16:37:11  mbickel
 //      Moved replay code to own file ( replay.cpp )
 //      Fixed compile problems done by cleanup
@@ -282,6 +289,7 @@ class   hosticons_c: public ContainerBaseGuiHost
 { // basis fuer icons ->struct mit allen icons
    public:
       void seticonmains ( pcontainer maintemp );
+      // void   chainiconstohost ( pgeneralicon_c icn ) { ContainerBaseGuiHost::chainiconstohost ( icn ); };
 };
 
 
@@ -578,7 +586,6 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
             takeofficon_cb             ( void ) ;
       };
 
-
       class   chosticons_cb : public hosticons_c
       {
          public:
@@ -604,9 +611,6 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
             icons;
       }
       hosticons_cb;
-
-
-
 
 
 

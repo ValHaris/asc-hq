@@ -1,6 +1,12 @@
-//     $Id: building_controls.h,v 1.4 2000-11-08 19:30:56 mbickel Exp $
+//     $Id: building_controls.h,v 1.5 2001-01-24 11:53:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/11/08 19:30:56  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.3  2000/10/11 14:26:21  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -54,6 +60,7 @@
 
 
 #include "containerbase.h"
+#include "unitctrl.h"
 
 enum tcontainermode { mbuilding, mtransport };
 enum tunitmode { mnormal, mproduction, mloadintocontainer };

@@ -1,6 +1,9 @@
-//     $Id: gui.h,v 1.17 2000-12-21 11:00:50 mbickel Exp $
+//     $Id: gui.h,v 1.18 2001-01-24 11:53:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/12/21 11:00:50  mbickel
+//      Added some code documentation
+//
 //     Revision 1.16  2000/10/18 14:14:13  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -831,8 +834,7 @@ class treplayguihost : public ReplayBaseGuiHost {
 
 class ContainerBaseGuiHost : public GuiHost<pgeneralicon_c> {
          public:
-            int foo;
-            ContainerBaseGuiHost ( void ) {};
+            ContainerBaseGuiHost ( void ) { chainiconstohost(NULL); }; // just a hack to avoid some gcc bugs; chainiconstohost wouldn't be instantiated else ...
     };
 
 
