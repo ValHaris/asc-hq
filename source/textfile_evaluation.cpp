@@ -670,7 +670,7 @@ ASCString StringArrayProperty::toString ( ) const
 
 
 template<class T>
-ValArrayProperty<T>::PropertyType ValArrayProperty<T>::operation_add ( const TextPropertyGroup::Entry& entry ) const
+typename ValArrayProperty<T>::PropertyType ValArrayProperty<T>::operation_add ( const TextPropertyGroup::Entry& entry ) const
 {
    PropertyType child = operation_eq( entry );
    PropertyType parent = parse ( *entry.parent );
@@ -699,7 +699,7 @@ ValArrayProperty<T>::PropertyType ValArrayProperty<T>::operation_add ( const Tex
 }
 
 template<class T>
-ValArrayProperty<T>::PropertyType ValArrayProperty<T>::operation_mult ( const TextPropertyGroup::Entry& entry ) const
+typename ValArrayProperty<T>::PropertyType ValArrayProperty<T>::operation_mult ( const TextPropertyGroup::Entry& entry ) const
 {
    PropertyType child = operation_eq( entry );
    PropertyType parent = parse ( *entry.parent );
