@@ -1,0 +1,65 @@
+.TH "asc" "6" "1.15.0"
+.SH "NAME"
+asc \- Advanced Strategic Command \- turn based strategy game
+.SH "SYNTAX"
+.LP 
+.B asc [\fIoptions\fP] 
+.SH "DESCRIPTION"
+.LP 
+This program is a free (GPL) turn based strategy game in the tradition of
+BattleIsle 2/3. Game can be played against human or computer.
+It features a 2-dim. map that is tiled into hexagons where units are placed. 
+The object of the game varies from map to map. The most commonly know goal 
+is to completely eliminate an oppononet by detroying all his units.
+.br
+.SH "OPTIONS"
+.LP 
+The following options are supported:
+.LP 
+.TP 15
+.B -x --xresolution <value> (640... default=800)
+Set horizontal resolution to <value>
+.TP 15
+.B -y --yresolution <value> (480... default=600)
+Set vertical resolution to <value>
+.TP 15
+.B -l --load <string>
+Load a map, saved game, or email game on startup
+.TP 15
+.B -c --configfile <string>
+Use given configuration file
+.TP 15
+.B -r --verbose <value> (0...10 default=0)
+Set verbosity level to <value>
+.TP 15
+.B -w --window
+Disable fullscreen mode
+.TP 15
+.B -f --fulscreen
+Enable fullscreen mode (overriding config file)
+.TP 15
+.B -q --nosound
+Disable sound
+.TP 15
+.B -h --help
+Display help information
+.TP 15
+.B -v --version
+Output version
+.PD
+.SH "SEE ALSO"
+.PP
+asc_demount (6),
+asc_makegfx (6),
+asc_mapedit (6),
+asc_mount (6),
+asc_weaponguide (6)
+.PD
+.SH "AUTHORS"
+.LP 
+The ASC game is developed by Martin Bickel <bickel@asc-hq.org>.
+.br 
+This man page was written by Bartosz Fenski <fenio@o2.pl> (some parts were
+grabbed from Michael Moerz's work) for the Debian GNU/Linux distribution 
+(but it may be used by others).
+

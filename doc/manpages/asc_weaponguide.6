@@ -1,0 +1,68 @@
+.TH "asc_weaponguide" "6" "1.15.0"
+.SH "NAME"
+asc \- Advanced Strategic Command weaponguide generator
+.SH "SYNTAX"
+.LP 
+.B asc_weaponguide [\fIoptions\fP] 
+.SH "DESCRIPTION"
+.LP 
+This program generates html files that document ASCs units.
+It is a part of Advanced Strategic Command game.
+.br
+.SH "OPTIONS"
+.LP 
+The following options are supported:
+.LP 
+.TP 15
+.B -c --configfile <string>
+Use given configuration file
+.TP 15
+.B -r --verbose <value> (0...10 default=0)
+Set verbosity level to <value>
+.TP 15
+.B -d --directory <string>
+Place all output files in different directory
+.TP 15
+.B -l --linkdir <string>
+Relative directory for the menu links
+.TP 15
+.B -s --set <value> (0... default=0)
+Only use unitset with given ID
+.TP 15
+.B -i --image
+Generate images for units (Linux only)
+.TP 15
+.B -z --imgsize <value> (0... default=48)
+Size of unit images
+.TP 15
+.B -f --framename <string> (default=main)
+Name of the main frame
+.TP 15
+.B -t --style <string> (default=../../ug.css)
+Name of the main pages' stylesheet
+.TP 15
+.B -m --menustyle <string> (default=asc.css)
+Name of the menu stylesheet
+.TP 15
+.B -h --help
+Display help information
+.TP 15
+.B -v --version
+Output version
+.PD
+.SH "SEE ALSO"
+.PP
+asc (6)
+asc_demount (6),
+asc_makegfx (6),
+asc_mapedit (6),
+asc_mount (6),
+.PD
+.SH "AUTHORS"
+.LP 
+The ASC game is developed by Martin Bickel <bickel@asc-hq.org>.
+.br 
+This man page was written by Bartosz Fenski <fenio@o2.pl> (some parts were
+grabbed from Michael Moerz's work) for the Debian GNU/Linux distribution 
+(but it may be used by others).
+

@@ -1,5 +1,5 @@
 MAINTAINERCLEANFILES	= Makefile.in
 
-SUBDIRS 		= @SGML2MAN@
+SUBDIRS 		= manpages
 EXTRA_DIST 		= *.html *.css
 

@@ -105,7 +105,7 @@ asc_version = @asc_version@
 install_sh = @install_sh@
 MAINTAINERCLEANFILES = Makefile.in
 
-SUBDIRS = @SGML2MAN@
+SUBDIRS = manpages
 EXTRA_DIST = *.html *.css
 subdir = doc
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
