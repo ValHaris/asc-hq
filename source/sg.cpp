@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: sg.cpp,v 1.172 2001-10-08 14:44:23 mbickel Exp $
+//     $Id: sg.cpp,v 1.173 2001-10-16 15:33:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.172  2001/10/08 14:44:23  mbickel
+//      Some cleanup
+//
 //     Revision 1.171  2001/10/03 20:56:06  mbickel
 //      Updated data files
 //      Updated online help
@@ -360,6 +363,7 @@
 #include <signal.h>
 #include <algorithm>
 #include <memory>
+#include <SDL_image.h>
 
 
 #include "vehicletype.h"
@@ -2592,6 +2596,16 @@ int main(int argc, char *argv[] )
    if ( CGameOptions::Instance()->forceWindowedMode && !cl->f() )  // cl->f == force fullscreen command line param
       fullscreen = 0;
 
+   SDLmm::Surface* icon = NULL;
+   try {
+      tnfilestream iconl ( "icon_asc.gif", tnstream::reading );
+      SDL_Surface *icn = IMG_LoadGIF_RW( SDL_RWFromStream ( &iconl ));
+      SDL_SetColorKey(icn, SDL_SRCCOLORKEY, *((Uint8 *)icn->pixels));
+      icon = new SDLmm::Surface ( icn );
+   }
+   catch ( ... ) {
+   }
+
 
 
    int xr = 800;
@@ -2607,7 +2621,7 @@ int main(int argc, char *argv[] )
    if ( cl->y() != 600 )
       yr = cl->y();
 
-   modenum8 = initgraphics ( xr, yr, 8 );
+   modenum8 = initgraphics ( xr, yr, 8, icon );
    
    /* Clean up on exit */
    atexit(SDL_Quit);
@@ -2623,6 +2637,7 @@ int main(int argc, char *argv[] )
       gtp.filename = cl->l();
 
       {
+         SDL_Init ( SDL_INIT_VIDEO );
          int w;
          tnfilestream stream ("mausi.raw", tnstream::reading);
          stream.readrlepict(   &icons.mousepointer, false, &w );

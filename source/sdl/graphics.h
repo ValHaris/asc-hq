@@ -22,13 +22,14 @@
 #include "../global.h"
 #include "../tpascal.inc"
 #include "../palette.h"
+#include "../basegfx.h"
 
 
 
 //*********** Initialization ************
 
 extern int reinitgraphics(int modenum);
-extern int initgraphics ( int x, int y, int depth );
+extern int initgraphics ( int x, int y, int depth, SDLmm::Surface* icon = NULL );
              // returns > 0  modenum to reestablish this mode
              //         < 0 : error
 

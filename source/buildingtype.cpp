@@ -456,6 +456,12 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
          pc.closeBracket();
       }
 
+      #ifndef converter
+      guibuildicon = generate_building_gui_build_icon ( this );
+      #else
+      guibuildicon = NULL;
+      #endif
+
 
       bool rubble = false;
       for ( int i = 0; i < 4; i++ )

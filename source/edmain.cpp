@@ -2,9 +2,13 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.54 2001-10-02 18:08:52 mbickel Exp $
+//     $Id: edmain.cpp,v 1.55 2001-10-16 15:33:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2001/10/02 18:08:52  mbickel
+//      Changed parser error handling to use exceptions
+//      Removed gfx2pcx project
+//
 //     Revision 1.53  2001/10/02 14:06:28  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -276,6 +280,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <SDL_image.h>
 
 
 #include "edmisc.h"
@@ -913,6 +918,17 @@ int main(int argc, char *argv[] )
    checkDataVersion();
    check_bi3_dir ();
 
+   SDLmm::Surface* icon = NULL;
+   try {
+      tnfilestream iconl ( "icon_mapeditor.gif", tnstream::reading );
+      SDL_Surface *icn = IMG_LoadGIF_RW( SDL_RWFromStream ( &iconl ));
+      SDL_SetColorKey(icn, SDL_SRCCOLORKEY, *((Uint8 *)icn->pixels));
+      icon = new SDLmm::Surface ( icn );
+   }
+   catch ( ... ) {
+   }
+
+
 
    int xr = 800;
    int yr = 600;
@@ -927,7 +943,7 @@ int main(int argc, char *argv[] )
    if ( cl->y() != 600 )
       yr = cl->y();
 
-   modenum8 = initgraphics ( xr, yr, 8 );
+   modenum8 = initgraphics ( xr, yr, 8, icon );
 
    if ( modenum8 < 0 )
       return 1;

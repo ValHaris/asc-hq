@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.17 2001-08-02 15:33:02 mbickel Exp $
+//     $Id: graphics.cpp,v 1.18 2001-10-16 15:33:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2001/08/02 15:33:02  mbickel
+//      Completed text based file formats
+//
 //     Revision 1.16  2000/10/18 12:40:48  mbickel
 //      Rewrite event handling for windows
 //
@@ -91,6 +94,8 @@
 #include "graphics.h"
 #include "../basegfx.h"
 #include "../global.h"
+#include "../ascstring.h"
+#include "../errors.h"
 #include sdlheader
 
 
@@ -116,24 +121,26 @@ void setWindowCaption ( const char* s )
    SDL_WM_SetCaption ( s, NULL );
 }
 
-int initgraphics ( int x, int y, int depth )
+int initgraphics ( int x, int y, int depth, SDLmm::Surface* icon )
 {
-  if ( SDL_Init(SDL_INIT_VIDEO  ) < 0 ) { // | SDL_INIT_NOPARACHUTE
-     fprintf(stderr, "Couldn't initialize SDL: %s\n", SDL_GetError());
-     return -1;
-  }
+  if ( SDL_Init(SDL_INIT_VIDEO  ) < 0 )  // | SDL_INIT_NOPARACHUTE
+     fatalError ( ASCString("Couldn't initialize SDL: ") + SDL_GetError());
+
 
   setWindowCaption ( "Advanced Strategic Command" );
+
+  if ( icon )
+     SDL_WM_SetIcon( icon->GetSurface(), NULL );
+
+
   /* Initialize the display in a 640x480 8-bit palettized mode */
   int flags = SDL_SWSURFACE;
   if ( fullscreen )
      flags |= SDL_FULLSCREEN;
 
   screen = SDL_SetVideoMode(x, y, depth, flags ); // | SDL_FULLSCREEN
-  if ( screen == NULL ) {
-     fprintf(stderr, "Couldn't set %dx%dx%d video mode: %s\n",x,y,depth, SDL_GetError());
-     return -1;
-  }
+  if ( !screen )
+     fatalError ( "Couldn't set %dx%dx%d video mode: %s\n", x,y,depth, SDL_GetError());
 
   agmp->resolutionx = x;
   agmp->resolutiony = y;
@@ -143,22 +150,13 @@ int initgraphics ( int x, int y, int depth )
   agmp->bytesperscanline = x * depth/8;
   agmp->byteperpix = screen->format->BytesPerPixel ;
   agmp->linearaddress = (int) screen->pixels;
-/*
-            char          redmasksize       ;
-            char          redfieldposition  ;
-            char          greenmasksize     ;
-            char          greenfieldposition;
-            char          bluemasksize      ;
-            char          bluefieldposition ;
-*/
   agmp->bitperpix = screen->format->BitsPerPixel;
-//            char          memorymodel;
   agmp->directscreenaccess = 0;
 
   *hgmp = *agmp;
 
-        graphicinitialized = 1;
-   return 1;
+  graphicinitialized = 1;
+  return 1;
 }
              // returns > 0  modenum to reestablish this mode
              //         < 0 : error

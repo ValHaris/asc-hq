@@ -2541,7 +2541,7 @@ MAINCONDATA="palette.pal data.version *.gfx title.jpg \
  	informat.nic ascent.nic descent.nic attack.nic \
  	movement.nic *.nic 640480.pcx *.raw *.scr *.fnt \
  	*.dat *.map helpsys?.txt message?.txt *.pcx lcac2.jpg \
- 	bkgr4.scr helpsys9.msg *.wav *.msg"
+ 	bkgr4.scr helpsys9.msg *.wav *.msg *.gif"
 
 
 
@@ -2646,7 +2646,15 @@ done
 ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
 
-trap 'rm -fr `echo "Makefile source/Makefile source/docs/Makefile source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile source/libs/Makefile source/ai/Makefile source/unix/Makefile  config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
+trap 'rm -fr `echo "Makefile source/Makefile source/docs/Makefile source/docs/en/Makefile \
+           source/sdl/Makefile source/libs/triangul/Makefile \
+	   source/libs/Makefile source/ai/Makefile source/unix/Makefile doc/manpages/Makefile \
+           source/Makefile source/docs/Makefile source/clparser/Makefile \
+           source/docs/en/Makefile source/sdl/Makefile \
+	   source/libs/triangul/Makefile source/libs/Makefile \
+	   source/ai/Makefile source/unix/Makefile \
+           source/unix/mapeditor/Makefile source/tools/Makefile \
+	   source/tools/linux/Makefile data/Makefile  config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
@@ -2744,7 +2752,15 @@ EOF
 
 cat >> $CONFIG_STATUS <<EOF
 
-CONFIG_FILES=\${CONFIG_FILES-"Makefile source/Makefile source/docs/Makefile source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile source/libs/Makefile source/ai/Makefile source/unix/Makefile "}
+CONFIG_FILES=\${CONFIG_FILES-"Makefile source/Makefile source/docs/Makefile source/docs/en/Makefile \
+           source/sdl/Makefile source/libs/triangul/Makefile \
+	   source/libs/Makefile source/ai/Makefile source/unix/Makefile doc/manpages/Makefile \
+           source/Makefile source/docs/Makefile source/clparser/Makefile \
+           source/docs/en/Makefile source/sdl/Makefile \
+	   source/libs/triangul/Makefile source/libs/Makefile \
+	   source/ai/Makefile source/unix/Makefile \
+           source/unix/mapeditor/Makefile source/tools/Makefile \
+	   source/tools/linux/Makefile data/Makefile "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
@@ -2923,10 +2939,4 @@ EOF
 chmod +x $CONFIG_STATUS
 rm -fr confdefs* $ac_clean_files
 test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
-
-doc/manpages/Makefile \
-source/Makefile source/docs/Makefile source/clparser/Makefile \
-source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile \
-source/libs/Makefile source/ai/Makefile source/unix/Makefile \
-source/unix/mapeditor/Makefile source/tools/Makefile source/tools/linux/Makefile)
 

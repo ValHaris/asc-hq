@@ -2,8 +2,6 @@ MAINTAINERCLEANFILES    = Makefile.in
 
 pkgdata_DATA = main.con 
 
-SUBDIRS = moredata
-
 pkgdatadir = $(datadir)/games/@PACKAGE@
 
 main.con: @MAINCONDATA@

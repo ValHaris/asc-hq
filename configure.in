@@ -145,15 +145,17 @@ MAINCONDATA="palette.pal data.version *.gfx title.jpg \
  	informat.nic ascent.nic descent.nic attack.nic \
  	movement.nic *.nic 640480.pcx *.raw *.scr *.fnt \
  	*.dat *.map helpsys?.txt message?.txt *.pcx lcac2.jpg \
- 	bkgr4.scr helpsys9.msg *.wav *.msg"
+ 	bkgr4.scr helpsys9.msg *.wav *.msg *.gif"
 
 dnl what gehts packed into main.con (the data container file)
 AC_SUBST([MAINCONDATA])
 
-AC_OUTPUT(Makefile source/Makefile source/docs/Makefile source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile source/libs/Makefile source/ai/Makefile source/unix/Makefile )
-doc/manpages/Makefile \
-source/Makefile source/docs/Makefile source/clparser/Makefile \
-source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile \
-source/libs/Makefile source/ai/Makefile source/unix/Makefile \
-source/unix/mapeditor/Makefile source/tools/Makefile source/tools/linux/Makefile)
-
+AC_OUTPUT( Makefile source/Makefile source/docs/Makefile source/docs/en/Makefile \
+           source/sdl/Makefile source/libs/triangul/Makefile \
+	   source/libs/Makefile source/ai/Makefile source/unix/Makefile doc/manpages/Makefile \
+           source/Makefile source/docs/Makefile source/clparser/Makefile \
+           source/docs/en/Makefile source/sdl/Makefile \
+	   source/libs/triangul/Makefile source/libs/Makefile \
+	   source/ai/Makefile source/unix/Makefile \
+           source/unix/mapeditor/Makefile source/tools/Makefile \
+	   source/tools/linux/Makefile data/Makefile )
