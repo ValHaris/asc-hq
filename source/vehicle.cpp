@@ -520,7 +520,6 @@ int Vehicle::ReactionFire::enable ( void )
       } else {
          status = init2;
       }
-      // unit->setMovement ( 0, 0 );
    }
    #endif
    return 0;
@@ -529,9 +528,11 @@ int Vehicle::ReactionFire::enable ( void )
 void Vehicle::ReactionFire::disable ( void )
 {
    if ( status != off ) {
+       if ( status != init1 && status != init2 ) {
+          enemiesAttackable = 0;
+          unit->setMovement ( 0, 0 );
+       }
        status = off;
-       enemiesAttackable = 0;
-       unit->setMovement ( 0, 0 );
    }
 }
 

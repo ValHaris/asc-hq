@@ -79,6 +79,20 @@ Troubleshooting:
     Type ASC --help for a summary of the command line parameters
 
 
+7)  ASC crashes.
+
+    Please send me a backtrace. You must compile ASC from source to do this.
+    Run "gdb asc"
+    Type "run" in gdb and reproduce the crash.
+    type "backtrace" in gdb and send me its output.
+
+    If gdb cant find the debug symbols, you must first turn them on and rebuild
+    ASC:
+     export CXXFLAGS="-O0 -g"
+     configure
+     make
+     (make install)
+     
 
 Some notes:
  - to run under X in fullscreen mode you need DGA. You may need to upgrade

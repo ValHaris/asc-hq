@@ -110,6 +110,12 @@ Medium sized tasks
 -8-  input/output of raw height information in mapgenerator
      for usage by terragen or similar programs
 
+-6-  the units that are destroyed by terrain change or lack or fuel (airplanes
+     only) should be recorded in some kind of replay.
+
+-3-  some statistics screen that lists your losses and the losses you inflicted
+     at the enemy
+
 Larger Tasks:
 
 -1-  Rewriting the whole graphics engine

@@ -31,9 +31,6 @@
 #include <stdio.h>
 #include <malloc.h>
 
-
-#define logging
-
 #ifdef logging
  void addToLog ( const ASCString& str )
  {

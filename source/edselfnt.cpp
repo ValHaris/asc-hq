@@ -2,9 +2,14 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.36 2001-11-22 13:49:32 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.37 2001-12-17 19:41:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2001/11/22 13:49:32  mbickel
+//      Fixed crash in Mapeditor when selection color 9
+//      Fixed: turrets being displayed gray
+//      Fixed: division by 0 by AI movement
+//
 //     Revision 1.35  2001/10/29 20:24:56  mbickel
 //      Fixed AI crash when producing to much units
 //
@@ -1333,7 +1338,10 @@ void SelectItemContainer :: checkformouse ( void )
             break;
          case 3: selbuilding ( ct_invvalue );
             break;
-         case 4: selobject ( ct_invvalue );
+         case 4: if ( skeypress ( ct_lstrg ) || skeypress ( ct_rstrg ) || skeypress ( ct_lshift ) || skeypress ( ct_rshift ))
+                    selobject ( ct_invvalue );
+                 else
+                    execaction(act_switchmaps );
             break;
          case 5: selmine ( ct_invvalue );
             break;

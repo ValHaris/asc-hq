@@ -2,9 +2,13 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.57 2001-12-14 10:20:05 mbickel Exp $
+//     $Id: edmain.cpp,v 1.58 2001-12-17 19:41:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2001/12/14 10:20:05  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.56  2001/10/16 19:58:19  mbickel
 //      Added title screen for mapeditor
 //      Updated source documentation
@@ -594,6 +598,7 @@ void         editor(void)
                      break;
                   case ct_f1:   execaction(act_help);
                      break;
+                  case ct_f7 :
                   case ct_f3 : execaction(act_selbodentyp);
                      break;
                   case ct_f3 + ct_shp :
@@ -606,7 +611,9 @@ void         editor(void)
                      break;
                   case ct_f6 : execaction(act_selbuilding);
                      break;
-                  case ct_f7 : execaction(act_selobject);
+                  case ct_f7 + ct_shp :
+                  case ct_f7 + ct_altp :
+                  case ct_f7 + ct_stp : execaction(act_selobject);
                      break;
                   case ct_f8 : execaction(act_selmine);
                      break;

@@ -434,7 +434,7 @@ Using this parameters you can completely disable the construction of buildings o
 Using this parameters you can completely disable the construction of units by other construction units. A value of 0 enables construction, a value of 1 disables it.
 						      
 ##0807
-In ASC there are two different modes in which a training center operates. In the first mode must be explicitly trained in a training center to gain experience (just like Battle Isle 2). In the second mode a newly constructed unit will already have experience depending on the number of training centers you have (like Battle Isle 3).
+In ASC there are two different modes in which a training center operates. In the first mode a unit must be explicitly trained in a training center to gain experience (just like Battle Isle 2). In the second mode a newly constructed unit will already have experience depending on the number of training centers you have (like Battle Isle 3).
 
 If this parameter is 0, the first (BI2 style) training mode is enabled.
 If this parameter is > 0, the second (BI3 style) taining mode is enabled. The unit then gains the number of experience points that equal this parameter. For example, if you have 3 training facilities and set this parameter to 2, each newly constructed unit will alraedy have 6 experience points.
