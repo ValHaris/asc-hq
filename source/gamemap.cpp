@@ -735,6 +735,12 @@ void tmap :: setupResources ( void )
 void tmap :: chainunit ( pvehicle eht )
 {
    if ( eht ) {
+      for ( int i = 0; i< 32; i++ )
+         if ( eht->loading[i] == eht )
+            fatalError ( "tmap::chainunit - unit carries itself as cargo !\nposition is %d / %d", eht->xpos, eht->ypos );
+
+
+
       eht->next = player[ eht->color / 8 ].firstvehicle;
       if ( eht->next )
          eht->next->prev = eht;
@@ -743,7 +749,10 @@ void tmap :: chainunit ( pvehicle eht )
       if ( eht->typ->loadcapacity > 0)
          for ( int i = 0; i <= 31; i++)
             if ( eht->loading[i] )
-               chainunit ( eht->loading[i] );
+               if ( eht->loading[i] == eht )
+                  fatalError ( "tmap::chainunit - unit carries itself as cargo !\nposition is %d / %d", eht->xpos, eht->ypos );
+               else
+                  chainunit ( eht->loading[i] );
    }
 }
 

@@ -1635,19 +1635,6 @@ tlockdispspfld :: ~tlockdispspfld ()
 
 
 
-class tdisplaywholemap : public tgeneraldisplaymap {
-          tvirtualdisplay* dsp;
-          const string& filename;
-       public:
-          int getfieldposx ( int x, int y ) { return 0; };
-          int getfieldposy ( int x, int y ) { return 0; };
-          virtual void init ( int xs, int ys );
-          void cp_buf ( void );
-
-          tdisplaywholemap ( const string& _filename ) : filename ( _filename ) { dsp = NULL; };
-          virtual ~tdisplaywholemap ();
-
-};
 
 tdisplaywholemap :: ~tdisplaywholemap ( )
 {
@@ -1677,14 +1664,24 @@ void tdisplaywholemap :: init ( int xs, int ys )
 
 }
 
+int tdisplaywholemap :: getWidth( )
+{
+  return getscreenxsize() * fielddistx + 20 + 1;
+}
+
+int tdisplaywholemap :: getHeight( )
+{
+  return (getscreenysize() + 1 ) * fielddisty + 1;
+}
 
 void tdisplaywholemap :: cp_buf ( void )
 {
-   writepcx ( filename.c_str(), vfbleftspace, vfbtopspace, vfbleftspace + getscreenxsize() * fielddistx + 20, vfbtopspace + (getscreenysize() + 1 ) * fielddisty, pal );
+   writepcx ( filename.c_str(), vfbleftspace, vfbtopspace, vfbleftspace + getWidth()-1, vfbtopspace + getHeight()-1, pal );
+
 }
 
 
-void writemaptopcx ( bool confirmation, string filename )
+void writemaptopcx ( bool confirmation, string filename, int* width, int* height )
 {
 
    if ( confirmation ) {
@@ -1715,6 +1712,11 @@ void writemaptopcx ( bool confirmation, string filename )
       wm.pnt_terrain ( );
       wm.pnt_main ( );
       wm.cp_buf (  );
+      if ( width )
+         *width = wm.getWidth();
+
+      if ( height )
+         *height = wm.getHeight();
    } /* endtry */
    catch ( fatalgraphicserror ) {
       displaymessage("unable to generate image", 1 );

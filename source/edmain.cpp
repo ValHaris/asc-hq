@@ -2,9 +2,15 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.36 2001-01-28 14:04:13 mbickel Exp $
+//     $Id: edmain.cpp,v 1.37 2001-01-31 14:52:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2001/01/28 14:04:13  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.35  2001/01/25 23:44:57  mbickel
 //      Moved map displaying routins to own file (mapdisplay.cpp)
 //      Wrote program to create pcx images from map files (map2pcx.cpp)
@@ -218,7 +224,7 @@ const char* progressbarfilename = "progress.8me";
 #endif
 
 
-//  #define MEMCHK
+// #define MEMCHK
 #include "memorycheck.cpp"
 
 

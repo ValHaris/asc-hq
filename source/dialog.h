@@ -2,9 +2,15 @@
     \brief Interface for all the dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.h,v 1.16 2001-01-28 14:04:11 mbickel Exp $
+//     $Id: dialog.h,v 1.17 2001-01-31 14:52:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2001/01/28 14:04:11  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.15  2001/01/21 12:48:35  mbickel
 //      Some cleanup and documentation
 //
@@ -36,6 +42,7 @@
 #ifndef dialog_h
 #define dialog_h
 
+#include "ascstring.h"
 #include "dlg_box.h"
 #include "loaders.h"
 #include "password.h"
@@ -50,11 +57,7 @@ const int dbluedark = 248;
   \param filename A pointer to an array where the selected filename will be written to. If string is empty, the dialog was canceled.
   \param mode 1: open file for loading   0: select filename to write to
 */
-extern void  fileselectsvga(const char *       ext, 
-                             char *       filename,
-                             char         mode );
-
-
+extern void   fileselectsvga( const ASCString& ext, ASCString* filename, char swtch );
 
 extern void  startnextcampaignmap(word         id);
 

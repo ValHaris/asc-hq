@@ -1,6 +1,13 @@
-//     $Id: loaders.cpp,v 1.39 2001-01-23 21:05:18 mbickel Exp $
+//     $Id: loaders.cpp,v 1.40 2001-01-31 14:52:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2001/01/23 21:05:18  mbickel
+//      Speed up of AI
+//      Lot of bugfixes in AI
+//      Moved Research to own files (research.*)
+//      Rewrote storing of developed technologies
+//      Some cleanup and documentation
+//
 //     Revision 1.38  2001/01/22 20:00:09  mbickel
 //      Fixed bug that made savegamefrom campaign games unloadable
 //      Optimized the terrainAccess-checking
@@ -2686,8 +2693,8 @@ bool validatesavfile ( const char* filename )
 
 
 
-void         savecampaignrecoveryinformation(char*        name,
-                                             word         id)
+void         savecampaignrecoveryinformation( const ASCString& filename,
+                                             int id)
 { 
    displaymessage("This has not been implemented yet, sorry!", 2 );
 

@@ -18,118 +18,66 @@
 
 #ifdef MEMCHK
 
-  int blocknum = 0;
-  int blocklist[1000000];
+  int blockNum = 0;
+  int operationID = 0;
+  int errorNum = 0;
+  int breakOnFree = 0;
+  const int infoblocksize = 3;
+
+  bool memchk_initialized = false;
 
 
-  void addblock ( void* p )
+  bool memchk_reallyComplete = false;  // this variable is intended to be set by the debugger
+  int memchk_breakOnOp = -1;           // this variable is intended to be set by the debugger
+
+  void memchkError ( )
   {
-     blocklist[blocknum++] = (int) p;
+     errorNum++;
   }
 
-  int removeblock ( void* p )
-  {
-     if ( blocknum== 0 )
-        return 0;
-
-     int error = 0;
-     int found = 0;
-     int pos = 0;
-     while ( !found && pos < blocknum) {
-        if ( blocklist[pos] == (int) p )
-           found++;
-        else
-           pos++;
-     } /* endwhile */
-     if ( found ) {
-        for ( int i = pos+1; i < blocknum; i++ )
-           blocklist[i-1] = blocklist[i];
-        blocknum--;
-     }
-
-     return found;
-  }
-
-  int blockavail( void* p )
-  {
-     int found = 0;
-     int pos = 0;
-     while ( !found && pos < blocknum) {
-        if ( blocklist[pos] == (int) p )
-           found++;
-        else
-           pos++;
-     } /* endwhile */
-     return found;
-  }
-
-  void verifyallblocks( void );
-
-  void* memchkAlloc ( int tp, size_t amt )
-  {
-     // verifyallblocks();
-     int error;
-     void* tmp = malloc ( amt + 53 * 4 );
-    #ifdef _DOS_
-     if ( !tmp )
-        new_new_handler();
-    #endif
-
-     int* tmpi = (int*) tmp;
-     /*
-     if ( (int) tmpi == 0x1bb2138 || (int) tmpi == 0x1bcf178 )
-        error++;
-        */
-     tmpi[0] = tp;
-     tmpi[1] = (int) tmp;
-     tmpi[2] = amt;
-     for ( int i = 0; i < 25; i++ ) {
-        tmpi[3 + i] = 0x12345678;
-        tmpi[3 + i + (amt+3)/4 + 25] = 0x87654321;
-     }
-     void* p = &tmpi[28];
-
-     addblock ( p );
-     return p;
-  }
+  class Block {
+     public:
+        int start;
+        int stop;
+        int userStart;
+        int size;
+        int allocated;
+        int freed;
+        int allocatedOP;
+        int freedOP;
+  };
 
 
-  void* verifyblock ( int tp, void* p )
+  Block blocks[1000000];
+
+  void* verifyblock ( int tp, Block* b )
   {
      int error = 0;
-     int* tmpi = (int*) p;
-     tmpi -= 28;
+     int* tmpi = (int*) b->start;
 
      if ( tp != -1 )
         if ( tmpi[0] != tp )
-           error++;
-
+           error++;  // for example: allocated with new  ; freed with delete[]
+/*
      if ( tmpi[1] != (int) tmpi) {
-        error++;
+        memchkError();
         #ifdef logging
          logtofile ( "memory check: verifyblock : error A at address %x", p );
         #endif
      }
-
+*/
      int amt = tmpi[2];
 
      for ( int i = 0; i < 25; i++ ) {
+        if ( tmpi[infoblocksize + i] != 0x12345678) {
+           memchkError();
+           #ifdef logging
+            logtofile ( "memory check: verifyblock : error C at address %x", p );
+           #endif
+        }
 
-        if ( tmpi[3 + i] != 0x12345678)
-           if ( i == 1  &&  tmpi[3 + i] == -2) {
-              error++;  // deallocated twice
-              #ifdef logging
-               logtofile ( "memory check: verifyblock : error B at address %x", p );
-              #endif
-           } else {
-              error++;
-              #ifdef logging
-               logtofile ( "memory check: verifyblock : error C at address %x", p );
-              #endif
-           }
-
-        if ( tmpi[3 + i + (amt+3)/4 + 25] != 0x87654321 ) {
-           error++;
+        if ( tmpi[infoblocksize + i + (amt+3)/4 + 25] != 0x87654321 ) {
+           memchkError();
            #ifdef logging
             logtofile ( "memory check: verifyblock : error D at address %x", p );
            #endif
@@ -140,24 +88,119 @@
 
   void verifyallblocks ( void )
   {
-     for ( int i = 0; i < blocknum; i++ )
-        verifyblock ( -1, (void*) blocklist[i] );
+     for ( int i = 0; i < blockNum; i++ )
+        if ( !blocks[i].freed )
+           verifyblock ( -1, &blocks[i] );
+  }
+
+  void* memchkAlloc ( int tp, size_t amt )
+  {
+     if ( ! memchk_initialized ) {
+        memset ( blocks, 0, sizeof ( blocks ));
+        memchk_initialized = true;
+     }
+
+     if ( memchk_reallyComplete )
+        verifyallblocks();
+
+     Block& b = blocks[ blockNum++ ];
+     if ( blockNum >= 1000000 )
+        memchkError();
+
+     b.size = amt + (50+infoblocksize) * 4;
+     b.allocated++;
+
+     if ( operationID == memchk_breakOnOp )
+        memchkError();
+
+     b.allocatedOP = operationID++;
+
+     void* tmp = malloc ( b.size+4 );
+
+
+     b.start = (int) tmp;
+     b.stop = b.start + b.size;
+
+     for ( int i = 0; i < blockNum-1; i++ ) {
+        if ( !blocks[i].freed ) {
+           if ( b.start >= blocks[i].start && b.start < blocks[i].stop )
+              memchkError();
+           if ( b.stop >= blocks[i].start  && b.stop < blocks[i].stop )
+              memchkError();
+           if ( blocks[i].start < b.start && blocks[i].stop > b.stop )
+              memchkError();
+        }
+     }
+
+
+     int* tmpi = (int*) tmp;
+     /*
+     if ( (int) tmpi == 0x1bb2138 || (int) tmpi == 0x1bcf178 )
+        error++;
+        */
+     tmpi[0] = tp;
+
+     if ( 4 < infoblocksize )
+       tmpi[4] = (int) tmp;
+
+     if ( 2 < infoblocksize )
+       tmpi[2] = amt;
+
+     if ( 3 < infoblocksize )
+        tmpi[3] = b.allocatedOP;
+
+     if ( 1 < infoblocksize )
+        tmpi[1] = blockNum-1;
+
+     for ( int i = 0; i < 25; i++ ) {
+        tmpi[infoblocksize + i] = 0x12345678;
+        tmpi[infoblocksize + i + (amt+3)/4 + 25] = 0x87654321;
+     }
+     void* p = &tmpi[25+infoblocksize];
+     b.userStart = (int) p;
+     return p;
   }
 
   void memchkFree ( int tp, void* buf )
   {
-     if ( removeblock ( buf )) {
-        void* tmpi = verifyblock ( tp, buf );
+     if ( breakOnFree == (int) buf )
+        memchkError();
 
-        int* tmpi2 = (int*) buf;
-        tmpi2 -= 28;
-        tmpi2[4] = -2;
+     Block* b = NULL;
+     for ( int i = blockNum-1; i>= 0 ; i-- )
+        if ( blocks[i].userStart == (int) buf ) {
+           b = &blocks[i];
+           break;
+        }
 
+     if ( b ) {
+
+        if ( memchk_reallyComplete )
+           verifyallblocks();
+
+        void* tmpi = verifyblock ( tp, b );
+
+        if ( b->freed > 0 )
+           memchkError();
+
+        if ( b->allocated <= 0 )
+           memchkError();
+
+        if ( operationID == memchk_breakOnOp )
+           memchkError();
+
+
+        b->freed++;
+        b->freedOP = operationID++;
 
         free ( tmpi );
      } else
-       free ( buf );
+        free ( buf );
   }
+
+
+
+
 
   void *operator new( size_t amt )
   {
@@ -184,10 +227,6 @@
   void* asc_malloc ( size_t size )
   {
      void* tmp = memchkAlloc ( 104, size );
-    #ifdef _DOS_
-     if ( tmp == NULL )
-        new_new_handler();
-    #endif
      return tmp;
   }
 

@@ -1,6 +1,9 @@
-//     $Id: loadbi3.h,v 1.11 2001-01-28 23:00:40 mbickel Exp $
+//     $Id: loadbi3.h,v 1.12 2001-01-31 14:52:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2001/01/28 23:00:40  mbickel
+//      Made the small editors compilable with Watcom again
+//
 //     Revision 1.10  2001/01/28 20:42:13  mbickel
 //      Introduced a new string class, ASCString, which should replace all
 //        char* and std::string in the long term
@@ -81,7 +84,9 @@
 
 
 extern void check_bi3_dir ( void );
-extern void importbattleislemap ( const char* path, const char* filename, TerrainType::Weather* trrn, string* errorOutput = NULL );
+
+// fakemap must not be used by a program other than map2pcx
+extern void importbattleislemap ( const char* path, const char* filename, TerrainType::Weather* trrn, string* errorOutput = NULL, bool __fakeMap = false );
 extern void insertbattleislemap ( int x, int y, const char* path, const char* filename  );
 
 extern const char* getbi3path ( void );

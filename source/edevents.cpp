@@ -2,9 +2,15 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.17 2001-01-28 14:04:12 mbickel Exp $
+//     $Id: edevents.cpp,v 1.18 2001-01-31 14:52:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2001/01/28 14:04:12  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.16  2001/01/25 23:44:56  mbickel
 //      Moved map displaying routins to own file (mapdisplay.cpp)
 //      Wrote program to create pcx images from map files (map2pcx.cpp)
@@ -1489,14 +1495,15 @@ void         tcreateevent::buttonpressed(int         id)
                     } 
                 break; 
                 case cepalettechange: {
-                    mousevisible(false); 
-                    fileselectsvga("*.pal", s , 1);
+                    mousevisible(false);
+                    ASCString filename;
+                    fileselectsvga("*.pal", &filename , 1);
                     mousevisible(true); 
                     freedata();
-                    if (s[0] != 0 ) {
-                       ae->datasize = strlen (s) +1;
+                    if ( !filename.empty() ) {
+                       ae->datasize = filename.length() + 1;
                        ae->chardata = new char [ ae->datasize ];
-                       strcpy( ae->chardata, s );
+                       strcpy( ae->chardata, filename.c_str() );
                     } 
                     else {
                        ae->a.action = 255;
@@ -1506,14 +1513,15 @@ void         tcreateevent::buttonpressed(int         id)
                 break;
                 case cerunscript: {
                     mousevisible(false); 
-                    fileselectsvga("*.scr", s , 1);
-                    mousevisible(true); 
+                    ASCString filename;
+                    fileselectsvga("*.scr", &filename , 1);
+                    mousevisible(true);
                     freedata();
-                    if (s[0] != 0 ) {
-                       ae->datasize = strlen(s)+1;
+                    if ( !filename.empty() ) {
+                       ae->datasize = filename.length() + 1;
                        ae->chardata = new char [ ae->datasize ];
-                       strcpy( ae->chardata, s );
-                       nr = getid("Map ID",ae->a.saveas,0,maxint); 
+                       strcpy( ae->chardata, filename.c_str() );
+                       nr = getid("Map ID",ae->a.saveas,0,maxint);
                        if (nr != 0) ae->a.saveas = nr;
                        else {
                           ae->a.action = 255;

@@ -1,6 +1,9 @@
-//     $Id: loadbi3.cpp,v 1.38 2001-01-28 23:00:40 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.39 2001-01-31 14:52:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2001/01/28 23:00:40  mbickel
+//      Made the small editors compilable with Watcom again
+//
 //     Revision 1.37  2001/01/28 20:42:13  mbickel
 //      Introduced a new string class, ASCString, which should replace all
 //        char* and std::string in the long term
@@ -97,9 +100,6 @@ class timporterror : public ASCexception {};
 
 int battleisleversion = -1;
 
-
-
-
 const int LIBFilesAnz  = 11;
 
 struct  TLIBFiles {
@@ -192,14 +192,6 @@ void checkbi3dir ( void )
    } while ( notfound ); /* enddo */
    battleisleversion = 3;
 }
-
-
-class initloadbi3 {
-      public:
-         initloadbi3 ( void ) { bi2asc_color_translation_table[0] = 254; };
-      } LoadBi3init;
-
-
 
 
 const char* getbi3path ( void )
@@ -396,16 +388,19 @@ class tloadBImap {
 
        dynamic_array<char*> names;
        int namenum;
+       bool fakemap;
 
      protected:
         int xoffset, yoffset;
         TerrainType::Weather* defaultterraintype;
      public:
        void LoadFromFile( const char* path, const char* AFileName, TerrainType::Weather* trrn, string* errorOutput );
-       tloadBImap ( void ) { 
+       tloadBImap (  ) {
           xoffset = 0;
           yoffset = 0;
+          fakemap = false;
        };
+       void ____fakeMap____ ( void ) { fakemap = true; };
        virtual ~tloadBImap() {};
      private:
 
@@ -550,11 +545,13 @@ pvehicletype  tloadBImap :: getvehicletype ( int tp )
 
 pvehicle tloadBImap :: getunit ( int tp, int col )
 {
-   pvehicletype vt = getvehicletype ( tp );
-   if ( vt ) {
-      pvehicle eht = new Vehicle ( vt, actmap, col );
-      eht->fillMagically();
-      return eht;
+   if ( tp != 0xffff ) {
+      pvehicletype vt = getvehicletype ( tp );
+      if ( vt ) {
+         pvehicle eht = new Vehicle ( vt, actmap, col );
+         eht->fillMagically();
+         return eht;
+      }
    }
 
    return NULL;
@@ -782,16 +779,38 @@ void        tloadBImap ::   ReadACTNPart(void)
          }
 
          if ( !found  && Line[X] != 0xffff ) {
-            getfield ( newx, newy )->temp3 = 1;
+            if ( fakemap ) {
+               pobjecttype o = new tobjecttype;
+               *o = *getobjecttype_forid ( 44 );
+               int id = 100000;
+               while ( getobjecttype_forid ( id ))
+                 id++;
 
-            int fnd = 0;
-            for ( int k = 0; k < missnum; k++ )
-               if ( miss[k] == Line[X] )
-                  fnd = 1;
+               o->id = id;
+               o->weather = 1;
+               o->pictnum = 1;
+               o->picture[0] = new thexpic;
+               loadbi3pict_double ( Line[X], &o->picture[0]->picture );
+               o->picture[0]->flip = 0;
+               o->picture[0]->bi3pic = Line[X];
 
-            if ( !fnd ) 
-               if ( Line[X] < 44  || Line[X] > 88 )
-                  miss[missnum++] = Line[X];
+               addobjecttype ( o );
+
+               getfield ( newx, newy )->addobject ( o, 0, 1 );
+
+            } else {
+
+               getfield ( newx, newy )->temp3 = 1;
+
+               int fnd = 0;
+               for ( int k = 0; k < missnum; k++ )
+                  if ( miss[k] == Line[X] )
+                     fnd = 1;
+
+               if ( !fnd )
+                  if ( Line[X] < 44  || Line[X] > 88 )
+                     miss[missnum++] = Line[X];
+            }
             
          }
       }
@@ -830,17 +849,19 @@ struct blds {
   pbuildingtype bld;
   int pictnum;
   int terrainmatch;
+  int objectmatch;
 } ;
-   
+
+
 void       tloadBImap :: ReadSHOPPart( void )
 { 
-   TSHOPHead    SHOPHead; 
-   TFileShop    FileShop; 
+   TSHOPHead    SHOPHead;
+   TFileShop    FileShop;
 //   PVehContent  PVC; 
  
- int firstmissingbuilding = 1;
+   int firstmissingbuilding = 1;
  
-  MissFile->seek ( Header.ShopPos );
+   MissFile->seek ( Header.ShopPos );
    MissFile->readdata2 ( SHOPHead ); 
    if ( strncmp ( SHOPHead.ID, SHOPID, 4 )) {
       strcat ( missing, "\nFatal error: No Battle Isle mission; invalid ShopID\n"  );
@@ -850,8 +871,8 @@ void       tloadBImap :: ReadSHOPPart( void )
    int ShopNum = 0; 
  //  int VehContNum = 0;
  //   int AINum = 0;
-   for ( int I = 0; I < SHOPHead.Num ; I++ ) { 
-      MissFile->readdata2 ( FileShop ); 
+   for ( int I = 0; I < SHOPHead.Num ; I++ ) {
+      MissFile->readdata2 ( FileShop );
       if ( FileShop.ID == 1) {   //  wenn kein ki punkt  
         if (FileShop.a.ShopType == 32) {   //  Vehicle  
            int IsVehCont = false; 
@@ -877,7 +898,7 @@ void       tloadBImap :: ReadSHOPPart( void )
            } 
         }
        
-        else { 
+        else {
            int Y = FileShop.Pos1 / 64;
            int X = FileShop.Pos1 % 64;
            int newx = X / 2;
@@ -897,7 +918,9 @@ void       tloadBImap :: ReadSHOPPart( void )
                            if ( bld->bi_picture[w][p][ bld->entry.x ] [ bld->entry.y ] == fld->tempw ) {
                               bldlist[ bldlistnum ].bld = bld;
                               int cnt = 0;
-                              int f = 0;
+                              int terrainmatch = 0;
+                              int objmatch = 0;
+                              bool fail = false;
                               for ( int m = 0; m < 4; m++ )
                                  for ( int n = 0; n < 6; n++ )
                                     if ( bld->getpicture( m , n ) ) {
@@ -905,15 +928,23 @@ void       tloadBImap :: ReadSHOPPart( void )
                                        int ypos;
                                        bld->getfieldcoordinates ( newx, newy, m, n, &xpos, &ypos );
                                        pfield fld2 = getfield ( xpos, ypos );
-                                       if ( bld->terrain_access->accessible ( fld2->bdt ) > 0 )
-                                          f++;
-
+                                       if ( !fld2 )
+                                          fail = true;
+                                       else {
+                                          if ( bld->terrain_access->accessible ( fld2->bdt ) > 0 )
+                                             terrainmatch++;
+                                          if ( bld->bi_picture[w][p][m][n] == fld2->tempw )
+                                             objmatch++;
+                                       }
                                        cnt++;
                                     }
-                              bldlist[ bldlistnum ].pictnum = cnt;
-                              bldlist[ bldlistnum ].terrainmatch = f;
+                              if ( !fail ) {
+                                 bldlist[ bldlistnum ].pictnum = cnt;
+                                 bldlist[ bldlistnum ].terrainmatch = terrainmatch;
+                                 bldlist[ bldlistnum ].objectmatch = objmatch;
 
-                              bldlistnum++;
+                                 bldlistnum++;
+                              }
 
                            }
            }
@@ -921,8 +952,8 @@ void       tloadBImap :: ReadSHOPPart( void )
            int found = 0;
            if ( bldlistnum ) {
               for ( int j = 0; j < bldlistnum-1;  )
-                 if ( ( bldlist[ j ].terrainmatch < bldlist[ j+1 ].terrainmatch ) || 
-                      ( bldlist[ j ].terrainmatch == bldlist[ j+1 ].terrainmatch && bldlist[ j ].pictnum < bldlist[ j+1 ].pictnum) ) {
+                 if ( ( bldlist[ j ].objectmatch < bldlist[ j+1 ].objectmatch ) ||
+                      ( bldlist[ j ].objectmatch == bldlist[ j+1 ].objectmatch && bldlist[ j ].terrainmatch < bldlist[ j+1 ].terrainmatch) ) {
                     blds tmp = bldlist[ j ];
                     bldlist[ j ] = bldlist[ j+1 ];
                     bldlist[ j+1 ] = tmp;
@@ -978,7 +1009,6 @@ void       tloadBImap :: ReadSHOPPart( void )
               } 
            } 
 
-
            if ( fld->building ) {
 
               if ( battleisleversion == 3 )
@@ -994,8 +1024,11 @@ void       tloadBImap :: ReadSHOPPart( void )
               int unitnum = 0;
               for ( int j = 0; j < 16; j++ ) {
                  pvehicle eht = getunit ( FileShop.a.Content.All[j], fld->building->color/8 );
-                 if ( eht )
+                 if ( eht ) {
                     fld->building->loading[unitnum++] = eht;
+                    eht->xpos = newx;
+                    eht->ypos = newy;
+                 }
               }
 
               int prodnum = 0;
@@ -1035,21 +1068,22 @@ void       tloadBImap :: ReadSHOPPart( void )
               fld->building->actstorage.fuel = fuelfactor * FileShop.a.E;
 
            } else {
-              if ( found == 254 ) {
-                 char tmp[100];
-                 int obj = fld->tempw;
-                 sprintf( tmp, "The building at position %d / %d using pic #%d could not be set\n", newx, newy, obj );
-                 strcat ( missing, tmp );
-              } else {
-                 if ( firstmissingbuilding ) {
-                    strcat ( missing, "The buildings at the following coordinates could not be found:\n " );
-                    firstmissingbuilding = 0;
+                 if ( found == 254 ) {
+                    char tmp[100];
+                    int obj = fld->tempw;
+                    sprintf( tmp, "The building at position %d / %d using pic #%d could not be set\n", newx, newy, obj );
+                    strcat ( missing, tmp );
+                 } else {
+                    if ( firstmissingbuilding ) {
+                       strcat ( missing, "The buildings at the following coordinates could not be found:\n " );
+                       firstmissingbuilding = 0;
+                    }
+                    char tmp[100];
+                    int obj = fld->tempw;
+                    sprintf( tmp, "%d / %d using pic #%d\n", newx, newy, obj );
+                    strcat ( missing, tmp );
                  }
-                 char tmp[100];
-                 int obj = fld->tempw;
-                 sprintf( tmp, "%d / %d using pic #%d\n", newx, newy, obj );
-                 strcat ( missing, tmp );
-              }
+
            }
            ShopNum++;
 
@@ -1330,13 +1364,24 @@ void tloadBImap :: LoadFromFile( const char* path, const char* AFileName, Terrai
 }
 
 
-void importbattleislemap ( const char* path, const char* filename, TerrainType::Weather* trrn, string* errorOutput  )
+void importbattleislemap ( const char* path, const char* filename, TerrainType::Weather* trrn, string* errorOutput, bool fakemap  )
 {
+    pmap oldmap = actmap;
+    actmap = NULL;
     activateGraphicSet ( 1 );
-    ImportBiMap lbim;  
-    lbim.LoadFromFile ( path, filename, trrn, errorOutput );
-    actmap->_resourcemode = 1;
-    actmap->cleartemps ( 7 );
+    try {
+       ImportBiMap lbim ;
+       lbim.____fakeMap____();
+       lbim.LoadFromFile ( path, filename, trrn, errorOutput );
+       actmap->_resourcemode = 1;
+       actmap->cleartemps ( 7 );
+    }
+    catch ( ASCexception ) {
+       delete actmap;
+       actmap = oldmap;
+       throw;
+    }
+    delete oldmap;
 }
 
 

@@ -142,18 +142,46 @@ int mapeditorMainThread ( void* _mapname )
       loaddata();
 
       for ( FilesToLoad::iterator i = filesToLoad.begin(); i != filesToLoad.end(); i++ ) {
-          tfindfile ff ( "mis/"+*i );
+          string fn;
+          if ( i->find ( "mis/" ) == i->npos )
+             fn = "mis/"+*i;
+          else
+             fn = *i;
+
+          tfindfile ff ( fn );
           string s = ff.getnextname();
           while ( !s.empty () ) {
              string errormsg;
-             importbattleislemap ( "/home/martin/binetwork/", s.c_str(), getterraintype_forpos(0)->weather[0], &errormsg );
+             importbattleislemap ( "/home/martin/binetwork/", s.c_str(), getterraintype_forpos(0)->weather[0], &errormsg, true );
              if ( !errormsg.empty() )
                 fprintf(stderr, "map %s : %s \n", s.c_str(), errormsg.c_str() );
-             string fn = s;
+             string fn = "images/pcx/"+s;
              fn.replace ( fn.find ("dat"), 3, "pcx");
 
-             writemaptopcx ( false, fn );
-             printf("map %s # %s # %d # %d \n", s.c_str(), actmap->title, actmap->xsize*2, actmap->ysize/2 );
+             int width, height;
+
+             int maptime = get_filetime ( s.c_str());
+             int pcxtime = get_filetime ( fn.c_str() );
+             if ( maptime > pcxtime || pcxtime < 0 )
+                writemaptopcx ( false, fn, &width, &height );
+             else {
+                tdisplaywholemap wm ( fn );
+                wm.init ( actmap->xsize, actmap->ysize );
+                width = wm.getWidth();
+                height = wm.getHeight();
+             }
+
+             int playernum = 0;
+             int ainum = 0;
+             for ( int i = 0; i < 8; i++ )
+               if ( actmap->player[i].firstvehicle || actmap->player[i].firstbuilding ) {
+                  if ( actmap->player[i].stat == 0 )
+                     playernum++;
+                  if ( actmap->player[i].stat == 1 )
+                     ainum++;
+                }
+
+             printf("%sµ%sµ%dµ%dµ%dµ%dµ%dµ%d\n", s.c_str(), actmap->title, actmap->xsize*2, actmap->ysize/2, width, height, playernum, ainum );
 
              s = ff.getnextname();
 

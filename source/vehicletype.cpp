@@ -695,6 +695,9 @@ Vehicle :: Vehicle ( Vehicletype* t, pmap actmap, int player )
    color = player*8;
    
    if ( gamemap ) {
+      for ( int i = 0; i< 32; i++ )
+         if ( loading[i] == this )
+            fatalError ( "tmap::chainunit - unit carries itself as cargo !\nposition is %d / %d", xpos, ypos );
       gamemap->chainunit ( this );
       gamemap->unitnetworkid++;
       networkid = gamemap->unitnetworkid;
@@ -734,6 +737,9 @@ Vehicle :: ~Vehicle (  )
 
 void Vehicle :: init ( void )
 {
+   for ( int j = 0; j < 32; j++ )
+       loading[j] = NULL;
+
    xpos = -1;
    ypos = -1;
    
@@ -787,11 +793,6 @@ void Vehicle :: init ( void )
    reactionfire.enemiesAttackable = 0;
    generatoractive = 0;
    
-
-
-   for ( int j = 0; j < 32; j++ )
-       loading[j] = NULL;
-
    for ( int a = 0; a < 8 ; a++ )
       aiparam[a] = NULL;
 }

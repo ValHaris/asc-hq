@@ -3,9 +3,14 @@
 */
 
 
-//     $Id: sg.cpp,v 1.128 2001-01-28 20:42:14 mbickel Exp $
+//     $Id: sg.cpp,v 1.129 2001-01-31 14:52:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.128  2001/01/28 20:42:14  mbickel
+//      Introduced a new string class, ASCString, which should replace all
+//        char* and std::string in the long term
+//      Split loadbi3.cpp into 3 different files (graphicselector, graphicset)
+//
 //     Revision 1.127  2001/01/28 17:19:13  mbickel
 //      The recent cleanup broke some source files; this is fixed now
 //
@@ -930,16 +935,16 @@ void         repaintdisplayhard(void)
 
 void         ladekarte(void)
 {
-  char         s1[300];
+   ASCString s1;
 
    mousevisible(false);
-   fileselectsvga(mapextension, s1, 1 );
+   fileselectsvga(mapextension, &s1, 1 );
 
-   if ( s1[0] ) {
+   if ( !s1.empty() ) {
       mousevisible(false);
       cursor.hide();
-      displaymessage("loading map %s",0, s1 );
-      loadmap(s1);
+      displaymessage("loading map %s",0, s1.c_str() );
+      loadmap(s1.c_str());
       actmap->startGame();
 
       next_turn();
@@ -960,19 +965,16 @@ void         ladekarte(void)
 
 void         ladespiel(void)
 {
-  char         s1[300];
-
    mousevisible(false);
-   char temp[200];
-   strcpy ( temp, savegameextension );
 
-   fileselectsvga(temp, s1, 1 );
+   ASCString s1;
+   fileselectsvga(savegameextension, &s1, 1 );
 
-   if ( s1[0] ) {
+   if ( !s1.empty() ) {
       mousevisible(false);
       cursor.hide();
-      displaymessage("loading %s ",0, s1);
-      loadgame(s1 );
+      displaymessage("loading %s ",0, s1.c_str());
+      loadgame(s1.c_str() );
       removemessage();
       if ( !actmap || actmap->xsize == 0 || actmap->ysize == 0 )
          throw  NoMapLoaded();
@@ -991,7 +993,7 @@ void         ladespiel(void)
 
 void         speicherspiel( int as )
 {
-   char         s1[300];
+   ASCString s1;
 
    int nameavail = 0;
    if ( !actmap->preferredFileNames.savegame[actmap->actplayer].empty() )
@@ -1000,21 +1002,17 @@ void         speicherspiel( int as )
 
    if ( as || !nameavail ) {
       mousevisible(false);
-      char temp[200];
-      strcpy ( temp, savegameextension );
-
-      fileselectsvga(temp, s1, 0);
-
+      fileselectsvga(savegameextension, &s1, 0);
    } else
-      strcpy ( s1, actmap->preferredFileNames.savegame[actmap->actplayer].c_str() );
+      s1 = actmap->preferredFileNames.savegame[actmap->actplayer];
 
-   if ( s1[0] ) {
+   if ( !s1.empty() ) {
       actmap->preferredFileNames.savegame[actmap->actplayer] = s1;
 
       mousevisible(false);
       cursor.hide();
-      displaymessage("saving %s", 0, s1);
-      savegame(s1);
+      displaymessage("saving %s", 0, s1.c_str());
+      savegame(s1.c_str());
 
       removemessage();
       displaymap();
@@ -1281,10 +1279,10 @@ void  checkforvictory ( void )
 
 void selectgraphicset ( void )
 {
-   char filename[300];
-   fileselectsvga("*.gfx",filename,1);
-   if ( filename[0] ) {
-      int id = getGraphicSetIdFromFilename ( filename );
+   ASCString filename;
+   fileselectsvga("*.gfx",&filename,1);
+   if ( !filename.empty() ) {
+      int id = getGraphicSetIdFromFilename ( filename.c_str() );
       if ( id != actmap->graphicset ) {
          actmap->graphicset = id;
          displaymap();

@@ -1,6 +1,14 @@
-//     $Id: edglobal.cpp,v 1.26 2001-01-25 23:44:57 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.27 2001-01-31 14:52:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2001/01/25 23:44:57  mbickel
+//      Moved map displaying routins to own file (mapdisplay.cpp)
+//      Wrote program to create pcx images from map files (map2pcx.cpp)
+//      Fixed bug in repair function: too much resource consumption
+//      AI improvements and bug fixes
+//      The BI3 map import function now evaluates the player status (human/
+//       computer)
+//
 //     Revision 1.25  2001/01/21 16:37:16  mbickel
 //      Moved replay code to own file ( replay.cpp )
 //      Fixed compile problems done by cleanup
@@ -823,17 +831,17 @@ void execaction(int code)
          strcat ( filename2, pathdelimitterstring );
          strcat ( filename2, "*.dat");
 
-         char filename[260];
-         fileselectsvga ( filename2, filename,1 );
-         if ( filename[0] ) {
+         ASCString filename;
+         fileselectsvga ( filename2, &filename,1 );
+         if ( !filename.empty() ) {
             strcpy ( filename2, path );
             strcat ( filename2, "mis");
             strcat ( filename2, pathdelimitterstring );
-            strcat ( filename2, filename);
+            strcat ( filename2, filename.c_str());
             TerrainType::Weather* t = auswahl->weather[auswahlw];
             if ( !t )
                t = auswahl->weather[0];
-            importbattleislemap ( path, filename, t );
+            importbattleislemap ( path, filename.c_str(), t );
             displaymap();
          }
          #endif
@@ -853,14 +861,14 @@ void execaction(int code)
          strcat ( filename2, pathdelimitterstring );
          strcat ( filename2, "*.dat");
 
-         char filename[260];
-         fileselectsvga ( filename2, filename,1 );
-         if ( filename[0] ) {
+         ASCString filename;
+         fileselectsvga ( filename2, &filename,1 );
+         if ( !filename.empty() ) {
             strcpy ( filename2, path );
             strcat ( filename2, "mis");
             strcat ( filename2, pathdelimitterstring );
-            strcat ( filename2, filename);
-            insertbattleislemap ( getxpos(), getypos(), path, filename );
+            strcat ( filename2, filename.c_str());
+            insertbattleislemap ( getxpos(), getypos(), path, filename.c_str() );
             displaymap();
          }
          #endif

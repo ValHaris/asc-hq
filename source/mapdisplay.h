@@ -147,7 +147,7 @@ extern int showresources;
 
 extern int   getfieldundermouse ( int* x, int* y );
 
-extern void writemaptopcx ( bool confirmation = true, string filename = "" );
+extern void writemaptopcx ( bool confirmation = true, string filename = "", int* width = NULL, int* height = NULL );
 
 class tlockdispspfld {
       public:
@@ -265,6 +265,22 @@ class tbackgroundpict : public tpaintmapborder {
                int getlastpaintmode ( void );
 };
 extern tbackgroundpict backgroundpict;
+
+class tdisplaywholemap : public tgeneraldisplaymap {
+          tvirtualdisplay* dsp;
+          const string& filename;
+       public:
+          int getfieldposx ( int x, int y ) { return 0; };
+          int getfieldposy ( int x, int y ) { return 0; };
+          virtual void init ( int xs, int ys );
+          void cp_buf ( void );
+
+          tdisplaywholemap ( const string& _filename ) : filename ( _filename ) { dsp = NULL; };
+          virtual ~tdisplaywholemap ();
+          int getWidth();
+          int getHeight();
+
+};
 
 
 #endif

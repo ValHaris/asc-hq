@@ -1,6 +1,13 @@
-//     $Id: loaders.h,v 1.12 2001-01-23 21:05:19 mbickel Exp $
+//     $Id: loaders.h,v 1.13 2001-01-31 14:52:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2001/01/23 21:05:19  mbickel
+//      Speed up of AI
+//      Lot of bugfixes in AI
+//      Moved Research to own files (research.*)
+//      Rewrote storing of developed technologies
+//      Some cleanup and documentation
+//
 //     Revision 1.11  2000/11/08 19:31:10  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -81,7 +88,7 @@
 #ifndef loaders_h
 #define loaders_h
 
-
+#include "ascstring.h"
 #include "sgstream.h"
 #include "spfst.h"
 
@@ -140,8 +147,7 @@ extern void  loadicons(void);
 
 extern void loadallobjecttypes ( void );
 
-extern void  savecampaignrecoveryinformation(char*        name,
-                                             word         id);
+extern void  savecampaignrecoveryinformation( const ASCString& filename, int id);
 
 const int actsavegameversion  = 0xff33;
 const int minsavegameversion  = 0xff31;

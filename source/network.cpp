@@ -7,9 +7,15 @@
 */
 
 
-//     $Id: network.cpp,v 1.15 2001-01-28 14:04:14 mbickel Exp $
+//     $Id: network.cpp,v 1.16 2001-01-31 14:52:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2001/01/28 14:04:14  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.14  2000/10/18 14:14:15  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -168,17 +174,14 @@ void tfiletransfernetworkconnection::tsetup::init ( void )
 
 void  tfiletransfernetworkconnection::tsetup::buttonpressed ( int id )
 {
-  char         s1[300];
+   ASCString s1;
 
    tdialogbox::buttonpressed ( id );
    switch ( id ) {
       case 2:    mousevisible( false ); 
-                 char temp[200];
-                 strcpy ( temp, tournamentextension );
-
-                 fileselectsvga( temp, s1, 1);
-                 if ( s1[0] ) {
-                    strcpy ( filename, s1 );
+                 fileselectsvga( tournamentextension, &s1, 1);
+                 if ( !s1.empty() ) {
+                    strcpy ( filename, s1.c_str() );
                     showbutton ( 1 );
                  }
                  mousevisible( true );

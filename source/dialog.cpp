@@ -2,9 +2,12 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.73 2001-01-28 17:19:04 mbickel Exp $
+//     $Id: dialog.cpp,v 1.74 2001-01-31 14:52:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.73  2001/01/28 17:19:04  mbickel
+//      The recent cleanup broke some source files; this is fixed now
+//
 //     Revision 1.72  2001/01/28 14:04:10  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -1971,22 +1974,23 @@ void        unpack_time (unsigned short packed, int &sec, int &min, int &hour)
 const int fileswithdescrptionnum = 1;
 const char* fileswithdescrption[fileswithdescrptionnum] =  {"bla.bla"}; // { mapextension, savegameextension, tournamentextension };
 
- struct tfiledata {
-                char*        name;
-                char*        sdate;
-                int          time;
-
-             } ;
 
 
 
 class   tfileselectsvga : public tdialogbox {
                    public:
-                        tfiledata       *files;
+
+                       class tfiledata {
+                                   public:
+                                      ASCString        name;
+                                      ASCString        sdate;
+                                      int              time;
+                                   } ;
+
+                        vector<tfiledata>  files;
                         
-                        char         ausgabeaborted;
-                        char            searchstring[20];
-                        int             searchsize;
+                        char            ausgabeaborted;
+                        ASCString       searchstring;
                         int             numberoffiles;
                         char            mousebuttonreleased;
                         int             lastscrollbarposition;
@@ -1999,21 +2003,21 @@ class   tfileselectsvga : public tdialogbox {
                         int             firstshownfile;
                         int             markedfile;
 
-                        char            wildcard[100];
+                        ASCString       wildcard;
                         char            swtch;           /* 1: load        2: save */
-                        char*           result;
+                        ASCString*      result;
                         char         sort_name;
                         char         sort_time;
 
                         void            init( char sw );
-                        void            setdata( const char* _wildcard,   char* b );   // result
+                        void            setdata( const ASCString& _wildcard, ASCString* _result );   // result
                         
                         void            readdirectory ( void );
                         void            fileausgabe( char force , int dispscrollbar);
                         void            sortentries ( void );
                         virtual void    run ( void );
                         
-                        char         speedsearch( char input );
+                        char            speedsearch( char input );
                         void            checkfsf( char lock);   
                         void            displayspeedsearch ( void );
 
@@ -2036,7 +2040,6 @@ void         tfileselectsvga::init( char sw  )
    ysize = 420;
    sort_name = false; 
    sort_time = true; 
-   searchsize = 0;
    lastscrollbarposition = 0;
 
    windowstyle &= ~dlg_in3d;
@@ -2119,111 +2122,21 @@ void         tfileselectsvga::readdirectory(void)
 { 
    numberoffiles = 0; 
 
-  char fls[200];
-//  strcpy ( fls, gamepath );
-//  strcat ( fls, wildcard );
-  strcpy ( fls, wildcard );
-
-
-  {
-     tfindfile ff ( fls );
-
-     string filename = ff.getnextname();
-     while( !filename.empty() ) {
-        numberoffiles++;
-        filename = ff.getnextname();
-      }
-
-   } 
-
-   files = new tfiledata [ numberoffiles ];
-   memset ( files, 0, numberoffiles *  sizeof ( tfiledata ));
-
-   numberoffiles = 0; 
-
-
-   tfindfile ff ( fls );
+   tfindfile ff ( wildcard );
    string filename = ff.getnextname();
 
    while( !filename.empty() ) {
-      /*
-      if ( searchfordescription && !keypress()) {
-   
-            try {
-               char tmp[200];
-               if ( strchr ( wildcard, '\\' )) {
-                  char* a = wildcard;
-                  char* b = wildcard;
-                  while ( *a ) {
-                     if ( *a == '\\' )
-                        b = a;
-                     a++;
-                  }
-                  
-                  int ps = 0;
-                  a = wildcard;
-                  while ( a <= b ) {
-                     tmp[ps++] = *a;
-                     a++;
-                  }
+      tfiledata f;
+      f.name = filename.c_str();
 
-                  tmp[ps] = 0;
+      time_t tdate = get_filetime( filename.c_str() );
+      f.time = tdate;
+      if ( tdate != -1 )
+         f.sdate = ctime ( &tdate );
 
-                  strcat ( tmp, filename );
+      files.push_back ( f );
 
-               } else
-                  strcpy ( tmp, filename );
-
-               tnfilestream stream ( tmp, 1 );
-               stream.readpchar ( &description, 200 );
-               word w;
-               stream.readdata2 ( w );
-               if ( w != fileterminator )
-                  throw tinvalidversion ( filename, fileterminator, w );
-   
-               files[numberoffiles].name = strdup ( filename );
-               files[numberoffiles].description = NULL;
-               if ( description )
-                  if ( description[0] )
-                      files[numberoffiles].description = strdup ( description );
-   
-               time_t tdate = stream.get_time();
-               if ( tdate != -1 ) {
-                  files[numberoffiles].time = tdate;
-                  files[numberoffiles].sdate = strdup ( ctime ( &tdate ) );
-               }
-   
-   
-               numberoffiles++;
-   
-            }
-   
-            catch ( tfileerror ) {
-            }
-            
-            if ( description ) {
-               delete[]  description ;
-               description = NULL;
-            }
-   
-          
-      } else {
-         */
-          files[numberoffiles].name = strdup ( filename.c_str() );
-          // files[numberoffiles].description = NULL;
-                 
-          time_t tdate = get_filetime( filename.c_str() );
-
-          if ( tdate != -1 )
-             files[numberoffiles].sdate = strdup ( ctime ( &tdate ) );
-          else
-             files[numberoffiles].sdate = NULL;
-
-          files[numberoffiles].time = tdate;
-
-          numberoffiles++;
-       // }
-
+      numberoffiles++;
 
       filename = ff.getnextname();
    } 
@@ -2234,11 +2147,8 @@ void         tfileselectsvga::readdirectory(void)
 } 
 
 
-
-
 void         tfileselectsvga::fileausgabe(char     force , int dispscrollbar)
 { 
-
    if (numberoffiles == 0)
       return;
 
@@ -2276,14 +2186,14 @@ void         tfileselectsvga::fileausgabe(char     force , int dispscrollbar)
             actdispc[jj] = activefontsettings.color;
 
             activefontsettings.length = 120;
-            showtext2( files[ii].name,x1 + 15,y1 + starty + jj * 20 + 20);
+            showtext2( files[ii].name.c_str() ,x1 + 15,y1 + starty + jj * 20 + 20);
 
             activefontsettings.length = 200;
             activefontsettings.justify = righttext;
-            if ( files[ii].sdate ) 
-              showtext2( files[ii].sdate, x1 + 145,y1 + starty + jj * 20 + 20);
+            if ( !files[ii].sdate.empty() )
+               showtext2( files[ii].sdate.c_str(), x1 + 145,y1 + starty + jj * 20 + 20);
             else 
-              bar ( x1 + 145,y1 + starty + jj * 20 + 20, x1 + 145 + activefontsettings.length, y1 + starty + jj * 20 + 20 + activefontsettings.font->height, activefontsettings.background );
+               bar ( x1 + 145,y1 + starty + jj * 20 + 20, x1 + 145 + activefontsettings.length, y1 + starty + jj * 20 + 20 + activefontsettings.font->height, activefontsettings.background );
 
             activefontsettings.justify = lefttext;
             activefontsettings.length = 230;
@@ -2300,9 +2210,7 @@ void         tfileselectsvga::fileausgabe(char     force , int dispscrollbar)
          actdispc[jj] = -1;
       } 
    } 
-
-
-   ausgabeaborted = false; 
+   ausgabeaborted = false;
    mousevisible(true); 
 } 
 
@@ -2311,7 +2219,7 @@ void         tfileselectsvga::fileausgabe(char     force , int dispscrollbar)
 
 void         tfileselectsvga::sortentries(void)
 { 
-    int      ii;
+   int      ii;
 
    if ( numberoffiles == 0)
       return;
@@ -2320,8 +2228,8 @@ void         tfileselectsvga::sortentries(void)
    memset ( actdispn, -1, sizeof ( actdispn ));
 
    for (ii=0; ii < numberoffiles-1; ) {
-      if (((sort_name == true ) && ( strcmp( files[ii].name , files[ii+1].name ) > 0)) ||
-          ((sort_name == false) && ( files[ii].time < files[ii+1].time))) {
+      if ((sort_name == true  && files[ii].name > files[ii+1].name ) ||
+          (sort_name == false && files[ii].time < files[ii+1].time )) {
              tfiledata temp = files[ii];
              files[ii] = files[ii+1];
              files[ii+1] = temp;
@@ -2338,29 +2246,23 @@ void         tfileselectsvga::sortentries(void)
       else 
          ii++;
    } 
-
-} 
+}
 
 
 
 char      tfileselectsvga::speedsearch(char         input)
 { 
-    char      sps; 
+   searchstring += toupper( input );
 
-
-   searchstring[searchsize] = toupper( input );
-   searchsize++;
-   searchstring[searchsize] = 0;
-
-   sps = false; 
+   bool sps = false;
    int ii = markedfile;
-   if ( ii >= 0    &&   strnicmp ( searchstring, files[ii].name, searchsize ) == 0) {
+   if ( ii >= 0  && searchstring.compare ( files[ii].name.copyToUpper(), 0, searchstring.length() ) == 0) {
       sps = true; 
    } 
    else { 
       ii = 0;
       while (ii < numberoffiles  &&  !sps ) {
-         if (strnicmp ( searchstring, files[ii].name, searchsize ) == 0) {
+         if (searchstring.compare ( files[ii].name.copyToUpper(), 0, searchstring.length() ) == 0) {
             sps = true; 
             markedfile = ii;
          } 
@@ -2368,13 +2270,10 @@ char      tfileselectsvga::speedsearch(char         input)
       } 
    } 
 
-   if (!sps   &&   swtch == 1) {
-     searchsize--;
-     searchstring[searchsize] = 0;
-   }
+   if ( !sps   &&   swtch == 1)
+     searchstring.erase ( searchstring.length()-1, 1 );
 
-
-   displayspeedsearch(); 
+   displayspeedsearch();
 
    return sps;
 } 
@@ -2382,12 +2281,12 @@ char      tfileselectsvga::speedsearch(char         input)
 
 void         tfileselectsvga::displayspeedsearch(void)
 { 
-  collategraphicoperations cgo ( x1 + 225, y1 + ysize - 30, x1 + 225 + 190, y1 + ysize );
+   collategraphicoperations cgo ( x1 + 225, y1 + ysize - 30, x1 + 225 + 190, y1 + ysize );
 
    mousevisible(false);
    npush ( activefontsettings );
    activefontsettings.length = 190;
-   showtext2(searchstring,x1 + 225, y1 + ysize - 30);
+   showtext2(searchstring.c_str(),x1 + 225, y1 + ysize - 30);
    npop ( activefontsettings );
    mousevisible(true); 
 } 
@@ -2424,7 +2323,6 @@ void         tfileselectsvga::run(void)
    #endif
 
    activefontsettings.background = dblue; 
-   searchstring[0] = 0;
 
    readdirectory(); 
    sortentries(); 
@@ -2505,7 +2403,7 @@ void         tfileselectsvga::run(void)
          }
 
          if (prntkey == cto_enter) {
-            if ( (swtch == 1 && ( markedfile >= 0) )   ||   ( swtch == 0) && searchstring[0]  )
+            if (  ( swtch == 1 && ( markedfile >= 0) ) || ( swtch == 0) && !searchstring.empty()  )
                abrt = 2;
             else
               if  ( ( swtch == 0) && (markedfile >= 0))
@@ -2519,28 +2417,22 @@ void         tfileselectsvga::run(void)
                   fileausgabe(false,1); 
                } 
             } 
-            else { 
-               if ( searchsize < maxfilenamelength ) {
-                  searchstring[searchsize] = prntkey;
-                  searchsize++;
-                  searchstring[searchsize] = 0;
+            else
+               if ( prntkey != '.' ) {
+                  searchstring += prntkey;
                   displayspeedsearch();
                }
-            } 
          } 
-         if ((prntkey == cto_bspace) && (searchstring[0] != 0)) {   /* l”schen des letzten zeichens von searchstring */
-            searchsize--;
-            searchstring[searchsize] = 0;
+         if ( prntkey == cto_bspace  &&  !searchstring.empty() ) {   /* l”schen des letzten zeichens von searchstring */
+            searchstring.erase ( searchstring.length()-1 , 1);
             displayspeedsearch(); 
          } 
          if (prntkey == cto_esc ) {   /*  abbrechen / searchstring zur?cksetze  */
-            if ((swtch == 1 ) || (searchstring[0] == 0))
+            if ((swtch == 1 ) || searchstring.empty() )
                abrt = 1; 
             else
-               if ( searchstring[0] ) {
-                  searchstring[0] = 0;
-                  searchsize = 0;
-               }
+               if ( !searchstring.empty() )
+                  searchstring.erase();
 
          } 
          if (ausgabeaborted) 
@@ -2571,75 +2463,42 @@ void         tfileselectsvga::run(void)
       }  while ( abrt == 0);
       mousevisible(false); 
       if (abrt > 1) { 
-         if ( ( markedfile >= 0) || searchstring[0] ) {
-            if ( (swtch == 1)  ||   (abrt == 3)   ||  (!searchstring[0]) ) {  // load
-               strcpy ( result , files[markedfile].name );
-               /*
-               if ( descrip ) 
-                  if ( files[markedfile].description )
-                     strcpy ( descrip, files[markedfile].description );
-                  else
-                     descrip[0] = 0;
-               */
+         if ( ( markedfile >= 0) || !searchstring.empty() ) {
+            if ( (swtch == 1)  ||   (abrt == 3)   || searchstring.empty() ) {  // load
+               *result = files[markedfile].name ;
             } else {
-               char* aa = searchstring;
-               while (*aa != 0  && *aa != '.') 
-                  aa++;
-               *aa = 0;
-
-               aa = wildcard;
-               while ( *aa != 0 && *aa != '*' )
-                  aa++;
-
-               if ( *aa ) 
-                  aa++;
-
-               strcat( searchstring, aa );
-   
-               strcpy( result , searchstring );
+               ASCString extension = wildcard;
+               extension.erase ( 0, 1 );
+               *result = searchstring + extension;
             }
          } else
-             result[0] = 0;
+             result->erase();
       } else
-        result[0] = 0;
+          result->erase();
 
       mousevisible(true); 
 
    } else
-     result[0] = 0;
+      result->erase();
 
   #ifdef _DOS_
    #ifdef NEWKEYB
    initkeyb();
    #endif
   #endif
-
-
-   for (int ii=0; ii < numberoffiles ;ii++ ) {
-      if ( files[ii].name )
-         delete[]  files[ii].name ;
-      if ( files[ii].sdate )
-         delete[]  files[ii].sdate ;
-      // if ( files[ii].description )
-      //   delete[]  files[ii].description ;
-   } /* endfor */
-   delete[] files ;
-
-} 
+}
 
 
 
 
-void         tfileselectsvga::setdata( const char * _wildcard, char *   b)
+void         tfileselectsvga::setdata( const ASCString& _wildcard, ASCString* _result )
 { 
-   strcpy ( wildcard , _wildcard );
-   result = b;
+   wildcard = _wildcard;
+   result = _result;
 } 
 
 
-void         fileselectsvga( const char*       ext,
-                            char*       filename,
-                            char        swtch )
+void         fileselectsvga( const ASCString& ext, ASCString* filename, char swtch )
 {                           
    tfileselectsvga tss; 
 

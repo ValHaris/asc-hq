@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.61 2001-01-28 17:19:09 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.62 2001-01-31 14:52:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2001/01/28 17:19:09  mbickel
+//      The recent cleanup broke some source files; this is fixed now
+//
 //     Revision 1.60  2001/01/23 21:05:15  mbickel
 //      Speed up of AI
 //      Lot of bugfixes in AI
@@ -1388,11 +1391,11 @@ void         tcontinuecampaign::buttonpressed(int         id)
       break;
 
       case 2:   {
-            char t[30];
+            ASCString t;
 
-            fileselectsvga("*.rcy", t, 2);
-            if ( t[0] )
-               savecampaignrecoveryinformation ( t, idsearched);
+            fileselectsvga("*.rcy", &t, 2);
+            if ( !t.empty() )
+               savecampaignrecoveryinformation ( t.c_str(), idsearched);
          }
       break;
 
@@ -1540,14 +1543,14 @@ void         tchoosenewmap::readmapinfo(void)
 
 void         tchoosenewmap::buttonpressed( int id )
 {
-  char         t[100];
+   ASCString t;
 
    switch (id) {
 
       case 2:   {
-            fileselectsvga(mapextension, t, 1);
-            if ( t[0] ) {
-               strcpy(mapname, t);
+            fileselectsvga(mapextension, &t, 1);
+            if ( !t.empty() ) {
+               strcpy(mapname, t.c_str());
                readmapinfo();
             }
             else

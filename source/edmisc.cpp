@@ -1,6 +1,11 @@
-//     $Id: edmisc.cpp,v 1.46 2001-01-28 20:42:11 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.47 2001-01-31 14:52:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2001/01/28 20:42:11  mbickel
+//      Introduced a new string class, ASCString, which should replace all
+//        char* and std::string in the long term
+//      Split loadbi3.cpp into 3 different files (graphicselector, graphicset)
+//
 //     Revision 1.45  2001/01/28 17:19:07  mbickel
 //      The recent cleanup broke some source files; this is fixed now
 //
@@ -1411,48 +1416,24 @@ void         repaintdisplay(void)
 
 void         k_savemap(char saveas)
 { 
-
-   #ifdef logging
-   logtofile ( "edmisc / k_savemap /  started" );
-   #endif
-
-   char filename[1000];
+   ASCString filename;
 
    int nameavail = 0;
    if ( !actmap->preferredFileNames.mapname[0].empty() ) {
       nameavail = 1;
-      strcpy ( filename, actmap->preferredFileNames.mapname[0].c_str() );
-   } else
-      filename[0] = 0;
+      filename = actmap->preferredFileNames.mapname[0];;
+   }
 
    mousevisible(false);
    if ( saveas || !nameavail ) {
-      fileselectsvga(mapextension,filename,0);
+      fileselectsvga(mapextension,&filename,0);
    } 
-   if ( filename[0] ) {
-
-      #ifdef logging
-      logtofile ( "edmisc / k_savemap /  filename entered" );
-      #endif
-
+   if ( !filename.empty() ) {
       mapsaved = true;
-
       cursor.hide();
-
-      #ifdef logging
-      logtofile ( "edmisc / k_savemap /  description entered" );
-      #endif
-
       actmap->preferredFileNames.mapname[0] = filename;
-
-      #ifdef logging
-      logtofile ( "edmisc / k_savemap /  vor savemap" );
-      #endif
-      savemap( filename );
-      #ifdef logging
-      logtofile ( "edmisc / k_savemap /  nach savemap " );
-      #endif
-      displaymap(); 
+      savemap( filename.c_str() );
+      displaymap();
       cursor.show();
    } 
    mousevisible(true); 
@@ -1460,15 +1441,15 @@ void         k_savemap(char saveas)
 
 
 void         k_loadmap(void)
-{ 
-  char         s1[300];
+{
+   ASCString s1;
 
    mousevisible(false); 
-   fileselectsvga(mapextension, s1, 1 );
-   if ( s1[0] ) {
+   fileselectsvga(mapextension, &s1, 1 );
+   if ( !s1.empty() ) {
       cursor.hide(); 
-      displaymessage("loading map %s",0, s1 );
-      loadmap(s1);
+      displaymessage("loading map %s",0, s1.c_str() );
+      loadmap(s1.c_str());
       actmap->startGame();
 
       if ( actmap->campaign && !actmap->campaign->directaccess && actmap->codeword[0]) {
@@ -3570,10 +3551,10 @@ void selectunitsetfilter ( void )
 
 void selectgraphicset ( void )
 {
-   char filename[300];
-   fileselectsvga("*.gfx",filename,1);
-   if ( filename[0] ) {
-      int id = getGraphicSetIdFromFilename ( filename );
+   ASCString filename;
+   fileselectsvga("*.gfx",&filename,1);
+   if ( !filename.empty() ) {
+      int id = getGraphicSetIdFromFilename ( filename.c_str() );
       if ( id != actmap->graphicset ) {
          actmap->graphicset = id;
          displaymap();
