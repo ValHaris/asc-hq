@@ -1,6 +1,9 @@
-//     $Id: sgstream.cpp,v 1.8 2000-03-11 18:22:08 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.9 2000-03-29 09:58:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/03/11 18:22:08  mbickel
+//      Added support for multiple graphic sets
+//
 //     Revision 1.7  2000/02/03 20:54:41  mbickel
 //      Some cleanup
 //      getfiletime now works under Linux too
@@ -66,6 +69,7 @@
 #include <stdio.h>
 #include <fstream.h>
 #include <math.h>
+#include <stdarg.h>
 
 
 #include "tpascal.inc"
@@ -129,8 +133,13 @@ int checkcodemem ( void )
 */
 
 #ifndef converter
-void logtofile ( char* strng )
+void logtofile ( char* strng, ... )
 {
+   char buf[10000];
+   va_list arglist;
+   va_start ( arglist, strng );
+   vsprintf ( buf, strng, arglist );
+
    int a = memavail();
 
    if ( !logfile )
@@ -150,10 +159,11 @@ void logtofile ( char* strng )
    if ( !checkcodemem() )
      fprintf( logfile, "CODE DAMAGED!!" );
 */     
-   fprintf ( logfile, strng );
+   fprintf ( logfile, buf );
    fprintf ( logfile, "\n" );
    fflush ( logfile );
 //   fclose ( f );
+   va_end ( arglist );
 }
 #endif
 

@@ -1,6 +1,9 @@
-//     $Id: dlg_box.h,v 1.5 2000-01-04 19:43:51 mbickel Exp $
+//     $Id: dlg_box.h,v 1.6 2000-03-29 09:58:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/01/04 19:43:51  mbickel
+//      Continued Linux port
+//
 //     Revision 1.4  2000/01/01 19:04:17  mbickel
 //     /tmp/cvsVhJ4Z3
 //
@@ -345,7 +348,7 @@ extern void  loadtexture ( void );
                      int eeinzug;
                      int aeinzug;
                      int height;
-                     char* textpointer;
+                     const char* textpointer;
                      pstartpoint next;
                      int xpos;
                      int maxlineheight;
@@ -356,12 +359,12 @@ class tviewtext {
        public: 
          tviewtext();
 
-         void setparams ( int xx1, int yy1, int xx2, int yy2, char* ttxt, char clr, char bkgr);
+         void setparams ( int xx1, int yy1, int xx2, int yy2, const char* ttxt, char clr, char bkgr);
          void setpos ( int xx1, int yy1, int xx2, int yy2 );
 
          void displaytext ( void );
-         void evalcommand (char** s);
-         void nextline ( int einzug, char* txtptr );
+         void evalcommand ( const char** s);
+         void nextline ( int einzug, const char* txtptr );
          void displaysingleline ( char* t);
          void fillline ( int x1, int x2 );
          void setnewlineheight ( int h );
@@ -371,7 +374,7 @@ class tviewtext {
          int tvt_dispactive;
          int eeinzug, aeinzug;
          int tvt_maxlineheight;
-         char*  tvt_text;
+         const char*  tvt_text;
          char*  actline;
          void*  tvt_firstlinebuf;
          tgraphmodeparameters tvt_firstlinebufparm;

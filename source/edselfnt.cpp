@@ -1,6 +1,10 @@
-//     $Id: edselfnt.cpp,v 1.3 1999-12-27 12:59:59 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.4 2000-03-29 09:58:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/12/27 12:59:59  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.2  1999/11/16 03:41:40  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -490,10 +494,13 @@ class SelectVehicleType : public SelectAnything< pvehicletype > {
 
 int SelectVehicleType :: isavailable ( pvehicletype item )
 {
+   /*
    if ( farbwahl == 8 ) {
       displaymessage("no neutral units allowed on map !\nswitching to red player!", 1 );
       farbwahl = 0;
    }
+   */
+
    if ( unitSet.set.getlength() >= 0 ) {
       for ( int i = 0; i <= unitSet.set.getlength(); i++ )
          for ( int j = 0; j <= unitSet.set[i].ids.getlength(); j++ )
@@ -1224,14 +1231,14 @@ int SelectVehicleTypeForTransportCargo :: isavailable ( pvehicletype item )
     if ( transport->freeweight() < item->maxsize() )
        return 0;
     else
-       return transport->typ->vehicleloadable ( item ); 
+       return transport->typ->vehicleloadable ( item ) && SelectVehicleType::isavailable ( item ); 
 }
 
 class SelectVehicleTypeForBuildingCargo : public SelectCargoVehicleType {
          pbuilding building;
       public:
          SelectVehicleTypeForBuildingCargo ( pbuilding _building ) { building = _building; };
-         int isavailable ( pvehicletype item ) {    return building->typ->vehicleloadable ( item ); };
+         int isavailable ( pvehicletype item ) {    return building->typ->vehicleloadable ( item ) && SelectVehicleType::isavailable ( item ); };
      };
 
 class SelectVehicleTypeForBuildingProduction : public SelectCargoVehicleType {
@@ -1242,7 +1249,7 @@ class SelectVehicleTypeForBuildingProduction : public SelectCargoVehicleType {
             for ( int i = 0; i < 32; i++ )
                if ( building->production[i] == item )
                   return 0;
-            return building->typ->vehicleloadable ( item ); 
+            return building->typ->vehicleloadable ( item ) && SelectVehicleType::isavailable ( item ); 
          };
      };
 

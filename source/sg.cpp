@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.26 2000-03-11 18:22:07 mbickel Exp $
+//     $Id: sg.cpp,v 1.27 2000-03-29 09:58:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/03/11 18:22:07  mbickel
+//      Added support for multiple graphic sets
+//
 //     Revision 1.25  2000/02/24 10:54:08  mbickel
 //      Some cleanup and bugfixes
 //
@@ -666,6 +669,11 @@ int tbackgroundpict :: getlastpaintmode ( void )
      // verifyallblocks();
      int error;
      void* tmp = malloc ( amt + 53 * 4 );
+    #ifdef _DOS_
+     if ( !tmp )
+        new_new_handler();
+    #endif
+
      int* tmpi = (int*) tmp;
      /*
      if ( (int) tmpi == 0x1bb2138 || (int) tmpi == 0x1bcf178 ) 
@@ -695,21 +703,36 @@ int tbackgroundpict :: getlastpaintmode ( void )
         if ( tmpi[0] != tp )
            error++;
 
-     if ( tmpi[1] != (int) tmpi)
+     if ( tmpi[1] != (int) tmpi) {
         error++;
+        #ifdef logging
+         logtofile ( "memory check: verifyblock : error A at address %x", p );
+        #endif
+     }
 
      int amt = tmpi[2];
 
      for ( int i = 0; i < 25; i++ ) {
 
         if ( tmpi[3 + i] != 0x12345678)
-           if ( i == 1  &&  tmpi[3 + i] == -2)
+           if ( i == 1  &&  tmpi[3 + i] == -2) {
               error++;  // deallocated twice 
-           else
+              #ifdef logging
+               logtofile ( "memory check: verifyblock : error B at address %x", p );
+              #endif
+           } else {
               error++;
+              #ifdef logging
+               logtofile ( "memory check: verifyblock : error C at address %x", p );
+              #endif
+           }
 
-        if ( tmpi[3 + i + (amt+3)/4 + 25] != 0x87654321 )
+        if ( tmpi[3 + i + (amt+3)/4 + 25] != 0x87654321 ) {
            error++;
+           #ifdef logging
+            logtofile ( "memory check: verifyblock : error D at address %x", p );
+           #endif
+        }
      }
      return tmpi;
   }
@@ -809,9 +832,9 @@ void showmemory ( void )
    int b;
    //   int b = _memavl();
    //   showtext2( strrr ( _memmax() ), 10,agmp->resolutiony );
-   showtext2( strrr ( b  ), 110,agmp->resolutiony );
+   // showtext2( strrr ( b  ), 110,agmp->resolutiony );
    showtext2( strrr ( a ), 210,agmp->resolutiony );
-   showtext2( strrr ( b+a ), 310,agmp->resolutiony );
+   // showtext2( strrr ( b+a ), 310,agmp->resolutiony );
    showtext2( strrr ( stackfree ()  ), 410,agmp->resolutiony );
 
    showtext2( strrr ( getxpos()  ), 10,agmp->resolutiony + 30 );
@@ -1573,7 +1596,7 @@ void         ladespiel(void)
       if (loaderror > 0) { 
          displaymessage( "error nr. %d",1, loaderror);
       } 
-      if ( actmap->xsize == 0 || actmap->ysize == 0 )
+      if ( !actmap || actmap->xsize == 0 || actmap->ysize == 0 )
          throw  tnomaploaded();
          
       if ( actmap->network )
@@ -2367,8 +2390,10 @@ void  mainloop ( void )
             case ct_3:  execuseraction ( ua_heapcheck );
                break;
 
-            case ct_4:  selectgraphicset();
-                        displaymap();
+            case ct_4:  /* selectgraphicset();
+                        displaymap(); */
+                        asc_malloc ( 200000000 );
+
                break;
 
             case ct_5:  execuseraction ( ua_benchgamewov );
@@ -2429,12 +2454,16 @@ void dispmessageonexit ( void ) {
    if (exitmessage[0] != NULL) {
       for (i=0;i<20 ;i++ ) {
           if (exitmessage[i] != NULL) {
+             #ifdef logging
+              logtofile(exitmessage[i]);
+             #endif     
              printf(exitmessage[i]);
              printf("\n");
           } /* endif */
       }
-      printf("\npress any key to exit\n");
-      //      getch();
+      printf("\npress enter to exit\n");
+      char tmp;
+      scanf("%c", &tmp );
    } else {
      #ifdef _DOS_
       printf( getstartupmessage() );
@@ -2468,15 +2497,30 @@ const char* progressbarfilename = "progress.8mn";
 
 
 void loaddata( int resolx, int resoly ) {
+                #ifdef logging
+                logtofile("initializing progress bar");
+                #endif
+
                 actprogressbar = new tprogressbar; 
                 if ( actprogressbar ) {
                    tfindfile ff ( progressbarfilename );
                    if ( ff.getnextname() ) {
+                      #ifdef logging
+                      logtofile("progress bar file found");
+                      #endif
                       tnfilestream strm ( progressbarfilename, 1 );
                       actprogressbar->start ( 255, 0, agmp->resolutiony-3, agmp->resolutionx-1, agmp->resolutiony-1, &strm );
-                   } else
+                   } else {
+                      #ifdef logging
+                      logtofile("progress bar file NOT found");
+                      #endif
                       actprogressbar->start ( 255, 0, agmp->resolutiony-3, agmp->resolutionx-1, agmp->resolutiony-1, NULL );
+                   }
                 }
+                #ifdef logging
+                else
+                   logtofile("allocating of progress bar failed");
+                #endif
 
                 weapdist = new tweapdist;
 
@@ -2936,6 +2980,9 @@ int main(int argc, char *argv[] )
     #else
     logtofile ( "new keyboard handler ist disabled" );
     #endif
+    #ifdef MEMCHK
+     logtofile ( "memory checking is enabled" );
+    #endif
    #endif
 
    #ifdef logging
@@ -2943,6 +2990,14 @@ int main(int argc, char *argv[] )
    #endif
    inittimer(100);
    atexit ( closetimer );
+
+   #ifdef _DOS_
+    #ifdef MEMCHK
+     initmemory( 5000000 );
+    #else
+     initmemory();
+    #endif
+   #endif
 
 
        int cntr = ticker;
@@ -3022,7 +3077,6 @@ int main(int argc, char *argv[] )
            showavailablemodes();
            return 0;
        }
-       initmemory();
       #endif
 
 
@@ -3128,6 +3182,9 @@ int main(int argc, char *argv[] )
               catch ( tfileerror err ) {
                  displaymessage ( "unable to access file %s \n", 2, err.filename );
               } /* endcatch */
+              catch ( toutofmem err ) {
+                 displaymessage ( "loading of game failed due to insufficient memory", 2 );
+              } /* endcatch */
               catch ( terror err ) {
                  displaymessage ( "loading of game failed", 2 );
               } /* endcatch */
@@ -3151,6 +3208,9 @@ int main(int argc, char *argv[] )
 
               catch ( tfileerror err ) {
                  displaymessage ( "unable to access file %s \n", 2, err.filename );
+              } /* endcatch */
+              catch ( toutofmem err ) {
+                 displaymessage ( "loading of game failed due to insufficient memory", 2 );
               } /* endcatch */
               catch ( terror err ) {
                  displaymessage ( "loading of game failed", 2 );
@@ -3197,7 +3257,7 @@ int main(int argc, char *argv[] )
            abortgame = 0;
            do {
               try {
-                 if ( actmap->xsize == 0 || actmap->ysize == 0 ) {
+                 if ( !actmap || actmap->xsize <= 0 || actmap->ysize <= 0 ) {
                     runmainmenu();
                  } else {
                     if ( actmap->actplayer == -1 )

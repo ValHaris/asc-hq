@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.17 2000-03-11 18:22:05 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.18 2000-03-29 09:58:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/03/11 18:22:05  mbickel
+//      Added support for multiple graphic sets
+//
 //     Revision 1.16  2000/02/03 20:54:40  mbickel
 //      Some cleanup
 //      getfiletime now works under Linux too
@@ -1588,22 +1591,22 @@ void         tchoosenewsinglelevel::run(void)
 
       catch ( tinvalidid err ) {
          displaymessage( err.msg, 1 );
-         if ( actmap->xsize <= 0)
+         if ( !actmap || actmap->xsize <= 0)
             throw tnomaploaded();
       } /* endcatch */
       catch ( tinvalidversion err ) {
          displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.filename, err.expected, err.found );
-         if ( actmap->xsize <= 0)
+         if ( !actmap || actmap->xsize <= 0)
             throw tnomaploaded();
       } /* endcatch */
       catch ( tfileerror err) {
          displaymessage( "error reading map filename %s ", 1, err.filename );
-         if ( actmap->xsize <= 0)
+         if ( !actmap || actmap->xsize <= 0)
             throw tnomaploaded();
       } /* endcatch */
       catch ( terror ) {
          displaymessage( "error loading map", 1 );
-         if ( actmap->xsize <= 0)
+         if ( !actmap || actmap->xsize <= 0)
             throw tnomaploaded();
       } /* endcatch */
 
@@ -6239,7 +6242,7 @@ void         tgiveunitawaydlg :: init(void)
    num = 0;
    for ( int i = 0; i < 8; i++ )
       if ( actmap->player[i].existent )
-         if ( i != actmap->actplayer ) 
+         if ( i != actmap->actplayer && getdiplomaticstatus ( i ) == capeace ) 
             ply[num++] = i;
 
    if ( fld->building )

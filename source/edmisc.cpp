@@ -1,6 +1,9 @@
-//     $Id: edmisc.cpp,v 1.10 2000-03-16 14:06:55 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.11 2000-03-29 09:58:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/03/16 14:06:55  mbickel
+//      Added unitset transformation to the mapeditor
+//
 //     Revision 1.9  2000/03/11 18:22:04  mbickel
 //      Added support for multiple graphic sets
 //
@@ -61,6 +64,8 @@
     Boston, MA  02111-1307  USA
 */
 
+#include <string>
+#include <iostream.h>
 #include <math.h>
 
 #include "edmisc.h";
@@ -3532,6 +3537,8 @@ class UnitTypeTransformation {
 
                 pvehicletype transformvehicletype ( pvehicletype type, int unitsetnum, int translationnum );
                 void transformvehicle ( pvehicle veh, int unitsetnum, int translationnum );
+                dynamic_array<int> vehicleTypesNotTransformed;
+                int vehicleTypesNotTransformedNum ;
              public:
                  void run ( void );
       } ;
@@ -3616,8 +3623,20 @@ void         UnitTypeTransformation :: TranslationTableSelection::run(void)
 pvehicletype UnitTypeTransformation :: transformvehicletype ( pvehicletype type, int unitsetnum, int translationnum )
 {
    for ( int i = 0; i <= unitSet.set[unitsetnum].transtab[translationnum].translation.getlength(); i++ )
-      if ( unitSet.set[unitsetnum].transtab[translationnum].translation[i].from == type->id ) 
-         return getvehicletype_forid ( unitSet.set[unitsetnum].transtab[translationnum].translation[i].to );
+      if ( unitSet.set[unitsetnum].transtab[translationnum].translation[i].from == type->id ) {
+         pvehicletype tp = getvehicletype_forid ( unitSet.set[unitsetnum].transtab[translationnum].translation[i].to );
+         if ( tp ) 
+            return tp;
+      }
+
+   int fnd = 0;
+   for ( int j = 0; j < vehicleTypesNotTransformedNum; j++ )
+       if ( vehicleTypesNotTransformed[j] == type->id )
+          fnd ++;
+
+   if ( !fnd ) 
+      vehicleTypesNotTransformed[vehicleTypesNotTransformedNum++] = type->id;
+
    return NULL;
 }
 
@@ -3637,8 +3656,18 @@ void  UnitTypeTransformation ::transformvehicle ( pvehicle veh, int unitsetnum, 
    unitstransformed++;
 }
 
+
+void test ( void )
+{
+  cout<<"Results of string1_test:"<<endl;
+  char* array = "Hello, World!";
+  __STD::string v(array);
+}
+
 void UnitTypeTransformation :: run ( void )
 {
+   vehicleTypesNotTransformedNum = 0;
+
    UnitSetSelection uss;
    uss.init();
    uss.run();
@@ -3682,7 +3711,33 @@ void UnitTypeTransformation :: run ( void )
             }
       }
 
-   displaymessage ( "%d units were transformed\n%d units were NOT transformed\n (production included)", 1, unitstransformed, unitsnottransformed );
+    if ( vehicleTypesNotTransformedNum ) {
+       __STD::string s = "The following vehicles could not be transformed: ";
+       for ( int i = 0; i < vehicleTypesNotTransformedNum; i++ ) {
+          s += "\n ID ";
+          s += strrr ( vehicleTypesNotTransformed[i] );
+          s += " : ";
+          pvehicletype vt = getvehicletype_forid ( vehicleTypesNotTransformed[i] );
+          if ( vt-> name && vt->name[0] )
+             s += vt->name;
+          else
+             s += vt->description;
+       }
+       
+       s += "\n";
+       s += strrr ( unitstransformed );
+       s += " units were transformed\n";
+       s += strrr ( unitsnottransformed );
+       s += " units were NOT transformed\n (production included)";
+
+       tviewanytext vat;
+       vat.init ( "warning", s.data() );
+       vat.run();
+       vat.done();
+    } else 
+       displaymessage ( "All units were transformed !\ntotal number: %d", 3, unitstransformed );
+
+
 }
 
 void unitsettransformation( void )

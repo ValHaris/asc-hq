@@ -1,6 +1,10 @@
-//     $Id: dlg_box.cpp,v 1.13 2000-02-05 12:13:44 steb Exp $
+//     $Id: dlg_box.cpp,v 1.14 2000-03-29 09:58:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/02/05 12:13:44  steb
+//     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
+//     startup due to actmap being null when trying to report errors.
+//
 //     Revision 1.12  2000/01/06 11:19:13  mbickel
 //      Worked on the Linux-port again...
 //
@@ -2569,7 +2573,7 @@ void tviewtext::fillline ( int x1, int x2 )
       }
 }
 
-void tviewtext::nextline ( int einzug, char* txtptr )
+void tviewtext::nextline ( int einzug, const char* txtptr )
 {
    if ( tvt_dispactive == 0 && txtptr ) {
       if (  ( tvt_startpoint == NULL  &&  (tvt_yp > 500) ) || ( tvt_startpoint && ( tvt_yp > (tvt_startpoint->ypos+500) ))) {
@@ -2641,7 +2645,7 @@ void tviewtext::setpos ( int xx1, int yy1, int xx2, int yy2 )
    tvt_y2 = yy2;
 }
 
-void tviewtext::setparams ( int xx1, int yy1, int xx2, int yy2, char* ttxt, char clr, char bkgr)
+void tviewtext::setparams ( int xx1, int yy1, int xx2, int yy2, const char* ttxt, char clr, char bkgr)
 {
    tvt_x1 = xx1;
    tvt_y1 = yy1;
@@ -2679,7 +2683,8 @@ void tviewtext::displaytext ( void )
    aeinzug = 0;
 
 
-  char         *s1, *actword, *s5;
+  char         *actword, *s5;
+  const char* s1;
   boolean      abbruch; 
   integer      i; 
 
@@ -2808,9 +2813,9 @@ void tviewtext::displaytext ( void )
 
 
 
-void tviewtext::evalcommand (char** s)
+void tviewtext::evalcommand ( const char** s)
 {
-   char* s3 = *s;
+   const char* s3 = *s;
    char s4[100];
    int k, i = 0,
           j = 0;

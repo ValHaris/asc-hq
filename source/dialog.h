@@ -1,7 +1,11 @@
-//     $Id: dialog.h,v 1.4 1999-12-27 12:59:51 mbickel Exp $
+//     $Id: dialog.h,v 1.5 2000-03-29 09:58:44 mbickel Exp $
 
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/27 12:59:51  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.3  1999/12/07 22:13:18  mbickel
 //      Fixed various bugs
 //      Extended BI3 map import tables
@@ -147,7 +151,7 @@ class tviewanytext : public tdialogbox, public tviewtextwithscrolling {
 
   class   tviewanytext : public tdialogbox, public tviewtextwithscrolling {
                public:
-                   char                 *txt;
+                   const char                 *txt;
                    boolean              ok;
                     
                    boolean              scrollbarvisible;
@@ -157,7 +161,7 @@ class tviewanytext : public tdialogbox, public tviewtextwithscrolling {
                    int                  textstart;
                    int                  rightspace;
 
-                   void                 init( char* ttl, char* text , int xx1 = 50, int yy1 = 50 , int xxsize = 360, int yysize = 360 );
+                   void                 init( char* title, const char* text , int xx1 = 50, int yy1 = 50 , int xxsize = 360, int yysize = 360 );
                    virtual void         run ( void );
                    virtual void         buttonpressed( char id);
                    void                 redraw ( void );

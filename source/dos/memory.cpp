@@ -23,18 +23,31 @@
 
  void new_new_handler ( void )
  {
+    static int called = 0;
+    called++;
+
+    if ( called == 2 ) 
+       emergency_new_handler();
+
     delete  ( reservememory );
     set_new_handler ( emergency_new_handler );
+    #ifdef logging
+     logtofile ( "invoking new_new_handler" );
+    #endif
     savegame("rescue.sav","game saved while exiting game due to a lack of memory ");
     displaymessage("Not enough memory. Saved game to emergncy.sav. ",2 );
  }
 
- void initmemory( void ) 
+ void initmemory( int plus ) 
  {
-     int memneeded = 20000000;
-     int ma = maxavail() + _memavl();
+     int memneeded = 30000000;
+     int ma = maxavail(); //  + _memavl();
 
-     printf(" \n memory avaiable: %d \n ", ma );
+     #ifdef logging
+      logtofile ( "memory available: %d ; memory needed : %d ", ma, memneeded );
+     #endif
+
+     printf(" \n memory avaiable: %d MB \n ", ma / ( 1024 * 1024 ) );
      if ( ma < memneeded ) {
         printf(" Not enough momory available, at least %d MB recommended.\n"
                " You may try to run the game, but unpredictable results can happen.\n"
@@ -43,6 +56,9 @@
         int ch = getch();
         if ( toupper ( ch ) != 'R' )
            exit(2);
+       #ifdef logging
+        logtofile ( "continueing, although memory may be insufficient" );
+       #endif
      }
 
      reservememory = asc_malloc ( reservememorysize );
@@ -84,7 +100,7 @@ void getmeminfo( void )
 int maxavail()
 {
    getmeminfo();
-   return meminfo. LargestBlockAvail;
+   return meminfo. LargestBlockAvail + _memavl();
 }
 
 

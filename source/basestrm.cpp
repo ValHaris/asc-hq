@@ -1,6 +1,10 @@
-//     $Id: basestrm.cpp,v 1.17 2000-02-05 12:13:44 steb Exp $
+//     $Id: basestrm.cpp,v 1.18 2000-03-29 09:58:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/02/05 12:13:44  steb
+//     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
+//     startup due to actmap being null when trying to report errors.
+//
 //     Revision 1.16  2000/02/03 21:15:32  mbickel
 //      Fixed a crash in the new file date routines
 //
@@ -1182,8 +1186,12 @@ int libbzip_decompression :: readdata ( void* buf, int size, int excpt )
            abrt = 1;
         } else {
            if ( res != BZ_OK ) {
-              if ( excpt )
-                 throw tcompressionerror ( "MBZLB2 decompression :: readdata", res );
+              if ( excpt ) {
+                 if ( res == BZ_MEM_ERROR )
+                    throw toutofmem ( -1 );
+                 else
+                    throw tcompressionerror ( "MBZLB2 decompression :: readdata", res );
+              }
               abrt = 1;
            }
         }

@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.22 2000-03-11 19:51:12 mbickel Exp $
+//     $Id: dialog.cpp,v 1.23 2000-03-29 09:58:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/03/11 19:51:12  mbickel
+//      Removed file name length limitation under linux
+//      No weapon sound for attacked units any more (only attacker)
+//
 //     Revision 1.21  2000/02/03 21:15:33  mbickel
 //      Fixed a crash in the new file date routines
 //
@@ -4797,7 +4801,7 @@ void         tviewanytext::run(void)
 
 
 
-void         tviewanytext:: init( char* ttl, char* text , int xx1 , int yy1  , int xxsize , int yysize  )
+void         tviewanytext:: init( char* _title, const char* text , int xx1 , int yy1  , int xxsize , int yysize  )
 { 
 
    // dialogbox initialisieren
@@ -4810,7 +4814,7 @@ void         tviewanytext:: init( char* ttl, char* text , int xx1 , int yy1  , i
    textstart = 42 ; 
    textsizey = (ysize - textstart - 10); 
    starty = starty + 10; 
-   title = ttl;
+   title = _title;
    windowstyle ^= dlg_in3d;
    action=0;
 
