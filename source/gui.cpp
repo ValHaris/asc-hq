@@ -1588,7 +1588,6 @@ void  tnsguiiconbuildany::exec         ( void )
 }
 
 
-#endif
 
 
 tnsguiiconrepair::tnsguiiconrepair ( void )
@@ -1674,8 +1673,6 @@ void tnsguiiconrepair::loadspecifics ( pnstream stream )
    sprintf( buf, infotext.c_str(), buf2 );
    infotext = buf;
 }
-
-
 
 
 
@@ -1793,7 +1790,6 @@ void  tnsguiiconrefuel::display      ( void )
 
 
 
-
 tnsguiiconrefueldialog::tnsguiiconrefueldialog ( void )
 {
    filename =  "refueld" ;
@@ -1825,7 +1821,6 @@ void  tnsguiiconrefueldialog::exec         ( void )
 
 
 
-#if 0
 tnsguiiconputbuilding::tnsguiiconputbuilding ( void )
 {
    filename = "building";
@@ -1948,9 +1943,6 @@ void  tnsguiicondig::exec         ( void )
 }
 
 
-#endif
-
-
 
 
 
@@ -1976,7 +1968,8 @@ void  tnsguiiconviewmap::exec         ( void )
     cursor.show();
 }
 
-#if 0
+
+
 
 
 tnsguiiconenablereactionfire::tnsguiiconenablereactionfire ( void )

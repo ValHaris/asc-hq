@@ -31,8 +31,8 @@
     <USERDEFINES value="HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_;_DEBUG;USE_GRAPHVIZ"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="weaponguide.bpf"/>
-    <INCLUDEPATH value="..\..\graphics;..;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include;..\..\libs\libsigc++;..\..\..\..\SDL_ttf;..\..\..\..\SDL_image"/>
-    <LIBPATH value="..\..\graphics;..;..\..;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\;..\..\graphics;..;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include;..\..\libs\libsigc++;..\..\..\..\SDL_ttf;..\..\..\..\SDL_image"/>
+    <LIBPATH value="..\;..\..\graphics;..;..\..;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-pck -w-par"/>
     <OTHERFILES value=""/>
   </MACROS>

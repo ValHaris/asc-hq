@@ -1,4 +1,4 @@
-//     $Id: unitctrl.h,v 1.36.2.6 2005-02-09 20:28:03 mbickel Exp $
+//     $Id: unitctrl.h,v 1.36.2.7 2005-02-15 16:33:38 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -338,7 +338,8 @@ class VehicleService : public VehicleAction {
 
               int getStatus( void ) { return status; };
               virtual int available ( Vehicle* veh ) const;
-              int getServices ( Vehicle* veh ) const;
+              static int avail ( const Vehicle* veh );
+              static int getServices ( Vehicle* veh );
               int execute ( Vehicle* veh, int targetNWID, int dummy, int step, int pos, int amount );
               int fillEverything ( int targetNWID, bool repairsToo );
               virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );

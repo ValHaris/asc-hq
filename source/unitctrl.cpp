@@ -960,7 +960,7 @@ VehicleService :: VehicleService ( MapDisplayInterface* md, PPendingVehicleActio
 }
 
 
-int VehicleService :: available ( Vehicle* veh ) const
+int  VehicleService :: avail ( const Vehicle* veh )
 {
    int av = 0;
    if ( veh && !veh->attacked ) {
@@ -997,7 +997,12 @@ int VehicleService :: available ( Vehicle* veh ) const
       return 0;
 }
 
-int VehicleService :: getServices ( Vehicle* veh ) const
+int VehicleService :: available ( Vehicle* veh ) const
+{
+   return avail(veh);
+}
+
+int VehicleService :: getServices ( Vehicle* veh ) 
 {
    int res = 0;
    if ( veh ) {

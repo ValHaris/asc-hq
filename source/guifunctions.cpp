@@ -40,6 +40,7 @@
 #include "viewcalculation.h"
 #include "spfst.h"
 #include "building.h"
+#include "gamedlg.h"
 
 namespace GuiFunctions
 {
@@ -728,8 +729,6 @@ bool UnitInfo::available( const MapCoordinate& pos, int num )
 
 
 
-
-
 class DestructBuilding : public GuiFunction
 {
    public:
@@ -931,6 +930,273 @@ class DisableReactionfire : public GuiFunction
          return "disable reaction fire";
       };
 };
+
+
+/*
+class ExternalLoading : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         if (moveparams.movestatus == 130)
+            if ( actmap->getField(pos)->a.temp == 123 )
+               return true;
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+         moveparams.movestatus++;
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("disable-reactionfire.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "disable reaction fire";
+      };
+};
+*/
+
+
+
+class RepairUnit : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         pfield fld = actmap->getField(pos);
+         if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
+            if ( fld->vehicle )
+               if (fld->vehicle->color == actmap->actplayer * 8)
+                  if ( VehicleService::avail ( fld->vehicle ))
+                     if ( VehicleService::getServices( fld->vehicle) & (1 << VehicleService::srv_repair ))
+                        return true;
+         } else
+            if ( pendingVehicleActions.actionType == vat_service && pendingVehicleActions.service->guimode == 1 ) {
+               if ( fld->vehicle ) {
+                  // if ( pendingVehicleActions.service->getServices ( fld->vehicle) & ( 1 << VehicleService::srv_repair) ) {
+                  VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.find(fld->vehicle->networkid);
+                  if ( i != pendingVehicleActions.service->dest.end() )
+                     for ( int j = 0; j < i->second.service.size(); j++ )
+                        if ( i->second.service[j].type == VehicleService::srv_repair )
+                           return true;
+               }
+            }
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+         if ( pendingVehicleActions.actionType == vat_nothing ) {
+            VehicleService* vs = new VehicleService ( &getDefaultMapDisplay(), &pendingVehicleActions );
+            vs->guimode = 1;
+            int res = vs->execute ( actmap->getField(pos)->vehicle, -1, -1, 0, -1, -1 );
+            if ( res < 0 ) {
+               dispmessage2 ( -res );
+               delete vs;
+               return;
+            }
+            int fieldCount = 0;
+            for ( VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.begin(); i != pendingVehicleActions.service->dest.end(); i++ ) {
+               pfield fld = getfield ( i->second.dest->xpos, i->second.dest->ypos );
+               if ( fld != actmap->getField(pos) )
+                  for ( int j = 0; j < i->second.service.size(); j++ )
+                     if ( i->second.service[j].type == VehicleService::srv_repair ) {
+                        fieldCount++;
+                        fld->a.temp = 1;
+                     }
+            }
+            if ( !fieldCount ) {
+               delete vs;
+               dispmessage2 ( 211 );
+            } else
+               repaintMap();
+         } else {
+            for ( VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.begin(); i != pendingVehicleActions.service->dest.end(); i++ ) {
+               pfield fld = actmap->getField(pos);
+               if ( i->second.dest == fld->vehicle )
+                  // for ( vector<VehicleService::Service>::iterator j = i->second->service.begin(); j != i->second->service.end(); j++ )
+                  for ( int j = 0; j < i->second.service.size(); j++ )
+                     if ( i->second.service[j].type == VehicleService::srv_repair )
+                        pendingVehicleActions.service->execute ( NULL, fld->vehicle->networkid, -1, 2, j, i->second.service[j].minAmount );
+            }
+
+            delete pendingVehicleActions.service;
+            actmap->cleartemps(7);
+            repaintMap();
+            updateFieldInfo();
+         }
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("repair.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "repair a unit";
+      };
+};
+
+
+class RefuelUnit : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         pfield fld = actmap->getField(pos);
+         if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
+            if ( fld->vehicle )
+               if (fld->vehicle->color == actmap->actplayer * 8)
+                  if ( VehicleService::avail ( fld->vehicle ))
+                     if ( VehicleService::getServices( fld->vehicle) & ((1 << VehicleService::srv_resource ) | (1 << VehicleService::srv_ammo )) )
+                        return true;
+
+            if ( fld->building )
+               if ( fld->building->color == actmap->actplayer * 8)
+                   if ( fld->building->typ->special & (cgexternalloadingb | cgexternalresourceloadingb | cgexternalammoloadingb ))
+                      return true;
+         } else
+            if ( pendingVehicleActions.actionType == vat_service && pendingVehicleActions.service->guimode == 2) {
+               if ( fld->vehicle ) {
+                  VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.find(fld->vehicle->networkid);
+                  if ( i != pendingVehicleActions.service->dest.end() )
+                     for ( int j = 0; j < i->second.service.size(); j++ )
+                        if (   i->second.service[j].type == VehicleService::srv_resource
+                            || i->second.service[j].type == VehicleService::srv_ammo )
+                           return true;
+               }
+            }
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+         if ( pendingVehicleActions.actionType == vat_nothing ) {
+            VehicleService* vs = new VehicleService ( &getDefaultMapDisplay(), &pendingVehicleActions );
+            pendingVehicleActions.service->guimode = 2;
+            int res = vs->execute ( actmap->getField(pos)->vehicle, pos.x, pos.y, 0, -1, -1 );
+            if ( res < 0 ) {
+               dispmessage2 ( -res );
+               delete vs;
+               return;
+            }
+            int fieldCount = 0;
+            for ( VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.begin(); i != pendingVehicleActions.service->dest.end(); i++ ) {
+               pfield fld = getfield ( i->second.dest->xpos, i->second.dest->ypos );
+               if ( fld != actmap->getField(pos) )
+                  for ( int j = 0; j < i->second.service.size(); j++ )
+                     if (  i->second.service[j].type == VehicleService::srv_ammo
+                        || i->second.service[j].type == VehicleService::srv_resource ) {
+                        fieldCount++;
+                        fld->a.temp = 1;
+                     }
+            }
+            if ( !fieldCount ) {
+               delete vs;
+               dispmessage2 ( 211 );
+            } else
+               displaymap();
+         } else {
+            for ( VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.begin(); i != pendingVehicleActions.service->dest.end(); i++ )
+               if ( i->second.dest == actmap->getField(pos)->vehicle )
+                  for ( int j = 0; j < i->second.service.size(); j++ )
+                     if (  i->second.service[j].type == VehicleService::srv_ammo
+                        || i->second.service[j].type == VehicleService::srv_resource )
+                        pendingVehicleActions.service->execute ( NULL, actmap->getField(pos)->vehicle->networkid, -1, 2, j, i->second.service[j].maxAmount );
+
+
+            delete pendingVehicleActions.service;
+            actmap->cleartemps(7);
+            displaymap();
+            updateFieldInfo();
+         }
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("refuel.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "refuel a unit";
+      };
+};
+
+
+class RefuelUnitDialog : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         pfield fld = actmap->getField(pos);
+         if ( pendingVehicleActions.service && pendingVehicleActions.service->guimode == 2 && fld->a.temp && fld->vehicle )
+            return true;
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+         verlademunition( pendingVehicleActions.service, actmap->getField(pos)->vehicle->networkid );
+         delete pendingVehicleActions.service;
+         actmap->cleartemps ( 7 );
+         displaymap();
+         updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("refuel-dialog.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "refuel a unit";
+      };
+};
+
+
+
+
+
+
+class ViewMap : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
+            return true;
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+          showmap ();
+          displaymap();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("worldmap.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "view survey map";
+      };
+};
+
+
 
 
 
@@ -1895,5 +2161,9 @@ void registerGuiFunctions( GuiIconHandler& handler )
    handler.registerUserFunction( new GuiFunctions::DisableReactionfire() );
    handler.registerUserFunction( new GuiFunctions::Ascend );
    handler.registerUserFunction( new GuiFunctions::Descend );
+   handler.registerUserFunction( new GuiFunctions::RepairUnit );
+   handler.registerUserFunction( new GuiFunctions::RefuelUnit );
+   handler.registerUserFunction( new GuiFunctions::RefuelUnitDialog );
+   handler.registerUserFunction( new GuiFunctions::ViewMap );
 }
 
