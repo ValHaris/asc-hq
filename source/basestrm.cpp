@@ -1,6 +1,12 @@
-//     $Id: basestrm.cpp,v 1.45 2000-11-08 19:30:53 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.46 2000-11-09 17:48:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2000/11/08 19:30:53  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.44  2000/10/12 22:24:00  mbickel
 //      Made the DOS part of the new platform system work again
 //
@@ -1813,6 +1819,13 @@ tn_c_lzw_filestream :: tn_c_lzw_filestream ( const char* name, char mode ) : tan
    tanycompression :: init (  ); 
 }
 
+int tn_c_lzw_filestream :: getSize ( void )
+{
+   if ( inp == 2 )
+      return containerstream->getSize();
+   else
+      return strm->getSize();
+}
 
 void tn_c_lzw_filestream :: writecmpdata ( const void* buf, int size )
 {

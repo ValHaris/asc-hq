@@ -49,6 +49,7 @@
            virtual ~tnstream() {};
            virtual const char* getDeviceName ( void );
            virtual void seek ( int newpos );
+           virtual int getSize ( void ) { return -1; };
            tnstream ( );
          protected:
            std::string devicename; // will just contain "abstract"

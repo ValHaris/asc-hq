@@ -1,6 +1,17 @@
-//     $Id: loadpcxc.cpp,v 1.7 2000-10-11 14:26:43 mbickel Exp $
+//     $Id: loadpcxc.cpp,v 1.8 2000-11-09 17:48:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/10/11 14:26:43  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.6  2000/08/12 15:03:24  mbickel
 //      Fixed bug in unit movement
 //      ASC compiles and runs under Linux again...
@@ -103,8 +114,12 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
    stream->readdata ( &header, sizeof(header) );
    read += sizeof(header);
 
-   if ( !header.size )
-      return 12;
+   if ( !header.size ) {
+      if ( stream->getSize() < 0 )
+         return 12;
+      else
+         header.size = stream->getSize();
+   }
 
    int width = (header.xmax - header.xmin + 1 );
    int pixels = width * (header.ymax - header.ymin + 1) * header.nplanes;

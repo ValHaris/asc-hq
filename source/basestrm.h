@@ -1,6 +1,10 @@
-//     $Id: basestrm.h,v 1.30 2000-10-14 15:31:52 mbickel Exp $
+//     $Id: basestrm.h,v 1.31 2000-11-09 17:48:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/10/14 15:31:52  mbickel
+//      Moved key symbols to separate files
+//      Moved tnstream to its own file
+//
 //     Revision 1.29  2000/10/14 10:52:44  mbickel
 //      Some adjustments for a Win32 port
 //
@@ -553,6 +557,7 @@ class tn_file_buf_stream : public tnbufstream {
             tn_file_buf_stream ( const char* name, char mode );
             virtual void seek ( int newpos );
             virtual int getstreamsize ( void );
+            virtual int getSize ( void ) { return getstreamsize(); };
             virtual ~tn_file_buf_stream  ( );
             virtual time_t get_time ( void );
 
@@ -631,6 +636,7 @@ class tn_c_lzw_filestream : public tnstream, protected tanycompression {
             int  readdata  ( void* buf, int size, int excpt = 1  );
             virtual ~tn_c_lzw_filestream  ( );
             virtual time_t get_time ( void );
+            virtual int getSize( void );
      };
 
 typedef tn_c_lzw_filestream tnfilestream ;

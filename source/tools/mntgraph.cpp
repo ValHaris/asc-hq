@@ -105,7 +105,7 @@ void getpic ( int pos, int offset )
 
    void* buf = asc_malloc ( 10000 );
 
-   putmask ( xp, yp, mask[doublesize], 0 );
+   // putmask ( xp, yp, mask[doublesize], 0 );
    getimage ( xp, yp, xp + fsx-1, yp + fsy-1, buf );
 
    if ( !lockpalette ) {
@@ -179,6 +179,7 @@ int main(int argc, char *argv[] )
          char* piclist = strtok ( NULL, ";" );
 
          loadpcxxy ( filename, 1, 0, 0 );
+         writepcx ( "testimg.pcx", 0,0, 999, 10000 , pal);
          char* pic = strtok ( piclist, "," );
          while ( pic ) {
             int from, to;
