@@ -66,9 +66,9 @@ install_location=
 type=DATA
 [Workspace_1]
 browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/index.html
-cpp_file=/home/martin/asc/source/ai/tactics.cpp
-header_file=/home/martin/asc/source/ai/ai.h
-openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/ai/ai.h,/home/martin/asc/source/ai/tactics.cpp
+cpp_file=Untitled.cpp
+header_file=/home/martin/asc/source/buildingtype.h
+openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/vehicletype.h,/home/martin/asc/source/buildingtype.h
 show_outputview=true
 show_treeview=true
 [asc.kdevprj]

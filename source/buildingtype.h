@@ -91,10 +91,10 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
         int          loadcapacity;
 
         //! bitmapped: only units on one of these levels of height may enter
-        char         loadcapability;
+        int          loadcapability;
 
         //! bitmapped: only units that are able to reach one of these levels of height may enter. For example, an airport may have "low level flight" set here. That does not mean that the units must FLY into the building!
-        char         unitheightreq;
+        int          unitheightreq;
 
         //! bitmapped: units that are able to reach one of these levels of height may NEVER enter this building
         int          unitheight_forbidden;
@@ -105,8 +105,8 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
 
         int          special;   /*  HQ, Trainingslager, ...  */
 
-        unsigned char         technologylevel;
-        unsigned char         researchid;
+        int          technologylevel;
+        int          researchid;
 
         TerrainAccess terrainaccess;
 

@@ -105,23 +105,24 @@ extern const char*  cvehiclefunctions[];
         int armor;
 
         void*        picture[8];    /*  0ø  ,  45ø   */
-        char         height;        /*  BM  Besteht die Moeglichkeit zum Hoehenwechseln  */
-        word         researchid;    // inzwischen ?berfl?ssig, oder ?
-        char         steigung;      /*  max. befahrbare Hoehendifferenz zwischen 2 fieldern  */
-        char         jamming;      /*  St„rke der Stoerstrahlen  */
+        int          height;        /*  BM  Besteht die Moeglichkeit zum Hoehenwechseln  */
+        int          researchid;    // inzwischen ?berfl?ssig, oder ?
+        int          steigung;      /*  max. befahrbare Hoehendifferenz zwischen 2 fieldern  */
+        int          jamming;      /*  St„rke der Stoerstrahlen  */
         int          view;         /*  viewweite  */
-        char         wait;        /*  Kann vehicle nach movement sofort schiessen ?  */
-        Word         loadcapacity;      /*  Transportmoeglichkeiten  */
-        word         maxunitweight; /*  maximales Gewicht einer zu ladenden vehicle */
-        char         loadcapability;     /*  BM     CHoehenStufen   die zu ladende vehicle muss sich auf einer dieser Hoehenstufen befinden */
-        char         loadcapabilityreq;  /*  eine vehicle, die geladen werden soll, muss auf eine diese Hoehenstufen kommen koennen */
-        char         loadcapabilitynot;  /*  eine vehicle, die auf eine dieser Hoehenstufen kann, darf NICHT geladen werden. Beispiel: Flugzeuge in Transportflieger */
-        Word         id;
+        bool         wait;        /*  Kann vehicle nach movement sofort schiessen ?  */
+        int          loadcapacity;      /*  Transportmoeglichkeiten  */
+        int          maxunitweight; /*  maximales Gewicht einer zu ladenden vehicle */
+        int          loadcapability;     /*  BM     CHoehenStufen   die zu ladende vehicle muss sich auf einer dieser Hoehenstufen befinden */
+        int          loadcapabilityreq;  /*  eine vehicle, die geladen werden soll, muss auf eine diese Hoehenstufen kommen koennen */
+        int          loadcapabilitynot;  /*  eine vehicle, die auf eine dieser Hoehenstufen kann, darf NICHT geladen werden. Beispiel: Flugzeuge in Transportflieger */
+        int          id;
         Resources    tank;
-        Word         fuelConsumption;
+        int          fuelConsumption;
         int          functions;
         vector<int>  movement;      /*  max. movementsstrecke  */
-        char         movemalustyp;     /*  wenn ein Bodentyp mehrere Movemali fuer unterschiedliche vehiclearten, wird dieser genommen.  <= cmovemalitypes */
+        int          movemalustyp;     /*  wenn ein Bodentyp mehrere Movemali fuer unterschiedliche vehiclearten, wird dieser genommen.  <= cmovemalitypes */
+
         char         classnum;         /* Anzahl der Klassen, max 8, min 0 ;  Der EINZIGE Unterschied zwischen 0 und 1 ist der NAME ! */
         ASCString    classnames[8];    /* Name der einzelnen Klassen */
 
@@ -134,8 +135,8 @@ extern const char*  cvehiclefunctions[];
          int          vehiclefunctions;
        } classbound[8];    /* untergrenze (minimum), die zum erreichen dieser Klasse notwendig ist, classbound[0] gilt fuer vehicletype allgemein*/
 
-        char         maxwindspeedonwater;
-        char         digrange;        // Radius, um den nach bodensch„tzen gesucht wird.
+        int          maxwindspeedonwater;
+        int          digrange;        // Radius, um den nach bodensch„tzen gesucht wird.
         int          initiative;      // 0 ist ausgeglichen // 256 ist verdoppelung
 
         int           weight;           // basic weight, without fuel etc.
