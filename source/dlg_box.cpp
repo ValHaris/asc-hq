@@ -1,6 +1,10 @@
-//     $Id: dlg_box.cpp,v 1.20 2000-05-30 18:39:23 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.21 2000-06-23 09:24:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/05/30 18:39:23  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.19  2000/05/23 20:40:42  mbickel
 //      Removed boolean type
 //
@@ -2110,7 +2114,6 @@ void         tdialogbox::stredit(char *       s,
                       int          max)
 { 
 
-   int  cc;
    char         *ss, *ss2, *ss3;
    char      einfuegen; 
    byte         position; 
@@ -2140,19 +2143,23 @@ void         tdialogbox::stredit(char *       s,
      lne(x1,y1,ss,position,einfuegen);
    }
 
+   int  cc;
+   tkey symkey;
    do {
      if ( keypress() ) {
-       cc = rp_key();
+       getkeysyms ( &symkey, &cc );
+       // cc = rp_key();
      } else {
         cc = cto_invvalue;
+        symkey = ct_invvalue;
         releasetimeslice();
      }
 
      if (cc != cto_invvalue ) {
        lne(x1,y1,ss,position,einfuegen);
-       switch (cc) {
+       switch (symkey) {
 	 
-            case cto_einf: {
+            case ct_einf: {
                     if (einfuegen == false) 
                        einfuegen = true; 
                     else 
@@ -2160,21 +2167,21 @@ void         tdialogbox::stredit(char *       s,
                  } 
             break; 
             
-            case cto_left:   if (position > 1)
+            case ct_left:   if (position > 1)
                            position--;
             break; 
             
-            case cto_right:  if (position < strlen ( ss ) )
+            case ct_right:  if (position < strlen ( ss ) )
                          position++;
             break; 
             
-            case cto_pos1:  position = 0;
+            case ct_pos1:  position = 0;
             break; 
             
-            case cto_ende:  position = strlen ( ss ) ;
+            case ct_ende:  position = strlen ( ss ) ;
             break; 
             
-            case cto_entf:  if ( ss[ position ] != 0 ) {
+            case ct_entf:  if ( ss[ position ] != 0 ) {
                          for (i=0; i< position ;i++ ) {
                             ss2[i] = ss[i];
                          } /* endfor */
@@ -2190,14 +2197,14 @@ void         tdialogbox::stredit(char *       s,
                        }
             break; 
             
-            case cto_right + cto_stp:  if ( position < strlen ( ss ) ) {
+            case ct_right + ct_stp:  if ( position < strlen ( ss ) ) {
                         do { 
                            position++;
                         }  while ( (ss[ position ] != ' ') && ( ss[ position ] != 0 ) );
                      } 
             break; 
             
-            case cto_left + cto_stp:  if ( position > 0 ) {
+            case ct_left + ct_stp:  if ( position > 0 ) {
                         do { 
                            position--;
                         }  while ( ( position > 0 ) && ( ss [ position - 1 ] != ' ') );

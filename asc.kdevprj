@@ -30,10 +30,10 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/sdl/sound.cpp,/home/martin/asc/source/basestrm.cpp,/home/martin/asc/source/basestrm.h,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/Makefile.am,/home/martin/asc/source/network.h,/home/martin/asc/source/typen.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/doc/source.htm,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/Makefile.am
+header_file=/home/martin/asc/doc/source.htm
 cpp_file=/home/martin/asc/source/sg.cpp
 browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/reference/C/FUNCTIONS/format.html
 [source/controls.cpp]
@@ -99,7 +99,7 @@ ldflags=
 addcxxflags=
 ldadd=-lSDL -lpthread -lbz2
 bin_program=asc
-cxxflags= -O0 -g3 -Wall
+cxxflags=-O0 -g3 -Wall
 [source/sdl/graphics.cpp]
 install_location=
 dist=true
@@ -359,7 +359,7 @@ dist=true
 install=false
 type=SOURCE
 [General]
-make_options= -j1
+make_options=-j1
 execute_args=
 makefiles=Makefile.am,source/Makefile.am,source/docs/Makefile.am,source/docs/en/Makefile.am,source/sdl/Makefile.am,source/libs/triangul/Makefile.am,source/libs/Makefile.am,
 version_control=None

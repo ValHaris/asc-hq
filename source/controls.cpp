@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.37 2000-06-19 20:05:04 mbickel Exp $
+//     $Id: controls.cpp,v 1.38 2000-06-23 09:24:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2000/06/19 20:05:04  mbickel
+//      Fixed crash when transfering ammo to vehicle with > 8 weapons
+//
 //     Revision 1.36  2000/06/09 13:12:23  mbickel
 //      Fixed tribute function and renamed it to "transfer resources"
 //
@@ -7577,7 +7580,7 @@ int  trunreplay :: run ( int player )
    mousevisible( true );
 //   cursor.show();
 
-
+   cursor.checkposition( getxpos(), getypos() );
    do {
        if ( status == 2 ) {
           execnextreplaymove ( );
@@ -7587,10 +7590,11 @@ int  trunreplay :: run ( int player )
          */
        }
 
-       if ( nextaction == rpl_finished   &&  !cursor.an )
-          cursor.show();
-       else
-          if ( nextaction != rpl_finished   &&  cursor.an )
+       if (nextaction == rpl_finished  || status != 2) {
+          if ( !cursor.an )
+             cursor.show();
+       } else
+          if ( cursor.an )
              cursor.hide();
 
 

@@ -1,6 +1,10 @@
-//     $Id: keybp.h,v 1.11 2000-06-01 15:27:46 mbickel Exp $
+//     $Id: keybp.h,v 1.12 2000-06-23 09:24:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/06/01 15:27:46  mbickel
+//      Some changes for the upcoming Win32 version of ASC
+//      Fixed error at startup: unable to load smalaril.fnt
+//
 //     Revision 1.10  2000/02/05 12:13:44  steb
 //     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
 //     startup due to actmap being null when trying to report errors.
@@ -58,7 +62,7 @@
 
 #ifdef _DOS_
 
-#ifndef NEWKEYB 
+ #ifndef NEWKEYB
    #define ct_enterk  ct_enter
    #define ct_altp     256 
    #define ct_space   32 
@@ -151,9 +155,7 @@
    #define ct_stp  -96
    #define ct_shp  -32
    #define ct_shift_tab 271
-#endif
-
-#ifdef NEWKEYB
+ #else
    #define ct_invvalue   -1
    #define ct_shp  2048 
    #define ct_stp  512 
@@ -275,80 +277,80 @@
    #define ct_f12    88 
 #endif
 
-   #define cto_stp  -96
-   #define cto_entf   83+256 
-   #define cto_space   32 
-   #define cto_bspace  8 
-   #define cto_a  'a' 
-   #define cto_b  'b' 
-   #define cto_c  'c' 
-   #define cto_d  'd' 
-   #define cto_e  'e' 
-   #define cto_f  'f' 
-   #define cto_g  'g' 
-   #define cto_h  'h' 
-   #define cto_i  'i' 
-   #define cto_j  'j' 
-   #define cto_k  'k' 
-   #define cto_l  'l' 
-   #define cto_m  'm' 
-   #define cto_n  'n' 
-   #define cto_o  'o' 
-   #define cto_p  'p' 
-   #define cto_q  'q' 
-   #define cto_r  'r' 
-   #define cto_s  's' 
-   #define cto_t  't' 
-   #define cto_u  'u' 
-   #define cto_v  'v' 
-   #define cto_w  'w' 
-   #define cto_x  'x' 
-   #define cto_y  'y' 
-   #define cto_z  'z' 
-   #define cto_oe 'î' 
-   #define cto_ae 'Ñ' 
-   #define cto_ue 'Å' 
-   #define cto_0  '0' 
-   #define cto_1  '1' 
-   #define cto_2  '2' 
-   #define cto_3  '3' 
-   #define cto_4  '4' 
-   #define cto_5  '5' 
-   #define cto_6  '6' 
-   #define cto_7  '7' 
-   #define cto_8  '8' 
-   #define cto_9  '9' 
+  #define cto_stp  -96
+  #define cto_entf   83+256
+  #define cto_space   32
+  #define cto_bspace  8
+  #define cto_a  'a'
+  #define cto_b  'b'
+  #define cto_c  'c'
+  #define cto_d  'd'
+  #define cto_e  'e'
+  #define cto_f  'f'
+  #define cto_g  'g'
+  #define cto_h  'h'
+  #define cto_i  'i'
+  #define cto_j  'j'
+  #define cto_k  'k'
+  #define cto_l  'l'
+  #define cto_m  'm'
+  #define cto_n  'n'
+  #define cto_o  'o'
+  #define cto_p  'p'
+  #define cto_q  'q'
+  #define cto_r  'r'
+  #define cto_s  's'
+  #define cto_t  't'
+  #define cto_u  'u'
+  #define cto_v  'v'
+  #define cto_w  'w'
+  #define cto_x  'x'
+  #define cto_y  'y'
+  #define cto_z  'z'
+  #define cto_oe 'î'
+  #define cto_ae 'Ñ'
+  #define cto_ue 'Å'
+  #define cto_0  '0'
+  #define cto_1  '1'
+  #define cto_2  '2'
+  #define cto_3  '3'
+  #define cto_4  '4'
+  #define cto_5  '5'
+  #define cto_6  '6'
+  #define cto_7  '7'
+  #define cto_8  '8'
+  #define cto_9  '9'
 
-   #define cto_tab    9 
-   #define cto_esc    27 
-   #define cto_invvalue   -1
-   #define cto_invvalue2  -2
-   #define cto_left   75+256 
-   #define cto_right  77+256 
-   #define cto_up     72+256 
-   #define cto_down   80+256 
-   #define cto_enter  13 
-   #define cto_pos1   71+256 
-   #define cto_ende   79+256 
-   #define cto_pdown  81+256 
-   #define cto_pup    73+256 
-   #define cto_einf   82+256 
-   #define cto_f1     59+256 
-   #define cto_f2     60+256 
-   #define cto_f3     61+256 
-   #define cto_f4     62+256 
-   #define cto_f5     63+256 
-   #define cto_f6     64+256 
-   #define cto_f7     65+256 
-   #define cto_f8     66+256 
-   #define cto_f9     67+256 
-   #define cto_f10    68+256 
-   #define cto_f11    254 
-   #define cto_f12    253 
-   #define cto_minus  '-' 
-   #define cto_plus   '+' 
-   #define cto_point  '.' 
-   #define cto_komma  ',' 
+  #define cto_tab    9
+  #define cto_esc    27
+  #define cto_invvalue   -1
+  #define cto_invvalue2  -2
+  #define cto_left   75+256
+  #define cto_right  77+256
+  #define cto_up     72+256
+  #define cto_down   80+256
+  #define cto_enter  13
+  #define cto_pos1   71+256
+  #define cto_ende   79+256
+  #define cto_pdown  81+256
+  #define cto_pup    73+256
+  #define cto_einf   82+256
+  #define cto_f1     59+256
+  #define cto_f2     60+256
+  #define cto_f3     61+256
+  #define cto_f4     62+256
+  #define cto_f5     63+256
+  #define cto_f6     64+256
+  #define cto_f7     65+256
+  #define cto_f8     66+256
+  #define cto_f9     67+256
+  #define cto_f10    68+256
+  #define cto_f11    254
+  #define cto_f12    253
+  #define cto_minus  '-'
+  #define cto_plus   '+'
+  #define cto_point  '.'
+  #define cto_komma  ','
 
 #else //  _DOS_
 
