@@ -332,7 +332,7 @@ persmine.nic tankmine.nic putmine.nic endturn.nic \
 informat.nic ascent.nic descent.nic attack.nic \
 movement.nic *.nic 640480.pcx *.raw *.scr *.fnt \
 *.dat *.map helpsys?.txt message?.txt *.pcx lcac2.jpg \
-bkgr4.scr helpsys9.msg *.wav *.msg *.gif *.asctxt"
+bkgr4.scr *.wav *.msg *.gif *.asctxt"
 
 dnl what gehts packed into main.con (the data container file)
 AC_SUBST([MAINCONDATA])
