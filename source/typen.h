@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.40 2000-08-10 10:20:18 mbickel Exp $
+//     $Id: typen.h,v 1.41 2000-08-11 12:24:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2000/08/10 10:20:18  mbickel
+//      Added building function "produce all unit types"
+//
 //     Revision 1.39  2000/08/09 12:39:40  mbickel
 //      fixed invalid height when constructing vehicle with other vehicles
 //      fixed wrong descent icon being shown
@@ -200,7 +203,7 @@
 #include "global.h"
 #include "tpascal.inc"
 #include "misc.h"
-
+#include "basestrm.h"
 
 #pragma pack(1)
 
@@ -683,7 +686,9 @@ class tvehicletype {    // This structure does not have a fixed layout any more 
 }; 
 
 
-class tvehicle { /*** Bei 始derungen unbedingt Save/LoadGame und Konstruktor korrigieren !!! ***/ 
+class tvehicle { /*** Bei 始derungen unbedingt Save/LoadGame und Konstruktor korrigieren !!! ***/
+  private:
+    pmap gamemap;
   public:
     pvehicletype typ;          /*  vehicleart: z.B. Schwere Fu疸ruppe  */
     char         color; 
@@ -737,6 +742,9 @@ class tvehicle { /*** Bei 始derungen unbedingt Save/LoadGame und Konstruktor kor
     void setMovement ( int newmove, int transp = 0 );
     int hasMoved ( void );
 
+    void read ( pnstream stream );
+    void write ( pnstream stream );
+
 
     int weight( void );   // weight of unit including cargo, fuel and material
     int cargo ( void );   // return weight of all loaded units
@@ -766,7 +774,9 @@ class tvehicle { /*** Bei 始derungen unbedingt Save/LoadGame und Konstruktor kor
   
     int searchstackforfreeweight( pvehicle eht, int what ); // what: 0=cargo ; 1=material/fuel
     // should not be called except from freeweight
+
     tvehicle ( void );
+    tvehicle ( pmap actmap );
     tvehicle ( pvehicle src, pmap actmap ); // if actmap == NULL  ==> unit will not be chained
     void clone ( pvehicle src, pmap actmap ); // if actmap == NULL  ==> unit will not be chained
     void transform ( pvehicletype type );     // to be used with extreme caution, and only in the mapeditor !!

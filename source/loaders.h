@@ -1,6 +1,12 @@
-//     $Id: loaders.h,v 1.5 2000-08-03 13:12:17 mbickel Exp $
+//     $Id: loaders.h,v 1.6 2000-08-11 12:24:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/08/03 13:12:17  mbickel
+//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
+//      Repairing units now reduces their experience
+//      negative attack- and defenseboni possible
+//      changed attackformula
+//
 //     Revision 1.4  2000/05/25 11:07:44  mbickel
 //      Added functions to check files for valid mail / savegame files.
 //
@@ -125,9 +131,6 @@ class  tspfldloaders {
            pnstream        stream;
            tmap*     spfld;
 
-
-           void            writeunit  ( pvehicle eht );
-           void            readunit ( pvehicle &eht );
 
            void            writebuilding  ( pbuilding bld );
            void            readbuilding ( pbuilding &bld );

@@ -1,6 +1,11 @@
-//     $Id: loaders.cpp,v 1.21 2000-08-07 16:29:21 mbickel Exp $
+//     $Id: loaders.cpp,v 1.22 2000-08-11 12:24:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/08/07 16:29:21  mbickel
+//      orbiting units don't consume fuel any more
+//      Fixed bug in attack formula; improved attack formula
+//      Rewrote reactionfire
+//
 //     Revision 1.20  2000/08/05 13:38:26  mbickel
 //      Rewrote height checking for moving units in and out of
 //        transports / building
@@ -433,154 +438,154 @@ void         renumevents(void)
 /**************************************************************/
 
 
-void         tspfldloaders::writeunit ( pvehicle eht )
+void   tvehicle::write ( pnstream stream )
 {
 
-    stream->writedata2 ( eht->typ->id );
-    stream->writedata2 ( eht->color );
+    stream->writedata2 ( typ->id );
+    stream->writedata2 ( color );
 
     int bm = 0;
 
-    if ( eht->experience )
+    if ( experience )
        bm |= cem_experience;
-    if ( eht->damage    )
+    if ( damage    )
        bm |= cem_damage;
 
-    if ( eht->fuel < eht->typ->tank )
+    if ( fuel < typ->tank )
        bm |= cem_fuel;
 
-    if ( eht->typ->weapons->count ) 
-       for (char m = 0; m < eht->typ->weapons->count ; m++) {
-          if ( eht->ammo[m] < eht->typ->weapons->weapon[m].count )
+    if ( typ->weapons->count )
+       for (char m = 0; m < typ->weapons->count ; m++) {
+          if ( ammo[m] < typ->weapons->weapon[m].count )
              bm |= cem_ammunition2;
-          if ( eht->weapstrength[m] != eht->typ->weapons->weapon[m].maxstrength )
+          if ( weapstrength[m] != typ->weapons->weapon[m].maxstrength )
              bm |= cem_weapstrength2;
 
-       } 
+       }
     for ( int i = 0; i < 32; i++ )
-       if ( eht->loading[i] )
+       if ( loading[i] )
            bm |= cem_loading;
 
-    if ( eht->attacked  )
+    if ( attacked  )
        bm |= cem_attacked;
-    if ( eht->height != chfahrend )
+    if ( height != chfahrend )
        bm |= cem_height;
-    if ( eht->getMovement() < eht->typ->movement[log2(eht->height)] )
+    if ( _movement < typ->movement[log2(height)] )
        bm |= cem_movement;
 
-    if ( eht->direction )
+    if ( direction )
        bm |= cem_direction;
 
-    if ( eht->material < eht->typ->material )
+    if ( material < typ->material )
        bm |= cem_material  ;
 
-    if ( eht->energy   < eht->typ->energy   )
+    if ( energy   < typ->energy   )
        bm |= cem_energy;
 
-    if ( eht->energyUsed )
+    if ( energyUsed )
        bm |= cem_energyUsed;
 
-    if ( eht->klasse    )
+    if ( klasse    )
        bm |= cem_class;
-    
-    if ( eht->armor != eht->typ->armor )
+
+    if ( armor != typ->armor )
        bm |= cem_armor;
 
-    if ( eht->networkid )
+    if ( networkid )
        bm |= cem_networkid;
 
-    if ( eht->name      )
+    if ( name      )
        bm |= cem_name;
- 
-    if ( eht->reactionfire.status )
+
+    if ( reactionfire.status )
        bm |= cem_reactionfire;
 
-    if ( eht->reactionfire.enemiesAttackable )
+    if ( reactionfire.enemiesAttackable )
        bm |= cem_reactionfire2;
 
-    if ( eht->generatoractive )
+    if ( generatoractive )
        bm |= cem_poweron;
 
 
     stream->writedata2( bm );
 
-    if ( bm & cem_experience )              
-         stream->writedata2 ( eht->experience );
+    if ( bm & cem_experience )
+         stream->writedata2 ( experience );
 
     if ( bm & cem_damage )
-         stream->writedata2 ( eht->damage );
+         stream->writedata2 ( damage );
 
     if ( bm & cem_fuel )
-         stream->writedata2 ( eht->fuel );
+         stream->writedata2 ( fuel );
 
-    if ( bm & cem_ammunition2 )              
+    if ( bm & cem_ammunition2 )
        for ( int j= 0; j < 16; j++ )
-         stream->writedata2 ( eht->ammo[j] );
+         stream->writedata2 ( ammo[j] );
 
     if ( bm & cem_weapstrength2 )
        for ( int j = 0; j < 16; j++ )
-         stream->writedata2 ( eht->weapstrength[j] );
+         stream->writedata2 ( weapstrength[j] );
 
     if ( bm & cem_loading ) {
        char k;
        char c=0;
        for (k = 0; k <= 31; k++)
-          if ( eht->loading[k] )
+          if ( loading[k] )
              c++;
-   
+
        stream->writedata2 ( c );
-   
+
        if (c)
-          for (k = 0; k <= 31; k++) 
-             if ( eht->loading[k] )
-                writeunit ( eht->loading[k] );
+          for (k = 0; k <= 31; k++)
+             if ( loading[k] )
+                loading[k]->write ( stream );
     }
 
     if ( bm & cem_height )
-         stream->writedata2 ( eht->height );
+         stream->writedata2 ( height );
 
     if ( bm & cem_movement )
-         stream->writeChar ( eht->getMovement() );
+         stream->writeChar ( _movement );
 
     if ( bm & cem_direction )
-         stream->writedata2 ( eht->direction );
+         stream->writedata2 ( direction );
 
     if ( bm & cem_material )
-         stream->writedata2 ( eht->material );
+         stream->writedata2 ( material );
 
     if ( bm & cem_energy )
-         stream->writedata2 ( eht->energy );
+         stream->writedata2 ( energy );
 
     if ( bm & cem_class )
-         stream->writedata2 ( eht->klasse );
+         stream->writedata2 ( klasse );
 
     if ( bm & cem_armor )
-         stream->writedata2 ( eht->armor );
-    
+         stream->writedata2 ( armor );
+
     if ( bm & cem_networkid )
-         stream->writedata2 ( eht->networkid );
+         stream->writedata2 ( networkid );
 
     if ( bm & cem_attacked )
-         stream->writedata2 ( eht->attacked );
+         stream->writedata2 ( attacked );
 
     if ( bm & cem_name     )
-         stream->writepchar ( eht->name );
+         stream->writepchar ( name );
 
     if ( bm & cem_reactionfire )
-       stream->writeChar ( eht->reactionfire.status );
+       stream->writeChar ( reactionfire.status );
 
     if ( bm & cem_reactionfire2 )
-       stream->writeChar ( eht->reactionfire.enemiesAttackable );
+       stream->writeChar ( reactionfire.enemiesAttackable );
 
     if ( bm & cem_poweron )
-       stream->writedata2 ( eht->generatoractive );
+       stream->writedata2 ( generatoractive );
 
     if ( bm & cem_energyUsed )
-       stream->writeInt ( eht->energyUsed );
+       stream->writeInt ( energyUsed );
 }
 
 
-void         tspfldloaders::readunit ( pvehicle &eht )
+void   tvehicle::read ( pnstream stream )
 {
     word id;
     stream->readdata2 ( id );
@@ -590,181 +595,184 @@ void         tspfldloaders::readunit ( pvehicle &eht )
     if ( !fzt )
        throw tinvalidid ( "no unit with matching ID found; ID = ", id );
 
-    eht = new tvehicle ;
 
-    eht->typ = fzt;
+    typ = fzt;
 
-    if ( spfld->objectcrc ) 
-       spfld->objectcrc->speedcrccheck->checkunit2 ( eht->typ );
+    /*
+    if ( spfld->objectcrc )
+       spfld->objectcrc->speedcrccheck->checkunit2 ( typ );
+    */
 
+    stream->readdata2 ( color );
 
-    stream->readdata2 ( eht->color );
-    
     int bm;
 
     stream->readdata2( bm );
 
     if ( bm & cem_experience )
-         stream->readdata2 ( eht->experience );
+         stream->readdata2 ( experience );
     else
-       eht->experience = 0;
+       experience = 0;
 
     if ( bm & cem_damage )
-         stream->readdata2 ( eht->damage );
+         stream->readdata2 ( damage );
     else
-       eht->damage = 0;
+       damage = 0;
 
     if ( bm & cem_fuel )
-         stream->readdata2 ( eht->fuel );
+         stream->readdata2 ( fuel );
     else
-       eht->fuel = eht->typ->tank;
+       fuel = typ->tank;
 
     if ( bm & cem_ammunition ) {
        word old;
        for ( int i = 0; i < 8; i++ ) {
          stream->readdata2 ( old );
-         eht->ammo[i] = old;
+         ammo[i] = old;
        }
     } else
      if ( bm & cem_ammunition2 ) {
         for ( int i = 0; i < 16; i++ ) {
-          stream->readdata2 ( eht->ammo[i] );
-          if ( eht->ammo[i] > eht->typ->weapons->weapon[i].count )
-             eht->ammo[i] = eht->typ->weapons->weapon[i].count;
-          if ( eht->ammo[i] < 0 )
-             eht->ammo[i] = 0;
+          stream->readdata2 ( ammo[i] );
+          if ( ammo[i] > typ->weapons->weapon[i].count )
+             ammo[i] = typ->weapons->weapon[i].count;
+          if ( ammo[i] < 0 )
+             ammo[i] = 0;
         }
-        
+
      } else
-       for (int i=0; i < eht->typ->weapons->count ;i++ )
-          eht->ammo[i] = eht->typ->weapons->weapon[i].count;
+       for (int i=0; i < typ->weapons->count ;i++ )
+          ammo[i] = typ->weapons->weapon[i].count;
 
 
     if ( bm & cem_weapstrength ) {
        word old;
        for ( int i = 0; i < 8; i++ ) {
          stream->readdata2 ( old );
-         eht->weapstrength[i] = old;
+         weapstrength[i] = old;
        }
     } else
      if ( bm & cem_weapstrength2 ) {
         for ( int i = 0; i < 16; i++ ) {
-          stream->readdata2 ( eht->weapstrength[i] );
+          stream->readdata2 ( weapstrength[i] );
         }
      } else
-       for (int i=0; i < eht->typ->weapons->count ;i++ )
-          eht->weapstrength[i] = eht->typ->weapons->weapon[i].maxstrength;
+       for (int i=0; i < typ->weapons->count ;i++ )
+          weapstrength[i] = typ->weapons->weapon[i].maxstrength;
 
     if ( bm & cem_loading ) {
        char c;
-   
+
        stream->readdata2 ( c );
-   
+
        if (c)
-          for (int k = 0; k < c; k++)
-              readunit ( eht->loading[k]  );
+          for (int k = 0; k < c; k++) {
+             loading[k] = new tvehicle ( gamemap );
+             loading[k]->read ( stream );
+          }
+
     }
 
     if ( bm & cem_height )
-         stream->readdata2 ( eht->height );
+         stream->readdata2 ( height );
     else
-       eht->height = chfahrend;
+       height = chfahrend;
 
-    if ( ! (eht->height & eht->typ->height) )
-       eht->height = 1 << log2 ( eht->typ->height );
+    if ( ! (height & typ->height) )
+       height = 1 << log2 ( typ->height );
 
-    if ( bm & cem_movement ) 
-         eht->setMovement ( stream->readChar ( ), -1 );
+    if ( bm & cem_movement )
+         setMovement ( stream->readChar ( ), -1 );
     else
-       eht->setMovement ( eht->typ->movement [ log2 ( eht->height ) ], -1 );
+       setMovement ( typ->movement [ log2 ( height ) ], -1 );
 
     if ( bm & cem_direction )
-         stream->readdata2 ( eht->direction );
+         stream->readdata2 ( direction );
     else
-         eht->direction = 0;
+         direction = 0;
 
     if ( bm & cem_material )
-         stream->readdata2 ( eht->material );
+         stream->readdata2 ( material );
     else
-         eht->material = eht->typ->material;
+         material = typ->material;
 
     if ( bm & cem_energy )
-         stream->readdata2 ( eht->energy );
+         stream->readdata2 ( energy );
     else
-         eht->energy = eht->typ->energy;
+         energy = typ->energy;
 
     if ( bm & cem_class )
-         stream->readdata2 ( eht->klasse );
+         stream->readdata2 ( klasse );
     else
-       eht->klasse = 0;
+       klasse = 0;
 
     if ( bm & cem_armor )
-         stream->readdata2 ( eht->armor );
+         stream->readdata2 ( armor );
     else
-       eht->armor = eht->typ->armor;
-    
+       armor = typ->armor;
+
     if ( bm & cem_networkid )
-         stream->readdata2 ( eht->networkid );
-    else 
-       eht->networkid = 0;
+         stream->readdata2 ( networkid );
+    else
+       networkid = 0;
 
     if ( bm & cem_attacked )
-         stream->readdata2 ( eht->attacked );
+         stream->readdata2 ( attacked );
 
-    if ( bm & cem_name     ) 
-         stream->readpchar ( &eht->name );
-    
+    if ( bm & cem_name     )
+         stream->readpchar ( &name );
+
     if ( bm & cem_reactionfire )
-       eht->reactionfire.status = stream->readChar (  );
+       reactionfire.status = stream->readChar (  );
     else
-       eht->reactionfire.status = 0;
+       reactionfire.status = 0;
 
     if ( bm & cem_reactionfire2 )
-       eht->reactionfire.enemiesAttackable = stream->readChar (  );
+       reactionfire.enemiesAttackable = stream->readChar (  );
     else
-       eht->reactionfire.enemiesAttackable = 0;
+       reactionfire.enemiesAttackable = 0;
 
     if ( bm & cem_poweron )
-       stream->readdata2 ( eht->generatoractive );
+       stream->readdata2 ( generatoractive );
     else
-       eht->generatoractive = 0;
+       generatoractive = 0;
 
     if ( bm & cem_energyUsed )
-       eht->energyUsed =  stream->readInt ();
+       energyUsed =  stream->readInt ();
     else
-       eht->energyUsed = 0;
+       energyUsed = 0;
 
 
 
     #ifdef sgmain
-    if (eht->klasse == 255) {
-       if ( eht->typ->classnum ) {
-          for (int i = 0; i < eht->typ->classnum ; i++ ) 
-             if ( spfld->player[ eht->color/8 ].research.vehicleclassavailable( eht->typ, i, spfld ) )
-                eht->klasse = i;
+    if (klasse == 255) {
+       if ( typ->classnum ) {
+          for (int i = 0; i < typ->classnum ; i++ )
+             if ( gamemap->player[ color/8 ].research.vehicleclassavailable( typ, i, gamemap ) )
+                klasse = i;
              else
                 break;
-                
-          
-          eht->functions = eht->typ->functions & eht->typ->classbound[eht->klasse].vehiclefunctions;
+
+
+          functions = typ->functions & typ->classbound[klasse].vehiclefunctions;
        } else {
-          eht->functions = eht->typ->functions ;
-          eht->klasse = 0;
+          functions = typ->functions ;
+          klasse = 0;
        }
 
-       eht->armor = eht->typ->armor * eht->typ->classbound[eht->klasse].armor / 1024;
-       if (eht->typ->weapons->count ) 
-          for ( int m = 0; m < eht->typ->weapons->count ; m++)
-             if ( eht->typ->weapons->weapon[m].getScalarWeaponType() >= 0 )
-                eht->weapstrength[m] = eht->typ->weapons->weapon[m].maxstrength * eht->typ->classbound[eht->klasse].weapstrength[ eht->typ->weapons->weapon[m].getScalarWeaponType()] / 1024;
+       armor = typ->armor * typ->classbound[klasse].armor / 1024;
+       if (typ->weapons->count )
+          for ( int m = 0; m < typ->weapons->count ; m++)
+             if ( typ->weapons->weapon[m].getScalarWeaponType() >= 0 )
+                weapstrength[m] = typ->weapons->weapon[m].maxstrength * typ->classbound[klasse].weapstrength[ typ->weapons->weapon[m].getScalarWeaponType()] / 1024;
              else
-                eht->weapstrength[m] = 0;
+                weapstrength[m] = 0;
 
     } else {
-      if ( eht->typ->classnum ) 
-        eht->functions = eht->typ->functions & eht->typ->classbound[eht->klasse].vehiclefunctions;
+      if ( typ->classnum )
+        functions = typ->functions & typ->classbound[klasse].vehiclefunctions;
       else
-        eht->functions = eht->typ->functions ;
+        functions = typ->functions ;
     }
     #endif
 
@@ -817,7 +825,7 @@ void         tspfldloaders::writebuilding ( pbuilding bld )
     if (c)
        for (k = 0; k <= 31; k++) 
           if ( bld->loading[k] )
-             writeunit ( bld->loading[k]  );
+             bld->loading[k]->write ( stream );
 
 
     c = 0;
@@ -928,8 +936,11 @@ void         tspfldloaders::readbuilding ( pbuilding &bld )
 
     stream->readdata2 ( c );
     if (c)
-       for (k = 0; k < c; k++)
-          readunit ( bld->loading[k]  );
+       for (k = 0; k < c; k++) {
+          bld->loading[k] = new tvehicle ( spfld );
+          bld->loading[k]->read ( stream );
+       }
+
 
     stream->readdata2 ( c );
     if (c)
@@ -2125,7 +2136,7 @@ void   tspfldloaders::writefields ( void )
          stream->writedata2 ( fld->direction );
 
       if (b1 & csm_vehicle ) 
-         writeunit ( fld->vehicle  );
+         fld->vehicle->write ( stream );
 
 
       if (b1 & csm_building ) 
@@ -2268,8 +2279,10 @@ void tspfldloaders::readfields ( void )
             fld2->direction = 0; 
 
 
-         if (b1 & csm_vehicle ) 
-            readunit ( fld2->vehicle   );
+         if (b1 & csm_vehicle ) {
+            fld2->vehicle = new tvehicle ( spfld );
+            fld2->vehicle->read ( stream );
+         }
 
 
          if (b1 & csm_building ) {

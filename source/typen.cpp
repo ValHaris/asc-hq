@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.41 2000-08-10 10:20:18 mbickel Exp $
+//     $Id: typen.cpp,v 1.42 2000-08-11 12:24:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2000/08/10 10:20:18  mbickel
+//      Added building function "produce all unit types"
+//
 //     Revision 1.40  2000/08/09 12:39:34  mbickel
 //      fixed invalid height when constructing vehicle with other vehicles
 //      fixed wrong descent icon being shown
@@ -881,8 +884,17 @@ void* tbuilding :: getpicture ( int x, int y )
 
 tvehicle :: tvehicle ( void ) : reactionfire ( this )
 {
+   gamemap = NULL;
    init();
 }
+
+tvehicle :: tvehicle ( pmap actmap )
+          : reactionfire ( this )
+{
+   gamemap = actmap;
+   init();
+}
+
 
 tvehicle :: ~tvehicle (  )
 {
@@ -894,8 +906,10 @@ tvehicle :: ~tvehicle (  )
 
 }
 
-tvehicle :: tvehicle ( pvehicle src, pmap actmap ) : reactionfire ( this )
+tvehicle :: tvehicle ( pvehicle src, pmap actmap )
+          : reactionfire ( this )
 {
+   gamemap = actmap;
    init();
    clone ( src, actmap );
 }
