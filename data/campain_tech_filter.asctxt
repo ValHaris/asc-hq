@@ -1,0 +1,7 @@
+itemfilter {
+   Technologies = 101000-101999
+   Terrain = 
+   name = Campain Technologies
+   activated = true
+} itemfilter
+   

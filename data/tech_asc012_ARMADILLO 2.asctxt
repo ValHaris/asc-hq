@@ -1,6 +1,6 @@
 technology {
    Name = ARMADILLO 2
-   infotext = Reserach project finished! ARMADILLO 2 avialable!
+   infotext = Research project finished! ARMADILLO 2 avialable! You should stop transfering resources to the research institute, because this was the last researchable project at this time!
    id = 101102
    RelatedUnitID = 102
    parent = 101000

@@ -1,6 +1,6 @@
 technology {
    Name = ASSAULT TANK
-   infotext = Reserach project finished! ASSAULT TANK avialable!
+   infotext = Research project finished! ASSAULT TANK avialable!
    id = 101103
    RelatedUnitID = 3
    parent = 101000
