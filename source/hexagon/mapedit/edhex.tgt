@@ -1234,8 +1234,8 @@ WVList
 0
 286
 MItem
-18
-..\..\basevesa.obj
+22
+..\..\dos\basevesa.obj
 287
 WString
 3
@@ -1252,8 +1252,8 @@ WVList
 0
 290
 MItem
-18
-..\..\dispfont.obj
+22
+..\..\dos\dispfont.obj
 291
 WString
 3
@@ -1270,8 +1270,8 @@ WVList
 0
 294
 MItem
-15
-..\..\mouse.obj
+19
+..\..\dos\mouse.obj
 295
 WString
 3
@@ -1288,8 +1288,8 @@ WVList
 0
 298
 MItem
-13
-..\..\pcx.obj
+17
+..\..\dos\pcx.obj
 299
 WString
 3
@@ -1306,8 +1306,8 @@ WVList
 0
 302
 MItem
-18
-..\..\spfldutl.obj
+22
+..\..\dos\spfldutl.obj
 303
 WString
 3
