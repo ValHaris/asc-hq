@@ -2074,10 +2074,11 @@ void nextPlayer( void )
       }
 
       if ( !actmap->player[actmap->actplayer].exist() )
-         if ( actmap->replayinfo->guidata[actmap->actplayer] ) {
-            delete actmap->replayinfo->guidata[actmap->actplayer];
-            actmap->replayinfo->guidata[actmap->actplayer] = NULL;
-         }
+         if ( actmap->replayinfo )
+            if ( actmap->replayinfo->guidata[actmap->actplayer] ) {
+               delete actmap->replayinfo->guidata[actmap->actplayer];
+               actmap->replayinfo->guidata[actmap->actplayer] = NULL;
+            }
 
    }  while (!(actmap->player[actmap->actplayer].exist()  || (runde > 2) ));
 

@@ -215,13 +215,13 @@ AiParameter::JobList AI::chooseJob ( const Vehicletype* typ, int functions )
 
 
    if ( functions & cf_conquer ) {
-      if ( functions & cf_trooper )  {
+      /* if ( functions & cf_trooper )  {
          if ( typ->height & chfahrend )
             jobList.push_back ( AiParameter::job_conquer );
-      } else {
+      } else { */
          if ( maxstrength < maxmove )
             jobList.push_back ( AiParameter::job_conquer );
-      }
+      // }
    }
 
    if ( ( maxstrength*1.5 < typ->view
