@@ -1,6 +1,12 @@
-//     $Id: UnitEditor.java,v 1.8 2000-11-07 16:19:40 schelli Exp $
+//     $Id: UnitEditor.java,v 1.9 2000-11-07 22:14:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/11/07 16:19:40  schelli
+//     Minor Memory-Functions & Problems changed
+//     Picture Support partly enabled
+//     New Funktion partly implemented
+//     Buildings partly implemented
+//
 //     Revision 1.7  2000/11/01 11:41:05  mbickel
 //      Fixed: Selection in MainWindow-List not being evaluated, the first list
 //       entry was always edited.
@@ -2002,7 +2008,7 @@ static String  cTerrainType[]  = {"shallow water , coast"       ,    "normal low
     "track possible",                  "small rocks",      "mud",         "snow",
     "deep snow",                       "mountains",        "very shallow water",
     "large rocks",                     "small trench",     "ditch",  "hillside",
-"turret foundation",               "swamp thin",       "Installation", "pack ice", "river", "frozen water" };
+"turret foundation",               "swamp thin",       "Installation", "pack ice", "river", "frozen water", "Lava" };
 
 static int cfsonar = 1;
 static int cfparatrooper = 2;
