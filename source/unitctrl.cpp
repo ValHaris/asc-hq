@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.14 2000-07-23 17:59:53 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.15 2000-07-24 13:55:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/07/23 17:59:53  mbickel
+//      various AI improvements
+//      new terrain information window
+//
 //     Revision 1.13  2000/07/16 14:20:06  mbickel
 //      AI has now some primitive tactics implemented
 //      Some clean up
@@ -1372,6 +1376,9 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
       int ad1 = battle->av.damage;
       int dd1 = battle->dv.damage;
 
+      int xp1 = vehicle->xpos;
+      int yp1 = vehicle->ypos;
+
       if ( mapDisplay ) {
          mapDisplay->displayActionCursor ( vehicle->xpos, vehicle->ypos, x, y );
          battle->calcdisplay ();
@@ -1382,7 +1389,7 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
       int dd2 = battle->dv.damage;
       battle->setresult ();
 
-      logtoreplayinfo ( rpl_attack, vehicle->xpos, vehicle->ypos, x, y, ad1, ad2, dd1, dd2, weapnum );
+      logtoreplayinfo ( rpl_attack, xp1, yp1, x, y, ad1, ad2, dd1, dd2, weapnum );
 
       computeview();
 
