@@ -1,6 +1,11 @@
-//     $Id: sg.cpp,v 1.120 2000-12-28 16:58:37 mbickel Exp $
+//     $Id: sg.cpp,v 1.121 2000-12-29 16:33:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.120  2000/12/28 16:58:37  mbickel
+//      Fixed bugs in AI
+//      Some cleanup
+//      Fixed crash in building construction
+//
 //     Revision 1.119  2000/12/28 11:12:46  mbickel
 //      Fixed: no redraw when restoring fullscreen focus in WIN32
 //      Better error message handing in WIN32
@@ -2467,8 +2472,6 @@ void networksupervisor ( void )
        network.computer[0].receive.transfermethod->closetransfer();
        network.computer[0].receive.transfermethod->closeconnection();
 
-
-       // displaymessage ( " data transfer finished",1);
        removemessage();
        if ( actmap->network )
           setallnetworkpointers ( actmap->network );
@@ -2491,25 +2494,12 @@ void networksupervisor ( void )
    int ok = 0;
    if ( !actmap->supervisorpasswordcrc.empty() ) {
        ok = enterpassword ( actmap->supervisorpasswordcrc );
-       /*
-       taskforsupervisorpassword afsp;
-       int a;
-       afsp.init ( &actmap->supervisorpasswordcrc, 1 );
-       afsp.run( &a );
-       afsp.done();
-
-       if ( a == 1 )
-         ok = 1;
-       */
    } else {
       displaymessage ("no supervisor defined",1 );
       delete actmap;
       actmap = NULL;
       return;
    }
-
-
-
 
    if ( ok ) {
       npush ( actmap->actplayer );

@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.67 2000-12-27 22:23:05 mbickel Exp $
+//     $Id: dialog.cpp,v 1.68 2000-12-29 16:33:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.67  2000/12/27 22:23:05  mbickel
+//      Fixed crash in loading message text
+//      Removed many unused variables
+//
 //     Revision 1.66  2000/12/26 21:04:33  mbickel
 //      Fixed: putimageprt not working (used for small map displaying)
 //      Fixed: mapeditor crashed on generating large maps
@@ -3861,6 +3865,8 @@ class  tsetalliances : public tdialogbox {
                      char                lastplayer;
                      int                 oninit;
                      int                 supervisor;
+                     bool                mapeditor;
+                     bool                  shareview_changeable;
                      int                 xp,yp,xa,ya,bx;  /* position der tastatur-markierungsrechtecke  */
 
                      void                init ( int supervis );
@@ -3974,7 +3980,9 @@ void         tsetalliances::init( int supervis )
   #ifdef karteneditor
   oninit = 1;
   supervisor = 1;
+  mapeditor = true;
   #else
+  mapeditor = false;
   if ( actmap->actplayer == -1 ) {
      oninit = 1;
      supervisor = 1;
@@ -3986,6 +3994,8 @@ void         tsetalliances::init( int supervis )
 
   if ( supervis )
      supervisor = 1;
+
+  shareview_changeable = actmap->actplayer >= 0   &&  !oninit ;
 
    tdialogbox::init();
    title = "set alliances";
@@ -4005,10 +4015,6 @@ void         tsetalliances::init( int supervis )
    addbutton("~a~i names",400,115,xsize - 20,140,0,1,4,true);
    addbutton("~n~etwork",400,160,xsize - 20,190,0,1,5, actmap->network != NULL ); 
    #endif
-   if ( !supervisor ) 
-     addbutton("~s~upervisor",400,200,xsize - 20,230,0,1,6, !actmap->supervisorpasswordcrc.empty() );
-
-   // buildgraphics(); 
 
    int lastcomppos = 0;
    int plnum = 0;
@@ -4041,6 +4047,18 @@ void         tsetalliances::init( int supervis )
          else
             sv.mode[i][j] = sv_none;
    } 
+
+   if ( !supervisor )
+     addbutton("~s~upervisor",400,200,xsize - 20,230,0,1,6, !actmap->supervisorpasswordcrc.empty() );
+   else {
+      if ( !mapeditor )
+          for ( int i = 0; i < 8; i++ )
+             if ( actmap->player[i].existent ) {
+                int x = x1 + 10 + ply_x1 + 2 * tsa_namelength;
+                int y = y1 + ply_y1 + i * 22 - 10;
+                addbutton ("reset passw.", x, y, x+ 90, y + 15, 0, 1, 70+i, true );
+             }
+   }
 
 
    for (i = 0; i < 8; i++) 
@@ -4149,12 +4167,9 @@ void         tsetalliances::buildhlgraphics(void)
          sprintf(temp, "computer %d", location[i] );
          showtext2(temp ,x1 + ply_x1 + 30 + tsa_namelength,y1 + ply_y1 + i * 22);
 
-         #ifndef kartened
-         if ( actmap->actplayer >= 0   &&  !oninit )
+         if ( shareview_changeable )
             if ( i != actmap->actplayer )
                showtext2(shareview_modenames[sv.mode[actmap->actplayer][i]],x1 + 40 + ply_x1 + 2 * tsa_namelength,y1 + ply_y1 + i * 22); 
-
-         #endif
 
          playernum++; 
          playerexist |= 1 << i;
@@ -4335,12 +4350,6 @@ void         tsetalliances::click(pascal_byte         bxx,
                                 pascal_byte         x,
                                 pascal_byte         y)
 { 
-
-   #ifdef karteneditor
-   bool mapeditor = true;
-   #else
-   bool mapeditor = false;
-   #endif
    mousevisible(false);
    activefontsettings.color = 23 + y * 8; 
    activefontsettings.length = tsa_namelength; 
@@ -4380,9 +4389,8 @@ void         tsetalliances::click(pascal_byte         bxx,
          checkfornetwork();
       } 
       #endif
-      
-      #ifndef kartened
-      if (x == 2  &&  ( y != actmap->actplayer ) && actmap->actplayer>=0  &&  !oninit ) 
+
+      if (x == 2  &&  ( y != actmap->actplayer ) && actmap->actplayer>=0  &&  !oninit )
          if ( (actmap->alliances[actmap->actplayer][y] == capeace && actmap->alliances[y][actmap->actplayer] == capeace) ||  sv.mode[actmap->actplayer][y] == sv_shareview ) {
                                                  
             if ( sv.mode[actmap->actplayer][y] == sv_shareview )
@@ -4403,8 +4411,7 @@ void         tsetalliances::click(pascal_byte         bxx,
             showtext2(shareview_modenames[sv.mode[actmap->actplayer][y]],x1 + 40 + ply_x1 + 2 * tsa_namelength,y1 + ply_y1 + y * 22); 
    
          } 
-      #endif
-      
+
    } 
    else { 
       if (x != y) { 
@@ -4530,7 +4537,14 @@ void         tsetalliances::buttonpressed( int id )
               }
       break;
       #endif
-   } 
+   }
+   if ( id >= 70 && id <= 77 ) {
+      actmap->player[id-70].passwordcrc.reset();
+      char txt[1000];
+      char* sp = "The supervirsor reset the password of player #%d, %s" ;
+      sprintf ( txt, sp, id-70, actmap->player[id-70].getName().c_str() );
+      new tmessage ( strdup ( txt), 255 );
+   }
 } 
 
 
@@ -4556,7 +4570,7 @@ void         tsetalliances::run(void)
                      releasetimeslice();
                } 
 
-               if ((mouseparams.x > x1 + 40 + ply_x1 + 2 * tsa_namelength) && (mouseparams.x <= x1 + 40 + ply_x1 + 3 * tsa_namelength) && (mouseparams.y > y1 + ply_y1 + i * ply_lineheight) && (mouseparams.y <= y1 + ply_y1 + (i + 1) * ply_lineheight)) {
+               if (shareview_changeable && (mouseparams.x > x1 + 40 + ply_x1 + 2 * tsa_namelength) && (mouseparams.x <= x1 + 40 + ply_x1 + 3 * tsa_namelength) && (mouseparams.y > y1 + ply_y1 + i * ply_lineheight) && (mouseparams.y <= y1 + ply_y1 + (i + 1) * ply_lineheight)) {
                   click(0,2,i); 
                   while ( mouseparams.taste != 0 )
                      releasetimeslice();
@@ -4571,10 +4585,7 @@ void         tsetalliances::run(void)
                      releasetimeslice();
                }
 
-
-
-
-      } 
+      }
 
       if ((taste == ct_down) || (taste == ct_up) || (taste == ct_left) || (taste == ct_right)) { 
          mousevisible(false); 
@@ -4675,20 +4686,8 @@ void         tsetalliances::run(void)
 
 void         setupalliances( int supervisor )
 { 
-   /*
-   #ifndef karteneditor
-   if ( actmap->actplayer == -1  && !supervisor ) {
-        taskforsupervisorpassword afsp;
-        afsp.init ( &actmap->supervisorpasswordcrc, 0 );
-        afsp.run( NULL );
-        afsp.done();
-   }
-   #endif
-   */
-
-   tsetalliances sua; 
-
-   sua.init( supervisor ); 
+   tsetalliances sua;
+   sua.init( supervisor );
    sua.run(); 
    sua.done(); 
 }  

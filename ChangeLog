@@ -1,3 +1,353 @@
+2000-12-28 17:58  mbickel
+
+	* asc.kdevprj, source/artint.cpp, source/artint.h,
+	source/gamemap.cpp, source/mapalgorithms.cpp, source/sg.cpp,
+	source/spfst.cpp, source/strtmesg.cpp, source/typen.h,
+	source/unitctrl.h, source/vehicletype.cpp:  Fixed bugs in AI
+	 Some cleanup
+	 Fixed crash in building construction
+
+2000-12-28 12:12  mbickel
+
+	* source/: dlg_box.cpp, dlg_box.h, sg.cpp, sdl/events.cpp,
+	win32/borland/global_os.h:  Fixed: no redraw when restoring
+	fullscreen focus in WIN32
+	 Better error message handing in WIN32
+
+2000-12-27 23:23  mbickel
+
+	* source/: dialog.cpp, dlg_box.cpp, gamedlg.cpp, gamemap.cpp,
+	gui.cpp, newfont.cpp, sg.cpp, sgstream.cpp, spfst.cpp,
+	tools/win/tools.bpr, tools/win/weaponguide.bpr,
+	win32/borland/asc.bpr:	Fixed crash in loading message text
+	 Removed many unused variables
+
+2000-12-26 22:04  mbickel
+
+	* asc.kdevprj, source/Named.h, source/basegfx.cpp,
+	source/dialog.cpp, source/edglobal.cpp, source/edmisc.cpp,
+	source/sg.cpp:	Fixed: putimageprt not working (used for small map
+	displaying)
+	 Fixed: mapeditor crashed on generating large maps
+
+2000-12-26 15:51  mbickel
+
+	* source/: asc.bpf, asc.bpr, tools/win/tools.bpf,
+	tools/win/tools.bpr, tools/win/weaponguide.bpf,
+	tools/win/weaponguide.bpr, win32/borland/asc.bpf,
+	win32/borland/asc.bpr:	Added some more Borland C++ Builder project
+	files
+
+2000-12-26 15:45  mbickel
+
+	* asc.bpg, source/artint.cpp, source/basegfx.cpp,
+	source/basestrm.cpp, source/misc.h, source/sg.cpp,
+	source/typen.cpp, source/libs/bzlib/win/bzlib.bpr,
+	source/libs/jpeg-6b/libjpeg.bpr,
+	source/libs/triangul/win32/triangulation.bpr,
+	source/tools/weaponguide.cpp,
+	source/win32/borland/mapeditor/mapeditor.bpr:  Made ASC compilable
+	(and runnable) with Borland C++ Builder
+
+2000-12-23 16:58  mbickel
+
+	* asc.bpg, doc/source.html, source/asc.bpr, source/gui.cpp,
+	source/sg.cpp, source/win32/borland/mapeditor/mapeditor.bpf,
+	source/win32/borland/mapeditor/mapeditor.bpr:  Trying to get ASC to
+	run with Borland C++ Builder...
+
+2000-12-23 14:27  mbickel
+
+	* asc.bpg, source/asc.bpf, source/asc.bpr,
+	source/libs/bzlib/win/bzlib.bpf, source/libs/bzlib/win/bzlib.bpr,
+	source/libs/jpeg-6b/libjpeg.bpf, source/libs/jpeg-6b/libjpeg.bpr,
+	source/libs/triangul/win32/triangulation.bpf,
+	source/libs/triangul/win32/triangulation.bpr:  Added Borland C++
+	Builder project files
+
+2000-12-23 14:19  mbickel
+
+	* doc/source.html, source/Named.h, source/astar2.cpp,
+	source/borland.DSW, source/borland.OBR, source/borland.ide,
+	source/borland.met, source/building.cpp, source/controls.cpp,
+	source/dlg_box.cpp, source/edgen.cpp, source/edgen.h,
+	source/gui.cpp, source/loadbi3.cpp, source/loadpcxc.cpp,
+	source/missions.cpp, source/palette.cpp, source/stack.cpp,
+	source/strtmesg.cpp, source/libs/readme.txt,
+	source/win32/borland/global_os.h:  Made ASC compileable with
+	Borland C++ Builder
+
+2000-12-21 17:41  mbickel
+
+	* asc.kdevprj, source/basestreaminterface.h, source/building.cpp,
+	source/buildingtype.cpp, source/misc.h:  Fixed some compilation
+	errors that were made during documentation
+
+2000-12-21 12:00  mbickel
+
+	* source/: artint.h, basegfx.h, basestreaminterface.h, basestrm.h,
+	basetemp.h, building.cpp, building.h, buildingtype.cpp,
+	buildingtype.h, controls.cpp, controls.h, gui.h, mousecontrol.h,
+	typen.cpp, typen.h:  Added some code documentation
+
+2000-11-29 18:58  mbickel
+
+	* source/dlg_box.cpp:  BI3 map loading routines can now handles
+	maps > 64*64
+	 Fixed: pressing enter in dialog_box triggered wrong buttons
+
+2000-11-29 12:18  mbickel
+
+	* source/: artint.cpp, gamemap.cpp, strtmesg.cpp, win32/asc.tgt,
+	win32/asc.wpj, win32/mapedit/mapedit.tgt:  Mapeditor compiles with
+	Watcom again
+
+2000-11-29 12:05  mbickel
+
+	* asc.kdevprj, source/basestrm.cpp, source/dlg_box.cpp,
+	source/edglobal.cpp, source/edmain.cpp, source/edmisc.cpp,
+	source/edmisc.h, source/edselfnt.cpp, source/edselfnt.h,
+	source/gamemap.cpp, source/loaders.cpp, source/sg.cpp,
+	source/typen.h:  Improved userinterface of the mapeditor
+	 map::preferredfilenames uses now strings (instead of char*)
+
+2000-11-29 10:40  mbickel
+
+	* asc.kdevprj, source/CLoadable.cpp, source/Makefile.am,
+	source/Makefile.in, source/Named.cpp, source/Named.h,
+	source/Property.cpp, source/controls.cpp, source/dialog.cpp,
+	source/dialog.h, source/dlg_box.cpp, source/edglobal.cpp,
+	source/edglobal.h, source/edmain.cpp, source/edmisc.cpp,
+	source/edmisc.h, source/gamedlg.cpp, source/gamemap.cpp,
+	source/gameoptions.cpp, source/gameoptions.h,
+	source/memorycheck.cpp, source/password.cpp, source/password.h,
+	source/password_dialog.cpp, source/password_dialog.h,
+	source/sg.cpp, source/sgstream.cpp, source/typen.h,
+	source/mapedit/Makefile.am, source/mapedit/Makefile.in:  The
+	mapeditor has now two maps simultaneously active
+	 Moved memorychecking functions to its own file: memorycheck.cpp
+	 Rewrote password handling in ASC
+
+2000-11-26 23:18  mbickel
+
+	* asc.kdevprj, source/edmain.cpp, source/loaders.cpp,
+	source/sg.cpp, source/sgstream.cpp, source/sgstream.h:	Added
+	command line parameters for setting the verbosity
+	 Increased verbose output
+
+2000-11-26 15:39  mbickel
+
+	* source/: artint.cpp, artint.h, astar2.h, borland.DSW,
+	borland.OBR, borland.ide, borland.met, borland.mlt,
+	win32/global_os.h:  Added Project Files for Borland C++
+	 Some modifications to compile source with BCC
+
+2000-11-23 20:45  mbickel
+
+	* source/libs/triangul/README:	Added original libtriangulation
+	README
+
+2000-11-22 18:00  mbickel
+
+	* source/libs/: bzlib/README, bzlib/README.ASC,
+	triangul/README.ASC, triangul/readme.txt:  Updated documentation
+	for libraries
+
+2000-11-22 12:34  mbickel
+
+	* config.h.in, configure, source/mapedit/Makefile.in,
+	source/tools/linux/Makefile.in:  new Makefile.in : dynamically
+	linked libbzip2
+
+2000-11-22 09:48  mbickel
+
+	* configure.in, source/mapedit/Makefile.am,
+	source/tools/linux/Makefile.am:  mapeditor and mount/demount use
+	configurable bzlib linking
+	 invalid bzlib tests in configure.in fixed
+
+2000-11-21 21:26  mbickel
+
+	* Makefile.in, asc.kdevprj, config.h.in, configure, configure.in,
+	source/Makefile.in, source/artint.cpp, source/artint.h,
+	source/building.cpp, source/buildingtype.cpp, source/controls.cpp,
+	source/controls.h, source/dlg_box.cpp, source/dlg_box.h,
+	source/edmisc.cpp, source/edmisc.h, source/edselfnt.cpp,
+	source/gamedlg.cpp, source/mapalgorithms.cpp,
+	source/mapalgorithms.h, source/sg.cpp, source/sgstream.cpp,
+	source/sgstream.h, source/spfst.cpp, source/spfst.h,
+	source/unitctrl.cpp, source/unitctrl.h, source/vehicletype.cpp,
+	source/viewcalculation.cpp, source/viewcalculation.h,
+	source/docs/Makefile.in, source/docs/en/Makefile.in,
+	source/libs/Makefile.in, source/libs/triangul/Makefile.in,
+	source/mapedit/Makefile.in, source/sdl/Makefile.in,
+	source/tools/Makefile.in, source/tools/linux/Makefile.in:  Fixed
+	crash in tsearchfields (used by object construction for example)
+	 AI improvements
+	 configure.in: added some debug output
+		       fixed broken check for libbz2
+
+2000-11-21 20:13  mbickel
+
+	* configure.in, source/Makefile.am, source/weather.cpp,
+	source/libs/Makefile.am:  libbzip2 can now be linked either
+	statically or dynamically to ASC/linux
+
+2000-11-15 20:28  mbickel
+
+	* asc.kdevprj, source/artint.cpp, source/artint.h, source/sg.cpp,
+	source/spfst.cpp, source/typen.h:  AI improvements
+
+2000-11-14 21:36  mbickel
+
+	* asc.kdevprj, configure, source/TODO, source/artint.cpp,
+	source/artint.h, source/buildingtype.h, source/dialog.cpp,
+	source/edmisc.cpp, source/sgstream.cpp, source/spfst.cpp,
+	source/typen.cpp, source/typen.h, source/unitctrl.cpp,
+	source/unitctrl.h, source/vehicletype.h:  The AI can now use supply
+	vehicles
+	 Rewrote objecttype IO routines to make the structure independant
+	of
+	  the memory layout
+
+2000-11-12 16:19  mbickel
+
+	* asc.kdevprj, configure, configure.in, source/gamedlg.cpp,
+	source/libs/bzlib/Makefile:  Applied patch to configure.in to
+	enable finding SDL if it isn't installed
+	  in the default directory
+	 GiveUnitAway dialog improved
+
+2000-11-11 12:05  mbickel
+
+	* asc.kdevprj, source/artint.cpp, source/artint.h,
+	source/buildingtype.h, source/containerbase.h, source/controls.cpp,
+	source/gamedlg.cpp, source/gamemap.cpp, source/loaders.cpp,
+	source/mapalgorithms.cpp, source/mapalgorithms.h,
+	source/missions.cpp, source/typen.h, source/unitctrl.cpp,
+	source/unitctrl.h, source/vehicletype.cpp, source/vehicletype.h: 
+	started AI service functions
+
+2000-11-09 19:39  mbickel
+
+	* source/: spfst.cpp, tools/demount.wpj, tools/dos/demount.tgt,
+	tools/os2/demount.tgt, tools/win/demount.tgt:  Fix: mapeditor
+	crashed at startup due to invalid map being generated
+
+2000-11-09 18:48  mbickel
+
+	* source/: basestreaminterface.h, basestrm.cpp, basestrm.h,
+	loadpcxc.cpp, tools/mntgraph.cpp:  The size of a stream can now be
+	queried
+	 PCX loader (in C) can now load unpatched images provided they are
+	not
+	   compressed
+
+2000-11-08 23:00  mbickel
+
+	* source/tools/: mntgraph.tgt, mount_new_graphics.wpj,
+	dos/mntgraph.tgt, dos/weaponguide.tgt:	Moved mntgraph program into
+	tools project (dos small editors)
+
+2000-11-08 22:58  mbickel
+
+	* source/: gamemap.cpp, strtmesg.cpp, vehicletype.cpp,
+	dos/global_os.h, tools/asctool.tgt, tools/bldhex.cpp,
+	tools/maketank.cpp, tools/mntgraph.cpp, tools/printbld.cpp,
+	tools/tools.wpj, tools/weaponguide.cpp, tools/dos/bi2pcx.tgt,
+	tools/dos/makebld.tgt, tools/dos/makeobl.tgt,
+	tools/dos/maketec.tgt, tools/dos/maketrr.tgt,
+	tools/dos/printbld.tgt, tools/dos/printveh.tgt,
+	tools/dos/trn2pcx.tgt, tools/dos/veh2pcx.tgt, tools/dos/viewid.tgt:
+	 brought the small editors up to date
+
+2000-11-08 20:50  mbickel
+
+	* source/tools/java/MainWindow.java:  Fixed Nullpointer exception
+	when the last directory doesn't exist any
+	  more on startup.
+
+2000-11-08 20:37  mbickel
+
+	* asc.kdevprj, source/typen.cpp, source/typen.h,
+	source/tools/java/UnitEditor.java:  Changed the terrain types
+	(again): "lava" now replaces "small trench"
+
+2000-11-08 20:30  mbickel
+
+	* asc.kdevprj, asc.lsm, source/artint.cpp,
+	source/basestreaminterface.h, source/basestrm.cpp,
+	source/building.cpp, source/building_controls.h,
+	source/buildingtype.cpp, source/buildingtype.h,
+	source/controls.cpp, source/controls.h, source/dialog.cpp,
+	source/dlg_box.cpp, source/edevents.cpp, source/edmain.cpp,
+	source/edmisc.cpp, source/gamedlg.cpp, source/gamedlg.h,
+	source/gamemap.cpp, source/gui.cpp, source/loadbi3.cpp,
+	source/loaders.cpp, source/loaders.h, source/loadimage.h,
+	source/missions.cpp, source/movecurs.inc, source/sg.cpp,
+	source/sgstream.cpp, source/spfst.cpp, source/spfst.h,
+	source/typen.cpp, source/typen.h, source/unitctrl.cpp,
+	source/unitctrl.h, source/vehicletype.cpp, source/vehicletype.h,
+	source/sdl/events.cpp:	Rewrote IO for the tmap structure
+	 Fixed crash when entering damaged building
+	 Fixed crash in AI
+	 Removed item CRCs
+
+2000-11-07 23:14  mbickel
+
+	* source/tools/java/UnitEditor.java:  Added terrain type "Lava"
+
+2000-11-07 17:19  schelli
+
+	* source/tools/java/: BuildRange.java, Building.java,
+	ClassBound.java, CompAll.bat, ImageProcess.java, ImgCanvas.java,
+	MainWindow.form, MainWindow.java, PK.java, PaletteInfo.java,
+	RLEHeader.java, SgStream.java, ToDO.txt, Unit.java,
+	UnitEditor.form, UnitEditor.java, Weapons.java: Minor
+	Memory-Functions & Problems changed Picture Support partly enabled
+	New Funktion partly implemented Buildings partly implemented
+
+2000-11-01 12:41  mbickel
+
+	* source/tools/java/: MainWindow.java, StartSelector.bat,
+	UnitEditor.java:  Fixed: Selection in MainWindow-List not being
+	evaluated, the first list
+	  entry was always edited.
+
+2000-10-31 19:08  mbickel
+
+	* source/: tools/Makefile.bcc, win32/watcom/global_os.h:  Borland C
+	now uses unsigned char ( tools/Makefile changed )
+	 Added header file for size_t to global_os.h
+
+2000-10-31 19:06  mbickel
+
+	* source/tools/java/: CompAll.bat, MainWindow.java,
+	UnitEditor.java:  Fileselector now displays files too
+
+2000-10-31 11:42  mbickel
+
+	* ChangeLog, asc.kdevprj, source/buildingtype.cpp,
+	source/buildingtype.h, source/controls.cpp, source/controls.h,
+	source/gamedlg.cpp, source/gamemap.cpp, source/gui.cpp,
+	source/spfst.cpp, source/strtmesg.cpp, source/typen.cpp,
+	source/typen.h, source/unitctrl.cpp, source/unitctrl.h,
+	source/vehicletype.cpp:  Added building->vehicle service to vehicle
+	controls
+	 Moved tmap methods to gamemap.cpp
+
+2000-10-31 11:41  mbickel
+
+	* source/tools/java/Unit.java:	Fixed crash when loading a unit
+	that can "construct specific building"
+
+2000-10-29 22:06  mbickel
+
+	* source/tools/java/: ExampleFileFilter.java, MainWindow.form,
+	MainWindow.java, UnitEditor.java:  Modified filename construction
+	to run under Linux
+	 Started implementing a better directory choosing dialog
+
 2000-10-26 21:17  mbickel
 
 	* source/: edmain.cpp, dos/asc.tgt, dos/asc.wpj,
