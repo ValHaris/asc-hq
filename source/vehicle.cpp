@@ -511,6 +511,9 @@ bool Vehicle::movementLeft() const
 
 bool Vehicle :: canMove ( void ) const
 {
+   if ( attacked && !(typ->functions & cf_moveafterattack))
+      return false; 
+
    if ( movementLeft() && reactionfire.canMove() ) {
       pfield fld = gamemap->getField ( getPosition() );
       if ( fld->unitHere ( this ) ) {

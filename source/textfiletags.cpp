@@ -80,7 +80,7 @@ const char*  bodenarten[cbodenartennum]
      = {           "sonar",
                    "paratrooper",
                    "mine_layer",
-                   " _unused_ ", // was: trooper
+                   "cruiserlanding", 
                    "repair_vehicle",
                    "conquer_buildings",
                    "move_after_attack",

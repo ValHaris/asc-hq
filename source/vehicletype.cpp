@@ -37,7 +37,7 @@ const char*  cvehiclefunctions[cvehiclefunctionsnum]  = {
                    "sonar",
                    "paratrooper",
                    "mine-layer",
-                   "trooper",
+                   "cruiser landing",
                    "repair vehicle",
                    "conquer buildings",
                    "move after attack",

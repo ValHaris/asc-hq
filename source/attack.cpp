@@ -548,7 +548,7 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    dv.armor = attackedunit->armor;
    dv.damage    = attackedunit->damage;
    dv.experience = attackedunit->experience;
-   if ( dist <= maxmalq )
+   if ( dist <= maxmalq && attackingunit->height < chtieffliegend )
       dv.hemming = strength_hemming ( attackingunit->xpos, attackingunit->ypos, attackedunit );
    else
       dv.hemming = 1;
@@ -1095,7 +1095,7 @@ bool attackpossible2u( const pvehicle attacker, const pvehicle target, pattackwe
 
    if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
       for ( int i = 0; i < angreifer->typ->weapons.count ; i++)
-         for ( int h = 0; h < 7; h++ )
+         for ( int h = 0; h < 8; h++ )
             if ( uheight & (1<<h))
                if (angreifer->typ->weapons.weapon[i].shootable() )
                   if (angreifer->typ->weapons.weapon[i].offensive() )
