@@ -1,6 +1,9 @@
-//     $Id: dlg_box.cpp,v 1.41 2000-12-23 13:19:44 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.42 2000-12-27 22:23:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2000/12/23 13:19:44  mbickel
+//      Made ASC compileable with Borland C++ Builder
+//
 //     Revision 1.40  2000/11/29 17:58:17  mbickel
 //      BI3 map loading routines can now handles maps > 64*64
 //      Fixed: pressing enter in dialog_box triggered wrong buttons
@@ -3198,8 +3201,11 @@ char*  readtextmessage( int id )
   int wldcrdnum = 3;
 
   string tmpstr = actmap->preferredFileNames.mapname[0];
-  tmpstr.replace ( tmpstr.find ( ".map"), 4, ".msg" );
-  tmpstr.replace ( tmpstr.find ( ".MAP"), 4, ".msg" );
+  while ( tmpstr.find ( ".map") != string::npos )
+     tmpstr.replace ( tmpstr.find ( ".map"), 4, ".msg" );
+
+  while( tmpstr.find ( ".MAP") != string::npos )
+     tmpstr.replace ( tmpstr.find ( ".MAP"), 4, ".msg" );
 
   tfindfile ff3 ( tmpstr.c_str() );
   tfindfile ff2 ( "*.msg" );
@@ -3211,15 +3217,15 @@ char*  readtextmessage( int id )
   for ( int m = 0; m < wldcrdnum; m++ ) {
 
      tfindfile* pff = ffa[m];
-   
+
      char* filefound = pff->getnextname();
-   
+
      while( filefound ) {
-   
+
          tnfilestream stream ( filefound, 1 );
-   
+
          char *tempstr;
-   
+
          stream.readpnchar ( &tempstr );
          int started = 0;
    
@@ -3418,9 +3424,10 @@ void         thelpsystem::done(void)
       firstpict = firstpict->next; 
       delete ( pic1->pict );
       delete ( pic1 );
-   } 
-   if (scrollbarvisible) 
-        /* scrollbar.done */ ; 
+   }
+   /*
+   if (scrollbarvisible)
+       scrollbar.done(); */
    delete[] txt;
 } 
 
@@ -3519,13 +3526,10 @@ int displaymessage2( const char* formatstring, ... )
 {
    const int maxlength = 2000;
    char stringtooutput[maxlength];
-   char* b;
    char* c = new char[maxlength];
    // int linenum = 0;
 
    memset (stringtooutput, 0, sizeof ( stringtooutput ));
-
-   b = stringtooutput;
 
    va_list paramlist;
    va_start ( paramlist, formatstring );

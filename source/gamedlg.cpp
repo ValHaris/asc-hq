@@ -1,6 +1,11 @@
-//     $Id: gamedlg.cpp,v 1.55 2000-11-29 09:40:21 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.56 2000-12-27 22:23:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2000/11/29 09:40:21  mbickel
+//      The mapeditor has now two maps simultaneously active
+//      Moved memorychecking functions to its own file: memorycheck.cpp
+//      Rewrote password handling in ASC
+//
 //     Revision 1.54  2000/11/21 20:27:03  mbickel
 //      Fixed crash in tsearchfields (used by object construction for example)
 //      AI improvements
@@ -2885,16 +2890,15 @@ pparagraph tparagraph :: movecursor ( int dx, int dy )
 void tparagraph :: displaycursor ( void )
 {
    if ( cursor >= 0 ) {
-      int startline;
       int starty;
       if ( ps.line1num < 0 ) {
          starty = winy1 + (ps.line1num + cursory) * activefontsettings.height;
-         startline = -ps.line1num;
+         // startline = -ps.line1num;
       } else {
          starty = winy1 + (ps.line1num + cursory) * activefontsettings.height;
-         startline = 0;
+         // startline = 0;
       }
-                   
+
       if ( starty  < winy2 ) {
          collategraphicoperations cgo ( winx1 + cursorx-2,   starty, winx1 + cursorx+2,   starty + activefontsettings.height );
          setinvisiblemouserectanglestk ( winx1 + cursorx-2,   starty, winx1 + cursorx+2,   starty + activefontsettings.height  );

@@ -4,7 +4,7 @@
   <MACROS>
     <VERSION value="BCB.05.03"/>
     <PROJECT value="weaponguide.exe"/>
-    <OBJFILES value="weaponguide.obj"/>
+    <OBJFILES value="..\weaponguide.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>

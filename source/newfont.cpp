@@ -1,6 +1,17 @@
-//     $Id: newfont.cpp,v 1.9 2000-10-11 14:26:44 mbickel Exp $
+//     $Id: newfont.cpp,v 1.10 2000-12-27 22:23:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/10/11 14:26:44  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.8  2000/08/12 12:52:49  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -120,7 +131,7 @@ pfont        loadfont(char *       filename)
    int          i; 
    char *p;
    void         *q;
-   int      ll, ll2, completesize; 
+   int      ll, ll2;
    word*         pg;
 
 
@@ -140,11 +151,9 @@ pfont        loadfont(char *       filename)
    } /* endif */
 
    font1->id[47] = 0;
-             
-   if ( strncmp(font1->id,fontid, 46) ) 
-      return (NULL);
 
-   completesize = 0; 
+   if ( strncmp(font1->id,fontid, 46) )
+      return (NULL);
 
    font1->useems = false;
 
@@ -223,16 +232,16 @@ pfont        loadfont(char *       filename)
    delete font1 ;
 
    return font2;
-} 
+}
 
 
 
 pfont        loadfont( pnstream stream )
-{                
-   toldfont     *font1; 
+{
+   toldfont     *font1;
    char *p;
    void         *q;
-   int      ll, ll2, completesize; 
+   int      ll, ll2;
    word*         pg;
    int i;
 
@@ -241,11 +250,9 @@ pfont        loadfont( pnstream stream )
    stream->readdata ( font1, sizeof(*font1) );
 
    font1->id[47] = 0;
-             
-   if ( strncmp(font1->id,fontid, 46) ) 
-      return (NULL);
 
-   completesize = 0; 
+   if ( strncmp(font1->id,fontid, 46) )
+      return (NULL);
 
    font1->useems = false;
    font1->palette = NULL; 
@@ -319,7 +326,7 @@ pfont        loadfont( pnstream stream )
    delete font1 ;
 
    return font2;
-} 
+}
 
 
 

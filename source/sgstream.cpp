@@ -1,6 +1,11 @@
-//     $Id: sgstream.cpp,v 1.45 2000-11-29 09:40:25 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.46 2000-12-27 22:23:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2000/11/29 09:40:25  mbickel
+//      The mapeditor has now two maps simultaneously active
+//      Moved memorychecking functions to its own file: memorycheck.cpp
+//      Rewrote password handling in ASC
+//
 //     Revision 1.44  2000/11/26 22:18:56  mbickel
 //      Added command line parameters for setting the verbosity
 //      Increased verbose output
@@ -441,19 +446,17 @@ void         tbufstream::init(void)
 
 void         tbufstream::readdata( char* buf, int size )
 { 
-  void*      p; 
-  int          s, actpos2; 
+  int          s, actpos2;
 
    if (status != 0) return;
-   actpos2 = 0; 
+   actpos2 = 0;
 
    #ifdef dlg_box_h
-   if (modus == 2) 
+   if (modus == 2)
       displaymessage("attempt to read in a file opened only for reading\nfile: %s\n" ,2, devicename) ;
    #endif
 
-   p = buf; 
-   while (actpos2 < size) { 
+   while (actpos2 < size) {
       if (datasize == 0) { 
 
          #ifdef dlg_box_h
@@ -479,26 +482,18 @@ void         tbufstream::readdata( char* buf, int size )
 
 
 void         tbufstream::readpchar(char** pc)
-{ 
-  int          actpos2; 
-  int          ms; 
-  char         *pch1, *pch2; 
+{
+  int          ms;
+  char         *pch1, *pch2;
 
-   if (status != 0) return;
-   actpos2 = 0; 
+   if (status != 0)
+      return;
+
+   int actpos2 = 0;
 
    #ifdef dlg_box_h
-   if (modus == 2) 
+   if (modus == 2)
       displaymessage("attempt to read pchar from a file opened only for writing\nfile: %s\n", 2,devicename);
-   #endif
-
-   #ifdef UseMemAvail 
-   if (memavail() < 0xffff)
-      ms = memavail(); 
-   else
-      ms = 0xffff;
-   #else 
-   ms = 0xffff;
    #endif
 
    pch1 = (char*) asc_malloc ( 0xffff );
@@ -524,7 +519,7 @@ void         tbufstream::readpchar(char** pc)
       *pc = NULL;
    asc_free( pch1 );
 
-} 
+}
 
 void         tbufstream::writepchar(char* pc)
 { 
@@ -1641,11 +1636,11 @@ pquickview generateaveragecol ( pwterraintype bdn )
       if ( bdn->picture[dir] ) {
 
          char* c = (char*) &qv->dir[dir].p1 ;
-         int dx,dy;
-      
+         // int dx,dy;
+
          for ( int i=1; i<6 ;i+=2 ) {
-            dx = fieldxsize / i;
-            dy = fieldysize / i;
+            // dx = fieldxsize / i;
+            // dy = fieldysize / i;
             for ( int k=0;k<i ; k++) {
                for ( int j=0 ; j<i ; j++) {
                    generateaveragecolprt ( k * fieldxsize / i, j * fieldysize / i, (k+1) * fieldxsize / i, (j+1) * fieldysize / i, bdn->picture[dir],  c );

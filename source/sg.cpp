@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.117 2000-12-26 21:04:36 mbickel Exp $
+//     $Id: sg.cpp,v 1.118 2000-12-27 22:23:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.117  2000/12/26 21:04:36  mbickel
+//      Fixed: putimageprt not working (used for small map displaying)
+//      Fixed: mapeditor crashed on generating large maps
+//
 //     Revision 1.116  2000/12/26 14:46:00  mbickel
 //      Made ASC compilable (and runnable) with Borland C++ Builder
 //
@@ -79,168 +83,6 @@
 //        spfst -> spfst, mapalgorithm
 //      bzlib is now statically linked and sources integrated
 //
-//     Revision 1.97  2000/09/27 16:08:26  mbickel
-//      AI improvements
-//
-//     Revision 1.96  2000/09/25 20:04:38  mbickel
-//      AI improvements
-//
-//     Revision 1.95  2000/09/24 19:57:04  mbickel
-//      ChangeUnitHeight functions are now more powerful since they use
-//        UnitMovement on their own.
-//
-//     Revision 1.94  2000/09/17 15:20:34  mbickel
-//      AI is now automatically invoked (depending on gameoptions)
-//      Some cleanup
-//
-//     Revision 1.93  2000/09/16 13:02:53  mbickel
-//      Put the AI in place
-//
-//     Revision 1.92  2000/09/16 11:47:29  mbickel
-//      Some cleanup and documentation again
-//
-//     Revision 1.91  2000/09/07 15:49:44  mbickel
-//      some cleanup and documentation
-//
-//     Revision 1.90  2000/09/05 19:57:06  gulliver
-//     namespace std added on vector
-//
-//     Revision 1.89  2000/09/01 17:46:40  mbickel
-//      Improved A* code
-//      Renamed tvehicle class to Vehicle
-//
-//     Revision 1.88  2000/09/01 15:47:49  mbickel
-//      Added Astar path finding code
-//      Fixed: viewid crashed
-//      Fixed display error in ynswitch ( krkr.cpp )
-//
-//     Revision 1.87  2000/08/29 10:36:49  mbickel
-//      Removed Debug code
-//      Fixed bug: movement left when changing height into buildings
-//
-//     Revision 1.86  2000/08/28 15:58:59  mbickel
-//      Fixed short displaying of map before password dialog when loading email
-//        games by command line parameter
-//      Fixed reaction fire not working when loading an old ( < ASC1.2.0 ) file
-//
-//     Revision 1.85  2000/08/28 14:37:15  mbickel
-//      Fixed: satellite not able to leave orbiter
-//      Restructured next-turn routines
-//
-//     Revision 1.84  2000/08/26 15:33:43  mbickel
-//      Warning message displayed if empty password is entered
-//      pcxtank now displays error messages
-//
-//     Revision 1.83  2000/08/21 17:51:00  mbickel
-//      Fixed: crash when unit reaching max experience
-//      Fixed: crash when displaying research image
-//      Fixed: crash when events referenced a unit that has been shot down
-//      Fixed: screenshot being written to wrong directory
-//
-//     Revision 1.82  2000/08/13 15:22:40  mbickel
-//      Improved data version control
-//      Fixed: not all experience symbols were loaded
-//
-//     Revision 1.81  2000/08/13 12:35:16  mbickel
-//
-//      Dataversion >= 3 is now required
-//
-//     Revision 1.80  2000/08/13 11:55:08  mbickel
-//      Attacking now decreases a units movement by 20% if it has the
-//        "move after attack" flag.
-//
-//     Revision 1.79  2000/08/12 15:03:25  mbickel
-//      Fixed bug in unit movement
-//      ASC compiles and runs under Linux again...
-//
-//     Revision 1.78  2000/08/12 12:52:50  mbickel
-//      Made DOS-Version compile and run again.
-//
-//     Revision 1.77  2000/08/12 09:17:32  gulliver
-//     *** empty log message ***
-//
-//     Revision 1.76  2000/08/08 13:22:03  mbickel
-//      Added unitCategoriesLoadable property to buildingtypes and vehicletypes
-//      Added option: showUnitOwner
-//
-//     Revision 1.75  2000/08/08 09:48:23  mbickel
-//
-//      speed up of dialog boxes in linux
-//      fixed graphical errors in attack
-//      fixed graphical error in ammo transfer
-//      fixed reaction fire not allowing manual attack
-//
-//     Revision 1.74  2000/08/07 16:29:21  mbickel
-//      orbiting units don't consume fuel any more
-//      Fixed bug in attack formula; improved attack formula
-//      Rewrote reactionfire
-//
-//     Revision 1.73  2000/08/06 11:39:15  mbickel
-//      New map paramter: fuel globally available
-//      Mapeditor can now filter buildings too
-//      Fixed unfreed memory in fullscreen image loading
-//      Fixed: wasted cpu cycles in building
-//      map parameters can be specified when starting a map
-//      map parameters are reported to all players in multiplayer games
-//
-//     Revision 1.72  2000/08/05 20:17:59  mbickel
-//      Restructured Fullscreen Image loading
-//
-//     Revision 1.71  2000/08/05 18:26:59  mbickel
-//      Added Fullscreen-JPG-Support
-//
-//     Revision 1.70  2000/08/05 13:38:32  mbickel
-//      Rewrote height checking for moving units in and out of
-//        transports / building
-//
-//     Revision 1.69  2000/08/04 15:11:14  mbickel
-//      Moving transports costs movement for units inside
-//      refuelled vehicles now have full movement in the same turn
-//      terrain: negative attack / defensebonus allowed
-//      new mapparameters that affect damaging and repairing of building
-//
-//     Revision 1.68  2000/08/03 19:45:18  mbickel
-//      Fixed some bugs in DOS code
-//      Removed submarine.ascent != 0 hack
-//
-//     Revision 1.67  2000/08/03 19:21:28  mbickel
-//      Fixed: units had invalid height when produced in some buildings
-//      Fixed: units could not enter building if unitheightreq==0
-//      Started adding SDL_image support
-//      Upgraded to SDL1.1.3 (for SDL_image)
-//
-//     Revision 1.66  2000/08/02 15:52:57  mbickel
-//      New unit set definition files
-//      demount accepts now more than one container file
-//      Unitset information dialog added
-//
-//     Revision 1.65  2000/08/01 10:39:11  mbickel
-//      Updated documentation
-//      Refined configuration file handling
-//
-//     Revision 1.64  2000/07/31 19:16:46  mbickel
-//      Improved handing of multiple directories
-//      Fixed: wind direction not displayed when cycling through wind heights
-//      Fixed: oil rig not working
-//      Fixed: resources becomming visible when checking mining station status
-//      Fixed: division by zero when moving unit without fuel consumption
-//
-//     Revision 1.63  2000/07/31 18:02:53  mbickel
-//      New configuration file handling
-//      ASC searches its data files in all directories specified in ascrc
-//      Renamed all tools so they begin with asc
-//
-//     Revision 1.62  2000/07/29 14:54:42  mbickel
-//      plain text configuration file implemented
-//
-//     Revision 1.61  2000/07/28 10:15:28  mbickel
-//      Fixed broken movement
-//      Fixed graphical artefacts when moving some airplanes
-//
-//     Revision 1.60  2000/07/22 18:57:57  mbickel
-//      New message during save operation
-//      Weapon efficiency displayed did not correspond to mouse position when
-//        first weapon was service
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -257,20 +99,24 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    along with this program; see the file COPYING. If not, write to the
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
 
 
 
-#include <stdio.h>                                  
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <new.h>
 #include <malloc.h>
 #include <ctype.h>
 #include <signal.h>
+
+#ifdef _SDL_
+#include "SDL_byteorder.h"
+#endif
 
 #include "vehicletype.h"
 #include "buildingtype.h"
@@ -2034,7 +1880,19 @@ void execuseraction ( tuseractions action )
         case ua_viewaboutmessage:     {
                                          help(30);
                                          tviewanytext vat;
-                                         vat.init ( "about", getstartupmessage() );
+                                         string s = getstartupmessage();
+                                         /*
+                                         #ifdef _SDL_
+                                         char buf[1000];
+                                         SDL_version compiled;
+                                         SDL_VERSION(&compiled);
+                                         sprintf(buf, "Compiled with SDL version: %d.%d.%d\n", compiled.major, compiled.minor, compiled.patch);
+                                         s += buf;
+                                         sprintf(buf, "Linked with SDL version: %d.%d.%d\n", SDL_Linked_Version()->major, SDL_Linked_Version()->minor, SDL_Linked_Version()->patch);
+                                         s += buf;
+                                         #endif
+                                         */
+                                         vat.init ( "about", s.c_str() );
                                          vat.run();
                                          vat.done();
                                       }

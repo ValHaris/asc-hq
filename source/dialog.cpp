@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.66 2000-12-26 21:04:33 mbickel Exp $
+//     $Id: dialog.cpp,v 1.67 2000-12-27 22:23:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.66  2000/12/26 21:04:33  mbickel
+//      Fixed: putimageprt not working (used for small map displaying)
+//      Fixed: mapeditor crashed on generating large maps
+//
 //     Revision 1.65  2000/11/29 09:40:16  mbickel
 //      The mapeditor has now two maps simultaneously active
 //      Moved memorychecking functions to its own file: memorycheck.cpp
@@ -2489,12 +2493,8 @@ void         tfileselectsvga::fileausgabe(char     force , int dispscrollbar)
    activefontsettings.background = dblue; 
    
    int lastshownfile = firstshownfile + actshownfilenum;
-   int emptylines;
-   if (lastshownfile >= numberoffiles) {
-      emptylines = lastshownfile - numberoffiles+1;
+   if (lastshownfile >= numberoffiles)
       lastshownfile = numberoffiles - 1;
-   } else
-      emptylines = 0;
 
    int jj = 0;
    for ( int ii = firstshownfile; ii < firstshownfile + actshownfilenum; ii++, jj++) {
@@ -3252,14 +3252,13 @@ void tbasicshowmap::generatemap2 ( void )
    *k = mysize - 1;
 
 
-   int l,i,j;
+   int i,j;
 
    buffer2 = buffer + 4;
    pfield fld1;
 
-   l = 0; 
    for (j = 0; j < actmap->ysize ; j++) {
-      for (i = 0; i < actmap->xsize ; i++) { 
+      for (i = 0; i < actmap->xsize ; i++) {
          fld1 = getfield ( i, j ) ;
 
          int v = fieldVisibility ( fld1, actmap->playerView );

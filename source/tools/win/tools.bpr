@@ -4,8 +4,9 @@
   <MACROS>
     <VERSION value="BCB.05.03"/>
     <PROJECT value="tools.lib"/>
-    <OBJFILES value="basegfx.obj basestrm.obj buildingtype.obj gameoptions.obj loadbi3.obj 
-      misc.obj Named.obj palette.obj sgstream.obj typen.obj vehicletype.obj"/>
+    <OBJFILES value="..\..\basegfx.obj ..\..\basestrm.obj ..\..\buildingtype.obj 
+      ..\..\gameoptions.obj ..\..\loadbi3.obj ..\..\misc.obj ..\..\Named.obj 
+      ..\..\palette.obj ..\..\sgstream.obj ..\..\typen.obj ..\..\vehicletype.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>

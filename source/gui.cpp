@@ -1,6 +1,9 @@
-//     $Id: gui.cpp,v 1.45 2000-12-23 15:58:37 mbickel Exp $
+//     $Id: gui.cpp,v 1.46 2000-12-27 22:23:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2000/12/23 15:58:37  mbickel
+//      Trying to get ASC to run with Borland C++ Builder...
+//
 //     Revision 1.44  2000/12/23 13:19:46  mbickel
 //      Made ASC compileable with Borland C++ Builder
 //
@@ -1131,8 +1134,9 @@ void tnguiicon::putpict ( void* buf )
 tnguiicon:: ~tnguiicon (  )
 {
    for (int i = 0; i < 8; i++) {
-      if ( picture[i] );
+      if ( picture[i] )
          delete[] picture[i];
+
       if ( picturepressed[i] )
          delete[] picturepressed[i];
    } 

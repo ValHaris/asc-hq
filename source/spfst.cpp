@@ -1,6 +1,12 @@
-//     $Id: spfst.cpp,v 1.74 2000-11-21 20:27:08 mbickel Exp $
+//     $Id: spfst.cpp,v 1.75 2000-12-27 22:23:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.74  2000/11/21 20:27:08  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.73  2000/11/15 19:28:34  mbickel
 //      AI improvements
 //
@@ -4327,12 +4333,13 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
    
       int h1;
       int h2;
-   
+
+     /*
       int r1;
       if ( dir & 1 )
          r1 = 20;
       else
-         r1 = 40;
+         r1 = 40; */
    
       int r2 = 0;
    

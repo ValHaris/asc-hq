@@ -169,9 +169,9 @@ void tmap :: read ( tnstream& stream )
    oldevents = NULL;
 
    //! practically dummy
-   int loadeventstore = stream.readInt();
-   int loadeventstocome = stream.readInt();
-   int loadeventpassed = stream.readInt();
+   stream.readInt(); // int loadeventstore 
+   stream.readInt(); // int loadeventstocome
+   stream.readInt(); // int loadeventpassed
 
    unitnetworkid = stream.readInt();
    levelfinished = stream.readChar();
@@ -187,7 +187,7 @@ void tmap :: read ( tnstream& stream )
       cursorpos.position[i].sy = stream.readWord();
    }
 
-   bool loadtribute = stream.readInt();
+   stream.readInt(); // loadtribute
    unsentmessage = (pmessagelist) stream.readInt();
    message = (pmessage) stream.readInt();
 
@@ -291,7 +291,7 @@ void tmap :: read ( tnstream& stream )
           delete[] tempname;
        }
 
-    int h = stream.readInt();
+    stream.readInt();
 
 
 /*
