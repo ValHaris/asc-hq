@@ -23,6 +23,7 @@
 #include "../global.h"
 #include "../basestrm.h"
 #include "../misc.h"
+#include "../strtmesg.h"
 
 #ifdef _DOS_
 #  include <direct.h> 
@@ -45,7 +46,7 @@
 
 
 FILE* out;
-
+int verbose = 1;
 
 /*--- rle1.c ------------------------------ Listing 9-1 ---------
  *  Run-Length Encoding for files of all types
@@ -232,14 +233,14 @@ void copyfile ( const char* name, const char* orgname, int size )
 
    FILE* in = fopen ( name, "rb" );
    if ( fread ( buf, 1, size, in ) != size ) {
-      printf( "error reading file %s \n", name );
+      fprintf( stderr, "error reading file %s \n", name );
       exit(1);
    }
    fclose ( in );
 
    int s = fwrite ( buf, 1, size, out );
    if ( s != size ) {
-      printf( "error writing file %s \n", name );
+      fprintf( stderr, "error writing file %s \n", name );
       exit(1);
    }
    nindex[num].name = strdup ( orgname );
@@ -247,7 +248,8 @@ void copyfile ( const char* name, const char* orgname, int size )
    pos += s;
    nindex[num].end = pos-1;
    num++;
-   printf ( " ; written \n" );
+   if ( verbose )
+      printf ( " ; written \n" );
    compsize += size;
 
 /*
@@ -290,7 +292,7 @@ void testcompress ( char* name, int size )
 
       FILE* outfile = fopen ( newname, filewritemode );
       if ( !outfile ) {
-         printf(" Unable to open %s for writing. \n\n", newname );
+         fprintf( stderr, " Unable to open %s for writing. \n\n", newname );
          exit ( 1 );
       }
 
@@ -308,24 +310,26 @@ void testcompress ( char* name, int size )
    }
 
    uncompsize += size;
-   printf ( "file %14s ", name );
+   if ( verbose )
+      printf ( "file %14s ", name );
 
    int comp = 0;
    {
       char buf[100];
       FILE* in = fopen ( name, "rb" );
       if ( fread ( buf, 1, 10, in ) == 10 ) {
-         if ( strncmp ( &buf[1], "MBLZW16", 7) == 0 ) 
+         if ( strncmp ( &buf[1], "MBLZW16", 7) == 0 )
             comp = 1;
-         if ( strncmp ( &buf[1], "MBRLE1", 6) == 0 ) 
+         if ( strncmp ( &buf[1], "MBRLE1", 6) == 0 )
             comp = 1;
-         if ( strncmp ( &buf[0], "MBZLB2X!", 8) == 0 ) 
+         if ( strncmp ( &buf[0], "MBZLB2X!", 8) == 0 )
             comp = 1;
       }
       fclose ( in );
-   }   
+   }
    if ( comp ) {
-      printf ( "is already compressed ! " );
+      if ( verbose )
+         printf ( "is already compressed ! " );
       copyfile ( name, name, filesize ( name ) );
       return;
    }
@@ -335,28 +339,28 @@ void testcompress ( char* name, int size )
 //   r = spawnl ( P_WAIT, "rle1.exe", "rle1.exe", name, "temp.rle",  NULL );
    r = rlemain( name, "temp.rle");
    if ( r ) {
-      printf ( "\n\n error executing rle1.exe; errno is %d \n", errno );
+      fprintf ( stderr, "\n\n error executing rle1.exe; errno is %d \n", errno );
       exit ( r );
    }
    int rl = filesize ( "temp.rle" );
-    
+
   #ifndef NOLZW
 
    fflush ( stdout );
    r = spawnl ( P_WAIT, "lzwcomp.exe", "lzwcomp.exe", name, "temp.lzw", NULL );
    if ( r ) {
-      printf ( "\n\n error executing lzwcomp.exe; errno is %d \n", errno);
+      fprintf ( stderr, "\n\n error executing lzwcomp.exe; errno is %d \n", errno);
       exit ( r );
    }
    int lz = filesize ( "temp.lzw" );
-  
+
   #endif
 
    fflush ( stdout );
 //   r = spawnl ( P_WAIT, "mbzip.exe", "mbzip.exe", name, "temp.mzl",  NULL );
    r = bzmain ( name, "temp.mzl" );
    if ( r ) {
-      printf ( "\n\n error executing mbzip.exe; errno is %d \n", errno);
+      fprintf ( stderr, "\n\n error executing mbzip.exe; errno is %d \n", errno);
       exit ( r );
    }
    int mz = filesize ( "temp.mzl" );
@@ -364,32 +368,38 @@ void testcompress ( char* name, int size )
 
 
   #ifdef NOLZW
-   printf ( ";  rle: %3d%%; mzl: %3d%% ; ", 100 * rl / size, 100 * mz / size );
+   if ( verbose )
+      printf ( ";  rle: %3d%%; mzl: %3d%% ; ", 100 * rl / size, 100 * mz / size );
    int compr = MIN ( rl, mz );
   #else
-   printf ( "; lzw: %3d%%; rle: %3d%%; mzl: %3d%%", 100 * lz / size, 100 * rl / size, 100 * mz / size );
+   if ( verbose )
+      printf ( "; lzw: %3d%%; rle: %3d%%; mzl: %3d%%", 100 * lz / size, 100 * rl / size, 100 * mz / size );
    int compr = MIN3 ( rl, lz, mz );
   #endif
 
    if ( compr * 120 / 100 > size ) {
+      if ( verbose )
          printf ( "not compressed" );
-         copyfile ( name, name, size );
+      copyfile ( name, name, size );
    } else
  #ifndef NOLZW
    if ( compr == lz ) {
-      printf ( "lzw compressed" );
+      if ( verbose )
+         printf ( "lzw compressed" );
       copyfile ( "temp.lzw", orgname, compr );
    } else
  #endif
    if ( compr == rl ) {
-      printf ( "rle compressed" );
+      if ( verbose )
+         printf ( "rle compressed" );
       copyfile ( "temp.rle", orgname, compr );
    } else
    if ( compr == mz ) {
-      printf ( "mzl compressed" );
+      if ( verbose )
+         printf ( "mzl compressed" );
       copyfile ( "temp.mzl", orgname, compr );
    }
-   
+
 
    if ( name == newname )
       remove ( newname );
@@ -397,13 +407,25 @@ void testcompress ( char* name, int size )
 }
 
 
+// including the command line parser, which is generated by genparse
+#include "../clparser/mount.cpp"
+
 int main(int argc, char *argv[] )
 {
+   Cmdline cl ( argc, argv );
 
-   if ( argc < 3 ) {
-      printf("usage: mount datafile [...] containerfile\n");
-      return 1;
+   if ( cl.v() ) {
+      cout << argv[0] << " " << getVersionString() << endl;
+      exit(0);
    }
+
+   if ( argc - cl.next_param() < 2 ) {
+      cl.usage();
+      exit(1);
+   }
+
+   if (cl.q())
+      verbose = 0;
 
    addSearchPath(".");
 
@@ -413,7 +435,7 @@ int main(int argc, char *argv[] )
    pos += fwrite ( containermagic, 1, 4, out );
    pos += fwrite ( &i, 1, 4, out );
 
-   for ( int df = 1; df < argc-2; df++ ) {
+   for ( int df = cl.next_param(); df < argc-1; df++ ) {
    /*
    char buf[1000];
    while ( fgets ( buf, 1000, fp )) {
@@ -436,16 +458,16 @@ int main(int argc, char *argv[] )
    */
          int compress = 1;
 
-         DIR *dirp; 
-         struct dirent *direntp; 
-     
+         DIR *dirp;
+         struct dirent *direntp;
+
          dirp = opendir( "." );
-         if( dirp != NULL ) { 
-           for(;;) { 
-             direntp = readdir( dirp ); 
-             if ( direntp == NULL ) 
-                break; 
-                
+         if( dirp != NULL ) {
+           for(;;) {
+             direntp = readdir( dirp );
+             if ( direntp == NULL )
+                break;
+
              if ( patimat ( argv[df] , direntp->d_name ) ) {
                 int fnd = 0;
 
@@ -457,18 +479,20 @@ int main(int argc, char *argv[] )
                    if ( compress )
                       testcompress ( direntp->d_name,  filesize(direntp->d_name) );
                    else {
-                      printf ( "file %14s is not compressed, ", direntp->d_name );
+                      if ( verbose )
+                         printf ( "file %14s is not compressed, ", direntp->d_name );
                       copyfile ( direntp->d_name, direntp->d_name,  filesize(direntp->d_name)  );
                    }
              }
 
-           } 
-           closedir( dirp ); 
-         } 
+           }
+           closedir( dirp );
+         }
 
    } /* endwhile */
 
-   printf ( "ftell: %d ; pos : %d ; num : %d \n ", int( ftell ( out )), pos, num );
+   if ( verbose )
+      printf ( "ftell: %d ; pos : %d ; num : %d \n ", int( ftell ( out )), pos, num );
 
    fwrite ( &num, 4, 1, out );
 
@@ -483,9 +507,11 @@ int main(int argc, char *argv[] )
    fwrite ( &pos, 4, 1, out );
    fclose ( out );
 
-   printf(" average compression is %d%% \noverhead is %d byte \n", 100 * compsize / uncompsize, filesize ( argv[2] ) - compsize );
+   if ( verbose ) {
+      printf(" average compression is %d%% \noverhead is %d byte \n", 100 * compsize / uncompsize, filesize ( argv[2] ) - compsize );
 
-   printf ( "completed \n" );
+      printf ( "completed \n" );
+   }
    remove ( "temp.rle" );
    remove ( "temp.mzl" );
 

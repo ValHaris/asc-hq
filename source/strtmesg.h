@@ -1,6 +1,14 @@
-//     $Id: strtmesg.h,v 1.2 1999-11-16 03:42:40 tmwilson Exp $
+//     $Id: strtmesg.h,v 1.3 2001-05-17 14:23:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:40  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -25,11 +33,13 @@
 #ifndef strtmesg_h
 #define strtmesg_h 1
 
-extern char* getstartupmessage ( void );
-extern char* getaboutmessage ( void );
+extern const char* getstartupmessage (  );
+extern const char* getaboutmessage (  );
 
-extern char* kgetstartupmessage ( void );
-extern char* kgetaboutmessage ( void );
+extern const char* kgetstartupmessage (  );
+extern const char* kgetaboutmessage (  );
+
+extern const char* getVersionString (  );
 
 
 #endif

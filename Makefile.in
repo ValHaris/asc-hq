@@ -10,8 +10,6 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
-####### kdevelop will overwrite this part!!! (begin)##########
-
 
 SHELL = @SHELL@
 
@@ -72,13 +70,11 @@ RANLIB = @RANLIB@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
+SGML2MAN = @SGML2MAN@
 VERSION = @VERSION@
 
 SUBDIRS = source data doc
-
-EXTRA_DIST = asc.kdevprj AUTHORS COPYING ChangeLog INSTALL README TODO asc.lsm 
-
-####### kdevelop will overwrite this part!!! (end)############
+EXTRA_DIST = asc.kdevprj AUTHORS COPYING ChangeLog INSTALL README TODO asc.lsm
 AUTOMAKE_OPTIONS = foreign
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

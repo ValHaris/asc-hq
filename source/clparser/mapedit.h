@@ -2,7 +2,7 @@
 **
 ** mapedit.h
 **
-** Thu May 17 01:05:09 2001
+** Thu May 17 16:02:42 2001
 ** Linux 2.4.4 (#1 SMP Sam Apr 28 13:21:30 CEST 2001) i686
 ** martin@linux. (Martin Bickel)
 **
@@ -36,11 +36,11 @@ private:
   int _y;
   string _l;
   string _c;
-  int _v;
+  int _r;
   bool _w;
   bool _f;
-  bool _version;
   bool _h;
+  bool _v;
 
   /* other stuff to keep track of */
   string _executable;
@@ -63,11 +63,11 @@ public:
   int y() { return _y; }
   string l() { return _l; }
   string c() { return _c; }
-  int v() { return _v; }
+  int r() { return _r; }
   bool w() { return _w; }
   bool f() { return _f; }
-  bool version() { return _version; }
   bool h() { return _h; }
+  bool v() { return _v; }
 };
 
 #endif

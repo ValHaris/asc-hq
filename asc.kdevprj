@@ -66,9 +66,9 @@ install_location=
 type=DATA
 [Workspace_1]
 browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/tutorial/index-7.html
-cpp_file=/home/martin/asc/source/sg.cpp
-header_file=/home/martin/asc/source/events.h
-openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/configure.in,/home/martin/asc/source/Makefile.am,/home/martin/asc/source/edmain.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/events.h,/home/martin/asc/source/sdl/events.cpp,/home/martin/asc/source/map2pcx.cpp
+cpp_file=Untitled.cpp
+header_file=/home/martin/asc/configure.in
+openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/configure.in
 show_outputview=true
 show_treeview=true
 [asc.kdevprj]

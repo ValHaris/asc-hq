@@ -2,7 +2,7 @@
 **
 ** asc.cpp
 **
-** Thu May 17 00:32:52 2001
+** Thu May 17 15:54:29 2001
 ** Linux 2.4.4 (#1 SMP Sam Apr 28 13:21:30 CEST 2001) i686
 ** martin@linux. (Martin Bickel)
 **
@@ -39,12 +39,12 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
     {"yresolution", 1, 0, 'y'},
     {"load", 1, 0, 'l'},
     {"configfile", 1, 0, 'c'},
-    {"verbose", 1, 0, 'v'},
+    {"verbose", 1, 0, 'r'},
     {"window", 0, 0, 'w'},
     {"fullscreen", 0, 0, 'f'},
     {"nosound", 0, 0, 'q'},
-    {"version", 0, 0, 256},
     {"help", 0, 0, 'h'},
+    {"version", 0, 0, 'v'},
     {0, 0, 0, 0}
   };
 
@@ -53,14 +53,14 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
   /* default values */
   _x = 800;
   _y = 600;
-  _v = 0;
+  _r = 0;
   _w = false;
   _f = false;
   _q = false;
-  _version = false;
   _h = false;
+  _v = false;
 
-  while ((c = getopt_long(argc, argv, "x:y:l:c:v:wfqh", long_options, &option_index)) != EOF)
+  while ((c = getopt_long(argc, argv, "x:y:l:c:r:wfqhv", long_options, &option_index)) != EOF)
     {
       switch(c)
         {
@@ -92,18 +92,18 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
           _c = optarg;
           break;
 
-        case 'v': 
-          _v = atoi(optarg);
-          if (_v < 0)
+        case 'r': 
+          _r = atoi(optarg);
+          if (_r < 0)
             {
               string s;
-              s += "parameter range error: v must be >= 0";
+              s += "parameter range error: r must be >= 0";
               throw(s);
             }
-          if (_v > 10)
+          if (_r > 10)
             {
               string s;
-              s += "parameter range error: v must be <= 10";
+              s += "parameter range error: r must be <= 10";
               throw(s);
             }
           break;
@@ -120,13 +120,13 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
           _q = true;
           break;
 
-        case 256: 
-          _version = true;
-          break;
-
         case 'h': 
           _h = true;
           this->usage();
+          break;
+
+        case 'v': 
+          _v = true;
           break;
 
         default:
@@ -148,7 +148,8 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
 
 void Cmdline::usage()
 {
-  cout << "usage: " << _executable << " [ -xylcvwfqh ] " << endl;
+  cout << "Advanced Strategic Command: a turn based strategy game " << endl;
+  cout << "usage: " << _executable << " [ -xylcrwfqhv ] " << endl;
   cout << "  [ -x ] ";
   cout << "[ --xresolution ]  ";
   cout << "(";
@@ -181,7 +182,7 @@ void Cmdline::usage()
   cout << "STRING";
   cout << ")\n";
   cout << "         Use given configuration file\n";
-  cout << "  [ -v ] ";
+  cout << "  [ -r ] ";
   cout << "[ --verbose ]  ";
   cout << "(";
   cout << "type=";
@@ -211,12 +212,6 @@ void Cmdline::usage()
   cout << "FLAG";
   cout << ")\n";
   cout << "         Disable sound\n";
-  cout << "  [ --version ]  ";
-  cout << "(";
-  cout << "type=";
-  cout << "FLAG";
-  cout << ")\n";
-  cout << "         Display version information and exit\n";
   cout << "  [ -h ] ";
   cout << "[ --help ]  ";
   cout << "(";
@@ -224,6 +219,13 @@ void Cmdline::usage()
   cout << "FLAG";
   cout << ")\n";
   cout << "         Display help information.\n";
+  cout << "  [ -v ] ";
+  cout << "[ --version ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "FLAG";
+  cout << ")\n";
+  cout << "         Output version.\n";
   exit(0);
 }
 

@@ -3,9 +3,16 @@
 */
 
 
-//     $Id: sg.cpp,v 1.138 2001-05-16 23:21:01 mbickel Exp $
+//     $Id: sg.cpp,v 1.139 2001-05-17 14:23:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.138  2001/05/16 23:21:01  mbickel
+//      The data file is mounted using automake
+//      Added sgml documentation
+//      Added command line parsing functionality;
+//        integrated it into autoconf/automake
+//      Replaced command line parsing of ASC and ASCmapedit
+//
 //     Revision 1.137  2001/05/15 09:54:52  mbickel
 //      Added complete Data and documentaion to repository
 //      The unix programs are now build in the 'unix' subdirectory, not the
@@ -2491,7 +2498,7 @@ int main(int argc, char *argv[] )
       exit(1);
    }
 
-   if ( cl->version() ) {
+   if ( cl->v() ) {
       printf( getstartupmessage() );
       exit(0);
    }
@@ -2502,116 +2509,7 @@ int main(int argc, char *argv[] )
    if ( cl->f() )
       fullscreen = 1;
 
-   verbosity = cl->v();
-
-
-
-
-/*
-   for ( int i = 1; i<argc; i++ ) {
-      if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
-#ifdef _DOS_
-      if ( strcmpi ( &argv[i][1], "V1" ) == 0 ) {
-         vesaerrorrecovery = 1; continue;
-      }
-
-      if ( strcmpi ( &argv[i][1], "SHOWMODES" ) == 0 ) {
-         showmodes = 1; continue;
-      }
-      if ( strcmpi ( &argv[i][1], "8BITONLY" ) == 0 ) {
-         setFullscreenSetting ( FIS_noTrueColor, 0 ); continue;
-      }
-#else
-      // Added support for the -w and --window options
-      // (equivalent to -window), since -w and --window are more
-      // intuitive for *ux users (gnu option convention)
-      if ( strcmpi ( &argv[i][1], "WINDOW" ) == 0 ||
-          strcmpi ( &argv[i][1], "W" ) == 0 ||
-          strcmpi ( &argv[i][1], "-WINDOW" ) == 0 ) {
-        fullscreen = 0; continue;
-      }
-
-      if ( strcmpi ( &argv[i][1], "FULLSCREEN" ) == 0 ||
-          strcmpi ( &argv[i][1], "FS" ) == 0 ||
-          strcmpi ( &argv[i][1], "-FULLSCREEN" ) == 0 ) {
-        fullscreen = 1;
-        forceFullScreen = 1;
-        continue;
-      }
-
-      if ( strcmpi ( &argv[i][1], "NOSOUND" ) == 0 ||
-          strcmpi ( &argv[i][1], "-NOSOUND" ) == 0 ||
-          strcmpi ( &argv[i][1], "NS" ) == 0 ) {
-        useSound = 0; continue;
-      }
-
-#endif
-
-      if ( strnicmp ( &argv[i][1], "x=", 2 ) == 0 ) {
-           resolx = atoi ( &argv[i][3] ); continue;
-      }
-
-      if ( strnicmp ( &argv[i][1], "x:" ,2 ) == 0 ) {
-           resolx = atoi ( &argv[i][3] ); continue;
-      }
-
-      if ( strnicmp ( &argv[i][1], "y=" ,2 ) == 0 ) {
-           resoly = atoi ( &argv[i][3] ); continue;
-      }
-
-      if ( strnicmp ( &argv[i][1], "y:" ,2 ) == 0 ) {
-           resoly = atoi ( &argv[i][3] ); continue;
-      }
-
-      if ( strcmpi ( &argv[i][1], "-load" ) == 0 ||
-           strcmpi ( &argv[i][1], "l" ) == 0 ) {
-           fileToLoad = argv[++i]; continue;
-      }
-
-      if ( strcmpi ( &argv[i][1], "-configfile" ) == 0 ||
-           strcmpi ( &argv[i][1], "c" ) == 0 ) {
-         configfile = argv[++i]; continue;
-      }
-
-      if ( strcmpi ( &argv[i][1], "-verbose" ) == 0 ||
-           strcmpi ( &argv[i][1], "v" ) == 0 ) {
-         verbosity = atoi ( argv[++i] ); continue;
-      }
-
-
-     if ( ( strcmpi ( &argv[i][1], "?" ) == 0 ) ||
-          ( strcmpi ( &argv[i][1], "h" ) == 0 ) ||
-          ( strcmpi ( &argv[i][1], "-help" ) == 0 ) ){
-        printf( " Parameters: \n"
-                "    -h , --help             this page\n"
-                "    -l , --load file        load a map, save game, or email game on startup\n"
-                "    -v , --verbose x        set verbosity level to x (0..10)\n"
-                "    -c , --configfile file  use given configuration file\n"
-                "    -x:X               Set horizontal resolution to X; default is 800 \n"
-                "\t-y:Y               Set verticalal resolution to Y; default is 600 \n"
-#ifdef _DOS_
-                "\t-v1                Set vesa error recovery level to 1 \n"
-                "\t-8bitonly          Disable truecolor graphic mode \n"
-                "\t-showmodes         Display list of available graphic modes \n" );
-#else
-                "\t-w\n"
-                "\t--window           Disable fullscreen mode \n"
-                "\t-f\n"
-                "\t--fullscreen       Enable fullscreen mode (overriding config file)\n"
-                "\t-q\n"
-                "\t--nosound          Disable sound \n" );
-#endif
-        exit (0);
-     }
-
-   }
-
-   printf ( "\nInvalid command line parameter: %s \n", argv[i]);
-   printf ( "Use /h to for help\n"  );
-   exit(1);
-
-  } /* endfor */
-
+   verbosity = cl->r();
 
 #ifdef _DOS_
    if ( showmodes ) {

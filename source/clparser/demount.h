@@ -1,8 +1,8 @@
 /******************************************************************************
 **
-** asc.h
+** demount.h
 **
-** Thu May 17 15:54:29 2001
+** Thu May 17 15:10:31 2001
 ** Linux 2.4.4 (#1 SMP Sam Apr 28 13:21:30 CEST 2001) i686
 ** martin@linux. (Martin Bickel)
 **
@@ -32,13 +32,6 @@ class Cmdline
 {
 private:
   /* parameters */
-  int _x;
-  int _y;
-  string _l;
-  string _c;
-  int _r;
-  bool _w;
-  bool _f;
   bool _q;
   bool _h;
   bool _v;
@@ -60,13 +53,6 @@ public:
 
   /* callback functions */
 
-  int x() { return _x; }
-  int y() { return _y; }
-  string l() { return _l; }
-  string c() { return _c; }
-  int r() { return _r; }
-  bool w() { return _w; }
-  bool f() { return _f; }
   bool q() { return _q; }
   bool h() { return _h; }
   bool v() { return _v; }

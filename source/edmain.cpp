@@ -2,9 +2,16 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.40 2001-05-16 23:21:01 mbickel Exp $
+//     $Id: edmain.cpp,v 1.41 2001-05-17 14:23:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2001/05/16 23:21:01  mbickel
+//      The data file is mounted using automake
+//      Added sgml documentation
+//      Added command line parsing functionality;
+//        integrated it into autoconf/automake
+//      Replaced command line parsing of ASC and ASCmapedit
+//
 //     Revision 1.39  2001/03/07 21:40:51  mbickel
 //      Lots of bugfixes in the mapeditor
 //
@@ -803,10 +810,12 @@ int main(int argc, char *argv[] )
       exit(1);
    }
 
-   if ( cl->version() ) {
+   if ( cl->v() ) {
       printf( kgetstartupmessage() );
       exit(0);
    }
+
+   verbosity = cl->r();
 
    int              modenum8;
 

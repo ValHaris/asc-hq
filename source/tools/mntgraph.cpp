@@ -159,6 +159,9 @@ void getpic ( int pos, int offset )
 
 int main(int argc, char *argv[] )
 {
+   printf("Please use pcx2gfx !!\n"
+          "This program is unsupported and usage of it is discouraged.\n");
+
    initFileIO( NULL );
    addSearchPath ( "." );
    opencontainer ( "*.con");

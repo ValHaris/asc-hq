@@ -70,9 +70,11 @@ RANLIB = @RANLIB@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
+SGML2MAN = @SGML2MAN@
 VERSION = @VERSION@
 
-BUILT_SOURCES = asc.cpp mapedit.cpp
+BUILT_SOURCES = asc.cpp mapedit.cpp map2pcx.cpp mount.cpp demount.cpp viewid.cpp                 makegfx.cpp gfx2pcx.cpp
+
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
 CONFIG_CLEAN_FILES = 
@@ -87,7 +89,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/asc.P .deps/mapedit.P
+DEP_FILES =  .deps/asc.P .deps/demount.P .deps/gfx2pcx.P .deps/makegfx.P \
+.deps/map2pcx.P .deps/mapedit.P .deps/mount.P .deps/viewid.P
 all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .cpp

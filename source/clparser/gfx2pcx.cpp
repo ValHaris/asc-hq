@@ -1,8 +1,8 @@
 /******************************************************************************
 **
-** mapedit.cpp
+** gfx2pcx.cpp
 **
-** Thu May 17 16:02:42 2001
+** Thu May 17 15:54:29 2001
 ** Linux 2.4.4 (#1 SMP Sam Apr 28 13:21:30 CEST 2001) i686
 ** martin@linux. (Martin Bickel)
 **
@@ -16,7 +16,7 @@
 
 #include <getopt.h>
 #include <stdlib.h>
-#include "mapedit.h"
+#include "gfx2pcx.h"
 
 /*----------------------------------------------------------------------------
 **
@@ -35,13 +35,15 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
 
   static struct option long_options[] =
   {
-    {"xresolution", 1, 0, 'x'},
-    {"yresolution", 1, 0, 'y'},
-    {"load", 1, 0, 'l'},
     {"configfile", 1, 0, 'c'},
     {"verbose", 1, 0, 'r'},
-    {"window", 0, 0, 'w'},
-    {"fullscreen", 0, 0, 'f'},
+    {"legend", 0, 0, 256},
+    {"wide", 0, 0, 257},
+    {"orgpal", 0, 0, 258},
+    {"nousage", 0, 0, 259},
+    {"doublen", 0, 0, 260},
+    {"doublei", 0, 0, 261},
+    {"id", 1, 0, 262},
     {"help", 0, 0, 'h'},
     {"version", 0, 0, 'v'},
     {0, 0, 0, 0}
@@ -50,42 +52,21 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
   _executable += argv[0];
 
   /* default values */
-  _x = 800;
-  _y = 600;
   _r = 0;
-  _w = false;
-  _f = false;
+  _legend = false;
+  _wide = false;
+  _orgpal = false;
+  _nousage = false;
+  _doublen = false;
+  _doublei = false;
+  _id = 0;
   _h = false;
   _v = false;
 
-  while ((c = getopt_long(argc, argv, "x:y:l:c:r:wfhv", long_options, &option_index)) != EOF)
+  while ((c = getopt_long(argc, argv, "c:r:hv", long_options, &option_index)) != EOF)
     {
       switch(c)
         {
-        case 'x': 
-          _x = atoi(optarg);
-          if (_x < 640)
-            {
-              string s;
-              s += "parameter range error: x must be >= 640";
-              throw(s);
-            }
-          break;
-
-        case 'y': 
-          _y = atoi(optarg);
-          if (_y < 480)
-            {
-              string s;
-              s += "parameter range error: y must be >= 480";
-              throw(s);
-            }
-          break;
-
-        case 'l': 
-          _l = optarg;
-          break;
-
         case 'c': 
           _c = optarg;
           break;
@@ -106,12 +87,32 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
             }
           break;
 
-        case 'w': 
-          _w = true;
+        case 256: 
+          _legend = true;
           break;
 
-        case 'f': 
-          _f = true;
+        case 257: 
+          _wide = true;
+          break;
+
+        case 258: 
+          _orgpal = true;
+          break;
+
+        case 259: 
+          _nousage = true;
+          break;
+
+        case 260: 
+          _doublen = true;
+          break;
+
+        case 261: 
+          _doublei = true;
+          break;
+
+        case 262: 
+          _id = atoi(optarg);
           break;
 
         case 'h': 
@@ -142,33 +143,8 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
 
 void Cmdline::usage()
 {
-  cout << "The map editor for Advanced Strategic Command " << endl;
-  cout << "usage: " << _executable << " [ -xylcrwfhv ] " << endl;
-  cout << "  [ -x ] ";
-  cout << "[ --xresolution ]  ";
-  cout << "(";
-  cout << "type=";
-  cout << "INTEGER,";
-  cout << " range=640...,";
-  cout << " default=800";
-  cout << ")\n";
-  cout << "         Set horizontal resolution to <X>\n";
-  cout << "  [ -y ] ";
-  cout << "[ --yresolution ]  ";
-  cout << "(";
-  cout << "type=";
-  cout << "INTEGER,";
-  cout << " range=480...,";
-  cout << " default=600";
-  cout << ")\n";
-  cout << "         Set vertical resolution to <Y>\n";
-  cout << "  [ -l ] ";
-  cout << "[ --load ]  ";
-  cout << "(";
-  cout << "type=";
-  cout << "STRING";
-  cout << ")\n";
-  cout << "         Load a map on startup\n";
+  cout << "output index picture containing all ASC graphics and their usage " << endl;
+  cout << "usage: " << _executable << " [ -crhv ] " << endl;
   cout << "  [ -c ] ";
   cout << "[ --configfile ]  ";
   cout << "(";
@@ -185,20 +161,49 @@ void Cmdline::usage()
   cout << " default=0";
   cout << ")\n";
   cout << "         Set verbosity level to x (0..10)\n";
-  cout << "  [ -w ] ";
-  cout << "[ --window ]  ";
+  cout << "  [ --legend ]  ";
   cout << "(";
   cout << "type=";
   cout << "FLAG";
   cout << ")\n";
-  cout << "         Disable fullscreen mode (overriding config file)\n";
-  cout << "  [ -f ] ";
-  cout << "[ --fullscreen ]  ";
+  cout << "         Output legend\n";
+  cout << "  [ --wide ]  ";
   cout << "(";
   cout << "type=";
   cout << "FLAG";
   cout << ")\n";
-  cout << "         Enable fullscreen mode\n";
+  cout << "         Use wide output ( 10 columns )\n";
+  cout << "  [ --orgpal ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "FLAG";
+  cout << ")\n";
+  cout << "         keep Battle Isle palette\n";
+  cout << "  [ --nousage ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "FLAG";
+  cout << ")\n";
+  cout << "         output just the pictures\n";
+  cout << "  [ --doublen ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "FLAG";
+  cout << ")\n";
+  cout << "         use scaled pictures without interpolation\n";
+  cout << "  [ --doublei ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "FLAG";
+  cout << ")\n";
+  cout << "         use scaled pictures with interpolation\n";
+  cout << "  [ --id ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "INTEGER,";
+  cout << " default=0";
+  cout << ")\n";
+  cout << "         use graphic set X\n";
   cout << "  [ -h ] ";
   cout << "[ --help ]  ";
   cout << "(";

@@ -1,2 +1,2 @@
-SUBDIRS = manpages
+SUBDIRS = @SGML2MAN@
 EXTRA_DIST = *.html *.css

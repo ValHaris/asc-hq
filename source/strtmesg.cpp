@@ -1,4 +1,4 @@
-//     $Id: strtmesg.cpp,v 1.60 2001-04-30 11:55:42 mbickel Exp $
+//     $Id: strtmesg.cpp,v 1.61 2001-05-17 14:23:20 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -28,25 +28,31 @@ const char* asc_release="ASC1.3.14-beta";
 
 char startupmessagebuffer[200];
 
-char* getstartupmessage ( void )
+
+const char* getVersionString (  )
+{
+  return &asc_release[3];
+}
+
+const char* getstartupmessage (  )
 {
     sprintf( startupmessagebuffer, "\nAdvanced Strategic Command : %s\nmade %s      %s\n\n", asc_release, __DATE__, __TIME__);
     return startupmessagebuffer;
 }
 
-char* getaboutmessage ( void )
+const char* getaboutmessage (  )
 {
     sprintf( startupmessagebuffer, "Advanced Strategic Command : %s ; made %s ; %s", asc_release, __DATE__, __TIME__);
     return startupmessagebuffer;
 }
 
-char* kgetstartupmessage ( void )
+const char* kgetstartupmessage (  )
 {
     sprintf( startupmessagebuffer, "\n      Mapeditor for\nAdvanced Strategic Command \n%s\nmade %s      %s\n\n", asc_release, __DATE__, __TIME__);
     return startupmessagebuffer;
 }
 
-char* kgetaboutmessage ( void )
+const char* kgetaboutmessage (  )
 {
     sprintf( startupmessagebuffer, "Mapeditor for Advanced Strategic Command : %s ; made %s ; %s", asc_release, __DATE__, __TIME__);
     return startupmessagebuffer;
