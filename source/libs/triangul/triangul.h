@@ -125,8 +125,7 @@ typedef struct {
  #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #endif
 
-#define CROSS(v0, v1, v2) (((v1).x - (v0).x)*((v2).y - (v0).y) - \
-			   ((v1).y - (v0).y)*((v2).x - (v0).x))
+#define CROSS(v0, v1, v2) (((v1).x - (v0).x)*((v2).y - (v0).y) - ((v1).y - (v0).y)*((v2).x - (v0).x))
 
 #define DOT(v0, v1) ((v0).x * (v1).x + (v0).y * (v1).y)
 

@@ -17,6 +17,7 @@
 
 #include <vector>
 #include <SDL_image.h>
+#include <algorithm>
 #include "ascstring.h"
 #include "basegfx.h"
 #include "typen.h"
