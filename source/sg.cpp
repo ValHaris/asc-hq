@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: sg.cpp,v 1.170 2001-10-02 18:08:52 mbickel Exp $
+//     $Id: sg.cpp,v 1.171 2001-10-03 20:56:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.170  2001/10/02 18:08:52  mbickel
+//      Changed parser error handling to use exceptions
+//      Removed gfx2pcx project
+//
 //     Revision 1.169  2001/10/02 14:06:28  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -967,7 +971,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_vehicleinfo,     ua_researchinfo,     ua_unitstatistics, ua_buildingstatistics, ua_newmessage, ua_viewqueuedmessages,
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
-                    ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus  };
+                    ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange };
 
 
 class tsgpulldown : public tpulldown {
@@ -1006,15 +1010,17 @@ void         tsgpulldown :: init ( void )
 
   addfield ( "~I~nfo" );
    addbutton ( "~V~ehicle types", ua_vehicleinfo );
-   addbutton ( "~G~ame Statusõ5", ua_GameStatus );
+   addbutton ( "~U~nit weapon rangeõ3", ua_viewunitweaponrange );
+   addbutton ( "~U~nit movement rangeõ4", ua_viewunitmovementrange );
+   addbutton ( "~G~ame Timeõ5", ua_GameStatus );
    addbutton ( "unit ~S~et informationõ6", ua_UnitSetInfo );
    addbutton ( "~T~errainõ7", ua_viewterraininfo );
    addbutton ( "~U~nit weightõ8", ua_unitweightinfo );
-   addbutton ( "seperator", -1 );
-   addbutton ( "~R~esearch", ua_researchinfo );
+   // addbutton ( "seperator", -1 );
+   // addbutton ( "~R~esearch", ua_researchinfo );
 
    // addbutton ( "vehicle ~I~mprovementõF7", ua_dispvehicleimprovement);
-   addbutton ( "show game ~P~arameters", ua_GameParameterInfo );
+   // addbutton ( "show game ~P~arameters", ua_GameParameterInfo );
 
 
   addfield ( "~S~tatistics" );
@@ -1363,6 +1369,105 @@ void benchgame ( int mode )
    displaymessage2 ( " %s fps ", buf );
 }
 
+class WeaponRange : public SearchFields {
+       public:
+         int run ( const pvehicle veh );
+         void testfield ( const MapCoordinate& mc ) { gamemap->getField( mc )->tempw = 1; };
+         WeaponRange ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
+};
+
+int  WeaponRange :: run ( const pvehicle veh )
+{
+   int found = 0;
+   if ( fieldvisiblenow ( getfield ( veh->xpos, veh->ypos )))
+      for ( int i = 0; i < veh->typ->weapons.count; i++ ) {
+         if ( veh->typ->weapons.weapon[i].shootable() ) {
+            initsearch ( veh->getPosition(), veh->typ->weapons.weapon[i].maxdistance/minmalq, (veh->typ->weapons.weapon[i].mindistance+maxmalq-1)/maxmalq );
+            startsearch();
+            found++;
+         }
+      }
+   return found;
+}
+
+void viewunitweaponrange ( const pvehicle veh, tkey taste )
+{
+   if ( veh && !moveparams.movestatus  ) {
+      actmap->cleartemps ( 7 );
+      WeaponRange wr ( actmap );
+      int res = wr.run ( veh );
+      if ( res ) {
+         displaymap();
+
+         #ifndef NEWKEYB
+         taste = ct_invvalue;
+         #endif
+
+         if ( taste != ct_invvalue ) {
+            while ( skeypress ( taste )) {
+
+               while ( keypress() )
+                  r_key();
+            }
+         } else {
+            int mb = mouseparams.taste;
+            while ( mouseparams.taste == mb && !keypress() )
+               releasetimeslice();
+            while ( keypress() )
+               r_key();
+         }
+
+         actmap->cleartemps ( 7 );
+         displaymap();
+      }
+   }
+}
+
+void viewunitmovementrange ( pvehicle veh, tkey taste )
+{
+   if ( veh && !moveparams.movestatus && fieldvisiblenow ( getfield ( veh->xpos, veh->ypos ))) {
+      actmap->cleartemps ( 7 );
+      int move = veh->getMovement();
+      veh->setMovement ( veh->typ->movement[log2(veh->height)]);
+      VehicleMovement vm ( NULL, NULL );
+      if ( vm.available ( veh )) {
+         vm.execute ( veh, -1, -1, 0, -1, -1 );
+         if ( vm.reachableFields.getFieldNum()) {
+            for  ( int i = 0; i < vm.reachableFields.getFieldNum(); i++ )
+               if ( fieldvisiblenow ( vm.reachableFields.getField ( i ) ))
+                  vm.reachableFields.getField ( i )->a.temp = 1;
+            for  ( int j = 0; j < vm.reachableFieldsIndirect.getFieldNum(); j++ )
+               if ( fieldvisiblenow ( vm.reachableFieldsIndirect.getField ( j )))
+                  vm.reachableFieldsIndirect.getField ( j )->a.temp = 1;
+
+            displaymap();
+
+            #ifndef NEWKEYB
+            taste = ct_invvalue;
+            #endif
+
+            if ( taste != ct_invvalue ) {
+               while ( skeypress ( taste )) {
+
+                  while ( keypress() )
+                     r_key();
+               }
+            } else {
+               int mb = mouseparams.taste;
+               while ( mouseparams.taste == mb && !keypress() )
+                  releasetimeslice();
+
+               while ( keypress() )
+                  r_key();
+            }
+            actmap->cleartemps ( 7 );
+            displaymap();
+         }
+      }
+      veh->setMovement ( move );
+   }
+}
+
 
 void selectgraphicset ( void )
 {
@@ -1678,7 +1783,12 @@ void execuseraction ( tuseractions action )
                        break;
         case ua_GameParameterInfo: showGameParameters();
                        break;
-        case ua_GameStatus: displaymessage ( "turn %d , move %d ", 3, actmap->time.turn(), actmap->time.move() );
+        case ua_GameStatus: displaymessage ( "Current game time is:\n turn %d , move %d ", 3, actmap->time.turn(), actmap->time.move() );
+                       break;
+        case ua_viewunitweaponrange: viewunitweaponrange ( getactfield()->vehicle, ct_invvalue );
+                       break;
+
+        case ua_viewunitmovementrange: viewunitmovementrange ( getactfield()->vehicle, ct_invvalue );
                        break;
     }
 
@@ -1761,102 +1871,8 @@ void viewunreadmessages ( void )
 
 
 
-class WeaponRange : public SearchFields {
-       public:
-         int run ( const pvehicle veh );
-         void testfield ( const MapCoordinate& mc ) { gamemap->getField( mc )->tempw = 1; };
-         WeaponRange ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
-};
-
-int  WeaponRange :: run ( const pvehicle veh )
-{
-   int found = 0;
-   if ( fieldvisiblenow ( getfield ( veh->xpos, veh->ypos )))
-      for ( int i = 0; i < veh->typ->weapons.count; i++ ) {
-         if ( veh->typ->weapons.weapon[i].shootable() ) {
-            initsearch ( veh->getPosition(), veh->typ->weapons.weapon[i].maxdistance/minmalq, (veh->typ->weapons.weapon[i].mindistance+maxmalq-1)/maxmalq );
-            startsearch();
-            found++;
-         }
-      }
-   return found;
-}
 
 
-void viewunitweaponrange ( const pvehicle veh, tkey taste )
-{
-   if ( veh && !moveparams.movestatus  ) {
-      actmap->cleartemps ( 7 );
-      WeaponRange wr ( actmap );
-      int res = wr.run ( veh );
-      if ( res ) {
-         displaymap();
-
-         #ifndef NEWKEYB
-         taste = ct_invvalue;
-         #endif
-
-         if ( taste != ct_invvalue ) {
-            while ( skeypress ( taste )) {
-
-               while ( keypress() )
-                  r_key();
-            }
-         } else {
-            int mb = mouseparams.taste;
-            while ( mouseparams.taste == mb )
-               releasetimeslice();
-         }
-         actmap->cleartemps ( 7 );
-         displaymap();
-      }
-   }
-}
-
-void viewunitmovementrange ( pvehicle veh, tkey taste )
-{
-   if ( veh && !moveparams.movestatus && fieldvisiblenow ( getfield ( veh->xpos, veh->ypos ))) {
-      actmap->cleartemps ( 7 );
-      int move = veh->getMovement();
-      veh->setMovement ( veh->typ->movement[log2(veh->height)]);
-      VehicleMovement vm ( NULL, NULL );
-      if ( vm.available ( veh )) {
-         vm.execute ( veh, -1, -1, 0, -1, -1 );
-         if ( vm.reachableFields.getFieldNum()) {
-            for  ( int i = 0; i < vm.reachableFields.getFieldNum(); i++ )
-               if ( fieldvisiblenow ( vm.reachableFields.getField ( i ) ))
-                  vm.reachableFields.getField ( i )->a.temp = 1;
-            for  ( int j = 0; j < vm.reachableFieldsIndirect.getFieldNum(); j++ )
-               if ( fieldvisiblenow ( vm.reachableFieldsIndirect.getField ( j )))
-                  vm.reachableFieldsIndirect.getField ( j )->a.temp = 1;
-
-            displaymap();
-
-            #ifndef NEWKEYB
-            taste = ct_invvalue;
-            #endif
-
-            if ( taste != ct_invvalue ) {
-               while ( skeypress ( taste )) {
-
-                  while ( keypress() )
-                     r_key();
-               }
-            } else {
-               int mb = mouseparams.taste;
-               while ( mouseparams.taste == mb )
-                  releasetimeslice();
-            }
-            actmap->cleartemps ( 7 );
-            displaymap();
-         }
-      }
-      veh->setMovement ( move );
-   }
-}
-
-extern void testland();
-extern void testtext( TerrainType* pt, ObjectType* po );
 
 void  mainloop ( void )
 {
@@ -1903,9 +1919,6 @@ void  mainloop ( void )
             case ct_f4:  execuseraction ( ua_computerturn );
                break;
 
-            case ct_f7:  execuseraction ( ua_dispvehicleimprovement );
-               break;
-
             case ct_f8:  {
                             int color;
                             if ( getactfield()->vehicle )
@@ -1916,17 +1929,7 @@ void  mainloop ( void )
                             if ( actmap->player[color].ai ) {
                                 AI* ai = (AI*) actmap->player[color].ai;
                                 ai->showFieldInformation ( getxpos(), getypos() );
-                            } else {
-                                int x = getxpos();
-                                int y = getypos();
-                                displaymessage("cursorposition: %d / %d", 3, x, y );
-
-                                if ( getactfield()->vehicle ) {
-                                   displaymessage("unitposition: %d / %d\nnetworkid: %d", 3, getactfield()->vehicle->xpos, getactfield()->vehicle->ypos, getactfield()->vehicle->networkid );
-                                   displaymessage("number of units: %d", 3, actmap->player[getactfield()->vehicle->color/8].vehicleList.size() );
-                                }
                             }
-
                          }
                break;
 

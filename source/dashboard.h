@@ -66,7 +66,7 @@
                        void         paintsmallmap ( int repaint = 0  );
                        void         paintlargeweaponinfo ( void );
                        void         paintlargeweapon ( int pos, const char* name, int ammoact, int ammomax, int shoot, int refuel, int strengthmax, int strengthmin, int distmax, int distmin, int from, int to );
-                       void         paintlargeweaponefficiency ( int pos, int* e, int alreadypainted, int nohit );
+                       void         paintlargeweaponefficiency ( int pos, int* e, int alreadypainted, const int* hit );
                        void         paintzoom( void );
                      public:
                        struct {

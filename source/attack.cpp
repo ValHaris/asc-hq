@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: attack.cpp,v 1.50 2001-10-02 14:06:27 mbickel Exp $
+//     $Id: attack.cpp,v 1.51 2001-10-03 20:56:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2001/10/02 14:06:27  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.49  2001/09/25 15:13:07  mbickel
 //      New version number
 //      Fixed crash when reaction fire during ascend
@@ -539,7 +545,9 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
 
    const SingleWeapon* weap = attackingunit->getWeapon(_weapon);
 
-   av.strength = int( attackingunit->weapstrength[_weapon] * weapDist.getWeapStrength(weap, dist, attackingunit->height, attackedunit->height ));
+   av.strength = int( attackingunit->weapstrength[_weapon]
+                      * weapDist.getWeapStrength(weap, dist, attackingunit->height, attackedunit->height )
+                      * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[attackedunit->typ->movemalustyp] / 100 );
    av.armor  = attackingunit->armor;
    av.damage     = attackingunit->damage;
    av.experience  = attackingunit->experience;
@@ -586,7 +594,9 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    if ( respond ) {
       weap = attackedunit->getWeapon( dv.weapnum );
 
-      dv.strength  = int( attackedunit->weapstrength[ dv.weapnum ] * weapDist.getWeapStrength(weap, dist, attackedunit->height, attackingunit->height ));
+      dv.strength  = int( attackedunit->weapstrength[ dv.weapnum ]
+                          * weapDist.getWeapStrength(weap, dist, attackedunit->height, attackingunit->height )
+                          * attackedunit->typ->weapons.weapon[ dv.weapnum ].targetingAccuracy[attackingunit->typ->movemalustyp] / 100 );
       field = getfield ( attackedunit->xpos, attackedunit->ypos );
       dv.attackbonus  = field->getattackbonus();
       _respond = 1;
@@ -703,7 +713,10 @@ void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int w
       _weapon  = weapon;
 
    const SingleWeapon *weap = &attackingunit->typ->weapons.weapon[_weapon];
-   av.strength  = int( attackingunit->weapstrength[_weapon] * weapDist.getWeapStrength(weap, dist, attackingunit->height, _attackedbuilding->typ->buildingheight ));
+   av.strength  = int( attackingunit->weapstrength[_weapon]
+                       * weapDist.getWeapStrength(weap, dist, attackingunit->height, _attackedbuilding->typ->buildingheight )
+                       * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[cmm_building] / 100 );
+
    av.armor = attackingunit->armor;
    av.damage    = attackingunit->damage;
    av.experience = attackingunit->experience;
@@ -958,7 +971,10 @@ void tunitattacksobject :: setup ( pvehicle attackingunit, int obj_x, int obj_y,
       _weapon  = weapon;
 
    const SingleWeapon *weap = &attackingunit->typ->weapons.weapon[weapon];
-   av.strength  = int( attackingunit->weapstrength[weapon] * weapDist.getWeapStrength(weap, dist, -1, -1  ));
+   av.strength  = int( attackingunit->weapstrength[weapon]
+                       * weapDist.getWeapStrength(weap, dist, -1, -1  )
+                       * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[cmm_building] / 100 );
+
    av.armor = attackingunit->armor;
    av.damage    = attackingunit->damage;
    av.experience = attackingunit->experience;
@@ -1067,7 +1083,7 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
             for (int i = 0; i < angreifer->typ->weapons.count ; i++)
                if (angreifer->typ->weapons.weapon[i].shootable() )
                   if (angreifer->typ->weapons.weapon[i].offensive() )
-                     if (!( angreifer->typ->weapons.weapon[i].targets_not_hittable & ( 1 << cmm_building ))) {
+                     if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[cmm_building] > 0 ) {
                         int tm = efield->building->typ->buildingheight;
                         if (tm & angreifer->typ->weapons.weapon[i].targ) {
                            if (fieldvisiblenow(efield, angreifer->color/8)) {
@@ -1101,7 +1117,7 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
                if (angreifer->typ->weapons.weapon[i].shootable() )
                   if ( angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwcannonn ||
                        angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwbombn ) {
-                     if (!( angreifer->typ->weapons.weapon[i].targets_not_hittable & ( 1 << cmm_building )))
+                     if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[cmm_building] )
                         if (chfahrend & angreifer->typ->weapons.weapon[i].targ ) {
                            if (fieldvisiblenow(efield, angreifer->color/8)) {
                               int d = beeline(angreifer->xpos,angreifer->ypos,x,y);
@@ -1150,11 +1166,11 @@ bool attackpossible2u( const pvehicle attacker, const pvehicle target, pattackwe
             if (angreifer->typ->weapons.weapon[i].offensive() )
                if (verteidiger->height & angreifer->typ->weapons.weapon[i].targ )
                   if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
-                     if (!( angreifer->typ->weapons.weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
+                     if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp] > 0 )
                         if (angreifer->ammo[i] > 0) {
                            result = true;
                            if ( atw ) {
-                              atw->strength[atw->count] = angreifer->weapstrength[i];
+                              atw->strength[atw->count] = angreifer->weapstrength[i] * angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp] / 100;
                               atw->num[atw->count ] = i;
                               atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
                               atw->target = AttackWeap::vehicle;
@@ -1193,11 +1209,11 @@ bool attackpossible28( const pvehicle attacker, const pvehicle target, pattackwe
                   if (minmalq <= angreifer->typ->weapons.weapon[i].maxdistance)
                      if (minmalq >= angreifer->typ->weapons.weapon[i].mindistance)
                         if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
-                           if (!( angreifer->typ->weapons.weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
+                           if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp ] > 0)
                               if (angreifer->ammo[i] > 0) {
                                  result =  true;
                                  if ( atw ) {
-                                    atw->strength[atw->count] = angreifer->weapstrength[i];
+                                    atw->strength[atw->count] = angreifer->weapstrength[i] * angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp] / 100;
                                     atw->num[atw->count ] = i;
                                     atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
                                     atw->target = AttackWeap::vehicle;
@@ -1238,11 +1254,11 @@ bool attackpossible2n( const pvehicle attacker, const pvehicle target, pattackwe
                         if (dist <= angreifer->typ->weapons.weapon[i].maxdistance)
                            if (dist >= angreifer->typ->weapons.weapon[i].mindistance)
                               if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
-                                 if (!( angreifer->typ->weapons.weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
+                                 if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp ] > 0)
                                     if (angreifer->ammo[i] > 0) {
                                        result = true;
                                        if ( atw ) {
-                                          atw->strength[atw->count] = angreifer->weapstrength[i];
+                                          atw->strength[atw->count] = angreifer->weapstrength[i] * angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp ] / 100;
                                           atw->num[atw->count ] = i;
                                           atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
                                           atw->target = AttackWeap::vehicle;

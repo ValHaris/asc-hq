@@ -1,6 +1,12 @@
-//     $Id: typen.h,v 1.101 2001-10-02 14:06:29 mbickel Exp $
+//     $Id: typen.h,v 1.102 2001-10-03 20:56:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.101  2001/10/02 14:06:29  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.100  2001/09/25 18:03:35  mbickel
 //      Move after attack doesn't reduce a units movement
 //
@@ -239,9 +245,6 @@ const int choehenstufennum =  8;
 
 //! The maximum number of number of different images for a building and a weather. For example, A wind power plant might have 6 different images, depending on the direction of the wind.
 const int maxbuildingpicnum  = 8;
-
-//! The number of game paramters that can be specified for each map.
-const int gameparameternum = 19;
 
 //! The maximum experience value of a #Vehicle
 const int maxunitexperience = 23;
@@ -864,13 +867,6 @@ enum { visible_not, visible_ago, visible_now, visible_all };
 
   extern const char*  cwettertypen[];
 
-extern const char* gameparametername[ gameparameternum ];
-extern const int gameparameterdefault [ gameparameternum ];
-enum { cgp_fahrspur, cgp_eis, cgp_movefrominvalidfields, cgp_building_material_factor, cgp_building_fuel_factor,
-       cgp_forbid_building_construction, cgp_forbid_unitunit_construction, cgp_bi3_training, cgp_maxminesonfield,
-       cgp_antipersonnelmine_lifetime, cgp_antitankmine_lifetime, cgp_mooredmine_lifetime, cgp_floatingmine_lifetime,
-       cgp_buildingarmor, cgp_maxbuildingrepair, cgp_buildingrepairfactor, cgp_globalfuel, cgp_maxtrainingexperience,
-       cgp_initialMapVisibility };
 
 
 

@@ -32,6 +32,38 @@
  #include "basestrm.h"
 
 
+//! The number of game paramters that can be specified for each map.
+const int gameparameternum = 19;
+
+//! The names of the game paramter. \sa gameparameterdefault
+extern const char* gameparametername[ gameparameternum ];
+
+extern const int gameparameterdefault [ gameparameternum ];
+
+extern const int gameParameterLowerLimit [ gameparameternum ];
+extern const int gameParameterUpperLimit [ gameparameternum ];
+
+enum { cgp_fahrspur,
+       cgp_eis,
+       cgp_movefrominvalidfields,
+       cgp_building_material_factor,
+       cgp_building_fuel_factor,
+       cgp_forbid_building_construction,
+       cgp_forbid_unitunit_construction,
+       cgp_bi3_training,
+       cgp_maxminesonfield,
+       cgp_antipersonnelmine_lifetime,
+       cgp_antitankmine_lifetime,
+       cgp_mooredmine_lifetime,
+       cgp_floatingmine_lifetime,
+       cgp_buildingarmor,
+       cgp_maxbuildingrepair,
+       cgp_buildingrepairfactor,
+       cgp_globalfuel,
+       cgp_maxtrainingexperience,
+       cgp_initialMapVisibility };
+
+
 //! an instance of an object type (#tobjecttype) on the map
 class Object {
     public:

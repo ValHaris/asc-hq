@@ -440,7 +440,7 @@ void         tdashboard :: paintlargeweaponinfo ( void )
          }
          if ( topaint != lastpainted ) {
             if ( topaint == -1 )
-               paintlargeweaponefficiency ( i, NULL, first, 0 );
+               paintlargeweaponefficiency ( i, NULL, first, NULL );
             else {
                int effic[13];
                for ( int k = 0; k < 13; k++ )
@@ -462,7 +462,7 @@ void         tdashboard :: paintlargeweaponinfo ( void )
                for ( int b = maxdelta+1; b < 7; b++ )
                   effic[6+b] = -1;
 
-               paintlargeweaponefficiency ( i, effic, first, vt->weapons.weapon[topaint].targets_not_hittable );
+               paintlargeweaponefficiency ( i, effic, first, vt->weapons.weapon[topaint].targetingAccuracy );
             }
             lastpainted = topaint;
             first = 0;
@@ -481,7 +481,7 @@ void         tdashboard :: paintlargeweaponinfo ( void )
 
 }
 
-void         tdashboard::paintlargeweaponefficiency ( int pos, int* e, int first, int nohit )
+void         tdashboard::paintlargeweaponefficiency ( int pos, int* e, int first, const int* hit )
 {
    int x = (agmp->resolutionx - 640) / 2;
    int y = 150 + 28 + pos * 14;
@@ -524,19 +524,27 @@ void         tdashboard::paintlargeweaponefficiency ( int pos, int* e, int first
    activefontsettings.justify = lefttext;
    // activefontsettings.color = black;
    for ( int j = 0; j < cmovemalitypenum; j++ ) {
-      int pnt;
-      if ( dataVersion >= 2 )
-         pnt = !(nohit & (1 << j ));
-      else
-         pnt = nohit & (1 << j );
-      if ( pnt ) {
-         activefontsettings.font = schriften.guifont;
-         showtext2c ( cmovemalitypes[j],   x + 88 + (j % 3) * 180, y + 15 + 16 + (j / 3) * 12 );
+      int xp = x + 88 + (j % 3) * 180;
+      int yp = y + 15 + 16 + (j / 3) * 12;
+      if ( hit ) {
+         ASCString s = ASCString(cmovemalitypes[j]) + "=" + strrr ( hit[j] ) + "%";
+         if ( hit[j] == 100 ) {
+            activefontsettings.font = schriften.guifont;
+            showtext2c (  s, xp, yp );
+         } else
+            if ( hit[j] > 0 ) {
+               activefontsettings.font = schriften.guicolfont;
+               showtext2c (  s, xp, yp );
+            } else {
+               activefontsettings.font = schriften.monogui;
+               showtext2 (  s, xp, yp );
+            }
       } else {
          activefontsettings.font = schriften.monogui;
-         showtext2  ( cmovemalitypes[j],   x + 88 + (j % 3) * 180, y + 15 + 16 + (j / 3) * 12 );
+         showtext2 ( "-", xp, yp );
       }
    }
+   activefontsettings.font = schriften.guifont;
    getinvisiblemouserectanglestk ();
 }
 

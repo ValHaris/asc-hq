@@ -2,9 +2,15 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.96 2001-10-02 14:06:27 mbickel Exp $
+//     $Id: dialog.cpp,v 1.97 2001-10-03 20:56:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.96  2001/10/02 14:06:27  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.95  2001/09/26 19:53:27  mbickel
 //      Reorganized data files for coming ASC 1.9.0 release
 //      Improved field information dialog
@@ -5213,8 +5219,8 @@ void viewUnitSetinfo ( void )
          sprintf(t3, "\nUnit ID: %d \n", typ->id );
          s += t3;
 
-         if ( !typ->filename.empty() ) {
-            sprintf(t3, "file name: %s\n\n", typ->filename.c_str() );
+         if ( !typ->location.empty() ) {
+            sprintf(t3, "file name: %s\n\n", typ->location.c_str() );
             s += t3;
          }
 
@@ -5274,9 +5280,10 @@ void         tgameparamsel ::setup(void)
    ey = ysize - 90;
    startpos = lastchoice;
    addbutton("~O~k",20,ysize - 50,xsize-20,ysize - 20,0,1,13,true);
-   addbutton("~E~dit Selected",20,ysize - 80,xsize-20,ysize - 60,0,1,12,true);
+   addbutton("~E~dit Selected",20,ysize - 80,xsize/2-5,ysize - 60,0,1,12,true);
+   addbutton("~D~escription",  xsize/2+5,ysize - 80,xsize-20,ysize - 60,0,1,14,true);
    addkey ( 13, ct_esc );
-
+   addkey ( 14, ct_f1 );
 }
 
 
@@ -5290,6 +5297,12 @@ void         tgameparamsel ::buttonpressed(int         id)
                 break;
 
       case 13:   action = id-10;
+                 break;
+
+      case 14:   if ( redline >= 0)
+                    help ( 800+redline);
+                 else
+                    displaymessage ( "Please select an entry first", 3);
                  break;
    }
 }
@@ -5313,7 +5326,7 @@ void         tgameparamsel ::run(void)
             action = 2;
          else
             action = 3;
-   }  while ( action == 0 ); // ! (( action == 2 || action == 3 ) || (msel == 1))
+   }  while ( action == 0 );
    if ( action == 3 )
       redline = 255;
 }
@@ -5337,6 +5350,6 @@ void setmapparameters ( void )
    do {
       param = selectgameparameter( -1 );
       if ( param >= 0 && param < gameparameternum )
-         actmap->setgameparameter( param , getid("Parameter Val",actmap->getgameparameter( param ),minint,maxint));
+         actmap->setgameparameter( param , getid("Parameter Val",actmap->getgameparameter( param ), gameParameterLowerLimit[param], gameParameterUpperLimit[param] ));
    } while ( param >= 0 && param < gameparameternum );
 }

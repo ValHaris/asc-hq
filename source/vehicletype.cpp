@@ -162,7 +162,7 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 6;
+const int vehicle_version = 7;
 
 
 
@@ -256,6 +256,8 @@ void Vehicletype :: read ( tnstream& stream )
 
 
    movemalustyp = stream.readChar();
+   if ( movemalustyp >= cmovemalitypenum )
+      movemalustyp = cmovemalitypenum -1;
 
    if ( version <= 2 )
       for ( j = 0; j < 9; j++ )
@@ -404,7 +406,17 @@ void Vehicletype :: read ( tnstream& stream )
          for ( int k = 0; k < 13; k++ )
             weapons.weapon[j].efficiency[k] = stream.readInt();
 
-         weapons.weapon[j].targets_not_hittable = stream.readInt();
+         if ( version <= 6 ) {
+            int targets_not_hittable = stream.readInt();
+            for ( int i = 0; i < cmovemalitypenum; i++ )
+               if ( targets_not_hittable & ( 1 << i))
+                  weapons.weapon[j].targetingAccuracy[i] = 0;
+         } else {
+            int num = stream.readInt();
+            for ( int i = 0; i < num; i++ )
+               weapons.weapon[j].targetingAccuracy[i] = stream.readInt();
+         }
+
 
          if ( version <= 2 )
             for ( int l = 0; l < 9; l++ )
@@ -613,7 +625,9 @@ void Vehicletype:: write ( tnstream& stream ) const
       for ( int k = 0; k < 13; k++ )
          stream.writeInt(weapons.weapon[j].efficiency[k] );
 
-      stream.writeInt(weapons.weapon[j].targets_not_hittable );
+      stream.writeInt ( cmovemalitypenum );
+      for ( int i = 0; i < cmovemalitypenum; i++ )
+         stream.writeInt(weapons.weapon[j].targetingAccuracy[i] );
    }
 
    terrainaccess.write ( stream );
@@ -722,6 +736,9 @@ UnitWeapon :: UnitWeapon ( void )
 {
    count = 0;
    memset ( weapon, 0, sizeof ( weapon ));
+   for ( int w = 0; w < 16; w++ )
+      for ( int i = 0; i < cmovemalitypenum; i++ )
+         weapon[w].targetingAccuracy[i] = 100;
 }
 
 
@@ -843,6 +860,28 @@ void SingleWeapon::runTextIO ( PropertyContainer& pc )
            else
               pc.addInteger( ASCString("u")+strrr(j-6), efficiency[j] );
    } pc.closeBracket();
-   pc.addTagInteger( "cantHit", targets_not_hittable, cmovemalitypenum, unitCategoryTags );
+
+   if ( pc.isReading() ) {
+      if ( pc.find ( "cantHit" )) {
+         int targets_not_hittable;
+         pc.addTagInteger( "cantHit", targets_not_hittable, cmovemalitypenum, unitCategoryTags ).evaluate();
+         for ( int i = 0; i < cmovemalitypenum; i++ )
+            if ( targets_not_hittable & ( 1 << i ))
+               targetingAccuracy[i] = 0;
+      }
+      pc.openBracket("WeaponEffectiveness" );
+      for ( int i = 0; i < cmovemalitypenum; i++ ) {
+         if ( pc.find ( unitCategoryTags[i] ))
+            pc.addInteger( unitCategoryTags[i], targetingAccuracy[i] );
+      }
+      pc.closeBracket();
+   } else {
+      pc.openBracket("WeaponEffectiveness" );
+      for ( int i = 0; i < cmovemalitypenum; i++ )
+         if ( targetingAccuracy[i] != 100 )
+            pc.addInteger( unitCategoryTags[i], targetingAccuracy[i] );
+      pc.closeBracket();
+   }
+
 }
 

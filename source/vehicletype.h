@@ -72,7 +72,8 @@ extern const char* AIjobs[];
      int          maxstrength;    // Wenn der Waffentyp == Mine ist, dann ist hier die Minenst„rke als Produkt mit der Bassi 64 abgelegt.
      int          minstrength;
      int          efficiency[13]; // floating and driving are the same ; 0-5 is lower ; 6 is same height ; 7-12 is higher
-     int          targets_not_hittable; // BM   <=  cmovemalitypes
+     // int          targets_not_hittable; // BM   <=  cmovemalitypes
+     int          targetingAccuracy[cmovemalitypenum];
     public:
      int          getScalarWeaponType(void) const;
      bool          requiresAmmo(void) const;

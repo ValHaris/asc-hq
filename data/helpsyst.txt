@@ -139,7 +139,6 @@ v  #pos030#: View map
 F1 #pos030#: Help
 F2 #pos030#: Main Menu
 F3 #pos030#: Continue Network Game
-F7 #pos030#: View weapon research
 1 #pos030#: Toggle view of resourcs
 2 #pos030#: Toggle unit shading
 3 #pos030#: Show weapon range of unit
@@ -401,4 +400,100 @@ You have entered an empty password. In a multiplayer game, all other players cou
 It is highly recommended to use a password if you are playing a serious multiplayer game.
 
 However, you can use empty passwords for test games, or if your opponent is sitting right next to you and is reading this dialog as well :-)
+
+##0800
+Tanks and other vehicles leave tracks when moving on most terrain. This parameter is the number of turns after which the tracks disappear. 
+
+Possible values: x >=1 
+
+##0801
+An icebreaker crushing its way through ice leaves a fairway. This parameter is the number of turns after which the fairway disappears. 
+
+Possible values: x >=1 
+
+##0802
+This parameter controls whether a unit is able to move from a field it cannot move onto. This unit may be standing on such an inaccessible field either because it was deliberately by the map creator, or because of a terrin or weather change event.
+If the parameter is 0, the mapeditor will not place units on inaccessible fields.
+
+Possible values: 0, 1 
+
+##0803
+The construction of buildings can be made cheaper or more expensive, depending on the map. On a map with very few resources it may be desirable to make buildings cheaper. This parameter is the percentage of the original materal costs of the building. A value of 100 uses the original construction cost, a value of 50 leads to half the original construction cost.
+
+Possible values: x >= 1
+
+##0804
+The construction of buildings can be made cheaper or more expensive, depending on the map. On a map with very few resources it may be desirable to make buildings cheaper. This parameter is the percentage of the original energy costs of the building. A value of 100 uses the original construction cost, a value of 50 leads to half the original construction cost.
+
+Possible values: x >= 1
+
+##0805
+Using this parameters you can completely disable the construction of buildings on the map. A value of 0 enables building construction, a value of 1 disables it.
+
+##0806
+Using this parameters you can completely disable the construction of units by other construction units. A value of 0 enables construction, a value of 1 disables it.
+						      
+##0807
+In ASC there are two different modes in which a training center operates. In the first mode must be explicitly trained in a training center to gain experience (just like Battle Isle 2). In the second mode a newly constructed unit will already have experience depending on the number of training centers you have (like Battle Isle 3).
+
+If this parameter is 0, the first (BI2 style) training mode is enabled.
+If this parameter is > 0, the second (BI3 style) taining mode is enabled. The unit then gains the number of experience points that equal this parameter. For example, if you have 3 training facilities and set this parameter to 2, each newly constructed unit will alraedy have 6 experience points.
+
+Possible values: x >= 0
+
+##0808
+It ASC you can put several (possibly different) mines onto a single field. This parameter controls the maximum number of mines you can put onto a field.
+
+Possible values: x >= 0
+
+##0809
+Mines may disappear after some time. This parameter controls the lifetime in turns of antipersonnel mines. A value of 0 results in the mines lasting indefinitly.
+
+##0810
+Mines may disappear after some time. This parameter controls the lifetime in turns of antitank mines. A value of 0 results in the mines lasting indefinitly.
+
+##0811
+Mines may disappear after some time. This parameter controls the lifetime in turns of moored mines. A value of 0 results in the mines lasting indefinitly.
+
+##0812
+Mines may disappear after some time. This parameter controls the lifetime in turns of floating mines. A value of 0 results in the mines lasting indefinitly.
+
+##0813
+Buildings can be attacked and destroyed by units. Depending on the map it may be necessary to make buildings weaker or tougher. If this parameter is 100, buildings have their original armor. A parameter of 200 doubles their armor.
+
+Using very high values here, you can practically disable the shooting down of buildings.
+
+Possible values: x >= 1
+
+##0814
+The maximum repair rate of buildings may be limited. This parameter is the amount of damage in percent that a building can be repaired each turn. Using a value of 0 disables the repairing of buildings.
+
+Example: A building has 60 percent damage and this value is set to. It now takes 3 turns to completely repair the building.
+
+Possible values: x >= 0
+
+##0815
+The repair costs of buildings may be increased or decreased. If this parameter is set to 100, repairing an almost completely damaged building costs one third of its construction cost. Using a value of 300, the repair costs are equal to its construction cost.
+
+Possible values: x >= 1
+
+##0816
+In BI resource mode, energy is globally available in all of the players buildings. This parameter controls, if fuel is globally available too (only in BI resource mode).
+
+Possible values:
+x = 0 : fuel is NOT globally available, but must be exchanged with pipelines or units
+x = 1 : fuel is globally available
+
+##0817
+This parameter is the upper limit of the experience a unit may gain through training centers.
+
+Possible values: 0 <= x <= 23
+
+##0818
+When starting a map, this parameter controls the visibility of the maps portions that your units haven't seen yet.
+
+Possible values:
+x = 0 : the map is completely invisible and must be explored first
+x = 1 : the map is covered with fog of war, so you can see the terrain, but no units
+x = 2 : the whole map is visible, with all units, satellites, mines and subs and will stay so for the remaining game.
 

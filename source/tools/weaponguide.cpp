@@ -522,10 +522,7 @@ int main(int argc, char *argv[] )
             for ( int w = 0; w < ft->weapons.count ; w++) {
                fprintf ( detailed3, "<TR><td>#%d</td>", w+1 );
                for ( i = 0; i < cmovemalitypenum; i++ )
-                  if ( !(ft->weapons.weapon[w].targets_not_hittable & ( 1 << i )) )
-                     fprintf ( detailed3, "<td><img src=\"../hacken.gif\"></td>" );
-                  else
-                     fprintf ( detailed3, "<td></td>" );
+                  fprintf ( detailed3, "<td>%d %%</td>", ft->weapons.weapon[w].targetingAccuracy[i] );
                fprintf ( detailed3, "</TR>\n");
             }
             //Ende tabelle

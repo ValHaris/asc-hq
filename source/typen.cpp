@@ -1,6 +1,12 @@
-//     $Id: typen.cpp,v 1.82 2001-10-02 14:06:29 mbickel Exp $
+//     $Id: typen.cpp,v 1.83 2001-10-03 20:56:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.82  2001/10/02 14:06:29  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.81  2001/09/13 17:43:12  mbickel
 //      Many, many bug fixes
 //
@@ -459,26 +465,6 @@ const int directionangle [ sidenum ] =
 const int resourceWeight[ resourceTypeNum ] = { 0, 4, 12 };
 
 
-const int gameparameterdefault [ gameparameternum ] = { 1, 2, 0, 100, 100, 1, 0, 0, 1, 0, 0, 0, 0, 100, 100, 100, 1, maxunitexperience, 0 };
-const char* gameparametername[ gameparameternum ] = { "lifetime of tracks", 
-                                                      "freezing time of broken ice cover ( icebreaker )",
-                                                      "move vehicles from unaccessible fields",
-                                                      "building construction material factor (percent)",
-                                                      "building construction fuel factor (percent)",
-                                                      "forbid construction of buildings",
-                                                      "forbid units to build units",
-                                                      "use BI3 style training factor ",
-                                                      "maximum number of mines on a single field",
-                                                      "lifetime of antipersonnel mine",
-                                                      "lifetime of antitank mine",
-                                                      "lifetime of moored mine",
-                                                      "lifetime of floating mine",
-                                                      "building armor factor (percent)", 
-                                                      "max building damage repair / turn",
-                                                      "building repair cost increase (percent)",
-                                                      "fuel globally available (BI resource mode)",
-                                                      "maximum experience that can be gained by training",
-                                                      "initial map visibility"};
 
 
 const int csolarkraftwerkleistung[cwettertypennum] = { 1024, 512, 256, 756, 384 }; // 1024 ist Maximum
