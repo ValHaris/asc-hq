@@ -35,19 +35,19 @@
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="tlink32"/>
-    <USERDEFINES value="HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32"/>
+    <USERDEFINES value="HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="asc.bpf"/>
-    <INCLUDEPATH value="..\..\..\source;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="..\..\..\source;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\..;..\..\..\source;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..\..;..\..\..\source;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par -w-8027 -w-8026 -w-csu"/>
   </MACROS>
   <OPTIONS>
-    <CFLAG1 value="-O2 -Q -Vx -Ve -X- -a1 -5 -b -k- -vi -tW -tWM -c -K"/>
-    <PFLAGS value="-N2obj -N0obj -$Y- -$L- -$D- -v -JPHNE -M"/>
+    <CFLAG1 value="-Od -Q -Vx -Ve -X- -r- -a1 -5 -b -k -y -v -vi- -tW -tWM -c -K"/>
+    <PFLAGS value="-N2obj -N0obj -$Y+ -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-Iobj -D&quot;&quot; -aa -Tpe -GD -s -Gn -M"/>
+    <LFLAGS value="-Iobj -D&quot;&quot; -aa -Tpe -GD -s -Gn -M -v"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0w32.obj $(OBJFILES)"/>
@@ -84,9 +84,9 @@ Comments=
 
 [HistoryLists\hlIncludePath]
 Count=14
-Item0=..\..;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
-Item1=..\..\..\source;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
-Item2=..\..;..\..\..\source;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
+Item0=..\..;..\..\..\source;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
+Item1=..\..;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
+Item2=..\..\..\source;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
 Item3=..\..;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\..\source;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
 Item4=..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ASCSRC\GAMES\ASC\SOURCE\LIBS\getopt
 Item5=..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
@@ -101,9 +101,9 @@ Item13=..\..;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=11
-Item0=..\..;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
-Item1=..\..\..\source;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
-Item2=..\..;..\..\..\source;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
+Item0=..\..;..\..\..\source;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\..;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..\..\..\source;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
 Item3=..\..;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
 Item4=..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
 Item5=..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
@@ -119,8 +119,8 @@ Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
 Count=3
-Item0=HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32
-Item1=HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32;_DEBUG
+Item0=HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32;_DEBUG
+Item1=HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32
 Item2=_DEBUG
 
 [HistoryLists\hlIntOutputDir]

@@ -7,9 +7,15 @@
 */
 
 
-//     $Id: network.cpp,v 1.18 2001-02-26 12:35:24 mbickel Exp $
+//     $Id: network.cpp,v 1.19 2001-07-09 17:38:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2001/02/26 12:35:24  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.17  2001/02/18 15:37:16  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -175,8 +181,18 @@ void tfiletransfernetworkconnection::tsetup::init ( void )
       addbutton ( "~O~k", 10, ysize - 40, xsize - 10, ysize - 10, 0, 1, 3 , true);
       addkey ( 3, ct_enter );
    }
-   if ( !filename[0] )
-      strcpy ( filename, "turnier%");
+   if ( !filename[0] ) {
+      ASCString fn = actmap->preferredFileNames.mapname[0];
+      if ( fn.find ( "." ) != ASCString::npos )
+         fn.erase ( fn.find ( "." ) );
+
+      fn += "-";
+      char buf = 'A'+actmap->actplayer;
+      fn += buf;
+      fn += "-%";
+      strcpy ( filename, fn.c_str() );
+      //strcpy ( filename, "turnier%");
+   }
 
    buildgraphics();
 }
@@ -305,7 +321,7 @@ void  tfiletransfernetworkconnection::mountfilename ( char* newname, char* oldna
       newname[p] = 0;
       char temp[10];
       itoa ( actmap->time.a.turn, temp, 10 );
-      while ( strlen ( temp ) + strlen ( newname ) > 8 ) {
+      while ( strlen ( temp ) + strlen ( newname ) > maxfilenamelength ) {
          p--;
          newname[p] = 0;
       }
@@ -319,7 +335,7 @@ void  tfiletransfernetworkconnection::mountfilename ( char* newname, char* oldna
             newname[p] = 0;
          }
       } else {
-         while ( strlen ( newname ) > 12 ) {
+         while ( strlen ( newname ) > maxfilenamelength ) {
             p--;
             newname[p] = 0;
          }
