@@ -3,11 +3,6 @@
 #include <functional>
 #include <algorithm>
 
-
-#ifdef _UNIX_
- #include <heap>
-#endif
- 
 #include "vehicletype.h"
 #include "spfst.h"
 #include "controls.h"

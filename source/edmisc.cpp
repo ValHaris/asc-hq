@@ -1,6 +1,10 @@
-//     $Id: edmisc.cpp,v 1.32 2000-10-11 15:33:43 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.33 2000-10-14 15:31:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/10/11 15:33:43  mbickel
+//      Adjusted small editors to the new ASC structure
+//      Watcom compatibility
+//
 //     Revision 1.31  2000/10/11 14:26:31  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -1922,13 +1926,14 @@ void         tnewmap::run(void)
          if ( sysize & 1 ) {
             displaymessage("YSize must be even !",1 ); 
             action = 0; 
-         } 
+         }
+         #ifdef UseMemAvail
          if (action != 4) 
             if ( sxsize * sysize * sizeof( tfield ) > memavail() ) {
-
-               displaymessage("Not enough memory for map.\nGenerate smaller map or free more memory",1); 
+               displaymessage("Not enough memory for map.\nGenerate smaller map or free more memory",1);
                action = 0; 
-            } 
+            }
+         #endif
       } 
    }  while (!((taste == ct_esc) || (action >= 2))); 
    if (action == 3) { 

@@ -1,6 +1,9 @@
-//     $Id: basestrm.h,v 1.29 2000-10-14 10:52:44 mbickel Exp $
+//     $Id: basestrm.h,v 1.30 2000-10-14 15:31:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/10/14 10:52:44  mbickel
+//      Some adjustments for a Win32 port
+//
 //     Revision 1.28  2000/10/12 22:24:00  mbickel
 //      Made the DOS part of the new platform system work again
 //
@@ -163,6 +166,7 @@
 #include <time.h>
 
 #include "global.h"
+#include "basestreaminterface.h"
 #include "lzw.h"
 #include "errors.h"
 #include "tpascal.inc"
@@ -308,39 +312,6 @@ class dynamic_initialized_array : public dynamic_array<T> {
 ////////////        Streams
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-typedef class tnstream* pnstream;
-
-class tnstream {
-        public:
-           virtual void writedata ( const void* buf, int size ) = 0 ;
-           virtual int  readdata  ( void* buf, int size, int excpt = 1 ) = 0 ;
-
-           virtual void readpchar( char** pc, int maxlength = 0) ;
-           virtual void readpnchar( char** pc, int maxlength = 0) ;
-           virtual int readTextString ( std::string& s ); // return 0 if end of file is reached
-           virtual void writepchar( const char* pc) ;
-
-           virtual int  readInt  ( void );
-           virtual word readWord ( void );
-           virtual char readChar ( void );
-
-           virtual void writeInt  ( int  i );
-           virtual void writeWord ( word w );
-           virtual void writeChar ( char c );
-
-           virtual void writerlepict ( const void* pnter );
-           virtual void readrlepict( void** pnter, int allocated, int* size);
-           virtual ~tnstream() {};
-           virtual const char* getDeviceName ( void );
-           virtual void seek ( int newpos );
-           tnstream ( );
-         protected:
-           std::string devicename; // will just contain "abstract" 
-
-};
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class MemoryStreamCopy : public tnstream {
                void* buf;
