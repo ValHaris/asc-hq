@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.73 2001-11-05 21:10:42 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.74 2001-11-05 21:31:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.73  2001/11/05 21:10:42  mbickel
+//      Updated palette code
+//
 //     Revision 1.72  2001/10/31 18:34:33  mbickel
 //      Some adjustments and fixes for gcc 3.0.2
 //
@@ -1103,7 +1106,7 @@ void checkDataVersion( )
       } else
          dataVersion = 0;
 
-      if ( dataVersion < 6 || dataVersion > 0xffff )
+      if ( dataVersion < 7 || dataVersion > 0xffff )
          fatalError("A newer version of the data files is required. \n"
                     "You can get a new data package at http://www.asc-hq.org", 2 );
 }
