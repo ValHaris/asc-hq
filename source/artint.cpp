@@ -2,9 +2,12 @@
     \brief The artificial intelligence of ASC. 
 */
 
-//     $Id: artint.cpp,v 1.64 2001-03-02 11:51:40 mbickel Exp $
+//     $Id: artint.cpp,v 1.65 2001-03-02 13:24:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.64  2001/03/02 11:51:40  mbickel
+//      Fixed infinite loop in AI::buildingcapture search
+//
 //     Revision 1.63  2001/03/01 21:24:32  mbickel
 //      Fixed two AI bugs: inconsistent attack value calculation
 //
@@ -2440,6 +2443,8 @@ AI::AiResult AI::tactics( void )
 
    int hemmingBonus = 5;
 
+   int lastTactVehiclesSize = tactVehicles.size();
+
    while ( !tactVehicles.empty() ) {
 
       typedef map<int, MoveVariantContainer> Targets;
@@ -2627,6 +2632,11 @@ AI::AiResult AI::tactics( void )
          // no attacks are possible
          tactVehicles.clear();
       }
+      if ( lastTactVehiclesSize == tactVehicles.size() ) {
+         displaymessage ("AI :: tactics ; escaping infinite loop; please report this error !",1 );
+         return result;
+      }
+
    }
 
    displaymessage2("tactics completed ... ");
