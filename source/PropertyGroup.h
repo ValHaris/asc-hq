@@ -21,7 +21,9 @@
 #include "Named.h"
 
 #include <list>
-#include <istream>
+#ifdef __WATCOM_CPLUSPLUS__
+ #include <istream>
+#endif
 /**
 * A Class thats holds a Group of Propertys
 *

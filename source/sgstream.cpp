@@ -1,6 +1,9 @@
-//     $Id: sgstream.cpp,v 1.16 2000-07-29 14:54:43 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.17 2000-07-29 15:28:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/07/29 14:54:43  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.15  2000/07/28 10:15:29  mbickel
 //      Fixed broken movement
 //      Fixed graphical artefacts when moving some airplanes
@@ -108,7 +111,7 @@
 #include <stdarg.h>
 
 
-#include "cloadable.h"
+#include "CLoadable.h"
 
 #include "tpascal.inc"
 #include "typen.h"

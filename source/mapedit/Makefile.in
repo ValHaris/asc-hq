@@ -70,7 +70,7 @@ CXXFLAGS = @CXXFLAGS@ -Dkarteneditor -I./ -DHEXAGON -DFREEMAPZOOM -funsigned-cha
 
 bin_PROGRAMS = mapedit
 
-mapedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp edselfnt.cpp edmisc.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp loadjpg.cpp loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp attack.cpp
+mapedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp edselfnt.cpp edmisc.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp loadjpg.cpp loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp Named.cpp
 mapedit_LDADD = ../sdl/libsdl.a ../libs/triangul/libtriangul.a -lSDL -lpthread -lbz2
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
@@ -85,7 +85,8 @@ LIBS = @LIBS@
 mapedit_OBJECTS =  edevents.o edgen.o edglobal.o edmain.o edselfnt.o \
 edmisc.o weather.o typen.o strtmesg.o stack.o spfst.o sgstream.o pd.o \
 palette.o newfont.o misc.o loadpcxc.o loadjpg.o loaders.o loadbi3.o \
-dlg_box.o dialog.o basestrm.o basegfx.o attack.o
+dlg_box.o dialog.o basestrm.o basegfx.o attack.o CLoadable.o Property.o \
+PropertyGroup.o gameoptions.o Named.o
 mapedit_DEPENDENCIES =  ../sdl/libsdl.a ../libs/triangul/libtriangul.a
 mapedit_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -98,13 +99,14 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/attack.P .deps/basegfx.P .deps/basestrm.P \
+DEP_FILES =  .deps/CLoadable.P .deps/Named.P .deps/Property.P \
+.deps/PropertyGroup.P .deps/attack.P .deps/basegfx.P .deps/basestrm.P \
 .deps/dialog.P .deps/dlg_box.P .deps/edevents.P .deps/edgen.P \
 .deps/edglobal.P .deps/edmain.P .deps/edmisc.P .deps/edselfnt.P \
-.deps/loadbi3.P .deps/loaders.P .deps/loadjpg.P .deps/loadpcxc.P \
-.deps/misc.P .deps/newfont.P .deps/palette.P .deps/pd.P \
-.deps/sgstream.P .deps/spfst.P .deps/stack.P .deps/strtmesg.P \
-.deps/typen.P .deps/weather.P
+.deps/gameoptions.P .deps/loadbi3.P .deps/loaders.P .deps/loadjpg.P \
+.deps/loadpcxc.P .deps/misc.P .deps/newfont.P .deps/palette.P \
+.deps/pd.P .deps/sgstream.P .deps/spfst.P .deps/stack.P \
+.deps/strtmesg.P .deps/typen.P .deps/weather.P
 SOURCES = $(mapedit_SOURCES)
 OBJECTS = $(mapedit_OBJECTS)
 
