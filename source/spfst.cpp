@@ -2,9 +2,13 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.111 2002-10-09 16:58:46 mbickel Exp $
+//     $Id: spfst.cpp,v 1.112 2002-11-01 14:06:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.111  2002/10/09 16:58:46  mbickel
+//      Fixed to GrafikSet loading
+//      New item filter for mapeditor
+//
 //     Revision 1.110  2002/09/19 20:20:05  mbickel
 //      Cleanup and various bug fixes
 //
@@ -298,13 +302,13 @@ int          terrainaccessible2 ( const pfield        field, const pvehicle     
       return 2;
    else {
         if ( uheight == chtiefgetaucht ) 
-           if ( (field->typ->art & getTerrainBitType(cbwater3) ).any() )
-              return 2; 
+           if ( (field->bdt & getTerrainBitType(cbwater3) ).any() )
+              return 2;
            else
               return -1;
         else
-           if ( uheight == chgetaucht ) 
-              if ( (field->typ->art & ( getTerrainBitType(cbwater3) | getTerrainBitType(cbwater2 )) ).any() )
+           if ( uheight == chgetaucht )
+              if ( (field->bdt & ( getTerrainBitType(cbwater3) | getTerrainBitType(cbwater2 )) ).any() )
                  return 2; 
               else
                  return -2;

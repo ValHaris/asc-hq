@@ -8,3 +8,8 @@ Lenlin Grinson, Thunderlance Briefing Officer
 
 Objectives:
 Capture Imperium buildings
+
+##1112
+Thunderlance HQ, Relnid:
+
+We've found quite a lot of ammo in the depot. If our units run out of ammo, we can reequip them there.

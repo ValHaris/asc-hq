@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.90 2002-10-27 22:19:44 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.91 2002-11-01 14:06:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.90  2002/10/27 22:19:44  mbickel
+//      Added bridge terrain property
+//      Some restructuring of the graphic set code
+//
 //     Revision 1.89  2002/10/01 09:23:42  mbickel
 //      Fixed many bugs
 //      Added inheritance to text files
@@ -1441,11 +1445,15 @@ int ChangeVehicleHeight :: verticalHeightChangeMoveCost ( pvehicle vehicle, cons
 
       int md;
 
-      if ( newheight > oldheight )
-         md = sub_heightincmovedecrease;
-      else
-         md = sub_heightdecmovedecrease;
-
+      if ( (newheight == chfahrend && oldheight == chschwimmend) || (newheight == chschwimmend && oldheight == chfahrend )) {
+         md = 0;
+      } else {
+         if ( newheight > oldheight )
+            md = sub_heightincmovedecrease;
+         else
+            md = sub_heightdecmovedecrease;
+      }
+      
       int res = terrainaccessible2 ( fld, vehicle, newheight );
       if ( res <= 0 ) {
          if ( newheight > vehicle->height )

@@ -101,7 +101,6 @@ int main(int argc, char *argv[] )
       fprintf ( overview1 , "<html>\n"
                 "<HEAD>\n"
                 "<TITLE>WEAPONGUIDE OVERVIEW PICTURES</TITLE>\n"
-                "<base target=\"base\">\n"
                 "<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"../ug.css\">\n"
                 "</HEAD>\n"
                 "\n"
