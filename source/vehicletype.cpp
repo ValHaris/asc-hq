@@ -877,6 +877,9 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
         pc.openBracket ( ASCString("Weapon")+strrr(i) );
         weapons.weapon[i].runTextIO( pc );
         pc.closeBracket();
+        if ( functions & cfno_reactionfire )
+           weapons.weapon[i].reactionFireShots = 0;
+
     }
 
    pc.closeBracket();
@@ -1097,7 +1100,7 @@ Resources Vehicletype :: calcProductionsCost()
 		// Zuschlag für Eisbrecher
 		if ( functions & cficebreaker ) {
 			typecoste += armor *2;
-			typecostm += armor *2;  
+			typecostm += armor *2;
 		}
 		// Zuschlag für U-Boote / Druckhülle
 		if ( height & chgetaucht ) {
@@ -1122,8 +1125,8 @@ Resources Vehicletype :: calcProductionsCost()
 			// Zuschlag für Flugzeugträger / Start- und Landeeinrichtungen
 			for ( int T=0; T < entranceSystems.size(); ++T ) {
 				if ( entranceSystems[T].container_height == chfahrend && entranceSystems[T].height_abs == chtieffliegend && maxLoadableUnits > 2 ) {
-					typecoste += maxLoadableUnits*1000;
-					typecostm += maxLoadableUnits*1000;
+					typecoste += maxLoadableUnits*80;
+					typecostm += maxLoadableUnits*800;
 				}
 			}
 		}
@@ -1133,7 +1136,7 @@ Resources Vehicletype :: calcProductionsCost()
 				movecostsize = movement[M];
 			}
 		}
-		// Zuschlag für Triebwerke 
+		// Zuschlag für Triebwerke
 		if (movecostsize > 70 ) {
 			typecoste += (movecostsize-70)*30;
 			typecostm += (movecostsize-70)*15;
@@ -1156,8 +1159,8 @@ Resources Vehicletype :: calcProductionsCost()
 		}
 
 
-		
-// Part IV - weaponcost		
+
+// Part IV - weaponcost
 		if ( weapons.count > 0 ) {
 			for ( int W=0; W < weapons.count; ++W ) {
 				if (weapons.weapon[W].getScalarWeaponType() == cwmachinegunn && weapons.weapon[W].shootable() ) {
@@ -1225,7 +1228,7 @@ Resources Vehicletype :: calcProductionsCost()
 				weaponcostm += (rangecostsize-90)*100;
 			}
 		}
-		
+
 // Part V Specialcost
 		// stealth (typecost) oder jamming (specialcost)
 
@@ -1241,19 +1244,19 @@ Resources Vehicletype :: calcProductionsCost()
 			specialcoste += jamming*170;
 			specialcostm += jamming*150;
 		}
-		
+
 		// Baufunktionen
 		if ( (functions & cfputbuilding) || (functions & cfspecificbuildingconstruction ) ) {
 			specialcoste += 1000;
-			specialcostm += 500;  
+			specialcostm += 500;
 		}
 		if ( functions & cfvehicleconstruction ) {
 			specialcoste += 1000;
-			specialcostm += 500;  
+			specialcostm += 500;
 		}
 		if ( objectsBuildable.size() > 0 || objectGroupsBuildable.size() > 0 ) {
 			specialcoste += 1000;
-			specialcostm += 500;  
+			specialcostm += 500;
 		}
       // Res Search
 		if ( (functions & cfmanualdigger) || (functions & cfautodigger) ) {
@@ -1277,17 +1280,17 @@ Resources Vehicletype :: calcProductionsCost()
 		}
 		// Selbstreparatur / Heilung
 		if ( functions & cfautorepair ) {
-			specialcoste += autorepairrate*50;
-			specialcostm += autorepairrate*50;
+			specialcoste += autorepairrate*armor / 15;
+			specialcostm += autorepairrate*armor / 15;
 		}
 		// Radar
 		if ( view > 40 ) {
 			specialcoste += (view-40)*50;
 			specialcostm += (view-40)*20;
 		}
-		if (view > 100 ) {
-			specialcoste += (view-100)*100;
-			specialcostm += (view-100)*100;
+		if (view > 90 ) {
+			specialcoste += (view-90)*100;
+			specialcostm += (view-90)*100;
 		}
       // Satview
 		if ( functions & cfsatellitenview ) {
@@ -1306,8 +1309,12 @@ Resources Vehicletype :: calcProductionsCost()
 		}
 		//Move during reaction fire
 		if ( functions & cfmovewithRF ) {
-			specialcoste += weapons.count * 100;
-			specialcostm += weapons.count * 50;
+         int rfweapcount = 0;
+         for ( int i = 0; i < weapons.count; ++i )
+            rfweapcount += weapons.weapon[i].reactionFireShots;
+
+			specialcoste += rfweapcount * 100;
+			specialcostm += rfweapcount * 50;
 		}
 
 		//move after attack
@@ -1326,7 +1333,7 @@ Resources Vehicletype :: calcProductionsCost()
 			res.energy -= typecoste/6;
 			res.material -= typecostm/6;
 		}
-		
+
 		// Kamikazeeinheiten
 		if (functions & cfkamikaze) {
 			res.energy -= (typecoste+weaponcoste)/2;
@@ -1335,10 +1342,17 @@ Resources Vehicletype :: calcProductionsCost()
 
 		// low movement
 		if (movecostsize < 20 ) {
-			res.energy -= typecoste/4;
-			res.material -= typecostm/5;
+			res.energy -= typecoste/5;
+			res.material -= typecostm/6;
 		}
-		
+
+		// low movement
+		if (movecostsize < 10 ) {
+			res.energy -= typecoste/5;
+			res.material -= typecostm/6;
+		}
+
+
 // Part VIII Abschluss
 
 	return res;

@@ -385,6 +385,8 @@ int  readInt  ( void )
 
 int main(int argc, char *argv[] )
 {
+   assert( sizeof(int) == 4 ); 
+
    int i = 0;      /* loop var */
    Cmdline cl ( argc, argv );
 
