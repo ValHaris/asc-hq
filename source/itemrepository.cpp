@@ -25,6 +25,7 @@
 #include "textfileparser.h"
 #include "sgstream.h"
 #include "textfile_evaluation.h"
+#include "research.h"
 
 #ifndef converter
 #  include "dialog.h"
