@@ -82,7 +82,7 @@ BuildingType :: BuildingType ( void )
 
 
 
-void*   BuildingType :: getpicture ( const LocalCoordinate& localCoordinate )
+void*   BuildingType :: getpicture ( const LocalCoordinate& localCoordinate ) const
 {
    return w_picture[0][0][localCoordinate.x][localCoordinate.y];
 }
@@ -107,7 +107,7 @@ MapCoordinate  BuildingType :: getFieldCoordinate ( const MapCoordinate& entryPo
 }
 
 
-const int building_version = 7;
+const int building_version = 8;
 
 #ifndef converter
 extern void* generate_building_gui_build_icon ( pbuildingtype bld );
@@ -227,6 +227,9 @@ void BuildingType :: read ( tnstream& stream )
          defaultMaxResearchpoints = stream.readInt();
       }
 
+      if ( version >= 8 )
+         infotext = stream.readString();
+
 
 
      #ifdef converter
@@ -326,6 +329,8 @@ void BuildingType :: write ( tnstream& stream ) const
 
     techDependency.write ( stream );
     stream.writeInt( defaultMaxResearchpoints );
+
+    stream.writeString ( infotext );
 }
 
 
@@ -359,7 +364,6 @@ BuildingType :: LocalCoordinate :: LocalCoordinate ( const ASCString& s )
 void BuildingType :: runTextIO ( PropertyContainer& pc )
 {
    try {
-      pc.addString( "Name", name );
       pc.addInteger ( "ConstructionStages", construction_steps );
 
       BitSet weatherBits;
@@ -503,13 +507,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
          entry = LocalCoordinate ( st.getNextToken() );
       }
 
-      pc.addInteger( "ID", id );
       pc.addInteger( "Armor", _armor );
-      pc.addInteger( "View", view );
-      if ( view > 255 )
-         view = 255;
-
-      pc.addInteger( "Jaming", jamming );
 
       pc.addTagInteger ( "Functions", special, cbuildingfunctionnum, buildingFunctionTags );
 

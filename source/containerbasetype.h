@@ -24,7 +24,22 @@
 class ContainerBaseType: public LoadableItemType {
    public:
      ContainerBaseType ();
-     
+
+     int id;
+
+     //! a short name, for example B-52
+     ASCString    name;
+
+     //! an extensive information about the unit/building which may be several paragraphs long
+     ASCString    infotext;
+
+     //! the radar jamming power
+     int          jamming;
+
+     //! the visibility range
+     int          view;
+
+
      Resources productionCost;
      virtual ~ContainerBaseType() {};
 

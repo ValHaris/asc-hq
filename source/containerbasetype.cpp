@@ -28,6 +28,9 @@ ContainerBaseType :: ContainerBaseType ()
    maxLoadableUnitSize = 0;
    maxLoadableWeight = maxint;
    vehicleCategoriesStorable = -1;
+   id = 0;
+   jamming = 0;
+   view = 0;
 }
 
 ContainerBaseType::TransportationIO::TransportationIO()
@@ -64,23 +67,44 @@ void ContainerBaseType :: TransportationIO :: runTextIO ( PropertyContainer& pc 
 
 void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
 {
-  pc.openBracket ( "Transportation" );
-   int num = entranceSystems.size();
-   pc.addInteger ( "EntranceSystemNum", num, 0 );
-   entranceSystems.resize(num);
-   for ( int i = 0; i < num; i++ ) {
-      pc.openBracket ( ASCString("EntranceSystem") + strrr(i) );
-      entranceSystems[i].runTextIO( pc );
-      pc.closeBracket();
-   }
-   pc.addInteger ( "MaxLoadableUnits", maxLoadableUnits, 0 );
-   if ( maxLoadableUnits > 18 )
-      maxLoadableUnits = 18;
+   pc.openBracket ( "Transportation" );
+    int num = entranceSystems.size();
+    pc.addInteger ( "EntranceSystemNum", num, 0 );
+    entranceSystems.resize(num);
+    for ( int i = 0; i < num; i++ ) {
+       pc.openBracket ( ASCString("EntranceSystem") + strrr(i) );
+       entranceSystems[i].runTextIO( pc );
+       pc.closeBracket();
+    }
+    pc.addInteger ( "MaxLoadableUnits", maxLoadableUnits, 0 );
+    if ( maxLoadableUnits > 18 )
+       maxLoadableUnits = 18;
 
-   pc.addInteger ( "MaxLoadableUnitSize", maxLoadableUnitSize, maxint );
-   pc.addInteger ( "MaxLoadableMass", maxLoadableWeight, maxint );
-   pc.addTagInteger( "CategoriesNOT", vehicleCategoriesStorable, cmovemalitypenum, unitCategoryTags, -1, true );
-  pc.closeBracket(); 
+    pc.addInteger ( "MaxLoadableUnitSize", maxLoadableUnitSize, maxint );
+    pc.addInteger ( "MaxLoadableMass", maxLoadableWeight, maxint );
+    pc.addTagInteger( "CategoriesNOT", vehicleCategoriesStorable, cmovemalitypenum, unitCategoryTags, -1, true );
+   pc.closeBracket();
+
+   pc.addString( "Name", name );
+
+   ASCString it = infotext;
+
+   while ( it.find ( "\n" ) != ASCString::npos )
+      it.replace ( it.find ( "\n" ), 1, "#crt#" );
+   while ( it.find ( "\r" ) != ASCString::npos )
+      it.replace ( it.find ( "\r" ), 1, "" );
+
+   pc.addString( "Infotext", it, "" );
+
+   if ( pc.isReading() )
+      infotext = it;
+
+   pc.addInteger( "ID", id );
+   pc.addInteger( "View", view );
+   if ( view > 255 )
+      view = 255;
+
+   pc.addInteger( "Jamming", jamming, 0 );
 }
 
 

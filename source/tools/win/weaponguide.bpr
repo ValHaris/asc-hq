@@ -4,7 +4,8 @@
   <MACROS>
     <VERSION value="BCB.06.00"/>
     <PROJECT value="weaponguide.exe"/>
-    <OBJFILES value="..\weaponguide.obj ..\..\itemrepository.obj ..\..\research.obj"/>
+    <OBJFILES value="obj\weaponguide.obj obj\itemrepository.obj obj\research.obj 
+      obj\groupfile.obj obj\guidegenerator.obj obj\infopage.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -25,15 +26,17 @@
     <MAINSOURCE value="weaponguide.bpf"/>
     <INCLUDEPATH value="..\;..;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include;..\..\libs\libsigc++"/>
     <LIBPATH value="..\;..;..\..;$(BCB)\lib\obj;$(BCB)\lib"/>
-    <WARNINGS value="-w-par"/>
+    <WARNINGS value="-w-pck -w-par"/>
     <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
     <CFLAG1 value="-Od -Q -Vx -Ve -X- -r- -a1 -b -k -y -v -vi- -tWC -tWM -c -K"/>
-    <PFLAGS value="-$YD -$W -$O- -$A8 -v -JPHNE -M"/>
+    <PFLAGS value="-N2C:\Programme\ascdev\asc\source\tools\win\obj 
+      -N0C:\Programme\ascdev\asc\source\tools\win\obj -$YD -$W -$O- -$A8 -v 
+      -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zi"/>
-    <LFLAGS value="-D&quot;&quot; -ap -Tpe -x -Gn -v"/>
+    <LFLAGS value="-IC:\Programme\ascdev\asc\source\tools\win\obj -D&quot;&quot; -ap -Tpe -x -Gn -v"/>
     <OTHERFILES value=""/>
   </OPTIONS>
   <LINKER>
@@ -52,6 +55,9 @@
       <FILE FILENAME="..\..\..\..\SDL_image\bin\SDL_image.lib" FORMNAME="" UNITNAME="SDL_image" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\libs\sdlmm\SDLmm.lib" FORMNAME="" UNITNAME="SDLmm" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\research.cpp" FORMNAME="" UNITNAME="research" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\groupfile.cpp" FORMNAME="" UNITNAME="groupfile.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\guidegenerator.cpp" FORMNAME="" UNITNAME="guidegenerator.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\infopage.cpp" FORMNAME="" UNITNAME="infopage.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
@@ -123,14 +129,15 @@ Item2=_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_
 Item3=_DEBUG
 
 [HistoryLists\hlIntOutputDir]
-Count=1
-Item0=C:\Programme\ascsrc\games\asc\source\tools\win
+Count=2
+Item0=C:\Programme\ascdev\asc\source\tools\win\obj
+Item1=C:\Programme\ascsrc\games\asc\source\tools\win
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=-c C:\Programme\ascdev\asc\source\win32\borland\asc.ini  -i -d C:\wg-test\online\html -l html/ -z 48 -s 100
+RunParams=-c C:\Programme\ascdev\asc\source\win32\borland\asc.ini  -i -d C:\wg-test\online\html -l html/ -z 48 -s 100 
 Launcher=
 UseLauncher=0
 DebugCWD=

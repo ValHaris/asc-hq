@@ -114,7 +114,7 @@ extern const char*  cvehiclefunctions[];
      void         set ( int type );  // will be enhanced later ...
      int          gettype ( void ) const { return typ; };
      bool         offensive( void ) const;
-     ASCString    getName ( void );
+     ASCString    getName ( void ) const;
      void         runTextIO ( PropertyContainer& pc );
  };
 
@@ -130,14 +130,8 @@ extern const char*  cvehiclefunctions[];
  //! The class describing properties that are common to all vehicles of a certain kind. \sa Vehicle
  class Vehicletype : public ContainerBaseType {
     public:
-        //! name of the unit, for example "B-52"
-        ASCString    name;
-
         //! short description of the units role, for example "strategic bomber"
         ASCString    description;
-
-        //! an extensive information about the unit which may be several paragraphs long
-        ASCString    infotext;
 
         const ASCString&    getName() const;
 
@@ -155,17 +149,8 @@ extern const char*  cvehiclefunctions[];
         // if the unit can change the level of height, this is the number of fields the unit must move to go from one level to the next
         // int          steigung;
 
-        //! the radar jamming power
-        int          jamming;
-
-        //! the visibility range
-        int          view;
-
         //! If the unit cannot attack in the same turn after it has moved, it has to wait
         bool         wait;
-
-        //! the identification number of the unit
-        int          id;
 
         //! the resource storage capacity
         Resources    tank;

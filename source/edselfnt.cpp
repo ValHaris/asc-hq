@@ -2,9 +2,12 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.45 2004-05-12 20:05:52 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.46 2004-07-22 20:14:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2004/05/12 20:05:52  mbickel
+//      Restructured file loading routines for upcoming data cache
+//
 //     Revision 1.44  2003/04/23 18:31:10  mbickel
 //      Fixed: AI problems
 //      Improved cheating detection in replay
@@ -1580,7 +1583,9 @@ class SelectVehicleTypeForBuildingProduction : public SelectCargoVehicleType {
             for ( int i = 0; i < 32; i++ )
                if ( building->production[i] == item )
                   return 0;
-            return building->typ->vehicleFit ( item ) && SelectVehicleType::isavailable ( item );
+            return building->typ->vehicleFit ( item )
+                   && SelectVehicleType::isavailable ( item )
+                   &&  ( building->vehicleUnloadable(item) || (building->typ->special & cgproduceAllUnitsB ));
          };
      };
 

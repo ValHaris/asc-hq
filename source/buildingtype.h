@@ -87,8 +87,6 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
               ASCString toString ( ) const;
         };
 
-        ASCString    name;
-
         void*        w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
         int          bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
 
@@ -97,16 +95,11 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
 
         LocalCoordinate entry;
 
-        int          id;
-
         /** the armor of the buildingtype.
             This does not necessarily be equal to the armor of a specific building during the
             game, since the map may modify the armor of buildings with a map parameter.
             Use Building::getArmor() to query the effective armor. */
         int          _armor;
-
-        int          jamming;
-        int          view;
 
         //! bitmapped: functions the building can perfom. see #cbuildingfunctions
         int          special;
@@ -157,7 +150,7 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
         //! bitmapped: units on these levels of height may be refuelled when standing next to the buildings entry
         int          externalloadheight;
 
-        void*        getpicture ( const LocalCoordinate& localCoordinate );
+        void*        getpicture ( const LocalCoordinate& localCoordinate ) const;
 
         BuildingType ( void );
 

@@ -261,6 +261,7 @@ bool TechAdapterDependency::available( const Research& research ) const
    return true;
 }
 
+
 TechAdapter :: TechAdapter() {}
 
 void TechAdapterDependency::read ( tnstream& stream )

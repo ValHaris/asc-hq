@@ -77,10 +77,7 @@ Vehicletype :: Vehicletype ( void )
       picture[i] = NULL;
    height     = 0;
    cargoMovementDivisor = 2;
-   jamming = 0;
-   view = 0;
    wait = 0;
-   id = 0;
    fuelConsumption = 0;
    functions = 0;
 
@@ -768,7 +765,7 @@ void SingleWeapon::set ( int type )
    typ = type;
 }
 
-ASCString SingleWeapon::getName ( void )
+ASCString SingleWeapon::getName ( void ) const
 {
    ASCString s;
 
@@ -792,26 +789,9 @@ UnitWeapon :: UnitWeapon ( void )
 
 void Vehicletype::runTextIO ( PropertyContainer& pc )
 {
-   pc.addString( "Name", name );
-   pc.addInteger( "ID", id );
    pc.addString( "Description", description);
-   ASCString it = infotext;
-
-   while ( it.find ( "\n" ) != ASCString::npos )
-      it.replace ( it.find ( "\n" ), 1, "#crt#" );
-   while ( it.find ( "\r" ) != ASCString::npos )
-      it.replace ( it.find ( "\r" ), 1, "" );
-
-   pc.addString( "Infotext", it );
-
-   if ( pc.isReading() )
-      infotext = it;
 
    pc.addInteger( "Armor", armor );
-   pc.addInteger("View", view );
-
-   if ( view > 255 )
-      view = 255;
 
    ASCString fn;
    if ( filename.empty() ) {
@@ -827,7 +807,6 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.closeBracket ();
 
    pc.addTagInteger( "Height", height, choehenstufennum, heightTags );
-   pc.addInteger("Jamming", jamming );
    pc.addBool ( "WaitFortack", wait );
    pc.openBracket( "Tank" );
      tank.runTextIO ( pc );
