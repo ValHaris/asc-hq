@@ -35,9 +35,11 @@ panel {
           filename = wind_bg.png
           widgetnum = 1
           widget0 {
-            type = SpecialDisplay
+            type = BarGraph
             x = 7
             y = 7
+            width = 51
+            height =  6
             name = winddisplay
           } widget0
         } widget0
