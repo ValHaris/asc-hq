@@ -88,222 +88,882 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=..\source\artint.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\sdl\asc_IMG_jpg.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\source\astar2.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\attack.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\basegfx.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\basestrm.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\libs\bzlib\blocksort.c
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\building.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\libs\bzlib\bzip2.c
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\libs\bzlib\bzlib.c
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\CLoadable.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\libs\bzlib\compress.c
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\libs\triangul\construc.c
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\controls.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\libs\bzlib\crctable.c
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\libs\bzlib\decompress.c
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\dialog.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\dlg_box.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\sdl\events.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\gamedlg.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\gameoptions.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\sdl\graphics.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\gui.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\libs\bzlib\huffman.c
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\loadbi3.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\loaders.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\sdl\loadimage.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\loadjpg.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\loadpcxc.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\misc.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\missions.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\libs\triangul\monotone.c
-# End Source File
-# Begin Source File
 
-SOURCE=..\source\mousecontrol.cpp
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\Named.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\ndir.c
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\network.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\newfont.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\palette.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\pd.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\Property.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\PropertyGroup.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\libs\bzlib\randtable.c
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\sdl\SDLStretch.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\sg.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\sgstream.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\sdl\sound.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\soundList.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\spfst.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\stack.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\strtmesg.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\sdl\timer.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\libs\triangul\tri.c
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\libs\triangul\trimisc.c
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\typen.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\unitctrl.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\source\weather.cpp
+
+!IF  "$(CFG)" == "asc - Win32 Release"
+
+# ADD CPP /I "libs/jpeg"
+
+!ELSEIF  "$(CFG)" == "asc - Win32 Debug"
+
+# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # End Group
 # Begin Group "Header-Dateien"
