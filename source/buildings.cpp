@@ -648,6 +648,12 @@ void Building :: readData ( tnstream& stream, int version )
        for ( int k = 0; k < c; k++) {
           loading[k] = Vehicle::newFromStream ( gamemap, stream );
           loading[k]->setnewposition ( getEntry().x, getEntry().y );
+          if ( loading[k]->color != color ) {
+             ASCString msg;
+             msg.format("warning: the building at position %d / %d , which is owned by player %d, contained units from player %d ", getEntry().x, getEntry().y, color/8, loading[k]->color/8 );
+             warning(msg);
+             loading[k]->convert(getOwner());
+          }
        }
        for ( int l = c; l < 32; l++ )
           loading[l] = NULL;

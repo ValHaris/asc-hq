@@ -921,7 +921,7 @@ bool  Vehicle :: vehicleloadable ( pvehicle vehicle, int uheight ) const
                       return 2;
                  else
                     if (vehicle->height == chtieffliegend)
-                       if (vehicle->typ->steigung <= flugzeugtraegerrunwayverkuerzung)
+                       if (vehicle->typ->steigung <= flugzeugtraegerrunwayverkuerzung && vehicle->attacked == false )
                           return 2;
                        else
                           return 0;

@@ -1,6 +1,6 @@
 USEUNIT("..\..\sg.cpp");
-USEUNIT("..\..\dlg_box.cpp");
 USEUNIT("..\..\attack.cpp");
+USEUNIT("..\..\dlg_box.cpp");
 USEUNIT("..\..\basegfx.cpp");
 USEUNIT("..\..\basestrm.cpp");
 USEUNIT("..\..\building.cpp");
@@ -81,4 +81,5 @@ USELIB("..\..\..\..\Expat\Libs\exp.lib");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 
-WinMain
+
+WinMain
