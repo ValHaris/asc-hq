@@ -1,4 +1,4 @@
-//     $Id: gui.cpp,v 1.33 2000-08-12 09:17:29 gulliver Exp $
+//     $Id: gui.cpp,v 1.34 2000-08-12 15:01:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
 //     Revision 1.32  2000/08/09 12:39:27  mbickel
@@ -347,7 +347,7 @@ int    tguihost::painticons ( void )
 }
 
 
-void   tguihost :: cleanup ( void )    // wird zum entfernen der kleinen guiicons aufgerufen, bevor das icon ausgef?hrt wird
+void   tguihost :: cleanup ( void )    // wird zum entfernen der kleinen guiicons aufgerufen, bevor das icon ausgefhrt wird
 {
    if ( smalliconpos.buf ) {
       setinvisiblemouserectanglestk ( smalliconpos.x, smalliconpos.y, smalliconpos.x + smalliconpos.xsize, smalliconpos.y + guismalliconsizey );
@@ -382,13 +382,12 @@ void   tguihost::paintsmallicons ( int taste, int up )
 
 
 
-      if	(		(CGameOptions::Instance()->mouse.smalliconundermouse == 0)  
-				|| (CGameOptions::Instance()->mouse.smalliconundermouse == 2)
-				&&	up 
-			)
+      if ( (CGameOptions::Instance()->mouse.smalliconundermouse == 0)  || ((CGameOptions::Instance()->mouse.smalliconundermouse == 2) && up ))
          smalliconpos.y = mouseparams.y - 5 - guismalliconsizey;
       else
          smalliconpos.y = mouseparams.y - guismalliconsizey / 2;
+
+
 
       if ( smalliconpos.y < 0 )
          smalliconpos.y = 0;
@@ -1098,10 +1097,10 @@ void tnguiicon::putpict ( void* buf )
 tnguiicon:: ~tnguiicon (  )
 {
    for (int i = 0; i < 8; i++) {
-      if ( picture[i] )
-         delete picture[i];
+      if ( picture[i] );
+         delete[] picture[i];
       if ( picturepressed[i] )
-         delete picturepressed[i];
+         delete[] picturepressed[i];
    } 
    if ( infotext )
       delete[] infotext;
@@ -2313,7 +2312,7 @@ int tnsguiiconcontainer :: available    ( void )
 void tnsguiiconcontainer :: exec         ( void ) 
 {
    containeractive++;
-//   cmousecontrol::getInstance()->reset();
+   mousecontrol->reset();
    pfield fld = getactfield ();
    /*
    if ( fld->vehicle && fld->building )
@@ -2787,8 +2786,7 @@ void tselectweaponguihost :: init ( int resolutionx, int resolutiony )
     if ( !atw ) 
        atw = pendingVehicleActions.attack->attackableObjects.getData( getxpos(), getypos() );
  
-	// ausgeblendet wg. fehlender Implementierung
-	//    getfirsticon()->setup ( atw, 0 );
+    getfirsticon()->setup ( atw, 0 );
     
     x = getxpos();
     y = getypos();
@@ -2821,7 +2819,7 @@ void    tselectweaponguihost ::  checkcoordinates ( void )
 }
 
 
-pnguiicon tselectweaponguihost :: getfirsticon( void )
+pnweapselguiicon tselectweaponguihost :: getfirsticon( void )
 {
    return first_icon;
 }
@@ -2879,7 +2877,7 @@ tnweapselguiicon::tnweapselguiicon ( void )
 }
 
 
-pnguiicon   tnweapselguiicon::nxt( void )
+pnweapselguiicon   tnweapselguiicon::nxt( void )
 {
    return next;
 }
@@ -2888,7 +2886,7 @@ void      tnweapselguiicon::setnxt   ( pnguiicon ts )
    next = (pnweapselguiicon) ts ;
 }
 
-pnguiicon   tnweapselguiicon::frst( void )
+pnweapselguiicon   tnweapselguiicon::frst( void )
 {
    return first;
 }
@@ -3015,8 +3013,6 @@ void  tnweapselguiicon::checkforkey  ( tkey key )
 
    if ( nxt () )
       nxt()->checkforkey( key );
-
-
 }
 
 
@@ -3148,9 +3144,8 @@ void trguiicon_faster :: exec ( void )
    else
       CGameOptions::Instance()->replayspeed = 0;
 
-   CGameOptions::Instance()->setChanged();
-   displaymessage2 (	"delay set to %d / 100 sec", 
-						CGameOptions::Instance()->replayspeed );
+   CGameOptions::Instance()->setChanged ( 1 );
+   displaymessage2 ( "delay set to %d / 100 sec", CGameOptions::Instance()->replayspeed );
    dashboard.x = -1;
 }
 
@@ -3171,9 +3166,8 @@ int trguiicon_slower :: available ( void )
 void trguiicon_slower :: exec ( void )
 {
    CGameOptions::Instance()->replayspeed += 20;
-   CGameOptions::Instance()->setChanged();
-   displaymessage2 (	"delay set to %d / 100 sec", 
-						CGameOptions::Instance()->replayspeed );
+   CGameOptions::Instance()->setChanged ( 1 );
+   displaymessage2 ( "delay set to %d / 100 sec", CGameOptions::Instance()->replayspeed );
    dashboard.x = -1;
 }
 
