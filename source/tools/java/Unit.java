@@ -1,6 +1,9 @@
-//     $Id: Unit.java,v 1.2 2000-10-13 13:15:47 schelli Exp $
+//     $Id: Unit.java,v 1.3 2000-10-14 22:40:02 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/10/13 13:15:47  schelli
+//     *** empty log message ***
+//
 
 /*
  * Unit.java
@@ -509,6 +512,7 @@ public class Unit {   /*  vehicleart: z.B. Schwere Fuátruppe  */
             stream.writeByteArray(buildingBuildableDummy);
         }
 
+        version = vehicle_version;
         return 0;
     }
 

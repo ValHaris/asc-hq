@@ -1,3 +1,20 @@
+Not working components:
+----------------------------------
+
 Weapons Add/Remove - Button
 
 Revert to Saved - Button
+
+
+Missing functions :
+---------------------
+
+Gebäude/Einheiten bauen
+
+Object bauen (-id = entfernen)
+
+TerrainAccess
+
+Bugs :
+-------
+

@@ -1,30 +1,33 @@
-//     $Id: UnitEditor.java,v 1.2 2000-10-13 13:15:47 schelli Exp $
+//     $Id: UnitEditor.java,v 1.3 2000-10-14 22:40:02 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/10/13 13:15:47  schelli
+//     *** empty log message ***
+//
 
 /*
  * UnitEditor.java
  *
- * Created on 23. November 1999, 16:59 
-  
-    This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-2000  Martin Bickel  and  Marc Schellenberger
+ * Created on 23. November 1999, 16:59
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+This file is part of Advanced Strategic Command; http://www.asc-hq.de
+Copyright (C) 1994-2000  Martin Bickel  and  Marc Schellenberger
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
-    Boston, MA  02111-1307  USA
-*/
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; see the file COPYING. If not, write to the
+Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+Boston, MA  02111-1307  USA
+ */
 
 
 public class UnitEditor extends javax.swing.JFrame {
@@ -67,8 +70,10 @@ public class UnitEditor extends javax.swing.JFrame {
     private javax.swing.JCheckBox loadOnHeightTableCheckBox[];
     private javax.swing.JCheckBox loadAbleHeightTableCheckBox[];
     private javax.swing.JCheckBox loadNotHeightTableCheckBox[];
+    private javax.swing.JCheckBox mustCategoryCheckBox[];
     //Functions-Table
     private MakeCheckIntRangeField jIntFieldResourceRadius;
+    private MakeCheckIntRangeField jIntFieldAutoRepairRate;
     private javax.swing.JCheckBox functionSelectCheckBox[];
     //Class-Table
     private String classNames[];
@@ -88,6 +93,7 @@ public class UnitEditor extends javax.swing.JFrame {
     private javax.swing.JCheckBox weaponTypeSelectCheckBox[];
     private javax.swing.JCheckBox weaponAimSelectCheckBox[];
     private javax.swing.JCheckBox weaponSourceSelectCheckBox[];
+    private javax.swing.JCheckBox weaponCanNotHitSelectCheckBox[];
     private MakeCheckIntRangeField jIntFieldMinDistance;
     private MakeCheckIntRangeField jIntFieldMaxDistance;
     private MakeCheckIntRangeField jIntFieldMinDistanceStrength;
@@ -114,11 +120,11 @@ public class UnitEditor extends javax.swing.JFrame {
         String unitAbsoluteFileName = unitPath.concat(unitFileName);
         tUnit = new Unit(unitAbsoluteFileName);
         if (action == 0 ) tUnit.makeNew();
-        else tUnit.load();               
+        else tUnit.load();
 
         errMsg = new ErrorMessage(jLabelErrorMessage);
         //*Int-Field-Settings*
-        
+
         jLabelVersion.setText ("Version "+tUnit.version+".0");
 
         // Main-Panel
@@ -137,6 +143,7 @@ public class UnitEditor extends javax.swing.JFrame {
         jIntFieldView = new MakeCheckIntRangeField(jTextFieldView,errMsg,0,255);
         jIntFieldJamming = new MakeCheckIntRangeField(jTextFieldJamming,
         errMsg,0,255);
+
         // Movement-Panel
         jIntFieldFuelconsumption = new MakeCheckIntRangeField(jTextFieldFuelconsumption,
         errMsg,0,65534);
@@ -146,17 +153,23 @@ public class UnitEditor extends javax.swing.JFrame {
         errMsg,0,255);
         jIntFieldMaxWindspeed = new MakeCheckIntRangeField(jTextFieldMaxWindspeed,
         errMsg,0,255);
+
         // Load-Panel
         jIntFieldMaxLoad = new MakeCheckIntRangeField(jTextFieldMaxLoad,
         errMsg,0,32000);
         jIntFieldMaxUnitWeight = new MakeCheckIntRangeField(jTextFieldMaxUnitWeight,
         errMsg,0,32000);
+
         // Functions-Panel
         jIntFieldResourceRadius = new MakeCheckIntRangeField(jTextFieldResourceRadius,
         errMsg,0,255);
+        jIntFieldAutoRepairRate = new MakeCheckIntRangeField(jTextFieldAutoRepairRate,
+        errMsg,0,100);
+
         // Class-Panel
         jIntFieldClassTechLevel = new MakeCheckIntRangeField(jTextFieldTechLevel,
         errMsg,0,255);
+
         // Weapon-Panel
         jIntFieldMinDistance = new MakeCheckIntRangeField(jTextFieldWeaponMinDistance,
         errMsg,0,255);
@@ -200,6 +213,7 @@ public class UnitEditor extends javax.swing.JFrame {
         jIntFieldMaxUnitWeight.setInt(tUnit.maxunitweight);
         // Functions-Panel
         jIntFieldResourceRadius.setInt(tUnit.digrange);
+        jIntFieldAutoRepairRate.setInt(tUnit.autorepairrate);
 
         //*Variable-Layout-Design*
 
@@ -278,6 +292,19 @@ public class UnitEditor extends javax.swing.JFrame {
             if ( (tUnit.loadcapabilitynot & (1 << i)) > 0 )
             loadNotHeightTableCheckBox[i].setSelected(true);
         }
+        
+        jPanelMustCategory.setLayout (new java.awt.GridLayout (cMovemaliType.length, 1));
+        mustCategoryCheckBox = new javax.swing.JCheckBox[cMovemaliType.length];
+        
+        for (int i=0; i < cMovemaliType.length;i++) {
+            mustCategoryCheckBox[i] = new javax.swing.JCheckBox();
+            mustCategoryCheckBox[i].setText (cMovemaliType[i]);
+            
+            jPanelMustCategory.add (mustCategoryCheckBox[i]);
+            
+            if ( (tUnit.vehicleCategoriesLoadable & (1 << i)) > 0 )
+            mustCategoryCheckBox[i].setSelected(true);            
+        }
 
         jTextFieldMaxLoad.addActionListener (new java.awt.event.ActionListener () {
             public void actionPerformed (java.awt.event.ActionEvent evt) {
@@ -327,9 +354,7 @@ public class UnitEditor extends javax.swing.JFrame {
         digCheck();
 
         //Class-Table
-
-        classNames = new String[9];
-        //Einer mehr als Classes, damit man auch hinter der letzten Class einfuegen kann
+        classNames = new String[9]; //Einer mehr als Classes, damit man auch hinter der letzten Class einfuegen kann
         for (int i=0; i<8;i++) {
             if (tUnit.classnames[i] != null) classNames[i] = tUnit.classnames[i];
         }
@@ -450,6 +475,17 @@ public class UnitEditor extends javax.swing.JFrame {
             jPanelWeaponSource.add (weaponSourceSelectCheckBox[i]);
         }
 
+        jPanelWeaponCanNotHit.setLayout
+        (new java.awt.GridLayout (cMovemaliType.length, 1));
+
+        weaponCanNotHitSelectCheckBox = new javax.swing.JCheckBox[cMovemaliType.length];
+
+        for (int i=0; i < cMovemaliType.length;i++) {
+            weaponCanNotHitSelectCheckBox[i] = new javax.swing.JCheckBox();
+            weaponCanNotHitSelectCheckBox[i].setText (cMovemaliType[i]);
+            jPanelWeaponCanNotHit.add (weaponCanNotHitSelectCheckBox[i]);
+        }
+
         jPanelEfficiencies.setLayout
         (new java.awt.GridLayout (13, 1));
 
@@ -538,22 +574,32 @@ public class UnitEditor extends javax.swing.JFrame {
         jLabelOnHeight = new javax.swing.JLabel ();
         jLabelAbleHeight = new javax.swing.JLabel ();
         jLabelNotHeight = new javax.swing.JLabel ();
+        jLabelMustCategory = new javax.swing.JLabel ();
+        jPanelMustCategory = new javax.swing.JPanel ();
         jPanelWeapons = new javax.swing.JPanel ();
         jComboBoxWeapons = new javax.swing.JComboBox ();
         jPanelEfficiencies = new javax.swing.JPanel ();
-        jPanelWeaponAim = new javax.swing.JPanel ();
-        jPanelWeaponSource = new javax.swing.JPanel ();
-        jPanelWeaponType = new javax.swing.JPanel ();
-        jTextFieldWeaponMinDistance = new javax.swing.JTextField ();
+        jButtonAddWeapon = new javax.swing.JButton ();
+        jButtonRemoveWeapon = new javax.swing.JButton ();
+        jTabbedPaneWeapons = new javax.swing.JTabbedPane ();
+        jPaneWeaponslMisc = new javax.swing.JPanel ();
         jTextFieldWeaponMaxDistance = new javax.swing.JTextField ();
+        jTextFieldWeaponMinDistance = new javax.swing.JTextField ();
         jTextFieldWeaponMinStrength = new javax.swing.JTextField ();
         jTextFieldWeaponMaxStrength = new javax.swing.JTextField ();
         jTextFieldWeaponAmmo = new javax.swing.JTextField ();
-        jButtonAddWeapon = new javax.swing.JButton ();
-        jButtonRemoveWeapon = new javax.swing.JButton ();
+        jPaneWeaponslWeaponAimHeights = new javax.swing.JPanel ();
+        jPanelWeaponAim = new javax.swing.JPanel ();
+        jPanelWeaponsWeaponSourceHeights = new javax.swing.JPanel ();
+        jPanelWeaponSource = new javax.swing.JPanel ();
+        jPanelWeaponsWeaponType = new javax.swing.JPanel ();
+        jPanelWeaponType = new javax.swing.JPanel ();
+        jPanelWeaponsWeaponCanNotHit = new javax.swing.JPanel ();
+        jPanelWeaponCanNotHit = new javax.swing.JPanel ();
         jPanelFunctions = new javax.swing.JPanel ();
         jPanelFunctionSelect = new javax.swing.JPanel ();
         jTextFieldResourceRadius = new javax.swing.JTextField ();
+        jTextFieldAutoRepairRate = new javax.swing.JTextField ();
         jPanelClass = new javax.swing.JPanel ();
         jPanelClassFunctionSelect = new javax.swing.JPanel ();
         jListClasses = new javax.swing.JList ();
@@ -808,26 +854,35 @@ public class UnitEditor extends javax.swing.JFrame {
     
             jPanelLoadTable.setLayout (new java.awt.GridLayout (8, 3));
     
-            jPanelLoad.add (jPanelLoadTable, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 110, 760, 360));
+            jPanelLoad.add (jPanelLoadTable, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 110, 570, 320));
     
-            jPanelLoadTabelTitle.setLayout (new java.awt.GridLayout (1, 3));
+            jPanelLoadTabelTitle.setLayout (new java.awt.GridLayout (1, 4));
     
               jLabelOnHeight.setText ("Unit must be on that height");
-              jLabelOnHeight.setFont (new java.awt.Font ("Dialog", 0, 12));
+              jLabelOnHeight.setFont (new java.awt.Font ("Dialog", 0, 10));
       
               jPanelLoadTabelTitle.add (jLabelOnHeight);
       
               jLabelAbleHeight.setText ("Unit must be able to be on that height");
-              jLabelAbleHeight.setFont (new java.awt.Font ("Dialog", 0, 12));
+              jLabelAbleHeight.setFont (new java.awt.Font ("Dialog", 0, 10));
       
               jPanelLoadTabelTitle.add (jLabelAbleHeight);
       
               jLabelNotHeight.setText ("Unit mustn\u00b4t be able to be on that height");
-              jLabelNotHeight.setFont (new java.awt.Font ("Dialog", 0, 12));
+              jLabelNotHeight.setFont (new java.awt.Font ("Dialog", 0, 10));
       
               jPanelLoadTabelTitle.add (jLabelNotHeight);
       
+              jLabelMustCategory.setText ("Unit must be of that category");
+              jLabelMustCategory.setFont (new java.awt.Font ("Dialog", 0, 10));
+      
+              jPanelLoadTabelTitle.add (jLabelMustCategory);
+      
             jPanelLoad.add (jPanelLoadTabelTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 70, 760, 40));
+    
+            jPanelMustCategory.setLayout (new java.awt.GridLayout (15, 1));
+    
+            jPanelLoad.add (jPanelMustCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints (580, 110, 190, 320));
     
           jTabbedPaneMain.addTab ("Load", jPanelLoad);
   
@@ -847,65 +902,7 @@ public class UnitEditor extends javax.swing.JFrame {
             new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
             "Efficiencies", 4, 2, new java.awt.Font ("Arial", 0, 10), java.awt.Color.black));
     
-            jPanelWeapons.add (jPanelEfficiencies, new org.netbeans.lib.awtextra.AbsoluteConstraints (580, 0, 200, 470));
-    
-            jPanelWeaponAim.setLayout (new java.awt.GridLayout (8, 1));
-            jPanelWeaponAim.setBorder (new javax.swing.border.TitledBorder(
-            new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
-            "Weapon.aim.heights", 4, 2, new java.awt.Font ("Arial", 0, 10), java.awt.Color.black));
-    
-            jPanelWeapons.add (jPanelWeaponAim, new org.netbeans.lib.awtextra.AbsoluteConstraints (270, 50, 290, 170));
-    
-            jPanelWeaponSource.setLayout (new java.awt.GridLayout (8, 1));
-            jPanelWeaponSource.setBorder (new javax.swing.border.TitledBorder(
-            new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
-            "Weapon.source.heights", 4, 2, new java.awt.Font ("Arial", 0, 10), java.awt.Color.black));
-    
-            jPanelWeapons.add (jPanelWeaponSource, new org.netbeans.lib.awtextra.AbsoluteConstraints (270, 240, 290, 180));
-    
-            jPanelWeaponType.setLayout (new java.awt.GridLayout (12, 1));
-            jPanelWeaponType.setBorder (new javax.swing.border.TitledBorder(
-            new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
-            "Weapon.type", 4, 2, new java.awt.Font ("Arial", 0, 10), java.awt.Color.black));
-    
-            jPanelWeapons.add (jPanelWeaponType, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 250, 250, 220));
-    
-            jTextFieldWeaponMinDistance.setBorder (new javax.swing.border.TitledBorder(
-            new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
-            "Distance.min (0-255)", 4, 2, new java.awt.Font ("Arial", 0, 10), java.awt.Color.black));
-            jTextFieldWeaponMinDistance.setText ("0");
-    
-            jPanelWeapons.add (jTextFieldWeaponMinDistance, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 50, 250, 40));
-    
-            jTextFieldWeaponMaxDistance.setBorder (new javax.swing.border.TitledBorder(
-            new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
-            "Distance.max (0-255)", 4, 2, new java.awt.Font ("Arial", 0, 10), java.awt.Color.black));
-            jTextFieldWeaponMaxDistance.setText ("0");
-    
-            jPanelWeapons.add (jTextFieldWeaponMaxDistance, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 100, 250, 40));
-    
-            jTextFieldWeaponMinStrength.setBorder (new javax.swing.border.TitledBorder(
-            new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
-            "Strength.at.min.distance (1-2147483646)", 4, 2, new java.awt.Font ("Arial", 0, 10),
-            java.awt.Color.black));
-            jTextFieldWeaponMinStrength.setText ("0");
-    
-            jPanelWeapons.add (jTextFieldWeaponMinStrength, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 150, 250, 40));
-    
-            jTextFieldWeaponMaxStrength.setBorder (new javax.swing.border.TitledBorder(
-            new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
-            "Strength.at.max.distance (1-2147483646)", 4, 2, new java.awt.Font ("Arial", 0, 10),
-            java.awt.Color.black));
-            jTextFieldWeaponMaxStrength.setText ("0");
-    
-            jPanelWeapons.add (jTextFieldWeaponMaxStrength, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 200, 250, 40));
-    
-            jTextFieldWeaponAmmo.setBorder (new javax.swing.border.TitledBorder(
-            new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
-            "Ammo (0-255)", 4, 2, new java.awt.Font ("Arial", 0, 10), java.awt.Color.black));
-            jTextFieldWeaponAmmo.setText ("0");
-    
-            jPanelWeapons.add (jTextFieldWeaponAmmo, new org.netbeans.lib.awtextra.AbsoluteConstraints (270, 430, 290, 40));
+            jPanelWeapons.add (jPanelEfficiencies, new org.netbeans.lib.awtextra.AbsoluteConstraints (570, 10, 200, 470));
     
             jButtonAddWeapon.setText ("Add");
     
@@ -914,6 +911,82 @@ public class UnitEditor extends javax.swing.JFrame {
             jButtonRemoveWeapon.setText ("Remove");
     
             jPanelWeapons.add (jButtonRemoveWeapon, new org.netbeans.lib.awtextra.AbsoluteConstraints (430, 10, 130, 30));
+    
+    
+              jPaneWeaponslMisc.setLayout (new org.netbeans.lib.awtextra.AbsoluteLayout ());
+      
+                jTextFieldWeaponMaxDistance.setBorder (new javax.swing.border.TitledBorder(
+                new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
+                "Distance.max (0-255)", 4, 2, new java.awt.Font ("Arial", 0, 10), java.awt.Color.black));
+                jTextFieldWeaponMaxDistance.setText ("0");
+        
+                jPaneWeaponslMisc.add (jTextFieldWeaponMaxDistance, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 110, 300, 40));
+        
+                jTextFieldWeaponMinDistance.setBorder (new javax.swing.border.TitledBorder(
+                new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
+                "Distance.min (0-255)", 4, 2, new java.awt.Font ("Arial", 0, 10), java.awt.Color.black));
+                jTextFieldWeaponMinDistance.setText ("0");
+        
+                jPaneWeaponslMisc.add (jTextFieldWeaponMinDistance, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 10, 300, 40));
+        
+                jTextFieldWeaponMinStrength.setBorder (new javax.swing.border.TitledBorder(
+                new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
+                "Strength.at.min.distance (1-2147483646)", 4, 2, new java.awt.Font ("Arial", 0, 10),
+                java.awt.Color.black));
+                jTextFieldWeaponMinStrength.setText ("0");
+        
+                jPaneWeaponslMisc.add (jTextFieldWeaponMinStrength, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 60, 300, 40));
+        
+                jTextFieldWeaponMaxStrength.setBorder (new javax.swing.border.TitledBorder(
+                new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
+                "Strength.at.max.distance (1-2147483646)", 4, 2, new java.awt.Font ("Arial", 0, 10),
+                java.awt.Color.black));
+                jTextFieldWeaponMaxStrength.setText ("0");
+        
+                jPaneWeaponslMisc.add (jTextFieldWeaponMaxStrength, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 160, 300, 40));
+        
+                jTextFieldWeaponAmmo.setBorder (new javax.swing.border.TitledBorder(
+                new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
+                "Ammo (0-255)", 4, 2, new java.awt.Font ("Arial", 0, 10), java.awt.Color.black));
+                jTextFieldWeaponAmmo.setText ("0");
+        
+                jPaneWeaponslMisc.add (jTextFieldWeaponAmmo, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 210, 300, 40));
+        
+              jTabbedPaneWeapons.addTab ("Misc", jPaneWeaponslMisc);
+      
+              jPaneWeaponslWeaponAimHeights.setLayout (new org.netbeans.lib.awtextra.AbsoluteLayout ());
+      
+                jPanelWeaponAim.setLayout (new java.awt.GridLayout (8, 1));
+        
+                jPaneWeaponslWeaponAimHeights.add (jPanelWeaponAim, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 10, 300, 190));
+        
+              jTabbedPaneWeapons.addTab ("Weapon.aim.heights", jPaneWeaponslWeaponAimHeights);
+      
+              jPanelWeaponsWeaponSourceHeights.setLayout (new org.netbeans.lib.awtextra.AbsoluteLayout ());
+      
+                jPanelWeaponSource.setLayout (new java.awt.GridLayout (8, 1));
+        
+                jPanelWeaponsWeaponSourceHeights.add (jPanelWeaponSource, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 10, 300, 190));
+        
+              jTabbedPaneWeapons.addTab ("Weapon.source.heights", jPanelWeaponsWeaponSourceHeights);
+      
+              jPanelWeaponsWeaponType.setLayout (new org.netbeans.lib.awtextra.AbsoluteLayout ());
+      
+                jPanelWeaponType.setLayout (new java.awt.GridLayout (12, 1));
+        
+                jPanelWeaponsWeaponType.add (jPanelWeaponType, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 20, 300, 220));
+        
+              jTabbedPaneWeapons.addTab ("Weapon.type", jPanelWeaponsWeaponType);
+      
+              jPanelWeaponsWeaponCanNotHit.setLayout (new org.netbeans.lib.awtextra.AbsoluteLayout ());
+      
+                jPanelWeaponCanNotHit.setLayout (new java.awt.GridLayout (15, 1));
+        
+                jPanelWeaponsWeaponCanNotHit.add (jPanelWeaponCanNotHit, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 10, 300, 340));
+        
+              jTabbedPaneWeapons.addTab ("Weapon.can.NOT.hit", jPanelWeaponsWeaponCanNotHit);
+      
+            jPanelWeapons.add (jTabbedPaneWeapons, new org.netbeans.lib.awtextra.AbsoluteConstraints (0, 50, 560, 420));
     
           jTabbedPaneMain.addTab ("Weapons", jPanelWeapons);
   
@@ -925,11 +998,18 @@ public class UnitEditor extends javax.swing.JFrame {
     
             jTextFieldResourceRadius.setBorder (new javax.swing.border.TitledBorder(
             new javax.swing.border.EtchedBorder(java.awt.Color.white, new java.awt.Color (134, 134, 134)),
-            "Radius to  check for resources (0-255)", 4, 2, new java.awt.Font ("Arial", 0, 10),
+            "Radius to check for resources (0-255)", 4, 2, new java.awt.Font ("Arial", 0, 10),
             java.awt.Color.black));
             jTextFieldResourceRadius.setText ("0");
     
             jPanelFunctions.add (jTextFieldResourceRadius, new org.netbeans.lib.awtextra.AbsoluteConstraints (440, 20, 330, 40));
+    
+            jTextFieldAutoRepairRate.setBorder (new javax.swing.border.TitledBorder(
+            new javax.swing.border.EtchedBorder(), "AutoRepairRate (0-100)", 4, 2,
+            new java.awt.Font ("Arial", 0, 10), java.awt.Color.black));
+            jTextFieldAutoRepairRate.setText ("0");
+    
+            jPanelFunctions.add (jTextFieldAutoRepairRate, new org.netbeans.lib.awtextra.AbsoluteConstraints (440, 70, 330, 40));
     
           jTabbedPaneMain.addTab ("Functions", jPanelFunctions);
   
@@ -1042,7 +1122,8 @@ public class UnitEditor extends javax.swing.JFrame {
 
   private void jButtonSaveActionPerformed (java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
     setVariablesForSave();
-    tUnit.write();        
+    tUnit.write();
+    jLabelVersion.setText ("Version "+tUnit.version+".0");
   }//GEN-LAST:event_jButtonSaveActionPerformed
 
 private void jTabbedPaneMainStateChanged (javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPaneMainStateChanged
@@ -1195,7 +1276,7 @@ public void showWeaponValues(int index,int save) {  //Weapon-Panel
         for (int i=0; i < 13;i++) {
             tUnit.weapons.weapon[weaponLastIndex].efficiency[i] = jIntFieldEfficiencies[i].getInt();
         }
-
+        
         for (int i=0; i < cWeaponType.length;i++) {
             if (weaponTypeSelectCheckBox[i].isSelected() == true )
             tUnit.weapons.weapon[weaponLastIndex].typ |= (1 << i);
@@ -1210,6 +1291,11 @@ public void showWeaponValues(int index,int save) {  //Weapon-Panel
             tUnit.weapons.weapon[weaponLastIndex].sourceHeight |= (1 << i);
             else tUnit.weapons.weapon[weaponLastIndex].sourceHeight &= ~(1 << i);
         }
+        for (int i=0; i < cMovemaliType.length;i++) {
+            if (weaponCanNotHitSelectCheckBox[i].isSelected() == true )
+            tUnit.weapons.weapon[weaponLastIndex].targets_not_hittable |= (1 << i);
+            else tUnit.weapons.weapon[weaponLastIndex].targets_not_hittable &= ~(1 << i);
+        }        
     }
 
     for (int i=0; i < cWeaponType.length;i++) {
@@ -1226,7 +1312,12 @@ public void showWeaponValues(int index,int save) {  //Weapon-Panel
         weaponSourceSelectCheckBox[i].setSelected(true);
         else weaponSourceSelectCheckBox[i].setSelected(false);
     }
-
+    for (int i=0; i < cMovemaliType.length;i++) {
+        if ( (tUnit.weapons.weapon[index].targets_not_hittable & (1 << i)) > 0 )
+        weaponCanNotHitSelectCheckBox[i].setSelected(true);
+        else weaponCanNotHitSelectCheckBox[i].setSelected(false);
+    }    
+    
     jIntFieldMinDistance.setInt(tUnit.weapons.weapon[index].minDistance);
     jIntFieldMaxDistance.setInt(tUnit.weapons.weapon[index].maxDistance);
     jIntFieldMinDistanceStrength.setInt(tUnit.weapons.weapon[index].minStrength);
@@ -1340,7 +1431,7 @@ private int setVariablesForSave() {
     if (jIntFieldView.convertError != 0) i++;
     tUnit.jamming = jIntFieldJamming.getInt();
     if (jIntFieldJamming.convertError != 0) i++;
-    
+
     //Info-Panel
     tUnit.infotext =jTextPaneInfoText.getText();
 
@@ -1386,6 +1477,12 @@ private int setVariablesForSave() {
         tUnit.loadcapabilitynot |= (1 << j);
     }
     
+    tUnit.vehicleCategoriesLoadable = 0;
+    for (int j=0; j < cMovemaliType.length;j++) {
+        if ( mustCategoryCheckBox[j].isSelected() == true )
+        tUnit.vehicleCategoriesLoadable |= (1 << j);        
+    }
+    
     //Functions-Panel
     tUnit.functions = 0;
     for (int j=0; j < cVehicleFunctions.length;j++) {
@@ -1393,6 +1490,7 @@ private int setVariablesForSave() {
         tUnit.functions |= (1 << j);
     }
     tUnit.digrange = jIntFieldResourceRadius.getInt();
+    tUnit.autorepairrate = jIntFieldAutoRepairRate.getInt();
 
     //Class-Panel
     //Values will be directly written into tUnit ! except last values with ->
@@ -1442,6 +1540,9 @@ private void maxLoadCheck() { //Load-Panel
             loadOnHeightTableCheckBox[j].setEnabled(true);
             loadAbleHeightTableCheckBox[j].setEnabled(true);
             loadNotHeightTableCheckBox[j].setEnabled(true);
+        }        
+        for (int j=0; j < cMovemaliType.length;j++) {
+            mustCategoryCheckBox[j].setEnabled(true);            
         }
     } else {
         jTextFieldMaxUnitWeight.setEnabled(false);
@@ -1449,6 +1550,9 @@ private void maxLoadCheck() { //Load-Panel
             loadOnHeightTableCheckBox[j].setEnabled(false);
             loadAbleHeightTableCheckBox[j].setEnabled(false);
             loadNotHeightTableCheckBox[j].setEnabled(false);
+        }
+        for (int j=0; j < cMovemaliType.length;j++) {
+            mustCategoryCheckBox[j].setEnabled(false);            
         }
     }
 }
@@ -1580,22 +1684,32 @@ private javax.swing.JPanel jPanelLoadTabelTitle;
 private javax.swing.JLabel jLabelOnHeight;
 private javax.swing.JLabel jLabelAbleHeight;
 private javax.swing.JLabel jLabelNotHeight;
+private javax.swing.JLabel jLabelMustCategory;
+private javax.swing.JPanel jPanelMustCategory;
 private javax.swing.JPanel jPanelWeapons;
 private javax.swing.JComboBox jComboBoxWeapons;
 private javax.swing.JPanel jPanelEfficiencies;
-private javax.swing.JPanel jPanelWeaponAim;
-private javax.swing.JPanel jPanelWeaponSource;
-private javax.swing.JPanel jPanelWeaponType;
-private javax.swing.JTextField jTextFieldWeaponMinDistance;
+private javax.swing.JButton jButtonAddWeapon;
+private javax.swing.JButton jButtonRemoveWeapon;
+private javax.swing.JTabbedPane jTabbedPaneWeapons;
+private javax.swing.JPanel jPaneWeaponslMisc;
 private javax.swing.JTextField jTextFieldWeaponMaxDistance;
+private javax.swing.JTextField jTextFieldWeaponMinDistance;
 private javax.swing.JTextField jTextFieldWeaponMinStrength;
 private javax.swing.JTextField jTextFieldWeaponMaxStrength;
 private javax.swing.JTextField jTextFieldWeaponAmmo;
-private javax.swing.JButton jButtonAddWeapon;
-private javax.swing.JButton jButtonRemoveWeapon;
+private javax.swing.JPanel jPaneWeaponslWeaponAimHeights;
+private javax.swing.JPanel jPanelWeaponAim;
+private javax.swing.JPanel jPanelWeaponsWeaponSourceHeights;
+private javax.swing.JPanel jPanelWeaponSource;
+private javax.swing.JPanel jPanelWeaponsWeaponType;
+private javax.swing.JPanel jPanelWeaponType;
+private javax.swing.JPanel jPanelWeaponsWeaponCanNotHit;
+private javax.swing.JPanel jPanelWeaponCanNotHit;
 private javax.swing.JPanel jPanelFunctions;
 private javax.swing.JPanel jPanelFunctionSelect;
 private javax.swing.JTextField jTextFieldResourceRadius;
+private javax.swing.JTextField jTextFieldAutoRepairRate;
 private javax.swing.JPanel jPanelClass;
 private javax.swing.JPanel jPanelClassFunctionSelect;
 private javax.swing.JList jListClasses;
@@ -1614,20 +1728,41 @@ private javax.swing.JLabel jLabelErrorMessage;
 // End of variables declaration//GEN-END:variables
 
 
-static String cHeightLevel[] = {"deep submerged", "submerged", "floating",
-"ground level", "low-level flight", "flight", "high-level flight", "orbit"};
-static String cMovemaliType[] = { "default", "light tracked vehicle",
-    "medium tracked vehicle", "heavy tracked vehicle", "light wheeled vehicle",
-"medium wheeled vehicle", "heavy wheeled vehicle", "trooper", "rail vehicle"};
-static String cVehicleFunctions[] = {"sonar", "paratrooper", "mine-layer", "trooper",
-    "repair vehicle", "conquer buildings", "move after attack","view satellites",
-    "construct ALL buildings", "view mines", "construct vehicles","construct specific buildings",
-    "refuel units", "icebreaker", "!", "refuels material", "!", "makes tracks",
-    "drill for mineral resources manually", "sailing", "auto repair", "generator",
-"search for mineral resources automatically", "Kamikaze only"  };
-static String cWeaponType[] = {"cruise missile", "mine", "bomb", "air - missile",
-    "ground - missile", "torpedo", "machine gun", "cannon", "service", "ammunition refuel",
-"laser (not implemented yet!)", "shootable"};
+static String cHeightLevel[] = {"deep submerged", "submerged", "floating", "ground level", "low-level flight", "flight", "high-level flight", "orbit"};
+static String cMovemaliType[] = { "default",
+    "light tracked vehicle", "medium tracked vehicle", "heavy tracked vehicle",
+    "light wheeled vehicle", "medium wheeled vehicle", "heavy wheeled vehicle",
+    "trooper",               "rail vehicle",           "medium aircraft",
+    "medium ship",           "building / turret / object", "light aircraft",
+"heavy aircraft",        "light ship",             "heavy ship"};
+static String cVehicleFunctions[] = {"sonar",
+    "paratrooper",
+    "mine-layer",
+    "trooper",
+    "repair vehicle",
+    "conquer buildings",
+    "move after attack",
+    "view satellites",
+    "construct ALL buildings",
+    "view mines",
+    "construct vehicles",
+    "construct specific buildings",
+    "refuel units",
+    "icebreaker",
+    "cannot be refuelled in air",
+    "refuels material",
+    "! (unused) !",
+    "makes tracks",
+    "drill for mineral resources manually",
+    "sailing",
+    "auto repair",
+    "generator",
+    "search for mineral resources automatically",
+    "Kamikaze only",
+    "immune to mines",
+"refuels energy"  };
+static String cWeaponType[] = {"cruise missile", "mine",    "bomb",       "air - missile", "ground - missile", "torpedo", "machine gun",
+"cannon",         "service", "ammunition refuel", "laser (not implemented yet!)", "shootable"};
 
 static int cfsonar = 1;
 static int cfparatrooper = 2;
@@ -1643,15 +1778,18 @@ static int cfvehicleconstruction = 1024;
 static int cfspecificbuildingconstruction = 2048;
 static int cffuelref = 4096;
 static int cficebreaker = 8192;
+static int cfnoairrefuel = 16384;
 static int cfmaterialref = 32768;
-// static int cfenergyref 65536
-static int cffahrspur = ( 1 << 17 );   /*  !!  */
+
+static int cffahrspur = ( 1 << 17 );
 static int cfmanualdigger = ( 1 << 18 );
 static int cfwindantrieb = ( 1 << 19 );
 static int cfautorepair = ( 1 << 20 );
 static int cfgenerator = ( 1 << 21 );
 static int cfautodigger = ( 1 << 22 );
 static int cfkamikaze = ( 1 << 23 );
+static int cfmineimmune = ( 1 << 24 );
+static int cfenergyref = ( 1 << 25 );
 
 static int cwcruisemissilen = 0;
 static int cwcruisemissileb = ( 1 << cwcruisemissilen );
@@ -1685,7 +1823,7 @@ static int chfahrend = 8;
 static int chtieffliegend = 16;
 static int chfliegend = 32;
 static int chhochfliegend = 64;
-static int chsatellit = 128; 
+static int chsatellit = 128;
 
 static int autorepairdamagedecrease = 10;
 }
