@@ -1235,7 +1235,7 @@ bool tmap :: ResourceTribute :: empty ( )
    return true;
 }
 
-const tributeVersion = 1;  // we are counting backwards, -2 is newer than -1
+const int tributeVersion = 1;  // we are counting backwards, -2 is newer than -1
 
 void tmap :: ResourceTribute :: read ( tnstream& stream )
 {
