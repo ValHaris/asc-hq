@@ -12,7 +12,7 @@ EXE
 3
 WString
 5
-dr2e9
+dr2eo
 1
 0
 0
@@ -1839,8 +1839,8 @@ WVList
 0
 434
 MItem
-29
-..\libs\triangul\triangul.lib
+33
+..\libs\triangul\dos\triangul.lib
 435
 WString
 3

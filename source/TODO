@@ -9,10 +9,8 @@ TODO list for ASC:
 6.  Optimize beeline (shouldn't be iterative...)
 9.  Converting getfield()->vehicle == veh to getfield()->unitHere ( veh )
     grep "> *vehicle *==" *.cpp
-11.  Fix comparisons between char and unsigned char that gcc warns about.
 13.  Fix delete[] void warnings 
      -> making a class for image data
 14.  Reformat the code to something a little more readable (use indent maybe?)
-15.  Run this through 'gcc -W -Wall' and fix other problems
 
 *******
