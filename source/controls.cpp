@@ -3,9 +3,13 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.127 2002-03-14 18:14:37 mbickel Exp $
+//     $Id: controls.cpp,v 1.128 2002-03-18 21:42:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.127  2002/03/14 18:14:37  mbickel
+//      Improved messages for proposing peace
+//      Fixed display error when enterering passwords
+//
 //     Revision 1.126  2002/03/03 22:19:32  mbickel
 //      Updated documentation
 //      Improved user interface
@@ -723,13 +727,13 @@ void  legemine( int typ, int delta )
                int  strength = 64;
                for ( int i = 0; i < fzt->weapons.count ; i++)
                   if ((fzt->weapons.weapon[i].getScalarWeaponType() == cwminen) && fzt->weapons.weapon[i].shootable() )
-                     if ( fld-> putmine( actmap->actplayer, typ, cminestrength[typ-1] * strength / 64 )) {
+                     if ( fld-> putmine( actmap->actplayer, typ, MineBasePunch[typ-1] * strength / 64 )) {
                         eht->ammo[i]--;
                         eht->setMovement ( eht->getMovement() - mineputmovedecrease );
                         strength = eht->weapstrength[i];
                         int x = getxpos();
                         int y = getypos();
-                        logtoreplayinfo ( rpl_putmine, x, y, (int) actmap->actplayer, (int) typ, (int) cminestrength[typ-1] * strength / 64 );
+                        logtoreplayinfo ( rpl_putmine, x, y, (int) actmap->actplayer, (int) typ, (int) MineBasePunch[typ-1] * strength / 64 );
                         break;
                      }
 

@@ -1,6 +1,11 @@
-//     $Id: typen.h,v 1.108 2002-03-03 14:13:49 mbickel Exp $
+//     $Id: typen.h,v 1.109 2002-03-18 21:42:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.108  2002/03/03 14:13:49  mbickel
+//      Some documentation updates
+//      Soundsystem update
+//      AI bug fixed
+//
 //     Revision 1.107  2002/02/21 17:06:52  mbickel
 //      Completed Paragui integration
 //      Moved mail functions to own file (messages)
@@ -832,15 +837,6 @@ struct ticons {
 /// Structure field naming constants 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
-
-
-#define cminenum 4
-extern const char*  cminentypen[cminenum] ;
-extern const int cminestrength[cminenum]  ;
- #define cmantipersonnelmine 1  
- #define cmantitankmine 2  
- #define cmmooredmine 3  
- #define cmfloatmine 4  
 
 
 

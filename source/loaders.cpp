@@ -5,9 +5,12 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.67 2002-01-07 11:40:40 mbickel Exp $
+//     $Id: loaders.cpp,v 1.68 2002-03-18 21:42:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.67  2002/01/07 11:40:40  mbickel
+//      Fixed some syntax errors
+//
 //     Revision 1.66  2001/12/19 17:16:29  mbickel
 //      Some include file cleanups
 //
@@ -1350,7 +1353,7 @@ void   tspfldloaders::writefields ( void )
             stream->writeInt ( m->type );
             stream->writeInt ( m->strength );
             stream->writeInt ( m->time );
-            stream->writeInt ( m->color );
+            stream->writeInt ( m->player );
          }
 
          stream->writeInt ( fld->objects.size() );
@@ -1492,10 +1495,10 @@ void tspfldloaders::readfields ( void )
             char minestrength = stream->readChar();
             if ( minetype >> 4 ) {
                Mine m;
-               m.type = (minetype >> 1) & 7;
+               m.type = MineTypes((minetype >> 1) & 7);
                m.strength = minestrength;
                m.time = 0;
-               m.color = minetype >> 4;
+               m.player = minetype >> 4;
                fld2->mines.push_back ( m );
             }
 
@@ -1515,10 +1518,10 @@ void tspfldloaders::readfields ( void )
 
             for ( int i = 0; i < minenum; i++ ) {
                Mine m;
-               m.type = stream->readInt();
+               m.type = MineTypes(stream->readInt());
                m.strength = stream->readInt();
                m.time = stream->readInt();
-               m.color = stream->readInt();
+               m.player = stream->readInt();
                fld2->mines.push_back ( m );
             }
 

@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: spfst.h,v 1.46 2001-12-14 10:20:05 mbickel Exp $
+//     $Id: spfst.h,v 1.47 2002-03-18 21:42:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2001/12/14 10:20:05  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.45  2001/10/31 18:34:33  mbickel
 //      Some adjustments and fixes for gcc 3.0.2
 //
@@ -196,9 +200,8 @@ extern bool fieldvisiblenow( const pfield pe, int player = actmap->actplayer );
   evaluates the visibility of a field
   \param pe the field to be evaluated
   \param player the player who is 'looking'
-  \return visible_not .. visible_all
  */
-extern int fieldVisibility  ( const pfield pe, int player = actmap->actplayer );
+extern VisibilityStates fieldVisibility  ( const pfield pe, int player = actmap->actplayer );
 
 //! returns the diplomatic status between actmap->actplayer and the player with color b (note that the color is playernum*8 ) 
 extern int getdiplomaticstatus( int b );

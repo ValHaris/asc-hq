@@ -2,9 +2,13 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.108 2002-03-14 18:14:37 mbickel Exp $
+//     $Id: dialog.cpp,v 1.109 2002-03-18 21:42:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.108  2002/03/14 18:14:37  mbickel
+//      Improved messages for proposing peace
+//      Fixed display error when enterering passwords
+//
 //     Revision 1.107  2002/03/02 23:04:00  mbickel
 //      Some cleanup of source code
 //      Improved Paragui Integration
@@ -5161,6 +5165,27 @@ void viewterraininfo ( void )
          char t2[1000];
          sprintf(t2, "%s: %d\n",  cmovemalitypes[i], fld->getmovemalus(i) );
          strcat ( text, t2 );
+      }
+
+      int mines[4] = { 0, 0, 0, 0 };
+
+      for ( tfield::MineContainer::iterator m = fld->mines.begin(); m != fld->mines.end(); ++m )
+         if ( m->player == actmap->actplayer || fieldVisibility  ( fld ) == visible_all )
+            mines[m->type-1]++;
+
+      if ( mines[0] || mines[1] || mines[2] || mines[3] ) {
+         strcat ( text, "#aeinzug0##eeinzug0#\n\n"
+                        "#font02#Mine Information:#font01##aeinzug20##eeinzug20##crtp10#"
+                        "there are \n" );
+
+         for ( int i = 0; i < 4; i++ ) {
+            strcat ( text, " " );
+            strcat ( text, strrr ( mines[i] ));
+            strcat ( text, " ");
+            strcat ( text, MineNames[i] );
+            strcat ( text, "(s) \n" );
+         }
+         strcat ( text, "on this field.");
       }
 
       if  ( getactfield()->vehicle ) {

@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.87 2002-02-21 17:06:52 mbickel Exp $
+//     $Id: typen.cpp,v 1.88 2002-03-18 21:42:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.87  2002/02/21 17:06:52  mbickel
+//      Completed Paragui integration
+//      Moved mail functions to own file (messages)
+//
 //     Revision 1.86  2001/12/19 17:16:29  mbickel
 //      Some include file cleanups
 //
@@ -441,9 +445,6 @@ const char* ceventtrigger[ceventtriggernum]  = {"*NONE*", "turn/move >=", "build
                                                  "all units lost", "all enemy buildings destroyed/captured", "all buildings lost", 
                                                  "energy tribute <", "material tribute <", "fuel tribute <",
                                                  "any unit enters polygon", "specific unit enters polygon", "building is seen", "irrelevant (used internally)"};
-const char*  cminentypen[cminenum]  = {"antipersonnel mine", "antitank mine", "antisub mine", "antiship mine"};
-const int cminestrength[cminenum]  = { 60, 120, 180, 180 };
-
 
 
 

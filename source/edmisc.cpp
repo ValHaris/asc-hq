@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.77 2002-03-18 09:31:51 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.78 2002-03-18 21:42:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.77  2002/03/18 09:31:51  mbickel
+//      Fixed: canceling Reactionfire enabled units that can not attack after
+//             moving to move in the same turn
+//
 //     Revision 1.76  2002/03/17 21:25:18  mbickel
 //      Fixed: View unit movement revealed the reaction fire status of enemy units
 //      Mapeditor: new function "resource comparison"
@@ -933,7 +937,7 @@ void placemine(void)
    cursor.hide();
    mousevisible(false); 
    mapsaved = false;
-   getactfield()->putmine(farbwahl,auswahlm+1,cminestrength[auswahlm]); 
+   getactfield()->putmine(farbwahl,auswahlm+1,MineBasePunch[auswahlm]);
    lastselectiontype = cselmine;
    displaymap();
    mousevisible(true); 
@@ -958,7 +962,7 @@ void putactthing ( void )
           break;
        case cselobject:   placeobject();
           break;
-       case cselmine:   if ( farbwahl < 8 ) getactfield()->putmine(farbwahl,auswahlm+1,cminestrength[auswahlm]);
+       case cselmine:   if ( farbwahl < 8 ) getactfield()->putmine(farbwahl,auswahlm+1,MineBasePunch[auswahlm]);
           break;
     } 
     displaymap(); 
@@ -1305,11 +1309,11 @@ void         tplayerchange::buttonpressed(int         id)
               for (int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
                  pfield fld = &actmap->field[i];
                  for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
-                    if ( i->color == sel1 )
-                       i->color = sel2;
+                    if ( i->player == sel1 )
+                       i->player = sel2;
                     else
-                       if ( i->color == sel2 )
-                          i->color = sel1;
+                       if ( i->player == sel2 )
+                          i->player = sel1;
                     
                  
               } /* endfor */
@@ -1337,8 +1341,8 @@ void         tplayerchange::buttonpressed(int         id)
               for (int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
                  pfield fld = &actmap->field[i];
                  for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
-                    if ( i->color == sel2 )
-                       i->color = sel1;
+                    if ( i->player == sel2 )
+                       i->player = sel1;
 
               } /* endfor */
               anzeige();

@@ -83,12 +83,27 @@ class Object {
        int  getdir ( void );
 };
 
+#define cminenum 4
+extern const char* MineNames[cminenum] ;
+extern const int MineBasePunch[cminenum]  ;
+
+enum MineTypes { cmantipersonnelmine = 1 , cmantitankmine, cmmooredmine, cmfloatmine  };
+
+
 class Mine {
    public:
-      int type;
+      MineTypes type;
+
+      //! the effective punch of the mine
       int strength;
+
+      //! the turnnumber in which the mine was placed
       int time;
-      int color;
+
+      //! the player who placed the mine; range 0 .. 7      
+      int player;
+
+      //! can the mine attack this unit
       bool attacksunit ( const pvehicle veh );
 };
 

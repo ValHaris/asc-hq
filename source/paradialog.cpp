@@ -142,20 +142,26 @@ PG_Theme* ASC_PG_App::LoadTheme(const char* xmltheme, bool asDefault, const char
 //! A Paragui widget that fills the whole screen and redraws it whenever Paragui wants to it.
 class MainScreenWidget : public PG_ThemeWidget, public PG_EventObject {
     bool gameInitialized;
+    bool dirtyFlag;
 public:
     MainScreenWidget( )
        : PG_ThemeWidget(NULL, PG_Rect ( 0, 0, ::getScreen()->w, ::getScreen()->h ), true),
-         gameInitialized (false){};
+         gameInitialized (false), dirtyFlag(true) {};
 
     //! to be called after ASC has completed loading and repaintdisplay() is available and working.
     void gameReady() { gameInitialized = true; Show(); };
+
+    void setDirty() { dirtyFlag = true; };
+
 protected:
-    void eventDraw (SDL_Surface* surface, const PG_Rect& rect);
+//    void eventDraw (SDL_Surface* surface, const PG_Rect& rect);
+    void eventBlit ( SDL_Surface* srf, const PG_Rect &src, const PG_Rect& dst );
 };
 
 MainScreenWidget* mainScreenWidget = NULL;
-
-void MainScreenWidget::eventDraw (SDL_Surface* surface, const PG_Rect& rect) {
+/*
+void MainScreenWidget::eventDraw (SDL_Surface* surface, const PG_Rect& rect)
+{
     PG_ThemeWidget::eventDraw(surface, rect);
 
     if ( gameInitialized ) {
@@ -164,6 +170,18 @@ void MainScreenWidget::eventDraw (SDL_Surface* surface, const PG_Rect& rect) {
        repaintdisplay();
        initASCGraphicSubsystem( screen, NULL );
     }
+}
+*/
+void MainScreenWidget::eventBlit ( SDL_Surface* srf, const PG_Rect &src, const PG_Rect& dst )
+{
+    if ( gameInitialized && dirtyFlag ) {
+       SDL_Surface* screen = ::getScreen();
+       initASCGraphicSubsystem( srf, NULL );
+       repaintdisplay();
+       initASCGraphicSubsystem( screen, NULL );
+       dirtyFlag = false;
+    }
+    PG_ThemeWidget::eventBlit( srf, src, dst );
 }
 
 
@@ -192,7 +210,7 @@ ASC_PG_Dialog :: ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const char
        :PG_Window ( parent, r, windowtext, flags, style, heightTitlebar ),
         quitModalLoop ( 0 )
 {
-   mainScreenWidget->Redraw();
+   mainScreenWidget->setDirty();
 //   SDL_mutexP ( eventHandlingMutex );
 }
 

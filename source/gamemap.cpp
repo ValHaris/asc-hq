@@ -37,6 +37,9 @@
 #endif
 
 
+const char* MineNames[cminenum]  = {"antipersonnel mine", "antitank mine", "antisub mine", "antiship mine"};
+const int MineBasePunch[cminenum]  = { 60, 120, 180, 180 };
+
 
 
 
@@ -1264,7 +1267,7 @@ bool Mine :: attacksunit ( const pvehicle veh )
 {
      if  (!( ( veh->functions & cfmineimmune ) || 
               ( veh->height > chfahrend ) ||
-              ( getdiplomaticstatus2 ( veh->color, color*8 ) == capeace ) || 
+              ( getdiplomaticstatus2 ( veh->color, player*8 ) == capeace ) ||
               ( (veh->functions & cf_trooper) && (type != cmantipersonnelmine)) || 
               ( veh->height <= chgetaucht && type != cmmooredmine ) || 
               ( veh->height == chschwimmend && type != cmfloatmine ) ||
@@ -1480,8 +1483,8 @@ bool  tfield :: putmine( int col, int typ, int strength )
 
    Mine m;
    m.strength = strength ;
-   m.color = col;
-   m.type = typ;
+   m.player = col;
+   m.type = MineTypes(typ);
    if ( actmap && actmap->time.turn() >= 0 )
       m.time = actmap->time.turn();
    else
@@ -1496,7 +1499,7 @@ int tfield :: mineowner( void )
    if ( mines.empty() )
       return -1;
    else
-      return mines.begin()->color;
+      return mines.begin()->player;
 }
 
 
@@ -1904,6 +1907,7 @@ const int gameparameterdefault [ gameparameternum ] = { 1,
                                                         40,
                                                         100,
                                                         10 };
+
 const int gameParameterLowerLimit [ gameparameternum ] = { 1,
                                                            1,
                                                            0,
@@ -1926,6 +1930,7 @@ const int gameParameterLowerLimit [ gameparameternum ] = { 1,
                                                            1,
                                                            0,
                                                            0 };
+
 const int gameParameterUpperLimit [ gameparameternum ] = { maxint,
                                                            maxint,
                                                            1,
@@ -1948,6 +1953,7 @@ const int gameParameterUpperLimit [ gameparameternum ] = { maxint,
                                                            100,
                                                            1000,
                                                            100 };
+
 const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "freezing time of icebreaker fairway",
                                                       "move vehicles from unaccessible fields",

@@ -13,8 +13,6 @@ Bugs:
  
 Small tasks:
 
--5- Display number of mines on a field
-
 -5- Message of crashed airplanes when they run out of fuel
 
 -7- writing a TPWM decoder for Battle Isle maps
@@ -62,8 +60,6 @@ Small tasks:
 -8-  kamikaze weapon
 
 -4- add mine information to field info dialog
-
--6- remove depenency to jpeg library in windows
 
 -6- resize graphics to contain all vehicle categories in weapon info
 

@@ -2,9 +2,15 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.38 2002-03-02 23:04:01 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.39 2002-03-18 21:42:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2002/03/02 23:04:01  mbickel
+//      Some cleanup of source code
+//      Improved Paragui Integration
+//      Updated documentation
+//      Improved Sound System
+//
 //     Revision 1.37  2001/12/17 19:41:22  mbickel
 //      Reactionfire can now be deactivated without consequences if it has just
 //        been activated
@@ -1204,7 +1210,7 @@ class SelectItemContainer {
                         pminetype mt = new tminetype;
                         mt->type = i;
                         minevector[i] = mt;
-                        mt->name = strdup ( cminentypen[ i ] );
+                        mt->name = strdup ( MineNames[ i ] );
                      }
                      selectmine = new SelectMine;
                      selectmine->init( minevector );
