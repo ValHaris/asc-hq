@@ -894,6 +894,8 @@ void loadStartupMap ( const char *gameToLoad=NULL )
             tnfilestream gamefile ( gameToLoad, tnstream::reading );
             tnetworkloaders nwl;
             nwl.loadnwgame( &gamefile );
+            if ( actmap->network )
+               setallnetworkpointers ( actmap->network );
          } catch ( tfileerror ) {
             fprintf ( stderr, "%s is not a legal email game. \n", gameToLoad );
             exit(-1);

@@ -3,9 +3,14 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.137 2002-11-05 09:05:16 mbickel Exp $
+//     $Id: controls.cpp,v 1.138 2002-11-07 18:42:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.137  2002/11/05 09:05:16  mbickel
+//      Fixed: mining stations produced not enough output
+//      Changed default building properties in mapeditor
+//      new autoborder object netting function
+//
 //     Revision 1.136  2002/11/01 20:44:52  mbickel
 //      Added function to specify which units can be build by other units
 //
@@ -1530,7 +1535,8 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
                   cursor.hide();
                }
 
-               tunitattacksunit battle ( ul->eht, fld->vehicle, 0, atw->num[num] );
+               pvehicle veh = ul->eht;
+               tunitattacksunit battle ( veh, fld->vehicle, 0, atw->num[num] );
 
                ad1 = battle.av.damage;
                dd1 = battle.dv.damage;
@@ -1549,6 +1555,7 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
                   result = 1;
 
                ul->eht->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  (vehicle->color / 8) );
+               removeunit ( ul->eht );
 
                battle.setresult();
 
@@ -1558,7 +1565,6 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
 //               logtoreplayinfo ( rpl_reactionfire, ulex, uley, x, y, ad1, ad2, dd1, dd2, atw->num[num] );
 
                dashboard.x = 0xffff;
-               removeunit ( ul->eht );
 
             }
             delete atw;
@@ -3109,9 +3115,10 @@ void continuenetworkgame ( void )
 
        network.computer[0].receive.transfermethod->closeconnection();
 
-       removemessage();
        if ( actmap->network )
           setallnetworkpointers ( actmap->network );
+
+       removemessage();
    } /* endtry */
 
    catch ( InvalidID err ) {

@@ -5,9 +5,14 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.72 2002-10-12 17:28:04 mbickel Exp $
+//     $Id: loaders.cpp,v 1.73 2002-11-07 18:42:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.72  2002/10/12 17:28:04  mbickel
+//      Fixed "enemy unit loaded" bug.
+//      Changed map format
+//      Improved log messages
+//
 //     Revision 1.71  2002/10/09 16:58:46  mbickel
 //      Fixed to GrafikSet loading
 //      New item filter for mapeditor
@@ -2621,7 +2626,7 @@ int  tspeedcrccheck :: checkbuilding     ( pbuildingtype b, int add )
                  if ( list->building.restricted == 2 )
                     return 0;
 
-               
+
          }
    return 0;
 }
