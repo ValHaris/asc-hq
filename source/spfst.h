@@ -1,6 +1,21 @@
-//     $Id: spfst.h,v 1.37 2001-01-25 23:45:06 mbickel Exp $
+/*! \file spfst.h
+    \brief map accessing and usage routines used by ASC and the mapeditor
+
+    spfst comes from german "Spielfeldsteuerung" :-)
+*/
+
+
+//     $Id: spfst.h,v 1.38 2001-01-28 14:04:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2001/01/25 23:45:06  mbickel
+//      Moved map displaying routins to own file (mapdisplay.cpp)
+//      Wrote program to create pcx images from map files (map2pcx.cpp)
+//      Fixed bug in repair function: too much resource consumption
+//      AI improvements and bug fixes
+//      The BI3 map import function now evaluates the player status (human/
+//       computer)
+//
 //     Revision 1.36  2001/01/23 21:05:22  mbickel
 //      Speed up of AI
 //      Lot of bugfixes in AI
@@ -55,14 +70,6 @@
 
 #ifndef spfst_h
   #define spfst_h
-
-/*! \file spfst.h
-    \brief map accessing routines used by ASC and the mapeditor
-
-    spfst comes from german "Spielfeldsteuerung" :-)
-    Routines that are not used by the mapeditor can be found controls
-*/
-
 
 
 
@@ -126,11 +133,9 @@
  //! Determines if fields that have a temp value != 0 are being marked when displaying the map
  extern char tempsvisible;
 
+ //! passes a key to the map-cursor
  extern void  movecursor(tkey         ch);
  
-
-
-  /*  zugriffe auf map und andere strukturen  */ 
 
 //! returns the field that is selected with the cursor
 extern pfield getactfield(void);
@@ -184,19 +189,26 @@ extern void  putbuilding2(integer      x,
 extern void  removebuilding(pbuilding *  bld);
 
 
-/*  hilfsfunktionen zum handhaben des mapes  */ 
-
+//! recalculates the connection (like road interconnections) of all objects on the map
 extern void  calculateallobjects(void);
 
-extern void  calculateobject(integer      x,
-                              integer      y,
-                              char      mof,
-                              pobjecttype obj);
+/** recalculates the connection (like road interconnections) of an object
+      \param x The x coordinate of the field
+      \param y The y coordinate of the field
+      \param mof Should the neighbouring fields be modified if necessary
+      \param obj The objecttype that is to be aligned on this field
+*/
+extern void  calculateobject(int  x,
+                             int  y,
+                             bool mof,
+                             pobjecttype obj );
 
+//! generate a map of size xsize/ysize and consisting just of fields bt. The map is stored in #actmap
 extern void  generatemap( TerrainType::Weather* bt,
                           int          xsize,
                           int          ysize);
 
+//! puts a line of objects from x1/y1 to x2/y2, moving round obstacles
 extern void  putstreets2( int          x1,
                           int          y1,
                           int          x2,
@@ -204,12 +216,9 @@ extern void  putstreets2( int          x1,
                           pobjecttype obj );
 
 
-extern int resizemap( int top, int bottom, int left, int right );
-
+/** removes objects like tracks (by vehicles) or shipping lanes (made by icebreakers) 
+    after their lifetime (specified in the mapparameters) is exceeded      */
 extern void  clearfahrspuren(void);
-
-extern void  initmap(void);
-
 
 
 /*! tests if the vehicle can move onto the field
@@ -223,21 +232,26 @@ extern int fieldaccessible( const pfield        field,
                             const pvehicle     vehicle,
                             int  uheight = -1 );
 
-
-  /*  sonstiges  */ 
-
-
+//! returns the image of an (explosive) mine. The type of the mine is specified by num.
 extern void* getmineadress( int num , int uncompressed = 0 );
 
-extern void generatespfdspaces();
-
+/** removes all units that cannot exist any more, either due to invalid terrin
+    (like tanks on melting ice) or too much wind (eg. hoovercrafts in a storm) */
 extern void  checkunitsforremoval ( void );
+
+//! removes all objects that cannot exist where they currently are (terrainaccess)
 extern void checkobjectsforremoval ( void );
 
 //! returns the maximum wind speed that the unit can endure
 extern int          getmaxwindspeedforunit ( const pvehicle eht );
 
+/** Wind may be different at different heights. This function returns the index 
+    for the wind array  */
 extern int          getwindheightforunit   ( const pvehicle eht );
+
+/** Each field that has a building on it stores a pointer to the picture of the 
+    buildings' part for faster displaying. This function refreshes these pointers
+    on all fields */
 extern void         resetallbuildingpicturepointers ( void );
 
 /** Checks if the unit can drive on the field
@@ -261,14 +275,7 @@ extern int          terrainaccessible (  const pfield        field, const pvehic
 extern int          terrainaccessible2 ( const pfield        field, const pvehicle     vehicle, int uheight = -1 );  
 
 
-
-extern int getcrc ( const pvehicletype fzt );
-extern int getcrc ( const ptechnology tech );
-extern int getcrc ( const pobjecttype obj );
-extern int getcrc ( const pterraintype bdn );
-extern int getcrc ( const pbuildingtype bld );
-
-
+//! automatically adjusting the pictures of woods and coasts to form coherent structures 
 extern void smooth ( int what );
 
 

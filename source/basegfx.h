@@ -1,3 +1,18 @@
+/*! \file basegfx.h
+   \brief basegfx.h is the interface for the graphic routines (of which some are platform dependent).
+
+   basegfx.h additionally includes the definitions of routines, 
+    whose implementation is platform dependant, but whose interface
+    is the same on all platforms. Their implementation is in the various
+    subdirectories for the platforms.
+    The graphic routines are older than ASC itself, first written in 1993 as a protected
+    mode replacement for Borlands BGI. (That's why the uncompressed image structure
+    is exactly the same as in the BGI).
+    This is the most badly designed and ugly part of ASC, which hould be completely rewritten,
+    to make use of high- and truecolor, hardware acceleration and to provide a nice, object
+    oriented C++ interface.
+*/
+
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -21,21 +36,6 @@
 #ifndef basegfx_h
 #define basegfx_h
 
-/*! \file basegfx.h
-   \brief basegfx.h is the interface for the graphic routines (of which some are platform dependent).
-
-   basegfx.h additionally includes the definitions of routines, 
-    whose implementation is platform dependant, but whose interface
-    is the same on all platforms. Their implementation is in the various
-    subdirectories for the platforms.
-    The graphic routines are older than ASC itself, first written in 1993 as a protected
-    mode replacement for Borlands BGI. (That's why the uncompressed image structure
-    is exactly the same as in the BGI).
-    This is the most badly designed and ugly part of ASC, which hould be completely rewritten,
-    to make use of high- and truecolor, hardware acceleration and to provide a nice, object
-    oriented C++ interface.
-
-    */
 
 
 #include "tpascal.inc"

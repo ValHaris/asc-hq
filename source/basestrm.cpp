@@ -1,6 +1,15 @@
-//     $Id: basestrm.cpp,v 1.49 2001-01-04 15:13:28 mbickel Exp $
+/*! \file basestrm.cpp
+    \brief The various streams that ASC offers, like file and memory streams. 
+*/
+
+//     $Id: basestrm.cpp,v 1.50 2001-01-28 14:04:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2001/01/04 15:13:28  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.48  2000/12/26 14:46:00  mbickel
 //      Made ASC compilable (and runnable) with Borland C++ Builder
 //

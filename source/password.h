@@ -6,6 +6,10 @@
     email                : bickel@asc-hq.org
  ***************************************************************************/
 
+/*! \file password.h
+    \brief A class for holding, encoding and comparing passwords
+*/
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

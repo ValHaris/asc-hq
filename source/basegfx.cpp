@@ -1,6 +1,16 @@
-//     $Id: basegfx.cpp,v 1.21 2001-01-19 13:33:47 mbickel Exp $
+/*! \file basegfx.cpp
+    \brief Platform indepedant graphic functions. 
+*/
+
+//     $Id: basegfx.cpp,v 1.22 2001-01-28 14:04:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2001/01/19 13:33:47  mbickel
+//      The AI now uses hemming
+//      Several bugfixes in Vehicle Actions
+//      Moved all view calculation to viewcalculation.cpp
+//      Mapeditor: improved keyboard support for item selection
+//
 //     Revision 1.20  2001/01/04 15:10:48  mbickel
 //      Fixed: showtext displayed garbage as last character when text had to be
 //        cut shorter to be displayed

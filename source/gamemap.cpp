@@ -714,16 +714,16 @@ void tmap :: setupResources ( void )
 {
   #ifndef converter
    for ( int n = 0; n< 8; n++ ) {
-      actmap->bi_resource[n].energy = 0;
-      actmap->bi_resource[n].material = 0;
-      actmap->bi_resource[n].fuel = 0;
+      bi_resource[n].energy = 0;
+      bi_resource[n].material = 0;
+      bi_resource[n].fuel = 0;
 
      #ifdef sgmain
 
-      for ( pbuilding bld = actmap->player[n].firstbuilding; bld ; bld = bld->next )
+      for ( pbuilding bld = player[n].firstbuilding; bld ; bld = bld->next )
          for ( int r = 0; r < 3; r++ )
-            if ( actmap->isResourceGlobal( r )) {
-               actmap->bi_resource[n].resource(r) += bld->actstorage.resource(r);
+            if ( isResourceGlobal( r )) {
+               bi_resource[n].resource(r) += bld->actstorage.resource(r);
                bld->actstorage.resource(r) = 0;
             }
      #endif
@@ -843,7 +843,7 @@ pvehicle tmap :: getUnit ( int nwid )
 pvehicle tmap :: getUnit ( int x, int y, int nwid )
 {
   #ifndef converter
-   pfield fld  = getfield ( x, y );
+   pfield fld  = getField ( x, y );
    if ( !fld )
       return NULL;
 
@@ -1058,6 +1058,113 @@ void tmap :: ResourceTribute :: write ( tnstream& stream )
 }
 
 
+
+int  tmap::resize( int top, int bottom, int left, int right )  // positive: larger
+{ 
+  if ( !top && !bottom && !left && !right )
+     return 0;
+
+  if ( -(top + bottom) > ysize )
+     return 1;
+
+  if ( -(left + right) > xsize )
+     return 2;
+
+  if ( bottom & 1 || top & 1 )
+     return 3;
+
+  int ox1, oy1, ox2, oy2;
+
+  if ( top < 0 ) {
+     for ( int x = 0; x < xsize; x++ )
+        for ( int y = 0; y < -top; y++ )
+           getField(x,y)->deleteeverything();
+
+     oy1 = -top;
+  } else
+     oy1 = 0;
+
+  if ( bottom < 0 ) {
+     for ( int x = 0; x < xsize; x++ )
+        for ( int y = ysize+bottom; y < ysize; y++ )
+           getField(x,y)->deleteeverything();
+
+     oy2 = ysize + bottom;
+  } else
+     oy2 = ysize;
+   
+  if ( left < 0 ) {
+     for ( int x = 0; x < -left; x++ )
+        for ( int y = 0; y < ysize; y++ )
+           getField(x,y)->deleteeverything();
+     ox1 = -left;
+  } else
+     ox1 = 0;
+
+  if ( right < 0 ) {
+     for ( int x = xsize+right; x < xsize; x++ )
+        for ( int y = 0; y < ysize; y++ )
+           getField(x,y)->deleteeverything();
+     ox2 = xsize + right;
+  } else
+     ox2 = xsize;
+
+
+  int newx = xsize + left + right;
+  int newy = ysize + top + bottom;
+
+  pfield newfield = new tfield [ newx * newy ];
+
+  int x;
+  for ( x = ox1; x < ox2; x++ )
+     for ( int y = oy1; y < oy2; y++ ) {
+        pfield org = getField ( x, y );
+        pfield dst = &newfield[ (x + left) + ( y + top ) * newx];
+        *dst = *org;
+     }
+
+  tfield defaultfield;
+  memset ( &defaultfield, 0, sizeof ( defaultfield ));
+  defaultfield.typ = getterraintype_forid ( 30 )->weather[0];
+
+  for ( x = 0; x < left; x++ )
+     for ( int y = 0; y < newy; y++ )
+        newfield[ x + y * newx ] = defaultfield;
+
+  for ( x = xsize + left; x < xsize + left + right; x++ )
+     for ( int y = 0; y < newy; y++ )
+        newfield[ x + y * newx ] = defaultfield;
+
+
+  int y;
+  for ( y = 0; y < top; y++ )
+     for ( int x = 0; x < newx; x++ )
+        newfield[ x + y * newx ] = defaultfield;
+
+  for ( y = ysize + top; y < ysize + top + bottom; y++ )
+     for ( int x = 0; x < newx; x++ )
+        newfield[ x + y * newx ] = defaultfield;
+
+  calculateallobjects();
+  for ( int p = 0; p < newx*newy; p++ )
+     newfield[p].setparams();
+
+  delete[] field;
+  field = newfield;
+  xsize = newx;
+  ysize = newy;
+
+  if (xpos + idisplaymap.getscreenxsize() > xsize) 
+     xpos = xsize - idisplaymap.getscreenxsize() ; 
+  if (ypos + idisplaymap.getscreenysize()  > ysize) 
+     ypos = ysize - idisplaymap.getscreenysize() ; 
+
+
+  return 0;
+}
+
+
+
 #ifdef converter
 pterraintype tmap :: getterraintype_byid ( int id )      { return NULL; }
 pobjecttype tmap :: getobjecttype_byid ( int id )        { return NULL; }
@@ -1155,6 +1262,74 @@ int tmap :: getTechnologyNum ( )
 {
    return  objecttypenum;
 }
+
+void tmap :: startGame ( )
+{ 
+   time.a.turn = 1;
+   time.a.move = 0;
+
+   for ( int j = 0; j < 8; j++ )
+      player[j].queuedEvents = 1;
+   #ifndef karteneditor
+   getnexteventtime();
+   #endif
+
+   levelfinished = false;
+   firsteventpassed = NULL;
+   network = NULL;
+   int num = 0;
+   int cols[72];
+   memset ( cols, 0, sizeof ( cols ));
+   int i;
+   for ( i = 0; i < 8 ; i++) {
+      if ( player[i].existent ) {
+         num++;
+         cols[ i * 8 ] = 1;
+      } else
+         cols[ i * 8 ] = 0;
+
+      cursorpos.position[ i ].sx = 0;
+      cursorpos.position[ i ].sy = 0;
+
+   }
+
+   i = 0;                                                                        
+   int sze = xsize * ysize;
+   do {
+      if ( field[i].vehicle ) 
+         if ( cols[ field[i].vehicle->color] ) {
+            cursorpos.position[ field[i].vehicle->color / 8 ].cx = field[i].vehicle->xpos;
+            cursorpos.position[ field[i].vehicle->color / 8 ].cy = field[i].vehicle->ypos;
+            num--;
+            cols[ field[i].vehicle->color] = 0;
+         }
+
+      if ( field[i].building && field[i].building->color < 64 ) 
+         if ( cols[ field[i].building->color] ) {
+            cursorpos.position[ field[i].building->color / 8 ].cx = field[i].building->xpos;
+            cursorpos.position[ field[i].building->color / 8 ].cy = field[i].building->ypos;
+            num--;
+            cols[ field[i].building->color] = 0;
+         }
+      i++;
+   } while ( num   &&   i <= sze ); /* enddo */
+   i = 0;
+   while ( !player[i].existent )
+      i++;
+
+   for ( int n = 0; n< 8; n++ ) {
+      bi_resource[n].energy = 0;
+      bi_resource[n].material = 0;
+      bi_resource[n].fuel = 0;
+   }
+
+
+   #ifndef karteneditor
+   actplayer = -1;
+   #else
+   actplayer = 0;
+   #endif
+} 
 
 
 #endif

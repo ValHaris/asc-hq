@@ -6,6 +6,12 @@
     email                : bickel@asc-hq.org
  ***************************************************************************/
 
+/*! \file pointers.h
+    \brief Some pointer definitions to central classes for usage as forward 
+           declarations 
+*/
+
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

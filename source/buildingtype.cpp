@@ -6,6 +6,10 @@
     email                : bickel@asc-hq.org
  ***************************************************************************/
 
+/*! \file buildingtype.cpp
+    \brief The implementation of the methods handling buildings and buildingtypes
+*/
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

@@ -1,6 +1,14 @@
-//     $Id: pd.cpp,v 1.14 2000-10-18 14:14:16 mbickel Exp $
+/*! \file pd.h
+    \brief The implementation of the Pulldown Menu
+*/
+
+//     $Id: pd.cpp,v 1.15 2001-01-28 14:04:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/10/18 14:14:16  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.13  2000/08/12 12:52:50  mbickel
 //      Made DOS-Version compile and run again.
 //

@@ -6,6 +6,10 @@
     email                : 
  ***************************************************************************/
 
+/*! \file CLoadable.h
+    \brief Interface for the class mapping configfile-entries to the gameoptions
+*/
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

@@ -1,3 +1,8 @@
+/*! \file soundList.h
+    \brief The collection of all sounds used by ASC
+*/
+
+
 #ifdef _DOS_
  #include "dos/sound.h"
 #else

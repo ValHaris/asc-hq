@@ -1,6 +1,19 @@
-//     $Id: network.cpp,v 1.14 2000-10-18 14:14:15 mbickel Exp $
+/*! \file network.cpp
+    \brief Code for moving a multiplayer game data from one computer to another.
+ 
+    The only method that is currently implemented is writing the data to a file
+    and telling the user to send this file by email :-)
+    But the interface for real networking is there...
+*/
+
+
+//     $Id: network.cpp,v 1.15 2001-01-28 14:04:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/10/18 14:14:15  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.13  2000/10/14 14:16:06  mbickel
 //      Cleaned up includes
 //      Added mapeditor to win32 watcom project

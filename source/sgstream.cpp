@@ -1,6 +1,17 @@
-//     $Id: sgstream.cpp,v 1.49 2001-01-21 16:37:19 mbickel Exp $
+/*! \file sgstream.cpp
+    \brief The IO for many basic classes and structurs of ACS
+   
+    These routines are gradually being moved to become methods of their classes
+*/
+
+
+//     $Id: sgstream.cpp,v 1.50 2001-01-28 14:04:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2001/01/21 16:37:19  mbickel
+//      Moved replay code to own file ( replay.cpp )
+//      Fixed compile problems done by cleanup
+//
 //     Revision 1.48  2001/01/21 12:48:36  mbickel
 //      Some cleanup and documentation
 //
@@ -38,192 +49,6 @@
 //      Fixed crash when entering damaged building
 //      Fixed crash in AI
 //      Removed item CRCs
-//
-//     Revision 1.40  2000/10/26 18:15:00  mbickel
-//      AI moves damaged units to repair
-//      tmap is not memory layout sensitive any more
-//
-//     Revision 1.39  2000/10/18 14:14:18  mbickel
-//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
-//       fixed soon.
-//
-//     Revision 1.38  2000/10/17 13:04:13  mbickel
-//      New terrainaccess reading/writing
-//      Added Win32 project files
-//
-//     Revision 1.37  2000/10/17 12:12:22  mbickel
-//      Improved vehicletype loading/saving routines
-//      documented some global variables
-//
-//     Revision 1.36  2000/10/14 14:16:08  mbickel
-//      Cleaned up includes
-//      Added mapeditor to win32 watcom project
-//
-//     Revision 1.35  2000/10/14 13:07:01  mbickel
-//      Moved DOS version into own subdirectories
-//      Win32 version with Watcom compiles and links ! But doesn't run yet...
-//
-//     Revision 1.34  2000/10/12 22:24:02  mbickel
-//      Made the DOS part of the new platform system work again
-//
-//     Revision 1.33  2000/10/12 21:37:55  mbickel
-//      Further restructured platform dependant routines
-//
-//     Revision 1.32  2000/10/12 19:51:45  mbickel
-//      Added a stub program for generating a weapon guide
-//      Added makefiles to compile this weaponguide with the free borland C++
-//        compiler
-//      Made some adjustments to basic IO file for compiling them with borland
-//        C++
-//
-//     Revision 1.31  2000/10/11 14:26:47  mbickel
-//      Modernized the internal structure of ASC:
-//       - vehicles and buildings now derived from a common base class
-//       - new resource class
-//       - reorganized exceptions (errors.h)
-//      Split some files:
-//        typen -> typen, vehicletype, buildingtype, basecontainer
-//        controls -> controls, viewcalculation
-//        spfst -> spfst, mapalgorithm
-//      bzlib is now statically linked and sources integrated
-//
-//     Revision 1.30  2000/09/20 15:05:10  mbickel
-//      Better error handling on startup.
-//
-//     Revision 1.29  2000/08/21 17:51:02  mbickel
-//      Fixed: crash when unit reaching max experience
-//      Fixed: crash when displaying research image
-//      Fixed: crash when events referenced a unit that has been shot down
-//      Fixed: screenshot being written to wrong directory
-//
-//     Revision 1.28  2000/08/12 09:17:33  gulliver
-//     *** empty log message ***
-//
-//     Revision 1.27  2000/08/08 13:22:09  mbickel
-//      Added unitCategoriesLoadable property to buildingtypes and vehicletypes
-//      Added option: showUnitOwner
-//
-//     Revision 1.26  2000/08/05 13:38:36  mbickel
-//      Rewrote height checking for moving units in and out of
-//        transports / building
-//
-//     Revision 1.25  2000/08/04 15:11:18  mbickel
-//      Moving transports costs movement for units inside
-//      refuelled vehicles now have full movement in the same turn
-//      terrain: negative attack / defensebonus allowed
-//      new mapparameters that affect damaging and repairing of building
-//
-//     Revision 1.24  2000/08/02 18:18:09  mbickel
-//      Fixed broken Watcom Projectfiles for tools
-//      Makebld can now save a buildings image
-//
-//     Revision 1.23  2000/08/02 17:27:50  mbickel
-//      Renamed translation to transformation in unitset definition file
-//
-//     Revision 1.22  2000/08/02 15:53:01  mbickel
-//      New unit set definition files
-//      demount accepts now more than one container file
-//      Unitset information dialog added
-//
-//     Revision 1.21  2000/08/02 10:28:27  mbickel
-//      Fixed: generator vehicle not working
-//      Streams can now report their name
-//      Field information shows units filename
-//
-//     Revision 1.20  2000/08/01 10:39:14  mbickel
-//      Updated documentation
-//      Refined configuration file handling
-//
-//     Revision 1.19  2000/07/31 19:16:48  mbickel
-//      Improved handing of multiple directories
-//      Fixed: wind direction not displayed when cycling through wind heights
-//      Fixed: oil rig not working
-//      Fixed: resources becomming visible when checking mining station status
-//      Fixed: division by zero when moving unit without fuel consumption
-//
-//     Revision 1.18  2000/07/31 18:02:54  mbickel
-//      New configuration file handling
-//      ASC searches its data files in all directories specified in ascrc
-//      Renamed all tools so they begin with asc
-//
-//     Revision 1.17  2000/07/29 15:28:36  mbickel
-//      Plaintext configfile runs now in Linux version too
-//
-//     Revision 1.16  2000/07/29 14:54:43  mbickel
-//      plain text configuration file implemented
-//
-//     Revision 1.15  2000/07/28 10:15:29  mbickel
-//      Fixed broken movement
-//      Fixed graphical artefacts when moving some airplanes
-//
-//     Revision 1.14  2000/06/28 19:26:17  mbickel
-//      fixed bug in object generation by building removal
-//      Added artint.cpp to makefiles
-//      Some cleanup
-//
-//     Revision 1.13  2000/06/28 18:31:02  mbickel
-//      Started working on AI
-//      Started making loaders independent of memory layout
-//      Destroyed buildings can now leave objects behind.
-//
-//     Revision 1.12  2000/05/23 20:40:49  mbickel
-//      Removed boolean type
-//
-//     Revision 1.11  2000/05/06 20:25:24  mbickel
-//      Fixed: -recognition of a second mouse click when selection a pd menu item
-//             -movement: fields the unit can only pass, but not stand on them,
-//                        are marked darker
-//             -intedit/stredit: mouseclick outside is like hitting enter
-//
-//     Revision 1.10  2000/04/27 16:25:26  mbickel
-//      Attack functions cleanup
-//      New vehicle categories
-//      Rewrote resource production in ASC resource mode
-//      Improved mine system: several mines on a single field allowed
-//      Added unitctrl.* : Interface for vehicle functions
-//        currently movement and height change included
-//      Changed timer to SDL_GetTicks
-//
-//     Revision 1.9  2000/03/29 09:58:48  mbickel
-//      Improved memory handling for DOS version
-//      Many small changes I can't remember ;-)
-//
-//     Revision 1.8  2000/03/11 18:22:08  mbickel
-//      Added support for multiple graphic sets
-//
-//     Revision 1.7  2000/02/03 20:54:41  mbickel
-//      Some cleanup
-//      getfiletime now works under Linux too
-//
-//     Revision 1.6  2000/01/24 17:35:46  mbickel
-//      Added dummy routines for sound under DOS
-//      Cleaned up weapon specification
-//
-//     Revision 1.5  1999/12/28 21:03:20  mbickel
-//      Continued Linux port
-//      Added KDevelop project files
-//
-//     Revision 1.4  1999/12/27 13:00:10  mbickel
-//      new vehicle function: each weapon can now be set to not attack certain
-//                            vehicles
-//
-//     Revision 1.3  1999/11/22 18:27:54  mbickel
-//      Restructured graphics engine:
-//        VESA now only for DOS
-//        BASEGFX should be platform independant
-//        new interface for initialization
-//      Rewrote all ASM code in C++, but it is still available for the Watcom
-//        versions
-//      Fixed bugs in RLE decompression, BI map importer and the view calculation
-//
-//     Revision 1.2  1999/11/16 03:42:28  tmwilson
-//      Added CVS keywords to most of the files.
-//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//      Wrote replacement routines for kbhit/getch for Linux
-//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//      Added autoconf/automake capabilities
-//      Added files used by 'automake --gnu'
-//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -279,10 +104,6 @@
 
 #ifdef HEXAGON
  #include "loadbi3.h"
-#endif
-
-#ifdef _DOS_
- #include "dos/memory.h"
 #endif
 
 

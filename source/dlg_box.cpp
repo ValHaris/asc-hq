@@ -1,6 +1,16 @@
-//     $Id: dlg_box.cpp,v 1.44 2001-01-04 15:13:38 mbickel Exp $
+/*! \file dlg_box.cpp
+    \brief Some basic classes from which all of ASC's dialogs are derived
+*/
+
+
+//     $Id: dlg_box.cpp,v 1.45 2001-01-28 14:04:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2001/01/04 15:13:38  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.43  2000/12/28 11:12:44  mbickel
 //      Fixed: no redraw when restoring fullscreen focus in WIN32
 //      Better error message handing in WIN32

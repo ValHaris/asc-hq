@@ -1,6 +1,21 @@
-//     $Id: loadpcxc.cpp,v 1.10 2001-01-25 23:45:01 mbickel Exp $
+/*! \file loadpcxc.cpp
+    \brief Loading and storing images in PCX format, written in C
+
+    There is also an optimized assembler version for the DOS version around
+    which is called loadpcx.cpp , but not used any more.
+*/
+
+//     $Id: loadpcxc.cpp,v 1.11 2001-01-28 14:04:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2001/01/25 23:45:01  mbickel
+//      Moved map displaying routins to own file (mapdisplay.cpp)
+//      Wrote program to create pcx images from map files (map2pcx.cpp)
+//      Fixed bug in repair function: too much resource consumption
+//      AI improvements and bug fixes
+//      The BI3 map import function now evaluates the player status (human/
+//       computer)
+//
 //     Revision 1.9  2000/12/23 13:19:47  mbickel
 //      Made ASC compileable with Borland C++ Builder
 //

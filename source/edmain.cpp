@@ -1,6 +1,18 @@
-//     $Id: edmain.cpp,v 1.35 2001-01-25 23:44:57 mbickel Exp $
+/*! \file edmain.cpp
+    \brief The map editor's main program 
+*/
+
+//     $Id: edmain.cpp,v 1.36 2001-01-28 14:04:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2001/01/25 23:44:57  mbickel
+//      Moved map displaying routins to own file (mapdisplay.cpp)
+//      Wrote program to create pcx images from map files (map2pcx.cpp)
+//      Fixed bug in repair function: too much resource consumption
+//      AI improvements and bug fixes
+//      The BI3 map import function now evaluates the player status (human/
+//       computer)
+//
 //     Revision 1.34  2001/01/04 15:13:45  mbickel
 //      configure now checks for libSDL_image
 //      AI only conquers building that cannot be conquered back immediately

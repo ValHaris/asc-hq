@@ -1,6 +1,19 @@
-//     $Id: artint.cpp,v 1.54 2001-01-25 23:44:50 mbickel Exp $
+/*! \file artint.cpp
+    \brief The artificial intelligence of ASC. 
+*/
+
+
+//     $Id: artint.cpp,v 1.55 2001-01-28 14:04:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2001/01/25 23:44:50  mbickel
+//      Moved map displaying routins to own file (mapdisplay.cpp)
+//      Wrote program to create pcx images from map files (map2pcx.cpp)
+//      Fixed bug in repair function: too much resource consumption
+//      AI improvements and bug fixes
+//      The BI3 map import function now evaluates the player status (human/
+//       computer)
+//
 //     Revision 1.53  2001/01/24 14:42:45  mbickel
 //      Fixed a crash in the AI
 //
@@ -91,11 +104,6 @@
     along with this program; see the file COPYING. If not, write to the 
     Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
     Boston, MA  02111-1307  USA
-*/
-
-
-/*! \file artint.cpp
-   The artificial intelligence of ASC. 
 */
 
 

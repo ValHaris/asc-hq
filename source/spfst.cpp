@@ -1,6 +1,18 @@
-//     $Id: spfst.cpp,v 1.80 2001-01-25 23:45:04 mbickel Exp $
+/*! \file spfst.cpp
+    \brief map accessing and usage routines used by ASC and the mapeditor
+*/
+
+//     $Id: spfst.cpp,v 1.81 2001-01-28 14:04:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.80  2001/01/25 23:45:04  mbickel
+//      Moved map displaying routins to own file (mapdisplay.cpp)
+//      Wrote program to create pcx images from map files (map2pcx.cpp)
+//      Fixed bug in repair function: too much resource consumption
+//      AI improvements and bug fixes
+//      The BI3 map import function now evaluates the player status (human/
+//       computer)
+//
 //     Revision 1.79  2001/01/23 21:05:20  mbickel
 //      Speed up of AI
 //      Lot of bugfixes in AI
@@ -268,189 +280,8 @@ int  rol ( int valuetorol, int rolwidth )
 
 
 
-void         initmap( void )
-{ 
-   actmap->time.a.turn = 1;
-   actmap->time.a.move = 0;
-
-   for ( int j = 0; j < 8; j++ )
-      actmap->player[j].queuedEvents = 1;
-   #ifndef karteneditor
-   getnexteventtime();
-   #endif
-
-   actmap->levelfinished = false;
-   actmap->firsteventpassed = NULL;
-   actmap->network = NULL;
-   int num = 0;
-   int cols[72];
-   memset ( cols, 0, sizeof ( cols ));
-   int i;
-   for ( i = 0; i < 8 ; i++) {
-      if ( actmap->player[i].existent ) {
-         num++;
-         cols[ i * 8 ] = 1;
-      } else
-         cols[ i * 8 ] = 0;
-
-      actmap->cursorpos.position[ i ].sx = 0;
-      actmap->cursorpos.position[ i ].sy = 0;
-
-   }
-
-   i = 0;                                                                        
-   int sze = actmap->xsize * actmap->ysize;
-   do {
-      if ( actmap->field[i].vehicle ) 
-         if ( cols[ actmap->field[i].vehicle->color] ) {
-            actmap->cursorpos.position[ actmap->field[i].vehicle->color / 8 ].cx = actmap->field[i].vehicle->xpos;
-            actmap->cursorpos.position[ actmap->field[i].vehicle->color / 8 ].cy = actmap->field[i].vehicle->ypos;
-            num--;
-            cols[ actmap->field[i].vehicle->color] = 0;
-         }
-
-      if ( actmap->field[i].building && actmap->field[i].building->color < 64 ) 
-         if ( cols[ actmap->field[i].building->color] ) {
-            actmap->cursorpos.position[ actmap->field[i].building->color / 8 ].cx = actmap->field[i].building->xpos;
-            actmap->cursorpos.position[ actmap->field[i].building->color / 8 ].cy = actmap->field[i].building->ypos;
-            num--;
-            cols[ actmap->field[i].building->color] = 0;
-         }
-      i++;
-   } while ( num   &&   i <= sze ); /* enddo */
-   i = 0;
-   while ( !actmap->player[i].existent )
-      i++;
-
-   for ( int n = 0; n< 8; n++ ) {
-      actmap->bi_resource[n].energy = 0;
-      actmap->bi_resource[n].material = 0;
-      actmap->bi_resource[n].fuel = 0;
-   }
 
 
-   #ifndef karteneditor
-   actmap->actplayer = -1;
-   #else
-   actmap->actplayer = 0;
-   #endif
-
-} 
-
-
-
-
-
-
-
-
-
-
-
-
-int  resizemap( int top, int bottom, int left, int right )  // positive: larger
-{ 
-  if ( !top && !bottom && !left && !right )
-     return 0;
-
-  if ( -(top + bottom) > actmap->ysize )
-     return 1;
-
-  if ( -(left + right) > actmap->xsize )
-     return 2;
-
-  if ( bottom & 1 || top & 1 )
-     return 3;
-
-  int ox1, oy1, ox2, oy2;
-
-  if ( top < 0 ) {
-     for ( int x = 0; x < actmap->xsize; x++ )
-        for ( int y = 0; y < -top; y++ )
-           getfield(x,y)->deleteeverything();
-
-     oy1 = -top;
-  } else
-     oy1 = 0;
-
-  if ( bottom < 0 ) {
-     for ( int x = 0; x < actmap->xsize; x++ )
-        for ( int y = actmap->ysize+bottom; y < actmap->ysize; y++ )
-           getfield(x,y)->deleteeverything();
-
-     oy2 = actmap->ysize + bottom;
-  } else
-     oy2 = actmap->ysize;
-   
-  if ( left < 0 ) {
-     for ( int x = 0; x < -left; x++ )
-        for ( int y = 0; y < actmap->ysize; y++ )
-           getfield(x,y)->deleteeverything();
-     ox1 = -left;
-  } else
-     ox1 = 0;
-
-  if ( right < 0 ) {
-     for ( int x = actmap->xsize+right; x < actmap->xsize; x++ )
-        for ( int y = 0; y < actmap->ysize; y++ )
-           getfield(x,y)->deleteeverything();
-     ox2 = actmap->xsize + right;
-  } else
-     ox2 = actmap->xsize;
-
-
-  int newx = actmap->xsize + left + right;
-  int newy = actmap->ysize + top + bottom;
-
-  pfield newfield = new tfield [ newx * newy ];
-
-  int x;
-  for ( x = ox1; x < ox2; x++ )
-     for ( int y = oy1; y < oy2; y++ ) {
-        pfield org = getfield ( x, y );
-        pfield dst = &newfield[ (x + left) + ( y + top ) * newx];
-        *dst = *org;
-     }
-
-  tfield defaultfield;
-  memset ( &defaultfield, 0, sizeof ( defaultfield ));
-  defaultfield.typ = getterraintype_forid ( 30 )->weather[0];
-
-  for ( x = 0; x < left; x++ )
-     for ( int y = 0; y < newy; y++ )
-        newfield[ x + y * newx ] = defaultfield;
-
-  for ( x = actmap->xsize + left; x < actmap->xsize + left + right; x++ )
-     for ( int y = 0; y < newy; y++ )
-        newfield[ x + y * newx ] = defaultfield;
-
-
-  int y;
-  for ( y = 0; y < top; y++ )
-     for ( int x = 0; x < newx; x++ )
-        newfield[ x + y * newx ] = defaultfield;
-
-  for ( y = actmap->ysize + top; y < actmap->ysize + top + bottom; y++ )
-     for ( int x = 0; x < newx; x++ )
-        newfield[ x + y * newx ] = defaultfield;
-
-  calculateallobjects();
-  for ( int p = 0; p < newx*newy; p++ )
-     newfield[p].setparams();
-
-  delete[] actmap->field;
-  actmap->field = newfield;
-  actmap->xsize = newx;
-  actmap->ysize = newy;
-
-  if (actmap->xpos + idisplaymap.getscreenxsize() > actmap->xsize) 
-     actmap->xpos = actmap->xsize - idisplaymap.getscreenxsize() ; 
-  if (actmap->ypos + idisplaymap.getscreenysize()  > actmap->ysize) 
-     actmap->ypos = actmap->ysize - idisplaymap.getscreenysize() ; 
-
-
-  return 0;
-}
 
 
 
@@ -1244,9 +1075,9 @@ int isresourcenetobject ( pobjecttype obj )
 
 
 
-void         calculateobject(integer      x,
-                              integer      y,
-                              char      mof,
+void         calculateobject(int      x,
+                              int      y,
+                              bool      mof,
                               pobjecttype obj)  /* mof = modify other fields  */        
 { 
   #ifdef HEXAGON
@@ -2470,27 +2301,6 @@ void swapbuildings ( pbuilding building, pbuilding orgbuilding )
       npop ( orgbuilding->prev );
       npop ( orgbuilding->next );
 }
-
-/*
-void swapvehicles ( pvehicle orgvehicle, pvehicle transport )
-{
-      npush ( orgvehicle->next );
-      npush ( orgvehicle->prev );
-
-      npush ( transport->next );
-      npush ( transport->prev );
-
-      tvehicle temp = *orgvehicle;
-      *orgvehicle = *transport;
-      *transport = temp;
-
-      npop ( transport->prev );
-      npop ( transport->next );
-
-      npop ( orgvehicle->prev );
-      npop ( orgvehicle->next );
-}
-*/
 
 
 

@@ -1,3 +1,7 @@
+/*! \file soundList.cpp
+    \brief The collection of all sounds used by ASC
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 

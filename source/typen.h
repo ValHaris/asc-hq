@@ -1,6 +1,13 @@
-//     $Id: typen.h,v 1.78 2001-01-23 21:05:23 mbickel Exp $
+//     $Id: typen.h,v 1.79 2001-01-28 14:04:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.78  2001/01/23 21:05:23  mbickel
+//      Speed up of AI
+//      Lot of bugfixes in AI
+//      Moved Research to own files (research.*)
+//      Rewrote storing of developed technologies
+//      Some cleanup and documentation
+//
 //     Revision 1.77  2001/01/22 20:00:11  mbickel
 //      Fixed bug that made savegamefrom campaign games unloadable
 //      Optimized the terrainAccess-checking
@@ -1320,6 +1327,11 @@ class tmap {
       const char* getPlayerName ( int playernum );
       pfield getField ( int x, int y );
       pfield getField ( const MapCoordinate& pos );
+      void startGame ( );
+
+      //! resizes the map. Positive numbers enlarge the map in that direction
+      int  resize( int top, int bottom, int left, int right );
+
 
       void calculateAllObjects ( void );
 

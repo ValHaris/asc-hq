@@ -1,6 +1,14 @@
-//     $Id: attack.cpp,v 1.36 2001-01-21 12:48:35 mbickel Exp $
+/*! \file attack.cpp
+    \brief All the routines for fighting in ASC
+*/
+
+
+//     $Id: attack.cpp,v 1.37 2001-01-28 14:04:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2001/01/21 12:48:35  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.35  2001/01/19 13:33:46  mbickel
 //      The AI now uses hemming
 //      Several bugfixes in Vehicle Actions
@@ -27,9 +35,6 @@
     Boston, MA  02111-1307  USA
 */
 
-/*! \file attack.cpp
-   eveything regarind . 
-*/
 
 
 #include <stdio.h>

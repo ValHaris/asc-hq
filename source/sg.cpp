@@ -1,6 +1,19 @@
-//     $Id: sg.cpp,v 1.125 2001-01-25 23:45:02 mbickel Exp $
+/*! \file sg.cpp
+    \brief THE main program: ASC
+*/
+
+
+//     $Id: sg.cpp,v 1.126 2001-01-28 14:04:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.125  2001/01/25 23:45:02  mbickel
+//      Moved map displaying routins to own file (mapdisplay.cpp)
+//      Wrote program to create pcx images from map files (map2pcx.cpp)
+//      Fixed bug in repair function: too much resource consumption
+//      AI improvements and bug fixes
+//      The BI3 map import function now evaluates the player status (human/
+//       computer)
+//
 //     Revision 1.124  2001/01/21 16:37:18  mbickel
 //      Moved replay code to own file ( replay.cpp )
 //      Fixed compile problems done by cleanup
@@ -259,7 +272,6 @@ tsgonlinemousehelpwind* onlinehelpwind = NULL;
 
 
 
-int  memcheckticker;
 int  abortgame;
 
 #define keyinputbuffersize 12
@@ -345,133 +357,6 @@ void showmemory ( void )
    npop  ( activefontsettings );
   #endif
 };
-
-
-
-
-
-
-#ifndef HEXAGON
-static const char vierecktranstable[256] = {   0,    0,    2,    0,    0,    5,    6,    7,    8,    9,   10,
-                                               11,   00,   13,   14,   15,   00,   00,   18,   19,   20,
-                                               85,   22,   23,   24,   25,   26,   27,   28,   29,   30,
-                                               31,   32,   33,   34,   35,   36,   37,   38,   39,   40,
-                                               41,   42,   43,   44,   45,   46,   47,   00,   49,   50,
-                                               00,   52,   53,   54,   00,   56,   57,   58,   59,   60,
-                                               61,   62,  255,   00,   65,   66,   67,   00,   85,   70,
-                                               85,   72,   73,   74,   75,   76,   77,   78,   79,   80,
-                                               85,   82,   83,   85,   85,   86,   85,   88,   89,   90,
-                                               91,   92,   85,   94,   95,   96,   97,   98,   99,  100,
-                                               101,  102,  103,  104,  105,  106,  107,  108,  109,  110,  
-                                               111,  112,  113,  114,  000,   85,   85,  118,   85 ,  120,
-                                               121,  122,  123,  124,  125,  126,  255,  128,  129,  130,
-                                               131,  132,  133,  134,  135,  136,  137,  138,  139,  140,  
-                                               141,  142,  143,  144,  145,  146,  147,  148,  149,  150,  
-                                               151,  152,  153,  154,  155,  156,  157,  158,  159,  160,  
-                                               161,  162,  163,  164,  165,  166,  167,  168,  169,  170, 
-                                               171,  172,  173,  174,  175,  176,  177,  178,  179,  180,
-                                               181,  182,  183,  184,  185,  186,  187,  188,  189,  190,
-                                               191,  000,  193,  194,  195,  196,  197,  198,  199,  200,
-                                               201,  202,  203,  000,  000,  206,  255,  208,  209,  210,
-                                               211,  212,   85,  214,  215,  216,  217,  218,  219,  000,
-                                                85,  222,  255,  224,  225,  226,  227,  228,  229,  230,
-                                               231,  232,  233,  234,  235,  236,  237,  238,  239,  240,  
-                                               241,  242,  255,  244,  245,  246,  255,  248,  249,  250,
-                                               251,  255,  255, 254, 255 };
-
-
-
-void mountview( void ) 
-{
-   memset( view.viereck, 0, sizeof ( view.viereck ));
-   npush ( *agmp );
-   agmp-> linearaddress = (int) new int [ 256 ];
-
-   agmp-> scanlinelength = 20;
-   agmp-> windowstatus = 100;
-
-   int m,n;
-
-   int a,b[5],c,e,w;
-   memset(b, 0, sizeof(b));
-
-   w = imagesize ( 0,0,9,9 );
-
-   for (a=0 ;a < 81 ;a++ ) {
-         bar(0,0,10,10,255);
-         e=0;
-         m=0;
-         n=0;
-         for (c=0;c < 4 ; c++ ) {
-            if ( b[c] == 1) {
-              putspriteimage(0,0, view.va4[c]);
-              e |= (1 << (2*c));
-              m++;
-            } else {
-              if ( b[c] == 2) {
-                 putspriteimage(0,0, view.nv4[c]);
-                 e |= (3 << (2*c));
-                 n++;
-              }
-            }
-         } /* endfor */
-
-         if ( vierecktranstable[e] == e ) {
-              view.viereck[e] = new char [  w  ];
-              getimage ( 0,0,9,9, view.viereck[e] );
-          } /* endif */
-
-         /*
-         itoa( e, t, 2);
-         activefontsettings.background = white;
-         activefontsettings.length = 100;
-         activefontsettings.font = schriften.smallarial;
-         showtext2( t, 50, 50 );
-         getch();
-         */
-
-         e=0;
-         while (b[e] == 2) {
-            b[e] = 0;
-            e++;
-         } /* endwhile */
-         b[e]++;
-   } /* endfor */
-
-   for (a=0 ;a < 81 ;a++ ) {
-         m=0;
-         n=0;
-         e=0;
-         for (c=0;c < 4 ; c++ ) {
-            if ( b[c] == 1) {
-              e |= (1 << (2*c));
-              m++;
-            } else {
-              if ( b[c] == 2) {
-                 e |= (3 << (2*c));
-                 n++;
-              }
-            }
-         } /* endfor */
-
-         if ( view.viereck[e] == NULL ) 
-            view.viereck[e] = view.viereck[vierecktranstable[e]];
-
-         e=0;
-         while (b[e] == 2) {
-            b[e] = 0;
-            e++;
-         } /* endwhile */
-         b[e]++;
-   } /* endfor */
-
-
-
-
-   delete  ( (void*) agmp-> linearaddress );
-   npop ( *agmp );
-}
-#endif
 
 
 
@@ -915,11 +800,6 @@ void         tsgpulldown :: init ( void )
    addbutton ( "seperator", -1);
    addbutton ( "~O~ptions", ua_gamepreferences );
    addbutton ( "~M~ouse options", ua_mousepreferences );
-/*
-   #ifdef HEXAGON
-    addbutton ( "~B~I options",ua_bi3preferences);
-   #endif
-*/
    addbutton ( "seperator", -1);
    addbutton ( "~M~ain MenuõF2", ua_mainmenu );
    addbutton ( "E~x~itõctrl-x", ua_exitgame );
@@ -1213,7 +1093,7 @@ void         startnewsinglelevelfromgame(void)
 
 
 
-void ladestartkarte( char *emailgame=NULL, char *mapname=NULL, char *savegame=NULL )
+void loadStartupMap ( char *emailgame=NULL, char *mapname=NULL, char *savegame=NULL )
 {
    char s[300];
    if( emailgame != NULL ) {
@@ -1299,17 +1179,6 @@ void ladestartkarte( char *emailgame=NULL, char *mapname=NULL, char *savegame=NU
       loadmap(s);
       initmap();
       actmap->setupResources();
-
-#ifdef logging
-      logtofile("nach initmap");
-          {
-              for ( int jj = 0; jj < 8; jj++ ) {
-              char tmpcbuf[200];
-              sprintf(tmpcbuf,"humanplayername; address is %x", actmap->humanplayername[jj]);
-              logtofile ( tmpcbuf );
-              }
-          }
-#endif
    }
 }
 
@@ -1761,10 +1630,6 @@ void mainloopgeneralmousecheck ( void )
          mousevisible(true);
       }
 
-   if ( memcheckticker + 100 < ticker ) {
-      showmemory();
-      memcheckticker = ticker ;
-   }
    if ( lastdisplayedmessageticker + messagedisplaytime < ticker )
       displaymessage2("");
 
@@ -1898,7 +1763,6 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
 void  mainloop ( void )
 {
    tkey ch;
-   memcheckticker = ticker;
    abortgame = 0;
 
    do {
@@ -2178,7 +2042,7 @@ void loaddata( int resolx, int resoly,
 
    if ( actprogressbar ) actprogressbar->startgroup();
 
-   ladestartkarte( emailgame, mapname, savegame );
+   loadStartupMap( emailgame, mapname, savegame );
 
    if ( actprogressbar ) actprogressbar->startgroup();
 

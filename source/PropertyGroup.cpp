@@ -18,8 +18,6 @@
 #include <iostream>
 #include <iomanip>
 
-// using namespace std;
-
 #include "PropertyGroup.h"
 
 /////////////////////////////////////////////////////////////////

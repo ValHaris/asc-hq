@@ -1,6 +1,19 @@
-//     $Id: sg.h,v 1.6 2001-01-25 23:45:03 mbickel Exp $
+/*! \file sg.h
+    \brief Interface for various global functions and variables
+*/
+
+
+//     $Id: sg.h,v 1.7 2001-01-28 14:04:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2001/01/25 23:45:03  mbickel
+//      Moved map displaying routins to own file (mapdisplay.cpp)
+//      Wrote program to create pcx images from map files (map2pcx.cpp)
+//      Fixed bug in repair function: too much resource consumption
+//      AI improvements and bug fixes
+//      The BI3 map import function now evaluates the player status (human/
+//       computer)
+//
 //     Revision 1.5  2001/01/21 12:48:36  mbickel
 //      Some cleanup and documentation
 //

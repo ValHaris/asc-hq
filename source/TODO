@@ -1,17 +1,104 @@
-TODO list for ASC:
+TODO list for ASC, programming department:
 
-0.  rewriting tdrawgettempline ( mapalgorithm.cpp )
-1.  Caching of fullscreen image ( file sdl/loadimage.c )
+Small tasks:
+
+-   rewriting tdrawgettempline ( mapalgorithm.cpp ) which is way to slow
+   
+-   Clean up the transportcargo routines in mapeditor ( cancel function etc )
+    Making copies for backup purposes is problematic because pointers (in the 
+    events, for example) may be left dangling if cancel is pressed
+    This can be resolved by the copy constructor of tvehicle
+
+-   Replace tterainaccess class by a bitset
+    The terrainbits and terrainaccess operators are quite a mess. Replacing 
+    the system by a bitset (from STL) is probably the best solution
+
+-   Converting getfield()->vehicle == veh to getfield()->unitHere ( veh )
+    Especially the AI makes heavy use of cloning of units for making 
+    experiments after which the clone is deleted. Comparing pointers fails 
+    here.
+    ( grep "> *vehicle *==" *.cpp ??? )
+
+-   writing a script that makes an RPM package of ASC
+    I don't have a clue how RPM packages are created, but it would be nice
+    if we could provide some...
+    Since the whole release-process is a big collection of scripts on my
+    system, the RPM creation process should be handled by some script which
+    I can plug into the process.
+
+-   direct invocation of and from mail clients to automate email games
+
+-   Optimize  int VehicleMovement::getDistance ( int x, int y) in unitctrl.cpp
+    This function is pretty slow, but not called often enough to really 
+    beeing a problem
+    => not so important
+
+-   Caching of fullscreen image ( file sdl/loadimage.c )
     converting an image from 24 bitt to 8 bit and resizing it is quite slow.
     The image could be cached as PCX with 8 bit and correct resolution to be
     loaded faster the next time.
-3.  Clean up the transportcargo routines in mapeditor ( cancel function etc )
-5.  Optimize  int VehicleMovement :: getDistance ( int x, int y ) in unitctrl.cpp
-7.  Replace tterainaccess class by a bitset
-9.  Converting getfield()->vehicle == veh to getfield()->unitHere ( veh )
-    grep "> *vehicle *==" *.cpp
-13.  Fix delete[] void warnings 
-     -> making a class for image data
+    -- not very important --
 
 
-*******
+Medium sized tasks
+
+
+ Since DOS is no longer supported by ASC, we can now rewrite much legacy code
+ to make use of features modern operating system and even Windows provide:
+
+
+=   Introducing Truetype font support. 
+     Although the current font handling routines are quite old, I still think 
+     they are quite ok and relatively fast. But the creation of font files is 
+     problematic. The tfont structures should be created on program start from
+     TTF fonts. The SDL_TTF library provides the necessary background routines
+
+=   new Keyboard handling. 
+     The handling of keyboard input was the biggest pain-in-the-ass under DOS.
+     The keyboard routines should be completely redesigend. Searching for
+     NEWKEYB will reveal all cruicial parts of the code which may be greatly
+     simplified with a new key class that routines like rkey should return.
+
+
+Larger Tasks:
+
+=   Rewriting the whole graphics engine
+     Currently is graphics engine is 8 bit depth only, cannot use hardware 
+     acceleration and an image is just a void* pointer (resulting in all the
+     delete void* warnings on compilation).
+
+     Creating a class that represents images and on which all graphic 
+     functions operate. 
+     This class should probably be a wrapper around a SDL_image structure.
+
+=   maintaining and improving the mapeditor
+     Especially the user interface of the mapeditor has some room for
+     improvements. This jobs involves asking the map-designers what they think
+     should be improved there and then do it...
+     Some things like copy&paste would be really nice there too.
+     Not to mention the reinforcements event...
+     Or a function to make a diff between two maps and use it for a 
+      map-change event...
+
+=   rewriting the "small editors", either in Java, or with 
+     WxWindows ( http://www.wxwindows.org )
+      
+     The Java version of the vehicle editor is almost complete, but the
+     other editors (for buildings, terrain, techology, objects) are still to 
+     be done.
+
+=   maintaining and improving the dialog engine together with the dialogs 
+    themselves. The VehicleInfo dialog for example is really outdated... 
+    libu ( http://www.rhrk.uni-kl.de/~klaux/libu.html ) could be an 
+    interesting GUI library for this.
+
+    The dialogs have long been neglected , because the basic class on which 
+    all dialogs are based is, well, not very well designed. Because of this,
+    creating dialogs is way to much work today.
+
+    Since ASC has tons of dialogs, building a special graphical dialog
+    designing program may be worth the effort. Perhaps it is possible to 
+    use an existing one (like QT Designer) and import its XML dialog 
+    description (implementing only a small subset of the functionality)
+
+

@@ -1,11 +1,13 @@
+/*! \file astar2.h
+    \brief Interface for the A* pathfinding algorithm
+*/
+
+
 #ifndef astar2_h_included
  #define astar2_h_included
 
  #include <vector>
 
-/*! \file astar2.h
-    Interface for the A* pathfinding algorithm
-*/
 
 
 class AStar {

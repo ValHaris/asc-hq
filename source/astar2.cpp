@@ -1,5 +1,5 @@
 /*! \file astar2.cpp
-   Pathfinding routines using the A* algorithm. 
+    \brief Pathfinding routines using the A* algorithm. 
 */
 
 

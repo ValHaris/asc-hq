@@ -7,7 +7,8 @@
  ***************************************************************************/
 
 /*! \file basestreaminterface.h
-   The interface for ASC streams. This is used for all kinds of streams:
+    \brief The standard interface for ASC streams.
+    This is the parent class for all kinds of streams:
     normal files, compressed files, files inside containers, memory buffer, ... 
 */
 

@@ -1,5 +1,8 @@
 
-// map2pcx : A program to generate pcx images of maps
+/*! \file map2pcx.cpp
+  map2pcx : A program to generate pcx images of maps. This is a separate 
+   program and not a module of the ASC main program or the mapeditor
+*/
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de

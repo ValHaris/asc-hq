@@ -1,6 +1,9 @@
-//     $Id: gui.h,v 1.18 2001-01-24 11:53:13 mbickel Exp $
+//     $Id: gui.h,v 1.19 2001-01-28 14:04:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2001/01/24 11:53:13  mbickel
+//      Fixed some compilation problems with gcc
+//
 //     Revision 1.17  2000/12/21 11:00:50  mbickel
 //      Added some code documentation
 //
@@ -103,13 +106,20 @@
 #define gui_h
 
 #include "basestrm.h"
-#include "basegui.h"
 #include "spfst.h"
 #include "unitctrl.h"
 
 const int guismalliconsizex = 24;
 const int guismalliconsizey = 17;
 const int guismallicongap = 3;
+
+struct tnguiiconfiledata {
+          void*     picture[8];
+          void*     picturepressed[8];
+          char*     infotext;
+          tkey      keys[6][6];
+          int       priority;
+       };
 
 
 typedef class tnguiicon* pnguiicon;

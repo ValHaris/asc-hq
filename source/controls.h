@@ -1,6 +1,19 @@
-//     $Id: controls.h,v 1.37 2001-01-23 21:05:15 mbickel Exp $
+/*! \file controls.h
+   Controlling units (which is graudally moved to #vehicletype.cpp and #unitctrl.cpp );
+   Resource networks
+   Things that are run when starting and ending someones turn   
+*/
+
+//     $Id: controls.h,v 1.38 2001-01-28 14:04:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2001/01/23 21:05:15  mbickel
+//      Speed up of AI
+//      Lot of bugfixes in AI
+//      Moved Research to own files (research.*)
+//      Rewrote storing of developed technologies
+//      Some cleanup and documentation
+//
 //     Revision 1.36  2001/01/21 16:37:16  mbickel
 //      Moved replay code to own file ( replay.cpp )
 //      Fixed compile problems done by cleanup
@@ -29,136 +42,7 @@
 //      Fixed crash in AI
 //      Removed item CRCs
 //
-//     Revision 1.30  2000/10/31 10:42:41  mbickel
-//      Added building->vehicle service to vehicle controls
-//      Moved tmap methods to gamemap.cpp
-//
-//     Revision 1.29  2000/10/18 14:13:57  mbickel
-//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
-//       fixed soon.
-//
-//     Revision 1.28  2000/10/11 14:26:25  mbickel
-//      Modernized the internal structure of ASC:
-//       - vehicles and buildings now derived from a common base class
-//       - new resource class
-//       - reorganized exceptions (errors.h)
-//      Split some files:
-//        typen -> typen, vehicletype, buildingtype, basecontainer
-//        controls -> controls, viewcalculation
-//        spfst -> spfst, mapalgorithm
-//      bzlib is now statically linked and sources integrated
-//
-//     Revision 1.27  2000/09/24 19:57:04  mbickel
-//      ChangeUnitHeight functions are now more powerful since they use
-//        UnitMovement on their own.
-//
-//     Revision 1.26  2000/09/17 15:20:31  mbickel
-//      AI is now automatically invoked (depending on gameoptions)
-//      Some cleanup
-//
-//     Revision 1.25  2000/09/16 13:02:52  mbickel
-//      Put the AI in place
-//
-//     Revision 1.24  2000/09/16 11:47:23  mbickel
-//      Some cleanup and documentation again
-//
-//     Revision 1.23  2000/08/28 19:49:40  mbickel
-//      Fixed: replay exits when moving satellite out of orbiter
-//      Fixed: airplanes being able to endlessly takeoff and land
-//      Fixed: buildings constructable by unit without resources
-//
-//     Revision 1.22  2000/08/28 14:37:14  mbickel
-//      Fixed: satellite not able to leave orbiter
-//      Restructured next-turn routines
-//
-//     Revision 1.21  2000/08/13 09:53:58  mbickel
-//      Refuelling is now logged for replays
-//
-//     Revision 1.20  2000/08/12 12:52:43  mbickel
-//      Made DOS-Version compile and run again.
-//
-//     Revision 1.19  2000/08/12 09:17:21  gulliver
-//     *** empty log message ***
-//
-//     Revision 1.18  2000/08/02 10:28:25  mbickel
-//      Fixed: generator vehicle not working
-//      Streams can now report their name
-//      Field information shows units filename
-//
-//     Revision 1.17  2000/08/02 08:47:58  mbickel
-//      Fixed: Mineral resources where visible for all players
-//
-//     Revision 1.16  2000/07/23 17:59:52  mbickel
-//      various AI improvements
-//      new terrain information window
-//
-//     Revision 1.15  2000/07/06 11:07:27  mbickel
-//      More AI work
-//      Started modularizing the attack formula
-//
-//     Revision 1.14  2000/06/09 13:12:25  mbickel
-//      Fixed tribute function and renamed it to "transfer resources"
-//
-//     Revision 1.13  2000/06/08 21:03:41  mbickel
-//      New vehicle action: attack
-//      wrote documentation for vehicle actions
-//
-//     Revision 1.12  2000/06/05 18:21:23  mbickel
-//      Fixed a security hole which was opened with the new method of loading
-//        mail games by command line parameters
-//
-//     Revision 1.11  2000/05/23 20:40:40  mbickel
-//      Removed boolean type
-//
-//     Revision 1.10  2000/05/07 12:12:14  mbickel
-//      New mouse option dialog
-//      weapon info can now be displayed by clicking on a unit
-//
-//     Revision 1.9  2000/05/02 16:20:54  mbickel
-//      Fixed bug with several simultaneous vehicle actions running
-//      Fixed graphic error at ammo transfer in buildings
-//      Fixed ammo loss at ammo transfer
-//      Movecost is now displayed for mines and repairs
-//      Weapon info now shows unhittable units
-//
-//     Revision 1.8  2000/04/27 16:25:19  mbickel
-//      Attack functions cleanup
-//      New vehicle categories
-//      Rewrote resource production in ASC resource mode
-//      Improved mine system: several mines on a single field allowed
-//      Added unitctrl.* : Interface for vehicle functions
-//        currently movement and height change included
-//      Changed timer to SDL_GetTicks
-//
-//     Revision 1.7  2000/01/31 16:08:39  mbickel
-//      Fixed crash in line
-//      Improved error handling in replays
-//
-//     Revision 1.6  2000/01/01 19:04:16  mbickel
-//     /tmp/cvsVhJ4Z3
-//
-//     Revision 1.5  1999/12/28 21:02:47  mbickel
-//      Continued Linux port
-//      Added KDevelop project files
-//
-//     Revision 1.4  1999/12/07 21:57:56  mbickel
-//      Fixed bugs in Weapon information window
-//      Added vehicle function "no air refuelling"
-//
-//     Revision 1.3  1999/11/25 22:00:05  mbickel
-//      Added weapon information window
-//      Added support for primary offscreen frame buffers to graphics engine
-//      Restored file time handling for DOS version
-//
-//     Revision 1.2  1999/11/16 03:41:18  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
+
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -191,94 +75,6 @@
 #include "mousecontrol.h"
 
 
-/*! \file controls.h
-   Controlling units (which is graudally moved to #vehicletype.cpp );
-   Onscreen information like the dashboard
-   
-*/
-
-
-  //! The unit, weather and map information displayed on the right side of the screen
-  class tdashboard {
-                public:
-                       pfont        font; 
-                       int         x, y; 
-                       pvehicle     vehicle;
-                       pvehicletype vehicletype;
-                       pbuilding    building;
-                       pobjectcontainer      object;
-
-                       void         allocmem ( void );
-                    protected:
-                       int          largeWeaponsDisplayPos[16];
-                       void*        fuelbkgr;
-                       int          fuelbkgrread;
-                       void*        imagebkgr;
-                       int          imageshown;
-                       int          movedisp;   // 0: Movement f?r Runde    1: movement mit Tank
-                       int          windheight; // 4 , 5 , 6 
-                       int          windheightshown;
-                       void*        windheightbackground;
-                       void         putheight(integer      i,   integer      sel);
-                       void         paintheight(void);
-                       void         painttank(void);
-                       void         paintweapon( int h, int num, int strength, const SingleWeapon  *weap );
-                       void         paintweapons(void);
-                       void         paintweaponammount( int h, int num, int max );
-                       void         paintdamage(void);
-                       void         paintexperience(void);
-                       void         paintmovement(void);
-                       void         paintarmor(void);
-                       void         paintwind( int repaint = 0 );
-                       void         paintclasses ( void );
-                       void         paintname ( void );
-                       void         paintimage( void );
-                       void         paintplayer( void );
-                       void         paintalliances ( void ); 
-                       void         paintsmallmap ( int repaint = 0  );
-                       void         paintlargeweaponinfo ( void );
-                       void         paintlargeweapon ( int pos, const char* name, int ammoact, int ammomax, int shoot, int refuel, int strengthmax, int strengthmin, int distmax, int distmin, int from, int to );
-                       void         paintlargeweaponefficiency ( int pos, int* e, int alreadypainted, int nohit );
-                     #ifdef FREEMAPZOOM
-                       void         paintzoom( void );
-                     public:
-                       struct {
-                          void*        pic;
-                          int x1, y1, x2, y2;
-                          int picwidth;
-                       } zoom;
-                      #endif
-                     public:
-                       void         checkformouse ( int func = 0 );
-                       void paint ( const pfield fld, int playerview );
-                       tdashboard ( void );
-                       void paintvehicleinfo( const pvehicle     vehicle,
-                                              const pbuilding    building,
-                                              const pobjectcontainer      object,
-                                              const pvehicletype  vehicletype );
-
-                       void         paintlweaponinfo ( void );
-
-                       int backgrndcol ;
-                       int vgcol       ;
-                       int ymx         ;
-                       int ymn         ;
-                       int ydl         ;
-                       int munitnumberx ;
-
-                       struct {
-                           int mindist, maxdist, minstrength, maxstrength;
-                           int displayed;
-                       } weaps[8];
-
-                       int repainthard;
-                       protected:
-                         char* str_2 ( int num );
-                         int materialdisplayed;
-
-
-                    }; 
-  extern tdashboard dashboard; 
 
 
 
@@ -471,144 +267,12 @@ typedef treactionfire_replayinfo* preactionfire_replayinfo;
      else it will contain a pointer to the newly created vehicle. The vehicle will be empty after
      creation (no fuel, etc). The resources for the creation must be seperately 'consumed'. */
 extern void   generatevehicle_cl ( pvehicletype fztyp,
-                                  int           col,
-                                  pvehicle &    vehicle,
-                                  int           x, 
-                                  int           y );
-
-
-
-
-
-// nets
-
-class MapNetwork {
-                static int instancesrunning;
-             protected:
-                int pass;
-
-                struct tposition {
-                   int x, y ;
-                };
-
-                tposition startposition;
-
-
-                virtual int fieldavail ( int x, int y ) = 0;
-                virtual int searchfinished ( void ) = 0;
-                virtual void checkvehicle ( pvehicle v ) = 0;
-                virtual void checkbuilding ( pbuilding b ) = 0;
-                virtual int globalsearch ( void ) = 0;
-
-                virtual void searchbuilding ( int x, int y );
-                virtual void searchvehicle  ( int x, int y );
-                virtual void searchfield ( int x, int y, int dir );
-             public:
-                virtual void start ( int x, int y );
-                MapNetwork ( int checkInstances = 1 );
-                virtual ~MapNetwork();
-           };
-
-class ResourceNet : public MapNetwork {
-               public:
-                  ResourceNet ( int _scope = -1 ) : MapNetwork ( _scope != 0 ) {};
-               protected:
-                  int resourcetype;
-                  int scope;
-
-                  virtual int fieldavail ( int x, int y );
-                  virtual int globalsearch ( void ) { return scope; };
-             };
-
-class StaticResourceNet : public ResourceNet {
-               protected:
-                  int need;
-                  int got;
-                  int queryonly;
-                  int player;
-
-                  virtual int searchfinished ( void );
-
-              public:
-                  StaticResourceNet ( int scope = -1 ) : ResourceNet ( scope ) {};
-                  int getresource ( int x, int y, int resource, int _need, int _queryonly, int _player, int _scope );
-                       /* _scope:  0 : only this field
-                                   1 : net
-                                   2 : global
-                       */
-       };
-
-class GetResource : public StaticResourceNet {
-              protected:
-                  int tributegot[3][8];
-                  virtual void checkvehicle ( pvehicle v );
-                  virtual void checkbuilding ( pbuilding b );
-                  virtual void start ( int x, int y );
-              public:
-                  GetResource ( int scope = -1 );
-   };
-
-class PutResource : public StaticResourceNet {
-              protected:
-                  virtual void checkbuilding ( pbuilding b );
-                  virtual void checkvehicle ( pvehicle v ) {};
-                  virtual void start ( int x, int y );
-               public:
-                   PutResource ( int scope = -1 ) : StaticResourceNet ( scope ) {};
-   };
-
-class PutTribute : public StaticResourceNet {
-              protected:
-                  int targplayer;
-                  pbuilding startbuilding;
-                  virtual void checkbuilding ( pbuilding b );
-                  virtual void checkvehicle ( pvehicle v ) {};
-                  virtual void start ( int x, int y );
-              public:
-                  int puttribute ( pbuilding start, int resource, int _queryonly, int _forplayer, int _fromplayer, int _scope );
-   };
-
-
-class GetResourceCapacity : public StaticResourceNet {
-              protected:
-                  virtual void checkbuilding ( pbuilding b );
-                  virtual void checkvehicle ( pvehicle v ) {};
-                  virtual void start ( int x, int y );
-                  virtual int searchfinished ( void ) { return 0; };
-   };
-
-class ResourceChangeNet : public ResourceNet {
-               protected:
-                  int got;
-                  int player;
-
-                  virtual int searchfinished ( void ) { return 0; };
-
-              public:
-                  int getresource ( int x, int y, int resource, int _player, int _scope );
-                       /* _scope:  0 : only this field
-                                   1 : net
-                                   2 : global
-                       */
-
-       };
-
-
-class GetResourcePlus : public ResourceChangeNet {
-              protected:
-                  virtual void checkbuilding ( pbuilding b );
-                  virtual void checkvehicle ( pvehicle v );
-   };
-
-class GetResourceUsage : public ResourceChangeNet {
-              protected:
-                  virtual void checkbuilding ( pbuilding b );
-                  virtual void checkvehicle ( pvehicle v ) {};
-   };
+                                                int               col,
+                                                pvehicle &    vehicle,
+                                                int               x, 
+                                                int               y );
 
 extern int searchexternaltransferfields ( pbuilding bld );
-extern void transfer_all_outstanding_tribute( void );
-
 
 
 class treactionfire {

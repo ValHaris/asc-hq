@@ -1,6 +1,15 @@
-//     $Id: dlgraph.cpp,v 1.9 2000-10-16 14:34:12 mbickel Exp $
+/*! \file dlgraph.cpp
+    \brief This file is included by dlg_box.cpp !
+*/
+
+//     $Id: dlgraph.cpp,v 1.10 2001-01-28 14:04:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/10/16 14:34:12  mbickel
+//      Win32 port is now running fine.
+//      Removed MSVC project files and put them into a zip file in
+//        asc/source/win32/msvc/
+//
 //     Revision 1.8  2000/08/12 09:17:26  gulliver
 //     *** empty log message ***
 //

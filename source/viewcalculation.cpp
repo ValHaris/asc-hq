@@ -20,12 +20,11 @@
 
 #include "vehicletype.h"
 #include "buildingtype.h"
+#include "errors.h"
 
 #ifdef sgmain
-#include "missions.h"
+ #include "missions.h"
 #endif
-
-extern void fatalError ( const char* formatstring, ... );
 
 
 void         tcomputeview::initviewcalculation(  int view, int jamming, int sx, int sy, int _mode, int _height  )  // mode: +1 = add view  ;  -1 = remove view

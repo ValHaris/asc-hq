@@ -1,6 +1,15 @@
-//     $Id: sgstream.h,v 1.16 2001-01-21 16:37:20 mbickel Exp $
+/*! \file sgstream.h
+    \brief The IO for many basic classes and structurs of ACS
+  
+*/
+
+//     $Id: sgstream.h,v 1.17 2001-01-28 14:04:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2001/01/21 16:37:20  mbickel
+//      Moved replay code to own file ( replay.cpp )
+//      Fixed compile problems done by cleanup
+//
 //     Revision 1.15  2001/01/21 12:48:36  mbickel
 //      Some cleanup and documentation
 //

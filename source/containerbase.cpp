@@ -6,6 +6,10 @@
     email                : bickel@asc-hq.org
  ***************************************************************************/
 
+/*! \file containerbase.cpp
+    \brief Implementation of methods that buildings and vehicles have in common
+*/
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

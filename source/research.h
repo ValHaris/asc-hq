@@ -6,6 +6,11 @@
     email                : bickel@asc-hq.org
  ***************************************************************************/
 
+/*! \file research.h
+    \brief Interface for everything related to research
+*/
+
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

@@ -1,6 +1,13 @@
-//     $Id: edgen.h,v 1.6 2000-12-23 13:19:46 mbickel Exp $
+/*! \file edgen.cpp
+    \brief Interface for the random map generator
+*/
+
+//     $Id: edgen.h,v 1.7 2001-01-28 14:04:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/12/23 13:19:46  mbickel
+//      Made ASC compileable with Borland C++ Builder
+//
 //     Revision 1.5  2000/08/12 12:52:46  mbickel
 //      Made DOS-Version compile and run again.
 //

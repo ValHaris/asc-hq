@@ -21,6 +21,10 @@
 #include "gui.h"
 #include "controls.h"
 
+/*! \file replay.h
+    \brief Interface for recording and playing replays
+*/
+
 
 enum trpl_actions { rpl_attack, rpl_move, rpl_changeheight, rpl_convert, rpl_remobj, rpl_buildobj, rpl_putbuilding,
                     rpl_removebuilding, rpl_putmine, rpl_removemine, rpl_produceunit, rpl_removeunit, rpl_trainunit,

@@ -1,6 +1,17 @@
-//     $Id: missions.cpp,v 1.19 2001-01-23 21:05:20 mbickel Exp $
+/*! \file missions.cpp
+    \brief The event handling of ASC
+*/
+
+//     $Id: missions.cpp,v 1.20 2001-01-28 14:04:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2001/01/23 21:05:20  mbickel
+//      Speed up of AI
+//      Lot of bugfixes in AI
+//      Moved Research to own files (research.*)
+//      Rewrote storing of developed technologies
+//      Some cleanup and documentation
+//
 //     Revision 1.18  2000/12/23 13:19:47  mbickel
 //      Made ASC compileable with Borland C++ Builder
 //

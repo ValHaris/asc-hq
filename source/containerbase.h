@@ -6,6 +6,11 @@
     email                : bickel@asc-hq.org
  ***************************************************************************/
 
+/*! \file containerbase.h
+    \brief The base class for buildings and vehicles
+*/
+
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -27,7 +32,7 @@ class ContainerBaseType {
 };
 
 
- /** The parent class of Vehicle and Building;
+/** \brief The parent class of Vehicle and Building;
     The name Container originates from Battle Isle, where everything that could load units
     was a container
 */

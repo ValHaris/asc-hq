@@ -1,6 +1,17 @@
-//     $Id: attack.h,v 1.16 2001-01-19 13:33:46 mbickel Exp $
+/*! \file attack.h
+    \brief Interface for all the fighting routines of ASC. 
+*/
+
+
+//     $Id: attack.h,v 1.17 2001-01-28 14:04:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2001/01/19 13:33:46  mbickel
+//      The AI now uses hemming
+//      Several bugfixes in Vehicle Actions
+//      Moved all view calculation to viewcalculation.cpp
+//      Mapeditor: improved keyboard support for item selection
+//
 //     Revision 1.15  2000/10/11 14:26:16  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -105,9 +116,6 @@
 #include "vehicletype.h"
 
 
-/*! \file attack.h
-   Everything regarding fighting in ASC. 
-*/
 
 
 

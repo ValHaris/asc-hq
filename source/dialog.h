@@ -1,64 +1,17 @@
-//     $Id: dialog.h,v 1.15 2001-01-21 12:48:35 mbickel Exp $
+/*! \file dialog.cpp
+    \brief Interface for all the dialog boxes used by the game and the mapeditor
+*/
+
+//     $Id: dialog.h,v 1.16 2001-01-28 14:04:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2001/01/21 12:48:35  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.14  2000/11/29 09:40:18  mbickel
 //      The mapeditor has now two maps simultaneously active
 //      Moved memorychecking functions to its own file: memorycheck.cpp
 //      Rewrote password handling in ASC
-//
-//     Revision 1.13  2000/09/16 11:47:26  mbickel
-//      Some cleanup and documentation again
-//
-//     Revision 1.12  2000/08/26 15:33:41  mbickel
-//      Warning message displayed if empty password is entered
-//      pcxtank now displays error messages
-//
-//     Revision 1.11  2000/08/13 09:54:00  mbickel
-//      Refuelling is now logged for replays
-//
-//     Revision 1.10  2000/08/12 12:52:45  mbickel
-//      Made DOS-Version compile and run again.
-//
-//     Revision 1.9  2000/08/06 11:38:48  mbickel
-//      New map paramter: fuel globally available
-//      Mapeditor can now filter buildings too
-//      Fixed unfreed memory in fullscreen image loading
-//      Fixed: wasted cpu cycles in building
-//      map parameters can be specified when starting a map
-//      map parameters are reported to all players in multiplayer games
-//
-//     Revision 1.8  2000/08/02 15:52:50  mbickel
-//      New unit set definition files
-//      demount accepts now more than one container file
-//      Unitset information dialog added
-//
-//     Revision 1.7  2000/06/08 21:03:41  mbickel
-//      New vehicle action: attack
-//      wrote documentation for vehicle actions
-//
-//     Revision 1.6  2000/05/23 20:40:42  mbickel
-//      Removed boolean type
-//
-//     Revision 1.5  2000/03/29 09:58:44  mbickel
-//      Improved memory handling for DOS version
-//      Many small changes I can't remember ;-)
-//
-//     Revision 1.4  1999/12/27 12:59:51  mbickel
-//      new vehicle function: each weapon can now be set to not attack certain
-//                            vehicles
-//
-//     Revision 1.3  1999/12/07 22:13:18  mbickel
-//      Fixed various bugs
-//      Extended BI3 map import tables
-//
-//     Revision 1.2  1999/11/16 03:41:21  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -83,11 +36,6 @@
 #ifndef dialog_h
 #define dialog_h
 
-/*! \file dialog.h
-   A lot of dialog boxes, used by both ASC and the mapeditor.
-*/
-
-
 #include "dlg_box.h"
 #include "loaders.h"
 #include "password.h"
@@ -102,7 +50,6 @@ const int dbluedark = 248;
   \param filename A pointer to an array where the selected filename will be written to. If string is empty, the dialog was canceled.
   \param mode 1: open file for loading   0: select filename to write to
 */
-
 extern void  fileselectsvga(const char *       ext, 
                              char *       filename,
                              char         mode );
@@ -142,19 +89,6 @@ extern int   choice_dlg(char *       title,
                         char *       s2,
                         ... );
    
-
-
-/*
-class tenterfiledescription : public tdialogbox {
-                       public:
-                         char* description;
-                         void init ( char* descrip = NULL );
-                         void buttonpressed ( int id );
-                         void run ( void );
-                       private:
-                         char status;
-                      };
-*/
 
 
 //! shows a small overview map in a dialog box

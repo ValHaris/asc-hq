@@ -1,6 +1,16 @@
-//     $Id: missions.h,v 1.5 2001-01-19 13:33:51 mbickel Exp $
+/*! \file missions.h
+    \brief Interface to the event handling of ASC
+*/
+
+//     $Id: missions.h,v 1.6 2001-01-28 14:04:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2001/01/19 13:33:51  mbickel
+//      The AI now uses hemming
+//      Several bugfixes in Vehicle Actions
+//      Moved all view calculation to viewcalculation.cpp
+//      Mapeditor: improved keyboard support for item selection
+//
 //     Revision 1.4  2000/10/11 14:26:44  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class

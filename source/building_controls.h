@@ -1,6 +1,16 @@
-//     $Id: building_controls.h,v 1.5 2001-01-24 11:53:13 mbickel Exp $
+/*! \file building_controls.h
+    \brief The interface for the building functions
+     This is for use by the AI, since the user interface to these functions
+     are within building.cpp itself.
+*/
+
+
+//     $Id: building_controls.h,v 1.6 2001-01-28 14:04:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2001/01/24 11:53:13  mbickel
+//      Fixed some compilation problems with gcc
+//
 //     Revision 1.4  2000/11/08 19:30:56  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -54,9 +64,6 @@
 #ifndef building_controls_h
 #define building_controls_h
 
-/*! \file building_controls.h
-   The interface for controlling the building functions for use by the AI.
-*/
 
 
 #include "containerbase.h"

@@ -1,6 +1,18 @@
-//     $Id: edevents.cpp,v 1.16 2001-01-25 23:44:56 mbickel Exp $
+/*! \file edevents.cpp
+    \brief The event editing in the mapeditor
+*/
+
+//     $Id: edevents.cpp,v 1.17 2001-01-28 14:04:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2001/01/25 23:44:56  mbickel
+//      Moved map displaying routins to own file (mapdisplay.cpp)
+//      Wrote program to create pcx images from map files (map2pcx.cpp)
+//      Fixed bug in repair function: too much resource consumption
+//      AI improvements and bug fixes
+//      The BI3 map import function now evaluates the player status (human/
+//       computer)
+//
 //     Revision 1.15  2001/01/04 15:13:43  mbickel
 //      configure now checks for libSDL_image
 //      AI only conquers building that cannot be conquered back immediately

@@ -1,6 +1,13 @@
-//     $Id: building.cpp,v 1.62 2001-01-24 11:53:10 mbickel Exp $
+/*! \file building.cpp
+    \brief The implementation of basic logic and the UI of buildings&transports  
+*/
+
+//     $Id: building.cpp,v 1.63 2001-01-28 14:04:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2001/01/24 11:53:10  mbickel
+//      Fixed some compilation problems with gcc
+//
 //     Revision 1.61  2001/01/23 21:05:09  mbickel
 //      Speed up of AI
 //      Lot of bugfixes in AI
@@ -32,111 +39,6 @@
 //      Fixed crash when entering damaged building
 //      Fixed crash in AI
 //      Removed item CRCs
-//
-//     Revision 1.54  2000/10/18 14:13:50  mbickel
-//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
-//       fixed soon.
-//
-//     Revision 1.53  2000/10/11 14:26:17  mbickel
-//      Modernized the internal structure of ASC:
-//       - vehicles and buildings now derived from a common base class
-//       - new resource class
-//       - reorganized exceptions (errors.h)
-//      Split some files:
-//        typen -> typen, vehicletype, buildingtype, basecontainer
-//        controls -> controls, viewcalculation
-//        spfst -> spfst, mapalgorithm
-//      bzlib is now statically linked and sources integrated
-//
-//     Revision 1.52  2000/09/25 20:04:35  mbickel
-//      AI improvements
-//
-//     Revision 1.51  2000/09/17 15:16:10  mbickel
-//      reformatted the whole file with Astyle
-//
-//     Revision 1.50  2000/08/30 14:45:05  mbickel
-//      ASC compiles and links with GCC again...
-//
-//     Revision 1.49  2000/08/29 20:21:04  mbickel
-//      Tried to make source GCC compliant, but some problems still remain
-//
-//     Revision 1.48  2000/08/29 17:42:39  mbickel
-//      Restructured GUI to make it compilable with VisualC.
-//
-//     Revision 1.47  2000/08/28 19:49:36  mbickel
-//      Fixed: replay exits when moving satellite out of orbiter
-//      Fixed: airplanes being able to endlessly takeoff and land
-//      Fixed: buildings constructable by unit without resources
-//
-//     Revision 1.46  2000/08/28 14:37:11  mbickel
-//      Fixed: satellite not able to leave orbiter
-//      Restructured next-turn routines
-//
-//     Revision 1.45  2000/08/25 13:42:50  mbickel
-//      Fixed: zoom dialogbox in mapeditor was invisible
-//      Fixed: ammoproduction: no numbers displayed
-//      game options: produceammo and fillammo are now modified together
-//      Fixed: sub could not be seen when standing on a mine
-//      Some AI improvements
-//
-//     Revision 1.44  2000/08/13 09:53:55  mbickel
-//      Refuelling is now logged for replays
-//
-//     Revision 1.43  2000/08/12 09:17:16  gulliver
-//     *** empty log message ***
-//
-//     Revision 1.42  2000/08/11 11:38:26  mbickel
-//      Enabled resource control subwindow in BI resource mode
-//
-//     Revision 1.41  2000/08/09 13:18:09  mbickel
-//      Fixed: invalid movement cost for airplanes flying with wind
-//      Fixed: building mineral resource info: wrong lines for availability
-//
-//     Revision 1.40  2000/08/08 09:47:55  mbickel
-//
-//      speed up of dialog boxes in linux
-//      fixed graphical errors in attack
-//      fixed graphical error in ammo transfer
-//      fixed reaction fire not allowing manual attack
-//
-//     Revision 1.39  2000/08/06 11:38:36  mbickel
-//      New map paramter: fuel globally available
-//      Mapeditor can now filter buildings too
-//      Fixed unfreed memory in fullscreen image loading
-//      Fixed: wasted cpu cycles in building
-//      map parameters can be specified when starting a map
-//      map parameters are reported to all players in multiplayer games
-//
-//     Revision 1.38  2000/08/05 15:30:26  mbickel
-//      Fixed possible divisions by 0 in attack/defensebonus
-//
-//     Revision 1.37  2000/08/05 13:38:20  mbickel
-//      Rewrote height checking for moving units in and out of
-//        transports / building
-//
-//     Revision 1.36  2000/08/04 15:10:49  mbickel
-//      Moving transports costs movement for units inside
-//      refuelled vehicles now have full movement in the same turn
-//      terrain: negative attack / defensebonus allowed
-//      new mapparameters that affect damaging and repairing of building
-//
-//     Revision 1.35  2000/08/03 19:21:16  mbickel
-//      Fixed: units had invalid height when produced in some buildings
-//      Fixed: units could not enter building if unitheightreq==0
-//      Started adding SDL_image support
-//      Upgraded to SDL1.1.3 (for SDL_image)
-//
-//     Revision 1.34  2000/08/03 13:11:51  mbickel
-//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
-//      Repairing units now reduces their experience
-//      negative attack- and defenseboni possible
-//      changed attackformula
-//
-//     Revision 1.33  2000/07/29 18:40:08  mbickel
-//      Fixed crash in ammo transfer window inside buildings/transports
-//
-//     Revision 1.32  2000/07/29 14:54:11  mbickel
-//      plain text configuration file implemented
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de

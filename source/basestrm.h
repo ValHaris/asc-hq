@@ -1,6 +1,11 @@
-//     $Id: basestrm.h,v 1.33 2001-01-04 15:13:30 mbickel Exp $
+//     $Id: basestrm.h,v 1.34 2001-01-28 14:04:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2001/01/04 15:13:30  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.32  2000/12/21 11:00:44  mbickel
 //      Added some code documentation
 //
@@ -8,148 +13,7 @@
 //      The size of a stream can now be queried
 //      PCX loader (in C) can now load unpatched images provided they are not
 //        compressed
-//
-//     Revision 1.30  2000/10/14 15:31:52  mbickel
-//      Moved key symbols to separate files
-//      Moved tnstream to its own file
-//
-//     Revision 1.29  2000/10/14 10:52:44  mbickel
-//      Some adjustments for a Win32 port
-//
-//     Revision 1.28  2000/10/12 22:24:00  mbickel
-//      Made the DOS part of the new platform system work again
-//
-//     Revision 1.27  2000/10/12 21:37:51  mbickel
-//      Further restructured platform dependant routines
-//
-//     Revision 1.26  2000/10/12 20:21:41  mbickel
-//      Restructuring operating system dependant files
-//
-//     Revision 1.25  2000/10/12 19:51:44  mbickel
-//      Added a stub program for generating a weapon guide
-//      Added makefiles to compile this weaponguide with the free borland C++
-//        compiler
-//      Made some adjustments to basic IO file for compiling them with borland
-//        C++
-//
-//     Revision 1.24  2000/10/12 19:00:21  mbickel
-//      Fixed crash in building placement
-//      Replaced multi-character character constants by strings (there where
-//        problems with the byte order)
-//      Building ID and name are now correctly displayed in mapeditor
-//
-//     Revision 1.23  2000/10/11 14:26:17  mbickel
-//      Modernized the internal structure of ASC:
-//       - vehicles and buildings now derived from a common base class
-//       - new resource class
-//       - reorganized exceptions (errors.h)
-//      Split some files:
-//        typen -> typen, vehicletype, buildingtype, basecontainer
-//        controls -> controls, viewcalculation
-//        spfst -> spfst, mapalgorithm
-//      bzlib is now statically linked and sources integrated
-//
-//     Revision 1.22  2000/09/26 18:05:14  mbickel
-//      Upgraded to bzlib 1.0.0 (which is incompatible to older versions)
-//
-//     Revision 1.21  2000/09/24 19:57:03  mbickel
-//      ChangeUnitHeight functions are now more powerful since they use
-//        UnitMovement on their own.
-//
-//     Revision 1.20  2000/08/12 09:17:16  gulliver
-//     *** empty log message ***
-//
-//     Revision 1.19  2000/08/03 19:21:15  mbickel
-//      Fixed: units had invalid height when produced in some buildings
-//      Fixed: units could not enter building if unitheightreq==0
-//      Started adding SDL_image support
-//      Upgraded to SDL1.1.3 (for SDL_image)
-//
-//     Revision 1.18  2000/08/02 15:52:40  mbickel
-//      New unit set definition files
-//      demount accepts now more than one container file
-//      Unitset information dialog added
-//
-//     Revision 1.17  2000/08/02 10:28:23  mbickel
-//      Fixed: generator vehicle not working
-//      Streams can now report their name
-//      Field information shows units filename
-//
-//     Revision 1.16  2000/08/01 10:39:08  mbickel
-//      Updated documentation
-//      Refined configuration file handling
-//
-//     Revision 1.15  2000/07/31 19:16:32  mbickel
-//      Improved handing of multiple directories
-//      Fixed: wind direction not displayed when cycling through wind heights
-//      Fixed: oil rig not working
-//      Fixed: resources becomming visible when checking mining station status
-//      Fixed: division by zero when moving unit without fuel consumption
-//
-//     Revision 1.14  2000/07/31 18:02:53  mbickel
-//      New configuration file handling
-//      ASC searches its data files in all directories specified in ascrc
-//      Renamed all tools so they begin with asc
-//
-//     Revision 1.13  2000/07/28 10:15:27  mbickel
-//      Fixed broken movement
-//      Fixed graphical artefacts when moving some airplanes
-//
-//     Revision 1.12  2000/06/28 18:30:57  mbickel
-//      Started working on AI
-//      Started making loaders independent of memory layout
-//      Destroyed buildings can now leave objects behind.
-//
-//     Revision 1.11  2000/05/30 18:39:20  mbickel
-//      Added support for multiple directories
-//      Moved DOS specific files to a separate directory
-//
-//     Revision 1.10  2000/04/27 16:25:15  mbickel
-//      Attack functions cleanup
-//      New vehicle categories
-//      Rewrote resource production in ASC resource mode
-//      Improved mine system: several mines on a single field allowed
-//      Added unitctrl.* : Interface for vehicle functions
-//        currently movement and height change included
-//      Changed timer to SDL_GetTicks
-//
-//     Revision 1.9  2000/03/11 19:51:12  mbickel
-//      Removed file name length limitation under linux
-//      No weapon sound for attacked units any more (only attacker)
-//
-//     Revision 1.8  2000/02/05 12:13:44  steb
-//     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
-//     startup due to actmap being null when trying to report errors.
-//
-//     Revision 1.7  2000/02/03 20:54:38  mbickel
-//      Some cleanup
-//      getfiletime now works under Linux too
-//
-//     Revision 1.6  1999/12/29 12:50:42  mbickel
-//      Removed a fatal error message in GUI.CPP
-//      Made some modifications to allow platform dependant path delimitters
-//
-//     Revision 1.5  1999/12/28 21:02:38  mbickel
-//      Continued Linux port
-//      Added KDevelop project files
-//
-//     Revision 1.4  1999/12/27 12:59:40  mbickel
-//      new vehicle function: each weapon can now be set to not attack certain
-//                            vehicles
-//
-//     Revision 1.3  1999/11/16 17:03:55  mbickel
-//     Made ASC compilable for DOS again :-)
-//     Merged all the bug fixes in that I did last week
-//
-//     Revision 1.2  1999/11/16 03:41:07  tmwilson
-//      Added CVS keywords to most of the files.
-//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//      Wrote replacement routines for kbhit/getch for Linux
-//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//      Added autoconf/automake capabilities
-//      Added files used by 'automake --gnu'
-//
-//
+
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -174,7 +38,8 @@
 #define basestream_h
 
 /*! \file basestrm.h
-   The various streams that ASC offers, like file and memory streams. 
+    \brief The interface for the various streams that ASC offers, 
+           like file and memory streams. 
 */
 
 

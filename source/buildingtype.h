@@ -6,10 +6,9 @@
     email                : bickel@asc-hq.org
  ***************************************************************************/
 
-/*! \file building_controls.h
-   The interface for controlling the building functions for use by the AI.
+/*! \file buildingtype.h
+    \brief The interface for buildings and buildingtypes
 */
-
 
 /***************************************************************************
  *                                                                         *
@@ -19,6 +18,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 #ifndef buildingtype_h_included
  #define buildingtype_h_included
 

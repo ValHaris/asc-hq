@@ -6,6 +6,13 @@
     email                : bickel@asc-hq.org
  ***************************************************************************/
 
+/*! \file replay.cpp
+    \brief Everything for recording and playing replays
+
+    Replays being the moves of other players or the AI, which can be viewed 
+    later (especially useful in email games)
+*/
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

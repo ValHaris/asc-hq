@@ -1,6 +1,14 @@
-//     $Id: pd.h,v 1.6 2000-08-12 12:52:50 mbickel Exp $
+/*! \file pd.h
+    \brief The interface of the Pulldown Menu
+*/
+
+
+//     $Id: pd.h,v 1.7 2001-01-28 14:04:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/08/12 12:52:50  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.5  2000/06/09 10:50:59  mbickel
 //      Repaired keyboard control of pulldown menu
 //      Fixed compile errors at fieldlist with gcc

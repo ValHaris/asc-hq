@@ -1,6 +1,13 @@
-//     $Id: stack.h,v 1.4 2001-01-21 12:48:36 mbickel Exp $
+/*! \file stack.h
+    \brief Interface for a small general-purpose stack (not type safe)
+*/
+
+//     $Id: stack.h,v 1.5 2001-01-28 14:04:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2001/01/21 12:48:36  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.3  2000/01/04 19:43:54  mbickel
 //      Continued Linux port
 //
@@ -33,17 +40,19 @@
     Boston, MA  02111-1307  USA
 */
 
-#define npush(a) pushdata( (char*)&a, sizeof ( a ) )
-#define npop(a) popdata ( (char*)&a, sizeof ( a ) )
+#ifndef stack_h_included
+ #define stack_h_included
 
-extern void  pushdata(char *       daten,
+ #define npush(a) pushdata( (char*)&a, sizeof ( a ) )
+ #define npop(a) popdata ( (char*)&a, sizeof ( a ) )
+
+ extern void  pushdata(char *       daten,
                   int          size);
 
-extern void  popdata(char *       daten,
+ extern void  popdata(char *       daten,
                  int          size);
 
-extern int   stackfree(void);
+ extern int   stackfree(void);
 
-
-class fatalstackerror {};
-
+ class fatalstackerror {};
+#endif

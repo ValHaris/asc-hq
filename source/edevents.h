@@ -1,6 +1,19 @@
-//     $Id: edevents.h,v 1.5 2000-08-06 11:39:03 mbickel Exp $
+/*! \file edevents.h
+    \brief Interface for the event editing of the mapeditor
+*/
+
+
+//     $Id: edevents.h,v 1.6 2001-01-28 14:04:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/08/06 11:39:03  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.4  2000/05/23 20:40:43  mbickel
 //      Removed boolean type
 //

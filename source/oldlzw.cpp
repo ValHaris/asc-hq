@@ -1,6 +1,25 @@
-//     $Id: oldlzw.cpp,v 1.5 2000-10-11 14:26:44 mbickel Exp $
+/*! \file oldlzw.cpp
+    \brief Some old LZW encoding and decoding stuff. Included by basestrm.cpp
+   
+    ASC does not use LZW for compressing new files, since the bzlib is the new
+    compression library that replaces this one. But there are old files around
+    which should still be loaded.
+*/
+
+//     $Id: oldlzw.cpp,v 1.6 2001-01-28 14:04:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/10/11 14:26:44  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.4  2000/05/03 14:49:14  mbickel
 //      Fixed a bug in LZW decompression
 //

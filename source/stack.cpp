@@ -1,6 +1,13 @@
-//     $Id: stack.cpp,v 1.3 2000-12-23 13:19:47 mbickel Exp $
+/*! \file stack.cpp
+    \brief A small general-purpose stack (not type safe)
+*/
+
+//     $Id: stack.cpp,v 1.4 2001-01-28 14:04:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/12/23 13:19:47  mbickel
+//      Made ASC compileable with Borland C++ Builder
+//
 //     Revision 1.2  1999/11/16 03:42:36  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)

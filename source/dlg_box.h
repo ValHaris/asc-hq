@@ -1,6 +1,14 @@
-//     $Id: dlg_box.h,v 1.18 2000-12-28 11:12:45 mbickel Exp $
+/*! \file dlg_box.h
+    \brief Interface for some basic classes from which all of ASC's dialogs are derived
+*/
+
+//     $Id: dlg_box.h,v 1.19 2001-01-28 14:04:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/12/28 11:12:45  mbickel
+//      Fixed: no redraw when restoring fullscreen focus in WIN32
+//      Better error message handing in WIN32
+//
 //     Revision 1.17  2000/11/21 20:27:01  mbickel
 //      Fixed crash in tsearchfields (used by object construction for example)
 //      AI improvements

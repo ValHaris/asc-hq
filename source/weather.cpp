@@ -1,6 +1,13 @@
-//     $Id: weather.cpp,v 1.7 2000-11-21 19:13:27 mbickel Exp $
+/*! \file weather.cpp
+    \brief Changing the weather and the terrain on the map
+*/
+
+//     $Id: weather.cpp,v 1.8 2001-01-28 14:04:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/11/21 19:13:27  mbickel
+//      libbzip2 can now be linked either statically or dynamically to ASC/linux
+//
 //     Revision 1.6  2000/10/18 14:14:22  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.

@@ -1,6 +1,14 @@
-//     $Id: palette.h,v 1.3 1999-12-28 21:03:15 mbickel Exp $
+/*! \file palette.h
+    \brief The color palette and various color translation tables
+*/
+
+//     $Id: palette.h,v 1.4 2001-01-28 14:04:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/12/28 21:03:15  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.2  1999/11/16 03:42:20  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)

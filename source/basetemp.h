@@ -1,6 +1,14 @@
-//     $Id: basetemp.h,v 1.4 2000-12-21 11:00:45 mbickel Exp $
+/*! \file basetemp.h
+   Some really ugly templates, which were written before I started using the
+   STL. Should be scrapped and replaced by STL functions.
+*/
+
+//     $Id: basetemp.h,v 1.5 2001-01-28 14:04:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/12/21 11:00:45  mbickel
+//      Added some code documentation
+//
 //     Revision 1.3  1999/12/27 12:59:41  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -35,13 +43,6 @@
 */
 
 #include <stdio.h> 
-// #include <direct.h> 
-
-
-/*! \file basetemp.h
-   Some really ugly templates, which were written before I started using the
-   STL. Should be scrapped and replaced by STL functions.
-*/
 
 
 template<class T> dynamic_queue<T> :: dynamic_queue ( void )
