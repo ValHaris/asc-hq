@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.26 2000-09-17 16:16:44 mbickel Exp $
+//     $Id: artint.cpp,v 1.27 2000-09-24 19:57:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/09/17 16:16:44  mbickel
+//      Some fixes for Watcom
+//
 //     Revision 1.25  2000/09/17 15:17:43  mbickel
 //      some restructuring; moving units out of buildings
 //
@@ -858,7 +861,7 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int mov
       for ( int g = 0; g < va.attackableVehicles.getFieldNum(); g++ ) {
          int xp, yp;
          va.attackableVehicles.getFieldCoordinates ( g, &xp, &yp );
-         pattackweap aw = va.attackableVehicles.getData ( g );
+         pattackweap aw = &va.attackableVehicles.getData ( g );
 
          int bestweap = -1;
          int targdamage = -1;

@@ -1,6 +1,9 @@
-//     $Id: gui.cpp,v 1.38 2000-09-07 15:49:41 mbickel Exp $
+//     $Id: gui.cpp,v 1.39 2000-09-24 19:57:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2000/09/07 15:49:41  mbickel
+//      some cleanup and documentation
+//
 //     Revision 1.37  2000/08/30 14:45:08  mbickel
 //      ASC compiles and links with GCC again...
 //
@@ -1320,7 +1323,7 @@ void  tnsguiiconascent::exec         ( void )
       new IncreaseVehicleHeight ( &defaultMapDisplay, &pendingVehicleActions );
 
       int res;
-      res = pendingVehicleActions.ascent->execute ( getactfield()->vehicle, -1, -1, 0, getactfield()->vehicle->height << 1, 0 );
+      res = pendingVehicleActions.ascent->execute ( getactfield()->vehicle, -1, -1, 0, getactfield()->vehicle->height << 1, 1 );
       if ( res < 0 ) {
          dispmessage2 ( -res, NULL );
          delete pendingVehicleActions.action;
@@ -1431,7 +1434,7 @@ void  tnsguiicondescent::exec         ( void )
       new DecreaseVehicleHeight ( &defaultMapDisplay, &pendingVehicleActions );
 
       int res;
-      res = pendingVehicleActions.descent->execute ( getactfield()->vehicle, -1, -1, 0, getactfield()->vehicle->height >> 1, 0 );
+      res = pendingVehicleActions.descent->execute ( getactfield()->vehicle, -1, -1, 0, getactfield()->vehicle->height >> 1, 1 );
       if ( res < 0 ) {
          dispmessage2 ( -res, NULL );
          delete pendingVehicleActions.action;
@@ -2661,11 +2664,15 @@ void tselectweaponguihost :: init ( int resolutionx, int resolutiony )
     // pvehicle eht = getfield(moveparams.movesx,moveparams.movesy)->vehicle;
     // pattackweap atw = attackpossible(eht, getxpos(),getypos());
 
-    pattackweap atw = pendingVehicleActions.attack->attackableVehicles.getData( getxpos(), getypos() );
-    if ( !atw ) 
-       atw = pendingVehicleActions.attack->attackableBuildings.getData( getxpos(), getypos() );
-    if ( !atw ) 
-       atw = pendingVehicleActions.attack->attackableObjects.getData( getxpos(), getypos() );
+    pattackweap atw = NULL;
+    if ( pendingVehicleActions.attack->attackableVehicles.isMember ( getxpos(), getypos() ))
+       atw = &pendingVehicleActions.attack->attackableVehicles.getData( getxpos(), getypos() );
+    else
+       if ( pendingVehicleActions.attack->attackableBuildings.isMember ( getxpos(), getypos() ))
+          atw = &pendingVehicleActions.attack->attackableBuildings.getData( getxpos(), getypos() );
+       else
+          if ( pendingVehicleActions.attack->attackableObjects.isMember ( getxpos(), getypos() ))
+             atw = &pendingVehicleActions.attack->attackableObjects.getData( getxpos(), getypos() );
  
     getfirsticon()->setup ( atw, 0 );
     

@@ -30,12 +30,12 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/unitctrl.h,/home/martin/asc/source/unitctrl.cpp,/home/martin/asc/source/artint.cpp,/home/martin/asc/source/artint.h,/home/martin/asc/source/gameoptions.cpp,/home/martin/asc/source/CLoadable.cpp,/home/martin/asc/source/Named.cpp,/home/martin/asc/source/Property.cpp,/home/martin/asc/source/PropertyGroup.cpp,/home/martin/asc/source/PropertyGroup.h,/home/martin/asc/source/astar2.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/docs/en/index.html,/home/martin/asc/source/docs/en/index-5.html,/home/martin/asc/source/docs/en/index-2.html,/home/martin/asc/source/libs/triangul/trimisc.c,/home/martin/asc/source/typen.h,/home/martin/asc/source/typen.cpp,/home/martin/asc/source/attack.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/unitctrl.cpp,/home/martin/asc/source/gui.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/typen.h
-cpp_file=/home/martin/asc/source/artint.cpp
-browser_file=file:/home/martin/asc/source/api/VehicleAttack.html
+header_file=Unbenannt.h
+cpp_file=/home/martin/asc/source/gui.cpp
+browser_file=file:/home/martin/asc/source/api/unitctrl_h.html
 [source/astar2.h]
 install_location=
 dist=true
@@ -396,7 +396,7 @@ version_control=None
 project_type=normal_cpp
 author=Martin Bickel
 sub_dir=source/
-lfv_open_groups=Headers,Quellen,GNU,Andere,
+lfv_open_groups=Headers,Quellen,GNU,
 workspace=1
 project_name=ASC
 version=1.2.0

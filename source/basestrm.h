@@ -1,6 +1,9 @@
-//     $Id: basestrm.h,v 1.20 2000-08-12 09:17:16 gulliver Exp $
+//     $Id: basestrm.h,v 1.21 2000-09-24 19:57:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/08/12 09:17:16  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.19  2000/08/03 19:21:15  mbickel
 //      Fixed: units had invalid height when produced in some buildings
 //      Fixed: units could not enter building if unitheightreq==0
@@ -195,7 +198,6 @@ class tfileerror : public terror {
    char filename[2000];
    tfileerror ( const char* fn ) ;
    tfileerror ( void );
-//   ~tfileerror();
 };
 
 class tinvalidmode : public tfileerror {

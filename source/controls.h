@@ -1,6 +1,10 @@
-//     $Id: controls.h,v 1.26 2000-09-17 15:20:31 mbickel Exp $
+//     $Id: controls.h,v 1.27 2000-09-24 19:57:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/09/17 15:20:31  mbickel
+//      AI is now automatically invoked (depending on gameoptions)
+//      Some cleanup
+//
 //     Revision 1.25  2000/09/16 13:02:52  mbickel
 //      Put the AI in place
 //
@@ -137,8 +141,8 @@
 #include "mousecontrol.h"
 
 
-/*! \file attack.h
-   Everything regarding fighting in ASC. 
+/*! \file controls.h
+   Controlling units; unit information on the screen; ...
 */
 
 

@@ -1,6 +1,10 @@
-//     $Id: unitctrl.h,v 1.8 2000-09-17 15:20:38 mbickel Exp $
+//     $Id: unitctrl.h,v 1.9 2000-09-24 19:57:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/09/17 15:20:38  mbickel
+//      AI is now automatically invoked (depending on gameoptions)
+//      Some cleanup
+//
 //     Revision 1.7  2000/07/16 14:20:06  mbickel
 //      AI has now some primitive tactics implemented
 //      Some clean up
@@ -70,6 +74,11 @@
 #include "spfst.h"
 #include "attack.h"
 
+/** \file unitctrl.h
+   New system for actions performed by units
+*/
+
+
 
 template<class T>
 class FieldList {
@@ -82,10 +91,11 @@ class FieldList {
        FieldList ( void );
        int getFieldNum ( void ) const;
        pfield getField ( int num ) const;
-       T* getData ( int num );
-       T* getData ( int x, int y );
+       T& getData ( int num );
+       T& getData ( int x, int y );
        void getFieldCoordinates ( int num, int* x, int* y ) const;
-       void addField ( int x, int y, T* _data = NULL );
+       void addField ( int x, int y, T& _data );
+       void addField ( int x, int y );
        void setMap ( pmap map );
        pmap getMap ( void );
        int isMember ( int x, int y );
@@ -147,16 +157,17 @@ class BaseVehicleMovement : public VehicleAction {
             protected:
                pvehicle vehicle;
                int newheight;
- 
-               int moveunitxy ( int xt1, int yt1, int noInterrupt = -1 );
 
+               //! Moves the unit to xt1 / yt1 along #path
+               int moveunitxy ( int xt1, int yt1, IntFieldList& pathToMove, int noInterrupt = -1 );
+
+                  //! finding the shortest path for a unit to a given position
                   class FieldReachableRek {
 
                        struct tstrecke {
-                                 struct { 
-                                     int x, y; 
-                                  } field[31]; 
-                                  int tiefe; 
+                                 vector<int> x;
+                                 vector<int> y;
+                                 int tiefe;
                               }; 
 
                         int          distance;
@@ -167,7 +178,6 @@ class BaseVehicleMovement : public VehicleAction {
                         int          zielerreicht; 
                         int          x1, y1, x2, y2;
                         pvehicle     vehicle;
-                        int          mode;
                         int          height;
                         void         move(int          x,
                                           int          y,
@@ -178,7 +188,6 @@ class BaseVehicleMovement : public VehicleAction {
                          void         run(int          x22,
                                           int          y22,
                                           pvehicle     eht,
-                                          int          md,
                                           int          _height,
                                           IntFieldList*   path );
                   } fieldReachableRek;
@@ -194,6 +203,9 @@ class VehicleMovement : public BaseVehicleMovement {
               int getStatus ( void ) { return status; };
               int execute ( pvehicle veh, int x, int y, int step, int height, int noInterrupt );
 
+              //! returns the distance for the registered unit to x,y ; quite slow; could be optimized...
+              int getDistance ( int x, int y );
+
               virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
               VehicleMovement ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
               ~VehicleMovement ( );
@@ -201,7 +213,10 @@ class VehicleMovement : public BaseVehicleMovement {
             // the calculation part
             protected:
 
+               //! searches for all fields that are reachable and stores them in #reachableFields and #reachableFieldsIndirect
                void searchstart( int x1, int y1, int hgt );
+
+               //! recursive method for searching all reachable fields; is called by #searchstart
                void searchmove( int x,  int y, int direc, int streck, int fuelneeded );
 
                struct {
@@ -240,17 +255,23 @@ class VehicleMovement : public BaseVehicleMovement {
 
 class ChangeVehicleHeight : public BaseVehicleMovement {
               int status;
+              IntFieldList path1;
            public:
-              IntFieldList reachableFields;
+              struct StartPosition {
+                 int x;
+                 int y;
+                 int dist;
+              };
+              FieldList<StartPosition> reachableFields;
               int getStatus ( void ) { return status; };
-              int execute ( pvehicle veh, int x, int y, int step, int height, int param2 );
+              int execute ( pvehicle veh, int x, int y, int step, int height, int allFields );
               ChangeVehicleHeight ( MapDisplayInterface* md, PPendingVehicleActions _pva , VehicleActionType vat );
            protected:
               int verticalHeightChange ( void );
 
-              int moveunitxy ( int xt1, int yt1 );
-              int execute_withmove ( void );
-              int moveheight ( void );
+              int moveunitxy ( int xt1, int yt1, IntFieldList& pathToMove );
+              int execute_withmove ( int allFields );
+              int moveheight ( int allFields );
 
           };
 
@@ -273,9 +294,12 @@ class DecreaseVehicleHeight : public ChangeVehicleHeight {
 
 /* IncreaseVehicleHeight / DecreaseVehicleHeight:
  *
- *   Step 0:   execute ( vehicle, -1, -1, step = 0 , newheight, -1 );
+ *   Step 0:   execute ( vehicle, -1, -1, step = 0 , newheight, allFields );
  *                 newheight should be vehicle->height >> 1 for DecreaseVehicleHeight and 
  *                                     vehicle->height << 1 for IncreaseVehicleHeight.
+ *                 allFields: 1 all fields are reported that can be reached with moving the unit first
+ *                            <= 0 ; only fields are reported that the unit can reach changing its
+ *                                   height without moving first
  *                 Depending of the units ability to change its height vertically (for example helicopter and submarine) or
  *                   by moving a distance ( normal airplanes ), execute will either immediatly change the units height and 
  *                   finish (status == 1000), or follow the same procedure as VehicleMovement.
@@ -352,6 +376,8 @@ extern PendingVehicleActions pendingVehicleActions;
  * Template implementations
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+class asc_out_of_range : public terror {};
+
 
 template<class T> FieldList<T> :: FieldList ( void )
 {
@@ -373,21 +399,21 @@ template<class T> pfield FieldList<T> :: getField ( int num ) const
 }
 
 
-template<class T> T* FieldList<T> :: getData ( int num )
+template<class T> T& FieldList<T> :: getData ( int num )
 {
    if ( num < fieldnum && num >= 0 )
-      return &data[num] ;
-   else
-      return NULL;
+      return data[num] ;
+
+   throw asc_out_of_range();
 }
 
-template<class T> T* FieldList<T> :: getData ( int x, int y )
+template<class T> T& FieldList<T> :: getData ( int x, int y )
 {
    for ( int i = 0; i < fieldnum; i++ )
       if ( xpos[i] == x && ypos[i] == y )
-         return &data[i];
+         return data[i];
 
-   return NULL;
+   throw asc_out_of_range();
 }
 
 
@@ -402,7 +428,7 @@ template<class T> void FieldList<T> :: getFieldCoordinates ( int num, int* x, in
    }
 }
 
-template<class T> void FieldList<T> :: addField ( int x, int y, T* _data )
+template<class T> void FieldList<T> :: addField ( int x, int y, T& _data )
 {
    int found = 0;
    for( int i = 0; i < fieldnum; i++ )
@@ -411,12 +437,27 @@ template<class T> void FieldList<T> :: addField ( int x, int y, T* _data )
    if ( !found ) {
       xpos.push_back ( x );
       ypos.push_back ( y );
-      if ( _data )
-         data.push_back( *_data );
+      data.push_back( _data );
 
       fieldnum++;
    }
 }
+
+template<class T> void FieldList<T> :: addField ( int x, int y )
+{
+   int found = 0;
+   for( int i = 0; i < fieldnum; i++ )
+      if ( xpos[i] == x && ypos[i] == y )
+         found = 1;
+   if ( !found ) {
+      xpos.push_back ( x );
+      ypos.push_back ( y );
+      T t;
+      data.push_back ( t );
+      fieldnum++;
+   }
+}
+
 
 template<class T> void FieldList<T> :: setMap ( pmap map )
 {

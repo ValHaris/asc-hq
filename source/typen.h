@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.51 2000-09-17 16:16:44 mbickel Exp $
+//     $Id: typen.h,v 1.52 2000-09-24 19:57:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2000/09/17 16:16:44  mbickel
+//      Some fixes for Watcom
+//
 //     Revision 1.50  2000/09/17 15:20:37  mbickel
 //      AI is now automatically invoked (depending on gameoptions)
 //      Some cleanup
@@ -614,6 +617,12 @@ class BaseAI {
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 
+
+class Coordinate {
+         public:
+            int x;
+            int y;
+      };
 
 class SingleWeapon {
   #ifdef converter

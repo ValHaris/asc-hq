@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.94 2000-09-17 15:20:34 mbickel Exp $
+//     $Id: sg.cpp,v 1.95 2000-09-24 19:57:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.94  2000/09/17 15:20:34  mbickel
+//      AI is now automatically invoked (depending on gameoptions)
+//      Some cleanup
+//
 //     Revision 1.93  2000/09/16 13:02:53  mbickel
 //      Put the AI in place
 //
@@ -3097,6 +3101,7 @@ int main(int argc, char *argv[] )
    int cntr = ticker;
    char *emailgame = NULL, *mapname = NULL, *savegame = NULL, *configfile = NULL;
    int useSound = 1;
+   int forceFullScreen = 0;
 
    for (i = 1; i<argc; i++ ) {
       if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
@@ -3119,6 +3124,14 @@ int main(int argc, char *argv[] )
           strcmpi ( &argv[i][1], "W" ) == 0 ||
           strcmpi ( &argv[i][1], "-WINDOW" ) == 0 ) {
         fullscreen = 0; continue;
+      }
+
+      if ( strcmpi ( &argv[i][1], "FULLSCREEN" ) == 0 ||
+          strcmpi ( &argv[i][1], "FS" ) == 0 ||
+          strcmpi ( &argv[i][1], "-FULLSCREEN" ) == 0 ) {
+        fullscreen = 1;
+        forceFullScreen = 1;
+        continue;
       }
 
       if ( strcmpi ( &argv[i][1], "NOSOUND" ) == 0 ||
@@ -3188,6 +3201,8 @@ int main(int argc, char *argv[] )
 #else
                 "\t-w\n"
                 "\t--window           Disable fullscreen mode \n"
+                "\t-fs\n"
+                "\t--fullscreen       Enable fullscreen mode (overriding config file)\n"
                 "\t-ns\n"
                 "\t--nosound          Disable sound \n" );
 #endif
@@ -3252,8 +3267,9 @@ int main(int argc, char *argv[] )
          "loading of game failed during pre graphic initializing", 2 );
    }
 
-   if ( CGameOptions::Instance()->forceWindowedMode )
+   if ( CGameOptions::Instance()->forceWindowedMode && !forceFullScreen )
       fullscreen = 0;
+
 
    modenum8 = initgraphics ( resolx, resoly, 8 );
 

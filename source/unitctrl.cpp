@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.31 2000-09-17 15:20:38 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.32 2000-09-24 19:57:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/09/17 15:20:38  mbickel
+//      AI is now automatically invoked (depending on gameoptions)
+//      Some cleanup
+//
 //     Revision 1.30  2000/09/10 10:19:52  mbickel
 //      AI improvements
 //
@@ -75,70 +79,6 @@
 //     Revision 1.14  2000/07/23 17:59:53  mbickel
 //      various AI improvements
 //      new terrain information window
-//
-//     Revision 1.13  2000/07/16 14:20:06  mbickel
-//      AI has now some primitive tactics implemented
-//      Some clean up
-//        moved weapon functions to attack.cpp
-//      Mount doesn't modify PCX files any more.
-//
-//     Revision 1.12  2000/07/02 21:04:14  mbickel
-//      Fixed crash in Replay
-//      Fixed graphic errors in replay
-//
-//     Revision 1.11  2000/06/23 11:53:11  mbickel
-//      Fixed a bug that crashed ASC when trying to ascend with a unit near the
-//       border of the map
-//
-//     Revision 1.10  2000/06/09 10:51:00  mbickel
-//      Repaired keyboard control of pulldown menu
-//      Fixed compile errors at fieldlist with gcc
-//
-//     Revision 1.9  2000/06/08 21:03:44  mbickel
-//      New vehicle action: attack
-//      wrote documentation for vehicle actions
-//
-//     Revision 1.8  2000/06/04 21:39:22  mbickel
-//      Added OK button to ViewText dialog (used in "About ASC", for example)
-//      Invalid command line parameters are now reported
-//      new text for attack result prediction
-//      Added constructors to attack functions
-//
-//     Revision 1.7  2000/05/18 14:14:50  mbickel
-//      Fixed bug in movemalus calculation for movement
-//      Added "view movement range"
-//
-//     Revision 1.6  2000/05/10 19:15:18  mbickel
-//      Fixed invalid height when trying to change a units height
-//
-//     Revision 1.5  2000/05/07 17:04:07  mbickel
-//      Fixed a bug in movement
-//
-//     Revision 1.4  2000/05/06 20:25:26  mbickel
-//      Fixed: -recognition of a second mouse click when selection a pd menu item
-//             -movement: fields the unit can only pass, but not stand on them,
-//                        are marked darker
-//             -intedit/stredit: mouseclick outside is like hitting enter
-//
-//     Revision 1.3  2000/05/02 16:20:56  mbickel
-//      Fixed bug with several simultaneous vehicle actions running
-//      Fixed graphic error at ammo transfer in buildings
-//      Fixed ammo loss at ammo transfer
-//      Movecost is now displayed for mines and repairs
-//      Weapon info now shows unhittable units
-//
-//     Revision 1.2  2000/04/27 17:59:24  mbickel
-//      Updated Kdevelop project file
-//      Fixed some graphical errors
-//
-//     Revision 1.1  2000/04/27 16:25:31  mbickel
-//      Attack functions cleanup
-//      New vehicle categories
-//      Rewrote resource production in ASC resource mode
-//      Improved mine system: several mines on a single field allowed
-//      Added unitctrl.* : Interface for vehicle functions
-//        currently movement and height change included
-//      Changed timer to SDL_GetTicks
 //
 
 /*
@@ -289,7 +229,7 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
          return status;
       }
 
-      fieldReachableRek.run( x, y, vehicle, 1, height, &path );
+      fieldReachableRek.run( x, y, vehicle, height, &path );
 
       status = 3;
       return status;
@@ -311,7 +251,7 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
  
        if ( mapDisplay )
           mapDisplay->startAction();
-       int stat = moveunitxy( x, y, noInterrupt );
+       int stat = moveunitxy( x, y, path, noInterrupt );
        if ( mapDisplay )
           mapDisplay->stopAction();
 
@@ -325,6 +265,30 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
     } else
        status = 0;
   return status;
+}
+
+int VehicleMovement :: getDistance ( int x, int y )
+{
+   if ( status < 2 )
+      return maxint;
+
+   IntFieldList path;
+   fieldReachableRek.run( x, y, vehicle, newheight, &path );
+   int dist = 0;
+   int lastx = vehicle->xpos;
+   int lasty = vehicle->ypos;
+   for  ( int i = 0; i < path.getFieldNum(); i++ ) {
+      int mm1, mm2;
+      int x;
+      int y;
+      path.getFieldCoordinates ( i, &x, &y );
+
+      calcmovemalus ( lastx, lasty, x, y, vehicle, -1, mm1, mm2  );
+      lastx = x;
+      lasty = y;
+      dist += mm2;
+   }
+   return dist;
 }
 
 
@@ -383,14 +347,7 @@ void VehicleMovement :: searchmove(int         x,
 
    if (search.mode == 1) { 
 
-      #ifdef fastsearch   
-      if ((fld->special & cbmovetempb) != 0) {
-         if ((((fld->special & cbmovetempb) >> cbmovetempv) != maindir / 2 + 1) || ((maindir & 1) == 0))
-            return;
-      } 
-      #endif   
-
-      if ( fld->a.temp < streck + 1 ) { 
+      if ( fld->a.temp < streck + 1 ) {
          fld->a.temp = streck + 1; 
          if ( c == 2 ) {
             reachableFields.addField ( x, y );
@@ -401,17 +358,8 @@ void VehicleMovement :: searchmove(int         x,
       } 
       else 
          return;
-   } 
-   else { 
-      // displaymessage (" was soll denn der K„se hier ?? ", 2 );
-      /*
-      fld->special |= ((direc / 2 + 1) << cbmovetempv);
-      fld->a.temp = 1; 
-      fieldnum++;
-      */
-   } 
-   if (search.mode == 1) { 
-      for ( int b = 0; b < sef_dirnum; b++) { 
+
+      for ( int b = 0; b < sef_dirnum; b++) {
          int c = sef_directions[b] + direc; 
 
          if (c >= sidenum ) 
@@ -440,22 +388,10 @@ void VehicleMovement :: searchstart( int x1, int y1, int hgt )
    actmap->cleartemps(7); 
    initwindmovement( vehicle );
 
-   int maindir; 
-
-   #ifdef fastsearch   
-   mode = 0; 
-   strck = vehicle->getMovement(); 
-   for (maindir = 0; maindir <= 3; maindir++) { 
-      move(startx,starty,maindir * 2 + 1,strck);
-      tiefe--; 
-   } 
-   #endif   
-
-
-   search.mode = 1; 
+   search.mode = 1;
    search.strck = vehicle->getMovement(); 
 
-   for (maindir = 0; maindir < sidenum; maindir++) { 
+   for ( int maindir = 0; maindir < sidenum; maindir++) {
       searchmove( search.startx, search.starty, sef_searchorder[maindir], search.strck, 0 );
       search.tiefe--;
    }
@@ -488,9 +424,8 @@ void   VehicleMovement :: FieldReachableRek :: move(int          x,
     if ( zielerreicht == 2 ) 
        return;
 
-    if (mode == 1)
-       if (streck > vehicle->getMovement() )
-          return;                      
+    if (streck > vehicle->getMovement() )
+       return;
 
     getnextfield ( x, y, direc);
 
@@ -509,7 +444,7 @@ void   VehicleMovement :: FieldReachableRek :: move(int          x,
 
     pfield fld = getfield(x,y); 
     for ( int b = 1; b < strecke.tiefe ; b++)
-       if ((strecke.field[b].x == x) && (strecke.field[b].y == y)) 
+       if ((strecke.x[b] == x) && (strecke.y[b] == y))
           return;
 
     int c = fieldaccessible( fld, vehicle, height); 
@@ -531,24 +466,32 @@ void   VehicleMovement :: FieldReachableRek :: move(int          x,
     if (fuel * vehicle->typ->fuelConsumption / minmalq  > vehicle->fuel) 
        return;
 
-    if (mode == 1) 
-       if ((fld->a.temp > 0) && (streck > fld->a.temp)) return;
+    if ((fld->a.temp > 0) && (streck > fld->a.temp))
+       return;
 
     if ((fld->a.temp > streck) || (fld->a.temp == 0)) 
         fld->a.temp = streck;
 
-    strecke.field[strecke.tiefe].x = x; 
-    strecke.field[strecke.tiefe].y = y; 
+    if ( strecke.x.size() <= strecke.tiefe ) {
+       strecke.x.push_back ( x );
+       strecke.y.push_back ( y );
+    } else {
+       strecke.x[strecke.tiefe] = x;
+       strecke.y[strecke.tiefe] = y;
+    }
+
     if ((x == x2) && (y == y2)) { 
        distance = streck; 
        zielerreicht = 1;
 
-       shortestway = strecke; 
+       shortestway.tiefe = strecke.tiefe;
+       shortestway.x = strecke.x;
+       shortestway.y = strecke.y;
        if (actmap->weather.wind[ getwindheightforunit ( vehicle ) ].speed && vehicle->height >= chtieffliegend && vehicle->height <= chhochfliegend) {
-          if ((mode == 2) || ((mode == 1) && (streck == windbeeline(x1,y1,x2,y2))))
+          if ( streck == windbeeline(x1,y1,x2,y2))
              zielerreicht = 2;
        } else {
-          if ((mode == 2) || ((mode == 1) && (streck == beeline(x2,y2,x1,y1))))
+          if ( streck == beeline(x2,y2,x1,y1))
              zielerreicht = 2;
        }
     } 
@@ -588,7 +531,6 @@ void   VehicleMovement :: FieldReachableRek :: move(int          x,
 void   VehicleMovement :: FieldReachableRek :: run(int          x22,
                                                    int          y22,
                                                    pvehicle     eht,
-                                                   int          md,
                                                    int          _height,
                                                    IntFieldList*   path )
                
@@ -600,12 +542,13 @@ void   VehicleMovement :: FieldReachableRek :: run(int          x22,
 
    x2 = x22;
    y2 = y22;
-   mode = md;
    vehicle = eht;
    height = _height;
 
    x1 = vehicle->xpos; 
    y1 = vehicle->ypos; 
+   strecke.x.push_back ( x1 );
+   strecke.y.push_back ( y1 );
 
    maxwegstrecke = vehicle->getMovement(); 
    zielerreicht = 0; 
@@ -633,22 +576,15 @@ void   VehicleMovement :: FieldReachableRek :: run(int          x22,
    for ( int c = 0; c < sidenum; c++ ) { 
       strecke.tiefe = 0; 
       move( x1, y1, (*direc)[c], 0, 0 );
-      /*
-      if ((mode == 2) && zielerreicht) 
-         if (distance <= maxwegstrecke) {
-            moveparams.movepath = shortestway; 
-            moveparams.movedist = distance; 
-            return;
-         }  */
 
-      if ((mode == 1) && zielerreicht==2) 
+      if ( zielerreicht==2 )
          break; 
    } 
 
    if ( zielerreicht >= 1) {
       path->addField ( eht->xpos, eht->ypos );
       for ( int d = 1; d <= shortestway.tiefe; d++) 
-         path->addField ( shortestway.field[d].x, shortestway.field[d].y ); 
+         path->addField ( shortestway.x[d], shortestway.y[d] );
    }
    actmap->cleartemps(7); 
 } 
@@ -656,13 +592,13 @@ void   VehicleMovement :: FieldReachableRek :: run(int          x22,
 
 
 
-int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, int noInterrupt )
+int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMove, int noInterrupt )
 { 
    pfield fld = getfield( xt1, yt1 ); 
 
    int fieldnum;
-   for ( fieldnum = 0; fieldnum < path.getFieldNum(); fieldnum++) 
-      if ( path.getField( fieldnum ) == fld ) 
+   for ( fieldnum = 0; fieldnum < pathToMove.getFieldNum(); fieldnum++)
+      if ( pathToMove.getField( fieldnum ) == fld )
          break; 
    
    
@@ -674,7 +610,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, int noInterrupt )
 
    int x ;
    int y ;
-   path.getFieldCoordinates ( 0, &x, &y );
+   pathToMove.getFieldCoordinates ( 0, &x, &y );
 
    tsearchreactionfireingunits srfu;
    treactionfirereplay rfr;    
@@ -685,7 +621,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, int noInterrupt )
    else
       rf = &srfu;
 
-   rf->init( vehicle, &path );
+   rf->init( vehicle, &pathToMove );
 
    if ( oldfield->vehicle == vehicle) {
       vehicle->removeview();
@@ -718,7 +654,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, int noInterrupt )
          cancelmovement--;
 
       int x2, y2;
-      path.getFieldCoordinates ( i+1, &x2, &y2 );
+      pathToMove.getFieldCoordinates ( i+1, &x2, &y2 );
 
       int mm1,mm2;
       calcmovemalus( x, y, x2, y2, vehicle, -1 , mm1, mm2);
@@ -754,7 +690,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, int noInterrupt )
       } 
 
       i++;
-      path.getFieldCoordinates ( i, &x, &y );
+      pathToMove.getFieldCoordinates ( i, &x, &y );
 
       pfield field3 = fld2; 
       if (vehicle->functions & cffahrspur) {
@@ -939,7 +875,7 @@ ChangeVehicleHeight :: ChangeVehicleHeight ( MapDisplayInterface* md, PPendingVe
 
 
 
-int ChangeVehicleHeight :: execute_withmove ( void )
+int ChangeVehicleHeight :: execute_withmove ( int allFields )
 {
    if ( !vehicle ) 
       return -unspecified_error;
@@ -977,7 +913,7 @@ int ChangeVehicleHeight :: execute_withmove ( void )
 
       newheight = w;
 
-      return moveheight( ); 
+      return moveheight( allFields );
    } else {
       displaymessage("changing height with movement of non-airplanes has not been defined yet !",2 );
       return -1;
@@ -986,66 +922,107 @@ int ChangeVehicleHeight :: execute_withmove ( void )
 }
 
 
-int ChangeVehicleHeight :: moveheight( void )
+int ChangeVehicleHeight :: moveheight( int allFields )
 { 
-
    initwindmovement( vehicle );
+
+   FieldList<StartPosition> startpos;
+   if ( allFields == 1 ) {
+      VehicleMovement vm ( NULL );
+      if ( vm.available ( vehicle )) {
+         vm.execute ( vehicle, -1, -1, 0, -1, -1 );
+         for ( int i = 0; i < vm.reachableFields.getFieldNum(); i++ ) {
+            StartPosition sp;
+            vm.reachableFields.getFieldCoordinates( i, &sp.x, &sp.y );
+            sp.dist = vm.getDistance ( sp.x, sp.y);
+            startpos.addField ( sp.x, sp.y, sp );
+         }
+      }
+   }// else {
+      StartPosition sp;
+      sp.x = vehicle->xpos;
+      sp.y = vehicle->ypos;
+      sp.dist = 0;
+      startpos.addField ( vehicle->xpos, vehicle->ypos, sp );
+   //}
+
 
    int ok2 = false; 
 
-   int xx = vehicle->xpos;
-   int yy = vehicle->ypos;
-   for ( int direc = 0; direc < sidenum; direc++) { 
-      int ok = true; 
-      int x = xx; 
-      int y = yy; 
+   for ( int i = 0; i < startpos.getFieldNum(); i++ ) {
+      StartPosition& sp = startpos.getData ( i );
+      int xx;
+      int yy;
+      startpos.getFieldCoordinates ( i, &xx, &yy );
+      for ( int direc = 0; direc < sidenum; direc++) {
+         int ok = true;
+         int x = xx;
+         int y = yy;
 
-      int dist = 0;
-      int mx = vehicle->getMovement();
-      while ( dist < vehicle->typ->steigung * minmalq  && mx > 0 && ok) {
-         int ox = x;
-         int oy = y;
-         getnextfield( x, y, direc );
-         if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize))
+         int dist = 0;
+         int mx = vehicle->getMovement()- sp.dist;
+         while ( dist < vehicle->typ->steigung * minmalq  && mx > 0 && ok) {
+            int ox = x;
+            int oy = y;
+            getnextfield( x, y, direc );
+            if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize))
+               ok = false;
+            else {
+
+               int fuelcost, movecost;
+               calcmovemalus(ox,oy,x,y,vehicle,direc, fuelcost, movecost);
+               /*
+               dist += minmalq ;// - windmovement[direc];
+               mx -= minmalq ; //- windmovement[direc];
+
+               movecost += windmovement[direc]; // compensating for the wind which.
+               */
+               dist += movecost;
+               mx -= movecost;
+
+               pfield fld = getfield(x,y);
+
+               if ( fieldaccessible(fld, vehicle, vehicle->height ) < 1)
+                  ok = false;
+
+               if ( fieldaccessible(fld, vehicle, newheight ) < 1)
+                  ok = false;
+            }
+         }
+         if ( mx < 0 )
             ok = false;
-         else {
-
-            int fuelcost, movecost;
-            calcmovemalus(ox,oy,x,y,vehicle,direc, fuelcost, movecost);
-            /*
-            dist += minmalq ;// - windmovement[direc];
-            mx -= minmalq ; //- windmovement[direc];
-
-            movecost += windmovement[direc]; // compensating for the wind which.
-            */
-            dist += movecost;
-            mx -= movecost;
-
-            pfield fld = getfield(x,y);
-            if ( fieldaccessible(fld, vehicle, vehicle->height ) < 1) 
-               ok = false; 
-            if ( fieldaccessible(fld, vehicle, newheight ) < 1) 
-               ok = false; 
-         } 
-      } 
-      if ( mx < 0 )
-         ok = false;
 
 
-      if ( ok && fieldaccessible( getfield(x,y), vehicle, newheight ) < 2)
-         ok = false;
-/*
-      if ( ok )
-         if ( fld->building || fld->vehicle )
+         if ( ok && fieldaccessible( getfield(x,y), vehicle, newheight ) < 2)
             ok = false;
-*/
+   /*
+         if ( ok )
+            if ( fld->building || fld->vehicle )
+               ok = false;
+   */
 
-      if (ok) { 
-         reachableFields.addField ( x, y );
-         ok2 = true; 
-      } 
+         if (ok) {
+            if ( reachableFields.isMember ( x, y )) {
+               StartPosition& sp = reachableFields.getData ( x, y );
+               if ( sp.dist < mx ) {
+                  sp.x = xx;
+                  sp.y = yy;
+                  sp.dist = mx;
+               }
+            } else {
+               StartPosition sp;
+               sp.x = xx;
+               sp.y = yy;
+               sp.dist = mx;
+               reachableFields.addField ( x, y, sp );
+            }
 
-   } 
+            ok2 = true;
+         }
+      }
+   }
+
+
    if ( ok2 ) 
       return 0;
    else
@@ -1053,10 +1030,10 @@ int ChangeVehicleHeight :: moveheight( void )
 } 
 
 
-int ChangeVehicleHeight :: moveunitxy ( int xt1, int yt1 )
+int ChangeVehicleHeight :: moveunitxy ( int xt1, int yt1, IntFieldList& pathToMove )
 {
    int oldheight = vehicle->height;
-   int res = BaseVehicleMovement :: moveunitxy ( xt1, yt1 );
+   int res = BaseVehicleMovement :: moveunitxy ( xt1, yt1, pathToMove );
    if ( res < 0 )
       return res;
 
@@ -1241,7 +1218,7 @@ int ChangeVehicleHeight :: verticalHeightChange ( void )
 }
 
 
-int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int height, int param2 )
+int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int height, int allFields )
 {
    if ( step != status )
       return -1;
@@ -1255,7 +1232,7 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int h
       newheight = height;
 
       if ( vehicle->typ->steigung ) {
-         int res = execute_withmove ( );
+         int res = execute_withmove ( allFields );
          if ( res < 0 ) {
             status = res;
             return status;
@@ -1288,7 +1265,18 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int h
          return status;
       }
 
-      fieldReachableRek.run( x, y, vehicle, 1, height, &path );
+      StartPosition& sp = reachableFields.getData ( x, y );
+      if ( sp.x != vehicle->xpos || sp.y != vehicle->ypos ) {
+         fieldReachableRek.run( sp.x, sp.y, vehicle, vehicle->height, &path1 );
+         npush ( vehicle->xpos );
+         npush ( vehicle->ypos );
+         vehicle->xpos = sp.x;  // some cheating because fieldReachableRec starts from the units position
+         vehicle->ypos = sp.y;
+         fieldReachableRek.run( x, y, vehicle, height, &path );
+         npop ( vehicle->ypos );
+         npop ( vehicle->xpos );
+      } else
+         fieldReachableRek.run( x, y, vehicle, height, &path );
 
       status = 3;
       return status;
@@ -1306,7 +1294,15 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int h
  
        if ( mapDisplay )
           mapDisplay->startAction();
-       int stat = moveunitxy( x, y );
+
+       npush ( newheight );
+       newheight = vehicle->height;
+       StartPosition& sp = reachableFields.getData ( x, y );
+       int stat = BaseVehicleMovement :: moveunitxy( sp.x, sp.y, path1 );
+       npop ( newheight );
+
+       stat = moveunitxy ( x, y, path );
+
        if ( mapDisplay ) {
           // mapDisplay->displayMap();
           mapDisplay->stopAction();
@@ -1467,13 +1463,13 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
   if ( status == 2 ) {
       pattackweap atw = NULL;
       if ( attackableVehicles.isMember ( x, y ))
-         atw = attackableVehicles.getData ( x, y );
+         atw = &attackableVehicles.getData ( x, y );
       else
          if ( attackableObjects.isMember ( x, y ))
-            atw = attackableObjects.getData ( x, y );
+            atw = &attackableObjects.getData ( x, y );
          else
             if ( attackableBuildings.isMember ( x, y ))
-               atw = attackableBuildings.getData ( x, y );
+               atw = &attackableBuildings.getData ( x, y );
 
       tfight* battle = NULL;
       switch ( atw->target ) {
@@ -1546,11 +1542,11 @@ void     VehicleAttack :: tsearchattackablevehicles::testfield( void )
          pattackweap atw = attackpossible( angreifer, xp, yp ); 
          if (atw->count > 0) { 
             switch ( atw->target ) {
-               case AttackWeap::vehicle:  va->attackableVehicles.addField  ( xp, yp, atw );
+               case AttackWeap::vehicle:  va->attackableVehicles.addField  ( xp, yp, *atw );
                   break;                                    
-               case AttackWeap::building: va->attackableBuildings.addField ( xp, yp, atw );
+               case AttackWeap::building: va->attackableBuildings.addField ( xp, yp, *atw );
                   break;
-               case AttackWeap::object:   va->attackableObjects.addField   ( xp, yp, atw );
+               case AttackWeap::object:   va->attackableObjects.addField   ( xp, yp, *atw );
                   break;
             } /* endswitch */
             anzahlgegner++;
