@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: basestrm.h,v 1.58 2004-05-16 11:28:00 mbickel Exp $
+//     $Id: basestrm.h,v 1.59 2004-05-29 15:07:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2004/05/16 11:28:00  mbickel
+//      Speed up of startup loading by using a cache file
+//
 //     Revision 1.57  2004/01/25 19:44:16  mbickel
 //      Many, many bugfixes
 //      Removed #pragma pack whereever possible
@@ -638,7 +641,10 @@ class tfindfile {
             int date;
 
             void read ( tnstream& stream ) {
-               stream.readInt();
+               int version = stream.readInt();
+               if ( version != 1 )
+                  throw tinvalidversion( stream.getDeviceName(), 1, version );
+
                name = stream.readString();
                directoryLevel = stream.readInt();
                isInContainer = stream.readInt();

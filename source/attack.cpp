@@ -1058,7 +1058,7 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
                               if (d <= angreifer->typ->weapons.weapon[i].maxdistance)
                                  if (d >= angreifer->typ->weapons.weapon[i].mindistance) {
                                     if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
-                                       if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), chfahrend)] )
+                                       if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), log2(chfahrend))] )
                                           if (angreifer->ammo[i] > 0) {
                                              atw->strength[atw->count ] = angreifer->weapstrength[i];
                                              atw->num[atw->count ] = i;

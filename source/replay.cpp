@@ -1510,11 +1510,14 @@ void trunreplay :: execnextreplaymove ( void )
                                  Building* bld = dynamic_cast<Building*>( actmap->getContainer(building));
                                  Vehicletype* veh = actmap->getvehicletype_byid ( vehicleid );
                                  if ( bld && veh ) {
-                                    cbuildingcontrols bc;
-                                    bc.init ( bld );
-                                    int result = bc.buildProductionLine.build( veh );
-                                    if ( result < 0)
-                                       displaymessage("severe replay inconsistency:\ncould not build production line!\n%s !", 1, getmessage(result));
+                                    if ( veh->techDependency.available( actmap->player[ bld->getOwner()].research )) {
+                                       cbuildingcontrols bc;
+                                       bc.init ( bld );
+                                       int result = bc.buildProductionLine.build( veh );
+                                       if ( result < 0)
+                                          displaymessage("severe replay inconsistency:\ncould not build production line!\n%s !", 1, getmessage(result));
+                                    } else
+                                       displaymessage("severe replay inconsistency:\ntechnology for building production line not available!", 1);
 
                                  } else
                                     displaymessage("severe replay inconsistency:\nno building for build production line command !", 1);

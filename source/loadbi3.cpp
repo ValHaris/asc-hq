@@ -169,7 +169,9 @@ class Bi3MapTranslationTable {
            int terrainid;
            int weather;
            void read ( tnstream& stream ) {
-               stream.readInt();
+               int version = stream.readInt();
+               if ( version != 1 )
+                  throw tinvalidversion( stream.getDeviceName(), 1, version );
                BIpic = stream.readInt();
                terrainid = stream.readInt();
                weather = stream.readInt();

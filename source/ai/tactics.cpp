@@ -167,6 +167,46 @@ bool AI::moveVariantComp ( const AI::MoveVariant* mv1, const AI::MoveVariant* mv
 
 void AI::getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBonus, bool justOne )
 {
+
+   //! first check
+
+   int x1 = veh->xpos;
+   int y1 = veh->ypos;
+   int x2 = veh->xpos;
+   int y2 = veh->ypos;
+
+   for ( AStar3D::Container::iterator ff = vm.visited.begin(); ff != vm.visited.end(); ++ff ) {
+      x1 = min ( x1, ff->h.x );
+      y1 = min ( y1, ff->h.y );
+      x2 = min ( x2, ff->h.x );
+      y2 = min ( y2, ff->h.y );
+   }
+
+   int maxrange = 0;
+   for ( int i = 0; i < veh->typ->weapons.count; ++i )
+      maxrange = max ( maxrange, veh->typ->weapons.weapon[i].maxdistance );
+
+   maxrange += 20;
+
+   x1 = max ( 0, x1 - maxrange/10 );
+   y1 = max ( 0, y1 - maxrange/10 );
+   x2 = min ( getMap()->xsize, x1 + maxrange/10 );
+   y2 = min ( getMap()->ysize, y1 + maxrange/10 );
+
+   int enemycount = 0;
+   for ( int y = y1; y <= y2 && !enemycount; ++y)
+      for ( int x = x1; x <= x2; ++x) {
+         pfield fld = getMap()->getField(x,y);
+         if ( fld && fld->vehicle)
+            if ( getdiplomaticstatus2 ( fld->vehicle->color, getPlayerNum()*8 ) != capeace )
+               enemycount++;
+      }
+
+   if( !enemycount )
+      return;
+
+
+
    int orgxpos = veh->xpos ;
    int orgypos = veh->ypos ;
 

@@ -1,6 +1,14 @@
-//     $Id: edglobal.h,v 1.18 2004-05-20 14:01:09 mbickel Exp $
+//     $Id: edglobal.h,v 1.19 2004-05-29 15:07:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2004/05/20 14:01:09  mbickel
+//      Many bugfixes and new features, among them:
+//        - Container.FillUnitsAutomatically = 2
+//        - generate Tech Tree
+//        - show research info
+//        - edit research in mapeditor
+//        - limit production to units that can leave a building
+//
 //     Revision 1.17  2004/05/11 20:22:33  mbickel
 //      Readded research system to ASC
 //
@@ -109,7 +117,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 87;
+const int execactionscount = 88;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -200,6 +208,7 @@ enum tuseractions {
      act_showPipeNet,
      act_editResearch,
      act_editResearchPoints,
-     act_generateTechTree};
+     act_generateTechTree,
+     act_editTechAdapter};
 
 extern void         execaction(int code);

@@ -2040,7 +2040,9 @@ int gamethread ( void* data )
 
    addmouseproc ( &mousescrollproc );
 
+   displayLogMessage ( 5, "starting music..." );
    startMusic();
+   displayLogMessage ( 5, " done \n" );
 
    onlinehelp = new tsgonlinemousehelp;
    onlinehelpwind = new tsgonlinemousehelpwind;

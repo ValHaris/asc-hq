@@ -26,31 +26,45 @@
 #include "vehicletype.h"
 #include "gamemap.h"
 #include "itemrepository.h"
- 
+
+const int techDependencyVersion = 2;
 
 void TechDependency::read ( tnstream& stream )
 {
-   stream.readInt();
+   int version = stream.readInt();
+   if ( version > techDependencyVersion || version < 1 )
+      throw tinvalidversion( stream.getDeviceName(), techDependencyVersion, version );
+
    requireAllListedTechnologies = stream.readInt();
    readClassContainer(requiredTechnologies, stream );
+   if ( version >= 2 )
+      readClassContainer(blockingTechnologies, stream );
 }
 
 void TechDependency::write ( tnstream& stream ) const
 {
-   stream.writeInt(1);
+   stream.writeInt(techDependencyVersion);
    stream.writeInt(requireAllListedTechnologies);
    writeClassContainer(requiredTechnologies, stream );
+   writeClassContainer(blockingTechnologies, stream );
 }
 
 void TechDependency::runTextIO ( PropertyContainer& pc )
 {
    pc.addIntRangeArray ( "TechnologiesRequired", requiredTechnologies );
    pc.addBool( "RequireAllListedTechnologies", requireAllListedTechnologies, true );
+   if ( pc.find( "BlockingTechnologies" ) || !pc.isReading() )
+      pc.addIntRangeArray ( "BlockingTechnologies", blockingTechnologies );
 }
 
 bool TechDependency::available( const Research& research ) const
 {
    if ( requiredTechnologies.size() )
+      for ( RequiredTechnologies::const_iterator j = blockingTechnologies.begin(); j != blockingTechnologies.end(); ++j )
+         for ( int k = j->from; k <= j->to; ++k )
+            if ( research.techResearched( k ))
+               return false;
+
       if ( requireAllListedTechnologies ) {
          for ( RequiredTechnologies::const_iterator j = requiredTechnologies.begin(); j != requiredTechnologies.end(); ++j )
             for ( int k = j->from; k <= j->to; ++k )
@@ -144,11 +158,44 @@ void TechDependency::writeTreeOutput ( const ASCString& sourceTechName, tnstream
 }
 
 
+void TechDependency::writeInvertTreeOutput ( const ASCString& sourceTechName, tnstream& stream, vector<int>& history ) const
+{
+   for ( RequiredTechnologies::const_iterator j = requiredTechnologies.begin(); j != requiredTechnologies.end(); ++j )
+      for ( int k = j->from; k <= j->to; ++k ) {
+         const Technology* t = technologyRepository.getObject_byID( k );
+         if ( t  ) {
+            ASCString s = "\"";
+            ASCString stn = sourceTechName;
+
+            while ( stn.find ( "\"" ) != ASCString::npos )
+               stn.erase ( stn.find ( "\"" ),1 );
+
+            s += stn;
+            s += "\" -> \"";
+
+            ASCString stn2 = t->name;
+            while ( stn2.find ( "\"" ) != ASCString::npos )
+               stn2.erase ( stn2.find ( "\"" ),1 );
+
+            s += stn2 + "\"\n";
+            stream.writeString ( s, false );
+
+            stream.writeString ( "\"" + stn + "\" [color=black] \n", false );
+            if ( find ( history.begin(), history.end(), t->id) == history.end()) {
+               history.push_back ( t->id );
+               t->techDependency.writeInvertTreeOutput ( t->name, stream, history );
+            }
+         }
+      }
+}
+
 
 
 void TechAdapter::read ( tnstream& stream )
 {
-   stream.readInt();
+   int version = stream.readInt();
+   if ( version > 1 || version < 1 )
+      throw tinvalidversion( stream.getDeviceName(), 1, version );
    name = stream.readString();
    techDependency.read( stream );
 }
@@ -163,6 +210,7 @@ void TechAdapter::write ( tnstream& stream ) const
 void TechAdapter::runTextIO ( PropertyContainer& pc )
 {
    pc.addString ( "Name", name );
+   name.toLower();
    techDependency.runTextIO ( pc );
 }
 
@@ -198,7 +246,9 @@ TechAdapter :: TechAdapter() {}
 
 void TechAdapterDependency::read ( tnstream& stream )
 {
-   stream.readInt();
+   int version = stream.readInt();
+   if ( version > 1 || version < 1 )
+      throw tinvalidversion( stream.getDeviceName(), 1, version );
    requireAllListedTechAdapter = stream.readInt();
    requiredTechAdapter.clear();
    for ( int i = stream.readInt(); i >0 ; --i )
@@ -216,7 +266,7 @@ void TechAdapterDependency::write ( tnstream& stream ) const
 
 void TechAdapterDependency::runTextIO ( PropertyContainer& pc, const ASCString& defaultTechAdapter )
 {
-   if ( pc.find( "TechAdapterRequired")) {
+   if ( pc.find( "TechAdapterRequired") || !pc.isReading() ) {
       pc.addStringArray ( "TechAdapterRequired", requiredTechAdapter );
       if ( pc.isReading())
          for ( RequiredTechAdapter::iterator j = requiredTechAdapter.begin(); j != requiredTechAdapter.end(); ++j )
@@ -229,6 +279,14 @@ void TechAdapterDependency::runTextIO ( PropertyContainer& pc, const ASCString& 
    pc.addBool( "RequireAllListedTechAdapter", requireAllListedTechAdapter, true );
 }
 
+void TechAdapterDependency::writeInvertTreeOutput ( const ASCString& sourceTechName, tnstream& stream ) const
+{
+   vector<int> history;
+   for ( RequiredTechAdapter::const_iterator r = requiredTechAdapter.begin(); r != requiredTechAdapter.end(); ++r )
+      for ( TechAdapterContainer::iterator i = techAdapterContainer.begin(); i != techAdapterContainer.end(); ++i ) 
+         if ( *r == (*i)->getName() )
+            (*i)->techDependency.writeInvertTreeOutput ( sourceTechName, stream, history );
+}
 
 
 
@@ -241,10 +299,13 @@ Technology::Technology()
    techlevel = 0;
 }
 
+const int technologyVersion = 2;
 
 void Technology::read( tnstream& stream )
 {
    int version = stream.readInt();
+   if ( version > technologyVersion || version < 1 )
+      throw tinvalidversion( stream.getDeviceName(), technologyVersion, version );
    id = stream.readInt();
    researchpoints = stream.readInt();
    requireEvent = stream.readInt();
@@ -260,7 +321,7 @@ void Technology::read( tnstream& stream )
 
 void Technology::write( tnstream& stream ) const
 {
-   stream.writeInt( 2 );
+   stream.writeInt( technologyVersion );
    stream.writeInt ( id );
    stream.writeInt( researchpoints );
    stream.writeInt( requireEvent );

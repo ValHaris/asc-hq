@@ -74,6 +74,7 @@ void MusicPlayList :: read ( tnstream& stream )
    filename = stream.readString();
    location = stream.readString();
    readClassContainer( fileNameList, stream );
+   reset();
 }
 
 void MusicPlayList :: write ( tnstream& stream ) const

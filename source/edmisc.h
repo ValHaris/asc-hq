@@ -1,6 +1,14 @@
-//     $Id: edmisc.h,v 1.33 2004-05-20 14:01:10 mbickel Exp $
+//     $Id: edmisc.h,v 1.34 2004-05-29 15:07:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2004/05/20 14:01:10  mbickel
+//      Many bugfixes and new features, among them:
+//        - Container.FillUnitsAutomatically = 2
+//        - generate Tech Tree
+//        - show research info
+//        - edit research in mapeditor
+//        - limit production to units that can leave a building
+//
 //     Revision 1.32  2004/05/11 20:22:33  mbickel
 //      Readded research system to ASC
 //
@@ -443,5 +451,7 @@ extern void setweatherall ( int weather  );
 extern void editResearch();
 extern void editResearchPoints();
 extern void generateTechTree();
+extern void editTechAdapter();
+
 
 #endif

@@ -224,9 +224,13 @@ bool FileCache::checkForModification (  )
 
 void FileCache::load()
 {
-   for ( DataLoaders::iterator i = dataLoaders.begin(); i != dataLoaders.end(); ++i)
+   for ( DataLoaders::iterator i = dataLoaders.begin(); i != dataLoaders.end(); ++i) {
+      displayLogMessage ( 5, "loading all of " + (*i)->getTypeName() + " from cache ... ");
       (*i)->read ( *stream );
+      displayLogMessage ( 5, "completed \n ");
+   }
 }
+
 
 void FileCache::write()
 {
@@ -284,6 +288,7 @@ void  loadAllData( bool useCache )
 
    if ( cache.isCurrent() && useCache ) {
       cache.load();
+      displayLogMessage ( 4, "loading of cache completed\n");
    } else {
 
       loadalltextfiles();
@@ -393,6 +398,8 @@ void ItemFiltrationSystem::ItemFilter::runTextIO ( PropertyContainer& pc )
 void ItemFiltrationSystem::ItemFilter::read ( tnstream& stream )
 {
    int version = stream.readInt();
+   if ( version > 2 )
+      throw tinvalidversion( stream.getDeviceName(), 2, version );
    readClassContainer ( buildings, stream );
    readClassContainer ( objects, stream );
    readClassContainer ( units, stream );

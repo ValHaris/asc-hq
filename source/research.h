@@ -38,6 +38,7 @@ class TechDependency: public LoadableItemType {
      typedef vector<IntRange> RequiredTechnologies;
      RequiredTechnologies requiredTechnologies;
      bool         requireAllListedTechnologies;
+     RequiredTechnologies blockingTechnologies;
    public:
      TechDependency(){ requireAllListedTechnologies = true; };
      bool available( const Research& research ) const;
@@ -49,14 +50,16 @@ class TechDependency: public LoadableItemType {
      //! outputs the dependencies in text format for processing by GraphViz
      void writeTreeOutput ( const ASCString& sourceTechName, tnstream& stream, bool reduce ) const;
 
+     void writeInvertTreeOutput ( const ASCString& sourceTechName, tnstream& stream, vector<int>& history ) const;
+
      int findInheritanceLevel( int id, vector<int>& stack, const ASCString& sourceTechName ) const;
 };
 
 class TechAdapter: public LoadableItemType {
      ASCString name;
+   public:
      TechDependency techDependency;
 
-   public:
      TechAdapter();
      bool available( const Research& research ) const;
      const ASCString& getName() const { return name; } ;
@@ -77,6 +80,8 @@ class TechAdapterDependency {
      void read ( tnstream& stream );
      void write ( tnstream& stream ) const;
      void runTextIO ( PropertyContainer& pc, const ASCString& defaultTechAdapter = "");
+
+     void writeInvertTreeOutput ( const ASCString& sourceTechName, tnstream& stream ) const;
 };
 
 
@@ -117,11 +122,14 @@ class TechAdapterDependency {
 
      int ___loadActiveTech;
      bool ___oldVersionLoader;
+   #ifdef karteneditor
+   public:
+   #endif   
 
      typedef std::map<ASCString,bool> TriggeredTechAdapter;
      TriggeredTechAdapter triggeredTechAdapter;
-
    public:
+
      vector<int> developedTechnologies;
 
 

@@ -20,7 +20,7 @@
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="ilink32"/>
-    <USERDEFINES value="HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_;_DEBUG"/>
+    <USERDEFINES value="HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_;_DEBUG;USE_GRAPHVIZ"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="weaponguide.bpf"/>
     <INCLUDEPATH value="..\;..;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include;..\..\libs\libsigc++"/>
@@ -116,10 +116,11 @@ Count=1
 Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
-Count=3
-Item0=HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_;_DEBUG
-Item1=_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_
-Item2=_DEBUG
+Count=4
+Item0=HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_;_DEBUG;USE_GRAPHVIZ
+Item1=HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_;_DEBUG
+Item2=_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_
+Item3=_DEBUG
 
 [HistoryLists\hlIntOutputDir]
 Count=1
@@ -129,7 +130,7 @@ Item0=C:\Programme\ascsrc\games\asc\source\tools\win
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=-c C:\ugneu\asc.ini  -i -d online/html -l html/ -z 48
+RunParams=-c C:\Programme\ascdev\asc\source\win32\borland\asc.ini  -i -d C:\wg-test\online\html -l html/ -z 48 -s 100
 Launcher=
 UseLauncher=0
 DebugCWD=

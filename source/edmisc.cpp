@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.113 2004-05-23 12:54:28 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.114 2004-05-29 15:07:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.113  2004/05/23 12:54:28  mbickel
+//      Updated campaign maps
+//      improved tech tree generation
+//
 //     Revision 1.112  2004/05/20 14:01:09  mbickel
 //      Many bugfixes and new features, among them:
 //        - Container.FillUnitsAutomatically = 2
@@ -1202,7 +1206,8 @@ void         pdsetup(void)
    pd.addbutton ( "~C~reate ressourcesõctrl+F", act_createresources );
    pd.addbutton ( "~S~et turn number",        act_setTurnNumber );
    pd.addbutton ( "~E~dit technologies",          act_editResearch );
-   pd.addbutton ( "~E~dit research points",          act_editResearchPoints );
+   pd.addbutton ( "edit ~R~search points",          act_editResearchPoints );
+   pd.addbutton ( "edit ~T~ech adapter",          act_editTechAdapter );
 
   pd.addfield ("~T~ools");
    pd.addbutton ( "~V~iew mapõV",            act_viewmap );
@@ -5010,46 +5015,150 @@ void generateTechTree()
    fileselectsvga("*.dot", filename, false);
    if ( !filename.empty() ) {
 
-      vector<ASCString> techs;
-      vector<int> techIds;
+      map<ASCString,int> temptechs;
       for ( int i = 0; i < technologyRepository.getNum(); ++i ) {
          const Technology* t = technologyRepository.getObject_byPos(i);
          if ( !ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Technology, t->id )) {
-            techs.push_back ( printTech ( t->id ));
-            techIds.push_back ( t->id );
+            temptechs[t->name] = t->id;
          }
       }
+
+      vector<ASCString> techs;
+      vector<int> techIds;
+      for ( map<ASCString,int>::iterator i = temptechs.begin(); i != temptechs.end(); ++i ) {
+          techs.push_back ( printTech ( i->second ));
+          techIds.push_back ( i->second );
+      }
+
+
+
+      /*
+      for ( int i = 1; i < techIds.size();  )
+         if ( technologyRepository.getObject_byID( techIds[i-1] )->name > technologyRepository.getObject_byID( techIds[i] )->name ) {
+            int a = techIds[i];
+            int b = techIds[i-1];
+            techs[i] = printTech ( b );
+            techs[i-1] = printTech ( a );
+            techIds[i] = b;
+            techIds[i-1] = a;
+            if ( i > 1 )
+               --i;
+         } else
+            ++i;
+         */
+
 
       vector<ASCString> buttons2;
       buttons2.push_back ( "~O~k" );
       buttons2.push_back ( "~C~ancel" );
 
-      // sort (techs.begin(), techs.end() );
-      pair<int,int> r = chooseString ( "Choose Base Technology", techs, buttons2 );
-      if ( r.first == 0 ) {
+      bool leavesUp = choice_dlg ( "tree direction", "leaves up", "root up" ) == 1;
+
+      if ( leavesUp )  {
+
+         pair<int,int> r = chooseString ( "Choose Base Technology", techs, buttons2 );
+         if ( r.first == 0 ) {
 
 
-         bool reduce = choice_dlg ( "generate sparce tree ?", "~y~es", "~n~o" ) == 1;
+            bool reduce = choice_dlg ( "generate sparce tree ?", "~y~es", "~n~o" ) == 1;
 
-         tn_file_buf_stream f ( filename, tnstream::writing );
+            tn_file_buf_stream f ( filename, tnstream::writing );
 
-         f.writeString ( "digraph \"ASC Technology Tree\" { \nnode [color=gray]\n", false );
+            f.writeString ( "digraph \"ASC Technology Tree\" { \nnode [color=gray]\n", false );
 
-         for ( int i = 0; i < technologyRepository.getNum(); ++i ) {
-            const Technology* t  = technologyRepository.getObject_byPos(i);
-            vector<int> stack;
-            if ( t->techDependency.findInheritanceLevel( techIds[r.second], stack, techs[r.second] ) > 0 )
-               t->techDependency.writeTreeOutput( t->name, f, reduce );
+            for ( int i = 0; i < technologyRepository.getNum(); ++i ) {
+               const Technology* t  = technologyRepository.getObject_byPos(i);
+               if ( !ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Technology, t->id )) {
+                  vector<int> stack;
+                  if ( t->techDependency.findInheritanceLevel( techIds[r.second], stack, techs[r.second] ) > 0 )
+                     t->techDependency.writeTreeOutput( t->name, f, reduce );
+               }
 
+            }
+
+            ASCString stn2 = technologyRepository.getObject_byID(techIds[r.second])->name;
+            while ( stn2.find ( "\"" ) != ASCString::npos )
+               stn2.erase ( stn2.find ( "\"" ),1 );
+
+            f.writeString ( "\"" + stn2 + "\" [shape=doublecircle] \n", false );
+            f.writeString ( "}\n", false );
          }
+      } else {
+         pair<int,int> r = chooseString ( "Choose Tip Technology", techs, buttons2 );
+         if ( r.first == 0 ) {
 
-         ASCString stn2 = technologyRepository.getObject_byID(techIds[r.second])->name;
-         while ( stn2.find ( "\"" ) != ASCString::npos )
-            stn2.erase ( stn2.find ( "\"" ),1 );
+            tn_file_buf_stream f ( filename, tnstream::writing );
 
-         f.writeString ( "\"" + stn2 + "\" [shape=doublecircle] \n", false );
-         f.writeString ( "}\n", false );
+            f.writeString ( "digraph \"ASC Technology Tree\" { \nnode [color=gray]\n", false );
+
+            const Technology* t  = technologyRepository.getObject_byID(techIds[r.second]);
+            vector<int> history;
+            if ( t )
+               t->techDependency.writeInvertTreeOutput( t->name, f, history );
+
+            ASCString stn2 = technologyRepository.getObject_byID(techIds[r.second])->name;
+            while ( stn2.find ( "\"" ) != ASCString::npos )
+               stn2.erase ( stn2.find ( "\"" ),1 );
+
+            f.writeString ( "\"" + stn2 + "\" [shape=doublecircle] \n", false );
+            f.writeString ( "}\n", false );
+         }
       }
 
    }
 }
+
+
+
+void editTechAdapter()
+{
+   vector<ASCString> buttons;
+   buttons.push_back ( "~A~dd" );
+   buttons.push_back ( "~R~emove" );
+   buttons.push_back ( "~C~lose" );
+
+   vector<ASCString> buttons2;
+   buttons2.push_back ( "~A~dd" );
+   buttons2.push_back ( "~C~ancel" );
+
+   vector<ASCString> buttonsP;
+   buttonsP.push_back ( "~E~dit" );
+   buttonsP.push_back ( "~C~lose" );
+
+   pair<int,int> playerRes;
+   do {
+      vector<ASCString> player;
+      for ( int i = 0; i < 8; ++i )
+         player.push_back ( ASCString ( strrr(i)) + " " + actmap->player[i].getName());
+
+      playerRes = chooseString ( "Choose Player", player, buttonsP );
+      if ( playerRes.first == 0 ) {
+         int player = playerRes.second;
+
+         pair<int,int> res;
+         do {
+            Research::TriggeredTechAdapter& tta = actmap->player[player].research.triggeredTechAdapter;
+            vector<ASCString> ta;
+            for ( Research::TriggeredTechAdapter::iterator i = tta.begin(); i != tta.end(); ++i ) {
+               if ( i->second )
+                  ta.push_back ( i->first );
+            }
+            res = chooseString ( "Registered TechAdapter", ta, buttons );
+            if ( res.first == 0 ) {
+               ASCString s = editString( "enter TechAdapter" );
+               if ( !s.empty() ) {
+                  s.toLower();
+                  tta[s] = true;
+               }
+            } else
+            if ( res.first == 1 && res.second >= 0 ) {
+               Research::TriggeredTechAdapter::iterator p = tta.begin();
+               while ( res.second-- )
+                  ++p;
+               tta.erase ( p );
+            }
+         } while ( res.first != 2 );
+      }
+   } while ( playerRes.first != 1 );
+}
+

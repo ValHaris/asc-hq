@@ -173,7 +173,7 @@ int main(int argc, char *argv[] )
    #else
    ASCString tempPath = "/tmp/";
    #endif
-   
+
 
    try {
 
@@ -246,7 +246,7 @@ int main(int argc, char *argv[] )
          } else
             setmatch = true;
 
-         
+
          if ( patimat ( wildcard, ft->filename.c_str() ) && setmatch ) {
 
             printf(" processing unit %s , ID %d ... ", ft->description.c_str(), ft->id );
@@ -258,8 +258,10 @@ int main(int argc, char *argv[] )
             FILE* constructionPage = createFile ( tempPath + fileName + "4.html" );
             FILE* transportPage = createFile ( tempPath + fileName + "5.html" );
             FILE* infoPage = createFile ( tempPath + fileName + "6.html" );
+            FILE* researchPage = createFile ( tempPath + fileName + "7.html" );
 
-            FILE* files[6] = { generalPage, movePage, weaponPage, constructionPage, transportPage, infoPage };
+            const int pageNum = 7;
+            FILE* files[pageNum] = { generalPage, movePage, weaponPage, constructionPage, transportPage, infoPage, researchPage };
 
             // Beginn Einzelfiles
             // UNIT FRAME
@@ -376,10 +378,10 @@ int main(int argc, char *argv[] )
             fprintf ( generalPage, "</td></tr></table>\n" );
             */
 
-            const char* pages[6] = { "Basic Data", "Movement", "Weapon&nbsp;Systems", "Construction", "Transportation", "Description" };
+            const char* pages[pageNum] = { "Basic Data", "Movement", "Weapon&nbsp;Systems", "Construction", "Transportation", "Description", "Research" };
 
-            for ( int i = 1; i < 6; i++ ) {
-               for  ( int j = 1; j < 6; j++ )
+            for ( int i = 1; i < pageNum; i++ ) {
+               for  ( int j = 1; j < pageNum; j++ )
                   if ( i != j )
                     fprintf ( files[i], "<a href=\"%s%d.html\">%s</a> " , fileName.c_str(), j+1, pages[j] );
                   else
@@ -486,7 +488,7 @@ int main(int argc, char *argv[] )
 
             if ( ft->heightChangeMethodNum ) {
                fprintf( movePage, "<TABLE %s>\n", tableParam );
-               
+
                printIndex ( movePage, "Method" );
                for ( int w = 0; w < ft->heightChangeMethodNum ; w++)
                   fprintf ( movePage, "<th class=\"wg\">%d </th>", w);
@@ -993,6 +995,36 @@ int main(int argc, char *argv[] )
             //ENDE DESCRIPTION
 
 
+
+
+            fprintf ( researchPage, "<H2>Technology Dependencies</H2>\n<p>" );
+
+
+            #ifdef USE_GRAPHVIZ
+            ASCString temptechfilename = tempPath + fileName + "_tech";
+            {
+               tn_file_buf_stream f ( temptechfilename + ".dot", tnstream::writing );
+
+               f.writeString ( "digraph \"Tech Dependency\" { \nnode [color=gray]\n", false );
+
+
+               ft->techDependency.writeInvertTreeOutput( ft->getName() + " ", f );
+               f.writeString ( "\"" + ft->getName() + " \" [shape=diamond] \n", false );
+
+               f.writeString ( "}\n", false );
+            }
+
+            fprintf ( researchPage, "<img src=\"%s_tech.png\">\n<p>", fileName.c_str() );
+
+            ASCString sysCommand = "dot " + temptechfilename + ".dot -Tpng -o" + temptechfilename + ".png";
+            int res = system ( sysCommand.c_str() );
+            if ( res != 0 )
+               printf("error running command  %s \n", sysCommand.c_str() );
+            else
+               copyFile ( temptechfilename + ".png", prefixDir + fileName + "_tech.png" );
+            #endif
+
+
             // ABSCHLU˜ DER DOKUMENTE
 
             fprintf ( generalPage, "</body></html>\n");
@@ -1001,6 +1033,7 @@ int main(int argc, char *argv[] )
             fprintf ( constructionPage, "</body></html>\n");
             fprintf ( transportPage, "</body></html>\n");
             fprintf ( infoPage, "</body></html>\n");
+            fprintf ( researchPage, "</body></html>\n");
             // Ende des Einheiten Dokuments
 
             fclose ( framePage );
@@ -1010,10 +1043,11 @@ int main(int argc, char *argv[] )
             fclose ( constructionPage );
             fclose ( transportPage );
             fclose ( infoPage );
+            fclose ( researchPage );
             // closing the file
 
 
-            for ( int i = 0; i <= 6; i++ ) {
+            for ( int i = 0; i <= pageNum; i++ ) {
                ASCString nm = fileName;
                if ( i > 0 )
                  nm += strrr(i);
@@ -1064,7 +1098,7 @@ int main(int argc, char *argv[] )
       copyFile ( tempPath + "overview1.html", prefixDir + "overview1.html" );
 
       printf("Generating unit listings");
-      
+
       int counter = 0;
       for ( std::vector<SingleUnitSet*>::iterator i = unitSets.begin(); i != unitSets.end(); i++  ) {
          if ( (*i)->ID == cl.s() || !cl.s() ) {

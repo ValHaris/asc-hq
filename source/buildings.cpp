@@ -475,6 +475,8 @@ Building* Building::newFromStream ( pmap gamemap, tnstream& stream )
 
     pbuildingtype typ;
 
+    if ( version < buildingstreamversion )
+       throw tinvalidversion( stream.getDeviceName(), buildingstreamversion, version );
 
     if ( version == buildingstreamversion || version == -1 ) {
 
@@ -1196,11 +1198,16 @@ Resources Building :: getResourcePlus( )
 
 Resources Building :: getResourceUsage( )
 {
-  Work* w = spawnWorkClasses ( true );
-  Resources r;
-  if ( w )
-    r = w->getUsage();
-  delete w;
+   Work* w = spawnWorkClasses ( true );
+   Resources r;
+   if ( w )
+     r = w->getUsage();
+   delete w;
+
+   if ( typ->special & cgresearchb )
+      r += returnResourcenUseForResearch( this, researchpoints );
+
+
   return r;
 }
 
