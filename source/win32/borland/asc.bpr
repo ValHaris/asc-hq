@@ -37,8 +37,8 @@
     <USERDEFINES value="HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL;USEPACKAGES"/>
     <MAINSOURCE value="asc.bpf"/>
-    <INCLUDEPATH value="..\..;..\..\..\source;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="..\..;..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par -w-8027 -w-8026 -w-csu"/>
   </MACROS>
   <OPTIONS>
@@ -83,9 +83,9 @@ Comments=
 
 [HistoryLists\hlIncludePath]
 Count=8
-Item0=..\..;..\..\..\source;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
-Item1=..\..;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
-Item2=..\..\..\source;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
+Item0=..\..\..\source;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
+Item1=..\..;..\..\..\source;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
+Item2=..\..;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
 Item3=..\..;..\..\..\..\sdl\include;..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
 Item4=C:\Programme\ascsrc\games\sdl\include;..\..;..\..\sdl;..\..\..\..\sdl\src\main\win32;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
 Item5=..\..;..\..\sdl;..\..\..\..\sdl\src\main\win32;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
@@ -94,9 +94,9 @@ Item7=..\..;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=6
-Item0=..\..;..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
-Item1=..\..;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
-Item2=..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
+Item0=..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\..;..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..\..;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
 Item3=..\..;..\..\sdl;..\..\..\..\sdl\src\main\win32;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
 Item4=..\..\sdl;..\..\..\..\sdl\src\main\win32;..\..;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
 Item5=..\..;$(BCB)\lib\obj;$(BCB)\lib

@@ -2,9 +2,12 @@
     \brief The artificial intelligence of ASC. 
 */
 
-//     $Id: artint.cpp,v 1.63 2001-03-01 21:24:32 mbickel Exp $
+//     $Id: artint.cpp,v 1.64 2001-03-02 11:51:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2001/03/01 21:24:32  mbickel
+//      Fixed two AI bugs: inconsistent attack value calculation
+//
 //     Revision 1.62  2001/02/26 12:34:58  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -190,12 +193,17 @@ const int attack_unitdestroyed_bonus = 90;
        {
           int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
           int visibility = getfield ( x2, y2 )->visible;
+          int visnum = 0;
+          int enemynum = 0;
           for ( int i = 0; i< 8; i++ )
              if ( getdiplomaticstatus2 ( i*8, ai->getPlayerNum()*8 ) != capeace ) {
+                enemynum++;
                 int v = (visibility >> ( 2*i)) & 3;
                 if ( v >= visible_now )
-                   cost += 12;
+                   visnum++;
              }
+          if ( enemynum )
+             cost += 12 * visnum / enemynum;
 
           return cost;
        };
@@ -1000,14 +1008,17 @@ void AI :: checkConquer( )
 {
    // remove all capture orders for buildings which are no longer controlled by the enemy
 
-   for ( BuildingCaptureContainer::iterator bi = buildingCapture.begin(); bi != buildingCapture.end(); bi++)
+   for ( BuildingCaptureContainer::iterator bi = buildingCapture.begin(); bi != buildingCapture.end(); bi++) {
+      BuildingCaptureContainer::iterator nxt = bi;
+      ++nxt;
       if ( getdiplomaticstatus2( getMap()->getField( bi->first )->building->color, getPlayerNum()*8 ) != cawar ) {
          pvehicle veh= getMap()->getUnit ( bi->second.unit );
          if ( veh )
             veh->aiparam[getPlayerNum()]->task = AiParameter::tsk_nothing;
          buildingCapture.erase ( bi );
       }
-
+      bi = nxt;
+   }
 
    displaymessage2("check for capturing enemy towns ... ");
 
@@ -1130,6 +1141,8 @@ void AI :: checkConquer( )
    }
 
    for ( BuildingCaptureContainer::iterator bi = buildingCapture.begin(); bi != buildingCapture.end(); bi++) {
+      BuildingCaptureContainer::iterator nxt = bi;
+      ++nxt;
       pvehicle veh = getMap()->getUnit ( bi->second.unit );
       if ( veh ) {
          MapCoordinate dest = veh->aiparam[getPlayerNum()]->dest;
@@ -1141,6 +1154,7 @@ void AI :: checkConquer( )
       } else
          buildingCapture.erase ( bi );
       checkKeys();
+      bi = nxt;
    }
 
 }
