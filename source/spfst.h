@@ -1,6 +1,10 @@
-//     $Id: spfst.h,v 1.10 2000-06-08 21:03:43 mbickel Exp $
+//     $Id: spfst.h,v 1.11 2000-06-28 19:26:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/06/08 21:03:43  mbickel
+//      New vehicle action: attack
+//      wrote documentation for vehicle actions
+//
 //     Revision 1.9  2000/05/30 18:39:27  mbickel
 //      Added support for multiple directories
 //      Moved DOS specific files to a separate directory
@@ -214,7 +218,6 @@ extern void  displaymap(void);
 
 extern pfield getactfield(void);
 
-#pragma intrinsic ( getfield );
 extern pfield getfield(int          x,
                      int          y);
 
@@ -694,6 +697,7 @@ class MapDisplayInterface {
            virtual void resetMovement ( void ) = 0;
            virtual void startAction ( void ) = 0;
            virtual void stopAction ( void ) = 0;
+           virtual ~MapDisplayInterface () {};
        };
 
 class MapDisplay : public MapDisplayInterface {

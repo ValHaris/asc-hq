@@ -1,6 +1,9 @@
-//     $Id: edglobal.cpp,v 1.12 2000-05-11 20:12:05 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.13 2000-06-28 19:26:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/05/11 20:12:05  mbickel
+//      mapedit(lin) can now import BI3 maps
+//
 //     Revision 1.11  2000/05/10 19:55:49  mbickel
 //      Fixed empty loops when waiting for mouse events
 //
@@ -103,7 +106,7 @@ int infomessage( char* formatstring, ... )
    char* a = formatstring;
    char* c = new char[200];
    char* d;
-   int linenum = 0;
+   // int linenum = 0;
    int i;
 
    memset (stringtooutput, 0, sizeof ( stringtooutput ));

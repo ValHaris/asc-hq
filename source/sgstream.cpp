@@ -1,6 +1,11 @@
-//     $Id: sgstream.cpp,v 1.13 2000-06-28 18:31:02 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.14 2000-06-28 19:26:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/06/28 18:31:02  mbickel
+//      Started working on AI
+//      Started making loaders independent of memory layout
+//      Destroyed buildings can now leave objects behind.
+//
 //     Revision 1.12  2000/05/23 20:40:49  mbickel
 //      Removed boolean type
 //
@@ -162,7 +167,7 @@ void logtofile ( char* strng, ... )
    va_start ( arglist, strng );
    vsprintf ( buf, strng, arglist );
 
-   int a = memavail();
+   // int a = memavail();
 
    if ( !logfile )
      logfile = fopen ( "SGLOG.TXT", "at+" );
@@ -1190,7 +1195,7 @@ pvehicletype   loadvehicletype( pnstream stream )
       #ifndef converter
        #ifdef HEXAGON
          if ( fztn->bipicture <= 0 ) {
-            void* pic2 = fztn->picture[0];
+            // void* pic2 = fztn->picture[0];
             TrueColorImage* zimg = zoomimage ( fztn->picture[0], fieldxsize, fieldysize, pal, 0 );
             void* pic = convertimage ( zimg, pal ) ;
             for (  i = 0; i < 6; i++ )
@@ -1249,7 +1254,7 @@ pvehicletype   loadvehicletype( pnstream stream )
 
 void writevehicle( pvehicletype fztn, pnstream stream )
 {
-  int  i;
+  int  i,j;
   word w;
   char c;
   int  one  = 1;
@@ -1278,7 +1283,7 @@ void writevehicle( pvehicletype fztn, pnstream stream )
    w = fztn->production.material ; stream->writedata2( w );
    w = fztn->armor               ; stream->writedata2( w );
 
-   for ( int j = 0; j < 8; j++ ) 
+   for ( j = 0; j < 8; j++ )
       if ( fztn->picture[j] )
          stream->writedata2( one ); 
       else
@@ -1874,7 +1879,7 @@ extern dacpalette256 pal;
 void generateaveragecolprt ( int x1, int y1, int x2, int y2, void* buf, char* pix1 )
 {
    word *w = (word*) buf;
-   int size = ( w[0] + 1) * (w[1] + 1);
+   // int size = ( w[0] + 1) * (w[1] + 1);
 
 
    char *c ; // = (char*) buf;

@@ -29,8 +29,8 @@ void movedir(char dir)
   lastdir = dir;
  #ifdef HEXAGON
 
-  int oldx = cxp;
-  int oldy = cyp;
+  // int oldx = cxp;
+  // int oldy = cyp;
 
    switch (dir) {
       

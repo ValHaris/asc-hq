@@ -1,6 +1,11 @@
-//     $Id: typen.cpp,v 1.21 2000-06-28 18:31:03 mbickel Exp $
+//     $Id: typen.cpp,v 1.22 2000-06-28 19:26:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/06/28 18:31:03  mbickel
+//      Started working on AI
+//      Started making loaders independent of memory layout
+//      Destroyed buildings can now leave objects behind.
+//
 //     Revision 1.20  2000/06/08 21:03:43  mbickel
 //      New vehicle action: attack
 //      wrote documentation for vehicle actions
@@ -1769,8 +1774,7 @@ tterrainaccess :: tterrainaccess ( void )
 
 int tterrainaccess :: accessible ( tterrainbits bts )
 {
-   int i = 0;
-   if ( terrain.toand ( bts )  
+   if ( terrain.toand ( bts )
          &&
          bts.existall ( terrainreq )
          &&
@@ -1781,7 +1785,6 @@ int tterrainaccess :: accessible ( tterrainbits bts )
          return -1;
       else
          return 0;
-
 }
 
 

@@ -1,6 +1,11 @@
-//     $Id: spfst.cpp,v 1.34 2000-06-28 18:31:02 mbickel Exp $
+//     $Id: spfst.cpp,v 1.35 2000-06-28 19:26:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2000/06/28 18:31:02  mbickel
+//      Started working on AI
+//      Started making loaders independent of memory layout
+//      Destroyed buildings can now leave objects behind.
+//
 //     Revision 1.33  2000/06/23 11:53:09  mbickel
 //      Fixed a bug that crashed ASC when trying to ascend with a unit near the
 //       border of the map
@@ -5069,7 +5074,7 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
    
          int compl = totalmove;
          int went = fieldnum;
-         int togo = totalmove - fieldnum;
+         // int togo = totalmove - fieldnum;
    
          int ht1 = 10 * ( log2 ( height1 ) - log2 ( chfahrend ) );
          int ht2 = 10 * ( log2 ( height2 ) - log2 ( chfahrend ) );
@@ -5116,7 +5121,7 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
             h2 = 0;
          }
    
-      int step = 1;
+      // int step = 1;
    
    
      /************************************/
@@ -6683,6 +6688,10 @@ void  tfield :: addobject( pobjecttype obj, int dir, int force )
           else
              if (choice_dlg("object cannot be built here","~i~gnoe","~c~ancel") == 1) 
                 buildable = 1;
+     #else
+     if ( !buildable )
+          if ( force )
+             buildable = 1;
      #endif
 
      if ( buildable ) {

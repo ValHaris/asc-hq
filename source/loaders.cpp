@@ -1,6 +1,11 @@
-//     $Id: loaders.cpp,v 1.12 2000-06-28 18:31:00 mbickel Exp $
+//     $Id: loaders.cpp,v 1.13 2000-06-28 19:26:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/06/28 18:31:00  mbickel
+//      Started working on AI
+//      Started making loaders independent of memory layout
+//      Destroyed buildings can now leave objects behind.
+//
 //     Revision 1.11  2000/05/25 11:07:44  mbickel
 //      Added functions to check files for valid mail / savegame files.
 //
@@ -2547,7 +2552,6 @@ int          tmaploaders::loadmap(char *       name )
     #endif
     
     stream->readpchar ( &description );
-    int desclen = strlen ( description ) + 7;
     delete[] description;
  
     word w;
@@ -2731,7 +2735,6 @@ int          tsavegameloaders::loadgame(char *       name )
    char* description = NULL;
 
    stream->readpchar ( &description );
-   int desclen = strlen ( description ) + 7;
    delete[] description;
 
    word w;

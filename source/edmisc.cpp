@@ -1,6 +1,9 @@
-//     $Id: edmisc.cpp,v 1.18 2000-05-23 20:40:44 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.19 2000-06-28 19:26:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/05/23 20:40:44  mbickel
+//      Removed boolean type
+//
 //     Revision 1.17  2000/05/10 19:55:49  mbickel
 //      Fixed empty loops when waiting for mouse events
 //
@@ -1520,8 +1523,8 @@ void showcoordinates(void)
 
 int  selectfield(int * cx ,int  * cy)
 {
-   int oldposx = getxpos();
-   int oldposy = getypos();
+   // int oldposx = getxpos();
+   // int oldposy = getypos();
    cursor.gotoxy( *cx, *cy );
    displaymap();
    cursor.show();

@@ -1,6 +1,9 @@
-//     $Id: edselfnt.cpp,v 1.7 2000-05-06 19:57:09 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.8 2000-06-28 19:26:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/05/06 19:57:09  mbickel
+//      Mapeditor/linux is now running
+//
 //     Revision 1.6  2000/05/02 16:20:54  mbickel
 //      Fixed bug with several simultaneous vehicle actions running
 //      Fixed graphic error at ammo transfer in buildings
@@ -112,7 +115,9 @@ class SelectAnythingBase {
             public:
                 virtual void showactiteminfos ( int x1, int y1, int x2, int y2 ) = 0;
                 virtual int getiteminfoheight( void ) { return 60; };
+                virtual ~SelectAnythingBase ( ) {};
         };
+
 
 
 

@@ -1,6 +1,11 @@
-//     $Id: building.cpp,v 1.25 2000-06-28 18:30:57 mbickel Exp $
+//     $Id: building.cpp,v 1.26 2000-06-28 19:26:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/06/28 18:30:57  mbickel
+//      Started working on AI
+//      Started making loaders independent of memory layout
+//      Destroyed buildings can now leave objects behind.
+//
 //     Revision 1.24  2000/06/19 20:05:02  mbickel
 //      Fixed crash when transfering ammo to vehicle with > 8 weapons
 //
@@ -1561,7 +1566,6 @@ void  ccontainer :: buildgraphics( void )
    #ifdef HEXAGON
     getpicsize (icons.container.container_window, windowwidth, windowheight);
     collategraphicoperations cgo ( containerxpos, containerypos, containerxpos+windowwidth, containerypos+windowheight );
-    int mss = getmousestatus();
     putspriteimage ( containerxpos, containerypos, icons.container.container_window );
    #else
     try {
@@ -3576,7 +3580,7 @@ void  ccontainer_b :: crepairbuilding_subwindow :: display ( void )
 void ccontainer_b :: crepairbuilding_subwindow :: paintvariables ( void )
 {
    npush ( activefontsettings );
-   int newdamage = checkto ( ndamag );
+   // int newdamage = checkto ( ndamag );
 
    int w = ( 100 - cc_b->building->damage);
    int c;
