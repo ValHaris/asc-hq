@@ -42,6 +42,19 @@
 
 int main(int argc, char *argv[] )
 {
+/*
+   ASCString s = "test #crt# test";
+   if (s.find ( "#crt" ))
+      printf("found\n");
+   else
+      printf("not found\n");
+
+   if ( s.find ( "#crt#" ) != ASCString::npos )
+      s.replace ( s.find  ("#crt#"), 5, "<p>");
+
+   printf(s.c_str());
+   return 0;
+  */
    Cmdline cl ( argc, argv );
 
    if ( cl.v() ) {
@@ -663,25 +676,31 @@ int main(int argc, char *argv[] )
             fprintf ( detailed6, "<table align=\"left\" id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">" );
             fprintf ( detailed6, "<tr><td align=\"center\" bgcolor=\"#20483f\">Informationen zur Einheit</td></tr>" );
             if ( !ft->infotext.empty() ) {
-               string text = ft->infotext;
-               if ( text.find ( "#color0#" ) != string::npos )
-                  text.replace ( text.find  ("#color0#"), 8, " ");
-               if ( text.find ( "#color1#" ) != string::npos )
-                  text.replace ( text.find  ("#color1#"), 8, " ");
-               if ( text.find ( "#color2#" ) != string::npos )
-                  text.replace ( text.find  ("#color2#"), 8, " ");
-               if ( text.find ( "#color3#" ) != string::npos )
-                  text.replace ( text.find  ("#color3#"), 8, " ");
-               if ( text.find ( "#color4#" ) != string::npos )
-                  text.replace ( text.find  ("#color4#"), 8, " ");
-               if ( text.find ( "#font0#" ) != string::npos )
-                  text.replace ( text.find  ("#font0#"), 7, " ");
-               if ( text.find ( "#font1#" ) != string::npos )
-                  text.replace ( text.find  ("#font1#"), 7, " ");
-               if ( text.find ( "#font2#" ) != string::npos )
-                  text.replace ( text.find  ("#font2#"), 7, " ");
-               if ( text.find ( "#crt#" ) != string::npos )
-                  text.replace ( text.find  ("#crt#"), 5, " ");
+               ASCString text = ft->infotext;
+               while ( text.find ( "#crt#" ) != ASCString::npos )
+                  text.replace ( text.find  ("#crt#"), 5, "<p>");
+               while ( text.find ( "#CRT#" ) != ASCString::npos )
+                  text.replace ( text.find  ("#CRT#"), 5, "<p>");
+               while ( text.find ( "\n" ) != ASCString::npos )
+                  text.replace ( text.find  ("\n"), 1, "<p>");
+               while ( text.find ( "\r" ) != ASCString::npos )
+                  text.replace ( text.find  ("\r"), 1, "");
+
+               ASCString::size_type begin = 0;
+               ASCString::size_type end = 0;
+               do {
+                  begin = text.find ( "#", end );
+                  if ( begin != ASCString::npos && begin+1 < text.length() ) {
+                     end = text.find ( "#", begin+1 );
+                     if ( end != ASCString::npos ) {
+                        text.erase ( begin, end-begin+1 );
+                        begin = 0;
+                        end = 0;
+                     }
+                  } else
+                     end = ASCString::npos;
+               } while ( end != ASCString::npos );
+
                fprintf ( detailed6, "<tr><td><br>%s<br></td></tr>", text.c_str() );
             }
             //            fprintf ( detailed6, "<tr><td><br><br>%s</td></tr>", ft->infotext );
