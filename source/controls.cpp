@@ -215,8 +215,8 @@ void         putbuildinglevel1(void)
    eht = getactfield()->vehicle;
 
    int num = 0;
-   for ( int i = 0; i < buildingtypenum; i++)
-      if ( eht->buildingconstructable ( getbuildingtype_forpos( i ) ))
+   for ( int i = 0; i < buildingTypeRepository.getNum(); i++)
+      if ( eht->buildingconstructable ( buildingTypeRepository.getObject_byPos( i ) ))
          num++;
 
    if ( num == 0 ) {
@@ -802,24 +802,24 @@ void         tbuildstreet::testfield( const MapCoordinate& mc )
    if ( !fld->vehicle && !fld->building ) {
       for ( int i = 0; i < actvehicle->typ->objectsBuildable.size(); i++ )
         for ( int j = actvehicle->typ->objectsBuildable[i].from; j <= actvehicle->typ->objectsBuildable[i].to; j++ )
-          checkObject( fld, getobjecttype_forid ( j ), Build );
+          checkObject( fld, actmap->getobjecttype_byid ( j ), Build );
 
       for ( int i = 0; i < actvehicle->typ->objectGroupsBuildable.size(); i++ )
         for ( int j = actvehicle->typ->objectGroupsBuildable[i].from; j <= actvehicle->typ->objectGroupsBuildable[i].to; j++ )
-          for ( int k = 0; k < objecttypenum; k++ ) {
-             pobjecttype objtype = getobjecttype_forpos ( k );
+          for ( int k = 0; k < objectTypeRepository.getNum(); k++ ) {
+             pobjecttype objtype = objectTypeRepository.getObject_byPos ( k );
              if ( objtype->groupID == j )
                 checkObject( fld, objtype, Build );
           }
 
       for ( int i = 0; i < actvehicle->typ->objectsRemovable.size(); i++ )
         for ( int j = actvehicle->typ->objectsRemovable[i].from; j <= actvehicle->typ->objectsRemovable[i].to; j++ )
-          checkObject( fld, getobjecttype_forid ( j ), Remove );
+          checkObject( fld, actmap->getobjecttype_byid ( j ), Remove );
 
       for ( int i = 0; i < actvehicle->typ->objectGroupsRemovable.size(); i++ )
         for ( int j = actvehicle->typ->objectGroupsRemovable[i].from; j <= actvehicle->typ->objectGroupsRemovable[i].to; j++ )
-          for ( int k = 0; k < objecttypenum; k++ ) {
-             pobjecttype objtype = getobjecttype_forpos ( k );
+          for ( int k = 0; k < objectTypeRepository.getNum(); k++ ) {
+             pobjecttype objtype = objectTypeRepository.getObject_byPos ( k );
              if ( objtype->groupID == j )
                 checkObject( fld, objtype, Remove );
           }
@@ -864,7 +864,7 @@ void         SearchVehicleConstructionFields::testfield(const MapCoordinate& mc)
      for ( int i = 0; i < actvehicle->typ->vehiclesBuildable.size(); i++ )
        for ( int j = actvehicle->typ->vehiclesBuildable[i].from; j <= actvehicle->typ->vehiclesBuildable[i].to; j++ ) {
          if ( actmap->getgameparameter(cgp_forbid_unitunit_construction) == 0 || gamemap->unitProduction.check(j) ) {
-            pvehicletype v = getvehicletype_forid ( j );
+            pvehicletype v = actmap->getvehicletype_byid ( j );
             if ( v && actvehicle->vehicleconstructable ( v, mc.x, mc.y )) {
                fld->a.temp = 1;
                numberoffields++;
@@ -1154,8 +1154,8 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle, const AStar3D::Path
       for (i = 0; i < 8; i++ )
          maxshootdist[i] = 0;
 
-      for (i = 0; i < vehicletypenum; i++ ) {
-         pvehicletype fzt = getvehicletype_forpos ( i );
+      for (i = 0; i < vehicleTypeRepository.getNum(); i++ ) {
+         pvehicletype fzt = vehicleTypeRepository.getObject_byPos ( i );
          if ( fzt )
             for (j = 0; j < fzt->weapons.count; j++ )
                if ( fzt->weapons.weapon[j].shootable() )
@@ -2069,7 +2069,7 @@ void dissectvehicle ( pvehicle eht )
                   if ( techs[k]->id == eht->typ->classbound[i].techrequired[j] )
                      found = 1;
                if ( !found ) {
-                  ptechnology tec = gettechnology_forid ( eht->typ->classbound[i].techrequired[j] );
+                  ptechnology tec = technologyRepository.getObject_byID ( eht->typ->classbound[i].techrequired[j] );
                   if ( tec )
                      techs[technum++] = tec;
                }
@@ -2113,7 +2113,7 @@ void dissectvehicle ( pvehicle eht )
             Player::Dissection du;
 
             du.tech = techs[i];
-            du.fzt = getvehicletype_forid ( eht->typ->id );
+            du.fzt = vehicleTypeRepository.getObject_byID ( eht->typ->id );
 
             if ( found & 1 )
                du.orgpoints = du.tech->researchpoints / dissectunitresearchpointsplus2;
@@ -2429,3 +2429,4 @@ void  checkforvictory ( )
 }
 
 
+ 

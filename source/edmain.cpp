@@ -2,9 +2,14 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.65 2003-07-06 15:10:26 mbickel Exp $
+//     $Id: edmain.cpp,v 1.66 2004-05-12 20:05:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.65  2003/07/06 15:10:26  mbickel
+//      Better configure messages
+//      code cleanup
+//      Replays update resources for constructing / removing objects
+//
 //     Revision 1.64  2003/04/23 18:31:09  mbickel
 //      Fixed: AI problems
 //      Improved cheating detection in replay
@@ -437,27 +442,7 @@ void loaddata( void )
    if ( actprogressbar )
       actprogressbar->startgroup();
 
-   loadallobjecttypes();
-
-   if ( actprogressbar )
-      actprogressbar->startgroup();
-   loadallvehicletypes();
-
-   if ( actprogressbar )
-      actprogressbar->startgroup();
-   loadallbuildingtypes();
-
-   if ( actprogressbar )
-      actprogressbar->startgroup();
-   loadalltechnologies();
-
-   if ( actprogressbar )
-      actprogressbar->startgroup();
-   loadstreets();
-
-   if ( actprogressbar )
-      actprogressbar->startgroup();
-   loadallterraintypes();
+   loadAllData();
 
    if ( actprogressbar )
       actprogressbar->startgroup();
@@ -477,10 +462,10 @@ void loaddata( void )
 
 void buildemptymap ( void )
 {
-   if ( getterraintype_forid(30) )
-      generatemap(getterraintype_forid(30)->weather[0], idisplaymap.getscreenxsize(1), idisplaymap.getscreenysize());
+   if ( terrainTypeRepository.getObject_byID(30) )
+      generatemap(terrainTypeRepository.getObject_byID(30)->weather[0], idisplaymap.getscreenxsize(1), idisplaymap.getscreenysize());
    else
-      generatemap(getterraintype_forpos(0)->weather[0], idisplaymap.getscreenxsize(1), idisplaymap.getscreenysize());
+      generatemap(terrainTypeRepository.getObject_byPos(0)->weather[0], idisplaymap.getscreenxsize(1), idisplaymap.getscreenysize());
 }
 
 

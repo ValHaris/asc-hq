@@ -3726,6 +3726,7 @@ void  ccontainer_b :: setpictures ( void )
          for ( i = num; i < 32; i++ ) {
             picture[i] = NULL;
             pictgray[i] = 0;
+            produceableunits[i] = NULL;
          }
 
          inactivefield = icons.container.mark.repairinactive;
@@ -6176,7 +6177,7 @@ int  ccontainer_b :: BuildProductionLine :: available ( )
 
    int count = 0;
    for ( int i = 0; i < 32; ++i )
-      if ( cc_b->building->production[i] ) 
+      if ( cc_b->building->production[i] )
          ++count;
 
    if ( count >= 18 )
@@ -6191,7 +6192,7 @@ void ccontainer_b :: BuildProductionLine :: exec( )
    vector<int>       idList;
 
    Resources r = cc_b->building->getResource( Resources(maxint, maxint, maxint), 1 );
-   for ( int i = 0; i < vehicletypenum; ++i ) {
+   for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
       Vehicletype* veh = actmap->getvehicletype_bypos ( i );
       if ( veh ) {
          bool found = false;
@@ -6227,6 +6228,7 @@ void ccontainer_b :: BuildProductionLine :: exec( )
                if ( !cc_b->building->production[i] ) {
                   Vehicletype* veh = actmap->getvehicletype_byid ( id );
                   cc_b->building->production[i] = veh;
+                  main->setpictures();
                   main->movemark (repaint);
                   main->repaintresources = 1;
                   cc_b->building->getResource( veh->productionCost * productionLineConstructionCostFactor, 0 );
@@ -6279,12 +6281,13 @@ void ccontainer_b :: RemoveProductionLine :: exec( )
 
    if (choice_dlg("do you really want to remove this production line ?","~y~es","~n~o") == 1) {
       cc_b->building->production[main->mark.y*unitsshownx + main->mark.x] = NULL;
+      main->setpictures();
       main->movemark (repaint);
       main->repaintresources = 1;
+      dashboard.x = 0xffff;
       cc_b->building->getResource( veh->productionCost * productionLineConstructionCostFactor, 0 );
    }
 }
-
 
 
 ccontainer_b :: trainuniticon_cb :: trainuniticon_cb ( void )

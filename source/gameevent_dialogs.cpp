@@ -307,10 +307,10 @@ void         getxy_building(int *x,int *y)
 
 NewVehicleTypeDetection::NewVehicleTypeDetection(  )
 {
-   buf = new bool[ vehicletypenum ];
+   buf = new bool[ vehicleTypeRepository.getNum() ];
 
-   for ( int i=0; i < vehicletypenum ; i++ )
-      buf[i] = actmap->player[ actmap->actplayer ].research.vehicletypeavailable ( getvehicletype_forpos ( i ) );
+   for ( int i=0; i < vehicleTypeRepository.getNum() ; i++ )
+      buf[i] = actmap->player[ actmap->actplayer ].research.vehicletypeavailable ( vehicleTypeRepository.getObject_byPos ( i ) );
 }
 
 
@@ -318,9 +318,9 @@ NewVehicleTypeDetection::NewVehicleTypeDetection(  )
 void    NewVehicleTypeDetection::evalbuffer( void )
 {
    int num = 0;
-   for ( int i=0; i < vehicletypenum ;i++ ) {
+   for ( int i=0; i < vehicleTypeRepository.getNum() ;i++ ) {
       if (buf[i] == 0) {
-          buf[i] = actmap->player[ actmap->actplayer ].research.vehicletypeavailable ( getvehicletype_forpos ( i ) );
+          buf[i] = actmap->player[ actmap->actplayer ].research.vehicletypeavailable ( vehicleTypeRepository.getObject_byPos ( i ) );
           if ( buf[i] )
              num++;
       } else
@@ -570,9 +570,9 @@ void  tshownewtanks :: init ( bool*      buf2 )
 
    buf = buf2;
    int i, num = 0;
-   for (i=0; i < vehicletypenum ;i++ ) {
+   for (i=0; i < vehicleTypeRepository.getNum() ;i++ ) {
       if ( buf[i] ) {
-         pvehicletype tnk = getvehicletype_forpos ( i );
+         pvehicletype tnk = vehicleTypeRepository.getObject_byPos ( i );
          if ( tnk ) {
             bar ( x1 + 25, y1 + 45 + num * 50, x1 + 65, y1 + 85 + num * 50, dblue );
             putrotspriteimage (  x1 + 30, y1 + 50 + num * 50, tnk -> picture[0] , actmap->actplayer * 8);

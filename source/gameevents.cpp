@@ -1042,7 +1042,7 @@ void MapChange :: writeData ( tnstream& stream )
 
 void MapChange :: fieldOperator( const MapCoordinate& mc )
 {
-   TerrainType* typ = getterraintype_forid ( terrainID );
+   TerrainType* typ = terrainTypeRepository.getObject_byID ( terrainID );
    if ( !typ )
       return;
 
@@ -1083,7 +1083,7 @@ void AddObject :: writeData ( tnstream& stream )
 
 void AddObject :: fieldOperator( const MapCoordinate& mc )
 {
-   ObjectType* obj = getobjecttype_forid ( objectID );
+   ObjectType* obj = objectTypeRepository.getObject_byID ( objectID );
    if ( !obj )
       return;
 

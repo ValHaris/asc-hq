@@ -658,7 +658,7 @@ void         tvehicleinfo::init( const Vehicletype* type )
 {
 
    if ( type )
-      aktvehicle = getvehicletype_forid ( type->id);
+      aktvehicle = actmap->getvehicletype_byid ( type->id);
    else
       aktvehicle = NULL;
 
@@ -1462,19 +1462,19 @@ void         tvehicleinfo::buttonpressed( int id )
             if ( i > 0 )
                i--;
             else
-               i = vehicletypenum - 1;
-            type = getvehicletype_forpos ( i );
+               i = vehicleTypeRepository.getNum() - 1;
+            type = vehicleTypeRepository.getObject_byPos ( i );
          } while ( !type || ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Vehicle, type->id ) ); /* enddo */
          markweap = 0;
       }
 
       if (id == 3) {
          do {
-            if ( i < vehicletypenum - 1 )
+            if ( i < vehicleTypeRepository.getNum() - 1 )
                i++;
             else
                i = 0;
-            type = getvehicletype_forpos ( i );
+            type = vehicleTypeRepository.getObject_byPos ( i );
          } while ( !type || ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Vehicle, type->id ) ); /* enddo */
 
          markweap = 0;
@@ -1515,7 +1515,7 @@ void         tvehicleinfo::checknextunit(void)
 {
    if (i != j) {
       mousevisible(false);
-      aktvehicle = getvehicletype_forpos ( i );
+      aktvehicle = actmap->getvehicletype_bypos ( i );
       zeigevehicle();
       if ( category == 0 ) {
          showgeneralinfovariables();
@@ -1549,29 +1549,29 @@ void         tvehicleinfo::run(void)
       if ( !fieldvisiblenow(getactfield()) )
          eht = NULL;
       if ( eht ) {
-         while (eht->typ != getvehicletype_forpos ( i ))
+         while (eht->typ != actmap->getvehicletype_bypos ( i ))
             i++;
       }
    } else {
-      while ( aktvehicle != getvehicletype_forpos ( i ))
+      while ( aktvehicle != actmap->getvehicletype_bypos ( i ))
         i++;
    }
 
-   pvehicletype type = getvehicletype_forpos ( i );
+   pvehicletype type = actmap->getvehicletype_bypos ( i );
    while ( !type || ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Vehicle, type->id ) ) {
-      if ( i < vehicletypenum - 1 )
+      if ( i < vehicleTypeRepository.getNum() - 1 )
          i++;
       else {
          displaymessage ( "no vehicle type to display; check unitset filters ", 1);
          return;
       }
-      type = getvehicletype_forpos ( i );
+      type = actmap->getvehicletype_bypos ( i );
    } ;
 
 
    j = i;
 
-   aktvehicle = getvehicletype_forpos ( i );
+   aktvehicle = actmap->getvehicletype_bypos ( i );
    zeigevehicle();
    showgeneralinfos();
 

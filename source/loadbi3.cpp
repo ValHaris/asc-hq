@@ -581,19 +581,19 @@ int translateunits[ bi3unitnum ][2] = { {1201,26}, {1270,26}, {1202,13}, {1200,6
 
 pvehicletype  tloadBImap :: getvehicletype ( int tp )
 {
-   for ( int j = 0; j < vehicletypenum; j++ ) {
-      pvehicletype tnk = getvehicletype_forpos ( j );
+   for ( int j = 0; j < vehicleTypeRepository.getNum(); j++ ) {
+      pvehicletype tnk = vehicleTypeRepository.getObject_byPos ( j );
       if ( tnk )
-         if ( tnk->bipicture > 0 ) 
-            if ( tnk->bipicture == 1340 + tp * 2 ) 
+         if ( tnk->bipicture > 0 )
+            if ( tnk->bipicture == 1340 + tp * 2 )
                   return tnk;
    }
 
 
    if ( tp < bi3unitnum )
-      for ( int i = 0; i < 2; i++ ) 
+      for ( int i = 0; i < 2; i++ )
          if ( translateunits[tp][i] > 0 ) {
-            pvehicletype tnk = getvehicletype_forid ( translateunits[tp][i] );
+            pvehicletype tnk = vehicleTypeRepository.getObject_byID ( translateunits[tp][i] );
             if ( tnk )
                return tnk;
          }
@@ -733,7 +733,7 @@ void        tloadBImap ::   ReadACTNPart(void)
 
          for ( int i = 0; i < translationTable->terrain2idTranslation.size(); i++ ) {
             if ( Line[X] == translationTable->terrain2idTranslation[i].BIpic ) {
-                pterraintype trrn = getterraintype_forid ( translationTable->terrain2idTranslation[i].terrainid );
+                pterraintype trrn = terrainTypeRepository.getObject_byID ( translationTable->terrain2idTranslation[i].terrainid );
                 int w = translationTable->terrain2idTranslation[i].weather;
                 if ( trrn )
                   if ( trrn->weather[w] ) {
@@ -747,12 +747,12 @@ void        tloadBImap ::   ReadACTNPart(void)
          if ( !found )
             for ( int j = 0; j < translationTable->terraincombixlat.size(); j++ )
                if ( Line[X] == translationTable->terraincombixlat[j].bigraph ) {
-                  pterraintype trrn = getterraintype_forid ( translationTable->terraincombixlat[j].terrainid );
+                  pterraintype trrn = terrainTypeRepository.getObject_byID ( translationTable->terraincombixlat[j].terrainid );
                   if ( trrn ) {
                      fld->typ = trrn->weather[translationTable->terraincombixlat[j].terrainweather];
                      pobjecttype obj = NULL;
                      if ( translationTable->terraincombixlat[j].objectid > 0 )
-                        obj = getobjecttype_forid ( translationTable->terraincombixlat[j].objectid );
+                        obj = objectTypeRepository.getObject_byID ( translationTable->terraincombixlat[j].objectid );
                      if ( obj )
                         fld->addobject ( obj, -1, 1 );
                      fld->setparams();
@@ -761,8 +761,8 @@ void        tloadBImap ::   ReadACTNPart(void)
                }
 
          if ( !found )
-            for ( int i = 0; i < terraintypenum; i++ ) {
-               pterraintype trrn = getterraintype_forpos ( i );
+            for ( int i = 0; i < terrainTypeRepository.getNum(); i++ ) {
+               pterraintype trrn = terrainTypeRepository.getObject_byPos ( i );
                if ( trrn )
                   for ( int j = 0; j < cwettertypennum; j++ )
                      if ( trrn->weather[j] )
@@ -780,13 +780,13 @@ void        tloadBImap ::   ReadACTNPart(void)
                if ( miss[k] == Line[X] )
                   fnd = 1;
 
-            if ( !fnd ) 
+            if ( !fnd )
                miss[missnum++] = Line[X];
-            
+
          }
       }
     }
-    
+
     if ( missnum ) {
        strcat ( missing, "The following terrain fields could not be found: " );
        for ( int k = 0; k < missnum; k++ ) {
@@ -840,7 +840,7 @@ void        tloadBImap ::   ReadACTNPart(void)
             for ( int pass = 0; pass < 2 && !found_without_force; pass++ ) {
                for ( int i = 0; i < translationTable->object2IDtranslate.size(); i++ )
                   if ( xlt[m] == translationTable->object2IDtranslate[i].first )  {
-                     pobjecttype obj = getobjecttype_forid ( translationTable->object2IDtranslate[i].second );
+                     pobjecttype obj = objectTypeRepository.getObject_byID ( translationTable->object2IDtranslate[i].second );
                      if ( obj ) {
                         pfield fld = getfield ( newx, newy );
                         if ( pass == 1 || obj->getFieldModification(fld->getweather()).terrainaccess.accessible ( fld->bdt )) {
@@ -853,8 +853,8 @@ void        tloadBImap ::   ReadACTNPart(void)
                }
 
                if ( !(found & 1) )
-                  for ( int i = 0; i < objecttypenum; i++ ) {
-                     pobjecttype obj = getobjecttype_forpos ( i );
+                  for ( int i = 0; i < objectTypeRepository.getNum(); i++ ) {
+                     pobjecttype obj = objectTypeRepository.getObject_byPos ( i );
                      if ( obj )
                         for ( int ww = 0; ww < cwettertypennum; ww++ )
                            if ( obj->weather.test(ww) )
@@ -873,7 +873,7 @@ void        tloadBImap ::   ReadACTNPart(void)
          }
 
          if ( trrID >= 0 ) {
-            pterraintype trrn = getterraintype_forid ( trrID );
+            pterraintype trrn = terrainTypeRepository.getObject_byID ( trrID );
             if ( trrn ) {
                if ( !trrn->weather[trrWeather] )
                   trrWeather = 0;
@@ -890,9 +890,9 @@ void        tloadBImap ::   ReadACTNPart(void)
          if ( !found  && Line[X] != 0xffff ) {
             if ( fakemap ) {
                pobjecttype o = new ObjectType;
-               *o = *getobjecttype_forid ( 44 );
+               *o = *objectTypeRepository.getObject_byID ( 44 );
                int id = 1000000;
-               while ( getobjecttype_forid ( id ))
+               while ( objectTypeRepository.getObject_byID ( id ))
                  id++;
 
                o->id = id;
@@ -903,9 +903,9 @@ void        tloadBImap ::   ReadACTNPart(void)
                loadbi3pict_double ( Line[X], &o->weatherPicture[0].images[0] );
                o->weatherPicture[0].bi3pic[0] = Line[X];
 
-               addobjecttype ( o );
+               // addobjecttype ( o );
 
-               getfield ( newx, newy )->addobject ( o, 0, true );
+               // getfield ( newx, newy )->addobject ( o, 0, true );
 
             } else {
 
@@ -1018,8 +1018,8 @@ void       tloadBImap :: ReadSHOPPart( void )
            dynamic_array<blds> bldlist;
            int bldlistnum = 0;
 
-           for ( int i = 0; i < buildingtypenum; i++ ) {
-               pbuildingtype bld  = getbuildingtype_forpos ( i );
+           for ( int i = 0; i < buildingTypeRepository.getNum(); i++ ) {
+               pbuildingtype bld  = buildingTypeRepository.getObject_byPos ( i );
                if ( bld )
                   for ( int w = 0; w < cwettertypennum; w++ ) 
                      for ( int p = 0; p < maxbuildingpicnum; p++ ) 

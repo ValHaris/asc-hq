@@ -113,8 +113,8 @@ void         tchoosetechnology::check(void)
    technum = 0;
    Research* resrch = &actmap->player[actmap->actplayer].research;
 
-   for (int i = 0; i < technologynum; i++) {
-      const Technology* tech = gettechnology_forpos( i );
+   for (int i = 0; i < technologyRepository.getNum(); i++) {
+      const Technology* tech = technologyRepository.getObject_byPos( i );
       if ( tech ) {
          Research::AvailabilityStatus a = resrch->techAvailable ( tech );
          if ( a == Research::available ) {
@@ -154,11 +154,20 @@ void         tchoosetechnology::disp(void)
       activefontsettings.length = 300;
       showtext2(techs[i]->name.c_str(), x,y ) ;
 
+      /*
       if ( techs[i]->relatedUnitID > 0 ) {
          Vehicletype* vt = actmap->getvehicletype_byid( techs[i]->relatedUnitID );
-         activefontsettings.length = 100;
+         activefontsettings.length = 70;
          if ( vt )
-            showtext2("(unit info)", x1 + xsize - 120,y ) ;
+            showtext2("(tech info)", x1 + xsize - 130,y ) ;
+      }
+      */
+
+      if ( techs[i]->relatedUnitID > 0 ) {
+         Vehicletype* vt = actmap->getvehicletype_byid( techs[i]->relatedUnitID );
+         activefontsettings.length = 70;
+         if ( vt )
+            showtext2("(unit info)", x1 + xsize - 130,y ) ;
       }
 
    }

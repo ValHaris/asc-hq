@@ -27,54 +27,39 @@
 #include "buildingtype.h"
 #include "research.h"
 
-extern pterraintype getterraintype_forid ( int id );
-extern pobjecttype getobjecttype_forid ( int id );
-extern pvehicletype getvehicletype_forid ( int id );
-extern pbuildingtype getbuildingtype_forid ( int id );
-extern const Technology* gettechnology_forid ( int id );
 
-extern pterraintype getterraintype_forpos ( int pos );
-extern pobjecttype getobjecttype_forpos ( int pos );
-extern pvehicletype getvehicletype_forpos ( int pos );
-extern pbuildingtype getbuildingtype_forpos ( int pos );
-extern const Technology* gettechnology_forpos ( int pos );
+template<class T>
+class ItemRepository {
+   ASCString typeName;
+   vector<T*>   container;
+   typedef map<int,T*>  ObjectMap;
+   ObjectMap hash;
 
-extern void addterraintype ( pterraintype bdt );
-extern void addobjecttype ( pobjecttype obj );
-extern void addvehicletype ( pvehicletype vhcl );
-extern void addbuildingtype ( pbuildingtype bld );
-extern void addtechnology ( const Technology* tech );
+   void add( T* obj );
 
+   public:
+      ItemRepository( const ASCString& typeName_ ) : typeName( typeName_ ) {};
+      T* getObject_byPos( int pos ) { return container[pos]; };
+      T* getObject_byID( int id ) { return hash[id]; };
+      int getNum() { return container.size(); };
+      void load();
 
-typedef dynamic_array<pvehicletype> VehicleTypeVector;
-extern VehicleTypeVector& getvehicletypevector ( void );
+      vector<T*>& getVector() { return container; };
 
-typedef dynamic_array<pterraintype> TerrainTypeVector;
-extern TerrainTypeVector& getterraintypevector ( void );
+};
 
-typedef dynamic_array<pbuildingtype> BuildingTypeVector;
-extern BuildingTypeVector& getbuildingtypevector ( void );
-
-typedef dynamic_array<pobjecttype> ObjectTypeVector;
-extern ObjectTypeVector& getobjecttypevector ( void );
+extern ItemRepository<Vehicletype>  vehicleTypeRepository;
+extern ItemRepository<TerrainType>  terrainTypeRepository;
+extern ItemRepository<ObjectType>   objectTypeRepository;
+extern ItemRepository<BuildingType> buildingTypeRepository;
+extern ItemRepository<Technology>   technologyRepository;
 
 extern void  loadalltextfiles();
-extern void  loadallbuildingtypes(void);
-extern void  loadallvehicletypes(void);
-extern void  loadallterraintypes(void);
-extern void  loadalltechnologies(void);
-extern void  loadallobjecttypes ( void );
-extern void  loadalltechadapter();
+extern void  loadAllData();
 extern void  freetextdata();
 
 extern pobjecttype eisbrecherobject;
 extern pobjecttype fahrspurobject;
-
-extern int  terraintypenum;
-extern int  vehicletypenum;
-extern int  buildingtypenum;
-extern int  technologynum;
-extern int  objecttypenum;
 
 typedef map<ASCString,TextPropertyList> TextFileRepository;
 extern TextFileRepository textFileRepository;

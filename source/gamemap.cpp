@@ -1340,82 +1340,82 @@ bool tmap::Player::exist()
 
 pterraintype tmap :: getterraintype_byid ( int id )
 {
-   return getterraintype_forid ( id );
+   return terrainTypeRepository.getObject_byID ( id );
 }
 
 pobjecttype tmap :: getobjecttype_byid ( int id )
 {
-   return getobjecttype_forid ( id );
+   return objectTypeRepository.getObject_byID ( id );
 }
 
 pvehicletype tmap :: getvehicletype_byid ( int id )
 {
-   return getvehicletype_forid ( id );
+   return vehicleTypeRepository.getObject_byID ( id );
 }
 
 pbuildingtype tmap :: getbuildingtype_byid ( int id )
 {
-   return getbuildingtype_forid ( id );
+   return buildingTypeRepository.getObject_byID ( id );
 }
 
 const Technology* tmap :: gettechnology_byid ( int id )
 {
-   return gettechnology_forid ( id );
+   return technologyRepository.getObject_byID ( id );
 }
 
 
 pterraintype tmap :: getterraintype_bypos ( int pos )
 {
-   return getterraintype_forpos ( pos );
+   return terrainTypeRepository.getObject_byPos ( pos );
 }
 
 pobjecttype tmap :: getobjecttype_bypos ( int pos )
 {
-   return getobjecttype_forpos ( pos );
+   return objectTypeRepository.getObject_byPos ( pos );
 }
 
 pvehicletype tmap :: getvehicletype_bypos ( int pos )
 {
-   return getvehicletype_forpos ( pos );
+   return vehicleTypeRepository.getObject_byPos ( pos );
 }
 
 pbuildingtype tmap :: getbuildingtype_bypos ( int pos )
 {
-   return getbuildingtype_forpos ( pos );
+   return buildingTypeRepository.getObject_byPos ( pos );
 }
 
 const Technology* tmap :: gettechnology_bypos ( int pos )
 {
-   return gettechnology_forpos ( pos );
+   return technologyRepository.getObject_byPos ( pos );
 }
 
 int tmap :: getTerrainTypeNum ( )
 {
-   return  terraintypenum;
+   return  terrainTypeRepository.getNum();
 }
 
 int tmap :: getObjectTypeNum ( )
 {
-   return  objecttypenum;
+   return  objectTypeRepository.getNum();
 }
 
 int tmap :: getVehicleTypeNum ( )
 {
-   return  vehicletypenum;
+   return  vehicleTypeRepository.getNum();
 }
 
 int tmap :: getBuildingTypeNum ( )
 {
-   return  buildingtypenum;
+   return  buildingTypeRepository.getNum();
 }
 
 int tmap :: getTechnologyNum ( )
 {
-   return  technologynum;
+   return  technologyRepository.getNum();
 }
 
 void tmap :: startGame ( )
-{ 
+{
    time.set ( 1, 0 );
 
    for ( int j = 0; j < 8; j++ )

@@ -142,7 +142,7 @@ void process_BI_map ( const ASCString& filename )
    string s = ff.getnextname();
    while ( !s.empty () ) {
       string errormsg;
-      importbattleislemap ( outputDir.c_str(), s.c_str(), getterraintype_forpos(0)->weather[0], &errormsg, true );
+      importbattleislemap ( outputDir.c_str(), s.c_str(), terrainTypeRepository.getObject_byPos(0)->weather[0], &errormsg, true );
       if ( !errormsg.empty() && 0 )
          fprintf(stderr, "map %s : %s \n", s.c_str(), errormsg.c_str() );
       string fn = outputDir+"images/pcx/"+s;

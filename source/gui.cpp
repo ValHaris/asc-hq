@@ -2309,12 +2309,12 @@ void  tnsguiiconcancel::exec         ( void )
 void    tselectobjectcontainerguihost :: init ( int resolutionx, int resolutiony )
 {
    SelectObjectBaseGuiHost :: init ( resolutionx, resolutiony );
-   icons = new pnputobjectcontainerguiicon[ 1 + objecttypenum * 2 ] ;
+   icons = new pnputobjectcontainerguiicon[ 1 + objectTypeRepository.getNum() * 2 ] ;
    icons[0] = new tnputobjectcontainerguiicon ( NULL, 1 );
-   for (int i = 0; i < objecttypenum ; i++ ) 
-      if ( getobjecttype_forpos( i ) ) {
-         icons[1+i*2] = new tnputobjectcontainerguiicon ( getobjecttype_forpos( i ), 1 );
-         icons[1+i*2+1] = new tnputobjectcontainerguiicon ( getobjecttype_forpos( i ), 0 );
+   for (int i = 0; i < objectTypeRepository.getNum() ; i++ )
+      if ( objectTypeRepository.getObject_byPos( i ) ) {
+         icons[1+i*2] = new tnputobjectcontainerguiicon ( objectTypeRepository.getObject_byPos( i ), 1 );
+         icons[1+i*2+1] = new tnputobjectcontainerguiicon ( objectTypeRepository.getObject_byPos( i ), 0 );
       }
 
 
@@ -2339,11 +2339,11 @@ void tselectobjectcontainerguihost ::reset ( void )
 void    tselectvehiclecontainerguihost :: init ( int resolutionx, int resolutiony )
 {
    SelectVehicleBaseGuiHost :: init ( resolutionx, resolutiony );
-   icons = new pnputvehiclecontainerguiicon[ 1 + vehicletypenum ] ;
+   icons = new pnputvehiclecontainerguiicon[ 1 + vehicleTypeRepository.getNum() ] ;
    icons[0] = new tnputvehiclecontainerguiicon ( NULL );
-   for (int i = 0; i < vehicletypenum ; i++ ) 
-      if ( getvehicletype_forpos( i ) ) 
-         icons[1+i] = new tnputvehiclecontainerguiicon ( getvehicletype_forpos( i ) );
+   for (int i = 0; i < vehicleTypeRepository.getNum() ; i++ )
+      if ( vehicleTypeRepository.getObject_byPos( i ) )
+         icons[1+i] = new tnputvehiclecontainerguiicon ( vehicleTypeRepository.getObject_byPos( i ) );
 
 
    icons[0]->frst()->sethost ( this );
@@ -2374,12 +2374,12 @@ tselectbuildingguihost :: tselectbuildingguihost( void )
 void    tselectbuildingguihost :: init ( int resolutionx, int resolutiony )
 {                                      
    SelectBuildingBaseGuiHost :: init ( resolutionx, resolutiony );
-   icons = new ( pnputbuildingguiicon[ buildingtypenum ] );
-   for (int i = 0; i < buildingtypenum ; i++ )
-      if ( getbuildingtype_forpos( i ) )
-         icons[i] = new tnputbuildingguiicon ( getbuildingtype_forpos( i ) );
+   icons = new ( pnputbuildingguiicon[ buildingTypeRepository.getNum() ] );
+   for (int i = 0; i < buildingTypeRepository.getNum() ; i++ )
+      if ( buildingTypeRepository.getObject_byPos( i ) )
+         icons[i] = new tnputbuildingguiicon ( buildingTypeRepository.getObject_byPos( i ) );
 
-   if ( !buildingtypenum )
+   if ( !buildingTypeRepository.getNum() )
       fatalError ( "No buildings found !");
    icons[0]->frst()->sethost ( this );
    setfirsticon ( pnputbuildingguiicon( icons[0]->frst() ));

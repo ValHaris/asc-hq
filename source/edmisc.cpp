@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.110 2004-05-11 20:22:33 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.111 2004-05-12 20:05:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.110  2004/05/11 20:22:33  mbickel
+//      Readded research system to ASC
+//
 //     Revision 1.109  2004/01/25 19:44:16  mbickel
 //      Many, many bugfixes
 //      Removed #pragma pack whereever possible
@@ -1866,31 +1869,31 @@ void         setstartvariables(void)
    mapsaved = true;
    polyfieldmode = false;
 
-   auswahl  = getterraintype_forpos(0);
-   auswahlf = getvehicletype_forpos(0);
-   auswahlb = getbuildingtype_forpos(0);
-   actobject = getobjecttype_forpos(0);
+   auswahl  = terrainTypeRepository.getObject_byPos(0);
+   auswahlf = vehicleTypeRepository.getObject_byPos(0);
+   auswahlb = buildingTypeRepository.getObject_byPos(0);
+   actobject = objectTypeRepository.getObject_byPos(0);
    auswahls = 0;
    auswahlm = 1;
    auswahlw = 0;
    auswahld = 0;
    farbwahl = 0;
 
-   sr[0].maxanz = terraintypenum;
+   sr[0].maxanz = terrainTypeRepository.getNum();
    sr[0].showall = true;
-   sr[1].maxanz = vehicletypenum;
+   sr[1].maxanz = vehicleTypeRepository.getNum();
    sr[1].showall = true;
    sr[2].maxanz = 9;
    sr[2].showall = true;
-   sr[3].maxanz = buildingtypenum;
+   sr[3].maxanz = buildingTypeRepository.getNum();
    sr[3].showall = true;
-   sr[4].maxanz = vehicletypenum;
+   sr[4].maxanz = vehicleTypeRepository.getNum();
    sr[4].showall = false;
-   sr[5].maxanz = objecttypenum;
+   sr[5].maxanz = objectTypeRepository.getNum();
    sr[5].showall = true;
-   sr[6].maxanz = vehicletypenum;
+   sr[6].maxanz = vehicleTypeRepository.getNum();
    sr[6].showall = false;
-   sr[7].maxanz = vehicletypenum;
+   sr[7].maxanz = vehicleTypeRepository.getNum();
    sr[7].showall = false;
    sr[8].maxanz = minecount;
    sr[8].showall = true;
@@ -4274,7 +4277,7 @@ pvehicletype UnitTypeTransformation :: transformvehicletype ( const Vehicletype*
 {
    for ( int i = 0; i < unitSets[unitsetnum]->transtab[translationnum]->translation.size(); i++ )
       if ( unitSets[unitsetnum]->transtab[translationnum]->translation[i].from == type->id ) {
-         pvehicletype tp = getvehicletype_forid ( unitSets[unitsetnum]->transtab[translationnum]->translation[i].to );
+         pvehicletype tp = vehicleTypeRepository.getObject_byID ( unitSets[unitsetnum]->transtab[translationnum]->translation[i].to );
          if ( tp ) 
             return tp;
       }
@@ -4360,7 +4363,7 @@ void UnitTypeTransformation :: run ( void )
           s += "\n ID ";
           s += strrr ( vehicleTypesNotTransformed[i] );
           s += " : ";
-          pvehicletype vt = getvehicletype_forid ( vehicleTypesNotTransformed[i] );
+          pvehicletype vt = vehicleTypeRepository.getObject_byID ( vehicleTypesNotTransformed[i] );
           if ( !vt-> name.empty() )
              s += vt->name;
           else
@@ -4557,7 +4560,7 @@ void transformMap ( )
           pfield fld = actmap->getField ( x, y );
           for ( int i = 0; i < terraintranslation.size()/2; i++ )
              if ( fld->typ->terraintype->id == terraintranslation[i*2] ) {
-                TerrainType* tt = getterraintype_forid ( terraintranslation[i*2+1] );
+                TerrainType* tt = terrainTypeRepository.getObject_byID ( terraintranslation[i*2+1] );
                 if ( tt ) {
                    fld->typ = tt->weather[fld->getweather()];
                    fld->setparams();
@@ -4566,10 +4569,10 @@ void transformMap ( )
 
           for ( int i = 0; i < terrainobjtranslation.size()/3; i++ )
              if ( fld->typ->terraintype->id == terrainobjtranslation[i*3] ) {
-                TerrainType* tt = getterraintype_forid ( terrainobjtranslation[i*3+1] );
+                TerrainType* tt = terrainTypeRepository.getObject_byID ( terrainobjtranslation[i*3+1] );
                 if ( tt ) {
                    fld->typ = tt->weather[fld->getweather()];
-                   fld->addobject ( getobjecttype_forid ( terrainobjtranslation[i*3+2] ), -1, true );
+                   fld->addobject ( objectTypeRepository.getObject_byID ( terrainobjtranslation[i*3+2] ), -1, true );
                    fld->setparams();
                 }
              }
@@ -4578,7 +4581,7 @@ void transformMap ( )
           for ( int j = 0; j < fld->objects.size(); ++j ) 
              for ( int i = 0; i < objecttranslation.size(); i++ )
                 if ( fld->objects[j].typ->id == objecttranslation[i*2] ) {
-                   ObjectType* ot = getobjecttype_forid ( objecttranslation[i*2+1] );
+                   ObjectType* ot = objectTypeRepository.getObject_byID ( objecttranslation[i*2+1] );
                    if ( ot ) {
                       fld->objects[j].typ = ot;
                       fld->sortobjects();
@@ -4894,7 +4897,7 @@ ASCString printTech( int id )
 {
    ASCString s;
    s.format ( "%7d ", id );
-   const Technology* t = gettechnology_forid ( id );
+   const Technology* t = technologyRepository.getObject_byID ( id );
    if ( t )
       s += t->name;
 
@@ -4941,14 +4944,14 @@ void editResearch()
             if ( res.first == 0 ) {
                vector<ASCString> techs;
                vector<int> techIds;
-               for ( int i = 0; i < technologynum; ++i ) {
-                  const Technology* t = gettechnology_forpos(i);
+               for ( int i = 0; i < technologyRepository.getNum(); ++i ) {
+                  const Technology* t = technologyRepository.getObject_byPos(i);
                   if ( find ( devTech.begin(), devTech.end(), t->id ) == devTech.end() ) {
                      techs.push_back ( printTech ( t->id ));
                      techIds.push_back ( t->id );
                   }
                }
-               sort (techs.begin(), techs.end() );
+               // sort (techs.begin(), techs.end() );
                pair<int,int> r = chooseString ( "Unresearched Technologies", techs, buttons2 );
                if ( r.first == 0 )
                   devTech.push_back ( techIds[r.second] );
@@ -4962,3 +4965,5 @@ void editResearch()
       }
    } while ( playerRes.first != 1 );
 }
+
+

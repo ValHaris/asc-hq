@@ -235,12 +235,12 @@ void   tspfldloaders::readdissections ( void )
             k = stream->readInt();
 
             int j = stream->readInt();
-            du.fzt = getvehicletype_forid ( j );
+            du.fzt = vehicleTypeRepository.getObject_byID ( j );
             if ( !du.fzt )
                throw InvalidID ( "vehicle", j );
 
             j = stream->readInt();
-            du.tech = gettechnology_forid  ( j );
+            du.tech = technologyRepository.getObject_byID  ( j );
             if ( !du.tech )
                throw InvalidID ( "technology", j );
 
@@ -755,7 +755,7 @@ void tspfldloaders::readfields ( void )
          else
             k = stream->readChar();
 
-         pterraintype trn = getterraintype_forid ( k );
+         pterraintype trn = terrainTypeRepository.getObject_byID ( k );
          if ( !trn ) 
             throw InvalidID ( "terrain", k );
 
@@ -847,7 +847,7 @@ void tspfldloaders::readfields ( void )
                   stream->readInt(); // dummy
 
                int id = stream->readInt();
-               o.typ = getobjecttype_forid ( id );
+               o.typ = objectTypeRepository.getObject_byID ( id );
 
                if ( !o.typ )
                   throw InvalidID ( "object", id );
@@ -1700,15 +1700,6 @@ void         savecampaignrecoveryinformation( const ASCString& filename,
 
 
 
-void         loadstreets(void)
-{ 
-  int          w;
-
-  tnfilestream stream ( "hexmines.raw", tnstream::reading );
-  for ( int i = 0; i < 4; i++) 
-      stream.readrlepict( &icons.mine[i], false, &w);
-
-}
 
 
 
@@ -1717,10 +1708,16 @@ void         loadstreets(void)
 
 
 void         loadicons(void)
-{ 
+{
   int w2;
   int          *w = & w2, i;
 
+
+   {
+      tnfilestream stream ( "hexmines.raw", tnstream::reading );
+      for ( int i = 0; i < 4; i++)
+         stream.readrlepict( &icons.mine[i], false, &w2);
+   }
 
   {
       int xl[5] = { cawar, cawarannounce, capeaceproposal, capeace, capeace_with_shareview };
@@ -1804,31 +1801,31 @@ tspeedcrccheck :: tspeedcrccheck ( pobjectcontainercrcs crclist )
 
 
    for ( i = 0; i < list->unit.crcnum; i++ ) 
-      if ( getcrc ( getvehicletype_forid ( list->unit.crc[i].id, 0 )) == list->unit.crc[i].crc )
+      if ( getcrc ( vehicleTypeRepository.getObject_byID ( list->unit.crc[i].id, 0 )) == list->unit.crc[i].crc )
          fzt[ list->unit.crc[i].id ] = 1;
       else    
          fzt[ list->unit.crc[i].id ] = 2;
 
    for ( i = 0; i < list->building.crcnum; i++ ) 
-      if ( getcrc ( getbuildingtype_forid ( list->building.crc[i].id, 0 )) == list->building.crc[i].crc )
+      if ( getcrc ( buildingTypeRepository.getObject_byID ( list->building.crc[i].id, 0 )) == list->building.crc[i].crc )
          bld[ list->building.crc[i].id ] = 1;
       else
          bld[ list->building.crc[i].id ] = 2;
 
    for ( i = 0; i < list->object.crcnum; i++ ) 
-      if ( getcrc ( getobjecttype_forid ( list->object.crc[i].id, 0 )) == list->object.crc[i].crc )
+      if ( getcrc ( objectTypeRepository.getObject_byID ( list->object.crc[i].id, 0 )) == list->object.crc[i].crc )
          obj[ list->object.crc[i].id ] = 1;
       else
          obj[ list->object.crc[i].id ] = 2;
 
    for ( i = 0; i < list->terrain.crcnum; i++ ) 
-      if ( getcrc ( getterraintype_forid ( list->terrain.crc[i].id, 0 )) == list->terrain.crc[i].crc )
+      if ( getcrc ( terrainTypeRepository.getObject_byID ( list->terrain.crc[i].id, 0 )) == list->terrain.crc[i].crc )
          bdt[ list->terrain.crc[i].id ] = 1;
       else
          bdt[ list->terrain.crc[i].id ] = 2;
 
    for ( i = 0; i < list->technology.crcnum; i++ ) 
-      if ( getcrc ( gettechnology_forid ( list->technology.crc[i].id, 0 )) == list->technology.crc[i].crc )
+      if ( getcrc ( technologyRepository.getObject_byID ( list->technology.crc[i].id, 0 )) == list->technology.crc[i].crc )
          tec[ list->technology.crc[i].id ] = 1;
       else
          tec[ list->technology.crc[i].id ] = 2;

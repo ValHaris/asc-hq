@@ -5,147 +5,8 @@
 
 */
 
-//     $Id: loaders.h,v 1.28 2004-05-11 20:22:33 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.26  2004/01/23 18:29:56  mbickel
-//      Fixed replay problems
-//      Fixed crash when landing with unit
-//
-//     Revision 1.25  2004/01/16 15:33:46  mbickel
-//     Completely rewritten game event system
-//     TPWM-decoding-Patch
-//     Fixed: swallog message: wrong coordinates
-//     Autotraining for units with max ammo only
-//     Movement required for clearing mines
-//     Unit names can be edited
-//     weather dependen object properties
-//     Unit swallowed by ground -> unified message
-//     units cannot enter enemy transports
-//     Building entry has constant movemalus
-//     Message for resource transfer for providing player
-//     increased ammo production cost
-//     Fixed: unit could attack after movement (with RF on) although "no attack after move" property was set
-//     Buildings: new properties: "ExternalResourceTransfer", "ExternalAmmoTransfer"
-//     Container: Movemalus override for unloading
-//     Startup map specified in ASC.INI
-//
-//     Revision 1.24  2003/04/23 18:31:10  mbickel
-//      Fixed: AI problems
-//      Improved cheating detection in replay
-//
-//     Revision 1.23  2003/04/09 17:39:10  mbickel
-//      Fixed: AI not moving units that can not be refuelled
-//      Fixed: AI parameters not saved in .ASC files
-//
-//     Revision 1.22  2002/12/08 21:53:39  mbickel
-//      Fixed: mining station produces twice the resources
-//      Updated file version numbers
-//
-//     Revision 1.21  2002/09/19 20:20:05  mbickel
-//      Cleanup and various bug fixes
-//
-//     Revision 1.20  2002/05/07 21:32:49  mbickel
-//      Fixed crash in mapeditor
-//      Fixed: conquering of allied buildings
-//      Fixed: ambiguity in pulldown menu keys
-//
-//     Revision 1.19  2001/10/11 10:41:06  mbickel
-//      Restructured platform fileio handling
-//      Added map archival information to mapeditor
-//
-//     Revision 1.18  2001/07/28 11:19:12  mbickel
-//      Updated weaponguide
-//      moved item repository from spfst to itemrepository
-//
-//     Revision 1.17  2001/02/26 12:35:20  mbickel
-//      Some major restructuing:
-//       new message containers
-//       events don't store pointers to units any more
-//       tfield class overhauled
-//
-//     Revision 1.16  2001/02/11 11:39:39  mbickel
-//      Some cleanup and documentation
-//
-//     Revision 1.15  2001/02/04 21:26:58  mbickel
-//      The AI status is written to savegames -> new savegame revision
-//      Lots of bug fixes
-//
-//     Revision 1.14  2001/02/01 22:48:45  mbickel
-//      rewrote the storing of units and buildings
-//      Fixed bugs in bi3 map importing routines
-//      Fixed bugs in AI
-//      Fixed bugs in mapeditor
-//
-//     Revision 1.13  2001/01/31 14:52:41  mbickel
-//      Fixed crashes in BI3 map importing routines
-//      Rewrote memory consistency checking
-//      Fileselect dialog now uses ASCStrings
-//
-//     Revision 1.12  2001/01/23 21:05:19  mbickel
-//      Speed up of AI
-//      Lot of bugfixes in AI
-//      Moved Research to own files (research.*)
-//      Rewrote storing of developed technologies
-//      Some cleanup and documentation
-//
-//     Revision 1.11  2000/11/08 19:31:10  mbickel
-//      Rewrote IO for the tmap structure
-//      Fixed crash when entering damaged building
-//      Fixed crash in AI
-//      Removed item CRCs
-//
-//     Revision 1.10  2000/10/11 14:26:43  mbickel
-//      Modernized the internal structure of ASC:
-//       - vehicles and buildings now derived from a common base class
-//       - new resource class
-//       - reorganized exceptions (errors.h)
-//      Split some files:
-//        typen -> typen, vehicletype, buildingtype, basecontainer
-//        controls -> controls, viewcalculation
-//        spfst -> spfst, mapalgorithm
-//      bzlib is now statically linked and sources integrated
-//
-//     Revision 1.9  2000/09/07 15:49:44  mbickel
-//      some cleanup and documentation
-//
-//     Revision 1.8  2000/09/02 15:36:50  mbickel
-//      Some minor cleanup and documentation
-//
-//     Revision 1.7  2000/08/12 12:52:49  mbickel
-//      Made DOS-Version compile and run again.
-//
-//     Revision 1.6  2000/08/11 12:24:04  mbickel
-//      Fixed: no movement after refuelling unit
-//      Restructured reading/writing of units
-//
-//     Revision 1.5  2000/08/03 13:12:17  mbickel
-//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
-//      Repairing units now reduces their experience
-//      negative attack- and defenseboni possible
-//      changed attackformula
-//
-//     Revision 1.4  2000/05/25 11:07:44  mbickel
-//      Added functions to check files for valid mail / savegame files.
-//
-//     Revision 1.3  2000/04/27 16:25:26  mbickel
-//      Attack functions cleanup
-//      New vehicle categories
-//      Rewrote resource production in ASC resource mode
-//      Improved mine system: several mines on a single field allowed
-//      Added unitctrl.* : Interface for vehicle functions
-//        currently movement and height change included
-//      Changed timer to SDL_GetTicks
-//
-//     Revision 1.2  1999/11/16 03:41:59  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
+//     $Id: loaders.h,v 1.29 2004-05-12 20:05:53 mbickel Exp $
+
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -206,8 +67,6 @@ extern tmap*  loadreplay( pmemorystreambuf streambuf );
 //! writes all replay relevant map information of player num to the replay variable of #actmap
 extern void  savereplay( int num );
 
-
-extern void  loadstreets(void);
 
 extern void  loadicons(void);
 

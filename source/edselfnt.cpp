@@ -2,9 +2,13 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.44 2003-04-23 18:31:10 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.45 2004-05-12 20:05:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2003/04/23 18:31:10  mbickel
+//      Fixed: AI problems
+//      Improved cheating detection in replay
+//
 //     Revision 1.43  2003/02/19 19:47:26  mbickel
 //      Completely rewrote Pathfinding code
 //      Wind not different any more on different levels of height
@@ -285,7 +289,7 @@ void tselfntmousescrollproc :: mouseaction ( void )
 // something like
 //template<class T> typedef dynamic_array<T> vect<T> ;
 
-#define vect dynamic_array  
+#define vect vector
 
 class SelectAnythingBase {
             public:
@@ -342,13 +346,13 @@ template<class T> void SelectAnything<T> :: init ( vect<T> &v )
 
 template<class T> void SelectAnything<T> :: init ( vect<T> &v, int x1, int y1, int x2, int y2 ) 
 {
-   itemsavail.reset();
+   itemsavail.clear();
 
-   for ( int i = 0; i <= v.getlength(); i++ )
+   for ( int i = 0; i < v.size(); i++ )
       if ( isavailable ( v[i] ) )
-         itemsavail[ itemsavail.getlength()+1 ] = v[i];
+         itemsavail.push_back (  v[i] );
      
-  int num = itemsavail.getlength() + 1; 
+  int num = itemsavail.size() + 1; 
   if ( num <= 0 ) {
      displaymessage("no items available", 1 );
      // return;
@@ -390,7 +394,7 @@ template<class T> void SelectAnything<T> :: _showiteminfos ( T item, int x1, int
 template<class T> void SelectAnything<T> :: showactiteminfos ( int x1, int y1, int x2, int y2 )
 {
    int pos = actitemx + actitemy * maxx;
-   if ( pos <= itemsavail.getlength() )
+   if ( pos < itemsavail.size() )
       _showiteminfos ( itemsavail[ pos ], x1, y1, x2, y2 );
    else
       _showiteminfos ( NULL, x1, y1, x2, y2 );
@@ -400,7 +404,7 @@ template<class T> void SelectAnything<T> :: showactiteminfos ( int x1, int y1, i
 template<class T> void SelectAnything<T> :: showactiteminfos ( void )
 {
    int pos = actitemx + actitemy * maxx;
-   if ( pos <= itemsavail.getlength() )
+   if ( pos < itemsavail.size() )
       showiteminfos ( itemsavail[ pos ] );
    else
       showiteminfos ( NULL );
@@ -427,7 +431,7 @@ template<class T> void SelectAnything<T> :: _displaysingleitem ( T item, int x, 
 template<class T> void SelectAnything<T> :: displayItem ( int itemx, int itemy, int picx, int picy )
 {
    int pos = itemx + itemy * maxx;
-   if ( pos <= itemsavail.getlength() )
+   if ( pos < itemsavail.size() )
       displaysingleitem ( itemsavail[ pos ], picx, picy );
    else
       displaysingleitem ( NULL, picx, picy );
@@ -470,7 +474,7 @@ template<class T> void SelectAnything<T> ::  display ( void )
 
 template<class T> void SelectAnything<T> :: setnewselection ( T item )
 {
-   int num = itemsavail.getlength() + 1; 
+   int num = itemsavail.size(); 
    if ( num <= 0 )
       return;
 
@@ -496,7 +500,7 @@ template<class T> void SelectAnything<T> :: setnewselection ( T item )
 
 template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey )
 {
-   int num = itemsavail.getlength() + 1; 
+   int num = itemsavail.size() ; 
    if ( num <= 0 )
       return NULL;
 
@@ -509,7 +513,7 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
    bar ( position.x1, position.y1-getiteminfoheight(), position.x2, position.y2, black );
 
    if ( previtem ) 
-      for ( int i = 0; i <= itemsavail.getlength(); i++ )
+      for ( int i = 0; i < itemsavail.size(); i++ )
          if ( itemsavail[ i ] == previtem ) {
             actitemx = i % maxx;
             actitemy = i / maxx;
@@ -598,7 +602,7 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
                   finished = true;
                } else {
                   int pos = ax + ay * maxx;
-                  if ( pos <= itemsavail.getlength() )
+                  if ( pos < itemsavail.size() )
                      if ( itemsavail[pos] ) {
                         ASCString s = getItemName( itemsavail[pos] );
                         if ( !s.empty() )
@@ -701,7 +705,7 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
 
    if ( finished == 1 ) {
       int pos = actitemx + actitemy * maxx;
-      if ( pos <= itemsavail.getlength() )
+      if ( pos < itemsavail.size() )
          return itemsavail[ pos ];
       else
          return previtem;
@@ -963,7 +967,7 @@ class tweathertype {
             char* name;
        };
 typedef tweathertype* pweathertype;
-dynamic_array< pweathertype > weathervector;
+vector< pweathertype > weathervector;
 
 
 class tcolortype {
@@ -971,8 +975,8 @@ class tcolortype {
             int col;
             int getcolor ( void ) { return 20 + 8 * col; };
        };
-typedef tcolortype* pcolortype;       
-dynamic_array< pcolortype > colorvector;
+typedef tcolortype* pcolortype;
+vector< pcolortype > colorvector;
 
 
 class tminetype {
@@ -981,8 +985,8 @@ class tminetype {
             char* name;
             void paint ( int x, int y ) { putrotspriteimage ( x, y, getmineadress(type+1), farbwahl*8 ); };
        };
-typedef tminetype* pminetype;       
-dynamic_array< pminetype > minevector;
+typedef tminetype* pminetype;
+vector< pminetype > minevector;
 
 
 
@@ -1190,42 +1194,42 @@ class SelectItemContainer {
              SelectTerrainType*   getterrainselector ( void ) {  
                   if ( !selectterraintype ) {
                      selectterraintype = new SelectTerrainType;
-                     selectterraintype->init( getterraintypevector() );
+                     selectterraintype->init( terrainTypeRepository.getVector() );
                   }
                   return selectterraintype;
              };
 
-             SelectBuildingType*   getbuildingselector ( void ) {  
+             SelectBuildingType*   getbuildingselector ( void ) {
                   if ( !selectbuildingtype ) {
                      selectbuildingtype = new SelectBuildingType;
-                     selectbuildingtype->init( getbuildingtypevector() );
+                     selectbuildingtype->init( buildingTypeRepository.getVector() );
                   }
                   return selectbuildingtype;
              };
 
-             SelectVehicleType*   getvehicleselector ( void ) {  
+             SelectVehicleType*   getvehicleselector ( void ) {
                   if ( !selectvehicletype ) {
                      selectvehicletype = new SelectVehicleType;
-                     selectvehicletype->init( getvehicletypevector() );
+                     selectvehicletype->init( vehicleTypeRepository.getVector() );
                   }
                   return selectvehicletype;
              };
 
-             SelectObjectType*   getobjectselector ( void ) {  
+             SelectObjectType*   getobjectselector ( void ) {
                   if ( !selectobjecttype ) {
                      selectobjecttype = new SelectObjectType;
-                     selectobjecttype->init( getobjecttypevector() );
+                     selectobjecttype->init( objectTypeRepository.getVector() );
                   }
                   return selectobjecttype;
              };
 
-             SelectWeather*   getweatherselector ( void ) {  
+             SelectWeather*   getweatherselector ( void ) {
                   if ( !selectweather ) {
                      for ( int i = 0; i < cwettertypennum; i++ ) {
                         pweathertype wt = new tweathertype;
                         wt->num = i;
                         wt->name = strdup ( cwettertypen[i] );
-                        weathervector[i] = wt;
+                        weathervector.push_back ( wt );
                      }
                      selectweather = new SelectWeather;
                      selectweather->init( weathervector );
@@ -1233,12 +1237,12 @@ class SelectItemContainer {
                   return selectweather;
              };
 
-             SelectMine*   getmineselector ( void ) {  
+             SelectMine*   getmineselector ( void ) {
                   if ( !selectmine ) {
                      for ( int i = 0; i < cminenum; i++ ) {
                         pminetype mt = new tminetype;
                         mt->type = i;
-                        minevector[i] = mt;
+                        minevector.push_back( mt );
                         mt->name = strdup ( MineNames[ i ] );
                      }
                      selectmine = new SelectMine;
@@ -1247,12 +1251,12 @@ class SelectItemContainer {
                   return selectmine;
              };
 
-             SelectColor*   getcolorselector ( void ) {  
+             SelectColor*   getcolorselector ( void ) {
                   if ( !selectcolor ) {
                      for ( int i = 0; i < 9; i++ ) {
                         pcolortype ct = new tcolortype;
                         ct->col = i;
-                        colorvector[i] = ct;
+                        colorvector.push_back( ct );
                      }
                      selectcolor = new SelectColor;
                      selectcolor->init( colorvector );
@@ -1475,22 +1479,22 @@ void setnewvehicleselection ( pvehicletype v )
 
 void resetvehicleselector ( void )
 {
-   selectitemcontainer.getvehicleselector()->init( getvehicletypevector() );
+   selectitemcontainer.getvehicleselector()->init( vehicleTypeRepository.getVector() );
 }
 
 void resetbuildingselector ( void )
 {
-   selectitemcontainer.getbuildingselector()->init( getbuildingtypevector() );
+   selectitemcontainer.getbuildingselector()->init( buildingTypeRepository.getVector() );
 }
 
 void resetterrainselector ( void )
 {
-   selectitemcontainer.getterrainselector()->init( getterraintypevector() );
+   selectitemcontainer.getterrainselector()->init( terrainTypeRepository.getVector() );
 }
 
 void resetobjectselector ( void )
 {
-   selectitemcontainer.getobjectselector()->init( getobjecttypevector() );
+   selectitemcontainer.getobjectselector()->init( objectTypeRepository.getVector() );
 }
 
 
@@ -1521,7 +1525,7 @@ class SelectCargoVehicleType : public SelectVehicleType {
      };
 
 void SelectCargoVehicleType :: showiteminfos ( pvehicletype item, int x1, int y1, int x2, int y2 )
-{ 
+{
    rectangle ( x1, y1, x2, y2, lightgray );
    bar ( x1+1, y1+1, x2-1, y2-1, black );
    if ( item ) {
@@ -1586,7 +1590,7 @@ class SelectVehicleTypeForBuildingProduction : public SelectCargoVehicleType {
 void selcargo( ContainerBase* container )
 {
    SelectVehicleTypeForContainerCargo svtftc ( container );
-   svtftc.init( getvehicletypevector() );
+   svtftc.init( vehicleTypeRepository.getVector() );
    pvehicletype newcargo = svtftc.selectitem ( NULL );
 
    if ( newcargo ) {
@@ -1624,7 +1628,7 @@ void selcargo( ContainerBase* container )
 void selbuildingproduction( pbuilding bld )
 {  
    SelectVehicleTypeForBuildingProduction svtfbc ( bld );
-   svtfbc.init( getvehicletypevector() );
+   svtfbc.init( vehicleTypeRepository.getVector() );
    pvehicletype newcargo = svtfbc.selectitem ( NULL );
    if ( newcargo ) {
       int p = 0;

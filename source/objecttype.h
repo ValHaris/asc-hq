@@ -118,7 +118,6 @@
 
      TechAdapterDependency techDependency;
 
-
      //! the images of the objects
      struct WeatherPicture {
         vector<void*> images;

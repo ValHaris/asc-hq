@@ -1853,31 +1853,12 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
    if ( actprogressbar ) actprogressbar->startgroup();
 
    loadguipictures();
-   loadallobjecttypes();
-
    if ( actprogressbar ) actprogressbar->startgroup();
-   loadallvehicletypes();
+   loadAllData();
+   if ( actprogressbar ) actprogressbar->startgroup();
    loadUnitSets();
 
    if ( actprogressbar ) actprogressbar->startgroup();
-   loadallbuildingtypes();
-
-
-   if ( actprogressbar ) actprogressbar->startgroup();
-   loadalltechnologies();
-
-   if ( actprogressbar ) actprogressbar->startgroup();
-   loadalltechadapter();
-
-
-   if ( actprogressbar ) actprogressbar->startgroup();
-   loadstreets();
-
-   if ( actprogressbar ) actprogressbar->startgroup();
-   loadallterraintypes();
-
-   if ( actprogressbar ) actprogressbar->startgroup();
-
 
    freetextdata();
 

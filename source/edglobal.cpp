@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.57 2004-05-11 20:22:33 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.58 2004-05-12 20:05:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2004/05/11 20:22:33  mbickel
+//      Readded research system to ASC
+//
 //     Revision 1.56  2004/01/21 14:43:00  mbickel
 //      Fixed: external loading not working
 //      Improved AI
@@ -832,7 +835,7 @@ void execaction(int code)
                   pfield fld = getactfield();
 
                   if ( fld->vehicle ) {
-                     auswahlf = getvehicletype_forid ( fld->vehicle->typ->id );
+                     auswahlf = vehicleTypeRepository.getObject_byID ( fld->vehicle->typ->id );
                      altefarbwahl = farbwahl;
                      farbwahl = fld->vehicle->color/8;
                      lastselectiontype = cselunit;

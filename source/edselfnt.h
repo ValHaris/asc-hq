@@ -1,6 +1,10 @@
-//     $Id: edselfnt.h,v 1.8 2003-02-19 19:47:26 mbickel Exp $
+//     $Id: edselfnt.h,v 1.9 2004-05-12 20:05:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2003/02/19 19:47:26  mbickel
+//      Completely rewrote Pathfinding code
+//      Wind not different any more on different levels of height
+//
 //     Revision 1.7  2002/11/01 20:44:53  mbickel
 //      Added function to specify which units can be build by other units
 //
@@ -80,3 +84,4 @@ extern void resetobjectselector ( void );
 
 
 extern void checkselfontbuttons(void);
+

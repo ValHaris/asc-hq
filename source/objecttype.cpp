@@ -417,8 +417,8 @@ class Smoothing {
                                 nw = SmoothData[P3+ 1 ]; // + (ticker % SmoothData[P3] )
                           }
                           /*
-                          for ( int i = 0; i < terraintypenum; i++ ) {
-                             pterraintype trrn = getterraintype_forpos( i );
+                          for ( int i = 0; i < terrainTypeRepository.getNum; i++ ) {
+                             pterraintype trrn = terrainTypeRepository.getObject_byPos( i );
                              if ( trrn )
                                 for ( int j = 0; j < cwettertypennum; j++ )
                                    if ( trrn->weather[j] )

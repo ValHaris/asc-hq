@@ -2,7 +2,7 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.40 2004-05-11 20:22:33 mbickel Exp $
+//     $Id: edevents.cpp,v 1.41 2004-05-12 20:05:52 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -256,7 +256,7 @@ bool gettm( GameTime& time  )  /* True : Erfolgreich ausgefÅhrt */
 
 
 // ıS gettechnologyid
-
+#if 0
 class   tgettechnologyid : public tstringselect {
            public :
                  int lastid;
@@ -275,9 +275,9 @@ void         tgettechnologyid::setup(void)
    numberoflines = technologynum;
    ttechnologyid = 0;
    for (int i=0;i< technologynum;i++) {
-      if (gettechnology_forpos(i)->id == lastid ) {
+      if (technologyRepository.getObject_byPos(i)->id == lastid ) {
          startpos = i;
-         ttechnologyid = gettechnology_forpos(i)->id;
+         ttechnologyid = technologyRepository.getObject_byPos(i)->id;
          i = technologynum;
       }
    } /* endfor */
@@ -293,7 +293,7 @@ void         tgettechnologyid::setup(void)
 
 void   tgettechnologyid::get_text(word nr) //gibt in txt den string zurÅck
 {
-   strcpy(txt,gettechnology_forpos(nr)->name.c_str());
+   strcpy(txt,technologyRepository.getObject_byPos(nr)->name.c_str());
 }
 
 
@@ -319,7 +319,7 @@ void         tgettechnologyid::run(void)
    do {
       tstringselect::run();
       if ( (msel == 1 ) || (taste == ct_enter ) ) {
-         ttechnologyid = gettechnology_forpos(redline)->id;
+         ttechnologyid = technologyRepository.getObject_byPos(redline)->id;
          showbutton(5);
       }
    }  while ((taste != ct_esc) && (action != 1));
@@ -336,6 +336,8 @@ int         gettechnologyid(int lid)
    ch = 0;
    return tt.ttechnologyid;
 }
+
+#endif
 
 // ıS ChangeWind
 #if 0

@@ -243,7 +243,7 @@ int  Building :: unchainbuildingfromfield ( void )
                #ifdef sgmain
                 if ( !gamemap->__mapDestruction )
                    if ( typ->destruction_objects[i][j] )
-                      fld->addobject ( getobjecttype_forid ( typ->destruction_objects[i][j] ), -1, true );
+                      fld->addobject ( actmap->getobjecttype_byid ( typ->destruction_objects[i][j] ), -1, true );
                #endif
 
             }

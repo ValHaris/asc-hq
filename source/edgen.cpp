@@ -2,9 +2,14 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.18 2002-04-21 21:27:00 mbickel Exp $
+//     $Id: edgen.cpp,v 1.19 2004-05-12 20:05:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2002/04/21 21:27:00  mbickel
+//      Mapeditor: Fixed crash in "Put Resources"
+//      Updating the small map after AI
+//      Fixed infinite loop "quit game" after sending signal
+//
 //     Revision 1.17  2002/04/17 22:41:34  mbickel
 //      Updated build system to warn about missing music
 //      Updated build system to insert version information automatically
@@ -463,8 +468,8 @@ void tmapgenerator::addcoast(void)
  
    for (int i=0;i<2;i++ ) {
       if (id[i] != 0 ) {
-         btyp[i] = getterraintype_forid(id[i]);
-         if (btyp[i] == NULL) btyp[i] = getterraintype_forpos(0);
+         btyp[i] = terrainTypeRepository.getObject_byID(id[i]);
+         if (btyp[i] == NULL) btyp[i] = terrainTypeRepository.getObject_byPos(0);
       } 
    } /* endfor */
 
@@ -605,9 +610,9 @@ void tmapgenerator::setmap(void)
  
    int set = 2 - choice_dlg("Choose terrain set","dark","light") ;
    for (i=0;i<numofbdts ;i++ ) {
-       btyp[i] = getterraintype_forid( terrain_object_ids[i][set][0] );
+       btyp[i] = terrainTypeRepository.getObject_byID( terrain_object_ids[i][set][0] );
        if ( !btyp[i] ) 
-          btyp[i] = getterraintype_forpos(0);
+          btyp[i] = terrainTypeRepository.getObject_byPos(0);
    }
 
    if (initialized[clmaterial] == true ) {

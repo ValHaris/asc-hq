@@ -147,7 +147,7 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
 {
 
    eht = _eht;
-   calc_threat_vehicletype ( getvehicletype_forid ( eht->typ->id ) );
+   calc_threat_vehicletype ( vehicleTypeRepository.getObject_byID ( eht->typ->id ) );
 
    if ( !eht->aiparam[ai->getPlayerNum()] )
       eht->aiparam[ai->getPlayerNum()] = new AiParameter ( eht );
@@ -416,8 +416,8 @@ void     AI :: calculateAllThreats( void )
 {
    // Calculates the basethreats for all vehicle types
    if ( !baseThreatsCalculated ) {
-      for ( int w = 0; w < vehicletypenum; w++) {
-         pvehicletype fzt = getvehicletype_forpos(w);
+      for ( int w = 0; w < vehicleTypeRepository.getNum(); w++) {
+         pvehicletype fzt = vehicleTypeRepository.getObject_byPos(w);
          if ( fzt )
             calculateThreat( fzt );
 
@@ -427,8 +427,8 @@ void     AI :: calculateAllThreats( void )
 
    // Some further calculations that only need to be done once.
    if ( maxTrooperMove == 0) {
-      for ( int v = 0; v < vehicletypenum; v++) {
-         pvehicletype fzt = getvehicletype_forpos( v );
+      for ( int v = 0; v < vehicleTypeRepository.getNum(); v++) {
+         pvehicletype fzt = vehicleTypeRepository.getObject_byPos( v );
          if ( fzt )
             if ( fzt->functions & cf_conquer )
                if ( fzt->movement[chfahrend] > maxTrooperMove )   // buildings can only be conquered on ground level, or by moving to adjecent field which is less
@@ -436,8 +436,8 @@ void     AI :: calculateAllThreats( void )
       }
    }
    if ( maxTransportMove == 0 ) {
-      for (int v = 0; v < vehicletypenum; v++) {
-         pvehicletype fzt = getvehicletype_forpos( v );
+      for (int v = 0; v < vehicleTypeRepository.getNum(); v++) {
+         pvehicletype fzt = vehicleTypeRepository.getObject_byPos( v );
          if ( fzt )
             for ( int w = 0; w <= 7; w++) // cycle through all levels of height
                if (fzt->movement[w] > maxTransportMove)
@@ -450,8 +450,8 @@ void     AI :: calculateAllThreats( void )
 
          maxWeapDist[height] = 0; // It may be possible that there is no weapon to shoot to a specific height
 
-         for ( int v = 0; v < vehicletypenum; v++) {
-            pvehicletype fzt = getvehicletype_forpos( v );
+         for ( int v = 0; v < vehicleTypeRepository.getNum(); v++) {
+            pvehicletype fzt = vehicleTypeRepository.getObject_byPos( v );
             if ( fzt )
                for ( int w = 0; w < fzt->weapons.count ; w++)
                   if ( fzt->weapons.weapon[w].maxdistance > maxWeapDist[height] )
