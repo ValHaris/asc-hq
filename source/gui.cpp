@@ -4,9 +4,16 @@
 */
 
 
-//     $Id: gui.cpp,v 1.65 2001-08-06 20:54:43 mbickel Exp $
+//     $Id: gui.cpp,v 1.66 2001-08-07 15:58:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.65  2001/08/06 20:54:43  mbickel
+//      Fixed lots of crashes related to the new text files
+//      Fixed delayed events
+//      Fixed crash in terrin change event
+//      Fixed visibility of mines
+//      Fixed crashes in event loader
+//
 //     Revision 1.64  2001/07/28 21:09:08  mbickel
 //      Prepared vehicletype structure for textIO
 //
@@ -2530,9 +2537,11 @@ tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( pobjecttype obj, in
       }
       infotext = buf;
    } else {
-        picture[0] = icons.selectweaponguicancel;
-        infotext = "Cancel";
-        priority = 10;
+      picture[0] = icons.selectweaponguicancel;
+      infotext = "Cancel (~ESC~)";
+      priority = 10;
+      keys[0][0] = ct_esc;
+      keys[0][1] = ct_c;
    }
 
 }

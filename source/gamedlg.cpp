@@ -1,8 +1,12 @@
 /*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.77 2001-07-28 11:19:10 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.78 2001-08-07 15:58:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.77  2001/07/28 11:19:10  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.76  2001/07/27 21:13:34  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -3399,7 +3403,7 @@ class tviewmessages : public tdialogbox {
                void run ( void );
                void buttonpressed ( int id );
                void paintmessages ( void );
-               void checkforscroll ( void );
+               void checkforscroll ( bool mouse );
           };
 
 
@@ -3411,6 +3415,7 @@ tviewmessages :: tviewmessages ( const MessagePntrContainer& msglist )
    marked = msg.end();
    firstdisplayed = msg.begin();
    __num = msg.size();
+   scrollpos = 0;
 }
 
 void tviewmessages :: init ( char* ttl, bool editable, int md )
@@ -3466,8 +3471,10 @@ void tviewmessages :: buttonpressed ( int id )
    if ( id == 3 )
       ok = 1;
 
-   if ( id == 4 )
+   if ( id == 4 ) {
+      checkforscroll( true );
       paintmessages();
+   }
 }
 
 void tviewmessages :: paintmessages ( void )
@@ -3522,17 +3529,26 @@ void tviewmessages :: paintmessages ( void )
        getinvisiblemouserectanglestk();
 }
 
-void tviewmessages :: checkforscroll ( void )
+void tviewmessages :: checkforscroll ( bool mouse )
 {
    firstdisplayed = msg.begin() + scrollpos;
    if ( firstdisplayed >= msg.end() )
       displaymessage (" tviewmessages :: checkforscroll  -- invalid scrolling operation ", 2 );
 
    MsgVec::iterator oldfirst = firstdisplayed;
-   if ( marked < firstdisplayed )
-      firstdisplayed = marked;
-   if ( marked > firstdisplayed + (dispnum-1) )
-      firstdisplayed = marked - (dispnum-1) ;
+   if ( mouse ) {
+      // if called by scrollbar the marked position is changed according to
+      // scrolling position; else vice versa
+      if ( marked < firstdisplayed )
+        marked = firstdisplayed;
+      if ( marked > firstdisplayed + (dispnum-1) )
+         marked = firstdisplayed + (dispnum-1) ;
+   } else {
+      if ( marked < firstdisplayed )
+        firstdisplayed = marked;
+      if ( marked > firstdisplayed + (dispnum-1) )
+         firstdisplayed = marked - (dispnum-1) ;
+   }
 
    if ( oldfirst != firstdisplayed )
       if ( msg.size() > dispnum )
@@ -3560,22 +3576,22 @@ void tviewmessages :: run ( void )
       tdialogbox :: run ( );
          if ( taste == ct_down  &&  marked+1 < msg.end() ) {
             marked++;
-            checkforscroll();
+            checkforscroll( false );
             paintmessages();
          }
          if ( taste == ct_up  &&  marked > msg.begin() ) {
             marked--;
-            checkforscroll();
+            checkforscroll( false );
             paintmessages();
          }
          if ( taste == ct_pos1  && marked > msg.begin() ) {
             marked=msg.begin();
-            checkforscroll();
+            checkforscroll( false );
             paintmessages();
          }
          if ( taste == ct_ende  &&  marked+1 < msg.end() ) {
             marked = msg.end()-1;
-            checkforscroll();
+            checkforscroll( false );
             paintmessages();
          }
 

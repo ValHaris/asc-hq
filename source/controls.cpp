@@ -3,9 +3,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.109 2001-08-06 21:38:00 mbickel Exp $
+//     $Id: controls.cpp,v 1.110 2001-08-07 15:58:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.109  2001/08/06 21:38:00  mbickel
+//      Fixed: ghost icons remained after vehicle construction canceled
+//
 //     Revision 1.108  2001/07/28 21:09:08  mbickel
 //      Prepared vehicletype structure for textIO
 //
@@ -821,6 +824,7 @@ void build_objects_reset( void )
    displaymap();
    actgui->restorebackground();
    actgui = &gui;
+   actgui->painticons();
 }
 
    class tbuildstreet : public SearchFields {

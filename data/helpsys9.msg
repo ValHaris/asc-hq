@@ -268,7 +268,7 @@ After you have refuelled the Wiesel, follow the road to the north.
 ##2213
 You have been playing for some time now, but I haven't told you yet what the goal of this level is.
 
-If you scroll to the left you can see an Island with a building called #color1#Villa Deng#color0#. You must conquer this building. But it is not easy.
+If you scroll to the right you can see an Island with a building called #color1#Villa Deng#color0#. You must conquer this building. But it is not easy.
 
 To cross the water, you need a ship. It can be build in the shipyard that you can see in the north. But you can not conquer it with the Wiesel.
 

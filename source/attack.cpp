@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: attack.cpp,v 1.46 2001-07-25 19:56:56 mbickel Exp $
+//     $Id: attack.cpp,v 1.47 2001-08-07 15:58:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2001/07/25 19:56:56  mbickel
+//      Fixed: kamikaze not working
+//
 //     Revision 1.45  2001/07/15 21:00:25  mbickel
 //      Some cleanup in the vehicletype class
 //
@@ -1280,12 +1283,12 @@ float WeapDist::getWeapStrength ( const SingleWeapon* weap, int dist, int attack
       return 0;
 
    if ( scalar == 1 )     // mine
-      return 255;
+      return 1;
 
    int typ = translat[ scalar ];
    if ( typ == 255 ) {
       displaymessage("tweapdist::getweapstrength: invalid type ", 1 );
-      return 255;
+      return 1;
    }
 
 
@@ -1310,7 +1313,7 @@ float WeapDist::getWeapStrength ( const SingleWeapon* weap, int dist, int attack
    int minstrength = 255 - 255 * weap->minstrength / weap->maxstrength;
 
    int relstrength = 255 - ( 255 - data[typ][reldiff] ) * minstrength / ( 255 - data[typ][255] );
-                                 
+
    float rel = relstrength;
 
    if ( attacker_height != -1 && defender_height!= -1 ) {
