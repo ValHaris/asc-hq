@@ -793,7 +793,7 @@ void         calculateallobjects( pmap actmap )
 
 
 
-const int object_version = 5;
+const int object_version = 6;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -944,6 +944,9 @@ void ObjectType :: read ( tnstream& stream )
             netBehaviour |= NetToSelf;
       }
 
+      if ( version >= 6 )
+         techDependency.read( stream );
+
 
 
    #ifndef converter
@@ -1090,6 +1093,8 @@ void ObjectType :: write ( tnstream& stream ) const
 
     stream.writeInt ( groupID );
     stream.writeInt ( netBehaviour );
+    techDependency.write( stream );
+
 }
 
 
@@ -1273,6 +1278,8 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
 
    if ( pc.isReading() )
       setupImages();
+
+   techDependency.runTextIO( pc );
 
 
    #ifndef converter

@@ -86,8 +86,6 @@
     //! if events are triggered by this unit (if it is lost for example), this will set connection != 0
     int          connection;
 
-    //! the generation of the vehicletype (also called 'class', as in 'salmon class')
-    char         klasse;
     word         armor;
 
     /** a unique identification of the unit that is used everywhere in ASC
@@ -210,8 +208,6 @@
     //! sets the unit (and its cargo) the a new position (the unit will not be chained to a field)
     void setnewposition ( int x, int y );
     void setnewposition ( const MapCoordinate& mc );
-
-    void setup_classparams_after_generation ( void );
 
     /** converts the unit so it is owned by 'player'. Note that the player is passed
         as parameter (values [0..8]), and not his color (which would be the values

@@ -19,6 +19,7 @@
  #define containerbasetypeH
 
  #include "typen.h"
+ #include "research.h"
 
 class ContainerBaseType: public LoadableItemType {
    public:
@@ -78,9 +79,11 @@ class ContainerBaseType: public LoadableItemType {
      typedef vector<TransportationIO> EntranceSystems;
      EntranceSystems   entranceSystems;
 
+     TechAdapterDependency techDependency;
+
      void runTextIO ( PropertyContainer& pc );
 
-     //! can units of the given type be moved into this buildtype? This is a prerequisite, but not the only requirement, for a real unit to move into a real building
+     //! can units of the given type be moved into this buildtype? This is a prerequisite - but not the only requirement - for a real unit to move into a real building
      bool vehicleFit ( const Vehicletype* type ) const ;
 
      void read ( tnstream& stream ) ;

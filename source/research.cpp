@@ -19,102 +19,289 @@
  *                                                                         *
  ***************************************************************************/
 
-
+#include <cmath>
 #include "research.h"
 #include "errors.h"
 #include "typen.h"
 #include "vehicletype.h"
 #include "gamemap.h"
+#include "itemrepository.h"
 
 
-tresearch :: tresearch ( )
+void TechDependency::read ( tnstream& stream )
 {
-   progress = 0;
-   activetechnology = NULL;
+   stream.readInt();
+   requireAllListedTechnologies = stream.readInt();
+   readContainer(requiredTechnologies, stream );
+}
+
+void TechDependency::write ( tnstream& stream ) const
+{
+   stream.writeInt(1);
+   stream.writeInt(requireAllListedTechnologies);
+   writeContainer(requiredTechnologies, stream );
+}
+
+void TechDependency::runTextIO ( PropertyContainer& pc )
+{
+   pc.addIntRangeArray ( "TechnologiesRequired", requiredTechnologies );
+   pc.addBool( "RequireAllListedTechnologies", requireAllListedTechnologies, true );
+}
+
+bool TechDependency::available( const Research& research ) const
+{
+   if ( requiredTechnologies.size() )
+      if ( requireAllListedTechnologies ) {
+         for ( RequiredTechnologies::const_iterator j = requiredTechnologies.begin(); j != requiredTechnologies.end(); ++j )
+            for ( int k = j->from; k <= j->to; ++k )
+               if ( !research.techResearched( k ))
+                  return false;
+          return true;
+      } else {
+         for ( RequiredTechnologies::const_iterator j = requiredTechnologies.begin(); j != requiredTechnologies.end(); ++j )
+            for ( int k = j->from; k <= j->to; ++k )
+                if ( research.techResearched ( k ))
+                  return true;
+         return false;
+      }
+
+   return true;
+}
+
+
+
+
+
+void TechAdapter::read ( tnstream& stream )
+{
+   stream.readInt();
+   name = stream.readString();
+   techDependency.read( stream );
+}
+
+void TechAdapter::write ( tnstream& stream ) const
+{
+   stream.writeInt(1);
+   stream.writeString( name );
+   techDependency.write ( stream );
+}
+
+void TechAdapter::runTextIO ( PropertyContainer& pc )
+{
+   pc.addString ( "Name", name );
+   techDependency.runTextIO ( pc );
+}
+
+bool TechAdapter::available( const Research& research ) const
+{
+   return techDependency.available ( research );
+}
+
+
+
+
+TechAdapterDependency::TechAdapterDependency() : requireAllListedTechAdapter ( false ) {};
+
+bool TechAdapterDependency::available( const Research& research ) const
+{
+   if ( requiredTechAdapter.size() )
+      if ( requireAllListedTechAdapter ) {
+          for ( RequiredTechAdapter::const_iterator j = requiredTechAdapter.begin(); j != requiredTechAdapter.end(); ++j )
+             if ( !research.techAdapterAvail( *j ))
+                return false;
+          return true;
+      } else {
+          for ( RequiredTechAdapter::const_iterator j = requiredTechAdapter.begin(); j != requiredTechAdapter.end(); ++j )
+             if ( research.techAdapterAvail ( *j ))
+                return true;
+         return false;
+      }
+
+   return true;
+}
+
+TechAdapter :: TechAdapter() {}
+
+void TechAdapterDependency::read ( tnstream& stream )
+{
+   stream.readInt();
+   requireAllListedTechAdapter = stream.readInt();
+   requiredTechAdapter.clear();
+   for ( int i = stream.readInt(); i >0 ; --i )
+      requiredTechAdapter.push_back ( stream.readString() );
+}
+
+void TechAdapterDependency::write ( tnstream& stream ) const
+{
+   stream.writeInt(1);
+   stream.writeInt(requireAllListedTechAdapter);
+   stream.writeInt( requiredTechAdapter.size() );
+   for ( RequiredTechAdapter::const_iterator i = requiredTechAdapter.begin(); i != requiredTechAdapter.end(); ++i )
+       stream.writeString(*i);
+}
+
+void TechAdapterDependency::runTextIO ( PropertyContainer& pc, const ASCString& defaultTechAdapter )
+{
+   if ( pc.find( "TechAdapterRequired")) {
+      pc.addStringArray ( "TechAdapterRequired", requiredTechAdapter );
+      if ( pc.isReading())
+         for ( RequiredTechAdapter::const_iterator j = requiredTechAdapter.begin(); j != requiredTechAdapter.end(); ++j )
+            j->toLower();
+
+   } else
+      if ( defaultTechAdapter.length() > 0 )
+         requiredTechAdapter.push_back ( defaultTechAdapter );
+
+   pc.addBool( "RequireAllListedTechAdapter", requireAllListedTechAdapter, true );
+}
+
+
+
+
+Technology::Technology()
+{
+   icon = NULL;
+   id = 0;
+   researchpoints = 0;
+   requireEvent = false;
    techlevel = 0;
 }
 
 
-void tresearch :: read ( tnstream& stream )
+void Technology::read( tnstream& stream )
+{
+   int version = stream.readInt();
+   id = stream.readInt();
+   researchpoints = stream.readInt();
+   requireEvent = stream.readInt();
+   techlevel = stream.readInt();
+   name = stream.readString();
+   infotext = stream.readString();
+   techDependency.read( stream );
+}
+
+void Technology::write( tnstream& stream ) const
+{
+   stream.writeInt( 1 );
+   stream.writeInt( researchpoints );
+   stream.writeInt( requireEvent );
+   stream.writeInt( techlevel );
+   stream.writeString( name );
+   stream.writeString( infotext );
+   techDependency.write( stream );
+}
+
+void Technology::runTextIO ( PropertyContainer& pc )
+{
+   pc.addString( "Name", name );
+   pc.addString( "Infotext", infotext);
+
+   pc.addInteger( "Id", id );
+   pc.addInteger( "Researchpoints", researchpoints );
+
+   pc.addInteger( "Techlevel", techlevel );
+   pc.addBool( "RequireEvent", requireEvent, false );
+
+   techDependency.runTextIO( pc );
+
+   if ( pc.find ( "BlockingTechnologies" ) || !pc.isReading() )
+      pc.addIntRangeArray ( "BlockingTechnologies", blockingTechnologies );
+
+
+   pc.addInteger( "RelatedUnitID", relatedUnitID, 0 );
+}
+
+
+Research :: Research ( )
+{
+   progress = 0;
+   activetechnology = 0;
+   ___loadActiveTech = 0;
+   ___oldVersionLoader = false;
+   techsAvail = true;
+}
+
+
+void Research :: read ( tnstream& stream )
 {
    read_struct ( stream );
    read_techs ( stream );
+   evalTechAdapter();
 }
 
-void tresearch :: write ( tnstream& stream )
+
+const int researchableWeaponImprovements = 8;
+
+
+const int researchVersion = -2;
+
+void Research :: read_struct ( tnstream& stream )
 {
-   write_struct ( stream );
-   write_techs ( stream );
+   int version = stream.readInt();
+   if ( version >= 0 ) {
+      progress = version;
+      ___loadActiveTech = stream.readInt();
+
+      for ( int i = 0; i < researchableWeaponImprovements; i++ )
+         stream.readWord(); // unitimprovement.weapons[i] =
+      stream.readWord(); // unitimprovement.armor =
+
+      for ( int j = 0; j < 44-researchableWeaponImprovements*2; j++ )
+          stream.readChar(); // dummy
+
+      stream.readInt(); // techlevel =
+      stream.readInt(); // __loader_techsAvail =
+      ___oldVersionLoader = true;
+      techsAvail = true;
+   } else {
+      progress = stream.readInt();
+      activetechnology = map->gettechnology_byid(stream.readInt());
+      int size = stream.readInt();
+      for ( int i = 0; i < size; ++i )
+         developedTechnologies.push_back ( stream.readInt());
+      ___oldVersionLoader = false;
+
+      if ( version <= -2 )
+         techsAvail = stream.readInt();
+      else
+         techsAvail = true;
+
+   }
 }
 
-
-
-void tresearch :: read_struct ( tnstream& stream ) {
-   progress = stream.readInt();
-   activetechnology = (ptechnology) stream.readInt();
-
-   for ( int i = 0; i < researchableWeaponImprovements; i++ )
-      unitimprovement.weapons[i] = stream.readWord();
-   unitimprovement.armor = stream.readWord();
-   for ( int j = 0; j < 44-researchableWeaponImprovements*2; j++ )
-       stream.readChar(); // dummy
-
-   techlevel = stream.readInt();
-
-   __loader_techsAvail = stream.readInt();
-
-}
-
-void tresearch :: write_struct ( tnstream& stream ) {
+void Research :: write ( tnstream& stream ) {
+   stream.writeInt ( researchVersion );
    stream.writeInt( progress );
-   if ( activetechnology )
-      stream.writeInt( 1 );
-   else
-      stream.writeInt ( 0 );
+   stream.writeInt ( activetechnology ? activetechnology->id : 0);
+   stream.writeInt( developedTechnologies.size());
+   for ( int i = 0; i < developedTechnologies.size(); ++i )
+       stream.writeInt( developedTechnologies[i] );
 
-   for ( int i = 0; i < researchableWeaponImprovements; i++ )
-      stream.writeWord ( unitimprovement.weapons[i] );
-
-   stream.writeWord ( unitimprovement.armor );
-   for ( int j = 0; j < 44-researchableWeaponImprovements*2; j++ )
-       stream.writeChar( 0 ); // dummy
-
-   stream.writeInt ( techlevel );
-   if ( developedTechnologies.empty() )
-      stream.writeInt ( 0 );
-   else
-      stream.writeInt ( 1 );
+   stream.writeInt ( techsAvail );
+   // writeContainer( developedTechnologies, stream );
 }
 
 
-void  tresearch :: write_techs ( tnstream& stream )
+void Research :: read_techs ( tnstream& stream )
 {
-   for ( DevelopedTechnologies::iterator i = developedTechnologies.begin(); i != developedTechnologies.end(); i++ )
-      stream.writeInt ( i->first );
+   if ( !___oldVersionLoader )
+      return;
 
-   stream.writeInt ( 0 );
-
-   if ( activetechnology )
-      stream.writeInt ( activetechnology->id );
-}
-
-void tresearch :: read_techs ( tnstream& stream )
-{
    developedTechnologies.clear();
 
    int w = stream.readInt ();
 
    while ( w ) {
-      ptechnology tec = map->gettechnology_byid ( w );
+      const Technology* tec = map->gettechnology_byid ( w );
       if ( !tec )
          throw InvalidID ( "technology", w );
 
-      developedTechnologies[w] = tec;
+      developedTechnologies.push_back(tec->id);
 
       w = stream.readInt();
    } /* endwhile */
 
-   if ( activetechnology ) {
+   if ( ___loadActiveTech ) {
       w = stream.readInt ();
 
       activetechnology = map->gettechnology_byid ( w );
@@ -125,99 +312,237 @@ void tresearch :: read_techs ( tnstream& stream )
 }
 
 
+bool Research::techResearched ( int id ) const
+{
+   for ( vector<int>::const_iterator i = developedTechnologies.begin(); i != developedTechnologies.end(); ++i )
+      if ( *i == id )
+         return true;
+   return false;
+}
 
 
-void tresearch :: addanytechnology ( const ptechnology tech )
+bool Research::techAdapterAvail( const ASCString& ta )
+{
+   return triggeredTechAdapter.find ( ta ) != triggeredTechAdapter.end();
+}
+
+void Research::evalTechAdapter()
+{
+   for ( TechAdapterContainer::iterator i = techAdapterContainer.begin(); i != techAdapterContainer.end(); ++i )
+      if ( (*i)->available ( *this ))
+         triggeredTechAdapter[(*i)->getName()] = true;
+}
+
+
+Research::AvailabilityStatus Research::techAvailable ( const Technology* tech )
+{
+   if ( techResearched( tech->id ))
+      return researched;
+
+   if ( tech->techDependency.available( *this ) ) {
+      for ( vector<IntRange>::const_iterator j = tech->blockingTechnologies.begin(); j != tech->blockingTechnologies.end(); ++j )
+          for ( int k = j->from; k <= j->to; ++k )
+             if ( techResearched ( k ))
+                return unavailable;
+
+      return available;
+   } else
+      return unavailable;
+
+/*
+    if ( tech->requireevent)
+       if ( ! actmap->eventpassed(tech->id, cenewtechnologyresearchable) )
+          fail = true;
+*/
+}
+
+
+void Research :: addanytechnology ( const Technology* tech )
 {
    if ( tech ) {
-      developedTechnologies[tech->id] = tech;
-
-      for ( int i = 0; i < researchableWeaponImprovements; i++)
-         unitimprovement.weapons[i] = unitimprovement.weapons[i] * tech->unitimprovement.weapons[i] / 1024;
-      unitimprovement.armor = unitimprovement.armor * tech->unitimprovement.armor / 1024;
-
-      if ( tech->techlevelset )
-         settechlevel ( tech->techlevelset );
+      developedTechnologies.push_back ( tech->id );
 
       map->player[player].queuedEvents++;
+      evalTechAdapter();
    }
 }
 
-void tresearch :: addtechnology ( void )
+void Research :: addtechnology ( void )
 {
    if ( activetechnology )
       addanytechnology ( activetechnology );
 
-   activetechnology = NULL;
+   activetechnology = 0;
 }
 
-void tresearch :: settechlevel ( int _techlevel )
+void Research :: settechlevel ( int techlevel )
 {
-   if ( _techlevel > 0 ) {
-      techlevel = _techlevel;
+   if ( techlevel > 0 ) {
       for ( int j = 0; j < map->getTechnologyNum(); j++ ) {
-         ptechnology tech = map->gettechnology_bypos ( j );
+         const Technology* tech = map->gettechnology_bypos ( j );
          if ( tech )
-            if ( tech->techlevelget <= techlevel )
-               if ( !technologyresearched ( tech->id ))
+            if ( tech->techlevel <= techlevel )
+               if ( !techResearched ( tech->id ))
                   addanytechnology ( tech );
       }
    }
-}
-
-bool tresearch :: technologyresearched ( int id )
-{
-   return developedTechnologies.find ( id ) != developedTechnologies.end();
+   evalTechAdapter();
 }
 
 
 
 
 
-int tresearch :: vehicleclassavailable ( const Vehicletype* fztyp , int classnm )
-{
-   if ( fztyp->classbound[classnm].techlevel )
-      if ( fztyp->classbound[classnm].techlevel <= techlevel )
-         return true;
 
 
-   int  i;
 
-   #ifndef karteneditor
-   for (i=0;i<4 ;i++ )
-      if (fztyp->classbound[classnm].techrequired[i])
-         if ( !technologyresearched ( fztyp->classbound[classnm].techrequired[i] ))
-            return false;
-
-/*
-   if ( fztyp->classbound[classnm].eventrequired )
-      if (!map->eventpassed (fztyp->classbound[classnm].eventrequired ))
-         return false;
-*/
-   #endif
-
-   for (i=0; i< researchableWeaponImprovements; i++)
-      if ( fztyp->classbound[classnm].weapstrength[i] > unitimprovement.weapons[i] )
-         return false;
-
-
-   if ( fztyp->classbound[classnm].armor > unitimprovement.armor )
-      return false;
-
-   return true;
-
-}
-
-
-int tresearch :: vehicletypeavailable ( const Vehicletype* fztyp )
+bool Research :: vehicletypeavailable ( const Vehicletype* fztyp )
 {
    if ( !fztyp )
-      return 0;
+      return false;
    else
-      return vehicleclassavailable( fztyp, 0 );
+      return true; // vehicleclassavailable( fztyp, 0 );
 }
 
 
-tresearch :: ~tresearch ()
+void Research::initchoosentechnology()
 {
+   Player& player = map->player[map->actplayer];
+   player.research.progress = 0;
+
+   Player::DissectionContainer::iterator di = player.dissections.begin();
+   while ( di != player.dissections.end() ) {
+      if ( di->tech->id == player.research.activetechnology->id ) {
+         player.research.progress += di->points;
+         di = player.dissections.erase ( di );
+      } else
+         di++;
+   }
 }
+
+
+Research::~Research () {};
+
+
+
+Resources returnResourcenUseForResearch ( const pbuilding bld, int research )
+{
+   Resources res;
+   if ( bld->typ->nominalresearchpoints == 0 )
+      return res;
+
+   for ( int r = 0; r < 3; ++r )
+      if ( bld->typ->maxplus.resource(r) < 0 ) {
+         float a = -bld->typ->maxplus.resource(r) / pow(double(bld->typ->nominalresearchpoints),2);
+         res.resource(r) = pow(double(research),2) * a;
+      }
+
+   return res;
+}
+
+#if 0
+void returnresourcenuseforresearch ( const pbuilding bld, int research, int* energy, int* material )
+{
+   /*
+   double esteigung = 55;
+   double msteigung = 40;
+   */
+
+   double res = research;
+   double deg = res / bld->typ->maxresearchpoints;
+
+   double m = 1 / log ( minresearchcost + maxresearchcost );
+
+   *energy   = (int)(researchenergycost   * research * ( exp ( deg / m ) - ( 1 - minresearchcost ) ) / 1000 * (researchcostdouble+res)/researchcostdouble);
+   *material = (int)(researchmaterialcost * research * ( exp ( deg / m ) - ( 1 - minresearchcost ) ) / 1000 * (researchcostdouble+res)/researchcostdouble);
+/*
+   if ( bld->typ->maxresearchpoints > 0 ) {
+      *material = researchmaterialcost * research *
+      ( exp ( res / msteigung ) - 1 ) / ( exp ( (double)bld->typ->maxresearchpoints / (msteigung*2) ) - 1 ) * (10000+res)/10000 / 1000;
+      *energy   = researchenergycost   * ( exp ( res / esteigung ) - 1 ) / ( exp ( (double)bld->typ->maxresearchpoints / (esteigung*2) ) - 1 ) * (10000+res)/10000 / 1000;
+   } else {
+      *material = 0;
+      *energy = 0;
+   }
+  */
+}
+#endif
+
+   struct  ResearchEfficiency {
+               float eff;
+               pbuilding  bld;
+               bool operator<( const ResearchEfficiency& re) const { return eff > re.eff; };
+           };
+
+
+void doresearch ( tmap* actmap, int player )
+{
+
+   typedef vector<ResearchEfficiency> VRE;
+   VRE vre;
+
+   for ( tmap::Player::BuildingList::iterator bi = actmap->player[player].buildingList.begin(); bi != actmap->player[player].buildingList.end(); bi++ ) {
+      pbuilding bld = *bi;
+      if ( bld->typ->special & cgresearchb ) {
+         Resources res = returnResourcenUseForResearch ( bld, bld->researchpoints );
+
+         int m = max ( res.energy, max ( res.material, res.fuel));
+
+         ResearchEfficiency re;
+         if ( m )
+            re.eff = float(bld->researchpoints) / float(m);
+         else
+            re.eff = maxint;
+
+         re.bld = bld;
+
+         vre.push_back(re);
+      }
+   }
+   sort( vre.begin(), vre.end());
+
+   for ( VRE::iterator i = vre.begin(); i != vre.end(); ++i ) {
+      pbuilding bld = i->bld;
+      Resources r = returnResourcenUseForResearch ( bld, bld->researchpoints );
+      Resources got = bld->getResource ( r, 1 );
+
+      int res = bld->researchpoints;
+      if ( got < r ) {
+         int diff = bld->researchpoints / 2;
+         while ( got < r || diff > 1) {
+            if ( got < r  )
+               res -= diff;
+            else
+               res += diff;
+
+            if ( diff > 1 )
+               diff /=2;
+            else
+               diff = 1;
+
+            r = returnResourcenUseForResearch ( bld, res );
+         }
+
+         /*
+         res = returnResourcenUseForResearch ( bld, res+1 );
+
+         if ( ena >= energy  &&  maa >= material )
+            res++;
+         else
+            returnresourcenuseforresearch ( bld, res, &energy, &material );
+         */
+
+      }
+
+      got = bld->getResource ( r, 0 );
+
+      if ( got < r )
+         fatalError( "controls : doresearch : inconsistency in getting energy or material for building" );
+
+      actmap->player[player].research.progress += res;
+   }
+}
+
+
+
+

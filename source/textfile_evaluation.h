@@ -27,6 +27,7 @@
 #include "ascstring.h"
 #include "errors.h"
 #include "textfileparser.h"
+#include "typen.h"
 
 
 class PropertyContainer {

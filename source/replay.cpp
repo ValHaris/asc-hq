@@ -1215,10 +1215,8 @@ void trunreplay :: execnextreplaymove ( void )
                                     #endif
 
                                     pvehicle eht = new Vehicle ( tnk, actmap, col / 8 );
-                                    eht->klasse = cl;
                                     eht->xpos = x;
                                     eht->ypos = y;
-                                    eht->setup_classparams_after_generation ();
                                     eht->networkid = nwid;
 
                                     if ( fld->building ) {

@@ -51,7 +51,9 @@ Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const p
    connection = 0;
 
    lastmineddist= 0;
-   maxresearchpoints = 0;
+   maxresearchpoints = typ->defaultMaxResearchpoints;
+   researchpoints = min ( maxresearchpoints, typ->nominalresearchpoints );
+   
    for ( i = 0; i < waffenanzahl; i++ )
       ammo[i] = 0;
 
@@ -64,8 +66,8 @@ Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const p
    }
 
    repairedThisTurn = 0;
-   researchpoints = 0;
    visible = 1;
+   damage = 0;
 
    entryPosition = _entryPosition;
 
@@ -552,14 +554,6 @@ void Building :: readData ( tnstream& stream, int version )
 
     for ( i = 0; i < waffenanzahl; i++)
        ammo[i] = stream.readWord();
-
-/*
-    if ( ammo[cwairmissilen] > 20 )
-       ammo[cwairmissilen] = 20;
-
-    if ( ammo[cwcruisemissile] > 10 )
-       ammo[cwcruisemissile] = 10;
-*/    
 
     maxresearchpoints = stream.readWord();
     researchpoints = stream.readWord();

@@ -58,10 +58,12 @@
 #include "itemrepository.h"
 #include "strtmesg.h"
 
-#if 0
 
 class   tchoosetechnology : public tdialogbox {
-                           dynamic_array<ptechnology> techs;
+                           typedef vector<const Technology*> Techs;
+                           Techs         techs;
+                           bool          endDialog;
+
                            char          markedbackgrnd;
                            int           technum;
                            int           dispnum;
@@ -78,7 +80,8 @@ class   tchoosetechnology : public tdialogbox {
                         };
 
 void         tchoosetechnology::init(void)
-{ 
+{
+   endDialog = false;
    tdialogbox::init();
    title = "research";
 
@@ -87,61 +90,40 @@ void         tchoosetechnology::init(void)
    markedtech = 0;
 
    check();
-   if ( technum > dispnum ) 
-      addscrollbar  ( xsize - 40, 50, xsize - 20, ysize - 20, &technum, dispnum, &firstshowntech, 1, 0 );
+   if ( technum > dispnum )
+      addscrollbar  ( xsize - 40, 50, xsize - 20, ysize - 40, &technum, dispnum, &firstshowntech, 1, 0 );
 
-   buildgraphics(); 
-   markedbackgrnd = lightblue;
-   disp();
+   addbutton ( "~O~k", 10, ysize - 30, xsize - 10, ysize - 10 , 0, 1, 10, true );
+   addkey ( 10, ct_enter );
+   addkey ( 10, ct_space );
 
-/*   activefontsettings.font = schriften.smallarial; 
-   activefontsettings.justify = lefttext; 
+
+/*   activefontsettings.font = schriften.smallarial;
+   activefontsettings.justify = lefttext;
    showtext2("choose technology to research :", x1 + 10, y1 + starty + 10); */
-} 
+}
+
+bool techComp ( const Technology* t1, const Technology* t2 )
+{
+   return t1->techlevel < t2->techlevel;
+}
 
 void         tchoosetechnology::check(void)
 {
-  int i;
-
    technum = 0;
-   presearch resrch = &actmap->player[actmap->actplayer].research;
+   Research* resrch = &actmap->player[actmap->actplayer].research;
 
-   for (i = 0; i < technologynum; i++) {
-       ptechnology tech = gettechnology_forpos( i );
-       if ( tech ) {
-          if ( resrch->technologyresearched ( tech->id )) {
-             bool fail = false;
-             for (int j = 0; j < 6; j++) {
-                 if ( tech->requiretechnology[j] > 0 )
-                    if ( !resrch->technologyresearched ( tech->id ))
-                       fail = true;
-
-                 if ( tech->requiretechnology[j] < 0 )
-                    if ( resrch->technologyresearched ( -tech->id ))
-                       fail = true;
-             }
-             if ( tech->requireevent)
-                if ( ! actmap->eventpassed(tech->id, cenewtechnologyresearchable) )
-                   fail = true;
-             if (!fail) {
-                techs[technum] = tech;
-                technum++;
-             }
-          } 
-
-       } 
-     
+   for (int i = 0; i < technologynum; i++) {
+      const Technology* tech = gettechnology_forpos( i );
+      if ( tech ) {
+         Research::AvailabilityStatus a = resrch->techAvailable ( tech );
+         if ( a == Research::available ) {
+            techs.push_back ( tech );
+            technum++;
+         }
+      }
    }
-   for ( i = 0; i < technum-1; ) {
-      if ( techs[i]->lvl > techs[i+1]->lvl ) {
-         ptechnology temp = techs[i];    
-         techs[i]->lvl = techs[i+1]->lvl;
-         techs[i+1] = temp;
-         if ( i )
-            i--;
-      } else
-         i++;
-   }
+   sort ( techs.begin(), techs.end(), techComp );
 }
 
 
@@ -157,19 +139,28 @@ int          tchoosetechnology::gy ( int i )
 
 void         tchoosetechnology::disp(void)
 {
-   activefontsettings.font = schriften.smallarial; 
+   activefontsettings.font = schriften.smallarial;
    activefontsettings.justify = lefttext;
    activefontsettings.length = 300;
    for ( int i = firstshowntech; i < technum && i < firstshowntech + dispnum; i++ ) {
       if ( i == markedtech )
-          activefontsettings.background = markedbackgrnd;
+          activefontsettings.background = 25;
       else
           activefontsettings.background = dblue;
 
       int x = gx();
       int y = gy(i);
 
-      showtext2(techs[i]->name, x,y ) ;
+      activefontsettings.length = 300;
+      showtext2(techs[i]->name.c_str(), x,y ) ;
+
+      if ( techs[i]->relatedUnitID > 0 ) {
+         Vehicletype* vt = actmap->getvehicletype_byid( techs[i]->relatedUnitID );
+         activefontsettings.length = 100;
+         if ( vt )
+            showtext2("(unit info)", x1 + xsize - 120,y ) ;
+      }
+
    }
 }
 
@@ -177,19 +168,34 @@ void         tchoosetechnology::buttonpressed ( int id )
 {
    if ( id == 1 )
       disp();
+   if ( id == 10 )
+      endDialog = true;
 }
 
 
 void         tchoosetechnology::run(void)
 {
+
+
+  if ( !technum && !actmap->player[actmap->actplayer].research.techsAvail )
+     return;
+
+  actmap->player[actmap->actplayer].research.techsAvail = true;
+
+  buildgraphics();
+  markedbackgrnd = lightblue;
+  disp();
+
   mousevisible(true);
   if (technum == 0) {
      showtext2("no further technologies to develop !", x1 + 20, y1 + starty + 30);
      actmap->player[actmap->actplayer].research.activetechnology = NULL;
-     wait();
+     do {
+        tdialogbox::run();
+     } while (!endDialog);
+     actmap->player[actmap->actplayer].research.techsAvail = false;
   }
   else {
-     int fertig = 0;
      do {
         tdialogbox::run();
         int oldmark = markedtech;
@@ -197,9 +203,21 @@ void         tchoosetechnology::run(void)
             for ( int i = firstshowntech; i < technum && i < firstshowntech + dispnum; i++ ) {
                int x = gx();
                int y = gy(i);
-               if ( mouseinrect ( x, y, x+300, y + 20  ) ){
+               if ( mouseinrect ( x1 + xsize - 120, y, x1 + xsize - 20, y + 20  ) ) {
+                  if ( techs[i]->relatedUnitID > 0 ) {
+                     Vehicletype* vt = actmap->getvehicletype_byid( techs[i]->relatedUnitID );
+                     if ( vt ) {
+                        while ( mouseparams.taste == 1 )
+                           releasetimeslice();
+
+                        vehicle_information ( vt );
+                     }
+                  }
+               }
+
+               if ( mouseinrect ( x, y, x1 + xsize - 100, y + 20  ) ){
                   if ( markedtech == i )
-                     fertig = 1;
+                     endDialog = true;
                   else
                      markedtech = i;
 
@@ -215,22 +233,15 @@ void         tchoosetechnology::run(void)
         }
 
         switch (taste) {
-           
+
            case ct_down:  if ( markedtech+1 < technum )
-                               markedtech++;   
-           break; 
-           
+                               markedtech++;
+           break;
+
            case ct_up: if ( markedtech )
                           markedtech--;
-           break; 
-           
-           case ct_enter:   
-           case ct_space:   { 
-                        // resrch->progress = 0; 
-                        fertig = true; 
-                     } 
            break;
-        } 
+        }
         if (markedtech != oldmark) {
            if ( markedtech < firstshowntech ) {
               firstshowntech = markedtech;
@@ -243,30 +254,27 @@ void         tchoosetechnology::run(void)
            disp();
         }
 
-     }  while ( !fertig ); 
+     }  while ( !endDialog );
 
      /*
      if ( actmap->objectcrc )
-       if ( !actmap->objectcrc->speedcrccheck->checktech2 ( techs[markedtech] )) 
+       if ( !actmap->objectcrc->speedcrccheck->checktech2 ( techs[markedtech] ))
           displaymessage ("CRC-check inconsistency in choosetechnology :: run ", 2 );
      */
 
      actmap->player[actmap->actplayer].research.activetechnology = techs[markedtech];
 
-  } 
-} 
+  }
+}
 
-#endif
 
 void         choosetechnology(void)
 {
-#if 0
-         tchoosetechnology ct;
+   tchoosetechnology ct;
 
    ct.init();
    ct.run();
    ct.done();
-   #endif
 }
 
 
@@ -1175,8 +1183,7 @@ void         tcontinuecampaign::regroupevents ( pmap map )
 */
    tmemorystream  memoryStream ( &memoryStreamBuffer, tnstream::writing );
    for (int i = 0; i<8; i++) {
-      map->player[i].research.write_struct ( memoryStream );
-      map->player[i].research.write_techs ( memoryStream );
+      map->player[i].research.write ( memoryStream );
       dissectedunits[i] = map->player[ i ].dissections;
    }
 }

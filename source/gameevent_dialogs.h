@@ -2,7 +2,7 @@
     \brief Interface to game event dialogs
 */
 
-//     $Id: gameevent_dialogs.h,v 1.1 2004-01-16 19:14:55 mbickel Exp $
+//     $Id: gameevent_dialogs.h,v 1.2 2004-05-11 20:22:33 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -31,6 +31,7 @@
 #include "mappolygons.h"
 #include "gameevents.h"
 #include "dlg_box.h"
+#include "research.h"
 
     //! checks, which vehicle types are newly available
     class NewVehicleTypeDetection  {
@@ -56,7 +57,7 @@
                         };
 
 
-extern void  showtechnology(ptechnology  t);
+extern void showtechnology( const Technology* t);
 extern void selectFields( FieldAddressing::Fields& fields );
 extern bool chooseWeather( int& weather );
 extern bool chooseTerrain( int& terrainID );

@@ -735,9 +735,8 @@ void  tnguiicon::loadspecifics( pnstream stream )
 
       if ( rawdata.picturepressed[i] )
          stream->readrlepict ( &picturepressed[i], false, &w );
-   } 
+   }
    memcpy ( keys, rawdata.keys, sizeof ( keys ));
-
 }
 
 

@@ -21,114 +21,152 @@
  ***************************************************************************/
 
 
-#ifndef research_h_included
- #define research_h_included
+#ifndef researchH
+ #define researchH
 
-#include <cstring>
+ #include <cstring>
  #include <map>
 
  #include "basestreaminterface.h"
- #include "tpascal.inc"
+ #include "basictypes.h"
  #include "pointers.h"
-
- const int researchableWeaponImprovements = 8;
-
- class tresearchdatachange {
-    public:
-      word         weapons[researchableWeaponImprovements];   /*  Basis 1024  */
-      word         armor;         /*  Basis 1024  */
-      unsigned char         dummy[20+(12-researchableWeaponImprovements)*2];
-      tresearchdatachange ( void ) {
-         for ( int i = 0; i< researchableWeaponImprovements; i++ )
-            weapons[i] = 1024;
-         armor = 1024;
-         memset ( dummy, 0, sizeof(dummy ));
-      };
- };
+ #include "typen.h"
 
 
- class  ttechnology {
+class Research;
+
+class TechDependency: public LoadableItemType {
+     typedef vector<IntRange> RequiredTechnologies;
+     RequiredTechnologies requiredTechnologies;
+     bool         requireAllListedTechnologies;
    public:
-     void*      icon;
-     char*        infotext;
+     TechDependency(){ requireAllListedTechnologies = true; };
+     bool available( const Research& research ) const;
+     void read ( tnstream& stream );
+     void write ( tnstream& stream ) const;
+     void runTextIO ( PropertyContainer& pc);
+
+};
+
+class TechAdapter: public LoadableItemType {
+     ASCString name;
+     TechDependency techDependency;
+
+   public:
+     TechAdapter();
+     bool available( const Research& research ) const;
+     const ASCString& getName() { return name; };
+
+     void read ( tnstream& stream );
+     void write ( tnstream& stream ) const;
+     void runTextIO ( PropertyContainer& pc);
+};
+
+class TechAdapterDependency {
+     typedef vector<ASCString> RequiredTechAdapter;
+     RequiredTechAdapter requiredTechAdapter;
+     bool         requireAllListedTechAdapter;
+   public:
+     TechAdapterDependency();
+     bool available( const Research& research ) const;
+
+     void read ( tnstream& stream );
+     void write ( tnstream& stream ) const;
+     void runTextIO ( PropertyContainer& pc, const ASCString& defaultTechAdapter = "");
+};
+
+
+ class  Technology: public LoadableItemType {
+   public:
+     Technology();
+
+     void*        icon;
+     ASCString    infotext;
      int          id;
      int          researchpoints;
-     char*        name;
+     ASCString    name;
+     int          techlevel;
+     int          relatedUnitID;
 
-     tresearchdatachange unitimprovement;
+     bool         requireEvent;
 
-     char      requireevent;
+     TechDependency techDependency;
 
-     union {
-       ptechnology  requiretechnology[6];
-       int      requiretechnologyid[6];
-     };
+     //! if one of these technologies has been researched, this tech will be never be researchable. This allows exclusive technology branches
+     vector<IntRange> blockingTechnologies;
 
-     int          techlevelget;  // sobald dieser technologylevel erreicht ist, ist die Technologie automatisch verf?gbar
-     char* pictfilename;
-     int lvl;     // wird nur im Spiel benoetigt: "Level" der benoetigten Techologie. Gibt an, wieviele Basistechnologien insgesamt benoetogt werden.
-     int techlevelset;
-     int dummy[7];
-     int  getlvl( void ) {
-        if ( lvl == -1 ) {
-           lvl = 0;
-           for (int l = 0; l <= 5; l++)
-              if ( requiretechnology[l] )
-                 lvl += requiretechnology[l]->getlvl();
 
-        }
-        return lvl;
-     };
+//     static Technology* newFromStream ( tnstream& stream );
 
- };
+     void read ( tnstream& stream );
+     void write ( tnstream& stream ) const;
+     void runTextIO ( PropertyContainer& pc );
+};
 
 
 
 
- class tresearch {
-
-     typedef less<int> lessint ;
-     typedef map<int, ptechnology, lessint> DevelopedTechnologies;
-     DevelopedTechnologies developedTechnologies;
+ class Research {
 
      pmap map;
      int player;
 
-     bool __loader_techsAvail;
+     int ___loadActiveTech;
+     bool ___oldVersionLoader;
+
+     typedef std::map<ASCString,bool> TriggeredTechAdapter;
+     TriggeredTechAdapter triggeredTechAdapter;
+
+   #ifdef karteneditor
+   public:
+   #endif 
+     vector<int> developedTechnologies;
+
 
    public:
-     int                     progress;
-     ptechnology             activetechnology;
-     tresearchdatachange     unitimprovement;
-     int                     techlevel;
+     bool techResearched ( int id ) const;
 
-     bool technologyresearched ( int id );
-     int vehicletypeavailable ( const Vehicletype* fztyp );
-     int vehicleclassavailable ( const Vehicletype* fztyp , int classnm );
+     enum AvailabilityStatus { researched, available, unavailable };
+
+     int  progress;
+     const Technology* activetechnology;
+
+     bool vehicletypeavailable ( const Vehicletype* fztyp );
 
      void read ( tnstream& stream );
      void write ( tnstream& stream );
 
      void read_struct ( tnstream& stream );
-     void write_struct ( tnstream& stream );
-
      void read_techs ( tnstream& stream );
-     void write_techs ( tnstream& stream );
+
+     void evalTechAdapter();
+     bool techAdapterAvail( const ASCString& ta );
+
+     void settechlevel ( int techlevel );
 
      void chainToMap ( pmap _map, int _player ) { map = _map; player = _player; };
 
-     void settechlevel ( int _techlevel );
-
      //! Move the technology that is currently being reseached to the list of discovered technologies
-     void addtechnology ( void );
+     void addtechnology();
 
-     void addanytechnology ( const ptechnology tech );
+     void addanytechnology ( const Technology* tech );
 
-     //! just an very ugly hack to keep the replay compatible with older versions; called from treplayloaders :: savereplay
-     void ____setDevTechToNULL ( )  { developedTechnologies.clear(); };
+     AvailabilityStatus techAvailable ( const Technology* tech );
 
-     tresearch ( );
-     ~tresearch ();
+     void initchoosentechnology();
+
+     /** is used by the chooseTechnology dialog: the first time no techs are available this variable is still true,
+         so the dialog shows "now techs avail". THen it sets techAvail to false, preventing the same message at the
+         beginning of each turn */
+     bool techsAvail;
+
+     Research ( );
+     ~Research ();
  };
+
+extern void doresearch ( tmap* actmap, int player );
+
+//! Calculates the resources that are needed to research the given number of research
+extern Resources returnResourcenUseForResearch ( const pbuilding bld, int research );
 
 #endif

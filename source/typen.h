@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.142 2004-04-23 16:35:46 mbickel Exp $
+//     $Id: typen.h,v 1.143 2004-05-11 20:22:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
 //     Revision 1.141  2004/01/25 19:44:16  mbickel
@@ -461,7 +461,7 @@ class Resources {
      Resources& operator-= ( const Resources& res ) { energy-=res.energy; material-=res.material; fuel-=res.fuel; return *this;};
      bool operator>= ( const Resources& res ) { return energy >= res.energy && material>=res.material && fuel>=res.fuel; };
      bool operator< ( const Resources& res ) { return !(*this >= res); };
-     Resources operator* ( double d );
+//     Resources operator* ( double d );
      bool operator== ( const Resources& res ) { return energy==res.energy && material==res.material && fuel==res.fuel; };
      Resources& operator+= ( const Resources& res ) { energy+=res.energy; material+=res.material; fuel+=res.fuel; return *this;};
      enum { Energy, Material, Fuel };
@@ -573,6 +573,16 @@ class LoadableItemType {
        virtual void write ( tnstream& stream ) const = 0;
        virtual void runTextIO ( PropertyContainer& pc ) = 0;
        virtual ~LoadableItemType() {};
+};
+
+class IntRange {
+     public:
+           int from;
+           int to;
+           IntRange(): from(-1), to(-1) {};
+           IntRange( int from_, int to_ ): from(from_), to(to_) {};
+           void read ( tnstream& stream );
+           void write ( tnstream& stream ) const;
 };
 
 
@@ -956,12 +966,6 @@ const int maxwindspeed = 60;          // Wind with a strength of 255 means that 
 
 #define generatortruckefficiency 2  // fuer jede vehicle Power wird soviel Sprit gebraucht !
 
-#define researchenergycost 512      // fuer 1000 researchpoints wird soviel energie benoetigt.
-#define researchmaterialcost 200    //                                     material
-#define researchcostdouble 10000    // bei soviel researchpoints verdoppeln sich die Kosten
-#define minresearchcost 0.5
-#define maxresearchcost 4
-
 #define mine_movemalus_increase 50   // percent
 
 #define tfieldtemp2max 255
@@ -1000,7 +1004,10 @@ const int maxwindspeed = 60;          // Wind with a strength of 255 means that 
 //! The maximum number of fields a mining station can extract mineral resources from; Counted from its entry
 const int maxminingrange = 10;
 
-//! The weight of 1000 units of a Resource 
+const float productionLineConstructionCostFactor = 0.5;
+const float productionLineRemovalCostFactor = 0.2;
+
+//! The weight of 1000 units of a Resource
 extern const int resourceWeight[ resourceTypeNum ];
 
 #define objectbuildmovecost 16  // vehicle->movement -= (8 + ( fld->movemalus[0] - 8 ) / ( objectbuildmovecost / 8 ) ) * kosten des obj

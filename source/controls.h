@@ -4,7 +4,7 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.51 2004-04-23 16:35:46 mbickel Exp $
+//     $Id: controls.h,v 1.52 2004-05-11 20:22:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
 //     Revision 1.50  2004/01/16 15:33:45  mbickel

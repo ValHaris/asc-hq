@@ -25,7 +25,6 @@
 #include "textfileparser.h"
 #include "sgstream.h"
 #include "textfile_evaluation.h"
-#include "research.h"
 
 #ifndef converter
 #  include "dialog.h"
@@ -42,33 +41,88 @@ pobjecttype eisbrecherobject = NULL;
 pobjecttype fahrspurobject = NULL;
 
 
+template<class T>
+class ItemContainer {
+   ASCString typeName;
+   vector<T*>   container;
+   typedef map<int,T*>  ObjectMap;
+   ObjectMap hash;
+
+   void add( T* obj );
+
+   public:
+      ItemContainer( const ASCString& typeName_ ) : typeName( typeName_ ) {};
+      T* getObject_byPos( int pos ) { return container[pos]; };
+      T* getObject_byID( int id ) { return hash[id]; };
+      int getObjectNum() { return container.size(); };
+      void load();
+
+};
+
+
+template<class T>
+void ItemContainer<T>::add( T* obj )
+{
+   ObjectMap::iterator i = hash.find ( obj->id );
+   if ( i != hash.end() && i->second )
+     duplicateIDError ( typeName, obj->id, obj->location, obj->name, i->second->location, i->second->name );
+
+   container.push_back( obj );
+   hash[ obj->id ] = obj;
+}
+
+
+template<class T>
+void ItemContainer<T>::load()
+{
+   TextPropertyList& tpl = textFileRepository[typeName];
+   for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
+      if ( actprogressbar )
+        actprogressbar->point();
+
+      if ( !(*i)->isAbstract() ) {
+         PropertyReadingContainer pc ( typeName, *i );
+
+         T* t = new T;
+         t->runTextIO ( pc );
+         pc.run();
+
+         t->filename = (*i)->fileName;
+         t->location = (*i)->location;
+         add ( t );
+    }
+  }
+  displayLogMessage ( 4, "loading all of " + typeName + "  completed\n");
+}
+
 
 
   TerrainTypeVector terrain;
-  TerrainTypeVector& getterraintypevector ( void ) 
+  TerrainTypeVector& getterraintypevector ( void )
   {
      return terrain;
   }
 
-  VehicleTypeVector vehicletypes; 
-  VehicleTypeVector& getvehicletypevector ( void ) 
+  VehicleTypeVector vehicletypes;
+  VehicleTypeVector& getvehicletypevector ( void )
   {
      return vehicletypes;
   }
 
   BuildingTypeVector buildingtypes;
-  BuildingTypeVector& getbuildingtypevector ( void ) 
+  BuildingTypeVector& getbuildingtypevector ( void )
   {
      return buildingtypes;
   }
 
   ObjectTypeVector objecttypes;
-  ObjectTypeVector& getobjecttypevector ( void ) 
+  ObjectTypeVector& getobjecttypevector ( void )
   {
      return objecttypes;
   }
 
-  dynamic_array<ptechnology> technology; 
+  vector<const Technology*> technologies;
+  TechAdapterContainer techAdapterContainer;
 
 
 
@@ -91,7 +145,8 @@ pobjecttype fahrspurobject = NULL;
    typedef map< int, pbuildingtype>  BuildingMap;
    BuildingMap buildingmap;
 
-   map< int, ptechnology>  technologymap;
+   typedef map< int, const Technology*>  TechnologyMap;
+   TechnologyMap technologymap;
 
 pterraintype getterraintype_forid ( int id )
 {
@@ -109,7 +164,8 @@ pbuildingtype getbuildingtype_forid ( int id )
 {
    return buildingmap[id];
 }
-ptechnology gettechnology_forid ( int id )
+
+const Technology* gettechnology_forid ( int id )
 {
    return technologymap[id];
 }
@@ -144,10 +200,10 @@ pbuildingtype getbuildingtype_forpos ( int pos )
       return NULL;
 }
 
-ptechnology gettechnology_forpos ( int pos )
+const Technology* gettechnology_forpos ( int pos )
 {
    if ( pos < technologynum )
-      return technology[pos];
+      return technologies[pos];
    else
       return NULL;
 }
@@ -220,13 +276,20 @@ void addbuildingtype ( pbuildingtype bld )
    }
 }
 
-void addtechnology ( ptechnology tech )
+void addtechnology ( const Technology* tech )
 {
    if ( tech ) {
-      technology[ technologynum++] = tech;
+      TechnologyMap::iterator i = technologymap.find ( tech->id );
+      if ( i != technologymap.end() )
+         duplicateIDError ( "technologytype", tech->id, tech->location, tech->name, i->second->location, i->second->name );
+
+
+      technologies.push_back ( tech );
+      technologynum = technologies.size();
       technologymap[tech->id] = tech;
    }
 }
+
 
 
 
@@ -362,33 +425,51 @@ void         loadallobjecttypes (void)
 
 void         loadalltechnologies(void)
 {
-  int i;
-
-  tfindfile ff ( "*.tec" );
-  string c = ff.getnextname();
-
-  while ( !c.empty() ) {
+   TextPropertyList& tpl = textFileRepository["technology"];
+   for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
       if ( actprogressbar )
-         actprogressbar->point();
+        actprogressbar->point();
 
-      addtechnology ( loadtechnology( c.c_str() ));
+      if ( !(*i)->isAbstract() ) {
+        PropertyReadingContainer pc ( "technology", *i );
 
-      c = ff.getnextname();
+        Technology* tech = new Technology;
+        tech->runTextIO ( pc );
+        pc.run();
+
+        tech->filename = (*i)->fileName;
+        tech->location = (*i)->location;
+        addtechnology ( tech );
+      }
    }
 
-   for (i = 0; i < technologynum; i++)
-      for (int l = 0; l < 6; l++) {
-         ptechnology tech = gettechnology_forpos ( i );
-         int j = tech->requiretechnologyid[l];
-         if ( j > 0 )
-            tech->requiretechnology[l] = gettechnology_forid ( j );
-      }
-
-   for (i = 0; i < technologynum; i++)
-      gettechnology_forpos ( i ) -> getlvl();
 
    displayLogMessage ( 4, "loadallTechnologies completed\n");
 }
+
+void         loadalltechadapter()
+{
+   TextPropertyList& tpl = textFileRepository["techadapter"];
+   for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
+      if ( actprogressbar )
+        actprogressbar->point();
+
+      if ( !(*i)->isAbstract() ) {
+        PropertyReadingContainer pc ( "techadapter", *i );
+
+        TechAdapter* ta = new TechAdapter;
+        ta->runTextIO ( pc );
+        pc.run();
+
+        ta->filename = (*i)->fileName;
+        ta->location = (*i)->location;
+        techAdapterContainer.push_back ( ta );
+      }
+   }
+
+   displayLogMessage ( 4, "loadallTechAdapter completed\n");
+}
+
 
 
 void         loadallterraintypes(void)

@@ -1221,6 +1221,7 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_dispvehicleimprovement    :
+      /*
          displaymessage("Research:\n%s %d \n%s %d \n%s %d \n"
                         "%s %d \n%s %d \n%s %d \n"
                         "%s %d \n%s %d \n%s %d \n"
@@ -1235,6 +1236,7 @@ void execuseraction ( tuseractions action )
                         cwaffentypen[7], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[7])  ,
                         cwaffentypen[10], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[10])     ,
                         "armor",         (actmap->player[actmap->actplayer].research.unitimprovement.armor));
+                        */
          break;
 
       case ua_mainmenu:
@@ -1863,6 +1865,9 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
    if ( actprogressbar ) actprogressbar->startgroup();
    loadalltechnologies();
+
+   if ( actprogressbar ) actprogressbar->startgroup();
+   loadalltechadapter();
 
 
    if ( actprogressbar ) actprogressbar->startgroup();

@@ -45,15 +45,6 @@ template <class T> class PointerList : public std::list<T> {
 };
 
 
-class IntRange {
-     public:
-           int from;
-           int to;
-           IntRange(): from(-1), to(-1) {};
-           IntRange( int from_, int to_ ): from(from_), to(to_) {};
-};
-
-
 typedef std::bitset<64> BitSet;
 
 

@@ -60,7 +60,6 @@ int StringTokenizer::CharSpace ( char c )
 
 ASCString StringTokenizer::getNextToken( )
 {
-   const char* sp = str.c_str();
    while ( i < str.length() && !CharSpace(str[i]) )
      i++;
 
@@ -80,3 +79,42 @@ ASCString StringTokenizer::getRemaining( )
 {
    return str.substr(i);
 }
+
+
+
+StringSplit :: StringSplit ( const ASCString& _str, const ASCString& delimitter_ )
+                 : str( _str ), delimitter(delimitter_),i ( 0 )
+{
+}
+
+
+
+bool StringSplit::isDelimitter ( char c )
+{
+  const char* d = delimitter.c_str();
+  do {
+     if( *d == c  )
+        return true;
+     if ( *d == 0 )
+        return false;
+     d++;
+  } while ( true );
+}
+
+
+ASCString StringSplit::getNextToken( )
+{
+   const char* sp = str.c_str();
+   while ( i < str.length() && isDelimitter(sp[i]) )
+     i++;
+
+   if ( i == str.length() )
+      return "";
+
+   int begin = i;
+   while ( i < str.length() && !isDelimitter(sp[i]) )
+     i++;
+     
+   return str.substr(begin, i-begin);
+}
+

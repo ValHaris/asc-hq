@@ -747,12 +747,6 @@ void         putbuilding( const MapCoordinate& entryPosition,
    if (completion >= buildingtyp->construction_steps)
       completion = buildingtyp->construction_steps - 1;
 
-   gbde->damage = 0;
-   gbde->maxresearchpoints = 0;
-   gbde->researchpoints = 0; 
-   gbde->netcontrol = 0;
-   gbde->connection = 0; 
-   gbde->visible = true; 
    gbde->setCompletion ( completion );
 }
 
@@ -833,8 +827,6 @@ void         putbuilding2( const MapCoordinate& entryPosition,
       gbde->actstorage.fuel = 0;
       gbde->actstorage.material = 0;
       gbde->actstorage.energy = 0;
-      gbde->maxresearchpoints = maxresearch;
-      gbde->researchpoints = 0;
       gbde->netcontrol = 0;
       gbde->connection = 0;
       gbde->visible = true;

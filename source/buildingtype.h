@@ -29,6 +29,7 @@
  #include "objecttype.h"
  #include "basestreaminterface.h"
  #include "textfileparser.h"
+ #include "research.h"
 
 
 const int cbuildingfunctionnum = 21;
@@ -121,6 +122,12 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
         //! the maximum number of research points a research center may produce
         int          maxresearchpoints;
 
+        //! when a building of this type is placed on a map, its maxResearch property will be set to this value
+        int          defaultMaxResearchpoints;
+
+        //! the number of reseach points for which the plus settings apllies
+        int          nominalresearchpoints;
+
         //! the amount of resources stored in the building. Use Building::getResource( int, int, int, int) to access this field, since depending on the map settings some resources may be globally available and stored in a global pool: #tmap::bi_resource
         Resources    _tank;
         Resources    maxplus;
@@ -155,6 +162,7 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
             \param localCoordinate The relative coordinate of the buildings segment for which is global MapCoordinate is going to be calculated and returned.
         */
         MapCoordinate getFieldCoordinate( const MapCoordinate& entryOnMap, const LocalCoordinate& localCoordinate );
+
 
         void read ( tnstream& stream ) ;
         void write ( tnstream& stream ) const ;

@@ -2,9 +2,15 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.56 2004-01-21 14:43:00 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.57 2004-05-11 20:22:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2004/01/21 14:43:00  mbickel
+//      Fixed: external loading not working
+//      Improved AI
+//      Fixed and improved replay resource checking
+//      Fixed various display errors
+//
 //     Revision 1.55  2004/01/16 15:33:46  mbickel
 //     Completely rewritten game event system
 //     TPWM-decoding-Patch
@@ -390,7 +396,8 @@ mc_check mc;
         "Save Clipboard",
         "Load Clipboard",
         "Set Turn Number",
-        "Show Pipeline Net" };
+        "Show Pipeline Net",
+        "Edit Research" };
 
 
 // õS Infomessage
@@ -1164,6 +1171,8 @@ void execaction(int code)
    case act_setTurnNumber:  actmap->time.set ( getid("Turn",actmap->time.turn(),0,maxint), 0 );
       break;
    case act_showPipeNet: showPipeNet();
+      break;
+   case act_editResearch:  editResearch();
       break;
 
     }

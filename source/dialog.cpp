@@ -5182,7 +5182,7 @@ void         tgameparamsel ::run(void)
             action = 3;
    }  while ( action == 0 );
    if ( action == 3 )
-      redline = 255;
+      redline = -1;
 }
 
 

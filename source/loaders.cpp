@@ -1130,9 +1130,6 @@ void   tsavegameloaders::savegame( pnstream strm, pmap gamemap, bool writeReplay
 
    writenetwork ( );
 
-   for ( int i = 0; i < 8; i++ )
-      spfld->player[i].research.write_techs ( *stream );
-
    writemessages();
 
    writefields ( );
@@ -1211,8 +1208,9 @@ tmap*          tsavegameloaders::loadgame( pnstream strm )
 
    readnetwork ();
 
-   for ( int i = 0; i < 8; i++ )
-      spfld->player[i].research.read_techs ( *stream );
+   if  ( version <= 0xff39 )
+      for ( int i = 0; i < 8; i++ )
+         spfld->player[i].research.read_techs ( *stream );
 
    readmessages();
 
@@ -1277,9 +1275,6 @@ int          tnetworkloaders::savenwgame( pnstream strm )
 
    writemap ();
 
-   for ( int i = 0; i < 8; i++ )
-      spfld->player[i].research.write_techs ( *stream );
-
    writemessages();
 
    writenetwork ( );
@@ -1331,8 +1326,9 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
 
    readmap ();
 
-   for ( int i = 0; i < 8; i++ )
-      spfld->player[i].research.read_techs ( *stream );
+   if ( version <= 0x11 )
+      for ( int i = 0; i < 8; i++ )
+         spfld->player[i].research.read_techs ( *stream );
 
 
    readmessages();

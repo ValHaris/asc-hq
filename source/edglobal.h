@@ -1,6 +1,12 @@
-//     $Id: edglobal.h,v 1.16 2004-01-21 14:43:00 mbickel Exp $
+//     $Id: edglobal.h,v 1.17 2004-05-11 20:22:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2004/01/21 14:43:00  mbickel
+//      Fixed: external loading not working
+//      Improved AI
+//      Fixed and improved replay resource checking
+//      Fixed various display errors
+//
 //     Revision 1.15  2003/04/23 18:31:09  mbickel
 //      Fixed: AI problems
 //      Improved cheating detection in replay
@@ -100,7 +106,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 84;
+const int execactionscount = 85;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -188,6 +194,7 @@ enum tuseractions {
      act_saveClipboard,
      act_readClipBoard,
      act_setTurnNumber,
-     act_showPipeNet};
+     act_showPipeNet,
+     act_editResearch};
 
 extern void         execaction(int code);

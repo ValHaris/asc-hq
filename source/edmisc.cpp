@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.109 2004-01-25 19:44:16 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.110 2004-05-11 20:22:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.109  2004/01/25 19:44:16  mbickel
+//      Many, many bugfixes
+//      Removed #pragma pack whereever possible
+//
 //     Revision 1.108  2004/01/21 14:43:00  mbickel
 //      Fixed: external loading not working
 //      Improved AI
@@ -1183,6 +1187,7 @@ void         pdsetup(void)
    pd.addbutton ( "set global ~w~eatherõctrl-W", act_setactweatherglobal );
    pd.addbutton ( "~C~reate ressourcesõctrl+F", act_createresources );
    pd.addbutton ( "~S~et turn number",        act_setTurnNumber );
+   pd.addbutton ( "~E~dit research",          act_editResearch );
 
   pd.addfield ("~T~ools");
    pd.addbutton ( "~V~iew mapõV",            act_viewmap );
@@ -2638,7 +2643,7 @@ void         changebuildingvalues( Building& b )
 
 // õS Class-Change
 
-
+#if 0
 class   tclass_change: public tstringselect {
            public :
                  pvehicle unit;
@@ -2752,7 +2757,7 @@ void         class_change(pvehicle p)
    cc.run();
    cc.done();
 }
-
+#endif
 
 // õS Polygon-Management
 /*
@@ -3281,8 +3286,6 @@ void         tunit::buttonpressed(int         id)
         break;
     case 31 : action = 1;
               tus.restore();
-        break;
-    case 32: class_change( unit );
         break;
     case 115: {
                  static int player = 0;
@@ -4572,14 +4575,16 @@ void transformMap ( )
              }
 
 
-          for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ )
+          for ( int j = 0; j < fld->objects.size(); ++j ) 
              for ( int i = 0; i < objecttranslation.size(); i++ )
-                if ( o->typ->id == objecttranslation[i*2] ) {
+                if ( fld->objects[j].typ->id == objecttranslation[i*2] ) {
                    ObjectType* ot = getobjecttype_forid ( objecttranslation[i*2+1] );
                    if ( ot ) {
-                      o->typ = ot;
+                      fld->objects[j].typ = ot;
                       fld->sortobjects();
                       fld->setparams();
+                      j = -1; // restarting the outer loop
+                      break;
                    }
                 }
    }
@@ -4884,3 +4889,76 @@ void setweatherall ( int weather  )
         actmap->getField(x,y)->setweather( weather );
 }
 
+
+ASCString printTech( int id )
+{
+   ASCString s;
+   s.format ( "%7d ", id );
+   const Technology* t = gettechnology_forid ( id );
+   if ( t )
+      s += t->name;
+
+   return s;
+}
+
+void editResearch()
+{
+   vector<ASCString> buttons;
+   buttons.push_back ( "~A~dd" );
+   buttons.push_back ( "~R~emove" );
+   buttons.push_back ( "~C~lose" );
+
+   vector<ASCString> buttons2;
+   buttons2.push_back ( "~A~dd" );
+   buttons2.push_back ( "~C~ancel" );
+
+   vector<ASCString> buttonsP;
+   buttonsP.push_back ( "~E~dit" );
+   buttonsP.push_back ( "~C~lose" );
+
+   pair<int,int> playerRes;
+   do {
+      vector<ASCString> player;
+      for ( int i = 0; i < 8; ++i )
+         player.push_back ( ASCString ( strrr(i)) + " " + actmap->player[i].getName());
+
+      playerRes = chooseString ( "Choose Player", player, buttonsP );
+      if ( playerRes.first == 0 ) {
+         int player = playerRes.second;
+
+         pair<int,int> res;
+         do {
+            vector<int>& devTech = actmap->player[player].research.developedTechnologies;
+            vector<ASCString> techs;
+            vector<int> techIds;
+            for ( int i = 0; i < devTech.size(); ++i ) {
+               int id = devTech[i];
+               techs.push_back ( printTech(id ) );
+               techIds.push_back  ( id );
+            }
+            sort (techs.begin(), techs.end() );
+            res = chooseString ( "Available Technologies", techs, buttons );
+            if ( res.first == 0 ) {
+               vector<ASCString> techs;
+               vector<int> techIds;
+               for ( int i = 0; i < technologynum; ++i ) {
+                  const Technology* t = gettechnology_forpos(i);
+                  if ( find ( devTech.begin(), devTech.end(), t->id ) == devTech.end() ) {
+                     techs.push_back ( printTech ( t->id ));
+                     techIds.push_back ( t->id );
+                  }
+               }
+               sort (techs.begin(), techs.end() );
+               pair<int,int> r = chooseString ( "Unresearched Technologies", techs, buttons2 );
+               if ( r.first == 0 )
+                  devTech.push_back ( techIds[r.second] );
+            } else
+            if ( res.first == 1 && res.second >= 0 ) {
+               vector<int>::iterator p = devTech.begin();
+               p += res.second;
+               devTech.erase ( p );
+            }
+         } while ( res.first != 2 );
+      }
+   } while ( playerRes.first != 1 );
+}

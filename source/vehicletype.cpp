@@ -136,7 +136,7 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 11;
+const int vehicle_version = 12;
 
 
 
@@ -468,6 +468,9 @@ void Vehicletype :: read ( tnstream& stream )
         heightChangeMethod[i].read( stream );
    } else
       heightChangeMethodNum = 0;
+
+   if ( version >= 12 )
+      techDependency.read( stream );
 }
 
 void Vehicletype::setupPictures()
@@ -660,13 +663,15 @@ void Vehicletype:: write ( tnstream& stream ) const
    for ( i = 0; i < buildingsBuildable.size(); i++ ) {
       stream.writeInt( buildingsBuildable[i].from );
       stream.writeInt( buildingsBuildable[i].to );
-   }                            
+   }
 
    ContainerBaseType::write ( stream );
 
    stream.writeInt( heightChangeMethodNum );
    for ( int i = 0; i < heightChangeMethodNum; i++ )
       heightChangeMethod[i].write( stream );
+
+   techDependency.write( stream );
 
 }
 
@@ -901,6 +906,8 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    }
 
    ContainerBaseType::runTextIO ( pc );
+
+   techDependency.runTextIO( pc, strrr(id) );
 
 
    setupPictures();

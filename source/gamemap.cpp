@@ -124,7 +124,7 @@ tmap :: tmap ( void )
 }
 
 
-const int tmapversion = 5;
+const int tmapversion = 6;
 
 void tmap :: read ( tnstream& stream )
 {
@@ -179,7 +179,11 @@ void tmap :: read ( tnstream& stream )
       player[i].existanceAtBeginOfTurn = stream.readChar();
       stream.readInt(); // dummy
       stream.readInt(); // dummy
-      player[i].research.read_struct ( stream );
+      if ( version <= 5 )
+         player[i].research.read_struct ( stream );
+      else
+         player[i].research.read ( stream );
+
       player[i].ai = (BaseAI*) stream.readInt();
       player[i].stat = Player::tplayerstat ( stream.readChar() );
       stream.readChar(); // dummy
@@ -454,7 +458,7 @@ void tmap :: write ( tnstream& stream )
       stream.writeChar( player[i].existanceAtBeginOfTurn );
       stream.writeInt( 1 ); // dummy
       stream.writeInt( 1 ); // dummy
-      player[i].research.write_struct ( stream );
+      player[i].research.write ( stream );
       stream.writeInt( player[i].ai != NULL );
       stream.writeChar( player[i].stat );
       stream.writeChar( 0 ); // dummy
@@ -1068,7 +1072,7 @@ void tmap::endRound()
                    if ( (*j)->run() )
                       didSomething = true;
           } while ( didSomething );
-          // doresearch( i );
+          doresearch( this, i );
        }
 }
 
@@ -1354,7 +1358,7 @@ pbuildingtype tmap :: getbuildingtype_byid ( int id )
    return getbuildingtype_forid ( id );
 }
 
-ptechnology tmap :: gettechnology_byid ( int id )
+const Technology* tmap :: gettechnology_byid ( int id )
 {
    return gettechnology_forid ( id );
 }
@@ -1380,7 +1384,7 @@ pbuildingtype tmap :: getbuildingtype_bypos ( int pos )
    return getbuildingtype_forpos ( pos );
 }
 
-ptechnology tmap :: gettechnology_bypos ( int pos )
+const Technology* tmap :: gettechnology_bypos ( int pos )
 {
    return gettechnology_forpos ( pos );
 }
@@ -1392,22 +1396,22 @@ int tmap :: getTerrainTypeNum ( )
 
 int tmap :: getObjectTypeNum ( )
 {
-   return  vehicletypenum;
+   return  objecttypenum;
 }
 
 int tmap :: getVehicleTypeNum ( )
 {
-   return  buildingtypenum;
+   return  vehicletypenum;
 }
 
 int tmap :: getBuildingTypeNum ( )
 {
-   return  technologynum;
+   return  buildingtypenum;
 }
 
 int tmap :: getTechnologyNum ( )
 {
-   return  objecttypenum;
+   return  technologynum;
 }
 
 void tmap :: startGame ( )
@@ -2260,11 +2264,11 @@ tmap :: ReplayInfo :: ~ReplayInfo ( )
 
 
 
-const int gameparameterdefault [ gameparameternum ] = { 1,                       //       cgp_fahrspur
-                                                        2,                       //       cgp_eis,
-                                                        0,                       //       cgp_movefrominvalidfields,
-                                                        100,                     //       cgp_building_material_factor,
-                                                        100,                     //       cgp_building_fuel_factor,
+const int gameparameterdefault [ gameparameternum ] = { 1,                       //       cgp_fahrspur                        
+                                                        2,                       //       cgp_eis,                            
+                                                        0,                       //       cgp_movefrominvalidfields,          
+                                                        100,                     //       cgp_building_material_factor,       
+                                                        100,                     //       cgp_building_fuel_factor,           
                                                         1,                       //       cgp_forbid_building_construction,   
                                                         0,                       //       cgp_forbid_unitunit_construction,   
                                                         0,                       //       cgp_bi3_training,                   
@@ -2410,5 +2414,4 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "disable direct View",
                                                       "disable transfering units/buildings to other players",
                                                       "experience effect divisor for defense" };
-
 

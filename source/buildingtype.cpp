@@ -73,6 +73,9 @@ BuildingType :: BuildingType ( void )
             }
          destruction_objects [x][y] = 0;
       }
+   maxresearchpoints = 0;
+   defaultMaxResearchpoints = 0;
+   nominalresearchpoints = 0;
 }
 
 
@@ -102,7 +105,7 @@ MapCoordinate  BuildingType :: getFieldCoordinate ( const MapCoordinate& entryPo
 }
 
 
-const int building_version = 5;
+const int building_version = 7;
 
 #ifndef converter
 extern void* generate_building_gui_build_icon ( pbuildingtype bld );
@@ -214,6 +217,16 @@ void BuildingType :: read ( tnstream& stream )
       if ( version >= 4 )
          ContainerBaseType::read ( stream );
 
+      if ( version >= 6 )
+         nominalresearchpoints = stream.readInt();
+
+      if ( version >= 7 ) {
+         techDependency.read( stream );
+         defaultMaxResearchpoints = stream.readInt();
+      }
+
+
+
      #ifdef converter
       guibuildicon = NULL;
      #else
@@ -310,6 +323,11 @@ void BuildingType :: write ( tnstream& stream ) const
                        stream.writedata( w_picture[w][k][i][j],fieldsize);
 
     ContainerBaseType::write ( stream );
+
+    stream.writeInt( nominalresearchpoints );
+
+    techDependency.write ( stream );
+    stream.writeInt( defaultMaxResearchpoints );
 }
 
 
@@ -504,7 +522,9 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
       pc.closeBracket();
 
 
-      pc.addInteger ( "MaxResearch", maxresearchpoints );
+      pc.addInteger ( "MaxResearch", maxresearchpoints, 0 );
+      pc.addInteger ( "NominalResearch", nominalresearchpoints, maxresearchpoints/2 );
+      pc.addInteger ( "MaxResearchpointsDefault", defaultMaxResearchpoints, maxresearchpoints );
 
       pc.openBracket ( "ConstructionCost" );
        productionCost.runTextIO ( pc );
@@ -538,6 +558,9 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
       ContainerBaseType::runTextIO ( pc );
 
       pc.addTagInteger( "ExternalLoading", externalloadheight, choehenstufennum, heightTags );
+
+      techDependency.runTextIO( pc, strrr(id) );
+
    }
    catch ( InvalidString ) {
       pc.error ( "Could not parse building field coordinate");

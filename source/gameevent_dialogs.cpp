@@ -22,7 +22,7 @@
     Boston, MA  02111-1307  USA
 */
 
-#include <stdio.h>                                                                
+#include <stdio.h>
 
 #include "global.h"
 #include "buildingtype.h"
@@ -44,6 +44,7 @@
 #include "errors.h"
 #include "itemrepository.h"
 #include "gameevent_dialogs.h"
+#include "dialog.h"
 
 
 #ifdef karteneditor
@@ -341,18 +342,18 @@ NewVehicleTypeDetection::~NewVehicleTypeDetection()
    delete[] buf ;
 }
 
-               
+#if 0
 
  class   tshowtechnology : public tdialogbox {
                public:
-                  ptechnology       tech;
-                  void              init( ptechnology acttech );
+                  const Technology*       tech;
+                  void              init( const Technology* acttech );
                   virtual void      run ( void );
                   void              showtec ( void );
          };
 
 
-void         tshowtechnology::init(  ptechnology acttech  )
+void         tshowtechnology::init(  const Technology* acttech  )
 { 
    tdialogbox::init();
    title = "new technology";
@@ -363,8 +364,8 @@ void         tshowtechnology::init(  ptechnology acttech  )
 
 void         tshowtechnology::showtec(void)
 { 
-   char         *wort1, *wort2;
-   char         *pc, *w2;
+   const char         *wort1, *wort2;
+   const char         *pc, *w2;
    word         xp, yp, w;
 
    activefontsettings.font = schriften.large; 
@@ -393,10 +394,10 @@ void         tshowtechnology::showtec(void)
    activefontsettings.font = schriften.smallarial; 
    showtext2(wort1, x1 + 30,y1 + yp);
 
-   if (tech->infotext != NULL) { 
+   if ( !tech->infotext.empty()) {
       activefontsettings.color = black; 
       xp = 0; 
-      pc = tech->infotext; 
+      pc = tech->infotext.c_str();
       while (*pc ) {
          w2 = wort1;
          while ( *pc  && *pc != ' ' && *pc != '-' ) {
@@ -418,28 +419,29 @@ void         tshowtechnology::showtec(void)
          } 
          showtext2(wort1,x1 + xp + 20,y1 + starty + yp);
          xp += w;
-      } 
-   } 
+      }
+   }
    delete[] wort1 ;
    delete[] wort2 ;
-} 
+}
 
 
 
 void         tshowtechnology::run(void)
-{ 
-   showtec(); 
-   do { 
+{
+   showtec();
+   do {
       tdialogbox::run();
    }  while ( (taste != ct_esc) && (taste != ct_space) && (taste != ct_enter) );
-} 
+}
+
+#endif
 
 
-
-
-void         showtechnology(ptechnology  tech )
-{ 
-   if ( tech ) { 
+void         showtechnology(const Technology*  tech )
+{
+   if ( tech ) {
+   #if 0
       if ( tech->pictfilename ) {
          mousevisible(false);
          bar ( 0,0, agmp->resolutionx-1, agmp->resolutiony-1, black );
@@ -456,7 +458,7 @@ void         showtechnology(ptechnology  tech )
             releasetimeslice();
          do {
             releasetimeslice();
-         } while ( t + 200 > ticker  &&  !keypress()  && !mouseparams.taste); /* enddo */
+         } while ( t + 200 > ticker  &&  !keypress()  && !mouseparams.taste);
 
          int abrt = 0;
          while ( keypress() )
@@ -473,9 +475,9 @@ void         showtechnology(ptechnology  tech )
             do {
                releasetimeslice();
             } while ( t + 600 > ticker  &&  !keypress()  && !mouseparams.taste && !abrt ); /* enddo */
-   
+
             closeFullscreenImage();
-         }            
+         }
          activefontsettings.length = agmp->resolutionx - 40;
          activefontsettings.justify = centertext;
          activefontsettings.background = 255;
@@ -529,16 +531,22 @@ void         showtechnology(ptechnology  tech )
             // repaintdisplay();
          }
       } else {
-         tshowtechnology sh; 
-         sh.init( tech ); 
-         sh.run(); 
-         sh.done(); 
-      }
-   } 
-} 
+   #endif
+         //ASCString text = "A new technology has been researched:\n#font02#";
+         ASCString text = "#font02#";
+         text += tech->name;
+         text += "#font01#\n";
+         text += tech->infotext;
+       tviewanytext vat;
+       vat.init ( "new technology", text.c_str() );
+       vat.run();
+       vat.done();
+//      }
+   }
+}
 
 
-void  tshownewtanks :: init ( bool*      buf2 ) 
+void  tshownewtanks :: init ( bool*      buf2 )
 {
    tdialogbox::init();
 

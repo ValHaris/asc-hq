@@ -32,7 +32,6 @@
  typedef class tmap Map;
  typedef class tevent* pevent ;
  typedef class tresearch* presearch ;
- typedef class  ttechnology* ptechnology ;
  typedef char* pchar;
  typedef class tbasenetworkconnection* pbasenetworkconnection;
  typedef class tnetwork* pnetwork;

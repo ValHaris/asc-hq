@@ -139,7 +139,6 @@ void Vehicle :: init ( void )
       ammo[i] = 0;
    }
 
-   klasse = 0;
    damage = 0;
 
    experience = 0;
@@ -155,9 +154,9 @@ void Vehicle :: init ( void )
          if (typ->height & chschwimmend )
             height = chschwimmend;
 
-      armor = typ->armor * typ->classbound[klasse].armor / 1024;
+      armor = typ->armor;
       for ( int m = 0; m < typ->weapons.count ; m++)
-         weapstrength[m] = typ->weapons.weapon[m].maxstrength; // * typ->classbound[klasse].weapstrength[typ->weapons.weapon[m].getScalarWeaponType()] / 1024;
+         weapstrength[m] = typ->weapons.weapon[m].maxstrength;
 
       setMovement ( typ->movement[log2(height)] );
    } else {
@@ -239,20 +238,6 @@ void Vehicle :: setGeneratorStatus ( bool status )
 }
 
 
-void Vehicle :: setup_classparams_after_generation ( void )
-{
-      armor = typ->armor * typ->classbound[klasse].armor / 1024;
-      if ( typ->weapons.count ) {
-         for ( int m = 0; m < typ->weapons.count ; m++) {
-            ammo[m] = 0;
-            weapstrength[m] = typ->weapons.weapon[m].maxstrength; // * typ->classbound[klasse].weapstrength[typ->weapons.weapon[m].getScalarWeaponType()] / 1024;
-         }
-      }
-
-      attacked = true;
-}
-
-
 
 int Vehicle::weight( void ) const
 {
@@ -278,7 +263,6 @@ void Vehicle::transform ( const pvehicletype type )
       weapstrength[m] = typ->weapons.weapon[m].maxstrength;
    }
    armor = typ->armor;
-   klasse = 255;
 }
 
 void Vehicle :: postRepair ( int oldDamage )
@@ -811,6 +795,9 @@ Vehicle* Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
 
 bool  Vehicle :: vehicleconstructable ( pvehicletype tnk, int x, int y )
 {
+   if ( !tnk->techDependency.available ( gamemap->player[getOwner()].research))
+      return 0;
+
    if ( tnk->terrainaccess.accessible ( gamemap->getField(x,y)->bdt ) > 0 || height >= chtieffliegend)
       if ( tnk->productionCost.material <= tank.material &&
            tnk->productionCost.energy   <= tank.fuel  )
@@ -831,6 +818,10 @@ bool Vehicle :: buildingconstructable ( pbuildingtype building )
 
    if ( gamemap->getgameparameter(cgp_forbid_building_construction) )
        return 0;
+
+   if ( !building->techDependency.available ( gamemap->player[getOwner()].research))
+      return 0;
+
 
    int mf = gamemap->getgameparameter ( cgp_building_material_factor );
    int ff = gamemap->getgameparameter ( cgp_building_fuel_factor );
@@ -1107,7 +1098,6 @@ void Vehicle :: fillMagically( void )
       weapstrength[m] = typ->weapons.weapon[m].maxstrength;
    }
    armor = typ->armor;
-   klasse = 255;
 }
 
 
@@ -1191,9 +1181,6 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
     if ( energyUsed )
        bm |= cem_energyUsed;
 
-    if ( klasse    )
-       bm |= cem_class;
-
     if ( armor != typ->armor )
        bm |= cem_armor;
 
@@ -1268,9 +1255,6 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 
     if ( bm & cem_energy )
          stream.writeInt ( tank.energy );
-
-    if ( bm & cem_class )
-         stream.writeChar ( klasse );
 
     if ( bm & cem_armor )
          stream.writeWord ( armor );
@@ -1423,9 +1407,7 @@ void   Vehicle::readData ( tnstream& stream )
        tank.energy = typ->tank.energy;
 
     if ( bm & cem_class )
-       klasse = stream.readChar();
-    else
-       klasse = 0;
+       stream.readChar(); // was: class
 
     if ( bm & cem_armor )
        armor = stream.readWord();
@@ -1497,31 +1479,12 @@ void   Vehicle::readData ( tnstream& stream )
           throw ASCmsgException ( "Vehicle::read() - inconsistent data stream" );
     }
 
-
-
-    #ifdef sgmain
-    if (klasse == 255) {
-       if ( typ->classnum ) {
-          for (int i = 0; i < typ->classnum ; i++ )
-             if ( gamemap->player[ color/8 ].research.vehicleclassavailable( typ, i ) )
-                klasse = i;
-             else
-                break;
-
-       } else {
-          klasse = 0;
-       }
-
-       armor = typ->armor * typ->classbound[klasse].armor / 1024;
-       if (typ->weapons.count )
-          for ( int m = 0; m < typ->weapons.count ; m++)
-             if ( typ->weapons.weapon[m].getScalarWeaponType() >= 0 )
-                weapstrength[m] = typ->weapons.weapon[m].maxstrength; // * typ->classbound[klasse].weapstrength[ typ->weapons.weapon[m].getScalarWeaponType()] / 1024;
-             else
-                weapstrength[m] = 0;
-
-    }
-    #endif
+    armor = typ->armor;
+    for ( int m = 0; m < typ->weapons.count ; m++)
+       if ( typ->weapons.weapon[m].getScalarWeaponType() >= 0 )
+          weapstrength[m] = typ->weapons.weapon[m].maxstrength;
+       else
+          weapstrength[m] = 0;
 }
 
 MapCoordinate3D Vehicle :: getPosition ( ) const

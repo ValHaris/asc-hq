@@ -164,6 +164,7 @@ Resources operator/ ( const Resources& res1, float a )
    return res;
 }
 
+/*
 Resources Resources::operator* ( double d )
 {
    Resources rs;
@@ -171,7 +172,7 @@ Resources Resources::operator* ( double d )
       rs.resource(i) = int( resource(i)*d );
    return rs;
 }
-
+*/
 
 void Resources::runTextIO ( PropertyContainer& pc )
 {
@@ -211,6 +212,20 @@ ASCString Resources::toString()
 }
 
 
+
+void IntRange::read ( tnstream& stream )
+{
+   stream.readInt();
+   from = stream.readInt();
+   to = stream.readInt();
+}
+
+void IntRange::write ( tnstream& stream ) const
+{
+   stream.writeInt(1);
+   stream.writeInt( from );
+   stream.writeInt( to );
+}
 
 ////////////////////////////////////////////////////////////////////
 

@@ -5,7 +5,7 @@
 
 */
 
-//     $Id: loaders.h,v 1.27 2004-04-23 16:35:46 mbickel Exp $
+//     $Id: loaders.h,v 1.28 2004-05-11 20:22:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
 //     Revision 1.26  2004/01/23 18:29:56  mbickel
@@ -213,11 +213,11 @@ extern void  loadicons(void);
 
 extern void  savecampaignrecoveryinformation( const ASCString& filename, int id);
 
-const int actsavegameversion  = 0xff39;
+const int actsavegameversion  = 0xff40;
 const int minsavegameversion  = 0xff31;
 const int actmapversion       = 0xfe28;
 const int minmapversion       = 0xfe24;
-const int actnetworkversion   = 0x0011;
+const int actnetworkversion   = 0x0012;
 const int minnetworkversion   = 0x0004;
 const int actreplayversion    = 0x0003;
 const int minreplayversion    = 0x0001;

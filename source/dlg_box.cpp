@@ -3441,7 +3441,7 @@ tstringselect :: tstringselect ( )
 void         tstringselect::init(void)
 {
    tdialogbox::init();
-   
+
    xsize = 570;
    ysize = 320;
    x1 = ( 640 -xsize ) / 2;
@@ -3578,7 +3578,7 @@ void         tstringselect::run(void)
       break;
       }
    }
-   else redline = 255;
+   else redline = -1;
 }
 
 
@@ -3764,17 +3764,18 @@ void errorMessage ( const ASCString& string )
 
 class   ChooseString : public tstringselect {
                  const vector<ASCString>& strings;
+                 const vector<ASCString>& buttons;
                  char buf[10000];
            public :
-                 ChooseString ( const ASCString& _title, const vector<ASCString>& _strings , int defaultEntry );
+                 ChooseString ( const ASCString& _title, const vector<ASCString>& _strings , const vector<ASCString>& _buttons, int defaultEntry );
                  void setup( );
                  virtual void buttonpressed(int id);
                  void run(void);
                  virtual void get_text(word nr);
               };
 
-ChooseString :: ChooseString ( const ASCString& _title, const vector<ASCString>& _strings, int defaultEntry )
-              : strings ( _strings )
+ChooseString :: ChooseString ( const ASCString& _title, const vector<ASCString>& _strings, const vector<ASCString>& _buttons, int defaultEntry )
+              : strings ( _strings ), buttons ( _buttons )
 {
    strcpy ( buf, _title.c_str() );
    startpos = defaultEntry;
@@ -3787,18 +3788,17 @@ void         ChooseString ::setup( )
    title = buf;
    numberoflines = strings.size();
    ey = ysize - 50;
-   addbutton("~O~k",20,ysize - 45,xsize-20,ysize - 20,0,1,12,true);
+   int width = (xsize-40)/buttons.size();
+   for ( int i = 0; i< buttons.size(); ++i )
+      addbutton( buttons[i].c_str(),25 + i*width,ysize - 45,15 + (i+1)*width,ysize - 20,0,1,20+i,true);
 }
 
 
 void         ChooseString ::buttonpressed(int         id)
 {
    tstringselect::buttonpressed(id);
-   switch (id) {
-      case 12:  if ( redline >= 0 )
-                   action = id-10;
-                break;
-   }
+   if ( id >= 20 )
+      action =id ;
 }
 
 
@@ -3812,21 +3812,31 @@ void         ChooseString ::run(void)
 {
    do {
       tstringselect::run();
+      /*
       if ( taste == ct_enter )
          if ( redline >= 0 )
             action = 2;
+      */
    }  while ( action == 0 );
 }
 
 
 int chooseString ( const ASCString& title, const vector<ASCString>& entries, int defaultEntry  )
 {
-   ChooseString  gps ( title, entries, defaultEntry );
+   vector<ASCString> b;
+   b.push_back ( "~O~K");
+   return chooseString ( title, entries, b, defaultEntry).second;
+}
+
+pair<int,int> chooseString ( const ASCString& title, const vector<ASCString>& entries, const vector<ASCString>& buttons, int defaultEntry  )
+{
+   ChooseString  gps ( title, entries, buttons, defaultEntry );
 
    gps.init();
    gps.run();
    gps.done();
-   return gps.redline;
+   return make_pair(gps.action-20,gps.redline);
+
 }
 
 
@@ -3921,3 +3931,242 @@ ASCString editString( const ASCString& title, const ASCString& defaultValue  )
    return gi.text;
 }
 
+
+
+
+#if 0
+
+class   StringSelect : public tdialogbox {
+                     const vector<ASCString>& entries;
+                     const vector<ASCString>& buttons;
+                     ASCString myTitle;
+                public :
+                     StringSelect( const ASCString& title, const vector<ASCString>& entries_, const vector<ASCString>& buttons_ );
+                protected:
+                     char  ok;
+                     int sy,ey,sx,ex,action,dx;
+                     int dk;
+                     int msel,mouseselect,redline,lnshown,numberoflines,firstvisibleline,startpos;
+                     char scrollbarvisible;
+                     void init(void);
+                     tstringselect ( );
+                     virtual void run(void);
+                     virtual void buttonpressed(int id);
+                     void scrollbar_on(void);
+                     void viewtext(void);
+                     virtual void resettextfield(void);
+                     virtual void get_text( word nr);
+                     void done(void);
+                 };
+
+
+StringSelect :: StringSelect( const ASCString& title, const vector<ASCString>& entries_, const vector<ASCString>& buttons_ )
+              : entries( entries_ ), buttons ( buttons_ )
+{
+   numberoflines = 0;
+   firstvisibleline = 0;
+   redline = 0;
+   startpos = 0;
+   myTitle = title;
+}
+
+
+void         tstringselect::init(void)
+{
+   tdialogbox::init();
+
+   xsize = 570;
+   ysize = 320;
+   x1 = ( 640 -xsize ) / 2;
+   y1 = ( 480 -ysize ) / 2;
+
+   sy = 45;
+
+   sx = 20;
+   title = myTitle.c_str();
+   windowstyle = windowstyle ^ dlg_in3d;
+   lnshown = 10;
+   ey = ysize - 50;
+   ex = xsize - 30;
+   setup();
+
+   if (startpos >= numberoflines )
+      startpos = numberoflines-1;
+   if (startpos > lnshown -1 ) {
+      firstvisibleline = startpos - ( lnshown - 1 );
+      redline = startpos;
+   } else {
+      redline = startpos;
+   } /* endif */
+
+   dk = 0;
+   action = 0;
+   dx = (ey - sy) / lnshown;
+   if (numberoflines > lnshown) {
+      scrollbarvisible = true;
+      addscrollbar(ex + 10 ,sy ,ex + 20,ey ,&numberoflines,lnshown,&firstvisibleline,1,0);
+   }
+   else
+      scrollbarvisible = false;
+   buildgraphics();
+   rahmen(true,x1 + sx , y1 + sy,x1 + ex,y1 + ey);
+   mousevisible(true);
+   activefontsettings.font = schriften.smallarial;
+   activefontsettings.color = black;
+   activefontsettings.justify = lefttext;
+   activefontsettings.background = lightgray;
+   activefontsettings.height = 15;
+   viewtext();
+}
+
+
+
+void         tstringselect::buttonpressed(int         id)
+{
+   tdialogbox::buttonpressed(id);
+   if (id == 1) {
+      if (firstvisibleline > redline) redline = firstvisibleline;
+      if (firstvisibleline + lnshown - 1 < redline) redline = firstvisibleline + lnshown - 1;
+      viewtext();
+   }
+}
+
+
+void         tstringselect::run(void)
+{
+  char      view;
+  integer      my;
+  int         ms;
+
+   tdialogbox::run();
+   if (numberoflines > 0) {
+      msel = 0;
+      if (getmousestatus() == 2) {
+         if ((( ms = mouseparams.taste ) == 0) && (dk == 1)) dk = 2;
+         if ((mouseparams.x > x1 + 10) & (mouseparams.x < x1 + xsize - 40) && (ms != 0)) {
+            my = mouseparams.y - y1 - sy;
+            my = my / dx;
+            if ((my >= 0) && (my <= lnshown - 1) && (my <= numberoflines - 1)) {
+               mouseselect = firstvisibleline + my;
+               if ((mouseselect == redline) && (dk == 2)) {
+                  msel = ms;
+                  dk = 0;
+               }
+               else {
+                  redline = mouseselect;
+                  dk = 1;
+                  ms =0;
+                  viewtext();
+               }
+            }
+         }
+      }
+      switch (taste) {
+
+         case ct_up:   {
+                   view = true;
+                   if (redline > 0) redline--;
+                   else view = false;
+                   if ((redline < firstvisibleline) && (firstvisibleline > 0)) {
+                      firstvisibleline--;
+                      showbutton( 1 );
+                   }
+                   if (view) viewtext();
+                }
+         break;
+         case ct_pos1:   {
+                   view = false;
+                   if  ( (redline > 0) || (firstvisibleline > 0) ) {
+                      view = true;
+                      redline = 0;
+                      firstvisibleline = 0;
+                   }
+                   if (view) viewtext();
+                }
+         break;
+
+         case ct_ende:   {
+                   view = false;
+                   if (redline < numberoflines -1 ) {
+                      view = true;
+                      redline = numberoflines -1 ;
+                      firstvisibleline = numberoflines - lnshown;
+                   }
+                   if (view) viewtext();
+                }
+         break;
+
+         case ct_down:   {
+                     view = true;
+                     if (redline < numberoflines - 1) redline++;
+                     else view = false;
+                     if ((redline > firstvisibleline + lnshown - 1) && (firstvisibleline + lnshown - 1 <= numberoflines)) {
+                        firstvisibleline++;
+                        showbutton( 1 );
+                     }
+                     if (view) viewtext();
+                  }
+      break;
+      }
+   }
+   else redline = -1;
+}
+
+
+void         tstringselect::resettextfield(void)
+{
+   bar(x1 + sx,y1 + sy,x1 + ex,y1 + ey,lightgray);
+   rahmen(true,x1 + sx ,y1 + sy,x1 + ex,y1 + ey);
+}
+
+void   tstringselect::get_text(word nr) //gibt in txt den string zur?ck
+{
+  strcpy(txt,"");
+  nr = 0;
+}
+
+void tstringselect::scrollbar_on(void)
+{
+   scrollbarvisible = true;
+   addscrollbar(ex + 10 ,sy - 10,ex + 30,ey + 10,&numberoflines,lnshown,&firstvisibleline,1,0);
+}
+
+
+void         tstringselect::viewtext(void)
+{
+  char         s1[200];
+  word         yp;
+  integer      l;
+
+   mousevisible(false);
+   //showbutton(1);
+   npush(activefontsettings.length);
+   activefontsettings.length = ex - sx - 10;
+   yp = y1 + sy + 5;
+   l = firstvisibleline;
+   if (numberoflines > 0) {
+         while ((l<numberoflines) && (l-firstvisibleline < lnshown)) {
+            get_text(l);
+            strcpy(s1,txt);
+            if (l == redline ) activefontsettings.color=red;
+            else activefontsettings.color=lightblue;
+            showtext2(s1,x1+ sx + 5,yp+( l-firstvisibleline ) * dx );
+            l++;
+         } /* endwhile */
+
+   }
+   // else showtext2("No text available !",x1 + 50,yp + 50);
+
+   //rahmen(true,x1  + sx ,y1 + sy,x1  + ex ,y1 + ey );
+   npop(activefontsettings.length);
+   mousevisible(true);
+}
+
+
+void         tstringselect::done(void)
+{
+   tdialogbox::done();
+   while ( mouseparams.taste )
+     releasetimeslice();
+}
+#endif

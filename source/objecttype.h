@@ -20,6 +20,7 @@
 
  #include "typen.h"
  #include "terraintype.h"
+ #include "research.h"
 
 
  //! An object that can be placed on fields. Roads, pipelines and ditches are examples of objects. \sa Object
@@ -114,6 +115,9 @@
      void* buildicon;
      //! the icon used for selecting the object when executing the "remove object" function of a unit. The image is automatically generated at load time
      void* removeicon;
+
+     TechAdapterDependency techDependency;
+
 
      //! the images of the objects
      struct WeatherPicture {

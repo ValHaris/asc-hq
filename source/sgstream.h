@@ -3,9 +3,13 @@
   
 */
 
-//     $Id: sgstream.h,v 1.27 2003-02-13 00:56:07 mbickel Exp $
+//     $Id: sgstream.h,v 1.28 2004-05-11 20:22:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2003/02/13 00:56:07  mbickel
+//      Updated weaponguide
+//      ASC compiles with gcc again
+//
 //     Revision 1.26  2002/12/23 12:50:25  mbickel
 //      Fixed AI crash
 //      Minimap now working with partially defined graphic sets
@@ -162,10 +166,6 @@ extern pterraintype loadterraintype( pnstream stream );
 extern pbuildingtype loadbuildingtype( const char *       name);
 extern pbuildingtype loadbuildingtype( pnstream stream );
 extern void writebuildingtype ( pbuildingtype bld, pnstream stream );
-
-extern ptechnology loadtechnology( const char *       name);
-extern ptechnology loadtechnology( pnstream stream );
-extern void writetechnology ( ptechnology tech, pnstream stream );
 
 extern pobjecttype   loadobjecttype( const char *       name);
 extern pobjecttype   loadobjecttype( pnstream stream );

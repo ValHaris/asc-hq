@@ -2,9 +2,27 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.31 2004-01-16 15:33:45 mbickel Exp $
+//     $Id: dlg_box.h,v 1.32 2004-05-11 20:22:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2004/01/16 15:33:45  mbickel
+//     Completely rewritten game event system
+//     TPWM-decoding-Patch
+//     Fixed: swallog message: wrong coordinates
+//     Autotraining for units with max ammo only
+//     Movement required for clearing mines
+//     Unit names can be edited
+//     weather dependen object properties
+//     Unit swallowed by ground -> unified message
+//     units cannot enter enemy transports
+//     Building entry has constant movemalus
+//     Message for resource transfer for providing player
+//     increased ammo production cost
+//     Fixed: unit could attack after movement (with RF on) although "no attack after move" property was set
+//     Buildings: new properties: "ExternalResourceTransfer", "ExternalAmmoTransfer"
+//     Container: Movemalus override for unloading
+//     Startup map specified in ASC.INI
+//
 //     Revision 1.30  2002/10/05 21:22:09  mbickel
 //      Added inheritance to textfiles
 //
@@ -595,6 +613,14 @@ extern ASCString editString( const ASCString& title, const ASCString& defaultVal
     \returns the selected index or -1 if nothing was selected
 */
 extern int chooseString ( const ASCString& title, const vector<ASCString>& entries, int defaultEntry = -1 );
+
+/** displays a dialogbox which lets you chose one of a number of strings.
+    \param tittle the title of the dialog box
+    \param entires the list of strings
+    \returns button-number, selected index 
+*/
+extern pair<int,int> chooseString ( const ASCString& title, const vector<ASCString>& entries, const vector<ASCString>& buttons, int defaultEntry = -1 );
+
 
 #endif
 

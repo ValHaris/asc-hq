@@ -58,7 +58,6 @@
 #include "gameoptions.h"
 #include "graphicset.h"
 #include "itemrepository.h"
-#include "research.h"
 
 const char* asc_EnvironmentName = "ASC_CONFIGFILE";
 int dataVersion = 0;
@@ -141,70 +140,6 @@ pvehicletype   loadvehicletype( tnstream& stream )
 }
 
 
-
-
-
-ptechnology       loadtechnology( const char *       name)
-{
-   displayLogMessage ( 5, " loading technology %s ...", name );
-   tnfilestream stream ( name, tnstream::reading );
-   ptechnology t = loadtechnology ( &stream );
-   displayLogMessage ( 5, " done\n");
-   return t;
-}
-
-
-ptechnology       loadtechnology( pnstream stream )
-{ 
-   int          w;
-
-   int version = stream->readInt();
-   if ( version == technology_version ) {
-
-      ptechnology pt =  new ttechnology;
-   
-      stream->readdata ( pt, sizeof(*pt) ); 
-      if ( pt->name )
-         stream->readpchar( &pt->name );
-
-      if ( pt->infotext )
-         stream->readpchar( &pt->infotext );
-
-      if ( pt->icon )
-         stream->readrlepict ( &pt->icon,false,&w);
-
-      if ( pt->pictfilename ) {
-         stream->readpchar( &pt->pictfilename );
-
-         char* pc = pt->pictfilename;
-         while ( *pc ) {
-            *pc = tolower( *pc );
-            pc++;
-         }
-      }
-   
-      pt->lvl = -1;
-
-      return pt; 
-   } else
-      return NULL;
-} 
-
-void writetechnology ( ptechnology tech, pnstream stream )
-{
-   stream->writeInt ( technology_version );
-
-   stream->writedata2 ( *tech );
- 
-   if (tech->name)
-      stream->writepchar( tech->name );
-   if (tech->infotext)
-      stream->writepchar( tech->infotext );
-   if (tech->icon)
-      stream->writerlepict( tech->icon );
-   if ( tech->pictfilename )
-      stream->writepchar( tech->pictfilename );
-} 
 
 
 

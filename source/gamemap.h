@@ -370,7 +370,7 @@ class tmap {
             BuildingList  buildingList;
 
             //! the status of the scientific research
-            tresearch    research;
+            Research    research;
 
             //! if the player is run by an AI, this is the pointer to it
             BaseAI*      ai;
@@ -393,7 +393,7 @@ class tmap {
             class Dissection {
                public:
                   pvehicletype  fzt;
-                  ptechnology   tech;
+                  const Technology*   tech;
                   int           orgpoints;
                   int           points;
                   int           num;
@@ -632,13 +632,13 @@ class tmap {
       pobjecttype getobjecttype_byid ( int id );
       pvehicletype getvehicletype_byid ( int id );
       pbuildingtype getbuildingtype_byid ( int id );
-      ptechnology gettechnology_byid ( int id );
+      const Technology* gettechnology_byid ( int id );
 
       pterraintype getterraintype_bypos ( int pos );
       pobjecttype getobjecttype_bypos ( int pos );
       pvehicletype getvehicletype_bypos ( int pos );
       pbuildingtype getbuildingtype_bypos ( int pos );
-      ptechnology gettechnology_bypos ( int pos );
+      const Technology* gettechnology_bypos ( int pos );
 
       int getTerrainTypeNum ( );
       int getObjectTypeNum ( );

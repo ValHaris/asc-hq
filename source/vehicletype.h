@@ -23,6 +23,7 @@
  #include "ascstring.h"
  #include "baseaiinterface.h"
  #include "terraintype.h"
+ #include "research.h"
 
 
 //! The number of 'special' vehicle functions

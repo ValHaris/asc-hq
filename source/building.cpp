@@ -53,6 +53,8 @@
 #include "replay.h"
 #include "dashboard.h"
 #include "resourcenet.h"
+#include "research.h"
+#include "itemrepository.h"
 
 
 
@@ -420,6 +422,27 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
             trainuniticon_cb ( void );
       };
 
+      class BuildProductionLine : public generalicon_c
+      {
+         public:
+            virtual int   available    ( void ) ;
+            virtual void  exec         ( void ) ;
+            void loadspecifics( pnstream stream );
+
+            BuildProductionLine ( void );
+      };
+
+      class RemoveProductionLine : public generalicon_c
+      {
+         public:
+            virtual int   available    ( void ) ;
+            virtual void  exec         ( void ) ;
+            void loadspecifics( pnstream stream );
+
+            RemoveProductionLine ( void );
+      };
+
+
       class dissectuniticon_cb
                :	public generalicon_c,
                public cbuildingcontrols::cdissectunit
@@ -460,6 +483,8 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
                repairicon_c        repair;
                trainuniticon_cb    training;
                dissectuniticon_cb  dissect;
+               BuildProductionLine buildProductionLine;
+               RemoveProductionLine removeProductionLine;
                //fill_dialog_icon_cb filldialog;
                fill_icon_cb        fill;
                produceuniticon_cb  produceunit;
@@ -612,7 +637,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
             int research;    // 1024 ist maximale Forschung
             void checkformouse ( void );
             int gx1, gy1, gx2, gy2;
-            int materialcolor, energycolor;
+            int materialcolor, energycolor,fuelcolor;
          public:
             cresearch_subwindow ( void );
             int  subwin_available ( void );
@@ -1625,12 +1650,7 @@ int   cbuildingcontrols :: cdissectunit :: available ( pvehicle eht )
 {
    if ( eht )
       if (  cc->getspecfunc ( mbuilding ) & cgresearchb )
-         if ( actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( eht->typ ) ) {
-            if ( !actmap->player[ cc->getactplayer() ].research.vehicleclassavailable( eht->typ, eht->klasse ) )
-               return 1;
-
-         } else
-            return 1;
+         return !actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( eht->typ );
 
    return 0;
 }
@@ -5220,6 +5240,7 @@ ccontainer_b :: cresearch_subwindow :: cresearch_subwindow ( void )
    laschpic2 = icons.container.lasche.a.research[1];
    materialcolor = 125;
    energycolor = 232;
+   fuelcolor = red;
    objcoordinates[0].x1 = subwinx1 + 117;
    objcoordinates[0].y1 = subwiny1 +  95;
    objcoordinates[0].x2 = subwinx1 + 146;
@@ -5260,11 +5281,12 @@ void  ccontainer_b :: cresearch_subwindow :: display ( void )
 
    showtext2c ( "energy cost:",     subwinx1 + 8, subwiny1 + 43 );
    showtext2c ( "material cost:",   subwinx1 + 8, subwiny1 + 61 );
+   showtext2c ( "fuel cost:",       subwinx1 + 8, subwiny1 + 79 );
 
-   showtext2c ( "avail in:",        subwinx1 + 8, subwiny1 + 79 );
+   showtext2c ( "avail in:",        subwinx1 + 8, subwiny1 + 97 );
 
    //   showtext2 ( "act. technology:", subwinx1 + 195, subwiny1 + 4 );
-   showtext2c ( "change all buildings:",subwinx1+8,subwiny1 + 98 );
+   // showtext2c ( "change all buildings:",subwinx1+8,subwiny1 + 98 );
 
 
 
@@ -5278,10 +5300,9 @@ void  ccontainer_b :: cresearch_subwindow :: display ( void )
    activefontsettings.height = 0;
    activefontsettings.background = 255;
    if ( actmap->player[actmap->actplayer].research.activetechnology ) {
-      showtext2c ( actmap->player[actmap->actplayer].research.activetechnology->name, subwinx1 + 195, subwiny1 + 4 );
+      showtext2c(actmap->player[actmap->actplayer].research.activetechnology->name, subwinx1 + 195, subwiny1 + 4 );
       // showtext2 ( "avail in:", subwinx1 + 130, subwiny1 +        1 + abstand2 + abstand1 + abstand2 + abstand1 );
-   }
-   else
+   } else
       showtext2c ( "none", subwinx1 + 195, subwiny1 + 4  );
 
    npop ( activefontsettings );
@@ -5327,9 +5348,6 @@ void ccontainer_b :: cresearch_subwindow :: setnewresearch ( int res )
 
 void  ccontainer_b :: cresearch_subwindow :: displayvariables ( void )
 {
-
-   return;
-   
    int x;
 
    npush ( activefontsettings );
@@ -5340,56 +5358,54 @@ void  ccontainer_b :: cresearch_subwindow :: displayvariables ( void )
    activefontsettings.height = 0;
    activefontsettings.background = 201;
 
-   int energy = 0;
-   int material = 0;
- //   returnresourcenuseforresearch ( cc_b->building, cc_b->building->researchpoints, &energy, &material );
+   Resources res = returnResourcenUseForResearch ( cc_b->building, cc_b->building->researchpoints );
 
    showtext2c ( strrr( cc_b->building->researchpoints ), subwinx1 + 115, subwiny1 + 25 );
 
-   showtext2c ( strrr( energy ), subwinx1 + 115, subwiny1 + 43 );
-   showtext2c ( strrr( material ), subwinx1 + 115, subwiny1 + 61 );
+   showtext2c ( strrr( res.energy ), subwinx1 + 115, subwiny1 + 43 );
+   showtext2c ( strrr( res.material ), subwinx1 + 115, subwiny1 + 61 );
+   showtext2c ( strrr( res.fuel ), subwinx1 + 115, subwiny1 + 79 );
 
 
-   showtext2c ( "avail in:",        subwinx1 + 8, subwiny1 + 79 );
+   showtext2c ( "avail in:",        subwinx1 + 8, subwiny1 + 97 );
 
    int rppt = 0;
    for ( tmap::Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ )
        rppt += (*bi)->researchpoints;
 
    if ( rppt  && actmap->player[actmap->actplayer].research.activetechnology ) {
-      showtext2c ( strrr( (actmap->player[actmap->actplayer].research.activetechnology->researchpoints - actmap->player[actmap->actplayer].research.progress + rppt-1) / rppt ),  subwinx1 + 115, subwiny1 + 79 );
+      showtext2c ( strrr( (actmap->player[actmap->actplayer].research.activetechnology->researchpoints - actmap->player[actmap->actplayer].research.progress + rppt-1) / rppt ),  subwinx1 + 115, subwiny1 + 97 );
    } else
-      bar ( subwinx1 + 115, subwiny1 + 79, subwinx1 + 115 + activefontsettings.length, subwiny1 + 79 + activefontsettings.font->height, activefontsettings.background );
+      bar ( subwinx1 + 115, subwiny1 + 97, subwinx1 + 115 + activefontsettings.length, subwiny1 + 97 + activefontsettings.font->height, activefontsettings.background );
 
    activefontsettings.justify = centertext;
    activefontsettings.length = 22;
    activefontsettings.background = 255;
 
-
+/*
    putimage ( subwinx1 + 117, subwiny1 + 95, icons.container.subwin.research.button[0] );
    if ( allbuildings )
       showtext2c ( "yes", subwinx1+120, subwiny1 + 98 );
    else
       showtext2c ( "no",  subwinx1+120, subwiny1 + 98 );
+*/
 
 
    // ->typ ??
-//   returnresourcenuseforresearch ( cc_b->building, cc_b->building->maxresearchpoints, &energy, &material );
-   int max;
-   if ( energy > material )
-      max = energy * 17/16;
-   else
-      max = material * 17/16;
+   res = returnResourcenUseForResearch ( cc_b->building, cc_b->building->maxresearchpoints );
+   int mx = max ( res.energy, max(res.material,res.fuel)) * 17/16;
 
    int dist = gx2-gx1;
    for (x = dist; x >0 ; x--) {
       int res = cc_b->building->maxresearchpoints * x / dist;
-      // returnresourcenuseforresearch ( cc_b->building, res, &energy, &material );
+      Resources r = returnResourcenUseForResearch  ( cc_b->building, res );
 
 
-      if ( max ) {
-         putpixel ( gx1 + x, gy2 - ( gy2-gy1 ) * energy / max, energycolor );
-         putpixel ( gx1 + x, gy2 - ( gy2-gy1 ) * material / max, materialcolor );
+
+      if ( mx ) {
+         putpixel ( gx1 + x, gy2 - ( gy2-gy1 ) * r.energy / mx, energycolor );
+         putpixel ( gx1 + x, gy2 - ( gy2-gy1 ) * r.material / mx, materialcolor );
+         putpixel ( gx1 + x, gy2 - ( gy2-gy1 ) * r.fuel / mx, fuelcolor );
       }
 
    } /* endfor */
@@ -6136,6 +6152,138 @@ void  ccontainer_b :: cmineralresources_subwindow :: checkforkey ( tkey taste )
 
 
 
+ccontainer_b :: BuildProductionLine :: BuildProductionLine ()
+{
+   filename = "buyprodline";
+}
+
+void ccontainer_b :: BuildProductionLine :: loadspecifics( pnstream stream )
+{
+    infotext = "~B~uy production line";
+    priority = 20;
+    int w;
+    stream->readrlepict ( &picture[0], false, &w );
+    keys[0][0] = 'b' ;
+}
+
+int  ccontainer_b :: BuildProductionLine :: available ( )
+{
+   if ( main->unitmode != mproduction )
+      return 0;
+
+   if ( main->getmarkedunittype() )
+      return 0;
+
+   int count = 0;
+   for ( int i = 0; i < 32; ++i )
+      if ( cc_b->building->production[i] ) 
+         ++count;
+
+   if ( count >= 18 )
+      return 0;
+
+   return 1;
+}
+
+void ccontainer_b :: BuildProductionLine :: exec( )
+{
+   vector<ASCString> list;
+   vector<int>       idList;
+
+   Resources r = cc_b->building->getResource( Resources(maxint, maxint, maxint), 1 );
+   for ( int i = 0; i < vehicletypenum; ++i ) {
+      Vehicletype* veh = actmap->getvehicletype_bypos ( i );
+      if ( veh ) {
+         bool found = false;
+         for ( int j = 0; j< 32; ++j )
+            if ( cc_b->building->production[j] == veh )
+               found = true;
+
+
+         if ( cc_b->building->typ->vehicleFit ( veh ) && !found )
+            if ( veh->techDependency.available ( actmap->player[actmap->actplayer].research )) {
+               ASCString s;
+               if ( r < veh->productionCost * productionLineConstructionCostFactor  ) {
+                  s += "* ";
+                  idList.push_back ( -1 );
+               } else
+                  idList.push_back ( veh->id );
+               s += veh->getName() + " (E: ";
+               s += strrr ( int(productionLineConstructionCostFactor * veh->productionCost.energy ));
+               s += " M: ";
+               s += strrr ( int(productionLineConstructionCostFactor * veh->productionCost.material ));
+               s += ")";
+               list.push_back ( s );
+            }
+      }
+   }
+
+   if ( idList.size() ) {
+      int pos =  chooseString ( "Select Unit Type", list );
+      if ( pos >= 0 && pos < 255) {
+         int id = idList[pos];
+         if ( id >= 0 )
+            for ( int i = 0; i < 18; ++i ) {
+               if ( !cc_b->building->production[i] ) {
+                  Vehicletype* veh = actmap->getvehicletype_byid ( id );
+                  cc_b->building->production[i] = veh;
+                  main->movemark (repaint);
+                  main->repaintresources = 1;
+                  cc_b->building->getResource( veh->productionCost * productionLineConstructionCostFactor, 0 );
+                  break;
+               }
+            }
+         else
+            displaymessage ( "not enough resources", 1);
+      }
+   } else
+      displaymessage ( "No Unit Types researched", 1);
+}
+
+
+
+ccontainer_b :: RemoveProductionLine :: RemoveProductionLine ()
+{
+   filename = "removeprodline";
+}
+
+void ccontainer_b :: RemoveProductionLine :: loadspecifics( pnstream stream )
+{
+    infotext = "~R~emove production line";
+    priority = 10;
+    int w;
+    stream->readrlepict ( &picture[0], false, &w );
+    keys[0][0] = 'r' ;
+}
+
+int  ccontainer_b :: RemoveProductionLine :: available ( )
+{
+   if ( main->unitmode != mproduction )
+      return 0;
+
+   if ( !main->getmarkedunittype() )
+      return 0;
+
+   return 1;
+}
+
+void ccontainer_b :: RemoveProductionLine :: exec( )
+{
+   Vehicletype* veh = main->getmarkedunittype();
+
+   Resources r = cc_b->building->getResource( Resources(maxint, maxint, maxint), 1 );
+   if ( r < veh->productionCost * productionLineRemovalCostFactor  ) {
+      displaymessage("not enough resourcese to remove production line", 1 );
+      return;
+   }
+
+   if (choice_dlg("do you really want to remove this production line ?","~y~es","~n~o") == 1) {
+      cc_b->building->production[main->mark.y*unitsshownx + main->mark.x] = NULL;
+      main->movemark (repaint);
+      main->repaintresources = 1;
+      cc_b->building->getResource( veh->productionCost * productionLineConstructionCostFactor, 0 );
+   }
+}
 
 
 
@@ -6229,6 +6377,9 @@ int   ccontainer_b :: produceuniticon_cb :: available    ( void )
 {
    if ( cc_b->building->color == actmap->actplayer * 8 ) {
       if ( main->unitmode == mnormal ) {
+         if ( cc_b->building->vehiclesLoaded() >= min ( 32, cc_b->building->baseType->maxLoadableUnits ))
+            return 0;
+
          if ( main->getspecfunc ( mbuilding ) & cgvehicleproductionb ) {
             pvehicle eht = main->getmarkedunit();
             if ( eht )

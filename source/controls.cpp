@@ -61,7 +61,7 @@
 #include "itemrepository.h"
 #include "strtmesg.h"
 #include "messagedlg.h"
-// #include "mission_dialog.h"
+#include "gameevent_dialogs.h"
 
 tmoveparams moveparams;
 
@@ -767,7 +767,7 @@ void tbuildstreet::checkObject( pfield fld, pobjecttype objtype, Mode mode )
        return;
 
     if ( mode == Build ) {
-       if ( objtype->getFieldModification(fld->getweather()).terrainaccess.accessible( fld->bdt ) > 0 &&  !fld->checkforobject ( objtype ) ) {
+       if ( objtype->getFieldModification(fld->getweather()).terrainaccess.accessible( fld->bdt ) > 0 &&  !fld->checkforobject ( objtype ) && objtype->techDependency.available(actmap->player[actvehicle->getOwner()].research) ) {
           int movecost;
           Resources cost;
           getobjbuildcosts ( objtype, fld, &cost, &movecost );
@@ -1636,125 +1636,6 @@ int  Building :: getResource ( int      need,    int resourcetype, int queryonly
 
 
 
-void doresearch ( int i )
-{
-   return;
-
-   // typedef struct tresbuild* presbuild;
-
-   struct  tresbuild {
-               int        eff;
-               pbuilding  bld;
-               tresbuild  *next;
-           };
-
-
-   tresbuild* first = NULL;
-
-   for ( tmap::Player::BuildingList::iterator bi = actmap->player[i].buildingList.begin(); bi != actmap->player[i].buildingList.end(); bi++ ) {
-      pbuilding bld = *bi;
-      if ( bld->typ->special & cgresearchb ) {
-         int energy, material;
-         // returnresourcenuseforresearch ( bld, bld->researchpoints, &energy, &material );
-
-         tresbuild* a = new tresbuild;
-         if ( energy )
-            a->eff = 16384 * bld->researchpoints / energy ;
-         else
-            a->eff = maxint;
-
-         a->bld = bld;
-
-         tresbuild* b  = first;
-         tresbuild* bp = NULL;
-         while ( b && ( b->eff > a->eff ) ) {
-            bp = b;
-            b = b->next;
-         }
-
-         a->next = b;
-         if ( bp )
-            bp->next = a;
-         else
-            first = a;
-
-      }
-   }
-
-   tresbuild*  a = first;
-   while ( a ) {
-      pbuilding bld = a->bld;
-      int energy, material;
-      // returnresourcenuseforresearch ( bld, bld->researchpoints, &energy, &material );
-      int ena = bld->getResource ( energy,   0, 1 );
-      int maa = bld->getResource ( material, 1, 1 );
-
-      int res = bld->researchpoints;
-      if ( ena < energy  ||  maa < material ) {
-         int diff = bld->researchpoints / 2;
-         while ( ena < energy  ||  maa < material  || diff > 1) {
-            if ( ena < energy  ||  maa < material )
-               res -= diff;
-            else
-               res += diff;
-
-            if ( diff > 1 )
-               diff /=2;
-            else
-               diff = 1;
-
-            // returnresourcenuseforresearch ( bld, res, &energy, &material );
-         }
-
-         // returnresourcenuseforresearch ( bld, res+1, &energy, &material );
-
-         if ( ena >= energy  &&  maa >= material )
-            res++;
-         // else
-            //returnresourcenuseforresearch ( bld, res, &energy, &material );
-         
-      }
-
-      ena = bld->getResource ( energy,   0, 0 );
-      maa = bld->getResource ( material, 1, 0 );
-
-      if ( ena < energy || maa < material )
-         displaymessage( "controls : doresearch : inconsistency in getting energy or material for building", 2 );
-
-      actmap->player[i].research.progress += res;
-
-
-      a = a->next;
-
-   }
-
-   tresbuild*  b;
-   a = first;
-   while ( a ) {
-      b = a;
-      a = a->next;
-      delete b;
-   }
-}
-
-
-
-void initchoosentechnology( void )
-{
-   Player& player = actmap->player[actmap->actplayer];
-   player.research.progress = 0;
-
-   Player::DissectionContainer::iterator di = player.dissections.begin();
-   while ( di != player.dissections.end() ) {
-      if ( di->tech == player.research.activetechnology ) {
-         player.research.progress += di->points;
-         di = player.dissections.erase ( di );
-      } else
-         di++;
-   }
-}
-
-
 void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
 {
    checkalliances_at_beginofturn ();
@@ -1795,35 +1676,30 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
 
       checkforreplay();
 
-      if (actmap->player[actmap->actplayer].research.activetechnology == NULL)
+      if (actmap->player[actmap->actplayer].research.activetechnology == NULL )
          if ( actmap->player[actmap->actplayer].research.progress ) {
             int mx  = actmap->player[actmap->actplayer].research.progress;
             choosetechnology();
-            initchoosentechnology();
+            actmap->player[actmap->actplayer].research.initchoosentechnology();
             actmap->player[actmap->actplayer].research.progress += mx;
          }
-      if (actmap->player[actmap->actplayer].research.activetechnology != NULL) {
-         while ((actmap->player[actmap->actplayer].research.activetechnology != NULL) &&
-                (actmap->player[actmap->actplayer].research.progress >= actmap->player[actmap->actplayer].research.activetechnology->researchpoints))
-                {
-                 int mx = actmap->player[actmap->actplayer].research.progress -
-                      actmap->player[actmap->actplayer].research.activetechnology->researchpoints;
-                 #if 0
-                 showtechnology(actmap->player[actmap->actplayer].research.activetechnology);
+      while ((actmap->player[actmap->actplayer].research.activetechnology != NULL ) &&
+             (actmap->player[actmap->actplayer].research.progress >= actmap->player[actmap->actplayer].research.activetechnology->researchpoints)) {
+              int mx = actmap->player[actmap->actplayer].research.progress -  actmap->player[actmap->actplayer].research.activetechnology->researchpoints;
 
-                 NewVehicleTypeDetection pfzt;
+              showtechnology(actmap->player[actmap->actplayer].research.activetechnology);
 
-                 actmap->player[actmap->actplayer].research.addtechnology();
+              NewVehicleTypeDetection pfzt;
 
-                 pfzt.evalbuffer ();
+              actmap->player[actmap->actplayer].research.addtechnology();
+
+              pfzt.evalbuffer ();
 
 
-                 choosetechnology();
-                 initchoosentechnology();
-                 #endif
+              choosetechnology();
+              actmap->player[actmap->actplayer].research.initchoosentechnology();
 
-                 actmap->player[actmap->actplayer].research.progress += mx;
-         }
+              actmap->player[actmap->actplayer].research.progress += mx;
       }
 
       if ( actmap->lastjournalchange.abstime )
@@ -2172,16 +2048,21 @@ void continuenetworkgame ( void )
 
 
 
+
+
+
+
 void dissectvehicle ( pvehicle eht )
 {
+/*
   int i,j,k;
 
    ptechnology techs[32];
    int technum = 0;
    memset ( techs, 0, sizeof ( techs ));
-   for (i = 0; i <= eht->klasse; i++) 
+   for (i = 0; i <= eht->klasse; i++)
       for (j = 0; j < 4; j++ )
-         if ( eht->typ->classbound[i].techrequired[j] ) 
+         if ( eht->typ->classbound[i].techrequired[j] )
            if ( !actmap->player[actmap->actplayer].research.technologyresearched ( eht->typ->classbound[i].techrequired[j] )) {
                int found =  0;
                for (k = 0; k < technum; k++ )
@@ -2201,7 +2082,7 @@ void dissectvehicle ( pvehicle eht )
       if ( player.research.activetechnology != techs[i] ) {
 
          int found = 0;     // Bit 1: Technologie gefunden
-                            //     2: vehicletype gefunden      
+                            //     2: vehicletype gefunden
                             //     3: Technologie+vehicletype gefunden
 
          Player::DissectionContainer::iterator di = player.dissections.begin();
@@ -2211,13 +2092,13 @@ void dissectvehicle ( pvehicle eht )
                   found |= 4;
                else
                   found |= 2;
-            
+
             if ( di->tech == techs[i] )
                found |= 1;
-      
+
             di++;
          }
-   
+
          if ( found & 4 ) {
             di = player.dissections.begin();
             while ( di != player.dissections.end() ) {
@@ -2233,21 +2114,22 @@ void dissectvehicle ( pvehicle eht )
 
             du.tech = techs[i];
             du.fzt = getvehicletype_forid ( eht->typ->id );
-   
+
             if ( found & 1 )
                du.orgpoints = du.tech->researchpoints / dissectunitresearchpointsplus2;
             else
                du.orgpoints = du.tech->researchpoints / dissectunitresearchpointsplus;
-   
+
             du.points = du.orgpoints;
             du.num = 1;
 
             player.dissections.push_back ( du );
          }
-      } else 
+      } else
          player.research.progress+= techs[i]->researchpoints / dissectunitresearchpointsplus;
 
    }
+   */
 }
 
 
@@ -2257,22 +2139,15 @@ void         generatevehicle_cl ( pvehicletype fztyp,
                                   pvehicle &   vehicle,
                                   int          x,
                                   int          y )
-{ 
+{
    if ( actmap->player[ actmap->actplayer ].research.vehicletypeavailable ( fztyp ) ) {
 
       vehicle = new Vehicle ( fztyp, actmap, col );
-      if ( fztyp->classnum )
-        for (int i = 0; i < fztyp->classnum ; i++ ) 
-           if ( actmap->player[ actmap->actplayer ].research.vehicleclassavailable( fztyp, i ) )
-              vehicle->klasse = i;
-           else
-              break;
               
-      logtoreplayinfo ( rpl_produceunit, (int) fztyp->id , (int) col * 8, x, y, (int) vehicle->klasse, (int) vehicle->networkid );
+      logtoreplayinfo ( rpl_produceunit, (int) fztyp->id , (int) col * 8, x, y, int(0), (int) vehicle->networkid );
 
       vehicle->xpos = x;
       vehicle->ypos = y;
-      vehicle->setup_classparams_after_generation ();
 
       int height = -1;
       int maxmove = -1;
@@ -2283,8 +2158,7 @@ void         generatevehicle_cl ( pvehicletype fztyp,
                height = h;
             }
       vehicle->height = 1 << height;
-      // vehicle->setMovement ( vehicle->maxMovement() );
-      vehicle->setMovement ( 0 );
+      vehicle->setMovement ( vehicle->maxMovement() );
 
 
 

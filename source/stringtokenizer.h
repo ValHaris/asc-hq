@@ -41,5 +41,15 @@
        ASCString getRemaining ( );
  };
 
+  class StringSplit {
+       const ASCString& str;
+       int i;
+       ASCString delimitter;
+       bool isDelimitter ( char c );
+     public:
+       StringSplit ( const ASCString& _str, const ASCString& delimitter_ );
+       ASCString getNextToken ( );
+  };
+
 
 #endif

@@ -1021,13 +1021,14 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
                               if (d <= angreifer->typ->weapons.weapon[i].maxdistance)
                                  if (d >= angreifer->typ->weapons.weapon[i].mindistance) {
                                     if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight)
-                                       if (angreifer->ammo[i] > 0) {
-                                          atw->strength[atw->count ] = angreifer->weapstrength[i];
-                                          atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType() ;
-                                          atw->num[atw->count ] = i;
-                                          atw->target = AttackWeap::building;
-                                          atw->count++;
-                                       }
+                                       if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), tm)] )
+                                          if (angreifer->ammo[i] > 0) {
+                                             atw->strength[atw->count ] = angreifer->weapstrength[i];
+                                             atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType() ;
+                                             atw->num[atw->count ] = i;
+                                             atw->target = AttackWeap::building;
+                                             atw->count++;
+                                          }
 
                                  }
                            }
@@ -1046,6 +1047,9 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
             for ( int i = 0; i <= angreifer->typ->weapons.count - 1; i++)
                if (angreifer->typ->weapons.weapon[i].shootable() )
                   if ( angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwcannonn ||
+                       angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwlasern ||
+                       angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwcruisemissile ||
+                       angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwairmissilen ||
                        angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwbombn ) {
                      if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[cmm_building] )
                         if (chfahrend & angreifer->typ->weapons.weapon[i].targ ) {
@@ -1054,13 +1058,14 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
                               if (d <= angreifer->typ->weapons.weapon[i].maxdistance)
                                  if (d >= angreifer->typ->weapons.weapon[i].mindistance) {
                                     if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
-                                       if (angreifer->ammo[i] > 0) {
-                                          atw->strength[atw->count ] = angreifer->weapstrength[i];
-                                          atw->num[atw->count ] = i;
-                                          atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
-                                          atw->target = AttackWeap::object;
-                                          atw->count++;
-                                       }
+                                       if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), chfahrend)] )
+                                          if (angreifer->ammo[i] > 0) {
+                                             atw->strength[atw->count ] = angreifer->weapstrength[i];
+                                             atw->num[atw->count ] = i;
+                                             atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
+                                             atw->target = AttackWeap::object;
+                                             atw->count++;
+                                          }
 
                                  }
                            }

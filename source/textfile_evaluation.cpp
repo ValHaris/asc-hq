@@ -813,7 +813,7 @@ IntRangeArrayProperty::PropertyType IntRangeArrayProperty::operation_eq ( const 
 {
    PropertyType ira;
 
-   StringTokenizer st ( entry.value, true );
+   StringSplit st ( entry.value, ";, " );
    ASCString s = st.getNextToken();
    while ( !s.empty() ) {
       if ( s.find ( "-" ) != ASCString::npos ) {

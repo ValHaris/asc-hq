@@ -25,24 +25,25 @@
 #include "vehicletype.h"
 #include "objecttype.h"
 #include "buildingtype.h"
+#include "research.h"
 
 extern pterraintype getterraintype_forid ( int id );
 extern pobjecttype getobjecttype_forid ( int id );
 extern pvehicletype getvehicletype_forid ( int id );
 extern pbuildingtype getbuildingtype_forid ( int id );
-extern ptechnology gettechnology_forid ( int id );
+extern const Technology* gettechnology_forid ( int id );
 
 extern pterraintype getterraintype_forpos ( int pos );
 extern pobjecttype getobjecttype_forpos ( int pos );
 extern pvehicletype getvehicletype_forpos ( int pos );
 extern pbuildingtype getbuildingtype_forpos ( int pos );
-extern ptechnology gettechnology_forpos ( int pos );
+extern const Technology* gettechnology_forpos ( int pos );
 
 extern void addterraintype ( pterraintype bdt );
 extern void addobjecttype ( pobjecttype obj );
 extern void addvehicletype ( pvehicletype vhcl );
 extern void addbuildingtype ( pbuildingtype bld );
-extern void addtechnology ( ptechnology tech );
+extern void addtechnology ( const Technology* tech );
 
 
 typedef dynamic_array<pvehicletype> VehicleTypeVector;
@@ -63,6 +64,7 @@ extern void  loadallvehicletypes(void);
 extern void  loadallterraintypes(void);
 extern void  loadalltechnologies(void);
 extern void  loadallobjecttypes ( void );
+extern void  loadalltechadapter();
 extern void  freetextdata();
 
 extern pobjecttype eisbrecherobject;
@@ -76,6 +78,9 @@ extern int  objecttypenum;
 
 typedef map<ASCString,TextPropertyList> TextFileRepository;
 extern TextFileRepository textFileRepository;
+
+typedef  vector<const TechAdapter*> TechAdapterContainer;
+extern TechAdapterContainer techAdapterContainer;
 
 
 class ItemFiltrationSystem {
