@@ -4,13 +4,8 @@
   <MACROS>
     <VERSION value="BCB.06.00"/>
     <PROJECT value="weaponguide.exe"/>
-    <OBJFILES value="..\..\..\..\asc\source\tools\win\obj\weaponguide.obj 
-      ..\..\..\..\asc\source\tools\win\obj\itemrepository.obj 
-      ..\..\..\..\asc\source\tools\win\obj\research.obj 
-      ..\..\..\..\asc\source\tools\win\obj\groupfile.obj 
-      ..\..\..\..\asc\source\tools\win\obj\guidegenerator.obj 
-      ..\..\..\..\asc\source\tools\win\obj\infopage.obj 
-      ..\..\..\..\asc\source\tools\win\obj\sgstream.obj"/>
+    <OBJFILES value="obj\weaponguide.obj obj\itemrepository.obj obj\research.obj 
+      obj\groupfile.obj obj\guidegenerator.obj obj\infopage.obj obj\sgstream.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -143,7 +138,7 @@ Item1=C:\Programme\ascsrc\games\asc\source\tools\win
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=-c C:\Programme\ascdev\asc\source\win32\borland\asc.ini  -i -d C:\wg-test\online\html -l html/ -z 48 -s 1400 --roottech 101000,101913
+RunParams=-c C:\Programme\ascdev\asc\source\win32\borland\asc.ini  -i -d C:\wg-test\online\html -l html/ -z 48 -s 100 --roottech 101000,101913
 Launcher=
 UseLauncher=0
 DebugCWD=

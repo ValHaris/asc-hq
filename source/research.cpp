@@ -174,6 +174,16 @@ void TechDependency::writeTreeOutput ( const ASCString& sourceTechName, tnstream
       }
 }
 
+ASCString generateTechName( const Technology* tech )
+{
+   ASCString s = ASCString(strrr(tech->id)) + "-";
+   ASCString stn = tech->name;
+
+   while ( stn.find ( "\"" ) != ASCString::npos )
+      stn.erase ( stn.find ( "\"" ),1 );
+
+   return s + stn;
+}
 
 void TechDependency::writeInvertTreeOutput ( const Technology* tech, tnstream& stream, vector<int>& history, const vector<IntRange>* onlyWithBaseTechs ) const
 {
@@ -184,7 +194,7 @@ void TechDependency::writeInvertTreeOutput ( const Technology* tech, tnstream& s
          for ( int j = i->from; j <= i->to; ++j )
             if ( findInheritanceLevel ( j, inheritanceStack, "" ) >= 0 )
                found = true;
-               
+
       if ( !found )
          return;
    }
@@ -194,17 +204,12 @@ void TechDependency::writeInvertTreeOutput ( const Technology* tech, tnstream& s
          const Technology* t = technologyRepository.getObject_byID( k );
          if ( t ) {
             ASCString s = "\"";
-            ASCString stn = tech->name;
-
-            while ( stn.find ( "\"" ) != ASCString::npos )
-               stn.erase ( stn.find ( "\"" ),1 );
+            ASCString stn = generateTechName( tech );
 
             s += stn;
             s += "\" -> \"";
 
-            ASCString stn2 = t->name;
-            while ( stn2.find ( "\"" ) != ASCString::npos )
-               stn2.erase ( stn2.find ( "\"" ),1 );
+            ASCString stn2 = generateTechName( t );
 
             s += stn2 + "\"";
 
@@ -215,7 +220,15 @@ void TechDependency::writeInvertTreeOutput ( const Technology* tech, tnstream& s
 
             stream.writeString ( s, false );
 
-            stream.writeString ( "\"" + stn + "\" [color=black label=\"" + stn + "\\n" + strrr(tech->researchpoints) + " RP\"] \n", false );	    
+            ASCString s2 = tech->name;
+            while ( s2.find ( "\"" ) != ASCString::npos )
+               s2.erase ( s2.find ( "\"" ),1 );
+
+
+            s = "\"" + stn + "\" [color=black label=\"" + s2 + "\\n";
+//            s += "ID " + ASCString(strrr( tech->id)) + "; ";
+            s += ASCString(strrr(tech->researchpoints)) + " RP\"] \n";
+            stream.writeString ( s, false );
             if ( find ( history.begin(), history.end(), t->id) == history.end()) {
                history.push_back ( t->id );	       
                t->techDependency.writeInvertTreeOutput ( t, stream, history );
@@ -245,15 +258,10 @@ void TechDependency::writeInvertTreeOutput ( const ASCString techName, tnstream&
             ASCString s = "\"";
             ASCString stn = techName;
 
-            while ( stn.find ( "\"" ) != ASCString::npos )
-               stn.erase ( stn.find ( "\"" ),1 );
-
             s += stn;
             s += "\" -> \"";
 
-            ASCString stn2 = t->name;
-            while ( stn2.find ( "\"" ) != ASCString::npos )
-               stn2.erase ( stn2.find ( "\"" ),1 );
+            ASCString stn2 = generateTechName( t );
 
             s += stn2 + "\"";
 
