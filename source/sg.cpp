@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.51 2000-06-19 20:05:06 mbickel Exp $
+//     $Id: sg.cpp,v 1.52 2000-06-22 12:36:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2000/06/19 20:05:06  mbickel
+//      Fixed crash when transfering ammo to vehicle with > 8 weapons
+//
 //     Revision 1.50  2000/06/09 13:12:26  mbickel
 //      Fixed tribute function and renamed it to "transfer resources"
 //
@@ -2302,11 +2305,12 @@ void execuseraction ( tuseractions action )
                                        else
                                           displaymessage("units that can not move and cannot shoot will now be displayed gray", 3);
                        break;
+/*
         case ua_computerturn:          displaymessage("This function is under development and for programmers only\n"
                                                       "unpredicatable things may happen ...",3 ) ;
                                         if (choice_dlg("do you really want to start the AI?","~y~es","~n~o") == 1) 
                                            computerturn();
-                       break; 
+                       break;  */
         case ua_setupnetwork:       if ( actmap->network )
                                        setupnetwork ( actmap->network );
                                     else
