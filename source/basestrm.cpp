@@ -1,6 +1,10 @@
-//     $Id: basestrm.cpp,v 1.22 2000-05-30 18:39:20 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.23 2000-05-30 19:59:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/05/30 18:39:20  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.21  2000/05/22 15:40:30  mbickel
 //      Included patches for Win32 version
 //
@@ -976,7 +980,7 @@ void locateFile ( const char* filename, FileLocation* loc )
    ContainerCollector::FileIndex* idx = containercollector.getfile ( filename );
    int maxnum;
    if ( idx ) {
-      maxnum = idx->directoryLevel;
+      maxnum = idx->directoryLevel+1;
       loc->directoryLevel = idx->directoryLevel;
       loc->found = 1;
       loc->container = idx->container;
