@@ -1,6 +1,9 @@
-//     $Id: gamedlg.h,v 1.8 2000-08-12 12:52:48 mbickel Exp $
+//     $Id: gamedlg.h,v 1.9 2000-08-13 09:54:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/08/12 12:52:48  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.7  2000/08/12 09:17:28  gulliver
 //     *** empty log message ***
 //
@@ -241,6 +244,17 @@ extern void giveunitaway ( void );
 
 extern void settechlevel ( int techlevel, int playerBM );
 extern void showGameParameters ( void );
+
+extern void  verlademunition(pvehicle     vehicle,
+                             pvehicle     vehicle2,
+                             pbuilding    building,
+                             int          fast);
+              /*  entweder muá vehicle2 oder building = NULL sein  */ 
+     /* fast: */
+     /*  0: innen dialog  */ 
+     /*  1: innen fast  */ 
+     /*  2: auáen dialog  */ 
+     /*  3: auáen fast  */ 
 
 
 #endif

@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.65 2000-08-12 15:03:19 mbickel Exp $
+//     $Id: controls.cpp,v 1.66 2000-08-13 09:53:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.65  2000/08/12 15:03:19  mbickel
+//      Fixed bug in unit movement
+//      ASC compiles and runs under Linux again...
+//
 //     Revision 1.64  2000/08/12 12:52:42  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -6951,6 +6955,21 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writedata2 ( size );
          stream->writedata2 ( actmap->alliances );
       }
+      if ( action == rpl_refuel ) {
+         int x =  va_arg ( paramlist, int );
+         int y =  va_arg ( paramlist, int );
+         int nwid = va_arg ( paramlist, int );
+         int pos = va_arg ( paramlist, int );
+         int amnt = va_arg ( paramlist, int );
+         stream->writedata2 ( action );
+         int size = 5;
+         stream->writedata2 ( size );
+         stream->writedata2 ( x );
+         stream->writedata2 ( y );
+         stream->writedata2 ( nwid );
+         stream->writedata2 ( pos );
+         stream->writedata2 ( amnt );
+      }
 
       va_end ( paramlist );
 
@@ -7506,7 +7525,33 @@ void trunreplay :: execnextreplaymove ( void )
                                  dashboard.x = 0xffff;
                               }
          break;
-         
+      case rpl_refuel : {
+                                 int x, y, size, nwid, pos, amnt;
+                                 stream->readdata2 ( size );
+                                 stream->readdata2 ( x );
+                                 stream->readdata2 ( y );
+                                 stream->readdata2 ( nwid );
+                                 stream->readdata2 ( pos );
+                                 stream->readdata2 ( amnt );
+                                 readnextaction();
+
+                                 pvehicle eht = actmap->getunit ( x, y, nwid );
+                                 if ( eht ) {
+                                    if ( pos < 16 )
+                                       eht->ammo[pos] = amnt;
+                                     else {
+                                        switch ( pos ) {
+                                        case 1000: eht->energy = amnt;
+                                           break;
+                                        case 1001: eht->material = amnt;
+                                           break;
+                                        case 1002: eht->fuel = amnt;
+                                           break;
+                                        } /* endswitch */
+                                     }
+                                 } else 
+                                    displaymessage("severe replay inconsistency:\nno vehicle for refuel-unit command !", 1);
+                              }
       default:{
                  int size, temp;
                  stream->readdata2 ( size );

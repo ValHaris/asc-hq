@@ -1,6 +1,9 @@
-//     $Id: controls.h,v 1.20 2000-08-12 12:52:43 mbickel Exp $
+//     $Id: controls.h,v 1.21 2000-08-13 09:53:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/08/12 12:52:43  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.19  2000/08/12 09:17:21  gulliver
 //     *** empty log message ***
 //
@@ -425,7 +428,8 @@ extern void addanytechnology ( ptechnology tech, int player );
 
 enum trpl_actions { rpl_attack, rpl_move, rpl_changeheight, rpl_convert, rpl_remobj, rpl_buildobj, rpl_putbuilding, 
                     rpl_removebuilding, rpl_putmine, rpl_removemine, rpl_produceunit, rpl_removeunit, rpl_trainunit, 
-                    rpl_reactionfire, rpl_finished, rpl_shareviewchange, rpl_alliancechange, rpl_move2, rpl_buildtnk }; 
+                    rpl_reactionfire, rpl_finished, rpl_shareviewchange, rpl_alliancechange, rpl_move2, rpl_buildtnk,
+                    rpl_refuel }; 
 
 extern void         destructbuildinglevel2( int xp, int yp);
 extern void         destructbuildinglevel1( int xp, int yp);

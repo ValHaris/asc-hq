@@ -1,7 +1,10 @@
-//     $Id: dialog.h,v 1.10 2000-08-12 12:52:45 mbickel Exp $
+//     $Id: dialog.h,v 1.11 2000-08-13 09:54:00 mbickel Exp $
 
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/08/12 12:52:45  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.9  2000/08/06 11:38:48  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -283,17 +286,6 @@ extern void resizemap ( void );
 #ifdef FREEMAPZOOM
 extern void choosezoomlevel ( void );
 #endif
-
-extern void  verlademunition(pvehicle     vehicle,
-                             pvehicle     vehicle2,
-                             pbuilding    building,
-                             int          fast);
-              /*  entweder muá vehicle2 oder building = NULL sein  */ 
-     /* fast: */
-     /*  0: innen dialog  */ 
-     /*  1: innen fast  */ 
-     /*  2: auáen dialog  */ 
-     /*  3: auáen fast  */ 
 
 extern void viewterraininfo ( void );
 

@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.43 2000-08-12 09:17:16 gulliver Exp $
+//     $Id: building.cpp,v 1.44 2000-08-13 09:53:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2000/08/12 09:17:16  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.42  2000/08/11 11:38:26  mbickel
 //      Enabled resource control subwindow in BI resource mode
 //
@@ -532,6 +535,7 @@ void  ccontainercontrols :: crefill :: fuel (pvehicle eht, int newfuel)
       delta = cc->putfuel ( delta );
       eht->fuel -= delta;
    }
+   logtoreplayinfo ( rpl_refuel, eht->xpos, eht->ypos, eht->networkid, int(1002), newfuel );
 };
 
 
@@ -550,6 +554,7 @@ void  ccontainercontrols :: crefill :: material (pvehicle eht, int newmaterial)
       delta = cc->putmaterial ( delta );
       eht->material -= delta;
    }
+   logtoreplayinfo ( rpl_refuel, eht->xpos, eht->ypos, eht->networkid, int(1001), newmaterial );
 };
 
 
@@ -568,6 +573,7 @@ void  ccontainercontrols :: crefill :: ammunition (pvehicle eht, char weapon, in
          eht->ammo[weapon] = newa;
       }
    }
+   logtoreplayinfo ( rpl_refuel, eht->xpos, eht->ypos, eht->networkid, int(weapon), newa );
 
 };
 

@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.54 2000-08-12 12:52:51 mbickel Exp $
+//     $Id: spfst.cpp,v 1.55 2000-08-13 09:54:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2000/08/12 12:52:51  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.53  2000/08/12 09:17:34  gulliver
 //     *** empty log message ***
 //
@@ -286,6 +289,7 @@
 
 #ifndef karteneditor
   #include "missions.h"
+  #include "gamedlg.h"
 #endif
 
 #include "dialog.h"
@@ -6634,8 +6638,11 @@ void tvehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
                if ( functions & (cffuelref | cfmaterialref) )
                   refuel = 1; 
             }
+#ifdef sgmain
       if ( refuel ) 
          verlademunition( v, this ,NULL, 3 ); 
+#endif
+
       v->attacked = 1;
       
 
