@@ -480,7 +480,9 @@ AI::AiResult AI::tactics( void )
       pvehicle veh = *vi;
 
       bool unitUsable = false;
-      if ( veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_fight || veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_undefined )
+      if ( veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_fight
+        || veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_undefined
+        || (veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_guard && veh->aiparam[ getPlayerNum() ]->dest_nwid == -1 && veh->aiparam[ getPlayerNum() ]->dest.x == -1 ))
          for ( int j = 0; j < tsk_num; j++ )
             if ( veh->aiparam[ getPlayerNum() ]->getTask() == tasks[j] )
                unitUsable = true;

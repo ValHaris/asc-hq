@@ -418,7 +418,7 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
             int fullfillableServices = 0;
             int partlyFullfillabelServices = 0;
             switch ( so.requiredService ) {
-               case VehicleService::srv_repair : if ( bld->canRepair() ) {
+               case VehicleService::srv_repair : if ( bld->canRepair( veh ) ) {
                                                     int mr =  bld->getMaxRepair( veh );
                                                     if ( mr == 0 )
                                                        fullfillableServices++;

@@ -2,9 +2,14 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.122 2003-01-28 17:48:42 mbickel Exp $
+//     $Id: dialog.cpp,v 1.123 2003-02-11 17:35:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.122  2003/01/28 17:48:42  mbickel
+//      Added sounds
+//      Rewrote soundsystem
+//      Fixed: tank got stuck when moving from one transport ship to another
+//
 //     Revision 1.121  2003/01/06 16:52:04  mbickel
 //      Fixed: units inside transports got wrong movement when moved out
 //      Fixed: wind not displayed correctly
@@ -3702,6 +3707,10 @@ void viewVisibilityStatistics()
 {
    ASCString msg;
 
+   tmap::Shareview* sv = actmap->shareview;
+   actmap->shareview = NULL;
+   computeview ( actmap );
+
    for ( int i = 0; i < 8; i++ )
       if ( actmap->player[i].exist() ) {
          msg += ASCString("#font02#Player ") + strrr ( i ) + "#font01#\n" ;
@@ -3723,6 +3732,11 @@ void viewVisibilityStatistics()
          msg += ASCString("  fog of war: ") + strrr(fogOfWar ) + " fields\n";
          msg += ASCString("  visible: ") + strrr(visible ) + " fields\n\n";
       }
+
+
+   actmap->shareview = sv;
+   computeview ( actmap );
+
 
    tviewanytext vat;
    vat.init ( "Visibility Statistics", msg.c_str() );
@@ -4314,7 +4328,7 @@ void         tsetalliances::buttonpressed( int id )
                     ASCString filename;
                     fileselectsvga(mapextension, filename, false);
                     for ( int i = 0; i < 8; i++ )
-                       if ( actmap->player[i].exist() ) {
+                       if ( actmap->player[i].stat != Player::off ) {
                           if (choice_dlg("do you want to reset the view for player %d ?","~y~es","~n~o", i) == 1)
                              for ( int x = 0; x < actmap->xsize; x++ )
                                 for ( int y = 0; y < actmap->ysize; y++ )
@@ -5410,8 +5424,9 @@ void         tgameparamsel ::setup(void)
    ey = ysize - 90;
    startpos = lastchoice;
    addbutton("~O~k",20,ysize - 50,xsize-20,ysize - 20,0,1,13,true);
-   addbutton("~E~dit Selected",20,ysize - 80,xsize/2-5,ysize - 60,0,1,12,true);
-   addbutton("~D~escription",  xsize/2+5,ysize - 80,xsize-20,ysize - 60,0,1,14,true);
+   addbutton("~E~dit Selected",20,ysize - 80,xsize/3-5,ysize - 60,0,1,12,true);
+   addbutton("~D~escription",  xsize/3+5,ysize - 80,xsize/3*2-5,ysize - 60,0,1,14,true);
+   addbutton("~R~eset all",xsize/3*2+5,ysize - 80,xsize-20,ysize - 60,0,1,17,true);
    addkey ( 13, ct_esc );
    addkey ( 14, ct_f1 );
 }
@@ -5433,6 +5448,11 @@ void         tgameparamsel ::buttonpressed(int         id)
                     help ( 800+redline);
                  else
                     displaymessage ( "Please select an entry first", 3);
+                 break;
+      case 17:   delete actmap->game_parameter;
+                 actmap->game_parameter = NULL;
+                 actmap->gameparameter_num = 0;
+                 viewtext();
                  break;
    }
 }
