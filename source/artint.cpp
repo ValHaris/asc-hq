@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.24 2000-09-10 10:19:50 mbickel Exp $
+//     $Id: artint.cpp,v 1.25 2000-09-17 15:17:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/09/10 10:19:50  mbickel
+//      AI improvements
+//
 //     Revision 1.23  2000/09/07 16:42:27  mbickel
 //      Made some adjustments so that ASC compiles with Watcom again...
 //
@@ -140,6 +143,7 @@
 #include <stdlib.h>
 #include <malloc.h>
 #include <math.h>
+#include <algorithm>
 
 #include "artint.h"
 
@@ -158,11 +162,11 @@
 #include "dialog.h"
 #include "timer.h"
 #include "gamedlg.h"
-//#include "building.h"
 #include "attack.h"
 #include "gameoptions.h"
 #include "astar2.h"
 
+#include "building_controls.h"
 
 
 
@@ -832,7 +836,7 @@ void    AI :: setup (void)
    displaymessage2("setup completed ... ");
 }
 
-void AI :: searchTargets ( pvehicle veh, int x, int y, TargetList* tl, int moveDist )
+void AI :: searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int moveDist )
 {
    npush ( veh->xpos );
    npush ( veh->ypos );
@@ -841,7 +845,9 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetList* tl, int moveD
    veh->xpos = x;
    veh->ypos = y;
    veh->addview();
-   evaluateviewcalculation ( 1 << activemap->playerview );
+
+   if ( activemap->playerView >= 0 )
+      evaluateviewcalculation ( 1 << activemap->playerView );
 
    VehicleAttack va ( NULL, NULL );
    if ( va.available ( veh )) {
@@ -862,18 +868,20 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetList* tl, int moveD
                targdamage = uau.dv.damage;
                weapstrength = aw->strength[w];
             } else
-            if ( uau.dv.damage == 100 )
-               if ( weapstrength == -1 || weapstrength > aw->strength[w] ) {
-                  bestweap = aw->num[w];
-                  targdamage = uau.dv.damage;
-                  weapstrength = aw->strength[w];
-               }
+               if ( uau.dv.damage == 100 )
+                  if ( weapstrength == -1 || weapstrength > aw->strength[w] ) {
+                     bestweap = aw->num[w];
+                     targdamage = uau.dv.damage;
+                     weapstrength = aw->strength[w];
+                  }
          }
 
          if ( bestweap == -1 )
             displaymessage ( "inconsistency in AI :: searchTarget", 1 );
 
-         MoveVariant* mv = &(*tl)[tl->getlength()+1 ];  // sometime this should all be modified to use the STL...
+
+         MoveVariant* mv = new MoveVariant;
+         tl.push_back ( mv );
 
          tunitattacksunit uau ( veh, getfield ( xp, yp)->vehicle, 1, bestweap );
          mv->orgDamage = uau.av.damage;
@@ -892,6 +900,10 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetList* tl, int moveD
          mv->weapNum = bestweap;
          mv->moveDist = moveDist;
 
+         mv->result = int ((mv->enemyDamage - mv->enemyOrgDamage) * mv->enemy->aiparam[getPlayer()]->value - config.aggressiveness * (mv->damageAfterAttack - mv->orgDamage) * veh->aiparam[getPlayer()]->value );
+         if ( mv->enemyDamage >= 100 )
+            mv->result += mv->enemy->aiparam[getPlayer()]->value * attack_unitdestroyed_bonus;
+
       }
    }
 
@@ -900,7 +912,113 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetList* tl, int moveD
    npop ( veh->xpos );
 
    veh->addview();
-   evaluateviewcalculation ( 1 << activemap->playerview );
+
+   if ( activemap->playerView >= 0 )
+      evaluateviewcalculation ( 1 << activemap->playerView );
+}
+
+bool operator > ( const AI::MoveVariant& mv1, const AI::MoveVariant& mv2 )
+{
+   return ( mv1.result > mv2.result || (mv1.result == mv2.result && mv1.moveDist < mv2.moveDist ));
+}
+
+bool moveVariantComp ( const AI::MoveVariant* mv1, const AI::MoveVariant* mv2 )
+{
+   return ( mv1->result < mv2->result || (mv1->result == mv2->result && mv1->moveDist > mv2->moveDist ));
+}
+
+void AI::getAttacks ( const VehicleMovement& vm, pvehicle veh, TargetVector& tv )
+{
+   int orgxpos = veh->xpos ;
+   int orgypos = veh->ypos ;
+
+   if ( getfield ( veh->xpos, veh->ypos )->vehicle == veh )  // unit not inside a building or transport
+      searchTargets ( veh, veh->xpos, veh->ypos, tv, 0 );
+
+   // Now we cycle through all fields that are reachable...
+   if ( !veh->typ->wait )
+      for ( int f = 0; f < vm.reachableFields.getFieldNum(); f++ )
+         if ( !vm.reachableFields.getField( f )->vehicle && !vm.reachableFields.getField( f )->building ) {
+             int xp, yp;
+             vm.reachableFields.getFieldCoordinates ( f, &xp, &yp );
+             searchTargets ( veh, xp, yp, tv, beeline ( xp, yp, orgxpos, orgypos ) );
+          }
+}
+
+void AI::executeMoveAttack ( pvehicle veh, TargetVector& tv )
+{
+   MoveVariant* mv = *max_element( tv.begin(), tv.end(), moveVariantComp );
+
+   if ( mv->movex != veh->xpos || mv->movey != veh->ypos ) {
+      VehicleMovement vm2 ( mapDisplay, NULL );
+      vm2.execute ( veh, -1, -1, 0, -1, -1 );
+      if ( vm2.getStatus() != 2 )
+         displaymessage ( "AI :: tactics \n error in movement step 0 with unit %d", 1, veh->networkid );
+
+      vm2.execute ( NULL, mv->movex, mv->movey, 2, -1, -1 );
+      if ( vm2.getStatus() != 3 )
+         displaymessage ( "AI :: tactics \n error in movement step 2 with unit %d", 1, veh->networkid );
+
+      vm2.execute ( NULL, mv->movex, mv->movey, 3, -1,  1 );
+      if ( vm2.getStatus() != 1000 )
+         displaymessage ( "AI :: tactics \n error in movement step 3 with unit %d", 1, veh->networkid );
+   }
+
+   VehicleAttack va ( mapDisplay, NULL );
+   va.execute ( veh, -1, -1, 0 , 0, -1 );
+   if ( va.getStatus() != 2 )
+      displaymessage ( "AI :: tactics \n error in attack step 2 with unit %d", 1, veh->networkid );
+
+   va.execute ( NULL, mv->attackx, mv->attacky, 2 , -1, mv->weapNum );
+   if ( va.getStatus() != 1000 )
+      displaymessage ( "AI :: tactics \n error in attack step 3 with unit %d", 1, veh->networkid );
+
+   VehicleMovement vm3 ( mapDisplay, NULL );
+   if ( vm3.available ( veh ))
+      moveToSavePlace ( veh, vm3 );
+}
+
+
+void AI::moveToSavePlace ( pvehicle veh, VehicleMovement& vm3 )
+{
+   vm3.execute ( veh, -1, -1, 0, -1, -1 );
+   if ( vm3.getStatus() != 2 )
+      displaymessage ( "AI :: tactics \n error in movement3 step 0 with unit %d", 1, veh->networkid );
+
+   int xtogo = veh->xpos;
+   int ytogo = veh->ypos;
+   int threat = maxint;
+
+   if ( getfield ( veh->xpos, veh->ypos)->vehicle == veh ) {  // vehicle not in building / transport
+      threat = int( getFieldThreat ( veh->xpos, veh->ypos).threat[ veh->aiparam[ getPlayer()]->valueType] * 1.5 );
+       // multiplying with 1.5 to make this field a bit unattractive, to allow other units (for example buggies) to attack from this field to, since it is probably quite a good position (else it would not have been chosen)
+   }
+
+   for ( int f = 0; f < vm3.reachableFields.getFieldNum(); f++ )
+      if ( !vm3.reachableFields.getField( f )->vehicle && !vm3.reachableFields.getField( f )->building ) {
+         int x,y;
+         vm3.reachableFields.getFieldCoordinates ( f, &x, &y );
+         AiThreat& ait = getFieldThreat ( x, y );
+
+            // make fields far away a bit unattractive; we don't want to move the whole distance back again next turn
+         int t = int( ait.threat[ veh->aiparam[ getPlayer()]->valueType ] * log ( beeline ( x, y, veh->ypos, veh->ypos))/log(10) );
+
+         if ( t < threat ) {
+            threat = t;
+            xtogo = x;
+            ytogo = y;
+         }
+      }
+
+   if ( veh->xpos != xtogo || veh->ypos != ytogo ) {
+      vm3.execute ( NULL, xtogo, ytogo, 2, -1, -1 );
+      if ( vm3.getStatus() != 3 )
+         displaymessage ( "AI :: tactics \n error in movement3 step 2 with unit %d", 1, veh->networkid );
+
+      vm3.execute ( NULL, xtogo, ytogo, 3, -1,  1 );
+      if ( vm3.getStatus() != 1000 )
+         displaymessage ( "AI :: tactics \n error in movement3 step 3 with unit %d", 1, veh->networkid );
+   }
 }
 
 
@@ -911,113 +1029,21 @@ void AI::tactics( void )
    pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
    while ( veh ) {
       if ( veh->weapexist() ) {
-         int orgmovement = veh->getMovement();
-         int orgxpos = veh->xpos ;
-         int orgypos = veh->ypos ;
+         unitCounter++;
+         displaymessage2("tact: unit %d moved", unitCounter );
 
          VehicleMovement vm ( NULL, NULL );
          if ( vm.available ( veh )) {
             vm.execute ( veh, -1, -1, 0, -1, -1 );
 
-            TargetList targetList;
+            TargetVector tv;
+            getAttacks ( vm, veh, tv );
 
-            searchTargets ( veh, veh->xpos, veh->ypos, &targetList, 0 );
-
-            // Now we cycle through all fields that are reachable...
-            if ( !veh->typ->wait )
-               for ( int f = 0; f < vm.reachableFields.getFieldNum(); f++ )
-                  if ( !vm.reachableFields.getField( f )->vehicle && !vm.reachableFields.getField( f )->building ) {
-                      int xp, yp;
-                      vm.reachableFields.getFieldCoordinates ( f, &xp, &yp );
-                      searchTargets ( veh, xp, yp, &targetList, beeline ( xp, yp, orgxpos, orgypos ) );
-                   }
-
-            int bestpos = -1;
-            int bestres = -1;
-            int bestmove = maxint;
-            for ( int i = 0; i <= targetList.getlength(); i++ ) {
-               MoveVariant* mv = &targetList[i];
-
-               mv->result = int ((mv->enemyDamage - mv->enemyOrgDamage) * mv->enemy->aiparam[getPlayer()]->value - config.aggressiveness * (mv->damageAfterAttack - mv->orgDamage) * veh->aiparam[getPlayer()]->value );
-               if ( mv->enemyDamage >= 100 )
-                  mv->result += mv->enemy->aiparam[getPlayer()]->value * attack_unitdestroyed_bonus;
-
-               if ( mv->result > bestres || (mv->result == bestres && bestmove > mv->moveDist )) {
-                  bestres = mv->result;
-                  bestpos = i;
-                  bestmove = mv->moveDist;
-               }
-            }
-            if ( bestpos >= 0 ) {
-               MoveVariant* mv = &targetList[bestpos];
-
-               if ( mv->movex != veh->xpos || mv->movey != veh->ypos ) {
-                  VehicleMovement vm2 ( mapDisplay, NULL );
-                  vm2.execute ( veh, -1, -1, 0, -1, -1 );
-                  if ( vm2.getStatus() != 2 )
-                     displaymessage ( "AI :: tactics \n error in movement step 0 with unit %d", 1, veh->networkid );
-
-                  vm2.execute ( NULL, mv->movex, mv->movey, 2, -1, -1 );
-                  if ( vm2.getStatus() != 3 )
-                     displaymessage ( "AI :: tactics \n error in movement step 2 with unit %d", 1, veh->networkid );
-
-                  vm2.execute ( NULL, mv->movex, mv->movey, 3, -1,  1 );
-                  if ( vm2.getStatus() != 1000 )
-                     displaymessage ( "AI :: tactics \n error in movement step 3 with unit %d", 1, veh->networkid );
-               }
-
-               VehicleAttack va ( mapDisplay, NULL );
-               va.execute ( veh, -1, -1, 0 , 0, -1 );
-               if ( va.getStatus() != 2 )
-                  displaymessage ( "AI :: tactics \n error in attack step 2 with unit %d", 1, veh->networkid );
-
-               va.execute ( NULL, mv->attackx, mv->attacky, 2 , -1, mv->weapNum );
-               if ( va.getStatus() != 1000 )
-                  displaymessage ( "AI :: tactics \n error in attack step 3 with unit %d", 1, veh->networkid );
-
-               VehicleMovement vm3 ( mapDisplay, NULL );
-               if ( vm3.available ( veh )) {
-                  vm3.execute ( veh, -1, -1, 0, -1, -1 );
-                  if ( vm3.getStatus() != 2 )
-                     displaymessage ( "AI :: tactics \n error in movement3 step 0 with unit %d", 1, veh->networkid );
-
-                  int xtogo = veh->xpos;
-                  int ytogo = veh->ypos;
-
-                      // multiplying with 1.5 to make this field a bit unattractive, to allow other units (for example buggies) to attack from this field to, since it is probably quite a good position (else it would not have been chosen)
-                  int threat = getFieldThreat ( veh->xpos, veh->ypos).threat[ veh->aiparam[ getPlayer()]->valueType] * 1.5;
-
-                  for ( int f = 0; f < vm3.reachableFields.getFieldNum(); f++ )
-                     if ( !vm3.reachableFields.getField( f )->vehicle && !vm3.reachableFields.getField( f )->building ) {
-                        int x,y;
-                        vm3.reachableFields.getFieldCoordinates ( f, &x, &y );
-                        AiThreat& ait = getFieldThreat ( x, y );
-
-                           // make fields far away a bit unattractive; we don't want to move the whole distance back again next turn
-                        int t = ait.threat[ veh->aiparam[ getPlayer()]->valueType ] * log ( beeline ( x, y, veh->ypos, veh->ypos))/log(10);
-
-                        if ( t < threat ) {
-                           threat = t;
-                           xtogo = x;
-                           ytogo = y;
-                        }
-                     }
-
-                  if ( veh->xpos != xtogo || veh->ypos != ytogo ) {
-                     vm3.execute ( NULL, xtogo, ytogo, 2, -1, -1 );
-                     if ( vm3.getStatus() != 3 )
-                        displaymessage ( "AI :: tactics \n error in movement3 step 2 with unit %d", 1, veh->networkid );
-
-                     vm3.execute ( NULL, xtogo, ytogo, 3, -1,  1 );
-                     if ( vm3.getStatus() != 1000 )
-                        displaymessage ( "AI :: tactics \n error in movement3 step 3 with unit %d", 1, veh->networkid );
-                  }
-
-               }
+            if ( tv.size() ) {
+               executeMoveAttack ( veh, tv );
                veh->aiparam[ getPlayer() ]->task = AiParameter::tsk_tactics;
             } else
                veh->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
-
 
          }
       }
@@ -1026,66 +1052,142 @@ void AI::tactics( void )
    displaymessage2("tactics completed ... ");
 }
 
+/*
+bool AI::vehicleValueComp ( const pvehicle v1, const pvehicle v2 )
+{
+   return v1->aiparam[ getPlayer() ]->value < v2->aiparam[ getPlayer() ]->value;
+}
+*/
+
+
+bool vehicleValueComp ( const pvehicle v1, const pvehicle v2 )
+{
+   return v1->aiparam[ v1->color/8 ]->value < v2->aiparam[ v1->color/8 ]->value;
+}
+
+void AI::buildings( int process )
+{
+   displaymessage2("checking buildings ... ");
+
+
+   int buildingCounter = 0;
+   pbuilding bld = getMap()->player[ getPlayer() ].firstbuilding;
+   while ( bld ) {
+      buildingCounter++;
+      displaymessage2("processing building %d", buildingCounter );
+
+      cbuildingcontrols bc;
+      bc.init ( bld );
+
+      // move idle units out of building
+      std::vector<pvehicle> idleUnits;
+      for ( int i= 0; i < 32; i++ ) {
+         pvehicle veh = bc.getloadedunit ( i );
+         if ( veh )
+            if ( veh->aiparam[ getPlayer() ]->task == AiParameter::tsk_nothing && bc.moveavail ( veh ))
+               idleUnits.push_back ( veh );
+      }
+      // move the most important unit first, to get the best position
+      sort ( idleUnits.begin(), idleUnits.end(), vehicleValueComp );
+
+      for ( std::vector<pvehicle>::iterator i = idleUnits.begin(); i != idleUnits.end(); i++ ) {
+         VehicleMovement* vm = bc.movement ( *i );
+         VehicleAttack va ( NULL, NULL );
+         int attack = 0;
+         if ( va.available ( *i )) {
+            TargetVector tv;
+            getAttacks ( *vm, *i, tv );
+
+            if ( tv.size() ) {
+               executeMoveAttack ( *i, tv );
+               (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_tactics;
+               attack = 1;
+            }
+
+         }
+         if ( !attack ) {
+            moveToSavePlace ( *i, *vm );
+            (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
+         }
+
+
+         delete vm;
+      }
+
+
+      bld = bld->next;
+   }
+
+   displaymessage2("building check completed... ");
+}
+
+
 void AI::strategy( void )
 {
-   displaymessage2("starting strategy ... ");
+   int stratloop = 0;
+   int unitsMoved;
+   do {
+      unitsMoved = 0;
+      displaymessage2("starting strategy loop %d ... ", ++stratloop);
+      pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
+      while ( veh ) {
+         if ( veh->weapexist() && veh->aiparam[ getPlayer() ]->task != AiParameter::tsk_tactics ) {
+            int orgmovement = veh->getMovement();
+            int orgxpos = veh->xpos ;
+            int orgypos = veh->ypos ;
 
-   pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
-   while ( veh ) {
-      if ( veh->weapexist() && veh->aiparam[ getPlayer() ]->task != AiParameter::tsk_tactics ) {
-         int orgmovement = veh->getMovement();
-         int orgxpos = veh->xpos ;
-         int orgypos = veh->ypos ;
+            VehicleMovement vm ( mapDisplay, NULL );
+            if ( vm.available ( veh )) {
+               int x2, y2;
 
-         VehicleMovement vm ( mapDisplay, NULL );
-         if ( vm.available ( veh )) {
-            int x2, y2;
+               AI::Section* sec = sections.getBest ( veh, &x2, &y2 );
+               if ( sec ) {
+                  vm.execute ( veh, -1, -1, 0, -1, -1 );
 
-            AI::Section* sec = sections.getBest ( veh, &x2, &y2 );
-            if ( sec ) {
-               vm.execute ( veh, -1, -1, 0, -1, -1 );
+                  std::vector<int> path;
+                  findPath ( getMap(), path, veh, x2, y2 );
+                  int x = veh->xpos;
+                  int y = veh->ypos;
+                  int xtogo = x;
+                  int ytogo = y;
 
-               std::vector<int> path;
-               findPath ( getMap(), path, veh, x2, y2 );
-               int x = veh->xpos;
-               int y = veh->ypos;
-               int xtogo = x;
-               int ytogo = y;
+                  for ( int i = path.size()-1; i >= 0 ; i-- ) {
+                     getnextfield ( x, y, path[i] );
 
-               for ( int i = path.size()-1; i >= 0 ; i-- ) {
-                  getnextfield ( x, y, path[i] );
-
-                  pfield fld = getfield ( x, y );
-                  if ( !fld)
-                     break;
+                     pfield fld = getfield ( x, y );
+                     if ( !fld)
+                        break;
 
 
-                  if ( vm.reachableFields.isMember ( x, y ) && fieldaccessible ( fld, veh ) == 2 && !fld->building && !fld->vehicle) {
-                     xtogo = x;
-                     ytogo = y;
+                     if ( vm.reachableFields.isMember ( x, y ) && fieldaccessible ( fld, veh ) == 2 && !fld->building && !fld->vehicle) {
+                        xtogo = x;
+                        ytogo = y;
+                     }
                   }
+
+                  if ( xtogo != veh->xpos || ytogo != veh->ypos ) {
+                     AiParameter& aip = *veh->aiparam[getPlayer()];
+
+                     aip.xtogo = x;
+                     aip.ytogo = y;
+
+                     vm.execute ( NULL, xtogo, ytogo, 2, -1, -1 );
+                     if ( vm.getStatus() != 3 )
+                        displaymessage ( "AI :: strategy \n error in movement step 2 with unit %d", 1, veh->networkid );
+
+                     vm.execute ( NULL, xtogo, ytogo, 3, -1,  1 );
+                     if ( vm.getStatus() != 1000 )
+                        displaymessage ( "AI :: strategy \n error in movement step 3 with unit %d", 1, veh->networkid );
+
+                     unitsMoved++;
+                  }
+
                }
-
-               if ( xtogo != veh->xpos || ytogo != veh->ypos ) {
-                  AiParameter& aip = *veh->aiparam[getPlayer()];
-
-                  aip.xtogo = x;
-                  aip.ytogo = y;
-
-                  vm.execute ( NULL, xtogo, ytogo, 2, -1, -1 );
-                  if ( vm.getStatus() != 3 )
-                     displaymessage ( "AI :: strategy \n error in movement step 2 with unit %d", 1, veh->networkid );
-
-                  vm.execute ( NULL, xtogo, ytogo, 3, -1,  1 );
-                  if ( vm.getStatus() != 1000 )
-                     displaymessage ( "AI :: strategy \n error in movement step 3 with unit %d", 1, veh->networkid );
-               }
-
             }
          }
+         veh = veh->next;
       }
-      veh = veh->next;
-   }
+   } while ( unitsMoved );
 
    displaymessage2("strategy completed ... ");
 }
@@ -1093,14 +1195,17 @@ void AI::strategy( void )
 
 void AI:: run ( void )
 {
+   unitCounter = 0;
    _isRunning = true;
 
    tempsvisible = false;
    setup();
    tempsvisible = true;
 
+   buildings( 3 );
    tactics();
    strategy();
+   buildings( 1 );
    _isRunning = false;
 }
 
