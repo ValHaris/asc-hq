@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.48 2000-09-07 15:49:47 mbickel Exp $
+//     $Id: typen.h,v 1.49 2000-09-10 10:19:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2000/09/07 15:49:47  mbickel
+//      some cleanup and documentation
+//
 //     Revision 1.47  2000/09/02 13:59:50  mbickel
 //      Worked on AI
 //      Started using doxygen
@@ -578,7 +581,7 @@ class AiParameter {
            AiThreat threat;
            int value;
            int valueType;
-           enum { tsk_nothing } task;
+           enum { tsk_nothing, tsk_tactics } task;
 
            int xtogo;
            int ytogo;

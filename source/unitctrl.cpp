@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.29 2000-08-29 10:36:51 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.30 2000-09-10 10:19:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/08/29 10:36:51  mbickel
+//      Removed Debug code
+//      Fixed bug: movement left when changing height into buildings
+//
 //     Revision 1.28  2000/08/28 19:49:43  mbickel
 //      Fixed: replay exits when moving satellite out of orbiter
 //      Fixed: airplanes being able to endlessly takeoff and land
@@ -1497,6 +1501,10 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
       logtoreplayinfo ( rpl_attack, xp1, yp1, x, y, ad1, ad2, dd1, dd2, weapnum );
 
       computeview();
+
+      if ( mapDisplay )
+         mapDisplay->displayMap();
+
 
       status = 1000;
   } 

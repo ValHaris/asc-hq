@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.23 2000-09-07 16:42:27 mbickel Exp $
+//     $Id: artint.cpp,v 1.24 2000-09-10 10:19:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/09/07 16:42:27  mbickel
+//      Made some adjustments so that ASC compiles with Watcom again...
+//
 //     Revision 1.22  2000/09/07 15:42:09  mbickel
 //     *** empty log message ***
 //
@@ -972,7 +975,50 @@ void AI::tactics( void )
                if ( va.getStatus() != 1000 )
                   displaymessage ( "AI :: tactics \n error in attack step 3 with unit %d", 1, veh->networkid );
 
-            }
+               VehicleMovement vm3 ( mapDisplay, NULL );
+               if ( vm3.available ( veh )) {
+                  vm3.execute ( veh, -1, -1, 0, -1, -1 );
+                  if ( vm3.getStatus() != 2 )
+                     displaymessage ( "AI :: tactics \n error in movement3 step 0 with unit %d", 1, veh->networkid );
+
+                  int xtogo = veh->xpos;
+                  int ytogo = veh->ypos;
+
+                      // multiplying with 1.5 to make this field a bit unattractive, to allow other units (for example buggies) to attack from this field to, since it is probably quite a good position (else it would not have been chosen)
+                  int threat = getFieldThreat ( veh->xpos, veh->ypos).threat[ veh->aiparam[ getPlayer()]->valueType] * 1.5;
+
+                  for ( int f = 0; f < vm3.reachableFields.getFieldNum(); f++ )
+                     if ( !vm3.reachableFields.getField( f )->vehicle && !vm3.reachableFields.getField( f )->building ) {
+                        int x,y;
+                        vm3.reachableFields.getFieldCoordinates ( f, &x, &y );
+                        AiThreat& ait = getFieldThreat ( x, y );
+
+                           // make fields far away a bit unattractive; we don't want to move the whole distance back again next turn
+                        int t = ait.threat[ veh->aiparam[ getPlayer()]->valueType ] * log ( beeline ( x, y, veh->ypos, veh->ypos))/log(10);
+
+                        if ( t < threat ) {
+                           threat = t;
+                           xtogo = x;
+                           ytogo = y;
+                        }
+                     }
+
+                  if ( veh->xpos != xtogo || veh->ypos != ytogo ) {
+                     vm3.execute ( NULL, xtogo, ytogo, 2, -1, -1 );
+                     if ( vm3.getStatus() != 3 )
+                        displaymessage ( "AI :: tactics \n error in movement3 step 2 with unit %d", 1, veh->networkid );
+
+                     vm3.execute ( NULL, xtogo, ytogo, 3, -1,  1 );
+                     if ( vm3.getStatus() != 1000 )
+                        displaymessage ( "AI :: tactics \n error in movement3 step 3 with unit %d", 1, veh->networkid );
+                  }
+
+               }
+               veh->aiparam[ getPlayer() ]->task = AiParameter::tsk_tactics;
+            } else
+               veh->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
+
+
          }
       }
       veh = veh->next;
@@ -986,7 +1032,7 @@ void AI::strategy( void )
 
    pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
    while ( veh ) {
-      if ( veh->weapexist() ) {
+      if ( veh->weapexist() && veh->aiparam[ getPlayer() ]->task != AiParameter::tsk_tactics ) {
          int orgmovement = veh->getMovement();
          int orgxpos = veh->xpos ;
          int orgypos = veh->ypos ;
@@ -1055,8 +1101,6 @@ void AI:: run ( void )
 
    tactics();
    strategy();
-   displaymap();
-
    _isRunning = false;
 }
 
