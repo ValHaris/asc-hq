@@ -209,12 +209,11 @@ int main(int argc, char *argv[] )
       // Beginn des HTML Files HEAD und BODY
       //  \n is the sequence to start a new line
 
-      fprintf ( overview , "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n"
+      fprintf ( overview , "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n"
                 "<html>\n"
                 "<HEAD>\n"
                 "<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\">"
                 "<TITLE>UNITGUIDE OVERVIEW LEFT</TITLE>\n"
-                "<base target=\"base\">\n"
                 "<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"%s\">\n"
                 "</HEAD>\n"
                 "\n"
@@ -222,7 +221,7 @@ int main(int argc, char *argv[] )
                 "<table width=\"100%\"  class=\"wg\" >\n"
                 "<tr><td><a href=\"overview1.html\">SEE PICTURES</a></td></tr><tr><td></td></tr>\n", cl.t().c_str() );
 
-      fprintf ( overview1 , "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n"
+      fprintf ( overview1 , "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n"
                 "<html>\n"
                 "<HEAD>\n"
                 "<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\">"
@@ -265,6 +264,8 @@ int main(int argc, char *argv[] )
 
             // Beginn Einzelfiles
             // UNIT FRAME
+
+            
             fprintf ( framePage, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\" \"http://www.w3.org/TR/html4/frameset.dtd\">\n"
                       "<html>\n"
                       "<HEAD>\n"
@@ -277,16 +278,15 @@ int main(int argc, char *argv[] )
                       "</frameset>\n"
                       "</html>\n", fileName.c_str() , fileName.c_str(), fileName.c_str(), fileName.c_str(), fileName.c_str(), fileName.c_str(), fileName.c_str(), fileName.c_str() );
 
-            const char* header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n"
+            const char* header = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n"
                       "<html>\n"
                       "<HEAD>\n"
                       "<meta http-equiv=\"content-type\" content=\"text/html; charset=ISO-8859-1\">"
                       "<TITLE>%s</TITLE>\n"
-                      "<base target=\"under\"> \n"
                       "<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"%s\">\n"
                       "</HEAD>\n"
                       "\n"
-                      "<BODY  class=\"%s\">\n";
+                      "<BODY  class=\"%s\">\n<p>\n";
 
             // UNIT GENERAL
             fprintf ( generalPage, header, "general", cl.t().c_str(), "wgleft" );
@@ -540,7 +540,7 @@ int main(int argc, char *argv[] )
                
                fprintf ( movePage, "</table>\n" );
             } else
-               fprintf( movePage, "This unit cannot change its level of height\n" );
+               fprintf( movePage, "<p>This unit can not change its level of height\n" );
 
 
 
@@ -801,10 +801,10 @@ int main(int argc, char *argv[] )
             fprintf( transportPage, "<h2>Transportation</h2>\n" );
 
             fprintf ( transportPage, "<table %s>\n", tableParam );
-            printMainLine ( transportPage, "Max.loadable units", ft->maxLoadableUnits );
+            printMainLine ( transportPage, "Max. loadable units", ft->maxLoadableUnits );
             if ( ft->maxLoadableUnits ) {
-               printMainLine ( transportPage, "Max.total cargo weight", ft->maxLoadableWeight );
-               printMainLine ( transportPage, "Max.single cargo weight", ft->maxLoadableUnitSize );
+               printMainLine ( transportPage, "Max. total cargo weight", ft->maxLoadableWeight );
+               printMainLine ( transportPage, "Max. single cargo weight", ft->maxLoadableUnitSize );
 
 
                ASCString type;
@@ -904,14 +904,14 @@ int main(int argc, char *argv[] )
 
                   printLineEnd( transportPage );
                }
-               fprintf ( transportPage, "</table>\n" );
             }
+            fprintf ( transportPage, "</table>\n" );
 
 
 
 
             //BEGINN DESCRIPTION
-            fprintf ( infoPage, "<H2>Information about this Unit</H2>\n" );
+            fprintf ( infoPage, "<H2>Information about this Unit</H2>\n<p>" );
 
 
             FILE* fp = fopen ( ASCString(prefixDir + fileName + ".jpg").c_str(), "r" );
