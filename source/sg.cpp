@@ -1,6 +1,12 @@
-//     $Id: sg.cpp,v 1.111 2000-11-21 20:27:05 mbickel Exp $
+//     $Id: sg.cpp,v 1.112 2000-11-26 22:18:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.111  2000/11/21 20:27:05  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.110  2000/11/15 19:28:33  mbickel
 //      AI improvements
 //
@@ -3206,6 +3212,12 @@ int main(int argc, char *argv[] )
          configfile = argv[++i]; continue;
       }
 
+      if ( strcmpi ( &argv[i][1], "-verbose" ) == 0 ||
+           strcmpi ( &argv[i][1], "v" ) == 0 ) {
+         verbosity = atoi ( argv[++i] ); continue;
+      }
+
+
      if ( ( strcmpi ( &argv[i][1], "?" ) == 0 ) ||
           ( strcmpi ( &argv[i][1], "h" ) == 0 ) ||
           ( strcmpi ( &argv[i][1], "-help" ) == 0 ) ){
@@ -3217,6 +3229,8 @@ int main(int argc, char *argv[] )
                 "\t--savegame file    continue a saved game\n"
                 "\t-lm file\n"
                 "\t--loadmap file     start with a given map\n"
+                "\t-v x\n"
+                "\t--verbose x        set verbosity level to x (0..10)\n"
                 "\t-cf file\n"
                 "\t--configfile file  use given configuration file\n"
                 "\t-x:X               Set horizontal resolution to X; default is 800 \n"

@@ -25,11 +25,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/Makefile.am,/home/martin/asc/configure.in,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/edmain.cpp,/home/martin/asc/source/loaders.cpp,/home/martin/asc/source/sgstream.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/configure.in
-cpp_file=Unbenannt.cpp
+header_file=Unbenannt.h
+cpp_file=/home/martin/asc/source/loaders.cpp
 browser_file=file:/home/martin/.kde/share/apps/kdevelop/search_result.html
 [source/gui.h]
 install_location=

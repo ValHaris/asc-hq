@@ -1,6 +1,12 @@
-//     $Id: edmain.cpp,v 1.30 2000-11-08 19:31:03 mbickel Exp $
+//     $Id: edmain.cpp,v 1.31 2000-11-26 22:18:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/11/08 19:31:03  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.29  2000/10/26 19:17:49  mbickel
 //      Removed fullscreen settings in mapeditor
 //
@@ -944,6 +950,11 @@ int main(int argc, char *argv[] )
          configfile = argv[++i]; continue;
       }
 
+      if ( strcmpi ( &argv[i][1], "-verbose" ) == 0 ||
+           strcmpi ( &argv[i][1], "v" ) == 0 ) {
+         verbosity = atoi ( argv[++i] ); continue;
+      }
+
      if ( ( strcmpi ( &argv[i][1], "?" ) == 0 ) ||
           ( strcmpi ( &argv[i][1], "h" ) == 0 ) ||
           ( strcmpi ( &argv[i][1], "-help" ) == 0 ) ){
@@ -953,6 +964,8 @@ int main(int argc, char *argv[] )
                 "\t--loadmap file     start with a given map\n"
                 "\t-cf file\n"
                 "\t--configfile file  use given configuration file\n"
+                "\t-v x\n"
+                "\t--verbose x        set verbosity level to x (0..10)\n"
                 "\t-x:X               Set horizontal resolution to X; default is 800 \n"
                 "\t-y:Y               Set verticalal resolution to Y; default is 600 \n"
 #ifdef _DOS_

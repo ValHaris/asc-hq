@@ -1,6 +1,12 @@
-//     $Id: sgstream.h,v 1.12 2000-11-21 20:27:07 mbickel Exp $
+//     $Id: sgstream.h,v 1.13 2000-11-26 22:18:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/11/21 20:27:07  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.11  2000/10/17 12:12:23  mbickel
 //      Improved vehicletype loading/saving routines
 //      documented some global variables
@@ -257,5 +263,8 @@ extern std::vector<SingleUnitSet*> unitSets;
 
 extern void loadUnitSets ( void );
 
+
+//! displays a message on the log. If msgVerbosity is greater than the game verbosity, the message is NOT printed
+extern void displayLogMessage ( int msgVerbosity, char* message, ... );
 
 #endif

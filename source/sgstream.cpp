@@ -1,6 +1,12 @@
-//     $Id: sgstream.cpp,v 1.43 2000-11-21 20:27:07 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.44 2000-11-26 22:18:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2000/11/21 20:27:07  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.42  2000/11/14 20:36:41  mbickel
 //      The AI can now use supply vehicles
 //      Rewrote objecttype IO routines to make the structure independant of
@@ -1098,8 +1104,11 @@ void* generate_vehicle_gui_build_icon ( pvehicletype tnk )
 
 pvehicletype   loadvehicletype( char* name)
 {
+   displayLogMessage ( 5, " loading vehicle type %s ...", name );
    tnfilestream stream ( name, 1 );
-   return loadvehicletype ( stream );
+   pvehicletype vt = loadvehicletype ( stream );
+   displayLogMessage ( 5, " done\n");
+   return vt;
 }
 
 
@@ -1116,8 +1125,11 @@ pvehicletype   loadvehicletype( tnstream& stream )
 
 ptechnology       loadtechnology(char *       name)
 {
-   tnfilestream stream ( name, 1 ); 
-   return loadtechnology ( &stream );
+   displayLogMessage ( 5, " loading technology %s ...", name );
+   tnfilestream stream ( name, 1 );
+   ptechnology t = loadtechnology ( &stream );
+   displayLogMessage ( 5, " done\n");
+   return t;
 }
 
 
@@ -1324,8 +1336,11 @@ void loadguipictures( void )
 
 pbuildingtype       loadbuildingtype(char *       name)
 {
-   tnfilestream stream ( name, 1 ); 
-   return loadbuildingtype ( &stream );
+   displayLogMessage ( 5, " loading building type %s ...", name );
+   tnfilestream stream ( name, 1 );
+   pbuildingtype bt = loadbuildingtype ( &stream );
+   displayLogMessage ( 5, " done\n");
+   return bt;
 }
 
 
@@ -1642,8 +1657,11 @@ pquickview generateaveragecol ( pwterraintype bdn )
 
 pterraintype      loadterraintype(char *       name)
 {
-   tnfilestream stream ( name, 1 ); 
-   return loadterraintype ( &stream );
+   displayLogMessage ( 5, " loading terrain type %s ...", name );
+   tnfilestream stream ( name, 1 );
+   pterraintype tt = loadterraintype ( &stream );
+   displayLogMessage ( 5, " done\n" );
+   return tt;
 }
 
 pterraintype      loadterraintype( pnstream stream )
@@ -1814,8 +1832,11 @@ pobjecttype fahrspurobject = NULL;
 
 pobjecttype   loadobjecttype(char *       name)
 {
+   displayLogMessage ( 5, " loading object type %s ...", name );
    tnfilestream stream ( name, 1 );
-   return loadobjecttype ( &stream );
+   pobjecttype ot = loadobjecttype ( &stream );
+   displayLogMessage ( 5, " done\n" );
+   return ot;
 /*
    pobjecttype fztn = loadobjecttype ( &stream );
    for ( int i = 0 ; i < cmovemalitypenum; i++) {
@@ -1868,37 +1889,43 @@ void writeobject ( pobjecttype object, pnstream stream, int compressed )
 
 void loadpalette ( void )
 {
-   tnfilestream stream ("palette.pal",1); 
-   stream.readdata( & pal, sizeof(pal)); 
-   colormixbuf = (pmixbuf) new char [ sizeof ( tmixbuf ) ];
-   stream.readdata( colormixbuf,  sizeof ( *colormixbuf ));
+   if ( ! asc_paletteloaded ) {
+      displayLogMessage ( 4, "loading palette ... " );
 
-   stream.readdata( &xlattables.a.dark05, sizeof ( xlattables.a.dark05 ));
-   xlattables.a.dark05[255] = 255;
+      tnfilestream stream ("palette.pal",1);
+      stream.readdata( & pal, sizeof(pal));
+      colormixbuf = (pmixbuf) new char [ sizeof ( tmixbuf ) ];
+      stream.readdata( colormixbuf,  sizeof ( *colormixbuf ));
 
-   stream.readdata( &xlattables.a.dark1,  sizeof ( xlattables.a.dark1 ));
-   xlattables.a.dark1[255] = 255;
+      stream.readdata( &xlattables.a.dark05, sizeof ( xlattables.a.dark05 ));
+      xlattables.a.dark05[255] = 255;
 
-   stream.readdata( &xlattables.a.dark2,  sizeof ( xlattables.a.dark2 ));
-   xlattables.a.dark2[255] = 255;
+      stream.readdata( &xlattables.a.dark1,  sizeof ( xlattables.a.dark1 ));
+      xlattables.a.dark1[255] = 255;
 
-   stream.readdata( &xlattables.a.dark3,  sizeof ( xlattables.a.dark3 ));
-   xlattables.a.dark3[255] = 255;
+      stream.readdata( &xlattables.a.dark2,  sizeof ( xlattables.a.dark2 ));
+      xlattables.a.dark2[255] = 255;
 
-   stream.readdata( &xlattables.light,  sizeof ( xlattables.light ));
-   xlattables.light[255] = 255;
+      stream.readdata( &xlattables.a.dark3,  sizeof ( xlattables.a.dark3 ));
+      xlattables.a.dark3[255] = 255;
 
-   stream.readdata( &truecolor2pal_table,  sizeof ( truecolor2pal_table ));
-   #ifdef HEXAGON
-   stream.readdata( &bi2asc_color_translation_table,  sizeof ( bi2asc_color_translation_table ));
-   #endif
-   asc_paletteloaded = 1;
+      stream.readdata( &xlattables.light,  sizeof ( xlattables.light ));
+      xlattables.light[255] = 255;
 
-   xlatpictgraytable = (ppixelxlattable) asc_malloc( sizeof(*xlatpictgraytable) );
-   // xlatpictgraytable = new tpixelxlattable;
-   generategrayxlattable(xlatpictgraytable,160,16,&pal);
+      stream.readdata( &truecolor2pal_table,  sizeof ( truecolor2pal_table ));
+      #ifdef HEXAGON
+      stream.readdata( &bi2asc_color_translation_table,  sizeof ( bi2asc_color_translation_table ));
+      #endif
 
-   (*xlatpictgraytable)[255] = 255;
+      xlatpictgraytable = (ppixelxlattable) asc_malloc( sizeof(*xlatpictgraytable) );
+      // xlatpictgraytable = new tpixelxlattable;
+      generategrayxlattable(xlatpictgraytable,160,16,&pal);
+
+      (*xlatpictgraytable)[255] = 255;
+
+      asc_paletteloaded = 1;
+      displayLogMessage ( 4, "done\n" );
+   }
 
 }
 
@@ -1950,6 +1977,7 @@ CLoadableGameOptions* loadableGameOptions =     NULL;
 
 int readgameoptions ( const char* filename )
 {
+   displayLogMessage ( 4, "loading game options ... " );
 
    const char* fn;
    if ( filename )
@@ -2042,6 +2070,7 @@ int readgameoptions ( const char* filename )
 
    makeDirectory ( CGameOptions::Instance()->getSearchPath(0) );
 
+   displayLogMessage ( 4, "done\n" );
    return 0;
 }
 
@@ -2119,9 +2148,7 @@ void initFileIO ( const char* configFileName )
 
    for ( int i = 0; i < CGameOptions::Instance()->getSearchPathNum(); i++ )
       if ( CGameOptions::Instance()->getSearchPath(i)   ) {
-         if ( verbosity > 2 )
-            printf(     "adding search patch %s\n",
-                                        CGameOptions::Instance()->getSearchPath(i));
+         displayLogMessage ( 3, "adding search patch %s\n", CGameOptions::Instance()->getSearchPath(i));
          addSearchPath ( CGameOptions::Instance()->getSearchPath(i) );
       }
    try {
@@ -2321,9 +2348,11 @@ void SingleUnitSet::read ( pnstream stream )
 
 void loadUnitSets ( void )
 {
+   displayLogMessage ( 4, "loading unit set definition files\n" );
    tfindfile ff ( "*.set" );
    char* n = ff.getnextname();
    while ( n ) {
+      displayLogMessage ( 5, " loading unit set definition file %s ... ",n );
       tnfilestream stream ( n, 1 );
 
       SingleUnitSet* set = new SingleUnitSet;
@@ -2331,8 +2360,24 @@ void loadUnitSets ( void )
       unitSets.push_back ( set );
 
       n = ff.getnextname();
+      displayLogMessage ( 5, "done\n" );
    } /* endwhile */
 }
 
 std::vector<SingleUnitSet*> unitSets;
 
+
+
+void displayLogMessage ( int msgVerbosity, char* message, ... )
+{
+   va_list arglist;
+   va_start ( arglist, message );
+   if ( msgVerbosity <= verbosity ) {
+      char buf[10000];
+      vsprintf ( buf, message, arglist );
+
+      fprintf ( stdout, buf );
+      fflush ( stdout );
+   }
+   va_end ( arglist );
+}

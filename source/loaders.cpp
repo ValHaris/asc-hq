@@ -1,6 +1,9 @@
-//     $Id: loaders.cpp,v 1.34 2000-11-11 11:05:18 mbickel Exp $
+//     $Id: loaders.cpp,v 1.35 2000-11-26 22:18:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2000/11/11 11:05:18  mbickel
+//      started AI service functions
+//
 //     Revision 1.33  2000/11/08 19:31:09  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -1830,11 +1833,9 @@ int          tmaploaders::savemap( const char * name )
    /*   Stream initialisieren, Dateiinfo schreiben , map schreiben         ÿ */
    /********************************************************************************/
    {
-    
        stream->writepchar ( NULL );  // description is not used any more
        stream->writedata2 ( fileterminator );
        stream->writedata2 ( actmapversion  );
-
 
        writemap ( );
    }
@@ -1881,9 +1882,8 @@ int          tmaploaders::loadmap( const char *       name )
     oldmap = actmap;
     actmap = NULL;
 
-    #ifdef logging
-    logtofile ( "loaders / tmaploaders::loadmap / opening stream");
-    #endif
+    displayLogMessage ( 4, "loading map %s ... ", name );
+
     tnfilestream filestream ( name, 1);
 
     stream = &filestream;
@@ -1891,10 +1891,6 @@ int          tmaploaders::loadmap( const char *       name )
 
     char* description = NULL;
  
-    #ifdef logging
-    logtofile ( "loaders / tmaploaders::loadmap / reading description");
-    #endif
-    
     stream->readpchar ( &description );
     delete[] description;
  
@@ -1912,19 +1908,13 @@ int          tmaploaders::loadmap( const char *       name )
        throw tinvalidversion ( name, actmapversion, version );
    
 
-   #ifdef logging
-   logtofile ( "loaders / tmaploaders::loadmap / readmap");
-   #endif
+   displayLogMessage ( 10, "map, ");
    readmap ();
 
-   #ifdef logging
-   logtofile ( "loaders / tmaploaders::loadmap / readeventstocome");
-   #endif
+   displayLogMessage ( 10, "eventsToCome, ");
    readeventstocome ();
 
-   #ifdef logging
-   logtofile ( "loaders / tmaploaders::loadmap / readfields");
-   #endif
+   displayLogMessage ( 10, "fields, ");
    readfields ();
 
 
@@ -1939,9 +1929,7 @@ int          tmaploaders::loadmap( const char *       name )
       throw tinvalidversion ( name, actmapversion, version );
    } 
 
-   #ifdef logging
-   logtofile ( "loaders / tmaploaders::loadmap / erasemap");
-   #endif
+   displayLogMessage ( 10, "~oldmap, ");
    delete oldmap;
    oldmap = NULL;
    
@@ -1949,40 +1937,22 @@ int          tmaploaders::loadmap( const char *       name )
    spfld = NULL;
 
 
-   #ifdef logging
-   logtofile ( "loaders / tmaploaders::loadmap / chainitems");
-   #endif
+   displayLogMessage ( 10, "chainItems, ");
    chainitems ();
 
-   #ifdef logging
-   logtofile ( "loaders / tmaploaders::loadmap / setbuildingsonmap");
-   #endif
-   setbuildingsonmap(); 
-
-   #ifdef logging
-   logtofile ( "loaders / tmaploaders::loadmap / setplayerexistencies");
-   #endif
+   setbuildingsonmap();
    setplayerexistencies ();
 
-   #ifdef logging
-   logtofile ( "loaders / tmaploaders::loadmap / seteventtriggers");
-   #endif
-   seteventtriggers(); 
+   displayLogMessage ( 10, "setEventTriggers, ");
+   seteventtriggers();
 
    actmap->time.a.turn = 1; 
    actmap->time.a.move = 0;
              
-   #ifdef logging
-   logtofile ( "loaders / tmaploaders::loadmap / calculateallobjects");
-   #endif
-   calculateallobjects(); 
+   calculateallobjects();
+   actmap->levelfinished = false;
 
-/*   starthistory();  */
-   actmap->levelfinished = false; 
-
-   #ifdef logging
-   logtofile ( "loaders / tmaploaders::loadmap / returning");
-   #endif
+   displayLogMessage ( 4, "done\n");
 
    
    return 0;
@@ -2908,9 +2878,6 @@ void         loadallvehicletypes(void)
           //   t->steigung = 0;
 
           addvehicletype ( t );
-          if ( verbosity >= 2)
-            printf("vehicletype %s loaded\n", c );
-
 
           c = ff.getnextname();
        }
@@ -2929,9 +2896,6 @@ void         loadallobjecttypes (void)
          actprogressbar->point();
 
       addobjecttype ( loadobjecttype( c )); 
-
-      if ( verbosity >= 2)
-         printf("objecttype %s loaded\n", c );
 
       c = ff.getnextname();
    }
@@ -2960,8 +2924,6 @@ void         loadalltechnologies(void)
          actprogressbar->point();
 
       addtechnology ( loadtechnology( c ));
-      if ( verbosity >= 2)
-         printf("technology %s loaded\n", c );
 
       c = ff.getnextname();
    } 
@@ -2991,8 +2953,6 @@ void         loadallterraintypes(void)
          actprogressbar->point();
 
       addterraintype ( loadterraintype( c ));
-      if ( verbosity >= 2)
-         printf("terraintype %s loaded\n", c );
 
       c = ff.getnextname();
    } 
@@ -3012,8 +2972,6 @@ void         loadallbuildingtypes(void)
          actprogressbar->point();
 
       addbuildingtype ( loadbuildingtype( c ));
-      if ( verbosity >= 2)
-         printf("buildingtype %s loaded\n", c );
 
       c = ff.getnextname();
    } 
