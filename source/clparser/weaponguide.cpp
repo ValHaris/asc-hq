@@ -2,8 +2,8 @@
 **
 ** weaponguide.cpp
 **
-** Mon Mar 10 17:10:21 2003
-** Linux 2.4.19-4GB (#1 Fri Sep 13 13:14:56 UTC 2002) i686
+** Sun May 30 09:21:20 2004
+** Linux 2.4.21-198-default (#1 Thu Mar 11 17:43:56 UTC 2004) i686
 ** martin@linux. (Martin Bickel)
 **
 ** Definition of command line parser class
@@ -239,7 +239,7 @@ void Cmdline::usage()
   cout << "STRING,";
   cout << " default=asc.css";
   cout << ")\n";
-  cout << "         name of the menu stylesheed\n";
+  cout << "         name of the menu stylesheet\n";
   cout << "  [ -h ] ";
   cout << "[ --help ]  ";
   cout << "(";
