@@ -81,6 +81,8 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
         int          id;
 
         ASCString    name;
+        ASCString    fileName;
+        ASCString    location;
 
         int          _armor;
 

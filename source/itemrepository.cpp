@@ -79,10 +79,18 @@ pobjecttype fahrspurobject = NULL;
   int objecttypenum = 0;
 
 
-   map< int, pterraintype>  terrainmap;
-   map< int, pobjecttype>  objectmap;
-   map< int, pvehicletype>  vehiclemap;
-   map< int, pbuildingtype>  buildingmap;
+   typedef map< int, pterraintype>  TerrainMap;
+   TerrainMap terrainmap;
+
+   typedef map< int, pobjecttype>  ObjectMap;
+   ObjectMap objectmap;
+
+   typedef map< int, pvehicletype>  VehicleMap;
+   VehicleMap vehiclemap;
+
+   typedef map< int, pbuildingtype>  BuildingMap;
+   BuildingMap buildingmap;
+
    map< int, ptechnology>  technologymap;
 
 pterraintype getterraintype_forid ( int id, int crccheck )
@@ -146,13 +154,27 @@ ptechnology gettechnology_forpos ( int pos, int crccheck  )
 void addterraintype ( pterraintype bdt )
 {
    if ( bdt ) {
+      TerrainMap::iterator i = terrainmap.find ( bdt->id );
+      if ( i != terrainmap.end() )
+         fatalError ( "Unable to add terraintype from file " + bdt->fileName+ "; "
+                      "The unit " + i->second->name + " from file " + i->second->location + " has the same ID ");
+
       terrain[ terraintypenum++] = bdt;
       terrainmap[bdt->id] = bdt;
    }
 }
+
+
+
 void addobjecttype ( pobjecttype obj )
 {
    if ( obj ) {
+
+      ObjectMap::iterator i = objectmap.find ( obj->id );
+      if ( i != objectmap.end() )
+         fatalError ( "Unable to add objecttype from file " + obj->fileName+ "; "
+                      "The unit " + i->second->name + " from file " + i->second->location + " has the same ID ");
+
       objecttypes[ objecttypenum++] = obj;
       objectmap[obj->id] = obj;
 
@@ -175,6 +197,12 @@ void addobjecttype ( pobjecttype obj )
 void addvehicletype ( pvehicletype vhcl )
 {
    if ( vhcl ) {
+
+      VehicleMap::iterator i = vehiclemap.find ( vhcl->id );
+      if ( i != vehiclemap.end() )
+         fatalError ( "Unable to add vehicletype from file " + vhcl->filename+ "; "
+                      "The unit " + i->second->getName() + " from file " + i->second->location + " has the same ID ");
+
       vehicletypes[ vehicletypenum++] = vhcl;
       vehiclemap[vhcl->id] = vhcl;
    }
@@ -182,10 +210,17 @@ void addvehicletype ( pvehicletype vhcl )
 void addbuildingtype ( pbuildingtype bld )
 {
    if ( bld ) {
+
+      BuildingMap::iterator i = buildingmap.find ( bld->id );
+      if ( i != buildingmap.end() )
+         fatalError ( "Unable to add buildingtype from file " + bld->fileName+ "; "
+                      "The unit " + i->second->name + " from file " + i->second->location + " has the same ID ");
+
       buildingtypes[ buildingtypenum++] = bld;
       buildingmap[bld->id] = bld;
    }
 }
+
 void addtechnology ( ptechnology tech )
 {
    if ( tech ) {

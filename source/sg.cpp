@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: sg.cpp,v 1.158 2001-08-02 18:50:43 mbickel Exp $
+//     $Id: sg.cpp,v 1.159 2001-08-06 15:35:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.158  2001/08/02 18:50:43  mbickel
+//      Corrected Error handling in Text parsers
+//      Improved version information
+//
 //     Revision 1.157  2001/08/02 15:33:01  mbickel
 //      Completed text based file formats
 //
@@ -2533,7 +2537,7 @@ int main(int argc, char *argv[] )
       xr = cl->x();
 
    if ( CGameOptions::Instance()->yresolution != 600 )
-      yr = CGameOptions::Instance()->xresolution;
+      yr = CGameOptions::Instance()->yresolution;
    if ( cl->y() != 600 )
       yr = cl->y();
 
