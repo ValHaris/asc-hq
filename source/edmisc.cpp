@@ -2,9 +2,15 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.50 2001-02-18 15:37:08 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.51 2001-02-26 12:35:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2001/02/18 15:37:08  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.49  2001/02/11 11:39:32  mbickel
 //      Some cleanup and documentation
 //
@@ -310,8 +316,7 @@
 
 char checkobject(pfield pf)
 {
-   if ( pf->object->objnum > 0 ) return true;
-   else return false;
+   return !pf->objects.empty();
 }
 
 // õS MouseButtonBox
@@ -462,11 +467,11 @@ int rightmousebox(void)
    pf = getactfield();
    if (pf != NULL) {
 
-      if (pf->vehicle != NULL) tmb.additem(act_changeunitvals);
+      if ( pf->vehicle != NULL) tmb.additem(act_changeunitvals);
       if ( (pf->vehicle != NULL) && (pf->vehicle->typ->loadcapacity > 0) ) tmb.additem(act_changecargo);
       if ( (pf->building != NULL) && (pf->building->typ->loadcapacity > 0 ) ) tmb.additem(act_changecargo);
       if ( (pf->building != NULL) && (pf->building->typ->special & cgvehicleproductionb) ) tmb.additem(act_changeproduction);
-      if ( (pf->object != NULL ) && (pf->object->mine != 0) ) tmb.additem(act_changeminestrength);
+      if ( !pf->mines.empty() ) tmb.additem(act_changeminestrength);
       tmb.additem(act_changeresources);
 
       tmb.additem(act_seperator);
@@ -479,8 +484,8 @@ int rightmousebox(void)
 
       if (pf->vehicle != NULL) tmb.additem(act_deleteunit);
       if (pf->building != NULL) tmb.additem(act_deletebuilding);
-      if ( (pf->object != NULL ) && (pf->object->objnum > 0 ) ) tmb.additem(act_deleteobject);
-      if ( (pf->object != NULL ) && (pf->object->mine != 0) ) tmb.additem(act_deletemine);
+      if ( !pf->objects.empty() ) tmb.additem(act_deleteobject);
+      if ( !pf->mines.empty() ) tmb.additem(act_deletemine);
 
       tmb.additem(act_seperator);
 
@@ -1183,13 +1188,12 @@ void         tplayerchange::buttonpressed(int         id)
 
               for (int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
                  pfield fld = &actmap->field[i];
-                 if  ( fld->object  ) 
-                    for ( int i = 0; i < fld->object->minenum; i++ ) 
-                       if ( fld->object->mine[i]->color == sel1 )
-                          fld->object->mine[i]->color = sel2;
-                       else
-                          if ( fld->object->mine[i]->color == sel2 )
-                             fld->object->mine[i]->color = sel1;
+                 for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
+                    if ( i->color == sel1 )
+                       i->color = sel2;
+                    else
+                       if ( i->color == sel2 )
+                          i->color = sel1;
                     
                  
               } /* endfor */
@@ -1216,10 +1220,9 @@ void         tplayerchange::buttonpressed(int         id)
 
               for (int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
                  pfield fld = &actmap->field[i];
-                 if  ( fld->object  ) 
-                    for ( int i = 0; i < fld->object->minenum; i++ ) 
-                       if ( fld->object->mine[i]->color == sel2 )
-                          fld->object->mine[i]->color = sel1;
+                 for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
+                    if ( i->color == sel2 )
+                       i->color = sel1;
 
               } /* endfor */
               anzeige();
@@ -2968,7 +2971,7 @@ void         tminestrength::init(void)
    w = (xsize - 60) / 2;
    action = 0;
    pf = getactfield();
-   strength = pf->object->mine[0]->strength;
+   strength = pf->mines.begin()->strength;
 
    windowstyle = windowstyle ^ dlg_in3d;
 
@@ -3000,7 +3003,7 @@ void         tminestrength::buttonpressed(int         id)
    if (id == 7) {
       mapsaved = false;
       action = 1;
-      pf->object->mine[0]->strength = strength;
+      pf->mines.begin()->strength = strength;
    }
    if (id == 8) action = 1;
 }
@@ -3008,10 +3011,11 @@ void         tminestrength::buttonpressed(int         id)
 
 void         changeminestrength(void)
 {
-   tminestrength  ms;
-
    pf =  getactfield();
-   if ( (pf->object == NULL ) || (pf->object->mine == 0) ) return;
+   if ( pf->mines.empty() )
+      return;
+
+   tminestrength  ms;
    ms.init();
    ms.run();
    ms.done();

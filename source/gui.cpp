@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: gui.cpp,v 1.54 2001-02-18 17:52:38 mbickel Exp $
+//     $Id: gui.cpp,v 1.55 2001-02-26 12:35:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2001/02/18 17:52:38  mbickel
+//      Fixed some compilation problems on Linux
+//
 //     Revision 1.53  2001/02/18 15:37:12  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -1652,7 +1655,7 @@ int   tnsguiiconputgroundmine::available    ( void )
       pfield fld = getactfield(); 
       if ((fld->typ->art & cbwater) == 0)
          if ( fld->a.temp ) 
-            if ( fld->minenum() < actmap->getgameparameter( cgp_maxminesonfield ) && ( !fld->minenum() || fld->mineowner() == actmap->actplayer )) 
+            if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
                return true; 
    } 
    return 0;
@@ -1692,7 +1695,7 @@ int   tnsguiiconputseamine::available    ( void )
       pfield fld = getactfield(); 
       if (fld->typ->art & cbwater ) 
          if (fld->a.temp ) 
-            if ( fld->minenum() < actmap->getgameparameter( cgp_maxminesonfield ) && ( !fld->minenum() || fld->mineowner() == actmap->actplayer )) 
+            if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
                return true; 
    } 
    return 0;
@@ -1746,9 +1749,8 @@ int   tnsguiiconremovemine::available    ( void )
    if (moveparams.movestatus == 90) { 
       pfield fld = getactfield(); 
       if ( fld->a.temp ) 
-         if ( fld->minenum() ) 
-            return true; 
-   } 
+         return !fld->mines.empty();
+   }
    return 0;
 }
 
@@ -2738,7 +2740,7 @@ const char*       tnweapselguiicon::getinfotext  ( void )
       if ( fld->building ) 
          battle = new tunitattacksbuilding ( eht, getxpos(), getypos(), weapnum );
       else
-      if ( fld->object ) 
+      if ( !fld->objects.empty() )
          battle = new tunitattacksobject ( eht, getxpos(), getypos(), weapnum );
       
 

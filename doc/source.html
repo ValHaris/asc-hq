@@ -90,13 +90,13 @@ Well, nothing special about that. We build ASC with the standard GNU development
 
 
 <H3>Source code formatting</H3>
-Since there are many different source code formatting styles out there, it would be quite a mess if everybody used his own style and spends half his time undoing the formatting that others did. So we should agree on a common layout. 
+Since there are many different source code formatting styles out there, it would be quite a mess if everybody used his own style and spends half his time undoing the formatting that others did. I don't want to force everybody to use exactly the same formatting, but if some source is <B>re</B>formatted, then to a well defined layout.
 <A HREF="http://astyle.sourceforge.net/astyle/">Artistic Style</A> is a capable program for formatting source code.
 The settings <TT>--style=linux -s3 -C -S</TT> are recommended to be used for ASC. If you write these settings to a file <TT>~/.astylerc</TT>, you don't need to type them each time you call Astyle. The central setting there is the -s3, which tells Astyle to indent with 3 spaces.<P>
 
-<strong>Some nested and nasty #ifdefs can confuse Astyle. After using Astyle, check the last line of the source file and verify they are correctly indentend. If they are not, either fix the #ifdef or restore to the backup file that was created by Astyle!</strong><P>
+<strong>Some nested and nasty #ifdefs can confuse Astyle. After using Astyle, check the last line of the source file and verify they are correctly indented. If they are not, either fix the #ifdef or restore to the backup file that was created by Astyle!</strong><P>
 
-I personally don't like cutting breaking each line after 80 characters. The times when that was the upper limit of what a monitor could display at once are long passed. And since the first 120 characters (or whatever the size of your screen is) of a command are usually sufficient to get an idea what it is doing, I prefer to not have the next line cluttered with some coordinate calculations that nobody is interested in. 
+I personally don't like cutting breaking each line after 80 characters. The times when that was the upper limit of what a monitor could display at once are long passed. And since the first 120 characters (or whatever the size of your screen is) of a command are usually sufficient to get an idea what it is doing, I prefer to not have the next line cluttered with some coordinate calculations that nobody is really interested in.
 But, as always, there are exceptions where it helps to break a command into several lines...
 <P>
 
@@ -104,157 +104,18 @@ But, as always, there are exceptions where it helps to break a command into seve
 <H3>Porting ASC</H3>
 Porting ASC to any platform supported by SDL should be farely easy (as long as it is 32 bit and has Intel byte order). 
 
-<H3>The source files</H3>
-A short overview of the various source files ASC consists of (outdated, I've started using doxygen for the source documentation)
+<H3>The source documentation</H3>
+The source documentation system used for ASC is <A HREF="http://www.stack.nl/~dimitri/doxygen/">doxygen</A>. The doxygen configuration file is <TT>asc/source/doxygen.config</TT>.
 
-<DL>
-<DT><A HREF="../source/artint.cpp">artint.cpp</A>
-<DD>
-The artificial intelligence. The file is not compileable at them moment, but will be reactivated soon.
-<BR><I>used by: </I><I>used by: </I>main program
+<H3>A short walk through the ASC source</H3>
 
-<DT><A HREF="../source/attack.cpp">attack.cpp</A>
-<DD>The attack routines: unit vs. unit, unit vs. object, unit vs. building
-<BR><I>used by: </I>main program
-
-<DT><A HREF="../source/basegfx.cpp">basegfx.cpp</A>
-<DD>Platform independant graphic routines. Mostly modifying of raw images
-<BR><I>used by: </I>main program, map editor, small editors
-
-<DT><A HREF="../source/basestrm.cpp">basestrm.cpp</A>
-<DD>Basic file IO, absolutely platform- and ASC independant. Stream functions for accessing container files, memory, ...
-<BR><I>used by: </I>everything
-
-<DT><A HREF="../source/building.cpp">building.cpp</A>
-<DD>routines for buildings and transports (sometimes called "container"). Containercontrols offer the functionaligy, ccontainer_t/b the GUI 
-<BR><I>used by: </I>main program
-
-<DT><A HREF="../source/controls.cpp">controls.cpp</A>
-<DD>Originally designed to contain all routines for controlling units, but everything affecting the map, its units etc but is not used by the mapeditor was placed here, so it is quite a varied collection of routines. In contrast, everything that is used by 
-the mapeditor is placed in SPFST.CPP 
-<BR><I>used by: </I>main program
-
-<DT><A HREF="../source/dialog.cpp">dialog.cpp</A>
-<DD>All dialog boxes that are used by the mapeditor and the main program
-<BR><I>used by: </I>main program, mapeditor
-
-<DT><A HREF="../source/dlg_box.cpp">dlg_box.cpp</A>
-<DD>The dialogbox engine. Contains some fundamental dialog box, for displaying messages, larger texts (like the help texts), too
-<BR><I>used by: </I>main program, mapeditor
+THE central class of ASC is <CODE>tmap</CODE> in <TT>gamemap.h</TT>. It is the anchor where nearly all elements of ASC are chained to. The global variable <CODE>actmap</CODE> is a pointer to the active map. There can be a maximum of 8 players on a map, plus neutral units (which are handled like a 9th player). Hence the array of 9 <CODE>Player</CODE> classes inside <CODE>tmap</CODE>. <P>
+Each player has units and buildings, which are stored in the lists <CODE>vehicleList</CODE> and <CODE>buildingList</CODE>. The terms units and vehicles are used synonymously in ASC. Since unit was a reserved word in Borland Pascal, we decided to use the term vehicle instead. But now, with ASC written in C++, 'unit' is also used.<P>
+Every building and unit is of a certain 'type'. The <CODE>vehicletypes</CODE> and <CODE>buildingtypes</CODE> are stored in the <TT>*.veh</TT> and <TT>*.bld</TT> files, are loaded on startup and globally available. They are not modified during runtime in any way and are referenced by the vehicles and buildings. The <CODE>vehicletype</CODE> has information that are shared by all vehicles of this 'type', like speed, weapon systems, accessable terrain etc, while the <CODE>vehicle</CODE> stores things like remaining movement for this turn, ammo, fuel and cargo.<P>
+The <CODE>Vehicle</CODE>, <CODE>Vehicletype</CODE> and <CODE>Buildingtype</CODE> classes are defined in files having the same name as the class, while the <CODE>Building</CODE> class is defined in <TT>building<B>s</B>.h</TT>, since <TT>building.*</TT> was already used for something different. <P>
+The primary content of a map are its fields. Each field has again a pointer to a certain weather of a <CODE>terraintype</CODE>. Each terraintype (can currently be found in <TT>typen.h</TT>, but will be moved to its own file sooner of later) has up to 5 different weathers ("dry (standard)","light rain", "heavy rain", "few snow", "lot of snow"). If there is a unit or a building standing on a field, it has a pointer to it. <P>
+On the field can be several <CODE>Objects</CODE>. Objects are another central class of ASC. Roads, pipleines, trenches and woods are examples of objects.
 
 
-<DT><A HREF="../source/edevents.cpp">edevents.cpp</A>
-<DD>editing the events 
-<BR><I>used by: </I>mapeditor
-
-<DT><A HREF="../source/edgen.cpp">edgen.cpp</A>
-<DD>generating random maps
-<BR><I>used by: </I>mapeditor
-
-<DT><A HREF="../source/edglobal.cpp">edglobal.cpp</A>, <A HREF="../source/edmain.cpp">edmain.cpp</A>, 
-<A HREF="../source/edmisc.cpp">edmisc.cpp</A>
-<DD>The central files of the mapeditor
-<BR><I>used by: </I>mapeditor
-
-<DT><A HREF="../source/edselfnt.cpp">edselfnt.cpp</A>
-<DD>Selecting units, buildings, objects, weather, ...
-<BR><I>used by: </I>mapeditor
-
-<DT><A HREF="../source/gamedlg.cpp">gamedlg.cpp</A>
-<DD>dialog boxes that are not used in the mapeditor
-<BR><I>used by: </I>main program
-
-<DT><A HREF="../source/gui.cpp">gui.cpp</A>
-<DD>The buttons for unit actions: movement, attack, ...
-<BR><I>used by: </I>main program
-
-<DT><A HREF="../source/history.cpp">history.cpp</A>
-<DD>Originally planed to provide history functions for ASC, but was never finished. Long derelicted.
-<BR><I>used by: </I>planned for use in the main program
-
-<DT><A HREF="../source/loadbi3.cpp">loadbi3.cpp</A>
-<DD>Routines for loading maps and graphics from Battle Isle 2 / 3 (Battle Isle 2200 / 2220 in the US)
-<BR><I>used by: </I>main program, mapeditor, small editors
-
-<DT><A HREF="../source/loaders.cpp">loaders.cpp</A>
-<DD>Loading and writing maps, save games, email files
-<BR><I>used by: </I>main program, mapeditor
-
-<DT><A HREF="../source/loadjpg.cpp">loadjpg.cpp</A>
-<DD>Loading of JPEG files (DOS only)
-
-
-<DT><A HREF="../source/loadpcxc.cpp">loadpcxc.cpp</A>
-<DD>Loading and writing PCX files, C code (in contrast to <A HREF="../source/dos/loadpcx.cpp">dos/loadpcx.cpp</A>, which uses ASM)
-<BR><I>used by: </I>main program, mapeditor
-
-<DT><A HREF="../source/misc.cpp">misc.cpp</A>
-<DD>Small miscellaneous functions
-<BR><I>used by: </I>main program, mapeditor, small editors
-
-<DT><A HREF="../source/missions.cpp">missions.cpp</A>
-<DD>Handling of map events
-<BR><I>used by: </I>main program
-
-<DT><A HREF="../source/network.cpp">network.cpp</A>
-<DD>currently only used for providing email game functionality, but designed for data transfer in general
-<BR><I>used by: </I>main program
-
-<DT><A HREF="../source/newfont.cpp">newfont.cpp</A>
-<DD>Font loading and displaying
-<BR><I>used by: </I>main program, mapeditor, some small editors
-
-<DT><A HREF="../source/objxlat.cpp">objxlat.cpp</A>
-<DD>included by loadpcx.cpp
-
-<DT><A HREF="../source/oldlzw.cpp">oldlzw.cpp</A>
-<DD>included by basestrm.cpp
-
-<DT><A HREF="../source/palette.cpp">palette.cpp</A>
-<DD>handling the 8bit palette
-<BR><I>used by: </I>main program, mapeditor, small editors
-
-<DT><A HREF="../source/pd.cpp">pd.cpp</A>
-<DD>The pulldown menu
-<BR><I>used by: </I>main program, mapeditor
-
-<DT><A HREF="../source/sg.cpp">sg.cpp</A>
-<DD>The main program of ASC
-<BR><I>used by: </I>main program
-
-<DT><A HREF="../source/sgstream.cpp">sgstream.cpp</A>
-<DD>ASC specific file IO, for loading and writing of vehicles, buildings, objects, ...
-<BR><I>used by: </I>main program, mapeditor, small editors
-
-<DT><A HREF="../source/soundList.cpp">soundList.cpp</A>
-<DD>Loading and handling of all sounds in ASC
-<BR><I>used by: </I>main program
-
-<DT><A HREF="../source/spfst.cpp">spfst.cpp</A>
-<DD>Name comes from german "Spielfeldsteuerung", english "map control". Contains everything arount the map that is used by the mapeditor and the main program. All routines that are only used in the main program are placed in controls.cpp
-<BR><I>used by: </I>main program, mapeditor
-
-<DT><A HREF="../source/stack.cpp">stack.cpp</A>
-<DD>A small, general purpose, not-type-save stack
-<BR><I>used by: </I>main program, mapeditor, small editors
-
-<DT><A HREF="../source/strtmesg.cpp">strtmesg.cpp</A>
-<DD>Contains the version number of ASC and the about start message of ASC and the mapeditor
-<BR><I>used by: </I>main program, mapeditor
-
-<DT><A HREF="../source/typen.h">typen.h</A>, <A HREF="../source/typen.cpp">typen.cpp</A>
-<DD>The definitions of the central ASC structures. 
-<BR><I>used by: </I>main program, mapeditor, small editors
-
-<DT><A HREF="../source/unitctrl.cpp">unitctrl.cpp</A>
-<DD>The new interface for controlling of the units. Foundation for the upcoming AI
-<BR><I>used by: </I>main program
-
-<DT><A HREF="../source/weather.cpp">weather.cpp</A>
-<DD>Weather change and mapchange events are executed here, as well as all polygon processing
-<BR><I>used by: </I>main program, mapeditor
-
-</DL>
-	
 </BODY>
 </HTML>

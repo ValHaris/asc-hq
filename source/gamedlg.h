@@ -1,6 +1,13 @@
-//     $Id: gamedlg.h,v 1.15 2001-01-23 21:05:17 mbickel Exp $
+//     $Id: gamedlg.h,v 1.16 2001-02-26 12:35:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2001/01/23 21:05:17  mbickel
+//      Speed up of AI
+//      Lot of bugfixes in AI
+//      Moved Research to own files (research.*)
+//      Rewrote storing of developed technologies
+//      Some cleanup and documentation
+//
 //     Revision 1.14  2001/01/04 15:13:52  mbickel
 //      configure now checks for libSDL_image
 //      AI only conquers building that cannot be conquered back immediately
@@ -111,16 +118,6 @@
 
 
 
-typedef struct tstringlist* pstringlist ;
-
- struct tstringlist {
-           tstringlist*    next;
-           tstringlist*    priv;
-           char*           text;
-           int             linenum;
-        };
-
-
 class   tnewcampaignlevel : public tdialogbox {
                       protected:
                          tmaploaders  loader;
@@ -145,9 +142,8 @@ class   tnewcampaignlevel : public tdialogbox {
 class  tcontinuecampaign : public tnewcampaignlevel {
                          word           idsearched;
                          peventstore    oldevent;
-                         // pdevelopedtechnologies  tech[8];
                          tmemorystreambuf memoryStreamBuffer;
-                         pdissectedunit dissectedunits[8];
+                         Player::DissectionContainer dissectedunits[8];
                     public:
                          void           init ( void );
                          virtual void   evaluatemapinfo( const char* srname, tmap* spfld );
@@ -214,11 +210,11 @@ class   tshownewtanks : public tdialogbox {
 extern void  showtechnology(ptechnology  t);
 extern void researchinfo ( void );
 extern void choosetechlevel ( void );
-extern void editmessage ( pmessage msg );
+extern void editmessage ( Message& msg );
 extern void newmessage ( void );
-extern void viewmessages ( char* title, pmessagelist strt, int editable, int md  ) ;   // mode : 0 verschickte ; 1 empfangene
-extern void viewmessage ( pmessage message );
-extern void editmessage ( pmessage msg );
+extern void viewmessages ( char* title, const MessagePntrContainer& msgc, bool editable, int md  ) ;   // mode : 0 verschickte ; 1 empfangene
+extern void viewmessage ( const Message& message );
+extern void editmessage ( Message& msg );
 extern void editjournal ( void );
 extern void viewjournal ( void );
 

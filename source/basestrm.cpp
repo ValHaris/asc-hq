@@ -2,9 +2,15 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.52 2001-02-18 15:37:01 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.53 2001-02-26 12:35:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2001/02/18 15:37:01  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.51  2001/02/04 21:26:54  mbickel
 //      The AI status is written to savegames -> new savegame revision
 //      Lots of bug fixes
@@ -346,6 +352,7 @@ CharBuf :: CharBuf ( void )
          }
 
 CharBuf :: CharBuf ( int _size )
+
          {
             size = _size;
             buf = new char[ size ];
@@ -656,6 +663,7 @@ void         tnstream::readpnchar(char** pc, int maxlength )
 
 bool  tnstream::readTextString ( ASCString& s )
 {
+  s = "";
   char c;
   int red;
   int end = 0;
@@ -802,6 +810,7 @@ static int stream_seek( struct SDL_RWops *context, int offset, int whence)
 
 
 static int stream_read(SDL_RWops *context, void *ptr, int size, int maxnum)
+
 {
 	MemoryStreamCopy* stream = (MemoryStreamCopy*) context->hidden.unknown.data1;
 	size_t nread = stream->readdata ( ptr, size * maxnum, 0 );
@@ -948,6 +957,7 @@ tnbufstream::~tnbufstream ()
    if (_mode == writing ) 
       writebuffer();
 
+
    if ( memsize > 1)
       delete []  zeiger ;
 } 
@@ -1067,6 +1077,7 @@ tn_file_buf_stream::~tn_file_buf_stream()
       writebuffer();
 
    fclose( fp );
+   _mode = uninitialized;
 
 }
 
@@ -1090,6 +1101,7 @@ tncontainerstream :: tncontainerstream ( const char* containerfilename, Containe
       readdata ( &num, sizeof (num) );
       index = new tcontainerindex[num];
       for ( int i = 0; i < num; i++ ) {
+
          readdata ( &index[i], sizeof ( index[i] ) );
          if ( index[i].name ) {
             readpchar ( &index[i].name );
@@ -2224,7 +2236,7 @@ int checkforvaliddirectory ( char* dir )
   void tmemorystreambuf :: writetostream ( pnstream stream )
   {
      if ( stream ) {
-        stream->writeChar ( initialized );
+        stream->writeInt ( initialized );
         stream->writeInt ( used );
         stream->writeInt ( allocated );
         stream->writedata2 ( dummy );
@@ -2236,9 +2248,9 @@ int checkforvaliddirectory ( char* dir )
   void tmemorystreambuf :: readfromstream ( pnstream stream )
   {
      if ( stream ) {
-        initialized = stream->readChar();
-        used = stream->readInt();
-        allocated = stream->readInt();
+        initialized = stream->readInt();
+        used        = stream->readInt();
+        allocated   = stream->readInt();
         stream->readdata2 ( dummy );
         if ( buf ) {
            delete[] buf;
@@ -2254,6 +2266,7 @@ int checkforvaliddirectory ( char* dir )
 
 tmemorystream :: tmemorystream ( pmemorystreambuf lbuf, IOMode lmode )
 {
+
    blocksize = 1024;
    buf = lbuf;
    _mode = lmode;
@@ -2424,6 +2437,7 @@ int directoryExist ( const char* path )
    int existence = 0;
 
    DIR *dirp = opendir( path );
+
    if( dirp ) {
       if ( readdir( dirp ) )
          existence = 1;

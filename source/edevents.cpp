@@ -2,9 +2,12 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.20 2001-02-11 11:39:31 mbickel Exp $
+//     $Id: edevents.cpp,v 1.21 2001-02-26 12:35:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2001/02/11 11:39:31  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.19  2001/02/01 22:48:36  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -1369,9 +1372,9 @@ void         tcreateevent::run(void)
                     ae->trigger[i] == ceventt_unitdestroyed ) {
                     pvehicle vehicle;
                     if ( ae->trigger[i] == ceventt_specific_unit_enters_polygon )
-                       vehicle = ae->trigger_data[i]->unitpolygon->vehicle;
+                       vehicle = actmap->getUnit( ae->trigger_data[i]->unitpolygon->vehiclenetworkid );
                     else
-                       vehicle = ae->trigger_data[i]->vehicle;
+                       vehicle = actmap->getUnit( ae->trigger_data[i]->networkid );
 
                     if ( !vehicle->name.empty() )
                        displaymessage ( vehicle->name.c_str(), 1 );
@@ -1395,7 +1398,7 @@ void tcreateevent::freedata( void )
       ae->datasize = 0;
    }
 }
-                                                            
+
 
 pvehicle selectunit ( pvehicle unit )
 {
@@ -1432,6 +1435,17 @@ pvehicle selectunit ( pvehicle unit )
        return NULL;
     }
 }
+
+int selectunit ( int unitnetworkid )
+{
+  pvehicle v = actmap->getUnit ( unitnetworkid );
+  v = selectunit ( v );
+  if ( v )
+     return v->networkid;
+  else
+     return 0;
+}
+
 
 
 // There is a memory leak at the unit_enters_polygon trigger; but it is not large and should be fixed by a general rewrite of the trigger functions
@@ -1798,8 +1812,8 @@ void         tcreateevent::buttonpressed(int         id)
                      case ceventt_unitlost:
                      case ceventt_unitconquered:
                      case ceventt_unitdestroyed:   {
-                                 ae->trigger_data[nid]->vehicle = selectunit( ae->trigger_data[nid]->vehicle );
-                                 if ( ae->trigger_data[nid]->vehicle )
+                                 ae->trigger_data[nid]->networkid = selectunit ( ae->trigger_data[nid]->networkid );
+                                 if ( ae->trigger_data[nid]->networkid )
                                     ae->trigger[nid] = rnr;
                                  else
                                     ae->trigger[nid] = 0;
@@ -1830,13 +1844,13 @@ void         tcreateevent::buttonpressed(int         id)
                      }
                      break;
                   case ceventt_specific_unit_enters_polygon:
-                                 etpe.vehicle = selectunit( ae->trigger_data[nid]->vehicle );
+                                 etpe.vehiclenetworkid = selectunit( ae->trigger_data[nid]->networkid );
                                  redraw();
-                                 if ( !etpe.vehicle )
+                                 if ( !etpe.vehiclenetworkid )
                                     break;
 
                   case ceventt_any_unit_enters_polygon:
-                                 if ( !etpe.vehicle ) {
+                                 if ( !etpe.vehiclenetworkid ) {
                                     int col = 0;
                                     playerselall ( &col );
                                     etpe.color = (col >> 2) & 255;

@@ -1,6 +1,12 @@
-//     $Id: typen.cpp,v 1.72 2001-02-18 15:37:21 mbickel Exp $
+//     $Id: typen.cpp,v 1.73 2001-02-26 12:35:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.72  2001/02/18 15:37:21  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.71  2001/02/11 11:39:44  mbickel
 //      Some cleanup and documentation
 //
@@ -18,6 +24,7 @@
 //      Fixed bugs in mapeditor
 //
 //     Revision 1.67  2001/01/28 23:00:42  mbickel
+
 //      Made the small editors compilable with Watcom again
 //
 //     Revision 1.66  2001/01/28 20:42:16  mbickel
@@ -260,6 +267,7 @@
 //      Changed timer to SDL_GetTicks
 //
 //     Revision 1.12  2000/03/16 14:06:56  mbickel
+
 //      Added unitset transformation to the mapeditor
 //
 //     Revision 1.11  2000/01/31 16:08:39  mbickel
@@ -640,198 +648,76 @@ Resources Resources::operator* ( double d )
 
 
 
-tmessage :: tmessage ( void )
+Message :: Message ( void )
 {
    from = 0;
    to = 0;
    time = 0;
-   text = NULL;
    id = 0;
-   next = NULL;
 }
 
 #ifndef sgmain
 
-tmessage :: tmessage ( pmap spfld )
+Message :: Message ( pmap spfld )
 {
    from = 0;
    to = 0;
    time = 0;
-   text = NULL;
    id = 0;
-   next = NULL;
    runde = 0;
    move = 0;
 }
 
-tmessage :: tmessage ( char* txt, int rec )  // f?r Meldungen vom System
+Message :: Message ( const ASCString& , pmap gamemap, int rec )  // f?r Meldungen vom System
 {
    from = 0;
    to = 0;
    time = 0;
-   text = NULL;
    id = 0;
-   next = NULL;
    runde = 0;
    move = 0;
 }
 
 #else
 
-tmessage :: tmessage ( pmap spfld  )
+Message :: Message ( pmap spfld  )
 {
    from = 1 << spfld->actplayer;
    runde = spfld->time.a.turn;
    move = spfld->time.a.move;
    time = ::time( NULL );
    to = 0;
-   text = NULL;
    spfld->messageid++;
    id = spfld->messageid;
-   next = NULL;
-   if ( spfld->message ) {
-      pmessage mes = spfld->message;
-      while ( mes->next )
-         mes = mes->next;
-      mes->next = this;
-   } else 
-     spfld->message = this;
 
+   spfld->messages.push_back ( this );
 }
 
-tmessage :: tmessage ( char* txt, int rec )  // f?r Meldungen vom System
+Message :: Message ( const ASCString& msg, pmap gamemap, int rec )  // f?r Meldungen vom System
 {
    from = 1 << 9;
    runde = actmap->time.a.turn;
    move = actmap->time.a.move;
    time = ::time( NULL );
    to = rec;
-   text = txt;
-   actmap->messageid++;
-   id = actmap->messageid;
-   next = NULL;
-   if ( actmap->message ) {
-      pmessage mes = actmap->message;
-      while ( mes->next )
-         mes = mes->next;
-      mes->next = this;
-   } else 
-     actmap->message = this;
+   text = msg;
+   gamemap->messageid++;
+   id = gamemap->messageid;
 
-    for ( int i = 0; i < 8; i++ )
-       if ( to & ( 1 << i )) {
-          pmessagelist dst = new tmessagelist ( &actmap->player[ i ].unreadmessage );
-          dst->message = this;
-       }   
+   gamemap->messages.push_back ( this );
+
+   for ( int i = 0; i < 8; i++ )
+      if ( to & ( 1 << i ))
+         actmap->player[i].unreadmessage.push_back ( this );
 }
 
 
 #endif
 
-tmessage :: ~tmessage()
-{
-   if ( text ) {
-      delete[] text;
-      text = NULL;
-   }
-}
-
-
-tmessagelist :: tmessagelist ( pmessagelist* prv )
-{
-   message = NULL;
-   pmessagelist p = *prv;
-   if ( p )
-      while ( p->next )
-         p = p->next;
-
-   prev = p;
-
-   if ( p ) {
-      next = p->next;
-      if ( next )
-         next->prev = this;
-      p->next = this;
-   
-   } else {
-      next = NULL;
-      *prv = this;
-   }
-   
-}
-
-tmessagelist :: ~tmessagelist ()
-{
-
-   if ( prev )
-      prev->next = next;
-
-   if ( next )
-      next->prev = prev;
-
-}
-
-int tmessagelist :: getlistsize ( void )
-{
-   if ( next || prev )
-      return 1;
-   else
-      return 0;
-}
 
 
 
 
-
-
-tnetworkcomputer :: tnetworkcomputer ( void )
-{
-   #ifdef sgmain
-   send.transfermethod = defaultnetworkconnection;
-   send.transfermethodid = defaultnetworkconnection->getid();
-   memset ( send.data, 0, sizeof ( send.data ));
-
-   receive.transfermethod = defaultnetworkconnection;
-   receive.transfermethodid = defaultnetworkconnection->getid();
-   memset ( receive.data, 0, sizeof ( receive.data ));
-   #endif
-
-   name = NULL;
-   existent = 0;
-}
-
-tnetworkcomputer :: ~tnetworkcomputer ( )
-{
-   #ifdef sgmain
-   if ( send.transfermethod ) {
-      if ( send.transfermethod->transferopen () )
-         send.transfermethod->closetransfer();
-      if ( send.transfermethod->connectionopen () )
-         send.transfermethod->closeconnection();
-   }
-
-   if ( receive.transfermethod ) {
-      if ( receive.transfermethod->transferopen () )
-         receive.transfermethod->closetransfer();
-      if ( receive.transfermethod->connectionopen () )
-         receive.transfermethod->closeconnection();
-   }
-   #endif
-
-}
-
-
-tnetwork :: tnetwork ( void )
-{
-  for (int i = 0; i < 8; i++) {
-     player[i].compposition = 0;
-     player[i].codewordcrc = 0;
-  } /* endfor */
-  computernum = 0;
-  turn = 0;
-  globalparams.enablesaveloadofgames = 0;
-  globalparams.reaskpasswords = 0;
-}
 
 void      TerrainType::Weather::paint ( int x1, int y1 )
 {
@@ -864,41 +750,12 @@ void      TerrainType::Weather::paint ( int x1, int y1 )
 
         buf += agmp->scanlinelength - 2 * i + 1;
       } /* endfor */
-      
+
    }
   #endif
  #endif
 }
 
-
-treplayinfo :: treplayinfo ( void )
-{
-   for (int i = 0; i < 8; i++) {
-      guidata[i] = NULL;
-      map[i] = NULL;
-   }
-   actmemstream = NULL;
-}
-
-treplayinfo :: ~treplayinfo ( )
-{
-   #ifndef converter
-   for (int i = 0; i < 8; i++)  {
-      if ( guidata[i] ) {
-         delete guidata[i];
-         guidata[i] = NULL;
-      }
-      if ( map[i] ) {
-         delete map[i];
-         map[i] = NULL;
-      }
-  }
-  if ( actmemstream ) {
-     delete actmemstream ;
-     actmemstream = NULL;
-  }
-  #endif
-}
 
 bool tterrainbits :: toand ( const tterrainbits& bts ) const
 {
@@ -1003,7 +860,6 @@ tterrainbits cblargerocks ( 1<<23, 0 );
 tevent::LargeTriggerData::PolygonEntered :: PolygonEntered ( void )
 {
    size = 0;
-   vehicle = NULL;
    vehiclenetworkid = 0;
    data = NULL;
    tempnwid = 0;
@@ -1016,7 +872,6 @@ tevent::LargeTriggerData::PolygonEntered :: PolygonEntered ( void )
 tevent::LargeTriggerData::PolygonEntered :: PolygonEntered ( const tevent::LargeTriggerData::PolygonEntered& poly )
 {
    size = poly.size;
-   vehicle = poly.vehicle;
    vehiclenetworkid = poly.vehiclenetworkid;
    if ( poly.data ) {
       data = new int [size];
@@ -1046,8 +901,7 @@ tevent::LargeTriggerData :: LargeTriggerData ( void )
    xpos = -1;
    ypos = -1;
    building = NULL;
-   vehicle = NULL;
-   mapid = 0;  
+   mapid = 0;
    id = -1;  
    unitpolygon = NULL;  
    networkid = 0;
@@ -1061,7 +915,6 @@ tevent::LargeTriggerData :: LargeTriggerData ( const LargeTriggerData& data )
    ypos = data.ypos;
    networkid = data.networkid;
    building = data.building;
-   vehicle = data.vehicle;
    mapid = data.mapid;
    id = data.id;
    if ( data.unitpolygon ) {
@@ -1145,20 +998,6 @@ tevent :: ~tevent ()
    }
 }
 
-
-int getheightdelta ( int height1, int height2 )
-{
-   int ah = height1;
-   int dh = height2;
-   int hd = dh - ah;
- 
-   if ( ah >= 3 && dh <= 2 ) 
-      hd++;
-   if (dh >= 3 && ah <= 2 )
-      hd--;
- 
-   return hd;
-}
 
 
 const int object_version = 1;

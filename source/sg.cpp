@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: sg.cpp,v 1.134 2001-02-18 15:37:17 mbickel Exp $
+//     $Id: sg.cpp,v 1.135 2001-02-26 12:35:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.134  2001/02/18 15:37:17  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.133  2001/02/15 21:57:06  mbickel
 //      The AI doesn't try to attack with recon units any more
 //
@@ -676,6 +682,7 @@ void         loadcursor(void)
    {
       tnfilestream stream ("solarpwr.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.subwin.solarpower.start, false, &w );
+
    }
 
    {
@@ -757,6 +764,7 @@ void         loadcursor(void)
       stream.readrlepict (   &icons.container.tabmark[0], false, &w );
       stream.readrlepict (   &icons.container.tabmark[1], false, &w );
    }
+
 
    {
       tnfilestream stream ("traninfo.raw", tnstream::reading);
@@ -1249,8 +1257,7 @@ void  checkforvictory ( void )
             char* sp = getmessage( 10010 ); // Message "player has been terminated"
 
             sprintf ( txt, sp, actmap->player[i].getName().c_str() );
-            sp = strdup ( txt );
-            new tmessage ( sp, to );
+            new Message ( txt, actmap, to );
 
             if ( i == actmap->actplayer ) {
                displaymessage ( getmessage ( 10011 ),1 );
@@ -1677,15 +1684,12 @@ void mainloopgeneralmousecheck ( void )
 
 void viewunreadmessages ( void )
 {
-      while ( actmap->player[ actmap->actplayer ].unreadmessage  ) {
-         pmessagelist m = actmap->player[ actmap->actplayer ].unreadmessage ;
-         viewmessage ( m->message );
-         pmessagelist n = new tmessagelist ( &actmap->player[ actmap->actplayer ].oldmessage );
-         n->message = m->message;
-
-         actmap->player[ actmap->actplayer ].unreadmessage = m->next;
-         delete m;
-      }
+   MessagePntrContainer::iterator mi = actmap->player[ actmap->actplayer ].unreadmessage.begin();
+   while ( mi != actmap->player[ actmap->actplayer ].unreadmessage.end()  ) {
+      viewmessage ( **mi );
+      actmap->player[ actmap->actplayer ].oldmessage.push_back ( *mi );
+      mi = actmap->player[ actmap->actplayer ].unreadmessage.erase ( mi );
+   }
 }
 
 
@@ -2046,6 +2050,7 @@ void loaddata( int resolx, int resoly,
 
    if ( actprogressbar ) actprogressbar->startgroup();
    loadallbuildingtypes();
+
 
    if ( actprogressbar ) actprogressbar->startgroup();
    loadalltechnologies();

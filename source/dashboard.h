@@ -34,7 +34,7 @@
                        pvehicle     vehicle;
                        pvehicletype vehicletype;
                        pbuilding    building;
-                       pobjectcontainer      object;
+                       pfield       objfield;
 
                        void         allocmem ( void );
                     protected:
@@ -80,8 +80,8 @@
                        tdashboard ( void );
                        void paintvehicleinfo( const pvehicle     vehicle,
                                               const pbuilding    building,
-                                              const pobjectcontainer      object,
-                                              const pvehicletype  vehicletype );
+                                              const pfield       _objfield,
+                                              const pvehicletype vehicletype );
 
                        void         paintlweaponinfo ( void );
 

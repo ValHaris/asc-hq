@@ -1,6 +1,9 @@
-//     $Id: network.h,v 1.5 2000-08-12 12:52:49 mbickel Exp $
+//     $Id: network.h,v 1.6 2001-02-26 12:35:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/08/12 12:52:49  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.4  1999/12/28 21:03:12  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -38,10 +41,10 @@
     Boston, MA  02111-1307  USA
 */
 
-#ifdef karteneditor
-#error eigentlich sollte der Karteneditor ohne das Network auskommen k”nnen !
-#endif
 
+#ifdef karteneditor
+#error The mapeditor should not need the network routines
+#endif
 
 #ifndef network_h
 #define network_h
@@ -49,8 +52,9 @@
 #include "typen.h"
 #include "sgstream.h"
 #include "dlg_box.h"
+#include "networkdata.h"
 
-extern int netlevel;
+
 
 
 

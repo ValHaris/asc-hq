@@ -27,7 +27,7 @@
 #include "errors.h"
 #include "gameoptions.h"
 #include "basegfx.h"
-
+#include "spfst.h"
 
 
 

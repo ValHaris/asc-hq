@@ -7,9 +7,15 @@
 */
 
 
-//     $Id: network.cpp,v 1.17 2001-02-18 15:37:16 mbickel Exp $
+//     $Id: network.cpp,v 1.18 2001-02-26 12:35:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2001/02/18 15:37:16  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.16  2001/01/31 14:52:41  mbickel
 //      Fixed crashes in BI3 map importing routines
 //      Rewrote memory consistency checking
@@ -105,8 +111,6 @@
 #include "events.h"
 #include "sgstream.h"
 #include "loadpcx.h"
-
-int netlevel;
 
 pbasenetworkconnection firstnetworkconnection = NULL;
 

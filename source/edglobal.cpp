@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.29 2001-02-11 11:39:32 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.30 2001-02-26 12:35:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2001/02/11 11:39:32  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.28  2001/02/01 22:48:37  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -670,8 +673,8 @@ void execaction(int code)
                      lastselectiontype = cselbuilding;
                      setnewbuildingselection ( auswahlb );
                   } else
-                  if ( fld->object && fld->object->objnum ) {
-                     actobject = fld->object->object[ fld->object->objnum -1 ]->typ ;
+                  if ( !fld->objects.empty() ) {
+                     actobject = fld->objects.begin()->typ ;
                      lastselectiontype = cselobject;
                      setnewobjectselection ( actobject );
                   } else {

@@ -2,9 +2,15 @@
     \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
 
-//     $Id: gamedlg.cpp,v 1.65 2001-02-18 15:37:10 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.66 2001-02-26 12:35:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.65  2001/02/18 15:37:10  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.64  2001/02/11 11:39:33  mbickel
 //      Some cleanup and documentation
 //
@@ -1047,15 +1053,15 @@ void tsetupnetwork :: paintcomputernames ( void )
 int  setupnetwork ( tnetwork* nw, int edt, int player )
 {
    if ( nw || actmap->network ) {
-      tsetupnetwork sun;
+      tsetupnetwork sn;
       if ( nw )
-         sun.init( nw, edt, player );
+         sn.init( nw, edt, player );
       else
-         sun.init ( actmap->network, edt, player );
+         sn.init ( actmap->network, edt, player );
 
-      sun.run();
-      int i = sun.status;
-      sun.done();
+      sn.run();
+      int i = sn.status;
+      sn.done();
       return i;
    }
    return 1;
@@ -1443,18 +1449,18 @@ void         tcontinuecampaign::regroupevents ( pmap map )
    pevent ev = map->firsteventpassed;
 
    while ( ev ) {
-      peventstore foev;
+      // peventstore foev;
 
       if ( oev == NULL ) {
          oev = new ( teventstore ) ;
          oldevent = oev;
-         foev = oev;
+         // foev = oev;
          oev->next = NULL;
          oev->num = 0;
       }
       else
          if (oev->num == 256) {
-            foev = oev;
+            peventstore foev = oev;
             oev = new ( teventstore ) ;
             foev->next = oev;
             oev->num = 0;
@@ -1472,11 +1478,7 @@ void         tcontinuecampaign::regroupevents ( pmap map )
    for (int i = 0; i<8; i++) {
       map->player[i].research.write_struct ( memoryStream );
       map->player[i].research.write_techs ( memoryStream );
-
-      if ( map->player[i].exist() )
-         dissectedunits[i] = map->player[ i ].dissectedunit;
-      else
-         dissectedunits[i] = NULL;
+      dissectedunits[i] = map->player[ i ].dissections;
    }
 }
 
@@ -1498,9 +1500,6 @@ void         tcontinuecampaign::run(void)
       regroupevents( actmap );
 
       actmap->oldevents = NULL;
-      for (i=0;i<8 ; i++) {
-         actmap->player[ i ].dissectedunit = NULL;
-      }
 
       loadcampaignmap();
       actmap->oldevents = oldevent;
@@ -1509,7 +1508,7 @@ void         tcontinuecampaign::run(void)
       for (i=0;i<8 ; i++) {
          actmap->player[i].research.read_struct ( memoryStream );
          actmap->player[i].research.read_techs ( memoryStream );
-         actmap->player[ i ].dissectedunit = dissectedunits[i];
+         actmap->player[ i ].dissections = dissectedunits[i];
       }
 
    }
@@ -2443,7 +2442,7 @@ class  tparagraph {
           void checkscrolldown ( void );
           int  checkcursorpos ( void );
 
-          void addtext ( char* txt );
+          void addtext ( const ASCString& txt );
           ~tparagraph ();
 
           void setpos ( int x1, int y1, int y2, int linepos, int linenum );
@@ -2576,13 +2575,13 @@ void tparagraph :: join ( void )
 
 
 
-void tparagraph :: addtext ( char* txt )
+void tparagraph :: addtext ( const ASCString& txt )
 {
-    int nsize = strlen ( txt );
+    int nsize = txt.length();
     if ( allocated < nsize + size )
        changesize ( nsize + size );
- 
-    strcat ( text, txt );
+
+    strcat ( text, txt.c_str() );
     size = strlen ( text ) + 1;
 }
 
@@ -2759,7 +2758,6 @@ int  tparagraph :: reflow( int all  )
         }
         linenum++;
         linestart[linenum] = &text[pos2];
-        oldlength = length;
         length = 0;
         pos = pos2;
      } else
@@ -2977,9 +2975,9 @@ class tmessagedlg : public tdialogbox {
             public:
                 tmessagedlg ( void );
                 virtual void setup ( void );
-                void inserttext ( char* txt );
+                void inserttext ( const ASCString& txt );
                 void run ( void );
-                void extracttext ( char** c );
+                ASCString extracttext ();
                 ~tmessagedlg();
 
 
@@ -3001,45 +2999,45 @@ tmessagedlg :: tmessagedlg ( void )
     #endif
 }
 
-void tmessagedlg :: inserttext ( char* txt )
+void tmessagedlg :: inserttext ( const ASCString& txt )
 {
-   if ( !txt )
+   if ( txt.empty() )
       firstparagraph = new tparagraph;
    else {
       firstparagraph = NULL;
       actparagraph = NULL;
-      char* c = txt;
-      char* start = txt;
-      while ( *c ) {
+      int pos = 0;
+      int start = 0;
+      const char* c = txt.c_str();
+      while ( c[pos] ) {
          int sz = 0;
-         if ( strnicmp(c, "#CRT#" , 5 ) == 0 ) 
+         if ( strnicmp(&c[pos], "#CRT#" , 5 ) == 0 )
             sz = 5;
-         if ( strnicmp(c, "\r\n" , 2 ) == 0 )
+         if ( strnicmp(&c[pos], "\r\n" , 2 ) == 0 )
             sz = 2;
-         if ( strnicmp(c, "\n" , 2 ) == 0 )
+         if ( strnicmp(&c[pos], "\n" , 2 ) == 0 )
             sz = 1;
          if ( sz ) {
-            // if ( c[sz] ) {
-               char d = *c;
-               *c = 0;
-               actparagraph = new tparagraph ( actparagraph );
-               if ( !firstparagraph )
-                  firstparagraph = actparagraph;
-  
-               actparagraph->addtext ( start );
-               *c = d;
-            // }
-            c+=sz;
-            start = c;
+            ASCString s = txt;
+            if ( start )
+               s.erase ( 0, start );
+            s.erase ( pos );
+            actparagraph = new tparagraph ( actparagraph );
+            if ( !firstparagraph )
+               firstparagraph = actparagraph;
+
+            actparagraph->addtext ( s );
+            pos+=sz;
+            start = pos;
          } else
             c++;
       } /* endwhile */
 
-      if ( strlen ( start ) ) {
+      if ( start < txt.length() ) {
          actparagraph = new tparagraph ( actparagraph );
          if ( !firstparagraph )
              firstparagraph = actparagraph;
-         actparagraph->addtext ( start );
+         actparagraph->addtext ( &(txt.c_str()[start]) );
       }
 
    }
@@ -3082,7 +3080,7 @@ void tmessagedlg :: run ( void )
    }
 }
 
-void tmessagedlg :: extracttext ( char** c  )
+ASCString tmessagedlg :: extracttext ()
 {
    tparagraph text;
 
@@ -3092,7 +3090,7 @@ void tmessagedlg :: extracttext ( char** c  )
       text.addtext ( "#crt#" );
       actparagraph = actparagraph->next;
    }
-   *c = strdup ( text.text );
+   return text.text;
 
 }
 
@@ -3185,7 +3183,7 @@ void tnewmessage :: init ( void )
    activefontsettings.color = black;
    activefontsettings.justify = lefttext;
 
-   inserttext ( NULL );
+   inserttext ( "" );
    actparagraph = firstparagraph;
    actparagraph->cursor = 0;
    actparagraph->setpos( x1 + tx1, y1 + ty1, y1 + ty2, 0, 13 );
@@ -3214,7 +3212,6 @@ void tnewmessage :: buttonpressed ( int id )
 
 void tnewmessage :: run ( void )
 {
-
    mousevisible ( true );
 
    do {
@@ -3223,18 +3220,14 @@ void tnewmessage :: run ( void )
 
    } while ( !ok ); /* enddo */
    if ( ok == 1 ) {
-      char* c;
-      extracttext ( &c );
-      pmessage message = new tmessage ( actmap );
-      message->text = c;
+      Message* message = new Message ( extracttext(), actmap, 0 );
       for ( int i = 0; i < 8; i++ ) {
          if ( actmap->player[i].exist() )
             if ( actmap->actplayer != i ) 
                message->to |= to[i] << i;
       }
-      pmessagelist list = new tmessagelist ( &actmap->unsentmessage );
-      list->message = message;
 
+      actmap->unsentmessage.push_back ( message );
    }
 }
 
@@ -3250,21 +3243,21 @@ void newmessage ( void )
 
 class teditmessage : public tmessagedlg  {
             protected:
-               pmessage message;
+               Message* message;
             public:
-               void init ( pmessage msg );
+               void init ( Message* msg );
                void buttonpressed ( int id );
                void run ( void );
        };
 
 
-void teditmessage :: init ( pmessage msg  )
+void teditmessage :: init ( Message* msg  )
 {
    message = msg;
    tdialogbox :: init ( );
    title = "edit message";
 
-   for ( int i = 0; i < 8; i++ ) 
+   for ( int i = 0; i < 8; i++ )
       to[i] = (message->to & ( 1 << i )) > 0;
 
    setup();
@@ -3281,7 +3274,7 @@ void teditmessage :: init ( pmessage msg  )
    activefontsettings.color = black;
    activefontsettings.justify = lefttext;
 
-   inserttext ( msg->text );
+   inserttext ( msg->text.c_str() );
    actparagraph = firstparagraph;
    actparagraph->cursor = 0;
    actparagraph->setpos( x1 + tx1, y1 + ty1, y1 + ty2, 0, 13 );
@@ -3310,137 +3303,115 @@ void teditmessage :: buttonpressed ( int id )
 
 void teditmessage :: run ( void )
 {
-
    mousevisible ( true );
 
    do {
-
       tmessagedlg::run ( );
-
    } while ( !ok ); /* enddo */
+
    if ( ok == 1 ) {
-      char* c;
-      extracttext ( &c );
-      delete[] message->text;
-      message->text = c;
+      message->text = extracttext();
       message->to = 0;
       for ( int i = 0; i < 8; i++ ) {
          if ( actmap->player[i].exist() )
-            if ( actmap->actplayer != i ) 
+            if ( actmap->actplayer != i )
                message->to |= to[i] << i;
       }
    }
 }
 
 
-void editmessage ( pmessage msg )
+void editmessage ( Message& msg )
 {
   teditmessage nm;
-  nm.init( msg );
+  nm.init( &msg );
   nm.run();
   nm.done();
 }
 
 class tviewmessages : public tdialogbox {
-               pmessagelist start;
-               pmessagelist *message;
-               int act;
-               int num;
-               int dispnum;
-               int firstdisplayed;
+               typedef vector<Message*> MsgVec;
+               MsgVec msg;
+               MsgVec::iterator firstdisplayed;
+               MsgVec::iterator marked;
                int player[8];
                int mode;
                int ok;
+               int dispnum;
+               int scrollpos;
+               int __num;
 
             public:
-               tviewmessages ( void );
-               void init ( char* ttl, pmessagelist strt, int editable, int md  );    // mode : 0 verschickte ; 1 empfangene
+               tviewmessages ( const MessagePntrContainer& _msglist );
+               void init ( char* ttl, bool editable, int md  );    // mode : 0 verschickte ; 1 empfangene
                int  getcapabilities ( void ) { return 1; };
                void redraw ( void );
                void run ( void );
                void buttonpressed ( int id );
                void paintmessages ( void );
                void checkforscroll ( void );
-               ~tviewmessages();
           };
 
 
-tviewmessages :: tviewmessages ( void )
+tviewmessages :: tviewmessages ( const MessagePntrContainer& msglist )
 {
-   message = NULL;
+   msg.insert ( msg.end(), msglist.begin(), msglist.end());
    ok = 0;
    dispnum = 10;
+   marked = msg.end();
+   firstdisplayed = msg.begin();
+   __num = msg.size();
 }
 
-void tviewmessages :: init ( char* ttl, pmessagelist strt, int editable, int md )
+void tviewmessages :: init ( char* ttl, bool editable, int md )
 {
    mode = md;
    tdialogbox :: init ( );
-   num = 0;
-   if ( strt ) {
-      pmessagelist temp = strt;
-      while ( temp->prev )
-         temp = temp->prev;
-      start = temp;
-      act = 0;
-      while ( temp ) {
-         num++;
-         temp = temp->next;
-      }
-      message = new pmessagelist[num];
-   
-      temp = strt;
-      int i = 0;
-      while ( temp ) {
-         message[num-i-1] = temp;
-         i++;
-         temp = temp->next;
-      }
-   }
-   firstdisplayed = 0;
 
    xsize =  400;
    ysize =  300;
    title = ttl;
    windowstyle &= ~dlg_in3d;
    if ( editable ) {
-     addbutton ( "~V~iew",    10,              ysize - 30, xsize / 3 - 5, ysize - 10 ,   0, 1, 1, num > 0  );
+     addbutton ( "~V~iew",    10,              ysize - 30, xsize / 3 - 5, ysize - 10 ,   0, 1, 1, msg.size() > 0 );
      addkey    ( 1, ct_enter );
 
-     addbutton ( "~E~dit",    xsize / 3 + 5,   ysize - 30, 2*xsize / 3 - 5, ysize - 10 , 0, 1, 2, num > 0  );
+     addbutton ( "~E~dit",    xsize / 3 + 5,   ysize - 30, 2*xsize / 3 - 5, ysize - 10 , 0, 1, 2, msg.size() > 0 );
 
      addbutton ( "e~x~it",  2*xsize / 3 + 5, ysize - 30, xsize - 10, ysize - 10 ,      0, 1, 3, true );
      addkey    ( 3, ct_esc );
    } else {
-     addbutton ( "~V~iew",    10,            ysize - 30, xsize / 2 - 5, ysize - 10 ,   0, 1, 1, num > 0  );
+     addbutton ( "~V~iew",    10,            ysize - 30, xsize / 2 - 5, ysize - 10 ,   0, 1, 1, msg.size() > 0  );
      addkey    ( 1, ct_enter );
 
      addbutton ( "e~x~it",  xsize / 2 + 5, ysize - 30, xsize - 10, ysize - 10 ,      0, 1, 3, true );
      addkey    ( 3, ct_esc );
    }
 
-   if ( num > dispnum )
-     addscrollbar ( xsize - 25, starty, xsize - 10, ysize - 40 , &num, dispnum, &firstdisplayed, 4, 0 );
+   if ( msg.size() > dispnum )
+     addscrollbar ( xsize - 25, starty, xsize - 10, ysize - 40 , &__num, dispnum, &scrollpos, 4, 0 );
 
    int b = 0;
 
    for ( int i = 0; i < 8; i++ )
       if ( actmap->player[i].exist()  &&  actmap->actplayer != i )
-            player[i] = b++;
+         player[i] = b++;
       else
-            player[i] = -1;
+         player[i] = -1;
 
    buildgraphics();
-            
+
 }
 
 void tviewmessages :: buttonpressed ( int id )
 {
    if ( id == 1 )
-      viewmessage ( message[ act ]->message );
+      if ( marked != msg.end() )
+         viewmessage ( **marked );
 
    if ( id == 2 )
-      editmessage ( message[ act ]->message );
+      if ( marked != msg.end() )
+         editmessage ( **marked );
 
    if ( id == 3 )
       ok = 1;
@@ -3451,31 +3422,30 @@ void tviewmessages :: buttonpressed ( int id )
 
 void tviewmessages :: paintmessages ( void )
 {
-   if ( start ) {
-
        setinvisiblemouserectanglestk ( x1 + 10, y1 + starty, x1 + xsize - 30, y1 + ysize - 40 );
 
-       int a = firstdisplayed;
+       MsgVec::iterator a = firstdisplayed;
        activefontsettings.font = schriften.smallarial;
        activefontsettings.background = dblue;
        activefontsettings.justify = lefttext;
-       while ( a < num  &&  a-firstdisplayed < dispnum ) {
-          if ( a == act )
+       int displayed = 0;
+       while ( a != msg.end()  &&  displayed < dispnum ) {
+          if ( a == marked )
              activefontsettings.color= white;
           else
              activefontsettings.color= black;
-    
+
           activefontsettings.length = 190;
-    
+
           tm *tmbuf;
-          tmbuf = localtime (&message[a]->message->time);
+          tmbuf = localtime ( &( (*a)->time ) );
           int y = y1 + starty + 10 + ( a - firstdisplayed ) * 20 ;
 
           showtext2 (asctime (tmbuf), x1 + 20, y);
-    
+
           activefontsettings.length = 100;
           if ( mode ) {
-             int fr = log2 ( message[a]->message->from );
+             int fr = log2 ( (*a)->from );
              if ( fr < 8 )
                 showtext2 ( actmap->player[ fr ].getName().c_str(), x1 + 220, y );
              else
@@ -3485,33 +3455,37 @@ void tviewmessages :: paintmessages ( void )
                 if ( player[i] >= 0 ) {
                    int x = x1 + 220 + player[i] * 15;
                    int color;
-                   if ( message[a]->message->to & ( 1 << i ) ) 
+                   if ( (*a)->to & ( 1 << i ) )
                       color = 20 + i * 8;
                    else
                       color = dblue ;
-    
+
                    bar ( x, y, x + 10, y + 10, color );
-                   
+
                 }
           }
-    
+
           a++;
+          displayed++;
        }
 
        getinvisiblemouserectanglestk();
-   }
 }
 
 void tviewmessages :: checkforscroll ( void )
 {
-   int oldfirst = firstdisplayed;
-   if ( act < firstdisplayed )
-      firstdisplayed = act;
-   if ( act > firstdisplayed + (dispnum-1) )
-      firstdisplayed = act - (dispnum-1) ;
+   firstdisplayed = msg.begin() + scrollpos;
+   if ( firstdisplayed >= msg.end() )
+      displaymessage (" tviewmessages :: checkforscroll  -- invalid scrolling operation ", 2 );
+
+   MsgVec::iterator oldfirst = firstdisplayed;
+   if ( marked < firstdisplayed )
+      firstdisplayed = marked;
+   if ( marked > firstdisplayed + (dispnum-1) )
+      firstdisplayed = marked - (dispnum-1) ;
 
    if ( oldfirst != firstdisplayed )
-      if ( num > dispnum )
+      if ( msg.size() > dispnum )
          enablebutton ( 4 );
 }
 
@@ -3519,7 +3493,7 @@ void tviewmessages :: checkforscroll ( void )
 void tviewmessages :: redraw ( void )
 {
    tdialogbox::redraw();
-   if ( num > dispnum )
+   if ( msg.size() > dispnum )
      rahmen ( true, x1 + 10, y1 + starty, x1 + xsize - 30, y1 + ysize - 40 );
    else
      rahmen ( true, x1 + 10, y1 + starty, x1 + xsize - 10, y1 + ysize - 40 );
@@ -3532,26 +3506,25 @@ void tviewmessages :: run ( void )
    int mstatus = 0;
 
    mousevisible( true );
-   do {              
+   do {
       tdialogbox :: run ( );
-      if ( start ) {
-         if ( taste == ct_down  &&  act+1 < num ) {
-            act++;
+         if ( taste == ct_down  &&  marked+1 < msg.end() ) {
+            marked++;
             checkforscroll();
             paintmessages();
          }
-         if ( taste == ct_up  &&  act ) {
-            act--;
+         if ( taste == ct_up  &&  marked > msg.begin() ) {
+            marked--;
             checkforscroll();
             paintmessages();
          }
-         if ( taste == ct_pos1  &&  act ) {
-            act=0;
+         if ( taste == ct_pos1  && marked > msg.begin() ) {
+            marked=msg.begin();
             checkforscroll();
             paintmessages();
          }
-         if ( taste == ct_ende  &&  act+1 < num ) {
-            act = num-1;
+         if ( taste == ct_ende  &&  marked+1 < msg.end() ) {
+            marked = msg.end()-1;
             checkforscroll();
             paintmessages();
          }
@@ -3559,15 +3532,15 @@ void tviewmessages :: run ( void )
          if ( mouseinrect ( x1 + 10, y1 + starty, x1 + xsize - 30, y1 + ysize - 40 )) {
             if ( mouseparams.taste == 1 ) {
                 int ps = (mouseparams.y - (y1 + starty + 10)) / 20;
-                if ( ps < dispnum ) {
-                   int n = ps + firstdisplayed;
-                   if ( n < num  && n >= 0) {
-                      if ( n != act ) {
-                         act = n;
+                if ( ps < dispnum && ps >= 0 ) {
+                   MsgVec::iterator n = firstdisplayed + ps;
+                   if ( n < msg.end() ) {
+                      if ( n != marked ) {
+                         marked = n;
                          paintmessages();
                          mstatus = 1;
                       }
-                      if ( n == act  &&  mstatus == 2 ) {
+                      if ( n == marked  &&  mstatus == 2 ) {
                          buttonpressed ( 1 );
                          mstatus = 0;
                       }
@@ -3578,24 +3551,16 @@ void tviewmessages :: run ( void )
          }
          if ( mouseparams.taste == 0  && mstatus == 1 )
             mstatus = 2;
-      }
+
    } while ( !ok ); /* enddo */
 
 }
 
-tviewmessages :: ~tviewmessages (  )
-{
-  if ( message ) {
-     delete message;
-     message = NULL;
-  }
-}
 
-
-void viewmessages ( char* title, pmessagelist strt, int editable, int md  )    // mode : 0 verschickte ; 1 empfangene
+void viewmessages ( char* title, const MessagePntrContainer& msg, bool editable, int md  )    // mode : 0 verschickte ; 1 empfangene
 {
-   tviewmessages vm;
-   vm.init  ( title, strt, editable, md );
+   tviewmessages vm ( msg );
+   vm.init  ( title, editable, md );
    vm.run ();
    vm.done();
 }
@@ -3609,17 +3574,17 @@ void viewmessages ( char* title, pmessagelist strt, int editable, int md  )    /
 
   class   tviewmessage : public tdialogbox, public tviewtextwithscrolling {
                public:
-                   char                 *txt;
-                   char              ok;
-                    
-                   char              scrollbarvisible;
+                   const char*          txt;
+                   char                 ok;
+
+                   char                 scrollbarvisible;
                    char                 action;
                    int                  textstart;
                    int                  from;
                    int                  cc;
                    int                  rightspace;
 
-                   void                 init( pmessage msg );
+                   void                 init( const Message& msg );
                    virtual void         run ( void );
                    virtual void         buttonpressed( int id);
                    void                 redraw ( void );
@@ -3629,29 +3594,29 @@ void viewmessages ( char* title, pmessagelist strt, int editable, int md  )    /
 
 
 
-void         tviewmessage::init( pmessage msg )
-{ 
+void         tviewmessage::init( const Message& msg )
+{
 
    // dialogbox initialisieren
 
    tdialogbox::init();
-   x1 = 20; 
-   y1 = 50; 
-   xsize = 500; 
-   ysize = 360; 
-   textstart = 42 + 45; 
-   textsizey = (ysize - textstart - 35); 
-   starty = starty + 10; 
+   x1 = 20;
+   y1 = 50;
+   xsize = 500;
+   ysize = 360;
+   textstart = 42 + 45;
+   textsizey = (ysize - textstart - 35);
+   starty = starty + 10;
    title = "message";
    windowstyle ^= dlg_in3d;
    action=0;
 
 
-   txt = msg->text;
-   from = msg->from;
-   cc = msg->to;
+   txt = msg.text.c_str();
+   from = msg.from;
+   cc = msg.to;
 
-                       
+
    setparams ( x1 + 13, y1 + textstart, x1 + xsize - 41, y1 + ysize - 35, txt, black, dblue);
    tvt_dispactive = 0;
    displaytext(  );
@@ -3660,7 +3625,7 @@ void         tviewmessage::init( pmessage msg )
 
 
    if (textsizeycomplete >= textsizey) {
-      scrollbarvisible = true; 
+      scrollbarvisible = true;
 
       #ifdef NEWKEYB
       addscrollbar(xsize - 30,starty,xsize - 15,ysize - 35,&textsizeycomplete, textsizey, &tvt_starty,1,0);
@@ -3670,10 +3635,10 @@ void         tviewmessage::init( pmessage msg )
       setscrollspeed ( 1 , 1 );
 
       rightspace = 40;
-   }                                                                                       
+   }
    else {
       rightspace = 10;
-      scrollbarvisible = false; 
+      scrollbarvisible = false;
    }
 
    addbutton ( "e~x~it", 10, ysize - 25, xsize - 10, ysize - 5, 0, 1, 4, true );
@@ -3700,7 +3665,7 @@ void         tviewmessage::redraw(void)
    activefontsettings.font = schriften.smallarial; 
    activefontsettings.color = black; 
    activefontsettings.justify = lefttext; 
-   activefontsettings.background = dblue; 
+   activefontsettings.background = dblue;
    activefontsettings.length =0;
 
    int yp = 36;
@@ -3718,7 +3683,7 @@ void         tviewmessage::redraw(void)
 
    activefontsettings.color = black; 
    if ( from != 1 << actmap->actplayer ) 
-      showtext2 ( "cc: ", x1 + 13, y1 + textstart - yp ); 
+      showtext2 ( "cc: ", x1 + 13, y1 + textstart - yp );
    else
       showtext2 ( "to: ", x1 + 13, y1 + textstart - yp ); 
 
@@ -3754,7 +3719,7 @@ void         tviewmessage::redraw(void)
 
 
 void         tviewmessage::buttonpressed( int id )
-{ 
+{
    tdialogbox::buttonpressed(id);
    if (id == 1) 
       displaytext();
@@ -3773,11 +3738,11 @@ void         tviewmessage::run(void)
       if (taste == ct_esc || taste == ct_enter || taste == ct_space ) 
          action = 11; 
    }  while (action < 10);
-} 
+}
 
 
 
-void viewmessage ( pmessage message )
+void viewmessage ( const Message& message )
 {
    tviewmessage vm;
    vm.init ( message );
@@ -3823,7 +3788,7 @@ void teditjournal :: init ( void )
    activefontsettings.color = black;
    activefontsettings.justify = lefttext;
 
-   inserttext ( actmap->newjournal );
+   inserttext ( actmap->newjournal ? actmap->newjournal : "" );
    actparagraph = firstparagraph;
    actparagraph->cursor = 0;
    actparagraph->setpos( x1 + tx1, y1 + ty1, y1 + ty2, 0, 13 );
@@ -3882,11 +3847,10 @@ void teditjournal :: run ( void )
 
    } while ( !ok ); /* enddo */
    if ( ok == 1 ) {
-      char* c;
-      extracttext ( &c );
+      ASCString c = extracttext();
       if ( actmap->newjournal )
          delete[] actmap->newjournal;
-      actmap->newjournal = c;
+      actmap->newjournal = strdup ( c.c_str() );
 
       actmap->lastjournalchange.a.turn = actmap->time.a.turn;
       actmap->lastjournalchange.a.move = actmap->actplayer;
@@ -4580,9 +4544,9 @@ void writeGameParametersToString ( std::string& s)
 
 void sendGameParameterAsMail ( void )
 {
-         std::string s;
+   ASCString s;
    writeGameParametersToString ( s );
-   new tmessage ( strdup ( s.c_str()), 255 );
+   new Message ( s, actmap, 255 );
 }
 
 

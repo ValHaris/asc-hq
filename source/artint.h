@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: artint.h,v 1.36 2001-02-15 21:57:06 mbickel Exp $
+//     $Id: artint.h,v 1.37 2001-02-26 12:34:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2001/02/15 21:57:06  mbickel
+//      The AI doesn't try to attack with recon units any more
+//
 //     Revision 1.35  2001/02/08 21:21:02  mbickel
 //      AI attacks and services more sensibly
 //
@@ -383,19 +386,21 @@
             AiResult  tactics( void );
             void tactics_findBestAttackOrder ( pvehicle* units, int* attackOrder, pvehicle enemy, int depth, int damage, int& finalDamage, int* finalOrder, int& finalAttackNum );
             void tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, pvehicle* positions, float value, pvehicle* finalposition, float& finalvalue, int unitsPositioned, int recursionDepth, int startTime );
+
             /** a special path finding where fields occupied by units get an addidional movemalus.
                 This helps finding a path that is not thick with units and prevents units to queue all one after another
             */
             void findStratPath ( vector<MapCoordinate>& path, pvehicle veh, int x2, int y2 );
 
-            AiResult  strategy ( void );
+            void      production();
+            AiResult  strategy();
             AiResult  buildings ( int process );
             AiResult  transports ( int process );
             AiResult  container ( ccontainercontrols& cc );
-            AiResult  executeServices ( void );
-            void  setup( void );
+            AiResult  executeServices ();
+            void      setup();
 
-            void reset ( void );
+            void reset();
 
             typedef map<MapCoordinate,int> ReconPositions;
             ReconPositions reconPositions;
@@ -448,7 +453,9 @@
            AI ( pmap _map, int _player ) ;
            void  run ( void );
            pmap getMap ( void ) { return activemap; };
-           int getPlayer ( void ) { return player; };
+           int getPlayerNum ( void ) { return player; };
+           Player& getPlayer ( void ) { return getMap()->player[player]; };
+           Player& getPlayer ( int player ) { return getMap()->player[player]; };
            void showFieldInformation ( int x, int y );
            bool isRunning ( void );
            int getVision ( void );

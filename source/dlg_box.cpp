@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.46 2001-02-18 15:37:07 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.47 2001-02-26 12:35:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2001/02/18 15:37:07  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.45  2001/01/28 14:04:11  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -3205,7 +3211,7 @@ void tviewtextwithscrolling::checkscrolling ( void )
 
 
 
-char*  readtextmessage( int id )
+ASCString  readtextmessage( int id )
 {
    char         s1[10];
    sprintf ( s1, "##%4d", id );
@@ -3218,15 +3224,11 @@ char*  readtextmessage( int id )
       }
    }
 
-  int        txtsize = 10000;
-
-  char* txt = new char[txtsize];
-  txt[0] = 0;
-  int acttxtpos = 0;
+  ASCString txt;
 
   int wldcrdnum = 3;
 
-  string tmpstr = actmap->preferredFileNames.mapname[0];
+  ASCString tmpstr = actmap->preferredFileNames.mapname[0];
   while ( tmpstr.find ( ".map") != string::npos )
      tmpstr.replace ( tmpstr.find ( ".map"), 4, ".msg" );
 
@@ -3244,45 +3246,31 @@ char*  readtextmessage( int id )
 
      tfindfile* pff = ffa[m];
 
-     string filefound = pff->getnextname();
+     ASCString filefound = pff->getnextname();
 
      while( !filefound.empty() ) {
 
          tnfilestream stream ( filefound.c_str(), tnstream::reading );
 
-         char *tempstr;
+         ASCString tempstr;
 
-         stream.readpnchar ( &tempstr );
+         bool data = stream.readTextString ( tempstr );
          int started = 0;
-   
-         while ( tempstr  ) {
+
+         while ( data  ) {
             if ( started ) {
                if ( tempstr[0] != ';' ) {
                   if ( tempstr[0] == '#'  &&  tempstr[1] == '#' ) {
                      started = 0;
                      return txt;
-                  } else {
-   
-                     int i = strlen ( tempstr );
-                     while (acttxtpos + i + 2 > txtsize) {
-                        char* tempch = txt;
-                        txtsize*=2;
-                        txt = new char[txtsize];
-                        strcpy ( txt, tempch );
-                        delete[] tempch;
-                     }
-                     strcat ( txt, tempstr );
-                     strcat ( txt, "\n" );
-                     acttxtpos+=i+1;
-   
-                  }
+                  } else
+                     txt += tempstr + "\n";
                }
             } else
-               if ( strcmp ( tempstr, s1 ) == 0 ) 
+               if ( tempstr == s1 )
                   started = 1;
    
-            delete[] tempstr;
-            stream.readpnchar ( &tempstr );
+            data = stream.readTextString ( tempstr );
          } /* endwhile */
 
          if ( started ) {
@@ -3314,10 +3302,10 @@ char*  readtextmessage( int id )
 
   class   thelpsystem : public tdialogbox, public tviewtextwithscrolling {
                public:
-                   char                 *txt;
-                   char              ok;
+                   ASCString            txt;
+                   char                 ok;
                     
-                   char              scrollbarvisible;
+                   char                 scrollbarvisible;
                    ppicture             firstpict;
                    char                 action;
                    int                  textstart;
@@ -3361,15 +3349,15 @@ void         thelpsystem::init(int id, char* titlet )
 
    txt = readtextmessage( id );
 
-   if (txt[0] == 0) {
-      strcpy(txt, "help topic not found : ");
-      strcat(txt, strrr (id ));
+   if ( txt.empty() ) {
+      txt =  "help topic not found : ";
+      txt += strrr (id );
    }
 
    setup();                    
 
    // Koordinaten auch bei setpos „ndern
-   setparams ( x1 + 13, y1 + textstart, x1 + xsize - 41, y1 + ysize - 40, txt, black, dblue);
+   setparams ( x1 + 13, y1 + textstart, x1 + xsize - 41, y1 + ysize - 40, txt.c_str(), black, dblue);
 
    tvt_dispactive = 0;
    displaytext(  );
@@ -3451,11 +3439,7 @@ void         thelpsystem::done(void)
       delete ( pic1->pict );
       delete ( pic1 );
    }
-   /*
-   if (scrollbarvisible)
-       scrollbar.done(); */
-   delete[] txt;
-} 
+}
 
             
 

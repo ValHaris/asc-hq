@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: attack.cpp,v 1.42 2001-02-18 17:52:35 mbickel Exp $
+//     $Id: attack.cpp,v 1.43 2001-02-26 12:34:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2001/02/18 17:52:35  mbickel
+//      Fixed some compilation problems on Linux
+//
 //     Revision 1.41  2001/02/18 15:36:59  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -771,7 +774,7 @@ tmineattacksunit :: tmineattacksunit ( pfield mineposition, int minenum, pvehicl
 
 void tmineattacksunit :: setup ( pfield mineposition, int minenum, pvehicle &attackedunit )
 {
-   if ( !mineposition->object || !mineposition->object->mine )
+   if ( mineposition->mines.empty() )
       displaymessage(" tmineattacksunit :: setup \n no mine to attack !\n",2 );
 
    if ( attackedunit->height >= chtieffliegend )
@@ -788,10 +791,10 @@ void tmineattacksunit :: setup ( pfield mineposition, int minenum, pvehicle &att
    if ( minenum == -1 ) {
       int cnt = 1;
       av.strength = 0;
-      for ( int i = 0; i < mineposition->minenum(); i++ )
-         if ( mineposition->object->mine[i]->attacksunit ( attackedunit )) {
-            int strength = mineposition->object->mine[i]->strength;
-            if ( mineposition->object->mine[i]->type  == cmantipersonnelmine   &&  (attackedunit->functions & cf_trooper ) )
+      for ( tfield::MineContainer::iterator m = mineposition->mines.begin(); m != mineposition->mines.end(); m++ )
+         if ( m->attacksunit ( attackedunit )) {
+            int strength = m->strength;
+            if ( m->type == cmantipersonnelmine   &&  (attackedunit->functions & cf_trooper ) )
                strength *= 2;
 
             for ( int j = 1; j < cnt; j++ )
@@ -801,12 +804,11 @@ void tmineattacksunit :: setup ( pfield mineposition, int minenum, pvehicle &att
             cnt++;
          }
    } else {
-     av.strength = mineposition->object->mine[minenum]->strength;
-     if ( mineposition->object->mine[minenum]->type  == cmantipersonnelmine   &&  (attackedunit->functions & cf_trooper ) )
-        av.strength *= 2;
+      Mine& m = mineposition->getMine ( minenum );
+      av.strength = m.strength;
+      if ( m.type  == cmantipersonnelmine   &&  (attackedunit->functions & cf_trooper ) )
+         av.strength *= 2;
    }
-
-
 
    av.armor = 1;
    av.damage = 0;
@@ -849,13 +851,11 @@ void tmineattacksunit::calcdisplay( int ad, int dd ) {
 void tmineattacksunit :: setresult ( void )
 {
    if ( _minenum == -1 ) {
-      for ( int i = 0; i < _mineposition->minenum(); ) {
-         if ( _mineposition->object->mine[i]->attacksunit ( _attackedunit )) {
-            _mineposition->removemine ( i );
-            i = 0;
-         } else
-            i++;
-      }
+      for ( tfield::MineContainer::iterator m = _mineposition->mines.begin(); m != _mineposition->mines.end(); )
+         if ( m->attacksunit ( _attackedunit ))
+            m = _mineposition->mines.erase ( m );
+         else
+            m++;
    } else
       _mineposition->removemine ( _minenum );
 
@@ -872,12 +872,15 @@ void tmineattacksunit :: setresult ( void )
 void tmineattacksunit :: paintimages ( int xa, int ya, int xd, int yd ) 
 {
    if ( _minenum == -1 ) {
-      int num = _mineposition->mineattacks ( _attackedunit )-1;
-      putspriteimage    ( xa, ya, getmineadress ( _mineposition->object->mine[num]->type ));
-   } else
-      putspriteimage    ( xa, ya, getmineadress ( _mineposition->object->mine[0]->type ));
+      tfield::MineContainer::iterator m = _mineposition->mines.begin();
+      while ( ! m->attacksunit  ( _attackedunit ))
+         m++;
 
-   putrotspriteimage ( xd, yd, _attackedunit ->typ->picture[0], _attackedunit->color  );
+      putspriteimage    ( xa, ya, getmineadress ( m->type ));
+   } else
+      putspriteimage    ( xa, ya, getmineadress ( _mineposition->getMine(_minenum).type ));
+
+   putrotspriteimage ( xd, yd, _attackedunit->typ->picture[0], _attackedunit->color  );
 }
 
 
@@ -894,19 +897,17 @@ void tunitattacksobject :: setup ( pvehicle attackingunit, int obj_x, int obj_y,
    _x = obj_x;
    _y = obj_y;
 
-   pfield field = getfield ( obj_x, obj_y );
-   _object = field->object;
+   targetField = getfield ( obj_x, obj_y );
 
    _attackingunit = attackingunit;
 
    int dist = beeline ( attackingunit->xpos, attackingunit->ypos, obj_x, obj_y );
 
-
-   for ( int i = _object->objnum-1; i >= 0; i-- )
-     if ( _object->object[ i ] -> typ->armor > 0 ) {
-        _obji = _object->object[ i ];
-        break;
-     }
+   for ( tfield::ObjectContainer::reverse_iterator o = targetField->objects.rbegin(); o != targetField->objects.rend(); o++ )
+      if ( o->typ->armor > 0 ) {
+         _obji = &(*o);
+         break;
+      }
 
    int _weapon;
 
@@ -1060,10 +1061,10 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
                      } 
       } 
 
-   if ( efield->object ) {
+   if ( efield->objects.size() ) {
       int n = 0;
-      for ( int j = 0; j < efield->object->objnum; j++ )
-         if ( efield->object->object[j]->typ->armor > 0 )
+      for ( tfield::ObjectContainer::iterator j = efield->objects.begin(); j != efield->objects.end(); j++ )
+         if ( j->typ->armor > 0 )
             n++;
 
       if ( n > 0 ) 

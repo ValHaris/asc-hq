@@ -1,6 +1,12 @@
-//     $Id: typen.h,v 1.85 2001-02-18 15:37:21 mbickel Exp $
+//     $Id: typen.h,v 1.86 2001-02-26 12:35:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.85  2001/02/18 15:37:21  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.84  2001/02/15 21:57:08  mbickel
 //      The AI doesn't try to attack with recon units any more
 //
@@ -142,12 +148,6 @@
 ///    Some miscellaneous defintions. Not very intersting...
 //////////////////////////////////////////////////////////////
 
-//! fraction of the production cost that is needed if a unit repairs something
-const int repairefficiency_unit = 2;
-
-//! fraction of the production cost that is needed if a building repairs something
-const int repairefficiency_building = 3;
-
 //! A Ellipse that is used for highlighting elements of the screen during the tutorial
 class  EllipseOnScreen {
    public:
@@ -178,14 +178,8 @@ const int choehenstufennum =  8;
 //! The maximum number of number of different images for a building and a weather. For example, A wind power plant might have 6 different images, depending on the direction of the wind.
 const int maxbuildingpicnum  = 8;
 
-//! The maximum number of mines that can be placed on a single field
-const int maxminesonfield = 20;
-
 //! The number of game paramters that can be specified for each map.
 const int gameparameternum = 19;
-
-//! The maximum number of objects ( #tobject ) that can be placed on a single field ( #tfield )
-const int maxobjectonfieldnum = 16;
 
 //! The maximum experience value of a #Vehicle
 const int maxunitexperience = 23;
@@ -381,6 +375,14 @@ class ResourceMatrix {
 
 
 
+//! A list that stores pointers, but deletes the objects (and not only the pointers) on destruction
+template <class T> class PointerList : public list<T> {
+   public:
+     ~PointerList() {
+        for ( iterator it=begin(); it!=end(); it++ )
+            delete *it;
+     };
+};
 
 
 //! the image for a terraintype ( #tterraintype ) that is shown on the small map
@@ -415,49 +417,23 @@ struct teventstore {
 
 
 
-#ifndef pmemorystreambuf_defined
-  #define pmemorystreambuf_defined
-  typedef class tmemorystreambuf* pmemorystreambuf;
-  typedef class tmemorystream* pmemorystream;
-#endif
 
-  class treplayinfo {
-  public:
-    pmemorystreambuf guidata[8];
-    pmemorystreambuf map[8];
-    pmemorystream    actmemstream;
-    treplayinfo ( void );
-    ~treplayinfo ( );
-  };
+class  Message {
+   public:
+     int from;      // BM ; Bit 9 ist system
+     int to;        // BM
+     time_t time;
+     ASCString text;
+     int id;
+     int runde;  //  Zeitpunkt des abschickens
+     int move;   //  "
+     Message ( void );
+     Message ( pmap spfld );
+     Message ( const ASCString& msg, pmap gamemap,int rec );  // fuer Meldungen vom System
+};
 
-  typedef class  tmessage* pmessage;
-  class  tmessage {
-  public:
-    int from;      // BM ; Bit 9 ist system
-    int to;        // BM
-    time_t time;
-    char* text;
-    int id;
-    int runde;  //  Zeitpunkt des abschickens
-    int move;   //  "
-    pmessage next;
-    tmessage ( void );
-    tmessage ( pmap spfld );
-    tmessage ( char* txt, int rec );  // fuer Meldungen vom System
-    ~tmessage();
-  };
-
-
-  typedef class tmessagelist* pmessagelist;
-  class tmessagelist {
-  public:
-    pmessage message;
-    pmessagelist next;
-    pmessagelist prev;
-    tmessagelist( pmessagelist* prv );
-    ~tmessagelist(  );
-    int getlistsize ( void );  // liefert 1 falls noch weitere Glieder in der Liste existieren, sonst 0;
-  };
+typedef PointerList<Message*> MessageContainer;
+typedef list<Message*> MessagePntrContainer;
 
 //! the time in ASC, measured in turns and moves
 union tgametime {
@@ -499,14 +475,6 @@ class MapCoordinate3D : public MapCoordinate {
 
 
 
-//! A list that stores pointers, but deletes the objects (and not only the pointers) on destruction
-template <class T> class PointerList : public list<T> {
-   public:
-     ~PointerList() {
-        for ( iterator it=begin(); it!=end(); it++ )
-            delete *it;
-     };
-};
 
 
 
@@ -692,8 +660,8 @@ class tevent {
        class  PolygonEntered {
          public:
            int size;
-           pvehicle vehicle;
-           int      vehiclenetworkid;
+           int dummy;
+           int vehiclenetworkid;
            int* data;
            int tempnwid;
            int tempxpos;
@@ -709,7 +677,7 @@ class tevent {
         int xpos, ypos;
         int networkid;
         pbuilding    building;
-        pvehicle     vehicle;
+        int         dummy;
         int          mapid;
         int          id;
         tevent::LargeTriggerData::PolygonEntered* unitpolygon;
@@ -860,65 +828,12 @@ class tevent {
 
 
 
-#define tnetworkdatasize 100
-typedef char tnetworkconnectionparameters[ tnetworkdatasize ];
-typedef tnetworkconnectionparameters* pnetworkconnectionparameters;
-
-
-class tnetworkcomputer {
-  public:
-    char*        name;
-    struct {
-      int          transfermethodid;
-      pbasenetworkconnection transfermethod;
-      tnetworkconnectionparameters         data;
-    } send, receive;
-    int          existent;
-    tnetworkcomputer ( void );
-    ~tnetworkcomputer ( );
-};
-
-
-class  tnetwork {
-  public:
-    struct {
-      char         compposition;   // Nr. des Computers, an dem der SPieler spielt    => network.computernames
-      int          codewordcrc;
-    } player[8];
-
-    tnetworkcomputer computer[8];
-
-    int computernum;
-    int turn;
-    struct tglobalparams {
-      int enablesaveloadofgames;
-      int reaskpasswords;
-      int dummy[48];
-    } globalparams;
-    tnetwork ( void );
-};
-
-
-  typedef struct tdissectedunit* pdissectedunit;
-  struct tdissectedunit {
-    pvehicletype  fzt;
-    ptechnology   tech;
-    int           orgpoints;
-    int           points;
-    int           num;
-    pdissectedunit next;
-  };
-
-
-
 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 /// Even more miscellaneous structures...
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
-
-enum tnetworkchannel { TN_RECEIVE, TN_SEND };
 
 
 typedef struct tguiicon* pguiicon ;
@@ -1084,16 +999,6 @@ struct ticons {
 
 
 
-
-
-
-
-/*!
-  \brief calculate the height difference between two levels of height
-
-  Since floating and ground based are assumed to be the same effective height, a simple subtraction isn't sufficient.
- */
-extern int getheightdelta ( int height1, int height2 );
 
 
 /////////////////////////////////////////////////////////////////////

@@ -2,9 +2,15 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.80 2001-02-18 15:37:05 mbickel Exp $
+//     $Id: dialog.cpp,v 1.81 2001-02-26 12:35:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.80  2001/02/18 15:37:05  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.79  2001/02/11 20:40:27  mbickel
 //      Fixed compilation problems with gcc
 //
@@ -130,9 +136,9 @@
 #include "password_dialog.h"
 
 #include "mapdisplay.h"
+#include "networkdata.h"
 
 #ifndef karteneditor
- #include "network.h"
  #include "gamedlg.h"
 #endif
 
@@ -4171,7 +4177,7 @@ void         tsetalliances::buttonpressed( int id )
       char txt[1000];
       char* sp = "The supervirsor reset the password of player #%d, %s" ;
       sprintf ( txt, sp, id-70, actmap->player[id-70].getName().c_str() );
-      new tmessage ( strdup ( txt), 255 );
+      new Message ( txt, actmap, 255 );
    }
 } 
 

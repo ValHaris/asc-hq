@@ -42,6 +42,9 @@
 #endif
 
 
+bool tempsvisible;
+
+
 // #define showtempnumber
 
 #define show2threatvalue
@@ -184,6 +187,7 @@ void copyvfb2displaymemory_zoom ( void* parmbuf )
 }
 
 #endif
+
 
 
 
@@ -896,21 +900,20 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
                   /* display streets, railroads and pipelines */
                       if ( !fld->building || !fld->building->visible )
-                           if ( fld->object )
-                              for ( int n = 0; n < fld->object->objnum; n++ )  {
-                                 int h = fld->object->object[n]->typ->height;
-                                 if (  h >= hgt*30 && h < 30 + hgt*30 )
-                                    fld->object->object[n]->display ( r - streetleftshift , yp - streettopshift, fld->getweather() );
-                              }
+                         for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ ) {
+                            int h = o->typ->height;
+                            if (  h >= hgt*30 && h < 30 + hgt*30 )
+                               o->display ( r - streetleftshift , yp - streettopshift, fld->getweather() );
+                         }
 
 
                   /* display mines */
                       if ( b == visible_all )
-                           if (fld->minenum() && hgt == 2 ) {
-                              if ( fld->object->mine[0]->type != cmmooredmine )
-                                 putspriteimage( r + unitrightshift , yp + unitdownshift ,getmineadress(fld->object->mine[0]->type) );
+                           if ( !fld->mines.empty() && hgt == 2 ) {
+                              if ( fld->mines.begin()->type != cmmooredmine )
+                                 putspriteimage( r + unitrightshift , yp + unitdownshift ,getmineadress(fld->mines.begin()->type) );
                               else
-                                 putpicturemix ( r + unitrightshift , yp + unitdownshift ,getmineadress(fld->object->mine[0]->type, 1 ) ,  0, (char*) colormixbuf );
+                                 putpicturemix ( r + unitrightshift , yp + unitdownshift ,getmineadress(fld->mines.begin()->type, 1 ) ,  0, (char*) colormixbuf );
                               #ifdef karteneditor
                               bar ( r + unitrightshift + 5 , yp + unitdownshift +5, r + unitrightshift + 15 , yp + unitdownshift +10, 20 + fld->mineowner() * 8 );
                               #endif
@@ -1020,13 +1023,12 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
                       /* display objects */
                       if ( !fld->building )
-                           if ( fld->object )
-                              for ( int n = 0; n < fld->object->objnum; n++ )
-                                 if ( fld->object->object[n]->typ->visibleago ) {
-                                    int h = fld->object->object[n]->typ->height;
-                                    if (  h >= hgt*30 && h < 30 + hgt*30 )
-                                       fld->object->object[n]->display ( r - streetleftshift , yp - streettopshift );
-                                 }
+                         for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ )
+                            if ( o->typ->visibleago ) {
+                               int h = o->typ->height;
+                               if (  h >= hgt*30 && h < 30 + hgt*30 )
+                                  o->display ( r - streetleftshift , yp - streettopshift );
+                            }
                    }
                   #endif
 

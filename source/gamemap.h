@@ -23,53 +23,48 @@
 #ifndef gamemap_h_included
  #define gamemap_h_included
 
+ #include <vector>
+
  #include "typen.h"
  #include "baseaiinterface.h"
  #include "vehicle.h"
  #include "buildings.h"
+ #include "basestrm.h"
+
 
 //! an instance of an object type (#tobjecttype) on the map
-class tobject {
+class Object {
     public:
        pobjecttype typ;
        int damage;
        int dir;
        int time;
-       int dummy[4];
-       tobject ( void );
-       tobject ( pobjecttype t );
+       // int dummy[4];
+       Object ( void );
+       Object ( pobjecttype t );
        void display ( int x, int y, int weather = 0 );
        void setdir ( int dir );
        int  getdir ( void );
 };
 
-class tmine {
+class Mine {
    public:
       int type;
       int strength;
       int time;
       int color;
-      int attacksunit ( const pvehicle veh );
+      bool attacksunit ( const pvehicle veh );
 };
 
 
-class  tobjectcontainer {
-  public:
-    int minenum;
-    tmine* mine[ maxminesonfield ];
-
-    int objnum;
-    pobject object[ maxobjectonfieldnum ];
-
-    tobjectcontainer ( void );
-    int checkforemptyness ( void );
-    pobject checkforobject ( pobjecttype o );
-};
 
 
 //! a single field of the map
 class  tfield {
   public:
+    tfield ( );
+    void operator= ( const tfield& f );
+
     //! the terraintype (#pwterraintype) of the field
     TerrainType::Weather* typ;
 
@@ -106,17 +101,15 @@ class  tfield {
     //! the mineral resources that were seen by a player on this field; since the actual amount may have decreased since the player looked, this value is not identical to the fuel and material fields.
     Resourceview*  resourceview;
 
-    //! objects and mines that may be placed on the field
-    pobjectcontainer      object;
+    typedef list<Mine> MineContainer;
+    MineContainer mines;
 
-    //! the terraintype properties. They determine which units can move over the field. This variable is recalculated from the terraintype and objects each time something on the field changes (#setparams)
-    tterrainbits  bdt;
+    //! returns the nth mine. This function should only be used by legacy code; new code should store an iterator instead of an index
+    Mine& getMine ( int n );
 
-    //! are any events connected to this field
-    int connection;
 
-    //! the number of mines on the field
-    int minenum ( void );
+    typedef vector<Object> ObjectContainer;
+    ObjectContainer objects;
 
     /** add an object to the field
          \param obj The object type
@@ -131,14 +124,26 @@ class  tfield {
     //! sorts the objects. Since objects can be on different levels of height, the lower one must be displayed first
     void sortobjects ( void );
 
+    //! checks if there are objects from the given type on the field and returns them
+    pobject checkforobject ( pobjecttype o );
+
+
+
+
+
+    //! the terraintype properties. They determine which units can move over the field. This variable is recalculated from the terraintype and objects each time something on the field changes (#setparams)
+    tterrainbits  bdt;
+
+    //! are any events connected to this field
+    int connection;
+
+
+
     //! deletes everything placed on the field
     void deleteeverything ( void );
 
     //! recalculates the terrain properties, movemalus etc from the terraintype and the objects,
     void setparams ( void );
-
-    //! checks if there are objects from the given type on the field and returns them
-    pobject checkforobject ( pobjecttype o );
 
     //! the defense bonus that unit get when they are attacked
     int getdefensebonus ( void );
@@ -175,12 +180,13 @@ class  tfield {
     void  removemine ( int num ); // num == -1 : remove last mine
 
     //! some variables for the viewcalculation algorithm. see #viewcalculation.cpp for details
-    struct {
+    struct View {
       int view;
       int jamming;
       char mine, satellite, sonar, direct;
     } view[8];
 
+    ~tfield();
   private:
     int getx( void );
     int gety( void );
@@ -189,8 +195,24 @@ class  tfield {
 
 
 
+
+  class treplayinfo {
+  public:
+    pmemorystreambuf guidata[8];
+    pmemorystreambuf map[8];
+    pmemorystream    actmemstream;
+    treplayinfo ( void );
+    ~treplayinfo ( );
+  };
+
+
+
+
+
+
 //! the map. THE central structure of ASC
 class tmap {
+      void operator= ( const tmap& map );
    public:
       //! the size of the map
       word         xsize, ysize;
@@ -206,6 +228,7 @@ class tmap {
 
       //! the title of the map
       char*        title;
+
 
       struct Campaign {
           //! an identification for identifying a map in the chain of maps that make up a campaign
@@ -254,6 +277,7 @@ class tmap {
       //! the diplomatic status between the players
       char         alliances[8][8];
 
+
       //! the different players in ASC. There may be 8 players (0..7) and neutral units (8)
       class Player {
          public:
@@ -296,18 +320,32 @@ class tmap {
             //! the Password required for playing this player
             Password passwordcrc;
 
-            //! the container that stores the list of dissected units
-            pdissectedunit dissectedunit;
+            class Dissection {
+               public:
+                  pvehicletype  fzt;
+                  ptechnology   tech;
+                  int           orgpoints;
+                  int           points;
+                  int           num;
+            };
 
+            //! the list of dissected units
+            typedef list<Dissection> DissectionContainer;
+            DissectionContainer dissections;
+
+            bool __dissectionsToLoad;
 
             //! the list of messages that haven't been read by the player yet
-            pmessagelist  unreadmessage;
+            MessagePntrContainer  unreadmessage;
+            bool __loadunreadmessage;
 
             //! the list of messages that already have been read by the player yet
-            pmessagelist  oldmessage;
+            MessagePntrContainer  oldmessage;
+            bool __loadoldmessage;
 
             //! the list of messages that have been sent yet
-            pmessagelist  sentmessage;
+            MessagePntrContainer  sentmessage;
+            bool __loadsentmessage;
 
             //! if ASC should check all events for fullfilled triggers, this variable will be set to true. This does not mean that there really ARE events that are ready to be executed
             int queuedEvents;
@@ -358,10 +396,12 @@ class tmap {
       } tribute;
 
       //! the list of messages that were written this turn and are waiting to be processed at the end of the turn
-      pmessagelist  unsentmessage;
+      MessagePntrContainer  unsentmessage;
+      bool __loadunsentmessage;
 
       //! these are the messages themselfs. A #pmessagelist only stores pointers to message body which are archived here
-      pmessage      message;
+      MessageContainer messages;
+      bool __loadmessages;
 
       //! each message has an identification number (which is incremented with each message) for referencing it in files. The id of the last message is stored here
       int           messageid;
@@ -395,8 +435,8 @@ class tmap {
       Resources     bi_resource[8];
 
       struct PreferredFilenames {
-        string mapname[8];
-        string savegame[8];
+        ASCString mapname[8];
+        ASCString savegame[8];
       } preferredFileNames;
 
       EllipseOnScreen* ellipse;

@@ -22,6 +22,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <stdarg.h>
 #include "replay.h"
 #include "typen.h"
 #include "buildingtype.h"
@@ -682,7 +683,7 @@ void trunreplay :: execnextreplaymove ( void )
                                 battle.setresult ();
                                 dashboard.x = 0xffff;
                              } else
-                             if ( targ->object ) {
+                             if ( !targ->objects.empty() ) {
                                 tunitattacksobject battle ( fld->vehicle, x2, y2, wpnum );
                                 if ( attackvisible ) {
                                    displayActionCursor ( x1, y1, x2, y2, 0 );

@@ -64,10 +64,6 @@ Medium sized tasks
      (std::string) by the new ASCString class (which is derived from
      std::string)
 
-=  the events contain pointers to units. After deletion of a unit these
-    pointers may be left dangling. Replacing the pointers by the networkid
-    of the unit solves the problem.
-
 
 Larger Tasks:
 

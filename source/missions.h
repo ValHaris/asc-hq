@@ -2,9 +2,12 @@
     \brief Interface to the event handling of ASC
 */
 
-//     $Id: missions.h,v 1.7 2001-02-11 11:39:40 mbickel Exp $
+//     $Id: missions.h,v 1.8 2001-02-26 12:35:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2001/02/11 11:39:40  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.6  2001/01/28 14:04:14  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -90,7 +93,7 @@ extern void  getnexteventtime(void);
 
 extern void  initmissions( void );
 
-extern void mark_polygon_fields_with_connection ( int* data, int mark );
+extern void mark_polygon_fields_with_connection ( pmap gamemap, int* data, int mark );
 extern int unit_in_polygon ( tevent::LargeTriggerData::PolygonEntered* trigger );
 
 

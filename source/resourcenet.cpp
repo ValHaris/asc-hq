@@ -555,10 +555,9 @@ void transfer_all_outstanding_tribute ( void )
                }
             }
       }
-      if ( text[0] ) {
-         char* sp = strdup ( text );
-         new tmessage ( sp, 1 << targplayer );
-      }
+      if ( text[0] )
+         new Message ( text, actmap, 1 << targplayer );
+
    }
 }
 

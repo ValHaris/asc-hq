@@ -5,9 +5,15 @@
 */
 
 
-//     $Id: spfst.h,v 1.40 2001-02-18 15:37:20 mbickel Exp $
+//     $Id: spfst.h,v 1.41 2001-02-26 12:35:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2001/02/18 15:37:20  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.39  2001/02/01 22:48:51  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -141,8 +147,6 @@
 
   extern int  terraintypenum, vehicletypenum, buildingtypenum, technologynum, objecttypenum;
 
- //! Determines if fields that have a temp value != 0 are being marked when displaying the map
- extern char tempsvisible;
 
  //! passes a key to the map-cursor
  extern void  movecursor(tkey         ch);
@@ -194,7 +198,7 @@ extern void  putbuilding2( const MapCoordinate& entryPosition,
 
 
 //! recalculates the connection (like road interconnections) of all objects on the map
-extern void  calculateallobjects( );
+extern void  calculateallobjects( pmap m = actmap );
 
 /** recalculates the connection (like road interconnections) of an object
       \param x The x coordinate of the field
@@ -205,7 +209,8 @@ extern void  calculateallobjects( );
 extern void  calculateobject(int  x,
                              int  y,
                              bool mof,
-                             pobjecttype obj );
+                             pobjecttype obj,
+                             pmap gamemap = actmap );
 
 //! generate a map of size xsize/ysize and consisting just of fields bt. The map is stored in #actmap
 extern void  generatemap( TerrainType::Weather* bt,
@@ -280,7 +285,16 @@ extern int          terrainaccessible2 ( const pfield        field, const pvehic
 
 
 //! automatically adjusting the pictures of woods and coasts to form coherent structures 
-extern void smooth ( int what );
+extern void smooth ( int what, pmap gamemap = actmap );
+
+
+/*!
+  \brief calculate the height difference between two levels of height
+
+  Since floating and ground based are assumed to be the same effective height, a simple subtraction isn't sufficient.
+ */
+extern int getheightdelta ( int height1, int height2 );
+
 
 
 extern pterraintype getterraintype_forid ( int id, int crccheck = 1 );

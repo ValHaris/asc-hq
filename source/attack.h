@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: attack.h,v 1.18 2001-02-08 21:21:03 mbickel Exp $
+//     $Id: attack.h,v 1.19 2001-02-26 12:35:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2001/02/08 21:21:03  mbickel
+//      AI attacks and services more sensibly
+//
 //     Revision 1.17  2001/01/28 14:04:02  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -211,9 +214,9 @@ class tmineattacksunit : public tfight {
       };
 
 class tunitattacksobject : public tfight {
-           pvehicle     _attackingunit; 
-           pobjectcontainer      _object; 
-           pobject _obji;
+           pvehicle     _attackingunit;
+           pfield       targetField;
+           pobject      _obji;
            void paintimages ( int xa, int ya, int xd, int yd );
            int _x, _y;
          public:

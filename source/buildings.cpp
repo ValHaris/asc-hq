@@ -255,11 +255,7 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
       for ( int b = 0; b < 6; b++)
          if ( typ->getpicture ( BuildingType::LocalCoordinate( a , b ) )) {
             pfield field = getField( BuildingType::LocalCoordinate( a, b) );
-            if ( field->object ) {
-               for ( int n = 0; n < field->object->objnum; n++ )
-                  delete field->object->object[n];
-               field->object->objnum = 0;
-            }
+            field->objects.clear();
 
             if ( field->vehicle ) {
                delete field->vehicle;

@@ -22,6 +22,11 @@
 #include "basegfx.h"
 #include "events.h"
 
+
+//! Determines if fields that have a temp value != 0 are being marked when displaying the map
+extern bool tempsvisible;
+
+
  //! displays the map that #actmap points to
 extern void  displaymap(void);
 
@@ -265,6 +270,7 @@ class tbackgroundpict : public tpaintmapborder {
                int getlastpaintmode ( void );
 };
 extern tbackgroundpict backgroundpict;
+
 
 class tdisplaywholemap : public tgeneraldisplaymap {
           tvirtualdisplay* dsp;

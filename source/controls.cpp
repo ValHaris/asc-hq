@@ -3,9 +3,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.98 2001-02-18 17:52:35 mbickel Exp $
+//     $Id: controls.cpp,v 1.99 2001-02-26 12:35:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.98  2001/02/18 17:52:35  mbickel
+//      Fixed some compilation problems on Linux
+//
 //     Revision 1.97  2001/02/18 15:37:02  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -525,11 +528,11 @@ void         tputmine::testfield(void)
       fld = getfield(xp,yp);
       if ( !fld->vehicle  &&  !fld->building ) {
          fld->a.temp = 0;
-         if (fld->object && fld->object->mine ) {
+         if ( !fld->mines.empty() ) {
             fld->a.temp += 2;
             numberoffields++;
          }
-         if (mienenlegen && (!fld->minenum() || fld->mineowner() == player)) {
+         if (mienenlegen && (fld->mines.empty() || fld->mineowner() == player)) {
             fld->a.temp += 1;
             numberoffields++;
          }
@@ -1665,18 +1668,17 @@ void checkalliances_at_endofturn ( void )
       if ( i != act ) {
 
          if ( actmap->alliances[i] [act] == canewsetwar2 ) {
+            // message "sneak attack" to all players except attacker
+
             int to = 0;
             for ( int j = 0; j < 8; j++ )
                if ( j != act )
                   to |= 1 << j;
-                  // Message "sneak attack" an alle auáer dem Angreifer selbst.
-
 
             char txt[200];
             char* sp = getmessage( 10001 );
             sprintf ( txt, sp, actmap->player[act].getName().c_str(), actmap->player[i].getName().c_str() );
-            sp = strdup ( txt );
-            new tmessage ( sp, to );
+            new Message ( txt, actmap, to );
          }
 
          if ( actmap->alliances[i] [act] == capeaceproposal  &&  actmap->alliances_at_beginofturn[i] != capeaceproposal ) {
@@ -1688,8 +1690,7 @@ void checkalliances_at_endofturn ( void )
             char txt[200];
             char* sp = getmessage( 10003 );
             sprintf ( txt, sp, actmap->player[act].getName().c_str() );
-            sp = strdup ( txt );
-            new tmessage ( sp, to );
+            new Message ( txt, actmap, to );
          }
 
          if ( actmap->alliances[i] [act] == cawarannounce ) {
@@ -1701,8 +1702,7 @@ void checkalliances_at_endofturn ( void )
             char txt[200];
             char* sp = getmessage( 10002 );
             sprintf ( txt, sp, actmap->player[act].getName().c_str() );
-            sp = strdup ( txt );
-            new tmessage ( sp, to );
+            new Message ( txt, actmap, to );
          }
 
       }
@@ -2572,27 +2572,16 @@ void endRound ( void )
 
 void initchoosentechnology( void )
 {
-   actmap->player[actmap->actplayer].research.progress = 0;
- 
-   pdissectedunit du = actmap->player[ actmap->actplayer ].dissectedunit;
-   pdissectedunit last = NULL;
-   while ( du ) {
- 
-      if ( du->tech == actmap->player[actmap->actplayer].research.activetechnology ) {
-         actmap->player[actmap->actplayer].research.progress += du->points;
- 
-         du = du->next;
-         if ( last ) {
-            delete last->next;
-            last->next = du;
-         } else {
-            delete actmap->player[ actmap->actplayer ].dissectedunit;
-            actmap->player[ actmap->actplayer ].dissectedunit = du;
-         }
- 
+   Player& player = actmap->player[actmap->actplayer];
+   player.research.progress = 0;
+
+   Player::DissectionContainer::iterator di = player.dissections.begin();
+   while ( di != player.dissections.end() ) {
+      if ( di->tech == player.research.activetechnology ) {
+         player.research.progress += di->points;
+         di = player.dissections.erase ( di );
       } else
-        du = du->next;
- 
+         di++;
    }
 }
 
@@ -2853,20 +2842,14 @@ void endTurn ( void )
 
      /* *********************  messages ********************  */
 
-
-  while ( actmap->unsentmessage ) {
-     pmessagelist list = actmap->unsentmessage;
-
-     pmessagelist nw = new tmessagelist ( &actmap->player[ actmap->actplayer ].sentmessage );
-     nw->message = list->message;
+  MessagePntrContainer::iterator mi = actmap->unsentmessage.begin();
+  while ( mi != actmap->unsentmessage.end() ) {
+     actmap->player[ actmap->actplayer ].sentmessage.push_back ( *mi );
      for ( int i = 0; i < 8; i++ )
-        if ( nw->message->to & ( 1 << i )) {
-           pmessagelist dst = new tmessagelist ( &actmap->player[ i ].unreadmessage );
-           dst->message = nw->message;
-        }
+        if ( (*mi)->to & ( 1 << i ))
+           actmap->player[ i ].unreadmessage.push_back ( *mi );
 
-     actmap->unsentmessage = list->next;
-     delete list;
+     mi = actmap->unsentmessage.erase ( mi );
   }
 
   if ( actmap->newjournal ) {
@@ -3182,64 +3165,55 @@ void dissectvehicle ( pvehicle eht )
 
    for ( i = 0; i < technum; i++ ) {
 
-      if ( actmap->player[actmap->actplayer].research.activetechnology != techs[i] ) {
+      Player& player = actmap->player[actmap->actplayer];
+      if ( player.research.activetechnology != techs[i] ) {
 
          int found = 0;     // Bit 1: Technologie gefunden
                             //     2: vehicletype gefunden      
                             //     3: Technologie+vehicletype gefunden
-   
-         pdissectedunit du = actmap->player[ actmap->actplayer ].dissectedunit;
-         while ( du ) {
-            if ( du->fzt == eht->typ ) 
-               if ( du->tech == techs[i] )
+
+         Player::DissectionContainer::iterator di = player.dissections.begin();
+         while ( di != player.dissections.end() ) {
+            if ( di->fzt == eht->typ )
+               if ( di->tech == techs[i] )
                   found |= 4;
                else
                   found |= 2;
             
-            if ( du->tech == techs[i] )
+            if ( di->tech == techs[i] )
                found |= 1;
       
-            du = du->next;
+            di++;
          }
    
          if ( found & 4 ) {
-            du = actmap->player[ actmap->actplayer ].dissectedunit;
-            while ( du ) {
-               if ( du->fzt == eht->typ ) 
-                  if ( du->tech == techs[i] ) {
-                     du->points += du->orgpoints / ( 1 << du->num);
-                     du->num++;
+            di = player.dissections.begin();
+            while ( di != player.dissections.end() ) {
+               if ( di->fzt == eht->typ )
+                  if ( di->tech == techs[i] ) {
+                     di->points += di->orgpoints / ( 1 << di->num);
+                     di->num++;
                   }
-   
-               du = du->next;
+               di++;
             }
          } else {
-            pdissectedunit du2 = new tdissectedunit;
-            du = actmap->player[ actmap->actplayer ].dissectedunit;
-            if ( du ) {
-               while ( du->next )
-                  du = du->next;
-               du->next = du2;
-            } else {
-              actmap->player[ actmap->actplayer ].dissectedunit = du2;
-            }
-   
-            du2->next = NULL;
-            du2->tech = techs[i];
-            du2->fzt = getvehicletype_forid ( eht->typ->id );
+            Player::Dissection du;
+
+            du.tech = techs[i];
+            du.fzt = getvehicletype_forid ( eht->typ->id );
    
             if ( found & 1 )
-               du2->orgpoints = du2->tech->researchpoints / dissectunitresearchpointsplus2;
+               du.orgpoints = du.tech->researchpoints / dissectunitresearchpointsplus2;
             else
-               du2->orgpoints = du2->tech->researchpoints / dissectunitresearchpointsplus;
+               du.orgpoints = du.tech->researchpoints / dissectunitresearchpointsplus;
    
-            du2->points = du2->orgpoints;
-            du2->num = 1;
-   
+            du.points = du.orgpoints;
+            du.num = 1;
+
+            player.dissections.push_back ( du );
          }
       } else 
-         actmap->player[actmap->actplayer].research.progress+= techs[i]->researchpoints / dissectunitresearchpointsplus;
-      
+         player.research.progress+= techs[i]->researchpoints / dissectunitresearchpointsplus;
 
    }
 }

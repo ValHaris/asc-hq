@@ -2,9 +2,12 @@
     \brief The event handling of ASC
 */
 
-//     $Id: missions.cpp,v 1.23 2001-02-11 11:39:40 mbickel Exp $
+//     $Id: missions.cpp,v 1.24 2001-02-26 12:35:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2001/02/11 11:39:40  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.22  2001/02/01 22:48:45  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -135,6 +138,7 @@
 */
 
 #include <stdio.h>                                                                
+
 #include <string.h>
 
 #include "global.h"
@@ -394,14 +398,27 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
                                      } 
                break; 
                
-               case ceventt_unitlost:   { 
-                                    if (ev->trigger_data[b]->vehicle->color != ev->player * 8) 
-                                       ev->triggerstatus[b] = 1; 
-                                    else 
-                                       ev->triggerstatus[b] = 0; 
+               case ceventt_unitlost:   {
+                                    pvehicle v = actmap->getUnit ( ev->trigger_data[b]->networkid );
+                                    if ( !v )
+                                       ev->triggerstatus[b] = 2;
+                                    else {
+                                       if (v->color != ev->player * 8)
+                                          ev->triggerstatus[b] = 1;
+                                       else
+                                          ev->triggerstatus[b] = 0;
+                                    }
                                  } 
-               break; 
-               
+               break;
+
+               case ceventt_unitdestroyed:   {
+                                    if ( actmap->getUnit ( ev->trigger_data[b]->networkid ))
+                                       ev->triggerstatus[b] = 0;
+                                    else
+                                       ev->triggerstatus[b] = 2;
+                                 }
+               break;
+
                case ceventt_technologyresearched:   { 
                                                 ev->triggerstatus[b] = 0; 
                                                 if ( ev->player == 8 ) {
@@ -437,11 +454,16 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
                               } 
                break; 
                
-               case ceventt_unitconquered:   { 
-                                         if (ev->trigger_data[b]->vehicle->color == ev->player * 8) 
-                                            ev->triggerstatus[b] = 1; 
-                                         else 
-                                            ev->triggerstatus[b] = 0; 
+               case ceventt_unitconquered:   {
+                                         pvehicle v = actmap->getUnit ( ev->trigger_data[b]->networkid );
+                                         if ( !v ) {
+                                            ev->triggerstatus[b] = 3;
+                                         } else {
+                                            if ( v->color == ev->player * 8)
+                                               ev->triggerstatus[b] = 1;
+                                            else
+                                               ev->triggerstatus[b] = 0;
+                                         }
                                       } 
                break; 
                
@@ -607,6 +629,7 @@ void         releaseevent(pvehicle     eht,
                            ev1->triggerstatus[b] = 0;
                         actmap->player[ev1->player].queuedEvents++;
                      }
+
                      else
                         if (ev1->trigger[b] == ceventt_buildinglost) {
                            if (ev1->player == bld->color / 8)   /*  eventuell allies  */
@@ -647,6 +670,7 @@ void         releaseevent(pvehicle     eht,
       if (eht != NULL) 
          for (b = 0; b <= 3; b++)
             if ( ev1->trigger_data[b] ) {
+               /*
                if (ev1->trigger_data[b]->vehicle == eht) {
                   if (action == cconnection_destroy) {
                      if (ev1->trigger[b] == ceventt_unitdestroyed) {
@@ -663,7 +687,7 @@ void         releaseevent(pvehicle     eht,
                   }
                   if (action == cconnection_conquer) {
                      if (ev1->trigger[b] == ceventt_unitconquered) {
-                        if (ev1->player == eht->color / 8)   /*  eventuell allies  */
+                        if (ev1->player == eht->color / 8)
                            ev1->triggerstatus[b] = 1;
                         else
                            ev1->triggerstatus[b] = 0;
@@ -671,7 +695,7 @@ void         releaseevent(pvehicle     eht,
                      }
                      else
                         if (ev1->trigger[b] == ceventt_unitlost) {
-                           if (ev1->player == eht->color / 8)   /*  eventuell allies  */
+                           if (ev1->player == eht->color / 8)   //  eventuell allies
                               ev1->triggerstatus[b] = 0;
                            else
                               ev1->triggerstatus[b] = 1;
@@ -681,7 +705,7 @@ void         releaseevent(pvehicle     eht,
 
                   if (action == cconnection_lose) {
                      if (ev1->trigger[b] == ceventt_unitconquered) {
-                        if (ev1->player == eht->color / 8)   /*  eventuell allies  */
+                        if (ev1->player == eht->color / 8)   //  eventuell allies
                            ev1->triggerstatus[b] = 0;
                         else
                            ev1->triggerstatus[b] = 1;
@@ -689,14 +713,14 @@ void         releaseevent(pvehicle     eht,
                      }
                      else
                         if (ev1->trigger[b] == ceventt_unitlost) {
-                           if (ev1->player == eht->color / 8)   /*  eventuell allies  */
+                           if (ev1->player == eht->color / 8)   //  eventuell allies
                               ev1->triggerstatus[b] = 1;
                            else
                               ev1->triggerstatus[b] = 0;
                            actmap->player[ev1->player].queuedEvents++;
                         }
                   }
-               }
+               } */
                if ( (ev1->trigger[b] == ceventt_any_unit_enters_polygon  &&
                     action          == cconnection_areaentered_anyunit ) ||
                     (ev1->trigger[b] == ceventt_specific_unit_enters_polygon  &&
@@ -716,10 +740,10 @@ void         releaseevent(pvehicle     eht,
    } 
 } 
 
-void         viewtextmessage ( int id, int player )
-{ 
-   char* txt = readtextmessage( id );
-   if ( txt && txt[0] ) {
+void    viewtextmessage ( int id, int player )
+{
+   ASCString txt = readtextmessage( id );
+   if ( !txt.empty() ) {
 
       int to;
       if ( player < 8 )
@@ -727,14 +751,11 @@ void         viewtextmessage ( int id, int player )
       else
          to = 0xff;
 
-      char* m = strdup ( txt );
-      new tmessage ( m, to );
+      new Message ( txt, actmap, to );
       if ( player == actmap->actplayer )
          viewunreadmessages (  );
-
-   } 
-   delete[] txt;
-} 
+   }
+}
 
 
 
@@ -992,6 +1013,7 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
     
       if (actmap->firsteventtocome == ev) { 
          actmap->firsteventtocome = ev->next; 
+
       } 
       else { 
    
@@ -1013,6 +1035,7 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
             ev2 = ev2->next; 
          ev2->next = ev; 
       } 
+
 
       if ( ev->conn & 1 )
          for ( int i = 0; i < 9; i++ )
@@ -1106,8 +1129,9 @@ void         startnextcampaignmap(word         id)
 
 
 class tfillpolygon_connectionmarker : public tfillpolygonsquarecoord {
+             pmap gamemap;
         public:
-             virtual void initmark ( int _mark ) { mark = _mark; };
+             virtual void initmark ( pmap _gamemap, int _mark ) { mark = _mark; gamemap = _gamemap; };
         protected:
              virtual void setpointabs ( int x,  int y  );
              int mark;
@@ -1115,11 +1139,11 @@ class tfillpolygon_connectionmarker : public tfillpolygonsquarecoord {
 
 void tfillpolygon_connectionmarker :: setpointabs ( int x,  int y  )
 {
-   getfield ( x, y )->connection |= mark;
+   gamemap->getField ( x, y )->connection |= mark;
 }
 
 
-void mark_polygon_fields_with_connection ( int* data, int mark )
+void mark_polygon_fields_with_connection ( pmap gamemap, int* data, int mark )
 {
    int polynum = data[0];
    data++;
@@ -1136,7 +1160,7 @@ void mark_polygon_fields_with_connection ( int* data, int mark )
       }
 
       tfillpolygon_connectionmarker fpcm;
-      fpcm.initmark ( mark );
+      fpcm.initmark ( gamemap, mark );
       fpcm.paint_polygon ( &poly );
       delete[] poly.vertex;
    }
@@ -1200,9 +1224,9 @@ int unit_in_polygon ( tevent::LargeTriggerData::PolygonEntered* trigger )
          data+=2;
       }
 
-      if ( trigger->vehicle ) {
+      if ( trigger->vehiclenetworkid ) {
          tcheckpolygon_specificunitentered cpsue;
-         cpsue.init ( trigger->vehicle );
+         cpsue.init ( actmap->getUnit ( trigger->vehiclenetworkid) );
          cpsue.paint_polygon ( &poly );
          found+= cpsue.getresult();
       } else {

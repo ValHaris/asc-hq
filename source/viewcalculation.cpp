@@ -19,6 +19,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "global.h" 
 #include "viewcalculation.h"
 #include "mapalgorithms.h"
 
@@ -257,7 +258,7 @@ int  evaluatevisibilityfield ( pmap actmap, pfield fld, int player, int add, int
       if (( fld->vehicle  && ( fld->vehicle->color  == player * 8 )) ||
           ( fld->vehicle  && ( fld->vehicle->height  < chschwimmend ) && sonar ) ||
           ( fld->building && ( fld->building->typ->buildingheight < chschwimmend ) && sonar ) ||
-          ( fld->object && fld->object->mine && ( mine  ||  fld->mineowner() == player)) ||
+          ( !fld->mines.empty() && ( mine  ||  fld->mineowner() == player)) ||
           ( fld->vehicle  && ( fld->vehicle->height  >= chsatellit )  && satellite )) {
              setvisibility(&fld->visible,visible_all, player);
              return originalVisibility != visible_all;

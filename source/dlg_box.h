@@ -2,9 +2,15 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.19 2001-01-28 14:04:12 mbickel Exp $
+//     $Id: dlg_box.h,v 1.20 2001-02-26 12:35:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2001/01/28 14:04:12  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.18  2000/12/28 11:12:45  mbickel
 //      Fixed: no redraw when restoring fullscreen focus in WIN32
 //      Better error message handing in WIN32
@@ -492,7 +498,7 @@ extern char*  strrrd8u(int  l);           // aufrunden
 extern char*  strrrd8d(int  l);           // abrunden
 extern char*  strrrd8n(int  l);           // mathematisch korrekt runden
 
-extern char*  readtextmessage( int id );
+extern ASCString readtextmessage( int id );
 
 
 class   tstringselect : public tdialogbox {

@@ -5,9 +5,12 @@
 
 */
 
-//     $Id: loaders.h,v 1.16 2001-02-11 11:39:39 mbickel Exp $
+//     $Id: loaders.h,v 1.17 2001-02-26 12:35:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2001/02/11 11:39:39  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.15  2001/02/04 21:26:58  mbickel
 //      The AI status is written to savegames -> new savegame revision
 //      Lots of bug fixes
@@ -165,13 +168,13 @@ extern void loadallobjecttypes ( void );
 
 extern void  savecampaignrecoveryinformation( const ASCString& filename, int id);
 
-const int actsavegameversion  = 0xff34;
+const int actsavegameversion  = 0xff35;
 const int minsavegameversion  = 0xff31;
 const int actmapversion       = 0xfe26;
 const int minmapversion       = 0xfe24;
 const int actnetworkversion   = 0x0006;
 const int minnetworkversion   = 0x0004;
-const int actreplayversion    = 0x0001;
+const int actreplayversion    = 0x0002;
 const int minreplayversion    = 0x0001;
   
 
@@ -207,14 +210,14 @@ class  tspfldloaders {
            void            readfields  ( void );
 
            void            writemessages ( void );
-           void            writemessagelist( pmessagelist lst ); 
+           void            writemessagelist( MessagePntrContainer& lst );
            void            readmessages ( void );
-           void            readmessagelist( pmessagelist* lst ); 
+           void            readmessagelist( MessagePntrContainer& lst );
 
            void            writereplayinfo ( void );
            void            readreplayinfo ( void );
 
-           void            chainitems ( void );
+           void            chainitems ( pmap actmap );
            void            setplayerexistencies ( void );
            virtual ~tspfldloaders();
            tspfldloaders ( void );
@@ -248,17 +251,21 @@ class tnetworkloaders : public tgameloaders {
 
 class tsavegameloaders : public tgameloaders {
         public:
+           tmap*           loadgame ( pnstream strm );
+           void            savegame ( pnstream strm, pmap gamemap, bool writeReplays = true );
+
            int             loadgame ( const char* name );
-           int             savegame ( const char* name );
+           void            savegame ( const char* name );
 };
 
-
+/*
 class treplayloaders : public tspfldloaders {
            void            initmap ( void );
          public:
            void            loadreplay ( pmemorystreambuf streambuf );
            void            savereplay ( int num );
 };
+*/
 
 //! checks, whether filename is a valid map file
 extern bool validatemapfile ( const char* filename );

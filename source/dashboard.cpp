@@ -55,7 +55,7 @@ void tdashboard::paint ( const pfield ffield, int playerview )
 {
    if ( playerview >= 0 ) {
       if (fieldvisiblenow(ffield, playerview ))
-         paintvehicleinfo ( ffield->vehicle, ffield->building, ffield->object, NULL );
+         paintvehicleinfo ( ffield->vehicle, ffield->building, ffield, NULL );
       else
          paintvehicleinfo( NULL, NULL, NULL, NULL );
    }
@@ -703,11 +703,11 @@ void         tdashboard::paintdamage(void)
 
        }
        else
-          if ( object ) {
+          if ( objfield ) {
              c = darkgray;
-             for ( int i = object->objnum-1; i >= 0; i-- )
-               if ( object->object[ i ] -> typ->armor > 0 )
-                  w = (x2 - x1 + 1) * ( 100 - object->object[ i ] -> damage ) / 100;
+             for ( tfield::ObjectContainer::iterator i = objfield->objects.begin(); i != objfield->objects.end(); i++ )
+               if ( i->typ->armor > 0 )
+                  w = (x2 - x1 + 1) * ( 100 - i->damage ) / 100;
 
           } else
              w = 0;
@@ -1217,16 +1217,15 @@ void         tdashboard::checkformouse ( int func )
           if ( fld->building )
              displaymessage2("damage is %d", fld->building->damage );
           else
-          if ( fld->object ) {
-             char temp[1000];
-             strcpy ( temp, "damage is " );
-             for ( int i = fld->object->objnum-1; i >= 0; i-- )
-                if ( fld->object->object[i]->typ->armor >= 0 ) {
-                   strcat ( temp, strrr ( fld->object->object[i]->damage ));
-                   strcat ( temp, " ");
+          if ( !fld->objects.empty() ) {
+             ASCString temp = "damage is ";
+             for ( tfield::ObjectContainer::reverse_iterator i = fld->objects.rbegin(); i != fld->objects.rend(); i++ )
+                if ( i->typ->armor >= 0 ) {
+                   temp += strrr ( i->damage );
+                   temp += " ";
                 }
 
-             displaymessage2( temp );
+             displaymessage2( temp.c_str() );
           }
 
        }
@@ -1249,7 +1248,7 @@ void         tdashboard::checkformouse ( int func )
 
 void   tdashboard :: paintvehicleinfo( const pvehicle     vehicle,
                                        const pbuilding    building,
-                                       const pobjectcontainer      object,
+                                       const pfield       _objfield,
                                        const pvehicletype vt )
 {
    collategraphicoperations cgo ( agmp->resolutionx - 800 + 610, 15, agmp->resolutionx - 800 + 783, 307 );
@@ -1267,7 +1266,7 @@ void   tdashboard :: paintvehicleinfo( const pvehicle     vehicle,
    dashboard.munitnumberx   = 545;
    dashboard.vehicle        = vehicle;
    dashboard.building       = building;
-   dashboard.object         = object;
+   dashboard.objfield       = _objfield;
    dashboard.vehicletype    = vt;
 
    dashboard.paintheight();

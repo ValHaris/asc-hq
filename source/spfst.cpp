@@ -2,9 +2,15 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.85 2001-02-18 15:37:19 mbickel Exp $
+//     $Id: spfst.cpp,v 1.86 2001-02-26 12:35:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.85  2001/02/18 15:37:19  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.84  2001/02/11 11:39:43  mbickel
 //      Some cleanup and documentation
 //
@@ -177,8 +183,7 @@
   int objecttypenum = 0;
 
 
-   char tempsvisible;
-   Schriften schriften; 
+   Schriften schriften;
 
    map< int, pterraintype>  terrainmap;
    map< int, pobjecttype>  objectmap;
@@ -368,7 +373,7 @@ int         fieldaccessible( const pfield        field,
       return 0;
 
    if ( c == visible_all)
-      if ( field->minenum() ) 
+      if ( field->mines.size() )
          if (vehicle->height <= chfahrend && getdiplomaticstatus2 ( vehicle->color, field->mineowner()*8 ) == cawar )  
             return 0;
       
@@ -432,68 +437,32 @@ void         generatemap( TerrainType::Weather*   bt,
                                int                xsize,
                                int                ysize)
 { 
-   tfield    leerfield;
-
    delete actmap;
    actmap = new tmap;
-   actmap->playerView = 0;
-
    actmap->xsize = xsize;
    actmap->ysize = ysize; 
-   actmap->campaign = NULL;
-   for (int k = 1; k < 8; k++) 
+   for (int k = 1; k < 8; k++)
       actmap->player[k].stat = Player::computer;
 
    actmap->title = strdup( "new map" );
-   actmap->codeword[0] = 0;
 
    actmap->field = new tfield[ xsize * ysize];
+
    if ( actmap->field== NULL)
       displaymessage ( "Could not generate map !! \nProbably out of enough memory !",2);
 
-   leerfield.bdt.set ( 0 );
-   leerfield.typ = bt; 
-   leerfield.picture = NULL;
-   leerfield.vehicle = NULL;
-   leerfield.building = NULL; 
-   leerfield.a.temp = 0; 
-   leerfield.a.temp2 = 0; 
-   leerfield.visible = 0; 
-   leerfield.direction = 0; 
-   leerfield.fuel = 0;
-   leerfield.material = 0;
-   leerfield.object = NULL;
-   leerfield.resourceview = NULL;
-   leerfield.connection = 0;
-   leerfield.setparams ();
-            
-   {
-      int l = 0; 
-      for ( int j = 0; j < ysize ; j++) { 
-         for ( int i = 0; i < xsize ; i++) { 
-            memcpy( &actmap->field[l], &leerfield, sizeof (leerfield) );
-            l++;
-         } 
-      } 
+   for ( int l = 0; l < xsize*ysize; l++ ) {
+      actmap->field[l].typ = bt;
+      actmap->field[l].setparams();
    }
-
-   memset ( &actmap->alliances, 0, sizeof ( actmap->alliances ));
-   int i;
-   for ( i = 0; i < 7; i++ )
-      for ( int j = 0; j < 7; j++ )
-         actmap->alliances[i][j] = cawar;
-
-
-   for ( i = 0; i < gameparameternum; i++ )
-      actmap->setgameparameter(i, gameparameterdefault[i] );
 
    #ifdef HEXAGON
    actmap->_resourcemode = 1;
    #else
    actmap->_resourcemode = 0;
    #endif
-
-} 
+   actmap->playerView = 0;
+}
 
 
 
@@ -1006,23 +975,485 @@ const int woodformnum = 28;
 int woodform[ woodformnum ] = { 63,30,60,39,51,28,35,48,6,57,15,14,56,7,49,47,59,31,61,60,55, -1,-1,-1,-1,-1,-1,-1 };
 int woodid = 81;
 
-void smooth ( int what );
 
 
-void calculateforest( void )
-{
-   {
-      for ( int y = 0; y < actmap->ysize ; y++) 
-         for ( int x = 0; x < actmap->xsize ; x++) {
-            pfield fld = getfield(x,y); 
-   
-            if ( fld->object )
-               for ( int i = 0; i < fld->object->objnum; i++ )
-                  if ( fld->object->object[i]->typ->id == woodid ) 
-                     fld->object->object[i]->dir = 0;
+#ifdef HEXAGON
+
+
+
+
+/*
+   These smoothing functions are straight conversions from Joerg Richter's routines
+   he made for his Battle Isle Map editor
+   Many thanks for giving them to me !
+*/
+
+
+int SmoothTreesData0[] = {
+     4, 7, 10,101,
+     1,0x0001,243,
+     1,0x0115,243,          // die die garnicht gehen
+    30,0x3F, 30,243,0x3F, 60,243,0x3F, 39,243,0x3F, 51,243,
+       0x3F, 28,243,0x3F, 35,243,0x3F, 48,243,0x3F,  6,243,
+       0x3F, 57,243,0x3F, 15,243,0x3F, 14,243,0x3F, 56,243,
+       0x3F,  7,243,0x3F, 49,243,0x3F, 47,243,0x3F, 59,243,
+       0x3F, 31,243,0x3F, 61,243,0x3F, 62,243,0x3F, 55,243,
+       0x3F, 23,243,0x3F, 46,243,0x3F, 29,243,0x3F, 58,243,
+       0x3F, 53,243,0x3F, 43,243,0x3F, 22,243,0x3F, 38,243,
+       0x3F, 50,243,0x3F, 52,243,
+     7,264,265,266,267,268,269,270
+  };
+
+int SmoothTreesData[] = {
+     4, 7, 10,101,
+     1,0x0001,243,
+     1,0x0115,243,
+    30,0x3F, 30,244,0x3F, 60,245,0x3F, 39,246,0x3F, 51,247,
+       0x3F, 28,248,0x3F, 29,248,0x3F, 35,249,0x3F, 43,249,
+       0x3F, 48,250,0x3F, 50,250,0x3F, 52,250,0x3F,  6,251,
+       0x3F, 22,251,0x3F, 38,251,0x3F, 57,252,0x3F, 15,253,
+       0x3F, 14,254,0x3F, 46,254,0x3F, 56,255,0x3F, 58,255,
+       0x3F,  7,256,0x3F, 23,256,0x3F, 49,257,0x3F, 53,257,
+       0x3F, 47,258,0x3F, 59,259,0x3F, 31,260,0x3F, 61,261,
+       0x3F, 62,262,0x3F, 55,263,
+     7,264,265,266,267,268,269,270
+  };
+
+int UnSmoothTreesData[] = {
+     4, 7, 8, 9,
+     1,0x011C,243,
+     0,
+     0,
+     1,243
+  };
+
+
+
+
+int  SmoothBanksData [] = {
+     4, 7, 16, 77,
+     1, 0x0103, 95,    // was zu ersetzen ist         - blaues wasser }
+     4, 0x010F, 95,    // was als 1 zu betrachten ist - wasser und strand }
+        0x010E,  0,                                // - Hafen }
+        0x0109,110,                                // - Steine und Schilf }
+        0x0107,121,                                // - Schilf }
+    20,0x3F,59, 98, 0x3F,51, 98, 0x3F,47, 99, 0x3F,39, 99, // durch was ersetzen }
+       0x3F,31,100, 0x3F,30,100, 0x3F,61,101, 0x3F,60,101,
+       0x3F,55,102, 0x3F,62,103, 0x3F,35,104, 0x3F,28,105,
+       0x3F,56,106, 0x3F,48,106, 0x3F,49,106, 0x3F,57,106,
+       0x3F,14,107, 0x3F,15,107, 0x3F, 7,107, 0x3F, 6,107,
+     0                                            // wenn nicht gefunden }
+  };
+
+int  UnSmoothBanksData [] = {
+     4, 7, 8, 9,
+     1, 0x010C, 98,          // { alle str"nder ersetzen }
+     0,
+     0,
+     1, 95                  // durch flaches wasser ersetzen }
+  };
+
+
+int  SmoothDarkBanksData [] = {
+     4, 7, 16, 77,
+     1,0x0103,385,                       // dunkels wasser }
+     4,0x0103,385,                       // dunkles wasser }
+       0x010A,373,
+       0x0104,449,
+       0x0104,463,
+    20,0x3F,59,373, 0x3F,51,373, 0x3F,47,374, 0x3F,39,374,          // durch was ersetzen }
+       0x3F,31,375, 0x3F,30,375, 0x3F,61,376, 0x3F,60,376,
+       0x3F,55,377, 0x3F,62,378, 0x3F,35,379, 0x3F,28,380,
+       0x3F,56,381, 0x3F,48,381, 0x3F,49,381, 0x3F,57,381,
+       0x3F,14,382, 0x3F,15,382, 0x3F, 7,382, 0x3F, 6,382,
+     0                                       // wenn nicht gefunden }
+  };
+
+int  UnSmoothDarkBanksData [] = {
+     4, 7, 8, 9,
+     1,0x010A,373,
+     0,
+     0,
+     1,385
+  };
+
+
+
+class Smoothing {
+         pmap actmap;
+       public:
+         Smoothing ( pmap gamemap ) : actmap ( gamemap ) {};
+         pfield getfield ( int x, int y )
+         {
+            return actmap->getField ( x, y );
          }
-   }
-   smooth( 1 );
+
+         int IsInSetOfWord( int Wert, int* A )
+         {
+           int Pos = 0;
+           int Anz1 = A[Pos];
+           Pos++;
+           int res = 0;
+           int Anz2;
+           while ( Anz1 > 0 ) {
+             int W = A[Pos];
+             Pos++;
+             Anz2 = W & 0xff;
+
+             if ( W & 0x100 ) {
+                if (( Wert>= A[Pos]) && (Wert< A[Pos]+Anz2))
+                     res = 1;
+                   Pos++;
+             } else {
+                while ( Anz2 > 0) {
+                  if ( Wert == A[Pos] )
+                     res = 1;
+                  Pos++;
+                  Anz2--;
+                }
+             }
+
+             Anz1--;
+           }
+
+           return res;
+         };
+
+
+         int  GetNeighbourMask( int x, int y, int* Arr, pobjecttype o )
+         {
+            int res = 0;
+            for ( int d = 0; d < sidenum; d++ ) {
+               int x1 = x;
+               int y1 = y;
+               getnextfield ( x1, y1, d );
+               pfield fld = getfield ( x1, y1 );
+               if ( fld ) {
+
+                  pobject obj = fld->checkforobject ( o );
+                  if ( obj )
+                     if ( obj->typ->picture[0] && (obj->typ->weather & 1) )
+                        if ( IsInSetOfWord ( obj->typ->picture[0][ obj->dir ].bi3pic, Arr ))
+                           res += 1 << d;
+
+                  // if ( fld->checkforobject ( o ) )
+                  //    res += 1 << d;
+               } else
+                  res += 1 << d;
+
+            }
+            return res;
+         };
+
+         int  GetNeighbourMask( int x, int y, int* Arr )
+         {
+            int res = 0;
+            for ( int d = 0; d < sidenum; d++ ) {
+               int x1 = x;
+               int y1 = y;
+               getnextfield ( x1, y1, d );
+               pfield fld = getfield ( x1, y1 );
+               if ( fld ) {
+
+                  if ( IsInSetOfWord ( fld->typ->bi_picture[ fld->direction ], Arr ))
+                     res += 1 << d;
+
+               } else
+                  res += 1 << d;
+
+            }
+            return res;
+         };
+
+
+         /*
+               Res:= 0;
+               for I:= Oben to LOben do begin
+                 GetNear(P, I, R);
+                 if ValidEck(R) then
+                   Res:= Res or
+          (Byte(IsInSetOfWord(  TRawArrEck(   Mission.ACTN[R.Y, R.X] )[TerObj], Arr)) shl Ord(I))
+                 else
+                   Res:= Res or 1 shl Ord(I);
+               end;
+               GetNeighbourMask:= Res;
+             end;
+         */
+
+
+         int SearchAndGetInt( int Wert, int* Arr, int* Res )
+         {
+            int Anz = Arr[0];
+            int Pos = 1;
+            while ( Anz> 0 ) {
+              if (( Wert & Arr[Pos]) == Arr[Pos+1] ) {
+                 *Res = Arr[Pos+2];
+                 return  Anz > 0;
+              }
+              Pos += 3;
+              Anz--;
+            }
+            return  Anz> 0;
+         };
+
+
+         int SmoothIt( pobjecttype TerObj, int* SmoothData )
+         {
+           int P0 = SmoothData[0];
+           int P1 = SmoothData[1];
+           int P2 = SmoothData[2];
+           int P3 = SmoothData[3];
+           int Res = 0;
+           for ( int Y = 0 ; Y < actmap->ysize; Y++ )
+             for ( int X = 0; X < actmap->xsize; X++ ) {
+                 if ( TerObj ) {
+                    pobject obj = getfield ( X, Y )-> checkforobject ( TerObj );
+                    if ( obj  && obj->typ->picture[0] && (obj->typ->weather & 1)) {
+                       int Old = obj->dir; // bipicnum
+                                           //    Old:= TRawArrEck(Mission.ACTN[Y, X])[TerObj];  // bisherige Form / oder Bildnummer ?
+
+                       if ( IsInSetOfWord( obj->typ->picture[0][ obj->dir ].bi3pic, &SmoothData[P0] )) {    // Nur die "allesWald"-fielder werden gesmootht
+                          int Mask = GetNeighbourMask( X, Y, &SmoothData[P1], TerObj );
+                          if ( Mask < 63 ) {
+                             int nw;
+                             if ( !SearchAndGetInt(Mask, &SmoothData[P2], &nw) ) {  // Wenn kein passendes field gefunden wurde
+                                if ( SmoothData[P3] == 0  ||  SmoothData[P3] == 1 )
+                                   nw = SmoothData[P3+ 1];
+                                else
+                                   nw = SmoothData[P3+ 1 ]; // + (ticker % SmoothData[P3] )
+                             }
+                             for ( int i = 0; i < TerObj->pictnum; i++ )
+                                if ( TerObj->picture[0][ i ].bi3pic == nw )
+                                   obj->dir = i;
+                          }
+                       }
+                       if ( Old != obj->dir )
+                          Res = 1;
+                    }
+                 } else {
+                    pfield fld = getfield ( X, Y );
+                    TerrainType::Weather* old = fld->typ;
+                    int odir = fld->direction;
+
+                    if ( IsInSetOfWord( fld->typ->bi_picture[ fld->direction ], &SmoothData[P0] )) {    // Nur die "allesWald"-fielder werden gesmootht
+                       int Mask = GetNeighbourMask( X, Y, &SmoothData[P1] );
+                       if ( Mask < 63 ) {
+                          int nw;
+                          if ( !SearchAndGetInt(Mask, &SmoothData[P2], &nw) ) {  // Wenn kein passendes field gefunden wurde
+                             if ( SmoothData[P3] == 0  ||  SmoothData[P3] == 1 )
+                                nw = SmoothData[P3+ 1];
+                             else
+                                nw = SmoothData[P3+ 1 ]; // + (ticker % SmoothData[P3] )
+                          }
+                          for ( int i = 0; i < terraintypenum; i++ ) {
+                             pterraintype trrn = getterraintype_forpos( i );
+                             if ( trrn )
+                                for ( int j = 0; j < cwettertypennum; j++ )
+                                   if ( trrn->weather[j] )
+                                      for ( int k = 0; k < sidenum; k++ )
+                                         if ( trrn->weather[j]->picture[k] )
+                                            if ( trrn->weather[j]->bi_picture[k] == nw ) {
+                                               fld->typ = trrn->weather[j];
+                                               fld->direction = k;
+                                               fld->setparams();
+                                            }
+                          }
+                       }
+                    }
+                    if ( old != fld->typ  ||  odir != fld->direction )
+                       Res = 1;
+
+                 }
+              }
+           return Res;
+         };
+
+
+
+         void smooth ( int what )
+         {
+           int ShowAgain = 0;
+           if ( what & 2 ) {
+             if ( SmoothIt( NULL, UnSmoothBanksData) )
+                ShowAgain = 1;
+             if ( SmoothIt( NULL, UnSmoothDarkBanksData) )
+                ShowAgain = 1;
+             if ( SmoothIt( NULL, SmoothBanksData) )
+                ShowAgain = 1;
+             if ( SmoothIt( NULL, SmoothDarkBanksData) )
+                ShowAgain = 1;
+           }
+
+           if ( what & 1 ) {
+              pobjecttype obj = getobjecttype_forid ( woodid );
+              if ( obj ) {
+                int count = 0;
+                while ( SmoothIt ( obj, SmoothTreesData0 ) && count < 20 ) {
+                   ShowAgain = 1;
+                   count++;
+                }
+                if  ( SmoothIt ( obj, SmoothTreesData) )
+                   ShowAgain = 1;
+              }
+           }
+         /*    while SmoothIt(1, SmoothDarkTreesData0) do ShowAgain:= true;
+             if SmoothIt(1, SmoothDarkTreesData) then ShowAgain:= true;
+             if ShowAgain then begin
+               ShowAll;
+               Repaint;
+             end;    */
+         };
+
+};
+
+
+/*
+procedure TMissView.Smooth;
+  var
+    ShowAgain: Boolean;
+  begin
+    ShowAgain:= false;
+    if SmoothIt(0, SmoothBanksData) then ShowAgain:= true;
+    if SmoothIt(0, SmoothDarkBanksData) then ShowAgain:= true;
+
+    while SmoothIt(1, SmoothTreesData0) do ShowAgain:= true;
+    if SmoothIt(1, SmoothTreesData) then ShowAgain:= true;
+{    while SmoothIt(1, SmoothDarkTreesData0) do ShowAgain:= true;
+    if SmoothIt(1, SmoothDarkTreesData) then ShowAgain:= true;}
+    if ShowAgain then begin
+      ShowAll;
+      Repaint;
+    end;
+  end;
+
+function IsInSetofWord(Wert: Word; var A: array of Word): Boolean;
+  var
+    Anz1: Word;
+    Anz2: Word;
+    W: Word;
+    Pos: Word;
+  begin
+    Pos:= 0;
+    Anz1:= A[Pos];
+    Inc(Pos);
+    IsInSetOfWord:= false;
+    while Anz1> 0 do begin
+      W:= A[Pos];
+      Inc(Pos);
+      Anz2:= Lo(W);
+      case Hi(W) of
+        0: begin
+            while Anz2> 0 do begin
+              if Wert= A[Pos] then IsInSetOfWord:= true;
+              Inc(Pos);
+              Dec(Anz2);
+            end;
+          end;
+        1: begin
+            if (Wert>= A[Pos]) and (Wert< A[Pos]+Anz2) then
+              IsInSetOfWord:= true;
+            Inc(Pos);
+          end;
+      end;
+      Dec(Anz1);
+    end;
+  end;
+
+
+
+****************
+Smoothdaten
+****************
+
+{
+  Aufbau eines Set of Ints
+
+  1. word anzahl der bl"cke
+  dann folgen die bl"cke
+
+  aufbau eines blocks:
+    1. word:
+       hibyte- optionsnummer
+         0- nur rawdaten   lobyte ist anzahl der folgenden raws
+         1- ab hier        lobyte ist anzahl der ab hier
+    weitere ist entweder raw oder startzahl
+}
+
+
+  SmoothBanksData: array[0..77] of Word= (
+     4, 7, 16, 77,
+     1, $0103, 95,    { was zu ersetzen ist         - blaues wasser }
+     4, $010F, 95,    { was als 1 zu betrachten ist - wasser und strand }
+        $010E,  0,                                { - Hafen }
+        $0109,110,                                { - Steine und Schilf }
+        $0107,121,                                { - Schilf }
+    20,$3F,59, 98, $3F,51, 98, $3F,47, 99, $3F,39, 99, { durch was ersetzen }
+       $3F,31,100, $3F,30,100, $3F,61,101, $3F,60,101,
+       $3F,55,102, $3F,62,103, $3F,35,104, $3F,28,105,
+       $3F,56,106, $3F,48,106, $3F,49,106, $3F,57,106,
+       $3F,14,107, $3F,15,107, $3F, 7,107, $3F, 6,107,
+     0                                            { wenn nicht gefunden }
+  );
+
+  UnSmoothBanksData: array[0..10] of Word= (
+     4, 7, 8, 9,
+     1, $010C, 98,          { alle str"nder ersetzen }
+     0,
+     0,
+     1, 95                  { durch flaches wasser ersetzen }
+  );
+
+
+  SmoothDarkBanksData: array[0..77] of Word= (
+     4, 7, 16, 77,
+     1,$0103,385,                       { dunkels wasser }
+     4,$0103,385,                       { dunkles wasser }
+       $010A,373,
+       $0104,449,
+       $0104,463,
+    20,$3F,59,373, $3F,51,373, $3F,47,374, $3F,39,374,          { durch was ersetzen }
+       $3F,31,375, $3F,30,375, $3F,61,376, $3F,60,376,
+       $3F,55,377, $3F,62,378, $3F,35,379, $3F,28,380,
+       $3F,56,381, $3F,48,381, $3F,49,381, $3F,57,381,
+       $3F,14,382, $3F,15,382, $3F, 7,382, $3F, 6,382,
+     0                                       { wenn nicht gefunden }
+  );
+
+  UnSmoothDarkBanksData: array[0..10] of Word= (
+     4, 7, 8, 9,
+     1,$010A,373,
+     0,
+     0,
+     1,385
+  );
+
+*/
+
+
+void smooth ( int what, pmap gamemap )
+{
+  Smoothing s ( gamemap );
+  s.smooth ( what );
+}
+
+#endif // Hexagon
+
+
+
+
+void calculateforest( pmap actmap )
+{
+   for ( int y = 0; y < actmap->ysize ; y++)
+     for ( int x = 0; x < actmap->xsize ; x++) {
+        pfield fld = actmap->getField(x,y);
+
+        for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ )
+           if ( i->typ->id == woodid )
+              i->dir = 0;
+     }
+
+   Smoothing s ( actmap );
+   s.smooth( 1 );
    return;
 
    int run = 0;
@@ -1031,47 +1462,42 @@ void calculateforest( void )
       changed = 0;
       for ( int y = 0; y < actmap->ysize ; y++) 
          for ( int x = 0; x < actmap->xsize ; x++) { 
-            pfield fld = getfield(x,y); 
+            pfield fld = actmap->getField(x,y);
    
-            if ( fld->object )
-               for ( int i = 0; i < fld->object->objnum; i++ )
-                  if ( fld->object->object[i]->typ->id == woodid ) {
-                     pobject oi2 = fld->object->object[i];
-   
-                     int c = 0; 
-                     for ( int i = 0; i < sidenum; i++) { 
-                        int a = x; 
-                        int b = y; 
-                        getnextfield( a, b, i ); 
-                        pfield fld2 = getfield(a,b); 
-                                    
-                        if ( fld2 ) { 
-                           pobject oi = fld2->checkforobject ( oi2->typ );
-                           if ( oi )
-                             if ( oi->dir <= 20  ||  run == 0 )
-                                 c |=  1 << i ; 
-                               
-                            
-                        } 
-                     } 
+            for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ )
+               if ( o->typ->id == woodid ) {
+                  int c = 0;
+                  for ( int i = 0; i < sidenum; i++) {
+                     int a = x;
+                     int b = y;
+                     getnextfield( a, b, i );
+                     pfield fld2 = actmap->getField(a,b);
 
-                     int found = 0;
-                     int dr;
-                     for ( int j = 0; j < woodformnum; j++ )
-                        if ( woodform[j] == c ) {
-                           dr = j;
-                           found = 1;
-                        }
-
-                     if ( !found )
-                        dr = 21 + ticker % 7;
-
-                     if ( oi2->dir != dr  && !(oi2->dir >= 21  && dr >= 21)) {
-                        oi2->dir = dr;
-                        fld->setparams();
-                        changed = 1;
-                     }
+                     if ( fld2 ) {
+                        pobject oi = fld2->checkforobject ( o->typ );
+                        if ( oi )
+                           if ( oi->dir <= 20  ||  run == 0 )
+                              c |=  1 << i ;
+                      }
                   }
+
+                  int found = 0;
+                  int dr;
+                  for ( int j = 0; j < woodformnum; j++ )
+                     if ( woodform[j] == c ) {
+                        dr = j;
+                        found = 1;
+                     }
+
+                  if ( !found )
+                     dr = 21 + ticker % 7;
+
+                  if ( o->dir != dr  && !(o->dir >= 21  && dr >= 21)) {
+                     o->dir = dr;
+                     fld->setparams();
+                     changed = 1;
+                  }
+               }
          } 
       run++;
    } while ( changed );
@@ -1094,24 +1520,23 @@ int isresourcenetobject ( pobjecttype obj )
 
 
 
-void         calculateobject(int      x,
-                              int      y,
+void         calculateobject( int       x,
+                              int       y,
                               bool      mof,
-                              pobjecttype obj)  /* mof = modify other fields  */        
+                              pobjecttype obj,
+                              pmap actmap )
 { 
-  #ifdef HEXAGON
   if ( obj->id == woodid ) {
-     calculateforest();
+     calculateforest( actmap );
      return;
   }
-  #endif
 
   int       d, e; 
 
    if ( obj->no_autonet )
       return;
 
-   pfield fld = getfield(x,y) ;
+   pfield fld = actmap->getField(x,y) ;
    pobject oi2 = fld-> checkforobject (  obj  );
 
    if ( oi2 ) 
@@ -1124,7 +1549,7 @@ void         calculateobject(int      x,
       int a = x; 
       int b = y; 
       getnextfield( a, b, i ); 
-      pfield fld2 = getfield(a,b); 
+      pfield fld2 = actmap->getField(a,b);
                   
       if ( fld2 ) {
          for ( int oj = -1; oj < obj->objectslinkablenum; oj++ ) {
@@ -1175,27 +1600,22 @@ void         calculateobject(int      x,
 
 
 
-void         calculateallobjects(void)       /* prir tst */
+void         calculateallobjects( pmap actmap )
 { 
    for ( int y = 0; y < actmap->ysize ; y++) 
       for ( int x = 0; x < actmap->xsize ; x++) { 
-         pfield fld = getfield(x,y); 
+         pfield fld = actmap->getField(x,y);
 
-         if ( fld->object )
-            for ( int i = 0; i < fld->object->objnum; i++ )
-               if ( !fld->object->object[i]->typ->no_autonet )
-                  #ifdef HEXAGON
-                  if ( fld->object->object[i]->typ->id != woodid )
-                  #endif
-                      calculateobject( x, y, false, fld->object->object[i]->typ ); 
+         for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ )
+             if ( !i->typ->no_autonet )
+                if ( i->typ->id != woodid )
+                   calculateobject( x, y, false, i->typ, actmap );
 
          fld->setparams();
       } 
 
-  #ifdef HEXAGON
-    calculateforest();
-  #endif
-} 
+    calculateforest( actmap );
+}
 
 
 void         tcursor::display(void)
@@ -1442,13 +1862,10 @@ void checkobjectsforremoval ( void )
    for ( int y = 0; y < actmap->ysize; y++ )
       for ( int x = 0; x < actmap->xsize; x++ ) {
          pfield fld = getfield ( x, y );
-         if ( fld->object )
-            for ( int i = 0; i < fld->object->objnum; i++ )
-               if ( fld->object->object[i]->typ->terrainaccess.accessible ( fld->bdt ) < 0 )
-                  fld->removeobject ( fld->object->object[i]->typ );
-
+         for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ )
+            if ( i->typ->terrainaccess.accessible ( fld->bdt ) < 0 )
+               fld->removeobject ( i->typ );
       }
-
 }
 
 void  checkunitsforremoval ( void )
@@ -1661,451 +2078,6 @@ int getcrc ( const pbuildingtype bld )
 
 
 
-#ifdef HEXAGON
-
-
-
-
-/* 
-   These smoothing functions are straight conversions from Joerg Richter's routines
-   he made for his Battle Isle Map editor 
-   Many thanks for giving them to me !
-*/
-
-
-int SmoothTreesData0[] = {
-     4, 7, 10,101,
-     1,0x0001,243,
-     1,0x0115,243,          // die die garnicht gehen 
-    30,0x3F, 30,243,0x3F, 60,243,0x3F, 39,243,0x3F, 51,243,
-       0x3F, 28,243,0x3F, 35,243,0x3F, 48,243,0x3F,  6,243,
-       0x3F, 57,243,0x3F, 15,243,0x3F, 14,243,0x3F, 56,243,
-       0x3F,  7,243,0x3F, 49,243,0x3F, 47,243,0x3F, 59,243,
-       0x3F, 31,243,0x3F, 61,243,0x3F, 62,243,0x3F, 55,243,
-       0x3F, 23,243,0x3F, 46,243,0x3F, 29,243,0x3F, 58,243,
-       0x3F, 53,243,0x3F, 43,243,0x3F, 22,243,0x3F, 38,243,
-       0x3F, 50,243,0x3F, 52,243,
-     7,264,265,266,267,268,269,270
-  };
-
-int SmoothTreesData[] = {
-     4, 7, 10,101,
-     1,0x0001,243,
-     1,0x0115,243,
-    30,0x3F, 30,244,0x3F, 60,245,0x3F, 39,246,0x3F, 51,247,
-       0x3F, 28,248,0x3F, 29,248,0x3F, 35,249,0x3F, 43,249,
-       0x3F, 48,250,0x3F, 50,250,0x3F, 52,250,0x3F,  6,251,
-       0x3F, 22,251,0x3F, 38,251,0x3F, 57,252,0x3F, 15,253,
-       0x3F, 14,254,0x3F, 46,254,0x3F, 56,255,0x3F, 58,255,
-       0x3F,  7,256,0x3F, 23,256,0x3F, 49,257,0x3F, 53,257,
-       0x3F, 47,258,0x3F, 59,259,0x3F, 31,260,0x3F, 61,261,
-       0x3F, 62,262,0x3F, 55,263,
-     7,264,265,266,267,268,269,270
-  };
-
-int UnSmoothTreesData[] = {
-     4, 7, 8, 9,
-     1,0x011C,243,
-     0,
-     0,
-     1,243
-  };
-
-
-
-
-int  SmoothBanksData [] = {
-     4, 7, 16, 77,
-     1, 0x0103, 95,    // was zu ersetzen ist         - blaues wasser }
-     4, 0x010F, 95,    // was als 1 zu betrachten ist - wasser und strand }
-        0x010E,  0,                                // - Hafen }
-        0x0109,110,                                // - Steine und Schilf }
-        0x0107,121,                                // - Schilf }
-    20,0x3F,59, 98, 0x3F,51, 98, 0x3F,47, 99, 0x3F,39, 99, // durch was ersetzen }
-       0x3F,31,100, 0x3F,30,100, 0x3F,61,101, 0x3F,60,101,
-       0x3F,55,102, 0x3F,62,103, 0x3F,35,104, 0x3F,28,105,
-       0x3F,56,106, 0x3F,48,106, 0x3F,49,106, 0x3F,57,106,
-       0x3F,14,107, 0x3F,15,107, 0x3F, 7,107, 0x3F, 6,107,
-     0                                            // wenn nicht gefunden }
-  };
-
-int  UnSmoothBanksData [] = {
-     4, 7, 8, 9,
-     1, 0x010C, 98,          // { alle str"nder ersetzen }
-     0,
-     0,
-     1, 95                  // durch flaches wasser ersetzen }
-  };
-
-
-int  SmoothDarkBanksData [] = {
-     4, 7, 16, 77,
-     1,0x0103,385,                       // dunkels wasser }
-     4,0x0103,385,                       // dunkles wasser }
-       0x010A,373,
-       0x0104,449,
-       0x0104,463,
-    20,0x3F,59,373, 0x3F,51,373, 0x3F,47,374, 0x3F,39,374,          // durch was ersetzen }
-       0x3F,31,375, 0x3F,30,375, 0x3F,61,376, 0x3F,60,376,
-       0x3F,55,377, 0x3F,62,378, 0x3F,35,379, 0x3F,28,380,
-       0x3F,56,381, 0x3F,48,381, 0x3F,49,381, 0x3F,57,381,
-       0x3F,14,382, 0x3F,15,382, 0x3F, 7,382, 0x3F, 6,382,
-     0                                       // wenn nicht gefunden }
-  };
-
-int  UnSmoothDarkBanksData [] = {
-     4, 7, 8, 9,
-     1,0x010A,373,
-     0,
-     0,
-     1,385
-  };
-
-
-
-
-
-int IsInSetOfWord( int Wert, int* A )
-{
-  int Pos = 0;
-  int Anz1 = A[Pos];
-  Pos++;
-  int res = 0;
-  int Anz2;
-  while ( Anz1 > 0 ) {
-    int W = A[Pos];
-    Pos++;
-    Anz2 = W & 0xff;
-
-    if ( W & 0x100 ) {
-       if (( Wert>= A[Pos]) && (Wert< A[Pos]+Anz2)) 
-            res = 1;
-          Pos++;
-    } else {
-       while ( Anz2 > 0) { 
-         if ( Wert == A[Pos] )
-            res = 1;
-         Pos++;
-         Anz2--;
-       }
-    }
-
-    Anz1--;
-  }
-
-  return res;
-}
-
-
-int  GetNeighbourMask( int x, int y, int* Arr, pobjecttype o )
-{
-   int res = 0;
-   for ( int d = 0; d < sidenum; d++ ) {
-      int x1 = x;
-      int y1 = y;
-      getnextfield ( x1, y1, d );
-      pfield fld = getfield ( x1, y1 );
-      if ( fld ) {
-         
-         pobject obj = fld->checkforobject ( o );
-         if ( obj )                               
-            if ( obj->typ->picture[0] && (obj->typ->weather & 1) )
-               if ( IsInSetOfWord ( obj->typ->picture[0][ obj->dir ].bi3pic, Arr ))
-                  res += 1 << d;
-         
-         // if ( fld->checkforobject ( o ) )
-         //    res += 1 << d;
-      } else
-         res += 1 << d;
-
-   }
-   return res;
-}
-
-int  GetNeighbourMask( int x, int y, int* Arr )
-{
-   int res = 0;
-   for ( int d = 0; d < sidenum; d++ ) {
-      int x1 = x;
-      int y1 = y;
-      getnextfield ( x1, y1, d );
-      pfield fld = getfield ( x1, y1 );
-      if ( fld ) {
-         
-         if ( IsInSetOfWord ( fld->typ->bi_picture[ fld->direction ], Arr ))
-            res += 1 << d;
-         
-      } else
-         res += 1 << d;
-
-   }
-   return res;
-}
-
-
-/*
-      Res:= 0;
-      for I:= Oben to LOben do begin
-        GetNear(P, I, R);
-        if ValidEck(R) then
-          Res:= Res or
- (Byte(IsInSetOfWord(  TRawArrEck(   Mission.ACTN[R.Y, R.X] )[TerObj], Arr)) shl Ord(I))
-        else
-          Res:= Res or 1 shl Ord(I);
-      end;
-      GetNeighbourMask:= Res;
-    end;
-*/
-
-
-int SearchAndGetInt( int Wert, int* Arr, int* Res )
-{
-   int Anz = Arr[0];
-   int Pos = 1;
-   while ( Anz> 0 ) {
-     if (( Wert & Arr[Pos]) == Arr[Pos+1] ) {
-        *Res = Arr[Pos+2];
-        return  Anz > 0;
-     }
-     Pos += 3;
-     Anz--;
-   }
-   return  Anz> 0;
-}
-
-
-int SmoothIt( pobjecttype TerObj, int* SmoothData )
-{
-  int P0 = SmoothData[0];
-  int P1 = SmoothData[1];
-  int P2 = SmoothData[2];
-  int P3 = SmoothData[3];
-  int Res = 0;
-  for ( int Y = 0 ; Y < actmap->ysize; Y++ )
-    for ( int X = 0; X < actmap->xsize; X++ ) {
-        if ( TerObj ) {
-           pobject obj = getfield ( X, Y )-> checkforobject ( TerObj );
-           if ( obj  && obj->typ->picture[0] && (obj->typ->weather & 1)) {
-              int Old = obj->dir; // bipicnum
-                                  //    Old:= TRawArrEck(Mission.ACTN[Y, X])[TerObj];  // bisherige Form / oder Bildnummer ?
-                                                   
-              if ( IsInSetOfWord( obj->typ->picture[0][ obj->dir ].bi3pic, &SmoothData[P0] )) {    // Nur die "allesWald"-fielder werden gesmootht
-                 int Mask = GetNeighbourMask( X, Y, &SmoothData[P1], TerObj );
-                 if ( Mask < 63 ) {
-                    int nw;
-                    if ( !SearchAndGetInt(Mask, &SmoothData[P2], &nw) ) {  // Wenn kein passendes field gefunden wurde
-                       if ( SmoothData[P3] == 0  ||  SmoothData[P3] == 1 )
-                          nw = SmoothData[P3+ 1];
-                       else 
-                          nw = SmoothData[P3+ 1 ]; // + (ticker % SmoothData[P3] )
-                    }                      
-                    for ( int i = 0; i < TerObj->pictnum; i++ )
-                       if ( TerObj->picture[0][ i ].bi3pic == nw )
-                          obj->dir = i;
-                 }
-              }
-              if ( Old != obj->dir )
-                 Res = 1;
-           }
-        } else {
-           pfield fld = getfield ( X, Y );
-           TerrainType::Weather* old = fld->typ;
-           int odir = fld->direction;
-   
-           if ( IsInSetOfWord( fld->typ->bi_picture[ fld->direction ], &SmoothData[P0] )) {    // Nur die "allesWald"-fielder werden gesmootht
-              int Mask = GetNeighbourMask( X, Y, &SmoothData[P1] );
-              if ( Mask < 63 ) {
-                 int nw;
-                 if ( !SearchAndGetInt(Mask, &SmoothData[P2], &nw) ) {  // Wenn kein passendes field gefunden wurde
-                    if ( SmoothData[P3] == 0  ||  SmoothData[P3] == 1 )
-                       nw = SmoothData[P3+ 1];
-                    else 
-                       nw = SmoothData[P3+ 1 ]; // + (ticker % SmoothData[P3] )
-                 }
-                 for ( int i = 0; i < terraintypenum; i++ ) {
-                    pterraintype trrn = getterraintype_forpos( i );
-                    if ( trrn )
-                       for ( int j = 0; j < cwettertypennum; j++ )
-                          if ( trrn->weather[j] )
-                             for ( int k = 0; k < sidenum; k++ )
-                                if ( trrn->weather[j]->picture[k] )
-                                   if ( trrn->weather[j]->bi_picture[k] == nw ) {
-                                      fld->typ = trrn->weather[j];
-                                      fld->direction = k;
-                                      fld->setparams();
-                                   }
-                 }
-              }
-           }
-           if ( old != fld->typ  ||  odir != fld->direction )
-              Res = 1;
-           
-        }
-     }
-  return Res;
-}
-
-
-
-void smooth ( int what )
-{
-  int ShowAgain = 0;
-  if ( what & 2 ) {
-    if ( SmoothIt( NULL, UnSmoothBanksData) ) 
-       ShowAgain = 1;
-    if ( SmoothIt( NULL, UnSmoothDarkBanksData) ) 
-       ShowAgain = 1;
-    if ( SmoothIt( NULL, SmoothBanksData) ) 
-       ShowAgain = 1;
-    if ( SmoothIt( NULL, SmoothDarkBanksData) ) 
-       ShowAgain = 1;
-  }
-
-  if ( what & 1 ) {        
-     pobjecttype obj = getobjecttype_forid ( woodid );
-     if ( obj ) {
-       int count = 0; 
-       while ( SmoothIt ( obj, SmoothTreesData0 ) && count < 20 ) {
-          ShowAgain = 1;
-          count++;
-       }
-       if  ( SmoothIt ( obj, SmoothTreesData) )  
-          ShowAgain = 1;
-     }
-  }
-/*    while SmoothIt(1, SmoothDarkTreesData0) do ShowAgain:= true;
-    if SmoothIt(1, SmoothDarkTreesData) then ShowAgain:= true;
-    if ShowAgain then begin
-      ShowAll;
-      Repaint;
-    end;    */
-}
-
-
-/*
-procedure TMissView.Smooth;
-  var
-    ShowAgain: Boolean;
-  begin
-    ShowAgain:= false;
-    if SmoothIt(0, SmoothBanksData) then ShowAgain:= true;
-    if SmoothIt(0, SmoothDarkBanksData) then ShowAgain:= true;
-
-    while SmoothIt(1, SmoothTreesData0) do ShowAgain:= true;
-    if SmoothIt(1, SmoothTreesData) then ShowAgain:= true;
-{    while SmoothIt(1, SmoothDarkTreesData0) do ShowAgain:= true;
-    if SmoothIt(1, SmoothDarkTreesData) then ShowAgain:= true;}
-    if ShowAgain then begin
-      ShowAll;
-      Repaint;
-    end;
-  end;
-
-function IsInSetofWord(Wert: Word; var A: array of Word): Boolean;
-  var
-    Anz1: Word;
-    Anz2: Word;
-    W: Word;
-    Pos: Word;
-  begin
-    Pos:= 0;
-    Anz1:= A[Pos];
-    Inc(Pos);
-    IsInSetOfWord:= false;
-    while Anz1> 0 do begin
-      W:= A[Pos];
-      Inc(Pos);
-      Anz2:= Lo(W);
-      case Hi(W) of
-        0: begin
-            while Anz2> 0 do begin
-              if Wert= A[Pos] then IsInSetOfWord:= true;
-              Inc(Pos);
-              Dec(Anz2);
-            end;
-          end;
-        1: begin
-            if (Wert>= A[Pos]) and (Wert< A[Pos]+Anz2) then
-              IsInSetOfWord:= true;
-            Inc(Pos);
-          end;
-      end;
-      Dec(Anz1);
-    end;
-  end;
-
-
-
-****************
-Smoothdaten
-****************
-
-{
-  Aufbau eines Set of Ints
-
-  1. word anzahl der bl"cke
-  dann folgen die bl"cke
-
-  aufbau eines blocks:
-    1. word:
-       hibyte- optionsnummer
-         0- nur rawdaten   lobyte ist anzahl der folgenden raws
-         1- ab hier        lobyte ist anzahl der ab hier
-    weitere ist entweder raw oder startzahl
-}
-
-
-  SmoothBanksData: array[0..77] of Word= (
-     4, 7, 16, 77,
-     1, $0103, 95,    { was zu ersetzen ist         - blaues wasser }
-     4, $010F, 95,    { was als 1 zu betrachten ist - wasser und strand }
-        $010E,  0,                                { - Hafen }
-        $0109,110,                                { - Steine und Schilf }
-        $0107,121,                                { - Schilf }
-    20,$3F,59, 98, $3F,51, 98, $3F,47, 99, $3F,39, 99, { durch was ersetzen }
-       $3F,31,100, $3F,30,100, $3F,61,101, $3F,60,101,
-       $3F,55,102, $3F,62,103, $3F,35,104, $3F,28,105,
-       $3F,56,106, $3F,48,106, $3F,49,106, $3F,57,106,
-       $3F,14,107, $3F,15,107, $3F, 7,107, $3F, 6,107,
-     0                                            { wenn nicht gefunden }
-  );
-
-  UnSmoothBanksData: array[0..10] of Word= (
-     4, 7, 8, 9,
-     1, $010C, 98,          { alle str"nder ersetzen }
-     0,
-     0,
-     1, 95                  { durch flaches wasser ersetzen }
-  );
-
-
-  SmoothDarkBanksData: array[0..77] of Word= (
-     4, 7, 16, 77,
-     1,$0103,385,                       { dunkels wasser }
-     4,$0103,385,                       { dunkles wasser }
-       $010A,373,
-       $0104,449,
-       $0104,463,
-    20,$3F,59,373, $3F,51,373, $3F,47,374, $3F,39,374,          { durch was ersetzen }
-       $3F,31,375, $3F,30,375, $3F,61,376, $3F,60,376,
-       $3F,55,377, $3F,62,378, $3F,35,379, $3F,28,380,
-       $3F,56,381, $3F,48,381, $3F,49,381, $3F,57,381,
-       $3F,14,382, $3F,15,382, $3F, 7,382, $3F, 6,382,
-     0                                       { wenn nicht gefunden }
-  );
-
-  UnSmoothDarkBanksData: array[0..10] of Word= (
-     4, 7, 8, 9,
-     1,$010A,373,
-     0,
-     0,
-     1,385
-  );
-
-*/
-
-
-#endif // Hexagon
 
 
 
@@ -2177,3 +2149,17 @@ int isBuildingNotFiltered ( int id )
    return 1;
 }
 
+
+int getheightdelta ( int height1, int height2 )
+{
+   int ah = height1;
+   int dh = height2;
+   int hd = dh - ah;
+
+   if ( ah >= 3 && dh <= 2 )
+      hd++;
+   if (dh >= 3 && ah <= 2 )
+      hd--;
+
+   return hd;
+}

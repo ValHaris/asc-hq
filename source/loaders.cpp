@@ -5,9 +5,15 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.44 2001-02-18 15:37:14 mbickel Exp $
+//     $Id: loaders.cpp,v 1.45 2001-02-26 12:35:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2001/02/18 15:37:14  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.43  2001/02/11 11:39:37  mbickel
 //      Some cleanup and documentation
 //
@@ -235,6 +241,7 @@
     Boston, MA  02111-1307  USA
 */
 
+#include <algorithm>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -255,6 +262,7 @@
 #include "sg.h"
 #include "attack.h"
 #include "errors.h"
+#include "networkdata.h"
 
 #ifdef sgmain
 #include "missions.h"
@@ -272,7 +280,7 @@ ticons icons;
 
 
 
-void         seteventtriggers(void)
+void         seteventtriggers( pmap actmap )
 { 
   pevent       event;
 
@@ -292,7 +300,7 @@ void         seteventtriggers(void)
                int xpos = event->trigger_data[j]->xpos; 
                int ypos = event->trigger_data[j]->ypos; 
                if ( xpos != -1  &&  ypos != -1  &&  event->triggerstatus[j] != 2 ) {
-                  pbuilding building = getfield(xpos,ypos)->building; 
+                  pbuilding building = actmap->getField(xpos,ypos)->building;
                   event->trigger_data[j]->building = building; 
                   if ((event->trigger[j] == ceventt_buildingconquered)) 
                      building->connection |= cconnection_conquer;
@@ -318,9 +326,9 @@ void         seteventtriggers(void)
                   if ( event->trigger_data[j]->networkid != -1 ) 
                      vehicle = actmap->getUnit ( xpos, ypos, event->trigger_data[j]->networkid );
                   else
-                     vehicle = getfield(xpos,ypos)->vehicle;
+                     vehicle = actmap->getField(xpos,ypos)->vehicle;
 
-                  event->trigger_data[j]->vehicle = vehicle; 
+                  event->trigger_data[j]->networkid = vehicle->networkid;
                   if ((event->trigger[j] == ceventt_unitconquered)) 
                      vehicle->connection |= cconnection_conquer;
                   if ((event->trigger[j] == ceventt_unitlost)) 
@@ -328,12 +336,11 @@ void         seteventtriggers(void)
                   if ((event->trigger[j] == ceventt_unitdestroyed)) 
                      vehicle->connection |= cconnection_destroy;
                } else
-                  event->trigger_data[j]->vehicle = NULL;
+                  event->trigger_data[j]->networkid = 0;
 
                event->trigger_data[j]->xpos = -1;
                event->trigger_data[j]->ypos = -1;
-               event->trigger_data[j]->networkid = -1;
-            } 
+            }
    
             if ((event->trigger[j] == ceventt_event)) {     
               // int id = event->trigger_data[j]->id;
@@ -354,15 +361,14 @@ void         seteventtriggers(void)
            if (event->trigger[j] == ceventt_any_unit_enters_polygon || 
                event->trigger[j] == ceventt_specific_unit_enters_polygon) {
 
-               if ( event->trigger_data[j]->unitpolygon->vehicle ) {
-                  event->trigger_data[j]->unitpolygon->vehicle = actmap->getUnit ( event->trigger_data[j]->unitpolygon->tempxpos, event->trigger_data[j]->unitpolygon->tempypos, event->trigger_data[j]->unitpolygon->tempnwid );
-                  event->trigger_data[j]->unitpolygon->vehicle->connection |= cconnection_areaentered_specificunit;
+               if ( event->trigger_data[j]->unitpolygon->vehiclenetworkid ) {
+                  actmap->getUnit ( event->trigger_data[j]->unitpolygon->vehiclenetworkid )->connection |= cconnection_areaentered_specificunit;
                }
               #ifndef karteneditor
                if ( event->trigger[j] == ceventt_any_unit_enters_polygon )
-                  mark_polygon_fields_with_connection ( event->trigger_data[j]->unitpolygon->data, cconnection_areaentered_anyunit );
+                  mark_polygon_fields_with_connection ( actmap, event->trigger_data[j]->unitpolygon->data, cconnection_areaentered_anyunit );
                else 
-                  mark_polygon_fields_with_connection ( event->trigger_data[j]->unitpolygon->data, cconnection_areaentered_specificunit );
+                  mark_polygon_fields_with_connection ( actmap, event->trigger_data[j]->unitpolygon->data, cconnection_areaentered_specificunit );
               #endif 
            }
          } 
@@ -409,16 +415,47 @@ void         seteventtriggers(void)
 void   tspfldloaders::writeevent ( pevent event )
 {
    int magic = -1;
-   stream->writedata2 ( magic );
+   stream->writeInt ( magic );
    int eventversion = 1;
-   stream->writedata2 ( eventversion );
+   stream->writeInt ( eventversion );
 
-    stream->writedata2( *event );
-    if ( event->datasize  &&  event->rawdata ) 
-       stream->writedata( event->rawdata, event->datasize);
+   stream->writedata2( *event );
+
+/*
+   stream->writeInt ( event->id );
+   stream->writeChar ( event->player );
+   stream->writeSting ( event->description );
+   if ( event->intdata )
+      stream->writeInt ( 1 );
+   else
+      stream->writeInt ( 0 );
+
+   stream->writeInt ( event->datasize );
+   stream->writeInt ( event->next ? 1 : 0 );
+   stream->writeInt ( event->conn );
+   for ( int i = 0; i < 4; i++ )
+      stream->writeWord ( event->trigger[i] );
+
+   for ( int i = 0; i < 4; i++ )
+      stream->writeInt ( event->trigger_data ? 1 : 0 );
+
+   for ( int i = 0; i < 4; i++ )
+      stream->writeChar ( event->triggerconnect[i] );
+
+   for ( int i = 0; i < 4; i++ )
+      stream->writeChar ( event->triggerstatus[i] );
+
+   stream->writeInt ( event->triggertime.abs );
+
+   stream->writeInt ( event->delayedexecution.turn );
+   stream->writeInt ( event->delayedexecution.move );
+*/
+
+   if ( event->datasize  &&  event->rawdata )
+      stream->writedata( event->rawdata, event->datasize);
    
-    for (char j = 0; j <= 3; j++) { 
-       if ((event->trigger[j] == ceventt_buildingconquered) || 
+   for (char j = 0; j <= 3; j++) {
+      if ((event->trigger[j] == ceventt_buildingconquered) ||
            (event->trigger[j] == ceventt_buildinglost) || 
            (event->trigger[j] == ceventt_buildingdestroyed) || 
            (event->trigger[j] == ceventt_building_seen )) { 
@@ -442,9 +479,10 @@ void   tspfldloaders::writeevent ( pevent event )
               yp = -1;
               nwid = -1;
            } else {
-              xp = event->trigger_data[j]->vehicle->xpos;
-              yp = event->trigger_data[j]->vehicle->ypos;
-              nwid = event->trigger_data[j]->vehicle->networkid;
+              nwid = event->trigger_data[j]->networkid;
+              pvehicle v = actmap->getUnit ( nwid );
+              xp = v->xpos;
+              yp = v->ypos;
            }
            stream->writedata2( xp );
            stream->writedata2( yp );
@@ -461,10 +499,11 @@ void   tspfldloaders::writeevent ( pevent event )
               stream->writedata2( *event->trigger_data[j]->unitpolygon );
               int sz = event->trigger_data[j]->unitpolygon->size - sizeof ( *event->trigger_data[j]->unitpolygon );
               stream->writedata( event->trigger_data[j]->unitpolygon->data, sz );
-              if ( event->trigger_data[j]->unitpolygon->vehicle ) {
-                 int x = event->trigger_data[j]->unitpolygon->vehicle->xpos;
-                 int y = event->trigger_data[j]->unitpolygon->vehicle->ypos;
-                 int nwid = event->trigger_data[j]->unitpolygon->vehicle->networkid;
+              if ( event->trigger_data[j]->unitpolygon->vehiclenetworkid ) {
+                 int nwid = event->trigger_data[j]->unitpolygon->vehiclenetworkid;
+                 pvehicle v = actmap->getUnit ( nwid );
+                 int x = v->xpos;
+                 int y = v->ypos;
                  stream->writedata2( x );
                  stream->writedata2( y );
                  stream->writedata2( nwid );
@@ -555,10 +594,11 @@ void    tspfldloaders::readevent ( pevent& event1 )
                   int sz = event1->trigger_data[m]->unitpolygon->size - sizeof ( *event1->trigger_data[m]->unitpolygon );
                   event1->trigger_data[m]->unitpolygon->data = new int [ (sz + sizeof(int) -1 ) / sizeof ( int ) ];
                   stream->readdata( event1->trigger_data[m]->unitpolygon->data, sz );
-                  if ( event1->trigger_data[m]->unitpolygon->vehicle ) {
+                  if ( event1->trigger_data[m]->unitpolygon->vehiclenetworkid || event1->trigger_data[m]->unitpolygon->dummy ) {
                      stream->readdata2( event1->trigger_data[m]->unitpolygon->tempxpos );
                      stream->readdata2( event1->trigger_data[m]->unitpolygon->tempypos );
                      stream->readdata2( event1->trigger_data[m]->unitpolygon->tempnwid );
+                     event1->trigger_data[m]->unitpolygon->vehiclenetworkid = event1->trigger_data[m]->unitpolygon->tempnwid;
                   } 
                   
            }
@@ -579,28 +619,31 @@ void    tspfldloaders::readevent ( pevent& event1 )
 void   tspfldloaders::readdissections ( void )
 {
    for (int i = 0; i < 8; i ++ ) {
-      if ( spfld->player[ i ].dissectedunit ) {
-         int k = 1;
-         spfld->player[ i ].dissectedunit = NULL;
+      if ( spfld->player[ i ].__dissectionsToLoad ) {
+         int k;
+         do {
+            Player::Dissection du;
+            stream->readInt(); // dummy;
+            stream->readInt(); // dummy;
 
-         while ( k ) {
-            pdissectedunit du = new tdissectedunit;
-            stream->readdata2 ( *du );
-            int j;
-            stream->readdata2 ( j );
-            du->fzt = getvehicletype_forid ( j, 0 );
-            if ( !du->fzt )
+            du.orgpoints = stream->readInt();
+            du.points    = stream->readInt();
+            du.num       = stream->readInt();
+
+            k = stream->readInt();
+
+            int j = stream->readInt();
+            du.fzt = getvehicletype_forid ( j );
+            if ( !du.fzt )
                throw InvalidID ( "vehicle", j );
 
-            stream->readdata2 ( j );
-            du->tech = gettechnology_forid  ( j, 0 );
-            if ( !du->tech )
+            j = stream->readInt();
+            du.tech = gettechnology_forid  ( j );
+            if ( !du.tech )
                throw InvalidID ( "technology", j );
 
-            k = ( du->next != NULL );
-            du->next = spfld->player[ i ].dissectedunit;
-            spfld->player[ i ].dissectedunit = du;
-         }
+            spfld->player[ i ].dissections.push_back ( du );
+         } while ( k );
       }
    } /* endfor */
 }
@@ -608,19 +651,24 @@ void   tspfldloaders::readdissections ( void )
 void   tspfldloaders::writedissections ( void )
 {
    for (int i = 0; i < 8; i ++ ) {
-      pdissectedunit du = spfld->player[ i ].dissectedunit;
-      while ( du ) {
-            stream->writedata2 ( *du );
+      Player::DissectionContainer::iterator di = spfld->player[i].dissections.begin();
+      while ( di != spfld->player[i].dissections.end() ) {
+         stream->writeInt ( 1 ); // dummy
+         stream->writeInt ( 1 ); // dummy
+         stream->writeInt ( di->orgpoints );
+         stream->writeInt ( di->points );
+         stream->writeInt ( di->num );
 
-            int j = du->tech->id;
-            stream->writedata2 ( j );
+         di++;
+         if ( di != spfld->player[i].dissections.end() )
+            stream->writeInt ( 1 );
+         else
+            stream->writeInt ( 0 );
 
-            j = du->fzt->id;
-            stream->writedata2 ( j );
-
-            du = du->next;
+         stream->writeInt ( di->fzt->id );
+         stream->writeInt ( di->tech->id );
       }
-   } /* endfor */
+   }
 }
 
 
@@ -630,46 +678,39 @@ void   tspfldloaders::writedissections ( void )
 /**************************************************************/
 
 
-void      tspfldloaders:: writemessagelist( pmessagelist lst )
-{
-   if ( lst ) {
-      pmessagelist msg = lst;
-      while ( msg ) {
-         stream->writedata2 ( msg->message->id );
-         msg = msg->next;
-      }
-      int i = 0;
-      stream->writedata2 ( i );
-   }
-}
-
-
 void      tspfldloaders:: writemessages ( void )
 {
-  int i;
    int j = 0xabcdef;
-   stream->writedata2 ( j );
-
+   stream->writeInt ( j );
 
    int id = 0;
-   pmessage msg = spfld->message;
-   while ( msg ) {
+   for ( MessageContainer::iterator mi = spfld->messages.begin(); mi != spfld->messages.end();  ) {
       id++;
-      msg->id = id;
-      stream->writedata2 ( *msg );
-      if ( msg->text )
-         stream->writepchar ( msg->text );
+      (*mi)->id = id;
 
-      msg = msg->next;
+      stream->writeInt ( (*mi)->from );
+      stream->writeInt ( (*mi)->to );
+      stream->writeInt ( (*mi)->time );
+      stream->writeInt ( 1 );
+      stream->writeInt ( (*mi)->id );
+      stream->writeInt ( (*mi)->runde );
+      stream->writeInt ( (*mi)->move );
+
+
+      ASCString& t = (*mi)->text;
+      mi++;
+      stream->writeInt ( mi != spfld->messages.end() ? 1 : 0 );
+
+      stream->writeString ( t );
    }
 
-   for (i = 0; i < 8; i++ ) 
+   for ( int i = 0; i < 8; i++ )
       writemessagelist ( spfld->player[ i ].oldmessage );
 
-   for ( i = 0; i < 8; i++ ) 
+   for ( int i = 0; i < 8; i++ )
       writemessagelist ( spfld->player[ i ].unreadmessage );
 
-   for ( i = 0; i < 8; i++ ) 
+   for ( int i = 0; i < 8; i++ )
       writemessagelist ( spfld->player[ i ].sentmessage );
 
    writemessagelist ( spfld->unsentmessage );
@@ -685,62 +726,78 @@ void      tspfldloaders:: writemessages ( void )
 }
 
 
-
-void      tspfldloaders:: readmessagelist( pmessagelist* lst )
+void      tspfldloaders:: writemessagelist( MessagePntrContainer& lst )
 {
-   if ( *lst ) {
-      int i;
-      *lst = NULL;
-      do {
-          stream->readdata2 ( i );
-          pmessage msg = spfld->message;
-          if ( i ) {
-             while ( msg && msg->id != i )
-                msg = msg->next;
-   
-             if ( msg  &&  msg->id == i ) {
-                pmessagelist n = new tmessagelist ( lst );
-                n->message = msg;
-             } else
-                displaymessage ( "message list corrupted !\nplease report this bug!\nthe game will continue, but some messages will probably be missing\nand other instabilities may occur.",1);
-          }
-      } while ( i ); /* enddo */
+   for ( MessagePntrContainer::iterator i = lst.begin(); i != lst.end(); i++ )
+      stream->writeInt ( (*i)->id );
+   stream->writeInt ( 0 );
+}
+
+
+/*
+class MessageIDequals : public unary_function<Message*,bool>{
+      int id;
+   public:
+      MessageIDequals ( int _id ) { id == _id; };
+      bool operator() ( const Message* m ) { return m->id == id; };
+};
+*/
+
+void      tspfldloaders:: readmessagelist( MessagePntrContainer& lst )
+{
+   int i = stream->readInt();
+   while ( i ) {
+      // MessageContainer::iterator mi = find ( spfld->messages.begin(), spfld->messages.end(), MessageIDequals ( i ));
+      MessageContainer::iterator mi = spfld->messages.end();
+      for ( MessageContainer::iterator mi2 = spfld->messages.begin(); mi2 != spfld->messages.end(); mi2++ )
+         if ( (*mi2)->id == i )
+            mi = mi2;
+
+      if ( mi == spfld->messages.end())
+         displaymessage ( "message list corrupted !\nplease report this bug!\nthe game will continue, but some messages will probably be missing\nand other instabilities may occur.",1);
+      lst.push_back ( *mi );
+      i = stream->readInt();
    }
 }
 
 
 void      tspfldloaders:: readmessages ( void )
 {
-   int j;
-   int i;
-   stream->readdata2 ( j );
+   int magic = stream->readInt();
 
-   pmessage msg = spfld->message;
-   spfld->message = NULL;
-   while ( msg ) {
-      pmessage msg2 = new tmessage;
-      stream->readdata2 ( *msg2 );
-      if ( msg2->text )
-         stream->readpchar ( &msg2->text );
+   while ( spfld->__loadmessages ) {
+      Message* msg = new Message ( spfld );
 
-      msg = msg2->next;
-      msg2->next = spfld->message;
-      spfld->message = msg2;
+      msg->from    = stream->readInt();
+      msg->to      = stream->readInt();
+      msg->time    = stream->readInt();
+      bool msgtext = stream->readInt();
+      msg->id      = stream->readInt();
+      msg->runde   = stream->readInt();
+      msg->move    = stream->readInt();
+
+      spfld->__loadmessages = stream->readInt();
+
+      if ( msgtext )
+         msg->text = stream->readString();
    }
 
-   for (i = 0; i < 8; i++ ) 
-      readmessagelist ( &spfld->player[ i ].oldmessage );
+   for ( int i = 0; i < 8; i++ )
+      if ( spfld->player[ i ].__loadoldmessage )
+         readmessagelist ( spfld->player[ i ].oldmessage );
 
-   for ( i = 0; i < 8; i++ ) 
-      readmessagelist ( &spfld->player[ i ].unreadmessage );
+   for ( int i = 0; i < 8; i++ )
+      if ( spfld->player[ i ].__loadunreadmessage )
+         readmessagelist ( spfld->player[ i ].unreadmessage );
 
-   for ( i = 0; i < 8; i++ ) 
-      readmessagelist ( &spfld->player[ i ].sentmessage );
+   for ( int i = 0; i < 8; i++ )
+      if ( spfld->player[ i ].__loadsentmessage )
+         readmessagelist ( spfld->player[ i ].sentmessage );
 
-   readmessagelist ( &spfld->unsentmessage );
+   if ( spfld->__loadunsentmessage )
+      readmessagelist ( spfld->unsentmessage );
 
-
-   stream->readdata2 ( j );
+   stream->readdata2 ( magic );
 
    if ( spfld->journal )
       stream->readpchar ( &spfld->journal );
@@ -997,6 +1054,7 @@ void        tspfldloaders::readnetwork ( void )
 
 
 
+
 /**************************************************************/
 /*     Replay Data  schreiben / lesen                       ÿ */
 /**************************************************************/
@@ -1057,15 +1115,21 @@ void   tspfldloaders::writefields ( void )
    do { 
       cnt2 = 0; 
       fld = &spfld->field[l];
+      /*
+
+      RLE encoding not supported any more, since tfield is becomming too complex
+
       if (l + 2 < cnt1) { 
          l2 = l + 1; 
          fld2 = &spfld->field[l2];
+       asfasfdasfd
          while ((l2 + 2 < cnt1) && ( memcmp(fld2, fld, sizeof(*fld2)) == 0) ) {
             cnt2++;
             l2++;
             fld2 = &spfld->field[l2];
          } 
-      } 
+      }
+      */
 
 
       char b1 = 0;
@@ -1081,6 +1145,7 @@ void   tspfldloaders::writefields ( void )
       if (fld->bdt & cbbuildingentry ) 
          b1 |= csm_building; 
 
+
       if (cnt2 > 0) 
          b1 |= csm_cnt2; 
 
@@ -1093,7 +1158,7 @@ void   tspfldloaders::writefields ( void )
          b3 |= csm_weather;
       if (fld->visible)
          b3 |= csm_visible;
-      if (fld->object )
+      if ( !fld->objects.empty() )
          b4 |= csm_newobject;
 
       if ( fld->resourceview )
@@ -1160,19 +1225,24 @@ void   tspfldloaders::writefields ( void )
       if ( b4 & csm_newobject ) {
          stream->writedata2 ( objectstreamversion );
 
-         stream->writedata2 ( fld->object->minenum );
-         for ( int i = 0; i < fld->object->minenum; i++ ) {
-            stream->writedata2 ( fld->object->mine[i]->type );
-            stream->writedata2 ( fld->object->mine[i]->strength );
-            stream->writedata2 ( fld->object->mine[i]->time );
-            stream->writedata2 ( fld->object->mine[i]->color );
+         stream->writeInt ( fld->mines.size() );
+         for ( tfield::MineContainer::iterator m = fld->mines.begin(); m != fld->mines.end(); m++  ) {
+            stream->writeInt ( m->type );
+            stream->writeInt ( m->strength );
+            stream->writeInt ( m->time );
+            stream->writeInt ( m->color );
          }
 
-         stream->writedata2 ( fld->object->objnum );
+         stream->writeInt ( fld->objects.size() );
 
-         for ( int n = 0; n < fld->object->objnum; n++ ) {
-            stream->writedata2 ( *fld->object->object[n] );
-            stream->writedata2 ( fld->object->object[n]->typ->id );
+         for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++  ) {
+            stream->writeInt ( 1 ); // was: pointer to type
+            stream->writeInt ( o->damage );
+            stream->writeInt ( o->dir );
+            stream->writeInt ( o->time );
+            for ( int i = 0; i < 4; i++ )
+               stream->writeInt ( 0 );  // dummy
+            stream->writeInt ( o->typ->id );
          }
       }
 
@@ -1199,23 +1269,22 @@ void tspfldloaders::readfields ( void )
    for ( int i = 0; i < cnt1; i++ ) {
       spfld->field[i].building = NULL;
       spfld->field[i].picture = NULL;
+      spfld->field[i].vehicle = NULL;
+      spfld->field[i].tempw = 0;
+      spfld->field[i].resourceview = NULL;
+      spfld->field[i].connection = 0;
    }
 
    int l = 0;
-   do { 
+   pfield lfld = NULL;
+
+   do {
       pfield fld2;
-      tfield lfld;
 
       if (cnt2 == 0) { 
 
          fld2 = & spfld->field[l];
 
-         fld2->a.temp = 0;
-         fld2->a.temp2 = 0; 
-         fld2->vehicle = NULL;
-         fld2->object = NULL;
-         fld2->resourceview = NULL; 
-         fld2->connection = 0;
          fld2->bdt.set ( 0 , 0 );
 
          char b1, b3, b4;
@@ -1285,6 +1354,7 @@ void tspfldloaders::readfields ( void )
          if (b3 & csm_fuel) 
             stream->readdata2 ( fld2->fuel );
          else 
+
             fld2->fuel = 0; 
 
          if (b3 & csm_visible)
@@ -1292,29 +1362,22 @@ void tspfldloaders::readfields ( void )
          else
             fld2->visible = 0;
 
+         bool tempObjects[16];
+         int  tempObjectNum;
 
          if (b3 & csm_object ) {
 
-            if ( !fld2->object )
-               fld2->object = new tobjectcontainer;
-
-            char minetype;
-            char minestrength;
-            stream->readdata2 ( minetype );
-            stream->readdata2 ( minestrength );
-
+            char minetype = stream->readChar();
+            char minestrength = stream->readChar();
             if ( minetype >> 4 ) {
                fld2->putmine ( (minetype >> 1) & 7, minetype >> 4, minestrength );
-               fld2->object->mine[0]->time = 0;
-            } else
-               fld2->object->minenum = 0;
+               fld2->mines.begin()->time = 0;
+            }
 
-            int objnum;
-            stream->readdata2 ( objnum );
-            fld2->object->objnum = objnum;
-                                                 
-            pobject object[ 16 ];
-            stream->readdata ( object, sizeof ( pobject ) * 16 ); 
+            tempObjectNum = stream->readInt();
+
+            for ( int i = 0; i < 16; i++ )
+               tempObjects[i] = stream->readInt();
          }
 
          if ( b4 & csm_newobject ) {
@@ -1324,52 +1387,37 @@ void tspfldloaders::readfields ( void )
             if ( objectversion != objectstreamversion )
                throw tinvalidversion ( "object", objectstreamversion, objectversion );
 
+            int minenum = stream->readInt();
 
-            if ( !fld2->object ) 
-               fld2->object = new tobjectcontainer;
-
-            int minenum;
-            fld2->object->minenum = 0;
-            stream->readdata2 ( minenum );
             for ( int i = 0; i < minenum; i++ ) {
-               int type;
-               int strength;
-               int time;
-               int color;
-               stream->readdata2 ( type );
-               stream->readdata2 ( strength );
-               stream->readdata2 ( time );
-               stream->readdata2 ( color );
-
-               if ( type ) {
-                  fld2->object->mine[fld2->object->minenum] = new tmine;
-                  fld2->object->mine[fld2->object->minenum]->type = type;
-                  fld2->object->mine[fld2->object->minenum]->strength = strength;
-                  fld2->object->mine[fld2->object->minenum]->time = time;
-                  fld2->object->mine[fld2->object->minenum]->color = color;
-                  fld2->object->minenum++;
-               }
+               Mine m;
+               m.type = stream->readInt();
+               m.strength = stream->readInt();
+               m.time = stream->readInt();
+               m.color = stream->readInt();
+               fld2->mines.push_back ( m );
             }
 
-            stream->readdata2 ( fld2->object->objnum );
+            tempObjectNum = stream->readInt();
          }
 
          if ( (b3 & csm_object) || (b4 & csm_newobject )) {
-            for ( int n = 0; n < fld2->object->objnum; n++ ) {
-               fld2->object->object[n] = new tobject;
-               stream->readdata2 ( *fld2->object->object[n] );
-               int id;
-               stream->readdata2 ( id );
+            for ( int n = 0; n < tempObjectNum; n++ ) {
+               Object o;
+               stream->readInt(); // was: type
+               o.damage = stream->readInt();
+               o.dir = stream->readInt();
+               o.time = stream->readInt();
+               for ( int i = 0; i < 4; i++ )
+                  stream->readInt(); // dummy
 
-               fld2->object->object[n]->typ = getobjecttype_forid ( id, 0 );
+               int id = stream->readInt();
+               o.typ = getobjecttype_forid ( id, 0 );
 
-               if ( !fld2->object->object[n]->typ )
+               if ( !o.typ )
                   throw InvalidID ( "object", id );
 
-               /*
-               if ( spfld->objectcrc ) 
-                  spfld->objectcrc->speedcrccheck->checkobj2 ( fld2->object->object[n]->typ );
-               */
+               fld2->objects.push_back ( o );
             }
             fld2->sortobjects();
          }
@@ -1382,14 +1430,20 @@ void tspfldloaders::readfields ( void )
          if ( b4 & csm_connection ) 
             stream->readdata2 ( fld2->connection );
          
-         // fld2->setparams();
-
-         if (b1 & csm_cnt2 ) 
-            memcpy( &lfld, fld2, sizeof ( lfld ));
+         if (b1 & csm_cnt2 )
+            lfld = fld2;
 
       } 
-      else { 
-         memcpy( &spfld->field[l], &lfld,  sizeof ( lfld ));
+      else {
+         spfld->field[l].typ = lfld->typ;
+         spfld->field[l].fuel = lfld->material;
+         spfld->field[l].visible = lfld->visible;
+         spfld->field[l].direction = lfld->direction;
+         spfld->field[l].picture = NULL;
+         spfld->field[l].tempw = 0;
+         spfld->field[l].connection = lfld->connection;
+         for ( int i = 0; i < 8; i++ )
+            spfld->field[l].view[i] = lfld->view[i];
          cnt2--;
       } 
       l++ ;
@@ -1403,7 +1457,7 @@ void tspfldloaders::readfields ( void )
 /*     Chain Items                                          ÿ */
 /**************************************************************/
 
-void   tspfldloaders::chainitems ( void )
+void   tspfldloaders::chainitems ( pmap actmap )
 {
    int i = 0;
    for (int y = 0; y < actmap->ysize; y++)
@@ -1421,13 +1475,6 @@ void   tspfldloaders::chainitems ( void )
 /**************************************************************/
 /*     Set Player Existencies                               ÿ */
 /**************************************************************/
-
-void   tspfldloaders::setplayerexistencies ( void )
-{
-   for ( int sp = 7; sp >= 0; sp--)
-      if ( actmap->player[sp].exist() )
-         actmap->actplayer = sp;
-}
 
 
 tspfldloaders::tspfldloaders ( void )
@@ -1598,6 +1645,19 @@ int          tmaploaders::loadmap( const char *       name )
       throw tinvalidversion ( name, actmapversion, version );
    } 
 
+   displayLogMessage ( 10, "chainItems, ");
+   chainitems ( spfld );
+
+   for ( int sp = 7; sp >= 0; sp--)
+      if ( spfld->player[sp].exist() )
+         spfld->actplayer = sp;
+
+   displayLogMessage ( 10, "setEventTriggers, ");
+   seteventtriggers( spfld );
+
+   calculateallobjects( spfld );
+
+
    displayLogMessage ( 10, "~oldmap, ");
    delete oldmap;
    oldmap = NULL;
@@ -1605,24 +1665,12 @@ int          tmaploaders::loadmap( const char *       name )
    actmap = spfld;
    spfld = NULL;
 
-
-   displayLogMessage ( 10, "chainItems, ");
-   chainitems ();
-
-   setplayerexistencies ();
-
-   displayLogMessage ( 10, "setEventTriggers, ");
-   seteventtriggers();
-
-   actmap->time.a.turn = 1; 
+   actmap->time.a.turn = 1;
    actmap->time.a.move = 0;
-             
-   calculateallobjects();
    actmap->levelfinished = false;
 
    displayLogMessage ( 4, "done\n");
 
-   
    return 0;
 } 
 
@@ -1639,18 +1687,10 @@ int          tmaploaders::loadmap( const char *       name )
 
 
 
-
-
-int          tsavegameloaders::savegame( const char* name )
-{ 
-
-   tnfilestream filestream ( name, tnstream::writing );
-
-   stream = &filestream;
-
-   spfld = actmap;
-
- 
+void   tsavegameloaders::savegame( pnstream strm, pmap gamemap, bool writeReplays )
+{
+   stream = strm;
+   spfld = gamemap;
 
    stream->writepchar ( NULL ); // description is not used any more
    stream->writedata2 ( fileterminator );
@@ -1671,43 +1711,68 @@ int          tsavegameloaders::savegame( const char* name )
    writefields ( );
 
    writedissections();
-   writereplayinfo ();
+
+   stream->writeInt( writeReplays );
+   if ( writeReplays )
+      writereplayinfo ();
+
    writeAI();
 
    stream->writedata2 ( actsavegameversion );
 
    spfld = NULL;
 
-   return 0;
-} 
+}
 
-
-
-
-
-int          tsavegameloaders::loadgame( const char *       name )
+void         tsavegameloaders::savegame( const char* name )
 { 
-   tnfilestream filestream ( name, tnstream::reading );
+   tnfilestream filestream ( name, tnstream::writing );
+   savegame ( &filestream, actmap, true );
+}
 
-   stream = &filestream;
 
-   char* description = NULL;
 
-   stream->readpchar ( &description );
-   delete[] description;
 
-   word w;
-   stream->readdata2 ( w );
+int   tsavegameloaders::loadgame( const char* filename )
+{
+   tnfilestream filestream ( filename, tnstream::reading );
+
+   pmap spfld = loadgame ( &filestream );
+
+   delete actmap;
+   actmap = spfld;
+   actmap->levelfinished = false;
+
+   if ( actmap->replayinfo ) {
+      if ( actmap->replayinfo->actmemstream )
+         displaymessage2( "actmemstream already open at begin of turn ",2 );
+
+      if ( actmap->replayinfo->guidata[actmap->actplayer] )
+         actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::appending );
+      else {
+         actmap->replayinfo->guidata[actmap->actplayer] = new tmemorystreambuf;
+         actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::writing );
+      }
+   }
+
+   return 0;
+}
+
+tmap*          tsavegameloaders::loadgame( pnstream strm )
+{
+   stream = strm;
+
+   stream->readString(); // was: description
+
+   int w = stream->readWord();
 
    if ( w != fileterminator ) 
-      throw tinvalidversion ( name, fileterminator, (int) w );
+      throw tinvalidversion ( strm->getDeviceName(), fileterminator, w );
    
-
-   int version;
-   stream->readdata2( version );
+   int version = stream->readInt();
 
    if (version > actsavegameversion || version < minsavegameversion ) 
-      throw tinvalidversion ( name, actsavegameversion, version );
+      throw tinvalidversion ( strm->getDeviceName(), actsavegameversion, version );
    
 
    readmap ();
@@ -1727,44 +1792,32 @@ int          tsavegameloaders::loadgame( const char *       name )
 
    readdissections();
 
-   readreplayinfo ();
+   if ( version >= 0xff35 ) {
+      bool rpl = stream->readInt();
+      if ( rpl )
+         readreplayinfo ();
+      else
+         spfld->replayinfo = NULL;
+   } else
+      readreplayinfo ();
 
    if ( version >= 0xff34 )
       readAI ();
 
-   stream->readdata( &version, sizeof(version));
-   if (version > actsavegameversion || version < minsavegameversion ) {
-      delete spfld ;
-      spfld = NULL;
-      throw tinvalidversion ( name, actsavegameversion, version );
-   }
+   version = stream->readInt();
+   if (version > actsavegameversion || version < minsavegameversion )
+      throw tinvalidversion ( strm->getDeviceName(), actsavegameversion, version );
 
-   delete actmap;
-   actmap = spfld;
-   spfld = NULL;
- 
-   chainitems ();
+   chainitems ( spfld );
 
-   seteventtriggers();
+   seteventtriggers( spfld );
 
-   calculateallobjects();
+   calculateallobjects( spfld );
 
-   actmap->levelfinished = false;
-
-   if ( actmap->replayinfo ) {
-      if ( actmap->replayinfo->actmemstream )
-         displaymessage2( "actmemstream already open at begin of turn ",2 );
-
-      if ( actmap->replayinfo->guidata[actmap->actplayer] ) 
-         actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::appending );
-      else {
-         actmap->replayinfo->guidata[actmap->actplayer] = new tmemorystreambuf;
-         actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::writing );
-      }
-   }
-
-   return 0;
-} 
+   tmap* s = spfld;
+   spfld = NULL;  // to avoid that is is deleted by the destructor of tsavegameloaders
+   return s;
+}
 
 
 
@@ -1924,14 +1977,15 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
    if (version > actnetworkversion || version < minnetworkversion )
       throw tinvalidversion ( name, actnetworkversion, version );
 
+  chainitems ( spfld );
+
+  seteventtriggers( spfld );
 
    delete actmap;
    actmap = spfld;
    spfld = NULL;
 
-  chainitems ();
 
-  seteventtriggers();
 
   calculateallobjects();
 
@@ -2023,6 +2077,7 @@ void  savegame( const char *       name )
    } /* endcatch */
 }
 
+
 void  loadgame( const char *       name )
 {
    try {
@@ -2060,8 +2115,23 @@ void  loadgame( const char *       name )
 void  savereplay( int num )
 {
    try {
-      treplayloaders rl;
-      rl.savereplay ( num );
+      if ( !actmap->replayinfo )
+         displaymessage ( "treplayloaders :: savereplay   ;   No replay activated !",2);
+
+      if ( actmap->replayinfo->map[num] ) {
+         delete actmap->replayinfo->map[num];
+         actmap->replayinfo->map[num] = NULL;
+      }
+
+      actmap->replayinfo->map[num] = new tmemorystreambuf;
+      tmemorystream memstream ( actmap->replayinfo->map[num], tnstream::writing );
+
+      memstream.writeInt( actreplayversion );
+
+      tsavegameloaders sgl;
+      sgl.savegame ( &memstream, actmap, false );
+
+      memstream.writeInt ( actreplayversion );
    }
    catch ( ASCexception err) {
       displaymessage( "error saving replay information", 1 );
@@ -2071,8 +2141,25 @@ void  savereplay( int num )
 void  loadreplay( pmemorystreambuf streambuf )
 {
    try {
-      treplayloaders rl;
-      rl.loadreplay ( streambuf );
+      char* name = "memorystream actmap->replayinfo";
+      tmemorystream memstream ( streambuf, tnstream::reading );
+
+      int version = memstream.readInt();
+      if (version > actreplayversion || version < minreplayversion )
+         throw tinvalidversion ( name, actreplayversion, version );
+
+      tsavegameloaders sgl;
+      tmap* replaymap = sgl.loadgame ( &memstream );
+
+      version = memstream.readInt();
+      if (version > actreplayversion || version < minreplayversion ) {
+         delete replaymap;
+         throw tinvalidversion ( name, actreplayversion, version );
+      }
+
+      delete actmap;
+      actmap = replaymap;
+
    }
    catch ( InvalidID err ) {
       displaymessage( err.getMessage().c_str(), 1 );
@@ -2094,117 +2181,6 @@ void  loadreplay( pmemorystreambuf streambuf )
       if ( actmap->xsize == 0)
          throw NoMapLoaded();
    } /* endcatch */
-}
-
-
-
-
-
-
-void treplayloaders :: initmap ( void )
-{
-    spfld->game_parameter = NULL;
-}
-
-
-void treplayloaders :: loadreplay ( pmemorystreambuf streambuf )
-{
-
-   char* name = "memorystream actmap->replayinfo";
-
-   tmemorystream memstream ( streambuf, tnstream::reading );
-
-   stream = &memstream;
-
-   int version;
-   stream->readdata2( version );
-
-   if (version > actreplayversion || version < minreplayversion ) 
-      throw tinvalidversion ( name, actreplayversion, version );
-
-                   
-   readmap ();
-
-   readfields ( );
- 
-   stream->readdata2( version );
-   if (version > actreplayversion || version < minreplayversion )
-      throw tinvalidversion ( name, actreplayversion, version );
-
-   delete actmap;
-   actmap = spfld;
-   spfld = NULL;
-
-
-  chainitems ();
-
-  seteventtriggers();
-
-  calculateallobjects(); 
-
-  actmap->levelfinished = false; 
-
-}
-
-
-
-void treplayloaders :: savereplay ( int num )
-{
-   if ( !actmap->replayinfo ) 
-      displaymessage ( "treplayloaders :: savereplay   ;   No replay activated !",2);
-
-   if ( actmap->replayinfo->map[num] ) {
-      delete actmap->replayinfo->map[num];
-      actmap->replayinfo->map[num] = NULL;
-   }
-
-   actmap->replayinfo->map[num] = new tmemorystreambuf;
-
-   tmemorystream memstream ( actmap->replayinfo->map[num], tnstream::writing );
-
-   tmap* replayfield = new tmap;
-   *replayfield = *actmap;
-
-   replayfield->campaign = NULL;
-   replayfield->title = NULL;
-   for ( int i = 0; i < 8; i++ ) {
-      replayfield->player[i].dissectedunit = NULL;
-      replayfield->player[i].unreadmessage = NULL;
-      replayfield->player[i].oldmessage = NULL;
-      replayfield->player[i].sentmessage = NULL;
-      replayfield->player[i].ai = NULL;
-      replayfield->player[i].research.activetechnology = NULL;
-      replayfield->player[i].research.____setDevTechToNULL ( );
-      replayfield->player[i].humanname = "";
-      replayfield->player[i].computername = "";
-   }
-   replayfield->oldevents = NULL;
-   replayfield->firsteventtocome = NULL;
-   replayfield->firsteventpassed = NULL;
-   replayfield->network = NULL;
-   replayfield->unsentmessage = NULL;
-   replayfield->message = NULL;
-   replayfield->journal = NULL;
-   replayfield->newjournal = NULL;
-   // replayfield->objectcrc = NULL;
-   if ( actmap->shareview )
-      replayfield->shareview = new tmap::Shareview ( actmap->shareview );
-
-   replayfield->replayinfo = NULL;
-
-   stream = &memstream;
-
-   spfld = replayfield;
-
-   stream->writedata2( actreplayversion );
-   writemap ();
-           
-   writefields ( );
-
-   stream->writedata2 ( actreplayversion );
-
-   spfld = NULL;
-
 }
 
 
@@ -2563,6 +2539,7 @@ void         loadicons(void)
       icons.diplomaticstatus[canewsetwar1] = icons.diplomaticstatus[cawar];
       icons.diplomaticstatus[canewsetwar2] = icons.diplomaticstatus[cawar];
       icons.diplomaticstatus[canewpeaceproposal] = icons.diplomaticstatus[capeaceproposal];
+
   }
    
   {

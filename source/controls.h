@@ -4,9 +4,15 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.38 2001-01-28 14:04:09 mbickel Exp $
+//     $Id: controls.h,v 1.39 2001-02-26 12:35:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2001/01/28 14:04:09  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.37  2001/01/23 21:05:15  mbickel
 //      Speed up of AI
 //      Lot of bugfixes in AI
@@ -82,13 +88,6 @@
    struct tmoveparams { 
                         unsigned char         movestatus;       /*  Folgende Modi sind definiert : 
                                                                              0:  garnichts, standard
-                                                                             1:  movement l1
-                                                                             2:  movement l2
-                                                                             10: angriff
-                                                                             11: movement l1 mit h”he-wechseln
-                                                                             12: movement l2 mit h”he-wechseln
-                                                                             65: refuel
-                                                                             66: reparieren
                                                                              72: putstreet
                                                                              90: putmine
                                                                              111: putbuilding l1

@@ -1,7 +1,5 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.2 2001-01-25 23:45:09 mbickel Exp $
+## $Id: Makefile.am,v 1.3 2001-02-26 12:35:41 mbickel Exp $
 
 SUBDIRS = linux
-
-
