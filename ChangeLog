@@ -1,3 +1,269 @@
+2001-07-14 23:26  mbickel
+
+	* asc.kdevprj, source/strtmesg.cpp:  Updated version information
+
+2001-07-14 23:10  mbickel
+
+	* doc/source.html, source/ai/ai.mak, source/win32/borland/asc.mak,
+	source/win32/borland/mapeditor/mapeditor.mak:  Updated
+	documentation and BCC make files
+
+2001-07-14 23:07  mbickel
+
+	* data/sounds.txt, doc/source.html, source/TODO,
+	source/dlg_box.cpp, source/dlg_box.h, source/edmain.cpp,
+	source/sg.cpp, source/soundList.cpp, source/soundList.h,
+	source/ai/ai.bpr, source/sdl/sound.cpp, source/sdl/sound.h,
+	source/unix/global_os.h, source/win32/borland/asc.bpf,
+	source/win32/borland/asc.bpr, source/win32/borland/global_os.h,
+	source/win32/borland/mapeditor/mapeditor.bpf,
+	source/win32/borland/mapeditor/mapeditor.bpr:  Sound works now
+	under Win32 too
+	 Error reporting on Win32 during startup works again.
+
+2001-07-14 21:33  mbickel
+
+	* asc.kdevprj, data/sounds.txt, source/soundList.cpp:  Some sound
+	fixes
+
+2001-07-14 21:13  mbickel
+
+	* asc.kdevprj, config.h.in, configure, configure.in,
+	data/a_battl2.veh, data/a_battle.veh, data/a_bfigh1.veh,
+	data/a_bfigh2.veh, data/a_bomber.veh, data/a_espion.veh,
+	data/a_figbom.veh, data/a_fight1.veh, data/a_fight3.veh,
+	data/a_helic1.veh, data/a_long-r.veh, data/a_reccep.veh,
+	data/a_seapla.veh, data/a_stealt.veh, data/a_tanker.veh,
+	data/a_transp.veh, data/a_vertic.veh, data/attach_biggun.wav,
+	data/attach_gun.wav, data/attach_guns.wav, data/data.version,
+	data/interface_alert_no.wav, data/interface_click.wav,
+	data/interface_click2.wav, data/interface_click3.wav,
+	data/interface_tone.wav, data/move_air_chopper.wav,
+	data/move_air_jet.wav, data/move_drop.wav,
+	data/move_ground_heavy.wav, data/move_ground_mid.wav,
+	data/move_ground_tank.wav, data/sounds.txt, source/CLoadable.cpp,
+	source/controls.h, source/gamedlg.cpp, source/gameoptions.cpp,
+	source/gameoptions.h, source/gui.cpp, source/mapdisplay.cpp,
+	source/mapdisplay.h, source/replay.cpp, source/sg.cpp,
+	source/sgstream.cpp, source/sgstream.h, source/soundList.cpp,
+	source/soundList.h, source/typen.cpp, source/typen.h,
+	source/unitctrl.cpp, source/ai/valuation.cpp, source/sdl/sound.cpp,
+	source/sdl/sound.h, source/tools/java/UnitEditor.java,
+	source/unix/Makefile.am, source/unix/Makefile.in:  Rewrote sound
+	system
+	 Moveing units make sounds
+	 Added sound files to data
+
+2001-07-14 16:26  mbickel
+
+	* source/: dialog.cpp, dlg_box.cpp, dlgraph.cpp, sdl/sound.cpp,
+	sdl/sound.h:  Some cleanup
+
+2001-07-14 15:15  mbickel
+
+	* asc.kdevprj, source/ascstring.cpp, source/ascstring.h,
+	source/attack.cpp, source/basestreaminterface.h,
+	source/basestrm.cpp, source/basestrm.h, source/dlg_box.cpp,
+	source/errors.h, source/sg.cpp, source/soundList.cpp,
+	source/soundList.h, source/sdl/sound.cpp, source/sdl/sound.h: 
+	Rewrote sound handling
+
+2001-07-13 21:33  mbickel
+
+	* source/: TODO, dashboard.cpp, network.cpp, unitctrl.cpp:  Fixed
+	crashes in the dashboards experience display
+	 Fixed inconsistent movement cost calculation (which caused
+	       AI and replay warnings)
+	 Fixed crash when starting network game from main menu
+
+2001-07-13 16:02  mbickel
+
+	* source/: TODO, network.cpp, replay.cpp, sg.cpp, unitctrl.cpp: 
+	Fixed inconsistency in replay (shareviewchange)
+	 Fixed sound initialization problem
+	 Speed up of movement
+
+2001-07-13 14:53  mbickel
+
+	* asc.bpg, source/gamedlg.cpp, source/gui.cpp, source/gui.h,
+	source/replay.cpp, source/replay.h, source/typen.cpp,
+	source/typen.h, source/unitctrl.cpp:  Fixed duplicate icons in
+	replay
+	 Fixed crash in tooltip help
+
+2001-07-11 23:31  mbickel
+
+	* TODO, source/TODO:  Updated ToDO lists
+
+2001-07-11 22:44  mbickel
+
+	* data/g_puma.veh, data/s_typhon.veh, data/standard.set,
+	data/legacy/A_BOMBER.VEH, data/legacy/G_DITCH.VEH,
+	data/legacy/S_ARMTNK.VEH, data/legacy/S_FREIGH.VEH,
+	data/legacy/g_puma.veh, data/legacy/readme,
+	data/legacy/s_typhon.veh, source/building.cpp, source/dialog.cpp,
+	source/edmisc.cpp, source/gamedlg.cpp, source/network.cpp,
+	source/sg.cpp, source/typen.cpp, source/typen.h,
+	source/win32/borland/mapeditor/mapeditor.bpr:  Removed some
+	vehicles from the data file.
+	 Put all legacy units in into the data/legacy directory
+
+2001-07-11 22:13  mbickel
+
+	* doc/source.html, doc/source_watcom.html, source/gamemap.cpp,
+	source/gamemap.h, source/loaders.cpp,
+	source/libs/bzlib/win/bzlib.bpr,
+	source/libs/triangul/win32/triangulation.bpr,
+	source/tools/win/demount.bpr, source/tools/win/gfx2pcx.bpr,
+	source/tools/win/makegfx.bpr, source/tools/win/mount.bpr,
+	source/tools/win/tank2pcx.bpr, source/tools/win/tools.bpr,
+	source/tools/win/viewid.bpr, source/tools/win/weaponguide.bpr,
+	source/win32/borland/asc.bpr,
+	source/win32/borland/mapeditor/mapeditor.bpr:  Fixed crash when
+	exception occures during game loading
+	 Fixed wrong sender of mails
+
+2001-07-09 19:38  mbickel
+
+	* source/: network.cpp, win32/borland/asc.bpr:	New default email
+	filename
+	 removed limitation for 8 character long email filenames
+
+2001-07-09 19:01  mbickel
+
+	* source/: dialog.cpp, dlg_box.cpp, strtmesg.cpp, sdl/events.cpp,
+	win32/borland/asc.bpr:	Small map can now be even smaller
+	 fixed redraw problems on windows
+	 fixed no-font crash
+
+2001-07-09 14:08  mbickel
+
+	* asc.kdevprj, source/graphicset.cpp, source/loaders.cpp,
+	source/strtmesg.cpp:  Fixed: crash when saving game
+
+2001-07-09 00:54  mbickel
+
+	* asc.kdevprj, source/typen.h, source/ai/service.cpp:  Added
+	version checking for coordinate loading
+	 Fixed crash when loading AI-savegames
+
+2001-07-08 22:55  mbickel
+
+	* asc.kdevprj, source/graphicset.cpp, source/clparser/Makefile.am,
+	source/clparser/Makefile.in, source/clparser/tank2pcx.cpp,
+	source/clparser/tank2pcx.gp, source/clparser/tank2pcx.h,
+	source/tools/pcxtank.cpp, source/tools/linux/Makefile.am,
+	source/tools/linux/Makefile.in:  Fixed linux makefiles
+	 Added command line parsing to tank2pcx
+
+2001-07-08 22:10  mbickel
+
+	* source/tools/win/: tank2pcx.bpf, tank2pcx.bpr:  Added tank2pcx to
+	project
+
+2001-07-08 22:09  mbickel
+
+	* asc.bpg, source/gamedlg.cpp, source/strtmesg.cpp,
+	source/tools/pcxtank.cpp, source/tools/linux/Makefile.am:  Added
+	tank2pcx tool to project
+	 Fixed bug in refuel dialog
+
+2001-07-08 20:15  mbickel
+
+	* source/ai/ai_common.h:  Added <float.h> include
+
+2001-07-05 18:23  mbickel
+
+	* source/pointers.h:  Fixed double definition of pvehicle
+
+2001-07-04 18:53  mbickel
+
+	* asc.bpg, bccmake.bat, doc/source.html, source/gamedlg.cpp,
+	source/strtmesg.cpp, source/tools/mount.cpp,
+	source/tools/win/mount.bpr, source/tools/win/mount.mak:  Fixed bug
+	in refuel dialog
+	 Fixed crash in mount (win32)
+	 Improved build process for Borland command line compiler
+	 Updated source documentation
+
+2001-07-04 12:27  mbickel
+
+	* source/win32/borland/: asc.mak, mapeditor/mapeditor.mak:  ASC and
+	Mapeditor don't require VCL50 to link any more
+
+2001-07-03 22:53  mbickel
+
+	* source/: tools/win/demount.bpr, tools/win/demount.mak,
+	tools/win/gfx2pcx.bpr, tools/win/gfx2pcx.mak,
+	tools/win/makegfx.bpr, tools/win/makegfx.mak, tools/win/mount.bpr,
+	tools/win/mount.mak, tools/win/viewid.bpr, tools/win/viewid.mak,
+	tools/win/weaponguide.bpr, tools/win/weaponguide.mak,
+	win32/borland/asc.bpr, win32/borland/asc.mak,
+	win32/borland/mapeditor/mapeditor.bpr,
+	win32/borland/mapeditor/mapeditor.mak:	Borland C++ Makefiles don't
+	require the VCL any more
+
+2001-07-03 12:05  mbickel
+
+	* bccmake.bat, doc/source.html, source/sg.cpp, source/ai/ai.mak,
+	source/libs/bzlib/win/bzlib.mak, source/libs/jpeg-6b/libjpeg.mak,
+	source/libs/triangul/win32/triangulation.mak,
+	source/tools/win/demount.mak, source/tools/win/gfx2pcx.mak,
+	source/tools/win/makegfx.mak, source/tools/win/mount.mak,
+	source/tools/win/tools.mak, source/tools/win/viewid.mak,
+	source/tools/win/weaponguide.mak, source/win32/borland/asc.mak,
+	source/win32/borland/mapeditor/mapeditor.mak:  Added Makefiles for
+	Borland C++ command line compiler
+
+2001-07-02 17:09  mbickel
+
+	* source/tools/: makegfx.cpp, win/makegfx.bpr:	Better error
+	messages in makegfx
+
+2001-07-02 12:14  mbickel
+
+	* source/: controls.cpp, strtmesg.cpp:	Fixed crash when starting
+	new email games
+	 New version: 1.3.19
+
+2001-06-25 17:36  mbickel
+
+	* asc.kdevprj, doc/graphics.html, source/dashboard.cpp,
+	source/events.h, source/graphicset.cpp, source/sdl/events.cpp: 
+	Help on experience icon
+
+2001-06-25 17:32  mbickel
+
+	* source/strtmesg.cpp:	Updated version: 1.3.18
+
+2001-06-14 16:46  mbickel
+
+	* asc.kdevprj, source/CLoadable.cpp, source/basestrm.cpp,
+	source/basestrm.h, source/dialog.cpp, source/gameoptions.cpp,
+	source/gameoptions.h, source/map2pcx.cpp, source/sg.cpp,
+	source/clparser/map2pcx.cpp, source/clparser/map2pcx.gp,
+	source/clparser/map2pcx.h:  The resolution of ASC can be specified
+	in the configuration file
+	 The fileselect dialog box shows the file's location
+	 new ascmap2pcx param: outputdir
+
+2001-05-24 17:37  mbickel
+
+	* asc.kdevprj, data/Makefile.am, data/Makefile.in,
+	source/astar2.cpp, source/edglobal.cpp, source/edmisc.cpp,
+	source/edmisc.h, source/gui.cpp, source/strtmesg.cpp,
+	source/ai/ai.h, source/ai/ai_common.h, source/ai/service.cpp,
+	source/ai/tactics.cpp, source/ai/valuation.cpp,
+	source/sdl/events.cpp, source/tools/mount.cpp:	Fixed: reaction
+	fire could not be disabled when unit out of ammo
+	 Fixed several AI problems
+
+2001-05-22 10:19  mbickel
+
+	* ChangeLog, asc.kdevprj, source/strtmesg.cpp,
+	source/ai/buildingcapture.cpp:	Fixed an infinite loop in
+	AI::checkBuildingCapture
+
 2001-05-21 14:50  mbickel
 
 	* source/strtmesg.cpp:	Updated version to 1.3.15

@@ -229,6 +229,8 @@ The port to Linux was done by Tom Wilson, Simon Britnell and Martin Bickel
 
 Alexander Schäfer originally implemented the 'small editors' and created the first version of the ASC vehicle set.
 
+Jeffrey M. Wacheski contributed sound effects
+
 Many thanks go to Jörg Richter for giving us the source of his excellent BI2/3 map editor and enabling us to make the "Battle-Isle"-Version of ASC. 
 
 Steffen Fröhlich created the "Battle Isle" vehicle set and several buildings.
@@ -237,7 +239,7 @@ The "Standard MKII" unit set was created by Bas Fournier
 
 Many objects, terrain and buildings were contributed by Torsten Maekler.
 
-The configuration file IO was written by Frank Landgraf
+Thanks to Michael Moerz and Frank Landgraf for contributing code and general help.
 
 Advanced Strategic Command and its utility programs use code of The Independent JPEG Group .
 
@@ -250,6 +252,7 @@ Karel Voracek created the experience symbols.
 The logo shown on startup of the mapeditor was created by Stefan Pfeiffer.
 
 Some icons created by Michael Lange.
+
 
 Many thanks also to the numerous bug reporters, first to mention Torsten Maekler and Steffen Fröhlich.
 
