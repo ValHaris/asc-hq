@@ -1,6 +1,12 @@
-//     $Id: sg.cpp,v 1.58 2000-07-16 14:20:04 mbickel Exp $
+//     $Id: sg.cpp,v 1.59 2000-07-16 14:57:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2000/07/16 14:20:04  mbickel
+//      AI has now some primitive tactics implemented
+//      Some clean up
+//        moved weapon functions to attack.cpp
+//      Mount doesn't modify PCX files any more.
+//
 //     Revision 1.57  2000/07/10 15:21:30  mbickel
 //      Fixed crash in replay (alliancechange)
 //      Fixed some movement problems when moving units out of transports / buildings
@@ -1410,6 +1416,15 @@ void         loadcursor(void)
          stream.readrlepict(   &icons.container.subwin.ammotransfer.schieber[i], false, &w );
       stream.readrlepict(   &icons.container.subwin.ammotransfer.schieneinactive, false, &w );
       stream.readrlepict(   &icons.container.subwin.ammotransfer.schiene, false, &w );
+      if ( dataVersion >= 2 ) {
+         stream.readrlepict(   &icons.container.subwin.ammotransfer.singlepage[0], false, &w );
+         stream.readrlepict(   &icons.container.subwin.ammotransfer.singlepage[1], false, &w );
+         stream.readrlepict(   &icons.container.subwin.ammotransfer.plus[0], false, &w );
+         stream.readrlepict(   &icons.container.subwin.ammotransfer.plus[1], false, &w );
+         stream.readrlepict(   &icons.container.subwin.ammotransfer.minus[0], false, &w );
+         stream.readrlepict(   &icons.container.subwin.ammotransfer.minus[1], false, &w );
+      }
+
    }
 
    {
@@ -3413,6 +3428,12 @@ int main(int argc, char *argv[] )
    } 
 
    try {
+      if ( exist ( "data.version" )) {
+         tnfilestream s ( "data.version", 1 );
+         dataVersion = s.readint();
+      } else
+         dataVersion = 0;
+
       readgameoptions();
       if ( gameoptions.disablesound )
          useSound = 0;

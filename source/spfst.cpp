@@ -1,6 +1,12 @@
-//     $Id: spfst.cpp,v 1.38 2000-07-16 14:20:05 mbickel Exp $
+//     $Id: spfst.cpp,v 1.39 2000-07-16 14:57:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2000/07/16 14:20:05  mbickel
+//      AI has now some primitive tactics implemented
+//      Some clean up
+//        moved weapon functions to attack.cpp
+//      Mount doesn't modify PCX files any more.
+//
 //     Revision 1.37  2000/07/06 11:07:28  mbickel
 //      More AI work
 //      Started modularizing the attack formula
@@ -242,6 +248,7 @@ int showresources = 0;
 
 
    int lockdisplaymap = 0;
+   int dataVersion = 0;
 
    tcursor            cursor;
    pmap              actmap;

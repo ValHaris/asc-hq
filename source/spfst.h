@@ -1,6 +1,12 @@
-//     $Id: spfst.h,v 1.14 2000-07-16 14:20:06 mbickel Exp $
+//     $Id: spfst.h,v 1.15 2000-07-16 14:57:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/07/16 14:20:06  mbickel
+//      AI has now some primitive tactics implemented
+//      Some clean up
+//        moved weapon functions to attack.cpp
+//      Mount doesn't modify PCX files any more.
+//
 //     Revision 1.13  2000/07/06 11:07:29  mbickel
 //      More AI work
 //      Started modularizing the attack formula
@@ -105,6 +111,7 @@
             } ; 
    extern Schriften schriften;
 
+   extern int dataVersion;
 
    class tcursor { 
            public:

@@ -1,6 +1,12 @@
-//     $Id: controls.cpp,v 1.44 2000-07-16 14:19:59 mbickel Exp $
+//     $Id: controls.cpp,v 1.45 2000-07-16 14:57:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2000/07/16 14:19:59  mbickel
+//      AI has now some primitive tactics implemented
+//      Some clean up
+//        moved weapon functions to attack.cpp
+//      Mount doesn't modify PCX files any more.
+//
 //     Revision 1.43  2000/07/10 15:21:29  mbickel
 //      Fixed crash in replay (alliancechange)
 //      Fixed some movement problems when moving units out of transports / buildings
@@ -3290,15 +3296,20 @@ void         tdashboard::paintlargeweaponefficiency ( int pos, int* e, int first
    activefontsettings.color = 86;
    activefontsettings.justify = lefttext;
    // activefontsettings.color = black;
-   for ( int j = 0; j < cmovemalitypenum; j++ )
-      if ( nohit & (1 << j ) ) {
+   for ( int j = 0; j < cmovemalitypenum; j++ ) {
+      int pnt;
+      if ( dataVersion >= 2 )
+         pnt = !(nohit & (1 << j ));
+      else
+         pnt = nohit & (1 << j );
+      if ( pnt{
          activefontsettings.font = schriften.guifont;
          showtext2c ( cmovemalitypes[j],   x + 88 + (j % 3) * 180, y + 15 + 16 + (j / 3) * 12 );
       } else {
          activefontsettings.font = schriften.monogui;
          showtext2  ( cmovemalitypes[j],   x + 88 + (j % 3) * 180, y + 15 + 16 + (j / 3) * 12 );
       }
-      
+   }
    getinvisiblemouserectanglestk ();
 }
 
