@@ -1,6 +1,11 @@
-//     $Id: misc.cpp,v 1.15 2001-01-28 21:39:30 mbickel Exp $
+//     $Id: misc.cpp,v 1.16 2001-01-28 23:19:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2001/01/28 21:39:30  mbickel
+//      Updated Borland C++ Building project files
+//      Fixed some compilation problems with Borland
+//      Made weaponguide compilable again
+//
 //     Revision 1.14  2000/10/12 19:51:44  mbickel
 //      Added a stub program for generating a weapon guide
 //      Added makefiles to compile this weaponguide with the free borland C++
@@ -90,6 +95,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdarg.h>
 #include "global.h"
 #include "tpascal.inc"
 #include "misc.h"
