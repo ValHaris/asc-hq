@@ -629,6 +629,12 @@ class tmap {
       //! called between endTurn() of player 7 and the next turn of player 0
       void endRound();
 
+
+      //! called when a new round starts (after switching from player 7 to player 0 )
+      SigC::Signal0<void> newRound;
+
+
+
       //! changes to the next player and calls endRound() if necessary. \Returns false if there are no players left
       bool nextPlayer();
 

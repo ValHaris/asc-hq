@@ -1172,6 +1172,7 @@ bool tmap::nextPlayer()
       if (actplayer > 7) {
          endRound();
          runde++;
+         newRound();
       }
 
       if ( !player[actplayer].exist() )
@@ -1583,6 +1584,7 @@ void tmap :: startGame ( )
    #else
    actplayer = 0;
    #endif
+   newRound();
 } 
 
 bool tmap::UnitProduction::check ( int id )
