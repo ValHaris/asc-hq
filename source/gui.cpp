@@ -1,6 +1,9 @@
-//     $Id: gui.cpp,v 1.44 2000-12-23 13:19:46 mbickel Exp $
+//     $Id: gui.cpp,v 1.45 2000-12-23 15:58:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2000/12/23 13:19:46  mbickel
+//      Made ASC compileable with Borland C++ Builder
+//
 //     Revision 1.43  2000/11/08 19:31:07  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -3187,5 +3190,8 @@ void   treplayguihost :: bi2control (  )
    ReplayBaseGuiHost::bi2control (  );
 }
 
+#ifdef __BORLANDC__
+   // Borland C++ Builder forgets to instatiate these templates...
    treplayguihost Borland_Cpp_builder_sucks;
-   ContainerBaseGuiHost blurb;
+   ContainerBaseGuiHost Borland_Cpp_builder_sucks2;
+#endif

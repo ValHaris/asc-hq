@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value="..\mapeditor.exe"/>
+    <OBJFILES value="..\..\..\edmain.obj ..\..\..\vehicletype.obj ..\..\..\basegfx.obj 
+      ..\..\..\basestrm.obj ..\..\..\CLoadable.obj ..\..\..\containerbase.obj 
+      ..\..\..\dialog.obj ..\..\..\dlg_box.obj ..\..\..\edevents.obj 
+      ..\..\..\edgen.obj ..\..\..\edglobal.obj ..\..\..\edmisc.obj 
+      ..\..\..\edselfnt.obj ..\..\..\gamemap.obj ..\..\..\gameoptions.obj 
+      ..\..\..\loadbi3.obj ..\..\..\loaders.obj ..\..\..\loadpcxc.obj 
+      ..\..\..\mapalgorithms.obj ..\..\..\misc.obj ..\..\..\Named.obj 
+      ..\..\..\newfont.obj ..\..\..\palette.obj ..\..\..\password.obj 
+      ..\..\..\password_dialog.obj ..\..\..\pd.obj ..\..\..\Property.obj 
+      ..\..\..\PropertyGroup.obj ..\..\..\sgstream.obj ..\..\..\spfst.obj 
+      ..\..\..\stack.obj ..\..\..\strtmesg.obj ..\..\..\typen.obj 
+      ..\..\..\attack.obj ..\..\..\sdl\sound.obj ..\..\..\sdl\graphics.obj 
+      ..\..\..\sdl\loadimage.obj ..\..\..\sdl\SDLStretch.obj 
+      ..\..\..\sdl\events.obj ..\..\..\..\..\sdl\src\main\win32\SDL_main.obj 
+      ..\..\..\weather.obj ..\..\..\buildingtype.obj"/>
+    <RESFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES)"/>
+    <LIBFILES value="..\..\..\..\..\sdl\bin\sdl.lib ..\..\..\libs\bzlib\win\bzlib.lib 
+      ..\..\..\libs\triangul\win32\triangulation.lib 
+      ..\..\..\libs\jpeg-6b\libjpeg.lib"/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="VCL50.lib"/>
+    <PACKAGES value="VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi"/>
+    <PATHCPP value=".;..\..\..\..\source;..\..\..\sdl;..\..\..\..\..\sdl\src\main\win32"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="tlink32"/>
+    <USERDEFINES value="_DEBUG;karteneditor;HEXAGON;FREEMAPZOOM;_WIN32_;WIN32;_SDL_;_NOASM_;NEWKEYB"/>
+    <SYSDEFINES value="NO_STRICT;_NO_VCL;USEPACKAGES"/>
+    <MAINSOURCE value="mapeditor.bpf"/>
+    <INCLUDEPATH value="..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32"/>
+    <LIBPATH value="..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par"/>
+  </MACROS>
+  <OPTIONS>
+    <CFLAG1 value="-Od -Q -Vx -Ve -X- -r- -a1 -5 -b -k -y -v -vi- -tW -tWM -c -K"/>
+    <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cw32mt.lib"/>
+  </LINKER>
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1031
+CodePage=1252
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[HistoryLists\hlIncludePath]
+Count=11
+Item0=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item1=..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
+Item2=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item3=..\..\..\..\..\sdl\src\main\win32;..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32
+Item4=..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..
+Item5=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;C:\Programme\ascsrc\games\asc\source\win32
+Item6=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include
+Item7=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\sdl\include
+Item8=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item9=..\..\..;..\..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item10=..\..\..;$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=9
+Item0=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\..\source;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
+Item3=..\..\..\..\..\sdl\src\main\win32;..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
+Item4=..\..\..;..\..\..\..\source;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
+Item5=..\..\..;..\..\..\sdl;..\..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
+Item6=..\..\..\sdl;..\..\..;..\..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
+Item7=..\..\..;..\..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
+Item8=..\..\..;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=2
+Item0=_DEBUG;karteneditor;HEXAGON;FREEMAPZOOM;_WIN32_;WIN32;_SDL_;_NOASM_;NEWKEYB
+Item1=_DEBUG
+
+[HistoryLists\hlIntOutputDir]
+Count=1
+Item0=C:\Programme\ascsrc\games\asc\source\win32\borland\mapeditor
+
+[HistoryLists\hlFinalOutputDir]
+Count=2
+Item0=..\
+Item1=C:\Programme\ascsrc\games\asc\source\win32\borland
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=0
+  </IDEOPTIONS>
+</PROJECT>

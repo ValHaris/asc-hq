@@ -42,7 +42,7 @@
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="tlink32"/>
-    <USERDEFINES value="HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32"/>
+    <USERDEFINES value="HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL;USEPACKAGES"/>
     <MAINSOURCE value="asc.bpf"/>
     <INCLUDEPATH value="..\..\..\SDL-1.1.5\src\main\win32;..\..\sdl\include;sdl;win32;..\..\..\SDL-1.1.5\include;..\..\..\..\BORLAND\CBuilder5\Projects\$(SDLDIR)\include;$(BCB)\include"/>
@@ -50,7 +50,7 @@
     <WARNINGS value="-w-rch -w-par -w-csu -w-ccc"/>
   </MACROS>
   <OPTIONS>
-    <CFLAG1 value="-O2 -Vx -Ve -X- -a1 -5 -b -k -y -v -vi- -tW -tWM -c"/>
+    <CFLAG1 value="-Od -Q -Vx -Ve -X- -r- -a1 -5 -b -k -y -v -vi- -tW -tWM -c -K"/>
     <PFLAGS value="-N2win32\borland -N0win32\borland -$YD -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
@@ -115,11 +115,12 @@ Count=1
 Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
-Count=4
-Item0=HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32
-Item1=HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_
-Item2=_DEBUG;_WIN32_
-Item3=_DEBUG
+Count=5
+Item0=HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32;_DEBUG
+Item1=HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32
+Item2=HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_
+Item3=_DEBUG;_WIN32_
+Item4=_DEBUG
 
 [HistoryLists\hlIntOutputDir]
 Count=2
