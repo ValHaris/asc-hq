@@ -23,7 +23,6 @@ code could perhaps look like this:
     -Use plain C / C++ file IO, no ASC specific streams, because they need
         exactly this configuration data to be initialized
 
-0.  Add a commandline parameter to disable sound 
 1.  Get Truecolor graphics to work (title screen for example)
 2.  Get JPEG images to work. A modified version of the independant JPEG groups
     library is included, but not used by the Linux version yet.
