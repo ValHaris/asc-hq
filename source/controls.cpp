@@ -3,9 +3,14 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.133 2002-10-01 09:23:41 mbickel Exp $
+//     $Id: controls.cpp,v 1.134 2002-10-09 16:58:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.133  2002/10/01 09:23:41  mbickel
+//      Fixed many bugs
+//      Added inheritance to text files
+//      updated graphics
+//
 //     Revision 1.132  2002/09/19 20:20:04  mbickel
 //      Cleanup and various bug fixes
 //
@@ -1412,19 +1417,20 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle, IntFieldList* field
                            addunit ( eht );
 
       }
-   for ( i = 0; i < 8; i++ )
-      if ( fieldvisiblenow ( getfield ( vehicle->xpos, vehicle->ypos ), i )) {
-         punitlist ul  = unitlist[i];
-         while ( ul ) {
-            punitlist next = ul->next;
-            pattackweap atw = attackpossible ( ul->eht, vehicle->xpos, vehicle->ypos );
-            if ( atw->count )
-               removeunit ( ul->eht );
+   if ( getfield(vehicle->xpos, vehicle->ypos)->vehicle == vehicle )
+      for ( i = 0; i < 8; i++ )
+         if ( fieldvisiblenow ( getfield ( vehicle->xpos, vehicle->ypos ), i )) {
+            punitlist ul  = unitlist[i];
+            while ( ul ) {
+               punitlist next = ul->next;
+               pattackweap atw = attackpossible ( ul->eht, vehicle->xpos, vehicle->ypos );
+               if ( atw->count )
+                  removeunit ( ul->eht );
 
-            delete atw;
-            ul = next;
-         } /* endwhile */
-      }
+               delete atw;
+               ul = next;
+            } /* endwhile */
+         }
 
 }
 

@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.83 2002-10-02 20:21:01 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.84 2002-10-09 16:58:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.83  2002/10/02 20:21:01  mbickel
+//      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
+//
 //     Revision 1.82  2002/04/10 21:12:13  mbickel
 //      Win32 version now searches registry for install path
 //
@@ -246,6 +249,7 @@
 #include "palette.h"
 #include "gameoptions.h"
 #include "graphicset.h"
+#include "itemrepository.h"
 
 const char* asc_EnvironmentName = "ASC_CONFIGFILE";
 int dataVersion = 0;
@@ -1099,13 +1103,6 @@ int SingleUnitSet :: isMember ( int id )
    return 0;
 }
 
-/*
-         class IdRangeVector {
-                public:
-                   vector<IdRange> idRange;
-                   void parseString ( const char* s );
-         };
-*/
 
 void SingleUnitSet::parseIDs ( const char* s )
 {
@@ -1128,7 +1125,7 @@ void SingleUnitSet::parseIDs ( const char* s )
          } else
             from = to = atoi ( pic );
 
-         IdRange ir;
+         IntRange ir;
          ir.from = from;
          ir.to = to;
          ids.push_back ( ir );
@@ -1156,7 +1153,7 @@ void SingleUnitSet::TranslationTable::parseString ( const char* s )
          if ( strchr ( xl, ',' )) {
             char* a = strchr ( xl, ',' );
             *a = 0;
-            IdRange ir;
+            IntRange ir;
             ir.from = atoi ( xl );
             ir.to = atoi ( ++a );
 
@@ -1247,6 +1244,9 @@ void loadUnitSets ( void )
       SingleUnitSet* set = new SingleUnitSet;
       set->read ( &stream );
       unitSets.push_back ( set );
+
+//      ItemFiltrationSystem::ItemFilter* itf = new ItemFiltrationSystem::ItemFilter ( set->name, set->ids, !set->active );
+//      ItemFiltrationSystem::itemFilters.push_back ( itf );
 
       n = ff.getnextname();
       displayLogMessage ( 5, "done\n" );

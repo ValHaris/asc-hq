@@ -2045,6 +2045,7 @@ int main(int argc, char *argv[] )
 
    initmissions();
 
+
    initFileIO( cl->c().c_str() );  // passing the filename from the command line options
 
    try {
@@ -2069,7 +2070,6 @@ int main(int argc, char *argv[] )
    } catch ( ... ) {}
 
 
-
    int xr = 800;
    int yr = 600;
    // determining the graphics resolution
@@ -2083,9 +2083,12 @@ int main(int argc, char *argv[] )
    if ( cl->y() != 600 )
       yr = cl->y();
 
+
    SoundSystem soundSystem ( CGameOptions::Instance()->sound.muteEffects, CGameOptions::Instance()->sound.muteMusic, cl->q() || CGameOptions::Instance()->sound.off );
+
    soundSystem.setMusicVolume ( CGameOptions::Instance()->sound.musicVolume );
    soundSystem.setEffectVolume ( CGameOptions::Instance()->sound.soundVolume );
+
 
    ASC_PG_App app ( "asc_dlg" );
    pgApp = &app;
@@ -2096,6 +2099,7 @@ int main(int argc, char *argv[] )
 
    setWindowCaption ( "Advanced Strategic Command" );
    SDL_WM_SetIcon( icon->GetSurface(), NULL );
+
 
    app.InitScreen( xr, yr, 8, flags);
 

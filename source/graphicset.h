@@ -19,12 +19,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef graphicset_h_included
- #define graphicset_h_included
+#ifndef graphicsetH
+ #define graphicsetH
 
  extern int getGraphicSetIdFromFilename ( const char* filename );
  extern int activateGraphicSet ( int id  );
- 
+
  //! initializes the subsystem and loads all available graphicSets
  extern void loadbi3graphics( void );
 

@@ -2,9 +2,13 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.39 2002-03-18 21:42:17 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.40 2002-10-09 16:58:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2002/03/18 21:42:17  mbickel
+//      Some cleanup and documentation in the Mine class
+//      The number of mines is now displayed in the field information window
+//
 //     Revision 1.38  2002/03/02 23:04:01  mbickel
 //      Some cleanup of source code
 //      Improved Paragui Integration
@@ -289,7 +293,7 @@ class SelectAnything : public SelectAnythingBase {
                        int winsizey;
                        int actitemx;   int actitemy;
 
-                       virtual int isavailable ( T item ) = 0;
+                       virtual bool isavailable ( T item ) = 0;
                        virtual void displaysingleitem ( T item, int x, int y ) = 0;
                        virtual void _displaysingleitem ( T item, int x, int y );
                        virtual void displayItem ( int itemx, int itemy, int picx, int picy );
@@ -445,7 +449,7 @@ template<class T> void SelectAnything<T> :: displayItem ( int itemx, int itemy )
 template<class T> void SelectAnything<T> ::  display ( void ) 
 {
    for ( int y = winstarty; y < winstarty + winsizey; y++ ) 
-      for ( int x = 0; x < maxx; x++ ) 
+      for ( int x = 0; x < maxx; x++ )
          displayItem ( x, y );
       
 }
@@ -621,7 +625,7 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
                      lastscroll = ticker;
                      actitemy --;
                   }
-            
+
          }
       } else
          if ( mousepressed == 1 )
@@ -695,7 +699,7 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
 
 class SelectVehicleType : public SelectAnything< pvehicletype > {
                     protected:
-                       virtual int isavailable ( pvehicletype item );
+                       virtual bool isavailable ( pvehicletype item );
                        virtual void displaysingleitem ( pvehicletype item, int x, int y );
                        virtual int getitemsizex ( void ) { return fieldsizex; } ;
                        virtual int getitemsizey ( void ) { return fieldsizey; } ;
@@ -704,7 +708,7 @@ class SelectVehicleType : public SelectAnything< pvehicletype > {
 };
 
 
-int SelectVehicleType :: isavailable ( pvehicletype item )
+bool SelectVehicleType :: isavailable ( pvehicletype item )
 {
    /*
    if ( farbwahl == 8 ) {
@@ -713,7 +717,7 @@ int SelectVehicleType :: isavailable ( pvehicletype item )
    }
    */
 
-   return isUnitNotFiltered ( item->id );  
+   return !ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Vehicle, item->id );
 }
 
 
@@ -763,7 +767,7 @@ void SelectVehicleType :: showiteminfos ( pvehicletype item, int x1, int y1, int
 
 class SelectTerrainType : public SelectAnything< pterraintype > {
                     protected:
-                       virtual int isavailable ( pterraintype item ) { return 1; };
+                       virtual bool isavailable ( pterraintype item );
                        virtual void displaysingleitem ( pterraintype item, int x, int y );
                        virtual int getitemsizex ( void ) { return fieldsizex; } ;
                        virtual int getitemsizey ( void ) { return fieldsizey; } ;
@@ -771,14 +775,20 @@ class SelectTerrainType : public SelectAnything< pterraintype > {
                        virtual ASCString getItemName ( pterraintype item );
 };
 
+
+bool SelectTerrainType :: isavailable ( pterraintype item )
+{
+   return !ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Terrain, item->id );
+}
+
 void SelectTerrainType :: displaysingleitem ( pterraintype item, int x, int y )
 {
    bar ( x, y, x + getitemsizex(), y + getitemsizey(), black );
-   if ( auswahlw >= cwettertypennum || auswahlw < 0 ) 
+   if ( auswahlw >= cwettertypennum || auswahlw < 0 )
       auswahlw = 0;
 
    if ( item )
-      if ( item->weather[auswahlw] )   
+      if ( item->weather[auswahlw] )
          item->weather[auswahlw]->paint ( x, y );
       else
          item->weather[0]->paint ( x, y );
@@ -820,13 +830,19 @@ void SelectTerrainType :: showiteminfos ( pterraintype item, int x1, int y1, int
 
 class SelectObjectType : public SelectAnything< pobjecttype > {
                     protected:
-                       virtual int isavailable ( pobjecttype item ) { return 1; };
+                       virtual bool isavailable ( pobjecttype item );
                        virtual void displaysingleitem ( pobjecttype item, int x, int y );
                        virtual int getitemsizex ( void ) { return fieldsizex; } ;
                        virtual int getitemsizey ( void ) { return fieldsizey; } ;
                        virtual void showiteminfos ( pobjecttype item, int x1, int y1, int x2, int y2 );
                        virtual ASCString getItemName ( pobjecttype item );
 };
+
+bool SelectObjectType :: isavailable ( pobjecttype item )
+{
+  return !ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Object, item->id );
+}
+
 
 void SelectObjectType :: displaysingleitem ( pobjecttype item, int x, int y )
 {
@@ -872,7 +888,7 @@ void SelectObjectType :: showiteminfos ( pobjecttype item, int x1, int y1, int x
 class SelectBuildingType : public SelectAnything< pbuildingtype > {
                        int buildingfieldsdisplayedx, buildingfieldsdisplayedy;
                     protected:
-                       virtual int isavailable ( pbuildingtype item ); // { return 1; };
+                       virtual bool isavailable ( pbuildingtype item );
                        virtual void displaysingleitem ( pbuildingtype item, int x, int y );
                        virtual int getitemsizex ( void ) { return fieldsizex+(buildingfieldsdisplayedx-1)*fielddistx+fielddisthalfx; } ;
                        virtual int getitemsizey ( void ) { return fieldsizey+(buildingfieldsdisplayedy-1)*fielddisty; } ;
@@ -882,9 +898,9 @@ class SelectBuildingType : public SelectAnything< pbuildingtype > {
                        SelectBuildingType( void ) { buildingfieldsdisplayedx = 4; buildingfieldsdisplayedy = 6; };
 };
 
-int SelectBuildingType :: isavailable ( pbuildingtype item )
+bool SelectBuildingType :: isavailable ( pbuildingtype item )
 {
-   return isBuildingNotFiltered ( item->id );
+  return !ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Building, item->id );
 }
 
 ASCString SelectBuildingType :: getItemName ( pbuildingtype item )
@@ -959,7 +975,7 @@ dynamic_array< pminetype > minevector;
 
 class SelectColor : public SelectAnything< pcolortype > {
                     protected:
-                       virtual int isavailable ( pcolortype item ) { return 1; };
+                       virtual bool isavailable ( pcolortype item ) { return 1; };
                        virtual void displaysingleitem ( pcolortype item, int x, int y );
                        virtual int getitemsizex ( void ) { return fieldsizex; } ;
                        virtual int getitemsizey ( void ) { return fieldsizey; } ;
@@ -1006,7 +1022,7 @@ void SelectColor :: showiteminfos ( pcolortype item, int x1, int y1, int x2, int
 
 class SelectWeather : public SelectAnything< pweathertype > {
                     protected:
-                       virtual int isavailable ( pweathertype item ) { return 1; };
+                       virtual bool isavailable ( pweathertype item ) { return 1; };
                        virtual void displaysingleitem ( pweathertype item, int x, int y );
                        virtual int getitemsizex ( void ) { return 120; } ;
                        virtual int getitemsizey ( void ) { return 25; } ;
@@ -1066,7 +1082,7 @@ void SelectWeather :: showiteminfos ( pweathertype item, int x1, int y1, int x2,
 
 class SelectMine : public SelectAnything< pminetype > {
                     protected:
-                       virtual int isavailable ( pminetype item ) { return 1; };
+                       virtual bool isavailable ( pminetype item ) { return 1; };
                        virtual void displaysingleitem ( pminetype item, int x, int y );
                        virtual int getitemsizex ( void ) { return fieldsizex; } ;
                        virtual int getitemsizey ( void ) { return fieldsizey; } ;
@@ -1453,6 +1469,16 @@ void resetbuildingselector ( void )
    selectitemcontainer.getbuildingselector()->init( getbuildingtypevector() );
 }
 
+void resetterrainselector ( void )
+{
+   selectitemcontainer.getterrainselector()->init( getterraintypevector() );
+}
+
+void resetobjectselector ( void )
+{
+   selectitemcontainer.getobjectselector()->init( getobjecttypevector() );
+}
+
 
 void setnewterrainselection ( pterraintype t )
 {
@@ -1513,13 +1539,13 @@ class SelectVehicleTypeForTransportCargo : public SelectCargoVehicleType {
          pvehicle transport;
       public:
          SelectVehicleTypeForTransportCargo ( pvehicle _transport ) { transport = _transport; };
-         int isavailable ( pvehicletype item );
+         bool isavailable ( pvehicletype item );
      };
 
-int SelectVehicleTypeForTransportCargo :: isavailable ( pvehicletype item ) 
+bool SelectVehicleTypeForTransportCargo :: isavailable ( pvehicletype item )
 {
     if ( transport->freeweight() < item->maxsize() )
-       return 0;
+       return false;
     else
        return transport->typ->vehicleloadable ( item ) && SelectVehicleType::isavailable ( item ); 
 }
@@ -1528,14 +1554,14 @@ class SelectVehicleTypeForBuildingCargo : public SelectCargoVehicleType {
          pbuilding building;
       public:
          SelectVehicleTypeForBuildingCargo ( pbuilding _building ) { building = _building; };
-         int isavailable ( pvehicletype item ) {    return building->typ->vehicleloadable ( item ) && SelectVehicleType::isavailable ( item ); };
+         bool isavailable ( pvehicletype item ) {    return building->typ->vehicleloadable ( item ) && SelectVehicleType::isavailable ( item ); };
      };
 
 class SelectVehicleTypeForBuildingProduction : public SelectCargoVehicleType {
          pbuilding building;
       public:
          SelectVehicleTypeForBuildingProduction ( pbuilding _building ) { building = _building; };
-         int isavailable ( pvehicletype item ) {  
+         bool isavailable ( pvehicletype item ) {  
             for ( int i = 0; i < 32; i++ )
                if ( building->production[i] == item )
                   return 0;

@@ -5,9 +5,12 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.70 2002-09-19 20:20:05 mbickel Exp $
+//     $Id: loaders.cpp,v 1.71 2002-10-09 16:58:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.70  2002/09/19 20:20:05  mbickel
+//      Cleanup and various bug fixes
+//
 //     Revision 1.69  2002/05/07 21:32:49  mbickel
 //      Fixed crash in mapeditor
 //      Fixed: conquering of allied buildings
@@ -1796,10 +1799,11 @@ void   tsavegameloaders::savegame( pnstream strm, pmap gamemap, bool writeReplay
 
    writedissections();
 
-   stream->writeInt( writeReplays );
-   if ( writeReplays )
-      if( spfld->replayinfo )
-         spfld->replayinfo->write(*stream);
+   if ( writeReplays && spfld->replayinfo ) {
+      stream->writeInt( 1 );
+      spfld->replayinfo->write(*stream);
+   } else
+      stream->writeInt( 0 );
 
    writeAI();
 

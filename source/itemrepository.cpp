@@ -477,4 +477,76 @@ void         loadallbuildingtypes(void)
 
 
 
+vector<ItemFiltrationSystem::ItemFilter*> ItemFiltrationSystem::itemFilters;
+
+
+ItemFiltrationSystem::ItemFilter::ItemFilter( const ASCString& _name, const IntRangeArray& unitsetIDs, bool _active )
+{
+   name = "UnitSet: " + _name;
+   units = unitsetIDs;
+   active = _active;
+}
+
+
+void ItemFiltrationSystem::ItemFilter::runTextIO ( PropertyContainer& pc )
+{
+    pc.addIntRangeArray ( "Buildings", buildings );
+    pc.addIntRangeArray ( "Vehicles", units );
+    pc.addIntRangeArray ( "Objects", objects );
+    pc.addIntRangeArray ( "Terrain", terrain );
+    pc.addBool ( "activated", active, false );
+    pc.addString ( "name", name );
+}
+
+
+
+bool ItemFiltrationSystem::ItemFilter::isContained ( IntRangeArray& arr, int id )
+{
+   for ( IntRangeArray::iterator i = arr.begin(); i != arr.end(); i++ )
+      if ( id >= i->from && id <= i->to )
+         return true;
+   return false;
+}
+
+
+
+bool ItemFiltrationSystem::ItemFilter::isContained ( ItemFiltrationSystem::Category cat, int id )
+{
+   switch ( cat ) {
+      case Building: return isContained ( buildings, id );
+      case Vehicle: return isContained ( units, id );
+      case Object: return isContained ( objects, id );
+      case Terrain: return isContained ( terrain, id );
+   };
+   return false;
+}
+
+bool ItemFiltrationSystem::isFiltered ( ItemFiltrationSystem::Category cat, int id )
+{
+   for ( vector<ItemFilter*>::iterator i = itemFilters.begin(); i != itemFilters.end(); i++ )
+      if ( (*i)->isContained ( cat, id ) )
+         if ( (*i)->isActive() )
+            return true;
+
+   return false;
+}
+
+
+void ItemFiltrationSystem::read ( )
+{
+    TextPropertyList& tpl = textFileRepository["itemfilter"];
+    for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
+
+      PropertyReadingContainer pc ( "itemfilter", *i );
+
+      ItemFilter* itf = new ItemFilter;
+      itf->runTextIO ( pc );
+      pc.run();
+
+      // bmtt->filename = (*i)->fileName;
+      // bmtt->location = (*i)->location;
+      itemFilters.push_back ( itf );
+   }
+}
+
 

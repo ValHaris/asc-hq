@@ -134,6 +134,7 @@ int getGraphicSetIdFromFilename ( const char* filename )
        return 0;
 }
 
+void* emptyfield = NULL;
 
 void loadbi3graphics( void )
 {
@@ -151,7 +152,6 @@ void loadbi3graphics( void )
 
    int absoluteMaxPicSize = 0;
 
-   void* emptyfield;
    {
       int o;
       tnfilestream s ( "emptyfld.raw", tnstream::reading );
@@ -356,8 +356,19 @@ int  loadbi3pict_double ( int num, void** pict, int interpolate, int reference )
       loadbi3graphics();
 
    if ( ! activeGraphicPictures.picAvail ( num ) ) {
-      *pict = NULL;
-      return -1;
+      if ( !emptyfield )
+         fatalError ( "referencing non existing GFX picture !" );
+
+      if ( reference == 1) {
+         *pict = emptyfield;
+         return 1;
+      } else {
+         int sz = getpicsize2 ( emptyfield );
+         void* buf = asc_malloc ( sz );
+         memcpy ( buf, emptyfield, sz );
+         *pict = buf;
+         return 0;
+      } /* endif */
    }
 
    if ( (activeGraphicPictures.getMode ( num ) & 0xff ) == 1 ) {

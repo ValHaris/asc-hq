@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: spfst.h,v 1.48 2002-10-06 15:44:40 mbickel Exp $
+//     $Id: spfst.h,v 1.49 2002-10-09 16:58:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2002/10/06 15:44:40  mbickel
+//      Completed inheritance of .asctxt files
+//      Speed up of replays
+//
 //     Revision 1.47  2002/03/18 21:42:17  mbickel
 //      Some cleanup and documentation in the Mine class
 //      The number of mines is now displayed in the field information window
@@ -333,12 +337,6 @@ class tdrawline8 : public tdrawline {
            virtual void putpix ( int x, int y );
            virtual void putpix8 ( int x, int y ) = 0;
        };
-
-
-
-extern int isUnitNotFiltered ( int id ) ;
-extern int isBuildingNotFiltered ( int id ) ;
-
 
 extern int  rol ( int valuetorol, int rolwidth );
 

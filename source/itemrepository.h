@@ -81,4 +81,33 @@ typedef map<ASCString,TextPropertyList> TextFileRepository;
 extern TextFileRepository textFileRepository;
 
 
+class ItemFiltrationSystem {
+      public:
+         typedef enum { Building, Vehicle, Object, Terrain } Category;
+
+         class ItemFilter {
+               public:
+                 typedef vector<IntRange> IntRangeArray;
+               private:
+                 IntRangeArray buildings;
+                 IntRangeArray objects;
+                 IntRangeArray units;
+                 IntRangeArray terrain;
+                 bool isContained (IntRangeArray& arr, int id );
+                 bool active;
+               public:
+                 ItemFilter() { active = false; };
+                 ItemFilter( const ASCString& _name, const IntRangeArray& unitsetIDs, bool _active );
+                 ASCString name;
+                 bool isActive() { return active; };
+                 bool setActive( bool _active ) { active = _active; };
+                 void runTextIO ( PropertyContainer& pc );
+                 bool isContained ( ItemFiltrationSystem::Category cat, int id );
+         };
+         static vector<ItemFilter*> itemFilters;
+
+         static void read();
+         static bool isFiltered ( Category cat, int id );
+};
+
 #endif

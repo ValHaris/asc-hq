@@ -562,7 +562,12 @@ ASCString BoolProperty::toString ( ) const
 
 ASCString StringProperty::operation_add ( const TextPropertyGroup::Entry& entry ) const
 {
-   return parse ( *entry.parent ) + entry.value;
+/*   ASCString s = entry.value;
+   while ( s.find ( "%s" ) != ASCString::npos )
+      s.replace ( s.find ( "%s" ), 2, parse ( *entry.parent ));
+   return s;
+   */
+   return parse( *entry.parent ) + entry.value;
 }
 
 ASCString StringProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
@@ -711,11 +716,11 @@ IntRangeArrayProperty::PropertyType IntRangeArrayProperty::operation_eq ( const 
 {
    PropertyType ira;
 
-   StringTokenizer st ( entry.value );
+   StringTokenizer st ( entry.value, true );
    ASCString s = st.getNextToken();
    while ( !s.empty() ) {
       if ( s.find ( "-" ) != ASCString::npos ) {
-         ASCString from = s.substr ( 0, s.find ( "-" )-1 );
+         ASCString from = s.substr ( 0, s.find ( "-" ) );
          ASCString to = s.substr ( s.find ( "-" )+1 );
          ira.push_back ( IntRange ( atoi ( from.c_str() ), atoi ( to.c_str() )));
       } else {

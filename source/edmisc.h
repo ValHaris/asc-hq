@@ -1,6 +1,11 @@
-//     $Id: edmisc.h,v 1.25 2002-04-21 21:27:00 mbickel Exp $
+//     $Id: edmisc.h,v 1.26 2002-10-09 16:58:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2002/04/21 21:27:00  mbickel
+//      Mapeditor: Fixed crash in "Put Resources"
+//      Updating the small map after AI
+//      Fixed infinite loop "quit game" after sending signal
+//
 //     Revision 1.24  2002/04/14 17:21:18  mbickel
 //      Renamed global variable pf to pf2 due to name clash with SDL_mixer library
 //
@@ -136,6 +141,9 @@
     Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
     Boston, MA  02111-1307  USA
 */
+
+#ifndef edmiscH
+#define edmiscH
 
 #include <string.h>
 #include <stdlib.h>
@@ -372,4 +380,4 @@ extern void editArchivalInformation();
 //! displays a textmessage comparing the resources of all players 
 extern void resourceComparison ( );
 
-
+#endif

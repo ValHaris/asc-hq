@@ -2,9 +2,12 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.111 2002-10-02 20:21:00 mbickel Exp $
+//     $Id: dialog.cpp,v 1.112 2002-10-09 16:58:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.111  2002/10/02 20:21:00  mbickel
+//      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
+//
 //     Revision 1.110  2002/04/05 09:25:08  mbickel
 //      Project files now for Borland C++ Builder 6
 //      Fixed: netcontrol not working
@@ -1701,7 +1704,7 @@ void         tvehicleinfo::buttonpressed( int id )
             else
                i = vehicletypenum - 1;
             type = getvehicletype_forpos ( i );
-         } while ( !type || !isUnitNotFiltered ( type->id ) ); /* enddo */
+         } while ( !type || ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Vehicle, type->id ) ); /* enddo */
          markweap = 0;
       }
 
@@ -1712,7 +1715,7 @@ void         tvehicleinfo::buttonpressed( int id )
             else
                i = 0;
             type = getvehicletype_forpos ( i );
-         } while ( !type || !isUnitNotFiltered ( type->id ) ); /* enddo */
+         } while ( !type || ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Vehicle, type->id ) ); /* enddo */
 
          markweap = 0;
       }
@@ -1795,7 +1798,7 @@ void         tvehicleinfo::run(void)
    }
 
    pvehicletype type = getvehicletype_forpos ( i );
-   while ( !type || !isUnitNotFiltered ( type->id ) ) {
+   while ( !type || ItemFiltrationSystem::isFiltered( ItemFiltrationSystem::Vehicle, type->id ) ) {
       if ( i < vehicletypenum - 1 )
          i++;
       else {

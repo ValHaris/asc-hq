@@ -2,9 +2,13 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.59 2002-10-06 15:44:40 mbickel Exp $
+//     $Id: edmain.cpp,v 1.60 2002-10-09 16:58:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.59  2002/10/06 15:44:40  mbickel
+//      Completed inheritance of .asctxt files
+//      Speed up of replays
+//
 //     Revision 1.58  2001/12/17 19:41:22  mbickel
 //      Reactionfire can now be deactivated without consequences if it has just
 //        been activated
@@ -408,6 +412,8 @@ void loaddata( void )
    loadalltextfiles();
 
    readBI3translationTable();
+
+   ItemFiltrationSystem::read();
 
    if ( actprogressbar )
       actprogressbar->startgroup();

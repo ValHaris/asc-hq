@@ -3,9 +3,12 @@
   
 */
 
-//     $Id: sgstream.h,v 1.24 2002-03-25 18:48:15 mbickel Exp $
+//     $Id: sgstream.h,v 1.25 2002-10-09 16:58:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2002/03/25 18:48:15  mbickel
+//      Applications can now specify which data checks to perform
+//
 //     Revision 1.23  2001/12/19 11:46:36  mbickel
 //      Applied patches from Michael Moerz:
 //       - 64bit cleanup of demount.cpp, mount.cpp
@@ -130,8 +133,8 @@
 */
 
 
-#ifndef sgstream_h
-#define sgstream_h
+#ifndef sgstreamH
+#define sgstreamH
 
 #include <vector>
 
@@ -186,26 +189,21 @@ extern void initFileIO ( const ASCString& configFileName, int skipChecks = 0 );
 
 class SingleUnitSet {
       public:
-         struct IdRange {
-                 int from;
-                 int to;
-                };
-
 
          class TranslationTable {
                   public:
-                     std::vector<IdRange> translation;
+                     std::vector<IntRange> translation;
                      std::string name;
                      void parseString ( const char* s );
                };
 
 
          int active;
-          std::string name;
-          std::string maintainer;
-          std::string information;
+         ASCString name;
+         ASCString maintainer;
+         ASCString information;
 
-         std::vector<IdRange> ids;
+         std::vector<IntRange> ids;
          std::vector<TranslationTable*> transtab;
          bool filterBuildings;
 

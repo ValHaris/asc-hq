@@ -2,9 +2,12 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.110 2002-09-19 20:20:05 mbickel Exp $
+//     $Id: spfst.cpp,v 1.111 2002-10-09 16:58:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.110  2002/09/19 20:20:05  mbickel
+//      Cleanup and various bug fixes
+//
 //     Revision 1.109  2002/03/19 20:38:56  mbickel
 //      Some cleanup and documentation in dlg_box
 //      Fixed some type assignment errors
@@ -2080,40 +2083,17 @@ void tdrawline8 :: start ( int x1, int y1, int x2, int y2 )
 
 void tdrawline8 :: putpix ( int x, int y )
 {
-       if ( (x & 1) == (y & 1) ) 
-          putpix8( x/2, y ); 
+       if ( (x & 1) == (y & 1) )
+          putpix8( x/2, y );
 }
 
 
 void EllipseOnScreen :: paint ( void )
 {
-   if ( active ) 
+   if ( active )
       ellipse ( x1, y1, x2, y2, color, precision );
 }
 
-
-
-int isUnitNotFiltered ( int id )
-{
-   if ( unitSets.size() > 0 ) {
-      for ( int i = 0; i < unitSets.size(); i++ )
-         if ( unitSets[i]->isMember ( id ))
-            if ( !unitSets[i]->active )
-                return 0;
-   }
-   return 1;
-}
-
-int isBuildingNotFiltered ( int id )
-{
-   if ( unitSets.size() > 0 ) {
-      for ( int i = 0; i < unitSets.size(); i++ )
-         if ( unitSets[i]->isMember ( id ))
-            if ( !unitSets[i]->active && unitSets[i]->filterBuildings)
-                return 0;
-   }
-   return 1;
-}
 
 
 int getheightdelta ( int height1, int height2 )

@@ -1,6 +1,10 @@
-//     $Id: edselfnt.h,v 1.5 2000-11-29 11:05:29 mbickel Exp $
+//     $Id: edselfnt.h,v 1.6 2002-10-09 16:58:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/11/29 11:05:29  mbickel
+//      Improved userinterface of the mapeditor
+//      map::preferredfilenames uses now strings (instead of char*)
+//
 //     Revision 1.4  2000/08/06 11:39:09  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -65,5 +69,8 @@ extern void setnewbuildingselection ( pbuildingtype v );
 
 extern void resetvehicleselector ( void );
 extern void resetbuildingselector ( void );
+extern void resetterrainselector ( void );
+extern void resetobjectselector ( void );
+
 
 extern void checkselfontbuttons(void);

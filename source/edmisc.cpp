@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.85 2002-10-06 15:44:40 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.86 2002-10-09 16:58:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.85  2002/10/06 15:44:40  mbickel
+//      Completed inheritance of .asctxt files
+//      Speed up of replays
+//
 //     Revision 1.84  2002/10/02 20:21:00  mbickel
 //      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
 //
@@ -3873,9 +3877,11 @@ class SelectUnitSet : public tdialogbox {
                int* active;
                int action;
            public :
+               SelectUnitSet() : active(NULL) {};
                void init(void);
                virtual void run(void);
                virtual void buttonpressed(int id);
+               ~SelectUnitSet() { delete[] active; };
            };
 
 
@@ -3884,7 +3890,7 @@ void         SelectUnitSet::init(void)
 
    tdialogbox::init();
    action = 0;
-   title = "Select Unit Sets";
+   title = "Select Item Filters";
    x1 = 90;
    xsize = 445;
    y1 = 10;
@@ -3895,13 +3901,13 @@ void         SelectUnitSet::init(void)
    windowstyle = windowstyle ^ dlg_in3d;
 
 
+   active = new int[ItemFiltrationSystem::itemFilters.size()];
 
-   active = new int [unitSets.size()];
+   for ( int i = 0; i < ItemFiltrationSystem::itemFilters.size(); i++ ) {
+     active[i]=  ItemFiltrationSystem::itemFilters[i]->isActive() ;
 
-   for ( int i = 0; i < unitSets.size(); i++ ) {
-      active[i] = unitSets[i]->active;
-      addbutton ( unitSets[i]->name.c_str(), 30, 60 + i * 25, xsize - 50, 80 + i * 25, 3, 0, 10 + i, 1 );
-      addeingabe ( 10 + i, &active[i], black, dblue );
+     addbutton ( ItemFiltrationSystem::itemFilters[i]->name.c_str(), 30, 60 + i * 25, xsize - 50, 80 + i * 25, 3, 0, 10 + i, 1 );
+     addeingabe ( 10 + i, &active[i], black, dblue );
    }
 
    addbutton("~O~k",20,ysize - 40,20 + w,ysize - 10,0,1,7,true);
@@ -3929,10 +3935,13 @@ void         SelectUnitSet::buttonpressed(int         id)
    switch(id) {
        case 7: {
                   action = 1;
-                  for ( int i = 0; i < unitSets.size(); i++ )
-                      unitSets[i]->active = active[i];
+                  for ( int i = 0; i < ItemFiltrationSystem::itemFilters.size(); i++ )
+                      ItemFiltrationSystem::itemFilters[i]->setActive( active[i] );
+
                   resetvehicleselector();
                   resetbuildingselector();
+                  resetterrainselector();
+                  resetobjectselector();
           }
           break;
        case 8: action = 2;
@@ -3942,13 +3951,13 @@ void         SelectUnitSet::buttonpressed(int         id)
 
 void selectunitsetfilter ( void )
 {
-   if ( unitSets.size() > 0 ) {
+   if ( ItemFiltrationSystem::itemFilters.size() > 0 ) {
       SelectUnitSet sus;
       sus.init();
       sus.run();
       sus.done();
    } else
-      displaymessage ( " no unitsets defined !", 1 );
+      displaymessage ( " no Filters defined !", 1 );
 }
 
 
@@ -4499,3 +4508,6 @@ void resourceComparison ( )
    }
    displaymessage ( s, 3 );
 }
+
+
+
