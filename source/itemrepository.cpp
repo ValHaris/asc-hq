@@ -181,7 +181,7 @@ void addobjecttype ( pobjecttype obj )
    if ( obj ) {
 
       ObjectMap::iterator i = objectmap.find ( obj->id );
-      if ( i != objectmap.end() )
+      if ( i != objectmap.end() && i->second )
          duplicateIDError ( "objecttype", obj->id, obj->location, obj->name, i->second->location, i->second->name );
 
       objecttypes[ objecttypenum++] = obj;

@@ -1,3 +1,47 @@
+2001-10-03 22:56  mbickel
+
+	* data/bi3maptranslation.txt, data/helpsys2.txt, data/helpsyst.txt,
+	data/moredata/buildings.con, data/moredata/trrobj.con,
+	source/attack.cpp, source/dashboard.cpp, source/dashboard.h,
+	source/dialog.cpp, source/gamemap.cpp, source/gamemap.h,
+	source/sg.cpp, source/strtmesg.cpp, source/typen.cpp,
+	source/typen.h, source/vehicletype.cpp, source/vehicletype.h,
+	source/tools/weaponguide.cpp:  Updated data files
+	 Updated online help
+	 Clean up of Pulldown menues
+	 Weapons can now have different efficiencies against different unit
+	classes
+
+2001-10-02 20:08  mbickel
+
+	* asc.bpg, source/edmain.cpp, source/sg.cpp:  Changed parser error
+	handling to use exceptions
+	 Removed gfx2pcx project
+
+2001-10-02 16:06  mbickel
+
+	* source/: TODO, attack.cpp, baseaiinterface.h, controls.cpp,
+	dialog.cpp, dialog.h, dlg_box.cpp, dlg_box.h, edevents.cpp,
+	edglobal.cpp, edglobal.h, edmain.cpp, edmisc.cpp, edmisc.h,
+	edselfnt.cpp, errors.h, gamedlg.cpp, gamemap.cpp, gamemap.h,
+	itemrepository.cpp, itemrepository.h, loadbi3.cpp, loaders.cpp,
+	mapevents.h, missions.cpp, network.cpp, objxlat.cpp, sg.cpp,
+	spfst.cpp, strtmesg.cpp, textfileparser.cpp, textfileparser.h,
+	typen.cpp, typen.h, unitctrl.cpp, vehicle.cpp, vehicle.h,
+	vehicletype.h, viewcalculation.cpp, viewcalculation.h, ai/ai.h,
+	ai/service.cpp, ai/tactics.cpp, tools/weaponguide.cpp,
+	tools/linux/Makefile.am, tools/linux/Makefile.in:  Some cleanup and
+	documentation
+	 Bi3 import tables now stored in .asctxt files
+	 Added ability to choose amoung different BI3 import tables
+	 Added map transformation tables
+
+2001-09-30 15:09  mbickel
+
+	* ChangeLog, data/first.map, data/first.msg, data/paybacktime.map,
+	data/paybacktime.msg, source/strtmesg.cpp:  Updated maps
+	 Version now 1.9.1
+
 2001-09-30 13:04  mbickel
 
 	* data/paybacktime.map:  Corrected alliances in paybacktime

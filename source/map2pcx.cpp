@@ -118,6 +118,8 @@ void loaddata( void )
 
    loadallterraintypes();
 
+   readBI3translationTable();
+
    loadUnitSets();
 }
 

@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.55 2001-10-02 14:06:28 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.56 2001-10-06 11:30:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2001/10/02 14:06:28  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.54  2001/09/13 17:43:12  mbickel
 //      Many, many bug fixes
 //
@@ -960,7 +966,7 @@ void        tloadBImap ::   ReadACTNPart(void)
             if ( fakemap ) {
                pobjecttype o = new ObjectType;
                *o = *getobjecttype_forid ( 44 );
-               int id = 100000;
+               int id = 1000000;
                while ( getobjecttype_forid ( id ))
                  id++;
 
@@ -970,7 +976,6 @@ void        tloadBImap ::   ReadACTNPart(void)
                o->weatherPicture[0].resize(1);
 
                loadbi3pict_double ( Line[X], &o->weatherPicture[0].images[0] );
-               o->weatherPicture[0].images[0] = 0;
                o->weatherPicture[0].bi3pic[0] = Line[X];
 
                addobjecttype ( o );
@@ -1482,6 +1487,7 @@ void tloadBImap :: LoadFromFile( const char* path, const char* AFileName, Terrai
 //   PShopNameItem PSNI;
 
     char TXTName[1000];
+    bool error = false;
     try {
        GetTXTName( path, AFileName, TXTName );
    
@@ -1519,12 +1525,15 @@ void tloadBImap :: LoadFromFile( const char* path, const char* AFileName, Terrai
        strcat ( missing, "\nA fatal error occured while accessing the file " );
        strcat ( missing, err.getFileName().c_str() );
        strcat ( missing, "\n" );
+       error = true;
     } /* endcatch */
     catch ( ASCexception ) {
        strcat ( missing, "\nA fatal error occured" );
+       error = true;
     } /* endcatch */
 
-    calculateallobjects();
+    if ( !error )
+       calculateallobjects();
     if ( missing[0] ) {
       if ( errorOutput )
          (*errorOutput)=missing;

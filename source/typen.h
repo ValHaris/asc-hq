@@ -1,6 +1,12 @@
-//     $Id: typen.h,v 1.102 2001-10-03 20:56:07 mbickel Exp $
+//     $Id: typen.h,v 1.103 2001-10-06 11:30:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.102  2001/10/03 20:56:07  mbickel
+//      Updated data files
+//      Updated online help
+//      Clean up of Pulldown menues
+//      Weapons can now have different efficiencies against different unit classes
+//
 //     Revision 1.101  2001/10/02 14:06:29  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -350,7 +356,7 @@ struct teventstore {
 struct GameTime {
   int move() { return abstime & 0xffff; };
   int turn() { return abstime >> 16; };
-  int set ( int turn, int move ) { abstime = turn << 16 + move ; };
+  int set ( int turn, int move ) { abstime = (turn << 16) + move ; };
   int abstime;
 };
 
