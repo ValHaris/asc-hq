@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.49 2000-09-10 10:19:51 mbickel Exp $
+//     $Id: typen.h,v 1.50 2000-09-17 15:20:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2000/09/10 10:19:51  mbickel
+//      AI improvements
+//
 //     Revision 1.48  2000/09/07 15:49:47  mbickel
 //      some cleanup and documentation
 //
@@ -235,6 +238,7 @@
 #define typen_h
 
 #include <time.h>
+#include <limits.h>
 #include "global.h"
 #include "tpascal.inc"
 #include "misc.h"
@@ -1591,7 +1595,7 @@ class tmap {
       pshareview    shareview;
       int           continueplaying;         // als einzig ?briggebliebener Spieler
       treplayinfo*  replayinfo;
-      int           playerview;
+      int           playerView;
       tgametime     lastjournalchange;
       tresources    bi_resource[8];
       PreferredFilenames* preferredfilenames;
@@ -2059,11 +2063,20 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 #define unitsize tanksize
 
 
-const int maxint = 0x7ffffffe;
-const int minint = -0x7ffffffe;
+/*
+#define maxint numeric_limits<int>::max()
+#define minint numeric_limits<int>::min()
 
-const float maxfloat = 2E20;
-const float minfloat = -2E20;
+#define maxfloat numeric_limits<float>::max()
+#define minfloat numeric_limits<float>::min()
+*/
+
+#define maxint INT_MAX
+#define minint INT_MIN
+
+#define maxfloat FLT_MAX
+#define minfloat FLT_MIN
+
 
 
 /////////////////////////////////////////////////////////////////////

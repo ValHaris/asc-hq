@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.30 2000-09-10 10:19:52 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.31 2000-09-17 15:20:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/09/10 10:19:52  mbickel
+//      AI improvements
+//
 //     Revision 1.29  2000/08/29 10:36:51  mbickel
 //      Removed Debug code
 //      Fixed bug: movement left when changing height into buildings
@@ -243,10 +246,11 @@ VehicleMovement :: ~VehicleMovement ( )
 int VehicleMovement :: available ( pvehicle veh ) const
 {
    if ( status == 0 )
-     if ( veh ) 
+     if ( veh )
+       if ( getfield ( veh->xpos, veh->ypos )->vehicle == veh )
           if ( veh->getMovement() >= minmalq && veh->reactionfire.status == tvehicle::ReactionFire::off )
              if ( terrainaccessible ( getfield ( veh->xpos, veh->ypos ), veh ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
-                return 1; 
+                return 1;
 
    return 0;
 }
@@ -781,7 +785,11 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, int noInterrupt )
          vehicle->addview();
       }
 
-      int fieldschanged = evaluateviewcalculation ( 1 << actmap->playerview );
+      int fieldschanged;
+      if ( actmap->playerView >= 0 )
+         fieldschanged = evaluateviewcalculation ( 1 << actmap->playerView );
+      else
+         fieldschanged = 0;
 
       if ( rf->checkfield ( x, y, vehicle, mapDisplay ))
          cancelmovement = 1;
@@ -805,7 +813,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, int noInterrupt )
          if ( field3->mineattacks ( vehicle )) {
             tmineattacksunit battle ( field3, -1, vehicle );
 
-            if ( mapDisplay && fieldvisiblenow ( getfield ( x, y ), actmap->playerview) || field3->mineowner() == actmap->playerview )
+            if ( mapDisplay && fieldvisiblenow ( getfield ( x, y ), actmap->playerView) || field3->mineowner() == actmap->playerView )
                battle.calcdisplay ();
             else
                battle.calc();
@@ -895,7 +903,11 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, int noInterrupt )
       dashboard.x = 0xffff; 
    } 
 
-   int fieldschanged = computeview( 1 << actmap->playerview ); 
+   int fieldschanged;
+   if ( actmap->playerView >= 0 )
+      fieldschanged = computeview( 1 << actmap->playerView );
+   else
+      fieldschanged = 0;
 
    if ( mapDisplay ) {
       mapDisplay->resetMovement();
@@ -1481,11 +1493,16 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
       int xp1 = vehicle->xpos;
       int yp1 = vehicle->ypos;
 
-      if ( mapDisplay ) {
+      int shown;
+      if ( mapDisplay && fieldvisiblenow ( getfield ( x, y ), actmap->playerView) ) {
          mapDisplay->displayActionCursor ( vehicle->xpos, vehicle->ypos, x, y );
          battle->calcdisplay ();
-      } else
+         mapDisplay->removeActionCursor ( );
+         shown = 1;
+      } else {
          battle->calc();
+         shown = 0;
+      }
 
       int ad2 = battle->av.damage;
       int dd2 = battle->dv.damage;
@@ -1502,7 +1519,7 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
 
       computeview();
 
-      if ( mapDisplay )
+      if ( mapDisplay && shown )
          mapDisplay->displayMap();
 
 

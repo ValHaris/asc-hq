@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.54 2000-09-16 11:47:24 mbickel Exp $
+//     $Id: dialog.cpp,v 1.55 2000-09-17 15:20:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2000/09/16 11:47:24  mbickel
+//      Some cleanup and documentation again
+//
 //     Revision 1.53  2000/08/29 10:36:47  mbickel
 //      Removed Debug code
 //      Fixed bug: movement left when changing height into buildings
@@ -3156,11 +3159,7 @@ void tbasicshowmap::generatemap1 ( void )
          pfield fld1 = getfield ( i, j ) ;
          c = fld1->typ->quickview->dir[fld1->direction].p1;
 
-         int v ;
-         if ( godview )
-            v = visible_all;
-         else
-            v = (fld1->visible >> (actmap->playerview*2)) & 3;
+         int v = fieldVisibility ( fld1, actmap->playerView );
 
          if (j & 1) {
             if ( v == visible_not )
@@ -3169,7 +3168,7 @@ void tbasicshowmap::generatemap1 ( void )
                if ( v == visible_ago)
                   buffer2[ j * mxsize + 1 + i*2] = xlattables.a.dark1[ c ];
                else 
-                  if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerview ) && ( fld1->building->visible || fld1->building->color == actmap->playerview*8 || godview ) )
+                  if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 || godview ) )
                      buffer2[ j * mxsize + 1 + i*2] = fld1->building->color + buildingcoloroffset;
                   else
                      if ( fld1->vehicle && ((v == visible_all) || ((fld1->vehicle->height >= chschwimmend) && (fld1->vehicle->height <= chhochfliegend))))
@@ -3183,7 +3182,7 @@ void tbasicshowmap::generatemap1 ( void )
                if ( v == visible_ago)
                   buffer2[ j * mxsize + i*2] = xlattables.a.dark1[ c ];
                else 
-                  if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerview ) && ( fld1->building->visible || fld1->building->color == actmap->playerview*8 || godview )) 
+                  if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 || godview ))
                      buffer2[ j * mxsize + i*2] = fld1->building->color + buildingcoloroffset;
                   else
                      if ( fld1->vehicle && ((v == visible_all) || ((fld1->vehicle->height >= chschwimmend) && (fld1->vehicle->height <= chhochfliegend))))
@@ -3216,11 +3215,7 @@ void tbasicshowmap::generatemap2 ( void )
       for (i = 0; i < actmap->xsize ; i++) { 
          fld1 = getfield ( i, j ) ;
 
-         int v ;
-         if ( godview )
-            v = visible_all;
-         else
-            v = (fld1->visible >> (actmap->playerview*2)) & 3;
+         int v = fieldVisibility ( fld1, actmap->playerView );
 
          if (j & 1) {
                     if ( v == visible_not ) {
@@ -3237,7 +3232,7 @@ void tbasicshowmap::generatemap2 ( void )
                           buffer2 [ (j * 2 + 1) * mxsize + (i * 4) + 4 ] = xlattables.a.dark1[ fld1->typ->quickview->dir[fld1->direction].p3[2][1] ];
                           buffer2 [ (j * 2 + 2) * mxsize + (i * 4) + 3 ] = xlattables.a.dark1[ fld1->typ->quickview->dir[fld1->direction].p3[1][2] ];
                         } else {
-                          if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerview ) && ( fld1->building->visible || fld1->building->color == actmap->playerview*8 || godview ) ) {
+                          if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 || godview ) ) {
                              buffer2 [ (j * 2 + 0) * mxsize + (i * 4) + 3 ] = fld1->building->color + buildingcoloroffset;
                              buffer2 [ (j * 2 + 1) * mxsize + (i * 4) + 2 ] = fld1->building->color + buildingcoloroffset;
                              buffer2 [ (j * 2 + 1) * mxsize + (i * 4) + 3 ] = fld1->building->color + buildingcoloroffset;
@@ -3273,7 +3268,7 @@ void tbasicshowmap::generatemap2 ( void )
                           buffer2 [ (j * 2 + 1) * mxsize + (i * 4) + 2 ] = xlattables.a.dark1[ fld1->typ->quickview->dir[fld1->direction].p3[2][1] ];
                           buffer2 [ (j * 2 + 2) * mxsize + (i * 4) + 1 ] = xlattables.a.dark1[ fld1->typ->quickview->dir[fld1->direction].p3[1][2] ];
                         } else {
-                          if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerview ) && ( fld1->building->visible || fld1->building->color == actmap->playerview*8 || godview ) ) {
+                          if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 || godview ) ) {
                              buffer2 [ (j * 2 + 0) * mxsize + (i * 4) + 1 ] = fld1->building->color + buildingcoloroffset;
                              buffer2 [ (j * 2 + 1) * mxsize + (i * 4) + 0 ] = fld1->building->color + buildingcoloroffset;
                              buffer2 [ (j * 2 + 1) * mxsize + (i * 4) + 1 ] = fld1->building->color + buildingcoloroffset;
@@ -3325,11 +3320,7 @@ void tbasicshowmap::generatemap3 ( void )
              else
                 m = l-(zoom-1) ;
 
-             int v ;
-             if ( godview )
-                v = visible_all;
-             else
-                v = (fld1->visible >> (actmap->playerview*2)) & 3;
+             int v = fieldVisibility ( fld1, actmap->playerView);
 
              if (j & 1) {
                 for (n = m ; n < 5-m ; n++ )
@@ -3339,7 +3330,7 @@ void tbasicshowmap::generatemap3 ( void )
                        if ( v == visible_ago)
                           buffer2 [ (j * 3 + 0 + l) * mxsize + (i * 6) + 3 + n ] = xlattables.a.dark1[ fld1->typ->quickview->dir[fld1->direction].p5[n][l] ];
                        else
-                          if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerview ) && ( fld1->building->visible || fld1->building->color == actmap->playerview*8 || godview ) )
+                          if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 || godview ) )
                              buffer2 [ (j * 3 + 0 + l) * mxsize + (i * 6) + 3 + n ]= fld1->building->color + buildingcoloroffset;
                           else
                              if ( fld1->vehicle && ((v == visible_all) || ((fld1->vehicle->height >= chschwimmend) && (fld1->vehicle->height <= chhochfliegend))))
@@ -3355,7 +3346,7 @@ void tbasicshowmap::generatemap3 ( void )
                        if ( v == visible_ago)
                           buffer2 [ (j * 3 + 0 + l) * mxsize + (i * 6) + 0 + n ] = xlattables.a.dark1[ fld1->typ->quickview->dir[fld1->direction].p5[n][l] ];
                        else
-                          if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerview ) && ( fld1->building->visible || fld1->building->color == actmap->playerview*8 || godview ) )
+                          if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 || godview ) )
                              buffer2 [ (j * 3 + 0 + l) * mxsize + (i * 6) + 0 + n ] = fld1->building->color + buildingcoloroffset;
                           else
                              if ( fld1->vehicle && ((v == visible_all) || ((fld1->vehicle->height >= chschwimmend) && (fld1->vehicle->height <= chhochfliegend))))
@@ -3447,20 +3438,15 @@ void tbasicshowmap::generatemap_var ( void )
          if ( !(pix == -1  || pix == 255) ) {
              fld1 = getfield ( xd, yd );
              if ( fld1 ) {
-                int v ;
-                if ( godview )
-                   v = visible_all;
-                else
-                   v = (fld1->visible >> (actmap->playerview*2)) & 3;
-   
-   
+                int v = fieldVisibility ( fld1, actmap->playerView);
+
                 if ( v == visible_not )
                    *b = visiblenotcol;
                 else
                    if ( v == visible_ago)
                       *b = xlattables.a.dark1[ fld1->typ->quickview->dir[fld1->direction].p5[ xo * 5 / fieldxsize ][ yo * 5 / fieldysize ] ];
                    else
-                      if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerview ) && ( fld1->building->visible || fld1->building->color == actmap->playerview*8 || godview ) )
+                      if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 || godview ) )
                          *b = fld1->building->color + buildingcoloroffset;
                       else
                          if ( fld1->vehicle && ((v == visible_all) || ((fld1->vehicle->height >= chschwimmend) && (fld1->vehicle->height <= chhochfliegend))))

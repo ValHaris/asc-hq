@@ -1,6 +1,9 @@
-//     $Id: controls.h,v 1.25 2000-09-16 13:02:52 mbickel Exp $
+//     $Id: controls.h,v 1.26 2000-09-17 15:20:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/09/16 13:02:52  mbickel
+//      Put the AI in place
+//
 //     Revision 1.24  2000/09/16 11:47:23  mbickel
 //      Some cleanup and documentation again
 //
@@ -258,7 +261,7 @@
 
   class tcomputeview : public tsearchfields {
                 protected:
-                      int actview;
+                      int actView;
                       int player;
                       int mode;
                       int height;
@@ -270,7 +273,7 @@
                       virtual void  testfield ( void );
 
                 public:
-                      tcomputeview ( void ) { actview = actmap->playerview; };
+                      tcomputeview ( void ) { actView = actmap->playerView; };
                  };
 
   class tcomputevehicleview : public tcomputeview {
@@ -481,6 +484,7 @@ class trunreplay {
 
             void readnextaction ( void );
             void displayActionCursor ( int x1, int y1, int x2 = -1, int y2 = -1, int secondWait = 0 );
+            void removeActionCursor( void );
 
          public:
 
@@ -693,6 +697,7 @@ class ReplayMapDisplay : public MapDisplayInterface {
            void displayActionCursor ( int x1, int y1, int x2 , int y2 , int secondWait );
            void displayActionCursor ( int x1, int y1 ) { displayActionCursor ( x1, y1, -1, -1, 0 ); };
            void displayActionCursor ( int x1, int y1, int x2 , int y2 ) { displayActionCursor ( x1, y1, x2, y2, 0 ); };
+           void removeActionCursor ( void );
            int checkMapPosition ( int x, int y );
            void setCursorDelay  ( int time ) { cursorDelay = time; };
     };

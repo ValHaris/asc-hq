@@ -49,6 +49,7 @@ CGameOptions::CGameOptions(void)
 
 void CGameOptions::setDefaults ( void )
 {
+   forceWindowedMode = 0;
    runAI = 0;
    fastmove	=	1;
    visibility_calc_algo=0;      // 0 sauber, 1 schnell=0;

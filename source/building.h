@@ -1,6 +1,9 @@
-//     $Id: building.h,v 1.15 2000-08-30 14:45:07 mbickel Exp $
+//     $Id: building.h,v 1.16 2000-09-17 15:20:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/08/30 14:45:07  mbickel
+//      ASC compiles and links with GCC again...
+//
 //     Revision 1.14  2000/08/29 20:21:06  mbickel
 //      Tried to make source GCC compliant, but some problems still remain
 //
@@ -85,7 +88,7 @@
 
 
 #ifdef karteneditor
- #error eigentlich sollte der Karteneditor ohne das building auskommen k”nnen !
+ #error the mapeditor should not need to use building* !
 #endif
 
 

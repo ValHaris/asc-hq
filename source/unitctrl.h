@@ -1,6 +1,12 @@
-//     $Id: unitctrl.h,v 1.7 2000-07-16 14:20:06 mbickel Exp $
+//     $Id: unitctrl.h,v 1.8 2000-09-17 15:20:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/07/16 14:20:06  mbickel
+//      AI has now some primitive tactics implemented
+//      Some clean up
+//        moved weapon functions to attack.cpp
+//      Mount doesn't modify PCX files any more.
+//
 //     Revision 1.6  2000/06/09 10:51:00  mbickel
 //      Repaired keyboard control of pulldown menu
 //      Fixed compile errors at fieldlist with gcc
@@ -57,6 +63,8 @@
 #ifndef unitctrl_h_included
 #define unitctrl_h_included
 
+#include <vector>
+
 #include "typen.h"
 #include "basestrm.h"
 #include "spfst.h"
@@ -67,16 +75,16 @@ template<class T>
 class FieldList {
        pmap localmap;
        int fieldnum;
-       dynamic_array<int> xpos;
-       dynamic_array<int> ypos;
-       dynamic_array<T>   data;
+       std::vector<int> xpos;
+       std::vector<int> ypos;
+       std::vector<T>   data;
      public:
        FieldList ( void );
-       int getFieldNum ( void );
-       pfield getField ( int num );
+       int getFieldNum ( void ) const;
+       pfield getField ( int num ) const;
        T* getData ( int num );
        T* getData ( int x, int y );
-       void getFieldCoordinates ( int num, int* x, int* y );
+       void getFieldCoordinates ( int num, int* x, int* y ) const;
        void addField ( int x, int y, T* _data = NULL );
        void setMap ( pmap map );
        pmap getMap ( void );
@@ -351,12 +359,12 @@ template<class T> FieldList<T> :: FieldList ( void )
    localmap = NULL;
 }
 
-template<class T> int FieldList<T> :: getFieldNum ( void )
+template<class T> int FieldList<T> :: getFieldNum ( void ) const
 {
    return fieldnum;
 }
 
-template<class T> pfield FieldList<T> :: getField ( int num )
+template<class T> pfield FieldList<T> :: getField ( int num ) const
 {
    if ( num < fieldnum && num >= 0 )
       return getfield ( xpos[num], ypos[num] );
@@ -383,7 +391,7 @@ template<class T> T* FieldList<T> :: getData ( int x, int y )
 }
 
 
-template<class T> void FieldList<T> :: getFieldCoordinates ( int num, int* x, int* y )
+template<class T> void FieldList<T> :: getFieldCoordinates ( int num, int* x, int* y ) const
 {
    if ( num < fieldnum && num >= 0 ) {
       *x = xpos[num];
@@ -401,10 +409,10 @@ template<class T> void FieldList<T> :: addField ( int x, int y, T* _data )
       if ( xpos[i] == x && ypos[i] == y )
          found = 1;
    if ( !found ) {
-      xpos[fieldnum] = x;
-      ypos[fieldnum] = y;
+      xpos.push_back ( x );
+      ypos.push_back ( y );
       if ( _data )
-         data[fieldnum] = *_data;
+         data.push_back( *_data );
 
       fieldnum++;
    }

@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.93 2000-09-16 13:02:53 mbickel Exp $
+//     $Id: sg.cpp,v 1.94 2000-09-17 15:20:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.93  2000/09/16 13:02:53  mbickel
+//      Put the AI in place
+//
 //     Revision 1.92  2000/09/16 11:47:29  mbickel
 //      Some cleanup and documentation again
 //
@@ -146,241 +149,8 @@
 //      New message during save operation
 //      Weapon efficiency displayed did not correspond to mouse position when
 //        first weapon was service
-//
-//     Revision 1.59  2000/07/16 14:57:42  mbickel
-//      Datafile versioning
-//
-//     Revision 1.58  2000/07/16 14:20:04  mbickel
-//      AI has now some primitive tactics implemented
-//      Some clean up
-//        moved weapon functions to attack.cpp
-//      Mount doesn't modify PCX files any more.
-//
-//     Revision 1.57  2000/07/10 15:21:30  mbickel
-//      Fixed crash in replay (alliancechange)
-//      Fixed some movement problems when moving units out of transports / buildings
-//      Removed save game description dialog
-//
-//     Revision 1.56  2000/07/06 11:07:27  mbickel
-//      More AI work
-//      Started modularizing the attack formula
-//
-//     Revision 1.55  2000/07/05 10:49:36  mbickel
-//      Fixed AI bugs
-//      setbuildingdamage event now updates the screen
-//
-//     Revision 1.54  2000/06/28 18:31:00  mbickel
-//      Started working on AI
-//      Started making loaders independent of memory layout
-//      Destroyed buildings can now leave objects behind.
-//
-//     Revision 1.53  2000/06/23 12:09:30  mbickel
-//      Graphicsets now selectable in ASC too.
-//
-//     Revision 1.52  2000/06/22 12:36:30  mbickel
-//      Fixed compilation problems with gcc
-//      version now ASC1.1.6
-//
-//     Revision 1.51  2000/06/19 20:05:06  mbickel
-//      Fixed crash when transfering ammo to vehicle with > 8 weapons
-//
-//     Revision 1.50  2000/06/09 13:12:26  mbickel
-//      Fixed tribute function and renamed it to "transfer resources"
-//
-//     Revision 1.49  2000/06/09 10:50:59  mbickel
-//      Repaired keyboard control of pulldown menu
-//      Fixed compile errors at fieldlist with gcc
-//
-//     Revision 1.48  2000/06/06 20:03:18  mbickel
-//      Fixed graphical error when transfering ammo in buildings
-//      Sound can now be disable by a command line parameter and the game options
-//
-//     Revision 1.47  2000/06/05 18:33:10  mbickel
-//      Refined password check for mail games
-//
-//     Revision 1.46  2000/06/05 18:21:23  mbickel
-//      Fixed a security hole which was opened with the new method of loading
-//        mail games by command line parameters
-//
-//     Revision 1.45  2000/06/04 21:39:21  mbickel
-//      Added OK button to ViewText dialog (used in "About ASC", for example)
-//      Invalid command line parameters are now reported
-//      new text for attack result prediction
-//      Added constructors to attack functions
-//
-//     Revision 1.44  2000/06/01 15:27:46  mbickel
-//      Some changes for the upcoming Win32 version of ASC
-//      Fixed error at startup: unable to load smalaril.fnt
-//
-//     Revision 1.43  2000/06/01 15:03:55  mbickel
-//      New command line evaluation code and parameters:
-//        Maps, savegames and email games can now be loaded by passing an command
-//        line parameter.  From Sven Riedel
-//
-//     Revision 1.42  2000/05/23 20:40:48  mbickel
-//      Removed boolean type
-//
-//     Revision 1.41  2000/05/22 15:40:36  mbickel
-//      Included patches for Win32 version
-//
-//     Revision 1.40  2000/05/18 14:14:48  mbickel
-//      Fixed bug in movemalus calculation for movement
-//      Added "view movement range"
-//
-//     Revision 1.39  2000/05/10 19:55:54  mbickel
-//      Fixed empty loops when waiting for mouse events
-//
-//     Revision 1.38  2000/05/08 20:56:27  mbickel
-//      Some cleanup
-//
-//     Revision 1.37  2000/05/07 12:12:17  mbickel
-//      New mouse option dialog
-//      weapon info can now be displayed by clicking on a unit
-//
-//     Revision 1.36  2000/05/06 19:57:10  mbickel
-//      Mapeditor/linux is now running
-//
-//     Revision 1.35  2000/05/02 17:28:16  mbickel
-//      Linux: Added makefile for demount and mount(con)
-//
-//     Revision 1.34  2000/05/02 16:20:54  mbickel
-//      Fixed bug with several simultaneous vehicle actions running
-//      Fixed graphic error at ammo transfer in buildings
-//      Fixed ammo loss at ammo transfer
-//      Movecost is now displayed for mines and repairs
-//      Weapon info now shows unhittable units
-//
-//     Revision 1.33  2000/04/27 17:59:23  mbickel
-//      Updated Kdevelop project file
-//      Fixed some graphical errors
-//
-//     Revision 1.32  2000/04/27 16:25:26  mbickel
-//      Attack functions cleanup
-//      New vehicle categories
-//      Rewrote resource production in ASC resource mode
-//      Improved mine system: several mines on a single field allowed
-//      Added unitctrl.* : Interface for vehicle functions
-//        currently movement and height change included
-//      Changed timer to SDL_GetTicks
-//
-//     Revision 1.31  2000/04/17 18:55:23  mbickel
-//      Fixed the DOS version
-//
-//     Revision 1.30  2000/04/15 15:52:00  mbickel
-//      Updated linux documentation
-//
-//     Revision 1.29  2000/04/01 11:38:39  mbickel
-//      Updated the small editors
-//      Added version numbering
-//
-//     Revision 1.28  2000/03/29 15:28:28  mbickel
-//      Preparations for the Linux release:
-//       updated help files and documentation
-//
-//     Revision 1.27  2000/03/29 09:58:48  mbickel
-//      Improved memory handling for DOS version
-//      Many small changes I can't remember ;-)
-//
-//     Revision 1.26  2000/03/11 18:22:07  mbickel
-//      Added support for multiple graphic sets
-//
-//     Revision 1.25  2000/02/24 10:54:08  mbickel
-//      Some cleanup and bugfixes
-//
-//     Revision 1.24  2000/02/07 19:45:42  mbickel
-//      fixed map structure size bug
-//
-//     Revision 1.23  2000/02/05 12:13:44  steb
-//     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
-//     startup due to actmap being null when trying to report errors.
-//
-//     Revision 1.22  2000/02/03 20:54:41  mbickel
-//      Some cleanup
-//      getfiletime now works under Linux too
-//
-//     Revision 1.21  2000/02/02 19:18:18  mbickel
-//      Enhanced sound loading routines to use the ASC stream io functions
-//
-//     Revision 1.20  2000/01/24 17:35:45  mbickel
-//      Added dummy routines for sound under DOS
-//      Cleaned up weapon specification
-//
-//     Revision 1.19  2000/01/24 08:16:49  steb
-//     Changes to existing files to implement sound.  This is the first munge into
-//     CVS.  It worked for me before the munge, but YMMV :)
-//
-//     Revision 1.18  2000/01/19 21:18:35  mbickel
-//      Adjusted case of filenames for Linux version (all data files now
-//        lowercase)
-//
-//     Revision 1.17  2000/01/07 13:20:04  mbickel
-//      DGA fullscreen mode now working
-//
-//     Revision 1.16  2000/01/06 11:19:14  mbickel
-//      Worked on the Linux-port again...
-//
-//     Revision 1.15  2000/01/04 19:43:53  mbickel
-//      Continued Linux port
-//
-//     Revision 1.14  2000/01/02 19:47:08  mbickel
-//      Continued Linux port
-//      Fixed crash at program exit
-//
-//     Revision 1.13  2000/01/01 19:04:18  mbickel
-//     /tmp/cvsVhJ4Z3
-//
-//     Revision 1.12  1999/12/30 21:04:47  mbickel
-//      Restored DOS compatibility again.
-//
-//     Revision 1.11  1999/12/30 20:30:38  mbickel
-//      Improved Linux port again.
-//
-//     Revision 1.10  1999/12/29 17:38:20  mbickel
-//      Continued Linux port
-//
-//     Revision 1.9  1999/12/28 22:04:27  mbickel
-//      Had to make some changes again to compile it for DOS...
-//
-//     Revision 1.8  1999/12/28 21:03:19  mbickel
-//      Continued Linux port
-//      Added KDevelop project files
-//
-//     Revision 1.7  1999/12/27 13:00:07  mbickel
-//      new vehicle function: each weapon can now be set to not attack certain
-//                            vehicles
-//
-//     Revision 1.6  1999/11/25 22:00:08  mbickel
-//      Added weapon information window
-//      Added support for primary offscreen frame buffers to graphics engine
-//      Restored file time handling for DOS version
-//
-//     Revision 1.5  1999/11/22 18:27:49  mbickel
-//      Restructured graphics engine:
-//        VESA now only for DOS
-//        BASEGFX should be platform independant
-//        new interface for initialization
-//      Rewrote all ASM code in C++, but it is still available for the Watcom
-//        versions
-//      Fixed bugs in RLE decompression, BI map importer and the view calculation
-//
-//     Revision 1.4  1999/11/18 17:31:18  mbickel
-//      Improved BI-map import translation tables
-//      Moved macros to substitute Watcom specific routines into global.h
-//
-//     Revision 1.3  1999/11/16 17:04:09  mbickel
-//     Made ASC compilable for DOS again :-)
-//     Merged all the bug fixes in that I did last week
-//
-//     Revision 1.2  1999/11/16 03:42:25  tmwilson
-//        Added CVS keywords to most of the files.
-//        Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//        Wrote replacement routines for kbhit/getch for Linux
-//        Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//        Added autoconf/automake capabilities
-//        Added files used by 'automake --gnu'
-//
-//
-/*                                 
+
+/*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
 
@@ -457,8 +227,8 @@
 
 
 class tsgonlinemousehelp : public tonlinemousehelp {
-public:
-  tsgonlinemousehelp ( void );
+   public:
+     tsgonlinemousehelp ( void );
 };
 
 tsgonlinemousehelp :: tsgonlinemousehelp ( void )
@@ -533,11 +303,9 @@ int              modenum8;
 
 int videostartpos = 0;
 
-int cdrom = 1;
 
 pprogressbar actprogressbar = NULL;
 
-pchar mainmenuitems[6] = { "new map", "new campaign", "load game", "continue network game", "network supervisor", "exit" };
 
 
 cmousecontrol* mousecontrol = NULL;
@@ -571,7 +339,7 @@ int checkforcheats( void )
        return 0;
 
    #else
-   return 0;
+    return 0;
    #endif
 }   
 
@@ -1111,12 +879,6 @@ void mountview( void )
 
    agmp-> scanlinelength = 20;
    agmp-> windowstatus = 100;
-
-   /*
-   initsvga(0x101);
-
-   char t[20];
-   */
 
    int m,n;
 
@@ -1717,15 +1479,6 @@ void         tsgpulldown :: init ( void )
 
    addbutton ( "~A~bout", ua_viewaboutmessage ); 
 
-/*
-   addbutton ( "show ~P~alette"); 
-   addbutton ( "~G~enerate sub"); 
-   addbutton ( ""); 
-   addbutton ( ""); 
-   addbutton ( ""); 
-   pdb.pdfield[6]->count = 1; 
-*/
-
    tpulldown :: init();
    setshortkeys();
 } 
@@ -1796,10 +1549,7 @@ void         ladekarte(void)
          actmap->campaign = NULL; 
       } 
 
-      // computeview(); 
-      // cursor.gotoxy ( actmap->cursorpos.position[ actmap->actplayer ].x, actmap->cursorpos.position[ actmap->actplayer ].y , 0);
-
-      displaymap(); 
+      displaymap();
       dashboard.x = 0xffff;
       moveparams.movestatus = 0; 
    } 
@@ -1982,16 +1732,6 @@ void ladestartkarte( char *emailgame=NULL, char *mapname=NULL, char *savegame=NU
          exit(-1);
       }
 
-     /*
-      try {
-         newturnforplayer ( -1, password );
-      } 
-      catch ( tnomaploaded ) {
-         fprintf ( stderr, "invalid password specified for %s\n", emailgame );
-         exit(-1);
-      } 
-    */
-
    } else if( savegame != NULL ) {
       if( validatesavfile( savegame ) == 0 ) {
          fprintf( stderr, "The savegame %s is invalid. Aborting.\n", savegame );
@@ -2020,7 +1760,7 @@ void ladestartkarte( char *emailgame=NULL, char *mapname=NULL, char *savegame=NU
    } else {  // resort to loading defaults
 
 
-	   if ( CGameOptions::Instance()->startupcount < 4 ) {
+     if ( CGameOptions::Instance()->startupcount < 4 ) {
         strcpy ( s , "tutor0" );
      } else {
         strcpy ( s , "railstat" );
@@ -2112,11 +1852,11 @@ void  checkforvictory ( void )
                for ( int j = 0; j < 8; j++ )
                   if ( j != i )
                      to |= 1 << j;
-                     // Message player has been terminated.
-   
+
    
                char txt[1000];
-               char* sp = getmessage( 10010 ); 
+               char* sp = getmessage( 10010 ); // Message "player has been terminated"
+
                sprintf ( txt, sp, actmap->player[i].name );
                sp = strdup ( txt );
                new tmessage ( sp, to );
@@ -2429,17 +2169,19 @@ void execuseraction ( tuseractions action )
                                           displaymessage("units that can not move and cannot shoot will now be displayed gray", 3);
                        break;
 
-        case ua_computerturn:          displaymessage("This function is under development and for programmers only\n"
-                                                      "unpredicatable things may happen ...",3 ) ;
+        case ua_computerturn:          if ( checkforcheats() ) {
+                                          displaymessage("This function is under development and for programmers only\n"
+                                                         "unpredicatable things may happen ...",3 ) ;
 
-                                       if (choice_dlg("do you really want to start the AI?","~y~es","~n~o") == 1) {
+                                          if (choice_dlg("do you really want to start the AI?","~y~es","~n~o") == 1) {
 
-                                          if ( !actmap->player[ actmap->actplayer ].ai )
-                                             actmap->player[ actmap->actplayer ].ai = new AI ( actmap );
-                                        
-                                          actmap->player[ actmap->actplayer ].ai->run();
+                                             if ( !actmap->player[ actmap->actplayer ].ai )
+                                                actmap->player[ actmap->actplayer ].ai = new AI ( actmap );
+
+                                             actmap->player[ actmap->actplayer ].ai->run();
+                                          }
                                        }
-                       break; 
+                       break;
         case ua_setupnetwork:       if ( actmap->network )
                                        setupnetwork ( actmap->network );
                                     else
@@ -2497,7 +2239,7 @@ void mainloopgeneralmousecheck ( void )
          // collategraphicoperations cgo;
          mousevisible(false);
 
-         dashboard.paint ( getactfield(), actmap->playerview );
+         dashboard.paint ( getactfield(), actmap->playerView );
          actgui->painticons();
 
          mousevisible(true);
@@ -2691,6 +2433,7 @@ void  mainloop ( void )
                               AI* ai = (AI*) actmap->player[ actmap->actplayer].ai;
                               ai->showFieldInformation ( getxpos(), getypos() );
                          }
+                         displaymessage ( "%d", 1, &getactfield()->visible );
                break;
                
 
@@ -3089,6 +2832,8 @@ void networksupervisor ( void )
 
 void runmainmenu ( void )
 {
+    const char* mainmenuitems[6] = { "new map", "new campaign", "load game", "continue network game", "network supervisor", "exit" };
+
     int mainmenuitemnum = 6;
 
     int unitsearched = 30;
@@ -3198,12 +2943,14 @@ void runmainmenu ( void )
 }
 
 
+
 void closecdrom( void )
 {
 //   end_real_int();
 //   freecdinfo();
 }
 
+// int cdrom = 1;
 
 
 void startcdaudio ( char c )
@@ -3505,6 +3252,8 @@ int main(int argc, char *argv[] )
          "loading of game failed during pre graphic initializing", 2 );
    }
 
+   if ( CGameOptions::Instance()->forceWindowedMode )
+      fullscreen = 0;
 
    modenum8 = initgraphics ( resolx, resoly, 8 );
 

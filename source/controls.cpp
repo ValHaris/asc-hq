@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.75 2000-09-16 13:02:51 mbickel Exp $
+//     $Id: controls.cpp,v 1.76 2000-09-17 15:20:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.75  2000/09/16 13:02:51  mbickel
+//      Put the AI in place
+//
 //     Revision 1.74  2000/09/16 11:47:21  mbickel
 //      Some cleanup and documentation again
 //
@@ -2983,10 +2986,12 @@ tdashboard::tdashboard ( void )
   
 void tdashboard::paint ( const pfield ffield, int playerview )
 {
-   if (fieldvisiblenow(ffield, playerview ))
-      paintvehicleinfo ( ffield->vehicle, ffield->building, ffield->object, NULL );
-   else 
-      paintvehicleinfo( NULL, NULL, NULL, NULL ); 
+   if ( playerview >= 0 ) {
+      if (fieldvisiblenow(ffield, playerview ))
+         paintvehicleinfo ( ffield->vehicle, ffield->building, ffield->object, NULL );
+      else
+         paintvehicleinfo( NULL, NULL, NULL, NULL );
+   }
 }
 
 void         tdashboard::putheight(integer      i, integer      sel) 
@@ -5316,7 +5321,7 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
    }
    computeview(); 
 
-   actmap->playerview = actmap->actplayer;
+   actmap->playerView = actmap->actplayer;
 
    if ( startreplaylate ) {
       actmap->replayinfo = new treplayinfo;
@@ -5608,7 +5613,7 @@ void nextPlayer( void )
    } 
 
    int newplayer = actmap->actplayer;
-   actmap->playerview = actmap->actplayer;
+   actmap->playerView = actmap->actplayer;
 
    if ( actmap->network &&  oldplayer != actmap->actplayer && actmap->network->player[ newplayer ].compposition != actmap->network->player[ oldplayer ].compposition )
       sendnetworkgametonextplayer ( oldplayer, newplayer );
@@ -5631,7 +5636,7 @@ void nextPlayer( void )
 void runai( int playerView )
 {
    if ( CGameOptions::Instance()->runAI ) {
-      actmap->playerview = playerView;
+      actmap->playerView = playerView;
 
       if ( !actmap->player[ actmap->actplayer ].ai )
          actmap->player[ actmap->actplayer ].ai = new AI ( actmap );
@@ -6678,7 +6683,10 @@ int ReplayMapDisplay :: checkMapPosition ( int x, int y )
 
 int  ReplayMapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove )
 {
-   if ( fieldvisiblenow ( getfield ( x1, y1 ), actmap->playerview) || fieldvisiblenow ( getfield ( x2, y2 ), actmap->playerview)) {
+   if ( actmap->playerView < 0 )
+      return 0;
+
+   if ( fieldvisiblenow ( getfield ( x1, y1 ), actmap->playerView) || fieldvisiblenow ( getfield ( x2, y2 ), actmap->playerView)) {
       if ( checkMapPosition  ( x1, y1 ))
          displayMap();
 
@@ -6695,17 +6703,21 @@ int  ReplayMapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pveh
 
 void ReplayMapDisplay :: displayPosition ( int x, int y )
 {
-   if ( fieldvisiblenow ( getfield ( x, y ), actmap->playerview )) {
+   if ( fieldvisiblenow ( getfield ( x, y ), actmap->playerView )) {
       checkMapPosition  ( x, y );
       mapDisplay->displayPosition ( x, y );
    }
 }
 
+void ReplayMapDisplay :: removeActionCursor ( void )
+{
+   cursor.hide();
+}
 
 void ReplayMapDisplay :: displayActionCursor ( int x1, int y1, int x2, int y2, int secondWait )
 {
    if ( x1 >= 0 && y1 >= 0 ) {
-      int i = fieldvisiblenow ( getfield ( x1, y1 ), actmap->playerview );
+      int i = fieldvisiblenow ( getfield ( x1, y1 ), actmap->playerView );
       if( i ) {
          cursor.gotoxy ( x1, y1, i );
          wait();
@@ -6713,7 +6725,7 @@ void ReplayMapDisplay :: displayActionCursor ( int x1, int y1, int x2, int y2, i
    }
 
    if ( x2 >= 0 && y2 >= 0 ) {
-      int i = fieldvisiblenow ( getfield ( x2, y2 ), actmap->playerview );
+      int i = fieldvisiblenow ( getfield ( x2, y2 ), actmap->playerView );
       if( i ) {
          cursor.gotoxy ( x2, y2, i );
          if ( secondWait )
@@ -7035,7 +7047,7 @@ int  trunreplay :: removeunit ( int x, int y, int nwid )
 
 void trunreplay :: wait ( int t )
 {
-   if ( fieldvisiblenow ( getactfield(), actmap->playerview ))
+   if ( fieldvisiblenow ( getactfield(), actmap->playerView ))
     while ( ticker < t + CGameOptions::Instance()->replayspeed  && !keypress()) {
        /*
        tkey input;
@@ -7068,6 +7080,12 @@ void trunreplay :: displayActionCursor ( int x1, int y1, int x2, int y2, int sec
     ReplayMapDisplay rmd( &defaultMapDisplay );
     rmd.setCursorDelay ( CGameOptions::Instance()->replayspeed );
     rmd.displayActionCursor ( x1, y1, x2, y2, secondWait );
+}
+
+void trunreplay :: removeActionCursor ( void )
+{
+    ReplayMapDisplay rmd( &defaultMapDisplay );
+    rmd.removeActionCursor (  );
 }
 
 
@@ -7156,7 +7174,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                           pfield fld = getfield ( x1, y1 );
                           pfield targ = getfield ( x2, y2 );
-                          int attackvisible = fieldvisiblenow ( fld, actmap->playerview ) || fieldvisiblenow ( targ, actmap->playerview );
+                          int attackvisible = fieldvisiblenow ( fld, actmap->playerView ) || fieldvisiblenow ( targ, actmap->playerView );
                           if ( fld && targ && fld->vehicle ) {
                              if ( targ->vehicle ) {
                                 tunitattacksunit battle ( fld->vehicle, targ->vehicle, 1, wpnum );
@@ -7165,6 +7183,7 @@ void trunreplay :: execnextreplaymove ( void )
                                 if ( attackvisible ) {
                                    displayActionCursor ( x1, y1, x2, y2, 0 );
                                    battle.calcdisplay ( ad2, dd2 );
+                                   removeActionCursor();
                                 } else {
                                    battle.calc ();
                                    battle.av.damage = ad2;
@@ -7180,6 +7199,7 @@ void trunreplay :: execnextreplaymove ( void )
                                 if ( attackvisible ) {
                                    displayActionCursor ( x1, y1, x2, y2, 0 );
                                    battle.calcdisplay ( ad2, dd2 );
+                                   removeActionCursor();
                                 } else {
                                    battle.calc ();
                                    battle.av.damage = ad2;
@@ -7193,6 +7213,7 @@ void trunreplay :: execnextreplaymove ( void )
                                 if ( attackvisible ) {
                                    displayActionCursor ( x1, y1, x2, y2, 0 );
                                    battle.calcdisplay ( ad2, dd2 );
+                                   removeActionCursor();
                                 } else {
                                    battle.calc ();
                                    battle.av.damage = ad2;
@@ -7256,10 +7277,10 @@ void trunreplay :: execnextreplaymove ( void )
                            stream->readdata2 ( col );
                            readnextaction();
 
-                           displayActionCursor ( x, y );
 
                            pfield fld = getfield ( x, y );
                            if ( fld ) {
+                              displayActionCursor ( x, y );
                               if ( fld->vehicle )
                                  fld->vehicle->convert ( col );
                               else
@@ -7269,6 +7290,7 @@ void trunreplay :: execnextreplaymove ( void )
                               computeview();
                               displaymap();
                               wait();
+                              removeActionCursor();
                            } else
                               displaymessage("severe replay inconsistency:\nno vehicle for convert command !", 1);
 
@@ -7284,12 +7306,13 @@ void trunreplay :: execnextreplaymove ( void )
                            stream->readdata2 ( id );
                            readnextaction();
 
-                           displayActionCursor ( x, y );
 
                            pobjecttype obj = getobjecttype_forid ( id );
 
                            pfield fld = getfield ( x, y );
                            if ( obj && fld ) {
+                              displayActionCursor ( x, y );
+
                               if ( actaction == rpl_remobj )
                                  fld->removeobject ( obj );      
                               else
@@ -7298,6 +7321,7 @@ void trunreplay :: execnextreplaymove ( void )
                               computeview();
                               displaymap();
                               wait();
+                              removeActionCursor();
                            } else
                               displaymessage("severe replay inconsistency:\nCannot find Object to build/remove !", 1 );
 
@@ -7312,12 +7336,12 @@ void trunreplay :: execnextreplaymove ( void )
                            stream->readdata2 ( col );
                            readnextaction();
 
-                           displayActionCursor ( x, y );
                            pfield fld = getfield ( x, y );
 
                            pvehicletype tnk = getvehicletype_forid ( id );
 
                            if ( fld && tnk && !fld->vehicle ) {
+                              displayActionCursor ( x, y );
                               pvehicle v;
                               generate_vehicle ( tnk, col, v );
                               v->xpos = x;
@@ -7327,6 +7351,7 @@ void trunreplay :: execnextreplaymove ( void )
                               computeview();
                               displaymap();
                               wait();
+                              removeActionCursor();
                            } else
                               displaymessage("severe replay inconsistency:\nCannot find Vehicle to build !", 1 );
 
@@ -7341,17 +7366,18 @@ void trunreplay :: execnextreplaymove ( void )
                                stream->readdata2 ( color );
                                readnextaction();
 
-                               displayActionCursor ( x, y );
 
                                pfield fld = getfield ( x, y );
     
                                pbuildingtype bld = getbuildingtype_forid ( id );
     
                                if ( bld && fld ) {
-                                  putbuilding2( x, y, color, bld ); 
+                                  displayActionCursor ( x, y );
+                                  putbuilding2( x, y, color, bld );
                                   computeview();
                                   displaymap();
                                   wait();
+                                  removeActionCursor();
                                } else
                                   displaymessage("severe replay inconsistency:\nCannot find building to build/remove !", 1 );
                             }
@@ -7366,14 +7392,15 @@ void trunreplay :: execnextreplaymove ( void )
                            stream->readdata2 ( strength );
                            readnextaction();
 
-                           displayActionCursor ( x, y );
 
                            pfield fld = getfield ( x, y );
                            if ( fld ) {
+                              displayActionCursor ( x, y );
                               fld -> putmine ( col, typ, strength );
                               computeview();
                               displaymap();
                               wait();
+                              removeActionCursor();
                            } else
                               displaymessage("severe replay inconsistency:\nno field for putmine command !", 1);
 
@@ -7386,14 +7413,15 @@ void trunreplay :: execnextreplaymove ( void )
                            stream->readdata2 ( y );
                            readnextaction();
 
-                           displayActionCursor ( x, y );
 
                            pfield fld = getfield ( x, y );
                            if ( fld ) {
+                              displayActionCursor ( x, y );
                               fld -> removemine ( -1 );
                               computeview();
                               displaymap();
                               wait();
+                              removeActionCursor ( );
                            } else
                               displaymessage("severe replay inconsistency:\nno field for remove mine command !", 1);
 
@@ -7406,10 +7434,10 @@ void trunreplay :: execnextreplaymove ( void )
                            stream->readdata2 ( y );
                            readnextaction();
 
-                           displayActionCursor ( x, y );
 
                            pfield fld = getfield ( x, y );
                            if ( fld && fld->building ) {
+                              displayActionCursor ( x, y );
                               pbuilding bb = fld->building;
                               if ( bb->completion ) {
                                  bb->changecompletion ( -1 );
@@ -7419,9 +7447,10 @@ void trunreplay :: execnextreplaymove ( void )
                               computeview();
                               displaymap();
                               wait();
-                           } else 
+                              removeActionCursor();
+                           } else
                               displaymessage("severe replay inconsistency:\nno building for removebuilding command !", 1);
-   
+
                        }
          break;
       case  rpl_produceunit : {
@@ -7462,6 +7491,7 @@ void trunreplay :: execnextreplaymove ( void )
                                        computeview();
                                        displaymap();
                                        wait();
+                                       removeActionCursor();
                                     }
                                  } else
                                     displaymessage("severe replay inconsistency:\nCannot find vehicle to build/remove !", 1 );
@@ -7625,7 +7655,7 @@ int  trunreplay :: run ( int player )
 
    loadreplay ( orgmap.replayinfo->map[player]  );
 
-   actmap->playerview = actplayer;
+   actmap->playerView = actplayer;
 
    tmemorystream guidatastream ( orgmap.replayinfo->guidata [ player ], 1 );
    stream = &guidatastream;
@@ -7745,7 +7775,7 @@ void cmousecontrol :: chkmouse ( void )
                cursor.posy = y;
                cursor.show();
 
-               dashboard.paint( getactfield(), actmap-> playerview );
+               dashboard.paint( getactfield(), actmap-> playerView );
 
                mousevisible(true);
             } 
@@ -7819,7 +7849,7 @@ void cmousecontrol :: chkmouse ( void )
                        cursor.posy = y;
                        cursor.show();
 
-                       dashboard.paint( getactfield(), actmap-> playerview );
+                       dashboard.paint( getactfield(), actmap-> playerView );
 
                        mousevisible(true);
                     }

@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.58 2000-09-02 13:59:48 mbickel Exp $
+//     $Id: spfst.cpp,v 1.59 2000-09-17 15:20:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2000/09/02 13:59:48  mbickel
+//      Worked on AI
+//      Started using doxygen
+//
 //     Revision 1.57  2000/09/01 17:46:42  mbickel
 //      Improved A* code
 //      Renamed tvehicle class to Vehicle
@@ -1602,7 +1606,10 @@ word         beeline(integer      x1,
 
 
 bool fieldvisiblenow( const pfield pe, int player )
-{ 
+{
+  if ( player < 0 )
+     return false;
+
   if ( pe ) { 
       int c = (pe->visible >> ( player * 2)) & 3; 
       if ( godview ) 
@@ -1632,7 +1639,7 @@ bool fieldvisiblenow( const pfield pe, int player )
 
 int fieldVisibility( const pfield pe, int player )
 {
-  if ( pe ) {
+  if ( pe && player >= 0 ) {
       int c = (pe->visible >> ( player * 2)) & 3;
       if ( godview )
          c = visible_all;
@@ -3224,7 +3231,7 @@ int tgeneraldisplaymap :: getfieldposy ( int x, int y )
 void tgeneraldisplaymap :: init ( int xs, int ys )
 {
    if ( actmap )
-      playerview = actmap->playerview;
+      playerview = actmap->playerView;
 
    dispmapdata.numberoffieldsx = xs;
    dispmapdata.numberoffieldsy = ys;
@@ -3671,7 +3678,7 @@ void        tgeneraldisplaymap :: calcviereck(void)
       for (j = 1; j <= dispmapdata.numberoffieldsy+3 ; j++) {
          pf = getfield(actmap->xpos + i - 2 ,actmap->ypos + j - 2 );
          if ( pf ) { 
-            if ( ((pf->visible >> (playerview * 2)) & 3 ) == visible_not) {
+            if ( fieldVisibility (pf, playerview ) == visible_not) {
                if (j & 1) {
                   viereck[i+1][j-1] |= (3 << 4);
                   viereck[i][j]     |= (3 << 2);
@@ -3684,7 +3691,7 @@ void        tgeneraldisplaymap :: calcviereck(void)
                   viereck[i][j+1]   |= (3 << 0);
                }
             }
-            if ( ((pf->visible >> (playerview * 2)) & 3 ) == visible_ago) {
+            if ( fieldVisibility (pf, playerview ) == visible_ago) {
                if (j & 1) {
                   viereck[i+1][j-1] |= (1 << 4);
                   viereck[i][j]     |= (1 << 2);
@@ -3722,7 +3729,7 @@ void        tgeneraldisplaymap :: calcviereck(void)
 void tdisplaymap :: gnt_terrain ( void )
 {
    #ifndef HEXAGON
-    playerview = actmap->playerview;
+    playerview = actmap->playerView;
     generatespfdptrs ( actmap->xpos, actmap->ypos );
     calcviereck();
    #endif
@@ -3757,6 +3764,9 @@ void tgeneraldisplaymap :: pnt_terrain_rect ( void )
 
 void tdisplaymap :: pnt_terrain ( void )
 {
+    if ( playerview < 0 )
+       displaymessage("tdisplaymap :: pnt_terrain ; playerview < 0", 2 );
+
    gnt_terrain (  );
 
     agmp-> windowstatus = 100;
@@ -3773,9 +3783,7 @@ void tdisplaymap :: pnt_terrain ( void )
                               "   this is probably caused by trying to display a map that is smaller\n"
                               "   than the resolution. Please reduce the displayed resolution until we\n"
                               "   have rewritten these routines" , 2 );
-          int b = (fld->visible >> (playerview << 1)) & 3;
-          if ( godview ) 
-              b = visible_all;
+          int b = fieldVisibility (fld, playerview );
 
           if ( b != visible_not ) {
              int yp;
@@ -3859,7 +3867,7 @@ int tgeneraldisplaymap :: getfielddisty ( void )
 void tgeneraldisplaymap :: init ( int xs, int ys )
 {
    if ( actmap )
-      playerview = actmap->playerview;
+      playerview = actmap->playerView;
 
    dispmapdata.numberoffieldsx = xs;
    dispmapdata.numberoffieldsy = ys;
@@ -3869,7 +3877,7 @@ void tgeneraldisplaymap :: init ( int xs, int ys )
 void tgeneraldisplaymap :: _init ( int xs, int ys )
 {
    if ( actmap )
-      playerview = actmap->playerview;
+      playerview = actmap->playerView;
 
    window.xsize = xs;
    window.ysize = ys;
@@ -4027,16 +4035,17 @@ int  tgeneraldisplaymap :: getscreenysize( int target )
 
 void tgeneraldisplaymap :: pnt_terrain ( void )
 {
+    if ( playerview < 0 )
+       displaymessage("tgeneraldisplaymap :: pnt_terrain ; playerview < 0", 2 );
+
    *agmp = vfb.parameters;
 
     for (int y=dispmapdata.disp.y1; y < dispmapdata.disp.y2; y++ ) {
        for ( int x=dispmapdata.disp.x1; x < dispmapdata.disp.x2; x++ ) {
           pfield fld = getfield ( actmap->xpos + x, actmap->ypos + y );
           if ( fld ) {
-             int b = (fld->visible >> (playerview << 1)) & 3;
-             if ( godview ) 
-                 b = visible_all;
-   
+             int b = fieldVisibility ( fld, playerview );
+
              if ( b != visible_not ) {
                 int yp;
                 int r;
@@ -4211,6 +4220,7 @@ void tdisplaymap :: cp_buf ( int x1, int y1, int x2, int y2 )
 
 void tgeneraldisplaymap :: pnt_main ( void )
 {
+
    activefontsettings.font = schriften.monogui;
    activefontsettings.background = 255;
    activefontsettings.color = white;
@@ -4219,8 +4229,10 @@ void tgeneraldisplaymap :: pnt_main ( void )
    activefontsettings.height = 0;
    
 
-   playerview = actmap->playerview;
+   playerview = actmap->playerView;
 
+    if ( playerview < 0 )
+       displaymessage("tgeneraldisplaymap :: pnt_main ; playerview < 0", 2 );
 
    int b;
    pfield fld;
@@ -4242,9 +4254,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
          for ( x=dispmapdata.disp.x1; x < dispmapdata.disp.x2; x++ ) {
             fld = getfield ( actmap->xpos + x, actmap->ypos + y );
             if ( fld ) {
-               b = (fld->visible >> (playerview << 1)) & 3;
-               if (godview)
-                  b = visible_all;
+               b = fieldVisibility ( fld, playerview );
 
                if (y & 1 )   /*  ungerade reihennummern  */
                   r = vfbleftspace + fielddisthalfx + x * fielddistx;
@@ -4389,10 +4399,8 @@ void tgeneraldisplaymap :: pnt_main ( void )
             for ( x=dispmapdata.disp.x1; x < dispmapdata.disp.x2; x++ ) {
                fld = getfield ( actmap->xpos + x, actmap->ypos + y );
                if ( fld ) {
-                  b = (fld->visible >> (playerview << 1)) & 3;
-                  if (godview) 
-                     b = visible_all;
-      
+                  b = fieldVisibility (fld, playerview );
+
                   if (y & 1 )   /*  ungerade reihennummern  */
                      r = vfbleftspace + fielddisthalfx + x * fielddistx;
                   else 
@@ -4471,17 +4479,13 @@ void tgeneraldisplaymap :: displayadditionalunits ( int height )
 
 void tdisplaymap :: displayadditionalunits ( int height )
 {
-
-
    int r;
    if ( height == 4 ) {
 
       if ( displaymovingunit.eht  &&  displaymovingunit.eht->height <= chfahrend ) {
 
          pfield fld = getfield ( displaymovingunit.xpos, displaymovingunit.ypos);
-         int b = (fld->visible >> (playerview << 1)) & 3;
-         if (godview) 
-            b = visible_all;
+         int b = fieldVisibility ( fld, playerview );
 
          if ( displaymovingunit.hgt == 0 ) {
                if (displaymovingunit.ypos & 1 )   /*  ungerade reihennummern  */
@@ -4502,10 +4506,7 @@ void tdisplaymap :: displayadditionalunits ( int height )
    if ( height == 5 ) {
       if ( displaymovingunit.eht && displaymovingunit.eht->height > chfahrend) {
          pfield fld = getfield ( displaymovingunit.xpos, displaymovingunit.ypos);
-         int b = (fld->visible >> (playerview << 1)) & 3;
-         if (godview) 
-            b = visible_all;
-
+         int b = fieldVisibility (fld, playerview );
 
           if (displaymovingunit.ypos & 1 )   /*  ungerade reihennummern  */
              r = vfbleftspace  + fielddisthalfx + (displaymovingunit.xpos - actmap->xpos) * fielddistx;
@@ -4556,7 +4557,7 @@ void         displaymap(  )
           mapborderpainter->paint();
 
    if ( actmap )
-      idisplaymap.playerview = actmap->playerview;
+      idisplaymap.playerview = actmap->playerView;
 
    #ifdef logging
    logtofile("spfst / displaymap ; vor pnt_terrain");
@@ -6830,21 +6831,20 @@ class MapDisplay {
 
 int  MapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove )
 {
+   if ( actmap->playerView < 0 )
+      return 0;
+
    if ( height2 == -1 )
       height2 = height1;
 
    pfield fld1 = getfield ( x1, y1 );
-   int view1 = (fld1->visible >> ( actmap->playerview * 2)) & 3; 
-   if ( godview ) 
-      view1 = visible_all; 
+   int view1 = fieldVisibility ( fld1, actmap->playerView );
 
    pfield fld2 = getfield ( x2, y2 );
-   int view2 = (fld2->visible >> ( actmap->playerview * 2)) & 3; 
-   if ( godview ) 
-      view2 = visible_all; 
+   int view2 = fieldVisibility ( fld2, actmap->playerView );
 
    if (  view1 >= visible_now  ||  view2 >= visible_now ) 
-      if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) && ( view2 == visible_all )) || ( actmap->actplayer == actmap->playerview ))
+      if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) && ( view2 == visible_all )) || ( actmap->actplayer == actmap->playerView ))
          idisplaymap.movevehicle( x1, y1, x2, y2, vehicle, height1, height2, fieldnum, totalmove );
 
 

@@ -1,6 +1,9 @@
-//     $Id: spfst.h,v 1.23 2000-09-07 15:49:46 mbickel Exp $
+//     $Id: spfst.h,v 1.24 2000-09-17 15:20:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/09/07 15:49:46  mbickel
+//      some cleanup and documentation
+//
 //     Revision 1.22  2000/09/02 15:36:50  mbickel
 //      Some minor cleanup and documentation
 //
@@ -715,6 +718,7 @@ class MapDisplayInterface {
            virtual void startAction ( void ) = 0;
            virtual void stopAction ( void ) = 0;
            virtual void displayActionCursor ( int x1, int y1, int x2, int y2 ) = 0;
+           virtual void removeActionCursor ( void ) = 0;
            virtual ~MapDisplayInterface () {};
        };
 
@@ -730,6 +734,7 @@ class MapDisplay : public MapDisplayInterface {
            void startAction ( void );
            void stopAction ( void );
            void displayActionCursor ( int x1, int y1, int x2, int y2 ) {};
+           void removeActionCursor ( void ) {};
     };
 
 extern MapDisplay defaultMapDisplay;

@@ -1,6 +1,12 @@
-//     $Id: missions.cpp,v 1.11 2000-08-21 17:51:00 mbickel Exp $
+//     $Id: missions.cpp,v 1.12 2000-09-17 15:20:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/08/21 17:51:00  mbickel
+//      Fixed: crash when unit reaching max experience
+//      Fixed: crash when displaying research image
+//      Fixed: crash when events referenced a unit that has been shot down
+//      Fixed: screenshot being written to wrong directory
+//
 //     Revision 1.10  2000/08/12 12:52:49  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -905,7 +911,7 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
          actmap->ellipse->precision = 0.15;
          actmap->ellipse->active = 1;
          if ( md ) {
-            dashboard.paint( getactfield(), actmap->playerview );
+            dashboard.paint( getactfield(), actmap->playerView );
             actmap->ellipse->paint();
          }
       }

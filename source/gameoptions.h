@@ -55,6 +55,7 @@ class CGameOptions
       int attackspeed3;
       int disablesound;
       int runAI;
+      int forceWindowedMode;
 
       struct Mouse
       {
