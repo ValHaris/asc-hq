@@ -20,13 +20,13 @@
     <USERDEFINES value="_DEBUG"/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT"/>
     <MAINSOURCE value="bzlib.bpf"/>
-    <INCLUDEPATH value="..;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="..;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\;..\..\bzlib;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..\;..\..\bzlib;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-rch -w-par -w-ccc"/>
     <LISTFILE value=""/>
   </MACROS>
   <OPTIONS>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Q -Vx -Ve -X- -r- -a1 -b -k -y -v -vi- -c 
       -tW -tWM"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <AFLAGS value="/mx /w2 /zd"/>
@@ -79,7 +79,7 @@ RemotePath=
 RemoteDebug=0
 
 [Compiler]
-ShowInfoMsgs=0
+ShowInfoMsgs=1
 LinkDebugVcl=0
   </IDEOPTIONS>
 </PROJECT>

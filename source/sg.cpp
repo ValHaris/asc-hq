@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.115 2000-12-23 15:58:38 mbickel Exp $
+//     $Id: sg.cpp,v 1.116 2000-12-26 14:46:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.115  2000/12/23 15:58:38  mbickel
+//      Trying to get ASC to run with Borland C++ Builder...
+//
 //     Revision 1.114  2000/11/29 11:05:30  mbickel
 //      Improved userinterface of the mapeditor
 //      map::preferredfilenames uses now strings (instead of char*)
@@ -308,7 +311,7 @@
 #endif
 
 
-#define MEMCHK
+// #define MEMCHK
 
 #include "memorycheck.cpp"
 
@@ -2929,7 +2932,6 @@ int gamethread ( void* data )
 
 int main(int argc, char *argv[] )
 {
-
    int resolx = 800;
    int resoly = 600;
 

@@ -38,9 +38,9 @@
     <USERDEFINES value="_DEBUG;karteneditor;HEXAGON;FREEMAPZOOM;_WIN32_;WIN32;_SDL_;_NOASM_;NEWKEYB"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL;USEPACKAGES"/>
     <MAINSOURCE value="mapeditor.bpf"/>
-    <INCLUDEPATH value="..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32"/>
-    <LIBPATH value="..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib"/>
-    <WARNINGS value="-w-par"/>
+    <INCLUDEPATH value="..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32"/>
+    <LIBPATH value="..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par -w-csu"/>
   </MACROS>
   <OPTIONS>
     <CFLAG1 value="-Od -Q -Vx -Ve -X- -r- -a1 -5 -b -k -y -v -vi- -tW -tWM -c -K"/>
@@ -137,7 +137,7 @@ RemotePath=
 RemoteDebug=0
 
 [Compiler]
-ShowInfoMsgs=0
+ShowInfoMsgs=1
 LinkDebugVcl=0
   </IDEOPTIONS>
 </PROJECT>

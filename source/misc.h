@@ -1,6 +1,9 @@
-//     $Id: misc.h,v 1.15 2000-12-21 16:41:56 mbickel Exp $
+//     $Id: misc.h,v 1.16 2000-12-26 14:46:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/12/21 16:41:56  mbickel
+//      Fixed some compilation errors that were made during documentation
+//
 //     Revision 1.14  2000/10/14 10:52:52  mbickel
 //      Some adjustments for a Win32 port
 //
@@ -159,7 +162,14 @@ class structure_size_tester {
     extern void* asc_malloc ( size_t size );
     extern void asc_free ( void* p );
    #else
+    #ifdef asc_malloc
+     #undef asc_malloc
+    #endif
     #define asc_malloc malloc
+
+    #ifdef asc_free
+     #undef asc_free
+    #endif
     #define asc_free   free
    #endif
 

@@ -9,7 +9,8 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = bzlib.lib libjpeg.lib triangulation.lib mapeditor.exe asc.exe
+PROJECTS = bzlib.lib libjpeg.lib triangulation.lib mapeditor.exe asc.exe \
+  tools.lib weaponguide.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -34,6 +35,14 @@ mapeditor.exe: source\win32\borland\mapeditor\mapeditor.bpr
 
 asc.exe: source\win32\borland\asc.bpr
   $(ROOT)\bin\bpr2mak $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+weaponguide.exe: source\tools\win\weaponguide.bpr
+  $(ROOT)\bin\bpr2mak $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+tools.lib: source\tools\win\tools.bpr
+  $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 

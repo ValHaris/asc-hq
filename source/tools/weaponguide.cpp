@@ -236,25 +236,25 @@ int main(int argc, char *argv[] )
          // some details about the unit; %d tells C to insert a decimal number there
          // take a look at the vehicletype class in vehicletype.h for the names of all variables that make a vehicletype
          // be carefuel not to make a , at the end of the first lines, since this would seperate the string in to several independant strings
-   
-         // choehenstufen is a global array that contains the names of the height levels         
+
+         // choehenstufen is a global array that contains the names of the height levels
 
 
 // BEGIN MOVEMENT
-         
+
   // Hoehenstufen
-         int i;
+         int i,w;
     // Tabellenbeginn
          fprintf( detailed2, "<TABLE align=\"left\" rules=\"rows\" id=\"H9\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">"
                              "<TR><td colspan=\"9\" bgcolor=\"#20483f\" id=\"H2\">Reachable levels of height:</td></tr>\n<tr>");
     // Spaltentitel
          fprintf ( detailed2, "<td></td>" );
-         for ( i = 0; i < 8; i++ ) 
+         for ( i = 0; i < 8; i++ )
              fprintf ( detailed2, " <TD><IMG src=\"../hoehe%d.gif\" ></TD>", i);
          fprintf( detailed2, "</TR>\n<TR>\n");
     // Spaltenwerte Hacken
          fprintf ( detailed2, "<td></td>" );
-         for ( i = 0; i < 8; i++ ) 
+         for ( i = 0; i < 8; i++ )
             if ( ft->height & ( 1 << i ))
                 fprintf ( detailed2, " <TD><img src=\"../hacken.gif\"></TD>" );
             else
@@ -271,7 +271,7 @@ int main(int argc, char *argv[] )
     // Spaltenwerte Maximum
          fprintf ( detailed2, "<td>Max.</td>" );
          for ( i = 0; i < 8; i++ ) 
-            if ( ft->height & ( 1 << i ))
+            if ( (ft->height & ( 1 << i )) && ft->fuelConsumption )
                 fprintf ( detailed2, " <TD align=\"center\">%d</TD>", ft->tank.fuel/ft->fuelConsumption );
             else
                 fprintf ( detailed2, " <TD></TD>"  );
@@ -330,7 +330,7 @@ int main(int argc, char *argv[] )
          } /* endfor */
          fprintf( detailed2, "</TR>\n<TR>\n");
 
-   // Spaltenwerte can not drive on       
+   // Spaltenwerte can not drive on
          fprintf ( detailed2, "<td>not drive on</td>" );
          for ( i = 0; i < cbodenartennum ; i++) {
             tterrainbits bts;

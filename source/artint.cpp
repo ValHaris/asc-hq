@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.43 2000-11-29 11:18:36 mbickel Exp $
+//     $Id: artint.cpp,v 1.44 2000-12-26 14:45:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2000/11/29 11:18:36  mbickel
+//      Mapeditor compiles with Watcom again
+//
 //     Revision 1.42  2000/11/26 14:39:01  mbickel
 //      Added Project Files for Borland C++
 //      Some modifications to compile source with BCC
@@ -797,7 +800,18 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( pvehiclety
       fzt->aiparam[ ai->getPlayer() ]->threat.threat[l] = weapthreat[l];
 
    value = fzt->armor * value_armorfactor * (100 - getdamage()) / 100 ;
-   qsort ( weapthreat, 8, sizeof(int), compareinteger );
+
+   for ( int s = 0; s < 7; )
+      if ( weapthreat[s] < weapthreat[s+1] ) {
+         int temp = weapthreat[s];
+         weapthreat[s] = weapthreat[s+1];
+         weapthreat[s+1] = temp;
+         if ( s > 0 )
+            s--;
+      } else
+         s++;
+
+   // qsort ( weapthreat, 8, sizeof(int), compareinteger );
 
    for ( int k = 0; k < 8; k++ )
       value += weapthreat[k] * value_weaponfactor / (k+1);

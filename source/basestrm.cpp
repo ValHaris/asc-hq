@@ -1,6 +1,10 @@
-//     $Id: basestrm.cpp,v 1.47 2000-11-29 11:05:26 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.48 2000-12-26 14:46:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2000/11/29 11:05:26  mbickel
+//      Improved userinterface of the mapeditor
+//      map::preferredfilenames uses now strings (instead of char*)
+//
 //     Revision 1.46  2000/11/09 17:48:45  mbickel
 //      The size of a stream can now be queried
 //      PCX loader (in C) can now load unpatched images provided they are not
@@ -789,7 +793,7 @@ static int stream_close(SDL_RWops *context)
 			MemoryStreamCopy* stream = (MemoryStreamCopy*) context->hidden.unknown.data1;
 			delete stream;
 		}
-		free(context);
+		SDL_FreeRW(context);
 	}
 	return(0);
 }

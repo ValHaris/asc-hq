@@ -33,8 +33,7 @@
     <LISTFILE value=""/>
   </MACROS>
   <OPTIONS>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
-      -tW -tWM"/>
+    <CFLAG1 value="-Od -Q -Vx -Ve -X- -r- -a1 -b -k -y -v -vi- -c -tW -tWM"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <AFLAGS value="/mx /w2 /zd"/>
     <LFLAGS value=""/>
@@ -82,7 +81,7 @@ RemotePath=
 RemoteDebug=0
 
 [Compiler]
-ShowInfoMsgs=0
+ShowInfoMsgs=1
 LinkDebugVcl=0
   </IDEOPTIONS>
 </PROJECT>

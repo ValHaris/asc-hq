@@ -1,6 +1,10 @@
-//     $Id: basegfx.cpp,v 1.17 2000-10-18 14:13:48 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.18 2000-12-26 14:45:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/10/18 14:13:48  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.16  2000/08/12 09:17:15  gulliver
 //     *** empty log message ***
 //
@@ -61,7 +65,6 @@
 
 tgraphmodeparameters *agmp = (tgraphmodeparameters *) & activegraphmodeparameters;
 tgraphmodeparameters *hgmp = (tgraphmodeparameters *) & hardwaregraphmodeparameters;
-
 
 int xlatbuffersize = 66000;
 

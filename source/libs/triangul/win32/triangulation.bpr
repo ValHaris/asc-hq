@@ -19,13 +19,13 @@
     <USERDEFINES value="_DEBUG;_WIN32_"/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT"/>
     <MAINSOURCE value="triangulation.bpf"/>
-    <INCLUDEPATH value="..;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\..\SDL-1.1.5\include"/>
-    <LIBPATH value="..;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\;..\..\triangul;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include"/>
+    <LIBPATH value="..\;..\..\triangul;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
     <LISTFILE value=""/>
   </MACROS>
   <OPTIONS>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Q -Vx -Ve -X- -r- -a1 -b -k -y -v -vi- -c 
       -tW -tWM"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <AFLAGS value="/mx /w2 /zd"/>
@@ -64,17 +64,21 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=5
-Item0=..\..\triangul;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\SDL-1.1.5\include
-Item1=..\..\triangul;$(BCB)\include;$(BCB)\include\vcl;$(SDLDIR)\include
-Item2=..;$(BCB)\include;$(BCB)\include\vcl;$(SDLDIR)\include
-Item3=..;$(BCB)\include;$(BCB)\include\vcl
-Item4=..\..\triangul;$(BCB)\include;$(BCB)\include\vcl
+Count=8
+Item0=..\;..\..\triangul;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\sdl\include
+Item1=..\;..\..\triangul;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\..\SDL-1.1.5\include
+Item2=..;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\..\SDL-1.1.5\include
+Item3=..\..\triangul;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\SDL-1.1.5\include
+Item4=..\..\triangul;$(BCB)\include;$(BCB)\include\vcl;$(SDLDIR)\include
+Item5=..;$(BCB)\include;$(BCB)\include\vcl;$(SDLDIR)\include
+Item6=..;$(BCB)\include;$(BCB)\include\vcl
+Item7=..\..\triangul;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=2
-Item0=..\..\triangul;$(BCB)\lib\obj;$(BCB)\lib
+Count=3
+Item0=..\;..\..\triangul;$(BCB)\lib\obj;$(BCB)\lib
 Item1=..;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..\..\triangul;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1
@@ -100,7 +104,7 @@ RemotePath=
 RemoteDebug=0
 
 [Compiler]
-ShowInfoMsgs=0
+ShowInfoMsgs=1
 LinkDebugVcl=0
   </IDEOPTIONS>
 </PROJECT>

@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.61 2000-12-21 11:00:50 mbickel Exp $
+//     $Id: typen.cpp,v 1.62 2000-12-26 14:46:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2000/12/21 11:00:50  mbickel
+//      Added some code documentation
+//
 //     Revision 1.60  2000/11/14 20:36:44  mbickel
 //      The AI can now use supply vehicles
 //      Rewrote objecttype IO routines to make the structure independant of
@@ -291,6 +294,7 @@
 #include "misc.h"
 #include "typen.h"
 #include "loadbi3.h"
+#include "basegfx.h" 
 
 #ifndef converter
 #include "spfst.h"
@@ -1810,6 +1814,7 @@ void tobjecttype :: read ( tnstream& stream )
                   else
                      stream.readrlepict ( &picture[ww][n].picture, false, &w);
 
+                 #ifndef converter
                   if ( picture[ww][n].flip == 1 ) {
                      void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
                      flippict ( picture[ww][n].picture, buf , 1 );
@@ -1836,6 +1841,7 @@ void tobjecttype :: read ( tnstream& stream )
 
                   if ( picture[ww][n].bi3pic == -1 )
                      picture[ww][n].flip = 0;
+                 #endif 
                }
             }
 
