@@ -34,7 +34,8 @@
 
  class NullParamType {};
  extern NullParamType nullParam;
-  
+
+ extern void skipGCCBug( int w );  
  
  template<int BytesPerPixel> class PixelSize2Type;
 
@@ -174,8 +175,8 @@
                      ColorMerger<BytesPerTargetPixel>( cm ),
                      SourcePixelSelector<BytesPerSourcePixel>( sps ) { };
 
-        int getWidth()  { SourcePixelSelector<BytesPerTargetPixel>::getWidth(); };
-        int getHeight() { SourcePixelSelector<BytesPerTargetPixel>::getHeight(); };
+        int getWidth()  { return SourcePixelSelector<BytesPerTargetPixel>::getWidth(); };
+        int getHeight() { return SourcePixelSelector<BytesPerTargetPixel>::getHeight(); };
         
         void initSource( const Surface& src )
         {
@@ -703,12 +704,25 @@
        int x,y;
     protected:
 
-       int getWidth()  { return int( zoomFactor * SourcePixelSelector::getWidth()  ); };
-       int getHeight() { return int( zoomFactor * SourcePixelSelector::getHeight() ); };
+       int getWidth()  { 
+          int w = SourcePixelSelector::getWidth();
+          // skipGCCBug(w);
+          return int( zoomFactor * w  ); 
+       };
+       
+       int getHeight() { 
+          int h = SourcePixelSelector::getHeight();
+          // skipGCCBug(h);
+          return int( zoomFactor * h ); 
+       };
 
        PixelType getPixel(int x, int y)
        {
-         return SourcePixelSelector::getPixel( int(float(x) / zoomFactor), int(float(y) / zoomFactor));
+         //int nx  = int(float(x) / zoomFactor);
+         //int ny  = int(float(y) / zoomFactor);
+         // fprintf(stderr, "Zoom-blit: x=%d/%d, y=%d/%d \n",x,nx,y,ny);
+         //return SourcePixelSelector::getPixel( nx, ny);
+          return SourcePixelSelector::getPixel( int(float(x) / zoomFactor), int(float(y) / zoomFactor));
        };
 
        PixelType nextPixel()

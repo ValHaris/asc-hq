@@ -57,7 +57,7 @@ class PropertyContainer {
                bool defaultValueAvail;
                virtual bool hasDefault() { return defaultValueAvail; };
                void writeProperty( );
-               Property( bool defaultValueAvail_ ) : propertyContainer ( NULL ), entry ( NULL ), evaluated(false), defaultValueAvail (defaultValueAvail_) {};
+               Property( bool defaultValueAvail_ ) : propertyContainer ( NULL ), entry ( NULL ), defaultValueAvail (defaultValueAvail_), evaluated(false) {};
 
              public:
                virtual ~Property() {};

@@ -36,6 +36,7 @@ class TextFileDataLoader {
       virtual void read ( tnstream& stream ) = 0;
       virtual void write ( tnstream& stream ) = 0;
       virtual ASCString getTypeName() = 0;
+      virtual ~TextFileDataLoader() {};
 };
 
 

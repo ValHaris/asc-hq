@@ -118,7 +118,7 @@ const char* EventActionName[] = { "Nothing",
                                  "Set View Sharing" };
 
 
-Event::Event ( tmap& map_ ) : gamemap ( map_ ), action(NULL), playerBitmap(0xff), reArmNum(0)
+Event::Event ( tmap& map_ ) : gamemap ( map_ ), playerBitmap(0xff), reArmNum(0), action(NULL)
 {
    id = ++gamemap.eventID;
    triggerTime.abstime = -1;

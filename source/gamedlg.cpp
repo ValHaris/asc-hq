@@ -170,7 +170,7 @@ void         tchoosetechnology::disp(void)
 
       activefontsettings.length = 40;
       if ( techs[i]->relatedUnitID > 0 && actmap->getvehicletype_byid( techs[i]->relatedUnitID )) {
-         Vehicletype* vt = actmap->getvehicletype_byid( techs[i]->relatedUnitID );
+         // Vehicletype* vt = actmap->getvehicletype_byid( techs[i]->relatedUnitID );
          showtext2("(O)", x1 + xsize - 90,y ) ;
       } else
          showtext2(" ", x1 + xsize - 90,y ) ;
@@ -1234,7 +1234,7 @@ void         tcontinuecampaign::run(void)
 
       regroupevents( actmap );
 
-      tmap* oldmap = actmap;
+      // tmap* oldmap = actmap;
       actmap = NULL;
 
       loadcampaignmap();
@@ -3124,7 +3124,6 @@ void         tverlademunition::run(void)
    activefontsettings.length = 100;
 
    int ix = fieldsizex;
-   int iy = fieldsizey;
 
    if ( source )
       source->paint( getActiveSurface(), SPoint(startx+x1 - 60 , y1 + 55));

@@ -1007,6 +1007,8 @@ bool tmap :: compareResources( tmap* replaymap, int player, ASCString* log )
    }
 
    return diff;
+   #else
+   return false;
    #endif
 }
 

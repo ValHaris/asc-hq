@@ -2,7 +2,7 @@
     \brief Interface to the event handling of ASC
 */
 
-//     $Id: gameeventsystem.h,v 1.1 2004-01-16 19:14:55 mbickel Exp $
+//     $Id: gameeventsystem.h,v 1.1.2.1 2004-11-27 23:20:52 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -67,7 +67,7 @@ class EventTrigger {
    public:
       enum State { unfulfilled, fulfilled, finally_fulfilled, finally_failed };
    protected:
-      EventTrigger ( EventTriggerID id ) : triggerID ( id ), invert(false), stateCache(unfulfilled), triggerFinal( false ), gamemap(NULL), event(NULL) {};
+      EventTrigger ( EventTriggerID id ) : triggerID ( id ), gamemap(NULL), event(NULL), stateCache(unfulfilled), triggerFinal( false ), invert(false) {};
       virtual State getState( int player ) = 0;
       tmap* gamemap;
       Event* event;
@@ -170,13 +170,13 @@ class Factory{
       typedef map<IdentifierType, ObjectCreatorCallBack> CallbackMap;
       CallbackMap callbackMap;
    public:
-      bool registerClass( IdentifierType id, ObjectCreatorCallBack createFn ) { callbackMap[id] = createFn; };
+      bool registerClass( IdentifierType id, ObjectCreatorCallBack createFn ) { callbackMap[id] = createFn; return true; };
       AbstractProduct* createObject( IdentifierType id )
       {
          typename CallbackMap::const_iterator i = callbackMap.find(id);
          if ( i != callbackMap.end() )
             return (i->second)();
-         else
+         else 
             fatalError("Factory: Object ID not found");
       };
 };

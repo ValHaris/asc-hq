@@ -84,6 +84,8 @@ template<class T>
 void ItemRepository<T>::read( tnstream& stream )
 {
    int version = stream.readInt();
+   if ( version != 1 )
+      throw tinvalidversion( stream.getLocation(), 1, version );
    int num = stream.readInt();
    for ( int i = 0; i< num; ++i ) {
       dataLoaderTicker();

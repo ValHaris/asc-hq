@@ -662,7 +662,7 @@ Event*   readOldEvent( pnstream stream, pmap map, map<int,int>& eventTranslation
            }
            if (event1.trigger[m] == ceventt_any_unit_enters_polygon ||
                event1.trigger[m] == ceventt_specific_unit_enters_polygon) {
-                  int i = stream->readInt();
+                  stream->readInt(); // i
                   event1.trigger_data[m]->unitpolygon = new PrehistoricEventStructure::LargeTriggerData::PolygonEntered;
                   stream->readdata2( *event1.trigger_data[m]->unitpolygon );
                   event1.trigger_data[m]->unitpolygon->data = new int [ event1.trigger_data[m]->unitpolygon->dataSize ];

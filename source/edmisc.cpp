@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.124.2.6 2004-11-14 15:47:42 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.124.2.7 2004-11-27 23:20:51 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -1535,7 +1535,7 @@ void tfillpolygonbodentyp::initevent ( void )
 {
 }
 
-//* õS FillPolygonunit
+// õS FillPolygonunit
 
 void tfillpolygonunit::setpointabs    ( int x,  int y  )
 {
@@ -1577,7 +1577,7 @@ void tfillpolygonunit::initevent ( void )
 }
 
 
-//* õS ChangePoly
+// õS ChangePoly
 */
 
 void PolygonEditor::display()
@@ -4212,7 +4212,6 @@ void resourceComparison ( )
       Resources plus;
       Resources have;
       for ( Player::BuildingList::iterator b = actmap->player[i].buildingList.begin(); b != actmap->player[i].buildingList.end(); ++b ) {
-         Building& bld = **b;
          if ( actmap->_resourcemode == 0 )
             plus += (*b)->plus;
          else
@@ -4501,8 +4500,6 @@ void editTechAdapter()
 
          pair<int,int> res;
          do {
-
-            Research::TriggeredTechAdapter& tta = actmap->player[player].research.triggeredTechAdapter;
             vector<ASCString>& ta = actmap->player[player].research.predefinedTechAdapter;
             res = chooseString ( "Registered TechAdapter", ta, buttons );
             if ( res.first == 0 ) {

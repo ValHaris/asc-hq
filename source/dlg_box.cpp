@@ -3915,7 +3915,6 @@ void         StringEdit::init(void)
 
 void         StringEdit::run(void)
 {
-   int orig = mid;
    tdialogbox::run ();
    pbutton pb = firstbutton;
    while ( pb &&  (pb->id != 3))

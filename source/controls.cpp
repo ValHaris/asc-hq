@@ -1271,8 +1271,6 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Veh
                if ( atw->count && (ul->eht->reactionfire.enemiesAttackable & (1 << (vehicle->color / 8)))) {
 
                   int ad1, ad2, dd1, dd2;
-                  int ulex = ul->eht->xpos;
-                  int uley = ul->eht->ypos;
 
                   int strength = 0;
                   int num = -1;
@@ -1657,7 +1655,7 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
 
          bool firstRound = actmap->time.turn() == 1;
          bool specifyPassword = firstRound && actmap->player[actmap->actplayer].passwordcrc.empty();
-         bool askForPassword = false;
+         // bool askForPassword = false;
 
          if ( (!actmap->player[actmap->actplayer].passwordcrc.empty() && actmap->player[actmap->actplayer].passwordcrc != CGameOptions::Instance()->getDefaultPassword() )
             || firstRound || (actmap->network && actmap->network->globalparams.reaskpasswords) ) {

@@ -83,7 +83,7 @@ ASCString StringTokenizer::getRemaining( )
 
 
 StringSplit :: StringSplit ( const ASCString& _str, const ASCString& delimitter_ )
-                 : str( _str ), delimitter(delimitter_),i ( 0 )
+                 : str( _str ), i ( 0 ), delimitter(delimitter_)
 {
 }
 

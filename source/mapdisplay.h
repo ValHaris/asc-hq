@@ -23,23 +23,6 @@
 #include "events.h"
 #include "soundList.h"
 
-#if 0
- class ScreenInterface {
-    public:
-       virtual void displayEverything() = 0;
-       virtual void displayMap() = 0;
-       virtual void updateCursor() = 0;
- };
-
- class Screen : public ScreenInterface {
-    public:
-       Screen ( );
-       virtual void displayEverything();
-       virtual void displayMap() ;
-       virtual void updateCursor();
- }
-
-#endif
 
 //! Determines if fields that have a temp value != 0 are being marked when displaying the map
 extern bool tempsvisible;

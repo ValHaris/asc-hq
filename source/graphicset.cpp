@@ -166,7 +166,7 @@ void GraphicSetManager_Base::loadData()
 
          gs->id = s.readInt();
          int picnum = s.readInt();
-         int maxPicSize = s.readInt();
+         s.readInt(); // maxPicSize
 
          int* picmode = new int[picnum];
          for ( int i = 0; i < picnum; ++i )

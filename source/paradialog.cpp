@@ -15,8 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef NO_PARAGUI 
- 
+
 #include "global.h"
 
 #include <paragui.h>
@@ -36,7 +35,6 @@
 #include "pgslider.h"
 #include "pglistbox.h"
 #include "pgcolumnitem.h"
-#include "pgeventobject.h"
 #include "pgpopupmenu.h"
 #include "pgspinnerbox.h"
 #include "pglog.h"
@@ -99,9 +97,12 @@ void MainScreenWidget::Blit ( bool recursive , bool restore )
 }
 
 
+ 
+
 ASC_PG_App* pgApp = NULL;
 
  ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
+        : quitModalLoopValue ( 0 )
 {
    this->themeName = themeName;
    EnableSymlinks(true);
@@ -121,6 +122,12 @@ ASC_PG_App* pgApp = NULL;
    
    pgApp = this;
 }
+
+ ASC_PG_App& getPGApplication()
+ {
+    return *pgApp;
+ }    
+
 
 
 bool ASC_PG_App:: InitScreen ( int w, int h, int depth, Uint32 flags )
@@ -142,6 +149,20 @@ void ASC_PG_App :: reloadTheme()
 }
 
 
+int ASC_PG_App::Run ( )
+{
+   setEventRouting ( true, false );
+   
+   while ( !quitModalLoopValue ) {
+      SDL_Event event;
+      if ( getQueuedEvent( event ))
+         pgApp->PumpIntoEventQueue( &event );
+      else
+         SDL_Delay ( 2 );
+   }
+   setEventRouting ( false, true );
+   return quitModalLoopValue;
+}
 
 
 
@@ -301,9 +322,8 @@ void soundSettings( )
 }
 
 
-#else
-void soundSettings( ){};
-void setupMainScreenWidget() {};
 
 
-#endif
+ 
+
+

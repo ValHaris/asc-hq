@@ -54,8 +54,10 @@ namespace SDLmm {
 
     Surface(const Surface& other)
       : BaseSurface(other) {
+      /*
       if (me)
         ++(me->refcount);
+      */  
     }
     
     //! Create an uninitialized surface.

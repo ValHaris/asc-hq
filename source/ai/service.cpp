@@ -623,7 +623,6 @@ AI::AiResult AI :: executeServices ( )
   for_each ( serviceOrders.begin(), serviceOrders.end(), ServiceOrder::releaseServiceUnit );
 
   AiResult res;
-  static int i = 0;
 
   vector<int> unitIds;
   for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); ++vi ) 
@@ -634,10 +633,8 @@ AI::AiResult AI :: executeServices ( )
       Vehicle* veh = getMap()->getUnit( *vi );
       if ( veh ) {
         checkKeys();
-        int counter = 0;
-        if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_supply ) {
-                runServiceUnit ( veh );
-        }
+        if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_supply ) 
+           runServiceUnit ( veh );
       }
   }
 

@@ -55,6 +55,8 @@ bool    PolygonPainerSquareCoordinate::paintPolygon   ( const Poly_gon& poly )
 void Poly_gon::read ( tnstream& stream )
 {
    int version = stream.readInt();
+   if ( version != 100 )
+      throw tinvalidversion( stream.getLocation(), 100, version );
    readClassContainer ( vertex, stream );
 }
 

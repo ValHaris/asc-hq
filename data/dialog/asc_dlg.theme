@@ -21,10 +21,10 @@
       <type value="ThemeWidget"/>
 	   <object>
 	      <name value="ThemeWidget"/>
-	      <filename name="background" value="none"/>
+	      <filename name="background" value="asc/dialog_background2.png"/>
 	      <color name="textcolor" value="0x00FFFFFF"/>
 	      <property name="backmode" value="TILE"/>
-	      <gradient name="gradient" color0="0x00737b56" color1="0x00737b56" color2="0x00737b56" color3="0x00737b56"/>
+	      <gradient name="gradient" color0="0x00FF7b56" color1="0x00737b56" color2="0x00737b56" color3="0x00737b56"/>
 	      <property name="blend" value="0"/>
       </object>
     </widget>    
@@ -39,9 +39,9 @@
 	    <property name="backmode0" value="TILE"/>
 	    <property name="backmode1" value="TILE"/>
 	    <property name="backmode2" value="TILE"/>
-	    <gradient name="gradient0" color0="0x00E7E7E7" color1="0x00C9C9C9" color2="0x00CCCCCC" color3="0x00AEAEAE"/>
-	    <gradient name="gradient1" color0="0x00F5E1FF" color1="0x00DCC8FF" color2="0x00DCC8FF" color3="0x00C3AFFF"/>
-	    <gradient name="gradient2" color0="0x00CFAFFF" color1="0x00DCC8FF" color2="0x00DCC8FF" color3="0x00F5E1FF"/>
+	    <gradient name="gradient0" color0="0x00239b3f" color1="0x00239b3f" color2="0x00239b3f" color3="0x00239b3f"/>
+	    <gradient name="gradient1" color0="0x001d8235" color1="0x001d8235" color2="0x001d8235" color3="0x001d8235"/>
+	    <gradient name="gradient2" color0="0x00239b3f" color1="0x00239b3f" color2="0x00239b3f" color3="0x00239b3f"/>
 	    <property name="blend0" value="200"/>
 	    <property name="blend1" value="240"/>
 	    <property name="blend2" value="200"/>

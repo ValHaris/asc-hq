@@ -22,8 +22,7 @@
 #ifndef paradialogH
  #define paradialogH
 
- #ifndef NO_PARAGUI
- 
+  
 #include "global.h"
 
 #include <paragui.h>
@@ -43,7 +42,6 @@
 #include "pgslider.h"
 #include "pglistbox.h"
 #include "pgcolumnitem.h"
-#include "pgeventobject.h"
 #include "pgpopupmenu.h"
 #include "pgspinnerbox.h"
 #include "pglog.h"
@@ -54,13 +52,16 @@
 
  class ASC_PG_App : public PG_Application {
        ASCString themeName;
+       int quitModalLoopValue;
     public:
        ASC_PG_App ( const ASCString& themeName );
        bool InitScreen ( int w, int h, int depth = 0, Uint32 flags = SDL_SWSURFACE|SDL_HWPALETTE );
        void reloadTheme();
+       int ASC_PG_App::Run ();
       // PG_Theme* LoadTheme(const char* xmltheme, bool asDefault = true, const char* searchpath = NULL );
  };
 
+ extern ASC_PG_App& getPGApplication();
  
  //! Adapter class for using Paragui Dialogs in ASC. This class transfers the event control from ASC to Paragui and back. All new dialog classes should be derived from this class
 class ASC_PG_Dialog : public PG_Window {
@@ -75,9 +76,16 @@ class ASC_PG_Dialog : public PG_Window {
        ~ASC_PG_Dialog();
 };
 
- 
-#endif
+class Panel : public  PG_Window {
+      
+   public:  
+      Panel ( PG_Widget *parent, const PG_Rect &r=PG_Rect::null, const char *windowtext=NULL, WindowFlags flags=DEFAULT, const char *style="Panel", int heightTitlebar=0)
+           : PG_Window ( parent, r, windowtext, flags, style, heightTitlebar ) {};
+           
 
+};
+
+ 
  extern void soundSettings();
 
 #endif

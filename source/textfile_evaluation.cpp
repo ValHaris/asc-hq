@@ -588,10 +588,12 @@ T PropertyTemplate<T>::parse ( const TextPropertyGroup::Entry& entry ) const
    if ( !entry.parent )
       propertyContainer->error ( ASCString("PropertyContainer::PropertyTemplate::parse - no parent for operator ") + TextFormatParser::operations[entry.op] + " at entry " + entry.propertyName + " !");
 
-   switch ( entry.op ) {
-      case TextPropertyGroup::Entry::mult_eq : return operation_mult ( entry );
-      case TextPropertyGroup::Entry::add_eq :  return operation_add ( entry );
-   }
+   if ( entry.op == TextPropertyGroup::Entry::mult_eq )
+      return operation_mult ( entry );
+      
+   if ( entry.op == TextPropertyGroup::Entry::add_eq )
+      return operation_add ( entry );
+      
    propertyContainer->error ( "PropertyTemplate::parse - invalid operator !");
    return defaultValue;
 }
@@ -1111,9 +1113,6 @@ vector<void*> loadImage ( const ASCString& file, int num )
 vector<Surface> loadASCImage ( const ASCString& file, int num )
 {
    vector<Surface> images;
-
-   int imgwidth = fieldsizex;
-   int imgheight = fieldsizey;
 
    int xsize;
    if ( num <= 10)

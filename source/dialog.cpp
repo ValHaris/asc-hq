@@ -1392,7 +1392,7 @@ void         tvehicleinfo::showclasses( void )
 {
   collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
 
-  int i, j;
+  int i;
 
   #if 0
    if ( aktvehicle->classnum) {

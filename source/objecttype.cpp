@@ -98,8 +98,6 @@ void ObjectType :: display ( Surface& surface, SPoint pos, int dir, int weather 
 {
    vector<int> dirsToDisplay;
    
-   int actualDir = dir;
-
    if ( id == 4 ) {
      switch ( dir ) {
         case  68 : dirsToDisplay.push_back(  9 ); break;
@@ -1157,7 +1155,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
          if ( bi3pics ) {
             pc.addIntegerArray ( "GFXpictures", weatherPicture[i].bi3pic );
             pc.addIntegerArray ( "FlipPictures", weatherPicture[i].flip );
-            int oldsize = weatherPicture[i].flip.size();
+            // int oldsize = weatherPicture[i].flip.size();
             weatherPicture[i].flip.resize( weatherPicture[i].bi3pic.size() );
             weatherPicture[i].images.resize( weatherPicture[i].bi3pic.size() );
          } else {

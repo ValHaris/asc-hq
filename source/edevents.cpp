@@ -2,7 +2,7 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.42 2004-07-12 18:15:04 mbickel Exp $
+//     $Id: edevents.cpp,v 1.42.2.1 2004-11-27 23:20:51 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -618,8 +618,6 @@ tcreateevent :: tcreateevent( Event* ev )
 
    static const char* connectionNames[2] = {"all trigger must be triggered", "only one trigger must be triggered" };
    addDropDown( 20, reasonst + 175, reasonx - 110, reasonst+195, 9, connectionNames, 2, &triggerConnection );
-
-   int verkx = xsize -120;
 
    buildgraphics();
 

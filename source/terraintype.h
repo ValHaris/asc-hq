@@ -115,7 +115,7 @@ const int cbodenartennum = 35;
           const FieldQuickView* getQuickView();
           void readQuickView ( tnstream& stream );
 
-          Weather ( TerrainType* base ) : terraintype ( base ), quickView ( NULL ) {};
+          Weather ( TerrainType* base ) : quickView ( NULL ), terraintype ( base ) {};
           void runTextIO ( PropertyContainer& pc );
       };
      Weather*           weather[cwettertypennum];

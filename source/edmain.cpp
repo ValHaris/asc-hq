@@ -2,7 +2,7 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.4 2004-11-21 17:35:40 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67.2.5 2004-11-27 23:20:51 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -620,8 +620,6 @@ int main(int argc, char *argv[] )
 
    verbosity = cl->r();
 
-   int              modenum8;
-
    #ifdef logging
     logtofile ( kgetstartupmessage() );
     logtofile ( "\n new log started \n ");
@@ -680,6 +678,8 @@ int main(int argc, char *argv[] )
    
    app.InitScreen( xr, yr, 8, flags);
       
+   atexit ( closesvgamode );
+
    #ifdef pbpeditor
    setWindowCaption ( "Advanced Strategic Command : PBP Editor ");
    #else

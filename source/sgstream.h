@@ -3,7 +3,7 @@
   
 */
 
-//     $Id: sgstream.h,v 1.30.2.4 2004-10-26 16:35:05 mbickel Exp $
+//     $Id: sgstream.h,v 1.30.2.5 2004-11-27 23:20:53 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -82,7 +82,7 @@ class SingleUnitSet {
          std::vector<TranslationTable*> transtab;
          bool filterBuildings;
 
-         SingleUnitSet ( void ) : active ( 1 ), filterBuildings ( true ), ID(0) {};
+         SingleUnitSet ( void ) : active ( 1 ), ID(0), filterBuildings ( true ) {};
          bool isMember ( int id, Type type );
          void read ( pnstream stream );
          std::vector<IntRange> parseIDs ( const char* s );

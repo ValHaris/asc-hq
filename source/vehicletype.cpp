@@ -316,7 +316,6 @@ void Vehicletype :: read ( tnstream& stream )
          autorepairrate = autorepairdamagedecrease; // which is 10
 
    if ( version <= 18 ) {
-      int size;
       if ( picture[0] )
          image.read ( stream );
 

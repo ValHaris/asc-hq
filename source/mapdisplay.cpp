@@ -42,22 +42,13 @@
 #endif
 
 
+// #include "paradialog.h"
+
 bool tempsvisible;
 
 extern void repaintdisplay();
 
-// #define showtempnumber
-
-#define show2threatvalue
-
-// #define showmovetemp
 int showresources = 0;
-
-
-   #define stepsizex 2
-   #define stepsizey 4
-   #define fielddx 4    /*  verschiebung der ro ecke des bodentypes gegen?ber der vehicle etc  */
-   #define fielddy 4
 
    int lockdisplaymap = 0;
 
@@ -74,15 +65,8 @@ int vfbscanlinelength;
 
 #define cursordownshift 0
 
-#define streettopshift 0
-#define streetleftshift 0
 #define cursorrightshift -8
-#define unitdownshift 0
-#define unitrightshift 0
 
-
-#define buildingdownshift  0
-#define buildingrightshift 0
 
 #define mapborderwidth 4
 
@@ -730,13 +714,13 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
                    if ( fld->building  &&  (log2(fld->building->typ->buildingheight)+1 == hgt ) )
                         if ((b == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerview*8 ))
-                           fld->building->paintSingleField( getActiveSurface(), SPoint( r + buildingrightshift, yp + buildingdownshift ), fld->building->getLocalCoordinate( MapCoordinate(actmap->xpos + x, actmap->ypos + y)));
+                           fld->building->paintSingleField( getActiveSurface(), SPoint( r, yp), fld->building->getLocalCoordinate( MapCoordinate(actmap->xpos + x, actmap->ypos + y)));
 
 
                   /* display units */
                    if ( fld->vehicle  &&  (fld->vehicle->height == binaryheight))
                       if ( ( fld->vehicle->color == playerview * 8 ) || (b == visible_all) || ((fld->vehicle->height >= chschwimmend) && (fld->vehicle->height <= chhochfliegend)))
-                         fld->vehicle->paint( getActiveSurface(), SPoint(r + unitrightshift , yp + unitdownshift ));
+                         fld->vehicle->paint( getActiveSurface(), SPoint(r, yp));
 
                 }
 
@@ -745,7 +729,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
                    int h = o->typ->imageHeight;
                    if (b > visible_ago || o->typ->visibleago )
                       if (  h >= hgt*30 && h < 30 + hgt*30 )
-                         o->display ( getActiveSurface(), SPoint(r - streetleftshift , yp - streettopshift), fld->getweather() );
+                         o->display ( getActiveSurface(), SPoint(r, yp), fld->getweather() );
                 }
 
 
@@ -756,11 +740,11 @@ void tgeneraldisplaymap :: pnt_main ( void )
                       if ( b == visible_all )
                            if ( !fld->mines.empty() && hgt == 3 ) {
                               if ( fld->mines.begin()->type != cmmooredmine )
-                                 putspriteimage( r + unitrightshift , yp + unitdownshift ,getmineadress(fld->mines.begin()->type) );
+                                 putspriteimage( r, yp, getmineadress(fld->mines.begin()->type) );
                               else
-                                 putpicturemix ( r + unitrightshift , yp + unitdownshift ,getmineadress(fld->mines.begin()->type, 1 ) ,  0, (char*) colormixbuf );
+                                 putpicturemix ( r, yp, getmineadress(fld->mines.begin()->type, 1 ) ,  0, (char*) colormixbuf );
                               #ifdef karteneditor
-                              bar ( r + unitrightshift + 5 , yp + unitdownshift +5, r + unitrightshift + 15 , yp + unitdownshift +10, 20 + fld->mineowner() * 8 );
+                              bar ( r + 5 , yp +5, r + 15 , yp +10, 20 + fld->mineowner() * 8 );
                               #endif
                            }
 
@@ -769,17 +753,17 @@ void tgeneraldisplaymap :: pnt_main ( void )
                       if ( hgt == 8 ) {
 
                           if ( fld->a.temp && tempsvisible )
-                             putspriteimage(  r + unitrightshift , yp + unitdownshift , cursor.markfield);
+                             putspriteimage(  r, yp, cursor.markfield);
                           else
                              if ( fld->a.temp2 && tempsvisible )
-                                putspriteimage(  r + unitrightshift , yp + unitdownshift , xlatpict ( &xlattables.a.dark2 , cursor.markfield));
+                                putspriteimage(  r, yp, xlatpict ( &xlattables.a.dark2 , cursor.markfield));
 
 
                           #ifdef showtempnumber
                           activefontsettings.color = white;
-                          showtext2(strrr( fld->temp ), r + unitrightshift + 5, yp + unitdownshift + 5 );
+                          showtext2(strrr( fld->temp ), r + 5, yp + 5 );
                           activefontsettings.color = black;
-                          showtext2(strrr( fld->temp2 ), r + unitrightshift + 5, yp + unitdownshift + 20 );
+                          showtext2(strrr( fld->temp2 ), r + 5, yp + 20 );
                           #endif
 
                       }
@@ -788,7 +772,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
                   if (b == visible_ago) {
                      if ( fld->building  &&  (log2(fld->building->typ->buildingheight)+1 == hgt ) )
                         if ((b == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerview*8 ))
-                           fld->building->paintSingleField( getActiveSurface(), SPoint( r + buildingrightshift, yp + buildingdownshift ), fld->building->getLocalCoordinate( MapCoordinate(actmap->xpos + x, actmap->ypos + y)));
+                           fld->building->paintSingleField( getActiveSurface(), SPoint( r, yp), fld->building->getLocalCoordinate( MapCoordinate(actmap->xpos + x, actmap->ypos + y)));
                   
                   }
                }
@@ -798,27 +782,27 @@ void tgeneraldisplaymap :: pnt_main ( void )
                  #ifndef karteneditor
                  if ( fld->resourceview && (fld->resourceview->visible & ( 1 << playerview) ) ){
                     if ( showresources == 1 ) {
-                       showtext2( strrr ( fld->resourceview->materialvisible[playerview] ) , r + unitrightshift + 10 , yp + unitdownshift+10 );
-                       showtext2( strrr ( fld->resourceview->fuelvisible[playerview] )     , r + unitrightshift + 10 , yp + unitdownshift+ 20 );
+                       showtext2( strrr ( fld->resourceview->materialvisible[playerview] ) , r + 10 , yp +10 );
+                       showtext2( strrr ( fld->resourceview->fuelvisible[playerview] )     , r + 10 , yp +20 );
                     } else
                        if ( showresources == 2 ) {
                           if ( fld->resourceview->materialvisible[playerview] )
-                             bar ( r + unitrightshift + 10 , yp + unitdownshift +2, r + unitrightshift + 10 + fld->resourceview->materialvisible[playerview] / 10, yp + unitdownshift +6, 23 );
+                             bar ( r + 10 , yp +2, r + 10 + fld->resourceview->materialvisible[playerview] / 10, yp +6, 23 );
 
                           if ( fld->resourceview->fuelvisible[playerview] )
-                             bar ( r + unitrightshift + 10 , yp + unitdownshift +14 -2, r + unitrightshift + 10 + fld->resourceview->fuelvisible[playerview] / 10, yp + unitdownshift +14 +2 , 191 );
+                             bar ( r + 10 , yp + 14 -2, r + 10 + fld->resourceview->fuelvisible[playerview] / 10, yp +14 +2 , 191 );
                        }
                  }
                  #else
                  if ( showresources == 1 ) {
-                    showtext2( strrr ( fld->material ) , r + unitrightshift + 10 , yp + unitdownshift );
-                    showtext2( strrr ( fld->fuel )     , r + unitrightshift + 10 , yp + unitdownshift+ 10 );
+                    showtext2( strrr ( fld->material ) , r + 10 , yp );
+                    showtext2( strrr ( fld->fuel )     , r + 10 , yp + 10 );
                  }
                  else if ( showresources == 2 ) {
                     if ( fld->material )
-                       bar ( r + unitrightshift + 10 , yp + unitdownshift -2, r + unitrightshift + 10 + fld->material / 10, yp + unitdownshift +2, 23 );
+                       bar ( r + 10 , yp -2, r + 10 + fld->material / 10, yp +2, 23 );
                     if ( fld->fuel )
-                       bar ( r + unitrightshift + 10 , yp + unitdownshift +10 -2, r + unitrightshift + 10 + fld->fuel / 10, yp + unitdownshift +10 +2 , 191 );
+                       bar ( r + 10 , yp +10 -2, r + 10 + fld->fuel / 10, yp +10 +2 , 191 );
                  }
                 #endif
               }
@@ -865,25 +849,25 @@ void tgeneraldisplaymap :: pnt_main ( void )
               #endif
 
                 // putspriteimage( r + unitrightshift , yp + unitdownshift , view.va8);
-                putshadow( r + unitrightshift , yp + unitdownshift , icons.view.nv8, &xlattables.a.dark2 );
+                putshadow( r, yp, icons.view.nv8, &xlattables.a.dark2 );
                 if ( fld->a.temp && tempsvisible )
-                   putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
+                   putspriteimage(  r, yp, cursor.markfield);
                 else
                    if ( fld->a.temp2 && tempsvisible )
-                      putspriteimage(  r + unitrightshift , yp + unitdownshift , xlatpict ( &xlattables.a.dark2 , cursor.markfield));
+                      putspriteimage(  r, yp, xlatpict ( &xlattables.a.dark2 , cursor.markfield));
 
                 #ifdef showtempnumber
                 activefontsettings.color = white;
-                showtext2(strrr( fld->temp ), r + unitrightshift + 5, yp + unitdownshift + 5 );
+                showtext2(strrr( fld->temp ), r + 5, yp + 5 );
                 activefontsettings.color = black;
-                showtext2(strrr( fld->temp2 ), r + unitrightshift + 5, yp + unitdownshift + 20 );
+                showtext2(strrr( fld->temp2 ), r + 5, yp + 20 );
                 #endif
 
             } else
               if (b == visible_not) {
-                  putspriteimage( r + unitrightshift, yp + unitdownshift , icons.view.nv8 );
+                  putspriteimage( r, yp, icons.view.nv8 );
                   if ( ( fld->a.temp || fld->a.temp2 ) && tempsvisible )
-                        putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
+                        putspriteimage(  r, yp, cursor.markfield);
 
                 #ifdef showtempnumber
                 activefontsettings.color = white;
@@ -936,7 +920,7 @@ void tdisplaymap :: displayadditionalunits ( int height )
          if ( b == visible_all || 
             (displaymovingunit.eht->height >= chschwimmend && displaymovingunit.eht->height <= chhochfliegend ) || 
             displaymovingunit.eht->getOwner() == playerview )
-               displaymovingunit.eht->paint( getActiveSurface(), SPoint( xp + unitrightshift + displaymovingunit.dx , yp + unitdownshift + displaymovingunit.dy), shadowdist );
+               displaymovingunit.eht->paint( getActiveSurface(), SPoint( xp + displaymovingunit.dx , yp + displaymovingunit.dy), shadowdist );
                
        }
      }
@@ -1311,12 +1295,12 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, Vehicle* eht, i
 
          int r;
          if ( displaymovingunit.ypos & 1 )   /*  ungerade reihennummern  */
-            r = vfbleftspace + fielddisthalfx + x2 * fielddistx + unitrightshift - dx;
+            r = vfbleftspace + fielddisthalfx + x2 * fielddistx - dx;
          else
-            r = vfbleftspace + x2 * fielddistx + unitrightshift - dx;
+            r = vfbleftspace + x2 * fielddistx - dx;
 
 
-         int yp = vfbtopspace + y2 * fielddisty + unitdownshift - dy;
+         int yp = vfbtopspace + y2 * fielddisty - dy;
 
 
          if ( r >= 0  &&  yp >= 0 &&  yp+unitsizey <= dispmapdata.vfbheight && r+unitsizex <= dispmapdata.vfbwidth ) {

@@ -32,3 +32,9 @@
  {
     return 0;
  }
+
+ void skipGCCBug( int w )
+ {
+    
+ }
+ 

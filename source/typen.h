@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.154.2.2 2004-11-04 22:22:22 mbickel Exp $
+//     $Id: typen.h,v 1.154.2.3 2004-11-27 23:20:53 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -293,6 +293,9 @@ template<typename C>
 void readClassContainer ( C& c, tnstream& stream  )
 {
    int version = stream.readInt();
+   if ( version != 1 )
+      throw tinvalidversion( stream.getLocation(), 1, version );
+      
    int num = stream.readInt();
    c.clear();
    for ( int i = 0; i < num; ++i ) {

@@ -56,6 +56,9 @@
  {
     SDL_PixelFormat* pf = new SDL_PixelFormat;
     int version = stream.readInt();
+    if ( version != 1 )
+       throw tinvalidversion( stream.getLocation(), 1, version );
+       
     pf->BitsPerPixel = stream.readInt();
     pf->BytesPerPixel = stream.readInt();
     pf->Rmask = stream.readInt();
@@ -259,16 +262,11 @@ void Surface::assignDefaultPalette()
 {
    if ( me && GetPixelFormat().BytesPerPixel() == 1 ) {
         SDL_Color spal[256];
-        int col;
+        memset ( spal, 0, 256* sizeof(SDL_Color));
         for ( int i = 0; i < 256; i++ ) {
-           for ( int c = 0; c < 3; c++ ) {
-              col = pal[i][c];
-              switch ( c ) {
-                 case 0: spal[i].r = col * 4; break;
-                 case 1: spal[i].g = col * 4; break;
-                 case 2: spal[i].b = col * 4; break;
-              };
-             }
+           spal[i].r = pal[i][0] * 4;;
+           spal[i].g = pal[i][1] * 4;;
+           spal[i].b = pal[i][2] * 4;;
          }
          SDL_SetColors ( me, spal, 0, 256 );
    }
@@ -386,7 +384,7 @@ void applyLegacyFieldMask( Surface& s, int x, int y )
    s.detectColorKey (  );
 }
 
-
+/*
 void colorShift ( Surface& s, int startcolor, int colNum, int shift )
 {
    if ( s.GetPixelFormat().BitsPerPixel() != 8)
@@ -411,13 +409,13 @@ void colorShift ( Surface& s, int startcolor, int colNum, int shift )
    }
    s.assignPalette( spal, 0, 256 );
 }
-
+*/
 
 Surface rotateSurface( Surface& s, int degrees )
 {
    const float pi = 3.14159265;
 
-   float angle = degrees / 360 * 2 * pi + pi;
+   // float angle = degrees / 360 * 2 * pi + pi;
 
    SurfaceLock sl1 ( s );
 

@@ -69,14 +69,7 @@
 #include <algorithm>
 #include <memory>
 #include <SDL_image.h>
-
-#ifndef NO_PARAGUI
-# include <pgthemewidget.h>
-# include <pgeventobject.h>
-# include <pgapplication.h>
-#endif
-
-#include "SDL_mixer.h"
+#include <SDL_mixer.h>
 
 #include "paradialog.h"
 
@@ -602,9 +595,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "seperator", -1);
    addbutton ( "~O~ptions", ua_gamepreferences );
    addbutton ( "~M~ouse options", ua_mousepreferences );
-   #ifndef NO_PARAGUI
    addbutton ( "~S~ound options", ua_soundDialog );
-   #endif
    addbutton ( "seperator", -1);
    addbutton ( "E~x~itõctrl-x", ua_exitgame );
 
@@ -1640,16 +1631,12 @@ void execuseraction ( tuseractions action )
          }
          break;
 
-/*
-#ifndef NO_PARAGUI
+
       case ua_reloadDlgTheme:
-         if ( pgApp ) {
-             pgApp->reloadTheme();
+             getPGApplication().reloadTheme();
              soundSettings();
-         }
          break;
-#endif
-*/
+
    }
 
 
@@ -1715,6 +1702,11 @@ void mainloopgeneralmousecheck ( void )
       onlinehelpwind->checkforhelp();
 }
 
+
+void  mainloop2()
+{
+   getPGApplication().Run();
+}
 
 void  mainloop ( void )
 {
@@ -2113,7 +2105,7 @@ int gamethread ( void* data )
             }
 
             displayLogMessage ( 8, "gamethread :: Painting background pict..." );
-            backgroundpict.paint();
+            // backgroundpict.paint();
 
             if ( !gtp->filename.empty() && patimat ( tournamentextension, gtp->filename.c_str() ) ) {
                displayLogMessage ( 5, "Initializing network game..." );
@@ -2122,14 +2114,14 @@ int gamethread ( void* data )
             }
 
             displayLogMessage ( 8, "gamethread :: displaying map..." );
-            displaymap();
+            // displaymap();
             displayLogMessage ( 8, "done.\n" );
-            cursor.show();
+            // cursor.show();
 
             moveparams.movestatus = 0;
 
             displayLogMessage ( 8, "gamethread :: painting gui icons..." );
-            actgui->painticons();
+            // actgui->painticons();
             displayLogMessage ( 8, "done.\n" );
             mousevisible(true);
 
@@ -2137,7 +2129,7 @@ int gamethread ( void* data )
             dashboard.y = 0xffff;
 
             displayLogMessage ( 5, "entering inner main loop.\n" );
-            mainloop();
+            mainloop2();
             mousevisible ( false );
          }
       } /* endtry */

@@ -80,7 +80,6 @@ Surface generate_gui_build_icon ( pvehicletype tnk )
 
 Surface generate_gui_build_icon ( pbuildingtype bld )
 {
-
    Surface s = Surface::createSurface(500,500);
 
    int minx = 1000;
@@ -111,7 +110,7 @@ Surface generate_gui_build_icon ( pbuildingtype bld )
    maxx += fieldxsize;
    maxy += fieldysize;
 
-   Surface s2 = Surface::createSurface(maxx-minx,maxy-miny);
+   Surface s2 = Surface::createSurface(maxx-minx+1,maxy-miny+1);
    s2.Blit( s, SDLmm::SRect(SPoint(minx,miny), SPoint(maxx,maxy) ), SPoint(0,0));
    
    

@@ -135,8 +135,6 @@ void AI::checkKeys ( void )
 
 void AI:: run ( bool benchMark )
 {
-   int* ip = new int[100];
-
    this->benchMark = benchMark;
 
    if ( getMap()->playerView >= 0 && !benchMark)
@@ -405,8 +403,8 @@ void AI :: read ( tnstream& stream )
    if ( version >= 104 ) {
       int id = stream.readInt();
       while ( id >= 0 ) {
-         float enemyValue = stream.readFloat();
-         float ownValue = stream.readFloat();
+         stream.readFloat(); // enemyValue
+         stream.readFloat(); // ownValue
          id = stream.readInt();
       }
    }
