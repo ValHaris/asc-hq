@@ -399,10 +399,14 @@ ItemFiltrationSystem::ItemFilter::ItemFilter( const ASCString& _name, const IntR
 
 void ItemFiltrationSystem::ItemFilter::runTextIO ( PropertyContainer& pc )
 {
-    pc.addIntRangeArray ( "Buildings", buildings );
-    pc.addIntRangeArray ( "Vehicles", units );
-    pc.addIntRangeArray ( "Objects", objects );
-    pc.addIntRangeArray ( "Terrain", terrain );
+    if ( pc.find ( "Buildings"))
+      pc.addIntRangeArray ( "Buildings", buildings );
+    if ( pc.find ( "Vehicles"))
+      pc.addIntRangeArray ( "Vehicles", units );
+    if ( pc.find ( "Objects"))
+       pc.addIntRangeArray ( "Objects", objects );
+    if ( pc.find ( "Terrain"))
+      pc.addIntRangeArray ( "Terrain", terrain );
     if ( pc.find ( "Technologies"))
       pc.addIntRangeArray ( "Technologies", technologies );
     pc.addBool ( "activated", active, false );

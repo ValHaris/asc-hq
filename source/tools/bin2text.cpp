@@ -67,13 +67,14 @@ int main(int argc, char *argv[] )
 
    try {
       loadpalette();
+      printf(".");
       loadbi3graphics();
-      loadalltextfiles();
-      loadallvehicletypes();
-      loadallobjecttypes();
-      loadallbuildingtypes();
-      loadallterraintypes();
-      freetextdata();
+      printf(".");
+
+      loadAllData( false );
+      printf(".");
+      loadUnitSets();
+      printf(".");
 
       for ( int i = cl.next_param(); i < argc; i++ ) {
          for ( int j = 0; j < vehicletypenum; j++ )
