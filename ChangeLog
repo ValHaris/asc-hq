@@ -1,3 +1,67 @@
+2003-08-24 14:48  mbickel
+
+	* source/: building.cpp, replay.cpp, replay.h, unitctrl.cpp:  Fixed
+	even move replay problems
+
+2003-08-23 12:36  mbickel
+
+	* source/controls.cpp:	Fixed yet another replay error
+
+2003-08-22 18:58  mbickel
+
+	* source/: controls.cpp, flview.cpp, flview.h, vehicle.h,
+	sdl/sound.cpp, win32/borland/mapeditor/mapeditor.bpr:  Better error
+	messages when sound is missing
+	 Fixed: movement problems
+
+2003-08-22 18:04  mbickel
+
+	* source/: building.cpp, containerbase.cpp, strtmesg.cpp:  Fixed:
+	invalid replay warnings
+
+2003-08-18 20:15  mbickel
+
+	* source/: sgstream.cpp, soundList.cpp, strtmesg.cpp:  Fixed
+	disabled sound
+	 Increased data version requirement
+
+2003-08-17 22:26  mbickel
+
+	* source/: gamedlg.cpp, gamedlg.h, sg.cpp:  Added function: show
+	playing time
+
+2003-08-17 21:34  mbickel
+
+	* source/: containerbase.cpp, strtmesg.cpp, textfileparser.cpp,
+	unitctrl.cpp, vehicle.cpp:  Fixed: units moving out of container
+	had wrong movement
+	 Fixed: unitheightrel wrong sign - units could not enter transports
+	 ASC now checks for duplicate IDs on abstract types too.
+
+2003-08-10 22:27  mbickel
+
+	* source/: ASCStringHelpers.h, basestrm.cpp:  Fixed  NetBSD
+	problems
+
+2003-08-10 15:36  mbickel
+
+	* source/: astar2.cpp, astar2.h, strtmesg.cpp:	Fixed movement
+	problems
+
+2003-08-07 21:58  mbickel
+
+	* source/: dlg_box.cpp, soundList.cpp, soundList.h:  Improved error
+	handling and logging for sounds
+
+2003-08-05 22:04  mbickel
+
+	* source/vehicle.cpp:  Fixed crash when moving ice breaker in or
+	out of buildings
+
+2003-07-06 18:47  mbickel
+
+	* ChangeLog, source/strtmesg.cpp:  Changed version to 1.13.7
+
 2003-07-06 17:13  mbickel
 
 	* source/unix/: Makefile.in, mapeditor/Makefile.in:  rerun boostrap

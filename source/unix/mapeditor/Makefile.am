@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.13 2003-07-06 15:10:26 mbickel Exp $
+## $Id: Makefile.am,v 1.14 2003-08-24 13:34:55 mbickel Exp $
 
 vpath %.cpp ../..
 
@@ -25,7 +25,7 @@ password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
-textfile_evaluation.cpp containerbasetype.cpp
+textfile_evaluation.cpp containerbasetype.cpp soundList.cpp
 
 asc_mapedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @SDLMM_LIBS@ @LDADDLIBBZ2@ $(PARAGUI_LIBS)
@@ -40,7 +40,7 @@ password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
-textfile_evaluation.cpp containerbasetype.cpp
+textfile_evaluation.cpp containerbasetype.cpp soundList.cpp
 
 asc_map2pcx_LDADD   	= $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/sdl/libsdl.la @SDLMM_LIBS@ @LDADDLIBBZ2@ $(PARAGUI_LIBS)
