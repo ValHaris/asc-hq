@@ -8,7 +8,11 @@
 #include "soundList.h"
 tSoundList sound;
 
-#define DEBUG( msg ) printf( "%s\n", msg )
+#ifdef _DOS_
+ #define DEBUG( msg ) 
+#else
+ #define DEBUG( msg ) printf( "%s\n", msg )
+#endif
 
 void initSoundList(void) {
   initSound();
@@ -36,7 +40,7 @@ void tSoundList::init( unsigned weaponCount ) {
  *  silence.
  */
 Sound *tSoundList::weaponSound(unsigned weapon) {
-  printf( "Fetching sound for weapon %u\n", weapon );
+  // printf( "Fetching sound for weapon %u\n", weapon );
   if( weaponSoundCount < weapon )
     return soundFail;
 

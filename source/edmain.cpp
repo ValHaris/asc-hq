@@ -1,6 +1,10 @@
-//     $Id: edmain.cpp,v 1.6 2000-02-03 20:54:39 mbickel Exp $
+//     $Id: edmain.cpp,v 1.7 2000-02-24 10:54:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/02/03 20:54:39  mbickel
+//      Some cleanup
+//      getfiletime now works under Linux too
+//
 //     Revision 1.5  1999/12/27 12:59:54  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -788,15 +792,15 @@ int main(int argc, char *argv[] )
    memset(exitmessage, 0, sizeof ( exitmessage ));
    atexit ( dispmessageonexit );
         
+   #ifdef _DOS_
+    initmemory();
+   #endif
    
    modenum8 = initgraphics( resolx, resoly, 8 );
    if ( modenum8 < 0 )
       return 1;
    atexit ( closesvgamode ); 
 
-   #ifdef _DOS_
-    initmemory();
-   #endif
 
    inittimer(100);
    atexit ( closetimer );
@@ -807,7 +811,6 @@ int main(int argc, char *argv[] )
    schriften.smallsystem = load_font("msystem.fnt");
    schriften.monogui = load_font("monogui.fnt");
    
-
 
    virtualscreenbuf.init();
 

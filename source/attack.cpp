@@ -1,6 +1,15 @@
-//     $Id: attack.cpp,v 1.8 2000-01-25 19:28:06 mbickel Exp $
+//     $Id: attack.cpp,v 1.9 2000-02-24 10:54:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/01/25 19:28:06  mbickel
+//      Fixed bugs:
+//        invalid mouse buttons reported when moving the mouse
+//        missing service weapon in weapon information
+//        invalid text displayed in ammo production
+//        undamaged units selected in repair vehicle function
+//
+//      speed up when playing weapon sound
+//
 //     Revision 1.7  2000/01/24 09:08:55  steb
 //     Tidied up configure.in to support SDL properly.  Added sounds to Makefile.am
 //     Tested.  It built ok for me. Still YMMV however :)
@@ -70,7 +79,14 @@
 #include "loaders.h"
 #include "soundList.h"
 
-#define DEBUG( msg ) fprintf( stderr, "DEBUG : %s\n", msg )
+/*
+#ifdef _DOS_
+ #define DEBUG( msg ) 
+#else
+ #define DEBUG( msg ) fprintf( stderr, "DEBUG : %s\n", msg )
+#endif
+*/
+ #define DEBUG( msg ) fprintf( stderr, "DEBUG : %s\n", msg )
 
    #define damagefaktor 4
    #define  verteidigungsfaktor  14     /* wird durch 8 geteilt */

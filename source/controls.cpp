@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.19 2000-01-31 16:08:38 mbickel Exp $
+//     $Id: controls.cpp,v 1.20 2000-02-24 10:54:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/01/31 16:08:38  mbickel
+//      Fixed crash in line
+//      Improved error handling in replays
+//
 //     Revision 1.18  2000/01/25 19:28:09  mbickel
 //      Fixed bugs:
 //        invalid mouse buttons reported when moving the mouse
@@ -4868,7 +4872,6 @@ void   tdashboard :: paintvehicleinfo( const pvehicle     vehicle,
                                        const pobjectcontainer      object,
                                        const pvehicletype vt )
 { 
-
    collategraphicoperations cgo ( agmp->resolutionx - 800 + 610, 15, agmp->resolutionx - 800 + 783, 307 );
 
    byte         ms; 

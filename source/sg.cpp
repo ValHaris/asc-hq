@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.24 2000-02-07 19:45:42 mbickel Exp $
+//     $Id: sg.cpp,v 1.25 2000-02-24 10:54:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/02/07 19:45:42  mbickel
+//      fixed map structure size bug
+//
 //     Revision 1.23  2000/02/05 12:13:44  steb
 //     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
 //     startup due to actmap being null when trying to report errors.
@@ -164,7 +167,7 @@
 
 
 
-// #define MEMCHK
+#define MEMCHK
 
 
 class tsgonlinemousehelp : public tonlinemousehelp {
@@ -589,7 +592,6 @@ void  tbackgroundpict :: paint ( int resavebackground )
     #ifdef HEXAGON
      if ( actmap && actmap->xsize && !lockdisplaymap )
         paintborder( getmapposx ( ), getmapposy ( ) );
-
     #endif
   }
   if ( resavebackground  ||  !run ) {

@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.18 2000-01-24 17:35:47 mbickel Exp $
+//     $Id: spfst.cpp,v 1.19 2000-02-24 10:54:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/01/24 17:35:47  mbickel
+//      Added dummy routines for sound under DOS
+//      Cleaned up weapon specification
+//
 //     Revision 1.17  2000/01/24 08:16:50  steb
 //     Changes to existing files to implement sound.  This is the first munge into
 //     CVS.  It worked for me before the munge, but YMMV :)
@@ -688,7 +692,14 @@ char tweapdist::getweapstrength ( const SingleWeapon* weap, int dist, int attack
   byte         translat[31]  = { 6, 255, 1, 3, 2, 4, 0, 5, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
                                  255, 255, 255, 255, 255, 255}; 
 
-   int typ = translat[ weap->getScalarWeaponType() ];
+   if ( !weap )
+      return 0;
+
+   int scalar = weap->getScalarWeaponType();
+   if ( scalar >= 31 || scalar < 0 )
+      return 0;
+
+   int typ = translat[ scalar ];
 
 
 
@@ -703,7 +714,11 @@ char tweapdist::getweapstrength ( const SingleWeapon* weap, int dist, int attack
          displaymessage("tweapdist::getweapstrength: invalid range: \n min = %d ; max = %d ; req = %d ",1, weap->mindistance, weap->maxdistance, dist);
          return 0;
       }
-      reldiff = 255 * (dist - weap->mindistance) / ( weap->maxdistance - weap->mindistance) ;
+
+      if ( weap->maxdistance - weap->mindistance != 0 )
+         reldiff = 255 * (dist - weap->mindistance) / ( weap->maxdistance - weap->mindistance) ;
+      else
+         reldiff = 0;
    }
 
    int minstrength = 255 - 255 * weap->minstrength / weap->maxstrength;
@@ -6447,7 +6462,7 @@ void tbuilding :: changecompletion ( int d )
  *  vehicle.
  */
 SingleWeapon *tvehicle::getWeapon( unsigned weaponNum ) {
-  printf( "getWeapon(%u)\n", weaponNum );
+  // printf( "getWeapon(%u)\n", weaponNum );
   UnitWeapon *weapons=typ->weapons;
   return (weaponNum<=weapons->count)?weapons->weapon+weaponNum:NULL;;
 }
