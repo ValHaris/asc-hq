@@ -273,9 +273,20 @@ bool AI::ServiceOrder::canWait( )
 
 
    bool fuelLack = requiredService == VehicleService::srv_resource && position == 2 ;
-   return fuelLack || !timeOut();
+   bool couldWait = fuelLack || !timeOut();
+   if ( couldWait )
+      return serviceUnitExists();
+   else
+      return false;
 }
 
+bool AI::ServiceOrder::serviceUnitExists()
+{
+   for ( Player::VehicleList::iterator vi = ai->getPlayer().vehicleList.begin(); vi != ai->getPlayer().vehicleList.end(); vi++ )
+       if ( possible ( *vi ))
+          return true;
+   return false;
+}
 
 
 bool AI::ServiceOrder::valid (  ) const
@@ -357,9 +368,9 @@ AI::ServiceOrder& AI :: issueRefuelOrder ( pvehicle veh, bool returnImmediately 
 {
    ServiceOrder& so = issueService ( VehicleService::srv_resource, veh->networkid, Resources::Fuel);
    if ( returnImmediately ) {
-      if ( AirplaneLanding::canUnitCrash ( veh )) {
-         AirplaneLanding apl ( *this, veh );
-         veh->aiparam[getPlayerNum()]->dest = apl.getNearestLandingPosition ( true, true, false );
+      if ( RefuelConstraint::necessary ( veh, *this )) {
+         RefuelConstraint apl ( *this, veh );
+         veh->aiparam[getPlayerNum()]->dest = apl.getNearestRefuellingPosition ( true, true, false );
          veh->aiparam[getPlayerNum()]->task = AiParameter::tsk_serviceRetreat;
          runUnitTask ( veh );
       } else {
@@ -374,8 +385,9 @@ AI::ServiceOrder& AI :: issueRefuelOrder ( pvehicle veh, bool returnImmediately 
 MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distance )
 {
    pvehicle veh = so.getTargetUnit();
-   if ( !veh->canMove() )
-      return MapCoordinate ( -1, -1 );
+   if ( getMap()->getField( veh->getPosition())->unitHere ( veh ))
+      if ( !veh->canMove() )
+         return MapCoordinate ( -1, -1 );
 
    AStar3D astar ( getMap(), veh );
    astar.findAllAccessibleFields (  );
@@ -510,11 +522,11 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
 
    if ( bestBuilding && (bestDistance < bestDistance_p*3)) {
       if ( distance )
-         *distance = bestDistance * maxmalq;
+         *distance = bestDistance;
       return bestPos;
    } else {
       if ( distance )
-         *distance = bestDistance_p * maxmalq;
+         *distance = bestDistance_p;
       return bestPos_p;
    }
 }
@@ -617,8 +629,8 @@ AI::AiResult AI :: executeServices ( )
             veh->aiparam[ getPlayerNum() ]->task = AiParameter::tsk_serviceRetreat;
          } else {
             if ( (veh->height & ( chtieffliegend | chfliegend | chhochfliegend )) && veh->typ->fuelConsumption ) {
-               AirplaneLanding apl ( *this, veh );
-               MapCoordinate3D dst = apl.getNearestLandingPosition( true, true, false );
+               RefuelConstraint apl ( *this, veh );
+               MapCoordinate3D dst = apl.getNearestRefuellingPosition( true, true, false );
                if ( dst.x != -1 ) {
                   veh->aiparam[ getPlayerNum() ]->dest = dst;
                   veh->aiparam[ getPlayerNum() ]->task = AiParameter::tsk_serviceRetreat;

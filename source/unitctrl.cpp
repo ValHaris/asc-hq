@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.66 2001-08-15 14:02:10 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.67 2001-08-24 15:50:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.66  2001/08/15 14:02:10  mbickel
+//      Updated message texts
+//
 //     Revision 1.65  2001/08/09 15:58:59  mbickel
 //      Some usability improvements in the map editor
 //      More flexible BI3 map import
@@ -2156,7 +2159,7 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
                s.orgSourceAmount = bld->ammo[type];
                int stillNeeded = destWeapon.count - targetUnit->ammo[i] - s.orgSourceAmount;
                int produceable;
-               if ( stillNeeded > 0 ) {
+               if ( (stillNeeded > 0) && (bld->typ->special & cgammunitionproductionb)) {
                   stillNeeded = ((stillNeeded +4) / 5)*5;
                   Resources res;
                   for( int j = 0; j< resourceTypeNum; j++ )

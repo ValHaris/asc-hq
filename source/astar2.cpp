@@ -212,7 +212,12 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
 
             Node N2;
             N2.h = hn;
-            N2.gval = N.gval + k;
+
+            if ( k == MAXIMUM_PATH_LENGTH )
+               N2.gval = k;
+            else
+               N2.gval = N.gval + k;
+
             N2.hval = dist( hn, B );
             // If this spot (hn) hasn't been visited, its mark is DirNone
             if( getfield (hn.m,hn.n)->temp3 == DirNone ) {
@@ -576,7 +581,12 @@ void AStar3D::findPath( const MapCoordinate3D& A, const MapCoordinate3D& B, Path
                k = MAXIMUM_PATH_LENGTH;
             Node N2;
             N2.h = hn;
-            N2.gval = N.gval + k;
+
+            if ( k == MAXIMUM_PATH_LENGTH )
+               N2.gval = k;
+            else
+               N2.gval = N.gval + k;
+
             N2.hval = dist( hn, B );
 
             pfield fld = actmap->getField(hn);

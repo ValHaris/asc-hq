@@ -625,14 +625,14 @@ AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, MapCoordi
    */
 
    AStar3D* ast = 0;
-   AirplaneLanding* apl = NULL;
-   if ( AirplaneLanding::canUnitCrash ( veh )) {
+   RefuelConstraint* rfc = NULL;
+   if ( RefuelConstraint::necessary ( veh, *ai )) {
       if ( secondRun )
-         apl = new AirplaneLanding ( *ai, veh, maxint );
+         rfc = new RefuelConstraint ( *ai, veh, maxint );
       else
-         apl = new AirplaneLanding ( *ai, veh );
+         rfc = new RefuelConstraint ( *ai, veh );
 
-      apl->findPath();
+      rfc->findPath();
    } else {
       ast = new AStar3D ( ai->getMap(), veh );
       ast->findAllAccessibleFields (  );
@@ -728,7 +728,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, MapCoordi
                       }
 
                    if ( xtogoSec >= 0 && ytogoSec >= 0 )
-                      if ( !apl || apl->returnFromPositionPossible ( MapCoordinate3D( xtogoSec, ytogoSec, h ))) {
+                      if ( !rfc || rfc->returnFromPositionPossible ( MapCoordinate3D( xtogoSec, ytogoSec, h ))) {
                          int notAccessible = 100 * nac / (nac+ac);
                          if ( notAccessible < 85  && targets ) {   // less than 85% of fields not accessible
                             float nf = f * ( 100-notAccessible) / 100; // *  ( 100 - notAccessible );
@@ -745,7 +745,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, MapCoordi
                          }
                       } else
                          if ( allowRefuellOrder ) {
-                            if ( apl && apl->returnFromPositionPossible ( MapCoordinate3D( xtogoSec, ytogoSec, h ), veh->typ->tank.fuel ))
+                            if ( rfc && rfc->returnFromPositionPossible ( MapCoordinate3D( xtogoSec, ytogoSec, h ), veh->typ->tank.fuel ))
                                sectionsPossibleWithMaxFuell++;
                          }
 
@@ -754,13 +754,13 @@ AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, MapCoordi
 
    tus.restore();
    delete ast;
-   delete apl;
+   delete rfc;
 
    if ( !frst ) {
       if ( sectionsPossibleWithMaxFuell && allowRefuellOrder )
          ai->issueRefuelOrder ( veh, false );
       else
-        if ( AirplaneLanding::canUnitCrash ( veh ) && !secondRun )
+        if ( RefuelConstraint::necessary ( veh, *ai ) && !secondRun )
            return getBest ( pass, veh, dest, allowRefuellOrder, true );
 
    }

@@ -134,7 +134,7 @@ class SaveUnitMovement {
 
 
 
-void AI::AirplaneLanding::findPath()
+void AI::RefuelConstraint::findPath()
 {
    if ( !ast ) {
       ast = new AStar3D ( ai.getMap(), veh );
@@ -155,26 +155,36 @@ void AI::AirplaneLanding::findPath()
    }
 }
 
-MapCoordinate3D AI::AirplaneLanding::getNearestLandingPosition ( bool buildingRequired, bool refuel, bool repair )
+MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildingRequired, bool refuel, bool repair )
 {
    findPath();
 
    for ( int x = 0; x < actmap->xsize; x++ )
-      for ( int y = 0; y < actmap->ysize; y++ ) {
-          pfield fld = getfield( x,y );
-          if ( fld->a.temp & chfahrend ) {
-             int dist = ast->fieldVisited( MapCoordinate3D( x,y,chfahrend))->gval;
-             if ( fld->building && fld->building->color == veh->color )
-                reachableBuildings[ dist ] = fld->building;
-             // aircraft carriers should be supported too....
+      for ( int y = 0; y < actmap->ysize; y++ )
+         for ( int h = 0; h < 8; h++ )
+            if ( veh->typ->height & ( 1 << h)) {
+                pfield fld = getfield( x,y );
+                AStar3D::Node* node = ast->fieldVisited( MapCoordinate3D( x,y, 1 << h));
+                if ( node ) {
+                   int dist = node->gval;
+                   if ( fld->building && fld->building->color == veh->color )
+                      reachableBuildings[ dist ] = fld->building;
 
-             // we don't want to land in hostile territory
-             FieldInformation& fi = ai.getFieldInformation ( x, y );
-             if ( fi.control == -1 || getdiplomaticstatus2 ( fi.control * 8, ai.getPlayerNum()*8 ) == capeace )
-                 landingPositions[dist] = MapCoordinate3D( x,y,chfahrend);
+                   // aircraft carriers should be supported too....
+                   // external loading of buildings too....
+                   // turrets too .....
 
-          }
-      }
+
+                   // let's check for landing
+                   if ((veh->height > chfahrend) && (fld->a.temp & chfahrend) && ( 1 << h) == chfahrend ) {
+                      // we don't want to land in hostile territory
+                      FieldInformation& fi = ai.getFieldInformation ( x, y );
+                      if ( fi.control == -1 || getdiplomaticstatus2 ( fi.control * 8, ai.getPlayerNum()*8 ) == capeace )
+                          landingPositions[dist] = MapCoordinate3D( x,y,chfahrend);
+                   }
+                }
+            }
+
 
    if ( buildingRequired ) {
       for ( ReachableBuildings::iterator rb = reachableBuildings.begin(); rb != reachableBuildings.end(); rb++  ) {
@@ -195,7 +205,7 @@ MapCoordinate3D AI::AirplaneLanding::getNearestLandingPosition ( bool buildingRe
       return MapCoordinate3D();
 }
 
-bool AI::AirplaneLanding::returnFromPositionPossible ( const MapCoordinate3D& pos, int theoreticalFuel )
+bool AI::RefuelConstraint::returnFromPositionPossible ( const MapCoordinate3D& pos, int theoreticalFuel )
 {
    if ( !veh->typ->fuelConsumption )
       return true;
@@ -205,7 +215,7 @@ bool AI::AirplaneLanding::returnFromPositionPossible ( const MapCoordinate3D& po
 
    findPath();
    if ( !positionsCalculated )
-      getNearestLandingPosition ( true, true, false );
+      getNearestRefuellingPosition ( true, true, false );
 
    int dist  = ast->fieldVisited(pos)->gval;
    int dist2;
@@ -245,12 +255,17 @@ bool AI::AirplaneLanding::returnFromPositionPossible ( const MapCoordinate3D& po
 
 }
 
-bool AI::AirplaneLanding::canUnitCrash (const pvehicle veh )
+bool AI::RefuelConstraint::necessary (const pvehicle veh, AI& ai )
 {
    if ( !veh->typ->fuelConsumption )
       return false;
-   if ( !(veh->height & (chtieffliegend | chfliegend | chhochfliegend)))
-      return false;
+   if ( !(veh->height & (chtieffliegend | chfliegend | chhochfliegend))) {
+      ServiceOrder so  ( &ai, VehicleService::srv_resource, veh->networkid, 2 );
+      if ( so.serviceUnitExists() )
+         return false;
+      else
+         return true;
+   }
 
    return true;
 }
@@ -450,6 +465,12 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
          if ( vm.getStatus() != 1000 )
             displaymessage ( "AI :: moveUnit \n error in movement step 3 with unit %d", 1, veh->networkid );
 
+         if ( destination.x == xtogo && destination.y == ytogo )
+            if ( veh->aiparam[getPlayerNum()]->job == AiParameter::job_conquer )
+               if ( getfield ( xtogo, ytogo)->building )
+                  veh->aiparam[getPlayerNum()]->job = AiParameter::job_undefined;
+
+
          return true;
       }
       return false;
@@ -508,8 +529,12 @@ int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path )
          }
       }
 
-      if ( pi == path.end() )
+      if ( pi == path.end() ) {
+         if ( veh->aiparam[getPlayerNum()]->job == AiParameter::job_conquer )
+            if ( getMap()->getField ( veh->getPosition() )->building )
+               veh->aiparam[getPlayerNum()]->job = AiParameter::job_undefined;
          return 1;
+      }
 
       if ( pi->z == veh->height ) {
          // movement exhausted

@@ -175,9 +175,9 @@ void AI::getAttacks ( VehicleMovement& vm, pvehicle veh, TargetVector& tv, int h
       if ( vm.getStatus() == 0 )
          vm.execute ( veh, -1, -1, 0, -1, -1 );
 
-      AirplaneLanding* apl = NULL;
-      if ( AirplaneLanding::canUnitCrash ( veh ))
-        apl = new AirplaneLanding( *this, veh );
+      RefuelConstraint* apl = NULL;
+      if ( RefuelConstraint::necessary ( veh, *this ))
+        apl = new RefuelConstraint( *this, veh );
 
       int fuelLacking = 0;
       for ( int f = 0; f < vm.reachableFields.getFieldNum(); f++ )

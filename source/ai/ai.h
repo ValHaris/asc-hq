@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: ai.h,v 1.5 2001-07-27 21:13:35 mbickel Exp $
+//     $Id: ai.h,v 1.6 2001-08-24 15:50:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2001/07/27 21:13:35  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.4  2001/05/24 15:37:51  mbickel
 //      Fixed: reaction fire could not be disabled when unit out of ammo
 //      Fixed several AI problems
@@ -108,6 +112,8 @@
                   void serviceFailed() { failure++; };
                   bool completelyFailed();
 
+                  bool serviceUnitExists();
+
                   static void releaseServiceUnit ( ServiceOrder& so );
 
                   void write ( tnstream& stream ) const;
@@ -154,7 +160,7 @@
            ServiceOrder& issueRefuelOrder ( pvehicle veh, bool returnImmediately );
            void runServiceUnit ( pvehicle supplyUnit );
 
-           class AirplaneLanding {
+           class RefuelConstraint {
                    AI& ai;
                    pvehicle veh;
                    AStar3D* ast;
@@ -166,15 +172,15 @@
                    bool positionsCalculated;
                    int maxMove;
                 public:
-                   AirplaneLanding ( AI& ai_, pvehicle veh_, int maxMove_ = -1 ) : ai ( ai_ ), veh ( veh_ ), ast(NULL), positionsCalculated(false), maxMove ( maxMove_ ) {};
-                   MapCoordinate3D getNearestLandingPosition ( bool buildingRequired, bool refuel, bool repair );
+                   RefuelConstraint ( AI& ai_, pvehicle veh_, int maxMove_ = -1 ) : ai ( ai_ ), veh ( veh_ ), ast(NULL), positionsCalculated(false), maxMove ( maxMove_ ) {};
+                   MapCoordinate3D getNearestRefuellingPosition ( bool buildingRequired, bool refuel, bool repair );
                    bool returnFromPositionPossible ( const MapCoordinate3D& pos, int theoreticalFuel = -1 );
                    //! checks whether the unit can crash do to lack of fuel; this is usually true for airplanes. A unit that does not crash does not need to care about landing positions.
                    void findPath();
-                   static bool canUnitCrash (const pvehicle veh );
-                   ~AirplaneLanding() { if (ast) delete ast; };
+                   static bool necessary (const pvehicle veh, AI& ai );
+                   ~RefuelConstraint() { if (ast) delete ast; };
            };
-           friend class AirplaneLanding;
+           friend class RefuelConstraint;
 
            bool runUnitTask ( pvehicle veh );
            // void searchServices ( );
