@@ -1,6 +1,15 @@
-//     $Id: spfst.cpp,v 1.25 2000-04-27 16:25:27 mbickel Exp $
+//     $Id: spfst.cpp,v 1.26 2000-05-06 20:25:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/04/27 16:25:27  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.24  2000/04/17 18:55:25  mbickel
 //      Fixed the DOS version
 //
@@ -4455,10 +4464,12 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
                   /* display marked fields */
                       if ( hgt == 8 ) {
-                          if ( ( fld->a.temp || fld->a.temp2 ) && tempsvisible ) 
-                               putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
-       
 
+                          if ( fld->a.temp && tempsvisible ) 
+                             putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
+                          else
+                             if ( fld->a.temp2 && tempsvisible ) 
+                                putspriteimage(  r + unitrightshift , yp + unitdownshift , xlatpict ( &xlattables.a.dark2 , cursor.markfield));
 
 
                           #ifdef showtempnumber   

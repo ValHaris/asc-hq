@@ -1,6 +1,15 @@
-//     $Id: sgstream.cpp,v 1.10 2000-04-27 16:25:26 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.11 2000-05-06 20:25:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/04/27 16:25:26  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.9  2000/03/29 09:58:48  mbickel
 //      Improved memory handling for DOS version
 //      Many small changes I can't remember ;-)
@@ -2043,11 +2052,21 @@ void loadpalette ( void )
    stream.readdata( & pal, sizeof(pal)); 
    colormixbuf = (pmixbuf) new char [ sizeof ( tmixbuf ) ];
    stream.readdata( colormixbuf,  sizeof ( *colormixbuf ));
+
    stream.readdata( &xlattables.a.dark05, sizeof ( xlattables.a.dark05 ));
+   xlattables.a.dark05[255] = 255;
+
    stream.readdata( &xlattables.a.dark1,  sizeof ( xlattables.a.dark1 ));
+   xlattables.a.dark1[255] = 255;
+
    stream.readdata( &xlattables.a.dark2,  sizeof ( xlattables.a.dark2 ));
+   xlattables.a.dark2[255] = 255;
+
    stream.readdata( &xlattables.a.dark3,  sizeof ( xlattables.a.dark3 ));
+   xlattables.a.dark3[255] = 255;
+
    stream.readdata( &xlattables.light,  sizeof ( xlattables.light ));
+   xlattables.light[255] = 255;
 
    stream.readdata( &truecolor2pal_table,  sizeof ( truecolor2pal_table ));
    #ifdef HEXAGON

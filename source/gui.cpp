@@ -1,6 +1,13 @@
-//     $Id: gui.cpp,v 1.14 2000-05-02 16:20:54 mbickel Exp $
+//     $Id: gui.cpp,v 1.15 2000-05-06 20:25:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/05/02 16:20:54  mbickel
+//      Fixed bug with several simultaneous vehicle actions running
+//      Fixed graphic error at ammo transfer in buildings
+//      Fixed ammo loss at ammo transfer
+//      Movecost is now displayed for mines and repairs
+//      Weapon info now shows unhittable units
+//
 //     Revision 1.13  2000/04/27 16:25:24  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -1060,6 +1067,10 @@ void  tnsguiiconmove::exec         ( void )
       }
       for ( int i = 0; i < pendingVehicleActions.move->reachableFields.getFieldNum(); i++ ) 
          pendingVehicleActions.move->reachableFields.getField( i ) ->a.temp = 1;
+
+      if ( gameoptions.marcfielsnotaccessible_movement )
+         for ( int j = 0; j < pendingVehicleActions.move->reachableFields.getFieldNum(); j++ ) 
+            pendingVehicleActions.move->reachableFieldsIndirect.getField( j ) ->a.temp2 = 2;
       displaymap();
 
    } else

@@ -1,6 +1,15 @@
-//     $Id: dlg_box.h,v 1.7 2000-04-27 16:25:20 mbickel Exp $
+//     $Id: dlg_box.h,v 1.8 2000-05-06 20:25:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/04/27 16:25:20  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.6  2000/03/29 09:58:45  mbickel
 //      Improved memory handling for DOS version
 //      Many small changes I can't remember ;-)
@@ -412,9 +421,6 @@ extern long lastdisplayedmessageticker ;
 
 
 #define linesshown 13  
-
-extern int  releasetimeslice( void );
-
 
 class tvirtualscreenbuf {
       public:

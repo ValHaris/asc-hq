@@ -1,6 +1,9 @@
-//     $Id: misc.h,v 1.5 2000-03-11 18:22:07 mbickel Exp $
+//     $Id: misc.h,v 1.6 2000-05-06 20:25:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/03/11 18:22:07  mbickel
+//      Added support for multiple graphic sets
+//
 //     Revision 1.4  2000/02/03 20:54:41  mbickel
 //      Some cleanup
 //      getfiletime now works under Linux too
@@ -63,9 +66,12 @@
 
    extern void beep( void );
 
-   void passtring2cstring ( char* s );
+   extern void passtring2cstring ( char* s );
    
-   int  crc32buf(void *vbuf, int len);
+   extern int  crc32buf(void *vbuf, int len);
+
+   extern int  releasetimeslice( void );
+
 
  #pragma pack(1)
 

@@ -1,6 +1,10 @@
-//     $Id: dlg_box.cpp,v 1.16 2000-04-27 17:59:23 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.17 2000-05-06 20:25:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/04/27 17:59:23  mbickel
+//      Updated Kdevelop project file
+//      Fixed some graphical errors
+//
 //     Revision 1.15  2000/04/27 16:25:20  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -271,19 +275,6 @@ tvirtualscreenbuf:: ~tvirtualscreenbuf ()
 {
    delete[] buf;
    buf = NULL;
-}
-
-
-int  releasetimeslice( void )
-{
-   #ifndef _DOS_
-    SDL_Delay(10);
-   #endif
-/*    union REGS inregs, outregs;
-    inregs.w.ax = 0x1680;
-    int386 (0x2f, &inregs, &outregs);
-    return outregs.w.ax == 0; */
-    return 0;
 }
 
 
@@ -1765,11 +1756,11 @@ void         tdialogbox::editfield(pbutton      pb)
    
    if (pb->art == 1) { 
       ps = (char*) pb->data;
-      mousevisible(false); 
+      // mousevisible(false); 
       do { 
         stredit(ps, x1 + pb->x1 + 5,y1 + pb->y1 + 2,pb->x2 - pb->x1 - 10, pb->max);
       }  while ( !checkvalue(pb->id,ps) );
-      mousevisible(true); 
+      // mousevisible(true); 
    } 
    if (pb->art == 2) { 
       if (pb->max <= 255 && pb->min >= 0) { 
@@ -1785,11 +1776,11 @@ void         tdialogbox::editfield(pbutton      pb)
             pl = (int*) pb->data;
             l = *pl; 
          } 
-      mousevisible(false); 
+      // mousevisible(false); 
       do { 
          intedit( &l,x1 + pb->x1 + 5,y1 + pb->y1 + 2,pb->x2 - pb->x1 - 10,pb->min,pb->max);
       }  while ( !checkvalue(pb->id, &l) );
-      mousevisible(true); 
+      // mousevisible(true); 
       if (pb->max <= 255 && pb->min >= 0) { 
          *pbt = l; 
       } 
@@ -2088,7 +2079,10 @@ void removemessage( void )
 
 void tdialogbox::dispeditstring ( char* st, int x1, int y1 )
 {
+   setinvisiblemouserectanglestk ( x1, y1, x1 + activefontsettings.length, y1 + activefontsettings.height );
    showtext2(st,x1,y1); 
+   getinvisiblemouserectanglestk (  );
+
 }
 
 
@@ -2252,10 +2246,10 @@ void         tdialogbox::stredit(char *       s,
             lne(x1,y1,ss,position,einfuegen); 
          } 
       } 
-   }  while ( cc != cto_enter && cc != cto_esc );
+   }  while ( cc != cto_enter && cc != cto_esc && !( !mouseinrect ( x1, y1, x1 + wdth, y1 + activefontsettings.height) && mouseparams.taste > 0 ) );
 
    lne(x1,y1,ss,position,einfuegen); 
-   if (cc == cto_enter )
+   if (cc != cto_esc )
       strcpy(s,ss);
    delete[] ss;
    delete[] ss2;
@@ -2457,9 +2451,9 @@ void         tdialogbox::intedit(int *    st,
              lne(x1,y1,ss,position,einfuegen);
           }
 
-      }  while ( (cc != cto_enter) && (cc != cto_esc) );
+      }  while ( (cc != cto_enter) && (cc != cto_esc) && !( !mouseinrect ( x1, y1, x1 + wdth, y1 + activefontsettings.height) && mouseparams.taste > 0 ) );
       lne(x1,y1,ss,position,einfuegen);
-      if (cc == cto_enter) {
+      if (cc != cto_esc ) {
         j = strtol ( ss, &ss3, 10 );
         if ((ss3 != NULL) && ( (ss3 - ss ) < strlen ( ss ) )) {
 
@@ -2479,8 +2473,8 @@ void         tdialogbox::intedit(int *    st,
 
         } /* endif */
 
-       } else
-          ok = true;
+      } else
+         ok = true;
 
    } while ( ! ok );
 

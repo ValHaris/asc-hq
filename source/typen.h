@@ -1,6 +1,15 @@
-//     $Id: typen.h,v 1.17 2000-04-27 16:25:30 mbickel Exp $
+//     $Id: typen.h,v 1.18 2000-05-06 20:25:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/04/27 16:25:30  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.16  2000/04/01 11:38:39  mbickel
 //      Updated the small editors
 //      Added version numbering
@@ -1433,7 +1442,8 @@ class tgameoptions {
     int mapzoom;
     int mapzoomeditor;
     int startupcount;
-    int dummy[14];
+    int marcfielsnotaccessible_movement;
+    int dummy[13];
 
     struct {
       int scrollbutton;

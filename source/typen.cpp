@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.14 2000-05-06 19:57:11 mbickel Exp $
+//     $Id: typen.cpp,v 1.15 2000-05-06 20:25:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/05/06 19:57:11  mbickel
+//      Mapeditor/linux is now running
+//
 //     Revision 1.13  2000/04/27 16:25:30  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -1430,6 +1433,8 @@ void tgameoptions :: setdefaults ( void )
    bi3.interpolate.units = 0;
    bi3.interpolate.objects = 0;
    bi3.interpolate.buildings = 1; 
+
+   marcfielsnotaccessible_movement = 0;
 
    mapzoom = 80;
 }

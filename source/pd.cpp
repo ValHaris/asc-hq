@@ -1,6 +1,9 @@
-//     $Id: pd.cpp,v 1.8 2000-01-06 14:11:22 mbickel Exp $
+//     $Id: pd.cpp,v 1.9 2000-05-06 20:25:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/01/06 14:11:22  mbickel
+//      Fixed a graphic bug in PD and disabled fullscreen mode
+//
 //     Revision 1.7  2000/01/04 19:43:53  mbickel
 //      Continued Linux port
 //
@@ -172,10 +175,22 @@ void tpulldown::run(void)
             } /* endif */
          } /* endif */
       } /* endif */
+
       if (mousestat != mouseparams.taste) {
-         if (mouseparams.y <= pdb.pdbreite) mousestat = mouseparams.taste;
-         else cancel = true;
+         if (mouseparams.y <= pdb.pdbreite) 
+            mousestat = mouseparams.taste;
+         else {
+            if ( mouseparams.taste == 1 )
+               mousestat = mouseparams.taste;
+            else
+               cancel = true;
+           /*
+            while ( mouseparams.taste )
+               releasetimeslice();
+           */
+         }
       }
+
       if (keypress() ) {
          tkey ch = r_key();
          switch (ch) {
@@ -373,13 +388,12 @@ void         tpulldown::openpdfield(void)
    anf = pdb.field[pdfieldnr].xstart + pdfieldtextdistance / 2 - pdfieldenlargement;
    ende =  anf + pdb.field[pdfieldnr].xwidth + pdfieldenlargement*2;
    boolean umbau = false;
-   if (ende > agmp->resolutionx-4 ) 
-      { 
-         umbau = true; 
-         zw = ende - (agmp->resolutionx-4);
-         ende -= zw;
-         anf -= zw;
-      } 
+   if (ende > agmp->resolutionx-4 ) { 
+      umbau = true; 
+      zw = ende - (agmp->resolutionx-4);
+      ende -= zw;
+      anf -= zw;
+   } 
 
    mousevisible(false);
    collategraphicoperations   cgo ( anf - 3, 0 ,ende + 3, pdb.pdbreite + 6 + pdb.field[pdfieldnr].height );
@@ -389,22 +403,20 @@ void         tpulldown::openpdfield(void)
    bar( anf - 3,pdb.pdbreite,ende + 3,pdb.pdbreite + 6 + pdb.field[pdfieldnr].height,bkgcolor);
    lines(anf - 3,pdb.pdbreite,ende + 3,pdb.pdbreite + 6 + pdb.field[pdfieldnr].height);
    int lang = gettextwdth(pdb.field[pdfieldnr].name,pulldownfont) + 13;
-   if (umbau == true)
-      {
-         line(anf - 2, pdb.pdbreite, anf + lang -1 + zw , pdb.pdbreite,bkgcolor);
-         line(anf - 3,1,anf - 3,pdb.pdbreite + 1,rcolor1);
-         line(anf - 3,1,anf + lang + zw ,1,rcolor1);
-         line(anf +  lang + zw ,1,anf + lang + zw ,pdb.pdbreite ,rcolor2);
-      }
-   else
-      {
-         line(anf - 2, pdb.pdbreite, anf + lang -1, pdb.pdbreite,bkgcolor);
-         line(anf - 3,1,anf - 3,pdb.pdbreite + 1,rcolor1);
-         line(anf - 3,1,anf + lang,1,rcolor1);
-         line(anf +  lang,1,anf + lang,pdb.pdbreite ,rcolor2);
-      }
-   for (int i = 0; i < pdb.field[pdfieldnr].count; i++)
-      {
+
+   if (umbau == true) {
+      line(anf - 2, pdb.pdbreite, anf + lang -1 + zw , pdb.pdbreite,bkgcolor);
+      line(anf - 3,1,anf - 3,pdb.pdbreite + 1,rcolor1);
+      line(anf - 3,1,anf + lang + zw ,1,rcolor1);
+      line(anf +  lang + zw ,1,anf + lang + zw ,pdb.pdbreite ,rcolor2);
+   } else {
+      line(anf - 2, pdb.pdbreite, anf + lang -1, pdb.pdbreite,bkgcolor);
+      line(anf - 3,1,anf - 3,pdb.pdbreite + 1,rcolor1);
+      line(anf - 3,1,anf + lang,1,rcolor1);
+      line(anf +  lang,1,anf + lang,pdb.pdbreite ,rcolor2);
+   }
+
+   for (int i = 0; i < pdb.field[pdfieldnr].count; i++) {
          if (strcmp(pdb.field[pdfieldnr].button[i].name,"seperator") != 0) {
             getleftrighttext(pdb.field[pdfieldnr].button[i].name,lt,rt);
             activefontsettings.justify = lefttext;
@@ -419,6 +431,7 @@ void         tpulldown::openpdfield(void)
          else
             line(anf,pdb.pdbreite + 7 + getpdfieldheight(pdfieldnr,i),ende + 1,pdb.pdbreite + 7 + getpdfieldheight(pdfieldnr,i),rcolor2);
       }
+
    buttonnr = 0;
    showbutton();
 
@@ -479,3 +492,4 @@ void tpulldown::setshortkeys(void)
          } 
       }
    } 
+

@@ -1,6 +1,9 @@
-//     $Id: misc.cpp,v 1.8 2000-03-11 18:22:07 mbickel Exp $
+//     $Id: misc.cpp,v 1.9 2000-05-06 20:25:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/03/11 18:22:07  mbickel
+//      Added support for multiple graphic sets
+//
 //     Revision 1.7  2000/02/03 20:54:41  mbickel
 //      Some cleanup
 //      getfiletime now works under Linux too
@@ -209,6 +212,19 @@ structure_size_tester :: structure_size_tester ( void )
       printf("This program had been compiled with invalid compiler option!\nThe structures had not benn packed !\n");
       exit(1);
    }
+}
+
+
+int  releasetimeslice( void )
+{
+   #ifndef _DOS_
+    SDL_Delay(10);
+   #endif
+/*    union REGS inregs, outregs;
+    inregs.w.ax = 0x1680;
+    int386 (0x2f, &inregs, &outregs);
+    return outregs.w.ax == 0; */
+    return 0;
 }
 
 

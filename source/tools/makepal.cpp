@@ -276,6 +276,11 @@ int main(int argc, char *argv[], char *envp[])
       tn_file_buf_stream mainstream ("palette.pal",2);
       mainstream.writedata( pal, sizeof ( pal ));
       mainstream.writedata( mixbuf, sizeof ( mixbuf ));
+      dunkel05[255] = 255;
+      dunkel1[255] = 255;
+      dunkel2[255] = 255;
+      dunkel3[255] = 255;
+      hell[255] = 255;
       mainstream.writedata( dunkel05, sizeof ( dunkel05 ));
       mainstream.writedata( dunkel1, sizeof ( dunkel1 ));
       mainstream.writedata( dunkel2, sizeof ( dunkel2 ));

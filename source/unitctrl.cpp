@@ -1,6 +1,13 @@
-//     $Id: unitctrl.cpp,v 1.3 2000-05-02 16:20:56 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.4 2000-05-06 20:25:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/05/02 16:20:56  mbickel
+//      Fixed bug with several simultaneous vehicle actions running
+//      Fixed graphic error at ammo transfer in buildings
+//      Fixed ammo loss at ammo transfer
+//      Movecost is now displayed for mines and repairs
+//      Weapon info now shows unhittable units
+//
 //     Revision 1.2  2000/04/27 17:59:24  mbickel
 //      Updated Kdevelop project file
 //      Fixed some graphical errors
@@ -320,7 +327,9 @@ void VehicleMovement :: searchmove(int         x,
          if ( c == 2 ) {
             reachableFields.addField ( x, y );
             search.fieldnum++;
-         }
+         } else
+            if ( c == 1 ) 
+               reachableFieldsIndirect.addField ( x, y );
       } 
       else 
          return;
