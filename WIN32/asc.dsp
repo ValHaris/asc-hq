@@ -124,10 +124,11 @@ SOURCE=..\source\astar2.cpp
 !IF  "$(CFG)" == "asc - Win32 Release"
 
 # ADD CPP /I "libs/jpeg"
+# SUBTRACT CPP /O<none>
 
 !ELSEIF  "$(CFG)" == "asc - Win32 Debug"
 
-# ADD CPP /Gm- /Gi- /I "libs/jpeg"
+# ADD CPP /Gm- /Gi- /Od /I "libs/jpeg"
 # SUBTRACT CPP /YX
 
 !ENDIF 
