@@ -405,10 +405,10 @@ WindMovement::WindMovement ( const Vehicle* vehicle )
    for ( int i = 0; i < sidenum; i++ )
       wm[i] = 0;
 
-   int movement = maxint;
+   int movement = 0;
    for ( int height = 4; height <= 6; height++ )
       if ( vehicle->typ->movement[height] )
-         if ( vehicle->typ->movement[height] < movement )
+         if ( vehicle->typ->movement[height] > movement )
             movement = vehicle->typ->movement[height];
 
 
@@ -429,6 +429,8 @@ WindMovement::WindMovement ( const Vehicle* vehicle )
          int disttofly = (int)sqrt ( square ( xtg - relwindspeedx) + square ( ytg - relwindspeedy ) );
 
          wm[direc] =  (120 - disttofly) / 10;
+         if ( wm[direc] > 7 )
+            wm[direc] = 7;
       }
    }
 }

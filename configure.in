@@ -35,10 +35,17 @@ if test "$GCC" = yes; then
 **** GCC $gcc_version detected. This version of gcc is not an official release
 **** and does produce incorrect code. You may try to build ASC, but it will
 **** most likely NOT run.
-**** To build ASC, we recommend either GCC 2.95 or GCC 3
+**** To build ASC, we recommend GCC 3.2 ; GCC 2.95 is still supported too.
 **** You can bypass this test with --disable-gcc296-detection, so you can build
 **** ASC and see for yourself. And perhaps even rewrite some parts of ASC to
 **** make them Redhat compatible ;) ])
+      fi
+
+      gcc_version29=`echo $gcc_version | grep 2.9`
+      if test "X$gcc_version29" != "X"; then
+         AC_MSG_WARN([
+**** GCC $gcc_version detected. GCC 2.95 is currently still supported, but we
+**** are planning to drop support for GCC 2.x in the medium term. ) ])
       fi
    fi
 fi

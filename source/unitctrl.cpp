@@ -435,6 +435,17 @@ int VehicleMovement :: available ( pvehicle veh ) const
 }
 
 
+      class HeightChangeLimitation: public AStar3D::OperationLimiter {
+              bool allow_Height_Change;
+           public:
+              HeightChangeLimitation ( bool allow_Height_Change_ ) : allow_Height_Change ( allow_Height_Change_ ) {};
+              virtual bool allowHeightChange() { return allow_Height_Change; };
+              virtual bool allowMovement() { return true; };
+              virtual bool allowEnteringContainer() { return true; };
+              virtual bool allowLeavingContainer() { return true; };
+              virtual bool allowDocking() { return true; };
+      };
+
 
 int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int height, int capabilities )
 {
@@ -447,17 +458,6 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
          status = -101;
          return status;
       }
-
-      class HeightChangeLimitation: public AStar3D::OperationLimiter {
-              bool allow_Height_Change;
-           public:
-              HeightChangeLimitation ( bool allow_Height_Change_ ) : allow_Height_Change ( allow_Height_Change_ ) {};
-              virtual bool allowHeightChange() { return allow_Height_Change; };
-              virtual bool allowMovement() { return true; };
-              virtual bool allowEnteringContainer() { return true; };
-              virtual bool allowLeavingContainer() { return true; };
-              virtual bool allowDocking() { return true; };
-      };
 
       int h;
       if ( actmap->getField(veh->getPosition())->unitHere(veh) )
@@ -518,6 +518,17 @@ ChangeVehicleHeight :: ChangeVehicleHeight ( MapDisplayInterface* md, PPendingVe
    dir = _dir;
 }
 
+      class MovementLimitation: public AStar3D::OperationLimiter {
+              bool simpleMode;
+              int hcNum;
+           public:
+              MovementLimitation ( bool simpleMode_ ) : simpleMode ( simpleMode_ ), hcNum(0) {};
+              virtual bool allowHeightChange() { ++hcNum; if ( simpleMode) return hcNum <= 1 ; else return true; };
+              virtual bool allowMovement() { return !simpleMode; };
+              virtual bool allowEnteringContainer() { return true; };
+              virtual bool allowLeavingContainer() { return true; };
+              virtual bool allowDocking() { return true; };
+      };
 
 
 int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int noInterrupt, int disableMovement )
@@ -542,17 +553,6 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int n
       newheight = veh->getPosition().getNumericalHeight() + hcm->heightDelta;
 
 
-      class MovementLimitation: public AStar3D::OperationLimiter {
-              bool simpleMode;
-              int hcNum;
-           public:
-              MovementLimitation ( bool simpleMode_ ) : simpleMode ( simpleMode_ ), hcNum(0) {};
-              virtual bool allowHeightChange() { ++hcNum; if ( simpleMode) return hcNum <= 1 ; else return true; };
-              virtual bool allowMovement() { return !simpleMode; };
-              virtual bool allowEnteringContainer() { return true; };
-              virtual bool allowLeavingContainer() { return true; };
-              virtual bool allowDocking() { return true; };
-      };
 
       PathFinder pf ( actmap, vehicle, vehicle->getMovement() );
       MovementLimitation ml ( disableMovement );
