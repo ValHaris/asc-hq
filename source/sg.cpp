@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.80 2000-08-13 11:55:08 mbickel Exp $
+//     $Id: sg.cpp,v 1.81 2000-08-13 12:35:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.80  2000/08/13 11:55:08  mbickel
+//      Attacking now decreases a units movement by 20% if it has the
+//        "move after attack" flag.
+//
 //     Revision 1.79  2000/08/12 15:03:25  mbickel
 //      Fixed bug in unit movement
 //      ASC compiles and runs under Linux again...
@@ -3511,7 +3515,7 @@ int main(int argc, char *argv[] )
       } else
          dataVersion = 0;
 
-      if ( dataVersion < 2 )
+      if ( dataVersion < 3 )
          displaymessage("A newer version of the data files is required. \n"
                         "You can download a new data package from http://www.asc-hq.org", 2 );
            
