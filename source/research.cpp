@@ -26,17 +26,6 @@
 #include "vehicletype.h"
 #include "gamemap.h"
 
-int  ttechnology :: getlvl( void )
-{
-   if ( lvl == -1 ) {
-      lvl = 0;
-      for (int l = 0; l <= 5; l++)
-         if ( requiretechnology[l] )
-            lvl += requiretechnology[l]->getlvl();
-   }
-   return lvl;
-}
-
 
 tresearch :: tresearch ( )
 {

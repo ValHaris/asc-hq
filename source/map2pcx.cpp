@@ -35,7 +35,7 @@
 #include "mapdisplay.h"
 #include "dialog.h"
 #include "strtmesg.h"
-
+#include "itemrepository.h"
 #include "memorycheck.cpp"
 
 pprogressbar actprogressbar = NULL;

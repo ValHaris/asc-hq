@@ -69,7 +69,17 @@
      int lvl;     // wird nur im Spiel benoetigt: "Level" der benoetigten Techologie. Gibt an, wieviele Basistechnologien insgesamt benoetogt werden.
      int techlevelset;
      int dummy[7];
-     int  getlvl( void );
+     int  getlvl( void ) {
+        if ( lvl == -1 ) {
+           lvl = 0;
+           for (int l = 0; l <= 5; l++)
+              if ( requiretechnology[l] )
+                 lvl += requiretechnology[l]->getlvl();
+
+        }
+        return lvl;
+     };
+
  };
 
 
