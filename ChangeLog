@@ -1,3 +1,79 @@
+2003-02-02 14:04  mbickel
+
+	* data/data.version, data/paybacktime.map,
+	data/legacy/legacy_unit_filter.asctxt, source/edglobal.cpp,
+	source/sgstream.cpp, source/strtmesg.cpp, source/ai/ai.mak,
+	source/libs/triangul/win32/triangulation.mak,
+	source/win32/borland/asc.mak,
+	source/win32/borland/mapeditor/mapeditor.mak:  Increased version of
+	main.con
+	 Updated makefiles
+
+2003-01-29 15:36  mbickel
+
+	* source/strtmesg.cpp:	Changed version number
+
+2003-01-29 15:35  mbickel
+
+	* data/sounds.asctxt:  Fixed sounds.asctxt: wrong case for filename
+
+2003-01-29 00:04  mbickel
+
+	* configure, configure.in, libtool, source/loaders.cpp:  unix
+	builds again
+
+2003-01-28 18:48  mbickel
+
+	* asc.bpg, data/first.map, data/hheli.wav, data/jet.wav,
+	data/paybacktime.map, data/raketenari.wav, data/sounds.asctxt,
+	data/sounds.txt, data/tankmove.wav, data/train.wav, doc/asc.html,
+	doc/raw/spielen.txt, source/attack.cpp, source/building.h,
+	source/building_controls.h, source/controls.h, source/dialog.cpp,
+	source/gamemap.h, source/gui.cpp, source/gui.h, source/loaders.cpp,
+	source/missions.h, source/network.h, source/soundList.cpp,
+	source/soundList.h, source/strtmesg.cpp,
+	source/textfile_evaluation.cpp, source/textfile_evaluation.h,
+	source/unitctrl.cpp, source/vehicle.cpp, source/vehicletype.cpp,
+	source/vehicletype.h, source/win32/borland/asc.bpr:  Added sounds
+	 Rewrote soundsystem
+	 Fixed: tank got stuck when moving from one transport ship to
+	another
+
+2003-01-24 17:24  mbickel
+
+	* data/: message1.txt, sounds.txt:  Updated messages
+	 Updated sounds
+
+2003-01-22 23:39  mbickel
+
+	* doc/install.html:  Updated installation instructions
+
+2003-01-21 22:00  mbickel
+
+	* source/: buildings.cpp, typen.cpp:  Fixed some warnings
+
+2003-01-21 19:46  mbickel
+
+	* source/: building.cpp, buildings.cpp, buildings.h,
+	buildingtype.cpp, buildingtype.h, strtmesg.cpp, vehicle.cpp: 
+	Fixed: ships could not enter spaceship
+	 Fixed: efficiency of mining stations not correctly working
+	 Fixed: unit categories not being evaluated when entering building
+
+2003-01-19 21:27  mbickel
+
+	* source/: edmisc.cpp, gamemap.cpp,
+	win32/borland/mapeditor/mapeditor.bpr:	Mapeditor: Fixed
+	unjustified warning messages during map transformation
+
+2003-01-15 15:35  mbickel
+
+	* ChangeLog, libtool:  rerun configure
+
+2003-01-15 15:29  mbickel
+
+	* source/strtmesg.cpp:	Updated version number
+
 2003-01-14 23:21  mbickel
 
 	* source/: building.cpp, strtmesg.cpp:	Fixed: crash when
