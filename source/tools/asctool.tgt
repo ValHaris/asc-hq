@@ -286,8 +286,8 @@ WVList
 0
 69
 MItem
-15
-..\dos\vesa.cpp
+19
+..\dos\mousehnd.cpp
 70
 WString
 6
@@ -304,8 +304,8 @@ WVList
 0
 73
 MItem
-14
-..\loadbi3.cpp
+15
+..\dos\vesa.cpp
 74
 WString
 6
@@ -322,8 +322,8 @@ WVList
 0
 77
 MItem
-11
-..\misc.cpp
+14
+..\loadbi3.cpp
 78
 WString
 6
@@ -340,8 +340,8 @@ WVList
 0
 81
 MItem
-15
-..\mousehnd.cpp
+11
+..\misc.cpp
 82
 WString
 6

@@ -532,8 +532,8 @@ WVList
 0
 130
 MItem
-21
-..\..\dos\realint.cpp
+22
+..\..\dos\mousehnd.cpp
 131
 WString
 6
@@ -550,8 +550,8 @@ WVList
 0
 134
 MItem
-19
-..\..\dos\timer.cpp
+21
+..\..\dos\realint.cpp
 135
 WString
 6
@@ -568,8 +568,8 @@ WVList
 0
 138
 MItem
-18
-..\..\dos\vesa.cpp
+19
+..\..\dos\timer.cpp
 139
 WString
 6
@@ -587,7 +587,7 @@ WVList
 142
 MItem
 18
-..\..\edevents.cpp
+..\..\dos\vesa.cpp
 143
 WString
 6
@@ -604,8 +604,8 @@ WVList
 0
 146
 MItem
-15
-..\..\edgen.cpp
+18
+..\..\edevents.cpp
 147
 WString
 6
@@ -622,8 +622,8 @@ WVList
 0
 150
 MItem
-18
-..\..\edglobal.cpp
+15
+..\..\edgen.cpp
 151
 WString
 6
@@ -640,8 +640,8 @@ WVList
 0
 154
 MItem
-16
-..\..\edmain.cpp
+18
+..\..\edglobal.cpp
 155
 WString
 6
@@ -659,7 +659,7 @@ WVList
 158
 MItem
 16
-..\..\edmisc.cpp
+..\..\edmain.cpp
 159
 WString
 6
@@ -676,8 +676,8 @@ WVList
 0
 162
 MItem
-18
-..\..\edselfnt.cpp
+16
+..\..\edmisc.cpp
 163
 WString
 6
@@ -694,8 +694,8 @@ WVList
 0
 166
 MItem
-16
-..\..\flview.cpp
+18
+..\..\edselfnt.cpp
 167
 WString
 6
@@ -712,8 +712,8 @@ WVList
 0
 170
 MItem
-17
-..\..\loadbi3.cpp
+16
+..\..\flview.cpp
 171
 WString
 6
@@ -731,7 +731,7 @@ WVList
 174
 MItem
 17
-..\..\loaders.cpp
+..\..\loadbi3.cpp
 175
 WString
 6
@@ -748,8 +748,8 @@ WVList
 0
 178
 MItem
-14
-..\..\misc.cpp
+17
+..\..\loaders.cpp
 179
 WString
 6
@@ -766,8 +766,8 @@ WVList
 0
 182
 MItem
-18
-..\..\mousehnd.cpp
+14
+..\..\misc.cpp
 183
 WString
 6

@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.50 2000-06-09 13:12:26 mbickel Exp $
+//     $Id: sg.cpp,v 1.51 2000-06-19 20:05:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2000/06/09 13:12:26  mbickel
+//      Fixed tribute function and renamed it to "transfer resources"
+//
 //     Revision 1.49  2000/06/09 10:50:59  mbickel
 //      Repaired keyboard control of pulldown menu
 //      Fixed compile errors at fieldlist with gcc
@@ -2299,11 +2302,11 @@ void execuseraction ( tuseractions action )
                                        else
                                           displaymessage("units that can not move and cannot shoot will now be displayed gray", 3);
                        break;
-/*        case ua_computerturn:          displaymessage("This function is under development and for programmers only\n"
-                                                      "unpredicatable things may happen if you continue",3 ) ;
+        case ua_computerturn:          displaymessage("This function is under development and for programmers only\n"
+                                                      "unpredicatable things may happen ...",3 ) ;
                                         if (choice_dlg("do you really want to start the AI?","~y~es","~n~o") == 1) 
                                            computerturn();
-                       break; */
+                       break; 
         case ua_setupnetwork:       if ( actmap->network )
                                        setupnetwork ( actmap->network );
                                     else
@@ -2877,7 +2880,7 @@ void networksupervisor ( void )
 
 
    try {
-       displaymessage ( " starting network transfer ",0);
+       displaymessage ( " starting data transfer ",0);
     
        network.computer[0].receive.transfermethod->initconnection ( TN_RECEIVE );
        network.computer[0].receive.transfermethod->inittransfer ( &network.computer[0].receive.data );
@@ -2889,7 +2892,7 @@ void networksupervisor ( void )
        network.computer[0].receive.transfermethod->closeconnection();
     
     
-       // displaymessage ( " network transfer finished",1);
+       // displaymessage ( " data transfer finished",1);
        removemessage();
        if ( actmap->network )
           setallnetworkpointers ( actmap->network );
@@ -2944,7 +2947,7 @@ void networksupervisor ( void )
 
       tnetworkcomputer* compi = &network.computer[ 0 ];
 
-      displaymessage ( " starting network transfer ",0);
+      displaymessage ( " starting data transfer ",0);
 
       try {
          compi->send.transfermethod->initconnection ( TN_SEND );
@@ -2977,7 +2980,7 @@ void networksupervisor ( void )
       } /* endcatch */
 
       erasemap();
-      displaymessage ( " network transfer finished",1);
+      displaymessage ( "data transfer finished",1);
 
    } else {
       displaymessage ("no supervisor defined or invalid password",1 );

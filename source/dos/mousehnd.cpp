@@ -1,6 +1,10 @@
-//     $Id: mousehnd.cpp,v 1.4 1999-12-07 22:13:21 mbickel Exp $
+//     $Id: mousehnd.cpp,v 1.1 2000-06-19 20:05:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/07 22:13:21  mbickel
+//      Fixed various bugs
+//      Extended BI3 map import tables
+//
 //     Revision 1.3  1999/11/22 18:27:42  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -54,11 +58,11 @@
 #include <malloc.h>
 #include <string.h>
 
-#include "tpascal.inc"
-#include "basegfx.h"
-#include "misc.h"
-#include "mousehnd.h"
-#include "stack.h"
+#include "../tpascal.inc"
+#include "../basegfx.h"
+#include "../misc.h"
+#include "../mousehnd.h"
+#include "../stack.h"
 
 
 /* Data touched at mouse callback time -- they are in a structure to

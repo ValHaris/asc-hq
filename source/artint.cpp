@@ -1,6 +1,15 @@
-//     $Id: artint.cpp,v 1.3 1999-11-22 18:26:43 mbickel Exp $
+//     $Id: artint.cpp,v 1.4 2000-06-19 20:05:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/22 18:26:43  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:41:00  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -35,9 +44,9 @@
 #include <stdio.h>
 
 #ifdef _DOS_
-#include <i86.h>
-#include <conio.h>
-#include <dos.h>
+ #include <i86.h>
+ #include <conio.h>
+ #include <dos.h>
 #endif
 
 #include <string.h>
@@ -62,7 +71,6 @@
 #include "gamedlg.h"
 #include "building.h"
 #include "attack.h"
-#include "spfldutl.h"
 #include "artint.h"
 
 
@@ -89,9 +97,9 @@
                      prequireunit next;
                   } ;
 
-
+/*
    class tcmpsearchattackablevehicles : public tsearchattackablevehicles
-                                 {
+                                 {             
                                       typedef tsearchattackablevehicles inherited;
                                     public:
                                       pattackableunit                   firstattackableunit;
@@ -113,10 +121,10 @@
                      void run ( void );
                   };
 
-  /*  basis 256  */ 
+  //  basis 256  
   #define cca_transport 512  
-  #define cca_attackpriority 5    /*  nenner 8  */ 
-  #define cca_killunit 12    /*  basis 8  */ 
+  #define cca_attackpriority 5    //  nenner 8  
+  #define cca_killunit 12    //  basis 8  
   #define cca_cursordelay 20  
   #define cca_movecursor true  
 
@@ -130,21 +138,21 @@
   #define ccm_servicewait 8  
 
 
-  #define cc_offensiv 30    /*  0: eigene vehicle genausoviel wert wie gegnerische  */ 
-                            /*  - 100: eigenen vehicle doppelt so viel wert  */ 
-                            /*  100: eigene vehicle garnichts wert  */ 
+  #define cc_offensiv 30    //  0: eigene vehicle genausoviel wert wie gegnerische  
+                            //  - 100: eigenen vehicle doppelt so viel wert  
+                            //  100: eigene vehicle garnichts wert  
 
   #define cc_maxshortmovedist 30  
 
-  #define ccbt_repairfacility 200    /*  basic threatvalues for buildings  */ 
+  #define ccbt_repairfacility 200    //  basic threatvalues for buildings  
   #define ccbt_hq 10000  
   #define ccbt_recycling 50  
   #define ccbt_training 150  
 
-  #define ccs_refuel 6           /*  basis 16; ab dieser grenze wird ein tankwagen angeheuert  */ 
-  #define ccs_remunitionier 5    /*  basis 16; ab dieser grenze wird ein  munitionstransporter geordert  */ 
-  #define ccs_damageleave 5      /*  basis 16; sofortige flucht zwecks reparatur;  */ 
-  #define ccs_damageord 8        /*  basis 16; reperaturwagen wird angeheuert  */ 
+  #define ccs_refuel 6           //  basis 16; ab dieser grenze wird ein tankwagen angeheuert  
+  #define ccs_remunitionier 5    //  basis 16; ab dieser grenze wird ein  munitionstransporter geordert  
+  #define ccs_damageleave 5      //  basis 16; sofortige flucht zwecks reparatur;  
+  #define ccs_damageord 8        //  basis 16; reperaturwagen wird angeheuert  
 
   #define unitstatusnum 4
   byte         unitstatus[4]  = {0, ccm_secondattack, ccm_servicewait, ccm_waiting}; 
@@ -153,14 +161,14 @@
   #define ccat_reconquerbuilding 1  
   #define ccat_conquerbuilding 2  
 
-  #define ccam_attackprirfak 26    /* nenner 16 */ 
-     /*  wenn vehicle^.typ^.wait, um wieviel muá attack-priorit„t nach movement gr”áer
-     sein als sofortiger angriff  */ 
-  #define ccam_moveableunitthreatlossdecrease 8    /* nenenr 16 */ 
-     /*  falls sich eine vehicle vor dem angriff noch bewegen kann, um wieviel wird die
-     bedrohung vermindert. dadurch wird die bedrohung eines panzers verringert, da man
-     sich aus dessen schussreichweite entfernen kann, dieser vor einem angriff aber wieder
-     an die vehicle ranfahren kann.  */ 
+  #define ccam_attackprirfak 26    // nenner 16 
+     //  wenn vehicle^.typ^.wait, um wieviel muá attack-priorit„t nach movement gr”áer
+     //  sein als sofortiger angriff  
+  #define ccam_moveableunitthreatlossdecrease 8    // nenenr 16 
+     //  falls sich eine vehicle vor dem angriff noch bewegen kann, um wieviel wird die
+     // bedrohung vermindert. dadurch wird die bedrohung eines panzers verringert, da man
+     // sich aus dessen schussreichweite entfernen kann, dieser vor einem angriff aber wieder
+     // an die vehicle ranfahren kann.  
 
 
 
@@ -218,16 +226,12 @@ void         showthreats(char *       s)
 
 void         generatethreatvalueunit(pvehicle     eht);
 
-/*
-boolean      fieldreachablelongdist(pvehicle     eht,
-                                    integer      x2,
-                                    integer      y2);
 
-void         movelongdist(pvehicle     eht,
-                          integer      x2,
-                          integer      y2);
+// boolean      fieldreachablelongdist(pvehicle     eht, integer      x2, integer      y2);
 
-*/
+// void         movelongdist(pvehicle     eht, integer      x2, integer      y2);
+
+
 
 void         initcomputerturn(void);
 
@@ -305,15 +309,15 @@ void         changethreatvalue(pvehicle     eht,
    eht->completethreatvalue += value; 
    eht->completethreatvaluesurr += value; 
 
-/*
-   punits units = new tunits;
-   tjugdesituationrect jsr; 
-   jsr.init(units,1,eht->xpos,eht->ypos,10); 
-   jsr.startsuche(); 
-   jsr.done(); 
 
-   delete units; 
-*/
+ //  punits units = new tunits;
+ //  tjugdesituationrect jsr; 
+ //  jsr.init(units,1,eht->xpos,eht->ypos,10); 
+ //  jsr.startsuche(); 
+ //  jsr.done(); 
+
+ //  delete units; 
+
 } 
 
 
@@ -456,8 +460,8 @@ int      tsearchsurroundingunits :: unitposition(pvehicle     eht,
    o = 0; 
    m = 0; 
    for (b = 0; b <= 7; b++) { 
-        /* if units^.alliedthreats[b] = 0 then
-      units^.alliedthreats[b] :=1; */ 
+      //   if units^.alliedthreats[b] = 0 then
+      //      units^.alliedthreats[b] :=1; 
       m += units->enemythreatpos[b]; 
       n += units->enemythreatpos[b] * eht->threatvalue[b]; 
       if (n > 0) 
@@ -828,10 +832,10 @@ void         tcmpsearchattackablevehicles :: testfield(void)
       if (atw->count > 0) { 
          if ( fld2->vehicle ) { 
             pfield fld1 = getfield(startx,starty); 
-              /****************************************************************
-            ÿ                           eigenen angriff testen
-            ÿ ****************************************************************/ 
-            /*
+              // ****************************************************************
+            ÿ //                          eigenen angriff testen
+            ÿ // ****************************************************************
+            
             battle.calc(fld1, xp, yp, atw->num[0] ); 
             tattackresult attackresult = battle.attackresult; 
             lastweapnum = 0; 
@@ -881,19 +885,19 @@ void         tcmpsearchattackablevehicles :: testfield(void)
             firstattackableunit->result = attackresult; 
 
             firstattackableunit->next = pau; 
-            */ 
+             
             
          } 
       } 
       delete atw;
 
 
-      /****************************************************************
-      ÿ                   gegnerischen angriff testen
-      ****************************************************************/ 
+      // ****************************************************************
+      //ÿ                   gegnerischen angriff testen
+      // ****************************************************************
       attackingunit = fld2->vehicle; 
       if ( attackingunit ) { 
-         /*
+         
          npush( actmap->actplayer ); 
          actmap->actplayer = attackingunit->color / 8; 
          pattackweap  atw = attackpossible(attackingunit,startx,starty); 
@@ -910,7 +914,7 @@ void         tcmpsearchattackablevehicles :: testfield(void)
             completethreat += threatloss; 
          } 
          delete atw; 
-         */
+         
       } 
    } 
 } 
@@ -961,10 +965,6 @@ int      getposthreat(pvehicle     eht,
    npush( eht->xpos ); 
    npush( eht->ypos ); 
 
-   /* pfield        fld;
-   fld:=getfield(x,y);
-   push(fld^.vehicle,sizeof(fld^.vehicle));
-   fld^.vehicle:=eht                         */ 
 
    tcmpsearchattackablevehicles csae; 
    csae.init(eht); 
@@ -972,7 +972,6 @@ int      getposthreat(pvehicle     eht,
    int temp = csae.getpositionthreat(); 
    csae.done(); 
 
-     /*  pop(fld^.vehicle,sizeof(fld^.vehicle)); */ 
    npop( eht->ypos ); 
    npop( eht->xpos ); 
 
@@ -1030,11 +1029,6 @@ void         tcmpsearchattackablevehicles :: done(void)
 
 
    
-
-   /*
-   tcmpmovement : public tsearchfields)
-                  end;
-      */
 
   class  tcmpcheckreconquerbuilding : public tsearchfields {
                                    typedef tsearchfields inherited;
@@ -1204,15 +1198,15 @@ void         checkconquerbuilding(pvehicle     eht)
                while (bld != NULL) { 
                   if (bld->threatvalue == 0) 
                      generatethreatvaluebuilding(bld); 
-                   /*
-                  if (fieldreachablelongdist(eht,bld->xpos,bld->ypos)) { 
+                   
+                  if (fieldreachablelongdist(eht,bld->xpos,bld->ypos) && 0) { 
                      int p = bld->threatvalue * 16 / beeline(bld->xpos,bld->ypos,eht->xpos,eht->ypos);
                      if ( p > bestbuilding.prir ) {
                         bestbuilding.prir = p; 
                         bestbuilding.bld = bld; 
                      } 
                   } 
-                  */
+                  
                   bld = bld->next; 
                } 
             } 
@@ -1978,7 +1972,7 @@ void         checkmovement(pvehicle     eht)
          b = 0; 
          msd.init(eht); 
          msd.run(); 
-///*          if msd.bestattack <> NULL then
+//          if msd.bestattack <> NULL then
 //            msd.exec;
 //         else
 //            b:=1;  
@@ -1989,7 +1983,7 @@ void         checkmovement(pvehicle     eht)
    } 
 } 
 
-*/
+
 ///////////////////////////////////////////////////////////
 //          movementsroutinen Ende
 /////////////////////////////////////////////////////////// 
@@ -2106,8 +2100,8 @@ void         tsearchforfuel :: testfield(void)
                                  x1 = eht->xpos; 
                                  y1 = eht->ypos; 
                                  getnextfield(x1,y1,b); 
-                                 /*
-                                 if (fieldreachablelongdist(vehicle,x1,y1)) { 
+                                 
+                                 if (0 && fieldreachablelongdist(vehicle,x1,y1)) { 
                                     destx = x1; 
                                     desty = y1; 
                                     abbruch = true; 
@@ -2118,23 +2112,21 @@ void         tsearchforfuel :: testfield(void)
                                     else 
                                        necheight = vehicle->height; 
                                  } 
-                                 */
+                                 
                               } 
                               if (status != 2) { 
-                                 /*
-                                 if (fieldreachablelongdist(vehicle,eht->xpos,eht->ypos)) { 
+                                 if (0 && fieldreachablelongdist(vehicle,eht->xpos,eht->ypos)) { 
                                     destx = eht->xpos; 
                                     desty = eht->ypos; 
                                     status = 2; 
                                     abbruch = true; 
                                     necheight = vehicle->height; 
                                  } 
-                                 */
                               } 
                            } 
       if (mode > 0) { 
-/*         pbuilding bld = fld->building;
-         if (bld != NULL) 
+         pbuilding bld = fld->building;
+         if (0 && bld != NULL) 
             if (bld->sprit + 5 * bld->plus.fuel >= vehicle->typ->tank - vehicle->fuel) 
                if (fieldreachablelongdist(vehicle,x1,y1)) { 
                   destx = x1; 
@@ -2142,7 +2134,7 @@ void         tsearchforfuel :: testfield(void)
                   abbruch = true; 
                   status = 1; 
                } 
-               */
+               
       } 
    } 
 } 
@@ -2166,8 +2158,8 @@ void         tsearchforrepairsite :: testfield(void)
                               x1 = eht->xpos; 
                               y1 = eht->ypos; 
                               getnextfield(x1,y1,b); 
-                              /*
-                              if (fieldreachablelongdist(vehicle,x1,y1)) { 
+                              
+                              if (0 && fieldreachablelongdist(vehicle,x1,y1)) { 
                                  destx = x1; 
                                  desty = y1; 
                                  abbruch = true; 
@@ -2178,22 +2170,19 @@ void         tsearchforrepairsite :: testfield(void)
                                  else 
                                     necheight = vehicle->height; 
                               } 
-                              */
+                              
                            } 
                            if (status != 2) { 
-                              /*
-                              if (fieldreachablelongdist(vehicle,eht->xpos,eht->ypos)) { 
+                              if ( 0 && fieldreachablelongdist(vehicle,eht->xpos,eht->ypos)) { 
                                  destx = eht->xpos; 
                                  desty = eht->ypos; 
                                  status = 2; 
                                  abbruch = true; 
                                  necheight = vehicle->height; 
                               } 
-                              */
                            } 
                         } 
       if (mode > 0) { 
-         /*
          pbuilding bld = fld->building;
          if (bld != NULL) 
             if (bld->typ->special & cgrepairfacilityb )
@@ -2203,7 +2192,6 @@ void         tsearchforrepairsite :: testfield(void)
                   abbruch = true; 
                   status = 1; 
                } 
-               */
       } 
    } 
 } 
@@ -2230,8 +2218,8 @@ void         tsearchforammunition :: testfield(void)
                                        x1 = eht->xpos; 
                                        y1 = eht->ypos; 
                                        getnextfield(x1,y1,b); 
-                                       /*
-                                       if (fieldreachablelongdist(vehicle,x1,y1)) { 
+                                       
+                                       if (0 && fieldreachablelongdist(vehicle,x1,y1)) { 
                                           destx = x1; 
                                           desty = y1; 
                                           abbruch = true; 
@@ -2242,25 +2230,21 @@ void         tsearchforammunition :: testfield(void)
                                           else 
                                              necheight = vehicle->height; 
                                        } 
-                                       */
                                     } 
                                     if (status != 2) { 
-                                       /*
-                                       if (fieldreachablelongdist(vehicle,eht->xpos,eht->ypos)) { 
+                                       if (0 && fieldreachablelongdist(vehicle,eht->xpos,eht->ypos)) { 
                                           destx = eht->xpos; 
                                           desty = eht->ypos; 
                                           status = 2; 
                                           abbruch = true; 
                                           necheight = vehicle->height; 
                                        } 
-                                       */
                                     } 
                                  } 
 
       if (mode > 0) { 
-         /*
          pbuilding bld = fld->building;
-         if (bld != NULL) 
+         if (0 && bld != NULL) 
             if (bld->sprit + 5 * bld->plus.fuel >= vehicle->typ->tank - vehicle->fuel) 
                if (fieldreachablelongdist(vehicle,x1,y1)) { 
                   destx = x1; 
@@ -2268,7 +2252,7 @@ void         tsearchforammunition :: testfield(void)
                   abbruch = true; 
                   status = 1; 
                } 
-               */
+               
       } 
    } 
 } 
@@ -2432,19 +2416,18 @@ void         checkorders(pvehicle     eht)
                   x1 = bestorder[b].order->units->xpos; 
                   y1 = bestorder[b].order->units->ypos; 
                   getnextfielddir(x1,y1,j,c); 
-                  /*
-                  if (fieldreachablelongdist(eht,x1,y1)) { 
+                  
+                  if (0 && fieldreachablelongdist(eht,x1,y1)) { 
                      i++;
                      break;
                   } 
-                  */
                } 
 
                if (i > 0) { 
-                  /*
-                  if (beeline(x1,y1,eht->xpos,eht->ypos) > 15) 
-                     movelongdist(eht,x1,y1); 
-                     */
+                  
+                  // if (beeline(x1,y1,eht->xpos,eht->ypos) > 15) 
+                  //    movelongdist(eht,x1,y1); 
+                     
                   if (beeline(x1,y1,eht->xpos,eht->ypos) <= 15) { 
                      if (bestorder[b].order->need & ccn_repair > 0) { 
                         tcmprefuelunit cru;
@@ -2637,14 +2620,14 @@ void         initcomputerturn(void)
          } 
       } 
    }     
-  /*
-   punits units = new tunits;
-   tjugdesituationspfd jugdesituationspfd; 
-   jugdesituationspfd.init(units,1); 
-   jugdesituationspfd.startsuche(); 
-   jugdesituationspfd.done(); 
-   delete units;
-  */
+
+   // punits units = new tunits;
+   // tjugdesituationspfd jugdesituationspfd; 
+   // jugdesituationspfd.init(units,1); 
+   // jugdesituationspfd.startsuche(); 
+   // jugdesituationspfd.done(); 
+   // delete units;
+
    showthreats("init: threatvals generated"); 
 
 } 
@@ -2681,10 +2664,10 @@ void         computerturn(void)
          if (vehicle->cmpchecked == unitstatus[calcpass]) { 
             displaymessage2(vehicle->typ->description); 
             checkorders(vehicle); 
-            checkservice(vehicle); /*
-            if (vehicle->movement > 0) 
-               checkmovement(vehicle); 
-            else  */
+            checkservice(vehicle); 
+            // if (vehicle->movement > 0) 
+            //   checkmovement(vehicle); 
+            // else  
                checkattack(vehicle); 
          } 
 
@@ -2709,9 +2692,10 @@ class tartintinit {
 
 tartintconfig artintconfig;
 
-/*
-void* getfirstpointer ( void )
-{
-    return (void*) beep2;
-}    
+   
 */
+void         computerturn(void)
+{
+
+}
+

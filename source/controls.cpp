@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.36 2000-06-09 13:12:23 mbickel Exp $
+//     $Id: controls.cpp,v 1.37 2000-06-19 20:05:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2000/06/09 13:12:23  mbickel
+//      Fixed tribute function and renamed it to "transfer resources"
+//
 //     Revision 1.35  2000/06/08 21:03:39  mbickel
 //      New vehicle action: attack
 //      wrote documentation for vehicle actions
@@ -5169,7 +5172,7 @@ void sendnetworkgametonextplayer ( int oldplayer, int newplayer )
       while ( compi->send.transfermethod == NULL  ||  compi->send.transfermethodid == 0 )
            setupnetwork( actmap->network, 2, oldplayer );
 
-      displaymessage ( " starting network transfer ",0);
+      displaymessage ( " starting data transfer ",0);
 
       try {
          compi->send.transfermethod->initconnection ( TN_SEND );
@@ -5199,7 +5202,7 @@ void sendnetworkgametonextplayer ( int oldplayer, int newplayer )
       } /* endcatch */
 
       erasemap();
-      displaymessage( " network transfer finished",1);
+      displaymessage( " data transfer finished",1);
 
       throw tnomaploaded ();
    }
@@ -5506,7 +5509,7 @@ void continuenetworkgame ( void )
    
 
    try {
-       displaymessage ( " starting network transfer ",0);
+       displaymessage ( " starting data transfer ",0);
     
        network.computer[0].receive.transfermethod->initconnection ( TN_RECEIVE );
        network.computer[0].receive.transfermethod->inittransfer ( &network.computer[0].receive.data );

@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.23 2000-06-09 13:12:22 mbickel Exp $
+//     $Id: building.cpp,v 1.24 2000-06-19 20:05:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/06/09 13:12:22  mbickel
+//      Fixed tribute function and renamed it to "transfer resources"
+//
 //     Revision 1.22  2000/06/06 20:03:16  mbickel
 //      Fixed graphical error when transfering ammo in buildings
 //      Sound can now be disable by a command line parameter and the game options
@@ -1997,13 +2000,25 @@ ccontainer :: cammunitiontransfer_subwindow :: cammunitiontransfer_subwindow ( v
       objcoordinates[i].t2 = 8;
    } /* endfor */
 
-   objcoordinates[9].x1 = subwinx1 + 217;
-   objcoordinates[9].x2 = subwinx1 + 303;
-   objcoordinates[9].y1 = subwiny1 + 4;
-   objcoordinates[9].y2 = subwiny1 + 14;
-   objcoordinates[9].type = 5;
+   objcoordinates[19].x1 = subwinx1 + 217;
+   objcoordinates[19].x2 = subwinx1 + 303;
+   objcoordinates[19].y1 = subwiny1 + 4;
+   objcoordinates[19].y2 = subwiny1 + 14;
+   objcoordinates[19].type = 5;
    
-   memset ( &actdisp, 0, sizeof ( actdisp ));
+
+   objcoordinates[20].x1 = subwinx1 + 193;
+   objcoordinates[20].x2 = subwinx1 + 215;
+   objcoordinates[20].y1 = subwiny1 + 4;
+   objcoordinates[20].y2 = subwiny1 + 14;
+   objcoordinates[20].type = 6;
+
+   objcoordinates[21].x1 = subwinx1 + 305;
+   objcoordinates[21].x2 = subwinx1 + 327;
+   objcoordinates[21].y1 = subwiny1 + 4;
+   objcoordinates[21].y2 = subwiny1 + 14;
+   objcoordinates[21].type = 6;
+
    actschieber = 0 ;
    externalloadingactive = 0;
 }
@@ -2027,11 +2042,11 @@ void  ccontainer :: cammunitiontransfer_subwindow :: paintobj ( int numm, int st
    csubwindow :: paintobj ( numm, stat );
 
    if ( objcoordinates[numm].type == 3 ) {
+      int nnumm = numm + page * 8;
       setinvisiblemouserectanglestk ( objcoordinates[numm].x1,   objcoordinates[numm].y1,   objcoordinates[numm].x2+10,   objcoordinates[numm].y2 );
       collategraphicoperations cgo  ( objcoordinates[numm].x1,   objcoordinates[numm].y1,   objcoordinates[numm].x2+10,   objcoordinates[numm].y2 );
-      if ( numm < num ) {
+      if ( nnumm < num ) {
          putimage ( objcoordinates[numm].x1-1,   objcoordinates[numm].y1-1,  icons.container.subwin.ammotransfer.schiene );
-         actdisp[numm] = 2;
    
          int offs = 0;
          if ( numm == actschieber )
@@ -2047,11 +2062,10 @@ void  ccontainer :: cammunitiontransfer_subwindow :: paintobj ( int numm, int st
          activefontsettings.length = 29;
          activefontsettings.justify = centertext;
          activefontsettings.background = bkgrcol;
-         showtext2c ( strrr ( weaps[numm].actnum  ), subwinx1 + 31 + numm * 40, subwiny1 + 25 );
-         showtext2c ( strrr ( weaps[numm].buildnum + weaps[numm].orgnum - weaps[numm].actnum  ), subwinx1 + 31 + numm * 40, subwiny1 + 96 );
+         showtext2c ( strrr ( weaps[nnumm].actnum  ), subwinx1 + 31 + numm * 40, subwiny1 + 25 );
+         showtext2c ( strrr ( weaps[nnumm].buildnum + weaps[nnumm].orgnum - weaps[nnumm].actnum  ), subwinx1 + 31 + numm * 40, subwiny1 + 96 );
       } else {
          putimage ( objcoordinates[numm].x1-1,   objcoordinates[numm].y1-1,  icons.container.subwin.ammotransfer.schieneinactive );
-         actdisp[numm] = 1;
          bar ( subwinx1 + 31 + numm * 40, subwiny1 + 25, subwinx1 + 61 + numm * 40, subwiny1 + 35, bkgrcol );
          bar ( subwinx1 + 31 + numm * 40, subwiny1 + 96, subwinx1 + 61 + numm * 40, subwiny1 +106, bkgrcol );
          bar ( subwinx1 + 31 + numm * 40, subwiny1 + 38, subwinx1 + 45 + numm * 40, subwiny1 + 93, bkgrcol );
@@ -2066,19 +2080,43 @@ void  ccontainer :: cammunitiontransfer_subwindow :: paintobj ( int numm, int st
       else
          activefontsettings.font = schriften.guifont;
       activefontsettings.background = 255;
-      activefontsettings.length = 65;
+      activefontsettings.length = objcoordinates[numm].x2 - objcoordinates[numm].x1;
       activefontsettings.height = 0;
       activefontsettings.justify = centertext;
       if ( stat == 0 ) {
-         putimage ( subwinx1 + 217, subwiny1 + 4, icons.container.subwin.ammotransfer.button );
-         showtext2c ( txtptr, subwinx1 + 228, subwiny1 +5 );
+         putimage ( objcoordinates[numm].x1, objcoordinates[numm].y1, icons.container.subwin.ammotransfer.button );
+         showtext2c ( txtptr, objcoordinates[numm].x1 + 1, objcoordinates[numm].y1 + 1 );
       } else {
-         putimage ( subwinx1 + 217, subwiny1 + 4, icons.container.subwin.ammotransfer.buttonpressed );
-         showtext2c ( txtptr, subwinx1 + 229, subwiny1 + 6 );
+         putimage ( objcoordinates[numm].x1, objcoordinates[numm].y1, icons.container.subwin.ammotransfer.buttonpressed );
+         showtext2c ( txtptr, objcoordinates[numm].x1 + 2, objcoordinates[numm].y1 + 2 );
       }
       getinvisiblemouserectanglestk ( ); 
-
    }
+   if ( objcoordinates[numm].type == 6 ) {
+      setinvisiblemouserectanglestk ( objcoordinates[numm].x1,   objcoordinates[numm].y1,   objcoordinates[numm].x2+10,   objcoordinates[numm].y2 );
+      collategraphicoperations cgo  ( objcoordinates[numm].x1,   objcoordinates[numm].y1,   objcoordinates[numm].x2+10,   objcoordinates[numm].y2 );
+      activefontsettings.font = schriften.guifont;
+      activefontsettings.background = 255;
+      activefontsettings.length = objcoordinates[numm].x2 - objcoordinates[numm].x1;
+      activefontsettings.height = 0;
+      activefontsettings.justify = centertext;
+      char* text;
+      if ( numm == 20 )
+         text = "-";
+      else
+         if ( numm == 21 )
+            text = "+";
+
+      if ( stat == 0 ) {
+         bar ( objcoordinates[numm].x1, objcoordinates[numm].y1, objcoordinates[numm].x2, objcoordinates[numm].y2, bkgrcol);
+         showtext2c ( text, objcoordinates[numm].x1 + 1, objcoordinates[numm].y1 + 1 );
+      } else {
+         bar ( objcoordinates[numm].x1, objcoordinates[numm].y1, objcoordinates[numm].x2, objcoordinates[numm].y2, bkgrdarkcol);
+         showtext2c ( text, objcoordinates[numm].x1 + 2, objcoordinates[numm].y1 + 2 );
+      }
+      getinvisiblemouserectanglestk ( ); 
+   }
+
 }
 
 void  ccontainer :: cammunitiontransfer_subwindow :: reset ( pvehicle veh )
@@ -2132,8 +2170,10 @@ void  ccontainer :: cammunitiontransfer_subwindow :: reset ( pvehicle veh )
          check(i);
          objcoordinates[i].type = 3;
       }
-
    }
+   pagenum = num / 8;
+   if ( page > pagenum )
+      page = 0;
 }                                                          
 
 int   ccontainer :: cammunitiontransfer_subwindow :: gpres ( int i )
@@ -2166,8 +2206,11 @@ int   ccontainer :: cammunitiontransfer_subwindow :: gpres ( int i )
 void  ccontainer :: cammunitiontransfer_subwindow :: check ( int i )
 {
     weaps[i].actnum = weaps[i].orgnum + gpres(i);
-    int length = objcoordinates[i].y2 - objcoordinates[i].y1 - objcoordinates[i].t2;
-    objcoordinates[i].t1 = length * weaps[i].actnum / weaps[i].maxnum;
+    int ii = i - page*8;
+    if ( ii >= 0 && ii < 8 ) {
+       int length = objcoordinates[ii].y2 - objcoordinates[ii].y1 - objcoordinates[ii].t2;
+       objcoordinates[ii].t1 = length * weaps[i].actnum / weaps[i].maxnum;
+    }
 }
 
 
@@ -2180,14 +2223,14 @@ void  ccontainer :: cammunitiontransfer_subwindow :: display ( void )
    setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    npush ( activefontsettings );
    putimage ( subwinx1, subwiny1, icons.container.subwin.ammotransfer.start );
-   for ( int i = 0; i < 8; i++ )
-      actdisp[i] = 0;
 
    csubwindow :: display ();
 
    displayvariables();
 
-   paintobj ( 9, 0 );
+   paintobj ( 19, 0 );
+   paintobj ( 20, 0 );
+   paintobj ( 21, 0 );
 
 
    npop ( activefontsettings );
@@ -2202,7 +2245,7 @@ void  ccontainer :: cammunitiontransfer_subwindow :: displayvariables ( void )
    activefontsettings.justify = lefttext;
    for (int i = 0; i < 8; i++) {
 
-      if ( i < num ) {
+      if ( i+page*8 < num ) {
          char* buf;
          paintobj ( i, 0 );
          {
@@ -2218,16 +2261,14 @@ void  ccontainer :: cammunitiontransfer_subwindow :: displayvariables ( void )
             activefontsettings.length = 0;
             activefontsettings.justify = lefttext;
             activefontsettings.background = 255;
-            showtext2c ( weaps[i].name, 10, 10 );
+            showtext2c ( weaps[i+page*8].name, 10, 10 );
             getimage ( 10, 10, 10 + x2, 10 + y2, buf );
          }
          putrotspriteimage90 ( subwinx1 + 31 + 40 * i , subwiny1 + 38, buf, 0 );
 
          delete[] buf;
       } else
-        if ( actdisp[i] != 1 )
-           paintobj ( i, 0 );
-
+         paintobj ( i, 0 );
         
    }
 
@@ -2266,35 +2307,36 @@ void  ccontainer :: cammunitiontransfer_subwindow :: execexternalload ( void )
 void  ccontainer :: cammunitiontransfer_subwindow :: checkformouse ( void )
 {
    if ( mouseparams.taste == 1 ) {
-      for (int i = 0; i < num; i++) {
-         if ( mouseparams.x >= objcoordinates[i].x1    && mouseparams.x <= objcoordinates[i].x2  &&
-              mouseparams.y >= objcoordinates[i].y1    && mouseparams.y <= objcoordinates[i].y2 ) {
+      for (int i = page*8; i < num && i < (page+1)*8; i++) {
+         int ii = i - page*8;
+         if ( mouseparams.x >= objcoordinates[ii].x1    && mouseparams.x <= objcoordinates[ii].x2  &&
+              mouseparams.y >= objcoordinates[ii].y1    && mouseparams.y <= objcoordinates[ii].y2 ) {
 
             int repnt = 0;
             int tp = weaps[i].actnum;
-            if ( i != actschieber ) {
+            if ( ii != actschieber ) {
                int old = actschieber;
-               actschieber = i;
+               actschieber = ii;
                paintobj ( old, 0 );
                repnt = 1;
             }
 
-            int relpos = objcoordinates[i].y2 -  mouseparams.y  /* - objcoordinates[i].t2 / 2 */ ;
+            int relpos = objcoordinates[ii].y2 -  mouseparams.y  /* - objcoordinates[ii].t2 / 2 */ ;
             if ( relpos < 0 )
                relpos = 0;
 
-            int maxlen = ( objcoordinates[i].y2 - objcoordinates[i].y1 - objcoordinates[i].t2 + 1 );
+            int maxlen = ( objcoordinates[ii].y2 - objcoordinates[ii].y1 - objcoordinates[ii].t2 + 1 );
             if ( relpos > maxlen )
                relpos = maxlen;
 
-            if ( relpos != objcoordinates[i].t1 ) {
+            if ( relpos != objcoordinates[ii].t1 ) {
                int n = relpos * weaps[i].maxnum / maxlen;
                int oldnum = weaps[i].actnum;      
                if ( n != oldnum ) {
                   weaps[i].actnum = n;
                   check ( i );
                   if ( weaps[i].actnum != oldnum ) {
-                     paintobj ( i, 0 );
+                     paintobj ( ii, 0 );
                      transfer();
                   }
                }
@@ -2302,15 +2344,26 @@ void  ccontainer :: cammunitiontransfer_subwindow :: checkformouse ( void )
             }
 
             if (  tp == weaps[i].actnum && repnt )
-               paintobj ( i, 0 );
+               paintobj ( ii, 0 );
 
 
          }
       } /* endfor */
 
-      if ( externalloadavailable () && objpressedbymouse ( 9 ) ) 
+      if ( externalloadavailable () && objpressedbymouse ( 19 ) ) 
          execexternalload();
       
+      if ( objpressedbymouse ( 20 ) && page > 0 ) {
+         page--;
+         // display();
+         displayvariables();
+      }
+
+      if ( objpressedbymouse ( 21 ) && page < pagenum ) {
+         page++;
+         // display();
+         displayvariables();
+      }
 
    }
 }
@@ -2318,9 +2371,19 @@ void  ccontainer :: cammunitiontransfer_subwindow :: checkformouse ( void )
 void  ccontainer :: cammunitiontransfer_subwindow :: checkforkey ( tkey taste )
 {
   if ( num ) {
+     int snum;
+     if ( num < 8 )
+        snum = num;
+     else {
+        if ( page == num/8 )
+           snum = num%8;
+        else
+           snum = 8;
+     }
+
      if ( taste == ct_right  || taste==ct_6k ) {
         int olds = actschieber;
-        if ( actschieber+1 < num )
+        if ( actschieber+1 < snum  )
            actschieber++;
         else
            actschieber = 0;
@@ -2333,7 +2396,7 @@ void  ccontainer :: cammunitiontransfer_subwindow :: checkforkey ( tkey taste )
         if ( actschieber > 0 )
            actschieber--;
         else
-           actschieber = num-1;
+           actschieber = snum-1;
    
         paintobj ( olds, 0 );
         paintobj ( actschieber, 0 );
@@ -2363,14 +2426,6 @@ void  ccontainer :: cammunitiontransfer_subwindow :: checkforkey ( tkey taste )
          }
    
      }
-/*   
-     if ( taste == ct_enter || taste == ct_enterk ) { 
-          transfer();
-          reset();
-          for ( int i = 0; i < num; i++ ) 
-             paintobj ( i, 0 );
-     }
-*/
   }
 }
 

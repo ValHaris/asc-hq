@@ -1,6 +1,9 @@
-//     $Id: artint.h,v 1.3 2000-05-23 20:40:36 mbickel Exp $
+//     $Id: artint.h,v 1.4 2000-06-19 20:05:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/05/23 20:40:36  mbickel
+//      Removed boolean type
+//
 //     Revision 1.2  1999/11/16 03:41:01  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -40,7 +43,7 @@
                }; 
 extern tartintconfig artintconfig;
 
-// extern void  computerturn(void);
+extern void  computerturn(void);
 
 extern int getposval(void);
 

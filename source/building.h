@@ -1,6 +1,15 @@
-//     $Id: building.h,v 1.8 2000-04-27 16:25:16 mbickel Exp $
+//     $Id: building.h,v 1.9 2000-06-19 20:05:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/04/27 16:25:16  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.7  2000/01/02 19:47:05  mbickel
 //      Continued Linux port
 //      Fixed crash at program exit
@@ -365,7 +374,7 @@ typedef class csubwindow* psubwindow;
                                   int x1, y1, x2, y2;
                                   int t1, t2;
                                   int type;
-                              } objcoordinates[20];
+                              } objcoordinates[30];
                         int objnum;
 
                         virtual void paintobj ( int num, int stat );
@@ -534,7 +543,6 @@ class    ccontainer : public virtual ccontainercontrols {
                                    const char* name;
                              } weaps[12];
                              int schieblength;
-                             int actdisp[8];
                              void checkformouse ( void );
                              int num;
                              pvehicle eht;
@@ -548,6 +556,8 @@ class    ccontainer : public virtual ccontainercontrols {
                              int externalloadingactive;
                              virtual int externalloadavailable ( void );
                              virtual void execexternalload ( void );
+                             int page;
+                             int pagenum;
                            public: 
                              cammunitiontransfer_subwindow ( void );
                              int  subwin_available ( void );
