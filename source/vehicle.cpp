@@ -569,7 +569,7 @@ bool Vehicle :: weapexist( void )
 void Vehicle :: putimage ( int x, int y )
 {
   #ifdef sgmain
-   int shaded = ( getMovement() < minmalq ) && ( color == gamemap->actplayer*8) && (attacked || !typ->weapons.count || CGameOptions::Instance()->units_gray_after_move );
+   int shaded = ( getMovement() < minmalq ) && maxMovement() && ( color == gamemap->actplayer*8) && (attacked || !typ->weapons.count || CGameOptions::Instance()->units_gray_after_move );
   #else
    int shaded = 0;
   #endif

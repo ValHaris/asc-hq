@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.77 2001-11-18 19:31:05 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.78 2001-11-22 13:49:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.77  2001/11/18 19:31:05  mbickel
+//      Fixed crash when reaction fire kills a unit during height change
+//
 //     Revision 1.76  2001/11/15 20:46:05  mbickel
 //      Fixed: replay not working when moving units out of carriers
 //
@@ -424,7 +427,10 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
       if ( height == -1 )
          height = veh->height;
 
-      initialMovement = veh->typ->movement[log2 ( height ) ] * veh->getMovement( false ) / veh->maxMovement();
+      if ( veh->maxMovement() )
+         initialMovement = veh->typ->movement[log2 ( height ) ] * veh->getMovement( false ) / veh->maxMovement();
+      else
+         initialMovement = 0;
 
       searchstart ( veh->xpos, veh->ypos, newheight );
       if ( search.fieldnum <= 0 ) {
@@ -1296,7 +1302,7 @@ int ChangeVehicleHeight :: moveheight( int allFields )
 
 int ChangeVehicleHeight :: moveunitxy ( int xt1, int yt1, IntFieldList& pathToMove )
 {
-   int nwid = vehicle->height;
+   int nwid = vehicle->networkid;
    int oldheight = vehicle->height;
    int res = BaseVehicleMovement :: moveunitxy ( xt1, yt1, pathToMove );
    if ( res < 0 || res == 1000 )

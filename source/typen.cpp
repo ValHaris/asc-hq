@@ -1,6 +1,12 @@
-//     $Id: typen.cpp,v 1.83 2001-10-03 20:56:06 mbickel Exp $
+//     $Id: typen.cpp,v 1.84 2001-11-22 13:49:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.83  2001/10/03 20:56:06  mbickel
+//      Updated data files
+//      Updated online help
+//      Clean up of Pulldown menues
+//      Weapons can now have different efficiencies against different unit classes
+//
 //     Revision 1.82  2001/10/02 14:06:29  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -423,7 +429,7 @@ const char* ceventtrigger[ceventtriggernum]  = {"*NONE*", "turn/move >=", "build
                                                  "all units lost", "all enemy buildings destroyed/captured", "all buildings lost", 
                                                  "energy tribute <", "material tribute <", "fuel tribute <",
                                                  "any unit enters polygon", "specific unit enters polygon", "building is seen", "irrelevant (used internally)"};
-const char*  cminentypen[cminenum]  = {"antipersonnel mine", "antitank mine", "moored mine", "floating mine"};
+const char*  cminentypen[cminenum]  = {"antipersonnel mine", "antitank mine", "antisub mine", "antiship mine"};
 const int cminestrength[cminenum]  = { 60, 120, 180, 180 };
 
 

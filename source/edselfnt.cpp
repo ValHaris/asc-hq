@@ -2,9 +2,12 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.35 2001-10-29 20:24:56 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.36 2001-11-22 13:49:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2001/10/29 20:24:56  mbickel
+//      Fixed AI crash when producing to much units
+//
 //     Revision 1.34  2001/10/02 14:06:28  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -985,7 +988,10 @@ void SelectColor :: displaysingleitem ( pcolortype item, int x, int y )
 void SelectColor :: showiteminfos ( pcolortype item, int x1, int y1, int x2, int y2 )
 { 
     rectangle ( x1, y1, x2, y2, lightgray );
-    bar ( x1+1, y1+1, x2-1 , y2-1, item->getcolor() );
+    if ( item )
+       bar ( x1+1, y1+1, x2-1 , y2-1, item->getcolor() );
+    else
+       bar ( x1+1, y1+1, x2-1 , y2-1, 0 );
 }
 
 
@@ -1353,8 +1359,12 @@ void selvehicletype(tkey ench )
 }
 
 void selcolor( tkey ench )
-{  
+{
+   int oldsel = farbwahl;
    farbwahl = selectitemcontainer.getcolorselector()->selectitem( colorvector[farbwahl], ench )->col;
+   if ( farbwahl > 8 )
+      farbwahl = oldsel;
+       
    if ( lastselectiontype != cselunit && lastselectiontype != cselbuilding && lastselectiontype != cselmine )
       lastselectiontype = cselunit;
    showallchoices();
