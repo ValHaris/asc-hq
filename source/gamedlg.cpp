@@ -1,6 +1,10 @@
-//     $Id: gamedlg.cpp,v 1.35 2000-08-06 12:18:09 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.36 2000-08-07 16:29:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2000/08/06 12:18:09  mbickel
+//      Gameoptions: new default values
+//      Maketank: negative buildable-object-IDs
+//
 //     Revision 1.34  2000/08/06 11:39:09  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -4452,11 +4456,9 @@ void mousepreferences  ( void )
 }
 
 
-
-
-void sendGameParameterAsMail ( void )
+void writeGameParametersToString ( string& s)
 {
-   string s = "The game has been set up with the following game parameters:\n";
+   s = "The game has been set up with the following game parameters:\n";
    s += "(black line: parameter has default value)\n\n";
    for ( int i = 0; i< gameparameternum; i++ ) {
       int d = actmap->getgameparameter(i) != gameparameterdefault[i];
@@ -4471,13 +4473,27 @@ void sendGameParameterAsMail ( void )
       if ( d )
          s+= "#color0#";
       s += "\n";
-
    }
-
-   tmessage* msg = new tmessage ( strdup ( s.c_str()), 255 );
-
 }
 
+void sendGameParameterAsMail ( void )
+{
+   string s;
+   writeGameParametersToString ( s );
+   tmessage* msg = new tmessage ( strdup ( s.c_str()), 255 );
+}
+
+
+void showGameParameters ( void )
+{
+   string s;
+   writeGameParametersToString ( s );
+
+   tviewanytext vat;
+   vat.init ( "Game Parameter", s.c_str() );
+   vat.run();
+   vat.done();
+}
 
 
 typedef class tbaseitemlist* pbaseitemlist;

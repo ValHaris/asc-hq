@@ -1,6 +1,14 @@
-//     $Id: typen.h,v 1.36 2000-08-06 11:39:26 mbickel Exp $
+//     $Id: typen.h,v 1.37 2000-08-07 16:29:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2000/08/06 11:39:26  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.35  2000/08/05 13:38:47  mbickel
 //      Rewrote height checking for moving units in and out of
 //        transports / building
@@ -697,24 +705,32 @@ class tvehicle { /*** Bei Žnderungen unbedingt Save/LoadGame und Konstruktor kor
     int          networkid; 
     char*        name;
     int          functions;
-    char         reactionfire;     // BM   ; gibt an, gegen welche Spieler die vehicle noch reactionfiren kann.
-    char         reactionfire_active;
+    class  ReactionFire {
+         tvehicle* unit;
+       public:
+         ReactionFire ( tvehicle* _unit ) : unit ( _unit ) {};
+         enum Status { off, init1, init2, ready };
+         int enemiesAttackable;     // BM   ; gibt an, gegen welche Spieler die vehicle noch reactionfiren kann.
+         int status;
+         void enable ( void );
+         void disable( void );
+         void endTurn ( void ); // is called when the player hits the "end turn" button
+    } reactionfire;
     int          generatoractive;
     AiParameter* aiparam[8];
   
     int getMovement ( void );
     void setMovement ( int newmove, int transp = 0 );
+    int hasMoved ( void );
 
 
-    int enablereactionfire( void );
-    int disablereactionfire ( void );
     int weight( void );   // weight of unit including cargo, fuel and material
     int cargo ( void );   // return weight of all loaded units
     int getmaxfuelforweight ( void );       
     int getmaxmaterialforweight ( void );
     int freeweight ( int what = 0 );      // what: 0 = cargo ; 1 = material/fuel
     int size ( void );
-    void nextturn( void );    // is executed when the player hits "end turn"
+    void endTurn( void );    // is executed when the player hits "end turn"
     void turnwrap ( void );   // is executed when the game starts a new turn ( player8 -> player1 )
     void repairunit ( pvehicle vehicle, int maxrepair = 100 );
     void constructvehicle ( pvehicletype tnk, int x, int y );      // current cursor position will be used

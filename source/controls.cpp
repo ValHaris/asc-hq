@@ -1,6 +1,14 @@
-//     $Id: controls.cpp,v 1.58 2000-08-06 11:38:37 mbickel Exp $
+//     $Id: controls.cpp,v 1.59 2000-08-07 16:29:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2000/08/06 11:38:37  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.57  2000/08/05 15:30:27  mbickel
 //      Fixed possible divisions by 0 in attack/defensebonus
 //
@@ -421,7 +429,7 @@ void         tsearchforminablefields::run( pvehicle     eht )
 { 
    if ( (eht->functions & cfmanualdigger) && !(eht->functions & cfautodigger) ) 
       if ( eht->attacked || 
-          (eht->typ->wait && (eht->getMovement() < eht->typ->movement[log2(eht->height)])) ||
+          (eht->typ->wait && eht->hasMoved() ) ||
           (eht->getMovement() < searchforresorcesmovedecrease )) {
          dispmessage2(311,"");
          return;
@@ -464,13 +472,13 @@ void   searchforminablefields ( pvehicle eht )
 
 void         tsearchputbuildingfields::initputbuilding( word x, word y, pbuildingtype building )
 { 
-  pvehicle     eht; 
+   pvehicle eht = getfield(x,y)->vehicle; 
 
-   eht = getfield(x,y)->vehicle; 
-   if (eht->attacked || (eht->typ->wait && (eht->getMovement() < eht->typ->movement[log2(eht->height)]))) {
+   if ( eht->attacked || (eht->typ->wait && eht->hasMoved() )) {
       dispmessage2(302,""); 
       return;
    } 
+
    actmap->cleartemps(7); 
    initsuche(x,y,1,1); 
    bld = building; 
@@ -679,7 +687,7 @@ void         putbuildinglevel3(integer      x,
 void         tsearchdestructbuildingfields::initdestructbuilding( int x, int y )
 { 
    pvehicle     eht = getfield(x,y)->vehicle; 
-   if (eht->attacked || (eht->typ->wait && (eht->getMovement() < eht->typ->movement[log2(eht->height)]))) {
+   if (eht->attacked || (eht->typ->wait && eht->hasMoved() )) {
       dispmessage2(305,NULL); 
       return;
    } 
@@ -2435,8 +2443,8 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle, IntFieldList* field
          pvehicle eht = getfield ( x, y )->vehicle;
          if ( eht ) 
             if ( eht->color != vehicle->color )
-               if ( eht->reactionfire_active )
-                  if ( eht->reactionfire & ( 1 << ( vehicle->color / 8 )))
+               if ( eht->reactionfire.status == tvehicle::ReactionFire::ready )
+                  if ( eht->reactionfire.enemiesAttackable & ( 1 << ( vehicle->color / 8 )))
                      if ( getdiplomaticstatus ( eht->color ) == cawar )
                         if ( attackpossible2u ( eht, vehicle ) ) 
                            addunit ( eht );
@@ -2507,7 +2515,7 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
          while ( ul  &&  !result ) {
             punitlist next = ul->next;
             pattackweap atw = attackpossible ( ul->eht, x, y );
-            if ( atw->count && (ul->eht->reactionfire & (1 << (vehicle->color / 8)))) {
+            if ( atw->count && (ul->eht->reactionfire.enemiesAttackable & (1 << (vehicle->color / 8)))) {
 
                int ad1, ad2, dd1, dd2;
 
@@ -2560,7 +2568,7 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
                logtoreplayinfo ( rpl_reactionfire, ul->eht->xpos, ul->eht->ypos, x, y, ad1, ad2, dd1, dd2, atw->num[num] );
 
                dashboard.x = 0xffff;
-               ul->eht->reactionfire &= 0xff ^ ( 1 <<  (vehicle->color / 8) );
+               ul->eht->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  (vehicle->color / 8) );
                ul->eht->attacked = false;
                removeunit ( ul->eht );
 
@@ -5350,7 +5358,7 @@ void sendnetworkgametonextplayer ( int oldplayer, int newplayer )
 
 
 
-void         nextturn(void)
+void endTurn ( void )
 { 
    if ( actmap->replayinfo )
       if ( actmap->replayinfo->actmemstream ) {
@@ -5364,10 +5372,6 @@ void         nextturn(void)
          erasemap();
          throw tnomaploaded();
       }
-
-   int bb = cursor.an;
-   if (bb)  
-      cursor.hide();
 
         /* *********************  vehicle ********************  */ 
         
@@ -5390,7 +5394,7 @@ void         nextturn(void)
    
             // Bei Žnderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
    
-            if (( actvehicle->height >= chtieffliegend )   &&   ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) { // || ((actvehicle->height == chfahrend) && (getfield(actvehicle->xpos,actvehicle->ypos)->typ->art & cbwater ))) && ) {
+            if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) { 
                if ( getmaxwindspeedforunit ( actvehicle ) < actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed*maxwindspeed ){
                   removevehicle ( &actvehicle );
                   j = -1;
@@ -5398,12 +5402,8 @@ void         nextturn(void)
       
                   j = actvehicle->fuel - actvehicle->typ->fuelConsumption * nowindplanefuelusage;
 
-                  int move = actvehicle->getMovement();
-                  if ( actvehicle->reactionfire_active  &&  !move )
-                     move = actvehicle->typ->movement[log2(actvehicle->height)];
-
                   if ( actvehicle->height <= chhochfliegend )
-                     j -= ( move * 64 / actvehicle->typ->movement[log2(actvehicle->height)] ) * (actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
+                     j -= ( actvehicle->getMovement() * 64 / actvehicle->typ->movement[log2(actvehicle->height)] ) * (actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
       
                  //          movement * 64        windspeed * maxwindspeed         fuelConsumption
                  // j -=   ----------------- *  ----------------------------- *   -----------
@@ -5432,31 +5432,11 @@ void         nextturn(void)
                      actvehicle->fuel = j; 
                }
             } 
-            if (j >= 0)  {
-                  if ( actvehicle->reactionfire_active ) {
-                     if ( actvehicle->reactionfire_active < 3 ) 
-                        actvehicle->reactionfire_active++;
-
-                     if ( actvehicle->reactionfire_active == 3 )  {
-                        actvehicle->reactionfire = 0xff;
-                        actvehicle->attacked = false; 
-                     } else {
-                        actvehicle->reactionfire = 0;
-                        actvehicle->attacked = true; 
-                     }
-
-                     // actvehicle->setMovement ( 0 );
-                     actvehicle->resetmovement();
-                     actvehicle->attacked = false; 
-
-                  } else {
-                     actvehicle->resetmovement();
-                     actvehicle->attacked = false; 
-                  }
-               } 
+            if (j >= 0)  
+               actvehicle->reactionfire.endTurn();
 
             if ( actvehicle )   
-               actvehicle->nextturn();
+               actvehicle->endTurn();
 
             actvehicle = nxeht; 
          } 
@@ -5470,22 +5450,22 @@ void         nextturn(void)
 
         /* *********************  messages ********************  */ 
 
-     {
-        while ( actmap->unsentmessage ) {
-           pmessagelist list = actmap->unsentmessage;
+     
+     while ( actmap->unsentmessage ) {
+        pmessagelist list = actmap->unsentmessage;
 
-           pmessagelist nw = new tmessagelist ( &actmap->player[ actmap->actplayer ].sentmessage );
-           nw->message = list->message;
-           for ( int i = 0; i < 8; i++ )
-              if ( nw->message->to & ( 1 << i )) {
-                 pmessagelist dst = new tmessagelist ( &actmap->player[ i ].unreadmessage );
-                 dst->message = nw->message;
-              }   
+        pmessagelist nw = new tmessagelist ( &actmap->player[ actmap->actplayer ].sentmessage );
+        nw->message = list->message;
+        for ( int i = 0; i < 8; i++ )
+           if ( nw->message->to & ( 1 << i )) {
+              pmessagelist dst = new tmessagelist ( &actmap->player[ i ].unreadmessage );
+              dst->message = nw->message;
+           }   
 
-           actmap->unsentmessage = list->next;
-           delete list;
-        }
+        actmap->unsentmessage = list->next;
+        delete list;
      }
+
      if ( actmap->newjournal ) {
         int s = 0;
         if ( actmap->journal )
@@ -5540,68 +5520,73 @@ void         nextturn(void)
         actmap->lastjournalchange.a.move = actmap->actplayer;
 
      }
+}
 
 
+void nextPlayer( void )
+{
+   int oldplayer = actmap->actplayer;
+   if ( oldplayer >= 0) 
+      if ( !actmap->player[oldplayer].firstvehicle && !actmap->player[oldplayer].firstbuilding )
+         actmap->player[oldplayer].existent = 0;
 
-
-  /* ****** N„chster player ********************************************  */ 
-
-
-      int oldplayer = actmap->actplayer;
-      if ( oldplayer >= 0) 
-         if ( !actmap->player[oldplayer].firstvehicle && !actmap->player[oldplayer].firstbuilding )
-            actmap->player[oldplayer].existent = 0;
-
-      int runde = 0; 
-      do { 
-         actmap->actplayer++;
-         actmap->time.a.move = 0; 
-         if (actmap->actplayer > 7) {
-            turnwrap();
-            runde++;
-         }
-      }  while (!(actmap->player[actmap->actplayer].firstvehicle  || actmap->player[actmap->actplayer].firstbuilding  || (runde > 2)));
-
-      if (runde > 2) { 
-         displaymessage("There are no players left any more !",2); 
-         erasemap();
-         throw tnomaploaded ();
-      } 
-
-      int newplayer = actmap->actplayer;
-      actmap->playerview = actmap->actplayer;
-      if ( actmap->network &&  oldplayer != actmap->actplayer)
-        sendnetworkgametonextplayer ( oldplayer, newplayer );
-      else {
-
-         tlockdispspfld ldsf;
-
-         int forcepwd;  // Wenn der aktuelle player gerade verloren hat, muá fr den n„chsten player die Passwortabfrage kommen, auch wenn er nur noch der einzige player ist !
-
-         if ( oldplayer >= 0  &&  !actmap->player[oldplayer].existent )
-            forcepwd = 1;
-         else
-            forcepwd = 0;
-
-        newturnforplayer( forcepwd );
-        checkforreplay();
+   int runde = 0; 
+   do { 
+      actmap->actplayer++;
+      actmap->time.a.move = 0; 
+      if (actmap->actplayer > 7) {
+         turnwrap();
+         runde++;
       }
-   if (bb)  
-     cursor.display();
+   }  while (!(actmap->player[actmap->actplayer].firstvehicle  || actmap->player[actmap->actplayer].firstbuilding  || (runde > 2)));
+
+   if (runde > 2) { 
+      displaymessage("There are no players left any more !",2); 
+      erasemap();
+      throw tnomaploaded ();
+   } 
+
+   int newplayer = actmap->actplayer;
+   actmap->playerview = actmap->actplayer;
+   if ( actmap->network &&  oldplayer != actmap->actplayer)
+      sendnetworkgametonextplayer ( oldplayer, newplayer );
+   else {
+
+      tlockdispspfld ldsf;
+
+      int forcepwd;  // Wenn der aktuelle player gerade verloren hat, muá fr den n„chsten player die Passwortabfrage kommen, auch wenn er nur noch der einzige player ist !
+
+      if ( oldplayer >= 0  &&  !actmap->player[oldplayer].existent )
+         forcepwd = 1;
+      else
+         forcepwd = 0;
+
+     newturnforplayer( forcepwd );
+     checkforreplay();
+   }
 } 
 
 
 void next_turn ( void )
 {
-     #ifdef ignorecomputers
-     do {
-     #endif
-  
-       nextturn();
-  
-     #ifdef ignorecomputers
-     } while ( actmap->player[actmap->actplayer].stat != ps_human ); /* enddo */
-     #endif
+   int bb = cursor.an;
+   if (bb)  
+      cursor.hide();
+
+   #ifdef ignorecomputers
+   do {
+   #endif
+
+
+     endTurn();
+     nextPlayer();
+
+   #ifdef ignorecomputers
+   } while ( actmap->player[actmap->actplayer].stat != ps_human ); /* enddo */
+   #endif
+
+   if (bb)  
+     cursor.display();
 }
 
 
@@ -6562,39 +6547,6 @@ void testnet ( void )
   if ( resource > 2 )
      resource = 0;
 }
-
-
-
-
-int tvehicle::enablereactionfire( void ) 
-{
-   if ( ! reactionfire_active ) {
-      reactionfire = 0;
-      if (  /* movement <  typ->movement[ log2 (  height ) ]  || */  typ->wait  ||  attacked )
-          reactionfire_active  = 1;
-      else
-          reactionfire_active  = 2;
-
-      setMovement ( 0 );
-
-      attacked = 1;
-   }
-   return 0;
-}
-
-int tvehicle::disablereactionfire ( void ) 
-{
-   if (  reactionfire_active ) {
-       reactionfire_active = 0;
-       reactionfire = 0;
-       setMovement ( 0, -1 );
-   }
-   return 0;
-}
-
-
-
-
 
 
 cmousecontrol :: cmousecontrol ( void )

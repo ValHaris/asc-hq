@@ -1,6 +1,10 @@
-//     $Id: attack.cpp,v 1.24 2000-08-05 13:38:19 mbickel Exp $
+//     $Id: attack.cpp,v 1.25 2000-08-07 16:29:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/08/05 13:38:19  mbickel
+//      Rewrote height checking for moving units in and out of
+//        transports / building
+//
 //     Revision 1.23  2000/08/04 15:10:47  mbickel
 //      Moving transports costs movement for units inside
 //      refuelled vehicles now have full movement in the same turn
@@ -206,6 +210,7 @@ float AttackFormula :: strength_hemming ( int  ax,  int ay,  pvehicle d_eht )
 
 float AttackFormula :: strength_damage ( int damage )
 {
+   float a = damage;
    float a = (300 - 2 * damage) / 3;
    return a / 100;
 }
@@ -215,7 +220,7 @@ float AttackFormula :: strength_experience ( int experience )
    float e = experience;
    if ( e < 0 )
       e = 0;
-   return 1 + e/4;
+   return e/4;
 }
 
 float AttackFormula :: defense_experience ( int experience )
@@ -223,20 +228,20 @@ float AttackFormula :: defense_experience ( int experience )
    float e = experience;
    if ( e < 0 )
       e = 0;
-   return 1 + e * 0.75 / 16;
+   return e * 0.75 / 15;
 }
 
 float AttackFormula :: strength_attackbonus ( int abonus )
 {
    float a = abonus;
-   return 1 + a/8;
+   return a/8;
 }
 
 
 float AttackFormula :: defense_defensebonus ( int defensebonus )
 {
    float d = defensebonus;
-   return 1 + d/8;
+   return d/8;
 }
 
 
@@ -255,14 +260,12 @@ void tfight :: calc ( void )
 
    if ( av.strength ) { 
       float absstrength = float(av.strength )
-                          * strength_experience ( av.experience )
+                          * ( 1 + strength_experience ( av.experience ) + strength_attackbonus ( av.attackbonus ) )
                           * strength_damage ( av.damage ) 
-                          * strength_attackbonus ( av.attackbonus ) 
                           * dv.hemming;
 
       float absdefense = float(dv.armor / armordivisor )
-                          * defense_defensebonus ( dv.defensebonus )
-                          * defense_experience ( dv.experience );
+                          * ( 1 + defense_defensebonus ( dv.defensebonus ) + defense_experience ( dv.experience ) );
 
       int w = int(dv.damage + absstrength / absdefense * 100 / damagefactor );
 
@@ -294,14 +297,12 @@ void tfight :: calc ( void )
 
    if ( dv.strength ) { 
 
-      float absstrength = float(av.strength )
-                          * strength_experience ( dv.experience )
-                          * strength_damage ( dv.damage ) 
-                          * strength_attackbonus ( dv.attackbonus ) ;
+      float absstrength = float(dv.strength )
+                          * ( 1 + strength_experience ( dv.experience ) + strength_attackbonus ( dv.attackbonus ) )
+                          * strength_damage ( dv.damage ) ;
 
-      float absdefense = float(dv.armor / armordivisor)
-                          * defense_defensebonus ( av.defensebonus )
-                          * defense_experience ( av.experience );
+      float absdefense = float(av.armor / armordivisor)
+                          * ( 1 + defense_defensebonus ( av.defensebonus )+ defense_experience ( av.experience ));
 
       int w = int(dv.damage + absstrength / absdefense * 100 / damagefactor );
 
@@ -655,8 +656,8 @@ void tunitattacksunit :: setresult ( void )
    _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
-   if ( _attackingunit->reactionfire_active >= 3 ) 
-      _attackingunit->reactionfire &= 0xff ^ ( 1 <<  dv.color );
+   if ( _attackingunit->reactionfire.status == tvehicle::ReactionFire::ready ) 
+      _attackingunit->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  dv.color );
 
    _attackingunit->attacked = true; 
    if ( !(_attackingunit->functions & cf_moveafterattack) )
@@ -1251,7 +1252,7 @@ int       attackpossible2n( const pvehicle     angreifer,
    int dist = beeline ( angreifer, verteidiger );
    if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
       if ( !angreifer->attacked )
-         if ( !angreifer->typ->wait || angreifer->getMovement() == angreifer->typ->movement[log2(angreifer->height)] )
+         if ( !angreifer->typ->wait || !angreifer->hasMoved() )
             for ( int i = 0; i < angreifer->typ->weapons->count ; i++) 
                if (angreifer->typ->weapons->weapon[i].shootable() ) 
                   if (angreifer->typ->weapons->weapon[i].offensive() ) 

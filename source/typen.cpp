@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.35 2000-08-06 12:18:10 mbickel Exp $
+//     $Id: typen.cpp,v 1.36 2000-08-07 16:29:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2000/08/06 12:18:10  mbickel
+//      Gameoptions: new default values
+//      Maketank: negative buildable-object-IDs
+//
 //     Revision 1.34  2000/08/06 11:39:21  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -849,7 +853,7 @@ void* tbuilding :: getpicture ( int x, int y )
 #endif
 
 
-tvehicle :: tvehicle ( void )
+tvehicle :: tvehicle ( void ) : reactionfire ( this )
 {
    init();
 }
@@ -864,7 +868,7 @@ tvehicle :: ~tvehicle (  )
 
 }
 
-tvehicle :: tvehicle ( pvehicle src, pmap actmap )
+tvehicle :: tvehicle ( pvehicle src, pmap actmap ) : reactionfire ( this )
 {
    init();
    clone ( src, actmap );
@@ -909,8 +913,8 @@ void tvehicle :: init ( void )
    networkid = -1; 
    name = NULL;
    functions = 0;
-   reactionfire = 0;
-   reactionfire_active = 0;
+   reactionfire.status = 0;
+   reactionfire.enemiesAttackable = 0;
    generatoractive = 0;
 
    for ( int j = 0; j < 32; j++ )
@@ -952,8 +956,8 @@ void tvehicle :: clone ( pvehicle src, pmap actmap )
    else
       name = NULL;
    functions = src->functions;
-   reactionfire = src->reactionfire;
-   reactionfire_active = src->reactionfire_active;
+   reactionfire.status = src->reactionfire.status;
+   reactionfire.enemiesAttackable = src->reactionfire.enemiesAttackable;
    generatoractive = src->generatoractive;
 
    for ( int i = 0; i < 32; i++ )
@@ -1351,11 +1355,16 @@ void tvehicle :: turnwrap ( void )
       }
 }
 
-void tvehicle :: nextturn( void )
+void tvehicle :: endTurn( void )
 {
    if ( typ->autorepairrate > 0 ) 
       if ( damage ) 
          repairunit ( this, typ->autorepairrate );
+
+   reactionfire.endTurn();
+
+   resetmovement();
+   attacked = false; 
 
 }
 
@@ -1397,6 +1406,12 @@ void tvehicle :: setMovement ( int newmove, int transp )
    _movement = newmove;
 }
 
+int tvehicle::hasMoved ( void )
+{
+   return _movement != typ->movement[ log2 ( height )];
+}
+
+
 int tvehicle :: getMovement ( void )
 {
    if ( typ->fuelConsumption ) {
@@ -1407,6 +1422,46 @@ int tvehicle :: getMovement ( void )
    } else
       return _movement;
 }
+
+void tvehicle::ReactionFire::enable ( void ) 
+{
+   if ( status == off ) {
+      if ( unit->typ->wait ) {
+         if ( unit->hasMoved())
+            status = init1;
+         else
+            status = init2;
+      } else {
+         status = init2;
+      }
+      unit->setMovement ( 0, -1 );
+   }
+}
+
+void tvehicle::ReactionFire::disable ( void ) 
+{
+   if ( status != off ) {
+       status = off;
+       enemiesAttackable = 0;
+       unit->setMovement ( 0, -1 );
+   }
+}
+
+
+
+void tvehicle::ReactionFire::endTurn ( void ) 
+{
+   if ( status >= init1 ) {
+      if ( status < ready ) 
+         status++;
+
+      if ( status == ready ) 
+         enemiesAttackable = 0xff;
+      else 
+         enemiesAttackable = 0;
+   }
+}
+
 
 int tvehicle :: weapexist( void )
 { 

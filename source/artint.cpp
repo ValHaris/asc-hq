@@ -1,6 +1,12 @@
-//     $Id: artint.cpp,v 1.14 2000-08-04 15:10:46 mbickel Exp $
+//     $Id: artint.cpp,v 1.15 2000-08-07 16:29:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/08/04 15:10:46  mbickel
+//      Moving transports costs movement for units inside
+//      refuelled vehicles now have full movement in the same turn
+//      terrain: negative attack / defensebonus allowed
+//      new mapparameters that affect damaging and repairing of building
+//
 //     Revision 1.13  2000/08/03 13:11:47  mbickel
 //      Fixed: on/off switching of generator vehicle produced endless amounts of energy
 //      Repairing units now reduces their experience
@@ -2863,7 +2869,7 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( pvehiclety
                   AttackFormula af;
                   for ( int e = (fzt->weapons->weapon[i].mindistance + maxmalq - 1)/ maxmalq; e <= fzt->weapons->weapon[i].maxdistance / maxmalq; e++ ) {    // the distance between two fields is maxmalq
                      d++; 
-                     int n = weapDist.getWeapStrength( &fzt->weapons->weapon[i], e*maxmalq ) * fzt->weapons->weapon[i].maxstrength * af.strength_damage(getdamage()) * af.strength_experience(getexpirience());
+                     int n = weapDist.getWeapStrength( &fzt->weapons->weapon[i], e*maxmalq ) * fzt->weapons->weapon[i].maxstrength * af.strength_damage(getdamage()) * ( 1 + af.strength_experience(getexpirience()));
                      m += n / (2*(1+d)); 
                   } 
                   if (getammunition(i) == 0) 
@@ -3018,8 +3024,7 @@ void AI :: WeaponThreatRange :: testfield ( void )
             AttackFormula af;
             int strength = weapDist.getWeapStrength( &veh->typ->weapons->weapon[weap], dist*maxmalq, veh->height, 1 << height ) 
                          * veh->typ->weapons->weapon[weap].maxstrength              
-                         * af.strength_experience ( veh->experience ) 
-                         * af.strength_attackbonus ( getfield(startx,starty)->getattackbonus() )
+                         * 1 ( + af.strength_experience ( veh->experience ) + af.strength_attackbonus ( getfield(startx,starty)->getattackbonus() ))
                          * af.strength_damage ( veh->damage );
 
             if ( strength ) {

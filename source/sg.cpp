@@ -1,6 +1,14 @@
-//     $Id: sg.cpp,v 1.73 2000-08-06 11:39:15 mbickel Exp $
+//     $Id: sg.cpp,v 1.74 2000-08-07 16:29:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.73  2000/08/06 11:39:15  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.72  2000/08/05 20:17:59  mbickel
 //      Restructured Fullscreen Image loading
 //
@@ -1601,7 +1609,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_vehicleinfo,     ua_researchinfo,     ua_unitstatistics, ua_buildingstatistics, ua_newmessage, ua_viewqueuedmessages, 
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
-                    ua_selectgraphicset, ua_UnitSetInfo  };
+                    ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo  };
 
 
 void         tsgpulldown :: init ( void )
@@ -1646,6 +1654,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "~R~esearch", ua_researchinfo ); 
    addbutton ( "vehicle ~I~mprovementõF7", ua_dispvehicleimprovement);
    addbutton ( "unit ~S~et information", ua_UnitSetInfo );
+   addbutton ( "show game ~P~arameters", ua_GameParameterInfo );
 
 
   addfield ( "~S~tatistics" );
@@ -2429,6 +2438,8 @@ void execuseraction ( tuseractions action )
         case ua_selectgraphicset:   selectgraphicset();
                        break;
         case ua_UnitSetInfo:        viewUnitSetinfo();
+                       break;
+        case ua_GameParameterInfo: showGameParameters();
                        break;
     }                                   
                        

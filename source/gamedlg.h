@@ -1,6 +1,9 @@
-//     $Id: gamedlg.h,v 1.5 2000-05-23 20:40:47 mbickel Exp $
+//     $Id: gamedlg.h,v 1.6 2000-08-07 16:29:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/05/23 20:40:47  mbickel
+//      Removed boolean type
+//
 //     Revision 1.4  2000/05/07 12:12:17  mbickel
 //      New mouse option dialog
 //      weapon info can now be displayed by clicking on a unit
@@ -229,6 +232,7 @@ extern void multiplayersettings ( void );
 extern void giveunitaway ( void );
 
 extern void settechlevel ( int techlevel, int playerBM );
+extern void showGameParameters ( void );
 
 
 #endif

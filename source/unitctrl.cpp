@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.22 2000-08-05 13:38:48 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.23 2000-08-07 16:29:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/08/05 13:38:48  mbickel
+//      Rewrote height checking for moving units in and out of
+//        transports / building
+//
 //     Revision 1.21  2000/08/04 15:11:31  mbickel
 //      Moving transports costs movement for units inside
 //      refuelled vehicles now have full movement in the same turn
@@ -207,7 +211,7 @@ int VehicleMovement :: available ( pvehicle veh ) const
 {
    if ( status == 0 )
      if ( veh ) 
-          if ( veh->getMovement() >= minmalq && !veh->reactionfire_active )
+          if ( veh->getMovement() >= minmalq && veh->reactionfire.status == tvehicle::ReactionFire::off )
              if ( terrainaccessible ( getfield ( veh->xpos, veh->ypos ), veh ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
                 return 1; 
 
@@ -1352,9 +1356,14 @@ int VehicleAttack :: available ( pvehicle eht ) const
 {
    if (eht != NULL) 
       if (eht->attacked == false)
-         if ((eht->typ->wait == false) || (eht->getMovement() == eht->typ->movement[log2(eht->height)]  ||  eht->reactionfire_active >= 3 ))
-            if ( eht->weapexist() )
-               return 1;
+         if ( eht->weapexist() ) 
+            if ( eht->reactionfire.status == tvehicle::ReactionFire::off ) {
+               if (eht->typ->wait == false  ||  !eht->hasMoved() )
+                  return 1;
+            } else {
+               // if ( reactionfire_active >= 3 )
+                  return 1;
+            }
 
    return 0;
 }
@@ -1498,8 +1507,7 @@ int      VehicleAttack :: tsearchattackablevehicles::run( void )
    if (angreifer->typ->weapons->count == 0) 
       return -204;
    
-   if (angreifer->typ->wait &&  angreifer->reactionfire_active < 3 ) 
-      if (angreifer->getMovement() != angreifer->typ->movement[log2(angreifer->height)]) 
+   if ( angreifer->typ->wait && angreifer->hasMoved() ) 
          return -205;
       
 

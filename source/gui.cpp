@@ -1,6 +1,12 @@
-//     $Id: gui.cpp,v 1.29 2000-08-04 15:11:10 mbickel Exp $
+//     $Id: gui.cpp,v 1.30 2000-08-07 16:29:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/08/04 15:11:10  mbickel
+//      Moving transports costs movement for units inside
+//      refuelled vehicles now have full movement in the same turn
+//      terrain: negative attack / defensebonus allowed
+//      new mapparameters that affect damaging and repairing of building
+//
 //     Revision 1.28  2000/08/03 13:12:12  mbickel
 //      Fixed: on/off switching of generator vehicle produced endless amounts of energy
 //      Repairing units now reduces their experience
@@ -2061,7 +2067,7 @@ int   tnsguiiconputbuilding::available    ( void )
     pfield fld = getactfield();
     if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) { 
        if ( fld->vehicle )
-          if ( fld->vehicle->attacked == false && fld->vehicle->getMovement() == fld->vehicle->typ->movement[log2(fld->vehicle->height)]) 
+          if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() ) 
              if (fld->vehicle->color == actmap->actplayer * 8)
                if (fld->vehicle->functions & (cfputbuilding | cfspecificbuildingconstruction))
                   return 1;
@@ -2112,7 +2118,7 @@ int   tnsguiicondestructbuilding::available    ( void )
     pfield fld = getactfield();
     if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) { 
        if ( fld->vehicle )
-          if ( fld->vehicle->attacked == false && fld->vehicle->getMovement() == fld->vehicle->typ->movement[log2(fld->vehicle->height)]) 
+          if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() ) 
              if (fld->vehicle->color == actmap->actplayer * 8)
                if (fld->vehicle->functions & cfputbuilding )
                   if ( fld->vehicle->fuel >= destruct_building_fuel_usage * fld->vehicle->typ->fuelConsumption )
@@ -2157,7 +2163,8 @@ int   tnsguiicondig::available    ( void )
       if (fld->vehicle->color == actmap->actplayer * 8) 
          if ( (fld->vehicle->functions &  cfmanualdigger) && !(fld->vehicle->functions &  cfautodigger) )
             if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
-               if ((fld->vehicle->typ->wait==false && fld->vehicle->getMovement() >= searchforresorcesmovedecrease ) || fld->vehicle->getMovement() == fld->vehicle->typ->movement[log2(fld->vehicle->height)])
+               if (   (fld->vehicle->typ->wait==false && fld->vehicle->getMovement() >= searchforresorcesmovedecrease ) 
+                   || !fld->vehicle->hasMoved() )
                  return true;
    return 0;
 }
@@ -2210,7 +2217,7 @@ int   tnsguiiconenablereactionfire::available    ( void )
    pvehicle eht = getactfield()->vehicle;
    if ( eht )
       if ( eht->color == actmap->actplayer * 8) 
-         if ( !eht->reactionfire_active )
+         if ( eht->reactionfire.status == tvehicle::ReactionFire::off )
             if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
                if ( eht->weapexist() )
                   return 1;
@@ -2221,7 +2228,7 @@ int   tnsguiiconenablereactionfire::available    ( void )
 
 void  tnsguiiconenablereactionfire::exec         ( void ) 
 {
-   getactfield()->vehicle->enablereactionfire();
+   getactfield()->vehicle->reactionfire.enable();
    dashboard.x = 0xffff;
    displaymap();
 }
@@ -2238,7 +2245,7 @@ int   tnsguiicondisablereactionfire::available    ( void )
    pvehicle eht = getactfield()->vehicle;
    if ( eht )
       if ( eht->color == actmap->actplayer * 8) 
-         if ( eht->reactionfire_active )
+         if ( eht->reactionfire.status != tvehicle::ReactionFire::off )
             if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
                if ( eht->weapexist() )
                   return 1;
@@ -2249,7 +2256,7 @@ int   tnsguiicondisablereactionfire::available    ( void )
 
 void  tnsguiicondisablereactionfire::exec         ( void ) 
 {
-   getactfield()->vehicle->disablereactionfire();
+   getactfield()->vehicle->reactionfire.disable();
    dashboard.x = 0xffff;
 }
 

@@ -1,6 +1,10 @@
-//     $Id: loaders.cpp,v 1.20 2000-08-05 13:38:26 mbickel Exp $
+//     $Id: loaders.cpp,v 1.21 2000-08-07 16:29:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/08/05 13:38:26  mbickel
+//      Rewrote height checking for moving units in and out of
+//        transports / building
+//
 //     Revision 1.19  2000/08/04 15:11:12  mbickel
 //      Moving transports costs movement for units inside
 //      refuelled vehicles now have full movement in the same turn
@@ -488,10 +492,10 @@ void         tspfldloaders::writeunit ( pvehicle eht )
     if ( eht->name      )
        bm |= cem_name;
  
-    if ( eht->reactionfire )
+    if ( eht->reactionfire.status )
        bm |= cem_reactionfire;
 
-    if ( eht->reactionfire_active )
+    if ( eht->reactionfire.enemiesAttackable )
        bm |= cem_reactionfire2;
 
     if ( eht->generatoractive )
@@ -563,10 +567,10 @@ void         tspfldloaders::writeunit ( pvehicle eht )
          stream->writepchar ( eht->name );
 
     if ( bm & cem_reactionfire )
-       stream->writedata2 ( eht->reactionfire );
+       stream->writeChar ( eht->reactionfire.status );
 
     if ( bm & cem_reactionfire2 )
-       stream->writedata2 ( eht->reactionfire_active );
+       stream->writeChar ( eht->reactionfire.enemiesAttackable );
 
     if ( bm & cem_poweron )
        stream->writedata2 ( eht->generatoractive );
@@ -711,14 +715,14 @@ void         tspfldloaders::readunit ( pvehicle &eht )
          stream->readpchar ( &eht->name );
     
     if ( bm & cem_reactionfire )
-       stream->readdata2 ( eht->reactionfire );
+       eht->reactionfire.status = stream->readChar (  );
     else
-       eht->reactionfire = 0;
+       eht->reactionfire.status = 0;
 
     if ( bm & cem_reactionfire2 )
-       stream->readdata2 ( eht->reactionfire_active );
+       eht->reactionfire.enemiesAttackable = stream->readChar (  );
     else
-       eht->reactionfire_active = 0;
+       eht->reactionfire.enemiesAttackable = 0;
 
     if ( bm & cem_poweron )
        stream->readdata2 ( eht->generatoractive );
