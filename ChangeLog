@@ -1,3 +1,241 @@
+2003-04-08 17:04  mbickel
+
+	* doc/maketank.html, source/astar2.cpp, source/controls.cpp,
+	source/edevents.cpp, source/loaders.cpp, source/strtmesg.cpp,
+	source/typen.cpp, source/typen.h, source/unitctrl.cpp,
+	source/win32/borland/mapeditor/mapeditor.bpr:  Fixed: crash when
+	loading certain events
+
+2003-04-02 19:25  mbickel
+
+	* data/helpsyst.txt, source/astar2.cpp, source/strtmesg.cpp,
+	source/unitctrl.cpp:  Fixed: view not updated after attack
+	 Fixed: planes needed a longer runway for takeoff than for landing
+
+2003-04-01 18:17  mbickel
+
+	* libtool, data/Makefile.am, data/Makefile.in,
+	data/music/Makefile.am, data/music/Makefile.in,
+	source/strtmesg.cpp: [no log message]
+
+2003-03-31 22:29  mbickel
+
+	* source/: edmisc.cpp, gui.cpp, sg.cpp, strtmesg.cpp,
+	textfile_evaluation.cpp, textfileparser.cpp, textfileparser.h,
+	ai/ai.h, ai/tactics.cpp, ai/valuation.cpp, win32/borland/asc.bpr: 
+	Fixed AI bugs
+	 Fixed clipboard in mapeditor
+
+2003-03-30 15:19  mbickel
+
+	* source/: edmisc.cpp, strtmesg.cpp, textfileparser.cpp, ai/ai.h,
+	ai/misc.cpp, ai/strategy.cpp:  Fixed: ai warnings
+	 Fixed: wrong hotkey for seeting unit properties in containers
+
+2003-03-26 20:16  mbickel
+
+	* data/asc003.msg, source/edmisc.cpp, source/edmisc.h,
+	source/strtmesg.cpp, source/unitctrl.cpp, source/vehicle.cpp,
+	source/ai/misc.cpp, source/ai/tactics.cpp,
+	source/win32/borland/asc.bpr:  Fixed AI bugs
+	 Fixed clipboard bugs
+	 Fixed: unable to move units out of some transport
+
+2003-03-24 12:49  mbickel
+
+	* Makefile.in, config.guess, config.h.in, config.sub, configure,
+	libtool, data/Makefile.in, data/dialog/Makefile.in,
+	data/music/Makefile.in, doc/Makefile.in, doc/manpages/Makefile.in,
+	doc/unitguide/asc.css, doc/unitguide/exkl.gif,
+	doc/unitguide/haken.gif, doc/unitguide/hakenrot.gif,
+	doc/unitguide/hoehe0.gif, doc/unitguide/hoehe1.gif,
+	doc/unitguide/hoehe2.gif, doc/unitguide/hoehe3.gif,
+	doc/unitguide/hoehe4.gif, doc/unitguide/hoehe5.gif,
+	doc/unitguide/hoehe6.gif, doc/unitguide/hoehe7.gif,
+	doc/unitguide/hoehetrans.gif, doc/unitguide/menu.pl,
+	doc/unitguide/pfeil_auf.gif, doc/unitguide/pfeil_zu.gif,
+	doc/unitguide/x.gif, source/Makefile.in, source/strtmesg.cpp,
+	source/ai/Makefile.in, source/clparser/Makefile.in,
+	source/docs/Makefile.in, source/docs/en/Makefile.in,
+	source/libs/Makefile.in, source/libs/triangul/Makefile.in,
+	source/sdl/Makefile.in, source/tools/Makefile.in,
+	source/tools/lib/Makefile.in, source/tools/linux/Makefile.in,
+	source/unix/Makefile.in, source/unix/mapeditor/Makefile.in: 
+	Started adding unitguide
+
+2003-03-24 12:18  mbickel
+
+	* Makefile.in, asc.kdevprj, config.guess, config.h.in, config.sub,
+	configure, libtool, data/Makefile.in, data/dialog/Makefile.in,
+	data/music/Makefile.in, doc/Makefile.in, doc/manpages/Makefile.in,
+	source/Makefile.in, source/astar2.h, source/controls.cpp,
+	source/messagedlg.cpp, source/messagedlg.h, source/messages.cpp,
+	source/messages.h, source/missions.cpp, source/sg.cpp,
+	source/unitctrl.h, source/ai/Makefile.in, source/ai/ai_common.h,
+	source/clparser/Makefile.in, source/docs/Makefile.in,
+	source/docs/en/Makefile.in, source/libs/Makefile.in,
+	source/libs/triangul/Makefile.in, source/sdl/Makefile.in,
+	source/tools/Makefile.in, source/tools/lib/Makefile.in,
+	source/tools/linux/Makefile.in, source/unix/Makefile.am,
+	source/unix/Makefile.in, source/unix/mapeditor/Makefile.in:  Fixed
+	compilation problems with gcc 2.95
+
+2003-03-22 12:34  mbickel
+
+	* doc/Makefile.am, source/strtmesg.cpp:  Updated version number
+
+2003-03-22 12:06  mbickel
+
+	* source/tools/: weaponguide.cpp, win/weaponguide.bpr:	Updated
+	weaponguide
+
+2003-03-22 11:16  mbickel
+
+	* asc.kdevprj, source/tools/weaponguide.cpp:  Fixed html errors in
+	weaponguide
+
+2003-03-22 10:45  mbickel
+
+	* configure, configure.in, libtool:  Updated main.con build command
+
+2003-03-21 22:03  mbickel
+
+	* data/asc003.map, data/asc003.msg, data/asc004.map,
+	data/asc004.msg, data/asc005.map, data/asc005.msg, data/first.map,
+	data/helpsys9.msg, data/paybacktime.map, data/tutor0.map,
+	data/tutor1.map, data/tutor2.map, data/tutor3.map, data/tutor4.map,
+	source/buildings.cpp, source/buildings.h, source/messages.cpp,
+	source/strtmesg.cpp, source/unitctrl.cpp, source/ai/base.cpp,
+	source/ai/misc.cpp, source/ai/tactics.cpp:  Removed tutorial maps
+	 Added and improved campaign maps
+	 Fixed AI problems
+
+2003-03-21 15:59  mbickel
+
+	* source/: CLoadable.cpp, building.cpp, controls.cpp,
+	gameoptions.cpp, gameoptions.h, gui.cpp, sgstream.cpp:	Cleaned up
+	gameoptions
+	 fastmove=0 is working again
+
+2003-03-20 12:16  mbickel
+
+	* source/: astar2.cpp, astar2.h, edmisc.cpp:  Fixed: compilation
+	problems with gcc
+
+2003-03-20 11:08  mbickel
+
+	* data/helpsys2.txt, source/basestrm.h, source/edglobal.cpp,
+	source/edglobal.h, source/edmain.cpp, source/edmisc.cpp,
+	source/edmisc.h, source/strtmesg.cpp, source/unitctrl.cpp,
+	source/ai/ai.bpr, source/ai/misc.cpp, source/ai/valuation.cpp,
+	source/tools/weaponguide.cpp, source/win32/borland/asc.bpr,
+	source/win32/borland/mapeditor/mapeditor.bpr:  KI speed up
+	 mapeditor: added clipboard
+	 Fixed movement issues
+
+2003-03-18 19:49  mbickel
+
+	* data/asc003.map, data/asc004.map, source/astar2.cpp,
+	source/astar2.h, source/dialog.cpp, source/sg.cpp,
+	source/strtmesg.cpp, source/ai/ai.bpr, source/ai/misc.cpp,
+	source/ai/service.cpp, source/tools/weaponguide.cpp,
+	source/win32/borland/asc.bpr,
+	source/win32/borland/mapeditor/mapeditor.bpr:  Fixed: Pathfinding
+	bug
+	 Added missing maps 3 and 4
+
+2003-03-18 11:53  mbickel
+
+	* source/: astar2.cpp, astar2.h:  Fixed A*
+
+2003-03-15 00:11  mbickel
+
+	* source/: astar2.cpp, astar2.h, mapalgorithms.cpp, strtmesg.cpp,
+	typen.h:  Fixes to the wind and Pathfinding algorithm
+
+2003-03-14 22:04  mbickel
+
+	* source/: mapalgorithms.cpp, sg.cpp, typen.h:	New wind movement
+
+2003-03-14 18:35  mbickel
+
+	* source/: astar2.cpp, edmisc.cpp, strtmesg.cpp, unitctrl.cpp,
+	ai/tactics.cpp:  Fixed AI errors
+
+2003-03-13 22:41  mbickel
+
+	* source/: astar2.cpp, strtmesg.cpp, tools/weaponguide.cpp:  Fixed
+	KI crash
+
+2003-03-12 18:30  mbickel
+
+	* source/tools/weaponguide.cpp:  Updated weaponguide
+
+2003-03-11 21:22  mbickel
+
+	* source/: astar2.cpp, strtmesg.cpp,
+	win32/borland/mapeditor/mapeditor.bpr:	Fixed: inifinite loop at AI
+
+2003-03-11 19:12  mbickel
+
+	* libtool, source/unitctrl.cpp, source/tools/weaponguide.cpp: 
+	Fixed warnings
+	 weaponguide: changed HTML class names
+
+2003-03-11 17:19  mbickel
+
+	* source/: sg.cpp, strtmesg.cpp, unitctrl.cpp,
+	tools/weaponguide.cpp, tools/win/weaponguide.bpr:  Updated
+	weaponguide
+	 Fixed: units could only enter buildings if on same level of height
+
+2003-03-10 17:56  mbickel
+
+	* libtool, source/clparser/weaponguide.cpp,
+	source/clparser/weaponguide.gp, source/clparser/weaponguide.h,
+	source/tools/weaponguide.cpp:  Added lots of command line
+	parameters to weaponguide
+
+2003-03-10 16:38  mbickel
+
+	* source/: containerbase.cpp, strtmesg.cpp, tools/weaponguide.cpp,
+	tools/win/weaponguide.bpr:  Updated weaponguide
+	 Fixed: units unable to leave building if building full
+
+2003-03-09 18:07  mbickel
+
+	* configure, configure.in, libtool, source/mapalgorithms.cpp,
+	source/strtmesg.cpp, source/unitctrl.cpp:  Fixed: compilation
+	problems with gcc 2
+	 Fixed: extreme wind effects on movement
+
+2003-03-09 16:52  mbickel
+
+	* source/tools/weaponguide.cpp:  Weaponguide improvements
+
+2003-03-09 16:14  mbickel
+
+	* source/: astar2.cpp, controls.cpp, sg.cpp, strtmesg.cpp,
+	unitctrl.cpp, tools/weaponguide.cpp, win32/borland/asc.bpr:  Fixed:
+	produced units could not be moved out of building
+		(maxMovement[actheight] = 0 )
+	 Fixed: unnecessary height changes
+	 Fixed: AI problem: Astar3d
+	 Updated weaponguide
+
+2003-03-08 21:55  mbickel
+
+	* source/tools/weaponguide.cpp:  Weaponguide: better noframes
+	navigation
+
+2003-03-08 20:47  mbickel
+
+	* source/tools/weaponguide.cpp:  Weaponguide layout improvements
+
+2003-03-08 18:47  mbickel
+
+	* ChangeLog:  Updated Changelog
+
 2003-03-08 15:24  mbickel
 
 	* source/: astar2.cpp, attack.cpp, basegfx.cpp, basestrm.cpp,
@@ -5284,8 +5522,7 @@
 
 	* source/: basestrm.cpp, basestrm.h, controls.cpp, controls.h,
 	dialog.cpp, loadbi3.cpp, misc.h, newfont.h, sg.wpj, sgstream.cpp,
-	spfst.h, typen.cpp, typen.h, libs/stl/readme.txt:  Fixed: generator
-	vehicle not working
+	spfst.h, typen.cpp, typen.h:  Fixed: generator vehicle not working
 	 Streams can now report their name
 	 Field information shows units filename
 
@@ -6019,8 +6256,8 @@
 2000-03-29 17:28  mbickel
 
 	* Makefile.in, README, asc.kdevprj, asc.lsm, source/README,
-	source/TODO, source/sg.cpp, source/libs/readme.txt,
-	source/libs/stl/readme.txt:  Preparations for the Linux release:
+	source/TODO, source/sg.cpp, source/libs/readme.txt:  Preparations
+	for the Linux release:
 	  updated help files and documentation
 
 2000-03-29 11:58  mbickel
@@ -6652,11 +6889,10 @@
 	source/libs/jpeg/wrbmp.cpp, source/libs/jpeg/wrgif.cpp,
 	source/libs/jpeg/wrjpgcom.1, source/libs/jpeg/wrjpgcom.cpp,
 	source/libs/jpeg/wrppm.cpp, source/libs/jpeg/wrrle.cpp,
-	source/libs/jpeg/wrtarga.cpp, source/libs/stl/readme.txt,
-	source/libs/triangul/construc.c, source/libs/triangul/interfac.h,
-	source/libs/triangul/monotone.c, source/libs/triangul/readme.txt,
-	source/libs/triangul/tri.c, source/libs/triangul/triangul.h,
-	source/libs/triangul/triangul.lb1,
+	source/libs/jpeg/wrtarga.cpp, source/libs/triangul/construc.c,
+	source/libs/triangul/interfac.h, source/libs/triangul/monotone.c,
+	source/libs/triangul/readme.txt, source/libs/triangul/tri.c,
+	source/libs/triangul/triangul.h, source/libs/triangul/triangul.lb1,
 	source/libs/triangul/triangul.tgt,
 	source/libs/triangul/triangul.wpj, source/libs/triangul/trimisc.c,
 	source/tools/bi2pcx.cpp, source/tools/bi2pcx.wpj,
@@ -6844,11 +7080,10 @@
 	source/libs/jpeg/wrbmp.cpp, source/libs/jpeg/wrgif.cpp,
 	source/libs/jpeg/wrjpgcom.1, source/libs/jpeg/wrjpgcom.cpp,
 	source/libs/jpeg/wrppm.cpp, source/libs/jpeg/wrrle.cpp,
-	source/libs/jpeg/wrtarga.cpp, source/libs/stl/readme.txt,
-	source/libs/triangul/construc.c, source/libs/triangul/interfac.h,
-	source/libs/triangul/monotone.c, source/libs/triangul/readme.txt,
-	source/libs/triangul/tri.c, source/libs/triangul/triangul.h,
-	source/libs/triangul/triangul.lb1,
+	source/libs/jpeg/wrtarga.cpp, source/libs/triangul/construc.c,
+	source/libs/triangul/interfac.h, source/libs/triangul/monotone.c,
+	source/libs/triangul/readme.txt, source/libs/triangul/tri.c,
+	source/libs/triangul/triangul.h, source/libs/triangul/triangul.lb1,
 	source/libs/triangul/triangul.tgt,
 	source/libs/triangul/triangul.wpj, source/libs/triangul/trimisc.c,
 	source/tools/bi2pcx.cpp, source/tools/bi2pcx.wpj,
