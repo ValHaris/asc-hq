@@ -11,6 +11,14 @@ CFLAGS="$CFLAGS -D_UNIX_ -D_SDL_ -D_NOASM_"
 AC_PROG_CXX
 CXXFLAGS="$CXXFLAGS -DHEXAGON -funsigned-char -D_UNIX_ -D_SDL_ -D_NOASM_"
 AC_PROG_RANLIB
+AC_CHECK_PROG(DOCBOOK2MAN, docbook-to-man docbook2man )
+dnl AC_CHECK_PROG(DOCBOOK2MAN, docbook-to-man, docbook-to-man)
+dnl if test "X$DOCBOOK2MAN" = X; then
+dnl	AC_CHECK_PROG(DOCBOOK2MAN, docbook2man, docbook2man)
+dnl fi
+
+AC_CHECK_PROG(GENCL,genparse,clparser)
+
 dnl Checks for libraries.
 
 dnl Checks for some STL header files (which aren't available for gcc at the time of writing).
@@ -80,13 +88,50 @@ dnl Checks for library functions.
 AC_CHECK_FUNCS(select)
 AC_CHECK_FUNCS(itoa)
 AC_CHECK_FUNCS(stricmp)
-AC_CHECK_FUNCS(log2)
 
 dnl shell vars set by test&feature flag for libbz2
 AC_SUBST([LIBBZ2])
 AC_SUBST([LDADDLIBBZ2])
 
-AC_OUTPUT(Makefile source/Makefile source/docs/Makefile \
+dnl docbook2man
+AC_SUBST(DOCBOOK2MAN)
+
+dnl what gehts packed into main.con (the data container file) and in which
+dnl order
+MAINCONDATA="palette.pal data.version *.gfx helisun.jpg \
+ 	progress.* smalaril.fnt usablack.fnt arial8.fnt \
+ 	msystem.fnt gui.fnt guicol.fnt monogui.fnt \
+ 	height2.raw windp.raw windpfei.raw farbe.raw \
+ 	allianc.raw weapicon.raw expicons.raw hexinvi2.raw \
+ 	hexinvis.raw fg8.raw windrose.raw hexfld_a.raw \
+ 	hexfld.raw in_ach.raw in_h.raw build_ah.raw \
+ 	build_h.raw hexbuild.raw allianc2.raw iconship.raw \
+ 	icontank.raw iconplan.raw pfeil2.raw pfeil3.raw \
+ 	height.raw weapons.dat message1.txt waffen.raw \
+ 	knorein.raw compi2.raw pfeil-a0.raw mausi.raw \
+ 	gebasym2.raw netcontr.raw ammoprod.raw resorinf.raw \
+ 	windpowr.raw solarpwr.raw ammotran.raw research.raw \
+ 	pwrplant.raw bldinfo.raw mining.raw tabmark.raw \
+ 	traninfo.raw attack.raw hexfeld.raw mapbkgr.raw \
+ 	hex2oct.raw weapinfo.raw amatur.raw hxborder.raw \
+ 	leergui.raw guiremov.raw *.obl *.veh *.bld *.tec \
+ 	hexmines.raw *.trr curshex2.raw curshex.raw \
+ 	railstat.map cancel.nic poweron.nic poweroff.nic \
+ 	extload.nic consttnk.nic reacfoff.nic reacfire.nic \
+ 	loading.nic viewmap.nic dig.nic abriss.nic \
+ 	building.nic refueld.nic refuel.nic repair.nic \
+ 	buildany.nic remomine.nic moormine.nic floatmin.nic \
+ 	persmine.nic tankmine.nic putmine.nic endturn.nic \
+ 	informat.nic ascent.nic descent.nic attack.nic \
+ 	movement.nic *.nic 640480.pcx *.raw *.scr *.fnt \
+ 	*.dat *.map helpsys?.txt message?.txt *.pcx lcac2.jpg \
+ 	bkgr4.scr helpsys9.msg *.set *.wav"
+
+dnl what gehts packed into main.con (the data container file)
+AC_SUBST([MAINCONDATA])
+
+AC_OUTPUT(Makefile data/Makefile doc/Makefile doc/manpages/Makefile \
+source/Makefile source/docs/Makefile source/clparser/Makefile \
 source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile \
 source/libs/Makefile source/ai/Makefile source/unix/Makefile \
 source/unix/mapeditor/Makefile source/tools/Makefile source/tools/linux/Makefile)

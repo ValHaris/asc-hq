@@ -381,7 +381,7 @@ int main(int argc, char *argv[] )
          }
       }
    
-      printf ( "\nwriting pcx\n", i / colnum );
+      printf ( "\nwriting pcx \n" );
       char* outputfilename = "bi_graph.pcx";
       writepcx ( outputfilename, 0, 0, agmp->resolutionx-1, yp + yd + (activefontsettings.font->height + 2 ) * (lastlinenum + 1), pal );
       printf ( "%s written\n", outputfilename );

@@ -41,18 +41,18 @@ const float repairEfficiencyVehicle[resourceTypeNum*resourceTypeNum] = { 0,  0, 
 
 
 Vehicle :: Vehicle (  )
-          : ContainerBase ( NULL, NULL, 0 ), typ ( NULL ), reactionfire ( this ), repairEfficiency ( repairEfficiencyVehicle )
+          : ContainerBase ( NULL, NULL, 0 ), repairEfficiency ( repairEfficiencyVehicle ), typ ( NULL ), reactionfire ( this )
 {
 }
 
 Vehicle :: Vehicle ( const Vehicle& v )
-          : ContainerBase ( NULL, NULL, 0 ), typ ( NULL ), reactionfire ( this ), repairEfficiency ( repairEfficiencyVehicle )
+          : ContainerBase ( NULL, NULL, 0 ), repairEfficiency ( repairEfficiencyVehicle ), typ ( NULL ), reactionfire ( this )
 {
 }
 
 
 Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player )
-          : ContainerBase ( t, actmap, player ), typ ( t ), reactionfire ( this ), repairEfficiency ( repairEfficiencyVehicle )
+          : ContainerBase ( t, actmap, player ), repairEfficiency ( repairEfficiencyVehicle ), typ ( t ), reactionfire ( this )
 {
    viewOnMap = false;
 

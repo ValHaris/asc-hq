@@ -15,9 +15,15 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.28 2001-02-18 15:37:30 mbickel Exp $
+//     $Id: events.cpp,v 1.29 2001-05-16 23:21:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2001/02/18 15:37:30  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.27  2000/12/28 11:12:48  mbickel
 //      Fixed: no redraw when restoring fullscreen focus in WIN32
 //      Better error message handing in WIN32
@@ -609,7 +615,7 @@ int gameThreadWrapper ( void* data )
 }
 #endif
 
-void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mousepointer )
+void initializeEventHandling ( int (*gamethread)(const void *) , const void *data, void* mousepointer )
 {
    mouseparams.xsize = 10;
    mouseparams.ysize = 10;

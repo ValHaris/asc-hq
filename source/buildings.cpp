@@ -35,7 +35,7 @@ const float repairEfficiencyBuilding[resourceTypeNum*resourceTypeNum] = { 1./3.,
                                                                           0,     0,     0 };
 
 Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const pbuildingtype type, int player, bool setupImages )
-           : ContainerBase ( type, actmap, player ), repairEfficiency ( repairEfficiencyBuilding ), typ ( type )
+           : ContainerBase ( type, actmap, player ), typ ( type ), repairEfficiency ( repairEfficiencyBuilding )
 {
    int i;
    for ( i = 0; i < 8; i++ )
@@ -427,9 +427,10 @@ Building :: ~Building ()
       if ( loading[i] )
          delete loading[i] ;
 
-   int set = unchainbuildingfromfield();
+   unchainbuildingfromfield();
 
    /*
+   int set = unchainbuildingfromfield();
    if ( set )
       for ( int i = xpos - 6; i <= xpos + 6; i++)
          for (j = ypos - 6; j <= ypos + 6; j++)
@@ -574,20 +575,20 @@ void Building:: read ( tnstream& stream )
     int version = stream.readInt();
 
     if ( version == buildingstreamversion || version == -1 ) {
-       int id = stream.readInt ();
+       stream.readInt (); // id
        for ( int i = 0; i < 3; i++ )
           bi_resourceplus.resource(i) = stream.readInt();
 
-       int color = stream.readChar();
-       int xpos = stream.readWord() ;
+       stream.readChar(); // color
+       stream.readWord() ; // xpos
     } else {
-       int id = version;
-       int color = stream.readChar();
-       int xpos  = stream.readWord();
+       // int id = version;
+       stream.readChar(); // color
+       stream.readWord(); // xpos
        bi_resourceplus = Resources ( 0, 0, 0);
     }
 
-    int ypos = stream.readWord();
+    stream.readWord(); // ypos
     readData ( stream, version );
 }
 

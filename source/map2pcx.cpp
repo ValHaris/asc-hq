@@ -131,7 +131,7 @@ pfont load_font(char* name)
 
 
 
-int mapeditorMainThread ( void* _mapname )
+int mapeditorMainThread ( const void* _mapname )
 {
    tvirtualdisplay buf ( 800, 600 );
    initMapDisplay( );

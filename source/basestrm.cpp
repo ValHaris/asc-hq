@@ -2,9 +2,13 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.55 2001-02-28 14:10:04 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.56 2001-05-16 23:21:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2001/02/28 14:10:04  mbickel
+//      Added some small editors to linux makefiles
+//      Added even more dirty hacks to basegfx: some more truecolor functions
+//
 //     Revision 1.54  2001/02/26 13:49:34  mbickel
 //      Fixed bug in message loading
 //      readString can now read strings that container \n
@@ -1596,7 +1600,7 @@ libbzip_decompression :: ~libbzip_decompression ( )
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+/*
 t_compressor_2ndbuf_filter :: t_compressor_2ndbuf_filter ( t_compressor_stream_interface* strm )
 {
    stream = strm;
@@ -1619,7 +1623,7 @@ int t_compressor_2ndbuf_filter :: readcmpdata ( void* buf, int size, int excpt )
        pc++;
        size--;
        got++;
-   } /* endwhile */
+   }
 
    if ( size )
       got += stream->readcmpdata ( pc, size, excpt );
@@ -1632,10 +1636,10 @@ void t_compressor_2ndbuf_filter :: insert_data_into_queue ( const void* buf, int
    char* pc = (char*) buf;
    for (int i = 0; i < size; i++) {
       _queue.push ( *pc );
-      *pc++;
-   } /* endfor */
+      pc++;
+   }
 }
-
+*/
 
 
 
@@ -2043,7 +2047,7 @@ int    compressrle ( const void* p, void* q)
 
 
 
-int patimat (const char *pat, const char *str)
+bool patimat (const char *pat, const char *str)
 {
       switch (*pat)
       {
@@ -2067,7 +2071,7 @@ int patimat (const char *pat, const char *str)
 
 
 
-tfindfile :: tfindfile ( string _name )
+tfindfile :: tfindfile ( ASCString _name )
 {
    found = 0;
    act = 0;
@@ -2534,4 +2538,18 @@ int createDirectory ( const char* name )
    #else
     return mkdir ( name );
    #endif
+}
+
+
+ASCString FileName::suffix ( )
+{
+   size_type slash = find_last_of ( pathdelimitterstring );
+   size_type point = find_last_of ( "." );
+   if ( point == npos )
+      return "";
+   else
+      if ( slash == npos || slash < point )
+         return substr(point+1);
+      else
+         return "";
 }

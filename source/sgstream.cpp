@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.57 2001-03-23 16:02:56 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.58 2001-05-16 23:21:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2001/03/23 16:02:56  mbickel
+//      Some restructuring;
+//      started rewriting event system
+//
 //     Revision 1.56  2001/02/18 15:37:19  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -1194,7 +1198,7 @@ int readgameoptions ( const char* filename )
    displayLogMessage ( 4, "loading game options ... " );
 
    const char* fn;
-   if ( filename )
+   if ( filename && filename[0] )
       fn = filename;
    else
       if ( getenv ( asc_EnvironmentName )) 

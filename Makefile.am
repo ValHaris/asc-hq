@@ -1,6 +1,6 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
-SUBDIRS = source 
+SUBDIRS = source data doc
 
 EXTRA_DIST = asc.kdevprj AUTHORS COPYING ChangeLog INSTALL README TODO asc.lsm 
 

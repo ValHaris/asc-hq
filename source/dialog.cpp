@@ -2,9 +2,14 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.82 2001-03-05 20:57:22 mbickel Exp $
+//     $Id: dialog.cpp,v 1.83 2001-05-16 23:21:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.82  2001/03/05 20:57:22  mbickel
+//      Fixed infinite loop in AI
+//      Fixed map resizing crash in mapaeditor
+//      Fixed speedsearch not working in fileselector
+//
 //     Revision 1.81  2001/02/26 12:35:05  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -333,7 +338,6 @@ void         tstatisticbuildings::init(void)
 void         tstatisticarmies::count(void)
 { 
   integer      j, b; 
-  pvehicle     actvehicle; 
 
    for (j = 0; j <= 8; j++) { 
       if (j == 8) 

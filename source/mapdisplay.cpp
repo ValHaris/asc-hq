@@ -222,8 +222,6 @@ void         initMapDisplay( )
    if ( y & 1 )
       y--;
 
-   int          i;
-
    if ( actmap ) {
       actmap->actplayer = 0;
       actmap->xsize = 0;

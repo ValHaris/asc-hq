@@ -4,9 +4,13 @@
 */
 
 
-//     $Id: basestrm.h,v 1.39 2001-02-28 14:10:05 mbickel Exp $
+//     $Id: basestrm.h,v 1.40 2001-05-16 23:21:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2001/02/28 14:10:05  mbickel
+//      Added some small editors to linux makefiles
+//      Added even more dirty hacks to basegfx: some more truecolor functions
+//
 //     Revision 1.38  2001/02/26 22:03:18  mbickel
 //      Some adjustments for Watcom C++
 //
@@ -403,7 +407,7 @@ class t_compressor_stream_interface {
              virtual void writecmpdata ( const void* buf, int size ) = 0;
              virtual int readcmpdata ( void* buf, int size, int excpt = 1 ) = 0;
       };
-
+/*
 class t_compressor_2ndbuf_filter : public t_compressor_stream_interface {
              t_compressor_stream_interface *stream;
              typedef deque<char> CDQ;
@@ -415,6 +419,7 @@ class t_compressor_2ndbuf_filter : public t_compressor_stream_interface {
              void insert_data_into_queue ( const void* buf, int size );
              virtual ~t_compressor_2ndbuf_filter() {};
 };
+*/
 
 typedef t_compressor_stream_interface *p_compressor_stream_interface;
 
@@ -634,7 +639,7 @@ class tfindfile {
         int act;
 
       public:
-        tfindfile ( string name );
+        tfindfile ( ASCString name );
         string getnextname ( int* loc = NULL, bool* inContainer = NULL );
      };
 
@@ -648,7 +653,11 @@ extern  const int maxfilenamelength;
 
 
 extern int compressrle ( const void* p, void* q);
-extern int patimat (const char *pat, const char *str);
+
+/** checks whether the regular expression pat matches the string str . This functions
+    only understands dos/windows style wildcards: * and ?
+*/
+extern bool patimat (const char *pat, const char *str);
 
 extern int checkforvaliddirectory ( char* dir );
 
@@ -673,6 +682,16 @@ extern const char* filereadmodetext;
 extern const char* filewritemodetext;
 
 extern int verbosity;
+
+
+//! This class handles filenames. All operations that work on filenames will be added here
+class FileName : public ASCString {
+    public:
+       /** return the suffix of the file or an empty string if the file doesn't have a suffix.
+           The suffix is the part of the filename after its last period. */
+       ASCString suffix();
+};
+
 
 extern const char pathdelimitter;
 extern const char* pathdelimitterstring;

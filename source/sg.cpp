@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: sg.cpp,v 1.137 2001-05-15 09:54:52 mbickel Exp $
+//     $Id: sg.cpp,v 1.138 2001-05-16 23:21:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.137  2001/05/15 09:54:52  mbickel
+//      Added complete Data and documentaion to repository
+//      The unix programs are now build in the 'unix' subdirectory, not the
+//       source directory.
+//      The executable names of all ASC helper programs now start with 'asc_'
+//
 //     Revision 1.136  2001/03/30 12:43:16  mbickel
 //      Added 3D pathfinding
 //      some cleanup and documentation
@@ -96,7 +102,7 @@
 //
 //     Revision 1.118  2000/12/27 22:23:13  mbickel
 //      Fixed crash in loading message text
-//      Removed many unused variables
+//      Remo functioved many unused variables
 //
 //     Revision 1.117  2000/12/26 21:04:36  mbickel
 //      Fixed: putimageprt not working (used for small map displaying)
@@ -202,7 +208,6 @@
 */
 
 
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -210,6 +215,9 @@
 #include <malloc.h>
 #include <ctype.h>
 #include <signal.h>
+#include <algorithm>
+#include <memory>
+
 
 #include "vehicletype.h"
 #include "buildingtype.h"
@@ -247,6 +255,7 @@
 #include "replay.h"
 #include "dashboard.h"
 #include "graphicset.h"
+
 
 
 #ifdef HEXAGON
@@ -1138,59 +1147,63 @@ void         startnewsinglelevelfromgame(void)
 
 
 
-void loadStartupMap ( char *emailgame=NULL, char *mapname=NULL, char *savegame=NULL )
+void loadStartupMap ( const char *gameToLoad=NULL )
 {
-   char s[300];
-   if( emailgame != NULL ) {
-      if( validateemlfile( emailgame ) == 0 ) {
-         fprintf( stderr, "Email gamefile %s is invalid. Aborting.\n", emailgame );
-         exit(-1);
-      }
+   if ( gameToLoad && gameToLoad[0] ) {
+      if ( patimat ( tournamentextension, gameToLoad )) {
 
-      try {
-         tnfilestream gamefile ( emailgame, tnstream::reading );
-         tnetworkloaders nwl;
-         nwl.loadnwgame( &gamefile );
-      }
+         if( validateemlfile( gameToLoad ) == 0 ) {
+            fprintf( stderr, "Email gamefile %s is invalid. Aborting.\n", gameToLoad );
+            exit(-1);
+         }
 
-      catch ( tfileerror ) {
-         fprintf ( stderr, "%s is not a legal email game. \n", emailgame );
-         exit(-1);
-      }
+         try {
+            tnfilestream gamefile ( gameToLoad, tnstream::reading );
+            tnetworkloaders nwl;
+            nwl.loadnwgame( &gamefile );
+         }
 
-   } else if( savegame != NULL ) {
-      if( validatesavfile( savegame ) == 0 ) {
-         fprintf( stderr, "The savegame %s is invalid. Aborting.\n", savegame );
-         exit( -1 );
-      }
-      try { loadgame( savegame ); }
+         catch ( tfileerror ) {
+            fprintf ( stderr, "%s is not a legal email game. \n", gameToLoad );
+            exit(-1);
+         }
+      } else if( patimat ( savegameextension, gameToLoad )) {
+         if( validatesavfile( gameToLoad ) == 0 ) {
+            fprintf( stderr, "The savegame %s is invalid. Aborting.\n", gameToLoad );
+            exit( -1 );
+         }
+         try { loadgame( gameToLoad ); }
 
-      catch ( tfileerror ) {
-         fprintf ( stderr, "%s is not a legal savegame. \n", savegame );
-         exit(-1);
-      }
+         catch ( tfileerror ) {
+            fprintf ( stderr, "%s is not a legal savegame. \n", gameToLoad );
+            exit(-1);
+         }
 
-   } else if( mapname != NULL ) {
-      if( validatemapfile( mapname ) == 0 ) {
-         fprintf( stderr, "Mapfile %s is invalid. Aborting.\n", mapname );
-         exit(-1);
-      }
+      } else if( patimat ( mapextension, gameToLoad )) {
+         if( validatemapfile( gameToLoad ) == 0 ) {
+            fprintf( stderr, "Mapfile %s is invalid. Aborting.\n", gameToLoad );
+            exit(-1);
+         }
 
-      try { loadmap( mapname ); }
-      catch ( tfileerror ) {
-         fprintf ( stderr, "%s is not a legal map. \n", mapname );
+         try { loadmap( gameToLoad ); }
+         catch ( tfileerror ) {
+            fprintf ( stderr, "%s is not a legal map. \n", gameToLoad );
+            exit(-1);
+         }
+      } else {
+         fprintf ( stderr, "Don't know how to handle the file %s \n", gameToLoad );
          exit(-1);
       }
 
    } else {  // resort to loading defaults
 
-
+     ASCString s;
      if ( CGameOptions::Instance()->startupcount < 4 ) {
-        strcpy ( s , "tutor0" );
+        s = "tutor0" ;
      } else {
-        strcpy ( s , "railstat" );
+        s = "railstat";
      }
-     strcat ( s, &mapextension[1] );
+     s += &mapextension[1];
 
      int maploadable;
      {
@@ -1217,10 +1230,10 @@ void loadStartupMap ( char *emailgame=NULL, char *mapname=NULL, char *savegame=N
                displaymessage( "unable to load startup-map",2);
 
          }
-         strcpy ( s , filename.c_str() );
+         s = filename;
       }
 
-      loadmap(s);
+      loadmap(s.c_str());
       actmap->startGame();
       actmap->setupResources();
    }
@@ -2008,8 +2021,8 @@ void dispmessageonexit ( void ) {
    } else {
       #ifdef _DOS_
        printf( getstartupmessage() );
-      #endif
        printf("exiting ... \n \n");
+      #endif
    } /* endif */
 }
 
@@ -2034,21 +2047,16 @@ const char* progressbarfilename = "progress.8mn";
 
 
 
-void loaddata( int resolx, int resoly,
-   char *emailgame=NULL, char *mapname=NULL, char *savegame=NULL )
+void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 {
    actprogressbar = new tprogressbar;
    if ( actprogressbar ) {
       tfindfile ff ( progressbarfilename );
       if ( !ff.getnextname().empty() ) {
          tnfilestream strm ( progressbarfilename, tnstream::reading );
-         actprogressbar->start ( 255, 0,
-            agmp->resolutiony-3, agmp->resolutionx-1,
-            agmp->resolutiony-1, &strm );
+         actprogressbar->start ( 255, 0, agmp->resolutiony-3, agmp->resolutionx-1, agmp->resolutiony-1, &strm );
       } else {
-         actprogressbar->start ( 255, 0,
-            agmp->resolutiony-3, agmp->resolutionx-1,
-            agmp->resolutiony-1, NULL );
+         actprogressbar->start ( 255, 0, agmp->resolutiony-3, agmp->resolutionx-1, agmp->resolutiony-1, NULL );
       }
    }
 
@@ -2105,7 +2113,7 @@ void loaddata( int resolx, int resoly,
 
    if ( actprogressbar ) actprogressbar->startgroup();
 
-   loadStartupMap( emailgame, mapname, savegame );
+   loadStartupMap( gameToLoad );
 
    if ( actprogressbar ) actprogressbar->startgroup();
 
@@ -2370,12 +2378,10 @@ void runmainmenu ( void )
 
 
 struct GameThreadParams {
-   char* mapname;
-   char* emailgame;
-   char* savegame;
+   ASCString filename;
 };
 
-int gamethread ( void* data )
+int gamethread ( const void* data )
 {
       GameThreadParams* gtp = (GameThreadParams*) data;
 
@@ -2392,7 +2398,7 @@ int gamethread ( void* data )
             tnfilestream stream ( "logo640.pcx", tnstream::reading );
             loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 );
          }
-         loaddata( resolx, resoly, gtp->emailgame, gtp->mapname, gtp->savegame );
+         loaddata( resolx, resoly, gtp->filename.c_str() );
          if ( fs )
             closeFullscreenImage ();
 
@@ -2432,7 +2438,7 @@ int gamethread ( void* data )
 
                backgroundpict.paint();
 
-               if ( gtp->emailgame ) {
+               if ( !gtp->filename.empty() && patimat ( tournamentextension, gtp->filename.c_str() ) ) {
                   initNetworkGame ( );
                }
 
@@ -2465,27 +2471,43 @@ int gamethread ( void* data )
 }
 
 
+// including the command line parser, which is generated by genparse
+#include "clparser/asc.cpp"
+
 int main(int argc, char *argv[] )
 {
-   int resolx = 800;
-   int resoly = 600;
+   Cmdline* cl = NULL;
+   auto_ptr<Cmdline> apcl ( cl );
+   try {
+      cl = new Cmdline ( argc, argv );
+   }
+   catch ( string s ) {
+      cerr << s.c_str();
+      exit(1);
+   }
 
-   printf( getstartupmessage() );
+   if ( cl->next_param() < argc ) {
+      cerr << "invalid command line parameter\n";
+      exit(1);
+   }
 
-   #ifdef _DOS_
-    int showmodes = 0;
-    #ifdef MEMCHK
-     initmemory( 5000000 );
-    #else
-     initmemory();
-    #endif
-   #endif
+   if ( cl->version() ) {
+      printf( getstartupmessage() );
+      exit(0);
+   }
+
+   if ( cl->w() )
+      fullscreen = 0;
+
+   if ( cl->f() )
+      fullscreen = 1;
+
+   verbosity = cl->v();
 
 
-   char *emailgame = NULL, *mapname = NULL, *savegame = NULL, *configfile = NULL;
-   int useSound = 1;
-   int forceFullScreen = 0;
 
+
+/*
    for ( int i = 1; i<argc; i++ ) {
       if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
 #ifdef _DOS_
@@ -2541,19 +2563,9 @@ int main(int argc, char *argv[] )
            resoly = atoi ( &argv[i][3] ); continue;
       }
 
-      if ( strcmpi ( &argv[i][1], "-emailgame" ) == 0 ||
-           strcmpi ( &argv[i][1], "eg" ) == 0 ) {
-         emailgame = argv[++i]; continue;
-      }
-
-      if ( strcmpi ( &argv[i][1], "-savegame" ) == 0 ||
-            strcmpi( &argv[i][1], "sg" ) == 0 ) {
-         savegame = argv[++i]; continue;
-      }
-
-      if ( strcmpi ( &argv[i][1], "-loadmap" ) == 0 ||
-            strcmpi( &argv[i][1], "lm" ) == 0 ) {
-         mapname = argv[++i]; continue;
+      if ( strcmpi ( &argv[i][1], "-load" ) == 0 ||
+           strcmpi ( &argv[i][1], "l" ) == 0 ) {
+           fileToLoad = argv[++i]; continue;
       }
 
       if ( strcmpi ( &argv[i][1], "-configfile" ) == 0 ||
@@ -2571,23 +2583,14 @@ int main(int argc, char *argv[] )
           ( strcmpi ( &argv[i][1], "h" ) == 0 ) ||
           ( strcmpi ( &argv[i][1], "-help" ) == 0 ) ){
         printf( " Parameters: \n"
-                "\t--help\n"
-                "\t-h                 this page\n"
-                "\t-e file\n"
-                "\t--emailgame file   continue an email game\n"
-                "\t-s file\n"
-                "\t--savegame file    continue a saved game\n"
-                "\t-m file\n"
-                "\t--loadmap file     start with a given map\n"
-                "\t-v x\n"
-                "\t--verbose x        set verbosity level to x (0..10)\n"
-                "\t-c file\n"
-                "\t--configfile file  use given configuration file\n"
-                "\t-x:X               Set horizontal resolution to X; default is 800 \n"
+                "    -h , --help             this page\n"
+                "    -l , --load file        load a map, save game, or email game on startup\n"
+                "    -v , --verbose x        set verbosity level to x (0..10)\n"
+                "    -c , --configfile file  use given configuration file\n"
+                "    -x:X               Set horizontal resolution to X; default is 800 \n"
                 "\t-y:Y               Set verticalal resolution to Y; default is 600 \n"
 #ifdef _DOS_
                 "\t-v1                Set vesa error recovery level to 1 \n"
-                //"\t/nocd\t\tDisable music \n"
                 "\t-8bitonly          Disable truecolor graphic mode \n"
                 "\t-showmodes         Display list of available graphic modes \n" );
 #else
@@ -2610,11 +2613,6 @@ int main(int argc, char *argv[] )
   } /* endfor */
 
 
-   if ( resolx < 640 || resoly < 480 ) {
-      printf ( "Cannot run in resolution smaller than 640*480 !\n");
-      exit(1);
-   }
-
 #ifdef _DOS_
    if ( showmodes ) {
       showavailablemodes();
@@ -2629,10 +2627,7 @@ int main(int argc, char *argv[] )
    memset(exitmessage, 0, sizeof ( exitmessage ));
    atexit ( dispmessageonexit );
 
-   initFileIO( configfile );
-
-   if ( CGameOptions::Instance()->disablesound )
-      useSound = 0;
+   initFileIO( cl->c().c_str() );  // passing the filename from the command line options
 
    try {
       if ( exist ( "data.version" )) {
@@ -2645,26 +2640,23 @@ int main(int argc, char *argv[] )
          displaymessage("A newer version of the data files is required. \n"
                         "You can download a new data package from http://www.asc-hq.org", 2 );
 
-      readgameoptions( configfile );
-      if ( CGameOptions::Instance()->disablesound )
-         useSound = 0;
-
       check_bi3_dir ();
    }
    catch ( tfileerror err ) {
       displaymessage ( "unable to access file %s \n", 2, err.getFileName().c_str() );
    }
    catch ( ... ) {
-      displaymessage (
-         "loading of game failed during pre graphic initializing", 2 );
+      displaymessage ( "loading of game failed during pre graphic initializing", 2 );
    }
 
-   if ( CGameOptions::Instance()->forceWindowedMode && !forceFullScreen )
+   if ( CGameOptions::Instance()->forceWindowedMode && !cl->f() )  // cl->f == force fullscreen command line param
       fullscreen = 0;
 
-   modenum8 = initgraphics ( resolx, resoly, 8 );
+   modenum8 = initgraphics ( cl->x(), cl->y(), 8 );
 
-   initSoundList( useSound == 0 );
+   // initialize the sound only if neither the command line parameter q is specified
+   // nor is the sound disabled in the game options
+   initSoundList( !cl->q() && !CGameOptions::Instance()->disablesound );
 
    if ( modenum8 > 0 ) {
       #ifdef _DOS_
@@ -2672,9 +2664,7 @@ int main(int argc, char *argv[] )
       #endif
 
       GameThreadParams gtp;
-      gtp.mapname = mapname;
-      gtp.savegame = savegame;
-      gtp.emailgame = emailgame;
+      gtp.filename = cl->l();
 
       {
          int w;

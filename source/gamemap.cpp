@@ -936,6 +936,9 @@ tmap :: ~tmap ()
       delete[] field;
       field = NULL;
    }
+
+   if ( actmap == this )
+      actmap = NULL;
 }
 
 /*

@@ -2,9 +2,12 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.68 2001-04-03 11:54:16 mbickel Exp $
+//     $Id: building.cpp,v 1.69 2001-05-16 23:21:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.68  2001/04/03 11:54:16  mbickel
+//      AI Improvements: production , servicing
+//
 //     Revision 1.67  2001/04/01 12:59:35  mbickel
 //      Updated win32 project files to new ai file structure
 //      Added viewid win32-project
@@ -1690,8 +1693,8 @@ pvehicle cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt)
 
    eht->setMovement ( eht->typ->movement[log2( eht->height )]);
 
-   int engot = cc->getenergy   ( fzt->productionCost.energy,   1 );
-   int magot = cc->getmaterial ( fzt->productionCost.material, 1 );
+   cc->getenergy   ( fzt->productionCost.energy,   1 );
+   cc->getmaterial ( fzt->productionCost.material, 1 );
 
 
    int i = 0;

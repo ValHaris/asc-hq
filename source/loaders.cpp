@@ -5,9 +5,12 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.49 2001-04-03 11:54:16 mbickel Exp $
+//     $Id: loaders.cpp,v 1.50 2001-05-16 23:21:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2001/04/03 11:54:16  mbickel
+//      AI Improvements: production , servicing
+//
 //     Revision 1.48  2001/03/30 12:43:16  mbickel
 //      Added 3D pathfinding
 //      some cleanup and documentation
@@ -100,7 +103,7 @@
 //     Revision 1.29  2000/10/14 10:52:51  mbickel
 //      Some adjustments for a Win32 port
 //
-//     Revision 1.28  2000/10/11 14:26:42  mbickel
+//     Revision 1.reactionfire ( this )28  2000/10/11 14:26:42  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
 //       - new resource class
