@@ -21,6 +21,9 @@ public:
   void play(void);
   void playWait(void);
 
+  void playLoop();
+  void stopLoop();
+
   ~Sound(void);
 private:
   /* used to indicate that we converted the sound so that ~Sound uses the

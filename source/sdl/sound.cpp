@@ -219,6 +219,17 @@ void Sound::play(void)
    SDL_PauseAudio(0);
 }
 
+void Sound::playLoop()
+{
+
+}
+
+void Sound::stopLoop()
+{
+
+}
+
+
 /** Play the sound, but don't return control to this thread until
  *  the sound has finished playing.
  */

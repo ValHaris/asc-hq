@@ -5,9 +5,12 @@
      which was never finished.
 */
 
-//     $Id: dlgraph.cpp,v 1.11 2001-02-11 11:39:31 mbickel Exp $
+//     $Id: dlgraph.cpp,v 1.12 2001-07-14 14:26:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2001/02/11 11:39:31  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.10  2001/01/28 14:04:12  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -123,12 +126,11 @@ void         tdialogbox::knopfdruck(int      xx1,
      collategraphicoperations cgs ( xx1, yy1, xx2, yy2 );
 
     void*      p;
-    char      kn, kn2; 
-    integer      mt; 
+    char      kn;
+    integer      mt;
 
-     mt = mouseparams.taste; 
-     mousevisible(false); 
-     kn2 = true; 
+     mt = mouseparams.taste;
+     mousevisible(false);
 
      void*    pq = asc_malloc ( imagesize ( xx1 , yy1 , xx2 , yy2 ));
      getimage( xx1 , yy1 , xx2 , yy2 , pq );

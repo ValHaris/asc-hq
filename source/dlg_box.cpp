@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.50 2001-07-14 13:15:17 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.51 2001-07-14 14:26:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2001/07/14 13:15:17  mbickel
+//      Rewrote sound handling
+//
 //     Revision 1.49  2001/07/09 17:01:44  mbickel
 //      Small map can now be even smaller
 //      fixed redraw problems on windows
@@ -254,6 +257,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <iostream.h>
 
 #include "tpascal.inc"
 #include "typen.h"
@@ -2866,8 +2870,7 @@ void tviewtext::displaytext ( void )
 
   char         *actword, *s5;
   const char* s1;
-  char      abbruch; 
-  integer      i; 
+  integer      i;
 
   int mss = getmousestatus();
 
@@ -2927,7 +2930,6 @@ void tviewtext::displaytext ( void )
    }
 
    if ( tvt_text ) {
-      abbruch = false; 
        *actline = 0;
        *actword = 0;
        do { 

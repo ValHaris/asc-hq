@@ -2,9 +2,13 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.86 2001-07-11 20:44:36 mbickel Exp $
+//     $Id: dialog.cpp,v 1.87 2001-07-14 14:26:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.86  2001/07/11 20:44:36  mbickel
+//      Removed some vehicles from the data file.
+//      Put all legacy units in into the data/legacy directory
+//
 //     Revision 1.85  2001/07/09 17:01:43  mbickel
 //      Small map can now be even smaller
 //      fixed redraw problems on windows
@@ -1673,8 +1677,7 @@ void         tvehicleinfo::checknextunit(void)
 void         tvehicleinfo::run(void)
 { 
    tweaponinfo  weapinf; 
-   int         k; 
-   int         drk; 
+   int         k;
 
    i = 0; 
    if ( !aktvehicle ) {
@@ -1703,7 +1706,6 @@ void         tvehicleinfo::run(void)
 
 
    j = i;
-   drk = 0; 
 
    aktvehicle = getvehicletype_forpos ( i ); 
    zeigevehicle();
