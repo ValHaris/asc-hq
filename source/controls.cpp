@@ -3,9 +3,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.113 2001-09-25 18:03:34 mbickel Exp $
+//     $Id: controls.cpp,v 1.114 2001-09-26 19:44:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.113  2001/09/25 18:03:34  mbickel
+//      Move after attack doesn't reduce a units movement
+//
 //     Revision 1.112  2001/09/13 17:43:11  mbickel
 //      Many, many bug fixes
 //
@@ -2927,7 +2930,7 @@ void nextPlayer( void )
    }  while (!(actmap->player[actmap->actplayer].exist()  || (runde > 2) ));
 
    if (runde > 2) {
-      displaymessage("There are no players left any more !",2);
+      displaymessage("There are no players left any more !",1);
       delete actmap;
       actmap = NULL;
       throw NoMapLoaded ();

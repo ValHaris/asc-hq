@@ -1048,6 +1048,10 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
   } else
      ox2 = xsize;
 
+  for (int s = 0; s < 9; s++)
+     for ( tmap::Player::BuildingList::iterator i = actmap->player[s].buildingList.begin(); i != actmap->player[s].buildingList.end(); i++ )
+        (*i)->unchainbuildingfromfield();
+
 
   int newx = xsize + left + right;
   int newy = ysize + top + bottom;
@@ -1095,8 +1099,19 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
 
 
   for (int s = 0; s < 9; s++)
-     for ( tmap::Player::BuildingList::iterator i = actmap->player[s].buildingList.begin(); i != actmap->player[s].buildingList.end(); i++ )
-        (*i)->resetPicturePointers ();
+     for ( tmap::Player::BuildingList::iterator i = actmap->player[s].buildingList.begin(); i != actmap->player[s].buildingList.end(); i++ ) {
+        MapCoordinate mc = (*i)->getEntry();
+        mc.x += left;
+        mc.y += top;
+        (*i)->chainbuildingtofield ( mc );
+     }
+
+  for (int s = 0; s < 9; s++)
+     for ( tmap::Player::VehicleList::iterator i = actmap->player[s].vehicleList.begin(); i != actmap->player[s].vehicleList.end(); i++ ) {
+        (*i)->xpos += left;
+        (*i)->ypos += top;
+     }
+
 
   /*
   if (xpos + idisplaymap.getscreenxsize() > xsize)
