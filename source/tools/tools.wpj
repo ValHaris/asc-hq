@@ -5,7 +5,7 @@ VpeMain
 1
 WRect
 0
-509
+485
 10160
 9920
 2
@@ -90,13 +90,13 @@ WRect
 WFileName
 11
 asctool.tgt
-0
-13
+10
+25
 23
 VComponent
 24
 WRect
-1288
+1280
 0
 2000
 2240
@@ -242,7 +242,7 @@ VComponent
 WRect
 8000
 4800
-1857
+1848
 2240
 0
 0
@@ -275,7 +275,7 @@ WRect
 0
 6080
 2080
-2666
+2654
 0
 0
 58
@@ -289,9 +289,9 @@ VComponent
 60
 WRect
 80
-1481
-1777
-2299
+1469
+1768
+2287
 0
 0
 61
@@ -300,4 +300,4 @@ WFileName
 dos\mntgraph.tgt
 0
 2
-20
+29

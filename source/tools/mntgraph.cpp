@@ -3,6 +3,7 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <map>
+#include <conio.h>
 
 #include "../basegfx.h"
 #include "../basestrm.h"
@@ -12,6 +13,7 @@
 #include "../palette.h"
 #include "../sgstream.h"
 #include "../basegfx.h"
+#include "../dos/vesa.h"
 
 
 int interpol;
@@ -41,7 +43,8 @@ int lockpalette;
 
 
 
-typedef map<int, TrueColorImage*> TCI;
+typedef less<int> lessint ;
+typedef map<int, TrueColorImage*, lessint> TCI;
 TCI tci;
 
 void* doublepict ( void* vbuf, int interpolate )
@@ -252,19 +255,22 @@ int main(int argc, char *argv[] )
    {
       int maxy = 0;
       int maxx = 0;
-      tvirtualdisplay vdp ( 1000, 30000, 255, 32 );
+      tvirtualdisplay vdp ( 2000, 30000, 255, 32 );
+      // initgraphics ( 1024, 768, 32 );
+      // bar ( 0, 0, 1024*4-1, 767, 0xffffffff );
       for ( TCI::iterator ti = tci.begin(); ti != tci.end(); ti++ ) {
          int x = ti->first % colnum;
          int y = ti->first / colnum;
-         int xp = x0 + x * xd;
-         int yp = y0 + y * yd;
-         putimage ( x, y, ti->second );
+         int xp = (x0 + x * xd) * 2;
+         int yp = (y0 + y * yd ) * 2;
+         putimage ( xp, yp, ti->second );
 
          if ( yp > maxy )
             maxy = yp;
 
          if ( xp > maxx )
             maxx = xp;
+           // getch();
       }
       writepcx ( "images.pcx", 0, 0, maxx+100, maxy+100, activepalette );
    }

@@ -4,9 +4,13 @@
 */
 
 
-//     $Id: basestrm.h,v 1.37 2001-02-26 21:14:30 mbickel Exp $
+//     $Id: basestrm.h,v 1.38 2001-02-26 22:03:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2001/02/26 21:14:30  mbickel
+//      Added two small editors to the linux makefiles
+//      Added some more truecolor hacks to the graphics engine
+//
 //     Revision 1.36  2001/02/18 15:37:02  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -78,6 +82,7 @@ extern "C" {
 
 
 #pragma pack(1)
+
 
 
 
@@ -369,7 +374,9 @@ class tlzwstreamcompression {
               void initwriting( void );
 
           protected:
-              queue<char> tempbuf;
+
+              typedef deque<char> CDQ;
+              queue<char,CDQ> tempbuf;
 
               enum tmode { none, reading, writing, readingdirect, readingrle };
               tmode mode;
@@ -396,7 +403,8 @@ class t_compressor_stream_interface {
 
 class t_compressor_2ndbuf_filter : public t_compressor_stream_interface {
              t_compressor_stream_interface *stream;
-             queue<char> _queue;
+             typedef deque<char> CDQ;
+             queue<char, CDQ> _queue;
            public:
              t_compressor_2ndbuf_filter ( t_compressor_stream_interface* strm );
              virtual void writecmpdata ( const void* buf, int size );
@@ -463,7 +471,8 @@ class tn_file_buf_stream : public tnbufstream {
 
 class tanycompression : public t_compressor_stream_interface, protected tlzwstreamcompression {
 
-                            queue<char> _queue;
+                            typedef deque<char> CDQ;
+                            queue<char, CDQ> _queue;
 
                             libbzip_compression* bzip_compress;
                             libbzip_decompression* bzip_decompress;

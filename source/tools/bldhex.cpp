@@ -55,7 +55,7 @@ char getbuildingfield ( int& x, int& y )
    void* fieldshape;
    {
       int w;
-      tnfilestream stream ("hexfeld.raw", 1);
+      tnfilestream stream ("hexfeld.raw", tnstream::reading);
       stream.readrlepict ( &fieldshape, false, &w );
    }
 
@@ -63,7 +63,7 @@ char getbuildingfield ( int& x, int& y )
    void* kontur;
    {
       int w;
-      tnfilestream stream ("hexcont.raw", 1);
+      tnfilestream stream ("hexcont.raw", tnstream::reading);
       stream.readrlepict ( &kontur, false, &w );
    }
 
@@ -223,7 +223,7 @@ void loadpicture ( char* filename , int step ) {
    void* maske;
    {
       int w;
-      tnfilestream stream ("hexfeld.raw", 1);
+      tnfilestream stream ("hexfeld.raw", tnstream::reading);
       stream.readrlepict ( &maske, false, &w );
    }
 
@@ -282,22 +282,22 @@ main ()
    try {
 
       {
-         tnfilestream mainstream ( "hexrast.raw", 1);          
+         tnfilestream mainstream ( "hexrast.raw", tnstream::reading);          
          mainstream.readrlepict ( &rast, false, &i );
       }
 
       {
-         tnfilestream mainstream ( "hxraster.raw", 1);          
+         tnfilestream mainstream ( "hxraster.raw", tnstream::reading);          
          mainstream.readrlepict ( &rast2, false, &i );
       }
    
       {
-         tnfilestream mainstream ( "allianc2.raw", 1);
+         tnfilestream mainstream ( "allianc2.raw", tnstream::reading);
          mainstream.readrlepict ( &haken, false, &i );
       }
    
       {
-         tnfilestream mainstream ("mausi.raw",1); 
+         tnfilestream mainstream ("mausi.raw",tnstream::reading); 
          mainstream.readrlepict ( &mousepntr, false, &i );
       }
 
@@ -305,7 +305,7 @@ main ()
       loadbi3graphics();
 
       {
-         tnfilestream stream ( "USABLACK.FNT", 1 );
+         tnfilestream stream ( "USABLACK.FNT", tnstream::reading );
          fnt = loadfont  ( &stream );
       }
       if ( !fnt ) {
@@ -334,7 +334,7 @@ main ()
       char   creat_edit = 0;
       yn_switch (" create ", " edit ", 0, 1, creat_edit);
       if (creat_edit==0) {                                            // creat new tank
-         bld = new Buildingtype;
+         bld = new BuildingType;
          memset ( bld, 0, sizeof ( *bld ));
          bld->terrain_access = &bld->terrainaccess;
          clearscreen ();
@@ -660,13 +660,13 @@ main ()
    
    
       {
-         tn_file_buf_stream mainstream (datfile.name,2);
+         tn_file_buf_stream mainstream (datfile.name, tnstream::writing);
          writebuildingtype ( bld, &mainstream  );
       } 
 
    } /* endtry */
    catch ( tfileerror err ) {
-      printf("\nfatal error accessing file %s \n", err.filename );
+      printf("\nfatal error accessing file %s \n", err.getFileName().c_str() );
       return 1;
    } /* endcatch */
    catch ( ASCexception ) {

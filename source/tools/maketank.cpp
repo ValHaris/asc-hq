@@ -69,7 +69,7 @@ void readtextfile ( char* name, pchar &buf, int allocated )
    char *p1, p2;
    p1 = buf;
 
-   tnfilestream mainstream ( name , 1);
+   tnfilestream mainstream ( name , tnstream::reading );
    for (int i = 0; i < size ; i++ ) {
       mainstream.readdata ( &p2, 1);
       if (p2 == 0x0D) {
