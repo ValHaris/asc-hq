@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.23 2000-04-17 18:30:46 mbickel Exp $
+//     $Id: spfst.cpp,v 1.24 2000-04-17 18:55:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/04/17 18:30:46  mbickel
+//      Even more SDL speed improvements
+//
 //     Revision 1.22  2000/04/17 16:27:22  mbickel
 //      Optimized vehicle movement for SDL version
 //
@@ -4439,7 +4442,11 @@ void tdisplaymap :: cp_buf ( int x1, int y1, int x2, int y2 )
        parm.dstdif = hgmp->bytesperscanline - window.xsize;
        parm.vfbsteps = copybufstepwidth;
 
+      #ifdef _NOASM_
        copyvfb2displaymemory_zoom ( &parm.src, getfieldposx ( x1-1, y1-1), getfieldposy( x1-1, y1-1 ), getfieldposx ( x2, y2) + getfieldsizex(), getfieldposy( x2, y2 ) + getfieldsizex());
+      #else
+       copyvfb2displaymemory_zoom ( &parm.src );
+      #endif
 }
 
 #endif

@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.30 2000-04-15 15:52:00 mbickel Exp $
+//     $Id: sg.cpp,v 1.31 2000-04-17 18:55:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/04/15 15:52:00  mbickel
+//      Updated linux documentation
+//
 //     Revision 1.29  2000/04/01 11:38:39  mbickel
 //      Updated the small editors
 //      Added version numbering
