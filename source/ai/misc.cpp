@@ -634,7 +634,11 @@ void AI :: calcReconPositions()
 
 void AI ::  runReconUnits ( )
 {
-   for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
+   Player::VehicleList::iterator nvi;
+   for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); ) {
+      nvi = vi;
+      ++nvi;
+
       pvehicle veh = *vi;
 
       // the threat posed should be enemy units should be considered for position choosing too...
@@ -664,6 +668,7 @@ void AI ::  runReconUnits ( )
             }
          }
       }
+      vi = nvi;
    }
 }
 

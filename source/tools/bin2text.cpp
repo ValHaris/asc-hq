@@ -79,7 +79,7 @@ int main(int argc, char *argv[] )
             if ( patimat ( argv[i], getvehicletype_forpos ( j )->filename.c_str() )) {
                Vehicletype* vt = getvehicletype_forpos ( j );
 
-               PropertyWritingContainer pc ( "VehicleType", extractFileName_withoutSuffix ( vt->filename ) + ".asctxt" );
+               PropertyWritingContainer pc ( "VehicleType", extractFileName_withoutSuffix ( vt->filename ) + "_generated.asctxt" );
                cout << "Writing file " << pc.getFilename() << "... ";
                vt->runTextIO ( pc );
                pc.run();
@@ -91,7 +91,7 @@ int main(int argc, char *argv[] )
             if ( patimat ( argv[i], getobjecttype_forpos ( j )->filename.c_str() )) {
                ObjectType* ot = getobjecttype_forpos ( j );
 
-               PropertyWritingContainer pc ( "ObjectType", extractFileName_withoutSuffix ( ot->filename ) + ".asctxt" );
+               PropertyWritingContainer pc ( "ObjectType", extractFileName_withoutSuffix ( ot->filename ) + "_generated.asctxt" );
                cout << "Writing file " << pc.getFilename() << "... ";
                ot->runTextIO ( pc );
                pc.run();
@@ -103,7 +103,7 @@ int main(int argc, char *argv[] )
             if ( patimat ( argv[i], getterraintype_forpos ( j )->filename.c_str() )) {
                TerrainType* tt = getterraintype_forpos ( j );
 
-               PropertyWritingContainer pc ( "TerrainType", extractFileName_withoutSuffix ( tt->filename ) + ".asctxt" );
+               PropertyWritingContainer pc ( "TerrainType", extractFileName_withoutSuffix ( tt->filename ) + "_generated.asctxt" );
                cout << "Writing file " << pc.getFilename() << "... ";
                tt->runTextIO ( pc );
                pc.run();
@@ -115,7 +115,7 @@ int main(int argc, char *argv[] )
             if ( patimat ( argv[i], getbuildingtype_forpos ( j )->filename.c_str() )) {
                BuildingType* bt = getbuildingtype_forpos ( j );
 
-               PropertyWritingContainer pc ( "BuildingType", extractFileName_withoutSuffix ( bt->filename ) + ".asctxt" );
+               PropertyWritingContainer pc ( "BuildingType", extractFileName_withoutSuffix ( bt->filename ) + "_generated.asctxt" );
                cout << "Writing file " << pc.getFilename() << "... ";
                bt->runTextIO ( pc );
                pc.run();

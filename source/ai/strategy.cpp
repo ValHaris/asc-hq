@@ -37,7 +37,11 @@ AI::AiResult AI::strategy( void )
       localResult.unitsWaiting = 0;
       stratloop++;
 
-      for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
+      Player::VehicleList::iterator nvi;
+      for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end();  ) {
+         nvi = vi;
+         ++nvi;
+
          pvehicle veh = *vi;
          if ( veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_fight ) {
             if ( veh->weapexist() && veh->aiparam[ getPlayerNum() ]->getTask() != AiParameter::tsk_tactics
@@ -70,6 +74,8 @@ AI::AiResult AI::strategy( void )
          displaymessage2("strategy loop %d ; moved unit %d ... ", stratloop, localResult.unitsMoved );
 
          checkKeys();
+         vi = nvi;
+
       }
       result += localResult;
    } while ( localResult.unitsMoved );

@@ -1,3 +1,135 @@
+2001-08-28 15:24  mbickel
+
+	* asc.bpg, source/libs/sdlmm/SDLmm.bpf,
+	source/libs/sdlmm/SDLmm.bpr, source/tools/win/bin2text.bpf,
+	source/tools/win/bin2text.bpr, source/tools/win/demount.bpf,
+	source/tools/win/demount.bpr, source/tools/win/gfx2pcx.bpf,
+	source/tools/win/gfx2pcx.bpr, source/tools/win/makegfx.bpf,
+	source/tools/win/makegfx.bpr, source/tools/win/mount.bpf,
+	source/tools/win/mount.bpr, source/tools/win/tank2pcx.bpf,
+	source/tools/win/tank2pcx.bpr, source/tools/win/viewid.bpf,
+	source/tools/win/viewid.bpr, source/tools/win/weaponguide.bpf,
+	source/tools/win/weaponguide.bpr, source/win32/borland/asc.bpf,
+	source/win32/borland/asc.bpr,
+	source/win32/borland/mapeditor/mapeditor.bpf,
+	source/win32/borland/mapeditor/mapeditor.bpr:  Added project files
+	for SDLmm
+
+2001-08-28 11:51  mbickel
+
+	* source/: basegfx.h, textfileparser.cpp, ai/ai.bpr,
+	tools/bi2pcx.cpp, tools/bin2text.cpp, tools/makegfx.cpp,
+	tools/pcxtank.cpp, tools/viewid.cpp, tools/weaponguide.cpp,
+	tools/weaponguide_english.cpp, tools/win/bin2text.bpf,
+	tools/win/bin2text.bpr, tools/win/demount.bpf,
+	tools/win/demount.bpr, tools/win/gfx2pcx.bpf,
+	tools/win/gfx2pcx.bpr, tools/win/makegfx.bpf,
+	tools/win/makegfx.bpr, tools/win/mount.bpf, tools/win/mount.bpr,
+	tools/win/tank2pcx.bpf, tools/win/tank2pcx.bpr,
+	tools/win/tools.bpr, tools/win/viewid.bpf, tools/win/viewid.bpr,
+	tools/win/weaponguide.bpf, tools/win/weaponguide.bpr,
+	win32/borland/asc.bpf, win32/borland/asc.bpr,
+	win32/borland/mapeditor/mapeditor.bpf,
+	win32/borland/mapeditor/mapeditor.bpr:	Added SDL_image and SDLmm
+	to the win32 project files
+
+2001-08-27 23:03  mbickel
+
+	* configure, configure.in, source/baseaiinterface.h,
+	source/basegfx.cpp, source/basegfx.h, source/basestrm.h,
+	source/edmisc.cpp, source/gamemap.cpp, source/sg.cpp,
+	source/textfileparser.cpp, source/typen.h, source/ai/ai.h,
+	source/ai/base.cpp, source/ai/buildingcapture.cpp,
+	source/ai/misc.cpp, source/ai/service.cpp, source/ai/strategy.cpp,
+	source/ai/tactics.cpp, source/ai/valuation.cpp,
+	source/tools/linux/Makefile.am, source/tools/linux/Makefile.in,
+	source/unix/Makefile.am, source/unix/Makefile.in,
+	source/unix/mapeditor/Makefile.am,
+	source/unix/mapeditor/Makefile.in:  Terraintype graphics can now be
+	mounted from any number of PNG files
+	 Several AI improvements
+
+2001-08-26 23:39  mbickel
+
+	* source/: objecttype.cpp, tools/linux/Makefile.am,
+	tools/linux/Makefile.in:  Fixed bugs in objecttype loading /
+	writing of text files
+
+2001-08-26 22:55  mbickel
+
+	* asc.bpg, source/buildingtype.cpp, source/buildingtype.h,
+	source/containerbasetype.h, source/edselfnt.cpp,
+	source/itemrepository.cpp, source/loadbi3.cpp,
+	source/objecttype.cpp, source/objecttype.h, source/sgstream.cpp,
+	source/terraintype.cpp, source/terraintype.h, source/typen.h,
+	source/vehicletype.cpp, source/tools/bin2text.cpp,
+	source/tools/win/bin2text.bpf, source/tools/win/bin2text.bpr: 
+	bin2text can now load text files too
+	 LoadableItemType interface class added
+
+2001-08-24 17:50  mbickel
+
+	* source/: astar2.cpp, strtmesg.cpp, unitctrl.cpp, ai/ai.h,
+	ai/misc.cpp, ai/service.cpp, ai/tactics.cpp, ai/valuation.cpp:	AI
+	performs better services when there are no service units
+
+2001-08-19 14:50  mbickel
+
+	* source/: edmisc.cpp, loaders.cpp, missions.cpp, sg.cpp:  fixed
+	event trigger allenemybuildings
+
+2001-08-19 14:31  mbickel
+
+	* source/: edevents.cpp, gamemap.cpp, loaders.cpp, missions.cpp,
+	sg.cpp, ai/base.cpp:  Fixed several bugs in event and campaign
+	handling
+
+2001-08-19 12:48  mbickel
+
+	* source/: dlg_box.cpp, edevents.cpp, gamedlg.cpp, typen.cpp,
+	tools/mount.cpp:  Fixed display problems in event dlg in mapeditor
+	 Fixed error when starting campaign with AI as first player
+
+2001-08-18 14:30  mbickel
+
+	* source/: strtmesg.cpp, ai/service.cpp:  Fixed crash in AI:
+	"trying to move immobile units"
+
+2001-08-17 21:02  mbickel
+
+	* source/: objecttype.cpp, objecttype.h, strtmesg.cpp,
+	textfileparser.cpp, textfileparser.h, tools/mount.cpp:	Objecttypes
+	can now use mirrored images in text files
+
+2001-08-15 16:02  mbickel
+
+	* data/message1.txt, source/TODO, source/gui.cpp,
+	source/unitctrl.cpp, source/vehicle.cpp, source/vehicle.h:  Updated
+	message texts
+
+2001-08-15 15:47  mbickel
+
+	* asc.kdevprj, source/loaders.cpp, source/mapdisplay.cpp,
+	source/strtmesg.cpp, source/vehicletype.cpp:  Fixed crash when
+	loading old vehicletypes
+
+2001-08-10 11:36  mbickel
+
+	* source/strtmesg.cpp:	Increased version number
+
+2001-08-10 01:13  mbickel
+
+	* ChangeLog, asc.kdevprj, source/buildingtype.cpp,
+	source/itemrepository.cpp, source/textfileparser.cpp:  Finished
+	text io for building types
+
+2001-08-10 00:08  mbickel
+
+	* asc.bpg, source/buildingtype.cpp, source/loadpcx.h,
+	source/loadpcxc.cpp, source/textfileparser.cpp,
+	source/textfileparser.h, source/tools/win/bin2text.bpr:  Improved
+	building text file IO
+
 2001-08-09 21:48  mbickel
 
 	* asc.kdevprj, source/buildingtype.cpp:  Improved building text

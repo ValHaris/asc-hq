@@ -568,8 +568,10 @@ void AI :: runServiceUnit ( pvehicle supplyUnit )
   */
        }
    }
+   int target = 0;
    for ( ServiceMap::reverse_iterator ri = serviceMap.rbegin(); ri != serviceMap.rend(); ri++ ) {
-      if ( (*ri).second->execute1st( supplyUnit ) ) {
+      if ( ri->second->execute1st( supplyUnit ) ) {
+         target = supplyUnit->aiparam[getPlayerNum()]->dest_nwid;
          destinationReached = runUnitTask ( supplyUnit );
          break;
       }
@@ -581,7 +583,6 @@ void AI :: runServiceUnit ( pvehicle supplyUnit )
          displaymessage ("AI :: runServiceUnit ; inconsistency in VehicleService.availability",1 );
 
       vs.execute ( supplyUnit, -1, -1, 0, -1, -1 );
-      int target = supplyUnit->aiparam[getPlayerNum()]->dest_nwid;
       VehicleService::TargetContainer::iterator i = vs.dest.find ( target );
       if ( i != vs.dest.end() ) {
          vs.fillEverything ( target, true );
@@ -611,11 +612,17 @@ AI::AiResult AI :: executeServices ( )
 
   AiResult res;
 
-  for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
+  Player::VehicleList::iterator nvi;
+  for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); ) {
+      nvi = vi;
+      ++nvi;
+
       pvehicle veh = *vi;
       checkKeys();
       if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_supply )
          runServiceUnit ( veh );
+
+      vi = nvi;
   }
 
   for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
@@ -647,35 +654,45 @@ AI::AiResult AI :: executeServices ( )
       }
   }
 
-  for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
+
+  for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); ) {
+     nvi = vi;
+     ++nvi;
+
      pvehicle veh = *vi;
      checkKeys();
 
      if ( veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat ) {
+        int nwid = veh->networkid;
         moveUnit ( veh, veh->aiparam[ getPlayerNum() ]->dest, true );
-        if ( veh->getPosition() == veh->aiparam[ getPlayerNum() ]->dest ) {
-           VehicleService vc ( mapDisplay, NULL );
-           pfield fld = getfield ( veh->xpos, veh->ypos );
-           if ( fld->building ) {
-              MapCoordinate mc = fld->building->getEntry();
-              vc.execute ( NULL, mc.x, mc.y, 0, -1, -1 );
 
-              if ( vc.getStatus () == 2 ) {
-                 if ( vc.dest.find ( veh->networkid ) != vc.dest.end() )
-                    vc.fillEverything ( veh->networkid, true );
-                 else
-                    displaymessage ( "AI :: executeServices / Vehicle cannot be serviced (1) ", 1);
-              } else
-                 displaymessage ( "AI :: executeServices / Vehicle cannot be serviced (2) ", 1);
+        // the unit may have been shot down
+        if ( getMap()->getUnit ( nwid )) {
+           if ( veh->getPosition() == veh->aiparam[ getPlayerNum() ]->dest ) {
+              VehicleService vc ( mapDisplay, NULL );
+              pfield fld = getfield ( veh->xpos, veh->ypos );
+              if ( fld->building ) {
+                 MapCoordinate mc = fld->building->getEntry();
+                 vc.execute ( NULL, mc.x, mc.y, 0, -1, -1 );
 
-              removeServiceOrdersForUnit ( veh );
+                 if ( vc.getStatus () == 2 ) {
+                    if ( vc.dest.find ( veh->networkid ) != vc.dest.end() )
+                       vc.fillEverything ( veh->networkid, true );
+                    else
+                       displaymessage ( "AI :: executeServices / Vehicle cannot be serviced (1) ", 1);
+                 } else
+                    displaymessage ( "AI :: executeServices / Vehicle cannot be serviced (2) ", 1);
 
-              if ( veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat )
-                  veh->aiparam[getPlayerNum()]->resetTask();
+                 removeServiceOrdersForUnit ( veh );
 
+                 if ( veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat )
+                     veh->aiparam[getPlayerNum()]->resetTask();
+
+              }
            }
         }
      }
+     vi = nvi;
   }
 
   /*

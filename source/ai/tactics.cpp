@@ -653,37 +653,45 @@ AI::AiResult AI::tactics( void )
                         }
                      }
 
-                  int attackOrder[sidenum];
-                  int finalOrder[sidenum];
-                  for ( int i = 0; i< sidenum; i++ )
-                     attackOrder[i] = finalOrder[i] = -1;
+
+                  int unitcount = 0;
+                  for ( int i = 0; i < sidenum; i++ )
+                     if ( finalPositions[i] )
+                        unitcount++;
+
+                  if ( unitcount ) {
+                     int attackOrder[sidenum];
+                     int finalOrder[sidenum];
+                     for ( int i = 0; i< sidenum; i++ )
+                        attackOrder[i] = finalOrder[i] = -1;
 
 
-                  int finalDamage = -1;
-                  int finalAttackNum = maxint;
-                  tactics_findBestAttackOrder ( finalPositions, attackOrder, enemy, 0, enemy->damage, finalDamage, finalOrder, finalAttackNum );
+                     int finalDamage = -1;
+                     int finalAttackNum = maxint;
+                     tactics_findBestAttackOrder ( finalPositions, attackOrder, enemy, 0, enemy->damage, finalDamage, finalOrder, finalAttackNum );
 
 
-                  pfield enemyField = getMap()->getField(enemy->xpos, enemy->ypos);
-                  for ( int i = 0; i < finalAttackNum && enemyField->vehicle == enemy; i++ ) {
-                     checkKeys();
-                     // if ( i+1 < finalAttackNum ) {
-                     if ( i < finalAttackNum && finalPositions[finalOrder[i]] ) {
-                        VehicleAttack va ( mapDisplay, NULL );
-                        va.execute ( finalPositions[finalOrder[i]], -1, -1, 0, 0, -1 );
-                        if ( va.getStatus() != 2 )
-                           displaymessage("inconsistency #1 in AI::tactics attack", 1 );
+                     pfield enemyField = getMap()->getField(enemy->xpos, enemy->ypos);
+                     for ( int i = 0; i < finalAttackNum && enemyField->vehicle == enemy; i++ ) {
+                        checkKeys();
+                        // if ( i+1 < finalAttackNum ) {
+                        if ( i < finalAttackNum && finalPositions[finalOrder[i]] ) {
+                           VehicleAttack va ( mapDisplay, NULL );
+                           va.execute ( finalPositions[finalOrder[i]], -1, -1, 0, 0, -1 );
+                           if ( va.getStatus() != 2 )
+                              displaymessage("inconsistency #1 in AI::tactics attack", 1 );
 
-                        va.execute ( NULL, enemy->xpos, enemy->ypos, 2, 0, -1 );
-                        if ( va.getStatus() != 1000 )
-                           displaymessage("inconsistency #1 in AI::tactics attack", 1 );
+                           va.execute ( NULL, enemy->xpos, enemy->ypos, 2, 0, -1 );
+                           if ( va.getStatus() != 1000 )
+                              displaymessage("inconsistency #1 in AI::tactics attack", 1 );
 
 
-                        pvehicle a = finalPositions[finalOrder[i]];
-                        TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), a ) ;
-                        tactVehicles.erase ( att );
+                           pvehicle a = finalPositions[finalOrder[i]];
+                           TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), a ) ;
+                           tactVehicles.erase ( att );
+                        }
                      }
-                  }
+                  } // unitcount > 0
                } // else { // if finalValue > 0
 
             } // if enemy

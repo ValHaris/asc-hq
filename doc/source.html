@@ -36,7 +36,9 @@ It is also possible to compile ASC with the free <A HREF="http://www.borland.com
 <LI>Uncompress the JPEG-lib source code into asc/source/libs/jpeg-6b/ (this directory already exists). 
 <LI>Get SDL 1.2 or newer. It can be downloaded from <A HREF="http://www.libsdl.org">www.libsdl.org</A>. You need the source code and the DLL file (the later is called: "binary runtime / win32"). 
 <LI>Get SDL_mixer 1.2 or newer. It can be downloaded from <A HREF="http://www.libsdl.org/projects/SDL_mixer/index.html">www.libsdl.org/projects/SDL_mixer/</A>. You need the source code and the DLL file (the later is called: "binary / win32", get the one without <i>devel</i> in the name). 
-<LI>The project files assume there is a <TT>SDL</TT> and a <TT>SDL_mixer</TT> directory located in the same directory where <TT>asc</TT> is placed. You need this directory structure:<BR>  
+<LI>Get SDL_image 1.2 or newer. It can be downloaded from <A HREF="http://www.libsdl.org/projects/SDL_image/index.html">www.libsdl.org/projects/SDL_image/</A>. You need the source code and the DLL file (the later is called: "binary / win32", get the one without <i>devel</i> in the name). 
+<LI>Get SDLmm. It can be downloaded from <A HREF="http://sdlmm.sourceforge.net">sdlmm.sourceforge.net</A>. You only need the source code. 
+<LI>The project files assume there is a <TT>SDL</TT>, <TT>SDL_mixer</TT>, <TT>SDL_image</TT>  and a <TT>SDLmm</TT> directory located in the same directory where <TT>asc</TT> is placed. You need this directory structure:<BR>  
   <TT>
     asc\  <i>(from ASC source package or CVS)</i><BR>
     asc\source\<BR>
@@ -45,13 +47,17 @@ It is also possible to compile ASC with the free <A HREF="http://www.borland.com
     SDL\include\<BR>
     SDL\src\<BR>
     SDL_mixer\   <i>(from SDL_mixes source package)</i><BR>
+    SDLmm\   <BR>
+    SDL_image\   <BR>
   </TT>
-   After uncompressing the SDL and SDL_mixer source packages, move them so that this directory structure forms. You probably have to rename the directories from SDL-1.2 to SDL, for example. <BR>
-   The asc directory may be called differently if you downloaded the asc source package from the homepage, That is no problem, it may for example be named asc-1.5.0 
+   After uncompressing the packages, move them so that this directory structure forms. You probably have to rename the directories from SDL-1.2 to SDL, for example. <BR>
+   The asc directory may be called differently. If you downloaded the asc source package from the homepage, that is no problem, it may for example be named asc-1.5.0 
 <LI>Create a subdirectory called BIN in <TT>SDL\</TT> and put the SDL.DLL into it.
 <LI>Go to this directory and run: <TT>IMPLIB -a -c SDL.LIB SDL.DLL</TT> 
 <LI>Create a subdirectory called BIN in <TT>SDL_MIXER\</TT> and put the SDL_MIXER.DLL into it.
 <LI>Go to this directory and run: <TT>IMPLIB -a -c SDL_mixer.LIB SDL_mixer.DLL</TT> 
+<LI>Create a subdirectory called BIN in <TT>SDL_IMAGE\</TT> and put all DLLs from the SDL_image binary backage into it.
+<LI>Go to this directory and run for each DLL: <TT>IMPLIB -a -c dllname.LIB dllname.DLL</TT> 
 
 <H6>Borland C++ Builder</H6>
 <OL start=10>
