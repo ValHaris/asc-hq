@@ -39,11 +39,16 @@ private:
   bool placeMaterial;
   unsigned short maxFuelOffset;
   unsigned short maxMaterialOffset;
+  int additionalResourceFreeFieldsPercentageFuel;
+  int additionalResourceFreeFieldsPercentageMaterial;
+  
   int stepCount;
 
   unsigned short createRandomValue(int limit);
   short createAlgebraicSign();
-
+  
+  void setFieldValueFuel(tfield* f);
+  void setFieldValueMaterial(tfield* f);
   int calculateCornerValueFuel(pfield a, pfield b, pfield c);
   int calculateDiamondValueFuel(pfield a, pfield b, pfield c, pfield d);
   int calculateCornerValueMaterial(pfield a, pfield b, pfield c);
@@ -65,7 +70,8 @@ public:
   @param maxFuelOffSet Determines the absolut offset fuelFields might have
   @param maxMaterialOffSet Determines the absolut offset materialFields might have
   */
-  ResourcePlacement(tmap& map, double fuelRoughness, double materialRoughness, unsigned short maxFuelOffSet, unsigned short maxMaterialOffSet);
+  ResourcePlacement(tmap& map, double fuelRoughness, double materialRoughness, unsigned short maxFuelOffSet, unsigned short maxMaterialOffSet, 
+                    int additionalFreeFieldsPercFuel = 0, int additionalFreeFieldsPercMaterial = 0);
   /**  
   @brief Destructor
   */
@@ -82,8 +88,14 @@ public:
   @brief Fills the map only with material resources
   */
   void placeMaterialResources();
+  
+  static const int MAXFUELVALUE;
+  static const int MINFUELVALUE;
+  static const int MAXMATERIALVALUE;
+  static const int MINMATERIALVALUE;
 
 };
 
 #endif
+
 

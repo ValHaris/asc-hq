@@ -1,6 +1,9 @@
-//     $Id: global_os.h,v 1.8 2003-06-01 15:03:16 mbickel Exp $
+//     $Id: global_os.h,v 1.8.2.1 2004-12-04 15:48:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2003/06/01 15:03:16  mbickel
+//      Some updates to the build system for FreeBSD
+//
 //     Revision 1.7  2001/12/19 17:16:29  mbickel
 //      Some include file cleanups
 //
@@ -65,6 +68,7 @@
    using namespace std;
   #endif
   #define HAVE_STRICMP
+  #define HAVE_STRDUP
   #define HAVE_ITOA
   #define HAVE_DIRENT_H
   #define HAVE_STDIO_H
