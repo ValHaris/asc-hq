@@ -1,6 +1,12 @@
-//     $Id: sg.cpp,v 1.67 2000-08-03 19:21:28 mbickel Exp $
+//     $Id: sg.cpp,v 1.68 2000-08-03 19:45:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.67  2000/08/03 19:21:28  mbickel
+//      Fixed: units had invalid height when produced in some buildings
+//      Fixed: units could not enter building if unitheightreq==0
+//      Started adding SDL_image support
+//      Upgraded to SDL1.1.3 (for SDL_image)
+//
 //     Revision 1.66  2000/08/02 15:52:57  mbickel
 //      New unit set definition files
 //      demount accepts now more than one container file
@@ -340,8 +346,6 @@
 #ifdef _DOS_
  #include "dos\memory.h"
 #endif
-
-extern SDL_Surface *screen;
 
 
 // #define MEMCHK

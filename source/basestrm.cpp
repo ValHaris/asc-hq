@@ -1,6 +1,12 @@
-//     $Id: basestrm.cpp,v 1.32 2000-08-03 19:21:15 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.33 2000-08-03 19:45:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/08/03 19:21:15  mbickel
+//      Fixed: units had invalid height when produced in some buildings
+//      Fixed: units could not enter building if unitheightreq==0
+//      Started adding SDL_image support
+//      Upgraded to SDL1.1.3 (for SDL_image)
+//
 //     Revision 1.31  2000/08/02 15:52:38  mbickel
 //      New unit set definition files
 //      demount accepts now more than one container file
@@ -677,7 +683,7 @@ void MemoryStreamCopy :: writedata ( const void* buf, int size )
    throw  tinvalidmode ( getDeviceName(), 1, 2 );
 }
 
-int MemoryStreamCopy :: readdata  ( void* buffer, int _size, int excpt = 1 )
+int MemoryStreamCopy :: readdata  ( void* buffer, int _size, int excpt )
 {
    char* cp = (char*) buf;
    if ( pos + _size > size ) {

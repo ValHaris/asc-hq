@@ -1,6 +1,12 @@
-//     $Id: loaders.cpp,v 1.17 2000-08-03 13:12:15 mbickel Exp $
+//     $Id: loaders.cpp,v 1.18 2000-08-03 19:45:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/08/03 13:12:15  mbickel
+//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
+//      Repairing units now reduces their experience
+//      negative attack- and defenseboni possible
+//      changed attackformula
+//
 //     Revision 1.16  2000/07/29 14:54:37  mbickel
 //      plain text configuration file implemented
 //
@@ -4028,8 +4034,9 @@ void         loadallvehicletypes(void)
              actprogressbar->point();
     
           pvehicletype t = loadvehicletype( c );
-          if ( t->steigung && ((t->height & 6 ) == 6 )) 
-             t->steigung = 0;
+
+          // if ( t->steigung && ((t->height & 6 ) == 6 )) 
+          //   t->steigung = 0;
 
           addvehicletype ( t );
           if ( verbosity >= 2)

@@ -360,7 +360,7 @@ void writepcx ( char* name, int x1, int y1, int x2, int y2, dacpalette256 pal )
       stream.writedata ( &pal2, 768 );
       fsize += 768 ;
    }
-   stream.seekstream ( 0 );
+   stream.seek ( 0 );
    header.size = fsize;
    stream.writedata2 ( header );
 }

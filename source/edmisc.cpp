@@ -1,6 +1,12 @@
-//     $Id: edmisc.cpp,v 1.22 2000-08-03 19:21:18 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.23 2000-08-03 19:45:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/08/03 19:21:18  mbickel
+//      Fixed: units had invalid height when produced in some buildings
+//      Fixed: units could not enter building if unitheightreq==0
+//      Started adding SDL_image support
+//      Upgraded to SDL1.1.3 (for SDL_image)
+//
 //     Revision 1.21  2000/08/03 13:12:11  mbickel
 //      Fixed: on/off switching of generator vehicle produced endless amounts of energy
 //      Repairing units now reduces their experience
@@ -3097,16 +3103,24 @@ void         tladeraum::run(void)
       checkforadditionalkeys ( taste );
       int oldpos = cursorpos;
       switch (taste) {
+       #ifdef NEWKEYB
          case ct_up:
+       #endif
          case ct_8k:   cursorpos -= itemsperline;
             break;
+       #ifdef NEWKEYB
          case ct_left:
+       #endif
          case ct_4k:   cursorpos--;
             break;
+       #ifdef NEWKEYB
          case ct_right:
+       #endif
          case ct_6k:   cursorpos++;
             break;
+       #ifdef NEWKEYB
          case ct_down:
+       #endif
          case ct_2k:   cursorpos += itemsperline;
             break;
       }
