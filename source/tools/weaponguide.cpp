@@ -162,10 +162,10 @@ int main(int argc, char *argv[] ) {
   }
 
 
-  BuildingGuideGen gen(prefixDir, cl.m(), cl.s(), cl.h(), cl.i(), false, true);
+  BuildingGuideGen gen(prefixDir, cl.m(), cl.s(), cl.roottech(), cl.i(), false, true);
   gen.processSubjects();
   cout << "*******Buildings done*******" << endl;
-  UnitGuideGen unitGen(prefixDir, cl.m(), cl.s(), cl.h(), cl.i(), true, false);
+  UnitGuideGen unitGen(prefixDir, cl.m(), cl.s(), cl.roottech(), cl.i(), true, false);
   unitGen.processSubjects();
   cout << "*******Units done*******" << endl;
   if(false) {

@@ -2,7 +2,7 @@
 **
 ** weaponguide.cpp
 **
-** Sun Jul 25 18:09:49 2004
+** Sat Jul 31 17:34:09 2004
 ** Linux 2.4.21-198-default (#1 Thu Mar 11 17:43:56 UTC 2004) i686
 ** martin@linux. (Martin Bickel)
 **
@@ -46,7 +46,9 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
     {"style", 1, 0, 't'},
     {"menustyle", 1, 0, 'm'},
     {"allbuildings", 0, 0, 'b'},
-    {"roottech", 1, 0, 'h'},
+    {"roottech", 1, 0, 256},
+    {"writeall", 0, 0, 257},
+    {"help", 0, 0, 'h'},
     {"version", 0, 0, 'v'},
     {0, 0, 0, 0}
   };
@@ -62,9 +64,11 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
   _t = "../../ug.css";
   _m = "asc.css";
   _b = false;
+  _writeall = false;
+  _h = false;
   _v = false;
 
-  while ((c = getopt_long(argc, argv, "c:r:d:l:s:iz:f:t:m:bh:v", long_options, &option_index)) != EOF)
+  while ((c = getopt_long(argc, argv, "c:r:d:l:s:iz:f:t:m:bhv", long_options, &option_index)) != EOF)
     {
       switch(c)
         {
@@ -136,8 +140,17 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
           _b = true;
           break;
 
+        case 256: 
+          _roottech = optarg;
+          break;
+
+        case 257: 
+          _writeall = true;
+          break;
+
         case 'h': 
-          _h = optarg;
+          _h = true;
+          this->usage();
           break;
 
         case 'v': 
@@ -251,13 +264,25 @@ void Cmdline::usage()
   cout << "FLAG";
   cout << ")\n";
   cout << "         generate doc for all buildings instead of uniquely named ones\n";
-  cout << "  [ -h ] ";
-  cout << "[ --roottech ]  ";
+  cout << "  [ --roottech ]  ";
   cout << "(";
   cout << "type=";
   cout << "STRING";
   cout << ")\n";
   cout << "         specify root technologies for tech dependency\n";
+  cout << "  [ --writeall ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "FLAG";
+  cout << ")\n";
+  cout << "         skip the check for changed files, which speeds up operation, but touches all files\n";
+  cout << "  [ -h ] ";
+  cout << "[ --help ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "FLAG";
+  cout << ")\n";
+  cout << "         Display help information.\n";
   cout << "  [ -v ] ";
   cout << "[ --version ]  ";
   cout << "(";
