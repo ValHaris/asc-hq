@@ -1796,6 +1796,7 @@ void  mainloop ( void )
                break;
 
             case ct_f11: {
+            // computeview ( actmap );
             }
             break;
 
