@@ -670,38 +670,40 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                          N2.h.setnum ( pos.x, pos.y, i );
                          N2.hasAttacked = N.hasAttacked;
                          const ContainerBaseType::TransportationIO* tio = actmap->getField(N.h)->getContainer()->vehicleUnloadSystem( veh->typ, 1<<i);
-                         if ( tio && tio->disableAttack )
-                            N2.hasAttacked = true;
+                         if ( tio ) {
+                            if ( tio->disableAttack )
+                               N2.hasAttacked = true;
 
-                         DistanceType k = getMoveCost( N.h, N2.h, veh, N2.canStop, N2.hasAttacked );
-                         if ( k > veh->typ->movement[N2.h.getNumericalHeight()]  )
-                            if ( k < longestPath )
-                               k = longestPath;
-                               /*
-                            if ( k < MAXIMUM_PATH_LENGTH )
-                               k = MAXIMUM_PATH_LENGTH;
-                               */
+                            DistanceType k = getMoveCost( N.h, N2.h, veh, N2.canStop, N2.hasAttacked );
+                            if ( k > veh->typ->movement[N2.h.getNumericalHeight()]  )
+                               if ( k < longestPath )
+                                  k = longestPath;
+                                  /*
+                               if ( k < MAXIMUM_PATH_LENGTH )
+                                  k = MAXIMUM_PATH_LENGTH;
+                                  */
 
-                         if ( k >= longestPath || N.gval >= longestPath )
-                            N2.gval = longestPath;
-                         else
-                            N2.gval = N.gval + k;
+                            if ( k >= longestPath || N.gval >= longestPath )
+                               N2.gval = longestPath;
+                            else
+                               N2.gval = N.gval + k;
 
-                         N2.hval = dist(N2.h,B);
+                            N2.hval = dist(N2.h,B);
 
-                         if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
-                              // there's an container on the field that can be entered. This means, the unit can't stop 'over' the container...
-                              N2.canStop = false;
-                              nodeVisited ( N2, HexDirection(dir), open, N.h.getNumericalHeight(), maxmalq );
+                            if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
+                                 // there's an container on the field that can be entered. This means, the unit can't stop 'over' the container...
+                                 N2.canStop = false;
+                                 nodeVisited ( N2, HexDirection(dir), open, N.h.getNumericalHeight(), maxmalq );
 
-                              // ... only inside it
-                              N2.canStop = true;
-                              N2.enterHeight = N2.h.getNumericalHeight() ;
-                              N2.h.setnum ( N2.h.x, N2.h.y, -1 );
-                              // N2.hasAttacked = true;
-                              nodeVisited ( N2, HexDirection(dir), open, N.h.getNumericalHeight(), maxmalq );
-                         } else
-                              nodeVisited ( N2, HexDirection(dir), open, N.h.getNumericalHeight(), maxmalq );
+                                 // ... only inside it
+                                 N2.canStop = true;
+                                 N2.enterHeight = N2.h.getNumericalHeight() ;
+                                 N2.h.setnum ( N2.h.x, N2.h.y, -1 );
+                                 // N2.hasAttacked = true;
+                                 nodeVisited ( N2, HexDirection(dir), open, N.h.getNumericalHeight(), maxmalq );
+                            } else
+                                 nodeVisited ( N2, HexDirection(dir), open, N.h.getNumericalHeight(), maxmalq );
+                         }
 
                       }
                 }
@@ -789,7 +791,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
 
            if ( !operationLimiter || operationLimiter->allowHeightChange() )
-              if ( fieldAccessible ( actmap->getField(N.h), veh, N.h.getBitmappedHeight() ) == 2 )
+              if ( (fieldAccessible ( actmap->getField(N.h), veh, N.h.getBitmappedHeight() ) == 2 ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
                  for ( int heightDelta = -1; heightDelta <= 1; heightDelta += 2 ) {
                     const Vehicletype::HeightChangeMethod* hcm = veh->getHeightChange( heightDelta, N.h.getBitmappedHeight());
                     if ( hcm ) {
@@ -798,11 +800,20 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                           bool access = true;
                           for ( int step = 0; step <= hcm->dist; step++ ) {
                              pfield fld = actmap->getField(newpos);
-                             if ( !fld || !fieldAccessible ( fld, veh, N.h.getBitmappedHeight() ) || !fieldAccessible( fld, veh, 1 << (N.h.getNumericalHeight() + hcm->heightDelta)) )
+                             if ( !fld ) {
                                 access = false;
+                                break;
+                             }
+
+                             if (  !fieldAccessible ( fld, veh, N.h.getBitmappedHeight()) && actmap->getgameparameter( cgp_movefrominvalidfields)==0 )
+                                access = false;
+
+                             if ( !fieldAccessible( fld, veh, 1 << (N.h.getNumericalHeight() + hcm->heightDelta)) )
+                                access = false;
+
                              if ( fld && fld->building )
                                 access = false;
-                                
+
                              if ( step < hcm->dist )
                                 getnextfield ( newpos.x, newpos.y, dir );
                           }

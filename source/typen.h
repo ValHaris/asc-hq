@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.155 2005-01-06 19:39:37 mbickel Exp $
+//     $Id: typen.h,v 1.156 2005-03-06 14:11:50 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -738,7 +738,7 @@ const int submarineMovement = 11;
 #define destructoutput 5
 #define nowindplanefuelusage 1      // herrscht kein Wind, braucht ein Flugzeug pro Runde soviel Sprit wie das fliegend dieser Anzahl fielder
   //   #define maxwindplainfuelusage 32   // beim nextturn: tank -= fuelconsumption * (maxwindplainfuelusage*nowindplainfuelusage + windspeed) / maxwindplainfuelusage     
-const int maxwindspeed = 60;          // Wind with a strength of 255 means that the air moves 12 fields / turn
+const int maxwindspeed = 60;          // Wind with a strength of 255 means that the air moves 6 fields / turn
 
 
 #define generatortruckefficiency 2  // fuer jede vehicle Power wird soviel Sprit gebraucht !
