@@ -123,7 +123,7 @@ AC_CHECK_FUNCS(stricmp)
 
 dnl GCC 2.95.3 came with a broken standard library
 AC_MSG_CHECKING("broken std::string compare")
-AC_TRY_COMPILE( string, [
+AC_TRY_COMPILE( [#include <string>], [
       std::string s = "Hello World";
       s.compare  ( 0, 0, "Hello");
 ],, string_compare_broken=yes)
