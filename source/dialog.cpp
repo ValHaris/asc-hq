@@ -4433,6 +4433,8 @@ void         tviewanytext::run(void)
    do { 
       tdialogbox::run();
       checkscrolling ( );
+      if ( prntkey == 's' )
+         printf("%s", txt);
    }  while (action < 10);
 } 
 

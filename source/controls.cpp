@@ -409,7 +409,7 @@ void         destructbuildinglevel2( int xp, int yp)
 
 
          pbuilding bb = fld->building;
-         eht->getResource( getDestructionCost( bb, eht ), false);
+         Resources res = eht->getResource( getDestructionCost( bb, eht ), false);
 
          eht->setMovement ( 0 );
          eht->attacked = 1;
@@ -419,7 +419,7 @@ void         destructbuildinglevel2( int xp, int yp)
          } else {
             delete bb;
          }
-         logtoreplayinfo ( rpl_removebuilding2, xp, yp, eht->networkid );
+         logtoreplayinfo ( rpl_removebuilding3, xp, yp, eht->networkid, res.energy, res.material, res.fuel );
          computeview( actmap );
          displaymap();
          moveparams.movestatus = 0;

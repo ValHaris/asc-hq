@@ -493,16 +493,30 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( x );
          stream->writeInt ( y );
       }
-      if ( action == rpl_removebuilding2 ) {
+      if ( action == rpl_removebuilding2 || action == rpl_removebuilding3) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
          int nwid = va_arg ( paramlist, int );
          stream->writeChar ( action );
-         int size = 3;
-         stream->writeInt ( size );
-         stream->writeInt ( x );
-         stream->writeInt ( y );
-         stream->writeInt( nwid );
+         if ( action == rpl_removebuilding2 ) {
+            int size = 3;
+            stream->writeInt ( size );
+            stream->writeInt ( x );
+            stream->writeInt ( y );
+            stream->writeInt( nwid );
+         } else {
+            int size = 6;
+            stream->writeInt ( size );
+            stream->writeInt ( x );
+            stream->writeInt ( y );
+            stream->writeInt( nwid );
+            int e =  va_arg ( paramlist, int );
+            int m =  va_arg ( paramlist, int );
+            int f =  va_arg ( paramlist, int );
+            stream->writeInt( e );
+            stream->writeInt( m );
+            stream->writeInt( f );
+         }
       }
 
       if ( action == rpl_produceunit ) {
@@ -1315,13 +1329,21 @@ void trunreplay :: execnextreplaymove ( void )
                        }
          break;
       case rpl_removebuilding2:
+      case rpl_removebuilding3:
       case rpl_removebuilding: {
                            stream->readInt();  // size
                            int x = stream->readInt();
                            int y = stream->readInt();
                            int nwid = -1;
-                           if ( nextaction == rpl_removebuilding2 )
+                           if ( nextaction == rpl_removebuilding2 || nextaction == rpl_removebuilding3 )
                               nwid = stream->readInt();
+
+                           Resources res;
+                           if ( nextaction == rpl_removebuilding3 ) {
+                              res.energy = stream->readInt();
+                              res.material = stream->readInt();
+                              res.fuel = stream->readInt();
+                           }
 
                            readnextaction();
 
@@ -1333,7 +1355,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  Vehicle* veh = actmap->getUnit( nwid );
                                  if ( veh ) {
                                     Resources r = getDestructionCost ( bb, veh );
-                                    if ( !veh || veh->getResource(r,false) != r )
+                                    if ( !veh || veh->getResource(r,false) != res )
                                        error("severe replay inconsistency:\nfailed to obtain vehicle resources for removebuilding command !");
 
                                  } else
