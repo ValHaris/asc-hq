@@ -455,6 +455,9 @@ void MapDisplayPG::eventDraw ( SDL_Surface* srf, const PG_Rect& rect)
 
 void MapDisplayPG::displayCursor()
 {
+   if ( !actmap )
+      return;
+      
    int x = actmap->player[actmap->playerView].cursorPos.x - offset.x;
    int y = actmap->player[actmap->playerView].cursorPos.y - offset.y;
    if( x >= field.viewPort.x1 && x < field.viewPort.x2 && y >= field.viewPort.y1 && y < field.viewPort.y2 ) {

@@ -56,6 +56,9 @@ void DashboardPanel::registerSpecialDisplay( const ASCString& name )
 
 void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
 {
+   if ( !actmap )
+      return;
+
    Surface screen = Surface::Wrap( PG_Application::GetScreen() );
    MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
 
@@ -149,6 +152,10 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
 
 void DashboardPanel::eval()
 {
+   if ( !actmap )
+      return;
+
+
    MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
    pfield fld = actmap->getField(mc);
 

@@ -1105,7 +1105,7 @@ void execuseraction ( tuseractions action )
             throw NoMapLoaded();
          }
          break;
-
+/*
       case ua_mntnc_morefog:
          if (actmap->weather.fog < 255   && maintainencecheck() ) {
             actmap->weather.fog++;
@@ -1151,7 +1151,7 @@ void execuseraction ( tuseractions action )
             displaymap();
          }
          break;
-
+*/
       case ua_changeresourceview:
          showresources++;
          if ( showresources >= 3 )
@@ -2177,7 +2177,7 @@ int gamethread ( void* data )
    gameStartupComplete = true;
 
    repaintDisplay.connect( repaintMap );
-   
+
    displayLogMessage ( 5, "entering outer main loop.\n" );
    do {
       try {
