@@ -1,3 +1,10 @@
+See README.ASC for a list of changes that where done with the inclusion
+of the source code into the ASC source tree.
+
+Martin Bickel <bickel@asc-hq.org>
+
+The original README:
+----------------------------------------------------------------------
 
 This is the README for bzip2, a block-sorting file compressor, version
 1.0.  This version is fully compatible with the previous public
