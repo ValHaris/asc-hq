@@ -1028,7 +1028,7 @@ void tmap :: ResourceTribute :: write ( tnstream& stream )
 
 
 int  tmap::resize( int top, int bottom, int left, int right )  // positive: larger
-{ 
+{
   if ( !top && !bottom && !left && !right )
      return 0;
 
@@ -1078,7 +1078,7 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
      ox2 = xsize;
 
   for (int s = 0; s < 9; s++)
-     for ( tmap::Player::BuildingList::iterator i = actmap->player[s].buildingList.begin(); i != actmap->player[s].buildingList.end(); i++ )
+     for ( tmap::Player::BuildingList::iterator i = player[s].buildingList.begin(); i != player[s].buildingList.end(); i++ )
         (*i)->unchainbuildingfromfield();
 
 
@@ -1086,6 +1086,8 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
   int newy = ysize + top + bottom;
 
   pfield newfield = new tfield [ newx * newy ];
+  for ( int i = 0; i < newx * newy; i++ )
+     newfield[i].setMap ( this );
 
   int x;
   for ( x = ox1; x < ox2; x++ )
@@ -1096,6 +1098,7 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
      }
 
   tfield defaultfield;
+  defaultfield.setMap ( this );
   defaultfield.typ = getterraintype_byid ( 30 )->weather[0];
 
   for ( x = 0; x < left; x++ )
@@ -1128,7 +1131,7 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
 
 
   for (int s = 0; s < 9; s++)
-     for ( tmap::Player::BuildingList::iterator i = actmap->player[s].buildingList.begin(); i != actmap->player[s].buildingList.end(); i++ ) {
+     for ( tmap::Player::BuildingList::iterator i = player[s].buildingList.begin(); i != player[s].buildingList.end(); i++ ) {
         MapCoordinate mc = (*i)->getEntry();
         mc.x += left;
         mc.y += top;
@@ -1136,7 +1139,7 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
      }
 
   for (int s = 0; s < 9; s++)
-     for ( tmap::Player::VehicleList::iterator i = actmap->player[s].vehicleList.begin(); i != actmap->player[s].vehicleList.end(); i++ ) {
+     for ( tmap::Player::VehicleList::iterator i = player[s].vehicleList.begin(); i != player[s].vehicleList.end(); i++ ) {
         (*i)->xpos += left;
         (*i)->ypos += top;
      }
@@ -1310,7 +1313,7 @@ bool tmap::UnitProduction::check ( int id )
 
 VisibilityStates tmap::getInitialMapVisibility( int player )
 {
-   VisibilityStates c = VisibilityStates(actmap->getgameparameter ( cgp_initialMapVisibility ));
+   VisibilityStates c = VisibilityStates( getgameparameter ( cgp_initialMapVisibility ));
 
    if ( this->player[player].ai ) {
       if ( this->player[player].ai->isRunning() ) {
@@ -1346,7 +1349,20 @@ bool Mine :: attacksunit ( const pvehicle veh )
 }
 
 
-tfield :: tfield ( )
+
+tfield :: tfield ( pmap gamemap_ )
+{
+  init();
+  setMap( gamemap_ );
+}
+
+tfield :: tfield (  )
+{
+  init();
+}
+
+
+void tfield::init ()
 {
    bdt.set ( 0 );
    typ = NULL;
@@ -1361,6 +1377,7 @@ tfield :: tfield ( )
    material = 0;
    resourceview = NULL;
    connection = 0;
+   gamemap = NULL;
 }
 
 
@@ -1393,7 +1410,7 @@ void tfield::operator= ( const tfield& f )
 void tfield :: checkminetime ( int time )
 {
    for ( MineContainer::iterator m = mines.begin(); m != mines.end();  ) {
-      int lt = actmap->getgameparameter ( cgp_antipersonnelmine_lifetime + m->type - 1);
+      int lt = gamemap->getgameparameter ( cgp_antipersonnelmine_lifetime + m->type - 1);
       if ( lt && m->time + lt < time )
          m = mines.erase( m );
       else
@@ -1421,7 +1438,7 @@ Mine& tfield::getMine ( int n )
 }
 
 void  tfield :: addobject( pobjecttype obj, int dir, bool force )
-{ 
+{
    if ( !obj )
       return;
 
@@ -1429,11 +1446,11 @@ void  tfield :: addobject( pobjecttype obj, int dir, bool force )
    if ( !i ) {
      int buildable = obj->buildable ( this );
      #ifdef karteneditor
-     if ( !buildable ) 
+     if ( !buildable )
           if ( force )
              buildable = 1;
           else
-             if (choice_dlg("object cannot be built here","~i~gnoe","~c~ancel") == 1) 
+             if (choice_dlg("object cannot be built here","~i~gnoe","~c~ancel") == 1)
                 buildable = 1;
      #else
      if ( !buildable )
@@ -1443,7 +1460,7 @@ void  tfield :: addobject( pobjecttype obj, int dir, bool force )
 
      if ( buildable ) {
          Object o ( obj );
-         o.time = actmap->time.turn();
+         o.time = gamemap->time.turn();
          if ( dir != -1 )
             o.dir = dir;
          else
@@ -1454,27 +1471,27 @@ void  tfield :: addobject( pobjecttype obj, int dir, bool force )
          setparams();
 
          if ( dir == -1 )
-            calculateobject( getx(), gety(), true, obj ); 
+            calculateobject( getx(), gety(), true, obj, gamemap );
 
          sortobjects();
      }
    } else {
-      if ( dir != -1 ) 
+      if ( dir != -1 )
          i->dir |= dir;
-      
+
       sortobjects();
    }
-} 
+}
 
 
 void tfield :: removeobject( pobjecttype obj )
-{ 
-   if ( building ) 
+{
+   if ( building )
       return;
 
    #ifndef karteneditor
    if ( vehicle ) 
-      if ( vehicle->color != actmap->actplayer << 3)
+      if ( vehicle->color != gamemap->actplayer << 3)
         return;
    #endif
 
@@ -1547,15 +1564,15 @@ bool  tfield :: putmine( int col, int typ, int strength )
    if ( mineowner() >= 0  && mineowner() != col )
       return 0;
 
-   if ( mines.size() >= actmap->getgameparameter ( cgp_maxminesonfield ))
+   if ( mines.size() >= gamemap->getgameparameter ( cgp_maxminesonfield ))
       return 0;
 
    Mine m;
    m.strength = strength ;
    m.player = col;
    m.type = MineTypes(typ);
-   if ( actmap && actmap->time.turn() >= 0 )
-      m.time = actmap->time.turn();
+   if ( gamemap && gamemap->time.turn() >= 0 )
+      m.time = gamemap->time.turn();
    else
       m.time = 0;
 
@@ -1588,14 +1605,14 @@ void tfield :: removemine( int num )
 
 int tfield :: getx( void )
 {
-   int n = this - actmap->field;
-   return n % actmap->xsize;
+   int n = this - gamemap->field;
+   return n % gamemap->xsize;
 }
 
 int tfield :: gety( void )
 {
-   int n = this - actmap->field;
-   return n / actmap->xsize;
+   int n = this - gamemap->field;
+   return n / gamemap->xsize;
 }
 
 

@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.70 2002-10-29 19:00:27 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.71 2002-11-23 18:36:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.70  2002/10/29 19:00:27  mbickel
+//      Fixed crashes when inserting a BI3 map
+//
 //     Revision 1.69  2002/10/06 15:44:40  mbickel
 //      Completed inheritance of .asctxt files
 //      Speed up of replays
@@ -1023,7 +1026,7 @@ void        tloadBImap ::   ReadACTNPart(void)
                      if ( obj ) {
                         pfield fld = getfield ( newx, newy );
                         if ( pass == 1 || obj->terrainaccess.accessible ( fld->bdt )) {
-                           fld -> addobject ( obj, 0, 1 );
+                           fld -> addobject ( obj, 0, true );
                            found |= 1;
                            if ( pass == 0 )
                              found_without_force = 1;
@@ -1041,7 +1044,7 @@ void        tloadBImap ::   ReadACTNPart(void)
                                  if ( obj->weatherPicture[ww].bi3pic[j] == xlt[m]  && !(found & 2)  && !( getActiveGraphicSet()->getMode(xlt[m]) & 256) ) {
                                     pfield fld = getfield ( newx, newy );
                                     if ( pass == 1 || obj->terrainaccess.accessible ( fld->bdt )) {
-                                       fld -> addobject ( obj, 0, 1 );
+                                       fld -> addobject ( obj, 0, true );
                                        found |= 1;
                                        if ( pass == 0 )
                                          found_without_force = 1;
@@ -1084,7 +1087,7 @@ void        tloadBImap ::   ReadACTNPart(void)
 
                addobjecttype ( o );
 
-               getfield ( newx, newy )->addobject ( o, 0, 1 );
+               getfield ( newx, newy )->addobject ( o, 0, true );
 
             } else {
 

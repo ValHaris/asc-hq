@@ -114,9 +114,14 @@ class Mine {
 
 //! a single field of the map
 class  tfield {
+    pmap gamemap;
+    void init();
   public:
-    tfield ( );
+    tfield ( pmap gamemap_ );
+    tfield (  );
     void operator= ( const tfield& f );
+
+    void setMap ( pmap gamemap_ ) { gamemap = gamemap_; };
 
     //! the terraintype (#pwterraintype) of the field
     TerrainType::Weather* typ;

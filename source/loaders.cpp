@@ -5,9 +5,14 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.73 2002-11-07 18:42:57 mbickel Exp $
+//     $Id: loaders.cpp,v 1.74 2002-11-23 18:36:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.73  2002/11/07 18:42:57  mbickel
+//      Fixed crash in reaction fire
+//      Improved autoborder object netification
+//      Fixed crash when mail game was loaded by command line parameters
+//
 //     Revision 1.72  2002/10/12 17:28:04  mbickel
 //      Fixed "enemy unit loaded" bug.
 //      Changed map format
@@ -1376,6 +1381,7 @@ void tspfldloaders::readfields ( void )
       spfld->field[i].tempw = 0;
       spfld->field[i].resourceview = NULL;
       spfld->field[i].connection = 0;
+      spfld->field[i].setMap ( spfld );
    }
 
    int l = 0;

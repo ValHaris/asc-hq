@@ -20,14 +20,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef containerbase_h_included
- #define containerbase_h_included
+#ifndef containerbaseH
+ #define containerbaseH
 
  #include "typen.h"
  #include "containerbasetype.h"
 
 
-//! The maximum number of units that are normally allowed in a building of transport. This limit is caused by the building dialog. There's an exception: if the building is conquered, the conquering unit will be still allowed in 
+//! The maximum number of units that are normally allowed in a building of transport. This limit is caused by the building dialog. There's an exception: if the building is conquered, the conquering unit will be still allowed in
 const int maxloadableunits = 18;
 
 

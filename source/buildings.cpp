@@ -341,7 +341,7 @@ int  Building :: unchainbuildingfromfield ( void )
 
                #ifdef sgmain
                 if ( typ->destruction_objects[i][j] )
-                   fld->addobject ( getobjecttype_forid ( typ->destruction_objects[i][j] ), -1, 1 );
+                   fld->addobject ( getobjecttype_forid ( typ->destruction_objects[i][j] ), -1, true );
 
                #endif
 
