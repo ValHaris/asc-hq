@@ -65,7 +65,7 @@
      const FieldQuickView* getQuickView( int id );
  };
 
- extern const ActiveGraphicPictures* getActiveGraphicSet();
+ extern ActiveGraphicPictures* getActiveGraphicSet();
 
 
 #endif

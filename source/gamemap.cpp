@@ -1426,7 +1426,7 @@ void tfield::operator= ( const tfield& f )
 void tfield :: checkminetime ( int time )
 {
    for ( MineContainer::iterator m = mines.begin(); m != mines.end();  ) {
-      int lt = gamemap->getgameparameter ( cgp_antipersonnelmine_lifetime + m->type - 1);
+      int lt = gamemap->getgameparameter ( GameParameter(cgp_antipersonnelmine_lifetime + m->type - 1));
       if ( lt && m->time + lt < time )
          m = mines.erase( m );
       else

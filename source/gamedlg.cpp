@@ -1,9 +1,14 @@
 /*! \file gamedlg.cpp    
     \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.98 2002-11-20 20:00:53 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.99 2002-12-23 13:43:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.98  2002/11/20 20:00:53  mbickel
+//      New features: specify passwords when starting a game
+//      Better error messages when loading a game through command line parameters
+//      Fixed .ASCTXT problems with alias and inheritance
+//
 //     Revision 1.97  2002/11/01 12:40:50  mbickel
 //      Added supervisor-save-map function
 //
@@ -3207,14 +3212,14 @@ void writeGameParametersToString ( std::string& s)
    s = "The game has been set up with the following game parameters:\n";
    s += "(black line: parameter has default value)\n\n";
    for ( int i = 0; i< gameparameternum; i++ ) {
-      int d = actmap->getgameparameter(i) != gameparameterdefault[i];
+      int d = actmap->getgameparameter(GameParameter(i)) != gameparameterdefault[i];
 
       if ( d )
          s+= "#color4#";
 
       s += gameparametername[i];
       s += " = ";
-      s += strrr ( actmap->getgameparameter(i) );
+      s += strrr ( actmap->getgameparameter(GameParameter(i)) );
 
       if ( d )
          s+= "#color0#";

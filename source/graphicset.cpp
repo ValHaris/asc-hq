@@ -37,7 +37,7 @@ bool graphicsLoaded = false;
 
 ActiveGraphicPictures activeGraphicPictures;
 
-const ActiveGraphicPictures* getActiveGraphicSet()
+ActiveGraphicPictures* getActiveGraphicSet()
 {
   return &activeGraphicPictures;
 }

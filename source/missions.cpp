@@ -2,9 +2,12 @@
     \brief The event handling of ASC
 */
 
-//     $Id: missions.cpp,v 1.32 2002-11-01 12:40:50 mbickel Exp $
+//     $Id: missions.cpp,v 1.33 2002-12-23 13:43:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2002/11/01 12:40:50  mbickel
+//      Added supervisor-save-map function
+//
 //     Revision 1.31  2001/12/19 17:16:29  mbickel
 //      Some include file cleanups
 //
@@ -997,7 +1000,7 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
       if ( ev->a.action == cegameparamchange ) {
          int* i = ev->intdata;
          if ( gameParameterChangeableByEvent [ i[0] ] )
-            actmap->setgameparameter( i[0] , i[1] );
+            actmap->setgameparameter( GameParameter(i[0]) , i[1] );
       }
 
       if ( ev->a.action == ceellipse ) {

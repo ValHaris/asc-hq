@@ -85,7 +85,7 @@ void TextPropertyGroup :: print( int indent )
    }
 
    for ( Parents::iterator i = parents.begin(); i != parents.end(); i++ ) {
-      for ( int i = 0; i< indent; i++ )
+      for ( int n = 0; n< indent; n++ )
          printf("  " );
       displayLogMessage(10, "  is inheriting from " + (*i)->location + "\n" );
       (*i)->print(indent+1 );

@@ -2,9 +2,13 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.119 2002-12-23 12:50:25 mbickel Exp $
+//     $Id: dialog.cpp,v 1.120 2002-12-23 13:43:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.119  2002/12/23 12:50:25  mbickel
+//      Fixed AI crash
+//      Minimap now working with partially defined graphic sets
+//
 //     Revision 1.118  2002/12/17 22:02:17  mbickel
 //      Enemy mines can now be crossed even if visible
 //      submerged mines can not be placed on shallow water
@@ -5227,7 +5231,7 @@ void viewterraininfo ( void )
             strcat ( text, "(s). " );
             if ( mineDissolve[i] >= 0 && mineDissolve[i] < maxint ) {
                strcat ( text, "Next mine will dissolve at turn " );
-               strcat ( text, strrr( mineDissolve[i]+actmap->getgameparameter(cgp_antipersonnelmine_lifetime+i) ));
+               strcat ( text, strrr( mineDissolve[i]+actmap->getgameparameter(GameParameter(cgp_antipersonnelmine_lifetime+i)) ));
             }
             strcat ( text, "\n" );
          }
@@ -5424,7 +5428,7 @@ void         tgameparamsel ::get_text(word nr)
 {
    strcpy(txt,gameparametername[nr] );
    strcat(txt, " (" );
-   strcat(txt, strrr ( actmap->getgameparameter( nr )));
+   strcat(txt, strrr ( actmap->getgameparameter( GameParameter(nr) )));
    strcat(txt,") ");
 }
 
@@ -5462,7 +5466,7 @@ void setmapparameters ( void )
    do {
       param = selectgameparameter( -1 );
       if ( param >= 0 && param < gameparameternum )
-         actmap->setgameparameter( param , getid("Parameter Val",actmap->getgameparameter( param ), gameParameterLowerLimit[param], gameParameterUpperLimit[param] ));
+         actmap->setgameparameter( GameParameter(param) , getid("Parameter Val",actmap->getgameparameter( GameParameter(param) ), gameParameterLowerLimit[param], gameParameterUpperLimit[param] ));
    } while ( param >= 0 && param < gameparameternum );
 }
 
