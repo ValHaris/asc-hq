@@ -1,6 +1,17 @@
-//     $Id: sg.cpp,v 1.98 2000-10-11 14:26:44 mbickel Exp $
+//     $Id: sg.cpp,v 1.99 2000-10-12 21:37:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.98  2000/10/11 14:26:44  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.97  2000/09/27 16:08:26  mbickel
 //      AI improvements
 //
@@ -2560,13 +2571,13 @@ void dispmessageonexit ( void ) {
              fprintf(stderr, "%s\n", exitmessage[i]);
           } /* endif */
       }
-      #if defined(_DOS_) | defined(WIN32)
+      #if defined(_DOS_) | defined(_WIN32_)
        printf("\npress enter to exit\n");
        char tmp;
        scanf("%c", &tmp );
       #endif
    } else {
-      #if defined(_DOS_) | defined(WIN32)
+      #ifdef(_DOS_)
        printf( getstartupmessage() );
       #endif
        printf("exiting ... \n \n");

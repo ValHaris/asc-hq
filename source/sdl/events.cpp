@@ -15,9 +15,20 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.18 2000-10-11 14:26:57 mbickel Exp $
+//     $Id: events.cpp,v 1.19 2000-10-12 21:37:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/10/11 14:26:57  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.17  2000/08/12 15:03:26  mbickel
 //      Fixed bug in unit movement
 //      ASC compiles and runs under Linux again...
@@ -100,7 +111,7 @@
 
 #include "../global.h"
 #include sdlheader
-#ifdef WIN32
+#ifdef _WIN32_
  #include "SDL_thread.h"
 #else
  #include "SDL/SDL_thread.h"

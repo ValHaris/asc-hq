@@ -94,7 +94,7 @@ void CGameOptions::setDefaults ( void )
    bi3.interpolate.objects=0;
    bi3.interpolate.buildings=0;
 
-  #if defined ( _DOS_ ) | defined ( WIN32 )
+  #if USE_HOME_DIRECTORY == 0
    searchPath[0].setName ( ".\\" );
    for ( int i = 1; i < getSearchPathNum(); i++ )
       searchPath[i].setName ( NULL );

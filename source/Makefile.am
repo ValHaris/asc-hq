@@ -6,4 +6,4 @@ SUBDIRS = docs sdl libs mapedit tools
 
 EXTRA_DIST = attack.cpp basegfx.cpp basestrm.cpp building.cpp controls.cpp dialog.cpp dlg_box.cpp gamedlg.cpp gui.cpp loadbi3.cpp loaders.cpp loadpcxc.cpp misc.cpp missions.cpp network.cpp newfont.cpp palette.cpp pd.cpp sg.cpp sgstream.cpp spfst.cpp stack.cpp strtmesg.cpp typen.cpp weather.cpp attack.h basegfx.h basegui.h basestrm.h basetemp.h building.h controls.h dialog.h dlg_box.h gamedlg.h global.h gui.h keybp.h loadbi3.h loaders.h loadjpg.h loadpcx.h misc.h missions.h mousehnd.h network.h newfont.h palette.h pd.h sg.h sgstream.h spfldutl.h spfst.h stack.h strtmesg.h timer.h typen.h weather.h soundList.cpp soundList.h unitctrl.cpp unitctrl.h artint.cpp vehicletype.cpp buildingtype.cpp
 
-CXXFLAGS = @CXXFLAGS@ -I./ -Dsgmain -DHEXAGON -DFREEMAPZOOM -funsigned-char -D_NOASM_ -DNEWKEYB
+CXXFLAGS = @CXXFLAGS@ -I./ -Dsgmain -DFREEMAPZOOM -DNEWKEYB

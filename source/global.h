@@ -21,62 +21,19 @@
 #ifndef global_h
  #define global_h
 
- #ifdef WIN32
-  #ifndef minimalIO
-   #define sdlheader "SDL.h"
-   #include sdlheader
-  #endif 
-  using namespace std;
-  #define HAVE_STRICMP 
-  #define HAVE_ITOA
-  #define HAVE_DIRENT_H 
+ #ifdef _WIN32_
+  #include "WIN32/global_os.h"
  #else
-  #ifndef _DOS_
-   #define sdlheader "SDL/SDL.h"
-   #include sdlheader
+  #ifdef _DOS_
+   #include "DOS/global_os.h"
+  #else
+   #ifdef _UNIX_
+    #include "unix/global_os.h"
+   #else
+    #error "No system specified"
+   #endif
   #endif
  #endif
 
- #ifndef WIN32
-  #include "config.h"
- #endif
-
- #ifdef __WATCOM_CPLUSPLUS__
-  #define HAVE_STRICMP 
-  #define HAVE_ITOA
-  #define HAVE_EXCEPTION
-  #define HAVE_LIMITS
-  #define StaticClassVariable static
-  namespace std {};
-
- #else
-  #ifndef _NOASM_
-   #define _NOASM_
-  #endif
-  #define StaticClassVariable
- #endif
-
-
- #ifndef HAVE_ITOA
- extern char* itoa ( int a, char* b, int c);
- #endif
-
-
-
- #ifndef HAVE_STRICMP
- #define stricmp strcasecmp
- #define strcmpi strcasecmp
- #define strnicmp strncasecmp
- #define strncmpi strncasecmp
- 
- extern char *strupr (const char *a);
- #endif
-
-
- #ifdef _DOS_
-  #ifndef converter
-   #define UseMemAvail
-  #endif
- #endif
 
 #endif

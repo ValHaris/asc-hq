@@ -1,4 +1,4 @@
-//     $Id: fileio.h,v 1.2 2000-10-12 21:37:57 mbickel Exp $
+//     $Id: global_os.h,v 1.1 2000-10-12 21:37:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
 //     Revision 1.1  2000/10/12 20:21:43  mbickel
@@ -28,22 +28,19 @@
 // this file takes care that the necessary header files for opendir / readdir
 // are being included in basestrm.cpp
 
-#ifndef fileio_h_included
- #define fileio_h_included
+#ifndef global_os_h_included
+ #define global_os_h_included
 
- #include <direct.h>
- #include <dirent.h>
- #define direct dirent
+  #define HAVE_STRICMP
+  #define HAVE_ITOA
+  #define HAVE_EXCEPTION
+  #define HAVE_LIMITS
+  #define StaticClassVariable static
+  namespace std {};
 
- const char* filereadmode = "rb";
- const char* filewritemode = "wb";
- const char pathdelimitter = '\\';
- const char* pathdelimitterstring = "\\";
- 
- #define CASE_SENSITIVE_FILE_NAMES 0
- #define USE_HOME_DIRECTORY 0
-
- const int maxfilenamelength = 255;
- const char* asc_configurationfile = "asc.ini";
+  #ifndef converter
+   #define UseMemAvail
+   #define UseMemCheck
+  #endif
 
 #endif

@@ -1,6 +1,9 @@
-//     $Id: basestrm.h,v 1.26 2000-10-12 20:21:41 mbickel Exp $
+//     $Id: basestrm.h,v 1.27 2000-10-12 21:37:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/10/12 20:21:41  mbickel
+//      Restructuring operating system dependant files
+//
 //     Revision 1.25  2000/10/12 19:51:44  mbickel
 //      Added a stub program for generating a weapon guide
 //      Added makefiles to compile this weaponguide with the free borland C++
@@ -758,6 +761,9 @@ class tfindfile {
 
 
 #include "basetemp.h"
+
+extern  const char* asc_configurationfile;
+extern  const int maxfilenamelength;
 
 
 extern int compressrle ( const void* p, void* q);

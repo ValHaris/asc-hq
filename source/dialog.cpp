@@ -1,6 +1,17 @@
-//     $Id: dialog.cpp,v 1.58 2000-10-11 14:26:26 mbickel Exp $
+//     $Id: dialog.cpp,v 1.59 2000-10-12 21:37:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2000/10/11 14:26:26  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.57  2000/09/27 16:08:25  mbickel
 //      AI improvements
 //
@@ -2727,7 +2738,7 @@ void         tfileselectsvga::run(void)
                   searchstring[searchsize] = prntkey;
                   searchsize++;
                   searchstring[searchsize] = 0;
-                  displayspeedsearch(); 
+                  displayspeedsearch();
                }
             } 
          } 

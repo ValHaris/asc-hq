@@ -1,6 +1,13 @@
-//     $Id: sgstream.cpp,v 1.32 2000-10-12 19:51:45 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.33 2000-10-12 21:37:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/10/12 19:51:45  mbickel
+//      Added a stub program for generating a weapon guide
+//      Added makefiles to compile this weaponguide with the free borland C++
+//        compiler
+//      Made some adjustments to basic IO file for compiling them with borland
+//        C++
+//
 //     Revision 1.31  2000/10/11 14:26:47  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -172,9 +179,11 @@
 
                                                
 #include <malloc.h>
+/*
 #ifdef _DOS_
 #include <dos.h> 
 #endif
+*/
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -182,11 +191,11 @@
 #include <math.h>
 #include <stdarg.h>
 #include <sys/types.h>
-
+#include <sys/stat.h>
 #include <fstream>
 
-#include "global.h"
 
+/*
 #if defined(_DOS_) | defined(WIN32)
  #include <direct.h> 
 #else
@@ -212,14 +221,11 @@
   #endif
  #endif
 #endif
+*/
 
 
-#include <sys/stat.h>
-
-
-
+#include "global.h"
 #include "CLoadable.h"
-
 #include "tpascal.inc"
 #include "typen.h"
 #include "buildingtype.h"
@@ -249,13 +255,8 @@
 
 const char* asc_EnvironmentName = "ASC_CONFIGFILE";
 
-#if defined(_DOS_) | defined(WIN32)
- const char* asc_configurationfile = "asc.ini";
-#else
- const char* asc_configurationfile = "~/.asc/ascrc";
-#endif
 
-
+#ifdef logging
 FILE* logfile = NULL;
 
 #ifndef converter
@@ -266,18 +267,10 @@ void logtofile ( char* strng, ... )
    va_start ( arglist, strng );
    vsprintf ( buf, strng, arglist );
 
-   // int a = memavail();
-
    if ( !logfile )
      logfile = fopen ( "SGLOG.TXT", "at+" );
 
-
-  /*
-   if ( crctest )
-      fprintf ( f, "%d; ", crctest );
-   */
-
-#ifdef _DOS_
+#ifdef UseMemCheck
    if ( _heapchk() != _HEAPOK  )
      fprintf( logfile, "HEAP DAMAGED!!" );
 #endif
@@ -286,8 +279,8 @@ void logtofile ( char* strng, ... )
    fflush ( logfile );
    va_end ( arglist );
 }
-#endif
-
+#endif //converter
+#endif //logging
 
 
 #pragma pack(1)
@@ -298,12 +291,6 @@ struct tindexstruct {
                  }; 
 
 
-/*
-void         tsrlefilestream::readrlepict( void** pnter, char allocated, int* size)
-{
-   readrlepict ( (char**) pnter, allocated. size );
-}
-*/
 
 void         tsrlefilestream::readrlepict( char** pnter, char allocated, int* size)
 { 
@@ -2522,10 +2509,10 @@ bool makeDirectory ( const char* path )
    int existence = directoryExist ( tmp );
 
    if ( !existence ) {
-      #if defined(_DOS_) | defined(WIN32)
-       int res = _mkdir ( tmp );
-      #else
+      #ifdef _UNIX_
        int res = mkdir ( tmp, 0700 );
+      #else
+       int res = _mkdir ( tmp );
       #endif
       if ( res ) {
          fprintf(stderr, "could neither access nor create directory %s\n", tmp );
