@@ -2,9 +2,15 @@
     \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
 
-//     $Id: gamedlg.cpp,v 1.66 2001-02-26 12:35:12 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.67 2001-02-26 13:49:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.66  2001/02/26 12:35:12  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.65  2001/02/18 15:37:10  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -1170,7 +1176,7 @@ void         tnewcampaignlevel::searchmapinfo(void)
 
           evaluatemapinfo( filename.c_str(), spfldloader.spfld );
       }
-      catch ( tfileerror ) {
+      catch ( ASCexception ) {
       } /* endcatch */
 
       filename = ff.getnextname();

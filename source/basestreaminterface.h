@@ -39,8 +39,8 @@
 
            virtual void readpchar( char** pc, int maxlength = 0) ;
            virtual void readpnchar( char** pc, int maxlength = 0) ;
-           virtual bool readTextString ( ASCString& s ); // return 0 if end of file is reached
-           virtual ASCString readString ( );
+           virtual bool readTextString ( ASCString& s, bool includeCR = false ); // return 0 if end of file is reached
+           virtual ASCString readString ( bool includeCR = false );
            virtual void writepchar( const char* pc) ;
            virtual void writeString( const ASCString& pc) ;
 

@@ -16,7 +16,7 @@
       obj\loadimage.obj obj\SDLStretch.obj obj\events.obj obj\SDL_main.obj 
       obj\weather.obj obj\buildingtype.obj obj\research.obj obj\graphicset.obj 
       obj\ascstring.obj obj\mapdisplay.obj obj\viewcalculation.obj 
-      obj\vehicle.obj obj\buildings.obj"/>
+      obj\vehicle.obj obj\buildings.obj obj\networkdata.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>

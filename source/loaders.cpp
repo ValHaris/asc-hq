@@ -5,9 +5,15 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.45 2001-02-26 12:35:17 mbickel Exp $
+//     $Id: loaders.cpp,v 1.46 2001-02-26 13:49:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2001/02/26 12:35:17  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.44  2001/02/18 15:37:14  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -779,7 +785,7 @@ void      tspfldloaders:: readmessages ( void )
       spfld->__loadmessages = stream->readInt();
 
       if ( msgtext )
-         msg->text = stream->readString();
+         msg->text = stream->readString( true );
    }
 
    for ( int i = 0; i < 8; i++ )

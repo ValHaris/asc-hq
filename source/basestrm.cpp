@@ -2,9 +2,15 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.53 2001-02-26 12:35:00 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.54 2001-02-26 13:49:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2001/02/26 12:35:00  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.52  2001/02/18 15:37:01  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -661,7 +667,7 @@ void         tnstream::readpnchar(char** pc, int maxlength )
 }
 
 
-bool  tnstream::readTextString ( ASCString& s )
+bool  tnstream::readTextString ( ASCString& s, bool includeCR  )
 {
   s = "";
   char c;
@@ -672,7 +678,7 @@ bool  tnstream::readTextString ( ASCString& s )
      if ( red < 1 ) {
         end = 2;
      } else
-       if ( c == '\n' || c == 0 ) {
+       if ( (c == '\n' && !includeCR) || c == 0 ) {
           end = 1;
        } else
           if ( c != '\r' )
@@ -685,10 +691,10 @@ bool  tnstream::readTextString ( ASCString& s )
 }
 
 
-ASCString  tnstream::readString ( )
+ASCString  tnstream::readString ( bool includeCR )
 {
   ASCString s;
-  readTextString ( s );
+  readTextString ( s, includeCR );
   return s;
 }
 
