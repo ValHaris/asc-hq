@@ -1,6 +1,10 @@
-//     $Id: unitctrl.h,v 1.5 2000-06-08 21:03:44 mbickel Exp $
+//     $Id: unitctrl.h,v 1.6 2000-06-09 10:51:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/06/08 21:03:44  mbickel
+//      New vehicle action: attack
+//      wrote documentation for vehicle actions
+//
 //     Revision 1.4  2000/06/04 21:39:22  mbickel
 //      Added OK button to ViewText dialog (used in "About ASC", for example)
 //      Invalid command line parameters are now reported
@@ -73,7 +77,6 @@ class FieldList {
        pmap getMap ( void );
        int isMember ( int x, int y );
      };
-
 
 
 typedef FieldList<int> IntFieldList;
@@ -321,4 +324,95 @@ class PendingVehicleActions {
          };
 
 extern PendingVehicleActions pendingVehicleActions;
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Template implementations
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+template<class T> FieldList<T> :: FieldList ( void )
+{
+   fieldnum = 0;
+   localmap = NULL;
+}
+
+template<class T> int FieldList<T> :: getFieldNum ( void )
+{
+   return fieldnum;
+}
+
+template<class T> pfield FieldList<T> :: getField ( int num )
+{
+   if ( num < fieldnum && num >= 0 )
+      return getfield ( xpos[num], ypos[num] );
+   else
+      return NULL;
+}
+
+
+template<class T> T* FieldList<T> :: getData ( int num )
+{
+   if ( num < fieldnum && num >= 0 )
+      return &data[num] ;
+   else
+      return NULL;
+}
+
+template<class T> T* FieldList<T> :: getData ( int x, int y )
+{
+   for ( int i = 0; i < fieldnum; i++ )
+      if ( xpos[i] == x && ypos[i] == y )
+         return &data[i];
+
+   return NULL;
+}
+
+
+template<class T> void FieldList<T> :: getFieldCoordinates ( int num, int* x, int* y )
+{
+   if ( num < fieldnum && num >= 0 ) {
+      *x = xpos[num];
+      *y = ypos[num];
+   } else {
+      *x = -1;
+      *y = -1;
+   }
+}
+
+template<class T> void FieldList<T> :: addField ( int x, int y, T* _data )
+{
+   int found = 0;
+   for( int i = 0; i < fieldnum; i++ )
+      if ( xpos[i] == x && ypos[i] == y )
+         found = 1;
+   if ( !found ) {
+      xpos[fieldnum] = x;
+      ypos[fieldnum] = y;
+      if ( _data )
+         data[fieldnum] = *_data;
+
+      fieldnum++;
+   }
+}
+
+template<class T> void FieldList<T> :: setMap ( pmap map )
+{
+   localmap = map;
+}
+
+template<class T> pmap FieldList<T> :: getMap ( void )
+{
+   return localmap;
+}
+
+template<class T> int FieldList<T> :: isMember ( int x, int y )
+{
+   for ( int i = 0; i < fieldnum; i++ )
+      if ( xpos[i] == x && ypos[i] == y )
+         return 1;
+   return 0;
+}
+
 #endif
+

@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.48 2000-06-06 20:03:18 mbickel Exp $
+//     $Id: sg.cpp,v 1.49 2000-06-09 10:50:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2000/06/06 20:03:18  mbickel
+//      Fixed graphical error when transfering ammo in buildings
+//      Sound can now be disable by a command line parameter and the game options
+//
 //     Revision 1.47  2000/06/05 18:33:10  mbickel
 //      Refined password check for mail games
 //
@@ -2308,6 +2312,7 @@ void execuseraction ( tuseractions action )
 
 void checkpulldown( tkey* ch )
 {
+   pd.key = *ch;
    pd.checkpulldown();
 
    if (pd.action2execute >= 0 ) {
@@ -2320,7 +2325,6 @@ void checkpulldown( tkey* ch )
 void mainloopgeneralkeycheck ( tkey& ch )
 {
     ch = r_key();
-    pd.key = ch;
     checkpulldown( &ch );
     keyinput[keyinputptr] = ch;
     keyinputptr++;
@@ -2642,7 +2646,8 @@ void  mainloop ( void )
                break;
          } 
 
-      } 
+      } else
+         ch = ct_invvalue;
 
 
       mainloopgeneralmousecheck ( );

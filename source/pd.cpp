@@ -1,6 +1,9 @@
-//     $Id: pd.cpp,v 1.11 2000-05-23 20:40:48 mbickel Exp $
+//     $Id: pd.cpp,v 1.12 2000-06-09 10:50:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/05/23 20:40:48  mbickel
+//      Removed boolean type
+//
 //     Revision 1.10  2000/05/10 19:55:53  mbickel
 //      Fixed empty loops when waiting for mouse events
 //
@@ -239,12 +242,14 @@ void tpulldown::run(void)
                openpdfield();
             }
             break;
-         case ct_enter: {
-               return;
-            }
+         case ct_space:
+         case ct_enter: action2execute = pdb.field [ pdfieldnr] .button [ buttonnr].actionid;
+                        return;
+
          default : {
                 for (int k = 0; k < pdb.field[pdfieldnr].count; k++) 
                     if (pdb.field[pdfieldnr].button[k].shortkey == ch ) {
+                       action2execute = pdb.field [ pdfieldnr] .button [k].actionid;
                        buttonnr = k;
                        return;
                     }
@@ -274,30 +279,9 @@ void tpulldown::getleftrighttext(char *qtext, char *ltext,char *rtext)
    } /* endfor */
 }
 
-void tpulldown::checkkeys(void)
-{
-   if (key > 1024) {
-      key -=1024;
-      for (int i = 0; i < pdb.count; i++) 
-         if (key == pdb.field[i].shortkey ) {
-            baron();
-            pdfieldnr=i;
-            openpdfield();
-            run();
-            done();
-            key = 0;
-            if (pdfieldnr == 255) baroff();
-            return;
-         }
-   }
-
-}
-
-
 void tpulldown::checkpulldown(void)
 {
-   checkkeys();
-   if (mouseparams.y <= pdb.pdbreite)  {
+   if (mouseparams.y <= pdb.pdbreite || skeypress(ct_lalt) || skeypress(ct_ralt)) {
       baron();
       if (mouseparams.taste == 1 ) {
          pdfieldnr = 0;
@@ -307,7 +291,19 @@ void tpulldown::checkpulldown(void)
          openpdfield();
          run();
          done();
-      }
+      } else
+         if ( key != ct_invvalue )
+            for (int i = 0; i < pdb.count; i++)
+               if (key == pdb.field[i].shortkey + ct_altp ) {
+                  baron();
+                  pdfieldnr=i;
+                  openpdfield();
+                  run();
+                  done();
+                  key = ct_invvalue;
+                  return;
+               }
+
    } 
    else baroff(); 
 }
@@ -489,14 +485,14 @@ void tpulldown::setshortkeys(void)
          pdb.field[i].shortkey = 0;
          for (j = 0; j < strlen(pdb.field[i].name); j++)
             if (pdb.field[i].name[j] == '~') {
-               pdb.field[i].shortkey = char2key( toupper ( pdb.field[i].name[j+1] ) );
+               pdb.field[i].shortkey = char2key( pdb.field[i].name[j+1] );
                j = strlen(pdb.field[i].name); 
             } 
          for (int k = 0; k < pdb.field[i].count; k++) {
             pdb.field[i].button[k].shortkey = 0; 
             for (j = 0; j < strlen(pdb.field[i].button[k].name); j++) {
                if (pdb.field[i].button[k].name[j] == '~') { 
-                  pdb.field[i].button[k].shortkey = char2key( toupper ( pdb.field[i].button[k].name[j+1] ) );
+                  pdb.field[i].button[k].shortkey = char2key( pdb.field[i].button[k].name[j+1] );
                   j = strlen(pdb.field[i].button[k].name); 
                } 
             } 

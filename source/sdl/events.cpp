@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.14 2000-06-01 15:27:47 mbickel Exp $
+//     $Id: events.cpp,v 1.15 2000-06-09 10:51:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/06/01 15:27:47  mbickel
+//      Some changes for the upcoming Win32 version of ASC
+//      Fixed error at startup: unable to load smalaril.fnt
+//
 //     Revision 1.13  2000/05/10 20:56:20  mbickel
 //      mouseparams and ticker now volatile under linux too
 //
@@ -75,6 +79,7 @@
 
 
 #include <queue>
+#include "ctype.h"
 
 #include "../misc.h"
 #include "../mousehnd.h"
@@ -496,9 +501,9 @@ void reset_keypress(void)
 tkey char2key(int c )
 {
   if ( c < 128 )
-    return c;
+    return tolower(c);
   else
-    return -1;
+    return ct_invvalue;
 }
 
 char *get_key(tkey keynr)

@@ -1,6 +1,9 @@
-//     $Id: pd.h,v 1.4 2000-05-23 20:40:48 mbickel Exp $
+//     $Id: pd.h,v 1.5 2000-06-09 10:50:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/05/23 20:40:48  mbickel
+//      Removed boolean type
+//
 //     Revision 1.3  1999/12/28 21:03:18  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -86,7 +89,6 @@
          virtual void showbutton(void);
          virtual void hidebutton(void);
          virtual void checkpulldown(void);
-         virtual void checkkeys(void);
          virtual void run(void);
          virtual void setshortkeys(void);
          virtual void lines(int x1,int y1,int x2,int y2);
