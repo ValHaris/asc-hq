@@ -1,6 +1,10 @@
-//     $Id: basegfx.cpp,v 1.19 2000-12-26 21:04:32 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.20 2001-01-04 15:10:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/12/26 21:04:32  mbickel
+//      Fixed: putimageprt not working (used for small map displaying)
+//      Fixed: mapeditor crashed on generating large maps
+//
 //     Revision 1.18  2000/12/26 14:45:59  mbickel
 //      Made ASC compilable (and runnable) with Borland C++ Builder
 //
@@ -933,7 +937,7 @@ char* convertimage ( TrueColorImage* img, dacpalette256 pal )
   #ifndef minimal
    if ( truecolor2pal_table[0] == 255 ) {
       tfindfile ff ( "tc2pal.dat" );
-      if ( ff.getnextname() ) {
+      if ( !ff.getnextname().empty() ) {
          tnfilestream stream ( "tc2pal.dat", 1 );
          stream.readdata ( truecolor2pal_table, sizeof ( truecolor2pal_table ));
       } else {
@@ -1675,7 +1679,6 @@ void putspritetexture ( int x1, int y1, int x2, int y2, void *texture )
 void putimageprt ( int x1, int y1, int x2, int y2, void *texture, int dx, int dy )
 {
    collategraphicoperations cgo ( x1, y1, x2, y2 );
-   word* w = (word*) texture;
    int spacelength = agmp->scanlinelength - (x2-x1) - 1;
 
    if ( agmp->windowstatus == 100 ) {
@@ -1886,7 +1889,8 @@ void showtext ( const char* text, int x, int y, int textcol )
        int x = 0;
        ps = 0;
        while ( x < length ) {
-          for (int cx = characterwidth[ps]; cx > 0 && x < length; cx--) {
+          int cx;
+          for ( cx = characterwidth[ps]; cx > 0 && x < length; cx--) {
              int pix = *(characterpointer[ps]++);
              if ( pix )
                 if ( textcol != -1 )
@@ -1915,6 +1919,8 @@ void showtext ( const char* text, int x, int y, int textcol )
                 x += characterdist[ps];
                 suppressbkgr = -characterdist[ps];
              }
+          } else {
+             characterpointer[ps] += cx;
           }
           ps++;
        }
