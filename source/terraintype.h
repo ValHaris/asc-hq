@@ -69,6 +69,9 @@ const int cbodenartennum = 34;
     public:
       int                id;
       ASCString          name;
+      class MoveMalus: public vector<double> {
+         public: MoveMalus();
+      };
 
       class  Weather {
         public:
@@ -81,16 +84,16 @@ const int cbodenartennum = 34;
           //! the attack bonus for the unit standing on this field. \see AttackFormula::strength_attackbonus(int)
           int            attackbonus;
 
-          //! the view obstraction of the field 
+          //! the view obstraction of the field
           int            basicjamming;
 
           //! the movement cost for the various units to move across this field
-          vector<int>    move_malus;
-          
+          TerrainType::MoveMalus   move_malus;
+
           //! displays the image on the screen coordinates x1/y1
           void           paint ( int x1, int y1 );
 
-          //! the image index from the graphic set. -1 if graphics is not from graphic set. \see  GraphicSet 
+          //! the image index from the graphic set. -1 if graphics is not from graphic set. \see  GraphicSet
           int            bi_pict;
 
           //! the properties defining which unit can move onto this field and which not 

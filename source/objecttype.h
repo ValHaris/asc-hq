@@ -47,10 +47,10 @@
      int armor;
 
      //! the movemalus_plus is added to the current movemalus of the field to form the new movemalus. Negative values are ok.
-     vector<int> movemalus_plus;
+     TerrainType::MoveMalus movemalus_plus;
 
      //! The movemalus_abs replaces the current movemalus of the field by a new one. Values of 0 and -1 won't affect the movemalus of the field, and values ranging from 1 to 9 must not be used.
-     vector<int> movemalus_abs;
+     TerrainType::MoveMalus movemalus_abs;
 
      //! this is added to the current attackbonus of the field to form the new attackbonus.
      int attackbonus_plus;

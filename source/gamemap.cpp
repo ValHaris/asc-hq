@@ -1364,6 +1364,7 @@ tfield :: tfield ( )
 }
 
 
+
 void tfield::operator= ( const tfield& f )
 {
    typ = f.typ;
@@ -1649,19 +1650,19 @@ int tfield :: getmovemalus ( const pvehicle veh )
 {
    int mnum = mines.size();
    if ( mnum ) {
-      int movemalus = _movemalus[veh->typ->movemalustyp];
+      int movemalus = __movemalus.at(veh->typ->movemalustyp);
       int col = mineowner();
-      if ( veh->color == col*8 ) 
+      if ( veh->color == col*8 )
          movemalus += movemalus * mine_movemalus_increase * mnum / 100;
 
       return movemalus;
    } else
-      return _movemalus[veh->typ->movemalustyp];
+      return __movemalus.at(veh->typ->movemalustyp);
 }
 
 int tfield :: getmovemalus ( int type )
 {
-  return _movemalus[type];
+  return __movemalus.at(type);
 }
 
 void tfield :: setparams ( void )
@@ -1670,18 +1671,18 @@ void tfield :: setparams ( void )
    bdt = typ->art;
 
    for ( i = 0; i < cmovemalitypenum; i++ )
-      _movemalus[i] = typ->move_malus[i];
+      __movemalus.at(i) = typ->move_malus[i];
 
    for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
       bdt  &=  o->typ->terrain_and;
       bdt  |=  o->typ->terrain_or;
 
       for ( i = 0; i < cmovemalitypenum; i++ ) {
-         _movemalus[i] += o->typ->movemalus_plus[i];
+         __movemalus[i] += o->typ->movemalus_plus[i];
          if ( (o->typ->movemalus_abs[i] != 0) && (o->typ->movemalus_abs[i] != -1) )
-            _movemalus[i] = o->typ->movemalus_abs[i];
-         if ( _movemalus[i] < minmalq )
-            _movemalus[i] = minmalq;
+            __movemalus[i] = o->typ->movemalus_abs[i];
+         if ( __movemalus[i] < minmalq )
+            __movemalus[i] = minmalq;
       }
    }
 

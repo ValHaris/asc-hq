@@ -95,17 +95,35 @@
                StringArrayProperty ( vector<ASCString>& property_ ) : PTSA ( property_ ) {};
          };
 
-         typedef PropertyTemplate< vector<int> > PTIA;
-         class IntegerArrayProperty : public PTIA {
-              typedef vector<int> PropertyType;
+
+         template <class T>
+         class ValArrayProperty: public PropertyTemplate< vector<T> > {
             protected:
-              PropertyType operation_eq ( const TextPropertyGroup::Entry& entry ) const ;
+              typedef vector<T> PropertyType;
               PropertyType operation_add ( const TextPropertyGroup::Entry& entry ) const;
               PropertyType operation_mult ( const TextPropertyGroup::Entry& entry ) const;
+              ValArrayProperty ( PropertyType& property_ ) : PropertyTemplate<vector<T> > ( property_ ) {};
+
+         };
+
+         typedef ValArrayProperty<int> PTIA;
+         class IntegerArrayProperty : public PTIA {
+            protected:
+              PropertyType operation_eq ( const TextPropertyGroup::Entry& entry ) const ;
               ASCString toString ( ) const;
             public:
                IntegerArrayProperty ( vector<int>& property_ ) : PTIA ( property_ ) {};
          };
+
+         typedef ValArrayProperty<double> PTDA;
+         class DoubleArrayProperty : public PTDA {
+            protected:
+              PropertyType operation_eq ( const TextPropertyGroup::Entry& entry ) const ;
+              ASCString toString ( ) const;
+            public:
+               DoubleArrayProperty ( vector<double>& property_ ) : PTDA ( property_ ) {};
+         };
+
 
          typedef PropertyTemplate< vector<IntRange> > PTIRA;
          class IntRangeArrayProperty : public PTIRA {
@@ -323,6 +341,13 @@ void PropertyContainer::addIntegerArray ( const ASCString& name, vector<int>& pr
    IntegerArrayProperty* ip = new IntegerArrayProperty ( property );
    setup ( ip, name );
 }
+
+void PropertyContainer::addDFloatArray ( const ASCString& name, vector<double>& property )
+{
+   DoubleArrayProperty* dp = new DoubleArrayProperty ( property );
+   setup ( dp, name );
+}
+
 
 void PropertyContainer::addIntRangeArray ( const ASCString& name, vector<IntRange>& property, bool required )
 {
@@ -644,20 +669,8 @@ ASCString StringArrayProperty::toString ( ) const
 }
 
 
-
-IntegerArrayProperty::PropertyType IntegerArrayProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
-{
-   PropertyType ia;
-   StringTokenizer st ( entry.value, true );
-   ASCString s = st.getNextToken();
-   while ( !s.empty() ) {
-      ia.push_back ( atoi ( s.c_str() ));
-      s = st.getNextToken();
-   }
-   return ia;
-}
-
-IntegerArrayProperty::PropertyType IntegerArrayProperty::operation_add ( const TextPropertyGroup::Entry& entry ) const
+template<class T>
+ValArrayProperty<T>::PropertyType ValArrayProperty<T>::operation_add ( const TextPropertyGroup::Entry& entry ) const
 {
    PropertyType child = operation_eq( entry );
    PropertyType parent = parse ( *entry.parent );
@@ -685,16 +698,10 @@ IntegerArrayProperty::PropertyType IntegerArrayProperty::operation_add ( const T
    return child;
 }
 
-IntegerArrayProperty::PropertyType IntegerArrayProperty::operation_mult ( const TextPropertyGroup::Entry& entry ) const
+template<class T>
+ValArrayProperty<T>::PropertyType ValArrayProperty<T>::operation_mult ( const TextPropertyGroup::Entry& entry ) const
 {
-   vector<double> child;
-   StringTokenizer st ( entry.value, true );
-   ASCString s = st.getNextToken();
-   while ( !s.empty() ) {
-      child.push_back ( atof ( s.c_str() ));
-      s = st.getNextToken();
-   }
-
+   PropertyType child = operation_eq( entry );
    PropertyType parent = parse ( *entry.parent );
 
    if ( child.size() == parent.size() ) {
@@ -721,6 +728,47 @@ IntegerArrayProperty::PropertyType IntegerArrayProperty::operation_mult ( const 
 }
 
 
+IntegerArrayProperty::PropertyType IntegerArrayProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
+{
+   PropertyType ia;
+   StringTokenizer st ( entry.value, true );
+   ASCString s = st.getNextToken();
+   while ( !s.empty() ) {
+      ia.push_back ( atoi ( s.c_str() ));
+      s = st.getNextToken();
+   }
+   return ia;
+}
+
+
+
+ASCString DoubleArrayProperty::toString ( ) const
+{
+   ASCString valueToWrite;
+   for ( PropertyType::iterator i = property.begin(); i != property.end(); i++ ) {
+      ASCString s;
+      s.format ( "%f", *i );
+      valueToWrite += s;
+      valueToWrite += " ";
+   }
+   return valueToWrite;
+}
+
+
+DoubleArrayProperty::PropertyType DoubleArrayProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
+{
+   PropertyType ia;
+   StringTokenizer st ( entry.value, true );
+   ASCString s = st.getNextToken();
+   while ( !s.empty() ) {
+      ia.push_back ( atof ( s.c_str() ));
+      s = st.getNextToken();
+   }
+   return ia;
+}
+
+
+
 ASCString IntegerArrayProperty::toString ( ) const
 {
    ASCString valueToWrite;
@@ -730,6 +778,9 @@ ASCString IntegerArrayProperty::toString ( ) const
    }
    return valueToWrite;
 }
+
+
+
 
 IntRangeArrayProperty::PropertyType IntRangeArrayProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {

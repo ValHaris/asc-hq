@@ -22,8 +22,8 @@
 
 
 
-#ifndef dashboard_h_included
- #define dashboard_h_included
+#ifndef dashboardH
+ #define dashboardH
 
 
   //! The unit, weather and map information displayed on the right side of the screen

@@ -92,7 +92,12 @@ void TerrainAccess::runTextIO ( PropertyContainer& pc )
    pc.addTagArray ( "terrain_kill", terrainkill, cbodenartennum, bodenarten );
 }
 
-
+TerrainType::MoveMalus::MoveMalus()
+{
+   resize( cmovemalitypenum);
+   for ( int i = 0; i <  cmovemalitypenum; i++ )
+      at(i) = 100;
+}
 
 TerrainType::TerrainType()
 {
@@ -398,7 +403,7 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
    pc.addInteger ( "DefenseBonus", defensebonus );
    pc.addInteger ( "AttackBonus",  attackbonus );
    pc.addInteger ( "BasicJamming", basicjamming );
-   pc.addIntegerArray ( "MoveMalus", move_malus );
+   pc.addDFloatArray ( "MoveMalus", move_malus );
    int mm = move_malus.size();
    move_malus.resize( cmovemalitypenum );
    for ( int i = mm; i < cmovemalitypenum; i++ )

@@ -1119,7 +1119,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
       pc.addBool ( "canExistBeneathBuildings", canExistBeneathBuildings );
 
    pc.addInteger  ( "Armor", armor );
-   pc.addIntegerArray ( "Movemalus_plus", movemalus_plus );
+   pc.addDFloatArray ( "Movemalus_plus", movemalus_plus );
    int mm = movemalus_plus.size();
    movemalus_plus.resize( cmovemalitypenum );
    for ( int i = mm; i < cmovemalitypenum; i++ ) {
@@ -1130,7 +1130,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
    }
 
 
-   pc.addIntegerArray ( "Movemalus_abs", movemalus_abs );
+   pc.addDFloatArray ( "Movemalus_abs", movemalus_abs );
    mm = movemalus_abs.size();
    movemalus_abs.resize( cmovemalitypenum );
    for ( int i = mm; i < cmovemalitypenum; i++ ) {

@@ -185,15 +185,11 @@ class  tfield {
     pobject checkforobject ( pobjecttype o );
 
 
-
-
-
     //! the terraintype properties. They determine which units can move over the field. This variable is recalculated from the terraintype and objects each time something on the field changes (#setparams)
     TerrainBits  bdt;
 
     //! are any events connected to this field
     int connection;
-
 
 
     //! deletes everything placed on the field
@@ -260,7 +256,7 @@ class  tfield {
   private:
     int getx( void );
     int gety( void );
-    unsigned char         _movemalus[cmovemalitypenum];
+    TerrainType::MoveMalus __movemalus;
 };
 
 

@@ -1034,7 +1034,6 @@ void         tdashboard::paintalliances ( void )
    } /* endfor */
 }
 
-#ifdef FREEMAPZOOM
 void         tdashboard::paintzoom( void )
 {
    int h;
@@ -1043,6 +1042,8 @@ void         tdashboard::paintzoom( void )
    zoom.x2 = agmp->resolutionx - ( 640 - 609);
    zoom.y1 = agmp->resolutiony - ( 480 - 444);
    zoom.y2 = agmp->resolutiony - ( 480 - 464);
+
+   collategraphicoperations cgo  ( zoom.x1, zoom.y1, zoom.x2, zoom.y2 );
 
    static void* background = NULL;
    if ( !background ) {
@@ -1057,8 +1058,6 @@ void         tdashboard::paintzoom( void )
    putimage ( zoom.x1 + dist - dist * actzoom / maxzoom, zoom.y1, zoom.pic );
 
 }
-#endif
-
 
 
 class tmainshowmap : public tbasicshowmap {
@@ -1188,7 +1187,6 @@ void         tdashboard::checkformouse ( int func )
           }
        }
 
-      #ifdef FREEMAPZOOM
        if ( mouseparams.taste == 1 )
           if ( mouseinrect ( zoom.x1, zoom.y1, zoom.x2, zoom.y2 )) {
              int pos = mouseparams.x - zoom.x1;
@@ -1210,7 +1208,6 @@ void         tdashboard::checkformouse ( int func )
                 dashboard.x = 0xffff;
              }
           }
-       #endif
     }
 
     if ( mouseparams.x >= agmp->resolutionx - ( 640 - 578 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 609 )  &&   mouseparams.y >=  59   &&   mouseparams.y <=  67  && (mouseparams.taste & 1) ) {
@@ -1281,54 +1278,52 @@ void   tdashboard :: paintvehicleinfo( const pvehicle     vehicle,
                                        const pfield       _objfield,
                                        const pvehicletype vt )
 {
-   collategraphicoperations cgo ( agmp->resolutionx - 800 + 610, 15, agmp->resolutionx - 800 + 783, 307 );
+   {
+      collategraphicoperations cgo ( agmp->resolutionx - 800 + 610, 15, agmp->resolutionx - 800 + 783, 307 );
 
-   int         ms;
+      int         ms;
 
-   npush( activefontsettings );
-   ms = getmousestatus();
-   if (ms == 2) mousevisible(false);
-   dashboard.backgrndcol    = 24;
-   dashboard.vgcol          = green;    /* 26 / 76  */
-   dashboard.ymx            = 471;    /*  469 / 471  */
-   dashboard.ymn            = 380;
-   dashboard.ydl            = dashboard.ymx - dashboard.ymn;
-   dashboard.munitnumberx   = 545;
-   dashboard.vehicle        = vehicle;
-   dashboard.building       = building;
-   dashboard.objfield       = _objfield;
-   dashboard.vehicletype    = vt;
+      npush( activefontsettings );
+      ms = getmousestatus();
+      if (ms == 2) mousevisible(false);
+      dashboard.backgrndcol    = 24;
+      dashboard.vgcol          = green;    /* 26 / 76  */
+      dashboard.ymx            = 471;    /*  469 / 471  */
+      dashboard.ymn            = 380;
+      dashboard.ydl            = dashboard.ymx - dashboard.ymn;
+      dashboard.munitnumberx   = 545;
+      dashboard.vehicle        = vehicle;
+      dashboard.building       = building;
+      dashboard.objfield       = _objfield;
+      dashboard.vehicletype    = vt;
 
-   dashboard.paintheight();
-   dashboard.paintweapons();
-   dashboard.paintdamage();
-   dashboard.painttank();
-   dashboard.paintexperience();
-   dashboard.paintmovement();
-   dashboard.paintarmor();
+      dashboard.paintheight();
+      dashboard.paintweapons();
+      dashboard.paintdamage();
+      dashboard.painttank();
+      dashboard.paintexperience();
+      dashboard.paintmovement();
+      dashboard.paintarmor();
 
-   if ( CGameOptions::Instance()->smallmapactive )
-      dashboard.paintsmallmap( dashboard.repainthard );
-   else
-      dashboard.paintwind( dashboard.repainthard );
+      if ( CGameOptions::Instance()->smallmapactive )
+         dashboard.paintsmallmap( dashboard.repainthard );
+      else
+         dashboard.paintwind( dashboard.repainthard );
 
-   dashboard.paintname();
-   dashboard.paintclasses ();
-   dashboard.paintimage();
-   dashboard.paintplayer();
-  #ifndef FREEMAPZOOM
-   dashboard.paintalliances();
-  #else
+      dashboard.paintname();
+      dashboard.paintclasses ();
+      dashboard.paintimage();
+      dashboard.paintplayer();
+      dashboard.x = getxpos();
+      dashboard.y = getypos();
+      if (ms == 2) mousevisible(true);
+      npop( activefontsettings );
+
+      dashboard.repainthard = 0;
+
+      if ( actmap && actmap->ellipse )
+         actmap->ellipse->paint();
+
+   }
    dashboard.paintzoom();
-  #endif
-   dashboard.x = getxpos();
-   dashboard.y = getypos();
-   if (ms == 2) mousevisible(true);
-   npop( activefontsettings );
-
-   dashboard.repainthard = 0;
-
-   if ( actmap && actmap->ellipse )
-      actmap->ellipse->paint();
-
 }   /*  paintvehicleinfo  */
