@@ -182,8 +182,6 @@ tsgonlinemousehelpwind* onlinehelpwind = NULL;
 
 
 
-int  abortgame;
-
 pprogressbar actprogressbar = NULL;
 cmousecontrol* mousecontrol = NULL;
 
@@ -580,102 +578,6 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_statisticdialog, ua_viewPipeNet, ua_cancelResearch, ua_showResearchStatus, ua_exportUnitToFile };
 
 
-class tsgpulldown : public tpulldown
-{
-   public:
-      void init ( void );
-}
-pd;
-
-void         tsgpulldown :: init ( void )
-{
-   addfield ( "Glo~b~al" );
-   addbutton ( "toggle ~R~esourceviewõ1", ua_changeresourceview );
-   addbutton ( "toggle unit shadingõ2", ua_toggleunitshading );
-   addbutton ( "seperator", -1);
-   addbutton ( "~O~ptions", ua_gamepreferences );
-   addbutton ( "~M~ouse options", ua_mousepreferences );
-   addbutton ( "~S~ound options", ua_soundDialog );
-   addbutton ( "seperator", -1);
-   addbutton ( "E~x~itõctrl-x", ua_exitgame );
-
-
-   addfield ("~G~ame");
-   addbutton ( "New ~C~ampaign", ua_newcampaign);
-   addbutton ( "~N~ew single Levelõctrl-n", ua_startnewsinglelevel );
-
-   addbutton ( "seperator", -1);
-   addbutton ( "~L~oad gameõctrl-l", ua_loadgame );
-   addbutton ( "~S~ave gameõctrl-s", ua_savegame );
-   addbutton ( "seperator", -1 );
-   addbutton ( "Continue network gameõF3", ua_continuenetworkgame);
-   addbutton ( "setup Net~w~ork", ua_setupnetwork );
-   addbutton ( "Change Passw~o~rd", ua_changepassword );
-   addbutton ( "supervise network game", ua_networksupervisor );
-   addbutton ( "seperator", -1 );
-   addbutton ( "~P~layers + Alliances", ua_setupalliances);
-   addbutton ( "transfer ~U~nit control", ua_giveunitaway );
-   addbutton ( "~r~ename unit/building", ua_renameunit );
-   addbutton ( "~T~ransfer resources", ua_settribute);
-   addbutton ( "~C~ancel Research", ua_cancelResearch );
-
-   addfield ( "~I~nfo" );
-   addbutton ( "~V~ehicle types", ua_vehicleinfo );
-   addbutton ( "Unit ~w~eapon rangeõ3", ua_viewunitweaponrange );
-   addbutton ( "Unit ~m~ovement rangeõ4", ua_viewunitmovementrange );
-   addbutton ( "~G~ame Timeõ5", ua_GameStatus );
-   addbutton ( "unit ~S~et informationõ6", ua_UnitSetInfo );
-   addbutton ( "~T~errainõ7", ua_viewterraininfo );
-   addbutton ( "~U~nit weightõ8", ua_unitweightinfo );
-   addbutton ( "show ~P~ipeline netõ9", ua_viewPipeNet );
-   addbutton ( "seperator", -1 );
-   addbutton ( "~R~esearch", ua_researchinfo );
-   addbutton ( "~P~lay time", ua_showPlayerSpeed );
-   // addbutton ( "~R~esearch status", ua_showResearchStatus );
-
-   // addbutton ( "vehicle ~I~mprovementõF7", ua_dispvehicleimprovement);
-   // addbutton ( "show game ~P~arameters", ua_GameParameterInfo );
-
-
-   addfield ( "~S~tatistics" );
-   addbutton ( "~U~nits", ua_unitstatistics );
-   addbutton ( "~B~uildings", ua_buildingstatistics );
-//   addbutton ( "~R~esources ", ua_statisticdialog );
-   // addbutton ( "seperator");
-   // addbutton ( "~H~istory");
-
-   addfield ( "~M~essage");
-   addbutton ( "~n~ew message", ua_newmessage );
-   addbutton ( "view ~q~ueued messages", ua_viewqueuedmessages );
-   addbutton ( "view ~s~end messages", ua_viewsentmessages );
-   addbutton ( "view ~r~eceived messages", ua_viewreceivedmessages);
-   addbutton ( "seperator", -1 );
-   addbutton ( "view ~j~ournal", ua_viewjournal );
-   addbutton ( "~a~ppend to journal", ua_editjournal );
-
-   addfield ( "~T~ools" );
-   addbutton ( "save ~M~ap as PCXõ9", ua_writemaptopcx );
-   addbutton ( "save ~S~creen as PCX", ua_writescreentopcx );
-   addbutton ( "benchmark without view calc", ua_benchgamewov );
-   addbutton ( "benchmark with view calc", ua_benchgamewv);
-   addbutton ( "compiler benchmark (AI)", ua_aibench );
-   // addbutton ( "test memory integrity", ua_heapcheck );
-   addbutton ( "seperator", -1 );
-   addbutton ( "select graphic set", ua_selectgraphicset );
-   addbutton ( "reload dialog theme", ua_reloadDlgTheme );
-
-   addfield ( "~H~elp" );
-   addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
-   addbutton ( "HowTo ~C~ontinue email games", ua_howtocontinuepbem );
-   addbutton ( "seperator", -1);
-   addbutton ( "~K~eys", ua_help );
-
-   addbutton ( "~A~bout", ua_viewaboutmessage );
-
-   tpulldown :: init();
-   setshortkeys();
-}
-
 
 class MainMenuPullDown : public tpulldown
 {
@@ -740,8 +642,6 @@ void         repaintdisplay(void)
       if ( cv )
          cursor.show();
    }
-
-   pd.barstatus = false;
 
    if ( ms == 2 )
       mousevisible ( true );
@@ -1355,10 +1255,12 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_exitgame:
-         if (choice_dlg("do you really want to quit ?","~y~es","~n~o") == 1)
+         /*if (choice_dlg("do you really want to quit ?","~y~es","~n~o") == 1)
             abortgame = 1;
          else
             exitprogram = 0;
+            */
+            getPGApplication().quit();
          break;
 
       case ua_newcampaign:
@@ -1638,27 +1540,14 @@ void execuseraction ( tuseractions action )
          break;
 
    }
-
-
 }
 
-void checkpulldown( tkey ch )
-{
-   pd.key = ch;
-   pd.checkpulldown();
 
-   if (pd.action2execute >= 0 ) {
-      tuseractions ua = (tuseractions) pd.action2execute;
-      pd.action2execute = -1;
-      execuseraction ( ua );
-   }
-}
 
 void mainloopgeneralkeycheck ( tkey& ch )
 {
    int keyprn;
    getkeysyms ( &ch, &keyprn );
-   checkpulldown( ch );
 
    movecursor(ch);
    actgui->checkforkey ( ch, keyprn );
@@ -1703,26 +1592,151 @@ void mainloopgeneralmousecheck ( void )
 }
 
 
+bool execUserActionI  (PG_PopupMenu::MenuItem* menuItem )
+{
+   getPGApplication().enableLegacyEventHandling ( true );
+   execuseraction( tuseractions( menuItem->getId() ) );
+   getPGApplication().enableLegacyEventHandling ( false );
+   return true;
+}
+
+
 class Menu : public PG_MenuBar {
 
-    PG_PopupMenu file, game;
+    PG_PopupMenu* currentMenu;
+    typedef list<PG_PopupMenu*> Categories;
+    Categories categories;
 
    public:
       Menu ( PG_Widget *parent, const PG_Rect &rect=PG_Rect::null);
+      ~Menu();
+      
+   protected:
+      void setup();   
 
-
+   private:
+      void addbutton(const char* name, int id );
+      void addfield ( const char* name );
+     
 };
+
+
+Menu::~Menu()
+{
+/*
+   for ( Categories::iterator i = categories.begin(); i != categories.end(); ++i )
+      delete *i;
+*/      
+      
+}
+
+void Menu::addfield( const char* name )
+{
+   currentMenu = new PG_PopupMenu( NULL, -1, -1, "" );
+   categories.push_back ( currentMenu );
+   Add ( name, currentMenu );
+   currentMenu->sigSelectMenuItem.connect( SigC::slot( execUserActionI));
+
+}
+
+void Menu::addbutton( const char* name, int id )
+{
+   currentMenu->addMenuItem( name, id );
+}
+
+
+void Menu::setup()
+{
+   addfield ( "Glo~b~al" );
+   addbutton ( "toggle ~R~esourceviewõ1", ua_changeresourceview );
+   addbutton ( "toggle unit shadingõ2", ua_toggleunitshading );
+   currentMenu->addSeparator();
+   addbutton ( "~O~ptions", ua_gamepreferences );
+   addbutton ( "~M~ouse options", ua_mousepreferences );
+   addbutton ( "~S~ound options", ua_soundDialog );
+   currentMenu->addSeparator();
+   addbutton ( "E~x~itõctrl-x", ua_exitgame );
+
+
+   addfield ("~G~ame");
+   addbutton ( "New ~C~ampaign", ua_newcampaign);
+   addbutton ( "~N~ew single Levelõctrl-n", ua_startnewsinglelevel );
+   currentMenu->addSeparator();
+   addbutton ( "~L~oad gameõctrl-l", ua_loadgame );
+   addbutton ( "~S~ave gameõctrl-s", ua_savegame );
+   currentMenu->addSeparator();
+   addbutton ( "Continue network gameõF3", ua_continuenetworkgame);
+   addbutton ( "setup Net~w~ork", ua_setupnetwork );
+   addbutton ( "Change Passw~o~rd", ua_changepassword );
+   addbutton ( "supervise network game", ua_networksupervisor );
+   currentMenu->addSeparator();
+   addbutton ( "~P~layers + Alliances", ua_setupalliances);
+   addbutton ( "transfer ~U~nit control", ua_giveunitaway );
+   addbutton ( "~r~ename unit/building", ua_renameunit );
+   addbutton ( "~T~ransfer resources", ua_settribute);
+   addbutton ( "~C~ancel Research", ua_cancelResearch );
+
+   addfield ( "~I~nfo" );
+   addbutton ( "~V~ehicle types", ua_vehicleinfo );
+   addbutton ( "Unit ~w~eapon rangeõ3", ua_viewunitweaponrange );
+   addbutton ( "Unit ~m~ovement rangeõ4", ua_viewunitmovementrange );
+   addbutton ( "~G~ame Timeõ5", ua_GameStatus );
+   addbutton ( "unit ~S~et informationõ6", ua_UnitSetInfo );
+   addbutton ( "~T~errainõ7", ua_viewterraininfo );
+   addbutton ( "~U~nit weightõ8", ua_unitweightinfo );
+   addbutton ( "show ~P~ipeline netõ9", ua_viewPipeNet );
+   currentMenu->addSeparator();
+   addbutton ( "~R~esearch", ua_researchinfo );
+   addbutton ( "~P~lay time", ua_showPlayerSpeed );
+   // addbutton ( "~R~esearch status", ua_showResearchStatus );
+
+   // addbutton ( "vehicle ~I~mprovementõF7", ua_dispvehicleimprovement);
+   // addbutton ( "show game ~P~arameters", ua_GameParameterInfo );
+
+
+   addfield ( "~S~tatistics" );
+   addbutton ( "~U~nits", ua_unitstatistics );
+   addbutton ( "~B~uildings", ua_buildingstatistics );
+//   addbutton ( "~R~esources ", ua_statisticdialog );
+   // addbutton ( "seperator");
+   // addbutton ( "~H~istory");
+
+   addfield ( "~M~essage");
+   addbutton ( "~n~ew message", ua_newmessage );
+   addbutton ( "view ~q~ueued messages", ua_viewqueuedmessages );
+   addbutton ( "view ~s~end messages", ua_viewsentmessages );
+   addbutton ( "view ~r~eceived messages", ua_viewreceivedmessages);
+   currentMenu->addSeparator();
+   addbutton ( "view ~j~ournal", ua_viewjournal );
+   addbutton ( "~a~ppend to journal", ua_editjournal );
+
+   addfield ( "~T~ools" );
+   addbutton ( "save ~M~ap as PCXõ9", ua_writemaptopcx );
+   addbutton ( "save ~S~creen as PCX", ua_writescreentopcx );
+   addbutton ( "benchmark without view calc", ua_benchgamewov );
+   addbutton ( "benchmark with view calc", ua_benchgamewv);
+   addbutton ( "compiler benchmark (AI)", ua_aibench );
+   // addbutton ( "test memory integrity", ua_heapcheck );
+   currentMenu->addSeparator();
+   addbutton ( "select graphic set", ua_selectgraphicset );
+   addbutton ( "reload dialog theme", ua_reloadDlgTheme );
+
+   addfield ( "~H~elp" );
+   addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
+   addbutton ( "HowTo ~C~ontinue email games", ua_howtocontinuepbem );
+   currentMenu->addSeparator();
+   addbutton ( "~K~eys", ua_help );
+
+   addbutton ( "~A~bout", ua_viewaboutmessage );
+}
 
 
 Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
     : PG_MenuBar( parent, rect, "MenuBar"),
-      file(NULL,0,0,""),
-      game(NULL,0,0,"")
+      currentMenu(NULL)
 {
-   file.addMenuItem("Exit",1);
-
-   Add("File", &file);
-   Add("Game", &game);
+   setup();
+   
 }    
 
 
@@ -1788,7 +1802,6 @@ void  mainloop2()
 void  mainloop ( void )
 {
    tkey ch;
-   abortgame = 0;
 
    do {
       viewunreadmessages();
@@ -1921,8 +1934,6 @@ void  mainloop ( void )
       /*        Pulldown Men?                                                                       . */
       /************************************************************************************************/
 
-      checkpulldown( ch );
-
       while ( actmap->player[ actmap->actplayer ].queuedEvents )
          checkevents( &defaultMapDisplay );
 
@@ -1932,7 +1943,7 @@ void  mainloop ( void )
 
       releasetimeslice();
 
-   }  while ( !abortgame );
+   }  while ( true );
 
 }
 
@@ -2102,7 +2113,7 @@ void runmainmenu ( void )
       }
 
       releasetimeslice();
-   } while ( !actmap && !abortgame ); /* enddo */
+   } while ( !actmap  ); /* enddo */
 
 }
 
@@ -2163,9 +2174,6 @@ int gamethread ( void* data )
    onlinehelp = new tsgonlinemousehelp;
    onlinehelpwind = new tsgonlinemousehelpwind;
 
-   pd.init();
-
-   abortgame = 0;
    gameStartupComplete = true;
 
 
@@ -2229,7 +2237,7 @@ int gamethread ( void* data )
            }
          }
       }
-   } while ( abortgame == 0);
+   } while ( false );
    return 0;
 }
 

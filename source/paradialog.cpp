@@ -99,9 +99,15 @@ void ASC_PG_App :: reloadTheme()
 }
 
 
+void ASC_PG_App :: enableLegacyEventHandling( bool use )
+{
+   setEventRouting ( !use, use );
+}
+
+
 int ASC_PG_App::Run ( )
 {
-   setEventRouting ( true, false );
+   enableLegacyEventHandling ( false );
    
    while ( !quitModalLoopValue ) {
       SDL_Event event;
@@ -110,7 +116,7 @@ int ASC_PG_App::Run ( )
       else
          SDL_Delay ( 2 );
    }
-   setEventRouting ( false, true );
+   enableLegacyEventHandling ( true );
    return quitModalLoopValue;
 }
 
