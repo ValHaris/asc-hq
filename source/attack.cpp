@@ -1,6 +1,9 @@
-//     $Id: attack.cpp,v 1.29 2000-08-12 12:52:41 mbickel Exp $
+//     $Id: attack.cpp,v 1.30 2000-08-12 15:03:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/08/12 12:52:41  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.28  2000/08/12 09:17:14  gulliver
 //     *** empty log message ***
 //
@@ -675,7 +678,7 @@ void tunitattacksunit :: setresult ( void )
    _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
-   if ( _attackingunit->reactionfire.status == tvehicle::ReactionFire::ready ) 
+   if ( _attackingunit->reactionfire.status >= tvehicle::ReactionFire::ready )
       _attackingunit->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  dv.color );
 
    _attackingunit->attacked = true; 

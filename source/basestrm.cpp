@@ -1,6 +1,9 @@
-//     $Id: basestrm.cpp,v 1.34 2000-08-12 09:17:15 gulliver Exp $
+//     $Id: basestrm.cpp,v 1.35 2000-08-12 15:03:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2000/08/12 09:17:15  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.33  2000/08/03 19:45:13  mbickel
 //      Fixed some bugs in DOS code
 //      Removed submarine.ascent != 0 hack
@@ -190,7 +193,6 @@
  #include "ndir.h"
  
 #else
-// #include sdlheader
 
  #ifdef HAVE_SYS_DIRENT_H
   #include <sys/dirent.h>
@@ -212,6 +214,7 @@
    #include <ndir.h>
   #endif
  #endif
+ #define direct dirent
 #endif
 
 

@@ -25,7 +25,8 @@
 /* This is a JPEG image file loading framework */
 
 #include <stdio.h>
-#include <SDL.h>
+#include "../global.h"
+#include sdlheader
 
 #include <jpeglib.h>
 
@@ -197,7 +198,7 @@ SDL_Surface *IMG_LoadJPG_RW_D(SDL_RWops *src, int depth)
 			cinfo.quantize_colors = TRUE;
 			break;
 		default:
-			IMG_SetError("Invalid depth");
+			//IMG_SetError("Invalid depth");
 			goto done;
 	}
 		
@@ -222,7 +223,7 @@ SDL_Surface *IMG_LoadJPG_RW_D(SDL_RWops *src, int depth)
 	}
 						 
 	if ( surface == NULL ) {
-		IMG_SetError("Out of memory");
+		// IMG_SetError("Out of memory");
 		goto done;
 	}
 

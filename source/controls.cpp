@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.64 2000-08-12 12:52:42 mbickel Exp $
+//     $Id: controls.cpp,v 1.65 2000-08-12 15:03:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.64  2000/08/12 12:52:42  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.63  2000/08/12 09:17:19  gulliver
 //     *** empty log message ***
 //
@@ -2478,7 +2481,7 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle, IntFieldList* field
          pvehicle eht = getfield ( x, y )->vehicle;
          if ( eht ) 
             if ( eht->color != vehicle->color )
-               if ( eht->reactionfire.status == tvehicle::ReactionFire::ready )
+               if ( eht->reactionfire.status >= tvehicle::ReactionFire::ready )
                   if ( eht->reactionfire.enemiesAttackable & ( 1 << ( vehicle->color / 8 )))
                      if ( getdiplomaticstatus ( eht->color ) == cawar )
                         if ( attackpossible2u ( eht, vehicle ) ) 
@@ -7668,6 +7671,12 @@ void trunreplay :: firstinit ( void )
     gui.starticonload();
     status = 0;
 }
+
+void cmousecontrol :: reset ( void )
+{
+   mousestat = 0;
+}
+
 
 void cmousecontrol :: chkmouse ( void )
 {

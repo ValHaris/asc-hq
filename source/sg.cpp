@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.78 2000-08-12 12:52:50 mbickel Exp $
+//     $Id: sg.cpp,v 1.79 2000-08-12 15:03:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.78  2000/08/12 12:52:50  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.77  2000/08/12 09:17:32  gulliver
 //     *** empty log message ***
 //
@@ -479,7 +482,7 @@ pprogressbar actprogressbar = NULL;
 pchar mainmenuitems[6] = { "new map", "new campaign", "load game", "continue network game", "network supervisor", "exit" };
 
 
-//cmousecontrol* mousecontrol = NULL;
+cmousecontrol* mousecontrol = NULL;
 
 
 
@@ -2521,8 +2524,8 @@ void mainloopgeneralmousecheck ( void )
    if ( lastdisplayedmessageticker + messagedisplaytime < ticker ) 
       displaymessage2("");
 
-  // if ( mousecontrol )
-  //    mousecontrol->chkmouse();
+   if ( mousecontrol )
+      mousecontrol->chkmouse();
 
    // checkfieldsformouse();
 
@@ -2934,7 +2937,7 @@ void loaddata( int resolx, int resoly,
       logtofile ( tmpcbuf );
    }
 #endif     
-  // mousecontrol = new cmousecontrol;
+   mousecontrol = new cmousecontrol;
 
    if ( actprogressbar ) {
       actprogressbar->end();

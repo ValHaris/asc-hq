@@ -37,10 +37,12 @@
   #define HAVE_STRICMP 
   #define HAVE_KBHIT
   #define HAVE_ITOA
+  #define StaticClassVariable static
  #else
   #ifndef _NOASM_
    #define _NOASM_
   #endif
+  #define StaticClassVariable
  #endif
 
 
@@ -73,5 +75,4 @@
   #endif
  #endif
 
- #define StaticClassVariable static
 #endif

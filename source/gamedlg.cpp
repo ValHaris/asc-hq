@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.39 2000-08-12 12:52:47 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.40 2000-08-12 15:03:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2000/08/12 12:52:47  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.38  2000/08/12 09:17:26  gulliver
 //     *** empty log message ***
 //
@@ -2391,10 +2394,10 @@ class  tparagraph {
           pparagraph prev;
       };
 
-static int tparagraph :: winy1;
-static int tparagraph :: winy2;
-static int tparagraph :: winx1;
-static int tparagraph :: maxlinenum;
+StaticClassVariable int tparagraph :: winy1;
+StaticClassVariable int tparagraph :: winy2;
+StaticClassVariable int tparagraph :: winx1;
+StaticClassVariable int tparagraph :: maxlinenum;
 
 tparagraph :: tparagraph ( void )
 {

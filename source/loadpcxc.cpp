@@ -1,6 +1,12 @@
-//     $Id: loadpcxc.cpp,v 1.5 2000-08-03 19:21:26 mbickel Exp $
+//     $Id: loadpcxc.cpp,v 1.6 2000-08-12 15:03:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/08/03 19:21:26  mbickel
+//      Fixed: units had invalid height when produced in some buildings
+//      Fixed: units could not enter building if unitheightreq==0
+//      Started adding SDL_image support
+//      Upgraded to SDL1.1.3 (for SDL_image)
+//
 //     Revision 1.4  2000/05/23 21:09:26  mbickel
 //      Removed boolean data type
 //
@@ -61,21 +67,21 @@
 #pragma pack(1)
 
 typedef struct tpcxheader{
-           byte     manufacturer;
-           byte     version     ;
-           byte     encoding    ;
-           byte     bitsperpixel;
+           char     manufacturer;
+           char     version     ;
+           char     encoding    ;
+           char     bitsperpixel;
            word     xmin,ymin   ;
            word     xmax,ymax   ;
            word     hdpi,vdpi   ;
-           byte     colormap[48];
-           byte     reserved    ;
-           byte     nplanes     ;
+           char     colormap[48];
+           char     reserved    ;
+           char     nplanes     ;
            word     bytesperline;
            word     paletteinfo ;
            word     hscreensize ;
            word     vscreensize ;
-           byte     dummy[50]   ;
+           char     dummy[50]   ;
            int      size;            // patch to be able to read pcx files without seeking 
        }tpcxheader;
 

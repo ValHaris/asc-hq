@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.25 2000-08-09 13:18:11 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.26 2000-08-12 15:03:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/08/09 13:18:11  mbickel
+//      Fixed: invalid movement cost for airplanes flying with wind
+//      Fixed: building mineral resource info: wrong lines for availability
+//
 //     Revision 1.24  2000/08/08 09:48:35  mbickel
 //
 //      speed up of dialog boxes in linux
@@ -550,7 +554,7 @@ void   VehicleMovement :: FieldReachableRek :: move(int          x,
              b = 2; 
 
        const trichtungen*  direc2 = &directions[b][a]; 
-       for (int i = 0; i <= 4; i++) { 
+       for (int i = 0; i < 6; i++) {
           move( x, y, (*direc2)[i], streck, fuel );
           strecke.tiefe--;
           if ( zielerreicht == 2 ) 

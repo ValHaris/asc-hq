@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.16 2000-08-12 09:17:41 gulliver Exp $
+//     $Id: events.cpp,v 1.17 2000-08-12 15:03:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/08/12 09:17:41  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.15  2000/06/09 10:51:01  mbickel
 //      Repaired keyboard control of pulldown menu
 //      Fixed compile errors at fieldlist with gcc
@@ -138,7 +141,7 @@ int mouse_in_off_area ( void )
 void mousevisible( int an) {
 }
 
-pascal_byte getmousestatus ()
+int getmousestatus ()
 {
    if ( eventthreadinitialized )
       return 2;

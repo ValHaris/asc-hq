@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.46 2000-08-12 12:52:43 mbickel Exp $
+//     $Id: dialog.cpp,v 1.47 2000-08-12 15:03:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2000/08/12 12:52:43  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.45  2000/08/12 09:17:22  gulliver
 //     *** empty log message ***
 //
@@ -6204,6 +6207,10 @@ void viewUnitSetinfo ( void )
 
          pvehicletype typ = getactfield()->vehicle->typ;
 
+         s += "\nreactionfire.Status: ";
+         s += strrr( getactfield()->vehicle->reactionfire.status );
+         s += "\nreactionfire.enemiesattackable: ";
+         s += strrr ( getactfield()->vehicle->reactionfire.enemiesAttackable );
 
          s += "Unit name: " ;
          if ( typ->name && typ->name[0] )
