@@ -1074,8 +1074,8 @@ Resources Vehicletype :: calcProductionsCost()
 // Part III typecost
 
 		if ( movemalustyp == MoveMalusType::trooper) {
-			typecoste += armor;
-			typecostm += armor;
+			typecoste += armor*2;
+			typecostm += armor*2;
 		} else
 		if ( movemalustyp == MoveMalusType::light_tracked_vehicle || movemalustyp == MoveMalusType::medium_tracked_vehicle || movemalustyp == MoveMalusType::heavy_tracked_vehicle || movemalustyp == MoveMalusType::light_wheeled_vehicle || movemalustyp == MoveMalusType::medium_wheeled_vehicle || movemalustyp == MoveMalusType::heavy_wheeled_vehicle || movemalustyp == MoveMalusType::rail_vehicle || movemalustyp == MoveMalusType::structure) {
 			typecoste += armor*8;
@@ -1125,7 +1125,7 @@ Resources Vehicletype :: calcProductionsCost()
 			// Zuschlag für Flugzeugträger / Start- und Landeeinrichtungen
 			for ( int T=0; T < entranceSystems.size(); ++T ) {
 				if ( entranceSystems[T].container_height == chfahrend && entranceSystems[T].height_abs == chtieffliegend && maxLoadableUnits > 2 ) {
-					typecoste += maxLoadableUnits*80;
+					typecoste += maxLoadableUnits*800;
 					typecostm += maxLoadableUnits*800;
 				}
 			}
@@ -1311,7 +1311,8 @@ Resources Vehicletype :: calcProductionsCost()
 		if ( functions & cfmovewithRF ) {
          int rfweapcount = 0;
          for ( int i = 0; i < weapons.count; ++i )
-            rfweapcount += weapons.weapon[i].reactionFireShots;
+            if ( weapons.weapon[i].shootable() )
+               rfweapcount += weapons.weapon[i].reactionFireShots;
 
 			specialcoste += rfweapcount * 100;
 			specialcostm += rfweapcount * 50;
@@ -1357,4 +1358,5 @@ Resources Vehicletype :: calcProductionsCost()
 
 	return res;
 }
+
 

@@ -526,6 +526,9 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    } else
       respond = 0;
 
+   if ( attackedunit->typ->functions & cfkamikaze )
+      respond = 0;
+
    if ( respond ) {
       weap = attackedunit->getWeapon( dv.weapnum );
 
@@ -561,7 +564,6 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
 
    dv.color      = attackedunit->getOwner();
    dv.initiative = attackedunit->typ->initiative;
-   dv.kamikaze = 0;
 }
 
 
