@@ -70,6 +70,9 @@
     //! did the unit already attack this turn
     bool         attacked;
 
+    //! the the unit and all cargo to #attacked = true
+    void setAttacked();
+
     //! the current level of height ( BITMAPPED ! )
     char         height;
 

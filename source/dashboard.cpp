@@ -1242,11 +1242,15 @@ void         tdashboard::checkformouse ( int func )
    }
 
    if ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )   &&   mouseparams.y >= 59    &&   mouseparams.y <= 67   && (mouseparams.taste & 1) ) {
+      /*
        pfield fld = getactfield();
        if ( fieldvisiblenow ( fld ) ) {
           if ( fld->vehicle )
              displaymessage2("unit has %d fuel", fld->vehicle->tank.fuel );
        }
+       */
+       if ( vehicle )
+          displaymessage2("unit has %d fuel", vehicle->tank.fuel );
        while ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )   &&   mouseparams.y >= 59    &&   mouseparams.y <= 67   && (mouseparams.taste & 1) )
           releasetimeslice();
    }

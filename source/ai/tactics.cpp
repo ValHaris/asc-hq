@@ -723,12 +723,12 @@ AI::AiResult AI::tactics( void )
                            pvehicle a = finalPositions[finalOrder[i]];
                            VehicleAttack va ( mapDisplay, NULL );
                            va.execute ( finalPositions[finalOrder[i]], -1, -1, 0, 0, -1 );
-                           if ( va.getStatus() != 2 )
+                           if ( va.getStatus() != 2 && strictChecks )
                               displaymessage("inconsistency #1 in AI::tactics attack", 1 );
 
                            va.execute ( NULL, enemy->xpos, enemy->ypos, 2, 0, -1 );
-                           if ( va.getStatus() != 1000 )
-                              displaymessage("inconsistency #1 in AI::tactics attack", 1 );
+                           if ( va.getStatus() != 1000 && strictChecks )
+                             displaymessage("inconsistency #1 in AI::tactics attack", 1 );
 
                            TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), a ) ;
                            tactVehicles.erase ( att );

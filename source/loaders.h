@@ -5,9 +5,13 @@
 
 */
 
-//     $Id: loaders.h,v 1.23 2003-04-09 17:39:10 mbickel Exp $
+//     $Id: loaders.h,v 1.24 2003-04-23 18:31:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2003/04/09 17:39:10  mbickel
+//      Fixed: AI not moving units that can not be refuelled
+//      Fixed: AI parameters not saved in .ASC files
+//
 //     Revision 1.22  2002/12/08 21:53:39  mbickel
 //      Fixed: mining station produces twice the resources
 //      Updated file version numbers
@@ -258,7 +262,6 @@ class tnetworkloaders : public tgameloaders {
         public:
            int             loadnwgame ( pnstream strm );
            int             savenwgame ( pnstream strm );
-           void            checkcrcs ( void );
 };
 
 class tsavegameloaders : public tgameloaders {
@@ -287,48 +290,6 @@ extern bool validatesavfile ( const char* filename );
 
 //! checks, whether filename is a valid email game
 extern bool validateemlfile ( const char* filename );
-
-
-/*
-class tspeedcrccheck {
-              char* strng;
-              int strnglen;
-
-
-              pobjectcontainercrcs list;
-
-              dynamic_array<int> bdt;              // 0: noch nicht ÅberprÅft     1 : in ordnung;   2 : UNGöLTIG;   4 : in Liste nicht vorhanden
-              dynamic_array<int> fzt; 
-              dynamic_array<int> bld; 
-              dynamic_array<int> tec; 
-              dynamic_array<int> obj;
-
-              void appendstring ( char* s, char* d, int id, int mode  );  // mode  0 : note included     1 : error crc check failed    2 : error missing crc      3 : error wrong crc
-              int status;
-
-              void additemtolist ( pcrcblock lst, int id, int crc );
-
-              int  checkunit     ( pvehicletype f,     int add = 1 );
-              int  checkbuilding ( pbuildingtype b, int add = 1 );
-              int  checktech     ( ptechnology t,      int add = 1 );
-              int  checkobj      ( pobjecttype o,   int add = 1 ); 
-              int  checkterrain  ( pterraintype b,    int add = 1 );
-
-           public:
-              // tspeedcrccheck ( pobjectcontainercrcs crclist, tcachedtypes* cache );
-              tspeedcrccheck ( pobjectcontainercrcs crclist );
-
-
-              int  checkunit2     ( pvehicletype f,      int add = 1  );
-              int  checkbuilding2 ( pbuildingtype b,  int add = 1  );
-              int  checktech2     ( ptechnology t,       int add = 1  );
-              int  checkobj2      ( pobjecttype o,    int add = 1  ); 
-              int  checkterrain2  ( pterraintype b,     int add = 1  );
-
-              int getstatus       ( void );
-          };
-*/
-
 
 
 #endif

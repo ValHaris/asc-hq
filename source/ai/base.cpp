@@ -20,6 +20,7 @@
 
 AI :: AI ( pmap _map, int _player ) : activemap ( _map ) , sections ( this )
 {
+   strictChecks = false;
    benchMark = false;
 
    player = _player;

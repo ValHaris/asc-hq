@@ -1,6 +1,11 @@
-//     $Id: edglobal.h,v 1.14 2003-03-20 10:08:29 mbickel Exp $
+//     $Id: edglobal.h,v 1.15 2003-04-23 18:31:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2003/03/20 10:08:29  mbickel
+//      KI speed up
+//      mapeditor: added clipboard
+//      Fixed movement issues
+//
 //     Revision 1.13  2002/11/01 20:44:53  mbickel
 //      Added function to specify which units can be build by other units
 //
@@ -91,7 +96,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 82;
+const int execactionscount = 83;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -177,6 +182,7 @@ enum tuseractions {
      act_copyToClipboard,
      act_cutToClipboard,
      act_saveClipboard,
-     act_readClipBoard };
+     act_readClipBoard,
+     act_setTurnNumber };
 
 extern void         execaction(int code);

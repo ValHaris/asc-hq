@@ -3581,32 +3581,33 @@ void         tsetalliances::init( int supervis )
       }
    }
 
-
-   for (i = 0; i < 8; i++) 
-      for ( char j = 0; j < 8; j++) 
+   for (i = 0; i < 8; i++)
+      for ( char j = 0; j < 8; j++)
          alliancedata[i][j] = actmap->alliances[i][j] ;
 
    if ( oninit )
-      if ( actmap->shareview ) 
+      if ( actmap->shareview )
          for ( i = 0; i < 8; i++ )
-            for (int j = 0; j < 8 ; j++) 
+            for (int j = 0; j < 8 ; j++)
                if ( sv.mode[i][j] ) {
                   alliancedata[i][j] = capeace_with_shareview;
+                  #ifndef pbpeditor
                   alliancedata[j][i] = capeace_with_shareview;
+                  #endif
                }
 
 
    playernum = 0;
-   playerexist = 0; 
+   playerexist = 0;
 
-   xp = 0; 
-   yp = 0; 
-   xa = 0; 
-   ya = 0; 
-   bx = -1; 
+   xp = 0;
+   yp = 0;
+   xa = 0;
+   ya = 0;
+   bx = -1;
 
    buildgraphics ( );
-} 
+}
 
 
 
@@ -3824,11 +3825,15 @@ void         tsetalliances::setparams ( void )
         if ( oninit ) {
            if ( actmap->alliances[i][j] == capeace_with_shareview ) {
               actmap->alliances[i][j] = capeace;
-              sv.mode[j][i] = true;
               sv.mode[i][j] = true;
+              #ifndef pbpeditor
+              sv.mode[j][i] = true;
+              #endif
            } else {
-              sv.mode[j][i] = false;
               sv.mode[i][j] = false;
+              #ifndef pbpeditor
+              sv.mode[j][i] = false;
+              #endif
            }
         }
 
@@ -3940,11 +3945,13 @@ void         tsetalliances::click(pascal_byte         bxx,
                         alliancedata[playerpos[x]][playerpos[y]] = capeace;
                      else
                         alliancedata[playerpos[x]][playerpos[y]] = cawar;
-   
+
+                  #ifndef pbpeditor
                   alliancedata[playerpos[y]][playerpos[x]] = alliancedata[playerpos[x]][playerpos[y]];
-   
-                  putimage(x1 + ali_x1 + x * 30,y1 + ali_y1 + y * 22,icons.diplomaticstatus[alliancedata[playerpos[x]][playerpos[y]]]); 
-                  putimage(x1 + ali_x1 + y * 30,y1 + ali_y1 + x * 22,icons.diplomaticstatus[alliancedata[playerpos[x]][playerpos[y]]]); 
+                  putimage(x1 + ali_x1 + y * 30,y1 + ali_y1 + x * 22,icons.diplomaticstatus[alliancedata[playerpos[x]][playerpos[y]]]);
+                  #endif
+
+                  putimage(x1 + ali_x1 + x * 30,y1 + ali_y1 + y * 22,icons.diplomaticstatus[alliancedata[playerpos[x]][playerpos[y]]]);
                }
             } /* endif */
          } else {

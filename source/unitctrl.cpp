@@ -141,12 +141,12 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
 
       bool container2container = pos->getNumericalHeight()==-1 && next->getNumericalHeight() == -1;
-      pair<int,int> mm = calcMoveMalus( pos->getRealPos(), next->getRealPos(), vehicle, wind, &inhibitAttack, container2container );
+      pair<int,int> mm = calcMoveMalus( *pos, next->getRealPos(), vehicle, wind, &inhibitAttack, container2container );
       movedist += mm.first;
       fueldist += mm.second;
 
       if ( pos->hasAttacked )
-         vehicle->attacked = true;
+         vehicle->setAttacked();
 
 
       // vehicle->decreaseMovement( mm.first );
@@ -182,7 +182,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             vehicle->xpos = to.x;
             vehicle->ypos = to.y;
             if ( inhibitAttack )
-               vehicle->attacked = true;
+               vehicle->setAttacked();
             vehicle->addview();
          }
 
@@ -852,7 +852,7 @@ int      VehicleAttack :: tsearchattackablevehicles::run( void )
    if (fieldvisiblenow(getfield(angreifer->xpos,angreifer->ypos)) == false)
       return -1;
 
-   if (angreifer->attacked) 
+   if (angreifer->attacked)
       return -202;
    
 

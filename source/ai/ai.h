@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: ai.h,v 1.17 2003-03-31 20:29:16 mbickel Exp $
+//     $Id: ai.h,v 1.18 2003-04-23 18:31:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2003/03/31 20:29:16  mbickel
+//      Fixed AI bugs
+//      Fixed clipboard in mapeditor
+//
 //     Revision 1.16  2003/03/30 13:19:47  mbickel
 //      Fixed: ai warnings
 //      Fixed: wrong hotkey for seeting unit properties in containers
@@ -115,6 +119,7 @@
 
     class AI : public BaseAI {
            bool benchMark;
+           bool strictChecks;
 
            bool _isRunning;
            VisibilityStates _vision;

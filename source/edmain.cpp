@@ -2,9 +2,14 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.63 2003-03-20 10:08:29 mbickel Exp $
+//     $Id: edmain.cpp,v 1.64 2003-04-23 18:31:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2003/03/20 10:08:29  mbickel
+//      KI speed up
+//      mapeditor: added clipboard
+//      Fixed movement issues
+//
 //     Revision 1.62  2003/01/12 19:37:18  mbickel
 //      Rewrote resource production
 //
@@ -848,7 +853,10 @@ int mapeditorMainThread ( void* _mapname )
                fatalError ( "%s is not a legal savegame. ", mapname );
             }
          } else
-            loadmap ( mapname );
+            if( patimat ( mapextension, mapname )) 
+               loadmap ( mapname );
+            else
+               fatalError ( "%s is not an accepted file format", mapname );
       } else
          buildemptymap();
 
@@ -986,7 +994,11 @@ int main(int argc, char *argv[] )
       return 1;
    atexit ( closesvgamode );
 
-   setWindowCaption ( "Advanced Strategic Command : map editor ");
+   #ifdef pbpeditor
+   setWindowCaption ( "Advanced Strategic Command : PBP Editor ");
+   #else
+   setWindowCaption ( "Advanced Strategic Command : Map Editor ");
+   #endif
 
    schriften.smallarial = load_font("smalaril.fnt");
    schriften.large = load_font("usablack.fnt");

@@ -149,7 +149,7 @@ void tenterpassword :: init ( char* _title  )
          addbutton ( "~C~ancel", xsize / 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1, 6, true );
       } else {
          addbutton ( "~O~k", 10, ysize - 35, xsize / 2 - 5, ysize - 10, 0, 1, 1, reask );
-         addbutton ( "e~x~it", xsize / 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1,8, true );
+         addbutton ( "~a~bort", xsize / 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1,8, true );
       }
    }
 

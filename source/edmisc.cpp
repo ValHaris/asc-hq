@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.100 2003-03-31 20:29:15 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.101 2003-04-23 18:31:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.100  2003/03/31 20:29:15  mbickel
+//      Fixed AI bugs
+//      Fixed clipboard in mapeditor
+//
 //     Revision 1.99  2003/03/30 13:19:46  mbickel
 //      Fixed: ai warnings
 //      Fixed: wrong hotkey for seeting unit properties in containers
@@ -1128,6 +1132,7 @@ void         pdsetup(void)
    pd.addbutton ( "Resi~z~e mapõR",             act_resizemap );
    pd.addbutton ( "set global ~w~eatherõctrl-W", act_setactweatherglobal );
    pd.addbutton ( "~C~reate ressourcesõctrl+F", act_createresources );
+   pd.addbutton ( "~S~et turn number",        act_setTurnNumber );
 
   pd.addfield ("~T~ools");
    pd.addbutton ( "~V~iew mapõV",            act_viewmap );
@@ -1671,6 +1676,7 @@ void         repaintdisplay(void)
    mousevisible(true);
 }
 
+#ifndef pbpeditor
 
 void         k_savemap(char saveas)
 {
@@ -1726,6 +1732,12 @@ void         k_loadmap(void)
    }
    mousevisible(true);
 }
+
+#else
+
+#include "pbpeditor.cpp"
+
+#endif
 
 void         placebuilding(int               colorr,
                           pbuildingtype   buildingtyp,
@@ -2348,6 +2360,7 @@ void         changemapvalues(void)
                int rs,mrs;
                Resources plus,mplus, biplus,storage;
                int col;
+               int damage;
                char tvisible;
                char name[260];
                int ammo[waffenanzahl];
@@ -2377,7 +2390,7 @@ void         BuildingValues::init(void)
    x1 = 0;
    xsize = 640;
    y1 = 10;
-   ysize = 440;
+   ysize = 480;
    // int w = (xsize - 60) / 2;
    action = 0;
 
@@ -2391,6 +2404,7 @@ void         BuildingValues::init(void)
    tvisible = gbde.visible;
    biplus = gbde.bi_resourceplus;
    col = gbde.color / 8;
+   damage = gbde.damage;
 
    strcpy( name, gbde.name.c_str() );
 
@@ -2459,6 +2473,9 @@ void         BuildingValues::init(void)
 
    addbutton("~C~olor",230,370,430,390,2,1,104,true);
    addeingabe(104,&col,0,8);
+
+   addbutton("~D~amage",230,410,430,430,2,1,105,true);
+   addeingabe(105,&damage,0,99);
 
 
    addbutton("BI energy plus",15,330,215,350,2,1,101,1);
@@ -2562,6 +2579,7 @@ void         BuildingValues::buttonpressed(int         id)
            gbde.visible = tvisible;
            gbde.bi_resourceplus = biplus;
            gbde.name = name;
+           gbde.damage = damage;
            for ( int i = 0; i< waffenanzahl; i++ )
                gbde.ammo[i] = ammo[i];
 

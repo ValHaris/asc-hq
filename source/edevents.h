@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: edevents.h,v 1.7 2001-08-09 10:28:22 mbickel Exp $
+//     $Id: edevents.h,v 1.8 2003-04-23 18:31:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2001/08/09 10:28:22  mbickel
+//      Fixed AI problems
+//      Mapeditor can edit a units AI parameter
+//
 //     Revision 1.6  2001/01/28 14:04:13  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -60,7 +64,7 @@
 #define clear_and_or 124
 
 extern void         event(void);
-extern void setmapparameters( void );
+extern void         setmapparameters( void );
 
 extern void         getxy(word *x,word *y);
 extern void         getxy( int *x, int *y);

@@ -51,10 +51,8 @@
 #include "textfileparser.h"
 #include "itemrepository.h"
 
-#if defined(sgmain) || defined(pbpeditor)
-# include "ai/ai.h"
-#endif
 #ifdef sgmain
+# include "ai/ai.h"
 # include "missions.h"
 #endif
 
@@ -158,7 +156,7 @@ void         seteventtriggers( pmap actmap )
                      v->connection |= cconnection_areaentered_specificunit;
                }
 	            displayLogMessage ( 10, "7 ");
-              #ifndef karteneditor
+              #ifdef sgmain
                if ( event->trigger[j] == ceventt_any_unit_enters_polygon ) {
                   displayLogMessage ( 10, "7-1 ");
                   mark_polygon_fields_with_connection ( actmap, event->trigger_data[j]->unitpolygon->data, cconnection_areaentered_anyunit );
@@ -808,30 +806,13 @@ void tgameloaders :: writeAI ( )
          a += 1 << i;
 
    stream->writeInt ( a );
-   #if 0
-
-   /* the PBP Editor needs to read the AI information without interpreting it.
-      So we need to store the size prior to the data. But we don't know how big the
-      data will be.
-      So we write the AI data not the stream itself, but to a memory buffer, then
-      store the buffers size, and then write the buffer to the stream
-    */
-
-   tmemorystreambuf membuf;
-   tmemorystream s ( &membuf, writing );
-   for ( int i = 0; i < 8; i++ )
-      if ( spfld->player[i].ai )
-         spfld->player[i].ai->write( s );
-
-   stream.writeInt( membuf.used );
-   membuf.writeToStream( stream );
-   #endif
 
    for ( int i = 0; i < 8; i++ )
       if ( spfld->player[i].ai )
          spfld->player[i].ai->write( *stream );
-  #endif 
-
+  #else
+   stream->writeInt(0);
+  #endif
 }
 
 void tgameloaders :: readAI ( )
@@ -846,6 +827,9 @@ void tgameloaders :: readAI ( )
       } else {
          spfld->player[i].ai = NULL;
       }
+ #else
+   for ( int i = 0; i< 9; i++ )
+      spfld->player[i].ai = NULL;
  #endif
 }
 
@@ -1606,41 +1590,6 @@ tmap*          tsavegameloaders::loadgame( pnstream strm )
 
 
 
-/*
-void         tnetworkloaders::checkcrcs ( void )
-{
-   if ( actmap )
-      if ( actmap->objectcrc ) {
-         tspeedcrccheck* ck = actmap->objectcrc->speedcrccheck;
-   
-         int i;
-         for ( i = 0; i < 9; i++ ) {
-            pbuilding bld = actmap->player[i].firstbuilding;
-            while ( bld ) {
-               ck->checkbuilding2 ( bld->typ );
-               for (int j = 0; j< 32 ; j++) {
-                   ck->checkunit2 ( bld->production[j] );
-                   ck->checkunit2 ( bld->loading[j]->typ );
-               }
-   
-               bld = bld->next;
-            }
-         }
-   
-         for ( i = 0; i < 8; i++ ) {
-            pvehicle eht = actmap->player[i].firstvehicle;
-            while ( eht ) {
-               ck->checkunit2 ( eht->typ );
-               for (int j = 0; j< 32 ; j++) 
-                   ck->checkunit2 ( eht->loading[j]->typ );
-               
-               eht = eht->next;
-            }
-         }
-      }
-}
-*/
-
 
 int          tnetworkloaders::savenwgame( pnstream strm )
 { 
@@ -1676,6 +1625,7 @@ int          tnetworkloaders::savenwgame( pnstream strm )
    if ( spfld->replayinfo )
       spfld->replayinfo->write ( *stream );
 
+   // the AI must be the last data of the file
    writeAI();
 
    stream->writeInt ( actnetworkversion );
@@ -1742,9 +1692,11 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
    if ( version > 8 )
       readAI();
 
+   #ifdef sgmain
    stream->readdata2( version );
    if (version > actnetworkversion || version < minnetworkversion )
       throw tinvalidversion ( name, actnetworkversion, version );
+   #endif
 
    chainitems ( spfld );
 

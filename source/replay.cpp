@@ -795,7 +795,7 @@ void trunreplay :: execnextreplaymove ( void )
                                 } else {
                                    battle.calc ();
                                 }
-                                if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
+                                if ( battle.av.damage < ad2 || battle.dv.damage > dd2 )
                                    displaymessage("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", 1, battle.av.damage,ad2 ,battle.dv.damage, dd2);
                                 battle.setresult ();
                                 dashboard.x = 0xffff;

@@ -2,9 +2,14 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.52 2003-03-20 10:08:29 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.53 2003-04-23 18:31:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2003/03/20 10:08:29  mbickel
+//      KI speed up
+//      mapeditor: added clipboard
+//      Fixed movement issues
+//
 //     Revision 1.51  2003/02/02 13:04:56  mbickel
 //      Increased version of main.con
 //      Updated makefiles
@@ -356,7 +361,8 @@ mc_check mc;
         "Copy",
         "Cut",
         "Save Clipboard",
-        "Load Clipboard" };
+        "Load Clipboard",
+        "Set Turn Number" };
 
 
 // õS Infomessage
@@ -396,7 +402,7 @@ int infomessage( char* formatstring, ... )
       lastdisplayedmessageticker = 0xffffff;
    else
       lastdisplayedmessageticker = ticker;
-   
+
 
    delete ( c );
 
@@ -456,7 +462,7 @@ class  GetString : public tdialogbox {
 
 void         GetString::init(char* _title)
 { 
-   tdialogbox::init(); 
+   tdialogbox::init();
    title = _title; 
    x1 = 120; 
    xsize = 400; 
@@ -471,7 +477,7 @@ void         GetString::init(char* _title)
    addbutton("~C~ancel",120,ysize - 40,200,ysize - 20,0,1,2,true); 
    addkey(2, ct_esc );
 
-   addbutton("",20,60,xsize - 20,80,1,1,3,true); 
+   addbutton("",20,60,xsize - 20,80,1,1,3,true);
    addeingabe(3,buf,0,1000);
 
    buildgraphics(); 
@@ -481,7 +487,7 @@ void         GetString::init(char* _title)
 
 
 void         GetString::run(void)
-{ 
+{
    if ( pcgo ) {
       delete pcgo;
       pcgo = NULL;
@@ -496,7 +502,7 @@ void         GetString::run(void)
 
    do { 
       tdialogbox::run(); 
-   }  while ( !action ); 
+   }  while ( !action );
 } 
 
 
@@ -506,7 +512,7 @@ void         GetString::buttonpressed(int         id)
    switch (id) {
       
       case 1:   
-      case 2:   action = id; 
+      case 2:   action = id;
    break; 
    } 
 } 
@@ -658,11 +664,23 @@ void execaction(int code)
                                if (choice_dlg("Map not saved ! Save now ?","~y~es","~n~o") == 1) 
                                   k_savemap(false);
 
-                             k_loadmap();
- 
-                             // actmap->player[8].firstvehicle = NULL;
- 
-                             pdbaroff(); 
+                            pmap oldmap = actmap;
+                            actmap = NULL;
+                            try {
+                                k_loadmap();
+                            }
+                            catch ( ... ) {
+                                displaymessage ( "error loading file",1 );
+                            }
+                            if ( !actmap ) {
+                                actmap = oldmap;
+                                oldmap = NULL;
+                            } else {
+                               delete oldmap;
+                               oldmap = NULL;
+                            }
+                            pdbaroff();
+                            displaymap();
                           } 
        break;
     case act_changeplayers : playerchange();
@@ -1090,6 +1108,8 @@ void execaction(int code)
       break;
 
    case act_readClipBoard:  readClipboard();
+      break;
+   case act_setTurnNumber:  actmap->time.set ( getid("Turn",actmap->time.turn(),0,maxint), 0 );
       break;
 
     }

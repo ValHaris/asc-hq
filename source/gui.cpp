@@ -1293,13 +1293,13 @@ void  tnsguiicondescent::exec         ( void )
    } else
      if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_descent &&  (pendingVehicleActions.descent->getStatus() == 2 || pendingVehicleActions.descent->getStatus() == 3 )) {
         int res = pendingVehicleActions.descent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.descent->getStatus(), -1, 0 );
-        if ( res >= 0 && CGameOptions::Instance()->fastmove )
+        if ( res >= 0 && CGameOptions::Instance()->fastmove ) {
            actmap->cleartemps(7);
            displaymap();
            // if the status is 1000 at this position, the unit has been shot down by reactionfire before initiating the height change
            if ( res < 1000 )
               res = pendingVehicleActions.descent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.descent->getStatus(), -1, 0 );
-        else {
+        } else {
            actmap->cleartemps(7);
            if ( res < 1000 )
               for ( int i = 0; i < pendingVehicleActions.descent->path.size(); i++ )

@@ -1022,6 +1022,15 @@ void Vehicle :: postAttack()
 }
 
 
+void Vehicle::setAttacked()
+{
+   attacked = true;
+   for ( int i = 0; i < 32; i++ )
+      if ( loading[i] )
+         loading[i]->setAttacked();
+}
+
+
 class tsearchforminablefields: public SearchFields {
       int shareview;
     public:

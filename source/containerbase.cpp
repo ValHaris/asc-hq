@@ -249,7 +249,7 @@ int  ContainerBase :: vehicleUnloadable ( const Vehicle* vehicle ) const
 
 const ContainerBaseType::TransportationIO* ContainerBase::vehicleUnloadSystem ( const Vehicle* vehicle, int height )
 {
-  if ( vehicleFit ( vehicle ))
+  if ( baseType->vehicleFit ( vehicle->typ ))
       for ( ContainerBaseType::EntranceSystems::const_iterator i = baseType->entranceSystems.begin(); i != baseType->entranceSystems.end(); i++ )
          if ( i->mode & ContainerBaseType::TransportationIO::Out )
             if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
@@ -273,7 +273,7 @@ int  ContainerBase :: vehicleDocking ( const Vehicle* vehicle ) const
 {
    int height = 0;
 
-   if ( vehicleFit ( vehicle ))
+   if ( baseType->vehicleFit ( vehicle->typ ))
       for ( ContainerBaseType::EntranceSystems::const_iterator i = baseType->entranceSystems.begin(); i != baseType->entranceSystems.end(); i++ )
          if ( i->mode & ContainerBaseType::TransportationIO::Docking )
             if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))

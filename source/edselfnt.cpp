@@ -2,9 +2,13 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.43 2003-02-19 19:47:26 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.44 2003-04-23 18:31:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2003/02/19 19:47:26  mbickel
+//      Completely rewrote Pathfinding code
+//      Wind not different any more on different levels of height
+//
 //     Revision 1.42  2003/02/12 20:11:53  mbickel
 //      Some significant changes to the Transportation code
 //
@@ -233,7 +237,6 @@
 #include "buildingtype.h"
 
 #include "edmisc.h"
-#include "flview.h"
 #include "edselfnt.h"
 #include "edglobal.h"
 #include "mapdisplay.h"

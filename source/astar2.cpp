@@ -449,7 +449,11 @@ AStar3D :: AStar3D ( pmap actmap_, pvehicle veh_, bool markTemps_, int maxDistan
 
    if ( veh->getPosition().getNumericalHeight() >= 0 )
       for ( int i = 0; i < 8; i++ )
-          vehicleSpeedFactor[i] = float(veh->typ->movement[i]) / veh->maxMovement();
+          if ( veh->maxMovement() )
+             vehicleSpeedFactor[i] = float(veh->typ->movement[i]) / veh->maxMovement();
+          else
+             vehicleSpeedFactor[i] = 0.00001;
+
    else
       for ( int i = 0; i < 8; i++ )
           vehicleSpeedFactor[i] = float(veh->typ->movement[i]);

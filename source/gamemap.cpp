@@ -1487,12 +1487,11 @@ void  tfield :: addobject( pobjecttype obj, int dir, bool force )
 
          objects.push_back ( o );
 
-         setparams();
-
          if ( dir == -1 )
             calculateobject( getx(), gety(), true, obj, gamemap );
 
          sortobjects();
+         setparams();
      }
    } else {
       if ( dir != -1 )

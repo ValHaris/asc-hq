@@ -1,6 +1,11 @@
-//     $Id: edmisc.h,v 1.29 2003-03-26 19:16:46 mbickel Exp $
+//     $Id: edmisc.h,v 1.30 2003-04-23 18:31:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2003/03/26 19:16:46  mbickel
+//      Fixed AI bugs
+//      Fixed clipboard bugs
+//      Fixed: unable to move units out of some transport
+//
 //     Revision 1.28  2003/03/20 10:08:29  mbickel
 //      KI speed up
 //      mapeditor: added clipboard
@@ -336,7 +341,7 @@ extern void         building_cargo( pbuilding bld );
 extern void         building_production( pbuilding bld );
 extern void         freevariables(void);
 extern int          selectfield(int * cx ,int  * cy);
-extern void 	playerchange(void);
+extern void 	     playerchange(void);
 
 extern void         setpolytemps (int value, ppolygon poly1); //* setzt in diesem Polygon den Tempvalue auf value
 extern void         createpolygon (ppolygon *poly, int place, int id);
