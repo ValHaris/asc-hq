@@ -2,9 +2,16 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.50 2001-08-06 20:54:43 mbickel Exp $
+//     $Id: edmain.cpp,v 1.51 2001-09-13 17:43:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2001/08/06 20:54:43  mbickel
+//      Fixed lots of crashes related to the new text files
+//      Fixed delayed events
+//      Fixed crash in terrin change event
+//      Fixed visibility of mines
+//      Fixed crashes in event loader
+//
 //     Revision 1.49  2001/08/02 18:50:43  mbickel
 //      Corrected Error handling in Text parsers
 //      Improved version information
@@ -883,10 +890,25 @@ int main(int argc, char *argv[] )
    checkDataVersion();
    check_bi3_dir ();
 
-   modenum8 = initgraphics( cl->x(), cl->y(), 8 );
+
+   int xr = 800;
+   int yr = 600;
+   // determining the graphics resolution
+   if ( CGameOptions::Instance()->mapeditor_xresolution != 800 )
+      xr = CGameOptions::Instance()->mapeditor_xresolution;
+   if ( cl->x() != 800 )
+      xr = cl->x();
+
+   if ( CGameOptions::Instance()->mapeditor_yresolution != 600 )
+      yr = CGameOptions::Instance()->mapeditor_yresolution;
+   if ( cl->y() != 600 )
+      yr = cl->y();
+
+   modenum8 = initgraphics ( xr, yr, 8 );
+
    if ( modenum8 < 0 )
       return 1;
-   atexit ( closesvgamode ); 
+   atexit ( closesvgamode );
 
    setWindowCaption ( "Advanced Strategic Command : map editor ");
 

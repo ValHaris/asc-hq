@@ -62,6 +62,9 @@ class CGameOptions
       int mapeditForceFullscreenMode;
       int xresolution;
       int yresolution;
+      int mapeditor_xresolution;
+      int mapeditor_yresolution;
+
 
       struct Mouse
       {

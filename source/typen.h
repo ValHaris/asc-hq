@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.97 2001-08-27 21:03:55 mbickel Exp $
+//     $Id: typen.h,v 1.98 2001-09-13 17:43:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.97  2001/08/27 21:03:55  mbickel
+//      Terraintype graphics can now be mounted from any number of PNG files
+//      Several AI improvements
+//
 //     Revision 1.96  2001/08/26 20:55:04  mbickel
 //      bin2text can now load text files too
 //      LoadableItemType interface class added
@@ -219,7 +223,7 @@ const int waffenanzahl = 8;
 const int cwettertypennum = 6;
 
 //! The number of vehicle categories; Each category has its own move malus
-const int cmovemalitypenum  = 17;
+const int cmovemalitypenum  = 18;
 
 //! The movemalus type for a building. It is used for #SingleWeapon.targets_not_hittable .
 const int cmm_building = 11;
@@ -1055,7 +1059,7 @@ const int attackmovecost = 20;
 #define sub_heightincmovedecrease 12
 #define sub_heightdecmovedecrease 12
 #define helicopter_attack_after_ascent 1  // nach abheben angriff moeglich
-#define helicopter_attack_after_descent 0  // nach landen angriff moeglich
+#define helicopter_attack_after_descent 1  // nach landen angriff moeglich
 #define helicopter_landing_move_cost 16   // zus„tzlich zu den Kosten fuer das Wechseln der Hoehenstufe 
 #define weaponpackagesize 5
 

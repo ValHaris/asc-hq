@@ -942,7 +942,7 @@ void         tdashboard::paintimage(void)
 
 void         tdashboard::paintclasses ( void )
 {
-        if ( CGameOptions::Instance()->showUnitOwner ) {
+   if ( CGameOptions::Instance()->showUnitOwner ) {
       const char* owner = NULL;
       if ( vehicle )
          owner = actmap->getPlayerName(vehicle->color / 8);
@@ -962,19 +962,19 @@ void         tdashboard::paintclasses ( void )
       } else
          bar ( agmp->resolutionx - ( 640 - 499), 42, agmp->resolutionx - ( 640 - 575), 50, 171 );
    } else
-      if (vehicle)
-         if (vehicle->typ->classnum) {
+      if (vehicle) {
+         if ( !vehicle->typ->description.empty() ) {
             activefontsettings.justify = lefttext;
             activefontsettings.color = white;
             activefontsettings.background = 171;
             activefontsettings.font = schriften.guifont;
             activefontsettings.length = 75;
             activefontsettings.height = 0;
-            showtext2c( vehicle->typ->classnames[vehicle->klasse] ,agmp->resolutionx - ( 640 - 500), 42);
+            showtext2c( vehicle->typ->description ,agmp->resolutionx - ( 640 - 500 ), 42);
             activefontsettings.height = 9;
          } else
             bar ( agmp->resolutionx - ( 640 - 499), 42, agmp->resolutionx - ( 640 - 575), 50, 171 );
-      else
+      } else
          bar ( agmp->resolutionx - ( 640 - 499), 42, agmp->resolutionx - ( 640 - 575), 50, 171 );
 }
 
@@ -1000,10 +1000,12 @@ void         tdashboard::paintname ( void )
             if ( !vt->name.empty() )
                showtext2c( vt->name , agmp->resolutionx - ( 640 - 500 ), 27);
             else
+               /*
                if ( !vt->description.empty() )
                   showtext2c( vt->description ,agmp->resolutionx - ( 640 - 500 ), 27);
                else
-                  bar ( agmp->resolutionx - ( 640 - 499 ), 27, agmp->resolutionx - ( 640 - 575 ), 35, 171 );
+               */
+               bar ( agmp->resolutionx - ( 640 - 499 ), 27, agmp->resolutionx - ( 640 - 575 ), 35, 171 );
 
       } else
          showtext2c( building->getName(), agmp->resolutionx - ( 640 - 500), 27);

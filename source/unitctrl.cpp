@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.67 2001-08-24 15:50:08 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.68 2001-09-13 17:43:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.67  2001/08/24 15:50:08  mbickel
+//      AI performs better services when there are no service units
+//
 //     Revision 1.66  2001/08/15 14:02:10  mbickel
 //      Updated message texts
 //
@@ -1388,7 +1391,7 @@ int ChangeVehicleHeight :: verticalHeightChange ( void )
 
          vehicle->setMovement ( newmovement ); 
          if ( !helicopter_attack_after_descent )
-            vehicle->attacked = 0; 
+            vehicle->attacked = true; 
          vehicle->tank.fuel -= fuelcost;
 
       } else
@@ -1416,7 +1419,7 @@ int ChangeVehicleHeight :: verticalHeightChange ( void )
          vehicle->setMovement ( newmovement - moveCost );
          vehicle->tank.fuel -= fuelcost;
 
-         if ((newheight == chtieffliegend) && helicopter_attack_after_ascent ) 
+         if ((newheight == chtieffliegend) && !helicopter_attack_after_ascent ) 
             vehicle->attacked = 1; 
       } else
          if ( newheight > oldheight  &&  newheight == chtieffliegend ) {
@@ -1424,7 +1427,7 @@ int ChangeVehicleHeight :: verticalHeightChange ( void )
             if ( newmovement < moveCost )
                return -110;
 
-            if ( helicopter_attack_after_ascent ) 
+            if ( !helicopter_attack_after_ascent )
                vehicle->attacked = 1; 
 
             vehicle->setMovement ( newmovement - moveCost);
@@ -1552,7 +1555,7 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int h
        stat = moveunitxy ( x, y, path );
 
        if ( mapDisplay ) {
-          // mapDisplay->displayMap();
+          mapDisplay->displayMap();
           mapDisplay->stopAction();
        }
 

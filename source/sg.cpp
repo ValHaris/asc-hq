@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: sg.cpp,v 1.164 2001-08-27 21:03:55 mbickel Exp $
+//     $Id: sg.cpp,v 1.165 2001-09-13 17:43:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.164  2001/08/27 21:03:55  mbickel
+//      Terraintype graphics can now be mounted from any number of PNG files
+//      Several AI improvements
+//
 //     Revision 1.163  2001/08/19 12:50:03  mbickel
 //      fixed event trigger allenemybuildings
 //
@@ -1799,9 +1803,11 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
          vm.execute ( veh, -1, -1, 0, -1, -1 );
          if ( vm.reachableFields.getFieldNum()) {
             for  ( int i = 0; i < vm.reachableFields.getFieldNum(); i++ )
-               vm.reachableFields.getField ( i )->a.temp = 1;
+               if ( fieldvisiblenow ( vm.reachableFields.getField ( i ) ))
+                  vm.reachableFields.getField ( i )->a.temp = 1;
             for  ( int j = 0; j < vm.reachableFieldsIndirect.getFieldNum(); j++ )
-               vm.reachableFieldsIndirect.getField ( j )->a.temp = 1;
+               if ( fieldvisiblenow ( vm.reachableFieldsIndirect.getField ( j )))
+                  vm.reachableFieldsIndirect.getField ( j )->a.temp = 1;
 
             displaymap();
 

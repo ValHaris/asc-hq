@@ -181,7 +181,10 @@ void ReplayMapDisplay :: displayActionCursor ( int x1, int y1, int x2, int y2, i
       int i = fieldvisiblenow ( getfield ( x1, y1 ), actmap->playerView );
       if( i ) {
          cursor.gotoxy ( x1, y1, i );
-         wait();
+         if ( x2 >= 0 && y2 >= 0 )
+            wait( 30 );
+         else
+            wait();
       }
    }
 
@@ -195,10 +198,10 @@ void ReplayMapDisplay :: displayActionCursor ( int x1, int y1, int x2, int y2, i
    }
 }
 
-void ReplayMapDisplay :: wait ( void )
+void ReplayMapDisplay :: wait ( int minTime )
 {
    int t = ticker;
-   while ( ticker < t + cursorDelay )
+   while ( ticker < t + max ( cursorDelay, minTime ) )
       releasetimeslice();
 }
 

@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.63 2001-08-27 21:03:55 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.64 2001-09-13 17:43:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2001/08/27 21:03:55  mbickel
+//      Terraintype graphics can now be mounted from any number of PNG files
+//      Several AI improvements
+//
 //     Revision 1.62  2001/08/19 12:50:03  mbickel
 //      fixed event trigger allenemybuildings
 //
@@ -1541,7 +1545,7 @@ void         k_loadmap(void)
    
 
       displaymap(); 
-      cursor.show(); 
+      cursor.show();
       mapsaved = true;
    } 
    mousevisible(true); 
@@ -1568,11 +1572,14 @@ void         placebuilding(int               colorr,
          for ( int y = 0; y < 6; y++ )
             if ( buildingtyp->getpicture ( BuildingType::LocalCoordinate(x, y) )) {
                MapCoordinate mc = buildingtyp->getFieldCoordinate ( MapCoordinate (getxpos(), getypos()), BuildingType::LocalCoordinate (x, y) );
+               if ( !actmap->getField (mc) )
+                  return;
+
                if ( buildingtyp->terrainaccess.accessible ( actmap->getField (mc)->bdt ) <= 0 )
                   f++;
             }
       if ( f )
-         if (choice_dlg("Invalid terrain for building !","~i~gnore","~c~ancel") == 2) 
+         if (choice_dlg("Invalid terrain for building !","~i~gnore","~c~ancel") == 2)
             return;
 
       putbuilding( MapCoordinate( getxpos(),getypos()), colorr * 8,buildingtyp,buildingtyp->construction_steps);

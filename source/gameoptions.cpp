@@ -124,6 +124,10 @@ void CGameOptions::setDefaults ( void )
 
   xresolution = 800;
   yresolution = 600;
+
+  mapeditor_xresolution = 800;
+  mapeditor_yresolution = 600;
+
   setChanged();
 }
 

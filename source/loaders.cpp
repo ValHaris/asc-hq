@@ -5,9 +5,12 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.61 2001-08-19 12:50:03 mbickel Exp $
+//     $Id: loaders.cpp,v 1.62 2001-09-13 17:43:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2001/08/19 12:50:03  mbickel
+//      fixed event trigger allenemybuildings
+//
 //     Revision 1.60  2001/08/19 12:31:26  mbickel
 //      Fixed several bugs in event and campaign handling
 //
@@ -1250,7 +1253,7 @@ void   tspfldloaders::writefields ( void )
          b3 |= csm_weather;
       if (fld->visible)
          b3 |= csm_visible;
-      if ( !fld->objects.empty() )
+      if ( !fld->objects.empty() || !fld->mines.empty() )
          b4 |= csm_newobject;
 
       if ( fld->resourceview )

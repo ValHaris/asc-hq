@@ -131,7 +131,8 @@ const char*  unitCategoryTags[cmovemalitypenum] =
      "heavy_aircraft",
      "light_ship",
      "heavy_ship",
-     "helicopter"
+     "helicopter",
+     "hoovercraft"
    };
 
 const char*  buildingFunctionTags[cbuildingfunctionnum]  =

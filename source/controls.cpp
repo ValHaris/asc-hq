@@ -3,9 +3,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.111 2001-08-09 19:28:22 mbickel Exp $
+//     $Id: controls.cpp,v 1.112 2001-09-13 17:43:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.111  2001/08/09 19:28:22  mbickel
+//      Started adding buildingtype text file functions
+//
 //     Revision 1.110  2001/08/07 15:58:09  mbickel
 //      Fixed crash in mail list
 //      Fixed crash in weapon info with mines
@@ -678,6 +681,7 @@ void  legemine( int typ, int delta )
             actmap->cleartemps(7);
             computeview( actmap );
             moveparams.movestatus = 0;
+            displaymap();
          }
       }
 }
@@ -857,46 +861,16 @@ void         tbuildstreet::initbs(void)
 
 void    getobjbuildcosts ( pobjecttype obj, pfield fld, Resources* resource, int* movecost )
 {
-   int bridgemultiple = 8;
-
-#ifndef HEXAGON
-   if ( fld->bdt & cbwater1 )
-      bridgemultiple = brigde1buildcostincrease;
-   else
-      if ( fld->bdt & cbwater2 )
-         bridgemultiple = brigde2buildcostincrease;
-      else
-         if ( fld->bdt & cbwater3 )
-            bridgemultiple = brigde3buildcostincrease;
-#endif
-
-
    int mvcost;
 
    if ( !fld->checkforobject ( obj ) ) {
-      // int costmultiply = ( 8 + ( fld->movemalus[0] - 8 ) / ( objectbuildmovecost / 8 ) ) *  bridgemultiple / 8;
       *resource = obj->buildcost;
-
-      #ifdef HEXAGON
-       mvcost = obj->build_movecost;
-      #else
-       mvcost = obj->movecost;
-      #endif
-
-   }
-
-   else {
-      for ( int j = 0; j < resourceTypeNum; j++ )
-         resource->resource(j) = obj->removecost.resource(j) * bridgemultiple / 8;
-
-      #ifdef HEXAGON
+      mvcost = obj->build_movecost;
+   } else {
+      *resource = obj->removecost;
        mvcost = obj->remove_movecost;
-      #else
-       mvcost = obj->movecost;
-      #endif
    }
-
-   *movecost =  ( 8 + ( fld->getmovemalus( 0 ) - 8 ) / ( objectbuildmovecost / 8 ) ) * mvcost  / 8  *  bridgemultiple / 8;
+   *movecost =  ( 8 + ( fld->getmovemalus( 0 ) - 8 ) / ( objectbuildmovecost / 8 ) ) * mvcost  / 8;
 }
 
 void         tbuildstreet::testfield( const MapCoordinate& mc )
@@ -914,22 +888,34 @@ void         tbuildstreet::testfield( const MapCoordinate& mc )
            for ( int j = actvehicle->typ->objectsBuildable[i].from; j <= actvehicle->typ->objectsBuildable[i].to; j++ ) {
              pobjecttype objtype = getobjecttype_forid ( j );
              if ( objtype )
-                if ( objtype->terrainaccess.accessible( fld->bdt ) > 0 || fld->checkforobject ( objtype ) ) {
+                if ( objtype->terrainaccess.accessible( fld->bdt ) > 0 &&  !fld->checkforobject ( objtype ) ) {
                    int movecost;
                    Resources cost;
                    getobjbuildcosts ( objtype, fld, &cost, &movecost );
                    if ( actvehicle->tank >= cost && actvehicle->getMovement() >= movecost ) {
-                      if ( !fld->checkforobject ( objtype ) ) {
-                         obj->objects_buildable[ obj->objects_buildable_num++ ] = objtype;
-                      } else
-                         obj->objects_removable[ obj->objects_removable_num++ ] = objtype;
+                      obj->objects_buildable[ obj->objects_buildable_num++ ] = objtype;
 
                       fld->a.temp = 1;
                       numberoffields++;
                    }
                 }
-         }
+           }
 
+         for ( int i = 0; i < actvehicle->typ->objectsRemovable.size(); i++ )
+           for ( int j = actvehicle->typ->objectsRemovable[i].from; j <= actvehicle->typ->objectsRemovable[i].to; j++ ) {
+             pobjecttype objtype = getobjecttype_forid ( j );
+             if ( objtype )
+                if ( fld->checkforobject ( objtype ) ) {
+                   int movecost;
+                   Resources cost;
+                   getobjbuildcosts ( objtype, fld, &cost, &movecost );
+                   if ( actvehicle->tank >= cost && actvehicle->getMovement() >= movecost ) {
+                      obj->objects_removable[ obj->objects_removable_num++ ] = objtype;
+                      fld->a.temp = 1;
+                      numberoffields++;
+                   }
+                }
+           }
       }
    }
 }
@@ -1017,35 +1003,22 @@ void         setspec( pobjecttype obj )
          pvehicle eht = getfield(moveparams.movesx,moveparams.movesy)->vehicle;
          pfield fld = getactfield();
 
-         /*
-         int stat = 0;
+         int movecost;
+         Resources cost;
+         getobjbuildcosts ( obj, fld, &cost, &movecost );
 
-         if ( actmap->objectcrc ) {
-            if ( actmap->objectcrc->speedcrccheck->checkobj2 ( obj ))
-               stat = 1;
-         } else
-            stat = 1;
+         int x = getxpos();
+         int y = getypos();
+         if ( !fld->checkforobject ( obj ) ) {
+            getactfield() -> addobject ( obj );
+            logtoreplayinfo ( rpl_buildobj, x, y, obj->id );
+         } else {
+            getactfield() -> removeobject ( obj );
+            logtoreplayinfo ( rpl_remobj, x, y, obj->id );
+         }
 
-         if ( stat ) {
-         */
-            int movecost;
-            Resources cost;
-            getobjbuildcosts ( obj, fld, &cost, &movecost );
-
-            int x = getxpos();
-            int y = getypos();
-            if ( !fld->checkforobject ( obj ) ) {
-               getactfield() -> addobject ( obj );
-               logtoreplayinfo ( rpl_buildobj, x, y, obj->id );
-            } else {
-               getactfield() -> removeobject ( obj );
-               logtoreplayinfo ( rpl_remobj, x, y, obj->id );
-            }
-
-            eht->tank -= cost;
-            eht->setMovement ( eht->getMovement() - movecost );
-
-         // }
+         eht->tank -= cost;
+         eht->setMovement ( eht->getMovement() - movecost );
 
          build_objects_reset();
       }

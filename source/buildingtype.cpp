@@ -409,7 +409,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
       } else {
          pc.openBracket ( "Pictures");
          if ( !pc.isReading() ) {
-            tvirtualdisplay vdd( construction_steps*500, 250 );
+            tvirtualdisplay vdd( construction_steps*500, 250, 255 );
             for ( int w = 0; w < cwettertypennum; w++ )
                if ( weatherBits.test(w) ) {
                   for ( int c = 0; c < construction_steps; c++ )

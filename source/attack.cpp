@@ -3,9 +3,14 @@
 */
 
 
-//     $Id: attack.cpp,v 1.47 2001-08-07 15:58:09 mbickel Exp $
+//     $Id: attack.cpp,v 1.48 2001-09-13 17:43:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2001/08/07 15:58:09  mbickel
+//      Fixed crash in mail list
+//      Fixed crash in weapon info with mines
+//      Fixed cancel Button in object construction
+//
 //     Revision 1.46  2001/07/25 19:56:56  mbickel
 //      Fixed: kamikaze not working
 //
@@ -475,10 +480,10 @@ void tfight :: calcdisplay ( int ad, int dd )
 
       cgo.off();
    }
-   for ( int i = 0; i <= av.damage; i++ )
+   for ( int i = 0; i < av.damage; i++ )
       paintline ( 4, 100 - i, bk );
 
-   for ( int i = 0; i <= dv.damage; i++ )
+   for ( int i = 0; i < dv.damage; i++ )
       paintline ( 5, 100 - i, bk );
 
    t = ticker;
@@ -746,7 +751,7 @@ void tunitattacksbuilding::calcdisplay( int ad, int dd ) {
 
 void tunitattacksbuilding :: setresult ( void )
 {
-   _attackingunit->experience = av.experience;
+   // _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
    _attackingunit->attacked = true;

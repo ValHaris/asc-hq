@@ -40,7 +40,6 @@ USEUNIT("..\..\vehicletype.cpp");
 USEUNIT("..\..\viewcalculation.cpp");
 USEUNIT("..\..\gamedlg.cpp");
 USELIB("..\..\libs\bzlib\win\bzlib.lib");
-USELIB("..\..\libs\jpeg-6b\libjpeg.lib");
 USELIB("..\..\libs\triangul\win32\triangulation.lib");
 USELIB("..\..\..\..\sdl\bin\sdl.lib");
 USEUNIT("..\..\..\..\sdl\src\main\win32\SDL_main.c");
@@ -71,6 +70,7 @@ USEUNIT("..\..\textfiletags.cpp");
 USEUNIT("..\..\itemrepository.cpp");
 USELIB("..\..\..\..\SDL_image\bin\SDL_image.lib");
 USELIB("..\..\libs\sdlmm\SDLmm.lib");
+USELIB("..\..\libs\jpeg-6b\libjpeg.lib");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 

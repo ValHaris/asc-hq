@@ -157,12 +157,26 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 5;
+const int vehicle_version = 6;
 
+
+
+void Vehicletype::setupRemovableObjectsFromOldFileLayout ( )
+{
+   for ( vector<IntRange>::iterator i = objectsBuildable.begin(); i != objectsBuildable.end();  )
+      if ( i->to < 0 && i->from < 0 ) {
+         int mi = min ( -i->from, -i->to );
+         int ma = max ( -i->from, -i->to );
+         objectsRemovable.push_back ( IntRange ( mi, ma ));
+         i = objectsBuildable.erase ( i );
+      } else {
+         objectsRemovable.push_back ( *i );
+         i++;
+      }
+}
 
 void Vehicletype :: read ( tnstream& stream )
 {
-
    int version = stream.readInt();
    if ( version > vehicle_version || version < 1) {
       string s = "invalid version for reading vehicle: ";
@@ -345,6 +359,18 @@ void Vehicletype :: read ( tnstream& stream )
 
          objectsBuildable.push_back ( IntRange ( from, to ));
       }
+
+   if ( version >= 6 ) {
+      int num = stream.readInt();
+      for ( int i = 0; i < num; i++ ) {
+         int from = stream.readInt();
+         int to   = stream.readInt();
+
+         objectsRemovable.push_back ( IntRange ( from, to ));
+      }
+   } else
+      setupRemovableObjectsFromOldFileLayout();
+
 
    if ( vehiclesbuildablenum )
       for ( i = 0; i < vehiclesbuildablenum; i++ ) {
@@ -557,6 +583,12 @@ void Vehicletype:: write ( tnstream& stream ) const
       stream.writeInt ( objectsBuildable[i].to );
    }
 
+   stream.writeInt ( objectsRemovable.size() );
+   for ( i = 0; i < objectsRemovable.size(); i++ ) {
+      stream.writeInt ( objectsRemovable[i].from );
+      stream.writeInt ( objectsRemovable[i].to );
+   }
+
    for ( i = 0; i < vehiclesBuildable.size(); i++ ) {
       stream.writeInt ( vehiclesBuildable[i].from );
       stream.writeInt ( vehiclesBuildable[i].to );
@@ -752,12 +784,18 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
     terrainaccess.runTextIO ( pc );
    pc.closeBracket();
 
-  //        int           bipicture;
-
    pc.openBracket ( "Construction" );
     pc.addIntRangeArray ( "Buildings", buildingsBuildable );
     pc.addIntRangeArray ( "Vehicles", vehiclesBuildable );
-    pc.addIntRangeArray ( "Objects", objectsBuildable );
+    pc.addIntRangeArray ( "Objects", objectsBuildable ).evaluate();
+    if ( pc.isReading() ) {
+      if ( pc.find ( "ObjectsRemovable" ))
+         pc.addIntRangeArray ( "ObjectsRemovable", objectsRemovable );
+      else
+         setupRemovableObjectsFromOldFileLayout();
+    } else
+         pc.addIntRangeArray ( "ObjectsRemovable", objectsRemovable );
+         
    pc.closeBracket();
 
    pc.openBracket ( "Weapons");

@@ -153,6 +153,7 @@ extern const char* AIjobs[];
         vector<IntRange> buildingsBuildable;
         vector<IntRange> vehiclesBuildable;
         vector<IntRange> objectsBuildable;
+        vector<IntRange> objectsRemovable;
 
         UnitWeapon   weapons;
         int          autorepairrate;
@@ -174,6 +175,7 @@ extern const char* AIjobs[];
         ~Vehicletype ( );
      private:
         void setupPictures();
+        void setupRemovableObjectsFromOldFileLayout();
  };
 
 

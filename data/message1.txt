@@ -95,7 +95,7 @@ You have %s outstanding from %s; %s of it was transferred this turn#crt#
 20001
 name
 20002
-class
+description
 20003 
 experience
 20004

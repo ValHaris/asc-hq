@@ -29,6 +29,10 @@ CLoadableGameOptions::CLoadableGameOptions(CGameOptions* pOptions)
 {
    add(new IntProperty("XResolution"							,&_pOptions->xresolution));
    add(new IntProperty("YResolution" 							,&_pOptions->yresolution));
+
+   add(new IntProperty("MapEditor_XResolution"						,&_pOptions->mapeditor_xresolution));
+   add(new IntProperty("MapEditor_YResolution" 						,&_pOptions->mapeditor_yresolution));
+
    add(new IntProperty("SoundMuted"	   						,&_pOptions->sound_mute));
    add(new IntProperty("SoundOff"   							,&_pOptions->sound_off));
    add(new IntProperty("FastMove"								,&_pOptions->fastmove,3));

@@ -4,9 +4,18 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.42 2001-07-18 16:05:47 mbickel Exp $
+//     $Id: controls.h,v 1.43 2001-09-13 17:43:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2001/07/18 16:05:47  mbickel
+//      Fixed: infinitive loop in displaying "player exterminated" msg
+//      Fixed: construction of units by units: wrong player
+//      Fixed: loading bug of maps with mines
+//      Fixed: invalid map parameter
+//      Fixed bug in game param edit dialog
+//      Fixed: cannot attack after declaring of war
+//      New: ffading of sounds
+//
 //     Revision 1.41  2001/07/14 19:13:15  mbickel
 //      Rewrote sound system
 //      Moveing units make sounds
@@ -335,7 +344,7 @@ extern void initNetworkGame( void );
 class ReplayMapDisplay : public MapDisplayInterface {
            MapDisplay* mapDisplay;
            int cursorDelay;
-           void wait ( void );
+           void wait ( int minTime = 0 );
          public:
            ReplayMapDisplay ( MapDisplay* md ) { mapDisplay = md; cursorDelay = 20; };
            int displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove, SoundLoopManager* slc );

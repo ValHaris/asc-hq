@@ -2,9 +2,16 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.62 2001-08-09 14:50:37 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.63 2001-09-13 17:43:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2001/08/09 14:50:37  mbickel
+//      Added palette.map to data directory
+//      Improved usability of terrain selection in mapeditor
+//      New terrain translation in bi3 import function
+//      Better error messages in text parser
+//      Better error message: duplicate ID
+//
 //     Revision 1.61  2001/07/28 11:19:10  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -1274,7 +1281,7 @@ char* constructFileName( char* buf, int directoryLevel, const char* path, const 
         if ( path )
            strcpy ( buf, path);
         else
-           if ( directoryLevel >= 0 )
+           if ( directoryLevel >= 0 && ascDirectory[ directoryLevel ] )
               strcpy ( buf, ascDirectory[ directoryLevel ]);
      }
 

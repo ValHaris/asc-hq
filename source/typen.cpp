@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.80 2001-08-19 10:48:49 mbickel Exp $
+//     $Id: typen.cpp,v 1.81 2001-09-13 17:43:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.80  2001/08/19 10:48:49  mbickel
+//      Fixed display problems in event dlg in mapeditor
+//      Fixed error when starting campaign with AI as first player
+//
 //     Revision 1.79  2001/07/27 21:13:35  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -424,7 +428,8 @@ const char*  cmovemalitypes[cmovemalitypenum] = { "default",
                                                  "light wheeled vehicle", "medium wheeled vehicle", "heavy wheeled vehicle",
                                                  "trooper",               "rail vehicle",           "medium aircraft",
                                                  "medium ship",           "building / turret / object", "light aircraft",
-                                                 "heavy aircraft",        "light ship",             "heavy ship",  "helicopter" };
+                                                 "heavy aircraft",        "light ship",             "heavy ship",  "helicopter",
+                                                 "hoovercraft"  };
 
 const char* cnetcontrol[cnetcontrolnum] = { "store energy",           "store material",           "store fuel",           
                                             "move out all energy",           "move out all material",           "move out all fuel", 

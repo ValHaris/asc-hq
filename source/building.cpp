@@ -2,9 +2,12 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.72 2001-07-29 21:26:37 mbickel Exp $
+//     $Id: building.cpp,v 1.73 2001-09-13 17:43:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.72  2001/07/29 21:26:37  mbickel
+//      Fixed: Torpedo-units could not leave submerged submarine
+//
 //     Revision 1.71  2001/07/15 21:00:25  mbickel
 //      Some cleanup in the vehicletype class
 //
@@ -6968,7 +6971,7 @@ void  ccontainer_t :: init (pvehicle eht)
             cursor.show ();
       */
 
-      ccontainer :: init ( vehicle->typ->picture[0], vehicle->color, vehicle->name.c_str(), vehicle->typ->description );
+      ccontainer :: init ( vehicle->typ->picture[0], vehicle->color, vehicle->name.empty()? vehicle->typ->name: vehicle->name, vehicle->typ->description );
       ccontainer :: displayloading ();
       ccontainer :: movemark (repaint);
 

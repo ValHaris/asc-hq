@@ -1,8 +1,12 @@
 /*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.79 2001-08-19 10:48:49 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.80 2001-09-13 17:43:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.79  2001/08/19 10:48:49  mbickel
+//      Fixed display problems in event dlg in mapeditor
+//      Fixed error when starting campaign with AI as first player
+//
 //     Revision 1.78  2001/08/07 15:58:09  mbickel
 //      Fixed crash in mail list
 //      Fixed crash in weapon info with mines
@@ -3079,9 +3083,11 @@ void tmessagedlg :: inserttext ( const ASCString& txt )
             sz = 1;
          if ( sz ) {
             ASCString s = txt;
-            if ( start )
+            if ( start ) {
                s.erase ( 0, start );
-            s.erase ( pos );
+               s.erase ( pos-start );
+            } else
+               s.erase ( pos );
             actparagraph = new tparagraph ( actparagraph );
             if ( !firstparagraph )
                firstparagraph = actparagraph;
@@ -3090,7 +3096,7 @@ void tmessagedlg :: inserttext ( const ASCString& txt )
             pos+=sz;
             start = pos;
          } else
-            c++;
+            pos++;
       } /* endwhile */
 
       if ( start < txt.length() ) {
@@ -3334,7 +3340,7 @@ void teditmessage :: init ( Message* msg  )
    activefontsettings.color = black;
    activefontsettings.justify = lefttext;
 
-   inserttext ( msg->text.c_str() );
+   inserttext ( msg->text );
    actparagraph = firstparagraph;
    actparagraph->cursor = 0;
    actparagraph->setpos( x1 + tx1, y1 + ty1, y1 + ty2, 0, 13 );

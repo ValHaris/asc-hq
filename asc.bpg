@@ -10,8 +10,8 @@ DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
 PROJECTS = bzlib.lib libjpeg.lib triangulation.lib tools.lib SDLmm.lib \
-  mount.exe demount.exe weaponguide.exe gfx2pcx.exe makegfx.exe viewid.exe \
-  tank2pcx.exe bin2text.exe ai.lib mapeditor.exe asc.exe
+  mount.exe weaponguide.exe demount.exe gfx2pcx.exe bin2text.exe makegfx.exe \
+  viewid.exe tank2pcx.exe ai.lib mapeditor.exe asc.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------

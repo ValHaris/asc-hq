@@ -244,29 +244,30 @@ TextFileRepository textFileRepository;
 
 void  loadalltextfiles ( )
 {
-      tfindfile ff ( "*.asctxt" );
-      ASCString c = ff.getnextname();
+   tfindfile ff ( "*.asctxt" );
+   ASCString c = ff.getnextname();
 
-      while( !c.empty() ) {
-         if ( actprogressbar )
-            actprogressbar->point();
+   while( !c.empty() ) {
+      if ( actprogressbar )
+         actprogressbar->point();
 
-         tnfilestream s ( c, tnstream::reading );
+      tnfilestream s ( c, tnstream::reading );
 
-         displayLogMessage ( 5, "loadalltextfiles :: loading " + c + ", " );
+      displayLogMessage ( 5, "loadalltextfiles :: loading " + c + ", " );
 
-         TextFormatParser tfp ( &s );
+      TextFormatParser tfp ( &s );
 
-         displayLogMessage ( 5, "TFP running... " );
+      displayLogMessage ( 5, "TFP running... " );
 
-         TextPropertyGroup* tpg = tfp.run();
+      TextPropertyGroup* tpg = tfp.run();
 
-         textFileRepository[tpg->typeName].push_back ( tpg );
+      textFileRepository[tpg->typeName].push_back ( tpg );
 
-         displayLogMessage ( 5, "done\n" );
+      displayLogMessage ( 5, "done\n" );
 
-         c = ff.getnextname();
-      }
+      c = ff.getnextname();
+   }
+   displayLogMessage ( 4, "loadalltextfiles completed\n");
 }
 
 
@@ -279,40 +280,39 @@ void  freetextdata()
 
 void         loadallvehicletypes(void)
 {
+   tfindfile ff ( "*.veh" );
+   string c = ff.getnextname();
 
-      tfindfile ff ( "*.veh" );
-      string c = ff.getnextname();
+   while ( !c.empty() ) {
+       if ( actprogressbar )
+          actprogressbar->point();
 
-      while ( !c.empty() ) {
-          if ( actprogressbar )
-             actprogressbar->point();
+       addvehicletype ( loadvehicletype( c.c_str() ) );
 
-          addvehicletype ( loadvehicletype( c.c_str() ) );
+       c = ff.getnextname();
+    }
 
-          c = ff.getnextname();
-       }
+    TextPropertyList& tpl = textFileRepository["vehicletype"];
+    for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
+       if ( actprogressbar )
+         actprogressbar->point();
 
-       TextPropertyList& tpl = textFileRepository["vehicletype"];
-       for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
-          if ( actprogressbar )
-            actprogressbar->point();
+      PropertyReadingContainer pc ( "vehicletype", *i );
 
-         PropertyReadingContainer pc ( "vehicletype", *i );
+      Vehicletype* vt = new Vehicletype;
+      vt->runTextIO ( pc );
+      pc.run();
 
-         Vehicletype* vt = new Vehicletype;
-         vt->runTextIO ( pc );
-         pc.run();
-
-         vt->filename = (*i)->fileName;
-         vt->location = (*i)->location;
-         addvehicletype ( vt );
-      }
+      vt->filename = (*i)->fileName;
+      vt->location = (*i)->location;
+      addvehicletype ( vt );
+   }
+   displayLogMessage ( 4, "loadallVehicleTypes completed\n");
 }
 
 
 void         loadallobjecttypes (void)
 {
-
    tfindfile ff ( "*.obl" );
 
    string c = ff.getnextname();
@@ -342,6 +342,8 @@ void         loadallobjecttypes (void)
       ot->location = (*i)->location;
       addobjecttype ( ot );
    }
+
+   displayLogMessage ( 4, "loadallObjectTypes completed\n");
 }
 
 
@@ -363,17 +365,18 @@ void         loadalltechnologies(void)
    }
 
    for (i = 0; i < technologynum; i++)
-      for (int l = 0; l < 6; l++) { 
+      for (int l = 0; l < 6; l++) {
          ptechnology tech = gettechnology_forpos ( i, 0 );
-         int j = tech->requiretechnologyid[l]; 
-         if ( j > 0 ) 
-            tech->requiretechnology[l] = gettechnology_forid ( j ); 
-      } 
+         int j = tech->requiretechnologyid[l];
+         if ( j > 0 )
+            tech->requiretechnology[l] = gettechnology_forid ( j );
+      }
 
    for (i = 0; i < technologynum; i++)
       gettechnology_forpos ( i, 0 ) -> getlvl();
 
-} 
+   displayLogMessage ( 4, "loadallTechnologies completed\n");
+}
 
 
 void         loadallterraintypes(void)
@@ -406,6 +409,8 @@ void         loadallterraintypes(void)
       tt->location = (*i)->location;
       addterraintype ( tt );
    }
+
+   displayLogMessage ( 4, "loadallTerrainTypes completed\n");
 }
 
 
@@ -442,6 +447,8 @@ void         loadallbuildingtypes(void)
       addbuildingtype ( bt );
    }
 
-} 
+   displayLogMessage ( 4, "loadallBuildingTypes completed\n");
+
+}
 
 
