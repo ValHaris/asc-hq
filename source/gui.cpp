@@ -1365,6 +1365,7 @@ void  tnsguiicondescent::display      ( void )
 
 
 
+#if 0
 
 tnsguiiconinformation::tnsguiiconinformation ( void )
 {
@@ -1413,12 +1414,6 @@ void  tnsguiiconinformation::display      ( void )
 
 
 
-
-
-
-
-
-#if 0
 
 tnsguiiconendturn::tnsguiiconendturn ( void )
 {
@@ -2465,6 +2460,7 @@ StaticClassVariable int             tnputobjectcontainerguiicon :: buildnum = 0;
 #endif
 
 
+
 tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( pobjecttype obj, int bld )
 {
    setnxt ( first );
@@ -2475,7 +2471,7 @@ tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( pobjecttype obj, in
       priority = 100;
       buildnum++;
       build = bld;
-
+/*
       char buf[10000];
       if ( bld ) {
          picture[0]    = object->buildIcon.toBGI();
@@ -2484,7 +2480,8 @@ tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( pobjecttype obj, in
          picture[0]    = object->removeIcon.toBGI();
          sprintf ( buf, "%s : %d material and %d fuel needed", object->name.c_str(), object->removecost.material, object->removecost.fuel );
       }
-      infotext = buf;
+
+      infotext = buf;*/
    } else {
       picture[0] = icons.selectweaponguicancel;
       infotext = "Cancel (~ESC~)";
@@ -2531,6 +2528,7 @@ int         tnputobjectcontainerguiicon::available( void )
    } else
       return 1;
 }
+
 
 
 
@@ -2597,6 +2595,7 @@ int         tnputvehiclecontainerguiicon::available( void )
    } else
       return 1;
 }
+
 
 tselectweaponguihost::tselectweaponguihost ( void )
 {

@@ -123,12 +123,6 @@
 
      ObjectType ( void );
 
-     //! the icon used for selecting the object when executing the "build object" function of a unit. The image is automatically generated at load time
-     Surface buildIcon;
-     //! the icon used for selecting the object when executing the "remove object" function of a unit. The image is automatically generated at load time
-     Surface removeIcon;
-
-
      TechAdapterDependency techDependency;
 
      //! the images of the objects

@@ -2,59 +2,6 @@
     \brief Interface for various global functions and variables
 */
 
-
-//     $Id: sg.h,v 1.10.2.2 2004-12-28 16:11:45 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.10.2.1  2004/12/11 21:22:31  mbickel
-//      Integration of new gui
-//      Speedup of blitter
-//      using signals to reduce dependencies
-//
-//     Revision 1.10  2004/05/23 12:54:28  mbickel
-//      Updated campaign maps
-//      improved tech tree generation
-//
-//     Revision 1.9  2002/05/07 19:52:47  mbickel
-//      Updated documentation
-//      Dialog themes can be reloaded during runtime.
-//
-//     Revision 1.8  2002/02/21 17:06:52  mbickel
-//      Completed Paragui integration
-//      Moved mail functions to own file (messages)
-//
-//     Revision 1.7  2001/01/28 14:04:19  mbickel
-//      Some restructuring, documentation and cleanup
-//      The resource network functions are now it their own files, the dashboard
-//       as well
-//      Updated the TODO list
-//
-//     Revision 1.6  2001/01/25 23:45:03  mbickel
-//      Moved map displaying routins to own file (mapdisplay.cpp)
-//      Wrote program to create pcx images from map files (map2pcx.cpp)
-//      Fixed bug in repair function: too much resource consumption
-//      AI improvements and bug fixes
-//      The BI3 map import function now evaluates the player status (human/
-//       computer)
-//
-//     Revision 1.5  2001/01/21 12:48:36  mbickel
-//      Some cleanup and documentation
-//
-//     Revision 1.4  2000/08/05 20:18:03  mbickel
-//      Restructured Fullscreen Image loading
-//
-//     Revision 1.3  2000/05/22 15:40:37  mbickel
-//      Included patches for Win32 version
-//
-//     Revision 1.2  1999/11/16 03:42:27  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -70,8 +17,8 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    along with this program; see the file COPYING. If not, write to the
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
 
@@ -80,6 +27,25 @@
 #define sgH
 
 #include "dialog.h"
+
+enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_dispvehicleimprovement, ua_mainmenu, ua_mntnc_morefog,
+                    ua_mntnc_lessfog,   ua_mntnc_morewind,   ua_mntnc_lesswind, ua_mntnc_rotatewind, ua_changeresourceview,
+                    ua_benchgamewv,     ua_benchgamewov,     ua_viewterraininfo, ua_unitweightinfo,  ua_writemaptopcx,  ua_writescreentopcx,
+                    ua_startnewsinglelevel, ua_changepassword, ua_gamepreferences, ua_bi3preferences,
+                    ua_exitgame,        ua_newcampaign,      ua_loadgame,  ua_savegame, ua_setupalliances, ua_settribute, ua_giveunitaway,
+                    ua_vehicleinfo,     ua_researchinfo,     ua_unitstatistics, ua_buildingstatistics, ua_newmessage, ua_viewqueuedmessages,
+                    ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
+                    ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
+                    ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
+                    ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme, ua_showPlayerSpeed, ua_renameunit,
+                    ua_statisticdialog, ua_viewPipeNet, ua_cancelResearch, ua_showResearchStatus, ua_exportUnitToFile, ua_viewButtonPanel, ua_viewWindPanel,
+                    ua_clearImageCache, ua_viewUnitInfoPanel };
+
+extern void execuseraction ( tuseractions action );
+
+//! switches the event handling between paragui and legacy depending on function called
+extern void execUserAction_ev( tuseractions action );
+
 
 extern void mainloopgeneralmousecheck ( void );
 extern void mainloopgeneralkeycheck ( tkey& ch );

@@ -55,21 +55,26 @@
 
   class TargetPixelSelector_Valid {
         int w,h;
+        SPoint dstPos;
      protected:
-        int skipTarget( int x, int y ) 
-        { 
+        int skipTarget( int x, int y )
+        {
+           x += dstPos.x;
+           y += dstPos.y;
+
            if ( x >= 0 && y >= 0 && x < w && y < h )
-              return 0; 
+              return 0;
            else
               if ( x < 0 )
                  return -x;
               else
-                 return 1;     
+                 return 1;
         };
-        void init( const Surface& srv, const SPoint& pos ) 
+        void init( const Surface& srv, const SPoint& pos )
         {
            w = srv.w();
            h = srv.h();
+           dstPos = pos;
         };
      public:
         TargetPixelSelector_Valid ( NullParamType npt = nullParam ) :w(0xffffff),h(0xffffff) {};   
@@ -1076,6 +1081,11 @@ template<>
        {
           this->zoomFactor = factor;
        };
+
+       float getZoom() {
+         return zoomFactor;
+       };
+
        void setSize( int sourceWidth, int sourceHeight, int targetWidth, int targetHeight )
        {
           float zw = float(targetWidth) / float(sourceWidth);

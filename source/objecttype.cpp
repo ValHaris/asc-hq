@@ -814,7 +814,7 @@ void         calculateallobjects( pmap actmap )
 
 
 
-const int object_version = 13;
+const int object_version = 14;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -886,9 +886,11 @@ void ObjectType :: read ( tnstream& stream )
 
        displayMethod = stream.readInt();
 
-       buildIcon.read( stream );
-       removeIcon.read( stream );
-
+       if ( version <= 13 ) {
+          Surface s;
+          s.read( stream );
+          s.read( stream );
+       }
 
        techDependency.read ( stream );
 
@@ -922,58 +924,6 @@ void ObjectType :: read ( tnstream& stream )
        throw tinvalidversion  ( stream.getLocation(), object_version, version );
 }
 
-#if 0
-void ObjectType :: setupImages()
-{
-   int copycount = 0;
-   #ifndef converter
-   for ( int ww = 0; ww < cwettertypennum; ww++ )
-      if ( weather.test( ww ) )
-         for ( int n = 0; n < weatherPicture[ww].bi3pic.size(); n++ ) {
-            if ( weatherPicture[ww].flip[n] == 1 ) {
-               void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-               flippict ( weatherPicture[ww].images[n], buf , 1 );
-               asc_free ( weatherPicture[ww].images[n] );
-               weatherPicture[ww].images[n] = buf;
-               copycount++;
-            }
-
-            if ( weatherPicture[ww].flip[n] == 2 ) {
-               void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-               flippict ( weatherPicture[ww].images[n], buf , 2 );
-               asc_free ( weatherPicture[ww].images[n] );
-               weatherPicture[ww].images[n] = buf;
-               copycount++;
-            }
-
-            if ( weatherPicture[ww].flip[n] == 3 ) {
-               void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-               flippict ( weatherPicture[ww].images[n], buf , 2 );
-               flippict ( buf, weatherPicture[ww].images[n], 1 );
-               asc_free( buf );
-               copycount++;
-            }
-
-
-//            if ( weatherPicture[ww].bi3pic[n] == -1 )
-//               weatherPicture[ww].flip[n] = 0;
-         }
-   #endif
-
-   /*
-   if ( copycount == 0 )
-      for ( int ww = 0; ww < cwettertypennum; ww++ )
-         if ( weather.test ( ww ) )
-            for ( int n = 0; n < weatherPicture[ww].images.size(); n++ )
-               if ( weatherPicture[ww].bi3pic[n] != -1 ) {
-                  asc_free ( weatherPicture[ww].images[n] );
-                  loadbi3pict_double ( weatherPicture[ww].bi3pic[n],
-                                       &weatherPicture[ww].images[n],
-                                       1 ); // CGameOptions::Instance()->bi3.interpolate.objects );
-               }
-   */
-}
-#endif
 
 void ObjectType :: write ( tnstream& stream ) const
 {
@@ -1030,9 +980,6 @@ void ObjectType :: write ( tnstream& stream ) const
     stream.writeInt ( netBehaviour );
 
     stream.writeInt ( displayMethod );
-
-    buildIcon.write( stream );
-    removeIcon.write( stream );
 
     techDependency.write ( stream );
 
@@ -1218,10 +1165,4 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
       }
 
    techDependency.runTextIO( pc );
-
-   #ifndef converter
-    buildIcon  = generate_gui_build_icon ( this, false );
-    removeIcon = generate_gui_build_icon ( this, true );
-   #endif
-
 }

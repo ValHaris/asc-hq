@@ -40,7 +40,7 @@ const int guiIconColumnNum = 3;
 
 
 
-GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent, r, "", -1, "GuiButton"), func( NULL ), num(-1)
+GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent, r, "", -1, "GuiButton"), func( NULL ), id(-1)
 {
   sigClick.connect ( SigC::slot( *this, &GuiButton::exec ));
   SetBackground( PRESSED, IconRepository::getIcon("empty-pressed.png").getBaseSurface() );
@@ -52,19 +52,19 @@ GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent,
 bool GuiButton::exec()
 {
   if ( func ) {
-     func->execute( pos, num );
+     func->execute( pos, id );
      return true;
   }
   return false;
 }
 
 
-void GuiButton::registerFunc( GuiFunction* f, const MapCoordinate& position, int num )
+void GuiButton::registerFunc( GuiFunction* f, const MapCoordinate& position, int id )
 {
-   this->num = num;
+   this->id = id;
    func = f;
    pos = position;
-   SetIcon( f->getImage( position, num).getBaseSurface());
+   SetIcon( f->getImage( position, id).getBaseSurface());
 }
 
 void GuiButton::unregisterFunc()

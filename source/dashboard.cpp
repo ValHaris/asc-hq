@@ -151,7 +151,8 @@ void DashboardPanel::eval()
 {
    MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
    pfield fld = actmap->getField(mc);
-   Vehicle* veh = actmap->getField(mc)->vehicle;
+
+   Vehicle* veh = fld? fld->vehicle : NULL;
 
    PG_Application::SetBulkMode(true);
 

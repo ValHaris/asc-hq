@@ -66,7 +66,6 @@ const int object_version = 1;
 const int technology_version = 1;
 
 Surface leergui;
-Surface removegui;
 
 
 Surface generate_gui_build_icon ( pvehicletype tnk )
@@ -125,25 +124,11 @@ Surface generate_gui_build_icon ( pbuildingtype bld )
 
 
 
-Surface generate_gui_build_icon ( pobjecttype obj, int remove )
-{
-   Surface s = leergui.Duplicate();
-   s.Blit(obj->getPicture(), SPoint((s.w() - obj->getPicture().w())/2, (s.h() - obj->getPicture().h())/2));
-   if ( remove )
-      s.Blit(removegui, SPoint((s.w() - removegui.w())/2, (s.h() - removegui.h())/2));
-   
-   return s;
-}
-
 void loadguipictures( void )
 {
    if ( !leergui.valid() ) {
       tnfilestream stream ( "leergui.raw", tnstream::reading );
       leergui.read( stream );
-   }
-   if ( !removegui.valid() ) {
-      tnfilestream stream ( "guiremov.raw", tnstream::reading );
-      removegui.read( stream );
    }
 }
 
