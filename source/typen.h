@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.129 2003-05-06 19:01:06 mbickel Exp $
+//     $Id: typen.h,v 1.130 2003-06-01 13:27:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.129  2003/05/06 19:01:06  mbickel
+//      Updated campaign maps
+//
 //     Revision 1.128  2003/05/01 18:02:22  mbickel
 //      Fixed: no movement decrease for cargo when transport moved
 //      Fixed: reactionfire not working when descending into range
@@ -308,7 +311,7 @@
  #include <limits.h>
 #endif
 
-#include <values.h>
+// #include <values.h>
 
 #include "pointers.h"
 #include "tpascal.inc"
