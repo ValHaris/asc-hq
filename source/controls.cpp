@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.74 2000-09-16 11:47:21 mbickel Exp $
+//     $Id: controls.cpp,v 1.75 2000-09-16 13:02:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.74  2000/09/16 11:47:21  mbickel
+//      Some cleanup and documentation again
+//
 //     Revision 1.73  2000/09/07 15:49:38  mbickel
 //      some cleanup and documentation
 //
@@ -369,6 +372,7 @@
 #include "sg.h"
 #include "weather.h"
 #include "gameoptions.h"
+#include "artint.h"
 
          tdashboard  dashboard;
          int             windmovement[8];
@@ -5624,16 +5628,41 @@ void nextPlayer( void )
 } 
 
 
-void runai( void )
+void runai( int playerView )
 {
-   tlockdispspfld displock;
-   checkalliances_at_beginofturn ();
-   computeview();
-   displaymessage("no AI available yet", 1 );
+   if ( CGameOptions::Instance()->runAI ) {
+      actmap->playerview = playerView;
+
+      if ( !actmap->player[ actmap->actplayer ].ai )
+         actmap->player[ actmap->actplayer ].ai = new AI ( actmap );
+     
+      actmap->player[ actmap->actplayer ].ai->run();
+
+   } else {
+      tlockdispspfld displock;
+      checkalliances_at_beginofturn ();
+      computeview();
+      displaymessage("no AI available yet", 1 );
+   }
 }
 
-void next_turn ( void )
+void next_turn ( int playerView )
 {
+   int startTurn = actmap->time.a.turn;
+
+   int pv;
+   if ( playerView == -2 ) {
+      if ( actmap->time.a.turn == 0 )  // the game has just been started
+         pv = -1;
+      else
+         if ( actmap->player[actmap->actplayer].stat != ps_human )
+            pv = -1;
+         else
+            pv = actmap->actplayer;
+   } else
+      pv = playerView;
+
+
    int bb = cursor.an;
    if (bb)  
       cursor.hide();
@@ -5642,7 +5671,13 @@ void next_turn ( void )
      endTurn();
      nextPlayer();
      if ( actmap->player[actmap->actplayer].stat == ps_computer )
-        runai();
+        runai( pv );
+
+     if ( actmap->time.a.turn >= startTurn+2 ) {
+        displaymessage("no human players found !", 1 );
+        erasemap();
+        throw tnomaploaded();
+     }
 
    } while ( actmap->player[actmap->actplayer].stat != ps_human ); /* enddo */
 
@@ -5652,13 +5687,12 @@ void next_turn ( void )
      cursor.display();
 }
 
-
 void initNetworkGame ( void )
 {
    while ( actmap->player[actmap->actplayer].stat != ps_human ) {
 
      if ( actmap->player[actmap->actplayer].stat == ps_computer )
-        runai();
+        runai(-1);
      endTurn();
      nextPlayer();
    }

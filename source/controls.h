@@ -1,6 +1,9 @@
-//     $Id: controls.h,v 1.24 2000-09-16 11:47:23 mbickel Exp $
+//     $Id: controls.h,v 1.25 2000-09-16 13:02:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/09/16 11:47:23  mbickel
+//      Some cleanup and documentation again
+//
 //     Revision 1.23  2000/08/28 19:49:40  mbickel
 //      Fixed: replay exits when moving satellite out of orbiter
 //      Fixed: airplanes being able to endlessly takeoff and land
@@ -340,8 +343,10 @@ extern void  calcmovemalus(int          x1,
 
 
 
-//! Ends the turn of the current player
-extern void next_turn ( void );
+/*! Ends the turn of the current player and runs AI until a player is human again
+    \param playerView -2 = detect automatically; -1 = don't display anything; 0-7 = this player is watching
+*/
+extern void next_turn ( int playerView = -2 );
 
 
 /////////////////////////////////////////////////////////////////////

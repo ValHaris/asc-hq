@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.92 2000-09-16 11:47:29 mbickel Exp $
+//     $Id: sg.cpp,v 1.93 2000-09-16 13:02:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.92  2000/09/16 11:47:29  mbickel
+//      Some cleanup and documentation again
+//
 //     Revision 1.91  2000/09/07 15:49:44  mbickel
 //      some cleanup and documentation
 //
@@ -1785,14 +1788,7 @@ void         ladekarte(void)
       loadmap(s1); 
       initmap(); 
 
-      do {
-        next_turn();
-        if ( actmap->time.a.turn == 2 ) {
-           displaymessage("no human players found !", 1 );
-           erasemap();
-           throw tnomaploaded();
-        }
-      } while ( actmap->player[actmap->actplayer].stat != ps_human );
+      next_turn();
 
       removemessage(); 
       if (actmap->campaign != NULL) { 
