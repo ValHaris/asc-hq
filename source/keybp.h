@@ -1,6 +1,9 @@
-//     $Id: keybp.h,v 1.9 2000-01-04 19:43:52 mbickel Exp $
+//     $Id: keybp.h,v 1.10 2000-02-05 12:13:44 steb Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/01/04 19:43:52  mbickel
+//      Continued Linux port
+//
 //     Revision 1.8  2000/01/01 19:04:18  mbickel
 //     /tmp/cvsVhJ4Z3
 //
@@ -345,7 +348,7 @@
 
 #else //  _DOS_
 
-   #include "SDL.h"
+   #include "SDL/SDL.h"
 
    #define ct_invvalue   -1
    #define ct_shp  2048

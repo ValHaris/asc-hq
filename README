@@ -9,7 +9,8 @@ FAQ :
 
 HOW DO I GET SOUND ?!
 
-You will need the following wave files in your current directory when you run ASC:
+You will need the following wave files in your current directory when you run
+ASC:
 
 Boom.wav
 Fail.wav
@@ -27,7 +28,9 @@ weapon04.wav -> missile.wav
 weapon06.wav -> auto.wav
 weapon07.wav -> cannon.wav
 
-I have a bunch of sounds I got from free sound sites on the web which I can make available.
-I'm still looking for a good (submarine type) torpedo sound.
+I have a bunch of sounds I got from free sound sites on the web which I have
+made available to Martin and will be put on http://www.asc-hq.org.
 
-NB: You don't *need* the symlinks pers'e, but they document what each weapon number means.
+
+NB: You don't *need* the symlinks pers'e, but they document what each weapon
+number means.

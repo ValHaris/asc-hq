@@ -1,6 +1,10 @@
-//     $Id: basestrm.h,v 1.7 2000-02-03 20:54:38 mbickel Exp $
+//     $Id: basestrm.h,v 1.8 2000-02-05 12:13:44 steb Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/02/03 20:54:38  mbickel
+//      Some cleanup
+//      getfiletime now works under Linux too
+//
 //     Revision 1.6  1999/12/29 12:50:42  mbickel
 //      Removed a fatal error message in GUI.CPP
 //      Made some modifications to allow platform dependant path delimitters
@@ -653,7 +657,7 @@ extern char* getnextfilenumname ( const char* first, const char* suffix, int num
 #define writedata2(a)  writedata ( &(a), sizeof(a) )
 #define readdata2(a)   readdata  ( &(a), sizeof(a) )
 
-extern int exist ( char* s );
+extern int exist ( const char* s );
 extern time_t get_filetime ( char* devicename );
 
 extern void opencontainer ( const char* wildcard );

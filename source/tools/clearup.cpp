@@ -35,7 +35,7 @@ typedef long int int;
 
 
 
-int exist ( char* s )
+int exist ( const char* s )
 {
    return !access ( s, F_OK );
 };

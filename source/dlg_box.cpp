@@ -1,6 +1,9 @@
-//     $Id: dlg_box.cpp,v 1.12 2000-01-06 11:19:13 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.13 2000-02-05 12:13:44 steb Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/01/06 11:19:13  mbickel
+//      Worked on the Linux-port again...
+//
 //     Revision 1.11  2000/01/04 19:43:50  mbickel
 //      Continued Linux port
 //
@@ -3487,7 +3490,7 @@ int displaymessage2( char* formatstring, ... )
    npush ( activefontsettings );
    activefontsettings.justify = lefttext;
    activefontsettings.font = schriften.guifont;
-   activefontsettings.color = 20 + actmap->actplayer * 8;
+   activefontsettings.color = 20 + ((actmap)?actmap->actplayer:0) * 8;
    activefontsettings.markcolor = yellow;
    activefontsettings.background = 172;
    activefontsettings.height = activefontsettings.font->height;

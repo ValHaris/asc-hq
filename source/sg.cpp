@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.22 2000-02-03 20:54:41 mbickel Exp $
+//     $Id: sg.cpp,v 1.23 2000-02-05 12:13:44 steb Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/02/03 20:54:41  mbickel
+//      Some cleanup
+//      getfiletime now works under Linux too
+//
 //     Revision 1.21  2000/02/02 19:18:18  mbickel
 //      Enhanced sound loading routines to use the ASC stream io functions
 //
@@ -579,7 +583,7 @@ void  tbackgroundpict :: paint ( int resavebackground )
     lastpaintmode = 0;
 
     #ifdef HEXAGON
-     if ( actmap->xsize && !lockdisplaymap ) 
+     if ( actmasp && actmap->xsize && !lockdisplaymap ) 
         paintborder( getmapposx ( ), getmapposy ( ) );
 
     #endif

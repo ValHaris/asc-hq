@@ -15,9 +15,18 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.9 2000-01-25 19:28:20 mbickel Exp $
+//     $Id: events.cpp,v 1.10 2000-02-05 12:13:46 steb Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/01/25 19:28:20  mbickel
+//      Fixed bugs:
+//        invalid mouse buttons reported when moving the mouse
+//        missing service weapon in weapon information
+//        invalid text displayed in ammo production
+//        undamaged units selected in repair vehicle function
+//
+//      speed up when playing weapon sound
+//
 //     Revision 1.8  2000/01/07 13:20:07  mbickel
 //      DGA fullscreen mode now working
 //
@@ -54,15 +63,15 @@
 #include "../timer.h"
 #include "../stack.h"
 
-#include "SDL.h"
-#include "SDL_thread.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL_thread.h"
 
 /* Data touched at mouse callback time -- they are in a structure to
 	simplify calculating the size of the region to lock.
 */
 
 
-static tmousesettings mouseparams;
+tmousesettings mouseparams; // was static, but not declared elsewhere
 
 SDL_mutex* keyboardmutex = NULL;
 

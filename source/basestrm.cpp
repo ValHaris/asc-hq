@@ -1,6 +1,9 @@
-//     $Id: basestrm.cpp,v 1.16 2000-02-03 21:15:32 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.17 2000-02-05 12:13:44 steb Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/02/03 21:15:32  mbickel
+//      Fixed a crash in the new file date routines
+//
 //     Revision 1.15  2000/02/03 20:54:38  mbickel
 //      Some cleanup
 //      getfiletime now works under Linux too
@@ -1963,7 +1966,7 @@ time_t get_filetime ( char* devicename )
 }
 
 
-int exist ( char* s )
+int exist ( const char* s )
 {
    tfindfile ff ( s );
    return ff.getnextname() != NULL;

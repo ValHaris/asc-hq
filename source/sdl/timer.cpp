@@ -1,6 +1,9 @@
-//     $Id: timer.cpp,v 1.2 2000-01-04 19:43:55 mbickel Exp $
+//     $Id: timer.cpp,v 1.3 2000-02-05 12:13:47 steb Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/01/04 19:43:55  mbickel
+//      Continued Linux port
+//
 //     Revision 1.1  1999/12/28 21:03:31  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -29,14 +32,14 @@
 #include <stdlib.h>
 #include "../timer.h"
 
-#include "SDL.h"
+#include "SDL/SDL.h"
 
 #define timerintr 0x08
 #define pit_freq 0x1234DD  
 
-    static int  ticker = 0;
-    static int  clock_ticks, counter,tticker;
-    char         init=0;
+int  ticker = 0; // was static, but I think this needs to be global somewhere
+static int  clock_ticks, counter,tticker;
+char         init=0;
 
 
 
