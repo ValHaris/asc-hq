@@ -15,10 +15,10 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/INSTALL,
 show_outputview=true
 show_treeview=true
-header_file=Unbenannt.h
+header_file=/home/martin/asc/INSTALL
 cpp_file=Unbenannt.cpp
 browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/reference/C/cref.html
 [source/gui.h]
@@ -360,7 +360,7 @@ version_control=None
 author=Martin Bickel
 project_type=normal_cpp
 sub_dir=source/
-lfv_open_groups=Headers,Quellen,
+lfv_open_groups=Headers,Quellen,GNU,
 workspace=1
 version=0.1
 project_name=ASC
