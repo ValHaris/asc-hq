@@ -134,7 +134,7 @@ vehicle.cpp buildings.cpp networkdata.cpp textfileparser.cpp terraintype.cpp \
 objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp \
 messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messagedlg.cpp \
 simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
-gameevent_dialogs.cpp  
+gameevent_dialogs.cpp statisticdialog.cpp
 
 
 asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
@@ -174,7 +174,7 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) typen.$(OBJEXT) \
 	messagedlg.$(OBJEXT) simplestream.$(OBJEXT) \
 	mappolygons.$(OBJEXT) prehistoricevents.$(OBJEXT) \
 	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
-	gameevent_dialogs.$(OBJEXT)
+	gameevent_dialogs.$(OBJEXT) statisticdialog.$(OBJEXT)
 asc_OBJECTS = $(am_asc_OBJECTS)
 asc_DEPENDENCIES = $(top_builddir)/source/libs/triangul/libtriangul.la \
 	$(top_builddir)/source/ai/libai.la \
@@ -224,7 +224,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/resourcenet.Po ./$(DEPDIR)/sg.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/sgstream.Po ./$(DEPDIR)/simplestream.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/soundList.Po ./$(DEPDIR)/spfst.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/stack.Po ./$(DEPDIR)/stringtokenizer.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/stack.Po ./$(DEPDIR)/statisticdialog.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/stringtokenizer.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/strtmesg.Po ./$(DEPDIR)/terraintype.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/textfile_evaluation.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/textfileparser.Po \
@@ -355,6 +356,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/soundList.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spfst.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stack.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/statisticdialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stringtokenizer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strtmesg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/terraintype.Po@am__quote@

@@ -648,7 +648,7 @@ void         tsgpulldown :: init ( void )
    addfield ( "~S~tatistics" );
    addbutton ( "~U~nits", ua_unitstatistics );
    addbutton ( "~B~uildings", ua_buildingstatistics );
-   addbutton ( "~R~esources ", ua_statisticdialog );
+//   addbutton ( "~R~esources ", ua_statisticdialog );
    // addbutton ( "seperator");
    // addbutton ( "~H~istory");
 
