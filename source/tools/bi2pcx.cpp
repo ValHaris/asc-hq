@@ -80,6 +80,10 @@ int main(int argc, char *argv[] )
 
    loadpalette();
    loadbi3graphics();
+
+   loadAllData( false );
+   loadUnitSets();
+
 //   readBI3translationTable();
 
    memset ( bipict, 0, sizeof ( 0 ) );
@@ -89,7 +93,6 @@ int main(int argc, char *argv[] )
          FILE* fp = fopen (itemlistfile.c_str(), filewritemodetext );
          printf(" Printing graphics usage to text file %s \n\n", itemlistfile.c_str() );
 
-         loadalltextfiles();
 
          {
          /*
@@ -105,7 +108,6 @@ int main(int argc, char *argv[] )
 
          {
             printf("\nLoading terrain:\n");
-            loadallterraintypes();
             for ( int trr = 0; trr < terraintypenum; trr++ ) {
 
                pterraintype bdt = getterraintype_forpos(trr);
@@ -145,7 +147,6 @@ int main(int argc, char *argv[] )
          }
          {
             printf("\nLoading objects:\n");
-            loadallobjecttypes();
             for ( int ob = 0; ob < objecttypenum; ob++ ) {
                pobjecttype obj = getobjecttype_forpos( ob );
                fprintf(fp, "\n%s ; id %d ; pictures ", obj->filename.c_str(), obj->id );
@@ -176,12 +177,11 @@ int main(int argc, char *argv[] )
 
          {
             printf("\nLoading buildings:\n");
-            loadallbuildingtypes();
             for ( int bl = 0; bl < buildingtypenum; bl++ ) {
 
                pbuildingtype bld = getbuildingtype_forpos ( bl );
                fprintf(fp, "\n%s ; id %d ; pictures ", bld->filename.c_str(), bld->id );
-      
+
                for ( int i = 0; i< cwettertypennum ; i++ )
                   for ( int j = 0; j < maxbuildingpicnum; j++ )
                      for ( int k = 0; k < 4; k++ )
@@ -191,7 +191,7 @@ int main(int argc, char *argv[] )
                                  int n = bld->bi_picture[i][j][k][l];
                                  int t = bipict[n].textnum;
                                  bipict[n].textnum += 2;
-                 
+
                                  sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", bld->filename.c_str(), bld->id );
                                  sprintf ( bipict [ n ].entry[ t+1 ] .text, "    W=%d #%d X=%d Y=%d", i, j, k, l );
 
@@ -205,7 +205,6 @@ int main(int argc, char *argv[] )
 
          {
             printf("\nLoading vehicles:\n");
-            loadallvehicletypes();
             for ( int ve = 0; ve < vehicletypenum; ve++ ) {
 
                pvehicletype tnk = getvehicletype_forpos( ve );

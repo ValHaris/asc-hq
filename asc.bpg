@@ -11,7 +11,7 @@ BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
 PROJECTS = bzlib.lib libjpeg.lib triangulation.lib tools.lib SDLmm.lib \
   libsigcpp.lib mount.exe demount.exe makegfx.exe makepal.exe weaponguide.exe \
-  pcx2raw.exe gfx2pcx.exe ai.lib Paragui.lib mapeditor.exe asc.exe
+  pcx2raw.exe ai.lib Paragui.lib mapeditor.exe asc.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -72,10 +72,6 @@ makepal.exe: source\tools\win\makepal.bpr
 
 Paragui.lib: ..\paragui\borland\Paragui.bpr
   $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
-  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
-
-gfx2pcx.exe: source\tools\win\gfx2pcx.bpr
-  $(ROOT)\bin\bpr2mak $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 pcx2raw.exe: source\tools\win\pcx2raw.bpr
