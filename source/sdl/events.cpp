@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.13 2000-05-10 20:56:20 mbickel Exp $
+//     $Id: events.cpp,v 1.14 2000-06-01 15:27:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/05/10 20:56:20  mbickel
+//      mouseparams and ticker now volatile under linux too
+//
 //     Revision 1.12  2000/05/10 19:55:57  mbickel
 //      Fixed empty loops when waiting for mouse events
 //
@@ -79,8 +82,14 @@
 #include "../timer.h"
 #include "../stack.h"
 
-#include "SDL/SDL.h"
-#include "SDL/SDL_thread.h"
+#include "../global.h"
+#include sdlheader
+#ifdef WIN32
+ #include "SDL_thread.h"
+#else
+ #include "SDL/SDL_thread.h"
+#endif
+
 
 /* Data touched at mouse callback time -- they are in a structure to
 	simplify calculating the size of the region to lock.

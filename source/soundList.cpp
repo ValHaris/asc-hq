@@ -2,7 +2,8 @@
 #include <stdlib.h>
 
 #ifndef _DOS_
- #include <SDL/SDL.h>
+ #include "global.h"
+ #include sdlheader
 #endif
 
 #include "soundList.h"

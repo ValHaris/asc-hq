@@ -1,6 +1,9 @@
-//     $Id: timer.cpp,v 1.7 2000-05-10 20:56:20 mbickel Exp $
+//     $Id: timer.cpp,v 1.8 2000-06-01 15:27:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/05/10 20:56:20  mbickel
+//      mouseparams and ticker now volatile under linux too
+//
 //     Revision 1.6  2000/05/10 19:55:58  mbickel
 //      Fixed empty loops when waiting for mouse events
 //
@@ -51,7 +54,8 @@
 #include <stdlib.h>
 #include "../timer.h"
 
-#include "SDL/SDL.h"
+#include "../global.h"
+#include sdlheader
 
 #define timerintr 0x08
 #define pit_freq 0x1234DD  

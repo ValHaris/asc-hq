@@ -1,6 +1,10 @@
-//     $Id: keybp.h,v 1.10 2000-02-05 12:13:44 steb Exp $
+//     $Id: keybp.h,v 1.11 2000-06-01 15:27:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/02/05 12:13:44  steb
+//     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
+//     startup due to actmap being null when trying to report errors.
+//
 //     Revision 1.9  2000/01/04 19:43:52  mbickel
 //      Continued Linux port
 //
@@ -348,7 +352,8 @@
 
 #else //  _DOS_
 
-   #include "SDL/SDL.h"
+   #include "global.h"
+   #include sdlheader
 
    #define ct_invvalue   -1
    #define ct_shp  2048

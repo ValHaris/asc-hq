@@ -23,7 +23,9 @@
 #include <unistd.h>
 //#include <SDL/SDL_audio.h>
 //#include <SDL/SDL_error.h>
-#include <SDL/SDL.h>
+
+#include "../global.h"
+#include sdlheader
 #include "sound.h"
 
 #include "../basestrm.h"

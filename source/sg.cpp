@@ -1,6 +1,11 @@
-//     $Id: sg.cpp,v 1.43 2000-06-01 15:03:55 mbickel Exp $
+//     $Id: sg.cpp,v 1.44 2000-06-01 15:27:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2000/06/01 15:03:55  mbickel
+//      New command line evaluation code and parameters:
+//        Maps, savegames and email games can now be loaded by passing an command
+//        line parameter.  From Sven Riedel
+//
 //     Revision 1.42  2000/05/23 20:40:48  mbickel
 //      Removed boolean type
 //
@@ -3414,9 +3419,10 @@ int main(int argc, char *argv[] )
          truecoloravail = false;
 
          try {
-            tnfilestream stream ( "logo640.pcx", 1 );
-            loadpcxxy( &stream, 
-               (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 ); 
+            {
+               tnfilestream stream ( "logo640.pcx", 1 );
+               loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 );
+            }
 #ifdef logging
             logtofile ( "sg.cpp / main / loading data ");
 #endif

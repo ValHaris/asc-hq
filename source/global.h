@@ -20,7 +20,13 @@
 
 #ifndef global_h
  #define global_h
- 
+
+ #ifdef WIN32
+  #define sdlheader "SDL.h"
+ #else
+  #define sdlheader "SDL/SDL.h"
+ #endif
+
  #include "config.h"
 
  #ifdef __WATCOM_CPLUSPLUS__

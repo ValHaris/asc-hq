@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.9 2000-02-08 08:26:54 steb Exp $
+//     $Id: graphics.cpp,v 1.10 2000-06-01 15:27:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/02/08 08:26:54  steb
+//     Changed SDL.h to SDL/SDL.h to make installation on the average users system
+//     easier.
+//
 //     Revision 1.8  2000/01/31 16:08:40  mbickel
 //      Fixed crash in line
 //      Improved error handling in replays
@@ -50,7 +54,8 @@
 #include <stdlib.h>
 #include "graphics.h"
 #include "../basegfx.h"
-#include "SDL/SDL.h"
+#include "../global.h"
+#include sdlheader
 
 
 
