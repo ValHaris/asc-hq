@@ -1,6 +1,12 @@
-//     $Id: spfst.cpp,v 1.26 2000-05-06 20:25:24 mbickel Exp $
+//     $Id: spfst.cpp,v 1.27 2000-05-10 19:15:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/05/06 20:25:24  mbickel
+//      Fixed: -recognition of a second mouse click when selection a pd menu item
+//             -movement: fields the unit can only pass, but not stand on them,
+//                        are marked darker
+//             -intedit/stredit: mouseclick outside is like hitting enter
+//
 //     Revision 1.25  2000/04/27 16:25:27  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -5196,9 +5202,9 @@ void  checkunitsforremoval ( void )
              if ( eht->height <= chfahrend )
                 if ( eht->typ->terrainaccess->accessible ( field->bdt ) < 0 )
                    removevehicle ( &eht );
-
-             if ( getmaxwindspeedforunit( eht ) < actmap->weather.wind[getwindheightforunit ( eht )].speed*maxwindspeed )
-                 removevehicle ( &eht );
+             if ( eht )
+                if ( getmaxwindspeedforunit( eht ) < actmap->weather.wind[getwindheightforunit ( eht )].speed*maxwindspeed )
+                    removevehicle ( &eht );
 
           }
           eht = eht2;

@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.5 2000-05-07 17:04:07 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.6 2000-05-10 19:15:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/05/07 17:04:07  mbickel
+//      Fixed a bug in movement
+//
 //     Revision 1.4  2000/05/06 20:25:26  mbickel
 //      Fixed: -recognition of a second mouse click when selection a pd menu item
 //             -movement: fields the unit can only pass, but not stand on them,
@@ -1001,7 +1004,7 @@ int ChangeVehicleHeight :: moveunitxy ( int xt1, int yt1 )
          vehicle->height = newheight;
       }
    } else {
-      if ( vehicle->height == chtieffliegend ) {
+      if ( oldheight == chtieffliegend ) {
          // vehicle->fuel -= vehicle->typ->fuelconsumption * vehicle->typ->steigung;
          // if ( vehicle->fuel < 0 )
          //    vehicle->fuel = 0;
