@@ -2,9 +2,13 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.94 2001-09-24 17:22:12 mbickel Exp $
+//     $Id: spfst.cpp,v 1.95 2001-09-25 09:35:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.94  2001/09/24 17:22:12  mbickel
+//      Fixed crash in end of turn
+//      Improved documentation
+//
 //     Revision 1.93  2001/08/06 20:54:43  mbickel
 //      Fixed lots of crashes related to the new text files
 //      Fixed delayed events
@@ -1700,7 +1704,7 @@ void         putbuilding2( const MapCoordinate& entryPosition,
 
 void         resetallbuildingpicturepointers ( void )
 {
-   for (int s = 0; s < 8; s++)
+   for (int s = 0; s < 9; s++)
       for ( tmap::Player::BuildingList::iterator i = actmap->player[s].buildingList.begin(); i != actmap->player[s].buildingList.end(); i++ )
          (*i)->resetPicturePointers ();
 }

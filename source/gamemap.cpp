@@ -1093,6 +1093,11 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
   xsize = newx;
   ysize = newy;
 
+
+  for (int s = 0; s < 9; s++)
+     for ( tmap::Player::BuildingList::iterator i = actmap->player[s].buildingList.begin(); i != actmap->player[s].buildingList.end(); i++ )
+        (*i)->resetPicturePointers ();
+
   /*
   if (xpos + idisplaymap.getscreenxsize() > xsize)
      xpos = xsize - idisplaymap.getscreenxsize() ;
