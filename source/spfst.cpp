@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.20 2000-03-11 18:22:09 mbickel Exp $
+//     $Id: spfst.cpp,v 1.21 2000-04-03 09:52:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/03/11 18:22:09  mbickel
+//      Added support for multiple graphic sets
+//
 //     Revision 1.19  2000/02/24 10:54:09  mbickel
 //      Some cleanup and bugfixes
 //
@@ -703,8 +706,14 @@ char tweapdist::getweapstrength ( const SingleWeapon* weap, int dist, int attack
    if ( scalar >= 31 || scalar < 0 )
       return 0;
 
-   int typ = translat[ scalar ];
+   if ( scalar == 1 )     // mine
+      return 255;
 
+   int typ = translat[ scalar ];
+   if ( typ == 255 ) {
+      displaymessage("tweapdist::getweapstrength: invalid type ", 1 );
+      return 255;
+   }
 
 
    if ( weap->maxdistance == 0 )
