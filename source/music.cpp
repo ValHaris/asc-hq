@@ -19,8 +19,8 @@ PlayLists playLists;
 
 void loadAllMusicPlayLists ( )
 {
-    TextPropertyList& tpl = textFileRepository["playlist"];
-    for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
+   TextPropertyList& tpl = textFileRepository["playlist"];
+   for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
       PropertyReadingContainer pc ( "playlist", *i );
 
       MusicPlayList* mpl = new MusicPlayList;

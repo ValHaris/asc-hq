@@ -63,6 +63,7 @@ CLoadableGameOptions::CLoadableGameOptions(CGameOptions* pOptions)
    add(new IntProperty("Mouse.SmallGuiIconUnderMouse"		,&_pOptions->mouse.smalliconundermouse ));
    add(new IntProperty("Mouse.MapCenterButton"				,&_pOptions->mouse.centerbutton ));
    add(new IntProperty("Mouse.UnitWeaponInfoButton"		,&_pOptions->mouse.unitweaponinfo));
+   add(new IntProperty("Mouse.SingleClickAction"	   	,&_pOptions->mouse.singleClickAction));
    // add(new IntProperty("Mouse.dragndropmovement"		,&_pOptions->mouse.dragndropmovement));
 
    add(new IntProperty("Container.ProduceAmmoAutomatically"	,	&_pOptions->container.autoproduceammunition));

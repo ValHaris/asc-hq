@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl AC_REVISION($Revision: 1.55 $)dnl
+dnl AC_REVISION($Revision: 1.56 $)dnl
 dnl AM_MAINTAINER_MODE
 AC_INIT(source/typen.h)
 
@@ -91,6 +91,12 @@ LIBS="$LIBS $SDL_LIBS"
 AC_CHECK_LIB( SDL_image, IMG_LoadJPG_RW,,  AC_MSG_ERROR( ASC requires the SDL_image library. You can get it at www.libsdl.org ), )
 AC_CHECK_LIB( SDL_mixer, Mix_PlayChannelTimed,, AC_MSG_ERROR( ASC requires the SDL_mixer library. You can get it at www.libsdl.org ) )
 
+dnl How do we add $SDL_FLAGS to the CFLAGS so gcc finds these headers ?
+dnl
+dnl AC_CHECK_HEADERS( SDL_image.h,, AC_MSG_ERROR( ASC requires the development files for the SDL_image library. You can get the complete library at www.libsdl.org ))
+dnl AC_CHECK_HEADERS( SDL_mixer.h,, AC_MSG_ERROR( ASC requires the development files for the SDL_mixer library. You can get the complete library at www.libsdl.org ))
+
+
 dnl AM_PATH_SMPEG(0.4.3, :, AC_MSG_ERROR([*** SMPEG version 0.4.3 not found! Get it from http://www.lokigames.com/development/smpeg.php3 ]))
 dnl CXXFLAGS="$CXXFLAGS $SMPEG_CFLAGS"
 dnl CFLAGS="$CFLAGS $SMPEG_CFLAGS"
@@ -107,7 +113,7 @@ AM_PATH_PARAGUI(1.0.1,
             AC_MSG_ERROR([*** PARAGUI version 1.0.0 not found!])
 )
 
-echo Paragui CFLAGS are $PARAGUI_CFLAGS
+dnl echo Paragui CFLAGS are $PARAGUI_CFLAGS
 
 AC_LANG_RESTORE
 
@@ -260,7 +266,7 @@ pwrplant.raw bldinfo.raw mining.raw tabmark.raw \
 traninfo.raw attack.raw hexfeld.raw mapbkgr.raw \
 hex2oct.raw weapinfo.raw amatur.raw hxborder.raw \
 leergui.raw guiremov.raw  *.tec \
-hexmines.raw curshex2.raw markedfield.png curshex.raw \
+hexmines.raw curshex2.raw markedfield.pcx curshex.raw \
 railstat.map cancel.nic poweron.nic poweroff.nic \
 extload.nic consttnk.nic reacfoff.nic reacfire.nic \
 loading.nic viewmap.nic dig.nic abriss.nic \
@@ -270,7 +276,7 @@ persmine.nic tankmine.nic putmine.nic endturn.nic \
 informat.nic ascent.nic descent.nic attack.nic \
 movement.nic *.nic 640480.pcx *.raw *.scr *.fnt \
 *.dat *.map helpsys?.txt message?.txt *.pcx lcac2.jpg \
-bkgr4.scr helpsys9.msg *.wav *.msg *.gif"
+bkgr4.scr helpsys9.msg *.wav *.msg *.gif *.asctxt"
 
 dnl what gehts packed into main.con (the data container file)
 AC_SUBST([MAINCONDATA])

@@ -1,0 +1,4 @@
+playlist {
+   Name = Track 1 by Michael Kievernagel
+   tracks = *.mp3
+} playlist

@@ -99,10 +99,25 @@ environment variable <tt>ASC_CONFIGFILE</tt> to the path of your config file.
 <h2>Compiling ASC: FAQ</h2>
 
 
+<h3>configure or bootstrap complains it can't find sdl or paragui </h3>
+
+If you compiled the library yourself and installed it, the problem may be that aclocal doesn't search in all required paths. Paragui and SDL install their .m3
+files in /usr/local/share/aclocal , but at least on SuSE Linux this directory is missing from the aclocal search path. You can either run <br>
+<tt>
+aclocal -I /usr/local/share/aclocal <br>
+</tt>
+or copy the .m4 files from /usr/local/share/aclocal to /usr/share/aclocal
+<p>
+
+
 <h3>the compile complains it can't find sdl. </h3>
 
+If you have installed SDL in a non-standard directory, run: <br>
 <tt>./configure --with-SDL-prefix=&lt;where&gt;</tt>
 &lt;where&gt; should be the prefix you make installed SDL into.
+
+
+
 
 
 <h3>the compile complains it doesn't know how to build buildings.con (or any other *.con file) </h3>
@@ -284,7 +299,7 @@ operates.
 
 <hr>
 <i>
-$Id: install.html,v 1.2 2002-03-02 23:04:00 mbickel Exp $
+$Id: install.html,v 1.3 2002-03-03 22:19:32 mbickel Exp $
 </i>
 </BODY>
 </HTML>

@@ -2,9 +2,12 @@
     \brief Platform indepedant graphic functions. 
 */
 
-//     $Id: basegfx.cpp,v 1.32 2001-12-19 17:16:28 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.33 2002-03-03 22:19:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2001/12/19 17:16:28  mbickel
+//      Some include file cleanups
+//
 //     Revision 1.31  2001/12/19 11:46:35  mbickel
 //      Applied patches from Michael Moerz:
 //       - 64bit cleanup of demount.cpp, mount.cpp
@@ -2149,7 +2152,7 @@ void showtext2c ( const ASCString& text, int x, int y )
 }
 
 
-void* convertSurface ( SDLmm::Surface& s )
+void* convertSurface ( SDLmm::Surface& s, bool paletteTranslation )
 {
   s.Lock();
 
@@ -2158,18 +2161,26 @@ void* convertSurface ( SDLmm::Surface& s )
   wp[0] = s.w()-1;
   wp[1] = s.h()-1;
   SDLmm::PixelFormat fmt = s.GetPixelFormat();
-  for ( int y = 0; y < s.h(); y++ )
-     for ( int x = 0; x < s.w(); x++ ) {
-        Uint8 red, green, blue, alpha;
-        fmt.GetRGBA ( s.GetPixel ( x, y ), red, green, blue, alpha);
+  if ( fmt.BytesPerPixel() == 1 && !paletteTranslation ) {
+     for ( int y = 0; y < s.h(); y++ )
+        for ( int x = 0; x < s.w(); x++ )
+           buf[4 + s.w()*y+x] = s.GetPixel ( x, y );
 
-        if ( alpha < 128 )
-           buf[4 + s.w()*y+x] = 255;
-        else
-           buf[4 + s.w()*y+x] = truecolor2pal_table[ (red >> 2) +
-                                                     (( green >> 2) << 6) +
-                                                     (( blue >> 2) << 12) ];
-     }
+  } else {
+
+     for ( int y = 0; y < s.h(); y++ )
+        for ( int x = 0; x < s.w(); x++ ) {
+           Uint8 red, green, blue, alpha;
+           fmt.GetRGBA ( s.GetPixel ( x, y ), red, green, blue, alpha);
+
+           if ( alpha < 128 )
+              buf[4 + s.w()*y+x] = 255;
+           else
+              buf[4 + s.w()*y+x] = truecolor2pal_table[ (red >> 2) +
+                                                        (( green >> 2) << 6) +
+                                                        (( blue >> 2) << 12) ];
+        }
+  }
 
   s.Unlock();
   return buf;

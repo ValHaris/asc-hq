@@ -138,6 +138,9 @@ class CGameOptions
 
          //! not used
          int dragndropmovement;
+
+         //! if != 0, a single click will mark a field AND open the small gui menu
+         int singleClickAction;
       }
       mouse;
 

@@ -3,9 +3,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.125 2002-01-07 11:40:40 mbickel Exp $
+//     $Id: controls.cpp,v 1.126 2002-03-03 22:19:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.125  2002/01/07 11:40:40  mbickel
+//      Fixed some syntax errors
+//
 //     Revision 1.124  2001/12/19 17:16:28  mbickel
 //      Some include file cleanups
 //
@@ -3284,7 +3287,10 @@ void cmousecontrol :: chkmouse ( void )
                cursor.show();
                mousevisible(true);
             } else 
-              if ( mousestat == 2  ||  mousestat == 0 ||  ((moveparams.movestatus || pendingVehicleActions.action) && getfield( actmap->xpos + x, actmap->ypos + y)->a.temp )  ) {
+              if (    mousestat == 2
+                  ||  mousestat == 0
+                  ||  ((moveparams.movestatus || pendingVehicleActions.action) && getfield( actmap->xpos + x, actmap->ypos + y)->a.temp )
+                  ||  CGameOptions::Instance()->mouse.singleClickAction ) {
                  {
                     // collategraphicoperations cgo;
                     if ( cursor.posx != x || cursor.posy != y ) {
@@ -3302,7 +3308,12 @@ void cmousecontrol :: chkmouse ( void )
                     actgui->painticons();
                  }
                  pfield fld = getactfield();
-                 actgui->paintsmallicons( CGameOptions::Instance()->mouse.smallguibutton, !fld->vehicle && !fld->building && !fld->a.temp );
+                 bool positionedUnderCursor = false;
+                 if (( fld->vehicle || fld->building) && fieldvisiblenow(fld))
+                    positionedUnderCursor = true;
+                 if ( fld->a.temp )
+                    positionedUnderCursor = true;
+                 actgui->paintsmallicons( CGameOptions::Instance()->mouse.smallguibutton, !positionedUnderCursor );
                  mousestat = 0;
               }
       } else 

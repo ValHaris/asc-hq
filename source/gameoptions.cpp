@@ -90,6 +90,7 @@ void CGameOptions::setDefaults ( void )
 
    mouse.unitweaponinfo=0;
    mouse.dragndropmovement=0;
+   mouse.singleClickAction=0;
 
    container.autoproduceammunition=1;
    container.filleverything=1;
@@ -167,6 +168,7 @@ void CGameOptions::copy ( const CGameOptions& cgo )
    mouse.centerbutton    = cgo.mouse.centerbutton;
    mouse.unitweaponinfo  = cgo.mouse.unitweaponinfo;
    mouse.dragndropmovement=cgo.mouse.dragndropmovement;
+   mouse.singleClickAction=cgo.mouse.singleClickAction;
 
    container.autoproduceammunition = cgo.container.autoproduceammunition;
    container.filleverything = cgo.container.filleverything;

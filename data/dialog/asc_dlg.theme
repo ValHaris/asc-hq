@@ -243,7 +243,6 @@
 	    <color name="textcolor" value="0x00303030"/>
 	    <property name="bordersize" value="0"/>
 	    <property name="height" value="20"/>
-       	    <ggradient name="gradient" color0="0x00000000" color1="0x00000000" color2="0x00ff0000" color3="0x00ff0000"/>
 	    <filename name="background" value="asc/top_grey.bmp"/>
 	    <property name="backmode" value="TILE"/>
 	    <property name="blend" value="0"/>

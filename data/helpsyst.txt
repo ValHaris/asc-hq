@@ -222,7 +222,7 @@ The port to Linux was done by Tom Wilson, Simon Britnell and Martin Bickel
 
 Steffen Fröhlich maintains the standard unit set and has created several map graphics.
 
-The music was composed by Michael Kievernagel.
+Music composed by Michael Kievernagel.
 
 The ASC logo and the title screens were created by Frank Fiedler.
 

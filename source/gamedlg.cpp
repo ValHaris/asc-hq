@@ -1,9 +1,15 @@
 /*! \file gamedlg.cpp    
     \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.89 2002-03-02 23:04:01 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.90 2002-03-03 22:19:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.89  2002/03/02 23:04:01  mbickel
+//      Some cleanup of source code
+//      Improved Paragui Integration
+//      Updated documentation
+//      Improved Sound System
+//
 //     Revision 1.88  2002/02/21 17:06:50  mbickel
 //      Completed Paragui integration
 //      Moved mail functions to own file (messages)
@@ -2945,7 +2951,7 @@ const char* mousebuttonnames[mousebuttonnum] = { "left", "right", "center" };
 class tmousepreferences : public tdialogbox {
                         CGameOptions actoptions;
                         int status;
-                        tmouserect r1, r2, ydelta;
+                        tmouserect r1, r2, r3, ydelta;
                         tmouserect dlgoffset;
                         char actgamepath[200];
                         int mouseActionNum;
@@ -3056,6 +3062,11 @@ void tmousepreferences :: init ( void )
    addbutton ( "", xsize -35, r2.y1 , r2.x2, r2.y2, 3, 0, 10, true );
    addeingabe ( 10, &actoptions.smallguiiconopenaftermove , 0, dblue  );
 
+   r3 = r2 + ydelta;
+
+   addbutton ( "", xsize -35, r3.y1 , r3.x2, r3.y2, 3, 0, 11, true );
+   addeingabe ( 11, &actoptions.mouse.singleClickAction , 0, dblue  );
+
 
    buildgraphics(); 
 
@@ -3084,6 +3095,9 @@ void tmousepreferences :: init ( void )
    paintbutt( 4 );
    
    showtext2 ( "mousegui menu opens after movement",  x1 + 25, r2.y1 + dlgoffset.y1 );
+
+   showtext2 ( "single click for field select and menu",  x1 + 25, r2.y1 + dlgoffset.y1 + dlgoffset.y1 );
+
 
    status = 0;
 }

@@ -418,7 +418,10 @@ extern int fullscreen;
 //! sets the caption of the main window
 extern void setWindowCaption ( const char* s );
 
-//! converts a SDLmm::Surface to an old style image buffer
-extern void* convertSurface ( SDLmm::Surface& s );
+/** converts a SDLmm::Surface to an old style image buffer
+    \param s The source surface
+    \param paletteTranslation If the source surface is 8 bit, convertSurface will convert the palette to the ASC palette if this is set to true.
+*/
+extern void* convertSurface ( SDLmm::Surface& s, bool paletteTranslation = true );
 
 #endif

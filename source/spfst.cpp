@@ -2,9 +2,14 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.106 2002-03-03 14:13:49 mbickel Exp $
+//     $Id: spfst.cpp,v 1.107 2002-03-03 22:19:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.106  2002/03/03 14:13:49  mbickel
+//      Some documentation updates
+//      Soundsystem update
+//      AI bug fixed
+//
 //     Revision 1.105  2002/03/02 23:04:01  mbickel
 //      Some cleanup of source code
 //      Improved Paragui Integration
@@ -620,10 +625,10 @@ void         tcursor::init ( void )
    backgrnd = new int [  imagesize ( 0, 0, fieldxsize, fieldysize ) ];
 
    {
-      tnfilestream iconl ( "markedfield.png", tnstream::reading );
-      SDLmm::Surface markedField ( IMG_LoadPNG_RW( SDL_RWFromStream ( &iconl )));
+      tnfilestream iconl ( "markedfield.pcx", tnstream::reading );
+      SDLmm::Surface markedField ( IMG_Load_RW( SDL_RWFromStream ( &iconl ), true ));
 
-      cursor.markfield = convertSurface ( markedField );
+      cursor.markfield = convertSurface ( markedField, false );
    }
 
    {
