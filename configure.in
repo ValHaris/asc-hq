@@ -169,9 +169,34 @@ AC_SUBST([LDADDLIBBZ2])
 dnl docbook2man
 AC_SUBST(DOCBOOK2MAN)
 
+
+dnl *************************************************************************
+dnl Checking and assembling the data files
+
+AC_MSG_CHECKING("data files")
+missingdata=`checkfordata.pl data/buildings.con data/mk1.con data/trrobj.con data/trrobj2.con`
+if test "x$missingdata" = x ; then
+  AC_MSG_RESULT("yes")
+else
+  AC_MSG_RESULT("no")
+  AC_MSG_ERROR( [ 
+The following data files could not be found: $missingdata 
+These must be downloaded separately. This can be done automatically by calling
+the ./getdata script or you get them manually from  
+http://www.asc-hq.org/download_updates.html 
+] )
+fi
+
+
+AC_TRY_COMPILE( [#include <string>], [
+   std::basic_string<wchar_t> test;
+   test.c_str();
+],, Unicode_broken=yes)
+
+
 dnl what gehts packed into main.con (the data container file) and in which
 dnl order
-configure.in
+
 MAINCONDATA="palette.pal data.version *.gfx title.jpg title_mapeditor.jpg \
 progress.* smalaril.fnt usablack.fnt arial8.fnt \
 msystem.fnt gui.fnt guicol.fnt monogui.fnt sounds.txt \
