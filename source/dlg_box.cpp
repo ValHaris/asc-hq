@@ -2972,6 +2972,9 @@ ASCString  readtextmessage( int id )
   while( tmpstr.find ( ".MAP") != string::npos )
      tmpstr.replace ( tmpstr.find ( ".MAP"), 4, ".msg" );
 
+  displayLogMessage(7, ASCString("Retrieving message ") + strrr(id) + "; looking for message file " + tmpstr );
+
+
   tfindfile ff3 ( tmpstr.c_str() );
   tfindfile ff2 ( "*.msg" );
   tfindfile ff ( "helpsys?.txt" );

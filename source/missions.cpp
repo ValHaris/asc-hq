@@ -214,30 +214,40 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
   peventstore  oldevent;
   int     si1, si2;
 
-   eject = false; 
+  #if 0
+  if ( ev->a.action == cenextmap ) {
+      for (b = 0; b <= 3; b++)
+         ev->triggerstatus[b] =2;
+      execevent( ev, md ); 
+  }
+  return;
+#endif
+
+
+   eject = false;
 
   if ( ev->triggertime.abstime != -1 )
      execevent ( ev, md );
   else {
 
-      for (b = 0; b <= 3; b++) { 
-         if (ev->triggerstatus[b] < 2) { 
+      for (b = 0; b <= 3; b++) {
+         if (ev->triggerstatus[b] < 2) {
             switch (ev->trigger[b]) {
-               
-               case ceventt_turn:   { 
-                                 if ( ( actmap->time.abstime >=  ev->trigger_data[b]->time.abstime )  && (actmap->actplayer == ev->player  || ev->player == 8 )) 
-                                    ev->triggerstatus[b] = 2; 
-                                 else 
-                                    ev->triggerstatus[b] = 0; 
-   
-                              } 
-               break; 
-                                
-               case ceventt_buildingconquered:   { 
-                                             if ( ev->trigger_data[b]->building->color == ev->player * 8) 
-                                                ev->triggerstatus[b] = 1; 
-                                             else 
-                                                ev->triggerstatus[b] = 0; 
+
+               case ceventt_turn:   {
+                                 if ( ( actmap->time.abstime >=  ev->trigger_data[b]->time.abstime )  && (actmap->actplayer == ev->player  || ev->player == 8 ))
+                                    ev->triggerstatus[b] = 2;
+                                 else
+                                    ev->triggerstatus[b] = 0;
+
+                              }
+               break;
+
+               case ceventt_buildingconquered:   {
+                                             if ( ev->trigger_data[b]->building->color == ev->player * 8)
+                                                ev->triggerstatus[b] = 1;
+                                             else
+                                                ev->triggerstatus[b] = 0;
                                           } 
                break; 
                
@@ -295,7 +305,7 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
                                        else
                                           ev->triggerstatus[b] = 0;
                                     }
-                                 } 
+                                 }
                break;
 
                case ceventt_unitdestroyed:   {
@@ -320,7 +330,7 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
                                              } 
                break; 
                
-               case ceventt_event:   { 
+               case ceventt_event:   {
                                  ev->triggerstatus[b] = 0; 
                                  if ( !ev->trigger_data[b]->mapid ) {
                                     ev2 = actmap->firsteventpassed; 
@@ -470,7 +480,7 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
       } 
    
    
-      si1 = 1; 
+      si1 = 1;
       si2 = -1; 
    
       memset(stt, 0, sizeof(stt));
@@ -695,10 +705,10 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
                        
                if (ev3 == NULL) 
                   ev2 = actmap->firsteventpassed; 
-               else 
+               else
                   ev2 = ev3->next; 
             } 
-                
+
             ev3 = ev2; 
             ev2 = ev2->next; 
          } 
@@ -719,7 +729,7 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
          */
          displaymessage("the eraseevent action has been removed !", 1 );
       } 
-   
+
       if (ev->a.action == cenextmap) {
          if ( !actmap->continueplaying ) {
             if (actmap->campaign != NULL) {

@@ -1,6 +1,12 @@
-//     $Id: typen.h,v 1.128 2003-05-01 18:02:22 mbickel Exp $
+//     $Id: typen.h,v 1.129 2003-05-06 19:01:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.128  2003/05/01 18:02:22  mbickel
+//      Fixed: no movement decrease for cargo when transport moved
+//      Fixed: reactionfire not working when descending into range
+//      Fixed: objects not sorted
+//      New map event: add object
+//
 //     Revision 1.127  2003/04/25 09:59:16  mbickel
 //      Added 6th campaign map
 //      Added Laser weapon
@@ -695,8 +701,8 @@ class tevent {
     tevent ( const tevent& event );
     ~tevent ( void );
 
-    EventAction* eventAction;
-    int eventActionType;
+    /*EventAction* eventAction;
+    int eventActionType;*/
 
 };
 
