@@ -112,6 +112,9 @@ int main(int argc, char *argv[] )
             cn.toLower();
             // now we are cycling through all files that match wildcard
 
+            printf(" processing unit %s , ID %d ... ", ft->description.c_str(), ft->id );
+
+
             string s, s1, s2, s3, s4, s5, s6, b1, b2;
             s = s1 = s2 = s3 = s4 = s5 = s6 = b1 = b2 = cn;
 
@@ -133,7 +136,7 @@ int main(int argc, char *argv[] )
             FILE* detailed3 = fopen ( s3.c_str(), "w" );
             FILE* detailed4 = fopen ( s4.c_str(), "w" );
             FILE* detailed5 = fopen ( s5.c_str(), "w" );
-            FILE* detailed6 = fopen ( s5.c_str(), "w" );
+            FILE* detailed6 = fopen ( s6.c_str(), "w" );
             // c_str() converts a c++ string back to a c string which fopen requires
 
 
@@ -608,7 +611,7 @@ int main(int argc, char *argv[] )
             }
 
             for ( i = 0; i < ft->objectsBuildable.size(); i++ ) {
-               printf("es können die Objekte mit ids von %d bis %d gebaut werden\n", ft->vehiclesBuildable[i].from, ft->vehiclesBuildable[i].to );
+               printf("es können die Objekte mit ids von %d bis %d gebaut werden\n", ft->objectsBuildable[i].from, ft->objectsBuildable[i].to );
                for ( int b = 0; b < objecttypenum; b++ ) {
                   pobjecttype obj = getobjecttype_forpos ( b );
                   if (     obj->id >= ft->objectsBuildable[i].from
@@ -637,7 +640,7 @@ int main(int argc, char *argv[] )
             fclose ( detailed6 );
             // closing the file
 
-            printf(" processed unit %s \n", ft->description.c_str() );
+            printf(" done \n" );
             // we are writing this not to a file, but the screen
 
          }
