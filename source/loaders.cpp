@@ -1,6 +1,9 @@
-//     $Id: loaders.cpp,v 1.4 1999-11-23 21:07:31 mbickel Exp $
+//     $Id: loaders.cpp,v 1.5 1999-12-14 20:23:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/23 21:07:31  mbickel
+//      Many small bugfixes
+//
 //     Revision 1.3  1999/11/22 18:27:34  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -2114,7 +2117,11 @@ void tspfldloaders::readfields ( void )
             k = b2; 
          } 
        
-         fld2->typ = getterraintype_forid ( k, 0 )->weather[weather];
+         pterraintype trn = getterraintype_forid ( k, 0 );
+         if ( !trn ) 
+            throw tinvalidid ( "no terrain with matching id found; ID = ", k );
+
+         fld2->typ = trn->weather[weather];
          if ( !fld2->typ ) 
             throw tinvalidid ( "no terrain with matching id found; ID = ", k );
 

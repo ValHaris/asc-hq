@@ -1,6 +1,10 @@
-//     $Id: loadbi3.cpp,v 1.6 1999-12-07 22:13:20 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.7 1999-12-14 20:23:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/12/07 22:13:20  mbickel
+//      Fixed various bugs
+//      Extended BI3 map import tables
+//
 //     Revision 1.5  1999/11/22 18:27:32  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -296,7 +300,7 @@ class tgetbi3pict {
    public:
       tgetbi3pict ( void );
       void paint ( void );
-      void run ( int* num, void** picture );
+      void run ( int* num );
 
 };
 
@@ -346,7 +350,7 @@ void tgetbi3pict :: paint ( void )
    }
 }
 
-void tgetbi3pict :: run ( int* num, void** picture )
+void tgetbi3pict :: run ( int* num )
 {
    if ( !fnt ) {
       tnfilestream stream ( "monogui.fnt", 1 );
@@ -408,7 +412,7 @@ void tgetbi3pict :: run ( int* num, void** picture )
 
    } while ( ch != ct_enter || marked < 0 ); /* enddo */
 
-   *picture = bi3graphics[marked];
+//   *picture = bi3graphics[marked];
    *num = marked;
 
    npop ( activefontsettings );
@@ -418,28 +422,18 @@ void tgetbi3pict :: run ( int* num, void** picture )
 void getbi3pict ( int* num, void** picture )
 {
    tgetbi3pict gbi3p;
-   gbi3p.run ( num, picture );
+   gbi3p.run ( num );
+   loadbi3pict_double ( *num, picture );
 }
 
 
 void getbi3pict_double ( int* num, void** picture )
 {
    tgetbi3pict gbi3p;
-   gbi3p.run ( num, picture );
-   bar ( 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, 255 );
-   putimage ( 0, 0, *picture );
-   for ( int y = 0; y < fieldysize/2; y++ )
-     for ( int x = 0; x < fieldxsize/2; x++ ) {
-        int c = getpixel ( x, y );
-        putpixel ( 100 + x*2, 100 + y*2, c );
-        putpixel ( 100 + x*2, 101 + y*2, c );
-        putpixel ( 101 + x*2, 100 + y*2, c );
-        putpixel ( 101 + x*2, 101 + y*2, c );
-     }
-   void* buf = new char [ imagesize ( 100, 100, 99+fieldxsize, 99+fieldysize )];
-   getimage ( 100, 100, 99+fieldxsize, 99+fieldysize, buf );
-   putimage ( 200, 200, buf );
-   *picture = buf;
+   gbi3p.run ( num );
+
+   loadbi3pict_double ( *num, picture );
+
 }
 
 void loadbi3pict_double ( int num, void** pict, int interpolate )
@@ -553,7 +547,7 @@ const int terraintranslate[terraintranslatenum][2] = {{ 574 , 526 } , { 575 , 12
                                                       { 576 ,1238 } , { 578 , 1245 }, {579, 1249 }, 
                                                       { 580 ,1253 } , { 242 , 1135 }, {463,  449 },
                                                       { 464,  450 } , { 465,  451  }, {466,  452 },
-                                                      { 237, 1108 } , { 233, 1094 }};
+                                                      { 237, 1110 } , { 233, 1094 }};
 
 const int terraincombixlatnum = 2;
 struct terraincombixlat {
@@ -565,7 +559,7 @@ struct terraincombixlat {
 const terraincombixlat terraincombixlat[terraincombixlatnum] = {{ 222, 1011, 0, 1 }, 
                                                                 { 223, 1012, 0, 1 }};
 
-const int objecttranslatenum = 30;
+const int objecttranslatenum = 35;
 const int objecttranslate[objecttranslatenum][5] = {{ 1264, 1470, 1500, -1, -1 }, 
                                                     { 1265, 1470, -1, 1560, -1 }, 
                                                     { 1266, 1470, -1, -1, 1530 }, 
@@ -595,7 +589,12 @@ const int objecttranslate[objecttranslatenum][5] = {{ 1264, 1470, 1500, -1, -1 }
                                                     {  238, 1113, -1, -1, -1 },
                                                     {  239, 1118, -1, -1, -1 },
                                                     {  240, 1125, -1, -1, -1 },
-                                                    {  241, 1131, -1, -1, -1 }
+                                                    {  241, 1131, -1, -1, -1 },
+                                                    {  345, 1152, -1, -1, -1 },
+                                                    { 1332, 1310, -1, -1, -1 },
+                                                    {  347,  340, -1, -1, -1 },
+                                                    {  348,  342, -1, -1, -1 },
+                                                    {  461, 1203, -1, -1, -1 }
                                                     };
 
 
@@ -987,6 +986,9 @@ void        tloadBImap ::   ReadACTNPart(void)
                Line[X] = terraintranslate[tr][1];
          int found = 0;
          pfield fld = getfield ( X / 2, Y * 2 + (X & 1) );
+         fld->tempw = Line[X];
+         fld->temp3 = 0;
+
          for ( int i = 0; i < terraintypenum; i++ ) {
             pterraintype trrn = getterraintype_forpos ( i );
             if ( trrn )
@@ -1049,6 +1051,9 @@ void        tloadBImap ::   ReadACTNPart(void)
          int newx = X / 2;
          int newy = Y * 2 + (X & 1);
 
+         if ( Line[X] != 0xffff )
+            getfield ( newx, newy )->tempw = Line[X];
+
 
          int xl = 0;
          int xlt[5];
@@ -1089,7 +1094,8 @@ void        tloadBImap ::   ReadACTNPart(void)
          }
 
          if ( !found  && Line[X] != 0xffff ) {
-            getfield ( newx, newy )->tempw = Line[X];
+            getfield ( newx, newy )->temp3 = 1;
+
             int fnd = 0;
             for ( int k = 0; k < missnum; k++ )
                if ( miss[k] == Line[X] )
@@ -1103,6 +1109,7 @@ void        tloadBImap ::   ReadACTNPart(void)
       }
       
     } 
+/*
     if ( missnum ) {
        strcat ( missing, "The following objects could not be found: " );
        for ( int k = 0; k < missnum; k++ ) {
@@ -1111,7 +1118,7 @@ void        tloadBImap ::   ReadACTNPart(void)
        }
        strcat ( missing, "\n\n");
     }
-
+*/
 
     for (Y = 0; Y < Size.Y ; Y++) { 
       MissFile->readdata ( Line, Size.X * 2 ); 
@@ -1263,11 +1270,14 @@ void       tloadBImap :: ReadSHOPPart( void )
               if ( found ) {
                  putbuilding ( xoffset + newx, yoffset + newy, 0, bldlist[actpos].bld, bldlist[actpos].bld->construction_steps - 1, 1 );
                  if ( fld->building ) {
-                    /*
+                    
                     for ( int m = 0; m < 4; m++ )
                        for ( int n = 0; n < 6; n++ )
-                          if ( bld->getpicture( m , n ) ) {
+                          if ( fld->building->getpicture( m , n ) ) {
                              pfield field = getbuildingfield ( fld->building, m, n );
+                             field->temp3 = 0;
+                          }
+                       /*
                              if ( field->object )
                                 for ( int o = 0; o < field->object->objnum; o++ )
                                    field->removeobject ( field->object->object[o]->typ );
@@ -1362,6 +1372,37 @@ void       tloadBImap :: ReadSHOPPart( void )
    if ( TPWMtextfile ) 
       strcat ( missing, "\nThe names of the buildings could not be read because the text file is TPWM encoded. Please decode it first if you want to keep the names of the shops !\n");
    
+
+   int missnum = 0;
+   dynamic_array<int> miss;
+
+   for ( int y = 0; y < actmap->ysize; y++ )
+      for ( int x = 0; x < actmap->xsize; x++ ) 
+         if ( getfield(x,y)->temp3 ) {
+            int m = getfield(x,y)->tempw;
+            if ( m > 0 && m != 0xffff ) {
+               int fnd = 0;
+               for ( int k = 0; k < missnum; k++ )
+                  if ( miss[k] == m )
+                     fnd = 1;
+   
+               if ( !fnd ) 
+                  miss[missnum++] = m;
+               
+            }
+         }
+      
+     
+   if ( missnum ) {
+      strcat ( missing, "The following objects could not be found: " );
+      for ( int k = 0; k < missnum; k++ ) {
+         strcat ( missing, strrr ( miss[k] ));
+         strcat ( missing, ", ");
+      }
+      strcat ( missing, "\n\n");
+   }
+
+
 } 
 
 

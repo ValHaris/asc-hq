@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.7 1999-12-07 22:13:27 mbickel Exp $
+//     $Id: spfst.cpp,v 1.8 1999-12-14 20:24:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  1999/12/07 22:13:27  mbickel
+//      Fixed various bugs
+//      Extended BI3 map import tables
+//
 //     Revision 1.6  1999/11/25 22:00:12  mbickel
 //      Added weapon information window
 //      Added support for primary offscreen frame buffers to graphics engine
@@ -4487,7 +4491,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
                             fld->vehicle->putimage ( r + unitrightshift , yp + unitdownshift );
       
                   /* display streets, railroads and pipelines */
-                      if ( !fld->building ) 
+                      if ( !fld->building || !fld->building->visible ) 
                            if ( fld->object )
                               for ( int n = 0; n < fld->object->objnum; n++ )  {
                                  int h = fld->object->object[n]->typ->height;

@@ -1,6 +1,15 @@
-//     $Id: gamedlg.cpp,v 1.5 1999-11-22 18:27:22 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.6 1999-12-14 20:23:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/11/22 18:27:22  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.4  1999/11/18 17:31:09  mbickel
 //      Improved BI-map import translation tables
 //      Moved macros to substitute Watcom specific routines into global.h
@@ -560,6 +569,22 @@ void  tsetupnetwork :: init ( tnetwork* nw, int edt, int playr )
    addbutton ( "choose method", x1 + xsize/2 + 15, y1 + ysize - 120, x1 + xsize - 20, y1 + ysize - 95, 0, 1, 9 , (edit & 2) > 0 );
 
    windowstyle &= ~dlg_in3d;
+
+   if ( (edit & 4) || !(edit & 8) ) {
+      if ( player == -1 ) {
+         int fp = actmap->actplayer;
+         if ( fp == -1 ) {
+            fp = 0;
+            while ( actmap->player[ fp ].existent == 0 )
+               fp++;
+         }
+         frstcompnum = actmap->network->player[ fp ].compposition;
+      } else
+         frstcompnum = actmap->network->player[ player ].compposition;
+   } else
+      frstcompnum = 0;
+
+
    buildgraphics();
 }
 
@@ -586,20 +611,6 @@ void tsetupnetwork :: redraw ( void )
 
    rahmen ( true, x1 + 20,           y1 + starty + 160, x1 + xsize/2 - 15, y1 + starty + 180 );
    rahmen ( true, x1 + xsize/2 + 15, y1 + starty + 160, x1 + xsize - 20,   y1 + starty + 180 );
-
-   if ( (edit & 4) || !(edit & 8) ) {
-      if ( player == -1 ) {
-         int fp = actmap->actplayer;
-         if ( fp == -1 ) {
-            fp = 0;
-            while ( actmap->player[ fp ].existent == 0 )
-               fp++;
-         }
-         frstcompnum = actmap->network->player[ fp ].compposition;
-      } else
-         frstcompnum = actmap->network->player[ player ].compposition;
-   } else
-      frstcompnum = 0;
 
    /*
    if ( edit ) {

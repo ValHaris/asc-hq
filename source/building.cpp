@@ -1,6 +1,10 @@
-//     $Id: building.cpp,v 1.8 1999-12-07 22:13:13 mbickel Exp $
+//     $Id: building.cpp,v 1.9 1999-12-14 20:23:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  1999/12/07 22:13:13  mbickel
+//      Fixed various bugs
+//      Extended BI3 map import tables
+//
 //     Revision 1.7  1999/11/25 21:59:59  mbickel
 //      Added weapon information window
 //      Added support for primary offscreen frame buffers to graphics engine
@@ -3165,12 +3169,8 @@ void  ccontainer_b :: paintvehicleinfo ( void )
 {
    if ( unitmode == mnormal )
       dashboard.paintvehicleinfo ( getmarkedunit(), NULL, NULL, NULL );
-   else {
-      pvehicletype fzt = getmarkedunittype ();
-      if ( fzt ) 
-         :: dashboard.paintvehicleinfo ( NULL, NULL, NULL, fzt );
-
-   }
+   else 
+      :: dashboard.paintvehicleinfo ( NULL, NULL, NULL, getmarkedunittype () );
 }
 
 
@@ -5629,11 +5629,12 @@ ccontainer_t :: ctransportinfo_subwindow :: ctransportinfo_subwindow ( void )
    laschpic1 = icons.container.lasche.a.transportinfo[0];
    laschpic2 = icons.container.lasche.a.transportinfo[1];
 
-   helplist.num = 3;
+   helplist.num = 4;
 
-   static tonlinehelpitem transportinfohelpitems[3]    = {{246 + subwinx1 , 22 + subwiny1 , 266 + subwinx1,108 + subwiny1, 20130 },
+   static tonlinehelpitem transportinfohelpitems[4]    = {{246 + subwinx1 , 22 + subwiny1 , 266 + subwinx1,108 + subwiny1, 20130 },
                                                           {277 + subwinx1 , 22 + subwiny1 , 297 + subwinx1,108 + subwiny1, 20131 },
-                                                          {308 + subwinx1 , 22 + subwiny1 , 328 + subwinx1,108 + subwiny1, 20132 }};
+                                                          {308 + subwinx1 , 22 + subwiny1 , 328 + subwinx1,108 + subwiny1, 20132 },
+                                                          {subwinx1 + 70,  subwiny1 + 33, subwinx1 + 200,  subwiny1 + 41,  20133 }};
 
 
    helplist.item = transportinfohelpitems;
@@ -5679,7 +5680,7 @@ void  ccontainer_t :: ctransportinfo_subwindow :: display ( void )
    activefontsettings.length = 0;
    showtext3c ( "~Transport:~",  subwinx1 + 8,  subwiny1 + 25 );
    showtext2c ( "act load:",        subwinx1 + 70,  subwiny1 + 25 );
-   showtext2c ( "max load:",        subwinx1 + 70,  subwiny1 + 33 );
+   showtext2c ( "max (single / total):",        subwinx1 + 70,  subwiny1 + 33 );
    showtext2c ( "free:",            subwinx1 + 70,  subwiny1 + 41 );
 
 
@@ -5713,8 +5714,11 @@ void ccontainer_t :: ctransportinfo_subwindow :: paintvariables ( void )
 
    activefontsettings.length = 40;
 
+   char buf[50];
+   sprintf(buf, "%d / %d", cc_t->vehicle->typ->maxunitweight, cc_t->vehicle->typ->loadcapacity );
+
    showtext2c ( strrr ( mass ),                          subwinx1 + 170,  subwiny1 + 25 );
-   showtext2c ( strrr ( cc_t->vehicle->typ->loadcapacity ),  subwinx1 + 170,  subwiny1 + 33 );
+   showtext2c ( buf,                                     subwinx1 + 170,  subwiny1 + 33 );
    showtext2c ( strrr ( free ),                          subwinx1 + 170,  subwiny1 + 41 );
 
    eht = hostcontainer->getmarkedunit();

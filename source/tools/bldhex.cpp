@@ -31,6 +31,7 @@
 #include "..\mousehnd.h"
 #include "..\misc.h"
 #include "..\keybp.h"
+#include "..\basegfx.h"
 
 #define maxint 1147483648
 
@@ -398,6 +399,9 @@ main ()
          printf ("\n    for which weather should the building be available \n");
          bitselect (wt, cwettertypen, cwettertypennum);
    
+         memset ( bld->bi_picture, 0, sizeof ( bld->bi_picture ));
+         memset ( bld->w_picture, 0, sizeof ( bld->w_picture ));
+
 /*
          for ( int pic = 0; pic < pictnum; pic++ ) {
             printf("\n\n picture # %d \n", pic );
@@ -411,7 +415,7 @@ main ()
            
                  if ( battleisle ) {
                     int   i ;
-                    initsvga (0x101);
+                    initgraphics ( 640, 480, 8 );
                     setvgapalette256 ( pal );
                     for ( i=0; i < pictnum; i++ ) {
                        int end = 0;
@@ -443,7 +447,7 @@ main ()
                       } while ( !end );
                     }
            
-                    closesvga();
+                    closegraphics();
                     settxt50mode ();
            
                  } else {
@@ -453,7 +457,7 @@ main ()
                        tfile pictfile;
                        fileselect ("*.PCX", _A_NORMAL, pictfile);
                                                  
-                       initsvga (0x101);
+                       initgraphics ( 640, 480, 8 );
                        initmousehandler( mousepntr );
                        mousevisible ( false );
               
@@ -465,7 +469,7 @@ main ()
                  }
                }
    
-         initsvga (0x101);
+         initgraphics ( 640, 480, 8 );
          setvgapalette256 ( pal );
    
          weather = 0;
@@ -493,7 +497,7 @@ main ()
         
       } else { 
          pictnum = maxbuildingpicnum;
-         initsvga (0x103);
+         initgraphics ( 800, 600, 8 );
          showbld ();
          setvgapalette256(pal);
    
@@ -530,12 +534,16 @@ main ()
          num_ed (bld->loadcapacity, 0, 65535);
    
          if ( bld->loadcapacity ) {
+            int lc = bld->loadcapability;
             printf ("\n    loadable units (height of entering units)\n");
-            bitselect (bld->loadcapability, choehenstufen, choehenstufennum);
+            bitselect (lc , choehenstufen, choehenstufennum);
+            bld->loadcapability = lc;
          } 
    
+         int a = bld->unitheightreq;
          printf ("\n    unitheightreq ( only units that are able to reach this height may enter)\n");
-         bitselect (bld->unitheightreq, choehenstufen, choehenstufennum);
+         bitselect (a, choehenstufen, choehenstufennum);
+         bld->unitheightreq = a;
    
          printf ("\n    Units that may NOT enter\n");
          bitselect (bld->unitheight_forbidden, choehenstufen, choehenstufennum);
@@ -550,33 +558,33 @@ main ()
    
                                                                                      
          printf ("\n  ASC resource mode - fuel tank    \n");
-         num_ed (bld->_tank.fuel, 0, maxint );
+         num_ed (bld->_tank.a.fuel, 0, maxint );
                                                                        
          printf ("\n  ASC resource mode - material tank    \n");
-         num_ed (bld->_tank.material, 0, maxint );
+         num_ed (bld->_tank.a.material, 0, maxint );
                                                                        
          printf ("\n  ASC resource mode - energy tank    \n");
-         num_ed (bld->_tank.energy, 0, maxint );
+         num_ed (bld->_tank.a.energy, 0, maxint );
                                                                        
    
          printf ("\n  BI resource mode - fuel tank    \n");
-         num_ed (bld->_bi_maxstorage.fuel, 0, maxint );
+         num_ed (bld->_bi_maxstorage.a.fuel, 0, maxint );
                                                                        
          printf ("\n  BI resource mode - material tank    \n");
-         num_ed (bld->_bi_maxstorage.material, 0, maxint );
+         num_ed (bld->_bi_maxstorage.a.material, 0, maxint );
                                                                        
          printf ("\n  BI resource mode - energy tank    \n");
-         num_ed (bld->_bi_maxstorage.energy, 0, maxint );
+         num_ed (bld->_bi_maxstorage.a.energy, 0, maxint );
                                                                        
    
          printf ("\n    fuel maxplus    \n");
-         num_ed (bld->maxplus.fuel, 0, maxint );
+         num_ed (bld->maxplus.a.fuel, 0, maxint );
                                                                        
          printf ("\n    material maxplus    \n");
-         num_ed (bld->maxplus.material, 0, maxint );
+         num_ed (bld->maxplus.a.material, 0, maxint );
                                                                        
          printf ("\n    energy maxplus    \n");
-         num_ed (bld->maxplus.energy, 0, maxint );
+         num_ed (bld->maxplus.a.energy, 0, maxint );
    
    
          printf ("\n    efficiency material    \n");
@@ -586,8 +594,10 @@ main ()
          num_ed (bld->efficiencyfuel, 0, maxint );
    
    
+         a = bld->technologylevel;
          printf ("\n    technology level \n ");
-         num_ed (bld->technologylevel, 0, 255);
+         num_ed (a, 0, 255);
+         bld->technologylevel = a;
    
    /*
          printf ("\n    research id \n ");

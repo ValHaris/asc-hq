@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.8 1999-12-07 21:57:52 mbickel Exp $
+//     $Id: controls.cpp,v 1.9 1999-12-14 20:23:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  1999/12/07 21:57:52  mbickel
+//      Fixed bugs in Weapon information window
+//      Added vehicle function "no air refuelling"
+//
 //     Revision 1.7  1999/11/25 22:00:02  mbickel
 //      Added weapon information window
 //      Added support for primary offscreen frame buffers to graphics engine
@@ -3875,24 +3879,24 @@ void         tdashboard::paintweapon(byte         h, int num, int strength,  con
 
  
 void         tdashboard::paintweapons(void)
- { 
+{ 
    memset ( weaps, 0, sizeof ( weaps ));
 
-    byte         i, j; 
+   int i, j; 
 
-      activefontsettings.color = black;
-      activefontsettings.background = 255;
-      activefontsettings.justify = lefttext;
-      activefontsettings.font = font;
+   activefontsettings.color = black;
+   activefontsettings.background = 255;
+   activefontsettings.justify = lefttext;
+   activefontsettings.font = font;
 
-    int serv = 0;
+   int serv = 0;
 
 
-    int xp = agmp->resolutionx - ( 640 - 465);
+   int xp = agmp->resolutionx - ( 640 - 465);
 
-    activefontsettings.justify = righttext; 
-    i = 0; 
-    int k = 7;
+   activefontsettings.justify = righttext; 
+   i = 0; 
+   int k = 7;
 
    pvehicletype vt;
    if ( vehicle )
@@ -3945,7 +3949,7 @@ void         tdashboard::paintweapons(void)
        bar( agmp->resolutionx - ( 640 - 552),  93 + j * 13 ,agmp->resolutionx - ( 640 - 571), 101 + j * 13, 172 );
        bar( agmp->resolutionx - ( 640 - 503),  93 + j * 13 ,agmp->resolutionx - ( 640 - 530), 101 + j * 13, 172 );
     } 
- } 
+} 
  
 
 void         tdashboard :: paintlargeweaponinfo ( void )
@@ -4008,7 +4012,7 @@ void         tdashboard :: paintlargeweaponinfo ( void )
              if ( vt->weapons->weapon[j].typ & (cwweapon | cwmineb )) { 
                 int maxstrength = vt->weapons->weapon[j].maxstrength;
                 int minstrength = vt->weapons->weapon[j].minstrength;
-                if ( vehicle ) {
+                if ( vehicle && maxstrength ) {
                    minstrength = minstrength * vehicle->weapstrength[j] / maxstrength;
                    maxstrength = vehicle->weapstrength[j];
                 }
@@ -4383,15 +4387,21 @@ void         tdashboard::paintmovement(void)
 }  
  
 void         tdashboard::paintarmor(void)
- { 
-    if ( vehicle ) {
+{ 
+    if ( vehicle || vehicletype ) {
        activefontsettings.justify = centertext;
        activefontsettings.color = white;
        activefontsettings.background = 172;
        activefontsettings.font = schriften.guifont;
        activefontsettings.length = 18;
        activefontsettings.height = 9;
-       showtext2c( strrr(vehicle->armor),agmp->resolutionx - ( 640 - 591), 71);
+       int arm;
+       if ( vehicle )
+          arm = vehicle->armor;
+       else
+          arm = vehicletype->armor;
+
+       showtext2c( strrr(arm),agmp->resolutionx - ( 640 - 591), 71);
     } else
        bar(agmp->resolutionx - ( 640 - 591), 71,agmp->resolutionx - ( 640 - 608), 79, 172); 
 }  
@@ -4579,22 +4589,28 @@ void         tdashboard::paintclasses ( void )
 
 void         tdashboard::paintname ( void )
 {
-   if ( vehicle || building ) {
+   if ( vehicle || building || vehicletype) {
       activefontsettings.justify = lefttext;
       activefontsettings.color = white;
       activefontsettings.background = 171;
       activefontsettings.font = schriften.guifont;
       activefontsettings.length = 75;
       activefontsettings.height = 9;
-      if ( vehicle ) {
-         if ( vehicle->name && vehicle->name[0] )
+      pvehicletype vt;
+      if ( vehicle )
+         vt = vehicle->typ;
+      else
+         vt = vehicletype;
+
+      if ( vehicle || vt ) {
+         if ( vehicle && vehicle->name && vehicle->name[0] )
             showtext2c( vehicle->name , agmp->resolutionx - ( 640 - 500 ), 27);
          else
-            if ( vehicle->typ->name && vehicle->typ->name[0] )
-               showtext2c( vehicle->typ->name , agmp->resolutionx - ( 640 - 500 ), 27);
+            if ( vt->name && vt->name[0] )
+               showtext2c( vt->name , agmp->resolutionx - ( 640 - 500 ), 27);
             else
-               if ( vehicle->typ->description  &&  vehicle->typ->description[0] )
-                  showtext2c( vehicle->typ->description ,agmp->resolutionx - ( 640 - 500 ), 27);
+               if ( vt->description  &&  vt->description[0] )
+                  showtext2c( vt->description ,agmp->resolutionx - ( 640 - 500 ), 27);
                else
                   bar ( agmp->resolutionx - ( 640 - 499 ), 27, agmp->resolutionx - ( 640 - 575 ), 35, 171 );
 

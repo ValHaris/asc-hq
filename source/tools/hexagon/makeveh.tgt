@@ -21,8 +21,8 @@ MCommand
 0
 5
 MCommand
-24
-\copyexecutables makeveh
+23
+\copyexecutable makeveh
 6
 MItem
 11
@@ -120,8 +120,8 @@ WString
 1
 30
 WString
-17
-converter HEXAGON
+23
+converter HEXAGON _DOS_
 0
 31
 MRState

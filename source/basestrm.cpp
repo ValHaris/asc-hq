@@ -1,6 +1,11 @@
-//     $Id: basestrm.cpp,v 1.6 1999-11-25 21:59:57 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.7 1999-12-14 20:23:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/11/25 21:59:57  mbickel
+//      Added weapon information window
+//      Added support for primary offscreen frame buffers to graphics engine
+//      Restored file time handling for DOS version
+//
 //     Revision 1.5  1999/11/22 18:26:50  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -590,29 +595,6 @@ int tn_file_buf_stream::getstreamsize(void)
 }                 
 
 int tn_file_buf_stream::gettime ( void )
-{
-   int time = -1;
-   {
-      DIR *dirp; 
-      struct dirent *direntp; 
-  
-      dirp = opendir( devicename ); 
-      if( dirp != NULL ) { 
-        for(;;) { 
-          direntp = readdir( dirp ); 
-          if ( direntp == NULL ) 
-             break; 
-         #ifdef _DOS_    
-	  time =  ( direntp ->d_date << 16) + direntp ->d_time;
-         #endif
-        } 
-        closedir( dirp ); 
-      } 
-    }
-   return time;
-}
-
-int getfiletime ( char* devicename )
 {
    int time = -1;
    {
@@ -1809,6 +1791,36 @@ char* getnextfilenumname ( const char* first, const char* suffix, int num )
    } while ( found == 0 ); /* enddo */
 
    return tempstringbuf;
+}
+
+
+int getfiletime ( char* devicename )
+{
+   int time = -1;
+   {
+      DIR *dirp; 
+      struct dirent *direntp; 
+  
+      dirp = opendir( devicename ); 
+      if( dirp != NULL ) { 
+        for(;;) { 
+          direntp = readdir( dirp ); 
+          if ( direntp == NULL ) 
+             break; 
+         #ifdef _DOS_    
+	  time =  ( direntp ->d_date << 16) + direntp ->d_time;
+         #endif
+        } 
+        closedir( dirp ); 
+      } 
+   }
+   if ( time == -1 ) {
+      pncontainerstream strm = containercollector.getfile( devicename );
+      if ( strm )
+         return strm->gettime();
+
+   }
+   return time;
 }
 
 
