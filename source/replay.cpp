@@ -680,6 +680,15 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( tech );
          stream->writeInt ( player );
       }
+      if ( action == rpl_setGeneratorStatus ) {
+         int vehid = va_arg ( paramlist, int );
+         int status = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 2;
+         stream->writeInt ( size );
+         stream->writeInt ( vehid );
+         stream->writeInt ( status );
+      }
 
 
       va_end ( paramlist );
@@ -1636,6 +1645,22 @@ void trunreplay :: execnextreplaymove ( void )
                                     actmap->player[player].research.progress -= tech->researchpoints;
                                  } else
                                     error("severe replay inconsistency:\nno technology for tech researched command !");
+                                }
+         break;
+      case rpl_setGeneratorStatus : {
+                                 stream->readInt();
+                                 int nwid = stream->readInt();
+                                 int status = stream->readInt();
+
+                                 readnextaction();
+
+                                 pvehicle eht = actmap->getUnit ( nwid );
+                                 if ( eht )
+                                    eht->setGeneratorStatus( status );
+                                 else
+                                    error("severe replay inconsistency:\nvehicle for generator switching not found !");
+
+
          break;
       }
 

@@ -1508,6 +1508,8 @@ int   tnsguiiconpoweron::available    ( void )
 void  tnsguiiconpoweron::exec         ( void ) 
 {
    getactfield()->vehicle->setGeneratorStatus ( true );
+   logtoreplayinfo ( rpl_setGeneratorStatus, getactfield()->vehicle->networkid, int(1) );
+
    dashboard.x = 0xffff;
 }
 
@@ -1518,21 +1520,22 @@ tnsguiiconpoweroff::tnsguiiconpoweroff ( void )
    filename = "poweroff" ;
 }
 
-int   tnsguiiconpoweroff::available    ( void ) 
+int   tnsguiiconpoweroff::available    ( void )
 {
-   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) 
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing )
       if ( getactfield()->vehicle )
          if ( getactfield()->vehicle->color == actmap->actplayer*8  &&
               (getactfield()->vehicle->typ->functions & cfgenerator))
               if ( getactfield()->vehicle->getGeneratorStatus() )
                  return 1;
 
-  return 0;         
+  return 0;
 }
 
-void  tnsguiiconpoweroff::exec         ( void ) 
+void  tnsguiiconpoweroff::exec         ( void )
 {
    getactfield()->vehicle->setGeneratorStatus ( false );
+   logtoreplayinfo ( rpl_setGeneratorStatus, getactfield()->vehicle->networkid, int(0) );
    dashboard.x = 0xffff;
 }
 

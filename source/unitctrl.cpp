@@ -527,7 +527,10 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
       }
 
       MapCoordinate3D dest;
-      dest.setnum ( x, y, reachableFields.getData(x,y) );
+      if ( height >= 0 )
+         dest.setnum ( x, y, height );
+      else
+         dest.setnum ( x, y, reachableFields.getData(x,y) );
 
       AStar3D ast ( actmap, vehicle, false, maxint );
       ast.findPath ( path, dest );
