@@ -65,9 +65,9 @@ tmap :: tmap ( void )
       player[i].ai = NULL;
 
       if ( i == 0 )
-         player[i].stat = 0;
+         player[i].stat = Player::human;
       else
-         player[i].stat = 2;
+         player[i].stat = Player::off;
 
       player[i].dissectedunit = 0;
       player[i].unreadmessage = NULL;
@@ -158,7 +158,7 @@ void tmap :: read ( tnstream& stream )
       stream.readInt(); // dummy
       player[i].research.read_struct ( stream );
       player[i].ai = (BaseAI*) stream.readInt();
-      player[i].stat = stream.readChar();
+      player[i].stat = Player::tplayerstat ( stream.readChar() );
       stream.readChar(); // dummy
       dummy_playername[i] = stream.readInt();
       player[i].passwordcrc.read ( stream );

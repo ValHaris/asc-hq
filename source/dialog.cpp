@@ -2,9 +2,12 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.78 2001-02-11 11:39:30 mbickel Exp $
+//     $Id: dialog.cpp,v 1.79 2001-02-11 20:40:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.78  2001/02/11 11:39:30  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.77  2001/02/06 17:15:10  mbickel
 //      Some changes for compilation by Borland C++ Builder
 //
@@ -3976,15 +3979,18 @@ void         tsetalliances::click(pascal_byte         bxx,
    activefontsettings.length = tsa_namelength; 
    activefontsettings.background = dblue; 
    if (bxx == 0) { 
-      if (x == 0  && ( y == actmap->actplayer || supervisor ) ) { 
-         actmap->player[y].stat++;
-         if ( actmap->actplayer == -1 || mapeditor ) {
-            if (actmap->player[y].stat > 2)
-               actmap->player[y].stat = Player::human;
-         } else {
-            if (actmap->player[y].stat > 1)
-               actmap->player[y].stat = Player::human;
-         }
+      if (x == 0  && ( y == actmap->actplayer || supervisor ) ) {
+         if ( actmap->player[y].stat == Player::human )
+            actmap->player[y].stat = Player::computer;
+         else
+            if ( actmap->actplayer == -1 || mapeditor ) {
+               if (actmap->player[y].stat == Player::computer )
+                  actmap->player[y].stat = Player::off;
+               else
+                  actmap->player[y].stat = Player::human;
+            } else {
+                actmap->player[y].stat = Player::human;
+            }
 
          activefontsettings.background = 17 + y * 8;
          showtext2( actmap->player[y].getName().c_str(), x1 + ply_x1,y1 + ply_y1 + y * 22);
