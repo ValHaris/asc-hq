@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: basestrm.h,v 1.48 2001-10-08 14:44:22 mbickel Exp $
+//     $Id: basestrm.h,v 1.49 2001-10-21 13:16:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2001/10/08 14:44:22  mbickel
+//      Some cleanup
+//
 //     Revision 1.47  2001/10/08 14:12:20  mbickel
 //      Fixed crash in AI
 //      Speedup of AI
@@ -253,7 +256,7 @@ class MemoryStreamCopy : public tnstream {
                MemoryStreamCopy ( pnstream stream );
                ~MemoryStreamCopy ( );
                void writedata ( const void* buf, int size );
-               int  readdata  ( void* buf, int size, int excpt = 1 );
+               int  readdata  ( void* buf, int size, bool excpt = true );
                void seek ( int newpos );
                int getPosition ( void ) { return pos; };
                int getSize ( void ) { return size; };
@@ -294,7 +297,7 @@ class tmemorystream : public tnstream {
         public:
            tmemorystream ( pmemorystreambuf lbuf, IOMode mode );
            virtual void writedata ( const void* nbuf, int size );
-           virtual int  readdata  ( void* nbuf, int size, int excpt = 1 );
+           virtual int  readdata  ( void* nbuf, int size, bool excpt = true );
            int dataavail ( void );
       };
 
@@ -318,7 +321,7 @@ class tnbufstream  : public tnstream {
        public:
            tnbufstream ( );
            virtual void writedata ( const void* buf, int size );
-           virtual int  readdata  ( void* buf, int size, int excpt = 1  );
+           virtual int  readdata  ( void* buf, int size, bool excpt = true  );
 
            virtual ~tnbufstream ( );
 
@@ -410,8 +413,8 @@ class tlzwstreamcompression {
           public:
 
              void writedata ( const void* buf, int size );
-             int  readdata  ( void* buf, int size, int excpt = 1  );
-             virtual int  readlzwdata ( void* buf, int size, int excpt = 1 ) = 0;
+             int  readdata  ( void* buf, int size, bool excpt = true  );
+             virtual int  readlzwdata ( void* buf, int size, bool excpt = true ) = 0;
              virtual void writelzwdata ( const void* buf, int size ) = 0;
              tlzwstreamcompression ( void );
              virtual ~tlzwstreamcompression ( void );
@@ -424,7 +427,7 @@ class tlzwstreamcompression {
 class t_compressor_stream_interface {
            public:
              virtual void writecmpdata ( const void* buf, int size ) = 0;
-             virtual int readcmpdata ( void* buf, int size, int excpt = 1 ) = 0;
+             virtual int readcmpdata ( void* buf, int size, bool excpt = true ) = 0;
       };
 /*
 class t_compressor_2ndbuf_filter : public t_compressor_stream_interface {
@@ -434,7 +437,7 @@ class t_compressor_2ndbuf_filter : public t_compressor_stream_interface {
            public:
              t_compressor_2ndbuf_filter ( t_compressor_stream_interface* strm );
              virtual void writecmpdata ( const void* buf, int size );
-             virtual int readcmpdata ( void* buf, int size, int excpt = 1 );
+             virtual int readcmpdata ( void* buf, int size, bool excpt = true );
              void insert_data_into_queue ( const void* buf, int size );
              virtual ~t_compressor_2ndbuf_filter() {};
 };
@@ -464,7 +467,7 @@ class libbzip_decompression {
             p_compressor_stream_interface stream;
 
          public:
-             int  readdata  ( void* buf, int size, int excpt = 1  );
+             int  readdata  ( void* buf, int size, bool excpt = true  );
              libbzip_decompression ( p_compressor_stream_interface strm );
              virtual ~libbzip_decompression ( );
 
@@ -507,7 +510,7 @@ class tanycompression : public t_compressor_stream_interface, protected tlzwstre
                             int status;
 
                           protected:
-                             virtual int readlzwdata ( void* buf, int size, int excpt = 1 );
+                             virtual int readlzwdata ( void* buf, int size, bool excpt = true );
                              virtual void writelzwdata ( const void* buf, int size );
                              void close_compression ( void );
 
@@ -516,7 +519,7 @@ class tanycompression : public t_compressor_stream_interface, protected tlzwstre
                              void init ( void );
 
                              void writedata ( const void* buf, int size );
-                             int  readdata  ( void* buf, int size, int excpt = 1  );
+                             int  readdata  ( void* buf, int size, bool excpt = true  );
                              ~tanycompression ( );
 };
 
@@ -526,8 +529,8 @@ class tanycompression : public t_compressor_stream_interface, protected tlzwstre
 class tn_lzw_bufstream : public tnbufstream, protected tlzwstreamcompression {
                             public:
                               void writedata ( const void* buf, int size );
-                              int  readdata  ( void* buf, int size, int excpt = 1  );
-                              int readlzwdata ( void* buf, int size, int excpt = 1 );
+                              int  readdata  ( void* buf, int size, bool excpt = true  );
+                              int readlzwdata ( void* buf, int size, bool excpt = true );
                               void writelzwdata ( const void* buf, int size );
                               ~tn_lzw_bufstream();
                         };
@@ -543,8 +546,8 @@ class tn_lzw_file_buf_stream : public tn_file_buf_stream, protected tanycompress
                  } ;
 
               void writedata ( const void* buf, int size );
-              int  readdata  ( void* buf, int size, int excpt = 1  );
-              int  readcmpdata ( void* buf, int size, int excpt = 1 );
+              int  readdata  ( void* buf, int size, bool excpt = true  );
+              int  readcmpdata ( void* buf, int size, bool excpt = true );
               void writecmpdata ( const void* buf, int size );
               ~tn_lzw_file_buf_stream();
            };
@@ -561,12 +564,12 @@ class tn_c_lzw_filestream : public tnstream, protected tanycompression {
             ASCString fname;
             ASCString location;
          protected:
-            int  readcmpdata ( void* buf, int size, int excpt = 1 );
+            int  readcmpdata ( void* buf, int size, bool excpt = true );
             void writecmpdata ( const void* buf, int size );
          public:
             tn_c_lzw_filestream ( const ASCString& name, IOMode mode );
             void writedata ( const void* buf, int size );
-            int  readdata  ( void* buf, int size, int excpt = 1  );
+            int  readdata  ( void* buf, int size, bool excpt = true  );
             virtual ~tn_c_lzw_filestream  ( );
             virtual time_t get_time ( void );
             virtual int getSize( void );
@@ -607,7 +610,7 @@ class tncontainerstream : public tn_file_buf_stream {
                  tncontainerstream ( const char* containerfilename, ContainerIndexer* indexer, int directoryLevel );
                  void opencontainerfile ( const char* name );
                  int  getcontainerfilesize ( const char* name );
-                 int readcontainerdata ( void* buf, int size, int excpt = 1 );
+                 int readcontainerdata ( void* buf, int size, bool excpt = true );
                  void closecontainerfile ( void );
                  char* getfirstname ( void );
                  char* getnextname ( void );

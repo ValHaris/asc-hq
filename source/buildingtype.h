@@ -115,9 +115,13 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
         //! bitmapped: functions the building can perfom. see #cbuildingfunctions
         int          special;
 
+        //! not used at the moment
         int          technologylevel;
+
+        //! not used at the moment
         int          researchid;
 
+        //! the terrain properties which are necessary for the building to be constructed there
         TerrainAccess terrainaccess;
 
         //! the number of stages that are required to construct a building using a construction unit. Each stage has a separate picture. Range is 1 to 8
@@ -155,6 +159,10 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
         //! can units of the given type be moved into this buildtype? This is a prerequisite, but not the only requirement, for a real unit to move into a real building
         bool          vehicleloadable ( pvehicletype type ) const ;
 
+        /** returns the Mapcoordinate of a buildings field
+            \param entryOnMap The location of the buildings entry on the map
+            \param localCoordinate The relative coordinate of the buildings segment for which is global MapCoordinate is going to be calculated and returned.
+        */
         MapCoordinate getFieldCoordinate( const MapCoordinate& entryOnMap, const LocalCoordinate& localCoordinate );
 
         void read ( tnstream& stream ) ;

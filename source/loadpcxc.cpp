@@ -5,9 +5,12 @@
     which is called #loadpcx.cpp , but not used any more.
 */
 
-//     $Id: loadpcxc.cpp,v 1.17 2001-08-09 22:08:22 mbickel Exp $
+//     $Id: loadpcxc.cpp,v 1.18 2001-10-21 13:16:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2001/08/09 22:08:22  mbickel
+//      Improved building text file IO
+//
 //     Revision 1.16  2001/08/02 15:33:01  mbickel
 //      Completed text based file formats
 //
@@ -406,5 +409,4 @@ void writepcx ( const ASCString& name, int x1, int y1, int x2, int y2, dacpalett
    stream.writedata2 ( header );
 }
 
-structure_size_tester sst2;
 

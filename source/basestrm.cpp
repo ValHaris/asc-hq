@@ -2,9 +2,13 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.66 2001-10-11 10:41:05 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.67 2001-10-21 13:16:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.66  2001/10/11 10:41:05  mbickel
+//      Restructured platform fileio handling
+//      Added map archival information to mapeditor
+//
 //     Revision 1.65  2001/10/08 14:12:20  mbickel
 //      Fixed crash in AI
 //      Speedup of AI
@@ -506,10 +510,10 @@ tnstream :: tnstream ( void )
 
 void tnstream::seek ( int pos )
 {
-   throw tfileerror ( getDeviceName() );
+   throw tfileerror ( "Seeking not supported for stream " + getDeviceName() );
 }
 
-void         tnstream::readrlepict( void** pnter, int allocated, int* size)
+void         tnstream::readrlepict( void** pnter, bool allocated, int* size)
 { 
   trleheader   hd; 
   int          w;
@@ -762,7 +766,7 @@ ASCString  tnstream::readString ( bool includeCR )
 }
 
 
-void         tnstream::writeString(const ASCString& pc, bool binary )
+void         tnstream::writeString(const string& pc, bool binary )
 {
    if ( binary )
       writepchar ( pc.c_str() );
@@ -839,7 +843,7 @@ void MemoryStreamCopy :: writedata ( const void* buf, int size )
    throw  tinvalidmode ( getDeviceName(), reading, writing );
 }
 
-int MemoryStreamCopy :: readdata  ( void* buffer, int _size, int excpt )
+int MemoryStreamCopy :: readdata  ( void* buffer, int _size, bool excpt )
 {
    char* cp = (char*) buf;
    if ( pos + _size > size ) {
@@ -956,7 +960,7 @@ tnbufstream::tnbufstream (  )
 }
 
 
-int          tnbufstream::readdata( void* buf, int size, int excpt  )
+int          tnbufstream::readdata( void* buf, int size, bool excpt  )
 {
    char*        cpbuf = (char*) buf;
    int          s, actpos2;
@@ -1231,7 +1235,7 @@ void tncontainerstream :: opencontainerfile ( const char* name )
    seek ( actfile->start );
 }
 
-int tncontainerstream :: readcontainerdata ( void* buf, int size, int excpt  )
+int tncontainerstream :: readcontainerdata ( void* buf, int size, bool excpt  )
 {
    if ( actfile->start + containerfilepos + size > actfile->end+1 ) {
       if ( excpt ) 
@@ -1591,7 +1595,7 @@ libbzip_decompression :: libbzip_decompression ( p_compressor_stream_interface s
 }
 
 
-int libbzip_decompression :: readdata ( void* buf, int size, int excpt )
+int libbzip_decompression :: readdata ( void* buf, int size, bool excpt )
 {
    int decompressed = 0;
    char* cbuf = (char*) buf;
@@ -1672,7 +1676,7 @@ void t_compressor_2ndbuf_filter :: writecmpdata ( const void* buf, int size )
    stream->writecmpdata ( buf, size );
 }
 
-int t_compressor_2ndbuf_filter :: readcmpdata ( void* buf, int size, int excpt )
+int t_compressor_2ndbuf_filter :: readcmpdata ( void* buf, int size, bool excpt )
 {
    int got = 0;
 
@@ -1752,7 +1756,7 @@ void tanycompression :: init ( void )
 }
 
 
-int  tanycompression :: readdata ( void* rbuf, int size, int excpt )
+int  tanycompression :: readdata ( void* rbuf, int size, bool excpt )
 {
    int red = 0;
    if ( size ) {
@@ -1778,7 +1782,7 @@ void tanycompression :: writedata ( const void* buf, int size )
 }
 
 
-int tanycompression :: readlzwdata ( void* buf, int size, int excpt )
+int tanycompression :: readlzwdata ( void* buf, int size, bool excpt )
 {
    if ( _queue.size() ) {
       int got = 0;
@@ -1835,12 +1839,12 @@ void tn_lzw_bufstream :: writedata ( const void* buf, int size )
    tlzwstreamcompression :: writedata ( buf, size );
 }
 
-int tn_lzw_bufstream :: readdata  ( void* buf, int size, int excpt  )
+int tn_lzw_bufstream :: readdata  ( void* buf, int size, bool excpt  )
 {
    return tlzwstreamcompression :: readdata ( buf, size, excpt );
 }
 
-int  tn_lzw_bufstream :: readlzwdata ( void* buf, int size, int excpt  )
+int  tn_lzw_bufstream :: readlzwdata ( void* buf, int size, bool excpt  )
 {
    return tnbufstream :: readdata ( buf, size, excpt );
 }
@@ -1865,12 +1869,12 @@ void tn_lzw_file_buf_stream :: writedata ( const void* buf, int size )
    tanycompression :: writedata ( buf, size );
 }
 
-int  tn_lzw_file_buf_stream :: readdata  ( void* buf, int size, int excpt  )
+int  tn_lzw_file_buf_stream :: readdata  ( void* buf, int size, bool excpt  )
 {
    return tanycompression :: readdata ( buf, size, excpt );
 }
 
-int  tn_lzw_file_buf_stream:: readcmpdata ( void* buf, int size, int excpt  )
+int  tn_lzw_file_buf_stream:: readcmpdata ( void* buf, int size, bool excpt  )
 {
    return tn_file_buf_stream :: readdata ( buf, size, excpt  );
 }
@@ -1959,7 +1963,7 @@ void tn_c_lzw_filestream :: writecmpdata ( const void* buf, int size )
       strm->writedata ( buf, size );
 }
 
-int tn_c_lzw_filestream :: readcmpdata  ( void* buf, int size, int excpt  )
+int tn_c_lzw_filestream :: readcmpdata  ( void* buf, int size, bool excpt  )
 {
    if ( inp == 2 )
       return containerstream->readcontainerdata ( buf, size, excpt );
@@ -1973,7 +1977,7 @@ void tn_c_lzw_filestream :: writedata ( const void* buf, int size )
    tanycompression :: writedata ( buf, size );
 }
 
-int tn_c_lzw_filestream :: readdata  ( void* buf, int size, int excpt  )
+int tn_c_lzw_filestream :: readdata  ( void* buf, int size, bool excpt  )
 {
    if ( tanycompression :: mode == readingdirect  && !tempbuf.size() )
       if ( inp == 2 )
@@ -2404,7 +2408,7 @@ void tmemorystream :: writedata ( const void* nbuf, int size )
 }   
 
 
-int  tmemorystream :: readdata ( void* nbuf, int size, int excpt  )
+int  tmemorystream :: readdata ( void* nbuf, int size, bool excpt  )
 {
    if (_mode != reading )
       throw  tinvalidmode ( "memorystream", _mode, reading );

@@ -2,9 +2,13 @@
     miscellaneous functions which are used by ASC and all its tools
 */
 
-//     $Id: misc.h,v 1.18 2001-10-16 19:58:19 mbickel Exp $
+//     $Id: misc.h,v 1.19 2001-10-21 13:16:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2001/10/16 19:58:19  mbickel
+//      Added title screen for mapeditor
+//      Updated source documentation
+//
 //     Revision 1.17  2001/02/11 11:39:40  mbickel
 //      Some cleanup and documentation
 //
@@ -150,28 +154,6 @@
   #ifndef HAVE_ITOA
    extern char* itoa ( int a, char* b, int c);
   #endif
-
-
-
-
-
-
- #pragma pack(1)
-
-
-
-// is there any way to do this test at compile time ??
-class structure_size_tester {       
-        struct _test_structure {
-            char a;
-            char b;
-            int c;
-            char d;
-            void* e[10];
-        };
-     public:
-       structure_size_tester ( void );
-    };
 
    #if defined(MEMCHK) | defined(sgmain) | defined(karteneditor)
     extern void* asc_malloc ( size_t size );

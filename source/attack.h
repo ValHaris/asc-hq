@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: attack.h,v 1.19 2001-02-26 12:35:00 mbickel Exp $
+//     $Id: attack.h,v 1.20 2001-10-21 13:16:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2001/02/26 12:35:00  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.18  2001/02/08 21:21:03  mbickel
 //      AI attacks and services more sensibly
 //
@@ -145,6 +151,7 @@ class tfight : public AttackFormula {
            void paintline ( int num, int val, int col );
            virtual void paintimages ( int xa, int ya, int xd, int yd ) = 0;
         protected:   
+           tfight ( void );
            int synchronedisplay;
         public:  
            struct tavalues {
@@ -162,10 +169,14 @@ class tfight : public AttackFormula {
                      int kamikaze;
                   } av, dv;
 
+           //! Performs the calculation of the attack. The result is only stored in the av and dv structures and is not written to the map
            void calc ( void ) ;
+      
+           //! Performs the calculation of the attack and displays the result on screen. As in calc , the result is not written to the actual units.
            virtual void calcdisplay ( int ad = -1, int dd = -1 );
+
+           //! Writes the result of the attack calculation to the actual units.
            virtual void setresult ( void ) = 0;
-           tfight ( void );
       };
 
 class tunitattacksunit : public tfight {
@@ -178,6 +189,10 @@ class tunitattacksunit : public tfight {
            int _respond; 
            void paintimages ( int xa, int ya, int xd, int yd );
          public:
+           /*! Calculates the fight if one unit attacks another units.
+               \param respond Does the unit that is being attacked retalliate ?
+               \param weapon  The number of the weapon which the attacking unit attacks with. If it is -1, the best weapon is chosen.
+           */
            tunitattacksunit ( pvehicle &attackingunit, pvehicle &attackedunit, bool respond = true, int weapon = -1);
            void setup ( pvehicle &attackingunit, pvehicle &attackedunit, bool respond, int weapon );
            void setresult ( void );
@@ -191,6 +206,9 @@ class tunitattacksbuilding : public tfight {
            int _x, _y;
            void paintimages ( int xa, int ya, int xd, int yd );
          public:
+           /*! Calculates the fight if one unit attacks the building at coordinate x/y.
+               \param weapon  The number of the weapon which the attacking unit attacks with. If it is -1, the best weapon is chosen.
+           */
            tunitattacksbuilding ( pvehicle attackingunit, int x, int y, int weapon = -1);
            void setup ( pvehicle attackingunit, int x, int y, int weapon );
            void setresult ( void );
@@ -206,11 +224,15 @@ class tmineattacksunit : public tfight {
             pvehicle* _pattackedunit;
             void paintimages ( int xa, int ya, int xd, int yd );
          public:
+           /*! Calculates the fight if a unit drives onto a mine.
+               \param mineposition The field on which the mine was placed  
+               \param minenum The number of a specific mine which explodes. If -1 , all mines on this field which are able to attack the unit will explode.
+               \param attackedunit The unit which moved onto the minefield.
+           */
            tmineattacksunit ( pfield mineposition, int minenum, pvehicle &attackedunit );
            void setup ( pfield mineposition, int minenum, pvehicle &attackedunit );
            void setresult ( void );
            virtual void calcdisplay(int ad = -1, int dd = -1);
-
       };
 
 class tunitattacksobject : public tfight {
@@ -220,12 +242,16 @@ class tunitattacksobject : public tfight {
            void paintimages ( int xa, int ya, int xd, int yd );
            int _x, _y;
          public:
+           /*! Calculates the fight if one unit attacks the objects at coordinate x/y.
+               \param weapon  The number of the weapon which the attacking unit attacks with. If it is -1, the best weapon is chosen.
+           */
            tunitattacksobject ( pvehicle attackingunit, int obj_x, int obj_y, int weapon = -1 );
            void setup ( pvehicle attackingunit, int obj_x, int obj_y, int weapon );
            void setresult ( void );
            virtual void calcdisplay(int ad = -1, int dd = -1);
       };
 
+   //! Structure to store the weapons which a unit can use to perform an attack. \sa attackpossible  
    class AttackWeap {
                public:
                     int          count; 

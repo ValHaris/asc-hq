@@ -8,11 +8,11 @@
 
  #include <vector>
 
-enum HexDirection { DirN, DirNE, DirSE, DirS, DirSW, DirNW, DirNone };
+ enum HexDirection { DirN, DirNE, DirSE, DirS, DirSW, DirNW, DirNone };
 
 
-
-class AStar {
+ //! A 2dimensional path finding algorithm, from Amit J. Patel
+ class AStar {
     public:
        typedef vector<MapCoordinate> Path;
 
@@ -24,10 +24,11 @@ class AStar {
        pmap _actmap;
 
 
+       //! returns the movement cost for the unit to travel from x1/y1 to x2/y2
        virtual int getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle );
     public:
 
-
+       //! A hexagonal Coordinate. This structure is used instead of MapCoordinate to reduce the amount of modifications to Amits path finding code.
        struct HexCoord{
            int m, n;
            HexCoord(): m(0), n(0) {}
@@ -42,6 +43,7 @@ class AStar {
            Node(): h(0,0), gval(0), hval(0) {}
            bool operator< ( const Node& a );
        };
+
        int dist( HexCoord a, HexCoord b );
 
        typedef std::vector<Node> Container;
@@ -72,6 +74,7 @@ class AStar {
 
        //! checks weather the field fld was among the visited fields during the last search
        bool fieldVisited ( int x, int y);
+      
        AStar ( pmap actmap, pvehicle veh );
        virtual ~AStar ( );
  };
@@ -84,6 +87,7 @@ extern void findPath( pmap actmap, AStar::Path& path, pvehicle veh, int x, int y
 
 
 
+//! A 3D path finding algorithm, based on the 2D algorithm by Amit J. Patel
 class AStar3D {
     public:
        typedef vector<MapCoordinate3D> Path;

@@ -1,6 +1,10 @@
-//     $Id: misc.cpp,v 1.20 2001-10-16 19:58:19 mbickel Exp $
+//     $Id: misc.cpp,v 1.21 2001-10-21 13:16:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2001/10/16 19:58:19  mbickel
+//      Added title screen for mapeditor
+//      Updated source documentation
+//
 //     Revision 1.19  2001/08/09 14:50:37  mbickel
 //      Added palette.map to data directory
 //      Improved usability of terrain selection in mapeditor
@@ -282,14 +286,6 @@ int  crc32buf(const void *vbuf, int len)
 
       return crc = oldcrc32 = ~oldcrc32;
 
-}
-
-structure_size_tester :: structure_size_tester ( void )
-{
-   if ( sizeof ( _test_structure ) != 47 ) {
-      printf("This program had been compiled with invalid compiler option!\nThe structures had not benn packed !\n");
-      exit(1);
-   }
 }
 
 

@@ -110,6 +110,9 @@ class  tfield {
     char         direction;
 
     void*      picture;
+
+    //@{ 
+    //! Various algorithms need to store some information in the fields they process. These variables are used for this.
     union  {
       struct {
         char         temp;
@@ -119,6 +122,7 @@ class  tfield {
     };
     int          temp3;
     int          temp4;
+    //@}
 
     pvehicle     vehicle;
     pbuilding    building;
@@ -209,7 +213,7 @@ class  tfield {
     /** removes a mine
          \param num The position of the mine; if num is -1, the last mine is removed)
     **/
-    void  removemine ( int num ); // num == -1 : remove last mine
+    void  removemine ( int num ); 
 
     //! some variables for the viewcalculation algorithm. see #viewcalculation.cpp for details
     struct View {
@@ -255,7 +259,7 @@ class  tfield {
 
 
 
-//! the map. THE central structure of ASC
+//! The map. THE central structure of ASC, which holds everything not globally available together
 class tmap {
       void operator= ( const tmap& map );
    public:

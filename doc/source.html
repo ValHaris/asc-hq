@@ -14,13 +14,35 @@
 <P>documentation<P>
 <H1>The Source</H1>
 </CENTER>
-I started writing the program and designed the basic game system in 1994 using Borland Pascal as the programming language. In 1995 I started using object orientated programming and in 1996 I converted the whole project to Watcom C/C++. We started the port to GCC and Linux in 1999. If you look at the source you will "see" this history. If I started such a project now from scratch I would design it completely different (for example a client / server design and everything much more object oriented). But we have the project as it is and are trying to improve it in that direction without rewriting it from scratch.<P>
 
-The source code is not very well structured and documented. I always preferred writing cool new features instead of cleaning up the code :-) <BR>
-We are going to improve this gradually. Don't hesitate to <A HREF="contact.html">contact us</A> if you have any questions regarding the source code or anything else about the game.<P>
+<H2>Introduction</H2>
 
 
-Another "historical" thing about the source code is the language (not the programming language) that was used for it. Since we did not intend to release the source code we used a mixture of German and English for variable- and function names and avoided writing comments and those that we have are mostly in German. We have now run several translation passes through the code to translate it to English. The global interfaces should be completely in English now, but several local variables may still be in German. Since we run the translation through the code by a source code wide "search and replace" there are now some comments and perhaps a few code elements that were negatively affected by it and sound quite funny.<P>
+ASC has a long history. The project was start in summer 1994 using Borland Pascal as the programming language. But even then the graphics engine was already available since it was written in 1993 for a simple Tetris clone. 
+In 1995 we started using object orientated programming and in 1996 we converted the whole project to C/C++ (Watcom). We started the port to GCC and Linux in 1999. In autumn 2000 the port to Windows was finished and in winter 2000 the DOS version finally dropped, together with support for the Watcom C/C++ compiler (which doesn't support all features of ANSI C++). <p>
+
+Most parts of ASC itself were written by me (Martin Bickel), while Marc Schellenberger wrote the map editor and Alexander Sch&auml;fer wrote the first "small editors".
+ASC was the project I learned serious programming with. If you look at the source you will see this, both the technical history with its DOS origins and my progress in designing software. <p>
+
+If I started such a project now from scratch I would design it completely different. But we have the project as it is and it is now a game that can be played really well. So rather than starting from scratch it is better to rewrite only one part at a time. This has several benefits:
+<ul>
+<li>The game is always playable. 
+<li>development on the non-programming areas like graphics, sound, units and maps can be done in parallel and all these data work is simultaneously available to both players and programmers. And it can be tested immediately.
+<li>Real testing is only possible in real games, which requires a more or less feature-complete game
+<li>ASC already has a very solid and much refined gameplay. 
+</ul>
+
+So our goal should be to improve ASC one part at once, with frequent releases to keep the players happy :-) <p>
+
+<p>
+
+Originally we didn't care about source documentation and modularization. We always preferred writing cool new features instead of cleaning up the code :-) <p>
+
+But the ASC project has reached a point were it can no longer be maintained by a single programmer and I myself don't intend to spend my entire life just working on this single project. But since it would be an enourmous loss for humanity if this project would die :-) my primary goal now is to get the source code into such a shape that others can join the development and hopefully, sometime in the future, take the whole project over. <p>
+During the last year, I've spend much time to clean up the source, document and modularize it. While the work is not finished and I intend to further work on it, the code should already be much more accessible now. 
+
+<p>
+Martin Bickel, October 2001
 
 <H2>Required Tools</H2>
 
@@ -33,8 +55,8 @@ It is also possible to compile ASC with the free <A HREF="http://www.borland.com
 
 <OL>
 <LI>Get the <A HREF="http://www.asc-hq.org/library_package.zip">Library Package</A>.
-<LI>If you downloaded the packaged sourcecode, the directory there is named <TT>asc-1.9.0</tt> or something similar. Rename to <tt>asc</tt>.
-<li>Now uncompress the library package that its <tt>asc</tt> directory and the <tt>asc</tt> directory of the asc source overlap.
+<LI>If you downloaded the packaged sourcecode, the directory there is named <TT>asc-1.9.0</tt> or something similar. Rename it to <tt>asc</tt>.
+<li>Now uncompress the library package so that its <tt>asc</tt> directory and the <tt>asc</tt> directory of the ASC source overlap.
 
 <H5>Borland C++ Builder</H5>
 <OL start=4>
@@ -119,26 +141,27 @@ Well, nothing special about that. We build ASC with the standard GNU development
 <H3>Watcom C++</H3>
 
 The discontinued DOS version and early Windows versions of ASC were built with Watcom C/C++ 11.0b. Since the compiler is dead and does not support all ANSI-C++ features, ASC can no longer be build with it.
-Just in case that the <A HREF="http://www.openwatcom.org">OpenWatcom-Project</A> will bring the compiler up to date, we preserved the <A HREF="source_watcom.html">build instructions</A>.
+Just in case that the <A HREF="http://www.openwatcom.org">OpenWatcom-Project</A> will bring the compiler up to date, we preserved the <A HREF="source_watcom.html">build instructions</A> (which are already out of date...).
 
 
 <H2>Porting ASC</H2>
 Porting ASC to any platform supported by SDL should be farely easy (as long as it is 32 bit and has Intel byte order).
 
-<H2>The source documentation</H2>
-The source documentation system used for ASC is <A HREF="http://www.stack.nl/~dimitri/doxygen/">doxygen</A>. The doxygen configuration file is <TT>asc/source/doxygen.config</TT>.
+Porting ASC to 64 bit or big-endian platforms requires some more work, but nothing that cannot be done in a few days ;-)
 
+<H2>The source documentation</H2>
+The source documentation system used for ASC is <A HREF="http://www.stack.nl/~dimitri/doxygen/">doxygen</A> with the doxygen configuration file being <TT>asc/source/doxygen.config</TT>. <p>
+You can access either generate the source documentation yourself using doxygen or access it online at <A HREF="http://www.asc-hq.org/sourcedocumentation/index.html">www.asc-hq.org/sourcedocumentation/</A>.
 
 
 <H2>Source code formatting</H2>
-Since there are many different source code formatting styles out there, it would be quite a mess if everybody used his own style and spends half his time undoing the formatting that others did. I don't want to force everybody to use exactly the same formatting, but if some source is <B>re</B>formatted, then to a well defined layout.
+Since there are many different source code formatting styles out there, it would be quite a mess if everybody wanted ASC to have his own style and spended half his time undoing the formatting that others did. I can't and don't want to force everybody to use exactly the same style, but if some source is <B>re</B>formatted, then it should be done to a well defined layout.
 <A HREF="http://astyle.sourceforge.net/astyle/">Artistic Style</A> is a capable program for formatting source code.
 The settings <TT>--style=linux -s3 -C -S</TT> are recommended to be used for ASC. If you write these settings to a file <TT>~/.astylerc</TT>, you don't need to type them each time you call Astyle. The central setting there is the -s3, which tells Astyle to indent with 3 spaces.<P>
 
 <strong>Some nested and nasty #ifdefs can confuse Astyle. After using Astyle, check the last line of the source file and verify they are correctly indented. If they are not, either fix the #ifdef or restore to the backup file that was created by Astyle!</strong><P>
 
-I personally don't like cutting breaking each line after 80 characters. The times when that was the upper limit of what a monitor could display at once are long passed. And since the first 120 characters (or whatever the size of your screen is) of a command are usually sufficient to get an idea what it is doing, I prefer to not have the next line cluttered with some coordinate calculations that nobody is really interested in.
-But, as always, there are exceptions where it helps to break a command into several lines...
+And here is my personal opinion about line breaks: I don't like breaking each line after 80 characters. The times when that was the upper limit of what a monitor could display at once are long passed. And since the first 120 characters (or whatever you can display on your screen at once) of a command are usually sufficient to get an idea what the command is doing, I prefer to not have the next line cluttered with some coordinate calculations that nobody is really interested in. If one breaks them, they just obstruct the view from the important part (which is the beginning) of the next command.
 <P>
 
 

@@ -1,11 +1,17 @@
-/*! \file history.cpp
+/*! \file loadbi3.cpp
     \brief Importing maps from Battle Isle
 */
 
 
-//     $Id: loadbi3.cpp,v 1.60 2001-10-16 15:33:03 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.61 2001-10-21 13:16:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2001/10/16 15:33:03  mbickel
+//      Added icons to data
+//      ASC displays icons
+//      Fixed crash when building icons
+//      Removed assembled datafiles
+//
 //     Revision 1.59  2001/10/12 00:32:21  mbickel
 //      Fixed crash in loadbi3
 //
