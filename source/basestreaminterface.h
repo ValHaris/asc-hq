@@ -7,7 +7,7 @@
  ***************************************************************************/
 
 /*! \file basestreaminterface.h
-   The interface for ASC stream. This is used for all kinds of stream:
+   The interface for ASC streams. This is used for all kinds of streams:
     normal files, compressed files, files inside containers, memory buffer, ... 
 */
 

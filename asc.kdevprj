@@ -40,11 +40,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/edmisc.h,/home/martin/asc/source/edmisc.cpp,/home/martin/asc/source/edglobal.cpp,/home/martin/asc/source/edmain.cpp,/home/martin/asc/source/typen.h,/home/martin/asc/source/loaders.cpp,/home/martin/asc/source/dlg_box.cpp,/home/martin/asc/source/basestrm.cpp,/home/martin/asc/source/gamemap.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/edevents.cpp,/home/martin/asc/source/edselfnt.cpp,/home/martin/asc/source/edselfnt.h,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/artint.h,/home/martin/asc/source/artint.cpp,/home/martin/asc/source/soundList.cpp,/home/martin/asc/source/spfst.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/edselfnt.h
-cpp_file=/home/martin/asc/source/edselfnt.cpp
+header_file=/home/martin/asc/source/artint.h
+cpp_file=/home/martin/asc/source/spfst.cpp
 browser_file=file:/home/martin/.kde/share/apps/kdevelop/search_result.html
 [source/astar2.h]
 install_location=

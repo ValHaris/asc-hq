@@ -594,7 +594,7 @@ void    Building :: produceAmmo ( int type, int num )
 
 void Building :: getpowerplantefficiency ( int* material, int* fuel )
 {
-   *material = bld->typ->efficiencymaterial;
-   *fuel = bld->typ->efficiencyfuel;
+   *material = typ->efficiencymaterial;
+   *fuel = typ->efficiencyfuel;
 }
 
