@@ -1,6 +1,9 @@
-//     $Id: pd.cpp,v 1.5 1999-12-29 17:38:19 mbickel Exp $
+//     $Id: pd.cpp,v 1.6 1999-12-30 20:30:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/29 17:38:19  mbickel
+//      Continued Linux port
+//
 //     Revision 1.4  1999/12/28 21:03:17  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -138,10 +141,12 @@ void tpulldown::run(void)
    do { 
       if (mouseparams.y <= pdb.pdbreite) {
          if ( (pdfieldnr < pdb.count-1 ) && (mouseparams.x > pdb.field[pdfieldnr+1].xstart)) {
+            collategraphicoperations cgo;
             closepdfield();
             pdfieldnr++;
             openpdfield();
          } else if ( (pdfieldnr > 0 ) && (mouseparams.x < pdb.field[pdfieldnr].xstart) ) {
+            collategraphicoperations cgo;
             closepdfield();
             pdfieldnr --;
             openpdfield();
@@ -149,10 +154,12 @@ void tpulldown::run(void)
       } else if (mouseparams.y <= pdb.pdbreite + pdb.field[pdfieldnr].height) {
          if ( (mouseparams.x >= anf ) && (mouseparams.x <= ende ) ) {
             if ( (buttonnr > 0 ) && (mouseparams.y < pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr) ) ) {
+               collategraphicoperations cgo;
                hidebutton();
                buttonnr--;
                showbutton();
             } else if ( (buttonnr < pdb.field[pdfieldnr].count-1 ) && (mouseparams.y > pdb.pdbreite + 4 + getpdfieldheight(pdfieldnr,buttonnr+1) ) ) {
+               collategraphicoperations cgo;
                hidebutton();
                buttonnr++;
                showbutton();

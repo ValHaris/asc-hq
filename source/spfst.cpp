@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.11 1999-12-29 12:50:48 mbickel Exp $
+//     $Id: spfst.cpp,v 1.12 1999-12-30 20:30:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  1999/12/29 12:50:48  mbickel
+//      Removed a fatal error message in GUI.CPP
+//      Made some modifications to allow platform dependant path delimitters
+//
 //     Revision 1.10  1999/12/28 21:03:22  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -382,6 +386,10 @@ void setvisibility ( word* visi, int valtoset, int actplayer )
 
 void copyvfb2displaymemory_zoom ( void* parmbuf )
 {
+   int tempdirectscreenaccess = agmp->directscreenaccess;
+   if ( hgmp->directscreenaccess != agmp->directscreenaccess )
+      agmp->directscreenaccess = hgmp->directscreenaccess;
+
    int* parmi = (int*) parmbuf;
 
    char* esi = (char*) parmi[0];
@@ -414,6 +422,7 @@ void copyvfb2displaymemory_zoom ( void* parmbuf )
    } while ( edx ); /* enddo */
 
    copySurface2screen();
+   agmp->directscreenaccess = tempdirectscreenaccess;
 }
 
 #endif

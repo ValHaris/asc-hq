@@ -1,6 +1,10 @@
-//     $Id: dlgraph.cpp,v 1.3 1999-12-28 21:02:52 mbickel Exp $
+//     $Id: dlgraph.cpp,v 1.4 1999-12-30 20:30:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/12/28 21:02:52  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.2  1999/11/16 03:41:27  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -136,56 +140,61 @@ void         tdialogbox::newknopfdruck2(integer      xx1,
                             integer      xx2,
                             integer      yy2)
 {
-     collategraphicoperations cgs;
 
     pointer      p;
     boolean      kn; 
     integer      mt; 
+    {
+       collategraphicoperations cgs;
+       mt = mouseparams.taste;
+       mousevisible(false);
+       p = asc_malloc ( imagesize ( xx1 + 1,yy1 + 1,xx2 - 2,yy2 - 2 ) );
+       getimage(xx1 + 1,yy1 + 1,xx2 - 2,yy2 - 2, p);
+       putimage(xx1 + 3,yy1 + 3, p);
 
-     mt = mouseparams.taste; 
-     mousevisible(false); 
-     p = asc_malloc ( imagesize ( xx1 + 1,yy1 + 1,xx2 - 2,yy2 - 2 ) );
-     getimage(xx1 + 1,yy1 + 1,xx2 - 2,yy2 - 2, p);
-     putimage(xx1 + 3,yy1 + 3, p);
+       line(xx1 - 1,yy1 - 1,xx2 + 1,yy1 - 1, 8);
+       line(xx1 - 1,yy1 - 1,xx1 - 1,yy2 + 1, 8);
+       line(xx2 + 1,yy1 - 1,xx2 + 1,yy2 + 1, 15);
+       line(xx1 - 1,yy2 + 1,xx2 + 1,yy2 + 1, 15);
 
-     line(xx1 - 1,yy1 - 1,xx2 + 1,yy1 - 1, 8);
-     line(xx1 - 1,yy1 - 1,xx1 - 1,yy2 + 1, 8);
-     line(xx2 + 1,yy1 - 1,xx2 + 1,yy2 + 1, 15);
-     line(xx1 - 1,yy2 + 1,xx2 + 1,yy2 + 1, 15);
+       line(xx1,yy1,xx2,yy1, 8);
+       line(xx1,yy1,xx1,yy2, 8);
+       line(xx2,yy1,xx2,yy2, 15);
+       line(xx1,yy2,xx2,yy2, 15);
 
-     line(xx1,yy1,xx2,yy1, 8);
-     line(xx1,yy1,xx1,yy2, 8);
-     line(xx2,yy1,xx2,yy2, 15);
-     line(xx1,yy2,xx2,yy2, 15);
-
-     mousevisible(true); 
-     knopfsuccessful = true; 
-     kn = true; 
-     do { 
+       mousevisible(true);
+       knopfsuccessful = true;
+       kn = true;
+    }
+    do {
            if ((mouseparams.x > xx2) || (mouseparams.x < xx1) || (mouseparams.y > yy2) || (mouseparams.y < yy1)) { 
               knopfsuccessful = false; 
               kn = false; 
            } 
            if (mouseparams.taste != mt) kn = false; 
-     }  while (kn == true);
+    }  while (kn == true);
+    {
+       collategraphicoperations cgo;
 
-     mousevisible(false); 
+       mousevisible(false);
 
-     if (knopfsuccessful == false) putimage (xx1 + 1,yy1 + 1,p);
-     asc_free ( p );
+       if (knopfsuccessful == false)
+          putimage (xx1 + 1,yy1 + 1,p);
+       asc_free ( p );
 
-     if (knopfsuccessful == false) { 
-        line(xx1 - 1,yy1 - 1,xx2 + 1,yy1 - 1, 8);
-        line(xx1 - 1,yy1 - 1,xx1 - 1,yy2 + 1, 8);
-        line(xx2 + 1,yy1 - 1,xx2 + 1,yy2 + 1, 15);
-        line(xx1 - 1,yy2 + 1,xx2 + 1,yy2 + 1, 15);
+       if (knopfsuccessful == false) {
+          line(xx1 - 1,yy1 - 1,xx2 + 1,yy1 - 1, 8);
+          line(xx1 - 1,yy1 - 1,xx1 - 1,yy2 + 1, 8);
+          line(xx2 + 1,yy1 - 1,xx2 + 1,yy2 + 1, 15);
+          line(xx1 - 1,yy2 + 1,xx2 + 1,yy2 + 1, 15);
 
-        line(xx1,yy1,xx2,yy1, 15);
-        line(xx1,yy1,xx1,yy2, 15);
-        line(xx2,yy1,xx2,yy2, 8);
-        line(xx1,yy2,xx2,yy2, 8);
-     } 
-     mousevisible(true); 
+          line(xx1,yy1,xx2,yy1, 15);
+          line(xx1,yy1,xx1,yy2, 15);
+          line(xx2,yy1,xx2,yy2, 8);
+          line(xx1,yy2,xx2,yy2, 8);
+       }
+       mousevisible(true);
+    }
 
 } 
 
@@ -237,16 +246,17 @@ void         tdialogbox::newknopfdruck(integer      xx1,
                            integer      xx2,
                            integer      yy2)
 {
-     collategraphicoperations cgs;
 
    pointer      p;
-    boolean      kn; 
-    integer      mt; 
-
-     mt = mouseparams.taste; 
+   boolean      kn;
+   integer      mt;
+   void*    pq ;
+   {
+     collategraphicoperations cgs;
+     mt = mouseparams.taste;
      mousevisible(false); 
 
-     void*    pq = asc_malloc ( imagesize ( xx1 , yy1 , xx2 , yy2 ));
+     pq = asc_malloc ( imagesize ( xx1 , yy1 , xx2 , yy2 ));
      getimage( xx1 , yy1 , xx2 , yy2 , pq );
 
 
@@ -268,15 +278,17 @@ void         tdialogbox::newknopfdruck(integer      xx1,
      mousevisible(true); 
 
      knopfsuccessful = true; 
-     kn = true; 
-     do { 
+     kn = true;
+   }
+   do {
            if ((mouseparams.x > xx2) || (mouseparams.x < xx1) || (mouseparams.y > yy2) || (mouseparams.y < yy1)) { 
               knopfsuccessful = false; 
               kn = false; 
            } 
            if (mouseparams.taste != mt) kn = false; 
-     }  while (kn == true);
-
+   }  while (kn == true);
+   {
+     collategraphicoperations cgo;
      mousevisible(false); 
      putimage(xx1 + 1,yy1 + 1,p);
      asc_free ( p ) ;
@@ -296,5 +308,6 @@ void         tdialogbox::newknopfdruck(integer      xx1,
      putimage( xx1 , yy1 , pq );
      asc_free ( pq );
 
-     mousevisible(true); 
+     mousevisible(true);
+   }
 } 

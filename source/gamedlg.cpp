@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.9 1999-12-29 17:38:11 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.10 1999-12-30 20:30:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  1999/12/29 17:38:11  mbickel
+//      Continued Linux port
+//
 //     Revision 1.8  1999/12/28 21:02:53  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -2832,9 +2835,10 @@ tmessagedlg :: tmessagedlg ( void )
     firstparagraph = NULL;
     lastcursortick = 0;
     blinkspeed = 80;
-
-    #ifdef NEWKEYB
-    closekeyb();
+    #ifdef _DOS_
+     #ifdef NEWKEYB
+     closekeyb();
+     #endif
     #endif
 }
 
@@ -2941,9 +2945,11 @@ tmessagedlg :: ~tmessagedlg ( )
       delete actparagraph;
       actparagraph = temp;
    }
+   #ifdef _DOS_
     #ifdef NEWKEYB
     initkeyb();
     #endif
+   #endif
 }
 
 void tmessagedlg :: setup ( void )

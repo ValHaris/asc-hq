@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.12 1999-12-29 17:38:07 mbickel Exp $
+//     $Id: controls.cpp,v 1.13 1999-12-30 20:30:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  1999/12/29 17:38:07  mbickel
+//      Continued Linux port
+//
 //     Revision 1.11  1999/12/28 21:02:43  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -1009,7 +1012,7 @@ void    getobjbuildcosts ( pobjecttype obj, pfield fld, tresources* resource, in
    int mvcost;
 
    if ( !fld->checkforobject ( obj ) ) {
-      int costmultiply = ( 8 + ( fld->movemalus[0] - 8 ) / ( objectbuildmovecost / 8 ) ) *  bridgemultiple / 8;
+      // int costmultiply = ( 8 + ( fld->movemalus[0] - 8 ) / ( objectbuildmovecost / 8 ) ) *  bridgemultiple / 8;
       for ( int i = 0; i < 3; i++ )
          resource->resource[i] = obj->buildcost.resource[i]; // * costmultiply / 8;
 
@@ -3467,7 +3470,6 @@ void         attack(boolean      kamikaze, int  weapnum )
    else 
       if (moveparams.movestatus == 10) { 
           pfield    fld = getfield(moveparams.movesx,moveparams.movesy);
-          pvehicle vehicle1 = fld->vehicle;
           pfield    targ = getactfield();
 
           int x2 = getxpos();
@@ -5152,7 +5154,7 @@ void checkalliances_at_endofturn ( void )
             char* sp = getmessage( 10001 ); 
             sprintf ( txt, sp, actmap->player[act].name, actmap->player[i].name );
             sp = strdup ( txt );
-            pmessage msg = new tmessage ( sp, to );
+            new tmessage ( sp, to );
          }
 
          if ( actmap->alliances[i] [act] == capeaceproposal  &&  actmap->alliances_at_beginofturn[i] != capeaceproposal ) {
@@ -5165,7 +5167,7 @@ void checkalliances_at_endofturn ( void )
             char* sp = getmessage( 10003 ); 
             sprintf ( txt, sp, actmap->player[act].name );
             sp = strdup ( txt );
-            pmessage msg = new tmessage ( sp, to );
+            new tmessage ( sp, to );
          }
 
          if ( actmap->alliances[i] [act] == cawarannounce ) {
@@ -5178,7 +5180,7 @@ void checkalliances_at_endofturn ( void )
             char* sp = getmessage( 10002 ); 
             sprintf ( txt, sp, actmap->player[act].name );
             sp = strdup ( txt );
-            pmessage msg = new tmessage ( sp, to );
+            new tmessage ( sp, to );
          }
 
       }
@@ -6253,7 +6255,7 @@ void initchoosentechnology( void )
    pdissectedunit last = NULL;
    while ( du ) {
  
-      if ( du->tech = actmap->player[actmap->actplayer].research.activetechnology ) {
+      if ( du->tech == actmap->player[actmap->actplayer].research.activetechnology ) {
          actmap->player[actmap->actplayer].research.progress += du->points;
  
          du = du->next;
@@ -7143,7 +7145,7 @@ void MapNetwork :: searchbuilding ( int x, int y )
                   int yp2 = yp;
                   getnextfield ( xp2, yp2, d );
                   pfield newfield = getfield ( xp2, yp2 );
-                  if ( newfield->building != bld  && !newfield->a.temp )
+                  if ( newfield && newfield->building != bld  && !newfield->a.temp )
                      searchfield ( xp2, yp2, d );
                } /* endfor */
          }
@@ -7549,7 +7551,7 @@ void transfer_all_outstanding_tribute ( void )
             }
             if ( text[0] ) {
                char* sp = strdup ( text );
-               pmessage msg = new tmessage ( sp, 1 << targplayer );
+               new tmessage ( sp, 1 << targplayer );
             }
          }
 }
@@ -7699,6 +7701,7 @@ void cmousecontrol :: chkmouse ( void )
    
          if ( r ) 
             if ( (cursor.posx != x || cursor.posy != y) && ( moveparams.movestatus == 0) ) {
+               collategraphicoperations cgo;
                mousestat = 1;
                mousevisible(false);
                cursor.hide();
@@ -7737,6 +7740,7 @@ void cmousecontrol :: chkmouse ( void )
                newy--;
 
             if ( newx != actmap->xpos  || newy != actmap->ypos ) {
+               collategraphicoperations cgo;
                cursor.hide();
                actmap->xpos = newx;
                actmap->ypos = newy;
@@ -7759,6 +7763,7 @@ void cmousecontrol :: chkmouse ( void )
    
          if ( r ) 
             if ( (cursor.posx != x || cursor.posy != y) && ( moveparams.movestatus == 0   ||  getfield(actmap->xpos + x , actmap->ypos + y)->a.temp == 0) ) {
+               collategraphicoperations cgo;
                mousestat = 1;
                mousevisible(false);
                cursor.hide();
@@ -7768,19 +7773,22 @@ void cmousecontrol :: chkmouse ( void )
                mousevisible(true);
             } else 
               if ( mousestat == 2  ||  mousestat == 0 ||  (moveparams.movestatus && getfield( actmap->xpos + x, actmap->ypos + y)->a.temp )  ) {
-                 if ( cursor.posx != x || cursor.posy != y ) {
-                    mousevisible(false);
-                    cursor.hide();
-                    cursor.posx = x;
-                    cursor.posy = y;
-                    cursor.show();
-   
-                    dashboard.paint( getactfield(), actmap-> playerview );
-   
-                    mousevisible(true);
+                 {
+                    collategraphicoperations cgo;
+                    if ( cursor.posx != x || cursor.posy != y ) {
+                       mousevisible(false);
+                       cursor.hide();
+                       cursor.posx = x;
+                       cursor.posy = y;
+                       cursor.show();
+
+                       dashboard.paint( getactfield(), actmap-> playerview );
+
+                       mousevisible(true);
+                    }
+
+                    actgui->painticons();
                  }
-   
-                 actgui->painticons();
                  pfield fld = getactfield();
                  actgui->paintsmallicons( gameoptions.mouse.smallguibutton, !fld->vehicle && !fld->building && !fld->a.temp );
                  mousestat = 0;
@@ -7794,16 +7802,21 @@ void cmousecontrol :: chkmouse ( void )
          int x; 
          int y;
          int r = getfieldundermouse ( &x, &y );
-   
-         if ( r && ( cursor.posx != x || cursor.posy != y) ) {
-            mousevisible(false);
-            cursor.hide();
-            cursor.posx = x;
-            cursor.posy = y;
-            cursor.show();
-            mousevisible(true);
+         {
+
+            collategraphicoperations cgo;
+
+            if ( r && ( cursor.posx != x || cursor.posy != y) ) {
+               mousevisible(false);
+               cursor.hide();
+               cursor.posx = x;
+               cursor.posy = y;
+               cursor.show();
+               mousevisible(true);
+            }
+            actgui->painticons();
          }
-         actgui->painticons();
+
          actgui->runpressedmouse ( mouseparams.taste );
       }
 
@@ -8671,9 +8684,6 @@ int  trunreplay :: run ( int player )
    if ( status < 0 )
       firstinit ( );
 
-
-   int cx = getxpos();
-   int cy = getypos();
 
    cursor.hide();
 

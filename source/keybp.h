@@ -1,6 +1,9 @@
-//     $Id: keybp.h,v 1.5 1999-12-28 22:04:26 mbickel Exp $
+//     $Id: keybp.h,v 1.6 1999-12-30 20:30:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/28 22:04:26  mbickel
+//      Had to make some changes again to compile it for DOS...
+//
 //     Revision 1.4  1999/12/28 21:03:00  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -454,79 +457,125 @@
    #define ct_f11    SDLK_F11
    #define ct_f12    SDLK_F12
 
-   #define cto_stp  -96
-   #define cto_entf   83+256
-   #define cto_space   32
-   #define cto_bspace  8
-   #define cto_a  'a'
-   #define cto_b  'b'
-   #define cto_c  'c'
-   #define cto_d  'd'
-   #define cto_e  'e'
-   #define cto_f  'f'
-   #define cto_g  'g'
-   #define cto_h  'h'
-   #define cto_i  'i'
-   #define cto_j  'j'
-   #define cto_k  'k'
-   #define cto_l  'l'
-   #define cto_m  'm'
-   #define cto_n  'n'
-   #define cto_o  'o'
-   #define cto_p  'p'
-   #define cto_q  'q'
-   #define cto_r  'r'
-   #define cto_s  's'
-   #define cto_t  't'
-   #define cto_u  'u'
-   #define cto_v  'v'
-   #define cto_w  'w'
-   #define cto_x  'x'
-   #define cto_y  'y'
-   #define cto_z  'z'
-   #define cto_oe 'î'
-   #define cto_ae 'Ñ'
-   #define cto_ue 'Å'
-   #define cto_0  '0'
-   #define cto_1  '1'
-   #define cto_2  '2'
-   #define cto_3  '3'
-   #define cto_4  '4'
-   #define cto_5  '5'
-   #define cto_6  '6'
-   #define cto_7  '7'
-   #define cto_8  '8'
-   #define cto_9  '9'
-
-   #define cto_tab    9
-   #define cto_esc    27
    #define cto_invvalue   -1
-   #define cto_invvalue2  -2
-   #define cto_left   75+256
-   #define cto_right  77+256
-   #define cto_up     72+256
-   #define cto_down   80+256
-   #define cto_enter  13
-   #define cto_pos1   71+256
-   #define cto_ende   79+256
-   #define cto_pdown  81+256
-   #define cto_pup    73+256
-   #define cto_f1     59+256
-   #define cto_f2     60+256
-   #define cto_f3     61+256
-   #define cto_f4     62+256
-   #define cto_f5     63+256
-   #define cto_f6     64+256
-   #define cto_f7     65+256
-   #define cto_f8     66+256
-   #define cto_f9     67+256
-   #define cto_f10    68+256
-   #define cto_f11    254
-   #define cto_f12    253
-   #define cto_minus  '-'
-   #define cto_plus   '+'
-   #define cto_point  '.'
-   #define cto_komma  ','
+   #define cto_shp  2048
+   #define cto_stp  512
+   #define cto_altp  1024
+
+   #define cto_space   SDLK_SPACE
+   #define cto_bspace  SDLK_BACKSPACE
+   #define cto_lshift  SDLK_LSHIFT
+   #define cto_rshift  SDLK_RSHIFT
+   #define cto_lstrg   SDLK_LCTRL
+   #define cto_rstrg   SDLK_RCTRL
+   #define cto_lalt    SDLK_LALT
+   #define cto_ralt    SDLK_RALT
+
+   #define cto_roll    SDLK_SCROLLOCK
+   #define cto_pause   SDLK_PAUSE
+   #define cto_druck   SDLK_PRINT
+
+   #define cto_esc     SDLK_ESCAPE
+   #define cto_tab     SDLK_TAB
+
+   #define cto_shift_tab    (cto_tab | cto_shp)
+
+   #define cto_capslck SDLK_CAPSLOCK
+   #define cto_sb      SDLK_LESS
+   #define cto_gitt    SDLK_HASH
+   #define cto_enter   SDLK_RETURN
+   #define cto_minus   SDLK_MINUS
+   #define cto_plus    SDLK_PLUS
+   #define cto_punkt   SDLK_PERIOD
+   #define cto_point cto_punkt
+   #define cto_komma   SDLK_COMMA
+
+   #define cto_num     SDLK_NUMLOCK
+   #define cto_divk    SDLK_KP_DIVIDE
+   #define cto_malk    SDLK_KP_MULTIPLY
+   #define cto_minusk  SDLK_KP_MINUS
+   #define cto_plusk   SDLK_KP_PLUS
+   #define cto_enterk  SDLK_KP_ENTER
+   #define cto_entk    SDLK_KP_PERIOD
+   #define cto_0k      SDLK_KP0
+   #define cto_1k      SDLK_KP1
+   #define cto_2k      SDLK_KP2
+   #define cto_3k      SDLK_KP3
+   #define cto_4k      SDLK_KP4
+   #define cto_5k      SDLK_KP5
+   #define cto_6k      SDLK_KP6
+   #define cto_7k      SDLK_KP7
+   #define cto_8k      SDLK_KP8
+   #define cto_9k      SDLK_KP9
+
+   #define cto_a  SDLK_a
+   #define cto_b  SDLK_b
+   #define cto_c  SDLK_c
+   #define cto_d  SDLK_d
+   #define cto_e  SDLK_e
+   #define cto_f  SDLK_f
+   #define cto_g  SDLK_g
+   #define cto_h  SDLK_h
+   #define cto_i  SDLK_i
+   #define cto_j  SDLK_j
+   #define cto_k  SDLK_k
+   #define cto_l  SDLK_l
+   #define cto_m  SDLK_m
+   #define cto_n  SDLK_n
+   #define cto_o  SDLK_o
+   #define cto_p  SDLK_p
+   #define cto_q  SDLK_q
+   #define cto_r  SDLK_r
+   #define cto_s  SDLK_s
+   #define cto_t  SDLK_t
+   #define cto_u  SDLK_u
+   #define cto_v  SDLK_v
+   #define cto_w  SDLK_w
+   #define cto_x  SDLK_x
+   #define cto_y  SDLK_y
+   #define cto_z  SDLK_z
+//   #define cto_oe 39
+//   #define cto_ae 40
+//   #define cto_ue 26
+
+   #define cto_circ  SDLK_CARET
+   #define cto_0  SDLK_0
+   #define cto_1  SDLK_1
+   #define cto_2  SDLK_2
+   #define cto_3  SDLK_3
+   #define cto_4  SDLK_4
+   #define cto_5  SDLK_5
+   #define cto_6  SDLK_6
+   #define cto_7  SDLK_7
+   #define cto_8  SDLK_8
+   #define cto_9  SDLK_9
+//   #define cto_ez  12
+//   #define cto_apos  13
+
+   #define cto_left   SDLK_LEFT
+   #define cto_right  SDLK_RIGHT
+   #define cto_up     SDLK_UP
+   #define cto_down   SDLK_DOWN
+
+   #define cto_entf   SDLK_DELETE
+   #define cto_einf   SDLK_INSERT
+   #define cto_pos1   SDLK_HOME
+   #define cto_ende   SDLK_END
+   #define cto_pdown  SDLK_PAGEDOWN
+   #define cto_pup    SDLK_PAGEUP
+
+   #define cto_f1     SDLK_F1
+   #define cto_f2     SDLK_F2
+   #define cto_f3     SDLK_F3
+   #define cto_f4     SDLK_F4
+   #define cto_f5     SDLK_F5
+   #define cto_f6     SDLK_F6
+   #define cto_f7     SDLK_F7
+   #define cto_f8     SDLK_F8
+   #define cto_f9     SDLK_F9
+   #define cto_f10    SDLK_F10
+   #define cto_f11    SDLK_F11
+   #define cto_f12    SDLK_F12
 
 
 #endif //_DOS_
@@ -536,6 +585,7 @@
     extern char  skeypress( tkey keynr);
     extern char *get_key(tkey keynr);
     extern tkey r_key(void);
+    extern int  rp_key(void);
     extern int keypress(void);
     extern void initkeyb(void);
     extern void closekeyb(void);

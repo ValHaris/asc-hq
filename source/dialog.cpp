@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.9 1999-12-28 21:02:48 mbickel Exp $
+//     $Id: dialog.cpp,v 1.10 1999-12-30 20:30:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  1999/12/28 21:02:48  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.8  1999/12/27 12:59:48  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -154,28 +158,30 @@ void         tstatisticarmies ::newknopfdruck(integer      xx1,
     char*      p; 
     boolean      kn; 
     integer      mt; 
+    {
+        collategraphicoperations cgo;
+        mt = mouseparams.taste;
+        mousevisible(false);
+        p = new char [ imagesize ( xx1 + 1,yy1 + 1,xx2 - 2,yy2 - 2 )];
+        getimage(xx1 + 1,yy1 + 1,xx2 - 2,yy2 - 2, p);
+        putimage(xx1 + 3,yy1 + 3, p);
 
-     mt = mouseparams.taste; 
-     mousevisible(false); 
-     p = new char [ imagesize ( xx1 + 1,yy1 + 1,xx2 - 2,yy2 - 2 )];
-     getimage(xx1 + 1,yy1 + 1,xx2 - 2,yy2 - 2, p);
-     putimage(xx1 + 3,yy1 + 3, p);
+        line(xx1 - 1,yy1 - 1,xx2 + 1,yy1 - 1, 8);
+        line(xx1 - 1,yy1 - 1,xx1 - 1,yy2 + 1, 8);
 
-     line(xx1 - 1,yy1 - 1,xx2 + 1,yy1 - 1, 8);
-     line(xx1 - 1,yy1 - 1,xx1 - 1,yy2 + 1, 8);
+        line(xx2 + 1,yy1 - 1,xx2 + 1,yy2 + 1, 15);
+        line(xx1 - 1,yy2 + 1,xx2 + 1,yy2 + 1, 15);
 
-     line(xx2 + 1,yy1 - 1,xx2 + 1,yy2 + 1, 15);
-     line(xx1 - 1,yy2 + 1,xx2 + 1,yy2 + 1, 15);
+        line(xx1,yy1,xx2,yy1, 8);
+        line(xx1,yy1,xx1,yy2, 8);
 
-     line(xx1,yy1,xx2,yy1, 8);
-     line(xx1,yy1,xx1,yy2, 8);
+        line(xx2,yy1,xx2,yy2, 15);
+        line(xx1,yy2,xx2,yy2, 15);
+        mousevisible(true);
 
-     line(xx2,yy1,xx2,yy2, 15);
-     line(xx1,yy2,xx2,yy2, 15);
-     mousevisible(true); 
-
-     knopfsuccessful = true; 
-     kn = true; 
+        knopfsuccessful = true;
+        kn = true;
+     }
      do { 
            if ((mouseparams.x > xx2) || (mouseparams.x < xx1) || (mouseparams.y > yy2) || (mouseparams.y < yy1)) { 
               knopfsuccessful = false; 
@@ -184,23 +190,27 @@ void         tstatisticarmies ::newknopfdruck(integer      xx1,
            if (mouseparams.taste != mt) kn = false; 
      }  while (kn == true);
 
-     mousevisible(false); 
-     putimage(xx1 + 1,yy1 + 1,p);
-     delete[] p  ;
+     {
+        collategraphicoperations cgo;
 
-     line(xx1 - 1,yy1 - 1,xx2 + 1,yy1 - 1, 8);
-     line(xx1 - 1,yy1 - 1,xx1 - 1,yy2 + 1, 8);
+        mousevisible(false);
+        putimage(xx1 + 1,yy1 + 1,p);
+        delete[] p  ;
 
-     line(xx2 + 1,yy1 - 1,xx2 + 1,yy2 + 1, 15);
-     line(xx1 - 1,yy2 + 1,xx2 + 1,yy2 + 1, 15);
+        line(xx1 - 1,yy1 - 1,xx2 + 1,yy1 - 1, 8);
+        line(xx1 - 1,yy1 - 1,xx1 - 1,yy2 + 1, 8);
 
-     line(xx1,yy1,xx2,yy1, 15);
-     line(xx1,yy1,xx1,yy2, 15);
+        line(xx2 + 1,yy1 - 1,xx2 + 1,yy2 + 1, 15);
+        line(xx1 - 1,yy2 + 1,xx2 + 1,yy2 + 1, 15);
 
-     line(xx2,yy1,xx2,yy2, 8);
-     line(xx1,yy2,xx2,yy2, 8);
+        line(xx1,yy1,xx2,yy1, 15);
+        line(xx1,yy1,xx1,yy2, 15);
 
-     mousevisible(true); 
+        line(xx2,yy1,xx2,yy2, 8);
+        line(xx1,yy2,xx2,yy2, 8);
+
+        mousevisible(true);
+     }
 } 
 
 
@@ -226,7 +236,8 @@ void         tstatistics::init(void)
 
 void         tstatisticarmies::init(void)
 { 
-  byte         i; 
+  collategraphicoperations cgo;
+  byte         i;
 
    tstatistics::init();
    categories = 3; 
@@ -249,6 +260,7 @@ void         tstatisticarmies::init(void)
 
 void         tstatisticbuildings::init(void)
 { 
+  collategraphicoperations cgo;
 
    tstatistics::init();
    categories = 1; 
@@ -336,7 +348,8 @@ void         tstatisticbuildings::count(void)
 
 void         tstatistics::paintgraph(void)
 { 
-   int    linestart = x1 + 95; 
+  collategraphicoperations cgo;
+   int    linestart = x1 + 95;
 
   int      max; 
   integer      b, i, j, y; 
@@ -700,6 +713,8 @@ void         tweaponinfo::run(void)
 
 void         tvehicleinfo::init( pvehicletype type )
 { 
+  collategraphicoperations cgo;
+
    aktvehicle = type;
    tdialogbox::init();
    category = 0;
@@ -762,7 +777,8 @@ void         tvehicleinfo::lines(integer      xp1,
                                  integer      yp2,
                                  char *       st)
 { 
-   rahmen(true,xp1,yp1,xp2,yp2); 
+  collategraphicoperations cgo;
+   rahmen(true,xp1,yp1,xp2,yp2);
    rahmen(false,xp1 + 1,yp1 + 1,xp2 - 1,yp2 - 1); 
 } 
 
@@ -788,7 +804,8 @@ void         tvehicleinfo::lines(integer      xp1,
 
 void         tvehicleinfo::paintmarkweap(void)
 { 
-  byte         mas; 
+  collategraphicoperations cgo;
+  byte         mas;
   int ii,jj,ll;
   char strng[100];
 
@@ -860,6 +877,7 @@ extern dacpalette256 pal;
 
 void         tvehicleinfo::zeigevehicle(void)
 { 
+  collategraphicoperations cgo;
 
       activefontsettings.font = schriften.smallarial; 
       activefontsettings.length = 240;
@@ -895,6 +913,7 @@ void         tvehicleinfo::zeigevehicle(void)
 
 void tvehicleinfo::showgeneralinfos ( void ) 
 {
+  collategraphicoperations cgo;
  char mss = getmousestatus();
  if (mss == 2)
     mousevisible(false);
@@ -951,6 +970,7 @@ void tvehicleinfo::showgeneralinfos ( void )
 
 void  tvehicleinfo::showgeneralinfovariables( void )
 {
+  collategraphicoperations cgo;
  int          ii, kk;
  pointer      q; 
  char         strng[100];
@@ -1171,7 +1191,8 @@ void  tvehicleinfo::showgeneralinfovariables( void )
 
 void tvehicleinfo::showweapons ( void )
 {                             
-  
+  collategraphicoperations cgo;
+
  char mss = getmousestatus();
  if (mss == 2)
     mousevisible(false);
@@ -1204,6 +1225,8 @@ void tvehicleinfo::showweapons ( void )
 
 void tvehicleinfo::showweaponsvariables( void )
 {
+  collategraphicoperations cgo;
+
    char strng[100];
    int xa,ya,ii;
       
@@ -1393,6 +1416,8 @@ void tvehicleinfo::showweaponsvariables( void )
 
 void         tvehicleinfo::showinfotext( void )
 {
+  collategraphicoperations cgo;
+
    char *b;
    if (aktvehicle->infotext)
       b = aktvehicle->infotext;
@@ -1430,6 +1455,8 @@ void         tvehicleinfo::showinfotext( void )
 
 void         tvehicleinfo::showclasses( void )
 {
+  collategraphicoperations cgo;
+
   int i, j;
 
    if ( aktvehicle->classnum) {
@@ -1811,7 +1838,8 @@ class  tchoice_dlg : public tdialogbox {
 
 
 void         tchoice_dlg::init( char* a, char* b, char* c )
-{ 
+{
+  collategraphicoperations cgo;
   tdialogbox::init();
   windowstyle |= dlg_notitle;
   int wdth = gettextwdth ( a, schriften.arial8 ) ;
@@ -1969,6 +1997,8 @@ class   tfileselectsvga : public tdialogbox {
 
 void         tfileselectsvga::init( char sw  )
 { 
+  collategraphicoperations cgo;
+
    tdialogbox::init();
    swtch = sw; 
    if (sw == 1)
@@ -2031,7 +2061,8 @@ void         tfileselectsvga::buttonpressed(byte         id)
       break; 
       
       case 3:   { 
-            sort_time = (boolean) !sort_name; 
+            collategraphicoperations cgo;
+            sort_time = (boolean) !sort_name;
             enablebutton(4); 
             sortentries(); 
             fileausgabe(false,1);
@@ -2039,7 +2070,8 @@ void         tfileselectsvga::buttonpressed(byte         id)
       break; 
       
       case 4:   { 
-            sort_name = (boolean) !sort_time; 
+            collategraphicoperations cgo;
+            sort_name = (boolean) !sort_time;
             enablebutton(3); 
             sortentries(); 
             fileausgabe(false,1);
@@ -2211,7 +2243,9 @@ void         tfileselectsvga::fileausgabe(boolean     force , int dispscrollbar)
    if (numberoffiles == 0)
       return;
 
-   mousevisible(false); 
+  collategraphicoperations cgo;
+
+   mousevisible(false);
 
    ausgabeaborted = true; 
    if (dispscrollbar)
@@ -2353,7 +2387,9 @@ boolean      tfileselectsvga::speedsearch(char         input)
 
 void         tfileselectsvga::displayspeedsearch(void)
 { 
-   mousevisible(false); 
+  collategraphicoperations cgo;
+
+   mousevisible(false);
    npush ( activefontsettings );
    activefontsettings.length = 90;
    showtext2(searchstring,x1 + 225, y1 + ysize - 30);
@@ -2386,10 +2422,11 @@ void         tfileselectsvga::checkfsf( char lock )
 
 void         tfileselectsvga::run(void)
 { 
-
-      #ifdef NEWKEYB
-      closekeyb();
-      #endif
+   #ifdef _DOS_
+    #ifdef NEWKEYB
+     closekeyb();
+    #endif
+   #endif
 
    activefontsettings.background = dblue; 
    searchstring[0] = 0;
@@ -2575,9 +2612,11 @@ void         tfileselectsvga::run(void)
    } else
      result[0] = 0;
 
+  #ifdef _DOS_
    #ifdef NEWKEYB
    initkeyb();
    #endif
+  #endif
 
 
    for (int ii=0; ii < numberoffiles ;ii++ ) {
@@ -2638,6 +2677,8 @@ void testdisptext ( void )
 
 void tenterfiledescription::init ( char* descrip )
 {
+   collategraphicoperations cgo;
+
    tdialogbox::init();
    xsize = 350;
    ysize = 145;
@@ -2729,6 +2770,8 @@ class tshowmap : public tdialogbox, public tbasicshowmap {
 
 void  tshowmap::init ( void )
 {
+  collategraphicoperations cgo;
+
    tdialogbox::init();
    windowstyle ^= dlg_notitle;
    xsize = 450;
@@ -3297,6 +3340,8 @@ int tbasicshowmap::getposfieldy ( int c )
 
 void tbasicshowmap::dispimage ( void )
 {
+  collategraphicoperations cgo;
+
    int xsize;
    int ysize;
    int x1 = xp1;
@@ -3635,6 +3680,8 @@ static const char*    cens[]  = { "player", "alliance", "computer" };
 
 void         tenternamestrings::init(  pnamestrings namestrings, char plyexist, char md )
 { 
+  collategraphicoperations cgo;
+
   char         i, j;
 
   tdialogbox::init();
@@ -3867,6 +3914,8 @@ int          tsetalliances::getcapabilities ( void )
 
 void          tsetalliances::redraw ( void )
 {
+  collategraphicoperations cgo;
+
    inherited::redraw();
 
    rahmen3("player",x1 + 10,y1 + 45,x1 + 380,y1 + 230,1); 
@@ -3882,6 +3931,7 @@ void          tsetalliances::redraw ( void )
 
 void         tsetalliances::displayplayernamesintable( void )
 {
+  collategraphicoperations cgo;
    npush ( activefontsettings );
    activefontsettings.background = dblue; 
    activefontsettings.length = ali_x1 - 41 ;
@@ -3903,7 +3953,9 @@ char* shareview_modenames[2] = { "none", "share view" };
 
 void         tsetalliances::buildhlgraphics(void)
 { 
-  byte         i, j; 
+  collategraphicoperations cgo;
+
+  byte         i, j;
   byte         mss; 
 
    mss = getmousestatus(); 
@@ -3979,6 +4031,7 @@ void         tsetalliances::buildhlgraphics(void)
 
 void         tsetalliances::paintkeybar(void)
 { 
+  collategraphicoperations cgo;
  int          xx1, xx2;
 
    if (bx == 0) { 
@@ -4002,7 +4055,7 @@ void         tsetalliances::paintkeybar(void)
 void          tsetalliances::checkfornetwork ( void )
 {
   int cmp = 0;
-  int i, j;
+  int i;
 
   for (i = 0; i < 8; i++) 
      if ( actmap->player[i].existent )
@@ -4177,7 +4230,9 @@ void         tsetalliances::click(byte         bxx,
                                 byte         x,
                                 byte         y)
 { 
-   mousevisible(false); 
+  collategraphicoperations cgo;
+
+   mousevisible(false);
    activefontsettings.color = 23 + y * 8; 
    activefontsettings.length = tsa_namelength; 
    activefontsettings.background = dblue; 
@@ -4727,6 +4782,7 @@ void         tviewanytext::run(void)
 
 void         tviewanytext:: init( char* ttl, char* text , int xx1 , int yy1  , int xxsize , int yysize  )
 { 
+  collategraphicoperations cgo;
 
    // dialogbox initialisieren
 
@@ -4782,6 +4838,8 @@ void         tviewanytext::repaintscrollbar ( void )
 
 void         tviewanytext::redraw(void)
 { 
+  collategraphicoperations cgo;
+
    tdialogbox::redraw();
    rahmen(true,x1 + 10,y1 + textstart - 2,x1 + xsize - rightspace,y1 + textstart + textsizey + 2); 
 
@@ -4983,7 +5041,9 @@ boolean ResizeMap :: checkvalue(byte         id, pointer      p)
 
 void ResizeMap :: init ( void )
 {
-   top = 0; 
+  collategraphicoperations cgo;
+
+   top = 0;
    bottom = 0;
    left = 0;
    right = 0;
@@ -5361,6 +5421,8 @@ char* tmunitionsbox::strr ( int a ) {
 
 void         tverlademunition::init(void)
 { 
+  collategraphicoperations cgo;
+
    tmunitionsbox::init();
    x1 = 40;
    xsize = 560;
@@ -5535,42 +5597,46 @@ void         tverlademunition::run(void)
    ysize = 480 - 2 * y1; 
 
    if ((fast & 1) == 0) {
-      for (i = 0; i <= wp.count - 1; i++) { 
-         oldpos[i] = wp.weap[i].newdestamount; 
-      } 
+      {
+         collategraphicoperations cgo;
+         for (i = 0; i <= wp.count - 1; i++) {
+            oldpos[i] = wp.weap[i].newdestamount;
+         }
 
-      addbutton("~l~oad",10,ysize - 40,xsize - 10,ysize - 10,0,1,1,true); 
-      addkey(1,ct_enter); 
-      buildgraphics(); 
+         addbutton("~l~oad",10,ysize - 40,xsize - 10,ysize - 10,0,1,1,true);
+         addkey(1,ct_enter);
+         buildgraphics();
 
-      rahmen(true,x1 + 10,y1 + 50,x1 + xsize - 10,y1 + ysize - 50); 
+         rahmen(true,x1 + 10,y1 + 50,x1 + xsize - 10,y1 + ysize - 50);
 
-      activefontsettings.justify = lefttext; 
-      activefontsettings.font = schriften.smallarial;
-      activefontsettings.length = 100;
+         activefontsettings.justify = lefttext;
+         activefontsettings.font = schriften.smallarial;
+         activefontsettings.length = 100;
 
-      int ix, iy;
-      getpicsize ( vehicle2->typ->picture[0], ix, iy );
+         int ix, iy;
+         getpicsize ( vehicle2->typ->picture[0], ix, iy );
 
-      if ( vehicle2 )
-         putrotspriteimage(x1 + 30 , y1 + 55, vehicle2->typ->picture[0], actmap->actplayer * 8);
-      else
-         showtext2( building->typ->name , x1 + 50, y1 + 55);
+         if ( vehicle2 )
+            putrotspriteimage(x1 + 30 , y1 + 55, vehicle2->typ->picture[0], actmap->actplayer * 8);
+         else
+            showtext2( building->typ->name , x1 + 50, y1 + 55);
 
-      putrotspriteimage(x1 + xsize - 30 - ix , y1 + 55, vehicle->typ->picture[0], actmap->actplayer * 8);
+         putrotspriteimage(x1 + xsize - 30 - ix , y1 + 55, vehicle->typ->picture[0], actmap->actplayer * 8);
 
-      for (i = 0; i < wp.count ; i++) { 
-         activefontsettings.length = (x1 + startx - numlength - 10 ) - (x1 + 20 );
-         if ((wp.weap[i].typ >= 100) && (wp.weap[i].typ <= 110)) 
-            showtext2( cdnames[wp.weap[i].typ - 100],x1 + 20, y1 + firstliney + i * abstand);
-         else 
-            showtext2( cwaffentypen[wp.weap[i].typ],x1 + 20, y1 + firstliney + i * abstand); 
+         for (i = 0; i < wp.count ; i++) {
+            activefontsettings.length = (x1 + startx - numlength - 10 ) - (x1 + 20 );
+            if ((wp.weap[i].typ >= 100) && (wp.weap[i].typ <= 110))
+               showtext2( cdnames[wp.weap[i].typ - 100],x1 + 20, y1 + firstliney + i * abstand);
+            else
+               showtext2( cwaffentypen[wp.weap[i].typ],x1 + 20, y1 + firstliney + i * abstand);
 
-         rahmen(true, x1 + startx - 11, y1 + firstliney - 2 + i * abstand, x1 + startx + llength + 11,y1 + firstliney + 18 + i * abstand);
-         zeichneschieberegler(i); 
-      } 
-      mousevisible(true); 
-      if (wp.count > 0) { 
+            rahmen(true, x1 + startx - 11, y1 + firstliney - 2 + i * abstand, x1 + startx + llength + 11,y1 + firstliney + 18 + i * abstand);
+            zeichneschieberegler(i);
+         }
+      }
+
+      mousevisible(true);
+      if (wp.count > 0) {
          abbruch = false; 
          do { 
             tmunitionsbox::run();
@@ -5672,7 +5738,9 @@ void         tverlademunition::run(void)
                mousevisible(true); 
             } 
             if ((op != 20) && (mp != op)) { 
-               mousevisible(false); 
+               collategraphicoperations cgo;
+
+               mousevisible(false);
                if (!frst) 
                   xorrectangle(x1 + 15,y1 + firstliney - 5 + op * abstand,x1 + xsize - 15,y1 + firstliney - 5 + (op + 1) * abstand,14);
                frst = false; 
@@ -5743,8 +5811,10 @@ void         tverlademunition::setvariables(  pvehicle svehicle, pvehicle svehic
 
 void         tverlademunition::zeichneschieberegler(byte         b)
 { 
-         int      l; 
-         byte         r; 
+  collategraphicoperations cgo;
+
+   int      l;
+   byte         r;
 
    r = getmousestatus(); 
    if (r == 2) mousevisible(false); 
@@ -6019,7 +6089,8 @@ void         tenterpassword ::lne(int          x1,
                  char *       s,
                  int          position,
                  boolean      einfuegen)
-{ 
+{
+  collategraphicoperations cgo;
   char* ss2 = strdup ( s );
 
   int i = 0;

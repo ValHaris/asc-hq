@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.10 1999-12-29 17:38:20 mbickel Exp $
+//     $Id: sg.cpp,v 1.11 1999-12-30 20:30:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  1999/12/29 17:38:20  mbickel
+//      Continued Linux port
+//
 //     Revision 1.9  1999/12/28 22:04:27  mbickel
 //      Had to make some changes again to compile it for DOS...
 //
@@ -627,7 +630,7 @@ void new_new_handler ( void )
 
   void* memchkAlloc ( int tp, size_t amt )
   {
-     // verifyallblocks();
+     verifyallblocks();
      int error;
      void* tmp = malloc ( amt + 53 * 4 );
      int* tmpi = (int*) tmp;
@@ -747,6 +750,7 @@ void new_new_handler ( void )
 
 void showmemory ( void )
 {
+  #ifdef _DOS_
    npush ( activefontsettings );
    activefontsettings.length = 99;
    activefontsettings.background = 0;
@@ -775,6 +779,7 @@ void showmemory ( void )
       getinvisiblemouserectanglestk ();
 
    npop  ( activefontsettings );
+  #endif
 };
 
 
@@ -1788,7 +1793,7 @@ void  checkforvictory ( void )
                char* sp = getmessage( 10010 ); 
                sprintf ( txt, sp, actmap->player[i].name );
                sp = strdup ( txt );
-               pmessage msg = new tmessage ( sp, to );
+               new tmessage ( sp, to );
 
                if ( i == actmap->actplayer ) {
                   displaymessage ( getmessage ( 10011 ),1 );

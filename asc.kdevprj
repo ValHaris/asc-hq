@@ -1,10 +1,10 @@
 # KDE Config File
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/building.h,/home/martin/asc/source/basestrm.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/building.h,/home/martin/asc/source/dlg_box.cpp,/home/martin/asc/source/dlgraph.cpp,/home/martin/asc/source/dialog.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/spfst.cpp,/home/martin/asc/source/controls.cpp,/home/martin/asc/source/controls.h,/home/martin/asc/source/spfst.h,/home/martin/asc/source/pd.cpp,/home/martin/asc/source/keybp.h,/home/martin/asc/source/gamedlg.cpp,/home/martin/asc/source/sdl/events.cpp,/home/martin/asc/source/building.cpp,/home/martin/asc/source/typen.h,/home/martin/asc/source/gui.cpp,/home/martin/asc/source/loadpcxc.cpp,
 show_outputview=true
 show_treeview=true
 header_file=/home/martin/asc/source/building.h
-cpp_file=/home/martin/asc/source/basestrm.cpp
+cpp_file=/home/martin/asc/source/sg.cpp
 browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/reference/C/cref.html
 [asc/loaders.cpp]
 install_location=
@@ -58,7 +58,7 @@ ldflags=
 addcxxflags=-I/usr/lib/SDL/include -D_NOASM_ -funsigned-char -DHEXAGON -Dsgmain -DFREEMAPZOOM -DNEWKEYB
 ldadd=-lSDL -lpthread -lbz2
 bin_program=asc
-cxxflags=-O0 -g3 -Wall
+cxxflags= -O0 -g3 -Wall -W 
 [asc/libs/triangul/monotone.c]
 install_location=
 dist=true
@@ -322,7 +322,7 @@ dist=true
 install=false
 type=HEADER
 [General]
-make_options=-j1
+make_options= -j1
 makefiles=Makefile.am,asc/Makefile.am,asc/docs/Makefile.am,asc/docs/en/Makefile.am,asc/sdl/Makefile.am,asc/libs/triangul/Makefile.am,asc/libs/Makefile.am,
 version_control=None
 project_type=normal_cpp

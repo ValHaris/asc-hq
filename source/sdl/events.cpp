@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.2 1999-12-29 17:38:22 mbickel Exp $
+//     $Id: events.cpp,v 1.3 1999-12-30 20:30:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/12/29 17:38:22  mbickel
+//      Continued Linux port
+//
 //     Revision 1.1  1999/12/28 21:03:31  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -29,6 +32,7 @@
 #include "../misc.h"
 #include "../mousehnd.h"
 #include "../keybp.h"
+#include "../timer.h"
 
 #include "SDL.h"
 #include "SDL_thread.h"
@@ -43,7 +47,7 @@ static tmousesettings mouseparams;
 SDL_mutex* keyboardmutex = NULL;
 
 queue<tkey>   keybuffer_sym;
-queue<Uint16> keybuffer_prnt;
+queue<Uint32> keybuffer_prnt;
 
 
 int eventthreadinitialized = 0;
@@ -270,6 +274,29 @@ tkey r_key(void)
     	if ( !r ) {
     	   if ( !keybuffer_sym.empty() ) {
             key = keybuffer_sym.front();
+            keybuffer_sym.pop();
+            keybuffer_prnt.pop();
+            found++;
+         }
+         r = SDL_mutexV ( keyboardmutex );
+    	}
+    	if (!found ) {
+      	int t = ticker;
+      	while ( t + 5 > ticker );
+      }	
+   } while ( !found ); 	
+   return key;
+}
+
+int rp_key(void)
+{
+	int found = 0;
+   tkey key;
+  	do {
+      int r = SDL_mutexP ( keyboardmutex );
+    	if ( !r ) {
+    	   if ( !keybuffer_prnt.empty() ) {
+            key = keybuffer_prnt.front();
             keybuffer_sym.pop();
             keybuffer_prnt.pop();
             found++;

@@ -1,6 +1,10 @@
-//     $Id: building.h,v 1.5 1999-12-28 21:02:42 mbickel Exp $
+//     $Id: building.h,v 1.6 1999-12-30 20:30:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/28 21:02:42  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.4  1999/12/27 12:59:44  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -643,7 +647,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
                         virtual int   available    ( void ) ;
                 };
 
-
+/*
                 class repairicon_c : public generalicon_c , public virtual crepairunit {
                     public:
                         virtual int   available    ( void ) ;
@@ -651,7 +655,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
                         virtual char* getinfotext  ( void );
                         repairicon_c ( void );
                 };
-
+*/
 
                      //0 tnbcguiiconrecycling 
                 class recyclingicon_cb : public generalicon_c , public crecycling {

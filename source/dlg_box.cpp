@@ -1,6 +1,9 @@
-//     $Id: dlg_box.cpp,v 1.7 1999-12-29 17:38:09 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.8 1999-12-30 20:30:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  1999/12/29 17:38:09  mbickel
+//      Continued Linux port
+//
 //     Revision 1.6  1999/12/28 21:02:50  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -453,8 +456,8 @@ void         tdialogbox::paint     ( void )
 int getplayercolor ( int i )
 {
    if ( actmap ) {
-      int textcolor =  actmap->actplayer * 8 + 21; 
-      if ( actmap->actplayer == 7 || actmap->actplayer == 2 )
+      int textcolor =  i * 8 + 21;
+      if ( i == 7 || i == 2 )
          textcolor += 1;
       return textcolor;
    } else
@@ -1444,6 +1447,7 @@ void         tdialogbox::execbutton( pbutton      pb, boolean      mouse )
                    ys1 = yb2 - ysd - 1;
 
                 if ( ys1 != ys1b ) {
+                   collategraphicoperations cgo;
                    ys1b = ys1;
                    // waitretrace();
                    mousevisible(false);
@@ -1979,7 +1983,11 @@ void displaymessage( char* formatstring, int num, ... )
       for ( int i=0; i<= linenum ;i++ ) {
          exitmessage[i] = stringtooutput[i];
       } /* endfor */
-      closekeyb();
+     #ifdef _DOS_
+      #ifdef NEWKEYB
+       closekeyb();
+      #endif
+     #endif
       exit ( 1 );
    } else {
 
@@ -2036,15 +2044,17 @@ void         tdialogbox::stredit(char *       s,
                       int          max)
 { 
 
-   char         cc; 
+   int  cc;
    char         *ss, *ss2, *ss3;
    boolean      einfuegen; 
    byte         position; 
    int          i;
 
+  #ifdef _DOS_
    #ifdef NEWKEYB
    closekeyb();
    #endif
+  #endif
 
    if ( strlen ( s ) > max )
       max = strlen ( s );
@@ -2056,26 +2066,25 @@ void         tdialogbox::stredit(char *       s,
 
    activefontsettings.length = wdth;
    activefontsettings.height = activefontsettings.font->height;
-   dispeditstring ( ss, x1, y1 ); 
-   position = strlen(s); 
-   einfuegen = true; 
-   lne(x1,y1,ss,position,einfuegen); 
+   {
+     collategraphicoperations cgo;
+     dispeditstring ( ss, x1, y1 );
+     position = strlen(s);
+     einfuegen = true;
+     lne(x1,y1,ss,position,einfuegen);
+   }
 
-#ifndef HAVE_KBHIT
-   set_keypress ();
-#endif
+   do {
+     if ( keypress() ) {
+       cc = rp_key();
+     } else
+        cc = cto_invvalue;
 
-   do { 
-     if ( kbhit() )
-       cc = getch();
-     else 
-       cc = 0x01;
-     if (cc == 0x00 ) {
-       cc = getch();
-       lne(x1,y1,ss,position,einfuegen); 
+     if (cc != cto_invvalue ) {
+       lne(x1,y1,ss,position,einfuegen);
        switch (cc) {
 	 
-       case 'R':   {
+            case cto_einf: {
                     if (einfuegen == false) 
                        einfuegen = true; 
                     else 
@@ -2083,21 +2092,21 @@ void         tdialogbox::stredit(char *       s,
                  } 
             break; 
             
-            case 'K':   if (position > 1)
+            case cto_left:   if (position > 1)
                            position--;
             break; 
             
-            case 'M':  if (position < strlen ( ss ) )
+            case cto_right:  if (position < strlen ( ss ) )
                          position++;
             break; 
             
-            case 'G':  position = 0;
+            case cto_pos1:  position = 0;
             break; 
             
-            case 'O':  position = strlen ( ss ) ;
+            case cto_ende:  position = strlen ( ss ) ;
             break; 
             
-            case 'S':  if ( ss[ position ] != 0 ) {
+            case cto_entf:  if ( ss[ position ] != 0 ) {
                          for (i=0; i< position ;i++ ) {
                             ss2[i] = ss[i];
                          } /* endfor */
@@ -2113,25 +2122,23 @@ void         tdialogbox::stredit(char *       s,
                        }
             break; 
             
-            case 't':  if ( position < strlen ( ss ) ) {
+            case cto_right + cto_stp:  if ( position < strlen ( ss ) ) {
                         do { 
                            position++;
                         }  while ( (ss[ position ] != ' ') && ( ss[ position ] != 0 ) );
                      } 
             break; 
             
-            case 's':  if ( position > 0 ) {
+            case cto_left + cto_stp:  if ( position > 0 ) {
                         do { 
                            position--;
                         }  while ( ( position > 0 ) && ( ss [ position - 1 ] != ' ') );
                      } 
             break;
          } 
-         lne(x1,y1,ss,position,einfuegen); 
-      } 
-      else /* if cc == 0x00 */
-      {
-         if ( ( cc > 31 ) && (strlen(ss) < max ) ) {
+         lne(x1,y1,ss,position,einfuegen);
+
+         if ( ( cc > 31 ) && ( cc < 256 ) && (strlen(ss) < max ) ) {       // plain ascii
             i=0;
             while ( (ss[i] != 0) && ( i < position ) ) {
                ss2[i] = ss[i];
@@ -2158,6 +2165,7 @@ void         tdialogbox::stredit(char *       s,
             } /* endif */
             
             if (gettextwdth_stredit( ss2, NULL ) < wdth ) {
+              collategraphicoperations cgo;
               lne(x1,y1,ss,position,einfuegen);
               ss3 = ss2;
               ss2 = ss;
@@ -2167,8 +2175,9 @@ void         tdialogbox::stredit(char *       s,
               lne(x1,y1,ss,position,einfuegen);
             } /* endif */
          } 
-         if ((cc == 8 ) && (position > 0)) {   /* Backspace */
-            lne(x1,y1,ss,position,einfuegen); 
+         if ((cc == cto_bspace ) && (position > 0)) {   /* Backspace */
+            collategraphicoperations cgo;
+            lne(x1,y1,ss,position,einfuegen);
             for (i=0; i+1< position ; i++ ) {
                ss2[i] = ss[i];
             } /* endfor */
@@ -2185,21 +2194,20 @@ void         tdialogbox::stredit(char *       s,
             lne(x1,y1,ss,position,einfuegen); 
          } 
       } 
-   }  while ( cc != 13 && cc != 27 );
+   }  while ( cc != cto_enter && cc != cto_esc );
 
    lne(x1,y1,ss,position,einfuegen); 
-   if (cc == 13) 
+   if (cc == cto_enter )
       strcpy(s,ss);
    delete[] ss;
    delete[] ss2;
 
-#ifndef HAVE_KBHIT
-   reset_keypress ();
-#endif
-
+  #ifdef _DOS_
    #ifdef NEWKEYB
+   reset_keypress ();
    initkeyb();
    #endif
+  #endif
 } 
 
 
@@ -2214,7 +2222,8 @@ void         tdialogbox::lne(int          x1,
                  char *       s,
                  int          position,
                  boolean      einfuegen)
-{ 
+{
+  collategraphicoperations cgo;
  int          i, j, k;
  char* ss2;
 
@@ -2241,7 +2250,7 @@ void         tdialogbox::intedit(int *    st,
                      int          min,
                      int          max)
 { 
-   char         cc; 
+   int  cc;
    char         *ss, *ss2, *ss3;
    boolean      einfuegen; 
    int          position;
@@ -2250,9 +2259,11 @@ void         tdialogbox::intedit(int *    st,
    int          ml;
    boolean ok;
 
+  #ifdef _DOS_
    #ifdef NEWKEYB
    closekeyb();
    #endif
+  #endif
 
    ml =  12 ;
    activefontsettings.justify = lefttext; 
@@ -2267,169 +2278,160 @@ void         tdialogbox::intedit(int *    st,
 
    ok = false;
 
-#ifndef HAVE_KBHIT
-   set_keypress ();
-#endif
-
-   do { 
+   do {
       lne(x1,y1,ss,position,einfuegen); 
       do {
-	
-        if ( kbhit() )
-          cc = getch();
-        else 
-          cc = 0x01;
-        if (cc == 0x00 ) {
-	  cc = getch();
-          lne(x1,y1,ss,position,einfuegen); 
-          switch (cc) {
-             
-             case 'R':   {
-                     if (einfuegen == false) 
-                        einfuegen = true; 
-                     else 
-                        einfuegen = false; 
-                  } 
-             break; 
-             
-             case 'K':   if (position > 1)
-                            position--;
-             break; 
-             
-             case 'M':  if (position < strlen ( ss ) )
-                          position++;
-             break; 
-             
-             case 'G':  position = 0;
-             break; 
-             
-             case 'O':  position = strlen ( ss ) ;
-             break; 
-             
-             case 'S':  if ( ss[ position ] != 0 ) {
-                          for (i=0; i< position ;i++ ) {
-                             ss2[i] = ss[i];
-                          } /* endfor */
-                          while ( ss[i] != 0 ) {
-                             ss2[i] = ss [ i + 1 ];
-                             i++;
-                          } /* endwhile */
-                          ss3 = ss2;
-                          ss2 = ss;
-                          ss = ss3;
- 
-                          dispeditstring (ss,x1,y1); /* ? */
-                        }
-             break; 
-             
-             case 't':  if ( position < strlen ( ss ) ) {
-                         do { 
-                            position++;
-                         }  while ( (ss[ position ] != ' ') && ( ss[ position ] != 0 ) );
-                      } 
-             break; 
-             
-             case 's':  if ( position > 0 ) {
-                         do { 
-                            position--;
-                         }  while ( ( position > 0 ) && ( ss [ position - 1 ] != ' ') );
-                      } 
-             break;
-          } 
-          lne(x1,y1,ss,position,einfuegen); 
-       } 
-       else /* if cc == 0x00 */
-       {
-          if ( (( cc >=  '0' &&  cc <= '9' ) || ( cc == '-' && !position)) && (strlen(ss) < ml-1 ) ) {
-             i=0;
-             while ( (ss[i] != 0) && ( i < position ) ) {
-                ss2[i] = ss[i];
-                i++;
+         if ( keypress() ) {
+           cc = rp_key();
+         } else
+            cc = cto_invvalue;
+
+         if (cc != cto_invvalue ) {
+            collategraphicoperations cgo;
+
+            lne(x1,y1,ss,position,einfuegen);
+            switch (cc) {
+    	
+                case cto_einf: {
+                        if (einfuegen == false)
+                           einfuegen = true;
+                        else
+                           einfuegen = false;
+                     }
+                break;
+
+                case cto_left:   if (position > 1)
+                               position--;
+                break;
+
+                case cto_right:  if (position < strlen ( ss ) )
+                             position++;
+                break;
+
+                case cto_pos1:  position = 0;
+                break;
+
+                case cto_ende:  position = strlen ( ss ) ;
+                break;
+
+                case cto_entf:  if ( ss[ position ] != 0 ) {
+                             for (i=0; i< position ;i++ ) {
+                                ss2[i] = ss[i];
+                             } /* endfor */
+                             while ( ss[i] != 0 ) {
+                                ss2[i] = ss [ i + 1 ];
+                                i++;
+                             } /* endwhile */
+                             ss3 = ss2;
+                             ss2 = ss;
+                             ss = ss3;
+
+                             dispeditstring (ss,x1,y1); /* ? */
+                           }
+                break;
+
+                case cto_right + cto_stp:  if ( position < strlen ( ss ) ) {
+                            do {
+                               position++;
+                            }  while ( (ss[ position ] != ' ') && ( ss[ position ] != 0 ) );
+                         }
+                break;
+
+                case cto_left + cto_stp:  if ( position > 0 ) {
+                            do {
+                               position--;
+                            }  while ( ( position > 0 ) && ( ss [ position - 1 ] != ' ') );
+                         }
+                break;
              }
-             ss2 [ i ] = cc;
-             if (einfuegen) {
-               while ( ss[i] != 0) {
-                  ss2[i+1] = ss[i];
-                  i++;
-               } /* endwhile */
-               ss2[i+1] = 0;
-             } else {
-                if (ss[i] != 0) {
-                  i++;
+
+             if ( (( cc >=  '0' &&  cc <= '9' ) || ( cc == '-' && !position)) && (strlen(ss) < ml-1 ) ) {
+                i=0;
+                while ( (ss[i] != 0) && ( i < position ) ) {
+                   ss2[i] = ss[i];
+                   i++;
+                }
+                ss2 [ i ] = cc;
+                if (einfuegen) {
                   while ( ss[i] != 0) {
-                    ss2[i+1] = ss[i];
-                    i++;
+                     ss2[i+1] = ss[i];
+                     i++;
                   } /* endwhile */
+                  ss2[i+1] = 0;
+                } else {
+                   if (ss[i] != 0) {
+                     i++;
+                     while ( ss[i] != 0) {
+                       ss2[i+1] = ss[i];
+                       i++;
+                     } /* endwhile */
+                   } /* endif */
+                   ss2[i] = 0;
                 } /* endif */
-                ss2[i] = 0;
-             } /* endif */
-             
-             if (gettextwdth( ss2, NULL ) < wdth ) {
-               lne(x1,y1,ss,position,einfuegen);
-               ss3 = ss2;
-               ss2 = ss;
-               ss = ss3;
-               dispeditstring (ss,x1,y1);
-               position++;
-               lne(x1,y1,ss,position,einfuegen);
-             } /* endif */
-          } 
-          if ((cc == 8 ) && (position > 0)) {   /* Backspace */
-             lne(x1,y1,ss,position,einfuegen); 
- 
-             for (i=0; i+1< position ; i++ ) 
-                ss2[i] = ss[i];
- 
-             i--;
-             do {
-                i++;
-                ss2[i] = ss[i+1];
-             } while (ss[i+1] != 0 );
-             ss3 = ss2;
-             ss2 = ss;
-             ss = ss3;
-             position--;
- 
-             dispeditstring (ss,x1,y1); 
-             lne(x1,y1,ss,position,einfuegen); 
-          } 
-       } 
-    }  while ( (cc != 13) && (cc != 27) );
-    lne(x1,y1,ss,position,einfuegen); 
-    if (cc == 13) {
-      j = strtol ( ss, &ss3, 10 );
-      if ((ss3 != NULL) && ( (ss3 - ss ) < strlen ( ss ) )) {
- 
-         position = (ss3 - ss );
-         lne(x1,y1,ss,position,einfuegen);
-         ok = false;
- 
-      } else {
- 
-         if ( j > max || j < min ) {
-            ok = false;
-            displaymessage( "Invalid range ! \n range is %d to %d !", 1, min, max  );
-         } else {
-           *st = j;
-           ok = true;
-         }
- 
-      } /* endif */
- 
-     } else 
-        ok = true;
+
+                if (gettextwdth( ss2, NULL ) < wdth ) {
+                  ss3 = ss2;
+                  ss2 = ss;
+                  ss = ss3;
+                  dispeditstring (ss,x1,y1);
+                  position++;
+                } /* endif */
+             }
+             if ((cc == 8 ) && (position > 0)) {   /* Backspace */
+
+                for (i=0; i+1< position ; i++ )
+                   ss2[i] = ss[i];
+
+                i--;
+                do {
+                   i++;
+                   ss2[i] = ss[i+1];
+                } while (ss[i+1] != 0 );
+                ss3 = ss2;
+                ss2 = ss;
+                ss = ss3;
+                position--;
+
+                dispeditstring (ss,x1,y1);
+             }
+             lne(x1,y1,ss,position,einfuegen);
+          }
+
+      }  while ( (cc != cto_enter) && (cc != cto_esc) );
+      lne(x1,y1,ss,position,einfuegen);
+      if (cc == cto_enter) {
+        j = strtol ( ss, &ss3, 10 );
+        if ((ss3 != NULL) && ( (ss3 - ss ) < strlen ( ss ) )) {
+
+           position = (ss3 - ss );
+           lne(x1,y1,ss,position,einfuegen);
+           ok = false;
+
+        } else {
+
+           if ( j > max || j < min ) {
+              ok = false;
+              displaymessage( "Invalid range ! \n range is %d to %d !", 1, min, max  );
+           } else {
+             *st = j;
+             ok = true;
+           }
+
+        } /* endif */
+
+       } else
+          ok = true;
 
    } while ( ! ok );
 
- delete[] ss;
- delete[] ss2;
+   delete[] ss;
+   delete[] ss2;
 
-#ifndef HAVE_KBHIT
- reset_keypress ();
-#endif
-
-   #ifdef NEWKEYB
-   initkeyb();
+   #ifdef _DOS_
+    #ifdef NEWKEYB
+    reset_keypress ();
+    initkeyb();
+    #endif
    #endif
 
 } 
@@ -3362,7 +3364,6 @@ int displaymessage2( char* formatstring, ... )
 {
    char stringtooutput[200];
    char* b;
-   char* a = formatstring;
    char* c = new char[200];
    // int linenum = 0;
 
