@@ -1,6 +1,11 @@
-//     $Id: keybp.cpp,v 1.3 2000-10-16 14:34:12 mbickel Exp $
+//     $Id: keybp.cpp,v 1.4 2000-10-18 15:10:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/10/16 14:34:12  mbickel
+//      Win32 port is now running fine.
+//      Removed MSVC project files and put them into a zip file in
+//        asc/source/win32/msvc/
+//
 //     Revision 1.2  2000/06/23 09:48:33  mbickel
 //      Improved key handling in intedit/stredit
 //
@@ -61,16 +66,16 @@
 
 #include <dos.h>
 #include <conio.h>
-
+#include <stdlib.h>
 #include <ctype.h>
 #include <stdio.h>
-#include "../keybp.h"
+#include "../events.h"
 
     void             (__interrupt __far *bioskeyboardhandler)();
     void             (__interrupt __far *keybpointer)()=NULL;
     char             callbioshandler,keyboardinit=0;
     char             pufferpos,maxpufferkeys;
-    long             oldticker,ticker;
+    // long             oldticker,ticker;
     char             normkey[256];
     int                puffer[256];
     char             keyreleasefrequence = 100;
@@ -593,5 +598,30 @@ tkey char2key (int ch)
      return ch;
    #endif   
 } 
+
+
+extern void inittimer ( int freq );
+extern void closetimer ();
+
+extern int initmousehandler ( void* pic );
+extern void removemousehandler ();
+
+void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mousepointer )
+{
+   mouseparams.xsize = 10;
+   mouseparams.ysize = 10;
+
+   initkeyb();
+   atexit(closekeyb);
+
+   inittimer ( 100);
+   atexit ( closetimer );
+
+   initmousehandler ( mousepointer );
+   atexit ( removemousehandler );
+   
+   gamethread( data );
+
+}
 
 

@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.104 2000-10-18 14:14:16 mbickel Exp $
+//     $Id: sg.cpp,v 1.105 2000-10-18 15:10:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.104  2000/10/18 14:14:16  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.103  2000/10/18 12:40:46  mbickel
 //      Rewrite event handling for windows
 //
@@ -3271,7 +3275,7 @@ int main(int argc, char *argv[] )
       gtp.savegame = savegame;
       gtp.emailgame = emailgame;
 
-      initializeEventHandling ( gamethread, &gtp );
+      initializeEventHandling ( gamethread, &gtp, icons.mousepointer );
 
 
       closegraphics();

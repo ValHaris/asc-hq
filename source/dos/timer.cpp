@@ -1,16 +1,20 @@
-//     $Id: timer.cpp,v 1.1 2000-05-30 18:39:29 mbickel Exp $
+//     $Id: timer.cpp,v 1.2 2000-10-18 15:10:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/05/30 18:39:29  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.3  2000/05/07 12:53:59  mbickel
 //      some minor adjustments
 //
 //     Revision 1.2  1999/11/16 03:42:41  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
+//      Added CVS keywords to most of the files.
+//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//      Wrote replacement routines for kbhit/getch for Linux
+//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//      Added autoconf/automake capabilities
+//      Added files used by 'automake --gnu'
 //
 //
 /*
@@ -37,7 +41,7 @@
 #include <dos.h>
 #include <conio.h>
 #include <stdio.h>
-#include "../timer.h"
+#include "../events.h"
 #include <stdlib.h>
 
 #define timerintr 0x08

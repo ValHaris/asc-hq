@@ -1,6 +1,9 @@
-//     $Id: mousehnd.cpp,v 1.3 2000-09-07 16:42:29 mbickel Exp $
+//     $Id: mousehnd.cpp,v 1.4 2000-10-18 15:10:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/09/07 16:42:29  mbickel
+//      Made some adjustments so that ASC compiles with Watcom again...
+//
 //     Revision 1.2  2000/08/12 12:52:56  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -21,12 +24,12 @@
 //      Fixed bugs in RLE decompression, BI map importer and the view calculation
 //
 //     Revision 1.2  1999/11/16 03:42:11  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
+//      Added CVS keywords to most of the files.
+//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//      Wrote replacement routines for kbhit/getch for Linux
+//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//      Added autoconf/automake capabilities
+//      Added files used by 'automake --gnu'
 //
 //
 /*
@@ -50,10 +53,10 @@
 */
 
 /*
-	MOUSE.C - The following program demonstrates how
-	to use the mouse interrupt (0x33) with DOS/4GW.
+        MOUSE.C - The following program demonstrates how
+        to use the mouse interrupt (0x33) with DOS/4GW.
 
-	Compile and link: wcl386 /l=dos4g mouse
+        Compile and link: wcl386 /l=dos4g mouse
 */
 #ifdef _DOS_
 
@@ -67,12 +70,12 @@
 #include "../tpascal.inc"
 #include "../basegfx.h"
 #include "../misc.h"
-#include "../mousehnd.h"
+#include "../events.h"
 #include "../stack.h"
 
 
 /* Data touched at mouse callback time -- they are in a structure to
-	simplify calculating the size of the region to lock.
+        simplify calculating the size of the region to lock.
 */
 
 
@@ -97,17 +100,17 @@ int lock_region (void *address, unsigned length)
     unsigned linear;
 
     /* Thanks to DOS/4GW's zero-based flat memory model, converting
-	    a pointer of any type to a linear address is trivial.
+            a pointer of any type to a linear address is trivial.
     */
     linear = (unsigned) address;
 
-    regs.w.ax = 0x600;			/* DPMI Lock Linear Region */
+    regs.w.ax = 0x600;                  /* DPMI Lock Linear Region */
     regs.w.bx = (unsigned short) (linear >> 16); /* Linear address in BX:CX */
     regs.w.cx = (unsigned short) (linear & 0xFFFF);
     regs.w.si = (unsigned short) (length >> 16); /* Length in SI:DI */
     regs.w.di = (unsigned short) (length & 0xFFFF);
     int386 (0x31, &regs, &regs);
-    return (! regs.w.cflag);		/* Return 0 if can't lock */
+    return (! regs.w.cflag);            /* Return 0 if can't lock */
 }
 
 
@@ -164,7 +167,7 @@ void putmousepointer ( void )
 
 
 void _loadds far click_handler (int max, int mbx, int mcx, int mdx,
-				int msi, int mdi)
+                                int msi, int mdi)
 #pragma aux click_handler parm [EAX] [EBX] [ECX] [EDX] [ESI] [EDI]
 {
   if (handleractive==0) {
@@ -236,8 +239,8 @@ void _loadds far click_handler ( void )
 #endif
 
 void cbc_end (void) /* Dummy function so we can */
-{		    /* calculate size of code to lock */
-}		    /* (cbc_end - click_handler) */
+{                   /* calculate size of code to lock */
+}                   /* (cbc_end - click_handler) */
 #pragma on (check_stack)
 
 
@@ -319,18 +322,18 @@ int initmousehandler ( void* pic )
         mouseparams.hotspotx = 0;
         mouseparams.hotspoty = 0;
 
-	/* lock callback code and data (essential under VMM!)
-	   note that click_handler, although it does a far return and
-	   is installed using a full 48-bit pointer, is really linked
-	   into the flat model code segment -- so we can use a regular
-	   (near) pointer in the lock_region() call.
-	if ( (! lock_region ((void*) &mouseparams, sizeof(mouseparams))) ||
-	    (! lock_region ((void near *) click_handler,
-	       (char *) cbc_end - (char near *) click_handler)))
-	{
-	    printf( "locks failed\n" );
-	} else {
-	*/
+        /* lock callback code and data (essential under VMM!)
+           note that click_handler, although it does a far return and
+           is installed using a full 48-bit pointer, is really linked
+           into the flat model code segment -- so we can use a regular
+           (near) pointer in the lock_region() call.
+        if ( (! lock_region ((void*) &mouseparams, sizeof(mouseparams))) ||
+            (! lock_region ((void near *) click_handler,
+               (char *) cbc_end - (char near *) click_handler)))
+        {
+            printf( "locks failed\n" );
+        } else {
+        */
 
        /* get position */
        inregs.w.ax = 0x03;
@@ -368,16 +371,16 @@ int initmousehandler ( void* pic )
 
 #ifndef _NOASM_
         inregs.x.edx = FP_OFF (click_handler);
-        sregs.es	 = FP_SEG (click_handler);
+        sregs.es         = FP_SEG (click_handler);
         int386x (0x33, &inregs, &outregs, &sregs);
 #endif
 
 /*
     void (far *function_ptr)();
 
-	    function_ptr = ( void(__far *)(void) ) click_handler;
-	    inregs.x.edx = FP_OFF (function_ptr);
-	    sregs.es	    = FP_SEG (function_ptr);
+            function_ptr = ( void(__far *)(void) ) click_handler;
+            inregs.x.edx = FP_OFF (function_ptr);
+            sregs.es        = FP_SEG (function_ptr);
 
         int386x (0x33, &inregs, &outregs, &sregs);
 */
@@ -388,7 +391,7 @@ int initmousehandler ( void* pic )
 }
 
 
-int removemousehandler ( void )
+void removemousehandler ( void )
 {
     union REGS inregs, outregs;
 
@@ -398,11 +401,10 @@ int removemousehandler ( void )
     inregs.w.ax = 0;
     int386 (0x33, &inregs, &outregs);
 /*/    if (outregs.w.ax == 0xffff)
-//	printf( "DONE : Mouse still installed...\n" );
+//      printf( "DONE : Mouse still installed...\n" );
 //    else
-//	printf( "DONE : Mouse NOT installed...\n" ); */
+//      printf( "DONE : Mouse NOT installed...\n" ); */
     } /* endif */
-    return(0);
 }
 
 void setmouseposition ( int x, int y )

@@ -1,6 +1,10 @@
-//     $Id: edmain.cpp,v 1.24 2000-10-18 14:14:06 mbickel Exp $
+//     $Id: edmain.cpp,v 1.25 2000-10-18 15:10:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/10/18 14:14:06  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.23  2000/10/11 14:26:30  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -103,12 +107,12 @@
 //      Fixed bugs in RLE decompression, BI map importer and the view calculation
 //
 //     Revision 1.2  1999/11/16 03:41:36  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
+//      Added CVS keywords to most of the files.
+//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//      Wrote replacement routines for kbhit/getch for Linux
+//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//      Added autoconf/automake capabilities
+//      Added files used by 'automake --gnu'
 //
 //
 /*
@@ -845,6 +849,7 @@ int mapeditorMainThread ( void* _mapname )
    cursor.show();
 
    editor();
+   return 0;
 }
 
 
@@ -1004,7 +1009,7 @@ int main(int argc, char *argv[] )
 
    }
 
-   initializeEventHandling ( mapeditorMainThread, mapname );
+   initializeEventHandling ( mapeditorMainThread, mapname, icons.mousepointer );
 
    cursor.hide();
    writegameoptions ();

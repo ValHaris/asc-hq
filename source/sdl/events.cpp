@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.24 2000-10-18 14:14:23 mbickel Exp $
+//     $Id: events.cpp,v 1.25 2000-10-18 15:10:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/10/18 14:14:23  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.23  2000/10/18 12:40:48  mbickel
 //      Rewrite event handling for windows
 //
@@ -578,7 +582,7 @@ int gameThreadWrapper ( void* data )
 }
 #endif
 
-void initializeEventHandling ( int (*gamethread)(void *) , void *data )
+void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mousepointer )
 {
    mouseparams.xsize = 10;
    mouseparams.ysize = 10;

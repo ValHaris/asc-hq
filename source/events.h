@@ -26,7 +26,7 @@
 #define events_h_included
 
 
-extern void initializeEventHandling ( int (*fn)(void *) , void *data );
+extern void initializeEventHandling ( int (*fn)(void *) , void *data, void* mousepointer );
 
 
 
@@ -135,6 +135,11 @@ extern void popallmouseprocs ( void );
  #ifdef _SDL_
   #include "sdl/keysymbols.h"
  #endif
+#endif
+
+#ifdef _DOS_
+extern void initkeyb();
+extern void closekeyb();
 #endif
 
  typedef int tkey;
