@@ -207,11 +207,13 @@ void loadbi3graphics( void )
                      tvirtualdisplay vdp ( 100, 100, 255 );
 
                      bool fullimage = true;
+                     /*
                      for ( int x = 0; x < 80; x++ )
                         for ( int y = 0; y < 80; y++ )
                            if ( getpixelfromimage ( mask, x, y ) == 0 )
                               if ( getpixelfromimage ( p, x, y ) == 255 )
                                  fullimage = false;
+                     */
 
                      if ( fullimage ) {
                         putspriteimage ( 8, 8, p );

@@ -5,9 +5,15 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.51 2001-05-21 12:46:19 mbickel Exp $
+//     $Id: loaders.cpp,v 1.52 2001-07-09 12:08:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2001/05/21 12:46:19  mbickel
+//      Fixed infinite loop in AI::strategy
+//      Fixed bugs in mapeditor - event editing
+//      Fixed bugs in even loading / writing
+//      Fixed wrong build order AI <-> main program
+//
 //     Revision 1.50  2001/05/16 23:21:01  mbickel
 //      The data file is mounted using automake
 //      Added sgml documentation
@@ -1139,11 +1145,9 @@ void   tspfldloaders::writefields ( void )
    int cnt1 = spfld->xsize * spfld->ysize;
    int cnt2;
 
-   pfield fld, fld2;
-
-   do { 
+   do {
       cnt2 = 0; 
-      fld = &spfld->field[l];
+      pfield fld = &spfld->field[l];
       /*
 
       RLE encoding not supported any more, since tfield is becomming too complex
@@ -1277,9 +1281,9 @@ void   tspfldloaders::writefields ( void )
       if (b4 & csm_resources ) {
          stream->writeChar ( fld->resourceview->visible );
          for ( int i = 0; i < 8; i++ )
-            stream->writeChar ( fld2->resourceview->fuelvisible[i] );
+            stream->writeChar ( fld->resourceview->fuelvisible[i] );
          for ( int i = 0; i < 8; i++ )
-            stream->writeChar ( fld2->resourceview->materialvisible[i] );
+            stream->writeChar ( fld->resourceview->materialvisible[i] );
       }
 
       if ( b4 & csm_connection )

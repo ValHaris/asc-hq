@@ -66,9 +66,9 @@ install_location=
 type=DATA
 [Workspace_1]
 browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/programming/index-11.html#ss11.1
-cpp_file=/home/martin/asc/source/unitctrl.cpp
-header_file=/home/martin/asc/source/unitctrl.h
-openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/typen.h,/home/martin/asc/source/ai/service.cpp,/home/martin/asc/source/unitctrl.h,/home/martin/asc/source/unitctrl.cpp
+cpp_file=/home/martin/asc/source/strtmesg.cpp
+header_file=Untitled.h
+openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/loaders.cpp,/home/martin/asc/source/strtmesg.cpp
 show_outputview=true
 show_treeview=true
 [asc.kdevprj]
