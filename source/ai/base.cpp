@@ -210,7 +210,7 @@ void AI:: run ( bool benchMark )
 
 //   getMap()->weather = weatherBackup;
 
-   if ( (CGameOptions::Instance()->runAI == 2 && duration > 100*60) || benchMark )
+   if ( benchMark ) // (CGameOptions::Instance()->runAI == 2 && duration > 100*60) ||
       displaymessage ("The AI took %.2f seconds to run\n"
                       " setup: %d \n"
                       " service: %d \n"

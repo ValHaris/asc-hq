@@ -233,7 +233,10 @@ class  Building : public ContainerBase {
 
     //! returns the position of the buildings entry
     MapCoordinate3D getPosition ( ) const { return getEntry(); };
-    
+
+    //! returns the position of the buildings entry
+    MapCoordinate3D getPosition3D( ) const;
+
     //! registers the building at the given position on the map
     int  chainbuildingtofield ( const MapCoordinate& entryPos, bool setupImages = true );
 

@@ -318,7 +318,8 @@ AI::AiResult AI::moveToSavePlace ( pvehicle veh, VehicleMovement& vm3, int prefe
 
    AiResult result;
 
-   vm3.execute ( veh, -1, -1, 0, -1, -1 );
+   if ( vm3.getStatus() == 0 )
+      vm3.execute ( veh, -1, -1, 0, -1, -1 );
 
    // if there are no fields reachable
    if ( vm3.getStatus() == -107 )

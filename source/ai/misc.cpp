@@ -220,12 +220,12 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
    if ( buildingRequired ) {
       for ( ReachableBuildings::iterator rb = reachableBuildings.begin(); rb != reachableBuildings.end(); rb++  ) {
          if ( !repair || (rb->second->typ->special & cgrepairfacilityb))
-            return rb->second->getPosition();
+            return rb->second->getPosition3D();
       }
    }
    if ( !reachableBuildings.empty() && !landingPositions.empty()) {
       if ( reachableBuildings.begin()->first < landingPositions.begin()->first )
-         return reachableBuildings.begin()->second->getPosition();
+         return reachableBuildings.begin()->second->getPosition3D();
       else
          return landingPositions.begin()->second;
    }

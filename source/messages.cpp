@@ -584,7 +584,7 @@ void         tviewmessage::init( const Message& msg )
       scrollbarvisible = false;
    }
 
-   addbutton ( "e~x~it", 10, ysize - 25, xsize - 10, ysize - 5, 0, 1, 4, true );
+   addbutton ( "~o~k", 10, ysize - 25, xsize - 10, ysize - 5, 0, 1, 4, true );
 
    tvt_starty = 0;
    buildgraphics();

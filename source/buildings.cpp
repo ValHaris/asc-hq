@@ -273,6 +273,13 @@ void Building :: removeview ( void )
    }
 }
 
+MapCoordinate3D Building::getPosition3D() const 
+{
+   MapCoordinate3D e = getEntry();
+   MapCoordinate3D p3;
+   p3.setnum ( e.x, e.y, -1 );
+   return p3;
+}
 
 int Building :: getArmor ( void )
 {

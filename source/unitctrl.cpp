@@ -80,7 +80,7 @@ void BaseVehicleMovement :: PathFinder :: getMovementFields ( IntFieldList& reac
       int move = int(i->second->gval);
       Fields::key_type key = i->first;
       ++i;
-      while ( i->first == key ) {
+      while ( i->first == key && i != fields.end() ) {
          if ( i->second->gval  < move || ( i->second->gval == move && abs(i->second->h.getNumericalHeight()-orgHeight) < abs(height-orgHeight) ))
             height = i->second->h.getNumericalHeight();
          ++i;
