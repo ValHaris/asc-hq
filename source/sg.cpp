@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.89 2000-09-01 17:46:40 mbickel Exp $
+//     $Id: sg.cpp,v 1.90 2000-09-05 19:57:06 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.89  2000/09/01 17:46:40  mbickel
+//      Improved A* code
+//      Renamed tvehicle class to Vehicle
+//
 //     Revision 1.88  2000/09/01 15:47:49  mbickel
 //      Added Astar path finding code
 //      Fixed: viewid crashed
@@ -2788,7 +2792,7 @@ void  mainloop ( void )
                              veh = getactfield()->vehicle;
                           } else {
                              actmap->cleartemps ( 7 );
-                             vector<int> path;
+							 std::vector<int> path;
                              AStar ( actmap, path, veh, getxpos(), getypos() );
                              int x = veh->xpos;
                              int y = veh->ypos;
