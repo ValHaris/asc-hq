@@ -1,6 +1,9 @@
-//     $Id: keybp.h,v 1.6 1999-12-30 20:30:35 mbickel Exp $
+//     $Id: keybp.h,v 1.7 1999-12-30 21:04:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/12/30 20:30:35  mbickel
+//      Improved Linux port again.
+//
 //     Revision 1.5  1999/12/28 22:04:26  mbickel
 //      Had to make some changes again to compile it for DOS...
 //
@@ -139,7 +142,7 @@
 
 #ifdef NEWKEYB
    #define ct_invvalue   -1
-   #define ct_shp  256 
+   #define ct_shp  2048 
    #define ct_stp  512 
    #define ct_altp  1024
 
@@ -316,6 +319,7 @@
    #define cto_ende   79+256 
    #define cto_pdown  81+256 
    #define cto_pup    73+256 
+   #define cto_einf   82+256 
    #define cto_f1     59+256 
    #define cto_f2     60+256 
    #define cto_f3     61+256 

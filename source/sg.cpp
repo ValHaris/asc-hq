@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.11 1999-12-30 20:30:38 mbickel Exp $
+//     $Id: sg.cpp,v 1.12 1999-12-30 21:04:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  1999/12/30 20:30:38  mbickel
+//      Improved Linux port again.
+//
 //     Revision 1.10  1999/12/29 17:38:20  mbickel
 //      Continued Linux port
 //
@@ -3041,13 +3044,21 @@ int main(int argc, char *argv[] )
         logtofile ( "sg.cpp / main / initializing containerstream ");
         #endif
 
-        t_carefor_containerstream cfc;
-
-        readgameoptions();
-       #ifdef HEXAGON
-        check_bi3_dir ();
-       #endif
-
+        try {
+           opencontainer ( "*.con" );
+   
+           readgameoptions();
+          #ifdef HEXAGON
+           check_bi3_dir ();
+          #endif
+        } /* endtry */
+        catch ( tfileerror err ) {
+           displaymessage ( "unable to access file %s \n", 2, err.filename );
+        } /* endcatch */
+        catch ( ... ) {
+           displaymessage ( "loading of game failed during pre graphic initializing", 2 );
+        } /* endcatch */
+ 
 
 
         #ifdef logging

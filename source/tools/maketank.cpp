@@ -411,7 +411,7 @@ main (int argc, char *argv[] )
                    }
                 }
 
-               printf ("\n    The weapon can NOT hit :\n(this function is experimental and not yet implemented in the game itself)\n");
+               printf ("\n    The weapon can NOT hit :\n");
                bitselect (ft->weapons->weapon[i].targets_not_hittable, cmovemalitypes, cmovemalitypenum);
 
                i++;
@@ -773,6 +773,7 @@ main (int argc, char *argv[] )
 
 
 
+// #define OLDSIZE
 
 void *       loadpcx2(char *       filestring)
 {      

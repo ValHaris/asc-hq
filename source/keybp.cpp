@@ -1,6 +1,9 @@
-//     $Id: keybp.cpp,v 1.5 1999-12-28 22:04:25 mbickel Exp $
+//     $Id: keybp.cpp,v 1.6 1999-12-30 21:04:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/28 22:04:25  mbickel
+//      Had to make some changes again to compile it for DOS...
+//
 //     Revision 1.4  1999/12/27 12:51:36  mbickel
 //      Cleanup for Linux port
 //
@@ -396,6 +399,15 @@ void shleft()
    puffer[255] = 0;
 } 
 
+int rp_key ( void )
+{
+   int cch = getch();
+   if ( cch == 0 ) 
+      cch = getch() + 256;
+
+   return cch;
+}
+
 
 tkey r_key(void)
 
@@ -422,12 +434,9 @@ tkey r_key(void)
    {
 
       int  cch;
-     #ifdef _DOS_
       cch = getch();
-      if ( cch == 0 ) {
+      if ( cch == 0 ) 
          cch = getch() + 256;
-      } /* endif */
-     #endif
 
       return cch;
    }

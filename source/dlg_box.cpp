@@ -1,6 +1,9 @@
-//     $Id: dlg_box.cpp,v 1.8 1999-12-30 20:30:30 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.9 1999-12-30 21:04:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  1999/12/30 20:30:30  mbickel
+//      Improved Linux port again.
+//
 //     Revision 1.7  1999/12/29 17:38:09  mbickel
 //      Continued Linux port
 //
@@ -2204,7 +2207,7 @@ void         tdialogbox::stredit(char *       s,
 
   #ifdef _DOS_
    #ifdef NEWKEYB
-   reset_keypress ();
+   // reset_keypress ();
    initkeyb();
    #endif
   #endif
@@ -2429,7 +2432,7 @@ void         tdialogbox::intedit(int *    st,
 
    #ifdef _DOS_
     #ifdef NEWKEYB
-    reset_keypress ();
+    // reset_keypress ();
     initkeyb();
     #endif
    #endif
