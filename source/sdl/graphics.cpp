@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.8 2000-01-31 16:08:40 mbickel Exp $
+//     $Id: graphics.cpp,v 1.9 2000-02-08 08:26:54 steb Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/01/31 16:08:40  mbickel
+//      Fixed crash in line
+//      Improved error handling in replays
+//
 //     Revision 1.7  2000/01/07 13:20:07  mbickel
 //      DGA fullscreen mode now working
 //
@@ -46,7 +50,7 @@
 #include <stdlib.h>
 #include "graphics.h"
 #include "../basegfx.h"
-#include "SDL.h"
+#include "SDL/SDL.h"
 
 
 
