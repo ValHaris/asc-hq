@@ -1,6 +1,9 @@
-//     $Id: basegfx.cpp,v 1.18 2000-12-26 14:45:59 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.19 2000-12-26 21:04:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/12/26 14:45:59  mbickel
+//      Made ASC compilable (and runnable) with Borland C++ Builder
+//
 //     Revision 1.17  2000/10/18 14:13:48  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -1673,13 +1676,13 @@ void putimageprt ( int x1, int y1, int x2, int y2, void *texture, int dx, int dy
 {
    collategraphicoperations cgo ( x1, y1, x2, y2 );
    word* w = (word*) texture;
-   int spacelength = agmp->scanlinelength - *w - 1;
+   int spacelength = agmp->scanlinelength - (x2-x1) - 1;
 
    if ( agmp->windowstatus == 100 ) {
       char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
-      for ( int y = 0; y <= w[1] ; y++ ) {
-         for ( int x = 0; x <= w[0]; x++ ) {
-            int p = getpixelfromimage ( texture, x + dx, y + dy );
+      for ( int y = y1; y <= y2 ; y++ ) {
+         for ( int x = x1; x <= x2; x++ ) {
+            int p = getpixelfromimage ( texture, x - x1 + dx, y - y1 + dy );
             if ( p != -1 ) 
                *buf = p;
 
@@ -1687,6 +1690,17 @@ void putimageprt ( int x1, int y1, int x2, int y2, void *texture, int dx, int dy
          }
          buf+=spacelength;
       }
+      /*
+      for ( int y = 0; y <= w[1] ; y++ ) {
+         for ( int x = 0; x <= w[0]; x++ ) {
+            int p = getpixelfromimage ( texture, x + dx, y + dy );
+            if ( p != -1 )
+               *buf = p;
+
+            buf++;
+         }
+         buf+=spacelength;
+      } */
    }
 
 }

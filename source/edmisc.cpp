@@ -1,6 +1,10 @@
-//     $Id: edmisc.cpp,v 1.41 2000-11-29 11:05:27 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.42 2000-12-26 21:04:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2000/11/29 11:05:27  mbickel
+//      Improved userinterface of the mapeditor
+//      map::preferredfilenames uses now strings (instead of char*)
+//
 //     Revision 1.40  2000/11/29 09:40:20  mbickel
 //      The mapeditor has now two maps simultaneously active
 //      Moved memorychecking functions to its own file: memorycheck.cpp
@@ -1929,8 +1933,8 @@ void         tnewmap::run(void)
       } 
    }  while (!((taste == ct_esc) || (action >= 2))); 
    if (action == 3) { 
-      actmap->xsize = sxsize;
-      actmap->ysize = sysize;
+      // actmap->xsize = sxsize;
+      // actmap->ysize = sysize;
       if (valueflag == true ) {
          if ( tauswahl->weather[auswahlw] )
             generatemap(tauswahl->weather[auswahlw], sxsize , sysize );

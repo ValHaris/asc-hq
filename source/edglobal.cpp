@@ -1,6 +1,10 @@
-//     $Id: edglobal.cpp,v 1.23 2000-11-29 11:05:27 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.24 2000-12-26 21:04:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/11/29 11:05:27  mbickel
+//      Improved userinterface of the mapeditor
+//      map::preferredfilenames uses now strings (instead of char*)
+//
 //     Revision 1.22  2000/11/29 09:40:19  mbickel
 //      The mapeditor has now two maps simultaneously active
 //      Moved memorychecking functions to its own file: memorycheck.cpp
@@ -123,7 +127,7 @@
 */
 
 #include <stdarg.h>
-
+#include "global.h"
 #include "vehicletype.h"
 #include "buildingtype.h"
 #include "edmisc.h"

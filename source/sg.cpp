@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.116 2000-12-26 14:46:00 mbickel Exp $
+//     $Id: sg.cpp,v 1.117 2000-12-26 21:04:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.116  2000/12/26 14:46:00  mbickel
+//      Made ASC compilable (and runnable) with Borland C++ Builder
+//
 //     Revision 1.115  2000/12/23 15:58:38  mbickel
 //      Trying to get ASC to run with Borland C++ Builder...
 //
@@ -313,7 +316,9 @@
 
 // #define MEMCHK
 
+
 #include "memorycheck.cpp"
+
 
 class tsgonlinemousehelp : public tonlinemousehelp {
    public:

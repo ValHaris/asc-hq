@@ -1,6 +1,11 @@
-//     $Id: dialog.cpp,v 1.65 2000-11-29 09:40:16 mbickel Exp $
+//     $Id: dialog.cpp,v 1.66 2000-12-26 21:04:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.65  2000/11/29 09:40:16  mbickel
+//      The mapeditor has now two maps simultaneously active
+//      Moved memorychecking functions to its own file: memorycheck.cpp
+//      Rewrote password handling in ASC
+//
 //     Revision 1.64  2000/11/14 20:36:39  mbickel
 //      The AI can now use supply vehicles
 //      Rewrote objecttype IO routines to make the structure independant of
@@ -3562,7 +3567,7 @@ void tbasicshowmap::dispimage ( void )
       ysize = mysize;
 
    setinvisiblemouserectanglestk ( xp1, yp1, xp1 + txsize, yp1 + tysize );
-   collategraphicoperations cgo ( xp1, yp1, xp1 + txsize, yp1 + tysize );;
+   collategraphicoperations cgo ( xp1, yp1, xp1 + txsize, yp1 + tysize );
 
    mapwindow.x1 = (txsize - xsize) / 2;
    mapwindow.y1 = (tysize - ysize) / 2;
@@ -3617,8 +3622,7 @@ void tbasicshowmap::dispimage ( void )
    if ( yofs < 0)
       yofs = 0;
 
-
-   if ( (mxsize > txsize ) || ( mysize > tysize )) 
+   if ( (mxsize > txsize ) || ( mysize > tysize ))
       putimageprt ( x1 + mapwindow.x1 , y1 + mapwindow.y1, x1 + mapwindow.x2, y1 + mapwindow.y2, buffer, xofs, yofs );
    else
       putspriteimage ( x1 + mapwindow.x1 , y1 + mapwindow.y1,  buffer );

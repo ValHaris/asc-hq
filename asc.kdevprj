@@ -40,12 +40,12 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/artint.h,/home/martin/asc/source/artint.cpp,/home/martin/asc/source/soundList.cpp,/home/martin/asc/source/spfst.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/edmisc.cpp,/home/martin/asc/source/basegfx.cpp,/home/martin/asc/source/dialog.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/artint.h
-cpp_file=/home/martin/asc/source/spfst.cpp
-browser_file=file:/home/martin/.kde/share/apps/kdevelop/search_result.html
+header_file=Unbenannt.h
+cpp_file=/home/martin/asc/source/basegfx.cpp
+browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/index.html
 [source/astar2.h]
 install_location=
 dist=true
