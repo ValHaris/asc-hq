@@ -1,6 +1,10 @@
-//     $Id: gui.cpp,v 1.41 2000-10-18 14:14:12 mbickel Exp $
+//     $Id: gui.cpp,v 1.42 2000-10-31 10:42:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2000/10/18 14:14:12  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.40  2000/10/11 14:26:39  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -2026,6 +2030,11 @@ int   tnsguiiconrefuel::available    ( void )
             if ( service.available ( fld->vehicle ))
                if ( service.getServices( fld->vehicle) & ((1 << VehicleService::srv_resource ) | (1 << VehicleService::srv_ammo )) )
                   return 1;
+
+      if ( fld->building )
+         if ( fld->building->color == actmap->actplayer * 8)
+             if ( fld->building->typ->special & cgexternalloadingb )
+                return 1;
    } else
       if ( pendingVehicleActions.actionType == vat_service ) {
          pfield fld = getactfield();
@@ -2046,7 +2055,7 @@ void  tnsguiiconrefuel::exec         ( void )
 {
    if ( pendingVehicleActions.actionType == vat_nothing ) {
       VehicleService* vs = new VehicleService ( &defaultMapDisplay, &pendingVehicleActions );
-      int res = vs->execute ( getactfield()->vehicle, -1, -1, 0, -1, -1 );
+      int res = vs->execute ( getactfield()->vehicle, getxpos(), getypos(), 0, -1, -1 );
       if ( res < 0 ) {
          dispmessage2 ( -res );
          delete vs;
@@ -2092,7 +2101,9 @@ void  tnsguiiconrefuel::display      ( void )
    if ( x == -1   ||    y == -1 ) 
       return;
 
-   int pict = 1;
+   int pict = 0;
+
+   /*
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) { 
       pfield fld = getactfield(); 
       if ( fld->vehicle ) 
@@ -2101,7 +2112,7 @@ void  tnsguiiconrefuel::display      ( void )
    } else 
       if ( getfield(moveparams.movesx,moveparams.movesy)->vehicle->functions & cffuelref  )
          pict = 0; 
-
+   */
    putpict ( picture[pict] );
 }
 

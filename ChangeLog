@@ -1,6 +1,391 @@
+2000-10-26 21:17  mbickel
+
+	* source/: edmain.cpp, dos/asc.tgt, dos/asc.wpj,
+	dos/mapedit/edhex.tgt, tools/weaponguide.cpp,
+	tools/dos/weapguid.tgt:  Removed fullscreen settings in mapeditor
+
+2000-10-26 20:55  mbickel
+
+	* source/: CLoadable.cpp, artint.h, edmain.cpp, edselfnt.cpp,
+	gameoptions.cpp, gameoptions.h, typen.h, win32/asc.tgt,
+	win32/asc.wpj, win32/mapedit/mapedit.tgt:  Fixed crash when editing
+	the properties of a vehicle inside a building
+	 Added mapeditorFullscreen switch to asc.ini
+
+2000-10-26 20:15  mbickel
+
+	* source/gamemap.cpp:  Added gamemap.cpp, which contains methods
+	from tmap
+
+2000-10-26 20:14  mbickel
+
+	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
+	source/artint.cpp, source/artint.h, source/buildingtype.cpp,
+	source/buildingtype.h, source/controls.cpp, source/loaders.cpp,
+	source/missions.cpp, source/sg.cpp, source/sgstream.cpp,
+	source/spfst.cpp, source/typen.cpp, source/typen.h,
+	source/vehicletype.cpp, source/vehicletype.h,
+	source/mapedit/Makefile.am, source/mapedit/Makefile.in:  AI moves
+	damaged units to repair
+	 tmap is not memory layout sensitive any more
+
+2000-10-24 17:35  schelli
+
+	* source/: edmain.cpp, edmisc.cpp, libs/jpeg/jpeglib.h,
+	tools/java/MainWindow.form, tools/java/MainWindow.java,
+	tools/java/Readme.txt, win32/asc.wpj, win32/mapedit/mapedit.tgt:
+	MapEd FullScreen support added weapons ammo now editable in MapEd
+
+2000-10-19 13:40  mbickel
+
+	* source/edmisc.cpp:  Fixed crash when editing unit values
+
+2000-10-18 20:53  mbickel
+
+	* doc/source.html, source/sg.cpp, source/libs/readme.txt,
+	source/libs/jpeg-6b/jconfig.h, source/libs/jpeg-6b/jpeg.tgt,
+	source/libs/jpeg-6b/jpeg.wpj, source/sdl/SDLStretch.cpp,
+	source/sdl/asc_IMG_jpg.c, source/sdl/loadimage.cpp,
+	source/win32/asc.tgt, source/win32/asc.wpj,
+	source/win32/mapedit/mapedit.tgt:  Added JPEG support to windows
+	version
+
+2000-10-18 19:09  mbickel
+
+	* doc/source.html, source/edmain.cpp, source/events.h,
+	source/sg.cpp, source/spfst.cpp, source/spfst.h, source/typen.cpp,
+	source/vehicletype.cpp, source/vehicletype.h, source/dos/keybp.cpp,
+	source/dos/vesa.cpp, source/tools/asctool.tgt,
+	source/tools/bldhex.cpp, source/tools/makeobl4.cpp,
+	source/tools/maketank.cpp, source/tools/maketech.cpp,
+	source/tools/tools.wpj, source/tools/weaponguide.cpp,
+	source/tools/dos/makeveh.tgt:  Fixed eventhandling for DOS
+
+2000-10-18 17:10  mbickel
+
+	* source/: edmain.cpp, events.h, sg.cpp, strtmesg.cpp,
+	dos/keybp.cpp, dos/mousehnd.cpp, dos/timer.cpp, sdl/events.cpp,
+	win32/asc.tgt, win32/asc.wpj, win32/mapedit/mapedit.tgt:  Fixed
+	event handling for windows and dos
+
+2000-10-18 16:16  mbickel
+
+	* source/events.h:  Added events.h
+
+2000-10-18 16:13  mbickel
+
+	* asc.kdevprj, source/artint.cpp, source/attack.cpp,
+	source/basegfx.cpp, source/basegfx.h, source/basegui.h,
+	source/building.cpp, source/controls.cpp, source/controls.h,
+	source/dialog.cpp, source/dlg_box.cpp, source/dlg_box.h,
+	source/edevents.cpp, source/edglobal.cpp, source/edmain.cpp,
+	source/edmisc.cpp, source/edmisc.h, source/edselfnt.cpp,
+	source/gamedlg.cpp, source/gamedlg.h, source/gui.cpp, source/gui.h,
+	source/keybp.h, source/loadbi3.cpp, source/loaders.cpp,
+	source/missions.cpp, source/mousehnd.h, source/network.cpp,
+	source/pd.cpp, source/sg.cpp, source/sgstream.cpp,
+	source/spfst.cpp, source/spfst.h, source/timer.h,
+	source/weather.cpp, source/sdl/Makefile.am, source/sdl/Makefile.in,
+	source/sdl/events.cpp, source/sdl/timer.cpp,
+	source/tools/bi2pcx.cpp, source/tools/bldhex.cpp,
+	source/tools/makebuld.cpp, source/tools/maketech.cpp,
+	source/tools/pcx2raw.cpp:  Rewrote Event handling; DOS and WIN32
+	may be currently broken, will be
+	  fixed soon.
+
+2000-10-18 14:40  mbickel
+
+	* source/: sg.cpp, sdl/events.cpp, sdl/graphics.cpp:  Rewrite event
+	handling for windows
+
+2000-10-17 22:21  schelli
+
+	* source/tools/java/MainWindow.java: App now remembers path
+
+2000-10-17 19:28  schelli
+
+	* source/tools/java/: BuildRange.java, ClassBound.java,
+	CompAll.bat, MainWindow.java, MakeCheckIntRangeField.java, PK.java,
+	RLEHeader.java, RLEPackage.java, SgStream.java, SingleWeapon.java,
+	ToDO.txt, Unit.java, UnitEditor.form, UnitEditor.java,
+	UnitWeapon.java, Weapon.java: minor bugs fixed in lots of sources
+	add & remove weapon works now revert to save button removed
+	class-handling bugs fixed load & save routines fully implemented
+	terrainacces added
+
+2000-10-17 15:04  mbickel
+
+	* source/: sgstream.cpp, typen.h, libs/triangul/triangul.tgt,
+	libs/triangul/triangul.wpj, libs/triangul/trimisc.c,
+	libs/triangul/win32/triangul.tgt, tools/weaponguide.cpp,
+	win32/asc.wpj, win32/global_os.h, win32/watcom/global_os.h:  New
+	terrainaccess reading/writing
+	 Added Win32 project files
+
+2000-10-17 14:12  mbickel
+
+	* source/: sgstream.cpp, sgstream.h, typen.h, dos/asc.tgt,
+	dos/asc.wpj, dos/global_os.h, dos/mapedit/edhex.tgt,
+	libs/bzlib/dos/libbzip2.tgt, libs/triangul/dos/triangul.tgt: 
+	Improved vehicletype loading/saving routines
+	 documented some global variables
+
+2000-10-17 12:46  mbickel
+
+	* asc.kdevprj, config.h.in, configure, configure.in,
+	source/Makefile.in, source/libs/triangul/trimisc.c,
+	source/sdl/events.cpp:	Added log2 testing to configure.in
+	 Eventhandling now different between Win32 and Linux
+
+2000-10-16 16:34  mbickel
+
+	* doc/source.html, source/dlgraph.cpp, source/dos/global_os.h,
+	source/dos/keybp.cpp, source/sdl/events.cpp,
+	source/sdl/graphics.cpp, source/sdl/timer.cpp,
+	source/win32/asc.tgt, source/win32/asc.wpj,
+	source/win32/mapedit/mapedit.tgt, source/win32/msvc/fileio.h,
+	source/win32/msvc/global_os.h, source/win32/msvc/projectfiles.zip,
+	source/win32/watcom/global_os.h:  Win32 port is now running fine.
+	 Removed MSVC project files and put them into a zip file in
+	   asc/source/win32/msvc/
+
+2000-10-16 11:50  mbickel
+
+	* source/: TODO, dos/asc.tgt, dos/asc.wpj, dos/mapedit/edhex.tgt,
+	libs/bzlib/dos/libbzip2.tgt, libs/triangul/trimisc.c,
+	libs/triangul/dos/triangul.tgt:  DOS adjustments
+
+2000-10-16 11:37  mbickel
+
+	* asc.kdevprj, source/dlg_box.cpp:  Fixed Win32: not recognizing
+	keys in dialog box
+
+2000-10-15 14:31  mbickel
+
+	* source/win32/: asc.tgt, asc.wpj, mapedit/mapedit.tgt:  Worked on
+	Win32 port (Watcom)
+
+2000-10-15 00:40  schelli
+
+	* source/tools/java/: CompAll.bat, ToDO.txt, Unit.java,
+	UnitEditor.form, UnitEditor.java: AutoRepairRate added version will
+	be updated to actual version when saved "vehicle must category"
+	added Weapon pannel restructured + can.NOT.hit added data-arrays
+	updated
+
+2000-10-14 17:31  mbickel
+
+	* asc.kdevprj, source/AUTHORS, source/COPYING, source/NEWS,
+	source/astar2.cpp, source/basestreaminterface.h, source/basestrm.h,
+	source/edmisc.cpp, source/keybp.h, source/dos/keysymbols.h,
+	source/sdl/keysymbols.h:  Moved key symbols to separate files
+	 Moved tnstream to its own file
+
+2000-10-14 16:16  mbickel
+
+	* source/: artint.cpp, dialog.cpp, dlg_box.cpp, edglobal.cpp,
+	edmisc.h, gamedlg.cpp, network.cpp, sg.cpp, sgstream.cpp,
+	spfst.cpp, dos/asc.wpj, dos/mapedit/edhex.tgt, sdl/graphics.cpp,
+	win32/asc.wpj, win32/mapedit/mapedit.tgt:  Cleaned up includes
+	 Added mapeditor to win32 watcom project
+
+2000-10-14 15:34  mbickel
+
+	* doc/source.html, source/ChangeLog:  Updated source documentation:
+	added paragraph about installing STLPORT
+
+2000-10-14 15:07  mbickel
+
+	* source/: loadbi3.h, loaders.cpp, sg.wpj, sgstream.cpp,
+	weather.cpp, dos/asc.tgt, dos/asc.wpj, dos/mapedit/edhex.tgt,
+	libs/bzlib/libbzip2.tgt, libs/bzlib/libbzip2.wpj,
+	libs/bzlib/dos/libbzip2.tgt, libs/bzlib/os2/libbzip2.tgt,
+	libs/bzlib/win/libbzip2.tgt, libs/triangul/dos/triangul.tgt,
+	sdl/SDLStretch.cpp, sdl/events.cpp, sdl/loadimage.cpp,
+	win32/asc.tgt, win32/asc.wpj, win32/watcom/global_os.h:  Moved DOS
+	version into own subdirectories
+	 Win32 version with Watcom compiles and links ! But doesn't run
+	yet...
+
+2000-10-14 13:18  mbickel
+
+	* source/: dos/basevesa.obj, dos/dispfont.obj, dos/mouse.obj,
+	dos/pcx.obj, dos/spfldutl.obj, tools/Makefile.bcc:  Added obj files
+	of assembler routines for DOS version
+	 Removed absolute path from source/tools/Makefile.bcc
+
+2000-10-14 12:55  mbickel
+
+	* source/win32/: asc.tgt, asc.wpj, watcom/fileio.h,
+	watcom/global_os.h:  Added ASC-Win32 project files for Watcom
+
+2000-10-14 12:52  mbickel
+
+	* doc/source.html, source/astar2.cpp, source/basegfx.h,
+	source/basestrm.h, source/controls.cpp, source/dialog.cpp,
+	source/dlg_box.cpp, source/gamedlg.cpp, source/loaders.cpp,
+	source/misc.h, source/network.cpp, source/sg.cpp, source/sg.wpj,
+	source/typen.h, source/libs/bzlib/libbzip2.tgt,
+	source/libs/bzlib/win/libbzip2.tgt,
+	source/libs/triangul/triangul.tgt, source/tools/maketank.cpp,
+	source/win32/fileio.h, source/win32/global_os.h,
+	source/win32/msvc/fileio.h, source/win32/msvc/global_os.h:  Some
+	adjustments for a Win32 port
+
+2000-10-13 15:15  schelli
+
+	* source/tools/java/: AbsoluteConstraints.java,
+	AbsoluteLayout.java, ClassBound.java, CompAll.bat,
+	ErrorMessage.java, MainWindow.form, MainWindow.java,
+	MakeCheckIntRangeField.java, PK.java, RLEHeader.java,
+	RLEHeader2.java, RLEPackage.java, Readme.txt, SgStream.java,
+	SingleWeapon.java, ToDO.txt, Unit.java, UnitEditor.form,
+	UnitEditor.java, UnitWeapon.java, Weapon.java, Weapons.java,
+	org/netbeans/lib/awtextra/AbsoluteConstraints.java,
+	org/netbeans/lib/awtextra/AbsoluteLayout.java: [no log message]
+
+2000-10-13 00:24  mbickel
+
+	* source/: basestrm.cpp, basestrm.h, misc.h, sg.cpp, sgstream.cpp,
+	typen.cpp, weather.cpp:  Made the DOS part of the new platform
+	system work again
+
+2000-10-12 23:37  mbickel
+
+	* asc.kdevprj, configure, configure.in, source/Makefile.am,
+	source/Makefile.in, source/basestrm.h, source/dialog.cpp,
+	source/gameoptions.cpp, source/global.h, source/misc.h,
+	source/sg.cpp, source/sgstream.cpp, source/dos/fileio.h,
+	source/dos/global_os.h, source/mapedit/Makefile.am,
+	source/mapedit/Makefile.in, source/sdl/Makefile.am,
+	source/sdl/Makefile.in, source/sdl/events.cpp,
+	source/unix/fileio.h, source/unix/global_os.h,
+	source/win32/global_os.h, source/win32/borland/fileio.h,
+	source/win32/borland/global_os.h:  Further restructured platform
+	dependant routines
+
+2000-10-12 22:21  mbickel
+
+	* source/: basestrm.cpp, basestrm.h, ndir.h, sg.wpj, dos/fileio.h,
+	dos/wat_asm.bat, tools/Makefile.bcc, unix/fileio.h, win32/fileio.h,
+	win32/borland/fileio.h:  Restructuring operating system dependant
+	files
+
+2000-10-12 21:51  mbickel
+
+	* source/: basestrm.cpp, basestrm.h, global.h, loadbi3.cpp,
+	misc.cpp, sgstream.cpp, libs/bzlib/Makefile.bcc,
+	tools/Makefile.bcc, tools/weaponguide.cpp:  Added a stub program
+	for generating a weapon guide
+	 Added makefiles to compile this weaponguide with the free borland
+	C++
+	   compiler
+	 Made some adjustments to basic IO file for compiling them with
+	borland
+	   C++
+
+2000-10-12 21:00  mbickel
+
+	* asc.kdevprj, source/basestrm.cpp, source/basestrm.h,
+	source/buildingtype.cpp, source/edselfnt.cpp, source/loadbi3.cpp,
+	source/spfst.cpp, source/tools/mount.cpp:  Fixed crash in building
+	placement
+	 Replaced multi-character character constants by strings (there
+	where
+	   problems with the byte order)
+	 Building ID and name are now correctly displayed in mapeditor
+
+2000-10-11 23:25  mbickel
+
+	* asc.kdevprj, source/containerbase.cpp, source/containerbase.h: 
+	Fixed uninitilized ladung in containerbase
+
+2000-10-11 21:50  mbickel
+
+	* asc.kdevprj, config.h.in, configure, configure.in,
+	source/errors.h, source/global.h, source/strtmesg.cpp:	Cleaned up
+	Linux make procedure
+
+2000-10-11 18:59  mbickel
+
+	* README, source/sg.wpj, source/tools/asctool.tgt,
+	source/tools/tools.wpj:  Some more improvement of the Watcom build
+	process
+
+2000-10-11 18:45  mbickel
+
+	* doc/source.html, source/mouse.asm, source/sg.wpj, source/tsm.bat,
+	source/watcom.bat, source/dos/mouse.asm:  Improved the build
+	process for Watcom
+
+2000-10-11 17:33  mbickel
+
+	* source/: Named.h, buildingtype.cpp, buildingtype.h,
+	containerbase.cpp, edmisc.cpp, global.h, sg.wpj, spfst.cpp,
+	spfst.h, typen.cpp, typen.h, unitctrl.cpp, unitctrl.h,
+	vehicletype.cpp, tools/asctool.tgt, tools/bi2pcx.cpp,
+	tools/bldhex.cpp, tools/convtank.wpj, tools/convtnk2.cpp,
+	tools/krkr.cpp, tools/makebdt.cpp, tools/makeobl4.cpp,
+	tools/maketank.cpp, tools/mount.wpj, tools/pcxtank.cpp,
+	tools/printbld.cpp, tools/printtnk.cpp, tools/tools.wpj,
+	tools/viewid.cpp, tools/dos/dosmount.tgt,
+	tools/hexagon/convtank.tgt, tools/os2/os2mount.tgt,
+	tools/win/winmount.tgt:  Adjusted small editors to the new ASC
+	structure
+	 Watcom compatibility
+
+2000-10-11 16:26  mbickel
+
+	* ChangeLog, asc.kdevprj, config.h.in, configure, configure.in,
+	source/Makefile.am, source/Makefile.in, source/artint.cpp,
+	source/astar2.cpp, source/astar2.h, source/attack.cpp,
+	source/attack.h, source/basestrm.cpp, source/basestrm.h,
+	source/building.cpp, source/building_controls.h,
+	source/buildingtype.cpp, source/buildingtype.h,
+	source/containerbase.cpp, source/containerbase.h,
+	source/controls.cpp, source/controls.h, source/dialog.cpp,
+	source/dlg_box.cpp, source/edevents.cpp, source/edglobal.cpp,
+	source/edmain.cpp, source/edmisc.cpp, source/edmisc.h,
+	source/edselfnt.cpp, source/errors.h, source/gamedlg.cpp,
+	source/gamedlg.h, source/global.h, source/gui.cpp, source/gui.h,
+	source/keybp.h, source/loadbi3.cpp, source/loaders.cpp,
+	source/loaders.h, source/loadpcxc.cpp, source/mapalgorithms.cpp,
+	source/mapalgorithms.h, source/misc.cpp, source/misc.h,
+	source/missions.cpp, source/missions.h, source/newfont.cpp,
+	source/oldlzw.cpp, source/sg.cpp, source/sgstream.cpp,
+	source/spfst.cpp, source/spfst.h, source/strtmesg.cpp,
+	source/tpascal.inc, source/typen.cpp, source/typen.h,
+	source/unitctrl.cpp, source/unitctrl.h, source/vehicletype.cpp,
+	source/vehicletype.h, source/viewcalculation.cpp,
+	source/viewcalculation.h, source/libs/Makefile.am,
+	source/libs/Makefile.in, source/libs/readme.txt,
+	source/libs/bzlib/Makefile, source/mapedit/Makefile.am,
+	source/mapedit/Makefile.in, source/sdl/asc_IMG_jpg.c,
+	source/sdl/events.cpp, source/sdl/graphics.cpp,
+	source/sdl/loadimage.cpp, source/tools/bldhex.cpp,
+	source/tools/makebuld.cpp, source/tools/mount.cpp,
+	source/tools/linux/Makefile.am, source/tools/linux/Makefile.in: 
+	Modernized the internal structure of ASC:
+	  - vehicles and buildings now derived from a common base class
+	  - new resource class
+	  - reorganized exceptions (errors.h)
+	 Split some files:
+	   typen -> typen, vehicletype, buildingtype, basecontainer
+	   controls -> controls, viewcalculation
+	   spfst -> spfst, mapalgorithm
+	 bzlib is now statically linked and sources integrated
+
 2000-10-03 18:49  mbickel
 
-	* source/tools/makeobl4.cpp:  Added Java Vehicle editor
+	* source/tools/: makeobl4.cpp, java/AbsoluteConstraints.java,
+	java/AbsoluteLayout.java, java/ClassBound.java, java/CompAll.bat,
+	java/ErrorMessage.java, java/MainWindow.java,
+	java/MakeCheckIntRangeField.java, java/PK.java,
+	java/RLEHeader.java, java/RLEHeader2.java, java/RLEPackage.java,
+	java/Readme.txt, java/SgStream.java, java/SingleWeapon.java,
+	java/StartSelector.bat, java/Unit.java, java/UnitEditor.java,
+	java/UnitWeapon.java, java/Weapon.java, java/Weapons.java:  Added
+	Java Vehicle editor
 
 2000-09-27 18:08  mbickel
 
@@ -82,22 +467,6 @@
 
 	* source/sgstream.cpp:	Better error handling on startup.
 
-2000-09-17 22:17  gulliver
-
-	* WIN32/asc.opt: initial release (binary)
-
-2000-09-17 21:46  gulliver
-
-	* WIN32/asc.opt: removed in preparation of a binary add
-
-2000-09-17 21:43  gulliver
-
-	* WIN32/asc.dsp: [no log message]
-
-2000-09-17 21:42  gulliver
-
-	* WIN32/asc.opt: removed (in preparation of a binary add)
-
 2000-09-17 18:16  mbickel
 
 	* source/: artint.cpp, typen.h:  Some fixes for Watcom
@@ -142,10 +511,6 @@
 
 	* asc.kdevprj, source/artint.cpp, source/typen.h,
 	source/unitctrl.cpp:  AI improvements
-
-2000-09-08 19:17  gulliver
-
-	* WIN32/: asc.dsp, asc.opt: [no log message]
 
 2000-09-07 18:42  mbickel
 
@@ -202,9 +567,9 @@
 2000-09-01 17:47  mbickel
 
 	* source/: astar2.cpp, astar2.h, sg.cpp, sg.wpj, sgstream.h,
-	spfst.h, hexagon/asc.tgt, tools/krkr.cpp, tools/maketank.cpp,
-	tools/tools.wpj, tools/viewid.cpp, tools/dos/viewid.tgt:  Added
-	Astar path finding code
+	spfst.h, tools/krkr.cpp, tools/maketank.cpp, tools/tools.wpj,
+	tools/viewid.cpp, tools/dos/viewid.tgt:  Added Astar path finding
+	code
 	 Fixed: viewid crashed
 	 Fixed display error in ynswitch ( krkr.cpp )
 
@@ -260,15 +625,6 @@
 	leave orbiter
 	 Restructured next-turn routines
 
-2000-08-26 21:43  gulliver
-
-	* WIN32/: asc.dsp, asc.dsw, asc.opt, config.h, ndir.c: initial
-	checkin
-
-2000-08-26 21:41  gulliver
-
-	* WIN32/ndir.h: [no log message]
-
 2000-08-26 17:33  mbickel
 
 	* source/: controls.cpp, dialog.cpp, dialog.h, dlg_box.cpp,
@@ -316,8 +672,7 @@
 
 2000-08-13 17:22  mbickel
 
-	* source/: sg.cpp, sg.wpj, hexagon/asc.tgt:  Improved data version
-	control
+	* source/: sg.cpp, sg.wpj:  Improved data version control
 	 Fixed: not all experience symbols were loaded
 
 2000-08-13 16:09  mbickel
@@ -515,8 +870,8 @@
 2000-08-05 22:17  mbickel
 
 	* source/: gamedlg.cpp, loadimage.h, loadjpg.cpp, loadjpg.h,
-	sg.cpp, sg.h, sg.wpj, dos/loadjpg.cpp, dos/loadjpg.h,
-	hexagon/asc.tgt:  Restructured Fullscreen Image loading
+	sg.cpp, sg.h, sg.wpj, dos/loadjpg.cpp, dos/loadjpg.h:  Restructured
+	Fullscreen Image loading
 
 2000-08-05 20:26  mbickel
 
@@ -543,8 +898,8 @@
 	* source/: artint.cpp, attack.cpp, building.cpp, controls.cpp,
 	dialog.cpp, edmisc.cpp, edselfnt.cpp, gui.cpp, loaders.cpp, sg.cpp,
 	sg.wpj, sgstream.cpp, spfst.cpp, typen.cpp, typen.h, unitctrl.cpp,
-	hexagon/asc.tgt, tools/makebdt.cpp:  Moving transports costs
-	movement for units inside
+	tools/makebdt.cpp:  Moving transports costs movement for units
+	inside
 	 refuelled vehicles now have full movement in the same turn
 	 terrain: negative attack / defensebonus allowed
 	 new mapparameters that affect damaging and repairing of building
@@ -552,7 +907,7 @@
 2000-08-03 21:45  mbickel
 
 	* source/: basestrm.cpp, edmisc.cpp, loaders.cpp, sg.cpp, sg.wpj,
-	strtmesg.cpp, dos/loadpcx.cpp, hexagon/asc.tgt, tools/demount.wpj,
+	strtmesg.cpp, dos/loadpcx.cpp, tools/demount.wpj,
 	tools/dos/demount.tgt, tools/os2/demount.tgt,
 	tools/win/demount.tgt:	Fixed some bugs in DOS code
 	 Removed submarine.ascent != 0 hack
@@ -662,9 +1017,9 @@
 
 	* source/: basestrm.cpp, basestrm.h, controls.cpp, dialog.cpp,
 	edmain.cpp, gameoptions.cpp, sg.cpp, sg.wpj, sgstream.cpp,
-	unitctrl.cpp, hexagon/asc.tgt, tools/asctool.tgt,
-	tools/maketank.cpp, tools/tools.wpj, tools/dos/viewid.tgt: 
-	Improved handing of multiple directories
+	unitctrl.cpp, tools/asctool.tgt, tools/maketank.cpp,
+	tools/tools.wpj, tools/dos/viewid.tgt:	Improved handing of
+	multiple directories
 	 Fixed: wind direction not displayed when cycling through wind
 	heights
 	 Fixed: oil rig not working
@@ -686,8 +1041,8 @@
 
 2000-07-29 20:40  mbickel
 
-	* source/: building.cpp, sg.wpj, strtmesg.cpp, hexagon/asc.tgt: 
-	Fixed crash in ammo transfer window inside buildings/transports
+	* source/: building.cpp, sg.wpj, strtmesg.cpp:	Fixed crash in ammo
+	transfer window inside buildings/transports
 
 2000-07-29 17:28  mbickel
 
@@ -704,9 +1059,8 @@
 	controls.cpp, dialog.cpp, edglobal.cpp, gamedlg.cpp,
 	gameoptions.cpp, gameoptions.h, gui.cpp, loadbi3.cpp, loadbi3.h,
 	loaders.cpp, network.cpp, sg.cpp, sg.wpj, sgstream.cpp, sgstream.h,
-	spfst.cpp, typen.cpp, typen.h, unitctrl.cpp, hexagon/asc.tgt,
-	hexagon/mapedit/edhex.tgt:  plain text configuration file
-	implemented
+	spfst.cpp, typen.cpp, typen.h, unitctrl.cpp:  plain text
+	configuration file implemented
 
 2000-07-28 12:15  mbickel
 
@@ -754,9 +1108,8 @@
 	* source/: artint.cpp, artint.h, attack.cpp, attack.h,
 	building.cpp, controls.cpp, dialog.cpp, edmain.cpp, gui.cpp,
 	loadbi3.cpp, loaders.cpp, sg.cpp, sg.wpj, spfst.cpp, spfst.h,
-	typen.h, unitctrl.cpp, unitctrl.h, hexagon/asc.tgt,
-	hexagon/mapedit/edhex.tgt, tools/mount.cpp:  AI has now some
-	primitive tactics implemented
+	typen.h, unitctrl.cpp, unitctrl.h, tools/mount.cpp:  AI has now
+	some primitive tactics implemented
 	 Some clean up
 	   moved weapon functions to attack.cpp
 	 Mount doesn't modify PCX files any more.
@@ -767,8 +1120,8 @@
 
 2000-07-12 10:27  mbickel
 
-	* source/: gamedlg.cpp, sg.wpj, strtmesg.cpp, hexagon/asc.tgt: 
-	Prepared 1.1.9 release
+	* source/: gamedlg.cpp, sg.wpj, strtmesg.cpp:  Prepared 1.1.9
+	release
 
 2000-07-10 17:21  mbickel
 
@@ -834,7 +1187,7 @@
 	* source/: artint.cpp, artint.h, basestrm.cpp, basestrm.h,
 	building.cpp, controls.cpp, gui.cpp, loaders.cpp, sg.cpp, sg.wpj,
 	sgstream.cpp, spfst.cpp, strtmesg.cpp, typen.cpp, typen.h,
-	hexagon/asc.tgt, tools/bldhex.cpp:  Started working on AI
+	tools/bldhex.cpp:  Started working on AI
 	 Started making loaders independent of memory layout
 	 Destroyed buildings can now leave objects behind.
 
@@ -910,9 +1263,8 @@
 
 	* source/: artint.cpp, artint.h, building.cpp, building.h,
 	controls.cpp, mousehnd.cpp, sg.cpp, sg.wpj, strtmesg.cpp,
-	dos/mousehnd.cpp, hexagon/asc.tgt, hexagon/mapedit/edhex.tgt,
-	tools/asctool.tgt, tools/tools.wpj:  Fixed crash when transfering
-	ammo to vehicle with > 8 weapons
+	dos/mousehnd.cpp, tools/asctool.tgt, tools/tools.wpj:  Fixed crash
+	when transfering ammo to vehicle with > 8 weapons
 
 2000-06-09 17:13  mbickel
 
@@ -922,8 +1274,8 @@
 2000-06-09 15:12  mbickel
 
 	* source/: building.cpp, controls.cpp, controls.h, gamedlg.cpp,
-	sg.cpp, spfst.cpp, strtmesg.cpp, typen.h, hexagon/asc.tgt:  Fixed
-	tribute function and renamed it to "transfer resources"
+	sg.cpp, spfst.cpp, strtmesg.cpp, typen.h:  Fixed tribute function
+	and renamed it to "transfer resources"
 
 2000-06-09 12:50  mbickel
 
@@ -936,8 +1288,8 @@
 
 	* source/: attack.cpp, attack.h, controls.cpp, controls.h,
 	dialog.h, gui.cpp, gui.h, sg.wpj, spfst.cpp, spfst.h, strtmesg.cpp,
-	typen.cpp, typen.h, unitctrl.cpp, unitctrl.h, view.cpp,
-	hexagon/asc.tgt:  New vehicle action: attack
+	typen.cpp, typen.h, unitctrl.cpp, unitctrl.h, view.cpp:  New
+	vehicle action: attack
 	 wrote documentation for vehicle actions
 
 2000-06-08 23:00  mbickel
@@ -982,8 +1334,8 @@
 2000-06-04 23:39  mbickel
 
 	* source/: attack.cpp, attack.h, controls.cpp, dialog.cpp, gui.cpp,
-	sg.cpp, sg.wpj, unitctrl.cpp, unitctrl.h, hexagon/asc.tgt:  Added
-	OK button to ViewText dialog (used in "About ASC", for example)
+	sg.cpp, sg.wpj, unitctrl.cpp, unitctrl.h:  Added OK button to
+	ViewText dialog (used in "About ASC", for example)
 	 Invalid command line parameters are now reported
 	 new text for attack result prediction
 	 Added constructors to attack functions
@@ -1021,8 +1373,7 @@
 	dos/cdrom.cpp, dos/cdrom.h, dos/dispfont.asm, dos/keybp.cpp,
 	dos/loadpcx.cpp, dos/pcx.asm, dos/realint.cpp, dos/realint.h,
 	dos/setpages.inc, dos/spfldutl.asm, dos/spfldutl.h, dos/timer.cpp,
-	dos/vesa.cpp, dos/vesa.h, hexagon/asc.tgt,
-	hexagon/mapedit/edhex.tgt, tools/asctool.tgt, tools/bi2pcx.cpp,
+	dos/vesa.cpp, dos/vesa.h, tools/asctool.tgt, tools/bi2pcx.cpp,
 	tools/bldhex.cpp, tools/krkr.cpp, tools/makebdt.cpp,
 	tools/makeobl4.cpp, tools/maketank.cpp, tools/maketech.cpp,
 	tools/mount.cpp, tools/pcxtank.cpp, tools/printbld.cpp,
@@ -1173,16 +1524,15 @@
 
 	* source/: controls.cpp, controls.h, dialog.cpp, gamedlg.cpp,
 	gamedlg.h, gui.cpp, sg.cpp, sg.wpj, strtmesg.cpp, typen.cpp,
-	typen.h, hexagon/asc.tgt:  New mouse option dialog
+	typen.h:  New mouse option dialog
 	 weapon info can now be displayed by clicking on a unit
 
 2000-05-06 22:25  mbickel
 
 	* source/: dlg_box.cpp, dlg_box.h, gui.cpp, misc.cpp, misc.h,
 	pd.cpp, sg.wpj, sgstream.cpp, spfst.cpp, typen.cpp, typen.h,
-	unitctrl.cpp, unitctrl.h, hexagon/asc.tgt, tools/makepal.cpp: 
-	Fixed: -recognition of a second mouse click when selection a pd
-	menu item
+	unitctrl.cpp, unitctrl.h, tools/makepal.cpp:  Fixed: -recognition
+	of a second mouse click when selection a pd menu item
 		-movement: fields the unit can only pass, but not stand on
 	them,
 			   are marked darker
@@ -1233,31 +1583,23 @@
 
 2000-05-03 16:26  mbickel
 
-	* source/: hexagon/asc.tgt, tools/bi2pcx.wpj, tools/demount.tgt,
-	tools/dosmount.tgt, tools/makeobl.wpj, tools/maketank.wpj,
-	tools/maketec.tgt, tools/maketech.tgt, tools/maketech.wpj,
-	tools/maketrrn.wpj, tools/mount.tgt, tools/mount.wpj,
-	tools/mount_new_graphics.tgt, tools/mountwin.tgt,
-	tools/printbld.wpj, tools/prnttank.wpj, tools/tank2pcx.tgt,
-	tools/tank2pcx.wpj, tools/viewid.tgt, tools/viewid.wpj,
-	tools/winmount.tgt, tools/dos/bi2pcx.tgt, tools/dos/bi2pcx2.tgt,
-	tools/dos/convbodn.tgt, tools/dos/convobj.tgt,
-	tools/dos/convobj6.tgt, tools/dos/convtank.tgt,
-	tools/dos/demount.tgt, tools/dos/makebld.tgt,
-	tools/dos/makeobl.tgt, tools/dos/maketec.tgt,
-	tools/dos/maketrr.tgt, tools/dos/makeveh.tgt, tools/dos/mount.tgt,
-	tools/dos/printbld.tgt, tools/dos/printveh.tgt,
-	tools/dos/trn2pcx.tgt, tools/dos/veh2pcx.tgt, tools/dos/viewid.tgt,
-	tools/hexagon/bi2pcx.tgt, tools/hexagon/bi2pcx2.tgt,
-	tools/hexagon/hexids.tgt, tools/hexagon/makebl6.tgt,
-	tools/hexagon/makebld.tgt, tools/hexagon/makeob6.tgt,
-	tools/hexagon/makeobl.tgt, tools/hexagon/maketk6.tgt,
-	tools/hexagon/maketr6.tgt, tools/hexagon/maketr6b.tgt,
-	tools/hexagon/maketrn6.tgt, tools/hexagon/maketrr.tgt,
-	tools/hexagon/makeveh.tgt, tools/hexagon/printbl6.tgt,
-	tools/hexagon/printbld.tgt, tools/hexagon/printveh.tgt,
-	tools/hexagon/prnttk6.tgt, tools/hexagon/prntveh.tgt,
-	tools/hexagon/viewid.tgt:  Reorganized small editors
+	* source/tools/: bi2pcx.wpj, demount.tgt, dosmount.tgt,
+	makeobl.wpj, maketank.wpj, maketec.tgt, maketech.tgt, maketech.wpj,
+	maketrrn.wpj, mount.tgt, mount.wpj, mount_new_graphics.tgt,
+	mountwin.tgt, printbld.wpj, prnttank.wpj, tank2pcx.tgt,
+	tank2pcx.wpj, viewid.tgt, viewid.wpj, winmount.tgt, dos/bi2pcx.tgt,
+	dos/bi2pcx2.tgt, dos/convbodn.tgt, dos/convobj.tgt,
+	dos/convobj6.tgt, dos/convtank.tgt, dos/demount.tgt,
+	dos/makebld.tgt, dos/makeobl.tgt, dos/maketec.tgt, dos/maketrr.tgt,
+	dos/makeveh.tgt, dos/mount.tgt, dos/printbld.tgt, dos/printveh.tgt,
+	dos/trn2pcx.tgt, dos/veh2pcx.tgt, dos/viewid.tgt,
+	hexagon/bi2pcx.tgt, hexagon/bi2pcx2.tgt, hexagon/hexids.tgt,
+	hexagon/makebl6.tgt, hexagon/makebld.tgt, hexagon/makeob6.tgt,
+	hexagon/makeobl.tgt, hexagon/maketk6.tgt, hexagon/maketr6.tgt,
+	hexagon/maketr6b.tgt, hexagon/maketrn6.tgt, hexagon/maketrr.tgt,
+	hexagon/makeveh.tgt, hexagon/printbl6.tgt, hexagon/printbld.tgt,
+	hexagon/printveh.tgt, hexagon/prnttk6.tgt, hexagon/prntveh.tgt,
+	hexagon/viewid.tgt:  Reorganized small editors
 
 2000-05-02 19:28  mbickel
 
@@ -1294,8 +1636,8 @@
 	loadbi3.cpp, loaders.cpp, loaders.h, missions.cpp, sg.cpp, sg.wpj,
 	sgstream.cpp, spfst.cpp, spfst.h, strtmesg.cpp, tpascal.inc,
 	typen.cpp, typen.h, unitctrl.cpp, unitctrl.h, weather.h,
-	dos/memory.cpp, hexagon/asc.tgt, libs/bzlib/libbzip2.wpj,
-	sdl/events.cpp, sdl/timer.cpp, tools/bi2pcx.cpp, tools/bldhex.cpp,
+	dos/memory.cpp, libs/bzlib/libbzip2.wpj, sdl/events.cpp,
+	sdl/timer.cpp, tools/bi2pcx.cpp, tools/bldhex.cpp,
 	tools/demount.cpp, tools/demount.wpj, tools/makebdt.cpp,
 	tools/makeobl4.cpp, tools/maketank.cpp, tools/maketech.cpp,
 	tools/mount.cpp, tools/pcxtank.cpp, tools/printbld.cpp,
@@ -1367,10 +1709,9 @@
 2000-04-01 13:38  mbickel
 
 	* source/: edglobal.cpp, edmisc.cpp, loadbi3.cpp, loadbi3.h,
-	sg.cpp, sg.wpj, strtmesg.cpp, typen.h, hexagon/asc.tgt,
-	hexagon/mapedit/edhex.tgt, tools/makebdt.cpp, tools/makebuld.wpj,
-	tools/makeobl.wpj, tools/makeobl4.cpp, tools/maketank.wpj,
-	tools/maketrrn.wpj, tools/mntgraph.cpp,
+	sg.cpp, sg.wpj, strtmesg.cpp, typen.h, tools/makebdt.cpp,
+	tools/makebuld.wpj, tools/makeobl.wpj, tools/makeobl4.cpp,
+	tools/maketank.wpj, tools/maketrrn.wpj, tools/mntgraph.cpp,
 	tools/mount_new_graphics.wpj, tools/pcxtank.cpp,
 	tools/printbld.cpp, tools/printbld.wpj, tools/tank2pcx.tgt,
 	tools/tank2pcx.wpj, tools/viewid.cpp, tools/viewid.wpj,
@@ -1396,15 +1737,14 @@
 	dlg_box.cpp, dlg_box.h, edevents.h, edgen.h, edmisc.cpp,
 	edselfnt.cpp, flview.cpp, flview.h, gamedlg.cpp, realint.cpp,
 	sg.cpp, sg.wpj, sgstream.cpp, sgstream.h, view.cpp, dos/memory.cpp,
-	dos/memory.h, hexagon/asc.tgt:	Improved memory handling for DOS
-	version
+	dos/memory.h:  Improved memory handling for DOS version
 	 Many small changes I can't remember ;-)
 
 2000-03-16 15:06  mbickel
 
 	* source/: controls.cpp, edevents.cpp, edglobal.cpp, edglobal.h,
-	edmain.cpp, edmisc.cpp, edmisc.h, sg.wpj, typen.cpp, typen.h,
-	hexagon/asc.tgt:  Added unitset transformation to the mapeditor
+	edmain.cpp, edmisc.cpp, edmisc.h, sg.wpj, typen.cpp, typen.h: 
+	Added unitset transformation to the mapeditor
 
 2000-03-11 20:51  mbickel
 
@@ -1422,11 +1762,10 @@
 	* source/: attack.cpp, edglobal.cpp, edglobal.h, edmisc.cpp,
 	edmisc.h, gamedlg.cpp, global.h, gui.h, loadbi3.cpp, loadbi3.h,
 	misc.cpp, misc.h, sg.cpp, sg.wpj, sgstream.cpp, spfst.cpp, typen.h,
-	dos/memory.cpp, hexagon/asc.tgt, tools/maketank.cpp,
-	tools/mntgraph.cpp, tools/mntgraph.tgt,
-	tools/mount_new_graphics.wpj, tools/printtnk.cpp,
-	tools/prnttank.wpj, tools/hexagon/printveh.tgt:  Added support for
-	multiple graphic sets
+	dos/memory.cpp, tools/maketank.cpp, tools/mntgraph.cpp,
+	tools/mntgraph.tgt, tools/mount_new_graphics.wpj,
+	tools/printtnk.cpp, tools/prnttank.wpj, tools/hexagon/printveh.tgt:
+	 Added support for multiple graphic sets
 
 2000-02-24 11:54  mbickel
 
@@ -1465,8 +1804,7 @@
 
 	* source/: basestrm.cpp, basestrm.h, dialog.cpp, edmain.cpp,
 	edmisc.cpp, gamedlg.cpp, misc.cpp, misc.h, sg.cpp, sg.wpj,
-	sgstream.cpp, dos/memory.cpp, dos/memory.h, hexagon/asc.tgt,
-	hexagon/mapedit/edhex.tgt:  Some cleanup
+	sgstream.cpp, dos/memory.cpp, dos/memory.h:  Some cleanup
 	 getfiletime now works under Linux too
 
 2000-02-02 21:48  mbickel
@@ -1509,8 +1847,7 @@
 	* source/: building.cpp, controls.cpp, dialog.cpp, edmisc.cpp,
 	gui.cpp, loaders.cpp, sg.cpp, sg.wpj, sgstream.cpp, soundList.cpp,
 	soundList.h, spfst.cpp, typen.cpp, typen.h, dos/sound.cpp,
-	dos/sound.h, hexagon/asc.tgt:  Added dummy routines for sound under
-	DOS
+	dos/sound.h:  Added dummy routines for sound under DOS
 	 Cleaned up weapon specification
 
 2000-01-24 10:08  steb
@@ -1550,13 +1887,13 @@
 
 2000-01-19 23:03  mbickel
 
-	* source/: dialog.cpp, keybp.cpp, sg.wpj, hexagon/asc.tgt:  Fixed a
-	bug in the DOS keyboard code
+	* source/: dialog.cpp, keybp.cpp, sg.wpj:  Fixed a bug in the DOS
+	keyboard code
 
 2000-01-19 22:18  mbickel
 
-	* source/: sg.cpp, sg.wpj, hexagon/asc.tgt:  Adjusted case of
-	filenames for Linux version (all data files now
+	* source/: sg.cpp, sg.wpj:  Adjusted case of filenames for Linux
+	version (all data files now
 	   lowercase)
 
 2000-01-07 14:20  mbickel
@@ -1642,8 +1979,7 @@
 1999-12-30 22:04  mbickel
 
 	* source/: dlg_box.cpp, keybp.cpp, keybp.h, sg.cpp,
-	hexagon/asc.tgt, tools/maketank.cpp:  Restored DOS compatibility
-	again.
+	tools/maketank.cpp:  Restored DOS compatibility again.
 
 1999-12-30 21:30  mbickel
 
@@ -1663,8 +1999,8 @@
 1999-12-29 13:50  mbickel
 
 	* source/: basestrm.cpp, basestrm.h, edglobal.cpp, edmisc.cpp,
-	gui.cpp, sg.wpj, spfst.cpp, hexagon/asc.tgt:  Removed a fatal error
-	message in GUI.CPP
+	gui.cpp, sg.wpj, spfst.cpp:  Removed a fatal error message in
+	GUI.CPP
 	 Made some modifications to allow platform dependant path
 	delimitters
 
@@ -1757,8 +2093,7 @@
 
 	* source/: basegfx.cpp, basestrm.cpp, building.cpp, building.h,
 	controls.cpp, controls.h, newfont.cpp, newfont.h, sg.cpp, sg.wpj,
-	spfst.cpp, spfst.h, typen.h, hexagon/asc.tgt:  Added weapon
-	information window
+	spfst.cpp, spfst.h, typen.h:  Added weapon information window
 	 Added support for primary offscreen frame buffers to graphics
 	engine
 	 Restored file time handling for DOS version
@@ -1778,9 +2113,9 @@
 	loaders.cpp, loadjpg.cpp, loadpcx.cpp, loadpcxc.cpp, missions.cpp,
 	mousehnd.cpp, mousehnd.h, newfont.cpp, newfont.h, oldlzw.cpp,
 	pd.cpp, sg.cpp, sg.wpj, sgstream.cpp, spfldutl.h, spfst.cpp,
-	spfst.h, vesa.cpp, vesa.h, weather.cpp, hexagon/asc.tgt,
-	hexagon/mapedit/edhex.tgt, tools/demount.cpp, tools/demount.tgt,
-	tools/demount.wpj:  Restructured graphics engine:
+	spfst.h, vesa.cpp, vesa.h, weather.cpp, tools/demount.cpp,
+	tools/demount.tgt, tools/demount.wpj:  Restructured graphics
+	engine:
 	   VESA now only for DOS
 	   BASEGFX should be platform independant
 	   new interface for initialization
@@ -1831,9 +2166,9 @@
 
 	* source/: basestrm.cpp, basestrm.h, building.cpp, controls.cpp,
 	dialog.cpp, gamedlg.cpp, global.h, gui.cpp, keybp.cpp, loadbi3.cpp,
-	sg.cpp, sg.wpj, spfst.cpp, typen.cpp, typen.h, vesa.cpp,
-	hexagon/asc.tgt, hexagon/mapedit/edhex.tgt: Made ASC compilable for
-	DOS again :-) Merged all the bug fixes in that I did last week
+	sg.cpp, sg.wpj, spfst.cpp, typen.cpp, typen.h, vesa.cpp: Made ASC
+	compilable for DOS again :-) Merged all the bug fixes in that I did
+	last week
 
 1999-11-16 04:43  tmwilson
 
@@ -1940,7 +2275,6 @@
 	source/timer.h, source/tpascal.inc, source/tsm.bat,
 	source/typen.cpp, source/typen.h, source/vesa.cpp, source/vesa.h,
 	source/view.cpp, source/weather.cpp, source/weather.h,
-	source/hexagon/asc.tgt, source/hexagon/mapedit/edhex.tgt,
 	source/libs/bzlib/blocksort.c, source/libs/bzlib/bzip2.1,
 	source/libs/bzlib/bzip2.1.preformatted, source/libs/bzlib/bzip2.c,
 	source/libs/bzlib/CHANGES, source/libs/bzlib/bzip2.txt,
@@ -2132,7 +2466,6 @@
 	source/timer.h, source/tpascal.inc, source/tsm.bat,
 	source/typen.cpp, source/typen.h, source/vesa.cpp, source/vesa.h,
 	source/view.cpp, source/weather.cpp, source/weather.h,
-	source/hexagon/asc.tgt, source/hexagon/mapedit/edhex.tgt,
 	source/libs/bzlib/blocksort.c, source/libs/bzlib/bzip2.1,
 	source/libs/bzlib/bzip2.1.preformatted, source/libs/bzlib/bzip2.c,
 	source/libs/bzlib/CHANGES, source/libs/bzlib/bzip2.txt,

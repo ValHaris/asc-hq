@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.81 2000-10-26 18:14:55 mbickel Exp $
+//     $Id: controls.cpp,v 1.82 2000-10-31 10:42:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.81  2000/10/26 18:14:55  mbickel
+//      AI moves damaged units to repair
+//      tmap is not memory layout sensitive any more
+//
 //     Revision 1.80  2000/10/18 14:13:53  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -2367,6 +2371,9 @@ void         tdashboard :: paintlweaponinfo ( void )
 void         tdashboard :: paintlargeweaponinfo ( void )
 {
    int i = 0;
+   for ( int lw = 0; lw < 16; lw++ )
+      largeWeaponsDisplayPos[lw] = -1;
+
    int serv = -1;
    pvehicletype vt;
    if ( vehicle )
@@ -2435,6 +2442,7 @@ void         tdashboard :: paintlargeweaponinfo ( void )
                                maxstrength, minstrength, 
                                vt->weapons->weapon[j].maxdistance, vt->weapons->weapon[j].mindistance,
                                vt->weapons->weapon[j].sourceheight, vt->weapons->weapon[j].targ );
+                largeWeaponsDisplayPos[i] = j;
                 i++; 
              } 
           }
@@ -2443,20 +2451,24 @@ void         tdashboard :: paintlargeweaponinfo ( void )
           paintlargeweapon(i, cwaffentypen[ cwservicen ], -1, -1, -1, -1, -1, -1, 
                          vt->weapons->weapon[serv].maxdistance, vt->weapons->weapon[serv].mindistance,
                          vt->weapons->weapon[serv].sourceheight, vt->weapons->weapon[serv].targ );
+          largeWeaponsDisplayPos[i] = serv;
           i++; 
        }
        if ( vt->tank.energy ) {
           paintlargeweapon(i, resourceNames[ 0 ], ( vehicle ? vehicle->tank.energy : vt->tank.energy ), vt->tank.energy, -1, -1, -1, -1, -1, -1, -1, -1 );
-          i++; 
+          largeWeaponsDisplayPos[i] = -1;
+          i++;
        } 
 
        if ( (serv>= 0 || (funcs & cfmaterialref)) && vt->tank.material ) {
           paintlargeweapon(i, resourceNames[ 1 ], ( vehicle ? vehicle->tank.material : vt->tank.material ), vt->tank.material, -1, -1, -1, -1, -1, -1, -1, -1 );
-          i++; 
+          largeWeaponsDisplayPos[i] = -1;
+          i++;
        } 
        if ( (serv>= 0 || (funcs & cffuelref)) && vt->tank.fuel ) {
           paintlargeweapon(i, resourceNames[ 2 ], ( vehicle ? vehicle->tank.fuel : vt->tank.fuel ), vt->tank.fuel, -1, -1, -1, -1, -1, -1, -1, -1 );
-          i++; 
+          largeWeaponsDisplayPos[i] = -1;
+          i++;
        } 
        
       {
@@ -2499,13 +2511,10 @@ void         tdashboard :: paintlargeweaponinfo ( void )
          for ( int j = 0; j < vt->weapons->count ; j++) {
             int x = (agmp->resolutionx - 640) / 2;
             int y = 150 + 28 + (j - serv) * 14;
-            if ( vt->weapons->weapon[j].getScalarWeaponType() >= 0) 
-               if ( vt->weapons->weapon[j].shootable() ) 
-                  if ( mouseinrect ( x, y, x + 640, y+ 14 ))
-                     topaint = j; // + serv;
-            if ( vt->weapons->weapon[j].service() )
-               serv++;
-            
+            if ( mouseinrect ( x, y, x + 640, y+ 14 ))
+               if ( largeWeaponsDisplayPos[j] != -1 )
+                  topaint = largeWeaponsDisplayPos[j];
+
          }
          if ( topaint != lastpainted ) {
             if ( topaint == -1 )
@@ -6121,6 +6130,19 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writedata2 ( pos );
          stream->writedata2 ( amnt );
       }
+      if ( action == rpl_bldrefuel ) {
+         int x =  va_arg ( paramlist, int );
+         int y =  va_arg ( paramlist, int );
+         int pos = va_arg ( paramlist, int );
+         int amnt = va_arg ( paramlist, int );
+         stream->writedata2 ( action );
+         int size = 4;
+         stream->writedata2 ( size );
+         stream->writedata2 ( x );
+         stream->writedata2 ( y );
+         stream->writedata2 ( pos );
+         stream->writedata2 ( amnt );
+      }
 
       va_end ( paramlist );
 
@@ -6715,6 +6737,25 @@ void trunreplay :: execnextreplaymove ( void )
                                      }
                                  } else 
                                     displaymessage("severe replay inconsistency:\nno vehicle for refuel-unit command !", 1);
+                              }
+         break;
+      case rpl_bldrefuel : {
+                                 int x, y, size, pos, amnt;
+                                 stream->readdata2 ( size );
+                                 stream->readdata2 ( x );
+                                 stream->readdata2 ( y );
+                                 stream->readdata2 ( pos );
+                                 stream->readdata2 ( amnt );
+                                 readnextaction();
+
+                                 pbuilding bld = actmap->getField(x,y)->building;
+                                 if ( bld ) {
+                                    if ( pos < 16 )
+                                        bld->munition[pos] = amnt;
+                                     else
+                                        bld->getResource ( pos-1000, amnt, 0 );
+                                 } else
+                                    displaymessage("severe replay inconsistency:\nno building for refuel-unit command !", 1);
                               }
          break;
       default:{

@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.62 2000-10-26 18:55:30 mbickel Exp $
+//     $Id: typen.h,v 1.63 2000-10-31 10:42:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2000/10/26 18:55:30  mbickel
+//      Fixed crash when editing the properties of a vehicle inside a building
+//      Added mapeditorFullscreen switch to asc.ini
+//
 //     Revision 1.61  2000/10/26 18:15:04  mbickel
 //      AI moves damaged units to repair
 //      tmap is not memory layout sensitive any more
@@ -1701,7 +1705,7 @@ extern  const char*  choehenstufen[8] ;
  #define cwammunitionb ( 1 << cwammunitionn )
  #define cwservicen 8  
  #define cwserviceb ( 1 << cwservicen )
- extern const int cwaffenproduktionskosten[cwaffentypennum][3];  /*  Angabe: Waffentyp; energy - Material - Sprit ; jeweils fuer 5er Pack */  
+ extern const int cwaffenproduktionskosten[cwaffentypennum][3];  /*  Angabe: Waffentyp; energy - Material - Sprit ; jeweils fuer 5er Pack */
 
 
 

@@ -1,6 +1,10 @@
-//     $Id: controls.h,v 1.29 2000-10-18 14:13:57 mbickel Exp $
+//     $Id: controls.h,v 1.30 2000-10-31 10:42:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/10/18 14:13:57  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.28  2000/10/11 14:26:25  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -172,6 +176,7 @@
 
                        void         allocmem ( void );
                     protected:
+                       int          largeWeaponsDisplayPos[16];
                        void*        fuelbkgr;
                        int          fuelbkgrread;
                        void*        imagebkgr;
@@ -421,7 +426,7 @@ extern void addanytechnology ( ptechnology tech, int player );
 enum trpl_actions { rpl_attack, rpl_move, rpl_changeheight, rpl_convert, rpl_remobj, rpl_buildobj, rpl_putbuilding, 
                     rpl_removebuilding, rpl_putmine, rpl_removemine, rpl_produceunit, rpl_removeunit, rpl_trainunit, 
                     rpl_reactionfire, rpl_finished, rpl_shareviewchange, rpl_alliancechange, rpl_move2, rpl_buildtnk,
-                    rpl_refuel }; 
+                    rpl_refuel, rpl_bldrefuel };
 
 
 extern void logtoreplayinfo ( trpl_actions action, ... );

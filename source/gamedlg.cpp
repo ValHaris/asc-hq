@@ -1,6 +1,10 @@
-//     $Id: gamedlg.cpp,v 1.49 2000-10-18 14:14:09 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.50 2000-10-31 10:42:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2000/10/18 14:14:09  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.48  2000/10/14 14:16:05  mbickel
 //      Cleaned up includes
 //      Added mapeditor to win32 watcom project
@@ -6826,7 +6830,7 @@ void         tverlademunition::run(void)
       return;
    }
 
-   y1 = 75 + (8 - target->service.size()) * 25 / 2 - 20;
+   y1 = 160 - 13*target->service.size();
    ysize = 480 - 2 * y1; 
 
    int i;

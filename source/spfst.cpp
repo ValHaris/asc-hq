@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.68 2000-10-26 18:15:01 mbickel Exp $
+//     $Id: spfst.cpp,v 1.69 2000-10-31 10:42:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.68  2000/10/26 18:15:01  mbickel
+//      AI moves damaged units to repair
+//      tmap is not memory layout sensitive any more
+//
 //     Revision 1.67  2000/10/18 17:09:41  mbickel
 //      Fixed eventhandling for DOS
 //
@@ -1999,30 +2003,6 @@ end;  */
 
 
 
-
-
-
-void tmap :: cleartemps( int b, int value )
-{ 
-  if ( xsize <= 0 || ysize <= 0)  
-     return;
-
-  int l = 0; 
-  for ( int x = 0; x < actmap->xsize ; x++) 
-     for ( int y = 0; y <  actmap->ysize ; y++) {
-
-         if (b & 1 ) 
-           field[l].a.temp = value;
-         if (b & 2 ) 
-           field[l].a.temp2 = value;
-         if (b & 4 ) 
-           field[l].temp3 = value;
-         if (b & 8 ) 
-           field[l].temp4 = value;
-
-         l++;
-     } 
-} 
 
 
 void         clearfahrspuren(void)

@@ -1,6 +1,10 @@
-//     $Id: unitctrl.h,v 1.14 2000-10-11 15:33:48 mbickel Exp $
+//     $Id: unitctrl.h,v 1.15 2000-10-31 10:42:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/10/11 15:33:48  mbickel
+//      Adjusted small editors to the new ASC structure
+//      Watcom compatibility
+//
 //     Revision 1.13  2000/10/11 14:26:53  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -395,15 +399,20 @@ class VehicleAttack : public VehicleAction {
 
 class VehicleService : public VehicleAction {
               pvehicle vehicle;
+              pbuilding building;
               int status;
 
               class FieldSearch : public tsearchfields {
                      VehicleService& vs;
-                     pvehicle         veh;
+                     pvehicle        veh;
+                     pbuilding       bld;
                   public:
                      virtual void     testfield ( void );
+                     void             checkVehicle2Vehicle ( pvehicle veh );
+                     void             checkBuilding2Vehicle ( pvehicle veh );
                      void             initrefuelling( int xp1, int yp1 );
-                     void run ( pvehicle _veh );
+                     void             startsuche ( void );
+                     void run ( pvehicle _veh, pbuilding _bld );
                      FieldSearch ( VehicleService& _vs ) : vs ( _vs ) {};
                   } fieldSearch;
 
@@ -412,6 +421,7 @@ class VehicleService : public VehicleAction {
               MapDisplayInterface* mapDisplay;
            public:
               pvehicle getVehicle ( void ) { return vehicle; };
+              pbuilding getBuilding ( void ) { return building; };
 
               enum Service { srv_repair, srv_resource, srv_ammo };
               class Target {

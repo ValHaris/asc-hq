@@ -211,6 +211,7 @@ class  Building : public ContainerBase {
     pfield getEntryField ( );
     MapCoordinate getEntry ( );
     void  getFieldCoordinates( int x, int y, int &xx, int &yy);
+    void produceAmmo ( int type, int num );
 
     void resetPicturePointers ( void );
 

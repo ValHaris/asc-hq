@@ -15,7 +15,21 @@
  *                                                                         *
  ***************************************************************************/
 
- #include "typen.h"
+#include "global.h"
+#include "misc.h"
+#include "typen.h"
+
+#ifndef converter
+#include "spfst.h"
+#endif
+
+#ifdef sgmain
+ #include "network.h"
+ #include "gameoptions.h"
+#endif
+
+#include "vehicletype.h"
+#include "buildingtype.h"
 
 
 tmap :: tmap ( void )
@@ -335,6 +349,277 @@ void tmap :: write ( tnstream& stream )
    for ( i = 0; i < 8; i++ )
        stream.writeInt( _oldgameparameter[i] );
 }
+
+
+void tmap :: cleartemps( int b, int value )
+{
+  if ( xsize <= 0 || ysize <= 0)
+     return;
+
+  int l = 0;
+  for ( int x = 0; x < actmap->xsize ; x++)
+     for ( int y = 0; y <  actmap->ysize ; y++) {
+
+         if (b & 1 )
+           field[l].a.temp = value;
+         if (b & 2 )
+           field[l].a.temp2 = value;
+         if (b & 4 )
+           field[l].temp3 = value;
+         if (b & 8 )
+           field[l].temp4 = value;
+
+         l++;
+     }
+}
+
+
+
+#ifndef converter
+void tmap :: calculateAllObjects ( void )
+{
+   calculateallobjects();
+}
+#else
+void tmap :: calculateAllObjects ( void )
+{
+}
+#endif
+
+pfield  tmap :: getField(int x, int y)
+{
+   if ((x < 0) || (y < 0) || (x >= xsize) || (y >= ysize))
+      return NULL;
+   else
+      return (   &field[y * xsize + x] );
+}
+
+int tmap :: isResourceGlobal ( int resource )
+{
+   if ( resource != 1 && !(resource == 2 && getgameparameter(cgp_globalfuel)==0)  &&   _resourcemode == 1 )
+      return 1;
+   else
+      return 0;
+}
+
+int tmap :: getgameparameter ( int num )
+{
+  if ( game_parameter && num < gameparameter_num ) {
+
+     if ( num == cgp_maxminesonfield )
+        if ( game_parameter[num] > maxminesonfield )
+           return maxminesonfield;
+
+     return game_parameter[num];
+  } else
+     if ( num < gameparameternum )
+        return gameparameterdefault[ num ];
+     else
+        return 0;
+}
+
+void tmap :: setgameparameter ( int num, int value )
+{
+   if ( game_parameter ) {
+     if ( num < gameparameter_num )
+        game_parameter[num] = value;
+     else {
+        int* oldparam = game_parameter;
+        game_parameter = new int[num+1];
+        for ( int i = 0; i < gameparameter_num; i++ )
+           game_parameter[i] = oldparam[i];
+        for ( int j = gameparameter_num; j < num; j++ )
+           if ( j < gameparameternum )
+              game_parameter[j] = gameparameterdefault[j];
+           else
+              game_parameter[j] = 0;
+        game_parameter[num] = value;
+        gameparameter_num = num + 1;
+        delete[] oldparam;
+     }
+   } else {
+       game_parameter = new int[num+1];
+       for ( int j = 0; j < num; j++ )
+          if ( j < gameparameternum )
+             game_parameter[j] = gameparameterdefault[j];
+          else
+             game_parameter[j] = 0;
+       game_parameter[num] = value;
+       gameparameter_num = num + 1;
+   }
+}
+
+void tmap :: setupResources ( void )
+{
+  #ifndef converter
+   for ( int n = 0; n< 8; n++ ) {
+      actmap->bi_resource[n].energy = 0;
+      actmap->bi_resource[n].material = 0;
+      actmap->bi_resource[n].fuel = 0;
+
+     #ifdef sgmain
+
+      for ( pbuilding bld = actmap->player[n].firstbuilding; bld ; bld = bld->next )
+         for ( int r = 0; r < 3; r++ )
+            if ( actmap->isResourceGlobal( r )) {
+               actmap->bi_resource[n].resource(r) += bld->actstorage.resource(r);
+               bld->actstorage.resource(r) = 0;
+            }
+     #endif
+   }
+  #endif
+}
+
+void tmap :: chainunit ( pvehicle eht )
+{
+   if ( eht ) {
+      eht->next = player[ eht->color / 8 ].firstvehicle;
+      if ( eht->next )
+         eht->next->prev = eht;
+      eht->prev = NULL;
+      player[ eht->color / 8 ].firstvehicle = eht;
+      if ( eht->typ->loadcapacity > 0)
+         for ( int i = 0; i <= 31; i++)
+            if ( eht->loading[i] )
+               chainunit ( eht->loading[i] );
+   }
+}
+
+void tmap :: chainbuilding ( pbuilding bld )
+{
+   if ( bld ) {
+      bld->next = player[ bld->color / 8 ].firstbuilding;
+      if ( bld->next )
+         bld->next->prev = bld;
+      bld->prev = NULL;
+      player[ bld->color / 8 ].firstbuilding = bld;
+   }
+}
+
+const char* tmap :: getPlayerName ( int playernum )
+{
+   if ( playernum >= 8 )
+      playernum /= 8;
+
+   switch ( player[playernum].stat ) {
+      case 0: return humanplayername[playernum];
+      case 1: return computerplayername[playernum];
+      default: return "off";
+   } /* endswitch */
+}
+
+
+
+int tmap :: eventpassed( int saveas, int action, int mapid )
+{
+   return eventpassed ( (action << 16) | saveas, mapid );
+}
+
+
+
+int tmap :: eventpassed( int id, int mapid )
+{
+  pevent       ev2;
+  peventstore  oldevent;
+  char      b;
+  word         i;
+
+   b = false;
+   if ( !mapid ) {
+      ev2 = firsteventpassed;
+      while (ev2 != NULL) {
+         if (ev2->id == id)
+            return 1;
+         ev2 = ev2->next;
+      }
+   }
+
+   if (b == false) {
+      oldevent = oldevents;
+      while ( oldevent ) {
+         if (oldevent->num > 0)
+            for (i = 0; i < oldevent->num ; i++)
+               if (oldevent->eventid[i] == id && oldevent->mapid[i] == mapid )
+                  return 1;
+      }
+   }
+   return 0;
+}
+
+
+pvehicle tmap :: getUnit ( pvehicle eht, int nwid )
+{
+   if ( !eht )
+      return NULL;
+   else {
+      if ( eht->networkid == nwid )
+         return eht;
+      else
+         for ( int i = 0; i < 32; i++ )
+            if ( eht->loading[i] )
+               if ( eht->loading[i]->networkid == nwid )
+                  return eht->loading[i];
+               else {
+                  pvehicle ld = getUnit ( eht->loading[i], nwid );
+                  if ( ld )
+                     return ld;
+               }
+      return NULL;
+   }
+}
+
+pvehicle tmap :: getUnit ( int nwid )
+{
+   for ( int i = 0; i < 9; i++ ) {
+      pvehicle veh = player[i].firstvehicle;
+      while ( veh ) {
+         if ( veh->networkid == nwid )
+            return veh;
+         veh = veh->next;
+      };
+   }
+   return NULL;
+}
+
+
+pvehicle tmap :: getUnit ( int x, int y, int nwid )
+{
+  #ifndef converter
+   pfield fld  = getfield ( x, y );
+   if ( !fld )
+      return NULL;
+
+   if ( !fld->vehicle )
+      if ( fld->building ) {
+         for ( int i = 0; i < 32; i++ ) {
+            pvehicle ld = getUnit ( fld->building->loading[i], nwid );
+            if ( ld )
+               return ld;
+         }
+         return NULL;
+      } else
+         return NULL;
+   else
+      if ( fld->vehicle->networkid == nwid )
+         return fld->vehicle;
+      else
+         return getUnit ( fld->vehicle, nwid );
+ #else
+  return NULL;
+ #endif
+}
+
+
+
+pvehicletype tmap :: getVehicleType_byId ( int id )
+{
+   #ifdef converter
+   return NULL;
+   #else
+   return getvehicletype_forid ( id, 0 );
+   #endif
+}
+
 
 
 tmap :: ~tmap ()

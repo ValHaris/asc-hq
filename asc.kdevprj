@@ -25,11 +25,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=/home/martin/asc/source/artint.h,/home/martin/asc/source/artint.cpp,/home/martin/asc/source/vehicletype.h,/home/martin/asc/source/spfst.h,/home/martin/asc/source/spfst.cpp,/home/martin/asc/source/buildingtype.h,/home/martin/asc/source/astar2.h,/home/martin/asc/source/containerbase.h,/home/martin/asc/source/viewcalculation.h,/home/martin/asc/source/buildingtype.cpp,/home/martin/asc/source/unitctrl.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/controls.cpp,/home/martin/asc/source/controls.h,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/artint.h
-cpp_file=/home/martin/asc/source/artint.cpp
+header_file=/home/martin/asc/source/controls.h
+cpp_file=/home/martin/asc/source/controls.cpp
 browser_file=file:/opt/kde/share/doc/HTML/default/kdevelop/reference/C/cref.html
 [source/gui.h]
 install_location=

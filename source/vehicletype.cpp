@@ -800,7 +800,7 @@ void Vehicle :: init ( void )
 
 bool Vehicle :: canRepair( void )
 {
-   return functions & cfrepair;
+   return (functions & cfrepair) || typ->autorepairrate ;
 }
 
 int Vehicle :: putResource ( int amount, int resourcetype, int queryonly, int scope )
@@ -1039,7 +1039,7 @@ void Vehicle :: endTurn( void )
 {
    if ( typ->autorepairrate > 0 )
       if ( damage )
-         repairItem ( this, typ->autorepairrate );
+         repairItem ( this, max ( damage - typ->autorepairrate, 0 ) );
 
    reactionfire.endTurn();
 
