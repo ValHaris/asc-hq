@@ -1,6 +1,9 @@
-//     $Id: strtmesg.cpp,v 1.8 2000-04-17 16:27:23 mbickel Exp $
+//     $Id: strtmesg.cpp,v 1.9 2000-04-17 18:30:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/04/17 16:27:23  mbickel
+//      Optimized vehicle movement for SDL version
+//
 //     Revision 1.7  2000/04/06 09:07:48  mbickel
 //      Fixed a bug in the mapeditor that prevented transports from being loaded
 //
@@ -48,7 +51,7 @@
 
 
 // These strings should be the same as the release tags in CVS !
-const char* asc_release="ASC1.0.5";
+const char* asc_release="ASC1.0.5b";
 
 #include <stdio.h>
 

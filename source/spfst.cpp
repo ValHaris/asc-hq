@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.22 2000-04-17 16:27:22 mbickel Exp $
+//     $Id: spfst.cpp,v 1.23 2000-04-17 18:30:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/04/17 16:27:22  mbickel
+//      Optimized vehicle movement for SDL version
+//
 //     Revision 1.21  2000/04/03 09:52:16  mbickel
 //      Fixed crash in mine strength calculation
 //
@@ -3454,6 +3457,10 @@ tgeneraldisplaymapbase :: tgeneraldisplaymapbase ( void )
 
 int tgeneraldisplaymap :: getfieldposx ( int x, int y )
 {
+     if ( x < 0 )
+        x = 0;
+
+
      if ( y & 1 )   /*  gerade reihennummern  */
         return scrleftspace + fielddisthalfx + x * fielddistx + cursorrightshift;
      else 
@@ -3463,6 +3470,8 @@ int tgeneraldisplaymap :: getfieldposx ( int x, int y )
 
 int tgeneraldisplaymap :: getfieldposy ( int x, int y )
 {
+     if ( y < 0 )
+        y = 0;
      return scrtopspace  + y * fielddisty + cursordownshift;
 }
 
@@ -4141,6 +4150,9 @@ void tgeneraldisplaymap :: setnewsize ( int _zoom )
 
 int tdisplaymap :: getfieldposx ( int x, int y )
 {
+     if ( x < 0 )
+        x = 0;
+
      if ( y & 1 )   /*  gerade reihennummern  */
         return windowx1 + (fielddisthalfx + x * fielddistx ) * zoom / 100;
      else 
@@ -4150,6 +4162,8 @@ int tdisplaymap :: getfieldposx ( int x, int y )
 
 int tdisplaymap :: getfieldposy ( int x, int y )
 {
+     if ( y < 0 )
+        y = 0;
      return windowy1  + (y * fielddisty) * zoom / 100;
 }
 
@@ -4425,7 +4439,7 @@ void tdisplaymap :: cp_buf ( int x1, int y1, int x2, int y2 )
        parm.dstdif = hgmp->bytesperscanline - window.xsize;
        parm.vfbsteps = copybufstepwidth;
 
-       copyvfb2displaymemory_zoom ( &parm.src );
+       copyvfb2displaymemory_zoom ( &parm.src, getfieldposx ( x1-1, y1-1), getfieldposy( x1-1, y1-1 ), getfieldposx ( x2, y2) + getfieldsizex(), getfieldposy( x2, y2 ) + getfieldsizex());
 }
 
 #endif
@@ -4822,6 +4836,8 @@ struct tfieldlist {
                       int y[6];
                       int minx, maxx;
                       int miny, maxy;
+                      // int minxp, maxxp;
+                      // int minyp, maxyp;
                       int visible;
                    };
 
