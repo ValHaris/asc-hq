@@ -1108,6 +1108,39 @@ void         tdashboard::paintsmallmap ( int repaint )
 
 void         tdashboard::checkformouse ( int func )
 {
+    if ( vehicle ) {
+       // tmouserect experience = { 0,0,0,0};
+       tmouserect experience = { agmp->resolutionx - ( 640 - 587), 27, agmp->resolutionx - ( 640 - 587) + 25, 27 + 24 };
+
+       if ( mouseinrect ( &experience ) && mouseparams.taste != 0 ) {
+          int xnum = 4;
+          int ynum = 6;
+          int xwidth;
+          int ywidth;
+          getpicsize ( icons.experience[0], xwidth, ywidth );
+          tmouserect r = { experience.x2 - xnum*(xwidth+2)-2, experience.y1, experience.x2, experience.y1 + (ywidth+2)*ynum+2 };
+          void* p = asc_malloc ( imagesize ( r.x1, r.y1, r.x2, r.y2 ));
+          getimage  ( r.x1, r.y1, r.x2, r.y2, p );
+          rahmen ( r.x1, r.y1, r.x2, r.y2, true );
+          bar ( r.x1, r.y1, r.x2, r.y2, 171 );
+          for ( int x = 0; x < xnum; x++ )
+             for ( int y = 0; y < ynum; y++ )
+                 if ( y*xnum+x <= maxunitexperience ) {
+                    void* q;
+                    if ( vehicle->experience != y*xnum+x )
+                       q = xlatpict ( xlatpictgraytable, icons.experience[y*xnum+x] );
+                    else
+                       q = icons.experience[y*xnum+x];
+
+                    putimage( r.x1 +1 + (2 + xwidth)*x, r.y1 + 1 + (2 + ywidth)*y, q );
+                }
+
+          while ( mouseinrect ( &r ) && mouseparams.taste != 0 )
+             releasetimeslice();
+          putimage ( r.x1, r.y1, p );
+          asc_free ( p );
+       }
+    }
 
     if ( mouseinrect ( agmp->resolutionx - ( 800 - 612), 213, agmp->resolutionx - ( 800 - 781), 305 ) && (mouseparams.taste == 2)) {
        CGameOptions::Instance()->smallmapactive = !CGameOptions::Instance()->smallmapactive;

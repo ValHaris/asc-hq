@@ -36,7 +36,7 @@ MAKEGFX is:<BR>
 The source images must be in PCX format and must either be 24 bit images or 8 bit images. MAKEGFX does not perform any 
 color palette adaption, so 8 bit images must already have the ASC palette. In general, 24 bit images should be preferred 
 because some future ASC version may run with 24 bit graphics. Since it is not possible to store transparency information in
-PCX images, the color 0xFEFEFE ( red : 254 , green : 254 , blue 254 ). This is just a quick hack and will be removed when 
+PCX images, the color 0xFEFEFE ( red : 254 , green : 254 , blue 254 ) will be treated as being transparent. This is just a quick hack and will be removed when 
 the graphics engine of ASC will be rewritten.<P>
 But 8 bit images are required for buildings, since the owner of buildings affects a certain range of color indices:
 The colors 16 - 23 (red colortone) will be shifted depending on the player who owns the building. For the second player 
@@ -44,7 +44,7 @@ these colors will be shifted to 24 - 31 and so on. The color #255 is transparent
 ASC does not perform any palette transformation for 8 bit images, so ensure that your images use the standard ASC palette.<P>
 
 MAKEGFX accepts wildcards as parameter: To build the standard graphics set, you can simply type:<BR>
-<CODE>MAKEGFX asc.gfx graphics/terrain/actual/*.pcx</CODE><P>.
+<CODE>MAKEGFX asc.gfx graphics/terrain/actual/*.pcx</CODE>.<P>
 The filenames of the source images must reflect the position which they should occupy: The image that should be used on 
 position #354 must be called <TT>354.PCX</TT>.<P>
 

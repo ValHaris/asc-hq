@@ -204,8 +204,8 @@ void loadbi3graphics( void )
                s.readrlepict ( &p, false, &o );
                gs->pic[i] = p;
                gs->picmode[i] = picmode[i];
-   #ifdef genimg
-               if ( gs->id == 0 ) {
+#ifdef genimg
+               if ( gs->id == 1 ) {
                   if ( picmode[i] < 256 ) {
                      tvirtualdisplay vdp ( 100, 100, 255 );
                      /*
@@ -218,7 +218,7 @@ void loadbi3graphics( void )
 
                      putmask ( 10, 10, mask, 0 );
 
-                     ASCString fn = "13/";
+                     ASCString fn = "15/";
                      fn+=strrr(i);
                      fn+=".pcx";
                      writepcx ( fn.c_str(), 10, 10, 10+fieldsizex-1, 10+fieldsizey-1, pal );

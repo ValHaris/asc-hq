@@ -37,11 +37,12 @@ extern void initializeEventHandling ( int (*fn)(void *) , void *data, void* mous
  ***************************************************************************/
 
 
-class tmouserect {
-     public:
+struct tmouserect {
        int x1, y1;
        int x2, y2;
        tmouserect operator+ ( const tmouserect& b ) const;
+//       tmouserect ( int _x1, int _y1, int _x2, int _y2 ) : x1(_x1), y1(_y1), x2(_x2), y2(_y2 ) {};
+//       tmouserect(){ x1=0;y1=0;x2=0;y2=0;};
 };
 
 extern void mousevisible( int an );
@@ -66,7 +67,8 @@ extern int mouseinrect ( int x1, int y1, int x2, int y2 );
 
 extern int mouseinrect ( const tmouserect* rect );
 
-struct tmousesettings {
+class tmousesettings {
+  public:
    int x;
    int y;
    int x1;
@@ -83,6 +85,12 @@ struct tmousesettings {
    int hotspotx;
    int hotspoty;
    int backgroundsize;
+   tmousesettings ( ) { x=0;y=0;x1=0;y1=0;altx=0;alty=0;
+                        background=NULL;pictpointer=NULL;
+                        xsize=0;ysize=0;taste=0;status=0;
+                        hotspotx=0;hotspoty=0;backgroundsize=0;
+                        off.x1=0;off.y1=0;off.x2=0;off.y2=0;
+                      };
 };
 
 

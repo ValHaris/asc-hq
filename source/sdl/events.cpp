@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.31 2001-05-24 15:37:51 mbickel Exp $
+//     $Id: events.cpp,v 1.32 2001-06-25 15:36:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2001/05/24 15:37:51  mbickel
+//      Fixed: reaction fire could not be disabled when unit out of ammo
+//      Fixed several AI problems
+//
 //     Revision 1.30  2001/05/19 13:07:58  mbickel
 //      ASC now compiles with Borland C++ Builder again
 //      Added getopt for use with BCB
@@ -173,7 +177,7 @@
 */
 
 
-volatile tmousesettings mouseparams = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0,0,0,0}, 0, 0, 0 };
+volatile tmousesettings mouseparams;
 
 SDL_mutex* keyboardmutex = NULL;
 
