@@ -156,6 +156,10 @@
     //! weight of all loaded units
     int cargo ( void ) const;
 
+    //! returns the units name or, if it does not exist, the unit type's name or description
+    const ASCString&    getName() const;
+
+
   protected:
     /** should not be called except from freeweight
         \param what: 0=cargo ; 1=material/fuel

@@ -2,9 +2,12 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.115 2002-11-24 10:54:19 mbickel Exp $
+//     $Id: spfst.cpp,v 1.116 2002-12-15 23:54:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.115  2002/11/24 10:54:19  mbickel
+//      made field allocation more robust
+//
 //     Revision 1.114  2002/11/17 11:43:23  mbickel
 //      Fixed replay errors when replaying the AI moves
 //
@@ -1163,18 +1166,27 @@ void  checkunitsforremoval ( void )
           pfield field = getfield(eht->xpos,eht->ypos);
           bool erase = false;
 
+          ASCString reason;
           if (field->vehicle == eht) {
              if ( eht->height <= chfahrend )
-                if ( eht->typ->terrainaccess.accessible ( field->bdt ) < 0 )
+                if ( eht->typ->terrainaccess.accessible ( field->bdt ) < 0 ) {
                    erase = true;
+                   reason = "was swallowed by the ground";
+                }
              if ( eht )
-                if ( getmaxwindspeedforunit( eht ) < actmap->weather.wind[getwindheightforunit ( eht )].speed*maxwindspeed )
+                if ( getmaxwindspeedforunit( eht ) < actmap->weather.wind[getwindheightforunit ( eht )].speed*maxwindspeed ) {
+                   reason = "was blown away by the wind";
                    erase = true;
+                }
           }
           if ( erase ) {
+             ASCString ident = "The unit " + (*i)->getName() + " at position ("+strrr((*i)->getPosition().x)+"/"+strrr((*i)->getPosition().y)+") ";
+             new Message ( ident+reason, actmap, 1<<(*i)->getOwner());
              Vehicle* pv = *i;
              actmap->player[c].vehicleList.erase ( i );
              delete pv;
+
+
 
              /* if the unit was a transport and had other units loaded, these units have been deleted as well.
                 We don't know which elements of the container are still valid, so we start from the beginning again. */
@@ -1206,7 +1218,7 @@ int  getmaxwindspeedforunit ( const pvehicle eht )
       if (eht->height >= chtieffliegend && eht->height <= chhochfliegend ) //    || ((eht->height == chfahrend) && ( field->typ->art & cbwater ))) ) 
          return eht->typ->movement[log2(eht->height)] * 256 ;
 
-      if ( (field->bdt & getTerrainBitType(cbfestland)).none() )
+      if ( (field->bdt & getTerrainBitType(cbfestland)).none() && eht->height <= chfahrend && eht->height >= chschwimmend )
          return eht->typ->maxwindspeedonwater * maxwindspeed;
    }
    return maxint;

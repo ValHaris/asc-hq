@@ -3,9 +3,14 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.146 2002-12-12 20:36:05 mbickel Exp $
+//     $Id: controls.cpp,v 1.147 2002-12-15 23:54:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.146  2002/12/12 20:36:05  mbickel
+//      Updated documentation
+//      Fixed: hotkey for gui icons not allways working
+//      Fixed: objects in fog of war were always displayed for normal weather
+//
 //     Revision 1.145  2002/12/12 11:34:17  mbickel
 //      Fixed: ai crashing when weapon has no ammo
 //      Fixed: ASC crashed when loading game with ID not found
@@ -2900,6 +2905,8 @@ void endTurn ( void )
 
          if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
             if ( getmaxwindspeedforunit ( actvehicle ) < actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed*maxwindspeed ){
+               ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x)+"/"+strrr((*v)->getPosition().y)+") crashed because of the strong wind";
+               new Message ( ident, actmap, 1<<(*v)->getOwner());
                toRemove.push_back ( *v );
             } else {
 
@@ -2935,9 +2942,12 @@ void endTurn ( void )
               //
 
 
-               if (j < 0)
+               if (j < 0) {
+                   ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x)+"/"+strrr((*v)->getPosition().y)+") crashed due to lack of fuel";
+                   new Message ( ident, actmap, 1<<(*v)->getOwner());
+
                   toRemove.push_back ( *v );
-               else
+               } else
                   actvehicle->tank.fuel = j;
             }
          }

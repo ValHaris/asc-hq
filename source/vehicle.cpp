@@ -1513,6 +1513,15 @@ MapCoordinate3D Vehicle :: getPosition ( )
    return mc;
 }
 
+const ASCString&  Vehicle::getName() const
+{
+   if ( name.empty() )
+      return typ->getName();
+   else
+      return name;
+}
+
+
 Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream )
 {
    int id = stream.readWord ();
