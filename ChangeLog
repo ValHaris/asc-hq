@@ -1,3 +1,47 @@
+2003-07-06 17:13  mbickel
+
+	* source/unix/: Makefile.in, mapeditor/Makefile.in:  rerun boostrap
+
+2003-07-06 17:10  mbickel
+
+	* configure, configure.in, libtool, source/controls.cpp,
+	source/dialog.cpp, source/dialog.h, source/edglobal.cpp,
+	source/edmain.cpp, source/edmisc.cpp, source/map2pcx.cpp,
+	source/mapdisplay.cpp, source/mapdisplay.h, source/replay.cpp,
+	source/replay.h, source/sg.cpp, source/unix/Makefile.am,
+	source/unix/mapeditor/Makefile.am:  Better configure messages
+	 code cleanup
+	 Replays update resources for constructing / removing objects
+
+2003-07-06 15:16  mbickel
+
+	* data/asc003.map, data/evilisle.map, data/railstat.map,
+	source/missions.cpp, source/missions.h, source/strtmesg.cpp,
+	source/typen.h:  Updated maps
+
+2003-06-30 21:56  mbickel
+
+	* ChangeLog, source/typen.h:  Fixed compilation problems with GCC
+
+2003-06-29 22:39  mbickel
+
+	* source/: buildings.cpp, strtmesg.cpp:  Fixed: matter converter
+	not working when energy net full
+
+2003-06-29 19:52  mbickel
+
+	* source/: astar2.cpp, containerbase.cpp:  Fixed crash when moving
+	unit through enemy buildings
+
+2003-06-26 23:00  mbickel
+
+	* data/railstat.map, source/edmisc.cpp, source/gui.cpp,
+	source/memorycheck.cpp, source/missions.cpp, source/missions.h,
+	source/sg.cpp, source/strtmesg.cpp, source/typen.cpp,
+	source/typen.h, source/weather.cpp, source/weather.h,
+	source/win32/borland/mapeditor/mapeditor.bpr:  Fixed: land mines
+	could not be carried on bridges
+
 2003-06-22 20:08  mbickel
 
 	* source/strtmesg.cpp:	Updated version number
