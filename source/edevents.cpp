@@ -2,7 +2,7 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.38 2004-01-16 15:33:45 mbickel Exp $
+//     $Id: edevents.cpp,v 1.39 2004-01-25 19:44:16 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -555,7 +555,11 @@ tcreateevent :: tcreateevent( Event* ev )
       else
          invertTrigger[i] = 0;
 
-   triggerConnection = 0;
+   if ( event->triggerConnection == Event::OR )
+      triggerConnection = 1;
+   else
+      triggerConnection = 0;
+      
    tdialogbox::init();
    title = "New Event";
    x1 = 10;

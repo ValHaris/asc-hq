@@ -201,7 +201,8 @@ const char* AIjobs[AiParameter::jobNum] = { "undefined",
                        "conquer",
                        "build",
                        "recon",
-                       "guard" };
+                       "guard",
+                       "script" };
 
 const char* entranceModes[ContainerBaseType::TransportationIO::entranceModeNum]
                  = { "In",

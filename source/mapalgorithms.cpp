@@ -248,13 +248,14 @@ void         SearchFields::startsearch(void)
          for ( int e = 0; e < 6; e++ ) {
             int dir = (e + 2) % sidenum;
             for ( int c = 0; c < dist; c++) {
-               if ((mc.x >= 0) && (mc.y >= 0) && (mc.x < gamemap->xsize) && (mc.y < gamemap->ysize))
+               if ((mc.x >= 0) && (mc.y >= 0) && (mc.x < gamemap->xsize) && (mc.y < gamemap->ysize)) {
                   testfield( mc );
+                  if ( cancelSearch )
+                     return;
+               }
                getnextfield ( mc.x, mc.y, dir );
             }
 
-            if ( cancelSearch )
-               return;
          }
       }
 

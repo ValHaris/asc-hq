@@ -1,6 +1,24 @@
-//     $Id: typen.h,v 1.140 2004-01-16 15:33:48 mbickel Exp $
+//     $Id: typen.h,v 1.141 2004-01-25 19:44:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.140  2004/01/16 15:33:48  mbickel
+//     Completely rewritten game event system
+//     TPWM-decoding-Patch
+//     Fixed: swallog message: wrong coordinates
+//     Autotraining for units with max ammo only
+//     Movement required for clearing mines
+//     Unit names can be edited
+//     weather dependen object properties
+//     Unit swallowed by ground -> unified message
+//     units cannot enter enemy transports
+//     Building entry has constant movemalus
+//     Message for resource transfer for providing player
+//     increased ammo production cost
+//     Fixed: unit could attack after movement (with RF on) although "no attack after move" property was set
+//     Buildings: new properties: "ExternalResourceTransfer", "ExternalAmmoTransfer"
+//     Container: Movemalus override for unloading
+//     Startup map specified in ASC.INI
+//
 //     Revision 1.139  2003/12/27 22:34:35  mbickel
 //      Applied patch for improved AI building capturing (by Bernhard Oemer)
 //      Destructing buildings now gives 50% material back
@@ -366,7 +384,6 @@
 
 
 
-#pragma pack(1)
 
 
 //! A Ellipse that is used for highlighting elements of the screen during the tutorial
@@ -481,14 +498,6 @@ struct FieldQuickView {
 
 
 
-typedef struct teventstore* peventstore;
-struct teventstore {
-    int          num;
-    peventstore  next;
-    int      eventid[256];
-    int      mapid[256];
-};
-
 //! the time in ASC, measured in turns and moves
 struct GameTime {
   GameTime() { abstime = 0; };
@@ -602,26 +611,27 @@ void readContainer ( C& c, tnstream& stream  )
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
+#pragma pack(1)
 
 typedef struct tguiicon* pguiicon ;
-struct tguiicon { 
-  void*      picture[2]; 
-  char         txt[31]; 
-  unsigned char         id; 
+struct tguiicon {
+  void*      picture[2];
+  char         txt[31];
+  unsigned char         id;
   char         key[4];
-  word         realkey[4]; 
-  unsigned char         order; 
+  word         realkey[4];
+  unsigned char         order;
 };
 
 
-struct ticons { 
-   struct { 
-     void      *pfeil1, *pfeil2; 
-   } weapinfo; 
+struct ticons {
+   struct {
+     void      *pfeil1, *pfeil2;
+   } weapinfo;
    void*        statarmy[3];
    void*        height[8];      // fuer vehicleinfo - DLG-Box
    void*        height2[3][8];  // fuer vehicleinfo am map
-   void*        player[8];      // aktueller Spieler in der dashboard: FARBE.RAW 
+   void*        player[8];      // aktueller Spieler in der dashboard: FARBE.RAW
    void*        allianz[8][3];  // Allianzen in der dashboard: ALLIANC.RAW 
    void*        diplomaticstatus[8]; 
    void*        selectweapongui[13];
@@ -737,7 +747,7 @@ struct ticons {
           void*  mineralresources[2];
         } a;
      } lasche;
-   
+
      void* tabmark[2];
      void* container_window;
    } container;
@@ -756,11 +766,12 @@ struct ticons {
                void*     va8;
                void*     fog8;
     } view;  
-}; 
+};
 
 
 
 
+#pragma pack()
 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
@@ -781,7 +792,7 @@ enum VisibilityStates { visible_not, visible_ago, visible_now, visible_all };
 
 extern  const char*  choehenstufen[8] ;
  #define chtiefgetaucht 1  
- #define chgetaucht 2  
+ #define chgetaucht 2
  #define chschwimmend 4  
  #define chfahrend 8  
  #define chtieffliegend 16  
@@ -802,11 +813,11 @@ extern  const char*  choehenstufen[8] ;
  #define cwairmissileb ( 1 << cwairmissilen  )
  #define cwgroundmissilen 4  
  #define cwgroundmissileb ( 1 << cwgroundmissilen  )
- #define cwtorpedon 5  
+ #define cwtorpedon 5
  #define cwtorpedob ( 1 << cwtorpedon  )
  #define cwmachinegunn 6  
  #define cwmachinegunb ( 1 << cwmachinegunn )
- #define cwcannonn 7  
+ #define cwcannonn 7
  #define cwcannonb ( 1 << cwcannonn )
  #define cwweapon ( cwcruisemissileb | cwbombb | cwairmissileb | cwgroundmissileb | cwtorpedob | cwmachinegunb | cwcannonb | cwlaserb )
  #define cwshootablen 11  
@@ -931,7 +942,7 @@ const int submarineMovement = 11;
 
 
 #define lookintoenemytransports false  
-#define lookintoenemybuildings false  
+#define lookintoenemybuildings false
 
 #define recyclingoutput 2    /*  Material div RecyclingOutput  */
 #define destructoutput 5
@@ -1006,6 +1017,5 @@ extern const char* cgeneralnetcontrol[];
 
 #define greenbackgroundcol 156
 
-#pragma pack()
 
 #endif

@@ -3169,8 +3169,10 @@ ASCString  readtextmessage( int id )
 
 void         thelpsystem::setup( void )
 {
-   addbutton ( "e~x~it", 10, ysize - 30, xsize - 10, ysize - 10, 0, 1, 5, 1 );
+   addbutton ( "~O~K", 10, ysize - 30, xsize - 10, ysize - 10, 0, 1, 5, 1 );
    addkey ( 5, ct_esc );
+   addkey ( 5, ct_space );
+   addkey ( 5, ct_enter );
 }
 
 void         thelpsystem::init(int id, char* titlet )

@@ -2,9 +2,12 @@
     miscellaneous functions which are used by ASC and all its tools
 */
 
-//     $Id: misc.h,v 1.21 2001-12-19 17:16:29 mbickel Exp $
+//     $Id: misc.h,v 1.22 2004-01-25 19:44:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2001/12/19 17:16:29  mbickel
+//      Some include file cleanups
+//
 //     Revision 1.20  2001/12/19 11:46:35  mbickel
 //      Applied patches from Michael Moerz:
 //       - 64bit cleanup of demount.cpp, mount.cpp
@@ -130,7 +133,7 @@
    
    extern const char* digit[] ; 
    extern const char* letter[] ;
-   
+
    /** converts a to a string.
       \returns a pointer to a static array, which will be overwritten in the next call
     */
@@ -180,5 +183,4 @@
     #define asc_free   free
    #endif
 
-   #pragma pack()
 #endif

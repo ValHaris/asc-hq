@@ -28,8 +28,6 @@
  #include "buildingtype.h"
  #include "mapalgorithms.h"
 
- #pragma pack(1)
-
 //! An actual building on the map, which references a #BuildingType
 class  Building : public ContainerBase {
     MapCoordinate entryPosition;
@@ -210,7 +208,7 @@ class  Building : public ContainerBase {
     int getIdentification();
 
 
-    //! returns the picture of the building. It may depend on the current weather of the fields the building is standing on 
+    //! returns the picture of the building. It may depend on the current weather of the fields the building is standing on
     void* getpicture ( const BuildingType::LocalCoordinate& localCoordinate );
     
     //! changes the building's owner. \param player range: 0 .. 8
@@ -309,7 +307,5 @@ class GetMiningInfo : public SearchFields {
 
 
 
-
- #pragma pack()
 
 #endif

@@ -4,9 +4,13 @@
 */
 
 
-//     $Id: basestrm.h,v 1.56 2003-11-16 21:46:39 mbickel Exp $
+//     $Id: basestrm.h,v 1.57 2004-01-25 19:44:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2003/11/16 21:46:39  mbickel
+//      Some cleanup and restructuring
+//      Fixed: newly produced units could not leave building
+//
 //     Revision 1.55  2003/06/01 15:03:16  mbickel
 //      Some updates to the build system for FreeBSD
 //
@@ -160,10 +164,6 @@
   #include "libs/bzlib/bzlib.h"
  }
 #endif
-
-#pragma pack(1)
-
-
 
 
 const int maxFileStringSize = 10000;    // is used for some character arrays
@@ -681,7 +681,6 @@ extern void opencontainer ( const char* wildcard );
 
 extern const char* containermagic;
 
-#pragma pack()
 
 extern const char* filereadmode;
 extern const char* filewritemode;

@@ -2,9 +2,15 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.108 2004-01-21 14:43:00 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.109 2004-01-25 19:44:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.108  2004/01/21 14:43:00  mbickel
+//      Fixed: external loading not working
+//      Improved AI
+//      Fixed and improved replay resource checking
+//      Fixed various display errors
+//
 //     Revision 1.107  2004/01/16 15:33:46  mbickel
 //     Completely rewritten game event system
 //     TPWM-decoding-Patch
@@ -3037,11 +3043,12 @@ void         EditAiParam::buttonpressed(int         id)
              }
              break;
    case 22 : getxy ( &aiv.dest.x, &aiv.dest.y );
+             aiv.dest.setnum ( aiv.dest.x, aiv.dest.y, -2 );
              redraw();
              break;
 
    case 30 : action = 1;
-             aiv.dest.setnum ( aiv.dest.x, aiv.dest.y, z ); 
+             aiv.dest.setnum ( aiv.dest.x, aiv.dest.y, -2 );
              break;
    case 31 : action = 1;
               tus.restore();

@@ -29,7 +29,7 @@
     <MAINSOURCE value="tools.bpf"/>
     <INCLUDEPATH value="..\lib;..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image;..\..\libs\libsigc++"/>
     <LIBPATH value="..\lib;..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\lib\obj;$(BCB)\lib"/>
-    <WARNINGS value="-w-par -w-csu"/>
+    <WARNINGS value="-w-pck -w-par -w-csu"/>
     <LISTFILE value=""/>
     <OTHERFILES value=""/>
   </MACROS>

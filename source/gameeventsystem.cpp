@@ -258,7 +258,7 @@ void Event::execute( MapDisplayInterface* md )
       if ( status == Triggered ) {
          if ( delayedexecution.move  || delayedexecution.turn ) {
 
-            triggerTime.set ( gamemap.time.turn() + delayedexecution.turn, gamemap.time.move() + delayedexecution.move );
+            triggerTime.set ( gamemap.time.turn() + delayedexecution.turn, gamemap.time.move() + delayedexecution.move - 1 );
             if ( triggerTime.move() < 0 )
                triggerTime.set ( triggerTime.turn(), 0 );
 
@@ -273,16 +273,21 @@ void Event::execute( MapDisplayInterface* md )
          status = Timed;
       }
       if ( status == Timed && gamemap.time.abstime >= triggerTime.abstime ) {
+         if ( reArmNum > 0 )
+            status = Untriggered;
+         else
+            status = Executed;
+
          if ( action )
             action->execute( md );
 
          executed();
+         
          if ( reArmNum > 0 ) {
-            status = Untriggered;
             arm();
             --reArmNum;
-         } else
-            status = Executed;
+            check(md);
+         }
       }
    }
 }

@@ -81,9 +81,9 @@ class AiParameter : public AiValue {
            pvehicle unit;
         public:
            static const int taskNum = 8;
-           static const int jobNum = 7;
+           static const int jobNum = 8;
            enum Task { tsk_nothing, tsk_tactics, tsk_tactwait, tsk_stratwait, tsk_wait, tsk_strategy, tsk_serviceRetreat, tsk_move };
-           enum Job { job_undefined, job_fight, job_supply, job_conquer, job_build, job_recon, job_guard };
+           enum Job { job_undefined, job_fight, job_supply, job_conquer, job_build, job_recon, job_guard, job_script };
            typedef vector<AiParameter::Job> JobList;
 
            Task getTask ( ) { return task; };

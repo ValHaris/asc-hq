@@ -33,8 +33,6 @@
   #include "events.h"
   #include "gamemap.h"
 
-  #pragma pack(1)
-
    struct Schriften {
                pfont        smallarial;
                pfont        smallsystem;
@@ -60,7 +58,7 @@
               void init ( void );
               void display ( void );
               void reset ( void );
-              void*        markfield; 
+              void*        markfield;
               void*        picture; 
               void*        orgpicture;
               int          actpictwidth;
@@ -238,7 +236,6 @@ class tdrawline8 : public tdrawline {
 
 extern int  rol ( int valuetorol, int rolwidth );
 
-#pragma pack()
 
 #endif
 

@@ -1544,7 +1544,7 @@ class FindUnitPlacementPos : public SearchFields {
       void testfield ( const MapCoordinate& pos )
       {
          pfield fld = gamemap->getField( pos );
-         if ( !fld->vehicle ) {
+         if ( fld && !fld->vehicle ) {
             if ( fieldAccessible( fld, vehicle ) == 2 ) {
                fld->vehicle = vehicle;
                fld->vehicle->setnewposition ( pos );
@@ -1564,6 +1564,10 @@ void Reinforcements :: execute( MapDisplayInterface* md )
       Type type = Type(stream.readInt());
       if ( type == ReinfVehicle ) {
          Vehicle* veh = Vehicle::newFromStream( gamemap, stream );
+
+         gamemap->unitnetworkid++;
+         veh->networkid = gamemap->unitnetworkid;
+
          FindUnitPlacementPos fupp( gamemap, veh );
       }
       if ( type == ReinfBuilding ) {
