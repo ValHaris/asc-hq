@@ -1,3 +1,143 @@
+2003-03-08 15:24  mbickel
+
+	* source/: astar2.cpp, attack.cpp, basegfx.cpp, basestrm.cpp,
+	building.cpp, buildingtype.cpp, containerbase.cpp, controls.cpp,
+	dialog.cpp, dlg_box.cpp, gamedlg.cpp, gui.cpp, loadbi3.cpp,
+	loaders.cpp, loadpcxc.cpp, misc.cpp, missions.cpp, network.cpp,
+	newfont.cpp, palette.cpp, pd.cpp, sg.cpp, sgstream.cpp,
+	soundList.cpp, spfst.cpp, spfst.h, stack.cpp, strtmesg.cpp,
+	typen.cpp, unitctrl.cpp, vehicletype.cpp, weather.cpp, ai/ai.h,
+	ai/buildingcapture.cpp, ai/misc.cpp, ai/service.cpp,
+	ai/tactics.cpp, ai/valuation.cpp, sdl/events.cpp, sdl/graphics.cpp:
+	 Code cleanup
+	 AI fixes and improvements
+
+2003-03-07 18:59  mbickel
+
+	* source/: astar2.h, ai/tactics.cpp:  Fixed: ai crash
+
+2003-03-07 18:11  mbickel
+
+	* source/: astar2.h, typen.h, unitctrl.h, ai/ai.h, ai/misc.cpp,
+	ai/tactics.cpp:  AI improvements
+
+2003-03-07 00:35  mbickel
+
+	* source/ai/misc.cpp:  Fixed AI crash
+
+2003-03-06 18:45  mbickel
+
+	* source/: ai/service.cpp, tools/weaponguide.cpp,
+	tools/win/weaponguide.bpr:  Weaponguide compiles with win32
+	 Fixed AI crash
+
+2003-03-05 23:45  mbickel
+
+	* libtool, doc/index.html, source/astar2.cpp, source/astar2.h,
+	source/containerbase.h, source/gui.cpp, source/gui.h,
+	source/soundList.cpp, source/vehicle.cpp, source/vehicle.h,
+	source/vehicletype.cpp, source/ai/misc.cpp, source/ai/service.cpp,
+	source/tools/weaponguide.cpp:  Fixed compilation problems
+	 Updated weaponguide
+
+2003-03-05 18:57  mbickel
+
+	* source/: buildingtype.cpp, spfst.cpp, unitctrl.cpp:  Fixed:
+	defaultproduction not working
+
+2003-02-27 17:10  mbickel
+
+	* source/: ascstring.cpp, ascstring.h, astar2.cpp, astar2.h,
+	building.cpp, building_controls.h, buildings.cpp, buildingtype.cpp,
+	buildingtype.h, containerbase.cpp, containerbase.h,
+	containerbasetype.cpp, containerbasetype.h, controls.cpp,
+	controls.h, dialog.cpp, edevents.cpp, gamemap.cpp, gamemap.h,
+	gui.cpp, mapalgorithms.cpp, mapalgorithms.h, mapdisplay.cpp,
+	resourcenet.cpp, sg.cpp, sgstream.cpp, spfst.cpp, spfst.h,
+	strtmesg.cpp, typen.cpp, typen.h, unitctrl.cpp, unitctrl.h,
+	vehicle.cpp, vehicle.h, ai/ai_common.h, ai/buildingcapture.cpp,
+	ai/misc.cpp, ai/service.cpp, ai/tactics.cpp:  Restructuring of new
+	pathfinding code completed
+
+2003-02-19 22:18  mbickel
+
+	* asc.kdevprj, source/astar2.cpp, source/typen.h, source/vehicle.h,
+	source/tools/weaponguide.cpp:  Updated weaponguide
+	 compilation fixed
+
+2003-02-19 20:47  mbickel
+
+	* data/message1.txt, data/standard.set, source/astar2.cpp,
+	source/astar2.h, source/building.cpp, source/building_controls.h,
+	source/buildings.cpp, source/buildings.h, source/containerbase.cpp,
+	source/containerbase.h, source/controls.cpp, source/controls.h,
+	source/dashboard.cpp, source/dashboard.h, source/dialog.cpp,
+	source/edmisc.cpp, source/edselfnt.cpp, source/edselfnt.h,
+	source/gamemap.cpp, source/gamemap.h, source/gui.cpp,
+	source/mapalgorithms.cpp, source/mapalgorithms.h,
+	source/mapdisplay.cpp, source/mapdisplay.h, source/missions.cpp,
+	source/replay.cpp, source/replay.h, source/sg.cpp,
+	source/spfst.cpp, source/strtmesg.cpp, source/textfileparser.cpp,
+	source/typen.h, source/unitctrl.cpp, source/unitctrl.h,
+	source/vehicle.cpp, source/vehicle.h, source/vehicletype.cpp,
+	source/vehicletype.h, source/weather.cpp, source/ai/ai_common.h,
+	source/ai/misc.cpp, source/ai/service.cpp, source/ai/tactics.cpp,
+	source/win32/borland/asc.bpr,
+	source/win32/borland/mapeditor/mapeditor.bpr:  Completely rewrote
+	Pathfinding code
+	 Wind not different any more on different levels of height
+
+2003-02-13 01:56  mbickel
+
+	* libtool, source/buildings.h, source/containerbase.h,
+	source/containerbasetype.cpp, source/sgstream.cpp,
+	source/sgstream.h, source/typen.h, source/vehicle.cpp,
+	source/vehicle.h, source/clparser/weaponguide.cpp,
+	source/clparser/weaponguide.gp, source/clparser/weaponguide.h,
+	source/tools/weaponguide.cpp, source/tools/linux/Makefile.am,
+	source/tools/linux/Makefile.in, source/unix/Makefile.am,
+	source/unix/Makefile.in, source/unix/mapeditor/Makefile.am,
+	source/unix/mapeditor/Makefile.in:  Updated weaponguide
+	 ASC compiles with gcc again
+
+2003-02-12 21:11  mbickel
+
+	* source/: astar2.cpp, astar2.h, building.cpp, building_controls.h,
+	buildings.cpp, buildings.h, buildingtype.cpp, buildingtype.h,
+	containerbase.cpp, containerbase.h, containerbasetype.h,
+	dialog.cpp, edmisc.cpp, edselfnt.cpp, gamemap.cpp, gui.cpp,
+	loadbi3.cpp, spfst.cpp, strtmesg.cpp, textfiletags.cpp,
+	textfiletags.h, typen.h, unitctrl.cpp, vehicle.cpp, vehicle.h,
+	vehicletype.cpp, vehicletype.h, ai/base.cpp,
+	ai/buildingcapture.cpp, ai/misc.cpp, ai/service.cpp,
+	ai/valuation.cpp, tools/weaponguide.cpp, tools/win/tools.bpr,
+	win32/borland/asc.bpr, win32/borland/mapeditor/mapeditor.bpr:  Some
+	significant changes to the Transportation code
+
+2003-02-12 15:33  mbickel
+
+	* source/: dialog.cpp, strtmesg.cpp, sdl/events.cpp:  Fixed: color
+	problems in alliance dialog
+	 Fixed: Umlauts not working
+
+2003-02-11 18:35  mbickel
+
+	* source/: dialog.cpp, strtmesg.cpp, ai/service.cpp,
+	ai/tactics.cpp, tools/weaponguide.cpp:	Added: reset mapparameters
+	function
+	 AI now working better with guarding units
+
+2003-02-07 10:53  mbickel
+
+	* source/: building.cpp, buildings.cpp, buildings.h,
+	containerbase.cpp, containerbase.h, strtmesg.cpp, unitctrl.cpp,
+	vehicle.cpp, vehicle.h, win32/borland/asc.bpr:	Fixed: building
+	could not repair themself
+
+2003-02-02 14:19  mbickel
+
+	* ChangeLog:  Updated Changelog
+
 2003-02-02 14:04  mbickel
 
 	* data/data.version, data/paybacktime.map,
