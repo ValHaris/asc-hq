@@ -18,6 +18,14 @@
 #include "typen.h"
 #include "containerbase.h"
 
+ContainerBase ::  ContainerBase ( ContainerBaseType* bt ) : baseType ( bt)
+{
+   for ( int i = 0; i< 32; i++ )
+      loading[i] = NULL;
+   damage = 0;
+}
+
+
 Resources ContainerBase :: putResource ( const Resources& res, int queryonly, int scope  )
 {
    Resources result;

@@ -36,7 +36,7 @@ class ContainerBase {
       pmap gamemap;
       virtual const ResourceMatrix& getRepairEfficiency ( void ) = 0;
    public:
-      ContainerBase ( ContainerBaseType* bt ) : baseType ( bt) {};
+      ContainerBase ( ContainerBaseType* bt );
 
       const ContainerBaseType*  baseType;
       Vehicle*     loading[32];
