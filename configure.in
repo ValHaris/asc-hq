@@ -140,6 +140,23 @@ SDL_mixer.RPM installed, perhaps the SDL_mixer-devel.RPM is missing.
 If your distribution does not include the SDL_image library, you can get it 
 from http://www.libsdl.org/projects/SDL_mixer/ ]]))
 
+
+
+# Check for libsigc++
+#AM_PATH_SIGC(1.0.0, , AC_MSG_ERROR( [[
+#ASC requires the sigc++ library. If you have a distribution supplied
+#sigc++.RPM installed, perhaps the sigc++-devel.RPM is missing.
+#If your distribution does not include the sigc++ library, you can get it
+#from http://libsigc.sourceforge.net ]]))
+
+dnl SigC++
+PKG_CHECK_MODULES(SIGC, sigc++-1.2)
+
+AC_SUBST(SIGC_LIBS)
+AC_SUBST(SIGC_CFLAGS)
+
+
+
 dnl How do we add $SDL_FLAGS to the CFLAGS so gcc finds these headers ?
 dnl
 dnl AC_CHECK_HEADERS( SDL_image.h,, AC_MSG_ERROR( ASC requires the development files for the SDL_image library. You can get the complete library at www.libsdl.org ))
@@ -407,6 +424,8 @@ if test "X$ENABLEDEBUG" = "X1"; then
    echo CFLAGS $CFLAGS
    echo LIBS $LIBS
    echo LDFLAGS $LDFLAGS
+   echo SIGC_CFLAGS $SIGC_CFLAGS
+   echo SIGC_LIBS $SIGC_LIBS
 fi
 	
 if test "x$missingmusic" != x ; then

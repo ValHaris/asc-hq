@@ -2,7 +2,7 @@
     \brief Interface to the polygon triangulation library
 */
 
-//     $Id: polygontriangulation.h,v 1.1 2004-01-16 15:33:47 mbickel Exp $
+//     $Id: polygontriangulation.h,v 1.2 2004-01-16 21:17:23 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -42,7 +42,7 @@ class  PolygonPainter {
              bool  paintPolygon ( const Poly& poly );
          protected:
              virtual void   sortpolygon    ( Poly& a );
-             virtual void   painttriangle  ( Poly::Point p[] );
+             virtual void   painttriangle  ( typename Poly::Point p[] );
              virtual void   painthorizline ( int x1, int x2, int y );
              virtual void   paintline      ( int x1, int y1, int x2, int y2 );
              virtual void   setpoint       ( int x,  int y  ) = 0;
@@ -51,7 +51,7 @@ class  PolygonPainter {
              //! returns true if polygon correct
              virtual bool checkpolygon   ( const Poly& poly );
              //! returns true if lines a-b and c-d don't intersect
-             virtual bool checkline      ( Poly::Point a, Poly::Point b, Poly::Point d, Poly::Point e );
+             virtual bool checkline      ( typename Poly::Point a, typename Poly::Point b, typename Poly::Point d, typename Poly::Point e );
           };
 
 template <class Poly>
@@ -94,7 +94,7 @@ bool  PolygonPainter<Poly>::paintPolygon ( const Poly& poly )
 //       displayLogMessage ( 10, "pp4 ");
 
        for ( int i=0; i<pol2.vertex.size()-2 ;i++ ) {
-          Poly::Point tripos[3];
+          typename Poly::Point tripos[3];
           tripos[0] = pol2.vertex[triangles[i][0]-1];
           tripos[1] = pol2.vertex[triangles[i][1]-1];
           tripos[2] = pol2.vertex[triangles[i][2]-1];
@@ -113,7 +113,7 @@ static const double pi = 3.141592654;
 
 
 template <class Poly>
-bool PolygonPainter<Poly>::checkline( Poly::Point a, Poly::Point b, Poly::Point d, Poly::Point e )
+bool PolygonPainter<Poly>::checkline( typename Poly::Point a, typename Poly::Point b, typename Poly::Point d, typename Poly::Point e )
 {
    double r,s,t;
 
@@ -237,7 +237,7 @@ void PolygonPainter<Poly>::sortpolygon   ( Poly& a )
    if ( a.vertex.size() >= 3 )
       if ( getpolydir(a) < 0 ) {
          for ( int i=0;i< a.vertex.size()/2 ;i++ ) {
-            Poly::Point p = a.vertex[i];
+            typename Poly::Point p = a.vertex[i];
             a.vertex[i] = a.vertex[a.vertex.size()-i-1];
             a.vertex[a.vertex.size()-i-1] = p;
          } /* endfor */
@@ -246,7 +246,7 @@ void PolygonPainter<Poly>::sortpolygon   ( Poly& a )
 
 
 template <class Poly>
-void PolygonPainter<Poly>::painttriangle  ( Poly::Point p[] )
+void PolygonPainter<Poly>::painttriangle  ( typename Poly::Point p[] )
 {
    int x,y,dx1,dx2,dy1,dy2;
 

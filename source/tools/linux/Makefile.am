@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.32 2003-11-18 18:29:23 mbickel Exp $
+## $Id: Makefile.am,v 1.33 2004-01-16 21:17:25 mbickel Exp $
 
 vpath %.cpp ..:../..
 
@@ -10,7 +10,7 @@ INCLUDES		= -I $(top_builddir) -I$(top_src_dir) \
 -I$(top_builddir)/source -I$(top_src_dir)/source
 ## @OS_INCLUDE@
 
-AM_CXXFLAGS 		= @SDL_CFLAGS@ @SDLMM_CXXFLAGS@ -Dconverter
+AM_CXXFLAGS 		= @SDL_CFLAGS@ @SDLMM_CXXFLAGS@ -Dconverter @SIGC_CFLAGS@
 
 bin_PROGRAMS 		= asc_demount \
 			asc_mount \
@@ -30,11 +30,11 @@ asc_raw2pcx_SOURCES     = raw2pcx.cpp      basestrm.cpp simplestream.cpp misc.cp
 
 asc_mount_LDADD       = @SDL_LIBS@ @SDLMM_LIBS@ @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
 asc_demount_LDADD     = @SDL_LIBS@ @SDLMM_LIBS@ @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_makegfx_LDADD     = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_viewid_LDADD      = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_bin2text_LDADD    = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_weaponguide_LDADD = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_raw2pcx_LDADD     = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
+asc_makegfx_LDADD     = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
+asc_viewid_LDADD      = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
+asc_bin2text_LDADD    = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
+asc_weaponguide_LDADD = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
+asc_raw2pcx_LDADD     = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
 
 # vim: noexpandtab ai
 

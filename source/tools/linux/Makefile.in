@@ -91,6 +91,7 @@ PACKAGE = @PACKAGE@
 PARAGUI_CFLAGS = @PARAGUI_CFLAGS@
 PARAGUI_CONFIG = @PARAGUI_CONFIG@
 PARAGUI_LIBS = @PARAGUI_LIBS@
+PKG_CONFIG = @PKG_CONFIG@
 RANLIB = @RANLIB@
 SDLMM_CONFIG = @SDLMM_CONFIG@
 SDLMM_CXXFLAGS = @SDLMM_CXXFLAGS@
@@ -99,6 +100,8 @@ SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
 SGML2MAN = @SGML2MAN@
+SIGC_CFLAGS = @SIGC_CFLAGS@
+SIGC_LIBS = @SIGC_LIBS@
 STRIP = @STRIP@
 VERSION = @VERSION@
 am__include = @am__include@
@@ -112,7 +115,7 @@ INCLUDES = -I $(top_builddir) -I$(top_src_dir) \
 -I$(top_builddir)/source -I$(top_src_dir)/source
 
 
-AM_CXXFLAGS = @SDL_CFLAGS@ @SDLMM_CXXFLAGS@ -Dconverter
+AM_CXXFLAGS = @SDL_CFLAGS@ @SDLMM_CXXFLAGS@ -Dconverter @SIGC_CFLAGS@
 
 bin_PROGRAMS = asc_demount \
 			asc_mount \
@@ -133,11 +136,11 @@ asc_raw2pcx_SOURCES = raw2pcx.cpp      basestrm.cpp simplestream.cpp misc.cpp as
 
 asc_mount_LDADD = @SDL_LIBS@ @SDLMM_LIBS@ @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
 asc_demount_LDADD = @SDL_LIBS@ @SDLMM_LIBS@ @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_makegfx_LDADD = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_viewid_LDADD = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_bin2text_LDADD = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_weaponguide_LDADD = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_raw2pcx_LDADD = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
+asc_makegfx_LDADD = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
+asc_viewid_LDADD = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
+asc_bin2text_LDADD = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
+asc_weaponguide_LDADD = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
+asc_raw2pcx_LDADD = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
 subdir = source/tools/linux
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h

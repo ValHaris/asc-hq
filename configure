@@ -9445,6 +9445,119 @@ fi
 
 
 
+# Check for libsigc++
+#AM_PATH_SIGC(1.0.0, , AC_MSG_ERROR( [[
+#ASC requires the sigc++ library. If you have a distribution supplied
+#sigc++.RPM installed, perhaps the sigc++-devel.RPM is missing.
+#If your distribution does not include the sigc++ library, you can get it
+#from http://libsigc.sourceforge.net ]]))
+
+
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+
+if test -n "$PKG_CONFIG"; then
+  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  fi
+
+  if test "$PKG_CONFIG" = "no" ; then
+     echo "*** The pkg-config script could not be found. Make sure it is"
+     echo "*** in your path, or set the PKG_CONFIG environment variable"
+     echo "*** to the full path to pkg-config."
+     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        echo "$as_me:$LINENO: checking for sigc++-1.2" >&5
+echo $ECHO_N "checking for sigc++-1.2... $ECHO_C" >&6
+
+        if $PKG_CONFIG --exists "sigc++-1.2" ; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+            succeeded=yes
+
+            echo "$as_me:$LINENO: checking SIGC_CFLAGS" >&5
+echo $ECHO_N "checking SIGC_CFLAGS... $ECHO_C" >&6
+            SIGC_CFLAGS=`$PKG_CONFIG --cflags "sigc++-1.2"`
+            echo "$as_me:$LINENO: result: $SIGC_CFLAGS" >&5
+echo "${ECHO_T}$SIGC_CFLAGS" >&6
+
+            echo "$as_me:$LINENO: checking SIGC_LIBS" >&5
+echo $ECHO_N "checking SIGC_LIBS... $ECHO_C" >&6
+            SIGC_LIBS=`$PKG_CONFIG --libs "sigc++-1.2"`
+            echo "$as_me:$LINENO: result: $SIGC_LIBS" >&5
+echo "${ECHO_T}$SIGC_LIBS" >&6
+        else
+            SIGC_CFLAGS=""
+            SIGC_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            SIGC_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "sigc++-1.2"`
+            echo $SIGC_PKG_ERRORS
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     :
+  else
+     { { echo "$as_me:$LINENO: error: Library requirements (sigc++-1.2) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
+echo "$as_me: error: Library requirements (sigc++-1.2) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
+   { (exit 1); exit 1; }; }
+  fi
+
+
+
+
+
+
+
+
+
 
 
 ac_ext=cc
@@ -12095,6 +12208,9 @@ s,@GENCL@,$GENCL,;t t
 s,@SDL_CONFIG@,$SDL_CONFIG,;t t
 s,@SDL_CFLAGS@,$SDL_CFLAGS,;t t
 s,@SDL_LIBS@,$SDL_LIBS,;t t
+s,@PKG_CONFIG@,$PKG_CONFIG,;t t
+s,@SIGC_CFLAGS@,$SIGC_CFLAGS,;t t
+s,@SIGC_LIBS@,$SIGC_LIBS,;t t
 s,@SDLMM_CONFIG@,$SDLMM_CONFIG,;t t
 s,@SDLMM_CXXFLAGS@,$SDLMM_CXXFLAGS,;t t
 s,@SDLMM_LIBS@,$SDLMM_LIBS,;t t
@@ -12718,6 +12834,8 @@ if test "X$ENABLEDEBUG" = "X1"; then
    echo CFLAGS $CFLAGS
    echo LIBS $LIBS
    echo LDFLAGS $LDFLAGS
+   echo SIGC_CFLAGS $SIGC_CFLAGS
+   echo SIGC_LIBS $SIGC_LIBS
 fi
 
 if test "x$missingmusic" != x ; then

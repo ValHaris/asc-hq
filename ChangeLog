@@ -1,3 +1,123 @@
+2003-12-28 19:09  mbickel
+
+	* source/: buildings.cpp, strtmesg.cpp:  Updated version to 1.13.9
+
+2003-12-28 15:39  mbickel
+
+	* data/first.msg, source/CLoadable.cpp, source/buildings.cpp,
+	source/buildings.h, source/controls.cpp, source/gamedlg.cpp,
+	source/gameoptions.cpp, source/gameoptions.h, source/strtmesg.cpp,
+	source/unitctrl.cpp:  new function: automatic training
+	 energy not manually transferable any more
+
+2003-12-28 11:41  mbickel
+
+	* data/helpsyst.txt, source/buildings.cpp, source/buildings.h,
+	source/buildingtype.cpp, source/buildingtype.h,
+	source/mapalgorithms.cpp, source/textfiletags.cpp:  New building
+	function: resource sink
+
+2003-12-27 23:34  mbickel
+
+	* source/: typen.h, ai/buildingcapture.cpp:  Applied patch for
+	improved AI building capturing (by Bernhard Oemer)
+	 Destructing buildings now gives 50% material back
+
+2003-12-27 19:27  mbickel
+
+	* data/message1.txt, data/paybacktime.map, source/building.cpp,
+	source/edmisc.cpp, source/gamemap.cpp, source/gamemap.h,
+	source/sg.cpp, source/textfiletags.cpp, source/vehicle.cpp,
+	source/vehicletype.cpp, source/vehicletype.h,
+	source/viewcalculation.cpp:  New vehicle function: no reaction fire
+	 new map parameter: disable unit/building transfer
+	 fixed broken bridge in second campaign map
+	 container now display number of cargo slots
+
+2003-11-21 20:25  mbickel
+
+	* source/: strtmesg.cpp, viewcalculation.cpp, tools/win/tools.bpr,
+	win32/fileio.h, win32/borland/mapeditor/mapeditor.bpr:	Fixed:
+	invisible own units when directview disabled
+
+2003-11-20 19:33  mbickel
+
+	* source/: containerbase.cpp, strtmesg.cpp:  Fixed: full buildings
+	could not be conquered
+
+2003-11-18 19:29  mbickel
+
+	* config.h.in, configure, configure.in, libtool,
+	source/basestrm.cpp, source/simplestream.cpp, source/vehicle.cpp,
+	source/vehicle.h, source/tools/bin2text.cpp,
+	source/tools/linux/Makefile.am, source/tools/linux/Makefile.in,
+	source/unix/Makefile.am, source/unix/Makefile.in,
+	source/unix/fileio.h, source/unix/mapeditor/Makefile.am,
+	source/unix/mapeditor/Makefile.in:  Fixed unix compilation problems
+
+2003-11-16 22:46  mbickel
+
+	* source/: basestrm.cpp, basestrm.h, basicmessages.h, basictypes.h,
+	global.h, music.h, simplestream.cpp, simplestream.h, strtmesg.cpp,
+	textfile_evaluation.cpp, textfile_evaluation.h, textfileparser.cpp,
+	textfileparser.h, typen.h, unitctrl.cpp, vehicle.cpp,
+	win32/borland/asc.bpr:	Some cleanup and restructuring
+	 Fixed: newly produced units could not leave building
+
+2003-11-16 19:37  mbickel
+
+	* source/: attack.cpp, strtmesg.cpp, textfiletags.cpp, vehicle.cpp,
+	vehicletype.cpp:  Fixed reaction fire bugs
+	 Fixed hemming bug
+	 new vehicle function: cruiserlanding
+
+2003-11-11 21:03  mbickel
+
+	* source/: attack.cpp, controls.cpp, strtmesg.cpp,
+	textfiletags.cpp, typen.h, vehicle.cpp, vehicle.h, vehicletype.cpp,
+	vehicletype.h, ai/tactics.cpp:	No hemming for aircraft any more
+	 new vehicle type flag: move during ReactionFire
+	 movemalus 11 for all submerged units
+
+2003-10-31 20:49  mbickel
+
+	* source/: strtmesg.cpp, unitctrl.cpp:	Fixed: reaction fire could
+	attack units that were invisible due to jamming
+
+2003-10-31 20:13  mbickel
+
+	* source/mapdisplay.cpp:  Fixed: crash when movement-speed = 0
+
+2003-10-29 21:45  mbickel
+
+	* data/helpsys2.txt, data/helpsyst.txt, source/attack.cpp,
+	source/gamemap.cpp, source/gamemap.h, source/strtmesg.cpp,
+	source/textfile_evaluation.cpp, source/unitctrl.cpp,
+	source/viewcalculation.cpp, source/tools/weaponguide.cpp:  New game
+	parameter: disable direct view
+	 better error messages
+
+2003-09-04 18:35  mbickel
+
+	* source/gamedlg.cpp:  Fixed gcc compilation problems
+
+2003-09-03 23:18  mbickel
+
+	* source/: attack.cpp, resourcenet.cpp, strtmesg.cpp, sgstream.cpp:
+	 Fixed: crash when trying to extract resources from neutral
+	buildings
+	 Fixed: kamikaze unit surviving attack on buildings and objects
+
+2003-08-28 20:08  mbickel
+
+	* source/: gamedlg.cpp, strtmesg.cpp, strtmesg.h:  Added version
+	information to Play Time dialog
+
+2003-08-24 15:34  mbickel
+
+	* ChangeLog, libtool, source/unix/mapeditor/Makefile.am,
+	source/unix/mapeditor/Makefile.in:  Updated makefiles
+
 2003-08-24 14:48  mbickel
 
 	* source/: building.cpp, replay.cpp, replay.h, unitctrl.cpp:  Fixed

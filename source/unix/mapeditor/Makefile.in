@@ -91,6 +91,7 @@ PACKAGE = @PACKAGE@
 PARAGUI_CFLAGS = @PARAGUI_CFLAGS@
 PARAGUI_CONFIG = @PARAGUI_CONFIG@
 PARAGUI_LIBS = @PARAGUI_LIBS@
+PKG_CONFIG = @PKG_CONFIG@
 RANLIB = @RANLIB@
 SDLMM_CONFIG = @SDLMM_CONFIG@
 SDLMM_CXXFLAGS = @SDLMM_CXXFLAGS@
@@ -99,6 +100,8 @@ SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
 SGML2MAN = @SGML2MAN@
+SIGC_CFLAGS = @SIGC_CFLAGS@
+SIGC_LIBS = @SIGC_LIBS@
 STRIP = @STRIP@
 VERSION = @VERSION@
 am__include = @am__include@
@@ -113,13 +116,14 @@ INCLUDES = -I$(top_builddir) -I$(top_src_dir) \
 
 
 AM_CXXFLAGS = @SDL_CFLAGS@ @SDLMM_CXXFLAGS@ \
--Dkarteneditor -DNEWKEYB @PARAGUI_CFLAGS@
+-Dkarteneditor -DNEWKEYB @PARAGUI_CFLAGS@ @SIGC_CFLAGS@
 
 
-bin_PROGRAMS = asc_mapedit asc_map2pcx
+bin_PROGRAMS = asc_mapedit
 
+#asc_map2pcx
 asc_mapedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp \
-edselfnt.cpp edmisc.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp \
+edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \
 spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp \
 loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp \
 attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp \
@@ -129,14 +133,17 @@ password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
-textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp
+textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
+mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
+gameevent_dialogs.cpp 
 
 
 asc_mapedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
-$(top_builddir)/source/libs/triangul/libtriangul.la @SDLMM_LIBS@ @LDADDLIBBZ2@ $(PARAGUI_LIBS)
+$(top_builddir)/source/libs/triangul/libtriangul.la @SDLMM_LIBS@ @LDADDLIBBZ2@ \
+$(PARAGUI_LIBS) $(SIGC_LIBS)
 
 
-asc_map2pcx_SOURCES = map2pcx.cpp weather.cpp typen.cpp strtmesg.cpp \
+asc_map2pcx_SOURCES = map2pcx.cpp typen.cpp strtmesg.cpp \
 stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp \
 loadpcxc.cpp loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp \
 basegfx.cpp attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp \
@@ -146,22 +153,26 @@ password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
-textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp
+textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
+mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
+gameevent_dialogs.cpp 
 
 
 asc_map2pcx_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
-$(top_builddir)/source/sdl/libsdl.la @SDLMM_LIBS@ @LDADDLIBBZ2@ $(PARAGUI_LIBS)
+$(top_builddir)/source/sdl/libsdl.la @SDLMM_LIBS@ @LDADDLIBBZ2@ $(PARAGUI_LIBS) \
+$(SIGC_LIBS)
 
 subdir = source/unix/mapeditor
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-bin_PROGRAMS = asc_mapedit$(EXEEXT) asc_map2pcx$(EXEEXT)
+bin_PROGRAMS = asc_mapedit$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
 
-am_asc_map2pcx_OBJECTS = map2pcx.$(OBJEXT) weather.$(OBJEXT) \
-	typen.$(OBJEXT) strtmesg.$(OBJEXT) stack.$(OBJEXT) \
-	spfst.$(OBJEXT) sgstream.$(OBJEXT) pd.$(OBJEXT) \
+am_asc_mapedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
+	edglobal.$(OBJEXT) edmain.$(OBJEXT) edselfnt.$(OBJEXT) \
+	edmisc.$(OBJEXT) typen.$(OBJEXT) strtmesg.$(OBJEXT) \
+	stack.$(OBJEXT) spfst.$(OBJEXT) sgstream.$(OBJEXT) pd.$(OBJEXT) \
 	palette.$(OBJEXT) newfont.$(OBJEXT) misc.$(OBJEXT) \
 	loadpcxc.$(OBJEXT) loaders.$(OBJEXT) loadbi3.$(OBJEXT) \
 	dlg_box.$(OBJEXT) dialog.$(OBJEXT) basestrm.$(OBJEXT) \
@@ -179,35 +190,10 @@ am_asc_map2pcx_OBJECTS = map2pcx.$(OBJEXT) weather.$(OBJEXT) \
 	itemrepository.$(OBJEXT) stringtokenizer.$(OBJEXT) \
 	music.$(OBJEXT) messages.$(OBJEXT) paradialog.$(OBJEXT) \
 	textfile_evaluation.$(OBJEXT) containerbasetype.$(OBJEXT) \
-	soundList.$(OBJEXT) simplestream.$(OBJEXT)
-asc_map2pcx_OBJECTS = $(am_asc_map2pcx_OBJECTS)
-asc_map2pcx_DEPENDENCIES = \
-	$(top_builddir)/source/libs/triangul/libtriangul.la \
-	$(top_builddir)/source/sdl/libsdl.la
-asc_map2pcx_LDFLAGS =
-am_asc_mapedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
-	edglobal.$(OBJEXT) edmain.$(OBJEXT) edselfnt.$(OBJEXT) \
-	edmisc.$(OBJEXT) weather.$(OBJEXT) typen.$(OBJEXT) \
-	strtmesg.$(OBJEXT) stack.$(OBJEXT) spfst.$(OBJEXT) \
-	sgstream.$(OBJEXT) pd.$(OBJEXT) palette.$(OBJEXT) \
-	newfont.$(OBJEXT) misc.$(OBJEXT) loadpcxc.$(OBJEXT) \
-	loaders.$(OBJEXT) loadbi3.$(OBJEXT) dlg_box.$(OBJEXT) \
-	dialog.$(OBJEXT) basestrm.$(OBJEXT) basegfx.$(OBJEXT) \
-	attack.$(OBJEXT) CLoadable.$(OBJEXT) Property.$(OBJEXT) \
-	PropertyGroup.$(OBJEXT) gameoptions.$(OBJEXT) Named.$(OBJEXT) \
-	buildingtype.$(OBJEXT) vehicletype.$(OBJEXT) \
-	containerbase.$(OBJEXT) mapalgorithms.$(OBJEXT) \
-	viewcalculation.$(OBJEXT) gamemap.$(OBJEXT) password.$(OBJEXT) \
-	password_dialog.$(OBJEXT) research.$(OBJEXT) \
-	mapdisplay.$(OBJEXT) ascstring.$(OBJEXT) graphicset.$(OBJEXT) \
-	vehicle.$(OBJEXT) buildings.$(OBJEXT) networkdata.$(OBJEXT) \
-	resourcenet.$(OBJEXT) textfileparser.$(OBJEXT) \
-	terraintype.$(OBJEXT) objecttype.$(OBJEXT) \
-	textfiletags.$(OBJEXT) itemrepository.$(OBJEXT) \
-	stringtokenizer.$(OBJEXT) music.$(OBJEXT) messages.$(OBJEXT) \
-	paradialog.$(OBJEXT) textfile_evaluation.$(OBJEXT) \
-	containerbasetype.$(OBJEXT) soundList.$(OBJEXT) \
-	simplestream.$(OBJEXT)
+	soundList.$(OBJEXT) simplestream.$(OBJEXT) \
+	mappolygons.$(OBJEXT) prehistoricevents.$(OBJEXT) \
+	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
+	gameevent_dialogs.$(OBJEXT)
 asc_mapedit_OBJECTS = $(am_asc_mapedit_OBJECTS)
 asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/libs/triangul/libtriangul.la
@@ -233,18 +219,23 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/edevents.Po ./$(DEPDIR)/edgen.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/edglobal.Po ./$(DEPDIR)/edmain.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/edmisc.Po ./$(DEPDIR)/edselfnt.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/gameevent_dialogs.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/gameevents.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/gameeventsystem.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/gamemap.Po ./$(DEPDIR)/gameoptions.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/graphicset.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/itemrepository.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/loadbi3.Po ./$(DEPDIR)/loaders.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/loadpcxc.Po ./$(DEPDIR)/map2pcx.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/loadpcxc.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/mapalgorithms.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/mapdisplay.Po ./$(DEPDIR)/messages.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/mapdisplay.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/mappolygons.Po ./$(DEPDIR)/messages.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/misc.Po ./$(DEPDIR)/music.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/networkdata.Po ./$(DEPDIR)/newfont.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/objecttype.Po ./$(DEPDIR)/palette.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/paradialog.Po ./$(DEPDIR)/password.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/password_dialog.Po ./$(DEPDIR)/pd.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/prehistoricevents.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/research.Po ./$(DEPDIR)/resourcenet.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/sgstream.Po ./$(DEPDIR)/simplestream.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/soundList.Po ./$(DEPDIR)/spfst.Po \
@@ -254,8 +245,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/textfileparser.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/textfiletags.Po ./$(DEPDIR)/typen.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/vehicle.Po ./$(DEPDIR)/vehicletype.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/viewcalculation.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/weather.Po
+@AMDEP_TRUE@	./$(DEPDIR)/viewcalculation.Po
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -265,9 +255,9 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CXXFLAGS = @CXXFLAGS@
-DIST_SOURCES = $(asc_map2pcx_SOURCES) $(asc_mapedit_SOURCES)
+DIST_SOURCES = $(asc_mapedit_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(asc_map2pcx_SOURCES) $(asc_mapedit_SOURCES)
+SOURCES = $(asc_mapedit_SOURCES)
 
 all: all-am
 
@@ -307,9 +297,6 @@ clean-binPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-asc_map2pcx$(EXEEXT): $(asc_map2pcx_OBJECTS) $(asc_map2pcx_DEPENDENCIES) 
-	@rm -f asc_map2pcx$(EXEEXT)
-	$(CXXLINK) $(asc_map2pcx_LDFLAGS) $(asc_map2pcx_OBJECTS) $(asc_map2pcx_LDADD) $(LIBS)
 asc_mapedit$(EXEEXT): $(asc_mapedit_OBJECTS) $(asc_mapedit_DEPENDENCIES) 
 	@rm -f asc_mapedit$(EXEEXT)
 	$(CXXLINK) $(asc_mapedit_LDFLAGS) $(asc_mapedit_OBJECTS) $(asc_mapedit_LDADD) $(LIBS)
@@ -340,6 +327,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edmain.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edmisc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edselfnt.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameevent_dialogs.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameevents.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameeventsystem.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamemap.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameoptions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/graphicset.Po@am__quote@
@@ -347,9 +337,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadbi3.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loaders.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadpcxc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/map2pcx.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapalgorithms.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapdisplay.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mappolygons.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messages.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/music.Po@am__quote@
@@ -361,6 +351,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password_dialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pd.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/prehistoricevents.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/research.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/resourcenet.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sgstream.Po@am__quote@
@@ -378,7 +369,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viewcalculation.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/weather.Po@am__quote@
 
 distclean-depend:
 	-rm -rf ./$(DEPDIR)

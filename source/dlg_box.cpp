@@ -3641,7 +3641,7 @@ void         tstringselect::done(void)
 class  tgetid : public tdialogbox {
           public :
               tgetid () { onCancel = ReturnZero; };
-              enum { ReturnZero, ReturnOriginal } onCancel;
+              enum CancelMode { ReturnZero, ReturnOriginal } onCancel;
               int action;
               int mid;
               char nt[200];
@@ -3905,7 +3905,7 @@ ASCString editString( const ASCString& title, const ASCString& defaultValue  )
 {
    StringEdit     gi;
    gi.org = defaultValue;
-   gi.onCancel = tgetid::ReturnOriginal;
+   gi.onCancel = StringEdit::ReturnOriginal ;
 
    strcpy( gi.nt, title.c_str() );
    gi.init();
