@@ -1,6 +1,9 @@
-//     $Id: MainWindow.java,v 1.7 2000-10-31 18:06:46 mbickel Exp $
+//     $Id: MainWindow.java,v 1.8 2000-11-01 11:41:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/10/31 18:06:46  mbickel
+//      Fileselector now displays files too
+//
 //     Revision 1.6  2000/10/29 21:06:03  mbickel
 //      Modified filename construction to run under Linux
 //      Started implementing a better directory choosing dialog
@@ -213,7 +216,7 @@ public class MainWindow extends javax.swing.JFrame {
     // Add your handling code here:    
     int sel = fileList.getSelectedIndex();
     if (sel >= 0) {
-        String selName = files[selection];
+        String selName = files[sel];
         switch (selection) {
             case 0 : new UnitEditor (paths[selection],selName,tUnit.LOAD,new UnitEditor("","",0,0).DISPOSE).show ();
             default : ;

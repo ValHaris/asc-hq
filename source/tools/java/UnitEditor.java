@@ -1,6 +1,9 @@
-//     $Id: UnitEditor.java,v 1.6 2000-10-31 18:06:46 mbickel Exp $
+//     $Id: UnitEditor.java,v 1.7 2000-11-01 11:41:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/10/31 18:06:46  mbickel
+//      Fileselector now displays files too
+//
 //     Revision 1.5  2000/10/29 21:06:04  mbickel
 //      Modified filename construction to run under Linux
 //      Started implementing a better directory choosing dialog
@@ -159,19 +162,13 @@ public class UnitEditor extends javax.swing.JFrame {
         // Main-Panel
         jIntFieldID = new MakeCheckIntRangeField(jTextFieldID,errMsg,0,65534);
         jIntFieldArmor = new MakeCheckIntRangeField(jTextFieldArmor,errMsg,0,65535);
-        jIntFieldWeight = new MakeCheckIntRangeField(jTextFieldWeight,
-        errMsg,0,32000);
-        jIntFieldEnergyTank = new MakeCheckIntRangeField(jTextFieldEnergyTank,
-        errMsg,0,2147483646);
-        jIntFieldMaterialTank = new MakeCheckIntRangeField(jTextFieldMaterialTank,
-        errMsg,0,2147483646);
-        jIntFieldProductionEnergy = new MakeCheckIntRangeField(jTextFieldProductionEnergy,
-        errMsg,0,65535);
-        jIntFieldProductionMaterial = new MakeCheckIntRangeField(jTextFieldProductionMaterial,
-        errMsg,0,65535);
+        jIntFieldWeight = new MakeCheckIntRangeField(jTextFieldWeight,errMsg,0,32000);
+        jIntFieldEnergyTank = new MakeCheckIntRangeField(jTextFieldEnergyTank,errMsg,0,2147483646);
+        jIntFieldMaterialTank = new MakeCheckIntRangeField(jTextFieldMaterialTank,errMsg,0,2147483646);
+        jIntFieldProductionEnergy = new MakeCheckIntRangeField(jTextFieldProductionEnergy,errMsg,0,65535);
+        jIntFieldProductionMaterial = new MakeCheckIntRangeField(jTextFieldProductionMaterial,errMsg,0,65535);
         jIntFieldView = new MakeCheckIntRangeField(jTextFieldView,errMsg,0,255);
-        jIntFieldJamming = new MakeCheckIntRangeField(jTextFieldJamming,
-        errMsg,0,255);
+        jIntFieldJamming = new MakeCheckIntRangeField(jTextFieldJamming,errMsg,0,255);
 
         // Movement-Panel
         jIntFieldFuelconsumption = new MakeCheckIntRangeField(jTextFieldFuelconsumption,
@@ -228,9 +225,13 @@ public class UnitEditor extends javax.swing.JFrame {
         jIntFieldProductionMaterial.setInt(tUnit.production.material);
         jIntFieldView.setInt(tUnit.view);
         jIntFieldJamming.setInt(tUnit.jamming);
+        
         // InfoText-Panel
-        if (tUnit.infotext != null) jTextPaneInfoText.setText (tUnit.infotext);
-        else jTextPaneInfoText.setText ("");
+        if (tUnit.infotext != null) 
+           jTextPaneInfoText.setText (tUnit.infotext);
+        else 
+           jTextPaneInfoText.setText ("");
+        
         // Movement-Panel
         jIntFieldFuelconsumption.setInt(tUnit.fuelconsumption);
         jIntFieldTank.setInt(tUnit.tank);
@@ -247,8 +248,7 @@ public class UnitEditor extends javax.swing.JFrame {
         //*Variable-Layout-Design*
 
         // Movement-Panel
-        jPanelMovementTable.setLayout
-        (new java.awt.GridLayout (cHeightLevel.length, 2));
+        jPanelMovementTable.setLayout ( new java.awt.GridLayout (cHeightLevel.length, 2));
         movementTableCheckBox = new javax.swing.JCheckBox[cHeightLevel.length];
         movementTableTextField = new javax.swing.JTextField[cHeightLevel.length];
         jIntFieldMovementTable = new MakeCheckIntRangeField[cHeightLevel.length];
@@ -261,9 +261,9 @@ public class UnitEditor extends javax.swing.JFrame {
             jPanelMovementTable.add (movementTableCheckBox[i]);
 
             movementTableTextField[i] = new javax.swing.JTextField();
-            movementTableTextField[i].setBorder (new javax.swing.border
-            .TitledBorder(new javax.swing.border.EtchedBorder(),cHeightLevel[i]
-            .concat(".Movement (0-255)"), 1, 2, new java.awt.Font ("Arial", 0, 10)));
+            movementTableTextField[i].setBorder (
+               new javax.swing.border.TitledBorder(new javax.swing.border.EtchedBorder(),cHeightLevel[i]
+               .concat(".Movement (0-255)"), 1, 2, new java.awt.Font ("Arial", 0, 10)));
             movementTableTextField[i].setText ("0");
             movementTableTextField[i].setEnabled (false);
             jIntFieldMovementTable[i] = new MakeCheckIntRangeField
