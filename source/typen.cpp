@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.94 2003-01-12 19:37:19 mbickel Exp $
+//     $Id: typen.cpp,v 1.95 2003-01-21 21:00:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.94  2003/01/12 19:37:19  mbickel
+//      Rewrote resource production
+//
 //     Revision 1.93  2002/12/19 20:22:46  mbickel
 //      Fixed: solar power plant not producing energy when snow_and_ice
 //      Speed up of AI
@@ -568,7 +571,7 @@ Resources operator* ( const Resources& res1, float a )
 {
    Resources res = res1;
    for ( int r = 0; r < resourceTypeNum; r++ )
-      res.resource(r) *= a;
+      res.resource(r) = int( res.resource(r) * a );
    return res;
 }
 
@@ -576,7 +579,7 @@ Resources operator/ ( const Resources& res1, float a )
 {
    Resources res = res1;
    for ( int r = 0; r < resourceTypeNum; r++ )
-      res.resource(r) /= a;
+      res.resource(r) = int( res.resource(r) / a );
    return res;
 }
 

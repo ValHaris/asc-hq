@@ -1137,17 +1137,17 @@ void Building::MiningStation :: testfield ( const MapCoordinate& mc )
             if ( r == 1 ) {
                got = min( fld->material * resource_material_factor  * buildingEfficiency, e );
                if ( !justQuery )
-                  fld->material -= ceil( got / (resource_material_factor  * buildingEfficiency));
+                  fld->material -= int( ceil( got / (resource_material_factor  * buildingEfficiency)));
             } else {
                got = min( fld->fuel * resource_fuel_factor  * buildingEfficiency, e );
                if ( !justQuery )
-                  fld->fuel -= ceil( got  / (resource_fuel_factor * buildingEfficiency));
+                  fld->fuel -= int( ceil( got  / (resource_fuel_factor * buildingEfficiency)));
             }
-            toExtract_thisLoop.resource(r) -= ceil(got / distefficiency);
+            toExtract_thisLoop.resource(r) -= int(ceil(got / distefficiency));
             if ( toExtract_thisLoop.resource(r) < 0 )
                toExtract_thisLoop.resource(r) = 0;
 
-            extracted.resource(r) += got;
+            extracted.resource(r) += int(got);
 
             if ( !justQuery ) {
                if ( !fld->resourceview )
