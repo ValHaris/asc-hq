@@ -5193,22 +5193,22 @@ int  ccontainer_b :: cresourceinfo_subwindow :: getvalue ( int resourcetype, int
    switch ( y ) {
       case 0:
          {  // avail
-            GetResource gr;
+            GetResource gr ( cc_b->building->getMap() );
             return gr.getresource ( cc_b->building->getEntry().x, cc_b->building->getEntry().y, resourcetype, maxint, 1, cc_b->building->color/8, scope );
          }
       case 1:
          {  // tank
-            GetResourceCapacity grc;
+            GetResourceCapacity grc ( cc_b->building->getMap() );
             return grc.getresource ( cc_b->building->getEntry().x, cc_b->building->getEntry().y, resourcetype, maxint, 1, cc_b->building->color/8, scope );
          }
       case 2:
          {  // plus
-            GetResourcePlus grp;
+            GetResourcePlus grp ( cc_b->building->getMap() );
             return grp.getresource ( cc_b->building->getEntry().x, cc_b->building->getEntry().y, resourcetype, cc_b->building->color/8, scope );
          }
       case 3:
          {  // usage
-            GetResourceUsage gru;
+            GetResourceUsage gru( cc_b->building->getMap() );
             return gru.getresource ( cc_b->building->getEntry().x, cc_b->building->getEntry().y, resourcetype, cc_b->building->color/8, scope );
          }
    } /* endswitch */

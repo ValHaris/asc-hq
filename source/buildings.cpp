@@ -685,7 +685,7 @@ Resources Building::netResourcePlus( ) const
 {
    Resources res;
    for ( int resourcetype = 0; resourcetype < resourceTypeNum; resourcetype++ ) {
-      GetResourcePlus grp;
+      GetResourcePlus grp ( getMap() );
       res.resource(resourcetype) += grp.getresource ( getEntry().x, getEntry().y, resourcetype, color/8, 1 );
    }
    return res;

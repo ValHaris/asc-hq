@@ -35,7 +35,7 @@ void MapNetwork :: searchfield ( int x, int y, int dir )
 {
   int s;
 
-   pfield fld = getfield ( x, y );
+   pfield fld = actmap->getField ( x, y );
    if ( !fld )
       return;
 
@@ -91,7 +91,7 @@ void MapNetwork :: searchfield ( int x, int y, int dir )
             if ( r == 1 ) {
                dir = arr[0];
                getnextfield ( x, y, dir );
-               fld = getfield( x, y ); 
+               fld = actmap->getField( x, y ); 
                if ( !fld )
                   return;
             } else
@@ -103,7 +103,7 @@ void MapNetwork :: searchfield ( int x, int y, int dir )
 void MapNetwork :: searchvehicle ( int x, int y )
 {
    if ( pass == 2 ) {
-      pfield newfield = getfield ( x, y );
+      pfield newfield = actmap->getField ( x, y );
       if ( newfield )
          if ( !newfield->a.temp2 )
            if ( newfield->vehicle ) {
@@ -116,7 +116,7 @@ void MapNetwork :: searchvehicle ( int x, int y )
 
 void MapNetwork :: searchbuilding ( int x, int y )
 {
-   pbuilding bld = getfield( x, y )->building;
+   pbuilding bld = actmap->getField( x, y )->building;
    if ( !bld )
       return;
 
@@ -139,7 +139,7 @@ void MapNetwork :: searchbuilding ( int x, int y )
                   int xp2 = mc.x;
                   int yp2 = mc.y;
                   getnextfield ( xp2, yp2, d );
-                  pfield newfield = getfield ( xp2, yp2 );
+                  pfield newfield = actmap->getField ( xp2, yp2 );
                   if ( newfield && newfield->building != bld  && !newfield->a.temp )
 
 
@@ -154,7 +154,7 @@ void MapNetwork :: searchbuilding ( int x, int y )
 
 int MapNetwork :: instancesrunning = 0;
 
-MapNetwork :: MapNetwork ( int checkInstances )
+MapNetwork :: MapNetwork ( pmap gamemap, int checkInstances ) : actmap ( gamemap )
 {
    if ( checkInstances ) {
       if ( instancesrunning )
@@ -220,7 +220,7 @@ void MapNetwork :: start ( int x, int y )
          }
       } else  
          if ( globalsearch() == 0 ) {
-            pfield fld = getfield ( x, y );
+            pfield fld = actmap->getField ( x, y );
             if ( fld )
                if ( fld->building ) {
                   if ( pass == 1 )
@@ -237,7 +237,7 @@ void MapNetwork :: start ( int x, int y )
 
 int ResourceNet :: fieldavail ( int x, int y )
 {
-    pfield fld = getfield ( x, y );
+    pfield fld = actmap->getField ( x, y );
 /*    pobject o = fld->checkforobject ( pipelineobject ) ; 
     if ( o )
        return o->dir;
@@ -254,7 +254,7 @@ int ResourceNet :: fieldavail ( int x, int y )
              int xp = x;
              int yp = y;
              getnextfield ( xp, yp , i );
-             pfield fld2 = getfield ( xp, yp );
+             pfield fld2 = actmap->getField ( xp, yp );
              if ( fld2 )
                 if ( (fld2->bdt & tb).any() ||  fld2->building )
                    d |= ( 1 << i );
@@ -299,8 +299,8 @@ int StaticResourceNet :: searchfinished ( void )
 
 
 
-GetResource :: GetResource ( int scope )
-             : StaticResourceNet ( scope )
+GetResource :: GetResource ( pmap gamemap, int scope )
+             : StaticResourceNet ( gamemap, scope )
 {
    memset ( tributegot, 0, sizeof ( tributegot ));
 }
@@ -512,7 +512,7 @@ void transfer_all_outstanding_tribute ( void )
 
                   if ( !actmap->isResourceGlobal (resourcetype) ) {
                      for ( tmap::Player::BuildingList::iterator j = actmap->player[player].buildingList.begin(); j != actmap->player[player].buildingList.end() &&  topay[resourcetype] > got[resourcetype] ; j++ ) {
-                        PutTribute pt;
+                        PutTribute pt ( actmap );
                         got[resourcetype] += pt.puttribute ( *j, resourcetype, 0, targplayer, player, 1 );
                      }
                   } else {

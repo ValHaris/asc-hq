@@ -1767,7 +1767,6 @@ void  mainloop ( void )
                break;
 
             case ct_f11: {
-               //displaymessage(strrr(getactfield()->vehicle->getMovement()),1); 
             }
             break;
                

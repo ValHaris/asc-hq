@@ -1627,14 +1627,14 @@ void Building :: execnetcontrol ( void )
 
 int  Building :: putResource ( int      need,    int resourcetype, int queryonly, int scope  )
 {
-   PutResource putresource ( scope );
+   PutResource putresource ( getMap(), scope );
    return putresource.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
 }
 
 
 int  Building :: getResource ( int      need,    int resourcetype, int queryonly, int scope )
 {
-   GetResource gr ( scope );
+   GetResource gr ( getMap(), scope );
    return gr.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
 }
 

@@ -1338,10 +1338,17 @@ void trunreplay :: execnextreplaymove ( void )
                                  readnextaction();
 
                                  pvehicle eht = actmap->getUnit ( x, y, nwid );
-                                 if ( eht ) {
-                                    eht->experience = exp;
+                                 pbuilding bld = actmap->getField ( x, y )->building;
+                                 if ( eht && bld ) {
+                                    cbuildingcontrols bc;
+                                    bc.init( bld );
+                                    if ( bc.training.available( eht )) 
+                                       bc.training.trainunit( eht );
+                                    else
+                                       error("severe replay inconsistency:\nno vehicle for trainunit command !");
                                  } else
                                     error("severe replay inconsistency:\nno vehicle for trainunit command !");
+
 
                               }
          break;
