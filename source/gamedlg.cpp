@@ -1,9 +1,13 @@
 /*! \file gamedlg.cpp    
     \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.92 2002-03-14 18:14:37 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.93 2002-03-26 22:23:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.92  2002/03/14 18:14:37  mbickel
+//      Improved messages for proposing peace
+//      Fixed display error when enterering passwords
+//
 //     Revision 1.91  2002/03/11 18:47:36  mbickel
 //      Fixed: Remaining movement of troopers not displayed
 //      Fixed wrong text position in mouse options
@@ -460,10 +464,6 @@
 #include "viewcalculation.h"
 #include "replay.h"
 #include "itemrepository.h"
-
-#ifdef _SDL_
- #include "sdl/sound.h"
-#endif
 
 class   tchoosetechnology : public tdialogbox {
                            dynamic_array<ptechnology> techs;

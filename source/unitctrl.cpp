@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.82 2001-12-19 17:16:29 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.83 2002-03-26 22:23:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.82  2001/12/19 17:16:29  mbickel
+//      Some include file cleanups
+//
 //     Revision 1.81  2001/12/14 10:20:05  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -819,8 +822,8 @@ void   VehicleMovement :: FieldReachableRek :: run(int          x22,
       for ( int d = 1; d <= shortestway.tiefe; d++) 
          path->addField ( shortestway.x[d], shortestway.y[d] );
    }
-   actmap->cleartemps(7); 
-} 
+   actmap->cleartemps(7);
+}
 
 
 
@@ -869,13 +872,13 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
          oldfield->vehicle->loading[i] = NULL; 
       } 
       else 
-         if ( oldfield->building ) { 
+         if ( oldfield->building ) {
             int i = 0; 
             while (oldfield->building->loading[i] != vehicle) 
                i++; 
             oldfield->building->loading[i] = NULL; 
          } 
-   } 
+   }
 
    SoundLoopManager slm ( SoundList::getInstance().getSound( SoundList::moving, vehicle->typ->movemalustyp ), false );
 
@@ -968,6 +971,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
 
       if ( rf->checkfield ( x, y, vehicle, mapDisplay )) {
          cancelmovement = 1;
+         attackedByReactionFire = true;
          vehicle = actmap->getUnit ( networkID );
       }
 
@@ -1066,6 +1070,10 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
       if ( newheight != -1 && vehicle->typ->height & newheight)
          vehicle->height = newheight;
 
+      if ( rf->checkfield ( x, y, vehicle, mapDisplay )) {
+         attackedByReactionFire = true;
+         vehicle = actmap->getUnit ( networkID );
+      }
 
       dashboard.x = 0xffff;
    }
@@ -1084,7 +1092,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
          mapDisplay->displayPosition ( x, y );
    }
    return 0;
-} 
+}
 
 
 
@@ -1299,7 +1307,7 @@ int ChangeVehicleHeight :: moveheight( int allFields )
    }
 
 
-   if ( ok2 ) 
+   if ( ok2 )
       return 0;
    else
       return -116;
@@ -1588,7 +1596,8 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int h
             displaymessage ( "ChangeVehicleHeight :: execute / vmove step 3 failed !", 2 );
       }
 
-      if ( actmap->getUnit ( networkID )) {
+      // cancel if the unit was attecked; unless overridden param3 (noInterrupt = allFields) 
+      if ( actmap->getUnit ( networkID ) && (!vmove->attackedByReactionFire || allFields)) {
          modechangePosition = MapCoordinate ( sp.x, sp.y );
 
          fieldReachableRek.run( x, y, vehicle, height, &path, vehicle->getMovement( false ) );

@@ -1,6 +1,11 @@
-//     $Id: unitctrl.h,v 1.27 2001-11-28 13:03:16 mbickel Exp $
+//     $Id: unitctrl.h,v 1.28 2002-03-26 22:23:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2001/11/28 13:03:16  mbickel
+//      Fixed: attack selectable although 0% hit accuracy
+//      Fixed: refuelling not possible if weapon had wrong target height
+//      Fixed: repair icon displayed when refuelling
+//
 //     Revision 1.26  2001/11/15 20:46:05  mbickel
 //      Fixed: replay not working when moving units out of carriers
 //
@@ -246,8 +251,9 @@ class BaseVehicleMovement : public VehicleAction {
            protected:
               MapDisplayInterface* mapDisplay;
            public:
-              BaseVehicleMovement ( VehicleActionType _actionType, PPendingVehicleActions _pva ) : VehicleAction ( _actionType, _pva ) {};
+              BaseVehicleMovement ( VehicleActionType _actionType, PPendingVehicleActions _pva ) : VehicleAction ( _actionType, _pva ),attackedByReactionFire(false) {};
               IntFieldList path;
+              bool attackedByReactionFire;
               pvehicle getVehicle ( void ) { return vehicle; };
               void registerMapDisplay ( MapDisplayInterface* _mapDisplay ) { mapDisplay = _mapDisplay; };
 

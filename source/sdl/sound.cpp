@@ -38,7 +38,6 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
 
 
    this->effectsMuted = muteEffects;
-   this->musicMuted = muteMusic;
    this->off = _off;
 
    for ( int i = 0; i < MIX_CHANNELS; i++ )
@@ -72,7 +71,12 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
       return;
    } else {
       mix_initialized = true;
-		Mix_QuerySpec(&audio_rate, &audio_format, &audio_channels);
+      if ( muteMusic )
+         musicState = init_paused;
+      else
+         musicState = init_ready;
+
+      Mix_QuerySpec(&audio_rate, &audio_format, &audio_channels);
       displayLogMessage ( 5, "Opened audio at %d Hz %d bit %s\n", audio_rate,
 			(audio_format&0xFF),
 			(audio_channels > 1) ? "stereo" : "mono");
@@ -105,7 +109,7 @@ void SoundSystem :: trackFinished( void )
 
 void SoundSystem :: nextTrack( void )
 {
-   if ( off )
+   if ( off || musicState==paused || musicState==init_paused)
       return;
 
   if ( musicBuf ) {
@@ -147,6 +151,13 @@ void SoundSystem :: resumeMusic()
 {
    if ( off )
       return;
+
+   if ( musicState == init_ready || musicState == init_paused ) {
+      if (musicState == init_paused)
+         musicState = init_ready;
+      nextTrack();
+      return;
+   }
 
    if ( musicState == paused ) {
       Mix_ResumeMusic ();

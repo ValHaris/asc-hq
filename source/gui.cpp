@@ -4,9 +4,15 @@
 */
 
 
-//     $Id: gui.cpp,v 1.75 2002-03-02 23:04:01 mbickel Exp $
+//     $Id: gui.cpp,v 1.76 2002-03-26 22:23:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.75  2002/03/02 23:04:01  mbickel
+//      Some cleanup of source code
+//      Improved Paragui Integration
+//      Updated documentation
+//      Improved Sound System
+//
 //     Revision 1.74  2001/12/19 17:16:29  mbickel
 //      Some include file cleanups
 //
@@ -1298,11 +1304,13 @@ void  tnsguiiconascent::exec         ( void )
 
    } else
      if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_ascent &&  (pendingVehicleActions.ascent->getStatus() == 2 || pendingVehicleActions.ascent->getStatus() == 3 )) {
-        int res = pendingVehicleActions.ascent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.ascent->getStatus(), -1, 0 );
+        int xdst = getxpos();
+        int ydst = getypos();
+        int res = pendingVehicleActions.ascent->execute ( NULL, xdst, ydst, pendingVehicleActions.ascent->getStatus(), -1, 0 );
         if ( res >= 0 && CGameOptions::Instance()->fastmove ) {
            // if the status is 1000 at this position, the unit has been shot down by reactionfire before initiating the height change
            if ( res < 1000 )
-              res = pendingVehicleActions.ascent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.ascent->getStatus(), -1, 0 );
+              res = pendingVehicleActions.ascent->execute ( NULL, xdst, ydst, pendingVehicleActions.ascent->getStatus(), -1, 0 );
         } else {
            for ( int i = 0; i < pendingVehicleActions.ascent->path.getFieldNum(); i++ )
               pendingVehicleActions.ascent->path.getField( i ) ->a.temp = 1;
@@ -1318,7 +1326,7 @@ void  tnsguiiconascent::exec         ( void )
 
         if ( pendingVehicleActions.ascent->getStatus() == 1000 ) {
            delete pendingVehicleActions.ascent;
-   
+
            if ( CGameOptions::Instance()->smallguiiconopenaftermove ) {
               actgui->painticons();
               actgui->paintsmallicons ( CGameOptions::Instance()->mouse.smallguibutton, 0 );

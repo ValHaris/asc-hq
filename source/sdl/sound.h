@@ -47,7 +47,6 @@ class Sound {
 
 class SoundSystem {
       bool effectsMuted;
-      bool musicMuted;
       int off;
       bool sdl_initialized;
       bool mix_initialized;
@@ -65,7 +64,7 @@ class SoundSystem {
 
       void nextTrack ( void );
 
-      enum MusicState { uninitialized, playing, paused } musicState;
+      enum MusicState { uninitialized, init_ready, init_paused, playing, paused } musicState;
    protected:
 
       //! loads a sound from the wave file called name to an Mix_buffer.
