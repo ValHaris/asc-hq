@@ -1,6 +1,10 @@
-//     $Id: basestrm.cpp,v 1.26 2000-07-28 10:15:26 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.27 2000-07-31 18:02:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/07/28 10:15:26  mbickel
+//      Fixed broken movement
+//      Fixed graphical artefacts when moving some airplanes
+//
 //     Revision 1.25  2000/06/28 18:30:57  mbickel
 //      Started working on AI
 //      Started making loaders independent of memory layout
@@ -1003,17 +1007,51 @@ char* constructFileName( char* buf, int directoryLevel, const char* path, const 
 {
   if ( buf ) {
 
-     // this system could be extended to allow a relative path
+     const char* filename2 = filename;
+     buf[0] = 0;
 
-     if ( path ) 
-        strcpy ( buf, path);
-     else
-        strcpy ( buf, ascDirectory[ directoryLevel ]);
+     // filenames beginning with / or ~/ have an absolute path ; ignore variable path for them
+     if ( ! (filename && (filename[0] == pathdelimitter || (filename[0]=='~' && filename[1] == pathdelimitter)) )) {
+        if ( path )
+           strcpy ( buf, path);
+        else
+           if ( directoryLevel >= 0 )
+              strcpy ( buf, ascDirectory[ directoryLevel ]);
+     }
 
-     if ( strlen ( buf ) && buf[strlen ( buf ) -1] != pathdelimitter )
-        strcat ( buf, pathdelimitterstring );
+     appendbackslash ( buf );
 
-     strcat ( buf, filename );
+     char name2[10000];
+     if ( filename && strchr ( filename, pathdelimitter )) {
+        strcpy ( name2, filename );
+        int i = strlen ( name2 )-1;
+        while ( name2[i] != pathdelimitter )
+           i--;
+
+        name2[i+1] = 0;
+
+        filename2 = &filename[i+1];
+
+        if ( buf[0] && name2[0]==pathdelimitter )
+           strcpy ( buf, name2+1);
+        else
+           strcpy ( buf, name2);
+     }
+
+     if ( buf[0] == '~' && buf[1] == pathdelimitter )
+        if ( char* home = getenv ( "HOME" )) {
+           char temp[1000];
+           strcpy ( temp, buf );
+           strcpy ( buf, home );
+           appendbackslash ( buf );
+           strcat ( buf, &temp[2]);
+        }
+
+
+     appendbackslash ( buf );
+
+     if ( filename2 )
+        strcat ( buf, filename2 );
   }
 
   return buf;
@@ -1035,21 +1073,32 @@ void locateFile ( const char* filename, FileLocation* loc )
       loc->directoryLevel = idx->directoryLevel;
       loc->found = 1;
       loc->container = idx->container;
-   } else { 
+   } else {
       maxnum = searchDirNum;
       loc->container = NULL;
       loc->directoryLevel = -1;
    }
 
-   int localfound = 0;
-   for ( int i = 0; i < maxnum && !localfound; i++ ) {
+   if ( maxnum ) {
+      int localfound = 0;
+      for ( int i = 0; i < maxnum && !localfound; i++ ) {
+         char buf[2000];
+         FILE* fp = fopen ( constructFileName ( buf, i, NULL, filename), "r" );
+         if ( fp ) {
+            localfound = loc->found = 1;
+            fclose ( fp );
+            loc->container = NULL;
+            loc->directoryLevel = i;
+         }
+      }
+   } else {
       char buf[2000];
-      FILE* fp = fopen ( constructFileName ( buf, i, NULL, filename), "r" );
+      FILE* fp = fopen ( constructFileName ( buf, -1, ".", filename), "r" );
       if ( fp ) {
-         localfound = loc->found = 1;
+         loc->found = 1;
          fclose ( fp );
          loc->container = NULL;
-         loc->directoryLevel = i;
+         loc->directoryLevel = -2;
       }
    }
 }
@@ -1800,9 +1849,14 @@ tfindfile :: tfindfile ( const char* name )
       strcpy ( wildcard, &name[i+1] );
 
    } else {
-      for (int i = 0; i < searchDirNum; i++ ) 
-         directory[i] = ascDirectory[i];
-      dirNum = searchDirNum;
+      if ( searchDirNum ) {
+         for (int i = 0; i < searchDirNum; i++ )
+            directory[i] = ascDirectory[i];
+         dirNum = searchDirNum;
+      } else {
+         directory[0] = ".";
+         dirNum = 1;
+      }
       strcpy ( wildcard, name );
    }
 
@@ -2158,13 +2212,18 @@ int filesize( char *name)
 
 void addSearchPath ( const char* path )
 {
-   char* string = new char[ strlen(path) + 10 ];
-   strcpy ( string, path );
-   if ( strlen ( string ) && string[strlen ( string ) -1] != pathdelimitter )
-      strcat ( string, pathdelimitterstring );
+   if ( path ) {
+      char buf[1000];
+      char* string = new char[ strlen(path) + 10 ];
+      strcpy ( string, constructFileName ( buf, -3, path, NULL ) );
 
-   ascDirectory[ searchDirNum ] = string;
-   searchDirNum++;
+      ascDirectory[ searchDirNum++ ] = string;
+   }
 }
 
 
+void appendbackslash ( char* string )
+{
+   if ( strlen ( string ) && string[strlen ( string ) -1] != pathdelimitter )
+      strcat ( string, pathdelimitterstring );
+}

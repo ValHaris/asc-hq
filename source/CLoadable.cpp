@@ -63,7 +63,12 @@ CLoadableGameOptions::CLoadableGameOptions(CGameOptions* pOptions)
 	add(new IntProperty("bi3.interpolate.objects"			,	&_pOptions->bi3.interpolate.objects));
 	add(new IntProperty("bi3.interpolate.buildings"			,	&_pOptions->bi3.interpolate.buildings));
 	
-	add(new IntProperty("changed"							,	&_pOptions->changed));
+	// add(new IntProperty("changed"							,	&_pOptions->changed));
+	add(new TextProperty("searchPath0"							,	&_pOptions->searchPath[0]	)	);
+	add(new TextProperty("searchPath1"							,	&_pOptions->searchPath[1]	)	);
+	add(new TextProperty("searchPath2"							,	&_pOptions->searchPath[2]	)	);
+	add(new TextProperty("searchPath3"							,	&_pOptions->searchPath[3]	)	);
+	add(new TextProperty("searchPath4"							,	&_pOptions->searchPath[4]	)	);
 }
 
 CLoadableGameOptions::~CLoadableGameOptions()

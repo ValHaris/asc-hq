@@ -91,7 +91,7 @@ bool	PropertyGroup::Load(std::istream& is)
 
 	//set all values to default
 	//
-	setValueToDefault();
+	// setValueToDefault();
 				
 	while	(!is.eof() && is.good() )	{
 	

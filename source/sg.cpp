@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.62 2000-07-29 14:54:42 mbickel Exp $
+//     $Id: sg.cpp,v 1.63 2000-07-31 18:02:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2000/07/29 14:54:42  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.61  2000/07/28 10:15:28  mbickel
 //      Fixed broken movement
 //      Fixed graphical artefacts when moving some airplanes
@@ -2744,25 +2747,26 @@ void  mainloop ( void )
 
 void dispmessageonexit ( void ) {
    int i;
-   printf("\n");
    if (exitmessage[0] != NULL) {
+      printf("\n");
       for (i=0;i<20 ;i++ ) {
           if (exitmessage[i] != NULL) {
              #ifdef logging
               logtofile(exitmessage[i]);
              #endif     
-             printf(exitmessage[i]);
-             printf("\n");
+             fprintf(stderr, "%s\n", exitmessage[i]);
           } /* endif */
       }
-      printf("\npress enter to exit\n");
-      char tmp;
-      scanf("%c", &tmp );
+      #if defined(_DOS_) | defined(WIN32)
+       printf("\npress enter to exit\n");
+       char tmp;
+       scanf("%c", &tmp );
+      #endif
    } else {
-     #ifdef _DOS_
-      printf( getstartupmessage() );
-     #endif
-      printf("exiting ... \n \n");
+      #if defined(_DOS_) | defined(WIN32)
+       printf( getstartupmessage() );
+      #endif
+       printf("exiting ... \n \n");
    } /* endif */
 }
 
@@ -3406,27 +3410,10 @@ int main(int argc, char *argv[] )
 
    initmisc ();
 
-   try {
-     opencontainer ( "*.con" );
-   } 
-   catch ( tfileerror err ) {
-      displaymessage ( 
-         "a fatal error occured while mounting the container files \n", 2 );
-   } 
-   catch ( ... ) {
-      displaymessage ( 
-         "loading of game failed during pre graphic initializing", 2 );
-   }
+   initFileIO( configfile );
 
-
-   try {
-      tnfilestream strm ( "palette.pal", 1 );
-      int a;
-      strm.readdata2 ( a );
-   }
-   catch ( tfileerror err ) {
-     displaymessage ( " unable to access palette.pal\nMake sure the data file 'main.con' is in the active directory !\nIf you don't have a file 'main.con' , get the data package from www.asc-hq.org\n ", 2 );
-   } 
+   if ( gameoptions.disablesound )
+      useSound = 0;
 
    try {
       if ( exist ( "data.version" )) {
@@ -3435,12 +3422,8 @@ int main(int argc, char *argv[] )
       } else
          dataVersion = 0;
 
-      readgameoptions( configfile );
-      if ( gameoptions.disablesound )
-         useSound = 0;
-
       check_bi3_dir ();
-   } 
+   }
    catch ( tfileerror err ) {
       displaymessage ( "unable to access file %s \n", 2, err.filename );
    }

@@ -1,6 +1,9 @@
-//     $Id: edglobal.cpp,v 1.14 2000-07-29 14:54:25 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.15 2000-07-31 18:02:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/07/29 14:54:25  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.13  2000/06/28 19:26:15  mbickel
 //      fixed bug in object generation by building removal
 //      Added artint.cpp to makefiles
@@ -344,12 +347,6 @@ char*    getstring( char*  title, char* orgval )
    else
       return gi.buf;
 } 
-
-void appendbackslash ( char* string )
-{
-   if ( strlen ( string ) && string[strlen ( string ) -1] != pathdelimitter )
-      strcat ( string, pathdelimitterstring );
-}
 
 char* getbipath ( void )
 {

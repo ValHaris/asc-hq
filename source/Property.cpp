@@ -99,7 +99,7 @@ IntProperty::IntProperty	(	const char* pszName,
 	_name.setName(pszName);
 	this->setDefault(Default);
 	this->_ptrValue	=	pInt;
-	*pInt=Default;
+	// *pInt=Default;
 }
 
 const char*	IntProperty::getName() const

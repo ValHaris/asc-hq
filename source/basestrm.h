@@ -1,6 +1,10 @@
-//     $Id: basestrm.h,v 1.13 2000-07-28 10:15:27 mbickel Exp $
+//     $Id: basestrm.h,v 1.14 2000-07-31 18:02:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/07/28 10:15:27  mbickel
+//      Fixed broken movement
+//      Fixed graphical artefacts when moving some airplanes
+//
 //     Revision 1.12  2000/06/28 18:30:57  mbickel
 //      Started working on AI
 //      Started making loaders independent of memory layout
@@ -715,6 +719,8 @@ extern const char* pathdelimitterstring;
 extern int filesize( char *name);
 
 extern void addSearchPath ( const char* path );
+extern void appendbackslash ( char* string );
+extern char* constructFileName( char* buf, int directoryLevel, const char* path, const char* filename );
 
 #endif
 

@@ -28,9 +28,9 @@ void CGameOptions::setDefaults ( void )
 {
    fastmove	=	0;
    visibility_calc_algo=0;      // 0 sauber, 1 schnell=0;
-   movespeed=0;
+   movespeed=20;
    endturnquestion=0;
-   smallmapactive=0;
+   smallmapactive=1;
    units_gray_after_move=0;
    mapzoom=0;
    mapzoomeditor=0;
@@ -42,11 +42,11 @@ void CGameOptions::setDefaults ( void )
    disablesound=0;
 
    mouse.scrollbutton=0;
-   mouse.fieldmarkbutton=0;
-   mouse.smallguibutton=0;
+   mouse.fieldmarkbutton=2;
+   mouse.smallguibutton=1;
    mouse.largeguibutton=0;
-   mouse.smalliconundermouse=0;  // 0: nie=0;  1: immer=0; 2: nur wenn vehicle, gebÑude, oder temp unter MAUS
-   mouse.centerbutton=0;    // Maustaste zum zentrieren des fielder, Åber dem sich die Maus befindet=0;
+   mouse.smalliconundermouse=2;  // 0: nie=0;  1: immer=0; 2: nur wenn vehicle, gebÑude, oder temp unter MAUS
+   mouse.centerbutton=4;    // Maustaste zum zentrieren des fielder, Åber dem sich die Maus befindet=0;
    mouse.unitweaponinfo=0;
    mouse.dragndropmovement=0;
 
@@ -66,6 +66,16 @@ void CGameOptions::setDefaults ( void )
    bi3.interpolate.units=0;
    bi3.interpolate.objects=0;
    bi3.interpolate.buildings=0;
+
+  #if defined ( _DOS_ ) | defined ( WIN32 )
+   searchPath[0].setName ( "./" );
+   for ( int i = 1; i < 5; i++ )
+      searchPath[i].setName ( NULL );
+  #else
+   searchPath[0].setName ( "~/.asc/" );
+   for ( int i = 1; i < 5; i++ )
+      searchPath[i].setName ( NULL );
+  #endif
 
    changed	=	0;
 }
@@ -112,6 +122,8 @@ void CGameOptions::copy ( const CGameOptions& cgo )
    bi3.interpolate.units   = cgo.bi3.interpolate.units;
    bi3.interpolate.objects = cgo.bi3.interpolate.objects;
    bi3.interpolate.buildings = cgo.bi3.interpolate.buildings;
+   for ( int i = 0; i < 5; i++ )
+      searchPath[i].setName ( cgo.searchPath[i].getName() );
 
    changed = 1;
 }

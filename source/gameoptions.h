@@ -89,6 +89,7 @@ class CGameOptions
          interpolate;
       } bi3;
       int changed;
+      Named searchPath[5];
 };
 
 extern CGameOptions gameoptions;

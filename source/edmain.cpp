@@ -1,6 +1,12 @@
-//     $Id: edmain.cpp,v 1.15 2000-07-16 14:20:02 mbickel Exp $
+//     $Id: edmain.cpp,v 1.16 2000-07-31 18:02:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/07/16 14:20:02  mbickel
+//      AI has now some primitive tactics implemented
+//      Some clean up
+//        moved weapon functions to attack.cpp
+//      Mount doesn't modify PCX files any more.
+//
 //     Revision 1.14  2000/05/23 20:40:44  mbickel
 //      Removed boolean type
 //
@@ -850,59 +856,109 @@ int main(int argc, char *argv[] )
     initmemory();
    #endif
 
+   char *mapname = NULL, *configfile = NULL;
 
-      for (i = 1; i<argc; i++ ) {
-           if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
-            #ifdef _DOS_
-              if ( strcmpi ( &argv[i][1], "V1" ) == 0 ) 
-                 vesaerrorrecovery = 1;
-              else
-            #endif
-              if ( strnicmp ( &argv[i][1], "x=", 2 ) == 0 ) {
-                 resolx = atoi ( &argv[i][3] );
-              } else
-              if ( strnicmp ( &argv[i][1], "x:" ,2 ) == 0 ) {
-                 resolx = atoi ( &argv[i][3] );
-              } else
-              if ( strnicmp ( &argv[i][1], "y=" ,2 ) == 0 ) {
-                 resoly = atoi ( &argv[i][3] );
-              } else
-              if ( strnicmp ( &argv[i][1], "y:" ,2 ) == 0 ) {
-                 resoly = atoi ( &argv[i][3] );
-              }
-              else 
-                if ( ( strcmpi ( &argv[i][1], "?" ) == 0 ) || ( strcmpi ( &argv[i][1], "h" ) == 0 ) ){
-                   printf( " Parameters: \n ");
-                   printf( "    /h      This page\n ");
-                   printf( "    /v1     Set vesa error recovery level to 1 \n");
-                   printf( "    /x:X    Set horizontal resolution to X; default is 800 \n");
-                   printf( "    /y:Y    Set verticalal resolution to Y; default is 600 \n\n");
+   for (i = 1; i<argc; i++ ) {
+      if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
+#ifdef _DOS_
+      if ( strcmpi ( &argv[i][1], "V1" ) == 0 ) {
+         vesaerrorrecovery = 1; continue;
+      }
 
-                   exit (0);
+      if ( strcmpi ( &argv[i][1], "SHOWMODES" ) == 0 ) {
+         showmodes = 1; continue;
+      }
+#else
+   /*
+      // Added support for the -w and --window options
+      // (equivalent to -window), since -w and --window are more
+      // intuitive for *ux users (gnu option convention)
+      if ( strcmpi ( &argv[i][1], "WINDOW" ) == 0 ||
+          strcmpi ( &argv[i][1], "W" ) == 0 ||
+          strcmpi ( &argv[i][1], "-WINDOW" ) == 0 ) {
+        fullscreen = 0; continue;
+      }
+   */
 
-                } else {
-                    printf ( "\nInvalid command line parameter: %s \n", argv[i] );
-                    exit(1);
-                }
-           } else {
-               printf ( "\nInvalid command line parameter: %s \n", argv[i] );
-               exit(1);
-           }
-        } /* endfor */
-   
-   initmisc ();
+#endif
+      if ( strnicmp ( &argv[i][1], "x=", 2 ) == 0 ) {
+           resolx = atoi ( &argv[i][3] ); continue;
+      }
 
-   t_carefor_containerstream cfc;
+      if ( strnicmp ( &argv[i][1], "x:" ,2 ) == 0 ) {
+           resolx = atoi ( &argv[i][3] ); continue;
+      }
 
-       #ifdef HEXAGON
-        readgameoptions();
-        check_bi3_dir ();
-       #endif
+      if ( strnicmp ( &argv[i][1], "y=" ,2 ) == 0 ) {
+           resoly = atoi ( &argv[i][3] ); continue;
+      }
 
+      if ( strnicmp ( &argv[i][1], "y:" ,2 ) == 0 ) {
+           resoly = atoi ( &argv[i][3] ); continue;
+      }
+
+      if ( strcmpi ( &argv[i][1], "loadmap" ) == 0 ||
+            strcmpi( &argv[i][1], "lm" ) == 0 ) {
+         mapname = argv[++i]; continue;
+      }
+
+      if ( strcmpi ( &argv[i][1], "configfile" ) == 0 ||
+           strcmpi ( &argv[i][1], "cf" ) == 0 ) {
+         configfile = argv[++i]; continue;
+      }
+
+     if ( ( strcmpi ( &argv[i][1], "?" ) == 0 ) ||
+          ( strcmpi ( &argv[i][1], "h" ) == 0 ) ||
+          ( strcmpi ( &argv[i][1], "-help" ) == 0 ) ){
+        printf( " Parameters: \n"
+                "\t-h\t\tThis page\n"
+                "\t-lm file\n\t-loadmap file\tstart with a given map\n"
+                "\t-cf file\n\t-configfile file\tuse given configuration file\n"
+                "\t-x:X\t\tSet horizontal resolution to X; default is 800 \n"
+                "\t-y:Y\t\tSet verticalal resolution to Y; default is 600 \n"
+#ifdef _DOS_
+                "\t-v1\t\tSet vesa error recovery level to 1 \n"
+                "\t-8bitonly\tDisable truecolor graphic mode \n"
+                "\t-showmodes\tDisplay list of available graphic modes \n" );
+#else
+                // "\t-window\t\tDisable fullscreen mode \n"
+                );
+#endif
+        exit (0);
+     }
+
+   }
+
+   printf ( "\nInvalid command line parameter: %s \n", argv[i]);
+   printf ( "Use /h to for help\n"  );
+   exit(1);
+
+  } /* endfor */
+
+
+   if ( resolx < 640 || resoly < 480 ) {
+      printf ( "Cannot run in resolution smaller than 640*480 !\n");
+      exit(1);
+   }
+
+#ifdef _DOS_
+   if ( showmodes ) {
+      showavailablemodes();
+      return 0;
+   }
+#endif
 
    memset(exitmessage, 0, sizeof ( exitmessage ));
    atexit ( dispmessageonexit );
-        
+
+   initmisc ();
+   initFileIO( configfile );
+
+   #ifdef HEXAGON
+    check_bi3_dir ();
+   #endif
+
+
    modenum8 = initgraphics( resolx, resoly, 8 );
    if ( modenum8 < 0 )
       return 1;
@@ -949,6 +1005,10 @@ int main(int argc, char *argv[] )
 
    try {
       loaddata();
+      if ( mapname )
+         loadmap ( mapname );
+      else
+         buildemptymap();
    } /* end try */
    catch ( tfileerror err ) {
       displaymessage ( " error loading file %s ",2,err.filename );
@@ -971,9 +1031,6 @@ int main(int argc, char *argv[] )
       
    xlatpictgraytable = (ppixelxlattable) malloc( sizeof(*xlatpictgraytable) );
    generategrayxlattable(xlatpictgraytable,160,16); 
-
-
-   buildemptymap();
 
    (*xlatpictgraytable)[255] = 255;
 

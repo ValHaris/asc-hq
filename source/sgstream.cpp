@@ -1,6 +1,9 @@
-//     $Id: sgstream.cpp,v 1.17 2000-07-29 15:28:36 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.18 2000-07-31 18:02:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/07/29 15:28:36  mbickel
+//      Plaintext configfile runs now in Linux version too
+//
 //     Revision 1.16  2000/07/29 14:54:43  mbickel
 //      plain text configuration file implemented
 //
@@ -109,6 +112,11 @@
 #include <fstream.h>
 #include <math.h>
 #include <stdarg.h>
+#include <sys/types.h>
+#include <dirent.h>
+
+
+#include <sys/stat.h>
 
 
 #include "CLoadable.h"
@@ -140,11 +148,11 @@
 
 const char* asc_EnvironmentName = "asc_configfile";
 
-// #if defined(_DOS_) | defined(WIN32)
+#if defined(_DOS_) | defined(WIN32)
  const char* asc_configurationfile = "asc.ini";
-// #else
-//  const char* asc_configurationfile = "~/.ascrc";
-// #endif
+#else
+ const char* asc_configurationfile = "~/.asc/ascrc";
+#endif
 
 
 FILE* logfile = NULL;
@@ -2407,12 +2415,55 @@ t_carefor_containerstream :: t_carefor_containerstream ( void )
    opencontainer ( "*.con" );
 }
 
-CLoadableGameOptions* loadableGameOptions = NULL;
+
+bool checkDirectoryExistance ( const char* path )
+{
+   char tmp[10000];
+   constructFileName( tmp, 0, path, NULL );
+
+   int existence = 0;
+
+   DIR *dirp = opendir( tmp );
+   if( dirp ) {
+      if ( readdir( dirp ) )
+         existence = 1;
+      else
+         existence = 0;
+
+      closedir( dirp );
+   }
+
+   if ( !existence ) {
+      int res = mkdir ( tmp, 0700 );
+      if ( res ) {
+         fprintf(stderr, "could neither access nor create work directory %s\n", tmp );
+         return false;
+      }
+   }
+
+   return true;
+}
+
+
+// CLoadableGameOptions* loadableGameOptions = NULL;
+
+char* configFileNameUsed = NULL;
+char* configFileNameToWrite = NULL;
+
+char* getConfigFileName ( char* buffer )
+{
+   if ( buffer ) {
+      if ( configFileNameUsed )
+         strcpy ( buffer, configFileNameUsed );
+      else
+         strcpy ( buffer, "-none-" );
+   }
+   return buffer;
+}
+
 
 int readgameoptions ( const char* filename )
 {
-   if ( !loadableGameOptions)
-      loadableGameOptions = new CLoadableGameOptions (&gameoptions);
 
    const char* fn;
    if ( filename )
@@ -2423,11 +2474,19 @@ int readgameoptions ( const char* filename )
       else
          fn = asc_configurationfile;
 
-   if ( exist ( fn )) {
-      std::ifstream is( fn );
-      loadableGameOptions->Load(is);	
-      
-   } else
+   char completeFileName[10000];
+   constructFileName ( completeFileName, -3, NULL, fn );
+
+   configFileNameToWrite = strdup ( completeFileName );
+
+   if ( exist ( completeFileName )) {
+      configFileNameUsed = strdup ( completeFileName );
+
+      CLoadableGameOptions* loadable = new CLoadableGameOptions (&gameoptions);
+      std::ifstream is( completeFileName );
+      loadable->Load(is);	
+   } else {
+      gameoptions.changed = 1; // to generate a configuration file
       if ( exist ( "sg.cfg" ) ) {
          tnfilestream stream ( "sg.cfg", 1);
          int version = stream.readInt ( );
@@ -2482,11 +2541,11 @@ int readgameoptions ( const char* filename )
                gameoptions.bi3.dir.setName( tmp );
                delete[] tmp;
             }
-   
-            gameoptions.changed = 1;
-         }
-      } 
 
+         }
+      }
+      configFileNameUsed = strdup ( "-none- ; default values used" );
+   }
    #ifdef sgmain
    if ( gameoptions.startupcount < 10 ) {
       gameoptions.startupcount++;
@@ -2494,30 +2553,66 @@ int readgameoptions ( const char* filename )
    }
    #endif
 
+   checkDirectoryExistance ( gameoptions.searchPath[0].getName() );
+
    return 0;
 }
 
 int writegameoptions ( const char* filename )
 {
-   if ( gameoptions.changed ) {
-      const char* fn;
-      if ( filename )
-         fn = filename;
-      else
-         if ( getenv ( asc_EnvironmentName )) 
-            fn = getenv ( asc_EnvironmentName );
-         else
-            fn = asc_configurationfile;
-
-      std::ofstream os( fn );
-
-      if ( !loadableGameOptions)
-         loadableGameOptions = new CLoadableGameOptions (&gameoptions);
-      
-      loadableGameOptions->Save(os);
+   if ( gameoptions.changed && configFileNameToWrite ) {
+      CLoadableGameOptions* loadable = new CLoadableGameOptions (&gameoptions);
+      std::ofstream os( configFileNameToWrite );
+      loadable->Save(os);
    }
    return 0;
 }
 
-structure_size_tester sst3;
+void checkFileLoadability ( const char* filename )
+{
+   try {
+      tnfilestream strm ( filename, 1 );
+      char a = strm.readChar();
+   }
+   catch ( tfileerror err ) {
+      char temp[10000];
+      temp[0] = 0;
+      for ( int i = 0; i < 5; i++ )
+         if ( gameoptions.searchPath[i].getName() ) {
+            strcat ( temp, "  " );
+            strcat ( temp, gameoptions.searchPath[i].getName() );
+            strcat ( temp, "\n" );
+         }
 
+      char temp2[1000];
+      displaymessage ( "Unable to access %s\n"
+                       "Make sure the data file 'main.con' is in one of the search paths specified in your config file !\n"
+                       "The configuration file that is used is: %s \n"
+                       "These pathes are being searched:\n%s\n"
+                       "If you don't have a file 'main.con' , get and install the data package from www.asc-hq.org\n",
+                       2, filename, getConfigFileName(temp2), temp );
+   }
+}
+
+void initFileIO ( const char* configFileName )
+{
+   readgameoptions( configFileName );
+
+   for ( int i = 0; i < 5; i++ )
+      if ( gameoptions.searchPath[i].getName() ) {
+         if ( verbosity > 2 )
+            printf("adding search patch %s\n", gameoptions.searchPath[i].getName() );
+         addSearchPath ( gameoptions.searchPath[i].getName() );
+      }
+   try {
+     opencontainer ( "*.con" );
+   }
+   catch ( tfileerror err ) {
+      displaymessage ( "a fatal IO error occured while mounting the container files \n", 2 );
+   }
+   catch ( ... ) {
+      displaymessage ( "loading of game failed during pre graphic initializing", 2 );
+   }
+
+   checkFileLoadability ( "palette.pal" );
+}

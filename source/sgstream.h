@@ -1,6 +1,9 @@
-//     $Id: sgstream.h,v 1.5 2000-07-29 14:54:46 mbickel Exp $
+//     $Id: sgstream.h,v 1.6 2000-07-31 18:02:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/07/29 14:54:46  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.4  2000/05/23 20:40:49  mbickel
 //      Removed boolean type
 //
@@ -181,7 +184,12 @@ extern void logtofile ( char* strng, ... );
 extern void loadpalette ( void );
 extern int readgameoptions ( const char* filename = NULL );
 extern int writegameoptions ( const char* filename = NULL );
+extern char* getConfigFileName ( char* buffer );
 extern void loadguipictures( void );
+extern void checkFileLoadability ( const char* filename );
+extern void initFileIO ( const char* configFileName );
+
+
 
 
 #endif

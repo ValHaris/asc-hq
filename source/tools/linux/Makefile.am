@@ -1,14 +1,14 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.2 2000-05-08 20:39:02 mbickel Exp $
+## $Id: Makefile.am,v 1.3 2000-07-31 18:02:55 mbickel Exp $
 
 vpath %.cpp ..:../..
 
 CXXFLAGS = @CXXFLAGS@ -Dconverter
 
-bin_PROGRAMS = demount ascmount
+bin_PROGRAMS = ascdemount ascmount
 
-demount_SOURCES = demount.cpp basestrm.cpp misc.cpp
+ascdemount_SOURCES = demount.cpp basestrm.cpp misc.cpp
 
 ascmount_SOURCES = mount.cpp basestrm.cpp misc.cpp
 

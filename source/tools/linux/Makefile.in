@@ -68,9 +68,9 @@ VERSION = @VERSION@
 
 CXXFLAGS = @CXXFLAGS@ -Dconverter
 
-bin_PROGRAMS = demount ascmount
+bin_PROGRAMS = ascdemount ascmount
 
-demount_SOURCES = demount.cpp basestrm.cpp misc.cpp
+ascdemount_SOURCES = demount.cpp basestrm.cpp misc.cpp
 
 ascmount_SOURCES = mount.cpp basestrm.cpp misc.cpp
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -83,10 +83,10 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I../../..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-demount_OBJECTS =  demount.o basestrm.o misc.o
-demount_LDADD = $(LDADD)
-demount_DEPENDENCIES = 
-demount_LDFLAGS = 
+ascdemount_OBJECTS =  demount.o basestrm.o misc.o
+ascdemount_LDADD = $(LDADD)
+ascdemount_DEPENDENCIES = 
+ascdemount_LDFLAGS = 
 ascmount_OBJECTS =  mount.o basestrm.o misc.o
 ascmount_LDADD = $(LDADD)
 ascmount_DEPENDENCIES = 
@@ -102,8 +102,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 TAR = tar
 GZIP_ENV = --best
 DEP_FILES =  .deps/basestrm.P .deps/demount.P .deps/misc.P .deps/mount.P
-SOURCES = $(demount_SOURCES) $(ascmount_SOURCES)
-OBJECTS = $(demount_OBJECTS) $(ascmount_OBJECTS)
+SOURCES = $(ascdemount_SOURCES) $(ascmount_SOURCES)
+OBJECTS = $(ascdemount_OBJECTS) $(ascmount_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -157,9 +157,9 @@ distclean-compile:
 
 maintainer-clean-compile:
 
-demount: $(demount_OBJECTS) $(demount_DEPENDENCIES)
-	@rm -f demount
-	$(CXXLINK) $(demount_LDFLAGS) $(demount_OBJECTS) $(demount_LDADD) $(LIBS)
+ascdemount: $(ascdemount_OBJECTS) $(ascdemount_DEPENDENCIES)
+	@rm -f ascdemount
+	$(CXXLINK) $(ascdemount_LDFLAGS) $(ascdemount_OBJECTS) $(ascdemount_LDADD) $(LIBS)
 
 ascmount: $(ascmount_OBJECTS) $(ascmount_DEPENDENCIES)
 	@rm -f ascmount
