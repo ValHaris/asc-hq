@@ -67,7 +67,7 @@ ASCString ImageConverter::createPic(const BuildingType&  bt, ASCString filePath)
   int xsize = 300;
   int ysize = 200;
   convert(bt, constructImgPath(bt, filePath), xsize, ysize);
-  return  (constructImgPath(bt, filePath)) ;
+  return  (constructImgPath(bt, RELATIVEIMGPATH)) ;
 }
 
 void ImageConverter::convert(const ContainerBaseType&  cbt,  ASCString file, int xsize, int ysize) {
@@ -81,7 +81,7 @@ void ImageConverter::convert(const ContainerBaseType&  cbt,  ASCString file, int
 #endif
 
   ASCString tempFileName = tempPath + "tempPic.pcx";
-
+  cout << "command is: " << command << endl;
   command = "convert \"" + tempFileName + "\" -transparent \"#f8f4f0\" " + "\"" + file + "\"";
   cout << "creating image..." << command << endl;
   writepcx ( tempFileName, 0, 0, xsize, ysize, pal );
@@ -99,17 +99,15 @@ ASCString ImageConverter::createPic(const VehicleType&  vt, ASCString filePath) 
   pal[255][1] = 253;
   pal[255][2] = 252;
   convert(vt, constructImgPath(vt, filePath));
-  return  (constructImgPath(vt, filePath)) ;
+  return  (constructImgPath(vt, RELATIVEIMGPATH)) ;
 }
 
 ASCString ImageConverter::constructImgPath(const BuildingType&  bt, const ASCString filePath) {
-  ASCString fileName = strrr(bt.id);
-  return ("./"+ fileName + "B.gif") ;
+ return (filePath + strrr(bt.id) + "B.gif");
 }
 
 ASCString ImageConverter::constructImgPath(const VehicleType&  vt, const ASCString filePath) {
-  ASCString fileName = strrr(vt.id);
-  return ("./" + fileName + "U.gif") ;
+ return (filePath + strrr(vt.id) + "U.gif");
 }
 
 //**************************************************************************************************************
@@ -188,7 +186,7 @@ void BuildingGuideGen::generateCategories() const {
 
         for ( int building = 0; building < buildingTypeRepository.getNum(); building++ ) {
           BuildingType*  bt = buildingTypeRepository.getObject_byPos ( building );
-          if(s->isMember(bt->id)) {
+          if(s->isMember(bt->id, SingleUnitSet::unit)) {
             ASCString fileLink = strrr(bt->id) + APPENDIX + ASCString(MAINLINKSUFFIX) + HTML;
             CategoryMember* dataEntry = new CategoryMember(bt->name.toUpper(), cssFile, fileLink, TARGET);
             if ( bt->special & cghqb ) {
@@ -237,8 +235,9 @@ void BuildingGuideGen::processSubjects() {
     if(setID > 0) {
       for ( std::vector<SingleUnitSet*>::iterator i = unitSets.begin(); i != unitSets.end(); i++  ) {
         SingleUnitSet* s = (*i);
-        if((s->ID == setID) && (s->isMember(bt->id))) {
+        if((s->ID == setID) && (s->isMember(bt->id,SingleUnitSet::unit))) {
           if(buildingNames.end() != buildingNames.find(strrr(s->ID) +bt->name)||(!buildingsUnique)) {
+	    cout << "Test 1 " << setID << endl;
             processBuilding(*bt);
             buildingNames.insert(strrr(s->ID) +bt->name);
           }
@@ -269,7 +268,7 @@ void UnitGuideGen::processSubjects() {
     if(setID > 0) {
       for ( std::vector<SingleUnitSet*>::iterator i = unitSets.begin(); i != unitSets.end(); i++  ) {
         SingleUnitSet* s = (*i);
-        if((s->ID == setID) && (s->isMember(vt->id))) {
+        if((s->ID == setID) && (s->isMember(vt->id, SingleUnitSet::unit))) {
           processUnit(*vt);
         }
       }
@@ -332,7 +331,7 @@ void UnitGuideGen::generateCategories() const {
 
         for ( int unit = 0; unit < vehicleTypeRepository.getNum(); unit++ ) {
           VehicleType*  vt = vehicleTypeRepository.getObject_byPos ( unit );
-          if(s->isMember(vt->id)) {
+          if(s->isMember(vt->id, SingleUnitSet::unit )) {
             ASCString fileLink = strrr(vt->id) + APPENDIX + ASCString(MAINLINKSUFFIX) + HTML;
 
             CategoryMember* dataEntry = new CategoryMember(vt->name.toUpper(), cssFile, fileLink, TARGET);
@@ -386,4 +385,5 @@ void UnitGuideGen::generateCategories() const {
     cout << e.getMessage() << endl;
   }
 }
+
 

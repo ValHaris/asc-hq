@@ -3,9 +3,13 @@
   
 */
 
-//     $Id: sgstream.h,v 1.29 2004-05-23 12:54:28 mbickel Exp $
+//     $Id: sgstream.h,v 1.30 2004-07-25 15:13:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2004/05/23 12:54:28  mbickel
+//      Updated campaign maps
+//      improved tech tree generation
+//
 //     Revision 1.28  2004/05/11 20:22:33  mbickel
 //      Readded research system to ASC
 //
@@ -181,6 +185,8 @@ extern void initFileIO ( const ASCString& configFileName, int skipChecks = 0 );
 class SingleUnitSet {
       public:
 
+         enum Type { unit, building };
+
          class TranslationTable {
                   public:
                      std::vector<IntRange> translation;
@@ -195,14 +201,15 @@ class SingleUnitSet {
          ASCString maintainer;
          ASCString information;
 
-         std::vector<IntRange> ids;
+         std::vector<IntRange> unitIds;
+         std::vector<IntRange> buildingIds;
          std::vector<TranslationTable*> transtab;
          bool filterBuildings;
 
          SingleUnitSet ( void ) : active ( 1 ), filterBuildings ( true ), ID(0) {};
-         int isMember ( int id );
+         bool isMember ( int id, Type type );
          void read ( pnstream stream );
-         void parseIDs ( const char* s );
+         std::vector<IntRange> parseIDs ( const char* s );
 
      };
 

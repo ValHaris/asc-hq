@@ -37,6 +37,7 @@
 
 
 #define VehicleType Vehicletype
+#define RELATIVEIMGPATH "./"
 
 typedef map<int, ASCString> Int2String;
 typedef map<int, Category*> GroupFileEntriesMap;
@@ -284,7 +285,7 @@ public:
   *@param filePath The path where the images are stored
   *@return The full Path to the image: path + fileName + extension
   */
-  ASCString constructImgPath(const BuildingType&  bt, const ASCString filePath);
+  ASCString constructImgPath(const BuildingType&  cbt, const ASCString filePath);
   
   /**
   *@brief Constructs the full path to the image of a VehicleType  
@@ -292,8 +293,12 @@ public:
   *@param filePath The path where the images are stored
   *@return The full Path to the image: path + fileName + extension
   */
-  ASCString constructImgPath(const VehicleType&  vt, const ASCString filePath);
-
+  ASCString constructImgPath(const VehicleType&  cbt, const ASCString filePath);
+  
+  
+  
+  
+  
 private:
   /**
   *@brief Converts a pcx-file of a building to a gif
@@ -307,4 +312,5 @@ private:
 
 };
 #endif
+
 

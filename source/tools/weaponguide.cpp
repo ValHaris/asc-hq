@@ -207,11 +207,11 @@ int main(int argc, char *argv[] )
    BuildingGuideGen gen(prefixDir, cl.m(), 0, cl.i());   
    gen.processSubjects();
    cout << "*******Buildings done*******" << endl;
-   /*
+
    UnitGuideGen unitGen(prefixDir, cl.m(), 0, cl.i());
    unitGen.processSubjects();
    cout << "*******Units done*******" << endl;
-   TechGuideGenerator techGen;
+   /*TechGuideGenerator techGen;
    techGen.processTechs();   */
    cout << "******Guide generated*******" << endl;
    return 0;

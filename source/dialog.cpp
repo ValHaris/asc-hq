@@ -5114,7 +5114,7 @@ void viewUnitSetinfo ( void )
 
          if ( unitSets.size() > 0 )
             for ( unsigned int i = 0; i < unitSets.size(); i++ )
-               if ( unitSets[i]->isMember ( typ->id )) {
+               if ( unitSets[i]->isMember ( typ->id,SingleUnitSet::unit )) {
                   s += "Unit is part of this unit set:";
                   if ( unitSets[i]->name.length()) {
                      s += "#aeinzug20##eeinzug20#\nName: #aeinzug60##eeinzug60#\n";

@@ -140,7 +140,7 @@ protected:
   /**
   *@brief Builds the main text. This is the area beneath the picture. 
   */
-  virtual void addMainText() = 0;
+  virtual void addMainText();
   /**
   *@brief Builds the left area consisting of picture and mainText
   */
@@ -206,15 +206,17 @@ protected:
   *@brief Adds a text link to the page
   *@param label The label of the link
   *@param ref The destination where the link points to
+  *@param cssClass A cssClass defining the style of the link
   */
-  void addLink(ASCString label, ASCString ref);
+  void addLink(ASCString label, ASCString ref, ASCString cssClass = "");
   /**
   *@brief Constructs a text link and returns the result
   *@param label The label of the link
   *@param ref The destination where the link points to
+  *@param cssClass A cssClass defining the style of the link
   *@return The new constructed link
   */
-  ASCString constructLink(ASCString label, ASCString ref);
+  ASCString constructLink(ASCString label, ASCString ref, ASCString cssClass = "");
   /**
   *@brief Adds an image to the page  
   *@param ref The destination of the image added
@@ -302,7 +304,11 @@ protected:
   *@brief Ends a table data field
   */
   void endTD();
-
+private:
+  /**
+  *@brief name for the anchor at pageTop
+  */
+ static const ASCString ANCHORTOP;
 
   
 };
@@ -337,11 +343,7 @@ protected:
   *@brief Adds the links to all pages of this BuildingType to the info page
   */  
   virtual void addSectionLinks();
-  /**
-  *@brief  Adds the main text beneath the picture
-  */
-  virtual void addMainText();  
-
+  
   
 };
 
@@ -522,11 +524,7 @@ protected:
   *@brief The VehicleType for which the page is constructed. Avoids downcasting 
           from memeber cbt of super class
   */
-  const VehicleType& vt;
-  /**
-  *@brief  Adds the main text beneath the picture
-  */
-  virtual void addMainText();  
+  const VehicleType& vt;  
  /**
   *@brief Adds the links to all pages of this VehicleType to the info page
   */
@@ -710,4 +708,5 @@ public:
 };
 
 #endif
+
 

@@ -777,18 +777,27 @@ void checkDataVersion( )
 //===================================================================================
 
 
-int SingleUnitSet :: isMember ( int id )
+bool SingleUnitSet :: isMember ( int id, Type type )
 {
-   for ( int i = 0; i < ids.size(); i++ )
-     if ( id >= ids[i].from && id <= ids[i].to )
-        return 1;
-   return 0;
+   if ( type == unit ) {
+      for ( int i = 0; i < unitIds.size(); i++ )
+        if ( id >= unitIds[i].from && id <= unitIds[i].to )
+           return true;
+   }
+   if ( type == building ) {
+      for ( int i = 0; i < buildingIds.size(); i++ )
+        if ( id >= buildingIds[i].from && id <= buildingIds[i].to )
+           return true;
+   }
+   return false;
 }
 
 
-void SingleUnitSet::parseIDs ( const char* s )
+std::vector<IntRange> SingleUnitSet::parseIDs ( const char* s )
 {
    char buf[10000];
+
+   std::vector<IntRange> res;
 
    if ( s && s[0] ) {
 
@@ -810,11 +819,12 @@ void SingleUnitSet::parseIDs ( const char* s )
          IntRange ir;
          ir.from = from;
          ir.to = to;
-         ids.push_back ( ir );
+         res.push_back ( ir );
 
          pic = strtok ( NULL, "," );
       }
    }
+   return res;
 }
 
 void SingleUnitSet::TranslationTable::parseString ( const char* s )
@@ -890,9 +900,12 @@ void SingleUnitSet::read ( pnstream stream )
             if ( b == "IDENTIFICATION" )
                ID = atoi ( e.c_str() );
 
-               
+
             if ( b == "ID" )
-               parseIDs ( e.c_str() );
+               unitIds = parseIDs ( e.c_str() );
+
+            if ( b == "BUILDINGID" )
+               buildingIds = parseIDs ( e.c_str() );
 
          }
       }
