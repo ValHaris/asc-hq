@@ -442,15 +442,23 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
    pc.addIntegerArray ( "Movemalus_plus", movemalus_plus ).evaluate();
    int mm = movemalus_plus.size();
    movemalus_plus.resize( cmovemalitypenum );
-   for ( int i = mm; i < cmovemalitypenum; i++ )
-      movemalus_plus[i] = movemalus_plus[0];
-
+   for ( int i = mm; i < cmovemalitypenum; i++ ) {
+      if ( i == 0 )
+         movemalus_plus[i] = 0;
+      else
+         movemalus_plus[i] = movemalus_plus[0];
+   }  
+    
 
    pc.addIntegerArray ( "Movemalus_abs", movemalus_abs ).evaluate();
    mm = movemalus_abs.size();
    movemalus_abs.resize( cmovemalitypenum );
-   for ( int i = mm; i < cmovemalitypenum; i++ )
-      movemalus_abs[i] = movemalus_abs[0];
+   for ( int i = mm; i < cmovemalitypenum; i++ ) {
+      if ( i == 0 )
+         movemalus_abs[i] = -1;
+      else
+         movemalus_abs[i] = movemalus_abs[0];
+   }
 
    pc.addInteger  ( "AttackBonus_abs", attackbonus_abs );
    pc.addInteger  ( "AttackBonus_plus", attackbonus_plus );
@@ -519,6 +527,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                imgReferences.resize ( weatherPicture[i].images.size() );
 
                for ( int j = 0; j < weatherPicture[i].images.size(); j++ ) {
+                  weatherPicture[i].bi3pic[j] = -1;
                   weatherPicture[i].flip[j] = 0;
                   imgReferences[j] = -1;
                }

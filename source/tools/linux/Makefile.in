@@ -88,7 +88,7 @@ asc_makegfx_SOURCES = makegfx.cpp      basestrm.cpp misc.cpp ascstring.cpp loadp
 asc_mntgraph_SOURCES = mntgraph.cpp     basestrm.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp terraintype.cpp objecttype.cpp textfiletags.cpp
 asc_viewid_SOURCES = viewid.cpp       basestrm.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp terraintype.cpp objecttype.cpp textfiletags.cpp
 asc_tank2pcx_SOURCES = pcxtank.cpp      basestrm.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp terraintype.cpp objecttype.cpp textfiletags.cpp
-asc_bin2text_SOURCES = bin2text.cpp     basestrm.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp terraintype.cpp objecttype.cpp textfiletags.cpp
+asc_bin2text_SOURCES = bin2text.cpp     basestrm.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp 
 asc_weaponguide_SOURCES = weaponguide.cpp  basestrm.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp
 
 asc_mount_LDADD = -lSDL -lpthread @LDADDLIBBZ2@
@@ -156,7 +156,8 @@ asc_bin2text_OBJECTS =  bin2text.o basestrm.o misc.o ascstring.o \
 loadpcxc.o palette.o sgstream.o newfont.o basegfx.o graphicset.o \
 gameoptions.o CLoadable.o Named.o Property.o PropertyGroup.o stack.o \
 buildingtype.o typen.o vehicletype.o password.o strtmesg.o \
-textfileparser.o terraintype.o objecttype.o textfiletags.o
+textfileparser.o terraintype.o objecttype.o textfiletags.o \
+itemrepository.o
 asc_bin2text_DEPENDENCIES =  ../../sdl/libsdl.a
 asc_bin2text_LDFLAGS = 
 asc_weaponguide_OBJECTS =  weaponguide.o basestrm.o misc.o ascstring.o \
