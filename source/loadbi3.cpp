@@ -3,9 +3,16 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.50 2001-08-09 14:50:37 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.51 2001-08-09 15:58:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2001/08/09 14:50:37  mbickel
+//      Added palette.map to data directory
+//      Improved usability of terrain selection in mapeditor
+//      New terrain translation in bi3 import function
+//      Better error messages in text parser
+//      Better error message: duplicate ID
+//
 //     Revision 1.49  2001/08/09 10:28:23  mbickel
 //      Fixed AI problems
 //      Mapeditor can edit a units AI parameter
@@ -764,23 +771,39 @@ void        tloadBImap ::   ReadACTNPart(void)
 
          for ( int m = 0; m < xl; m++ ) {
             int found_without_force = 0;
-            for ( int pass = 0; pass < 2 && !found_without_force; pass++ ) 
-               for ( int i = 0; i < objecttypenum; i++ ) {
-                  pobjecttype obj = getobjecttype_forpos ( i );
-                  if ( obj ) 
-                     for ( int ww = 0; ww < cwettertypennum; ww++ )
-                        if ( obj->weather.test(ww) )
-                           for ( unsigned int j = 0; j < obj->weatherPicture[ww].images.size(); j++ )
-                              if ( obj->weatherPicture[ww].bi3pic[j] == xlt[m]  && !(found & 2)  && !( getActiveGraphicSet()->getMode(xlt[m]) & 256) ) {
-                                 pfield fld = getfield ( newx, newy );
-                                 if ( pass == 1 || obj->terrainaccess.accessible ( fld->bdt )) {
-                                    fld -> addobject ( obj, 0, 1 );
-                                    found |= 1;
-                                    if ( pass == 0 )
-                                      found_without_force = 1;
-                                 }
-                              }
+            for ( int pass = 0; pass < 2 && !found_without_force; pass++ ) {
+               for ( int i = 0; i < object2IDtranslatenum; i++ )
+                  if ( xlt[m] == object2IDtranslate[i][0] )  {
+                     pobjecttype obj = getobjecttype_forid ( object2IDtranslate[i][1] );
+                     if ( obj ) {
+                        pfield fld = getfield ( newx, newy );
+                        if ( pass == 1 || obj->terrainaccess.accessible ( fld->bdt )) {
+                           fld -> addobject ( obj, 0, 1 );
+                           found |= 1;
+                           if ( pass == 0 )
+                             found_without_force = 1;
+                        }
+                     }
                }
+
+               if ( !(found & 1) )
+                  for ( int i = 0; i < objecttypenum; i++ ) {
+                     pobjecttype obj = getobjecttype_forpos ( i );
+                     if ( obj )
+                        for ( int ww = 0; ww < cwettertypennum; ww++ )
+                           if ( obj->weather.test(ww) )
+                              for ( unsigned int j = 0; j < obj->weatherPicture[ww].images.size(); j++ )
+                                 if ( obj->weatherPicture[ww].bi3pic[j] == xlt[m]  && !(found & 2)  && !( getActiveGraphicSet()->getMode(xlt[m]) & 256) ) {
+                                    pfield fld = getfield ( newx, newy );
+                                    if ( pass == 1 || obj->terrainaccess.accessible ( fld->bdt )) {
+                                       fld -> addobject ( obj, 0, 1 );
+                                       found |= 1;
+                                       if ( pass == 0 )
+                                         found_without_force = 1;
+                                    }
+                                 }
+                  }
+            }
          }
 
          if ( !found  && Line[X] != 0xffff ) {

@@ -2,9 +2,16 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.34 2001-08-09 14:50:37 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.35 2001-08-09 15:58:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2001/08/09 14:50:37  mbickel
+//      Added palette.map to data directory
+//      Improved usability of terrain selection in mapeditor
+//      New terrain translation in bi3 import function
+//      Better error messages in text parser
+//      Better error message: duplicate ID
+//
 //     Revision 1.33  2001/08/02 15:33:01  mbickel
 //      Completed text based file formats
 //
@@ -940,11 +947,14 @@ void execaction(int code)
    case act_unitSetInformation: viewUnitSetinfo();
       break;
    case act_selbodentyp: if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) {
+                            execaction ( act_setactivefieldvals );
+                            /*
                             auswahl = getactfield()->typ->terraintype;
                             setnewterrainselection ( auswahl );
                             showallchoices();
-                         }
-                         lastselectiontype = cselbodentyp;
+                            */
+                         } else
+                            lastselectiontype = cselbodentyp;
                          execaction(act_switchmaps);
                          break;
    case act_switchmaps: mapSwitcher.toggle();

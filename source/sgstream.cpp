@@ -5,9 +5,16 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.66 2001-08-09 14:50:37 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.67 2001-08-09 15:58:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.66  2001/08/09 14:50:37  mbickel
+//      Added palette.map to data directory
+//      Improved usability of terrain selection in mapeditor
+//      New terrain translation in bi3 import function
+//      Better error messages in text parser
+//      Better error message: duplicate ID
+//
 //     Revision 1.65  2001/08/06 20:54:43  mbickel
 //      Fixed lots of crashes related to the new text files
 //      Fixed delayed events
@@ -1253,7 +1260,7 @@ void checkDataVersion( )
       } else
          dataVersion = 0;
 
-      if ( dataVersion < 5 || dataVersion > 0xffff )
+      if ( dataVersion < 6 || dataVersion > 0xffff )
          fatalError("A newer version of the data files is required. \n"
                     "You can get a new data package at http://www.asc-hq.org", 2 );
 }

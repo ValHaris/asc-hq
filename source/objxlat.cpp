@@ -33,6 +33,9 @@ Terraincombixlat terraincombixlat[100];
 int objecttranslatenum = 0;
 int objecttranslate[100][5];
 
+int object2IDtranslatenum = 0;
+int object2IDtranslate[200][2];
+
 
 int getterraintranslatenum ( void )
 {
@@ -77,6 +80,9 @@ void readBI3translationTable ( )
    vector<int> objecttranslation;
    pc.addIntegerArray ( "ObjectTranslation", objecttranslation );
 
+   vector<int> object2IDtranslation;
+   pc.addIntegerArray ( "Object2IDTranslation", object2IDtranslation );
+
    pc.run();
 
    delete tpg;
@@ -108,7 +114,14 @@ void readBI3translationTable ( )
 
    if ( objecttranslation.size() % 5 )
       fatalError ( "Bi3 map translation : objecttranslation - Invalid number of entries ");
-   objecttranslatenum = terraintranslation.size()/5;
+   objecttranslatenum = objecttranslation.size()/5;
    for ( int i = 0; i < objecttranslation.size(); i++ )
       objecttranslate[i/5][i%5] = objecttranslation[i];
+
+   if ( object2IDtranslation.size() % 2 )
+      fatalError ( "Bi3 map translation : object2IDtranslation - Invalid number of entries ");
+   object2IDtranslatenum = object2IDtranslation.size()/2;
+   for ( int i = 0; i < object2IDtranslation.size(); i++ )
+      object2IDtranslate[i/2][i%2] = object2IDtranslation[i];
+
 }

@@ -83,4 +83,15 @@ bi3maptranslation {
                             347  340 -1 -1 -1 
                             348  342 -1 -1 -1 
                             461 1203 -1 -1 -1 ]
+			    
+   ; These BI object pictures can be translated to ASC objects. 
+   ; The first entry is again the BI picture number, the second is the 
+   ;  ID of the ASC object. 
+			      
+    Object2IDTranslation = [ 1470  1
+                             1530 10
+                             1500  9 
+			     1560  2 ]
+
+			    
 } bi3maptranslation

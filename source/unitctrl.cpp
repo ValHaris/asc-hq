@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.64 2001-08-09 10:28:23 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.65 2001-08-09 15:58:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.64  2001/08/09 10:28:23  mbickel
+//      Fixed AI problems
+//      Mapeditor can edit a units AI parameter
+//
 //     Revision 1.63  2001/07/30 18:03:08  mbickel
 //      Fixed some more warnings
 //
@@ -796,8 +800,6 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
    } 
 
    SoundLoopManager slm ( SoundList::getInstance().getSound( SoundList::moving, vehicle->typ->movemalustyp ), false );
-
-   int nwid = vehicle->networkid;
 
    int i = 0;
    int cancelmovement = 0;

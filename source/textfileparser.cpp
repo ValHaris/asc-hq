@@ -666,8 +666,10 @@ void TextFormatParser::parseLine ( const ASCString& line )
          op = i;
 
    if ( op != -1 ) {
+      /*
       if ( s3.empty() )
          error ( "missing data after operand");
+      */
 
       ASCString s;
       for ( Level::iterator i = level.begin(); i != level.end(); i++ )
@@ -728,7 +730,11 @@ TextPropertyGroup* TextFormatParser::run (  )
 
 void TextFormatParser::error ( const ASCString& errmsg )
 {
-   fatalError ( errmsg.c_str() );
+   if ( stream )
+      fatalError ( stream->getLocation() + " : " + errmsg );
+   else
+      fatalError ( " : " + errmsg );
+
 }
 
 

@@ -66,9 +66,9 @@ install_location=
 type=DATA
 [Workspace_1]
 browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/index.html
-cpp_file=/home/martin/asc/source/objxlat.cpp
-header_file=Untitled.h
-openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/loadbi3.cpp,/home/martin/asc/source/objxlat.cpp
+cpp_file=/home/martin/asc/source/edglobal.cpp
+header_file=/home/martin/asc/source/textfileparser.h
+openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/unitctrl.cpp,/home/martin/asc/source/textfileparser.cpp,/home/martin/asc/source/textfileparser.h,/home/martin/asc/source/objxlat.cpp,/home/martin/asc/source/loadbi3.cpp,/home/martin/asc/source/sgstream.cpp,/home/martin/asc/source/edglobal.cpp
 show_outputview=true
 show_treeview=true
 [asc.kdevprj]
