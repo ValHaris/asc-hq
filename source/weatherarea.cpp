@@ -20,7 +20,7 @@ IllegalValueException::~IllegalValueException() {}
 
 //****************************************************************************************************************************************
 
-WeatherArea::WeatherArea(tmap* m, int xCenter, int yCenter, int w, int h): map(m), ft(DRY), center(xCenter, yCenter), width(w), height(h) {
+WeatherArea::WeatherArea(tmap* m, int xCenter, int yCenter, int w, int h, int d, FalloutType fallout): map(m), center(xCenter, yCenter), width(w), height(h), duration(d), ft(fallout) {
   int x =  0;
   int y =  0;
   counter = 0;
@@ -57,21 +57,21 @@ void WeatherArea::setFalloutType(FalloutType fallout) {
 void WeatherArea::updateMovementVector(unsigned int windspeed, Direction windDirection, double ratio) {
   cout << "updating movement vector" << endl;
   if(windDirection == N) {
-    currentMovement = Vector2D(0, -1 * ratio * windspeed);
+    currentMovement = Vector2D(0,static_cast<int>(-1 * ratio * windspeed));
   } else if(windDirection == NE) {
-    currentMovement = Vector2D(ratio * windspeed, -1 * ratio * windspeed);
+    currentMovement = Vector2D(static_cast<int>(ratio * windspeed), static_cast<int>(-1 * ratio * windspeed));
   } else if(windDirection == SE) {
-    currentMovement = Vector2D(ratio * windspeed, ratio * windspeed);
+    currentMovement = Vector2D(static_cast<int>(ratio * windspeed), static_cast<int>(ratio * windspeed));
   } else if(windDirection == S) {
-    currentMovement = Vector2D(0,  ratio * windspeed);
+    currentMovement = Vector2D(0,  static_cast<int>(ratio * windspeed));
   } else if(windDirection == SW) {
-    currentMovement = Vector2D(-1 * ratio * windspeed, ratio * windspeed);
+    currentMovement = Vector2D(static_cast<int>(-1 * ratio * windspeed), static_cast<int>( ratio * windspeed));
   } else if(windDirection == NW) {
-    currentMovement = Vector2D(-1 * ratio * windspeed, -1 * ratio * windspeed);
+    currentMovement = Vector2D(static_cast<int>(-1 * ratio * windspeed), static_cast<int>(-1 * ratio * windspeed));
   } else if(windDirection == W) {
-    currentMovement = Vector2D(-1 * ratio * windspeed, 0);
+    currentMovement = Vector2D(static_cast<int>(-1 * ratio * windspeed), 0);
   } else if(windDirection == E) {
-    currentMovement = Vector2D(ratio * windspeed, 0);
+    currentMovement = Vector2D(static_cast<int>(ratio * windspeed), 0);
   }
 
 }
@@ -135,7 +135,7 @@ Vector2D WeatherArea::getWindVector() const {
   return currentMovement;
 }
 
-FalloutType WeatherArea::getFalloutType()const {
+FalloutType WeatherArea::getFalloutType() const {
   return ft;
 }
 
@@ -225,6 +225,7 @@ void  WeatherField::read(tnstream& inputStream) {
 }
 
 //******************************************************************************************************************************************
+
 WeatherSystem::WeatherSystem(tmap* map, int spawn, float ws2fr, unsigned int tInterval, WeatherSystemMode mode):timeInterval(tInterval), windspeed2FieldRatio(ws2fr), areaSpawnAmount(spawn), gameMap(map), currentMode(mode), windspeed(2), globalWindDirection(S), lowerRandomSize(0.25), upperRandomSize(0.8) {
   Percentages defaultFallOut;
   int sum = 0;
@@ -248,8 +249,8 @@ WeatherSystem::WeatherSystem(tmap* map, int spawn, float ws2fr, unsigned int tIn
 
   sum = 0;
   Percentages defaultWindSpeeds;
-  for(int i = 0; i < 9; i++) {
-    int weight = (100 / 10);
+  for(int i = 0; i < WeatherSystem::WINDSPEEDDETAILLEVEL - 1 ; i++) {
+    int weight = (100 / WINDSPEEDDETAILLEVEL);
     defaultWindSpeeds.push_back(weight);
     sum += weight;
   }
@@ -269,7 +270,20 @@ WeatherSystem::~WeatherSystem() {
   }
 }
 
+ pair<int, WeatherArea*> WeatherSystem::getNthWeatherArea(int n) const{
+  int k = 0;
+  WeatherAreas::const_iterator it;
+  it = weatherAreas.begin();
+  while(k<n){
+    ++it;
+    ++k;
+  }  
+  return *it;
 
+}
+const int WeatherSystem::getQueuedWeatherAreasSize() const{
+  return weatherAreas.size();
+}
 
 void WeatherSystem::setLikelihoodFallOut(const Percentages& fol)
 throw (IllegalValueException) {
@@ -324,16 +338,14 @@ void WeatherSystem::setGlobalWind(unsigned int ws, Direction d) throw (IllegalVa
   globalWindDirection = d;
 }
 
-void WeatherSystem::addWeatherArea(WeatherArea* area, FalloutType fallout, unsigned int turn, unsigned int duration) {
-  area->setFalloutType(fallout);
-  area->setDuration(duration);
+void WeatherSystem::addWeatherArea(WeatherArea* area, unsigned int turn) {    
   pair<int, WeatherArea*>p(turn, area);
   weatherAreas.insert(p);
 }
 
 Direction WeatherSystem::randomWindChange(int currentTurn) {
   int newWindDirection = createRandomValue(100);
-  int newWindSpeed = 3;//createRandomValue(120);
+  int newWindSpeed = createRandomValue(windspeed);
   Direction newDirection;
   int sum = 0;
   for(int i = 0; i < windDirPercentages.size(); i++) {
@@ -351,9 +363,9 @@ void WeatherSystem::randomWeatherChange(int currentTurn, Direction windDirection
   WeatherArea* newArea;
   int xpos;
   int ypos;
-  int width = gameMap->xsize * createRandomValue(lowerRandomSize, upperRandomSize);
+  int width = static_cast<int>(gameMap->xsize * createRandomValue(lowerRandomSize, upperRandomSize));
   cout << " chosen xsize: " << width << endl;
-  int height = gameMap->ysize * createRandomValue(lowerRandomSize, upperRandomSize);
+  int height = static_cast<int>(gameMap->ysize * createRandomValue(lowerRandomSize, upperRandomSize));
   cout << " chosen ysize: " << height << endl;
   //Determine where the new weatherfield is placed
   if(windDirection == N) {
@@ -404,7 +416,6 @@ void WeatherSystem::randomWeatherChange(int currentTurn, Direction windDirection
       }
     }
   }  
-  newArea = new WeatherArea(gameMap, xpos, ypos, width, height);
   FalloutType ft;
   int sum = 0;
   int newFallout = createRandomValue(100);
@@ -416,10 +427,10 @@ void WeatherSystem::randomWeatherChange(int currentTurn, Direction windDirection
       break;
     }
   }
-  this->addWeatherArea(newArea, ft, currentTurn, 6);
+  newArea = new WeatherArea(gameMap, xpos, ypos, width, height, 6, ft);
+  this->addWeatherArea(newArea, currentTurn);
 }
 void WeatherSystem::update(int currentTurn) {
-  int result = (currentTurn % timeInterval);
   if((currentMode == RANDOMMODE)  && (currentTurn % timeInterval == 0)) {
     Direction newDirection = randomWindChange(currentTurn);
     for(int i=0; i < areaSpawnAmount; i++){ 
@@ -473,12 +484,10 @@ void WeatherSystem::addGlobalWindChange(int speed, Direction direction, unsigned
   windTriggers.insert(p);
 }
 
-void WeatherSystem::write(tnstream& outputStream) const {
-  cout << "Writing weahter" << endl;
+void WeatherSystem::write(tnstream& outputStream) const {  
   outputStream.writeInt(weather_version );
   cout << "weatherversion: " << weather_version << endl;
-  outputStream.writeFloat( seedValue );  
-  cout << "seedValue: " << seedValue << endl;
+  outputStream.writeFloat( seedValue );    
   outputStream.writeInt( timeInterval );
   outputStream.writeInt(areaSpawnAmount);
   outputStream.writeInt(currentMode);
@@ -491,8 +500,7 @@ void WeatherSystem::write(tnstream& outputStream) const {
   outputStream.writeFloat(lowerRandomSize);
   outputStream.writeFloat(upperRandomSize);
    
-  outputStream.writeInt(falloutPercentages.size());  
-  cout << "FalloutPer SIZE: " << falloutPercentages.size() << endl;
+  outputStream.writeInt(falloutPercentages.size());    
   for (int i = 0; i < falloutPercentages.size(); i++ ){
     outputStream.writeInt(falloutPercentages[i]);    
     cout << "FalloutPer: " << falloutPercentages[i] << endl;
@@ -524,8 +532,7 @@ void WeatherSystem::read (tnstream& inputStream) {
   cout << "seedValue: " << seedValue << endl;
   timeInterval = inputStream.readInt();
   areaSpawnAmount = inputStream.readInt();
-  currentMode  = static_cast<WeatherSystemMode>(inputStream.readInt());
-  cout << "currentmode is " << currentMode << endl;
+  currentMode  = static_cast<WeatherSystemMode>(inputStream.readInt());  
   
   windspeed = inputStream.readInt();
   windspeed2FieldRatio = inputStream.readFloat();  
@@ -561,6 +568,7 @@ void WeatherSystem::read (tnstream& inputStream) {
   }
   cout << "check: " << inputStream.readInt() << endl;
 }
+
 
 
 

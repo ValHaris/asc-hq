@@ -24,26 +24,149 @@
 /**
 @author Kevin Hirschmann
 */
-class ChanceSettingDialog :  public ASC_PG_Dialog {
+class ChanceSettingsDialog :  public ASC_PG_Dialog {
 public:  
-  ChanceSettingDialog(const vector<string>& labelVec);
+  ChanceSettingsDialog(std::string title);
   
-  ~ChanceSettingDialog();
+  virtual ~ChanceSettingsDialog();
   
-  bool closeWindow() {
+  virtual bool closeWindow() {
     quitModalLoop(2);
     return true;
   };
   
-  
+protected:
+  virtual void buildUpForm(const vector<string>& labelVec);  
 private:  
-  bool buttonEvent( PG_Button* button );
-  
+  virtual bool buttonEvent( PG_Button* button ) = 0;
+  virtual int getNthChanceValue(int n) = 0;
+  virtual void setChanceValues(const vector<PG_LineEdit*>& p)= 0;
+
+  protected:  
   vector<PG_LineEdit*> chances;
   vector<PG_Label*> labels;
+  PG_Label* note;
   static const int xsize;
   static const int ysize;
 };
+
+class FallOutSettingsDialog: public ChanceSettingsDialog  {
+virtual int getNthChanceValue(int n);
+virtual void setChanceValues(const vector<PG_LineEdit*>& p);
+virtual bool buttonEvent( PG_Button* button );
+
+
+public:
+  FallOutSettingsDialog();
+  ~FallOutSettingsDialog();
+};
+
+class WindSpeedSettingsDialog: public ChanceSettingsDialog  {
+virtual int getNthChanceValue(int n);
+virtual void setChanceValues(const vector<PG_LineEdit*>& p);
+virtual bool buttonEvent( PG_Button* button );
+
+
+public:
+  WindSpeedSettingsDialog();
+  ~WindSpeedSettingsDialog();
+};
+
+class WindDirectionSettingsDialog: public ChanceSettingsDialog  {
+virtual int getNthChanceValue(int n);
+virtual void setChanceValues(const vector<PG_LineEdit*>& p);
+virtual bool buttonEvent( PG_Button* button );
+
+
+public:
+  WindDirectionSettingsDialog();
+  ~WindDirectionSettingsDialog();
+};
+
+class WeatherAreaInformation{
+private:
+  WeatherArea* weatherArea;
+  int turn;
+  int duration;
+  FalloutType fallOut;
+public:
+  WeatherAreaInformation(WeatherArea* wa, int turn, int duration, FalloutType fallOut);
+  WeatherAreaInformation(WeatherArea* wa, int turn);
+  ~WeatherAreaInformation();
+  
+  int getTurn() const;
+  int getDuration() const;
+  FalloutType getFalloutType() const;
+  WeatherArea* getWeatherArea(){
+    return weatherArea;
+  }
+  std::string getInformation() const;
+
+};
+class EventAreasDialog: public ASC_PG_Dialog{
+
+public:
+EventAreasDialog();
+~EventAreasDialog();
+void addNewWeatherAreaInformation(WeatherAreaInformation* wai);
+
+bool closeWindow();
+
+private:
+  static const int xSize;
+  static const int ySize;
+  static const string SEPERATOR;
+  list<WeatherAreaInformation*> currentList;
+  list<WeatherAreaInformation*> removeList;
+  list<WeatherAreaInformation*> addList;
+  
+  PG_ListBox* eventList;
+  PG_Button* addButton;
+  PG_Button* removeButton;
+  bool buttonEvent( PG_Button* button );
+  
+  bool buttonAdd( PG_Button* button );
+  bool buttonRemove( PG_Button* button );
+  
+  void updateAreaList();
+};
+
+class AddWeatherAreaDialog: public ASC_PG_Dialog{
+public:
+  AddWeatherAreaDialog(EventAreasDialog* ead);
+  ~AddWeatherAreaDialog();
+  
+  
+private:
+  static const int xSize;
+  static const int ySize;
+
+  PG_Label* turnLabel;
+  PG_LineEdit* turnValue;
+  
+  PG_Label* durationLabel;
+  PG_LineEdit* durationValue;
+  
+  PG_Label* xCoordLabel;
+  PG_LineEdit* xCoordValue;
+  
+  PG_Label* yCoordLabel;
+  PG_LineEdit* yCoordValue;
+  
+  PG_Label* widthLabel;
+  PG_LineEdit* widthValue;
+  
+  PG_Label* heightLabel;
+  PG_LineEdit* heightValue;
+  
+  PG_Label* wTypesLabel;
+  PG_DropDown* weatherTypes;
+  
+  bool closeWindow();  
+  bool buttonEvent( PG_Button* button );
+};
+
+
 
 
 /**
@@ -94,7 +217,19 @@ private:
   PG_Label* fallOutLabel;
   PG_Button* fallOutButton;
   
-  bool editFallOut( PG_Button* button );
+  PG_Label* windSpeedLabel;
+  PG_Button* windSpeedButton;
+  
+  PG_Label* windDirectionLabel;
+  PG_Button* windDirectionButton;
+  
+  PG_Label* eventAreasLabel;
+  PG_Button* eventAreasButton;
+  
+  bool editEventAreas(PG_Button* button );  
+  bool editFallOut( PG_Button* button );  
+  bool editWindSpeed( PG_Button* button );  
+  bool editWindDirection( PG_Button* button );
   
   bool buttonEvent( PG_Button* button );
   
