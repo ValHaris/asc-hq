@@ -1,6 +1,11 @@
-//     $Id: gui.cpp,v 1.30 2000-08-07 16:29:21 mbickel Exp $
+//     $Id: gui.cpp,v 1.31 2000-08-08 09:48:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/08/07 16:29:21  mbickel
+//      orbiting units don't consume fuel any more
+//      Fixed bug in attack formula; improved attack formula
+//      Rewrote reactionfire
+//
 //     Revision 1.29  2000/08/04 15:11:10  mbickel
 //      Moving transports costs movement for units inside
 //      refuelled vehicles now have full movement in the same turn
@@ -2926,7 +2931,7 @@ char*       tnweapselguiicon::getinfotext  ( void )
       int ad = battle->av.damage;
       battle->calc ( );
 
-      sprintf(infotext, "(~%c~) %s; eff strength: %d; damage caused to enemy: %d, making a total of ~%d~; own damage will be +%d = %d", (int)('A'+weapnum), weapname, battle->av.strength, battle->dv.damage-dd, battle->dv.damage, battle->av.damage-ad, battle->av.damage );
+      sprintf(infotext, "(~%c~) %s; eff strength: %d; damage inflicted to enemy: %d, making a total of ~%d~; own damage will be +%d = %d", (int)('A'+weapnum), weapname, battle->av.strength, battle->dv.damage-dd, battle->dv.damage, battle->av.damage-ad, battle->av.damage );
 
       return infotext;
    } else

@@ -1,6 +1,9 @@
-//     $Id: dlg_box.cpp,v 1.26 2000-08-06 13:14:16 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.27 2000-08-08 09:48:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/08/06 13:14:16  mbickel
+//      Fixed crashes in mapeditor
+//
 //     Revision 1.25  2000/08/06 11:38:57  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -354,11 +357,10 @@ void* gmalloc ( int size )
 
 
 
-
+collategraphicoperations* tdialogbox::pcgo = NULL;
 
 tdialogbox::tdialogbox()
 {
-   pcgo = NULL;
    virtualbufoffset = 0;
    boxstatus = 0;
 
@@ -1374,6 +1376,8 @@ void         tdialogbox::buildgraphics(void)
   if ( ysize == -1)
      ysize = agmp->resolutiony - ysize*2;
 
+  if ( pcgo )
+     delete pcgo;
   pcgo = new collategraphicoperations ( x1, y1, x1 + xsize, y1 + ysize );
 
    if (windowstyle & dlg_notitle )
@@ -2601,6 +2605,10 @@ void         tdialogbox::paintsurface ( int xx1, int yy1, int xx2, int yy2 )
 
 tdialogbox::~tdialogbox()
 {
+   if ( pcgo ) {
+      delete pcgo;
+      pcgo = NULL;
+   }
 
    if ( boxstatus ) 
       done();

@@ -1,6 +1,9 @@
-//     $Id: attack.cpp,v 1.26 2000-08-07 21:10:18 mbickel Exp $
+//     $Id: attack.cpp,v 1.27 2000-08-08 09:47:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/08/07 21:10:18  mbickel
+//      Fixed some syntax errors
+//
 //     Revision 1.25  2000/08/07 16:29:19  mbickel
 //      orbiting units don't consume fuel any more
 //      Fixed bug in attack formula; improved attack formula
@@ -300,7 +303,6 @@ void tfight :: calc ( void )
    } 
 
    if ( dv.strength ) { 
-
       float absstrength = float(dv.strength )
                           * ( 1 + strength_experience ( dv.experience ) + strength_attackbonus ( dv.attackbonus ) )
                           * strength_damage ( dv.damage ) ;
@@ -308,7 +310,7 @@ void tfight :: calc ( void )
       float absdefense = float(av.armor / armordivisor)
                           * ( 1 + defense_defensebonus ( av.defensebonus )+ defense_experience ( av.experience ));
 
-      int w = int(dv.damage + absstrength / absdefense * 100 / damagefactor );
+      int w = int(av.damage + absstrength / absdefense * 100 / damagefactor );
 
       if (av.damage > w ) 
          displaymessage("fatal error at attack: \ndecrease of damage a!",1);
@@ -512,14 +514,16 @@ void tfight :: calcdisplay ( int ad, int dd )
       cgo.on();
 
       int i;
-      for ( i = d1; i <= newpos1 && i <= av.damage; i++ )
-         paintline ( 4, 100 - i, bk );
+      if ( avd != av.damage )
+         for ( i = d1; i <= newpos1 && i <= av.damage; i++ )
+            paintline ( 4, 100 - i, bk );
 
       d1 = i;
 
       int j;
-      for ( j = d2; j <= newpos2 && j <= dv.damage; j++ )
-         paintline ( 5, 100 - j, bk );
+      if ( dvd != dv.damage )
+         for ( j = d2; j <= newpos2 && j <= dv.damage; j++ )
+            paintline ( 5, 100 - j, bk );
 
       d2 = j;
 
@@ -664,8 +668,6 @@ void tunitattacksunit :: setresult ( void )
       _attackingunit->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  dv.color );
 
    _attackingunit->attacked = true; 
-   if ( !(_attackingunit->functions & cf_moveafterattack) )
-     _attackingunit->setMovement ( 0 );
 
    _attackedunit->damage    = dv.damage;
 
@@ -738,7 +740,7 @@ void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int w
       _weapon  = weapon;
 
    SingleWeapon *weap = &attackingunit->typ->weapons->weapon[_weapon];
-   av.strength  = attackingunit->weapstrength[_weapon] * weapDist.getWeapStrength(weap, dist, attackingunit->height, _attackedbuilding->typ->buildingheight );
+   av.strength  = int( attackingunit->weapstrength[_weapon] * weapDist.getWeapStrength(weap, dist, attackingunit->height, _attackedbuilding->typ->buildingheight ));
    av.armor = attackingunit->armor;
    av.damage    = attackingunit->damage;
    av.experience = attackingunit->experience;
@@ -990,7 +992,7 @@ void tunitattacksobject :: setup ( pvehicle attackingunit, int obj_x, int obj_y,
       _weapon  = weapon;
 
    SingleWeapon *weap = &attackingunit->typ->weapons->weapon[weapon];
-   av.strength  = attackingunit->weapstrength[weapon] * weapDist.getWeapStrength(weap, dist, -1, -1  );
+   av.strength  = int( attackingunit->weapstrength[weapon] * weapDist.getWeapStrength(weap, dist, -1, -1  ));
    av.armor = attackingunit->armor;
    av.damage    = attackingunit->damage;
    av.experience = attackingunit->experience;

@@ -30,11 +30,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/gui.cpp,/home/martin/asc/source/gamedlg.cpp,/home/martin/asc/source/dlg_box.cpp,/home/martin/asc/source/edselfnt.cpp,/home/martin/asc/source/mapedit/Makefile.am,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/attack.cpp,/home/martin/asc/source/edmisc.cpp,/home/martin/asc/source/spfst.cpp,/home/martin/asc/source/artint.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/mapedit/Makefile.am
-cpp_file=/home/martin/asc/source/edselfnt.cpp
+header_file=Unbenannt.h
+cpp_file=/home/martin/asc/source/attack.cpp
 browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/welcome/index.html
 [source/controls.cpp]
 install_location=
@@ -409,7 +409,7 @@ sub_dir=source/
 lfv_open_groups=Headers,Quellen,GNU,Andere,
 workspace=1
 project_name=ASC
-version=0.1
+version=1.2.0
 AMChanged=false
 sgml_file=/home/martin/source/source/docs/en/index.sgml
 short_info=,

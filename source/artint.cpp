@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.16 2000-08-07 21:10:17 mbickel Exp $
+//     $Id: artint.cpp,v 1.17 2000-08-08 09:47:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/08/07 21:10:17  mbickel
+//      Fixed some syntax errors
+//
 //     Revision 1.15  2000/08/07 16:29:18  mbickel
 //      orbiting units don't consume fuel any more
 //      Fixed bug in attack formula; improved attack formula
@@ -2874,7 +2877,7 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( pvehiclety
                   AttackFormula af;
                   for ( int e = (fzt->weapons->weapon[i].mindistance + maxmalq - 1)/ maxmalq; e <= fzt->weapons->weapon[i].maxdistance / maxmalq; e++ ) {    // the distance between two fields is maxmalq
                      d++; 
-                     int n = weapDist.getWeapStrength( &fzt->weapons->weapon[i], e*maxmalq ) * fzt->weapons->weapon[i].maxstrength * af.strength_damage(getdamage()) * ( 1 + af.strength_experience(getexpirience()));
+                     int n = int( weapDist.getWeapStrength( &fzt->weapons->weapon[i], e*maxmalq ) * fzt->weapons->weapon[i].maxstrength * af.strength_damage(getdamage()) * ( 1 + af.strength_experience(getexpirience())) );
                      m += n / (2*(1+d)); 
                   } 
                   if (getammunition(i) == 0) 
@@ -3027,10 +3030,11 @@ void AI :: WeaponThreatRange :: testfield ( void )
       if ( dist*maxmalq <= veh->typ->weapons->weapon[weap].maxdistance ) 
          if ( dist*maxmalq >= veh->typ->weapons->weapon[weap].mindistance ) {
             AttackFormula af;
-            int strength = weapDist.getWeapStrength( &veh->typ->weapons->weapon[weap], dist*maxmalq, veh->height, 1 << height ) 
-                         * veh->typ->weapons->weapon[weap].maxstrength              
-                         * (1 + af.strength_experience ( veh->experience ) + af.strength_attackbonus ( getfield(startx,starty)->getattackbonus() ))
-                         * af.strength_damage ( veh->damage );
+            int strength = int ( weapDist.getWeapStrength( &veh->typ->weapons->weapon[weap], dist*maxmalq, veh->height, 1 << height )
+                                 * veh->typ->weapons->weapon[weap].maxstrength
+                                 * (1 + af.strength_experience ( veh->experience ) + af.strength_attackbonus ( getfield(startx,starty)->getattackbonus() ))
+                                 * af.strength_damage ( veh->damage )
+                                );
 
             if ( strength ) {
                int pos = xp + yp * ai->getmap()->xsize;
@@ -3323,7 +3327,7 @@ void AI::tactics( void )
 
                mv->result = int ((mv->enemyDamage - mv->enemyOrgDamage) * mv->enemy->aiparam[getplayer()]->value - config.aggressiveness * (mv->damageAfterAttack - mv->orgDamage) * veh->aiparam[getplayer()]->value );
                if ( mv->enemyDamage >= 100 )
-                  mv->result *= attack_unitdestroyed_bonus;
+                  mv->result = int( mv->result * attack_unitdestroyed_bonus);
 
                if ( mv->result > bestres || (mv->result == bestres && bestmove > mv->moveDist )) {
                   bestres = mv->result;

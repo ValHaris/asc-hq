@@ -1,6 +1,9 @@
-//     $Id: edmisc.cpp,v 1.26 2000-08-07 21:10:20 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.27 2000-08-08 09:48:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/08/07 21:10:20  mbickel
+//      Fixed some syntax errors
+//
 //     Revision 1.25  2000/08/06 11:39:05  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -2665,7 +2668,9 @@ void         tunit::init( pvehicle v )
 */
    if ( unit->typ->classnum > 0 ) addbutton("C~h~ange Class",280,280,450,300,0,1,32,true);
 
-   
+   addbutton("~R~eactionfire",350,250,450,260,3,1,22,true);
+   addeingabe(22,&unit->reactionfire.status, 0, lightgray);
+
    addbutton("~S~et Values",20,ysize - 40,20 + w,ysize - 10,0,1,30,true);
    addkey(30,ct_enter );
    addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,31,true);
@@ -2786,7 +2791,11 @@ void         tunit::buttonpressed(byte         id)
    case 30 : {
          mapsaved = false;
          action = 1; 
-         
+         if ( unit->reactionfire.status ) {
+            unit->reactionfire.status = tvehicle::ReactionFire::ready;
+            unit->reactionfire.enemiesAttackable = 0xff;
+         }
+
          orgunit->clone ( unit, NULL );
          delete unit ;
         }

@@ -1,6 +1,9 @@
-//     $Id: dlgraph.cpp,v 1.6 2000-05-23 20:40:43 mbickel Exp $
+//     $Id: dlgraph.cpp,v 1.7 2000-08-08 09:48:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/05/23 20:40:43  mbickel
+//      Removed boolean type
+//
 //     Revision 1.5  2000/04/27 16:25:20  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -52,7 +55,7 @@ void         tdialogbox::rahmen(char      invers,
                     int          x2,
                     int          y2)
 {
-     collategraphicoperations cgs;
+     collategraphicoperations cgs ( x1, y1, x2, y2 );
      byte         col;
 
      if (invers == false) 
@@ -80,7 +83,7 @@ void         tdialogbox::knopf(integer      xx1,
                    integer      xx2,
                    integer      yy2)
 { 
-     collategraphicoperations cgs;
+     collategraphicoperations cgs ( xx1, yy1, xx2, yy2 );
 
      paintsurface2(xx1,yy1,xx2,yy2);
      rahmen(false,xx1,yy1,xx2,yy2); 
@@ -93,7 +96,7 @@ void         tdialogbox::knopfdruck(int      xx1,
                         int      yy2)
 {
 
-     collategraphicoperations cgs;
+     collategraphicoperations cgs ( xx1, yy1, xx2, yy2 );
 
     void*      p;
     char      kn, kn2; 
@@ -138,7 +141,7 @@ void         tdialogbox::newknopf(integer      xx1,
                       integer      xx2,
                       integer      yy2)
 { 
-     collategraphicoperations cgs;
+     collategraphicoperations cgs ( xx1-1, yy1-1, xx2+1, yy2+1 );
 
      paintsurface2(xx1,yy1,xx2,yy2);
 
@@ -157,7 +160,7 @@ void         tdialogbox::newknopfdruck2(integer      xx1,
     char      kn; 
     integer      mt; 
     {
-       collategraphicoperations cgs;
+       collategraphicoperations cgs ( xx1 -1, yy1 -1, xx2 + 1, yy2 + 1 );
        mt = mouseparams.taste;
        mousevisible(false);
        p = asc_malloc ( imagesize ( xx1 + 1,yy1 + 1,xx2 - 2,yy2 - 2 ) );
@@ -186,7 +189,7 @@ void         tdialogbox::newknopfdruck2(integer      xx1,
            if (mouseparams.taste != mt) kn = false; 
     }  while (kn == true);
     {
-       collategraphicoperations cgo;
+       collategraphicoperations cgo ( xx1 - 1, yy1 - 1, xx2 + 1, yy2 + 1 );
 
        mousevisible(false);
 
@@ -216,7 +219,7 @@ void         tdialogbox::newknopfdruck3(integer      xx1,
                             integer      xx2,
                             integer      yy2)
 {
-     collategraphicoperations cgs;
+     collategraphicoperations cgs ( xx1, yy1, xx2, yy2 );
 
    void*      p;
 
@@ -239,7 +242,7 @@ void         tdialogbox::newknopfdruck4(integer      xx1,
                             integer      xx2,
                             integer      yy2)
 {
-     collategraphicoperations cgs;
+     collategraphicoperations cgs ( xx1, yy1, xx2, yy2 );
 
    void*      p;
     // reindrÅcken
@@ -264,7 +267,7 @@ void         tdialogbox::newknopfdruck(integer      xx1,
    integer      mt;
    void*    pq ;
    {
-     collategraphicoperations cgs;
+     collategraphicoperations cgs( xx1-1, yy1-1, xx2+1, yy2+1 );
      mt = mouseparams.taste;
      mousevisible(false); 
 
@@ -300,7 +303,7 @@ void         tdialogbox::newknopfdruck(integer      xx1,
            if (mouseparams.taste != mt) kn = false; 
    }  while (kn == true);
    {
-     collategraphicoperations cgo;
+     collategraphicoperations cgo( xx1-1, yy1-1, xx2+1, yy2+1 );
      mousevisible(false); 
      putimage(xx1 + 1,yy1 + 1,p);
      asc_free ( p ) ;

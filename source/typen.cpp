@@ -1,6 +1,11 @@
-//     $Id: typen.cpp,v 1.36 2000-08-07 16:29:23 mbickel Exp $
+//     $Id: typen.cpp,v 1.37 2000-08-08 09:48:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2000/08/07 16:29:23  mbickel
+//      orbiting units don't consume fuel any more
+//      Fixed bug in attack formula; improved attack formula
+//      Rewrote reactionfire
+//
 //     Revision 1.35  2000/08/06 12:18:10  mbickel
 //      Gameoptions: new default values
 //      Maketank: negative buildable-object-IDs
@@ -1434,7 +1439,7 @@ void tvehicle::ReactionFire::enable ( void )
       } else {
          status = init2;
       }
-      unit->setMovement ( 0, -1 );
+      // unit->setMovement ( 0, -1 );
    }
 }
 

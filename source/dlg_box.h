@@ -1,6 +1,14 @@
-//     $Id: dlg_box.h,v 1.11 2000-08-06 11:38:58 mbickel Exp $
+//     $Id: dlg_box.h,v 1.12 2000-08-08 09:48:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/08/06 11:38:58  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.10  2000/08/03 13:12:09  mbickel
 //      Fixed: on/off switching of generator vehicle produced endless amounts of energy
 //      Repairing units now reduces their experience
@@ -214,7 +222,7 @@ typedef class tdialogbox* pdialogbox;
                      byte         markedtab; 
                      byte         disablecolor; 
                      int          boxstatus;
-                     collategraphicoperations* pcgo;
+                     static collategraphicoperations* pcgo;
 
                      tdialogbox();
 

@@ -1,6 +1,11 @@
-//     $Id: sg.cpp,v 1.74 2000-08-07 16:29:21 mbickel Exp $
+//     $Id: sg.cpp,v 1.75 2000-08-08 09:48:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.74  2000/08/07 16:29:21  mbickel
+//      orbiting units don't consume fuel any more
+//      Fixed bug in attack formula; improved attack formula
+//      Rewrote reactionfire
+//
 //     Revision 1.73  2000/08/06 11:39:15  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -980,8 +985,10 @@ int tbackgroundpict :: getlastpaintmode ( void )
   void* asc_malloc ( size_t size )
   {
      void* tmp = memchkAlloc ( 104, size );
+    #ifdef _DOS_
      if ( tmp == NULL ) 
         new_new_handler();
+    #endif
      return tmp;
   }
 

@@ -1,6 +1,9 @@
-//     $Id: building.h,v 1.9 2000-06-19 20:05:04 mbickel Exp $
+//     $Id: building.h,v 1.10 2000-08-08 09:47:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/06/19 20:05:04  mbickel
+//      Fixed crash when transfering ammo to vehicle with > 8 weapons
+//
 //     Revision 1.8  2000/04/27 16:25:16  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -541,8 +544,9 @@ class    ccontainer : public virtual ccontainercontrols {
                                    int pos;
                                    int buildnum;
                                    const char* name;
-                             } weaps[12];
+                             } weaps[20];
                              int schieblength;
+                             int schiebpos[20];
                              void checkformouse ( void );
                              int num;
                              pvehicle eht;

@@ -49,4 +49,4 @@ AC_CHECK_FUNCS(stricmp)
 AC_CHECK_FUNCS(kbhit)
 
 
-AC_OUTPUT(Makefile source/Makefile source/docs/Makefile source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile source/libs/Makefile source/tools/Makefile source/tools/linux/Makefile source/mapedit/Makefile )
+AC_OUTPUT(Makefile source/Makefile source/docs/Makefile source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile source/libs/Makefile )

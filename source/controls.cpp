@@ -1,6 +1,11 @@
-//     $Id: controls.cpp,v 1.59 2000-08-07 16:29:19 mbickel Exp $
+//     $Id: controls.cpp,v 1.60 2000-08-08 09:48:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.59  2000/08/07 16:29:19  mbickel
+//      orbiting units don't consume fuel any more
+//      Fixed bug in attack formula; improved attack formula
+//      Rewrote reactionfire
+//
 //     Revision 1.58  2000/08/06 11:38:37  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -5432,8 +5437,6 @@ void endTurn ( void )
                      actvehicle->fuel = j; 
                }
             } 
-            if (j >= 0)  
-               actvehicle->reactionfire.endTurn();
 
             if ( actvehicle )   
                actvehicle->endTurn();

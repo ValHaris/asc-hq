@@ -39,6 +39,7 @@ int loadFullscreenImage ( const char* filename )
    SDL_UpdateRect(screen, 0,0,0,0);
 
    SDL_FreeSurface ( convimg );
+   return 1;
 }
 
 void closeFullscreenImage ( void )

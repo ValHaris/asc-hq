@@ -1,6 +1,14 @@
-//     $Id: building.cpp,v 1.39 2000-08-06 11:38:36 mbickel Exp $
+//     $Id: building.cpp,v 1.40 2000-08-08 09:47:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2000/08/06 11:38:36  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.38  2000/08/05 15:30:26  mbickel
 //      Fixed possible divisions by 0 in attack/defensebonus
 //
@@ -2076,6 +2084,8 @@ ccontainer :: cammunitiontransfer_subwindow :: cammunitiontransfer_subwindow ( v
       objcoordinates[i].t1 = 0;
       objcoordinates[i].t2 = 8;
    } /* endfor */
+   for ( int z = 0; z < 20; z++ )
+      schiebpos[z] = 0;
 
    objcoordinates[19].x1 = subwinx1 + 217;
    objcoordinates[19].x2 = subwinx1 + 303;
@@ -2143,10 +2153,10 @@ void  ccontainer :: cammunitiontransfer_subwindow :: paintobj ( int numm, int st
          if ( numm == actschieber )
             offs = 1;
    
-         if ( objcoordinates[numm].y2 - objcoordinates[numm].t1 - objcoordinates[numm].t2 == objcoordinates[numm].y1 )
-            putimage ( objcoordinates[numm].x1,   objcoordinates[numm].y2 - objcoordinates[numm].t1 - objcoordinates[numm].t2,  icons.container.subwin.ammotransfer.schieber[offs + 2] );
+         if ( objcoordinates[numm].y2 - schiebpos[nnumm] - objcoordinates[numm].t2 == objcoordinates[numm].y1 )
+            putimage ( objcoordinates[numm].x1,   objcoordinates[numm].y2 - schiebpos[nnumm] - objcoordinates[numm].t2,  icons.container.subwin.ammotransfer.schieber[offs + 2] );
          else
-            putimage ( objcoordinates[numm].x1,   objcoordinates[numm].y2 - objcoordinates[numm].t1 - objcoordinates[numm].t2,  icons.container.subwin.ammotransfer.schieber[offs] );
+            putimage ( objcoordinates[numm].x1,   objcoordinates[numm].y2 - schiebpos[nnumm] - objcoordinates[numm].t2,  icons.container.subwin.ammotransfer.schieber[offs] );
    
          activefontsettings.color = white;
          activefontsettings.font = schriften.guifont;
@@ -2317,7 +2327,7 @@ void  ccontainer :: cammunitiontransfer_subwindow :: check ( int i )
     int ii = i - page*8;
     if ( ii >= 0 && ii < 8 ) {
        int length = objcoordinates[ii].y2 - objcoordinates[ii].y1 - objcoordinates[ii].t2;
-       objcoordinates[ii].t1 = length * weaps[i].actnum / weaps[i].maxnum;
+       schiebpos[i] = length * weaps[i].actnum / weaps[i].maxnum;
     }
 }
 
@@ -2442,7 +2452,7 @@ void  ccontainer :: cammunitiontransfer_subwindow :: checkformouse ( void )
             if ( relpos > maxlen )
                relpos = maxlen;
 
-            if ( relpos != objcoordinates[ii].t1 ) {
+            if ( relpos != schiebpos[i] ) {
                int n = relpos * weaps[i].maxnum / maxlen;
                int oldnum = weaps[i].actnum;      
                if ( n != oldnum ) {
@@ -2787,7 +2797,7 @@ char* ccontainer :: repairicon_c :: getinfotext  ( void )
 {
    static char buf[200];
    checkto ( main->getmarkedunit() , 0 );
-   strcpy ( buf, infotext );
+   strcpy ( buf, "re~p~air" );
    sprintf ( &buf[strlen(buf)], resourceusagestring, energycosts, materialcosts, fuelcosts );
    return buf;
 }

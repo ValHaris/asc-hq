@@ -1,6 +1,11 @@
-//     $Id: unitctrl.cpp,v 1.23 2000-08-07 16:29:23 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.24 2000-08-08 09:48:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/08/07 16:29:23  mbickel
+//      orbiting units don't consume fuel any more
+//      Fixed bug in attack formula; improved attack formula
+//      Rewrote reactionfire
+//
 //     Revision 1.22  2000/08/05 13:38:48  mbickel
 //      Rewrote height checking for moving units in and out of
 //        transports / building
@@ -786,7 +791,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, int noInterrupt )
          if ( field3->vehicle || field3->building )
             cancelmovement++;
 
-      if ( (newheight != -1 && newheight != vehicle->height && cancelmovement) || ( noInterrupt != -1 )) 
+      if ( (newheight != -1 && newheight != vehicle->height && cancelmovement) || ( noInterrupt > 0 ))
          cancelmovement = 0;
 
 
@@ -1432,6 +1437,10 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
       int ad2 = battle->av.damage;
       int dd2 = battle->dv.damage;
       battle->setresult ();
+
+      if ( ad2 < 100 )
+         if ( !(vehicle->functions & cf_moveafterattack) )
+            vehicle->setMovement ( 0 );
 
       logtoreplayinfo ( rpl_attack, xp1, yp1, x, y, ad1, ad2, dd1, dd2, weapnum );
 

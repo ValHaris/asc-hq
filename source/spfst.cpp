@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.48 2000-08-07 21:10:21 mbickel Exp $
+//     $Id: spfst.cpp,v 1.49 2000-08-08 09:48:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2000/08/07 21:10:21  mbickel
+//      Fixed some syntax errors
+//
 //     Revision 1.47  2000/08/06 11:39:17  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -6084,7 +6087,7 @@ int  tbuilding :: get_energy ( int      need,    int resourcetype, int queryonly
 void tbuilding :: getresourceusage ( tresources* usage ) { usage->a.energy = 0;
                                                            usage->a.material =  0;
                                                            usage->a.fuel = 0;
-                                                        }
+                                                         }
 #else
 void tbuilding :: changecompletion ( int d )
 {
