@@ -1,6 +1,10 @@
-//     $Id: building.cpp,v 1.28 2000-07-06 11:07:25 mbickel Exp $
+//     $Id: building.cpp,v 1.29 2000-07-10 15:21:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/07/06 11:07:25  mbickel
+//      More AI work
+//      Started modularizing the attack formula
+//
 //     Revision 1.27  2000/07/04 18:39:40  mbickel
 //      Added weapon information in buildings
 //      Made buried pipeline darker
@@ -848,7 +852,7 @@ int   cbuildingcontrols :: moveavail ( pvehicle eht )
      return 0;
 
   if ( eht->typ->height & building->typ->unitheightreq )
-    if ( eht->height & building->typ->loadcapability )
+    if ( eht->height & building->typ->loadcapability || eht->functions & cf_trooper)
        return 2;
     else
        return 1;
@@ -1397,7 +1401,7 @@ int   ctransportcontrols :: moveavail ( pvehicle eht )
 
    if ( (vehicle->height < chtieffliegend) ) {
 
-      if ((eht->typ->height & vehicle->typ->loadcapabilityreq ) &&
+      if (((eht->typ->height & vehicle->typ->loadcapabilityreq) || !vehicle->typ->loadcapabilityreq ) &&
          ((eht->typ->height & vehicle->typ->loadcapabilitynot ) == 0 ) &&
          ((eht->typ->steigung <= flugzeugtraegerrunwayverkuerzung ) || eht->height <= chfahrend ))
 
@@ -1412,7 +1416,7 @@ int   ctransportcontrols :: moveavail ( pvehicle eht )
             return 0;
    } else      
    if ( (vehicle->height <= chfliegend) && ( eht->functions & cfparatrooper)) {
-      if ((eht->typ->height & vehicle->typ->loadcapabilityreq ) &&
+      if (((eht->typ->height & vehicle->typ->loadcapabilityreq) || !vehicle->typ->loadcapabilityreq ) &&
          ((eht->typ->height & vehicle->typ->loadcapabilitynot ) == 0 ))
          return 3;
       else

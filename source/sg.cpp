@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.56 2000-07-06 11:07:27 mbickel Exp $
+//     $Id: sg.cpp,v 1.57 2000-07-10 15:21:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2000/07/06 11:07:27  mbickel
+//      More AI work
+//      Started modularizing the attack formula
+//
 //     Revision 1.55  2000/07/05 10:49:36  mbickel
 //      Fixed AI bugs
 //      setbuildingdamage event now updates the screen
@@ -1765,12 +1769,15 @@ void         speicherspiel( int as )
       if ( !as && actmap->preferredfilenames && actmap->preferredfilenames->savegamedescription[actmap->actplayer] ) 
          s2 = strdup ( actmap->preferredfilenames->savegamedescription[actmap->actplayer] );
       else {
+         s2 = strdup ( "no description");
+         /*
          tenterfiledescription efd;
          efd.init();
          efd.run();
          
          s2 = efd.description;
          efd.done();
+         */
       }
 
       if ( !actmap->preferredfilenames ) {
@@ -2994,21 +3001,23 @@ void networksupervisor ( void )
          compi->send.transfermethod->initconnection ( TN_SEND );
          compi->send.transfermethod->inittransfer ( &compi->send.data );
    
-         char* desciption = NULL;
-         {
+         char* description = NULL;
+         {  /*
             tenterfiledescription efd;
             efd.init();
             efd.run();
             desciption = efd.description;
             efd.done();
+            */
+            description = strdup ( "no description" );
          }
    
    
          tnetworkloaders nwl;
-         nwl.savenwgame ( compi->send.transfermethod->stream, desciption );
+         nwl.savenwgame ( compi->send.transfermethod->stream, description );
    
-         if ( desciption ) 
-            delete desciption;
+         if ( description ) 
+            delete description;
    
          compi->send.transfermethod->closetransfer();
          compi->send.transfermethod->closeconnection();

@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.42 2000-07-06 11:07:26 mbickel Exp $
+//     $Id: controls.cpp,v 1.43 2000-07-10 15:21:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2000/07/06 11:07:26  mbickel
+//      More AI work
+//      Started modularizing the attack formula
+//
 //     Revision 1.41  2000/07/04 17:10:13  mbickel
 //      Fixed crash in replay with invalid removebuilding coordinates
 //
@@ -7461,7 +7465,6 @@ void trunreplay :: execnextreplaymove ( void )
                                  stream->readdata2 ( size );
                                  if ( size ) {
                                     stream->readdata2 ( *sv );
-                                    readnextaction();
                                     if ( actmap->shareview ) 
                                        delete actmap->shareview;
                                     actmap->shareview = sv;
@@ -7472,6 +7475,7 @@ void trunreplay :: execnextreplaymove ( void )
                                        actmap->shareview = NULL;
                                     }
 
+                                 readnextaction();
                                  computeview();
                                  displaymap();
                               }
