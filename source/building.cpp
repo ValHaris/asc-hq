@@ -5902,16 +5902,18 @@ void  ccontainer_b :: cmineralresources_subwindow :: display ( void )
 
 
    max = 0;
-   for ( i = 0; i < maxminingrange; i++ )
-      if ( mininginfo.max[ i ].resource( 1 ) > max )
-         max = mininginfo.max[ i ].resource( 1 );
+   for ( int r = 1; r < 3; r++ )
+      for ( i = 0; i < maxminingrange; i++ )
+         if ( mininginfo.max[ i ].resource( r ) > max )
+            max = mininginfo.max[ i ].resource( r );
 
    max = max * 17 / 16;
 
    int maxa = 0;
-   for ( i = 0; i < maxminingrange; i++ )
-      if ( mininginfo.avail[ i ].resource( 1 ) > maxa )
-         maxa = mininginfo.avail[ i ].resource( 1 );
+   for ( int r = 1; r < 3; r++ )
+      for ( i = 0; i < maxminingrange; i++ )
+         if ( mininginfo.avail[ i ].resource( r ) > maxa )
+            maxa = mininginfo.avail[ i ].resource( r );
 
    max = max * 17 / 16;
    maxa = maxa * 17 / 16;
