@@ -1,6 +1,11 @@
-//     $Id: sg.cpp,v 1.86 2000-08-28 15:58:59 mbickel Exp $
+//     $Id: sg.cpp,v 1.87 2000-08-29 10:36:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.86  2000/08/28 15:58:59  mbickel
+//      Fixed short displaying of map before password dialog when loading email
+//        games by command line parameter
+//      Fixed reaction fire not working when loading an old ( < ASC1.2.0 ) file
+//
 //     Revision 1.85  2000/08/28 14:37:15  mbickel
 //      Fixed: satellite not able to leave orbiter
 //      Restructured next-turn routines
@@ -2785,9 +2790,6 @@ void  mainloop ( void )
             case ct_8:  execuseraction ( ua_unitweightinfo );
                break;
                
-            case ct_9:  displaymessage ( "reactionfire status: %d, enemiesattackable: %x", 1, int(getactfield()->vehicle->reactionfire.status), int(getactfield()->vehicle->reactionfire.enemiesAttackable)) ;
-               break;
-
             case ct_0:  execuseraction ( ua_writescreentopcx );
                break;
 

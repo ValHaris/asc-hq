@@ -1,6 +1,11 @@
-//     $Id: unitctrl.cpp,v 1.28 2000-08-28 19:49:43 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.29 2000-08-29 10:36:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/08/28 19:49:43  mbickel
+//      Fixed: replay exits when moving satellite out of orbiter
+//      Fixed: airplanes being able to endlessly takeoff and land
+//      Fixed: buildings constructable by unit without resources
+//
 //     Revision 1.27  2000/08/13 11:55:11  mbickel
 //      Attacking now decreases a units movement by 20% if it has the
 //        "move after attack" flag.
@@ -1090,6 +1095,11 @@ int ChangeVehicleHeight :: moveunitxy ( int xt1, int yt1 )
          vehicle->height = newheight;
       }
    }
+   if ( getfield ( vehicle->xpos, vehicle->ypos)->vehicle != vehicle ) {
+      vehicle->attacked = 1;
+      vehicle->setMovement ( 0 );
+   }
+
    return 0;
 }
 
