@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.15 2000-01-06 11:19:14 mbickel Exp $
+//     $Id: spfst.cpp,v 1.16 2000-01-07 13:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/01/06 11:19:14  mbickel
+//      Worked on the Linux-port again...
+//
 //     Revision 1.14  2000/01/04 19:43:53  mbickel
 //      Continued Linux port
 //
@@ -6278,73 +6281,71 @@ const int mousehotspots[9][2] = { { 8, 0 }, { 15, 0 }, { 15, 8 }, { 15, 15 },
 
 void checkformousescrolling ( void )
 {
+   if ( isfullscreen() )
+      if ( !mouseparams.x  ||  !mouseparams.y   ||  mouseparams.x >= hgmp->resolutionx-1  ||   mouseparams.y >= hgmp->resolutiony-1 ) {
+         if ( mouseparams.taste == gameoptions.mouse.scrollbutton ) {
+            if ( lastmousemapscrolltick + mousescrollspeed < ticker ) {
 
-   #ifdef _DOS_         // under Linux this does not work somehow
-   if ( !mouseparams.x  ||  !mouseparams.y   ||  mouseparams.x >= hgmp->resolutionx-1  ||   mouseparams.y >= hgmp->resolutiony-1 ) {
-      if ( mouseparams.taste == gameoptions.mouse.scrollbutton ) {
-         if ( lastmousemapscrolltick + mousescrollspeed < ticker ) {
+               int newx = actmap->xpos;
+               int newy = actmap->ypos;
+               switch ( mousecurs ) {
+                  case 0: newy-=2;
+                     break;
+                  case 1: newy-=2;
+                          newx+=1;
+                     break;
+                  case 2: newx+=1;
+                     break;
+                  case 3: newy+=2;
+                          newx+=1;
+                     break;
+                  case 4: newy+=2;
+                     break;
+                  case 5: newy+=2;
+                          newx-=1;
+                     break;
+                  case 6: newx-=1;
+                     break;
+                  case 7: newy-=2;
+                          newx-=1;
+                     break;
+               } /* endswitch */
 
-            int newx = actmap->xpos;
-            int newy = actmap->ypos;
-            switch ( mousecurs ) {
-               case 0: newy-=2;
-                  break;
-               case 1: newy-=2;
-                       newx+=1;
-                  break;
-               case 2: newx+=1;
-                  break;
-               case 3: newy+=2;
-                       newx+=1;
-                  break;
-               case 4: newy+=2;
-                  break;
-               case 5: newy+=2;
-                       newx-=1;
-                  break;
-               case 6: newx-=1;
-                  break;
-               case 7: newy-=2;
-                       newx-=1;
-                  break;
-            } /* endswitch */
+               if ( newx < 0 )
+                  newx = 0;
+               if ( newy < 0 )
+                  newy = 0;
+               if ( newx > actmap->xsize - idisplaymap.getscreenxsize() )
+                  newx = actmap->xsize - idisplaymap.getscreenxsize();
+               if ( newy > actmap->ysize - idisplaymap.getscreenysize() )
+                  newy = actmap->ysize - idisplaymap.getscreenysize();
 
-            if ( newx < 0 )
-               newx = 0;
-            if ( newy < 0 )
-               newy = 0;
-            if ( newx > actmap->xsize - idisplaymap.getscreenxsize() )
-               newx = actmap->xsize - idisplaymap.getscreenxsize();
-            if ( newy > actmap->ysize - idisplaymap.getscreenysize() )
-               newy = actmap->ysize - idisplaymap.getscreenysize();
-   
-            if ( newx != actmap->xpos  || newy != actmap->ypos ) {
-               cursor.hide();
-               int cursx = cursor.posx + (actmap->xpos - newx );
-               int cursy = cursor.posy + (actmap->ypos - newy );
-               if ( cursx < 0 )
-                  cursx = 0;
-               if ( cursx >= idisplaymap.getscreenxsize())
-                  cursx = idisplaymap.getscreenxsize() -1 ;
-               if ( cursy < 0 )
-                  cursy = 0;
-               if ( cursy >= idisplaymap.getscreenysize())
-                  cursy = idisplaymap.getscreenysize() -1 ;
+               if ( newx != actmap->xpos  || newy != actmap->ypos ) {
+                  cursor.hide();
+                  int cursx = cursor.posx + (actmap->xpos - newx );
+                  int cursy = cursor.posy + (actmap->ypos - newy );
+                  if ( cursx < 0 )
+                     cursx = 0;
+                  if ( cursx >= idisplaymap.getscreenxsize())
+                     cursx = idisplaymap.getscreenxsize() -1 ;
+                  if ( cursy < 0 )
+                     cursy = 0;
+                  if ( cursy >= idisplaymap.getscreenysize())
+                     cursy = idisplaymap.getscreenysize() -1 ;
 
-               cursor.posx = cursx;
-               cursor.posy = cursy;
+                  cursor.posx = cursx;
+                  cursor.posy = cursy;
 
-               actmap->xpos = newx;
-               actmap->ypos = newy;
-               displaymap();
-               lastmousemapscrolltick = ticker;
+                  actmap->xpos = newx;
+                  actmap->ypos = newy;
+                  displaymap();
+                  lastmousemapscrolltick = ticker;
 
-               cursor.show();
+                  cursor.show();
+               }
             }
          }
       }
-   }
-   #endif
 }
 
 

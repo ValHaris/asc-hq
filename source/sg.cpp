@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.16 2000-01-06 11:19:14 mbickel Exp $
+//     $Id: sg.cpp,v 1.17 2000-01-07 13:20:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/01/06 11:19:14  mbickel
+//      Worked on the Linux-port again...
+//
 //     Revision 1.15  2000/01/04 19:43:53  mbickel
 //      Continued Linux port
 //
@@ -2438,7 +2441,9 @@ void dispmessageonexit ( void ) {
       printf("\npress any key to exit\n");
       //      getch();
    } else {
+     #ifdef _DOS_
       printf( getstartupmessage() );
+     #endif
       printf("exiting ... \n \n");
    } /* endif */
 }
@@ -2960,9 +2965,15 @@ int main(int argc, char *argv[] )
                  if ( strcmpi ( &argv[i][1], "NOCD" ) == 0 )
                     cdrom = 0;
                  else
+                   #ifdef _DOS_
                     if ( strcmpi ( &argv[i][1], "SHOWMODES" ) == 0 ) {
                        showmodes = 1;
                     } else
+                   #else
+                    if ( strcmpi ( &argv[i][1], "WINDOW" ) == 0 ) {
+                       fullscreen = 0;
+                    } else
+                   #endif
                        if ( strcmpi ( &argv[i][1], "8BITONLY" ) == 0 )
                           modenum24 = -2;
                        else
@@ -2987,7 +2998,12 @@ int main(int argc, char *argv[] )
                                         "     /8bitonly   Disable truecolor graphic mode \n"
                                         "     /x:X        Set horizontal resolution to X; default is 800 \n"
                                         "     /y:Y        Set verticalal resolution to Y; default is 600 \n"
-                                        "     /showmodes  Display list of available graphic modes \n");
+                                       #ifdef _DOS_
+                                        "     /showmodes  Display list of available graphic modes \n" );
+                                       #else
+                                        "     /window Disable fullscreen mode \n" );
+                                       #endif
+
                                         //"     /game:X     Set gamepath to X \n\n");
                                 exit (0);
              

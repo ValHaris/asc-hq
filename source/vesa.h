@@ -1,6 +1,9 @@
-//     $Id: vesa.h,v 1.4 2000-01-02 20:23:39 mbickel Exp $
+//     $Id: vesa.h,v 1.5 2000-01-07 13:20:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/01/02 20:23:39  mbickel
+//      Improved keyboard handling in dialog boxes under DOS
+//
 //     Revision 1.3  1999/11/22 18:28:06  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -124,5 +127,6 @@ extern "C" int actdpmsmode;
 
 extern int dont_use_linear_framebuffer;
 extern int graphicinitialized;
+extern int isfullscreen ( void );
 
 #endif

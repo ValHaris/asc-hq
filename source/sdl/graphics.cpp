@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.6 2000-01-06 14:11:22 mbickel Exp $
+//     $Id: graphics.cpp,v 1.7 2000-01-07 13:20:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/01/06 14:11:22  mbickel
+//      Fixed a graphic bug in PD and disabled fullscreen mode
+//
 //     Revision 1.5  2000/01/06 11:19:16  mbickel
 //      Worked on the Linux-port again...
 //
@@ -45,12 +48,21 @@
 
 
 SDL_Surface *screen = NULL;
-
+int fullscreen = 1;
 
 int reinitgraphics(int modenum)
 {
   return 1;
 }
+
+int isfullscreen ( void )
+{
+   if ( !screen )
+      return 0;
+   else
+      return screen->flags & SDL_FULLSCREEN;
+}
+
 
 int initgraphics ( int x, int y, int depth )
 {
@@ -64,7 +76,11 @@ int initgraphics ( int x, int y, int depth )
 
   SDL_WM_SetCaption ( "Advanced Strategic Command", NULL );
   /* Initialize the display in a 640x480 8-bit palettized mode */
-  screen = SDL_SetVideoMode(x, y, depth, SDL_SWSURFACE ); // | SDL_FULLSCREEN
+  int flags = SDL_SWSURFACE;
+  if ( fullscreen )
+     flags |= SDL_FULLSCREEN;
+
+  screen = SDL_SetVideoMode(x, y, depth, flags ); // | SDL_FULLSCREEN
   if ( screen == NULL ) {
      fprintf(stderr, "Couldn't set %dx%dx%d video mode: %s\n",x,y,depth, SDL_GetError());
      return -1;

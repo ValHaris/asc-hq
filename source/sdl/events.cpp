@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.7 2000-01-06 11:19:16 mbickel Exp $
+//     $Id: events.cpp,v 1.8 2000-01-07 13:20:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/01/06 11:19:16  mbickel
+//      Worked on the Linux-port again...
+//
 //     Revision 1.6  2000/01/04 19:43:54  mbickel
 //      Continued Linux port
 //
@@ -129,6 +132,8 @@ int eventhandler ( void* nothing )
             case SDL_MOUSEMOTION: {
                mouseparams.x = event.motion.x;
                mouseparams.y = event.motion.y;
+               mouseparams.x1 = event.motion.x;
+               mouseparams.y1 = event.motion.y;
                mouseparams.taste = 0;
                mouseparams.taste =  ((event.motion.state & 1) > 0) ||
                                    (((event.motion.state & 2) > 0) >> 2) ||
@@ -197,6 +202,8 @@ int closeeventthread ( void )
 int initmousehandler ( void* pic )
 {
    initeventthread();
+   mouseparams.xsize = 10;
+   mouseparams.ysize = 10;
    return(0);
 }
 

@@ -1,6 +1,9 @@
-//     $Id: vesa.cpp,v 1.6 2000-01-02 20:23:39 mbickel Exp $
+//     $Id: vesa.cpp,v 1.7 2000-01-07 13:20:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/01/02 20:23:39  mbickel
+//      Improved keyboard handling in dialog boxes under DOS
+//
 //     Revision 1.5  1999/12/27 13:00:18  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -70,6 +73,7 @@
 void setdisplaystart( int x, int y) {}
 #endif
 
+int fullscreen = 1;
 
 struct tvesainfoblock {
           char       signature[4];                    
@@ -780,7 +784,11 @@ int copy2screen( int x1, int y1, int x2, int y2 )
    return 0;
 };
 
-
+int isfullscreen ( void )
+{
+   return graphicinitialized;
+}
+   
 #endif
 
 
