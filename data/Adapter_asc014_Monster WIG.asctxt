@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 71
+   ;Bezeichnung der verknüpften Technologie: Monster WIG
+   TechnologiesRequired = 101071
+} TechAdapter

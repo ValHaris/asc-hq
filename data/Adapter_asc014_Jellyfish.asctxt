@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 27
+   ;Bezeichnung der verknüpften Technologie: Jellyfish
+   TechnologiesRequired = 101027
+} TechAdapter

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 35
+   ;Bezeichnung der verknüpften Technologie: Tsunami
+   TechnologiesRequired = 101035
+} TechAdapter

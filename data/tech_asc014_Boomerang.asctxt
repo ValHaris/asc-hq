@@ -1,0 +1,10 @@
+technology {
+   Name = Boomerang
+   infotext = Reserach project finished! Boomerang avialable!
+   id = 101092
+   RelatedUnitID = 92
+   parent = 101914
+   researchpoints *= 150
+   techlevel = 2
+   TechnologiesRequired = 101019 
+} Technology

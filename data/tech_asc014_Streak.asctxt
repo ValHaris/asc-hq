@@ -1,0 +1,10 @@
+technology {
+   Name = Streak
+   infotext = Reserach project finished! Streak avialable!
+   id = 101038
+   RelatedUnitID = 38
+   parent = 101914
+   researchpoints *= 140
+   techlevel = 2
+   TechnologiesRequired = 101041 
+} Technology

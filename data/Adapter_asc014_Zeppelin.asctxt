@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 48
+   ;Bezeichnung der verknüpften Technologie: Zeppelin
+   TechnologiesRequired = 101048
+} TechAdapter

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 20
+   ;Bezeichnung der verknüpften Technologie: Bang
+   TechnologiesRequired = 101020
+} TechAdapter

@@ -1,0 +1,10 @@
+technology {
+   Name = Wedge
+   infotext = Reserach project finished! Wedge avialable!
+   id = 101014
+   RelatedUnitID = 14
+   parent = 101914
+   researchpoints *= 150
+   techlevel = 2
+   TechnologiesRequired = 101028 
+} Technology

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15
+   ;Bezeichnung der verknüpften Technologie: Raven
+   TechnologiesRequired = 101015
+} TechAdapter

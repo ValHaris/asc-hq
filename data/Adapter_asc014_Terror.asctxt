@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 90
+   ;Bezeichnung der verknüpften Technologie: Terror
+   TechnologiesRequired = 101090
+} TechAdapter

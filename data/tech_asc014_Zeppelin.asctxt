@@ -1,0 +1,10 @@
+technology {
+   Name = Zeppelin
+   infotext = Reserach project finished! Zeppelin avialable!
+   id = 101048
+   RelatedUnitID = 48
+   parent = 101914
+   researchpoints *= 100
+   techlevel = 1
+   TechnologiesRequired = 101910 
+} Technology

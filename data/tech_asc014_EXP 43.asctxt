@@ -1,0 +1,10 @@
+technology {
+   Name = EXP 43
+   infotext = Reserach project finished! EXP 43 avialable!
+   id = 101075
+   RelatedUnitID = 75
+   parent = 101914
+   researchpoints *= 160
+   techlevel = 4
+   TechnologiesRequired = 101075 
+} Technology

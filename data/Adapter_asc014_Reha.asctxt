@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 81
+   ;Bezeichnung der verknüpften Technologie: Reha
+   TechnologiesRequired = 101081
+} TechAdapter

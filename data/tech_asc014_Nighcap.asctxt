@@ -1,0 +1,10 @@
+technology {
+   Name = Nighcap
+   infotext = Reserach project finished! Nighcap avialable!
+   id = 101031
+   RelatedUnitID = 31
+   parent = 101914
+   researchpoints *= 100
+   techlevel = 1
+   TechnologiesRequired = 101910 
+} Technology

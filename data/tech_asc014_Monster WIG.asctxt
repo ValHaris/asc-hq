@@ -1,0 +1,10 @@
+technology {
+   Name = Monster WIG
+   infotext = Reserach project finished! Monster WIG avialable!
+   id = 101071
+   RelatedUnitID = 71
+   parent = 101914
+   researchpoints *= 220
+   techlevel = 4
+   TechnologiesRequired = 101081,101075,101037 
+} Technology

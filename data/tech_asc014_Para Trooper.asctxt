@@ -1,0 +1,10 @@
+technology {
+   Name = Para Trooper
+   infotext = Reserach project finished! Para Trooper avialable!
+   id = 101053
+   RelatedUnitID = 53
+   parent = 101914
+   researchpoints *= 130
+   techlevel = 1
+   TechnologiesRequired = 101910 
+} Technology

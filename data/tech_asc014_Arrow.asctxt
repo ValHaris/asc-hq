@@ -1,0 +1,10 @@
+technology {
+   Name = Arrow
+   infotext = Reserach project finished! Arrow avialable!
+   id = 101019
+   RelatedUnitID = 19
+   parent = 101914
+   researchpoints *= 130
+   techlevel = 2
+   TechnologiesRequired = 101910 
+} Technology

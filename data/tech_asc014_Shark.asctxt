@@ -1,0 +1,10 @@
+technology {
+   Name = Shark
+   infotext = Reserach project finished! Shark avialable!
+   id = 101047
+   RelatedUnitID = 47
+   parent = 101914
+   researchpoints *= 150
+   techlevel = 2
+   TechnologiesRequired = 101038 
+} Technology

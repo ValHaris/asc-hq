@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 32
+   ;Bezeichnung der verknüpften Technologie: Argus
+   TechnologiesRequired = 101032
+} TechAdapter

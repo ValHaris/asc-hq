@@ -1,0 +1,10 @@
+technology {
+   Name = Shine
+   infotext = Reserach project finished! Shine avialable!
+   id = 101115
+   RelatedUnitID = 115
+   parent = 101914
+   researchpoints *= 180
+   techlevel = 4
+   TechnologiesRequired = 101027,101080 
+} Technology

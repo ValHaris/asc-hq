@@ -1,0 +1,10 @@
+technology {
+   Name = Reha
+   infotext = Reserach project finished! Reha avialable!
+   id = 101081
+   RelatedUnitID = 81
+   parent = 101914
+   researchpoints *= 180
+   techlevel = 3
+   TechnologiesRequired = 101014 
+} Technology

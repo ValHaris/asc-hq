@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 52
+   ;Bezeichnung der verknüpften Technologie: Eagle
+   TechnologiesRequired = 101052
+} TechAdapter

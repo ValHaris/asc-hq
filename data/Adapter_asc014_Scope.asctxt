@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 9
+   ;Bezeichnung der verknüpften Technologie: Scope
+   TechnologiesRequired = 101009
+} TechAdapter

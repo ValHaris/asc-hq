@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 21
+   ;Bezeichnung der verknüpften Technologie: Impact
+   TechnologiesRequired = 101021
+} TechAdapter

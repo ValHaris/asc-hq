@@ -1,0 +1,10 @@
+technology {
+   Name = Wake
+   infotext = Reserach project finished! Wake avialable!
+   id = 101042
+   RelatedUnitID = 42
+   parent = 101914
+   researchpoints *= 100
+   techlevel = 1
+   TechnologiesRequired = 101912 
+} Technology

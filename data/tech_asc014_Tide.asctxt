@@ -1,0 +1,10 @@
+technology {
+   Name = Tide
+   infotext = Reserach project finished! Tide avialable!
+   id = 101041
+   RelatedUnitID = 41
+   parent = 101914
+   researchpoints *= 120
+   techlevel = 1
+   TechnologiesRequired = 101042 
+} Technology

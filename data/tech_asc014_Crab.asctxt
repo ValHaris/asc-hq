@@ -1,0 +1,10 @@
+technology {
+   Name = Crab
+   infotext = Reserach project finished! Crab avialable!
+   id = 101024
+   RelatedUnitID = 24
+   parent = 101914
+   researchpoints *= 120
+   techlevel = 2
+   TechnologiesRequired = 101043 
+} Technology

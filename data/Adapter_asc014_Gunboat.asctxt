@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 80
+   ;Bezeichnung der verknüpften Technologie: Gunboat
+   TechnologiesRequired = 101080
+} TechAdapter

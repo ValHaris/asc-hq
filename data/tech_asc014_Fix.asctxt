@@ -1,0 +1,10 @@
+technology {
+   Name = Fix
+   infotext = Reserach project finished! Fix avialable!
+   id = 101039
+   RelatedUnitID = 39
+   parent = 101914
+   researchpoints *= 150
+   techlevel = 3
+   TechnologiesRequired = 101024 
+} Technology

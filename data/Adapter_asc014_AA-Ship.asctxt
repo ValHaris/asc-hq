@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 28
+   ;Bezeichnung der verknüpften Technologie: AA-Ship
+   TechnologiesRequired = 101028
+} TechAdapter

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 38
+   ;Bezeichnung der verknüpften Technologie: Streak
+   TechnologiesRequired = 101038
+} TechAdapter

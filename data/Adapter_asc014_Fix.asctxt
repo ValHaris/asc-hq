@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 39
+   ;Bezeichnung der verknüpften Technologie: Fix
+   TechnologiesRequired = 101039
+} TechAdapter

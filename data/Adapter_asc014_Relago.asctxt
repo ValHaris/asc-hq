@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 78
+   ;Bezeichnung der verknüpften Technologie: Relago
+   TechnologiesRequired = 101078
+} TechAdapter

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14
+   ;Bezeichnung der verknüpften Technologie: Wedge
+   TechnologiesRequired = 101014
+} TechAdapter

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 46
+   ;Bezeichnung der verknüpften Technologie: Cone
+   TechnologiesRequired = 101046
+} TechAdapter

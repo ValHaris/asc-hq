@@ -1,0 +1,10 @@
+technology {
+   Name = Jellyfish
+   infotext = Reserach project finished! Jellyfish avialable!
+   id = 101027
+   RelatedUnitID = 27
+   parent = 101914
+   researchpoints *= 160
+   techlevel = 3
+   TechnologiesRequired = 101047 
+} Technology

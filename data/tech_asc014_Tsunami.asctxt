@@ -1,0 +1,10 @@
+technology {
+   Name = Tsunami
+   infotext = Reserach project finished! Tsunami avialable!
+   id = 101035
+   RelatedUnitID = 35
+   parent = 101914
+   researchpoints *= 250
+   techlevel = 4
+   TechnologiesRequired = 101034 
+} Technology

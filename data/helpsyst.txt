@@ -148,7 +148,7 @@ F3 #pos030#: Continue Network Game
 9 #pos030#: Write whole map to PCX-File
 0 #pos030#: Save screen to PCX-File
 strg x #pos030#: Exit program
-
+strg F12 #pos030#: cut unit to clipboard file
 ---------------------------
 
 r  #pos030#: repaint display (mainscreen only)

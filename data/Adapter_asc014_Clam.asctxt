@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 36
+   ;Bezeichnung der verknüpften Technologie: Clam
+   TechnologiesRequired = 101036
+} TechAdapter

@@ -1,0 +1,10 @@
+technology {
+   Name = Impact
+   infotext = Reserach project finished! Impact avialable!
+   id = 101021
+   RelatedUnitID = 21
+   parent = 101914
+   researchpoints *= 160
+   techlevel = 3
+   TechnologiesRequired = 101092 
+} Technology

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 92
+   ;Bezeichnung der verknüpften Technologie: Boomerang
+   TechnologiesRequired = 101092
+} TechAdapter
