@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.84 2002-03-27 00:18:21 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.85 2002-04-05 19:01:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.84  2002/03/27 00:18:21  mbickel
+//      Changed the resource weight
+//
 //     Revision 1.83  2002/03/26 22:23:09  mbickel
 //      Fixed: music was started even if turned off in ini file
 //      Fixed: crash in reaction fire
@@ -1034,35 +1037,13 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
    fld = getfield ( x, y );
 
    if ( vehicle ) {
-      if ((fld->vehicle == NULL) && (fld->building == NULL)) {
-         fld->vehicle = vehicle;
-         vehicle->addview();
-      } else {
-         if ( fld->vehicle  &&  fld->vehicle->typ->loadcapacity ) {
-            i = 0;
-            while ((fld->vehicle->loading[i] != NULL) && (i < 31))
-              i++;
-            fld->vehicle->loading[i] = vehicle;
-         }
-         else
-            if ( fld->building ) {
-               i = 0;
-               while ( fld->building->loading[i]  && (i < 31))
-                  i++;
-               fld->building->loading[i] = vehicle;
-               if (fld->building->color != vehicle->color )
-                  fld->building->convert( vehicle->color / 8 );
-
-            }
-      }
-
 
       vehicle->tank.fuel -= fueldist * vehicle->typ->fuelConsumption / maxmalq;
       if ( vehicle->tank.fuel < 0 )
          vehicle->tank.fuel = 0;
 
 
-      if (fld->vehicle == vehicle)
+      if ( !fld->vehicle && !fld->building )
          vehicle->decreaseMovement ( movedist );
       else {
          vehicle->setMovement ( 0 );
@@ -1075,13 +1056,39 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
       if ( newheight != -1 && vehicle->typ->height & newheight)
          vehicle->height = newheight;
 
-      if ( rf->checkfield ( x, y, vehicle, mapDisplay )) {
+      if ( vehicle && rf->checkfield ( x, y, vehicle, mapDisplay )) {
          attackedByReactionFire = true;
          vehicle = actmap->getUnit ( networkID );
       }
 
-      dashboard.x = 0xffff;
+      if ( vehicle ) {
+
+         if ((fld->vehicle == NULL) && (fld->building == NULL)) {
+            fld->vehicle = vehicle;
+            vehicle->addview();
+         } else {
+            if ( fld->vehicle  &&  fld->vehicle->typ->loadcapacity ) {
+               i = 0;
+               while ((fld->vehicle->loading[i] != NULL) && (i < 31))
+                 i++;
+               fld->vehicle->loading[i] = vehicle;
+            }
+            else
+               if ( fld->building ) {
+                  i = 0;
+                  while ( fld->building->loading[i]  && (i < 31))
+                     i++;
+                  fld->building->loading[i] = vehicle;
+                  if (fld->building->color != vehicle->color )
+                     fld->building->convert( vehicle->color / 8 );
+
+               }
+         }
+
+         dashboard.x = 0xffff;
+      }
    }
+
 
    int fieldschanged;
    if ( actmap->playerView >= 0 )

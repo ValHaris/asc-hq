@@ -3,9 +3,17 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.129 2002-04-05 09:25:05 mbickel Exp $
+//     $Id: controls.cpp,v 1.130 2002-04-05 19:01:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.129  2002/04/05 09:25:05  mbickel
+//      Project files now for Borland C++ Builder 6
+//      Fixed: netcontrol not working
+//      Fixed: replay errors when constructing turrets
+//      Submarine require no fuel for sufacing
+//      Field info dialog extended
+//      Fixed several buffer overruns
+//
 //     Revision 1.128  2002/03/18 21:42:17  mbickel
 //      Some cleanup and documentation in the Mine class
 //      The number of mines is now displayed in the field information window
@@ -1486,7 +1494,7 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
 
                battle.setresult();
 
-               logtoreplayinfo ( rpl_reactionfire, ulex, uley, x, y, ad1, ad2, dd1, dd2, atw->num[num] );
+//               logtoreplayinfo ( rpl_reactionfire, ulex, uley, x, y, ad1, ad2, dd1, dd2, atw->num[num] );
 
                dashboard.x = 0xffff;
                ul->eht->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  (vehicle->color / 8) );
