@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.69 2002-10-06 15:44:40 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.70 2002-10-29 19:00:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.69  2002/10/06 15:44:40  mbickel
+//      Completed inheritance of .asctxt files
+//      Speed up of replays
+//
 //     Revision 1.68  2002/03/19 19:29:31  mbickel
 //      Changed BI3 map import to work in map2pcx without user intervention
 //
@@ -1256,7 +1260,7 @@ void       tloadBImap :: ReadSHOPPart( void )
                                   if ( bld->w_picture[w][p][ m ] [ n ] )
                                      if ( bld->getpicture( BuildingType::LocalCoordinate(m , n) ) ) {
                                         MapCoordinate pos = bld->getFieldCoordinate ( MapCoordinate(newx, newy), BuildingType::LocalCoordinate(m, n) );
-                                        pfield fld2 = getfield ( xoffset + pos.x, yoffset + pos.y );
+                                        pfield fld2 = getfield ( pos.x, pos.y );
                                         if ( fld2->tempw != bld->bi_picture[w][p][ m ] [ n ] )
                                            match = 0;
                                      }
@@ -1380,15 +1384,15 @@ void       tloadBImap :: ReadSHOPPart( void )
 
    for ( int y = 0; y < actmap->ysize; y++ )
       for ( int x = 0; x < actmap->xsize; x++ ) 
-         if ( getfield(x,y)->temp3 ) {
-            int m = getfield(x,y)->tempw;
+         if ( ::getfield(x,y)->temp3 ) {
+            int m = ::getfield(x,y)->tempw;
             if ( m > 0 && m != 0xffff ) {
                int fnd = 0;
                for ( int k = 0; k < missnum; k++ )
                   if ( miss[k] == m )
                      fnd = 1;
-   
-               if ( !fnd ) 
+
+               if ( !fnd )
                   miss[missnum++] = m;
                
             }
