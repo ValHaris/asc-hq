@@ -29,13 +29,14 @@ class CGameOptions;
 /**
 * 
 */
-class	CLoadableGameOptions	:	public PropertyGroup	{
-	public:
-		CLoadableGameOptions (CGameOptions* pOptions);
-		virtual	~CLoadableGameOptions();
-	private:
-		CLoadableGameOptions();
-		CGameOptions* _pOptions;	
+class	CLoadableGameOptions	:	public PropertyGroup
+{
+   public:
+      CLoadableGameOptions (CGameOptions* pOptions);
+      virtual	~CLoadableGameOptions();
+   private:
+      CLoadableGameOptions();
+      CGameOptions* _pOptions;
 };
-		
+
 #endif	//#ifndef CLOADABLE_H

@@ -144,6 +144,10 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
     pvehicle veh = _veh;
     pmap actmap = _actmap;
 
+    if ( actmap->getField(A.m, A.n)->unitHere(veh) )
+       if ( !veh->canMove() )
+          return;
+
     for ( int y = actmap->xsize * actmap->ysize -1; y >= 0; y-- )
        actmap->field[y].temp3 = DirNone;
 
@@ -385,6 +389,7 @@ AStar3D :: AStar3D ( pmap actmap_, pvehicle veh_, bool markTemps_ )
    _path = NULL;
    veh = veh_;
    actmap = actmap_;
+
    MAXIMUM_PATH_LENGTH = maxint;
 
    float maxVehicleSpeed = 0;
@@ -518,6 +523,11 @@ void AStar3D::findPath( const MapCoordinate3D& A, const MapCoordinate3D& B, Path
     Node N;
     Container open;
 
+    if ( actmap->getField(A)->unitHere(veh) )
+       if ( !veh->canMove() )
+          return;
+
+
     // insert the original node
     N.h = A;
     N.gval = 0;
@@ -602,7 +612,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const MapCoordinate3D& B, Path
         MapCoordinate3D h = B;
         while( !(h == A) )
         {
-            pfield fld = actmap->getField ( h );
+            // pfield fld = actmap->getField ( h );
             HexDirection dir = HexDirection ( getPosDir(h) );
             tempPath.push_back( int( ReverseDirection( dir ) ) );
 

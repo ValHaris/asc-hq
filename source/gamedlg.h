@@ -1,5 +1,15 @@
-//     $Id: gamedlg.h,v 1.17 2001-07-18 16:05:47 mbickel Exp $//
+//     $Id: gamedlg.h,v 1.18 2001-07-18 18:15:52 mbickel Exp $
+//
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2001/07/18 16:05:47  mbickel
+//      Fixed: infinitive loop in displaying "player exterminated" msg
+//      Fixed: construction of units by units: wrong player
+//      Fixed: loading bug of maps with mines
+//      Fixed: invalid map parameter
+//      Fixed bug in game param edit dialog
+//      Fixed: cannot attack after declaring of war
+//      New: ffading of sounds
+//
 //     Revision 1.16  2001/02/26 12:35:14  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -53,21 +63,25 @@
 #define  gamedlg_h
 
 
-/*! \file gamedlg.h   A lot of dialog boxes that are only used by both ASC.
+/*! \file gamedlg.h
+   A lot of dialog boxes that are only used by both ASC.
 */
 
 
-#include "typen.h"#include "basegfx.h"
+#include "typen.h"
+#include "basegfx.h"
 #include "newfont.h"
 #include "spfst.h"
 #include "loaders.h"
 #include "misc.h"
 
-#include "dialog.h"#include "dlg_box.h"
+#include "dialog.h"
+#include "dlg_box.h"
 #include "unitctrl.h"
 
 
-class   tnewcampaignlevel : public tdialogbox {                      protected:
+class   tnewcampaignlevel : public tdialogbox {
+                      protected:
                          tmaploaders  loader;
                       public:
                          int           status;

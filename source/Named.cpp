@@ -20,21 +20,26 @@
 #include <string.h>
 #include <malloc.h>
 
-Named::Named()	
-	:	_name(NULL)	
+Named::Named()
+      :	_name(NULL)
 {}
 
-Named::Named(const char* pszName)	
-{	this->setName(pszName);	}
 
-
-Named::Named(const Named& n)	
-{	
-   setName(n.getName());	
+Named::Named(const char* pszName)
+{
+   this->setName(pszName);
 }
 
-Named::Named(const ASCString& pszName)	
-{	this->setName(pszName.c_str());	}
+
+Named::Named(const Named& n)
+{
+   setName(n.getName());
+}
+
+Named::Named(const ASCString& pszName)
+{
+   this->setName(pszName.c_str());
+}
 
 Named& Named::operator= (const Named& n)
 {
@@ -43,18 +48,20 @@ Named& Named::operator= (const Named& n)
 }
 
 
-Named::~Named()	
+Named::~Named()
 {
-	if (_name!=NULL)
-		free(_name);
+   if (_name!=NULL)
+      free(_name);
 }
 
-const char*	Named::getName() const	
-{	return _name;	}
+const char*	Named::getName() const
+{
+   return _name;
+}
 
 void	Named::setName(const char* pszName)
-{	
-	if (_name!=NULL)
-		free(_name);
-	_name	=	(pszName!=NULL && pszName[0])	?	strdup(pszName)	:	NULL;
+{
+   if (_name!=NULL)
+      free(_name);
+   _name	=	(pszName!=NULL && pszName[0])	?	strdup(pszName)	:	NULL;
 }

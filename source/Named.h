@@ -21,52 +21,53 @@
 #include "global.h"
 #include "ascstring.h"
 
-/** 
+/**
 * A simple Interface-class for a named Thing 
 * @author Frank Landgraf
 * @version 1.0
 */
-class Named	{
-	public:
+class Named
+{
+   public:
 
-		/** 
-		* default constructor
-		* sets the Name to NULL
-		*/
-		Named();
-		
-		/** 
-		* constructor
-		* sets the Name to 
-		* @param pszName 
-		*/
-		Named(const char* pszName);
-		Named(const ASCString& pszName);
-		Named(const Named& n);
-		
-		Named& operator= (const Named& n);
-		
-		/** 
-		* (virtual) destructor 
-		* deletes the internal buffer
-		*/
-		virtual ~Named();
+      /**
+      * default constructor
+      * sets the Name to NULL
+      */
+      Named();
 
-		/** 
-		* gets the Name of the Object
-		*/
-		const char*	getName() const;
-		
-		/** 
-		* set the Name of the Object to pszName
-		*/
-		virtual void	setName(const char* pszName);
+      /**
+      * constructor
+      * sets the Name to 
+      * @param pszName 
+      */
+      Named(const char* pszName);
+      Named(const ASCString& pszName);
+      Named(const Named& n);
 
-	private:
-		/** 
-		* internal namebuffer
-		*/
-		char* _name;
+      Named& operator= (const Named& n);
+
+      /**
+      * (virtual) destructor 
+      * deletes the internal buffer
+      */
+      virtual ~Named();
+
+      /**
+      * gets the Name of the Object
+      */
+      const char*	getName() const;
+
+      /**
+      * set the Name of the Object to pszName
+      */
+      virtual void	setName(const char* pszName);
+
+   private:
+      /**
+      * internal namebuffer
+      */
+      char* _name;
 };
 
 #endif // #ifndef NAMED_H

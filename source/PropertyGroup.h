@@ -22,34 +22,36 @@
 
 #include <list>
 #ifdef __WATCOM_CPLUSPLUS__
- #include <istream>
+#include <istream>
 #endif
 /**
 * A Class thats holds a Group of Propertys
 *
 * @author Frank Landgraf
 */
-class PropertyGroup	:	public	Named	{
-	public:
-	
-		class PtrList	:	public	std::list<PropertyIF*>	{
-			public:
-				~PtrList();	
-		};
-		
-		PropertyGroup();
-		
-		void		add(PropertyIF*);
-		PropertyIF*	find(const char* pszName);
-		
-		const PtrList&	getPropertyList();
+class PropertyGroup	:	public	Named
+{
+   public:
 
-		virtual void		setValueToDefault();
+      class PtrList	:	public	std::list<PropertyIF*>
+      {
+         public:
+            ~PtrList();
+      };
 
-		virtual	bool		Load(std::istream& is);                  
-		virtual	bool		Save(std::ostream& os);                       
+      PropertyGroup();
 
-	private:
-		PtrList	_propertys;
+      void		add(PropertyIF*);
+      PropertyIF*	find(const char* pszName);
+
+      const PtrList&	getPropertyList();
+
+      virtual void		setValueToDefault();
+
+      virtual	bool		Load(std::istream& is);
+      virtual	bool		Save(std::ostream& os);
+
+   private:
+      PtrList	_propertys;
 };
 #endif //#ifndef PROPERTYGROUP_H

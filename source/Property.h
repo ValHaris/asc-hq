@@ -29,37 +29,38 @@
 *
 * @author Frank Landgraf
 */
-class TextProperty	:	public	PropertyIF	{
-	public:
-		TextProperty();
-		TextProperty(	const	char* pszName,
-						Named* pszValue		=	NULL,
-						const	char* pszDefault	=	NULL
-					);
-		
-		virtual	~TextProperty();
+class TextProperty	:	public	PropertyIF
+{
+   public:
+      TextProperty();
+      TextProperty(	const	char* pszName,
+                    Named* pszValue		=	NULL,
+                    const	char* pszDefault	=	NULL
+                  );
 
-		const char*	getName() const;
-		void		setName(const char* pszName);
+      virtual	~TextProperty();
 
-		void		setValue(const char*);
-		const char*	getValue()		const;
+      const char*	getName() const;
+      void		setName(const char* pszName);
 
-		virtual	const char*	getValueString() const;
+      void		setValue(const char*);
+      const char*	getValue()		const;
 
-		virtual void		setValueString(const char* pszValue);
-		
-		void		setDefault(const char*);
-		const char*	getDefault()	const;
-		
-		virtual void		setValueToDefault();
+      virtual	const char*	getValueString() const;
 
-	private:
-		Named	_name;
-	//	Named	_value;
-		Named	_default_value;
+      virtual void		setValueString(const char* pszValue);
 
-		Named*	_ptrValue;
+      void		setDefault(const char*);
+      const char*	getDefault()	const;
+
+      virtual void		setValueToDefault();
+
+   private:
+      Named	_name;
+      //	Named	_value;
+      Named	_default_value;
+
+      Named*	_ptrValue;
 };
 
 /**
@@ -67,32 +68,35 @@ class TextProperty	:	public	PropertyIF	{
 *
 * @author Frank Landgraf
 */
-class IntProperty	:	public	PropertyIF	{
-	public:
-		IntProperty();
-		IntProperty(	const char* pszName,
-						int*		pInt	=	NULL,
-						int			Default	=	0
-				);
-		virtual	~IntProperty(){};
+class IntProperty	:	public	PropertyIF
+{
+   public:
+      IntProperty();
+      IntProperty(	const char* pszName,
+                   int*		pInt	=	NULL,
+                   int			Default	=	0
+                 );
+      virtual	~IntProperty()
+      {}
+      ;
 
-		const char*	getName() const;
-		void		setName(const char* pszName);
-	
-		void		setValue(int);
-		int			getValue()		const;
+      const char*	getName() const;
+      void		setName(const char* pszName);
 
-		virtual	const char*	getValueString()	const;
-		virtual void		setValueString(const char* pszValue);
-		virtual void		setValueToDefault();
+      void		setValue(int);
+      int			getValue()		const;
 
-		void	setDefault(int);
-		int		getDefault()	const;
-		
-	private:
-		Named	_name;
-		int		_default_value;
-		int*	_ptrValue;	
+      virtual	const char*	getValueString()	const;
+      virtual void		setValueString(const char* pszValue);
+      virtual void		setValueToDefault();
+
+      void	setDefault(int);
+      int		getDefault()	const;
+
+   private:
+      Named	_name;
+      int		_default_value;
+      int*	_ptrValue;
 };
 
 #endif //#ifndef PROPERTY_H

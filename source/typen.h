@@ -1,6 +1,11 @@
-//     $Id: typen.h,v 1.92 2001-07-14 19:13:16 mbickel Exp $
+//     $Id: typen.h,v 1.93 2001-07-18 18:15:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.92  2001/07/14 19:13:16  mbickel
+//      Rewrote sound system
+//      Moveing units make sounds
+//      Added sound files to data
+//
 //     Revision 1.91  2001/07/13 12:53:01  mbickel
 //      Fixed duplicate icons in replay
 //      Fixed crash in tooltip help
@@ -456,8 +461,14 @@ class  Message {
      int id;
      int runde;  //  Zeitpunkt des abschickens
      int move;   //  "
-     // Message ( void );
      Message ( pmap spfld );
+
+     /** Constructor.
+         \param msg      The message text
+         \param gamemap  The map that this message is currently being played
+         \param rec      The receipient. Bitmapped: each bit one player
+         \param from     The sender. Bitmapped too! 512 = system
+     */
      Message ( const ASCString& msg, pmap gamemap,int rec, int from = 512 );  // fuer Meldungen vom System
 };
 

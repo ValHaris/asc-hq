@@ -1,8 +1,11 @@
 /*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.73 2001-07-15 21:00:25 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.74 2001-07-18 18:15:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.73  2001/07/15 21:00:25  mbickel
+//      Some cleanup in the vehicletype class
+//
 //     Revision 1.72  2001/07/14 19:13:15  mbickel
 //      Rewrote sound system
 //      Moveing units make sounds
@@ -3251,7 +3254,7 @@ void tnewmessage :: run ( void )
 
    } while ( !ok ); /* enddo */
    if ( ok == 1 ) {
-      Message* message = new Message ( extracttext(), actmap, 0, actmap->actplayer );
+      Message* message = new Message ( extracttext(), actmap, 0, 1 << actmap->actplayer );
       for ( int i = 0; i < 8; i++ ) {
          if ( actmap->player[i].exist() )
             if ( actmap->actplayer != i )

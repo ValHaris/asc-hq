@@ -18,19 +18,20 @@
 #ifndef PROPERTYIF_H
 #define PROPERTYIF_H
 
- /**
+/**
 * An Interface (abstract class) thats holds a named (String)Value.
 * @author Frank Landgraf
 */
-class PropertyIF	{
-	public:
-		virtual	const char*	getName() const				=	0;
-		virtual void		setName(const char*)		=	0;
+class PropertyIF
+{
+   public:
+      virtual	const char*	getName() const				=	0;
+      virtual void		setName(const char*)		=	0;
 
-		virtual	const char*	getValueString() const		=	0;
-		virtual void		setValueString(const char*)	=	0;
+      virtual	const char*	getValueString() const		=	0;
+      virtual void		setValueString(const char*)	=	0;
 
-		virtual void		setValueToDefault()			=	0;
+      virtual void		setValueToDefault()			=	0;
 };
 
 #endif //#ifndef PROPERTYIF_H
