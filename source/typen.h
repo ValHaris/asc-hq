@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.104 2001-10-08 14:44:23 mbickel Exp $
+//     $Id: typen.h,v 1.105 2001-10-31 20:30:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.104  2001/10/08 14:44:23  mbickel
+//      Some cleanup
+//
 //     Revision 1.103  2001/10/06 11:30:42  mbickel
 //      Fixed bug in gametime calculation
 //
@@ -401,7 +404,7 @@ class  Message {
 template <class T> class PointerVector : public vector<T> {
    public:
      ~PointerVector() {
-        for ( iterator it=begin(); it!=end(); it++ )
+        for ( vector<T>::iterator it=begin(); it!=end(); it++ )
             delete *it;
      };
 };
@@ -411,7 +414,7 @@ template <class T> class PointerVector : public vector<T> {
 template <class T> class PointerList : public list<T> {
    public:
      ~PointerList() {
-        for ( iterator it=begin(); it!=end(); it++ )
+        for ( list<T>::iterator it=begin(); it!=end(); it++ )
             delete *it;
      };
 };
