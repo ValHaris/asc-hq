@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.27 2000-05-10 19:55:42 mbickel Exp $
+//     $Id: controls.cpp,v 1.28 2000-05-10 21:13:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/05/10 19:55:42  mbickel
+//      Fixed empty loops when waiting for mouse events
+//
 //     Revision 1.26  2000/05/08 20:39:00  mbickel
 //      Cleaned up makefiles
 //      Fixed bug in mount: crash when file > 1 MB
@@ -5667,6 +5670,10 @@ void continuenetworkgame ( void )
    } /* endcatch */
    catch ( tinvalidversion err ) {
       displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.filename, err.expected, err.found );
+      throw tnomaploaded();
+   } /* endcatch */
+   catch ( tcompressionerror err ) {
+      displaymessage( "The file cannot be decompressed. \nIt has probably been damaged during transmission from the previous player to you.\nTry sending it zip compressed or otherwise encapsulated.\n", 1 );
       throw tnomaploaded();
    } /* endcatch */
    catch ( tfileerror err) {
