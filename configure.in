@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl AC_REVISION($Revision: 1.57 $)dnl
+dnl AC_REVISION($Revision: 1.58 $)dnl
 dnl AM_MAINTAINER_MODE
 AC_INIT(source/typen.h)
 
@@ -228,6 +228,7 @@ AC_SUBST([LDADDLIBBZ2])
 dnl docbook2man
 AC_SUBST(DOCBOOK2MAN)
 
+AC_SUBST(asc_version)
 
 dnl *************************************************************************
 dnl Checking and assembling the data files
@@ -314,7 +315,7 @@ AC_OUTPUT( Makefile source/Makefile source/docs/Makefile \
       source/unix/mapeditor/Makefile source/tools/Makefile \
 	   source/tools/lib/Makefile source/tools/linux/Makefile \
 	   data/Makefile data/dialog/Makefile data/music/Makefile \
-	   doc/Makefile
+	   doc/Makefile asc.spec
 	 )
 
 	

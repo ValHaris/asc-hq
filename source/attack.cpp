@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: attack.cpp,v 1.58 2002-03-02 23:04:00 mbickel Exp $
+//     $Id: attack.cpp,v 1.59 2002-04-21 21:50:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2002/03/02 23:04:00  mbickel
+//      Some cleanup of source code
+//      Improved Paragui Integration
+//      Updated documentation
+//      Improved Sound System
+//
 //     Revision 1.57  2001/12/14 10:20:04  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -581,7 +587,7 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    av.hemming    = 1;
    av.weapnum    = _weapon;
    av.weapcount  = attackingunit->ammo [ _weapon ];
-   av.color      = attackingunit->color >> 3;
+   av.color      = attackingunit->getOwner();
    av.initiative = attackingunit->typ->initiative;
    av.kamikaze   = attackingunit->functions & cfkamikaze;
 
@@ -651,7 +657,7 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    else
       dv.defensebonus = 0;
 
-   dv.color      = attackedunit->color >> 3;
+   dv.color      = attackedunit->getOwner();
    dv.initiative = attackedunit->typ->initiative;
    dv.kamikaze = 0;
 }
@@ -746,7 +752,7 @@ void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int w
    av.hemming    = 1;
    av.weapnum    = _weapon;
    av.weapcount  = attackingunit->ammo [ _weapon ];
-   av.color      = attackingunit->color >> 3;
+   av.color      = attackingunit->getOwner();
    av.initiative = attackingunit->typ->initiative;
    av.kamikaze   = attackingunit->functions & cfkamikaze;
 
@@ -774,7 +780,7 @@ void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int w
    dv.hemming    = 1;
 
    dv.defensebonus = 0; // getfield ( x, y ) -> getdefensebonus();
-   dv.color      = _attackedbuilding->color >> 3;
+   dv.color      = _attackedbuilding->getOwner();
    dv.initiative = 0;
    dv.kamikaze = 0;
 
@@ -889,7 +895,7 @@ void tmineattacksunit :: setup ( pfield mineposition, int minenum, pvehicle &att
    dv.hemming    = 1;
    dv.weapnum = 0;
    dv.weapcount = 0;
-   dv.color = attackedunit->color >> 3;
+   dv.color = attackedunit->getOwner();
    dv.initiative = attackedunit->typ->initiative;
    dv.attackbonus = 0;
    dv.kamikaze = 0;

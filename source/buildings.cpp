@@ -81,7 +81,7 @@ void Building :: convert ( int player )
    if (player > 8)
       fatalError("convertbuilding: \n color muá im bereich 0..8 sein ");
 
-   int oldcol = color >> 3;
+   int oldcol = getOwner();
 
    #ifdef sgmain
    if ( oldcol == 8 )

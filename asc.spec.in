@@ -1,0 +1,62 @@
+# Initial spec file created by autospec ver. 0.6 with rpm 2.5 compatibility
+Summary: ASC - a battle isle clone
+Summary(de): ASC - ein Battle Isle clone
+Name: asc
+Version: @VERSION@
+Release: 1
+Group: Games/Strategy
+#Copyright: GNU GPL
+License: GNU GPL
+Source: asc-source-%{version}.tar.gz
+#BuildRoot: /tmp/asc-1.10.1.1-root
+# Following are optional fields
+URL: http://www.asc-hq.org/
+#Distribution: Red Hat Contrib-Net
+#Patch0: asc-pf.dif
+#Patch1: asc-nodebug.dif
+#Patch2: asc-1.10.1.1-bmw1.patch
+#Prefix: /usr/local/share/games/asc
+#BuildArchitectures: noarch
+BuildRequires: SDL-devel SDL_image-devel SDL_mixer freetype2-devel
+Requires: SDL SDL_image SDL_mixer freetype2
+ # eazy smpeg-devel alsa-devel
+ # paragui SDLmm #no rpm?
+#Obsoletes: 
+
+%description
+ASC aims at providing a free clone of Bluebyte's Battle Isle(tm) series
+
+%description -l de
+ASC ist eine freie Implementierung der bekannten Battle Isle Serie
+aus dem Hause Bluebyte
+
+%prep
+%setup -q
+%patch0
+%patch1
+%patch2
+
+%build
+#CFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=/usr
+%configure
+make
+
+%install
+make install
+
+#%clean
+#[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf "$RPM_BUILD_ROOT"
+
+%files
+%defattr(-,root,root)
+/usr/share/games/asc/
+/usr/bin/asc
+/usr/bin/asc_*
+%doc AUTHORS COPYING ChangeLog README TODO doc
+#INSTALL
+
+%changelog
+* Wed Apr 10 2002 Bernhard M. Wiedemann <b.m.w@gmx.net>
+- Initial spec file created by autospec ver. 0.6 with rpm 2.5 compatibility
+* Sun Apr 21 2002 Martin Bickel <bickel@asc-hq.org>
+- Added automatic versioning

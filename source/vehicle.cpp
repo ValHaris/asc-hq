@@ -658,7 +658,7 @@ void Vehicle::convert ( int col )
   if ( col > 8)
      fatalError("convertvehicle: \n color muá im bereich 0..8 sein ",2);
 
-   int oldcol = color >> 3;
+   int oldcol = getOwner();
 
    tmap::Player::VehicleList::iterator i = find ( gamemap->player[oldcol].vehicleList.begin(), gamemap->player[oldcol].vehicleList.end(), this );
    if ( i != gamemap->player[oldcol].vehicleList.end())
