@@ -24,46 +24,6 @@ When creating your own graphics the file <TT>tools/hexpics/hexfield.pcx</TT> sho
 
 The colors 16 - 23 (red colortone) will be shifted depending on the player who owns the vehicle. For the second player these colors will be shifted to 24 - 31 and so on. The color #255 is transparent so fill the remaining hexagon with this color when finished.<P>
 
-<H2>Defining unit sets</H2>
-You can group several vehicles together to form a unitset. In the mapeditor, you can enable and disable unitsets to make the selection of units easier. You can also define transformations that replace all units on a map by others. This is useful if you want to play a map with a different unit set than the one that is originally used by the map.<P>
-To define a unit set, you must create a <DFN>unitset definition file</DFN>, which is a plain text file with the extension <TT>.set</TT> . I suggest that you put all vehicles together with this <DFN>unitset definition file</DFN> into a single container (see <A HREF="mount.html">mount</A> for more information).<P>
-
-Here is an example for a <DFN>unitset definition file</DFN>:<BR>
-<NOBR><BLOCKQUOTE><TT>#V2#<BR>
-NAME=Standard Unitset<BR>
-ID=0-800,900,920-930,950<BR>
-MAINTAINER=Martin Bickel (martin@asc-hq.org)<BR>
-INFORMATION=This unitset is part of the standard ASC data package which can be obtained from http://www.asc-hq.org<BR>
-ACTIVE=1<BR>
-TRANSFORMATION=Example transformation;24,1840;25,1872;26,1805;27,1839;28,1878;29,1845;30,1834;31,1859;32,1821;33,1862;34,1810<BR>
-TRANSFORMATION=Another transformation;77,1877;78,1878;79,1879;1000,1822;1001,1829;1002,1806<BR>
-</TT></BLOCKQUOTE></NOBR><P>
-
-The first line must always be <TT>#V2#</TT>. This is to tell ASC that this is the second revision of the <DFN>unitset definition file</DFN> format. It is still possible to use the files with the old format, but if you create a new one use this new format.<P>
-Each of the following lines starts with a keyword, which must be UPPERCASE, an equals sign and some data. The order in which the properties are defined is not relevant. <P>
-<DL>
-<DT>NAME 
-<DD>The name of the unitset. <I>This field is required.</I>
-
-<DT>ID
-<DD>The IDs of the units that form the unitset. <I>This field is required.</I>
-
-<DT>MAINTAINER
-<DD>Some information about the person who maintains the unitset.  <I>This field is optional.</I>
-
-<DT>INFORMATION
-<DD>Some information about the unitset. The internet address where new versions can be optained is useful here.  <I>This field is optional.</I>
-
-<DT>ACTIVE
-<DD>Possible values are <TT>0</TT> and <TT>1</TT> . The default which is used if this field is not specified is <TT>1</TT> . If this variable is <TT>0</TT>, the units are not visible in the Vehicle Type Information Window in ASC. In the mapeditor's Setup Unit Filter dialog the default for each unitset is this variable. That means, even if a unitset is marked inactive, you can activate it with just three mouse clicks and see all units in it. There is no way to hide units completely. <I>This field is optional.</I>
-
-<DT>TRANSFORMATION
-<DD>The field consists of the transformations name, a semicolon ( <TT>;</TT> ) and a list of pairs of IDs. The first number is the ID of the unittype that will be replaced by the unittype with the second ID when this transformation is executed. In the above example, all units with ID 24 are replaced by units with ID 1840, all units with ID 25 are replaced by units with ID 1872, etc. You may define any number of transformations. Each transformation must be in a single line. <I>These fields are optional.</I>
-
-<DT>FILTERBUILDINGS
-<DD>The field is either zero or non-zero. If non-zero, buildings that are withing the range of IDs assigned to this unitset are not selectable too when this unitset is deactivated. Default is 0. <I>This field is optional.</I>
-
-</DL>
 
 </BODY>
 </HTML>

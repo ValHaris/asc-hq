@@ -2161,7 +2161,12 @@ void initNetworkGame ( void )
       if  ( actmap->player[i].exist() )
          if ( actmap->player[i].ASCversion > 0 )
             if ( (actmap->player[i].ASCversion & 0xffffff00) > getNumericVersion() ) {
-               new Message ( ASCString("Player ") + actmap->player[i].getName() + " is using a newer version of ASC. \nPlease check www.asc-hq.org for updates.", actmap, 1<<actmap->actplayer );
+               new Message ( ASCString("Player ") + actmap->player[i].getName()
+                        + " is using a newer version of ASC. \n"
+                          "Please check www.asc-hq.org for updates.\n\n"
+                          "Please do NOT report any problems with this version of ASC until "
+                          "you have confirmed that they are also present in the latest "
+                          "version of ASC.", actmap, 1<<actmap->actplayer );
                return;
             }
 

@@ -200,7 +200,7 @@ void Resources::runTextIO ( PropertyContainer& pc, const Resources& defaultValue
 
 tevent::LargeTriggerData::PolygonEntered :: PolygonEntered ( void )
 {
-   size = 0;
+   dataSize = 0;
    vehiclenetworkid = 0;
    data = NULL;
    tempnwid = 0;
@@ -212,11 +212,11 @@ tevent::LargeTriggerData::PolygonEntered :: PolygonEntered ( void )
 
 tevent::LargeTriggerData::PolygonEntered :: PolygonEntered ( const tevent::LargeTriggerData::PolygonEntered& poly )
 {
-   size = poly.size;
+   dataSize = poly.dataSize;
    vehiclenetworkid = poly.vehiclenetworkid;
    if ( poly.data ) {
-      data = new int [size];
-      for ( int i = 0; i < size; i++ )
+      data = new int [dataSize];
+      for ( int i = 0; i < dataSize; i++ )
          data[i] = poly.data[i];
    } else
       data = NULL;
@@ -225,8 +225,8 @@ tevent::LargeTriggerData::PolygonEntered :: PolygonEntered ( const tevent::Large
    tempypos = poly.tempypos;
    color = poly.color;
    memcpy ( reserved, poly.reserved, sizeof ( reserved ));
-
 }
+
 tevent::LargeTriggerData::PolygonEntered :: ~PolygonEntered ( )
 {
    if ( data ) {
@@ -243,8 +243,8 @@ tevent::LargeTriggerData :: LargeTriggerData ( void )
    ypos = -1;
    building = NULL;
    mapid = 0;
-   id = -1;  
-   unitpolygon = NULL;  
+   id = -1;
+   unitpolygon = NULL;
    networkid = 0;
    memset ( reserved, 0, sizeof ( reserved ));
 }

@@ -2,9 +2,12 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.35 2003-02-27 16:11:08 mbickel Exp $
+//     $Id: edevents.cpp,v 1.36 2003-04-08 15:04:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2003/02/27 16:11:08  mbickel
+//      Restructuring of new pathfinding code completed
+//
 //     Revision 1.34  2002/11/01 14:06:53  mbickel
 //      Changing the height between floating and driving has no movecost any more
 //      submarines evalute the field properties, not the terrain type properties
@@ -1921,9 +1924,8 @@ void         tcreateevent::buttonpressed(int         id)
                                  createpolygon(&poly,0,ae->a.action);
                                  redraw();
                                  if ( poly && poly->vertexnum ) {
-                                    int datasize = 2 + 2*poly->vertexnum;
-                                    etpe.size = sizeof ( etpe ) + datasize * sizeof ( int );
-                                    etpe.data = new int[ datasize ];
+                                    etpe.dataSize = 2 + 2*poly->vertexnum;
+                                    etpe.data = new int[ etpe.dataSize ];
                                     etpe.data[0] = 1;    // one polygon
                                     etpe.data[1] = poly->vertexnum;
                                     for ( i=0; i < poly->vertexnum; i++ ) {

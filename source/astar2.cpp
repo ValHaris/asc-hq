@@ -531,6 +531,12 @@ AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const
        return longestPath;
 
     int movecost = calcMoveMalus ( start, dest, vehicle, wind, &hasAttacked ).first;
+
+    if ( start.getNumericalHeight() >= 0 )
+       if ( movecost > veh->typ->movement[start.getNumericalHeight()]  )
+          return longestPath;
+
+
     if ( start.getNumericalHeight() < 0 )
        return movecost;
     else
@@ -729,8 +735,6 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                   Node N2;
                   N2.hasAttacked = N.hasAttacked;
                   DistanceType k = getMoveCost( N.h, hn, veh, N2.canStop, N2.hasAttacked );
-                  if ( k > veh->typ->movement[hn.getNumericalHeight()]  )
-                     k = 10*longestPath;
 
                   if ( k <= 0 )
                      k = 1;

@@ -18,8 +18,8 @@
     Boston, MA  02111-1307  USA
 */
 
-#include <vector> // From STL
-#include <algorithm>   // From STL
+#include <vector>
+#include <algorithm> 
 #include <cmath>
 
 #include "unitctrl.h"

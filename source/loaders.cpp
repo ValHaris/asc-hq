@@ -297,9 +297,9 @@ void   tspfldloaders::writeevent ( pevent event )
        }
        if (event->trigger[j] == ceventt_any_unit_enters_polygon || 
            event->trigger[j] == ceventt_specific_unit_enters_polygon) {
+              stream->writeInt(0x12345678);
               stream->writedata2( *event->trigger_data[j]->unitpolygon );
-              int sz = event->trigger_data[j]->unitpolygon->size - sizeof ( *event->trigger_data[j]->unitpolygon );
-              stream->writedata( event->trigger_data[j]->unitpolygon->data, sz );
+              stream->writedata( event->trigger_data[j]->unitpolygon->data, event->trigger_data[j]->unitpolygon->dataSize * sizeof(int) );
               if ( event->trigger_data[j]->unitpolygon->vehiclenetworkid ) {
                  int nwid = event->trigger_data[j]->unitpolygon->vehiclenetworkid;
                  pvehicle v = actmap->getUnit ( nwid );
@@ -312,10 +312,10 @@ void   tspfldloaders::writeevent ( pevent event )
                  }
                  stream->writedata2( nwid );
               }
-              
+
        }
-       
-    } 
+
+    }
 
 }
 
@@ -353,7 +353,7 @@ void    tspfldloaders::readevent ( pevent& event1 )
      for (char m = 0; m <= 3; m++) {
         event1->trigger_data[m] = new tevent::LargeTriggerData;
         if ( event1->trigger[m] ) {
-           if ((event1->trigger[m] == ceventt_buildingconquered) || 
+           if ((event1->trigger[m] == ceventt_buildingconquered) ||
               (event1->trigger[m] == ceventt_buildinglost) ||
               (event1->trigger[m] == ceventt_buildingdestroyed) || 
               (event1->trigger[m] == ceventt_building_seen )) {
@@ -395,26 +395,25 @@ void    tspfldloaders::readevent ( pevent& event1 )
 
            if (event1->trigger[m] == ceventt_turn) {
                stream->readdata2 ( event1->trigger_data[m]->time.abstime );
-           } 
-           if (event1->trigger[m] == ceventt_any_unit_enters_polygon || 
+           }
+           if (event1->trigger[m] == ceventt_any_unit_enters_polygon ||
                event1->trigger[m] == ceventt_specific_unit_enters_polygon) {
+                  int i = stream->readInt();
                   event1->trigger_data[m]->unitpolygon = new tevent::LargeTriggerData::PolygonEntered;
                   stream->readdata2( *event1->trigger_data[m]->unitpolygon );
-                  int sz = event1->trigger_data[m]->unitpolygon->size - sizeof ( *event1->trigger_data[m]->unitpolygon );
-                  event1->trigger_data[m]->unitpolygon->data = new int [ (sz + sizeof(int) -1 ) / sizeof ( int ) ];
-                  stream->readdata( event1->trigger_data[m]->unitpolygon->data, sz );
-                  if ( event1->trigger_data[m]->unitpolygon->vehiclenetworkid || event1->trigger_data[m]->unitpolygon->dummy ) {
+                  event1->trigger_data[m]->unitpolygon->data = new int [ event1->trigger_data[m]->unitpolygon->dataSize ];
+                  stream->readdata( event1->trigger_data[m]->unitpolygon->data, event1->trigger_data[m]->unitpolygon->dataSize * sizeof(int) );
+                  if ( event1->trigger_data[m]->unitpolygon->vehiclenetworkid  ) { // || event1->trigger_data[m]->unitpolygon->dummy
                      stream->readdata2( event1->trigger_data[m]->unitpolygon->tempxpos );
                      stream->readdata2( event1->trigger_data[m]->unitpolygon->tempypos );
                      stream->readdata2( event1->trigger_data[m]->unitpolygon->tempnwid );
                      event1->trigger_data[m]->unitpolygon->vehiclenetworkid = event1->trigger_data[m]->unitpolygon->tempnwid;
-                  } 
-                  
+                  }
+
            }
         }
 
-     } 
-
+     }
 }
 
 

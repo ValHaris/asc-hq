@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.125 2003-03-14 23:11:07 mbickel Exp $
+//     $Id: typen.h,v 1.126 2003-04-08 15:04:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.125  2003/03/14 23:11:07  mbickel
+//      Fixes to the wind and Pathfinding algorithm
+//
 //     Revision 1.124  2003/03/14 21:04:55  mbickel
 //      New wind movement
 //
@@ -560,7 +563,7 @@ class tevent {
 
        class  PolygonEntered {
          public:
-           int size;
+           int dataSize;
            int dummy;
            int vehiclenetworkid;
            int* data;
