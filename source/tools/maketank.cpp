@@ -741,7 +741,7 @@ main (int argc, char *argv[] )
              printf("\n\nNote: you may enter single ids ( '25' ) or ranges ('1 - 999');\n");
    
    
-             pbuildrange ids = new tbuildrange[1000];
+             Vehicletype::tbuildrange* ids = new Vehicletype::tbuildrange[1000];
              for ( int i = 0; i < ft->buildingsbuildablenum; i++ )
                 ids[i] = ft->buildingsbuildable[i];
              int num = 0;
@@ -794,13 +794,13 @@ main (int argc, char *argv[] )
 
 
       {
-         tn_file_buf_stream mainstream ( datfile.name, 2 );
+         tn_file_buf_stream mainstream ( datfile.name, tnstream::writing );
          ft->write ( mainstream );
       }
 
    } /* endtry */
    catch ( tfileerror err ) {
-      printf("\nfatal error accessing file %s \n", err.filename );
+      printf("\nfatal error accessing file %s \n", err.getFileName().c_str() );
       return 1;
    } /* endcatch */
    catch ( ASCexception ) {

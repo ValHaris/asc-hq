@@ -68,7 +68,7 @@ main (int argc, char *argv[] )
    try {
 
       {
-         tnfilestream stream ( "USABLACK.FNT", 1 );
+         tnfilestream stream ( "USABLACK.FNT", tnstream::reading );
          fnt = loadfont  ( &stream );
       }
       if ( !fnt ) {
@@ -223,7 +223,7 @@ main (int argc, char *argv[] )
       
                      if ( graph == 1 ) {
                         initgraphics ( 640, 480, 8);
-                        tnfilestream mainstream ( "palette.pal" , 1);
+                        tnfilestream mainstream ( "palette.pal" , tnstream::reading);
                         mainstream.readdata( (char*) pal, sizeof(pal)); 
                         setvgapalette256 ( pal );
    
@@ -256,7 +256,7 @@ main (int argc, char *argv[] )
             putspriteimage( 10 + i%8 * 50, 10 + i/8 * 50, ft->picture[0][i].picture ); 
    
          {
-            tnfilestream mainstream ( "palette.pal" , 1);
+            tnfilestream mainstream ( "palette.pal" , tnstream::reading);
             mainstream.readdata( (char*) pal, sizeof(pal)); 
          }
          setvgapalette256(pal);
@@ -441,12 +441,12 @@ main (int argc, char *argv[] )
       }
    
       {
-          tn_file_buf_stream mainstream (datfile.name, 2 );
+          tn_file_buf_stream mainstream (datfile.name, tnstream::writing );
           writeobject  ( ft, &mainstream, 0 );
       }
    } /* endtry */
    catch ( tfileerror err ) {
-      printf("\nfatal error accessing file %s \n", err.filename );
+      printf("\nfatal error accessing file %s \n", err.getFileName().c_str() );
       return 1;
    } /* endcatch */
    catch ( ASCexception ) {

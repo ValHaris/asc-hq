@@ -433,13 +433,13 @@ int main(int argc, char *argv[] )
    
    
       {
-         tn_file_buf_stream mainstream (datfile.name,2);
+         tn_file_buf_stream mainstream (datfile.name, tnstream::writing);
          writeterrain ( bdt, &mainstream );
       }
 
    } /* endtry */
    catch ( tfileerror err ) {
-      printf("\nfatal error accessing file %s \n", err.filename );
+      printf("\nfatal error accessing file %s \n", err.getFileName().c_str() );
       return 1;
    } /* endcatch */
    catch ( ASCexception ) {

@@ -142,7 +142,7 @@ main(int argc, char *argv[] )
    catch ( tfileerror err  ) {
       if ( gi )
          closegraphics();
-      printf("error accessing file %s\n", err.filename );
+      printf("error accessing file %s\n", err.getFileName().c_str() );
       getch();
    } /* endcatch */
 

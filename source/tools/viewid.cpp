@@ -176,7 +176,7 @@ int main ( void )
       printf("\n\n\n buildings  " );
       {
          didcounta id;
-         vid ("*.bld",Buildingtype,loadbuildingtype);
+         vid ("*.bld",BuildingType,loadbuildingtype);
          printresults( id );
       }
     
@@ -212,7 +212,7 @@ int main ( void )
    #endif
    } /* endtry */
    catch ( tfileerror err ) {
-      printf("\nfatal error accessing file %s \n", err.filename );
+      printf("\nfatal error accessing file %s \n", err.getFileName().c_str() );
       return 1;
    } /* endcatch */
    catch ( ASCexception ) {

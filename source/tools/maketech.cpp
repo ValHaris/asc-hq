@@ -73,7 +73,7 @@ void readtextfile ( char* name, pchar &buf, int allocated )
    char *p1, p2;
    p1 = buf;
 
-   tnfilestream stream ( name , 1);
+   tnfilestream stream ( name , tnstream::reading );
    for (int i = 0; i < size ; i++ ) {
       stream.readdata ( &p2, 1);
       if (p2 == 0x0D) {
@@ -264,7 +264,7 @@ main (int argc, char *argv[] )
 
 
    {
-      tn_file_buf_stream stream ( datfile.name, 2 );
+      tn_file_buf_stream stream ( datfile.name, tnstream::writing );
       writetechnology ( tech, &stream );
    }
 
@@ -342,7 +342,7 @@ void     loadicon (char *filename, void **icon)
    void* pnter;
       {
          int w;
-         tnfilestream stream ("mausi.raw",1);
+         tnfilestream stream ("mausi.raw",tnstream::reading);
          stream.readrlepict(   &pnter, false, &w );
       }
 

@@ -91,7 +91,7 @@ main(int argc, char *argv[] )
  
    void* hexshape;
    {
-      tnfilestream s ( "hxkontur.raw", 1 );
+      tnfilestream s ( "hxkontur.raw", tnstream::reading );
       int w;
       s.readrlepict ( &hexshape, 0, &w );
    }
