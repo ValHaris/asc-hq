@@ -338,7 +338,7 @@ struct trgbpixel {
 
 #define alphabase 64
 
-//! A class for a RGB image. 
+//! A class for a RGB image. Was an attempt to rewrite the graphics engine, but should be scrapped. Any new code should use SDLmm-Surfaces.
 class TrueColorImage {
          int xsize;
          int ysize;
