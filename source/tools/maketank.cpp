@@ -603,7 +603,8 @@ main (int argc, char *argv[] )
              c = ff.getnextname();
           }
        
-          printf("\n\n\n    the unit can build the following items of the object layers : \n\n");
+          printf("\n\n\n    the unit can build the following items of the object layers : \n"
+                 "            negative IDs: the objects can only be removed, but not build \n\n");
           int* pi = new int[100];
           memset ( pi, 0, 400 );
           for ( i = 0; i < ft->objectsbuildablenum; i++ ) {

@@ -1,6 +1,9 @@
-//     $Id: basestrm.h,v 1.28 2000-10-12 22:24:00 mbickel Exp $
+//     $Id: basestrm.h,v 1.29 2000-10-14 10:52:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/10/12 22:24:00  mbickel
+//      Made the DOS part of the new platform system work again
+//
 //     Revision 1.27  2000/10/12 21:37:51  mbickel
 //      Further restructured platform dependant routines
 //
@@ -124,12 +127,12 @@
 //     Merged all the bug fixes in that I did last week
 //
 //     Revision 1.2  1999/11/16 03:41:07  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
+//      Added CVS keywords to most of the files.
+//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//      Wrote replacement routines for kbhit/getch for Linux
+//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//      Added autoconf/automake capabilities
+//      Added files used by 'automake --gnu'
 //
 //
 /*
@@ -164,7 +167,9 @@
 #include "errors.h"
 #include "tpascal.inc"
 
+extern "C" {
 #include "libs/bzlib/bzlib.h"
+}
 
 
 

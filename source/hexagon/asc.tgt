@@ -12,7 +12,7 @@ EXE
 3
 WString
 5
-dr2eo
+dr2e9
 1
 0
 0
@@ -656,7 +656,8 @@ d????Include directories:
 0
 164
 WString
-0
+29
+C:\WATCOM\STLport-4.0\stlport
 0
 165
 MRState

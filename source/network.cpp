@@ -1,6 +1,9 @@
-//     $Id: network.cpp,v 1.11 2000-08-12 12:52:49 mbickel Exp $
+//     $Id: network.cpp,v 1.12 2000-10-14 10:52:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/08/12 12:52:49  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.10  2000/08/12 09:17:32  gulliver
 //     *** empty log message ***
 //
@@ -30,12 +33,12 @@
 //      Moved macros to substitute Watcom specific routines into global.h
 //
 //     Revision 1.2  1999/11/16 03:42:13  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
+//      Added CVS keywords to most of the files.
+//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//      Wrote replacement routines for kbhit/getch for Linux
+//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//      Added autoconf/automake capabilities
+//      Added files used by 'automake --gnu'
 //
 //
 /*
@@ -58,12 +61,11 @@
     Boston, MA  02111-1307  USA
 */
 
-#include "config.h"
 #include <stdio.h>                    
 #include <stdlib.h>
 #include <string.h>
 
-#include "tpascal.inc"
+#include "global.h"
 #include "misc.h"
 #include "typen.h"
 #include "network.h"

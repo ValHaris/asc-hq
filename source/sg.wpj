@@ -5,9 +5,9 @@ VpeMain
 1
 WRect
 0
-320
-10240
-9920
+0
+9040
+8379
 2
 MProject
 3
@@ -50,8 +50,8 @@ WRect
 WFileName
 15
 hexagon\asc.tgt
-35
-58
+0
+0
 13
 VComponent
 14
@@ -73,9 +73,9 @@ VComponent
 17
 WRect
 240
-213
+189
 5680
-4242
+4219
 1
 0
 18
@@ -89,9 +89,9 @@ VComponent
 20
 WRect
 1040
-1007
+983
 5680
-4254
+4231
 1
 0
 21

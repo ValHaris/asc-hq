@@ -1,6 +1,9 @@
-//     $Id: fileio.h,v 1.2 2000-10-14 10:52:56 mbickel Exp $
+//     $Id: global_os.h,v 1.1 2000-10-14 10:52:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/10/12 21:37:58  mbickel
+//      Further restructured platform dependant routines
+//
 //     Revision 1.1  2000/10/12 20:21:43  mbickel
 //      Restructuring operating system dependant files
 //
@@ -28,14 +31,21 @@
 // this file takes care that the necessary header files for opendir / readdir
 // are being included in basestrm.cpp
 
-#ifdef __BORLANDC__
- #include "borland/fileio.h"
-#else
- #ifdef __WATCOM_CPLUSPLUS__
-  #include "watcom/fileio.h"
- #else
-  #ifdef _MSC_VER
-   #include "msvc/fileio.h"
-  #endif
- #endif
+#ifndef global_os_h_included
+ #define global_os_h_included
+
+  #ifndef minimalIO
+   #define sdlheader "SDL.h"
+   #include sdlheader
+  #endif 
+
+  #include <string>
+  using namespace std;
+  #define HAVE_STRICMP 
+  #define HAVE_ITOA
+  #define HAVE_DIRENT_H 
+  #define HAVE_LIMITS
+
+  #define StaticClassVariable
+
 #endif

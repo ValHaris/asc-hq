@@ -1,6 +1,17 @@
-//     $Id: controls.cpp,v 1.78 2000-10-11 14:26:22 mbickel Exp $
+//     $Id: controls.cpp,v 1.79 2000-10-14 10:52:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.78  2000/10/11 14:26:22  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.77  2000/09/27 16:08:22  mbickel
 //      AI improvements
 //
@@ -106,7 +117,6 @@
     Boston, MA  02111-1307  USA
 */
 
-#include "config.h"
 #include <stdio.h>           
 #include <string.h>
 #include <math.h>
@@ -2995,7 +3005,7 @@ void         tdashboard::paintimage(void)
 
 void         tdashboard::paintclasses ( void )
 {
-	if ( CGameOptions::Instance()->showUnitOwner ) {
+        if ( CGameOptions::Instance()->showUnitOwner ) {
       const char* owner = NULL;
       if ( vehicle )
          owner = actmap->getPlayerName(vehicle->color / 8);
@@ -4623,7 +4633,7 @@ void endTurn ( void )
                      actvehicle->attacked = false;
                   }
                }
-			if ( actvehicle )
+                        if ( actvehicle )
                actvehicle->endTurn();
 
             actvehicle = nxeht;

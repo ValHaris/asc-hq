@@ -1,6 +1,9 @@
-//     $Id: global_os.h,v 1.1 2000-10-12 21:37:57 mbickel Exp $
+//     $Id: global_os.h,v 1.2 2000-10-14 10:52:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/10/12 21:37:57  mbickel
+//      Further restructured platform dependant routines
+//
 //     Revision 1.1  2000/10/12 20:21:43  mbickel
 //      Restructuring operating system dependant files
 //
@@ -28,4 +31,14 @@
 // this file defines operating system specific macros and is only included by
 // global.h
 
-#include "borland/global_os.h"
+#ifdef __BORLANDC__
+ #include "borland/global_os.h"
+#else
+ #ifdef __WATCOM_CPLUSPLUS__
+  #include "watcom/global_os.h"
+ #else
+  #ifdef _MSC_VER
+   #include "msvc/global_os.h"
+  #endif
+ #endif
+#endif

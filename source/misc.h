@@ -1,6 +1,9 @@
-//     $Id: misc.h,v 1.13 2000-10-12 22:24:00 mbickel Exp $
+//     $Id: misc.h,v 1.14 2000-10-14 10:52:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/10/12 22:24:00  mbickel
+//      Made the DOS part of the new platform system work again
+//
 //     Revision 1.12  2000/10/12 21:37:53  mbickel
 //      Further restructured platform dependant routines
 //
@@ -88,7 +91,7 @@
    #define dblue lightgray
    //153
    
-  #ifndef UseMemAvail 
+  #ifdef UseMemAvail 
    extern int memavail ( void );       // dummy function
   #endif
 

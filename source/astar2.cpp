@@ -1,9 +1,13 @@
 #include <stack>
 #include <vector>
 #include <functional>
-#ifndef __WATCOM_CPLUSPLUS__
- #include <heap.h>
+#include <algorithm>
+
+
+#ifdef _UNIX_
+ #include <heap>
 #endif
+ 
 #include "vehicletype.h"
 #include "spfst.h"
 #include "controls.h"

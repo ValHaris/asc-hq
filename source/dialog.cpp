@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.59 2000-10-12 21:37:51 mbickel Exp $
+//     $Id: dialog.cpp,v 1.60 2000-10-14 10:52:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.59  2000/10/12 21:37:51  mbickel
+//      Further restructured platform dependant routines
+//
 //     Revision 1.58  2000/10/11 14:26:26  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -251,12 +254,12 @@
 //     Merged all the bug fixes in that I did last week
 //
 //     Revision 1.2  1999/11/16 03:41:20  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
+//      Added CVS keywords to most of the files.
+//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//      Wrote replacement routines for kbhit/getch for Linux
+//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//      Added autoconf/automake capabilities
+//      Added files used by 'automake --gnu'
 //
 //
 /*
@@ -280,7 +283,6 @@
 */
 
 
-#include "config.h"                   
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -5160,7 +5162,7 @@ void tbi3preferences :: buttonpressed ( int id )
    tdialogbox :: buttonpressed ( id );
 
    if ( id == 1 ) {
-	   CGameOptions::Instance()->copy ( actoptions );
+           CGameOptions::Instance()->copy ( actoptions );
       status = 10;
    }
 
@@ -5641,7 +5643,7 @@ void viewterraininfo ( void )
 
 void viewUnitSetinfo ( void )
 {
-	std::string s;
+        std::string s;
    pfield fld = getactfield();
    if ( fieldvisiblenow  ( fld ) && fld->vehicle ) {
 
@@ -5830,7 +5832,7 @@ void tenterpassword :: init ( int* crc, int mode, char* ttl  )
 
    windowstyle ^= dlg_in3d;
    if ( mode == 0 ) {
-	   if ( *crc == 0   &&  CGameOptions::Instance()->defaultpassword ) {
+           if ( *crc == 0   &&  CGameOptions::Instance()->defaultpassword ) {
          addbutton ( "~O~k", 10, ysize - 35, xsize / 2 - 5, ysize - 10, 0, 1, 1, reask );
          addbutton ( "~D~efault", xsize / 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1,7, true );
       } else {
@@ -5839,7 +5841,7 @@ void tenterpassword :: init ( int* crc, int mode, char* ttl  )
       }
 
    } else {
-	   if ( *crc == 0   &&  CGameOptions::Instance()->defaultpassword ) {
+           if ( *crc == 0   &&  CGameOptions::Instance()->defaultpassword ) {
          addbutton ( "~O~k", 10, ysize - 35, xsize / 3 - 5, ysize - 10, 0, 1, 1, reask );
          addbutton ( "~D~efault", xsize / 3 + 5,   ysize - 35, 2 * xsize / 3 - 5, ysize - 10, 0, 1,7, true );
          addbutton ( "~C~ancel", 2 * xsize / 3 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1, 6, true );

@@ -67,22 +67,22 @@ struct trleheader {
    word y;
 };
 
-#define    black        0
-#define    blue         1
-#define    green        2
-#define    cyan         3
-#define    red          4
-#define    magenta      5 
-#define    brown        6  
-#define    lightgray    7   
-#define    darkgray     8    
-#define    lightblue    9     
-#define    lightgreen  42   // 10      
-#define    lightcyan   119  // 11      
-#define    lightred    52   // 12        
-#define    lightmagenta 5   // 13         
-#define    yellow      103  // 14          
-#define    white       160  // 15           
+const int black = 0;
+const int    blue        = 1;
+const int    green       = 2;
+const int    cyan        = 3;
+const int    red         = 4;
+const int    magenta     = 5 ;
+const int    brown       = 6  ;
+const int    lightgray   = 7   ;
+const int    darkgray    = 8    ;
+const int    lightblue   = 9     ;
+const int    lightgreen  = 42  ; // 10      
+const int    lightcyan   = 119 ; // 11      
+const int    lightred    = 52  ; // 12        
+const int    lightmagenta = 5  ; // 13         
+const int    yellow       = 103;  // 14          
+const int    white        = 160;  // 15           
 
 extern tgraphmodeparameters   *agmp;
 extern tgraphmodeparameters   *hgmp;

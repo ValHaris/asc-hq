@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.57 2000-10-11 15:33:47 mbickel Exp $
+//     $Id: typen.h,v 1.58 2000-10-14 10:52:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2000/10/11 15:33:47  mbickel
+//      Adjusted small editors to the new ASC structure
+//      Watcom compatibility
+//
 //     Revision 1.56  2000/10/11 14:26:51  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -270,7 +274,17 @@
 #define typen_h
 
 #include <time.h>
+
+
 #include "global.h"
+
+#ifdef HAVE_LIMITS
+ #include <limits>
+#else
+ #include <limits.h>
+#endif
+
+
 #include "tpascal.inc"
 #include "misc.h"
 #include "basestrm.h"
@@ -471,6 +485,9 @@ class Resources {
            case 1: return material;
            case 2: return fuel;
            default: throw OutOfRange();
+#ifdef _MSC_VER
+			       return energy; // MSVC sucks
+#endif 
         }
      };
 
@@ -480,6 +497,9 @@ class Resources {
            case 1: return material;
            case 2: return fuel;
            default: throw OutOfRange();
+#ifdef _MSC_VER
+			       return energy; // MSVC sucks
+#endif 
         }
      };
 
@@ -1719,7 +1739,12 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 
 #ifdef HAVE_LIMITS
 
- #include <limits>
+ #ifdef max
+  #undef max
+ #endif
+ #ifdef min
+  #undef min
+ #endif
 
  #define maxint numeric_limits<int>::max()
  #define minint numeric_limits<int>::min()
@@ -1727,8 +1752,6 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
  #define maxfloat numeric_limits<float>::max()
  #define minfloat numeric_limits<float>::min()
 #else
-
- #include <limits.h>
 
  #define maxint INT_MAX
  #define minint INT_MIN

@@ -1,6 +1,17 @@
-//     $Id: gamedlg.cpp,v 1.46 2000-10-11 14:26:35 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.47 2000-10-14 10:52:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2000/10/11 14:26:35  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.45  2000/09/16 11:47:27  mbickel
 //      Some cleanup and documentation again
 //
@@ -176,12 +187,12 @@
 //     Merged all the bug fixes in that I did last week
 //
 //     Revision 1.2  1999/11/16 03:41:44  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
+//      Added CVS keywords to most of the files.
+//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//      Wrote replacement routines for kbhit/getch for Linux
+//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//      Added autoconf/automake capabilities
+//      Added files used by 'automake --gnu'
 //
 //
 /*
@@ -204,7 +215,6 @@
     Boston, MA  02111-1307  USA
 */
 
-#include "config.h"
 #include <stdio.h>                        
 #include <string.h>
 #include <ctype.h>
@@ -3427,10 +3437,10 @@ void tviewmessages :: paintmessages ( void )
           activefontsettings.length = 190;
     
           tm *tmbuf;
-	  tmbuf = localtime (&message[a]->message->time);
+          tmbuf = localtime (&message[a]->message->time);
           int y = y1 + starty + 10 + ( a - firstdisplayed ) * 20 ;
 
-	  showtext2 (asctime (tmbuf), x1 + 20, y);
+          showtext2 (asctime (tmbuf), x1 + 20, y);
     
           activefontsettings.length = 100;
           if ( mode ) {
@@ -3997,7 +4007,7 @@ void tonlinemousehelp :: checklist ( tonlinehelplist* list )
 
 void tonlinemousehelp :: checkforhelp ( void )
 {
-	if ( CGameOptions::Instance()->onlinehelptime ) 
+        if ( CGameOptions::Instance()->onlinehelptime ) 
       if ( ticker > lastmousemove+CGameOptions::Instance()->onlinehelptime )
          if ( active == 1 )
             if ( mouseparams.taste == 0 )
@@ -4044,7 +4054,7 @@ class tgamepreferences : public tdialogbox {
                         void buttonpressed ( int id );
                         void run ( void );
                         tgamepreferences ( ) 
-							: actoptions ( *CGameOptions::Instance() ) {};
+                                                        : actoptions ( *CGameOptions::Instance() ) {};
                     };
 
 
@@ -4540,7 +4550,7 @@ void writeGameParametersToString ( std::string& s)
 
 void sendGameParameterAsMail ( void )
 {
- 	 std::string s;
+         std::string s;
    writeGameParametersToString ( s );
    new tmessage ( strdup ( s.c_str()), 255 );
 }
@@ -4572,17 +4582,17 @@ class tbaseitemlist {
 typedef class tmountpicture* pmountpicture;
 
 class  tmountpicture : public tbaseitemlist {
-	protected:
-		int outofmem;
+        protected:
+                int outofmem;
         pfont fnt;
 
         tgraphmodeparameters gmp;
 
         struct tb {
-			int x;
-			int y;
+                        int x;
+                        int y;
             int xs;
-			int ys;
+                        int ys;
             int xd;
             int num;
             char* name;
@@ -4592,11 +4602,11 @@ class  tmountpicture : public tbaseitemlist {
             tb* next;
        };
     
-		public:
-			typedef tb* pb ;
-		protected:
-			pb  first;
-			pb  last;
+                public:
+                        typedef tb* pb ;
+                protected:
+                        pb  first;
+                        pb  last;
 
 
        int x1;
@@ -4612,14 +4622,14 @@ class  tmountpicture : public tbaseitemlist {
 
        pb getpbfornum ( int n );
 
-		void dispimage ( void );
+                void dispimage ( void );
 
        virtual pb add_item ( void* item );
        void markitem ( pb i , int y );
        void clearbuf ( void );
 
-		public:
-		              int piclen;
+                public:
+                              int piclen;
                           int ysize;
                           int ystart;
                           int effpiclen;
@@ -5000,11 +5010,13 @@ void tmountpicture  :: newbuf ( int ys )
 
    bufsize = imagesize ( 1, 1, xsize, ys );
 
+   #ifdef UseMemAvail
    if ( bufsize > memavail()   ||  outofmem ) {
       outofmem = 1;
       removeallitems();
       return;
    }
+   #endif
 
    buf = new char [ bufsize ];
 

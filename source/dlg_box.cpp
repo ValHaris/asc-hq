@@ -1,6 +1,17 @@
-//     $Id: dlg_box.cpp,v 1.31 2000-10-11 14:26:28 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.32 2000-10-14 10:52:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/10/11 14:26:28  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.30  2000/08/26 15:33:41  mbickel
 //      Warning message displayed if empty password is entered
 //      pcxtank now displays error messages
@@ -121,12 +132,12 @@
 //      Moved macros to substitute Watcom specific routines into global.h
 //
 //     Revision 1.2  1999/11/16 03:41:22  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
+//      Added CVS keywords to most of the files.
+//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//      Wrote replacement routines for kbhit/getch for Linux
+//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//      Added autoconf/automake capabilities
+//      Added files used by 'automake --gnu'
 //
 //
 /*
@@ -149,7 +160,6 @@
     Boston, MA  02111-1307  USA
 */
 
-#include "config.h"
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -2381,7 +2391,7 @@ void         tdialogbox::intedit(int *    st,
             lne(x1,y1,ss,position,einfuegen);
 #ifdef _DOS_
             switch (symkey) {
-    	
+        
                 case cto_einf: {
                         if (einfuegen == false)
                            einfuegen = true;
@@ -2436,7 +2446,7 @@ void         tdialogbox::intedit(int *    st,
              }
 #else
             switch (symkey) {
-    	
+        
                 case ct_einf: {
                         if (einfuegen == false)
                            einfuegen = true;

@@ -1,6 +1,17 @@
-//     $Id: loaders.cpp,v 1.28 2000-10-11 14:26:42 mbickel Exp $
+//     $Id: loaders.cpp,v 1.29 2000-10-14 10:52:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/10/11 14:26:42  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.27  2000/09/07 15:49:43  mbickel
 //      some cleanup and documentation
 //
@@ -123,12 +134,12 @@
 //      Fixed bugs in RLE decompression, BI map importer and the view calculation
 //
 //     Revision 1.2  1999/11/16 03:41:57  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
+//      Added CVS keywords to most of the files.
+//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//      Wrote replacement routines for kbhit/getch for Linux
+//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//      Added autoconf/automake capabilities
+//      Added files used by 'automake --gnu'
 //
 //
 /*
@@ -151,10 +162,6 @@
     Boston, MA  02111-1307  USA
 */
 
-#ifdef _DOS_               
- #include <dos.h>
-#endif
-#include "config.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>

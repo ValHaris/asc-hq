@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.100 2000-10-12 22:24:00 mbickel Exp $
+//     $Id: sg.cpp,v 1.101 2000-10-14 10:52:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.100  2000/10/12 22:24:00  mbickel
+//      Made the DOS part of the new platform system work again
+//
 //     Revision 1.99  2000/10/12 21:37:53  mbickel
 //      Further restructured platform dependant routines
 //
@@ -199,10 +202,6 @@
 */
 
 
-#include "config.h"
-#ifdef _DOS_
- #include <conio.h>
-#endif
 
 #include <stdio.h>                                  
 #include <string.h>
@@ -3039,35 +3038,35 @@ extern SDL_Surface* SDL_GetRealVideoSurface ( void );
 
 void ASC_UpdateRects (SDL_Surface *screen, int numrects, SDL_Rect *rects)
 {
-	int i;
+        int i;
 
-			for ( i=0; i<numrects; ++i ) {
-				SDL_LowerBlit(screen, &rects[i],
-						SDL_GetRealVideoSurface(), &rects[i]);
-			}
+                        for ( i=0; i<numrects; ++i ) {
+                                SDL_LowerBlit(screen, &rects[i],
+                                                SDL_GetRealVideoSurface(), &rects[i]);
+                        }
 }
 
 
 void ASC_UpdateRect(SDL_Surface *screen, Sint32 x, Sint32 y, Uint32 w, Uint32 h)
 {
-	if ( screen ) {
-		SDL_Rect rect;
+        if ( screen ) {
+                SDL_Rect rect;
 
-		if ( w == 0 )
-			w = screen->w;
-		if ( h == 0 )
-			h = screen->h;
-		if ( (int)(x+w) > screen->w )
-			return;
-		if ( (int)(y+h) > screen->h )
-			return;
+                if ( w == 0 )
+                        w = screen->w;
+                if ( h == 0 )
+                        h = screen->h;
+                if ( (int)(x+w) > screen->w )
+                        return;
+                if ( (int)(y+h) > screen->h )
+                        return;
 
-		rect.x = x;
-		rect.y = y;
-		rect.w = w;
-		rect.h = h;
-		ASC_UpdateRects(screen, 1, &rect);
-	}
+                rect.x = x;
+                rect.y = y;
+                rect.w = w;
+                rect.h = h;
+                ASC_UpdateRects(screen, 1, &rect);
+        }
 }
 */
 
