@@ -1,0 +1,11 @@
+technology {
+   Name = Vesuvius
+   infotext = Reserach project finished! Vesuvius avialable!
+   id = 101012
+   RelatedUnitID = 12
+   parent = 101913
+   researchpoints *= 100
+   techlevel = 1
+   TechnologiesRequired = 101905,101907 
+RequireAllListedTechnologies = false
+} Technology

@@ -1,0 +1,10 @@
+technology {
+   Name = GRS
+   infotext = Reserach project finished! GRS avialable!
+   id = 101095
+   RelatedUnitID = 95
+   parent = 101913
+   researchpoints *= 140
+   techlevel = 2
+   TechnologiesRequired = 101012 
+} Technology

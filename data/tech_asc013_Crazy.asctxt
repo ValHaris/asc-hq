@@ -1,0 +1,10 @@
+technology {
+   Name = Crazy
+   infotext = Reserach project finished! Crazy avialable!
+   id = 101097
+   RelatedUnitID = 97
+   parent = 101913
+   researchpoints *= 140
+   techlevel = 2
+   TechnologiesRequired = 101098 
+} Technology

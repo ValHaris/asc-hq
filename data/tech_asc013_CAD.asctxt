@@ -1,0 +1,10 @@
+technology {
+   Name = CAD
+   infotext = Reserach project finished! CAD avialable!
+   id = 101074
+   RelatedUnitID = 74
+   parent = 101913
+   researchpoints *= 180
+   techlevel = 3
+   TechnologiesRequired = 101097 
+} Technology

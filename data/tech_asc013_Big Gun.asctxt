@@ -1,0 +1,10 @@
+technology {
+   Name = Big Gun
+   infotext = Reserach project finished! Big Gun avialable!
+   id = 101056
+   RelatedUnitID = 56
+   parent = 101913
+   researchpoints *= 140
+   techlevel = 2
+   TechnologiesRequired = 101049 
+} Technology

@@ -1,0 +1,10 @@
+technology {
+   Name = Fort
+   infotext = Reserach project finished! Fort avialable!
+   id = 101049
+   RelatedUnitID = 49
+   parent = 101913
+   researchpoints *= 120
+   techlevel = 1
+   TechnologiesRequired = 101012 
+} Technology
