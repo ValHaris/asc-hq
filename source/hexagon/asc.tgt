@@ -21,9 +21,10 @@ MCommand
 0
 5
 MCommand
-44
-xcopy asc.exe ..\..\
-xcopy asc.sym ..\..\
+47
+\copyexecutable asc
+wtouch ..\strtmesg.cpp
+
 
 6
 MItem
@@ -260,8 +261,8 @@ WString
 1
 65
 WString
-34
-HEXAGON sgmain FREEMAPZOOM NEWKEYB
+40
+HEXAGON sgmain FREEMAPZOOM NEWKEYB _DOS_
 0
 66
 MRState

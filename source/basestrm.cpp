@@ -1,6 +1,14 @@
-//     $Id: basestrm.cpp,v 1.2 1999-11-16 03:41:06 tmwilson Exp $
+//     $Id: basestrm.cpp,v 1.3 1999-11-16 17:03:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:06  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -24,15 +32,16 @@
 
 #include "config.h"
 #include <stdio.h> 
-#ifdef _DOS_
-#include <direct.h> 
-#endif
 #include <string.h>
 #include <ctype.h>
 #include <malloc.h>
 #include <stdlib.h>
 #include <string.h>
 #include "basestrm.h"
+
+#ifdef _DOS_
+#include <direct.h> 
+#else
 
 #ifdef HAVE_SYS_DIRENT_H
 #include <sys/dirent.h>
@@ -53,6 +62,8 @@
 # if HAVE_NDIR_H
 #  include <ndir.h>
 # endif
+#endif
+
 #endif
 
 #ifndef HAVE_ITOA

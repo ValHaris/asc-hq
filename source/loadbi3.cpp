@@ -1,6 +1,14 @@
-//     $Id: loadbi3.cpp,v 1.2 1999-11-16 03:41:54 tmwilson Exp $
+//     $Id: loadbi3.cpp,v 1.3 1999-11-16 17:04:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:54  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -1027,18 +1035,24 @@ void        tloadBImap ::   ReadACTNPart(void)
             xl = 1;
 
          for ( int m = 0; m < xl; m++ ) {
-
-            for ( int i = 0; i < objecttypenum; i++ ) {
-               pobjecttype obj = getobjecttype_forpos ( i );
-               if ( obj ) 
-                  for ( int ww = 0; ww < cwettertypennum; ww++ )
-                     if ( obj->weather & ( 1 << ww ))
-                        for ( int j = 0; j < obj->pictnum; j++ )
-                           if ( obj->picture[ww][j].bi3pic == xlt[m]  && !(found & 2)  && !(bi3graphmode[xlt[m]] & 256) ) {
-                              getfield ( newx, newy ) -> addobject ( obj, 0, 1 );
-                              found |= 1;
-                           }
-            }
+            int found_without_force = 0;
+            for ( int pass = 0; pass < 1 && !found_without_force; pass++ ) 
+               for ( int i = 0; i < objecttypenum; i++ ) {
+                  pobjecttype obj = getobjecttype_forpos ( i );
+                  if ( obj ) 
+                     for ( int ww = 0; ww < cwettertypennum; ww++ )
+                        if ( obj->weather & ( 1 << ww ))
+                           for ( int j = 0; j < obj->pictnum; j++ )
+                              if ( obj->picture[ww][j].bi3pic == xlt[m]  && !(found & 2)  && !(bi3graphmode[xlt[m]] & 256) ) {
+                                 pfield fld = getfield ( newx, newy );
+                                 if ( pass == 1 || obj->terrainaccess.accessible ( fld->bdt )) {
+                                    fld -> addobject ( obj, 0, 1 );
+                                    found |= 1;
+                                    if ( pass == 0 )
+                                      found_without_force = 1;
+                                 }
+                              }
+               }
          }
 
          if ( !found  && Line[X] != 0xffff ) {

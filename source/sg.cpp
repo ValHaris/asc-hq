@@ -1,6 +1,14 @@
-//     $Id: sg.cpp,v 1.2 1999-11-16 03:42:25 tmwilson Exp $
+//     $Id: sg.cpp,v 1.3 1999-11-16 17:04:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:25  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*                                 
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -74,6 +82,9 @@
 #ifdef HEXAGON
 #include "loadbi3.h"
 #endif
+
+
+
 
 // #define MEMCHK
 
@@ -2832,6 +2843,17 @@ void showavailablemodes ( void )
 int main(int argc, char *argv[] )
 {  
    // dont_use_linear_framebuffer = 1;
+
+
+  
+  if( sizeof(tvehicletype) != 601 || 
+      sizeof(byte) != 1 ||
+      sizeof(word) != 2 || 
+      sizeof(integer) != 2 ) {
+      printf("\n ASC was compiled with invalid structure sizes! Pack all structures ! \n\n" );
+      return 1;
+  }
+
 
   int i;
 

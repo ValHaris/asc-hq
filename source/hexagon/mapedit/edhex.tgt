@@ -18,13 +18,12 @@ dr2eo
 1
 4
 MCommand
-0
+25
+wtouch ..\..\strtmesg.cpp
 5
 MCommand
-54
-xcopy edhex.exe ..\..\..\
-xcopy edhex.sym ..\..\..\
-
+21
+\copyexecutable edhex
 6
 MItem
 9
@@ -242,8 +241,8 @@ WString
 1
 62
 WString
-32
-karteneditor HEXAGON FREEMAPZOOM
+38
+karteneditor HEXAGON FREEMAPZOOM _DOS_
 0
 63
 MRState

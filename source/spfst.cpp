@@ -1,6 +1,14 @@
-//     $Id: spfst.cpp,v 1.2 1999-11-16 03:42:32 tmwilson Exp $
+//     $Id: spfst.cpp,v 1.3 1999-11-16 17:04:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:32  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -29,12 +37,18 @@
 #endif
 
 
-#if (__WATCOM_CPLUSPLUS__ >= 1100 )
 
+#if (__WATCOM_CPLUSPLUS__ >= 1100 )
+  #define __use_STL_for_ASC__
+#endif
+
+#ifndef __WATCOM_CPLUSPLUS__
+  #define __use_STL_for_ASC__
+#endif
+
+#ifdef __use_STL_for_ASC__
   #include <utility>
   #include <map.h>
-  #define __use_STL_for_ASC__
-
 #endif
 
 
@@ -1834,12 +1848,12 @@ byte         getdiplomaticstatus(byte         b)
    if ( b/8 == actmap->actplayer )
       return capeace;
 
-   char *c = &actmap->alliances[ b/8 ][ actmap->actplayer ] ;
+   char *d = &actmap->alliances[ b/8 ][ actmap->actplayer ] ;
 
-   if ( *c == cawar || *c == canewsetwar2 )
-      return cawar;
-   else
+   if ( *d == capeace || *d == canewsetwar1 || *d == cawarannounce )
       return capeace;
+   else
+      return cawar;
 } 
 
 
@@ -1853,10 +1867,10 @@ byte        getdiplomaticstatus2(byte    b, byte    c)
 
    char *d = &actmap->alliances [ b/8][ c/8 ];
 
-   if ( *d == cawar || *d == canewsetwar2 )
-      return cawar;
-   else
+   if ( *d == capeace || *d == canewsetwar1 || *d == cawarannounce )
       return capeace;
+   else
+      return cawar;
 } 
 
 

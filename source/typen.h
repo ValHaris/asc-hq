@@ -1,6 +1,14 @@
-//     $Id: typen.h,v 1.2 1999-11-16 03:42:45 tmwilson Exp $
+//     $Id: typen.h,v 1.3 1999-11-16 17:04:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:45  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*                                                           
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -27,6 +35,7 @@
 /* Unit header for: TYPEN.C -- Made by TPTC - Translate Pascal to C */
 
 #include <time.h>
+#include "global.h"
 #include "tpascal.inc"
 #include "misc.h"
 
@@ -47,7 +56,7 @@
    #define cbodenartennum 33
    #define cnetcontrolnum 12
 
-   #define gameparameternum 7
+   #define gameparameternum 8
    #define maxgameparameternum 8
 
    #define maxobjectonfieldnum 16
@@ -1492,11 +1501,11 @@ struct thexpic {
                  EllipseOnScreen* ellipse;
                  int           dummy[32];
                  int           gameparameter[ maxgameparameternum ];
-
+/*
                  tmap ( void );
                  tmap ( const tmap &map );
                  ~tmap ( );
-
+*/
                  void chainunit ( pvehicle unit );
                  void chainbuilding ( pbuilding bld );
                  pvehicle getunit ( int x, int y, int nwid );
@@ -2131,6 +2140,7 @@ extern const int gameparameterdefault [ gameparameternum ];
 #define cgp_building_fuel_factor 4
 #define cgp_forbid_building_construction 5
 #define cgp_forbid_unitunit_construction 6
+#define cgp_bi3_training 7
 
 
 extern const char*  cmovemalitypes[cmovemalitypenum];

@@ -1,6 +1,14 @@
-//     $Id: dialog.cpp,v 1.2 1999-11-16 03:41:20 tmwilson Exp $
+//     $Id: dialog.cpp,v 1.3 1999-11-16 17:04:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:20  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -4142,7 +4150,11 @@ void         tsetalliances::click(byte         bxx,
    activefontsettings.background = dblue; 
    if (bxx == 0) { 
       if (x == 0  && ( y == actmap->actplayer || supervisor ) ) { 
-	(int)playermode[y] += 1; //++;
+        #ifdef __WATCOM_CPLUSPLUS__
+         playermode[y]++;
+        #else
+	 (int)playermode[y] += 1; 
+        #endif
          if ( actmap->actplayer == -1 ) {
             if (playermode[y] > 2) 
                playermode[y] = ps_human; 
@@ -4187,12 +4199,16 @@ void         tsetalliances::click(byte         bxx,
       #ifndef kartened
       if (x == 2  &&  ( y != actmap->actplayer ) && actmap->actplayer>=0  &&  !oninit ) 
          if ( (actmap->alliances[actmap->actplayer][y] == capeace && actmap->alliances[y][actmap->actplayer] == capeace) ||  sv.mode[actmap->actplayer][y] == sv_shareview ) {
-   
+                                                 
             if ( sv.mode[actmap->actplayer][y] == sv_shareview )
                sv.mode[actmap->actplayer][y] = sv_none;
-            else
-	      (int)sv.mode[actmap->actplayer][y] += 1; //++;
-   
+            else {
+             #ifdef __WATCOM_CPLUSPLUS__
+              sv.mode[actmap->actplayer][y] ++;
+             #else
+              (int)sv.mode[actmap->actplayer][y] += 1;
+             #endif
+            }
    
             activefontsettings.color = 23 + y * 8; 
             activefontsettings.background = dblue; 

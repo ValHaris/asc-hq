@@ -1,6 +1,14 @@
-//     $Id: gui.cpp,v 1.2 1999-11-16 03:41:47 tmwilson Exp $
+//     $Id: gui.cpp,v 1.3 1999-11-16 17:04:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:47  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -90,10 +98,9 @@ void setmouseongui( void )
    while (mouseparams.taste & 1) ;
 }
 
-
-
-//static void*    tguihost::background[30][30];
-
+#ifdef _DOS_
+static void*    tguihost::background[30][30];
+#endif
 
 tguihost::tguihost ( void )
 {
@@ -625,8 +632,9 @@ void      tguihost :: setfirsticon( pnguiicon ic )
 }
 
 
-
-//static pnguiicon  tnguiicon::first = NULL;
+#ifdef _DOS_
+static pnguiicon  tnguiicon::first = NULL;
+#endif
 
 
 tnguiicon::tnguiicon ( void )
@@ -886,8 +894,9 @@ void tnguiicon::display      ( void )
 
 
 
-
-//static pnsguiicon tnsguiicon ::first = NULL;
+#ifdef _DOS_
+static pnsguiicon tnsguiicon ::first = NULL;
+#endif
 
 tnsguiicon::tnsguiicon ( void )
 {
@@ -2171,8 +2180,10 @@ void tguihost::reset ( void )
       actshownicons[i/columncount][i%columncount] = NULL;
 }
 
-//static pnputbuildingguiicon tnputbuildingguiicon :: first    = NULL;
-//static int             tnputbuildingguiicon :: buildnum = 0;
+#ifdef _DOS_
+static pnputbuildingguiicon tnputbuildingguiicon :: first    = NULL;
+static int             tnputbuildingguiicon :: buildnum = 0;
+#endif
 
 tnputbuildingguiicon :: tnputbuildingguiicon ( pbuildingtype bld )
 {
@@ -2250,8 +2261,10 @@ void   tnputbuildingguiicon :: sethost      ( pselectbuildingguihost hst )
       bnxt()->sethost( hst );
 }
 
-//static pnputobjectcontainerguiicon tnputobjectcontainerguiicon :: first    = NULL;
-//static int             tnputobjectcontainerguiicon :: buildnum = 0;
+#ifdef _DOS_
+static pnputobjectcontainerguiicon tnputobjectcontainerguiicon :: first    = NULL;
+static int             tnputobjectcontainerguiicon :: buildnum = 0;
+#endif
 
 tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( pobjecttype obj, int bld )
 {
@@ -2360,9 +2373,10 @@ void   tnputobjectcontainerguiicon :: sethost      ( pselectobjectcontainerguiho
       bnxt()->sethost( hst );
 }
 
-//static pnputvehiclecontainerguiicon tnputvehiclecontainerguiicon :: first    = NULL;
-//static int                          tnputvehiclecontainerguiicon :: buildnum = 0;
-
+#ifdef _DOS_
+static pnputvehiclecontainerguiicon tnputvehiclecontainerguiicon :: first    = NULL;
+static int                          tnputvehiclecontainerguiicon :: buildnum = 0;
+#endif
 
 tnputvehiclecontainerguiicon :: tnputvehiclecontainerguiicon ( pvehicletype obj )
 {
@@ -2552,7 +2566,9 @@ void      tselectvehiclecontainerguihost :: setfirsticon( pnguiicon ic )
 }
 
 
-//static pnweapselguiicon tnweapselguiicon::first = NULL;
+#ifdef _DOS_
+static pnweapselguiicon tnweapselguiicon::first = NULL;
+#endif
 
 tnweapselguiicon::tnweapselguiicon ( void )
 {
@@ -2768,7 +2784,9 @@ void  tnweapselguiicon::setup        ( pattackweap atw, int n )
       next->setup ( atw, ++n );
 }
 
-//static preplayguiicon treplayguiicon ::first = NULL;
+#ifdef _DOS_
+static preplayguiicon treplayguiicon ::first = NULL;
+#endif
 
 treplayguiicon::treplayguiicon ( void )
 {

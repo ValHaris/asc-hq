@@ -1,6 +1,14 @@
-//     $Id: controls.cpp,v 1.2 1999-11-16 03:41:16 tmwilson Exp $
+//     $Id: controls.cpp,v 1.3 1999-11-16 17:03:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:16  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*                            
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -2570,7 +2578,7 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle )
       }
    }
 
-   for ( int i = 0; i <= moveparams.movepath.tiefe; i++) { 
+   for ( i = 0; i <= moveparams.movepath.tiefe; i++) { 
       if ( moveparams.movepath.field[i].x > x2 )
          x2 = moveparams.movepath.field[i].x ;
       if ( moveparams.movepath.field[i].y > y2 )
@@ -6620,6 +6628,19 @@ void         generatevehicle_cl ( pvehicletype fztyp,
       vehicle->xpos = x;
       vehicle->ypos = y;
       vehicle->setup_classparams_after_generation ();
+
+      if ( actmap->gameparameter[cgp_bi3_training] >= 1 ) {
+         int cnt = 0;
+         pbuilding bld = actmap->player[ actmap->actplayer ].firstbuilding;
+         while ( bld ) {
+            if ( bld->typ->special & cgtrainingb )
+               cnt++;
+            bld = bld->next;
+         }
+         vehicle->experience += cnt * actmap->gameparameter[cgp_bi3_training];
+         if ( vehicle->experience > maxunitexperience )
+            vehicle->experience = maxunitexperience;
+      }
    } else
      vehicle = NULL;
 } 
@@ -6835,6 +6856,10 @@ int StaticResourceNet :: getresource ( int x, int y, int resource, int _need, in
    got = 0;
    need = _need;
    queryonly = _queryonly;
+
+   if (scope == 3 && player == 8 )     // neutral player has no map-wide pool
+      scope = 0;
+
    start ( x , y );
    return got;
 }

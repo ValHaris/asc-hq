@@ -1,6 +1,14 @@
-//     $Id: gamedlg.cpp,v 1.2 1999-11-16 03:41:44 tmwilson Exp $
+//     $Id: gamedlg.cpp,v 1.3 1999-11-16 17:04:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:44  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -2293,12 +2301,12 @@ class  tparagraph {
           pparagraph prev;
       };
 
-/*
+#ifdef _DOS_
 static int tparagraph :: winy1;
 static int tparagraph :: winy2;
 static int tparagraph :: winx1;
 static int tparagraph :: maxlinenum;
-*/
+#endif
 
 tparagraph :: tparagraph ( void )
 {
@@ -3286,20 +3294,10 @@ void tviewmessages :: paintmessages ( void )
           activefontsettings.length = 190;
     
           tm *tmbuf;
-          char buf[26];
-#ifdef _DOS_
-          localtime( &message[a]->message->time, tmbuf ); 
-#else
 	  tmbuf = localtime (&message[a]->message->time);
-#endif
-
           int y = y1 + starty + 10 + ( a - firstdisplayed ) * 20 ;
 
-#ifdef _DOS_
-          showtext2 (  asctime( tmbuf, buf ) , x1 + 20, y ); 
-#else
 	  showtext2 (asctime (tmbuf), x1 + 20, y);
-#endif
     
           activefontsettings.length = 100;
           if ( mode ) {
