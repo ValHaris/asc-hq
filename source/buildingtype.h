@@ -63,9 +63,10 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
  #define cgproduceAllUnitsB ( 1 << cgproduceAllUnitsN )
 
 
-
+ //! The class describing properties that are common to all buildings of a certain kind.
  class  BuildingType : public ContainerBaseType {
    public:
+        //! A local coordinate referencing a single field that a building covers.
         class LocalCoordinate {
            public:
               int x,y;
@@ -90,7 +91,7 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
         /** the armor of the buildingtype.
             This does not necessarily be equal to the armor of a specific building during the
             game, since the map may modify the armor of buildings with a map parameter.
-            Use #Building::getArmor() to query the effective armor. */
+            Use Building::getArmor() to query the effective armor. */
         int          _armor;
 
         int          jamming;
@@ -119,18 +120,26 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
 
         TerrainAccess terrainaccess;
 
-        int          construction_steps;  // 1 .. 8
+        //! the number of stages that are required to construct a building using a construction unit. Each stage has a separate picture. Range is 1 to 8
+        int          construction_steps;
+
+        //! the maximum number of research points a research center may produce
         int          maxresearchpoints;
 
+        //! the amount of resources stored in the building. Use Building::getResource( int, int, int, int) to access this field, since depending on the map settings some resources may be globally available and stored in a global pool: #tmap::bi_resource
         Resources    _tank;
         Resources    maxplus;
 
-        int          efficiencyfuel;       // Basis 1024
-        int          efficiencymaterial;   // dito
+        //! currently only used by mining stations: the efficiency of the resource extraction from the ground. Base is 1024
+        int          efficiencyfuel;
+
+        //! currently only used by mining stations: the efficiency of the resource extraction from the ground. Base is 1024
+        int          efficiencymaterial;
 
         //! the picture for the GUI that is used for selecting a building that is going to be constructed by a unit
         void*        guibuildicon;
 
+        //! the maximum resource storage in BI resource mode.
         Resources    _bi_maxstorage;
 
         //! bitmapped: the level of height that this building will reside on.
@@ -143,7 +152,9 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
 
         BuildingType ( void );
 
-        bool          vehicleloadable ( pvehicletype fzt ) const ;
+        //! can units of the given type be moved into this buildtype? This is a prerequisite, but not the only requirement, for a real unit to move into a real building
+        bool          vehicleloadable ( pvehicletype type ) const ;
+
         MapCoordinate getFieldCoordinate( const MapCoordinate& entryOnMap, const LocalCoordinate& localCoordinate );
 
         void read ( tnstream& stream ) ;

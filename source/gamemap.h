@@ -447,7 +447,7 @@ class tmap {
       int           graphicset;
       int           gameparameter_num;
       int*          game_parameter;
-    public:
+
       int           mineralResourcesDisplayed;
 
       tmap ( void );

@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.98 2001-09-13 17:43:12 mbickel Exp $
+//     $Id: typen.h,v 1.99 2001-09-24 17:22:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.98  2001/09/13 17:43:12  mbickel
+//      Many, many bug fixes
+//
 //     Revision 1.97  2001/08/27 21:03:55  mbickel
 //      Terraintype graphics can now be mounted from any number of PNG files
 //      Several AI improvements
@@ -199,10 +202,6 @@
 
 #pragma pack(1)
 
-
-//////////////////////////////////////////////////////////////
-///    Some miscellaneous defintions. Not very intersting...
-//////////////////////////////////////////////////////////////
 
 //! A Ellipse that is used for highlighting elements of the screen during the tutorial
 class  EllipseOnScreen {

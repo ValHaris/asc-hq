@@ -2,9 +2,16 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.93 2001-08-06 20:54:43 mbickel Exp $
+//     $Id: spfst.cpp,v 1.94 2001-09-24 17:22:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.93  2001/08/06 20:54:43  mbickel
+//      Fixed lots of crashes related to the new text files
+//      Fixed delayed events
+//      Fixed crash in terrin change event
+//      Fixed visibility of mines
+//      Fixed crashes in event loader
+//
 //     Revision 1.92  2001/08/02 18:50:43  mbickel
 //      Corrected Error handling in Text parsers
 //      Improved version information
@@ -1768,7 +1775,7 @@ void checkobjectsforremoval ( void )
 void  checkunitsforremoval ( void )
 {
    for ( int c=0; c<=8 ;c++ )
-      for ( tmap::Player::VehicleList::iterator i = actmap->player[c].vehicleList.begin(); i != actmap->player[c].vehicleList.end();  ) {
+      for ( Player::VehicleList::iterator i = actmap->player[c].vehicleList.begin(); i != actmap->player[c].vehicleList.end();  ) {
           pvehicle eht = *i;
           pfield field = getfield(eht->xpos,eht->ypos);
           bool erase = false;
@@ -1783,8 +1790,12 @@ void  checkunitsforremoval ( void )
           }
           if ( erase ) {
              Vehicle* pv = *i;
-             i = actmap->player[c].vehicleList.erase ( i );
+             actmap->player[c].vehicleList.erase ( i );
              delete pv;
+
+             /* if the unit was a transport and had other units loaded, these units have been deleted as well.
+                We don't know which elements of the container are still valid, so we start from the beginning again. */
+             i = actmap->player[c].vehicleList.begin();
           } else
              i++;
       }
