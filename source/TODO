@@ -1,8 +1,3 @@
-Bugs
- - Das Replay(sammt Hauptprogramm) strtzt ab, wenn eine Bodengebundene Einheit im Kammikaze explodiert. Beispiel (sf_set, anbei)
- - Es lassen sich keine Einheiten durch andere Einheiten bauen (sf_set, anbei)
- 
-
 TODO list for ASC, programming department.
 
 -1- is very high priority
