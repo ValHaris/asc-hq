@@ -71,7 +71,7 @@ VERSION = @VERSION@
 
 noinst_LIBRARIES = libsdl.a
 
-libsdl_a_SOURCES = sound.cpp timer.cpp graphics.cpp events.cpp SDLStretch.cpp
+libsdl_a_SOURCES = sound.cpp timer.cpp graphics.cpp events.cpp SDLStretch.cpp loadimage.cpp
 
 EXTRA_DIST = events.cpp graphics.cpp graphics.h timer.cpp sound.cpp sound.h 
 
@@ -89,7 +89,8 @@ CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 libsdl_a_LIBADD = 
-libsdl_a_OBJECTS =  sound.o timer.o graphics.o events.o SDLStretch.o
+libsdl_a_OBJECTS =  sound.o timer.o graphics.o events.o SDLStretch.o \
+loadimage.o
 AR = ar
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
@@ -102,7 +103,7 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 TAR = tar
 GZIP_ENV = --best
 DEP_FILES =  .deps/SDLStretch.P .deps/events.P .deps/graphics.P \
-.deps/sound.P .deps/timer.P
+.deps/loadimage.P .deps/sound.P .deps/timer.P
 SOURCES = $(libsdl_a_SOURCES)
 OBJECTS = $(libsdl_a_OBJECTS)
 

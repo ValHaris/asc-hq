@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.70 2000-08-05 13:38:32 mbickel Exp $
+//     $Id: sg.cpp,v 1.71 2000-08-05 18:26:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.70  2000/08/05 13:38:32  mbickel
+//      Rewrote height checking for moving units in and out of
+//        transports / building
+//
 //     Revision 1.69  2000/08/04 15:11:14  mbickel
 //      Moving transports costs movement for units inside
 //      refuelled vehicles now have full movement in the same turn
@@ -307,9 +311,6 @@
 #include "config.h"
 #ifdef _DOS_
  #include <conio.h>
-#else
- #include <SDL/SDL_image.h>
- #include "sdl/SDLStretch.h"
 #endif
 
 #include <stdio.h>                                  
@@ -348,6 +349,7 @@
 #include "sg.h"
 #include "soundList.h"
 #include "gameoptions.h"
+#include "loadimage.h"
 
 #ifdef HEXAGON
 #include "loadbi3.h"
@@ -1664,8 +1666,8 @@ void         tsgpulldown :: init ( void )
   addfield ( "~T~ools" );
    addbutton ( "save ~M~ap as PCXõ9", ua_writemaptopcx ); 
    addbutton ( "save ~S~creen as PCXõ0", ua_writescreentopcx ); 
-   addbutton ( "benchmark without view calcõ5", ua_benchgamewov ); 
-   addbutton ( "benchmark with view calcõ6", ua_benchgamewv); 
+   addbutton ( "benchmark without view calc", ua_benchgamewov );
+   addbutton ( "benchmark with view calc", ua_benchgamewv);
    addbutton ( "test memory integrity", ua_heapcheck );
    addbutton ( "seperator", -1 );
    addbutton ( "select graphic set", ua_selectgraphicset );
@@ -3267,6 +3269,7 @@ void ASC_UpdateRect(SDL_Surface *screen, Sint32 x, Sint32 y, Uint32 w, Uint32 h)
 */
 
 
+
 int main(int argc, char *argv[] )
 {  
    // dont_use_linear_framebuffer = 1;
@@ -3531,43 +3534,11 @@ int main(int argc, char *argv[] )
          truecoloravail = false;
 
          try {
-
-            {
-            /*
-               tnfilestream s ( "helisun.jpg", 1 );
-            	SDL_Surface* image = IMG_Load_RW( SDL_RWFromStream ( &s ), 1 );
-            	
-               if ( image->format->palette )
-                  SDL_SetColors(screen, image->format->palette->colors, 0, image->format->palette->ncolors);
-
-               SDL_Surface* convimg =  SDL_DisplayFormat ( image );
-
-               SDL_StretchSurface( convimg,
-                                   0,0,convimg->w-1,convimg->h-1,
-                                   screen,
-                                   0,0,screen->w-1,screen->h-1);
-	
-               SDL_UpdateRect(screen, 0,0,0,0);
-*/
-
-/*               SDL_Rect srcrect,dstrect;
-               srcrect.x = 0;
-               srcrect.y = 0;
-               srcrect.w = image->w;
-               srcrect.h = image->h;
-               dstrect.x = (screen->w - image->w) / 2;
-               dstrect.y = (screen->h - image->h) / 2;
-               dstrect.w = image->w;
-               dstrect.h = image->h;
-               SDL_BlitSurface(convimg, &srcrect, screen, &dstrect);
-               SDL_UpdateRect(screen, 0, 0, 0, 0);
-            	SDL_FreeSurface ( convimg );
-            	SDL_FreeSurface ( image );
-*/            	
+            int fs = loadFullscreenImage ( "helisun.jpg" );
+            if ( !fs ) {
                tnfilestream stream ( "logo640.pcx", 1 );
                loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 );
             }
-
             loaddata( resolx, resoly, emailgame, mapname, savegame );
          } 
          catch ( tfileerror err ) {
