@@ -60,6 +60,8 @@ WindInfoPanel::~WindInfoPanel()
 
 }
 
+
+
 UnitInfoPanel::UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) : Panel( parent, r, "UnitInfo" )
 {
    updateFieldInfo.connect ( SigC::slot( *this, &UnitInfoPanel::eval ));
@@ -70,18 +72,20 @@ UnitInfoPanel::UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) : Panel( par
       siw->sigMouseButtonUp.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
    }
 
-   SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( "unitexp", true ) );
-   if ( sdw )
-     sdw->display.connect( SigC::slot( *this, &UnitInfoPanel::painter ));
-
-   sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( "unit_level", true ) );
-   if ( sdw )
-     sdw->display.connect( SigC::slot( *this, &UnitInfoPanel::painter ));
-
-
-
-
+   registerSpecialDisplay( "unitexp" );
+   registerSpecialDisplay( "unit_level" );
+   registerSpecialDisplay( "unit_pic" );
+   for ( int i = 0; i < 10; ++i)
+      registerSpecialDisplay( "symbol_weapon" + ASCString::toString(i) );
 }
+
+void UnitInfoPanel::registerSpecialDisplay( const ASCString& name )
+{
+   SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( name, true ) );
+   if ( sdw )
+     sdw->display.connect( SigC::slot( *this, &UnitInfoPanel::painter ));
+}
+
 
 
 void UnitInfoPanel::painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
@@ -116,6 +120,23 @@ void UnitInfoPanel::painter ( const PG_Rect &src, const ASCString& name, const P
                if ( height2 & (1 << i ))
                   screen.Blit( IconRepository::getIcon("height-a" + ASCString::toString(i) + ".png"), SPoint(dst.x, dst.y + (7-i) * 13 ) );
          }
+      }
+
+      if ( name == "unit_pic" ) {
+         if ( veh )
+           veh->typ->paint( screen, SPoint( dst.x, dst.y ), veh->getOwner() );
+      }
+
+      if ( veh ) {
+         int &pos = 0;
+         for ( int i = 0; i < veh->typ->weapons.count; ++i) {
+            if ( !veh->typ->weapons.weapon[i].service() && pos < 10 ) {
+               if ( name == "symbol_weapon" + ASCString::toString(pos))
+                  screen.Blit( IconRepository::getIcon(SingleWeapon::getIconFileName( veh->typ->weapons.weapon[i].getScalarWeaponType()) + "-small.png"), SPoint(dst.x, dst.y));
+
+               ++pos;
+             }
+          }
       }
 
    }
@@ -167,6 +188,7 @@ void UnitInfoPanel::eval()
          setLabelText( "unitmaterialstatus", veh->getTank().material );
          setBargraphValue( "unitenergy", veh->typ->tank.energy ? float( veh->getTank().energy) / veh->typ->tank.energy : 0  );
          setLabelText( "unitenergystatus", veh->getTank().energy );
+         setLabelText( "movepoints", veh->getMovement() );
 
          int &pos = weaponsDisplayed;
          for ( int i = 0; i < veh->typ->weapons.count; ++i) {
@@ -195,6 +217,7 @@ void UnitInfoPanel::eval()
          setLabelText( "unitmaterialstatus", "" );
          setBargraphValue( "unitenergy",  0  );
          setLabelText( "unitenergystatus", "" );
+         setLabelText( "movepoints", "" );
       }
       for ( int i = weaponsDisplayed; i < 10; ++i ) {
           ASCString ps = ASCString::toString(i);
@@ -205,17 +228,17 @@ void UnitInfoPanel::eval()
        }
 
    }
-   Redraw(true);                  
+   Redraw(true);
 }
 
 
- 
+
 WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const PG_Rect &r ) : Panel( parent, r, "WeaponInfo" )
 {
    SetName(name);
 /*
    updateFieldInfo.connect ( SigC::slot( *this, &UnitInfoPanel::eval ));
-   
+
    SpecialInputWidget* siw = dynamic_cast<SpecialInputWidget*>( FindChild( "weapinfo", true ) );
    if ( siw ) {
       siw->sigMouseButtonDown.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));

@@ -23,8 +23,8 @@ panel {
         Widget0 {
           type = Specialdisplay
           name = attacker_unit_pic
-          x = 14
-          y = 13
+          x = 12
+          y = 11
         } widget0
      } widget0
       
@@ -37,8 +37,8 @@ panel {
         Widget0 {
           type = Specialdisplay
           name = defender_unit_pic
-          x = 14
-          y = 13
+          x = 12
+          y = 11
         } widget0
       } widget1 
 
@@ -87,7 +87,7 @@ panel {
         WidgetNum = 1      
         Widget0 {
            type = BarGraph
-           direction = top2buttom
+           direction = buttom2top
            BackgroundColor = 0x808080
            name = attacker_unitstatusbar
            x = 3
@@ -104,7 +104,7 @@ panel {
         WidgetNum = 1      
         Widget0 {
            type = BarGraph
-           direction = top2buttom
+           direction = buttom2top
            BackgroundColor = 0x808080
            name = defender_unitstatusbar
            x = 3
@@ -218,7 +218,7 @@ panel {
            textalign = Center
            FontSize = 8
            FontColor = 0xffffff
-           direction = right2left
+           direction = left2right
            widgetnum = 6
            Widget0 {
              type = BarGraph
@@ -278,7 +278,7 @@ panel {
            textalign = Center
            FontSize = 8
            FontColor = 0xffffff
-           direction = left2right
+           direction = right2left
            widgetnum = 6
            Widget0 {
              type = BarGraph

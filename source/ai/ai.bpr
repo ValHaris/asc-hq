@@ -28,8 +28,8 @@
     <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
-    <CFLAG1 value="-Od -H=c:\PROGRA~1\borland\CBUILD~2\lib\vcl60.csm -Hc -Q -Vx -Ve -X- -r- 
-      -a1 -5 -b -k -y -v -vi- -K -c -tW -tWM"/>
+    <CFLAG1 value="-vGc -vGt -vGd -Od -H=c:\PROGRA~1\borland\CBUILD~2\lib\vcl60.csm -Hc -Q 
+      -Vx -Ve -X- -r- -a1 -5 -b -k -y -v -vi- -K -c -tW -tWM"/>
     <PFLAGS value="-$Y+ -$W -$O- -$A8 -v -JPHNE -M"/>
     <AFLAGS value="/mx /w2 /zi"/>
     <LFLAGS value="/P256"/>
@@ -132,6 +132,6 @@ RemoteDebug=0
 [Compiler]
 ShowInfoMsgs=1
 LinkDebugVcl=0
-LinkCGLIB=0
+LinkCGLIB=1
   </IDEOPTIONS>
 </PROJECT>

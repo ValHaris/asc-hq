@@ -241,8 +241,8 @@ void tfight :: calc ( void )
 
 
 
-#define maxdefenseshown 24
-#define maxattackshown 24
+#define maxdefenseshown 2
+#define maxattackshown 2
 
 void tunitattacksunit::calcdisplay( int ad, int dd ) {
   #ifdef sgmain
@@ -469,7 +469,7 @@ void tfight :: calcdisplay ( int ad, int dd )
 
 void UnitAttacksSomething::paintAttacker( Surface& surface, const SDL_Rect &dst )
 {
-   _attackingunit->paint( surface, SPoint( dst.x, dst.y ));
+   _attackingunit->typ->paint( surface, SPoint( dst.x, dst.y ), _attackingunit->getOwner() );
 }
 
 
@@ -896,7 +896,7 @@ void tmineattacksunit :: paintAttacker( Surface& surface, const SDL_Rect &dst )
 
 void tmineattacksunit :: paintTarget( Surface& surface, const SDL_Rect &dst )
 {
-   _attackedunit->paint( surface, SPoint( dst.x, dst.y ));
+   _attackedunit->typ->paint( surface, SPoint( dst.x, dst.y ), _attackedunit->getOwner() );
 }
 
 

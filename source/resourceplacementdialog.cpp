@@ -24,7 +24,7 @@
 
 
 const int ResourcePlacementDialog::xsize = 400;
-const int ResourcePlacementDialog::ysize = 512;
+const int ResourcePlacementDialog::ysize = 612;
 const int ResourcePlacementDialog::xOffSet = xsize/10;
 const int ResourcePlacementDialog::yOffSet = ysize/20;
 const int ResourcePlacementDialog::leftIndent = xsize/50;;
@@ -36,7 +36,7 @@ ResourcePlacementDialog::ResourcePlacementDialog( ) :
 fuelRoughnessWidget(NULL), materialRoughnessWidget(NULL), fuelOffsetWidget(NULL), materialOffsetWidget(NULL) {
   int xFuelWidgetPos = leftIndent;
   int yFuelWidgetPos = ysize/10;
-  int hFuelWidget = GetTextHeight()*2;
+  int hFuelWidget = GetTextHeight() + 10;
   placeFuelWidget = new PG_CheckButton(this, PG_Rect(xFuelWidgetPos, yFuelWidgetPos, xsize/3 , GetTextHeight()*2), "Fuel");
   placeFuelWidget->SetSizeByText();
 
@@ -208,6 +208,7 @@ void resourcePlacementDialog() {
   rpd.Show();
   rpd.Run();
 }
+
 
 
 

@@ -42,6 +42,7 @@ class WindInfoPanel : public Panel {
 };
 
 class UnitInfoPanel : public Panel {
+        void registerSpecialDisplay( const ASCString& name );
      protected:
         bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event );
         void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);

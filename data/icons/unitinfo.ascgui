@@ -19,8 +19,8 @@ panel {
         Widget0 {
           type = SpecialDisplay
           name = unit_pic
-          x = 13
-          y = 8
+          x = 12
+          y = 11
         } widget0
      } widget0
 
@@ -830,7 +830,7 @@ panel {
            y = 40
            width = 3
            height = 24
-           name = showplayercolor
+           name = showplayercolor0
          } widget50
          widget51 {
            type = specialdisplay
@@ -838,7 +838,7 @@ panel {
            y = 70
            width = 3
            height = 24
-           name = showplayercolor
+           name = showplayercolor1
          } widget51
       } widget0   
    } Widget2
