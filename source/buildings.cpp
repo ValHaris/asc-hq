@@ -573,7 +573,7 @@ void Building :: readData ( tnstream& stream, int version )
     netcontrol = stream.readInt();
     name = stream.readString ();
 
-    if ( version == -2 )
+    if ( version <= -2 )
        repairedThisTurn = stream.readInt ( );
     else
        repairedThisTurn = 0;
