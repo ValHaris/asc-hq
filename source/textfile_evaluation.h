@@ -74,6 +74,7 @@ class PropertyContainer {
          virtual void closeBracket();
 
          void addString ( const ASCString& name, ASCString& property );
+         void addString ( const ASCString& name, ASCString& property, const ASCString& defaultValue );
          void addStringArray ( const ASCString& name, vector<ASCString>& property );
          void addInteger ( const ASCString& name, int& property );
          void addInteger ( const ASCString& name, int& property, int defaultValue );

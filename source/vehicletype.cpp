@@ -706,7 +706,21 @@ Vehicletype :: ~Vehicletype ( )
 
 
 
-
+SingleWeapon::SingleWeapon()
+{
+  typ = 0;
+  targ = 0;
+  sourceheight = 0;
+  maxdistance = 0;
+  mindistance = 0;
+  count = 0;
+  maxstrength= 0;
+  minstrength = 0;
+  for ( int i = 0; i < 13; i++ )
+    efficiency[i] = 0;
+  for ( int i = 0; i < cmovemalitypenum; i++ )
+    targetingAccuracy[i] = 100;
+}
 
 
 /* Translate the weapon/mine/service bit pattern into scalar
@@ -769,10 +783,6 @@ ASCString SingleWeapon::getName ( void )
 UnitWeapon :: UnitWeapon ( void )
 {
    count = 0;
-   memset ( weapon, 0, sizeof ( weapon ));
-   for ( int w = 0; w < 16; w++ )
-      for ( int i = 0; i < cmovemalitypenum; i++ )
-         weapon[w].targetingAccuracy[i] = 100;
 }
 
 
@@ -879,6 +889,10 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.addNamedInteger ( "RecommendedAIJob", job, AiParameter::jobNum, AIjobs, AiParameter::job_undefined );
    recommendedAIJob = AiParameter::Job(job);
 
+   pc.addString("MovementSound", movementSoundLabel, "" );
+   pc.addString("KillSound", killSoundLabel, "" );         
+
+
    setupPictures();
    #ifndef converter
    buildicon = generate_vehicle_gui_build_icon ( this );
@@ -896,6 +910,7 @@ void SingleWeapon::runTextIO ( PropertyContainer& pc )
    pc.addInteger("Ammo", count );
    pc.addInteger("Punch@MaxRange", minstrength );
    pc.addInteger("Punch@MinRange", maxstrength );
+   pc.addString("Sound", soundLabel, "");
    pc.openBracket("HitAccuracy" ); {
      for ( int j = 0; j < 13; j++ )
         if ( j < 6 )

@@ -16,42 +16,6 @@
 
 SoundList* SoundList::instance = NULL;
 
-const int soundNum = 27;
-
-struct {
-          SoundList::Sample sample;
-          int subType;
-          char* name;
-          Sound* snd;
-      } sounds[soundNum] = { { SoundList::shooting, 0, "SHOOT.CRUISEMISSILE", NULL },
-                             { SoundList::shooting, 1, "SHOOT.MINE", NULL },
-                             { SoundList::shooting, 2, "SHOOT.BOMB", NULL },
-                             { SoundList::shooting, 3, "SHOOT.AIRMISSILE", NULL },
-                             { SoundList::shooting, 4, "SHOOT.GROUNDMISSILE", NULL },
-                             { SoundList::shooting, 5, "SHOOT.TORPEDO", NULL },
-                             { SoundList::shooting, 6, "SHOOT.MACHINEGUN", NULL },
-                             { SoundList::shooting, 7, "SHOOT.CANNON", NULL },
-                             { SoundList::shooting, 10, "SHOOT.LASER", NULL },
-                             { SoundList::moving,   0, "MOVE.DEFAULT", NULL },
-                             { SoundList::moving,   1, "MOVE.LIGHT_TRACKED_VEHICLE", NULL },
-                             { SoundList::moving,   2, "MOVE.MEDIUM_TRACKED_VEHICLE", NULL },
-                             { SoundList::moving,   3, "MOVE.HEAVY_TRACKED_VEHICLE", NULL },
-                             { SoundList::moving,   4, "MOVE.LIGHT_WHEELED_VEHICLE", NULL},
-                             { SoundList::moving,   5, "MOVE.MEDIUM_WHEELED_VEHICLE", NULL },
-                             { SoundList::moving,   6, "MOVE.HEAVY_WHEELED_VEHICLE", NULL },
-                             { SoundList::moving,   7, "MOVE.TROOPER", NULL },
-                             { SoundList::moving,   8, "MOVE.RAIL_VEHICLE", NULL },
-                             { SoundList::moving,   9, "MOVE.MEDIUM_AIRCRAFT", NULL },
-                             { SoundList::moving,  10, "MOVE.MEDIUM_SHIP", NULL },
-                             { SoundList::moving,  11, "MOVE.TURRET", NULL },
-                             { SoundList::moving,  12, "MOVE.LIGHT_AIRCRAFT", NULL },
-                             { SoundList::moving,  13, "MOVE.HEAVY_AIRCRAFT", NULL },
-                             { SoundList::moving,  14, "MOVE.LIGHT_SHIP", NULL },
-                             { SoundList::moving,  15, "MOVE.HEAVY_SHIP", NULL },
-                             { SoundList::moving,  16, "MOVE.HELICOPTER", NULL },
-                             { SoundList::menu_ack,  0, "MENU.ACKNOWLEDGE", NULL }
-                           };
-
 
 
 
@@ -73,78 +37,115 @@ void SoundList::init( )
    instance->initialize ( );
 }
 
+void SoundList::readLine( PropertyContainer& pc, const ASCString& name, SoundList::Sample sample, int subtype, int fadeIn )
+{
+   vector<ASCString> labels;
+   vector<ASCString> files;
+   pc.addStringArray ( name + ".files", files );
+   if ( pc.find ( name + ".labels" ))
+      pc.addStringArray ( name + ".labels", labels );
+
+   SoundAssignment s;
+   if ( files.size() && !files[0].empty() )
+      s.defaultSound = getSound( files[0], fadeIn );
+   else
+      s.defaultSound = NULL;
+
+   s.sample = sample;
+   s.subType = subtype;
+
+   for( int i = 0; i < labels.size() && i < files.size() ; i++ )
+      s.snd[ copytoLower(labels[i]) ] = getSound( files[i], fadeIn );
+
+   soundAssignments.push_back ( s );
+}
+
 void SoundList::initialize(  )
 {
-   const ASCString separator = "=";
-   const ASCString filename = "sounds.txt";
-
-
-   typedef map<ASCString, SingleSound> SoundSetup;
-   SoundSetup soundSetup;
+   TextPropertyGroup* tpg = NULL;
    {
-      tnfilestream list ( filename, tnstream::reading );
-      bool cont;
-      ASCString line;
-      int linenumber = 0;
-      do {
-         linenumber++;
-         cont = list.readTextString ( line );
-         if ( !line.empty() && line[0] != '#' && line[0] != ';' ) {
-            StringTokenizer tok ( line );
-            ASCString snd = tok.getNextToken( );
-            snd.toUpper();
-            ASCString op = tok.getNextToken( );
-            ASCString file = tok.getNextToken( );
-            ASCString fadein = tok.getNextToken( );
-            if ( !file.empty() && op==separator ) {
-               SingleSound ss;
-               ss.filename = file;
-               if ( !fadein.empty() )
-                  ss.fadein = atoi ( fadein.c_str() );
-               else
-                  ss.fadein = 0;
+      tnfilestream s ( "sounds.asctxt", tnstream::reading );
 
-               soundSetup[snd] = ss;
-            } else
-               if ( op.empty() )
-                  warning( "error parsing file " + filename + " , line " + strrr (linenumber ));
-         }
-      } while ( cont );
+      TextFormatParser tfp ( &s );
+      tpg = tfp.run();
    }
+   // auto_ptr<TextPropertyGroup> atpg ( tpg );
 
-   for ( SoundSetup::iterator i = soundSetup.begin(); i != soundSetup.end(); i++ ) {
-      Sound* s = NULL;
-      if ( !i->second.filename.empty() )
-         if ( soundFiles.find ( i->second.filename ) == soundFiles.end() ) {
-            s = new Sound ( i->second.filename, i->second.fadein );
-            soundFiles[i->second.filename] = s;
-         } else
-            s = soundFiles[i->second.filename];
+   PropertyReadingContainer pc ( "sounds", tpg );
 
-      for ( int n = 0; n < soundNum; n++ )
-         if ( i->first == ASCString( sounds[n].name ) )
-            sounds[n].snd =  s;
-   }
+   pc.openBracket("shoot");
+    readLine( pc, "CRUISEMISSILE", SoundList::shooting, 0 );
+    readLine( pc, "MINE", SoundList::shooting, 1 );
+    readLine( pc, "BOMB", SoundList::shooting, 2 );
+    readLine( pc, "AIRMISSILE", SoundList::shooting, 3 );
+    readLine( pc, "GROUNDMISSILE", SoundList::shooting, 4 );
+    readLine( pc, "TORPEDO", SoundList::shooting, 5 );
+    readLine( pc, "MACHINEGUN", SoundList::shooting, 6 );
+    readLine( pc, "CANNON", SoundList::shooting, 7 );
+    readLine( pc, "LASER", SoundList::shooting, 10);
+   pc.closeBracket();
+
+   pc.openBracket("move");
+    readLine( pc, "default", SoundList::moving, 0 );
+    readLine( pc, "LIGHT_TRACKED_VEHICLE", SoundList::moving, 1 );
+    readLine( pc, "MEDIUM_TRACKED_VEHICLE", SoundList::moving, 2 );
+    readLine( pc, "HEAVY_TRACKED_VEHICLE", SoundList::moving, 3 );
+    readLine( pc, "LIGHT_WHEELED_VEHICLE", SoundList::moving, 4 );
+    readLine( pc, "MEDIUM_WHEELED_VEHICLE", SoundList::moving, 5 );
+    readLine( pc, "HEAVY_WHEELED_VEHICLE", SoundList::moving, 6 );
+    readLine( pc, "TROOPER", SoundList::moving, 7 );
+    readLine( pc, "RAIL_VEHICLE", SoundList::moving, 8 );
+    readLine( pc, "MEDIUM_AIRCRAFT", SoundList::moving, 9 );
+    readLine( pc, "MEDIUM_SHIP", SoundList::moving, 10 );
+    readLine( pc, "TURRET", SoundList::moving, 11 );
+    readLine( pc, "LIGHT_AIRCRAFT", SoundList::moving, 12 );
+    readLine( pc, "HEAVY_AIRCRAFT", SoundList::moving, 13 );
+    readLine( pc, "LIGHT_SHIP", SoundList::moving, 14 );
+    readLine( pc, "HEAVY_SHIP", SoundList::moving, 15 );
+    readLine( pc, "HELICOPTER", SoundList::moving, 16 );
+   pc.closeBracket();
+
+   pc.openBracket("UserInterface");
+    readLine( pc, "ACKNOWLEDGE", SoundList::menu_ack );
+   pc.closeBracket();
+   readLine( pc, "CONQUER_BUILDING", SoundList::conquer_building );
+   readLine( pc, "UNIT_EXPLODES", SoundList::unitExplodes );
+   readLine( pc, "BUILDING_COLLAPSES", SoundList::buildingCollapses );
+
+   pc.run();
+
+}
+
+Sound* SoundList::getSound( const ASCString& filename, int fadeIn )
+{
+  if ( soundFiles.find ( filename ) == soundFiles.end() ) {
+     Sound* s = new Sound ( filename, fadeIn );
+     soundFiles[filename] = s;
+     return s;
+  } else
+     return soundFiles[filename];
 }
 
 
-
-Sound* SoundList::getSound( Sample snd, int subType )
+Sound* SoundList::getSound( Sample snd, int subType, const ASCString& label )
 {
    if ( SoundSystem::getInstance()->isOff() )
       return NULL;
 
-   for ( int i = 0; i < soundNum; i++ )
-      if ( snd == sounds[i].sample && subType == sounds[i].subType )
-         if ( sounds[i].snd )
-            return sounds[i].snd;
+   ASCString newlabel = copytoLower(label);
+   for ( vector<SoundAssignment>::iterator i = soundAssignments.begin(); i != soundAssignments.end(); i++ )
+      if ( snd == i->sample && subType == i->subType )
+         if ( newlabel.empty() || i->snd.find( newlabel ) == i->snd.end() )
+            return i->defaultSound;
+         else
+            return i->snd[newlabel];
 
    return NULL;
 }
 
-Sound* SoundList::play( Sample snd, int subType , bool looping )
+Sound* SoundList::playSound( Sample snd, int subType , bool looping, const ASCString& label  )
 {
-   Sound* sound = getSound ( snd, subType );
+   Sound* sound = getSound ( snd, subType, label );
    if ( !sound )
       return NULL;
 

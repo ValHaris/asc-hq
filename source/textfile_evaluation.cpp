@@ -83,6 +83,7 @@
               ASCString operation_add ( const TextPropertyGroup::Entry& entry ) const;
             public:
                StringProperty ( ASCString& property_ ) : PTS ( property_ ) {};
+               StringProperty ( ASCString& property_, const ASCString& defaultValue ) : PTS ( property_, defaultValue ) {};
          };
 
          typedef PropertyTemplate< vector<ASCString> > PTSA;
@@ -328,6 +329,13 @@ void PropertyContainer::addString ( const ASCString& name, ASCString& property )
    StringProperty* ip = new StringProperty ( property );
    setup ( ip, name );
 }
+
+void PropertyContainer::addString ( const ASCString& name, ASCString& property, const ASCString& defaultValue )
+{
+   StringProperty* ip = new StringProperty ( property, defaultValue );
+   setup ( ip, name );
+}
+
 
 void PropertyContainer::addStringArray ( const ASCString& name, vector<ASCString>& property )
 {

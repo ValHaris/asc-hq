@@ -61,6 +61,7 @@ extern const char*  cvehiclefunctions[];
  class SingleWeapon {
      int          typ;
     public:
+     SingleWeapon ();
      //! the weapon can attack targets at these levels of height (bitmapped)
      int          targ;
 
@@ -95,7 +96,9 @@ extern const char*  cvehiclefunctions[];
          All values are in percent. \see cmovemalitypes
      */
      int          targetingAccuracy[cmovemalitypenum];
-    public:
+
+     ASCString    soundLabel;
+
      int          getScalarWeaponType(void) const;
      bool          requiresAmmo(void) const;
      bool          shootable( void ) const;
@@ -276,6 +279,12 @@ extern const char*  cvehiclefunctions[];
 
         //! checks whether the given vehicletype can principially be loaded. 
         int vehicleloadable ( pvehicletype fzt ) const;
+
+        //! this label can select a special sound to be played when moving
+        ASCString    movementSoundLabel;
+
+        //! this label can select a special sound to be played when this unit is killed
+        ASCString    killSoundLabel;
 
         int maxSpeed ( ) const;
 

@@ -1,6 +1,10 @@
-//     $Id: network.h,v 1.7 2002-02-21 17:06:51 mbickel Exp $
+//     $Id: network.h,v 1.8 2003-01-28 17:48:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2002/02/21 17:06:51  mbickel
+//      Completed Paragui integration
+//      Moved mail functions to own file (messages)
+//
 //     Revision 1.6  2001/02/26 12:35:25  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -48,7 +52,7 @@
 */
 
 
-#ifdef karteneditor
+#if defined(karteneditor) && !defined(pbpeditor)
 #error The mapeditor should not need the network routines
 #endif
 

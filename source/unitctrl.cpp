@@ -1,6 +1,13 @@
-//     $Id: unitctrl.cpp,v 1.95 2003-01-06 16:52:04 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.96 2003-01-28 17:48:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.95  2003/01/06 16:52:04  mbickel
+//      Fixed: units inside transports got wrong movement when moved out
+//      Fixed: wind not displayed correctly
+//      Fixed: tribute displaying wrong values
+//      Fixed: constructing units with untis consumed energy when pipeline near
+//      The movement cost for building objects is no longer terrain dependant
+//
 //     Revision 1.94  2002/12/12 11:34:18  mbickel
 //      Fixed: ai crashing when weapon has no ammo
 //      Fixed: ASC crashed when loading game with ID not found
@@ -544,7 +551,7 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
           logtoreplayinfo ( rpl_changeheight2, x1, y1, x, y, vehicle->networkid, (int) vehicle->height, (int) newheight, noInterrupt );
        else */
           logtoreplayinfo ( rpl_move3, x1, y1, x, y, vehicle->networkid, newheight, noInterrupt );
-          if ( newheight != -1 )
+          if ( newheight != -1  && ( vehicle->typ->height & newheight ))
              vehicle->height = newheight;
 
        vehicle->setMovement( initialMovement, 0 );
@@ -933,7 +940,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
          }
    }
 
-   SoundLoopManager slm ( SoundList::getInstance().getSound( SoundList::moving, vehicle->typ->movemalustyp ), false );
+   SoundLoopManager slm ( SoundList::getInstance().getSound( SoundList::moving, vehicle->typ->movemalustyp, vehicle->typ->movementSoundLabel ), false );
 
    int i = 0;
    int cancelmovement = 0;
@@ -969,7 +976,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
       int dir;
       if (vehicle->functions & ( cffahrspur | cficebreaker ))  {
         dir = getdirection( x, y, x2, y2 );
-      
+
         if ( vehicle->functions & cffahrspur )
            if ( fahrspurobject )
               if ( (fld1->bdt & getTerrainBitType(cbfahrspur)).any() )
@@ -1124,8 +1131,11 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
                   while ( fld->building->loading[i]  && (i < 31))
                      i++;
                   fld->building->loading[i] = vehicle;
-                  if (fld->building->color != vehicle->color )
+                  if (fld->building->color != vehicle->color ) {
                      fld->building->convert( vehicle->color / 8 );
+                     if ( fieldvisiblenow ( fld, actmap->playerView ) || actmap->playerView*8  == vehicle->color )
+                        SoundList::getInstance().playSound ( SoundList::conquer_building, 0 );
+                  }
 
                }
          }

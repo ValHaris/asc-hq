@@ -363,6 +363,11 @@ class tmap {
             //! if the player is run by an AI, this is the pointer to it
             BaseAI*      ai;
 
+            #ifdef pbpeditor
+            int aibufsize;
+            void* aibuf;
+            #endif
+
             //! the status of the player: 0=human ; 1=AI ; 2=off
             enum tplayerstat { human, computer, off } stat;
 

@@ -5,9 +5,12 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.77 2003-01-12 19:37:18 mbickel Exp $
+//     $Id: loaders.cpp,v 1.78 2003-01-28 17:48:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.77  2003/01/12 19:37:18  mbickel
+//      Rewrote resource production
+//
 //     Revision 1.76  2002/12/20 16:40:58  mbickel
 //      Fixed problems with inheritance of asctxt files
 //      Changed the displaying of resources on map
@@ -405,9 +408,11 @@
 #include "textfileparser.h"
 #include "itemrepository.h"
 
+#if defined(sgmain) || defined(pbpeditor)
+# include "ai/ai.h"
+#endif
 #ifdef sgmain
-#include "missions.h"
-#include "ai/ai.h"
+# include "missions.h"
 #endif
 
 
@@ -1160,14 +1165,33 @@ void tgameloaders :: writeAI ( )
          a += 1 << i;
 
    stream->writeInt ( a );
+   #if 0
+
+   /* the PBP Editor needs to read the AI information without interpreting it.
+      So we need to store the size prior to the data. But we don't know how big the
+      data will be.
+      So we write the AI data not the stream itself, but to a memory buffer, then
+      store the buffers size, and then write the buffer to the stream
+    */
+
+   tmemorystreambuf membuf;
+   tmemorystream s ( &membuf, writing );
+   for ( int i = 0; i < 8; i++ )
+      if ( spfld->player[i].ai )
+         spfld->player[i].ai->write( s );
+
+   stream.writeInt( membuf.used );
+   membuf.writeToStream( stream );
+   #endif
+
    for ( int i = 0; i < 8; i++ )
       if ( spfld->player[i].ai )
          spfld->player[i].ai->write( *stream );
+
 }
 
 void tgameloaders :: readAI ( )
 {
-#ifdef sgmain
    int a = stream->readInt();
    for ( int i = 0; i< 8; i++ )
       if ( a & ( 1 << i ) ) {
@@ -1177,7 +1201,6 @@ void tgameloaders :: readAI ( )
       } else {
          spfld->player[i].ai = NULL;
       }
-#endif
 }
 
 

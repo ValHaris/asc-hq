@@ -2,9 +2,15 @@
     \brief Interface to the event handling of ASC
 */
 
-//     $Id: missions.h,v 1.8 2001-02-26 12:35:23 mbickel Exp $
+//     $Id: missions.h,v 1.9 2003-01-28 17:48:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2001/02/26 12:35:23  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.7  2001/02/11 11:39:40  mbickel
 //      Some cleanup and documentation
 //
@@ -65,7 +71,7 @@
 */
 
 
-#ifdef karteneditor
+#if defined(karteneditor) && !defined(pbpeditor)
 #error The mapeditor should not use missions.h
 #endif
 

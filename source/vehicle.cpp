@@ -921,8 +921,8 @@ bool  Vehicle :: vehicleloadable ( pvehicle vehicle, int uheight ) const
          uheight |= (chschwimmend | chfahrend );  //these heights are effectively the same
 
 
-   if ( getheightdelta ( log2(uheight), log2(vehicle->height))
-        || getheightdelta ( log2(uheight), log2(height)) )
+   if ( (getheightdelta ( log2(uheight), log2(vehicle->height))
+        || getheightdelta ( log2(uheight), log2(height))) && (uheight != 255) )
       return 0;
 
    if (( ( typ->loadcapability    & vehicle->height)   &&

@@ -9,7 +9,9 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = bzlib.lib libjpeg.lib triangulation.lib tools.lib SDLmm.lib mount.exe demount.exe weaponguide.exe bin2text.exe viewid.exe makegfx.exe makepal.exe tank2pcx.exe gfx2pcx.exe ai.lib Paragui.lib mapeditor.exe asc.exe
+PROJECTS = bzlib.lib libjpeg.lib triangulation.lib tools.lib SDLmm.lib \
+  mount.exe demount.exe weaponguide.exe bin2text.exe viewid.exe makegfx.exe \
+  makepal.exe tank2pcx.exe gfx2pcx.exe ai.lib Paragui.lib mapeditor.exe asc.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------

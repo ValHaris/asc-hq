@@ -6,9 +6,12 @@
    #building_controls.h
 */
 
-//     $Id: building.h,v 1.20 2002-09-19 20:20:04 mbickel Exp $
+//     $Id: building.h,v 1.21 2003-01-28 17:48:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2002/09/19 20:20:04  mbickel
+//      Cleanup and various bug fixes
+//
 //     Revision 1.19  2001/01/28 14:04:06  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -42,7 +45,7 @@
 */
 
 
-#ifdef karteneditor
+#if defined(karteneditor) && !defined(pbpeditor)
  #error the mapeditor should not need to use building* !
 #endif
 

@@ -4,9 +4,16 @@
 */
 
 
-//     $Id: gui.cpp,v 1.85 2003-01-06 16:52:04 mbickel Exp $
+//     $Id: gui.cpp,v 1.86 2003-01-28 17:48:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.85  2003/01/06 16:52:04  mbickel
+//      Fixed: units inside transports got wrong movement when moved out
+//      Fixed: wind not displayed correctly
+//      Fixed: tribute displaying wrong values
+//      Fixed: constructing units with untis consumed energy when pipeline near
+//      The movement cost for building objects is no longer terrain dependant
+//
 //     Revision 1.84  2002/12/17 22:02:17  mbickel
 //      Enemy mines can now be crossed even if visible
 //      submerged mines can not be placed on shallow water
@@ -997,7 +1004,7 @@ int  tnguiicon::pressedbymouse( void )
           mouseparams.taste != taste )
      {
             host->cleanup();
-            SoundList::getInstance().play( SoundList::menu_ack );
+            SoundList::getInstance().playSound( SoundList::menu_ack );
             exec();
             return 1;
      }

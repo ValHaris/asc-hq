@@ -5,9 +5,16 @@
 */
 
 
-//     $Id: building_controls.h,v 1.13 2002-12-12 11:34:17 mbickel Exp $
+//     $Id: building_controls.h,v 1.14 2003-01-28 17:48:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2002/12/12 11:34:17  mbickel
+//      Fixed: ai crashing when weapon has no ammo
+//      Fixed: ASC crashed when loading game with ID not found
+//      Fixed: more ai problems
+//      AI now faster
+//      Fixed: removing objects overfill a units tank
+//
 //     Revision 1.12  2002/09/19 20:20:04  mbickel
 //      Cleanup and various bug fixes
 //
@@ -86,7 +93,7 @@
 */
 
 
-#ifdef karteneditor
+#if defined(karteneditor) && !defined(pbpeditor)
  #error the mapeditor should not need to use building* !
 #endif
 

@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: attack.cpp,v 1.61 2002-11-17 11:43:23 mbickel Exp $
+//     $Id: attack.cpp,v 1.62 2003-01-28 17:48:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2002/11/17 11:43:23  mbickel
+//      Fixed replay errors when replaying the AI moves
+//
 //     Revision 1.60  2002/09/19 20:20:04  mbickel
 //      Cleanup and various bug fixes
 //
@@ -180,7 +183,7 @@ bool  AttackFormula :: checkHemming ( pvehicle     d_eht,  int     direc )
    getnextfield(x, y, direc);
    pfield fld = getfield(x,y);
 
-   if ( fld ) 
+   if ( fld )
       s_eht = fld->vehicle;
    else 
       s_eht = NULL; 
@@ -385,12 +388,16 @@ void tfight :: paintline ( int num, int val, int col )
 
 void tunitattacksunit::calcdisplay( int ad, int dd ) {
   #ifdef sgmain
-  SoundList::getInstance().play ( SoundList::shooting, _attackingunit->getWeapon(av.weapnum)->getScalarWeaponType() );
+  SoundList::getInstance().playSound ( SoundList::shooting, _attackingunit->getWeapon(av.weapnum)->getScalarWeaponType(), false, _attackingunit->getWeapon(av.weapnum)->soundLabel );
   #endif
   tfight::calcdisplay(ad,dd);
   #ifdef sgmain
-   if ( av.damage >= 100 || dv.damage >= 100 )
-      SoundList::getInstance().play( SoundList::unitBlowsUp , 0 );
+   if ( av.damage >= 100  )
+      SoundList::getInstance().playSound( SoundList::unitExplodes , 0, false, _attackingunit->typ->killSoundLabel );
+   if ( dv.damage >= 100 )
+      SoundList::getInstance().playSound( SoundList::unitExplodes , 0, false, _attackedunit->typ->killSoundLabel );
+
+
   #endif
 }
   
@@ -801,12 +808,12 @@ void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int w
 
 void tunitattacksbuilding::calcdisplay( int ad, int dd ) {
   #ifdef sgmain
-        SoundList::getInstance().play( SoundList::shooting  , _attackingunit->getWeapon(av.weapnum)->getScalarWeaponType() );
+   SoundList::getInstance().playSound( SoundList::shooting  , _attackingunit->getWeapon(av.weapnum)->getScalarWeaponType(), false, _attackingunit->getWeapon(av.weapnum)->soundLabel );
   #endif
   tfight::calcdisplay(ad,dd);
   #ifdef sgmain
-   if ( av.damage >= 100 || dv.damage >= 100 )
-      SoundList::getInstance().play( SoundList::unitBlowsUp );
+   if ( dv.damage >= 100 )
+      SoundList::getInstance().playSound( SoundList::buildingCollapses );
   #endif
 }
 
@@ -915,12 +922,12 @@ void tmineattacksunit :: setup ( pfield mineposition, int minenum, pvehicle &att
 
 void tmineattacksunit::calcdisplay( int ad, int dd ) {
   #ifdef sgmain
-  SoundList::getInstance().play( SoundList::shooting  , 1 );
+  SoundList::getInstance().playSound( SoundList::shooting , 1 );
   #endif
   tfight::calcdisplay(ad,dd);
   #ifdef sgmain
-   if ( av.damage >= 100 || dv.damage >= 100 )
-      SoundList::getInstance().play( SoundList::unitBlowsUp );
+   if ( dv.damage >= 100 )
+      SoundList::getInstance().playSound( SoundList::unitExplodes , 0, false, _attackedunit->typ->killSoundLabel );
   #endif
 }
 
@@ -1048,7 +1055,7 @@ void tunitattacksobject :: setup ( pvehicle attackingunit, int obj_x, int obj_y,
 
 void tunitattacksobject::calcdisplay( int ad, int dd ) {
   #ifdef sgmain
-  SoundList::getInstance().play( SoundList::shooting  , _attackingunit->getWeapon(av.weapnum)->getScalarWeaponType() );
+  SoundList::getInstance().playSound ( SoundList::shooting, _attackingunit->getWeapon(av.weapnum)->getScalarWeaponType(), false, _attackingunit->getWeapon(av.weapnum)->soundLabel );
   #endif
   tfight::calcdisplay(ad,dd);
 }

@@ -4,9 +4,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.44 2003-01-12 19:37:18 mbickel Exp $
+//     $Id: controls.h,v 1.45 2003-01-28 17:48:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2003/01/12 19:37:18  mbickel
+//      Rewrote resource production
+//
 //     Revision 1.43  2001/09/13 17:43:12  mbickel
 //      Many, many bug fixes
 //
@@ -98,7 +101,7 @@
     Boston, MA  02111-1307  USA
 */
 
-#ifdef karteneditor
+#if defined(karteneditor) && !defined(pbpeditor)
  #error the mapeditor should not need to use controls.h !
 #endif
 

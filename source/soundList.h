@@ -1,5 +1,5 @@
-#ifndef soundList_h_included
-#define soundList_h_included
+#ifndef soundListH
+#define soundListH
 
 /*! \file soundList.h
     \brief The collection of all sounds used by ASC
@@ -10,6 +10,7 @@
 #include "global.h"
 #include "sdl/sound.h"
 #include "ascstring.h"
+#include "textfile_evaluation.h"
 
 /** A helper class for managing looping sounds.
     A sound may be preloaded, later activated and this class assures that it is closed again.
@@ -32,27 +33,33 @@ class SoundLoopManager {
     It uses the singleton design pattern.
 */
 class SoundList {
-   class SingleSound {
-      public:
-         ASCString filename;
-         int fadein;
-   };
-   
     SoundList() {};
     static SoundList* instance;
 public:
     static SoundList& getInstance();
-    enum Sample { shooting, unitBlowsUp, moving, menu_ack };
+    enum Sample { shooting, unitExplodes, buildingCollapses, moving, menu_ack, conquer_building };
 
     static void init( );
-    Sound* play ( Sample snd, int subType = 0, bool looping = false);
-    Sound* getSound ( Sample snd, int subType = 0 );
+    Sound* playSound ( Sample snd, int subType = 0, bool looping = false, const ASCString& label = "" );
+    Sound* getSound ( Sample snd, int subType = 0, const ASCString& label = "");
 
    ~SoundList();
 private:
+     void initialize();
+
      typedef map<ASCString,Sound*> SoundFiles;
      SoundFiles  soundFiles;
-     void initialize();
+
+     Sound* getSound( const ASCString& filename, int fadeIn );
+
+      struct SoundAssignment {
+           SoundList::Sample sample;
+           int subType;
+           Sound* defaultSound;
+           map<ASCString,Sound*> snd;
+      };
+     vector<SoundAssignment> soundAssignments; 
+     void readLine( PropertyContainer& pc, const ASCString& name, SoundList::Sample sample, int subtype = 0, int fadeIn = 0 );
 };
 
 #endif

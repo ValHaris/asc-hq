@@ -2,9 +2,16 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.121 2003-01-06 16:52:04 mbickel Exp $
+//     $Id: dialog.cpp,v 1.122 2003-01-28 17:48:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.121  2003/01/06 16:52:04  mbickel
+//      Fixed: units inside transports got wrong movement when moved out
+//      Fixed: wind not displayed correctly
+//      Fixed: tribute displaying wrong values
+//      Fixed: constructing units with untis consumed energy when pipeline near
+//      The movement cost for building objects is no longer terrain dependant
+//
 //     Revision 1.120  2002/12/23 13:43:22  mbickel
 //      Fixed to compile with gcc 3.2
 //
@@ -3899,7 +3906,7 @@ void         tsetalliances::displayplayernamesintable( void )
    npop ( activefontsettings );
 }
 
-char* shareview_modenames[2] = { "none", "share view" };
+char* shareview_modenames[2] = { "don't share view", "share view" };
 
 
 void         tsetalliances::buildhlgraphics(void)

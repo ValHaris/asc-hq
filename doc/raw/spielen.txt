@@ -40,13 +40,13 @@ Also ich halte meine obige šberlegung fr recht optimal.
 
 ----- 8< ----  8< -----  8< ----  8< -----
 
-Du hattest im Canyon-Spiel nach dem Klemmen gefragt. Es k”nnen
+#Du hattest im Canyon-Spiel nach dem Klemmen gefragt. Es k”nnen
 ausschlieálich Einheiten klemmen, die nocht  nicht angegriffen haben.
 Das erfordert ein geschicktes Timing der Angriffe, wenn man mehrere
 nahe beeinanderstehende Einheiten angreift. 
 
 ----- 8< ----  8< -----  8< ----  8< -----
-!!!Die Frage nach dem Gentleman-Game bzw. irgendwelchen Savegame-Beschr„nkungen ist schon fast eine FAQ.
+### !!!Die Frage nach dem Gentleman-Game bzw. irgendwelchen Savegame-Beschr„nkungen ist schon fast eine FAQ.
 
 >Ich weiss nicht ob ich dir folgende šberlegungen schon mal gemailt hatte... . Mir ist so, als ob ich das schon mal getan habe... . Nun, worum geht's:
 >
@@ -61,6 +61,7 @@ den der Benutzer nicht rankommt. Der Benutzer hat dann nur einen
 Client, der lediglich das Spiel anzeigt und die Befehle entgegennimmt.
 
 ----- 8< ----  8< -----  8< ----  8< -----
+####
 
 !!! und hier noch mal ausfhrlich
 
@@ -122,7 +123,7 @@ Spiele machen... bei Civ1 muáte man immer das ganze Programm beenden,
 um wieder aus dem Hauptmen heraus einen Spielstand laden zu k”nnen).
 
 ----- 8< ----  8< -----  8< ----  8< -----
-
+#####
 !!! Das ist eine sehr gut versteckte, aber wichtige Funktion. Die msste in der Doku ziemlich betont werden. 'Muá mal sehen, ob man das im Dialog selber auch noch deutlicher machen kann.
 
 >Des weiteren suche im im Spiel (nicht im Editor) nach einer 
@@ -133,6 +134,7 @@ um wieder aus dem Hauptmen heraus einen Spielstand laden zu k”nnen).
 Die Funktion ist gut versteckt: Klick auf 'NONE' 
 
 ----- 8< ----  8< -----  8< ----  8< -----
+
 
 >Ich schicke hier einen Spielstand, in dem ich meine Einheiten nicht richtig
 >ausladen kann. Merw rdigerweise, konnte ich Technos ausladen, kurze zeit
@@ -149,6 +151,7 @@ weil die ja ber den vorderen Transp. fahren muá.
 !!! Der Grund ist der, daá die Einheiten fr das Fahrzeug auf der H”henstufe fahrend ausgeladen werden mssen, fr das schiff auf H”henstufe schwimmend. W„hrend eines Aufrufs der Bewegungsfunktion kann die Einheit beim Start aber nur auf einer H”henstufe sein, die ist anfangs dann halt schwimmend.
 
 ----- 8< ----  8< -----  8< ----  8< -----
+#####
 
 >- beim Reparieren von Einheiten scheinen nicht immer die 
 >Erfahrungspunkte mit zu verschwinden (oder ich verstehe die Regel 
