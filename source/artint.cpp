@@ -2,9 +2,15 @@
     \brief The artificial intelligence of ASC. 
 */
 
-//     $Id: artint.cpp,v 1.62 2001-02-26 12:34:58 mbickel Exp $
+//     $Id: artint.cpp,v 1.63 2001-03-01 21:24:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2001/02/26 12:34:58  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.61  2001/02/15 21:57:04  mbickel
 //      The AI doesn't try to attack with recon units any more
 //
@@ -2659,7 +2665,7 @@ void AI :: tactics_findBestAttackOrder ( pvehicle* units, int* attackOrder, pveh
 
 float AI :: getAttackValue ( const tfight& battle, const pvehicle attackingUnit, const pvehicle attackedUnit, float factor )
 {
-   float result = (battle.dv.damage - attackedUnit->damage) * attackedUnit->aiparam[getPlayerNum()]->getValue() * factor - 1/config.aggressiveness * (battle.av.damage - attackedUnit->damage) * attackedUnit->aiparam[getPlayerNum()]->getValue() ;
+   float result = (battle.dv.damage - attackedUnit->damage) * attackedUnit->aiparam[getPlayerNum()]->getValue() * factor - 1/config.aggressiveness * (battle.av.damage - attackingUnit->damage) * attackedUnit->aiparam[getPlayerNum()]->getValue() ;
    if ( battle.dv.damage >= 100 )
       result += attackedUnit->aiparam[getPlayerNum()]->getValue() * attack_unitdestroyed_bonus;
    return result;
@@ -2674,15 +2680,22 @@ class UnitAttacksUnit_FakeHemming : public tunitattacksunit {
               return neighbours[direc];
            };
         public:
-          UnitAttacksUnit_FakeHemming ( pvehicle attacker, pvehicle defender, pvehicle* _neighbours ) : tunitattacksunit ( attacker , defender )
+          UnitAttacksUnit_FakeHemming ( AI* ai, pvehicle attacker, pvehicle defender, pvehicle* _neighbours ) : tunitattacksunit ( attacker , defender )
           {
-             for ( int i = 0; i < sidenum; i++ )
-                neighbours[i] = false;
+             for ( int i = 0; i < sidenum; i++ ) {
+                pvehicle v = ai->getMap()->getField ( getNeighbouringFieldCoordinate ( attacker->getPosition(), i ))->vehicle;
+                if ( v && attackpossible2n ( v, defender ) )
+                   neighbours[i] = true;
+                else
+                   neighbours[i] = false;
+             }
 
              for ( int i = 0; i < sidenum; i++ ) {
                 if ( _neighbours[i] == attacker )
                    break;
-                neighbours[i] = _neighbours[i];
+
+                if ( _neighbours[i] )
+                   neighbours[i] = true;
              }
              setup ( attacker, defender, true, -1 );
           };
@@ -2705,7 +2718,7 @@ void AI :: tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVa
             positions[i]->xpos = mc.x;
             positions[i]->ypos = mc.y;
 
-            UnitAttacksUnit_FakeHemming uau ( positions[i], target, positions );
+            UnitAttacksUnit_FakeHemming uau ( this, positions[i], target, positions );
             uau.calc();
             value += getAttackValue ( uau, positions[i], target );
 
