@@ -15,6 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef NO_PARAGUI 
+ 
 #include "global.h"
 
 #include <paragui.h>
@@ -364,3 +366,10 @@ void soundSettings( )
   wnd1.Run();
   printf("c4c %d \n", ticker );
 }
+
+#else
+void soundSettings( ){};
+void setupMainScreenWidget() {};
+
+
+#endif

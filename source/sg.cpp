@@ -69,9 +69,12 @@
 #include <algorithm>
 #include <memory>
 #include <SDL_image.h>
-#include <pgthemewidget.h>
-#include <pgeventobject.h>
-#include <pgapplication.h>
+
+#ifndef NO_PARAGUI
+# include <pgthemewidget.h>
+# include <pgeventobject.h>
+# include <pgapplication.h>
+#endif
 
 #include "SDL_mixer.h"
 
@@ -604,7 +607,9 @@ void         tsgpulldown :: init ( void )
    addbutton ( "seperator", -1);
    addbutton ( "~O~ptions", ua_gamepreferences );
    addbutton ( "~M~ouse options", ua_mousepreferences );
+   #ifndef NO_PARAGUI
    addbutton ( "~S~ound options", ua_soundDialog );
+   #endif
    addbutton ( "seperator", -1);
    addbutton ( "E~x~itõctrl-x", ua_exitgame );
 
@@ -1485,13 +1490,14 @@ void execuseraction ( tuseractions action )
       case ua_soundDialog:
          soundSettings();
          break;
+#ifndef NO_PARAGUI
       case ua_reloadDlgTheme:
          if ( pgApp ) {
              pgApp->reloadTheme();
              soundSettings();
          }
          break;
-
+#endif
    }
 
 
@@ -2112,6 +2118,11 @@ int main(int argc, char *argv[] )
    if ( CGameOptions::Instance()->forceWindowedMode && !cl->f() )  // cl->f == force fullscreen command line param
       fullscreen = SDL_FALSE;
 
+   #ifdef NO_PARAGUI
+   SDL_Init ( SDL_INIT_VIDEO );
+   #endif
+
+      
    SDLmm::Surface* icon = NULL;
    try {
       tnfilestream iconl ( "icon_asc.gif", tnstream::reading );
@@ -2140,7 +2151,9 @@ int main(int argc, char *argv[] )
    soundSystem.setMusicVolume ( CGameOptions::Instance()->sound.musicVolume );
    soundSystem.setEffectVolume ( CGameOptions::Instance()->sound.soundVolume );
 
+   
 
+   #ifndef NO_PARAGUI
    ASC_PG_App app ( "asc_dlg" );
    pgApp = &app;
 
@@ -2148,14 +2161,20 @@ int main(int argc, char *argv[] )
    if ( fullscreen )
       flags |= SDL_FULLSCREEN;
 
-   setWindowCaption ( "Advanced Strategic Command" );
+
    SDL_WM_SetIcon( icon->GetSurface(), NULL );
-
-
    app.InitScreen( xr, yr, 8, flags);
-
+  
    initASCGraphicSubsystem ( app.GetScreen(), icon );
 
+   #else
+   SDL_WM_SetIcon( icon->GetSurface(), NULL );
+   initgraphics ( xr, yr, 8, icon );
+   #endif
+   
+
+   setWindowCaption ( "Advanced Strategic Command" );
+      
    GameThreadParams gtp;
    gtp.filename = cl->l();
 
@@ -2187,6 +2206,7 @@ int main(int argc, char *argv[] )
 #ifdef MEMCHK
    verifyallblocks();
 #endif
+exit(0);
    return(0);
 }
 

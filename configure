@@ -1015,6 +1015,7 @@ Optional Features:
   --enable-genparse       enables recreation of the command line parsers
   --disable-sdltest       Do not try to compile and run a test SDL program
   --disable-sdlmmtest       Do not try to compile and run a test SDLmm program
+  --disable-paragui  Don't use paragui .
   --disable-paraguitest       Do not try to compile and run a test PARAGUI program
   --enable-libbz2-static  compiles a static libbz2 into the binary of asc.
   --enable-debug       enables some debugging options
@@ -4218,7 +4219,7 @@ test "x$enable_libtool_lock" != xno && enable_libtool_lock=yes
 case $host in
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4221 "configure"' > conftest.$ac_ext
+  echo '#line 4222 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -4766,7 +4767,7 @@ chmod -w .
 save_CFLAGS="$CFLAGS"
 CFLAGS="$CFLAGS -o out/conftest2.$ac_objext"
 compiler_c_o=no
-if { (eval echo configure:4769: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
+if { (eval echo configure:4770: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
   # The compiler can only warn and ignore the option if not recognized
   # So say no if there are warnings
   if test -s out/conftest.err; then
@@ -6566,7 +6567,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 6569 "configure"
+#line 6570 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -6664,7 +6665,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 6667 "configure"
+#line 6668 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9653,6 +9654,17 @@ from http://sdlmm.sf.net " >&2;}
 
 
 
+# Check whether --enable-paragui or --disable-paragui was given.
+if test "${enable_paragui+set}" = set; then
+  enableval="$enable_paragui"
+  useparagui=no
+fi;
+
+
+
+if test "x$useparagui" != "xno"; then
+
+
 # Check whether --with-paragui-prefix or --without-paragui-prefix was given.
 if test "${with_paragui_prefix+set}" = set; then
   withval="$with_paragui_prefix"
@@ -9927,21 +9939,26 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
      PARAGUI_CFLAGS=""
      PARAGUI_LIBS=""
      { { echo "$as_me:$LINENO: error:
-*** PARAGUI version 1.0.1 not found! ASC requires the Paragui library.
-If you have a distribution supplied Paragui.RPM installed, perhaps the
-Paragui-devel.RPM is missing. If your distribution does not include the
-Paragui library, you can get it from http://www.paragui.org/ " >&5
+   *** PARAGUI version 1.0.1 not found! ASC requires the Paragui library.
+   If you have a distribution supplied Paragui.RPM installed, perhaps the
+   Paragui-devel.RPM is missing. If your distribution does not include the
+   Paragui library, you can get it from http://www.paragui.org/ " >&5
 echo "$as_me: error:
-*** PARAGUI version 1.0.1 not found! ASC requires the Paragui library.
-If you have a distribution supplied Paragui.RPM installed, perhaps the
-Paragui-devel.RPM is missing. If your distribution does not include the
-Paragui library, you can get it from http://www.paragui.org/ " >&2;}
+   *** PARAGUI version 1.0.1 not found! ASC requires the Paragui library.
+   If you have a distribution supplied Paragui.RPM installed, perhaps the
+   Paragui-devel.RPM is missing. If your distribution does not include the
+   Paragui library, you can get it from http://www.paragui.org/ " >&2;}
    { (exit 1); exit 1; }; }
   fi
 
 
   rm -f conf.paraguitest
 
+
+   else
+   PARAGUI_CFLAGS="-DNO_PARAGUI"
+   PARAGUI_LIBS=""
+fi
 
 
 ac_ext=c

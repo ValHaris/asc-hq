@@ -22,6 +22,8 @@
 #ifndef paradialogH
  #define paradialogH
 
+ #ifndef NO_PARAGUI
+ 
 #include "global.h"
 
 #include <paragui.h>
@@ -58,11 +60,14 @@
       // PG_Theme* LoadTheme(const char* xmltheme, bool asDefault = true, const char* searchpath = NULL );
  };
 
- extern void soundSettings();
-
- extern void setupMainScreenWidget();
 
  extern ASC_PG_App* pgApp;
 
 #endif
 
+ extern void soundSettings();
+
+ extern void setupMainScreenWidget();
+
+
+#endif
