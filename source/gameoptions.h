@@ -71,6 +71,7 @@ class CGameOptions
       int smallguiiconopenaftermove;
       int defaultpassword;
       int replayspeed;
+      int showUnitOwner;
 
       struct Bi3
       {

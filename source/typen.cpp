@@ -1,6 +1,13 @@
-//     $Id: typen.cpp,v 1.37 2000-08-08 09:48:30 mbickel Exp $
+//     $Id: typen.cpp,v 1.38 2000-08-08 13:22:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2000/08/08 09:48:30  mbickel
+//
+//      speed up of dialog boxes in linux
+//      fixed graphical errors in attack
+//      fixed graphical error in ammo transfer
+//      fixed reaction fire not allowing manual attack
+//
 //     Revision 1.36  2000/08/07 16:29:23  mbickel
 //      orbiting units don't consume fuel any more
 //      Fixed bug in attack formula; improved attack formula
@@ -1213,6 +1220,8 @@ tvehicletype :: tvehicletype ( void )
    weapons = new UnitWeapon;
    terrainaccess = new tterrainaccess;
    filename = NULL;
+   vehicleCategoriesLoadable = -1;
+
 }
 
 tvehicletype :: ~tvehicletype ( )
@@ -2211,6 +2220,19 @@ void tmap :: chainbuilding ( pbuilding bld )
       player[ bld->color / 8 ].firstbuilding = bld;
    }
 }
+
+const char* tmap :: getPlayerName ( int playernum )
+{
+   if ( playernum >= 8 )
+      playernum /= 8;
+
+   switch ( player[playernum].stat ) {
+      case 0: return humanplayername[playernum]; 
+      case 1: return computerplayername[playernum]; 
+      default: return "off";
+   } /* endswitch */
+}
+
 
 
 int tmap :: eventpassed( int saveas, int action, int mapid )

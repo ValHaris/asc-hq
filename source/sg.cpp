@@ -1,6 +1,13 @@
-//     $Id: sg.cpp,v 1.75 2000-08-08 09:48:23 mbickel Exp $
+//     $Id: sg.cpp,v 1.76 2000-08-08 13:22:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.75  2000/08/08 09:48:23  mbickel
+//
+//      speed up of dialog boxes in linux
+//      fixed graphical errors in attack
+//      fixed graphical error in ammo transfer
+//      fixed reaction fire not allowing manual attack
+//
 //     Revision 1.74  2000/08/07 16:29:21  mbickel
 //      orbiting units don't consume fuel any more
 //      Fixed bug in attack formula; improved attack formula
@@ -1660,7 +1667,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "seperator", -1 ); 
    addbutton ( "~R~esearch", ua_researchinfo ); 
    addbutton ( "vehicle ~I~mprovementõF7", ua_dispvehicleimprovement);
-   addbutton ( "unit ~S~et information", ua_UnitSetInfo );
+   addbutton ( "unit ~S~et informationõ6", ua_UnitSetInfo );
    addbutton ( "show game ~P~arameters", ua_GameParameterInfo );
 
 
@@ -2721,6 +2728,9 @@ void  mainloop ( void )
             case ct_4:  viewunitmovementrange ( getactfield()->vehicle, ct_4 );
                break;
 
+            case ct_6:  execuseraction ( ua_UnitSetInfo );
+               break; 
+               
             case ct_7:  execuseraction ( ua_viewterraininfo );
                break; 
             

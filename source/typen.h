@@ -1,6 +1,11 @@
-//     $Id: typen.h,v 1.37 2000-08-07 16:29:23 mbickel Exp $
+//     $Id: typen.h,v 1.38 2000-08-08 13:22:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2000/08/07 16:29:23  mbickel
+//      orbiting units don't consume fuel any more
+//      Fixed bug in attack formula; improved attack formula
+//      Rewrote reactionfire
+//
 //     Revision 1.36  2000/08/06 11:39:26  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -660,6 +665,7 @@ class tvehicletype {    // This structure does not have a fixed layout any more 
 
        AiParameter* aiparam[8];
        char*        filename;    // just for information purposes in the main program
+       int          vehicleCategoriesLoadable;
 
        int maxweight ( void );     // max. weight including fuel and material
        int maxsize   ( void );     // without fuel and material
@@ -773,7 +779,7 @@ class tvehicle { /*** Bei Žnderungen unbedingt Save/LoadGame und Konstruktor kor
 
 
 class  tbuildingtype { 
-   public:                         
+   public:
         void*        w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
         int          bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
         int          destruction_objects [4][6];
@@ -819,11 +825,12 @@ class  tbuildingtype {
         int          buildingheight;
         int          unitheight_forbidden;
         int          externalloadheight;
-        int          dummy[9];
+        int          vehicleCategoriesLoadable;
         void*        getpicture ( int x, int y );
     
         tbuildingtype ( void ) {
            terrain_access = &terrainaccess;
+           vehicleCategoriesLoadable = -1;
         };
 
         int          vehicleloadable ( pvehicletype fzt );
@@ -1534,6 +1541,7 @@ class tmap {
       void cleartemps( int b, int value = 0 );
       int isResourceGlobal ( int resource );
       void setupResources ( void );
+      const char* getPlayerName ( int playernum );
    private:
       pvehicle getunit ( pvehicle eht, int nwid );
 

@@ -1,6 +1,13 @@
-//     $Id: controls.cpp,v 1.60 2000-08-08 09:48:00 mbickel Exp $
+//     $Id: controls.cpp,v 1.61 2000-08-08 13:21:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2000/08/08 09:48:00  mbickel
+//
+//      speed up of dialog boxes in linux
+//      fixed graphical errors in attack
+//      fixed graphical error in ammo transfer
+//      fixed reaction fire not allowing manual attack
+//
 //     Revision 1.59  2000/08/07 16:29:19  mbickel
 //      orbiting units don't consume fuel any more
 //      Fixed bug in attack formula; improved attack formula
@@ -3798,20 +3805,40 @@ void         tdashboard::paintimage(void)
 
 void         tdashboard::paintclasses ( void )
 {
-   if (vehicle) 
-      if (vehicle->typ->classnum) {
+   if ( gameoptions.showUnitOwner ) {
+      const char* owner = NULL;
+      if ( vehicle )
+         owner = actmap->getPlayerName(vehicle->color / 8);
+      else
+         if ( building )
+            owner = actmap->getPlayerName(building->color / 8);
+
+      if ( owner ) {
          activefontsettings.justify = lefttext;
          activefontsettings.color = white;
          activefontsettings.background = 171;
          activefontsettings.font = schriften.guifont;
          activefontsettings.length = 75;
          activefontsettings.height = 0;
-         showtext2c( vehicle->typ->classnames[vehicle->klasse] ,agmp->resolutionx - ( 640 - 500), 42);
+         showtext2c( owner, agmp->resolutionx - ( 640 - 500), 42);
          activefontsettings.height = 9;
       } else
          bar ( agmp->resolutionx - ( 640 - 499), 42, agmp->resolutionx - ( 640 - 575), 50, 171 );
-   else
-      bar ( agmp->resolutionx - ( 640 - 499), 42, agmp->resolutionx - ( 640 - 575), 50, 171 );
+   } else 
+      if (vehicle) 
+         if (vehicle->typ->classnum) {
+            activefontsettings.justify = lefttext;
+            activefontsettings.color = white;
+            activefontsettings.background = 171;
+            activefontsettings.font = schriften.guifont;
+            activefontsettings.length = 75;
+            activefontsettings.height = 0;
+            showtext2c( vehicle->typ->classnames[vehicle->klasse] ,agmp->resolutionx - ( 640 - 500), 42);
+            activefontsettings.height = 9;
+         } else
+            bar ( agmp->resolutionx - ( 640 - 499), 42, agmp->resolutionx - ( 640 - 575), 50, 171 );
+      else
+         bar ( agmp->resolutionx - ( 640 - 499), 42, agmp->resolutionx - ( 640 - 575), 50, 171 );
 }
 
 void         tdashboard::paintname ( void )

@@ -1,6 +1,14 @@
-//     $Id: dialog.cpp,v 1.41 2000-08-06 11:38:41 mbickel Exp $
+//     $Id: dialog.cpp,v 1.42 2000-08-08 13:21:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2000/08/06 11:38:41  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.40  2000/08/04 15:10:56  mbickel
 //      Moving transports costs movement for units inside
 //      refuelled vehicles now have full movement in the same turn
@@ -6189,6 +6197,11 @@ void viewUnitSetinfo ( void )
          else
             if ( typ->description  &&  typ->description[0] )
                s += typ->description;
+
+         s += "\nUnit owner: ";
+         s += strrr ( fld->vehicle->color / 8 );
+         s += " - ";
+         s += actmap->getPlayerName ( fld->vehicle->color/8 );
 
          char t3[1000];
          sprintf(t3, "\nUnit ID: %d \n", typ->id );

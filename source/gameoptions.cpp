@@ -67,6 +67,7 @@ void CGameOptions::setDefaults ( void )
    smallguiiconopenaftermove=0;
    defaultpassword=0;
    replayspeed=0;
+   showUnitOwner = 0;
 
 
    bi3.dir.setName( NULL );
@@ -127,6 +128,7 @@ void CGameOptions::copy ( const CGameOptions& cgo )
    smallguiiconopenaftermove = cgo.smallguiiconopenaftermove;
    defaultpassword           = cgo.defaultpassword;
    replayspeed               = cgo.replayspeed;
+   showUnitOwner             = cgo.showUnitOwner;
 
 
    bi3.dir.setName( cgo.bi3.dir.getName() );

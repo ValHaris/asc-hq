@@ -537,7 +537,7 @@ main ()
    
    
          printf ("\n    armor  ");
-         num_ed (bld->armor, 0, 65535);
+         num_ed (bld->_armor, 0, 65535);
    
          printf ("\n    max size of loadable units \n");
          num_ed (bld->loadcapacity, 0, 65535);
@@ -557,6 +557,12 @@ main ()
          printf ("\n    Units that may NOT enter\n");
          bitselect (bld->unitheight_forbidden, choehenstufen, choehenstufennum);
    
+         printf ("\n    these vehicle categories can be loaded \n"
+                 "          This property is not evaluated yet, but will replace the system\n"
+                 "          checking the levels of height in some future version\n");
+         bitselect (bld->vehicleCategoriesLoadable, cmovemalitypes, cmovemalitypenum );
+
+
          printf ("\n    height of the building \n");
          bitselect (bld->buildingheight, choehenstufen, choehenstufennum);
    

@@ -137,18 +137,18 @@ main(int argc, char *argv[] )
          // 3 : movement
          cat[4][num] = ft->production.energy;
          cat[5][num] = ft->production.material;
-         cat[6][num] = ft->fuelconsumption;
+         cat[6][num] = ft->fuelConsumption;
          cat[7][num] = ft->tank;
          cat[8][num] = maxattack;
          cat[9][num] = ft->weight;
    
          int dist = 0;
-         if ( ft->fuelconsumption )
-            dist = ft->tank / ft->fuelconsumption;
+         if ( ft->fuelConsumption )
+            dist = ft->tank / ft->fuelConsumption;
    
          cat[10][num] = dist;
    
-         sprintf( buf, "%4d %4d %2d %3d %3d %3d %2d %4d %4d\n", dist, ft->fuelconsumption, ft->steigung, ft->view, ft->jamming, ft->weight, ft->wait, ft->loadcapacity, ft->maxunitweight );
+         sprintf( buf, "%4d %4d %2d %3d %3d %3d %2d %4d %4d\n", dist, ft->fuelConsumption, ft->steigung, ft->view, ft->jamming, ft->weight, ft->wait, ft->loadcapacity, ft->maxunitweight );
          strcat ( text[num], buf );
    
          printf("#%d %s\n", num, cn );

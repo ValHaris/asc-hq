@@ -354,6 +354,12 @@ main (int argc, char *argv[] )
                     "          example: aircrafts must not be loaded into an transport plane\n");
             bitselect (ft->loadcapabilitynot, choehenstufen, choehenstufennum);
    
+            printf ("\n    these vehicle categories can be loaded \n"
+                    "          This vehicle property is not evaluated, but will replace the system\n"
+                    "          checking the levels of height in some future version\n");
+            bitselect (ft->vehicleCategoriesLoadable, cmovemalitypes, cmovemalitypenum );
+
+
          } 
    
    

@@ -1,6 +1,10 @@
-//     $Id: sgstream.cpp,v 1.26 2000-08-05 13:38:36 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.27 2000-08-08 13:22:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/08/05 13:38:36  mbickel
+//      Rewrote height checking for moving units in and out of
+//        transports / building
+//
 //     Revision 1.25  2000/08/04 15:11:18  mbickel
 //      Moving transports costs movement for units inside
 //      refuelled vehicles now have full movement in the same turn
@@ -992,8 +996,8 @@ char* rotatepict ( void* image, int organgle )
 
 
 
-const int vehicle_version = 3;
-const int building_version = 2;
+const int vehicle_version = 4;
+const int building_version = 3;
 const int object_version = 1;
 const int terrain_version = 2;
 const int technology_version = 1;
@@ -1175,6 +1179,11 @@ pvehicletype   loadvehicletype( pnstream stream )
       fztn->autorepairrate = stream->readInt();
       if ( version <= 2 )
          stream->readInt( ); // dummy
+
+      if ( version >= 4 )
+         fztn->vehicleCategoriesLoadable = stream->readInt();
+      else
+         fztn->vehicleCategoriesLoadable = -1;
 
       if (fztn->name)
          stream->readpchar( &fztn->name );
@@ -1426,7 +1435,10 @@ void writevehicle( pvehicletype fztn, pnstream stream )
    else
       stream->writedata2( zero ); 
 
-   stream->writeInt(fztn->autorepairrate );
+   stream->writeInt( fztn->autorepairrate );
+
+   stream->writeInt( fztn->vehicleCategoriesLoadable );
+
 
    if (fztn->name)
       stream->writepchar( fztn->name );
@@ -1758,6 +1770,12 @@ pbuildingtype       loadbuildingtype( pnstream stream )
       pgbt->unitheight_forbidden = stream->readInt( );
       pgbt->externalloadheight = stream->readInt( );
 
+      if ( version >= 3)
+         pgbt->vehicleCategoriesLoadable = stream->readInt();
+      else
+         pgbt->vehicleCategoriesLoadable = -1;
+
+
       if ( version >= 2 ) {
          for ( x = 0; x < 4; x++ )
             for ( y = 0; y < 6; y++ )
@@ -1861,6 +1879,8 @@ void writebuildingtype ( pbuildingtype bld, pnstream stream )
    stream->writeInt ( bld->buildingheight );
    stream->writeInt ( bld->unitheight_forbidden );
    stream->writeInt ( bld->externalloadheight );
+
+   stream->writeInt ( bld->vehicleCategoriesLoadable );
 
    for ( x = 0; x < 4; x++ )
       for ( y = 0; y < 6; y++ )
