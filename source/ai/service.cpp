@@ -206,6 +206,8 @@ bool AI::ServiceOrder::execute1st ( pvehicle supplier )
       }
    }
 
+   if ( !dest.size() )
+      return false;
 
    AStar3D ast ( ai->getMap(), supplier, true, supplier->typ->maxSpeed()*6 );
    AStar3D::Path path;
