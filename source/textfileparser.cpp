@@ -491,18 +491,20 @@ void PropertyContainer::NamedIntProperty::evaluate_rw ( )
        valueToWrite += tags[property];
 }
 
-
-
-vector<void*> loadImage ( const ASCString& file, int num )
+void* getFieldMask()
 {
-   vector<void*> images;
-
    static void* mask = NULL;
    if ( !mask ) {
       int i ;
       tnfilestream s ( "largehex.raw", tnstream::reading );
       s.readrlepict ( &mask, false, & i );
    }
+   return mask;
+}
+
+vector<void*> loadImage ( const ASCString& file, int num )
+{
+   vector<void*> images;
 
    int imgwidth = fieldsizex;
    int imgheight = fieldsizey;
@@ -513,7 +515,9 @@ vector<void*> loadImage ( const ASCString& file, int num )
    else
       xsize = 1100;
 
-   int depth = pcxGetColorDepth ( file );
+   int pcxwidth;
+   int pcxheight;
+   int depth = pcxGetColorDepth ( file, &pcxwidth, &pcxheight );
    if ( depth > 8 ) {
       tvirtualdisplay vdp ( xsize, (num/10+1)*100, TCalpha, 32 );
       if ( num == 1 )
@@ -529,12 +533,12 @@ vector<void*> loadImage ( const ASCString& file, int num )
           tvirtualdisplay vdp ( 100, 100, 255 );
           void* img = convertimage ( tci, pal );
           putimage ( 0, 0, img );
-          putmask ( 0, 0, mask, 0 );
+          putmask ( 0, 0, getFieldMask(), 0 );
           getimage ( 0, 0, imgwidth-1, imgheight-1, img );
           images.push_back ( img );
       }
    } else {
-      tvirtualdisplay vdp ( xsize, (num/10+1)*100, 255, 8 );
+      tvirtualdisplay vdp ( max(xsize, pcxwidth), max( (num/10+1)*100, pcxheight), 255, 8 );
 
       if ( num == 1 )
          loadpcxxy ( file, 0, 0, 0, &imgwidth, &imgheight );
@@ -545,7 +549,7 @@ vector<void*> loadImage ( const ASCString& file, int num )
           int x1 = (i % 10) * 100;
           int y1 = (i / 10) * 100;
           if ( num > 1 )
-             putmask ( x1, y1, mask, 0 );
+             putmask ( x1, y1, getFieldMask(), 0 );
           void* img = new char[imagesize (0, 0, imgheight-1, imgwidth-1)];
           getimage ( x1, y1, x1+imgwidth-1, y1+imgheight-1, img );
           images.push_back ( img );

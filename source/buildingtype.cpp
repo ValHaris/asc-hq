@@ -26,6 +26,7 @@
 #include "graphicset.h"
 #include "gameoptions.h"
 #include "textfiletags.h"
+#include "basegfx.h"
 
 #include "errors.h"
 
@@ -383,6 +384,54 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
             }
             pc.closeBracket();
          }
+      pc.closeBracket();
+   } else {
+      pc.openBracket ( "Pictures");
+      if ( !pc.isReading() ) {
+         tvirtualdisplay vdd( construction_steps*500, 250 );
+         for ( int w = 0; w < cwettertypennum; w++ )
+            if ( weatherBits.test(w) ) {
+               for ( int c = 0; c < construction_steps; c++ )
+                  for ( int x = 0; x < 4; x++ )
+                     for ( int y = 0; y < 6; y++ )
+                        if ( w_picture[w][c][x][y] )
+                           putspriteimage ( 500*c + x * fielddistx + (y&1)*fielddisthalfx, y * fielddisty, w_picture[w][c][x][y] );
+
+               void* img = asc_malloc ( imagesize ( 0, 0, construction_steps*500-1, 250-1 ));
+               getimage ( 0, 0, construction_steps*500-1, 250-1, img );
+
+               pc.addImage ( weatherTags[w], img, extractFileName_withoutSuffix ( fileName )+weatherAbbrev[w]+".pcx" ).evaluate();
+
+               asc_free ( img );
+            }
+      } else {
+         for ( int w = 0; w < cwettertypennum; w++ )
+            if ( weatherBits.test(w) ) {
+               void* img = NULL;
+               pc.addImage ( weatherTags[w], img, extractFileName_withoutSuffix ( fileName )+weatherAbbrev[w]+".pcx" ).evaluate();
+               tvirtualdisplay ( construction_steps*500, 250 );
+               putimage ( 0, 0, img );
+               asc_free ( img );
+
+
+               for ( int c = 0; c < construction_steps; c++ )
+                  for ( int x = 0; x < 4; x++ )
+                     for ( int y = 0; y < 6; y++ )
+                        if ( w_picture[w][c][x][y] ) {
+                           void* img = asc_malloc ( imagesize ( 0, 0, fieldsizex, fieldsizey ));
+                           int xx = 500*c + x * fielddistx + (y&1)*fielddisthalfx;
+                           int yy = y * fielddisty;
+                           getimage ( xx, yy, xx + fieldsizex-1, yy + fieldsizey-1, img );
+                           tvirtualdisplay vd ( fieldsizex, fieldsizey );
+                           putimage ( 0, 0, img );
+                           putmask ( 0, 0, getFieldMask(), 0 );
+                           getimage ( 0, 0, fieldsizex-1, fieldsizey-1, img );
+                           w_picture[w][c][x][y] = img;
+                        }
+
+            }
+
+      }
       pc.closeBracket();
    }
 

@@ -241,5 +241,6 @@ class PropertyWritingContainer : public PropertyContainer {
          virtual void closeBracket();
 };
 
+extern void* getFieldMask();
 
 #endif

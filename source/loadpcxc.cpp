@@ -5,9 +5,12 @@
     which is called #loadpcx.cpp , but not used any more.
 */
 
-//     $Id: loadpcxc.cpp,v 1.16 2001-08-02 15:33:01 mbickel Exp $
+//     $Id: loadpcxc.cpp,v 1.17 2001-08-09 22:08:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2001/08/02 15:33:01  mbickel
+//      Completed text based file formats
+//
 //     Revision 1.15  2001/07/27 21:13:35  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -149,13 +152,20 @@ typedef struct tpcxheader{
 #pragma pack()
 
 
-int pcxGetColorDepth ( const ASCString& filename )
+int pcxGetColorDepth ( const ASCString& filename, int* width, int* height )
 {
    tnfilestream stream ( filename.c_str(), tnstream::reading );
 
    tpcxheader header;
 
    stream.readdata ( &header, sizeof(header) );
+
+   if ( width )
+      *width = header.xmax - header.xmin + 1 ;
+
+   if ( height )
+      *height = header.ymax - header.ymin + 1;
+
 
    return header.nplanes * header.bitsperpixel;
 }
