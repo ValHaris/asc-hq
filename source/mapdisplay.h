@@ -24,6 +24,63 @@
 #include "soundList.h"
 
 
+#include "paradialog.h"
+
+
+class MapDisplayPG: public Panel {
+      float zoom;
+      int fieldNumX, fieldNumY;
+      MapCoordinate offset;
+      Surface* surface;
+      int surfaceBorder;
+      
+      struct Icons {
+         Surface mapBackground;
+         Surface notVisible;
+      };
+      static Icons icons;
+      
+      void readData();
+      
+   protected:
+   
+      // Paragui stuff
+      void eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& dst);
+      
+      
+      //
+   
+   
+      void setNewZoom( float zoom );   
+      void paintTerrain( int playerView );
+      void fillSurface( int playerView );
+
+      // return the position of a field on the internal surface      
+      int getFieldPosX( int x, int y ) { 
+          if (y & 1 )   // even lines are shifted to the right
+             return surfaceBorder + fielddisthalfx + x * fielddistx;
+          else
+             return surfaceBorder + x * fielddistx;
+      };             
+      
+      // return the position of a field on the internal surface      
+      int getFieldPosY( int x, int y ) {
+          return surfaceBorder + y * fielddisty;
+      };    
+      
+      SPoint getFieldPos( int x, int y ) {
+          return SPoint( getFieldPosX(x,y), getFieldPosY(x,y));
+      };
+      
+      
+      
+   public:
+      MapDisplayPG ( PG_Widget *parent, const PG_Rect r );
+      
+
+};
+
+
 //! Determines if fields that have a temp value != 0 are being marked when displaying the map
 extern bool tempsvisible;
 

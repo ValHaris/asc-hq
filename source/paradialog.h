@@ -71,7 +71,7 @@ class ASC_PG_Dialog : public PG_Window {
     protected:
        void quitModalLoop(int i = 1) { quitModalLoopValue = i; };    
     public:
-       ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const char *windowtext, WindowFlags flags=DEFAULT, const char *style="Window", int heightTitlebar=25);
+       ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags=DEFAULT, const ASCString& style="Window", int heightTitlebar=25);
        int Run( );
        ~ASC_PG_Dialog();
 };
@@ -79,7 +79,7 @@ class ASC_PG_Dialog : public PG_Window {
 class Panel : public  PG_Window {
       
    public:  
-      Panel ( PG_Widget *parent, const PG_Rect &r=PG_Rect::null, const char *windowtext=NULL, WindowFlags flags=DEFAULT, const char *style="Panel", int heightTitlebar=0)
+      Panel ( PG_Widget *parent, const PG_Rect &r=PG_Rect::null, const ASCString& windowtext = "", WindowFlags flags=DEFAULT, const ASCString& style="Panel", int heightTitlebar=0)
            : PG_Window ( parent, r, windowtext, flags, style, heightTitlebar ) {};
            
 

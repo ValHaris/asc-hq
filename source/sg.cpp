@@ -1705,6 +1705,7 @@ void mainloopgeneralmousecheck ( void )
 
 void  mainloop2()
 {
+   (new MapDisplayPG( NULL, PG_Rect(10,10,400,300)))->Show();
    getPGApplication().Run();
 }
 
@@ -2241,6 +2242,7 @@ int main(int argc, char *argv[] )
 
    ASC_PG_App app ( "asc_dlg" );
 
+  
    int flags = SDL_SWSURFACE;
    if ( fullscreen )
       flags |= SDL_FULLSCREEN;

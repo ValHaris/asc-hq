@@ -111,11 +111,17 @@ TerrainType::TerrainType()
 
 void      TerrainType::Weather::paint ( SPoint pos )
 {
-   if ( bi_pict == -1 )
-      getActiveSurface().Blit ( image, pos);
-   else 
-      getActiveSurface().Blit ( GraphicSetManager::Instance().getPic( bi_pict), pos);
+   paint( getActiveSurface(), pos );
 }
+
+void      TerrainType::Weather::paint ( Surface& s, SPoint pos )
+{
+   if ( bi_pict == -1 )
+      s.Blit ( image, pos);
+   else 
+      s.Blit ( GraphicSetManager::Instance().getPic( bi_pict), pos );
+}
+
 
 const FieldQuickView* TerrainType::Weather::getQuickView()
 {

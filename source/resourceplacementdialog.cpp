@@ -90,7 +90,7 @@ ResourcePlacementDialog::ResourcePlacementDialog( ) :
 bool ResourcePlacementDialog::buttonEvent( PG_Button* button ) 
 {
            quitModalLoop(1);
-           ResourcePlacement rp (*actmap , atof(fuelRoughnessWidget->GetText()), atof(materialRoughnessWidget->GetText()), atoi(fuelOffsetWidget->GetText()), atoi(fuelOffsetWidget->GetText()));
+           ResourcePlacement rp (*actmap , atof(fuelRoughnessWidget->GetText().c_str()), atof(materialRoughnessWidget->GetText().c_str()), atoi(fuelOffsetWidget->GetText().c_str()), atoi(fuelOffsetWidget->GetText().c_str()));
            rp.placeResources();
            return true;
 }

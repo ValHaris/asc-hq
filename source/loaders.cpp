@@ -50,6 +50,7 @@
 #include "textfileparser.h"
 #include "itemrepository.h"
 #include "prehistoricevents.h"
+#include "gamemap.h"
 
 #ifdef sgmain
 # include "ai/ai.h"

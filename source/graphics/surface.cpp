@@ -171,10 +171,10 @@ void Surface::read ( tnstream& stream )
 
       stream.readdata( q, hd.size);  // endian ok ?
 
-      void* uncomp = uncompress_rlepict ( pnter );
+      char* uncomp = (char*) uncompress_rlepict ( pnter );
       delete[] pnter;
 
-      SetSurface( SDL_CreateRGBSurfaceFrom(uncomp, hd.x+1, hd.y+1, 8, hd.x+1, 0, 0, 0, 0 ));
+      SetSurface( SDL_CreateRGBSurfaceFrom(uncomp+4, hd.x+1, hd.y+1, 8, hd.x+1, 0, 0, 0, 0 ));
       SetColorKey( SDL_SRCCOLORKEY, 255 );
       assignDefaultPalette();
    }

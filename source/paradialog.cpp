@@ -169,7 +169,7 @@ int ASC_PG_App::Run ( )
 
 
 
-ASC_PG_Dialog :: ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const char *windowtext, WindowFlags flags, const char *style, int heightTitlebar )
+ASC_PG_Dialog :: ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags, const ASCString& style, int heightTitlebar )
        :PG_Window ( parent, r, windowtext, flags, style, heightTitlebar ),
         quitModalLoopValue ( 0 )
 {

@@ -21,6 +21,10 @@
  ***************************************************************************/
 
 
+#include <cmath>
+
+#include "global.h"
+
 #include "mapdisplay.h"
 #include "vehicletype.h"
 #include "buildingtype.h"
@@ -42,7 +46,234 @@
 #endif
 
 
-// #include "paradialog.h"
+
+MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
+      : Panel ( parent, r ) ,
+      zoom( 0.75 ),
+      offset(0,0),
+      surface(NULL),
+      surfaceBorder(20)
+{
+   setNewZoom( zoom );
+   readData();
+}
+
+
+void MapDisplayPG::setNewZoom( float zoom )
+{
+
+   this->zoom = zoom;
+
+   fieldNumX = int( ceil(float(Width())  / zoom / fielddistx) );
+   fieldNumY = int( ceil(float(Height()) / zoom / fielddisty) );
+   if ( fieldNumY & 1 )
+      fieldNumY += 1;
+
+   delete surface;
+   surface = new Surface( Surface::createSurface ( fieldNumX * fielddistx + 2 * surfaceBorder, (fieldNumY - 1) * fielddisty + fieldysize +  2 * surfaceBorder ));
+}
+
+MapDisplayPG::Icons MapDisplayPG::icons;
+
+
+void MapDisplayPG::readData()
+{
+   if ( !icons.mapBackground.valid() ) {
+
+      {
+         tnfilestream stream ("mapbkgr.raw", tnstream::reading);
+         icons.mapBackground.read( stream );
+      } {
+         tnfilestream stream ("hexinvis.raw",tnstream::reading);
+         icons.notVisible.read( stream );
+      }
+   }
+
+}
+
+
+void MapDisplayPG::fillSurface( int playerView )
+{
+   paintTerrain ( playerView );
+}
+
+
+void MapDisplayPG::paintTerrain( int playerView )
+{
+   int x1 = 0;
+   int y1 = 0;
+   int x2 = fieldNumX;
+   int y2 = fieldNumY;
+
+   for (int y= y1; y < y2; ++y )
+      for ( int x=x1; x < x2; ++x ) {
+         pfield fld = getfield ( offset.x + x, offset.y + y );
+         if ( fld ) {
+            if ( fieldVisibility ( fld, playerView ) != visible_not )
+               fld->typ->paint ( *surface, getFieldPos(x,y) );
+
+         } else
+            surface->Blit( icons.mapBackground, getFieldPos(x,y) );
+      } 
+
+
+   for (int pass = 0; pass < 10 ;pass++ ) {
+      int binaryheight = 0;
+      if ( pass > 0 )
+         binaryheight = 1 << ( pass-1);
+
+      for (int y= y1; y < y2; ++y )
+         for ( int x=x1; x < x2; ++x ) {
+            SPoint pos = getFieldPos(x,y);
+            pfield fld = getfield ( offset.x + x, offset.y + y );
+            if ( fld ) {
+               VisibilityStates visibility = fieldVisibility ( fld, playerView );
+
+               if ( visibility > visible_ago ) {
+
+                  /* display buildings */
+                  if ( fld->building  &&  (fld->building->typ->buildingheight & binaryheight) )
+                     if ((visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerView*8 ))
+                        fld->building->paintSingleField( *surface, pos, fld->building->getLocalCoordinate( MapCoordinate(offset.x + x, offset.y + y)));
+
+
+                  /* display units */
+                  if ( fld->vehicle  &&  (fld->vehicle->height == binaryheight))
+                     if ( ( fld->vehicle->color == playerView * 8 ) || (visibility == visible_all) || ((fld->vehicle->height >= chschwimmend) && (fld->vehicle->height <= chhochfliegend)))
+                        fld->vehicle->paint( *surface, pos );
+
+               }
+
+               // display objects
+               for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ ) {
+                  int h = o->typ->imageHeight;
+                  if ( visibility > visible_ago || (o->typ->visibleago && visibility >= visible_ago ))
+                     if (  h >= pass*30 && h < 30 + pass*30 )
+                        o->display ( *surface, pos, fld->getweather() );
+               }
+
+
+
+
+               if ( visibility > visible_ago ) {
+                  /* display mines */
+                  /*
+                    if ( visibility == visible_all )
+                         if ( !fld->mines.empty() && pass == 3 ) {
+                            if ( fld->mines.begin()->type != cmmooredmine )
+                               putspriteimage( r, yp, getmineadress(fld->mines.begin()->type) );
+                            else
+                               putpicturemix ( r, yp, getmineadress(fld->mines.begin()->type, 1 ) ,  0, (char*) colormixbuf );
+                            #ifdef karteneditor
+                            bar ( r + 5 , yp +5, r + 15 , yp +10, 20 + fld->mineowner() * 8 );
+                            #endif
+                         }
+                   */
+
+
+                  /* display marked fields */
+                  /*
+                      if ( pass == 8 ) {
+
+                          if ( fld->a.temp && tempsvisible )
+                             putspriteimage(  r, yp, cursor.markfield);
+                          else
+                             if ( fld->a.temp2 && tempsvisible )
+                                putspriteimage(  r, yp, xlatpict ( &xlattables.a.dark2 , cursor.markfield));
+                      }
+                      */
+
+               } else {
+                  if (visibility == visible_ago) {
+                     if ( fld->building  &&  (log2(fld->building->typ->buildingheight)+1 == pass ) )
+                        if ((visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerView*8 ))
+                           fld->building->paintSingleField( *surface, pos, fld->building->getLocalCoordinate( MapCoordinate(offset.x + x, offset.y + y)));
+
+                  }
+               }
+
+               /* display resources */
+               /*
+               if ( pass == 8 && b >= visible_ago) {
+                  #ifndef karteneditor
+                  if ( fld->resourceview && (fld->resourceview->visible & ( 1 << playerview) ) ){
+                     if ( showresources == 1 ) {
+                        showtext2( strrr ( fld->resourceview->materialvisible[playerview] ) , r + 10 , yp +10 );
+                        showtext2( strrr ( fld->resourceview->fuelvisible[playerview] )     , r + 10 , yp +20 );
+                     } else
+                        if ( showresources == 2 ) {
+                           if ( fld->resourceview->materialvisible[playerview] )
+                              bar ( r + 10 , yp +2, r + 10 + fld->resourceview->materialvisible[playerview] / 10, yp +6, 23 );
+
+                           if ( fld->resourceview->fuelvisible[playerview] )
+                              bar ( r + 10 , yp + 14 -2, r + 10 + fld->resourceview->fuelvisible[playerview] / 10, yp +14 +2 , 191 );
+                        }
+                  }
+                  #else
+                  if ( showresources == 1 ) {
+                     showtext2( strrr ( fld->material ) , r + 10 , yp );
+                     showtext2( strrr ( fld->fuel )     , r + 10 , yp + 10 );
+                  }
+                  else if ( showresources == 2 ) {
+                     if ( fld->material )
+                        bar ( r + 10 , yp -2, r + 10 + fld->material / 10, yp +2, 23 );
+                     if ( fld->fuel )
+                        bar ( r + 10 , yp +10 -2, r + 10 + fld->fuel / 10, yp +10 +2 , 191 );
+                  }
+                 #endif
+               }
+               */
+
+
+
+
+               // display view obstructions
+               if ( pass == 9 ) {
+                  if ( visibility == visible_ago) {
+                     /*
+                                     // putspriteimage( r + unitrightshift , yp + unitdownshift , view.va8);
+                                     putshadow( r, yp, icons.view.nv8, &xlattables.a.dark2 );
+                                     if ( fld->a.temp && tempsvisible )
+                                        putspriteimage(  r, yp, cursor.markfield);
+                                     else
+                                        if ( fld->a.temp2 && tempsvisible )
+                                           putspriteimage(  r, yp, xlatpict ( &xlattables.a.dark2 , cursor.markfield));
+                      
+                     */
+                  } else
+                     if ( visibility == visible_not) {
+                        surface->Blit( icons.notVisible, pos );
+                        /*
+                                        if ( ( fld->a.temp || fld->a.temp2 ) && tempsvisible )
+                                              putspriteimage(  r, yp, cursor.markfield);
+                        */
+
+                     }
+
+               }
+            }
+
+         }
+
+      // displayadditionalunits ( pass );
+   }
+}
+
+
+
+
+void MapDisplayPG::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& dst)
+{
+   fillSurface(0);
+
+
+   PG_Rect icon_src;
+   PG_Rect icon_dst;
+   GetClipRects(icon_src, icon_dst, *this);
+   PG_Widget::eventBlit(surface->getBaseSurface(), icon_src, icon_dst);
+}
+
+
 
 bool tempsvisible;
 
@@ -50,18 +281,18 @@ extern void repaintdisplay();
 
 int showresources = 0;
 
-   int lockdisplaymap = 0;
+int lockdisplaymap = 0;
 
-   MapDisplay        defaultMapDisplay;
-   tpaintmapborder* mapborderpainter = NULL;
+MapDisplay        defaultMapDisplay;
+tpaintmapborder* mapborderpainter = NULL;
 
 
 int vfbscanlinelength;
 
 
- int vfbstartdif;
- int scrstartdif;
- int scrstartpage;
+int vfbstartdif;
+int scrstartdif;
+int scrstartpage;
 
 #define cursordownshift 0
 
@@ -135,11 +366,13 @@ void         initMapDisplay( )
    if ( x == -1) {
       game_x = ( agmp->resolutionx - 225 ) / fielddistx;
       maped_x = ( agmp->resolutionx - 290 ) / fielddistx;
-  #ifdef sgmain
+#ifdef sgmain
+
       x = game_x;
-  #else
+#else
+
       x = maped_x;
-  #endif
+#endif
 
    }
 
@@ -160,11 +393,13 @@ void         initMapDisplay( )
 
    tempsvisible = true;
    cursor.color = 0;
-   #ifdef sgmain
-    idisplaymap.init( scrleftspace, 21, agmp->resolutionx - 215, agmp->resolutiony - 55 );
-   #else
-    idisplaymap.init( scrleftspace, 21, agmp->resolutionx - 295, agmp->resolutiony - 40 );
-   #endif
+#ifdef sgmain
+
+   idisplaymap.init( scrleftspace, 21, agmp->resolutionx - 215, agmp->resolutiony - 55 );
+#else
+
+   idisplaymap.init( scrleftspace, 21, agmp->resolutionx - 295, agmp->resolutiony - 40 );
+#endif
 }
 
 
@@ -219,13 +454,13 @@ int   getfieldundermouse ( int* xf, int* yf )
                k++;
 
 
-           /*
-            if ( pw[0] >= xd  && pw[1] >= yd )
-               for ( int xxx = 0; xxx <= pw[0]; xxx++ )
-                  for ( int yyy = 0; yyy <= pw[1]; yyy++ )
-                     if ( pc[ yyy * ( pw[0] + 1) + xxx] != 255 )
-                        putpixel ( xp + xxx, yp + yyy, 255 );
-           */
+            /*
+             if ( pw[0] >= xd  && pw[1] >= yd )
+                for ( int xxx = 0; xxx <= pw[0]; xxx++ )
+                   for ( int yyy = 0; yyy <= pw[1]; yyy++ )
+                      if ( pc[ yyy * ( pw[0] + 1) + xxx] != 255 )
+                         putpixel ( xp + xxx, yp + yyy, 255 );
+            */
 
             if ( k ) {
                *xf = i;
@@ -307,14 +542,17 @@ int ZoomLevel :: getzoomlevel ( void )
 {
    if ( !queried ) {
       int mz;
-     #ifdef sgmain
+#ifdef sgmain
+
       mz = CGameOptions::Instance()->mapzoom;
-     #else
+#else
+
       mz = CGameOptions::Instance()->mapzoomeditor;
-     #endif
+#endif
+
       if ( mz >= getminzoom()  &&
-           mz <= getmaxzoom() )
-          zoom = mz;
+            mz <= getmaxzoom() )
+         zoom = mz;
       queried = 1;
    }
    return zoom;
@@ -324,22 +562,23 @@ void ZoomLevel :: setzoomlevel ( int newzoom )
 {
    zoom = newzoom;
    idisplaymap.setnewsize ( zoom );
-  #ifdef sgmain
+#ifdef sgmain
+
    CGameOptions::Instance()->mapzoom = newzoom;
-  #else
+#else
+
    CGameOptions::Instance()->mapzoomeditor = newzoom;
-  #endif
+#endif
+
    CGameOptions::Instance()->setChanged();
 }
 
 
 void tgeneraldisplaymapbase :: setmouseinvisible ( void )
-{
-}
+{}
 
 void tgeneraldisplaymapbase :: restoremouse ( void )
-{
-}
+{}
 
 tgeneraldisplaymapbase :: tgeneraldisplaymapbase ( void )
 {
@@ -417,21 +656,21 @@ void tgeneraldisplaymap :: setnewsize ( int _zoom )
 
 int tdisplaymap :: getfieldposx ( int x, int y )
 {
-     if ( x < 0 )
-        x = 0;
+   if ( x < 0 )
+      x = 0;
 
-     if ( y & 1 )   /*  gerade reihennummern  */
-        return windowx1 + (fielddisthalfx + x * fielddistx ) * zoom / 100;
-     else
-        return windowx1 + ( x * fielddistx ) * zoom / 100;
+   if ( y & 1 )   /*  gerade reihennummern  */
+      return windowx1 + (fielddisthalfx + x * fielddistx ) * zoom / 100;
+   else
+      return windowx1 + ( x * fielddistx ) * zoom / 100;
 }
 
 
 int tdisplaymap :: getfieldposy ( int x, int y )
 {
-     if ( y < 0 )
-        y = 0;
-     return windowy1  + (y * fielddisty) * zoom / 100;
+   if ( y < 0 )
+      y = 0;
+   return windowy1  + (y * fielddisty) * zoom / 100;
 }
 
 
@@ -484,7 +723,7 @@ void tdisplaymap :: init ( int x1, int y1, int x2, int y2 )
 
    vfb.parameters.surface = new Surface ( Surface::CreateSurface( vfb.address, dispmapdata.vfbwidth, dispmapdata.vfbheight, 8, dispmapdata.vfbwidth ) );
    vfb.parameters.surface->assignDefaultPalette();
-   
+
 }
 
 
@@ -506,51 +745,51 @@ int  tgeneraldisplaymap :: getscreenxsize( int target )
 
 int  tgeneraldisplaymap :: getscreenysize( int target )
 {
-      if ( actmap && dispmapdata.numberoffieldsy >= actmap->ysize && actmap->ysize > 0 )
-         return actmap->ysize;
-      else
-         return dispmapdata.numberoffieldsy;
+   if ( actmap && dispmapdata.numberoffieldsy >= actmap->ysize && actmap->ysize > 0 )
+      return actmap->ysize;
+   else
+      return dispmapdata.numberoffieldsy;
 }
 
 
 void tgeneraldisplaymap :: pnt_terrain ( void )
 {
-    if ( playerview < 0 )
-       displaymessage("tgeneraldisplaymap :: pnt_terrain ; playerview < 0", 2 );
+   if ( playerview < 0 )
+      displaymessage("tgeneraldisplaymap :: pnt_terrain ; playerview < 0", 2 );
 
    *agmp = vfb.parameters;
 
-    for (int y=dispmapdata.disp.y1; y < dispmapdata.disp.y2; y++ ) {
-       for ( int x=dispmapdata.disp.x1; x < dispmapdata.disp.x2; x++ ) {
-          pfield fld = getfield ( actmap->xpos + x, actmap->ypos + y );
-          if ( fld ) {
-             int b = fieldVisibility ( fld, playerview );
+   for (int y=dispmapdata.disp.y1; y < dispmapdata.disp.y2; y++ ) {
+      for ( int x=dispmapdata.disp.x1; x < dispmapdata.disp.x2; x++ ) {
+         pfield fld = getfield ( actmap->xpos + x, actmap->ypos + y );
+         if ( fld ) {
+            int b = fieldVisibility ( fld, playerview );
 
-             if ( b != visible_not ) {
-                int yp;
-                int r;
-                if (y & 1 )   /*  ungerade reihennummern  */
-                   r = vfbleftspace + fielddisthalfx + x * fielddistx;
-                else
-                   r = vfbleftspace + x * fielddistx;
+            if ( b != visible_not ) {
+               int yp;
+               int r;
+               if (y & 1 )   /*  ungerade reihennummern  */
+                  r = vfbleftspace + fielddisthalfx + x * fielddistx;
+               else
+                  r = vfbleftspace + x * fielddistx;
 
-                yp = vfbtopspace + y * fielddisty;
-                fld->typ->paint ( SPoint(r, yp) );
-             }
-          } else {
-             int yp;
-             int r;
-             if (y & 1 )   /*  ungerade reihennummern  */
-                r = vfbleftspace + fielddisthalfx + x * fielddistx;
-             else
-                r = vfbleftspace + x * fielddistx;
+               yp = vfbtopspace + y * fielddisty;
+               fld->typ->paint ( SPoint(r, yp) );
+            }
+         } else {
+            int yp;
+            int r;
+            if (y & 1 )   /*  ungerade reihennummern  */
+               r = vfbleftspace + fielddisthalfx + x * fielddistx;
+            else
+               r = vfbleftspace + x * fielddistx;
 
-             yp = vfbtopspace + y * fielddisty;
-             putspriteimage ( r, yp, icons.mapbackground );
-          }
+            yp = vfbtopspace + y * fielddisty;
+            putspriteimage ( r, yp, icons.mapbackground );
+         }
 
-       } /* endfor */
-    } /* endfor */
+      } /* endfor */
+   } /* endfor */
 }
 
 void tdisplaymap :: setnewsize ( int _zoom )
@@ -575,75 +814,77 @@ void tdisplaymap :: calcdisplaycache( void )
 
    int last = 0;
    for ( int xp = 0; xp < sz; xp++ ) {
-       int pos = xp * 100 / zoom ;
-       int n = pos - last - 1;
-       if ( n < 0 )
-          n = 0;
-       copybufsteps[ xp ] = n;
-       copybufstepwidth[ xp ] = n * dispmapdata.vfbwidth;
-       last = pos;
-       if ( xp < window.xsize )
-          vfbwidthused = last;
+      int pos = xp * 100 / zoom ;
+      int n = pos - last - 1;
+      if ( n < 0 )
+         n = 0;
+      copybufsteps[ xp ] = n;
+      copybufstepwidth[ xp ] = n * dispmapdata.vfbwidth;
+      last = pos;
+      if ( xp < window.xsize )
+         vfbwidthused = last;
    }
 }
 
 void tdisplaymap :: cp_buf ( void )
 {
 
-    if ( hgmp->windowstatus != 100 ) {
-    } else {
+   if ( hgmp->windowstatus != 100 ) {}
+   else {
 
 
-       struct {
-          int src;
-          int dst;
-          int x;
-          int y;
-          int* steps;
-          int srcdif;
-          int dstdif;
-          int* vfbsteps;
-       } parm;
+      struct {
+         int src;
+         int dst;
+         int x;
+         int y;
+         int* steps;
+         int srcdif;
+         int dstdif;
+         int* vfbsteps;
+      }
+      parm;
 
-       parm.dst = hgmp->linearaddress + windowx1 + windowy1 * hgmp->bytesperscanline ;
-       parm.src = agmp->linearaddress + vfbstartdif;
-       parm.x = window.xsize;
-       parm.y = window.ysize;
-       parm.steps = copybufsteps;
-       parm.srcdif = agmp->bytesperscanline - vfbwidthused - 1;
-       parm.dstdif = hgmp->bytesperscanline - window.xsize;
-       parm.vfbsteps = copybufstepwidth;
+      parm.dst = hgmp->linearaddress + windowx1 + windowy1 * hgmp->bytesperscanline ;
+      parm.src = agmp->linearaddress + vfbstartdif;
+      parm.x = window.xsize;
+      parm.y = window.ysize;
+      parm.steps = copybufsteps;
+      parm.srcdif = agmp->bytesperscanline - vfbwidthused - 1;
+      parm.dstdif = hgmp->bytesperscanline - window.xsize;
+      parm.vfbsteps = copybufstepwidth;
 
-       copyvfb2displaymemory_zoom ( &parm.src );
+      copyvfb2displaymemory_zoom ( &parm.src );
 
-    }
+   }
 }
 
 
 void tdisplaymap :: cp_buf ( int x1, int y1, int x2, int y2 )
 {
 
-       struct {
-          int src;
-          int dst;
-          int x;
-          int y;
-          int* steps;
-          int srcdif;
-          int dstdif;
-          int* vfbsteps;
-       } parm;
+   struct {
+      int src;
+      int dst;
+      int x;
+      int y;
+      int* steps;
+      int srcdif;
+      int dstdif;
+      int* vfbsteps;
+   }
+   parm;
 
-       parm.dst = hgmp->linearaddress + windowx1 + windowy1 * hgmp->bytesperscanline ;
-       parm.src = agmp->linearaddress + vfbstartdif;
-       parm.x = window.xsize;
-       parm.y = window.ysize;
-       parm.steps = copybufsteps;
-       parm.srcdif = agmp->bytesperscanline - vfbwidthused - 1;
-       parm.dstdif = hgmp->bytesperscanline - window.xsize;
-       parm.vfbsteps = copybufstepwidth;
+   parm.dst = hgmp->linearaddress + windowx1 + windowy1 * hgmp->bytesperscanline ;
+   parm.src = agmp->linearaddress + vfbstartdif;
+   parm.x = window.xsize;
+   parm.y = window.ysize;
+   parm.steps = copybufsteps;
+   parm.srcdif = agmp->bytesperscanline - vfbwidthused - 1;
+   parm.dstdif = hgmp->bytesperscanline - window.xsize;
+   parm.vfbsteps = copybufstepwidth;
 
-       copyvfb2displaymemory_zoom ( &parm.src, getfieldposx ( x1-2, y1-2), getfieldposy( x1-2, y1-2 ), getfieldposx ( x2, y2) + getfieldsizex(), getfieldposy( x2, y2 ) + getfieldsizex());
+   copyvfb2displaymemory_zoom ( &parm.src, getfieldposx ( x1-2, y1-2), getfieldposy( x1-2, y1-2 ), getfieldposx ( x2, y2) + getfieldsizex(), getfieldposy( x2, y2 ) + getfieldsizex());
 }
 
 
@@ -662,8 +903,8 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
    playerview = actmap->playerView;
 
-    if ( playerview < 0 )
-       displaymessage("tgeneraldisplaymap :: pnt_main ; playerview < 0", 2 );
+   if ( playerview < 0 )
+      displaymessage("tgeneraldisplaymap :: pnt_main ; playerview < 0", 2 );
 
    int b;
    pfield fld;
@@ -699,100 +940,103 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
                   /* display buildings */
 
-                   if ( fld->building  &&  (log2(fld->building->typ->buildingheight)+1 == hgt ) )
-                        if ((b == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerview*8 ))
-                           fld->building->paintSingleField( getActiveSurface(), SPoint( r, yp), fld->building->getLocalCoordinate( MapCoordinate(actmap->xpos + x, actmap->ypos + y)));
+                  if ( fld->building  &&  (log2(fld->building->typ->buildingheight)+1 == hgt ) )
+                     if ((b == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerview*8 ))
+                        fld->building->paintSingleField( getActiveSurface(), SPoint( r, yp), fld->building->getLocalCoordinate( MapCoordinate(actmap->xpos + x, actmap->ypos + y)));
 
 
                   /* display units */
-                   if ( fld->vehicle  &&  (fld->vehicle->height == binaryheight))
-                      if ( ( fld->vehicle->color == playerview * 8 ) || (b == visible_all) || ((fld->vehicle->height >= chschwimmend) && (fld->vehicle->height <= chhochfliegend)))
-                         fld->vehicle->paint( getActiveSurface(), SPoint(r, yp));
+                  if ( fld->vehicle  &&  (fld->vehicle->height == binaryheight))
+                     if ( ( fld->vehicle->color == playerview * 8 ) || (b == visible_all) || ((fld->vehicle->height >= chschwimmend) && (fld->vehicle->height <= chhochfliegend)))
+                        fld->vehicle->paint( getActiveSurface(), SPoint(r, yp));
 
-                }
+               }
 
-                  /* display streets, railroads and pipelines */
-                for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ ) {
-                   int h = o->typ->imageHeight;
-                   if (b > visible_ago || o->typ->visibleago )
-                      if (  h >= hgt*30 && h < 30 + hgt*30 )
-                         o->display ( getActiveSurface(), SPoint(r, yp), fld->getweather() );
-                }
+               /* display streets, railroads and pipelines */
+               for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ ) {
+                  int h = o->typ->imageHeight;
+                  if (b > visible_ago || o->typ->visibleago )
+                     if (  h >= hgt*30 && h < 30 + hgt*30 )
+                        o->display ( getActiveSurface(), SPoint(r, yp), fld->getweather() );
+               }
 
 
 
 
                if (b > visible_ago ) {
                   /* display mines */
-                      if ( b == visible_all )
-                           if ( !fld->mines.empty() && hgt == 3 ) {
-                              if ( fld->mines.begin()->type != cmmooredmine )
-                                 putspriteimage( r, yp, getmineadress(fld->mines.begin()->type) );
-                              else
-                                 putpicturemix ( r, yp, getmineadress(fld->mines.begin()->type, 1 ) ,  0, (char*) colormixbuf );
-                              #ifdef karteneditor
-                              bar ( r + 5 , yp +5, r + 15 , yp +10, 20 + fld->mineowner() * 8 );
-                              #endif
-                           }
+                  if ( b == visible_all )
+                     if ( !fld->mines.empty() && hgt == 3 ) {
+                        if ( fld->mines.begin()->type != cmmooredmine )
+                           putspriteimage( r, yp, getmineadress(fld->mines.begin()->type) );
+                        else
+                           putpicturemix ( r, yp, getmineadress(fld->mines.begin()->type, 1 ) ,  0, (char*) colormixbuf );
+#ifdef karteneditor
+
+                        bar ( r + 5 , yp +5, r + 15 , yp +10, 20 + fld->mineowner() * 8 );
+#endif
+
+                     }
 
 
                   /* display marked fields */
-                      if ( hgt == 8 ) {
+                  if ( hgt == 8 ) {
 
-                          if ( fld->a.temp && tempsvisible )
-                             putspriteimage(  r, yp, cursor.markfield);
-                          else
-                             if ( fld->a.temp2 && tempsvisible )
-                                putspriteimage(  r, yp, xlatpict ( &xlattables.a.dark2 , cursor.markfield));
+                     if ( fld->a.temp && tempsvisible )
+                        putspriteimage(  r, yp, cursor.markfield);
+                     else
+                        if ( fld->a.temp2 && tempsvisible )
+                           putspriteimage(  r, yp, xlatpict ( &xlattables.a.dark2 , cursor.markfield));
 
 
-                          #ifdef showtempnumber
-                          activefontsettings.color = white;
-                          showtext2(strrr( fld->temp ), r + 5, yp + 5 );
-                          activefontsettings.color = black;
-                          showtext2(strrr( fld->temp2 ), r + 5, yp + 20 );
-                          #endif
+#ifdef showtempnumber
 
-                      }
+                     activefontsettings.color = white;
+                     showtext2(strrr( fld->temp ), r + 5, yp + 5 );
+                     activefontsettings.color = black;
+                     showtext2(strrr( fld->temp2 ), r + 5, yp + 20 );
+#endif
+
+                  }
 
                } else {
                   if (b == visible_ago) {
                      if ( fld->building  &&  (log2(fld->building->typ->buildingheight)+1 == hgt ) )
                         if ((b == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerview*8 ))
                            fld->building->paintSingleField( getActiveSurface(), SPoint( r, yp), fld->building->getLocalCoordinate( MapCoordinate(actmap->xpos + x, actmap->ypos + y)));
-                  
+
                   }
                }
 
-              /* display resources */
-              if ( hgt == 8 && b >= visible_ago) {
-                 #ifndef karteneditor
-                 if ( fld->resourceview && (fld->resourceview->visible & ( 1 << playerview) ) ){
-                    if ( showresources == 1 ) {
-                       showtext2( strrr ( fld->resourceview->materialvisible[playerview] ) , r + 10 , yp +10 );
-                       showtext2( strrr ( fld->resourceview->fuelvisible[playerview] )     , r + 10 , yp +20 );
-                    } else
-                       if ( showresources == 2 ) {
-                          if ( fld->resourceview->materialvisible[playerview] )
-                             bar ( r + 10 , yp +2, r + 10 + fld->resourceview->materialvisible[playerview] / 10, yp +6, 23 );
+               /* display resources */
+               if ( hgt == 8 && b >= visible_ago) {
+#ifndef karteneditor
+                  if ( fld->resourceview && (fld->resourceview->visible & ( 1 << playerview) ) ) {
+                     if ( showresources == 1 ) {
+                        showtext2( strrr ( fld->resourceview->materialvisible[playerview] ) , r + 10 , yp +10 );
+                        showtext2( strrr ( fld->resourceview->fuelvisible[playerview] )     , r + 10 , yp +20 );
+                     } else
+                        if ( showresources == 2 ) {
+                           if ( fld->resourceview->materialvisible[playerview] )
+                              bar ( r + 10 , yp +2, r + 10 + fld->resourceview->materialvisible[playerview] / 10, yp +6, 23 );
 
-                          if ( fld->resourceview->fuelvisible[playerview] )
-                             bar ( r + 10 , yp + 14 -2, r + 10 + fld->resourceview->fuelvisible[playerview] / 10, yp +14 +2 , 191 );
-                       }
-                 }
-                 #else
-                 if ( showresources == 1 ) {
-                    showtext2( strrr ( fld->material ) , r + 10 , yp );
-                    showtext2( strrr ( fld->fuel )     , r + 10 , yp + 10 );
-                 }
-                 else if ( showresources == 2 ) {
-                    if ( fld->material )
-                       bar ( r + 10 , yp -2, r + 10 + fld->material / 10, yp +2, 23 );
-                    if ( fld->fuel )
-                       bar ( r + 10 , yp +10 -2, r + 10 + fld->fuel / 10, yp +10 +2 , 191 );
-                 }
-                #endif
-              }
+                           if ( fld->resourceview->fuelvisible[playerview] )
+                              bar ( r + 10 , yp + 14 -2, r + 10 + fld->resourceview->fuelvisible[playerview] / 10, yp +14 +2 , 191 );
+                        }
+                  }
+#else
+                  if ( showresources == 1 ) {
+                     showtext2( strrr ( fld->material ) , r + 10 , yp );
+                     showtext2( strrr ( fld->fuel )     , r + 10 , yp + 10 );
+                  } else if ( showresources == 2 ) {
+                     if ( fld->material )
+                        bar ( r + 10 , yp -2, r + 10 + fld->material / 10, yp +2, 23 );
+                     if ( fld->fuel )
+                        bar ( r + 10 , yp +10 -2, r + 10 + fld->fuel / 10, yp +10 +2 , 191 );
+                  }
+#endif
+
+               }
 
             }
          }
@@ -816,7 +1060,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
             yp = vfbtopspace + y * fielddisty;
 
             if (b == visible_ago) {
-              #if 0
+#if 0
                for (int hgt = 0; hgt < 9 ;hgt++ ) {
                   /*
                   int binaryheight = 0;
@@ -824,46 +1068,48 @@ void tgeneraldisplaymap :: pnt_main ( void )
                      binaryheight = 1 << ( hgt-1);
                   */
 
-                   /* display objects */
-                   // if ( !fld->building )
-                      for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ )
-                         if ( o->typ->visibleago ) {
-                            int h = o->typ->height;
-                            if (  h >= hgt*30 && h < 30 + hgt*30 )
-                               o->display ( r - streetleftshift , yp - streettopshift, fld->getweather() );
-                         }
-                }
-              #endif
+                  /* display objects */
+                  // if ( !fld->building )
+                  for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ )
+                     if ( o->typ->visibleago ) {
+                        int h = o->typ->height;
+                        if (  h >= hgt*30 && h < 30 + hgt*30 )
+                           o->display ( r - streetleftshift , yp - streettopshift, fld->getweather() );
+                     }
+               }
+#endif
 
-                // putspriteimage( r + unitrightshift , yp + unitdownshift , view.va8);
-                putshadow( r, yp, icons.view.nv8, &xlattables.a.dark2 );
-                if ( fld->a.temp && tempsvisible )
-                   putspriteimage(  r, yp, cursor.markfield);
-                else
-                   if ( fld->a.temp2 && tempsvisible )
-                      putspriteimage(  r, yp, xlatpict ( &xlattables.a.dark2 , cursor.markfield));
+               // putspriteimage( r + unitrightshift , yp + unitdownshift , view.va8);
+               putshadow( r, yp, icons.view.nv8, &xlattables.a.dark2 );
+               if ( fld->a.temp && tempsvisible )
+                  putspriteimage(  r, yp, cursor.markfield);
+               else
+                  if ( fld->a.temp2 && tempsvisible )
+                     putspriteimage(  r, yp, xlatpict ( &xlattables.a.dark2 , cursor.markfield));
 
-                #ifdef showtempnumber
-                activefontsettings.color = white;
-                showtext2(strrr( fld->temp ), r + 5, yp + 5 );
-                activefontsettings.color = black;
-                showtext2(strrr( fld->temp2 ), r + 5, yp + 20 );
-                #endif
+#ifdef showtempnumber
+
+               activefontsettings.color = white;
+               showtext2(strrr( fld->temp ), r + 5, yp + 5 );
+               activefontsettings.color = black;
+               showtext2(strrr( fld->temp2 ), r + 5, yp + 20 );
+#endif
 
             } else
-              if (b == visible_not) {
+               if (b == visible_not) {
                   putspriteimage( r, yp, icons.view.nv8 );
                   if ( ( fld->a.temp || fld->a.temp2 ) && tempsvisible )
-                        putspriteimage(  r, yp, cursor.markfield);
+                     putspriteimage(  r, yp, cursor.markfield);
 
-                #ifdef showtempnumber
-                activefontsettings.color = white;
-                showtext2(strrr( fld->temp ), r + unitrightshift + 5, yp + unitdownshift + 5 );
-                activefontsettings.color = black;
-                showtext2(strrr( fld->temp2 ), r + unitrightshift + 5, yp + unitdownshift + 20 );
-                #endif
+#ifdef showtempnumber
 
-              }
+                  activefontsettings.color = white;
+                  showtext2(strrr( fld->temp ), r + unitrightshift + 5, yp + unitdownshift + 5 );
+                  activefontsettings.color = black;
+                  showtext2(strrr( fld->temp2 ), r + unitrightshift + 5, yp + unitdownshift + 20 );
+#endif
+
+               }
             /*
                     activefontsettings.color = white;
                     activefontsettings.font = schriften.guifont;
@@ -879,39 +1125,38 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
 
 void tgeneraldisplaymap :: displayadditionalunits ( int height )
-{
-}
+{}
 
 void tdisplaymap :: displayadditionalunits ( int height )
 {
-  if( displaymovingunit.eht )
-   if ( height == 4 || height == 5 ) {
-               
-     if ( (height == 4 && displaymovingunit.eht->height <= chfahrend) || (height == 5 && displaymovingunit.eht->height > chfahrend )) {
+   if( displaymovingunit.eht )
+      if ( height == 4 || height == 5 ) {
 
-         int xp;
-         if (displaymovingunit.ypos & 1 )   /*  ungerade reihennummern  */
-                xp = vfbleftspace  + fielddisthalfx + (displaymovingunit.xpos - actmap->xpos) * fielddistx;
-         else
-                xp = vfbleftspace + (displaymovingunit.xpos - actmap->xpos) * fielddistx;
-         int yp = vfbtopspace + (displaymovingunit.ypos - actmap->ypos) * fielddisty;
-         
-         pfield fld = getfield ( displaymovingunit.xpos, displaymovingunit.ypos);
-         int b = fieldVisibility ( fld, playerview );
+         if ( (height == 4 && displaymovingunit.eht->height <= chfahrend) || (height == 5 && displaymovingunit.eht->height > chfahrend )) {
 
-         int shadowdist = -1;
-         if ( displaymovingunit.hgt > 0 && displaymovingunit.eht->height > chfahrend ) 
-            shadowdist = 6 * displaymovingunit.hgt / 10 ;
-         
-         
-         if ( b == visible_all || 
-            (displaymovingunit.eht->height >= chschwimmend && displaymovingunit.eht->height <= chhochfliegend ) || 
-            displaymovingunit.eht->getOwner() == playerview )
+            int xp;
+            if (displaymovingunit.ypos & 1 )   /*  ungerade reihennummern  */
+               xp = vfbleftspace  + fielddisthalfx + (displaymovingunit.xpos - actmap->xpos) * fielddistx;
+            else
+               xp = vfbleftspace + (displaymovingunit.xpos - actmap->xpos) * fielddistx;
+            int yp = vfbtopspace + (displaymovingunit.ypos - actmap->ypos) * fielddisty;
+
+            pfield fld = getfield ( displaymovingunit.xpos, displaymovingunit.ypos);
+            int b = fieldVisibility ( fld, playerview );
+
+            int shadowdist = -1;
+            if ( displaymovingunit.hgt > 0 && displaymovingunit.eht->height > chfahrend )
+               shadowdist = 6 * displaymovingunit.hgt / 10 ;
+
+
+            if ( b == visible_all ||
+                  (displaymovingunit.eht->height >= chschwimmend && displaymovingunit.eht->height <= chhochfliegend ) ||
+                  displaymovingunit.eht->getOwner() == playerview )
                displaymovingunit.eht->paint( getActiveSurface(), SPoint( xp + displaymovingunit.dx , yp + displaymovingunit.dy), shadowdist );
-               
-       }
-     }
-   
+
+         }
+      }
+
 }
 
 
@@ -940,24 +1185,30 @@ void         displaymap(  )
 
    if ( mapborderpainter )
       if ( mapborderpainter->getlastpaintmode () < 1)
-          mapborderpainter->paint();
+         mapborderpainter->paint();
 
    if ( actmap )
       idisplaymap.playerview = actmap->playerView;
 
-   #ifdef logging
+#ifdef logging
+
    logtofile("spfst / displaymap ; vor pnt_terrain");
-   #endif
+#endif
+
    idisplaymap.pnt_terrain (  );
 
-   #ifdef logging
+#ifdef logging
+
    logtofile("spfst / displaymap ; vor pnt_main");
-   #endif
+#endif
+
    idisplaymap.pnt_main (  );
 
-   #ifdef logging
+#ifdef logging
+
    logtofile("spfst / displaymap ; vor cp_buf");
-   #endif
+#endif
+
    idisplaymap.cp_buf (  );
 
    npop ( *agmp );
@@ -976,123 +1227,130 @@ void         displaymap(  )
 
 
 
-struct tfieldlist {
-                      int num;
-                      int x[6];
-                      int y[6];
-                      int minx, maxx;
-                      int miny, maxy;
-                      // int minxp, maxxp;
-                      // int minyp, maxyp;
-                      int visible;
-                   };
+struct tfieldlist
+{
+   int num;
+   int x[6];
+   int y[6];
+   int minx, maxx;
+   int miny, maxy;
+   // int minxp, maxxp;
+   // int minyp, maxyp;
+   int visible;
+};
 
 typedef tfieldlist* pfieldlist;
 
 
 void adddirpts ( int x, int y, pfieldlist lst, int dir )
 {
-  int xt = x;
-  int yt = y;
-  getnextfield ( xt, yt, dir );
-  lst->x [ lst->num ] = xt;
-  lst->y [ lst->num ] = yt;
-  lst->num++;
+   int xt = x;
+   int yt = y;
+   getnextfield ( xt, yt, dir );
+   lst->x [ lst->num ] = xt;
+   lst->y [ lst->num ] = yt;
+   lst->num++;
 }
 
 int pointvisible ( int x, int y )
 {
    if ( (x >= 0) &&
-        (x <  idisplaymap.getscreenxsize()) &&
-        (y >= 0) &&
-        (y < idisplaymap.getscreenysize()))
-          return 1;
+         (x <  idisplaymap.getscreenxsize()) &&
+         (y >= 0) &&
+         (y < idisplaymap.getscreenysize()))
+      return 1;
    else
-          return 0;
+      return 0;
 
 }
 
 
 pfieldlist generatelst ( int x1, int y1, int x2, int y2 )
 {
-  pfieldlist list = new tfieldlist ;
-  list->num = 2;
-  list->x[0] = x1;
-  list->y[0] = y1;
-  list->x[1] = x2;
-  list->y[1] = y2;
-  list->visible = 0;
+   pfieldlist list = new tfieldlist ;
+   list->num = 2;
+   list->x[0] = x1;
+   list->y[0] = y1;
+   list->x[1] = x2;
+   list->y[1] = y2;
+   list->visible = 0;
 
-  if ( x1 != x2 || y1 != y2 ) {
+   if ( x1 != x2 || y1 != y2 ) {
 
-     int dir = getdirection(x1,y1,x2,y2);
+      int dir = getdirection(x1,y1,x2,y2);
 
-     switch ( dir ) {
+      switch ( dir ) {
 
-        case 0: adddirpts ( x1, y1, list, 5 );
-                adddirpts ( x1, y1, list, 1 );
-                adddirpts ( x1, y1, list, 2 );
-                break;
+         case 0:
+            adddirpts ( x1, y1, list, 5 );
+            adddirpts ( x1, y1, list, 1 );
+            adddirpts ( x1, y1, list, 2 );
+            break;
 
-        case 1: adddirpts ( x1, y1, list, 0 );
-                adddirpts ( x1, y1, list, 2 );
-                adddirpts ( x2, y2, list, 2 );
-                break;
+         case 1:
+            adddirpts ( x1, y1, list, 0 );
+            adddirpts ( x1, y1, list, 2 );
+            adddirpts ( x2, y2, list, 2 );
+            break;
 
-        case 2: adddirpts ( x1, y1, list, 1 );
-                adddirpts ( x1, y1, list, 3 );
-                adddirpts ( x2, y2, list, 2 );
-                break;
+         case 2:
+            adddirpts ( x1, y1, list, 1 );
+            adddirpts ( x1, y1, list, 3 );
+            adddirpts ( x2, y2, list, 2 );
+            break;
 
-        case 3: adddirpts ( x2, y2, list, 2 );
-                adddirpts ( x1, y1, list, 4 );
-                break;
+         case 3:
+            adddirpts ( x2, y2, list, 2 );
+            adddirpts ( x1, y1, list, 4 );
+            break;
 
-        case 4: adddirpts ( x1, y1, list, 3 );
-                adddirpts ( x1, y1, list, 5 );
-                adddirpts ( x1+1, y1, list, 2 );
-                break;
+         case 4:
+            adddirpts ( x1, y1, list, 3 );
+            adddirpts ( x1, y1, list, 5 );
+            adddirpts ( x1+1, y1, list, 2 );
+            break;
 
-        case 5: adddirpts ( x1, y1, list, 0 );
-                adddirpts ( x1, y1, list, 4 );
-                adddirpts ( x1, y1, list, 2 );
-                break;
+         case 5:
+            adddirpts ( x1, y1, list, 0 );
+            adddirpts ( x1, y1, list, 4 );
+            adddirpts ( x1, y1, list, 2 );
+            break;
 
-     } /* endswitch */
+      } /* endswitch */
 
-     }
+   }
 
-  list->minx = 0xffff;
-  list->miny = 0xffff;
-  list->maxx = 0;
-  list->maxy = 0;
+   list->minx = 0xffff;
+   list->miny = 0xffff;
+   list->maxx = 0;
+   list->maxy = 0;
 
-  for (int i = 0; i < list->num; i++) {
+   for (int i = 0; i < list->num; i++) {
 
-     if ( list->x[ i ] < list->minx )
-        list->minx = list->x[ i ];
+      if ( list->x[ i ] < list->minx )
+         list->minx = list->x[ i ];
 
-     if ( list->y[ i ] < list->miny )
-        list->miny = list->y[ i ];
+      if ( list->y[ i ] < list->miny )
+         list->miny = list->y[ i ];
 
-     if ( list->x[ i ] > list->maxx )
-        list->maxx = list->x[ i ];
+      if ( list->x[ i ] > list->maxx )
+         list->maxx = list->x[ i ];
 
-     if ( list->y[ i ] > list->maxy )
-        list->maxy = list->y[ i ];
+      if ( list->y[ i ] > list->maxy )
+         list->maxy = list->y[ i ];
 
-  } /* endfor */
+   } /* endfor */
 
-  if ( pointvisible ( list->minx, list->miny ) )
-     list->visible = 1;
-  if ( pointvisible ( list->minx, list->maxy ) )
-     list->visible = 1;
-  if ( pointvisible ( list->maxx, list->miny ) )
-     list->visible = 1;
-  if ( pointvisible ( list->maxx, list->maxy ) )
-     list->visible = 1;
+   if ( pointvisible ( list->minx, list->miny ) )
+      list->visible = 1;
+   if ( pointvisible ( list->minx, list->maxy ) )
+      list->visible = 1;
+   if ( pointvisible ( list->maxx, list->miny ) )
+      list->visible = 1;
+   if ( pointvisible ( list->maxx, list->maxy ) )
+      list->visible = 1;
 
-  return list;
+   return list;
 }
 
 
@@ -1153,27 +1411,34 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, Vehicle* eht, i
       int dy;
 
       switch ( dir ) {
-      case -1: dx = 0;
-               dy = 0;
-               break;
-      case 0: dx = 0;
-              dy = -fielddisty*2;
-              break;
-      case 1: dx = fielddisthalfx;
-              dy = -fielddisty;
-              break;
-      case 2: dx = fielddisthalfx;
-              dy = fielddisty;
-              break;
-      case 3: dx = 0;
-              dy = 2*fielddisty;
-              break;
-      case 4: dx = -fielddisthalfx;
-              dy = fielddisty;
-              break;
-      case 5: dx = -fielddisthalfx;
-              dy = -fielddisty;
-              break;
+         case -1:
+            dx = 0;
+            dy = 0;
+            break;
+         case 0:
+            dx = 0;
+            dy = -fielddisty*2;
+            break;
+         case 1:
+            dx = fielddisthalfx;
+            dy = -fielddisty;
+            break;
+         case 2:
+            dx = fielddisthalfx;
+            dy = fielddisty;
+            break;
+         case 3:
+            dx = 0;
+            dy = 2*fielddisty;
+            break;
+         case 4:
+            dx = -fielddisthalfx;
+            dy = fielddisty;
+            break;
+         case 5:
+            dx = -fielddisthalfx;
+            dy = -fielddisty;
+            break;
       } /* endswitch */
 
       displaymovingunit.eht = eht;
@@ -1181,19 +1446,19 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, Vehicle* eht, i
       int h1;
       int h2;
 
-     /*
-      int r1;
-      if ( dir & 1 )
-         r1 = 20;
-      else
-         r1 = 40; */
+      /*
+       int r1;
+       if ( dir & 1 )
+          r1 = 20;
+       else
+          r1 = 40; */
 
       int r2 = 0;
 
 
-     /************************************/
-     /*     Schattenposition computen   */
-     /************************************/
+      /************************************/
+      /*     Schattenposition computen   */
+      /************************************/
 
 
       if ( height1 != height2  && ( height1 > 3  || height2 > 3 ) ) {
@@ -1250,9 +1515,9 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, Vehicle* eht, i
       // int step = 1;
 
 
-     /************************************/
-     /*     eigentliche movement         */
-     /************************************/
+      /************************************/
+      /*     eigentliche movement         */
+      /************************************/
 
       int starttick = ticker;
       int sdx = dx;
@@ -1292,11 +1557,11 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, Vehicle* eht, i
 
          if ( r >= 0  &&  yp >= 0 &&  yp+unitsizey <= dispmapdata.vfbheight && r+unitsizex <= dispmapdata.vfbwidth ) {
             int d = -1;
-            if ( displaymovingunit.hgt ) 
+            if ( displaymovingunit.hgt )
                d = 6 * displaymovingunit.hgt / 10 ;
 
             displaymovingunit.eht->paint( getActiveSurface(), SPoint(r,yp), d );
-               
+
             idisplaymap.cp_buf ( touchedfields->minx, touchedfields->miny, touchedfields->maxx, touchedfields->maxy );
          }
 
@@ -1380,12 +1645,12 @@ void tdisplaywholemap :: init ( int xs, int ys )
 
 int tdisplaywholemap :: getWidth( )
 {
-  return getscreenxsize() * fielddistx + 20 + 1;
+   return getscreenxsize() * fielddistx + 20 + 1;
 }
 
 int tdisplaywholemap :: getHeight( )
 {
-  return (getscreenysize() + 1 ) * fielddisty + 1;
+   return (getscreenysize() + 1 ) * fielddisty + 1;
 }
 
 void tdisplaywholemap :: cp_buf ( void )
@@ -1449,9 +1714,14 @@ int mousecurs = 8;
 int mousescrollspeed = 6;
 int lastmousemapscrolltick = 0;
 
-const int mousehotspots[9][2] = { { 8, 0 }, { 15, 0 }, { 15, 8 }, { 15, 15 },
-                                  { 8, 15 }, { 0, 15 }, { 0, 8 }, { 0, 0 },
-                                  { 0, 0 } };
+const int mousehotspots[9][2] =
+   { {
+        8, 0
+     }
+     , { 15, 0 }, { 15, 8 }, { 15, 15 },
+     { 8, 15 }, { 0, 15 }, { 0, 8 }, { 0, 0 },
+     { 0, 0 }
+   };
 
 
 void checkformousescrolling ( void )
@@ -1464,25 +1734,33 @@ void checkformousescrolling ( void )
                int newx = actmap->xpos;
                int newy = actmap->ypos;
                switch ( mousecurs ) {
-                  case 0: newy-=2;
+                  case 0:
+                     newy-=2;
                      break;
-                  case 1: newy-=2;
-                          newx+=1;
+                  case 1:
+                     newy-=2;
+                     newx+=1;
                      break;
-                  case 2: newx+=1;
+                  case 2:
+                     newx+=1;
                      break;
-                  case 3: newy+=2;
-                          newx+=1;
+                  case 3:
+                     newy+=2;
+                     newx+=1;
                      break;
-                  case 4: newy+=2;
+                  case 4:
+                     newy+=2;
                      break;
-                  case 5: newy+=2;
-                          newx-=1;
+                  case 5:
+                     newy+=2;
+                     newx-=1;
                      break;
-                  case 6: newx-=1;
+                  case 6:
+                     newx-=1;
                      break;
-                  case 7: newy-=2;
-                          newx-=1;
+                  case 7:
+                     newy-=2;
+                     newx-=1;
                      break;
                } /* endswitch */
 
@@ -1538,27 +1816,27 @@ void tmousescrollproc :: mouseaction ( void )
       if ( mouseparams.y1 == 0 )
          pntnum = 7;
       else
-        if ( mouseparams.y1 + mouseparams.ysize >= hgmp->resolutiony  )
-           pntnum = 5;
-        else
-           pntnum = 6;
+         if ( mouseparams.y1 + mouseparams.ysize >= hgmp->resolutiony  )
+            pntnum = 5;
+         else
+            pntnum = 6;
    } else {
       if ( mouseparams.x1 + mouseparams.xsize >= hgmp->resolutionx ) {
          if ( mouseparams.y1 == 0 )
-             pntnum = 1;
+            pntnum = 1;
          else
-           if ( mouseparams.y1 + mouseparams.ysize >= hgmp->resolutiony  )
-             pntnum = 3;
-           else
-             pntnum = 2;
+            if ( mouseparams.y1 + mouseparams.ysize >= hgmp->resolutiony  )
+               pntnum = 3;
+            else
+               pntnum = 2;
       } else {
          if ( mouseparams.y1 == 0 )
-             pntnum = 0;
+            pntnum = 0;
          else
-           if ( mouseparams.y1 + mouseparams.ysize >= hgmp->resolutiony  )
-             pntnum = 4;
-           else
-             pntnum = 8;
+            if ( mouseparams.y1 + mouseparams.ysize >= hgmp->resolutiony  )
+               pntnum = 4;
+            else
+               pntnum = 8;
       }
    }
    if ( pntnum < 8 )
@@ -1577,7 +1855,7 @@ void tmousescrollproc :: mouseaction ( void )
 class MapDisplay {
          public:
            void displayMovingUnit ( int x1, int y1, int x2, int y2, Vehicle* veh );
-
+ 
     };
 */
 
@@ -1591,8 +1869,8 @@ int  MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCo
    if ( height2 == -1 )
       height2 = height1;
    else
-     if ( height1== -1 )
-        height1 = height2;
+      if ( height1== -1 )
+         height1 = height2;
 
    pfield fld1 = actmap->getField ( start );
    int view1 = fieldVisibility ( fld1, actmap->playerView );
@@ -1661,9 +1939,9 @@ void MapDisplay :: stopAction ( void )
 
 void MapDisplay :: updateDashboard ( void )
 {
-   #ifdef sgmain
+#ifdef sgmain
    dashboard.paint ( getactfield(), actmap->playerView );
-   #endif
+#endif
 }
 
 void MapDisplay :: repaintDisplay ()
@@ -1686,80 +1964,80 @@ tbackgroundpict :: tbackgroundpict ( void )
 void tbackgroundpict :: paintrectangleborder ( void )
 {
    if ( rectangleborder.initialized ) {
-         int width = 2;
-         for ( int i = 0; i < 3; i++ )
-            for ( int j = 0; j < width; j++ ) {
-               int p = i * width + j;
-               int x;
-               int y;
-               for ( x = rectangleborder.x1 - p; x < rectangleborder.x2 + p; x++ )
-                  putpixel ( x, rectangleborder.y1 - p, xlattables.a.dark2[ getpixel ( x, rectangleborder.y1-p )] );
-               for ( y = rectangleborder.y1 - p; y < rectangleborder.y2 + p; y++ )
-                  putpixel ( rectangleborder.x2 + p, y, xlattables.a.light3[ getpixel ( rectangleborder.x2 + p, y )] );
-               for ( x = rectangleborder.x2 + p; x > rectangleborder.x1 - p; x-- )
-                  putpixel ( x, rectangleborder.y2 + p, xlattables.a.light3[ getpixel ( x, rectangleborder.y2+p )] );
-               for ( y = rectangleborder.y2 + p; y > rectangleborder.y1 - p; y-- )
-                  putpixel ( rectangleborder.x1 - p, y, xlattables.a.dark2[ getpixel ( rectangleborder.x1 - p, y )] );
+      int width = 2;
+      for ( int i = 0; i < 3; i++ )
+         for ( int j = 0; j < width; j++ ) {
+            int p = i * width + j;
+            int x;
+            int y;
+            for ( x = rectangleborder.x1 - p; x < rectangleborder.x2 + p; x++ )
+               putpixel ( x, rectangleborder.y1 - p, xlattables.a.dark2[ getpixel ( x, rectangleborder.y1-p )] );
+            for ( y = rectangleborder.y1 - p; y < rectangleborder.y2 + p; y++ )
+               putpixel ( rectangleborder.x2 + p, y, xlattables.a.light3[ getpixel ( rectangleborder.x2 + p, y )] );
+            for ( x = rectangleborder.x2 + p; x > rectangleborder.x1 - p; x-- )
+               putpixel ( x, rectangleborder.y2 + p, xlattables.a.light3[ getpixel ( x, rectangleborder.y2+p )] );
+            for ( y = rectangleborder.y2 + p; y > rectangleborder.y1 - p; y-- )
+               putpixel ( rectangleborder.x1 - p, y, xlattables.a.dark2[ getpixel ( rectangleborder.x1 - p, y )] );
 
-            }
-      }
+         }
+   }
 }
 
 
 void tbackgroundpict :: init ( int reinit )
 {
    if ( !inited || reinit ) {
-     /*
-     int borderx1 = getmapposx ( );
-     int bordery1 = getmapposy ( );
-     */
-     int borderx1 = 0;
-     int bordery1 = 0;
+      /*
+      int borderx1 = getmapposx ( );
+      int bordery1 = getmapposy ( );
+      */
+      int borderx1 = 0;
+      int bordery1 = 0;
 
-     int bordery2 = bordery1 + (idisplaymap.getscreenysize() - 1) * fielddisty + fieldsizey - 1;
-     int borderx2 = borderx1 + (idisplaymap.getscreenxsize() - 1 ) * fielddistx + fieldsizex + fielddisthalfx - 1;
+      int bordery2 = bordery1 + (idisplaymap.getscreenysize() - 1) * fielddisty + fieldsizey - 1;
+      int borderx2 = borderx1 + (idisplaymap.getscreenxsize() - 1 ) * fielddistx + fieldsizex + fielddisthalfx - 1;
 
-     int height, width;
+      int height, width;
 
-     getpicsize ( borderpicture[2], width, height );
+      getpicsize ( borderpicture[2], width, height );
 
-     borderpos[0].x = borderx1 - mapborderwidth;
-     borderpos[0].y = bordery1 - mapborderwidth;
+      borderpos[0].x = borderx1 - mapborderwidth;
+      borderpos[0].y = bordery1 - mapborderwidth;
 
-     borderpos[2].x = borderx2 + mapborderwidth - ( width -1 );
-     borderpos[2].y = bordery1 - mapborderwidth;
-
-
-     getpicsize ( borderpicture[6], width, height );
-
-     borderpos[1].x = borderx1 - mapborderwidth + 28;
-     borderpos[1].y = bordery1 - mapborderwidth;
-
-     borderpos[6].x = borderx1 - mapborderwidth + 28 + fielddisthalfx;
-     borderpos[6].y = bordery2 + mapborderwidth - ( height-1);
+      borderpos[2].x = borderx2 + mapborderwidth - ( width -1 );
+      borderpos[2].y = bordery1 - mapborderwidth;
 
 
-     getpicsize ( borderpicture[4], width, height );
+      getpicsize ( borderpicture[6], width, height );
 
-     borderpos[3].x = borderx1 - mapborderwidth;
-     borderpos[3].y = bordery1 + fielddisty;
+      borderpos[1].x = borderx1 - mapborderwidth + 28;
+      borderpos[1].y = bordery1 - mapborderwidth;
 
-     borderpos[4].x = borderx2 + mapborderwidth - ( width - 1 );
-     borderpos[4].y = bordery1 + 2 * fielddisty;
-
-
-     getpicsize ( borderpicture[5], width, height );
-
-     borderpos[5].x = borderx1 - mapborderwidth;
-     borderpos[5].y = bordery2 + mapborderwidth - ( height - 1 );
+      borderpos[6].x = borderx1 - mapborderwidth + 28 + fielddisthalfx;
+      borderpos[6].y = bordery2 + mapborderwidth - ( height-1);
 
 
-     getpicsize ( borderpicture[7], width, height );
+      getpicsize ( borderpicture[4], width, height );
 
-     borderpos[7].x = borderx2 + mapborderwidth - ( width- 1);
-     borderpos[7].y = bordery2 + mapborderwidth - ( height - 1 );
+      borderpos[3].x = borderx1 - mapborderwidth;
+      borderpos[3].y = bordery1 + fielddisty;
 
-     inited = 1;
+      borderpos[4].x = borderx2 + mapborderwidth - ( width - 1 );
+      borderpos[4].y = bordery1 + 2 * fielddisty;
+
+
+      getpicsize ( borderpicture[5], width, height );
+
+      borderpos[5].x = borderx1 - mapborderwidth;
+      borderpos[5].y = bordery2 + mapborderwidth - ( height - 1 );
+
+
+      getpicsize ( borderpicture[7], width, height );
+
+      borderpos[7].x = borderx2 + mapborderwidth - ( width- 1);
+      borderpos[7].y = bordery2 + mapborderwidth - ( height - 1 );
+
+      inited = 1;
 
    }
 }
@@ -1773,9 +2051,11 @@ void tbackgroundpict :: load ( void )
       tnfilestream stream ("amatur.raw", tnstream::reading);
       for ( int i = 0; i< 7; i++ )
          stream.readrlepict ( &dashboard[i], false, &w );
-      #ifdef sgmain
+#ifdef sgmain
+
       ::dashboard.zoom.pic = dashboard[6];
-      #endif
+#endif
+
    }
    {
       tnfilestream stream ("hxborder.raw", tnstream::reading);
@@ -1800,84 +2080,84 @@ void tbackgroundpict :: paintborder ( int dx, int dy, int reinit )
 
 void  tbackgroundpict :: paint ( int resavebackground )
 {
-  collategraphicoperations cgo;
-  init();
+   collategraphicoperations cgo;
+   init();
 
-  {
-     if ( !background ) {
+   {
+      if ( !background ) {
 
-        char filename[100];
-        sprintf( filename, "%d%d.pcx", hgmp->resolutionx, hgmp->resolutiony );
-        if ( exist ( filename )) {
-           tnfilestream stream ( filename, tnstream::reading );
-           loadpcxxy( &stream ,0,0);
+         char filename[100];
+         sprintf( filename, "%d%d.pcx", hgmp->resolutionx, hgmp->resolutiony );
+         if ( exist ( filename )) {
+            tnfilestream stream ( filename, tnstream::reading );
+            loadpcxxy( &stream ,0,0);
 
-           background = new char[ imagesize ( 0, 0, agmp->resolutionx, agmp->resolutiony  )];
-        } else {
-           displaymessage2("generating background picture; please wait ..." );
-           if ( !asc_paletteloaded )
-              loadpalette();
-           int x = hgmp->resolutionx;
-           int y = hgmp->resolutiony;
-           {
-              tvirtualdisplay vdp ( agmp->resolutionx, agmp->resolutiony );
-              tnfilestream stream ( "640480.pcx", tnstream::reading );
-              loadpcxxy( &stream ,0,0);
-              char* pic = new char[ imagesize ( 0, 0, 639, 479 )];
-              getimage ( 0, 0, 639, 479, pic );
+            background = new char[ imagesize ( 0, 0, agmp->resolutionx, agmp->resolutiony  )];
+         } else {
+            displaymessage2("generating background picture; please wait ..." );
+            if ( !asc_paletteloaded )
+               loadpalette();
+            int x = hgmp->resolutionx;
+            int y = hgmp->resolutiony;
+            {
+               tvirtualdisplay vdp ( agmp->resolutionx, agmp->resolutiony );
+               tnfilestream stream ( "640480.pcx", tnstream::reading );
+               loadpcxxy( &stream ,0,0);
+               char* pic = new char[ imagesize ( 0, 0, 639, 479 )];
+               getimage ( 0, 0, 639, 479, pic );
 
-              TrueColorImage* img = zoomimage ( pic, x, y, pal, 1, 0  );
-              delete pic;
-              background = convertimage ( img, pal );
-           }
-           putimage ( 0, 0, background );
-           writepcx ( filename, 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, pal );
+               TrueColorImage* img = zoomimage ( pic, x, y, pal, 1, 0  );
+               delete pic;
+               background = convertimage ( img, pal );
+            }
+            putimage ( 0, 0, background );
+            writepcx ( filename, 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, pal );
 
-           /*
-           bar ( 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, greenbackgroundcol );
-           found = 0;
-           */
-        }
+            /*
+            bar ( 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, greenbackgroundcol );
+            found = 0;
+            */
+         }
 
-        putimage ( agmp->resolutionx - ( 640 - 450), 15,  dashboard[0] );
-        putimage ( agmp->resolutionx - ( 640 - 450), 211, dashboard[1] );
-        putimage ( agmp->resolutionx - ( 640 - 450), agmp->resolutiony - ( 480 - 433),  dashboard[2] );
-        int l_width, l_height;
-        int m_width, m_height;
-        int r_width, r_height;
-        getpicsize ( dashboard[3], l_width, l_height );
-        getpicsize ( dashboard[4], m_width, m_height );
-        getpicsize ( dashboard[5], r_width, r_height );
+         putimage ( agmp->resolutionx - ( 640 - 450), 15,  dashboard[0] );
+         putimage ( agmp->resolutionx - ( 640 - 450), 211, dashboard[1] );
+         putimage ( agmp->resolutionx - ( 640 - 450), agmp->resolutiony - ( 480 - 433),  dashboard[2] );
+         int l_width, l_height;
+         int m_width, m_height;
+         int r_width, r_height;
+         getpicsize ( dashboard[3], l_width, l_height );
+         getpicsize ( dashboard[4], m_width, m_height );
+         getpicsize ( dashboard[5], r_width, r_height );
 
-        int lpos = 14;
-        putimage ( lpos,  agmp->resolutiony - ( 480 - 442),  dashboard[3] );
-        putimage ( lpos + l_width,  agmp->resolutiony - ( 480 - 442),  dashboard[4] );
+         int lpos = 14;
+         putimage ( lpos,  agmp->resolutiony - ( 480 - 442),  dashboard[3] );
+         putimage ( lpos + l_width,  agmp->resolutiony - ( 480 - 442),  dashboard[4] );
 
-        int rpos = agmp->resolutionx - ( 640 - 433) - r_width + 1;
-        lpos += l_width + m_width;
+         int rpos = agmp->resolutionx - ( 640 - 433) - r_width + 1;
+         lpos += l_width + m_width;
 
-        putimage ( rpos,  agmp->resolutiony - ( 480 - 442),  dashboard[5] );
+         putimage ( rpos,  agmp->resolutiony - ( 480 - 442),  dashboard[5] );
 
-        while ( rpos > lpos ) {
-           rpos -= m_width;
-           putimage ( rpos,  agmp->resolutiony - ( 480 - 442),  dashboard[4] );
-        }
+         while ( rpos > lpos ) {
+            rpos -= m_width;
+            putimage ( rpos,  agmp->resolutiony - ( 480 - 442),  dashboard[4] );
+         }
 
-        getimage ( 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, background );
+         getimage ( 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, background );
 
-     } else
-        putimage ( 0, 0, background );
+      } else
+         putimage ( 0, 0, background );
 
-    lastpaintmode = 0;
+      lastpaintmode = 0;
 
-     if ( actmap && actmap->xsize && !lockdisplaymap )
-        paintborder( getmapposx ( ), getmapposy ( ) );
-  }
-  if ( resavebackground  ||  !run ) {
-     gui.savebackground ( );
-  }
-  run++;
-  ::dashboard.repainthard = 1;
+      if ( actmap && actmap->xsize && !lockdisplaymap )
+         paintborder( getmapposx ( ), getmapposy ( ) );
+   }
+   if ( resavebackground  ||  !run ) {
+      gui.savebackground ( );
+   }
+   run++;
+   ::dashboard.repainthard = 1;
 
 }
 

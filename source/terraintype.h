@@ -103,6 +103,10 @@ const int cbodenartennum = 35;
           //! displays the image on the screen coordinates x1/y1
           void           paint ( SPoint pos );
 
+          //! displays the image on the screen coordinates x1/y1
+          void           paint ( Surface& s, SPoint pos );
+          
+          
           //! the image index from the graphic set. -1 if graphics is not from graphic set. \see  GraphicSet
           int            bi_pict;
 
