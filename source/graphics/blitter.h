@@ -1,6 +1,6 @@
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-2003  Martin Bickel  and  Marc Schellenberger
+    Copyright (C) 1994-2004  Martin Bickel  and  Marc Schellenberger
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
  #include "surface.h"
 
  #include "../palette.h"
- 
+
  typedef SDLmm::Color Color;
 
  template<int BytesPerPixel> class PixelSize2Type;
@@ -37,159 +37,242 @@
  template<> class PixelSize2Type<4> { public: typedef Uint32 PixelType; };
 
 
-   
+
+  template<int BytesPerTargetPixel, class SourceColorTransform, template<int> class ColorMerger, template<int> class SourcePixelSelector>
+ class MegaBlitter : public SourceColorTransform,
+                     public ColorMerger<BytesPerTargetPixel>,
+                     public SourcePixelSelector<BytesPerTargetPixel> {
+        typedef typename PixelSize2Type<BytesPerTargetPixel>::PixelType PixelType;
+    public:
+        MegaBlitter() { };
+
+        void blit( const Surface& src, Surface& dst, SPoint dstPos )
+        {
+           SurfaceLock sl( dst );
+
+           ColorMerger<BytesPerTargetPixel>::init( src );
+           SourcePixelSelector<BytesPerTargetPixel>::init( src );
+
+           int h = SourcePixelSelector<BytesPerTargetPixel>::getHeight();
+           int w = SourcePixelSelector<BytesPerTargetPixel>::getWidth();
+
+           PixelType* pix = (PixelType*)( dst.pixels() );
+
+           pix += dstPos.y * dst.pitch()/BytesPerTargetPixel + dstPos.x;
+
+           int pitch = dst.pitch()/BytesPerTargetPixel - w;
+
+           for ( int y = 0; y < h; ++y ) {
+              for ( int x = 0; x < w; ++x ) {
+                  ColorMerger<BytesPerTargetPixel>::assign ( SourceColorTransform::transform( SourcePixelSelector<BytesPerTargetPixel>::getPixel(x,y)), pix );
+                  SourcePixelSelector<BytesPerTargetPixel>::nextPixel();
+                  ++pix;
+               }
+               SourcePixelSelector<BytesPerTargetPixel>::nextLine();
+               pix += pitch;
+           }
+       };
+
+};
+
+
+
+//////////////////// Color transformations ////////////////////////////////////
+
+
  class ColorTransform_None {
-     public:
+     protected:
+        ColorTransform_None(){};
         Color transform( Color col) { return col; };
  };
 
   class ColorTransform_PlayerCol {
         int shift;
-     public:
+
+    protected:
         ColorTransform_PlayerCol() : shift(0) {};
-        
+
+        Color transform( Color col)
+        {
+           if ( col >= 16 && col < 24 )
+              return col + shift;
+           else
+              return col;
+        };
+
+     public:
         void setPlayer( int player )
         {
            shift = player*8;
-        };
-        
-        Color transform( Color col) 
-        { 
-           if ( col >= 16 && col < 24 ) 
-              return col + shift;
-           else  
-              return col; 
         };
  };
 
  class ColorTransform_XLAT {
         const char* table;
-     public:
+
+     protected:
         ColorTransform_XLAT() : table(NULL) {};
-        
+
+
+        Color transform( Color col)
+        {
+           if ( table )
+              return table[col];
+           else
+              return col;
+        };
+
+     public:
         void setTranslationTable( const char* translationTable )
         {
            table = translationTable;
         };
-        
-        Color transform( Color col) 
-        { 
-           if ( table )
-              return table[col];
-           else
-              return col;   
-        };
+
  };
- 
+
+
+//////////////////////// Color Merger ////////////////////////////////////
+
  template<int pixelsize>
  class ColorMerger_PlainOverwrite {
          typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
-      public:
+      protected:
+         ColorMerger_PlainOverwrite(){};
          void init( const Surface& src ) {};
          void assign ( PixelType src, PixelType* dest ) { *dest = src; };
  };
 
- 
+
  template<int pixelsize>
  class ColorMerger_AlphaOverwrite {
          typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
          int colorKey;
-      public:
-         void init( const Surface& src ) 
+      protected:
+         ColorMerger_AlphaOverwrite(){};
+
+         void init( const Surface& src )
          {
             if ( src.flags() & SDL_SRCCOLORKEY )
                colorKey = src.GetPixelFormat().colorkey();
-            else 
-               colorKey = 0xfefefefe;    
-         }
-         
-         void assign ( PixelType src, PixelType* dest ) { if ( src != colorKey) *dest = src; };
+            else
+               colorKey = 0xfefefefe;
+         };
+
+         void assign ( PixelType src, PixelType* dest )
+         {
+            if ( src != colorKey) *dest = src;
+         };
  };
 
   template<int pixelsize>
   class ColorMerger_AlphaShadow {
          typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
          int colorKey;
-      public:
-         void init( const Surface& src ) 
+      protected:
+         ColorMerger_AlphaShadow(){};
+
+         void init( const Surface& src )
          {
             if ( src.flags() & SDL_SRCCOLORKEY )
                colorKey = src.GetPixelFormat().colorkey();
-            else 
-               colorKey = 0xfefefefe;    
-         }
-        
-         void assign ( PixelType src, PixelType* dest ) { if ( src != colorKey) *dest = xlattables.a.dark2[*dest]; };
+            else
+               colorKey = 0xfefefefe;
+         };
+
+         void assign ( PixelType src, PixelType* dest )
+         {
+            if ( src != colorKey)
+               *dest = xlattables.a.dark2[*dest];
+         };
  };
 
  template<int pixelsize>
  class ColorMerger_AlphaMixer {
          typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
          int colorKey;
-      public:
-         void init( const Surface& src ) 
+      protected:
+         ColorMerger_AlphaMixer(){};
+
+         void init( const Surface& src )
          {
             if ( src.flags() & SDL_SRCCOLORKEY )
                colorKey = src.GetPixelFormat().colorkey();
-            else 
-               colorKey = 0xfefefefe;    
-         }
-        
-         void assign ( PixelType src, PixelType* dest ) { if ( src != colorKey) *dest = colormixbufchar[*dest + src*256 ]; };
+            else
+               colorKey = 0xfefefefe;
+         };
+
+         void assign ( PixelType src, PixelType* dest )
+         {
+            if ( src != colorKey)
+               *dest = colormixbufchar[*dest + src*256 ];
+         };
  };
 
- 
-   
+
+
+
+//////////////////// Source Pixel Selector  ///////////////////////////////////
+
+
  template<int pixelsize>
  class SourcePixelSelector_Plain {
        typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
        const PixelType* pointer;
        int pitch;
-    public:
+       const Surface* surface;
+    protected:
+       SourcePixelSelector_Plain() : pointer(NULL), surface(NULL) {};
+
        void init ( const Surface& srv )
        {
           pointer = (const PixelType*)(srv.pixels());
           pitch = srv.pitch()/sizeof(PixelType) - srv.w();
-       }
+       };
+
        PixelType getPixel(int x, int y) { return *pointer; };
        void nextPixel() { ++pointer; };
        void nextLine() { pointer += pitch; };
+
+       int getWidth()  { return surface->w(); };
+       int getHeight() { return surface->h(); };
  };
- 
+
  template<int pixelsize>
  class SourcePixelSelector_Rotation {
        typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
        const Surface* surface;
        int degrees;
-    public:
+    protected:
        SourcePixelSelector_Rotation() : surface(NULL), degrees(0) {};
-       
-       void init ( const Surface& srv )
-       {
-          surface = &srv;
-       }
-       
-       void setAngle( int degrees )
-       {
-          this->degress = degrees;
-       }    
-       
-       PixelType getPixel(int x, int y) 
+
+       void init ( const Surface& srv )  { surface = &srv; };
+
+       int getWidth()  { return surface->w(); };
+       int getHeight() { return surface->h(); };
+
+       PixelType getPixel(int x, int y)
        {
          SPoint newpos = getPixelRotationLocation( SPoint(x,y), surface->w(),surface->h(), degrees );
 
          if ( newpos.x >= 0 && newpos.y >= 0 && newpos.x < surface->w() && newpos.y < surface->h() )
             return surface->GetPixel ( newpos );
          else
-            return surface->GetPixelFormat().colorkey();  
+            return surface->GetPixelFormat().colorkey();
 
        };
-       
+
        void nextPixel() {};
        void nextLine() {};
+
+    public:
+       void setAngle( int degrees )
+       {
+          this->degress = degrees;
+       };
+
  };
 
- 
+
  class RotationCache {
     protected:
        static map<int,int*> cache;
@@ -208,9 +291,9 @@
        int tableIndex;
        int pitch;
        int* cacheIndex;
-    public:
+    protected:
        SourcePixelSelector_CacheRotation() : surface(NULL), degrees(0), useCache(false),pixelStart(NULL), currentPixel(NULL),tableIndex(0),pitch(0), cacheIndex(NULL) {};
-       
+
        void init ( const Surface& srv )
        {
           if ( !surface ) {
@@ -222,16 +305,44 @@
           pixelStart = currentPixel = (PixelType*)surface->pixels();
           pitch = srv.pitch()/sizeof(PixelType) - srv.w();
        }
-       
+
+       PixelType getPixel(int x, int y)
+       {
+          if ( useCache && degrees != 0 ) {
+             assert ( cacheIndex );
+             int index = cacheIndex[tableIndex];
+             if ( index >= 0 )
+                return pixelStart[index];
+             else
+                return surface->GetPixelFormat().colorkey();
+          } else
+             return *currentPixel;
+       };
+
+       void nextPixel()
+       {
+          ++tableIndex;
+          ++currentPixel;
+       };
+
+       void nextLine()
+       {
+          currentPixel += pitch;
+       };
+
+       int getWidth()  { return surface->w(); };
+       int getHeight() { return surface->h(); };
+
+    public:
        void setAngle( const Surface& srv, int degrees )
        {
           init ( srv );
-          
+
           if ( xsize == -1 ) {
              xsize = surface->w();
              ysize = surface->h();
           }
-          
+
           this->degrees = degrees;
           if ( degrees != 0 && surface->w() == xsize && surface->h() == ysize ) {
              useCache = true;
@@ -243,78 +354,54 @@
                         SPoint pnt = getPixelRotationLocation( SPoint(x,y), surface->w(),surface->h(), degrees );
                         if ( pnt.x >= 0 && pnt.y >= 0 && pnt.x < surface->w() && pnt.y < surface->h() )
                            *index++ = pnt.x + pnt.y * surface->pitch()/pixelsize;
-                        else   
+                        else
                            *index++ = -1;
-                    }   
+                    }
              }
              cacheIndex = cache[degrees];
-          } 
-       }    
-       
-       PixelType getPixel(int x, int y) 
-       {
-          if ( useCache && degrees != 0 ) {
-             assert ( cacheIndex );
-             int index = cacheIndex[tableIndex];
-             if ( index >= 0 )
-                return pixelStart[index];
-             else 
-                return surface->GetPixelFormat().colorkey();  
-          } else
-             return *currentPixel;
-       };
-       
-       void nextPixel() 
-       { 
-          ++tableIndex;
-          ++currentPixel;
-       };
-       
-       void nextLine()
-       {
-          currentPixel += pitch;
-       };
+          }
+       }
+
+
  };
 
-  
- 
- template<int BytesPerTargetPixel, class SourceColorTransform, template<int> class ColorMerger, template<int> class SourcePixelSelector>
- class MegaBlitter : public SourceColorTransform, 
-                     public ColorMerger<BytesPerTargetPixel>, 
-                     public SourcePixelSelector<BytesPerTargetPixel> {
-        typedef typename PixelSize2Type<BytesPerTargetPixel>::PixelType PixelType;
-    public:
-        MegaBlitter() { };
 
-        void blit( const Surface& src, Surface& dst, SPoint dstPos )
-        {
-           //   SurfaceLock sl1( src );
-           SurfaceLock sl2( dst );
+ template<int pixelsize>
+ class SourcePixelSelector_Zoom {
+       typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+       const Surface* surface;
+       float zoomFactor;
+    protected:
+       SourcePixelSelector_Zoom() : surface(NULL), zoomFactor(1) {};
 
-           ColorMerger<BytesPerTargetPixel>::init( src );
-           SourcePixelSelector<BytesPerTargetPixel>::init( src );
+       void init ( const Surface& srv )  { surface = &srv; };
 
-           int h = src.h();
-           int w = src.w();
+       int getWidth()  { return int( zoomFactor * surface->w() ); };
+       int getHeight() { return int( zoomFactor * surface->h() ); };
 
-           PixelType* pix = (PixelType*)( dst.pixels() );
+       PixelType getPixel(int x, int y)
+       {
+         SPoint newpos = SPoint( float(x) / zoomFactor, float(y) / zoomFactor);
 
-           pix += dstPos.y * dst.pitch()/BytesPerTargetPixel + dstPos.x;
-
-           int pitch = dst.pitch()/BytesPerTargetPixel - src.w();
-
-           for ( int y = 0; y < h; ++y ) {
-              for ( int x = 0; x < w; ++x ) {
-                  ColorMerger<BytesPerTargetPixel>::assign ( SourceColorTransform::transform( SourcePixelSelector<BytesPerTargetPixel>::getPixel(x,y)), pix );
-                  SourcePixelSelector<BytesPerTargetPixel>::nextPixel();    
-                  ++pix;
-               }
-               SourcePixelSelector<BytesPerTargetPixel>::nextLine();
-               pix += pitch;
-           }
+         if ( newpos.x >= 0 && newpos.y >= 0 && newpos.x < surface->w() && newpos.y < surface->h() )
+            return surface->GetPixel ( newpos );
+         else
+            return surface->GetPixelFormat().colorkey();
        };
 
-};
+       void nextPixel() {};
+       void nextLine() {};
+
+    public:
+       void setZoom( float factor )
+       {
+          this->zoomFactor = factor;
+       };
+
+ };
+
+
+
 
 /*
  template<class SourceColorTransform, class ColorMerger, class SourcePixelSelector>
@@ -324,10 +411,10 @@
        case 1: megaBlit<1>( src, dst, dstPos, sct, cm, sps ); break;
        case 2: megaBlit<2>( src, dst, dstPos, sct, cm, sps ); break;
        case 4: megaBlit<4>( src, dst, dstPos, sct, cm, sps ); break;
-    };   
+    };
  }
 
 */
- 
+
 #endif
 
