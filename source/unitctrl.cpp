@@ -203,15 +203,15 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
                mapDisplay->displayMap();
             npop ( dest->vehicle );
 
-           if ( rf->checkfield ( to, vehicle, mapDisplay )) {
-              cancelmovement = 1;
-              attackedByReactionFire = true;
-              vehicle = actmap->getUnit ( networkID );
-           }
-           if ( !vehicle && mapDisplay ) {
-              mapDisplay->deleteVehicle( vehicle );
-              mapDisplay->displayMap();
-           }
+            if ( rf->checkfield ( to, vehicle, mapDisplay )) {
+               cancelmovement = 1;
+               attackedByReactionFire = true;
+               vehicle = actmap->getUnit ( networkID );
+            }
+            if ( !vehicle && mapDisplay ) {
+               mapDisplay->deleteVehicle( vehicle );
+               mapDisplay->displayMap();
+            }
          } else
             if ( mapDisplay ) {
                mapDisplay->deleteVehicle( vehicle );

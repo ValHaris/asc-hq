@@ -166,7 +166,7 @@ void         tcomputebuildingview::init( const pbuilding    bld,  int _mode )
    initviewcalculation( c, j, bld->getEntry().x, bld->getEntry().y, _mode, bld->typ->buildingheight );
    sonar = !!(bld->typ->special & cgsonarb);
 
-   minenview = true;
+   minenview = false;
    satellitenview = true;
 
    building = bld;

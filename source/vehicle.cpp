@@ -90,7 +90,7 @@ Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player, int networkI
 Vehicle :: ~Vehicle (  )
 {
    #ifndef karteneditor
-   if ( typ->wreckageObject >= 0 ) {
+   if ( typ->wreckageObject >= 0 && gamemap && !gamemap->__mapDestruction ) {
       pfield fld = getMap()->getField(getPosition());
       if ( fld->vehicle ==  this ) {
          pobjecttype obj = getMap()->getobjecttype_byid( typ->wreckageObject );
@@ -1155,7 +1155,7 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
     if ( damage    )
        bm |= cem_damage;
 
-    if ( tank.fuel < typ->tank.fuel )
+//    if ( tank.fuel < typ->tank.fuel )
        bm |= cem_fuel;
 
     if ( typ->weapons.count )
@@ -1182,10 +1182,10 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
     if ( direction )
        bm |= cem_direction;
 
-    if ( tank.material < typ->tank.material )
+//    if ( tank.material < typ->tank.material )
        bm |= cem_material  ;
 
-    if ( tank.energy   < typ->tank.energy   )
+//    if ( tank.energy   < typ->tank.energy   )
        bm |= cem_energy;
 
     if ( energyUsed )
