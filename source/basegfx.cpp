@@ -2,9 +2,15 @@
     \brief Platform indepedant graphic functions. 
 */
 
-//     $Id: basegfx.cpp,v 1.22 2001-01-28 14:04:02 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.23 2001-02-06 17:15:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2001/01/28 14:04:02  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.21  2001/01/19 13:33:47  mbickel
 //      The AI now uses hemming
 //      Several bugfixes in Vehicle Actions
@@ -74,6 +80,7 @@
 
 #include <string.h>
 #include <malloc.h>
+#include "global.h"
 #include "basegfx.h"
 #include "newfont.h"
 #include "misc.h"

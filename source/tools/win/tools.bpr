@@ -4,10 +4,10 @@
   <MACROS>
     <VERSION value="BCB.05.03"/>
     <PROJECT value="tools.lib"/>
-    <OBJFILES value="..\..\basegfx.obj ..\..\basestrm.obj ..\..\buildingtype.obj 
-      ..\..\gameoptions.obj ..\..\loadbi3.obj ..\..\misc.obj ..\..\Named.obj 
-      ..\..\palette.obj ..\..\sgstream.obj ..\..\typen.obj ..\..\vehicletype.obj 
-      ..\..\graphicset.obj ..\..\ascstring.obj"/>
+    <OBJFILES value="obj\basegfx.obj obj\basestrm.obj obj\buildingtype.obj obj\gameoptions.obj 
+      obj\misc.obj obj\Named.obj obj\palette.obj obj\sgstream.obj obj\typen.obj 
+      obj\vehicletype.obj obj\graphicset.obj obj\ascstring.obj 
+      obj\graphicselector.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -19,19 +19,19 @@
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <LINKER value="TLib"/>
-    <USERDEFINES value="_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_"/>
+    <USERDEFINES value="_DEBUG;HEXAGON;_WIN32_;WIN32;converter;_NOASM_;_SDL_"/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT"/>
     <MAINSOURCE value="tools.bpf"/>
-    <INCLUDEPATH value="..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32"/>
+    <INCLUDEPATH value="..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include"/>
     <LIBPATH value="..\..;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par -w-csu"/>
     <LISTFILE value=""/>
   </MACROS>
   <OPTIONS>
     <CFLAG1 value="-Od -Q -Vx -Ve -X- -a1 -b -k -y -v -vi- -c -tW -tWM -K"/>
-    <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
+    <PFLAGS value="-N2obj -N0obj -$YD -$W -$O- -v -JPHNE -M"/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="/P32 /0 /E"/>
+    <LFLAGS value="/P64 /0 /E"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="$(OBJFILES)"/>
@@ -66,13 +66,15 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=6
-Item0=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
-Item1=..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
-Item2=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
-Item3=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\asc\source\win32
-Item4=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
-Item5=..\..;$(BCB)\include;$(BCB)\include\vcl
+Count=8
+Item0=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include
+Item1=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;C:\Programme\ascsrc\games\SDL\include
+Item2=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item3=..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item4=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item5=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\asc\source\win32
+Item6=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item7=..\..;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=3
@@ -85,19 +87,24 @@ Count=1
 Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
-Count=2
-Item0=_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_
-Item1=_DEBUG
+Count=4
+Item0=_DEBUG;HEXAGON;_WIN32_;WIN32;converter;_NOASM_;_SDL_
+Item1=_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_;_SDL_
+Item2=_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_
+Item3=_DEBUG
 
 [HistoryLists\hlIntOutputDir]
-Count=1
-Item0=C:\Programme\ascsrc\games\asc\source\tools\win
+Count=3
+Item0=obj
+Item1=C:\Programme\ascsrc\games\asc\source\tools\win\obj
+Item2=C:\Programme\ascsrc\games\asc\source\tools\win
 
 [HistoryLists\hlTlibPageSize]
-Count=3
-Item0=0x0020
-Item1=32
-Item2=0x0010
+Count=4
+Item0=0x0040
+Item1=0x0020
+Item2=32
+Item3=0x0010
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl

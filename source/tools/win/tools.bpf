@@ -6,7 +6,6 @@ USEUNIT("..\..\basegfx.cpp");
 USEUNIT("..\..\basestrm.cpp");
 USEUNIT("..\..\buildingtype.cpp");
 USEUNIT("..\..\gameoptions.cpp");
-USEUNIT("..\..\loadbi3.cpp");
 USEUNIT("..\..\misc.cpp");
 USEUNIT("..\..\Named.cpp");
 USEUNIT("..\..\palette.cpp");
@@ -17,6 +16,7 @@ USELIB("..\..\libs\bzlib\win\bzlib.lib");
 USELIB("..\..\..\..\sdl\bin\sdl.lib");
 USEUNIT("..\..\graphicset.cpp");
 USEUNIT("..\..\ascstring.cpp");
+USEUNIT("..\..\graphicselector.cpp");
 //---------------------------------------------------------------------------
 #define Library
 

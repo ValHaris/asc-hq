@@ -27,6 +27,7 @@
 #include "basegfx.h"
 #include "events.h"
 #include "stack.h"
+#include "events.h"
 
 int marked = -1;
 

@@ -1,6 +1,9 @@
-//     $Id: newfont.h,v 1.8 2000-08-12 12:52:50 mbickel Exp $
+//     $Id: newfont.h,v 1.9 2001-02-06 17:15:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/08/12 12:52:50  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.7  2000/08/02 10:28:27  mbickel
 //      Fixed: generator vehicle not working
 //      Streams can now report their name
@@ -58,7 +61,8 @@
 
 #ifndef newfont_h
 
-#define newfont_h 
+#define newfont_h
+#include "global.h" 
 #include "basestrm.h"
 #include "tpascal.inc"
 #include "palette.h"

@@ -15,7 +15,7 @@
       obj\typen.obj obj\attack.obj obj\sound.obj obj\graphics.obj 
       obj\loadimage.obj obj\SDLStretch.obj obj\events.obj obj\SDL_main.obj 
       obj\weather.obj obj\buildingtype.obj obj\research.obj obj\graphicset.obj 
-      obj\ascstring.obj obj\mapdisplay.obj"/>
+      obj\ascstring.obj obj\mapdisplay.obj obj\viewcalculation.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>

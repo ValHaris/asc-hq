@@ -2,9 +2,13 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.76 2001-02-04 21:26:55 mbickel Exp $
+//     $Id: dialog.cpp,v 1.77 2001-02-06 17:15:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.76  2001/02/04 21:26:55  mbickel
+//      The AI status is written to savegames -> new savegame revision
+//      Lots of bug fixes
+//
 //     Revision 1.75  2001/02/01 22:48:34  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -2268,13 +2272,13 @@ char      tfileselectsvga::speedsearch(char         input)
 
    bool sps = false;
    int ii = markedfile;
-   if ( ii >= 0  && searchstring.compare ( files[ii].name.copyToUpper(), 0, searchstring.length() ) == 0) {
-      sps = true; 
-   } 
-   else { 
+   if ( ii >= 0  && searchstring.compare ( 0, searchstring.length(), files[ii].name.copyToUpper() ) == 0) {
+      sps = true;
+   }
+   else {
       ii = 0;
       while (ii < numberoffiles  &&  !sps ) {
-         if (searchstring.compare ( files[ii].name.copyToUpper(), 0, searchstring.length() ) == 0) {
+         if (searchstring.compare ( 0, searchstring.length(), files[ii].name.copyToUpper() ) == 0) {
             sps = true; 
             markedfile = ii;
          } 
