@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.12 2000-02-05 12:13:46 steb Exp $
+//     $Id: typen.h,v 1.13 2000-02-07 19:45:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/02/05 12:13:46  steb
+//     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
+//     startup due to actmap being null when trying to report errors.
+//
 //     Revision 1.11  2000/01/25 19:28:16  mbickel
 //      Fixed bugs:
 //        invalid mouse buttons reported when moving the mouse
@@ -1509,7 +1513,7 @@ class  tgeneral_old_building {
       tresearch    research; 
       paiparams    aiparams;
 
-      tplayerstat  stat;           // 0: human; 1: computer; 2: off
+      char         stat;           // 0: human; 1: computer; 2: off
       // char         alliance;       // => actmap->alliances ;  8 bedeuted parteilos
       char         dummy;
       char         *name;          // kein eigenst„ndiger string; zeigt entweder auf computernames oder playernames 

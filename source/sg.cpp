@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.23 2000-02-05 12:13:44 steb Exp $
+//     $Id: sg.cpp,v 1.24 2000-02-07 19:45:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/02/05 12:13:44  steb
+//     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
+//     startup due to actmap being null when trying to report errors.
+//
 //     Revision 1.22  2000/02/03 20:54:41  mbickel
 //      Some cleanup
 //      getfiletime now works under Linux too
@@ -583,7 +587,7 @@ void  tbackgroundpict :: paint ( int resavebackground )
     lastpaintmode = 0;
 
     #ifdef HEXAGON
-     if ( actmasp && actmap->xsize && !lockdisplaymap ) 
+     if ( actmap && actmap->xsize && !lockdisplaymap )
         paintborder( getmapposx ( ), getmapposy ( ) );
 
     #endif
