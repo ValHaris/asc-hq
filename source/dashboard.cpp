@@ -30,6 +30,9 @@
 #include "stack.h"
 #include "loadbi3.h"
 #include "mapalgorithms.h"
+#include "controls.h"
+#include "dashboard.h"
+#include "weather.h"
 
          tdashboard  dashboard;
 

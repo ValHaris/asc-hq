@@ -2,9 +2,15 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.63 2001-01-28 14:04:04 mbickel Exp $
+//     $Id: building.cpp,v 1.64 2001-01-28 17:18:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2001/01/28 14:04:04  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.62  2001/01/24 11:53:10  mbickel
 //      Fixed some compilation problems with gcc
 //
@@ -89,7 +95,8 @@
 #include "unitctrl.h"
 #include "gameoptions.h"
 #include "replay.h"
-
+#include "dashboard.h"
+#include "resourcenet.h"
 
 
 

@@ -70,7 +70,7 @@ SDL_LIBS = @SDL_LIBS@
 VERSION = @VERSION@
 
 bin_PROGRAMS = asc
-asc_SOURCES = unitctrl.cpp soundList.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp newfont.cpp network.cpp missions.cpp misc.cpp loadpcxc.cpp loaders.cpp loadbi3.cpp gui.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp building.cpp basestrm.cpp basegfx.cpp attack.cpp artint.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp Named.cpp astar2.cpp vehicletype.cpp buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp password_dialog.cpp replay.cpp research.cpp mapdisplay.cpp
+asc_SOURCES = unitctrl.cpp soundList.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp newfont.cpp network.cpp missions.cpp misc.cpp loadpcxc.cpp loaders.cpp loadbi3.cpp gui.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp building.cpp basestrm.cpp basegfx.cpp attack.cpp artint.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp Named.cpp astar2.cpp vehicletype.cpp buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp password_dialog.cpp replay.cpp research.cpp mapdisplay.cpp resourcenet.cpp dashboard.cpp
 
 
 asc_LDADD = ./sdl/libsdl.a ./libs/triangul/libtriangul.a -lSDL -lpthread -lSDL_image @LDADDLIBBZ2@
@@ -98,7 +98,7 @@ dlg_box.o dialog.o controls.o building.o basestrm.o basegfx.o attack.o \
 artint.o CLoadable.o Property.o PropertyGroup.o gameoptions.o Named.o \
 astar2.o vehicletype.o buildingtype.o containerbase.o mapalgorithms.o \
 viewcalculation.o gamemap.o password.o password_dialog.o replay.o \
-research.o mapdisplay.o
+research.o mapdisplay.o resourcenet.o dashboard.o
 asc_DEPENDENCIES =  ./sdl/libsdl.a ./libs/triangul/libtriangul.a
 asc_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -114,15 +114,16 @@ GZIP_ENV = --best
 DEP_FILES =  .deps/CLoadable.P .deps/Named.P .deps/Property.P \
 .deps/PropertyGroup.P .deps/artint.P .deps/astar2.P .deps/attack.P \
 .deps/basegfx.P .deps/basestrm.P .deps/building.P .deps/buildingtype.P \
-.deps/containerbase.P .deps/controls.P .deps/dialog.P .deps/dlg_box.P \
-.deps/gamedlg.P .deps/gamemap.P .deps/gameoptions.P .deps/gui.P \
-.deps/loadbi3.P .deps/loaders.P .deps/loadpcxc.P .deps/mapalgorithms.P \
-.deps/mapdisplay.P .deps/misc.P .deps/missions.P .deps/network.P \
-.deps/newfont.P .deps/palette.P .deps/password.P \
+.deps/containerbase.P .deps/controls.P .deps/dashboard.P .deps/dialog.P \
+.deps/dlg_box.P .deps/gamedlg.P .deps/gamemap.P .deps/gameoptions.P \
+.deps/gui.P .deps/loadbi3.P .deps/loaders.P .deps/loadpcxc.P \
+.deps/mapalgorithms.P .deps/mapdisplay.P .deps/misc.P .deps/missions.P \
+.deps/network.P .deps/newfont.P .deps/palette.P .deps/password.P \
 .deps/password_dialog.P .deps/pd.P .deps/replay.P .deps/research.P \
-.deps/sg.P .deps/sgstream.P .deps/soundList.P .deps/spfst.P \
-.deps/stack.P .deps/strtmesg.P .deps/typen.P .deps/unitctrl.P \
-.deps/vehicletype.P .deps/viewcalculation.P .deps/weather.P
+.deps/resourcenet.P .deps/sg.P .deps/sgstream.P .deps/soundList.P \
+.deps/spfst.P .deps/stack.P .deps/strtmesg.P .deps/typen.P \
+.deps/unitctrl.P .deps/vehicletype.P .deps/viewcalculation.P \
+.deps/weather.P
 SOURCES = $(asc_SOURCES)
 OBJECTS = $(asc_OBJECTS)
 

@@ -1,6 +1,14 @@
-//     $Id: edmisc.cpp,v 1.44 2001-01-25 23:44:58 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.45 2001-01-28 17:19:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2001/01/25 23:44:58  mbickel
+//      Moved map displaying routins to own file (mapdisplay.cpp)
+//      Wrote program to create pcx images from map files (map2pcx.cpp)
+//      Fixed bug in repair function: too much resource consumption
+//      AI improvements and bug fixes
+//      The BI3 map import function now evaluates the player status (human/
+//       computer)
+//
 //     Revision 1.43  2001/01/04 15:13:46  mbickel
 //      configure now checks for libSDL_image
 //      AI only conquers building that cannot be conquered back immediately
@@ -1457,7 +1465,7 @@ void         k_loadmap(void)
       cursor.hide(); 
       displaymessage("loading map %s",0, s1 );
       loadmap(s1);
-      initmap(); 
+      actmap->startGame();
 
       if ( actmap->campaign && !actmap->campaign->directaccess && actmap->codeword[0]) {
          tlockdispspfld ldsf;

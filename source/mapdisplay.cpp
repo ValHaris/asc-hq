@@ -32,6 +32,7 @@
 #ifdef sgmain
  #include "controls.h"
  #include "gui.h"
+ #include "dashboard.h"
 #endif
 
 

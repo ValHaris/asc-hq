@@ -33,7 +33,7 @@
 #include "gameoptions.h"
 #include "sg.h"
 #include "viewcalculation.h"
-
+#include "dashboard.h"
 
 
 

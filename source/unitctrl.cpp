@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.45 2001-01-21 16:37:23 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.46 2001-01-28 17:19:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2001/01/21 16:37:23  mbickel
+//      Moved replay code to own file ( replay.cpp )
+//      Fixed compile problems done by cleanup
+//
 //     Revision 1.44  2001/01/19 13:33:57  mbickel
 //      The AI now uses hemming
 //      Several bugfixes in Vehicle Actions
@@ -179,6 +183,7 @@
 #include "buildingtype.h"
 #include "viewcalculation.h"
 #include "replay.h"
+#include "dashboard.h"
 
 PendingVehicleActions pendingVehicleActions;
 

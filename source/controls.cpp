@@ -4,9 +4,15 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.93 2001-01-28 14:04:07 mbickel Exp $
+//     $Id: controls.cpp,v 1.94 2001-01-28 17:18:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.93  2001/01/28 14:04:07  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.92  2001/01/25 23:44:52  mbickel
 //      Moved map displaying routins to own file (mapdisplay.cpp)
 //      Wrote program to create pcx images from map files (map2pcx.cpp)
@@ -111,6 +117,8 @@
 #include "password_dialog.h"
 #include "viewcalculation.h"
 #include "replay.h"
+#include "dashboard.h"
+#include "resourcenet.h"
 
          int             windmovement[8];
 
@@ -124,7 +132,6 @@ class InitControls {
       memset ( (void*) &moveparams, 0, sizeof ( moveparams ));
    };
 } initControls;
-
 
 
 
@@ -1736,14 +1743,12 @@ void    tprotfzt::initbuffer( void )
    int i;
    for ( i=0; i < vehicletypenum ; i++ )
       buf[i] = actmap->player[ actmap->actplayer ].research.vehicletypeavailable ( getvehicletype_forpos ( i ) );
-asdfasdf
 }
 
 
 
 void    tprotfzt::evalbuffer( void )
 {
-asfdasdf
    int i, num = 0;
    for ( i=0; i < vehicletypenum ;i++ ) {
       if (buf[i] == 0) {

@@ -2,9 +2,15 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.72 2001-01-28 14:04:10 mbickel Exp $
+//     $Id: dialog.cpp,v 1.73 2001-01-28 17:19:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.72  2001/01/28 14:04:10  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.71  2001/01/25 23:44:54  mbickel
 //      Moved map displaying routins to own file (mapdisplay.cpp)
 //      Wrote program to create pcx images from map files (map2pcx.cpp)
@@ -4886,7 +4892,7 @@ void ResizeMap :: run ( void )
       tdialogbox::run();
    } while ( status < 10 ); /* enddo */
    if ( status >= 12 ) {
-      int result = resizemap ( top, bottom, left, right );
+      int result = actmap->resize ( top, bottom, left, right );
       if ( result )
         displaymessage ( "resizing failed" , 1 );
    }

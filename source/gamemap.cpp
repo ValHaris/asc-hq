@@ -26,6 +26,7 @@
 #ifdef sgmain
  #include "network.h"
  #include "gameoptions.h"
+ #include "missions.h"
 #endif
 
 #include "vehicletype.h"
@@ -1154,11 +1155,12 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
   xsize = newx;
   ysize = newy;
 
+  /*
   if (xpos + idisplaymap.getscreenxsize() > xsize) 
      xpos = xsize - idisplaymap.getscreenxsize() ; 
   if (ypos + idisplaymap.getscreenysize()  > ysize) 
      ypos = ysize - idisplaymap.getscreenysize() ; 
-
+   */
 
   return 0;
 }

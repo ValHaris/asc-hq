@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: sg.cpp,v 1.126 2001-01-28 14:04:16 mbickel Exp $
+//     $Id: sg.cpp,v 1.127 2001-01-28 17:19:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.126  2001/01/28 14:04:16  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.125  2001/01/25 23:45:02  mbickel
 //      Moved map displaying routins to own file (mapdisplay.cpp)
 //      Wrote program to create pcx images from map files (map2pcx.cpp)
@@ -192,6 +198,7 @@
 #include "password_dialog.h"
 #include "viewcalculation.h"
 #include "replay.h"
+#include "dashboard.h"
 
 #ifdef HEXAGON
 #include "loadbi3.h"
@@ -928,7 +935,7 @@ void         ladekarte(void)
       cursor.hide();
       displaymessage("loading map %s",0, s1 );
       loadmap(s1);
-      initmap();
+      actmap->startGame();
 
       next_turn();
 
@@ -1177,7 +1184,7 @@ void loadStartupMap ( char *emailgame=NULL, char *mapname=NULL, char *savegame=N
       }
 
       loadmap(s);
-      initmap();
+      actmap->startGame();
       actmap->setupResources();
    }
 }

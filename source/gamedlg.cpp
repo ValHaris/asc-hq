@@ -1,6 +1,13 @@
-//     $Id: gamedlg.cpp,v 1.60 2001-01-23 21:05:15 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.61 2001-01-28 17:19:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2001/01/23 21:05:15  mbickel
+//      Speed up of AI
+//      Lot of bugfixes in AI
+//      Moved Research to own files (research.*)
+//      Rewrote storing of developed technologies
+//      Some cleanup and documentation
+//
 //     Revision 1.59  2001/01/21 16:37:16  mbickel
 //      Moved replay code to own file ( replay.cpp )
 //      Fixed compile problems done by cleanup
@@ -1200,7 +1207,7 @@ void         tnewcampaignlevel::loadcampaignmap(void)
 
    try {
       if (loader.loadmap(mapname) == 0) {
-         ::initmap();
+         actmap->startGame();
          actmap->setupResources();
 
          do {
@@ -1678,7 +1685,7 @@ void         tchoosenewsinglelevel::run(void)
 
       try {
          loadmap( mapname );
-         initmap();
+         actmap->startGame();
 
          removemessage();
          if (actmap->campaign != NULL) {

@@ -1,6 +1,9 @@
-//     $Id: gui.cpp,v 1.49 2001-01-24 11:53:13 mbickel Exp $
+//     $Id: gui.cpp,v 1.50 2001-01-28 17:19:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2001/01/24 11:53:13  mbickel
+//      Fixed some compilation problems with gcc
+//
 //     Revision 1.48  2001/01/21 16:37:17  mbickel
 //      Moved replay code to own file ( replay.cpp )
 //      Fixed compile problems done by cleanup
@@ -25,198 +28,7 @@
 //      Fixed crash when entering damaged building
 //      Fixed crash in AI
 //      Removed item CRCs
-//
-//     Revision 1.42  2000/10/31 10:42:44  mbickel
-//      Added building->vehicle service to vehicle controls
-//      Moved tmap methods to gamemap.cpp
-//
-//     Revision 1.41  2000/10/18 14:14:12  mbickel
-//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
-//       fixed soon.
-//
-//     Revision 1.40  2000/10/11 14:26:39  mbickel
-//      Modernized the internal structure of ASC:
-//       - vehicles and buildings now derived from a common base class
-//       - new resource class
-//       - reorganized exceptions (errors.h)
-//      Split some files:
-//        typen -> typen, vehicletype, buildingtype, basecontainer
-//        controls -> controls, viewcalculation
-//        spfst -> spfst, mapalgorithm
-//      bzlib is now statically linked and sources integrated
-//
-//     Revision 1.39  2000/09/24 19:57:04  mbickel
-//      ChangeUnitHeight functions are now more powerful since they use
-//        UnitMovement on their own.
-//
-//     Revision 1.38  2000/09/07 15:49:41  mbickel
-//      some cleanup and documentation
-//
-//     Revision 1.37  2000/08/30 14:45:08  mbickel
-//      ASC compiles and links with GCC again...
-//
-//     Revision 1.36  2000/08/29 20:21:06  mbickel
-//      Tried to make source GCC compliant, but some problems still remain
-//
-//     Revision 1.35  2000/08/29 17:42:44  mbickel
-//      Restructured GUI to make it compilable with VisualC.
-//
-//     Revision 1.34  2000/08/12 15:01:41  mbickel
-//      Restored old versions of GUI ; new ones were broken
-//
-//     Revision 1.32  2000/08/09 12:39:27  mbickel
-//      fixed invalid height when constructing vehicle with other vehicles
-//      fixed wrong descent icon being shown
-//
-//     Revision 1.31  2000/08/08 09:48:17  mbickel
-//
-//      speed up of dialog boxes in linux
-//      fixed graphical errors in attack
-//      fixed graphical error in ammo transfer
-//      fixed reaction fire not allowing manual attack
-//
-//     Revision 1.30  2000/08/07 16:29:21  mbickel
-//      orbiting units don't consume fuel any more
-//      Fixed bug in attack formula; improved attack formula
-//      Rewrote reactionfire
-//
-//     Revision 1.29  2000/08/04 15:11:10  mbickel
-//      Moving transports costs movement for units inside
-//      refuelled vehicles now have full movement in the same turn
-//      terrain: negative attack / defensebonus allowed
-//      new mapparameters that affect damaging and repairing of building
-//
-//     Revision 1.28  2000/08/03 13:12:12  mbickel
-//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
-//      Repairing units now reduces their experience
-//      negative attack- and defenseboni possible
-//      changed attackformula
-//
-//     Revision 1.27  2000/08/01 10:39:10  mbickel
-//      Updated documentation
-//      Refined configuration file handling
-//
-//     Revision 1.26  2000/07/29 14:54:31  mbickel
-//      plain text configuration file implemented
-//
-//     Revision 1.25  2000/07/16 14:20:02  mbickel
-//      AI has now some primitive tactics implemented
-//      Some clean up
-//        moved weapon functions to attack.cpp
-//      Mount doesn't modify PCX files any more.
-//
-//     Revision 1.24  2000/06/28 18:30:59  mbickel
-//      Started working on AI
-//      Started making loaders independent of memory layout
-//      Destroyed buildings can now leave objects behind.
-//
-//     Revision 1.23  2000/06/08 21:03:41  mbickel
-//      New vehicle action: attack
-//      wrote documentation for vehicle actions
-//
-//     Revision 1.22  2000/06/04 21:39:20  mbickel
-//      Added OK button to ViewText dialog (used in "About ASC", for example)
-//      Invalid command line parameters are now reported
-//      new text for attack result prediction
-//      Added constructors to attack functions
-//
-//     Revision 1.21  2000/05/30 18:39:24  mbickel
-//      Added support for multiple directories
-//      Moved DOS specific files to a separate directory
-//
-//     Revision 1.20  2000/05/18 17:48:39  mbickel
-//      When moving units out of buildings/transports, indirectly accessible
-//         fields are marked now too
-//      The unit info display was not updated when changing the height of an
-//         helicopter
-//
-//     Revision 1.19  2000/05/11 15:45:12  mbickel
-//      No vehicle action icons are shown when another action is running
-//
-//     Revision 1.18  2000/05/10 19:55:53  mbickel
-//      Fixed empty loops when waiting for mouse events
-//
-//     Revision 1.17  2000/05/07 17:04:06  mbickel
-//      Fixed a bug in movement
-//
-//     Revision 1.16  2000/05/07 12:12:17  mbickel
-//      New mouse option dialog
-//      weapon info can now be displayed by clicking on a unit
-//
-//     Revision 1.15  2000/05/06 20:25:23  mbickel
-//      Fixed: -recognition of a second mouse click when selection a pd menu item
-//             -movement: fields the unit can only pass, but not stand on them,
-//                        are marked darker
-//             -intedit/stredit: mouseclick outside is like hitting enter
-//
-//     Revision 1.14  2000/05/02 16:20:54  mbickel
-//      Fixed bug with several simultaneous vehicle actions running
-//      Fixed graphic error at ammo transfer in buildings
-//      Fixed ammo loss at ammo transfer
-//      Movecost is now displayed for mines and repairs
-//      Weapon info now shows unhittable units
-//
-//     Revision 1.13  2000/04/27 16:25:24  mbickel
-//      Attack functions cleanup
-//      New vehicle categories
-//      Rewrote resource production in ASC resource mode
-//      Improved mine system: several mines on a single field allowed
-//      Added unitctrl.* : Interface for vehicle functions
-//        currently movement and height change included
-//      Changed timer to SDL_GetTicks
-//
-//     Revision 1.12  2000/01/24 17:35:43  mbickel
-//      Added dummy routines for sound under DOS
-//      Cleaned up weapon specification
-//
-//     Revision 1.11  2000/01/04 19:43:51  mbickel
-//      Continued Linux port
-//
-//     Revision 1.10  2000/01/02 19:47:07  mbickel
-//      Continued Linux port
-//      Fixed crash at program exit
-//
-//     Revision 1.9  1999/12/29 17:38:14  mbickel
-//      Continued Linux port
-//
-//     Revision 1.8  1999/12/29 12:50:45  mbickel
-//      Removed a fatal error message in GUI.CPP
-//      Made some modifications to allow platform dependant path delimitters
-//
-//     Revision 1.7  1999/12/28 21:02:57  mbickel
-//      Continued Linux port
-//      Added KDevelop project files
-//
-//     Revision 1.6  1999/12/27 13:00:03  mbickel
-//      new vehicle function: each weapon can now be set to not attack certain
-//                            vehicles
-//
-//     Revision 1.5  1999/12/07 22:13:19  mbickel
-//      Fixed various bugs
-//      Extended BI3 map import tables
-//
-//     Revision 1.4  1999/11/22 18:27:29  mbickel
-//      Restructured graphics engine:
-//        VESA now only for DOS
-//        BASEGFX should be platform independant
-//        new interface for initialization
-//      Rewrote all ASM code in C++, but it is still available for the Watcom
-//        versions
-//      Fixed bugs in RLE decompression, BI map importer and the view calculation
-//
-//     Revision 1.3  1999/11/16 17:04:05  mbickel
-//     Made ASC compilable for DOS again :-)
-//     Merged all the bug fixes in that I did last week
-//
-//     Revision 1.2  1999/11/16 03:41:47  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
+
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -262,6 +74,7 @@
 #include "gameoptions.h"
 #include "replay.h"
 #include "gamedlg.h"
+#include "dashboard.h"
 
 tguihoststandard          gui;
 tselectbuildingguihost    selectbuildinggui;

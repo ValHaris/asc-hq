@@ -2,9 +2,15 @@
     \brief The event handling of ASC
 */
 
-//     $Id: missions.cpp,v 1.20 2001-01-28 14:04:14 mbickel Exp $
+//     $Id: missions.cpp,v 1.21 2001-01-28 17:19:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2001/01/28 14:04:14  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.19  2001/01/23 21:05:20  mbickel
 //      Speed up of AI
 //      Lot of bugfixes in AI
@@ -139,6 +145,7 @@
 #include "controls.h"
 #include "sg.h"
 #include "errors.h"
+#include "dashboard.h"
 
 const  int    translatetriggerstatus[4]  = {0, 1, 1, 0};
 

@@ -1,6 +1,14 @@
-//     $Id: loadbi3.cpp,v 1.35 2001-01-25 23:45:00 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.36 2001-01-28 17:19:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2001/01/25 23:45:00  mbickel
+//      Moved map displaying routins to own file (mapdisplay.cpp)
+//      Wrote program to create pcx images from map files (map2pcx.cpp)
+//      Fixed bug in repair function: too much resource consumption
+//      AI improvements and bug fixes
+//      The BI3 map import function now evaluates the player status (human/
+//       computer)
+//
 //     Revision 1.34  2001/01/23 21:05:17  mbickel
 //      Speed up of AI
 //      Lot of bugfixes in AI
@@ -1288,7 +1296,7 @@ void InsertBiMap :: preparemap ( int x, int y  )
    if ( xp + x > actmap->xsize ) {
       int dx = xp + x - actmap->xsize;
       strcat ( missing, "map had to be resized in X direction\n");
-      int r = resizemap ( 0, 0, 0, dx );
+      int r = actmap->resize ( 0, 0, 0, dx );
       if ( r ) {
          strcat ( missing, "Resizing failed !!\n");
          throw timporterror();
@@ -1297,7 +1305,7 @@ void InsertBiMap :: preparemap ( int x, int y  )
    if ( yp + y > actmap->ysize ) {
       int dy = yp + y - actmap->ysize;
       strcat ( missing, "map had to be resized in Y direction\n");
-      int r = resizemap ( 0, dy, 0, 0 );
+      int r = actmap->resize ( 0, dy, 0, 0 );
       if ( r ) {
          strcat ( missing, "Resizing failed !!\n");
          throw timporterror();

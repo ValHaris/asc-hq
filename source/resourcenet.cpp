@@ -19,7 +19,14 @@
  *                                                                         *
  ***************************************************************************/
 
-
+#include "typen.h"
+#include "vehicletype.h"
+#include "buildingtype.h"
+#include "spfst.h"
+#include "resourcenet.h"
+#include "mapalgorithms.h"
+#include "dlg_box.h"
+#include "dialog.h"
 
 
 void MapNetwork :: searchfield ( int x, int y, int dir )
