@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.63 2001-10-22 18:53:39 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.64 2001-11-15 20:16:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2001/10/22 18:53:39  mbickel
+//      Fixed BI3 map translation errors: wrong order of table evaluation
+//
 //     Revision 1.62  2001/10/21 20:18:39  mbickel
 //      Fixed non-empty table problem with BI3 map import
 //      Added ini parameter to specify wood behaviour
@@ -341,6 +344,8 @@ class Bi3MapTranslationTable {
         struct Objecttranslataion {
            int BIpic;
            int objects[4];
+           int terrainID;
+           int terrainWeather;
         };
         /** These BI object pictures can be translated to up to four ASC objects. The first entry is again the BI picture number,
             the following four the pictures for the ASC objects. A -1 is used if the entry is not used. It does not matter if you
@@ -370,10 +375,16 @@ void Bi3MapTranslationTable :: runTextIO ( PropertyContainer& pc )
    pc.addIntegerArray ( "TerrainObjTranslation", _terrainobjtranslation );
 
    vector<int> _objecttranslation;
-   pc.addIntegerArray ( "ObjectTranslation", _objecttranslation );
+   if ( pc.find( "ObjectTranslation" ))
+      pc.addIntegerArray ( "ObjectTranslation", _objecttranslation );
 
    vector<int> _object2IDtranslation;
    pc.addIntegerArray ( "Object2IDTranslation", _object2IDtranslation );
+
+   vector<int> object3translation;
+   if ( pc.find( "Object3Translation" ))
+      pc.addIntegerArray ( "Object3Translation", object3translation );
+
 
    pc.run();
 
@@ -415,9 +426,26 @@ void Bi3MapTranslationTable :: runTextIO ( PropertyContainer& pc )
       ot.BIpic = _objecttranslation[i*5];
       for ( int j = 0; j < 4; j++ )
          ot.objects[j] = _objecttranslation[i*5 + 1 + j];
+      ot.terrainID = -1;
+      ot.terrainWeather = 0;
 
       objecttranslate.push_back ( ot );
    }
+
+
+   if ( object3translation.size() % 7 )
+      fatalError ( "Bi3 map translation : object3translation - Invalid number of entries ");
+   for ( int i = 0; i < object3translation.size()/7; i++ ) {
+      Objecttranslataion ot;
+      ot.BIpic = object3translation[i*7];
+      for ( int j = 0; j < 4; j++ )
+         ot.objects[j] = object3translation[i*7 + 1 + j];
+      ot.terrainID = object3translation[i*7 + 5];
+      ot.terrainWeather = object3translation[i*7 + 6];
+
+      objecttranslate.push_back ( ot );
+   }
+
 
    if ( _object2IDtranslation.size() % 2 )
       fatalError ( "Bi3 map translation : object2IDtranslation - Invalid number of entries ");
@@ -670,7 +698,7 @@ void  tloadBImap ::  ReadMISSPart(void)
   Allianz = OrgMissRec.Allianz; 
   for (I = 0; I <= 5; I++) 
      Allianz[I] = Allianz[I] & 0x3F; 
-  Recs2Win = OrgMissRec.Recs2Win; 
+  Recs2Win = OrgMissRec.Recs2Win;
   StartWeather = OrgMissRec.StartWeather; 
   if ( StartWeather < 0  ||  StartWeather > 4 )
      StartWeather = 0; 
@@ -913,7 +941,7 @@ void        tloadBImap ::   ReadACTNPart(void)
             
          }
       }
-    } 
+    }
     
     if ( missnum ) {
        strcat ( missing, "The following terrain fields could not be found: " );
@@ -943,12 +971,17 @@ void        tloadBImap ::   ReadACTNPart(void)
 
          int xl = 0;
          int xlt[5];
+         int trrID = -1;
+         int trrWeather = 0;
          xlt[0] = Line[X];
          for ( int b = 0; b < translationTable->objecttranslate.size(); b++ )
-             if ( translationTable->objecttranslate[b].BIpic == Line[X] )
+             if ( translationTable->objecttranslate[b].BIpic == Line[X] ) {
                 for ( int c = 1; c < 5; c++ )
                    if ( translationTable->objecttranslate[b].objects[c] != -1 )
                       xlt[xl++] = translationTable->objecttranslate[b].objects[c];
+                trrID = translationTable->objecttranslate[b].terrainID;
+                trrWeather = translationTable->objecttranslate[b].terrainWeather;
+             }
          if ( xl == 0 ) {
             for ( int c = 0; c < translationTable->terraintranslation.size(); c++ )
                 if ( translationTable->terraintranslation[c].first == Line[X] )
@@ -994,6 +1027,21 @@ void        tloadBImap ::   ReadACTNPart(void)
                   }
             }
          }
+
+         if ( trrID >= 0 ) {
+            pterraintype trrn = getterraintype_forid ( trrID );
+            if ( trrn ) {
+               if ( !trrn->weather[trrWeather] )
+                  trrWeather = 0;
+
+               if ( trrn->weather[trrWeather] ) {
+                  pfield fld = getfield ( newx, newy );
+                  fld->typ = trrn->weather[trrWeather];
+                  fld->setparams();
+               }
+            }
+         }
+
 
          if ( !found  && Line[X] != 0xffff ) {
             if ( fakemap ) {
@@ -1452,7 +1500,7 @@ void tloadBImap :: GetTXTName ( const char* path, const char* filename, char* bu
     strcat ( buf, pathdelimitterstring );
     strcat ( buf, filename );
     strcpy ( &buf[ strlen ( buf ) - 3], "txt" );
-    if ( exist ( buf )) 
+    if ( exist ( buf ))
        return;
 
     buf[0] = 0;
@@ -1638,3 +1686,4 @@ void insertbattleislemap ( int x, int y, const char* path, const char* filename 
 
 
 #pragma pack()
+
