@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.88 2002-03-18 21:42:17 mbickel Exp $
+//     $Id: typen.cpp,v 1.89 2002-03-27 00:18:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.88  2002/03/18 21:42:17  mbickel
+//      Some cleanup and documentation in the Mine class
+//      The number of mines is now displayed in the field information window
+//
 //     Revision 1.87  2002/02/21 17:06:52  mbickel
 //      Completed Paragui integration
 //      Moved mail functions to own file (messages)
@@ -477,7 +481,7 @@ const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoundaryNum
 const int directionangle [ sidenum ] = 
  { 0, -53, -127, -180, -180 -53 , -180 -127 };
 
-const int resourceWeight[ resourceTypeNum ] = { 0, 4, 12 };
+const int resourceWeight[ resourceTypeNum ] = { 0, 10, 4 };
 
 
 

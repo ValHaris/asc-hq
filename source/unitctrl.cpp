@@ -1,6 +1,11 @@
-//     $Id: unitctrl.cpp,v 1.83 2002-03-26 22:23:09 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.84 2002-03-27 00:18:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.83  2002/03/26 22:23:09  mbickel
+//      Fixed: music was started even if turned off in ini file
+//      Fixed: crash in reaction fire
+//      Fixed: reaction fire not occuring when changing height
+//
 //     Revision 1.82  2001/12/19 17:16:29  mbickel
 //      Some include file cleanups
 //
@@ -1596,8 +1601,8 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int h
             displaymessage ( "ChangeVehicleHeight :: execute / vmove step 3 failed !", 2 );
       }
 
-      // cancel if the unit was attecked; unless overridden param3 (noInterrupt = allFields) 
-      if ( actmap->getUnit ( networkID ) && (!vmove->attackedByReactionFire || allFields)) {
+      // cancel if the unit was attecked; unless overridden param3 (noInterrupt = allFields)
+      if ( actmap->getUnit ( networkID ) && (!vmove || (!vmove->attackedByReactionFire || allFields)) ) {
          modechangePosition = MapCoordinate ( sp.x, sp.y );
 
          fieldReachableRek.run( x, y, vehicle, height, &path, vehicle->getMovement( false ) );

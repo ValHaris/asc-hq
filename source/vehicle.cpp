@@ -288,7 +288,7 @@ int Vehicle::cargo ( void ) const
 
 int Vehicle::weight( void ) const
 {
-   return typ->weight + tank.fuel * resourceWeight[Resources::Fuel] / 1024 + tank.material * resourceWeight[Resources::Material] / 1024 + cargo();
+   return typ->weight + tank.fuel * resourceWeight[Resources::Fuel] / 1000 + tank.material * resourceWeight[Resources::Material] / 1000 + cargo();
 }
 
 int Vehicle::size ( void )
@@ -812,7 +812,7 @@ int Vehicle::getMaxResourceStorageForWeight ( int resourcetype )
    if ( fld->vehicle  &&  fld->vehicle != this && resourceWeight[resourcetype] ) {
       int fw = freeweight( 1 );
       if ( fw >= 0 ) {
-         int maxf = fw * 1024 / resourceWeight[resourcetype];
+         int maxf = fw * 1000 / resourceWeight[resourcetype];
          if ( maxf > typ->tank.resource(resourcetype) || maxf < 0 )
             return typ->tank.resource(resourcetype);
          else

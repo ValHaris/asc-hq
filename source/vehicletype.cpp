@@ -151,7 +151,7 @@ int Vehicletype :: vehicleloadable ( pvehicletype fzt ) const
 
 int Vehicletype::maxweight ( void ) const
 {
-   return weight + tank.fuel * resourceWeight[Resources::Fuel] / 1024 + tank.material * resourceWeight[Resources::Material] / 1024;
+   return weight + tank.fuel * resourceWeight[Resources::Fuel] / 1000 + tank.material * resourceWeight[Resources::Material] / 1000;
 }
 
 int Vehicletype::maxsize ( void ) const

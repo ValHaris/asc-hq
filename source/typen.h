@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.109 2002-03-18 21:42:17 mbickel Exp $
+//     $Id: typen.h,v 1.110 2002-03-27 00:18:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.109  2002/03/18 21:42:17  mbickel
+//      Some cleanup and documentation in the Mine class
+//      The number of mines is now displayed in the field information window
+//
 //     Revision 1.108  2002/03/03 14:13:49  mbickel
 //      Some documentation updates
 //      Soundsystem update
@@ -1110,7 +1114,7 @@ const int attackmovecost = 0;
 //! The maximum number of fields a mining station can extract mineral resources from; Counted from its entry
 const int maxminingrange = 10;
 
-//! The weight of 1024 units of aa Resource 
+//! The weight of 1000 units of a Resource 
 extern const int resourceWeight[ resourceTypeNum ];
 
 #define objectbuildmovecost 16  // vehicle->movement -= (8 + ( fld->movemalus[0] - 8 ) / ( objectbuildmovecost / 8 ) ) * kosten des obj

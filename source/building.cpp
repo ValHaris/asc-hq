@@ -2,9 +2,15 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.79 2002-03-02 23:04:00 mbickel Exp $
+//     $Id: building.cpp,v 1.80 2002-03-27 00:18:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.79  2002/03/02 23:04:00  mbickel
+//      Some cleanup of source code
+//      Improved Paragui Integration
+//      Updated documentation
+//      Improved Sound System
+//
 //     Revision 1.78  2001/12/14 10:20:04  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -6756,8 +6762,8 @@ void ccontainer_t :: ctransportinfo_subwindow :: paintvariables ( void )
    eht = hostcontainer->getmarkedunit();
    if ( eht ) {
       showtext2c ( strrr ( eht->typ->weight ),                       subwinx1 + 170,  subwiny1 +  62 );
-      showtext2c ( strrr ( eht->tank.material * resourceWeight[Resources::Material] / 1024 ),  subwinx1 + 170,  subwiny1 +  70 );
-      showtext2c ( strrr ( eht->tank.fuel     * resourceWeight[Resources::Fuel]     / 1024 ),  subwinx1 + 170,  subwiny1 +  78 );
+      showtext2c ( strrr ( eht->tank.material * resourceWeight[Resources::Material] / 1000 ),  subwinx1 + 170,  subwiny1 +  70 );
+      showtext2c ( strrr ( eht->tank.fuel     * resourceWeight[Resources::Fuel]     / 1000 ),  subwinx1 + 170,  subwiny1 +  78 );
       showtext2c ( strrr ( eht->cargo() ),                           subwinx1 + 170,  subwiny1 +  86 );
       showtext2c ( strrr ( eht->weight() ),                          subwinx1 + 170,  subwiny1 +  96 );
    } else {
