@@ -1,6 +1,9 @@
-//     $Id: loadbi3.cpp,v 1.16 2000-05-11 20:12:05 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.17 2000-05-21 17:18:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/05/11 20:12:05  mbickel
+//      mapedit(lin) can now import BI3 maps
+//
 //     Revision 1.15  2000/04/27 16:25:24  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -768,6 +771,11 @@ char* getbi3path ( void )
 }
 
 
+#include "objxlat.cpp"
+
+/*
+
+These tables are now in a separate file: objxlat.cpp , to be modifyable by non-programmers
 
 const int terraintranslatenum = 17;
 const int terraintranslate[terraintranslatenum][2] = {{ 574 , 526 } , { 575 , 1233 }, {577, 1244 }, 
@@ -825,6 +833,7 @@ const int objecttranslate[objecttranslatenum][5] = {{ 1264, 1470, 1500, -1, -1 }
                                                     {  461, 1203, -1, -1, -1 }
                                                     };
 
+*/
 
 const int fuelfactor = 120;
 const int materialfactor = 390;
