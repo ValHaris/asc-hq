@@ -12,7 +12,7 @@ AC_PROG_RANLIB
 dnl Checks for libraries.
 
 dnl Checks for STL header files (which aren't available for gcc at the time of writing).
-AC_CHECK_HEADERS( stdexception limits )
+AC_CHECK_HEADERS( exception limits )
 
 dnl Checks for other header files.
 AC_HEADER_STDC
@@ -36,8 +36,8 @@ AC_TYPE_SIZE_T
 
 dnl Checks for libraries.
 AC_CHECK_LIB( pthread, pthread_create )
-dnl AC_CHECK_LIB( SDL-1.1, SDL_EnableKeyRepeat, , AC_MSG_ERROR( ASC requires SDL 1.1.3 or newer to be installed ) )
-AC_CHECK_LIB( bz2, BZ2_bzReadOpen,, AC_MSG_ERROR( ASC requires bz2-1.0.0 . You can install the one in source/lib/bzlib/ or download the latest version from http://sourceware.cygnus.com/bzip2 ))
+dnl AC_CHECK_LIB( SDL-1.1, SDL_EnableKeyRepeat, echo " ", AC_MSG_ERROR( ASC requires SDL 1.1.3 or newer to be installed ) )
+dnl AC_CHECK_LIB( bz2, BZ2_bzReadOpen,echo " ", AC_MSG_ERROR( ASC requires bz2-1.0.0 . You can install the one in source/lib/bzlib/ or download the latest version from http://sourceware.cygnus.com/bzip2 ))
 
 SDL_VERSION=1.1.3
       AM_PATH_SDL($SDL_VERSION,

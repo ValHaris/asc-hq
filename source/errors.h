@@ -25,8 +25,8 @@
  extern void fatalError ( const char* formatstring, ... );
 
 
- #ifdef HAVE_STDEXCEPTION
-  #include <stdexception>
+ #ifdef HAVE_EXCEPTION
+  #include <exception>
   class ASCexception : public exception { };
  #else
   class ASCexception {};

@@ -35,11 +35,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/sg.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/strtmesg.h,/home/martin/asc/source/strtmesg.cpp,
 show_outputview=true
 show_treeview=true
-header_file=Unbenannt.h
-cpp_file=/home/martin/asc/source/sg.cpp
+header_file=/home/martin/asc/source/strtmesg.h
+cpp_file=/home/martin/asc/source/strtmesg.cpp
 browser_file=file:/home/martin/.kde/share/apps/kdevelop/search_result.html
 [source/astar2.h]
 install_location=
@@ -107,7 +107,7 @@ type=SOURCE
 [Config for BinMakefileAm]
 ldflags=
 addcxxflags=
-ldadd=-lSDL -lpthread -lbz2
+ldadd=-lSDL -lpthread
 bin_program=asc
 cxxflags=-O0 -g3 -Wall
 [source/sdl/graphics.cpp]

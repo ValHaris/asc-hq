@@ -24,6 +24,9 @@
 /* Define if you have the <dirent.h> header file.  */
 #undef HAVE_DIRENT_H
 
+/* Define if you have the <exception> header file.  */
+#undef HAVE_EXCEPTION
+
 /* Define if you have the <limits> header file.  */
 #undef HAVE_LIMITS
 
@@ -32,9 +35,6 @@
 
 /* Define if you have the <ndir.h> header file.  */
 #undef HAVE_NDIR_H
-
-/* Define if you have the <stdexception> header file.  */
-#undef HAVE_STDEXCEPTION
 
 /* Define if you have the <strings.h> header file.  */
 #undef HAVE_STRINGS_H
@@ -47,9 +47,6 @@
 
 /* Define if you have the <sys/ndir.h> header file.  */
 #undef HAVE_SYS_NDIR_H
-
-/* Define if you have the bz2 library (-lbz2).  */
-#undef HAVE_LIBBZ2
 
 /* Define if you have the pthread library (-lpthread).  */
 #undef HAVE_LIBPTHREAD
