@@ -151,13 +151,23 @@ ptechnology gettechnology_forpos ( int pos, int crccheck  )
       return NULL;
 }
 
+
+void duplicateIDError ( const ASCString& itemtype, int id, const ASCString& file1, const ASCString& name1, const ASCString&  file2, const ASCString& name2 )
+{
+   fatalError ( "Conflicting IDs !\n"
+                "These two " + itemtype + "s use both the ID of " + strrr ( id ) + "\n" +
+                " " + name1 + " from file " + file1 + "\n" +
+                " " + name2 + " from file " + file2 + "\n\n" +
+                "This is NOT a bug of ASC, it is conflict between two data files.");
+
+}
+
 void addterraintype ( pterraintype bdt )
 {
    if ( bdt ) {
       TerrainMap::iterator i = terrainmap.find ( bdt->id );
       if ( i != terrainmap.end() )
-         fatalError ( "Unable to add terraintype from file " + bdt->fileName+ "; "
-                      "The unit " + i->second->name + " from file " + i->second->location + " has the same ID ");
+         duplicateIDError ( "terraintype", bdt->id, bdt->location, bdt->name, i->second->location, i->second->name );
 
       terrain[ terraintypenum++] = bdt;
       terrainmap[bdt->id] = bdt;
@@ -172,8 +182,7 @@ void addobjecttype ( pobjecttype obj )
 
       ObjectMap::iterator i = objectmap.find ( obj->id );
       if ( i != objectmap.end() )
-         fatalError ( "Unable to add objecttype from file " + obj->fileName+ "; "
-                      "The unit " + i->second->name + " from file " + i->second->location + " has the same ID ");
+         duplicateIDError ( "objecttype", obj->id, obj->location, obj->name, i->second->location, i->second->name );
 
       objecttypes[ objecttypenum++] = obj;
       objectmap[obj->id] = obj;
@@ -200,8 +209,7 @@ void addvehicletype ( pvehicletype vhcl )
 
       VehicleMap::iterator i = vehiclemap.find ( vhcl->id );
       if ( i != vehiclemap.end() )
-         fatalError ( "Unable to add vehicletype from file " + vhcl->filename+ "; "
-                      "The unit " + i->second->getName() + " from file " + i->second->location + " has the same ID ");
+         duplicateIDError ( "vehicletype", vhcl->id, vhcl->location, vhcl->getName(), i->second->location, i->second->getName() );
 
       vehicletypes[ vehicletypenum++] = vhcl;
       vehiclemap[vhcl->id] = vhcl;
@@ -213,8 +221,7 @@ void addbuildingtype ( pbuildingtype bld )
 
       BuildingMap::iterator i = buildingmap.find ( bld->id );
       if ( i != buildingmap.end() )
-         fatalError ( "Unable to add buildingtype from file " + bld->fileName+ "; "
-                      "The unit " + i->second->name + " from file " + i->second->location + " has the same ID ");
+         duplicateIDError ( "buildingtype", bld->id, bld->location, bld->name, i->second->location, i->second->name );
 
       buildingtypes[ buildingtypenum++] = bld;
       buildingmap[bld->id] = bld;

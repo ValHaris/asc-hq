@@ -21,6 +21,14 @@ bi3maptranslation {
 			   237 1110 
 			   233 1094 ]
 
+
+    ;The first entry is the picture number that is going to be replaced by the 
+    ; terrain with the ID of the second number and the weather of the third 
+    ; number
+
+    Terrain2IDTranslation =
+
+
     ; This is a special translation for the fields that must be translated to 
     ; a terrain AND an additional object. Entries are:
     ;       bigraph;

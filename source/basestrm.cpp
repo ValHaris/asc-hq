@@ -2,9 +2,13 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.61 2001-07-28 11:19:10 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.62 2001-08-09 14:50:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2001/07/28 11:19:10  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.60  2001/07/27 21:13:34  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -729,7 +733,9 @@ bool  tnstream::readTextString ( ASCString& s, bool includeCR  )
 ASCString  tnstream::readString ( bool includeCR )
 {
   ASCString s;
-  readTextString ( s, includeCR );
+  bool data = readTextString ( s, includeCR );
+  if ( !data )
+     throw treadafterend ( getDeviceName() );
   return s;
 }
 
@@ -1893,6 +1899,7 @@ tn_c_lzw_filestream :: tn_c_lzw_filestream ( const ASCString& name, IOMode mode 
       strm = new tn_file_buf_stream ( constructFileName ( string, fl.directoryLevel, NULL, name.c_str()), mode );
       inp = 1;
       devicename = name;
+      location = name;
 
    } else {
       containerstream = fl.container;

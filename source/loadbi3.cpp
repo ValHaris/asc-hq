@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.49 2001-08-09 10:28:23 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.50 2001-08-09 14:50:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2001/08/09 10:28:23  mbickel
+//      Fixed AI problems
+//      Mapeditor can edit a units AI parameter
+//
 //     Revision 1.48  2001/07/28 21:09:08  mbickel
 //      Prepared vehicletype structure for textIO
 //
@@ -252,67 +256,6 @@ const char* getbi3path ( void )
 
 #include "objxlat.cpp"
 
-/*
-
-These tables are now in a separate file: objxlat.cpp , to be modifyable by non-programmers
-
-const int terraintranslatenum = 17;
-const int terraintranslate[terraintranslatenum][2] = {{ 574 , 526 } , { 575 , 1233 }, {577, 1244 }, 
-                                                      { 581 ,1260 } , { 573 , 1226 }, {572, 1221 }, 
-                                                      { 576 ,1238 } , { 578 , 1245 }, {579, 1249 }, 
-                                                      { 580 ,1253 } , { 242 , 1135 }, {463,  449 },
-                                                      { 464,  450 } , { 465,  451  }, {466,  452 },
-                                                      { 237, 1110 } , { 233, 1094 }};
-
-const int terraincombixlatnum = 2;
-struct terraincombixlat {
-           int bigraph;
-           int terrainid;
-           int terrainweather;
-           int objectid;
-       };
-const terraincombixlat terraincombixlat[terraincombixlatnum] = {{ 222, 1011, 0, 1 }, 
-                                                                { 223, 1012, 0, 1 }};
-
-const int objecttranslatenum = 35;
-const int objecttranslate[objecttranslatenum][5] = {{ 1264, 1470, 1500, -1, -1 }, 
-                                                    { 1265, 1470, -1, 1560, -1 }, 
-                                                    { 1266, 1470, -1, -1, 1530 }, 
-                                                    { 1267, -1, 1500, 1560, -1 }, 
-                                                    { 1268, -1, 1500, -1, 1530 }, 
-                                                    { 1269, -1, -1, 1560, 1530 }, 
-                                                    { 1270, 1470, 1500, 1560, -1 }, 
-                                                    { 1271, 1470, 1500, -1, 1530 }, 
-                                                    { 1272, 1470, -1, 1560, 1530 }, 
-                                                    { 1273, -1, 1500, 1560, 1530 }, 
-                                                    { 1274, 1470, 1500, 1560, 1530 },
-                                                    { 90  , 1470,  -1 , -1, -1   }, 
-                                                    { 91  , -1  , -1, 1560, -1   }, 
-                                                    { 92  , -1, 1500, -1  , -1   }, 
-                                                    { 93  , -1  , -1  , -1  , 1530 },
-                                                    { 459, 1190, -1, -1, -1 },
-                                                    { 460, 1191, -1, -1, -1 },
-                                                    { 1329, 1296, -1, -1, -1 },
-                                                    { 1330, 1300, -1, -1, -1 },
-                                                    { 1331, 1304, -1, -1, -1 },
-                                                    {  234, 1098, -1, -1, -1 },
-                                                    {  235, 1101, -1, -1, -1 },
-                                                    {  236, 1102, -1, -1, -1 },
-                                                    { 1283, 1284, -1, -1, -1 },
-                                                    { 1334, 1325, -1, -1, -1 },
-                                                    { 1333, 1320, -1, -1, -1 },
-                                                    {  238, 1113, -1, -1, -1 },
-                                                    {  239, 1118, -1, -1, -1 },
-                                                    {  240, 1125, -1, -1, -1 },
-                                                    {  241, 1131, -1, -1, -1 },
-                                                    {  345, 1152, -1, -1, -1 },
-                                                    { 1332, 1310, -1, -1, -1 },
-                                                    {  347,  340, -1, -1, -1 },
-                                                    {  348,  342, -1, -1, -1 },
-                                                    {  461, 1203, -1, -1, -1 }
-                                                    };
-
-*/
 
 const int fuelfactor = 120;
 const int materialfactor = 390;
@@ -719,18 +662,34 @@ void        tloadBImap ::   ReadACTNPart(void)
          fld->tempw = Line[X];
          fld->temp3 = 0;
 
-         for ( int i = 0; i < terraintypenum; i++ ) {
-            pterraintype trrn = getterraintype_forpos ( i );
-            if ( trrn )
-               for ( int j = 0; j < cwettertypennum; j++ )
-                  if ( trrn->weather[j] )
-                     if ( trrn->weather[j]->bi_pict == Line[X] ) {
-                        fld->typ = trrn->weather[j];
-                        fld->setparams();
-                        found = 1;
-                     }
+
+         for ( int i = 0; i < terrain2idTransNum; i++ ) {
+            if ( Line[X] == terrain2idTranslation[i][0] ) {
+                pterraintype trrn = getterraintype_forid ( terrain2idTranslation[i][1] );
+                int w = terrain2idTranslation[i][2];
+                if ( trrn )
+                  if ( trrn->weather[w] ) {
+                     fld->typ = trrn->weather[w];
+                     fld->setparams();
+                     found = 1;
+                  }
+            }
          }
-         if ( !found ) 
+
+         if ( !found )
+            for ( int i = 0; i < terraintypenum; i++ ) {
+               pterraintype trrn = getterraintype_forpos ( i );
+               if ( trrn )
+                  for ( int j = 0; j < cwettertypennum; j++ )
+                     if ( trrn->weather[j] )
+                        if ( trrn->weather[j]->bi_pict == Line[X] ) {
+                           fld->typ = trrn->weather[j];
+                           fld->setparams();
+                           found = 1;
+                        }
+            }
+
+         if ( !found )
             for ( int j = 0; j < terraincombixlatnum; j++ )
                if ( Line[X] == terraincombixlat[j].bigraph ) {
                   pterraintype trrn = getterraintype_forid ( terraincombixlat[j].terrainid );

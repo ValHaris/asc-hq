@@ -5,9 +5,16 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.65 2001-08-06 20:54:43 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.66 2001-08-09 14:50:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.65  2001/08/06 20:54:43  mbickel
+//      Fixed lots of crashes related to the new text files
+//      Fixed delayed events
+//      Fixed crash in terrin change event
+//      Fixed visibility of mines
+//      Fixed crashes in event loader
+//
 //     Revision 1.64  2001/08/02 18:50:43  mbickel
 //      Corrected Error handling in Text parsers
 //      Improved version information
@@ -357,7 +364,6 @@ pvehicletype   loadvehicletype( const char* name)
    tnfilestream stream ( name, tnstream::reading );
    pvehicletype vt = loadvehicletype ( stream );
    vt->filename = extractFileName_withoutSuffix ( name );
-   vt->location = name;
    displayLogMessage ( 5, " done\n");
    return vt;
 }
@@ -367,6 +373,7 @@ pvehicletype   loadvehicletype( tnstream& stream )
 {
    pvehicletype veh = new Vehicletype;
    veh->read( stream );
+   veh->location = stream.getLocation();
    return veh;
 }
 
@@ -597,7 +604,7 @@ pbuildingtype       loadbuildingtype( const char *       name)
 
 
 pbuildingtype       loadbuildingtype( pnstream stream )
-{ 
+{
    int v, w, x, y;
 
    int version;
@@ -605,11 +612,11 @@ pbuildingtype       loadbuildingtype( pnstream stream )
    if ( version <= building_version && version >= 1) {
 
       pbuildingtype pgbt = new BuildingType;
-   
+
       for ( v = 0; v < cwettertypennum; v++ )
          for ( w = 0; w < maxbuildingpicnum; w++ )
             for ( x = 0; x < 4; x++ )
-               for ( y = 0; y < 6 ; y++ ) 
+               for ( y = 0; y < 6 ; y++ )
                    pgbt->w_picture[v][w][x][y] = (void*)stream->readInt( );
 
       for ( v = 0; v < cwettertypennum; v++ )
@@ -700,13 +707,15 @@ pbuildingtype       loadbuildingtype( pnstream stream )
                                                                                 CGameOptions::Instance()->bi3.interpolate.buildings );
                      
                   
-       pgbt->terrain_access = &pgbt->terrainaccess; 
-   
+       pgbt->terrain_access = &pgbt->terrainaccess;
+
      #ifdef converter
       pgbt->guibuildicon = NULL;
      #else
       pgbt->guibuildicon = generate_building_gui_build_icon ( pgbt );
      #endif
+
+      pgbt->location = stream->getLocation();
 
       return pgbt; 
    } else
@@ -731,7 +740,7 @@ void writebuildingtype ( pbuildingtype bld, pnstream stream )
          for ( x = 0; x < 4; x++ )
             for ( y = 0; y < 6 ; y++ ) 
                 stream->writeInt ( bld->bi_picture[v][w][x][y] );
-            
+
    stream->writeInt ( bld->entry.x );
    stream->writeInt ( bld->entry.y );
    stream->writeInt ( -1 ); // was bld->powerlineconnect.x
@@ -856,25 +865,25 @@ void generateaveragecolprt ( int x1, int y1, int x2, int y2, void* buf, char* pi
       int r1 = r / pixnum;
       int g1 = g / pixnum;
       int b1 = b / pixnum;
-   
-   
+
+
       int diff = 0xFFFFFFF;
       int actdif;
 
-   
+
       for (i=0;i<256 ;i++ ) {
          actdif = sqr( pal[i][0] - r1 ) + sqr( pal[i][1] - g1 ) + sqr( pal[i][2] - b1 );
          if (actdif < diff) {
             diff = actdif;
             *pix1 = i;
          }
-      } 
-   
+      }
+
 /*
       int sml = ( r1 >> 2) + (( g1 >> 2) << 6) + (( b1 >> 2) << 12);
       *pix1 = truecolor2pal_table[sml];
 */
-   
+
    } else {
       *pix1 = 255;
    }
@@ -914,7 +923,6 @@ pterraintype      loadterraintype( const char *       name)
    tnfilestream stream ( name, tnstream::reading );
    pterraintype tt = loadterraintype ( &stream );
    tt->fileName = extractFileName_withoutSuffix ( name );
-   tt->location = name;
    displayLogMessage ( 5, " done\n" );
    return tt;
 }
@@ -923,6 +931,7 @@ pterraintype loadterraintype( pnstream stream )
 {
     pterraintype bbt = new TerrainType;
     bbt->read ( *stream );
+    bbt->location = stream->getLocation();
     return bbt;
 }
 
@@ -935,7 +944,6 @@ pobjecttype   loadobjecttype( const char *       name)
    tnfilestream stream ( name, tnstream::reading );
    pobjecttype ot = loadobjecttype ( &stream );
    ot->fileName = extractFileName_withoutSuffix ( name );
-   ot->location = extractFileName_withoutSuffix ( name );
    displayLogMessage ( 5, " done\n" );
    return ot;
 /*
@@ -954,6 +962,7 @@ pobjecttype   loadobjecttype( pnstream stream )
 {
    pobjecttype fztn = new ObjectType;
    fztn->read ( *stream );
+   fztn->location = stream->getLocation();
 
    return fztn;
 }

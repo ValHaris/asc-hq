@@ -7,6 +7,10 @@ int terraintranslatenum = 0;
 int terraintranslate[100][2];
 
 
+int terrain2idTransNum = 0;
+int terrain2idTranslation[100][3];
+
+
 // This is a special translation for the fields that must be translated to a terrain AND an additional object
 
 int terraincombixlatnum = 0;
@@ -64,6 +68,9 @@ void readBI3translationTable ( )
    vector<int> terraintranslation;
    pc.addIntegerArray ( "TerrainTranslation", terraintranslation );
 
+   vector<int> terrain2idtrans;
+   pc.addIntegerArray ( "Terrain2IDTranslation", terrain2idtrans );
+
    vector<int> terrainobjtranslation;
    pc.addIntegerArray ( "TerrainObjTranslation", terrainobjtranslation );
 
@@ -81,6 +88,13 @@ void readBI3translationTable ( )
    terraintranslatenum = terraintranslation.size()/2;
    for ( int i = 0; i < terraintranslation.size(); i++ )
       terraintranslate[i/2][i%2] = terraintranslation[i];
+
+   if ( terrain2idtrans.size() % 3 )
+      fatalError ( "Bi3 map translation : terrain2idTranslation - Invalid number of entries ");
+   terrain2idTransNum = terrain2idtrans.size()/3;
+   for ( int i = 0; i < terrain2idtrans.size(); i++ )
+      terrain2idTranslation[i/3][i%3] = terrain2idtrans[i];
+
 
    if ( terrainobjtranslation.size() % 4 )
       fatalError ( "Bi3 map translation : terrainobjtranslation - Invalid number of entries ");

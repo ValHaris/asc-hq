@@ -2,9 +2,14 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.29 2001-08-07 21:24:36 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.30 2001-08-09 14:50:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2001/08/07 21:24:36  mbickel
+//      Fixed invalid height of planes inside carriers (mapeditor)
+//      Added namespace std usage to unix config
+//      Updated vehicles (provided by gamer)
+//
 //     Revision 1.28  2001/07/28 11:19:10  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -1289,7 +1294,10 @@ void SelectItemContainer :: checkformouse ( void )
          }
 
       switch ( found ) {
-         case 0: selterraintype ( ct_invvalue );
+         case 0: if ( skeypress ( ct_lstrg ) || skeypress ( ct_rstrg ))
+                    selterraintype ( ct_invvalue );
+                 else
+                    execaction(act_switchmaps );
             break;
          case 1: selvehicletype ( ct_invvalue );
             break;

@@ -22,9 +22,9 @@
     <USERDEFINES value="_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="gfx2pcx.bpf"/>
-    <INCLUDEPATH value="..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt"/>
-    <LIBPATH value="..\;..\..\tools;$(BCB)\lib\obj;$(BCB)\lib"/>
-    <WARNINGS value="-w-par"/>
+    <INCLUDEPATH value="..\;..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt"/>
+    <LIBPATH value="..\;..;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par -w-csu"/>
   </MACROS>
   <OPTIONS>
     <CFLAG1 value="-Od -Q -Vx -Ve -X- -a1 -b -k -y -v -vi- -tWC -tWM -c -K"/>

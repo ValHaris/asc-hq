@@ -228,7 +228,7 @@ void PropertyContainer::warning ( const ASCString& errmsg )
 
 void PropertyContainer::error ( const ASCString& errmsg )
 {
-   fatalError ( errmsg.c_str() );
+   fatalError ( getFileName() + " : " + errmsg );
 }
 
 

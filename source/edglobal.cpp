@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.33 2001-08-02 15:33:01 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.34 2001-08-09 14:50:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2001/08/02 15:33:01  mbickel
+//      Completed text based file formats
+//
 //     Revision 1.32  2001/07/28 11:19:10  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -926,6 +929,7 @@ void execaction(int code)
    case act_setunitfilter: selectunitsetfilter();
       break;
    case act_selectgraphicset: selectgraphicset();
+                              showallchoices();
       break;
   #ifdef FREEMAPZOOM    
    case act_setzoom : choosezoomlevel();
@@ -940,11 +944,13 @@ void execaction(int code)
                             setnewterrainselection ( auswahl );
                             showallchoices();
                          }
+                         lastselectiontype = cselbodentyp;
                          execaction(act_switchmaps);
                          break;
    case act_switchmaps: mapSwitcher.toggle();
                         displaymap();
                         showStatusBar();
+                        showallchoices();
       break;
     }
 }

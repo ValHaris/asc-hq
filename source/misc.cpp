@@ -1,6 +1,13 @@
-//     $Id: misc.cpp,v 1.18 2001-08-06 20:54:43 mbickel Exp $
+//     $Id: misc.cpp,v 1.19 2001-08-09 14:50:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2001/08/06 20:54:43  mbickel
+//      Fixed lots of crashes related to the new text files
+//      Fixed delayed events
+//      Fixed crash in terrin change event
+//      Fixed visibility of mines
+//      Fixed crashes in event loader
+//
 //     Revision 1.17  2001/07/25 19:01:32  mbickel
 //      Started adding text file formats
 //
@@ -298,20 +305,29 @@ char* itoa ( int a, char* b, int c)
 #endif
 
 #ifdef converter
+
+void fatalError ( const ASCString& text )
+{
+   fprintf ( stderr, text.c_str() );
+
+   #ifdef _WIN32_
+   MessageBox(NULL, text.c_str(), "Fatal Error", MB_ICONERROR | MB_OK | MB_TASKMODAL );
+   #endif
+
+   exit ( 1 );
+}
+
+
 void fatalError ( const char* formatstring, ... )
 {
    va_list paramlist;
    va_start ( paramlist, formatstring );
 
-   vfprintf ( stderr, formatstring, paramlist );
-   exit ( 1 );
+   char buf[10000];
+   vsprintf ( buf, formatstring, paramlist );
+   fatalError ( ASCString ( buf ));
 }
 
-void fatalError ( const ASCString& text )
-{
-   fprintf ( stderr, text.c_str() );
-   exit ( 1 );
-}
 
 
 void warning ( const ASCString& output )
