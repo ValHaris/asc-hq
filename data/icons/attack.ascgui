@@ -1,0 +1,217 @@
+panel {
+   height = 225
+   width = 170
+   x = -10
+   y = 100
+ 
+   BackgroundColor = 0xffffff
+
+   WidgetNum = 1
+   Widget0 {
+      type = area
+      x = 5
+      y = 10
+      width = 162
+      height = 210  
+            
+      widgetnum = 13
+      Widget0 {
+        type = image
+        Filename = unit-hole.png
+        x = 2
+        y = 2
+        WidgetNum = 1
+        Widget0 {
+          type = Specialdisplay
+          name = attacker_unit_pic
+          x = 14
+          y = 13
+        } widget0
+     } widget0
+      
+     Widget1 {
+        type = image
+        Filename = unit-hole.png
+        x = 92
+        y = 2
+        WidgetNum = 1
+        Widget0 {
+          type = Specialdisplay
+          name = defender_unit_pic
+          x = 14
+          y = 13
+        } widget0
+      } widget1 
+
+      Widget2 {
+        type = image
+        Filename = level-hole.png
+        x = 53
+        y = 67
+        widgetnum = 1
+          Widget0 {
+           type = Textoutput
+           textalign = CENTER
+           FontSize = 10
+           FontColor = 0xffffff
+           name = attacker_unitstatus
+           x = 6
+           y = 3
+           width = 16
+           height = 12
+         } Widget0
+        } widget2 
+      Widget3 {
+        type = image
+        Filename = level-hole.png
+        x = 85
+        y = 67
+        widgetnum = 1
+          Widget0 {
+           type = Textoutput
+           textalign = CENTER
+           FontSize = 10
+           FontColor = 0xffffff
+           name = defender_unitstatus
+           x = 6
+           y = 3
+           width = 16
+           height = 12
+         } Widget0
+        } widget3 
+
+     Widget4 {
+        type = image
+        Filename = damagebar_hole.png
+        x = 53
+        y = 85
+        WidgetNum = 1      
+        Widget0 {
+           type = BarGraph
+           direction = top2buttom
+           BackgroundColor = 0x808080
+           name = attacker_damage
+           x = 3
+           y = 3
+	   width = 20
+           height = 71
+        } Widget0
+        } widget4 
+      Widget5 {
+        type = image
+        Filename = damagebar_hole.png
+        x = 85
+        y = 85
+        WidgetNum = 1      
+        Widget0 {
+           type = BarGraph
+           direction = top2buttom
+           BackgroundColor = 0x808080
+           name = defender_damage
+           x = 3
+           y = 3
+	   width = 20
+           height = 71
+        } Widget0
+        } widget5 
+
+      Widget6 {
+        type = image
+        Filename = exp-field.png
+        x = 13
+        y = 86
+        
+        WidgetNum = 1      
+        Widget0 {
+           type = SpecialDisplay
+           x = 2
+           y = 2
+	   name = attacker_unitexp
+        } Widget0
+     } Widget6
+
+      Widget7 {
+        type = image
+        Filename = exp-field.png
+        x = 120
+        y = 86
+        
+        WidgetNum = 1      
+        Widget0 {
+           type = SpecialDisplay
+           x = 2
+           y = 2
+	   name = defender_unitexp
+        } Widget0
+     } Widget7
+
+     Widget8 {
+        type = image
+        Filename = level-hole.png
+        x = 15
+        y = 127
+        
+        WidgetNum = 1      
+        Widget0 {
+           type = SpecialDisplay
+           x = 2
+           y = 2
+	   name = attacker_level
+        } Widget0
+     } Widget8
+
+    Widget9 {
+        type = image
+        Filename = level-hole.png
+        x = 15
+        y = 146
+        
+        WidgetNum = 1      
+        Widget0 {
+           type = SpecialDisplay
+           x = 2
+           y = 2
+	   name = defender_level
+        } Widget0
+     } Widget9
+
+      Widget10 {
+        type = image
+        Filename = level-hole.png
+        x = 122
+        y = 127
+        
+        WidgetNum = 1      
+        Widget0 {
+           type = SpecialDisplay
+           x = 2
+           y = 2
+	   name = attacker_weaponsymbol
+        } Widget0
+     } Widget10
+
+    Widget11 {
+        type = image
+        Filename = level-hole.png
+        x = 122
+        y = 146
+        
+        WidgetNum = 1      
+        Widget0 {
+           type = SpecialDisplay
+           x = 2
+           y = 2
+	   name = defender_weaponsymbol
+        } Widget0
+     } Widget11
+
+    Widget12 {
+        type = image
+        Filename = attack_defence_hemming.png
+        x = 5
+        y = 165
+        
+     } Widget12
+   } Widget0
+   
+} panel

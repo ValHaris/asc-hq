@@ -100,6 +100,7 @@ class Panel : public  PG_Window {
       bool setup();               
    protected:   
       void setLabelText ( const ASCString& widgetName, const ASCString& text );
+      void setLabelText ( const ASCString& widgetName, int i );
       void setBargraphValue( const ASCString& widgetName, float fraction );
               
    public:  
@@ -135,11 +136,19 @@ class BarGraphWidget : public PG_ThemeWidget {
       float fraction;
       PG_Color color;
    public:
-      BarGraphWidget (PG_Widget *parent, const PG_Rect &rect );
-      
+      typedef vector<pair<double,int> > Colors;
+      enum Direction { l2r, r2l, t2b, b2t };
+   private:
+      Direction dir;
+      Colors colors;
+   public:
+      BarGraphWidget (PG_Widget *parent, const PG_Rect &rect, Direction direction );
+
       void setFraction( float f );
-      void setColor( int c );
-      
+      void setColor( int c ) { color = c; };
+      void setColor( PG_Color c ) { color = c; };
+      void setColor( Colors colors ) { this->colors = colors; };
+
       void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst);
 };
 
@@ -152,7 +161,9 @@ class SpecialInputWidget : public PG_Widget {
 };
 
 
- 
+ extern void warningMessageDialog( const ASCString& message  );
+
+
  extern void soundSettings();
 
 #endif

@@ -717,13 +717,13 @@ template<>
             // STATIC_CHECK ( pixelsize == 1, wrong_pixel_size );
             if ( isOpaque(src ) ) {
                *dest = ((*dest >> 1) & 0x7f7f7f7f) + (src >> 1) & 0x7f7f7f7f;
-            }   
+            }
          };
       public:
-         ColorMerger_AlphaMixer ( NullParamType npt = nullParam ) {};   
+         ColorMerger_AlphaMixer ( NullParamType npt = nullParam ) {};
  };
- 
- 
+
+
 
  template<int pixelsize>
  class ColorMerger_Alpha_XLAT_TableShifter : public ColorMerger_AlphaHandler<pixelsize> {
@@ -731,22 +731,65 @@ template<>
          const char* table;
       protected:
          void assign ( PixelType src, PixelType* dest )
-         {
+         {/*
             // STATIC_CHECK ( pixelsize == 1, wrong_pixel_size );
             if ( isOpaque(src ) ) {
                *dest = table[ *dest + src*256 ];
-            }   
+            }
+            */
          };
-         
-     public:    
+
+     public:
          void setNeutralTranslationTable( const char* translationTable )
          {
             table = translationTable;
          };
-         
+
          ColorMerger_Alpha_XLAT_TableShifter( NullParamType npt = nullParam ) : table ( NULL ) {};
          ColorMerger_Alpha_XLAT_TableShifter ( const char* translationTable ) : table ( translationTable ) {};
 };
+
+ template<>
+ class ColorMerger_Alpha_XLAT_TableShifter<1> : public ColorMerger_AlphaHandler<1> {
+         typedef PixelSize2Type<1>::PixelType PixelType;
+         const char* table;
+      protected:
+         void assign ( PixelType src, PixelType* dest )
+         {
+            // STATIC_CHECK ( pixelsize == 1, wrong_pixel_size );
+            if ( isOpaque(src ) ) {
+               *dest = table[ *dest + src*256 ];
+            }
+         };
+
+     public:
+         void setNeutralTranslationTable( const char* translationTable )
+         {
+            table = translationTable;
+         };
+
+         ColorMerger_Alpha_XLAT_TableShifter( NullParamType npt = nullParam ) : table ( NULL ) {};
+         ColorMerger_Alpha_XLAT_TableShifter ( const char* translationTable ) : table ( translationTable ) {};
+};
+
+
+ template<int pixelsize>
+ class ColorMerger_Brightness  {
+         typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+         float b;
+      public:
+
+         void assign ( PixelType src, PixelType* dest ) const
+         {
+            PixelType d = 0;
+            for ( int i = 0; i < 3; ++i)
+               d |= int( float(((*dest) >> (i*8)) & 0xff) * b ) << (i*8);
+
+            *dest = d;
+         };
+
+         ColorMerger_Brightness( float brightness ) { b = brightness;};
+ };
 
 
 

@@ -42,6 +42,9 @@
 #include "viewcalculation.h"
 
 #include "mapalgorithms.h"
+#include "paradialog.h"
+#define USE_COLOR_CONSTANTS
+#include "pgcolors.h"
 
 #ifdef sgmain
  #include "soundList.h"
@@ -283,90 +286,107 @@ void tunitattacksunit::calcdisplay( int ad, int dd ) {
 
   #endif
 }
-  
+
+
+class AttackPanel : public Panel {
+     public:
+        AttackPanel ( ) ;
+        void setBarGraphValue( const ASCString& widgetName, float fraction ) { Panel::setBargraphValue( widgetName, fraction ); };
+        void setBarGraphColor( const ASCString& widgetName, PG_Color color ){
+            BarGraphWidget* bgw = dynamic_cast<BarGraphWidget*>( FindChild( widgetName, true ) );
+            if ( bgw )
+               bgw->setColor( color );
+        };
+      void setLabelText ( const ASCString& widgetName, int i ) { Panel::setLabelText ( widgetName, i ); };
+};
+
+
+AttackPanel::AttackPanel ( ) : Panel( PG_Application::GetWidgetById(1), PG_Rect(0,0,170,200), "Attack" )
+{
+
+}
+
+
 void tfight :: calcdisplay ( int ad, int dd )
 {
 
-   collategraphicoperations cgo ( agmp->resolutionx - ( 640 - 450), 211, agmp->resolutionx - ( 640 - 623 ), 426 );
 
-   if ( !icons.attack.orgbkgr ) {
-      icons.attack.orgbkgr = new char [ imagesize ( agmp->resolutionx - ( 640 - 450), 211, agmp->resolutionx - ( 640 - 623 ), 426 ) ];
-   }
-   getimage ( agmp->resolutionx - ( 640 - 451 ), 211, agmp->resolutionx - ( 640 - 624 ), 426, icons.attack.orgbkgr );
-
-   int bk = 156;
-
-   putimage ( agmp->resolutionx - ( 640 - 450 ), 211, icons.attack.bkgr );
-   paintimages ( agmp->resolutionx - ( 640 - 481 ), 226, agmp->resolutionx - ( 640 - 563 ), 226 );
+   auto_ptr<AttackPanel> at ( new AttackPanel());
 
    int ac = 20 + av.color * 8;
    int dc = 20 + dv.color * 8;
 
-   // ursprungs-heilheit zeichnen 
-   paintbar ( 4, 100 - av.damage, ac );
-   int avd = av.damage;
-
-   paintbar ( 5, 100 - dv.damage, dc );
-   int dvd = dv.damage;
+   float avd = float( 100 - av.damage )/100;
+   float dvd = float( 100 - dv.damage )/100;
 
 
-   // einkeilung;
+   at->setBarGraphValue( "attacker_damage", avd );
+   at->setBarGraphValue( "defender_damage", dvd );
 
-   paintbar ( 6, int( 100 *  (dv.hemming - 1 ) / 4), dc );
+   at->setLabelText( "attacker_unitstatus", 100 - av.damage );
+   at->setLabelText( "defender_unitstatus", 100 - dv.damage );
 
-   if ( av.attackbonus > 0 )
+
+
+   at->setBarGraphValue( "attacker_hemming", (dv.hemming -1) / 1.4 );
+//   at->setBarGraphValue( "defender_hemming", float( 100 - dv.damage )/100 );
+
+   if ( av.attackbonus > 0 ) {
       if ( av.attackbonus > maxattackshown )
-         paintbar ( 0, 100, ac - 2 );
+         at->setBarGraphValue( "attacker_attackbonus", 1 );
       else
-         paintbar ( 0, 100 * av.attackbonus / maxattackshown, ac );
-   else
+         at->setBarGraphValue( "attacker_attackbonus", av.attackbonus / maxattackshown );
+   } else {
+     at->setBarGraphColor( "attacker_attackbonus", PG_Colormap::yellow );
       if ( av.attackbonus < -maxattackshown )
-         paintbar ( 0, 100 , yellow );
+         at->setBarGraphValue( "attacker_attackbonus", 1 );
       else
-         paintbar ( 0, -100 * av.attackbonus / maxattackshown, yellow );
+         at->setBarGraphValue( "attacker_attackbonus", -av.attackbonus / maxattackshown );
+   }
 
-
-   if ( av.defensebonus > 0 )
-      if ( av.defensebonus > maxdefenseshown )
-         paintbar ( 1, 100, ac - 2 );
-      else
-         paintbar ( 1, 100 * av.defensebonus / maxdefenseshown, ac );
-   else
-      if ( av.defensebonus < -maxdefenseshown )
-         paintbar ( 1, 100, yellow );
-      else
-         paintbar ( 1, -100 * av.defensebonus / maxdefenseshown, yellow );
-
-
-
-
-   if ( dv.attackbonus > 0 )
+   if ( dv.attackbonus > 0 ) {
       if ( dv.attackbonus > maxattackshown )
-         paintbar ( 9, 100, dc - 2 );
+         at->setBarGraphValue( "defender_attackbonus", 1 );
       else
-         paintbar ( 9, 100 * dv.attackbonus / maxattackshown, dc );
-   else
+         at->setBarGraphValue( "defender_attackbonus", dv.attackbonus / maxattackshown );
+   } else {
+     at->setBarGraphColor( "defender_attackbonus", PG_Colormap::yellow );
       if ( dv.attackbonus < -maxattackshown )
-         paintbar ( 9, 100 , yellow );
+         at->setBarGraphValue( "defender_attackbonus", 1 );
       else
-         paintbar ( 9, -100 * dv.attackbonus / maxattackshown, yellow );
+         at->setBarGraphValue( "defender_attackbonus", -dv.attackbonus / maxattackshown );
+   }
 
 
-   if ( dv.defensebonus > 0 )
+   if ( av.defensebonus > 0 ) {
+      if ( av.defensebonus > maxdefenseshown )
+         at->setBarGraphValue( "attacker_defensebonus", 1 );
+      else
+         at->setBarGraphValue( "attacker_defensebonus", av.defensebonus / maxattackshown );
+   } else {
+     at->setBarGraphColor( "attacker_defensebonus", PG_Colormap::yellow );
+      if ( av.defensebonus < -maxdefenseshown )
+         at->setBarGraphValue( "attacker_defensebonus", 1 );
+      else
+         at->setBarGraphValue( "attacker_defensebonus", -av.defensebonus / maxattackshown );
+   }
+
+   if ( dv.defensebonus > 0 ) {
       if ( dv.defensebonus > maxdefenseshown )
-         paintbar ( 8, 100, dc - 2 );
+         at->setBarGraphValue( "defender_defensebonus", 1 );
       else
-         paintbar ( 8, 100 * dv.defensebonus / maxdefenseshown, dc );
-   else
+         at->setBarGraphValue( "defender_defensebonus", dv.defensebonus / maxattackshown );
+   } else {
+     at->setBarGraphColor( "defender_defensebonus", PG_Colormap::yellow );
       if ( dv.defensebonus < -maxdefenseshown )
-         paintbar ( 8, 100, yellow );
+         at->setBarGraphValue( "defender_defensebonus", 1 );
       else
-         paintbar ( 8, -100 * dv.defensebonus / maxdefenseshown, yellow );
-
-   cgo.off();
+         at->setBarGraphValue( "defender_defensebonus", -dv.defensebonus / maxattackshown );
+   }
 
    int t = ticker;
    calc();
+   at->Show();
 
 /*
    int time1 = CGameOptions::Instance()->attackspeed1;
@@ -383,10 +403,10 @@ void tfight :: calcdisplay ( int ad, int dd )
 
 
 */
-   int time1=0;
-   int time2=0;
-   int time3=0;
-   
+   int time1=300;
+   int time2=500;
+   int time3=300;
+
    do {
       releasetimeslice();
    } while ( t + time1 > ticker ); /* enddo */
@@ -396,54 +416,32 @@ void tfight :: calcdisplay ( int ad, int dd )
 
    if ( ad != -1 )
       av.damage = ad;
+
    if ( dd != -1 )
       dv.damage = dd;
 
 
-
-   int steps;
-   if ( av.damage - avd > dv.damage - dvd )
-      steps = av.damage - avd ;
-   else
-      steps = dv.damage - dvd;
-
-   int d1 = avd;
-   int d2 = dvd;
+   float avd2 = float( 100 - av.damage )/100;
+   float dvd2 = float( 100 - dv.damage )/100;
 
    int starttime = ticker;
    while ( ticker < starttime + time2 ) {
-      int finished = 1000 * (ticker - starttime) / time2;
-      int newpos1 = avd + steps * finished / 1000;
-      int newpos2 = dvd + steps * finished / 1000;
-      cgo.on();
+      float p = float(ticker - starttime ) / time2;
 
-      int i;
-      if ( avd != av.damage )
-         for ( i = d1; i <= newpos1 && i <= av.damage; i++ )
-            paintline ( 4, 100 - i, bk );
+      at->setBarGraphValue( "attacker_damage", avd + (avd2-avd) * p );
+      at->setBarGraphValue( "defender_damage", dvd + (dvd2-dvd) * p );
 
-      d1 = i;
-
-      int j;
-      if ( dvd != dv.damage )
-         for ( j = d2; j <= newpos2 && j <= dv.damage; j++ )
-            paintline ( 5, 100 - j, bk );
-
-      d2 = j;
-
-      cgo.off();
+      at->setLabelText( "attacker_unitstatus", int( 100.0 * (avd + (avd2-avd) * p )) );
+      at->setLabelText( "defender_unitstatus", int( 100.0 * (dvd + (dvd2-dvd) * p )) );
+      at->Update();
    }
-   for ( int i = 0; i < av.damage; i++ )
-      paintline ( 4, 100 - i, bk );
-
-   for ( int i = 0; i < dv.damage; i++ )
-      paintline ( 5, 100 - i, bk );
 
    t = ticker;
    do {
       releasetimeslice();
    } while ( t + time3 > ticker ); /* enddo */
-   putimage ( agmp->resolutionx - ( 640 - 451 ), 211, icons.attack.orgbkgr );
+
+
 }
 
 

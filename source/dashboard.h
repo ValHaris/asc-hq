@@ -44,6 +44,7 @@ class WindInfoPanel : public Panel {
 class UnitInfoPanel : public Panel {
      protected:
         bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event );
+        void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
      public:
         UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) ;
         void eval();

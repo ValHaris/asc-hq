@@ -40,6 +40,7 @@
 #include "pglog.h"
 #include "pgmenubar.h"
 #include "pgimage.h"
+#include "pgmessagebox.h"
 
 #include "paradialog.h"
 #include "events.h"
@@ -51,7 +52,7 @@
 #include "textfile_evaluation.h"
 
 #include "iconrepository.h"
-
+#include "graphics/drawing.h"
 
 ASC_PG_App* pgApp = NULL;
 
@@ -333,7 +334,28 @@ void soundSettings( )
 
 
 
-const int widgetTypeNum = 7;
+
+
+
+class Emboss : public PG_Widget {
+   public:
+
+      Emboss (PG_Widget *parent, const PG_Rect &rect ) : PG_Widget( parent, rect, false )
+      {
+      }
+
+
+      void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst) {
+         Surface s = Surface::Wrap( PG_Application::GetScreen() );
+         rectangle<4> ( s, SPoint(dst.x, dst.y), dst.w, dst.h, ColorMerger_Brightness<4>( 1.4 ), ColorMerger_Brightness<4>( 0.7 ));
+      };
+};
+
+
+
+
+
+const int widgetTypeNum = 8;
 const char* widgetTypes[widgetTypeNum]
 =
    { "image",
@@ -342,7 +364,8 @@ const char* widgetTypes[widgetTypeNum]
      "textoutput",
      "bargraph",
      "specialDisplay",
-     "specialInput"
+     "specialInput",
+     "dummy"
    };
 
 enum  WidgetTypes  { Image,
@@ -351,7 +374,8 @@ enum  WidgetTypes  { Image,
                      TextOutput,
                      BarGraph,
                      SpecialDisplay,
-                     SpecialInput };
+                     SpecialInput,
+                     Dummy };
 
 const int imageModeNum = 5;
 const char* imageModes[imageModeNum]
@@ -371,6 +395,16 @@ const char* textAlignment[textAlignNum]
    };
 
 
+const int barDirectionNum = 4;
+const char* barDirections[barDirectionNum]
+=
+   { "left2right",
+     "right2left",
+     "top2buttom",
+     "buttom2top"
+   };
+
+
 class WidgetParameters
 {
    public:
@@ -384,6 +418,7 @@ class WidgetParameters
       int fontSize;
       int backgroundColor;
       int transparency;
+
       void assign( PG_Widget* widget );
       void assign( BarGraphWidget* widget );
       void assign( PG_ThemeWidget* widget );
@@ -436,7 +471,7 @@ void  WidgetParameters::assign( PG_ThemeWidget* widget )
 
    if ( !backgroundImage.empty() )
       widget->SetBackground( IconRepository::getIcon(backgroundImage).getBaseSurface(), backgroundMode );
-   else   
+   else
       widget->SetBackground( NULL );
 
    widget->SetBackgroundColor( backgroundColor );
@@ -469,6 +504,8 @@ void  WidgetParameters::assign( PG_Widget* widget )
    widget->SetFontSize( fontSize );
    widget->SetTransparency( transparency );
 }
+
+
 
 
 void parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams )
@@ -553,8 +590,8 @@ void parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, WidgetP
          ASCString style;
          pc.addString( "style", style, "Emboss" );
 
-
-         PG_ThemeWidget* tw = new PG_ThemeWidget ( parent, r, style );
+         Emboss* tw = new Emboss ( parent, r );
+         // PG_ThemeWidget* tw = new PG_ThemeWidget ( parent, r, style );
          widgetParams.assign ( tw );
          parsePanelASCTXT( pc, tw, widgetParams );
       }
@@ -581,7 +618,25 @@ void parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, WidgetP
          ASCString name;
          pc.addString( "name", name );
 
-         BarGraphWidget* bg = new BarGraphWidget ( parent, r );
+
+         int dir;
+         pc.addNamedInteger( "direction", dir, barDirectionNum, barDirections, 0 );
+
+         int cnum;
+         pc.addInteger("Colors",cnum, 0 );
+         BarGraphWidget::Colors colorRange;
+         for ( int i = 0; i < cnum; ++i ) {
+            pc.openBracket("Color" + ASCString::toString(i));
+            int col;
+            pc.addInteger("color", col);
+            double f;
+            pc.addDFloat("fraction", f );
+            colorRange.push_back( make_pair(f,col) );
+            pc.closeBracket();
+         }
+
+         BarGraphWidget* bg = new BarGraphWidget ( parent, r, BarGraphWidget::Direction(dir) );
+         bg->setColor( colorRange );
          widgetParams.assign ( bg );
          bg->SetName( name );
          parsePanelASCTXT( pc, bg, widgetParams );
@@ -607,6 +662,11 @@ void parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* parent, WidgetP
          parsePanelASCTXT( pc, sw, widgetParams );
       }
 
+      if ( type == Dummy ) {
+         SpecialInputWidget* sw = new SpecialInputWidget ( parent, r );
+         parsePanelASCTXT( pc, sw, widgetParams );
+      }
+
 
       pc.closeBracket();
    }
@@ -625,6 +685,12 @@ void Panel::setLabelText ( const ASCString& widgetName, const ASCString& text )
    PG_Label* l = dynamic_cast<PG_Label*>( FindChild( widgetName, true ) );
    if ( l )
       l->SetText( text );
+}
+
+void Panel::setLabelText ( const ASCString& widgetName, int i )
+{
+   ASCString s = ASCString::toString(i);
+   setLabelText ( widgetName, s );
 }
 
 
@@ -669,15 +735,37 @@ bool Panel::setup()
 
       if ( w > 0 && h > 0 )
          SizeWidget( w, h, false );
+      else
+         if ( h > 0 )
+            SizeWidget( Width(), h, false );
+         else
+            if ( w > 0 )
+               SizeWidget( w, Height(), false );
+
+
+      if ( pc.find("x") && pc.find("y" )) {
+         int x1,y1;
+         pc.addInteger( "x", x1 );
+         pc.addInteger( "y", y1 );
+
+         if ( x1 < 0 )
+            x1 = GetParent()->Width() - Width() + x1;
+
+         if ( y1 < 0 )
+            y1 = GetParent()->Height() - Height() + y1;
+
+     	   MoveWidget( x1, y1, false );
+      }
+
 
       WidgetParameters widgetParameters = defaultWidgetParameters;
       widgetParameters.assign ( this );
       SetBackground( IconRepository::getIcon(panelBackgroundImage).getBaseSurface() );
-      
+
       widgetParameters.runTextIO( pc );
-         
+
       parsePanelASCTXT( pc, this, widgetParameters );
-      
+
       return true;
    } catch ( ParsingError err ) {
       displaymessage( ASCString("parsing error: ") + err.getMessage(), 1 );
@@ -691,36 +779,66 @@ bool Panel::setup()
 
 
 
-BarGraphWidget:: BarGraphWidget (PG_Widget *parent, const PG_Rect &rect ) : PG_ThemeWidget( parent, rect, false ), fraction(1)
+BarGraphWidget:: BarGraphWidget (PG_Widget *parent, const PG_Rect &rect, Direction direction ) : PG_ThemeWidget( parent, rect, false ), fraction(1), dir(direction)
 {
 }
 
 void BarGraphWidget::eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst)
 {
    PG_Rect d = dst;
-   d.w = min( max(0, int( float(dst.w) * fraction)), int(dst.w)) ;
-   
-/*   PG_Draw::DrawThemedSurface( 
-          surface, 
-          d, 
+   if ( dir == l2r ) {
+      d.w = min( max(0, int( float(dst.w) * fraction)), int(dst.w)) ;
+   }
+   if ( dir == r2l ) {
+      int x2 = d.x + d.w;
+      d.w = min( max(0, int( float(dst.w) * fraction)), int(dst.w)) ;
+      d.x = x2 - d.w;
+   }
+   if ( dir == t2b ) {
+      d.h = min( max(0, int( float(dst.h) * fraction)), int(dst.h)) ;
+   }
+   if ( dir == b2t ) {
+      int y2 = d.y + d.h;
+      d.h = min( max(0, int( float(dst.h) * fraction)), int(dst.h)) ;
+      d.y = y2 - d.h;
+   }
+
+   if ( d.h <= 0 || d.w <= 0 )
+      return;
+
+
+/*   PG_Draw::DrawThemedSurface(
+          surface,
+          d,
           my_has_gradient ? &my_gradient : 0,
           my_background,
           my_backgroundMode,
           my_blendLevel );
           */
-          
+
    Uint32 c = color.MapRGBA( PG_Application::GetScreen()->format, 255-GetTransparency());
-   
+   for ( Colors::iterator i = colors.begin(); i != colors.end(); ++i)
+      if ( fraction < i->first ) {
+         PG_Color col = i->second;
+         c = col.MapRGBA( PG_Application::GetScreen()->format, 255-GetTransparency());
+      }   
+
+
    SDL_FillRect(PG_Application::GetScreen(), (SDL_Rect*)&d, c);
-          
+
 }
 
-void BarGraphWidget:: setColor( int c )
-{
-   color = c;
-}
 
 void BarGraphWidget::setFraction( float f )
 {
    fraction = f;
 }
+
+
+
+void warningMessageDialog( const ASCString& message  )
+{
+//   PG_MessageBox msg( NULL, PG_Rect(100,100,500,150),"Error", message,PG_Rect(200,100,100,40),"OK" );
+//   msg.WaitForClick();
+}
+

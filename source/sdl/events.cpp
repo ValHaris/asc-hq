@@ -540,6 +540,11 @@ bool setEventRouting( bool queue, bool legacy )
    return prev;
 }
 
+bool legacyEventSystemActive()
+{
+   return _fillLegacyEventStructures;   
+}
+
 
 bool getQueuedEvent ( SDL_Event& event )
 {

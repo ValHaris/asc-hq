@@ -42,10 +42,10 @@ void WindInfoPanel::painter ( const PG_Rect &src, const ASCString& name, const P
    if ( actmap && actmap->weather.windSpeed > 0 ) {
       Surface screen = Surface::Wrap( PG_Application::GetScreen() );
 
-      MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Rotation> blitter; 
+      MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Rotation> blitter;
       blitter.setAngle( directionangle[actmap->weather.windDirection] );
       blitter.blit ( IconRepository::getIcon("wind-arrow.png"), screen, SPoint(dst.x, dst.y) );
-   } 
+   }
 }
 
 
@@ -63,12 +63,62 @@ WindInfoPanel::~WindInfoPanel()
 UnitInfoPanel::UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) : Panel( parent, r, "UnitInfo" )
 {
    updateFieldInfo.connect ( SigC::slot( *this, &UnitInfoPanel::eval ));
-   
+
    SpecialInputWidget* siw = dynamic_cast<SpecialInputWidget*>( FindChild( "weapinfo", true ) );
    if ( siw ) {
       siw->sigMouseButtonDown.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
       siw->sigMouseButtonUp.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
-   }   
+   }
+
+   SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( "unitexp", true ) );
+   if ( sdw )
+     sdw->display.connect( SigC::slot( *this, &UnitInfoPanel::painter ));
+
+   sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( "unit_level", true ) );
+   if ( sdw )
+     sdw->display.connect( SigC::slot( *this, &UnitInfoPanel::painter ));
+
+
+
+
+}
+
+
+void UnitInfoPanel::painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
+{
+   MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
+   int weaponsDisplayed = 0;
+
+   if ( mc.valid() ) {
+      Vehicle* veh = actmap->getField(mc)->vehicle;
+      Surface screen = Surface::Wrap( PG_Application::GetScreen() );
+
+      if ( name == "unitexp" ) {
+         int experience = 0;
+         if ( veh )
+            experience = veh->experience;
+
+         screen.Blit( IconRepository::getIcon("experience" + ASCString::toString(experience) + ".png"), SPoint(dst.x, dst.y) );
+      }
+
+      if ( name == "unit_level" ) {
+         int height1 = 0;
+         int height2 = 0;
+         if ( veh ) {
+            height1 = veh->height;
+            height2 = veh->typ->height;
+         }
+
+         for ( int i = 0; i < 8; ++i ) {
+            if ( height1 & (1 << i ))
+               screen.Blit( IconRepository::getIcon("height-b" + ASCString::toString(i) + ".png"), SPoint(dst.x, dst.y + (7-i) * 13) );
+            else
+               if ( height2 & (1 << i ))
+                  screen.Blit( IconRepository::getIcon("height-a" + ASCString::toString(i) + ".png"), SPoint(dst.x, dst.y + (7-i) * 13 ) );
+         }
+      }
+
+   }
 }
 
 
@@ -90,7 +140,7 @@ bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent*
                if ( wip ) {
                   delete wip;
                   result = true;
-               }   
+               }
             } while ( wip );
             return result;
          }
@@ -102,16 +152,60 @@ bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent*
 void UnitInfoPanel::eval()
 {
    MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
+   int weaponsDisplayed = 0;
+
    if ( mc.valid() ) {
       Vehicle* veh = actmap->getField(mc)->vehicle;
-      if ( veh )
+      if ( veh ) {
          setLabelText( "unittypename", veh->typ->name );
-      else
+         setLabelText( "unitname", veh->name );
+         setBargraphValue( "unitdamage", float(100-veh->damage) / 100  );
+         setLabelText( "unitstatus", 100-veh->damage );
+         setBargraphValue( "unitfuel", veh->typ->tank.fuel ? float( veh->getTank().fuel) / veh->typ->tank.fuel : 0  );
+         setLabelText( "unitfuelstatus", veh->getTank().fuel );
+         setBargraphValue( "unitmaterial", veh->typ->tank.material ? float( veh->getTank().material) / veh->typ->tank.material : 0  );
+         setLabelText( "unitmaterialstatus", veh->getTank().material );
+         setBargraphValue( "unitenergy", veh->typ->tank.energy ? float( veh->getTank().energy) / veh->typ->tank.energy : 0  );
+         setLabelText( "unitenergystatus", veh->getTank().energy );
+
+         int &pos = weaponsDisplayed;
+         for ( int i = 0; i < veh->typ->weapons.count; ++i) {
+            if ( !veh->typ->weapons.weapon[i].service() && pos < 10 ) {
+                ASCString ps = ASCString::toString(pos);
+                setLabelText( "punch_weapon" + ps, veh->typ->weapons.weapon[i].maxstrength );
+                if ( veh->typ->functions & cfno_reactionfire )
+                   setLabelText( "RF_weapon" + ps, "-" );
+                else
+                   setLabelText( "RF_weapon" + ps, veh->typ->weapons.weapon[i].reactionFireShots );
+                setLabelText( "status_ammo" + ps, veh->ammo[i] );
+                setBargraphValue( "bar_ammo" + ps, veh->typ->weapons.weapon[i].count ? float(veh->ammo[i]) / veh->typ->weapons.weapon[i].count : 0 );
+                ++pos;
+             }
+          }
+
+
+      } else {
          setLabelText( "unittypename", "" );
-         
-      setBargraphValue( "unitfuel", veh && veh->typ->tank.fuel ? float( veh->getTank().fuel) / veh->typ->tank.fuel : 0  );
+         setLabelText( "unitname", "" );
+         setBargraphValue( "unitdamage", 0  );
+         setLabelText( "unitstatus", "" );
+         setBargraphValue( "unitfuel", 0  );
+         setLabelText( "unitfuelstatus", "" );
+         setBargraphValue( "unitmaterial",  0  );
+         setLabelText( "unitmaterialstatus", "" );
+         setBargraphValue( "unitenergy",  0  );
+         setLabelText( "unitenergystatus", "" );
+      }
+      for ( int i = weaponsDisplayed; i < 10; ++i ) {
+          ASCString ps = ASCString::toString(i);
+          setLabelText( "punch_weapon" + ps, "" );
+          setLabelText( "RF_weapon" + ps, "" );
+          setLabelText( "status_ammo" + ps, "" );
+          setBargraphValue( "bar_ammo" + ps, 0 );
+       }
+
    }
-   Redraw(true);
+   Redraw(true);                  
 }
 
 

@@ -183,3 +183,17 @@ ASCString copytoUpper ( const ASCString& String )
 }
 
 
+ASCString ASCString::toString(int i )
+{
+   ASCString s;
+   s.format("%d",i);
+   return s;
+}
+
+ASCString toString(double d )
+{
+   ASCString s;
+   s.format("%f",d);
+   return s;
+}
+

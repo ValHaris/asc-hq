@@ -187,7 +187,7 @@ panel {
         WidgetNum = 4      
         Widget0 {
            type = BarGraph
-           BackgroundColor = 0x009c00
+           BackgroundColor = 0x1d7810
            name = unitdamage
            x = 23
            y = 4
@@ -195,7 +195,7 @@ panel {
            height = 9
            colors= 3
            color0 {
-             color = 0x009c00
+             color = 0x1d7810
              fraction = 1
            } color0
            color1 {
@@ -223,7 +223,7 @@ panel {
 
         Widget2 {
            type = BarGraph
-           BackgroundColor = 0x009c00
+           BackgroundColor = 0x1d7810
            name = unitfuel
            x = 23
            y = 16
@@ -231,7 +231,7 @@ panel {
            height = 9
            colors= 3
            color0 {
-             color = 0x009c00
+             color = 0x1d7810
              fraction = 1
            } color0
            color1 {
@@ -280,7 +280,7 @@ panel {
         WidgetNum = 4      
         Widget0 {
            type = BarGraph
-           BackgroundColor = 0x808080
+           BackgroundColor = 0x707070
            name = unitmaterial
            x = 23
            y = 4
@@ -302,7 +302,7 @@ panel {
 
         Widget2 {
            type = BarGraph
-           BackgroundColor = 0x808080
+           BackgroundColor = 0x707070
            name = unitenergy
            x = 23
            y = 16
@@ -626,7 +626,7 @@ panel {
 
         Widget30 {
            type = BarGraph
-           BackgroundColor = 0x808080
+           BackgroundColor = 0x707070
            name = bar_ammo0
            x = 83
            y = 4
@@ -646,7 +646,7 @@ panel {
          } Widget31
          Widget32 {
            type = BarGraph
-           BackgroundColor = 0x808080
+           BackgroundColor = 0x707070
            name = bar_ammo1
            x = 83
            y = 17
@@ -666,7 +666,7 @@ panel {
        } Widget33
          Widget34 {
            type = BarGraph
-           BackgroundColor = 0x808080
+           BackgroundColor = 0x707070
            name = bar_ammo2
            x = 83
            y = 30
@@ -686,7 +686,7 @@ panel {
        } Widget35
          Widget36 {
            type = BarGraph
-           BackgroundColor = 0x808080
+           BackgroundColor = 0x707070
            name = bar_ammo3
            x = 83
            y = 43
@@ -706,7 +706,7 @@ panel {
        } Widget37
          Widget38 {
            type = BarGraph
-           BackgroundColor = 0x808080
+           BackgroundColor = 0x707070
            name = bar_ammo4
            x = 83
            y = 56
@@ -726,7 +726,7 @@ panel {
        } Widget39
          Widget40 {
            type = BarGraph
-           BackgroundColor = 0x808080
+           BackgroundColor = 0x707070
            name = bar_ammo5
            x = 83
            y = 69
@@ -746,7 +746,7 @@ panel {
        } Widget41
          Widget42 {
            type = BarGraph
-           BackgroundColor = 0x808080
+           BackgroundColor = 0x707070
            name = bar_ammo6
            x = 83
            y = 82
@@ -766,7 +766,7 @@ panel {
        } Widget43
          Widget44 {
            type = BarGraph
-           BackgroundColor = 0x808080
+           BackgroundColor = 0x707070
            name = bar_ammo7
            x = 83
            y = 95
@@ -786,7 +786,7 @@ panel {
        } Widget45
          Widget46 {
            type = BarGraph
-           BackgroundColor = 0x808080
+           BackgroundColor = 0x707070
            name = bar_ammo8
            x = 83
            y = 108
@@ -806,7 +806,7 @@ panel {
        } Widget47
          Widget48 {
            type = BarGraph
-           BackgroundColor = 0x808080
+           BackgroundColor = 0x707070
            name = bar_ammo9
            x = 83
            y = 121
@@ -862,7 +862,7 @@ panel {
            y = 3
            name = unit_level
            width = 21
-           height = 11
+           height = 135
          } widget0
       } widget0
    } Widget3

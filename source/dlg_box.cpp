@@ -41,6 +41,7 @@
 #include "stack.h"
 #include "dlg_box.h"
 #include "loadpcx.h"
+#include "paradialog.h"
 
 
 #ifdef sgmain
@@ -1929,6 +1930,7 @@ void displaymessage( const ASCString& text, int num  )
         }
       #endif
 
+      if ( legacyEventSystemActive() ) {
       setvgapalette256(pal);
 
       static int messageboxopen = 0;
@@ -1958,6 +1960,9 @@ void displaymessage( const ASCString& text, int num  )
       }
 
       messageboxopen--;
+      } else {
+         warningMessageDialog( text );
+      }
    } /* endif */
 
    if ( num == 2 ) {
