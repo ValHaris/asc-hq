@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.57 2000-09-27 16:08:25 mbickel Exp $
+//     $Id: dialog.cpp,v 1.58 2000-10-11 14:26:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2000/09/27 16:08:25  mbickel
+//      AI improvements
+//
 //     Revision 1.56  2000/09/25 13:25:52  mbickel
 //      The AI can now change the height of units
 //      Heightchaning routines improved
@@ -281,6 +284,8 @@
 
 #include "tpascal.inc"
 #include "typen.h"
+#include "buildingtype.h"
+#include "vehicletype.h"
 #include "keybp.h"
 #include "basegfx.h"
 #include "newfont.h"
@@ -296,6 +301,7 @@
 #include "timer.h"
 #include "attack.h"
 #include "gameoptions.h"
+#include "errors.h"
 
 #ifndef karteneditor
  #include "network.h"
@@ -1227,12 +1233,12 @@ void  tvehicleinfo::showgeneralinfovariables( void )
 
    activefontsettings.justify = righttext;
    activefontsettings.length = 70;
-   showtext2( strrr(aktvehicle->production.material), productioncostx + 100, productioncosty + 20);
-   showtext2( strrr(aktvehicle->production.energy),   productioncostx + 100, productioncosty + 40);
+   showtext2( strrr(aktvehicle->productionCost.material), productioncostx + 100, productioncosty + 20);
+   showtext2( strrr(aktvehicle->productionCost.energy),   productioncostx + 100, productioncosty + 40);
 
-   showtext2( strrr(aktvehicle->material), column1x + 100, productioncosty + 90);
-   showtext2( strrr(aktvehicle->energy), column1x + 100, productioncosty + 110);
-   showtext2( strrr(aktvehicle->tank), column1x + 100, productioncosty + 130);
+   showtext2( strrr(aktvehicle->tank.material), column1x + 100, productioncosty + 90);
+   showtext2( strrr(aktvehicle->tank.energy), column1x + 100, productioncosty + 110);
+   showtext2( strrr(aktvehicle->tank.fuel), column1x + 100, productioncosty + 130);
    showtext2( strrr(aktvehicle->loadcapacity), column1x + 100, productioncosty + 150);
    showtext2( strrr(aktvehicle->fuelConsumption), column1x + 100,  productioncosty + 260 );
    showtext2( strrr(aktvehicle->steigung), column1x + 100, productioncosty + 280 );
@@ -3831,7 +3837,7 @@ class  tsetalliances : public tdialogbox {
                      char                lastplayer;
                      int                 oninit;
                      int                 supervisor;
-                     shortint            xp,yp,xa,ya,bx;  /* position der tastatur-markierungsrechtecke  */
+                     int                 xp,yp,xa,ya,bx;  /* position der tastatur-markierungsrechtecke  */
 
                      void                init ( int supervis );
                      virtual void        buttonpressed( int id);
@@ -5877,7 +5883,7 @@ void tenterpassword :: buttonpressed ( int id )
          } else
             if ( id == 8 ) {    // exit
                erasemap();
-               throw tnomaploaded();
+               throw NoMapLoaded();
             } else
                if ( reask == 0 )
                   if ( encodepassword ( strng1 ) == *cr )

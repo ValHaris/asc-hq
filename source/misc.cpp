@@ -1,6 +1,9 @@
-//     $Id: misc.cpp,v 1.12 2000-09-16 11:47:29 mbickel Exp $
+//     $Id: misc.cpp,v 1.13 2000-10-11 14:26:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/09/16 11:47:29  mbickel
+//      Some cleanup and documentation again
+//
 //     Revision 1.11  2000/09/07 15:49:44  mbickel
 //      some cleanup and documentation
 //
@@ -81,6 +84,33 @@ const char* letter[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", 
 
 char strstring[1000];
 
+
+int min ( int a, int b )
+{
+   if ( a > b )
+      return b;
+   else
+      return a;
+}
+
+int min ( int a, int b, int c )
+{
+   return min ( a, min ( b, c ));
+}
+
+
+int max ( int a, int b )
+{
+   if ( a > b )
+      return a;
+   else
+      return b;
+}
+
+int max ( int a, int b, int c )
+{
+   return max ( a, max ( b, c ));
+}
 
 
 #ifndef UseMemAvail 

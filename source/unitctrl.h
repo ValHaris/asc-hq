@@ -1,6 +1,9 @@
-//     $Id: unitctrl.h,v 1.12 2000-09-27 16:08:32 mbickel Exp $
+//     $Id: unitctrl.h,v 1.13 2000-10-11 14:26:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/09/27 16:08:32  mbickel
+//      AI improvements
+//
 //     Revision 1.11  2000/09/25 20:04:43  mbickel
 //      AI improvements
 //
@@ -79,8 +82,10 @@
 #define unitctrl_h_included
 
 #include <vector>
+#include <map>
 
 #include "typen.h"
+#include "mapalgorithms.h"
 #include "basestrm.h"
 #include "spfst.h"
 #include "attack.h"
@@ -381,29 +386,46 @@ class VehicleService : public VehicleAction {
               pvehicle vehicle;
               int status;
 
+              class FieldSearch : public tsearchfields {
+                     VehicleService& vs;
+                     pvehicle         veh;
+                  public:
+                     virtual void     testfield ( void );
+                     void             initrefuelling( int xp1, int yp1 );
+                     void run ( pvehicle _veh );
+                     FieldSearch ( VehicleService& _vs ) : vs ( _vs ) {};
+                  } fieldSearch;
+
+
            protected:
               MapDisplayInterface* mapDisplay;
            public:
-              enum Service { srv_repair, srv_fuel, srv_material, srv_ammo };
+              pvehicle getVehicle ( void ) { return vehicle; };
+
+              enum Service { srv_repair, srv_resource, srv_ammo };
               class Target {
                  public:
-                    pvehicle veh;
+                    pvehicle dest;
 
                     struct Service {
                       VehicleService::Service type;
-                      int percentage;   //!< how much of the required service can be fullfilled
-                      int sourcePos;
+                      int sourcePos;  //!< weapon position; resourceType
                       int targetPos;
+                      int curAmount;  //!< current amount at target
+                      int maxAmount;  //!< maximum amount at target
+                      int minAmount;  //!< minimum amount at target
+                      int orgSourceAmount;
                     };
                     vector<Service> service;
               };
-              FieldList<Target> target;
-
-              vector<Service> availableServices;
+              typedef map<int,Target> TargetContainer;
+              TargetContainer dest;
 
               int getStatus( void ) { return status; };
               virtual int available ( pvehicle veh ) const;
-              virtual int execute ( pvehicle veh, int x, int y, int step, int _kamikaze, int weapnum );
+              int getServices ( pvehicle veh ) const;
+              int execute ( pvehicle veh, int targetNWID, int dummy, int step, int pos, int amount );
+              int fillEverything ( pvehicle veh, int targetNWID );
               virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
               VehicleService ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
               virtual ~VehicleService ( );
@@ -448,9 +470,6 @@ extern PendingVehicleActions pendingVehicleActions;
  * Template implementations
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-class asc_out_of_range : public terror {};
-
-
 template<class T> FieldList<T> :: FieldList ( void )
 {
    fieldnum = 0;
@@ -476,7 +495,7 @@ template<class T> T& FieldList<T> :: getData ( int num )
    if ( num < fieldnum && num >= 0 )
       return data[num] ;
 
-   throw asc_out_of_range();
+   throw OutOfRange();
 }
 
 template<class T> T& FieldList<T> :: getData ( int x, int y )
@@ -485,7 +504,7 @@ template<class T> T& FieldList<T> :: getData ( int x, int y )
       if ( xpos[i] == x && ypos[i] == y )
          return data[i];
 
-   throw asc_out_of_range();
+   throw OutOfRange();
 }
 
 

@@ -1,6 +1,9 @@
-//     $Id: spfst.h,v 1.26 2000-09-27 16:08:30 mbickel Exp $
+//     $Id: spfst.h,v 1.27 2000-10-11 14:26:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/09/27 16:08:30  mbickel
+//      AI improvements
+//
 //     Revision 1.25  2000/09/25 20:04:41  mbickel
 //      AI improvements
 //
@@ -192,19 +195,6 @@
               virtual void checksize ( void );
    };
 
-  class   tsearchfields {
-                public:
-                    int         startx, starty;
-                    int         abbruch;
-                    int         maxdistance, mindistance;
-                    int         xp, yp;
-                    int         dist;
-                    tsearchfields ( void );
-                    virtual void testfield ( void ) = 0;
-                    void initsuche ( int  sx, int  sy, word max, word min );
-                    virtual void startsuche ( void );
-                 };
-
 
   extern tcursor cursor;
 
@@ -239,16 +229,6 @@ extern pfield getactfield(void);
 //! returns the field at the given coordinates
 extern pfield getfield(int x, int y);
 
-extern pfield getbuildingfield( const pbuilding    bld,
-                              shortint     x,
-                              shortint     y);
-
-extern void  getbuildingfieldcoordinates( const pbuilding    bld,
-                                         shortint     x,
-                                         shortint     y,
-                                         int     &    xx,
-                                         int     &    yy);
-
 //! returns the x coordinate of the cursor location
 extern int  getxpos(void);
 
@@ -276,18 +256,6 @@ extern int getdiplomaticstatus( int b );
 extern int getdiplomaticstatus2( int c, int b);
 
 extern void  removevehicle(pvehicle *   vehicle);
-
-extern void  generatevehicle_ka(pvehicletype fztyp,
-                             int col,
-                             pvehicle &   vehicle);
-// Die Einheit wird automatisch vollgef?llt.
-//  => Nur f?r Karteneditor
-
-
-extern void         generate_vehicle(pvehicletype fztyp,
-                             int col,
-                             pvehicle &   vehicle);
-
 
 extern void  putbuilding(int          x,
                          int          y,
@@ -324,22 +292,6 @@ extern void  putstreets2( int          x1,
                           int          y2,
                           pobjecttype obj );
 
-extern void  getnextfield(int &    x,
-                          int &    y,
-                          int direc);
-
-extern void  getnextfielddir(int &    x,
-                             int &    y,
-                             int direc,
-                             int sdir);
-
-/** gets the direction from x1/y1 to x2/y2
-  \returns -1 if the fields are identical
-*/
-extern int   getdirection(    int      x1,
-                              int      y1,
-                              int      x2,
-                              int      y2);
 
 extern int resizemap( int top, int bottom, int left, int right );
 
@@ -377,7 +329,6 @@ extern void checkobjectsforremoval ( void );
 
 extern int          getmaxwindspeedforunit ( const pvehicle eht );
 extern int          getwindheightforunit   ( const pvehicle eht );
-extern void         resetbuildingpicturepointers ( pbuilding bld );
 extern void         resetallbuildingpicturepointers ( void );
 
 extern int          terrainaccessible (  const pfield        field, const pvehicle     vehicle, int uheight = -1 );
@@ -623,8 +574,6 @@ class tlockdispspfld {
 
 extern int lockdisplaymap;
 
-extern int beeline ( int x1, int y1, int x2, int y2 );
-extern int beeline ( const pvehicle a, const pvehicle b );
 extern void smooth ( int what );
 extern void  stu_height ( pvehicle vehicle );
 

@@ -11,7 +11,10 @@ AC_PROG_CXX
 AC_PROG_RANLIB
 dnl Checks for libraries.
 
-dnl Checks for header files.
+dnl Checks for STL header files (which aren't available for gcc at the time of writing).
+AC_CHECK_HEADERS( stdexception limits )
+
+dnl Checks for other header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS(malloc.h strings.h sys/dirent.h)
 AC_HEADER_DIRENT
@@ -46,7 +49,6 @@ dnl Checks for library functions.
 AC_CHECK_FUNCS(select)
 AC_CHECK_FUNCS(itoa)
 AC_CHECK_FUNCS(stricmp)
-AC_CHECK_FUNCS(kbhit)
 
 
 AC_OUTPUT(Makefile source/Makefile source/mapedit/Makefile source/docs/Makefile source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile source/tools/Makefile source/tools/linux/Makefile source/libs/Makefile )

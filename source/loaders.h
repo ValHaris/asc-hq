@@ -1,6 +1,9 @@
-//     $Id: loaders.h,v 1.9 2000-09-07 15:49:44 mbickel Exp $
+//     $Id: loaders.h,v 1.10 2000-10-11 14:26:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/09/07 15:49:44  mbickel
+//      some cleanup and documentation
+//
 //     Revision 1.8  2000/09/02 15:36:50  mbickel
 //      Some minor cleanup and documentation
 //
@@ -137,15 +140,6 @@ const int minnetworkversion   = 0x0004;
 const int actreplayversion    = 0x0001;
 const int minreplayversion    = 0x0001;
   
-
-
-class tinvalidid : public terror {
-             public:
-               char msg[200];
-               char orgmsg[200];
-               int id;
-               tinvalidid ( char* s, int iid ) ;
-            };
 
 
 class  tspfldloaders {

@@ -1,6 +1,9 @@
-//     $Id: edmisc.h,v 1.11 2000-08-12 12:52:47 mbickel Exp $
+//     $Id: edmisc.h,v 1.12 2000-10-11 14:26:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/08/12 12:52:47  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.10  2000/05/30 18:39:24  mbickel
 //      Added support for multiple directories
 //      Moved DOS specific files to a separate directory
@@ -94,8 +97,8 @@
 #include "dialog.h"
 #include "strtmesg.h"
 #include "pd.h"
-// #include "cdrom.h"
 #include "palette.h"
+#include "mapalgorithms.h"
 
 #ifndef karteneditor
 #error this file should only be used in the mapeditor

@@ -24,6 +24,7 @@
  #ifdef WIN32
   #define sdlheader "SDL.h"
 	#include "SDL.h"
+	using namespace std;
  #else
   #ifndef _DOS_
    #define sdlheader "SDL/SDL.h"
@@ -35,8 +36,9 @@
 
  #ifdef __WATCOM_CPLUSPLUS__
   #define HAVE_STRICMP 
-  #define HAVE_KBHIT
   #define HAVE_ITOA
+  #define HAVE_STDEXCEPTION
+  #define HAVE_LIMITS
   #define StaticClassVariable static
  #else
   #ifndef _NOASM_
@@ -61,13 +63,6 @@
  extern char *strupr (const char *a);
  #endif
 
-
- #ifndef HAVE_KBHIT
- extern int kbhit (void);
- extern int getch (void);
- void set_keypress (void);
- void reset_keypress (void);
- #endif
 
  #ifdef _DOS_
   #ifndef converter

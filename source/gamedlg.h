@@ -1,6 +1,9 @@
-//     $Id: gamedlg.h,v 1.10 2000-09-16 11:47:28 mbickel Exp $
+//     $Id: gamedlg.h,v 1.11 2000-10-11 14:26:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/09/16 11:47:28  mbickel
+//      Some cleanup and documentation again
+//
 //     Revision 1.9  2000/08/13 09:54:02  mbickel
 //      Refuelling is now logged for replays
 //
@@ -68,7 +71,6 @@
 */
 
 
-#include "tpascal.inc"
 #include "typen.h"
 #include "keybp.h"
 #include "basegfx.h"
@@ -81,6 +83,7 @@
 
 #include "dialog.h"
 #include "dlg_box.h"
+#include "unitctrl.h"
 
 
 
@@ -247,16 +250,8 @@ extern void settechlevel ( int techlevel, int playerBM );
 extern void showGameParameters ( void );
 
 
-/*! a routine to transfer ammo, fuel and material from one unit to another. The ability to transfer to/from buildings is not used any more, since this functionality is in a subwindow of #ccontaier
-   \param vehicle the refuelling vehicle
-   \param vehicle2 the target vehicle
-   \param building should not be used any more
-   \param fast: 2 opens a dialog to select amount of resources; 3 fills target to maximum without any user information
-*/
-extern void  verlademunition(pvehicle     vehicle,
-                             pvehicle     vehicle2,
-                             pbuilding    building,
-                             int          fast);
+//! a dialog box to transfer resources from one vehicle to another
+extern void  verlademunition( VehicleService* serv, int targetNWID );
 
 #endif  // ifndef gamedlg_h
 

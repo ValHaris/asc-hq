@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.35 2000-09-27 16:08:31 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.36 2000-10-11 14:26:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2000/09/27 16:08:31  mbickel
+//      AI improvements
+//
 //     Revision 1.34  2000/09/25 20:04:42  mbickel
 //      AI improvements
 //
@@ -122,7 +125,8 @@
 #include "attack.h"
 #include "stack.h"
 #include "missions.h"
-
+#include "vehicletype.h"
+#include "buildingtype.h"
 
 
 PendingVehicleActions pendingVehicleActions;
@@ -353,7 +357,7 @@ void VehicleMovement :: searchmove(int         x,
    if (streck < 0) 
       return;
 
-   if ( fuelneeded * vehicle->typ->fuelConsumption / 8 > vehicle->fuel)   
+   if ( fuelneeded * vehicle->typ->fuelConsumption / 8 > vehicle->tank.fuel)
       return;
 
    if (search.mode == 1) { 
@@ -474,7 +478,7 @@ void   VehicleMovement :: FieldReachableRek :: move(int          x,
     if (streck > maxwegstrecke) 
        return;
 
-    if (fuel * vehicle->typ->fuelConsumption / minmalq  > vehicle->fuel) 
+    if (fuel * vehicle->typ->fuelConsumption / minmalq  > vehicle->tank.fuel)
        return;
 
     if ((fld->a.temp > 0) && (streck > fld->a.temp))
@@ -817,9 +821,9 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
       } 
 
 
-      vehicle->fuel -= fueldist * vehicle->typ->fuelConsumption / 8;
-      if ( vehicle->fuel < 0 )
-         vehicle->fuel = 0;
+      vehicle->tank.fuel -= fueldist * vehicle->typ->fuelConsumption / 8;
+      if ( vehicle->tank.fuel < 0 )
+         vehicle->tank.fuel = 0;
 
 
       if (fld->vehicle == vehicle) { 
@@ -897,13 +901,11 @@ int ChangeVehicleHeight :: execute_withmove ( int allFields )
    if ( !vehicle ) 
       return -unspecified_error;
 
-   pfield fld = getfield( vehicle->xpos, vehicle->ypos ); 
-
-   int steigung = vehicle->typ->steigung; 
+   int steigung = vehicle->typ->steigung;
 
    if ( vehicle->typ->height & (chtieffliegend | chfliegend | chhochfliegend) ) {
       int w;
-      if ( vehicle->fuel < steigung * maxmalq )
+      if ( vehicle->tank.fuel < steigung * maxmalq )
          return -115;
 
       if ( newheight > vehicle->height ) { 
@@ -1061,9 +1063,9 @@ int ChangeVehicleHeight :: moveunitxy ( int xt1, int yt1, IntFieldList& pathToMo
 
    if ( oldheight < newheight ) {
       if ( oldheight == chfahrend ) {
-         vehicle->fuel -= vehicle->typ->fuelConsumption * vehicle->typ->steigung;
-         if ( vehicle->fuel < 0 )
-            vehicle->fuel = 0;
+         vehicle->tank.fuel -= vehicle->typ->fuelConsumption * vehicle->typ->steigung;
+         if ( vehicle->tank.fuel < 0 )
+            vehicle->tank.fuel = 0;
 
          if ( vehicle->typ->steigung * minmalq <= airplanemoveafterstart )
             vehicle->setMovement ( 0 );
@@ -1075,9 +1077,9 @@ int ChangeVehicleHeight :: moveunitxy ( int xt1, int yt1, IntFieldList& pathToMo
       } else {
          vehicle->setMovement ( vehicle->getMovement() - air_heightincmovedecrease );
 
-         vehicle->fuel -= vehicle->typ->fuelConsumption * air_heightincmovedecrease / 8;
-         if ( vehicle->fuel < 0 )
-            vehicle->fuel = 0;
+         vehicle->tank.fuel -= vehicle->typ->fuelConsumption * air_heightincmovedecrease / 8;
+         if ( vehicle->tank.fuel < 0 )
+            vehicle->tank.fuel = 0;
 
          int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->getMovement() / vehicle->typ->movement[log2(vehicle->height)];
          vehicle->setMovement ( newmovement );
@@ -1100,9 +1102,9 @@ int ChangeVehicleHeight :: moveunitxy ( int xt1, int yt1, IntFieldList& pathToMo
       } else {
          vehicle->setMovement ( vehicle->getMovement() - air_heightdecmovedecrease );
 
-         vehicle->fuel -= vehicle->typ->fuelConsumption * air_heightdecmovedecrease / 8;
-         if ( vehicle->fuel < 0 )
-            vehicle->fuel = 0;
+         vehicle->tank.fuel -= vehicle->typ->fuelConsumption * air_heightdecmovedecrease / 8;
+         if ( vehicle->tank.fuel < 0 )
+            vehicle->tank.fuel = 0;
 
          int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->getMovement() / vehicle->typ->movement[log2(vehicle->height)];
          vehicle->setMovement ( newmovement );
@@ -1126,7 +1128,6 @@ int ChangeVehicleHeight :: verticalHeightChange ( void )
 
    pfield fld = getfield(vehicle->xpos,vehicle->ypos); 
 
-   int steigung = vehicle->typ->steigung; 
    int oldheight = vehicle->height;
 
    if (vehicle->typ->height & (chtieffliegend | chfliegend | chhochfliegend)) {
@@ -1139,14 +1140,14 @@ int ChangeVehicleHeight :: verticalHeightChange ( void )
             return -111;
 
          int fuelcost = vehicle->typ->fuelConsumption * (helicopter_landing_move_cost + air_heightdecmovedecrease) / 8;
-         if ( fuelcost > vehicle->fuel )
+         if ( fuelcost > vehicle->tank.fuel )
             return -115;
 
 
          vehicle->setMovement ( newmovement ); 
          if ( !helicopter_attack_after_descent )
             vehicle->attacked = 0; 
-         vehicle->fuel -= fuelcost;
+         vehicle->tank.fuel -= fuelcost;
 
       } else
       if ( newheight < oldheight ) { 
@@ -1155,23 +1156,23 @@ int ChangeVehicleHeight :: verticalHeightChange ( void )
             return -111;
 
          int fuelcost = vehicle->typ->fuelConsumption * air_heightdecmovedecrease / 8;
-         if ( fuelcost > vehicle->fuel )
+         if ( fuelcost > vehicle->tank.fuel )
             return -115;
 
 
          vehicle->setMovement ( newmovement - air_heightdecmovedecrease ); 
-         vehicle->fuel -= fuelcost;
+         vehicle->tank.fuel -= fuelcost;
       } else
       if (( newheight > oldheight ) && (newheight > chtieffliegend)) { 
          int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->getMovement() / vehicle->typ->movement[log2(vehicle->height)];
          if (newmovement < air_heightincmovedecrease) 
             return -110;
          int fuelcost = vehicle->typ->fuelConsumption * air_heightincmovedecrease / 8;
-         if ( fuelcost > vehicle->fuel )
+         if ( fuelcost > vehicle->tank.fuel )
             return -115;
 
          vehicle->setMovement ( newmovement - air_heightincmovedecrease ); 
-         vehicle->fuel -= fuelcost;
+         vehicle->tank.fuel -= fuelcost;
 
          if ((newheight == chtieffliegend) && helicopter_attack_after_ascent ) 
             vehicle->attacked = 1; 
@@ -1224,11 +1225,11 @@ int ChangeVehicleHeight :: verticalHeightChange ( void )
       }
 
       int fuelcost = vehicle->typ->fuelConsumption * md / 8;
-      if ( fuelcost > vehicle->fuel )
+      if ( fuelcost > vehicle->tank.fuel )
          return -115;
 
       vehicle->setMovement ( newmovement );
-      vehicle->fuel -= fuelcost; 
+      vehicle->tank.fuel -= fuelcost;
 
       logtoreplayinfo ( rpl_changeheight, (int) vehicle->xpos, (int) vehicle->ypos, 
                                           (int) vehicle->xpos, (int) vehicle->ypos, vehicle->networkid, (int) vehicle->height, (int) newheight );
@@ -1648,7 +1649,7 @@ int      VehicleAttack :: tsearchattackablevehicles::run( void )
    if (d == 0) 
       return -204;
    
-   initsuche( angreifer->xpos,angreifer->ypos, maxdist + 1, mindist ); 
+   initsuche( actmap, angreifer->xpos,angreifer->ypos, maxdist + 1, mindist );
    startsuche();
 
    return 0;
@@ -1674,7 +1675,7 @@ VehicleAttack :: ~VehicleAttack ( )
 
 
 VehicleService :: VehicleService ( MapDisplayInterface* md, PPendingVehicleActions _pva )
-               : VehicleAction ( vat_service, _pva )
+               : VehicleAction ( vat_service, _pva ), fieldSearch ( *this )
 {
    status = 0;
    mapDisplay = md;
@@ -1683,25 +1684,185 @@ VehicleService :: VehicleService ( MapDisplayInterface* md, PPendingVehicleActio
 }
 
 
-int VehicleService :: available ( pvehicle eht ) const
+int VehicleService :: available ( pvehicle veh ) const
 {
-/*
-   if (eht != NULL)
-      if (eht->attacked == false)
-         if ( eht->weapexist() )
-            if ( eht->reactionfire.status == tvehicle::ReactionFire::off ) {
-               if (eht->typ->wait == false  ||  !eht->hasMoved() )
-                  return 1;
-            } else {
-               // if ( reactionfire_active >= 3 )
-                  return 1;
-            }
-*/
-   return 0;
+   int av = 0;
+   if ( veh && !veh->attacked ) {
+      if ( veh->canRepair() )
+         for ( int i = 0; i < veh->typ->weapons->count; i++ )
+            if ( veh->typ->weapons->weapon[i].service() )
+               av++;
+
+
+      pvehicletype fzt = veh->typ;
+      for ( int i = 0; i < fzt->weapons->count; i++ ) {
+         if ( fzt->weapons->weapon[i].service() ) {
+
+            if ( veh->functions & cfenergyref )
+               if ( fzt->tank.energy )
+                  av++;
+
+            if ( veh->functions & cfmaterialref )
+               if ( fzt->tank.material )
+                  av++;
+
+            if ( veh->functions & cffuelref )
+               if ( fzt->tank.fuel )
+                  av++;
+
+         }
+         if ( fzt->weapons->weapon[i].canRefuel() )
+            av++;
+      }
+   }
+   return av;
+}
+
+int VehicleService :: getServices ( pvehicle veh ) const
+{
+   int res = 0;
+   if ( veh ) {
+      if ( veh->canRepair() )
+         for ( int i = 0; i < veh->typ->weapons->count; i++ )
+            if ( veh->typ->weapons->weapon[i].service() )
+               if ( !veh->attacked )
+                  res |= 1 << srv_repair;
+
+
+      pvehicletype fzt = veh->typ;
+      for ( int i = 0; i < fzt->weapons->count; i++ ) {
+         if ( fzt->weapons->weapon[i].service() )
+            if ( veh->functions & (cfenergyref | cfmaterialref | cffuelref))
+               if ( fzt->tank.energy )
+                  res |= 1 << srv_resource;
+
+
+         if ( fzt->weapons->weapon[i].canRefuel() )
+            res |= 1 << srv_ammo;
+      }
+   }
+   return res;
 }
 
 
-int VehicleService :: execute ( pvehicle veh, int x, int y, int step, int _kamikaze, int weapnum )
+
+void  VehicleService :: FieldSearch :: testfield(void)
+{
+   pfield fld = getfield ( xp, yp );
+   if ( fld && fld->vehicle ) {
+      VehicleService::Target targ;
+      targ.dest = fld->vehicle;
+
+      int dist = beeline ( xp, yp , startx, starty );
+
+      for (int i = 0; i < veh->typ->weapons->count ; i++) {
+         SingleWeapon& sourceWeapon = veh->typ->weapons->weapon[i];
+         if ( sourceWeapon.sourceheight & veh->height )
+            if ( sourceWeapon.service() || sourceWeapon.canRefuel() ) {
+               int targheight = 0;
+
+               for ( int h = 0; h < 8; h++ )
+                  if ( sourceWeapon.targ & ( 1 << h ))
+                     if ( sourceWeapon.efficiency[ getheightdelta ( log2(veh->height), h ) ] )
+                        targheight |= 1 << h;
+
+               if ( fld->vehicle )
+                  if ( !(fld->vehicle->functions & cfnoairrefuel) || fld->vehicle->height <= chfahrend )
+                     if (getdiplomaticstatus2(veh->color, fld->vehicle->color) == capeace)
+                        if ( fld->vehicle->height & targheight ) {
+
+                           if ( sourceWeapon.canRefuel() && sourceWeapon.maxdistance >= dist && sourceWeapon.mindistance <= dist )
+                              for ( int j = 0; j < fld->vehicle->typ->weapons->count ; j++) {
+                                 SingleWeapon& targetWeapon = fld->vehicle->typ->weapons->weapon[j];
+                                 if ( targetWeapon.getScalarWeaponType() == sourceWeapon.getScalarWeaponType()
+                                      && targetWeapon.requiresAmmo() ) {
+                                    VehicleService::Target::Service s;
+                                    s.type = VehicleService::srv_ammo;
+                                    s.sourcePos = i;
+                                    s.targetPos = j;
+                                    s.curAmount = fld->vehicle->ammo[j];
+                                    s.orgSourceAmount = veh->ammo[i];
+                                    s.maxAmount = min ( targetWeapon.count, s.curAmount+s.orgSourceAmount );
+                                    int sourceSpace = sourceWeapon.count - veh->ammo[i];
+                                    s.minAmount = max ( s.curAmount - sourceSpace, 0 );
+                                    targ.service.push_back ( s );
+                                 }
+                              }
+
+                           if ( sourceWeapon.service() && sourceWeapon.maxdistance >= dist && sourceWeapon.mindistance <= dist) {
+                              static int resourceVehicleFunctions[resourceTypeNum] = { cfenergyref, cfmaterialref, cffuelref };
+                              for ( int r = 0; r < resourceTypeNum; r++ )
+                                 if ( veh->typ->tank.resource(r) && fld->vehicle->typ->tank.resource(r) && (veh->functions & resourceVehicleFunctions[r])) {
+                                    VehicleService::Target::Service s;
+                                    s.type = VehicleService::srv_resource;
+                                    s.sourcePos = r;
+                                    s.targetPos = r;
+                                    s.curAmount = fld->vehicle->tank.resource(r);
+                                    s.orgSourceAmount = veh->tank.resource(r);
+                                    s.maxAmount = s.curAmount + min ( fld->vehicle->putResource(maxint, r, 1) , s.orgSourceAmount );
+                                    int sourceSpace = veh->putResource(maxint, r, 1);
+                                    s.minAmount = max ( s.curAmount - sourceSpace, 0 );
+                                    targ.service.push_back ( s );
+                                 }
+
+                              if ( veh->canRepair() )
+                                 if ( veh->tank.fuel && veh->tank.material )
+                                    if ( fld->vehicle->getMovement() >= movement_cost_for_repaired_unit )
+                                       if ( fld->vehicle->damage ) {
+                                          VehicleService::Target::Service s;
+                                          s.type = VehicleService::srv_repair;
+                                          s.sourcePos = -1;
+                                          s.targetPos = -1;
+                                          s.curAmount = fld->vehicle->damage;
+                                          s.orgSourceAmount = 100;
+                                          s.maxAmount = fld->vehicle->damage;
+                                          s.minAmount = veh->getMaxRepair ( fld->vehicle );
+                                          targ.service.push_back ( s );
+                                       }
+
+                           } // if sourceWeapon.service()
+                  } // if ( fld->vehicle->height & targheight
+               }  // service || refuel
+         } // for veh->typ->weapons->count
+
+      if ( vs.dest.find ( targ.dest->networkid ) != vs.dest.end() ) {
+         vs.dest[ targ.dest->networkid ] = targ;
+      } else
+         if ( targ.service.size() > 0 )
+            vs.dest[ targ.dest->networkid ] = targ;
+   }
+}
+
+
+void  VehicleService :: FieldSearch ::initrefuelling( int xp1, int yp1 )
+{
+   int mindist = maxint;
+   int maxdist = minint;
+   for ( int i = 0; i < veh->typ->weapons->count; i++ ) {
+      SingleWeapon& w = veh->typ->weapons->weapon[i];
+      if ( w.service() || w.canRefuel() ) {
+         mindist = min ( mindist, w.mindistance/minmalq );
+         maxdist = max ( maxdist, w.maxdistance/maxmalq );
+      }
+   }
+
+   initsuche(actmap, xp1,yp1,mindist,maxdist);
+}
+
+
+void VehicleService :: FieldSearch :: run ( pvehicle _veh )
+{
+   if ( !_veh )
+      return;
+
+   veh = _veh;
+   initrefuelling ( veh->xpos, veh->ypos );
+   startsuche();
+}
+
+
+
+int VehicleService :: execute ( pvehicle veh, int targetNWID, int dummy, int step, int pos, int amount )
 {
    if ( step != status )
       return -1;
@@ -1713,17 +1874,69 @@ int VehicleService :: execute ( pvehicle veh, int x, int y, int step, int _kamik
          return status;
       }
 
+      fieldSearch.run ( vehicle );
+      if ( dest.size() > 0 )
+         status = 2;
+      else
+         status = -210;
 
-      status = 2;
       return status;
   } else
   if ( status == 2 ) {
-      status = 1000;
+     TargetContainer::iterator i = dest.find(targetNWID);
+     if ( i == dest.end() )
+        return -211;
+
+     Target& t = i->second;
+     if ( pos < 0 || pos >= t.service.size())
+        return -211;
+
+     Target::Service& serv = t.service[pos];
+     if ( amount < serv.minAmount || amount > serv.maxAmount )
+        return -212;
+
+     int delta;
+     switch ( serv.type ) {
+        case srv_resource: {
+                              delta = amount - serv.curAmount;
+                              int put = t.dest->putResource ( delta, serv.targetPos, 0 );
+                              vehicle->getResource ( put, serv.sourcePos, 0 );
+                              logtoreplayinfo ( rpl_refuel, t.dest->xpos, t.dest->ypos, t.dest->networkid, int(1000+serv.targetPos), amount );
+                              logtoreplayinfo ( rpl_refuel, vehicle->xpos, vehicle->ypos, vehicle->networkid, int(1000+serv.sourcePos), vehicle->tank.resource(serv.sourcePos) );
+                           }
+                           break;
+        case srv_repair: vehicle->repairItem ( t.dest, amount );
+                         // logtoreplayinfo ( rpl_refuel, eht->xpos, eht->ypos, eht->networkid, int(1002), newfuel );
+                         break;
+        case srv_ammo: delta = amount - serv.curAmount;
+                       t.dest->ammo[ serv.targetPos ] += delta;
+                       vehicle->ammo[ serv.sourcePos ] -= delta;
+                       logtoreplayinfo ( rpl_refuel, t.dest->xpos, t.dest->ypos, t.dest->networkid, serv.targetPos, t.dest->ammo[ serv.targetPos ] );
+                       logtoreplayinfo ( rpl_refuel, vehicle->xpos, vehicle->ypos, vehicle->networkid, serv.targetPos, vehicle->ammo[ serv.sourcePos ] );
+                       break;
+     }
+     fieldSearch.run ( vehicle );
   }
   return status;
 }
 
 
+int VehicleService :: fillEverything ( pvehicle veh, int targetNWID )
+{
+   if ( status != 2 )
+      return -1;
+
+   TargetContainer::iterator i = dest.find(targetNWID);
+   if ( i == dest.end() )
+      return -211;
+
+   Target& t = i->second;
+
+   for ( int i = 0; i< t.service.size(); i++ )
+      if ( t.service[i].type != srv_repair )
+         execute ( veh, targetNWID, -1, 2, i, t.service[i].maxAmount );
+   return 0;
+}
 
 
 void VehicleService :: registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva )

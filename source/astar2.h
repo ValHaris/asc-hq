@@ -41,7 +41,7 @@ class AStar {
        void findAllAccessibleFields ( pmap actmap, pvehicle veh );  // all accessible fields will have a.temp set to 1
        bool fieldVisited ( int x, int y);
        AStar ( void );
-       ~AStar ( );
+       virtual ~AStar ( );
  };
 
 bool operator < ( const AStar::Node& a, const AStar::Node& b );

@@ -69,7 +69,7 @@ SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
 VERSION = @VERSION@
 
-SUBDIRS = triangul 
+SUBDIRS = triangul bzlib
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
 CONFIG_CLEAN_FILES = 

@@ -1,6 +1,10 @@
-//     $Id: keybp.h,v 1.12 2000-06-23 09:24:17 mbickel Exp $
+//     $Id: keybp.h,v 1.13 2000-10-11 14:26:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/06/23 09:24:17  mbickel
+//      Fixed crash in replay
+//      enabled cursor movement in stredit
+//
 //     Revision 1.11  2000/06/01 15:27:46  mbickel
 //      Some changes for the upcoming Win32 version of ASC
 //      Fixed error at startup: unable to load smalaril.fnt
@@ -612,10 +616,5 @@
     extern void wait(void);
     extern tkey char2key (int ch);
     extern void getkeysyms ( tkey* keysym, int* keyprnt );
-
-#ifndef _DOS_
-extern int getch(void);
-extern int kbhit(void);
-#endif
 
 extern int exitprogram;

@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.51 2000-09-27 16:08:30 mbickel Exp $
+//     $Id: typen.cpp,v 1.52 2000-10-11 14:26:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2000/09/27 16:08:30  mbickel
+//      AI improvements
+//
 //     Revision 1.50  2000/09/25 20:04:41  mbickel
 //      AI improvements
 //
@@ -254,6 +257,10 @@
  #include "gameoptions.h"
 #endif
 
+#include "vehicletype.h"
+#include "buildingtype.h"
+
+
 const char*  choehenstufen[choehenstufennum] = {"deep submerged", "submerged", "floating", "ground level", "low-level flight", "flight", "high-level flight", "orbit"}; 
                                                    // fahrend ??
 
@@ -274,20 +281,8 @@ const char* ceventtrigger[ceventtriggernum]  = {"*NONE*", "turn/move >=", "build
 const char*  cminentypen[cminenum]  = {"antipersonnel mine", "antitank mine", "moored mine", "floating mine"};
 const int cminestrength[cminenum]  = { 60, 120, 180, 180 };
 
-const char*  cbuildingfunctions[cbuildingfunctionnum]  = {"HQ",                "training",             "unused (was: refinery)",           "vehicle production", "ammunition production", 
-                                                      "unused (was: energy prod)", "unused (was: material prod)",  "unused (was: fuel prod)",    "repair facility",    "recycling",
-                                                      "research",          "sonar",                "wind power plant",     "solar power plant",    "matter converter (was: power plant)",
-                                                      "mining station",    "external loading",         "construct units that cannot move out" };
 
-const char*  cvehiclefunctions[cvehiclefunctionsnum]  = {"sonar",             "paratrooper",       "mine-layer",        "trooper",               "repair vehicle",
-                                                         "conquer buildings", "move after attack","view satellites",   "construct ALL buildings", "view mines", 
-                                                         "construct vehicles","construct specific buildings", "refuel units",      "icebreaker",  "cannot be refuelled in air", 
-                                                            "refuels material", "!",               "makes tracks",   "drill for mineral resources manually",  "sailing",
-                                                                                                    // ?? Fahrspurenleger 
-                                                            "auto repair",        "generator",        "search for mineral resources automatically", "Kamikaze only",
-                                                            "immune to mines" };
-                                                            
-const char*  cbodenarten[cbodenartennum]  = {"shallow water , coast"       ,    "normal lowland",   "swamp thick",       "forest",       
+const char*  cbodenarten[cbodenartennum]  = {"shallow water , coast"       ,    "normal lowland",   "swamp thick",       "forest",
                                              "high mountains",                  "road",             "railroad",    "entry of building (not to be used for terrain)" ,
                                              "harbour (safe for ships at storm)",                         "runway"  ,         "pipeline",    "buried pipeline",        
                                              "water",                           "deep water",       "hard sand",   "soft sand",  
@@ -329,7 +324,7 @@ const int directionangle [ sidenum ] =
 #endif
 
 
-const int gameparameterdefault [ gameparameternum ] = { 1, 2, 0, 100, 100, 1, 0, 0, 1, 0, 0, 0, 0, 100, 100, 100, 1, maxunitexperience };
+const int gameparameterdefault [ gameparameternum ] = { 1, 2, 0, 100, 100, 1, 0, 0, 1, 0, 0, 0, 0, 100, 100, 100, 1, maxunitexperience, 0 };
 const char* gameparametername[ gameparameternum ] = { "lifetime of tracks", 
                                                       "freezing time of broken ice cover ( icebreaker )",
                                                       "move vehicles from unaccessible fields",
@@ -347,7 +342,8 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "max building damage repair / turn",
                                                       "building repair cost increase (percent)",
                                                       "fuel globally available (BI resource mode)",
-                                                      "maximum experience that can be gained by training"};
+                                                      "maximum experience that can be gained by training",
+                                                      "initial map visibility"};
 
 
 const int csolarkraftwerkleistung[cwettertypennum] = { 1024, 512, 256, 756, 384 }; // 1024 ist Maximum 
@@ -609,14 +605,14 @@ void tfield :: setparams ( void )
 
    #ifndef converter
    if ( building ) {
-      if ( this == getbuildingfield( building, building->typ->entry.x, building->typ->entry.y)) 
+      if ( this == building->getField( building->typ->entry.x, building->typ->entry.y))
          bdt |= cbbuildingentry; 
 
      #ifdef HEXAGON
       if ( building )
          for (int x = 0; x < 4; x++) 
             for ( int y = 0; y < 6; y++ ) 
-               if ( getbuildingfield ( building, x, y ) == this )
+               if ( building->getField ( x, y ) == this )
                   if ( building->getpicture ( x, y ) )
                      picture = building->getpicture ( x, y );
      #endif
@@ -817,804 +813,29 @@ tresourceview :: tresourceview ( void )
    memset ( &materialvisible, 0, sizeof ( materialvisible ));
 }
 
-tbuilding :: tbuilding ( void )
+ResourceMatrix :: ResourceMatrix ( const float* f )
 {
-   lastmineddist= 0;
-   repairedThisTurn = 0;
-   memset ( &bi_resourceplus, 0, sizeof ( bi_resourceplus ));
-}
-
-tbuilding :: tbuilding ( pbuilding src, tmap* actmap )
-{
-   work = src->work;
-   lastenergyavail = src->lastenergyavail;
-   lastmaterialavail = src->lastmaterialavail;
-   lastfuelavail = src->lastfuelavail;
-   typ = src->typ; 
-   memcpy ( munitionsautoproduction , src->munitionsautoproduction, sizeof ( munitionsautoproduction ) ); 
-   color = src->color; 
-   memcpy ( production , src->production, sizeof ( production )); 
-   damage = src->damage; 
-
-   plus = src->plus;
-   maxplus = src->maxplus;
-
-   actstorage = src->actstorage;
-
-   memcpy ( munition ,  src->munition, sizeof ( munition )); 
-
-   maxresearchpoints = src->maxresearchpoints; 
-   researchpoints = src->researchpoints; 
-
-   if ( src->name )
-      name = strdup ( src->name );
-   else
-      name = NULL;
-
-   xpos = src->xpos;
-   ypos = src->ypos; 
-
-   completion = src->completion; 
-   netcontrol = src->netcontrol; 
-   connection = src->connection; 
-   visible = src->visible; 
-   memcpy ( productionbuyable , src->productionbuyable, sizeof ( productionbuyable ));
-
-   bi_resourceplus = src->bi_resourceplus;
-
-   lastmineddist = src->lastmineddist;
-   repairedThisTurn = src->repairedThisTurn;
-
-   for ( int i = 0; i < 32; i++ )
-     if ( src->loading[i] )
-        loading[i] = new tvehicle ( src->loading[i], actmap );
-     else
-        loading[i] = NULL;
-
-   if ( actmap )
-      actmap->chainbuilding ( this );
-
+   int num = 0;
+   for ( int i = 0; i < resourceTypeNum; i++ )
+      for ( int j = 0; j < resourceTypeNum; j++ )
+         e[i][j] = f[num++];
 }
 
 
-void*   tbuildingtype :: getpicture ( int x, int y )
+Resources ResourceMatrix :: operator* ( const Resources& r ) const
 {
-   #ifdef HEXAGON
-   return w_picture[0][0][x][y];
-   #else
-   return w_picture[0][x][y];
-   #endif
+   Resources res;
+   for ( int i = 0; i < resourceTypeNum; i++ )
+      for ( int j = 0; j < resourceTypeNum; j++ )
+         res.resource(i) += int( e[i][j] * r.resource(j));
+
+   return res;
 }
 
 
-void  tbuildingtype :: getfieldcoordinates ( int          bldx,
-                                             int          bldy,
-                                             int          x,
-                                             int          y,
-                                             int     *    xx,
-                                             int     *    yy)
+////////////////////////////////////////////////////////////////////
 
-{
- 
-   int      orgx, orgy;
-   int      dx;
 
-   orgx=bldx - entry.x;
-   orgy=bldy - entry.y;
-   
-   dx =orgy & 1;
-   orgx = orgx + (dx & (~ entry.y));
-
-   *yy = orgy + y; 
-   *xx = orgx + x - (dx & *yy); 
-} 
-
-
-#ifdef converter
-int tbuilding :: vehicleloadable ( pvehicle vehicle, int uheight )
-{
-   return 0;
-}
-
-void* tbuilding :: getpicture ( int x, int y )
-{
-   return NULL;
-}
-
-#endif
-
-
-Vehicle :: Vehicle ( void ) : reactionfire ( this )
-{
-   gamemap = NULL;
-   init();
-}
-
-Vehicle :: Vehicle ( pmap actmap )
-          : reactionfire ( this )
-{
-   gamemap = actmap;
-   init();
-}
-
-
-Vehicle :: ~Vehicle (  )
-{
-   delete[] weapstrength;
-   weapstrength = NULL;
-
-   delete[] ammo;
-   ammo = NULL;
-
-}
-
-Vehicle :: Vehicle ( pvehicle src, pmap actmap )
-          : reactionfire ( this )
-{
-   gamemap = actmap;
-   init();
-   clone ( src, actmap );
-}
-
-void Vehicle :: init ( void )
-{
-   dummy = 0;
-   moredummy[0] = 0;
-   moredummy[1] = 0;
-   moredummy[2] = 0;
-   evenmoredummy[0] = 0;
-   evenmoredummy[1] = 0;
-   evenmoredummy[2] = 0;
-   name = NULL;
-   weapstrength = new int[16];
-   ammo = new int[16];
-   for ( int i = 0; i < 16; i++ ) {
-      weapstrength[i] = 0;
-      ammo[i] = 0;
-   }
-
-   typ = NULL;          
-   color = 0; 
-   damage = 0; 
-   fuel = 0; 
-
-   experience = 0;
-   attacked = 0; 
-   height = 0;
-   direction = 0;
-   xpos = -1;
-   ypos = -1;
-   material = 0;
-   energy = 0;
-   energyUsed = 0;
-   prev = 0;
-   next = 0;
-   connection = 0; 
-   klasse = 0;
-   armor = 0; 
-   networkid = -1; 
-   name = NULL;
-   functions = 0;
-   reactionfire.status = 0;
-   reactionfire.enemiesAttackable = 0;
-   generatoractive = 0;
-
-   for ( int j = 0; j < 32; j++ )
-       loading[j] = NULL;
-
-   for ( int a = 0; a < 8 ; a++ ) 
-      aiparam[a] = NULL;
-
-   setMovement ( 0 );
-
-}
-
-
-
-
-void Vehicle :: clone ( pvehicle src, pmap actmap )
-{
-
-   typ = src->typ;
-   color = src->color;
-   damage = src->damage;
-   fuel = src->fuel;
-   memcpy ( ammo , src->ammo, 16*sizeof ( int  ));
-   memcpy ( weapstrength , src->weapstrength, 16*sizeof ( int ));
-   experience = src->experience;
-   attacked = src->attacked;
-   height = src->height;
-   _movement = src->_movement;
-   direction = src->direction;
-   xpos = src->xpos;
-   ypos = src->ypos;
-   material = src->material;
-   energy = src->energy;
-   energyUsed = src->energyUsed;
-   connection = src->connection;
-   klasse = src->klasse;
-   armor = src->armor;
-   networkid = src->networkid;
-   if ( src->name )
-      name = strdup ( src->name );
-   else
-      name = NULL;
-   functions = src->functions;
-   reactionfire.status = src->reactionfire.status;
-   reactionfire.enemiesAttackable = src->reactionfire.enemiesAttackable;
-   generatoractive = src->generatoractive;
-
-   for ( int i = 0; i < 32; i++ )
-     if ( src->loading[i] )
-        loading[i] = new tvehicle ( src->loading[i], NULL );
-     else
-        loading[i] = NULL;
-
-   for ( int j = 0; j < 8; j++ )
-      if ( src->aiparam[j] )
-         aiparam[j] = new AiParameter ( *src->aiparam[j] );
-      else
-         aiparam[j] = NULL;
-
-   if ( actmap )
-      actmap->chainunit ( this );
-}
-
-void Vehicle :: setpower ( int status )
-{
-   if ( functions & cfgenerator ) {
-      generatoractive = status;
-      if ( status )
-         energy = typ->energy - energyUsed;
-      else {
-         int endiff = typ->energy- energy - energyUsed;
-         if ( fuel < endiff * generatortruckefficiency )
-            endiff = fuel / generatortruckefficiency;
-
-         fuel -= endiff * generatortruckefficiency ;
-         energyUsed += endiff;
-         energy = 0;
-      }
-   } else
-     generatoractive = 0;
-}
-
-
-void Vehicle :: setup_classparams_after_generation ( void )
-{
-      armor = typ->armor * typ->classbound[klasse].armor / 1024;
-      if ( typ->weapons->count ) {
-         for ( int m = 0; m < typ->weapons->count ; m++) {
-            ammo[m] = 0;
-            weapstrength[m] = typ->weapons->weapon[m].maxstrength *
-	      typ->classbound[klasse].weapstrength[typ->weapons->weapon[m].getScalarWeaponType()] / 1024;
-         }
-      }
-
-      if ( typ->classnum )
-        functions = typ->functions & typ->classbound[klasse].vehiclefunctions;
-      else
-        functions = typ->functions;
-
-      attacked = true;
-
-}
-
-
-int Vehicle::cargo ( void )
-{
-   int w = 0;
-   if ( typ->loadcapacity > 0)
-      for (int c = 0; c <= 31; c++)
-         if ( loading[c] )
-            w += loading[c]->weight();
-   return w;
-}
-
-int Vehicle::weight( void )
-{
-   return typ->weight + fuel * fuelweight / 1024 + material * materialweight / 1024 + cargo();
-}
-
-int Vehicle::size ( void )
-{
-   return typ->weight;
-}
-
-void Vehicle::transform ( pvehicletype type )
-{
-   typ = type;
-
-   fuel = typ->tank;
-   material = typ->material;
-   energy = 0;
-   generatoractive = 0;
-
-   for ( int m = 0; m < typ->weapons->count ; m++) {
-      ammo[m] = typ->weapons->weapon[m].count;
-      weapstrength[m] = typ->weapons->weapon[m].maxstrength;
-   }
-   armor = typ->armor;
-   klasse = 255;
-}
-
-
-
-/* Translate the weapon/mine/service bit pattern into scalar
- * weapon number for use in fetching UI resources.
- */
-int SingleWeapon::getScalarWeaponType(void) const {
-   if ( typ & (cwweapon | cwmineb) )
-      return log2 ( typ & (cwweapon | cwmineb) );
-   else
-      return -1;
-}
-
-
-int SingleWeapon::requiresAmmo(void) const
-{
-   return typ & ( cwweapon | cwmineb );
-}
-
-int SingleWeapon::shootable( void ) const
-{
-   return typ & cwshootableb;
-}
-
-int SingleWeapon::offensive( void ) const
-{
-   return typ & cwweapon;
-}
-
-int SingleWeapon::service( void ) const
-{
-   return typ & cwserviceb;
-}
-
-int SingleWeapon::canRefuel( void ) const
-{
-   return typ & cwammunitionb;
-}
-
-void SingleWeapon::set ( int type )
-{
-   typ = type;
-}
-
-
-
-#ifdef converter
-void Vehicle::convert ( int color )
-{
-}
-
-void tbuilding::convert ( int color )
-{
-}
-
-int Vehicle :: getstrongestweapon( int aheight, int distance)
-{
-   return 0;
-}
-
-void Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
-{
-}
-int  Vehicle :: vehicleconstructable ( pvehicletype tnk, int x, int y )
-{
-   return 0;
-}
-
-#endif
-
-
-int tvehicletype::maxweight ( void )
-{
-   return weight + tank * fuelweight / 1024 + material * materialweight / 1024;
-}
-
-int tvehicletype::maxsize ( void )
-{
-   return weight;
-}
-
-
-tvehicletype :: tvehicletype ( void )
-{
-   int i;
-
-   name = NULL;
-   description = NULL;
-   infotext = NULL;
-
-   memset ( &oldattack, 0, sizeof ( oldattack ));
-
-   production.energy = 0;
-   production.material = 0;
-   armor = 0;
-
-   for ( i = 0; i < 8; i++ )
-      picture[i] = NULL;
-   height     = 0;
-   researchid = 0;
-   _terrain   = 0;
-   _terrainreq = 0;
-   _terrainkill = 0;
-   steigung = 0;
-   jamming = 0;
-   view = 0;
-   wait = 0;
-   loadcapacity = 0;
-   maxunitweight = 0;
-   loadcapability = 0;
-   loadcapabilityreq = 0;
-   loadcapabilitynot = 0;
-   id = 0;
-   tank = 0;
-   fuelConsumption = 0;
-   energy = 0;
-   material = 0;
-   functions = 0;
-   for ( i = 0; i < 8; i++ )
-      movement[i] = 0;
-   movemalustyp = 0;
-   classnum = 0;
-   for ( i = 0; i < 8; i++ ) {
-      classnames[i] = NULL;
-      for ( int j = 0; j< 8; j++)
-         classbound[i].weapstrength[j] = 0;
-
-      classbound[i].armor = 0;
-      classbound[i].techlevel = 0;
-      classbound[i].techrequired[0] = 0;
-      classbound[i].techrequired[1] = 0;
-      classbound[i].techrequired[2] = 0;
-      classbound[i].techrequired[3] = 0;
-      classbound[i].eventrequired = 0;
-      classbound[i].vehiclefunctions = 0;
-   }
-
-   maxwindspeedonwater = 0;
-   digrange = 0;
-   initiative = 0;
-   _terrainnot = 0;
-   _terrainreq1 = 0;
-   objectsbuildablenum = 0;
-   objectsbuildableid = NULL;
-
-   weight = 0;
-   bipicture = -1;
-   vehiclesbuildablenum = 0;
-   vehiclesbuildableid = NULL;
-
-   buildicon = NULL;
-   buildingsbuildablenum = 0;
-   buildingsbuildable = NULL;
-   autorepairrate = 0;
-
-   for ( i = 0; i < 8; i++ )
-      aiparam[i] = NULL;
-
-   weapons = new UnitWeapon;
-   terrainaccess = new tterrainaccess;
-   filename = NULL;
-   vehicleCategoriesLoadable = -1;
-
-}
-
-tvehicletype :: ~tvehicletype ( )
-{
-   int i;
-
-   if ( name ) {
-      delete[] name;
-      name = NULL;
-   }
-
-   if ( description ) {
-      delete[] description;
-      description = NULL;
-   }
-
-   if ( infotext ) {
-      delete[] infotext;
-      infotext = NULL;
-   }
-
-   for ( i = 0; i < 8; i++ )
-      if ( picture[i] ) {
-         delete picture[i];
-         picture[i] = NULL;
-      }
-
-   for ( i = 0; i < 8; i++ )
-      if ( classnames[i] ) {
-         delete[] classnames[i];
-         classnames[i] = NULL;
-      }
-
-   if ( objectsbuildableid ) {
-      delete[] objectsbuildableid;
-      objectsbuildableid = NULL;
-   }
-
-   if ( terrainaccess ) {
-      delete[] terrainaccess;
-      terrainaccess = NULL;
-   }
-
-   if ( buildicon ) {
-      delete buildicon;
-      buildicon = NULL;
-   }
-
-   if ( buildingsbuildable ) {
-      delete[] buildingsbuildable;
-      buildingsbuildable = NULL;
-   }
-
-   if ( weapons ) {
-      delete weapons;
-      weapons = NULL;
-   }
-
-   for ( i = 0; i < 8; i++ )
-      if ( aiparam[i] ) {
-         delete aiparam[i];
-         aiparam[i] = NULL;
-      }
-}
-
-UnitWeapon :: UnitWeapon ( void )
-{
-   count = 0;
-   memset ( weapon, 0, sizeof ( weapon ));
-}
-
-
-void Vehicle :: repairunit(pvehicle vehicle, int maxrepair )
-{
-   if ( vehicle->damage  &&  fuel  &&  material ) {
-
-      int orgdam = vehicle->damage;
-
-      int dam;
-      if ( vehicle->damage > maxrepair )
-         dam = maxrepair;
-      else
-         dam = vehicle->damage;
-
-      int fkost = dam * vehicle->typ->production.energy / (100 * repairefficiency_unit );
-      int mkost = dam * vehicle->typ->production.material / (100 * repairefficiency_unit );
-      int w;
-
-      if (mkost <= material)
-         w = 10000;
-      else
-         w = 10000 * material / mkost;
-
-      if (fkost > fuel)
-         if (10000 * fuel / fkost < w)
-            w = 10000 * fuel / fkost;
-
-
-      vehicle->damage -= dam * w / 10000;
-
-      for ( int i = 0; i < experienceDecreaseDamageBoundaryNum; i++)
-         if ( orgdam > experienceDecreaseDamageBoundaries[i] && vehicle->damage < experienceDecreaseDamageBoundaries[i] )
-            if ( vehicle->experience > 0 )
-               vehicle->experience-=1;
-
-
-      if ( vehicle != this ) {
-         if ( vehicle->getMovement() > movement_cost_for_repaired_unit )
-            vehicle->setMovement ( vehicle->getMovement() -  movement_cost_for_repaired_unit );
-         else
-            vehicle->setMovement ( 0 );
-
-         if ( !attack_after_repair )
-            vehicle->attacked = 0;
-
-         int unitloaded = 0;
-         for ( int i = 0; i < 32; i++ )
-            if ( loading[i] == vehicle )
-               unitloaded = 1;
-
-         if ( !unitloaded )
-            if ( getMovement() > movement_cost_for_repairing_unit )
-               setMovement ( getMovement() - movement_cost_for_repairing_unit );
-            else
-               setMovement ( 0 );
-      }
-
-      material -= w * mkost / 10000;
-      fuel -= w * fkost / 10000;
-
-   }
-}
-
-void Vehicle :: turnwrap ( void )
-{
-   if ( energy < typ->energy - energyUsed  && generatoractive )
-      if ( functions & cfgenerator ) {
-         int endiff = typ->energy- energy - energyUsed;
-         if ( fuel < endiff * generatortruckefficiency )
-            endiff = fuel / generatortruckefficiency;
-
-         energy += endiff;
-         fuel -= endiff * generatortruckefficiency ;
-         energyUsed = 0;
-      }
-}
-
-void Vehicle :: endTurn( void )
-{
-   if ( typ->autorepairrate > 0 )
-      if ( damage )
-         repairunit ( this, typ->autorepairrate );
-
-   reactionfire.endTurn();
-
-   resetMovement();
-   attacked = false;
-
-}
-
-void Vehicle :: resetMovement ( void )
-{
-    int move = typ->movement[log2(height)];
-    setMovement ( move, -1 );
-    /*
-    if (actvehicle->typ->fuelconsumption == 0)
-       actvehicle->movement = 0;
-    else {
-       if ((actvehicle->fuel << 3) / actvehicle->typ->fuelconsumption < move)
-          actvehicle->movement = (actvehicle->fuel << 3) / actvehicle->typ->fuelconsumption ;
-       else
-          actvehicle->movement = move;
-    }
-    */
-}
-
-void Vehicle :: setMovement ( int newmove, int cargoDivisor )
-{
-   if ( newmove < 0 )
-      newmove = 0;
-
-   if ( cargoDivisor && typ)
-      if ( typ->movement[ log2 ( height ) ] ) {
-         int diff = _movement - newmove;
-         int perc = 1000 * diff / typ->movement[ log2 ( height ) ] ;
-         for ( int i = 0; i < 32; i++ ) {
-            if ( loading[i] ) {
-               int lperc = perc;
-               if ( cargoDivisor )
-                  lperc /= cargoDivisor;
-
-               loading[i]->setMovement ( loading[i]->getMovement() - lperc * loading[i]->typ->movement[ log2 ( loading[i]->height)] / 1000 , 1 );
-            }
-         } /* endfor */
-   }
-   _movement = newmove;
-}
-
-int Vehicle::hasMoved ( void )
-{
-   return _movement != typ->movement[ log2 ( height )];
-}
-
-
-int Vehicle :: getMovement ( void )
-{
-   if ( typ->fuelConsumption ) {
-      if ( fuel * minmalq / typ->fuelConsumption < _movement )
-         return fuel * minmalq / typ->fuelConsumption;
-      else
-         return _movement;
-   } else
-      return _movement;
-}
-
-void Vehicle::ReactionFire::enable ( void )
-{
-   if ( status == off ) {
-      if ( unit->typ->wait ) {
-         if ( unit->hasMoved())
-            status = init1;
-         else
-            status = init2;
-      } else {
-         status = init2;
-      }
-      // unit->setMovement ( 0, 0 );
-   }
-}
-
-void Vehicle::ReactionFire::disable ( void )
-{
-   if ( status != off ) {
-       status = off;
-       enemiesAttackable = 0;
-       unit->setMovement ( 0, 0 );
-   }
-}
-
-
-
-void Vehicle::ReactionFire::endTurn ( void )
-{
-   if ( status >= init1 ) {
-      if ( status < ready )
-         status++;
-
-      if ( status == ready )
-         enemiesAttackable = 0xff;
-      else
-         enemiesAttackable = 0;
-   }
-}
-
-
-int Vehicle :: weapexist( void )
-{
-   if ( typ->weapons->count > 0)
-      for ( int b = 0; b < typ->weapons->count ; b++)
-         if ( typ->weapons->weapon[b].shootable() )
-            if ( typ->weapons->weapon[b].offensive() )
-               if ( ammo[b] )
-                  return 1;
-    return 0;
-}
-
-
-void Vehicle :: putimage ( int x, int y )
-{
- #ifndef converter
-  #ifdef sgmain
-	int shaded = ( getMovement() < minmalq ) && ( color == actmap->actplayer*8) && (attacked || !typ->weapons->count || CGameOptions::Instance()->units_gray_after_move );
-  #else
-   int shaded = 0;
-  #endif
-    if ( height <= chgetaucht ) {
-          if ( shaded )
-             putpicturemix ( x, y, xlatpict(xlatpictgraytable,  typ->picture[  direction ]),  color, (char*) colormixbuf );
-          else
-             putpicturemix ( x, y,  typ->picture[ direction],  color, (char*) colormixbuf );
-
-    } else {
-          if ( height >= chtieffliegend ) {
-             int d = 6 * ( log2 ( height) - log2 ( chfahrend ));
-             putshadow ( x + d, y + d, typ->picture[direction] , &xlattables.a.dark3);
-          } else
-             if ( height == chfahrend )
-                putshadow ( x + 1, y + 1,  typ->picture[ direction] , &xlattables.a.dark3);
-
-          if ( shaded )
-             putrotspriteimage( x, y, xlatpict(xlatpictgraytable,  typ->picture[  direction ]),  color);
-          else
-             putrotspriteimage( x, y,  typ->picture[ direction],  color);
-    }
-
-   #endif
-
-}
-
-#ifdef converter
-int  Vehicle :: vehicleloadable ( pvehicle vehicle,int uheight )
-{
-   return 0;
-}
-#endif
-
-void Vehicle :: setnewposition ( int x , int y )
-{
-  xpos = x;
-  ypos = y;
-  if ( typ->loadcapacity > 0)
-     for ( int i = 0; i <= 31; i++)
-        if ( loading[i] )
-           loading[i]->setnewposition ( x , y );
-}
 
 /*
 void tbuilding :: repairunit(pvehicle vehicle, int maxrepair )
@@ -1648,21 +869,6 @@ void tbuilding :: repairunit(pvehicle vehicle, int maxrepair )
 }
 */
 
-
-#ifndef karteneditor
-  #ifndef sgmain
-
-int Vehicle::getmaxfuelforweight (  )
-{
-   return 0;
-}
-
-int Vehicle::getmaxmaterialforweight ( )
-{
-   return 0;
-}
-  #endif
-#endif
 
 
 
@@ -2145,31 +1351,6 @@ tterrainbits cblargerocks ( 1<<23, 0 );
 
 
 
-int tvehicletype :: vehicleloadable ( pvehicletype fzt )
-{
-   if (( ( (loadcapabilityreq & fzt->height) || !loadcapabilityreq ) &&
-         ((loadcapabilitynot & fzt->height) == 0))
-        || (fzt->functions & cf_trooper)) 
-
-      if ( maxunitweight >= fzt->weight )
-        return 1;
-      return 0;
-}
-
-
-int    tbuildingtype :: vehicleloadable ( pvehicletype fzt )
-{
-   if ( special & cgproduceAllUnitsB )
-      return 1;
-
-   if (    (loadcapacity >= fzt->maxsize()  &&  ((unitheightreq & fzt->height) || !unitheightreq) && !(unitheight_forbidden & fzt->height)  && (loadcapability & fzt->height))  
-        || ( fzt->functions & cf_trooper ) )
-        return 1;
-
-   return 0;
-}
-
-
 
 int tresearch :: technologyresearched ( int id )
 {                                                        
@@ -2199,6 +1380,20 @@ tmap :: ~tmap ( )
 {
 }
 */
+
+#ifndef converter
+void tmap :: calculateAllObjects ( void )
+{
+   calculateallobjects();
+}
+#endif
+pfield  tmap :: getField(int x, int y)
+{
+   if ((x < 0) || (y < 0) || (x >= xsize) || (y >= ysize))
+      return NULL;
+   else
+      return (   &field[y * xsize + x] );
+}
 
 int tmap :: isResourceGlobal ( int resource )
 {
@@ -2259,17 +1454,17 @@ void tmap :: setupResources ( void )
 {
   #ifndef converter
    for ( int n = 0; n< 8; n++ ) {
-      actmap->bi_resource[n].a.energy = 0;
-      actmap->bi_resource[n].a.material = 0;
-      actmap->bi_resource[n].a.fuel = 0;
+      actmap->bi_resource[n].energy = 0;
+      actmap->bi_resource[n].material = 0;
+      actmap->bi_resource[n].fuel = 0;
 
      #ifdef sgmain
 
       for ( pbuilding bld = actmap->player[n].firstbuilding; bld ; bld = bld->next )
          for ( int r = 0; r < 3; r++ )
             if ( actmap->isResourceGlobal( r )) {
-               actmap->bi_resource[n].resource[r] += bld->actstorage.resource[r];
-               bld->actstorage.resource[r] = 0;
+               actmap->bi_resource[n].resource(r) += bld->actstorage.resource(r);
+               bld->actstorage.resource(r) = 0;
             }
      #endif
    }
@@ -2374,6 +1569,15 @@ pvehicle tmap :: getunit ( pvehicle eht, int nwid )
    }
 }
 
+pvehicletype tmap :: getVehicleType_byId ( int id )
+{
+   #ifdef converter
+   return NULL;
+   #else
+   return getvehicletype_forid ( id, 0 );
+   #endif
+}
+
 
 pvehicle tmap :: getunit ( int x, int y, int nwid )
 {
@@ -2454,12 +1658,6 @@ tshareview :: tshareview ( const tshareview* org )
    recalculateview = org->recalculateview; 
 }
 
-#ifdef converter
-int tbuildingtype :: gettank ( int resource )
-{
-   return _tank.resource[resource];
-}
-#endif
 
 teventtrigger_polygonentered :: teventtrigger_polygonentered ( void )
 {

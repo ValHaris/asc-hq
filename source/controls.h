@@ -1,6 +1,10 @@
-//     $Id: controls.h,v 1.27 2000-09-24 19:57:04 mbickel Exp $
+//     $Id: controls.h,v 1.28 2000-10-11 14:26:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/09/24 19:57:04  mbickel
+//      ChangeUnitHeight functions are now more powerful since they use
+//        UnitMovement on their own.
+//
 //     Revision 1.26  2000/09/17 15:20:31  mbickel
 //      AI is now automatically invoked (depending on gameoptions)
 //      Some cleanup
@@ -263,47 +267,6 @@
 
 
 
-  class tcomputeview : public tsearchfields {
-                protected:
-                      int actView;
-                      int player;
-                      int mode;
-                      int height;
-
-                      int sonar,satellitenview,minenview;
-                      int        viewdist;
-                      int        jamdist;
-                      virtual void       initviewcalculation( int view, int jamming, int sx, int sy, int _mode, int _height   );   // mode: +1 = add view  ;  -1 = remove view
-                      virtual void  testfield ( void );
-
-                public:
-                      tcomputeview ( void ) { actView = actmap->playerView; };
-                 };
-
-  class tcomputevehicleview : public tcomputeview {
-                           public:
-                               void          init( const pvehicle eht, int _mode  );   // mode: +1 = add view  ;  -1 = remove view );
-                           };
-
-  class tcomputebuildingview : public tcomputeview  {
-                              pbuilding         building;
-                              integer           orgx, orgy, dx;
-                           public:
-                              void              init( const pbuilding    bld, int _mode );
-                           };
-
-
-
-   class trefuelvehicle : public tsearchfields {
-                public:
-                       char             mode;
-                       pvehicle         actvehicle;
-                       word             numberoffields;
-
-                       virtual void     testfield ( void );
-                       void             initrefuelling( word xp1, word yp1, char md );
-                       virtual void     startsuche ( void );
-                    };
 
    class tputmine : public tsearchfields {
                        int player;
@@ -344,7 +307,7 @@ extern void  calcmovemalus(int          x1,
                            int          x2,
                            int          y2,
                            pvehicle     vehicle,
-                           shortint     direc,
+                           int          direc,
                            int&         fuelcost,               
                            int&         movecost );            
 
@@ -380,8 +343,6 @@ extern void  constructvehicle( pvehicletype tnk );
 //! A helper function for #constructvehicle
 extern void build_vehicles_reset( void );
 
-extern void  refuelvehicle( int b);
-
 //! An old procedure for putting and removing mines.
 extern void  legemine( int typ, int delta );
 
@@ -400,9 +361,6 @@ extern void         destructbuildinglevel2( int xp, int yp);
 //! An old procedure for removing a building with a vehicle
 extern void         destructbuildinglevel1( int xp, int yp);
 
-//! Some unit can search for mineral resources
-extern void searchforminablefields ( pvehicle eht );
-
 //! Initializes the wind calculations for moving vehicle
 extern void initwindmovement( const pvehicle vehicle );
 
@@ -418,7 +376,7 @@ extern void addtechnology ( void );
 
 //! Calculates the resources that are needed to research the given number of research
 extern void returnresourcenuseforresearch ( const pbuilding bld, int research, int* energy, int* material );
-extern void returnresourcenuseforpowerplant (  const pbuilding bld, int prod, tresources *usage, int percentagee_based_on_maxplus );
+extern void returnresourcenuseforpowerplant (  const pbuilding bld, int prod, Resources *usage, int percentagee_based_on_maxplus );
 
 extern void dissectvehicle ( pvehicle eht );
 
@@ -428,9 +386,9 @@ extern void getpowerplantefficiency ( const pbuilding bld, int* material, int* f
 
 
 struct tmininginfo {
-         tresources avail[maxminingrange+2];
+         Resources avail[maxminingrange+2];
          int efficiency[maxminingrange+2];
-         tresources max[maxminingrange+2];            // soviel Bodenschaetze k”nnten in der Entfernung untergebracht werden.
+         Resources max[maxminingrange+2];            // soviel Bodenschaetze k”nnten in der Entfernung untergebracht werden.
 };                                          
 
 

@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.52 2000-09-25 20:04:35 mbickel Exp $
+//     $Id: building.cpp,v 1.53 2000-10-11 14:26:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2000/09/25 20:04:35  mbickel
+//      AI improvements
+//
 //     Revision 1.51  2000/09/17 15:16:10  mbickel
 //      reformatted the whole file with Astyle
 //
@@ -113,8 +116,10 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "tpascal.inc"
 #include "typen.h"
+#include "vehicletype.h"
+#include "buildingtype.h"
+
 #include "misc.h"
 #include "basegfx.h"
 #include "newfont.h"
@@ -255,8 +260,7 @@ class    ccontainer : public virtual ccontainercontrols
       //-------------------------------------------------------------------------icons
 
 
-      class repairicon_c : public generalicon_c ,
-               public virtual ccontainercontrols::crepairunit
+      class repairicon_c : public generalicon_c
       {
          public:
             virtual int   available    ( void ) ;
@@ -472,12 +476,6 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
 
    protected :
 
-      class repairicon_cb
-               : public ccontainer::repairicon_c , public cbuildingcontrols::crepairunitinbuilding
-      {
-            virtual int      checkto  (pvehicle eht, char newdamage);
-      };
-
       class fill_dialog_icon_cb  : public ccontainer::fill_dialog_icon_c
       {
          public:
@@ -551,7 +549,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
             {
                moveicon_c          movement;
                recyclingicon_cb    recycling;
-               repairicon_cb       repair;
+               repairicon_c        repair;
                trainuniticon_cb    training;
                dissectuniticon_cb  dissect;
                //fill_dialog_icon_cb filldialog;
@@ -577,8 +575,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
       //-------------------------------------------------------------------------subwindows
 
       class  crepairbuilding_subwindow
-               :	public cbuildingsubwindow ,
-               public cbuildingcontrols::crepairbuilding
+               :	public cbuildingsubwindow
       {
          public:
             crepairbuilding_subwindow ( void );
@@ -617,7 +614,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
             void setnewpower ( int pwr );
             void displayvariables ( void );
             void paintobj ( int num, int stat );
-            void dispresources ( tresources* res, int ypos, int sign );
+            void dispresources ( Resources* res, int ypos, int sign );
 
             int resourcecolor[3];
             int power;
@@ -730,7 +727,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
             int gx1, gy1, gx2, gy2;
             int materialcolor, energycolor, fuelcolor;
             int resourcecolor[3];
-            void dispresources ( tresources* res, int ypos, int sign );
+            void dispresources ( Resources* res, int ypos, int sign );
 
          public:
             tmininginfo* mininginfo;
@@ -753,7 +750,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
             int hx1, hy1, hx2, hy2;
             int materialcolor, energycolor, fuelcolor;
             int resourcecolor[3];
-            void dispresources ( tresources* res, int ypos, int sign );
+            void dispresources ( Resources* res, int ypos, int sign );
 
          public:
             tmininginfo* mininginfo;
@@ -831,13 +828,6 @@ class    ccontainer_t : public ctransportcontrols , public ccontainer
 
    protected :
 
-      class repairicon_ct
-               :	public ccontainer::repairicon_c ,
-               public virtual ctransportcontrols::crepairunitintransport
-      {
-            virtual int      checkto  (pvehicle eht, char newdamage);
-      };
-
       class fill_dialog_icon_ct  : public ccontainer::fill_dialog_icon_c
       {
          public:
@@ -858,7 +848,7 @@ class    ccontainer_t : public ctransportcontrols , public ccontainer
             struct I3
             {
                moveicon_c          movement;
-               repairicon_ct       repair;
+               repairicon_c        repair;
                //fill_dialog_icon_ct filldialog;
                fill_icon_ct        fill;
                exit_icon_c         exit;
@@ -1100,138 +1090,43 @@ ccontainercontrols :: ccontainercontrols (void)
 
 
 
-int   ccontainercontrols :: crepairanything :: checkto ( int olddamage, int newdamage, int energycost, int materialcost, int fuelcost, int effizienz )
-{
-   if ( newdamage > olddamage )
-      newdamage = olddamage;
 
-   int   needede = energycost    / 100 * (olddamage-newdamage) / effizienz;
-   int   neededm = materialcost  / 100 * (olddamage-newdamage) / effizienz;
-   int   neededf = fuelcost      / 100 * (olddamage-newdamage) / effizienz;
-
-   int   availae = cc->getenergy  ( needede, 0 );
-   int   availam = cc->getmaterial( neededm, 0 );
-   int   availaf = cc->getfuel    ( neededf, 0 );
-
-   int   eperc;
-   if ( needede )
-      eperc = 100 * availae / needede;
-   else
-      eperc = 100;
-
-   int   mperc;
-   if ( neededm )
-      mperc = 100 * availam / neededm;
-   else
-      mperc = 100;
-
-   int   fperc;
-   if ( neededf )
-      fperc = 100 * availaf / neededf;
-   else
-      fperc = 100;
-
-
-   int perc;
-   if ( mperc < eperc )
-      perc = mperc;
-   else
-      perc = eperc;
-
-   if ( fperc < perc )
-      perc = fperc;
-
-
-   int repairabledamage = ( olddamage-newdamage) * perc / 100 ;
-
-   energycosts   = energycost   / 100 * repairabledamage  / effizienz;
-   materialcosts = materialcost / 100 * repairabledamage  / effizienz;
-   fuelcosts     = fuelcost     / 100 * repairabledamage  / effizienz;
-   return repairabledamage;
-};
-
-
-int   ccontainercontrols :: crepairunit :: available ( pvehicle eht )
-{
-   if ( eht->damage )
-      return ( ( cc->getspecfunc ( mbuilding ) & cgrepairfacilityb )  ||  ( cc->getspecfunc ( mtransport ) & cfrepair ) );
-   else
-      return 0;
-}
-
-
-
-int   ccontainercontrols :: crepairunit :: repairto (pvehicle eht, char newdamage)
-{
-   int ndamage = eht->damage - checkto ( eht, newdamage );
-   int e = cc->getenergy   ( energycosts, 1 );
-   int m = cc->getmaterial ( materialcosts, 1 );
-   int f = cc->getfuel     ( fuelcosts, 1 );
-   if ( e < energycosts   ||   m < materialcosts   ||  f < fuelcosts ) {
-      displaymessage( " ccontainercontrols :: crepairunit :: repairto    \n Not enough resources ! \n repair canceled ! ", 1 );
-      int ep = cc->putenergy   ( e );
-      int mp = cc->putmaterial ( m );
-      int fp = cc->putfuel     ( f );
-
-      /*
-      if ( ep < e  &&  mp < m )
-         displaymessage2 ( " %d energy and %d material lost ! ", e - ep, m - mp );
-      else
-         if ( ep < e )
-            displaymessage2 ( " %d energy lost ! ", e - ep );
-         else
-            if ( mp < m )
-               displaymessage2 ( " %d material lost ! ", m - mp );
-       */
-   } else {
-      int orgdam = eht->damage;
-      eht->damage = ndamage;
-      for ( int i = 0; i < experienceDecreaseDamageBoundaryNum; i++)
-         if ( orgdam > experienceDecreaseDamageBoundaries[i] && eht->damage < experienceDecreaseDamageBoundaries[i] )
-            if ( eht->experience > 0 )
-               eht->experience-=1;
-
-   }
-
-   return ndamage;
-}
 
 
 
 
 void  ccontainercontrols :: crefill :: fuel (pvehicle eht, int newfuel)
 {
-   if ( newfuel > eht->typ->tank )
-      newfuel = eht->typ->tank;
+   if ( newfuel > eht->typ->tank.fuel )
+      newfuel = eht->typ->tank.fuel;
 
-   if ( newfuel > eht->getmaxfuelforweight() )
-      newfuel = eht->getmaxfuelforweight();
+   newfuel = min ( newfuel, eht->getResource ( maxint, Resources::Fuel, 1 ) + eht->putResource(maxint, Resources::Fuel, 1));
 
-   if ( newfuel > eht->fuel ) {
-      eht->fuel += cc->getfuel ( newfuel - eht->fuel, 1 );
+   if ( newfuel > eht->tank.fuel ) {
+      eht->tank.fuel += cc->getfuel ( newfuel - eht->tank.fuel, 1 );
    } else {
-      int delta = eht->fuel - newfuel;
+      int delta = eht->tank.fuel - newfuel;
       delta = cc->putfuel ( delta );
-      eht->fuel -= delta;
+      eht->tank.fuel -= delta;
    }
+
    logtoreplayinfo ( rpl_refuel, eht->xpos, eht->ypos, eht->networkid, int(1002), newfuel );
 };
 
 
 void  ccontainercontrols :: crefill :: material (pvehicle eht, int newmaterial)
 {
-   if ( newmaterial > eht->typ->material )
-      newmaterial = eht->typ->material;
+   if ( newmaterial > eht->typ->tank.material )
+      newmaterial = eht->typ->tank.material;
 
-   if ( newmaterial > eht->getmaxmaterialforweight() )
-      newmaterial = eht->getmaxmaterialforweight();
+   newmaterial = min ( newmaterial, eht->getResource ( maxint, Resources::Material, 1 ) + eht->putResource(maxint, Resources::Material, 1));
 
-   if ( newmaterial > eht->material ) {
-      eht->material += cc->getmaterial ( newmaterial - eht->material, 1 );
+   if ( newmaterial > eht->tank.material ) {
+      eht->tank.material += cc->getmaterial ( newmaterial - eht->tank.material, 1 );
    } else {
-      int delta = eht->material - newmaterial;
+      int delta = eht->tank.material - newmaterial;
       delta = cc->putmaterial ( delta );
-      eht->material -= delta;
+      eht->tank.material -= delta;
    }
    logtoreplayinfo ( rpl_refuel, eht->xpos, eht->ypos, eht->networkid, int(1001), newmaterial );
 };
@@ -1427,7 +1322,7 @@ VehicleMovement*   ccontainercontrols :: movement (  pvehicle eht )
 
 
       VehicleMovement* vehicleMovement = new VehicleMovement ( &defaultMapDisplay, NULL );
-      int res = vehicleMovement->execute ( eht, -1, -1, 0, heightToTest[i], -1 );
+      vehicleMovement->execute ( eht, -1, -1, 0, heightToTest[i], -1 );
 
 
       if ( vehicleMovement->getStatus() > 0 )
@@ -1472,20 +1367,20 @@ char  cbuildingcontrols :: getactplayer (void)
 
 int   cbuildingcontrols :: putenergy (int e, int abbuchen )
 {
-   return building->put_energy( e, 0, !abbuchen );
+   return building->putResource( e, 0, !abbuchen );
 };
 
 
 int   cbuildingcontrols :: putmaterial (int m, int abbuchen )
 {
-   return building->put_energy( m, 1 , !abbuchen );
+   return building->putResource( m, 1 , !abbuchen );
 };
 
 
 
 int   cbuildingcontrols :: putfuel (int f, int abbuchen )
 {
-   return building->put_energy( f, 2, !abbuchen );
+   return building->putResource( f, 2, !abbuchen );
 };
 
 
@@ -1505,21 +1400,21 @@ int   cbuildingcontrols :: putammunition ( int weapontype, int ammunition, int a
 
 int   cbuildingcontrols :: getenergy ( int need, int abbuchen )
 {
-   return building->get_energy ( need, 0,  !abbuchen );
+   return building->getResource ( need, 0,  !abbuchen );
 };
 
 
 
 int   cbuildingcontrols :: getmaterial ( int need, int abbuchen )
 {
-   return building->get_energy ( need, 1, !abbuchen );
+   return building->getResource ( need, 1, !abbuchen );
 };
 
 
 
 int   cbuildingcontrols :: getfuel ( int need, int abbuchen )
 {
-   return building->get_energy ( need, 2, !abbuchen );
+   return building->getResource ( need, 2, !abbuchen );
 };
 
 
@@ -1644,7 +1539,7 @@ void  cbuildingcontrols :: crecycling :: resourceuse (pvehicle eht)
    else
       output = destructoutput;
 
-   material = eht->typ->production.material * (100 - eht->damage/2 ) / 100 / output;
+   material = eht->typ->productionCost.material * (100 - eht->damage/2 ) / 100 / output;
    energy = 0;
 }
 
@@ -1699,53 +1594,6 @@ void    cbuildingcontrols :: cnetcontrol :: reset ( void )
 
 
 
-int   cbuildingcontrols :: crepairbuilding :: available ( void )
-{
-   return ( cc_b->building->damage )	?	true	:	false;
-}
-
-
-int   cbuildingcontrols :: crepairbuilding :: checkto ( char newdamage )
-{
-   return crepairanything::checkto( cc_b->building->damage, newdamage,
-                                    cc_b->building->typ->productioncost.fuel      * actmap->getgameparameter(cgp_buildingrepairfactor) / 100 * actmap->getgameparameter(cgp_buildingarmor) / 100,
-                                    cc_b->building->typ->productioncost.material  * actmap->getgameparameter(cgp_buildingrepairfactor) / 100 * actmap->getgameparameter(cgp_buildingarmor) / 100,
-                                    0, repairefficiency_building );
-}
-
-
-
-int   cbuildingcontrols :: crepairbuilding :: repairto ( char newdamage)
-{
-   int ndamage = cc_b->building->damage - checkto ( newdamage );
-   int e = cc->getenergy   ( energycosts, 1 );
-   int m = cc->getmaterial ( materialcosts, 1 );
-   if ( e < energycosts   ||   m < materialcosts ) {
-      displaymessage( " cbuildingcontrols :: crepairbuilding :: repairto    \n Not enough resources ! \n repair canceled ! ", 1 );
-      int ep = cc->putenergy   ( e );
-      int mp = cc->putmaterial ( m );
-
-      if ( ep < e  &&  mp < m )
-         displaymessage2 ( " %d energy and %d material lost ! ", e - ep, m - mp );
-      else
-         if ( ep < e )
-            displaymessage2 ( " %d energy lost ! ", e - ep );
-         else
-            if ( mp < m )
-               displaymessage2 ( " %d material lost ! ", m - mp );
-
-   } else
-      cc_b->building->damage = ndamage;
-
-   cc_b->building->repairedThisTurn = 1;
-   return ndamage;
-}
-
-
-int   cbuildingcontrols :: crepairunitinbuilding :: checkto (pvehicle eht, char newdamage)
-{
-   return /*ccontainercontrols ::*/ crepairanything :: checkto ( eht->damage, newdamage, eht->typ->production.energy, eht->typ->production.material, 0, repairefficiency_building );
-};
 
 
 
@@ -1837,8 +1685,8 @@ void cbuildingcontrols :: cproduceammunition :: produce ( int weaptype, int num 
 int   cbuildingcontrols :: cproduceunit :: available (pvehicletype fzt)
 {
    if ( actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( fzt, actmap ) )
-      if (( cc->getenergy( fzt->production.energy, 0 )     >= fzt->production.energy)  &&
-            ( cc->getmaterial( fzt->production.material, 0 ) >= fzt->production.material))
+      if (( cc->getenergy( fzt->productionCost.energy, 0 )     >= fzt->productionCost.energy)  &&
+            ( cc->getmaterial( fzt->productionCost.material, 0 ) >= fzt->productionCost.material))
          return 1;
 
    return 0;
@@ -1863,8 +1711,8 @@ pvehicle cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt)
 
    eht->setMovement ( eht->typ->movement[log2( eht->height )]);
 
-   int engot = cc->getenergy   ( fzt->production.energy,   1 );
-   int magot = cc->getmaterial ( fzt->production.material, 1 );
+   int engot = cc->getenergy   ( fzt->productionCost.energy,   1 );
+   int magot = cc->getmaterial ( fzt->productionCost.material, 1 );
 
 
    int i = 0;
@@ -2012,14 +1860,14 @@ char  ctransportcontrols :: getactplayer (void)
 
 int   ctransportcontrols :: putmaterial (int m, int abbuchen )
 {
-   if ( vehicle->typ->material < vehicle->material + m ) {
-      int dif = vehicle->typ->material - vehicle->material;
+   if ( vehicle->typ->tank.material < vehicle->tank.material + m ) {
+      int dif = vehicle->typ->tank.material - vehicle->tank.material;
       if ( abbuchen )
-         vehicle->material += dif;
+         vehicle->tank.material += dif;
       return dif;
    } else {
       if ( abbuchen )
-         vehicle->material += m;
+         vehicle->tank.material += m;
       return m;
    }
 };
@@ -2029,14 +1877,14 @@ int   ctransportcontrols :: putmaterial (int m, int abbuchen )
 int   ctransportcontrols :: putfuel (int f, int abbuchen)
 {
    if ( vehicle->typ->functions & cffuelref) {
-      if ( vehicle->typ->tank < vehicle->fuel + f ) {
-         int dif = vehicle->typ->tank - vehicle->fuel;
+      if ( vehicle->typ->tank.fuel < vehicle->tank.fuel + f ) {
+         int dif = vehicle->typ->tank.fuel - vehicle->tank.fuel;
          if ( abbuchen )
-            vehicle->fuel += dif;
+            vehicle->tank.fuel += dif;
          return dif;
       } else {
          if ( abbuchen )
-            vehicle->fuel += f;
+            vehicle->tank.fuel += f;
          return f;
       }
    } else
@@ -2073,14 +1921,14 @@ int   ctransportcontrols :: putammunition ( int weapontype, int ammunition, int 
 
 int   ctransportcontrols :: getenergy ( int need, int abbuchen )
 {
-   if ( need < vehicle->energy ) {
+   if ( need < vehicle->tank.energy ) {
       if ( abbuchen )
-         vehicle->energy-=need;
+         vehicle->tank.energy-=need;
       return need;
    } else {
-      int e = vehicle->energy;
+      int e = vehicle->tank.energy;
       if ( abbuchen )
-         vehicle->energy = 0;
+         vehicle->tank.energy = 0;
       return e;
    }
 };
@@ -2089,14 +1937,14 @@ int   ctransportcontrols :: getenergy ( int need, int abbuchen )
 
 int   ctransportcontrols :: getmaterial ( int need, int abbuchen )
 {
-   if ( need < vehicle->material ) {
+   if ( need < vehicle->tank.material ) {
       if ( abbuchen )
-         vehicle->material-=need;
+         vehicle->tank.material-=need;
       return need;
    } else {
-      int m = vehicle->material;
+      int m = vehicle->tank.material;
       if ( abbuchen )
-         vehicle->material = 0;
+         vehicle->tank.material = 0;
       return m;
    }
 };
@@ -2106,14 +1954,14 @@ int   ctransportcontrols :: getmaterial ( int need, int abbuchen )
 int   ctransportcontrols :: getfuel ( int need, int abbuchen )
 {
    if ( vehicle->typ->functions & cffuelref) {
-      if ( need < vehicle->fuel ) {
+      if ( need < vehicle->tank.fuel ) {
          if ( abbuchen )
-            vehicle->fuel-=need;
+            vehicle->tank.fuel-=need;
          return need;
       } else {
-         int f = vehicle->fuel;
+         int f = vehicle->tank.fuel;
          if ( abbuchen )
-            vehicle->fuel = 0;
+            vehicle->tank.fuel = 0;
          return f;
       }
    } else
@@ -2225,20 +2073,20 @@ VehicleMovement*  ctransportcontrols :: movement (  pvehicle eht, int mode )
 {
    if ( eht->getMovement() < minmalq )
       return NULL;
- 
+
    movementparams.height   = eht->height;
    movementparams.movement = eht->getMovement();
    movementparams.attacked = eht->attacked;
- 
+
    int unitheight = -1;
    if ( vehicle->height <= chgetaucht || vehicle->height >= chtieffliegend )
       unitheight = vehicle->height;
- 
+
    moveparams.movestatus = 0;
    int ma = moveavail( eht );
-   if ( ma == 3 ) 
+   if ( ma == 3 )
       eht->attacked = 1;
- 
+
    VehicleMovement* vehicleMovement = new VehicleMovement ( &defaultMapDisplay, NULL );
    if (  ma >= 2 ) {
       vehicleMovement->execute ( eht, -1, -1, 0, unitheight, -1 );
@@ -2254,7 +2102,7 @@ VehicleMovement*  ctransportcontrols :: movement (  pvehicle eht, int mode )
                 eht->setMovement ( eht->typ->steigung * maxmalq );
               else
                 eht->setMovement ( maxmalq * 3 / 2 );
- 
+
              vehicleMovement->execute ( eht, -1, -1, 0, unitheight, -1 );
              if ( vehicleMovement->getStatus() <= 0 ) {
                 eht->height   = movementparams.height;
@@ -2264,13 +2112,13 @@ VehicleMovement*  ctransportcontrols :: movement (  pvehicle eht, int mode )
                 return NULL;
              }
          }
- 
+
       } else {
          delete vehicleMovement;
          return NULL;
       }
    }
- 
+
    return vehicleMovement;
 }
 */
@@ -2284,14 +2132,6 @@ void  ctransportcontrols :: removevehicle ( pvehicle *peht )
    logtoreplayinfo ( rpl_removeunit, vehicle->xpos, vehicle->ypos, (*peht)->networkid );
    ::removevehicle ( peht );
 }
-
-
-
-
-int   ctransportcontrols :: crepairunitintransport :: checkto (pvehicle eht, char newdamage)
-{
-   return /*ccontainercontrols ::*/ crepairanything :: checkto ( eht->damage, newdamage, 0, eht->typ->production.material, eht->typ->production.energy, repairefficiency_unit );
-};
 
 
 
@@ -2846,6 +2686,7 @@ ccontainer :: cammunitiontransfer_subwindow :: cammunitiontransfer_subwindow ( v
    actschieber = 0 ;
    externalloadingactive = 0;
    page = 0;
+   pagenum = 0;
 }
 
 int  ccontainer :: cammunitiontransfer_subwindow :: subwin_available ( void )
@@ -2985,20 +2826,20 @@ void  ccontainer :: cammunitiontransfer_subwindow :: reset ( pvehicle veh )
             }
          }
       } /* endfor */
-      if ( eht->typ->material ) {
+      if ( eht->typ->tank.material ) {
          weaps[num].name = resourceNames [ 1 ];
-         weaps[num].maxnum = eht->typ->material;
-         weaps[num].orgnum = eht->material;
+         weaps[num].maxnum = eht->typ->tank.material;
+         weaps[num].orgnum = eht->tank.material;
          weaps[num].actnum = weaps[num].orgnum;
          weaps[num].buildnum = cc->getmaterial ( maxint, 0 );
          weaps[num].pos  = 101;
          weaps[num].type = 101;
          num++;
       }
-      if ( eht->typ->tank ) {
+      if ( eht->typ->tank.fuel ) {
          weaps[num].name = resourceNames [ 2 ];
-         weaps[num].maxnum = eht->typ->tank;
-         weaps[num].orgnum = eht->fuel;
+         weaps[num].maxnum = eht->typ->tank.fuel;
+         weaps[num].orgnum = eht->tank.fuel;
          weaps[num].actnum = weaps[num].orgnum;
          weaps[num].buildnum = cc->getfuel ( maxint, 0 );
          weaps[num].pos  = 102;
@@ -3010,7 +2851,7 @@ void  ccontainer :: cammunitiontransfer_subwindow :: reset ( pvehicle veh )
          objcoordinates[i].type = 3;
       }
    }
-   pagenum = num / 8;
+   pagenum = (num-1) / 8;
    if ( page > pagenum )
       page = 0;
 
@@ -3039,6 +2880,9 @@ int   ccontainer :: cammunitiontransfer_subwindow :: gpres ( int i )
                n = cc->getfuel ( diff, 0 );
             else
                n = -cc->putfuel ( -diff, 0 );
+
+            // hostcontainer->setpictures();
+            // hostcontainer->displayloading();
 
          };
 
@@ -3129,8 +2973,11 @@ void  ccontainer :: cammunitiontransfer_subwindow :: transfer ( void )
       if ( weaps[i].pos == 101 )
          material ( eht, weaps[i].actnum );
 
-      if ( weaps[i].pos == 102 )
+      if ( weaps[i].pos == 102 ) {
          fuel ( eht, weaps[i].actnum );
+         hostcontainer->setpictures();
+         hostcontainer->displayloading();
+      }
    }
    dashboard.x = 0xffff;
 }
@@ -3504,24 +3351,26 @@ int   ccontainer :: repairicon_c :: available    ( void )
    pvehicle eht = main->getmarkedunit();
    if ( eht && eht->color == actmap->actplayer * 8)
       if ( eht->damage > 0 )
-         if ( /*ccontainercontrols ::*/ crepairunit :: available ( eht ) )
-            return 1;
+         return cc->baseContainer->canRepair();
 
    return 0;
 }
 
 void  ccontainer :: repairicon_c :: exec         ( void )
 {
-   repairto ( main->getmarkedunit() , 0 );
+   cc->baseContainer->repairItem ( main->getmarkedunit() , 0 );
    dashboard.x = 0xffff;
+   main->repaintresources = 1;
+
 }
 
 const char* ccontainer :: repairicon_c :: getinfotext  ( void )
 {
+   Resources cost;
    static char buf[200];
-   checkto ( main->getmarkedunit() , 0 );
+   cc->baseContainer->getMaxRepair ( main->getmarkedunit() , 0, cost );
    strcpy ( buf, "re~p~air" );
-   sprintf ( &buf[strlen(buf)], resourceusagestring, energycosts, materialcosts, fuelcosts );
+   sprintf ( &buf[strlen(buf)], resourceusagestring, cost.energy, cost.material, cost.fuel );
    return buf;
 }
 
@@ -3555,6 +3404,8 @@ ccontainer :: fill_icon_c :: fill_icon_c ( void )
 void  ccontainer :: fill_icon_c :: exec         ( void )
 {
    filleverything ( main->getmarkedunit() );
+   main->setpictures();
+   main->displayloading();
    main->repaintresources = 1;
    dashboard.x = 0xffff;
 }
@@ -3797,8 +3648,8 @@ void csubwindow :: paintlasche ( void )
 }
 
    bar ( laschx1 + steps, subwiny2, laschx2 - steps, subwiny2 + laschheight, color );
-               
-   for ( i = 0; i < steps ; i++ ) { 
+
+   for ( i = 0; i < steps ; i++ ) {
       int laschy2 = ( steps - i ) * laschstepwidth;
       if ( laschy2 > laschheight )
          laschy2 = laschheight;
@@ -4104,7 +3955,7 @@ void  ccontainer_b :: init ( pbuilding bld )
       setpictures();
 
       int x,y;                                           // setzen des mapcursors auf den Geb„udeeingang
-      getbuildingfieldcoordinates (building, building->typ->entry.x, building->typ->entry.y, x, y);
+      building->getFieldCoordinates (building->typ->entry.x, building->typ->entry.y, x, y);
       cursor.gotoxy ( x , y );
 
       ccontainer :: init ( building->getpicture ( building->typ->entry.x , building->typ->entry.y ),
@@ -4125,8 +3976,8 @@ void ccontainer_b :: unitchanged( void )
    if ( unitmode == mproduction ) {
       pvehicletype fzt = getmarkedunittype();
       if ( fzt  && actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( fzt, actmap ) ) {
-         int en = fzt->production.energy;
-         int ma = fzt->production.material;
+         int en = fzt->productionCost.energy;
+         int ma = fzt->productionCost.material;
          int fu = 0;
 
          if ( CGameOptions::Instance()->container.filleverything ) {
@@ -4134,8 +3985,8 @@ void ccontainer_b :: unitchanged( void )
             int ma1 = ma;
             int fu1 = fu;
 
-            fu += fzt->tank;
-            ma += fzt->material;
+            fu += fzt->tank.fuel;
+            ma += fzt->tank.material;
 
             displaymessage2(" production costs ~%d~ energy, ~%d~ material and ~%d~ fuel (empty: %d energy, %d material, %d fuel)", en, ma, fu, en1, ma1, fu1 );
          } else
@@ -4162,8 +4013,8 @@ void  ccontainer_b :: setpictures ( void )
                   building->typ->vehicleloadable( building->production[i] ) ) {
                produceableunits[num] = building->production[i];
                picture[num] = building->production[i]->picture[0] ;
-               int en = building->production[i]->production.energy;
-               int ma = building->production[i]->production.material;
+               int en = building->production[i]->productionCost.energy;
+               int ma = building->production[i]->productionCost.material;
                if ( getenergy ( en, 0 ) < en  ||  getmaterial ( ma, 0 ) < ma )
                   pictgray[num] = 1;
                else
@@ -4335,16 +4186,17 @@ ccontainer_b :: crepairbuilding_subwindow :: crepairbuilding_subwindow ( void )
 
    helplist.num = 10;
 
-   static tonlinehelpitem repairbuildinghelpitems[10]  = {{ 53 + subwinx1 , 26 + subwiny1 , 153 + subwinx1, 35 + subwiny1, 20100 },
-         { 52 + subwinx1 , 49 + subwiny1 ,  92 + subwinx1, 60 + subwiny1, 20101 },
-         {113 + subwinx1 , 49 + subwiny1 , 153 + subwinx1, 60 + subwiny1, 20102 },
-         {164 + subwinx1 , 34 + subwiny1 , 200 + subwinx1, 50 + subwiny1, 20103 },
-         { 26 + subwinx1 , 71 + subwiny1 ,  92 + subwinx1, 81 + subwiny1, 20104 },
-         { 26 + subwinx1 , 83 + subwiny1 ,  92 + subwinx1, 93 + subwiny1, 20105 },
-         { 26 + subwinx1 , 95 + subwiny1 ,  92 + subwinx1,105 + subwiny1, 20106 },
-         {113 + subwinx1 , 71 + subwiny1 , 165 + subwinx1, 81 + subwiny1, 20107 },
-         {277 + subwinx1 , 22 + subwiny1 , 297 + subwinx1,108 + subwiny1, 20108 },
-         {308 + subwinx1 , 22 + subwiny1 , 328 + subwinx1,108 + subwiny1, 20109 }};
+   static tonlinehelpitem repairbuildinghelpitems[10]  =
+        {{{ 53 + subwinx1 , 26 + subwiny1 , 153 + subwinx1, 35 + subwiny1}, 20100 },
+         {{ 52 + subwinx1 , 49 + subwiny1 ,  92 + subwinx1, 60 + subwiny1}, 20101 },
+         {{113 + subwinx1 , 49 + subwiny1 , 153 + subwinx1, 60 + subwiny1}, 20102 },
+         {{164 + subwinx1 , 34 + subwiny1 , 200 + subwinx1, 50 + subwiny1}, 20103 },
+         {{ 26 + subwinx1 , 71 + subwiny1 ,  92 + subwinx1, 81 + subwiny1}, 20104 },
+         {{ 26 + subwinx1 , 83 + subwiny1 ,  92 + subwinx1, 93 + subwiny1}, 20105 },
+         {{ 26 + subwinx1 , 95 + subwiny1 ,  92 + subwinx1,105 + subwiny1}, 20106 },
+         {{113 + subwinx1 , 71 + subwiny1 , 165 + subwinx1, 81 + subwiny1}, 20107 },
+         {{277 + subwinx1 , 22 + subwiny1 , 297 + subwinx1,108 + subwiny1}, 20108 },
+         {{308 + subwinx1 , 22 + subwiny1 , 328 + subwinx1,108 + subwiny1}, 20109 }};
 
    helplist.item = repairbuildinghelpitems;
 
@@ -4369,7 +4221,7 @@ void  ccontainer_b :: crepairbuilding_subwindow :: display ( void )
 
       if ( ndamag < 0 )
          ndamag = 0;
-      checkto ( ndamag );
+      // checkto ( ndamag );
    }
 
    setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
@@ -4394,7 +4246,7 @@ void  ccontainer_b :: crepairbuilding_subwindow :: display ( void )
    activefontsettings.length = 36;
    activefontsettings.justify = righttext;
    activefontsettings.background = 255;
-   showtext2c ( strrr ( cc_b->building->typ->getArmor() ), subwinx1 + 53,  subwiny1 + 72 );
+   showtext2c ( strrr ( cc_b->building->getArmor() ), subwinx1 + 53,  subwiny1 + 72 );
    showtext2c ( strrr ( cc_b->building->typ->jamming ),  subwinx1 + 53,  subwiny1 + 84 );
    showtext2c ( strrr ( cc_b->building->typ->view ),     subwinx1 + 53,  subwiny1 + 96 );
    showtext2c ( strrr ( cc_b->building->typ->loadcapacity ),  subwinx1 + 140, subwiny1 + 72 );
@@ -4406,13 +4258,13 @@ void  ccontainer_b :: crepairbuilding_subwindow :: display ( void )
       activefontsettings.length = 60;
       activefontsettings.justify = lefttext;
       activefontsettings.background = bkgrdarkcol;
-    
-    
+
+
       showtext2c ( "damage:",       subwinx1 + 20, subwiny1 + 10 );
       showtext2c ( "repairable:",   subwinx1 + 20, subwiny1 + 27 );
       showtext2c ( "repair cost: ", subwinx1 + 20, subwiny1 + 44 );
-    
-    
+
+
       objcoordinates[0].x1 = subwinx1 + 182;
       objcoordinates[0].x2 = subwinx2 -  20;
       objcoordinates[0].y1 = subwiny1 +  44;
@@ -4420,7 +4272,7 @@ void  ccontainer_b :: crepairbuilding_subwindow :: display ( void )
       objcoordinates[0].type = 2;
       objnum = 1;
       paintobj ( 0, 0 );
-    
+
       activefontsettings.length = objcoordinates[0].x2 - objcoordinates[0].x1 - 2;
       activefontsettings.height = 0;
       activefontsettings.justify = centertext;
@@ -4474,9 +4326,10 @@ void ccontainer_b :: crepairbuilding_subwindow :: paintvariables ( void )
       activefontsettings.length = 37;
       activefontsettings.justify = righttext;
       activefontsettings.background = 244;
-
-      showtext2c ( strrr ( energycosts ), subwinx1 + 53, subwiny1 + 51 );
-      showtext2c ( strrr ( materialcosts ), subwinx1 + 114, subwiny1 + 51 );
+      Resources cost;
+      cc_b->building->getMaxRepair ( cc_b->building, ndamag, cost );
+      showtext2c ( strrr ( cost.energy ), subwinx1 + 53, subwiny1 + 51 );
+      showtext2c ( strrr ( cost.material ), subwinx1 + 114, subwiny1 + 51 );
    } else {
       bar ( subwinx1 + 53, subwiny1 + 50 , subwinx1 + 53 + 38, subwiny1 + 59 , 244 );
       bar ( subwinx1 + 114, subwiny1 + 50, subwinx1 + 114 + 38, subwiny1 + 59 , 244 );
@@ -4500,9 +4353,10 @@ void  ccontainer_b :: crepairbuilding_subwindow :: paintobj ( int num, int stat 
 
 void  ccontainer_b :: crepairbuilding_subwindow :: checkformouse ( void )
 {
-   if ( available () )
+   if ( cc_b->building->damage )
       if ( objpressedbymouse ( 0 ) ) {
-         repairto ( ndamag );
+         cc_b->building->repairItem ( cc_b->building, ndamag );
+         hostcontainer->repaintresources = 1;
          paintvariables();
       }
 }
@@ -4724,11 +4578,12 @@ ccontainer_b :: cconventionelpowerplant_subwindow :: cconventionelpowerplant_sub
 
    helplist.num = 5;
 
-   static tonlinehelpitem powerplanthelpitems[5]   = {{ 11 + subwinx1 , 48 + subwiny1 , 164 + subwinx1, 58 + subwiny1, 20120 },
-         { 11 + subwinx1 , 61 + subwiny1 , 164 + subwinx1, 71 + subwiny1, 20121 },
-         { 11 + subwinx1 , 74 + subwiny1 , 164 + subwinx1, 84 + subwiny1, 20122 },
-         { 11 + subwinx1 , 87 + subwiny1 , 164 + subwinx1, 97 + subwiny1, 20123 },
-         { 178+ subwinx1 , 23 + subwiny1 , 343 + subwinx1, 108 + subwiny1, 20125 }};
+   static tonlinehelpitem powerplanthelpitems[5]   =
+        {{{ 11 + subwinx1 , 48 + subwiny1 , 164 + subwinx1, 58 + subwiny1}, 20120 },
+         {{ 11 + subwinx1 , 61 + subwiny1 , 164 + subwinx1, 71 + subwiny1}, 20121 },
+         {{ 11 + subwinx1 , 74 + subwiny1 , 164 + subwinx1, 84 + subwiny1}, 20122 },
+         {{ 11 + subwinx1 , 87 + subwiny1 , 164 + subwinx1, 97 + subwiny1}, 20123 },
+         {{ 178+ subwinx1 , 23 + subwiny1 , 343 + subwinx1, 108 + subwiny1}, 20125 }};
 
    helplist.item = powerplanthelpitems;
 
@@ -4745,7 +4600,7 @@ ccontainer_b :: cconventionelpowerplant_subwindow :: cconventionelpowerplant_sub
 
 int  ccontainer_b :: cconventionelpowerplant_subwindow :: subwin_available ( void )
 {
-   if ( ( hostcontainer->getspecfunc ( mbuilding ) & cgconventionelpowerplantb ) && ( cc_b->building->maxplus.a.energy ))
+   if ( ( hostcontainer->getspecfunc ( mbuilding ) & cgconventionelpowerplantb ) && ( cc_b->building->maxplus.energy ))
       cbuildingsubwindow :: subwin_available ( );
 
    if ( next )
@@ -4757,8 +4612,8 @@ int  ccontainer_b :: cconventionelpowerplant_subwindow :: subwin_available ( voi
 void  ccontainer_b :: cconventionelpowerplant_subwindow :: display ( void )
 {
 
-   if ( cc_b->building->maxplus.a.energy )
-      power = 1024 * cc_b->building->plus.a.energy / cc_b->building->maxplus.a.energy;
+   if ( cc_b->building->maxplus.energy )
+      power = 1024 * cc_b->building->plus.energy / cc_b->building->maxplus.energy;
    else
       power = 0;
 
@@ -4783,7 +4638,7 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: display ( void )
 
 
    /*   showtext2c ( "energy plus:", subwinx1 + 8, subwiny1 + 25 );
-    
+
       showtext2c ( "fuel     cost:",     subwinx1 + 8, subwiny1 + 43 );
       showtext2c ( "material cost:",     subwinx1 + 8, subwiny1 + 61 );*/
 
@@ -4833,19 +4688,19 @@ void ccontainer_b :: cconventionelpowerplant_subwindow :: setnewpower ( int pwr 
       while ( bld ) {
          if ( bld->typ->special & cgconventionelpowerplantb )
             for ( int r = 0; r < 3; r++ )
-               bld->plus.resource[r] = bld->maxplus.resource[r] * power/1024;
+               bld->plus.resource(r) = bld->maxplus.resource(r) * power/1024;
 
          bld=bld->next;
       }
    } else {
       pbuilding bld = cc_b->building;
       for ( int r = 0; r < 3; r++ )
-         bld->plus.resource[r] = bld->maxplus.resource[r] * power/1024;
+         bld->plus.resource(r) = bld->maxplus.resource(r) * power/1024;
    }
 
 }
 
-void  ccontainer_b :: cconventionelpowerplant_subwindow :: dispresources ( tresources* res, int ypos, int sign )
+void  ccontainer_b :: cconventionelpowerplant_subwindow :: dispresources ( Resources* res, int ypos, int sign )
 {
    npush ( activefontsettings );
    activefontsettings.font = schriften.monogui;
@@ -4858,9 +4713,9 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: dispresources ( treso
 
    int r;
    for ( r = 0; r < 3; r++ )
-      if( res->resource[r] * sign > 0 ) {
+      if( res->resource(r) * sign > 0 ) {
          activefontsettings.color = resourcecolor[r];
-         showtext2 ( int2string ( res->resource[r] * sign, buf ), subwinx1 + 68 + r * 33, subwiny1 + 48 + ypos * 13 );
+         showtext2 ( int2string ( res->resource(r) * sign, buf ), subwinx1 + 68 + r * 33, subwiny1 + 48 + ypos * 13 );
       } else
          bar ( subwinx1 + 68 + r * 33, subwiny1 + 48 + ypos * 13, subwinx1 + 68 + r * 33 + activefontsettings.length, subwiny1 + 48 + ypos * 13 + activefontsettings.font->height - 1, activefontsettings.background );
 
@@ -4884,15 +4739,15 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: displayvariables ( vo
    dispresources ( &cc_b->building->plus, 2, 1 );
 
 
-   tresources usage;
+   Resources usage;
    returnresourcenuseforpowerplant ( cc_b->building, 100,  &usage, 0 );
 
    dispresources ( &usage, 3, 1 );
 
    int max = 0;
    for ( int r = 0; r < 3; r++ )
-      if ( abs ( cc_b->building->maxplus.resource[r] ) > max )
-         max = abs ( cc_b->building->maxplus.resource[r] );
+      if ( abs ( cc_b->building->maxplus.resource(r) ) > max )
+         max = abs ( cc_b->building->maxplus.resource(r) );
 
    max = max * 17 / 16;
 
@@ -4902,9 +4757,9 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: displayvariables ( vo
 
       if ( max )
          for ( int r = 0; r < 3; r++ )
-            if ( cc_b->building->maxplus.resource[r] != 0 )
-               if ( !(x % 3) || cc_b->building->maxplus.resource[r] >= 0 )
-                  putpixel ( gx1 + x, gy2 - ( gy2-gy1 ) * abs ( cc_b->building->maxplus.resource[r] * x / dist ) / max, resourcecolor[r] );
+            if ( cc_b->building->maxplus.resource(r) != 0 )
+               if ( !(x % 3) || cc_b->building->maxplus.resource(r) >= 0 )
+                  putpixel ( gx1 + x, gy2 - ( gy2-gy1 ) * abs ( cc_b->building->maxplus.resource(r) * x / dist ) / max, resourcecolor[r] );
 
    } /* endfor */
    x = gx1 + ( gx2 - gx1 ) * power / 1024;
@@ -4964,15 +4819,15 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: paintobj ( int num, i
       /*
            if ( stat == 0 ) {
               putimage ( objcoordinates[0].x1, objcoordinates[0].y1, icons.container.subwin.conventionelpowerplant.button[0] );
-              if ( allbuildings ) 
+              if ( allbuildings )
                  showtext2c ( "yes", subwinx1+318, subwiny1 +  5 );
-              else 
+              else
                  showtext2c ( "no",  subwinx1+318, subwiny1 +  5 );
            } else {
               putimage ( objcoordinates[0].x1, objcoordinates[0].y1, icons.container.subwin.conventionelpowerplant.button[1] );
-              if ( allbuildings ) 
+              if ( allbuildings )
                  showtext2c ( "yes", subwinx1+319, subwiny1 +  6 );
-              else 
+              else
                  showtext2c ( "no",  subwinx1+319, subwiny1 +  6 );
            }
       */
@@ -5058,11 +4913,11 @@ void  ccontainer_b :: cwindpowerplant_subwindow :: display ( void )
    activefontsettings.length = 53;
    activefontsettings.justify = righttext;
 
-   tresources plus;
+   Resources plus;
    cc_b->building->getresourceplus( -2, &plus, 1 );
-   int prod = plus.a.energy;
+   int prod = plus.energy;
    cc_b->building->getresourceplus( -1, &plus, 1 );
-   int storable = plus.a.energy;
+   int storable = plus.energy;
 
    showtext2c ( strrr ( prod ), subwinx1 + 117, subwiny1 + 38 );
 
@@ -5074,7 +4929,7 @@ void  ccontainer_b :: cwindpowerplant_subwindow :: display ( void )
       strcpy ( buf, "-" );
 
    showtext2c ( buf, subwinx1 + 117, subwiny1 + 62 );
-   showtext2c ( strrr ( cc_b->building->maxplus.a.energy ), subwinx1 + 117, subwiny1 + 86 );
+   showtext2c ( strrr ( cc_b->building->maxplus.energy ), subwinx1 + 117, subwiny1 + 86 );
 
    getinvisiblemouserectanglestk (  );
    npop ( activefontsettings );
@@ -5144,11 +4999,11 @@ void  ccontainer_b :: csolarpowerplant_subwindow :: display ( void )
    activefontsettings.length = 53;
    activefontsettings.justify = righttext;
 
-   tresources plus;
+   Resources plus;
    cc_b->building->getresourceplus( -2, &plus, 1 );
-   int prod = plus.a.energy;
+   int prod = plus.energy;
    cc_b->building->getresourceplus( -1, &plus, 1 );
-   int storable = plus.a.energy;
+   int storable = plus.energy;
 
    showtext2c ( strrr ( prod ), subwinx1 + 117, subwiny1 + 38 );
 
@@ -5162,9 +5017,9 @@ void  ccontainer_b :: csolarpowerplant_subwindow :: display ( void )
    showtext2c ( buf, subwinx1 + 117, subwiny1 + 62 );
 
    if ( actmap->_resourcemode == 1 )
-      showtext2c ( strrr ( cc_b->building->bi_resourceplus.a.energy ), subwinx1 + 117, subwiny1 + 86 );
+      showtext2c ( strrr ( cc_b->building->bi_resourceplus.energy ), subwinx1 + 117, subwiny1 + 86 );
    else
-      showtext2c ( strrr ( cc_b->building->maxplus.a.energy ), subwinx1 + 117, subwiny1 + 86 );
+      showtext2c ( strrr ( cc_b->building->maxplus.energy ), subwinx1 + 117, subwiny1 + 86 );
 
 
    getinvisiblemouserectanglestk (  );
@@ -6037,12 +5892,13 @@ ccontainer_b :: cminingstation_subwindow :: cminingstation_subwindow ( void )
 
    helplist.num =  6;
 
-   static tonlinehelpitem miningstationhelpitems[ 6]   = {{ 14 + subwinx1 , 41 + subwiny1 , 167 + subwinx1, 51 + subwiny1, 20120 },
-         { 14 + subwinx1 , 54 + subwiny1 , 167 + subwinx1, 64 + subwiny1, 20121 },
-         { 14 + subwinx1 , 67 + subwiny1 , 167 + subwinx1, 77 + subwiny1, 20122 },
-         { 14 + subwinx1 , 80 + subwiny1 , 167 + subwinx1, 90 + subwiny1, 20123 },
-         { 14 + subwinx1 , 93 + subwiny1 , 167 + subwinx1, 103 + subwiny1, 20124 },
-         { 178+ subwinx1 , 23 + subwiny1 , 343 + subwinx1, 108 + subwiny1, 20125 }};
+   static tonlinehelpitem miningstationhelpitems[ 6]
+      = {{{ 14 + subwinx1 , 41 + subwiny1 , 167 + subwinx1, 51 + subwiny1}, 20120 },
+         {{ 14 + subwinx1 , 54 + subwiny1 , 167 + subwinx1, 64 + subwiny1}, 20121 },
+         {{ 14 + subwinx1 , 67 + subwiny1 , 167 + subwinx1, 77 + subwiny1}, 20122 },
+         {{ 14 + subwinx1 , 80 + subwiny1 , 167 + subwinx1, 90 + subwiny1}, 20123 },
+         {{ 14 + subwinx1 , 93 + subwiny1 , 167 + subwinx1, 103 + subwiny1}, 20124 },
+         {{ 178+ subwinx1 , 23 + subwiny1 , 343 + subwinx1, 108 + subwiny1}, 20125 }};
 
 
    helplist.item = miningstationhelpitems;
@@ -6061,7 +5917,7 @@ int  ccontainer_b :: cminingstation_subwindow :: subwin_available ( void )
    return 0;
 }
 
-void  ccontainer_b :: cminingstation_subwindow :: dispresources ( tresources* res, int ypos, int sign )
+void  ccontainer_b :: cminingstation_subwindow :: dispresources ( Resources* res, int ypos, int sign )
 {
    npush ( activefontsettings );
    activefontsettings.font = schriften.monogui;
@@ -6074,9 +5930,9 @@ void  ccontainer_b :: cminingstation_subwindow :: dispresources ( tresources* re
 
    int r;
    for ( r = 0; r < 3; r++ )
-      if( res->resource[r] * sign > 0 ) {
+      if( res->resource(r) * sign > 0 ) {
          activefontsettings.color = resourcecolor[r];
-         showtext2 ( int2string ( res->resource[r] * sign, buf ), subwinx1 + 71 + r * 33, subwiny1 + 41 + ypos * 13 );
+         showtext2 ( int2string ( res->resource(r) * sign, buf ), subwinx1 + 71 + r * 33, subwiny1 + 41 + ypos * 13 );
       } else
          bar ( subwinx1 + 71 + r * 33, subwiny1 + 41 + ypos * 13, subwinx1 + 71 + r * 33 + activefontsettings.length, subwiny1 + 41 + ypos * 13 + activefontsettings.font->height - 1, activefontsettings.background );
 
@@ -6087,11 +5943,11 @@ void  ccontainer_b :: cminingstation_subwindow :: dispresources ( tresources* re
 void  ccontainer_b :: cminingstation_subwindow :: display ( void )
 {
    extraction = 0;
-   if ( cc_b->building->maxplus.a.material > 0 )
-      extraction = 1024 * cc_b->building->plus.a.material / cc_b->building->maxplus.a.material;
+   if ( cc_b->building->maxplus.material > 0 )
+      extraction = 1024 * cc_b->building->plus.material / cc_b->building->maxplus.material;
    else
-      if ( cc_b->building->maxplus.a.fuel > 0 )
-         extraction = 1024 * cc_b->building->plus.a.fuel / cc_b->building->maxplus.a.fuel;
+      if ( cc_b->building->maxplus.fuel > 0 )
+         extraction = 1024 * cc_b->building->plus.fuel / cc_b->building->maxplus.fuel;
 
 
    setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
@@ -6150,14 +6006,14 @@ void ccontainer_b :: cminingstation_subwindow :: setnewextraction ( int res )
       while ( bld ) {
          if ( bld->typ->special & cgminingstationb ) {
             for ( int r = 0; r < 3; r++ )
-               bld->plus.resource[r] = bld->maxplus.resource[r] * extraction/1024;
+               bld->plus.resource(r) = bld->maxplus.resource(r) * extraction/1024;
          }
          bld=bld->next;
       }
    } else {
       pbuilding bld = cc_b->building;
       for ( int r = 0; r < 3; r++ )
-         bld->plus.resource[r] = bld->maxplus.resource[r] * extraction/1024;
+         bld->plus.resource(r) = bld->maxplus.resource(r) * extraction/1024;
    }
 }
 
@@ -6171,18 +6027,18 @@ void  ccontainer_b :: cminingstation_subwindow :: displayvariables ( void )
    dispresources ( &cc_b->building->maxplus, 0, 1 );
    dispresources ( &cc_b->building->maxplus, 1, -1 );
 
-   tresources plus;
+   Resources plus;
    cc_b->building->getresourceplus ( 16, &plus, 1 );
    dispresources ( &plus, 2, 1 );
 
-   tresources usage;
+   Resources usage;
    cc_b->building->getresourceusage ( &usage );
    dispresources ( &usage, 3, 1 );
 
-   tresources effic;
-   effic.a.energy = 0;
-   effic.a.material = cc_b->building->typ->efficiencymaterial;
-   effic.a.fuel = cc_b->building->typ->efficiencyfuel;
+   Resources effic;
+   effic.energy = 0;
+   effic.material = cc_b->building->typ->efficiencymaterial;
+   effic.fuel = cc_b->building->typ->efficiencyfuel;
    dispresources ( &effic, 4, 1 );
 
 
@@ -6196,8 +6052,8 @@ void  ccontainer_b :: cminingstation_subwindow :: displayvariables ( void )
 
    int max = 0;
    for ( int r = 0; r < 3; r++ )
-      if ( abs ( cc_b->building->maxplus.resource[r] ) > max )
-         max = abs ( cc_b->building->maxplus.resource[r] );
+      if ( abs ( cc_b->building->maxplus.resource(r) ) > max )
+         max = abs ( cc_b->building->maxplus.resource(r) );
 
    max = max * 17 / 16;
 
@@ -6205,9 +6061,9 @@ void  ccontainer_b :: cminingstation_subwindow :: displayvariables ( void )
    if ( max )
       for (x = dist; x >0 ; x--)
          for ( int r = 0; r < 3; r++ )
-            if ( cc_b->building->maxplus.resource[r] != 0 )
-               if ( !(x % 3) || cc_b->building->maxplus.resource[r] >= 0 )
-                  putpixel ( gx1 + x, gy2 - ( gy2-gy1 ) * abs ( cc_b->building->maxplus.resource[r] * x / dist ) / max, resourcecolor[r] );
+            if ( cc_b->building->maxplus.resource(r) != 0 )
+               if ( !(x % 3) || cc_b->building->maxplus.resource(r) >= 0 )
+                  putpixel ( gx1 + x, gy2 - ( gy2-gy1 ) * abs ( cc_b->building->maxplus.resource(r) * x / dist ) / max, resourcecolor[r] );
 
    x = gx1 + ( gx2 - gx1 ) * extraction / 1024;
 
@@ -6286,9 +6142,9 @@ void  ccontainer_b :: cminingstation_subwindow :: paintobj ( int num, int stat )
         y =   6;
      }
 
-     if ( allbuildings == 0 ) 
+     if ( allbuildings == 0 )
         showtext2c ( "all", subwinx1+x, subwiny1 + y );
-     else 
+     else
         if ( allbuildings == 1 )
            if ( mode == 1 )
               showtext2c ( "mat.", subwinx1+x, subwiny1 + y );
@@ -6372,8 +6228,9 @@ ccontainer_b :: cmineralresources_subwindow :: cmineralresources_subwindow ( voi
 
    helplist.num =  2;
 
-   static tonlinehelpitem mineralresourceshelpitems[2] = {{  6 + subwinx1 , 23 + subwiny1 , 171 + subwinx1, 108+ subwiny1, 20128 },
-         { 178+ subwinx1 , 23 + subwiny1 , 343 + subwinx1, 108+ subwiny1, 20129 }};
+   static tonlinehelpitem mineralresourceshelpitems[2] =
+        {{{  6 + subwinx1 , 23 + subwiny1 , 171 + subwinx1, 108+ subwiny1}, 20128 },
+         {{ 178+ subwinx1 , 23 + subwiny1 , 343 + subwinx1, 108+ subwiny1}, 20129 }};
 
    helplist.item = mineralresourceshelpitems;
 
@@ -6392,7 +6249,7 @@ int  ccontainer_b :: cmineralresources_subwindow :: subwin_available ( void )
    return 0;
 }
 
-void  ccontainer_b :: cmineralresources_subwindow :: dispresources ( tresources* res, int ypos, int sign )
+void  ccontainer_b :: cmineralresources_subwindow :: dispresources ( Resources* res, int ypos, int sign )
 {
    npush ( activefontsettings );
    activefontsettings.font = schriften.monogui;
@@ -6405,9 +6262,9 @@ void  ccontainer_b :: cmineralresources_subwindow :: dispresources ( tresources*
 
    int r;
    for ( r = 0; r < 3; r++ )
-      if( res->resource[r] * sign > 0 ) {
+      if( res->resource(r) * sign > 0 ) {
          activefontsettings.color = resourcecolor[r];
-         showtext2 ( int2string ( res->resource[r] * sign, buf ), subwinx1 + 71 + r * 33, subwiny1 + 41 + ypos * 13 );
+         showtext2 ( int2string ( res->resource(r) * sign, buf ), subwinx1 + 71 + r * 33, subwiny1 + 41 + ypos * 13 );
       } else
          bar ( subwinx1 + 71 + r * 33, subwiny1 + 41 + ypos * 13, subwinx1 + 71 + r * 33 + activefontsettings.length, subwiny1 + 41 + ypos * 13 + activefontsettings.font->height - 1, activefontsettings.background );
 
@@ -6418,11 +6275,11 @@ void  ccontainer_b :: cmineralresources_subwindow :: dispresources ( tresources*
 void  ccontainer_b :: cmineralresources_subwindow :: display ( void )
 {
    extraction = 0;
-   if ( cc_b->building->maxplus.a.material > 0 )
-      extraction = 1024 * cc_b->building->plus.a.material / cc_b->building->maxplus.a.material;
+   if ( cc_b->building->maxplus.material > 0 )
+      extraction = 1024 * cc_b->building->plus.material / cc_b->building->maxplus.material;
    else
-      if ( cc_b->building->maxplus.a.fuel > 0 )
-         extraction = 1024 * cc_b->building->plus.a.fuel / cc_b->building->maxplus.a.fuel;
+      if ( cc_b->building->maxplus.fuel > 0 )
+         extraction = 1024 * cc_b->building->plus.fuel / cc_b->building->maxplus.fuel;
 
 
    setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
@@ -6458,7 +6315,7 @@ void  ccontainer_b :: cmineralresources_subwindow :: display ( void )
       int y = gy2 - ( gy2 - gy1 ) * mininginfo->efficiency[i] / max;
       int xd = (gx2-gx1) / maxminingrange ;
       bar ( gx1 + i * xd , y, gx1 + i * xd + xd/2, gy2, materialcolor ); // 160 + 15 * mininginfo->avail[ i ].resource[ 1 ] / mininginfo->max[ i ].resource[ 1 ] );
-      bar ( gx1 + i * xd + xd/2, y, gx1 + (i+1) * xd, gy2, fuelcolor ); // 160 + 15 * mininginfo->avail[ i ].resource[ 2 ] / mininginfo->max[ i ].resource[ 2 ] );
+      bar ( gx1 + i * xd + xd/2, y, gx1 + (i+1) * xd, gy2, fuelcolor ); // 160 + 15 * mininginfo->avail[ i ].resource( 2 ) / mininginfo->max[ i ].resource( 2 ) );
    }
 
 
@@ -6471,34 +6328,34 @@ void  ccontainer_b :: cmineralresources_subwindow :: display ( void )
 
    max = 0;
    for ( i = 0; i < maxminingrange; i++ )
-      if ( mininginfo->max[ i ].resource[ 1 ] > max )
-         max = mininginfo->max[ i ].resource[ 1 ];
+      if ( mininginfo->max[ i ].resource( 1 ) > max )
+         max = mininginfo->max[ i ].resource( 1 );
 
    max = max * 17 / 16;
 
    int maxa = 0;
    for ( i = 0; i < maxminingrange; i++ )
-      if ( mininginfo->avail[ i ].resource[ 1 ] > maxa )
-         maxa = mininginfo->avail[ i ].resource[ 1 ];
+      if ( mininginfo->avail[ i ].resource( 1 ) > maxa )
+         maxa = mininginfo->avail[ i ].resource( 1 );
 
    max = max * 17 / 16;
    maxa = maxa * 17 / 16;
 
    for ( i = 0; i < maxminingrange; i++ ) {
-      int y1 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource[ 1 ] / mininginfo->max[ i ].resource[ 1 ];
-      int y2 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource[ 2 ] / mininginfo->max[ i ].resource[ 2 ];
+      int y1 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource( 1 ) / mininginfo->max[ i ].resource( 1 );
+      int y2 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource( 2 ) / mininginfo->max[ i ].resource( 2 );
 
       int xd = (hx2-hx1) / maxminingrange ;
-      bar ( hx1 + i * xd , y1, hx1 + i * xd + xd/2, hy2, materialcolor ); // 160 + 15 * mininginfo->avail[ i ].resource[ 1 ] / mininginfo->max[ i ].resource[ 1 ] );
-      bar ( hx1 + i * xd + xd/2, y2, hx1 + (i+1) * xd, hy2, fuelcolor ); // 160 + 15 * mininginfo->avail[ i ].resource[ 2 ] / mininginfo->max[ i ].resource[ 2 ] );
+      bar ( hx1 + i * xd , y1, hx1 + i * xd + xd/2, hy2, materialcolor ); // 160 + 15 * mininginfo->avail[ i ].resource( 1 ) / mininginfo->max[ i ].resource( 1 ) );
+      bar ( hx1 + i * xd + xd/2, y2, hx1 + (i+1) * xd, hy2, fuelcolor ); // 160 + 15 * mininginfo->avail[ i ].resource( 2 ) / mininginfo->max[ i ].resource( 2 ) );
 
-      y1 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource[ 1 ] / maxa;
-      y2 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource[ 2 ] / maxa;
+      y1 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource( 1 ) / maxa;
+      y2 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource( 2 ) / maxa;
 
-      int ya = hy2 - ( hy2 - hy1 ) * mininginfo->max[ i ].resource[ 2 ] / maxa;
+      // int ya = hy2 - ( hy2 - hy1 ) * mininginfo->max[ i ].resource( 2 ) / maxa;
 
-      line ( hx1 + i * xd , y1, hx1 + i * xd + xd/2, y1, materialcolor-2 ); // 160 + 15 * mininginfo->avail[ i ].resource[ 1 ] / mininginfo->max[ i ].resource[ 1 ] );
-      line ( hx1 + i * xd + xd/2, y2, hx1 + (i+1) * xd, y2, fuelcolor-2 ); // 160 + 15 * mininginfo->avail[ i ].resource[ 2 ] / mininginfo->max[ i ].resource[ 2 ] );
+      line ( hx1 + i * xd , y1, hx1 + i * xd + xd/2, y1, materialcolor-2 ); // 160 + 15 * mininginfo->avail[ i ].resource( 1 ) / mininginfo->max[ i ].resource( 1 ) );
+      line ( hx1 + i * xd + xd/2, y2, hx1 + (i+1) * xd, y2, fuelcolor-2 ); // 160 + 15 * mininginfo->avail[ i ].resource( 2 ) / mininginfo->max[ i ].resource( 2 ) );
 
       // line ( hx1 + i * xd , ya, hx1 + (i+1) * xd, ya, 16 + 8 * 16 + 4 ); // the maximum absolute amount
 
@@ -6529,7 +6386,7 @@ void  ccontainer_b :: cmineralresources_subwindow :: displayvariables ( void )
 
    /*
      int i;
-    
+
       npush ( activefontsettings );
       activefontsettings.color = white;
       activefontsettings.font = schriften.guifont;
@@ -6537,119 +6394,120 @@ void  ccontainer_b :: cmineralresources_subwindow :: displayvariables ( void )
       activefontsettings.justify = righttext;
       activefontsettings.height = 0;
       activefontsettings.background = 201;
-    
+
       char c[100];
-    
-    
+
+
       if ( mode == 1 )
          strcpy ( c, strrr ( plus.a.material ));
       else
          strcpy ( c, strrr ( plus.a.fuel ));         // aktualle F”rderung
-    
+
       strcat ( c , " / ");
       strcat ( c, strrr ( cc_b->building->plus.resource[mode] ));         // maximale F”rderung
-    
+
       showtext2c ( c,               subwinx1 + 63, subwiny1 + 25 );
-    
-    
-    
+
+
+
       int dist = 100;
       for (i = maxminingrange; i >= 0; i-- )
          if ( mininginfo->avail[ i ].resource[ mode ] )
             dist = i;
-    
+
       strcpy ( c, strrr ( cc_b->building->lastmineddist ));
       strcat ( c , " / ");
       strcat ( c, strrr ( dist ));
       showtext2c ( c ,                                                 subwinx1 + 63, subwiny1 + 43 );
-    
-   /*
-      if ( mode == 1 ) {
-         if ( !cc_b->building->typ->efficiencymaterial )
-            displaymessage(" the %s has a material efficiency of 0 !", 2, cc_b->building->typ->name );
-         i = cc_b->building->getmininginfo ( mode ) * 1024 / cc_b->building->typ->efficiencymaterial;
-      } else {
-         if ( !cc_b->building->typ->efficiencyfuel )
-            displaymessage(" the %s has a fuel efficiency of 0 !", 2, cc_b->building->typ->name );
-         i = cc_b->building->getmininginfo ( mode ) * 1024 / cc_b->building->typ->efficiencyfuel;
-      }
+
+
+  //    if ( mode == 1 ) {
+  //       if ( !cc_b->building->typ->efficiencymaterial )
+  //          displaymessage(" the %s has a material efficiency of 0 !", 2, cc_b->building->typ->name );
+  //       i = cc_b->building->getmininginfo ( mode ) * 1024 / cc_b->building->typ->efficiencymaterial;
+  //    } else {
+  //       if ( !cc_b->building->typ->efficiencyfuel )
+  //          displaymessage(" the %s has a fuel efficiency of 0 !", 2, cc_b->building->typ->name );
+  //       i = cc_b->building->getmininginfo ( mode ) * 1024 / cc_b->building->typ->efficiencyfuel;
+  //    }
    */
    /*
       int t = 0;
-      if ( i ) 
-          t = mininginfo->avail [ dist ].resource[ mode ] / i;         // in wieviel Runden wird n„chste Entfernung erreicht 
-    
+      if ( i )
+          t = mininginfo->avail [ dist ].resource[ mode ] / i;         // in wieviel Runden wird n„chste Entfernung erreicht
+
       showtext2c ( strrr ( t ),                                        subwinx1 + 63, subwiny1 + 61 );
-    
-    
+
+
       if ( mode == 1 )
          i =  cc_b->building->typ->efficiencymaterial;
       else
          i =  cc_b->building->typ->efficiencyfuel;
-    
+
       showtext2c ( strrr ( i ),                                        subwinx1 + 63, subwiny1 + 79 );
-    
+
    //   showtext2c ( "energy cost:",     subwinx1 + 8, subwiny1 + 43 );
    //   showtext2c ( "material cost:",   subwinx1 + 8, subwiny1 + 61 );
-    
-    
-   /*   int energy;
+
+   */
+   /*
+      int energy;
       int material;
       returnresourcenuseforresearch ( cc_b->building, cc_b->building->researchpoints, &energy, &material );
-    
+
       showtext2c ( strrr( cc_b->building->researchpoints ), subwinx1 + 115, subwiny1 + 25 );
-    
+
       showtext2c ( strrr( energy ), subwinx1 + 115, subwiny1 + 43 );
       showtext2c ( strrr( material ), subwinx1 + 115, subwiny1 + 61 );
-    
-    
+
+
       showtext2c ( "avail in:",        subwinx1 + 8, subwiny1 + 79 );
-    
+
       int rppt = 0;
       pbuilding bld = actmap->player[actmap->actplayer].firstbuilding;
       while ( bld ) {
          rppt += bld->researchpoints;
          bld=bld->next;
-      } 
-    
+      }
+
       if ( rppt  && actmap->player[actmap->actplayer].research.activetechnology ) {
          showtext2c ( strrr( (actmap->player[actmap->actplayer].research.activetechnology->researchpoints - actmap->player[actmap->actplayer].research.progress + rppt-1) / rppt ),  subwinx1 + 115, subwiny1 + 79 );
       } else
          bar ( subwinx1 + 115, subwiny1 + 79, subwinx1 + 115 + activefontsettings.length, subwiny1 + 79 + activefontsettings.font->height, activefontsettings.background );
-    
+
       activefontsettings.justify = centertext;
       activefontsettings.length = 22;
       activefontsettings.background = 255;
-    
-    
-    
+
+
+
       paintobj ( 0, 0 );
-    
-    
+
+
       returnresourcenuseforresearch ( cc_b->building, cc_b->building->typ->maxresearchpoints, &energy, &material );
       int max;
       if ( energy > material )
          max = energy * 17/16;
       else
          max = material * 17/16;
-    
+
       int dist = gx2-gx1;
       for (int x = dist; x >0 ; x--) {
           int res = cc_b->building->maxresearchpoints * x / dist;
           returnresourcenuseforresearch ( cc_b->building, res, &energy, &material );
-    
-    
+
+
           if ( max ) {
              putpixel ( gx1 + x, gy2 - ( gy2-gy1 ) * energy / max, energycolor );
              putpixel ( gx1 + x, gy2 - ( gy2-gy1 ) * material / max, materialcolor );
           }
-    
-      } 
+
+      }
       x = gx1 + ( gx2 - gx1 ) * research / 1024;
-    
+
       line( x, gy1, x, gy2-1, yellow );
-    
-      
+
+
       npop ( activefontsettings ); */
 }
 
@@ -6681,14 +6539,6 @@ ccontainer_b :: cmineralresources_subwindow :: ~cmineralresources_subwindow ()
 
 
 
-
-
-
-
-int      ccontainer_b :: repairicon_cb :: checkto  (pvehicle eht, char newdamage)
-{
-   return /*cbuildingcontrols ::*/ crepairunitinbuilding :: checkto ( eht, newdamage );
-}
 
 
 ccontainer_b :: trainuniticon_cb :: trainuniticon_cb ( void )
@@ -6744,7 +6594,7 @@ void  ccontainer_b :: dissectuniticon_cb :: exec         ( void )
 
 void  ccontainer_b :: fill_dialog_icon_cb :: exec         ( void )
 {
-   verlademunition ( main->getmarkedunit(), NULL, cc_b->building, 0 );
+   // verlademunition ( main->getmarkedunit(), NULL, cc_b->building, 0 );
    dashboard.x = 0xffff;
    main->repaintresources = 1;
 }
@@ -6755,9 +6605,9 @@ int   ccontainer_b :: fill_icon_cb :: available    ( void )
 {
    pvehicle eht = main->getmarkedunit();
    if ( eht && eht->color == actmap->actplayer * 8) {
-      if ( eht->material < eht->typ->material )
+      if ( eht->tank.material < eht->typ->tank.material )
          return 1;
-      if ( eht->fuel < eht->typ->tank )
+      if ( eht->tank.fuel < eht->typ->tank.fuel )
          return 1;
       for (int i = 0; i < eht->typ->weapons->count; i++)
          if ( eht->typ->weapons->weapon[ i ].requiresAmmo() )
@@ -6820,8 +6670,8 @@ const char* ccontainer_b :: produceuniticon_cb :: getinfotext  ( void )
 {
    pvehicletype fzt = main->getmarkedunittype();
    if ( fzt ) {
-      int en = fzt->production.energy;
-      int ma = fzt->production.material;
+      int en = fzt->productionCost.energy;
+      int ma = fzt->productionCost.material;
       int fu = 0;
 
       if ( CGameOptions::Instance()->container.filleverything ) {
@@ -6829,8 +6679,8 @@ const char* ccontainer_b :: produceuniticon_cb :: getinfotext  ( void )
          int ma1 = ma;
          int fu1 = fu;
 
-         fu += fzt->tank;
-         ma += fzt->material;
+         fu += fzt->tank.fuel;
+         ma += fzt->tank.material;
 
          strcpy ( infotextbuf, infotext.c_str() );
          sprintf ( &infotextbuf[strlen( infotextbuf)], resourceusagestring, en, ma, fu );
@@ -6956,10 +6806,11 @@ ccontainer_t :: ctransportinfo_subwindow :: ctransportinfo_subwindow ( void )
 
    helplist.num = 4;
 
-   static tonlinehelpitem transportinfohelpitems[4]    = {{246 + subwinx1 , 22 + subwiny1 , 266 + subwinx1,108 + subwiny1, 20130 },
-         {277 + subwinx1 , 22 + subwiny1 , 297 + subwinx1,108 + subwiny1, 20131 },
-         {308 + subwinx1 , 22 + subwiny1 , 328 + subwinx1,108 + subwiny1, 20132 },
-         {subwinx1 + 70,  subwiny1 + 33, subwinx1 + 200,  subwiny1 + 41,  20133 }};
+   static tonlinehelpitem transportinfohelpitems[4]    =
+        {{{246 + subwinx1 , 22 + subwiny1 , 266 + subwinx1,108 + subwiny1}, 20130 },
+         {{277 + subwinx1 , 22 + subwiny1 , 297 + subwinx1,108 + subwiny1}, 20131 },
+         {{308 + subwinx1 , 22 + subwiny1 , 328 + subwinx1,108 + subwiny1}, 20132 },
+         {{subwinx1 + 70,  subwiny1 + 33, subwinx1 + 200,  subwiny1 + 41},  20133 }};
 
 
    helplist.item = transportinfohelpitems;
@@ -7050,8 +6901,8 @@ void ccontainer_t :: ctransportinfo_subwindow :: paintvariables ( void )
    eht = hostcontainer->getmarkedunit();
    if ( eht ) {
       showtext2c ( strrr ( eht->typ->weight ),                       subwinx1 + 170,  subwiny1 +  62 );
-      showtext2c ( strrr ( eht->material * materialweight / 1024 ),  subwinx1 + 170,  subwiny1 +  70 );
-      showtext2c ( strrr ( eht->fuel     * fuelweight     / 1024 ),  subwinx1 + 170,  subwiny1 +  78 );
+      showtext2c ( strrr ( eht->tank.material * resourceWeight[Resources::Material] / 1024 ),  subwinx1 + 170,  subwiny1 +  70 );
+      showtext2c ( strrr ( eht->tank.fuel     * resourceWeight[Resources::Fuel]     / 1024 ),  subwinx1 + 170,  subwiny1 +  78 );
       showtext2c ( strrr ( eht->cargo() ),                           subwinx1 + 170,  subwiny1 +  86 );
       showtext2c ( strrr ( eht->weight() ),                          subwinx1 + 170,  subwiny1 +  96 );
    } else {
@@ -7252,7 +7103,7 @@ void  ccontainer_t :: chosticons_ct :: init ( int resolutionx, int resolutiony )
 
 void  ccontainer_t :: fill_dialog_icon_ct :: exec         ( void )
 {
-   verlademunition ( main->getmarkedunit(), cc_t->vehicle, NULL, 0 );
+   // verlademunition ( main->getmarkedunit(), cc_t->vehicle, NULL, 0 );
    dashboard.x = 0xffff;
    main->repaintresources = 1;
 }
@@ -7268,9 +7119,9 @@ int   ccontainer_t :: fill_icon_ct :: available    ( void )
 
    pvehicle eht = main->getmarkedunit();
    if ( eht && eht->color == actmap->actplayer * 8) {
-      if ( eht->material < eht->typ->material )
+      if ( eht->tank.material < eht->typ->tank.material )
          return 1;
-      if ( eht->fuel < eht->typ->tank )
+      if ( eht->tank.fuel < eht->typ->tank.fuel )
          return 1;
       for (int i = 0; i < eht->typ->weapons->count; i++)
          if ( eht->typ->weapons->weapon[ i ].requiresAmmo() )
@@ -7285,16 +7136,6 @@ int   ccontainer_t :: fill_icon_ct :: available    ( void )
 
    return 0;
 }
-
-
-
-
-int      ccontainer_t :: repairicon_ct :: checkto  (pvehicle eht, char newdamage)
-{
-   return /*ctransportcontrols ::*/ crepairunitintransport :: checkto ( eht, newdamage );
-}
-
-
 
 
 

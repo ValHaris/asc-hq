@@ -1,6 +1,10 @@
-//     $Id: loadpcxc.cpp,v 1.6 2000-08-12 15:03:24 mbickel Exp $
+//     $Id: loadpcxc.cpp,v 1.7 2000-10-11 14:26:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/08/12 15:03:24  mbickel
+//      Fixed bug in unit movement
+//      ASC compiles and runs under Linux again...
+//
 //     Revision 1.5  2000/08/03 19:21:26  mbickel
 //      Fixed: units had invalid height when produced in some buildings
 //      Fixed: units could not enter building if unitheightreq==0
@@ -92,7 +96,7 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
    int read = 0;
 
 
-   int m = y * agmp-> scanlinelength * agmp->byteperpix + x;
+   // int m = y * agmp-> scanlinelength * agmp->byteperpix + x;
 
    tpcxheader header;
 
@@ -127,7 +131,7 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
       scanlineret[1]= -(agmp-> scanlinelength - header.bytesperline * agmp->byteperpix);
    }
 
-   int totalbytes = header.nplanes * header.bytesperline;
+   // int totalbytes = header.nplanes * header.bytesperline;
 
 
    int ttlbytes = 0;
@@ -139,7 +143,8 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
 
    // some simple buffering
    char* buf = new char[header.size];
-   int bufdata = stream->readdata ( buf, header.size - sizeof( header ));
+   // int bufdata =
+   stream->readdata ( buf, header.size - sizeof( header ));
    int actpos = 0;
 
 

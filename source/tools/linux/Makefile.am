@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.4 2000-08-03 19:21:42 mbickel Exp $
+## $Id: Makefile.am,v 1.5 2000-10-11 14:26:58 mbickel Exp $
 
 vpath %.cpp ..:../..
 
@@ -12,8 +12,8 @@ ascdemount_SOURCES = demount.cpp basestrm.cpp misc.cpp
 
 ascmount_SOURCES = mount.cpp basestrm.cpp misc.cpp
 
-ascmount_LDADD   = -lSDL
-ascdemount_LDADD   = -lSDL
+ascmount_LDADD   = -lSDL ../../libs/bzlib/libbz2.a
+ascdemount_LDADD   = -lSDL ../../libs/bzlib/libbz2.a
 
 # vim: noexpandtab ai
 

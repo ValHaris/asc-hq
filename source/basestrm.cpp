@@ -1,6 +1,9 @@
-//     $Id: basestrm.cpp,v 1.39 2000-09-26 18:05:13 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.40 2000-10-11 14:26:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2000/09/26 18:05:13  mbickel
+//      Upgraded to bzlib 1.0.0 (which is incompatible to older versions)
+//
 //     Revision 1.38  2000/09/05 19:55:57  gulliver
 //     namespace std added on string vars
 //
@@ -333,14 +336,6 @@ CharBuf :: ~CharBuf()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////        Exceptions
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-tcompressionerror :: tcompressionerror ( const char* msg, int returncode )
-{
-   strcpy ( strng, msg );
-   code = returncode;
-};
 
 
 
@@ -748,6 +743,7 @@ static int stream_seek( struct SDL_RWops *context, int offset, int whence)
 	   else
          if ( whence == SEEK_SET )
             stream->seek ( offset + stream->getSize() );
+  return 0;
 }
 
 

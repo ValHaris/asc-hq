@@ -12,7 +12,7 @@ OBJS= blocksort.o  \
       decompress.o \
       bzlib.o
 
-all: libbz2.a bzip2 bzip2recover test
+all: libbz2.a bzip2 bzip2recover
 
 bzip2: libbz2.a bzip2.o
 	$(CC) $(CFLAGS) -o bzip2 bzip2.o -L. -lbz2
@@ -45,6 +45,8 @@ test: bzip2
 	cmp sample3.tst sample3.ref
 	@cat words3
 
+
+	
 PREFIX=/usr
 
 install: bzip2 bzip2recover

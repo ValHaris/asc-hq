@@ -1,6 +1,9 @@
-//     $Id: building_controls.h,v 1.2 2000-09-25 20:04:37 mbickel Exp $
+//     $Id: building_controls.h,v 1.3 2000-10-11 14:26:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/09/25 20:04:37  mbickel
+//      AI improvements
+//
 //     Revision 1.1  2000/09/17 15:20:29  mbickel
 //      AI is now automatically invoked (depending on gameoptions)
 //      Some cleanup
@@ -34,6 +37,7 @@
 #ifndef building_controls_h
 #define building_controls_h
 
+#include "containerbase.h"
 
 enum tcontainermode { mbuilding, mtransport };
 enum tunitmode { mnormal, mproduction, mloadintocontainer };
@@ -48,20 +52,6 @@ typedef  class ctransportcontrols*  ptransportcontrols;
 class    ccontainercontrols
 {
    public :
-      class crepairanything
-      {
-         public:
-            int      energycosts, materialcosts, fuelcosts;
-            int      checkto  ( int olddamage, int newdamage, int energycost, int materialcost, int fuelcost, int effizienz );
-      };
-
-      class    crepairunit : public crepairanything
-      {                          // REPAIRUNIT
-         public :
-            virtual int  checkto  (pvehicle eht, char newdamage) = 0;
-            int          repairto (pvehicle eht, char newdamage);
-            int          available ( pvehicle eht );
-      };
 
       class    crefill
       {
@@ -115,13 +105,11 @@ class    ccontainercontrols
 
       virtual pvehicle getloadedunit (int num) = NULL;
 
-      struct
-      {
+      struct {
          int height;
          int movement;
          int attacked;
-      }
-      movementparams;
+      } movementparams;
 
       ContainerBase* baseContainer;
 };
@@ -154,14 +142,6 @@ class    cbuildingcontrols : public virtual ccontainercontrols
       int    getLoadCapability ( void );
 
       pbuilding   building;
-
-      class   crepairunitinbuilding
-               : public virtual ccontainercontrols::crepairunit
-      {
-         public:
-            virtual int      checkto  (pvehicle eht, char newdamage);
-      }
-      repairunit;
 
       class    crecycling
       {                           // RECYCLING
@@ -206,16 +186,6 @@ class    cbuildingcontrols : public virtual ccontainercontrols
             void reset ( void );
       }
       netcontrol;
-
-      class    crepairbuilding
-               : public ccontainercontrols::crepairanything
-      {
-         public :
-            int      checkto  ( char newdamage);
-            int      repairto ( char newdamage);
-            int      available ( void );
-      }
-      repairbuilding;
 
 
       class    cproduceammunition
@@ -272,15 +242,6 @@ class    ctransportcontrols : public virtual ccontainercontrols
 
 
       pvehicle vehicle;
-
-      class   crepairunitintransport
-               : public virtual ccontainercontrols::crepairunit
-      {
-         public:
-            virtual int      checkto  (pvehicle eht, char newdamage);
-      }
-      repairunit;
-
 
       void  removevehicle ( pvehicle *peht );
       int    moveavail ( pvehicle eht );

@@ -1,6 +1,9 @@
-//     $Id: edselfnt.cpp,v 1.13 2000-08-15 16:22:55 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.14 2000-10-11 14:26:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/08/15 16:22:55  mbickel
+//      Fixed: crash in mapedit when selecting a unit as buildingcargo
+//
 //     Revision 1.12  2000/08/06 13:14:16  mbickel
 //      Fixed crashes in mapeditor
 //
@@ -84,6 +87,9 @@
     Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
     Boston, MA  02111-1307  USA
 */
+
+#include "vehicletype.h"
+#include "buildingtype.h"
 
 #include "edmisc.h"
 #include "flview.h"
@@ -1334,15 +1340,16 @@ void selunitcargo( pvehicle transport )
    pvehicletype newcargo = svtftc.selectitem ( NULL );
 
    if ( newcargo ) {
-      pvehicle unit;
-      generatevehicle_ka ( newcargo, transport->color / 8, unit );
+      pvehicle unit = new Vehicle ( newcargo, actmap, transport->color / 8 );
+      unit->fillMagically();
+      // generatevehicle_ka ( newcargo, transport->color / 8, unit );
     
       int match = 0;
       for ( int i = 0; i < 8; i++ )
         if ( unit->typ->height & ( 1 << i )) {
            unit->height = 1 << i;
-           unit->material = unit->typ->material;
-           unit->fuel = unit->typ->tank;
+           unit->tank.material = unit->typ->tank.material;
+           unit->tank.fuel = unit->typ->tank.fuel;
            if ( transport->vehicleloadable ( unit )) {
               int p = 0;
               while ( transport->loading[p] )
@@ -1351,8 +1358,8 @@ void selunitcargo( pvehicle transport )
               match = 1;
               break;
            } else {
-              unit->material = 0;
-              unit->fuel = 0;
+              unit->tank.material = 0;
+              unit->tank.fuel = 0;
               if ( transport->vehicleloadable ( unit )) {
                  int p = 0;
                  while ( transport->loading[p] )
@@ -1380,8 +1387,8 @@ void selbuildingcargo( pbuilding bld )
    svtfbc.init( getvehicletypevector() );
    pvehicletype newcargo = svtfbc.selectitem ( NULL );
    if ( newcargo ) {
-      pvehicle unit = NULL;
-      generatevehicle_ka ( newcargo, bld->color / 8, unit );
+      pvehicle unit = new Vehicle ( newcargo, actmap, bld->color / 8 );
+      unit->fillMagically();
 
       int match = 0;
       int poss = 0;

@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.55 2000-09-27 16:08:31 mbickel Exp $
+//     $Id: typen.h,v 1.56 2000-10-11 14:26:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2000/09/27 16:08:31  mbickel
+//      AI improvements
+//
 //     Revision 1.54  2000/09/25 20:04:42  mbickel
 //      AI improvements
 //
@@ -260,6 +263,7 @@
 #include "tpascal.inc"
 #include "misc.h"
 #include "basestrm.h"
+#include "errors.h"
 
 #pragma pack(1)
 
@@ -275,12 +279,10 @@ typedef class tterrainaccess *pterrainaccess;
 typedef struct tcrc *pcrc;
 typedef class Vehicle  tvehicle ;
 typedef class Vehicle* pvehicle ;
-typedef class tvehicletype* pvehicletype ;
 typedef struct tbuildrange* pbuildrange;
 typedef class tobjecttype* pobjecttype;
 typedef class tmap*  pmap;
 typedef class tmap Map;
-typedef class  tbuildingtype* pbuildingtype;
 typedef class tevent* pevent ;
 typedef class  ttechnology* ptechnology ;
 typedef class tresearch* presearch ;
@@ -295,7 +297,6 @@ typedef struct tresourcetribute* presourcetribute ;
 typedef class tfield* pfield ;
 typedef class tobjectcontainer* pobjectcontainer;
 typedef struct tresourceview* presourceview;
-typedef class tbuilding* pbuilding;
 typedef class tobject* pobject;
 typedef struct tcampaign* pcampaign;
 typedef class tshareview *pshareview;
@@ -304,7 +305,14 @@ typedef class tshareview *pshareview;
 ///    Some miscellaneous defintions. Not very intersting...
 //////////////////////////////////////////////////////////////
 
-  enum tshareviewmode { sv_none, sv_shareview };
+//! fractiton of the production cost is needed if a unit repairs something
+const int repairefficiency_unit = 2;
+
+//! fractiton of the production cost is needed if a building repairs something
+const int repairefficiency_building = 3;
+
+
+enum tshareviewmode { sv_none, sv_shareview };
 
 
   struct PreferredFilenames {
@@ -325,20 +333,27 @@ typedef class tshareview *pshareview;
   };
 
 
-#define waffenanzahl 8
-#define cwettertypennum 6
+//! The number of different weapon types
+const int waffenanzahl = 8;
+
+//! The number of different weather; Be careful: 'fog' is included here, but it is not used and has a different concept
+const int cwettertypennum = 6;
+
+//! The number of vehicle categories; Each category has its own move malus
 const int cmovemalitypenum  = 16;
+
  #define cmm_building 11
 
 #define choehenstufennum 8
 #define maxbuildingpicnum 8
 #define maxminesonfield 20
 
-const int gameparameternum = 18;
+const int gameparameternum = 19;
 
-#define maxobjectonfieldnum 16
+//! The maximum number of objects ( #tobject ) that can be placed on a single field ( #tfield )
+const int maxobjectonfieldnum = 16;
 
-
+//! The maximum experience value of a #Vehicle
 const int maxunitexperience = 23;
 
 
@@ -423,9 +438,6 @@ struct tcrc {
   int crc;
 };
 
-typedef word tmunition[waffenanzahl];
-typedef tmunition* pmunition ;
-
 
 struct tbuildrange {
   int from;
@@ -433,12 +445,48 @@ struct tbuildrange {
 };
 
 
-union tresources {
-  struct {
-    int energy, material, fuel;
-  }a;
-  int resource[3];
-} ;
+const int resourceTypeNum = 3;
+const int resourceNum = resourceTypeNum;
+
+class Resources {
+  public:
+     int energy;
+     int material;
+     int fuel;
+
+     int& resource ( int type ) {
+        switch ( type ) {
+           case 0: return energy;
+           case 1: return material;
+           case 2: return fuel;
+           default: throw OutOfRange();
+        }
+     };
+
+     const int& resource ( int type ) const {
+        switch ( type ) {
+           case 0: return energy;
+           case 1: return material;
+           case 2: return fuel;
+           default: throw OutOfRange();
+        }
+     };
+
+     Resources ( void ) : energy ( 0 ), material ( 0 ), fuel ( 0 ) {};
+     Resources ( int e, int m, int f ) : energy ( e ), material ( m ), fuel ( f ) {};
+     Resources& operator-= ( const Resources& res ) { energy-=res.energy; material-=res.material; fuel-=res.fuel; return *this;};
+     bool operator>= ( const Resources& res ) { return energy >= res.energy && material>=res.material && fuel>=res.fuel; };
+     enum { Energy, Material, Fuel };
+};
+
+class ResourceMatrix {
+           float e[resourceTypeNum][resourceTypeNum];
+        public:
+           ResourceMatrix ( const float* f );
+           Resources operator* ( const Resources& r ) const;
+};
+
+// Resources operator* ( const ResourceMatrix& m, const Resources& r );
 
 
 class tbuildingtype_bi_picture {
@@ -454,6 +502,7 @@ class tbuildingtype_bi_picture {
 };
 
 
+//! the image for a terraintype ( #tterraintype ) that is shown on the small map
 struct tquickview {
    struct {
       char p1;
@@ -620,7 +669,13 @@ class BaseAI {
          virtual ~BaseAI () {};
       };
 
-       
+
+ typedef class  Buildingtype* pbuildingtype;
+ typedef class  Vehicletype*  pvehicletype ;
+
+ typedef class  Building* pbuilding;
+ typedef class  Vehicle*  pvehicle;
+
 
 /*
 //////////////////////////////////////////////////////////////
@@ -638,414 +693,6 @@ class MapCoordinate {
             MapCoordinate ( ) : x(-1), y(-1 ) {};
             MapCoordinate ( int a, int b) : x(a), y(b ) {};
       };
-
-class SingleWeapon {
-  #ifdef converter
-   public:
-  #else
-   private:
-  #endif
-    int          typ; 
-   public:
-    int          targ;           /*  BM      <= CHoehenstufen  */
-    int          sourceheight;   /*  BM  "  */
-    int          maxdistance;
-    int          mindistance;
-    int          count;
-    int          maxstrength;    // Wenn der Waffentyp == Mine ist, dann ist hier die Minenst„rke als Produkt mit der Bassi 64 abgelegt.
-    int          minstrength;
-    int          efficiency[13]; // floating and driving are the same ; 0-5 is lower ; 6 is same height ; 7-12 is higher
-    int          targets_not_hittable; // BM   <=  cmovemalitypes
-   public:
-    int          getScalarWeaponType(void) const;
-    int          requiresAmmo(void) const;
-    int          shootable( void ) const;
-    int          service( void ) const;
-    int          canRefuel ( void ) const;
-    void         set ( int type );  // will be enhanced later ...
-    int          gettype ( void ) { return typ; };
-    int          offensive( void ) const;
-};
-
-class  UnitWeapon {
-  public:
-    int count;
-    SingleWeapon weapon[16];
-    UnitWeapon ( void );
-};
-
-
-class tvehicletype {    // This structure does not have a fixed layout any more !
-   public:
-       char*        name;          /* z.B. Exterminator  */
-       char*        description;   /* z.B. Jagdbomber    */
-       char*        infotext;      /* optional, kann sehr ausf?hrlich sein. Empfehlenswert ?ber eine Textdatei einzulesen */
-       struct tweapons {  
-         char         weaponcount; 
-         struct tweapon {
-           word         typ;            /*  BM      <= CWaffentypen  */
-           char         targ;           /*  BM      <= CHoehenstufen  */
-           char         sourceheight;   /*  BM  "  */
-           Word         maxdistance;
-           Word         mindistance;
-           char         count;
-           char         maxstrength;    // Wenn der Waffentyp == Mine ist, dann ist hier die Minenst„rke als Produkt mit der Bassi 64 abgelegt.
-           char         minstrength;
-         } waffe[8];
-       } oldattack;
-
-       struct { 
-          Word         energy; 
-          Word         material; 
-       } production;    /*  Produktionskosten der vehicle  */
-
-       Word         armor; 
-       void*        picture[8];    /*  0ø  ,  45ø   */
-       char         height;        /*  BM  Besteht die Moeglichkeit zum Hoehenwechseln  */
-       word         researchid;    // inzwischen ?berfl?ssig, oder ?
-       int          _terrain;    /*  BM     befahrbare terrain: z.B. Schiene, Wasser, Wald, ...  */
-       int          _terrainreq; /*  BM     diese Bits MšSSEN in ( field->typ->art & terrain ) gesetzt sein */
-       int          _terrainkill;  /* falls das aktuelle field nicht befahrbar ist, und bei field->typ->art eine dieser Bits gesetzt ist, verschwindet die vehicle */
-       char         steigung;      /*  max. befahrbare Hoehendifferenz zwischen 2 fieldern  */
-       char         jamming;      /*  St„rke der Stoerstrahlen  */
-       int          view;         /*  viewweite  */
-       char         wait;        /*  Kann vehicle nach movement sofort schiessen ?  */
-       Word         loadcapacity;      /*  Transportmoeglichkeiten  */
-       word         maxunitweight; /*  maximales Gewicht einer zu ladenden vehicle */
-       char         loadcapability;     /*  BM     CHoehenStufen   die zu ladende vehicle muss sich auf einer dieser Hoehenstufen befinden */
-       char         loadcapabilityreq;  /*  eine vehicle, die geladen werden soll, muss auf eine diese Hoehenstufen kommen koennen */
-       char         loadcapabilitynot;  /*  eine vehicle, die auf eine dieser Hoehenstufen kann, darf NICHT geladen werden. Beispiel: Flugzeuge in Transportflieger */
-       Word         id; 
-       int          tank; 
-       Word         fuelConsumption; 
-       int          energy; 
-       int          material; 
-       int          functions;
-       char         movement[8];      /*  max. movementsstrecke  */
-       char         movemalustyp;     /*  wenn ein Bodentyp mehrere Movemali fuer unterschiedliche vehiclearten, wird dieser genommen.  <= cmovemalitypes */
-       char         classnum;         /* Anzahl der Klassen, max 8, min 0 ;  Der EINZIGE Unterschied zwischen 0 und 1 ist der NAME ! */
-       char*        classnames[8];    /* Name der einzelnen Klassen */
-
-       struct tclassbound { 
-        word         weapstrength[8]; 
-        word         armor; 
-        word         techlevel;             //  Techlevel ist eine ALTERNATIVE zu ( techrequired und envetrequired )
-        word         techrequired[4];
-        char         eventrequired;
-        int          vehiclefunctions;
-      } classbound[8];    /* untergrenze (minimum), die zum erreichen dieser Klasse notwendig ist, classbound[0] gilt fuer vehicletype allgemein*/
-
-       char         maxwindspeedonwater;
-       char         digrange;        // Radius, um den nach bodensch„tzen gesucht wird. 
-       int          initiative;      // 0 ist ausgeglichen // 256 ist verdoppelung
-       int          _terrainnot;    /*  BM     sobald eines dieser Bits gesetzt ist, kann die vehicle NICHT auf das field fahren  */
-       int          _terrainreq1;  // wie terrainreq, es braucht aber nur 1 bit gesetzt zu sein
-       int          objectsbuildablenum;
-       int*         objectsbuildableid;
-     
-       int          weight;           // basic weight, without fuel etc. 
-       pterrainaccess terrainaccess;
-       int          bipicture;
-       int          vehiclesbuildablenum;
-       int*         vehiclesbuildableid;
-     
-       void*        buildicon;
-       int          buildingsbuildablenum;
-       pbuildrange  buildingsbuildable;
-       UnitWeapon*  weapons;
-       int          autorepairrate;
-
-       AiParameter* aiparam[8];
-       char*        filename;    // just for information purposes in the main program
-       int          vehicleCategoriesLoadable;
-
-       int maxweight ( void );     // max. weight including fuel and material
-       int maxsize   ( void );     // without fuel and material
-       int vehicleloadable ( pvehicletype fzt );
-       tvehicletype ( void );
-       ~tvehicletype ( );
-}; 
-
-/** The parent class of Vehicle and Building;
-    The name Container originates from Battle Isle, where everything that could load units
-    was a container
-*/
-class ContainerBase {
-   protected:
-      pmap gamemap;
-
-   public:
-      Vehicle*     loading[32];
-};
-
-class Vehicle : public ContainerBase {
-  public:
-    pvehicletype typ;          /*  vehicleart: z.B. Schwere Fusstruppe  */
-    char         color; 
-    char         damage; 
-    tmunition    munition;
-    int          fuel; 
-    int*         ammo; 
-    int          evenmoredummy[3];
-    int*         weapstrength;
-    int          moredummy[3];
-    Word         dummy;     
-    char         experience;    // 0 .. 15
-    char         attacked; 
-    char         height;       /* BM */   /*  aktuelle Hoehe: z.B. Hochfliegend  */
-   // char         movement;     /*  ?briggebliebene movement fuer diese Runde  */
-   private:
-    char         _movement;     /*  ?briggebliebene movement fuer diese Runde  */
-   public:
-    char         direction;    /*  Blickrichtung  */
-    Integer      xpos, ypos;   /*  Position auf map  */
-    int          material;     /*  aktuelle loading an Material und  */
-    int          energy;       /*  energy  */
-    int          energyUsed;
-    Vehicle      *next;
-    Vehicle      *prev;         /*  fuer lineare Liste der vehicle */
-                   
-    short        dummy3;   
-    word         dummy1[13]; 
-
-    int          connection; 
-    char         klasse;
-    word         armor; 
-    int          networkid; 
-    char*        name;
-    int          functions;
-    class  ReactionFire {
-         Vehicle* unit;
-       public:
-         ReactionFire ( Vehicle* _unit ) : unit ( _unit ) {};
-         enum Status { off, init1, init2, ready };
-         int enemiesAttackable;     // BM   ; gibt an, gegen welche Spieler die vehicle noch reactionfiren kann.
-         int status;
-         int getStatus()	{	return status;};
-		 void enable ( void );
-         void disable( void );
-         void endTurn ( void ); // is called when the player hits the "end turn" button
-    } reactionfire;
-    int          generatoractive;
-    AiParameter* aiparam[8];
-  
-    int getMovement ( void );
-
-    /** sets a new distance that the unit can move
-        \param cargoDivisor : the cargo of this unit gets 1/cargodivisor the change that this unit is getting; if 0 the cargo is not touched
-    */
-    void setMovement ( int newmove, int cargoDivisor = 2 );
-    int hasMoved ( void );
-    void resetMovement( void );
-
-    void read ( pnstream stream );
-    void write ( pnstream stream );
-
-
-    int weight( void );   //!< weight of unit including cargo, fuel and material
-    int cargo ( void );   //!< return weight of all loaded units
-    int getmaxfuelforweight ( void );       
-    int getmaxmaterialforweight ( void );
-    int freeweight ( int what = 0 );      // what: 0 = cargo ; 1 = material/fuel
-    int size ( void );
-    void endTurn( void );    //!< is executed when the player hits "end turn"
-    void turnwrap ( void );   //!< is executed when the game starts a new turn ( player8 -> player1 )
-    void repairunit ( pvehicle vehicle, int maxrepair = 100 );
-    void constructvehicle ( pvehicletype tnk, int x, int y );      // current cursor position will be used
-    int  vehicleconstructable ( pvehicletype tnk, int x, int y );
-    void putimage ( int x, int y );
-    int  vehicleloadable ( pvehicle vehicle, int uheight = -1 );
-    void setnewposition ( int x, int y );
-    void setup_classparams_after_generation ( void );
-    void convert ( int col );
-    void setpower( int status );
-    void addview ( void );
-    void removeview ( void );
-    SingleWeapon *getWeapon( unsigned weaponNum );
-    int buildingconstructable ( pbuildingtype bld );
-  
-    // int attackpossible ( int x, int y );
-    int getstrongestweapon( int aheight, int distance );
-  
-    int searchstackforfreeweight( pvehicle eht, int what ); // what: 0=cargo ; 1=material/fuel
-    // should not be called except from freeweight
-
-    Vehicle ( void );
-    Vehicle ( pmap actmap );
-    Vehicle ( pvehicle src, pmap actmap ); // if actmap == NULL  ==> unit will not be chained
-    void clone ( pvehicle src, pmap actmap ); // if actmap == NULL  ==> unit will not be chained
-    void transform ( pvehicletype type );     // to be used with extreme caution, and only in the mapeditor !!
-    int weapexist ( void );     // Is the unit able to shoot ?
-    ~Vehicle ( );
-  private:
-    void init ( void );
-}; 
-
-
-
-
-
-
-
-
-
-
-
-class  tbuildingtype { 
-   public:
-        void*        w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
-        int          bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
-        int          destruction_objects [4][6];
-        struct { 
-          int     x, y; 
-        } entry, powerlineconnect, pipelineconnect; 
-        int          id; 
-        char*        name; 
-        int          _armor; 
-        int          jamming; 
-        int          view; 
-        int          loadcapacity; 
-        char         loadcapability;   /*  BM => CHoehenstufen; aktuelle Hoehe der reinzufahrenden vehicle
-                                                                muss hier enthalten sein  */ 
-        char         unitheightreq;   /*   "       , es d?rfen nur Fahrzeuge ,
-                                                     die in eine dieser Hoehenstufen koennen , geladen werden  */ 
-    
-        struct  { 
-          int          material; 
-          int          fuel; 
-        } productioncost; 
-        int          special;   /*  HQ, Trainingslager, ...  */ 
-    
-    
-        unsigned char         technologylevel; 
-        unsigned char         researchid; 
-    
-        tterrainaccess terrainaccess;
-    
-        int          construction_steps;  // 1 .. 8
-        int          maxresearchpoints; 
-    
-        tresources   _tank;
-        tresources   maxplus;
-    
-        int          efficiencyfuel;       // Basis 1024
-        int          efficiencymaterial;   // dito
-    
-        void*        guibuildicon;
-    
-        pterrainaccess terrain_access;
-        tresources   _bi_maxstorage;
-        int          buildingheight;
-        int          unitheight_forbidden;
-        int          externalloadheight;
-        int          vehicleCategoriesLoadable;
-        void*        getpicture ( int x, int y );
-    
-        tbuildingtype ( void ) {
-           terrain_access = &terrainaccess;
-           vehicleCategoriesLoadable = -1;
-        };
-
-        int          vehicleloadable ( pvehicletype fzt );
-        int          gettank ( int resource );
-        int          getArmor( void );
-        void getfieldcoordinates( int bldx, int bldy, int x, int y, int *xx, int *yy);
-}; 
-
-
-class  tbuilding : public ContainerBase {
-    int lastenergyavail;
-    int lastmaterialavail;
-    int lastfuelavail;
-  public:
-    pbuildingtype     typ; 
-    tmunition         munitionsautoproduction; 
-    unsigned char     color; 
-    pvehicletype      production[32]; 
-    unsigned char     damage;
-
-    tresources   plus;
-    tresources   maxplus;
-
-    tresources   actstorage;
-
-    tmunition    munition; 
-
-    word         maxresearchpoints; 
-    word         researchpoints; 
-
-    char*        name;
-    Integer      xpos, ypos; 
-    pbuilding    next;
-    pbuilding    prev; 
-    char         completion; 
-    word         dummy; 
-    int          netcontrol; 
-    int          connection; 
-    char         visible; 
-    pvehicletype  productionbuyable[32];
-
-    tresources    bi_resourceplus;
-
-    int           repairedThisTurn;
-
-    AiParameter*  aiparam[8];
-
-    tbuilding( void );
-    int lastmineddist;
-                                      /*
-                                       int  getenergyplus( int mode );  // mode ( bitmapped ) : 1 : maximale energieproduktion ( ansonsten das, was gerade ins netz reingeht )
-                                       //                      2 : windkraftwerk
-                                       //                      4 : solarkraftwerk
-                                       //                      8 : konventionelles Kraftwerk
-                                       //                     16 : mining station
-                                       int  getmaterialplus( int mode );  // mode ( bitmapped ) : 1 : maximale energieproduktion ( ansonsten das, was gerade ins netz reingeht )
-                                       int  getfuelplus( int mode );  // mode ( bitmapped )     : 1 : maximale energieproduktion ( ansonsten das, was gerade ins netz reingeht )
-                                      */
-    int  getresourceplus ( int mode, tresources* plus, int queryonly ); // returns a positive value when the building did actually something
-    void initwork ( void );           
-    int  worktodo ( void );
-    int  processwork ( void );    // returns a positive value when the building did actually something
-
-  private:
-    int  processmining ( int res, int abbuchen );
-
-  public:
-    struct {
-       struct {
-          tresources touse;
-          int did_something_atall;
-          int did_something_lastpass;
-          int finished;
-       } mining;
-       struct {
-          tresources toproduce;
-          int did_something_atall;
-          int did_something_lastpass;
-          int finished;
-       } resource_production;
-       int wind_done;   
-       int solar_done;   
-       int bimode_done;
-    } work;
-
-    void execnetcontrol ( void );
-    int  getmininginfo ( int res );
-
-    int  put_energy ( int      need,    int resourcetype, int queryonly, int scope = 1 );
-    int  get_energy ( int      need,    int resourcetype, int queryonly, int scope = 1 );
-
-    void getresourceusage ( tresources* usage );
-    void changecompletion ( int d );
-    int vehicleloadable ( pvehicle eht, int uheight = -1 );
-    void* getpicture ( int x, int y );
-    void convert ( int col );
-    tbuilding ( pbuilding src, pmap actmap );
-    void addview ( void );
-    void removeview ( void );
-    int  chainbuildingtofield ( int x, int y );
-    int  unchainbuildingfromfield ( void );
-};
 
 
 class  twterraintype {
@@ -1107,8 +754,8 @@ class tobjecttype {
 
     int height;   
 
-    tresources buildcost;
-    tresources removecost;
+    Resources buildcost;
+    Resources removecost;
     int build_movecost;  // basis 8 
     int remove_movecost;  // basis 8 
 
@@ -1637,14 +1284,16 @@ class tmap {
       treplayinfo*  replayinfo;
       int           playerView;
       tgametime     lastjournalchange;
-      tresources    bi_resource[8];
+      Resources    bi_resource[8];
       PreferredFilenames* preferredfilenames;
       EllipseOnScreen* ellipse;
       int           graphicset;
       int           gameparameter_num;
       int*          game_parameter;
     public:
-      int           dummy[29];
+      int           mineralResourcesDisplayed;
+      int           queuedEvents[9];
+      int           dummy[19];
       int           _oldgameparameter[ 8 ];
       void chainunit ( pvehicle unit );
       void chainbuilding ( pbuilding bld );
@@ -1655,6 +1304,11 @@ class tmap {
       int isResourceGlobal ( int resource );
       void setupResources ( void );
       const char* getPlayerName ( int playernum );
+      pfield getField ( int x, int y );
+
+      void calculateAllObjects ( void );
+
+      pvehicletype getVehicleType_byId ( int id );
    private:
       pvehicle getunit ( pvehicle eht, int nwid );
 
@@ -1836,8 +1490,6 @@ struct ticons {
 
 
 
-  class tnomaploaded {       // this is used as an exception
-  };
 
 
 
@@ -1870,7 +1522,8 @@ extern const int gameparameterdefault [ gameparameternum ];
 enum { cgp_fahrspur, cgp_eis, cgp_movefrominvalidfields, cgp_building_material_factor, cgp_building_fuel_factor,
        cgp_forbid_building_construction, cgp_forbid_unitunit_construction, cgp_bi3_training, cgp_maxminesonfield,
        cgp_antipersonnelmine_lifetime, cgp_antitankmine_lifetime, cgp_mooredmine_lifetime, cgp_floatingmine_lifetime,
-       cgp_buildingarmor, cgp_maxbuildingrepair, cgp_buildingrepairfactor, cgp_globalfuel, cgp_maxtrainingexperience };
+       cgp_buildingarmor, cgp_maxbuildingrepair, cgp_buildingrepairfactor, cgp_globalfuel, cgp_maxtrainingexperience,
+       cgp_initialMapVisibility };
 
 
 
@@ -1913,68 +1566,9 @@ extern  const char*  choehenstufen[8] ;
  extern const int cwaffenproduktionskosten[cwaffentypennum][3];  /*  Angabe: Waffentyp; energy - Material - Sprit ; jeweils fuer 5er Pack */  
 
 
-const int cbuildingfunctionnum = 18;
-
-extern const char*  cbuildingfunctions[cbuildingfunctionnum]; 
- #define cghqn 0  
- #define cghqb ( 1 << cghqn  )
- #define cgtrainingn 1  
- #define cgtrainingb ( 1 << cgtrainingn  )
- #define cgvehicleproductionn 3  
- #define cgvehicleproductionb ( 1 << cgvehicleproductionn  )
- #define cgammunitionproductionn 4  
- #define cgammunitionproductionb ( 1 << cgammunitionproductionn  )
- #define cgrepairfacilityn 8  
- #define cgrepairfacilityb ( 1 << cgrepairfacilityn  )
- #define cgrecyclingplantn 9  
- #define cgrecyclingplantb ( 1 << cgrecyclingplantn  )
- #define cgresearchn 10  
- #define cgresearchb ( 1 << cgresearchn  )
- #define cgsonarn 11  
- #define cgsonarb ( 1 << cgsonarn )
- #define cgwindkraftwerkn 12
- #define cgwindkraftwerkb ( 1 << cgwindkraftwerkn )
- #define cgsolarkraftwerkn 13
- #define cgsolarkraftwerkb ( 1 << cgsolarkraftwerkn )
- #define cgconventionelpowerplantn 14
- #define cgconventionelpowerplantb ( 1 << cgconventionelpowerplantn )
- #define cgminingstationn 15
- #define cgminingstationb ( 1 << cgminingstationn )
- #define cgexternalloadingn 16
- #define cgexternalloadingb ( 1 << cgexternalloadingn )
- #define cgproduceAllUnitsN 17
- #define cgproduceAllUnitsB ( 1 << cgproduceAllUnitsN )
 
 
 
-#define cvehiclefunctionsnum 26
-extern const char*  cvehiclefunctions[]; 
- #define cfsonar 1  
- #define cfparatrooper 2  
- #define cfminenleger 4  
- #define cf_trooper 8  
- #define cfrepair 16  
- #define cf_conquer 32
- #define cf_moveafterattack 64
- #define cfsatellitenview 128  
- #define cfputbuilding 256  
- #define cfmineview 512  
- #define cfvehicleconstruction 1024  
- #define cfspecificbuildingconstruction 2048  
- #define cffuelref 4096  
- #define cficebreaker 8192  
- #define cfnoairrefuel 16384
- #define cfmaterialref 32768  
- #define cffahrspur ( 1 << 17 )   /*  !!  */
- #define cfmanualdigger ( 1 << 18 )
- #define cfwindantrieb ( 1 << 19 )
- #define cfautorepair ( 1 << 20 )
- #define cfgenerator ( 1 << 21 )
- #define cfautodigger ( 1 << 22 )
- #define cfkamikaze ( 1 << 23 )
- #define cfmineimmune ( 1 << 24 )
-
- #define cfvehiclefunctionsanzeige 0xFFFFFFFF  
 
 
 #define cbodenartennum 33
@@ -2105,7 +1699,7 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 #define unitsize tanksize
 
 
-#ifdef __WATCOM_CPLUSPLUS__
+#ifdef HAVE_LIMITS
 
  #include <limits>
 
@@ -2148,8 +1742,6 @@ const int attackmovecost = 20;  // 20% movement decrease for attacking; only use
 #define fusstruppenplattfahrgewichtsfaktor 2  
 #define mingebaeudeeroberungsbeschaedigung 80  
 #define flugzeugtraegerrunwayverkuerzung 2  
-#define repairefficiency_unit 2  
-#define repairefficiency_building 3
 
 #define autorepairdamagedecrease 10    // only for old units ; new one use autorepairrate
 
@@ -2191,8 +1783,6 @@ const int attackmovecost = 20;  // 20% movement decrease for attacking; only use
 
 #define mine_movemalus_increase 50   // percent
 
-#define  viewadditiv 1
-
 #define tfieldtemp2max 255
 #define tfieldtemp2min 0
 
@@ -2228,8 +1818,11 @@ const int attackmovecost = 20;  // 20% movement decrease for attacking; only use
 
 #define maxminingrange 10     // soviele fielder such ein Bergwerk ab.
 
+const int resourceWeight[ resourceTypeNum ] = { 0, 4, 12 };
+/*
 #define fuelweight  4         // 1024 fuel wiegen soviel
 #define materialweight 12     // 1024 material wiegen soviel
+*/
 
 #define objectbuildmovecost 16  // vehicle->movement -= (8 + ( fld->movemalus[0] - 8 ) / ( objectbuildmovecost / 8 ) ) * kosten des obj
 

@@ -1,6 +1,9 @@
-//     $Id: attack.cpp,v 1.32 2000-09-16 11:47:21 mbickel Exp $
+//     $Id: attack.cpp,v 1.33 2000-10-11 14:26:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/09/16 11:47:21  mbickel
+//      Some cleanup and documentation again
+//
 //     Revision 1.31  2000/08/13 11:55:07  mbickel
 //      Attacking now decreases a units movement by 20% if it has the
 //        "move after attack" flag.
@@ -167,6 +170,8 @@
 #include <stdio.h>
 #include "tpascal.inc"
 #include "typen.h"
+#include "buildingtype.h"
+#include "vehicletype.h"
 #include "attack.h"
 #include "newfont.h"
 #include "basegfx.h"
@@ -178,6 +183,8 @@
 #include "timer.h"
 #include "loaders.h"
 #include "gameoptions.h"
+
+#include "mapalgorithms.h"
 
 #ifdef sgmain
  #include "soundList.h"
@@ -791,7 +798,7 @@ void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int w
    dv.attackbonus = 0;
 
 
-   dv.armor = _attackedbuilding->typ->getArmor();
+   dv.armor = _attackedbuilding->getArmor();
    dv.damage    = _attackedbuilding->damage;
    dv.experience = 0;
    dv.hemming    = 1;

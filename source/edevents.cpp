@@ -1,6 +1,9 @@
-//     $Id: edevents.cpp,v 1.11 2000-08-12 12:52:45 mbickel Exp $
+//     $Id: edevents.cpp,v 1.12 2000-10-11 14:26:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/08/12 12:52:45  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.10  2000/08/06 11:39:02  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -67,11 +70,13 @@
 */
 
 #include <math.h>
+#include "vehicletype.h"
+#include "buildingtype.h"
+
 #include "edmisc.h"
 #include "edevents.h"
 #include "edselfnt.h"
 #include "timer.h"
-
 
 // õS TplayerSel
 

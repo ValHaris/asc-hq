@@ -17,9 +17,6 @@
 /* #undef HAVE_ITOA */
 #define HAVE_ITOA 1
 
-/* Define if you have the kbhit function.  */
-#define HAVE_KBHIT 
-
 /* Define if you have the select function.  */
 #define HAVE_SELECT 1
 

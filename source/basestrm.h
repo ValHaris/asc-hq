@@ -1,6 +1,9 @@
-//     $Id: basestrm.h,v 1.22 2000-09-26 18:05:14 mbickel Exp $
+//     $Id: basestrm.h,v 1.23 2000-10-11 14:26:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/09/26 18:05:14  mbickel
+//      Upgraded to bzlib 1.0.0 (which is incompatible to older versions)
+//
 //     Revision 1.21  2000/09/24 19:57:03  mbickel
 //      ChangeUnitHeight functions are now more powerful since they use
 //        UnitMovement on their own.
@@ -128,18 +131,9 @@
 
 #include "global.h"
 #include "lzw.h"
+#include "errors.h"
 
-#ifdef _DOS_
- extern "C" {
-  #include "libs/bzlib/bzlib.h"
- }
-#else
- #include <bzlib.h>
-// #define total_in   total_in_lo32
-// #define total_out  total_out_lo32
-#endif
-
-#include "tpascal.inc"
+#include "libs/bzlib/bzlib.h"
 
 
 
@@ -175,36 +169,35 @@ class CharBuf {
 
 
 
-class terror { 
-};
 
 
 
-class tcompressionerror : public terror {
-     char strng[100];
-     int code;
-
+class tcompressionerror : public ASCmsgException {
    public:
-     tcompressionerror ( const char* msg, int returncode );
+     tcompressionerror ( string msg, int returncode ) : ASCmsgException ( msg )
+     {
+        message += "\n the returncode is ";
+        message += strrr ( returncode );
+     };
 };
 
-class tinternalerror: public terror {
+class tinternalerror: public ASCexception {
    int linenum;
    const char* sourcefilename;
   public:
    tinternalerror ( const char* filename, int l );
 };
 
-class toutofmem : public terror { 
+class toutofmem : public ASCexception {
   public:
    int required;
    toutofmem ( int m ) ;
 };
 
-class tbufferoverflow : public terror { 
+class tbufferoverflow : public ASCexception {
 };
 
-class tfileerror : public terror {
+class tfileerror : public ASCexception {
   public:
    char filename[2000];
    tfileerror ( const char* fn ) ;

@@ -73,8 +73,8 @@ CXXFLAGS = @CXXFLAGS@ -Dkarteneditor -I./ -DHEXAGON -DFREEMAPZOOM -funsigned-cha
 
 bin_PROGRAMS = ascmapedit
 
-ascmapedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp edselfnt.cpp edmisc.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp Named.cpp
-ascmapedit_LDADD = ../sdl/libsdl.a ../libs/triangul/libtriangul.a -lSDL -lpthread -lbz2
+ascmapedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp edselfnt.cpp edmisc.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp Named.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp
+ascmapedit_LDADD = ../sdl/libsdl.a ../libs/triangul/libtriangul.a -lSDL -lpthread ../libs/bzlib/libbz2.a
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
 CONFIG_CLEAN_FILES = 
@@ -89,9 +89,10 @@ ascmapedit_OBJECTS =  edevents.o edgen.o edglobal.o edmain.o edselfnt.o \
 edmisc.o weather.o typen.o strtmesg.o stack.o spfst.o sgstream.o pd.o \
 palette.o newfont.o misc.o loadpcxc.o loaders.o loadbi3.o dlg_box.o \
 dialog.o basestrm.o basegfx.o attack.o CLoadable.o Property.o \
-PropertyGroup.o gameoptions.o Named.o
+PropertyGroup.o gameoptions.o Named.o buildingtype.o vehicletype.o \
+containerbase.o mapalgorithms.o viewcalculation.o
 ascmapedit_DEPENDENCIES =  ../sdl/libsdl.a \
-../libs/triangul/libtriangul.a
+../libs/triangul/libtriangul.a ../libs/bzlib/libbz2.a
 ascmapedit_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
@@ -105,12 +106,14 @@ TAR = tar
 GZIP_ENV = --best
 DEP_FILES =  .deps/CLoadable.P .deps/Named.P .deps/Property.P \
 .deps/PropertyGroup.P .deps/attack.P .deps/basegfx.P .deps/basestrm.P \
-.deps/dialog.P .deps/dlg_box.P .deps/edevents.P .deps/edgen.P \
-.deps/edglobal.P .deps/edmain.P .deps/edmisc.P .deps/edselfnt.P \
-.deps/gameoptions.P .deps/loadbi3.P .deps/loaders.P .deps/loadpcxc.P \
+.deps/buildingtype.P .deps/containerbase.P .deps/dialog.P \
+.deps/dlg_box.P .deps/edevents.P .deps/edgen.P .deps/edglobal.P \
+.deps/edmain.P .deps/edmisc.P .deps/edselfnt.P .deps/gameoptions.P \
+.deps/loadbi3.P .deps/loaders.P .deps/loadpcxc.P .deps/mapalgorithms.P \
 .deps/misc.P .deps/newfont.P .deps/palette.P .deps/pd.P \
 .deps/sgstream.P .deps/spfst.P .deps/stack.P .deps/strtmesg.P \
-.deps/typen.P .deps/weather.P
+.deps/typen.P .deps/vehicletype.P .deps/viewcalculation.P \
+.deps/weather.P
 SOURCES = $(ascmapedit_SOURCES)
 OBJECTS = $(ascmapedit_OBJECTS)
 

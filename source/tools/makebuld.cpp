@@ -119,7 +119,7 @@ char getbuildingfield ( int& x, int& y )
 }
 
 
-char getbuildingfield ( shortint& x, shortint& y )
+char getbuildingfield ( int& x, int& y )
 {
    int x1 = x;
    int y1 = y;

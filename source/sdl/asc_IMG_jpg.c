@@ -202,9 +202,8 @@ SDL_Surface *IMG_LoadJPG_RW_D(SDL_RWops *src, int depth)
 			goto done;
 	}
 		
-	
 	jpeg_calc_output_dimensions(&cinfo);
-
+	
 	/* Allocate an output surface to hold the image */
         switch ( depth ) {
 		case 24: surface = SDL_AllocSurface(SDL_SWSURFACE,
@@ -221,12 +220,13 @@ SDL_Surface *IMG_LoadJPG_RW_D(SDL_RWops *src, int depth)
 		                       8, 0, 0, 0, 0 );
 			break;
 	}
-						 
+						
 	if ( surface == NULL ) {
 		// IMG_SetError("Out of memory");
 		goto done;
 	}
 
+	
 	/* Decompress the image */
 	jpeg_start_decompress(&cinfo);
 	while ( cinfo.output_scanline < cinfo.output_height ) {

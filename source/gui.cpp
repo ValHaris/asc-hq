@@ -1,6 +1,10 @@
-//     $Id: gui.cpp,v 1.39 2000-09-24 19:57:04 mbickel Exp $
+//     $Id: gui.cpp,v 1.40 2000-10-11 14:26:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2000/09/24 19:57:04  mbickel
+//      ChangeUnitHeight functions are now more powerful since they use
+//        UnitMovement on their own.
+//
 //     Revision 1.38  2000/09/07 15:49:41  mbickel
 //      some cleanup and documentation
 //
@@ -193,7 +197,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "tpascal.inc"
+#include "vehicletype.h"
+#include "buildingtype.h"
 #include "basegfx.h"
 #include "typen.h"
 #include "newfont.h"
@@ -1904,6 +1909,7 @@ void  tnsguiiconbuildany::exec         ( void )
 
 
 tnsguiiconrepair::tnsguiiconrepair ( void )
+                 :service(NULL, NULL )
 {
    filename = "repair" ;
 }
@@ -1913,27 +1919,65 @@ int   tnsguiiconrepair::available    ( void )
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) { 
       pfield fld = getactfield(); 
       if ( fld->vehicle ) 
-         if (fld->vehicle->color == actmap->actplayer * 8) 
-            if (fld->vehicle->functions & cfrepair ) 
-               for ( int i = 0; i < fld->vehicle->typ->weapons->count; i++ )
-                  if ( fld->vehicle->typ->weapons->weapon[i].service() )
-                     if ( !fld->vehicle->attacked)
-                        return 1; 
-   } 
-
-   if (moveparams.movestatus == 66) { 
-      pfield fld = getactfield(); 
-      if ( fld->a.temp ) 
-         return true; 
-   } 
+         if (fld->vehicle->color == actmap->actplayer * 8)
+            if ( service.available ( fld->vehicle ))
+               if ( service.getServices( fld->vehicle) & (1 << VehicleService::srv_repair ))
+                  return 1;
+   } else
+      if ( pendingVehicleActions.actionType == vat_service ) {
+         pfield fld = getactfield();
+         if ( fld->vehicle ) {
+            // if ( pendingVehicleActions.service->getServices ( fld->vehicle) & ( 1 << VehicleService::srv_repair) ) {
+            VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.find(fld->vehicle->networkid);
+            if ( i != pendingVehicleActions.service->dest.end() )
+               for ( int j = 0; j < i->second.service.size(); j++ )
+                  if ( i->second.service[j].type == VehicleService::srv_repair )
+                     return 1;
+         }
+      }
 
    return 0;
 }
 
 void  tnsguiiconrepair::exec         ( void ) 
 {
-   refuelvehicle(1); 
-   displaymap();
+   if ( pendingVehicleActions.actionType == vat_nothing ) {
+      VehicleService* vs = new VehicleService ( &defaultMapDisplay, &pendingVehicleActions );
+      int res = vs->execute ( getactfield()->vehicle, -1, -1, 0, -1, -1 );
+      if ( res < 0 ) {
+         dispmessage2 ( -res );
+         delete vs;
+         return;
+      }
+      int fieldCount = 0;
+      for ( VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.begin(); i != pendingVehicleActions.service->dest.end(); i++ ) {
+         pfield fld = getfield ( i->second.dest->xpos, i->second.dest->ypos );
+         if ( fld != getactfield())
+            for ( int j = 0; j < i->second.service.size(); j++ )
+               if ( i->second.service[j].type == VehicleService::srv_repair ) {
+                  fieldCount++;
+                  fld->a.temp = 1;
+               }
+      }
+      if ( !fieldCount ) {
+         delete vs;
+         dispmessage2 ( 211 );
+      } else
+         displaymap();
+   } else {
+      for ( VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.begin(); i != pendingVehicleActions.service->dest.end(); i++ )
+         if ( i->second.dest == getactfield()->vehicle )
+            // for ( vector<VehicleService::Service>::iterator j = i->second->service.begin(); j != i->second->service.end(); j++ )
+            for ( int j = 0; j < i->second.service.size(); j++ )
+               if ( i->second.service[j].type == VehicleService::srv_repair )
+                  pendingVehicleActions.service->execute ( NULL, getactfield()->vehicle->networkid, -1, 2, j, i->second.service[j].minAmount );
+
+
+      delete pendingVehicleActions.service;
+      actmap->cleartemps(7);
+      displaymap();
+      dashboard.x = 0xffff;
+   }
 }
 
 void tnsguiiconrepair::loadspecifics ( pnstream stream )
@@ -1955,6 +1999,7 @@ void tnsguiiconrepair::loadspecifics ( pnstream stream )
 
 
 tnsguiiconrefuel::tnsguiiconrefuel ( void )
+                 :service(NULL, NULL )
 {
    filename =  "refuel" ;
 }
@@ -1963,40 +2008,70 @@ tnsguiiconrefuel::tnsguiiconrefuel ( void )
 
 int   tnsguiiconrefuel::available    ( void ) 
 {
-   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) { 
-      pfield fld = getactfield(); 
-      if ( fld->vehicle ) 
-         if ( !fld->vehicle->attacked )
-            if (fld->vehicle->color == actmap->actplayer * 8) { 
-               pvehicletype fzt = fld->vehicle->typ; 
-               for ( int i = 0; i < fzt->weapons->count; i++ )
-                  if ( fzt->weapons->weapon[i].service() )
-                     for ( int j = 0; j < fzt->weapons->count ; j++) {
-                        if (fzt->weapons->weapon[j].canRefuel() )
-                           return 1;
-                        if ( fld->vehicle->functions & (cffuelref | cfmaterialref) )
-                           return 1; 
-                     }
-            }     
-   } 
-   if (moveparams.movestatus == 65) { 
-      pfield fld = getactfield(); 
-      if ( fld->a.temp ) 
-         return 2; 
-   } 
+
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
+      pfield fld = getactfield();
+      if ( fld->vehicle )
+         if (fld->vehicle->color == actmap->actplayer * 8)
+            if ( service.available ( fld->vehicle ))
+               if ( service.getServices( fld->vehicle) & ((1 << VehicleService::srv_resource ) | (1 << VehicleService::srv_ammo )) )
+                  return 1;
+   } else
+      if ( pendingVehicleActions.actionType == vat_service ) {
+         pfield fld = getactfield();
+         if ( fld->vehicle ) {
+            VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.find(fld->vehicle->networkid);
+            if ( i != pendingVehicleActions.service->dest.end() )
+               for ( int j = 0; j < i->second.service.size(); j++ )
+                  if (   i->second.service[j].type == VehicleService::srv_resource
+                      || i->second.service[j].type == VehicleService::srv_ammo )
+                     return 1;
+         }
+      }
+
    return 0;
 }
 
 void  tnsguiiconrefuel::exec         ( void ) 
 {
-   if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing) {
-      refuelvehicle(3); 
+   if ( pendingVehicleActions.actionType == vat_nothing ) {
+      VehicleService* vs = new VehicleService ( &defaultMapDisplay, &pendingVehicleActions );
+      int res = vs->execute ( getactfield()->vehicle, -1, -1, 0, -1, -1 );
+      if ( res < 0 ) {
+         dispmessage2 ( -res );
+         delete vs;
+         return;
+      }
+      int fieldCount = 0;
+      for ( VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.begin(); i != pendingVehicleActions.service->dest.end(); i++ ) {
+         pfield fld = getfield ( i->second.dest->xpos, i->second.dest->ypos );
+         if ( fld != getactfield())
+            for ( int j = 0; j < i->second.service.size(); j++ )
+               if (  i->second.service[j].type == VehicleService::srv_ammo
+                  || i->second.service[j].type == VehicleService::srv_resource ) {
+                  fieldCount++;
+                  fld->a.temp = 1;
+               }
+      }
+      if ( !fieldCount ) {
+         delete vs;
+         dispmessage2 ( 211 );
+      } else
+         displaymap();
+   } else {
+      for ( VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.begin(); i != pendingVehicleActions.service->dest.end(); i++ )
+         if ( i->second.dest == getactfield()->vehicle )
+            for ( int j = 0; j < i->second.service.size(); j++ )
+               if (  i->second.service[j].type == VehicleService::srv_ammo
+                  || i->second.service[j].type == VehicleService::srv_resource )
+                  pendingVehicleActions.service->execute ( NULL, getactfield()->vehicle->networkid, -1, 2, j, i->second.service[j].maxAmount );
+
+
+      delete pendingVehicleActions.service;
+      actmap->cleartemps(7);
       displaymap();
-   } else
-     if (moveparams.movestatus == 65)  {
-        refuelvehicle(2); 
-        displaymap();
-     }
+      dashboard.x = 0xffff;
+   }
 }
 
 
@@ -2037,18 +2112,19 @@ tnsguiiconrefueldialog::tnsguiiconrefueldialog ( void )
 int   tnsguiiconrefueldialog::available    ( void ) 
 {
    priority = 20; // !!
-   if (moveparams.movestatus == 65) { 
-      pfield fld = getactfield(); 
-      if ( fld->a.temp ) 
-         return true; 
-   } 
+   if ( pendingVehicleActions.service && getactfield()->a.temp && getactfield()->vehicle )
+         return true;
+
    return 0;
 }
 
 void  tnsguiiconrefueldialog::exec         ( void ) 
 {
-   refuelvehicle(3); 
+   verlademunition( pendingVehicleActions.service, getactfield()->vehicle->networkid );
+   delete pendingVehicleActions.service;
+   actmap->cleartemps ( 7 );
    displaymap();
+   dashboard.x = 0xffff;
 }
 
 
@@ -2127,7 +2203,7 @@ int   tnsguiicondestructbuilding::available    ( void )
           if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() ) 
              if (fld->vehicle->color == actmap->actplayer * 8)
                if (fld->vehicle->functions & cfputbuilding )
-                  if ( fld->vehicle->fuel >= destruct_building_fuel_usage * fld->vehicle->typ->fuelConsumption )
+                  if ( fld->vehicle->tank.fuel >= destruct_building_fuel_usage * fld->vehicle->typ->fuelConsumption )
                      return 1;
     } 
     else 
@@ -2177,7 +2253,7 @@ int   tnsguiicondig::available    ( void )
 
 void  tnsguiicondig::exec         ( void ) 
 {
-    searchforminablefields( getactfield()->vehicle ) ;
+    getactfield()->vehicle->searchForMineralResources( ) ;
     showresources = 1;
     dashboard.x = 0xffff;
     displaymap();
@@ -2519,10 +2595,10 @@ tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( pobjecttype obj, in
       char buf[10000];
       if ( bld ) {
          picture[0]    = object->buildicon;
-         sprintf ( buf, "%s : %d material and %d fuel needed", object->name, object->buildcost.a.material, object->buildcost.a.fuel );
+         sprintf ( buf, "%s : %d material and %d fuel needed", object->name, object->buildcost.material, object->buildcost.fuel );
       } else {
          picture[0]    = object->removeicon;
-         sprintf ( buf, "%s : %d material and %d fuel needed", object->name, object->removecost.a.material, object->removecost.a.fuel );
+         sprintf ( buf, "%s : %d material and %d fuel needed", object->name, object->removecost.material, object->removecost.fuel );
       }
       infotext = buf;
    } else {
@@ -2602,7 +2678,7 @@ tnputvehiclecontainerguiicon :: tnputvehiclecontainerguiicon ( pvehicletype obj 
          c = vehicle->description;
 
       char buf[10000];
-      sprintf ( buf, "%s : %d material and %d fuel needed", c, vehicle->production.material, vehicle->production.energy );
+      sprintf ( buf, "%s : %d material and %d fuel needed", c, vehicle->productionCost.material, vehicle->productionCost.energy );
       infotext = buf;
    } else {
       picture[0] = icons.selectweaponguicancel;

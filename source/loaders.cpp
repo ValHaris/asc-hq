@@ -1,6 +1,9 @@
-//     $Id: loaders.cpp,v 1.27 2000-09-07 15:49:43 mbickel Exp $
+//     $Id: loaders.cpp,v 1.28 2000-10-11 14:26:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/09/07 15:49:43  mbickel
+//      some cleanup and documentation
+//
 //     Revision 1.26  2000/09/02 15:36:49  mbickel
 //      Some minor cleanup and documentation
 //
@@ -163,6 +166,8 @@
 #include "basegfx.h"
 #include "newfont.h"
 #include "typen.h"
+#include "buildingtype.h"
+#include "vehicletype.h"
 #include "spfst.h"
 #include "loaders.h"
 #include "dlg_box.h"
@@ -171,6 +176,7 @@
 #include "sgstream.h"
 #include "sg.h"
 #include "attack.h"
+#include "errors.h"
 
 #ifdef sgmain
 #include "missions.h"
@@ -184,15 +190,6 @@ ticons icons;
  const char* savegameextension = "*.sav";
  const char* mapextension = "*.map";
  const char* tournamentextension = "*.asc";
-
-
-tinvalidid :: tinvalidid ( char* s, int iid ) 
-{
-   strcpy ( msg, s );
-   strcpy ( orgmsg, s );
-   strcat ( msg, strrr ( iid ));
-   id = iid;
-}
 
 
 
@@ -336,10 +333,8 @@ void         seteventtriggers(void)
          event = event->next; 
       } 
    }
-  #ifndef karteneditor
    for ( int i = 0; i < 8; i++ )
-      quedevents[ i ] = 1;
-  #endif
+      actmap->queuedEvents[ i ] = 1;
 
 } 
 
@@ -368,385 +363,6 @@ void         seteventtriggers(void)
 
 
 
-#define cem_experience    0x1
-#define cem_damage        0x2
-#define cem_fuel          0x4
-#define cem_ammunition    0x8
-#define cem_weapstrength  0x10
-#define cem_loading       0x20
-#define cem_attacked      0x40
-#define cem_height        0x80
-#define cem_movement      0x100
-#define cem_direction     0x200
-#define cem_material      0x400
-#define cem_energy        0x800
-#define cem_class         0x1000
-#define cem_networkid     0x2000
-#define cem_name          0x4000
-#define cem_armor         0x8000
-#define cem_reactionfire  0x10000
-#define cem_reactionfire2 0x20000
-#define cem_poweron       0x40000
-#define cem_weapstrength2 0x80000
-#define cem_ammunition2   0x100000
-#define cem_energyUsed    0x200000
-
-
-
-
-
-
-/**************************************************************/
-/*     einzelne vehicle schreiben / lesen                   ÿ */
-/**************************************************************/
-
-
-void   tvehicle::write ( pnstream stream )
-{
-
-    stream->writedata2 ( typ->id );
-    stream->writedata2 ( color );
-
-    int bm = 0;
-
-    if ( experience )
-       bm |= cem_experience;
-    if ( damage    )
-       bm |= cem_damage;
-
-    if ( fuel < typ->tank )
-       bm |= cem_fuel;
-
-    if ( typ->weapons->count )
-       for (char m = 0; m < typ->weapons->count ; m++) {
-          if ( ammo[m] < typ->weapons->weapon[m].count )
-             bm |= cem_ammunition2;
-          if ( weapstrength[m] != typ->weapons->weapon[m].maxstrength )
-             bm |= cem_weapstrength2;
-
-       }
-    for ( int i = 0; i < 32; i++ )
-       if ( loading[i] )
-           bm |= cem_loading;
-
-    if ( attacked  )
-       bm |= cem_attacked;
-    if ( height != chfahrend )
-       bm |= cem_height;
-    if ( _movement < typ->movement[log2(height)] )
-       bm |= cem_movement;
-
-    if ( direction )
-       bm |= cem_direction;
-
-    if ( material < typ->material )
-       bm |= cem_material  ;
-
-    if ( energy   < typ->energy   )
-       bm |= cem_energy;
-
-    if ( energyUsed )
-       bm |= cem_energyUsed;
-
-    if ( klasse    )
-       bm |= cem_class;
-
-    if ( armor != typ->armor )
-       bm |= cem_armor;
-
-    if ( networkid )
-       bm |= cem_networkid;
-
-    if ( name      )
-       bm |= cem_name;
-
-    if ( reactionfire.status )
-       bm |= cem_reactionfire;
-
-    if ( reactionfire.enemiesAttackable )
-       bm |= cem_reactionfire2;
-
-    if ( generatoractive )
-       bm |= cem_poweron;
-
-
-    stream->writedata2( bm );
-
-    if ( bm & cem_experience )
-         stream->writedata2 ( experience );
-
-    if ( bm & cem_damage )
-         stream->writedata2 ( damage );
-
-    if ( bm & cem_fuel )
-         stream->writedata2 ( fuel );
-
-    if ( bm & cem_ammunition2 )
-       for ( int j= 0; j < 16; j++ )
-         stream->writedata2 ( ammo[j] );
-
-    if ( bm & cem_weapstrength2 )
-       for ( int j = 0; j < 16; j++ )
-         stream->writedata2 ( weapstrength[j] );
-
-    if ( bm & cem_loading ) {
-       char k;
-       char c=0;
-       for (k = 0; k <= 31; k++)
-          if ( loading[k] )
-             c++;
-
-       stream->writedata2 ( c );
-
-       if (c)
-          for (k = 0; k <= 31; k++)
-             if ( loading[k] )
-                loading[k]->write ( stream );
-    }
-
-    if ( bm & cem_height )
-         stream->writedata2 ( height );
-
-    if ( bm & cem_movement )
-         stream->writeChar ( _movement );
-
-    if ( bm & cem_direction )
-         stream->writedata2 ( direction );
-
-    if ( bm & cem_material )
-         stream->writedata2 ( material );
-
-    if ( bm & cem_energy )
-         stream->writedata2 ( energy );
-
-    if ( bm & cem_class )
-         stream->writedata2 ( klasse );
-
-    if ( bm & cem_armor )
-         stream->writedata2 ( armor );
-
-    if ( bm & cem_networkid )
-         stream->writedata2 ( networkid );
-
-    if ( bm & cem_attacked )
-         stream->writedata2 ( attacked );
-
-    if ( bm & cem_name     )
-         stream->writepchar ( name );
-
-    if ( bm & cem_reactionfire )
-       stream->writeChar ( reactionfire.status );
-
-    if ( bm & cem_reactionfire2 )
-       stream->writeChar ( reactionfire.enemiesAttackable );
-
-    if ( bm & cem_poweron )
-       stream->writedata2 ( generatoractive );
-
-    if ( bm & cem_energyUsed )
-       stream->writeInt ( energyUsed );
-}
-
-
-void   tvehicle::read ( pnstream stream )
-{
-    word id;
-    stream->readdata2 ( id );
-
-    pvehicletype fzt = getvehicletype_forid ( id, 0 );
-
-    if ( !fzt )
-       throw tinvalidid ( "no unit with matching ID found; ID = ", id );
-
-
-    typ = fzt;
-
-    /*
-    if ( spfld->objectcrc )
-       spfld->objectcrc->speedcrccheck->checkunit2 ( typ );
-    */
-
-    stream->readdata2 ( color );
-
-    int bm;
-
-    stream->readdata2( bm );
-
-    if ( bm & cem_experience )
-         stream->readdata2 ( experience );
-    else
-       experience = 0;
-
-    if ( bm & cem_damage )
-         stream->readdata2 ( damage );
-    else
-       damage = 0;
-
-    if ( bm & cem_fuel )
-         stream->readdata2 ( fuel );
-    else
-       fuel = typ->tank;
-
-    if ( bm & cem_ammunition ) {
-       word old;
-       for ( int i = 0; i < 8; i++ ) {
-         stream->readdata2 ( old );
-         ammo[i] = old;
-       }
-    } else
-     if ( bm & cem_ammunition2 ) {
-        for ( int i = 0; i < 16; i++ ) {
-          stream->readdata2 ( ammo[i] );
-          if ( ammo[i] > typ->weapons->weapon[i].count )
-             ammo[i] = typ->weapons->weapon[i].count;
-          if ( ammo[i] < 0 )
-             ammo[i] = 0;
-        }
-
-     } else
-       for (int i=0; i < typ->weapons->count ;i++ )
-          ammo[i] = typ->weapons->weapon[i].count;
-
-
-    if ( bm & cem_weapstrength ) {
-       word old;
-       for ( int i = 0; i < 8; i++ ) {
-         stream->readdata2 ( old );
-         weapstrength[i] = old;
-       }
-    } else
-     if ( bm & cem_weapstrength2 ) {
-        for ( int i = 0; i < 16; i++ ) {
-          stream->readdata2 ( weapstrength[i] );
-        }
-     } else
-       for (int i=0; i < typ->weapons->count ;i++ )
-          weapstrength[i] = typ->weapons->weapon[i].maxstrength;
-
-    if ( bm & cem_loading ) {
-       char c;
-
-       stream->readdata2 ( c );
-
-       if (c)
-          for (int k = 0; k < c; k++) {
-             loading[k] = new tvehicle ( gamemap );
-             loading[k]->read ( stream );
-          }
-
-    }
-
-    if ( bm & cem_height )
-         stream->readdata2 ( height );
-    else
-       height = chfahrend;
-
-    if ( ! (height & typ->height) )
-       height = 1 << log2 ( typ->height );
-
-    if ( bm & cem_movement )
-         setMovement ( stream->readChar ( ), -1 );
-    else
-       setMovement ( typ->movement [ log2 ( height ) ], -1 );
-
-    if ( bm & cem_direction )
-         stream->readdata2 ( direction );
-    else
-         direction = 0;
-
-    if ( bm & cem_material )
-         stream->readdata2 ( material );
-    else
-         material = typ->material;
-
-    if ( bm & cem_energy )
-         stream->readdata2 ( energy );
-    else
-         energy = typ->energy;
-
-    if ( bm & cem_class )
-         stream->readdata2 ( klasse );
-    else
-       klasse = 0;
-
-    if ( bm & cem_armor )
-         stream->readdata2 ( armor );
-    else
-       armor = typ->armor;
-
-    if ( bm & cem_networkid )
-         stream->readdata2 ( networkid );
-    else
-       networkid = 0;
-
-    if ( bm & cem_attacked )
-         stream->readdata2 ( attacked );
-
-    if ( bm & cem_name     )
-         stream->readpchar ( &name );
-
-    if ( bm & cem_reactionfire )
-       reactionfire.status = stream->readChar (  );
-    else
-       reactionfire.status = 0;
-
-    if ( bm & cem_reactionfire2 )
-       reactionfire.enemiesAttackable = stream->readChar (  );
-    else
-       reactionfire.enemiesAttackable = 0;
-
-    if ( reactionfire.status >= 8 && reactionfire.enemiesAttackable <= 4 ) { // for transition from the old reactionfire system ( < ASC1.2.0 ) to the new one ( >= ASC1.2.0 )
-       int temp = reactionfire.status;
-       reactionfire.status = reactionfire.enemiesAttackable;
-       reactionfire.enemiesAttackable = temp;
-       setMovement ( typ->movement [ log2 ( height ) ], -1 );
-    }
-
-    if ( bm & cem_poweron )
-       stream->readdata2 ( generatoractive );
-    else
-       generatoractive = 0;
-
-    if ( bm & cem_energyUsed )
-       energyUsed =  stream->readInt ();
-    else
-       energyUsed = 0;
-
-
-
-    #ifdef sgmain
-    if (klasse == 255) {
-       if ( typ->classnum ) {
-          for (int i = 0; i < typ->classnum ; i++ )
-             if ( gamemap->player[ color/8 ].research.vehicleclassavailable( typ, i, gamemap ) )
-                klasse = i;
-             else
-                break;
-
-
-          functions = typ->functions & typ->classbound[klasse].vehiclefunctions;
-       } else {
-          functions = typ->functions ;
-          klasse = 0;
-       }
-
-       armor = typ->armor * typ->classbound[klasse].armor / 1024;
-       if (typ->weapons->count )
-          for ( int m = 0; m < typ->weapons->count ; m++)
-             if ( typ->weapons->weapon[m].getScalarWeaponType() >= 0 )
-                weapstrength[m] = typ->weapons->weapon[m].maxstrength * typ->classbound[klasse].weapstrength[ typ->weapons->weapon[m].getScalarWeaponType()] / 1024;
-             else
-                weapstrength[m] = 0;
-
-    } else {
-      if ( typ->classnum )
-        functions = typ->functions & typ->classbound[klasse].vehiclefunctions;
-      else
-        functions = typ->functions ;
-    }
-    #endif
-
-}
 
 
 
@@ -760,140 +376,138 @@ const int buildingstreamversion = -2;
 
 void         tspfldloaders::writebuilding ( pbuilding bld )
 {
-    stream->writedata2 ( buildingstreamversion );
+    stream->writeInt ( buildingstreamversion );
 
-    stream->writedata2 ( bld->typ->id );
-    stream->writedata2 ( bld->bi_resourceplus );
-    stream->writedata2 ( bld->color );
-    stream->writedata2 ( bld->xpos );
-    stream->writedata2 ( bld->ypos );
-    stream->writedata2 ( bld->completion );
-    stream->writedata2 ( bld->munitionsautoproduction );
+    stream->writeInt ( bld->typ->id );
+    int i;
+    for ( i = 0; i< resourceTypeNum; i++ )
+       stream->writeInt ( bld->bi_resourceplus.resource(i) );
+    stream->writeChar ( bld->color );
+    stream->writeWord ( bld->xpos );
+    stream->writeWord ( bld->ypos );
+    stream->writeChar ( bld->completion );
+    for ( i = 0; i < waffenanzahl; i++ )
+       stream->writeWord ( bld->munitionsautoproduction[i] );
 
-    stream->writedata2 ( bld->plus );
-    stream->writedata2 ( bld->maxplus );
-    stream->writedata2 ( bld->actstorage );
+    for ( i = 0; i< resourceTypeNum; i++ )
+       stream->writeInt ( bld->plus.resource(i) );
 
-    stream->writedata2 ( bld->munition );
-    stream->writedata2 ( bld->maxresearchpoints );
-    stream->writedata2 ( bld->researchpoints );
-    stream->writedata2 ( bld->visible );
-    stream->writedata2 ( bld->damage );
-    stream->writedata2 ( bld->netcontrol );
+    for ( i = 0; i< resourceTypeNum; i++ )
+       stream->writeInt ( bld->maxplus.resource(i) );
+
+    for ( i = 0; i< resourceTypeNum; i++ )
+       stream->writeInt ( bld->actstorage.resource(i) );
+
+    for ( i = 0; i< waffenanzahl; i++ )
+       stream->writeWord ( bld->munition[i] );
+
+    stream->writeWord ( bld->maxresearchpoints );
+    stream->writeWord ( bld->researchpoints );
+    stream->writeChar ( bld->visible );
+    stream->writeChar ( bld->damage );
+    stream->writeInt  ( bld->netcontrol );
     stream->writepchar ( bld->name );
 
     stream->writeInt ( bld->repairedThisTurn );
 
     char c = 0;
-    char k;
 
     if (bld->typ->loadcapacity )  
-       for (k = 0; k <= 31; k++) 
+       for ( int k = 0; k <= 31; k++)
           if (bld->loading[k] ) 
              c++;
-    stream->writedata2 ( c );
-    if (c)
-       for (k = 0; k <= 31; k++) 
+    stream->writeChar ( c );
+    if ( c )
+       for ( int k = 0; k <= 31; k++)
           if ( bld->loading[k] )
              bld->loading[k]->write ( stream );
 
 
     c = 0;
     if (bld->typ->special & cgvehicleproductionb ) 
-       for (k = 0; k <= 31; k++) 
+       for (int k = 0; k <= 31; k++)
           if ( bld->production[k] )
              c++;
-    stream->writedata2 ( c );
-    if (c)
-       for (k = 0; k <= 31; k++) 
-          if (bld->production[k] != NULL) 
-             stream->writedata2( bld->production[k]->id );
+    stream->writeChar ( c );
+    if ( c )
+       for (int k = 0; k <= 31; k++)
+          if (bld->production[k] )
+             stream->writeWord( bld->production[k]->id );
 
 
     c = 0;
     if (bld->typ->special & cgvehicleproductionb ) 
-       for (k = 0; k <= 31; k++) 
+       for (int k = 0; k <= 31; k++)
           if ( bld->productionbuyable[k] )
              c++;
-    stream->writedata2 ( c );
-    if (c)
-       for (k = 0; k <= 31; k++) 
-          if (bld->productionbuyable[k] != NULL) 
-             stream->writedata2( bld->productionbuyable[k]->id );
-
+    stream->writeChar ( c );
+    if ( c )
+       for ( int k = 0; k <= 31; k++)
+          if ( bld->productionbuyable[k] )
+             stream->writeWord( bld->productionbuyable[k]->id );
 }
 
 void         tspfldloaders::readbuilding ( pbuilding &bld )
 {
-    bld = new ( tbuilding );
-    memset ( bld, 0, sizeof ( *bld ));
+    bld = new Building ( spfld );
 
-   #ifdef HEXAGON
-    int id;
-   #else
-    word id;
-   #endif
-
-    int version;
-    stream->readdata2 ( version );
+    int version = stream->readInt();
     if ( version == buildingstreamversion || version == -1 ) {
 
-       stream->readdata2 ( id );
+       int id = stream->readInt ();
        bld->typ = getbuildingtype_forid ( id, 0 );
        if ( !bld->typ )
-          throw tinvalidid ( "no building with matching ID found; ID = ", id );
-   
-       stream->readdata2 ( bld->bi_resourceplus );
+          throw InvalidID ( "building", id );
+
+       for ( int i = 0; i < 3; i++ )
+          bld->bi_resourceplus.resource(i) = stream->readInt();
    
        if ( spfld->objectcrc ) 
           spfld->objectcrc->speedcrccheck->checkbuilding2 ( bld->typ );
    
-       stream->readdata2 ( bld->color );
-       stream->readdata2 ( bld->xpos );
+       bld->color = stream->readChar();
+       bld->xpos = stream->readWord() ;
     } else {
-       int idsize = sizeof ( id );
-       memcpy ( &id, &version, idsize );
-   
+       int id = version;
+
        bld->typ = getbuildingtype_forid ( id, 0 );
        if ( !bld->typ )
-          throw tinvalidid ( "no building with matching ID found; ID = ", id );
+          throw InvalidID ( "building", id );
 
        if ( spfld->objectcrc ) 
           spfld->objectcrc->speedcrccheck->checkbuilding2 ( bld->typ );
-   
-       if ( idsize == 4 ) {
-          stream->readdata2 ( bld->color );
-          stream->readdata2 ( bld->xpos );
-       } else {
-          bld->color = (version >> 16) & 0xff;
-          char bb;
-          stream->readdata2 ( bb );
 
-          bld->xpos =  ( version >> 24) + (bb << 8);
-
-       }
-
+       bld->color = stream->readChar();
+       bld->xpos  = stream->readWord();
     }
 
+    bld->ypos = stream->readWord();
+    bld->completion = stream->readChar();
 
+    int i;
+    for ( i = 0; i < waffenanzahl; i++)
+       bld->munitionsautoproduction[i] = stream->readWord();
 
-    stream->readdata2 ( bld->ypos );
-    stream->readdata2 ( bld->completion );
+    for ( i = 0; i< 3; i++ )
+       bld->plus.resource(i) = stream->readInt();
 
-    stream->readdata2 ( bld->munitionsautoproduction );
+    for ( i = 0; i< 3; i++ )
+       bld->maxplus.resource(i) = stream->readInt();
 
-    stream->readdata2 ( bld->plus );
-    stream->readdata2 ( bld->maxplus );
+    for ( i = 0; i< 3; i++ )
+       bld->actstorage.resource(i) = stream->readInt();
 
-    stream->readdata2 ( bld->actstorage );
+    for ( i = 0; i < waffenanzahl; i++)
+       bld->munition[i] = stream->readWord();
 
-    stream->readdata2 ( bld->munition );
-    stream->readdata2 ( bld->maxresearchpoints );
-    stream->readdata2 ( bld->researchpoints );
-    stream->readdata2 ( bld->visible );
-    stream->readdata2 ( bld->damage );
-    stream->readdata2 ( bld->netcontrol );
+    bld->maxresearchpoints = stream->readWord();
+    bld->researchpoints = stream->readWord();
+
+    bld->visible = stream->readChar();
+    bld->damage = stream->readChar();
+    bld->netcontrol = stream->readInt();
     stream->readpchar ( &bld->name );
+
     if ( version == -2 )
        bld->repairedThisTurn = stream->readInt ( );
     else
@@ -901,41 +515,33 @@ void         tspfldloaders::readbuilding ( pbuilding &bld )
 
 
 
-    char c;
-    int k;
-
-    stream->readdata2 ( c );
-    if (c)
-       for (k = 0; k < c; k++) {
-          bld->loading[k] = new tvehicle ( spfld );
-          bld->loading[k]->read ( stream );
-       }
+    char c = stream->readChar();
+    if ( c )
+       for ( int k = 0; k < c; k++)
+          bld->loading[k] = new tvehicle ( stream, spfld );
 
 
-    stream->readdata2 ( c );
-    if (c)
-       for (k = 0; k < c ; k++) {
-
-           word id;
-           stream->readdata2( id );
+    c = stream->readChar();
+    if ( c )
+       for ( int k = 0; k < c ; k++) {
+           word id = stream->readWord();
            bld->production[k] = getvehicletype_forid ( id, 0 ) ;
            if ( !bld->production[k] )
-              throw tinvalidid ( "no unit with matching ID found; ID = ", id );
+              throw InvalidID ( "unit", id );
 
            if ( spfld->objectcrc ) 
               spfld->objectcrc->speedcrccheck->checkunit2 ( bld->production[k] );
 
        }
 
-    stream->readdata2 ( c );
-    if (c)
-       for (k = 0; k < c ; k++) {
-           word id;
-           stream->readdata2( id );
+    c = stream->readChar();
+    if ( c )
+       for ( int k = 0; k < c ; k++) {
+           word id = stream->readWord();
            bld->productionbuyable[k] = getvehicletype_forid ( id, 0 );
 
            if ( !bld->productionbuyable[k] )
-              throw tinvalidid ( "no unit with matching ID found; ID = ", id );
+              throw InvalidID ( "unit", id );
 
            if ( spfld->objectcrc ) 
               spfld->objectcrc->speedcrccheck->checkunit2 ( bld->productionbuyable[k] );
@@ -1135,12 +741,12 @@ void   tspfldloaders::readdissections ( void )
             stream->readdata2 ( j );
             du->fzt = getvehicletype_forid ( j, 0 );
             if ( !du->fzt )
-               throw tinvalidid ( "no vehicle with matching ID found; ID = ", j );
+               throw InvalidID ( "vehicle", j );
 
             stream->readdata2 ( j );
             du->tech = gettechnology_forid  ( j, 0 );
             if ( !du->tech )
-               throw tinvalidid ( "no technology with matching ID found; ID = ", j );
+               throw InvalidID ( "technology", j );
 
             k = ( du->next != NULL );
             du->next = spfld->player[ i ].dissectedunit;
@@ -1933,7 +1539,7 @@ void      tspfldloaders::readtechnologies ( void )
 
           ptechnology tec = gettechnology_forid ( w, 0 );
           if ( !tec )
-             throw tinvalidid ( "no technology with matching ID found; ID = ", w );
+             throw InvalidID ( "technology", w );
 
           devtech = new ( tdevelopedtechnologies );
           devtech->tech = tec;
@@ -1954,7 +1560,7 @@ void      tspfldloaders::readtechnologies ( void )
           spfld->player[i].research.activetechnology = gettechnology_forid ( w, 0 );
 
           if ( !spfld->player[i].research.activetechnology )
-             throw tinvalidid ( "no technology with matching ID found; ID = ", w );
+             throw InvalidID ( "technology", w );
 
           if ( spfld->objectcrc ) 
              spfld->objectcrc->speedcrccheck->checktech2 ( spfld->player[i].research.activetechnology );
@@ -2237,11 +1843,11 @@ void tspfldloaders::readfields ( void )
        
          pterraintype trn = getterraintype_forid ( k, 0 );
          if ( !trn ) 
-            throw tinvalidid ( "no terrain with matching id found; ID = ", k );
+            throw InvalidID ( "terrain", k );
 
          fld2->typ = trn->weather[weather];
          if ( !fld2->typ ) 
-            throw tinvalidid ( "no terrain with matching id found; ID = ", k );
+            throw InvalidID ( "terrain", k );
 
          if ( spfld->objectcrc ) 
             spfld->objectcrc->speedcrccheck->checkterrain2 ( fld2->typ->terraintype );
@@ -2253,10 +1859,8 @@ void tspfldloaders::readfields ( void )
             fld2->direction = 0; 
 
 
-         if (b1 & csm_vehicle ) {
-            fld2->vehicle = new tvehicle ( spfld );
-            fld2->vehicle->read ( stream );
-         }
+         if (b1 & csm_vehicle )
+            fld2->vehicle = new Vehicle ( stream, spfld );
 
 
          if (b1 & csm_building ) {
@@ -2352,7 +1956,7 @@ void tspfldloaders::readfields ( void )
                fld2->object->object[n]->typ = getobjecttype_forid ( id, 0 );
 
                if ( !fld2->object->object[n]->typ )
-                  throw tinvalidid ( "no object with matching ID found; ID = ", id );
+                  throw InvalidID ( "object", id );
 
                if ( spfld->objectcrc ) 
                   spfld->objectcrc->speedcrccheck->checkobj2 ( fld2->object->object[n]->typ );
@@ -2853,7 +2457,7 @@ int          tsavegameloaders::loadgame( const char *       name )
    if ( actmap->objectcrc ) 
       if ( actmap->objectcrc->speedcrccheck->getstatus ( )  ) {
          erasemap();
-         throw tnomaploaded();
+         throw NoMapLoaded();
       }
 
    if ( actmap->replayinfo ) {
@@ -3088,7 +2692,7 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
          logtofile ( "loaders / tnetworkloaders::loadnwgame / crc check failed; vor erasemap" );
          #endif
          erasemap();
-         throw tnomaploaded();
+         throw NoMapLoaded();
       }
 
    #ifdef logging
@@ -3132,7 +2736,7 @@ void  savemap( const char * name )
    catch ( tfileerror err) {
       displaymessage( "file error writing map to filename %s ", 1, err.filename );
    } /* endcatch */
-   catch ( terror err) {
+   catch ( ASCexception err) {
       displaymessage( "error writing map ", 1 );
    } /* endcatch */
 
@@ -3160,25 +2764,25 @@ void  loadmap( const char *       name )
          asc_free ( actmap->preferredfilenames->mapname[0] );
       actmap->preferredfilenames->mapname[0] = strdup ( name );
    }
-   catch ( tinvalidid err ) {
-      displaymessage( err.msg, 1 );
-      if ( actmap->xsize == 0)
-         throw tnomaploaded();
+   catch ( InvalidID err ) {
+      displaymessage( err.getMessage().c_str(), 1 );
+      if ( !actmap || actmap->xsize <= 0)
+         throw NoMapLoaded();
    } /* endcatch */
    catch ( tinvalidversion err ) {
       displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.filename, err.expected, err.found );
-      if ( actmap->xsize == 0)
-         throw tnomaploaded();
+      if ( !actmap || actmap->xsize <= 0)
+         throw NoMapLoaded();
    } /* endcatch */
    catch ( tfileerror err) {
       displaymessage( "error reading map filename %s ", 1, err.filename );
-      if ( actmap->xsize == 0)
-         throw tnomaploaded();
+      if ( !actmap || actmap->xsize <= 0)
+         throw NoMapLoaded();
    } /* endcatch */
-   catch ( terror ) {
+   catch ( ASCexception ) {
       displaymessage( "error loading map", 1 );
-      if ( actmap->xsize == 0)
-         throw tnomaploaded();
+      if ( !actmap || actmap->xsize <= 0)
+         throw NoMapLoaded();
    } /* endcatch */
 
    #ifdef logging
@@ -3196,7 +2800,7 @@ void  savegame( const char *       name )
    catch ( tfileerror err) {
       displaymessage( "error writing map to filename %s ", 1, err.filename );
    } /* endcatch */
-   catch ( terror err) {
+   catch ( ASCexception err) {
       displaymessage( "error writing map ", 1 );
    } /* endcatch */
 }
@@ -3211,25 +2815,25 @@ void  loadgame( const char *       name )
       tsavegameloaders gl;
       gl.loadgame ( name );
    }
-   catch ( tinvalidid err ) {
-      displaymessage( err.msg, 1 );
-      if ( actmap->xsize == 0)
-         throw tnomaploaded();
+   catch ( InvalidID err ) {
+      displaymessage( err.getMessage().c_str(), 1 );
+      if ( !actmap || actmap->xsize <= 0)
+         throw NoMapLoaded();
    } /* endcatch */
    catch ( tinvalidversion err ) {
       displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.filename, err.expected, err.found );
-      if ( actmap->xsize == 0)
-         throw tnomaploaded();
+      if ( !actmap || actmap->xsize <= 0)
+         throw NoMapLoaded();
    } /* endcatch */
    catch ( tfileerror err) {
       displaymessage( "error reading map filename %s ", 1, err.filename );
-      if ( actmap->xsize == 0)
-         throw tnomaploaded();
+      if ( !actmap || actmap->xsize <= 0)
+         throw NoMapLoaded();
    } /* endcatch */
-   catch ( terror ) {
+   catch ( ASCexception ) {
       displaymessage( "error loading game", 1 );
-      if ( actmap->xsize == 0)
-         throw tnomaploaded();
+      if ( !actmap || actmap->xsize <= 0)
+         throw NoMapLoaded();
    } /* endcatch */
 
    #ifdef logging
@@ -3249,7 +2853,7 @@ void  savereplay( int num )
       treplayloaders rl;
       rl.savereplay ( num );
    }
-   catch ( terror err) {
+   catch ( ASCexception err) {
       displaymessage( "error saving replay information", 1 );
    } /* endcatch */
 }
@@ -3264,25 +2868,25 @@ void  loadreplay( pmemorystreambuf streambuf )
       treplayloaders rl;
       rl.loadreplay ( streambuf );
    }
-   catch ( tinvalidid err ) {
-      displaymessage( err.msg, 1 );
+   catch ( InvalidID err ) {
+      displaymessage( err.getMessage().c_str(), 1 );
       if ( actmap->xsize == 0)
-         throw tnomaploaded();
+         throw NoMapLoaded();
    } /* endcatch */
    catch ( tinvalidversion err ) {
       displaymessage( "Replay stream %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.filename, err.expected, err.found );
       if ( actmap->xsize == 0)
-         throw tnomaploaded();
+         throw NoMapLoaded();
    } /* endcatch */
    catch ( tfileerror err) {
       displaymessage( "error reading map filename %s ", 1, err.filename );
       if ( actmap->xsize == 0)
-         throw tnomaploaded();
+         throw NoMapLoaded();
    } /* endcatch */
-   catch ( terror ) {
+   catch ( ASCexception ) {
       displaymessage( "error loading replay", 1 );
       if ( actmap->xsize == 0)
-         throw tnomaploaded();
+         throw NoMapLoaded();
    } /* endcatch */
 
    #ifdef logging
@@ -3460,7 +3064,7 @@ bool validatemapfile ( const char* filename )
 
    } /* endtry */
 
-   catch ( terror ) {
+   catch ( ASCexception ) {
        return 0;
    } /* endcatch */
 
@@ -3498,7 +3102,7 @@ bool validateemlfile ( const char* filename )
 
    } /* endtry */
 
-   catch ( terror ) {
+   catch ( ASCexception ) {
        return 0;
    } /* endcatch */
 
@@ -3534,7 +3138,7 @@ bool validatesavfile ( const char* filename )
 
    } /* endtry */
 
-   catch ( terror ) {
+   catch ( ASCexception ) {
        return 0;
    } /* endcatch */
 

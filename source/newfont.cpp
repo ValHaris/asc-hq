@@ -1,6 +1,9 @@
-//     $Id: newfont.cpp,v 1.8 2000-08-12 12:52:49 mbickel Exp $
+//     $Id: newfont.cpp,v 1.9 2000-10-11 14:26:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/08/12 12:52:49  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.7  2000/01/04 19:43:53  mbickel
 //      Continued Linux port
 //
@@ -541,7 +544,7 @@ void showtext4 ( const char* TextToOutput, int x1, int y1, ... )
 
    char tempbuf[1000];
 
-   int lng = vsprintf( tempbuf, TextToOutput, paramlist );
+   vsprintf( tempbuf, TextToOutput, paramlist );
    showtext2 ( tempbuf, x1, y1 );
 }
 
@@ -552,7 +555,7 @@ void showtext4c ( const char* TextToOutput, int x1, int y1, ... )
 
    char tempbuf[1000];
 
-   int lng = vsprintf( tempbuf, TextToOutput, paramlist );
+   vsprintf( tempbuf, TextToOutput, paramlist );
    showtext2c ( tempbuf, x1, y1 );
 }
 

@@ -465,7 +465,7 @@ int main(int argc, char *argv[] )
       }
    } /* endwhile */
 
-   printf ( "ftell: %d ; pos : %d ; num : %d \n ", ftell ( out ), pos, num );
+   printf ( "ftell: %d ; pos : %d ; num : %d \n ", int( ftell ( out )), pos, num );
 
    fwrite ( &num, 4, 1, out );
 

@@ -1,6 +1,9 @@
-//     $Id: sgstream.cpp,v 1.30 2000-09-20 15:05:10 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.31 2000-10-11 14:26:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/09/20 15:05:10  mbickel
+//      Better error handling on startup.
+//
 //     Revision 1.29  2000/08/21 17:51:02  mbickel
 //      Fixed: crash when unit reaching max experience
 //      Fixed: crash when displaying research image
@@ -203,10 +206,13 @@
 #include <sys/stat.h>
 
 
+
 #include "CLoadable.h"
 
 #include "tpascal.inc"
 #include "typen.h"
+#include "buildingtype.h"
+#include "vehicletype.h"
 #include "basegfx.h"
 #include "misc.h"
 #include "sgstream.h"
@@ -1089,7 +1095,7 @@ pvehicletype   loadvehicletype( pnstream stream )
 
       int   j;
 
-      pvehicletype fztn = new tvehicletype;
+      pvehicletype fztn = new Vehicletype;
    
       fztn->name = (char*) stream->readInt();
       fztn->description = (char*) stream->readInt();
@@ -1109,8 +1115,8 @@ pvehicletype   loadvehicletype( pnstream stream )
          }
       }
 
-      fztn->production.energy   = stream->readWord();
-      fztn->production.material = stream->readWord();
+      fztn->productionCost.energy   = stream->readWord();
+      fztn->productionCost.material = stream->readWord();
       fztn->armor = stream->readWord();
       for ( j = 0; j < 8; j++ ) 
           fztn->picture[j] = (void*)  stream->readInt();
@@ -1136,10 +1142,10 @@ pvehicletype   loadvehicletype( pnstream stream )
       fztn->loadcapabilityreq = stream->readChar();
       fztn->loadcapabilitynot = stream->readChar();
       fztn->id = stream->readWord();
-      fztn->tank = stream->readInt();
+      fztn->tank.fuel = stream->readInt();
       fztn->fuelConsumption = stream->readWord();
-      fztn->energy = stream->readInt();
-      fztn->material = stream->readInt();
+      fztn->tank.energy = stream->readInt();
+      fztn->tank.material = stream->readInt();
       fztn->functions = stream->readInt();
 
       for ( j = 0; j < 8; j++ ) 
@@ -1357,8 +1363,8 @@ void writevehicle( pvehicletype fztn, pnstream stream )
    else
       stream->writeInt( zero );  
 
-   stream->writeWord( fztn->production.energy ); 
-   stream->writeWord( fztn->production.material );
+   stream->writeWord( fztn->productionCost.energy );
+   stream->writeWord( fztn->productionCost.material );
    stream->writeWord( fztn->armor );
 
    for ( j = 0; j < 8; j++ )
@@ -1379,10 +1385,10 @@ void writevehicle( pvehicletype fztn, pnstream stream )
    stream->writeChar(fztn->loadcapabilityreq);
    stream->writeChar(fztn->loadcapabilitynot);
    stream->writeWord(fztn->id );
-   stream->writeInt(fztn->tank );
+   stream->writeInt(fztn->tank.fuel );
    stream->writeWord(fztn->fuelConsumption );
-   stream->writeInt(fztn->energy );
-   stream->writeInt(fztn->material );
+   stream->writeInt(fztn->tank.energy );
+   stream->writeInt(fztn->tank.material );
    stream->writeInt(fztn->functions );
    for ( j = 0; j < 8; j++ ) 
        stream->writeChar( fztn->movement[j] );
@@ -1735,7 +1741,7 @@ pbuildingtype       loadbuildingtype( pnstream stream )
    stream->readdata2 ( version );
    if ( version <= building_version && version >= 1) {
 
-      pbuildingtype pgbt = new tbuildingtype;
+      pbuildingtype pgbt = new Buildingtype;
    
       for ( v = 0; v < cwettertypennum; v++ )
          for ( w = 0; w < maxbuildingpicnum; w++ )
@@ -1774,20 +1780,20 @@ pbuildingtype       loadbuildingtype( pnstream stream )
 
       pgbt->construction_steps = stream->readInt( );
       pgbt->maxresearchpoints = stream->readInt( );
-      pgbt->_tank.a.energy = stream->readInt( );
-      pgbt->_tank.a.material = stream->readInt( );
-      pgbt->_tank.a.fuel = stream->readInt( );
-      pgbt->maxplus.a.energy = stream->readInt( );
-      pgbt->maxplus.a.material = stream->readInt( );
-      pgbt->maxplus.a.fuel = stream->readInt( );
+      pgbt->_tank.energy = stream->readInt( );
+      pgbt->_tank.material = stream->readInt( );
+      pgbt->_tank.fuel = stream->readInt( );
+      pgbt->maxplus.energy = stream->readInt( );
+      pgbt->maxplus.material = stream->readInt( );
+      pgbt->maxplus.fuel = stream->readInt( );
       pgbt->efficiencyfuel = stream->readInt( );
       pgbt->efficiencymaterial = stream->readInt( );
       pgbt->guibuildicon = (char*) stream->readInt( );
       pgbt->terrain_access = (pterrainaccess) stream->readInt( );
 
-      pgbt->_bi_maxstorage.a.energy = stream->readInt( );
-      pgbt->_bi_maxstorage.a.material = stream->readInt( );
-      pgbt->_bi_maxstorage.a.fuel = stream->readInt( );
+      pgbt->_bi_maxstorage.energy = stream->readInt( );
+      pgbt->_bi_maxstorage.material = stream->readInt( );
+      pgbt->_bi_maxstorage.fuel = stream->readInt( );
 
       pgbt->buildingheight = stream->readInt( );
       pgbt->buildingheight = 1 << log2 (pgbt->buildingheight); // to make sure just one bit is set
@@ -1887,20 +1893,20 @@ void writebuildingtype ( pbuildingtype bld, pnstream stream )
 
    stream->writeInt ( bld->construction_steps );
    stream->writeInt ( bld->maxresearchpoints );
-   stream->writeInt ( bld->_tank.a.energy );
-   stream->writeInt ( bld->_tank.a.material );
-   stream->writeInt ( bld->_tank.a.fuel );
-   stream->writeInt ( bld->maxplus.a.energy );
-   stream->writeInt ( bld->maxplus.a.material );
-   stream->writeInt ( bld->maxplus.a.fuel );
+   stream->writeInt ( bld->_tank.energy );
+   stream->writeInt ( bld->_tank.material );
+   stream->writeInt ( bld->_tank.fuel );
+   stream->writeInt ( bld->maxplus.energy );
+   stream->writeInt ( bld->maxplus.material );
+   stream->writeInt ( bld->maxplus.fuel );
    stream->writeInt ( bld->efficiencyfuel );
    stream->writeInt ( bld->efficiencymaterial );
    stream->writeInt ( (int) bld->guibuildicon );
    stream->writeInt ( (int) bld->terrain_access );
 
-   stream->writeInt ( bld->_bi_maxstorage.a.energy );
-   stream->writeInt ( bld->_bi_maxstorage.a.material );
-   stream->writeInt ( bld->_bi_maxstorage.a.fuel );
+   stream->writeInt ( bld->_bi_maxstorage.energy );
+   stream->writeInt ( bld->_bi_maxstorage.material );
+   stream->writeInt ( bld->_bi_maxstorage.fuel );
 
    stream->writeInt ( bld->buildingheight );
    stream->writeInt ( bld->unitheight_forbidden );
@@ -2655,9 +2661,9 @@ void checkFileLoadability ( const char* filename )
 {
    try {
       tnfilestream strm ( filename, 1 );
-      char a = strm.readChar();
+      strm.readChar();
    }
-   catch ( terror ) {
+   catch ( ASCexception ) {
       char temp[10000];
       temp[0] = 0;
       for ( int i = 0; i < 5; i++ )
@@ -2740,7 +2746,7 @@ void initFileIO ( const char* configFileName )
        exit(1);
       #endif
    }
-   catch ( terror err ) {
+   catch ( ASCexception err ) {
       const char* msg = "a fatal error occured while mounting the container files \n";
       #ifndef converter
        displaymessage ( msg, 2 );

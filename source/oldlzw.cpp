@@ -1,6 +1,9 @@
-//     $Id: oldlzw.cpp,v 1.4 2000-05-03 14:49:14 mbickel Exp $
+//     $Id: oldlzw.cpp,v 1.5 2000-10-11 14:26:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/05/03 14:49:14  mbickel
+//      Fixed a bug in LZW decompression
+//
 //     Revision 1.3  1999/11/22 18:27:47  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -433,7 +436,7 @@ int tlzwstreamcompression  :: readdata ( void* buf, int size, int excpt  )
                   count = LZWLoadBuffer ( 0, incode );
       
               if ( count == 0 )
-                 throw terror();
+                 throw ASCexception();
                              
               inchar = DecodeBuffer[ count - 1 ];
               while ( count )

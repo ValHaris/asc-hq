@@ -77,8 +77,8 @@ ascdemount_SOURCES = demount.cpp basestrm.cpp misc.cpp
 
 ascmount_SOURCES = mount.cpp basestrm.cpp misc.cpp
 
-ascmount_LDADD = -lSDL
-ascdemount_LDADD = -lSDL
+ascmount_LDADD = -lSDL ../../libs/bzlib/libbz2.a
+ascdemount_LDADD = -lSDL ../../libs/bzlib/libbz2.a
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../../config.h
 CONFIG_CLEAN_FILES = 
@@ -90,10 +90,10 @@ CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 ascdemount_OBJECTS =  demount.o basestrm.o misc.o
-ascdemount_DEPENDENCIES = 
+ascdemount_DEPENDENCIES =  ../../libs/bzlib/libbz2.a
 ascdemount_LDFLAGS = 
 ascmount_OBJECTS =  mount.o basestrm.o misc.o
-ascmount_DEPENDENCIES = 
+ascmount_DEPENDENCIES =  ../../libs/bzlib/libbz2.a
 ascmount_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)

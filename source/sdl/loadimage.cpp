@@ -50,10 +50,11 @@ int loadFullscreenImage ( const char* filename )
    try {
       if ( exist ( filename )) {
          tnfilestream stream ( filename, 1 );
-         if ( strstr ( filename, ".PCX" ) || strstr ( filename, ".pcx" ))
+         if ( strstr ( filename, ".PCX" ) || strstr ( filename, ".pcx" )) {
             loadpcxxy ( &stream, 0, 0 );
-         else
+         } else {
             read_JPEG_file ( &stream );
+         }
          return 1;
       } else {
          string s = filename;

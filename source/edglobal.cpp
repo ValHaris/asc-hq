@@ -1,6 +1,9 @@
-//     $Id: edglobal.cpp,v 1.18 2000-08-12 12:52:46 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.19 2000-10-11 14:26:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/08/12 12:52:46  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.17  2000/08/06 11:39:03  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -97,6 +100,8 @@
 
 #include <stdarg.h>
 
+#include "vehicletype.h"
+#include "buildingtype.h"
 #include "edmisc.h"
 #include "loadbi3.h"
 #include "edevents.h"
@@ -591,13 +596,15 @@ void execaction(int code)
        break;
     case act_setactivefieldvals : {
                   pfield fld = getactfield();
+                  /*
                   if ( fld->vehicle ) {
                      auswahlf = fld->vehicle->typ;
                      altefarbwahl = farbwahl;
                      farbwahl = fld->vehicle->color/8;
                      lastselectiontype = cselunit;
                      setnewvehicleselection ( auswahlf );
-                  } else 
+                  } else */
+
                   if ( fld->object && fld->object->objnum ) {
                      actobject = fld->object->object[ fld->object->objnum -1 ]->typ ;
                      lastselectiontype = cselobject;

@@ -1,6 +1,10 @@
-//     $Id: dlg_box.cpp,v 1.30 2000-08-26 15:33:41 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.31 2000-10-11 14:26:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/08/26 15:33:41  mbickel
+//      Warning message displayed if empty password is entered
+//      pcxtank now displays error messages
+//
 //     Revision 1.29  2000/08/12 12:52:45  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -2287,7 +2291,6 @@ void         tdialogbox::stredit(char *       s,
 
   #ifdef _DOS_
    #ifdef NEWKEYB
-   // reset_keypress ();
    initkeyb();
    #endif
   #endif
@@ -2571,7 +2574,6 @@ void         tdialogbox::intedit(int *    st,
 
    #ifdef _DOS_
     #ifdef NEWKEYB
-    // reset_keypress ();
     initkeyb();
     #endif
    #endif
@@ -3873,4 +3875,18 @@ int      getid( char*  title, int lval,int min,int max)
    gi.run();
    gi.done();
    return gi.mid;
+}
+
+void fatalError ( const char* formatstring, ... )
+{
+   va_list paramlist;
+   va_start ( paramlist, formatstring );
+
+   char tempbuf[1000];
+
+   int lng = vsprintf( tempbuf, formatstring, paramlist );
+   if ( lng >= 1000 )
+      displaymessage ( "dlg_box.cpp / fatalError:   string to long !\nPlease report this error",1 );
+
+   displaymessage ( tempbuf, 2 );
 }

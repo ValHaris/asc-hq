@@ -4,6 +4,7 @@
 #ifndef __WATCOM_CPLUSPLUS__
  #include <heap.h>
 #endif
+#include "vehicletype.h"
 #include "spfst.h"
 #include "controls.h"
 

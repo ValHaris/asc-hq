@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.61 2000-09-27 16:08:27 mbickel Exp $
+//     $Id: spfst.cpp,v 1.62 2000-10-11 14:26:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2000/09/27 16:08:27  mbickel
+//      AI improvements
+//
 //     Revision 1.60  2000/09/25 20:04:39  mbickel
 //      AI improvements
 //
@@ -293,6 +296,9 @@
 #endif
 
 
+#include "vehicletype.h"
+#include "buildingtype.h"
+
 #include "basestrm.h"
 #include "tpascal.inc"
 #include "misc.h"
@@ -317,7 +323,7 @@
 
 #include "dialog.h"
 #include "loadbi3.h"
-
+#include "mapalgorithms.h"
 
 
 
@@ -635,12 +641,12 @@ void         initmap( void )
    actmap->time.a.turn = 1;
    actmap->time.a.move = 0;
 
-  #ifndef karteneditor
    for ( int j = 0; j < 8; j++ )
-      quedevents[j] = 1;
+      actmap->queuedEvents[j] = 1;
+   #ifndef karteneditor
    getnexteventtime();
-  #endif
-   
+   #endif
+
   #ifdef logging
    logtofile("initmap anfang");
        {
@@ -708,9 +714,9 @@ void         initmap( void )
       i++;
 
    for ( int n = 0; n< 8; n++ ) {
-      actmap->bi_resource[n].a.energy = 0;
-      actmap->bi_resource[n].a.material = 0;
-      actmap->bi_resource[n].a.fuel = 0;
+      actmap->bi_resource[n].energy = 0;
+      actmap->bi_resource[n].material = 0;
+      actmap->bi_resource[n].fuel = 0;
    }
 
 
@@ -723,70 +729,6 @@ void         initmap( void )
 } 
 
 
-int          getdirection(    int      x1,
-                              int      y1,
-                              int      x2,
-                              int      y2)
-
-{ 
-  #ifdef HEXAGON 
-    int a;
-    int dx = (2 * x2 + (y2 & 1)) - (2 * x1 + (y1 & 1)); 
-    int dy = y2 - y1; 
-
-    if (dx < 0) 
-       if (dy < 0) 
-          a = 5; 
-       else 
-          a = 4; 
-    else 
-       if (dx > 0) 
-          if (dy < 0) 
-             a = 1; 
-          else 
-             a = 2; 
-       else  // dx is 0
-          if (dy < 0) 
-             a = 0; 
-          else
-             if ( dy > 0 )
-                a = 3;
-             else
-                a = -1;
-    return a; 
-
-
-  #else
-    int      a; 
-    int      dx, dy; 
-  
-     dx = (2 * x2 + (y2 & 1)) - (2 * x1 + (y1 & 1)); 
-     dy = y2 - y1; 
-     if (dx < 0) 
-        if (dy < 0) 
-           a = 7; 
-        else 
-           if (dy == 0) 
-              a = 6; 
-           else 
-              a = 5; 
-     else 
-        if (dx > 0) 
-           if (dy < 0) 
-              a = 1; 
-           else 
-              if (dy == 0) 
-                 a = 2; 
-              else 
-                 a = 3; 
-        else 
-           if (dy < 0) 
-              a = 0; 
-           else 
-              a = 4; 
-     return a; 
-   #endif
-} 
 
 
 
@@ -917,136 +859,8 @@ int  resizemap( int top, int bottom, int left, int right )  // positive: larger
 
 
 
-#ifdef HEXAGON
-  int         ccmpheighchangemovedir[6]  = {0, 1, 5, 2, 4, 3 }; 
-  
-  void         getnextfielddir(int&       x,
-                               int&       y,
-                               int       direc,
-                               int       sdir)
-  { 
-     int newdir = ccmpheighchangemovedir[direc] + sdir;
-     if ( newdir >= 6 )
-        newdir -= 6;
-
-     getnextfield( x, y, newdir ); 
-  } 
-
-#else
-  int         ccmpheighchangemovedir[8]  = {0, 1, 7, 2, 6, 3, 5, 4}; 
-  
-  
-  void         getnextfielddir(int&       x,
-                               int&       y,
-                               int       direc,
-                               int       sdir)
-  { 
-     getnextfield( x, y, (ccmpheighchangemovedir[direc] + sdir) & 7); 
-  } 
-
-#endif
 
 
-
-
-void         getnextfield(int&       x,
-                          int&       y,
-                          int       direc)
-{ 
-   switch (direc) {
-      
-    #ifdef HEXAGON
-      case 0: y-=2   ;                      /*  oben  */
-              break;
-      
-      case 1: if ((y & 1) == 1) x+=1;        /*  rechts oben  */
-              y-=1;
-              break;
-      
-      case 2: if ((y & 1) == 1) x+=1;        /*  rechts unten  */
-              y+=1;
-              break;
-      
-      case 3: y+=2;                          /*  unten  */
-              break;
-      
-      case 4: if ((y & 1) == 0) x-=1;        /*  links unten  */
-              y+=1;
-              break;
-      
-      case 5: if ((y & 1) == 0) x-=1;        /*  links oben  */
-              y-=1;
-              break;
-              
-    #else
-    
-      case 0: y-=2   ;                      /*  oben  */
-              break;
-      
-      case 1: if ((y & 1) == 1) x+=1;        /*  rechts oben  */
-              y-=1;
-              break;
-      
-      case 2: x+=1;                        /*  rechts  */
-              break;
-      
-      case 3: if ((y & 1) == 1) x+=1;        /*  rechts unten  */
-              y+=1;
-              break;
-      
-      case 4: y+=2;                          /*  unten  */
-              break;
-      
-      case 5: if ((y & 1) == 0) x-=1;        /*  links unten  */
-              y+=1;
-              break;
-      
-      case 6: x-=1;                        /*  links  */
-              break;
-      
-      case 7: if ((y & 1) == 0) x-=1;        /*  links oben  */
-              y-=1;
-              break;
-   #endif
-   } 
-} 
-
-
-
-int      vehiclegeladen( pvehicle    eht)
-{ 
-  int         a, b; 
-  
-   a = 0; 
-   if ((eht == NULL) || (eht->typ == NULL)) { 
-      return( 0 );
-   } 
-   if (eht->typ->loadcapacity == 0)  
-      return( 0 );
-
-   for (b = 0; b <= 31; b++) 
-      if ( eht->loading[b] ) 
-         a++; 
-   return a; 
-} 
-
-
-int         vehiclegeparkt(pbuilding    eht)
-{ 
-  int         a, b; 
-
-   a = 0; 
-   if ((eht == NULL) || (eht->typ == NULL))  
-      return ( 0 );
-
-   if (eht->typ->loadcapacity == 0) 
-      return ( 0 );
-
-   for (b = 0; b <= 31; b++) 
-      if (eht->loading[b] ) 
-         a++; 
-   return a; 
-} 
 
 
 int          terrainaccessible ( const pfield        field, const pvehicle     vehicle, int uheight )
@@ -1167,88 +981,6 @@ int         fieldaccessible( const pfield        field,
    return 0;
 } 
 
-
-void         generate_vehicle(pvehicletype fztyp,
-                             int         col,
-                             pvehicle &   vehicle )
-{
-   if ( col > 8 )
-      displaymessage ( "internal error !\ngenerate_vehicle :: col must be between 0 and 8 !", 1 );
-
-   vehicle = new tvehicle;
-
-  vehicle->color = col * 8 ;
-
-   vehicle->typ = fztyp;
-
-   actmap->chainunit ( vehicle );
-
-   vehicle->damage = 0;
-   vehicle->fuel = 0;
-   vehicle->experience = 0; 
-   vehicle->height = 1 << log2( fztyp->height ); 
-   vehicle->attacked = false; 
-   vehicle->direction = 0; 
-   vehicle->connection = 0; 
-   vehicle->energy = 0;
-   vehicle->material = 0; 
-//   vehicle->threats = 0; 
-//   vehicle->order = 0; 
-   vehicle->xpos = getxpos();
-   vehicle->ypos = getypos();
-   vehicle->generatoractive = 0;
-   actmap->unitnetworkid++;
-   vehicle->networkid = actmap->unitnetworkid; 
-
-   
-//   vehicle->completethreatvalue = 0; 
-//   vehicle->completethreatvaluesurr = 0; 
-   vehicle->name = NULL;
-   vehicle->klasse = 0;
-
-   vehicle->functions = vehicle->typ->functions & vehicle->typ->classbound[vehicle->klasse].vehiclefunctions;
-   vehicle->armor = vehicle->typ->armor * vehicle->typ->classbound[vehicle->klasse].armor / 1024;
-
-//   memset( &vehicle->threatvalue, 0, sizeof(vehicle->threatvalue)); 
-
-   if ( vehicle->typ->weapons->count ) { 
-      int m;
-      for (m = 0; m < vehicle->typ->weapons->count ; m++) { 
-         vehicle->weapstrength[m] = vehicle->typ->weapons->weapon[m].maxstrength * vehicle->typ->classbound[vehicle->klasse].weapstrength[vehicle->typ->weapons->weapon[m].getScalarWeaponType()] / 1024;
-         vehicle->ammo[m] = 0;
-      } 
-
-      for ( int k = m + 1; k <= 7; k++) 
-         vehicle->ammo[k] = 0; 
-   } 
-   
-   if (vehicle->typ->height & chfahrend ) 
-      vehicle->height = chfahrend; 
-   else 
-      if (vehicle->typ->height & chschwimmend )
-         vehicle->height = chschwimmend;
-     
-   vehicle->setMovement ( vehicle->typ->movement[log2(vehicle->height)] );  
-} 
-
-
-void         generatevehicle_ka ( pvehicletype fztyp,
-                                  int         col,
-                                  pvehicle &   vehicle)
-{
-   generate_vehicle ( fztyp, col, vehicle );
-   vehicle->fuel = fztyp->tank;
-   vehicle->material = fztyp->material;
-   vehicle->energy = 0;
-   vehicle->generatoractive = 0;
-
-   for ( int m = 0; m < vehicle->typ->weapons->count ; m++) {
-      vehicle->ammo[m] = fztyp->weapons->weapon[m].count;
-      vehicle->weapstrength[m] = fztyp->weapons->weapon[m].maxstrength;
-   }
-   vehicle->armor = vehicle->typ->armor;
-   vehicle->klasse = 255;
-}
 
 
 
@@ -1503,26 +1235,6 @@ int getypos(void)
 
 
 
-int beeline ( const pvehicle a, const pvehicle b )
-{
-   return beeline ( a->xpos, a->ypos, b->xpos, b->ypos );
-}
-
-int beeline ( int x1, int y1, int x2, int y2 )
-{
-  #ifdef HEXAGON
-  int num = 0;
-  while ( x1 != x2  || y1 != y2 ) {
-     num++;
-     getnextfield ( x1, y1, getdirection ( x1, y1, x2, y2 ));
-  }
-  return minmalq*num;
-
-  #else
-  return luftlinie8( x1, y1, x2, y2 );
-  #endif
-
-}
 
 /*
 
@@ -1684,53 +1396,6 @@ pfield        getfield(int          x,
 }
 
 
-#define compensatebuildingcoordinateorgx (a) (dx & (~a))
-#define compensatebuildingcoordinatex ( + (dx & ~b) )
-
-
-pfield        getbuildingfield( const pbuilding    bld,
-                              shortint     x,
-                              shortint     y)
-{ 
-  integer      x1, y1; 
-  integer      orgx, orgy;
-  shortint     dx; 
-
-   orgx = bld->xpos - bld->typ->entry.x; 
-   orgy = bld->ypos - bld->typ->entry.y; 
-
-   dx = orgy & 1; 
-   orgx += (dx & (~ bld->typ->entry.y));
-   
-   y1=orgy+y;  
-
-   x1 = orgx + x - (dx & y1); 
-
-   return getfield(x1,y1); 
-} 
-
-
-
-void         getbuildingfieldcoordinates( const pbuilding    bld,
-                                         shortint     x,
-                                         shortint     y,
-                                         int     &    xx,
-                                         int     &    yy)
-{ 
-  integer      orgx, orgy; 
-  shortint     dx; 
-
-   orgx = bld->xpos - bld->typ->entry.x; 
-   orgy = bld->ypos - bld->typ->entry.y; 
-
-   dx = orgy & 1; 
-
-   orgx += (dx & (~ bld->typ->entry.y));
-   
-   yy=orgy+y;
-   xx=orgx+x-(dx & yy);
-
-}
 
 
 
@@ -2429,10 +2094,8 @@ void         removevehicle(pvehicle*   vehicle)
       } 
       else {
          actmap->player[b].firstvehicle = NULL; 
-         #ifndef karteneditor
-           for ( int i = 0; i < 8; i++ )
-              quedevents[i]++;
-         #endif
+         for ( int i = 0; i < 8; i++ )
+            actmap->queuedEvents[i]++;
       }
    } 
 
@@ -2478,10 +2141,8 @@ void         removebuilding(pbuilding *  bld)
       } 
       else {
          actmap->player[b].firstbuilding = NULL; 
-         #ifndef karteneditor
-           for ( int i = 0; i < 8; i++ )
-              quedevents[i]++;
-         #endif
+         for ( int i = 0; i < 8; i++ )
+            actmap->queuedEvents[i]++;
       }
    } 
    int set = building->unchainbuildingfromfield();
@@ -2512,95 +2173,6 @@ void         removebuilding(pbuilding *  bld)
 
 
 
-int  tbuilding :: chainbuildingtofield ( int x, int y )
-{
-
-   int orgx = x - typ->entry.x - (typ->entry.y & ~y & 1 );
-   int orgy = y - typ->entry.y; 
-
-   int dx = orgy & 1; 
-
-
-   int a;
-   for ( a = orgx; a <= orgx + 3; a++) 
-      for ( int b = orgy; b <= orgy + 5; b++) 
-         if ( typ->getpicture ( a - orgx, b - orgy )) {
-            pfield f = getfield(a + compensatebuildingcoordinatex, b );
-            if ( !f )
-               return 1;
-
-            if ( f->building )
-               return 1;
-         }
-
-   for ( a = orgx; a <= orgx + 3; a++) 
-      for ( int b = orgy; b <= orgy + 5; b++) 
-         if ( typ->getpicture ( a - orgx, b - orgy ))
-             { 
-              pfield field = getfield(a + compensatebuildingcoordinatex, b );
-               if ( field->object ) {
-                  for ( int n = 0; n < field->object->objnum; n++ )
-                     delete field->object->object[n];
-                  field->object->objnum = 0;
-               }
-
-               if ( field->vehicle )
-                  removevehicle ( &field->vehicle );
-
-               field = getfield(a + compensatebuildingcoordinatex, b );
-               field->building = this;
-
-               // field->picture = gbde->typ->picture[compl][a - orgx][b - orgy]; 
-               field->bdt &= ~( cbstreet | cbrailroad | cbpipeline | cbpowerline );
-              } 
-            
-   xpos = x;
-   ypos = y;
-
-   for ( int i = 0; i < 32; i++ )
-      if ( loading[i] )
-         loading[i]->setnewposition ( x, y );
-
-
-   pfield field = getbuildingfield( this, typ->entry.x, typ->entry.y ); 
-   field->bdt |= cbbuildingentry ; 
-
-   resetbuildingpicturepointers ( this );
-   calculateallobjects(); 
-
-   return 0;
-}
-
-
-int  tbuilding :: unchainbuildingfromfield ( void )
-{
-   int set = 0;
-   for (int i = 0; i <= 3; i++) 
-      for (int j = 0; j <= 5; j++) 
-         if ( typ->getpicture ( i, j ) ) {
-            pfield fld = getbuildingfield( this, i, j ); 
-            if ( fld && fld->building == this ) {
-               set = 1;
-               fld->building = NULL; 
-               fld->picture = fld->typ->picture[0]; 
-               if ( fld->vehicle ) 
-                  removevehicle( &fld->vehicle ); 
-
-               tterrainbits t1 = cbstreet | cbbuildingentry | cbrailroad | cbpowerline | cbpipeline;
-               tterrainbits t2 = ~t1;
-
-               fld->bdt &= t2; 
-
-               #ifndef karteneditor
-                if ( typ->destruction_objects[i][j] )
-                   fld->addobject ( getobjecttype_forid ( typ->destruction_objects[i][j] ), -1, 1 );
-
-               #endif
-
-            }
-         } 
-   return set;
-}
 
 
 void         putbuilding(int          x,
@@ -2644,7 +2216,7 @@ void         putbuilding(int          x,
          } 
 
 
-   gbde = new tbuilding;
+   gbde = new Building;
    gbde->color = color; 
 
    actmap->chainbuilding ( gbde );
@@ -2662,16 +2234,16 @@ void         putbuilding(int          x,
    memset( &gbde->munitionsautoproduction  , 0, sizeof (gbde->munitionsautoproduction   ));
 
    gbde->damage = 0; 
-   gbde->plus.a.energy = 0; 
-   gbde->plus.a.material = 0; 
-   gbde->plus.a.fuel = 0; 
-   gbde->maxplus.a.energy = gbde->typ->maxplus.a.energy; 
-   gbde->maxplus.a.material = gbde->typ->maxplus.a.material; 
-   gbde->maxplus.a.fuel = gbde->typ->maxplus.a.fuel; 
+   gbde->plus.energy = 0;
+   gbde->plus.material = 0;
+   gbde->plus.fuel = 0;
+   gbde->maxplus.energy = gbde->typ->maxplus.energy;
+   gbde->maxplus.material = gbde->typ->maxplus.material;
+   gbde->maxplus.fuel = gbde->typ->maxplus.fuel;
 
-   gbde->actstorage.a.fuel = 0; 
-   gbde->actstorage.a.material = 0; 
-   gbde->actstorage.a.energy = 0; 
+   gbde->actstorage.fuel = 0;
+   gbde->actstorage.material = 0;
+   gbde->actstorage.energy = 0;
    gbde->maxresearchpoints = 0; 
    gbde->researchpoints = 0; 
    gbde->name = NULL;
@@ -2725,7 +2297,7 @@ void         putbuilding2(integer      x,
          } 
                           
    if (getfield(x,y)->building == NULL) { 
-      gbde = new tbuilding;
+      gbde = new Building;
       gbde->color = color; 
 
       actmap->chainbuilding ( gbde );
@@ -2742,46 +2314,43 @@ void         putbuilding2(integer      x,
       memset( &gbde->productionbuyable, 0, sizeof (gbde->productionbuyable ));
 
       {
-         tresources maxplus;
-         tresources actplus;
-         tresources biplus;
+         Resources maxplus;
+         Resources actplus;
+         Resources biplus;
          int maxresearch = 0;
 
-         memset ( &maxplus, 0, sizeof ( maxplus ));
-         memset ( &actplus, 0, sizeof ( actplus ));
-         memset ( &biplus,  0, sizeof ( biplus ));
          pbuilding bld = actmap->player[ color/8].firstbuilding;
          while ( bld ) {
             if ( bld->typ == gbde->typ  && bld != gbde ) {
 
-               if ( bld->maxplus.a.energy > maxplus.a.energy )
-                  maxplus.a.energy = bld->maxplus.a.energy;
+               if ( bld->maxplus.energy > maxplus.energy )
+                  maxplus.energy = bld->maxplus.energy;
 
-               if ( bld->maxplus.a.material > maxplus.a.material )
-                  maxplus.a.material = bld->maxplus.a.material;
+               if ( bld->maxplus.material > maxplus.material )
+                  maxplus.material = bld->maxplus.material;
 
-               if ( bld->maxplus.a.fuel > maxplus.a.fuel )
-                  maxplus.a.fuel = bld->maxplus.a.fuel;
-
-
-               if ( bld->bi_resourceplus.a.energy > biplus.a.energy )
-                  biplus.a.energy = bld->bi_resourceplus.a.energy;
-
-               if ( bld->bi_resourceplus.a.material > biplus.a.material )
-                  biplus.a.material = bld->bi_resourceplus.a.material;
-
-               if ( bld->bi_resourceplus.a.fuel > biplus.a.fuel )
-                  biplus.a.fuel = bld->bi_resourceplus.a.fuel;
+               if ( bld->maxplus.fuel > maxplus.fuel )
+                  maxplus.fuel = bld->maxplus.fuel;
 
 
-               if ( bld->plus.a.energy > actplus.a.energy )
-                  actplus.a.energy = bld->plus.a.energy;
+               if ( bld->bi_resourceplus.energy > biplus.energy )
+                  biplus.energy = bld->bi_resourceplus.energy;
 
-               if ( bld->plus.a.material > actplus.a.material )
-                  actplus.a.material = bld->plus.a.material;
+               if ( bld->bi_resourceplus.material > biplus.material )
+                  biplus.material = bld->bi_resourceplus.material;
 
-               if ( bld->plus.a.fuel > actplus.a.fuel )
-                  actplus.a.fuel = bld->plus.a.fuel;
+               if ( bld->bi_resourceplus.fuel > biplus.fuel )
+                  biplus.fuel = bld->bi_resourceplus.fuel;
+
+
+               if ( bld->plus.energy > actplus.energy )
+                  actplus.energy = bld->plus.energy;
+
+               if ( bld->plus.material > actplus.material )
+                  actplus.material = bld->plus.material;
+
+               if ( bld->plus.fuel > actplus.fuel )
+                  actplus.fuel = bld->plus.fuel;
 
 
                if ( bld->maxresearchpoints > maxresearch )
@@ -2793,23 +2362,23 @@ void         putbuilding2(integer      x,
 
          gbde->damage = 0; 
          if ( actmap->_resourcemode == 1 ) {
-            gbde->plus.a.energy = biplus.a.energy; 
-            gbde->plus.a.material = biplus.a.material; 
-            gbde->plus.a.fuel = biplus.a.fuel; 
+            gbde->plus.energy = biplus.energy;
+            gbde->plus.material = biplus.material;
+            gbde->plus.fuel = biplus.fuel;
          } else {
-            gbde->plus.a.energy = maxplus.a.energy; 
-            gbde->plus.a.material = maxplus.a.material; 
-            gbde->plus.a.fuel = maxplus.a.fuel; 
+            gbde->plus.energy = maxplus.energy;
+            gbde->plus.material = maxplus.material;
+            gbde->plus.fuel = maxplus.fuel;
          }
-         gbde->maxplus.a.energy = maxplus.a.energy; 
-         gbde->maxplus.a.material = maxplus.a.material; 
-         gbde->maxplus.a.fuel = maxplus.a.fuel; 
-         gbde->bi_resourceplus.a.energy = biplus.a.energy; 
-         gbde->bi_resourceplus.a.material = biplus.a.material; 
-         gbde->bi_resourceplus.a.fuel = biplus.a.fuel; 
-         gbde->actstorage.a.fuel = 0; 
-         gbde->actstorage.a.material = 0; 
-         gbde->actstorage.a.energy = 0; 
+         gbde->maxplus.energy = maxplus.energy;
+         gbde->maxplus.material = maxplus.material;
+         gbde->maxplus.fuel = maxplus.fuel;
+         gbde->bi_resourceplus.energy = biplus.energy;
+         gbde->bi_resourceplus.material = biplus.material;
+         gbde->bi_resourceplus.fuel = biplus.fuel;
+         gbde->actstorage.fuel = 0;
+         gbde->actstorage.material = 0;
+         gbde->actstorage.energy = 0;
          gbde->maxresearchpoints = maxresearch; 
          gbde->researchpoints = 0; 
          gbde->name = NULL;
@@ -2834,21 +2403,13 @@ void         putbuilding2(integer      x,
 
 
 
-void         resetbuildingpicturepointers ( pbuilding bld )
-{ 
-   if ( bld->visible )
-      for (int x = 0; x < 4; x++) 
-         for ( int y = 0; y < 6; y++ ) 
-            if ( bld->getpicture ( x, y ) )
-                getbuildingfield ( bld, x, y )->picture = bld->getpicture ( x, y );
-} 
 
 void         resetallbuildingpicturepointers ( void )
 {
    for (int s = 0; s < 8; s++) {
       pbuilding bld = actmap->player[s].firstbuilding;
       while ( bld ) {
-         resetbuildingpicturepointers ( bld );
+         bld->resetPicturePointers ();
          bld = bld->next;
       } /* endwhile */
    } /* endfor */
@@ -5128,7 +4689,7 @@ int getcrc ( const pvehicletype fzt )
     if ( !fzt )
        return -1;
 
-    tvehicletype fz = *fzt;
+    Vehicletype fz = *fzt;
     fz.name = NULL;
     fz.description = NULL;
     fz.infotext = NULL;
@@ -5260,7 +4821,7 @@ int getcrc ( const pbuildingtype bld )
     if ( !bld )
        return -1;
 
-    tbuildingtype b = *bld;
+    Buildingtype b = *bld;
     for ( int i = 0; i < maxbuildingpicnum; i++ )
        for ( int j = 0; j < 4; j++ )
           for ( int k = 0; k < 6; k++ )
@@ -5278,135 +4839,7 @@ int getcrc ( const pbuildingtype bld )
     return crc32buf ( &b, sizeof ( b ));
 }
 
-
-tsearchfields :: tsearchfields ( void )
-{
-   abbruch = 0;
-}
-
-
-
-void         tsearchfields::initsuche( int  sx, int  sy, word max, word min )
-{ 
-   maxdistance = max; 
-   mindistance = min; 
-   if (mindistance == 0) mindistance = 1; 
-   if (maxdistance == 0) maxdistance = 1; 
-   startx = sx; 
-   starty = sy; 
-} 
-
-
-#ifdef HEXAGON
-
-void         tsearchfields::startsuche(void)
-{ 
-  if ( abbruch )
-     return;
-
-   int   step; 
-
-   if (mindistance > maxdistance) 
-      step = -1; 
-   else 
-      step = 1; 
-   int strecke = mindistance; 
-
-   do { 
-      dist = strecke; 
-
-      xp = startx; 
-      yp = starty - 2*strecke; 
-      for ( int e = 0; e < 6; e++ ) {
-         int dir = (e + 2) % sidenum;
-         for ( int c = 0; c < strecke; c++) { 
-            if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) 
-               testfield(); 
-            getnextfield ( xp, yp, dir );
-         }
-
-         if ( abbruch ) 
-            return;
-      } 
-
-      strecke += step; 
-
-   }  while (!((strecke - step == maxdistance) || abbruch)); 
-} 
-
-#else
-
-void         tsearchfields::startsuche(void)
-{ 
-  if ( abbruch )
-     return;
-
-  word         strecke; 
-  int          a, c;
-  shortint     step; 
-
-   if (mindistance > maxdistance) 
-      step = -1; 
-   else 
-      step = 1; 
-   strecke = mindistance; 
-
-   do { 
-      dist = strecke; 
-      a = startx - strecke; 
-
-      xp = a; 
-      yp = starty; 
-      for (c = 1; c <= 2 * strecke; c++) { 
-         yp--;
-         if ((starty & 1) == (c & 1)) 
-           xp++;
-         if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) 
-            testfield(); 
-         if (abbruch) return;
-      } 
-
-      xp = startx + strecke + (starty & 1); 
-      yp = starty; 
-      for (c = 0; c < 2 * strecke ; c++) { 
-         if ((starty & 1) != (c & 1)) 
-            xp--;
-         if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) 
-            testfield(); 
-         if (abbruch) 
-            return;
-         yp--;
-      } 
-
-      yp = starty + strecke * 2 - 1; 
-      xp = startx - (yp & 1);
-      for (c = 1; c <= 2 * strecke; c++) {   /*  ????????  */ 
-         if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) 
-            testfield(); 
-         if (abbruch) 
-           return;
-         if ((starty & 1) == (c & 1)) xp--;
-
-         yp--;
-      } 
-
-      xp = startx; 
-      yp = starty + 2 * strecke; 
-      for (c = 0; c <= 2 * strecke - 1; c++) { 
-         if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) 
-            testfield(); 
-         if ((starty & 1) != (c & 1)) 
-           xp++;
-         yp--;
-         if (abbruch) return;
-      } 
-      strecke += step; 
-   }  while (!((strecke - step == maxdistance) || abbruch)); 
-} 
-#endif
-
-  
-tlockdispspfld :: tlockdispspfld ( void ) 
+tlockdispspfld :: tlockdispspfld ( void )
 { 
    lockdisplaymap ++; 
 }
@@ -5428,7 +4861,7 @@ class tdisplaywholemap : public tgeneraldisplaymap {
           virtual void init ( int xs, int ys );
           void cp_buf ( void );
 
-          ~tdisplaywholemap ();
+          virtual ~tdisplaywholemap ();
 
 };
 
@@ -5637,7 +5070,7 @@ int IsInSetOfWord( int Wert, int* A )
           Pos++;
     } else {
        while ( Anz2 > 0) { 
-         if ( Wert = A[Pos] )
+         if ( Wert == A[Pos] )
             res = 1;
          Pos++;
          Anz2--;
@@ -5971,7 +5404,7 @@ void swapbuildings ( pbuilding building, pbuilding orgbuilding )
       npush ( building->next );
       npush ( building->prev );
 
-      tbuilding temp = *orgbuilding;
+      Building temp = *orgbuilding;
       *orgbuilding = *building;
       *building = temp;
 
@@ -6143,26 +5576,8 @@ void tmousescrollproc :: mouseaction ( void )
 
 
 
-#ifndef sgmain
-void tbuilding :: changecompletion ( int d ) {}
-int  tbuilding :: getresourceplus ( int mode, tresources* plus, int queryonly ) { return 0;};
-void tbuilding :: execnetcontrol ( void ) {}
-int  tbuilding :: processmining ( int res, int abbuchen ) { return 0; }
-int  tbuilding :: put_energy ( int      need,    int resourcetype, int queryonly, int scope  )  { return 0; }
-int  tbuilding :: get_energy ( int      need,    int resourcetype, int queryonly, int scope  )  { return 0; }
-void tbuilding :: getresourceusage ( tresources* usage ) { usage->a.energy = 0;
-                                                           usage->a.material =  0;
-                                                           usage->a.fuel = 0;
-                                                         }
-#else
-void tbuilding :: changecompletion ( int d )
-{
-  completion += d;
-  resetbuildingpicturepointers ( this );
-}
 
-#endif
-   
+
 
 
 /** Returns the SingleWeapon corresponding to the weaponNum for this
@@ -6172,290 +5587,6 @@ SingleWeapon *Vehicle::getWeapon( unsigned weaponNum ) {
   // printf( "getWeapon(%u)\n", weaponNum );
   UnitWeapon *weapons=typ->weapons;
   return (weaponNum<=weapons->count)?weapons->weapon+weaponNum:NULL;;
-}
-
-int Vehicle :: buildingconstructable ( pbuildingtype building )
-{
-   if ( !building )
-      return 0;
-
-
-   if ( actmap->getgameparameter(cgp_forbid_building_construction) )
-       return 0;
-
-   int mf = actmap->getgameparameter ( cgp_building_material_factor );
-   int ff = actmap->getgameparameter ( cgp_building_fuel_factor );
-
-   if ( !mf )
-      mf = 100;
-   if ( !ff )
-      ff = 100;
-
-   int hd = getheightdelta ( log2 ( height ), log2 ( building->buildingheight ));
-
-   if ( hd != 0 && !(hd ==-11 && (height == chschwimmend || height == chfahrend)))
-      return 0;
-
-
-   if ( building->productioncost.material * mf / 100 <= material   &&   building->productioncost.fuel * ff / 100 <= fuel ) {
-      int found = 0;
-      if ( functions & cfputbuilding )
-         found = 1;
-      if ( functions & cfspecificbuildingconstruction )
-         for ( int i = 0; i < typ->buildingsbuildablenum; i++ )
-            if ( typ->buildingsbuildable[i].from <= building->id &&
-                 typ->buildingsbuildable[i].to   >= building->id )
-                 found = 1;
-
-      if ( found ) {
-         if ( actmap->objectcrc ) {
-            if ( actmap->objectcrc->speedcrccheck->checkbuilding2 ( building, 0 ))
-               return true;
-            else
-               return false;
-         } else
-           return true;
-      } else
-         return false;
-   } else
-      return false;
-}
-
-
-int tvehicle :: searchstackforfreeweight ( pvehicle eht, int what )
-{
-   if ( eht == this ) {
-      if ( what == 1 ) // material or fuel
-         return maxint;  
-      else
-         return typ->loadcapacity - cargo();
-        // return typ->maxweight() + typ->loadcapacity - weight();
-   } else {
-      int w1 = typ->maxweight() + typ->loadcapacity - weight();
-      int w2 = -1;
-      for ( int i = 0; i < 32; i++ ) 
-         if ( loading[i] ) {
-            int w3 = loading[i]->searchstackforfreeweight ( eht, what );
-            if ( w3 >= 0 )
-               w2 = w3;
-         }
-
-      if ( w2 != -1 ) 
-         if ( w2 < w1 )
-            return w2;
-         else
-            return w1;
-      else
-         return -1;
-   }
-}
-
-int tvehicle :: freeweight ( int what )
-{
-   pfield fld = getfield ( xpos, ypos );
-   if ( fld->vehicle ) 
-        return fld->vehicle->searchstackforfreeweight ( this, what );
-   else
-      if ( fld->building ) {
-         for ( int i = 0; i < 32; i++ )
-            if ( fld->building->loading[i] ) {
-               int w3 = fld->building->loading[i]->searchstackforfreeweight ( this, what );
-               if ( w3 >= 0 )
-                  return w3;
-            }
-      }
-
-   return -2;
-}
-
-int Vehicle::getmaxfuelforweight ( void )
-{
-   pfield fld = getfield ( xpos, ypos );
-   if ( fld->vehicle  &&  fld->vehicle != this ) {
-      int fw = freeweight( 1 );
-      if ( fw >= 0 ) {
-         int maxf = fw * 1024 / fuelweight;
-         if ( maxf > typ->tank || maxf < 0 )
-            return typ->tank;
-         else 
-            return maxf;
-      } else
-         return typ->tank;
-   } else
-      return typ->tank;
-}
-
-
-int Vehicle::getmaxmaterialforweight ( void )
-{
-   pfield fld = getfield ( xpos, ypos );
-   if ( fld->vehicle  &&  fld->vehicle != this ) {
-      int fw = freeweight( 1 );
-      if ( fw >= 0 ) {
-         int maxm = fw * 1024 / materialweight;
-         if ( maxm > typ->tank )
-            return typ->material;
-         else 
-            return maxm;
-      } else
-         return typ->material;
-
-  } else
-      return typ->material;
-}
-
-
-
-int  tvehicle :: vehicleloadable ( pvehicle vehicle, int uheight )
-{
-   if ( getfield ( xpos, ypos )->vehicle == this ) // not standing in some other transport / building
-      if ( height & (chtieffliegend | chfliegend | chhochfliegend ))
-         return 0;
-
-   if ( uheight == -1 )
-      uheight = vehicle->height;
-
-
-   if ( vehicle->functions & cf_trooper )
-      if ( uheight & (chschwimmend | chfahrend ))
-         uheight |= (chschwimmend | chfahrend );  //these heights are effectively the same
-
-
-   if ( !(uheight & vehicle->height)  &&  !(uheight & height) )
-      return 0;
-
-   if (( ( typ->loadcapability    & vehicle->height)   &&   
-         (( typ->loadcapabilityreq & vehicle->typ->height) || !typ->loadcapabilityreq ) && 
-         ((typ->loadcapabilitynot & vehicle->typ->height) == 0))
-        || (vehicle->functions & cf_trooper )) {
-
-      if ( typ->maxunitweight >= vehicle->weight() )
-         if ( (cargo() + vehicle->weight() <= typ->loadcapacity) && 
-              (vehiclegeladen( this ) + 1 < maxloadableunits)) {
-              // && ( height <= chfahrend )) 
-
-                 if ( getfield ( xpos, ypos )->vehicle != this )
-                    return 2;
-               #ifdef karteneditor
-                  return 2;
-               #else
-                 if ( uheight != vehicle->height &&
-                      height == uheight)  
-                      return 2;
-                 else
-                    if (vehicle->height == chtieffliegend) 
-                       if (vehicle->typ->steigung <= flugzeugtraegerrunwayverkuerzung) 
-                          return 2; 
-                       else 
-                          return 0; 
-                    else 
-                       if (vehicle->height == chfahrend) { 
-                           if ((height >= chschwimmend) && 
-                               (height <= chfahrend)) 
-                               return 2; 
-                           else
-                               return 0;
-                       } else
-                          if ( vehicle->height == height )
-                             return 2;
-               #endif
-              }
-
-   } 
-   return 0;
-}
-
-
-void* tbuilding :: getpicture ( int x, int y )
-{
-//                      if ( bld->typ->id == 8 ) {          // Windkraftwerk
-
-   pfield fld = getbuildingfield ( this, x, y );
-   if ( fld ) {
-      int w = fld->getweather();
-   
-      #ifdef HEXAGON
-       if ( typ->w_picture[w][completion][x][y] )
-          return typ->w_picture[w][completion][x][y];
-       else
-          return typ->w_picture[0][completion][x][y];
-      #else
-       return typ->picture[completion][x][y];
-      #endif
-   } else
-      return NULL;
-}
-
-
-int tbuilding :: vehicleloadable ( pvehicle vehicle, int uheight )
-{
-   if ( uheight == -1 )
-      uheight = vehicle->height;
-
-   if ( vehicle->functions & cf_trooper )
-      if ( uheight & (chschwimmend | chfahrend ))
-         uheight |= (chschwimmend | chfahrend );  //these heights are effectively the same
-
-   if ( completion ==  typ->construction_steps - 1 )
-      if ( typ->loadcapability & uheight ) {
-         if ( (( typ->loadcapacity >= vehicle->size())               // the unit is physically able to get "through the door"
-           && (vehiclegeparkt(this)+1 < maxloadableunits )
-           && (( typ->unitheightreq & vehicle->typ->height ) || !typ->unitheightreq)
-           && !( typ->unitheight_forbidden & vehicle->typ->height) )
-                   ||
-             ( vehicle->functions & cf_trooper )
-           ) {
-         //  && ( (uheight == typ->buildingheight)  || (typ->buildingheight >= chschwimmend && hgt == chfahrend) ))) {
-
-         #ifdef karteneditor
-              return 2;
-         #else
-              if ( color == actmap->actplayer * 8)
-                 return 2;
-              else
-                if ( !vehicle->attacked ) {
-                   if ( color == (8 << 3) )      // neutral building can be conquered by any unit
-                      return 2;
-                   else
-                      if ( (vehicle->functions & cf_conquer)  || ( damage >= mingebaeudeeroberungsbeschaedigung))
-                         return 2;
-                }
-         #endif
-         }
-      }
-      
-/*
-&&
-         (
-         (( color == actmap->actplayer * 8)                              // ganz regul„r: eigenes geb„ude
-         
-         || (( vehicle->functions & cftrooper )                // JEDES Geb„ude muá sich mit Fusstruppen erobern lassen
-         && (( uheight == typ->height ) || (typ->height >= chschwimmend && hgt == chfahrend))  
-         && ( !vehicle->attacked ))
-         // && color != (8 << 3)) )
-         //&& ( typ->loadcapability & hgt ))
-         ||
-         
-         ( (( damage >= mingebaeudeeroberungsbeschaedigung) || ( vehicle->functions & cfconquer ))    // bei Besch„digung oder cfconquer jedes Geb„ude mit fahrenden vehicle
-         && (vehicle->height == chfahrend)
-         // && ( color != (8 << 3))
-         && ( !vehicle->attacked ) 
-         && ( typ->loadcapability & hgt )
-         && ( typ->height & vehicle->typ->height ))
-         ||
-         
-         (( color == )                               // neutrale Geb„ude lassen sich immer erobern
-         // && (vehicle->height == chfahrend)
-         && ( !vehicle->attacked ) 
-         && ( typ->loadcapability & hgt )
-         && ( typ->height & vehicle->typ->height ) ))
-       )
-
-          return 2; 
-      else 
-           return 0;
-*/
-   return 0;
 }
 
 
@@ -6601,199 +5732,6 @@ void tfield :: deleteeverything ( void )
 
 
 
-void Vehicle::convert ( int col )
-{
-  if ( col > 8)   
-      displaymessage("convertvehicle: \n color muá im bereich 0..8 sein ",2);
-
-   int oldcol = color >> 3; 
-   if ( !prev && !next ) { 
-      actmap->player[oldcol].firstvehicle = NULL; 
-     #ifndef karteneditor
-      quedevents[oldcol]++;
-     #endif
-   } 
-   else { 
-      if ( prev ) 
-         prev->next = next; 
-      else 
-         actmap->player[oldcol].firstvehicle = next; 
-         
-      if ( next ) 
-         next->prev = prev; 
-      
-   } 
-
-   color = col << 3; 
-
-   pvehicle pe = actmap->player[ col ].firstvehicle; 
-   actmap->player[ col ].firstvehicle = this; 
-   prev = NULL; 
-   next = pe;
-   if ( pe )
-      pe->prev = this;
-
-   for ( int i = 0; i < 32; i++) 
-      if ( loading[i] ) 
-         loading[i]->convert( col );
-
-   #ifndef karteneditor
-      if ( connection & cconnection_conquer )
-         releaseevent( this, NULL,cconnection_conquer) ;
-      if ( connection & cconnection_lose ) 
-         releaseevent( this, NULL,cconnection_lose); 
-   #endif      
-}
-
-void tvehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
-{
-   if ( vehicleconstructable( tnk, x, y )) {
-      pvehicle v;
-      generate_vehicle ( tnk, color/8, v );
-      v->xpos = x;
-      v->ypos = y;
-
-      for ( int j = 0; j < 8; j++ ) {
-         int a = int(height) << j;
-         int b = int(height) >> j;
-         if ( v->typ->height & a ) {
-            v->height = a;
-            break;
-         }
-         if ( v->typ->height & b ) {
-            v->height = b;
-            break;
-         }
-      }
-      v->setMovement ( 0 );
-
-
-      getfield ( x, y )->vehicle = v;
-      material -= tnk->production.material;
-      fuel -= tnk->production.energy;
-
-      int refuel = 0;
-      for ( int i = 0; i < typ->weapons->count; i++ )
-         if ( typ->weapons->weapon[i].service()  )
-            for ( int j = 0; j < typ->weapons->count ; j++) {
-               if ( typ->weapons->weapon[j].canRefuel() )
-                  refuel = 1;
-               if ( functions & (cffuelref | cfmaterialref) )
-                  refuel = 1; 
-            }
-#ifdef sgmain
-      if ( refuel ) 
-         verlademunition( v, this ,NULL, 3 ); 
-#endif
-
-      v->attacked = 1;
-      
-
-   }
-}
-
-int  tvehicle :: vehicleconstructable ( pvehicletype tnk, int x, int y )
-{
-   if ( tnk->terrainaccess->accessible ( getfield(x,y)->bdt ) > 0 ) 
-      if ( tnk->production.material <= material &&
-           tnk->production.energy   <= fuel )
-           if ( beeline ( x, y, xpos, ypos ) <= maxmalq )
-              if ( tnk->height & height )
-                 return 1;
-
-   
-   return 0;
-}
-
-
-void tbuilding :: convert ( int col )
-{ 
-                    
-   if (col > 8)
-      displaymessage("convertbuilding: \n color muá im bereich 0..8 sein ",2);
-
-   int oldcol = color >> 3; 
-
-   #ifdef sgmain
-   if ( oldcol == 8 )
-      for ( int r = 0; r < 3; r++ )
-         if ( actmap->isResourceGlobal( r )) {
-            actmap->bi_resource[col].resource[r] += actstorage.resource[r];
-            actstorage.resource[r] = 0;
-         }
-
-   #endif 
-
-   if ( !prev && !next ) { 
-      actmap->player[oldcol].firstbuilding = NULL; 
-      #ifndef karteneditor
-        quedevents[oldcol]++;
-      #endif
-   } 
-   else { 
-
-      if ( prev ) 
-         prev->next = next; 
-      else 
-         actmap->player[oldcol].firstbuilding = next; 
-
-      if ( next ) 
-         next->prev = prev; 
-       
-   } 
-   color = col << 3; 
-
-   pbuilding pe = actmap->player[col].firstbuilding; 
-   actmap->player[ col ].firstbuilding = this; 
-   prev = NULL; 
-   next = pe;
-   if ( pe )
-      pe->prev = this;
-
-   for ( int i = 0; i < 32; i++) 
-      if ( loading[i] ) {
-         loading[i]->convert ( col );
-//         loading[i]->cmpchecked = 0; 
-      } 
-
-   #ifndef karteneditor
-      if ( connection & cconnection_conquer ) 
-         releaseevent(NULL,this,cconnection_conquer); 
-      if ( connection & cconnection_lose ) 
-         releaseevent(NULL,this,cconnection_lose); 
-   #endif
-
-} 
-
-int tvehicle :: getstrongestweapon( int aheight, int distance)
-{ 
-   int str = 0; 
-   int hw = 255;   /*  error-wert  ( keine waffe gefunden )  */ 
-   for ( int i = 0; i < typ->weapons->count; i++) { 
-
-      if (( ammo[i]) && 
-          ( typ->weapons->weapon[i].mindistance <= distance) && 
-          ( typ->weapons->weapon[i].maxdistance >= distance) &&
-          ( typ->weapons->weapon[i].targ & aheight ) &&
-          ( typ->weapons->weapon[i].sourceheight & height )) {
-            int astr = int( weapstrength[i] * weapDist.getWeapStrength( &typ->weapons->weapon[i], distance, height, aheight));
-            if ( astr > str ) {
-               str = astr;
-               hw  = i;
-            }
-       }
-   } 
-   return hw; 
-} 
-
-int tbuildingtype :: gettank ( int resource )
-{
-   if ( actmap && actmap->_resourcemode == 1 )
-      return _bi_maxstorage.resource[resource];
-   else
-      return _tank.resource[resource];
-}
-
 
 
 int tobjecttype :: connectablewithbuildings ( void )
@@ -6805,10 +5743,6 @@ int tobjecttype :: connectablewithbuildings ( void )
 }
 
 
-int tbuildingtype :: getArmor ( void )
-{
-   return _armor * actmap->getgameparameter( cgp_buildingarmor ) / 100;
-}
 
 void tdrawline8 :: start ( int x1, int y1, int x2, int y2 )
 {

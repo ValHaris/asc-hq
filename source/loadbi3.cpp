@@ -1,6 +1,9 @@
-//     $Id: loadbi3.cpp,v 1.25 2000-08-12 09:17:30 gulliver Exp $
+//     $Id: loadbi3.cpp,v 1.26 2000-10-11 14:26:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/08/12 09:17:30  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.24  2000/08/06 11:39:10  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -140,6 +143,8 @@
 #include "basegfx.h"
 #include "keybp.h"
 #include "typen.h"
+#include "buildingtype.h"
+#include "vehicletype.h"
 #include "misc.h"
 #include "stack.h"
 #include "palette.h"
@@ -222,8 +227,8 @@ int battleisleversion = -1;
 int keeporiginalpalette = 0;
 
 
-class timporterror : public terror {
-   };
+class timporterror : public ASCexception {
+};
 
 
 
@@ -1191,8 +1196,8 @@ pvehicle tloadBImap :: getunit ( int tp, int col )
 {
    pvehicletype vt = getvehicletype ( tp );
    if ( vt ) {
-      pvehicle eht;
-      generatevehicle_ka ( vt, col, eht );
+      pvehicle eht = new Vehicle ( vt, actmap, col );
+      eht->fillMagically();
       return eht;
    }
 
@@ -1567,9 +1572,9 @@ void       tloadBImap :: ReadSHOPPart( void )
                     for ( int m = 0; m < 4; m++ )
                        for ( int n = 0; n < 6; n++ )
                           if ( fld->building->getpicture( m , n ) ) {
-                             pfield field = getbuildingfield ( fld->building, m, n );
-                             field->temp3 = 0;
+                             fld->building->getField ( m, n )->temp3 = 0;
                           }
+
                        /*
                              if ( field->object )
                                 for ( int o = 0; o < field->object->objnum; o++ )
@@ -1631,13 +1636,13 @@ void       tloadBImap :: ReadSHOPPart( void )
                                  fld->building->production [ prodnum++ ] = vt;
                     }
                  }
-              fld->building->bi_resourceplus.a.energy = energyfactor * FileShop.a.EP;
-              fld->building->bi_resourceplus.a.material = materialfactor * FileShop.a.MP;
-              fld->building->bi_resourceplus.a.fuel = fuelfactor * FileShop.a.EP;
+              fld->building->bi_resourceplus.energy = energyfactor * FileShop.a.EP;
+              fld->building->bi_resourceplus.material = materialfactor * FileShop.a.MP;
+              fld->building->bi_resourceplus.fuel = fuelfactor * FileShop.a.EP;
 
-              fld->building->actstorage.a.energy = energyfactor * FileShop.a.E;
-              fld->building->actstorage.a.material = materialfactor * FileShop.a.M;
-              fld->building->actstorage.a.fuel = fuelfactor * FileShop.a.E;
+              fld->building->actstorage.energy = energyfactor * FileShop.a.E;
+              fld->building->actstorage.material = materialfactor * FileShop.a.M;
+              fld->building->actstorage.fuel = fuelfactor * FileShop.a.E;
 
            } else {
               if ( found == 254 ) {
@@ -1917,7 +1922,7 @@ void tloadBImap :: LoadFromFile( char* path, char* AFileName, pwterraintype trrn
        strcat ( missing, err.filename );
        strcat ( missing, "\n" );
     } /* endcatch */
-    catch ( terror ) {
+    catch ( ASCexception ) {
        strcat ( missing, "\nA fatal error occured" );
     } /* endcatch */
 

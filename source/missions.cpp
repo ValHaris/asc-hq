@@ -1,6 +1,10 @@
-//     $Id: missions.cpp,v 1.12 2000-09-17 15:20:33 mbickel Exp $
+//     $Id: missions.cpp,v 1.13 2000-10-11 14:26:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/09/17 15:20:33  mbickel
+//      AI is now automatically invoked (depending on gameoptions)
+//      Some cleanup
+//
 //     Revision 1.11  2000/08/21 17:51:00  mbickel
 //      Fixed: crash when unit reaching max experience
 //      Fixed: crash when displaying research image
@@ -76,7 +80,8 @@
 #include <stdio.h>                                                                
 #include <string.h>
 
-#include "tpascal.inc"
+#include "buildingtype.h"
+#include "vehicletype.h"
 #include "newfont.h"
 #include "typen.h"
 #include "basegfx.h"
@@ -91,13 +96,13 @@
 #include "gamedlg.h"
 #include "controls.h"
 #include "sg.h"
+#include "errors.h"
 
 const  int    translatetriggerstatus[4]  = {0, 1, 1, 0};
 
 
    int         stt[4]; 
-   int          quedevents[9];
-   tgametime    nexttimedevent[8]; 
+   tgametime    nexttimedevent[8];
    char      eject; 
 
 
@@ -159,7 +164,7 @@ void         checktimedevents ( MapDisplayInterface* md )
         return;
       getnexteventtime(); 
    } 
-   if ( quedevents[actmap->actplayer] ) {
+   if ( actmap->queuedEvents[actmap->actplayer] ) {
       checkevents( md ); 
       if (eject) 
         return;
@@ -172,93 +177,93 @@ void         checktimedevents ( MapDisplayInterface* md )
 
 
 int         evaluatetrigger(pevent       ev,
-                             shortint *   bracketstoopen,
-                             shortint     pos,
-                             shortint *   mxpos)
-{ 
-  shortint     bto ; 
-  int         stat, stat2; 
-  int         conn; 
-  shortint     mxp; 
+                             int *   bracketstoopen,
+                             int     pos,
+                             int *   mxpos)
+{
+  int     bto ;
+  int         stat, stat2;
+  int         conn;
+  int     mxp;
 
    (*bracketstoopen)--;
-   if (*bracketstoopen == 0) { 
-      *mxpos = pos + 1; 
-      if (pos < 0) { 
-         stat = 1; 
-         conn = ceventtrigger_and; 
-      } 
-      else { 
-         stat = translatetriggerstatus[ev->triggerstatus[pos]]; 
+   if (*bracketstoopen == 0) {
+      *mxpos = pos + 1;
+      if (pos < 0) {
+         stat = 1;
+         conn = ceventtrigger_and;
+      }
+      else {
+         stat = translatetriggerstatus[ev->triggerstatus[pos]];
          conn = ( ev->triggerconnect[pos + 1] & (ceventtrigger_and | ceventtrigger_or | ceventtrigger_not) );
-      } 
-   } 
-   else { 
-      *mxpos = pos; 
-      stat = 1; 
-      conn = ceventtrigger_and; 
-   } 
+      }
+   }
+   else {
+      *mxpos = pos;
+      stat = 1;
+      conn = ceventtrigger_and;
+   }
 
-   bto = *bracketstoopen; 
-   do { 
-      pos = *mxpos; 
-      if ((pos < 3) && (stt[pos] == 0)) { 
-         if (ev->triggerconnect[pos] & ceventtrigger_2klammerauf ) 
-            bto+=2; 
-         if (ev->triggerconnect[pos] & ceventtrigger_klammerauf ) 
+   bto = *bracketstoopen;
+   do {
+      pos = *mxpos;
+      if ((pos < 3) && (stt[pos] == 0)) {
+         if (ev->triggerconnect[pos] & ceventtrigger_2klammerauf )
+            bto+=2;
+         if (ev->triggerconnect[pos] & ceventtrigger_klammerauf )
             bto++;
          stt[pos]++;
-      } 
+      }
 
-      if (bto > 0) { 
-         stat2 = evaluatetrigger(ev,&bto,pos,&mxp); 
-         if (mxp > *mxpos) 
-            *mxpos = mxp; 
-      } 
-      else { 
+      if (bto > 0) {
+         stat2 = evaluatetrigger(ev,&bto,pos,&mxp);
+         if (mxp > *mxpos)
+            *mxpos = mxp;
+      }
+      else {
          (*mxpos)++;
-         stat2 = translatetriggerstatus[ev->triggerstatus[pos]]; 
-      } 
+         stat2 = translatetriggerstatus[ev->triggerstatus[pos]];
+      }
 
-      if (conn & ceventtrigger_not ) 
-         stat2 = 1 - stat2; 
+      if (conn & ceventtrigger_not )
+         stat2 = 1 - stat2;
 
-      if (conn & ceventtrigger_and ) 
-         stat = stat * stat2; 
-      else 
-         stat = stat + stat2; 
-      if (stat > 1) 
-         stat = 1; 
+      if (conn & ceventtrigger_and )
+         stat = stat * stat2;
+      else
+         stat = stat + stat2;
+      if (stat > 1)
+         stat = 1;
 
-      if (*mxpos < 4) 
+      if (*mxpos < 4)
          conn = ( ev->triggerconnect[*mxpos] & (ceventtrigger_and | ceventtrigger_or | ceventtrigger_not));
 
-      if (stt[pos] < 2) { 
-         if (ev->triggerconnect[pos] & ceventtrigger_2klammerzu ) 
-            bto-=2; 
-         if (ev->triggerconnect[pos] & ceventtrigger_klammerzu ) 
+      if (stt[pos] < 2) {
+         if (ev->triggerconnect[pos] & ceventtrigger_2klammerzu )
+            bto-=2;
+         if (ev->triggerconnect[pos] & ceventtrigger_klammerzu )
             bto--;
          stt[pos]++;
-      } 
+      }
 
-   }  while (!((bto != 0) || (*mxpos > 3) || (ev->trigger[*mxpos] == 0))); 
+   }  while (!((bto != 0) || (*mxpos > 3) || (ev->trigger[*mxpos] == 0)));
 
-   if (bto != 0) 
-      *bracketstoopen = bto + 1; 
+   if (bto != 0)
+      *bracketstoopen = bto + 1;
 
-   return stat; 
+   return stat;
 
-} 
+}
 
 
 
 void         checksingleevent(pevent       ev, MapDisplayInterface* md )
-{ 
-  int         b; 
-  word         i; 
-  pevent       ev2; 
-  peventstore  oldevent; 
-  shortint     si1, si2; 
+{
+  int         b;
+  word         i;
+  pevent       ev2;
+  peventstore  oldevent;
+  int     si1, si2;
 
    eject = false; 
 
@@ -301,7 +306,7 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
                                                       for ( int y = 0; y < 6; y++ ) {
                                                          pbuilding bld = ev->trigger_data[b]->building;
                                                          if ( bld->typ->getpicture ( x, y ) ) {
-                                                            pfield fld = getbuildingfield ( bld, x, y );
+                                                            pfield fld = bld->getField ( x, y );
                                                             if ( fld ) {
                                                                int vis = (fld-> visible >> (p*2) ) & 3;
                                                                if ( bld->typ->buildingheight >= chschwimmend && bld->typ->buildingheight <= chhochfliegend ) {
@@ -540,13 +545,13 @@ void         releaseevent(pvehicle     eht,
                   if (action == cconnection_destroy) {
                      if (ev1->trigger[b] == ceventt_buildingdestroyed) {
                         ev1->triggerstatus[b] = 2;
-                        quedevents[ev1->player]++;
+                        actmap->queuedEvents[ev1->player]++;
                         ev1->trigger[b] = ceventt_irrelevant;
                      }
                      else
                         if ((ev1->trigger[b] == ceventt_buildingconquered) || (ev1->trigger[b] == ceventt_buildinglost)) {
                            ev1->triggerstatus[b] = 3;
-                           quedevents[ev1->player]++;
+                           actmap->queuedEvents[ev1->player]++;
                            ev1->trigger[b] = ceventt_irrelevant;
                         }
                   }
@@ -556,7 +561,7 @@ void         releaseevent(pvehicle     eht,
                            ev1->triggerstatus[b] = 1;
                         else
                            ev1->triggerstatus[b] = 0;
-                        quedevents[ev1->player]++;
+                        actmap->queuedEvents[ev1->player]++;
                      }
                      else
                         if (ev1->trigger[b] == ceventt_buildinglost) {
@@ -565,7 +570,7 @@ void         releaseevent(pvehicle     eht,
                            else
                               ev1->triggerstatus[b] = 1;
 
-                           quedevents[ev1->player]++;
+                           actmap->queuedEvents[ev1->player]++;
                         }
                   }
 
@@ -575,7 +580,7 @@ void         releaseevent(pvehicle     eht,
                            ev1->triggerstatus[b] = 0;
                         else
                            ev1->triggerstatus[b] = 1;
-                        quedevents[ev1->player]++;
+                        actmap->queuedEvents[ev1->player]++;
                      }
                      else
                         if (ev1->trigger[b] == ceventt_buildinglost) {
@@ -583,13 +588,13 @@ void         releaseevent(pvehicle     eht,
                               ev1->triggerstatus[b] = 1;
                            else
                               ev1->triggerstatus[b] = 0;
-                           quedevents[ev1->player]++;
+                           actmap->queuedEvents[ev1->player]++;
                         }
                   }
 
                   if (action == cconnection_seen )
                      if (ev1->trigger[b] == ceventt_building_seen )
-                        quedevents[ev1->player]++;
+                        actmap->queuedEvents[ev1->player]++;
 
 
                }
@@ -602,13 +607,13 @@ void         releaseevent(pvehicle     eht,
                   if (action == cconnection_destroy) {
                      if (ev1->trigger[b] == ceventt_unitdestroyed) {
                         ev1->triggerstatus[b] = 2;
-                        quedevents[ev1->player]++;
+                        actmap->queuedEvents[ev1->player]++;
                         ev1->trigger[b] = ceventt_irrelevant;
                      }
                      else
                         if ((ev1->trigger[b] == ceventt_unitconquered) || (ev1->trigger[b] == ceventt_unitlost)) {
                            ev1->triggerstatus[b] = 3;
-                           quedevents[ev1->player]++;
+                           actmap->queuedEvents[ev1->player]++;
                            ev1->trigger[b] = ceventt_irrelevant;
                         }
                   }
@@ -618,7 +623,7 @@ void         releaseevent(pvehicle     eht,
                            ev1->triggerstatus[b] = 1;
                         else
                            ev1->triggerstatus[b] = 0;
-                        quedevents[ev1->player]++;
+                        actmap->queuedEvents[ev1->player]++;
                      }
                      else
                         if (ev1->trigger[b] == ceventt_unitlost) {
@@ -626,7 +631,7 @@ void         releaseevent(pvehicle     eht,
                               ev1->triggerstatus[b] = 0;
                            else
                               ev1->triggerstatus[b] = 1;
-                           quedevents[ev1->player]++;
+                           actmap->queuedEvents[ev1->player]++;
                         }
                   }
 
@@ -636,7 +641,7 @@ void         releaseevent(pvehicle     eht,
                            ev1->triggerstatus[b] = 0;
                         else
                            ev1->triggerstatus[b] = 1;
-                        quedevents[ev1->player]++;
+                        actmap->queuedEvents[ev1->player]++;
                      }
                      else
                         if (ev1->trigger[b] == ceventt_unitlost) {
@@ -644,7 +649,7 @@ void         releaseevent(pvehicle     eht,
                               ev1->triggerstatus[b] = 1;
                            else
                               ev1->triggerstatus[b] = 0;
-                           quedevents[ev1->player]++;
+                           actmap->queuedEvents[ev1->player]++;
                         }
                   }
                }
@@ -655,7 +660,7 @@ void         releaseevent(pvehicle     eht,
                        int res = unit_in_polygon (  ev1->trigger_data[b]->unitpolygon );
                        if ( res ) {
                           ev1->triggerstatus[b] = 2;
-                          quedevents[ev1->player]++;
+                          actmap->queuedEvents[ev1->player]++;
                        }
 
 
@@ -679,7 +684,7 @@ void         viewtextmessage ( int id, int player )
          to = 0xff;
 
       char* m = strdup ( txt );
-      pmessage msg = new tmessage ( m, to );
+      new tmessage ( m, to );
       if ( player == actmap->actplayer )
          viewunreadmessages (  );
 
@@ -771,7 +776,7 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
            viewtext2(904); 
            if (choice_dlg("Do you want to continue playing ?","~y~es","~n~o") == 2) {
               erasemap();
-              throw tnomaploaded();
+              throw NoMapLoaded();
            } else {
               actmap->continueplaying = 1;
               if ( actmap->replayinfo ) {
@@ -843,7 +848,7 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
          int  bdtid = *i;
          i++;
 
-         int direction = *i;
+         // int direction = *i;
          i++;
    
          int addressmode = *i;
@@ -965,10 +970,10 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
 
       if ( ev->conn & 1 )
          for ( int i = 0; i <= 8; i++ )
-            quedevents[i]++;
+            actmap->queuedEvents[i]++;
 
   } else
-     quedevents[ev->player]++;
+     actmap->queuedEvents[ev->player]++;
 } 
 
 
@@ -1007,10 +1012,10 @@ void execevent ( pevent ev, MapDisplayInterface* md )
 void         checkevents( MapDisplayInterface* md )
 { 
    eject = false; 
-   quedevents[actmap->actplayer]++; 
-   while ( quedevents[actmap->actplayer] ) { 
+   actmap->queuedEvents[actmap->actplayer]++;
+   while ( actmap->queuedEvents[actmap->actplayer] ) {
 
-      quedevents[actmap->actplayer] = 0; 
+      actmap->queuedEvents[actmap->actplayer] = 0;
    
       pevent ev = actmap->firsteventtocome; 
       while ( ev ) { 
@@ -1030,8 +1035,7 @@ void         checkevents( MapDisplayInterface* md )
 void initmissions( void )
 { 
    memset ( nexttimedevent, 0, sizeof ( nexttimedevent )); 
-   memset ( quedevents, 1, sizeof ( quedevents ));
-   eject = false; 
+   eject = false;
 }
 
 

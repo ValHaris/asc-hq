@@ -1,6 +1,9 @@
-//     $Id: edmisc.cpp,v 1.30 2000-09-16 11:47:26 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.31 2000-10-11 14:26:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/09/16 11:47:26  mbickel
+//      Some cleanup and documentation again
+//
 //     Revision 1.29  2000/09/07 15:49:41  mbickel
 //      some cleanup and documentation
 //
@@ -157,6 +160,8 @@
 #include <iostream.h>
 #include <math.h>
 
+#include "vehicletype.h"
+#include "buildingtype.h"
 #include "edmisc.h"
 #include "loadbi3.h"
 #include "edevents.h"
@@ -430,7 +435,7 @@ int leftmousebox(void)
 
 void tputresources :: init ( int sx, int sy, int dst, int restype, int resmax, int resmin )
 {
-   initsuche(sx,sy,dst,0); 
+   initsuche(actmap,sx,sy,dst,0);
    resourcetype = restype;
    maxresource = resmax;
    minresource = resmin;
@@ -632,7 +637,8 @@ void placeunit(void)
                    }
                }
                if ((auswahlf != NULL) && set ) {
-                  generatevehicle_ka(auswahlf,farbwahl ,pf->vehicle);
+                  pf->vehicle = new Vehicle ( auswahlf, actmap, farbwahl );
+                  pf->vehicle->fillMagically();
                   pf->vehicle->height=1;
                   while ( ! ( ( ( ( pf->vehicle->height & pf->vehicle->typ->height ) > 0) && (terrainaccessible(pf,pf->vehicle) == 2) ) ) && (pf->vehicle->height != 0) )
                      pf->vehicle->height = pf->vehicle->height * 2;
@@ -1673,8 +1679,9 @@ void tfillpolygonunit::setpointabs    ( int x,  int y  )
           if ( terrainaccessible(ffield,ffield->vehicle) ) 
                { 
                   if (ffield->vehicle != NULL) removevehicle(&ffield->vehicle); 
-                  if ((auswahlf != NULL)) { 
-                     generatevehicle_ka(auswahlf,farbwahl ,ffield->vehicle);
+                  if (auswahlf != NULL) {
+                     ffield->vehicle = new Vehicle ( auswahlf,actmap, farbwahl );
+                     ffield->vehicle->fillMagically();
                      ffield->vehicle->height=1;
                      while ( ! ( ( ( ( ffield->vehicle->height & ffield->vehicle->typ->height ) > 0) && (terrainaccessible(ffield,ffield->vehicle) == 2) ) ) && (ffield->vehicle->height != 0) )
                         ffield->vehicle->height = ffield->vehicle->height * 2;
@@ -2042,8 +2049,8 @@ void         changemapvalues(void)
            public :
                int action;
                pbuilding gbde;
-               int rs,e,m,f,mrs;
-               tresources plus,mplus, biplus;
+               int rs,mrs;
+               Resources plus,mplus, biplus,storage;
                int col;
                char tvisible;
                char name[260];
@@ -2072,9 +2079,7 @@ void         tsel::init(void)
 
    windowstyle = windowstyle ^ dlg_in3d; 
 
-   e = gbde->actstorage.a.energy; 
-   m = gbde->actstorage.a.material; 
-   f = gbde->actstorage.a.fuel;
+   storage = gbde->actstorage;
    plus = gbde->plus;
    mplus = gbde->maxplus; 
    rs = gbde->researchpoints; 
@@ -2090,25 +2095,25 @@ void         tsel::init(void)
    addeingabe(10,&name[0],0,25);
 
    addbutton("~E~nergy-Storage",15,90,215,110,2,1,1,true); 
-   addeingabe(1,&e,0,gbde->typ->gettank(0));
+   addeingabe(1,&storage.energy,0,gbde->gettank(0));
 
    addbutton("~M~aterial-Storage",15,130,215,150,2,1,2,true); 
-   addeingabe(2,&m,0,gbde->typ->gettank(1));
+   addeingabe(2,&storage.material,0,gbde->gettank(1));
 
    addbutton("~F~uel-Storage",15,170,215,190,2,1,3,true); 
-   addeingabe(3,&f,0,gbde->typ->gettank(2));
+   addeingabe(3,&storage.fuel,0,gbde->gettank(2));
 
    if ( gbde->typ->special & (cgconventionelpowerplantb | cgsolarkraftwerkb | cgwindkraftwerkb | cgminingstationb )) b = true;
    else b = false;
 
    addbutton("Energy-Max-Plus",230,50,430,70,2,1,13,b);
-   addeingabe(13,&mplus.a.energy,0,gbde->typ->maxplus.a.energy);
+   addeingabe(13,&mplus.energy,0,gbde->typ->maxplus.energy);
    
    if ( gbde->typ->special & (cgconventionelpowerplantb | cgminingstationb )) b = true;
    else b = false;
 
    addbutton("Energ~y~-Plus",230,90,430,110,2,1,4,b);
-   addeingabe(4,&plus.a.energy,0,mplus.a.energy);
+   addeingabe(4,&plus.energy,0,mplus.energy);
    
    if ( (gbde->typ->special & cgconventionelpowerplantb) || ((gbde->typ->special & cgminingstationb ) && gbde->typ->efficiencymaterial ))
       b = true;
@@ -2116,10 +2121,10 @@ void         tsel::init(void)
       b = false;
 
    addbutton("Material-Max-Plus",230,130,430,150,2,1,14,b);
-   addeingabe(14,&mplus.a.material,0,gbde->typ->maxplus.a.material);
+   addeingabe(14,&mplus.material,0,gbde->typ->maxplus.material);
 
    addbutton("M~a~terial-Plus",230,170,430,190,2,1,5,b);
-   addeingabe(5,&plus.a.material,0,mplus.a.material);
+   addeingabe(5,&plus.material,0,mplus.material);
 
    if ( (gbde->typ->special & cgconventionelpowerplantb) || ((gbde->typ->special & cgminingstationb ) && gbde->typ->efficiencyfuel ))
       b = true;
@@ -2127,10 +2132,10 @@ void         tsel::init(void)
       b = false;
 
    addbutton("Fuel-Max-Plus",230,210,430,230,2,1,15,b);
-   addeingabe(15,&mplus.a.fuel,0,gbde->typ->maxplus.a.fuel);
+   addeingabe(15,&mplus.fuel,0,gbde->typ->maxplus.fuel);
 
    addbutton("F~u~el-Plus",230,250,430,270,2,1,6,b);
-   addeingabe(6,&plus.a.fuel, 0, mplus.a.fuel);
+   addeingabe(6,&plus.fuel, 0, mplus.fuel);
 
    if ( (  ( gbde->typ->special & cgresearchb ) > 0) && ( gbde->typ->maxresearchpoints > 0)) b = true;
    else b = false;
@@ -2154,13 +2159,13 @@ void         tsel::init(void)
 
 
    addbutton("BI energy plus",15,330,215,350,2,1,101,1);
-   addeingabe(101,&biplus.a.energy,0,maxint);
+   addeingabe(101,&biplus.energy,0,maxint);
 
    addbutton("BI material plus",230,330,430,350,2,1,102,1);
-   addeingabe(102,&biplus.a.material,0,maxint);
+   addeingabe(102,&biplus.material,0,maxint);
 
    addbutton("BI fuel plus",15,370,215,390,2,1,103,1);
-   addeingabe(103,&biplus.a.fuel,0,maxint);
+   addeingabe(103,&biplus.fuel,0,maxint);
 
 
    addbutton("~S~et Values",10,ysize - 40, xsize/3-5,ysize - 10,0,1,7,true); 
@@ -2195,10 +2200,10 @@ void         tsel::buttonpressed(int         id)
               int changed_resource = id - 4;
               for ( int r = 0; r < 3; r++ )
                  if ( r != changed_resource ) 
-                    if ( mplus.resource[changed_resource] ) {
-                       int a = mplus.resource[r] * plus.resource[changed_resource] / mplus.resource[changed_resource];
-                       if ( a != plus.resource[r] ) {
-                          plus.resource[r] = a;
+                    if ( mplus.resource(changed_resource) ) {
+                       int a = mplus.resource(r) * plus.resource(changed_resource) / mplus.resource(changed_resource);
+                       if ( a != plus.resource(r) ) {
+                          plus.resource(r) = a;
                           showbutton ( 4 + r );
                        }
                     }
@@ -2211,30 +2216,29 @@ void         tsel::buttonpressed(int         id)
               if ( lockmaxproduction ) 
                  for ( int r = 0; r < 3; r++ )
                     if ( r != changed_resource ) 
-                       if ( gbde->typ->maxplus.resource[changed_resource] ) {
-                          int a = gbde->typ->maxplus.resource[r] * mplus.resource[changed_resource] / gbde->typ->maxplus.resource[changed_resource];
-                          if ( a != mplus.resource[r] ) {
-                             mplus.resource[r] = a;
+                       if ( gbde->typ->maxplus.resource(changed_resource) ) {
+                          int a = gbde->typ->maxplus.resource(r) * mplus.resource(changed_resource) / gbde->typ->maxplus.resource(changed_resource);
+                          if ( a != mplus.resource(r) ) {
+                             mplus.resource(r) = a;
                              showbutton ( 13 + r );
                           }
                        }
 
               for ( int r = 0; r < 3; r++ ) {
-                 if ( (mplus.resource[r] >= 0 && plus.resource[r] > mplus.resource[r] ) || 
-                      (mplus.resource[r] <  0 && plus.resource[r] < mplus.resource[r] )) {
-                         plus.resource[r] = mplus.resource[r];
+                 if ( (mplus.resource(r) >= 0 && plus.resource(r) > mplus.resource(r) ) ||
+                      (mplus.resource(r) <  0 && plus.resource(r) < mplus.resource(r) )) {
+                         plus.resource(r) = mplus.resource(r);
                          showbutton ( 4 + r );
                  }
-                 addeingabe(4+r, &plus.resource[r], 0, mplus.resource[r] );
+                 addeingabe(4+r, &plus.resource(r), 0, mplus.resource(r) );
               }
             }
       break;
      case 7: { 
            mapsaved = false;
            action = 1; 
-           gbde->actstorage.a.energy = e; 
-           gbde->actstorage.a.material = m; 
-           gbde->actstorage.a.fuel = f;
+           gbde->actstorage = storage;
+
            gbde->plus = plus;
            gbde->maxplus = mplus; 
            if ( col != gbde->color/8 )
@@ -2621,10 +2625,10 @@ void         tunit::init( pvehicle v )
    addeingabe(2, &unit->damage, 0, 100 );
  
    addbutton("~F~uel of Unit",50,200,250,220,2,1,3,true);
-   addeingabe( 3, &unit->fuel, 0, unit->getmaxfuelforweight() );
+   addeingabe( 3, &unit->tank.fuel, 0, unit->putResource(maxint, Resources::Fuel, 1 ) );
 
    addbutton("~M~aterial",50,240,250,260,2,1,12,true);
-   addeingabe(12,&unit->material, 0, unit->getmaxmaterialforweight() );
+   addeingabe(12,&unit->tank.material, 0, unit->putResource(maxint, Resources::Material, 1 ) );
 
 
    int unitheights = 0;
@@ -2751,7 +2755,7 @@ void         tunit::buttonpressed(int         id)
    int ht;
  
    switch (id) {
-   case 3:  addeingabe(12,&unit->material, 0, unit->getmaxmaterialforweight() );
+   case 3:  addeingabe(12,&unit->tank.material, 0, unit->putResource(maxint, Resources::Material, 1 ) );
       break;
       
    case 4 : 
@@ -2773,7 +2777,7 @@ void         tunit::buttonpressed(int         id)
      unit->setMovement ( unit->typ->movement[ log2 ( unit->height ) ] );
    }
    break;
-   case 12: addeingabe( 3, &unit->fuel, 0, unit->getmaxfuelforweight() );
+   case 12: addeingabe( 3, &unit->tank.fuel, 0, unit->putResource(maxint, Resources::Fuel, 1 ) );
       break;
    
    case 14 : 
@@ -3303,7 +3307,7 @@ class tbuildingcargoprod : public tladeraum {
 void tbuildingcargoprod :: init ( pbuilding bld, char* title )
 {
    building = bld; 
-   orgbuilding = new tbuilding ( bld, actmap );
+   orgbuilding = new Building ( bld, actmap );
    tladeraum::init ( title );
 }
 
@@ -3684,7 +3688,7 @@ void         UnitTypeTransformation :: TranslationTableSelection::run(void)
       redline = -1;
 } 
 
-pvehicletype UnitTypeTransformation :: transformvehicletype ( pvehicletype type, int unitsetnum, int translationnum )
+pvehicletype UnitTypeTransformation :: transformvehicletype ( const pvehicletype type, int unitsetnum, int translationnum )
 {
    for ( int i = 0; i < unitSets[unitsetnum]->transtab[translationnum]->translation.size(); i++ )
       if ( unitSets[unitsetnum]->transtab[translationnum]->translation[i].from == type->id ) {

@@ -1,6 +1,10 @@
-//     $Id: missions.h,v 1.3 2000-07-05 10:49:36 mbickel Exp $
+//     $Id: missions.h,v 1.4 2000-10-11 14:26:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/07/05 10:49:36  mbickel
+//      Fixed AI bugs
+//      setbuildingdamage event now updates the screen
+//
 //     Revision 1.2  1999/11/16 03:42:10  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -59,8 +63,6 @@ extern void  checktimedevents( MapDisplayInterface* md );
 extern void  getnexteventtime(void);
 
 extern void  initmissions( void );
-
-extern    int    quedevents[];
 
 extern void mark_polygon_fields_with_connection ( int* data, int mark );
 extern int unit_in_polygon ( peventtrigger_polygonentered trigger );

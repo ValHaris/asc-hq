@@ -1,6 +1,9 @@
-//     $Id: edmain.cpp,v 1.22 2000-09-07 16:42:28 mbickel Exp $
+//     $Id: edmain.cpp,v 1.23 2000-10-11 14:26:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/09/07 16:42:28  mbickel
+//      Made some adjustments so that ASC compiles with Watcom again...
+//
 //     Revision 1.21  2000/09/07 15:49:40  mbickel
 //      some cleanup and documentation
 //
@@ -123,6 +126,8 @@
 #include "loadbi3.h"
 #include "edselfnt.h"
 #include "edglobal.h"
+#include "errors.h"
+
 #include <signal.h>
 
 #ifdef _DOS_
@@ -710,7 +715,7 @@ void         editor(void)
       
          }  while (! (ch == ct_esc) || (ch == ct_altp+ct_x ) );
       } /* endtry */
-      catch ( tnomaploaded ) {
+      catch ( NoMapLoaded ) {
          buildemptymap();
          repaintdisplay();
       } /* endcatch */

@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.45 2000-09-16 11:47:27 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.46 2000-10-11 14:26:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2000/09/16 11:47:27  mbickel
+//      Some cleanup and documentation again
+//
 //     Revision 1.44  2000/08/26 15:33:42  mbickel
 //      Warning message displayed if empty password is entered
 //      pcxtank now displays error messages
@@ -206,6 +209,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <math.h>
 
 #ifdef _DOS_
  #include <dos.h>
@@ -224,6 +228,9 @@
 #endif
 
 
+#include "vehicletype.h"
+#include "buildingtype.h"
+
 #include "basegfx.h"
 #include "gamedlg.h"
 #include "missions.h"
@@ -235,6 +242,7 @@
 #include "sg.h"
 #include "gameoptions.h"
 #include "loadimage.h"
+#include "errors.h"
 
 #ifdef _DOS_
  #include "dos/memory.h"
@@ -868,10 +876,10 @@ void tsetupnetwork :: buttonpressed ( int id )
                if ( q ) {
                   if ( actmap->xsize && actmap->ysize )
                       erasemap();
-                  throw tnomaploaded;
+                  throw NoMapLoaded;
                 }
-             } 
-             */ 
+             }
+             */
              status = 1;
              break;
      case 4:  do {
@@ -882,7 +890,7 @@ void tsetupnetwork :: buttonpressed ( int id )
               paintcomputernames ();
               paintransfermnames ();
               break;
-              
+
      case 3:  do {
                  frstcompnum--;
                  if ( frstcompnum < 0 )
@@ -891,7 +899,7 @@ void tsetupnetwork :: buttonpressed ( int id )
               paintcomputernames ();
               paintransfermnames ();
               break;
-              
+
      case 6: if ( network.computer[frstcompnum].receive.transfermethod )
                   network.computer[frstcompnum].receive.transfermethod->setupforreceiving ( &network.computer[frstcompnum].receive.data );
              break;
@@ -903,11 +911,11 @@ void tsetupnetwork :: buttonpressed ( int id )
      case 8: getmethod ( TN_RECEIVE );
              paintransfermnames();
              break;
-             
+
      case 9: getmethod ( TN_SEND );
              paintransfermnames();
              break;
-              
+
    } /* endswitch */
 }
 
@@ -936,7 +944,7 @@ void tsetupnetwork :: paintcomputernames ( void )
       activefontsettings.length = 100;
       activefontsettings.justify = centertext;
       showtext2 ( network.computer[ frstcompnum ].name , x1 + ( xsize - activefontsettings.length) / 2 , y1 + starty + 85 );
-   
+
       activefontsettings.justify = lefttext;
       int i = frstcompnum ;
       do {
@@ -945,7 +953,7 @@ void tsetupnetwork :: paintcomputernames ( void )
             i = network.computernum-1;
       } while ( network.computer[i].existent == 0 );
       showtext2 ( network.computer[ i ].name , x1 + 50, y1 + starty + 85 );
-   
+
       activefontsettings.justify = righttext;
       i = frstcompnum ;
       do {
@@ -954,7 +962,7 @@ void tsetupnetwork :: paintcomputernames ( void )
             i = 0;
       } while ( network.computer[i].existent == 0 );
       showtext2 ( network.computer[ i ].name, x1 + xsize - 50 - activefontsettings.length, y1 + starty + 85 );
-   
+
       npop ( activefontsettings );
    }
 }
@@ -970,7 +978,7 @@ int  setupnetwork ( tnetwork* nw, int edt, int player )
 {
    if ( nw || actmap->network ) {
       tsetupnetwork sun;
-      if ( nw ) 
+      if ( nw )
          sun.init( nw, edt, player );
       else
          sun.init ( actmap->network, edt, player );
@@ -988,51 +996,51 @@ int  setupnetwork ( tnetwork* nw, int edt, int player )
 /*   Neuen Level starten                                                                               ÿ */
 /*********************************************************************************************************/
 
-void         tchoosenewcampaign::evaluatemapinfo( char* srname )             
-{ 
+void         tchoosenewcampaign::evaluatemapinfo( char* srname )
+{
    if ( spfld->campaign &&  ( stricmp( spfld->codeword, password ) == 0 )) {
       strcat(message1, srname );
       strcat(message1, " ");
-      if (status == 0) { 
+      if (status == 0) {
          strcpy ( mapinfo , dateiinfo );
          if ( spfld->title )
             strcpy ( maptitle, spfld->title);
          else
             maptitle[0] = 0;
          strcpy ( mapname, srname ) ;
-         status = 7; 
-      } 
-      else { 
-         status = 5; 
-      } 
-   } 
-} 
+         status = 7;
+      }
+      else {
+         status = 5;
+      }
+   }
+}
 
 
 void         tchoosenewsinglelevel::evaluatemapinfo( char* srname )
-{   
+{
 
    if ( stricmp ( spfld->codeword, password ) == 0) {
       strcat(message2, srname);
       strcat(message2, " ");
-      if (status == 0) { 
+      if (status == 0) {
          strcpy( mapinfo , dateiinfo );
          if ( spfld->title )
             strcpy ( maptitle, spfld->title);
          else
             maptitle[0] = 0;
-         strcpy(mapname,srname); 
-         status = 7; 
-      } 
-      else { 
-         status = 5; 
-      } 
-   } 
+         strcpy(mapname,srname);
+         status = 7;
+      }
+      else {
+         status = 5;
+      }
+   }
 
-} 
+}
 
 void         tnewcampaignlevel::init(void)
-{ 
+{
    tdialogbox::init();
    mapname[0]  = 0;
    maptitle[0] = 0;
@@ -1040,14 +1048,14 @@ void         tnewcampaignlevel::init(void)
    message1[0] = 0;
    message2[0] = 0;
    dateiinfo[0]= 0;
-   status = 0; 
-   spfld = NULL; 
-} 
+   status = 0;
+   spfld = NULL;
+}
 
 void         tnewcampaignlevel::searchmapinfo(void)
-{ 
+{
 
-   status = 0; 
+   status = 0;
    freespfld ();
    message1[0] = 0;
    message2[0] = 0;
@@ -1064,36 +1072,36 @@ void         tnewcampaignlevel::searchmapinfo(void)
           tmaploaders spfldloader;
           spfldloader.stream = &filestream;
           // spfldloader.setcachingarrays ( );
-   
+
           CharBuf description;
-       
+
           spfldloader.stream->readpchar ( &description.buf );
-          int desclen = strlen ( description.buf ) + 7;
+          // int desclen = strlen ( description.buf ) + 7;
           strncpy ( dateiinfo, description.buf, sizeof ( dateiinfo ) -2  );
 
           word w;
           spfldloader.stream->readdata2 ( w );
-       
-          if ( w != fileterminator ) 
+
+          if ( w != fileterminator )
              throw tinvalidversion ( filename, w, fileterminator );
-      
+
           int version;
           spfldloader.stream->readdata2( version );
-       
-         if (version > actmapversion || version < minmapversion ) 
+
+         if (version > actmapversion || version < minmapversion )
             throw tinvalidversion ( filename, version, actmapversion );
-         
+
           spfldloader.readmap ();
           spfld = spfldloader.spfld;
-      
+
           evaluatemapinfo( filename );
           spfld = NULL;
-      } 
+      }
       catch ( tfileerror ) {
       } /* endcatch */
 
       filename = ff.getnextname();
-   } 
+   }
 
    if ((status == 5) || ( status == 6 )) {
       strcpy(message1,  "multiple maps with the same id/password found" );
@@ -1101,56 +1109,56 @@ void         tnewcampaignlevel::searchmapinfo(void)
       mapinfo[0] = 0;
       maptitle[0] = 0;
       mapname[0] = 0;
-   } 
+   }
 
-   if (status == 0) { 
+   if (status == 0) {
       strcpy ( message1 , "no maps found" );
-   } 
+   }
    spfld = NULL;
 
    freespfld ();
-} 
+}
 
 
 void         tnewcampaignlevel::showmapinfo(word         ypos)
-{ 
+{
 
    activefontsettings.font = schriften.smallarial;
    npush( activefontsettings );
    if (message1[0] == 0) {
        activefontsettings.length = 120;
-       activefontsettings.justify = righttext; 
-      
-      bar(x1 + 26,y1 + ypos,x1 + xsize - 26,y1 + ypos + 120,dblue); 
-      showtext2("filename:",x1 + 25,y1 + ypos); 
-      showtext2("mapinfo:",x1 + 25,y1 + ypos + 40); 
-      showtext2("maptitle:",x1 + 25,y1 + ypos + 80); 
+       activefontsettings.justify = righttext;
+
+      bar(x1 + 26,y1 + ypos,x1 + xsize - 26,y1 + ypos + 120,dblue);
+      showtext2("filename:",x1 + 25,y1 + ypos);
+      showtext2("mapinfo:",x1 + 25,y1 + ypos + 40);
+      showtext2("maptitle:",x1 + 25,y1 + ypos + 80);
       activefontsettings.length = 200;
-      activefontsettings.background = dblue; 
-      activefontsettings.color = black; 
-      activefontsettings.justify = lefttext; 
-      
+      activefontsettings.background = dblue;
+      activefontsettings.color = black;
+      activefontsettings.justify = lefttext;
+
       showtext2(strupr( mapname ),x1 + 135,y1 + ypos + 20);
-      showtext2(mapinfo,x1 + 135,y1 + ypos + 60); 
-      showtext2(maptitle,x1 + 135,y1 + ypos + 100); 
-   } 
-   else { 
+      showtext2(mapinfo,x1 + 135,y1 + ypos + 60);
+      showtext2(maptitle,x1 + 135,y1 + ypos + 100);
+   }
+   else {
       paintsurface ( 26,ypos, xsize - 26, ypos + 120);
       activefontsettings.length = 300;
-      activefontsettings.background = dblue; 
-      activefontsettings.color = lightred; 
-      activefontsettings.justify = lefttext; 
-      
-      showtext2(message1,x1 + 30,y1 + ypos + 20); 
-      showtext2(message2,x1 + 30,y1 + ypos + 45); 
-   } 
+      activefontsettings.background = dblue;
+      activefontsettings.color = lightred;
+      activefontsettings.justify = lefttext;
+
+      showtext2(message1,x1 + 30,y1 + ypos + 20);
+      showtext2(message2,x1 + 30,y1 + ypos + 45);
+   }
 
    npop( activefontsettings );
-} 
+}
 
 
 void         tnewcampaignlevel::loadcampaignmap(void)
-{ 
+{
 
    displaymessage("loading: %s", 0, mapname);
 
@@ -1164,52 +1172,52 @@ void         tnewcampaignlevel::loadcampaignmap(void)
            if ( actmap->time.a.turn == 2 ) {
               displaymessage("no human players found !", 1 );
               erasemap();
-              throw tnomaploaded();
+              throw NoMapLoaded();
            }
          } while ( actmap->player[actmap->actplayer].stat != ps_human ); /* enddo */
-         
-      } 
+
+      }
    } /* endtry */
-   catch ( tinvalidid err ) {
-      displaymessage( err.msg, 1 );
+   catch ( InvalidID err ) {
+      displaymessage( err.getMessage().c_str(), 1 );
       if ( !actmap || actmap->xsize <= 0)
-         throw tnomaploaded();
+         throw NoMapLoaded();
    } /* endcatch */
    catch ( tinvalidversion err ) {
       displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.filename, err.expected, err.found );
       if ( !actmap || actmap->xsize <= 0)
-         throw tnomaploaded();
+         throw NoMapLoaded();
    } /* endcatch */
    catch ( tfileerror err) {
       displaymessage( "error reading map filename %s ", 1, err.filename );
       if ( !actmap || actmap->xsize <= 0)
-         throw tnomaploaded();
+         throw NoMapLoaded();
    } /* endcatch */
-   catch ( terror ) {
+   catch ( ASCexception ) {
       displaymessage( "error loading map", 1 );
       if ( !actmap || actmap->xsize <= 0)
-         throw tnomaploaded();
+         throw NoMapLoaded();
    } /* endcatch */
 
    removemessage();
 
-} 
+}
 
 
 
 void         tnewcampaignlevel::done (void)
-{ 
+{
    tdialogbox::done();
-} 
+}
 
 void         tcontinuecampaign::setid(word         id)
-{ 
-   idsearched = id; 
-} 
+{
+   idsearched = id;
+}
 
 
 void         tcontinuecampaign::showmapinfo(word         ypos)
-{ 
+{
    collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + xsize );
    tnewcampaignlevel::showmapinfo(ypos);
    npush( activefontsettings );
@@ -1217,7 +1225,7 @@ void         tcontinuecampaign::showmapinfo(word         ypos)
    activefontsettings.font = schriften.smallarial;
    if (message1[0] == 0) {
        activefontsettings.length = 120;
-       activefontsettings.justify = righttext; 
+       activefontsettings.justify = righttext;
        activefontsettings.color = textcolor;
        activefontsettings.background = dblue;
        showtext2("password:",x1 + 25,y1 + ypos + 120);
@@ -1230,20 +1238,20 @@ void         tcontinuecampaign::showmapinfo(word         ypos)
    }
 
    npop( activefontsettings );
-} 
+}
 
 
 void         tcontinuecampaign::evaluatemapinfo(char *       srname)
-{ 
+{
 
    if ( spfld->campaign ) {
       char b = 1;
       if (spfld->campaign->id == idsearched) {
          if ( actmap->campaign )
-            if ( spfld->campaign->prevmap == actmap->campaign->id) { 
+            if ( spfld->campaign->prevmap == actmap->campaign->id) {
                b = 0;
                if ( ( status == 0 ) || ( status == 5) || ( status == 7 )) {
-                  status = 8; 
+                  status = 8;
                   strcpy ( message2, srname);
                   strcat ( message2, " ");
                   strcpy ( mapinfo, dateiinfo );
@@ -1255,20 +1263,20 @@ void         tcontinuecampaign::evaluatemapinfo(char *       srname)
 
                   strcpy ( mapname, srname);
                   strcpy(  password, spfld->codeword);
-               } 
-               else 
+               }
+               else
                   if ((status == 6) || (status == 8)) {
-                     status = 6; 
+                     status = 6;
                      strcat ( message2, srname );
                      strcat ( message2, " ");
-                  } 
-            } 
+                  }
+            }
 
          if ( b ) {
             strcat( message2, srname );
             strcat( message2, " " );
 
-            if (status == 0) { 
+            if (status == 0) {
                strcpy ( mapinfo, dateiinfo );
                if ( spfld->title )
                   strcpy ( maptitle, spfld->title);
@@ -1276,72 +1284,72 @@ void         tcontinuecampaign::evaluatemapinfo(char *       srname)
                   maptitle[0] = 0;
                strcpy ( mapname, srname);
                strcpy( password, spfld->codeword );
-               status = 7; 
-            } 
-            else 
+               status = 7;
+            }
+            else
                if ((status == 5) || (status == 7)) {
-                  status = 5; 
-               } 
-         } 
-      } 
-   } 
-}                                              
+                  status = 5;
+               }
+         }
+      }
+   }
+}
 
 
 
 void         tcontinuecampaign::init(void)
-{ 
-  #define leftspace 25  
+{
+  #define leftspace 25
 
    tnewcampaignlevel::init();
    title = "next campaign level";
-   x1 = 100; 
-   xsize = 440; 
-   y1 = 100; 
-   ysize = 350; 
+   x1 = 100;
+   xsize = 440;
+   y1 = 100;
+   ysize = 350;
 
-   addbutton("~s~ave recovery information",leftspace,270,xsize - leftspace,290,0,1,2,true); 
+   addbutton("~s~ave recovery information",leftspace,270,xsize - leftspace,290,0,1,2,true);
    disablebutton ( 2 );
 
    addbutton("~g~o !",leftspace,300,( xsize - leftspace ) /2 , 330,0,1,1,true);
 
    addbutton("~q~uit~ !", ( xsize + leftspace ) /2 ,300, xsize - leftspace , 330,0,1,3,true);
 
-   buildgraphics(); 
+   buildgraphics();
 
-   rahmen3("map info",x1 + leftspace,y1 + 50,x1 + xsize - leftspace,y1 + 250,1); 
-} 
+   rahmen3("map info",x1 + leftspace,y1 + 50,x1 + xsize - leftspace,y1 + 250,1);
+}
 
 
 void         tcontinuecampaign::buttonpressed(int         id)
-{ 
+{
 
    switch (id) {
-      
-      case 1:   { 
-            if ((status == 7) || (status == 8 ))
-               status = 20; 
-            else { 
-               if ((status == 5) || (status == 6 )) {
-                  if (viewtextquery( 901,"warning", "~c~ancel", "c~o~ntinue" ) == 1) 
-                     status = 21; 
-               } 
-               if (status <= 1) { 
-                  if (viewtextquery( 902,"Fatal Error", "~c~ancel", "c~o~ntinue" ) == 1)
-                     status = 21; 
-               } 
-            } 
-         } 
 
-      break; 
-      
-      case 2:   { 
+      case 1:   {
+            if ((status == 7) || (status == 8 ))
+               status = 20;
+            else {
+               if ((status == 5) || (status == 6 )) {
+                  if (viewtextquery( 901,"warning", "~c~ancel", "c~o~ntinue" ) == 1)
+                     status = 21;
+               }
+               if (status <= 1) {
+                  if (viewtextquery( 902,"Fatal Error", "~c~ancel", "c~o~ntinue" ) == 1)
+                     status = 21;
+               }
+            }
+         }
+
+      break;
+
+      case 2:   {
             char t[30];
 
             fileselectsvga("*.rcy", t, 2);
             if ( t[0] )
-               savecampaignrecoveryinformation ( t, idsearched); 
-         } 
+               savecampaignrecoveryinformation ( t, idsearched);
+         }
       break;
 
 
@@ -1350,8 +1358,8 @@ void         tcontinuecampaign::buttonpressed(int         id)
             status = 50;
             }
       break;
-   } 
-} 
+   }
+}
 
 
 void         tcontinuecampaign::regroupevents ( pmap map )
@@ -1375,33 +1383,33 @@ void         tcontinuecampaign::regroupevents ( pmap map )
       if ( oev == NULL ) {
          oev = new ( teventstore ) ;
          oldevent = oev;
-         foev = oev; 
-         oev->next = NULL; 
-         oev->num = 0; 
-      } 
-      else  
-         if (oev->num == 256) { 
+         foev = oev;
+         oev->next = NULL;
+         oev->num = 0;
+      }
+      else
+         if (oev->num == 256) {
             foev = oev;
             oev = new ( teventstore ) ;
             foev->next = oev;
-            oev->num = 0; 
+            oev->num = 0;
             oev->next = NULL;
-         } 
-       
+         }
 
-      oev->eventid[oev->num] = ev->id; 
-      oev->mapid[oev->num] = mapid; 
+
+      oev->eventid[oev->num] = ev->id;
+      oev->mapid[oev->num] = mapid;
       oev->num++;
-      ev = ev->next; 
-   } 
+      ev = ev->next;
+   }
 
    for (int i = 0; i<8; i++) {
-      if ( map->player[i].existent ) 
+      if ( map->player[i].existent )
          tech[i] = map->player[i].research.developedtechnologies;
       else
          tech[i] = NULL;
 
-      if ( map->player[i].existent ) 
+      if ( map->player[i].existent )
          dissectedunits[i] = map->player[ i ].dissectedunit;
       else
          dissectedunits[i] = NULL;
@@ -1410,17 +1418,17 @@ void         tcontinuecampaign::regroupevents ( pmap map )
 
 
 void         tcontinuecampaign::run(void)
-{ 
+{
 
-   searchmapinfo(); 
-   showmapinfo(70); 
-   mousevisible(true); 
+   searchmapinfo();
+   showmapinfo(70);
+   mousevisible(true);
 
-   do { 
+   do {
       tnewcampaignlevel::run();
    }  while (status <= 10);
 
-   if (status == 20) { 
+   if (status == 20) {
       int i;
 
       regroupevents( actmap );
@@ -1431,22 +1439,22 @@ void         tcontinuecampaign::run(void)
          actmap->player[ i ].dissectedunit = NULL;
       }
 
-      loadcampaignmap(); 
+      loadcampaignmap();
       actmap->oldevents = oldevent;
       for (i=0;i<8 ; i++) {
          actmap->player[i].research.developedtechnologies = tech[i];
          actmap->player[ i ].dissectedunit = dissectedunits[i];
       }
 
-   } 
+   }
    if (status == 50)
       exit( 0 );
-} 
+}
 
 void         tchoosenewmap::readmapinfo(void)
-{ 
+{
 
-   if (mapname[0] != 0) 
+   if (mapname[0] != 0)
       freespfld ();
 
    message1[0] = 0;
@@ -1462,204 +1470,204 @@ void         tchoosenewmap::readmapinfo(void)
        // spfldloader.setcachingarrays ( );
 
        CharBuf description;
-    
+
        spfldloader.stream->readpchar ( &description.buf );
-       int desclen = strlen ( description.buf ) + 7;
+       // int desclen = strlen ( description.buf ) + 7;
        strncpy ( dateiinfo, description.buf, sizeof ( dateiinfo) - 2  );
 
        word w;
        spfldloader.stream->readdata2 ( w );
-    
-       if ( w != fileterminator ) 
+
+       if ( w != fileterminator )
           throw tinvalidversion ( mapname, w, fileterminator );
-   
+
        int version;
        spfldloader.stream->readdata2( version );
-    
-         if (version > actmapversion || version < minmapversion ) 
+
+         if (version > actmapversion || version < minmapversion )
             throw tinvalidversion ( mapname, version, actmapversion );
-      
+
        spfldloader.readmap ();
        spfld = spfldloader.spfld;
-   
+
        checkforcampaign(  );
 
-   } 
+   }
    catch ( tfileerror ) {
       strcpy( message1, "invalid map version" );
-      status = 1; 
+      status = 1;
    } /* endcatch */
    spfld = NULL;
 
-} 
- 
+}
+
 void         tchoosenewmap::buttonpressed( int id )
-{ 
+{
   char         t[100];
 
    switch (id) {
-      
-      case 2:   { 
+
+      case 2:   {
             fileselectsvga(mapextension, t, 1);
             if ( t[0] ) {
                strcpy(mapname, t);
-               readmapinfo(); 
-            } 
-            else 
-               strcpy(message1,"no map selected"); 
-            showmapinfo(260); 
-         } 
-      break; 
-      
-      case 3:   if (status >= 7) 
-            status = 20; 
-      break; 
-      
-      case 4:   status = 15; 
-      break; 
-      
-      case 5:   { 
+               readmapinfo();
+            }
+            else
+               strcpy(message1,"no map selected");
+            showmapinfo(260);
+         }
+      break;
+
+      case 3:   if (status >= 7)
+            status = 20;
+      break;
+
+      case 4:   status = 15;
+      break;
+
+      case 5:   {
             if (password[0] != 0) {
-               searchmapinfo(); 
-               showmapinfo(260); 
-            } 
-         } 
-   break; 
-   } 
-} 
+               searchmapinfo();
+               showmapinfo(260);
+            }
+         }
+   break;
+   }
+}
 
 
 void         tchoosenewmap::init( char* ptitle )
-{ 
+{
    tnewcampaignlevel::init();
    password[0] = 0;
    mapname[0] = 0;
    maptitle[0] = 0;
    mapinfo[0] = 0;
-   status = 0; 
+   status = 0;
 
    title = ptitle;
-   x1 = 120; 
-   xsize = 400; 
-   y1 = 20; 
-   ysize = 440; 
-   spfld = NULL; 
+   x1 = 120;
+   xsize = 400;
+   y1 = 20;
+   ysize = 440;
+   spfld = NULL;
 
 
-   addbutton("~p~assword",25,105,140,125,1,0,1,true); 
+   addbutton("~p~assword",25,105,140,125,1,0,1,true);
    addeingabe(1, password,10,10);
 
-   addbutton("se~a~rch map",150,100,360,125,0,1,5,true); 
+   addbutton("se~a~rch map",150,100,360,125,0,1,5,true);
 
-   addbutton("s~e~lect map",150,200,360,225,0,1,2,true); 
+   addbutton("s~e~lect map",150,200,360,225,0,1,2,true);
 
 
-   addbutton("~s~tart",20,390,195,420,0,1,3,true); 
-   addkey(3,ct_enter); 
+   addbutton("~s~tart",20,390,195,420,0,1,3,true);
+   addkey(3,ct_enter);
 
-   addbutton("~c~ancel",205,390,380,420,0,1,4,true); 
-   addkey(4,ct_esc); 
+   addbutton("~c~ancel",205,390,380,420,0,1,4,true);
+   addkey(4,ct_esc);
 
-   buildgraphics(); 
+   buildgraphics();
    rahmen3("search map by password",x1 + 10,y1 + starty + 30,x1 + xsize - 20,y1 + starty + 100,1);
    rahmen3("select map by filename",x1 + 10,y1 + starty + 130,x1 + xsize - 20,y1 + starty + 200,1);
 
-} 
+}
 
 
-                       
+
 void         tchoosenewsinglelevel::checkforcampaign( void )
-{                      
+{
    if ( spfld->campaign ) {
       if ( spfld->campaign->directaccess == 0 ) {
          strcpy ( message1, "access only allowed by password" );
-         status = 1; 
-      } 
-      else { 
+         status = 1;
+      }
+      else {
          strcpy( mapinfo, dateiinfo );
          if ( spfld->title )
             strcpy ( maptitle, spfld->title);
          else
             maptitle[0] = 0;
-         status = 7; 
-      } 
-   } 
-   else { 
+         status = 7;
+      }
+   }
+   else {
       strcpy( mapinfo, dateiinfo );
       if ( spfld->title )
          strcpy ( maptitle, spfld->title);
       else
          maptitle[0] = 0;
       status = 7;
-   } 
+   }
 
-} 
+}
 
 void         tchoosenewcampaign::checkforcampaign( void )
-{ 
+{
    if ( spfld->campaign == NULL ) {
       strcpy( message1, "no campaign map" );
-      status = 1; 
-   } 
-   else 
-      if (spfld->campaign->directaccess == false) { 
+      status = 1;
+   }
+   else
+      if (spfld->campaign->directaccess == false) {
          strcpy ( message1, "access only allowed by password" );
-         status = 1; 
-      } else { 
+         status = 1;
+      } else {
          strcpy( mapinfo, dateiinfo );
          if ( spfld->title )
             strcpy ( maptitle, spfld->title);
          else
             maptitle[0] = 0;
-         status = 7; 
-      } 
+         status = 7;
+      }
 
-}            
-       
+}
+
 void         tchoosenewcampaign::run(void)
-{ 
+{
 
-   mousevisible(true); 
-   do { 
+   mousevisible(true);
+   do {
       tchoosenewmap::run();
    }  while (status <= 10);
-   if (status == 20) {    
-      loadcampaignmap(); 
-   } 
-} 
+   if (status == 20) {
+      loadcampaignmap();
+   }
+}
 
 void         tchoosenewsinglelevel::run(void)
-{ 
-   mousevisible(true); 
-   do { 
+{
+   mousevisible(true);
+   do {
       tchoosenewmap::run();
    }  while (status <= 10);
 
-   if (status == 20) { 
+   if (status == 20) {
       displaymessage("loading: %s ",0, mapname);
 
       try {
          if ( loadmap( mapname ) == 0) {
             ::initmap();
-            
+
             removemessage();
-            if (actmap->campaign != NULL) { 
+            if (actmap->campaign != NULL) {
                delete actmap->campaign;
-               actmap->campaign = NULL; 
+               actmap->campaign = NULL;
             }
-            
+
             setupalliances();
-            
+
             int human = 0;
             for ( int i = 0; i < 8; i++ )
                if ( actmap->player[i].stat == ps_human )
                   if ( actmap->player[i].existent )
                      human++;
-   
+
             if ( !human ) {
                displaymessage ( "no human players found !", 1 );
                erasemap();
-               throw tnomaploaded();
+               throw NoMapLoaded();
             }
 
             if ( human > 1 )
@@ -1676,31 +1684,31 @@ void         tchoosenewsinglelevel::run(void)
               if ( actmap->time.a.turn == 2 ) {
                  displaymessage("no human players found !", 1 );
                  erasemap();
-                 throw tnomaploaded();
+                 throw NoMapLoaded();
               }
             } while ( actmap->player[actmap->actplayer].stat != ps_human ); /* enddo */
          }
       } /* endtry */
 
-      catch ( tinvalidid err ) {
-         displaymessage( err.msg, 1 );
+      catch ( InvalidID err ) {
+         displaymessage( err.getMessage().c_str(), 1 );
          if ( !actmap || actmap->xsize <= 0)
-            throw tnomaploaded();
+            throw NoMapLoaded();
       } /* endcatch */
       catch ( tinvalidversion err ) {
          displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.filename, err.expected, err.found );
          if ( !actmap || actmap->xsize <= 0)
-            throw tnomaploaded();
+            throw NoMapLoaded();
       } /* endcatch */
       catch ( tfileerror err) {
          displaymessage( "error reading map filename %s ", 1, err.filename );
          if ( !actmap || actmap->xsize <= 0)
-            throw tnomaploaded();
+            throw NoMapLoaded();
       } /* endcatch */
-      catch ( terror ) {
+      catch ( ASCexception ) {
          displaymessage( "error loading map", 1 );
          if ( !actmap || actmap->xsize <= 0)
-            throw tnomaploaded();
+            throw NoMapLoaded();
       } /* endcatch */
 
    } 
@@ -2213,7 +2221,7 @@ void         showtechnology(ptechnology  tech )
          } while ( t + 200 > ticker  &&  !keypress()  && !mouseparams.taste); /* enddo */
 
          int abrt = 0;
-         while ( keypress )
+         while ( keypress() )
            r_key();
 
 
@@ -4532,9 +4540,9 @@ void writeGameParametersToString ( std::string& s)
 
 void sendGameParameterAsMail ( void )
 {
-	std::string s;
+ 	 std::string s;
    writeGameParametersToString ( s );
-   tmessage* msg = new tmessage ( strdup ( s.c_str()), 255 );
+   new tmessage ( strdup ( s.c_str()), 255 );
 }
 
 
@@ -6721,30 +6729,23 @@ void giveunitaway ( void )
                           int startx;
                           int llength;
                           int numlength;
+                          VehicleService::Target* target;
+                          pvehicle      source;
+                          vector<int> oldpos;
+                          vector<int> newpos;
+                          vector<int> displayed;
+                          int           abbruch;
+                          VehicleService* serviceAction;
+                          int targetNWID;
+
                  public:
-                          tvweapons     wp;
-                          int           oldpos[10];
-                          int           j;
-                          integer       mx, my;
-                          char          mp, op;
-                          char       frst;
-                          
-                          // int*          ammunition;
-                          int           sprit,energy,material;
-                          pvehicle      vehicle;
-                          pvehicle      vehicle2;
-                          pbuilding     building;
-                          char          fast;
-                          char       abbruch;
-                          
-                          void          setvariables( pvehicle svehicle, pvehicle svehicle2, pbuilding sbuilding, char sfast);
-                          
-                          void          init ( void );
+
+                          void          init ( pvehicle src, int _targetNWID, VehicleService* _serviceAction );
                           virtual void  run ( void );
                           virtual void  buttonpressed( int id ); 
-                          void          zeichneschieberegler( char b);
-                          void          checkpossible( char b );
-                          void          setloading ( void );
+                          void          zeichneschieberegler( int pos);
+                          void          checkpossible( int pos );
+                          void          setloading ( int pos );
                        };
 
 
@@ -6765,17 +6766,18 @@ char* tmunitionsbox::strr ( int a ) {
    return strng2;
 }
 
-   #define firstweapon 0
 
-    #define cenergy 100  
-    #define cmaterial 101  
-    #define csprit 102  
-    #define maxloading 0xffff  
+void         tverlademunition::init( pvehicle src, int _targetNWID, VehicleService* _serviceAction )
+{
+   targetNWID = _targetNWID;
+   serviceAction = _serviceAction;
+   source = src;
 
+   VehicleService::TargetContainer::iterator i = serviceAction->dest.find ( targetNWID );
+   if ( i == serviceAction->dest.end() )
+      throw ASCmsgException ( "tverlademunition::init / target not found" );
 
-
-void         tverlademunition::init(void)
-{ 
+   target = &(i->second);
 
    tmunitionsbox::init();
    x1 = 40;
@@ -6797,7 +6799,7 @@ void         tverlademunition::init(void)
 void         tverlademunition::buttonpressed( int id)
 { 
    if (id == 1) { 
-      setloading(); 
+      // setloading();
       abbruch = true; 
    } 
 } 
@@ -6806,474 +6808,244 @@ void         tverlademunition::buttonpressed( int id)
 #define yoffset 105
 void         tverlademunition::run(void)
 { 
-   word         i; 
-   integer      k, l; 
+   if ( !target->service.size() ) {
+      displaymessage ( "nothing to transfer", 1 );
+      return;
+   }
 
-   if (vehicle == NULL) return;
-
-   wp.count = 0; 
-   frst = true; 
-   op = 20; 
-   mp = 0; 
-   memset( (void*) &wp, 0, sizeof(wp));
-
-   if (vehicle2 == NULL) { 
-    /*
-      if (vehicle->typ->tank > 0) { 
-            wp.weap[wp.count].typ = csprit; 
-            wp.weap[wp.count].sourcepos = csprit; 
-            wp.weap[wp.count].destpos = csprit; 
-            wp.weap[wp.count].sourceamount = sprit; 
-            wp.weap[wp.count].destamount = vehicle->fuel; 
-            wp.weap[wp.count].maxsourceamount = maxloading; 
-            wp.weap[wp.count].maxdestamount = vehicle->typ->tank; 
-            wp.weap[wp.count].newdestamount = wp.weap[wp.count].destamount; 
-         
-         wp.count++;
-      } 
-      if (vehicle->typ->energy > 0) { 
-            wp.weap[wp.count].typ = cenergy; 
-            wp.weap[wp.count].sourcepos = cenergy; 
-            wp.weap[wp.count].destpos = cenergy; 
-            wp.weap[wp.count].sourceamount = energy; 
-            wp.weap[wp.count].destamount = vehicle->energy; 
-            wp.weap[wp.count].maxsourceamount = maxloading; 
-            wp.weap[wp.count].maxdestamount = vehicle->typ->energy;
-            wp.weap[wp.count].newdestamount = wp.weap[wp.count].destamount; 
-         
-         wp.count++; 
-      } 
-      if (vehicle->typ->material > 0) { 
-            wp.weap[wp.count].typ = cmaterial; 
-            wp.weap[wp.count].sourcepos = cmaterial; 
-            wp.weap[wp.count].destpos = cmaterial; 
-            wp.weap[wp.count].sourceamount = material; 
-            wp.weap[wp.count].destamount = vehicle->material; 
-            wp.weap[wp.count].maxsourceamount = maxloading; 
-            wp.weap[wp.count].maxdestamount = vehicle->typ->material; 
-            wp.weap[wp.count].newdestamount = wp.weap[wp.count].destamount; 
-         
-         wp.count++; 
-      } 
-
-      if (vehicle->typ->weapons->count > 0) 
-         for (i = 0; i <= vehicle->typ->weapons->count - 1; i++) { 
-            if (vehicle->typ->weapons->weapon[i].typ & (cwweapon | cwmineb)) {   
-
-                  wp.weap[wp.count].typ = log2(vehicle->typ->weapons->weapon[i].typ & (cwweapon | cwmineb)); 
-                  wp.weap[wp.count].sourcepos = wp.weap[wp.count].typ; 
-                  wp.weap[wp.count].sourceamount = ammunition[wp.weap[wp.count].typ]; 
-
-                  wp.weap[wp.count].destpos = i; 
-                  wp.weap[wp.count].destamount = vehicle->ammo[i]; 
-                  wp.weap[wp.count].maxsourceamount = maxloading; 
-                  wp.weap[wp.count].maxdestamount = vehicle->typ->weapons->weapon[i].count; 
-                  wp.weap[wp.count].newdestamount = wp.weap[wp.count].destamount; 
-               
-               wp.count++; 
-            } 
-         } 
-     */
-   } 
-   else { 
-      /*
-      if ((fast & 2 ) == 0)
-         mx = 0; 
-      else 
-      */
-      mx = vehicle2->typ->weapons->count; 
-      for (i = 0; i < mx; i++) { 
-         if ( vehicle2->typ->weapons->weapon[i].service()  /* || ((fast & 2) == 0)  */ ) {
-            if ((vehicle->typ->tank > 0) && (vehicle2->typ->tank > 0) && ( vehicle2->functions & cffuelref)) { 
-                  wp.weap[wp.count].typ = csprit; 
-                  wp.weap[wp.count].sourcepos = csprit; 
-                  wp.weap[wp.count].destpos = csprit; 
-                  wp.weap[wp.count].sourceamount = vehicle2->fuel; 
-                  wp.weap[wp.count].maxsourceamount = vehicle2->typ->tank; 
-                  wp.weap[wp.count].destamount = vehicle->fuel; 
-                  wp.weap[wp.count].maxdestamount = vehicle->typ->tank; 
-                  wp.weap[wp.count].newdestamount = wp.weap[wp.count].destamount; 
-               
-               wp.count++;
-            } 
-            /*
-            if ((vehicle->typ->energy > 0) && (vehicle2->typ->energy > 0)) { 
-                  wp.weap[wp.count].typ = cenergy; 
-                  wp.weap[wp.count].sourcepos = cenergy; 
-                  wp.weap[wp.count].destpos = cenergy; 
-                  wp.weap[wp.count].sourceamount = vehicle2->energy; 
-                  wp.weap[wp.count].maxsourceamount = vehicle2->typ->energy; 
-                  wp.weap[wp.count].destamount = vehicle->energy; 
-                  wp.weap[wp.count].maxdestamount = vehicle->typ->energy; 
-                  wp.weap[wp.count].newdestamount = wp.weap[wp.count].destamount; 
-               
-               wp.count++;
-            } 
-            */
-            if ((vehicle2->typ->material > 0) && (vehicle->typ->material > 0) && ( vehicle2->functions & cfmaterialref )) { 
-                  wp.weap[wp.count].typ = cmaterial; 
-                  wp.weap[wp.count].sourcepos = cmaterial; 
-                  wp.weap[wp.count].destpos = cmaterial; 
-                  wp.weap[wp.count].sourceamount = vehicle2->material; 
-                  wp.weap[wp.count].maxsourceamount = vehicle2->typ->material; 
-                  wp.weap[wp.count].destamount = vehicle->material; 
-                  wp.weap[wp.count].maxdestamount = vehicle->typ->material; 
-                  wp.weap[wp.count].newdestamount = wp.weap[wp.count].destamount; 
-               
-               wp.count++;
-            } 
-         } 
-      } 
-      if (vehicle->typ->weapons->count > 0) 
-         for (i = 0; i < vehicle->typ->weapons->count ; i++) { 
-            l = 255; 
-            for (k = 0; k < vehicle2->typ->weapons->count ; k++) 
-               if (vehicle2->typ->weapons->weapon[k].getScalarWeaponType() == vehicle->typ->weapons->weapon[i].getScalarWeaponType()  &&  vehicle->typ->weapons->weapon[i].getScalarWeaponType() >= 0) 
-                  if (vehicle2->typ->weapons->weapon[k].canRefuel() ) 
-                     l = k; 
-            if (l != 255) {                                                                                          
-                  wp.weap[wp.count].typ = vehicle->typ->weapons->weapon[i].getScalarWeaponType() ; 
-                  wp.weap[wp.count].sourcepos = l; 
-                  wp.weap[wp.count].destpos = i; 
-                  wp.weap[wp.count].sourceamount = vehicle2->ammo[l]; 
-                  wp.weap[wp.count].maxsourceamount = vehicle2->typ->weapons->weapon[l].count; 
-
-                  wp.weap[wp.count].destamount = vehicle->ammo[i]; 
-                  wp.weap[wp.count].maxdestamount = vehicle->typ->weapons->weapon[i].count; 
-                  wp.weap[wp.count].newdestamount = wp.weap[wp.count].destamount; 
-               
-               wp.count++;
-            } 
-         } 
-   } 
-
-   y1 = 75 + (8 - wp.count) * 25 / 2 - 20;
+   y1 = 75 + (8 - target->service.size()) * 25 / 2 - 20;
    ysize = 480 - 2 * y1; 
 
-   if ((fast & 1) == 0) {
-      {
-         for (i = 0; i <= wp.count - 1; i++) {
-            oldpos[i] = wp.weap[i].newdestamount;
+   int i;
+
+   addbutton("~l~oad",10,ysize - 40,xsize - 10,ysize - 10,0,1,1,true);
+   addkey(1,ct_enter);
+   buildgraphics();
+
+   rahmen(true,x1 + 10,y1 + 50,x1 + xsize - 10,y1 + ysize - 50);
+
+   activefontsettings.justify = lefttext;
+   activefontsettings.font = schriften.smallarial;
+   activefontsettings.length = 100;
+
+   int ix, iy;
+   getpicsize ( target->dest->typ->picture[0], ix, iy );
+
+//   if ( vehicle2 )
+      putrotspriteimage(x1 + 30 , y1 + 55, target->dest->typ->picture[0], actmap->actplayer * 8);
+//   else
+//      showtext2( building->typ->name , x1 + 50, y1 + 55);
+
+//   putrotspriteimage(x1 + xsize - 30 - ix , y1 + 55, vehicle->typ->picture[0], actmap->actplayer * 8);
+
+   int pos = 0;
+   for (i = 0; i < target->service.size() ; i++)
+      if ( target->service[i].type != VehicleService::srv_repair ) {
+         activefontsettings.length = (x1 + startx - numlength - 10 ) - (x1 + 20 );
+         const char* text;
+         switch ( target->service[i].type ) {
+            case VehicleService::srv_ammo : text = cwaffentypen[ target->dest->typ->weapons->weapon[ target->service[i].targetPos ].getScalarWeaponType() ];
+                                            break;
+            case VehicleService::srv_resource : text = resourceNames[target->service[i].targetPos];
+                                            break;
+            case VehicleService::srv_repair : text = "damage";
+                                            break;
          }
+         oldpos.push_back ( target->service[i].curAmount );
+         newpos.push_back ( target->service[i].curAmount );
+         displayed.push_back ( i );
 
-         addbutton("~l~oad",10,ysize - 40,xsize - 10,ysize - 10,0,1,1,true);
-         addkey(1,ct_enter);
-         buildgraphics();
+         showtext2( text,x1 + 20, y1 + firstliney + i * abstand);
 
-         rahmen(true,x1 + 10,y1 + 50,x1 + xsize - 10,y1 + ysize - 50);
+         rahmen(true, x1 + startx - 11, y1 + firstliney - 2 + i * abstand, x1 + startx + llength + 11,y1 + firstliney + 18 + i * abstand);
+         zeichneschieberegler(pos);
+         pos++;
+      }
 
-         activefontsettings.justify = lefttext;
-         activefontsettings.font = schriften.smallarial;
-         activefontsettings.length = 100;
+   if ( !pos ) {
+      displaymessage ( "nothing to transfer", 1 );
+      return;
+   }
 
-         int ix, iy;
-         getpicsize ( vehicle2->typ->picture[0], ix, iy );
+   mousevisible(true);
+   abbruch = 0;
 
-         if ( vehicle2 )
-            putrotspriteimage(x1 + 30 , y1 + 55, vehicle2->typ->picture[0], actmap->actplayer * 8);
-         else
-            showtext2( building->typ->name , x1 + 50, y1 + 55);
+   int mp = -1;
+   do {
+      int op = mp;
+      tmunitionsbox::run();
+      switch (taste) {
 
-         putrotspriteimage(x1 + xsize - 30 - ix , y1 + 55, vehicle->typ->picture[0], actmap->actplayer * 8);
+         case ct_up:   {
+                   op = mp;
+                   if (mp > 0)
+                      mp--;
+                   else
+                      mp = displayed.size() - 1;
+                }
+         break;
 
-         for (i = 0; i < wp.count ; i++) {
-            activefontsettings.length = (x1 + startx - numlength - 10 ) - (x1 + 20 );
-            if ((wp.weap[i].typ >= 100) && (wp.weap[i].typ <= 110))
-               showtext2( resourceNames[wp.weap[i].typ - 100],x1 + 20, y1 + firstliney + i * abstand);
-            else
-               showtext2( cwaffentypen[wp.weap[i].typ],x1 + 20, y1 + firstliney + i * abstand);
+         case ct_down:   {
+                     op = mp;
+                     if (mp >= displayed.size() - 1)
+                        mp = 0;
+                     else
+                        mp++;
+                  }
+         break;
 
-            rahmen(true, x1 + startx - 11, y1 + firstliney - 2 + i * abstand, x1 + startx + llength + 11,y1 + firstliney + 18 + i * abstand);
-            zeichneschieberegler(i);
+         case ct_left:
+         case ct_right:   {
+                            int step =  ( target->service[displayed[mp]].maxAmount - target->service[displayed[mp]].minAmount ) / 100;
+                            step = int( pow ( 10, int ( log10 ( step ))));
+
+                            oldpos[mp] = newpos[mp];
+
+                            if( taste == ct_left )
+                               newpos[mp] -= step;
+                            else
+                               newpos[mp] += step;
+
+                            checkpossible(mp);
+                            if (oldpos[mp] != newpos[mp] )
+                               setloading ( mp );
+                           }
+         break;
+
+      }
+
+      if (taste == ct_esc) {
+          abbruch = true;
+      }
+
+      if (taste == entervalue) {
+         mousevisible(false);
+         oldpos[mp] = newpos[mp];
+         bar(x1 + xsize - 60, y1 + firstliney + mp * abstand,x1 + xsize - 17,y1 + firstliney + 15 + mp * abstand, backgrnd);
+         intedit( &newpos[mp], x1 + xsize - 60, y1 + firstliney + mp * abstand, 43, 0, 65535);
+         checkpossible(mp);
+         if ( oldpos[mp] != newpos[mp] )
+            setloading ( mp );
+         mousevisible(true);
+      }
+      if ( mp != op ) {
+         mousevisible(false);
+         if ( op >= 0 )
+            xorrectangle(x1 + 15,y1 + firstliney - 5 + op * abstand,x1 + xsize - 15,y1 + firstliney - 5 + (op + 1) * abstand,14);
+         op = mp;
+         xorrectangle(x1 + 15,y1 + firstliney - 5 + op * abstand,x1 + xsize - 15,y1 + firstliney - 5 + (op + 1) * abstand,14);
+         mousevisible(true);
+      }
+
+      int mx = mouseparams.x;
+      for (i = 0; i < displayed.size() ; i++) {
+         if ((mouseparams.taste == 1) && mouseinrect ( x1 + startx - 10, y1 + firstliney + i * abstand, x1 + startx + llength + 10, y1 + firstliney + i * abstand + 20 )) {
+            oldpos[i] = newpos[i];
+            int j = (target->service[displayed[i]].maxAmount - target->service[displayed[i]].minAmount) * (mx - (startx + x1)) / llength;
+            if (j < 0)
+               j = 0;
+
+            if (j > target->service[displayed[i]].maxAmount)
+               j = target->service[displayed[i]].maxAmount;
+
+            newpos[i] = j;
+
+            checkpossible(i);
+
+            if (oldpos[i] != newpos[i]) {
+               mousevisible(false);
+               setloading ( i );
+               mousevisible(true);
+            }
          }
       }
 
-      mousevisible(true);
-      if (wp.count > 0) {
-         abbruch = false; 
-         do { 
-            tmunitionsbox::run();
-            switch (taste) {
-               
-               case ct_up:   { 
-                         op = mp; 
-                         if (mp > 0) 
-                            mp--;
-                         else 
-                            mp = wp.count - 1;
-                      } 
-               break; 
-               
-               case ct_down:   { 
-                           op = mp; 
-                           if (mp >= wp.count - 1) 
-                              mp = 0;
-                           else 
-                              mp++;
-                        } 
-               break; 
-               
-               case ct_right:   { 
+   }  while ( abbruch==0 );
 
-                               oldpos[mp] = wp.weap[mp].newdestamount; 
-
-                               if (( wp.weap[mp].maxdestamount >= 1) && (wp.weap[mp].maxdestamount <= 20))
-                                  i = 1;
-                               if (( wp.weap[mp].maxdestamount >= 21) && (wp.weap[mp].maxdestamount <= 50))
-                                  i = 2;
-                               if (( wp.weap[mp].maxdestamount >= 51) && (wp.weap[mp].maxdestamount <= 100))
-                                  i = 5;
-                               if (( wp.weap[mp].maxdestamount >= 101) && (wp.weap[mp].maxdestamount <= 200))
-                                  i = 10;
-                               if (( wp.weap[mp].maxdestamount >= 201) && (wp.weap[mp].maxdestamount <= 500))
-                                  i = 20;
-                               if (( wp.weap[mp].maxdestamount >= 501) && (wp.weap[mp].maxdestamount <= 2000))
-                                  i = 100;
-                               if (( wp.weap[mp].maxdestamount >= 2001) && (wp.weap[mp].maxdestamount <= 10000))
-                                  i = 200;
-                               if ( wp.weap[mp].maxdestamount >= 10001)
-                                  i = 500;
-                                  
-                               wp.weap[mp].newdestamount = wp.weap[mp].newdestamount + i; 
-                               checkpossible(mp); 
-                               if (oldpos[mp] != wp.weap[mp].newdestamount) 
-                                  zeichneschieberegler(mp); 
-                            
-                         } 
-               break; 
-               
-               case ct_left:   { 
-                               oldpos[mp] = wp.weap[mp].newdestamount; 
-
-                               if (( wp.weap[mp].maxdestamount >= 1) && (wp.weap[mp].maxdestamount <= 20))
-                                  i = 1;
-                               if (( wp.weap[mp].maxdestamount >= 21) && (wp.weap[mp].maxdestamount <= 50))
-                                  i = 2;
-                               if (( wp.weap[mp].maxdestamount >= 51) && (wp.weap[mp].maxdestamount <= 100))
-                                  i = 5;
-                               if (( wp.weap[mp].maxdestamount >= 101) && (wp.weap[mp].maxdestamount <= 200))
-                                  i = 10;
-                               if (( wp.weap[mp].maxdestamount >= 201) && (wp.weap[mp].maxdestamount <= 500))
-                                  i = 20;
-                               if (( wp.weap[mp].maxdestamount >= 501) && (wp.weap[mp].maxdestamount <= 2000))
-                                  i = 100;
-                               if (( wp.weap[mp].maxdestamount >= 2001) && (wp.weap[mp].maxdestamount <= 10000))
-                                  i = 200;
-                               if ( wp.weap[mp].maxdestamount >= 10001)
-                                  i = 500;
-
-                               if (wp.weap[mp].newdestamount > i)
-                                  wp.weap[mp].newdestamount-=i;
-                               else
-                                  wp.weap[mp].newdestamount = 0;
-
-                               checkpossible(mp); 
-                               if (oldpos[mp] != wp.weap[mp].newdestamount) 
-                                  zeichneschieberegler(mp); 
-                           
-                        } 
-               break;
-
-            } 
-
-            if (taste == ct_esc) {
-                abbruch = true;
-            }
-
-            if (taste == entervalue) {
-
-               mousevisible(false); 
-               oldpos[mp] = wp.weap[mp].newdestamount; 
-               bar(x1 + xsize - 60, y1 + firstliney + mp * abstand,x1 + xsize - 17,y1 + firstliney + 15 + mp * abstand, backgrnd);
-               intedit( &wp.weap[mp].newdestamount , x1 + xsize - 60, y1 + firstliney + mp * abstand, 43, 0, 65535);
-               checkpossible(mp); 
-               zeichneschieberegler(mp); 
-               mousevisible(true); 
-            } 
-            if ((op != 20) && (mp != op)) { 
-
-               mousevisible(false);
-               if (!frst) 
-                  xorrectangle(x1 + 15,y1 + firstliney - 5 + op * abstand,x1 + xsize - 15,y1 + firstliney - 5 + (op + 1) * abstand,14);
-               frst = false; 
-               op = mp; 
-               xorrectangle(x1 + 15,y1 + firstliney - 5 + op * abstand,x1 + xsize - 15,y1 + firstliney - 5 + (op + 1) * abstand,14);
-               mousevisible(true); 
-            } 
-            mx = mouseparams.x; 
-            my = mouseparams.y; 
-            for (i = 0; i < wp.count ; i++) {
-               if ((mouseparams.taste == 1) && mouseinrect ( x1 + startx - 10, y1 + firstliney + i * abstand, x1 + startx + llength + 10, y1 + firstliney + i * abstand + 20 )) {
-                  oldpos[i] = wp.weap[i].newdestamount; 
-                  j = wp.weap[i].maxdestamount * (mx - (startx + x1)) / llength;
-                  if (j < 0) j = 0; 
-                  if (j > wp.weap[i].maxdestamount) j = wp.weap[i].maxdestamount; 
-                  wp.weap[i].newdestamount = j; 
-
-                  checkpossible(i); 
-
-                  if (oldpos[i] != wp.weap[i].newdestamount) { 
-                     mousevisible(false); 
-                     zeichneschieberegler(i); 
-                     mousevisible(true); 
-                     oldpos[i] = wp.weap[i].newdestamount; 
-                  } 
-               } 
-            } 
-
-         }  while ( abbruch==0 );
-      } 
-      else 
-         wait(); 
-      mousevisible(false); 
-   } 
-   else { 
-      for (i = 0; i < wp.count ; i++) { 
-         wp.weap[i].newdestamount = wp.weap[i].maxdestamount; 
-         checkpossible(i); 
-      } 
-      setloading(); 
-   } 
-} 
-
-
-
-void         tverlademunition::setvariables(  pvehicle svehicle, pvehicle svehicle2, pbuilding sbuilding, char sfast )
-{ 
-   vehicle = svehicle; 
-   vehicle2 = svehicle2; 
-   building = sbuilding; 
-   if ( building ) { 
-      displaymessage("obsolete function called : tverlademunition::setvariables / building ",2);
-      sprit = building->actstorage.a.fuel; 
-      energy = building->actstorage.a.energy; 
-      material = building->actstorage.a.material; 
-   } 
-   else { 
-      sprit = vehicle2->fuel; 
-      energy = vehicle2->energy; 
-      material = vehicle2->material; 
-   } 
-
-   fast = sfast; 
-} 
-
-
-
-
-void         tverlademunition::zeichneschieberegler(pascal_byte         b)
-{ 
-//  collategraphicoperations cgo;
-
-   int      l;
-   int         r;
-
-   r = getmousestatus(); 
-   if (r == 2) mousevisible(false); 
-   bar(x1 + xsize - 60, y1 + firstliney + b * abstand, x1 + xsize - 17,y1 + firstliney + 15 + b * abstand,backgrnd);
-
-   activefontsettings.justify = lefttext; 
-   activefontsettings.background = dblue;
-   activefontsettings.length = numlength;
-
-   showtext2(strrr(wp.weap[b].newdestamount),x1 + startx + llength + 15, y1 + firstliney + b * abstand);
-
-   l = x1 + startx + llength * oldpos[b] / wp.weap[b].maxdestamount;
-
-   rectangle(l - 10, y1 + firstliney - 1 + b * abstand,l + 10,y1 + firstliney - 1 + b * abstand + 18,backgrnd);
-
-   l = x1 + startx + llength * wp.weap[b].newdestamount / wp.weap[b].maxdestamount;
-   rahmen(false, l - 10,y1 + firstliney - 1 + b * abstand,l + 10,y1 + firstliney - 1 + b * abstand + 18);
-
-//   bar(x1 + 116,y1 + 100 - 35 + b * abstand,startx - 12,y1 + 115 - 35 + b * abstand,backgrnd);
-
-   showtext2(strrr(wp.weap[b].sourceamount - (wp.weap[b].newdestamount - wp.weap[b].destamount)), x1 + startx - numlength -15 ,y1 + firstliney + b * abstand);
-
-   if (r == 2) mousevisible(true); 
-} 
-
-
-void         tverlademunition::checkpossible(pascal_byte         b)
-{ 
-      if (wp.weap[b].newdestamount - wp.weap[b].destamount > wp.weap[b].sourceamount) 
-         wp.weap[b].newdestamount = wp.weap[b].destamount + wp.weap[b].sourceamount; 
-      if (wp.weap[b].newdestamount > wp.weap[b].maxdestamount) 
-         wp.weap[b].newdestamount = wp.weap[b].maxdestamount; 
-      if (wp.weap[b].sourceamount - (wp.weap[b].newdestamount - wp.weap[b].destamount) > wp.weap[b].maxsourceamount) 
-         wp.weap[b].newdestamount = wp.weap[b].sourceamount + wp.weap[b].destamount - wp.weap[b].maxsourceamount; 
+   mousevisible(false);
 
 }
 
 
 
-void         tverlademunition::setloading(void)
+
+
+void         tverlademunition::zeichneschieberegler( int b )
 { 
-   int         b; 
-
-   if (wp.count > 0) 
-      for (b = 0; b < wp.count ; b++) {
-            if (wp.weap[b].sourcepos == csprit) { 
-               vehicle->fuel = wp.weap[b].newdestamount; 
-               if (building) 
-                  building->actstorage.a.fuel = wp.weap[b].sourceamount - (wp.weap[b].newdestamount - wp.weap[b].destamount);
-               else 
-                  vehicle2->fuel = wp.weap[b].sourceamount - (wp.weap[b].newdestamount - wp.weap[b].destamount);
-
-               logtoreplayinfo ( rpl_refuel, vehicle->xpos, vehicle->ypos, vehicle->networkid, int(1002), vehicle->fuel );
-            } 
-            else 
-               if (wp.weap[b].sourcepos == cmaterial) { 
-                  vehicle->material = wp.weap[b].newdestamount; 
-                  material = wp.weap[b].sourceamount - (wp.weap[b].newdestamount - wp.weap[b].destamount); 
-                  if (building) 
-                     building->actstorage.a.material = wp.weap[b].sourceamount - (wp.weap[b].newdestamount - wp.weap[b].destamount);
-                  else
-                     vehicle2->material = wp.weap[b].sourceamount - (wp.weap[b].newdestamount - wp.weap[b].destamount);
-
-                  logtoreplayinfo ( rpl_refuel, vehicle->xpos, vehicle->ypos, vehicle->networkid, int(1001), vehicle->material );
-               } 
-               else 
-                  if (wp.weap[b].sourcepos == cenergy) { 
-                     vehicle->energy = wp.weap[b].newdestamount; 
-                     energy = wp.weap[b].sourceamount - (wp.weap[b].newdestamount - wp.weap[b].destamount); 
-                     if (building) 
-                        building->actstorage.a.energy = wp.weap[b].sourceamount - (wp.weap[b].newdestamount - wp.weap[b].destamount);
-                     else
-                        vehicle2->energy = wp.weap[b].sourceamount - (wp.weap[b].newdestamount - wp.weap[b].destamount);
-
-                     logtoreplayinfo ( rpl_refuel, vehicle->xpos, vehicle->ypos, vehicle->networkid, int(1000), vehicle->energy );
-                  } 
-                  else { 
-                     if (vehicle2 == NULL) { 
-                        /*
-                        vehicle->munition[wp.weap[b].destpos] = wp.weap[b].newdestamount; 
-                        (*munition)[wp.weap[b].sourcepos] = wp.weap[b].sourceamount - (wp.weap[b].newdestamount - wp.weap[b].destamount); 
-                        */
-                     } 
-                     else { 
-                        vehicle->ammo[wp.weap[b].destpos] = wp.weap[b].newdestamount; 
-                        vehicle2->ammo[wp.weap[b].sourcepos] = wp.weap[b].sourceamount - (wp.weap[b].newdestamount - wp.weap[b].destamount);
-                        logtoreplayinfo ( rpl_refuel, vehicle->xpos, vehicle->ypos, vehicle->networkid, int(wp.weap[b].destpos), vehicle->ammo[wp.weap[b].destpos] );
-                     } 
-                  } 
-      }
-} 
+   int r = getmousestatus();
+   if (r == 2)
+      mousevisible(false);
 
 
-void         verlademunition(pvehicle     vehicle,
-                             pvehicle     vehicle2,
-                             pbuilding    building,
-                             int         fast)
-{ 
-   tverlademunition vlm; 
+   int sta, sto;
+   if ( b == -1 ) {
+      sta = 0;
+      sto = displayed.size()-1;
+   } else {
+      sta = b;
+      sto = b;
+   }
 
-   vlm.setvariables(vehicle,vehicle2,building,fast); 
-   vlm.init(); 
-   vlm.run(); 
+   for ( b = sta; b <= sto; b++ ) {
+
+      int      l;
+
+      bar(x1 + xsize - 60, y1 + firstliney + b * abstand, x1 + xsize - 17,y1 + firstliney + 15 + b * abstand,backgrnd);
+
+      activefontsettings.justify = lefttext;
+      activefontsettings.background = dblue;
+      activefontsettings.length = numlength;
+
+      showtext2(strrr( target->service[displayed[b]].curAmount ),x1 + startx + llength + 15, y1 + firstliney + b * abstand);
+
+      if ( target->service[displayed[b]].maxAmount )
+         l = x1 + startx + llength * oldpos[b] / target->service[displayed[b]].maxAmount;
+      else
+         l = x1 + startx ;
+
+      rectangle(l - 10, y1 + firstliney - 1 + b * abstand,l + 10,y1 + firstliney - 1 + b * abstand + 18,backgrnd);
+
+      if ( target->service[displayed[b]].maxAmount )
+         l = x1 + startx + llength * target->service[displayed[b]].curAmount / target->service[displayed[b]].maxAmount;
+      else
+         l = x1 + startx ;
+
+      rahmen(false, l - 10,y1 + firstliney - 1 + b * abstand,l + 10,y1 + firstliney - 1 + b * abstand + 18);
+
+   //   bar(x1 + 116,y1 + 100 - 35 + b * abstand,startx - 12,y1 + 115 - 35 + b * abstand,backgrnd);
+
+      showtext2(strrr( target->service[displayed[b]].orgSourceAmount - (target->service[displayed[b]].curAmount - newpos[b])), x1 + startx - numlength -15 ,y1 + firstliney + b * abstand);
+
+   }
+
+   if (r == 2)
+      mousevisible(true);
+}
+
+
+void         tverlademunition::checkpossible(int         b)
+{
+   if ( newpos[b] > target->service[displayed[b]].maxAmount )
+      newpos[b] = target->service[displayed[b]].maxAmount;
+
+   if ( newpos[b] < target->service[displayed[b]].minAmount )
+      newpos[b] = target->service[displayed[b]].minAmount;
+}
+
+
+
+void         tverlademunition::setloading( int pos )
+{
+   serviceAction->execute ( source, targetNWID, -1, 2, pos, newpos[pos] );
+   zeichneschieberegler ( -1 );
+}
+
+
+void         verlademunition( VehicleService* serv, int targetNWID )
+{
+   tverlademunition vlm;
+   vlm.init( serv->getVehicle(), targetNWID, serv );
+   vlm.run();
    vlm.done(); 
-     /*  0: innen dialog  */ 
-     /*  1: innen fast  */ 
-     /*  2: auáen dialog  */ 
-     /*  3: auáen fast  */ 
-} 
+}
 

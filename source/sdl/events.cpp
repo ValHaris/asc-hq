@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.17 2000-08-12 15:03:26 mbickel Exp $
+//     $Id: events.cpp,v 1.18 2000-10-11 14:26:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/08/12 15:03:26  mbickel
+//      Fixed bug in unit movement
+//      ASC compiles and runs under Linux again...
+//
 //     Revision 1.16  2000/08/12 09:17:41  gulliver
 //     *** empty log message ***
 //
@@ -482,28 +486,10 @@ char  skeypress(tkey keynr)
 
 
 
-
-int getch(void)
-{
-  return 0;
-}
-
-int kbhit(void)
-{
-  return 0;
-}
-
 void wait(void)
 {
 }
 
-void set_keypress(void)
-{
-}
-
-void reset_keypress(void)
-{
-}
 
 tkey char2key(int c )
 {

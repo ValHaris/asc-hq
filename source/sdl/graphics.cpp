@@ -15,9 +15,15 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.12 2000-08-21 17:51:04 mbickel Exp $
+//     $Id: graphics.cpp,v 1.13 2000-10-11 14:26:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/08/21 17:51:04  mbickel
+//      Fixed: crash when unit reaching max experience
+//      Fixed: crash when displaying research image
+//      Fixed: crash when events referenced a unit that has been shot down
+//      Fixed: screenshot being written to wrong directory
+//
 //     Revision 1.11  2000/08/12 09:17:42  gulliver
 //     *** empty log message ***
 //
@@ -89,7 +95,7 @@ void setWindowCaption ( const char* s )
 
 int initgraphics ( int x, int y, int depth )
 {
-  if ( SDL_Init(SDL_INIT_VIDEO) < 0 ) {
+  if ( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE ) < 0 ) {
      fprintf(stderr, "Couldn't initialize SDL: %s\n", SDL_GetError());
      return -1;
   }
@@ -189,14 +195,11 @@ void set_vgapalette256 ( dacpalette256 pal )
          switch ( c ) {
             case 0: spal[i].r = col * 4; break;
             case 1: spal[i].g = col * 4; break;
-		      case 2: spal[i].b = col * 4; break;
-		   };
-      }
-	
-	
+            case 2: spal[i].b = col * 4; break;
+         };
+     }
 	}	
-	int res = SDL_SetColors ( screen, spal, 0, 256 );
-	// printf("result of setting the palette is %d \n", res );
+	SDL_SetColors ( screen, spal, 0, 256 );
 }
 
 int dont_use_linear_framebuffer;

@@ -1,6 +1,9 @@
-//     $Id: misc.h,v 1.10 2000-09-16 11:47:29 mbickel Exp $
+//     $Id: misc.h,v 1.11 2000-10-11 14:26:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/09/16 11:47:29  mbickel
+//      Some cleanup and documentation again
+//
 //     Revision 1.9  2000/09/07 15:49:44  mbickel
 //      some cleanup and documentation
 //
@@ -99,6 +102,10 @@
 
    extern int  crc32buf( const void *vbuf, int len);
 
+   extern int min ( int a, int b );
+   extern int min ( int a, int b, int c );
+   extern int max ( int a, int b );
+   extern int max ( int a, int b, int c );
 
  #pragma pack(1)
 

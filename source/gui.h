@@ -1,6 +1,9 @@
-//     $Id: gui.h,v 1.14 2000-08-30 16:26:59 mbickel Exp $
+//     $Id: gui.h,v 1.15 2000-10-11 14:26:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/08/30 16:26:59  mbickel
+//     *** empty log message ***
+//
 //     Revision 1.13  2000/08/30 14:45:08  mbickel
 //      ASC compiles and links with GCC again...
 //
@@ -547,6 +550,7 @@ class tnsguiiconbuildany : public tnsguiicon {
 
 
 class tnsguiiconrepair : public tnsguiicon {
+          VehicleService service;
         public:
           virtual int   available    ( void ) ;
           virtual void  exec         ( void ) ;
@@ -557,6 +561,7 @@ class tnsguiiconrepair : public tnsguiicon {
 
 
 class tnsguiiconrefuel : public tnsguiicon {
+          VehicleService service;
         public:
           virtual int   available    ( void ) ;
           virtual void  exec         ( void ) ;

@@ -12,8 +12,8 @@ typedef char* pchar;
 // #define Pointer pointer
 // #define boolean char
 // #define Boolean boolean
-#define shortint signed char
-#define Shortint shortint
+// #define shortint signed char
+// #define Shortint shortint
 // #define false 0
 // #define true 1
 /*

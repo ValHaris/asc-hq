@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.32 2000-09-27 16:08:22 mbickel Exp $
+//     $Id: artint.cpp,v 1.33 2000-10-11 14:26:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/09/27 16:08:22  mbickel
+//      AI improvements
+//
 //     Revision 1.31  2000/09/26 18:05:12  mbickel
 //      Upgraded to bzlib 1.0.0 (which is incompatible to older versions)
 //
@@ -171,12 +174,14 @@
 
 #include "artint.h"
 
-#include "tpascal.inc"
-#include "basegfx.h"
+#include "typen.h"
+#include "vehicletype.h"
+#include "buildingtype.h"
+
+
 #include "misc.h"
 #include "newfont.h"
 #include "mousehnd.h"
-#include "typen.h"
 #include "keybp.h"
 #include "spfst.h"
 #include "dlg_box.h"
@@ -184,7 +189,6 @@
 #include "missions.h"
 #include "controls.h"
 #include "dialog.h"
-#include "timer.h"
 #include "gamedlg.h"
 #include "attack.h"
 #include "gameoptions.h"
@@ -430,7 +434,7 @@ void  AI :: calculateThreat ( pbuilding bld )
    int b;
 
    // Since we have two different resource modes now, this calculation should be rewritten....
-   bld->aiparam[ getPlayer() ]->value = (bld->plus.a.energy / 10) + (bld->plus.a.fuel / 10) + (bld->plus.a.material / 10) + (bld->actstorage.a.energy / 20) + (bld->actstorage.a.fuel / 20) + (bld->actstorage.a.material / 20) + (bld->maxresearchpoints / 10);
+   bld->aiparam[ getPlayer() ]->value = (bld->plus.energy / 10) + (bld->plus.fuel / 10) + (bld->plus.material / 10) + (bld->actstorage.energy / 20) + (bld->actstorage.fuel / 20) + (bld->actstorage.material / 20) + (bld->maxresearchpoints / 10);
    for (b = 0; b <= 31; b++)
       if ( bld->loading[b]  ) {
          if ( !bld->loading[b]->aiparam[ getPlayer() ] )
@@ -467,7 +471,7 @@ void AI :: WeaponThreatRange :: run ( pvehicle _veh, int x, int y, AiThreat* _th
          if ( veh->height & veh->typ->weapons->weapon[weap].sourceheight )
             if ( (1 << height) & veh->typ->weapons->weapon[weap].targ )
                 if ( veh->typ->weapons->weapon[weap].shootable()  && veh->typ->weapons->weapon[weap].offensive() ) {
-                   initsuche ( x, y, veh->typ->weapons->weapon[weap].maxdistance/maxmalq, veh->typ->weapons->weapon[weap].mindistance/maxmalq );
+                   initsuche ( ai->getMap(), x, y, veh->typ->weapons->weapon[weap].maxdistance/maxmalq, veh->typ->weapons->weapon[weap].mindistance/maxmalq );
                    startsuche();
                 }
 }
@@ -1500,9 +1504,11 @@ AI::AiResult AI::strategy( void )
       while ( veh ) {
 
          if ( veh->weapexist() && veh->aiparam[ getPlayer() ]->task != AiParameter::tsk_tactics ) {
+            /*
             int orgmovement = veh->getMovement();
             int orgxpos = veh->xpos ;
             int orgypos = veh->ypos ;
+            */
 
             VehicleMovement vm ( mapDisplay, NULL );
             if ( vm.available ( veh )) {
