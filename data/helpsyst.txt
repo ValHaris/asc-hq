@@ -236,6 +236,8 @@ The "Standard MKII" unit set was created by Bas Fournier.
 
 Many objects, terrain and buildings were contributed by Torsten Maekler.
 
+The pathfinding code is based on code by Amit Patel, who was very helpful helpful in pointing out that his code is correct (and my modifications were not :-)
+
 Thanks to Michael Moerz, Nicolas Raffenaud and Frank Landgraf for contributing code and general help.
 
 Advanced Strategic Command and its utility programs use code of The Independent JPEG Group .

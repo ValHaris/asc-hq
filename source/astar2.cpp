@@ -769,11 +769,15 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                        for ( int dir = 0; (dir < 6 && hcm->dist) || (dir < 1 && !hcm->dist); dir++ ) {
                           MapCoordinate3D newpos = N.h;
                           bool access = true;
-                          for ( int step = 0; step < hcm->dist; step++ ) {
-                             getnextfield ( newpos.x, newpos.y, dir );
+                          for ( int step = 0; step <= hcm->dist; step++ ) {
                              pfield fld = actmap->getField(newpos);
                              if ( !fld || !fieldAccessible ( fld, veh, N.h.getBitmappedHeight() ) || !fieldAccessible( fld, veh, 1 << (N.h.getNumericalHeight() + hcm->heightDelta)) )
                                 access = false;
+                             if ( fld && fld->building )
+                                access = false;
+                                
+                             if ( step < hcm->dist )
+                                getnextfield ( newpos.x, newpos.y, dir );
                           }
 
                           pfield fld = actmap->getField( newpos );

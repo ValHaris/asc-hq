@@ -783,7 +783,7 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
 
       logtoreplayinfo ( rpl_attack, xp1, yp1, x, y, ad1, ad2, dd1, dd2, weapnum );
 
-      // computeview( actmap );
+      evaluateviewcalculation( actmap );
 
       if ( mapDisplay && shown )
          mapDisplay->displayMap();
