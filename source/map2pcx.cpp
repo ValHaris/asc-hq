@@ -312,6 +312,8 @@ int main(int argc, char *argv[] )
 
    check_bi3_dir ();
 
+   setDefaultBI3ImportTranslationTable ("bi-bi.asctxt");
+
    schriften.smallarial = load_font("smalaril.FNT");
    schriften.large = load_font("USABLACK.FNT");
    schriften.arial8 = load_font("ARIAL8.FNT");

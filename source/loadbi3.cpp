@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.67 2001-12-19 17:16:29 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.68 2002-03-19 19:29:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.67  2001/12/19 17:16:29  mbickel
+//      Some include file cleanups
+//
 //     Revision 1.66  2001/12/19 11:46:35  mbickel
 //      Applied patches from Michael Moerz:
 //       - 64bit cleanup of demount.cpp, mount.cpp
@@ -1643,6 +1646,14 @@ void tloadBImap :: LoadFromFile( const char* path, const char* AFileName, Terrai
 }
 
 
+ASCString defaultImportTranslationTable;
+
+void setDefaultBI3ImportTranslationTable( const ASCString& filename )
+{
+   defaultImportTranslationTable = filename;
+}
+
+
 Bi3MapTranslationTable* chooseImportTable ( )
 {
   if ( bi3ImportTables.size() == 0)
@@ -1651,16 +1662,26 @@ Bi3MapTranslationTable* chooseImportTable ( )
   if ( bi3ImportTables.size() == 1)
      return bi3ImportTables[0];
 
+  if ( defaultImportTranslationTable.empty() ) {
+     vector<ASCString> strings;
+     for ( int i = 0; i < bi3ImportTables.size(); i++ )
+        strings.push_back ( bi3ImportTables[i]->filename );
 
-  vector<ASCString> strings;
-  for ( int i = 0; i < bi3ImportTables.size(); i++ )
-     strings.push_back ( bi3ImportTables[i]->filename );
+     int t = chooseString ( "Select Import Table", strings );
+     if ( t != 255 )
+        return bi3ImportTables[ t ];
+     else
+        return bi3ImportTables[0];
+  } else {
+     for ( int i = 0; i < bi3ImportTables.size(); i++ )
+         if ( bi3ImportTables[i]->filename.compare_ci ( defaultImportTranslationTable ) == 0 )
+            return bi3ImportTables[i];
 
-  int t = chooseString ( "Select Import Table", strings );
-  if ( t != 255 )
-     return bi3ImportTables[ t ];
-  else
+     fatalError ( "default BI3 import Table " +defaultImportTranslationTable + " not found !");
+
+     // never executed...
      return bi3ImportTables[0];
+  }
 }
 
 

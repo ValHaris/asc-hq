@@ -59,6 +59,9 @@ extern void insertbattleislemap ( int x, int y, const char* path, const char* fi
 //! returns the path to the BI3 installation
 extern const char* getbi3path ( void );
 
+//! to prevent the appearnce of the dialog "choose import translation table" when running in batch mode, a default translation table can be specified
+extern void setDefaultBI3ImportTranslationTable( const ASCString& filename );
+
 extern int getterraintranslatenum ( void );
 extern int getobjectcontainertranslatenum ( void );
 
