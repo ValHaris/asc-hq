@@ -109,7 +109,7 @@ SUBDIRS = dialog @MUSICDIR@
 MAINTAINERCLEANFILES = Makefile.in
 
 # main.con buildings.con mk1.con trrobj.con trrobj2.con
-pkgdata_DATA = main.con buildings.con mk1.con trrobj.con trrobj2.con asc.gfx
+pkgdata_DATA = main.con buildings.con mk1.con trrobj.con trrobj2.con asc.gfx units-mk3.con
 subdir = data
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
