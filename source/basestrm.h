@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: basestrm.h,v 1.35 2001-02-11 11:39:28 mbickel Exp $
+//     $Id: basestrm.h,v 1.36 2001-02-18 15:37:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2001/02/11 11:39:28  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.34  2001/01/28 14:04:03  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -54,6 +57,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <vector>
+#include <queue>
 
 #include "global.h"
 #include "basestreaminterface.h"
@@ -70,8 +74,6 @@ extern "C" {
 #pragma pack(1)
 
 
-
-enum FS_StreamMode { fs_undefined, fs_read, fs_write };
 
 const int maxFileStringSize = 10000;    // is used for some character arrays
 
@@ -121,28 +123,29 @@ class tbufferoverflow : public ASCexception {
 };
 
 class tfileerror : public ASCexception {
+   ASCString _filename;
   public:
-   char filename[2000];
-   tfileerror ( const char* fn ) ;
-   tfileerror ( void );
+   tfileerror ( const ASCString& fileName ) ;
+   const ASCString& getFileName() const { return _filename; };
+   tfileerror ( void ) {};
 };
 
 class tinvalidmode : public tfileerror {
   public:
    int orgmode, requestmode;
-   tinvalidmode ( const char* fn, int org_mode, int requested_mode ) ;
+   tinvalidmode ( const ASCString& fileName, tnstream::IOMode org_mode, tnstream::IOMode requested_mode ) ;
 };
 
 class treadafterend : public tfileerror {
   public:
-   treadafterend ( const char* fn );
+   treadafterend ( const ASCString& fileName );
 };
 
 class tinvalidversion : public tfileerror {
    public:
-     tinvalidversion ( const char* fn, int ex, int fnd );
-     int expected;
-     int found;
+     tinvalidversion ( const ASCString& fileName, int ex, int fnd );
+     const int expected;
+     const int found;
 };
 
 
@@ -150,6 +153,7 @@ class tinvalidversion : public tfileerror {
 ////////////        dynamic data structures
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/*
 template<class T>
 class dynamic_queue {
            protected:
@@ -165,7 +169,7 @@ class dynamic_queue {
               int valavail ( void );
               ~dynamic_queue();
 };
-
+*/
 
 
 template<class T>
@@ -189,10 +193,10 @@ class dynamic_array {
 template<class T>
 class dynamic_initialized_array : public dynamic_array<T> {
               T initval;
-           protected: 
+           protected:
               virtual void resize ( int newsize );
 
-           public: 
+           public:
               dynamic_initialized_array ( T ival );
               dynamic_initialized_array ( T ival, int sze );
          };
@@ -228,9 +232,9 @@ class MemoryStreamCopy : public tnstream {
   #endif
 
 class tmemorystreambuf {
-        public: 
-           int mode;         // 0: uninitialisiert; 
-                             // 1: initialisiert
+        public:
+           bool initialized;
+
            int used;
            int allocated;
            int dummy[10];
@@ -246,12 +250,12 @@ class tmemorystream : public tnstream {
        protected:
            int   blocksize;
            char* zeiger;
-           int   mode;
+           IOMode _mode;
            int   actmempos;
            pmemorystreambuf buf;
 
-        public: 
-           tmemorystream ( pmemorystreambuf lbuf, int lmode );
+        public:
+           tmemorystream ( pmemorystreambuf lbuf, IOMode mode );
            virtual void writedata ( const void* nbuf, int size );
            virtual int  readdata  ( void* nbuf, int size, int excpt = 1 );
            int dataavail ( void );
@@ -266,7 +270,7 @@ class tnbufstream  : public tnstream {
 
        protected:
            char* zeiger;
-           char  modus;
+           IOMode  _mode;
            int   actmempos;
            int   memsize;
            int   datasize;
@@ -358,12 +362,13 @@ class tlzwstreamcompression {
               void initreading( void );
               void initwriting( void );
 
-              dynamic_queue<char> tempbuf;
+          protected:
+              queue<char> tempbuf;
 
-          public:
-              int queuestat;
               enum tmode { none, reading, writing, readingdirect, readingrle };
               tmode mode;
+
+          public:
 
              void writedata ( const void* buf, int size );
              int  readdata  ( void* buf, int size, int excpt = 1  );
@@ -385,8 +390,7 @@ class t_compressor_stream_interface {
 
 class t_compressor_2ndbuf_filter : public t_compressor_stream_interface {
              t_compressor_stream_interface *stream;
-             dynamic_queue<char> queue;
-             int queuesize;
+             queue<char> _queue;
            public:
              t_compressor_2ndbuf_filter ( t_compressor_stream_interface* strm );
              virtual void writecmpdata ( const void* buf, int size );
@@ -440,12 +444,12 @@ class tn_file_buf_stream : public tnbufstream {
 
 
         public:
-            tn_file_buf_stream ( const char* name, char mode );
+            tn_file_buf_stream ( const ASCString& _fileName, IOMode mode );
             virtual void seek ( int newpos );
             virtual int getstreamsize ( void );
             virtual int getSize ( void ) { return getstreamsize(); };
-            virtual ~tn_file_buf_stream  ( );
             virtual time_t get_time ( void );
+            virtual ~tn_file_buf_stream  ( );
 
   };
 
@@ -453,7 +457,7 @@ class tn_file_buf_stream : public tnbufstream {
 
 class tanycompression : public t_compressor_stream_interface, protected tlzwstreamcompression {
 
-                            dynamic_queue<char> queue;
+                            queue<char> _queue;
 
                             libbzip_compression* bzip_compress;
                             libbzip_decompression* bzip_decompress;
@@ -491,11 +495,11 @@ class tn_lzw_bufstream : public tnbufstream, protected tlzwstreamcompression {
 
 class tn_lzw_file_buf_stream : public tn_file_buf_stream, protected tanycompression {
            public:
-              tn_lzw_file_buf_stream ( const char* name, char mode ) : tn_file_buf_stream ( name, mode ) , tanycompression ( mode )
-                 { 
-                    tanycompression :: init ( ); 
+              tn_lzw_file_buf_stream ( const char* name, IOMode mode ) : tn_file_buf_stream ( name, mode ) , tanycompression ( mode )
+                 {
+                    tanycompression :: init ( );
                  } ;
-                                                                     
+
               void writedata ( const void* buf, int size );
               int  readdata  ( void* buf, int size, int excpt = 1  );
               int  readcmpdata ( void* buf, int size, int excpt = 1 );
@@ -517,7 +521,7 @@ class tn_c_lzw_filestream : public tnstream, protected tanycompression {
             int  readcmpdata ( void* buf, int size, int excpt = 1 );
             void writecmpdata ( const void* buf, int size );
          public:
-            tn_c_lzw_filestream ( const char* name, char mode );
+            tn_c_lzw_filestream ( const char* name, IOMode mode );
             void writedata ( const void* buf, int size );
             int  readdata  ( void* buf, int size, int excpt = 1  );
             virtual ~tn_c_lzw_filestream  ( );
@@ -552,7 +556,7 @@ class tncontainerstream : public tn_file_buf_stream {
                  tcontainerindex* actfile;
                  int containerfilepos;
                  int num;
-                 
+
                  int actname;
 
                public:
@@ -626,7 +630,6 @@ extern  const int maxfilenamelength;
 
 
 extern int compressrle ( const void* p, void* q);
-// extern tncontainerstream* containerstream;
 extern int patimat (const char *pat, const char *str);
 
 extern int checkforvaliddirectory ( char* dir );
@@ -651,8 +654,8 @@ extern const char* filewritemode;
 
 extern int verbosity;
 
-extern const char pathdelimitter; 
-extern const char* pathdelimitterstring; 
+extern const char pathdelimitter;
+extern const char* pathdelimitterstring;
 extern int filesize( char *name);
 
 extern void addSearchPath ( const char* path );

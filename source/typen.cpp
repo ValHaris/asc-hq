@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.71 2001-02-11 11:39:44 mbickel Exp $
+//     $Id: typen.cpp,v 1.72 2001-02-18 15:37:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.71  2001/02/11 11:39:44  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.70  2001/02/06 16:27:41  mbickel
 //      bugfixes, bugfixes and bugfixes
 //
@@ -464,307 +467,15 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "initial map visibility"};
 
 
-const int csolarkraftwerkleistung[cwettertypennum] = { 1024, 512, 256, 756, 384 }; // 1024 ist Maximum 
-
-tobjectcontainer :: tobjectcontainer ( void )
-{
-   minenum = 0;
-   for ( int i = 0; i < maxminesonfield; i++ )
-      mine[ i ] = NULL;
-
-   objnum = 0;
-}
-
-int  tobjectcontainer :: checkforemptyness ( void )
-{
-   return 0;
-
-/*
-   if ( mine )
-     return 0;   
-
-    if ( special & ( cbstreet | cbrailroad | cbpowerline | cbpipeline ))
-       return 0;
-
-    return 1;
-*/
-
-}
-
-bool tfield :: unitHere ( const pvehicle veh )
-{
-   if ( vehicle == veh )
-      return true;
-   if ( vehicle && veh && vehicle->networkid == veh->networkid )
-      return true;
-   return false;
-}
-
-int tfield :: getweather ( void )
-{
-   if ( !typ )
-      return 0;
-   for ( int w = 0; w < cwettertypennum; w++ )
-      if ( typ == typ->terraintype->weather[w] )
-         return w;
-   return -1;
-}
-
-void tfield :: sortobjects ( void )
-{
-   if ( object )
-      for ( int a = 0; a < object->objnum-1; ) {
-         if ( object->object[ a ]->typ->height > object->object[ a+1 ]->typ->height ) {
-            pobject o = object->object[ a ];
-            object->object[ a ] = object->object[ a+1 ];
-            object->object[ a+1 ] = o;
-            if ( a > 0 )
-               a--;
-         } else
-            a++;
-      }
-
-}
-
-
-int tfield :: minenum ( void )
-{
-  if ( object ) 
-     return object->minenum;
-  else
-     return 0;
-}
-
-bool  tfield :: putmine( int col, int typ, int strength )
-{ 
-  #ifndef converter
-   if ( mineowner() >= 0  && mineowner() != col )
-      return 0;
-
-   if ( !object )
-      object = new tobjectcontainer;
-
-   if ( object->minenum >= maxminesonfield )
-      return 0;
-
-   /*
-   if ( object->minenum >= actmap->getgameparameter ( cgp_maxminesonfield ))
-      return 0;
-   */
-
-   object->mine[ object->minenum ] = new tmine; 
-   object->mine[ object->minenum ]->strength = strength ;
-   object->mine[ object->minenum ]->color = col;
-   object->mine[ object->minenum ]->type = typ;
-   if ( actmap && actmap->time.a.turn>= 0 )
-      object->mine[ object->minenum ]->time = actmap->time.a.turn;
-   else
-      object->mine[ object->minenum ]->time = 0;
-
-   object->minenum++;
-   return 1;
-  #else
-   return 0;
-  #endif
-} 
-
-int tfield :: mineowner( void )
-{
-   if ( !object )
-      return -1;
-   if ( !object->minenum )
-      return -1;
-
-   return object->mine[0]->color;
-}
-
-
-void tfield :: removemine( int num )
-{ 
-   if ( !object )
-      return;
-
-   if ( num == -1 )
-      num = object->minenum - 1;
-
-   if ( num >= object->minenum )
-      return;
-
-   delete object->mine[num];
-
-   for ( int i = num+1; i < object->minenum; i++ )
-      object->mine[i-1] = object->mine[i];
-
-   object->minenum--;
-   object->mine[object->minenum] = NULL;
-} 
-
-
-
-#ifdef converter
-
-int tfield :: mineattacks ( const pvehicle veh ) { return 0; }
-void tfield :: checkminetime ( int time ) { }
-int tfield :: getx( void ) { return 0; }
-int tfield :: gety( void ) { return 0; }
-
-void  tfield :: addobject( pobjecttype obj, int dir, int force ) {} 
-
-
-void tfield :: removeobject( pobjecttype obj ) {} 
-
-void tfield :: deleteeverything ( void ) {}
-
-#else
-int tfield :: getx( void )
-{
-   int n = this - actmap->field;
-   return n % actmap->xsize;
-}
-
-int tfield :: gety( void )
-{
-   int n = this - actmap->field;
-   return n / actmap->xsize;
-}
-#endif
+const int csolarkraftwerkleistung[cwettertypennum] = { 1024, 512, 256, 756, 384 }; // 1024 ist Maximum
 
 
 
 
-int tfield :: getattackbonus ( void )
-{
-   int a = typ->attackbonus;
-   if ( object )
-      for ( int i = 0; i < object->objnum; i++ ) {
-         if ( object->object[i]->typ->attackbonus_abs != -1 )
-            a = object->object[i]->typ->attackbonus_abs;
-         else
-            a += object->object[i]->typ->attackbonus_plus;
-      }
-
-   if ( a > -8 )
-      return a;
-   else
-      return -7;
-}
-
-int tfield :: getdefensebonus ( void )
-{
-   int a = typ->defensebonus;
-   if ( object )
-      for ( int i = 0; i < object->objnum; i++ ) {
-         if ( object->object[i]->typ->defensebonus_abs != -1 )
-            a = object->object[i]->typ->defensebonus_abs;
-         else
-            a += object->object[i]->typ->defensebonus_plus;
-      }
-
-   if ( a > -8 )
-      return a;
-   else
-      return -7;
-}
-
-int tfield :: getjamming ( void )
-{
-   int a = typ->basicjamming;
-   if ( object )
-      for ( int i = 0; i < object->objnum; i++ ) {
-         if ( object->object[i]->typ->basicjamming_abs >= 0 )
-            a = object->object[i]->typ->basicjamming_abs;
-         else
-            a += object->object[i]->typ->basicjamming_plus;
-      }
-   return a;
-}
-
-int tfield :: getmovemalus ( const pvehicle veh )
-{       
-   int mnum = minenum();
-   if ( mnum ) {
-      int movemalus = _movemalus[veh->typ->movemalustyp];
-      int col = mineowner();
-      if ( veh->color == col*8 ) 
-         movemalus += movemalus * mine_movemalus_increase * mnum / 100;
-
-      return movemalus;
-   } else
-      return _movemalus[veh->typ->movemalustyp];
-}
-
-int tfield :: getmovemalus ( int type )
-{
-  return _movemalus[type];
-}
-
-void tfield :: setparams ( void )
-{
-   int i;
-   bdt = typ->art;
-
-   for ( i = 0; i < cmovemalitypenum; i++ )
-      _movemalus[i] = typ->movemalus[i];
-
-   if ( object ) 
-      for ( int j = 0; j < object->objnum; j++ ) {
-         pobjecttype o = object->object[j]->typ;
-
-         bdt  &=  o->terrain_and;
-         bdt  |=  o->terrain_or;
-
-         for ( i = 0; i < cmovemalitypenum; i++ ) {
-            _movemalus[i] += o->movemalus_plus[i];
-            if ( (o->movemalus_abs[i] != 0) && (o->movemalus_abs[i] != -1) )
-               _movemalus[i] = o->movemalus_abs[i];
-            if ( _movemalus[i] < minmalq )
-               _movemalus[i] = minmalq;
-         }
-      } /* endfor */
-
-   #ifndef converter
-   if ( building ) {
-      if ( this == building->getField( building->typ->entry ))
-         bdt |= cbbuildingentry; 
-
-      if ( building )
-         for (int x = 0; x < 4; x++) 
-            for ( int y = 0; y < 6; y++ ) 
-               if ( building->getField ( BuildingType::LocalCoordinate(x, y) ) == this )
-                  if ( building->getpicture ( BuildingType::LocalCoordinate(x, y) ) )
-                     picture = building->getpicture ( BuildingType::LocalCoordinate(x, y) );
-   }
-   #endif
-}
-
-
-tobject :: tobject ( void )
-{
-   typ = NULL;
-   dir = 0;
-   damage = 0;
-}
-
-tobject :: tobject ( pobjecttype t )
-{
-   typ = t;
-   dir = 0;
-   damage = 0;
-}
-
-
-void tobject :: setdir ( int direc )
-{
-   dir = direc;
-}
-
-int  tobject :: getdir ( void )
-{
-   return dir;
-}
 
 int  tobjecttype :: buildable ( pfield fld )
 {
+   #ifndef converter
    if ( fld->building )
       return 0;
 
@@ -773,6 +484,7 @@ int  tobjecttype :: buildable ( pfield fld )
        return 0;
    #endif
 
+   #endif
    return 1;
 }
 
@@ -794,40 +506,6 @@ void* tobjecttype :: getpic ( int i, int w )
 }
 
 
-void tobject :: display ( int x, int y, int weather )
-{
- #ifndef converter
-  if ( typ->id == 7 ) {
-    #ifndef HEXAGON
-     for (int i = 0; i <= 7; i++) 
-        if ( dir & (1 << i)) 
-           putxlatfilter( x, y, typ->getpic ( i ), &xlattables.nochange[0] ); 
-    #else
-        if ( dir < typ->pictnum )
-           putshadow  ( x, y,  typ->getpic ( dir, weather ) , &xlattables.a.dark1);
-        else
-           putshadow  ( x, y,  typ->getpic ( 0, weather ) , &xlattables.a.dark1);
-    #endif
-  } else
- #ifndef HEXAGON
-  if ( typ->id == 8 ) {
-     putspriteimage( x, y, typ->getpic ( 0 ) ); 
-     for (int i = 0; i <= 7; i++) 
-        if ( dir & (1 << i))
-           putspriteimage( x, y, typ->getpic ( i + 1 ) ); 
-  } else
- #endif
-  if ( typ->id == 30 ) {   // pipeline
-        if ( dir < typ->pictnum )
-           putshadow  ( x, y,  typ->getpic ( dir, weather ) , &xlattables.a.dark1);
-        else
-           putshadow  ( x, y,  typ->getpic ( 0, weather ) , &xlattables.a.dark1);
-  } else 
-     typ->display ( x, y, dir, weather );
-
-  #endif    //converter
-}
-
 
 
 void tobjecttype :: display ( int x, int y, int dir, int weather )
@@ -835,7 +513,7 @@ void tobjecttype :: display ( int x, int y, int dir, int weather )
    #ifndef converter
   if ( id == 1 || id == 2 ) {
      putspriteimage ( x, y,  getpic( dir, weather ) );
-  } else 
+  } else
 #ifdef HEXAGON
   if ( id == 4 ) {
 #else
@@ -845,7 +523,7 @@ void tobjecttype :: display ( int x, int y, int dir, int weather )
      if ( dir == 68 ) 
         putspriteimage ( x, y,  getpic ( 9, weather ) );
      else
-     if ( dir == 34 ) 
+     if ( dir == 34 )
         putspriteimage ( x, y,  getpic ( 10, weather ) );
      else
      if ( dir == 17 ) 
@@ -893,7 +571,7 @@ void tobjecttype :: display ( int x, int y, int dir, int weather )
            putspriteimage ( x, y, getpic ( dir, weather ) );
         else
            putspriteimage ( x, y, getpic ( 0, weather ) );
-  
+
   #endif
 }
 
@@ -905,30 +583,6 @@ void tobjecttype :: display ( int x, int y )
 }
 
 
-pobject tfield :: checkforobject ( pobjecttype o )
-{
-   if ( object )
-      return object->checkforobject( o );
-   else
-      return NULL;
-}
-
-pobject tobjectcontainer :: checkforobject ( pobjecttype o )
-{
-   for ( int i = 0; i < objnum; i++ )
-      if ( object[i]->typ == o )
-         return object[i];
-   return NULL;
-}
-
-
-
-tfield::Resourceview :: Resourceview ( void )
-{
-   visible = 0;
-   memset ( &fuelvisible, 0, sizeof ( fuelvisible ));
-   memset ( &materialvisible, 0, sizeof ( materialvisible ));
-}
 
 ResourceMatrix :: ResourceMatrix ( const float* f )
 {
@@ -980,41 +634,6 @@ Resources Resources::operator* ( double d )
 
 
 ////////////////////////////////////////////////////////////////////
-
-
-
-
-/*
-void tbuilding :: repairunit(pvehicle vehicle, int maxrepair )
-{
-   if ( vehicle->damage ) {
-
-      int dam;
-      if ( vehicle->damage > maxrepair )
-         dam = maxrepair;
-      else
-         dam = vehicle->damage;
-
-      int fkost = dam * vehicle->typ->production.energy / (100 * repairefficiency_building );
-      int mkost = dam * vehicle->typ->production.material / (100 * repairefficiency_building );
-      int w;
-
-      if (mkost <= getenergy ( mkost material)
-         w = 10000;
-      else
-         w = 10000 * material / mkost;
-
-      if (fkost > fuel)
-         if (10000 * fuel / fkost < w)
-            w = 10000 * fuel / fkost;
-
-
-      vehicle->damage = vehicle->damage * (1 - w / 10000);
-      material -= w * mkost / 10000;
-      fuel -= w * fkost / 10000;
-   }
-}
-*/
 
 
 
@@ -1160,96 +779,8 @@ int tmessagelist :: getlistsize ( void )
       return 0;
 }
 
-/*    
-tfieldarray :: fieldl1 :: fieldl1 ( void )
-{
-   for (int i = 0; i < 1024; i++) {
-      fielder[i] = NULL;
-   } 
-}
 
 
-tfieldarray :: tfieldarray ( int size )
-{
-   fieldl2 = new fieldl1[ size / 1024 + 1 ];
-}      
-
-void tfieldarray :: alloc ( int size )
-{
-   fieldl2 = new fieldl1[ size / 1024 + 1 ];
-}      
-
-tfieldarray :: tfieldarray ( void )
-{
-   fieldl2 = NULL;
-}      
-
-void tfieldarray :: free ( void )
-{
-   if ( fieldl2 )
-      delete fieldl2;
-   fieldl2 = NULL;
-}
-
-tfieldarray :: ~tfieldarray()
-{
-//   fieldl2 = NULL;
-//   delete fieldl2;
-}
-*/
-
-
-
-/*
-tgameoptions :: tgameoptions ( void )
-{
-    setdefaults ( );
-}
-
-void tgameoptions :: setdefaults ( void )
-{
-   version = 102;
-   fastmove = 1;
-   mouse.scrollbutton = 0;
-   mouse.fieldmarkbutton = 2;
-   mouse.smallguibutton = 1;
-   mouse.largeguibutton = -1;
-   mouse.smalliconundermouse = 2;
-   mouse.centerbutton = 4;
-   container.autoproduceammunition = 1;
-   smallguiiconopenaftermove = 0;
-   startupcount = 0;
-
-   visibility_calc_algo = 0;
-   container.emptyeverything = 1;
-   container.filleverything = 1;
-   movespeed = 20;
-   changed = 0;
-   bi3.dir = NULL;
-   strcpy ( filename, "sg.cfg" );
-   onlinehelptime = 150;
-
-   memset ( dummy, 0, sizeof ( dummy ));
-   memset ( dummy2, 0, sizeof ( dummy2 ));
-   memset ( container.dummy, 0, sizeof ( container.dummy ));
-   memset ( mouse.dummy, 0, sizeof ( mouse.dummy ));
-
-   bi3.interpolate.terrain = 1;
-   bi3.interpolate.units = 0;
-   bi3.interpolate.objects = 0;
-   bi3.interpolate.buildings = 1; 
-
-   dontMarkFieldsNotAccessible_movement = 0;
-
-   mapzoom = 80;
-   disablesound = 0;
-}
-*/
-
-bool tmap::Weather::Wind::operator== ( const tmap::Weather::Wind& b ) const
-{
-   return ( (speed == b.speed) && ( direction == b.direction));
-}
 
 
 
@@ -1377,7 +908,7 @@ bool tterrainbits :: toand ( const tterrainbits& bts ) const
 
 tterrainaccess :: tterrainaccess ( void )
                 : terrain ( -1, -1 )
-{  
+{
    /*
    terrain.terrain1 = -1;
    terrain.terrain2 = -1;
@@ -1450,7 +981,7 @@ tterrainbits cblargerocks ( 1<<23, 0 );
                };
 /*
                tterrainbits& operator& ( tterrainbits tb2, tterrainbits tb3 ) 
-               { 
+               {
                   tterrainbits tb = tb2;
                   return tb &=tb3;
                };
@@ -1461,23 +992,12 @@ tterrainbits cblargerocks ( 1<<23, 0 );
                };
 
                tterrainbits operator^ ( const tterrainbits& tb2, const tterrainbits& tb3 )
-               { 
+               {
                   tterrainbits tb = tb2;
                   return tb ^=tb3;
                };
 
 
-
-
-
-
-
-
-tmap::Shareview :: Shareview ( const tmap::Shareview* org )
-{ 
-   memcpy ( mode, org->mode, sizeof ( mode ));
-   recalculateview = org->recalculateview; 
-}
 
 
 tevent::LargeTriggerData::PolygonEntered :: PolygonEntered ( void )
@@ -1625,16 +1145,6 @@ tevent :: ~tevent ()
    }
 }
 
-AiThreat& AiThreat::operator+= ( const AiThreat& t )
-{
-   for ( int i = 0; i < threatTypes; i++ )
-      threat[i] += t.threat[i];
-   return *this;
-}
-
-
-// is there any way to do this test at compile time ??
-structure_size_tester sst1;
 
 int getheightdelta ( int height1, int height2 )
 {
@@ -1935,105 +1445,4 @@ void tobjecttype :: write ( tnstream& stream )
 }
 
 
-void AiThreat :: write ( tnstream& stream )
-{
-   const int version = 1000;
-   stream.writeInt ( version );
-   stream.writeInt ( threatTypes );
-   for ( int i = 0; i < threatTypes; i++ )
-      stream.writeInt ( threat[i] );
-}
 
-void AiThreat:: read ( tnstream& stream )
-{
-   int version = stream.readInt();
-   if ( version == 1000 ) {
-      threatTypes = stream.readInt();
-      for ( int i = 0; i < threatTypes; i++ )
-         threat[i] = stream.readInt();
-   }
-}
-
-
-void AiValue :: write ( tnstream& stream )
-{
-   const int version = 2000;
-   stream.writeInt ( version );
-   stream.writeInt ( value );
-   stream.writeInt ( addedValue );
-   threat.write ( stream );
-   stream.writeInt ( valueType );
-}
-
-void AiValue:: read ( tnstream& stream )
-{
-   int version = stream.readInt();
-   if ( version == 2000 ) {
-      value = stream.readInt (  );
-      addedValue= stream.readInt (  );
-      threat.read ( stream );
-      valueType = stream.readInt (  );
-   }
-}
-
-void AiParameter::write ( tnstream& stream )
-{
-   const int version = 3000;
-   stream.writeInt ( version );
-   stream.writeInt ( lastDamage );
-   stream.writeInt ( damageTime.abstime );
-   stream.writeInt ( dest.x );
-   stream.writeInt ( dest.y );
-   stream.writeInt ( dest.z );
-   stream.writeInt ( dest_nwid );
-   stream.writeInt ( data );
-   AiValue::write( stream );
-   stream.writeInt ( task );
-   stream.writeInt ( job );
-}
-
-void AiParameter::read ( tnstream& stream )
-{
-   int version = stream.readInt();
-   if ( version == 3000 ) {
-      lastDamage = stream.readInt();
-      damageTime.abstime = stream.readInt();
-      dest.x = stream.readInt();
-      dest.y = stream.readInt();
-      dest.z = stream.readInt();
-      dest_nwid = stream.readInt();
-      data = stream.readInt();
-      AiValue::read( stream );
-      task = (Task) stream.readInt();
-      job = (Job) stream.readInt();
-   }
-}
-
-void AiThreat :: reset ( void )
-{
-   for ( int i = 0; i < aiValueTypeNum; i++ )
-      threat[i] = 0;
-}
-
-AiParameter :: AiParameter ( pvehicle _unit ) : AiValue ( log2( _unit->height ))
-{
-   reset( _unit );
-}
-
-void AiParameter :: resetTask ( )
-{
-   dest.y = -1;
-   dest.z = -1;
-   dest_nwid = 1;
-   task = tsk_nothing;
-}
-
-void AiParameter :: reset ( pvehicle _unit )
-{
-   unit = _unit;
-   AiValue::reset ( log2( _unit->height ) );
-
-   dest.x = -1;
-   job = job_undefined;
-   resetTask();
-}

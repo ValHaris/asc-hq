@@ -24,6 +24,7 @@
 #include "typen.h"
 #include "vehicletype.h"
 #include "errors.h"
+#include "gamemap.h"
 
 
 tdrawgettempline :: tdrawgettempline ( int _freefields, pmap _gamemap )

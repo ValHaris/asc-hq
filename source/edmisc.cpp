@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.49 2001-02-11 11:39:32 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.50 2001-02-18 15:37:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2001/02/11 11:39:32  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.48  2001/02/01 22:48:37  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -2636,6 +2639,7 @@ int        getpolygon(ppolygon *poly) //return Fehlerstatus
                 pvehicle    unit;
                 int         w2, heightxs;
                 char        namebuffer[1000];
+                char        reactionfire;
               public:
                // char     checkvalue( char id, char* p );
                 tunit ( pvehicle v ) : tus ( v ), unit ( v ) {};
@@ -2704,7 +2708,8 @@ void         tunit::init(  )
    if ( unit->typ->classnum > 0 ) addbutton("C~h~ange Class",280,280,450,300,0,1,32,true);
 
    addbutton("~R~eactionfire",dirx-50,250,dirx+50,260,3,1,22,true);
-   addeingabe(22,&unit->reactionfire.status, 0, lightgray);
+   reactionfire = unit->reactionfire.getStatus();
+   addeingabe(22, &reactionfire, 0, lightgray);
 
    addbutton("~S~et Values",20,ysize - 40,20 + w,ysize - 10,0,1,30,true);
    addkey(30,ct_enter );
@@ -2830,10 +2835,12 @@ void         tunit::buttonpressed(int         id)
    case 30 : {
          mapsaved = false;
          action = 1;
-         if ( unit->reactionfire.status ) {
-            unit->reactionfire.status = tvehicle::ReactionFire::ready;
+         if ( reactionfire )  {
+            unit->reactionfire.enable();
             unit->reactionfire.enemiesAttackable = 0xff;
-         }
+         } else
+            unit->reactionfire.disable();
+
          unit->name = namebuffer;
         }
         break;

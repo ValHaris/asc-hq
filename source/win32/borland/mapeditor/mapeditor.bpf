@@ -49,6 +49,8 @@ USEUNIT("..\..\..\graphicset.cpp");
 USEUNIT("..\..\..\ascstring.cpp");
 USEUNIT("..\..\..\mapdisplay.cpp");
 USEUNIT("..\..\..\viewcalculation.cpp");
+USEUNIT("..\..\..\vehicle.cpp");
+USEUNIT("..\..\..\buildings.cpp");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 

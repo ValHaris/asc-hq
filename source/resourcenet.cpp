@@ -611,7 +611,7 @@ int ResourceChangeNet :: getresource ( int x, int y, int resource, int _player, 
 
 void GetResourcePlus :: checkvehicle ( pvehicle v )
 {
-   if ( v->generatoractive )
+   if ( v->getGeneratorStatus() )
       got += v->typ->tank.energy;
 }
 

@@ -2,9 +2,14 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.37 2001-01-31 14:52:36 mbickel Exp $
+//     $Id: edmain.cpp,v 1.38 2001-02-18 15:37:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2001/01/31 14:52:36  mbickel
+//      Fixed crashes in BI3 map importing routines
+//      Rewrote memory consistency checking
+//      Fileselect dialog now uses ASCStrings
+//
 //     Revision 1.36  2001/01/28 14:04:13  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -235,36 +240,36 @@ void         loadcursor(void)
 
   {
      #ifdef HEXAGON
-      tnfilestream stream ("hexfeld.raw", 1);
+      tnfilestream stream ("hexfeld.raw", tnstream::reading);
      #else
-      tnfilestream stream ("oktfld2.raw", 1);
+      tnfilestream stream ("oktfld2.raw", tnstream::reading);
      #endif
       stream.readrlepict ( &icons.fieldshape, false, &w );
   }
 
-   #ifdef FREEMAPZOOM 
+   #ifdef FREEMAPZOOM
    {
-      tnfilestream stream ("mapbkgrb.raw", 1);
+      tnfilestream stream ("mapbkgrb.raw", tnstream::reading);
       stream.readrlepict ( &icons.mapbackground, false, &w );
    }
    #endif
 
   {
     #ifdef HEXAGON
-      tnfilestream stream ("hexfld_a.raw",1); 
+      tnfilestream stream ("hexfld_a.raw", tnstream::reading);
     #else
-      tnfilestream stream ("markacti.raw",1); 
+      tnfilestream stream ("markacti.raw", tnstream::reading);
     #endif
     stream.readrlepict( &icons.stellplatz, false, &w);
   }
 
   {
-    tnfilestream stream ("x.raw",1); 
+    tnfilestream stream ("x.raw", tnstream::reading);
     stream.readrlepict( &icons.X, false, &w);
   }
 
   {
-     tnfilestream stream ("pfeil-a0.raw",1);
+     tnfilestream stream ("pfeil-a0.raw", tnstream::reading);
      for (i=0;i<8 ;i++ ) stream.readrlepict( &icons.pfeil2[i], false, &w);
   }
 
@@ -292,7 +297,7 @@ void loaddata( void )
    {
       tfindfile ff ( progressbarfilename );
       if ( !ff.getnextname().empty() ) {
-         tnfilestream strm ( progressbarfilename, 1 );
+         tnfilestream strm ( progressbarfilename, tnstream::reading );
          actprogressbar->start ( 255, 0, agmp->resolutiony-2, agmp->resolutionx-1, agmp->resolutiony-1, &strm );
       } else
          actprogressbar->start ( 255, 0, agmp->resolutiony-2, agmp->resolutionx-1, agmp->resolutiony-1, NULL );
@@ -339,7 +344,7 @@ void loaddata( void )
 
    if ( actprogressbar ) {
       actprogressbar->end();
-      tnfilestream strm ( progressbarfilename, 2 );
+      tnfilestream strm ( progressbarfilename, tnstream::writing );
       actprogressbar->writetostream( &strm );
       delete actprogressbar;
       actprogressbar = NULL;
@@ -456,8 +461,6 @@ void checkLeftMouseButton ( )
 
 void         editor(void)
 {  int execcode;
-   int lastx;
-   int lasty;
 
    cursor.show();
    do {
@@ -484,13 +487,13 @@ void         editor(void)
                   case ct_5k:   
                   case ct_6k:   
                   case ct_7k:   
-                  case ct_8k:   
+                  case ct_8k:
                   case ct_9k:   
                   case ct_1k + ct_stp:   
                   case ct_2k + ct_stp:   
                   case ct_3k + ct_stp:   
-                  case ct_4k + ct_stp:   
-                  case ct_5k + ct_stp:   
+                  case ct_4k + ct_stp:
+                  case ct_5k + ct_stp:
                   case ct_6k + ct_stp:   
                   case ct_7k + ct_stp:   
                   case ct_8k + ct_stp:   
@@ -538,7 +541,7 @@ void         editor(void)
                      break;
                   case ct_n + ct_stp: execaction(act_newmap);
                      break;
-                  case ct_o + ct_stp: execaction(act_polymode);  
+                  case ct_o + ct_stp: execaction(act_polymode);
                      break;            
                   case ct_r + ct_stp: execaction(act_repaintdisplay);
                      break;
@@ -624,14 +627,10 @@ void         editor(void)
                     cursor.posy = my;
                     cursor.show();
                     mousevisible(true);
-      
-                    lastx = mx;
-                    lasty = my;
-      
-                    execcode = -1;
+
                     execcode = rightmousebox();
                     if (execcode != -1) execaction(execcode);
-      
+
                     while ( mouseparams.taste != 0 )
                        releasetimeslice();
                   }
@@ -649,7 +648,7 @@ void         editor(void)
          repaintdisplay();
       } /* endcatch */
    }  while (! (ch == ct_esc) || (ch == ct_altp+ct_x ) );
-} 
+}
 
 
 //* õS Diverse
@@ -706,7 +705,7 @@ void showmemory ( void )
 
 pfont load_font(char* name)
 {
-   tnfilestream stream ( name, 1 );
+   tnfilestream stream ( name, tnstream::reading );
    return loadfont ( &stream );
 }
 
@@ -740,7 +739,7 @@ int mapeditorMainThread ( void* _mapname )
 
    } /* end try */
    catch ( tfileerror err ) {
-      displaymessage ( " error loading file %s ",2,err.filename );
+      displaymessage ( " error loading file %s ",2, err.getFileName().c_str() );
    } /* end catch */
 
    pulldownfont = schriften.smallarial;
@@ -936,7 +935,7 @@ int main(int argc, char *argv[] )
    virtualscreenbuf.init();
 
    {
-       tnfilestream stream ( "logo640.pcx", 1 );
+       tnfilestream stream ( "logo640.pcx", tnstream::reading );
        loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 ); 
        int whitecol = 251;
        activefontsettings.font = schriften.smallarial;
@@ -949,7 +948,7 @@ int main(int argc, char *argv[] )
    }
    {
       int w;
-      tnfilestream stream ("mausi.raw",1);
+      tnfilestream stream ("mausi.raw", tnstream::reading);
       stream.readrlepict(   &icons.mousepointer, false, &w );
    }
 

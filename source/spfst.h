@@ -5,9 +5,15 @@
 */
 
 
-//     $Id: spfst.h,v 1.39 2001-02-01 22:48:51 mbickel Exp $
+//     $Id: spfst.h,v 1.40 2001-02-18 15:37:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2001/02/01 22:48:51  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.38  2001/01/28 14:04:20  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -77,16 +83,15 @@
 #ifndef spfst_h
   #define spfst_h
 
-
-
   #include "newfont.h"
   #include "basegfx.h"
   #include "typen.h"
   #include "events.h"
+  #include "gamemap.h"
 
-#pragma pack(1)
+  #pragma pack(1)
 
-   struct Schriften {          
+   struct Schriften {
                pfont        smallarial;
                pfont        smallsystem;
                pfont        large;

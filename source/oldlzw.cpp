@@ -6,9 +6,15 @@
     which should still be loaded.
 */
 
-//     $Id: oldlzw.cpp,v 1.6 2001-01-28 14:04:15 mbickel Exp $
+//     $Id: oldlzw.cpp,v 1.7 2001-02-18 15:37:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2001/01/28 14:04:15  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.5  2000/10/11 14:26:44  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -76,7 +82,6 @@ tlzwstreamcompression  :: tlzwstreamcompression ( void )
     rdictionary = NULL;
     readcnt = 0;
     wdictionary = NULL;
-    queuestat = 0;
 }
 
 
@@ -182,11 +187,9 @@ void tlzwstreamcompression  :: LZWOut ( CodeType code )
            mode = readingrle;
 
         } else {
-           for ( i = 0; i < tempreadbufsize; i++ ) {
-              tempbuf.putval ( tempreadbuf[i] );
-              queuestat++;
-           }
-   
+           for ( i = 0; i < tempreadbufsize; i++ )
+              tempbuf.push ( tempreadbuf[i] );
+
            mode = readingdirect;
         }
      }
@@ -194,7 +197,7 @@ void tlzwstreamcompression  :: LZWOut ( CodeType code )
 
   } else
     if ( initwrite )
-       throw tinvalidmode ( "tlzwstreamcompression ", mode , reading );
+       throw tinvalidmode ( "tlzwstreamcompression ", tnstream::IOMode ( mode ), tnstream::reading );
 }
 
 
@@ -231,7 +234,7 @@ void tlzwstreamcompression  :: LZWOut ( CodeType code )
 
   } else
     if ( initread )
-       throw tinvalidmode ( "tlzwstreamcompression ", mode , writing );
+       throw tinvalidmode ( "tlzwstreamcompression ", tnstream::IOMode ( mode ) , tnstream::writing );
 }
 
 
@@ -356,23 +359,23 @@ int tlzwstreamcompression  :: readdata ( void* buf, int size, int excpt  )
 
    if ( mode == readingdirect ) {
       int tp = 0;
-      while ( pos < size  &&  tempbuf.valavail() )  {
-         buf2 [pos++] = tempbuf.getval();
-         queuestat--;      
+      while ( pos < size  &&  tempbuf.size() )  {
+         buf2 [pos++] = tempbuf.front();
+         tempbuf.pop();
          tp++;
        }
-       if ( size-pos > 0 ) 
+       if ( size-pos > 0 )
           tp += readlzwdata ( &buf2[pos], size-pos, excpt );
 
        return tp;
 
-   } else 
+   } else
 
 
 
    if ( mode == readingrle ) {
       while ( pos < size ) {
-          
+
           if ( rlenum ) {
              buf2[pos++] = rledata;
              rlenum--;
@@ -385,7 +388,7 @@ int tlzwstreamcompression  :: readdata ( void* buf, int size, int excpt  )
 
              if ( rledata == rlestartbyte ) {
                 readlzwdata ( &rlenum, 1 );
-                if ( rlenum > 2 ) 
+                if ( rlenum > 2 )
                    readlzwdata ( &rledata, 1 );
              } else
                 buf2[pos++] = rledata;
@@ -395,9 +398,11 @@ int tlzwstreamcompression  :: readdata ( void* buf, int size, int excpt  )
       return pos;
 
    } else {
-   
-       while ( pos < size  &&  tempbuf.valavail() ) 
-          buf2 [pos++] = tempbuf.getval();
+
+       while ( pos < size  &&  tempbuf.size() ) {
+          buf2 [pos++] = tempbuf.front();
+          tempbuf.pop();
+       }
 
 
        if ( pos < size ) {
@@ -463,7 +468,7 @@ int tlzwstreamcompression  :: readdata ( void* buf, int size, int excpt  )
                  if ( pos < size )
                     buf2 [pos++] = DecodeBuffer[--count];
                  else 
-                    tempbuf.putval ( DecodeBuffer[--count] ); 
+                    tempbuf.push ( DecodeBuffer[--count] );
               }
       
               /* now, update the rdictionary */

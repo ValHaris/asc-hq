@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: gui.cpp,v 1.52 2001-02-11 11:39:36 mbickel Exp $
+//     $Id: gui.cpp,v 1.53 2001-02-18 15:37:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2001/02/11 11:39:36  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.51  2001/02/01 22:48:41  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -762,7 +765,7 @@ void   tnguiicon::loaddata ( void )
    std::string tempfilename = filename + ".nic";
    
    {
-     tnfilestream stream ( tempfilename.c_str() ,1 );
+     tnfilestream stream ( tempfilename.c_str() , tnstream::reading );
      loadspecifics( &stream );
    }
 
@@ -1519,7 +1522,7 @@ int   tnsguiiconpoweron::available    ( void )
       if ( getactfield()->vehicle )
          if ( getactfield()->vehicle->color == actmap->actplayer*8  &&
               (getactfield()->vehicle->functions & cfgenerator))
-              if ( !getactfield()->vehicle->generatoractive )
+              if ( !getactfield()->vehicle->getGeneratorStatus() )
                  return 1;
 
   return 0;         
@@ -1527,7 +1530,7 @@ int   tnsguiiconpoweron::available    ( void )
 
 void  tnsguiiconpoweron::exec         ( void ) 
 {
-   getactfield()->vehicle->setpower ( 1 );
+   getactfield()->vehicle->setGeneratorStatus ( true );
    dashboard.x = 0xffff;
 }
 
@@ -1544,7 +1547,7 @@ int   tnsguiiconpoweroff::available    ( void )
       if ( getactfield()->vehicle )
          if ( getactfield()->vehicle->color == actmap->actplayer*8  &&
               (getactfield()->vehicle->functions & cfgenerator))
-              if ( getactfield()->vehicle->generatoractive )
+              if ( getactfield()->vehicle->getGeneratorStatus() )
                  return 1;
 
   return 0;         
@@ -1552,7 +1555,7 @@ int   tnsguiiconpoweroff::available    ( void )
 
 void  tnsguiiconpoweroff::exec         ( void ) 
 {
-   getactfield()->vehicle->setpower ( 0 );
+   getactfield()->vehicle->setGeneratorStatus ( false );
    dashboard.x = 0xffff;
 }
 
@@ -2182,7 +2185,7 @@ int   tnsguiiconenablereactionfire::available    ( void )
    pvehicle eht = getactfield()->vehicle;
    if ( eht )
       if ( eht->color == actmap->actplayer * 8) 
-         if ( eht->reactionfire.status == tvehicle::ReactionFire::off )
+         if ( eht->reactionfire.getStatus() == tvehicle::ReactionFire::off )
             if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
                if ( eht->weapexist() )
                   return 1;
@@ -2210,7 +2213,7 @@ int   tnsguiicondisablereactionfire::available    ( void )
    pvehicle eht = getactfield()->vehicle;
    if ( eht )
       if ( eht->color == actmap->actplayer * 8) 
-         if ( eht->reactionfire.status != tvehicle::ReactionFire::off )
+         if ( eht->reactionfire.getStatus() != tvehicle::ReactionFire::off )
             if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
                if ( eht->weapexist() )
                   return 1;

@@ -3,7 +3,16 @@
 #include "../../global.h"
 
 #ifndef HAVE_LOG2
-extern double log2();
+double log2( double v )
+{
+        static double tmp_log2 = -1.0;
+
+        if (tmp_log2 < 0.0) {
+                tmp_log2 = 1.0 / log(2.0);
+        }
+
+        return(log(v) * tmp_log2);
+}
 #endif
 
 static int choose_idx;
@@ -143,15 +152,4 @@ int math_N(n, h)
 }
 
 
-#ifndef HAVE_LOG2
-double log2( double v )
-{
-        static double tmp_log2 = -1.0;
 
-        if (tmp_log2 < 0.0) {
-                tmp_log2 = 1.0 / log(2.0);
-        }
-
-        return(log(v) * tmp_log2);
-}
-#endif

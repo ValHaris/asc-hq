@@ -20,6 +20,7 @@
 
  ***************************************************************************/
 
+#include "../global.h"
 #include "SDLStretch.h"
 #include <stdio.h>
 #include <string.h>

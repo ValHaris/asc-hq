@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: sg.cpp,v 1.133 2001-02-15 21:57:06 mbickel Exp $
+//     $Id: sg.cpp,v 1.134 2001-02-18 15:37:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.133  2001/02/15 21:57:06  mbickel
+//      The AI doesn't try to attack with recon units any more
+//
 //     Revision 1.132  2001/02/11 11:39:41  mbickel
 //      Some cleanup and documentation
 //
@@ -396,34 +399,34 @@ void         loadcursor(void)
   char         i;
 
    {
-      tnfilestream stream ( "height2.raw", 1 );
-      for (i=0;i<3 ;i++ ) 
-         for ( int j=0; j<8; j++) 
+      tnfilestream stream ( "height2.raw", tnstream::reading );
+      for (i=0;i<3 ;i++ )
+         for ( int j=0; j<8; j++)
             stream.readrlepict( &icons.height2[i][j], false, &w );
    }
 
    {
-      tnfilestream stream ("windp.raw",1);
-      for (i=0;i<9 ;i++ ) 
+      tnfilestream stream ("windp.raw", tnstream::reading);
+      for (i=0;i<9 ;i++ )
           stream.readrlepict( &icons.wind[i], false, &w );
                                                                                                                                                                                                                                                                
    }
 
   #ifdef HEXAGON
    {
-      tnfilestream stream ("windpfei.raw",1);
+      tnfilestream stream ("windpfei.raw",tnstream::reading);
       stream.readrlepict( &icons.windarrow, false, &w );
    }
   #endif
 
    {
-      tnfilestream stream ("farbe.raw",1);
-      for (i=0;i<8 ;i++ ) 
+      tnfilestream stream ("farbe.raw",tnstream::reading);
+      for (i=0;i<8 ;i++ )
           stream.readrlepict( &icons.player[i], false, &w );
    }
 
    {
-      tnfilestream stream ("allianc.raw",1);
+      tnfilestream stream ("allianc.raw",tnstream::reading);
       for (i=0;i<8 ;i++ ) {
           stream.readrlepict(   &icons.allianz[i][0], false, &w );
           stream.readrlepict(   &icons.allianz[i][1], false, &w );
@@ -432,31 +435,31 @@ void         loadcursor(void)
    }
 
    {
-      tnfilestream stream ("weapicon.raw",1);
-      for (i=0; i<13 ;i++ ) 
+      tnfilestream stream ("weapicon.raw",tnstream::reading);
+      for (i=0; i<13 ;i++ )
             stream.readrlepict(   &icons.unitinfoguiweapons[i], false, &w );
    }
 
    {
-      tnfilestream stream ("expicons.raw",1);
+      tnfilestream stream ("expicons.raw",tnstream::reading);
       for (i=0; i<=maxunitexperience ;i++ )
             stream.readrlepict(   &icons.experience[i], false, &w );
    }
 
    {
       #ifndef HEXAGON
-      tnfilestream stream ("va8.raw",1);
+      tnfilestream stream ("va8.raw",tnstream::reading);
       #else
-      tnfilestream stream ("hexinvi2.raw",1);
+      tnfilestream stream ("hexinvi2.raw",tnstream::reading);
       #endif
       stream.readrlepict(   &icons.view.va8, false, &w);
    }
 
    {
       #ifndef HEXAGON
-      tnfilestream stream ("nv8.raw",1);
+      tnfilestream stream ("nv8.raw",tnstream::reading);
       #else
-      tnfilestream stream ("hexinvis.raw",1);
+      tnfilestream stream ("hexinvis.raw",tnstream::reading);
       #endif
       stream.readrlepict(   &icons.view.nv8, false, &w);
       void* u = uncompress_rlepict ( icons.view.nv8 );
@@ -467,12 +470,12 @@ void         loadcursor(void)
    }
 
    {
-      tnfilestream stream ("fg8.raw",1);
+      tnfilestream stream ("fg8.raw",tnstream::reading);
       stream.readrlepict(   &icons.view.fog8, false, &w);
    }
 
    {
-      tnfilestream stream ("windrose.raw",1);
+      tnfilestream stream ("windrose.raw",tnstream::reading);
       stream.readrlepict(   &icons.windbackground, false, &w);
    }
 
@@ -489,37 +492,37 @@ void         loadcursor(void)
        s[1]='v';
        s[4]='0'+i;
        {
-          tnfilestream stream (s,1);
+          tnfilestream stream (s,tnstream::reading);
           stream.readrlepict(   &view.nv4[i], false, &w);
        }
 
        s[0]='v';
        s[1]='a';
        {
-          tnfilestream stream (s,1);
+          tnfilestream stream (s,tnstream::reading);
           stream.readrlepict(   &view.va4[i], false, &w);
        }
 
        s[0]='f';
        s[1]='g';
        {
-          tnfilestream stream (s,1);
+          tnfilestream stream (s,tnstream::reading);
           stream.readrlepict(   &view.fog4[i], false, &w);
        }
 
    } /* endfor */
    mountview();
    #endif
-   
-   
+
+
 
    {
       #ifdef HEXAGON
-      tnfilestream stream ("hexfld_a.raw",1); 
+      tnfilestream stream ("hexfld_a.raw",tnstream::reading);
       #else
-      tnfilestream stream ("markacti.raw",1); 
+      tnfilestream stream ("markacti.raw",tnstream::reading);
       #endif
-      
+
       stream.readrlepict(   &icons.container.mark.active, false, &w);
    }
 
@@ -528,52 +531,52 @@ void         loadcursor(void)
 
    {
       #ifdef HEXAGON
-      tnfilestream stream ("hexfld.raw",1); 
+      tnfilestream stream ("hexfld.raw",tnstream::reading);
       #else
-      tnfilestream stream ("markinac.raw",1); 
+      tnfilestream stream ("markinac.raw",tnstream::reading);
       #endif
       stream.readrlepict(   &icons.container.mark.inactive, false, &w);
    }
 
    {
       #ifdef HEXAGON
-      tnfilestream stream ("in_ach.raw",1); 
+      tnfilestream stream ("in_ach.raw",tnstream::reading);
       #else
-      tnfilestream stream ("markain.raw",1); 
+      tnfilestream stream ("markain.raw",tnstream::reading);
       #endif
       stream.readrlepict(   &icons.container.mark.movein_active, false, &w);
    }
 
    {
       #ifdef HEXAGON
-      tnfilestream stream ("in_h.raw",1); 
+      tnfilestream stream ("in_h.raw",tnstream::reading);
       #else
-      tnfilestream stream ("markain2.raw",1); 
+      tnfilestream stream ("markain2.raw",tnstream::reading);
       #endif
       stream.readrlepict(   &icons.container.mark.movein_inactive, false, &w);
    }
 
    {
       #ifdef HEXAGON
-      tnfilestream stream ("build_ah.raw",1); 
+      tnfilestream stream ("build_ah.raw",tnstream::reading);
       #else
-      tnfilestream stream ("baumoda.raw",1); 
+      tnfilestream stream ("baumoda.raw",tnstream::reading);
       #endif
       stream.readrlepict(   &icons.container.mark.repairactive, false, &w);
    }
 
    {
       #ifdef HEXAGON
-      tnfilestream stream ("build_h.raw",1); 
+      tnfilestream stream ("build_h.raw",tnstream::reading);
       #else
-      tnfilestream stream ("baumod.raw",1); 
+      tnfilestream stream ("baumod.raw",tnstream::reading);
       #endif
       stream.readrlepict(   &icons.container.mark.repairinactive, false, &w);
    }
 
    {
       #ifdef HEXAGON
-      tnfilestream stream ("hexbuild.raw",1); 
+      tnfilestream stream ("hexbuild.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.container_window, false, &w);
       #endif
    }
@@ -594,61 +597,61 @@ void         loadcursor(void)
    if ( actprogressbar )
       actprogressbar->point();
 
-   loadicons(); 
+   loadicons();
 
    if ( actprogressbar )
       actprogressbar->point();
 
-   loadmessages(); 
+   loadmessages();
 
    if ( actprogressbar )
       actprogressbar->point();
 
    {
-      tnfilestream stream ("waffen.raw",1);       
+      tnfilestream stream ("waffen.raw",tnstream::reading);
       int num;
-   
+
       static int xlatselectweaponguiicons[12] = { 2, 7, 6, 3, 4, 9, 0, 5, 10, 11, 11, 11 };
-   
+
       stream.readdata ( (char*) &num, sizeof( num ));
-      for ( i = 0; i < num; i++ ) 
+      for ( i = 0; i < num; i++ )
           stream.readrlepict(   &icons.selectweapongui[xlatselectweaponguiicons[i]], false, &w );
       stream.readrlepict(   &icons.selectweaponguicancel, false, &w );
    }
 
    {
-      tnfilestream stream ("knorein.raw",1);
+      tnfilestream stream ("knorein.raw",tnstream::reading);
       stream.readrlepict(   &icons.guiknopf, false, &w );
    }
 
    {
-      tnfilestream stream ("compi2.raw",1);
+      tnfilestream stream ("compi2.raw",tnstream::reading);
       stream.readrlepict(   &icons.computer, false, &w );
    }
 
    {
-      tnfilestream stream ("pfeil-A0.raw",1);
+      tnfilestream stream ("pfeil-A0.raw",tnstream::reading);
       for (i=0; i<8 ;i++ ) {
             stream.readrlepict(   &icons.pfeil2[i], false, &w );
       } /* endfor */
    }
 
    {
-      tnfilestream stream ("gebasym2.raw",1);
+      tnfilestream stream ("gebasym2.raw",tnstream::reading);
       for ( i = 0; i < 12; i++ )
          for ( int j = 0; j < 2; j++ )
             stream.readrlepict(   &icons.container.lasche.sym[i][j], false, &w );
    }
 
    {
-      tnfilestream stream ("netcontr.raw",1);
+      tnfilestream stream ("netcontr.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.subwin.netcontrol.start, false, &w );
       stream.readrlepict(   &icons.container.subwin.netcontrol.inactive, false, &w );
       stream.readrlepict(   &icons.container.subwin.netcontrol.active, false, &w );
    }
 
    {
-      tnfilestream stream ("ammoprod.raw",1);
+      tnfilestream stream ("ammoprod.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.subwin.ammoproduction.start, false, &w );
       stream.readrlepict(   &icons.container.subwin.ammoproduction.button, false, &w );
       stream.readrlepict(   &icons.container.subwin.ammoproduction.buttonpressed, false, &w );
@@ -661,22 +664,22 @@ void         loadcursor(void)
       actprogressbar->point();
 
    {
-      tnfilestream stream ("resorinf.raw",1);
+      tnfilestream stream ("resorinf.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.subwin.resourceinfo.start, false, &w );
    }
 
    {
-      tnfilestream stream ("windpowr.raw",1);
+      tnfilestream stream ("windpowr.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.subwin.windpower.start, false, &w );
    }
 
    {
-      tnfilestream stream ("solarpwr.raw",1);
+      tnfilestream stream ("solarpwr.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.subwin.solarpower.start, false, &w );
    }
 
    {
-      tnfilestream stream ("ammotran.raw",1);
+      tnfilestream stream ("ammotran.raw", tnstream::reading);
       stream.readrlepict(   &icons.container.subwin.ammotransfer.start, false, &w );
       stream.readrlepict(   &icons.container.subwin.ammotransfer.button, false, &w );
       stream.readrlepict(   &icons.container.subwin.ammotransfer.buttonpressed, false, &w );
@@ -696,7 +699,7 @@ void         loadcursor(void)
    }
 
    {
-      tnfilestream stream ("research.raw",1);
+      tnfilestream stream ("research.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.subwin.research.start, false, &w );
       stream.readrlepict(   &icons.container.subwin.research.button[0], false, &w );
       stream.readrlepict(   &icons.container.subwin.research.button[1], false, &w );
@@ -704,17 +707,17 @@ void         loadcursor(void)
    }
 
    {
-      tnfilestream stream ("pwrplnt2.raw",1);
+      tnfilestream stream ("pwrplnt2.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.subwin.conventionelpowerplant.start, false, &w );
       stream.readrlepict(   &icons.container.subwin.conventionelpowerplant.schieber, false, &w );
       //stream.readrlepict(   &icons.container.subwin.conventionelpowerplant.button[1], false, &w );
    }
 
-   
-   
+
+
    int m;
    {
-      tnfilestream stream ( "bldinfo.raw", 1 );
+      tnfilestream stream ( "bldinfo.raw", tnstream::reading );
       stream.readrlepict( &icons.container.subwin.buildinginfo.start, false, &m );
       for ( i = 0; i < 8; i++ )
          stream.readrlepict( &icons.container.subwin.buildinginfo.height1[i], false, &m );
@@ -724,10 +727,10 @@ void         loadcursor(void)
       stream.readrlepict( &icons.container.subwin.buildinginfo.repairpressed, false, &m );
       stream.readrlepict( &icons.container.subwin.buildinginfo.block, false, &m );
    }
-   
+
 
    {
-      tnfilestream stream ("mining2.raw",1);
+      tnfilestream stream ("mining2.raw", tnstream::reading);
       stream.readrlepict(   &icons.container.subwin.miningstation.start, false, &w );
       stream.readrlepict(   &icons.container.subwin.miningstation.zeiger, false, &w );
       /*
@@ -744,19 +747,19 @@ void         loadcursor(void)
    }
 
    {
-      tnfilestream stream ("mineral.raw",1);
+      tnfilestream stream ("mineral.raw", tnstream::reading);
       stream.readrlepict(   &icons.container.subwin.mineralresources.start, false, &w );
       stream.readrlepict(   &icons.container.subwin.mineralresources.zeiger, false, &w );
    }
 
    {
-      tnfilestream stream ("tabmark.raw", 1);
+      tnfilestream stream ("tabmark.raw", tnstream::reading);
       stream.readrlepict (   &icons.container.tabmark[0], false, &w );
       stream.readrlepict (   &icons.container.tabmark[1], false, &w );
    }
 
    {
-      tnfilestream stream ("traninfo.raw",1);
+      tnfilestream stream ("traninfo.raw", tnstream::reading);
       stream.readrlepict(   &icons.container.subwin.transportinfo.start, false, &w );
       for ( i = 0; i < 8; i++ )
          stream.readrlepict(   &icons.container.subwin.transportinfo.height1[i], false, &w );
@@ -769,41 +772,41 @@ void         loadcursor(void)
       actprogressbar->point();
 
    {
-      tnfilestream stream ("attack.raw", 1);
+      tnfilestream stream ("attack.raw", tnstream::reading);
       stream.readrlepict (   &icons.attack.bkgr, false, &w );
       icons.attack.orgbkgr = NULL;
    }
 
    {
      #ifdef HEXAGON
-      tnfilestream stream ("hexfeld.raw", 1);
+      tnfilestream stream ("hexfeld.raw", tnstream::reading);
      #else
-      tnfilestream stream ("oktfld2.raw", 1);
+      tnfilestream stream ("oktfld2.raw", tnstream::reading);
      #endif
       stream.readrlepict ( &icons.fieldshape, false, &w );
    }
 
-   #ifdef FREEMAPZOOM 
+   #ifdef FREEMAPZOOM
    {
-      tnfilestream stream ("mapbkgr.raw", 1);
+      tnfilestream stream ("mapbkgr.raw", tnstream::reading);
       stream.readrlepict ( &icons.mapbackground, false, &w );
    }
    #endif
 
    {
-      tnfilestream stream ("hex2oct.raw", 1);
+      tnfilestream stream ("hex2oct.raw", tnstream::reading);
       stream.readrlepict (   &icons.hex2octmask, false, &w );
    }
 
    {
-      tnfilestream stream ("weapinfo.raw", 1);
+      tnfilestream stream ("weapinfo.raw", tnstream::reading);
       for ( int i = 0; i < 5; i++ )
          stream.readrlepict (   &icons.weaponinfo[i], false, &w );
    }
 
    backgroundpict.load();
 
-} 
+}
 
 enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_dispvehicleimprovement, ua_mainmenu, ua_mntnc_morefog,
                     ua_mntnc_lessfog,   ua_mntnc_morewind,   ua_mntnc_lesswind, ua_mntnc_rotatewind, ua_changeresourceview, ua_heapcheck,
@@ -1125,7 +1128,7 @@ void loadStartupMap ( char *emailgame=NULL, char *mapname=NULL, char *savegame=N
       }
 
       try {
-         tnfilestream gamefile ( emailgame, 1 );
+         tnfilestream gamefile ( emailgame, tnstream::reading );
          tnetworkloaders nwl;
          nwl.loadnwgame( &gamefile );
       }
@@ -1154,7 +1157,6 @@ void loadStartupMap ( char *emailgame=NULL, char *mapname=NULL, char *savegame=N
       }
 
       try { loadmap( mapname ); }
-
       catch ( tfileerror ) {
          fprintf ( stderr, "%s is not a legal map. \n", mapname );
          exit(-1);
@@ -1983,7 +1985,7 @@ void dispmessageonexit ( void ) {
 
 pfont load_font ( const char* name )
 {
-   tnfilestream stream ( name , 1 );
+   tnfilestream stream ( name , tnstream::reading );
    return loadfont ( &stream );
 }
 
@@ -2006,7 +2008,7 @@ void loaddata( int resolx, int resoly,
    if ( actprogressbar ) {
       tfindfile ff ( progressbarfilename );
       if ( !ff.getnextname().empty() ) {
-         tnfilestream strm ( progressbarfilename, 1 );
+         tnfilestream strm ( progressbarfilename, tnstream::reading );
          actprogressbar->start ( 255, 0,
             agmp->resolutiony-3, agmp->resolutionx-1,
             agmp->resolutiony-1, &strm );
@@ -2084,7 +2086,7 @@ void loaddata( int resolx, int resoly,
    if ( actprogressbar ) {
       actprogressbar->end();
       try {
-         tnfilestream strm ( progressbarfilename, 2 );
+         tnfilestream strm ( progressbarfilename, tnstream::writing );
          actprogressbar->writetostream( &strm );
       } /* endtry */
       catch ( tfileerror ) { } /* endcatch */
@@ -2353,7 +2355,7 @@ int gamethread ( void* data )
       try {
          int fs = loadFullscreenImage ( "helisun.jpg" );
          if ( !fs ) {
-            tnfilestream stream ( "logo640.pcx", 1 );
+            tnfilestream stream ( "logo640.pcx", tnstream::reading );
             loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 );
          }
          loaddata( resolx, resoly, gtp->emailgame, gtp->mapname, gtp->savegame );
@@ -2362,7 +2364,7 @@ int gamethread ( void* data )
 
       }
       catch ( tfileerror err ) {
-         displaymessage ( "unable to access file %s \n", 2, err.filename );
+         displaymessage ( "unable to access file %s \n", 2, err.getFileName().c_str() );
       }
       catch ( toutofmem err ) {
          displaymessage (
@@ -2599,7 +2601,7 @@ int main(int argc, char *argv[] )
 
    try {
       if ( exist ( "data.version" )) {
-         tnfilestream s ( "data.version", 1 );
+         tnfilestream s ( "data.version", tnstream::reading );
          dataVersion = s.readInt();
       } else
          dataVersion = 0;
@@ -2615,7 +2617,7 @@ int main(int argc, char *argv[] )
       check_bi3_dir ();
    }
    catch ( tfileerror err ) {
-      displaymessage ( "unable to access file %s \n", 2, err.filename );
+      displaymessage ( "unable to access file %s \n", 2, err.getFileName().c_str() );
    }
    catch ( ... ) {
       displaymessage (
@@ -2641,7 +2643,7 @@ int main(int argc, char *argv[] )
 
       {
          int w;
-         tnfilestream stream ("mausi.raw",1);
+         tnfilestream stream ("mausi.raw", tnstream::reading);
          stream.readrlepict(   &icons.mousepointer, false, &w );
       }
 

@@ -24,6 +24,7 @@
 #include "errors.h"
 #include "typen.h"
 #include "vehicletype.h"
+#include "gamemap.h"
 
 int  ttechnology :: getlvl( void )
 {

@@ -2039,7 +2039,7 @@ void tbackgroundpict :: load ( void )
 {
    int w;
    {
-      tnfilestream stream ("amatur.raw", 1);
+      tnfilestream stream ("amatur.raw", tnstream::reading);
       for ( int i = 0; i< 7; i++ )
          stream.readrlepict ( &dashboard[i], false, &w );
      #ifdef FREEMAPZOOM
@@ -2050,7 +2050,7 @@ void tbackgroundpict :: load ( void )
    }
    #ifdef HEXAGON
    {
-      tnfilestream stream ("hxborder.raw", 1);
+      tnfilestream stream ("hxborder.raw", tnstream::reading);
       for ( int i = 0; i < 8; i++ )
          stream.readrlepict ( &borderpicture[i], false, &w );
    }
@@ -2116,7 +2116,7 @@ void  tbackgroundpict :: paint ( int resavebackground )
         char filename[100];
         sprintf( filename, "%d%d.pcx", hgmp->resolutionx, hgmp->resolutiony );
         if ( exist ( filename )) {
-           tnfilestream stream ( filename, 1 );
+           tnfilestream stream ( filename, tnstream::reading );
            loadpcxxy( &stream ,0,0);
 
            background = new char[ imagesize ( 0, 0, agmp->resolutionx, agmp->resolutiony  )];
@@ -2128,7 +2128,7 @@ void  tbackgroundpict :: paint ( int resavebackground )
            int y = hgmp->resolutiony;
            {
               tvirtualdisplay vdp ( agmp->resolutionx, agmp->resolutiony );
-              tnfilestream stream ( "640480.pcx", 1 );
+              tnfilestream stream ( "640480.pcx", tnstream::reading );
               loadpcxxy( &stream ,0,0);
               char* pic = new char[ imagesize ( 0, 0, 639, 479 )];
               getimage ( 0, 0, 639, 479, pic );

@@ -1145,7 +1145,7 @@ int  trunreplay :: run ( int player )
 
    actmap->playerView = actplayer;
 
-   tmemorystream guidatastream ( orgmap->replayinfo->guidata [ player ], 1 );
+   tmemorystream guidatastream ( orgmap->replayinfo->guidata [ player ], tnstream::reading );
    stream = &guidatastream;
 
    if ( stream->dataavail () )

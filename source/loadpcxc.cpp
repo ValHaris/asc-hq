@@ -5,9 +5,12 @@
     which is called #loadpcx.cpp , but not used any more.
 */
 
-//     $Id: loadpcxc.cpp,v 1.12 2001-02-11 11:39:39 mbickel Exp $
+//     $Id: loadpcxc.cpp,v 1.13 2001-02-18 15:37:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2001/02/11 11:39:39  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.11  2001/01/28 14:04:14  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -268,7 +271,7 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
 
 char loadpcxxy ( const char *name, char setpal, word x, word y)
 {
-   tnfilestream s ( name, 1 );
+   tnfilestream s ( name, tnstream::reading );
    return loadpcxxy ( &s, x, y, setpal );
 }
 
@@ -300,11 +303,11 @@ void writepcx ( const char* name, int x1, int y1, int x2, int y2, dacpalette256 
 
    int fsize = 0;
 
-   tn_file_buf_stream stream ( name, 2 );
+   tn_file_buf_stream stream ( name, tnstream::writing );
    stream.writedata2 ( header );
    fsize += sizeof ( header );
 
-   for ( int y = y1; y <= y2; y++ ) 
+   for ( int y = y1; y <= y2; y++ )
       for ( int plane = 0; plane < header.nplanes; plane++ ) {
          int lastbyte = -1;
          int count = 0;
@@ -344,13 +347,13 @@ void writepcx ( const char* name, int x1, int y1, int x2, int y2, dacpalette256 
       char d = 12;
       stream.writedata2 ( d );
       fsize += sizeof ( d );
-   
+
       dacpalette256 pal2;
-   
+
       for ( int i = 0; i < 3; i++ )
           for ( int j = 0; j < 256; j++ )
               pal2[j][i] = pal[j][i] << 2;
-   
+
       stream.writedata ( &pal2, 768 );
       fsize += 768 ;
    }

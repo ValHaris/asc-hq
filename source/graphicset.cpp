@@ -20,13 +20,15 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "basestrm.h"
 #include "misc.h"
 #include "graphicset.h"
-#include "basestrm.h"
 #include "basegfx.h"
 #include "errors.h"
 #include "typen.h"
 #include "sgstream.h"
+
+
 
 int bi3graphnum = 0;
 
@@ -126,7 +128,7 @@ int ActiveGraphicPictures :: setActive ( int id )
 
 int getGraphicSetIdFromFilename ( const char* filename )
 {
-      tnfilestream s ( filename, 1 );
+      tnfilestream s ( filename, tnstream::reading );
 
       int magic;
       s.readdata2 ( magic );
@@ -160,7 +162,7 @@ void loadbi3graphics( void )
    void* emptyfield;
    {
       int o;
-      tnfilestream s ( "emptyfld.raw", 1 );
+      tnfilestream s ( "emptyfld.raw", tnstream::reading );
       s.readrlepict ( &emptyfield, false, &o );
    }
    int emptyfieldsize = getpicsize2 ( emptyfield );
@@ -170,7 +172,7 @@ void loadbi3graphics( void )
    string filename = ff.getnextname();
    while ( !filename.empty() ) {
 
-      tnfilestream s ( filename.c_str(), 1 );
+      tnfilestream s ( filename.c_str(), tnstream::reading );
 
       int magic;
       s.readdata2 ( magic );

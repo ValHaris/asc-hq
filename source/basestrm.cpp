@@ -2,9 +2,13 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.51 2001-02-04 21:26:54 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.52 2001-02-18 15:37:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2001/02/04 21:26:54  mbickel
+//      The AI status is written to savegames -> new savegame revision
+//      Lots of bug fixes
+//
 //     Revision 1.50  2001/01/28 14:04:02  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -375,15 +379,11 @@ toutofmem::toutofmem ( int m )
   required = m; 
 }
 
-tfileerror::tfileerror ( const char* fn ) 
+tfileerror::tfileerror ( const ASCString& fileName )
 {
-   strcpy ( filename , fn );
+   _filename = fileName ;
 }
 
-tfileerror :: tfileerror ( void )
-{
-   filename[0] = 0;
-}
 
 /*
 tfileerror::~tfileerror()
@@ -395,8 +395,8 @@ tfileerror::~tfileerror()
 }
 */
 
-tinvalidmode :: tinvalidmode ( const char* fn, int org_mode, int requested_mode )
-              : tfileerror ( fn )
+tinvalidmode :: tinvalidmode ( const ASCString& _fileName, tnstream::IOMode org_mode, tnstream::IOMode requested_mode )
+              : tfileerror ( _fileName )
 {
    orgmode = org_mode;
    requestmode = requested_mode;
@@ -404,8 +404,8 @@ tinvalidmode :: tinvalidmode ( const char* fn, int org_mode, int requested_mode 
 
 
 
-treadafterend :: treadafterend ( const char* fn )
-               : tfileerror ( fn )
+treadafterend :: treadafterend ( const ASCString& _fileName )
+               : tfileerror ( _fileName )
 {
 
 }
@@ -419,11 +419,9 @@ tinternalerror::tinternalerror (  const char* filename, int l )
 
 
 
-tinvalidversion :: tinvalidversion ( const char* fn, int ex, int fnd ) 
-                 : tfileerror ( fn )
+tinvalidversion :: tinvalidversion ( const ASCString& _fileName, int ex, int fnd )
+                 : tfileerror ( _fileName ), expected ( ex ), found ( fnd )
 {
-   expected = ex;
-   found = fnd;
 }
 
 
@@ -659,7 +657,7 @@ void         tnstream::readpnchar(char** pc, int maxlength )
 bool  tnstream::readTextString ( ASCString& s )
 {
   char c;
-  int red = 1;
+  int red;
   int end = 0;
   do {
      red = readdata( &c, 1, 0 );
@@ -755,7 +753,7 @@ MemoryStreamCopy :: ~MemoryStreamCopy ( )
 
 void MemoryStreamCopy :: writedata ( const void* buf, int size )
 {
-   throw  tinvalidmode ( getDeviceName(), 1, 2 );
+   throw  tinvalidmode ( getDeviceName(), reading, writing );
 }
 
 int MemoryStreamCopy :: readdata  ( void* buffer, int _size, int excpt )
@@ -853,7 +851,7 @@ SDL_RWops *SDL_RWFromStream( pnstream stream )
 tnbufstream::tnbufstream (  )
 { 
    datalen = 0;
-   modus = 0; 
+   _mode = uninitialized;
 
   zeiger = NULL;
   int maxav = 0x10000;
@@ -869,24 +867,24 @@ tnbufstream::tnbufstream (  )
   if ( !zeiger )
       throw  toutofmem( memsize );
 
-   datasize = 0; 
+   datasize = 0;
    actmempos = 0;
-} 
+}
 
 
 int          tnbufstream::readdata( void* buf, int size, int excpt  )
-{ 
+{
    char*        cpbuf = (char*) buf;
    int          s, actpos2;
 
-   actpos2 = 0; 
+   actpos2 = 0;
 
-   if (modus == 2)  {
-      throw  tinvalidmode ( getDeviceName(), modus, 1 );
-	}
-      
-   while (actpos2 < size) { 
-      if (datasize == 0) 
+   if (_mode != reading)
+      throw  tinvalidmode ( getDeviceName(), _mode, reading );
+   
+
+   while (actpos2 < size) {
+      if (datasize == 0)
           if ( excpt ) {
              throw treadafterend ( getDeviceName() );
 			}
@@ -920,8 +918,8 @@ void         tnbufstream::writedata( const void* buf, int size )
    int          s, actpos2;
    char*        cpbuf = (char*) buf;
 
-   if (modus == 1) 
-      throw  tinvalidmode ( getDeviceName(), modus, 2 );
+   if (_mode != writing )
+      throw  tinvalidmode ( getDeviceName(), _mode, writing );
 
    actpos2 = 0; 
 
@@ -947,7 +945,7 @@ void         tnbufstream::writedata( const void* buf, int size )
 
 tnbufstream::~tnbufstream ()
 { 
-   if (modus == 2) 
+   if (_mode == writing ) 
       writebuffer();
 
    if ( memsize > 1)
@@ -979,18 +977,18 @@ time_t tn_file_buf_stream::get_time ( void )
 }
 
 
-tn_file_buf_stream::tn_file_buf_stream( const char* name, char mode)
+tn_file_buf_stream::tn_file_buf_stream( const ASCString& _fileName, IOMode mode)
 {
    char buf[10000];
-   std::string s;
-   if ( strchr ( name, pathdelimitter ) == NULL )
-      s = constructFileName ( buf, 0, NULL, name);
+   ASCString s;
+   if ( strchr ( _fileName.c_str(), pathdelimitter ) == NULL )
+      s = constructFileName ( buf, 0, NULL, _fileName.c_str() );
    else
-      s = name;
+      s = _fileName;
 
-   modus = mode; 
-   
-   if (mode == 1) {
+   _mode = mode;
+
+   if (_mode == reading) {
       fp = fopen ( s.c_str(), filereadmode );
    } else {
       fp = fopen ( s.c_str(), filewritemode );
@@ -1000,20 +998,20 @@ tn_file_buf_stream::tn_file_buf_stream( const char* name, char mode)
 
      actfilepos = 0;
 
-     if (mode == 1)
+     if (_mode == reading)
        readbuffer();
-                
-     devicename = s.c_str();
 
-   } else 
+     devicename = s;
+
+   } else
      throw tfileerror( s.c_str() );
 
-} 
+}
 
 
 void tn_file_buf_stream::seek( int newpos )
 { 
-   if ( modus == 2 ) {
+   if ( _mode == writing ) {
       writebuffer();
 
       fseek( fp, newpos, SEEK_SET );
@@ -1058,20 +1056,19 @@ void tn_file_buf_stream::writebuffer()
       throw  tfileerror ( getDeviceName() );
 
    actmempos = 0;
-} 
+}
 
 
 tn_file_buf_stream::~tn_file_buf_stream()
-{ 
+{
    close();
 
-   if (modus == 2) 
-      writebuffer(); 
-  
+   if (_mode == writing)
+      writebuffer();
+
    fclose( fp );
 
-   modus = 0; 
-} 
+}
 
 
 
@@ -1081,7 +1078,7 @@ tn_file_buf_stream::~tn_file_buf_stream()
 
 
 tncontainerstream :: tncontainerstream ( const char* containerfilename, ContainerIndexer* indexer, int dirLevel )
-        : tn_file_buf_stream ( containerfilename, 1 )
+        : tn_file_buf_stream ( containerfilename, reading )
 {
    int pos;
    num = 0;
@@ -1581,7 +1578,6 @@ libbzip_decompression :: ~libbzip_decompression ( )
 t_compressor_2ndbuf_filter :: t_compressor_2ndbuf_filter ( t_compressor_stream_interface* strm )
 {
    stream = strm;
-   queuesize = 0;
 }
 
 void t_compressor_2ndbuf_filter :: writecmpdata ( const void* buf, int size )
@@ -1595,10 +1591,10 @@ int t_compressor_2ndbuf_filter :: readcmpdata ( void* buf, int size, int excpt )
 
    char* pc = (char*) buf;
 
-   while ( size && queuesize) {
-       *pc = queue.getval();
+   while ( size && _queue.size() ) {
+       *pc = _queue.front();
+       _queue.pop();
        pc++;
-       queuesize--;
        size--;
        got++;
    } /* endwhile */
@@ -1606,16 +1602,15 @@ int t_compressor_2ndbuf_filter :: readcmpdata ( void* buf, int size, int excpt )
    if ( size )
       got += stream->readcmpdata ( pc, size, excpt );
 
-   return got;   
+   return got;
 }
 
 void t_compressor_2ndbuf_filter :: insert_data_into_queue ( const void* buf, int size )
 {
    char* pc = (char*) buf;
    for (int i = 0; i < size; i++) {
-      queue.putval ( *pc );
+      _queue.push ( *pc );
       *pc++;
-      queuesize++;
    } /* endfor */
 }
 
@@ -1659,7 +1654,7 @@ void tanycompression :: init ( void )
          status = 109;
 
       for ( int i = siglen; i < bufdatanum; i++ )
-          queue.putval ( buf[i] );
+          _queue.push ( buf[i] );
 
 
    } else {
@@ -1698,22 +1693,23 @@ void tanycompression :: writedata ( const void* buf, int size )
 
 int tanycompression :: readlzwdata ( void* buf, int size, int excpt )
 {
-   if ( queue.valavail() ) {
+   if ( _queue.size() ) {
       int got = 0;
-   
+
       char* pc = (char*) buf;
-   
-      while ( size && queue.valavail() ) {
-          *pc = queue.getval();
+
+      while ( size && _queue.size() ) {
+          *pc = _queue.front();
+          _queue.pop();
           pc++;
           size--;
           got++;
       } /* endwhile */
-   
+
       if ( size )
          got += readcmpdata ( pc, size, excpt );
-   
-      return got;   
+
+      return got;
    } else
       return readcmpdata ( buf, size, excpt );
 }
@@ -1807,7 +1803,7 @@ tn_lzw_file_buf_stream :: ~tn_lzw_file_buf_stream()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-tn_c_lzw_filestream :: tn_c_lzw_filestream ( const char* name, char mode ) : tanycompression ( mode )
+tn_c_lzw_filestream :: tn_c_lzw_filestream ( const char* name, IOMode mode ) : tanycompression ( mode )
 {
    #ifdef logfiles
     FILE* fp = fopen ( "files.lst", "at" );
@@ -1821,17 +1817,17 @@ tn_c_lzw_filestream :: tn_c_lzw_filestream ( const char* name, char mode ) : tan
    containerstream = NULL;
 
    FileLocation fl;
-   if ( mode == 1 ) {
-      locateFile ( name, &fl ); 
+   if ( mode == tnstream::reading ) {
+      locateFile ( name, &fl );
 
       if ( !fl.found )
          throw tfileerror ( name );
-            
+
    } else {
       fl.directoryLevel = 0;
       fl.container = NULL;
    }
-     
+
 
    if ( fl.container == NULL ) {
       char string[2000];
@@ -1869,7 +1865,7 @@ int tn_c_lzw_filestream :: getSize ( void )
 void tn_c_lzw_filestream :: writecmpdata ( const void* buf, int size )
 {
    if ( inp == 2 )
-      throw tinvalidmode ( fname, 1, 2 );
+      throw tinvalidmode ( fname, tnstream::reading, tnstream::writing );
    else
       strm->writedata ( buf, size );
 }
@@ -1890,7 +1886,7 @@ void tn_c_lzw_filestream :: writedata ( const void* buf, int size )
 
 int tn_c_lzw_filestream :: readdata  ( void* buf, int size, int excpt  )
 {
-   if ( tanycompression :: mode == readingdirect  && !queuestat )
+   if ( tanycompression :: mode == readingdirect  && !tempbuf.size() )
       if ( inp == 2 )
          return containerstream->readcontainerdata ( buf, size, excpt  );
       else
@@ -2210,7 +2206,7 @@ int checkforvaliddirectory ( char* dir )
 
   tmemorystreambuf :: tmemorystreambuf ( void )
   {
-     mode = 0;
+     initialized = false;
      used = 0;
      allocated = 0;
      buf = 0;
@@ -2228,9 +2224,9 @@ int checkforvaliddirectory ( char* dir )
   void tmemorystreambuf :: writetostream ( pnstream stream )
   {
      if ( stream ) {
-        stream->writedata2 ( mode );
-        stream->writedata2 ( used );
-        stream->writedata2 ( allocated );
+        stream->writeChar ( initialized );
+        stream->writeInt ( used );
+        stream->writeInt ( allocated );
         stream->writedata2 ( dummy );
         if ( used > 0 )
            stream->writedata ( buf, used );
@@ -2240,9 +2236,9 @@ int checkforvaliddirectory ( char* dir )
   void tmemorystreambuf :: readfromstream ( pnstream stream )
   {
      if ( stream ) {
-        stream->readdata2 ( mode );
-        stream->readdata2 ( used );
-        stream->readdata2 ( allocated );
+        initialized = stream->readChar();
+        used = stream->readInt();
+        allocated = stream->readInt();
         stream->readdata2 ( dummy );
         if ( buf ) {
            delete[] buf;
@@ -2256,21 +2252,21 @@ int checkforvaliddirectory ( char* dir )
   }
 
 
-tmemorystream :: tmemorystream ( pmemorystreambuf lbuf, int lmode )
+tmemorystream :: tmemorystream ( pmemorystreambuf lbuf, IOMode lmode )
 {
    blocksize = 1024;
    buf = lbuf;
-   mode = lmode;
+   _mode = lmode;
 
    if ( !buf )
       throw tfileerror ( "memorystream" );
 
 
-   if ( mode == 1 ) {
+   if ( _mode == reading ) {
       zeiger = buf->buf;
       actmempos = 0;
    } else
-   if ( mode == 2 ) {     // neuen Puffer anlegen
+   if ( _mode == writing ) {     // neuen Puffer anlegen
       if ( buf->buf ) {
          delete[] buf->buf;
          buf->buf = NULL;
@@ -2280,18 +2276,18 @@ tmemorystream :: tmemorystream ( pmemorystreambuf lbuf, int lmode )
       buf->used = 0;
       zeiger = buf->buf;
       actmempos = 0;
-   } else
-   if ( mode == 22 ) {
+   }
+   if ( _mode == appending ) {
       zeiger = buf->buf;
       actmempos = buf->used;
-      mode = 2;
+      _mode = writing;
    }
 }
 
 void tmemorystream :: writedata ( const void* nbuf, int size )
 {
-   if ( mode != 2 )
-      throw tinvalidmode ( "memorystream", mode, 2 );
+   if ( _mode != writing )
+      throw tinvalidmode ( "memorystream", _mode, writing );
 
    if ( buf->used + size > buf->allocated ) {
       int newsize = ((buf->used + size + blocksize - 1) / blocksize);
@@ -2310,8 +2306,8 @@ void tmemorystream :: writedata ( const void* nbuf, int size )
 
 int  tmemorystream :: readdata ( void* nbuf, int size, int excpt  )
 {
-   if (mode == 2) 
-      throw  tinvalidmode ( "memorystream", mode, 1 );
+   if (_mode != reading )
+      throw  tinvalidmode ( "memorystream", _mode, reading );
       
    if ( actmempos + size > buf->used )
       if ( excpt )
@@ -2326,7 +2322,7 @@ int  tmemorystream :: readdata ( void* nbuf, int size, int excpt  )
 
 int tmemorystream :: dataavail ( void )
 {
-   if ( mode == 2 )
+   if ( _mode == writing )
       return 1;
    else
       return actmempos < buf->used;

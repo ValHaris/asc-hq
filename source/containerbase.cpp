@@ -140,7 +140,7 @@ ContainerBase :: ~ContainerBase ( )
 TemporaryContainerStorage :: TemporaryContainerStorage ( ContainerBase* _cb, bool storeCargo )
 {
    cb = _cb;
-   tmemorystream stream ( &buf, 2 );
+   tmemorystream stream ( &buf, tnstream::writing );
    cb->write ( stream, false );
    _storeCargo = storeCargo;
 }
@@ -154,7 +154,7 @@ void TemporaryContainerStorage :: restore (  )
             cb->loading[i] = NULL;
          }
 
-   tmemorystream stream ( &buf, 1 );
+   tmemorystream stream ( &buf, tnstream::reading );
    cb->read ( stream );
 }
 

@@ -129,7 +129,7 @@ SDL_AudioSpec* loadWave ( const char* name, SDL_AudioSpec *spec, Uint8 **audio_b
    if ( !exist ( name ))
       return NULL;
 
-   tnfilestream stream ( name, 1 );
+   tnfilestream stream ( name, tnstream::reading );
    
    return SDL_LoadWAV_RW( SDL_RWFromStream ( &stream ), 1, spec, audio_buf, audio_len);
 }

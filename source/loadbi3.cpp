@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.42 2001-02-11 20:40:29 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.43 2001-02-18 15:37:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2001/02/11 20:40:29  mbickel
+//      Fixed compilation problems with gcc
+//
 //     Revision 1.41  2001/02/11 11:39:37  mbickel
 //      Some cleanup and documentation
 //
@@ -1332,7 +1335,7 @@ void tloadBImap :: LoadFromFile( const char* path, const char* AFileName, Terrai
        strcat ( completefilename, "mis" );
        strcat ( completefilename, pathdelimitterstring );
        strcat ( completefilename, AFileName );
-       tn_file_buf_stream stream ( completefilename, 1 );
+       tn_file_buf_stream stream ( completefilename, tnstream::reading );
        MissFile = &stream;
        MissFile->readdata2( Header );
        if ( strncmp ( Header.ID, HeadID, 4 )) {
@@ -1357,7 +1360,7 @@ void tloadBImap :: LoadFromFile( const char* path, const char* AFileName, Terrai
     } /* endtry */
     catch ( tfileerror err ) {
        strcat ( missing, "\nA fatal error occured while accessing the file " );
-       strcat ( missing, err.filename );
+       strcat ( missing, err.getFileName().c_str() );
        strcat ( missing, "\n" );
     } /* endcatch */
     catch ( ASCexception ) {

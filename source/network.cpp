@@ -7,9 +7,14 @@
 */
 
 
-//     $Id: network.cpp,v 1.16 2001-01-31 14:52:41 mbickel Exp $
+//     $Id: network.cpp,v 1.17 2001-02-18 15:37:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2001/01/31 14:52:41  mbickel
+//      Fixed crashes in BI3 map importing routines
+//      Rewrote memory consistency checking
+//      Fileselect dialog now uses ASCStrings
+//
 //     Revision 1.15  2001/01/28 14:04:14  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -385,9 +390,9 @@ void  tfiletransfernetworkconnection::inittransfer  ( pnetworkconnectionparamete
    mountfilename ( tempfilename, filename );
 
    if ( chann == TN_SEND )
-      orgstream = new  tnfilestream ( tempfilename, 2 );
+      orgstream = new  tnfilestream ( tempfilename, tnstream::writing );
    else
-      orgstream = new  tnfilestream ( tempfilename, 1 );
+      orgstream = new  tnfilestream ( tempfilename, tnstream::reading );
 
    stream = orgstream;
 }

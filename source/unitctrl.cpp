@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.49 2001-02-06 16:27:44 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.50 2001-02-18 15:37:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2001/02/06 16:27:44  mbickel
+//      bugfixes, bugfixes and bugfixes
+//
 //     Revision 1.48  2001/02/04 21:27:01  mbickel
 //      The AI status is written to savegames -> new savegame revision
 //      Lots of bug fixes
@@ -272,7 +275,7 @@ int VehicleMovement :: available ( pvehicle veh ) const
    if ( status == 0 )
      if ( veh )
        if ( getfield ( veh->xpos, veh->ypos )->unitHere ( veh ) )
-          if ( veh->getMovement() >= minmalq && veh->reactionfire.status == tvehicle::ReactionFire::off )
+          if ( veh->getMovement() >= minmalq && veh->reactionfire.getStatus() == tvehicle::ReactionFire::off )
              if ( terrainaccessible ( getfield ( veh->xpos, veh->ypos ), veh ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
                 return 1;
 
@@ -1536,12 +1539,11 @@ int VehicleAttack :: available ( pvehicle eht ) const
    if (eht != NULL) 
       if (eht->attacked == false)
          if ( eht->weapexist() ) 
-            if ( eht->reactionfire.status == tvehicle::ReactionFire::off ) {
+            if ( eht->reactionfire.getStatus() == tvehicle::ReactionFire::off ) {
                if (eht->typ->wait == false  ||  !eht->hasMoved() )
                   return 1;
             } else {
-               // if ( reactionfire_active >= 3 )
-                  return 1;
+               return 1;
             }
 
    return 0;

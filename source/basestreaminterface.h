@@ -32,6 +32,8 @@
  typedef class tnstream* pnstream;
  class tnstream {
         public:
+           enum IOMode { uninitialized, reading, writing, appending };
+
            virtual void writedata ( const void* buf, int size ) = 0 ;
            virtual int  readdata  ( void* buf, int size, int excpt = 1 ) = 0 ;
 

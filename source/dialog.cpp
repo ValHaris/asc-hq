@@ -2,9 +2,12 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.79 2001-02-11 20:40:27 mbickel Exp $
+//     $Id: dialog.cpp,v 1.80 2001-02-18 15:37:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.79  2001/02/11 20:40:27  mbickel
+//      Fixed compilation problems with gcc
+//
 //     Revision 1.78  2001/02/11 11:39:30  mbickel
 //      Some cleanup and documentation
 //
@@ -1743,19 +1746,17 @@ tmessagestrings messagestrings;
 
 
 
-   #define klickconst 100  
-   #define delayconst 10  
+   #define klickconst 100
+   #define delayconst 10
 
 
 
 
 
-
-#include <malloc.h>
 
 void   loadsinglemessagefile ( const char* name )
 {
-   tnfilestream stream ( name, 1 );
+   tnfilestream stream ( name, tnstream::reading );
 
    char* s1;
    char* s2;
@@ -1787,7 +1788,7 @@ void         loadmessages(void)
 { 
 
    messagestrings.number = 0; 
- 
+
    {
       tfindfile ff ( "message?.txt" );
       string filename = ff.getnextname();

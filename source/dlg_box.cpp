@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.45 2001-01-28 14:04:11 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.46 2001-02-18 15:37:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2001/01/28 14:04:11  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.44  2001/01/04 15:13:38  mbickel
 //      configure now checks for libSDL_image
 //      AI only conquers building that cannot be conquered back immediately
@@ -3242,7 +3248,7 @@ char*  readtextmessage( int id )
 
      while( !filefound.empty() ) {
 
-         tnfilestream stream ( filefound.c_str(), 1 );
+         tnfilestream stream ( filefound.c_str(), tnstream::reading );
 
          char *tempstr;
 

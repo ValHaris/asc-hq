@@ -3,9 +3,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.96 2001-02-11 11:39:28 mbickel Exp $
+//     $Id: controls.cpp,v 1.97 2001-02-18 15:37:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.96  2001/02/11 11:39:28  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.95  2001/02/01 22:48:31  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -1317,7 +1320,7 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle, IntFieldList* field
          pvehicle eht = getfield ( x, y )->vehicle;
          if ( eht )
             if ( eht->color != vehicle->color )
-               if ( eht->reactionfire.status >= tvehicle::ReactionFire::ready )
+               if ( eht->reactionfire.getStatus() >= tvehicle::ReactionFire::ready )
                   if ( eht->reactionfire.enemiesAttackable & ( 1 << ( vehicle->color / 8 )))
                      if ( getdiplomaticstatus ( eht->color ) == cawar )
                         if ( attackpossible2u ( eht, vehicle ) )
@@ -2520,7 +2523,7 @@ int  Building :: processwork ( void )
 
 
 
-void turnwrap ( void )
+void endRound ( void )
 {
 
     actmap->actplayer = 0; 
@@ -2531,7 +2534,7 @@ void turnwrap ( void )
        if (actmap->player[i].exist() ) {
 
           for ( tmap::Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); j++ )
-             (*j)->turnwrap();
+             (*j)->endRound();
 
           for ( tmap::Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); j++ )
              (*j)->initwork();
@@ -2688,7 +2691,7 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
       savereplay ( actmap->actplayer );
 
       actmap->replayinfo->guidata[actmap->actplayer] = new tmemorystreambuf;
-      actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], 2 );
+      actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::writing );
 
       // removemessage ();
 
@@ -2762,14 +2765,7 @@ void endTurn ( void )
          actmap->replayinfo->actmemstream = NULL;
       }
 
- /*
-   if ( actmap->objectcrc )
-      if ( actmap->objectcrc->speedcrccheck->getstatus ( )  ) {
-         erasemap();
-         throw NoMapLoaded();
-      }
-*/
-     /* *********************  vehicle ********************  */
+   /* *********************  vehicle ********************  */
 
    mousevisible(false);
    if ( actmap->actplayer >= 0 ) {
@@ -2801,7 +2797,7 @@ void endTurn ( void )
                j = actvehicle->tank.fuel - actvehicle->typ->fuelConsumption * nowindplanefuelusage;
 
                if ( actvehicle->height <= chhochfliegend )
-                  j -= ( actvehicle->getMovement() * 64 / actvehicle->typ->movement[log2(actvehicle->height)] ) 
+                  j -= ( actvehicle->getMovement() * 64 / actvehicle->typ->movement[log2(actvehicle->height)] )
                        * (actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
 
               //          movement * 64        windspeed * maxwindspeed         fuelConsumption
@@ -2834,27 +2830,7 @@ void endTurn ( void )
                   actvehicle->tank.fuel = j;
             }
          }
-         if (j >= 0 && !unitRemoved)  {
-               if ( actvehicle->reactionfire.getStatus()) {
-                  if ( actvehicle->reactionfire.getStatus()< 3 )
-                     actvehicle->reactionfire.status++;
 
-                  if ( actvehicle->reactionfire.getStatus() == 3 )  {
-                     //actvehicle->reactionfire = 0xff;
-                     actvehicle->attacked = false;
-                  } else {
-                     //actvehicle->reactionfire = 0;
-                     actvehicle->attacked = true;
-                  }
-
-                  // actvehicle->setMovement ( 0 );
-                  actvehicle->resetMovement();
-                  actvehicle->attacked = false;
-               } else {
-                  actvehicle->resetMovement();
-                  actvehicle->attacked = false;
-               }
-            }
          if ( actvehicle )
             actvehicle->endTurn();
 
@@ -2953,7 +2929,7 @@ void nextPlayer( void )
       actmap->actplayer++;
       actmap->time.a.move = 0;
       if (actmap->actplayer > 7) {
-         turnwrap();
+         endRound();
          runde++;
       }
    }  while (!(actmap->player[actmap->actplayer].exist()  || (runde > 2) ));
@@ -3123,7 +3099,7 @@ void continuenetworkgame ( void )
       throw NoMapLoaded();
    } /* endcatch */
    catch ( tinvalidversion err ) {
-      displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.filename, err.expected, err.found );
+      displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.getFileName().c_str(), err.expected, err.found );
       throw NoMapLoaded();
    } /* endcatch */
    catch ( tcompressionerror err ) {
@@ -3131,7 +3107,7 @@ void continuenetworkgame ( void )
       throw NoMapLoaded();
    } /* endcatch */
    catch ( tfileerror err) {
-      displaymessage( "error reading game %s ", 1, err.filename );
+      displaymessage( "error reading game %s ", 1, err.getFileName() );
       throw NoMapLoaded();
    } /* endcatch */
    catch ( ASCexception ) {

@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 // #include "SDL_video.h"
+#include "../global.h"
 #include "SDLStretch.h"
 #include "../basestrm.h"
 #include "../loadimage.h"
@@ -49,7 +50,7 @@ int loadFullscreenImage ( const char* filename )
 {
    try {
       if ( exist ( filename )) {
-         tnfilestream stream ( filename, 1 );
+         tnfilestream stream ( filename, tnstream::reading );
          if ( strstr ( filename, ".PCX" ) || strstr ( filename, ".pcx" )) {
             loadpcxxy ( &stream, 0, 0 );
          } else {
@@ -65,7 +66,7 @@ int loadFullscreenImage ( const char* filename )
             s.replace ( s.find ( ".pcx" ), 4, ".jpg");
 
          if ( exist ( s.c_str() )) {
-            tnfilestream stream ( s.c_str(), 1 );
+            tnfilestream stream ( s.c_str(), tnstream::reading );
             read_JPEG_file ( &stream );
             return 1;
          } else
@@ -73,7 +74,7 @@ int loadFullscreenImage ( const char* filename )
       }
    }
    catch ( tfileerror err) {
-      displaymessage ( "could not load image %s", 1, err.filename );
+      displaymessage ( "could not load image %s", 1, err.getFileName().c_str() );
       return 0;
    }
 }

@@ -94,7 +94,7 @@ void tgetbi3pict :: paint ( void )
 void tgetbi3pict :: run ( int* num )
 {
    if ( !fnt ) {
-      tnfilestream stream ( "monogui.fnt", 1 );
+      tnfilestream stream ( "monogui.fnt", tnstream::reading );
       fnt = loadfont  ( &stream );
    }
 

@@ -1,5 +1,5 @@
 /***************************************************************************
-                          vehicle.h  -  description
+                          vehicletype.h  -  description
                              -------------------
     begin                : Fri Sep 29 2000
     copyright            : (C) 2000 by Martin Bickel
@@ -21,6 +21,7 @@
  #include "typen.h"
  #include "containerbase.h"
  #include "ascstring.h"
+ #include "baseaiinterface.h"
 
 
 //! The number of 'special' vehicle functions
@@ -186,126 +187,6 @@ extern const char*  cvehiclefunctions[];
         void write ( tnstream& stream ) const ;
         ~Vehicletype ( );
  };
-
-
-
- class Vehicle : public ContainerBase {
-    Vehicle (  );
-    Vehicle ( const Vehicle& v );
-    //! is  the vehicle currently viewing the map? if yes, the view has to be removed on destruction
-    bool viewOnMap;
-   public:
-    const Vehicletype* typ;          /*  vehicleart: z.B. Schwere Fusstruppe  */
-    int*         ammo;
-    int*         weapstrength;
-    char         experience;    // 0 .. 15
-    char         attacked;
-    char         height;       /* BM */   /*  aktuelle Hoehe: z.B. Hochfliegend  */
-   private:
-    char         _movement;     /*  ?briggebliebene movement fuer diese Runde  */
-   public:
-    char         direction;    /*  Blickrichtung  */
-    Integer      xpos, ypos;   /*  Position auf map  */
-    Resources    tank;
-    int          energyUsed;
-
-    int          connection;
-    char         klasse;
-    word         armor;
-    int          networkid;
-    ASCString    name;
-    int          functions;
-    class  ReactionFire {
-         Vehicle* unit;
-       public:
-         ReactionFire ( Vehicle* _unit ) : unit ( _unit ) {};
-         enum Status { off, init1, init2, ready };
-         int enemiesAttackable;     // BM   ; gibt an, gegen welche Spieler die vehicle noch reactionfiren kann.
-         int status;
-         int getStatus()	{	return status;};
-         void enable ( void );
-         void disable( void );
-         void endTurn ( void ); // is called when the player hits the "end turn" button
-    } reactionfire;
-    int          generatoractive;
-    AiParameter* aiparam[8];
-
-    int getMovement ( void );
-
-    /** sets a new distance that the unit can move
-        \param cargoDivisor : the cargo of this unit gets 1/cargodivisor the change that this unit is getting; if 0 the cargo is not touched
-    */
-    void setMovement ( int newmove, int cargoDivisor = 2 );
-    int hasMoved ( void );
-    int maxMovement ( void );
-    void resetMovement( void );
-
-
-    int putResource ( int amount, int resourcetype, int queryonly, int scope = 1 );
-    int getResource ( int amount, int resourcetype, int queryonly, int scope = 1 );
-
-
-    int weight( void );   //!< weight of unit including cargo, fuel and material
-    int cargo ( void ) const;   //!< return weight of all loaded units
-    int freeweight ( int what = 0 );      // what: 0 = cargo ; 1 = material/fuel
-    int size ( void );
-    void endTurn( void );    //!< is executed when the player hits "end turn"
-    void turnwrap ( void );   //!< is executed when the game starts a new turn ( player8 -> player1 )
-    // void repairunit ( pvehicle vehicle, int maxrepair = 100 );
-    void constructvehicle ( pvehicletype tnk, int x, int y );      // current cursor position will be used
-    int  vehicleconstructable ( pvehicletype tnk, int x, int y );
-    void putimage ( int x, int y );
-    int  vehicleloadable ( pvehicle vehicle, int uheight = -1 ) const;
-    void setnewposition ( int x, int y );
-    void setup_classparams_after_generation ( void );
-    void convert ( int col );
-    void setpower( int status );
-    void addview ( void );
-    void removeview ( void );
-    bool isViewing ( ) const { return viewOnMap; };
-    SingleWeapon *getWeapon( unsigned weaponNum );
-    int buildingconstructable ( pbuildingtype bld );
-    int searchForMineralResources( void );
-    MapCoordinate getPosition ( );
-
-    // int attackpossible ( int x, int y );
-    // int getstrongestweapon( int aheight, int distance );
-
-    /** should not be called except from freeweight
-        \param what: 0=cargo ; 1=material/fuel
-    */
-    int searchstackforfreeweight( pvehicle eht, int what );
-
-    bool canRepair( void );
-
-    /** fills a unit with all resources it can carry and sets it class to "to be determined on map load".
-        This function should only be called in the mapeditor !
-    */
-    void fillMagically( void );
-
-
-    Vehicle ( const Vehicletype* t, pmap actmap, int player );
-    static Vehicle* newFromStream ( pmap gamemap, tnstream& stream );
-    void read ( tnstream& stream );
-    void write ( tnstream& stream, bool includeLoadedUnits = true );
-  private:
-    void readData ( tnstream& stream );
-  public:
-
-
-    void transform ( const pvehicletype type );     //!< to be used with EXTREME caution, and only in the mapeditor !!
-    int weapexist ( void );     // Is the unit able to shoot ?
-    ~Vehicle ( );
-  private:
-    void init ( void );
-
-  protected:
-      ResourceMatrix repairEfficiency;
-      const ResourceMatrix& getRepairEfficiency ( void ) { return repairEfficiency; };
-
-      int getMaxResourceStorageForWeight ( int resourcetype );
-
-};
 
 
 #endif

@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.55 2001-02-11 11:39:42 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.56 2001-02-18 15:37:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2001/02/11 11:39:42  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.54  2001/02/04 21:26:59  mbickel
 //      The AI status is written to savegames -> new savegame revision
 //      Lots of bug fixes
@@ -264,21 +267,18 @@ void* generate_vehicle_gui_build_icon ( pvehicletype tnk )
    int hg;
    getpicsize ( leergui, wd, hg );
 
-   int minx = 1000;
-   int miny = 1000;
+   int minx = 0;
+   int miny = 0;
    int maxx = 0;
    int maxy = 0;
 
    tvirtualdisplay vdsp ( 500, 500 );
 
-    bar ( 0, 0, 450, 450, 255 );
-  
+   bar ( 0, 0, 450, 450, 255 );
 
-    minx = 0;
-    miny = 0;
-    putspriteimage ( 0, 0, tnk->picture[0] );
-    maxx= fieldxsize;
-    maxy= fieldysize;
+   putspriteimage ( 0, 0, tnk->picture[0] );
+   maxx= fieldxsize;
+   maxy= fieldysize;
 
    int sze = imagesize ( minx, miny, maxx, maxy );
    void* buf = new char [ sze ];
@@ -314,7 +314,7 @@ void* generate_vehicle_gui_build_icon ( pvehicletype tnk )
 pvehicletype   loadvehicletype( const char* name)
 {
    displayLogMessage ( 5, " loading vehicle type %s ...", name );
-   tnfilestream stream ( name, 1 );
+   tnfilestream stream ( name, tnstream::reading );
    pvehicletype vt = loadvehicletype ( stream );
    displayLogMessage ( 5, " done\n");
    return vt;
@@ -335,7 +335,7 @@ pvehicletype   loadvehicletype( tnstream& stream )
 ptechnology       loadtechnology( const char *       name)
 {
    displayLogMessage ( 5, " loading technology %s ...", name );
-   tnfilestream stream ( name, 1 );
+   tnfilestream stream ( name, tnstream::reading );
    ptechnology t = loadtechnology ( &stream );
    displayLogMessage ( 5, " done\n");
    return t;
@@ -480,21 +480,18 @@ void* generate_object_gui_build_icon ( pobjecttype obj, int remove )
    int hg;
    getpicsize ( leergui, wd, hg );
 
-   int minx = 1000;
-   int miny = 1000;
+   int minx = 0;
+   int miny = 0;
    int maxx = 0;
    int maxy = 0;
 
    tvirtualdisplay vdsp ( 500, 500 );
 
-    bar ( 0, 0, 450, 450, 255 );
-  
+   bar ( 0, 0, 450, 450, 255 );
 
-    minx = 0;
-    miny = 0;
-    obj->display( 0, 0 );
-    maxx= fieldxsize;
-    maxy= fieldysize;
+   obj->display( 0, 0 );
+   maxx= fieldxsize;
+   maxy= fieldysize;
 
    int sze = imagesize ( minx, miny, maxx, maxy );
    void* buf = new char [ sze ];
@@ -531,12 +528,12 @@ void* generate_object_gui_build_icon ( pobjecttype obj, int remove )
 void loadguipictures( void )
 {
    if ( !leergui ) {
-      tnfilestream stream ( "leergui.raw", 1 );
+      tnfilestream stream ( "leergui.raw", tnstream::reading );
       int sze;
       stream.readrlepict ( &leergui, 0, &sze );
    }
    if ( !removegui ) {
-      tnfilestream stream ( "guiremov.raw", 1 );
+      tnfilestream stream ( "guiremov.raw", tnstream::reading );
       int sze;
       stream.readrlepict ( &removegui, 0, &sze );
    }
@@ -546,7 +543,7 @@ void loadguipictures( void )
 pbuildingtype       loadbuildingtype( const char *       name)
 {
    displayLogMessage ( 5, " loading building type %s ...", name );
-   tnfilestream stream ( name, 1 );
+   tnfilestream stream ( name, tnstream::reading );
    pbuildingtype bt = loadbuildingtype ( &stream );
    displayLogMessage ( 5, " done\n");
    return bt;
@@ -867,7 +864,7 @@ pquickview generateaveragecol ( TerrainType::Weather* bdn )
 pterraintype      loadterraintype( const char *       name)
 {
    displayLogMessage ( 5, " loading terrain type %s ...", name );
-   tnfilestream stream ( name, 1 );
+   tnfilestream stream ( name, tnstream::reading );
    pterraintype tt = loadterraintype ( &stream );
    displayLogMessage ( 5, " done\n" );
    return tt;
@@ -1042,7 +1039,7 @@ pobjecttype fahrspurobject = NULL;
 pobjecttype   loadobjecttype( const char *       name)
 {
    displayLogMessage ( 5, " loading object type %s ...", name );
-   tnfilestream stream ( name, 1 );
+   tnfilestream stream ( name, tnstream::reading );
    pobjecttype ot = loadobjecttype ( &stream );
    displayLogMessage ( 5, " done\n" );
    return ot;
@@ -1101,7 +1098,7 @@ void loadpalette ( void )
    if ( ! asc_paletteloaded ) {
       displayLogMessage ( 4, "loading palette ... " );
 
-      tnfilestream stream ("palette.pal",1);
+      tnfilestream stream ("palette.pal", tnstream::reading);
       stream.readdata( & pal, sizeof(pal));
       colormixbuf = (pmixbuf) new char [ sizeof ( tmixbuf ) ];
       stream.readdata( colormixbuf,  sizeof ( *colormixbuf ));
@@ -1210,7 +1207,7 @@ int readgameoptions ( const char* filename )
    } else {
       CGameOptions::Instance()->setChanged(); // to generate a configuration file
       if ( exist ( "sg.cfg" ) ) {
-         tnfilestream stream ( "sg.cfg", 1);
+         tnfilestream stream ( "sg.cfg", tnstream::reading);
          int version = stream.readInt ( );
          if ( version == 102 ) {
             CGameOptions::Instance()->fastmove = stream.readInt();
@@ -1298,7 +1295,7 @@ int writegameoptions ( void )
 void checkFileLoadability ( const char* filename )
 {
    try {
-      tnfilestream strm ( filename, 1 );
+      tnfilestream strm ( filename, tnstream::reading );
       strm.readChar();
    }
    catch ( ASCexception ) {
@@ -1350,7 +1347,7 @@ void initFileIO ( const char* configFileName )
    }
    catch ( tfileerror err ) {
       fatalError ( "a fatal IO error occured while mounting the container file %s\n"
-                   "It is probably damaged, try getting a new one.\n", err.filename );
+                   "It is probably damaged, try getting a new one.\n", err.getFileName().c_str() );
    }
    catch ( tcompressionerror err ) {
       fatalError ( "a fatal error occured while decompressing a container file.\n"
@@ -1522,7 +1519,7 @@ void loadUnitSets ( void )
    string n = ff.getnextname();
    while ( !n.empty() ) {
       displayLogMessage ( 5, " loading unit set definition file %s ... ",n.c_str() );
-      tnfilestream stream ( n.c_str(), 1 );
+      tnfilestream stream ( n.c_str(), tnstream::reading );
 
       SingleUnitSet* set = new SingleUnitSet;
       set->read ( &stream );

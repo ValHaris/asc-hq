@@ -5,9 +5,12 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.43 2001-02-11 11:39:37 mbickel Exp $
+//     $Id: loaders.cpp,v 1.44 2001-02-18 15:37:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2001/02/11 11:39:37  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.42  2001/02/04 21:26:57  mbickel
 //      The AI status is written to savegames -> new savegame revision
 //      Lots of bug fixes
@@ -1488,7 +1491,7 @@ int          tmaploaders::savemap( const char * name )
    logtofile ( "loaders / tmaploaders::savemap / started " );
    #endif
 
-   tnfilestream filestream ( name, 2 );
+   tnfilestream filestream ( name, tnstream::writing );
 
    stream = &filestream;
 
@@ -1550,7 +1553,7 @@ int          tmaploaders::loadmap( const char *       name )
 
     displayLogMessage ( 4, "loading map %s ... ", name );
 
-    tnfilestream filestream ( name, 1);
+    tnfilestream filestream ( name, tnstream::reading);
 
     stream = &filestream;
 
@@ -1641,7 +1644,7 @@ int          tmaploaders::loadmap( const char *       name )
 int          tsavegameloaders::savegame( const char* name )
 { 
 
-   tnfilestream filestream ( name, 2 );
+   tnfilestream filestream ( name, tnstream::writing );
 
    stream = &filestream;
 
@@ -1684,7 +1687,7 @@ int          tsavegameloaders::savegame( const char* name )
 
 int          tsavegameloaders::loadgame( const char *       name )
 { 
-   tnfilestream filestream ( name, 1 );
+   tnfilestream filestream ( name, tnstream::reading );
 
    stream = &filestream;
 
@@ -1753,10 +1756,10 @@ int          tsavegameloaders::loadgame( const char *       name )
          displaymessage2( "actmemstream already open at begin of turn ",2 );
 
       if ( actmap->replayinfo->guidata[actmap->actplayer] ) 
-         actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], 22 );
+         actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::appending );
       else {
          actmap->replayinfo->guidata[actmap->actplayer] = new tmemorystreambuf;
-         actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], 2 );
+         actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::writing );
       }
    }
 
@@ -1967,7 +1970,7 @@ void  savemap( const char * name )
    } /* endtry */
 
    catch ( tfileerror err ) {
-      displaymessage( "file error writing map to filename %s ", 1, err.filename );
+      displaymessage( "file error writing map to filename %s ", 1, err.getFileName().c_str() );
    } /* endcatch */
    catch ( ASCexception err) {
       displaymessage( "error writing map ", 1 );
@@ -1989,12 +1992,12 @@ void  loadmap( const char *       name )
          throw NoMapLoaded();
    } /* endcatch */
    catch ( tinvalidversion err ) {
-      displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.filename, err.expected, err.found );
+      displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.getFileName().c_str(), err.expected, err.found );
       if ( !actmap || actmap->xsize <= 0)
          throw NoMapLoaded();
    } /* endcatch */
    catch ( tfileerror err) {
-      displaymessage( "error reading map filename %s ", 1, err.filename );
+      displaymessage( "error reading map filename %s ", 1, err.getFileName().c_str() );
       if ( !actmap || actmap->xsize <= 0)
          throw NoMapLoaded();
    } /* endcatch */
@@ -2013,7 +2016,7 @@ void  savegame( const char *       name )
       gl.savegame ( name );
    }
    catch ( tfileerror err) {
-      displaymessage( "error writing map to filename %s ", 1, err.filename );
+      displaymessage( "error writing map to filename %s ", 1, err.getFileName().c_str() );
    } /* endcatch */
    catch ( ASCexception err) {
       displaymessage( "error writing map ", 1 );
@@ -2032,12 +2035,12 @@ void  loadgame( const char *       name )
          throw NoMapLoaded();
    } /* endcatch */
    catch ( tinvalidversion err ) {
-      displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.filename, err.expected, err.found );
+      displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.getFileName().c_str(), err.expected, err.found );
       if ( !actmap || actmap->xsize <= 0)
          throw NoMapLoaded();
    } /* endcatch */
    catch ( tfileerror err) {
-      displaymessage( "error reading map filename %s ", 1, err.filename );
+      displaymessage( "error reading map filename %s ", 1, err.getFileName().c_str() );
       if ( !actmap || actmap->xsize <= 0)
          throw NoMapLoaded();
    } /* endcatch */
@@ -2077,12 +2080,12 @@ void  loadreplay( pmemorystreambuf streambuf )
          throw NoMapLoaded();
    } /* endcatch */
    catch ( tinvalidversion err ) {
-      displaymessage( "Replay stream %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.filename, err.expected, err.found );
+      displaymessage( "Replay stream %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.getFileName().c_str(), err.expected, err.found );
       if ( actmap->xsize == 0)
          throw NoMapLoaded();
    } /* endcatch */
    catch ( tfileerror err) {
-      displaymessage( "error reading map filename %s ", 1, err.filename );
+      displaymessage( "error reading map filename %s ", 1, err.getFileName().c_str() );
       if ( actmap->xsize == 0)
          throw NoMapLoaded();
    } /* endcatch */
@@ -2109,7 +2112,7 @@ void treplayloaders :: loadreplay ( pmemorystreambuf streambuf )
 
    char* name = "memorystream actmap->replayinfo";
 
-   tmemorystream memstream ( streambuf, 1 );
+   tmemorystream memstream ( streambuf, tnstream::reading );
 
    stream = &memstream;
 
@@ -2157,7 +2160,7 @@ void treplayloaders :: savereplay ( int num )
 
    actmap->replayinfo->map[num] = new tmemorystreambuf;
 
-   tmemorystream memstream ( actmap->replayinfo->map[num], 2 );
+   tmemorystream memstream ( actmap->replayinfo->map[num], tnstream::writing );
 
    tmap* replayfield = new tmap;
    *replayfield = *actmap;
@@ -2224,7 +2227,7 @@ bool validatemapfile ( const char* filename )
 
    try {
 
-      tnfilestream stream ( filename, 1 );
+      tnfilestream stream ( filename, tnstream::reading );
       stream.readpchar ( &description, 200 );
       if ( description ) {
          delete[]  description ;
@@ -2262,7 +2265,7 @@ bool validateemlfile ( const char* filename )
 
    try {
 
-      tnfilestream stream ( filename, 1 );
+      tnfilestream stream ( filename, tnstream::reading );
       stream.readpchar ( &description, 200 );
       if ( description ) {
          delete[]  description ;
@@ -2298,7 +2301,7 @@ bool validatesavfile ( const char* filename )
 
    try {
 
-      tnfilestream stream ( filename, 1 );
+      tnfilestream stream ( filename, tnstream::reading );
       stream.readpchar ( &description, 200 );
       if ( description ) {
          delete[]  description ;
@@ -2406,7 +2409,7 @@ void         loadstreets(void)
 #ifdef HEXAGON
   int          w;
 
-  tnfilestream stream ( "hexmines.raw", 1 ); 
+  tnfilestream stream ( "hexmines.raw", tnstream::reading );
   for ( int i = 0; i < 4; i++) 
       stream.readrlepict( &icons.mine[i], false, &w);
   
@@ -2554,7 +2557,7 @@ void         loadicons(void)
 
   {
       int xl[5] = { cawar, cawarannounce, capeaceproposal, capeace, capeace_with_shareview };
-      tnfilestream stream ("allianc2.raw",1); 
+      tnfilestream stream ("allianc2.raw",tnstream::reading);
       for ( i = 0; i < 5; i++ )
          stream.readrlepict( &icons.diplomaticstatus[xl[i]],false,w); 
       icons.diplomaticstatus[canewsetwar1] = icons.diplomaticstatus[cawar];
@@ -2563,32 +2566,32 @@ void         loadicons(void)
   }
    
   {
-      tnfilestream stream ("iconship.raw",1); 
+      tnfilestream stream ("iconship.raw",tnstream::reading);
       stream.readrlepict( &icons.statarmy[2],false,w);
   }
-   
+
   {
-      tnfilestream stream ("icontank.raw",1); 
+      tnfilestream stream ("icontank.raw",tnstream::reading);
       stream.readrlepict( &icons.statarmy[1],false,w);
   }
    
   {
-      tnfilestream stream ("iconplan.raw",1);
+      tnfilestream stream ("iconplan.raw",tnstream::reading);
       stream.readrlepict( &icons.statarmy[0],false,w);
   }
    
   {
-      tnfilestream stream ("pfeil2.raw",1); 
+      tnfilestream stream ("pfeil2.raw",tnstream::reading);
       stream.readrlepict( &icons.weapinfo.pfeil1, false, w);
   }
    
   {
-      tnfilestream stream ("pfeil3.raw",1);
+      tnfilestream stream ("pfeil3.raw",tnstream::reading);
       stream.readrlepict( &icons.weapinfo.pfeil2, false, w);
   }
-   
+
   {
-      tnfilestream stream ("height.raw",1); 
+      tnfilestream stream ("height.raw",tnstream::reading); 
       for (i = 0; i <= 7; i++) 
          stream.readrlepict( &icons.height[i],false,w);
    }

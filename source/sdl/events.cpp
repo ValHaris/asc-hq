@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.27 2000-12-28 11:12:48 mbickel Exp $
+//     $Id: events.cpp,v 1.28 2001-02-18 15:37:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/12/28 11:12:48  mbickel
+//      Fixed: no redraw when restoring fullscreen focus in WIN32
+//      Better error message handing in WIN32
+//
 //     Revision 1.26  2000/11/08 19:31:20  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -156,10 +160,8 @@ volatile tmousesettings mouseparams = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0,0
 
 SDL_mutex* keyboardmutex = NULL;
 
-typedef deque<tkey> tkey_dqueue;
-std::queue<tkey,tkey_dqueue>   keybuffer_sym;
-typedef deque<Uint32> Uint32_dqueue;
-std::queue<Uint32,Uint32_dqueue> keybuffer_prnt;
+queue<tkey>   keybuffer_sym;
+queue<Uint32> keybuffer_prnt;
 
 
 int exitprogram = 0;

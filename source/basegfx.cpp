@@ -2,9 +2,12 @@
     \brief Platform indepedant graphic functions. 
 */
 
-//     $Id: basegfx.cpp,v 1.23 2001-02-06 17:15:09 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.24 2001-02-18 15:37:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2001/02/06 17:15:09  mbickel
+//      Some changes for compilation by Borland C++ Builder
+//
 //     Revision 1.22  2001/01/28 14:04:02  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -953,7 +956,7 @@ char* convertimage ( TrueColorImage* img, dacpalette256 pal )
    if ( truecolor2pal_table[0] == 255 ) {
       tfindfile ff ( "tc2pal.dat" );
       if ( !ff.getnextname().empty() ) {
-         tnfilestream stream ( "tc2pal.dat", 1 );
+         tnfilestream stream ( "tc2pal.dat", tnstream::reading );
          stream.readdata ( truecolor2pal_table, sizeof ( truecolor2pal_table ));
       } else {
          for ( int r = 0; r < 64; r++ )

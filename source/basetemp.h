@@ -3,9 +3,15 @@
    STL. Should be scrapped and replaced by STL functions.
 */
 
-//     $Id: basetemp.h,v 1.5 2001-01-28 14:04:04 mbickel Exp $
+//     $Id: basetemp.h,v 1.6 2001-02-18 15:37:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2001/01/28 14:04:04  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.4  2000/12/21 11:00:45  mbickel
 //      Added some code documentation
 //
@@ -44,7 +50,7 @@
 
 #include <stdio.h> 
 
-
+/*
 template<class T> dynamic_queue<T> :: dynamic_queue ( void )
 {
    first = 0;
@@ -94,7 +100,7 @@ template<class T> dynamic_queue<T> :: ~dynamic_queue()
 {
    delete[] buf;
 }
-
+*/
 
 
 

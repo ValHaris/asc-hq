@@ -22,10 +22,11 @@
 #include "global.h"
 #include "misc.h"
 #include "typen.h"
-
-#ifndef converter
+#include "vehicletype.h"
+#include "buildingtype.h"
 #include "spfst.h"
-#endif
+#include "dlg_box.h"
+#include "dialog.h"
 
 #ifdef sgmain
  #include "network.h"
@@ -33,8 +34,8 @@
  #include "missions.h"
 #endif
 
-#include "vehicletype.h"
-#include "buildingtype.h"
+
+
 
 
 tmap :: tmap ( void )
@@ -635,16 +636,10 @@ void tmap :: cleartemps( int b, int value )
 
 
 
-#ifndef converter
 void tmap :: calculateAllObjects ( void )
 {
    calculateallobjects();
 }
-#else
-void tmap :: calculateAllObjects ( void )
-{
-}
-#endif
 
 pfield  tmap :: getField(int x, int y)
 {
@@ -717,7 +712,6 @@ void tmap :: setgameparameter ( int num, int value )
 
 void tmap :: setupResources ( void )
 {
-  #ifndef converter
    for ( int n = 0; n< 8; n++ ) {
       bi_resource[n].energy = 0;
       bi_resource[n].material = 0;
@@ -733,7 +727,6 @@ void tmap :: setupResources ( void )
             }
      #endif
    }
-  #endif
 }
 
 /*
@@ -857,7 +850,6 @@ pvehicle tmap :: getUnit ( int nwid )
 
 pvehicle tmap :: getUnit ( int x, int y, int nwid )
 {
-  #ifndef converter
    pfield fld  = getField ( x, y );
    if ( !fld )
       return NULL;
@@ -877,9 +869,6 @@ pvehicle tmap :: getUnit ( int x, int y, int nwid )
          return fld->vehicle;
       else
          return getUnit ( fld->vehicle, nwid );
- #else
-  return NULL;
- #endif
 }
 
 
@@ -1151,9 +1140,7 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
      for ( int x = 0; x < newx; x++ )
         newfield[ x + y * newx ] = defaultfield;
 
-  #ifndef converter
   calculateallobjects();
-  #endif
 
   for ( int p = 0; p < newx*newy; p++ )
      newfield[p].setparams();
@@ -1177,29 +1164,6 @@ bool tmap::Player::exist()
 {
   return !(buildingList.empty() && vehicleList.empty());
 }
-
-
-#ifdef converter
-pterraintype tmap :: getterraintype_byid ( int id )      { return NULL; }
-pobjecttype tmap :: getobjecttype_byid ( int id )        { return NULL; }
-pvehicletype tmap :: getvehicletype_byid ( int id )      { return NULL; }
-pbuildingtype tmap :: getbuildingtype_byid ( int id )    { return NULL; }
-ptechnology tmap :: gettechnology_byid ( int id )        { return NULL; }
-
-pterraintype tmap :: getterraintype_bypos ( int pos )    { return NULL; }
-pobjecttype tmap :: getobjecttype_bypos ( int pos )      { return NULL; }
-pvehicletype tmap :: getvehicletype_bypos ( int pos )    { return NULL; }
-pbuildingtype tmap :: getbuildingtype_bypos ( int pos )  { return NULL; }
-ptechnology tmap :: gettechnology_bypos ( int pos )      { return NULL; }
-
-int tmap :: getTerrainTypeNum ( ) { return 0; }
-int tmap :: getObjectTypeNum ( ) { return 0; }
-int tmap :: getVehicleTypeNum ( ) { return 0; }
-int tmap :: getBuildingTypeNum ( ) { return 0; }
-int tmap :: getTechnologyNum ( ) { return 0; }
-
-
-#else
 
 pterraintype tmap :: getterraintype_byid ( int id )
 {
@@ -1344,4 +1308,589 @@ void tmap :: startGame ( )
 } 
 
 
-#endif
+int tmine :: attacksunit ( const pvehicle veh )
+{
+     if  (!( ( veh->functions & cfmineimmune ) || 
+              ( veh->height > chfahrend ) ||
+              ( getdiplomaticstatus2 ( veh->color, color*8 ) == capeace ) || 
+              ( (veh->functions & cf_trooper) && (type != cmantipersonnelmine)) || 
+              ( veh->height <= chgetaucht && type != cmmooredmine ) || 
+              ( veh->height == chschwimmend && type != cmfloatmine ) ||
+              ( veh->height == chfahrend && type != cmantipersonnelmine  && type != cmantitankmine )
+            ))
+         return 1;
+     return 0;
+}
+
+
+void tfield :: checkminetime ( int time )
+{
+   if ( minenum() )
+      for ( int i = minenum()-1; i >= 0; i-- ) {
+         int lt = actmap->getgameparameter ( cgp_antipersonnelmine_lifetime + object->mine[i]->type - 1);
+         if ( lt )
+            if ( object->mine[i]->time + lt < time )
+               removemine ( i );
+      }
+}
+
+
+int tfield :: mineattacks ( const pvehicle veh )
+{
+   int mn = minenum();
+   for ( int i = 0; i < mn; i++ ) 
+      if ( object->mine[i]->attacksunit ( veh ))
+         return 1+i;
+
+   return 0;
+}
+
+
+void  tfield :: addobject( pobjecttype obj, int dir, int force )
+{ 
+   if ( !obj )
+      return;
+
+   pobject i = checkforobject ( obj );
+   if ( !i ) {
+     int buildable = obj->buildable ( this );
+     #ifdef karteneditor
+     if ( !buildable ) 
+          if ( force )
+             buildable = 1;
+          else
+             if (choice_dlg("object cannot be built here","~i~gnoe","~c~ancel") == 1) 
+                buildable = 1;
+     #else
+     if ( !buildable )
+          if ( force )
+             buildable = 1;
+     #endif
+
+     if ( buildable ) {
+         if ( !object )
+            object = new tobjectcontainer;
+         else
+            if ( object->objnum == maxobjectonfieldnum-1 ) {
+               displaymessage("can not add any more objects to this field", 1 );
+               return;
+            }
+
+         object->object[ object->objnum ] = new tobject ( obj ) ;
+         object->object[ object->objnum ]->time = actmap->time.a.turn;
+         if ( dir != -1 )
+            object->object[ object->objnum ]->dir = dir;
+         else
+            object->object[ object->objnum ]->dir = 0;
+         object->objnum++;
+   
+         setparams();
+
+         if ( dir == -1 )
+            calculateobject( getx(), gety(), true, obj ); 
+
+         sortobjects();
+     }
+   } else {
+      if ( dir != -1 ) 
+         i->dir |= dir;
+      
+      sortobjects();
+   } 
+} 
+
+
+void tfield :: removeobject( pobjecttype obj )
+{ 
+   if ( building ) 
+      return;
+
+   #ifndef karteneditor
+   if ( vehicle ) 
+      if ( vehicle->color != actmap->actplayer << 3)
+        return;
+   #endif
+
+   if ( !object )
+      return;
+
+   for ( int i = 0; i < object->objnum; )
+      if ( object->object[i]->typ == obj ) {
+         delete object->object[i];
+         for ( int j = i+1; j < object->objnum; j++ )
+            object->object[j-1] = object->object[j];
+
+         object->objnum--;
+      } else
+         i++;
+
+    setparams();
+
+    calculateobject( getx(), gety(), true, obj );
+} 
+
+void tfield :: deleteeverything ( void )
+{
+   if ( vehicle ) {
+      delete vehicle;
+      vehicle = NULL;
+   }
+
+   if ( building ) {
+      delete building;
+      building = NULL;
+   }
+
+   if ( object ) {
+      for ( int i = 0; i < object->objnum; i++) {
+          delete object->object[i];
+          object->object[i] = NULL;
+      }
+      delete object;
+      object = NULL;
+   }
+   setparams();
+}
+
+tobjectcontainer :: tobjectcontainer ( void )
+{
+   minenum = 0;
+   for ( int i = 0; i < maxminesonfield; i++ )
+      mine[ i ] = NULL;
+
+   objnum = 0;
+}
+
+int  tobjectcontainer :: checkforemptyness ( void )
+{
+   return 0;
+
+/*
+   if ( mine )
+     return 0;   
+
+    if ( special & ( cbstreet | cbrailroad | cbpowerline | cbpipeline ))
+       return 0;
+
+    return 1;
+*/
+
+}
+
+bool tfield :: unitHere ( const pvehicle veh )
+{
+   if ( vehicle == veh )
+      return true;
+   if ( vehicle && veh && vehicle->networkid == veh->networkid )
+      return true;
+   return false;
+}
+
+int tfield :: getweather ( void )
+{
+   if ( !typ )
+      return 0;
+   for ( int w = 0; w < cwettertypennum; w++ )
+      if ( typ == typ->terraintype->weather[w] )
+         return w;
+   return -1;
+}
+
+void tfield :: sortobjects ( void )
+{
+   if ( object )
+      for ( int a = 0; a < object->objnum-1; ) {
+         if ( object->object[ a ]->typ->height > object->object[ a+1 ]->typ->height ) {
+            pobject o = object->object[ a ];
+            object->object[ a ] = object->object[ a+1 ];
+            object->object[ a+1 ] = o;
+            if ( a > 0 )
+               a--;
+         } else
+            a++;
+      }
+
+}
+
+
+int tfield :: minenum ( void )
+{
+  if ( object ) 
+     return object->minenum;
+  else
+     return 0;
+}
+
+bool  tfield :: putmine( int col, int typ, int strength )
+{
+   if ( mineowner() >= 0  && mineowner() != col )
+      return 0;
+
+   if ( !object )
+      object = new tobjectcontainer;
+
+   if ( object->minenum >= maxminesonfield )
+      return 0;
+
+   /*
+   if ( object->minenum >= actmap->getgameparameter ( cgp_maxminesonfield ))
+      return 0;
+   */
+
+   object->mine[ object->minenum ] = new tmine; 
+   object->mine[ object->minenum ]->strength = strength ;
+   object->mine[ object->minenum ]->color = col;
+   object->mine[ object->minenum ]->type = typ;
+   if ( actmap && actmap->time.a.turn>= 0 )
+      object->mine[ object->minenum ]->time = actmap->time.a.turn;
+   else
+      object->mine[ object->minenum ]->time = 0;
+
+   object->minenum++;
+   return 1;
+}
+
+int tfield :: mineowner( void )
+{
+   if ( !object )
+      return -1;
+   if ( !object->minenum )
+      return -1;
+
+   return object->mine[0]->color;
+}
+
+
+void tfield :: removemine( int num )
+{ 
+   if ( !object )
+      return;
+
+   if ( num == -1 )
+      num = object->minenum - 1;
+
+   if ( num >= object->minenum )
+      return;
+
+   delete object->mine[num];
+
+   for ( int i = num+1; i < object->minenum; i++ )
+      object->mine[i-1] = object->mine[i];
+
+   object->minenum--;
+   object->mine[object->minenum] = NULL;
+} 
+
+
+int tfield :: getx( void )
+{
+   int n = this - actmap->field;
+   return n % actmap->xsize;
+}
+
+int tfield :: gety( void )
+{
+   int n = this - actmap->field;
+   return n / actmap->xsize;
+}
+
+
+int tfield :: getattackbonus ( void )
+{
+   int a = typ->attackbonus;
+   if ( object )
+      for ( int i = 0; i < object->objnum; i++ ) {
+         if ( object->object[i]->typ->attackbonus_abs != -1 )
+            a = object->object[i]->typ->attackbonus_abs;
+         else
+            a += object->object[i]->typ->attackbonus_plus;
+      }
+
+   if ( a > -8 )
+      return a;
+   else
+      return -7;
+}
+
+int tfield :: getdefensebonus ( void )
+{
+   int a = typ->defensebonus;
+   if ( object )
+      for ( int i = 0; i < object->objnum; i++ ) {
+         if ( object->object[i]->typ->defensebonus_abs != -1 )
+            a = object->object[i]->typ->defensebonus_abs;
+         else
+            a += object->object[i]->typ->defensebonus_plus;
+      }
+
+   if ( a > -8 )
+      return a;
+   else
+      return -7;
+}
+
+int tfield :: getjamming ( void )
+{
+   int a = typ->basicjamming;
+   if ( object )
+      for ( int i = 0; i < object->objnum; i++ ) {
+         if ( object->object[i]->typ->basicjamming_abs >= 0 )
+            a = object->object[i]->typ->basicjamming_abs;
+         else
+            a += object->object[i]->typ->basicjamming_plus;
+      }
+   return a;
+}
+
+int tfield :: getmovemalus ( const pvehicle veh )
+{       
+   int mnum = minenum();
+   if ( mnum ) {
+      int movemalus = _movemalus[veh->typ->movemalustyp];
+      int col = mineowner();
+      if ( veh->color == col*8 ) 
+         movemalus += movemalus * mine_movemalus_increase * mnum / 100;
+
+      return movemalus;
+   } else
+      return _movemalus[veh->typ->movemalustyp];
+}
+
+int tfield :: getmovemalus ( int type )
+{
+  return _movemalus[type];
+}
+
+void tfield :: setparams ( void )
+{
+   int i;
+   bdt = typ->art;
+
+   for ( i = 0; i < cmovemalitypenum; i++ )
+      _movemalus[i] = typ->movemalus[i];
+
+   if ( object ) 
+      for ( int j = 0; j < object->objnum; j++ ) {
+         pobjecttype o = object->object[j]->typ;
+
+         bdt  &=  o->terrain_and;
+         bdt  |=  o->terrain_or;
+
+         for ( i = 0; i < cmovemalitypenum; i++ ) {
+            _movemalus[i] += o->movemalus_plus[i];
+            if ( (o->movemalus_abs[i] != 0) && (o->movemalus_abs[i] != -1) )
+               _movemalus[i] = o->movemalus_abs[i];
+            if ( _movemalus[i] < minmalq )
+               _movemalus[i] = minmalq;
+         }
+      } /* endfor */
+
+   if ( building ) {
+      if ( this == building->getField( building->typ->entry ))
+         bdt |= cbbuildingentry;
+
+      if ( building )
+         for (int x = 0; x < 4; x++)
+            for ( int y = 0; y < 6; y++ )
+               if ( building->getField ( BuildingType::LocalCoordinate(x, y) ) == this )
+                  if ( building->getpicture ( BuildingType::LocalCoordinate(x, y) ) )
+                     picture = building->getpicture ( BuildingType::LocalCoordinate(x, y) );
+   }
+}
+
+
+tobject :: tobject ( void )
+{
+   typ = NULL;
+   dir = 0;
+   damage = 0;
+}
+
+tobject :: tobject ( pobjecttype t )
+{
+   typ = t;
+   dir = 0;
+   damage = 0;
+}
+
+
+void tobject :: setdir ( int direc )
+{
+   dir = direc;
+}
+
+int  tobject :: getdir ( void )
+{
+   return dir;
+}
+
+void tobject :: display ( int x, int y, int weather )
+{
+  if ( typ->id == 7 ) {
+    #ifndef HEXAGON
+     for (int i = 0; i <= 7; i++)
+        if ( dir & (1 << i))
+           putxlatfilter( x, y, typ->getpic ( i ), &xlattables.nochange[0] );
+    #else
+        if ( dir < typ->pictnum )
+           putshadow  ( x, y,  typ->getpic ( dir, weather ) , &xlattables.a.dark1);
+        else
+           putshadow  ( x, y,  typ->getpic ( 0, weather ) , &xlattables.a.dark1);
+    #endif
+  } else
+ #ifndef HEXAGON
+  if ( typ->id == 8 ) {
+     putspriteimage( x, y, typ->getpic ( 0 ) );
+     for (int i = 0; i <= 7; i++)
+        if ( dir & (1 << i))
+           putspriteimage( x, y, typ->getpic ( i + 1 ) );
+  } else
+ #endif
+  if ( typ->id == 30 ) {   // pipeline
+        if ( dir < typ->pictnum )
+           putshadow  ( x, y,  typ->getpic ( dir, weather ) , &xlattables.a.dark1);
+        else
+           putshadow  ( x, y,  typ->getpic ( 0, weather ) , &xlattables.a.dark1);
+  } else
+     typ->display ( x, y, dir, weather );
+}
+
+
+pobject tfield :: checkforobject ( pobjecttype o )
+{
+   if ( object )
+      return object->checkforobject( o );
+   else
+      return NULL;
+}
+
+pobject tobjectcontainer :: checkforobject ( pobjecttype o )
+{
+   for ( int i = 0; i < objnum; i++ )
+      if ( object[i]->typ == o )
+         return object[i];
+   return NULL;
+}
+
+
+
+tfield::Resourceview :: Resourceview ( void )
+{
+   visible = 0;
+   memset ( &fuelvisible, 0, sizeof ( fuelvisible ));
+   memset ( &materialvisible, 0, sizeof ( materialvisible ));
+}
+
+bool tmap::Weather::Wind::operator== ( const tmap::Weather::Wind& b ) const
+{
+   return ( (speed == b.speed) && ( direction == b.direction));
+}
+
+tmap::Shareview :: Shareview ( const tmap::Shareview* org )
+{
+   memcpy ( mode, org->mode, sizeof ( mode ));
+   recalculateview = org->recalculateview;
+}
+
+void AiThreat :: write ( tnstream& stream )
+{
+   const int version = 1000;
+   stream.writeInt ( version );
+   stream.writeInt ( threatTypes );
+   for ( int i = 0; i < threatTypes; i++ )
+      stream.writeInt ( threat[i] );
+}
+
+void AiThreat:: read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   if ( version == 1000 ) {
+      threatTypes = stream.readInt();
+      for ( int i = 0; i < threatTypes; i++ )
+         threat[i] = stream.readInt();
+   }
+}
+
+
+void AiValue :: write ( tnstream& stream )
+{
+   const int version = 2000;
+   stream.writeInt ( version );
+   stream.writeInt ( value );
+   stream.writeInt ( addedValue );
+   threat.write ( stream );
+   stream.writeInt ( valueType );
+}
+
+void AiValue:: read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   if ( version == 2000 ) {
+      value = stream.readInt (  );
+      addedValue= stream.readInt (  );
+      threat.read ( stream );
+      valueType = stream.readInt (  );
+   }
+}
+
+void AiParameter::write ( tnstream& stream )
+{
+   const int version = 3000;
+   stream.writeInt ( version );
+   stream.writeInt ( lastDamage );
+   stream.writeInt ( damageTime.abstime );
+   stream.writeInt ( dest.x );
+   stream.writeInt ( dest.y );
+   stream.writeInt ( dest.z );
+   stream.writeInt ( dest_nwid );
+   stream.writeInt ( data );
+   AiValue::write( stream );
+   stream.writeInt ( task );
+   stream.writeInt ( job );
+}
+
+void AiParameter::read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   if ( version == 3000 ) {
+      lastDamage = stream.readInt();
+      damageTime.abstime = stream.readInt();
+      dest.x = stream.readInt();
+      dest.y = stream.readInt();
+      dest.z = stream.readInt();
+      dest_nwid = stream.readInt();
+      data = stream.readInt();
+      AiValue::read( stream );
+      task = (Task) stream.readInt();
+      job = (Job) stream.readInt();
+   }
+}
+
+void AiThreat :: reset ( void )
+{
+   for ( int i = 0; i < aiValueTypeNum; i++ )
+      threat[i] = 0;
+}
+
+AiParameter :: AiParameter ( pvehicle _unit ) : AiValue ( log2( _unit->height ))
+{
+   reset( _unit );
+}
+
+void AiParameter :: resetTask ( )
+{
+   dest.y = -1;
+   dest.z = -1;
+   dest_nwid = 1;
+   task = tsk_nothing;
+}
+
+void AiParameter :: reset ( pvehicle _unit )
+{
+   unit = _unit;
+   AiValue::reset ( log2( _unit->height ) );
+
+   dest.x = -1;
+   job = job_undefined;
+   resetTask();
+}

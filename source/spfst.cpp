@@ -2,9 +2,12 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.84 2001-02-11 11:39:43 mbickel Exp $
+//     $Id: spfst.cpp,v 1.85 2001-02-18 15:37:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.84  2001/02/11 11:39:43  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.83  2001/02/01 22:48:49  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -129,7 +132,8 @@
 #include "loadbi3.h"
 #include "mapalgorithms.h"
 #include "mapdisplay.h"
-
+#include "vehicle.h"
+#include "buildings.h"
 
 
    int dataVersion = 0;
@@ -382,17 +386,17 @@ int         fieldaccessible( const pfield        field,
                m1 += vehicle->loading[c]->weight();
                if ( vehicle->loading[c]->weight() > mx )
                   mx = vehicle->loading[c]->weight();
-            } 
+            }
 
 
       if (field->vehicle) {
-         if (field->vehicle->color == vehicle->color) { 
+         if (field->vehicle->color == vehicle->color) {
             int ldbl = field->vehicle->vehicleloadable ( vehicle, uheight );
             if ( ldbl )
                return 2;
-            else 
+            else
                if ( terrainaccessible ( field, vehicle, uheight ))
-                  return 1; 
+                  return 1;
                else 
                   return 0; 
          } 
@@ -610,7 +614,7 @@ bool fieldvisiblenow( const pfield pe, int player )
   }
 
   if ( pe ) { 
-      int c = (pe->visible >> ( player * 2)) & 3; 
+      int c = (pe->visible >> ( player * 2)) & 3;
       #ifdef karteneditor
          c = visible_all;
       #endif
@@ -707,19 +711,19 @@ void         tcursor::init ( void )
    { 
       int w;
      #ifndef HEXAGON
-      tnfilestream stream ( "curs3.raw", 1 ); 
+      tnfilestream stream ( "curs3.raw", tnstream::reading );
      #else
-      tnfilestream stream ( "curshex2.raw", 1 ); 
+      tnfilestream stream ( "curshex2.raw", tnstream::reading );
      #endif
       stream.readrlepict ( &cursor.markfield, false, &w);
    }
 
-   { 
+   {
       int w;
      #ifndef HEXAGON
-      tnfilestream stream ( "cursor3.raw", 1 ); 
+      tnfilestream stream ( "cursor3.raw", tnstream::reading );
      #else
-      tnfilestream stream ( "curshex.raw", 1 ); 
+      tnfilestream stream ( "curshex.raw", tnstream::reading );
      #endif
       stream.readrlepict ( &cursor.orgpicture, false, &w);
       void* newpic = uncompress_rlepict ( cursor.orgpicture );
@@ -734,11 +738,11 @@ void         tcursor::init ( void )
    actpictwidth = w;
    picture = new char [ getpicsize2 ( orgpicture )];
    memcpy ( picture, orgpicture, getpicsize2 ( orgpicture ));
-                         
-   posx = 0; 
-   posy = 0; 
-   oposx = 0; 
-   oposy = 0; 
+
+   posx = 0;
+   posy = 0;
+   oposx = 0;
+   oposy = 0;
 }
 
 void  tcursor :: checksize ( void )
@@ -2116,161 +2120,6 @@ Smoothdaten
 
 
 
-
-
-/** Returns the SingleWeapon corresponding to the weaponNum for this
- *  vehicle.
- */
-SingleWeapon *Vehicle::getWeapon( unsigned weaponNum ) {
-  // printf( "getWeapon(%u)\n", weaponNum );
-  UnitWeapon *weapons=typ->weapons;
-  return (weaponNum<=weapons->count)?weapons->weapon+weaponNum:NULL;;
-}
-
-
-int tmine :: attacksunit ( const pvehicle veh )
-{
-     if  (!( ( veh->functions & cfmineimmune ) || 
-              ( veh->height > chfahrend ) ||
-              ( getdiplomaticstatus2 ( veh->color, color*8 ) == capeace ) || 
-              ( (veh->functions & cf_trooper) && (type != cmantipersonnelmine)) || 
-              ( veh->height <= chgetaucht && type != cmmooredmine ) || 
-              ( veh->height == chschwimmend && type != cmfloatmine ) ||
-              ( veh->height == chfahrend && type != cmantipersonnelmine  && type != cmantitankmine )
-            ))
-         return 1;
-     return 0;
-}
-
-
-void tfield :: checkminetime ( int time )
-{
-   if ( minenum() ) 
-      for ( int i = minenum()-1; i >= 0; i-- ) {
-         int lt = actmap->getgameparameter ( cgp_antipersonnelmine_lifetime + object->mine[i]->type - 1);
-         if ( lt )
-            if ( object->mine[i]->time + lt < time )
-               removemine ( i );
-      }
-}
-
-
-int tfield :: mineattacks ( const pvehicle veh )
-{
-   int mn = minenum();
-   for ( int i = 0; i < mn; i++ ) 
-      if ( object->mine[i]->attacksunit ( veh ))
-         return 1+i;
-
-   return 0;
-}
-
-
-void  tfield :: addobject( pobjecttype obj, int dir, int force )
-{ 
-   if ( !obj )
-      return;
-
-   pobject i = checkforobject ( obj );
-   if ( !i ) {
-     int buildable = obj->buildable ( this );
-     #ifdef karteneditor
-     if ( !buildable ) 
-          if ( force )
-             buildable = 1;
-          else
-             if (choice_dlg("object cannot be built here","~i~gnoe","~c~ancel") == 1) 
-                buildable = 1;
-     #else
-     if ( !buildable )
-          if ( force )
-             buildable = 1;
-     #endif
-
-     if ( buildable ) {
-         if ( !object )
-            object = new tobjectcontainer;
-         else
-            if ( object->objnum == maxobjectonfieldnum-1 ) {
-               displaymessage("can not add any more objects to this field", 1 );
-               return;
-            }
-
-         object->object[ object->objnum ] = new tobject ( obj ) ;
-         object->object[ object->objnum ]->time = actmap->time.a.turn;
-         if ( dir != -1 )
-            object->object[ object->objnum ]->dir = dir;
-         else
-            object->object[ object->objnum ]->dir = 0;
-         object->objnum++;
-   
-         setparams();
-
-         if ( dir == -1 )
-            calculateobject( getx(), gety(), true, obj ); 
-
-         sortobjects();
-     }
-   } else {
-      if ( dir != -1 ) 
-         i->dir |= dir;
-      
-      sortobjects();
-   } 
-} 
-
-
-void tfield :: removeobject( pobjecttype obj )
-{ 
-   if ( building ) 
-      return;
-
-   #ifndef karteneditor
-   if ( vehicle ) 
-      if ( vehicle->color != actmap->actplayer << 3)
-        return;
-   #endif
-
-   if ( !object )
-      return;
-
-   for ( int i = 0; i < object->objnum; )
-      if ( object->object[i]->typ == obj ) {
-         delete object->object[i];
-         for ( int j = i+1; j < object->objnum; j++ )
-            object->object[j-1] = object->object[j];
-
-         object->objnum--;
-      } else
-         i++;
-
-    setparams();
-
-    calculateobject( getx(), gety(), true, obj );
-} 
-
-void tfield :: deleteeverything ( void )
-{
-   if ( vehicle ) {
-      delete vehicle;
-      vehicle = NULL;
-   }
-
-   if ( building ) {
-      delete building;
-      building = NULL;
-   }
-
-   if ( object ) {
-      for ( int i = 0; i < object->objnum; i++) {
-          delete object->object[i];
-          object->object[i] = NULL;
-      }
-      delete object;
-      object = NULL;
-   }
-   setparams();
-}
 
 
 

@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: attack.cpp,v 1.40 2001-02-08 21:21:02 mbickel Exp $
+//     $Id: attack.cpp,v 1.41 2001-02-18 15:36:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2001/02/08 21:21:02  mbickel
+//      AI attacks and services more sensibly
+//
 //     Revision 1.39  2001/02/04 21:26:53  mbickel
 //      The AI status is written to savegames -> new savegame revision
 //      Lots of bug fixes
@@ -587,7 +590,7 @@ void tunitattacksunit :: setresult ( void )
    _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
-   if ( _attackingunit->reactionfire.status >= tvehicle::ReactionFire::ready )
+   if ( _attackingunit->reactionfire.getStatus() >= tvehicle::ReactionFire::ready )
       _attackingunit->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  dv.color );
 
    _attackingunit->attacked = true; 
@@ -1240,7 +1243,7 @@ bool vehicleplattfahrbar( const pvehicle     vehicle,
 
 void WeapDist::loaddata(void)
 { 
-   tnfilestream stream ( "weapons.dat", 1 );
+   tnfilestream stream ( "weapons.dat", tnstream::reading );
    stream.readdata ( &data, sizeof( data ));
 } 
 

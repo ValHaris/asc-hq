@@ -2,9 +2,12 @@
     \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
 
-//     $Id: gamedlg.cpp,v 1.64 2001-02-11 11:39:33 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.65 2001-02-18 15:37:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.64  2001/02/11 11:39:33  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.63  2001/02/01 22:48:40  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -1133,7 +1136,7 @@ void         tnewcampaignlevel::searchmapinfo(void)
    while( !filename.empty() ) {
 
        try {
-          tnfilestream filestream ( filename.c_str(), 1 );
+          tnfilestream filestream ( filename.c_str(), tnstream::reading );
           tmaploaders spfldloader;
           spfldloader.stream = &filestream;
           // spfldloader.setcachingarrays ( );
@@ -1246,12 +1249,12 @@ void         tnewcampaignlevel::loadcampaignmap(void)
          throw NoMapLoaded();
    } /* endcatch */
    catch ( tinvalidversion err ) {
-      displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.filename, err.expected, err.found );
+      displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.getFileName().c_str(), err.expected, err.found );
       if ( !actmap || actmap->xsize <= 0)
          throw NoMapLoaded();
    } /* endcatch */
    catch ( tfileerror err) {
-      displaymessage( "error reading map filename %s ", 1, err.filename );
+      displaymessage( "error reading map filename %s ", 1, err.getFileName().c_str() );
       if ( !actmap || actmap->xsize <= 0)
          throw NoMapLoaded();
    } /* endcatch */
@@ -1465,7 +1468,7 @@ void         tcontinuecampaign::regroupevents ( pmap map )
       ev = ev->next;
    }
 
-   tmemorystream  memoryStream ( &memoryStreamBuffer, 2 );
+   tmemorystream  memoryStream ( &memoryStreamBuffer, tnstream::writing );
    for (int i = 0; i<8; i++) {
       map->player[i].research.write_struct ( memoryStream );
       map->player[i].research.write_techs ( memoryStream );
@@ -1501,7 +1504,7 @@ void         tcontinuecampaign::run(void)
 
       loadcampaignmap();
       actmap->oldevents = oldevent;
-      tmemorystream  memoryStream ( &memoryStreamBuffer, 1 );
+      tmemorystream  memoryStream ( &memoryStreamBuffer, tnstream::reading );
 
       for (i=0;i<8 ; i++) {
          actmap->player[i].research.read_struct ( memoryStream );
@@ -1524,7 +1527,7 @@ void         tchoosenewmap::readmapinfo(void)
 
 
     try {
-       tnfilestream filestream ( mapname, 1 );
+       tnfilestream filestream ( mapname, tnstream::reading );
        tmaploaders spfldloader;
        spfldloader.stream = &filestream;
        // spfldloader.setcachingarrays ( );
@@ -1756,12 +1759,12 @@ void         tchoosenewsinglelevel::run(void)
             throw NoMapLoaded();
       } /* endcatch */
       catch ( tinvalidversion err ) {
-         displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.filename, err.expected, err.found );
+         displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.getFileName().c_str(), err.expected, err.found );
          if ( !actmap || actmap->xsize <= 0)
             throw NoMapLoaded();
       } /* endcatch */
       catch ( tfileerror err) {
-         displaymessage( "error reading map filename %s ", 1, err.filename );
+         displaymessage( "error reading map filename %s ", 1, err.getFileName().c_str() );
          if ( !actmap || actmap->xsize <= 0)
             throw NoMapLoaded();
       } /* endcatch */

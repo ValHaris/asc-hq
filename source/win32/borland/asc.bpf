@@ -58,6 +58,8 @@ USEUNIT("..\..\dashboard.cpp");
 USEUNIT("..\..\ascstring.cpp");
 USEUNIT("..\..\resourcenet.cpp");
 USEUNIT("..\..\mapdisplay.cpp");
+USEUNIT("..\..\vehicle.cpp");
+USEUNIT("..\..\buildings.cpp");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 
