@@ -1,6 +1,10 @@
-//     $Id: artint.cpp,v 1.42 2000-11-26 14:39:01 mbickel Exp $
+//     $Id: artint.cpp,v 1.43 2000-11-29 11:18:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2000/11/26 14:39:01  mbickel
+//      Added Project Files for Borland C++
+//      Some modifications to compile source with BCC
+//
 //     Revision 1.41  2000/11/21 20:26:50  mbickel
 //      Fixed crash in tsearchfields (used by object construction for example)
 //      AI improvements
@@ -204,7 +208,6 @@
 
 
 #include <stdio.h>
-
 #include <string.h>
 #include <stdlib.h>
 #include <malloc.h>

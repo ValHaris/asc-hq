@@ -607,9 +607,9 @@ void tmap :: write ( tnstream& stream )
         for ( p = 0; p < 8; p++ )
            stream.writeInt( 0 );
 
-        for ( int i = 0; i < 8; i++ ) {
-           stream.writeString ( preferredFileNames.mapname[i] );
-           stream.writeString ( preferredFileNames.savegame[i] );
+        for ( int k = 0; k < 8; k++ ) {
+           stream.writeString ( preferredFileNames.mapname[k] );
+           stream.writeString ( preferredFileNames.savegame[k] );
         }
 
 
