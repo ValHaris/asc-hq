@@ -16,7 +16,7 @@
     <LIBFILES value="..\..\libs\bzlib\win\bzlib.lib ..\..\..\..\sdl\bin\sdl.lib"/>
     <LIBRARIES value=""/>
     <PACKAGES value=""/>
-    <PATHCPP value=".;..\..\..\source;..\..\sdl;..\..\LIBS\getopt"/>
+    <PATHCPP value=".;..\..;..\..\sdl;..\..\LIBS\getopt"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>

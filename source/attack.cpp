@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: attack.cpp,v 1.45 2001-07-15 21:00:25 mbickel Exp $
+//     $Id: attack.cpp,v 1.46 2001-07-25 19:56:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2001/07/15 21:00:25  mbickel
+//      Some cleanup in the vehicletype class
+//
 //     Revision 1.44  2001/07/14 13:15:17  mbickel
 //      Rewrote sound handling
 //
@@ -614,9 +617,9 @@ void tunitattacksunit :: setresult ( void )
    _attackingunit->attacked = true; 
 
    _attackedunit->damage    = dv.damage;
+   _attackingunit->damage    = av.damage;
 
    if ( _respond ) {
-      _attackingunit->damage    = av.damage;
 
       _attackedunit->experience = dv.experience;
       _attackedunit->ammo[ dv.weapnum ] = dv.weapcount;
