@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.124.2.5 2004-11-10 20:22:50 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.124.2.6 2004-11-14 15:47:42 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -699,7 +699,8 @@ void         pdsetup(void)
    pd.addbutton ( "seperator",                  -1 );
    pd.addbutton ( "Resi~z~e mapõR",             act_resizemap );
    pd.addbutton ( "set global ~w~eatherõctrl-W", act_setactweatherglobal );
-   pd.addbutton ( "~C~reate ressourcesõctrl+F", act_createresources );
+   pd.addbutton ( "~C~reate regional ressources", act_createresources );
+   pd.addbutton ( "~C~reate global ressourcesõctrl+F", act_createresources2 );
    pd.addbutton ( "~S~et turn number",        act_setTurnNumber );
    pd.addbutton ( "~E~dit technologies",          act_editResearch );
    pd.addbutton ( "edit ~R~search points",          act_editResearchPoints );

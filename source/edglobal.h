@@ -1,91 +1,4 @@
-//     $Id: edglobal.h,v 1.20 2004-09-13 16:56:54 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.19  2004/05/29 15:07:37  mbickel
-//      Fixed maps
-//      Fixed crash with asc.cache
-//      ai speed up
-//
-//     Revision 1.18  2004/05/20 14:01:09  mbickel
-//      Many bugfixes and new features, among them:
-//        - Container.FillUnitsAutomatically = 2
-//        - generate Tech Tree
-//        - show research info
-//        - edit research in mapeditor
-//        - limit production to units that can leave a building
-//
-//     Revision 1.17  2004/05/11 20:22:33  mbickel
-//      Readded research system to ASC
-//
-//     Revision 1.16  2004/01/21 14:43:00  mbickel
-//      Fixed: external loading not working
-//      Improved AI
-//      Fixed and improved replay resource checking
-//      Fixed various display errors
-//
-//     Revision 1.15  2003/04/23 18:31:09  mbickel
-//      Fixed: AI problems
-//      Improved cheating detection in replay
-//
-//     Revision 1.14  2003/03/20 10:08:29  mbickel
-//      KI speed up
-//      mapeditor: added clipboard
-//      Fixed movement issues
-//
-//     Revision 1.13  2002/11/01 20:44:53  mbickel
-//      Added function to specify which units can be build by other units
-//
-//     Revision 1.12  2002/03/17 21:25:18  mbickel
-//      Fixed: View unit movement revealed the reaction fire status of enemy units
-//      Mapeditor: new function "resource comparison"
-//
-//     Revision 1.11  2001/10/11 10:41:06  mbickel
-//      Restructured platform fileio handling
-//      Added map archival information to mapeditor
-//
-//     Revision 1.10  2001/10/08 14:12:20  mbickel
-//      Fixed crash in AI
-//      Speedup of AI
-//      Map2PCX improvements
-//      Mapeditor usability improvements
-//
-//     Revision 1.9  2001/10/02 14:06:28  mbickel
-//      Some cleanup and documentation
-//      Bi3 import tables now stored in .asctxt files
-//      Added ability to choose amoung different BI3 import tables
-//      Added map transformation tables
-//
-//     Revision 1.8  2001/08/02 15:33:01  mbickel
-//      Completed text based file formats
-//
-//     Revision 1.7  2000/11/29 09:40:19  mbickel
-//      The mapeditor has now two maps simultaneously active
-//      Moved memorychecking functions to its own file: memorycheck.cpp
-//      Rewrote password handling in ASC
-//
-//     Revision 1.6  2000/08/02 15:52:56  mbickel
-//      New unit set definition files
-//      demount accepts now more than one container file
-//      Unitset information dialog added
-//
-//     Revision 1.5  2000/03/16 14:06:54  mbickel
-//      Added unitset transformation to the mapeditor
-//
-//     Revision 1.4  2000/03/11 18:22:04  mbickel
-//      Added support for multiple graphic sets
-//
-//     Revision 1.3  1999/12/27 12:59:53  mbickel
-//      new vehicle function: each weapon can now be set to not attack certain
-//                            vehicles
-//
-//     Revision 1.2  1999/11/16 03:41:35  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
+//     $Id: edglobal.h,v 1.20.2.1 2004-11-14 15:47:41 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -122,7 +35,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 89;
+const int execactionscount = 90;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -215,6 +128,7 @@ enum tuseractions {
      act_editResearchPoints,
      act_generateTechTree,
      act_editTechAdapter,
-     act_resetPlayerData};
+     act_resetPlayerData,
+     act_createresources2 };
 
 extern void         execaction(int code);

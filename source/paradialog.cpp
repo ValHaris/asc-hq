@@ -48,6 +48,8 @@
 #include "sg.h"
 #include "sdl/sound.h"
 
+#include "resourceplacement.h"
+
 
 
 //! A Paragui widget that fills the whole screen and redraws it whenever Paragui wants to it.
@@ -143,22 +145,12 @@ void ASC_PG_App :: reloadTheme()
 
 
 
-//! Adapter class for using Paragui Dialogs in ASC. This class transfers the event control from ASC to Paragui and back. All new dialog classes should be derived from this class
-class ASC_PG_Dialog : public PG_Window {
-       SDL_Surface* background;
-    protected:
-       int quitModalLoop;
-    public:
-       ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const char *windowtext, WindowFlags flags=DEFAULT, const char *style="Window", int heightTitlebar=25);
-       int Run( );
-       ~ASC_PG_Dialog();
-};
 
 
 
 ASC_PG_Dialog :: ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const char *windowtext, WindowFlags flags, const char *style, int heightTitlebar )
        :PG_Window ( parent, r, windowtext, flags, style, heightTitlebar ),
-        quitModalLoop ( 0 )
+        quitModalLoopValue ( 0 )
 {
 //   mainScreenWidget->setDirty();
 //   SDL_mutexP ( eventHandlingMutex );
@@ -173,7 +165,7 @@ int ASC_PG_Dialog::Run ( )
 {
    setEventRouting ( true, false );
    
-   while ( !quitModalLoop ) {
+   while ( !quitModalLoopValue ) {
       SDL_Event event;
       if ( getQueuedEvent( event ))
          pgApp->PumpIntoEventQueue( &event );
@@ -181,7 +173,7 @@ int ASC_PG_Dialog::Run ( )
          SDL_Delay ( 2 );
    }
    setEventRouting ( false, true );
-   return quitModalLoop;
+   return quitModalLoopValue;
 }
 
 
@@ -201,7 +193,7 @@ int ASC_PG_Dialog::Run ( )
  	bool eventScrollTrack(PG_Slider* slider, long data);
         bool closeWindow()
         {
-           quitModalLoop = 1;
+           quitModalLoop(1);
            return true;
         };   
         
@@ -290,7 +282,7 @@ bool SoundSettings::eventScrollTrack(PG_Slider* slider, long data) {
 
 bool SoundSettings::buttonEvent( PG_Button* button ) 
 {
-           quitModalLoop = 2;
+           quitModalLoop(2);
            CGameOptions::Instance()->sound = soundSettings;
            updateSettings();
            return true;
@@ -307,6 +299,7 @@ void soundSettings( )
   wnd1.Run();
   // printf("c4c %d \n", ticker );
 }
+
 
 #else
 void soundSettings( ){};

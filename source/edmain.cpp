@@ -2,7 +2,7 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.2 2004-11-04 22:22:21 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67.2.3 2004-11-14 15:47:41 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -40,6 +40,7 @@
 #include "itemrepository.h"
 #include "loadimage.h"
 #include "graphicset.h"
+#include "paradialog.h"
 
 #include <signal.h>
 
@@ -670,8 +671,19 @@ int main(int argc, char *argv[] )
    if ( cl->y() != 600 )
       yr = cl->y();
 
-   modenum8 = initgraphics ( xr, yr, 8, icon );
+      
+   ASC_PG_App app ( "asc_dlg" );
+   
+   int flags = SDL_SWSURFACE;
+   if ( fullscreen )
+      flags |= SDL_FULLSCREEN;
+   
+   app.InitScreen( xr, yr, 8, flags);
+      
+//   modenum8 = initgraphics ( xr, yr, 8, icon );
 
+   
+   
    if ( modenum8 < 0 )
       return 1;
    atexit ( closesvgamode );

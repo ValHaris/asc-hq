@@ -131,7 +131,7 @@ terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
 textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
 mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
-gameevent_dialogs.cpp clipboard.cpp
+gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp
 
 
 asc_mapedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
@@ -170,7 +170,8 @@ am_asc_mapedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
 	soundList.$(OBJEXT) simplestream.$(OBJEXT) \
 	mappolygons.$(OBJEXT) prehistoricevents.$(OBJEXT) \
 	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
-	gameevent_dialogs.$(OBJEXT) clipboard.$(OBJEXT)
+	gameevent_dialogs.$(OBJEXT) clipboard.$(OBJEXT) \
+	resourceplacement.$(OBJEXT) resourceplacementdialog.$(OBJEXT)
 asc_mapedit_OBJECTS = $(am_asc_mapedit_OBJECTS)
 asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/libs/triangul/libtriangul.la \
@@ -217,6 +218,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/password_dialog.Po ./$(DEPDIR)/pd.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/prehistoricevents.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/research.Po ./$(DEPDIR)/resourcenet.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/resourceplacement.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/resourceplacementdialog.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/sgstream.Po ./$(DEPDIR)/simplestream.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/soundList.Po ./$(DEPDIR)/spfst.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/stack.Po ./$(DEPDIR)/stringtokenizer.Po \
@@ -335,6 +338,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/prehistoricevents.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/research.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/resourcenet.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/resourceplacement.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/resourceplacementdialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sgstream.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/simplestream.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/soundList.Po@am__quote@

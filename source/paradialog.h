@@ -61,6 +61,21 @@
       // PG_Theme* LoadTheme(const char* xmltheme, bool asDefault = true, const char* searchpath = NULL );
  };
 
+ 
+ //! Adapter class for using Paragui Dialogs in ASC. This class transfers the event control from ASC to Paragui and back. All new dialog classes should be derived from this class
+class ASC_PG_Dialog : public PG_Window {
+       SDL_Surface* background;
+    private:
+       int quitModalLoopValue;
+    protected:
+       void quitModalLoop(int i = 1) { quitModalLoopValue = i; };    
+    public:
+       ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const char *windowtext, WindowFlags flags=DEFAULT, const char *style="Window", int heightTitlebar=25);
+       int Run( );
+       ~ASC_PG_Dialog();
+};
+
+ 
 #endif
 
  extern void soundSettings();
