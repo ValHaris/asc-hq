@@ -1,6 +1,9 @@
-//     $Id: sg.h,v 1.3 2000-05-22 15:40:37 mbickel Exp $
+//     $Id: sg.h,v 1.4 2000-08-05 20:18:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/05/22 15:40:37  mbickel
+//      Included patches for Win32 version
+//
 //     Revision 1.2  1999/11/16 03:42:27  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -40,12 +43,11 @@ extern void mainloopgeneralkeycheck ( tkey& ch );
 extern void         repaintdisplay(void);
 
 #ifdef sgmain
-#include "controls.h"
-extern cmousecontrol* mousecontrol;
+ #include "controls.h"
+ extern cmousecontrol* mousecontrol;
 #endif
 
-extern int modenum24;
-extern int modenum8;
+// extern int modenum8;
 extern int cdrom;
 
 extern pprogressbar actprogressbar ;

@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.71 2000-08-05 18:26:59 mbickel Exp $
+//     $Id: sg.cpp,v 1.72 2000-08-05 20:17:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.71  2000/08/05 18:26:59  mbickel
+//      Added Fullscreen-JPG-Support
+//
 //     Revision 1.70  2000/08/05 13:38:32  mbickel
 //      Rewrote height checking for moving units in and out of
 //        transports / building
@@ -345,7 +348,6 @@
 #include "gamedlg.h"
 #include "network.h"
 #include "building.h"
-#include "loadjpg.h"
 #include "sg.h"
 #include "soundList.h"
 #include "gameoptions.h"
@@ -437,11 +439,6 @@ tkey         keyinput[keyinputbuffersize];
 byte         keyinputptr; 
 
 int              modenum8;
-#ifdef _DOS_
- int              modenum24 = -1;
-#else
- int              modenum24 = -2;
-#endif
 
 int videostartpos = 0;
 
@@ -3341,7 +3338,7 @@ int main(int argc, char *argv[] )
          showmodes = 1; continue;
       }
       if ( strcmpi ( &argv[i][1], "8BITONLY" ) == 0 ) {
-         modenum24 = -2; continue;
+         setFullscreenSetting ( FIS_noTrueColor, 0 ); continue;
       }
 #else
       // Added support for the -w and --window options
@@ -3448,7 +3445,6 @@ int main(int argc, char *argv[] )
 #endif
 
    mapborderpainter = &backgroundpict;
-   char truecoloravail;
 
    initmissions();
 
@@ -3487,72 +3483,43 @@ int main(int argc, char *argv[] )
    if ( modenum8 > 0 ) {
       atexit ( returntotextmode );
 
-#ifdef HEXAGON
+      #ifdef _DOS_
+       setFullscreenSetting ( FIS_oldModeNum, modenum8 );
+      #endif
+
       initspfst( -1, -1 ); // 6, 16 
-#else
-      initspfst();
-#endif
    
       gui.init ( resolx, resoly );
       virtualscreenbuf.init();
 
       tnewkeyb nkb;
 
-      // modenum24 is -2 when the command line parameter /8bitonly is used
-      if ( modenum24 == -1 ) modenum24 = initgraphics ( 640, 480,32 );
-              
-      if ( modenum24 > 0 ) {
-
-         char pcx[300], jpg[300];
-         int md = getbestpictname ( "helisun", pcx, jpg );
+      try {
+         int fs = loadFullscreenImage ( "helisun.jpg" );
+         if ( !fs ) {
+            tnfilestream stream ( "logo640.pcx", 1 );
+            loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 );
+         }
+         loaddata( resolx, resoly, emailgame, mapname, savegame );
+         if ( fs ) {
+            closeFullscreenImage ();
+         }
+      } 
+      catch ( tfileerror err ) {
+         displaymessage ( "unable to access file %s \n", 2, err.filename );
+      }
+      catch ( toutofmem err ) {
+         displaymessage ( 
+            "loading of game failed due to insufficient memory", 2 );
+      }
+      catch ( terror err ) {
+         displaymessage ( "loading of game failed", 2 );
+      } 
    
-         try {
-            if ( md & 1 ) { 
-               tnfilestream stream ( pcx , 1 );
-               loadpcxxy ( &stream, 0, 0 );
-            } else {
-               tnfilestream stream ( jpg, 1 );
-               read_JPEG_file ( &stream );
-            }
+         int fs = loadFullscreenImage ( "helisun.jpg" );
+         if ( fs ) 
+            closeFullscreenImage ();
 
-            loaddata( resolx, resoly, emailgame, mapname, savegame );
-         } 
-         catch ( tfileerror err ) {
-            displaymessage ( "unable to access file %s \n", 2, err.filename );
-         } 
-         catch ( toutofmem err ) {
-            displaymessage ( 
-               "loading of game failed due to insufficient memory", 2 );
-         } 
-         catch ( terror err ) {
-            displaymessage ( "loading of game failed", 2 );
-         }
-
-         reinitgraphics( modenum8 );
-      
-      } else {
-         truecoloravail = false;
-
-         try {
-            int fs = loadFullscreenImage ( "helisun.jpg" );
-            if ( !fs ) {
-               tnfilestream stream ( "logo640.pcx", 1 );
-               loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 );
-            }
-            loaddata( resolx, resoly, emailgame, mapname, savegame );
-         } 
-         catch ( tfileerror err ) {
-            displaymessage ( "unable to access file %s \n", 2, err.filename );
-         }
-         catch ( toutofmem err ) {
-            displaymessage ( 
-               "loading of game failed due to insufficient memory", 2 );
-         }
-         catch ( terror err ) {
-            displaymessage ( "loading of game failed", 2 );
-         } 
-   
-      } /* endif */
 
 #ifdef logging
       logtofile ( "sg.cpp / main / initializing keyboard handler ");

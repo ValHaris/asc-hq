@@ -15,5 +15,9 @@
  *                                                                         *
  ***************************************************************************/
 
+enum FullscreenImageSettings { FIS_noTrueColor, FIS_oldModeNum };
+
 extern int loadFullscreenImage ( const char* filename );
-extern int closeFullscreenImage ( void );
+extern void closeFullscreenImage ( void );
+extern void setFullscreenSetting ( FullscreenImageSettings setting, int value );
+

@@ -1,24 +1,3 @@
-//     $Id: loadjpg.cpp,v 1.4 1999-12-28 21:03:05 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.3  1999/11/22 18:27:37  mbickel
-//      Restructured graphics engine:
-//        VESA now only for DOS
-//        BASEGFX should be platform independant
-//        new interface for initialization
-//      Rewrote all ASM code in C++, but it is still available for the Watcom
-//        versions
-//      Fixed bugs in RLE decompression, BI map importer and the view calculation
-//
-//     Revision 1.2  1999/11/16 03:42:00  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -40,11 +19,12 @@
 */
 
 
-#include "config.h"
-#include <string.h>
+ #include <conio.h>
+ #include <string.h>
 
-#include "basegfx.h"
-#include "basestrm.h"
+ #include "../basegfx.h"
+ #include "vesa.h"
+
 
 /*
  * example.c
@@ -71,9 +51,7 @@
  * You may also wish to include "jerror.h".
  */
 
-#ifdef _DOS_
-#include "libs\jpeg\jpeglib.h"
-#endif
+#include "..\libs\jpeg\jpeglib.h"
 
 /*
  * <setjmp.h> is used for the optional error recovery mechanism shown in
@@ -108,10 +86,10 @@
  * RGB color and is described by:
  */
 
-#ifdef _DOS_
 extern JSAMPLE * image_buffer;	/* Points to large array of R,G,B-order data */
 extern int image_height;	/* Number of rows in image */
 extern int image_width;		/* Number of columns in image */
+
 
 
 /******************** JPEG DECOMPRESSION SAMPLE INTERFACE *******************/
@@ -180,7 +158,6 @@ my_error_exit (j_common_ptr cinfo)
   longjmp(myerr->setjmp_buffer, 1);
 }
 
-#endif
 
 /*
  * Sample routine for JPEG decompression.  We assume that the source file name
@@ -226,7 +203,7 @@ void put_scanline_someplace ( char* ptr, int width )
          }
 
    } else {
-     #ifndef _NOASM_
+
       bankparams.actpos = linenum * bankparams.linelen;
       int p = bankparams.actpos >> 16;
       if ( bankparams.page != p ) {
@@ -289,26 +266,21 @@ void put_scanline_someplace ( char* ptr, int width )
          }
 
       }
-     #endif
+
    }
 
    linenum++;
 }
 
 
-#ifdef _DOS_
 GLOBAL(int)
 read_JPEG_file ( pnstream strm )
 {
-
   bankparams.linelen = agmp->bytesperscanline;
   bankparams.actpos = 0;
   bankparams.page = 0;
   linenum = 0;
- #ifndef _NOASM_
-  if ( agmp->windowstatus != 100 ) 
-    setvirtualpagepos( 0 );
- #endif
+  setvirtualpagepos( 0 );
 
   /* This struct contains the JPEG decompression parameters and pointers to
    * working space (which is allocated as needed by the JPEG library).
@@ -418,13 +390,6 @@ read_JPEG_file ( pnstream strm )
   return 1;
 }
 
-#else // _DOS_
-int read_JPEG_file ( pnstream strm )
-{
-}
-#endif
-
-
 
 /*
  * SOME FINE POINTS:
@@ -498,5 +463,4 @@ int getbestpictname ( char* filename , char* c, char* e )
 
    return n;   
 }
-
 

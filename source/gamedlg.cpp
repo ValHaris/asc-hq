@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.32 2000-07-29 14:54:30 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.33 2000-08-05 20:17:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/07/29 14:54:30  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.31  2000/07/26 15:58:09  mbickel
 //      Fixed: infinite loop when landing with an aircraft which is low on fuel
 //      Fixed a bug in loadgame
@@ -173,9 +176,8 @@
 #include "controls.h"
 #include "timer.h"
 #include "sg.h"
-#include "loadpcx.h"
-#include "loadjpg.h"
 #include "gameoptions.h"
+#include "loadimage.h"
 
 #ifdef _DOS_
  #include "dos/memory.h"
@@ -2130,7 +2132,7 @@ void         tshowtechnology::run(void)
 void         showtechnology(ptechnology  tech )
 { 
    if ( tech ) { 
-      if ( tech->pictfilename  && (modenum24 > 0 ) ) {
+      if ( tech->pictfilename ) {
          mousevisible(false);
          bar ( 0,0, agmp->resolutionx-1, agmp->resolutiony-1, black );
          activefontsettings.length = agmp->resolutionx - 40;
@@ -2150,39 +2152,19 @@ void         showtechnology(ptechnology  tech )
 
          int abrt = 0;
 
-         char pcx[300];
-         char jpg[300];
-         int pic = getbestpictname ( tech->pictfilename, pcx, jpg );
+         int fs = loadFullscreenImage ( tech->pictfilename );
+         if ( fs ) {
 
-         if ( pic ) {
-
-            reinitgraphics( modenum24 );
-            try {
-               {
-                  if ( pic & 1 ) {
-                     tnfilestream stream ( pcx , 1 );
-                     loadpcxxy ( &stream, 0, 0 );
-                  } else {
-                     tnfilestream stream ( jpg, 1 );
-                     read_JPEG_file ( &stream );
-                  }
-               }
-            } /* endtry */
-            catch ( tfileerror err ) {
-               abrt = 1;
-            } /* endcatch */
-   
-   
             t = ticker;
             while ( mouseparams.taste )
                releasetimeslice();
+
             do {
                releasetimeslice();
             } while ( t + 600 > ticker  &&  !keypress()  && !mouseparams.taste && !abrt ); /* enddo */
    
-            reinitgraphics( modenum8 );
+            closeFullscreenImage();
          }            
-
 
          showtext2 ( tech->name, 20, 20 );
 

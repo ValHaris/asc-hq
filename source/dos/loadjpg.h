@@ -1,6 +1,14 @@
-//     $Id: loadjpg.h,v 1.2 1999-11-16 03:42:01 tmwilson Exp $
+//     $Id: loadjpg.h,v 1.1 2000-08-05 20:18:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:01  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -26,12 +34,9 @@
 #ifndef loadjpg_h
 #define loadjpg_h
 
-#include "basestrm.h"
+#include "../basestrm.h"
 
 extern int read_JPEG_file ( pnstream strm );
-
-//                                             PCX      JPG
-extern int getbestpictname ( char* filename , char* c, char* e );
 
 #endif
 
