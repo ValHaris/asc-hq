@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value="tools.lib"/>
+    <OBJFILES value="basegfx.obj basestrm.obj buildingtype.obj gameoptions.obj loadbi3.obj 
+      misc.obj Named.obj palette.obj sgstream.obj typen.obj vehicletype.obj"/>
+    <RESFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES)"/>
+    <LIBFILES value="..\..\libs\bzlib\win\bzlib.lib ..\..\..\..\sdl\bin\sdl.lib"/>
+    <LIBRARIES value=""/>
+    <PACKAGES value=""/>
+    <PATHCPP value=".;..\..\..\source"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <LINKER value="TLib"/>
+    <USERDEFINES value="_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_"/>
+    <SYSDEFINES value="_RTLDLL;NO_STRICT"/>
+    <MAINSOURCE value="tools.bpf"/>
+    <INCLUDEPATH value="..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32"/>
+    <LIBPATH value="..\..;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par -w-csu"/>
+    <LISTFILE value=""/>
+  </MACROS>
+  <OPTIONS>
+    <CFLAG1 value="-Od -Q -Vx -Ve -X- -a1 -b -k -y -v -vi- -c -tW -tWM -K"/>
+    <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="/P32 /0 /E"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="$(OBJFILES)"/>
+    <ALLLIB value=""/>
+  </LINKER>
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1031
+CodePage=1252
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[HistoryLists\hlIncludePath]
+Count=6
+Item0=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item1=..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item2=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item3=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\asc\source\win32
+Item4=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item5=..\..;$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=3
+Item0=..\..;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\..;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=2
+Item0=_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_
+Item1=_DEBUG
+
+[HistoryLists\hlIntOutputDir]
+Count=1
+Item0=C:\Programme\ascsrc\games\asc\source\tools\win
+
+[HistoryLists\hlTlibPageSize]
+Count=3
+Item0=0x0020
+Item1=32
+Item2=0x0010
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=1
+LinkDebugVcl=0
+  </IDEOPTIONS>
+</PROJECT>

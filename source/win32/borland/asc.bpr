@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value="asc.exe"/>
+    <OBJFILES value="..\..\sg.obj ..\..\artint.obj ..\..\dlg_box.obj ..\..\attack.obj 
+      ..\..\basegfx.obj ..\..\basestrm.obj ..\..\building.obj 
+      ..\..\buildingtype.obj ..\..\CLoadable.obj ..\..\containerbase.obj 
+      ..\..\controls.obj ..\..\dialog.obj ..\..\astar2.obj ..\..\weather.obj 
+      ..\..\gamemap.obj ..\..\gameoptions.obj ..\..\gui.obj ..\..\loadbi3.obj 
+      ..\..\loaders.obj ..\..\loadpcxc.obj ..\..\mapalgorithms.obj 
+      ..\..\misc.obj ..\..\missions.obj ..\..\Named.obj ..\..\network.obj 
+      ..\..\newfont.obj ..\..\palette.obj ..\..\password.obj 
+      ..\..\password_dialog.obj ..\..\pd.obj ..\..\Property.obj 
+      ..\..\PropertyGroup.obj ..\..\sgstream.obj ..\..\soundList.obj 
+      ..\..\spfst.obj ..\..\stack.obj ..\..\strtmesg.obj ..\..\typen.obj 
+      ..\..\unitctrl.obj ..\..\vehicletype.obj ..\..\viewcalculation.obj 
+      ..\..\gamedlg.obj ..\..\..\..\sdl\src\main\win32\SDL_main.obj 
+      ..\..\sdl\asc_IMG_jpg.obj ..\..\sdl\sound.obj ..\..\sdl\graphics.obj 
+      ..\..\sdl\loadimage.obj ..\..\sdl\SDLStretch.obj ..\..\sdl\events.obj"/>
+    <RESFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES)"/>
+    <LIBFILES value="..\..\libs\bzlib\win\bzlib.lib ..\..\libs\jpeg-6b\libjpeg.lib 
+      ..\..\libs\triangul\win32\triangulation.lib ..\..\..\..\sdl\bin\sdl.lib"/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="VCL50.lib"/>
+    <PACKAGES value="VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi"/>
+    <PATHCPP value=".;..\..\..\source;..\..\..\..\sdl\src\main\win32;..\..\sdl"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="tlink32"/>
+    <USERDEFINES value="HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32;_DEBUG"/>
+    <SYSDEFINES value="NO_STRICT;_NO_VCL;USEPACKAGES"/>
+    <MAINSOURCE value="asc.bpf"/>
+    <INCLUDEPATH value="..\..\..\source;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par"/>
+  </MACROS>
+  <OPTIONS>
+    <CFLAG1 value="-Od -Q -Vx -Ve -X- -a1 -5 -b -k -y -v -vi- -tW -tWM -c -K"/>
+    <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cw32mt.lib"/>
+  </LINKER>
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1031
+CodePage=1252
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[HistoryLists\hlIncludePath]
+Count=5
+Item0=..\..;..\..\..\..\sdl\include;..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
+Item1=C:\Programme\ascsrc\games\sdl\include;..\..;..\..\sdl;..\..\..\..\sdl\src\main\win32;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item2=..\..;..\..\sdl;..\..\..\..\sdl\src\main\win32;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item3=..\..\sdl;..\..\..\..\sdl\src\main\win32;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item4=..\..;$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=4
+Item0=..\..;..\..\..\source;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\..;..\..\sdl;..\..\..\..\sdl\src\main\win32;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..\..\sdl;..\..\..\..\sdl\src\main\win32;..\..;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
+Item3=..\..;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=2
+Item0=HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32;_DEBUG
+Item1=_DEBUG
+
+[HistoryLists\hlIntOutputDir]
+Count=1
+Item0=C:\Programme\ascsrc\games\asc\source\win32\borland
+
+[HistoryLists\hlFinalOutputDir]
+Count=1
+Item0=C:\Programme\ascsrc\games\asc\source\win32\borland
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=1
+LinkDebugVcl=0
+  </IDEOPTIONS>
+</PROJECT>

@@ -1,0 +1,22 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+USEUNIT("..\..\basegfx.cpp");
+USEUNIT("..\..\basestrm.cpp");
+USEUNIT("..\..\buildingtype.cpp");
+USEUNIT("..\..\gameoptions.cpp");
+USEUNIT("..\..\loadbi3.cpp");
+USEUNIT("..\..\misc.cpp");
+USEUNIT("..\..\Named.cpp");
+USEUNIT("..\..\palette.cpp");
+USEUNIT("..\..\sgstream.cpp");
+USEUNIT("..\..\typen.cpp");
+USEUNIT("..\..\vehicletype.cpp");
+USELIB("..\..\libs\bzlib\win\bzlib.lib");
+USELIB("..\..\..\..\sdl\bin\sdl.lib");
+//---------------------------------------------------------------------------
+#define Library
+
+// To add a file to the library use the Project menu 'Add to Project'.
+
