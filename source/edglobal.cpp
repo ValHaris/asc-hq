@@ -2,9 +2,14 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.35 2001-08-09 15:58:59 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.36 2001-09-23 23:06:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2001/08/09 15:58:59  mbickel
+//      Some usability improvements in the map editor
+//      More flexible BI3 map import
+//      Better textfile error messages
+//
 //     Revision 1.34  2001/08/09 14:50:37  mbickel
 //      Added palette.map to data directory
 //      Improved usability of terrain selection in mapeditor
@@ -838,17 +843,19 @@ void execaction(int code)
           }
        }
        break;
-    case act_end : {  
-       if (choice_dlg("Do you really want to quit ?","~y~es","~n~o") == 2) ch = ct_invvalue; 
-          else
-               {
+    case act_end : {
+       if ( mapSwitcher.getDefaultAction() == MapSwitcher::select )
+          execaction(act_switchmaps);
+       else
+          if (choice_dlg("Do you really want to quit ?","~y~es","~n~o") == 2) ch = ct_invvalue;
+             else {
                 ch = ct_esc; //Exit MapEdit
                 if (mapsaved == false )
                    if (choice_dlg("Map not saved ! Save now ?","~y~es","~n~o") == 1) k_savemap(false);
-               } 
-       }
+               }
+          }
        break;
-    case act_about :  
+    case act_about :
     case act_aboutbox : {
          help(1020);
          tviewanytext vat;

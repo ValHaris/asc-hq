@@ -115,8 +115,8 @@
     //! can the unit move from its current position (does not check neighbouring fields)
     bool canMove ( void );
 
-    //! returns the movement points the unit has left for this turn
-    int getMovement ( void );
+    //! returns the movement points the unit has left for this turn. CheckFuel should almost always be true. 
+    int getMovement ( bool checkFuel = true );
 
     /** sets a new distance that the unit can move
         \param cargoDivisor : the cargo of this unit gets 1/cargodivisor the change that this unit is getting; if 0 the cargo is not touched
@@ -128,6 +128,10 @@
 
     //! the maximum distance that the unit can drive in a single turn on the current level of height
     int maxMovement ( void );
+
+    /** reduces the movement by the given amount. Negative values are possible.
+        Don't use something like "setmovement ( getmovement() - amount )", because getmovement may return a lower amount due to lack of fuel. */
+    void decreaseMovement ( int movement );
 
 
     void resetMovement( void );

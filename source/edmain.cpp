@@ -2,9 +2,12 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.51 2001-09-13 17:43:12 mbickel Exp $
+//     $Id: edmain.cpp,v 1.52 2001-09-23 23:06:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2001/09/13 17:43:12  mbickel
+//      Many, many bug fixes
+//
 //     Revision 1.50  2001/08/06 20:54:43  mbickel
 //      Fixed lots of crashes related to the new text files
 //      Fixed delayed events
@@ -688,8 +691,10 @@ void         editor(void)
                                     execaction(act_placething);
                      break;
                   case ct_esc : {
-                        if (polyfieldmode) execaction(act_endpolyfieldmode);
-                        else execaction(act_end);
+                        if ( polyfieldmode )
+                           execaction(act_endpolyfieldmode);
+                        else
+                           execaction(act_end);
                      }
                      break;
                   }

@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: building_controls.h,v 1.8 2001-07-29 21:26:37 mbickel Exp $
+//     $Id: building_controls.h,v 1.9 2001-09-23 23:06:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2001/07/29 21:26:37  mbickel
+//      Fixed: Torpedo-units could not leave submerged submarine
+//
 //     Revision 1.7  2001/04/01 12:59:35  mbickel
 //      Updated win32 project files to new ai file structure
 //      Added viewid win32-project
@@ -132,6 +135,8 @@ class    ccontainercontrols
       virtual int    putenergy (int e, int abbuchen = 1 ) = 0;
       virtual int    putmaterial (int m, int abbuchen = 1 ) = 0;
       virtual int    putfuel (int f, int abbuchen = 1) = 0;
+
+      int            getResource ( int need, int resourceType, int abbuchen );
       virtual int    getenergy ( int need, int abbuchen ) = 0;
       virtual int    getmaterial ( int need, int abbuchen ) = 0;
       virtual int    getfuel ( int need, int abbuchen ) = 0;

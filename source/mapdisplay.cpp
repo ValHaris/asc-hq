@@ -857,9 +857,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
                yp = vfbtopspace + y * fielddisty;
 
-
                if (b > visible_ago ) {
-
 
 
                   /* display buildings */
@@ -954,8 +952,9 @@ void tgeneraldisplaymap :: pnt_main ( void )
                } else {
                   if (b == visible_ago) {
                      if ( fld->building && fld->picture )
-                        if ((b == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerview*8 ))
-                           putrotspriteimage(r + buildingrightshift, yp + buildingdownshift, fld->picture, fld->building->color);
+                        if ( fld->building->visible )
+                           if ((b == visible_all) ||  (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerview*8 ))
+                              putrotspriteimage(r + buildingrightshift, yp + buildingdownshift, fld->picture, fld->building->color);
 
                   }
                }

@@ -464,9 +464,12 @@ bool Vehicle::hasMoved ( void ) const
 }
 
 
-int Vehicle :: getMovement ( void )
+int Vehicle :: getMovement ( bool checkFuel )
 {
-   if ( typ->fuelConsumption ) {
+   if ( reactionfire.getStatus() != ReactionFire::off )
+      return 0;
+      
+   if ( typ->fuelConsumption && checkFuel ) {
       if ( tank.fuel * minmalq / typ->fuelConsumption < _movement )
          return tank.fuel * minmalq / typ->fuelConsumption;
       else
@@ -475,6 +478,14 @@ int Vehicle :: getMovement ( void )
       return _movement;
 }
 
+void Vehicle :: decreaseMovement ( int amount )
+{
+  _movement -= amount;
+  if ( _movement < 0 )
+    _movement = 0;
+  if ( _movement > typ->movement[log2(height)] )
+    _movement = typ->movement[log2(height)];
+}
 
 
 bool Vehicle :: canMove ( void )

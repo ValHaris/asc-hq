@@ -2,9 +2,12 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.73 2001-09-13 17:43:11 mbickel Exp $
+//     $Id: building.cpp,v 1.74 2001-09-23 23:06:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.73  2001/09/13 17:43:11  mbickel
+//      Many, many bug fixes
+//
 //     Revision 1.72  2001/07/29 21:26:37  mbickel
 //      Fixed: Torpedo-units could not leave submerged submarine
 //
@@ -229,14 +232,10 @@ class tcontaineronlinemousehelp : public tonlinemousehelp
 
 
 
-// ContainerBaseGuiHost Borland_cpp_builder_is_buggy;
-
-//0 cguihostcontainer
 class   hosticons_c: public ContainerBaseGuiHost
 { // basis fuer icons ->struct mit allen icons
    public:
       void seticonmains ( pcontainer maintemp );
-      // void   chainiconstohost ( pgeneralicon_c icn ) { ContainerBaseGuiHost::chainiconstohost ( icn ); };
 };
 
 
@@ -1081,6 +1080,17 @@ ccontainercontrols :: ccontainercontrols (void)
 
 
 
+int   ccontainercontrols :: getResource ( int need, int resourceType, int abbuchen )
+{
+   switch ( resourceType ) {
+      case 0: return getenergy ( need, abbuchen );
+      break;
+      case 1: return getmaterial ( need, abbuchen );
+      break;
+      case 2: return getfuel ( need, abbuchen );
+      break;
+   };
+};
 
 
 
@@ -1677,7 +1687,7 @@ int   cbuildingcontrols :: cproduceunit :: available (pvehicletype fzt, int* lac
    int l = 0;
    if ( actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( fzt ) ) {
       for ( int r = 0; r < resourceTypeNum; r++ )
-         if ( cc->getenergy( fzt->productionCost.resource(r), 0 ) < fzt->productionCost.resource(r) )
+         if ( cc->getResource( fzt->productionCost.resource(r), r, 0 ) < fzt->productionCost.resource(r) )
             l |= 1 << r;
    } else
       l |= 1 << 10;
@@ -6634,7 +6644,7 @@ int   ccontainer_b :: produceuniticon_cb :: available    ( void )
          }
       } else
          if ( main->getmarkedunittype() )
-            if (  /*cbuildingcontrols ::*/ cproduceunit :: available ( main->getmarkedunittype() ) )
+            if (  cproduceunit :: available ( main->getmarkedunittype() ) )
                return 1;
    }
    return 0;
