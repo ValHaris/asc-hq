@@ -2,9 +2,13 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.70 2002-03-03 18:52:01 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.71 2002-03-04 20:00:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.70  2002/03/03 18:52:01  mbickel
+//      Updated bzlib to 1.0.2
+//      Fixed bug in mount that compressed only part of files
+//
 //     Revision 1.69  2002/01/29 20:42:16  mbickel
 //      Improved finding of files with relative path
 //      Added wildcards to music playlist files
@@ -2709,5 +2713,5 @@ void convertPathDelimitters ( ASCString& path )
 {
    int pos;
    while ( (pos = path.find ( foreignPathDelimitterString )) != path.npos )
-      path.erase ( pos, strlen(foreignPathDelimitterString) );
+      path.replace ( pos, 1, pathdelimitterstring );
 }
