@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.21 2000-02-03 21:15:33 mbickel Exp $
+//     $Id: dialog.cpp,v 1.22 2000-03-11 19:51:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/02/03 21:15:33  mbickel
+//      Fixed a crash in the new file date routines
+//
 //     Revision 1.20  2000/02/03 20:54:38  mbickel
 //      Some cleanup
 //      getfiletime now works under Linux too
@@ -2211,19 +2214,6 @@ void         tfileselectsvga::readdirectory(void)
                time_t tdate = stream.get_time();
                if ( tdate != -1 ) {
                   files[numberoffiles].time = tdate;
-      
-                 /*
-                  int year, month, day, hour, min, sec;
-                  unpack_date ( date >> 16 , day, month, year );
-                  unpack_time ( date & 0xffff, sec, min, hour );
-                  char s[100];
-                  if (min < 10)
-                     sprintf( s, "%i.%i.%i ; %i:0%i", day, month, year, hour, min );
-                  else
-                     sprintf( s, "%i.%i.%i ; %i:%i", day, month, year, hour, min );
-      
-                  files[numberoffiles].sdate = strdup (  s );
-                 */
                   files[numberoffiles].sdate = strdup ( ctime ( &tdate ) );
                }
    
@@ -2247,21 +2237,9 @@ void         tfileselectsvga::readdirectory(void)
                  
           time_t tdate = get_filetime( filename );
 
-          if ( tdate != -1 ) {
-             /*
-             int year, month, day, hour, min, sec;
-             unpack_date ( date >> 16 , day, month, year );
-             unpack_time ( date & 0xffff, sec, min, hour );
-             char s[100];
-             if (min < 10)
-                sprintf( s, "%i.%i.%i ; %i:0%i", day, month, year, hour, min );
-             else
-                sprintf( s, "%i.%i.%i ; %i:%i", day, month, year, hour, min );
-             
-             files[numberoffiles].sdate = strdup (  s );
-             */
+          if ( tdate != -1 )
              files[numberoffiles].sdate = strdup ( ctime ( &tdate ) );
-          } else
+          else
              files[numberoffiles].sdate = NULL;
 
           files[numberoffiles].time = tdate;
@@ -2431,11 +2409,11 @@ boolean      tfileselectsvga::speedsearch(char         input)
 
 void         tfileselectsvga::displayspeedsearch(void)
 { 
-  collategraphicoperations cgo ( x1 + 225, y1 + ysize - 30, x1 + 225 + 90, y1 + ysize );
+  collategraphicoperations cgo ( x1 + 225, y1 + ysize - 30, x1 + 225 + 190, y1 + ysize );
 
    mousevisible(false);
    npush ( activefontsettings );
-   activefontsettings.length = 90;
+   activefontsettings.length = 190;
    showtext2(searchstring,x1 + 225, y1 + ysize - 30);
    npop ( activefontsettings );
    mousevisible(true); 
@@ -2569,7 +2547,7 @@ void         tfileselectsvga::run(void)
                } 
             } 
             else { 
-               if ( searchsize <= 7 ) {
+               if ( searchsize < maxfilenamelength ) {
                   searchstring[searchsize] = prntkey;
                   searchsize++;
                   searchstring[searchsize] = 0;

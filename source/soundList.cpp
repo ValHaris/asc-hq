@@ -30,7 +30,6 @@ void tSoundList::init( unsigned weaponCount ) {
   weaponSoundArray=(Sound **)malloc(sizeof(*weaponSoundArray)*weaponCount);
   for( unsigned u=0; u<weaponCount; ++u ) {
     sprintf( weaponSoundFileName, WEAPON_SOUND_FILENAME_TEMPLATE, u );
-    DEBUG( weaponSoundFileName );
     weaponSoundArray[u]=new Sound(weaponSoundFileName);
   }
 }

@@ -1,6 +1,10 @@
-//     $Id: basestrm.h,v 1.8 2000-02-05 12:13:44 steb Exp $
+//     $Id: basestrm.h,v 1.9 2000-03-11 19:51:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/02/05 12:13:44  steb
+//     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
+//     startup due to actmap being null when trying to report errors.
+//
 //     Revision 1.7  2000/02/03 20:54:38  mbickel
 //      Some cleanup
 //      getfiletime now works under Linux too
@@ -80,6 +84,13 @@ extern "C" {
 
 
 #pragma pack(1)
+
+
+#ifdef _DOS_
+ #define maxfilenamelength 8
+#else
+ #define maxfilenamelength 255
+#endif
 
 // #pragma library (basestrm)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

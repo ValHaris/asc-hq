@@ -1,9 +1,9 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 noinst_LIBRARIES = libsdl.a
 
-libsdl_a_SOURCES = timer.cpp graphics.cpp events.cpp sound.cpp
+libsdl_a_SOURCES = sound.cpp timer.cpp graphics.cpp events.cpp 
 
 
-EXTRA_DIST = events.cpp graphics.cpp graphics.h timer.cpp sound.cpp sound.h
+EXTRA_DIST = events.cpp graphics.cpp graphics.h timer.cpp sound.cpp sound.h 
 
 ####### kdevelop will overwrite this part!!! (end)############

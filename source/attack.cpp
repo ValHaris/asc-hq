@@ -1,6 +1,9 @@
-//     $Id: attack.cpp,v 1.10 2000-03-11 18:22:04 mbickel Exp $
+//     $Id: attack.cpp,v 1.11 2000-03-11 19:51:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/03/11 18:22:04  mbickel
+//      Added support for multiple graphic sets
+//
 //     Revision 1.9  2000/02/24 10:54:06  mbickel
 //      Some cleanup and bugfixes
 //
@@ -304,12 +307,14 @@ void tfight :: paintline ( int num, int val, int col )
 #define maxattackshown 24
 
 void tunitattacksunit::calcdisplay( int ad, int dd ) {
+  /*
   if ( dv.strength ) {
      sound.weaponSound(_attackingunit->getWeapon(av.weapnum)->getScalarWeaponType())->playWait();
      sound.weaponSound(_attackedunit->getWeapon(dv.weapnum)->getScalarWeaponType())->play();
   } else
      sound.weaponSound(_attackingunit->getWeapon(av.weapnum)->getScalarWeaponType())->play();
-
+  */
+  sound.weaponSound(_attackingunit->getWeapon(av.weapnum)->getScalarWeaponType())->play();
   tfight::calcdisplay(ad,dd);
 }
   
