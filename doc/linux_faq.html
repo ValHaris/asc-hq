@@ -55,7 +55,7 @@ version of ASC, refer to the <A HREF="install.html">Linux installation</A>. <p>
     This happens if you haven't got version 1.1.0 or later of SDL installed
     on your system.  Get it from <A HREF="http://www.libsdl.org">www.libsdl.org</A>
 
-    unpack it, and cd into it.  ./autogen.sh ; make
+    unpack it, and cd into it.  configure ; make
     then become root and make install.
 
 <H3>  ASC complains it can't load libSDL_image-1.0.so.0 </H3>
@@ -64,7 +64,7 @@ version of ASC, refer to the <A HREF="install.html">Linux installation</A>. <p>
 
     http://www.libsdl.org/projects/SDL_image/index.html
 
-    unpack it, and cd into it.  ./autogen.sh ; make
+    unpack it, and cd into it.  configure ; make
     then become root and make install.
 
 
@@ -117,7 +117,7 @@ version of ASC, refer to the <A HREF="install.html">Linux installation</A>. <p>
      make install </TT> <i>(if desired)</i>
     </BLOCKQUOTE> <p>
     
-    Any help about automating this task (like making ASC printing its own backtrace) are appreciated !
+    Any help about automating this task (like making ASC printing its own backtrace) is appreciated !
 
 <H3>  ASC crashes and does not restore the original screen resolution </H3>
 
@@ -148,7 +148,7 @@ version of ASC, refer to the <A HREF="install.html">Linux installation</A>. <p>
 <li><b>Ugrading from versions &lt; 1.2.0 to recent versions:</b><p>
 
 <BLOCKQUOTE>
-Since version 1.2.0 ASC looks for all savegames, email files etc. in ~./asc
+Since version 1.2.0 ASC looks for all savegames, email files etc. in ~/.asc
 and writes all files there. If you have previosly run ASC from a different
 directory, either move all your files to ~/.asc/ or specify your directory as 
 searchPath in ~/.asc/ascrc (this file is generated when the new ASC version 
@@ -169,7 +169,7 @@ example, ASC will load the files there, but write new ones to searchPath0.
 
 <hr>
 <i>
-$Id: linux_faq.html,v 1.4 2002-05-07 19:52:47 mbickel Exp $
+$Id: linux_faq.html,v 1.5 2002-10-21 12:23:08 mbickel Exp $
 </i>
 </BODY>
 </HTML>
