@@ -2,9 +2,13 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.40 2002-10-09 16:58:46 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.41 2002-11-01 20:44:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2002/10/09 16:58:46  mbickel
+//      Fixed to GrafikSet loading
+//      New item filter for mapeditor
+//
 //     Revision 1.39  2002/03/18 21:42:17  mbickel
 //      Some cleanup and documentation in the Mine class
 //      The number of mines is now displayed in the field information window
@@ -1372,11 +1376,12 @@ void selterraintype( tkey ench )
    showallchoices();
 }
 
-void selvehicletype(tkey ench )
-{  
+pvehicletype selvehicletype(tkey ench )
+{
    auswahlf = selectitemcontainer.getvehicleselector()->selectitem( auswahlf, ench );
    lastselectiontype = cselunit;
    showallchoices();
+   return auswahlf;
 }
 
 void selcolor( tkey ench )

@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.88 2002-10-30 12:10:57 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.89 2002-11-01 20:44:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.88  2002/10/30 12:10:57  mbickel
+//      VehicleTypes can now be assigned a recommended AIJob
+//
 //     Revision 1.87  2002/10/12 17:28:03  mbickel
 //      Fixed "enemy unit loaded" bug.
 //      Changed map format
@@ -838,9 +841,7 @@ void placebodentyp(void)
                   pf2->direction = auswahld;
                   pf2->setparams();
                   if (pf2->vehicle != NULL) 
-                     if ( (pf2->vehicle->typ->terrainaccess.accessible ( 
-pf2->bdt ) < 0) || (pf2->vehicle->typ->terrainaccess.accessible ( pf2->bdt 
-) == 0 && actmap->getgameparameter( cgp_movefrominvalidfields ) == 0 )) {
+                     if ( (pf2->vehicle->typ->terrainaccess.accessible (pf2->bdt ) < 0) || (pf2->vehicle->typ->terrainaccess.accessible ( pf2->bdt) == 0 && actmap->getgameparameter( cgp_movefrominvalidfields ) == 0 )) {
                         delete pf2->vehicle;
                         pf2->vehicle = NULL;
                      }
@@ -858,9 +859,7 @@ pf2->bdt ) < 0) || (pf2->vehicle->typ->terrainaccess.accessible ( pf2->bdt
          pf2->direction = auswahld;
          pf2->setparams();
          if (pf2->vehicle != NULL)
-            if ( (pf2->vehicle->typ->terrainaccess.accessible ( pf2->bdt ) 
-< 0) || (pf2->vehicle->typ->terrainaccess.accessible ( pf2->bdt ) == 0 && 
-actmap->getgameparameter( cgp_movefrominvalidfields ) == 0 )) {
+            if ( (pf2->vehicle->typ->terrainaccess.accessible ( pf2->bdt )< 0) || (pf2->vehicle->typ->terrainaccess.accessible ( pf2->bdt ) == 0 && actmap->getgameparameter( cgp_movefrominvalidfields ) == 0 )) {
                delete pf2->vehicle;
                pf2->vehicle = NULL;
             }
@@ -883,7 +882,7 @@ void placeunit(void)
 
       fillpoly.tempvalue = 0;
 
-      if (fillpoly.paint_polygon ( pfpoly ) == 0) 
+      if (fillpoly.paint_polygon ( pfpoly ) == 0)
          displaymessage("Invalid Polygon !",1 );
    
       polyfieldmode = false;
@@ -906,7 +905,7 @@ void placeunit(void)
                accessible = 1;
          }
 
-         if (pf2 != NULL) 
+         if (pf2 != NULL)
               // !( pf2->bdt & cbbuildingentry)
             if ( !( pf2->building ) && ( accessible || actmap->getgameparameter( cgp_movefrominvalidfields)) ) {
                int set = 1;
@@ -998,7 +997,7 @@ void placemine(void)
 
 void putactthing ( void )
 {
-    cursor.hide(); 
+    cursor.hide();
     mousevisible(false); 
     mapsaved = false;
     pf2 = getactfield();
@@ -1044,7 +1043,7 @@ void         showpalette(void)
 // õS Lines
 
 void lines(int x1,int y1,int x2,int y2)
-{ 
+{
    line(x1,y1,x2,y1,white);
    line(x2,y1,x2,y2,darkgray);
    line(x1,y2,x2,y2,darkgray);
@@ -1068,17 +1067,17 @@ void         pdsetup(void)
     pd.addbutton ( "~I~mport BI mapõctrl-i", act_import_bi_map );
     pd.addbutton ( "Insert ~B~I map", act_insert_bi_map );
    #ifdef FREEMAPZOOM
-    pd.addbutton ( "seperator", -1 ); 
-    pd.addbutton ( "set zoom level", act_setzoom ); 
+    pd.addbutton ( "seperator", -1 );
+    pd.addbutton ( "set zoom level", act_setzoom );
    #endif
-   pd.addbutton ( "seperator", -1 ); 
+   pd.addbutton ( "seperator", -1 );
    pd.addbutton ( "E~x~itõEsc", act_end);
-      
-  pd.addfield ("~T~ools"); 
+
+  pd.addfield ("~T~ools");
    pd.addbutton ( "~V~iew mapõctrl+V",          act_viewmap );
    pd.addbutton ( "~S~how palette",           act_showpalette );
    pd.addbutton ( "~R~ebuild displayõctrl+R",   act_repaintdisplay );
-   pd.addbutton ( "seperator",                  -1 ); 
+   pd.addbutton ( "seperator",                  -1 );
    pd.addbutton ( "~C~reate ressourcesõctrl+F", act_createresources );
    pd.addbutton ( "~M~ap generatorõG",          act_mapgenerator );
    pd.addbutton ( "Resi~z~e mapõR",             act_resizemap );
@@ -1093,6 +1092,7 @@ void         pdsetup(void)
     pd.addbutton ( "~C~hange playersõO",           act_changeplayers);
     pd.addbutton ( "~E~dit eventsõE",              act_events );
     pd.addbutton ( "~S~etup Player + Alliancesõctrl+A",     act_setupalliances );
+//    pd.addbutton ( "unit production ~L~imitation", act_specifyunitproduction );
     pd.addbutton ( "seperator",                    -1);
     pd.addbutton ( "~T~oggle ResourceViewõctrl+B", act_toggleresourcemode);
     pd.addbutton ( "~B~I ResourceMode",            act_bi_resource );
@@ -3600,6 +3600,92 @@ void         tladeraum::done(void)
    npop ( farbwahl );
    ch = 0;
 }
+
+
+class UnitProductionLimitation : public tladeraum {
+              tmap::UnitProduction::IDsAllowed ids;
+              tmap::UnitProduction& up;
+         protected:
+              virtual const char* getinfotext ( int pos );
+              virtual void additem ( void );
+              virtual void removeitem ( int pos );
+              void displaysingleitem ( int pos, int x, int y );
+              virtual void finish ( int cancel );
+          public:
+              UnitProductionLimitation ( tmap::UnitProduction& _up ) : up ( _up ) { ids = up.idsAllowed;  };
+              void init (  );
+
+
+};
+
+
+const char* UnitProductionLimitation:: getinfotext ( int pos )
+{
+   if ( ids.size() > pos ) {
+      pvehicletype vt = actmap->getvehicletype_byid( ids[pos] );
+      if ( vt )
+         return vt->name.c_str();
+   }
+   return NULL;
+}
+
+
+void UnitProductionLimitation :: init (  )
+{
+   tladeraum::init ( "Allowed Production" );
+}
+
+void UnitProductionLimitation :: displaysingleitem ( int pos, int x, int y )
+{
+   if ( ids.size() > pos ) {
+      pvehicletype vt = actmap->getvehicletype_byid( ids[pos] );
+      if ( vt )
+         putrotspriteimage ( x, y, vt->picture[0], farbwahl * 8 );
+   }
+}
+
+void UnitProductionLimitation :: additem  ( void )
+{
+   pvehicletype vt = selvehicletype ( ct_invvalue );
+   if ( vt ) {
+      for ( tmap::UnitProduction::IDsAllowed::iterator i = ids.begin(); i != ids.end(); i++ )
+         if ( *i == vt->id )
+            return;
+
+      ids.push_back ( vt->id );
+   }
+}
+
+void UnitProductionLimitation :: removeitem ( int pos )
+{
+   if ( pos < ids.size() )
+      ids.erase( ids.begin()+pos );
+}
+
+
+void UnitProductionLimitation :: finish ( int cancel )
+{
+   if ( !cancel ) 
+      up.idsAllowed = ids;
+}
+
+
+void unitProductionLimitation(  )
+{
+   UnitProductionLimitation upl( actmap->unitProduction );
+   upl.init();
+   upl.run();
+   upl.done();
+
+   static bool warned = false;
+   if ( warned == false && actmap->getgameparameter(cgp_forbid_unitunit_construction) != 2 ) {
+      displaymessage(ASCString("Please note that the limition will only be used \n if the GameParameter 5 (")+ gameparametername[cgp_forbid_unitunit_construction]+") is set to 2 !",3 );
+      warned = true;
+   }
+}
+
+
+
 
 
 

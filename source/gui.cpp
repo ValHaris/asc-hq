@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: gui.cpp,v 1.78 2002-09-19 20:20:05 mbickel Exp $
+//     $Id: gui.cpp,v 1.79 2002-11-01 20:44:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.78  2002/09/19 20:20:05  mbickel
+//      Cleanup and various bug fixes
+//
 //     Revision 1.77  2002/04/05 09:25:09  mbickel
 //      Project files now for Borland C++ Builder 6
 //      Fixed: netcontrol not working
@@ -1673,14 +1676,14 @@ tnsguiiconconstructvehicle::tnsguiiconconstructvehicle ( void )
 
 int   tnsguiiconconstructvehicle::available    ( void ) 
 {
-  if ( actmap->getgameparameter(cgp_forbid_unitunit_construction) )
+  if ( actmap->getgameparameter(cgp_forbid_unitunit_construction) == 1 )
       return 0;
 
 
    pfield fld = getactfield();
    if ( fld )
       if ( fld->vehicle )
-         if (fld->vehicle->color == actmap->actplayer * 8) 
+         if (fld->vehicle->color == actmap->actplayer * 8)
             if ( fld->vehicle->typ->vehiclesBuildable.size() )
                if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
                   if ( !fld->vehicle->attacked )
@@ -1689,9 +1692,9 @@ int   tnsguiiconconstructvehicle::available    ( void )
    return 0;
 }
 
-void  tnsguiiconconstructvehicle::exec         ( void ) 
+void  tnsguiiconconstructvehicle::exec         ( void )
 {
-   constructvehicle( NULL ); 
+   constructvehicle( NULL );
    displaymap();
 }
 

@@ -1,6 +1,10 @@
-//     $Id: edglobal.h,v 1.12 2002-03-17 21:25:18 mbickel Exp $
+//     $Id: edglobal.h,v 1.13 2002-11-01 20:44:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2002/03/17 21:25:18  mbickel
+//      Fixed: View unit movement revealed the reaction fire status of enemy units
+//      Mapeditor: new function "resource comparison"
+//
 //     Revision 1.11  2001/10/11 10:41:06  mbickel
 //      Restructured platform fileio handling
 //      Added map archival information to mapeditor
@@ -84,7 +88,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 76;
+const int execactionscount = 77;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -164,6 +168,7 @@ enum tuseractions {
      act_switchmaps,
      act_transformMap,
      act_editArchivalInformation,
-     act_displayResourceComparison };
+     act_displayResourceComparison,
+     act_specifyunitproduction };
 
 extern void         execaction(int code);

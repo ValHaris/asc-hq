@@ -542,6 +542,13 @@ class tmap {
             time_t modifytime;
       } archivalInformation;
 
+      //! specifies which vehicle types can be constructed by construction units
+      class UnitProduction {
+         public:
+            typedef vector<int> IDsAllowed;
+            bool check ( int id );
+            IDsAllowed idsAllowed;
+      } unitProduction;
 
       tmap ( void );
 

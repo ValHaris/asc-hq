@@ -3,9 +3,14 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.135 2002-10-12 17:28:03 mbickel Exp $
+//     $Id: controls.cpp,v 1.136 2002-11-01 20:44:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.135  2002/10/12 17:28:03  mbickel
+//      Fixed "enemy unit loaded" bug.
+//      Changed map format
+//      Improved log messages
+//
 //     Revision 1.134  2002/10/09 16:58:45  mbickel
 //      Fixed to GrafikSet loading
 //      New item filter for mapeditor
@@ -1083,10 +1088,12 @@ void         SearchVehicleConstructionFields::testfield(const MapCoordinate& mc)
    if ( !fld->vehicle && !fld->building ) {
      for ( int i = 0; i < actvehicle->typ->vehiclesBuildable.size(); i++ )
        for ( int j = actvehicle->typ->vehiclesBuildable[i].from; j <= actvehicle->typ->vehiclesBuildable[i].to; j++ ) {
-         pvehicletype v = getvehicletype_forid ( j );
-         if ( v && actvehicle->vehicleconstructable ( v, mc.x, mc.y )) {
-            fld->a.temp = 1;
-            numberoffields++;
+         if ( actmap->getgameparameter(cgp_forbid_unitunit_construction) == 0 || gamemap->unitProduction.check(j) ) {
+            pvehicletype v = getvehicletype_forid ( j );
+            if ( v && actvehicle->vehicleconstructable ( v, mc.x, mc.y )) {
+               fld->a.temp = 1;
+               numberoffields++;
+            }
          }
       }
    }

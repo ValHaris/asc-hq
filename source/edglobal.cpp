@@ -2,9 +2,14 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.48 2002-10-12 17:28:03 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.49 2002-11-01 20:44:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2002/10/12 17:28:03  mbickel
+//      Fixed "enemy unit loaded" bug.
+//      Changed map format
+//      Improved log messages
+//
 //     Revision 1.47  2002/04/14 17:21:17  mbickel
 //      Renamed global variable pf to pf2 due to name clash with SDL_mixer library
 //
@@ -335,7 +340,8 @@ mc_check mc;
         "switch maps",
         "transform map",
         "Edit Map Archival Information",
-        "Display Resource Comparison" };
+        "Display Resource Comparison",
+        "specify unit production" };
 
 
 // õS Infomessage
@@ -1032,6 +1038,8 @@ void execaction(int code)
    case act_editArchivalInformation: editArchivalInformation();
       break;
    case act_displayResourceComparison : resourceComparison();
+      break;
+   case act_specifyunitproduction: unitProductionLimitation();
       break;
     }
 }

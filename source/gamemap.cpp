@@ -446,6 +446,13 @@ void tmap :: read ( tnstream& stream )
        archivalInformation.requirements = stream.readString();
        archivalInformation.modifytime = stream.readInt();
     }
+
+    if ( version >= 4 ) {
+       int num = stream.readInt();
+       for ( int ii = 0; ii < num; ++ii )
+          unitProduction.idsAllowed.push_back ( stream.readInt() );
+    }
+
 }
 
 
@@ -647,6 +654,12 @@ void tmap :: write ( tnstream& stream )
     stream.writeString ( archivalInformation.tags );
     stream.writeString ( archivalInformation.requirements );
     stream.writeInt ( ::time ( &archivalInformation.modifytime ));
+
+/*
+    stream.writeInt( unitProduction.idsAllowed.size() );
+    for ( int ii = 0; ii < unitProduction.idsAllowed.size(); ++ii )
+       stream.writeInt ( unitProduction.idsAllowed[ii] );
+*/
 }
 
 
@@ -1274,6 +1287,15 @@ void tmap :: startGame ( )
    #endif
 } 
 
+bool tmap::UnitProduction::check ( int id )
+{
+   for ( tmap::UnitProduction::IDsAllowed::iterator i = idsAllowed.begin(); i != idsAllowed.end(); i ++ )
+      if( *i == id )
+         return true;
+
+    return false;
+}
+
 
 void tmap::operator= ( const tmap& map )
 {
@@ -1411,7 +1433,7 @@ void  tfield :: addobject( pobjecttype obj, int dir, bool force )
          i->dir |= dir;
       
       sortobjects();
-   } 
+   }
 } 
 
 
@@ -1595,7 +1617,7 @@ int tfield :: getjamming ( void )
 }
 
 int tfield :: getmovemalus ( const pvehicle veh )
-{       
+{
    int mnum = mines.size();
    if ( mnum ) {
       int movemalus = _movemalus[veh->typ->movemalustyp];
@@ -1873,6 +1895,7 @@ void AiParameter :: clearJobs()
 
 
 
+
 tmap :: ReplayInfo :: ReplayInfo ( void )
 {
    for (int i = 0; i < 8; i++) {
@@ -2031,7 +2054,7 @@ const int gameParameterUpperLimit [ gameparameternum ] = { maxint,
                                                            maxint,
                                                            maxint,
                                                            1,
-                                                           1,
+                                                           2,
                                                            maxunitexperience,
                                                            maxint,
                                                            maxint,
@@ -2055,7 +2078,7 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "building construction material factor (percent)",
                                                       "building construction fuel factor (percent)",
                                                       "forbid construction of buildings",
-                                                      "forbid units to build units",
+                                                      "limit construction of units by other units",
                                                       "use BI3 style training factor ",
                                                       "maximum number of mines on a single field",
                                                       "lifetime of antipersonnel mine",

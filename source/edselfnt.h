@@ -1,6 +1,10 @@
-//     $Id: edselfnt.h,v 1.6 2002-10-09 16:58:46 mbickel Exp $
+//     $Id: edselfnt.h,v 1.7 2002-11-01 20:44:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2002/10/09 16:58:46  mbickel
+//      Fixed to GrafikSet loading
+//      New item filter for mapeditor
+//
 //     Revision 1.5  2000/11/29 11:05:29  mbickel
 //      Improved userinterface of the mapeditor
 //      map::preferredfilenames uses now strings (instead of char*)
@@ -51,7 +55,7 @@
 #define selfontxanf ( agmp->resolutionx - selfontxsize - 10 )  	//Auswahlanzeige Xanf
 
 extern void selterraintype( tkey ench );
-extern void selvehicletype(tkey ench );
+extern pvehicletype selvehicletype(tkey ench );
 extern void selcolor( tkey ench );
 extern void selobject( tkey ench );
 extern void selmine( tkey ench );

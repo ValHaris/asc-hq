@@ -435,7 +435,11 @@ Possible values: x >= 1
 Using this parameters you can completely disable the construction of buildings on the map. A value of 0 enables building construction, a value of 1 disables it.
 
 ##0806
-Using this parameters you can completely disable the construction of units by other construction units. A value of 0 enables construction, a value of 1 disables it.
+Using this parameters you can specify if units can construct other units (for example turrets). 
+Possible values:
+0 all units can be constructed
+1 no units can be constructed
+2 only the units specified in the mapeditor can be constructed
 						      
 ##0807
 In ASC there are two different modes in which a training center operates. In the first mode a unit must be explicitly trained in a training center to gain experience (just like Battle Isle 2). In the second mode a newly constructed unit will already have experience depending on the number of training centers you have (like Battle Isle 3).

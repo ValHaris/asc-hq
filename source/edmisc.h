@@ -1,6 +1,10 @@
-//     $Id: edmisc.h,v 1.26 2002-10-09 16:58:46 mbickel Exp $
+//     $Id: edmisc.h,v 1.27 2002-11-01 20:44:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2002/10/09 16:58:46  mbickel
+//      Fixed to GrafikSet loading
+//      New item filter for mapeditor
+//
 //     Revision 1.25  2002/04/21 21:27:00  mbickel
 //      Mapeditor: Fixed crash in "Put Resources"
 //      Updating the small map after AI
@@ -379,5 +383,8 @@ extern void editArchivalInformation();
 
 //! displays a textmessage comparing the resources of all players 
 extern void resourceComparison ( );
+
+//! the function to edit the vehicle type that are allowed to be build by units
+extern void unitProductionLimitation();
 
 #endif
