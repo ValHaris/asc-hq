@@ -1103,6 +1103,7 @@ void tmap::endTurn()
 
 }
 
+
 void tmap::endRound()
 {
     actplayer = 0;
@@ -1128,9 +1129,10 @@ void tmap::endRound()
           do {
              didSomething = false;
              for ( BuildingWork::iterator j = buildingWork.begin(); j != buildingWork.end(); j++ )
-                if ( ! (*j)->finished() )
+                if ( ! (*j)->finished() ) 
                    if ( (*j)->run() )
                       didSomething = true;
+
           } while ( didSomething );
           doresearch( this, i );
        }

@@ -558,7 +558,7 @@ void Building :: readData ( tnstream& stream, int version )
 
 
     for ( i = 0; i< 3; i++ )
-       actstorage.resource(i) = stream.readInt();
+       actstorage.resource(i) = min(stream.readInt(), gettank(i));
 
     // printf("building at %d / %d has %d / %d / %d EMF \n", getEntry().x, getEntry().y, actstorage.energy, actstorage.material, actstorage.fuel );
 
@@ -1084,6 +1084,11 @@ bool Building::MiningStation :: run()
 
    if ( !justQuery ) {
       spaceAvail = bld->putResource( toExtract_thisTurn, 1 );
+      for ( int r = 0; r <3; ++r )
+         if ( spaceAvail.resource(r) < 0 ) {
+            warning( ASCString("map corruption detected; building space availability is negative! ") + resourceNames[r] );
+            spaceAvail.resource( r ) = 0;
+         }
    } else
       spaceAvail = toExtract_thisTurn;
 
@@ -1296,6 +1301,9 @@ void doresearch ( tmap* actmap, int player )
                res -= diff;
             else
                res += diff;
+
+            if ( res < 0 )
+               res = 0;
 
             if ( diff > 1 )
                diff /=2;
