@@ -17,5 +17,6 @@ Here are some libraries that are used by ASC:
  STL    is not included any more. For the DOS-Version, get STLPORT from
         www.stlport.org
  triangul  a polygon triangulation library. Used by DOS and Linux version
- 
+ getopt Command line parsing routines for platforms that don't supply getopt
+        themselfes (windows for example)
  

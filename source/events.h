@@ -26,7 +26,7 @@
 #define events_h_included
 
 
-extern void initializeEventHandling ( int (*fn)(const void *) , const void *data, void* mousepointer );
+extern void initializeEventHandling ( int (*fn)(void *) , void *data, void* mousepointer );
 
 
 

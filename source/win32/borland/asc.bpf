@@ -61,6 +61,8 @@ USEUNIT("..\..\vehicle.cpp");
 USEUNIT("..\..\buildings.cpp");
 USEUNIT("..\..\networkdata.cpp");
 USELIB("..\..\AI\ai.lib");
+USEUNIT("..\..\LIBS\getopt\getopt1.c");
+USEUNIT("..\..\LIBS\getopt\getopt.c");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 

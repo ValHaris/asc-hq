@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: sg.cpp,v 1.139 2001-05-17 14:23:19 mbickel Exp $
+//     $Id: sg.cpp,v 1.140 2001-05-19 13:07:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.139  2001/05/17 14:23:19  mbickel
+//      Rewrote command line parameters of all programs
+//      Made manpages generation optional
+//
 //     Revision 1.138  2001/05/16 23:21:01  mbickel
 //      The data file is mounted using automake
 //      Added sgml documentation
@@ -2388,7 +2392,7 @@ struct GameThreadParams {
    ASCString filename;
 };
 
-int gamethread ( const void* data )
+int gamethread ( void* data )
 {
       GameThreadParams* gtp = (GameThreadParams*) data;
 

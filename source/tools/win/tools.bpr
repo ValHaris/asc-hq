@@ -8,14 +8,15 @@
       obj\misc.obj obj\Named.obj obj\palette.obj obj\sgstream.obj obj\typen.obj 
       obj\vehicletype.obj obj\graphicset.obj obj\ascstring.obj 
       obj\graphicselector.obj obj\loadpcxc.obj obj\newfont.obj obj\CLoadable.obj 
-      obj\Property.obj obj\PropertyGroup.obj obj\graphics.obj"/>
+      obj\Property.obj obj\PropertyGroup.obj obj\graphics.obj obj\getopt1.obj 
+      obj\getopt.obj obj\strtmesg.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value="..\..\libs\bzlib\win\bzlib.lib ..\..\..\..\sdl\bin\sdl.lib"/>
     <LIBRARIES value=""/>
     <PACKAGES value=""/>
-    <PATHCPP value=".;..\..\..\source;..\..\sdl"/>
+    <PATHCPP value=".;..\..\..\source;..\..\sdl;..\..\LIBS\getopt"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -23,8 +24,8 @@
     <USERDEFINES value="_DEBUG;HEXAGON;_WIN32_;WIN32;converter;_NOASM_;_SDL_"/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT"/>
     <MAINSOURCE value="tools.bpf"/>
-    <INCLUDEPATH value="..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include"/>
-    <LIBPATH value="..\..\sdl;..\..;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include"/>
+    <LIBPATH value="..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par -w-csu"/>
     <LISTFILE value=""/>
   </MACROS>

@@ -23,6 +23,9 @@ USEUNIT("..\..\CLoadable.cpp");
 USEUNIT("..\..\Property.cpp");
 USEUNIT("..\..\PropertyGroup.cpp");
 USEUNIT("..\..\sdl\graphics.cpp");
+USEUNIT("..\..\LIBS\getopt\getopt1.c");
+USEUNIT("..\..\LIBS\getopt\getopt.c");
+USEUNIT("..\..\strtmesg.cpp");
 //---------------------------------------------------------------------------
 #define Library
 

@@ -2,9 +2,13 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.42 2001-05-17 20:10:22 mbickel Exp $
+//     $Id: edmain.cpp,v 1.43 2001-05-19 13:07:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2001/05/17 20:10:22  mbickel
+//      Fixed: mapeditor was unable to load maps
+//      Removed debugging output from bi3 map loader
+//
 //     Revision 1.41  2001/05/17 14:23:19  mbickel
 //      Rewrote command line parameters of all programs
 //      Made manpages generation optional
@@ -735,7 +739,7 @@ pfont load_font(char* name)
 
 
 
-int mapeditorMainThread ( const void* _mapname )
+int mapeditorMainThread ( void* _mapname )
 {
    const char* mapname = (const char*) _mapname;
    initMapDisplay( );
@@ -888,7 +892,10 @@ int main(int argc, char *argv[] )
    }
 
 
-   initializeEventHandling ( mapeditorMainThread, cl->l().c_str(), icons.mousepointer );
+   char* buf = new char[cl->l().length()+10];
+   strcpy ( buf, cl->l().c_str() );
+   initializeEventHandling ( mapeditorMainThread, buf, icons.mousepointer );
+   delete[] buf;
 
    cursor.hide();
    writegameoptions ();

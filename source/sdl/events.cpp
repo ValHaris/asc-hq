@@ -15,9 +15,16 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.29 2001-05-16 23:21:05 mbickel Exp $
+//     $Id: events.cpp,v 1.30 2001-05-19 13:07:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2001/05/16 23:21:05  mbickel
+//      The data file is mounted using automake
+//      Added sgml documentation
+//      Added command line parsing functionality;
+//        integrated it into autoconf/automake
+//      Replaced command line parsing of ASC and ASCmapedit
+//
 //     Revision 1.28  2001/02/18 15:37:30  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -615,7 +622,7 @@ int gameThreadWrapper ( void* data )
 }
 #endif
 
-void initializeEventHandling ( int (*gamethread)(const void *) , const void *data, void* mousepointer )
+void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mousepointer )
 {
    mouseparams.xsize = 10;
    mouseparams.ysize = 10;
