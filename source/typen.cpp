@@ -355,6 +355,8 @@ tevent :: ~tevent ()
 ///////////////////////////////////////////////////////////////////////////////
 // The new event system here is not yet functional
 
+#if 0
+
 TurnPassed :: TurnPassed () : EventTrigger ( ceventt_turn ), turn( -1 ), move(-1)
 {
 }
@@ -513,3 +515,5 @@ void ChangeGameParameter::write( tnstream& stream )
    stream.writeInt( parameterValue );
 }
 
+
+#endif
