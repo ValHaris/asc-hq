@@ -44,7 +44,6 @@
  class Vehicletype;
  typedef class  Vehicletype*  pvehicletype ;
  typedef class  Building* pbuilding;
- typedef class  Vehicle*  pvehicle;
 
 
 #endif
