@@ -293,7 +293,7 @@ void  loadAllData( bool useCache )
    registerDataLoader( new ItemFiltrationSystem::DataLoader() );
 
 
-   if ( cache.isCurrent() && useCache && false ) {
+   if ( cache.isCurrent() && useCache ) {
       try {
          cache.load();
       }

@@ -26,8 +26,8 @@
  SDLmm::PixelFormat* Surface::default8bit  = NULL;
  SDLmm::PixelFormat* Surface::default32bit = NULL;
 
- 
- void writeDefaultPixelFormat ( SDLmm::PixelFormat pf, tnstream& stream ) 
+
+ void writeDefaultPixelFormat ( SDLmm::PixelFormat pf, tnstream& stream )
  {
     stream.writeInt( 1 );
     stream.writeInt(pf.BitsPerPixel()) ;
@@ -48,7 +48,7 @@
     stream.writeInt(pf.alpha()) ;
 
  }
- 
+
  SDL_PixelFormat* readSDLPixelFormat( tnstream& stream )
  {
     SDL_PixelFormat* pf = new SDL_PixelFormat;
@@ -71,19 +71,19 @@
     pf->alpha = stream.readInt();
     return pf;
  }
- 
+
  void Surface::readDefaultPixelFormat ( tnstream& stream )
  {
      default8bit = new SDLmm::PixelFormat( readSDLPixelFormat( stream ) );
      default32bit = new SDLmm::PixelFormat( readSDLPixelFormat( stream ) );
  }
 
- void Surface::writeDefaultPixelFormat ( tnstream& stream ) 
+ void Surface::writeDefaultPixelFormat ( tnstream& stream )
  {
      ::writeDefaultPixelFormat( GetPixelFormat(),stream );
  }
 
- 
+
 
 void Surface::read ( tnstream& stream )
 {
@@ -112,28 +112,36 @@ void Surface::read ( tnstream& stream )
       if (hd.id == 16974) {
          int bitsPerPixel = stream.readChar();
          int bytesPerPixel = stream.readChar();
-         SDL_Surface* s = NULL;
+         int colorkey = stream.readInt();
          if ( bytesPerPixel == 1 ) {
-            s = SDL_CreateRGBSurface ( SDL_SWSURFACE, hd.x, hd.y, 8, 0xff, 0xff, 0xff, 0xff );
+            SDL_Surface* s = SDL_CreateRGBSurface ( SDL_SWSURFACE, hd.x, hd.y, 8, 0xff, 0xff, 0xff, 0xff );
             Uint8* p = (Uint8*)( s->pixels );
             for ( int y = 0; y < hd.y; ++y )
                for ( int x = 0; x< hd.x; ++x )
                   *(p++) = stream.readChar();
-
+/*
             for ( int i = 0; i < 256; ++i) {
                s->format->palette->colors[i].r = default8bit->palette()->colors[i].r;
                s->format->palette->colors[i].g = default8bit->palette()->colors[i].g;
                s->format->palette->colors[i].b = default8bit->palette()->colors[i].b;
             }
-                  
+*/
+            assignDefaultPalette();
+
          } else {
-            s = SDL_CreateRGBSurface ( SDL_SWSURFACE, hd.x, hd.y, 32, default32bit->Rmask(), default32bit->Gmask(), default32bit->Bmask(), default32bit->Amask() );
+            int Rmask = stream.readInt();
+            int Gmask = stream.readInt();
+            int Bmask = stream.readInt();
+            int Amask = stream.readInt();
+
+            SDL_Surface* s = SDL_CreateRGBSurface ( SDL_SWSURFACE, hd.x, hd.y, 32, Rmask, Gmask, Bmask, Amask );
             Uint32* p = (Uint32*)( s->pixels );
             for ( int y = 0; y < hd.y; ++y )
                for ( int x = 0; x< hd.x; ++x )
                   *(p++) = stream.readInt();
-         } 
-         SetSurface( s );
+            SetSurface( s );
+         }
+         SetColorKey( SDL_SRCCOLORKEY, colorkey );
       } else {
          int w =  (hd.id + 1) * (hd.size + 1) + 4 ;
          char  *pnter = new char [ w ];
@@ -181,16 +189,27 @@ void Surface::write ( tnstream& stream ) const
 
    stream.writeChar ( pf.BitsPerPixel() );
    stream.writeChar ( pf.BytesPerPixel() );
+   stream.writeInt ( GetPixelFormat().colorkey());
    if ( pf.BytesPerPixel() == 1 ) {
       for ( int y = 0; y < h(); ++y )
          for ( int x = 0; x < w(); ++x )
             stream.writeChar( GetPixel(x,y));
    } else {
+      SDLmm::PixelFormat pf = GetPixelFormat();
+      stream.writeInt(pf.Rmask()) ;
+      stream.writeInt(pf.Gmask()) ;
+      stream.writeInt(pf.Bmask()) ;
+      stream.writeInt(pf.Amask()) ;
       for ( int y = 0; y < h(); ++y )
          for ( int x = 0; x < w(); ++x )
             stream.writeInt( GetPixel(x,y));
    }
-   
+
 }
 
+void Surface::detectColorKey (  )
+{
+   if ( GetPixelFormat().BitsPerPixel() > 8 )
+      SetColorKey( SDL_SRCCOLORKEY, GetPixel(0,0));
+}
 

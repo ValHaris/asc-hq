@@ -4,8 +4,13 @@
   <MACROS>
     <VERSION value="BCB.06.00"/>
     <PROJECT value="weaponguide.exe"/>
-    <OBJFILES value="obj\weaponguide.obj obj\itemrepository.obj obj\research.obj 
-      obj\groupfile.obj obj\guidegenerator.obj obj\infopage.obj obj\sgstream.obj"/>
+    <OBJFILES value="..\..\..\..\asc\source\tools\win\obj\weaponguide.obj 
+      ..\..\..\..\asc\source\tools\win\obj\itemrepository.obj 
+      ..\..\..\..\asc\source\tools\win\obj\research.obj 
+      ..\..\..\..\asc\source\tools\win\obj\groupfile.obj 
+      ..\..\..\..\asc\source\tools\win\obj\guidegenerator.obj 
+      ..\..\..\..\asc\source\tools\win\obj\infopage.obj 
+      ..\..\..\..\asc\source\tools\win\obj\sgstream.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>

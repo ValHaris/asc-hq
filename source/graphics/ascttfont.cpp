@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include "ascttfont.h"
 #include <map>
+#include <cstdlib>
 //#include "misc.h"
 
 const ASCRGBColor ASCRGBColor::BLACKCOLOR(0,0,0);
@@ -47,7 +48,7 @@ SDL_Surface* ASCTTFont::output(const ASCTTFontRenderAlgorithm& alg, const ASCStr
 //*****************************************************************************************************************************************
 ASCTTFontFactory::ASCTTFontFactory(){
   TTF_Init();
-  atexit(TTF_Quit);
+  std::atexit(TTF_Quit);
 }
 
 ASCTTFontFactory::~ASCTTFontFactory(){

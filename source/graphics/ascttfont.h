@@ -17,8 +17,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef ASCTTFONT_H
-#define ASCTTFONT_H
+#ifndef ascttfontH
+#define ascttfontH
 
 #define ASCRect SDL_Rect
 #include <SDL_ttf.h>

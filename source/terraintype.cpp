@@ -422,7 +422,7 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
          s += strrr(terraintype->id);
       }
       pc.addImage ( "picture", image, s + weatherAbbrev[w] );
-
+      image.detectColorKey();
    } else {
       pc.addInteger ( "GFX_Picture", bi_pict );
       if  ( bi_pict < 0 )

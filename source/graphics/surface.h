@@ -42,7 +42,12 @@
 
       void writeDefaultPixelFormat ( tnstream& stream ) ;
       static void readDefaultPixelFormat ( tnstream& stream );
+
+      //! assigns the default ASC palette to the surface (only for 8 Bit surfaces)
       void assignDefaultPalette();
+
+      //! tries to automatically detect the color key of the surface
+      void detectColorKey();
    private:
       static SDLmm::PixelFormat* default8bit;
       static SDLmm::PixelFormat* default32bit;
