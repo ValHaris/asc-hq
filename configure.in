@@ -364,7 +364,7 @@ traninfo.raw attack.raw hexfeld.raw mapbkgr.raw \
 hex2oct.raw weapinfo.raw amatur.raw hxborder.raw \
 leergui.raw guiremov.raw  *.tec \
 hexmines.raw curshex2.raw markedfield.pcx curshex.raw \
-railstat.map cancel.nic poweron.nic poweroff.nic \
+railstations2.map cancel.nic poweron.nic poweroff.nic \
 extload.nic consttnk.nic reacfoff.nic reacfire.nic \
 loading.nic viewmap.nic dig.nic abriss.nic \
 building.nic refueld.nic refuel.nic repair.nic \
