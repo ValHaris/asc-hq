@@ -30,6 +30,8 @@
 #include "loadpcx.h"
 
 
+const char* fileNameDelimitter = " =*/+<>,";
+
 
          template <class T>
          class PropertyTemplate: public PropertyContainer::Property  {
@@ -1031,7 +1033,7 @@ void* ImageProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) cons
    void* img;
 
    try {
-      StringTokenizer st ( entry.value, true );
+      StringTokenizer st ( entry.value, fileNameDelimitter );
       FileName fn = st.getNextToken();
       fn.toLower();
       if ( fn.suffix() == "png" ) {
@@ -1081,7 +1083,7 @@ ASCString ImageProperty::toString() const
 ImageArrayProperty::PropertyType ImageArrayProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
    try {
-      StringTokenizer st ( entry.value );
+      StringTokenizer st ( entry.value, fileNameDelimitter );
       ASCString imgName = st.getNextToken();
       ASCString imgNumS = st.getNextToken();
       if ( imgNumS.empty() )

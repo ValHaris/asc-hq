@@ -76,6 +76,7 @@ class TextPropertyGroup {
          void error ( const ASCString& msg );
          bool processAlias( Entry& e, Entries& entriesToAdd, EntryPointerList& markAsResolved );
          int findGeneration ( Entry* e );
+         ASCString listInheritanceFilenames();
       public:
          void addEntry( const Entry& entry );
          Entry* find( const ASCString& n );

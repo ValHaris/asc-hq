@@ -102,7 +102,7 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( Vehicletyp
    for ( int l = 0; l < 8; l++ )
       fzt->aiparam[ ai->getPlayerNum() ]->threat.threat[l] = weapthreat[l];
 
-   value = fzt->armor * value_armorfactor * (100 - getdamage()) / 100 ;
+   value = fzt->armor * value_armorfactor * (100 - getdamage()) / 100;
 
    for ( int s = 0; s < 7; )
       if ( weapthreat[s] < weapthreat[s+1] ) {

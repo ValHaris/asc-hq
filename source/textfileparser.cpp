@@ -72,7 +72,8 @@ TextPropertyGroup* TextPropertyList::get ( int id )
 
 void TextPropertyGroup :: error ( const ASCString& msg )
 {
-   fatalError ( "Error evaluating file " + location + "\n" + msg );
+   fatalError ( "Error evaluating file " + location + "\n" + msg + "\nThe inheritance is\n" + listInheritanceFilenames() );
+
 }
 
 void TextPropertyGroup :: print( int indent )
@@ -117,7 +118,7 @@ void TextPropertyGroup :: buildInheritance(TextPropertyList& tpl )
             TextPropertyGroup* p = tpl.get ( *i );
             if ( p ) {
                parents.push_back ( p );
-               displayLogMessage( 10, ASCString("  entering parent with ID ") + strrr(*i) + "\n" );
+               displayLogMessage( 10, ASCString("  entering parent with ID ") + strrr(*i) + " ("+p->location+")\n" );
                p->buildInheritance( tpl );
                displayLogMessage( 10, ASCString("  leaving parent with ID ") + strrr(*i) + "\n" );
             } else
@@ -149,6 +150,14 @@ void TextPropertyGroup :: buildInheritance(TextPropertyList& tpl )
    }
 }
 
+ASCString TextPropertyGroup :: listInheritanceFilenames()
+{
+   ASCString s;
+   for ( Parents::iterator p = parents.begin(); p != parents.end(); p++ )
+      s += (*p)->listInheritanceFilenames();
+   s += location + "\n";
+   return s;
+}
 
 void TextPropertyGroup :: resolveAllAlias( )
 {
@@ -189,8 +198,8 @@ void TextPropertyGroup :: resolveAllAlias( )
 
       if ( !resolvedCounter && !unresolved.empty() )
          for ( Unresolved::iterator i = unresolved.begin(); i != unresolved.end(); i++ )
-            error ( "could not resolve the reference " + (*i)->value + " for " + typeName + " :: " + (*i)->propertyName  );
-
+            error (  "could not resolve the reference " + (*i)->value + " for " + typeName + " :: " + (*i)->propertyName  );
+         
       loop++;
    } while ( !unresolved.empty() );
 }

@@ -1590,11 +1590,10 @@ void  mainloop ( void )
 
             case ct_f8:
                {
-                  int color;
-                  if ( getactfield()->vehicle )
-                     color = getactfield()->vehicle->color / 8 ;
-                  else
-                     color = actmap->actplayer;
+                  int color = actmap->actplayer;
+                  for ( int p = 0; p < 8; p++ )
+                     if ( actmap->player[p].stat == Player::computer && actmap->player[p].exist() )
+                        color = p;
 
                   if ( actmap->player[color].ai ) {
                      AI* ai = (AI*) actmap->player[color].ai;

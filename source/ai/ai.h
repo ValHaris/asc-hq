@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: ai.h,v 1.16 2003-03-30 13:19:47 mbickel Exp $
+//     $Id: ai.h,v 1.17 2003-03-31 20:29:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2003/03/30 13:19:47  mbickel
+//      Fixed: ai warnings
+//      Fixed: wrong hotkey for seeting unit properties in containers
+//
 //     Revision 1.15  2003/03/08 14:24:38  mbickel
 //      Code cleanup
 //      AI fixes and improvements
@@ -349,7 +353,7 @@
                   int enemyOrgDamage;
                   int enemyDamage;
                   int weapNum;
-                  int result;
+                  float result;
                   int moveDist;
                   bool neighbouringFieldsReachable[ sidenum ]; // used for the hemming tactic
                   float positionThreat;

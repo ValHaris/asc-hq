@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.99 2003-03-30 13:19:46 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.100 2003-03-31 20:29:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.99  2003/03/30 13:19:46  mbickel
+//      Fixed: ai warnings
+//      Fixed: wrong hotkey for seeting unit properties in containers
+//
 //     Revision 1.98  2003/03/26 19:16:46  mbickel
 //      Fixed AI bugs
 //      Fixed clipboard bugs
@@ -3900,8 +3904,10 @@ void tbuildingcargo :: checkforadditionalkeys ( tkey ch )
        if ( ch == ct_c )
           unit_cargo( building->loading[ cursorpos ] );
 
-       if ( ch == ct_c + ct_stp )
+       if ( ch == ct_c + ct_stp ) {
+          clipBoard.clear();
           clipBoard.addUnit( building->loading[ cursorpos ] );
+       }
    }
    if ( ch == ct_v + ct_stp ) {
       Vehicle* veh = clipBoard.pasteUnit();

@@ -1608,11 +1608,11 @@ int   tnsguiiconputgroundmine::available    ( void )
 {
    if (moveparams.movestatus == 90) { 
       pfield fld = getactfield(); 
-      if ( (fld->typ->art & getTerrainBitType(cbwater)).none() )
+      if ( (fld->bdt & getTerrainBitType(cbwater)).none() )
          if ( fld->a.temp & 1)
             if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
-               return true; 
-   } 
+               return true;
+   }
    return 0;
 }
 
@@ -1623,9 +1623,9 @@ tnsguiiconputantitankmine::tnsguiiconputantitankmine ( void )
    filename = "tankmine" ;
 }
 
-void  tnsguiiconputantitankmine::exec         ( void ) 
+void  tnsguiiconputantitankmine::exec         ( void )
 {
-   legemine(cmantitankmine, 1 ); 
+   legemine(cmantitankmine, 1 );
    displaymap();
 }
 
@@ -1660,10 +1660,10 @@ int   tnsguiiconputfloatingmine::available    ( void )
 {
    if (moveparams.movestatus == 90) {
       pfield fld = getactfield();
-      if ( (fld->typ->art & getTerrainBitType(cbwater0)).any()
-           || (fld->typ->art & getTerrainBitType(cbwater1)).any()
-           || (fld->typ->art & getTerrainBitType(cbwater2)).any()
-           || (fld->typ->art & getTerrainBitType(cbwater3)).any() )
+      if ( (fld->bdt & getTerrainBitType(cbwater0)).any()
+           || (fld->bdt & getTerrainBitType(cbwater1)).any()
+           || (fld->bdt & getTerrainBitType(cbwater2)).any()
+           || (fld->bdt & getTerrainBitType(cbwater3)).any() )
          if (fld->a.temp & 1 )
             if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
                return true;

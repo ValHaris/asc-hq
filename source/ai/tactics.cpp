@@ -122,7 +122,7 @@ void AI :: searchTargets ( pvehicle veh, const MapCoordinate3D& pos, TargetVecto
                hemmingFactor += AttackFormula::getHemmingFactor ( nf );
          }
 
-         mv->result = int( getAttackValue ( uau, mv->attacker, mv->enemy, hemmingFactor ));
+         mv->result = getAttackValue ( uau, mv->attacker, mv->enemy, hemmingFactor );
 
          if ( mv->result > 0 )
             tl.push_back ( mv );
@@ -683,7 +683,7 @@ AI::AiResult AI::tactics( void )
                         int nwid = finalPositions[i]->networkid;
                         _vision = org_vision;
                         MapCoordinate3D dst = getNeighbouringFieldCoordinate( MapCoordinate3D( enemy->xpos, enemy->ypos, finalPositions[i]->height ), i);
-                        dst.setnum ( dst.x, dst.y, finalPositions[i]->getPosition3D().getNumericalHeight() );
+                        dst.setnum ( dst.x, dst.y, mvci->movePos.getNumericalHeight() );
                         moveUnit ( finalPositions[i], dst );
                         _vision = visible_all;
 
