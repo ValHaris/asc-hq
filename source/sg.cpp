@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: sg.cpp,v 1.165 2001-09-13 17:43:12 mbickel Exp $
+//     $Id: sg.cpp,v 1.166 2001-09-25 20:15:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.165  2001/09/13 17:43:12  mbickel
+//      Many, many bug fixes
+//
 //     Revision 1.164  2001/08/27 21:03:55  mbickel
 //      Terraintype graphics can now be mounted from any number of PNG files
 //      Several AI improvements
@@ -1274,13 +1277,15 @@ void loadStartupMap ( const char *gameToLoad=NULL )
 
    } else {  // resort to loading defaults
 
-     ASCString s;
+     ASCString s = "paybacktime.map";
+     /*
      if ( CGameOptions::Instance()->startupcount < 4 ) {
         s = "tutor0" ;
      } else {
         s = "railstat";
      }
      s += &mapextension[1];
+     */
 
      int maploadable;
      {
