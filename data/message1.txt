@@ -101,23 +101,23 @@ You have %s outstanding from %s; %s of it was transferred this turn#crt#
 20001
 name
 20002
-class
+description
 20003 
-experience
+experience $ right click to show all symbols
 20004
 fuel
 20005
 damage
 20006
-movement remaining$click to toggle between turn / tank
+movement remaining$ left click to toggle between turn / tank
 20007
 armor
 20008
-strength of weapons$click to show further infos
+strength of weapons$right click to show further infos
 20009
-type of weapon
+type of weapon$right click to show further infos
 20010
-ammo
+ammo$right click to show further infos
 20011
 heights
 20012
