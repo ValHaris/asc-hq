@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.69 2000-08-26 15:33:37 mbickel Exp $
+//     $Id: controls.cpp,v 1.70 2000-08-28 14:37:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.69  2000/08/26 15:33:37  mbickel
+//      Warning message displayed if empty password is entered
+//      pcxtank now displays error messages
+//
 //     Revision 1.68  2000/08/25 13:42:51  mbickel
 //      Fixed: zoom dialogbox in mapeditor was invisible
 //      Fixed: ammoproduction: no numbers displayed
@@ -5215,12 +5219,40 @@ void initchoosentechnology( void )
    }
 }
 
-void newturnforplayer ( int forcepasswordchecking, char* password )
-{
 
+void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
+{
    checkalliances_at_beginofturn ();
 
    if ( actmap->player[actmap->actplayer].stat == ps_human ) {
+
+      int humannum = 0;
+      for ( int i = 0; i < 8; i++ )
+         if ( actmap->player[i].existent )
+            if ( actmap->player[i].stat == ps_human )
+               humannum++;
+
+      if ( humannum > 1  ||  forcepasswordchecking > 0 ) {
+         tlockdispspfld ldsf;
+         backgroundpict.paint();
+
+         if ( (actmap->player[actmap->actplayer].passwordcrc && actmap->player[actmap->actplayer].passwordcrc != CGameOptions::Instance()->defaultpassword ) // && actmap->player[actmap->actplayer].passwordcrc != encodepassword ( password )
+            || actmap->time.a.turn == 1 || (actmap->network && actmap->network->globalparams.reaskpasswords) ) {
+               if ( forcepasswordchecking < 0 ) {
+                  erasemap( actmap );
+                  throw tnomaploaded();
+               } else {
+                  int stat;
+                  do {
+                     stat = enterpassword ( &actmap->player[actmap->actplayer].passwordcrc );
+                  } while ( !actmap->player[actmap->actplayer].passwordcrc && stat==1 && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
+               }
+         } else
+            displaymessage("next player is:\n%s",3,actmap->player[actmap->actplayer].name );
+      }
+
+      checkforreplay();
+
       if (actmap->player[actmap->actplayer].research.activetechnology == NULL)
          if ( actmap->player[actmap->actplayer].research.progress ) {
             int mx  = actmap->player[actmap->actplayer].research.progress;
@@ -5250,59 +5282,20 @@ void newturnforplayer ( int forcepasswordchecking, char* password )
                  actmap->player[actmap->actplayer].research.progress += mx;
          } 
       } 
-   
+
+      if ( actmap->lastjournalchange.abstime )
+         if ( (actmap->lastjournalchange.a.turn == actmap->time.a.turn ) ||
+              (actmap->lastjournalchange.a.turn == actmap->time.a.turn-1  &&  actmap->lastjournalchange.a.move > actmap->actplayer ) )
+                 viewjournal();
+
       dashboard.x = 0xffff; 
       
       moveparams.movestatus = 0; 
    
-      int humannum = 0;
-      for ( int i = 0; i < 8; i++ )
-         if ( actmap->player[i].existent )
-            if ( actmap->player[i].stat == ps_human )
-               humannum++;
-         
-   
-      if ( humannum > 1  ||  forcepasswordchecking > 0 ) {
-         tlockdispspfld ldsf;
-         backgroundpict.paint();
 
-         if ( (actmap->player[actmap->actplayer].passwordcrc && actmap->player[actmap->actplayer].passwordcrc != CGameOptions::Instance()->defaultpassword && actmap->player[actmap->actplayer].passwordcrc != encodepassword ( password )) 
-            || actmap->time.a.turn == 1 || (actmap->network && actmap->network->globalparams.reaskpasswords) ) {
-               if ( forcepasswordchecking < 0 ) {
-                  erasemap( actmap );
-                  throw tnomaploaded();
-               } else {
-                  int stat;
-                  do {
-                     stat = enterpassword ( &actmap->player[actmap->actplayer].passwordcrc );
-                  } while ( !actmap->player[actmap->actplayer].passwordcrc && stat==1 && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
-               }
-         } else
-            displaymessage("next player is:\n%s",3,actmap->player[actmap->actplayer].name );
-      }
    }
    computeview(); 
 
-/*
-   // Wenn der allererste player zum ersten mal drankommt, muá auch fuer die anderen player die view computet werden
-   if ( actmap->time.turn == 1 ) {
-      int i = 0;
-      while ( !actmap->player[i].existent )
-         i++;
-
-      if ( actmap->actplayer == i) {       // wirklich der erste player
-         npush ( actmap->playerview );
-         for ( int i = actmap->actplayer+1; i< 8; i++ ) {
-            actmap->playerview = i;
-            computeview();
-         }
-
-         npop ( actmap->playerview );
-      }
-
-
-   }
-*/
    actmap->playerview = actmap->actplayer;
 
    if ( startreplaylate ) {
@@ -5325,28 +5318,16 @@ void newturnforplayer ( int forcepasswordchecking, char* password )
       actmap->replayinfo->guidata[actmap->actplayer] = new tmemorystreambuf;
       actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], 2 );
 
-      removemessage ();
+      // removemessage ();
 
    }
 
-   {
-      /*
-      int xp = actmap->cursorpos.position[ actmap->actplayer ].cx;
-      int yp = actmap->cursorpos.position[ actmap->actplayer ].cy;
-      int xss = idisplaymap.getscreenxsize();
-      int yss = idisplaymap.getscreenysize();
-      */
 
-      actmap->xpos = actmap->cursorpos.position[ actmap->actplayer ].sx;
-      actmap->ypos = actmap->cursorpos.position[ actmap->actplayer ].sy;
+   actmap->xpos = actmap->cursorpos.position[ actmap->actplayer ].sx;
+   actmap->ypos = actmap->cursorpos.position[ actmap->actplayer ].sy;
 
-      cursor.gotoxy ( actmap->cursorpos.position[ actmap->actplayer ].cx, actmap->cursorpos.position[ actmap->actplayer ].cy , 0);
-   
-   }
-   if ( actmap->lastjournalchange.abstime ) 
-      if ( (actmap->lastjournalchange.a.turn == actmap->time.a.turn ) || 
-           (actmap->lastjournalchange.a.turn == actmap->time.a.turn-1  &&  actmap->lastjournalchange.a.move > actmap->actplayer ) )
-              viewjournal();
+   cursor.gotoxy ( actmap->cursorpos.position[ actmap->actplayer ].cx, actmap->cursorpos.position[ actmap->actplayer ].cy , 0);
+
 
    dashboard.x = 0xffff;
    transfer_all_outstanding_tribute();
@@ -5358,74 +5339,45 @@ void newturnforplayer ( int forcepasswordchecking, char* password )
 
 void sendnetworkgametonextplayer ( int oldplayer, int newplayer )
 {
+/*
    int num = 0;
    int pl[8];
 
-   {
-      for (int i = 0; i < 8; i++) {
-         if ( actmap->player[i].existent )
-            if ( actmap->player[i].firstvehicle || actmap->player[i].firstbuilding ) {
-               pl[num] = i;
-               num++;
-             }
-      } /* endfor */
-   }
-/*
-   if ( num == 1  && !actmap->continueplaying ) {
-      displaymessage ( "You won !\n press ok to exit to main menu",1);
-      erasemap();
-      throw tnomaploaded ();
-   }        
-*/
+   for (int i = 0; i < 8; i++) {
+      if ( actmap->player[i].existent )
+         if ( actmap->player[i].firstvehicle || actmap->player[i].firstbuilding ) {
+            pl[num] = i;
+            num++;
+          }
+   }  endfor */
 
-   if ( oldplayer == -1  ||  actmap->network->player[ newplayer ].compposition == actmap->network->player[ oldplayer ].compposition ) {
-      tlockdispspfld ldsf;
 
-      newturnforplayer( 0 );
-      checkforreplay();
-   } else {
-      tnetworkcomputer* compi = &actmap->network->computer[ actmap->network->player[ oldplayer ].compposition ];
-      while ( compi->send.transfermethod == NULL  ||  compi->send.transfermethodid == 0 )
-           setupnetwork( actmap->network, 2, oldplayer );
+   tnetworkcomputer* compi = &actmap->network->computer[ actmap->network->player[ oldplayer ].compposition ];
+   while ( compi->send.transfermethod == NULL  ||  compi->send.transfermethodid == 0 )
+        setupnetwork( actmap->network, 2, oldplayer );
 
-      displaymessage ( " starting data transfer ",0);
+   displaymessage ( " starting data transfer ",0);
 
-      try {
-         compi->send.transfermethod->initconnection ( TN_SEND );
-         compi->send.transfermethod->inittransfer ( &compi->send.data );
-   
-         char* desciption = NULL;
-/*         {
-            tenterfiledescription efd;
-            efd.init();
-            efd.run();
-            desciption = efd.description;
-            efd.done();
-         }
-*/   
-   
-         tnetworkloaders nwl;
-         nwl.savenwgame ( compi->send.transfermethod->stream, desciption );
-   
-         if ( desciption ) 
-            delete desciption;
-   
-         compi->send.transfermethod->closetransfer();
-         compi->send.transfermethod->closeconnection();
-      } /* endtry */
-      catch ( tfileerror ) {
-         displaymessage ( "error saving file", 1 );
-      } /* endcatch */
+   try {
+      compi->send.transfermethod->initconnection ( TN_SEND );
+      compi->send.transfermethod->inittransfer ( &compi->send.data );
 
-      erasemap();
-      displaymessage( " data transfer finished",1);
+      tnetworkloaders nwl;
+      nwl.savenwgame ( compi->send.transfermethod->stream, NULL );
 
-      throw tnomaploaded ();
-   }
+      compi->send.transfermethod->closetransfer();
+      compi->send.transfermethod->closeconnection();
+   } /* endtry */
+   catch ( tfileerror ) {
+      displaymessage ( "error saving file", 1 );
+   } /* endcatch */
+
+   erasemap();
+   displaymessage( " data transfer finished",1);
+
+   throw tnomaploaded ();
+
 }
-
-#define ignorecomputers
-
 
 
 
@@ -5637,23 +5589,31 @@ void nextPlayer( void )
 
    int newplayer = actmap->actplayer;
    actmap->playerview = actmap->actplayer;
-   if ( actmap->network &&  oldplayer != actmap->actplayer)
+
+   if ( actmap->network &&  oldplayer != actmap->actplayer && actmap->network->player[ newplayer ].compposition != actmap->network->player[ oldplayer ].compposition )
       sendnetworkgametonextplayer ( oldplayer, newplayer );
    else {
-
+/*
       tlockdispspfld ldsf;
 
-   int forcepwd;  // Wenn der aktuelle player gerade verloren hat, muá fuer den n„chsten player die Passwortabfrage kommen, auch wenn er nur noch der einzige player ist !
-   if ( oldplayer >= 0  &&  !actmap->player[oldplayer].existent )
+      int forcepwd;  // Wenn der aktuelle player gerade verloren hat, muá fuer den n„chsten player die Passwortabfrage kommen, auch wenn er nur noch der einzige player ist !
+      if ( oldplayer >= 0  &&  !actmap->player[oldplayer].existent )
          forcepwd = 1;
-   else
+      else
          forcepwd = 0;
 
-     newturnforplayer( forcepwd );
-     checkforreplay();
+      newturnforplayer( forcepwd );
+*/
    }
 } 
 
+
+void runai( void )
+{
+   checkalliances_at_beginofturn ();
+   computeview();
+   displaymessage("no AI available yet", 1 );
+}
 
 void next_turn ( void )
 {
@@ -5661,22 +5621,33 @@ void next_turn ( void )
    if (bb)  
       cursor.hide();
 
-   #ifdef ignorecomputers
    do {
-   #endif
-
-
      endTurn();
      nextPlayer();
+     if ( actmap->player[actmap->actplayer].stat == ps_computer )
+        runai();
 
-   #ifdef ignorecomputers
    } while ( actmap->player[actmap->actplayer].stat != ps_human ); /* enddo */
-   #endif
+
+   newTurnForHumanPlayer();
 
    if (bb)  
      cursor.display();
 }
 
+
+void initNetworkGame ( void )
+{
+   while ( actmap->player[actmap->actplayer].stat != ps_human ) {
+
+     if ( actmap->player[actmap->actplayer].stat == ps_computer )
+        runai();
+     endTurn();
+     nextPlayer();
+   }
+
+   newTurnForHumanPlayer( 0 );
+}
 
 
 void continuenetworkgame ( void )
@@ -5760,10 +5731,7 @@ void continuenetworkgame ( void )
    if ( actmap->xsize <= 0 || actmap->ysize <= 0 )
       throw tnomaploaded();
 
-   newturnforplayer( 0 );
-
-   checkforreplay();
-
+   initNetworkGame( );
 }
 
 

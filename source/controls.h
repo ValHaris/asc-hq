@@ -1,6 +1,9 @@
-//     $Id: controls.h,v 1.21 2000-08-13 09:53:58 mbickel Exp $
+//     $Id: controls.h,v 1.22 2000-08-28 14:37:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/08/13 09:53:58  mbickel
+//      Refuelling is now logged for replays
+//
 //     Revision 1.20  2000/08/12 12:52:43  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -667,7 +670,7 @@ class tsearchreactionfireingunits : public treactionfire {
                 ~tsearchreactionfireingunits();
       };
 
-extern void newturnforplayer ( int forcepasswordchecking, char* password = NULL );
+extern void initNetworkGame( void );
 
 class ReplayMapDisplay : public MapDisplayInterface {
            MapDisplay* mapDisplay;

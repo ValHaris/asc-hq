@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.84 2000-08-26 15:33:43 mbickel Exp $
+//     $Id: sg.cpp,v 1.85 2000-08-28 14:37:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.84  2000/08/26 15:33:43  mbickel
+//      Warning message displayed if empty password is entered
+//      pcxtank now displays error messages
+//
 //     Revision 1.83  2000/08/21 17:51:00  mbickel
 //      Fixed: crash when unit reaching max experience
 //      Fixed: crash when displaying research image
@@ -3659,8 +3663,7 @@ int main(int argc, char *argv[] )
                displayed = 1;
 
                if ( emailgame ) {
-                  newturnforplayer ( 0 );
-                  checkforreplay();
+                  initNetworkGame ( );
                }
 
                mainloop();

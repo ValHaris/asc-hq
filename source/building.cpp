@@ -1,6 +1,13 @@
-//     $Id: building.cpp,v 1.45 2000-08-25 13:42:50 mbickel Exp $
+//     $Id: building.cpp,v 1.46 2000-08-28 14:37:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2000/08/25 13:42:50  mbickel
+//      Fixed: zoom dialogbox in mapeditor was invisible
+//      Fixed: ammoproduction: no numbers displayed
+//      game options: produceammo and fillammo are now modified together
+//      Fixed: sub could not be seen when standing on a mine
+//      Some AI improvements
+//
 //     Revision 1.44  2000/08/13 09:53:55  mbickel
 //      Refuelling is now logged for replays
 //
@@ -1509,7 +1516,7 @@ int   ctransportcontrols :: moveavail ( pvehicle eht )
          return 0;
    } else
       if ( vehicle->height == chsatellit )
-         if ( (vehicle->height == eht->height  && ( eht->height & eht->typ->height)) || (eht->functions & cf_trooper) )  // to be sure...
+         if ( (vehicle->height & eht->typ->height) || (eht->functions & cf_trooper) )  // to be sure...
             return 2;
          else
             return 0;
