@@ -1,0 +1,160 @@
+/*
+    This file is part of Advanced Strategic Command; http://www.asc-hq.de
+    Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; see the file COPYING. If not, write to the 
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    Boston, MA  02111-1307  USA
+*/
+
+#include <stdio.h> 
+// #include <direct.h> 
+
+
+
+template<class T> dynamic_queue<T> :: dynamic_queue ( void )
+{
+   first = 0;
+   last = 0;
+   blksize = 10;
+   size = blksize;
+   buf = new T[size];
+}
+
+template<class T> void dynamic_queue<T> :: putval ( T a )
+{
+   if ( first >= size ) {
+      int newsize = ((first+1) / blksize + 1) * blksize;
+      T* temp = new T [ newsize ];
+      for ( int i = 0; i < size; i++ )
+         temp[i] = buf[i];
+
+      size=newsize;
+      delete[] buf;
+      buf = temp;
+   }
+   buf[first] = a;
+   first++;
+} 
+
+template<class T> int dynamic_queue<T> :: valavail ( void )
+{
+   if ( first > last )
+      return 1;
+   else 
+      return 0;
+} 
+
+template<class T> T dynamic_queue<T> :: getval ( void )
+{
+   T b = buf[last];
+   last++;
+   if ( last >= first ) {
+      first = 0;
+      last = 0;
+   }
+   return b;
+} 
+
+
+template<class T> dynamic_queue<T> :: ~dynamic_queue()
+{
+   delete[] buf;
+}
+
+
+
+
+
+template<class T> dynamic_array<T> :: dynamic_array ( void )
+{
+   maxaccessed = -1;
+   blksize = 10;
+   size = 0;
+   buf = NULL;
+//   resize ( blksize );
+}
+template<class T> dynamic_array<T> :: dynamic_array ( int sze )
+{
+   maxaccessed = -1;
+   blksize = 10;
+   size = 0;
+   buf = NULL;
+//   resize ( sze );
+}
+
+template<class T> void dynamic_array<T> :: resize ( int newsize )
+{
+   T* temp = new T [ newsize ];
+   if ( buf ) {
+      for ( int i = 0; i < size; i++ )
+         temp[i] = buf[i];
+    /*
+      for ( int j = size; j < newsize; j++ )
+         temp[j] = 0;
+     */
+      delete[] buf;
+   }
+
+   size=newsize;
+   buf = temp;
+}
+
+
+template<class T> T& dynamic_array<T> :: operator[]( int a )
+{
+   if ( a > maxaccessed )
+      maxaccessed = a;
+
+   if ( a >= size ) {
+      int newsize = ((a+1) / blksize + 1) * blksize;
+      resize ( newsize );
+   }
+   return buf[a];
+} 
+
+template<class T> dynamic_array<T> :: ~dynamic_array()
+{
+   delete[] buf;
+}
+
+
+template<class T> int dynamic_array<T> :: getlength( void )
+{
+   return maxaccessed;
+} 
+
+
+
+template<class T> void dynamic_initialized_array<T> :: resize ( int newsize )
+{
+   int oldsize = size;
+   dynamic_array :: resize ( newsize );
+   for ( int i = oldsize; i < newsize; i++ )
+      buf[i] = initval;
+}
+
+template<class T> dynamic_initialized_array<T> :: dynamic_initialized_array ( T ival )
+{
+   initval = ival;
+}
+
+template<class T> dynamic_initialized_array<T> :: dynamic_initialized_array ( T ival, int sze )
+                                             : dynamic_array<T> ( sze )
+{
+   initval = ival;
+}
+
+
+

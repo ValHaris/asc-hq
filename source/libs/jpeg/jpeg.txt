@@ -1,0 +1,163 @@
+cd d:\watcom\sg\jpeg
+wmake -f d:\watcom\sg\jpeg\jpeg.mk -h -e
+wpp386 jdatasrc.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+jdatasrc.cpp(173): Warning! W014: (col 1) no reference to symbol 'cinfo' 
+jdatasrc.cpp(173): Note! N392: (col 1) 'jpeg_decompress_struct * cinfo' in 'void term_source( jpeg_decompress_struct * )' defined in: jdatasrc.cpp(170) (col 31) 
+wpp386 jdcoefct.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+jdcoefct.cpp(231): Warning! W014: (col 1) no reference to symbol 'cinfo' 
+jdcoefct.cpp(231): Note! N392: (col 1) 'jpeg_decompress_struct * cinfo' in 'int dummy_consume_data( jpeg_decompress_struct * )' defined in: jdcoefct.cpp(228) (col 38) 
+wpp386 jdcolor.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+jdcolor.cpp(296): Warning! W014: (col 1) no reference to symbol 'cinfo' 
+jdcolor.cpp(296): Note! N392: (col 1) 'jpeg_decompress_struct * cinfo' in 'void start_pass_dcolor( jpeg_decompress_struct * )' defined in: jdcolor.cpp(293) (col 37) 
+wpp386 jddctmgr.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+wpp386 jdhuff.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+wpp386 jdinput.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+wpp386 jdmainct.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+wpp386 jdmarker.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+jdmarker.cpp(248): Warning! W555: (col 43) expression for 'while' is always false 
+jdmarker.cpp(250): Warning! W555: (col 56) expression for 'while' is always false 
+jdmarker.cpp(251): Warning! W555: (col 56) expression for 'while' is always false 
+jdmarker.cpp(252): Warning! W555: (col 55) expression for 'while' is always false 
+jdmarker.cpp(253): Warning! W555: (col 56) expression for 'while' is always false 
+jdmarker.cpp(259): Warning! W555: (col 33) expression for 'while' is always false 
+jdmarker.cpp(282): Warning! W555: (col 58) expression for 'while' is always false 
+jdmarker.cpp(283): Warning! W555: (col 38) expression for 'while' is always false 
+jdmarker.cpp(286): Warning! W555: (col 58) expression for 'while' is always false 
+jdmarker.cpp(290): Warning! W555: (col 59) expression for 'while' is always false 
+jdmarker.cpp(312): Warning! W555: (col 43) expression for 'while' is always false 
+jdmarker.cpp(314): Warning! W555: (col 36) expression for 'while' is always false 
+jdmarker.cpp(326): Warning! W555: (col 39) expression for 'while' is always false 
+jdmarker.cpp(327): Warning! W555: (col 38) expression for 'while' is always false 
+jdmarker.cpp(344): Warning! W555: (col 52) expression for 'while' is always false 
+jdmarker.cpp(348): Warning! W555: (col 36) expression for 'while' is always false 
+jdmarker.cpp(350): Warning! W555: (col 36) expression for 'while' is always false 
+jdmarker.cpp(352): Warning! W555: (col 36) expression for 'while' is always false 
+jdmarker.cpp(357): Warning! W555: (col 32) expression for 'while' is always false 
+jdmarker.cpp(429): Warning! W555: (col 43) expression for 'while' is always false 
+jdmarker.cpp(433): Warning! W555: (col 42) expression for 'while' is always false 
+jdmarker.cpp(440): Warning! W555: (col 46) expression for 'while' is always false 
+jdmarker.cpp(448): Warning! W555: (col 48) expression for 'while' is always false 
+jdmarker.cpp(451): Warning! W555: (col 52) expression for 'while' is always false 
+jdmarker.cpp(460): Warning! W555: (col 49) expression for 'while' is always false 
+jdmarker.cpp(499): Warning! W555: (col 43) expression for 'while' is always false 
+jdmarker.cpp(503): Warning! W555: (col 38) expression for 'while' is always false 
+jdmarker.cpp(518): Warning! W555: (col 46) expression for 'while' is always false 
+jdmarker.cpp(520): Warning! W555: (col 44) expression for 'while' is always false 
+jdmarker.cpp(531): Warning! W555: (col 68) expression for 'while' is always false 
+jdmarker.cpp(555): Warning! W555: (col 43) expression for 'while' is always false 
+jdmarker.cpp(560): Warning! W555: (col 40) expression for 'while' is always false 
+jdmarker.cpp(604): Warning! W389: (col 50) integral value may be truncated during assignment or initialization 
+jdmarker.cpp(605): Warning! W389: (col 51) integral value may be truncated during assignment or initialization 
+jdmarker.cpp(618): Warning! W555: (col 69) expression for 'while' is always false 
+jdmarker.cpp(680): Warning! W555: (col 70) expression for 'while' is always false 
+jdmarker.cpp(699): Warning! W555: (col 43) expression for 'while' is always false 
+jdmarker.cpp(710): Warning! W555: (col 41) expression for 'while' is always false 
+jdmarker.cpp(751): Warning! W555: (col 45) expression for 'while' is always false 
+jdmarker.cpp(851): Warning! W555: (col 43) expression for 'while' is always false 
+jdmarker.cpp(880): Warning! W555: (col 38) expression for 'while' is always false 
+jdmarker.cpp(889): Warning! W555: (col 40) expression for 'while' is always false 
+jdmarker.cpp(897): Warning! W555: (col 40) expression for 'while' is always false 
+jdmarker.cpp(932): Warning! W555: (col 36) expression for 'while' is always false 
+jdmarker.cpp(933): Warning! W555: (col 37) expression for 'while' is always false 
+wpp386 jdmaster.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+wpp386 jdmerge.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+jdmerge.cpp(189): Warning! W014: (col 1) no reference to symbol 'in_row_groups_avail' 
+jdmerge.cpp(189): Note! N392: (col 1) 'unsigned int in_row_groups_avail' in 'void merged_2v_upsample( jpeg_decompress_struct *, unsigned char * * *, unsigned int *, unsigned int, unsigned char * *, unsigned int *, unsigned int )' defined in: jdmerge.cpp(146) (col 32) 
+jdmerge.cpp(208): Warning! W014: (col 1) no reference to symbol 'in_row_groups_avail' 
+jdmerge.cpp(208): Note! N392: (col 1) 'unsigned int in_row_groups_avail' in 'void merged_1v_upsample( jpeg_decompress_struct *, unsigned char * * *, unsigned int *, unsigned int, unsigned char * *, unsigned int *, unsigned int )' defined in: jdmerge.cpp(195) (col 32) 
+jdmerge.cpp(208): Warning! W014: (col 1) no reference to symbol 'out_rows_avail' 
+jdmerge.cpp(208): Note! N392: (col 1) 'unsigned int out_rows_avail' in 'void merged_1v_upsample( jpeg_decompress_struct *, unsigned char * * *, unsigned int *, unsigned int, unsigned char * *, unsigned int *, unsigned int )' defined in: jdmerge.cpp(197) (col 32) 
+wpp386 jdphuff.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+jdphuff.cpp(472): Warning! W389: (col 22) integral value may be truncated during assignment or initialization 
+jdphuff.cpp(659): Warning! W604: (col 27) must look ahead to determine whether construct is a declaration/type or an expression 
+jdphuff.cpp(659): Warning! W594: (col 29) construct resolved as a declaration/type 
+wpp386 jdpostct.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+jdpostct.cpp(194): Warning! W014: (col 1) no reference to symbol 'output_buf' 
+jdpostct.cpp(194): Note! N392: (col 1) 'unsigned char * * output_buf' in 'void post_process_prepass( jpeg_decompress_struct *, unsigned char * * *, unsigned int *, unsigned int, unsigned char * *, unsigned int *, unsigned int )' defined in: jdpostct.cpp(161) (col 34) 
+jdpostct.cpp(194): Warning! W014: (col 1) no reference to symbol 'out_rows_avail' 
+jdpostct.cpp(194): Note! N392: (col 1) 'unsigned int out_rows_avail' in 'void post_process_prepass( jpeg_decompress_struct *, unsigned char * * *, unsigned int *, unsigned int, unsigned char * *, unsigned int *, unsigned int )' defined in: jdpostct.cpp(162) (col 34) 
+jdpostct.cpp(240): Warning! W014: (col 1) no reference to symbol 'input_buf' 
+jdpostct.cpp(240): Note! N392: (col 1) 'unsigned char * * * input_buf' in 'void post_process_2pass( jpeg_decompress_struct *, unsigned char * * *, unsigned int *, unsigned int, unsigned char * *, unsigned int *, unsigned int )' defined in: jdpostct.cpp(203) (col 32) 
+jdpostct.cpp(240): Warning! W014: (col 1) no reference to symbol 'in_row_group_ctr' 
+jdpostct.cpp(240): Note! N392: (col 1) 'unsigned int * in_row_group_ctr' in 'void post_process_2pass( jpeg_decompress_struct *, unsigned char * * *, unsigned int *, unsigned int, unsigned char * *, unsigned int *, unsigned int )' defined in: jdpostct.cpp(203) (col 55) 
+jdpostct.cpp(240): Warning! W014: (col 1) no reference to symbol 'in_row_groups_avail' 
+jdpostct.cpp(240): Note! N392: (col 1) 'unsigned int in_row_groups_avail' in 'void post_process_2pass( jpeg_decompress_struct *, unsigned char * * *, unsigned int *, unsigned int, unsigned char * *, unsigned int *, unsigned int )' defined in: jdpostct.cpp(204) (col 32) 
+wpp386 jdsample.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+jdsample.cpp(140): Warning! W014: (col 1) no reference to symbol 'in_row_groups_avail' 
+jdsample.cpp(140): Note! N392: (col 1) 'unsigned int in_row_groups_avail' in 'void sep_upsample( jpeg_decompress_struct *, unsigned char * * *, unsigned int *, unsigned int, unsigned char * *, unsigned int *, unsigned int )' defined in: jdsample.cpp(91) (col 26) 
+jdsample.cpp(161): Warning! W014: (col 1) no reference to symbol 'cinfo' 
+jdsample.cpp(161): Note! N392: (col 1) 'jpeg_decompress_struct * cinfo' in 'void fullsize_upsample( jpeg_decompress_struct *, __2udqiljpeg_component_info *, unsigned char * *, unsigned char * * * )' defined in: jdsample.cpp(157) (col 37) 
+jdsample.cpp(161): Warning! W014: (col 1) no reference to symbol 'compptr' 
+jdsample.cpp(161): Note! N392: (col 1) '__2udqiljpeg_component_info * compptr' in 'void fullsize_upsample( jpeg_decompress_struct *, __2udqiljpeg_component_info *, unsigned char * *, unsigned char * * * )' defined in: jdsample.cpp(157) (col 66) 
+jdsample.cpp(174): Warning! W014: (col 1) no reference to symbol 'cinfo' 
+jdsample.cpp(174): Note! N392: (col 1) 'jpeg_decompress_struct * cinfo' in 'void noop_upsample( jpeg_decompress_struct *, __2udqiljpeg_component_info *, unsigned char * *, unsigned char * * * )' defined in: jdsample.cpp(170) (col 33) 
+jdsample.cpp(174): Warning! W014: (col 1) no reference to symbol 'compptr' 
+jdsample.cpp(174): Note! N392: (col 1) '__2udqiljpeg_component_info * compptr' in 'void noop_upsample( jpeg_decompress_struct *, __2udqiljpeg_component_info *, unsigned char * *, unsigned char * * * )' defined in: jdsample.cpp(170) (col 62) 
+jdsample.cpp(174): Warning! W014: (col 1) no reference to symbol 'input_data' 
+jdsample.cpp(174): Note! N392: (col 1) 'unsigned char * * input_data' in 'void noop_upsample( jpeg_decompress_struct *, __2udqiljpeg_component_info *, unsigned char * *, unsigned char * * * )' defined in: jdsample.cpp(171) (col 27) 
+jdsample.cpp(252): Warning! W014: (col 1) no reference to symbol 'compptr' 
+jdsample.cpp(252): Note! N392: (col 1) '__2udqiljpeg_component_info * compptr' in 'void h2v1_upsample( jpeg_decompress_struct *, __2udqiljpeg_component_info *, unsigned char * *, unsigned char * * * )' defined in: jdsample.cpp(233) (col 62) 
+jdsample.cpp(285): Warning! W014: (col 1) no reference to symbol 'compptr' 
+jdsample.cpp(285): Note! N392: (col 1) '__2udqiljpeg_component_info * compptr' in 'void h2v2_upsample( jpeg_decompress_struct *, __2udqiljpeg_component_info *, unsigned char * *, unsigned char * * * )' defined in: jdsample.cpp(261) (col 62) 
+wpp386 jdtrans.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+wpp386 jerror.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+wpp386 jfdctflt.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+wpp386 jfdctfst.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+wpp386 jfdctint.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+wpp386 jidctflt.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+wpp386 jidctfst.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+wpp386 jidctint.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+wpp386 jidctred.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+wpp386 jmemmgr.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+jmemmgr.cpp(1044): Warning! W368: (col 53) conditional expression in if statement is always false 
+jmemmgr.cpp(1045): Warning! W013: (col 39) unreachable code 
+wpp386 jmemnobs.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+jmemnobs.cpp(38): Warning! W014: (col 1) no reference to symbol 'cinfo' 
+jmemnobs.cpp(38): Note! N392: (col 1) 'jpeg_common_struct * cinfo' in 'void * jpeg_get_small( jpeg_common_struct *, unsigned int )' defined in: jmemnobs.cpp(35) (col 30) 
+jmemnobs.cpp(44): Warning! W014: (col 1) no reference to symbol 'cinfo' 
+jmemnobs.cpp(44): Note! N392: (col 1) 'jpeg_common_struct * cinfo' in 'void jpeg_free_small( jpeg_common_struct *, void *, unsigned int )' defined in: jmemnobs.cpp(41) (col 31) 
+jmemnobs.cpp(44): Warning! W014: (col 1) no reference to symbol 'sizeofobject' 
+jmemnobs.cpp(44): Note! N392: (col 1) 'unsigned int sizeofobject' in 'void jpeg_free_small( jpeg_common_struct *, void *, unsigned int )' defined in: jmemnobs.cpp(41) (col 60) 
+jmemnobs.cpp(58): Warning! W014: (col 1) no reference to symbol 'cinfo' 
+jmemnobs.cpp(58): Note! N392: (col 1) 'jpeg_common_struct * cinfo' in 'void * jpeg_get_large( jpeg_common_struct *, unsigned int )' defined in: jmemnobs.cpp(55) (col 30) 
+jmemnobs.cpp(64): Warning! W014: (col 1) no reference to symbol 'cinfo' 
+jmemnobs.cpp(64): Note! N392: (col 1) 'jpeg_common_struct * cinfo' in 'void jpeg_free_large( jpeg_common_struct *, void *, unsigned int )' defined in: jmemnobs.cpp(61) (col 31) 
+jmemnobs.cpp(64): Warning! W014: (col 1) no reference to symbol 'sizeofobject' 
+jmemnobs.cpp(64): Note! N392: (col 1) 'unsigned int sizeofobject' in 'void jpeg_free_large( jpeg_common_struct *, void *, unsigned int )' defined in: jmemnobs.cpp(61) (col 64) 
+jmemnobs.cpp(77): Warning! W014: (col 1) no reference to symbol 'cinfo' 
+jmemnobs.cpp(77): Note! N392: (col 1) 'jpeg_common_struct * cinfo' in 'long jpeg_mem_available( jpeg_common_struct *, long, long, long )' defined in: jmemnobs.cpp(73) (col 34) 
+jmemnobs.cpp(77): Warning! W014: (col 1) no reference to symbol 'min_bytes_needed' 
+jmemnobs.cpp(77): Note! N392: (col 1) 'long min_bytes_needed' in 'long jpeg_mem_available( jpeg_common_struct *, long, long, long )' defined in: jmemnobs.cpp(73) (col 46) 
+jmemnobs.cpp(77): Warning! W014: (col 1) no reference to symbol 'already_allocated' 
+jmemnobs.cpp(77): Note! N392: (col 1) 'long already_allocated' in 'long jpeg_mem_available( jpeg_common_struct *, long, long, long )' defined in: jmemnobs.cpp(74) (col 49) 
+jmemnobs.cpp(91): Warning! W014: (col 1) no reference to symbol 'info' 
+jmemnobs.cpp(91): Note! N392: (col 1) 'backing_store_struct * info' in 'void jpeg_open_backing_store( jpeg_common_struct *, backing_store_struct *, long )' defined in: jmemnobs.cpp(87) (col 64) 
+jmemnobs.cpp(91): Warning! W014: (col 1) no reference to symbol 'total_bytes_needed' 
+jmemnobs.cpp(91): Note! N392: (col 1) 'long total_bytes_needed' in 'void jpeg_open_backing_store( jpeg_common_struct *, backing_store_struct *, long )' defined in: jmemnobs.cpp(88) (col 31) 
+jmemnobs.cpp(103): Warning! W014: (col 1) no reference to symbol 'cinfo' 
+jmemnobs.cpp(103): Note! N392: (col 1) 'jpeg_common_struct * cinfo' in 'long jpeg_mem_init( jpeg_common_struct * )' defined in: jmemnobs.cpp(100) (col 29) 
+jmemnobs.cpp(109): Warning! W014: (col 1) no reference to symbol 'cinfo' 
+jmemnobs.cpp(109): Note! N392: (col 1) 'jpeg_common_struct * cinfo' in 'void jpeg_mem_term( jpeg_common_struct * )' defined in: jmemnobs.cpp(106) (col 29) 
+wpp386 jquant1.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+jquant1.cpp(255): Warning! W014: (col 1) no reference to symbol 'cinfo' 
+jquant1.cpp(255): Note! N392: (col 1) 'jpeg_decompress_struct * cinfo' in 'int output_value( jpeg_decompress_struct *, int, int, int )' defined in: jquant1.cpp(245) (col 32) 
+jquant1.cpp(255): Warning! W014: (col 1) no reference to symbol 'ci' 
+jquant1.cpp(255): Note! N392: (col 1) 'int ci' in 'int output_value( jpeg_decompress_struct *, int, int, int )' defined in: jquant1.cpp(245) (col 43) 
+jquant1.cpp(265): Warning! W014: (col 1) no reference to symbol 'cinfo' 
+jquant1.cpp(265): Note! N392: (col 1) 'jpeg_decompress_struct * cinfo' in 'int largest_input_value( jpeg_decompress_struct *, int, int, int )' defined in: jquant1.cpp(259) (col 39) 
+jquant1.cpp(265): Warning! W014: (col 1) no reference to symbol 'ci' 
+jquant1.cpp(265): Note! N392: (col 1) 'int ci' in 'int largest_input_value( jpeg_decompress_struct *, int, int, int )' defined in: jquant1.cpp(259) (col 50) 
+jquant1.cpp(287): Warning! W555: (col 58) expression for 'while' is always false 
+jquant1.cpp(790): Warning! W014: (col 1) no reference to symbol 'is_pre_scan' 
+jquant1.cpp(790): Note! N392: (col 1) 'int is_pre_scan' in 'void start_pass_1_quant( jpeg_decompress_struct *, int )' defined in: jquant1.cpp(741) (col 51) 
+jquant1.cpp(801): Warning! W014: (col 1) no reference to symbol 'cinfo' 
+jquant1.cpp(801): Note! N392: (col 1) 'jpeg_decompress_struct * cinfo' in 'void finish_pass_1_quant( jpeg_decompress_struct * )' defined in: jquant1.cpp(798) (col 39) 
+wpp386 jquant2.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+jquant2.cpp(248): Warning! W014: (col 1) no reference to symbol 'output_buf' 
+jquant2.cpp(248): Note! N392: (col 1) 'unsigned char * * output_buf' in 'void prescan_quantize( jpeg_decompress_struct *, unsigned char * *, unsigned char * *, int )' defined in: jquant2.cpp(225) (col 30) 
+jquant2.cpp(1159): Warning! W014: (col 1) no reference to symbol 'cinfo' 
+jquant2.cpp(1159): Note! N392: (col 1) 'jpeg_decompress_struct * cinfo' in 'void finish_pass2( jpeg_decompress_struct * )' defined in: jquant2.cpp(1156) (col 32) 
+wpp386 jutils.cpp -i=d:\WATCOM\h -w4 -e25 -zq -otexan -d2 -5r -bt=dos -mf
+%create jpeg.lb1
+wlib -b -c -n -q -p=512 jpeg.lib @jpeg.lb1
+Execution complete
