@@ -15,9 +15,14 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.36 2002-11-15 20:54:12 mbickel Exp $
+//     $Id: events.cpp,v 1.37 2003-02-12 14:33:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2002/11/15 20:54:12  mbickel
+//      Added third snow-weather
+//      Added aliase in text files
+//      Fixed bad pointer access in gui.cpp
+//
 //     Revision 1.35  2002/03/02 23:04:01  mbickel
 //      Some cleanup of source code
 //      Improved Paragui Integration
@@ -519,6 +524,15 @@ SDL_Thread* secondThreadHandle = NULL;
 
 int closeEventThread = 0;
 
+const int keyTranslationNum = 7;
+int keyTranslation[keyTranslationNum][2] = {{ '‰', 'Ñ' },
+                                            {'ˆ', 'î' },
+                                            {'¸', 'Å'},
+                                            {'ƒ', 'é' },
+                                            {'÷', 'ô' },
+                                            {'‹', 'ö' },
+                                            {'ﬂ', '·' }}; 
+
 int processEvents ( )
 {
    SDL_mutexP ( eventHandlingMutex );
@@ -567,7 +581,12 @@ int processEvents ( )
                   if ( event.key.keysym.mod & KMOD_SHIFT )
                      key |= ct_shp;
                   keybuffer_sym.push ( key );
-                  keybuffer_prnt.push ( event.key.keysym.unicode );
+
+                  int newsym = event.key.keysym.unicode;
+                  for ( int i = 0; i < keyTranslationNum; i++ )
+                     if ( event.key.keysym.unicode == keyTranslation[i][0] )
+                        newsym = keyTranslation[i][1];
+                  keybuffer_prnt.push ( newsym );
                   r = SDL_mutexV ( keyboardmutex );
                }
             }

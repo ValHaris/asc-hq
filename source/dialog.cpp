@@ -2,9 +2,13 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.123 2003-02-11 17:35:51 mbickel Exp $
+//     $Id: dialog.cpp,v 1.124 2003-02-12 14:33:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.123  2003/02/11 17:35:51  mbickel
+//      Added: reset mapparameters function
+//      AI now working better with guarding units
+//
 //     Revision 1.122  2003/01/28 17:48:42  mbickel
 //      Added sounds
 //      Rewrote soundsystem
@@ -3760,7 +3764,7 @@ void viewVisibilityStatistics()
   #define ali_y1 275  
 
 // const char*  playermodenames[]  = {"player ", "ai ", "off "};
-const char   alliancecolors[]  = {0, 1, 2, 3, 4, 5, 6, 7};
+const char   alliancecolors[]  = {0, 1, 2, 3, 4, 5, 6, 11};
 
 
 void         tsetalliances::init( int supervis )
@@ -5320,6 +5324,8 @@ void viewterraininfo ( void )
          strcat ( text, "#aeinzug0##eeinzug0#\n\n"
                         "#font02#Building Information:#font01##aeinzug20##eeinzug20##crtp10#" );
          strcat ( text, fld->building->typ->location.c_str() );
+         strcat ( text, "#crtp10#owner: " );
+         strcat ( text, actmap->player[fld->building->getOwner()].getName().c_str() );
 
       }
 
