@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.40 2000-07-02 21:04:11 mbickel Exp $
+//     $Id: controls.cpp,v 1.41 2000-07-04 17:10:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2000/07/02 21:04:11  mbickel
+//      Fixed crash in Replay
+//      Fixed graphic errors in replay
+//
 //     Revision 1.39  2000/06/28 18:30:58  mbickel
 //      Started working on AI
 //      Started making loaders independent of memory layout
@@ -7364,8 +7368,8 @@ void trunreplay :: execnextreplaymove ( void )
                            setcursorpos ( x, y );
                            wait();
                            pfield fld = getfield ( x, y );
-                           pbuilding bb = fld->building;
-                           if ( bb && fld ) {
+                           if ( fld && fld->building ) {
+                              pbuilding bb = fld->building;
                               if ( bb->completion ) {
                                  bb->changecompletion ( -1 );
                               } else {
