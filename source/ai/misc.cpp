@@ -171,7 +171,7 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
          for ( int h = 0; h < 8; h++ )
             if ( veh->typ->height & ( 1 << h)) {
                 pfield fld = getfield( x,y );
-                AStar3D::Node* node = ast->fieldVisited( MapCoordinate3D( x,y, 1 << h));
+                const AStar3D::Node* node = ast->fieldVisited( MapCoordinate3D( x,y, 1 << h));
                 if ( node ) {
                    int dist = int(node->gval);
                    if ( fld->building && fld->building->color == veh->color )

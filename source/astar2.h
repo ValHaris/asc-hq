@@ -7,6 +7,8 @@
  #define astar2H
 
  #include <vector>
+ #include <map>
+ #include <set>
 
 
 
@@ -88,8 +90,6 @@ extern void findPath( pmap actmap, AStar::Path& path, pvehicle veh, int x, int y
 
 
 
-
-
 //! A 3D path finding algorithm, based on the 2D algorithm by Amit J. Patel
 class AStar3D {
     public:
@@ -151,12 +151,30 @@ class AStar3D {
        DistanceType dist( const MapCoordinate3D& a, const MapCoordinate3D& b );
        DistanceType dist( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b );
 
-       greater<Node> comp;
+    public:
 
-    public:   
-       typedef std::vector<Node> Container;
+       class Container: protected multiset<Node, less<Node> > {
+          public:
+             typedef multiset<Node, less<Node> > Parent;
+
+             // Container() {};
+             void add ( const Node& node ) { insert ( node ); };
+             bool update ( const Node& node );
+             Node getFirst() { Node n = *Parent::begin(); Parent::erase ( Parent::begin() ); return n; };
+             bool empty() { return Parent::empty(); };
+
+
+             typedef Parent::iterator iterator;
+             iterator find( const MapCoordinate3D& pos );
+
+             iterator begin() { return Parent::begin(); };
+             iterator end() { return Parent::end(); };
+
+       };
+
        //! the reachable fields
        Container visited;
+       // vector<Node> visited;
     protected:
 
        
@@ -194,7 +212,7 @@ class AStar3D {
        int getTravelTime( );
 
        //! checks weather the field fld was among the visited fields during the last search
-       Node* fieldVisited ( const MapCoordinate3D& fld );
+       const Node* fieldVisited ( const MapCoordinate3D& fld );
 
        int& getFieldAccess ( int x, int y );
        int& getFieldAccess ( const MapCoordinate& mc );

@@ -4,36 +4,35 @@
   <MACROS>
     <VERSION value="BCB.06.00"/>
     <PROJECT value="..\mapeditor.exe"/>
-    <OBJFILES value="obj\edmain.obj obj\vehicletype.obj obj\basegfx.obj obj\basestrm.obj 
-      obj\CLoadable.obj obj\containerbase.obj obj\dialog.obj obj\dlg_box.obj 
-      obj\edevents.obj obj\edgen.obj obj\edglobal.obj obj\edmisc.obj 
-      obj\edselfnt.obj obj\gamemap.obj obj\gameoptions.obj obj\loadbi3.obj 
-      obj\loaders.obj obj\loadpcxc.obj obj\mapalgorithms.obj obj\misc.obj 
-      obj\Named.obj obj\newfont.obj obj\palette.obj obj\password.obj 
-      obj\password_dialog.obj obj\pd.obj obj\Property.obj obj\PropertyGroup.obj 
-      obj\sgstream.obj obj\spfst.obj obj\stack.obj obj\strtmesg.obj 
-      obj\typen.obj obj\attack.obj obj\sound.obj obj\graphics.obj 
-      obj\loadimage.obj obj\SDLStretch.obj obj\events.obj obj\SDL_main.obj 
-      obj\weather.obj obj\buildingtype.obj obj\research.obj obj\graphicset.obj 
-      obj\ascstring.obj obj\mapdisplay.obj obj\viewcalculation.obj 
-      obj\vehicle.obj obj\buildings.obj obj\networkdata.obj obj\getopt1.obj 
-      obj\getopt.obj obj\objecttype.obj obj\terraintype.obj 
-      obj\textfileparser.obj obj\textfiletags.obj obj\itemrepository.obj 
-      obj\asc_IMG_jpg.obj obj\stringtokenizer.obj obj\messages.obj 
-      obj\paradialog.obj obj\textfile_evaluation.obj obj\containerbasetype.obj"/>
+    <OBJFILES value="obj\SDL_main.obj obj\CLoadable.obj obj\getopt.obj obj\getopt1.obj 
+      obj\Named.obj obj\Property.obj obj\PropertyGroup.obj obj\ascstring.obj 
+      obj\attack.obj obj\basegfx.obj obj\basestrm.obj obj\buildings.obj 
+      obj\buildingtype.obj obj\containerbase.obj obj\containerbasetype.obj 
+      obj\dialog.obj obj\dlg_box.obj obj\edevents.obj obj\edgen.obj 
+      obj\edglobal.obj obj\edmain.obj obj\edmisc.obj obj\edselfnt.obj 
+      obj\gamemap.obj obj\gameoptions.obj obj\graphicset.obj 
+      obj\itemrepository.obj obj\loadbi3.obj obj\loaders.obj obj\loadpcxc.obj 
+      obj\mapalgorithms.obj obj\mapdisplay.obj obj\messages.obj obj\misc.obj 
+      obj\networkdata.obj obj\newfont.obj obj\objecttype.obj obj\palette.obj 
+      obj\paradialog.obj obj\password.obj obj\password_dialog.obj obj\pd.obj 
+      obj\research.obj obj\SDLStretch.obj obj\asc_IMG_jpg.obj obj\events.obj 
+      obj\graphics.obj obj\loadimage.obj obj\sound.obj obj\sgstream.obj 
+      obj\spfst.obj obj\stack.obj obj\stringtokenizer.obj obj\strtmesg.obj 
+      obj\terraintype.obj obj\textfile_evaluation.obj obj\textfileparser.obj 
+      obj\textfiletags.obj obj\typen.obj obj\vehicle.obj obj\vehicletype.obj 
+      obj\viewcalculation.obj obj\weather.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
-    <LIBFILES value="..\..\..\..\..\sdl\bin\sdl.lib ..\..\..\libs\bzlib\win\bzlib.lib 
-      ..\..\..\libs\triangul\win32\triangulation.lib 
-      ..\..\..\libs\jpeg-6b\libjpeg.lib 
-      ..\..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB 
-      ..\..\..\..\..\SDL_image\bin\SDL_image.lib ..\..\..\libs\sdlmm\SDLmm.lib 
-      ..\..\..\ai\ai.lib"/>
+    <LIBFILES value="..\..\..\..\..\SDL_image\bin\SDL_image.lib 
+      ..\..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB ..\..\..\..\..\sdl\bin\sdl.lib 
+      ..\..\..\ai\ai.lib ..\..\..\libs\bzlib\win\bzlib.lib 
+      ..\..\..\libs\jpeg-6b\libjpeg.lib ..\..\..\libs\sdlmm\SDLmm.lib 
+      ..\..\..\libs\triangul\win32\triangulation.lib"/>
     <LIBRARIES value="vcl.lib rtl.lib"/>
     <SPARELIBS value="rtl.lib vcl.lib"/>
     <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi bcbsmp.bpi dclocx.bpi"/>
-    <PATHCPP value=".;..\..\..;..\..\..\sdl;..\..\..\..\..\sdl\src\main\win32;..\..\..\LIBS\getopt"/>
+    <PATHCPP value=".;..\..\..\..\..\sdl\src\main\win32;..\..\..;..\..\..\LIBS\getopt;..\..\..\sdl"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -64,77 +63,77 @@
   </LINKER>
   <FILELIST>
       <FILE FILENAME="mapeditor.bpf" FORMNAME="" UNITNAME="mapeditor" CONTAINERID="BPF" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\edmain.cpp" FORMNAME="" UNITNAME="edmain" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\vehicletype.cpp" FORMNAME="" UNITNAME="vehicletype" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\..\..\SDL_image\bin\SDL_image.lib" FORMNAME="" UNITNAME="SDL_image" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB" FORMNAME="" UNITNAME="SDL_mixer" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\..\..\sdl\bin\sdl.lib" FORMNAME="" UNITNAME="sdl" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\..\..\sdl\src\main\win32\SDL_main.c" FORMNAME="" UNITNAME="SDL_main" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\CLoadable.cpp" FORMNAME="" UNITNAME="CLoadable" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\LIBS\getopt\getopt.c" FORMNAME="" UNITNAME="getopt" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\LIBS\getopt\getopt1.c" FORMNAME="" UNITNAME="getopt1" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\Named.cpp" FORMNAME="" UNITNAME="Named" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\Property.cpp" FORMNAME="" UNITNAME="Property" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\PropertyGroup.cpp" FORMNAME="" UNITNAME="PropertyGroup" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\ai\ai.lib" FORMNAME="" UNITNAME="ai.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\ascstring.cpp" FORMNAME="" UNITNAME="ascstring" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\attack.cpp" FORMNAME="" UNITNAME="attack" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\basegfx.cpp" FORMNAME="" UNITNAME="basegfx" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\basestrm.cpp" FORMNAME="" UNITNAME="basestrm" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\CLoadable.cpp" FORMNAME="" UNITNAME="CLoadable" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\buildings.cpp" FORMNAME="" UNITNAME="buildings" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\buildingtype.cpp" FORMNAME="" UNITNAME="buildingtype" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\containerbase.cpp" FORMNAME="" UNITNAME="containerbase" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\containerbasetype.cpp" FORMNAME="" UNITNAME="containerbasetype" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\dialog.cpp" FORMNAME="" UNITNAME="dialog" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\dlg_box.cpp" FORMNAME="" UNITNAME="dlg_box" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\edevents.cpp" FORMNAME="" UNITNAME="edevents" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\edgen.cpp" FORMNAME="" UNITNAME="edgen" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\edglobal.cpp" FORMNAME="" UNITNAME="edglobal" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\edmain.cpp" FORMNAME="" UNITNAME="edmain" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\edmisc.cpp" FORMNAME="" UNITNAME="edmisc" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\edselfnt.cpp" FORMNAME="" UNITNAME="edselfnt" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\gamemap.cpp" FORMNAME="" UNITNAME="gamemap" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\gameoptions.cpp" FORMNAME="" UNITNAME="gameoptions" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\graphicset.cpp" FORMNAME="" UNITNAME="graphicset" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\itemrepository.cpp" FORMNAME="" UNITNAME="itemrepository" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\libs\bzlib\win\bzlib.lib" FORMNAME="" UNITNAME="bzlib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\libs\jpeg-6b\libjpeg.lib" FORMNAME="" UNITNAME="libjpeg" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\libs\sdlmm\SDLmm.lib" FORMNAME="" UNITNAME="SDLmm" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\libs\triangul\win32\triangulation.lib" FORMNAME="" UNITNAME="triangulation" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\loadbi3.cpp" FORMNAME="" UNITNAME="loadbi3" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\loaders.cpp" FORMNAME="" UNITNAME="loaders" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\loadpcxc.cpp" FORMNAME="" UNITNAME="loadpcxc" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\mapalgorithms.cpp" FORMNAME="" UNITNAME="mapalgorithms" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\mapdisplay.cpp" FORMNAME="" UNITNAME="mapdisplay" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\messages.cpp" FORMNAME="" UNITNAME="messages" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\misc.cpp" FORMNAME="" UNITNAME="misc" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\Named.cpp" FORMNAME="" UNITNAME="Named" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\networkdata.cpp" FORMNAME="" UNITNAME="networkdata" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\newfont.cpp" FORMNAME="" UNITNAME="newfont" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\objecttype.cpp" FORMNAME="" UNITNAME="objecttype" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\palette.cpp" FORMNAME="" UNITNAME="palette" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\paradialog.cpp" FORMNAME="" UNITNAME="paradialog" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\password.cpp" FORMNAME="" UNITNAME="password" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\password_dialog.cpp" FORMNAME="" UNITNAME="password_dialog" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\pd.cpp" FORMNAME="" UNITNAME="pd" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\Property.cpp" FORMNAME="" UNITNAME="Property" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\PropertyGroup.cpp" FORMNAME="" UNITNAME="PropertyGroup" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\research.cpp" FORMNAME="" UNITNAME="research" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\sdl\SDLStretch.cpp" FORMNAME="" UNITNAME="SDLStretch" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\sdl\asc_IMG_jpg.c" FORMNAME="" UNITNAME="asc_IMG_jpg" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\sdl\events.cpp" FORMNAME="" UNITNAME="events" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\sdl\graphics.cpp" FORMNAME="" UNITNAME="graphics" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\sdl\loadimage.cpp" FORMNAME="" UNITNAME="loadimage" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\sdl\sound.cpp" FORMNAME="" UNITNAME="sound" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\sgstream.cpp" FORMNAME="" UNITNAME="sgstream" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\spfst.cpp" FORMNAME="" UNITNAME="spfst" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\stack.cpp" FORMNAME="" UNITNAME="stack" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\stringtokenizer.cpp" FORMNAME="" UNITNAME="stringtokenizer" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\strtmesg.cpp" FORMNAME="" UNITNAME="strtmesg" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\typen.cpp" FORMNAME="" UNITNAME="typen" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\attack.cpp" FORMNAME="" UNITNAME="attack" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\..\..\sdl\bin\sdl.lib" FORMNAME="" UNITNAME="sdl" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\sdl\sound.cpp" FORMNAME="" UNITNAME="sound" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\sdl\graphics.cpp" FORMNAME="" UNITNAME="graphics" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\sdl\loadimage.cpp" FORMNAME="" UNITNAME="loadimage" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\sdl\SDLStretch.cpp" FORMNAME="" UNITNAME="SDLStretch" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\sdl\events.cpp" FORMNAME="" UNITNAME="events" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\libs\bzlib\win\bzlib.lib" FORMNAME="" UNITNAME="bzlib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\libs\triangul\win32\triangulation.lib" FORMNAME="" UNITNAME="triangulation" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\libs\jpeg-6b\libjpeg.lib" FORMNAME="" UNITNAME="libjpeg" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\..\..\sdl\src\main\win32\SDL_main.c" FORMNAME="" UNITNAME="SDL_main" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\weather.cpp" FORMNAME="" UNITNAME="weather" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\buildingtype.cpp" FORMNAME="" UNITNAME="buildingtype" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\research.cpp" FORMNAME="" UNITNAME="research" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\graphicset.cpp" FORMNAME="" UNITNAME="graphicset" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\ascstring.cpp" FORMNAME="" UNITNAME="ascstring" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\mapdisplay.cpp" FORMNAME="" UNITNAME="mapdisplay" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\viewcalculation.cpp" FORMNAME="" UNITNAME="viewcalculation" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\vehicle.cpp" FORMNAME="" UNITNAME="vehicle" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\buildings.cpp" FORMNAME="" UNITNAME="buildings" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\networkdata.cpp" FORMNAME="" UNITNAME="networkdata" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\LIBS\getopt\getopt1.c" FORMNAME="" UNITNAME="getopt1" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\LIBS\getopt\getopt.c" FORMNAME="" UNITNAME="getopt" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB" FORMNAME="" UNITNAME="SDL_mixer" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\objecttype.cpp" FORMNAME="" UNITNAME="objecttype" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\terraintype.cpp" FORMNAME="" UNITNAME="terraintype" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\textfile_evaluation.cpp" FORMNAME="" UNITNAME="textfile_evaluation" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\textfileparser.cpp" FORMNAME="" UNITNAME="textfileparser" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\textfiletags.cpp" FORMNAME="" UNITNAME="textfiletags" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\itemrepository.cpp" FORMNAME="" UNITNAME="itemrepository" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\..\..\SDL_image\bin\SDL_image.lib" FORMNAME="" UNITNAME="SDL_image" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\libs\sdlmm\SDLmm.lib" FORMNAME="" UNITNAME="SDLmm" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\sdl\asc_IMG_jpg.c" FORMNAME="" UNITNAME="asc_IMG_jpg" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\stringtokenizer.cpp" FORMNAME="" UNITNAME="stringtokenizer" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\messages.cpp" FORMNAME="" UNITNAME="messages" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\paradialog.cpp" FORMNAME="" UNITNAME="paradialog" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\textfile_evaluation.cpp" FORMNAME="" UNITNAME="textfile_evaluation" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\ai\ai.lib" FORMNAME="" UNITNAME="ai.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\containerbasetype.cpp" FORMNAME="" UNITNAME="containerbasetype" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\typen.cpp" FORMNAME="" UNITNAME="typen" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\vehicle.cpp" FORMNAME="" UNITNAME="vehicle" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\vehicletype.cpp" FORMNAME="" UNITNAME="vehicletype" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\viewcalculation.cpp" FORMNAME="" UNITNAME="viewcalculation" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\weather.cpp" FORMNAME="" UNITNAME="weather" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

@@ -1609,6 +1609,13 @@ void  mainloop ( void )
                break;
             case ct_f11: execuseraction ( ua_mntnc_rotatewind );
                break;
+            case ct_f12: {
+                   AStar3D::Path path;
+                   AStar3D ast ( actmap, getfield(16,80)->vehicle);
+                   ast.findPath ( path, MapCoordinate3D(38,54,1<<3));
+
+            }
+            break;
                
             case ct_1:
                execuseraction ( ua_changeresourceview );

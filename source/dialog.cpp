@@ -508,7 +508,7 @@ void         tweaponinfo::init( pvehicletype eht, char num  )
    ysize = 480 - 2 * y1; 
    title = "weapon info";
    buildgraphics(); 
-   backgrnd2 = dblue + 1;
+   backgrnd2 = lightgray; // dblue + 1;
    aktvehicle = eht; 
    weapnum = num - 1; 
    mousevisible(false); 
@@ -717,7 +717,7 @@ void         tvehicleinfo::init( const Vehicletype* type )
 
    background= dblue;
    textcol = black;
-   backgrnd2 = dblue + 1;
+   backgrnd2 = lightgray; // dblue + 1;
 
 
    wepx = x1 + 30;

@@ -363,7 +363,6 @@ void findPath( pmap actmap, AStar::Path& path, pvehicle veh, int x, int y )
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 
-
 bool operator< ( const AStar3D::Node& a, const AStar3D::Node& b )
 {
     // To compare two nodes, we compare the `f' value, which is the
@@ -388,6 +387,31 @@ bool operator == ( const AStar3D::Node& a, const AStar3D::Node& b )
     // Two nodes are equal if their components are equal
     return (a.h == b.h) && (a.gval == b.gval ) && (a.hval == b.hval );
 }
+
+
+
+
+bool AStar3D::Container::update ( const Node& node )
+{
+   iterator i = find ( node.h );
+   if ( i != Parent::end() )
+      if (i->gval > node.gval ) {
+         Parent::erase ( i );
+         add ( node );
+         return true;
+      }
+   return false;
+}
+
+AStar3D::Container::iterator AStar3D::Container::find ( const MapCoordinate3D& pos )
+{
+   for ( iterator i = begin(); i != end(); i++ )
+      if ( i->h == pos )
+         return i;
+   return end();
+}
+
+
 
 
 
@@ -516,75 +540,22 @@ AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const
 // abstraction layer on priority_queue wouldn't let me do that.
 
 
-#define _DDEBUG_ASTAR
-
-bool AStar3D::get_first( Container& v, Node& n )
-{
-#ifdef _DEBUG_ASTAR
-static int call = 0;
-++call;
-        for ( Container::iterator i = v.begin(); i != v.end(); i++ ) {
-           if ( i->gval < v.begin()->gval )
-              warning("warning");
-        }
-
-#endif
-
-    do {
-       if ( v.empty() )
-          return false;
-       n = v.front();
-       pop_heap( v.begin(), v.end(), comp );
-       v.pop_back();
-    } while ( n.deleted );
-    return true;
-
-#ifdef _DEBUG_ASTAR
-        for ( Container::iterator i = v.begin(); i != v.end(); i++ ) {
-           if ( i->gval < v.begin()->gval )
-              warning("warning");
-        }
-#endif
-}
 
 
 void AStar3D :: nodeVisited ( const Node& N2, HexDirection direc, Container& open, int prevHeight, int heightChangeDist )
 {
-
-#ifdef _DEBUG_ASTAR
-        for ( Container::iterator i = open.begin(); i != open.end(); i++ )
-           if ( i->gval < open.begin()->gval )
-              warning("warning");
-#endif
-
-   bool add = false;
-   if ( getPosDir(N2.h) == DirNone )
-      add = true;
-   else {
-       Container::iterator find1 = open.end();
-       for( Container::iterator i = open.begin(); i != open.end(); i++ )
-           if( i->h == N2.h )
-              if ( i->gval > N2.gval ) {
-                 add = true;
-                 i->deleted = true;
-              }
+   if ( N2.gval <= MAXIMUM_PATH_LENGTH && N2.gval <= longestPath ) {
+      if ( getPosDir(N2.h) == DirNone ) {
+         open.add ( N2 );
+         getPosDir(N2.h) = ReverseDirection(direc);
+         getPosHHop(N2.h) = 10 + prevHeight + 1000 * heightChangeDist;
+      } else {
+         if ( open.update ( N2 ) ) {
+            getPosDir(N2.h) = ReverseDirection(direc);
+            getPosHHop(N2.h) = 10 + prevHeight + 1000 * heightChangeDist;
+         }
+      }
    }
-
-   if( add ) {
-       if ( N2.gval <= MAXIMUM_PATH_LENGTH && N2.gval <= longestPath ) {
-          getPosDir(N2.h) = ReverseDirection(direc);
-          getPosHHop(N2.h) = 10 + prevHeight + 1000 * heightChangeDist;
-          open.push_back( N2 );
-          push_heap( open.begin(), open.end(), comp );
-       }
-   }
-
-#ifdef _DEBUG_ASTAR
-        for ( Container::iterator i = open.begin(); i != open.end(); i++ )
-           if ( i->gval < open.begin()->gval )
-              warning("warning");
-#endif
-
 }
 
 
@@ -633,17 +604,13 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
     if ( actmap->getField(A)->unitHere(veh) ) {
        // insert the original node
        N.h = A;
-       N.hasAttacked = veh->attacked;
-       N.gval = 0;
-       N.hval = dist(A,B);
-       open.push_back(N);
     } else {
        N.h.setnum(A.x, A.y, -1 );
-       N.hasAttacked = veh->attacked;
-       N.gval = 0;
-       N.hval = dist(A,B);
-       open.push_back(N);
     }
+    N.hasAttacked = veh->attacked;
+    N.gval = 0;
+    N.hval = dist(A,B);
+    open.add(N);
 
     // Remember which nodes we visited, so that we can clear the mark array
     // at the end.
@@ -653,11 +620,9 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
     // While there are still nodes to visit, visit them!
     while( !open.empty() ) {
-        bool got = get_first( open, N );
-        if ( !got )
-           break;
+        N = open.getFirst();
 
-        visited.push_back( N );
+        visited.add( N );
         // If we're at the goal, then exit
         for ( vector<MapCoordinate3D>::const_iterator i = B.begin(); i != B.end(); i++ )
            if( N.h == *i ) {
@@ -850,7 +815,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
             } else
                 getnextfield ( h.x, h.y, dir );
 
-            Node* n = fieldVisited ( h );
+            const Node* n = fieldVisited ( h );
             path.insert ( path.begin(), PathPoint(h, int(n->gval), n->enterHeight, n->hasAttacked) );
         }
     }
@@ -880,7 +845,7 @@ void AStar3D::findAllAccessibleFields ( )
 
    Path dummy;
    findPath ( dummy, MapCoordinate3D(actmap->xsize, actmap->ysize, veh->height) );  //this field does not exist...
-   for ( Container::iterator i = visited.begin(); i != visited.end(); i++ ) {
+   for ( Container::iterator i = visited.begin(); i != visited.end(); ++i ) {
       int& fa = getFieldAccess( i->h );
       fa |= i->h.getBitmappedHeight();
       if ( markTemps )
@@ -892,11 +857,11 @@ void AStar3D::findAllAccessibleFields ( )
 
 
 
-AStar3D::Node* AStar3D::fieldVisited ( const MapCoordinate3D& pos )
+const AStar3D::Node* AStar3D::fieldVisited ( const MapCoordinate3D& pos )
 {
-   for( Container::iterator i = visited.begin(); i != visited.end(); i++ )
-       if( i->h == pos  )
-          return &(*i);
+   Container::iterator i = visited.find( pos );
+   if ( i != visited.end() )
+       return &(*i);
 
    return NULL;
 }

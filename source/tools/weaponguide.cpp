@@ -1130,7 +1130,7 @@ int main(int argc, char *argv[] )
                if ( !linkpref.empty()  && linkpref[ linkpref.length() -1] != '/' )
                   linkpref += '/' ;
 
-                fprintf(ff,"..%d (%s);asc.css;\"%s%s\" target=\"main\";\n", j->second->id, j->second->getName().c_str(), linkpref.c_str(), unitFileName.c_str());
+                fprintf(ff,"..%d (%s);asc.css;\"%s%s\" target=\"%s\";\n", j->second->id, j->second->getName().c_str(), linkpref.c_str(), unitFileName.c_str(), cl.f().c_str() );
             }
             
                         
