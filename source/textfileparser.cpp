@@ -69,7 +69,7 @@ void TextPropertyGroup :: error ( const ASCString& msg )
 void TextPropertyGroup :: print( int indent )
 {
    for ( EntryCache::iterator i = entryCache.begin(); i != entryCache.end(); i++ ) {
-      for ( int i = 0; i< indent; i++ )
+      for ( int m = 0; m< indent; m++ )
          printf("  " );
 
       Entry::Operator o = i->second->op;
