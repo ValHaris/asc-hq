@@ -1,6 +1,10 @@
-//     $Id: unitctrl.h,v 1.25 2001-09-25 15:13:07 mbickel Exp $
+//     $Id: unitctrl.h,v 1.26 2001-11-15 20:46:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2001/09/25 15:13:07  mbickel
+//      New version number
+//      Fixed crash when reaction fire during ascend
+//
 //     Revision 1.24  2001/03/30 12:43:16  mbickel
 //      Added 3D pathfinding
 //      some cleanup and documentation
@@ -280,13 +284,15 @@ class BaseVehicleMovement : public VehicleAction {
                                           int          y22,
                                           pvehicle     eht,
                                           int          _height,
-                                          IntFieldList*   path );
+                                          IntFieldList* path,
+                                          int initialMovement );
                   } fieldReachableRek;
           };
 
 
 class VehicleMovement : public BaseVehicleMovement {
               int status;
+              int initialMovement;
            public:
               IntFieldList reachableFields;
               IntFieldList reachableFieldsIndirect;
@@ -324,7 +330,7 @@ class VehicleMovement : public BaseVehicleMovement {
 
 /* VehicleMovement:
  *
- *   Step 0:   execute ( vehicle, -1, -1, step = 0 , height, -1 );
+ *   Step 0:   execute ( vehicle, -1, -1, step = 0 , height, startheight );
  *                 height is usually -1, which means the aircraft will move on the same level of height it currently has
  *                        But there are situations like starting aircraft from carriers where it has to be set to the height 
  *                        the aircraft should move on after start. Don't use this height for regular height changing!

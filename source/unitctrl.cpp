@@ -1,6 +1,12 @@
-//     $Id: unitctrl.cpp,v 1.75 2001-11-15 20:16:01 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.76 2001-11-15 20:46:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.75  2001/11/15 20:16:01  mbickel
+//      Added a new BI3 import table
+//      Fixed movement reduction changing height of a nearly empty unit and
+//         refuelling it afterwards
+//      Better error message for "ID not found"
+//
 //     Revision 1.74  2001/11/12 18:28:34  mbickel
 //      Fixed graphical glitches when unit moves near border
 //      If max num of mines exceeded, no icon is displayed for placing a new one
@@ -412,8 +418,12 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
          return status;
       }
       newheight = height;
+      if ( height == -1 )
+         height = veh->height;
 
-      searchstart ( veh->xpos, veh->ypos, height );
+      initialMovement = veh->typ->movement[log2 ( height ) ] * veh->getMovement( false ) / veh->maxMovement();
+
+      searchstart ( veh->xpos, veh->ypos, newheight );
       if ( search.fieldnum <= 0 ) {
          status =  -107;
          return status;
@@ -433,7 +443,7 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
          return status;
       }
 
-      fieldReachableRek.run( x, y, vehicle, height, &path );
+      fieldReachableRek.run( x, y, vehicle, height, &path, initialMovement );
 
       status = 3;
       return status;
@@ -448,10 +458,12 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
        int y1 = vehicle->ypos;
  
       
-       if ( newheight != -1 && newheight != vehicle->height )
+/*       if ( newheight != -1 && newheight != vehicle->height )
           logtoreplayinfo ( rpl_changeheight2, x1, y1, x, y, vehicle->networkid, (int) vehicle->height, (int) newheight, noInterrupt );
-       else 
-          logtoreplayinfo ( rpl_move3, x1, y1, x, y, vehicle->networkid, (int) vehicle->height, noInterrupt );
+       else */
+          logtoreplayinfo ( rpl_move3, x1, y1, x, y, vehicle->networkid, newheight, noInterrupt );
+          if ( newheight != -1 )
+             vehicle->height = newheight;
  
        if ( mapDisplay )
           mapDisplay->startAction();
@@ -477,7 +489,7 @@ int VehicleMovement :: getDistance ( int x, int y )
       return maxint;
 
    IntFieldList path;
-   fieldReachableRek.run( x, y, vehicle, newheight, &path );
+   fieldReachableRek.run( x, y, vehicle, newheight, &path, initialMovement );
    int dist = 0;
    int lastx = vehicle->xpos;
    int lasty = vehicle->ypos;
@@ -593,7 +605,8 @@ void VehicleMovement :: searchstart( int x1, int y1, int hgt )
    initwindmovement( vehicle );
 
    search.mode = 1;
-   search.strck = vehicle->getMovement( false );
+   search.strck = initialMovement;
+   // search.strck = vehicle->getMovement( false );
 
    for ( int maindir = 0; maindir < sidenum; maindir++) {
       searchmove( search.startx, search.starty, sef_searchorder[maindir], search.strck, 0 );
@@ -628,7 +641,7 @@ void   VehicleMovement :: FieldReachableRek :: move(int          x,
     if ( zielerreicht == 2 ) 
        return;
 
-    if (streck > vehicle->getMovement( false ) )
+    if (streck > maxwegstrecke )
        return;
 
     getnextfield ( x, y, direc);
@@ -636,13 +649,13 @@ void   VehicleMovement :: FieldReachableRek :: move(int          x,
     if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize)) 
        return;
 
-    if (actmap->weather.wind[ getwindheightforunit ( vehicle ) ].speed && vehicle->height >= chtieffliegend && vehicle->height <= chhochfliegend) {
+    if (actmap->weather.wind[ getwindheightforunit ( vehicle ) ].speed && height >= chtieffliegend && height <= chhochfliegend) { // was: vehicle->height instead of height
        int ll = windbeeline(x,y,x2,y2);
        if (ll > maxwegstrecke - streck) 
           return; 
     } else {
        int ll = beeline(x2,y2,x,y);
-       if (ll > maxwegstrecke - streck) 
+       if (ll > maxwegstrecke - streck)
           return; 
     }
 
@@ -691,7 +704,7 @@ void   VehicleMovement :: FieldReachableRek :: move(int          x,
        shortestway.tiefe = strecke.tiefe;
        shortestway.x = strecke.x;
        shortestway.y = strecke.y;
-       if (actmap->weather.wind[ getwindheightforunit ( vehicle ) ].speed && vehicle->height >= chtieffliegend && vehicle->height <= chhochfliegend) {
+       if (actmap->weather.wind[ getwindheightforunit ( vehicle ) ].speed && height >= chtieffliegend && height <= chhochfliegend) { // was vehicle->height
           if ( streck == windbeeline(x1,y1,x2,y2))
              zielerreicht = 2;
        } else {
@@ -728,15 +741,16 @@ void   VehicleMovement :: FieldReachableRek :: move(int          x,
           if ( zielerreicht == 2 ) 
              return;
        } 
-    } 
- } 
+    }
+ }
 
 
 void   VehicleMovement :: FieldReachableRek :: run(int          x22,
                                                    int          y22,
                                                    pvehicle     eht,
                                                    int          _height,
-                                                   IntFieldList*   path )
+                                                   IntFieldList*   path,
+                                                   int initialMovement )
                
 /*  mode :  1 krzesten weg finden
             2 irgendeinen weg finden  */ 
@@ -754,7 +768,7 @@ void   VehicleMovement :: FieldReachableRek :: run(int          x22,
    strecke.x.push_back ( x1 );
    strecke.y.push_back ( y1 );
 
-   maxwegstrecke = vehicle->getMovement( false );
+   maxwegstrecke = initialMovement;
    zielerreicht = 0; 
    distance = 0; 
 
@@ -1552,7 +1566,7 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int h
       }
       modechangePosition = MapCoordinate ( sp.x, sp.y );
 
-      fieldReachableRek.run( x, y, vehicle, height, &path );
+      fieldReachableRek.run( x, y, vehicle, height, &path, vehicle->getMovement( false ) );
 
       status = 3;
       return status;

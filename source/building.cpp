@@ -2,9 +2,12 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.76 2001-10-29 20:24:56 mbickel Exp $
+//     $Id: building.cpp,v 1.77 2001-11-15 20:46:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.76  2001/10/29 20:24:56  mbickel
+//      Fixed AI crash when producing to much units
+//
 //     Revision 1.75  2001/10/11 10:22:49  mbickel
 //      Some cleanup and fixes for Visual C++
 //
@@ -1317,13 +1320,15 @@ VehicleMovement*   ccontainercontrols :: movement (  pvehicle eht )
 
    for ( int i = 0; i < heightToTestNum; i++ ) {
 
+   /*
       if ( eht->height != heightToTest[i]  && eht->typ->height & heightToTest[i] ) {
          eht->height = heightToTest[i];
          eht->setMovement( eht->typ->movement[log2 ( eht->height ) ] * perc / 1024 );
       }
+      */
 
       moveparams.movestatus = 0;
-      int ma = moveavail( eht );
+      int ma = moveavail( eht, heightToTest[i] );
       if ( ma == 3 )
          eht->attacked = 1;
 
@@ -1509,15 +1514,19 @@ int    cbuildingcontrols :: getLoadCapability ( void )
 
 
 
-int   cbuildingcontrols :: moveavail ( pvehicle eht )
+int   cbuildingcontrols :: moveavail ( pvehicle eht, int height )
 {
+   if ( height == -1 )
+      height = eht->height;
+
    if ( recursiondepth > 0 )
       return 0;
+
    if ( eht->getMovement() < minmalq )
       return 0;
 
    if ( (eht->typ->height & building->typ->unitheightreq) || !building->typ->unitheightreq )
-      if ( eht->height & building->typ->loadcapability || eht->functions & cf_trooper)
+      if ( height & building->typ->loadcapability || eht->functions & cf_trooper)
          return 2;
       else
          return 1;
@@ -2037,8 +2046,11 @@ int   ctransportcontrols :: getspecfunc ( tcontainermode mode )
 };
 
 
-int   ctransportcontrols :: moveavail ( pvehicle eht )
+int   ctransportcontrols :: moveavail ( pvehicle eht, int height )
 {
+   if ( height == -1 )
+      height = eht->height;
+
    if ( recursiondepth > 0 )
       return 0;
 
@@ -2049,7 +2061,7 @@ int   ctransportcontrols :: moveavail ( pvehicle eht )
       if ( eht->functions & cf_trooper )
          return 2;
       else
-         if ( eht->height & vehicle->height )
+         if ( height & vehicle->height )
             return 2;
          else
             if ( eht->typ->height & vehicle->height )
@@ -2061,9 +2073,9 @@ int   ctransportcontrols :: moveavail ( pvehicle eht )
 
       if (((eht->typ->height & vehicle->typ->loadcapabilityreq) || !vehicle->typ->loadcapabilityreq ) &&
             ((eht->typ->height & vehicle->typ->loadcapabilitynot ) == 0 ) &&
-            ((eht->typ->steigung <= flugzeugtraegerrunwayverkuerzung ) || eht->height <= chfahrend ))
+            ((eht->typ->steigung <= flugzeugtraegerrunwayverkuerzung ) || height <= chfahrend ))
 
-         if ( eht->height  & vehicle->typ->loadcapability )
+         if ( height  & vehicle->typ->loadcapability )
             return 2;
          else
             return 1;

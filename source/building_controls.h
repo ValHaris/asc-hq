@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: building_controls.h,v 1.10 2001-10-31 18:34:30 mbickel Exp $
+//     $Id: building_controls.h,v 1.11 2001-11-15 20:46:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2001/10/31 18:34:30  mbickel
+//      Some adjustments and fixes for gcc 3.0.2
+//
 //     Revision 1.9  2001/09/23 23:06:20  mbickel
 //      Fixed:
 //       - ascent/descent during reactionfire
@@ -136,7 +139,7 @@ class    ccontainercontrols
                   2  unit can move out
                   3  unit can move out, but cannot attack this turn
       */
-      virtual int    moveavail ( pvehicle eht ) = 0;
+      virtual int    moveavail ( pvehicle eht, int height = -1 ) = 0;
 
 
       virtual int    putenergy (int e, int abbuchen = 1 ) = 0;
@@ -265,7 +268,7 @@ class    cbuildingcontrols : public virtual ccontainercontrols
 
 
       void  removevehicle ( pvehicle *peht );
-      int    moveavail ( pvehicle eht );
+      int    moveavail ( pvehicle eht, int height = -1 );
 
       pvehicle getloadedunit (int num);
 
@@ -304,7 +307,7 @@ class    ctransportcontrols : public virtual ccontainercontrols
       pvehicle vehicle;
 
       void  removevehicle ( pvehicle *peht );
-      int    moveavail ( pvehicle eht );
+      int    moveavail ( pvehicle eht, int height = -1 );
 
       pvehicle getloadedunit (int num);
 
