@@ -1,6 +1,10 @@
-//     $Id: keybp.cpp,v 1.3 1999-11-16 17:04:07 mbickel Exp $
+//     $Id: keybp.cpp,v 1.4 1999-12-27 12:51:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/16 17:04:07  mbickel
+//     Made ASC compilable for DOS again :-)
+//     Merged all the bug fixes in that I did last week
+//
 //     Revision 1.2  1999/11/16 03:41:51  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -488,7 +492,7 @@ void wait(void)
    //   do {
    //      cha = r_key();
       //     } while (kbhit() != 0);
-   //cha = r_key(); 
+   r_key(); 
 } 
 
 

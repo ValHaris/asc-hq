@@ -1,6 +1,14 @@
-//     $Id: keybp.h,v 1.2 1999-11-16 03:41:53 tmwilson Exp $
+//     $Id: keybp.h,v 1.3 1999-12-27 12:51:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:53  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -21,6 +29,8 @@
     Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
     Boston, MA  02111-1307  USA
 */
+
+#ifdef _DOS_
 
 #ifndef NEWKEYB 
    #define ct_enterk  ct_enter
@@ -313,40 +323,16 @@
    #define cto_point  '.' 
    #define cto_komma  ',' 
 
-
-
-    extern unsigned short int keyport;
-    extern unsigned char key;
-    extern unsigned char pressed;
-    extern unsigned char p;
-    extern unsigned char exkey;
-
-
- /*  extern "C" unsigned short int keyport;
-   extern "C" unsigned char key;
-   extern "C" unsigned char pressed;
-   extern "C" unsigned char p;
-   extern "C" unsigned char exkey;
-
-   extern "C" void keyintr( void );
-   #pragma aux keyintr modify [eax edx] */
-
+#endif //_DOS_
 
     typedef int tkey;
 
-    extern char             maxpufferkeys;
-    extern char             normkey[256];
-    extern int                puffer[256];
-    extern char             keyreleasefrequence;
-    extern char             keyboardinit;
-
     extern char  skeypress(char keynr);
     extern char *get_key(char keynr);
-    extern void clearpuffer(void);
     extern tkey r_key(void);
     extern int keypress(void);
     extern void initkeyb(void);
-    extern void  closekeyb(void);
+    extern void closekeyb(void);
     extern void wait(void);
     tkey char2key (int ch);
 
