@@ -4,5 +4,9 @@
 */
 #description "generates html files that document ASCs units"
 #mandatoryq  "vehicleFiles"
-c / configfile  string           "Use given configuration file"
-r / verbose     int 0 [0..10]    "Set verbosity level to x (0..10)"
+c / configfile  string            "Use given configuration file"
+r / verbose     int 0 [0..10]     "Set verbosity level to x (0..10)"
+d / directory   string            "place all output files in different directory"
+l / linkdir     string            "relative directory for the menu links"
+s / set         int 0 [0...]      "only use unitset with given ID"
+i / image       flag              "generate images for units (Linux only)"

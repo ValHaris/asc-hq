@@ -2,8 +2,8 @@
 **
 ** weaponguide.cpp
 **
-** Sat Jul 28 13:23:10 2001
-** Linux 2.4.4 (#2 SMP Thu Jul 5 10:45:01 CEST 2001) i686
+** Wed Feb 12 23:57:57 2003
+** Linux 2.4.19-4GB (#1 Fri Sep 13 13:14:56 UTC 2002) i686
 ** martin@linux. (Martin Bickel)
 **
 ** Definition of command line parser class
@@ -37,6 +37,10 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
   {
     {"configfile", 1, 0, 'c'},
     {"verbose", 1, 0, 'r'},
+    {"directory", 1, 0, 'd'},
+    {"linkdir", 1, 0, 'l'},
+    {"set", 1, 0, 's'},
+    {"image", 0, 0, 'i'},
     {"help", 0, 0, 'h'},
     {"version", 0, 0, 'v'},
     {0, 0, 0, 0}
@@ -46,10 +50,12 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
 
   /* default values */
   _r = 0;
+  _s = 0;
+  _i = false;
   _h = false;
   _v = false;
 
-  while ((c = getopt_long(argc, argv, "c:r:hv", long_options, &option_index)) != EOF)
+  while ((c = getopt_long(argc, argv, "c:r:d:l:s:ihv", long_options, &option_index)) != EOF)
     {
       switch(c)
         {
@@ -71,6 +77,28 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
               s += "parameter range error: r must be <= 10";
               throw(s);
             }
+          break;
+
+        case 'd': 
+          _d = optarg;
+          break;
+
+        case 'l': 
+          _l = optarg;
+          break;
+
+        case 's': 
+          _s = atoi(optarg);
+          if (_s < 0)
+            {
+              string s;
+              s += "parameter range error: s must be >= 0";
+              throw(s);
+            }
+          break;
+
+        case 'i': 
+          _i = true;
           break;
 
         case 'h': 
@@ -102,7 +130,7 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
 void Cmdline::usage()
 {
   cout << "generates html files that document ASCs units " << endl;
-  cout << "usage: " << _executable << " [ -crhv ]  vehicleFiles" << endl;
+  cout << "usage: " << _executable << " [ -crdlsihv ]  vehicleFiles" << endl;
   cout << "  [ -c ] ";
   cout << "[ --configfile ]  ";
   cout << "(";
@@ -119,6 +147,36 @@ void Cmdline::usage()
   cout << " default=0";
   cout << ")\n";
   cout << "         Set verbosity level to x (0..10)\n";
+  cout << "  [ -d ] ";
+  cout << "[ --directory ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "STRING";
+  cout << ")\n";
+  cout << "         place all output files in different directory\n";
+  cout << "  [ -l ] ";
+  cout << "[ --linkdir ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "STRING";
+  cout << ")\n";
+  cout << "         relative directory for the menu links\n";
+  cout << "  [ -s ] ";
+  cout << "[ --set ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "INTEGER,";
+  cout << " range=0...,";
+  cout << " default=0";
+  cout << ")\n";
+  cout << "         only use unitset with given ID\n";
+  cout << "  [ -i ] ";
+  cout << "[ --image ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "FLAG";
+  cout << ")\n";
+  cout << "         generate images for units (Linux only)\n";
   cout << "  [ -h ] ";
   cout << "[ --help ]  ";
   cout << "(";

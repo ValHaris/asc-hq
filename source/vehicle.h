@@ -54,7 +54,7 @@
     Vehicle ( const Vehicletype* t, pmap actmap, int player, int networkID  );
 
    protected:
-     bool isBuilding() { return false; };
+     bool isBuilding() const { return false; };
 
    public:
 
@@ -242,7 +242,7 @@
     int searchForMineralResources( void );
 
     //! returns the units position
-    MapCoordinate3D getPosition ( );
+    MapCoordinate3D getPosition ( ) const;
 
     /** can the unit repair anything? This does not necessarily mean that the unit can repair
         other units, because a service weapon is additionally needed for that. It may be the

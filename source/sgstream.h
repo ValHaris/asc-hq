@@ -3,9 +3,13 @@
   
 */
 
-//     $Id: sgstream.h,v 1.26 2002-12-23 12:50:25 mbickel Exp $
+//     $Id: sgstream.h,v 1.27 2003-02-13 00:56:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2002/12/23 12:50:25  mbickel
+//      Fixed AI crash
+//      Minimap now working with partially defined graphic sets
+//
 //     Revision 1.25  2002/10/09 16:58:46  mbickel
 //      Fixed to GrafikSet loading
 //      New item filter for mapeditor
@@ -203,6 +207,7 @@ class SingleUnitSet {
 
 
          int active;
+         int ID;
          ASCString name;
          ASCString maintainer;
          ASCString information;
@@ -211,7 +216,7 @@ class SingleUnitSet {
          std::vector<TranslationTable*> transtab;
          bool filterBuildings;
 
-         SingleUnitSet ( void ) : active ( 1 ), filterBuildings ( true ) {};
+         SingleUnitSet ( void ) : active ( 1 ), filterBuildings ( true ), ID(0) {};
          int isMember ( int id );
          void read ( pnstream stream );
          void parseIDs ( const char* s );

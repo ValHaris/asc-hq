@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.88 2003-02-02 13:04:56 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.89 2003-02-13 00:56:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.88  2003/02/02 13:04:56  mbickel
+//      Increased version of main.con
+//      Updated makefiles
+//
 //     Revision 1.87  2002/12/23 12:50:25  mbickel
 //      Fixed AI crash
 //      Minimap now working with partially defined graphic sets
@@ -1237,6 +1241,10 @@ void SingleUnitSet::read ( pnstream stream )
             if ( b == "FILTERBUILDINGS" )
                filterBuildings = atoi ( e.c_str() );
 
+            if ( b == "IDENTIFICATION" )
+               ID = atoi ( e.c_str() );
+
+               
             if ( b == "ID" )
                parseIDs ( e.c_str() );
 

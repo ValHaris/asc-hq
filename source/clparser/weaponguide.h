@@ -2,8 +2,8 @@
 **
 ** weaponguide.h
 **
-** Sat Jul 28 13:23:10 2001
-** Linux 2.4.4 (#2 SMP Thu Jul 5 10:45:01 CEST 2001) i686
+** Wed Feb 12 23:57:57 2003
+** Linux 2.4.19-4GB (#1 Fri Sep 13 13:14:56 UTC 2002) i686
 ** martin@linux. (Martin Bickel)
 **
 ** Header file for command line parser class
@@ -34,6 +34,10 @@ private:
   /* parameters */
   string _c;
   int _r;
+  string _d;
+  string _l;
+  int _s;
+  bool _i;
   bool _h;
   bool _v;
 
@@ -56,6 +60,10 @@ public:
 
   string c() { return _c; }
   int r() { return _r; }
+  string d() { return _d; }
+  string l() { return _l; }
+  int s() { return _s; }
+  bool i() { return _i; }
   bool h() { return _h; }
   bool v() { return _v; }
 };

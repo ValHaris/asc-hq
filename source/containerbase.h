@@ -52,7 +52,7 @@ class ContainerBase {
 
       //! is called after a repair is perfored. Vehicles use this to reduce their experience.
       virtual void postRepair ( int oldDamage ) = 0;
-      virtual bool isBuilding() = 0;
+      virtual bool isBuilding() const = 0;
    public:
       ContainerBase ( const ContainerBaseType* bt, pmap map, int player );
 
@@ -103,7 +103,7 @@ class ContainerBase {
       int cargo ( void ) const;
 
 
-      virtual MapCoordinate3D getPosition ( ) = 0;
+      virtual MapCoordinate3D getPosition ( ) const = 0;
       virtual ~ContainerBase();
 };
 

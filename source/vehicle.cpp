@@ -1436,7 +1436,7 @@ void   Vehicle::readData ( tnstream& stream )
     #endif
 }
 
-MapCoordinate3D Vehicle :: getPosition ( )
+MapCoordinate3D Vehicle :: getPosition ( ) const
 {
    return MapCoordinate3D ( xpos, ypos, height );
 }

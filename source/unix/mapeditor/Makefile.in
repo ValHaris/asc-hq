@@ -129,7 +129,7 @@ password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
-textfile_evaluation.cpp
+textfile_evaluation.cpp containerbasetype.cpp
 
 
 asc_mapedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
@@ -146,7 +146,7 @@ password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
-textfile_evaluation.cpp
+textfile_evaluation.cpp containerbasetype.cpp
 
 
 asc_map2pcx_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
@@ -178,7 +178,7 @@ am_asc_map2pcx_OBJECTS = map2pcx.$(OBJEXT) weather.$(OBJEXT) \
 	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
 	itemrepository.$(OBJEXT) stringtokenizer.$(OBJEXT) \
 	music.$(OBJEXT) messages.$(OBJEXT) paradialog.$(OBJEXT) \
-	textfile_evaluation.$(OBJEXT)
+	textfile_evaluation.$(OBJEXT) containerbasetype.$(OBJEXT)
 asc_map2pcx_OBJECTS = $(am_asc_map2pcx_OBJECTS)
 asc_map2pcx_DEPENDENCIES = \
 	$(top_builddir)/source/libs/triangul/libtriangul.la \
@@ -204,7 +204,8 @@ am_asc_mapedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
 	terraintype.$(OBJEXT) objecttype.$(OBJEXT) \
 	textfiletags.$(OBJEXT) itemrepository.$(OBJEXT) \
 	stringtokenizer.$(OBJEXT) music.$(OBJEXT) messages.$(OBJEXT) \
-	paradialog.$(OBJEXT) textfile_evaluation.$(OBJEXT)
+	paradialog.$(OBJEXT) textfile_evaluation.$(OBJEXT) \
+	containerbasetype.$(OBJEXT)
 asc_mapedit_OBJECTS = $(am_asc_mapedit_OBJECTS)
 asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/libs/triangul/libtriangul.la
@@ -224,12 +225,13 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/basegfx.Po ./$(DEPDIR)/basestrm.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/buildings.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/buildingtype.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/containerbase.Po ./$(DEPDIR)/dialog.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/dlg_box.Po ./$(DEPDIR)/edevents.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/edgen.Po ./$(DEPDIR)/edglobal.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/edmain.Po ./$(DEPDIR)/edmisc.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/edselfnt.Po ./$(DEPDIR)/gamemap.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/gameoptions.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/containerbase.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/containerbasetype.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/dialog.Po ./$(DEPDIR)/dlg_box.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/edevents.Po ./$(DEPDIR)/edgen.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/edglobal.Po ./$(DEPDIR)/edmain.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/edmisc.Po ./$(DEPDIR)/edselfnt.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/gamemap.Po ./$(DEPDIR)/gameoptions.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/graphicset.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/itemrepository.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/loadbi3.Po ./$(DEPDIR)/loaders.Po \
@@ -326,6 +328,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildings.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildingtype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbase.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbasetype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dlg_box.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edevents.Po@am__quote@

@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.118 2003-02-12 20:11:53 mbickel Exp $
+//     $Id: typen.h,v 1.119 2003-02-13 00:56:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.118  2003/02/12 20:11:53  mbickel
+//      Some significant changes to the Transportation code
+//
 //     Revision 1.117  2003/01/12 19:37:19  mbickel
 //      Rewrote resource production
 //
@@ -470,8 +473,8 @@ class MapCoordinate {
 class MapCoordinate3D : public MapCoordinate {
             int z;
          public:
-            int getBitmappedHeight ( ) { return 1<<z; };
-            int getNumericalHeight ( ) { return z; };
+            int getBitmappedHeight ( ) const { return 1<<z; };
+            int getNumericalHeight ( ) const { return z; };
             // MapCoordinate3D& operator= ( const MapCoordinate& mc ) { x = mc.x; y = mc.y; z = -1 );
             MapCoordinate3D ( ) : MapCoordinate(), z(-1) {};
             MapCoordinate3D ( int _x, int _y, int bitmappedz) : MapCoordinate ( _x, _y ), z ( log2(bitmappedz) ) {};

@@ -129,7 +129,7 @@ gamemap.cpp password.cpp password_dialog.cpp replay.cpp research.cpp \
 mapdisplay.cpp resourcenet.cpp dashboard.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp textfileparser.cpp terraintype.cpp \
 objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp \
-messages.cpp paradialog.cpp textfile_evaluation.cpp
+messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp
 
 
 asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
@@ -166,7 +166,7 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
 	itemrepository.$(OBJEXT) stringtokenizer.$(OBJEXT) \
 	music.$(OBJEXT) messages.$(OBJEXT) paradialog.$(OBJEXT) \
-	textfile_evaluation.$(OBJEXT)
+	textfile_evaluation.$(OBJEXT) containerbasetype.$(OBJEXT)
 asc_OBJECTS = $(am_asc_OBJECTS)
 asc_DEPENDENCIES = $(top_builddir)/source/libs/triangul/libtriangul.la \
 	$(top_builddir)/source/ai/libai.la \
@@ -189,6 +189,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/buildings.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/buildingtype.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/containerbase.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/containerbasetype.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/controls.Po ./$(DEPDIR)/dashboard.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/dialog.Po ./$(DEPDIR)/dlg_box.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/gamedlg.Po ./$(DEPDIR)/gamemap.Po \
@@ -298,6 +299,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildings.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildingtype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbase.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbasetype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/controls.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dashboard.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialog.Po@am__quote@

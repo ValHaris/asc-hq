@@ -38,7 +38,7 @@ class  Building : public ContainerBase {
 
     friend class tprocessminingfields;
   protected:
-    bool isBuilding() { return true; };
+    bool isBuilding() const { return true; };
 
   public:
     class Work {
@@ -232,7 +232,7 @@ class  Building : public ContainerBase {
     void resetPicturePointers ( void );
 
     //! returns the position of the buildings entry
-    MapCoordinate3D getPosition ( ) { return getEntry(); };
+    MapCoordinate3D getPosition ( ) const { return getEntry(); };
     
     //! registers the building at the given position on the map
     int  chainbuildingtofield ( const MapCoordinate& entryPos, bool setupImages = true );
