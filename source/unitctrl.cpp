@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.91 2002-11-01 14:06:53 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.92 2002-11-27 10:38:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.91  2002/11/01 14:06:53  mbickel
+//      Changing the height between floating and driving has no movecost any more
+//      submarines evalute the field properties, not the terrain type properties
+//
 //     Revision 1.90  2002/10/27 22:19:44  mbickel
 //      Added bridge terrain property
 //      Some restructuring of the graphic set code
@@ -610,6 +614,9 @@ void VehicleMovement :: searchmove(int         x,
 
       calcmovemalus(ox,oy,x,y,vehicle,direc, mm1, mm2, search.height);
 
+      if ( mm2 < 10 )
+         displaymessage ( "invalid movecost for accessing field at %d / %d .\n Movecost is %d", 2, x, y, mm2 );
+         
       streck -= mm2;
       fuelneeded   += mm1;
    } 

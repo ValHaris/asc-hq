@@ -1697,8 +1697,11 @@ void tfield :: setparams ( void )
    int i;
    bdt = typ->art;
 
-   for ( i = 0; i < cmovemalitypenum; i++ )
+   for ( i = 0; i < cmovemalitypenum; i++ )   {
       __movemalus.at(i) = typ->move_malus[i];
+      if ( __movemalus[i] < minmalq )
+         fatalError ( "invalid movemalus for terraintype ID %d used on field %d / %d" , typ->terraintype->id, getx(), gety() );
+   }
 
    for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
       bdt  &=  o->typ->terrain_and;
