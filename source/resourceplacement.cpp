@@ -38,8 +38,7 @@ additionalResourceFreeFieldsPercentageFuel(addFreeFieldsPercFuel), additionalRes
     materialRoughness = 4.0;
   else if(materialRoughness < 0.1)
     materialRoughness = 0.1;
-    
-     cout << "additionalResourceFreeMaterial " << additionalResourceFreeFieldsPercentageMaterial << endl;
+         
 }
 
 
@@ -163,8 +162,8 @@ pfield ResourcePlacement::calculateDiamondPoint(pfield a, pfield b, pfield c, pf
   int y = 0;
   double xd = (b->getx() - a->getx())/2;
   double yd = (d->gety() - a->gety())/2;
-  x =  xd + a->getx();
-  y = yd  + a->gety();
+  x =  static_cast<int>(xd) + a->getx();
+  y = static_cast<int>(yd)  + a->gety();
   pfield e = map.getField(x, y);
   if(placeFuel) {
     e->temp3 = calculateDiamondValueFuel(a, b, c, d);
@@ -194,8 +193,9 @@ short ResourcePlacement::createAlgebraicSign() {
   else
     return 1;
 }
+
 int ResourcePlacement::calculateCornerValueFuel(pfield a, pfield b, pfield c) {
-  int value = (a->temp3 + b->temp3 + c->temp3)/3 + createRandomValue(calculateCurrentOffset(maxFuelOffset) * fuelRoughness)* createAlgebraicSign();
+  int value = (a->temp3 + b->temp3 + c->temp3)/3 + createRandomValue(static_cast<int>(calculateCurrentOffset(maxFuelOffset) * fuelRoughness))* createAlgebraicSign();
   if(value > MAXFUELVALUE * (1 + additionalResourceFreeFieldsPercentageFuel / 100)) {
     value = MAXFUELVALUE * (1 + additionalResourceFreeFieldsPercentageFuel /100);
   } else if( value < MINFUELVALUE) {
@@ -206,7 +206,7 @@ int ResourcePlacement::calculateCornerValueFuel(pfield a, pfield b, pfield c) {
 
 
 int ResourcePlacement::calculateDiamondValueFuel(pfield a, pfield b, pfield c, pfield d) {  
-  int value = (a->temp3 + b->temp3 + c->temp3 + d->temp3)/4 + createRandomValue(calculateCurrentOffset(maxFuelOffset) * fuelRoughness) * createAlgebraicSign();
+  int value = static_cast<int>((a->temp3 + b->temp3 + c->temp3 + d->temp3)/4 + createRandomValue(static_cast<int>(calculateCurrentOffset(maxFuelOffset) * fuelRoughness)) * createAlgebraicSign());
   if(value > MAXFUELVALUE * (1 + additionalResourceFreeFieldsPercentageFuel / 100)) {
     value = MAXFUELVALUE * (1 + additionalResourceFreeFieldsPercentageFuel /100);
   } else if( value < MINFUELVALUE) {
@@ -216,7 +216,7 @@ int ResourcePlacement::calculateDiamondValueFuel(pfield a, pfield b, pfield c, p
 }
 
 int ResourcePlacement::calculateCornerValueMaterial(pfield a, pfield b, pfield c) {
-  int value = (a->temp4 + b->temp4 + c->temp4)/3 + createRandomValue(calculateCurrentOffset(maxMaterialOffset) * materialRoughness)* createAlgebraicSign();
+  int value = (a->temp4 + b->temp4 + c->temp4)/3 + createRandomValue(static_cast<int>(calculateCurrentOffset(maxMaterialOffset) * materialRoughness ) * createAlgebraicSign());
   if(value > MAXMATERIALVALUE * (1 + additionalResourceFreeFieldsPercentageMaterial / 100)) {
     value = MAXMATERIALVALUE * (1 + additionalResourceFreeFieldsPercentageMaterial / 100);
   } else if( value < MINMATERIALVALUE) {
@@ -226,7 +226,7 @@ int ResourcePlacement::calculateCornerValueMaterial(pfield a, pfield b, pfield c
 }
 
 int ResourcePlacement::calculateDiamondValueMaterial(pfield a, pfield b, pfield c, pfield d) {
-  int value = (a->temp4 + b->temp4 + c->temp4 + d->temp4)/4 + createRandomValue(calculateCurrentOffset(maxMaterialOffset)* materialRoughness) * createAlgebraicSign();
+  int value = (a->temp4 + b->temp4 + c->temp4 + d->temp4)/4 + createRandomValue(static_cast<int>(calculateCurrentOffset(maxMaterialOffset)* materialRoughness)) * createAlgebraicSign();
   if(value > MAXMATERIALVALUE * (1 + additionalResourceFreeFieldsPercentageMaterial / 100)) {
     value = MAXMATERIALVALUE * (1 + additionalResourceFreeFieldsPercentageMaterial / 100);
   } else if( value < MINMATERIALVALUE) {
@@ -256,3 +256,4 @@ void ResourcePlacement::setFieldValueMaterial(tfield* f){
      f->material = value;
    }                
 }
+

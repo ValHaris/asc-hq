@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.154.2.7 2004-12-28 19:47:48 mbickel Exp $
+//     $Id: typen.h,v 1.154.2.8 2005-01-12 20:01:23 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -163,8 +163,8 @@ class ResourceMatrix {
 //! the time in ASC, measured in turns and moves
 struct GameTime {
   GameTime() { abstime = 0; };
-  int move() { return abstime % 0x10000; };
-  int turn() { return abstime / 0x10000; };
+  int move() const { return abstime % 0x10000; };
+  int turn() const { return abstime / 0x10000; };
   static bool comp ( const GameTime& a, const GameTime& b ) { return a.abstime > b.abstime; };
   void set ( int turn, int move ) { abstime = (turn * 0x10000) + move ; };
   int abstime;

@@ -24,7 +24,8 @@
       obj\gameevent_dialogs.obj obj\music.obj obj\clipboard.obj 
       obj\ascttfont.obj obj\blitter.obj obj\surface.obj obj\weatherdialog.obj 
       obj\weatherarea.obj obj\guidimension.obj obj\SDL_loadso.obj 
-      obj\geometry.obj obj\resourceplacement.obj obj\resourceplacementdialog.obj"/>
+      obj\geometry.obj obj\resourceplacement.obj obj\resourceplacementdialog.obj 
+      obj\iconrepository.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -167,6 +168,7 @@
       <FILE FILENAME="..\..\..\geometry.cpp" FORMNAME="" UNITNAME="geometry" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\resourceplacement.cpp" FORMNAME="" UNITNAME="resourceplacement.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\resourceplacementdialog.cpp" FORMNAME="" UNITNAME="resourceplacementdialog.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\iconrepository.cpp" FORMNAME="" UNITNAME="iconrepository" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

@@ -86,21 +86,21 @@ public:
 class WeatherAreaInformation{
 private:
   WeatherArea* weatherArea;
-  int turn;
+  GameTime time;
   int duration;
   FalloutType fallOut;
 public:
-  WeatherAreaInformation(WeatherArea* wa, int turn, int duration, FalloutType fallOut);
-  WeatherAreaInformation(WeatherArea* wa, int turn);
+  WeatherAreaInformation(WeatherArea* wa, GameTime time, int duration, FalloutType fallOut);
+  WeatherAreaInformation(WeatherArea* wa, GameTime time);
   ~WeatherAreaInformation();
   
-  int getTurn() const;
+  GameTime getTriggerTime() const;
   int getDuration() const;
   FalloutType getFalloutType() const;
   WeatherArea* getWeatherArea(){
     return weatherArea;
   }
-  std::string getInformation() const;
+  std::string getInformation() const;  
 
 };
 class EventAreasDialog: public ASC_PG_Dialog{
@@ -129,6 +129,72 @@ private:
   bool buttonRemove( PG_Button* button );
   
   void updateAreaList();
+};
+
+class WindInformation{
+private:
+  WindData data;
+  int turn;    
+public:
+  WindInformation(WindData data, int turn);  
+  ~WindInformation();
+  
+  int getTurn() const;   
+  WindData getWindData() const;
+  std::string getInformation() const;  
+  
+
+};
+
+
+class EventWindChangesDialog: public ASC_PG_Dialog{
+
+public:
+EventWindChangesDialog();
+~EventWindChangesDialog();
+void addNewWindInformation(WindInformation* wi);
+
+bool closeWindow();
+
+private:
+  static const int xSize;
+  static const int ySize;
+  static const string SEPERATOR;
+  list<WindInformation*> currentList;  
+  list<WindInformation*> addList;
+  
+  PG_ListBox* eventList;
+  PG_Button* addButton;
+  PG_Button* removeButton;
+  bool buttonEvent( PG_Button* button );
+  
+  bool buttonAdd( PG_Button* button );
+  bool buttonRemove( PG_Button* button );
+  
+  void updateWindChangeList();
+};
+
+class AddWindChangeDialog: public ASC_PG_Dialog{
+public:
+  AddWindChangeDialog(EventWindChangesDialog* ead);
+  ~AddWindChangeDialog();
+  
+  
+private:
+  static const int xSize;
+  static const int ySize;
+
+  PG_Label* turnLabel;
+  PG_LineEdit* turnValue;
+  
+  PG_Label* directionLabel;
+  PG_DropDown* directionBox;
+  
+  PG_Label* speedLabel;
+  PG_LineEdit* speedValue;
+  
+  bool buttonEvent( PG_Button* button );
+  bool closeWindow();
 };
 
 class AddWeatherAreaDialog: public ASC_PG_Dialog{
@@ -198,6 +264,7 @@ private:
   static const int ysize;
   
   PG_CheckButton* randomMode;
+  PG_CheckButton* seedMode;
   
   PG_Label* areaSpawnsLabel;
   PG_LineEdit* areaSpawnsValue;
@@ -226,7 +293,11 @@ private:
   PG_Label* eventAreasLabel;
   PG_Button* eventAreasButton;
   
+  PG_Label* eventWindChangesLabel;
+  PG_Button* eventWindChangesButton;
+  
   bool editEventAreas(PG_Button* button );  
+  bool editEventWindChanges(PG_Button* button );  
   bool editFallOut( PG_Button* button );  
   bool editWindSpeed( PG_Button* button );  
   bool editWindDirection( PG_Button* button );
@@ -242,4 +313,5 @@ private:
 extern void weatherConfigurationDialog();
 
 #endif
+
 

@@ -74,6 +74,7 @@ tmap :: tmap ( void )
 
    for ( i = 0; i< 9; i++ ) {
       player[i].ai = NULL;
+      player[i].player = i;
 
       if ( i == 0 )
          player[i].stat = Player::human;
@@ -762,6 +763,23 @@ void tmap :: setupResources ( void )
    }
 }
 
+
+
+int tmap :: Player :: getColor()
+{
+   switch ( player ) {
+      case 0: return 0x640000;
+      case 1: return 0x000098;
+      case 2: return 0x5c5800;
+      case 3: return 0x004c00;
+      case 4: return 0xbc0000;
+      case 5: return 0x540054;
+      case 6: return 0x00002c;
+      case 7: return 0x482800;
+      case 8: return 0x3c3c3c;
+   };
+   return 0;
+}
 
 const ASCString& tmap :: Player :: getName( )
 {

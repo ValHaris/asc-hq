@@ -783,7 +783,7 @@ template<>
          {
             PixelType d = 0;
             for ( int i = 0; i < 3; ++i)
-               d |= int( float(((*dest) >> (i*8)) & 0xff) * b ) << (i*8);
+               d |= min( max( int( float(((*dest) >> (i*8)) & 0xff) * b ), 0 ), 255) << (i*8);
 
             *dest = d;
          };

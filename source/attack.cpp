@@ -19,7 +19,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
 
@@ -40,18 +40,16 @@
 #include "loaders.h"
 #include "gameoptions.h"
 #include "viewcalculation.h"
+#include "graphics/drawing.h"
 
 #include "mapalgorithms.h"
 #include "paradialog.h"
 #define USE_COLOR_CONSTANTS
 #include "pgcolors.h"
-
+#include "iconrepository.h"
 #ifdef sgmain
  #include "soundList.h"
 #endif
-
-
-
 
 
 bool  AttackFormula :: checkHemming ( Vehicle*     d_eht,  int     direc )
@@ -155,7 +153,6 @@ float AttackFormula :: defense_defensebonus ( int defensebonus )
 
 tfight :: tfight ( void )
 {
-   synchronedisplay = 0;
 }
 
 
@@ -242,31 +239,6 @@ void tfight :: calc ( void )
 }
 
 
-int positions[][4] = {{ 459,    312,    468,      412  },
-                      { 471,    312,    480,      412  },
-                      { 483,    312,    492,      412  },
-                      { 494,    312,    504,      412  },
-                      { 510,    312,    531,      412  },
-                      { 542,    312,    563,      412  },
-                      { 569,    312,    578,      412  },
-                      { 581,    312,    590,      412  },
-                      { 593,    312,    602,      412  },
-                      { 605,    312,    614,      412  }};
-
-void tfight :: paintbar ( int num, int val, int col )
-{
-   if ( val ) 
-      bar ( agmp->resolutionx - ( 640 - positions[num][0] ) , positions[num][3] - ( val - 1), agmp->resolutionx - ( 640 - positions[num][2] ), positions[num][3], col );
-
-}
-
-void tfight :: paintline ( int num, int val, int col )
-{
-   if ( val ) 
-      line ( agmp->resolutionx - ( 640 - positions[num][0] ) , positions[num][3] - ( val - 1), agmp->resolutionx - ( 640 - positions[num][2] ), positions[num][3] - ( val - 1), col );
-
-}
-
 
 
 #define maxdefenseshown 24
@@ -289,8 +261,9 @@ void tunitattacksunit::calcdisplay( int ad, int dd ) {
 
 
 class AttackPanel : public Panel {
+       tfight& engine;
      public:
-        AttackPanel ( ) ;
+        AttackPanel ( tfight& engine_ ) ;
         void setBarGraphValue( const ASCString& widgetName, float fraction ) { Panel::setBargraphValue( widgetName, fraction ); };
         void setBarGraphColor( const ASCString& widgetName, PG_Color color ){
             BarGraphWidget* bgw = dynamic_cast<BarGraphWidget*>( FindChild( widgetName, true ) );
@@ -299,18 +272,81 @@ class AttackPanel : public Panel {
         };
       void setLabelText ( const ASCString& widgetName, int i ) { Panel::setLabelText ( widgetName, i ); };
       void setLabelText ( const ASCString& widgetName, const ASCString& i ) { Panel::setLabelText ( widgetName, i ); };
-      void dispValue ( const ASCString& name, float value, float maxvalue );
+      void dispValue ( const ASCString& name, float value, float maxvalue, PG_Color color );
+
+      void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
+   private:
+      void registerSpecialDisplay( const ASCString& name );
 };
 
 
-AttackPanel::AttackPanel ( ) : Panel( PG_Application::GetWidgetById(1), PG_Rect(0,0,170,200), "Attack" )
+
+AttackPanel::AttackPanel ( tfight& engine_ ) : Panel( PG_Application::GetWidgetById(1), PG_Rect(0,0,170,200), "Attack" ), engine( engine_ )
 {
+   registerSpecialDisplay( "attacker_unit_pic" );
+   registerSpecialDisplay( "defender_unit_pic" );
+   registerSpecialDisplay( "attacker_unitexp" );
+   registerSpecialDisplay( "defender_unitexp" );
+   registerSpecialDisplay( "attacker_level" );
+   registerSpecialDisplay( "defender_level" );
+   registerSpecialDisplay( "attacker_weaponsymbol" );
+   registerSpecialDisplay( "defender_weaponsymbol" );
+}
+
+
+void AttackPanel::registerSpecialDisplay( const ASCString& name )
+{
+   SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( name, true ) );
+   if ( sdw )
+     sdw->display.connect( SigC::slot( *this, &AttackPanel::painter ));
+}
+
+
+void AttackPanel::painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
+{
+   Surface s = Surface::Wrap( PG_Application::GetScreen() );
+
+   if ( name  == "attacker_unit_pic" ) {
+      engine.paintAttacker( s, dst );
+      return;
+   }
+   if ( name  == "defender_unit_pic" ) {
+      engine.paintTarget( s, dst );
+      return;
+   }
+   if ( name  == "attacker_unitexp" ) {
+      s.Blit( IconRepository::getIcon("experience" + ASCString::toString(engine.av.experience) + ".png"), SPoint(dst.x, dst.y) );
+      return;
+   }
+   if ( name  == "defender_unitexp" ) {
+      s.Blit( IconRepository::getIcon("experience" + ASCString::toString(engine.dv.experience) + ".png"), SPoint(dst.x, dst.y) );
+      return;
+   }
+   if ( name  == "attacker_level" && engine.av.height ) {
+      s.Blit( IconRepository::getIcon("height-a" + ASCString::toString(log2(engine.av.height)) + ".png"), SPoint(dst.x, dst.y) );
+      return;
+   }
+   if ( name  == "defender_level" && engine.dv.height ) {
+      s.Blit( IconRepository::getIcon("height-a" + ASCString::toString(log2(engine.dv.height)) + ".png"), SPoint(dst.x, dst.y) );
+      return;
+   }
+
+   if ( name  == "attacker_weaponsymbol" && engine.av.weapontype >= 0  ) {
+      s.Blit( IconRepository::getIcon(SingleWeapon::getIconFileName( engine.av.weapontype ) + "-small.png"), SPoint(dst.x, dst.y) );
+      return;
+   }
+   if ( name  == "defender_weaponsymbol" && engine.dv.weapontype >= 0  ) {
+      s.Blit( IconRepository::getIcon(SingleWeapon::getIconFileName( engine.dv.weapontype ) + "-small.png"), SPoint(dst.x, dst.y) );
+      return;
+   }
 
 }
 
-void AttackPanel::dispValue ( const ASCString& name, float value, float maxvalue )
+
+void AttackPanel::dispValue ( const ASCString& name, float value, float maxvalue, PG_Color color )
 {
    if ( value > 0 ) {
+      setBarGraphColor( name + "bar", color );
       if ( value > maxvalue )
          setBarGraphValue( name + "bar", 1 );
       else
@@ -332,7 +368,7 @@ void tfight :: calcdisplay ( int ad, int dd )
 {
 
 
-   auto_ptr<AttackPanel> at ( new AttackPanel());
+   auto_ptr<AttackPanel> at ( new AttackPanel(*this));
 
    int ac = 20 + av.color * 8;
    int dc = 20 + dv.color * 8;
@@ -340,9 +376,14 @@ void tfight :: calcdisplay ( int ad, int dd )
    float avd = float( 100 - av.damage )/100;
    float dvd = float( 100 - dv.damage )/100;
 
+   PG_Color attackingColor = lightenColor( PG_Color( actmap->player[getAttackingPlayer()].getColor()), 1.4 );
+   PG_Color defendingColor = lightenColor( PG_Color( actmap->player[getDefendingPlayer()].getColor()), 1.4 );
 
    at->setBarGraphValue( "attacker_unitstatusbar", avd );
+   at->setBarGraphColor( "attacker_unitstatusbar", attackingColor );
+
    at->setBarGraphValue( "defender_unitstatusbar", dvd );
+   at->setBarGraphColor( "defender_unitstatusbar", defendingColor );
 
    at->setLabelText( "attacker_unitstatus", 100 - av.damage );
    at->setLabelText( "defender_unitstatus", 100 - dv.damage );
@@ -350,17 +391,19 @@ void tfight :: calcdisplay ( int ad, int dd )
 
 
    at->setBarGraphValue( "attacker_hemmingbar", (dv.hemming -1) / 1.4 );
-//   at->setBarGraphValue( "defender_hemming", float( 100 - dv.damage )/100 );
+   at->setBarGraphColor( "attacker_hemmingbar", attackingColor );
+   at->setBarGraphValue( "defender_hemmingbar", (av.hemming -1) / 1.4 );
+   at->setBarGraphColor( "defender_hemmingbar", defendingColor );
 
    at->setLabelText( "defender_hemming", "-" );
    at->setLabelText( "attacker_hemming", (dv.hemming-1) * 100 );
 
-   at->dispValue( "attacker_attackbonus", strength_attackbonus(av.attackbonus), maxattackshown );
-   at->dispValue( "defender_attackbonus", strength_attackbonus(dv.attackbonus), maxattackshown );
+   at->dispValue( "attacker_attackbonus", strength_attackbonus(av.attackbonus), maxattackshown, attackingColor );
+   at->dispValue( "defender_attackbonus", strength_attackbonus(dv.attackbonus), maxattackshown, defendingColor );
 
 
-   at->dispValue( "attacker_defencebonus", defense_defensebonus(av.defensebonus), maxattackshown );
-   at->dispValue( "defender_defencebonus", defense_defensebonus(dv.defensebonus), maxattackshown );
+   at->dispValue( "attacker_defencebonus", defense_defensebonus(av.defensebonus), maxattackshown, attackingColor );
+   at->dispValue( "defender_defencebonus", defense_defensebonus(dv.defensebonus), maxattackshown, defendingColor );
 
 
    int t = ticker;
@@ -424,6 +467,11 @@ void tfight :: calcdisplay ( int ad, int dd )
 }
 
 
+void UnitAttacksSomething::paintAttacker( Surface& surface, const SDL_Rect &dst )
+{
+   _attackingunit->paint( surface, SPoint( dst.x, dst.y ));
+}
+
 
 
 tunitattacksunit :: tunitattacksunit ( Vehicle* &attackingunit, Vehicle* &attackedunit, bool respond, int weapon )
@@ -473,6 +521,8 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
    av.color      = attackingunit->getOwner();
    av.initiative = attackingunit->typ->initiative;
    av.kamikaze   = attackingunit->typ->functions & cfkamikaze;
+   av.height = attackingunit->height;
+   av.weapontype = attackingunit->typ->weapons.weapon[ _weapon ].getScalarWeaponType();
 
    pfield field = getfield ( attackingunit->xpos, attackingunit->ypos );
 
@@ -488,6 +538,7 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
    }
 
 
+   dv.weapnum = -1;
    if ( dist <= maxmalq  &&  respond  && !av.kamikaze  && fieldvisiblenow( field, attackedunit->getOwner()) ) {
       AttackWeap atw;
       attackpossible2n ( attackedunit, attackingunit, &atw );
@@ -518,6 +569,7 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
       _respond = 1;
 
       dv.weapcount   = attackedunit->ammo [ dv.weapnum ];
+      dv.weapontype = attackedunit->typ->weapons.weapon[ dv.weapnum ].getScalarWeaponType();
 
    } else {
       dv.strength = 0;
@@ -543,6 +595,7 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
    dv.color      = attackedunit->getOwner();
    dv.initiative = attackedunit->typ->initiative;
    dv.kamikaze = 0;
+   dv.height = attackedunit->height;
 }
 
 
@@ -579,11 +632,12 @@ void tunitattacksunit :: setresult ( void )
    actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 }
 
-void tunitattacksunit :: paintimages ( int xa, int ya, int xd, int yd )
+
+void tunitattacksunit::paintTarget( Surface& surface, const SDL_Rect &dst )
 {
-//    _attackingunit->paint( getActiveSurface(), SPoint(xa, ya));
-//    _attackedunit->paint ( getActiveSurface(), SPoint(xd, yd));
-};
+   _attackedunit->paint( surface, SPoint( dst.x, dst.y ));
+}
+
 
 
 
@@ -617,9 +671,9 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
             s = atw->strength[i];
             n = i;
          }
-   
+
       _weapon = atw->num[n];
-   
+
       delete atw;
    } else
       _weapon  = weapon;
@@ -635,9 +689,11 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
    av.hemming    = 1;
    av.weapnum    = _weapon;
    av.weapcount  = attackingunit->ammo [ _weapon ];
+   av.weapontype = attackingunit->typ->weapons.weapon[ _weapon ].getScalarWeaponType();
    av.color      = attackingunit->getOwner();
    av.initiative = attackingunit->typ->initiative;
    av.kamikaze   = attackingunit->typ->functions & cfkamikaze;
+   av.height = attackingunit->height;
 
    pfield field = getfield ( attackingunit->xpos, attackingunit->ypos );
 
@@ -661,14 +717,15 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
    dv.damage    = _attackedbuilding->damage;
    dv.experience = 0;
    dv.hemming    = 1;
+   dv.weapnum = -1;
 
    dv.defensebonus = 0; // getfield ( x, y ) -> getdefensebonus();
    dv.color      = _attackedbuilding->getOwner();
    dv.initiative = 0;
    dv.kamikaze = 0;
-
-
+   dv.height = _attackedbuilding->typ->buildingheight;
 }
+
 
 void tunitattacksbuilding::calcdisplay( int ad, int dd ) {
   #ifdef sgmain
@@ -708,13 +765,10 @@ void tunitattacksbuilding :: setresult ( void )
    actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 }
 
-void tunitattacksbuilding :: paintimages ( int xa, int ya, int xd, int yd )
+void tunitattacksbuilding :: paintTarget( Surface& surface, const SDL_Rect &dst )
 {
-   _attackingunit->paint( getActiveSurface(), SPoint(xa, ya));
-   _attackedbuilding->paintSingleField( getActiveSurface(), SPoint(xd, yd), _attackedbuilding->getLocalCoordinate(MapCoordinate(_x,_y)));
-   // getActiveSurface().Blit( *getfield ( _x, _y ) -> buildingPicture, SPoint(xd,yd));
-   //putrotspriteimage ( xd, yd,  , _attackedbuilding->color  );
-};
+   _attackedbuilding->paintSingleField( surface, SPoint(dst.x, dst.y), _attackedbuilding->getLocalCoordinate(MapCoordinate(_x,_y)));
+}
 
 
 
@@ -773,6 +827,8 @@ void tmineattacksunit :: setup ( pfield mineposition, int minenum, Vehicle* &att
    av.initiative = 256;
    av.attackbonus = 8;
    av.kamikaze = 0;
+   av.height = 0;
+   av.weapontype = cwminen;
 
    dv.strength = 0;
    dv.armor = attackedunit->armor;
@@ -786,6 +842,7 @@ void tmineattacksunit :: setup ( pfield mineposition, int minenum, Vehicle* &att
    dv.initiative = attackedunit->typ->initiative;
    dv.attackbonus = 0;
    dv.kamikaze = 0;
+   dv.height = attackedunit->height;
 }
 
 void tmineattacksunit::calcdisplay( int ad, int dd ) {
@@ -821,8 +878,10 @@ void tmineattacksunit :: setresult ( void )
 
 }
 
-void tmineattacksunit :: paintimages ( int xa, int ya, int xd, int yd )
+
+void tmineattacksunit :: paintAttacker( Surface& surface, const SDL_Rect &dst )
 {
+  #if 0
    if ( _minenum == -1 ) {
       tfield::MineContainer::iterator m = _mineposition->mines.begin();
       while ( ! m->attacksunit  ( _attackedunit ))
@@ -832,7 +891,12 @@ void tmineattacksunit :: paintimages ( int xa, int ya, int xd, int yd )
    } else
       putspriteimage    ( xa, ya, getmineadress ( _mineposition->getMine(_minenum).type ));
 
-   _attackedunit->paint( getActiveSurface(), SPoint(xd, yd));   
+  #endif
+}
+
+void tmineattacksunit :: paintTarget( Surface& surface, const SDL_Rect &dst )
+{
+   _attackedunit->paint( surface, SPoint( dst.x, dst.y ));
 }
 
 
@@ -892,6 +956,8 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
    av.weapnum    = _weapon;
    av.weapcount   = attackingunit->ammo [ _weapon ];
    av.kamikaze   = attackingunit->typ->functions & cfkamikaze;
+   av.height = attackingunit->height;
+   av.weapontype = attackingunit->typ->weapons.weapon[ _weapon ].getScalarWeaponType();
 
    pfield field2 = getfield ( attackingunit->xpos, attackingunit->ypos );
 
@@ -918,7 +984,7 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
    dv.hemming    = 1;
    dv.color = 8 ;
    dv.kamikaze = 0;
-
+   dv.height = 0;
 }
 
 void tunitattacksobject::calcdisplay( int ad, int dd ) {
@@ -956,13 +1022,11 @@ void tunitattacksobject :: setresult ( void )
 }
 
 
-void tunitattacksobject :: paintimages ( int xa, int ya, int xd, int yd )
+
+void tunitattacksobject :: paintTarget( Surface& surface, const SDL_Rect &dst )
 {
-   _attackingunit->paint( getActiveSurface(), SPoint(xa, ya));
-   _obji->typ->display ( getActiveSurface(), SPoint(xd - 5, yd - 5) );
+   _obji->typ->display ( surface, SPoint( dst.x, dst.y ) );
 }
-
-
 
 
 
@@ -1220,7 +1284,7 @@ bool vehicleplattfahrbar( const Vehicle*     vehicle,
       return ( false );
 
    if ((vehicle->color != field->vehicle->color) &&
-      (vehicle->height == chfahrend) && 
+      (vehicle->height == chfahrend) &&
       (field->vehicle->height == chfahrend) && 
       (field->vehicle->functions & cftrooper) && 
       (vehicle->weight() >= fusstruppenplattfahrgewichtsfaktor * field->vehicle->weight()))

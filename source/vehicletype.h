@@ -118,6 +118,7 @@ extern const char*  cvehiclefunctions[];
      int          gettype ( void ) const { return typ; };
      bool         offensive( void ) const;
      ASCString    getName ( void ) const;
+     static ASCString   getIconFileName( int weaponType );
      void         runTextIO ( PropertyContainer& pc );
  };
 

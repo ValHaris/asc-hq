@@ -323,7 +323,7 @@ class tmap {
           int         prevmap;   
 
           //! a campaign is usually designed to be played by a specific player
-          unsigned char         player;   
+          unsigned char         player;
 
           //! can the map be loaded just by knowing its filenmae? If 0, the codeword is required
           char      directaccess;   
@@ -361,6 +361,8 @@ class tmap {
 
       //! the different players in ASC. There may be 8 players (0..7) and neutral units (8)
       class Player {
+            friend class tmap;
+            int player;
          public:
             //! does the player exist at all
             bool         exist();
@@ -440,6 +442,8 @@ class tmap {
             PlayTimeContainer playTime;
 
             MapCoordinate cursorPos;
+
+            int getColor();
             
       } player[9];
 

@@ -30,6 +30,8 @@
 
 #include "typen.h"
 #include "vehicletype.h"
+#include "vehicle.h"
+#include "buildings.h"
 
 
 
@@ -48,14 +50,14 @@ class AttackFormula {
         };
 
 class tfight : public AttackFormula {
-           void paintbar ( int num, int val, int col );
-           void paintline ( int num, int val, int col );
-           virtual void paintimages ( int xa, int ya, int xd, int yd ) = 0;
-        protected:   
+        protected:
            tfight ( void );
-           int synchronedisplay;
-        public:  
+
+           virtual int getAttackingPlayer() = 0;
+           virtual int getDefendingPlayer() = 0;
+        public:
            struct tavalues {
+                     tavalues() : weapontype(-1) {};
                      int strength;
                      int armor;
                      int damage;
@@ -68,27 +70,43 @@ class tfight : public AttackFormula {
                      int color;
                      int initiative;
                      int kamikaze;
+                     int height;
+                     int weapontype;
                   } av, dv;
 
            //! Performs the calculation of the attack. The result is only stored in the av and dv structures and is not written to the map
            void calc ( void ) ;
-      
+
            //! Performs the calculation of the attack and displays the result on screen. As in calc , the result is not written to the actual units.
            virtual void calcdisplay ( int ad = -1, int dd = -1 );
 
            //! Writes the result of the attack calculation to the actual units.
            virtual void setresult ( void ) = 0;
+
+           virtual void paintAttacker( Surface& surface, const SDL_Rect &dst ) = 0;
+           virtual void paintTarget( Surface& surface, const SDL_Rect &dst ) = 0;
+
       };
 
-class tunitattacksunit : public tfight {
-           Vehicle* _attackingunit; 
-           Vehicle* _attackedunit; 
+class UnitAttacksSomething : public tfight {
+        protected:
+           Vehicle* _attackingunit;
+           int getAttackingPlayer() { return _attackingunit->getOwner(); };
+           void paintAttacker( Surface& surface, const SDL_Rect &dst );
+};
 
-           Vehicle** _pattackingunit; 
-           Vehicle** _pattackedunit; 
+class tunitattacksunit : public UnitAttacksSomething {
+           Vehicle* _attackedunit;
 
-           int _respond; 
-           void paintimages ( int xa, int ya, int xd, int yd );
+           Vehicle** _pattackingunit;
+           Vehicle** _pattackedunit;
+
+           int _respond;
+
+         protected:
+           int getDefendingPlayer() { return _attackedunit->getOwner();  };
+           void paintTarget( Surface& surface, const SDL_Rect &dst );
+
          public:
            /*! Calculates the fight if one unit attacks another units.
                \param respond Does the unit that is being attacked retalliate ?
@@ -101,11 +119,14 @@ class tunitattacksunit : public tfight {
 
       };
 
-class tunitattacksbuilding : public tfight {
-           Vehicle* _attackingunit; 
-           Building* _attackedbuilding; 
+class tunitattacksbuilding : public UnitAttacksSomething {
+           Building* _attackedbuilding;
            int _x, _y;
-           void paintimages ( int xa, int ya, int xd, int yd );
+         protected:
+           int getAttackingPlayer() { return _attackingunit->getOwner(); };
+           int getDefendingPlayer() { return _attackedbuilding->getOwner();  };
+           void paintTarget( Surface& surface, const SDL_Rect &dst );
+
          public:
            /*! Calculates the fight if one unit attacks the building at coordinate x/y.
                \param weapon  The number of the weapon which the attacking unit attacks with. If it is -1, the best weapon is chosen.
@@ -123,10 +144,18 @@ class tmineattacksunit : public tfight {
             Vehicle* _attackedunit;
             int _minenum;
             Vehicle** _pattackedunit;
-            void paintimages ( int xa, int ya, int xd, int yd );
+
+         protected:
+           int getAttackingPlayer() { return 8; };
+           int getDefendingPlayer() { return _attackedunit->getOwner();  };
+
+           void paintAttacker( Surface& surface, const SDL_Rect &dst );
+           void paintTarget( Surface& surface, const SDL_Rect &dst );
+
+
          public:
            /*! Calculates the fight if a unit drives onto a mine.
-               \param mineposition The field on which the mine was placed  
+               \param mineposition The field on which the mine was placed
                \param minenum The number of a specific mine which explodes. If -1 , all mines on this field which are able to attack the unit will explode.
                \param attackedunit The unit which moved onto the minefield.
            */
@@ -136,12 +165,16 @@ class tmineattacksunit : public tfight {
            virtual void calcdisplay(int ad = -1, int dd = -1);
       };
 
-class tunitattacksobject : public tfight {
-           Vehicle*     _attackingunit;
+class tunitattacksobject : public UnitAttacksSomething {
            pfield       targetField;
            pobject      _obji;
-           void paintimages ( int xa, int ya, int xd, int yd );
            int _x, _y;
+
+         protected:
+           int getAttackingPlayer() { return _attackingunit->getOwner(); };
+           int getDefendingPlayer() { return 8; };
+           void paintTarget( Surface& surface, const SDL_Rect &dst );
+
          public:
            /*! Calculates the fight if one unit attacks the objects at coordinate x/y.
                \param weapon  The number of the weapon which the attacking unit attacks with. If it is -1, the best weapon is chosen.
@@ -152,16 +185,16 @@ class tunitattacksobject : public tfight {
            virtual void calcdisplay(int ad = -1, int dd = -1);
       };
 
-   //! Structure to store the weapons which a unit can use to perform an attack. \sa attackpossible  
+   //! Structure to store the weapons which a unit can use to perform an attack. \sa attackpossible
    class AttackWeap {
                public:
-                    int          count; 
-                    int          strength[16]; 
-                    int          num[16]; 
+                    int          count;
+                    int          strength[16];
+                    int          num[16];
                     int          typ[16];
 
                     enum Target { nothing, vehicle, building, object } target;
-                 }; 
+                 };
    typedef class AttackWeap* pattackweap ;
 
 
@@ -173,7 +206,7 @@ extern pattackweap attackpossible( const Vehicle* attacker, int x, int y);
 /*! \brief Is attacker able to attack target ? Distance is not evaluated.
 
      The distance is not evaluated. The routine is used for the movement routines for example,
-     because the current distance of units A and B is not relevant for the check whether unit 
+     because the current distance of units A and B is not relevant for the check whether unit
      A can move across the field where B is standing.
 
      \param attackweap if != NULL, detailed information about the weapons which can perform

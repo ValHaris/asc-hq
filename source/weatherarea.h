@@ -15,10 +15,12 @@
 #include <list>
 #include <map>
 #include <set>
+
 #include "gamemap.h"
 //#include "error.h"
 #include "ascstring.h"
 #include "geometry.h"
+#include "typen.h"
 #include "basestreaminterface.h"
 #include "graphics/ascttfont.h"
 
@@ -28,7 +30,7 @@ IllegalValueException(const ASCString& msg);
 ~IllegalValueException();
 };
 
-
+extern const char*  cdirections[];
 enum Direction {
 N,
 NE,
@@ -38,8 +40,8 @@ S,
 SW,
 W,
 NW,
-
 };
+
 
 enum FalloutType {
 DRY,
@@ -55,7 +57,10 @@ struct WindData{
   Direction direction;
 };
 
+struct WeatherRect {
+  int a, b, c, d;
 
+};
 
 typedef map<int, WindData> WindChanges;
 typedef multiset<tfield*> FieldSet;
@@ -67,7 +72,12 @@ typedef list<tfield*> MapFields;
 typedef vector<WeatherField*> WeatherFields;
 typedef vector<int> Percentages;
 
+struct ltGTime{
+bool operator()(const GameTime& gt1, const GameTime& gt2) const{
+  return gt1.abstime < gt2.abstime;
+}
 
+};
 /**
 @author Kevin Hirschmann
 */
@@ -83,14 +93,27 @@ int radius;
 FalloutType ft;
 Vector2D currentMovement;
 int counter;
+int stepCount;
+static const int MAXVALUE;
+static const int MAXOFFSET;
 
+int seedValue;
 WeatherArea &operator=(const WeatherArea&);
 WeatherArea(const WeatherArea&);
-void updateMovementVector(unsigned int speed, Direction windDirection, double ratio);
 Point2D calculateFieldPosition(Point2D center, Vector2D relPos);
 
+
+short createAlgebraicSign();
+void step(WeatherRect r);
+int calculateCornerPoint(int a, int b, int c);
+int calculateDiamondPoint(int a, int b, int c, int d);
+int calculateCurrentOffset(int currentOffset);
+int calculateCornerPointValue(int a, int b, int c);
+int calculateDiamondPointValue(int a, int b, int c, int d);
+void createWeatherFields();
+
 public:
-    WeatherArea(tmap* map, int xCenter, int yCenter, int width, int height, int duration, FalloutType fType);
+    WeatherArea(tmap* map, int xCenter, int yCenter, int width, int height, int duration, FalloutType fType, unsigned int seedValue);
     WeatherArea(tmap* map, int xCenter, int yCenter, int radius);
     WeatherArea(tmap* map);
     
@@ -99,9 +122,10 @@ public:
     
     Vector2D getWindVector() const;
     void setWindVector(unsigned int speed, Direction windDirection);
-    
+    void updateMovementVector(unsigned int speed, Direction windDirection, double ratio);
     void setFalloutType(FalloutType fallout);    
-    inline FalloutType getFalloutType() const;
+    FalloutType getFalloutType() const;
+    FalloutType getFalloutType(int value) const;
     
     Point2D getCenterPos(){
       return center;
@@ -113,6 +137,7 @@ public:
     void update(WeatherSystem* wSystem, FieldSet& processedFields);                
     void placeArea();
     void removeArea(FieldSet& processedFields);
+    unsigned int createRandomValue(int limit); 
     
     void write (tnstream& outputStream) const;
     void read (tnstream& inputStream);
@@ -121,7 +146,7 @@ public:
     
 };
 
-typedef multimap<int, WeatherArea*> WeatherAreas;
+typedef multimap<GameTime, WeatherArea*, ltGTime> WeatherAreas;
 
 enum WeatherSystemMode {
 EVENTMODE,
@@ -134,8 +159,10 @@ tfield* mapField;
 tmap* map;
 Point2D posInArea;
 int counter;
+int value;
 
 void setMapField(tfield* mapField);
+
 public:
 WeatherField(tmap* map);
 WeatherField(Point2D mapPos, const WeatherArea* area);
@@ -146,15 +173,18 @@ void update(const WeatherArea*, FieldSet& processedFields);
 void reset(FieldSet& processedFields);
 void write (tnstream& outputStream) const;
 void read (tnstream& inputStream);
+void setValue(int v);
+int getValue();
 };
 
 class WeatherSystem{
 private:
 
-static const int weather_version = 1;
+static const int WEATHERVERSION = 1;
 float seedValue;
 int timeInterval;
 int areaSpawnAmount;
+int access2RandCount;
 
 
 float windspeed2FieldRatio;
@@ -164,6 +194,7 @@ Direction globalWindDirection;
 float lowerRandomSize;
 float upperRandomSize;
 
+bool seedValueIsSet;
 
 WeatherAreas weatherAreas;
 WindChanges windTriggers;
@@ -178,17 +209,17 @@ WeatherSystemMode currentMode;
 
 WeatherSystem(const WeatherSystem&);
 WeatherSystem& operator=(const WeatherSystem&);
-void randomWeatherChange(int currentTurn, Direction windDirection);
+void randomWeatherChange(GameTime currentTime, Direction windDirection);
 Direction randomWindChange(int currentTurn);
-unsigned short createRandomValue(int limit) const;
-float createRandomValue(float lowerlimit, float upperlimit) const;
+
+float createRandomValue(float lowerlimit, float upperlimit);
 
 public:
   static const int FallOutNum = 6;
   static const int WindDirNum = 8;
   static const int WINDSPEEDDETAILLEVEL = 8;
   WeatherSystem(tmap* map);
-  WeatherSystem(tmap* map, int areaSpawns, float windspeed2FieldRatio, unsigned int timeInterval = 1, WeatherSystemMode mode = EVENTMODE);
+  WeatherSystem(tmap* map, int areaSpawns, float windspeed2FieldRatio, unsigned int timeInterval = 6, WeatherSystemMode mode = EVENTMODE);
   ~WeatherSystem();
   inline void setSeedValue();
   void setLikelihoodFallOut(const Percentages& fol) throw (IllegalValueException);
@@ -196,17 +227,25 @@ public:
   void setLikelihoodWindSpeed(const Percentages&  wd) throw (IllegalValueException);
   void setRandomSizeBorders(float lower, float upper);
   void setGlobalWind(unsigned int speed, Direction direction) throw (IllegalValueException);
-  void addWeatherArea(WeatherArea* area, unsigned int turn);
-  void removeWeatherArea(WeatherArea* area);
-  void addGlobalWindChange(int speed, Direction direction, unsigned int turn) throw (IllegalValueException);  
-  void update(int currentTurn);
+  void addWeatherArea(WeatherArea* area, GameTime time);
+  void removeWeatherArea(GameTime time, WeatherArea* area);
+  void removeWindChange(int time, WindData);
+  void addGlobalWindChange(int speed, Direction direction, int time) throw (IllegalValueException);  
+  void update(GameTime currentTime);
   void write (tnstream& outputStream) const;
   void read (tnstream& inputStream);
   
-  pair<int, WeatherArea*> getNthWeatherArea(int n) const;
+  pair<GameTime, WeatherArea*> getNthWeatherArea(int n) const;
+  pair<int, WindData> getNthWindChange(int n) const;
   const int getQueuedWeatherAreasSize() const;
-  
-  
+  const int getQueuedWindChangesSize() const;
+  void setSeedValueGeneration(bool setNew);
+
+  unsigned int createRandomValue(unsigned int limit = 1000);  
+  void skipRandomValue() const;  
+  bool isSeedValueSet(){
+    return seedValueIsSet;
+  }  
   inline int getSpawnsAmount(){
     return areaSpawnAmount;
   }
@@ -259,5 +298,6 @@ public:
 };
 
 #endif
+
 
 

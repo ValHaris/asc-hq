@@ -753,10 +753,28 @@ ASCString SingleWeapon::getName ( void ) const
    return s;
 }
 
+ASCString    SingleWeapon::getIconFileName( int numerical ) 
+{
+   switch ( numerical ) {
+      case cwcruisemissile: return "weap-cruisemissile";
+      case cwbombn: return "weap-bomb";
+      case cwairmissilen: return "weap-bigmissile";
+      case cwgroundmissilen: return "weap-smallmissile";
+      case cwtorpedon: return "weap-torpedo";
+      case cwmachinegunn: return "weap-machinegun";
+      case cwcannonn: return "weap-cannon";
+      case cwminen: return "weap-mine";
+      default: return "weap-undefined";
+   };
+}
+
+
 UnitWeapon :: UnitWeapon ( void )
 {
    count = 0;
 }
+
+
 
 
 void Vehicletype::runTextIO ( PropertyContainer& pc )
