@@ -529,13 +529,19 @@ void         tdashboard::paintlargeweaponefficiency ( int pos, int* e, int first
             activefontsettings.font = schriften.guifont;
             showtext2c (  s, xp, yp );
          } else
-            if ( hit[j] > 0 ) {
+            if ( hit[j] > 0 && hit[j] < 100 ) {
                activefontsettings.font = schriften.guicolfont;
                showtext2c (  s, xp, yp );
-            } else {
-               activefontsettings.font = schriften.monogui;
-               showtext2 (  s, xp, yp );
-            }
+            } else
+               if ( hit[j] > 100 ) {
+                  activefontsettings.color = 26;
+                  activefontsettings.font = schriften.monogui;
+                  showtext2 (  s, xp, yp );
+               } else {
+                  activefontsettings.color = 86;
+                  activefontsettings.font = schriften.monogui;
+                  showtext2 (  s, xp, yp );
+               }
       } else {
          activefontsettings.font = schriften.monogui;
          showtext2 ( "-", xp, yp );

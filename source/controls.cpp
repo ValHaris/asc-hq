@@ -3,9 +3,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.143 2002-11-27 21:25:51 mbickel Exp $
+//     $Id: controls.cpp,v 1.144 2002-12-08 21:53:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.143  2002/11/27 21:25:51  mbickel
+//      AI fixes
+//
 //     Revision 1.142  2002/11/20 20:00:53  mbickel
 //      New features: specify passwords when starting a game
 //      Better error messages when loading a game through command line parameters
@@ -2367,9 +2370,9 @@ int   tprocessminingfields :: setup ( pbuilding bld, int& mm, int cm, int& mf, i
             int g = bld->getResource ( -bld->plus.resource(r) * perc / 1000, r, 0 );
             bld->work.mining.touse.resource(r) -= g;
          }
-      if ( !resourcesrequired ) 
-            bld->work.mining.finished+= res;
-      
+      if ( !resourcesrequired || perc == 1000 )
+            bld->work.mining.finished |= res;
+
 
    }
    return range;

@@ -1947,6 +1947,9 @@ int gamethread ( void* data )
    catch ( ParsingError err ) {
       displaymessage ( "Error parsing text file " + err.getMessage(), 2 );
    }
+   catch ( tfileerror err ) {
+      displaymessage ( "Error loading file " + err.getFileName(), 2 );
+   }
    catch ( ASCexception ) {
       displaymessage ( "loading of game failed", 2 );
    }

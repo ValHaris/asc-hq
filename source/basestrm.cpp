@@ -2,9 +2,14 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.77 2002-11-09 19:10:49 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.78 2002-12-08 21:53:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.77  2002/11/09 19:10:49  mbickel
+//      Fixed: invalid data return after EOF if file very small
+//      Resourceproduction of matter converter now working if not all resources could be stored
+//      mk1 V3 required
+//
 //     Revision 1.76  2002/10/19 16:11:31  mbickel
 //      Made listing of directories more portable
 //
@@ -806,7 +811,7 @@ ASCString  tnstream::readString ( bool includeCR )
   ASCString s;
   bool data = readTextString ( s, includeCR );
   if ( !data && s.empty() )
-     throw treadafterend ( getDeviceName() );
+     throw treadafterend ( getLocation() );
   return s;
 }
 

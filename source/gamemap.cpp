@@ -1460,7 +1460,7 @@ void  tfield :: addobject( pobjecttype obj, int dir, bool force )
           if ( force )
              buildable = 1;
           else
-             if (choice_dlg("object cannot be built here","~i~gnoe","~c~ancel") == 1)
+             if (choice_dlg("object cannot be built here","~i~gnore","~c~ancel") == 1)
                 buildable = 1;
      #else
      if ( !buildable )
