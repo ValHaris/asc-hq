@@ -1,6 +1,9 @@
-//     $Id: spfst.h,v 1.19 2000-08-12 12:52:54 mbickel Exp $
+//     $Id: spfst.h,v 1.20 2000-09-01 15:47:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/08/12 12:52:54  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.18  2000/08/12 09:17:36  gulliver
 //     *** empty log message ***
 //
@@ -112,6 +115,7 @@
   #include "keybp.h"
   #include "basegfx.h"
   #include "mousehnd.h"
+  #include "typen.h"
 
 #pragma pack(1)
 

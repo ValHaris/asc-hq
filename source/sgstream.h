@@ -1,6 +1,9 @@
-//     $Id: sgstream.h,v 1.9 2000-08-12 09:17:34 gulliver Exp $
+//     $Id: sgstream.h,v 1.10 2000-09-01 15:47:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/08/12 09:17:34  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.8  2000/08/02 15:53:04  mbickel
 //      New unit set definition files
 //      demount accepts now more than one container file
@@ -219,7 +222,7 @@ class SingleUnitSet {
 
          class TranslationTable {
                   public:
-					  std::vector<IdRange> translation;
+                     std::vector<IdRange> translation;
                      std::string name;
                      void parseString ( const char* s );
                };

@@ -21,7 +21,9 @@ MCommand
 0
 5
 MCommand
-0
+24
+\copyexecutable viewid
+
 6
 MItem
 10

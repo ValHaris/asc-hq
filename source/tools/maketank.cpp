@@ -56,7 +56,7 @@ const char* bildnr[8] = { " 0   ( unit facing up ) ",
                           " 7   ( unit facing left and up ) " };
 
 
-void *       loadpcx2(char *       filestring);
+void *       loadpcx2(char *       filestring, int autosize );
 
 
 
@@ -186,14 +186,25 @@ main (int argc, char *argv[] )
                    return 0;
                 }
              } else {    
+                char autosize = 0;
+                printf ("\n    use standard image size, or detect the size automatically ?\n"
+                        "If the unit has the standard size, because it was painted in hexagon.pcx\n"
+                        "which is part of the ASC editor package, then use the standard size,\n"
+                        "since it provides better image quality. The automatic size detection\n"
+                        "has a tolerance of +- 1 pixel, so it may scale the image even if it\n"
+                        "wasn't necessary.\n");
+
+
+                yn_switch ("standard size", "automatic size detection" , 0, 1, autosize);
+
                 fileselect ("*.PCX", _A_NORMAL, pictfile);
                                           
                 if ( usegraphics ) {
                    initgraphics (640, 480, 8);
-                   ft->picture[0] = loadpcx2(pictfile.name);
+                   ft->picture[0] = loadpcx2(pictfile.name, autosize);
                 } else {
                    tvirtualdisplay vd ( 640, 480, 255 );
-                   ft->picture[0] = loadpcx2(pictfile.name);
+                   ft->picture[0] = loadpcx2(pictfile.name, autosize);
                 }
 
                 ft->bipicture = -1;
@@ -806,7 +817,25 @@ main (int argc, char *argv[] )
 
 // #define OLDSIZE
 
-void *       loadpcx2(char *       filestring)
+int searchline ( int x1, int y1, int x2, int y2 )
+{
+   if ( x1 == x2 ) {
+      for ( int y = y1; y <= y2; y++ )
+         if ( getpixel ( x1, y ) != 255 )
+            return 1;
+         
+      return 0;
+   } else {
+      for ( int x = x1; x <= x2; x++ )
+         if ( getpixel ( x, y1 ) != 255 )
+            return 1;
+         
+      return 0;
+   }
+}
+
+
+void *       loadpcx2(char *       filestring, int autosize)
 {      
   void         *p = NULL;
   int b; 
@@ -815,12 +844,43 @@ void *       loadpcx2(char *       filestring)
    bar ( 0, 0, 639, 479, 255 );
    b = loadpcxxy(filestring, 1, 0,0); 
    if (b == 0) { 
-      p = malloc( 10000 ); 
-      #ifndef OLDSIZE
-      getimage(0,0,fieldsizex-1,fieldsizey-1,p); 
-      #else
-      getimage(0,0,unitsizex,unitsizey,p); 
-      #endif
+      if ( !autosize ) {
+         p = malloc( 10000 ); 
+         #ifndef OLDSIZE
+         getimage(0,0,fieldsizex-1,fieldsizey-1,p); 
+         rectangle ( 0, 0, fieldsizex-1,fieldsizey-1, blue );
+         #else
+         getimage(0,0,unitsizex,unitsizey,p); 
+         rectangle ( 0, 0, unitsizex,unitsizey, blue );
+         #endif
+      } else {
+         int maxsize = 100;
+         
+         int minx = 0;
+         while ( !searchline ( minx, 0, minx, maxsize ))
+            minx++;
+      
+         int miny = 0;
+         while ( !searchline ( 0, miny, maxsize, miny ))
+            miny++;
+      
+         int maxx = maxsize;
+         while ( !searchline ( maxx, 0, maxx, maxsize ))
+            maxx--;
+      
+      
+         int maxy = maxsize;
+         while ( !searchline ( 0, maxy, maxsize, maxy ))
+            maxy--;
+
+         int xsize = maxx+minx;
+         int ysize = maxy+miny;
+
+         p = malloc( imagesize ( 0, 0, xsize, ysize )); 
+         getimage(0,0, xsize, ysize, p); 
+         rectangle ( 0, 0, xsize, ysize, blue );
+
+      }
       _wait(); 
    } 
    return p; 

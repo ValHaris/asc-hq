@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.87 2000-08-29 10:36:49 mbickel Exp $
+//     $Id: sg.cpp,v 1.88 2000-09-01 15:47:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.87  2000/08/29 10:36:49  mbickel
+//      Removed Debug code
+//      Fixed bug: movement left when changing height into buildings
+//
 //     Revision 1.86  2000/08/28 15:58:59  mbickel
 //      Fixed short displaying of map before password dialog when loading email
 //        games by command line parameter
@@ -420,6 +424,7 @@
 #include "soundList.h"
 #include "gameoptions.h"
 #include "loadimage.h"
+#include "astar2.h"
 
 #ifdef HEXAGON
 #include "loadbi3.h"
@@ -2750,24 +2755,6 @@ void  mainloop ( void )
                          }
                break;
                
-           /*
-            case ct_plus: execuseraction ( ua_cheat_morefog );
-               break;
-               
-            case ct_minus: execuseraction ( ua_cheat_lessfog );
-               break;
-               
-            case ct_f8:  execuseraction ( ua_cheat_rotatewind );
-               break;
-               
-            case ct_f9: execuseraction ( ua_cheat_morewind );
-               break;
-               
-            case ct_f10: execuseraction ( ua_cheat_lesswind );
-               break;
-           */
-               
-               
 
             case ct_1:  execuseraction ( ua_changeresourceview );
                break;
@@ -2788,6 +2775,24 @@ void  mainloop ( void )
                break; 
             
             case ct_8:  execuseraction ( ua_unitweightinfo );
+               break;
+
+            case ct_9: {
+                          static pvehicle veh = 0;
+                          if ( !veh ) {
+                             veh = getactfield()->vehicle;
+                          } else {
+                             vector<int> path;
+                             AStar ( actmap, path, veh, getxpos(), getypos() );
+                             int x = veh->xpos;
+                             int y = veh->ypos;
+                             for ( int i = 0; i < path.size(); i++ ) {
+                                getnextfield ( x, y, path[i] );
+                                getfield ( x, y )->a.temp = 1;
+                             }
+                             displaymap();
+                          }
+                        }
                break;
                
             case ct_0:  execuseraction ( ua_writescreentopcx );

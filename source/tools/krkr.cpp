@@ -346,6 +346,7 @@ void           bitselect ( tterrainbits &bits, const char *selection[], char bit
 /*********************************************************************************************/
 void           yn_switch (char *s1, char *s2, char v1, char v2, char &oldvalue)
 {
+   fflush ( stdout );
    cyn_switch  sw;
  
    sw.init (s1, s2, v1, v2, oldvalue);
@@ -720,13 +721,13 @@ void     cyn_switch :: init (char *s1, char *s2, char v1, char v2, char &_oldval
 
    if (s1[0] != 0) {                               
       strncpy (button[0].string, s1, 13);
-      button[0].string[14] = 0;
+      button[0].string[13] = 0;
    } else {
       strcpy (button[0].string, " YES ");
    } /* endif */
    if (s2[0] != 0) {
       strncpy (button[1].string, s2, 13);
-      button[1].string[14] = 0;
+      button[1].string[13] = 0;
    } else {
       strcpy (button[1].string, " NO ");
    } /* endif */

@@ -32,7 +32,30 @@
 #include "..\basegfx.h"
 #include "..\loadbi3.h"
 
-#define vid(wildcard,structure) printf("%s\n", wildcard );  maxid=0; for ( int j = 0; j < 60; j++ ) printf("="); tfindfile ff ( wildcard ); char* c = ff.getnextname(); structure data; while( c ) { { tnfilestream mainstream ( c, 1 ); int c; mainstream.readdata2 ( c ); mainstream.readdata ( &data, sizeof ( data )); } if ( data.id > maxid ) maxid = data.id; int found = 0; for(int i = 0; i <= id.getlength(); i++ ) if ( id[i].id == data.id ) { id[i].count++; found = 1; } if( !found ) { int ps = id.getlength()+1; id[ps].id = data.id; id[ps].count = 1; } c = ff.getnextname(); }
+#define vid(wildcard,structure,loader) printf("%s\n", wildcard );\
+                                       maxid=0;\
+                                       for ( int j = 0; j < 60; j++ )\
+                                           printf("=");\ 
+                                       tfindfile ff ( wildcard );\
+                                       char* c = ff.getnextname();\
+                                       structure *data;\
+                                       while( c ) {\
+                                          data = loader( c );\
+                                          if ( data->id > maxid )\
+                                             maxid = data->id;\
+                                          int found = 0;\
+                                          for(int i = 0; i <= id.getlength(); i++ )\
+                                             if ( id[i].id == data->id ) { \
+                                                id[i].count++; \
+                                                found = 1;\
+                                             }\
+                                          if( !found ) { \
+                                            int ps = id.getlength()+1;  \
+                                            id[ps].id = data->id;  \
+                                            id[ps].count = 1;  \
+                                          } \
+                                          c = ff.getnextname(); \
+                                       }
 
 // The above line has > 550 characters !! Be sure that you don't use some primitive editor that truncates lines !
 
@@ -150,35 +173,35 @@ int main ( void )
       printf("\n\n\n buildings  " );
       {
          didcounta id;
-         vid ("*.bld",tbuildingtype);
+         vid ("*.bld",tbuildingtype,loadbuildingtype);
          printresults( id );
       }
     
       printf("\n\n\n vehicles  " );
       {
          didcounta id;
-         vid ("*.veh",tvehicletype);
+         vid ("*.veh",tvehicletype,loadvehicletype);
          printresults( id );
       }
    
       printf("\n\n\n terrain  " );
       {
          didcounta id;
-         vid ( "*.trr", tterraintype );
+         vid ( "*.trr", tterraintype,loadterraintype );
          printresults( id );
       }
         
       printf("\n\n\n technologies  " );
       {
          didcounta id;
-         vid ( "*.tec", ttechnology );
+         vid ( "*.tec", ttechnology,loadtechnology );
          printresults( id );
       }
    
       printf("\n\n\n objects  " );
       {
          didcounta id;
-         vid ( "*.obl", tobjecttype );
+         vid ( "*.obl", tobjecttype, loadobjecttype );
          printresults( id );
          printf("\n PLEASE DO NOT USE IDs BELOW 100 FOR NEW OBJECTS !!\n");
       }
