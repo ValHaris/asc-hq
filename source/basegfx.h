@@ -37,6 +37,7 @@
 #define basegfx_h
 
 
+#include <SDLmm/sdlmm.h>
 
 #include "tpascal.inc"
 #include "global.h"
@@ -432,5 +433,7 @@ extern int fullscreen;
 //! sets the caption of the main window
 extern void setWindowCaption ( const char* s );
 
+//! converts a SDLmm::Surface to an old style image buffer
+extern void* convertSurface ( SDLmm::Surface& s );
 
 #endif

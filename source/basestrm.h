@@ -4,9 +4,13 @@
 */
 
 
-//     $Id: basestrm.h,v 1.45 2001-07-28 11:19:10 mbickel Exp $
+//     $Id: basestrm.h,v 1.46 2001-08-27 21:03:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2001/07/28 11:19:10  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.44  2001/07/27 21:13:34  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -699,6 +703,9 @@ class FileName : public ASCString {
        /** return the suffix of the file or an empty string if the file doesn't have a suffix.
            The suffix is the part of the filename after its last period. */
        ASCString suffix();
+       FileName& operator= ( const ASCString& s ) { ASCString::operator=(s); return *this;};
+       FileName() {};
+       FileName( const ASCString& s ) : ASCString ( s ) {};
 };
 
 

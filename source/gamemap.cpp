@@ -1741,7 +1741,7 @@ void AiValue:: read ( tnstream& stream )
 
 void AiParameter::write ( tnstream& stream )
 {
-   const int version = 3000;
+   const int version = 3001;
    stream.writeInt ( version );
    stream.writeInt ( lastDamage );
    stream.writeInt ( damageTime.abstime );
@@ -1752,13 +1752,16 @@ void AiParameter::write ( tnstream& stream )
    stream.writeInt ( data );
    AiValue::write( stream );
    stream.writeInt ( task );
-   stream.writeInt ( job );
+   stream.writeInt ( jobPos );
+   stream.writeInt ( jobs.size() );
+   for ( int i = 0; i < jobs.size(); i++ )
+      stream.writeInt( jobs[i] );
 }
 
 void AiParameter::read ( tnstream& stream )
 {
    int version = stream.readInt();
-   if ( version == 3000 ) {
+   if ( version >= 3000 && version <= 3001 ) {
       lastDamage = stream.readInt();
       damageTime.abstime = stream.readInt();
       dest.x = stream.readInt();
@@ -1768,7 +1771,17 @@ void AiParameter::read ( tnstream& stream )
       data = stream.readInt();
       AiValue::read( stream );
       task = (Task) stream.readInt();
-      job = (Job) stream.readInt();
+      if ( version == 3000 ) {
+         jobs.clear();
+         jobs.push_back ( Job( stream.readInt() ));
+      } else {
+         jobPos = stream.readInt();
+         int num = stream.readInt();
+         jobs.clear();
+         for ( int i = 0; i < num; i++ )
+            jobs.push_back ( Job( stream.readInt() ));
+      }
+
    }
 }
 
@@ -1792,13 +1805,43 @@ void AiParameter :: resetTask ( )
    task = tsk_nothing;
 }
 
+void AiParameter::addJob ( Job j, bool front )
+{
+   if ( front )
+      jobs.insert ( jobs.begin(), j );
+   else
+      jobs.push_back ( j );
+}
+
+void AiParameter::setJob ( const JobList& jobs )
+{
+   this->jobs = jobs;
+}
+
+
 void AiParameter :: reset ( pvehicle _unit )
 {
    unit = _unit;
    AiValue::reset ( log2( _unit->height ) );
 
-   job = job_undefined;
+   clearJobs();
    resetTask();
+}
+
+void AiParameter :: setNextJob()
+{
+   jobPos++;
+}
+
+void AiParameter :: restartJobs()
+{
+   jobPos = 0;
+}
+
+void AiParameter :: clearJobs()
+{
+   jobs.clear();
+   jobPos = 0;
 }
 
 

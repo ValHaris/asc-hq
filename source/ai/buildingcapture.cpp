@@ -176,8 +176,8 @@ void AI :: checkConquer( )
            || !( veh && fieldaccessible ( getMap()->getField( bi->first ), veh ) == 2 )) {
 
          if ( veh ) {
-            veh->aiparam[getPlayerNum()]->task = AiParameter::tsk_nothing;
-            veh->aiparam[getPlayerNum()]->job = AiParameter::job_undefined;
+            veh->aiparam[getPlayerNum()]->resetTask ();
+            veh->aiparam[getPlayerNum()]->setNextJob();
          }
          buildingCapture.erase ( bi );
       }
@@ -188,7 +188,7 @@ void AI :: checkConquer( )
 
    for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
       pvehicle veh = *vi;
-      if ( veh->aiparam[getPlayerNum()]->job == AiParameter::job_conquer && veh->aiparam[getPlayerNum()]->task == AiParameter::tsk_nothing && veh->canMove() ) {
+      if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer && veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_nothing && veh->canMove() ) {
 
          HiddenAStar ast ( this, veh );
          ast.findAllAccessibleFields( veh->maxMovement() * config.maxCaptureTime );
@@ -217,10 +217,11 @@ void AI :: checkConquer( )
             bc.state = BuildingCapture::conq_conqUnit;
             bc.unit = veh->networkid;
 
-            veh->aiparam[getPlayerNum()]->job = AiParameter::job_conquer;
-            veh->aiparam[getPlayerNum()]->task = AiParameter::tsk_move;
+            veh->aiparam[getPlayerNum()]->addJob( AiParameter::job_conquer, true );
+            veh->aiparam[getPlayerNum()]->setTask( AiParameter::tsk_move );
             veh->aiparam[getPlayerNum()]->dest = bestBuilding->getEntry();
-         }
+         } else
+            veh->aiparam[getPlayerNum()]->setNextJob();
       }
    }
 
@@ -241,7 +242,7 @@ void AI :: checkConquer( )
 
          for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
             pvehicle veh = *vi;
-            if ( veh->aiparam[getPlayerNum()]->job != AiParameter::job_conquer || veh->aiparam[getPlayerNum()]->task == AiParameter::tsk_nothing)
+            if ( veh->aiparam[getPlayerNum()]->getJob() != AiParameter::job_conquer || veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_nothing)
                if ( fieldaccessible ( bld->getEntryField(), veh ) == 2 ) {
                   HiddenAStar ast ( this, veh );
                   vector<MapCoordinate> path;
@@ -275,7 +276,7 @@ void AI :: checkConquer( )
 
       for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
          pvehicle veh = *vi;
-         if ( veh->aiparam[getPlayerNum()]->job != AiParameter::job_conquer || veh->aiparam[getPlayerNum()]->task == AiParameter::tsk_nothing )
+         if ( veh->aiparam[getPlayerNum()]->getJob() != AiParameter::job_conquer || veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_nothing )
             if ( fieldaccessible ( (*i)->getEntryField(), veh ) == 2 ) {
                HiddenAStar ast ( this, veh ) ;
                vector<MapCoordinate> path;
@@ -295,8 +296,8 @@ void AI :: checkConquer( )
         else
            bc.state = BuildingCapture::conq_unitNotConq;
         bc.unit = conquerer->networkid;
-        conquerer->aiparam[getPlayerNum()]->job = AiParameter::job_conquer;
-        conquerer->aiparam[getPlayerNum()]->task = AiParameter::tsk_move;
+        conquerer->aiparam[getPlayerNum()]->addJob ( AiParameter::job_conquer, true );
+        conquerer->aiparam[getPlayerNum()]->setTask ( AiParameter::tsk_move );
         conquerer->aiparam[getPlayerNum()]->dest = (*i)->getEntry();
       } else
         buildingCapture[ (*i)->getEntry() ].state = BuildingCapture::conq_unreachable;
@@ -310,7 +311,7 @@ void AI :: checkConquer( )
          MapCoordinate dest = veh->aiparam[getPlayerNum()]->dest;
          moveUnit ( veh, dest, true );
          if ( veh->getPosition() == dest ) {
-            veh->aiparam[getPlayerNum()]->task = AiParameter::tsk_nothing;
+            veh->aiparam[getPlayerNum()]->resetTask ();
             buildingCapture.erase ( bi );
          }
       } else

@@ -27,7 +27,11 @@
 //! how many different target types are there?
 const int aiValueTypeNum = 8;
 
-
+/** the threat that a unit poses against other units. Since a given unit may
+    usually not attack all kinds of units ( satellites, submarines, etc ), there are
+    several different groups of unitTypes, with a different threat rating each
+    \see aiValueTypeNum
+*/
 class AiThreat {
        public:
          int threatTypes;
@@ -45,7 +49,11 @@ class AiThreat {
 };
 
 
-
+/** The value of a unit for the AI. The value consists of a base value calculated from
+    the unit type, damage etc and an additional value. The additional value is used for
+    example if a unit is trying to capture one of your buildings, of if the mission
+    goals say that this unit must be protected at all cost (if it is yours) or destroyed
+    (if it is the enemies') */
 class AiValue {
         #ifdef karteneditor
         public:
@@ -67,13 +75,28 @@ class AiValue {
            void write ( tnstream& stream );
         };
 
+//! All parameters the AI stores persistently about a unit.
 class AiParameter : public AiValue {
            pvehicle unit;
         public:
            static const int taskNum = 8;
            static const int jobNum = 7;
-           enum Task { tsk_nothing, tsk_tactics, tsk_tactwait, tsk_stratwait, tsk_wait, tsk_strategy, tsk_serviceRetreat, tsk_move } task;
-           enum Job { job_undefined, job_fight, job_supply, job_conquer, job_build, job_recon, job_guard } job;
+           enum Task { tsk_nothing, tsk_tactics, tsk_tactwait, tsk_stratwait, tsk_wait, tsk_strategy, tsk_serviceRetreat, tsk_move };
+           enum Job { job_undefined, job_fight, job_supply, job_conquer, job_build, job_recon, job_guard };
+           typedef vector<AiParameter::Job> JobList;
+
+           Task getTask ( ) { return task; };
+           void setTask ( Task t ) { task = t; };
+
+           Job getJob ( ) { if ( jobPos < jobs.size() ) return jobs[jobPos]; else return job_undefined; };
+           void addJob ( Job j, bool front = false );
+
+           void setNextJob();
+           void restartJobs();
+           void clearJobs();
+           void setJob ( const JobList& jobs );
+
+
            int lastDamage;
            tgametime damageTime;
 
@@ -87,7 +110,11 @@ class AiParameter : public AiValue {
 
            void read ( tnstream& stream );
            void write ( tnstream& stream );
- };
+        private:
+           Task task;
+           JobList jobs;
+           int jobPos;
+};
 
 class BaseAI {
        public:

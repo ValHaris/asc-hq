@@ -39,9 +39,9 @@ AI::AiResult AI::strategy( void )
 
       for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
          pvehicle veh = *vi;
-         if ( veh->aiparam[ getPlayerNum() ]->job == AiParameter::job_fight ) {
-            if ( veh->weapexist() && veh->aiparam[ getPlayerNum() ]->task != AiParameter::tsk_tactics
-                                  && veh->aiparam[ getPlayerNum() ]->task != AiParameter::tsk_serviceRetreat ) {
+         if ( veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_fight ) {
+            if ( veh->weapexist() && veh->aiparam[ getPlayerNum() ]->getTask() != AiParameter::tsk_tactics
+                                  && veh->aiparam[ getPlayerNum() ]->getTask() != AiParameter::tsk_serviceRetreat ) {
                /*
                int orgmovement = veh->getMovement();
                int orgxpos = veh->xpos ;

@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: ai.h,v 1.6 2001-08-24 15:50:08 mbickel Exp $
+//     $Id: ai.h,v 1.7 2001-08-27 21:03:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2001/08/24 15:50:08  mbickel
+//      AI performs better services when there are no service units
+//
 //     Revision 1.5  2001/07/27 21:13:35  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -368,7 +371,7 @@
             void  calculateThreat ( pbuilding bld );
             void  calculateThreat ( pbuilding bld, int player );
 
-            static AiParameter::Job chooseJob ( const Vehicletype* typ, int functions );
+            static AiParameter::JobList chooseJob ( const Vehicletype* typ, int functions );
             friend class CalculateThreat_Vehicle;
 
             /** This structure helps identifying units which don't reach any

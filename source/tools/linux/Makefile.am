@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.18 2001-08-26 21:39:36 mbickel Exp $
+## $Id: Makefile.am,v 1.19 2001-08-27 21:03:56 mbickel Exp $
 
 vpath %.cpp ..:../..
 
@@ -27,15 +27,15 @@ asc_bin2text_SOURCES    = bin2text.cpp     basestrm.cpp misc.cpp ascstring.cpp l
 asc_weaponguide_SOURCES = weaponguide.cpp  basestrm.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp
 
 
-asc_mount_LDADD     = -lSDL -lpthread @LDADDLIBBZ2@
-asc_demount_LDADD   = -lSDL -lpthread @LDADDLIBBZ2@
-asc_gfx2pcx_LDADD    = ../../sdl/libsdl.a -lSDL -lpthread @LDADDLIBBZ2@
-asc_makegfx_LDADD    = ../../sdl/libsdl.a -lSDL -lpthread @LDADDLIBBZ2@
-asc_mntgraph_LDADD   = ../../sdl/libsdl.a -lSDL -lpthread @LDADDLIBBZ2@
-asc_viewid_LDADD     = ../../sdl/libsdl.a -lSDL -lpthread @LDADDLIBBZ2@
-asc_tank2pcx_LDADD   = ../../sdl/libsdl.a -lSDL -lpthread @LDADDLIBBZ2@
-asc_bin2text_LDADD   = ../../sdl/libsdl.a -lSDL -lpthread @LDADDLIBBZ2@
-asc_weaponguide_LDADD =../../sdl/libsdl.a -lSDL -lpthread @LDADDLIBBZ2@
+asc_mount_LDADD     = -lSDL -lSDLmm -lpthread @LDADDLIBBZ2@
+asc_demount_LDADD   = -lSDL -lSDLmm -lpthread @LDADDLIBBZ2@
+asc_gfx2pcx_LDADD    = ../../sdl/libsdl.a -lSDL -lSDLmm -lpthread @LDADDLIBBZ2@
+asc_makegfx_LDADD    = ../../sdl/libsdl.a -lSDL -lSDLmm -lpthread @LDADDLIBBZ2@
+asc_mntgraph_LDADD   = ../../sdl/libsdl.a -lSDL -lSDLmm -lpthread @LDADDLIBBZ2@
+asc_viewid_LDADD     = ../../sdl/libsdl.a -lSDL -lSDLmm -lpthread @LDADDLIBBZ2@
+asc_tank2pcx_LDADD   = ../../sdl/libsdl.a -lSDL -lSDLmm -lpthread @LDADDLIBBZ2@
+asc_bin2text_LDADD   = ../../sdl/libsdl.a -lSDL -lSDLmm -lpthread @LDADDLIBBZ2@
+asc_weaponguide_LDADD =../../sdl/libsdl.a -lSDL -lSDLmm -lpthread @LDADDLIBBZ2@
 
 # vim: noexpandtab ai
 

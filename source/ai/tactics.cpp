@@ -268,7 +268,7 @@ int AI::getDirForBestTacticsMove ( const pvehicle veh, TargetVector& tv )
 
 MapCoordinate AI::getDestination ( const pvehicle veh )
 {
-   AiParameter::Task task = veh->aiparam[ getPlayerNum() ]->task;
+   AiParameter::Task task = veh->aiparam[ getPlayerNum() ]->getTask();
    if ( task == AiParameter::tsk_nothing || task == AiParameter::tsk_tactics ) {
       TargetVector tv;
       VehicleMovement vm ( NULL, NULL );
@@ -472,9 +472,9 @@ AI::AiResult AI::tactics( void )
       pvehicle veh = *vi;
 
       bool unitUsable = false;
-      if ( veh->aiparam[ getPlayerNum() ]->job == AiParameter::job_fight || veh->aiparam[ getPlayerNum() ]->job == AiParameter::job_undefined )
+      if ( veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_fight || veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_undefined )
          for ( int j = 0; j < tsk_num; j++ )
-            if ( veh->aiparam[ getPlayerNum() ]->task == tasks[j] )
+            if ( veh->aiparam[ getPlayerNum() ]->getTask() == tasks[j] )
                unitUsable = true;
 
       int maxWeapDist = minint;
@@ -529,7 +529,7 @@ AI::AiResult AI::tactics( void )
 
             int stat = changeVehicleHeight ( veh, NULL );
             if ( stat == -1 ) { // couldn't change height due to blocked way or something similar
-               veh->aiparam[ getPlayerNum() ]->task = AiParameter::tsk_wait;
+               veh->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_wait );
                result.unitsWaiting++;
                i++;
             } else {
@@ -566,7 +566,7 @@ AI::AiResult AI::tactics( void )
                      i = tactVehicles.erase ( i );
 
                      if ( !res.unitsDestroyed )
-                        veh->aiparam[ getPlayerNum() ]->task = AiParameter::tsk_tactics;
+                        veh->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_tactics );
 
                      result += res;
                      directAttackNum++;
@@ -577,8 +577,8 @@ AI::AiResult AI::tactics( void )
                   }
                } else {
                   // there is nothing the unit can do in tactics mode
-                  if ( veh->aiparam[ getPlayerNum() ]->task != AiParameter::tsk_serviceRetreat )
-                     veh->aiparam[ getPlayerNum() ]->task = AiParameter::tsk_nothing;
+                  if ( veh->aiparam[ getPlayerNum() ]->getTask() != AiParameter::tsk_serviceRetreat )
+                     veh->aiparam[ getPlayerNum() ]->resetTask();
                   i = tactVehicles.erase ( i );
                }
             }

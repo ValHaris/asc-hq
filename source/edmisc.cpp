@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.62 2001-08-19 12:50:03 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.63 2001-08-27 21:03:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2001/08/19 12:50:03  mbickel
+//      fixed event trigger allenemybuildings
+//
 //     Revision 1.61  2001/08/09 19:28:22  mbickel
 //      Started adding buildingtype text file functions
 //
@@ -2828,9 +2831,13 @@ void         EditAiParam::run(void)
 void         EditAiParam::buttonpressed(int         id)
 {
    switch (id) {
-   case 20 : aiv.task = AiParameter::Task( selectString ( aiv.task, "Select Task", AItasks , AiParameter::taskNum) );
+   case 20 : aiv.setTask( AiParameter::Task( selectString ( aiv.getTask(), "Select Task", AItasks , AiParameter::taskNum) ));
              break;
-   case 21 : aiv.job = AiParameter::Job( selectString ( aiv.job, "Select Job", AIjobs , AiParameter::jobNum) );
+   case 21 : {
+                AiParameter::JobList j;
+                j.push_back ( AiParameter::Job( selectString ( aiv.getJob(), "Select Job", AIjobs , AiParameter::jobNum) ) );
+                aiv.setJob ( j );
+             }
              break;
    case 22 : getxy ( &aiv.dest.x, &aiv.dest.y );
              redraw();

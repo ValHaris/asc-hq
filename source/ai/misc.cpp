@@ -22,14 +22,14 @@
 
 bool AI :: runUnitTask ( pvehicle veh )
 {
-   if ( veh->aiparam[getPlayerNum()]->task == AiParameter::tsk_move || veh->aiparam[getPlayerNum()]->task == AiParameter::tsk_serviceRetreat ) {
+   if ( veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_move || veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat ) {
       bool moveIntoBuildings = false;
-      if ( veh->aiparam[getPlayerNum()]->job == AiParameter::job_conquer || veh->aiparam[getPlayerNum()]->task == AiParameter::tsk_serviceRetreat )
+      if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer || veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat )
          moveIntoBuildings = true;
 
       moveUnit ( veh, veh->aiparam[getPlayerNum()]->dest, moveIntoBuildings );
       if ( veh->getPosition() == veh->aiparam[getPlayerNum()]->dest ) {
-         veh->aiparam[getPlayerNum()]->task = AiParameter::tsk_nothing;
+         veh->aiparam[getPlayerNum()]->resetTask ();
          return true;
       } else
          return false;
@@ -245,7 +245,10 @@ bool AI::RefuelConstraint::returnFromPositionPossible ( const MapCoordinate3D& p
             lp++;
          }
       } else
-         dist2 = maxint;
+         if ( veh->height > chfahrend )
+            dist2 = maxint;
+         else
+            return true;
    }
 
    if ( theoreticalFuel - (dist + dist2) / maxmalq * veh->typ->fuelConsumption > 0.2 * veh->typ->tank.fuel )
@@ -283,7 +286,7 @@ AI::AiResult  AI :: container ( ccontainercontrols& cc )
    for ( int j= 0; j < 32; j++ ) {
       pvehicle veh = cc.getloadedunit ( j );
       if ( veh )
-         if ( veh->aiparam[ getPlayerNum() ]->task == AiParameter::tsk_nothing && cc.moveavail ( veh ))
+         if ( veh->aiparam[ getPlayerNum() ]->getTask() == AiParameter::tsk_nothing && cc.moveavail ( veh ))
             idleUnits.push_back ( veh );
    }
    // move the most important unit first, to get the best position
@@ -302,13 +305,13 @@ AI::AiResult  AI :: container ( ccontainercontrols& cc )
             int stat = changeVehicleHeight ( *i, vm );
             if ( stat == -1 ) {
                result.unitsWaiting++;
-               (*i)->aiparam[ getPlayerNum() ]->task = AiParameter::tsk_wait;
+               (*i)->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_wait );
             } else {
                if ( stat== -2 ) {
                   simplyMove = 1;
                } else {
                   result.unitsMoved++;
-                  (*i)->aiparam[ getPlayerNum() ]->task = AiParameter::tsk_nothing;
+                  (*i)->aiparam[ getPlayerNum() ]->resetTask( );
                   if ( (*i)->getMovement() >= minmalq && !(*i)->attacked && (*i)->weapexist() )
                      simplyMove = 1;
                   else {
@@ -340,7 +343,7 @@ AI::AiResult  AI :: container ( ccontainercontrols& cc )
                   AiResult res = executeMoveAttack ( *i, tv );
                   result += res;
                   if ( !res.unitsDestroyed )
-                     (*i)->aiparam[ getPlayerNum() ]->task = AiParameter::tsk_tactics;
+                     (*i)->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_tactics );
 
                   attack = 1;
                }
@@ -350,7 +353,7 @@ AI::AiResult  AI :: container ( ccontainercontrols& cc )
                AiResult res =  moveToSavePlace ( *i, *vm );
                result += res;
                if ( !res.unitsDestroyed )
-                  (*i)->aiparam[ getPlayerNum() ]->task = AiParameter::tsk_nothing;
+                  (*i)->aiparam[ getPlayerNum() ]->resetTask();
             }
          }
 
@@ -422,7 +425,7 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
 
       std::vector<MapCoordinate> path;
       AStar* ast = NULL;
-      if ( veh->aiparam[getPlayerNum()]->job == AiParameter::job_conquer )
+      if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer )
          ast = new HiddenAStar ( this, veh );
       else
          ast = new StratAStar ( this, veh );
@@ -466,9 +469,9 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
             displaymessage ( "AI :: moveUnit \n error in movement step 3 with unit %d", 1, veh->networkid );
 
          if ( destination.x == xtogo && destination.y == ytogo )
-            if ( veh->aiparam[getPlayerNum()]->job == AiParameter::job_conquer )
+            if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer )
                if ( getfield ( xtogo, ytogo)->building )
-                  veh->aiparam[getPlayerNum()]->job = AiParameter::job_undefined;
+                  veh->aiparam[getPlayerNum()]->clearJobs();
 
 
          return true;
@@ -476,7 +479,7 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
       return false;
    } else {
       AStar3D* ast = NULL;
-      if ( veh->aiparam[getPlayerNum()]->job == AiParameter::job_conquer )
+      if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer )
          ast = new HiddenAStar3D ( this, veh );
       else
          ast = new StratAStar3D ( this, veh );
@@ -530,9 +533,9 @@ int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path )
       }
 
       if ( pi == path.end() ) {
-         if ( veh->aiparam[getPlayerNum()]->job == AiParameter::job_conquer )
+         if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer )
             if ( getMap()->getField ( veh->getPosition() )->building )
-               veh->aiparam[getPlayerNum()]->job = AiParameter::job_undefined;
+               veh->aiparam[getPlayerNum()]->clearJobs();
          return 1;
       }
 
@@ -619,7 +622,7 @@ void AI :: calcReconPositions()
       for ( int x = 0; x < getMap()->xsize; x++ ) {
          FieldInformation& fi = getFieldInformation ( x, y );
          pfield fld = getMap()->getField(x,y);
-         if ( fi.control == getPlayerNum() && !fld->building && ( !fld->vehicle || fld->vehicle->aiparam[getPlayerNum()]->job == AiParameter::job_recon )) {
+         if ( fi.control == getPlayerNum() && !fld->building && ( !fld->vehicle || fld->vehicle->aiparam[getPlayerNum()]->getJob() == AiParameter::job_recon )) {
             CheckFieldRecon cfr ( this );
             int qual = cfr.run(x,y);
             if ( qual>= 0 )
@@ -635,7 +638,7 @@ void AI ::  runReconUnits ( )
       pvehicle veh = *vi;
 
       // the threat posed should be enemy units should be considered for position choosing too...
-      if ( veh->aiparam[getPlayerNum()]->job == AiParameter::job_recon ) {
+      if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_recon ) {
          if ( reconPositions.find ( veh->getPosition()) == reconPositions.end()) {
             // the unit is not standing on a reconposition
             int mindist = maxint;
@@ -656,7 +659,7 @@ void AI ::  runReconUnits ( )
             }
             if( mindist < maxint ) {
                veh->aiparam[getPlayerNum()]->dest = mc;
-               veh->aiparam[getPlayerNum()]->task = AiParameter::tsk_move;
+               veh->aiparam[getPlayerNum()]->setTask( AiParameter::tsk_move );
                runUnitTask ( veh );
             }
          }
@@ -666,7 +669,7 @@ void AI ::  runReconUnits ( )
 
 AI::UnitDistribution::Group AI::getUnitDistributionGroup ( pvehicletype vt )
 {
-   switch ( chooseJob ( vt, vt->functions ) ) {
+   switch ( chooseJob ( vt, vt->functions ).front() ) {
       case AiParameter::job_supply : return UnitDistribution::service;
       case AiParameter::job_recon  : return UnitDistribution::recon;
       case AiParameter::job_conquer: return UnitDistribution::conquer;
@@ -690,7 +693,7 @@ AI::UnitDistribution::Group AI::getUnitDistributionGroup ( pvehicletype vt )
 
 AI::UnitDistribution::Group AI::getUnitDistributionGroup ( pvehicle veh )
 {
-   switch ( veh->aiparam[getPlayerNum()]->job ) {
+   switch ( veh->aiparam[getPlayerNum()]->getJob() ) {
       case AiParameter::job_supply : return UnitDistribution::service;
       case AiParameter::job_recon  : return UnitDistribution::recon;
       case AiParameter::job_conquer: return UnitDistribution::conquer;

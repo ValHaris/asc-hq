@@ -131,7 +131,7 @@ int AI::ServiceOrder::possible ( pvehicle supplier )
                             if ( requiredAmount < target.service[j].orgSourceAmount - supplier->typ->fuelConsumption * 30 )
                                enoughResources = true;
                         } else {
-                            if ( getTargetUnit()->aiparam[ai->getPlayerNum()]->job == AiParameter::job_supply ) {
+                            if ( getTargetUnit()->aiparam[ai->getPlayerNum()]->getJob() == AiParameter::job_supply ) {
                                if ( target.service[j].orgSourceAmount > requiredAmount )
                                   enoughResources = true;
                             } else
@@ -140,7 +140,7 @@ int AI::ServiceOrder::possible ( pvehicle supplier )
                         }
                      }
                      if ( requiredService == VehicleService::srv_ammo ) {
-                        if ( getTargetUnit()->aiparam[ai->getPlayerNum()]->job == AiParameter::job_supply ) {
+                        if ( getTargetUnit()->aiparam[ai->getPlayerNum()]->getJob() == AiParameter::job_supply ) {
                            if ( target.service[j].orgSourceAmount > requiredAmount )
                               enoughResources = true;
                         } else
@@ -226,7 +226,7 @@ bool AI::ServiceOrder::execute1st ( pvehicle supplier )
 
       if ( xy_dist / supplySpeed < nextServiceBuildingDistance/targ->maxMovement() || nextServiceBuildingDistance < 0 ) {
          supplier->aiparam[ai->getPlayerNum()]->dest = meet;
-         supplier->aiparam[ai->getPlayerNum()]->task = AiParameter::tsk_move;
+         supplier->aiparam[ai->getPlayerNum()]->setTask( AiParameter::tsk_move );
          supplier->aiparam[ai->getPlayerNum()]->dest_nwid = targ->networkid;
 
          setServiceUnit ( supplier );
@@ -371,7 +371,7 @@ AI::ServiceOrder& AI :: issueRefuelOrder ( pvehicle veh, bool returnImmediately 
       if ( RefuelConstraint::necessary ( veh, *this )) {
          RefuelConstraint apl ( *this, veh );
          veh->aiparam[getPlayerNum()]->dest = apl.getNearestRefuellingPosition ( true, true, false );
-         veh->aiparam[getPlayerNum()]->task = AiParameter::tsk_serviceRetreat;
+         veh->aiparam[getPlayerNum()]->setTask( AiParameter::tsk_serviceRetreat );
          runUnitTask ( veh );
       } else {
 
@@ -561,7 +561,7 @@ void AI :: runServiceUnit ( pvehicle supplyUnit )
              serviceMap.insert(make_pair(f,&(*i)));
           }
   /*
-          veh->aiparam[getPlayerNum()]->task = AiParameter::tsk_serviceRetreat;
+          veh->aiparam[getPlayerNum()]->getTask() = AiParameter::tsk_serviceRetreat;
           pbuilding bld = findServiceBuilding( **i );
           if ( bld )
              veh->aiparam[ getPlayerNum() ]->dest = bld->getEntry ( );
@@ -586,10 +586,8 @@ void AI :: runServiceUnit ( pvehicle supplyUnit )
       if ( i != vs.dest.end() ) {
          vs.fillEverything ( target, true );
          pvehicle targetUnit = getMap()->getUnit(target);
-         if ( targetUnit->aiparam[getPlayerNum()]->task == AiParameter::tsk_serviceRetreat ) {
-             targetUnit->aiparam[getPlayerNum()]->task = AiParameter::tsk_nothing;
-             targetUnit->aiparam[getPlayerNum()]->dest = MapCoordinate ( -1, -1 );
-         }
+         if ( targetUnit->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat )
+             targetUnit->aiparam[getPlayerNum()]->resetTask();
 
 
          removeServiceOrdersForUnit ( targetUnit );
@@ -616,7 +614,7 @@ AI::AiResult AI :: executeServices ( )
   for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
       pvehicle veh = *vi;
       checkKeys();
-      if ( veh->aiparam[getPlayerNum()]->job == AiParameter::job_supply )
+      if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_supply )
          runServiceUnit ( veh );
   }
 
@@ -626,20 +624,20 @@ AI::AiResult AI :: executeServices ( )
          if ( i->getServiceUnit()) {
             veh->aiparam[ getPlayerNum() ]->dest = i->getServiceUnit()->getPosition();
             veh->aiparam[ getPlayerNum() ]->dest_nwid = i->getServiceUnit()->networkid;
-            veh->aiparam[ getPlayerNum() ]->task = AiParameter::tsk_serviceRetreat;
+            veh->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_serviceRetreat );
          } else {
             if ( (veh->height & ( chtieffliegend | chfliegend | chhochfliegend )) && veh->typ->fuelConsumption ) {
                RefuelConstraint apl ( *this, veh );
                MapCoordinate3D dst = apl.getNearestRefuellingPosition( true, true, false );
                if ( dst.x != -1 ) {
                   veh->aiparam[ getPlayerNum() ]->dest = dst;
-                  veh->aiparam[ getPlayerNum() ]->task = AiParameter::tsk_serviceRetreat;
+                  veh->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_serviceRetreat );
                }
             } else {
                MapCoordinate3D dest = findServiceBuilding( *i );
                if ( dest.valid() ) {
                   veh->aiparam[ getPlayerNum() ]->dest = dest;
-                  veh->aiparam[ getPlayerNum() ]->task = AiParameter::tsk_serviceRetreat;
+                  veh->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_serviceRetreat );
                } else {
                   // displaymessage("warning: no service building found found for unit %s - %d!",1, veh->typ->description, veh->typ->id);
                }
@@ -653,7 +651,7 @@ AI::AiResult AI :: executeServices ( )
      pvehicle veh = *vi;
      checkKeys();
 
-     if ( veh->aiparam[getPlayerNum()]->task == AiParameter::tsk_serviceRetreat ) {
+     if ( veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat ) {
         moveUnit ( veh, veh->aiparam[ getPlayerNum() ]->dest, true );
         if ( veh->getPosition() == veh->aiparam[ getPlayerNum() ]->dest ) {
            VehicleService vc ( mapDisplay, NULL );
@@ -672,10 +670,8 @@ AI::AiResult AI :: executeServices ( )
 
               removeServiceOrdersForUnit ( veh );
 
-              if ( veh->aiparam[getPlayerNum()]->task == AiParameter::tsk_serviceRetreat ) {
-                  veh->aiparam[getPlayerNum()]->task = AiParameter::tsk_nothing;
-                  veh->aiparam[getPlayerNum()]->dest = MapCoordinate ( -1, -1 );
-              }
+              if ( veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat )
+                  veh->aiparam[getPlayerNum()]->resetTask();
 
            }
         }
@@ -686,7 +682,7 @@ AI::AiResult AI :: executeServices ( )
   for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
       if ( !i->timeOut() && i->requiredService == VehicleService::srv_repair ) {
          pvehicle veh = i->getTargetUnit();
-         veh->aiparam[getPlayerNum()]->task = AiParameter::tsk_serviceRetreat;
+         veh->aiparam[getPlayerNum()]->getTask() = AiParameter::tsk_serviceRetreat;
          pbuilding bld = findServiceBuilding( *i );
          if ( bld )
             veh->aiparam[ getPlayerNum() ]->dest = bld->getEntry ( );

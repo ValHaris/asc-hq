@@ -14,7 +14,7 @@ vehicle.cpp buildings.cpp networkdata.cpp textfileparser.cpp terraintype.cpp \
 objecttype.cpp textfiletags.cpp itemrepository.cpp
 
 asc_LDADD   = ../ai/libai.a ../sdl/libsdl.a ../libs/triangul/libtriangul.a \
--lSDL -lpthread -lSDL_image -lSDL_mixer @LDADDLIBBZ2@
+-lSDL -lpthread -lSDL_image -lSDL_mixer -lSDLmm @LDADDLIBBZ2@
 
 SUBDIRS = mapeditor
 

@@ -347,7 +347,7 @@ void AI :: showFieldInformation ( int x, int y )
 
       if ( fld->vehicle->aiparam ) {
 
-         sprintf(text2, "\nunit value: %d; xtogo: %d, ytogo: %d; ztogo: %d;\njob %s ; task %s \n", aip.getValue(), aip.dest.x, aip.dest.y, aip.dest.z, AIjobs[aip.job], AItasks[aip.task] );
+         sprintf(text2, "\nunit value: %d; xtogo: %d, ytogo: %d; ztogo: %d;\njob %s ; task %s \n", aip.getValue(), aip.dest.x, aip.dest.y, aip.dest.z, AIjobs[aip.getJob()], AItasks[aip.getTask()] );
          strcat ( text, text2 );
       }
 

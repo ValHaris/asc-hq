@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: sg.cpp,v 1.163 2001-08-19 12:50:03 mbickel Exp $
+//     $Id: sg.cpp,v 1.164 2001-08-27 21:03:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.163  2001/08/19 12:50:03  mbickel
+//      fixed event trigger allenemybuildings
+//
 //     Revision 1.162  2001/08/19 12:31:26  mbickel
 //      Fixed several bugs in event and campaign handling
 //
@@ -1627,7 +1630,7 @@ void execuseraction ( tuseractions action )
 
         case ua_computerturn:          if ( maintainencecheck() || 1 ) {
                                           displaymessage("This function is under development and for programmers only\n"
-                                                         "unpredicatable things may happen ...",3 ) ;
+                                                         "unpredictable things may happen ...",3 ) ;
 
                                           if (choice_dlg("do you really want to start the AI?","~y~es","~n~o") == 1) {
 

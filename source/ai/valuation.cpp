@@ -169,9 +169,9 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
    aip->setValue ( value );
 
 
-   if ( aip->job == AiParameter::job_undefined )
+   if ( aip->getJob() == AiParameter::job_undefined )
       if ( eht->canMove() )
-         aip->job = AI::chooseJob ( eht->typ, eht->functions );
+         aip->setJob( AI::chooseJob ( eht->typ, eht->functions ));
 /*
    generatethreatvalue();
    int l = 0;
@@ -186,8 +186,9 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
 */
 }
 
-AiParameter::Job AI::chooseJob ( const Vehicletype* typ, int functions )
+AiParameter::JobList AI::chooseJob ( const Vehicletype* typ, int functions )
 {
+   AiParameter::JobList jobList;
 
    int maxmove = minint;
    for ( int i = 0; i< 8; i++ )
@@ -204,26 +205,27 @@ AiParameter::Job AI::chooseJob ( const Vehicletype* typ, int functions )
       if ( typ->weapons.weapon[w].service() )
          service = true;
    if ( ((functions & cfrepair) || service) && maxmove >= minmalq )
-      return AiParameter::job_supply;
+      jobList.push_back ( AiParameter::job_supply );
 
 
    if ( functions & cf_conquer ) {
       if ( functions & cf_trooper )  {
          if ( typ->height & chfahrend )
-            return AiParameter::job_conquer;
+            jobList.push_back ( AiParameter::job_conquer );
       } else {
          if ( maxstrength < maxmove )
-            return AiParameter::job_conquer;
+            jobList.push_back ( AiParameter::job_conquer );
       }
    }
 
    if ( (maxstrength < typ->view  || maxstrength < typ->jamming) && maxmove > minmalq )
-      return AiParameter::job_recon;
+      jobList.push_back (  AiParameter::job_recon );
 
    if ( maxstrength > 0 )
-      return AiParameter::job_fight;
+      jobList.push_back ( AiParameter::job_fight );
 
-   return AiParameter::job_undefined;
+   jobList.push_back ( AiParameter::job_undefined );
+   return jobList;
 }
 
 

@@ -2,9 +2,12 @@
     \brief Platform indepedant graphic functions. 
 */
 
-//     $Id: basegfx.cpp,v 1.27 2001-07-15 21:00:25 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.28 2001-08-27 21:03:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2001/07/15 21:00:25  mbickel
+//      Some cleanup in the vehicletype class
+//
 //     Revision 1.26  2001/02/28 14:10:04  mbickel
 //      Added some small editors to linux makefiles
 //      Added even more dirty hacks to basegfx: some more truecolor functions
@@ -2049,6 +2052,31 @@ void showtext2c ( const ASCString& text, int x, int y )
 }
 
 
+void* convertSurface ( SDLmm::Surface& s )
+{
+  s.Lock();
+
+  char* buf = new char[ imagesize ( 1, 1, s.w(), s.h())];
+  word* wp = (word*) buf;
+  wp[0] = s.w()-1;
+  wp[1] = s.h()-1;
+  SDLmm::PixelFormat fmt = s.GetPixelFormat();
+  for ( int y = 0; y < s.h(); y++ )
+     for ( int x = 0; x < s.w(); x++ ) {
+        Uint8 red, green, blue, alpha;
+        fmt.GetRGBA ( s.GetPixel ( x, y ), red, green, blue, alpha);
+
+        if ( alpha < 128 )
+           buf[4 + s.w()*y+x] = 255;
+        else
+           buf[4 + s.w()*y+x] = truecolor2pal_table[ (red >> 2) +
+                                                     (( green >> 2) << 6) +
+                                                     (( blue >> 2) << 12) ];
+     }
+
+  s.Unlock();
+  return buf;
+}
 
 
 

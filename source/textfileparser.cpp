@@ -16,6 +16,8 @@
  ***************************************************************************/
 
 #include <vector>
+#include <SDLmm/sdlmm.h>
+#include <SDL_image.h>
 #include "ascstring.h"
 #include "typen.h"
 #include "terraintype.h"
@@ -356,6 +358,8 @@ void PropertyContainer::StringProperty::evaluate_rw ( )
       ASCString::size_type pos = property.find_first_not_of ( whiteSpace );
       if ( pos == ASCString::npos )
          property.erase();
+      else
+         property.erase ( 0, pos );
    } else {
       valueToWrite = property ;
 
@@ -577,7 +581,32 @@ void PropertyContainer::ImageProperty::evaluate_rw ( )
    if ( propertyContainer->isReading() ) {
       try {
          StringTokenizer st ( entry->value, true );
-         property = loadImage ( st.getNextToken(), 1 )[0];
+         FileName fn = st.getNextToken();
+         fn.toLower();
+         if ( fn.suffix() == "png" ) {
+            SDLmm::Surface* s = NULL;
+            do {
+               tnfilestream fs ( fn, tnstream::reading );
+               SDLmm::Surface s2 ( IMG_LoadPNG_RW ( SDL_RWFromStream( &fs )));
+               s2.SetAlpha ( SDL_SRCALPHA, SDL_ALPHA_OPAQUE );
+               if ( !s )
+                  s = new SDLmm::Surface ( s2 );
+               else {
+                  int res = s->Blit ( s2 );
+                  if ( res < 0 )
+                     propertyContainer->warning ( "PropertyContainer::ImageProperty::evaluate_rw - couldn't blit surface "+fn);
+               }
+
+               fn = st.getNextToken();
+            } while ( !fn.empty() );
+            if ( s )
+               property = convertSurface ( *s );
+            else
+               property = NULL;
+         } else
+            if ( fn.suffix() == ".pcx" ) {
+               property = loadImage ( fn, 1 )[0];
+            }
       }
       catch ( ASCexception ){
          propertyContainer->error( "error accessing file " + entry->value );

@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.96 2001-08-26 20:55:04 mbickel Exp $
+//     $Id: typen.h,v 1.97 2001-08-27 21:03:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.96  2001/08/26 20:55:04  mbickel
+//      bin2text can now load text files too
+//      LoadableItemType interface class added
+//
 //     Revision 1.95  2001/07/28 21:09:08  mbickel
 //      Prepared vehicletype structure for textIO
 //
@@ -439,6 +443,7 @@ class LoadableItemType {
        virtual void read ( tnstream& stream ) = 0;
        virtual void write ( tnstream& stream ) const = 0;
        virtual void runTextIO ( PropertyContainer& pc ) = 0;
+       virtual ~LoadableItemType() {};
 };
 
 
