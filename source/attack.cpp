@@ -1,6 +1,12 @@
-//     $Id: attack.cpp,v 1.22 2000-08-03 13:11:48 mbickel Exp $
+//     $Id: attack.cpp,v 1.23 2000-08-04 15:10:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/08/03 13:11:48  mbickel
+//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
+//      Repairing units now reduces their experience
+//      negative attack- and defenseboni possible
+//      changed attackformula
+//
 //     Revision 1.21  2000/07/29 14:54:10  mbickel
 //      plain text configuration file implemented
 //
@@ -654,7 +660,7 @@ void tunitattacksunit :: setresult ( void )
 
    _attackingunit->attacked = true; 
    if ( !(_attackingunit->functions & cf_moveafterattack) )
-     _attackingunit->movement = 0;
+     _attackingunit->setMovement ( 0 );
 
    _attackedunit->damage    = dv.damage;
 
@@ -756,7 +762,7 @@ void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int w
    dv.attackbonus = 0;
 
 
-   dv.armor = _attackedbuilding->typ->armor;
+   dv.armor = _attackedbuilding->typ->getArmor();
    dv.damage    = _attackedbuilding->damage;
    dv.experience = 0;
    dv.hemming    = 1;
@@ -778,7 +784,7 @@ void tunitattacksbuilding :: setresult ( void )
 
    _attackingunit->attacked = true; 
    if ( !(_attackingunit->functions & cf_moveafterattack) )
-      _attackingunit->movement = 0;
+      _attackingunit->setMovement ( 0 );
 
 
    _attackedbuilding->damage    = dv.damage;
@@ -1001,7 +1007,7 @@ void tunitattacksobject :: setresult ( void )
 
    _attackingunit->attacked = true; 
    if ( !(_attackingunit->functions & cf_moveafterattack) )
-      _attackingunit->movement = 0;
+      _attackingunit->setMovement ( 0 ); 
 
 
    _obji->damage    = dv.damage;
@@ -1216,7 +1222,7 @@ int       attackpossible2n( const pvehicle     angreifer,
    int dist = beeline ( angreifer, verteidiger );
    if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
       if ( !angreifer->attacked )
-         if ( !angreifer->typ->wait || angreifer->movement == angreifer->typ->movement[log2(angreifer->height)] )
+         if ( !angreifer->typ->wait || angreifer->getMovement() == angreifer->typ->movement[log2(angreifer->height)] )
             for ( int i = 0; i < angreifer->typ->weapons->count ; i++) 
                if (angreifer->typ->weapons->weapon[i].shootable() ) 
                   if (angreifer->typ->weapons->weapon[i].offensive() ) 

@@ -1,6 +1,12 @@
-//     $Id: artint.cpp,v 1.13 2000-08-03 13:11:47 mbickel Exp $
+//     $Id: artint.cpp,v 1.14 2000-08-04 15:10:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/08/03 13:11:47  mbickel
+//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
+//      Repairing units now reduces their experience
+//      negative attack- and defenseboni possible
+//      changed attackformula
+//
 //     Revision 1.12  2000/08/02 15:52:37  mbickel
 //      New unit set definition files
 //      demount accepts now more than one container file
@@ -3053,8 +3059,9 @@ void AI :: calculateFieldThreats ( void )
                   // The unit may have already moved this turn. 
                   // So we give it the maximum movementrange
    
-                  npush ( fld->vehicle->movement );
-                  fld->vehicle->movement = fld->vehicle->typ->movement [ log2 ( fld->vehicle->height )];
+                  int move = fld->vehicle->getMovement() ;
+
+                  fld->vehicle->setMovement ( fld->vehicle->typ->movement [ log2 ( fld->vehicle->height )] );
    
                   VehicleMovement vm ( NULL, NULL );
                   if ( vm.available ( fld->vehicle )) {
@@ -3074,7 +3081,7 @@ void AI :: calculateFieldThreats ( void )
                         wr.run ( fld->vehicle, xp, yp, singleUnitThreat, this );
                      }
                   }
-                  npop  ( fld->vehicle->movement );
+                  fld->vehicle->setMovement ( move );
                } else
                   wr.run ( fld->vehicle, x, y, singleUnitThreat, this );
 
@@ -3277,7 +3284,7 @@ void AI::tactics( void )
    pvehicle veh = getmap()->player[ getplayer() ].firstvehicle;
    while ( veh ) {
       if ( veh->weapexist() ) {
-         int orgmovement = veh->movement;
+         int orgmovement = veh->getMovement();
          int orgxpos = veh->xpos ;
          int orgypos = veh->ypos ;
 

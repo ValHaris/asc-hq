@@ -1,6 +1,12 @@
-//     $Id: spfst.cpp,v 1.44 2000-08-03 19:21:29 mbickel Exp $
+//     $Id: spfst.cpp,v 1.45 2000-08-04 15:11:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2000/08/03 19:21:29  mbickel
+//      Fixed: units had invalid height when produced in some buildings
+//      Fixed: units could not enter building if unitheightreq==0
+//      Started adding SDL_image support
+//      Upgraded to SDL1.1.3 (for SDL_image)
+//
 //     Revision 1.43  2000/08/02 15:53:06  mbickel
 //      New unit set definition files
 //      demount accepts now more than one container file
@@ -1158,7 +1164,7 @@ void         generate_vehicle(pvehicletype fztyp,
       if (vehicle->typ->height & chschwimmend )
          vehicle->height = chschwimmend;
      
-   vehicle->movement = vehicle->typ->movement[log2(vehicle->height)];  
+   vehicle->setMovement ( vehicle->typ->movement[log2(vehicle->height)] );  
 } 
 
 
@@ -1206,7 +1212,7 @@ void  stu_height ( pvehicle vehicle )
       if (vehicle->typ->terrainaccess->accessible ( fld->bdt ) > 0 )
          vehicle->height = chfahrend;
 
-   vehicle->movement = vehicle->typ->movement[log2( vehicle->height )];
+   vehicle->setMovement ( vehicle->typ->movement[log2( vehicle->height )] );
 }
 
 
@@ -6688,6 +6694,10 @@ int tobjecttype :: connectablewithbuildings ( void )
 }
 
 
+int tbuildingtype :: getArmor ( void )
+{
+   return _armor * actmap->getgameparameter( cgp_buildingarmor ) / 100;
+}
 
 void tdrawline8 :: start ( int x1, int y1, int x2, int y2 )
 {
@@ -6800,3 +6810,5 @@ int isUnitNotFiltered ( int id )
    }
    return 1;
 }
+
+

@@ -1,6 +1,12 @@
-//     $Id: typen.cpp,v 1.30 2000-08-03 19:21:33 mbickel Exp $
+//     $Id: typen.cpp,v 1.31 2000-08-04 15:11:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/08/03 19:21:33  mbickel
+//      Fixed: units had invalid height when produced in some buildings
+//      Fixed: units could not enter building if unitheightreq==0
+//      Started adding SDL_image support
+//      Upgraded to SDL1.1.3 (for SDL_image)
+//
 //     Revision 1.29  2000/08/03 13:12:20  mbickel
 //      Fixed: on/off switching of generator vehicle produced endless amounts of energy
 //      Repairing units now reduces their experience
@@ -237,7 +243,7 @@ const int directionangle [ sidenum ] =
 #endif
 
 
-const int gameparameterdefault [ gameparameternum ] = { 1, 2, 0, 100, 100, 1, 0, 0, 1, 0, 0, 0, 0 };
+const int gameparameterdefault [ gameparameternum ] = { 1, 2, 0, 100, 100, 1, 0, 0, 1, 0, 0, 0, 0, 100, 100, 100 };
 const char* gameparametername[ gameparameternum ] = { "lifetime of tracks", 
                                                       "freezing time of broken ice cover ( icebreaker )",
                                                       "move vehicles from unaccessible fields",
@@ -250,7 +256,10 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "lifetime of antipersonnel mine",
                                                       "lifetime of antitank mine",
                                                       "lifetime of moored mine",
-                                                      "lifetime of floating mine" };
+                                                      "lifetime of floating mine",
+                                                      "building armor factor (percent)", 
+                                                      "max building damage repair / turn",
+                                                      "building repair cost increase (percent)"};
 
 
 const int csolarkraftwerkleistung[cwettertypennum] = { 1024, 512, 256, 756, 384 }; // 1024 ist Maximum 
@@ -854,7 +863,6 @@ void tvehicle :: init ( void )
    experience = 0;
    attacked = 0; 
    height = 0;
-   movement = 0;
    direction = 0;
    xpos = -1;
    ypos = -1;
@@ -878,6 +886,9 @@ void tvehicle :: init ( void )
 
    for ( int a = 0; a < 8 ; a++ ) 
       aiparam[a] = NULL;
+
+   setMovement ( 0 );
+
 }
    
 
@@ -893,7 +904,7 @@ void tvehicle :: clone ( pvehicle src, pmap actmap )
    experience = src->experience;
    attacked = src->attacked; 
    height = src->height;
-   movement = src->movement;
+   setMovement ( src->getMovement() );
    direction = src->direction;
    xpos = src->xpos;
    ypos = src->ypos;
@@ -1114,7 +1125,7 @@ tvehicletype :: tvehicletype ( void )
    loadcapabilitynot = 0;
    id = 0; 
    tank = 0; 
-   fuelconsumption = 0; 
+   fuelConsumption = 0; 
    energy = 0; 
    material = 0; 
    functions = 0;
@@ -1268,10 +1279,10 @@ void tvehicle :: repairunit(pvehicle vehicle, int maxrepair )
 
 
       if ( vehicle != this ) {
-         if ( vehicle->movement > movement_cost_for_repaired_unit )
-            vehicle->movement -= movement_cost_for_repaired_unit;
+         if ( vehicle->getMovement() > movement_cost_for_repaired_unit )
+            vehicle->setMovement ( vehicle->getMovement() -  movement_cost_for_repaired_unit );
          else
-            vehicle->movement = 0;
+            vehicle->setMovement ( 0 ); 
 
          if ( !attack_after_repair )
             vehicle->attacked = 0;
@@ -1282,10 +1293,10 @@ void tvehicle :: repairunit(pvehicle vehicle, int maxrepair )
                unitloaded = 1;
    
          if ( !unitloaded ) 
-            if ( movement > movement_cost_for_repairing_unit )
-               movement -= movement_cost_for_repairing_unit;
+            if ( getMovement() > movement_cost_for_repairing_unit )
+               setMovement ( getMovement() - movement_cost_for_repairing_unit );
             else
-               movement = 0;
+               setMovement ( 0 );
       }
 
       material -= w * mkost / 10000; 
@@ -1319,7 +1330,7 @@ void tvehicle :: nextturn( void )
 void tvehicle :: resetmovement ( void )
 {
     int move = typ->movement[log2(height)];
-    movement = move;
+    setMovement ( move, -1 );
     /*
     if (actvehicle->typ->fuelconsumption == 0) 
        actvehicle->movement = 0;
@@ -1332,6 +1343,38 @@ void tvehicle :: resetmovement ( void )
     */
 }
 
+void tvehicle :: setMovement ( int newmove, int transp )
+{
+   if ( newmove < 0 )
+      newmove = 0;
+
+   if ( transp >= 0 ) 
+      if ( typ->movement[ log2 ( height ) ] ) {
+         int diff = _movement - newmove;
+         int perc = 1000 * diff / typ->movement[ log2 ( height ) ] ;
+         for ( int i = 0; i < 32; i++ ) {
+            if ( loading[i] ) {
+               int lperc = perc;
+               if ( !transp )
+                  lperc /= 2;
+      
+               loading[i]->setMovement ( loading[i]->getMovement() - lperc * loading[i]->typ->movement[ log2 ( loading[i]->height)] / 1000 , 1 );
+            }
+         } /* endfor */
+   }
+   _movement = newmove;
+}
+
+int tvehicle :: getMovement ( void )
+{
+   if ( typ->fuelConsumption ) {
+      if ( fuel / typ->fuelConsumption * 8 < _movement )
+         return fuel / typ->fuelConsumption * 8;
+      else
+         return _movement;
+   } else
+      return _movement;
+}
 
 int tvehicle :: weapexist( void )
 { 
@@ -1349,7 +1392,7 @@ void tvehicle :: putimage ( int x, int y )
 {
  #ifndef converter
   #ifdef sgmain
-   int shaded = ( movement < minmalq ) && ( color == actmap->actplayer*8) && (attacked || !typ->weapons->count || gameoptions.units_gray_after_move );
+   int shaded = ( getMovement() < minmalq ) && ( color == actmap->actplayer*8) && (attacked || !typ->weapons->count || gameoptions.units_gray_after_move );
   #else
    int shaded = 0;
   #endif

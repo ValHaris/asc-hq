@@ -1,6 +1,12 @@
-//     $Id: dialog.cpp,v 1.39 2000-08-03 13:11:57 mbickel Exp $
+//     $Id: dialog.cpp,v 1.40 2000-08-04 15:10:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2000/08/03 13:11:57  mbickel
+//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
+//      Repairing units now reduces their experience
+//      negative attack- and defenseboni possible
+//      changed attackformula
+//
 //     Revision 1.38  2000/08/02 15:52:44  mbickel
 //      New unit set definition files
 //      demount accepts now more than one container file
@@ -1156,7 +1162,7 @@ void  tvehicleinfo::showgeneralinfovariables( void )
    showtext2( strrr(aktvehicle->energy), column1x + 100, productioncosty + 110);
    showtext2( strrr(aktvehicle->tank), column1x + 100, productioncosty + 130);
    showtext2( strrr(aktvehicle->loadcapacity), column1x + 100, productioncosty + 150);
-   showtext2( strrr(aktvehicle->fuelconsumption), column1x + 100,  productioncosty + 260 );
+   showtext2( strrr(aktvehicle->fuelConsumption), column1x + 100,  productioncosty + 260 );
    showtext2( strrr(aktvehicle->steigung), column1x + 100, productioncosty + 280 );
 
 
@@ -1199,7 +1205,7 @@ void  tvehicleinfo::showgeneralinfovariables( void )
    itoa ( aktvehicle->tank, strng, 10 );
    showtext2(strng, x1 + 490,y1 + starty + 70);
 
-   itoa ( aktvehicle->fuelconsumption, strng, 10 );
+   itoa ( aktvehicle->fuelConsumption, strng, 10 );
    showtext2(strng, x1 + 490,y1 + starty + 90);
    itoa ( aktvehicle->steigung, strng, 10 );
    showtext2(strng, x1 + 490,y1 + starty + 110);

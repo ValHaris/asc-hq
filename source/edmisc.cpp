@@ -1,6 +1,10 @@
-//     $Id: edmisc.cpp,v 1.23 2000-08-03 19:45:14 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.24 2000-08-04 15:11:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/08/03 19:45:14  mbickel
+//      Fixed some bugs in DOS code
+//      Removed submarine.ascent != 0 hack
+//
 //     Revision 1.22  2000/08/03 19:21:18  mbickel
 //      Fixed: units had invalid height when produced in some buildings
 //      Fixed: units could not enter building if unitheightreq==0
@@ -612,7 +616,7 @@ void placeunit(void)
                         removevehicle(&pf->vehicle);
                   }
                   if ( pf->vehicle ) {
-                     pf->vehicle->movement = pf->vehicle->typ->movement[log2(pf->vehicle->height)];
+                     pf->vehicle->setMovement ( pf->vehicle->typ->movement[log2(pf->vehicle->height)] );
                      pf->vehicle->direction = auswahld;
                   }
                }
@@ -1656,7 +1660,7 @@ void tfillpolygonunit::setpointabs    ( int x,  int y  )
                         ffield->vehicle->height = ffield->vehicle->height * 2;
                      for (i = 0; i <= 31; i++) ffield->vehicle->loading[i] = NULL;
                      if (ffield->vehicle->height == 0 ) removevehicle(&ffield->vehicle); 
-                     else ffield->vehicle->movement = ffield->vehicle->typ->movement[log2(ffield->vehicle->height)];
+                     else ffield->vehicle->setMovement ( ffield->vehicle->typ->movement[log2(ffield->vehicle->height)] );
                      ffield->vehicle->direction = auswahld;
                   } 
             } 
@@ -2746,7 +2750,7 @@ void         tunit::buttonpressed(byte         id)
         if ( ht == h ) bar(x1 + 25+( i * w2),y1 + heightxs-5,x1 + w2 * (i +1 ) - 5,y1 + heightxs-3,red);
      } /* endfor */
      unit->height = h;
-     unit->movement = unit->typ->movement[ log2 ( unit->height ) ];
+     unit->setMovement ( unit->typ->movement[ log2 ( unit->height ) ] );
    }
    break;
    case 12: addeingabe( 3, &unit->fuel, 0, unit->getmaxfuelforweight() );

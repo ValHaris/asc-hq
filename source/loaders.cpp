@@ -1,6 +1,10 @@
-//     $Id: loaders.cpp,v 1.18 2000-08-03 19:45:15 mbickel Exp $
+//     $Id: loaders.cpp,v 1.19 2000-08-04 15:11:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/08/03 19:45:15  mbickel
+//      Fixed some bugs in DOS code
+//      Removed submarine.ascent != 0 hack
+//
 //     Revision 1.17  2000/08/03 13:12:15  mbickel
 //      Fixed: on/off switching of generator vehicle produced endless amounts of energy
 //      Repairing units now reduces their experience
@@ -451,7 +455,7 @@ void         tspfldloaders::writeunit ( pvehicle eht )
        bm |= cem_attacked;
     if ( eht->height != chfahrend )
        bm |= cem_height;
-    if ( eht->movement < eht->typ->movement[log2(eht->height)] )
+    if ( eht->getMovement() < eht->typ->movement[log2(eht->height)] )
        bm |= cem_movement;
 
     if ( eht->direction )
@@ -526,7 +530,7 @@ void         tspfldloaders::writeunit ( pvehicle eht )
          stream->writedata2 ( eht->height );
 
     if ( bm & cem_movement )
-         stream->writedata2 ( eht->movement );
+         stream->writeChar ( eht->getMovement() );
 
     if ( bm & cem_direction )
          stream->writedata2 ( eht->direction );
@@ -659,10 +663,10 @@ void         tspfldloaders::readunit ( pvehicle &eht )
     if ( ! (eht->height & eht->typ->height) )
        eht->height = 1 << log2 ( eht->typ->height );
 
-    if ( bm & cem_movement )
-         stream->readdata2 ( eht->movement );
+    if ( bm & cem_movement ) 
+         eht->setMovement ( stream->readChar ( ), -1 );
     else
-       eht->movement = eht->typ->movement [ log2 ( eht->height ) ];
+       eht->setMovement ( eht->typ->movement [ log2 ( eht->height ) ], -1 );
 
     if ( bm & cem_direction )
          stream->readdata2 ( eht->direction );

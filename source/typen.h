@@ -1,6 +1,12 @@
-//     $Id: typen.h,v 1.33 2000-08-03 13:12:20 mbickel Exp $
+//     $Id: typen.h,v 1.34 2000-08-04 15:11:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/08/03 13:12:20  mbickel
+//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
+//      Repairing units now reduces their experience
+//      negative attack- and defenseboni possible
+//      changed attackformula
+//
 //     Revision 1.32  2000/08/02 10:28:28  mbickel
 //      Fixed: generator vehicle not working
 //      Streams can now report their name
@@ -238,7 +244,7 @@ typedef class tshareview *pshareview;
 #define maxbuildingpicnum 8
 #define maxminesonfield 20
 
-#define gameparameternum 13
+const int gameparameternum = 16;
 
 #define maxobjectonfieldnum 16
 
@@ -596,7 +602,7 @@ class tvehicletype {    // This structure does not have a fixed layout any more 
        char         loadcapabilitynot;  /*  eine vehicle, die auf eine dieser Hîhenstufen kann, darf NICHT geladen werden. Beispiel: Flugzeuge in Transportflieger */
        Word         id; 
        int          tank; 
-       Word         fuelconsumption; 
+       Word         fuelConsumption; 
        int          energy; 
        int          material; 
        int          functions;
@@ -661,7 +667,9 @@ class tvehicle { /*** Bei énderungen unbedingt Save/LoadGame und Konstruktor kor
     char         experience;    // 0 .. 15 
     char         attacked; 
     char         height;       /* BM */   /*  aktuelle Hîhe: z.B. Hochfliegend  */
-    char         movement;     /*  Åbriggebliebene movement fÅr diese Runde  */
+   private:
+    char         _movement;     /*  Åbriggebliebene movement fÅr diese Runde  */
+   public:
     char         direction;    /*  Blickrichtung  */
     Integer      xpos, ypos;   /*  Position auf map  */
     int          material;     /*  aktuelle loading an Material und  */
@@ -684,6 +692,10 @@ class tvehicle { /*** Bei énderungen unbedingt Save/LoadGame und Konstruktor kor
     int          generatoractive;
     AiParameter* aiparam[8];
   
+    int getMovement ( void );
+    void setMovement ( int newmove, int transp = 0 );
+
+
     int enablereactionfire( void );
     int disablereactionfire ( void );
     int weight( void );   // weight of unit including cargo, fuel and material
@@ -744,7 +756,7 @@ class  tbuildingtype {
         } entry, powerlineconnect, pipelineconnect; 
         int          id; 
         char*        name; 
-        int          armor; 
+        int          _armor; 
         int          jamming; 
         int          view; 
         int          loadcapacity; 
@@ -790,6 +802,7 @@ class  tbuildingtype {
 
         int          vehicleloadable ( pvehicletype fzt );
         int          gettank ( int resource );
+        int          getArmor( void );
         void getfieldcoordinates( int bldx, int bldy, int x, int y, int *xx, int *yy);
 }; 
 
@@ -894,10 +907,9 @@ class  twterraintype {
   public:
     void*        picture[8];
     void*        direcpict[8];
-    int            dummy1;
-    Word           defensebonus;
-    word           attackbonus;
-    char           basicjamming;
+    int            defensebonus;
+    int            attackbonus;
+    int            basicjamming;
     char           movemaluscount;
     char*          movemalus;
     pterraintype  terraintype;
@@ -1769,7 +1781,8 @@ extern const char* gameparametername[ gameparameternum ];
 extern const int gameparameterdefault [ gameparameternum ];
 enum { cgp_fahrspur, cgp_eis, cgp_movefrominvalidfields, cgp_building_material_factor, cgp_building_fuel_factor,
        cgp_forbid_building_construction, cgp_forbid_unitunit_construction, cgp_bi3_training, cgp_maxminesonfield,
-       cgp_antipersonnelmine_lifetime, cgp_antitankmine_lifetime, cgp_mooredmine_lifetime, cgp_floatingmine_lifetime };
+       cgp_antipersonnelmine_lifetime, cgp_antitankmine_lifetime, cgp_mooredmine_lifetime, cgp_floatingmine_lifetime,
+       cgp_buildingarmor, cgp_maxbuildingrepair, cgp_buildingrepairfactor };
 
 
 

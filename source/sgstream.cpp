@@ -1,6 +1,10 @@
-//     $Id: sgstream.cpp,v 1.24 2000-08-02 18:18:09 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.25 2000-08-04 15:11:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/08/02 18:18:09  mbickel
+//      Fixed broken Watcom Projectfiles for tools
+//      Makebld can now save a buildings image
+//
 //     Revision 1.23  2000/08/02 17:27:50  mbickel
 //      Renamed translation to transformation in unitset definition file
 //
@@ -985,7 +989,7 @@ char* rotatepict ( void* image, int organgle )
 const int vehicle_version = 3;
 const int building_version = 2;
 const int object_version = 1;
-const int terrain_version = 1;
+const int terrain_version = 2;
 const int technology_version = 1;
 
 void* leergui = NULL;
@@ -1108,7 +1112,7 @@ pvehicletype   loadvehicletype( pnstream stream )
       fztn->loadcapabilitynot = stream->readChar();
       fztn->id = stream->readWord();
       fztn->tank = stream->readInt();
-      fztn->fuelconsumption = stream->readWord();
+      fztn->fuelConsumption = stream->readWord();
       fztn->energy = stream->readInt();
       fztn->material = stream->readInt();
       fztn->functions = stream->readInt();
@@ -1344,7 +1348,7 @@ void writevehicle( pvehicletype fztn, pnstream stream )
    stream->writeChar(fztn->loadcapabilitynot);
    stream->writeWord(fztn->id );
    stream->writeInt(fztn->tank );
-   stream->writeWord(fztn->fuelconsumption );
+   stream->writeWord(fztn->fuelConsumption );
    stream->writeInt(fztn->energy );
    stream->writeInt(fztn->material );
    stream->writeInt(fztn->functions );
@@ -1712,7 +1716,7 @@ pbuildingtype       loadbuildingtype( pnstream stream )
 
       pgbt->id = stream->readInt( );
       pgbt->name = (char*) stream->readInt( );
-      pgbt->armor = stream->readInt( );
+      pgbt->_armor = stream->readInt( );
       pgbt->jamming = stream->readInt( );
       pgbt->view = stream->readInt( );
       pgbt->loadcapacity = stream->readInt( );
@@ -1816,7 +1820,7 @@ void writebuildingtype ( pbuildingtype bld, pnstream stream )
 
    stream->writeInt ( bld->id );
    stream->writeInt ( (int) bld->name );
-   stream->writeInt ( bld->armor );
+   stream->writeInt ( bld->_armor );
    stream->writeInt ( bld->jamming );
    stream->writeInt ( bld->view );
    stream->writeInt ( bld->loadcapacity );
@@ -1991,33 +1995,64 @@ pterraintype      loadterraintype( pnstream stream )
 { 
    int version;
    stream->readdata2 ( version );
-   if ( version == terrain_version ) {
+   if ( version == terrain_version || version == 1) {
 
       pwterraintype pgbt; 
 
       pterraintype bbt = new (tterraintype);
    
-      stream->readdata2 ( *bbt );
+      bbt->name = (char*) stream->readInt();
+      bbt->id   = stream->readInt();
+      for ( int ww = 0; ww < cwettertypennum; ww++ )
+         bbt->weather[ww] = (pwterraintype) stream->readInt();
+      for ( int nf = 0; nf < 8; nf++ )
+         bbt->neighbouringfield[nf] = stream->readInt();
+
       stream->readpchar( &bbt->name );
    
       for ( int i=0; i<cwettertypennum ;i++ ) {
          if (bbt->weather[i] ) {
             bbt->weather[i] = new ( twterraintype );
             pgbt = bbt->weather[i];
-            stream->readdata2 ( *pgbt );
-   
+
+            int j;
+
+            for ( j = 0; j < 8; j++ )
+               pgbt->picture[j] = (void*) stream->readInt();
+
+            for ( j = 0; j < 8; j++ )
+               pgbt->direcpict[j] = (void*) stream->readInt();
+
+            if ( version == 1 ) {
+               stream->readInt(); //dummy1
+               pgbt->defensebonus = stream->readWord();
+               pgbt->attackbonus = stream->readWord();
+               pgbt->basicjamming = stream->readChar();
+            } else {
+               pgbt->defensebonus = stream->readInt();
+               pgbt->attackbonus = stream->readInt();
+               pgbt->basicjamming = stream->readInt();
+            }
+            pgbt->movemaluscount = stream->readChar();
+            pgbt->movemalus = (char*) stream->readInt();
+            pgbt->terraintype = (pterraintype) stream->readInt();
+            pgbt->quickview = (pquickview) stream->readInt();
+
+            for ( j = 0; j < 6; j++ )
+               pgbt->bi_picture[j] = stream->readInt();
+
+            stream->readdata2 ( pgbt->art );
+
             #ifndef converter
-            char mmcount = cmovemalitypenum;
-   
-            if (mmcount < pgbt->movemaluscount )
-               mmcount = pgbt->movemaluscount;
+             char mmcount = cmovemalitypenum;
+             if (mmcount < pgbt->movemaluscount )
+                mmcount = pgbt->movemaluscount;
             #else
-            char mmcount = pgbt->movemaluscount ;
+             char mmcount = pgbt->movemaluscount ;
             #endif
    
             bbt->weather[i]->movemalus = new ( char[mmcount ]);
    
-            int j;
             for (j=0; j< mmcount ; j++ ) {
                if (j < pgbt->movemaluscount)
                   stream->readdata ( pgbt->movemalus+j, 1);
@@ -2034,103 +2069,13 @@ pterraintype      loadterraintype( pnstream stream )
             pgbt->movemaluscount = mmcount;
    
    
-            for ( j=0; j<8 ;j++ ) {
-               if ( pgbt->picture[j] ) {
-                 #ifdef HEXAGON
+            for ( j=0; j<8 ;j++ ) 
+               if ( pgbt->picture[j] ) 
                   if ( pgbt->bi_picture[j] == -1 ) {
-                 #endif
                      pgbt->picture[j] = asc_malloc ( fieldsize );
                      stream->readdata ( pgbt->picture[j], fieldsize );
-      
-                    #ifndef HEXAGON
-                     #ifdef sgmain
-                      asc_free ( pgbt->picture[j] ) ;
-                      pgbt->picture[j] = NULL;
-                     #endif
-                     if ( pgbt->direcpict[j] ) {
-                        pgbt->direcpict[j] = asc_malloc ( fielddirecpictsize );
-                        stream->readdata ( pgbt->direcpict[j], fielddirecpictsize );
-                     }
-                    #endif
-                  #ifdef HEXAGON
-                   } else {
+                   } else 
                       loadbi3pict_double ( pgbt->bi_picture[j], &pgbt->picture[j], gameoptions.bi3.interpolate.terrain );
-                   }
-                  #endif
-               } 
-               #ifndef HEXAGON
-                 else 
-                  if (j == 1) {
-   
-                     pgbt->picture[j]   = asc_malloc( fieldsize );
-                     pgbt->direcpict[j] = asc_malloc ( fielddirecpictsize );
-   
-                     tvirtualdisplay vd ( 100, 100 );
-   
-                     memset ( (void*) agmp->linearaddress, 255, agmp->resolutionx * agmp->resolutiony );
-                     putrotspriteimage90 ( 10, 10, pgbt->picture[0] , 0);
-                     putrotspriteimage90 ( 11, 10, pgbt->picture[0] , 0);
-   
-                     
-                     getimage(10,10, 10 + fieldxsize-1, 10 + fieldysize-1, pgbt->picture[j] );
-   
-   
-                     char *b = (char*) pgbt->direcpict[j];
-   
-                     for (int t = 1; t < 20; t++) {
-                        for (int u = 20-t; u < 20+t; u++) {
-                           *b = getpixel(  10 + u, 9 + t);
-                           b++;
-                        }
-                     }
-                     
-                     for (t = 20; t > 0; t-- ) {
-                        for (int u =20-t; u<= 19 + t; u++) {
-                           *b = getpixel(  10 + u, 10 + 39 - t );
-                           b++;
-                        }
-                     }
-   
-                  } else
-                     if (j >= 2 && j <= 3) {
-         
-                        char *b1, *b2;
-                        int k;
-         
-                        pgbt->picture[j] = asc_malloc ( fieldsize );
-                        b1 = (char*) pgbt->picture[j-2];
-                        b2 = (char*) pgbt->picture[j];
-                        for (k=0; k<4; k++,b1++,b2++)
-                           *b2 = *b1;
-         
-                        b2 = (char*) pgbt->picture[j] + fieldsize - 1;
-         
-                        for (k=4; k<fieldsize; k++) {
-                           *b2 = *b1;
-                           b1++;
-                           b2--;
-                        }
-         
-                        pgbt->direcpict[j] = asc_malloc ( fielddirecpictsize );
-                        b1 = (char*) pgbt->direcpict[j-2];
-                        b2 = (char*) pgbt->direcpict[j] + fielddirecpictsize - 1;
-         
-                        for (k=0; k<fielddirecpictsize; k++) {
-                           *b2 = *b1;
-                           b1++;
-                           b2--;
-                        }
-         
-                     }  else
-                          if ( j <= 7 ) {
-                             pgbt->picture[j]   = asc_malloc ( fieldsize );
-                             pgbt->direcpict[j] = asc_malloc ( fielddirecpictsize );
-                             flippict( pgbt->picture[j-4], pgbt->picture[j] );
-                             generatedirecpict  ( pgbt->picture[j] , pgbt->direcpict[j] );
-                          }
-               #endif
-   
-            } /* endfor */
    
             pgbt->terraintype = bbt;
             if ( pgbt->quickview ) {
@@ -2154,26 +2099,45 @@ pterraintype      loadterraintype( pnstream stream )
 
 void writeterrain ( pterraintype bdt, pnstream stream )
 {
+   int m;
+
    stream->writedata2 ( terrain_version );
-   stream->writedata2 ( *bdt );
+   stream->writeInt ( int(bdt->name) );
+   stream->writeInt ( bdt->id );
+   for ( m = 0; m < cwettertypennum; m++ )
+      stream->writeInt ( int( bdt->weather));
+
+   for ( m = 0; m < 8; m++ )
+      stream->writeInt ( bdt->neighbouringfield[m] );
+
    stream->writepchar( bdt->name );
    for (int i=0;i<cwettertypennum ;i++ ) {
      if ( bdt->weather[i] ) {
-        stream->writedata ( ( char*) bdt->weather[i], sizeof ( *(bdt->weather[i]) ));
+        for ( m = 0; m < 8; m++ )
+           stream->writeInt ( int( bdt->weather[i]->picture[m] ));
+
+        for ( m = 0; m < 8; m++ )
+           stream->writeInt ( int( bdt->weather[i]->direcpict[m] ));
+
+        stream->writeInt ( bdt->weather[i]->defensebonus );
+        stream->writeInt ( bdt->weather[i]->attackbonus );
+        stream->writeInt ( bdt->weather[i]->basicjamming );
+        stream->writeChar ( bdt->weather[i]->movemaluscount );
+        stream->writeInt ( int( bdt->weather[i]->movemalus ));
+        stream->writeInt ( int( bdt->weather[i]->terraintype ));
+        stream->writeInt ( int( bdt->weather[i]->quickview ));
+        stream->writedata2 ( bdt->weather[i]->art );
+         
+        for ( m = 0; m< 6; m++ )
+           stream->writeInt ( bdt->weather[i]->bi_picture[6] );
+
         stream->writedata ( bdt->weather[i]->movemalus, bdt->weather[i]->movemaluscount );
-        for ( int j = 0; j < 8; j++ ) {
-           if ( bdt->weather[i]->picture[j] 
-           #ifdef HEXAGON
-           && bdt->weather[i]->bi_picture[j] == -1 
-           #endif
-           ) {
+
+        for ( int j = 0; j < 8; j++ ) 
+           if ( bdt->weather[i]->picture[j] && bdt->weather[i]->bi_picture[j] == -1 ) 
               stream->writedata ( ( char*) bdt->weather[i]->picture[j], fieldsize );
-             #ifndef HEXAGON
-              if ( bdt->weather[i]->direcpict[j] )
-                 stream->writedata ( ( char*) bdt->weather[i]->direcpict[j], fielddirecpictsize );
-             #endif
-           }
-        }
+           
+        
         if ( bdt->weather[i]->quickview )
            stream->writedata ( ( char*) bdt->weather[i]->quickview, sizeof ( *bdt->weather[i]->quickview ));
      }

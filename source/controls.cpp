@@ -1,6 +1,12 @@
-//     $Id: controls.cpp,v 1.54 2000-08-03 13:11:53 mbickel Exp $
+//     $Id: controls.cpp,v 1.55 2000-08-04 15:10:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2000/08/03 13:11:53  mbickel
+//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
+//      Repairing units now reduces their experience
+//      negative attack- and defenseboni possible
+//      changed attackformula
+//
 //     Revision 1.53  2000/08/02 15:52:42  mbickel
 //      New unit set definition files
 //      demount accepts now more than one container file
@@ -402,8 +408,8 @@ void         tsearchforminablefields::run( pvehicle     eht )
 { 
    if ( (eht->functions & cfmanualdigger) && !(eht->functions & cfautodigger) ) 
       if ( eht->attacked || 
-          (eht->typ->wait && (eht->movement < eht->typ->movement[log2(eht->height)])) ||
-          (eht->movement < searchforresorcesmovedecrease )) {
+          (eht->typ->wait && (eht->getMovement() < eht->typ->movement[log2(eht->height)])) ||
+          (eht->getMovement() < searchforresorcesmovedecrease )) {
          dispmessage2(311,"");
          return;
       } 
@@ -427,7 +433,7 @@ void         tsearchforminablefields::run( pvehicle     eht )
    testfield();
 
    if ( (eht->functions & cfmanualdigger) && !(eht->functions & cfautodigger) ) 
-      eht->movement -= searchforresorcesmovedecrease;
+      eht->setMovement ( eht->getMovement() - searchforresorcesmovedecrease );
 
    if ( !showresources && (eht->functions & cfmanualdigger) && !(eht->functions & cfautodigger))
       showresources = 1;
@@ -448,7 +454,7 @@ void         tsearchputbuildingfields::initputbuilding( word x, word y, pbuildin
   pvehicle     eht; 
 
    eht = getfield(x,y)->vehicle; 
-   if (eht->attacked || (eht->typ->wait && (eht->movement < eht->typ->movement[log2(eht->height)]))) {
+   if (eht->attacked || (eht->typ->wait && (eht->getMovement() < eht->typ->movement[log2(eht->height)]))) {
       dispmessage2(302,""); 
       return;
    } 
@@ -644,7 +650,7 @@ void         putbuildinglevel3(integer      x,
             eht->fuel -= bld->productioncost.fuel * ff / 100; 
 
          moveparams.movestatus = 0; 
-         eht->movement = 0;
+         eht->setMovement ( 0 );
          eht->attacked = true; 
          computeview(); 
       } 
@@ -660,7 +666,7 @@ void         putbuildinglevel3(integer      x,
 void         tsearchdestructbuildingfields::initdestructbuilding( int x, int y )
 { 
    pvehicle     eht = getfield(x,y)->vehicle; 
-   if (eht->attacked || (eht->typ->wait && (eht->movement < eht->typ->movement[log2(eht->height)]))) {
+   if (eht->attacked || (eht->typ->wait && (eht->getMovement() < eht->typ->movement[log2(eht->height)]))) {
       dispmessage2(305,NULL); 
       return;
    } 
@@ -719,9 +725,9 @@ void         destructbuildinglevel2( int xp, int yp)
          if ( eht->material > eht->typ->material )
             eht->material = eht->typ->material;
 
-         eht->movement = 0;
+         eht->setMovement ( 0 );
          eht->attacked = 1;
-         eht->fuel -= destruct_building_fuel_usage * eht->typ->fuelconsumption;
+         eht->fuel -= destruct_building_fuel_usage * eht->typ->fuelConsumption;
          if ( bb->completion ) {
             bb->changecompletion ( -1 );
          } else {
@@ -791,7 +797,7 @@ void         trefuelvehicle::testfield(void)
       
                                     if ( actvehicle->functions & cfrepair )
                                        if ( actvehicle->fuel && actvehicle->material ) 
-                                          // if ( fld->vehicle->movement >= movement_costtype_for_repaired_unit )
+                                          // if ( fld->vehicle->getMovement() >= movement_costtype_for_repaired_unit )
                                              if ( fld->vehicle->damage ) 
                                                 { 
                                                    fld->a.temp = 2; 
@@ -818,7 +824,7 @@ void         trefuelvehicle::initrefuelling( word xp1, word yp1, char md )   /* 
       if (md == 1) { 
          f = 0; 
          if (actvehicle->functions & cfrepair) 
-            if ( actvehicle->movement >= movement_cost_for_repairing_unit )
+            if ( actvehicle->getMovement() >= movement_cost_for_repairing_unit )
                for (a = 0; a < actvehicle->typ->weapons->count ; a++) { 
                   if ( actvehicle->typ->weapons->weapon[a].service() ) 
                      if ( actvehicle->material ) 
@@ -925,7 +931,7 @@ void         tputmine::initpm(  char mt, const pvehicle eht )
          } 
    player = eht->color / 8;
    mienentyp = mt; 
-   if (eht->movement < mineputmovedecrease) { 
+   if (eht->getMovement() < mineputmovedecrease) { 
       mienenlegen = false; 
       mienenraeumen = false; 
    } 
@@ -978,7 +984,7 @@ void  legemine( int typ, int delta )
                   if ((fzt->weapons->weapon[i].getScalarWeaponType() == cwminen) && fzt->weapons->weapon[i].shootable() ) 
                      if ( fld-> putmine( actmap->actplayer, typ, cminestrength[typ-1] * strength / 64 )) {
                         eht->ammo[i]--; 
-                        eht->movement -= mineputmovedecrease;
+                        eht->setMovement ( eht->getMovement() - mineputmovedecrease );
                         strength = eht->weapstrength[i];
                         int x = getxpos();
                         int y = getypos();
@@ -1244,7 +1250,7 @@ void         tbuildstreet::testfield(void)
                       if ( actvehicle->energy   >= cost.a.energy   && 
                            actvehicle->material >= cost.a.material && 
                            actvehicle->fuel     >= cost.a.fuel     &&
-                           actvehicle->movement >= movecost ) {
+                           actvehicle->getMovement() >= movecost ) {
       
                               if ( !fld->checkforobject ( objtype ) ) {
                                  obj->objects_buildable[ obj->objects_buildable_num++ ] = objtype;
@@ -1384,7 +1390,7 @@ void         setspec( pobjecttype obj )
             eht->fuel -= cost.a.fuel;
             eht->energy -= cost.a.energy;
             eht->material -= cost.a.material;
-            eht->movement -= movecost;
+            eht->setMovement ( eht->getMovement() - movecost );
    
          }
 
@@ -3570,11 +3576,11 @@ void         tdashboard::paintmovement(void)
        activefontsettings.font = schriften.guifont;
        activefontsettings.length = 17;
        activefontsettings.height = 9;
-       if ( vehicle->typ->fuelconsumption ) {
-          if ( (movedisp  &&  vehicle->typ->fuelconsumption ) || (minmalq*vehicle->fuel / vehicle->typ->fuelconsumption  < vehicle->movement ))
-             showtext2c( strrrd8d( minmalq*vehicle->fuel / vehicle->typ->fuelconsumption ), agmp->resolutionx - ( 640 - 591), 59);
+       if ( vehicle->typ->fuelConsumption ) {
+          if ( (movedisp  &&  vehicle->typ->fuelConsumption ) || (minmalq*vehicle->fuel / vehicle->typ->fuelConsumption  < vehicle->getMovement() ))
+             showtext2c( strrrd8d( minmalq*vehicle->fuel / vehicle->typ->fuelConsumption ), agmp->resolutionx - ( 640 - 591), 59);
           else
-             showtext2c( strrrd8d(vehicle->movement), agmp->resolutionx - ( 640 - 591), 59);
+             showtext2c( strrrd8d(vehicle->getMovement() ), agmp->resolutionx - ( 640 - 591), 59);
        } else
           showtext2c( strrrd8d(0), agmp->resolutionx - ( 640 - 591), 59);
     } else
@@ -5375,16 +5381,16 @@ void         nextturn(void)
                   j = -1;
                } else {
       
-                  j = actvehicle->fuel - actvehicle->typ->fuelconsumption * nowindplanefuelusage;
+                  j = actvehicle->fuel - actvehicle->typ->fuelConsumption * nowindplanefuelusage;
 
-                  int move = actvehicle->movement;
+                  int move = actvehicle->getMovement();
                   if ( actvehicle->reactionfire_active  &&  !move )
                      move = actvehicle->typ->movement[log2(actvehicle->height)];
 
                   if ( actvehicle->height <= chhochfliegend )
-                     j -= ( move * 64 / actvehicle->typ->movement[log2(actvehicle->height)] ) * (actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed * maxwindspeed / 256 ) * actvehicle->typ->fuelconsumption / ( minmalq * 64 );
+                     j -= ( move * 64 / actvehicle->typ->movement[log2(actvehicle->height)] ) * (actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
       
-                 //          movement * 64        windspeed * maxwindspeed         fuelconsumption
+                 //          movement * 64        windspeed * maxwindspeed         fuelConsumption
                  // j -=   ----------------- *  ----------------------------- *   -----------
                  //          typ->movement                 256                       64 * 8
                  //
@@ -5393,13 +5399,13 @@ void         nextturn(void)
                  //gekrzt:
                  //
                  //             movement            windspeed * maxwindspeed        
-                 // j -= --------------------- *  ----------------------------   * fuelconsumption
+                 // j -= --------------------- *  ----------------------------   * fuelConsumption
                  //           typ->movement             256   *      8 
                  //
                  //
                  //
                  // Falls eine vehicle sich nicht bewegt hat, bekommt sie soviel Sprit abgezogen, wie sie zum zurcklegen der Strecke,
-                 // die der Wind pro Runde zurckgelegt hat, fuelconsumptionen wrde.
+                 // die der Wind pro Runde zurckgelegt hat, fuelConsumptionen wrde.
                  // Wenn die vehicle sich schon bewegt hat, dann wurde dieser Abzug schon beim movement vorgenommen, so daá er hier nur
                  // noch fr das briggebliebene movement stattfinden muá.
                  //
@@ -5424,7 +5430,7 @@ void         nextturn(void)
                         actvehicle->attacked = true; 
                      }
 
-                     actvehicle->movement = 0;
+                     actvehicle->setMovement ( 0 );
                      actvehicle->attacked = false; 
 
                   } else {
@@ -6552,7 +6558,7 @@ int tvehicle::enablereactionfire( void )
       else
           reactionfire_active  = 2;
 
-      movement = 0;
+      setMovement ( 0 );
 
       attacked = 1;
    }

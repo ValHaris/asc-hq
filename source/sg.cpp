@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.68 2000-08-03 19:45:18 mbickel Exp $
+//     $Id: sg.cpp,v 1.69 2000-08-04 15:11:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.68  2000/08/03 19:45:18  mbickel
+//      Fixed some bugs in DOS code
+//      Removed submarine.ascent != 0 hack
+//
 //     Revision 1.67  2000/08/03 19:21:28  mbickel
 //      Fixed: units had invalid height when produced in some buildings
 //      Fixed: units could not enter building if unitheightreq==0
@@ -2566,8 +2570,8 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
 {
    if ( veh && !moveparams.movestatus && fieldvisiblenow ( getfield ( veh->xpos, veh->ypos ))) {
       actmap->cleartemps ( 7 );
-      npush ( veh->movement );
-      veh->movement = veh->typ->movement[log2(veh->height)];
+      int move = veh->getMovement();
+      veh->setMovement ( veh->typ->movement[log2(veh->height)]);
       VehicleMovement vm ( NULL, NULL );
       if ( vm.available ( veh )) {
          vm.execute ( veh, -1, -1, 0, -1, -1 );
@@ -2598,7 +2602,7 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
             displaymap();
          }
       }
-      npop ( veh->movement );
+      veh->setMovement ( move );
    }
 }
 

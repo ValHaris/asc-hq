@@ -251,10 +251,10 @@ int main(int argc, char *argv[] )
    
    
                 printf ("\n    defensebonus ");
-                num_ed (bdt->weather[i]->defensebonus, 0, 65536 );
+                num_ed (bdt->weather[i]->defensebonus, minint, maxint );
    
                 printf ("\n    attackbonus ");
-                num_ed (bdt->weather[i]->attackbonus, 0, 65536 );
+                num_ed (bdt->weather[i]->attackbonus, minint, maxint );
    
                 printf ("\n    basic jamming");
                 num_ed (bdt->weather[i]->basicjamming, 0, 255 );

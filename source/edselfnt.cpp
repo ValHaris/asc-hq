@@ -1,6 +1,12 @@
-//     $Id: edselfnt.cpp,v 1.9 2000-08-03 19:21:22 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.10 2000-08-04 15:11:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/08/03 19:21:22  mbickel
+//      Fixed: units had invalid height when produced in some buildings
+//      Fixed: units could not enter building if unitheightreq==0
+//      Started adding SDL_image support
+//      Upgraded to SDL1.1.3 (for SDL_image)
+//
 //     Revision 1.8  2000/06/28 19:26:16  mbickel
 //      fixed bug in object generation by building removal
 //      Added artint.cpp to makefiles
@@ -1371,7 +1377,7 @@ void selbuildingcargo( pbuilding bld )
           while ( bld->loading[p] )
             p++;
           bld->loading[p] = unit;
-          unit->movement = unit->typ->movement[log2( unit->height)];
+          unit->setMovement ( unit->typ->movement[log2( unit->height)] );
        } else
            displaymessage("The unit could not be loaded !",1);
            removevehicle ( &unit );

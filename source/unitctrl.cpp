@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.20 2000-08-01 13:50:53 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.21 2000-08-04 15:11:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/08/01 13:50:53  mbickel
+//      Chaning the height of airplanes is not affected by wind any more.
+//      Fixed: Airplanes could ascend onto buildings
+//
 //     Revision 1.19  2000/07/31 19:16:50  mbickel
 //      Improved handing of multiple directories
 //      Fixed: wind direction not displayed when cycling through wind heights
@@ -197,7 +201,7 @@ int VehicleMovement :: available ( pvehicle veh ) const
 {
    if ( status == 0 )
      if ( veh ) 
-          if ( veh->movement >= minmalq )
+          if ( veh->getMovement() >= minmalq )
              if ( terrainaccessible ( getfield ( veh->xpos, veh->ypos ), veh ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
                 return 1; 
 
@@ -327,7 +331,7 @@ void VehicleMovement :: searchmove(int         x,
    if (streck < 0) 
       return;
 
-   if ( fuelneeded * vehicle->typ->fuelconsumption / 8 > vehicle->fuel)   
+   if ( fuelneeded * vehicle->typ->fuelConsumption / 8 > vehicle->fuel)   
       return;
 
    if (search.mode == 1) { 
@@ -393,7 +397,7 @@ void VehicleMovement :: searchstart( int x1, int y1, int hgt )
 
    #ifdef fastsearch   
    mode = 0; 
-   strck = vehicle->movement(); 
+   strck = vehicle->getMovement(); 
    for (maindir = 0; maindir <= 3; maindir++) { 
       move(startx,starty,maindir * 2 + 1,strck);
       tiefe--; 
@@ -402,7 +406,7 @@ void VehicleMovement :: searchstart( int x1, int y1, int hgt )
 
 
    search.mode = 1; 
-   search.strck = vehicle->movement; 
+   search.strck = vehicle->getMovement(); 
 
    for (maindir = 0; maindir < sidenum; maindir++) { 
       searchmove( search.startx, search.starty, sef_searchorder[maindir], search.strck, 0 );
@@ -438,7 +442,7 @@ void   VehicleMovement :: FieldReachableRek :: move(int          x,
        return;
 
     if (mode == 1)
-       if (streck > vehicle->movement)
+       if (streck > vehicle->getMovement() )
           return;                      
 
     getnextfield ( x, y, direc);
@@ -477,7 +481,7 @@ void   VehicleMovement :: FieldReachableRek :: move(int          x,
     if (streck > maxwegstrecke) 
        return;
 
-    if (fuel * vehicle->typ->fuelconsumption / minmalq  > vehicle->fuel) 
+    if (fuel * vehicle->typ->fuelConsumption / minmalq  > vehicle->fuel) 
        return;
 
     if (mode == 1) 
@@ -556,7 +560,7 @@ void   VehicleMovement :: FieldReachableRek :: run(int          x22,
    x1 = vehicle->xpos; 
    y1 = vehicle->ypos; 
 
-   maxwegstrecke = vehicle->movement; 
+   maxwegstrecke = vehicle->getMovement(); 
    zielerreicht = 0; 
    distance = 0; 
 
@@ -815,24 +819,26 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, int noInterrupt )
       } 
 
 
-      vehicle->fuel -= fueldist * vehicle->typ->fuelconsumption / 8;
+      vehicle->fuel -= fueldist * vehicle->typ->fuelConsumption / 8;
       if ( vehicle->fuel < 0 )
          vehicle->fuel = 0;
 
 
       if (fld->vehicle == vehicle) { 
-         i = vehicle->movement - movedist;
+         i = vehicle->getMovement() - movedist;
          if (i > 0) 
-           vehicle->movement = i;
+           vehicle->setMovement ( i );
          else 
-           vehicle->movement = 0;
+           vehicle->setMovement ( 0 );
 
+        /*
          if ( vehicle->typ->fuelconsumption )
-           if ( (vehicle->movement >> 3) > (vehicle->fuel / vehicle->typ->fuelconsumption) )
+           if ( (vehicle->getMovement() >> 3) > (vehicle->fuel / vehicle->typ->fuelconsumption) )
               vehicle->movement = (vehicle->fuel << 3) / vehicle->typ->fuelconsumption;
+        */
       } 
       else { 
-         vehicle->movement = 0;
+         vehicle->setMovement ( 0 );
          vehicle->attacked = true; 
          if (vehicle->height == chtieffliegend) 
             vehicle->height = chfahrend; 
@@ -895,19 +901,19 @@ int ChangeVehicleHeight :: execute_withmove ( void )
       if ( newheight > vehicle->height ) { 
          w = (vehicle->height << 1);
          if ( w != chtieffliegend) { 
-            if (vehicle->movement < steigung * maxmalq + air_heightincmovedecrease) 
+            if (vehicle->getMovement() < steigung * maxmalq + air_heightincmovedecrease) 
                return -110;
 
          } 
          else { 
-            if (vehicle->movement < steigung * maxmalq ) 
+            if (vehicle->getMovement() < steigung * maxmalq ) 
                return -110;
          } 
 
       } 
       else { 
          w = (vehicle->height >> 1);
-         if (vehicle->movement < steigung * maxmalq) 
+         if (vehicle->getMovement() < steigung * maxmalq) 
             return -111;
 
       } 
@@ -940,7 +946,7 @@ int ChangeVehicleHeight :: moveheight( void )
       int y = yy; 
 
       int dist = 0;
-      int mx = vehicle->movement;
+      int mx = vehicle->getMovement();
       while ( dist < vehicle->typ->steigung * minmalq  && mx > 0 ) {
          getnextfield( x, y, direc );
 
@@ -991,25 +997,21 @@ int ChangeVehicleHeight :: moveunitxy ( int xt1, int yt1 )
 
    if ( oldheight < newheight ) {
       if ( oldheight == chfahrend ) {
-         vehicle->fuel -= vehicle->typ->fuelconsumption * vehicle->typ->steigung;
+         vehicle->fuel -= vehicle->typ->fuelConsumption * vehicle->typ->steigung;
          if ( vehicle->fuel < 0 )
             vehicle->fuel = 0;
-         vehicle->movement = airplanemoveafterstart;
+         vehicle->setMovement ( airplanemoveafterstart );
          vehicle->attacked = 1;
          vehicle->height = chtieffliegend;
       } else {
-         vehicle->movement -= air_heightincmovedecrease;
-         if ( vehicle->movement < 0 )
-            vehicle->movement = 0;
+         vehicle->setMovement ( vehicle->getMovement() - air_heightincmovedecrease );
 
-         vehicle->fuel -= vehicle->typ->fuelconsumption * air_heightincmovedecrease / 8;
+         vehicle->fuel -= vehicle->typ->fuelConsumption * air_heightincmovedecrease / 8;
          if ( vehicle->fuel < 0 )
             vehicle->fuel = 0;
 
-         int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->movement / vehicle->typ->movement[log2(vehicle->height)];
-         vehicle->movement = newmovement;
-         if ( vehicle->movement < 0 )
-            vehicle->movement = 0;
+         int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->getMovement() / vehicle->typ->movement[log2(vehicle->height)];
+         vehicle->setMovement ( newmovement );
 
          vehicle->height = newheight;
       }
@@ -1018,22 +1020,18 @@ int ChangeVehicleHeight :: moveunitxy ( int xt1, int yt1 )
          // vehicle->fuel -= vehicle->typ->fuelconsumption * vehicle->typ->steigung;
          // if ( vehicle->fuel < 0 )
          //    vehicle->fuel = 0;
-         vehicle->movement = airplanemoveafterlanding;
+         vehicle->setMovement ( airplanemoveafterlanding );
          vehicle->attacked = 1;
          vehicle->height = chfahrend;
       } else {
-         vehicle->movement -= air_heightdecmovedecrease;
-         if ( vehicle->movement < 0 )
-            vehicle->movement = 0;
+         vehicle->setMovement ( vehicle->getMovement() - air_heightdecmovedecrease );
 
-         vehicle->fuel -= vehicle->typ->fuelconsumption * air_heightdecmovedecrease / 8;
+         vehicle->fuel -= vehicle->typ->fuelConsumption * air_heightdecmovedecrease / 8;
          if ( vehicle->fuel < 0 )
             vehicle->fuel = 0;
 
-         int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->movement / vehicle->typ->movement[log2(vehicle->height)];
-         vehicle->movement = newmovement;
-         if ( vehicle->movement < 0 )
-            vehicle->movement = 0;
+         int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->getMovement() / vehicle->typ->movement[log2(vehicle->height)];
+         vehicle->setMovement ( newmovement );
 
          vehicle->height = newheight;
       }
@@ -1057,57 +1055,57 @@ int ChangeVehicleHeight :: verticalHeightChange ( void )
          if ( !terrainaccessible ( fld, vehicle, newheight ))
             return -109;
 
-         int newmovement = vehicle->typ->movement[log2(newheight)] * (vehicle->movement - (helicopter_landing_move_cost + air_heightdecmovedecrease)) / vehicle->typ->movement[log2(vehicle->height)];
+         int newmovement = vehicle->typ->movement[log2(newheight)] * (vehicle->getMovement() - (helicopter_landing_move_cost + air_heightdecmovedecrease)) / vehicle->typ->movement[log2(vehicle->height)];
          if ( newmovement < 0)                      
             return -111;
 
-         int fuelcost = vehicle->typ->fuelconsumption * (helicopter_landing_move_cost + air_heightdecmovedecrease) / 8;
+         int fuelcost = vehicle->typ->fuelConsumption * (helicopter_landing_move_cost + air_heightdecmovedecrease) / 8;
          if ( fuelcost > vehicle->fuel )
             return -115;
 
 
-         vehicle->movement = newmovement ; 
+         vehicle->setMovement ( newmovement ); 
          if ( !helicopter_attack_after_descent )
             vehicle->attacked = 0; 
          vehicle->fuel -= fuelcost;
 
       } else
       if ( newheight < oldheight ) { 
-         int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->movement / vehicle->typ->movement[log2(vehicle->height)];
+         int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->getMovement() / vehicle->typ->movement[log2(vehicle->height)];
          if ( newmovement < air_heightdecmovedecrease )
             return -111;
 
-         int fuelcost = vehicle->typ->fuelconsumption * air_heightdecmovedecrease / 8;
+         int fuelcost = vehicle->typ->fuelConsumption * air_heightdecmovedecrease / 8;
          if ( fuelcost > vehicle->fuel )
             return -115;
 
 
-         vehicle->movement = newmovement - air_heightdecmovedecrease; 
+         vehicle->setMovement ( newmovement - air_heightdecmovedecrease ); 
          vehicle->fuel -= fuelcost;
       } else
       if (( newheight > oldheight ) && (newheight > chtieffliegend)) { 
-         int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->movement / vehicle->typ->movement[log2(vehicle->height)];
+         int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->getMovement() / vehicle->typ->movement[log2(vehicle->height)];
          if (newmovement < air_heightincmovedecrease) 
             return -110;
-         int fuelcost = vehicle->typ->fuelconsumption * air_heightincmovedecrease / 8;
+         int fuelcost = vehicle->typ->fuelConsumption * air_heightincmovedecrease / 8;
          if ( fuelcost > vehicle->fuel )
             return -115;
 
-         vehicle->movement = newmovement - air_heightincmovedecrease ; 
+         vehicle->setMovement ( newmovement - air_heightincmovedecrease ); 
          vehicle->fuel -= fuelcost;
 
          if ((newheight == chtieffliegend) && helicopter_attack_after_ascent ) 
             vehicle->attacked = 1; 
       } else
          if ( newheight > oldheight  &&  newheight == chtieffliegend ) {
-            int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->movement / vehicle->typ->movement[log2(vehicle->height)];
+            int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->getMovement() / vehicle->typ->movement[log2(vehicle->height)];
             if ( newmovement < air_heightincmovedecrease )
                return -110;
 
             if ( helicopter_attack_after_ascent ) 
                vehicle->attacked = 1; 
 
-            vehicle->movement = newmovement - air_heightincmovedecrease;
+            vehicle->setMovement ( newmovement - air_heightincmovedecrease);
          }
          
       logtoreplayinfo ( rpl_changeheight, (int) vehicle->xpos, (int) vehicle->ypos, 
@@ -1120,16 +1118,16 @@ int ChangeVehicleHeight :: verticalHeightChange ( void )
 
       if ( newheight > oldheight ) { 
          md = sub_heightincmovedecrease; 
-         if ( vehicle->movement < md )
+         if ( vehicle->getMovement() < md )
             return -110;
       } 
       else { 
          md = sub_heightdecmovedecrease; 
-         if ( vehicle->movement < md )
+         if ( vehicle->getMovement() < md )
             return -111;
       } 
 
-      int newmovement = vehicle->typ->movement[log2(newheight)] * (vehicle->movement - md ) / vehicle->typ->movement[log2(vehicle->height)];
+      int newmovement = vehicle->typ->movement[log2(newheight)] * (vehicle->getMovement() - md ) / vehicle->typ->movement[log2(vehicle->height)];
 
       int res = terrainaccessible2 ( fld, vehicle, newheight );
       if ( res <= 0 ) {
@@ -1146,11 +1144,11 @@ int ChangeVehicleHeight :: verticalHeightChange ( void )
          }
       }
 
-      int fuelcost = vehicle->typ->fuelconsumption * md / 8;
+      int fuelcost = vehicle->typ->fuelConsumption * md / 8;
       if ( fuelcost > vehicle->fuel )
          return -115;
 
-      vehicle->movement = newmovement;
+      vehicle->setMovement ( newmovement );
       vehicle->fuel -= fuelcost; 
 
       logtoreplayinfo ( rpl_changeheight, (int) vehicle->xpos, (int) vehicle->ypos, 
@@ -1265,7 +1263,7 @@ void IncreaseVehicleHeight :: registerPVA ( VehicleActionType _actionType, PPend
 int IncreaseVehicleHeight :: available ( pvehicle veh ) const
 {
    if ( veh ) 
-      if ( veh->movement )
+      if ( veh->getMovement() )
          if (veh->height < 128) 
             if ((veh->height << 1) & veh->typ->height ) 
                if ( veh->typ->steigung )
@@ -1303,7 +1301,7 @@ void DecreaseVehicleHeight :: registerPVA ( VehicleActionType _actionType, PPend
 int DecreaseVehicleHeight :: available ( pvehicle veh ) const
 {
    if ( veh ) 
-      if ( veh->movement )
+      if ( veh->getMovement() )
          if (veh->height > 1) 
             if ((veh->height >> 1) & veh->typ->height ) 
                if ( veh->typ->steigung )
@@ -1348,7 +1346,7 @@ int VehicleAttack :: available ( pvehicle eht ) const
 {
    if (eht != NULL) 
       if (eht->attacked == false)
-         if ((eht->typ->wait == false) || (eht->movement == eht->typ->movement[log2(eht->height)]  ||  eht->reactionfire_active >= 3 ))
+         if ((eht->typ->wait == false) || (eht->getMovement() == eht->typ->movement[log2(eht->height)]  ||  eht->reactionfire_active >= 3 ))
             if ( eht->weapexist() )
                return 1;
 
@@ -1495,7 +1493,7 @@ int      VehicleAttack :: tsearchattackablevehicles::run( void )
       return -204;
    
    if (angreifer->typ->wait &&  angreifer->reactionfire_active < 3 ) 
-      if (angreifer->movement != angreifer->typ->movement[log2(angreifer->height)]) 
+      if (angreifer->getMovement() != angreifer->typ->movement[log2(angreifer->height)]) 
          return -205;
       
 
