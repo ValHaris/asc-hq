@@ -1,6 +1,12 @@
-//     $Id: sgstream.cpp,v 1.29 2000-08-21 17:51:02 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.30 2000-09-20 15:05:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/08/21 17:51:02  mbickel
+//      Fixed: crash when unit reaching max experience
+//      Fixed: crash when displaying research image
+//      Fixed: crash when events referenced a unit that has been shot down
+//      Fixed: screenshot being written to wrong directory
+//
 //     Revision 1.28  2000/08/12 09:17:33  gulliver
 //     *** empty log message ***
 //
@@ -2651,7 +2657,7 @@ void checkFileLoadability ( const char* filename )
       tnfilestream strm ( filename, 1 );
       char a = strm.readChar();
    }
-   catch ( tfileerror err ) {
+   catch ( terror ) {
       char temp[10000];
       temp[0] = 0;
       for ( int i = 0; i < 5; i++ )
@@ -2687,6 +2693,15 @@ void checkFileLoadability ( const char* filename )
       exit(1);
      #endif
    }
+   catch ( ... ) {
+      const char* msg = "checkFileLoadability threw an unspecified exception\n";
+      #ifndef converter
+       displaymessage ( msg, 2 );
+      #else
+       fprintf( stderr, msg );
+       exit(1);
+      #endif
+   }
 }
 
 void initFileIO ( const char* configFileName )
@@ -2704,7 +2719,29 @@ void initFileIO ( const char* configFileName )
      opencontainer ( "*.con" );
    }
    catch ( tfileerror err ) {
-      const char* msg = "a fatal IO error occured while mounting the container files \n";
+      const char* msg = "a fatal IO error occured while mounting the container file %s\n"
+                        "It is probably damaged, try getting a new one.\n";
+      #ifndef converter
+       displaymessage ( msg, 2, err.filename );
+      #else
+       fprintf( stderr, msg, err.filename );
+       exit(1);
+      #endif
+   }
+   catch ( tcompressionerror err ) {
+      const char* msg = "a fatal error occured while decompressing a container file.\n"
+                        "If you have several *.con files in your ASC directory, try removing all but main.con.\n"
+                        "If the error still occurs then, get a new data package from www.asc-hq.org\n";
+
+      #ifndef converter
+       displaymessage ( msg, 2 );
+      #else
+       fprintf( stderr, msg );
+       exit(1);
+      #endif
+   }
+   catch ( terror err ) {
+      const char* msg = "a fatal error occured while mounting the container files \n";
       #ifndef converter
        displaymessage ( msg, 2 );
       #else
