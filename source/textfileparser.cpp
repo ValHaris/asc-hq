@@ -59,13 +59,19 @@ TextPropertyGroup* TextPropertyList::get ( int id )
 
 ///////////////////// TextPropertyGroup //////////////////////////
 
+
+void TextPropertyGroup :: error ( const ASCString& msg )
+{
+   fatalError ( "Error evaluating file " + location + "\n" + msg );
+}
+
 void TextPropertyGroup :: buildInheritance(TextPropertyList& tpl )
 {
    static list<TextPropertyGroup*> callStack;
 
    if ( !inheritanceBuild ) {
       if ( std::find ( callStack.begin(), callStack.end(), this ) != callStack.end() )
-         fatalError ( "endless inheritance loop detected: type " + typeName + "; ID " + strrr ( id ));
+         error ( "endless inheritance loop detected: type " + typeName + "; ID " + strrr ( id ));
 
       callStack.push_back( this );
 
@@ -82,7 +88,7 @@ void TextPropertyGroup :: buildInheritance(TextPropertyList& tpl )
                parents.push_back ( p );
                p->buildInheritance( tpl );
             } else
-               fatalError ( location + " : no parent with ID " + strrr(*i) + " of type " + typeName + " could be found !" );
+               error ( location + " : no parent with ID " + strrr(*i) + " of type " + typeName + " could be found !" );
          }
       }
 
@@ -97,71 +103,116 @@ void TextPropertyGroup :: buildInheritance(TextPropertyList& tpl )
                p++;
             }
             if ( p == parents.end())
-               fatalError ( "could not find a parent entry for " + typeName + " :: " + i->propertyName  );
+               error ( "could not find a parent entry for " + typeName + " :: " + i->propertyName  );
          }
       }
 
-      // linking alias
+      callStack.pop_back();
+      inheritanceBuild = true;
+   }
+}
+
+
+void TextPropertyGroup :: resolveAllAlias( )
+{
+   int loop = 0;
+   typedef list<Entry*> Unresolved;
+   Unresolved unresolved;
+   do {
       Entries additionalEntries;
-      for ( Entries::iterator i = entries.begin(); i != entries.end(); i++ ) {
-         if ( i->op == Entry::alias_all ) {
-            ASCString s = i->value;
-            s.toLower();
-            ASCString::size_type pos;
-            do {
-               pos = s.find ( " " );
-               if ( pos != s.npos )
-                  s.erase(pos,1);
-            } while ( pos != s.npos );
-            if ( s.length() > 0 )
-               if ( s[s.length()-1] != '.' )
-                  s = s + ".";
+      int resolvedCounter = 0;
 
-            ASCString newName = i->propertyName;
-            if ( newName.length() > 0 )
-               if ( newName[newName.length()-1] != '.' )
-                  newName = newName + ".";
-
-            int counter = 0;
-            for ( Entries::iterator i = entries.begin(); i != entries.end(); i++ ) {
-               if ( i->propertyName.find ( s ) == 0 ) {
-                  Entry e = *i;
-                  e.propertyName.replace ( 0, s.length(), newName );
-                  additionalEntries.push_back ( e );
-                  counter++;
-               }
-            }
-            if ( !counter )
-               fatalError ( "could not find any alias matching " + i->value + " for " + typeName + " :: " + i->propertyName  );
-
+      if ( loop == 0 ) {
+         for ( Entries::iterator i = entries.begin(); i != entries.end(); i++ ) {
+            bool resolved = processAlias ( *i , additionalEntries );
+            if ( !resolved )
+                unresolved.push_back ( &(*i) );
+            else
+                resolvedCounter++;
          }
-         if ( i->op == Entry::alias ) {
-            ASCString s = i->value;
-            s.toLower();
-            ASCString::size_type pos;
-            do {
-                  pos = s.find ( " " );
-                  if ( pos != s.npos )
-                     s.erase(pos,1);
-            } while ( pos != s.npos );
-            Entry* alias = find ( s );
-            if ( !alias )
-               fatalError ( "could not find the alias " + i->value + " for " + typeName + " :: " + i->propertyName  );
-            i->value = alias->value;
-            i->op = alias->op;
-            i->parent = alias->parent;
+      } else {
+         Unresolved newunresolved;
+         for ( Unresolved::iterator i = unresolved.begin(); i != unresolved.end(); i++ ) {
+            bool resolved = processAlias ( **i , additionalEntries );
+            if ( !resolved )
+                newunresolved.push_back ( *i );
+            else
+                resolvedCounter++;
          }
+         unresolved = newunresolved;
       }
 
       for ( Entries::iterator i = additionalEntries.begin(); i != additionalEntries.end(); i++ )
          if ( find ( i->propertyName ) == NULL )
             addEntry ( *i );
 
-      callStack.pop_back();
+      if ( !resolvedCounter && !unresolved.empty() ) 
+         for ( Unresolved::iterator i = unresolved.begin(); i != unresolved.end(); i++ )
+            error ( "could not resolve the alias " + (*i)->value + " for " + typeName + " :: " + (*i)->propertyName  );
 
-      inheritanceBuild = true;
-   }
+      loop++;
+   } while ( !unresolved.empty() );
 }
+
+
+bool TextPropertyGroup::processAlias( Entry& e, Entries& entriesToAdd )
+{
+   if ( e.op == Entry::alias_all ) {
+      ASCString s = e.value;
+      s.toLower();
+      ASCString::size_type pos;
+      do {
+         pos = s.find ( " " );
+         if ( pos != s.npos )
+            s.erase(pos,1);
+      } while ( pos != s.npos );
+      if ( s.length() > 0 )
+         if ( s[s.length()-1] != '.' )
+            s = s + ".";
+
+      ASCString newName = e.propertyName;
+      if ( newName.length() > 0 )
+         if ( newName[newName.length()-1] != '.' )
+            newName = newName + ".";
+
+      int counter = 0;
+      Matches matches;
+      findMatches ( s, matches );
+      for ( Matches::iterator i = matches.begin(); i != matches.end(); i++ ) {
+         Entry e = **i;
+         e.propertyName.replace ( 0, s.length(), newName );
+         if ( find ( e.propertyName ) == NULL )
+            entriesToAdd.push_back ( e );
+         counter++;
+      }
+      if ( !counter )
+         return false;
+      else
+         return true;
+   }
+
+   if ( e.op == Entry::alias ) {
+      ASCString s = e.value;
+      s.toLower();
+      ASCString::size_type pos;
+      do {
+            pos = s.find ( " " );
+            if ( pos != s.npos )
+               s.erase(pos,1);
+      } while ( pos != s.npos );
+      Entry* alias = find ( s );
+      if ( !alias )
+         return false;
+      else {
+         e.value = alias->value;
+         e.op = alias->op;
+         e.parent = alias->parent;
+         return true;
+      }
+   }
+   return true;
+}
+
 
 int TextPropertyGroup :: evalID()
 {
@@ -187,6 +238,17 @@ TextPropertyGroup::Entry*  TextPropertyGroup :: find( const ASCString& n )
       return NULL;
    }
 }
+
+void TextPropertyGroup::findMatches( const ASCString& n, Matches& matches )
+{
+   for ( Entries::iterator i = entries.begin(); i != entries.end(); i++ )
+      if ( i->propertyName.find ( n ) == 0 )
+         matches.push_back ( &(*i) );
+
+   for ( Parents::iterator p = parents.begin(); p != parents.end(); p++ )
+      (*p)->findMatches ( n, matches );
+}
+
 
 void TextPropertyGroup::addEntry( const Entry& entry )
 {

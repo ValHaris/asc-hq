@@ -264,6 +264,7 @@ void  loadalltextfiles ( )
       i->second.buildIDs();
       for ( TextPropertyList::iterator j = i->second.begin(); j != i->second.end(); j++ ) {
           (*j)->buildInheritance( i->second );
+          (*j)->resolveAllAlias();
       }
    }
    displayLogMessage ( 4, "done\n");

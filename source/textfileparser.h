@@ -68,9 +68,14 @@ class TextPropertyGroup {
          EntryCache entryCache;
          typedef list<Entry> Entries;
          Entries entries;
+      protected:
+         void error ( const ASCString& msg );
+         bool processAlias( Entry& e, Entries& entriesToAdd );
       public:
          void addEntry( const Entry& entry );
          Entry* find( const ASCString& n );
+         typedef vector<Entry*> Matches;
+         void findMatches( const ASCString& n, Matches& matches );
 
          typedef list<TextPropertyGroup*> Parents;
          Parents parents;
@@ -84,6 +89,7 @@ class TextPropertyGroup {
          int evalID();
 
          void buildInheritance( TextPropertyList& tpl );
+         void resolveAllAlias( );
          bool isAbstract() { return abstract; };
 };
 
