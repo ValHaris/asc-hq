@@ -1,6 +1,14 @@
-//     $Id: weather.h,v 1.2 1999-11-16 03:42:52 tmwilson Exp $
+//     $Id: weather.h,v 1.3 1999-12-28 21:03:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:52  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -22,6 +30,9 @@
     Boston, MA  02111-1307  USA
 */
 
+#ifndef weather_h
+ #define weather_h
+
 #ifdef _DOS_
 #include "libs\triangul\interfac.h"
 #include "libs\triangul\triangul.h"
@@ -31,6 +42,8 @@
 #endif
 
 #include "typen.h"
+
+#pragma pack(1)
 
 struct tpunkt {
                 int x,y;
@@ -93,3 +106,6 @@ void setbdtall ( int id );
 void setbdtpoly ( int id, ppolygon poly1 );
 void displaywindspeed(void);
 
+#pragma pack()
+
+#endif //weather_h

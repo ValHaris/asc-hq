@@ -1,6 +1,11 @@
-//     $Id: loaders.cpp,v 1.5 1999-12-14 20:23:56 mbickel Exp $
+//     $Id: loaders.cpp,v 1.6 1999-12-28 21:03:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/14 20:23:56  mbickel
+//      getfiletime now works on containerfiles too
+//      improved BI3 map import tables
+//      various bugfixes
+//
 //     Revision 1.4  1999/11/23 21:07:31  mbickel
 //      Many small bugfixes
 //
@@ -232,7 +237,7 @@ void         seteventtriggers(void)
             } 
    
             if ((event->trigger[j] == ceventt_event)) {     
-               int id = event->trigger_data[j]->id; 
+              // int id = event->trigger_data[j]->id;
                pevent event1 = actmap->firsteventtocome; 
                if ( !event->trigger_data[j]->mapid )
                   while (event1 != NULL) { 
@@ -3834,8 +3839,12 @@ void         loadallvehicletypes(void)
           if ( actprogressbar )
              actprogressbar->point();
     
-          addvehicletype ( loadvehicletype( c )); 
-    
+          addvehicletype ( loadvehicletype( c ));
+
+          if ( verbosity >= 2)
+            printf("vehicletype %s loaded\n", c );
+
+
           c = ff.getnextname();
        }
    }
@@ -3853,6 +3862,9 @@ void         loadallobjecttypes (void)
          actprogressbar->point();
 
       addobjecttype ( loadobjecttype( c )); 
+
+      if ( verbosity >= 2)
+         printf("objecttype %s loaded\n", c );
 
       c = ff.getnextname();
    }
@@ -3881,6 +3893,8 @@ void         loadalltechnologies(void)
          actprogressbar->point();
 
       addtechnology ( loadtechnology( c ));
+      if ( verbosity >= 2)
+         printf("technology %s loaded\n", c );
 
       c = ff.getnextname();
    } 
@@ -3910,7 +3924,9 @@ void         loadallterraintypes(void)
          actprogressbar->point();
 
       addterraintype ( loadterraintype( c ));
-                    
+      if ( verbosity >= 2)
+         printf("terraintype %s loaded\n", c );
+
       c = ff.getnextname();
    } 
 };
@@ -3929,6 +3945,8 @@ void         loadallbuildingtypes(void)
          actprogressbar->point();
 
       addbuildingtype ( loadbuildingtype( c ));
+      if ( verbosity >= 2)
+         printf("buildingtype %s loaded\n", c );
 
       c = ff.getnextname();
    } 

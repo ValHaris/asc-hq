@@ -1,6 +1,10 @@
-//     $Id: gamedlg.cpp,v 1.7 1999-12-27 13:00:01 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.8 1999-12-28 21:02:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  1999/12/27 13:00:01  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.6  1999/12/14 20:23:52  mbickel
 //      getfiletime now works on containerfiles too
 //      improved BI3 map import tables
@@ -2303,7 +2307,7 @@ class  tparagraph {
           pparagraph prev;
       };
 
-#ifdef _DOS_
+#ifndef _NoStaticClassMembers_
 static int tparagraph :: winy1;
 static int tparagraph :: winy2;
 static int tparagraph :: winx1;

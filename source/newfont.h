@@ -1,6 +1,11 @@
-//     $Id: newfont.h,v 1.4 1999-11-25 22:00:07 mbickel Exp $
+//     $Id: newfont.h,v 1.5 1999-12-28 21:03:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/25 22:00:07  mbickel
+//      Added weapon information window
+//      Added support for primary offscreen frame buffers to graphics engine
+//      Restored file time handling for DOS version
+//
 //     Revision 1.3  1999/11/22 18:27:45  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -45,6 +50,8 @@
 #include "tpascal.inc"
 #include "palette.h"
 #include "basestrm.h"
+
+#pragma pack(1)
 
 typedef char charr[49];
 
@@ -169,5 +176,6 @@ extern void shrinkfont ( pfont font, int diff );
 extern const char* fontid;
 extern char* int2string ( int i, char* buf );
 
+#pragma pack()
 
 #endif

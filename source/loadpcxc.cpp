@@ -1,6 +1,10 @@
-//     $Id: loadpcxc.cpp,v 1.2 1999-12-27 13:00:06 mbickel Exp $
+//     $Id: loadpcxc.cpp,v 1.3 1999-12-28 21:03:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/12/27 13:00:06  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.1  1999/11/22 18:27:40  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -47,6 +51,8 @@
 #include "basegfx.h"
 #include "misc.h"
 
+#pragma pack(1)
+
 typedef struct tpcxheader{
            byte     manufacturer;
            byte     version     ;
@@ -66,6 +72,7 @@ typedef struct tpcxheader{
            int      size;            // patch to be able to read pcx files without seeking 
        }tpcxheader;
 
+#pragma pack()
 
 char loadpcxxy( pnstream stream, int x, int y, int setpalette )
 {
@@ -117,16 +124,26 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
    int byteperpix = agmp->byteperpix;
 
 
+   // some simple buffering
+   char* buf = new char[header.size];
+   int bufdata = stream->readdata ( buf, header.size - sizeof( header ));
+   int actpos = 0;
+
+
    char* dest = (char*) (agmp->linearaddress + x * agmp->byteperpix + y * agmp->bytesperscanline + scanlineret[0]);
    while ( pixels ) {
       char a;
-      stream->readdata2 ( a );   // if you really want speed, use my asm code :-)
+
+      a = buf[actpos++];
+
       read++;
 
       int count;
       if ( a >= 192 ) {
          count = a ^192;
-         stream->readdata2 ( a );
+
+         a = buf[actpos++];
+
          read++;
       } else
          count = 1;
@@ -152,10 +169,11 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
 
    } /* endwhile */
 
-
    if ( setpalette && colors == 8 ) {
       if ( header.size ) {
-         int dataend = header.size - sizeof ( dacpalette256 ) - 1;
+         int dataend = header.size - sizeof ( dacpalette256 ) - 1 - sizeof ( header );
+         actpos = dataend;
+         /*
          while ( read < dataend ) {
             char scratch[100];
             int datalength;
@@ -166,13 +184,14 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
             stream->readdata ( scratch, datalength );
             read+= datalength;;
          }
+         */
       }    
 
-      char c;
-      stream->readdata ( &c, 1 );
+      char c = buf[actpos++];
       if ( c == 12 ) {
          dacpalette256 pal;
-         stream->readdata ( pal, sizeof ( pal ) );
+         memcpy ( pal, &buf[actpos], sizeof ( pal ));
+         // stream->readdata ( pal, sizeof ( pal ) );
          for ( int i = 0; i < 3; i++ )
             for ( int j = 0; j < 256; j++ )
                pal[j][i] >>= 2;
@@ -180,6 +199,7 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
       }
    }
 
+   delete[] buf;
    return 0;
 } 
 

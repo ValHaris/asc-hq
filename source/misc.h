@@ -1,6 +1,14 @@
-//     $Id: misc.h,v 1.2 1999-11-16 03:42:07 tmwilson Exp $
+//     $Id: misc.h,v 1.3 1999-12-28 21:03:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:07  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -53,6 +61,7 @@
    
    int  crc32buf(void *vbuf, int len);
 
+ #pragma pack(1)
 
 struct _test_structure {
     char a;
@@ -90,4 +99,5 @@ class structure_size_tester {
    #define asc_malloc malloc
    #define asc_free   free
    #endif
+   #pragma pack()
 #endif

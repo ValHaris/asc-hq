@@ -24,7 +24,13 @@
 #include "tpascal.inc"
 #include "global.h"
 #include "palette.h"
-#include "vesa.h"
+#ifdef _DOS_
+ #include "vesa.h"
+#else
+ #include "sdl/graphics.h"
+#endif
+
+#pragma pack(1)
 
 struct  tgraphmodeparameters {
             int           resolutionx      ;
@@ -357,6 +363,19 @@ class fatalgraphicserror {
         fatalgraphicserror ( char* strng );
         fatalgraphicserror ( void );
       };
+
+class collategraphicoperations {
+         int olddirectscreenaccess;
+       public:
+         collategraphicoperations ( void );
+         ~collategraphicoperations ();
+};
+
+extern void copySurface2screen( void );
+
+
+#pragma pack()
+
 
 
 #endif

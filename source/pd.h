@@ -1,6 +1,14 @@
-//     $Id: pd.h,v 1.2 1999-11-16 03:42:22 tmwilson Exp $
+//     $Id: pd.h,v 1.3 1999-12-28 21:03:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:22  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -59,7 +67,8 @@
          byte bkgcolor,textcolor,shortkeycolor,rcolor1,rcolor2;
          int pdfieldtextdistance,textstart,righttextdifference,anf,ende;
          void *backgrnd,*barbackgrnd;
-         char *lt,*rt;
+         char lt[100];
+         char rt[100];
          pdbar pdb;
          tkey key;
          int action2execute;
@@ -78,12 +87,13 @@
          virtual void setshortkeys(void);
          virtual void lines(int x1,int y1,int x2,int y2);
          virtual void nolines(int x1,int y1,int x2,int y2);
-         virtual void tpulldown::getleftrighttext(char *qtext, char **ltext, char **rtext);
+         virtual void tpulldown::getleftrighttext(char *qtext, char *ltext, char *rtext);
          virtual int getpdfieldheight(byte pdfieldnr,byte pos);
          virtual void done(void);
          void addbutton ( char* name, int id );
          void addfield ( char* name );
          tpulldown ( void );
+         virtual ~tpulldown() {};
    };
 
 

@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.8 1999-12-27 12:59:48 mbickel Exp $
+//     $Id: dialog.cpp,v 1.9 1999-12-28 21:02:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  1999/12/27 12:59:48  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.7  1999/12/07 22:13:15  mbickel
 //      Fixed various bugs
 //      Extended BI3 map import tables
@@ -5159,6 +5163,8 @@ void tprogressbar :: lineto ( float pos )
 
    int newpos = (int)(x1 + ( x2 - x1 ) * pos);
    if ( newpos > lastpaintedpos ) {
+
+      collategraphicoperations cgo;
       for ( int x = lastpaintedpos+1; x <= newpos; x++ )
          for ( int y = y1; y <= y2; y++ )
             putpixel ( x, y, color );

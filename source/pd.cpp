@@ -1,6 +1,15 @@
-//     $Id: pd.cpp,v 1.3 1999-11-22 18:27:48 mbickel Exp $
+//     $Id: pd.cpp,v 1.4 1999-12-28 21:03:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/22 18:27:48  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:42:21  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -73,7 +82,7 @@ void tpulldown::init(void)
       pdb.field[i].xwidth = gettextwdth(pdb.field[i].name,pulldownfont) - 4;
       for (int j = 0; j < pdb.field[i].count; j++)
          { 
-            getleftrighttext(pdb.field[i].button[j].name,&lt,&rt);
+            getleftrighttext(pdb.field[i].button[j].name,lt,rt);
             int llang = gettextwdth(lt,pulldownfont);
             if (rt != NULL ) rlang = gettextwdth(rt,pulldownfont);
             else rlang = 0;
@@ -210,19 +219,14 @@ void tpulldown::run(void)
       action2execute = pdb.field [ pdfieldnr] .button [ buttonnr].actionid;
 }
 
-void tpulldown::getleftrighttext(char *qtext, char **ltext,char **rtext)
-{  
-   if (ltext != NULL) 
-      asc_free (ltext);
-   if (rtext != NULL) 
-      asc_free (rtext);
-   *ltext = new ( char[strlen(qtext)+1] );
-   strcpy(*ltext,qtext);
-   *rtext = NULL;
+void tpulldown::getleftrighttext(char *qtext, char *ltext,char *rtext)
+{
+   strcpy ( ltext, qtext );
+   rtext[0] = 0;
    for (int j = 0 ; j <= strlen(qtext) ; j++ ) {
-      if ( (( *ltext )[j] == rz) || (( *ltext )[j] == rz2) ){
-         ( *ltext ) [j]=0;
-         *rtext = & ( (*ltext ) [j+1] );
+      if ( (ltext[j] == rz) || (ltext[j] == rz2)){
+         ltext[j]=0;
+         strcpy ( rtext, &ltext[j+1] );
       } /* endif */
    } /* endfor */
 }
@@ -341,7 +345,7 @@ void         tpulldown::openpdfield(void)
    setvars();
 
    activefontsettings.length = pdb.field[pdfieldnr].xwidth;
-   boolean abbrch = false;
+   // boolean abbrch = false;
    anf = pdb.field[pdfieldnr].xstart + pdfieldtextdistance / 2 - pdfieldenlargement;
    ende =  anf + pdb.field[pdfieldnr].xwidth + pdfieldenlargement*2;
    boolean umbau = false;
@@ -377,11 +381,11 @@ void         tpulldown::openpdfield(void)
          for (int i = 0; i < pdb.field[pdfieldnr].count; i++)
             { 
                if (strcmp(pdb.field[pdfieldnr].button[i].name,"seperator") != 0) {
-                  getleftrighttext(pdb.field[pdfieldnr].button[i].name,&lt,&rt); 
+                  getleftrighttext(pdb.field[pdfieldnr].button[i].name,lt,rt);
                   activefontsettings.justify = lefttext;
                   activefontsettings.length = gettextwdth(lt,pulldownfont);
                   showtext3( lt ,anf + textstart ,pdb.pdbreite + 7 + getpdfieldheight(pdfieldnr,i));
-                  if (rt != NULL) {
+                  if (rt[0]) {
                      activefontsettings.justify = lefttext;
                      activefontsettings.length = gettextwdth(rt,pulldownfont);
                      showtext3(rt, anf + pdb.field[pdfieldnr].rtextstart,pdb.pdbreite + 7 + getpdfieldheight(pdfieldnr,i));

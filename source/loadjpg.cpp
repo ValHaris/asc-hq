@@ -1,6 +1,15 @@
-//     $Id: loadjpg.cpp,v 1.3 1999-11-22 18:27:37 mbickel Exp $
+//     $Id: loadjpg.cpp,v 1.4 1999-12-28 21:03:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/22 18:27:37  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:42:00  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -35,7 +44,7 @@
 #include <string.h>
 
 #include "basegfx.h"
-
+#include "basestrm.h"
 
 /*
  * example.c
@@ -64,8 +73,6 @@
 
 #ifdef _DOS_
 #include "libs\jpeg\jpeglib.h"
-#else
-#include "libs/jpeg/jpeglib.h"
 #endif
 
 /*
@@ -101,10 +108,10 @@
  * RGB color and is described by:
  */
 
+#ifdef _DOS_
 extern JSAMPLE * image_buffer;	/* Points to large array of R,G,B-order data */
 extern int image_height;	/* Number of rows in image */
 extern int image_width;		/* Number of columns in image */
-
 
 
 /******************** JPEG DECOMPRESSION SAMPLE INTERFACE *******************/
@@ -173,6 +180,7 @@ my_error_exit (j_common_ptr cinfo)
   longjmp(myerr->setjmp_buffer, 1);
 }
 
+#endif
 
 /*
  * Sample routine for JPEG decompression.  We assume that the source file name
@@ -288,9 +296,11 @@ void put_scanline_someplace ( char* ptr, int width )
 }
 
 
+#ifdef _DOS_
 GLOBAL(int)
 read_JPEG_file ( pnstream strm )
 {
+
   bankparams.linelen = agmp->bytesperscanline;
   bankparams.actpos = 0;
   bankparams.page = 0;
@@ -407,6 +417,13 @@ read_JPEG_file ( pnstream strm )
   /* And we're done! */
   return 1;
 }
+
+#else // _DOS_
+int read_JPEG_file ( pnstream strm )
+{
+}
+#endif
+
 
 
 /*

@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.9 1999-12-27 13:00:11 mbickel Exp $
+//     $Id: spfst.cpp,v 1.10 1999-12-28 21:03:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  1999/12/27 13:00:11  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.8  1999/12/14 20:24:00  mbickel
 //      getfiletime now works on containerfiles too
 //      improved BI3 map import tables
@@ -185,12 +189,20 @@ tmoveparams moveparams;
 
 
 #ifdef __use_STL_for_ASC__
-  typedef less<int> lessint;
-  map< int, pterraintype, lessint>  terrainmap;
-  map< int, pobjecttype,  lessint>  objectmap;
-  map< int, pvehicletype,  lessint>  vehiclemap;
-  map< int, pbuildingtype, lessint>  buildingmap;
-  map< int, ptechnology, lessint>  technologymap;
+  #ifdef __WATCOM_CPLUSPLUS__
+   typedef less<int> lessint;
+   map< int, pterraintype, lessint>  terrainmap;
+   map< int, pobjecttype,  lessint>  objectmap;
+   map< int, pvehicletype,  lessint>  vehiclemap;
+   map< int, pbuildingtype, lessint>  buildingmap;
+   map< int, ptechnology, lessint>  technologymap;
+  #else
+   map< int, pterraintype>  terrainmap;
+   map< int, pobjecttype>  objectmap;
+   map< int, pvehicletype>  vehiclemap;
+   map< int, pbuildingtype>  buildingmap;
+   map< int, ptechnology>  technologymap;
+  #endif
 #endif
 
 pterraintype getterraintype_forid ( int id, int crccheck )
@@ -397,6 +409,7 @@ void copyvfb2displaymemory_zoom ( void* parmbuf )
 
    } while ( edx ); /* enddo */
 
+   copySurface2screen();
 }
 
 #endif
@@ -3672,6 +3685,7 @@ void tdisplaymap :: generate_map_mask ( int *sze )
 void tdisplaymap :: init ( int xs, int ys )
 {
    rgmp = *agmp;
+   rgmp.directscreenaccess = 1;
 
    tgeneraldisplaymap :: init ( xs, ys );
 
@@ -4054,7 +4068,7 @@ void tgeneraldisplaymap :: pnt_terrain ( void )
 
 void tdisplaymap :: cp_buf ( void )
 {
-   copyvfb2displaymemory( displaybuffer.screenmaskbuf );
+    copyvfb2displaymemory( displaybuffer.screenmaskbuf );
 }
 
 
@@ -4163,6 +4177,7 @@ void tdisplaymap :: init ( int x1, int y1, int x2, int y2 )
    invmousewindow.y2 = y2;
 
    rgmp = *agmp;
+   rgmp.directscreenaccess = 1;
 
    tgeneraldisplaymap :: _init ( x2-x1, y2-y1 );
 
@@ -4194,6 +4209,7 @@ void tdisplaymap :: init ( int x1, int y1, int x2, int y2 )
    vfb.parameters.bytesperscanline = dispmapdata.vfbwidth;
    vfb.parameters.byteperpix = 1;
    vfb.parameters.linearaddress = (int) vfb.address;
+   vfb.parameters.directscreenaccess = 1;
 
 }
 
@@ -5682,6 +5698,7 @@ void tdisplaywholemap :: init ( int xs, int ys )
    dsp = new tvirtualdisplay ( bufsizex, bufsizey, 0 );
                          
    vfb.parameters = *agmp;
+   vfb.parameters.directscreenaccess = 1;
    dispmapdata.vfbadress = (void*) agmp->linearaddress;
 
 }

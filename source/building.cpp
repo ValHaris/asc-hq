@@ -1,6 +1,10 @@
-//     $Id: building.cpp,v 1.10 1999-12-27 12:59:42 mbickel Exp $
+//     $Id: building.cpp,v 1.11 1999-12-28 21:02:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  1999/12/27 12:59:42  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.9  1999/12/14 20:23:46  mbickel
 //      getfiletime now works on containerfiles too
 //      improved BI3 map import tables
@@ -5816,9 +5820,10 @@ void  ccontainer_t :: init (pvehicle eht)
 
       setpictures();
 
-
+/*
       int x = vehicle->xpos;
       int y = vehicle->ypos;
+*/
 /*      
       cursor.hide ();
       cursor.posx = x - actmap->xpos;

@@ -1,6 +1,10 @@
-//     $Id: network.h,v 1.3 1999-12-07 22:13:25 mbickel Exp $
+//     $Id: network.h,v 1.4 1999-12-28 21:03:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/12/07 22:13:25  mbickel
+//      Fixed various bugs
+//      Extended BI3 map import tables
+//
 //     Revision 1.2  1999/11/16 03:42:14  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -65,7 +69,7 @@ class tbasenetworkconnection {
            virtual void  closeconnection ( void )          = 0;
            virtual void  closetransfer   ( void )          = 0;
            tbasenetworkconnection ( void );
-           ~tbasenetworkconnection (  );
+           virtual ~tbasenetworkconnection (  );
            pnstream stream;
        };
 

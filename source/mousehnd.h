@@ -1,6 +1,10 @@
-//     $Id: mousehnd.h,v 1.4 1999-12-07 22:13:23 mbickel Exp $
+//     $Id: mousehnd.h,v 1.5 1999-12-28 21:03:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/07 22:13:23  mbickel
+//      Fixed various bugs
+//      Extended BI3 map import tables
+//
 //     Revision 1.3  1999/11/22 18:27:43  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -109,7 +113,7 @@ class tsubmousehandler {
 
 #ifdef _NOASM_
  extern void mouseintproc2( void );
- extern volatile tmousesettings mouseparams;
+ extern tmousesettings mouseparams;
 
 #else
  extern "C" void            mouseintproc2( void );

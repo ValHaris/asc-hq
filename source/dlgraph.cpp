@@ -1,6 +1,14 @@
-//     $Id: dlgraph.cpp,v 1.2 1999-11-16 03:41:27 tmwilson Exp $
+//     $Id: dlgraph.cpp,v 1.3 1999-12-28 21:02:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:27  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -27,8 +35,9 @@ void         tdialogbox::rahmen(boolean      invers,
                     int          y1,
                     int          x2,
                     int          y2)
-{ 
-     byte         col; 
+{
+     collategraphicoperations cgs;
+     byte         col;
 
      if (invers == false) 
         col = white;
@@ -55,6 +64,8 @@ void         tdialogbox::knopf(integer      xx1,
                    integer      xx2,
                    integer      yy2)
 { 
+     collategraphicoperations cgs;
+
      paintsurface2(xx1,yy1,xx2,yy2);
      rahmen(false,xx1,yy1,xx2,yy2); 
 } 
@@ -66,6 +77,7 @@ void         tdialogbox::knopfdruck(int      xx1,
                         int      yy2)
 {
 
+     collategraphicoperations cgs;
 
     pointer      p;
     boolean      kn, kn2; 
@@ -110,6 +122,8 @@ void         tdialogbox::newknopf(integer      xx1,
                       integer      xx2,
                       integer      yy2)
 { 
+     collategraphicoperations cgs;
+
      paintsurface2(xx1,yy1,xx2,yy2);
 
      rahmen(true,  xx1 - 1, yy1 - 1,xx2 + 1,yy2 + 1);
@@ -121,7 +135,10 @@ void         tdialogbox::newknopfdruck2(integer      xx1,
                             integer      yy1,
                             integer      xx2,
                             integer      yy2)
-{   pointer      p;
+{
+     collategraphicoperations cgs;
+
+    pointer      p;
     boolean      kn; 
     integer      mt; 
 
@@ -177,7 +194,10 @@ void         tdialogbox::newknopfdruck3(integer      xx1,
                             integer      yy1,
                             integer      xx2,
                             integer      yy2)
-{ pointer      p; 
+{
+     collategraphicoperations cgs;
+
+   pointer      p;
 
      // vom reingedrÅckten in den Normalzustand
 
@@ -197,7 +217,10 @@ void         tdialogbox::newknopfdruck4(integer      xx1,
                             integer      yy1,
                             integer      xx2,
                             integer      yy2)
-{ pointer      p; 
+{
+     collategraphicoperations cgs;
+
+   pointer      p;
     // reindrÅcken
 
      p = asc_malloc ( imagesize ( xx1 + 2,yy1 + 2,xx2 - 4,yy2 - 4 )) ;
@@ -213,7 +236,10 @@ void         tdialogbox::newknopfdruck(integer      xx1,
                            integer      yy1,
                            integer      xx2,
                            integer      yy2)
-{ pointer      p; 
+{
+     collategraphicoperations cgs;
+
+   pointer      p;
     boolean      kn; 
     integer      mt; 
 

@@ -1,6 +1,9 @@
-//     $Id: keybp.h,v 1.3 1999-12-27 12:51:38 mbickel Exp $
+//     $Id: keybp.h,v 1.4 1999-12-28 21:03:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/12/27 12:51:38  mbickel
+//      Cleanup for Linux port
+//
 //     Revision 1.2  1999/11/16 03:41:53  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -323,12 +326,211 @@
    #define cto_point  '.' 
    #define cto_komma  ',' 
 
+#else //  _DOS_
+
+   #include "SDL.h"
+
+   #define ct_invvalue   -1
+   #define ct_shp  2048
+   #define ct_stp  512
+   #define ct_altp  1024
+
+   #define ct_space   SDLK_SPACE
+   #define ct_bspace  SDLK_BACKSPACE
+   #define ct_lshift  SDLK_LSHIFT
+   #define ct_rshift  SDLK_RSHIFT
+   #define ct_lstrg   SDLK_LCTRL
+   #define ct_rstrg   SDLK_RCTRL
+   #define ct_lalt    SDLK_LALT
+   #define ct_ralt    SDLK_RALT
+
+   #define ct_roll    SDLK_SCROLLOCK
+   #define ct_pause   SDLK_PAUSE
+   #define ct_druck   SDLK_PRINT
+
+   #define ct_esc     SDLK_ESCAPE
+   #define ct_tab     SDLK_TAB
+
+   #define ct_shift_tab    (ct_tab | ct_shp)
+
+   #define ct_capslck SDLK_CAPSLOCK
+   #define ct_sb      SDLK_LESS 
+   #define ct_gitt    SDLK_HASH
+   #define ct_enter   SDLK_RETURN
+   #define ct_minus   SDLK_MINUS
+   #define ct_plus    SDLK_PLUS
+   #define ct_punkt   SDLK_PERIOD
+   #define ct_point ct_punkt
+   #define ct_komma   SDLK_COMMA
+
+   #define ct_num     SDLK_NUMLOCK
+   #define ct_divk    SDLK_KP_DIVIDE
+   #define ct_malk    SDLK_KP_MULTIPLY
+   #define ct_minusk  SDLK_KP_MINUS
+   #define ct_plusk   SDLK_KP_PLUS
+   #define ct_enterk  SDLK_KP_ENTER
+   #define ct_entk    SDLK_KP_PERIOD
+   #define ct_0k      SDLK_KP0
+   #define ct_1k      SDLK_KP1
+   #define ct_2k      SDLK_KP2
+   #define ct_3k      SDLK_KP3
+   #define ct_4k      SDLK_KP4
+   #define ct_5k      SDLK_KP5
+   #define ct_6k      SDLK_KP6
+   #define ct_7k      SDLK_KP7
+   #define ct_8k      SDLK_KP8
+   #define ct_9k      SDLK_KP9
+
+   #define ct_a  SDLK_a
+   #define ct_b  SDLK_b
+   #define ct_c  SDLK_c
+   #define ct_d  SDLK_d
+   #define ct_e  SDLK_e
+   #define ct_f  SDLK_f
+   #define ct_g  SDLK_g
+   #define ct_h  SDLK_h
+   #define ct_i  SDLK_i
+   #define ct_j  SDLK_j
+   #define ct_k  SDLK_k
+   #define ct_l  SDLK_l
+   #define ct_m  SDLK_m
+   #define ct_n  SDLK_n
+   #define ct_o  SDLK_o
+   #define ct_p  SDLK_p
+   #define ct_q  SDLK_q
+   #define ct_r  SDLK_r
+   #define ct_s  SDLK_s
+   #define ct_t  SDLK_t
+   #define ct_u  SDLK_u
+   #define ct_v  SDLK_v
+   #define ct_w  SDLK_w
+   #define ct_x  SDLK_x
+   #define ct_y  SDLK_y
+   #define ct_z  SDLK_z
+//   #define ct_oe 39
+//   #define ct_ae 40
+//   #define ct_ue 26
+
+   #define ct_circ  SDLK_CARET
+   #define ct_0  SDLK_0
+   #define ct_1  SDLK_1
+   #define ct_2  SDLK_2
+   #define ct_3  SDLK_3
+   #define ct_4  SDLK_4
+   #define ct_5  SDLK_5
+   #define ct_6  SDLK_6
+   #define ct_7  SDLK_7
+   #define ct_8  SDLK_8
+   #define ct_9  SDLK_9
+//   #define ct_ez  12
+//   #define ct_apos  13
+
+   #define ct_left   SDLK_LEFT
+   #define ct_right  SDLK_RIGHT
+   #define ct_up     SDLK_UP
+   #define ct_down   SDLK_DOWN
+
+   #define ct_entf   SDLK_DELETE
+   #define ct_einf   SDLK_INSERT
+   #define ct_pos1   SDLK_HOME
+   #define ct_ende   SDLK_END
+   #define ct_pdown  SDLK_PAGEDOWN
+   #define ct_pup    SDLK_PAGEUP
+
+   #define ct_f1     SDLK_F1
+   #define ct_f2     SDLK_F2
+   #define ct_f3     SDLK_F3
+   #define ct_f4     SDLK_F4
+   #define ct_f5     SDLK_F5
+   #define ct_f6     SDLK_F6
+   #define ct_f7     SDLK_F7
+   #define ct_f8     SDLK_F8
+   #define ct_f9     SDLK_F9
+   #define ct_f10    SDLK_F10
+   #define ct_f11    SDLK_F11
+   #define ct_f12    SDLK_F12
+
+   #define cto_stp  -96
+   #define cto_entf   83+256
+   #define cto_space   32
+   #define cto_bspace  8
+   #define cto_a  'a'
+   #define cto_b  'b'
+   #define cto_c  'c'
+   #define cto_d  'd'
+   #define cto_e  'e'
+   #define cto_f  'f'
+   #define cto_g  'g'
+   #define cto_h  'h'
+   #define cto_i  'i'
+   #define cto_j  'j'
+   #define cto_k  'k'
+   #define cto_l  'l'
+   #define cto_m  'm'
+   #define cto_n  'n'
+   #define cto_o  'o'
+   #define cto_p  'p'
+   #define cto_q  'q'
+   #define cto_r  'r'
+   #define cto_s  's'
+   #define cto_t  't'
+   #define cto_u  'u'
+   #define cto_v  'v'
+   #define cto_w  'w'
+   #define cto_x  'x'
+   #define cto_y  'y'
+   #define cto_z  'z'
+   #define cto_oe 'î'
+   #define cto_ae 'Ñ'
+   #define cto_ue 'Å'
+   #define cto_0  '0'
+   #define cto_1  '1'
+   #define cto_2  '2'
+   #define cto_3  '3'
+   #define cto_4  '4'
+   #define cto_5  '5'
+   #define cto_6  '6'
+   #define cto_7  '7'
+   #define cto_8  '8'
+   #define cto_9  '9'
+
+   #define cto_tab    9
+   #define cto_esc    27
+   #define cto_invvalue   -1
+   #define cto_invvalue2  -2
+   #define cto_left   75+256
+   #define cto_right  77+256
+   #define cto_up     72+256
+   #define cto_down   80+256
+   #define cto_enter  13
+   #define cto_pos1   71+256
+   #define cto_ende   79+256
+   #define cto_pdown  81+256
+   #define cto_pup    73+256
+   #define cto_f1     59+256
+   #define cto_f2     60+256
+   #define cto_f3     61+256
+   #define cto_f4     62+256
+   #define cto_f5     63+256
+   #define cto_f6     64+256
+   #define cto_f7     65+256
+   #define cto_f8     66+256
+   #define cto_f9     67+256
+   #define cto_f10    68+256
+   #define cto_f11    254
+   #define cto_f12    253
+   #define cto_minus  '-'
+   #define cto_plus   '+'
+   #define cto_point  '.'
+   #define cto_komma  ','
+
+
 #endif //_DOS_
 
     typedef int tkey;
 
-    extern char  skeypress(char keynr);
-    extern char *get_key(char keynr);
+    extern char  skeypress( tkey keynr);
+    extern char *get_key(tkey keynr);
     extern tkey r_key(void);
     extern int keypress(void);
     extern void initkeyb(void);
@@ -337,4 +539,5 @@
     tkey char2key (int ch);
 
 
-
+extern int getch(void);
+extern int kbhit(void);

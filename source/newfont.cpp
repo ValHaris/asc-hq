@@ -1,6 +1,11 @@
-//     $Id: newfont.cpp,v 1.4 1999-11-25 22:00:06 mbickel Exp $
+//     $Id: newfont.cpp,v 1.5 1999-12-28 21:03:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/25 22:00:06  mbickel
+//      Added weapon information window
+//      Added support for primary offscreen frame buffers to graphics engine
+//      Restored file time handling for DOS version
+//
 //     Revision 1.3  1999/11/22 18:27:44  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -105,7 +110,7 @@ pfont        loadfont(char *       filename)
    word*         pg;
 
 
-   fp = fopen(filename, "rb");
+   fp = fopen(filename, filereadmode );
    if ( !fp ) {
       printf("error opening file %s \n error code is %d \n",filename,errno);
       return(NULL);
@@ -544,9 +549,9 @@ class InitNewfont {
 
 char* int2string ( int i, char* buf )
 {
-   if ( i >= 0 ) 
+   if ( i >= 0 ) {
       itoa ( i, buf, 10 );
-   else {
+   } else {
       buf[0] = '-';
       i = -i;
       itoa ( i, &buf[1], 10 );

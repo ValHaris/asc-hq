@@ -1,6 +1,10 @@
-//     $Id: gui.cpp,v 1.6 1999-12-27 13:00:03 mbickel Exp $
+//     $Id: gui.cpp,v 1.7 1999-12-28 21:02:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/12/27 13:00:03  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.5  1999/12/07 22:13:19  mbickel
 //      Fixed various bugs
 //      Extended BI3 map import tables
@@ -117,7 +121,7 @@ void setmouseongui( void )
    */
 }
 
-#ifdef _DOS_
+#ifndef _NoStaticClassMembers_
 static void*    tguihost::background[30][30];
 #endif
 
@@ -652,7 +656,7 @@ void      tguihost :: setfirsticon( pnguiicon ic )
 }
 
 
-#ifdef _DOS_
+#ifndef _NoStaticClassMembers_
 static pnguiicon  tnguiicon::first = NULL;
 #endif
 
@@ -914,7 +918,7 @@ void tnguiicon::display      ( void )
 
 
 
-#ifdef _DOS_
+#ifndef _NoStaticClassMembers_
 static pnsguiicon tnsguiicon ::first = NULL;
 #endif
 
@@ -2200,7 +2204,7 @@ void tguihost::reset ( void )
       actshownicons[i/columncount][i%columncount] = NULL;
 }
 
-#ifdef _DOS_
+#ifndef _NoStaticClassMembers_
 static pnputbuildingguiicon tnputbuildingguiicon :: first    = NULL;
 static int             tnputbuildingguiicon :: buildnum = 0;
 #endif
@@ -2281,7 +2285,7 @@ void   tnputbuildingguiicon :: sethost      ( pselectbuildingguihost hst )
       bnxt()->sethost( hst );
 }
 
-#ifdef _DOS_
+#ifndef _NoStaticClassMembers_
 static pnputobjectcontainerguiicon tnputobjectcontainerguiicon :: first    = NULL;
 static int             tnputobjectcontainerguiicon :: buildnum = 0;
 #endif
@@ -2393,7 +2397,7 @@ void   tnputobjectcontainerguiicon :: sethost      ( pselectobjectcontainerguiho
       bnxt()->sethost( hst );
 }
 
-#ifdef _DOS_
+#ifndef _NoStaticClassMembers_
 static pnputvehiclecontainerguiicon tnputvehiclecontainerguiicon :: first    = NULL;
 static int                          tnputvehiclecontainerguiicon :: buildnum = 0;
 #endif
@@ -2586,7 +2590,7 @@ void      tselectvehiclecontainerguihost :: setfirsticon( pnguiicon ic )
 }
 
 
-#ifdef _DOS_
+#ifndef _NoStaticClassMembers_
 static pnweapselguiicon tnweapselguiicon::first = NULL;
 #endif
 
@@ -2804,7 +2808,7 @@ void  tnweapselguiicon::setup        ( pattackweap atw, int n )
       next->setup ( atw, ++n );
 }
 
-#ifdef _DOS_
+#ifndef _NoStaticClassMembers_
 static preplayguiicon treplayguiicon ::first = NULL;
 #endif
 

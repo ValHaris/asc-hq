@@ -1,6 +1,10 @@
-//     $Id: building.h,v 1.4 1999-12-27 12:59:44 mbickel Exp $
+//     $Id: building.h,v 1.5 1999-12-28 21:02:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/27 12:59:44  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.3  1999/11/25 22:00:00  mbickel
 //      Added weapon information window
 //      Added support for primary offscreen frame buffers to graphics engine
@@ -379,7 +383,7 @@ typedef class csubwindow* psubwindow;
                         virtual void resetresources ( int mode );
 
                         csubwindow ( void );
-                        ~csubwindow ( );
+                        virtual ~csubwindow ( );
                 };
 
 
@@ -596,7 +600,7 @@ class    ccontainer : public virtual ccontainercontrols {
                 void     displayloading ( int x, int y, int dx = 0, int dy = 0 );    
                 void     displayloading (void);    
                 ccontainer (void);
-                ~ccontainer (void);
+                virtual ~ccontainer (void);
 };
 
 

@@ -1,6 +1,14 @@
-//     $Id: basegui.h,v 1.2 1999-11-16 03:41:05 tmwilson Exp $
+//     $Id: basegui.h,v 1.3 1999-12-28 21:02:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:05  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -28,6 +36,7 @@
 
 #include "keybp.h"
 
+#pragma pack(1)
 struct tnguiiconfiledata {
           void*     picture[8];
           void*     picturepressed[8];
@@ -36,4 +45,5 @@ struct tnguiiconfiledata {
           int       priority;
        };
 
+#pragma pack()
 #endif

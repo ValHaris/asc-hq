@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.7 1999-12-27 13:00:07 mbickel Exp $
+//     $Id: sg.cpp,v 1.8 1999-12-28 21:03:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  1999/12/27 13:00:07  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.6  1999/11/25 22:00:08  mbickel
 //      Added weapon information window
 //      Added support for primary offscreen frame buffers to graphics engine
@@ -90,7 +94,7 @@
 #include "gamedlg.h"
 #include "network.h"
 #include "building.h"
-#include "cdrom.h"
+//#include "cdrom.h"
 #include "loadjpg.h"
 #include "sg.h"
 #include "artint.h"
@@ -101,6 +105,8 @@
 #endif
 
 
+
+   #include <dirent.h>			/* Directory information.	*/
 
 
 // #define MEMCHK
@@ -181,7 +187,12 @@ tkey         keyinput[keyinputbuffersize];
 byte         keyinputptr; 
 
 int              modenum8;
-int              modenum24 = -1;
+#ifdef _DOS_
+ int              modenum24 = -1;
+#else
+ int              modenum24 = -2;
+#endif
+
 int videostartpos = 0;
 
 int cdrom = 1;
@@ -437,7 +448,8 @@ void tbackgroundpict :: paintborder ( int dx, int dy, int reinit )
 }
 
 void  tbackgroundpict :: paint ( int resavebackground )
-{ 
+{
+  collategraphicoperations cgo;
   init();
 
   #ifndef HEXAGON
@@ -1397,7 +1409,8 @@ void         tsgpulldown :: init ( void )
 
 
 void         repaintdisplay(void)
-{ 
+{
+   collategraphicoperations cgo;
    int mapexist = !( actmap->xsize == 0  || actmap->ysize == 0 );
 
 
@@ -2962,10 +2975,12 @@ int main(int argc, char *argv[] )
           printf ( "Cannot run in resolution smaller than 640*480 !\n");
           exit(1);
        }
+      #ifdef _DOS_
        if ( showmodes ) {
            showavailablemodes();
            return 0;
        }
+      #endif
 
        // The following code is DOS only.  Unix machines will swap to make
        // room for the memory needed.  Only need to make sure we check all
@@ -3019,6 +3034,7 @@ int main(int argc, char *argv[] )
         #ifdef logging
         logtofile ( "sg.cpp / main / initializing containerstream ");
         #endif
+
         t_carefor_containerstream cfc;
 
         readgameoptions();
@@ -3045,7 +3061,9 @@ int main(int argc, char *argv[] )
            gui.init ( resolx, resoly );
    
            virtualscreenbuf.init();
-   
+
+           tnewkeyb nkb;
+
            if ( modenum24 == -1 )      // modenum24 is -2 when the command line parameter /8bitonly is used
               modenum24 = initgraphics ( 640, 480,32 );
            
@@ -3121,8 +3139,6 @@ int main(int argc, char *argv[] )
               displaymessage("mouse required", 2 );
 
            atexit ( closemouse );
-
-           tnewkeyb nkb;
 
            setvgapalette256(pal);
            xlatpictgraytable = (ppixelxlattable) asc_malloc( sizeof(*xlatpictgraytable) );

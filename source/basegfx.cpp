@@ -1,3 +1,7 @@
+//     $Id: basegfx.cpp,v 1.6 1999-12-28 21:02:34 mbickel Exp $
+//
+//     $Log: not supported by cvs2svn $
+
 
 #include <string.h>
 #include <malloc.h>
@@ -5,8 +9,11 @@
 #include "newfont.h"
 #include "misc.h"
 
-#include "vesa.h"
-
+#ifdef _DOS_
+ #include "vesa.h"
+#else
+ #include "sdl/graphics.h"
+#endif
 
 tgraphmodeparameters *agmp = (tgraphmodeparameters *) & activegraphmodeparameters;
 tgraphmodeparameters *hgmp = (tgraphmodeparameters *) & hardwaregraphmodeparameters;
@@ -169,6 +176,7 @@ line(int  x1,
      int  y2,
      char actcol)
 {
+   collategraphicoperations cgs;
 	float           m, b;
 	int             w;
 	float           yy1, yy2, xx1, xx2;
@@ -219,7 +227,6 @@ line(int  x1,
          } /* endif */
      }
 
-     CheckForDirectScreenAccess
 }
 
 void 
@@ -229,6 +236,8 @@ xorline(int  x1,
      int  y2,
      char actcol)
 {
+   collategraphicoperations cgs;
+
 	float           m, b;
 	int             w;
 	float           yy1, yy2, xx1, xx2;
@@ -272,7 +281,6 @@ xorline(int  x1,
 	}
      }
 
-     CheckForDirectScreenAccess
 }
 
 
@@ -284,12 +292,13 @@ rectangle(int x1,
 	  int y2,
 	  byte color)
 {
+   collategraphicoperations cgs;
+
 	line(x1, y1, x1, y2, color);
 	line(x1, y1, x2, y1, color);
 	line(x2, y1, x2, y2, color);
 	line(x1, y2, x2, y2, color);
 
-   CheckForDirectScreenAccess
 }
 
 
@@ -299,12 +308,13 @@ void xorrectangle(int x1,
 	     int y2,
 	     byte color)
 {
+   collategraphicoperations cgs;
+
           xorline(x1,y1,x1,y2,color); 
           xorline(x1,y1,x2,y1,color);
           xorline(x2,y1,x2,y2,color); 
           xorline(x1,y2,x2,y2,color);
 
-   CheckForDirectScreenAccess
 }
 
 /*
@@ -495,7 +505,7 @@ void rotatepict90 ( void* s, void* d )
    dw[1] = sw[0];
 
    int dl = dw[0]+1;
-   int dh = dw[1]+1;
+//   int dh = dw[1]+1;
 
    int sl = sw[0]+1;
    int sh = sw[1]+1;
@@ -955,8 +965,8 @@ fatalgraphicserror :: fatalgraphicserror ( void ) {
                  
 void putmask ( int x1, int y1, void* vbuf, int newtransparence )
 {
-      int linecount = 0;
-      int rowcount = 0;
+      // int linecount = 0;
+      // int rowcount = 0;
 
       word* wp = (word*) vbuf;
 
@@ -1030,6 +1040,7 @@ void setvgapalette256 ( dacpalette256 pal )
 
 void ellipse ( int x1, int y1, int x2, int y2, int color, float tolerance )
 {
+   collategraphicoperations cgo;
    int midx = (x1 + x2) / 2;
    int midy = (y1 + y2) / 2;
    float xr = x2 - x1;
@@ -1430,7 +1441,7 @@ void putrotspriteimage(int x1, int y1, void *pic, int rotationvalue)
 void putrotspriteimage90(int x1, int y1, void *pic, int rotationvalue)
 {
    word* w = (word*) pic;
-   char* c = (char*) pic + 4;
+   // char* c = (char*) pic + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
 
    if ( agmp->windowstatus == 100 ) {
@@ -1457,7 +1468,7 @@ void putrotspriteimage90(int x1, int y1, void *pic, int rotationvalue)
 void putrotspriteimage180(int x1, int y1, void *pic, int rotationvalue)
 {
    word* w = (word*) pic;
-   char* c = (char*) pic + 4;
+   // char* c = (char*) pic + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
 
    if ( agmp->windowstatus == 100 ) {
@@ -1484,7 +1495,7 @@ void putrotspriteimage180(int x1, int y1, void *pic, int rotationvalue)
 void putrotspriteimage270(int x1, int y1, void *pic, int rotationvalue)
 {
    word* w = (word*) pic;
-   char* c = (char*) pic + 4;
+   // char* c = (char*) pic + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
 
    if ( agmp->windowstatus == 100 ) {
@@ -1671,8 +1682,7 @@ void showtext ( const char* text, int x, int y, int textcol )
      return;
  
    char* fb = (char*)(x * agmp->byteperpix + y * agmp->scanlinelength + agmp->linearaddress);
-   int negkernwidth = 0;
-   int fontheight; 
+   int fontheight;
    int extraheight = 0;
    if ( activefontsettings.height == 0 )
       fontheight = activefontsettings.font->height;
@@ -1813,6 +1823,25 @@ void showtext2 ( const char* text, int x, int y )
 void showtext2c ( const char* text, int x, int y )
 {           
    showtext ( text, x, y, -1 );
+}
+
+
+
+collategraphicoperations :: collategraphicoperations ( void )
+{
+   olddirectscreenaccess = agmp->directscreenaccess;
+   agmp->directscreenaccess = 1;
+}
+
+collategraphicoperations :: ~collategraphicoperations (  )
+{
+   agmp->directscreenaccess = olddirectscreenaccess;
+   CheckForDirectScreenAccess;
+}
+
+void copySurface2screen( void )
+{
+   CheckForDirectScreenAccess;
 }
 
 

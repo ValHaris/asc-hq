@@ -1,6 +1,11 @@
-//     $Id: spfst.h,v 1.4 1999-11-25 22:00:14 mbickel Exp $
+//     $Id: spfst.h,v 1.5 1999-12-28 21:03:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/25 22:00:14  mbickel
+//      Added weapon information window
+//      Added support for primary offscreen frame buffers to graphics engine
+//      Restored file time handling for DOS version
+//
 //     Revision 1.3  1999/11/22 18:28:02  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -47,6 +52,7 @@
   #include "basegfx.h"
   #include "mousehnd.h"
 
+#pragma pack(1)
 
    struct ffonts {          
                pfont        smallarial;
@@ -709,6 +715,8 @@ class tdrawline8 : public tdrawline {
  int  rol ( int valuetorol, int rolwidth );
  void setvisibility ( word* visi, int valtoset, int actplayer );
 #endif
+
+#pragma pack()
 
 #endif
 

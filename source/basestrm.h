@@ -1,6 +1,10 @@
-//     $Id: basestrm.h,v 1.4 1999-12-27 12:59:40 mbickel Exp $
+//     $Id: basestrm.h,v 1.5 1999-12-28 21:02:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/27 12:59:40  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.3  1999/11/16 17:03:55  mbickel
 //     Made ASC compilable for DOS again :-)
 //     Merged all the bug fixes in that I did last week
@@ -37,19 +41,15 @@
 #ifndef basestream_h
 #define basestream_h
 
-#ifdef MEMCHECK
-#include "memchk.h2"
-#endif
-
 #include <stdio.h>
 
 #include "global.h"
 #include "lzw.h"
 extern "C" {
 #ifdef _DOS_
-    #include "libs\bzlib\bzlib.h"
+ #include "libs\bzlib\bzlib.h"
 #else
-#include "libs/bzlib/bzlib.h"
+ #include "libs/bzlib/bzlib.h"
 #endif
 
 }
@@ -65,6 +65,8 @@ extern "C" {
 #define MAX3(a,b,c)		((a) >= (b) ? MAX(a,c) : MAX(b,c))
 #define MIN3(a,b,c)		((a) <= (b) ? MIN(a,c) : MIN(b,c))
 
+
+#pragma pack(1)
 
 // #pragma library (basestrm)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -407,6 +409,7 @@ class t_compressor_2ndbuf_filter : public t_compressor_stream_interface {
              virtual void writecmpdata ( const void* buf, int size );
              virtual int readcmpdata ( void* buf, int size, int excpt = 1 );
              void insert_data_into_queue ( const void* buf, int size );
+             virtual ~t_compressor_2ndbuf_filter() {};
 };
 
 typedef t_compressor_stream_interface *p_compressor_stream_interface;
@@ -600,7 +603,7 @@ class ContainerCollector : public ContainerIndexer {
            pncontainerstream getfile ( const char* filename );
            char* getfirstname ( void );
            char* getnextname ( void );
-           ~ContainerCollector();
+           virtual ~ContainerCollector();
         };
 
 
@@ -647,6 +650,13 @@ extern int getfiletime ( char* devicename );
 extern void opencontainer ( const char* wildcard );
 
 extern const int containermagic;
+
+#pragma pack()
+
+extern const char* filereadmode;
+extern const char* filewritemode;
+
+extern int verbosity;
 
 #endif
 

@@ -26,11 +26,14 @@
   #define HAVE_KBHIT
   #define HAVE_ITOA
  #else
-  #define _NOASM_
+  #ifndef _NOASM_
+   #define _NOASM_
+  #endif
  #endif
 
+
  #ifndef HAVE_ITOA
- #define itoa(a, b, c) sprintf(b, "%##c##d", a);
+ extern char* itoa ( int a, char* b, int c);
  #endif
 
 
@@ -41,18 +44,7 @@
  #define strnicmp strncasecmp
  #define strncmpi strncasecmp
  
- char *strupr (const char *a)
- {
-   int i;
-   int j;
-   char *b;
- 
-   j = strlen (a);
-   b = (char *) malloc (j);
-   for (i = 0; i < j; i++)
-     b[i] = toupper (a[i]);
-   return (b);
- }
+ extern char *strupr (const char *a);
  #endif
 
 

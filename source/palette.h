@@ -1,6 +1,14 @@
-//     $Id: palette.h,v 1.2 1999-11-16 03:42:20 tmwilson Exp $
+//     $Id: palette.h,v 1.3 1999-12-28 21:03:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:20  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -25,6 +33,7 @@
 #ifndef palette_h_included
  #define palette_h_included
 
+#pragma pack(1)
 
 typedef char tmixbuf[256][256];
 typedef tmixbuf* pmixbuf;
@@ -60,5 +69,7 @@ extern dacpalette256 pal;
 
 extern int asc_paletteloaded;
 extern ppixelxlattable xlatpictgraytable;  
+
+#pragma pack()
 
 #endif

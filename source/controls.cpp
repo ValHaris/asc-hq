@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.10 1999-12-27 12:59:45 mbickel Exp $
+//     $Id: controls.cpp,v 1.11 1999-12-28 21:02:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  1999/12/27 12:59:45  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.9  1999/12/14 20:23:49  mbickel
 //      getfiletime now works on containerfiles too
 //      improved BI3 map import tables
@@ -1238,7 +1242,7 @@ void         constructvehicle( pvehicletype tnk )
    else { 
       if (moveparams.movestatus == 120 ) { 
          pvehicle eht = moveparams.vehicletomove; 
-         pfield fld = getactfield();
+         // pfield fld = getactfield();
 
          int stat = 0;
          if ( actmap->objectcrc ) {
@@ -2390,7 +2394,7 @@ void         tcomputevehicleview::init( const pvehicle eht, int _mode  )   // mo
    if ( eht->functions & cfautodigger )
       searchforminablefields ( eht );
 
-   pfield efield = getfield( eht->xpos, eht->ypos ); 
+  // pfield efield = getfield( eht->xpos, eht->ypos );
    xp = eht->xpos;
    yp = eht->ypos;
    tcomputeview::initviewcalculation( eht->typ->view+1, eht->typ->jamming, eht->xpos, eht->ypos, _mode, eht->height );
@@ -2453,6 +2457,7 @@ class treactionfire {
           public:
              virtual void checkfield ( int x, int y, pvehicle &eht ) = 0;
              virtual void init ( pvehicle eht ) = 0;
+             virtual ~treactionfire() {};
         };
 
 class treactionfirereplay : public treactionfire {
@@ -3519,7 +3524,6 @@ void         attack(boolean      kamikaze, int  weapnum )
 
 int squareroot ( int i )
 {
-   double b = (double) i;
    double a =  sqrt ( i );
    int c = (int) a;
    return c;
@@ -6886,8 +6890,10 @@ void initweather ( void )
 
 void returnresourcenuseforresearch ( const pbuilding bld, int research, int* energy, int* material )
 {
+   /*
    double esteigung = 55;
    double msteigung = 40;
+   */
 
    double res = research;
    double deg = res / bld->typ->maxresearchpoints;

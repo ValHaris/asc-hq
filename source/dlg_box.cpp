@@ -1,6 +1,9 @@
-//     $Id: dlg_box.cpp,v 1.5 1999-11-23 21:07:29 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.6 1999-12-28 21:02:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/11/23 21:07:29  mbickel
+//      Many small bugfixes
+//
 //     Revision 1.4  1999/11/22 18:27:10  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -445,16 +448,19 @@ void         tdialogbox::paint     ( void )
 
 int getplayercolor ( int i )
 {
+   if ( actmap ) {
       int textcolor =  actmap->actplayer * 8 + 21; 
       if ( actmap->actplayer == 7 || actmap->actplayer == 2 )
          textcolor += 1;
       return textcolor;
+   } else
+      return 20;
 }
 
 void         tdialogbox::init(void)
 { 
    imagesaved = false; 
-   if ( actmap->actplayer != -1 ) {
+   if ( actmap && actmap->actplayer != -1 ) {
       textcolor = getplayercolor ( actmap->actplayer );
    }
    else
@@ -1746,7 +1752,9 @@ void         tdialogbox::rahmen3(char *       txt,
                      integer      y2,
                      byte         style)
 { 
-  word         w; 
+   collategraphicoperations cgs;
+
+  word         w;
 
    push(activefontsettings,sizeof(activefontsettings)); 
    activefontsettings.font = schriften.smallarial;

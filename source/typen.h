@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.7 1999-12-27 13:00:16 mbickel Exp $
+//     $Id: typen.h,v 1.8 1999-12-28 21:03:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  1999/12/27 13:00:16  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.6  1999/12/07 22:02:10  mbickel
 //      Added vehicle function "no air refuelling"
 //
@@ -55,6 +59,7 @@
 #include "misc.h"
 
 
+#pragma pack(1)
 
    #define maxint 0x7ffffffe
    #define minint -0x7ffffffe
@@ -1420,7 +1425,7 @@ struct thexpic {
                   public:
                         tshareview ( void ) { recalculateview = 0; };
                         tshareview ( const tshareview* org );
-                        tshareviewmode mode[8][8]; 
+                        char mode[8][8];
                         int recalculateview;
                      };
                   // mode[1][6] = visible_all    =>  Spieler 1 gibt Spieler 6 die view frei
@@ -1471,7 +1476,7 @@ struct thexpic {
                                               tresearch    research; 
                                               paiparams    aiparams;
 
-                                              tplayerstat  stat;           // 0: human; 1: computer; 2: off
+                                              char  stat;           // 0: human; 1: computer; 2: off
                                               // char         alliance;       // => actmap->alliances ;  8 bedeuted parteilos
                                               char         dummy;
                                               char         *name;          // kein eigenst„ndiger string; zeigt entweder auf computernames oder playernames 
@@ -2176,8 +2181,6 @@ extern const char* cgeneralnetcontrol[];
 #define greenbackgroundcol 156
 
 
-#ifdef MEMCHECK
-#include "memchk.h2"
-#endif
+#pragma pack()
 
 #endif

@@ -1,6 +1,10 @@
-//     $Id: sgstream.cpp,v 1.4 1999-12-27 13:00:10 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.5 1999-12-28 21:03:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/27 13:00:10  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.3  1999/11/22 18:27:54  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -155,6 +159,8 @@ public:
   initgamepath( void ) { gamepath[0] = 0; };
 };
 
+
+#pragma pack(1)
 struct tindexstruct {
                     char         filename[13]; 
                     char         archivename[31]; 
@@ -476,9 +482,9 @@ void         tfilestream::openstream(char* name, char mode)
    }
 */
    if (mode == 1) {
-      fp = fopen ( name, "rb" );
+      fp = fopen ( name, filereadmode );
    } else {
-      fp = fopen ( name, "wb" );
+      fp = fopen ( name, filewritemode );
    }
 
    if (fp != NULL) {
@@ -2059,5 +2065,4 @@ int writegameoptions ( void )
 }
 
 structure_size_tester sst3;
-
 

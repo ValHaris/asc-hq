@@ -1,6 +1,10 @@
-//     $Id: basestrm.cpp,v 1.8 1999-12-27 12:59:38 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.9 1999-12-28 21:02:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  1999/12/27 12:59:38  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.7  1999/12/14 20:23:45  mbickel
 //      getfiletime now works on containerfiles too
 //      improved BI3 map import tables
@@ -96,6 +100,20 @@
 // #define printexternfilenams
 // #define logfiles
 
+
+char* ascdirectory = ".";
+
+#ifdef _DOS_
+const char* filereadmode = "rb";
+const char* filewritemode = "wb";
+#else
+const char* filereadmode = "r";
+const char* filewritemode = "w";
+#endif
+
+int verbosity = 10;
+
+#pragma pack(1)
 struct trleheader {
    unsigned short int id;
    unsigned short int size;
@@ -112,6 +130,7 @@ struct trleheader32 {
     int y;
 };
 
+#pragma pack()
 
 #define bzip_xor_byte 'M'
 
@@ -454,6 +473,75 @@ void         tnstream::writepchar(const char* pc)
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+
+class StreamReadBuffer : public tnstream {
+               pnstream stream;
+               char  minbuf;
+               int datalen;
+
+               char* zeiger;
+               int   actmempos;
+               int   memsize;
+               int   datasize;
+            public:
+               StreamReadBuffer ( pnstream s );
+               int readdata( void* buf, int size, int excpt  );
+          };
+
+
+
+
+StreamReadBuffer::StreamReadBuffer ( pnstream s )
+{
+   stream = s;
+
+   datalen = 0;
+
+   memsize = 0x10000;
+   zeiger = new char [ memsize ];
+
+   datasize = 0;
+   actmempos = 0;
+}
+
+
+
+int          StreamReadBuffer::readdata( void* buf, int size, int excpt  )
+{
+  char*        cpbuf = (char*) buf;
+  int          s, actpos2;
+
+   actpos2 = 0;
+
+   while (actpos2 < size) {
+      if (datasize == 0)
+          if ( excpt )
+             throw treadafterend ( devicename );
+          else
+             return actpos2;
+
+      s = datasize - actmempos;
+      if (s > size - actpos2)
+         s = size - actpos2;
+
+      memcpy ( cpbuf + actpos2, zeiger + actmempos, s );
+
+      actmempos += s;
+      if (actmempos >= datasize) {
+         readbuffer();
+         actmempos = 0;
+      }
+      actpos2 = actpos2 + s;
+   }
+
+   return actpos2;
+}
+
+*/
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 
@@ -463,7 +551,7 @@ tnbufstream::tnbufstream (  )
    datalen = 0;
 
    modus = 0; 
-   int maxmemsize = 0xffff;
+ //  int maxmemsize = 0xffff;
 
    strcpy ( devicename , "abstract" ); 
 
@@ -630,9 +718,9 @@ tn_file_buf_stream::tn_file_buf_stream( const char* name, char mode)
    
 
    if (mode == 1) {
-      fp = fopen ( name, "rb" );
+      fp = fopen ( name, filereadmode );
    } else {
-      fp = fopen ( name, "wb" );
+      fp = fopen ( name, filewritemode );
    }
 
    if (fp != NULL && ferror ( fp ) == 0 ) {
@@ -841,14 +929,14 @@ void ContainerCollector :: init ( const char* wildcard )
     DIR *dirp; 
     struct dirent *direntp; 
 
-    dirp = opendir( wildcard );   
+    dirp = opendir( ascdirectory );
     if( dirp != NULL ) { 
       for(;;) { 
         direntp = readdir( dirp ); 
         if ( direntp == NULL ) 
            break; 
-           
-        container[containernum++] = new tncontainerstream (  direntp->d_name, this );
+        if ( patimat ( wildcard, direntp->d_name ))
+           container[containernum++] = new tncontainerstream (  direntp->d_name, this );
       } 
       closedir( dirp ); 
     } 
@@ -1514,7 +1602,11 @@ int patimat (const char *pat, const char *str)
             return *str && patimat(pat+1, str+1);
 
       default  :
+#ifdef _DOS_     // DOS filenames are not case sensitive
             return (toupper(*pat) == toupper(*str)) && patimat(pat+1, str+1);
+#else
+            return (*pat == *str) && patimat(pat+1, str+1);
+#endif
       }
 }
 
@@ -1532,16 +1624,18 @@ tfindfile :: tfindfile ( const char* name )
       DIR *dirp; 
       struct dirent *direntp; 
   
-      dirp = opendir( name );   // Watcom C allows DOS-Wildcards as Parameter for opendir
+      dirp = opendir( ascdirectory );   // Watcom C allows DOS-Wildcards as Parameter for opendir
       if( dirp != NULL ) { 
         for(;;) { 
           direntp = readdir( dirp ); 
           if ( direntp == NULL ) 
              break; 
              
-          names[found] = strdup ( direntp->d_name );
-          namedupes[found] = 1;
-          found++;
+          if ( patimat ( name, direntp->d_name )) {
+             names[found] = strdup ( direntp->d_name );
+             namedupes[found] = 1;
+             found++;
+          }
         } 
         closedir( dirp ); 
       } 
@@ -1767,7 +1861,7 @@ char* getnextfilenumname ( const char* first, const char* suffix, int num )
    if ( num < 0 )
      num = 0;
 
-   int sl = strlen ( first );
+   // int sl = strlen ( first );
    char tmp[260];
    do {
       strcpy ( tmp, first );

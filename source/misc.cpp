@@ -1,6 +1,10 @@
-//     $Id: misc.cpp,v 1.3 1999-11-18 17:31:15 mbickel Exp $
+//     $Id: misc.cpp,v 1.4 1999-12-28 21:03:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/18 17:31:15  mbickel
+//      Improved BI-map import translation tables
+//      Moved macros to substitute Watcom specific routines into global.h
+//
 //     Revision 1.2  1999/11/16 03:42:05  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -36,6 +40,7 @@
 #include <string.h>
 #include "tpascal.inc"
 #include "misc.h"
+#include "global.h"
 
 #ifdef _DOS_
 #include <i86.h>
@@ -268,3 +273,26 @@ structure_size_tester :: structure_size_tester ( void )
    }
 }
 
+
+#ifndef HAVE_STRICMP
+char *strupr (const char *a)
+{
+   int i;
+   int j;
+   char *b;
+
+   j = strlen (a);
+   b = (char *) malloc (j);
+   for (i = 0; i < j; i++)
+     b[i] = toupper (a[i]);
+   return (b);
+}
+#endif
+
+#ifndef HAVE_ITOA
+char* itoa ( int a, char* b, int c)
+{
+   sprintf(b, "%d", a );
+   return b;
+}
+#endif

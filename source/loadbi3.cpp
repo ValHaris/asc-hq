@@ -1,6 +1,11 @@
-//     $Id: loadbi3.cpp,v 1.7 1999-12-14 20:23:55 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.8 1999-12-28 21:03:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  1999/12/14 20:23:55  mbickel
+//      getfiletime now works on containerfiles too
+//      improved BI3 map import tables
+//      various bugfixes
+//
 //     Revision 1.6  1999/12/07 22:13:20  mbickel
 //      Fixed various bugs
 //      Extended BI3 map import tables
@@ -754,6 +759,7 @@ class tloadBImap {
           xoffset = 0;
           yoffset = 0;
        };
+       virtual ~tloadBImap() {};
      private:
 
        tn_file_buf_stream* MissFile;

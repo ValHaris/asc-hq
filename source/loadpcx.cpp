@@ -91,7 +91,7 @@ char loadpcxxy(char *name, boolean setpal, word x, word y)
 
    m = y * agmp-> scanlinelength * agmp->byteperpix + x;
 
-   fp = fopen(name, "rb");
+   fp = fopen(name, filereadmode );
 
    if (fp == NULL) {
       return(100);
