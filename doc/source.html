@@ -32,21 +32,22 @@ We are building ASC/win with Borland C++ Builder 5. It should be possible to bui
 <H5>Borland C++ Builder / free commandline compiler</H5>
 
 <OL>
-<LI>Get JPEG-lib by the <A HREF="http://www.ijg.org">Independant Jpeg Group</A>.
-<LI>Uncompress the JPEG-lib source code into asc/source/libs/jpeg-6b/ . 
+<LI>Get the <A HREF="ftp://ftp.simtel.net/pub/simtelnet/msdos/graphics/jpegsr6.zip">JPEG-lib source code</A> by the <A HREF="http://www.ijg.org">Independant Jpeg Group</A>.
+<LI>Uncompress the JPEG-lib source code into asc/source/libs/jpeg-6b/ (this directory already exists). 
 <LI>Get SDL 1.2 or newer. It can be downloaded from <A HREF="http://www.libsdl.org">www.libsdl.org</A>. You need the source code and the DLL file (the later is called: "binary runtime / win32"). 
 <LI>Get SDL_mixer 1.2 or newer. It can be downloaded from <A HREF="http://www.libsdl.org/projects/SDL_mixer/index.html">www.libsdl.org/projects/SDL_mixer/</A>. You need the source code and the DLL file (the later is called: "binary / win32", get the one without <i>devel</i> in the name). 
 <LI>The project files assume there is a <TT>SDL</TT> and a <TT>SDL_mixer</TT> directory located in the same directory where <TT>asc</TT> is placed. You need this directory structure:<BR>  
   <TT>
-    asc\<BR>
+    asc\  <i>(from ASC source package or CVS)</i><BR>
     asc\source\<BR>
     asc\doc\<BR>
-    SDL\<BR>
+    SDL\  <i>(from SDL source package)</i> <BR>
     SDL\include\<BR>
     SDL\src\<BR>
-    SDL_mixer\<BR>
+    SDL_mixer\   <i>(from SDL_mixes source package)</i><BR>
   </TT>
-   After uncompressing the SDL and SDL_mixer source packages, move them so that this directory structure forms. You probably have to rename the directories from SDL-1.2 to SDL for example.
+   After uncompressing the SDL and SDL_mixer source packages, move them so that this directory structure forms. You probably have to rename the directories from SDL-1.2 to SDL, for example. <BR>
+   The asc directory may be called differently if you downloaded the asc source package from the homepage, That is no problem, it may for example be named asc-1.5.0 
 <LI>Create a subdirectory called BIN in <TT>SDL\</TT> and put the SDL.DLL into it.
 <LI>Go to this directory and run: <TT>IMPLIB -a -c SDL.LIB SDL.DLL</TT> 
 <LI>Create a subdirectory called BIN in <TT>SDL_MIXER\</TT> and put the SDL_MIXER.DLL into it.
