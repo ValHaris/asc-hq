@@ -1,57 +1,871 @@
 panel {
+   height = 320
    WidgetNum = 4
    Widget0 {
       type = area
-      x = 10
-      y = 20
-      x2 = -10
-      height = 60
-      
-      WidgetNum = 1
-      Widget0 {
-        x = 0
-	y = 0
-	type = specialInput
-	name = weapinfo
-      }	Widget0 
-   } Widget0
+      x = 5
+      y = 10
+      width = 162
+      height = 115  
 
-   Widget1 {
-      type = statictext
-      x = 10
-      y = 100
-      text = Hallo Welt
-   } Widget1
+      WidgetNum = 5
+      
+      Widget0 {
+        type = image
+        Filename = unit-hole.png
+        x = 48
+        y = 2
+        WidgetNum = 1
+        Widget0 {
+          type = Specialdisplay
+          name = unit_pic
+          x = 14
+          y = 13
+        } widget0
+     } widget0
+
+     Widget1 {
+        type = image
+        Filename = exp-field.png
+        x = 12
+        y = 25
+        
+        WidgetNum = 1      
+        Widget0 {
+           type = SpecialDisplay
+           x = 2
+           y = 2
+	   name = unitexp
+        } Widget0
+     } Widget1
+
+      Widget2 {
+        type = image
+        Filename = textbox.png
+        x = 10
+        y = 71
+        
+        WidgetNum = 1      
+        Widget0 {
+           type = textoutput
+           TextAlign = CENTER
+           FontColor = 0xffffff
+           x = 5
+           y = 5
+	   x2 = -5
+	   y2 = -5
+           name = unittypename
+        } Widget0
+     } Widget2
+
+     Widget3 {
+        type = image
+        Filename = textbox.png
+        x = 10
+        y = 91
+        
+        WidgetNum = 2      
+        Widget0 {
+           type = textoutput
+           TextAlign = CENTER
+           x = 5
+           y = 5
+	   x2 = -5
+	   y2 = -5
+           name = unitname
+        } Widget0
+        Widget1 {
+           type = SpecialInput
+           TextAlign = CENTER
+           FontColor = 0xffffff
+           x = 5
+           y = 5
+	   x2 = -5
+	   y2 = -5
+           name = unitname
+        } Widget1
+     } Widget3
+
+     widget4 {
+        type = area
+        x = 120
+        y = 10
+        width = 38
+        height = 53
+        widgetnum = 5
+        Widget0 {
+          type = image
+          Filename = text-hole.png
+          x = 10
+          y = 5
+          widgetnum = 1
+          Widget0 {
+           type = Textoutput
+           textalign = CENTER
+           FontSize = 8
+           FontColor = 0xffffff
+           name = movepoints
+           x = 6
+           y = 3
+           width = 12
+           height = 8
+       } Widget0
+     } widget0
+          
+        Widget1 {
+          type = image
+          Filename = text-hole.png
+          x = 10 
+          y = 17
+          widgetnum = 1
+          Widget0 {
+            type = Textoutput
+            textalign = CENTER
+            FontSize = 8
+            FontColor = 0xff3e3e
+            name = reduce_movepoints
+            x = 6
+            y = 3
+            width = 12
+            height = 8
+         } Widget0
+       } widget1
+
+        Widget2 {
+          type = image
+          Filename = text-hole.png
+          x = 10
+          y = 35
+          widgetnum = 1
+          Widget0 {
+            type = Textoutput
+            textalign = CENTER
+            FontSize = 8
+            FontColor = 0xffffff
+            name = result_reduce_movepoints
+            x = 6
+            y = 3
+            width = 12
+            height = 8
+         } Widget0
+       } widget2
+
+        Widget3 {
+          type = StaticText
+          TextAlign = LEFT
+          FontSize = 10
+          FontColor = 0xffffff
+          text = ./.
+          x = 2
+          y = 19
+          width = 15
+          height = 12
+       } widget3
+        
+       widget4 {
+         type = image
+         Filename = move_bar.png
+         x = 4
+         y = 31
+       } widget4
+     } widget4
+  } Widget0
+
+  Widget1 {
+      type = area
+      x = 5
+      y = 128
+      width = 162
+      height = 40
+      widgetnum = 4
+      Widget0 {
+        type = image
+        Filename = damage+fuel_field.png
+        x = 10
+        y = 5
+        
+        WidgetNum = 4      
+        Widget0 {
+           type = BarGraph
+           BackgroundColor = 0x009c00
+           name = unitdamage
+           x = 23
+           y = 4
+	   width = 51
+           height = 9
+           colors= 3
+           color0 {
+             color = 0x009c00
+             fraction = 1
+           } color0
+           color1 {
+             color = 0xfff000
+             fraction = 0.50
+           } color1
+           color2 {
+             color = 0xd6000f
+             fraction = 0.15
+           } color2
+        } Widget0
+
+        Widget1 {
+           type = TextOutput
+           textalign = Right
+           FontSize = 7
+           FontColor = 0xffffff
+           name = unitstatus
+           x = 0
+           y = 5
+           width = 73
+           height = 8
+       } Widget1
+
+
+        Widget2 {
+           type = BarGraph
+           BackgroundColor = 0x009c00
+           name = unitfuel
+           x = 23
+           y = 16
+	   width = 51
+           height = 9
+           colors= 3
+           color0 {
+             color = 0x009c00
+             fraction = 1
+           } color0
+           color1 {
+             color = 0xfff000
+             fraction = 0.5
+           } color1
+           color2 {
+             color = 0xd6000f
+             fraction = 0.15
+           } color2
+        } Widget2
+
+       Widget3 {
+           type = TextOutput
+           textalign = Right
+           FontSize = 7
+           FontColor = 0xffffff
+           name = unitfuelstatus
+           x = 0
+           y = 17
+           width = 73
+           height = 8
+	 } Widget3
+      } widget0
+
+     Widget1 {
+        type = image
+        Filename = bar_split.png
+        x = 40
+        y = 7
+     } Widget1
+  
+     Widget2 {
+        type = image
+        Filename = bar_split.png
+        x = 40
+        y = 19
+     } Widget2
+  
+     Widget3 {
+        type = image
+        Filename = material+energy_field.png
+        x = 90
+        y = 5
+        
+        WidgetNum = 4      
+        Widget0 {
+           type = BarGraph
+           BackgroundColor = 0x808080
+           name = unitmaterial
+           x = 23
+           y = 4
+	   width = 38
+           height = 9
+        } Widget0
+
+        Widget1 {
+           type = Textoutput
+           textalign = Right
+           FontSize = 7
+           FontColor = 0xffffff
+           name = unitmaterialstatus
+           x = 0
+           y = 5
+           width = 60
+           height = 8
+       } Widget1
+
+        Widget2 {
+           type = BarGraph
+           BackgroundColor = 0x808080
+           name = unitenergy
+           x = 23
+           y = 16
+	   width = 38
+           height = 9
+        } Widget2
+
+         Widget3 {
+           type = TextOutput
+           textalign = Right
+           FontSize = 7
+           FontColor = 0xffffff
+           name = unitenergystatus
+           x = 0
+           y = 17
+           width = 60
+           height = 8
+       } Widget3
+
+     } widget3
+  } widget1
+      
+
 
    Widget2 {
       type = area
-      style = EmbossIn
-      x = 10
-      y = 90
-      x2 = -10
-      height = 30
-
-      WidgetNum = 1      
-      Widget0 {
-         type = textoutput
+      x = 5
+      y = 171
+      width = 114
+      height = 145
+      widgetnum = 1
+      widget0 {
+         type = image
+         Filename = weapon_light.png
          x = 5
-         y = 5
-	 x2 = -5
-	 y2 = -5
-         name = unittypename
-      } Widget0
+         y = 7
+         widgetnum = 52
+         
+         widget0 {
+           type = specialdisplay
+           x = 5
+           y = 4
+           name = symbol_weapon0
+         } widget0
+         widget1 {
+           type = specialdisplay
+           x = 5
+           y = 17
+           name = symbol_weapon1
+         } widget1
+         widget2 {
+           type = specialdisplay
+           x = 5
+           y = 30
+           name = symbol_weapon2
+         } widget2
+         widget3 {
+           type = specialdisplay
+           x = 5
+           y = 43
+           name = symbol_weapon3
+         } widget3
+         widget4 {
+           type = specialdisplay
+           x = 5
+           y = 56
+           name = symbol_weapon4
+         } widget4 
+        widget5 {
+           type = specialdisplay
+           x = 5
+           y = 69
+           name = symbol_weapon5
+         } widget5
+         widget6 {
+           type = specialdisplay
+           x = 5
+           y = 82
+           name = symbol_weapon6
+         } widget6
+         widget7 {
+           type = specialdisplay
+           x = 5
+           y = 95
+           name = symbol_weapon7
+         } widget7
+         widget8 {
+           type = specialdisplay
+           x = 5
+           y = 108
+           name = symbol_weapon8
+         } widget8
+         widget9 {
+           type = specialdisplay
+           x = 5
+           y = 121
+           name = symbol_weapon9
+         } widget9
+         
+         Widget10 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = punch_weapon0
+           x = 28
+           y = 5
+           width = 23
+           height = 9
+         } Widget10
+         Widget11 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = punch_weapon1
+           x = 28
+           y = 18
+           width = 23
+           height = 9
+         } Widget11
+         Widget12 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = punch_weapon2
+           x = 28
+           y = 31
+           width = 23
+           height = 9
+         } Widget12
+         Widget13 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = punch_weapon3
+           x = 28
+           y = 44
+           width = 23
+           height = 9
+         } Widget13
+         Widget14 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = punch_weapon4
+           x = 28
+           y = 57
+           width = 23
+           height = 9
+         } Widget14
+         Widget15 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = punch_weapon5
+           x = 28
+           y = 70
+           width = 23
+           height = 9
+         } Widget15
+         Widget16 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = punch_weapon6
+           x = 28
+           y = 83
+           width = 23
+           height = 9
+         } Widget16
+         Widget17 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = punch_weapon7
+           x = 28
+           y = 96
+           width = 23
+           height = 9
+         } Widget17
+         Widget18 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = punch_weapon8
+           x = 28
+           y = 109
+           width = 23
+           height = 9
+         } Widget18
+         Widget19 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = punch_weapon9
+           x = 28
+           y = 122
+           width = 23
+           height = 9
+         } Widget19
+
+         Widget20 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = RF_weapon0
+           x = 58
+           y = 5
+           width = 5
+           height = 9
+         } Widget20
+         Widget21 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = RF_weapon1
+           x = 58
+           y = 18
+           width = 5
+           height = 9
+         } Widget21
+         Widget22 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = RF_weapon2
+           x = 58
+           y = 31
+           width = 5
+           height = 9
+         } Widget22
+         Widget23 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = RF_weapon3
+           x = 58
+           y = 44
+           width = 5
+           height = 9
+         } Widget23
+         Widget24 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = RF_weapon4
+           x = 58
+           y = 57
+           width = 5
+           height = 9
+         } Widget24
+         Widget25 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = RF_weapon5
+           x = 58
+           y = 70
+           width = 5
+           height = 9
+         } Widget25
+         Widget26 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = RF_weapon6
+           x = 58
+           y = 83
+           width = 5
+           height = 9
+         } Widget26
+         Widget27 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = RF_weapon7
+           x = 58
+           y = 96
+           width = 5
+           height = 9
+         } Widget27 
+        Widget28 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = RF_weapon8
+           x = 58
+           y = 109
+           width = 5
+           height = 9
+         } Widget28
+         Widget29 {
+           type = TextOutput
+           textalign = CENTER
+           FontSize = 7
+           FontColor = 0xffffff
+           name = RF_weapon9
+           x = 58
+           y = 122
+           width = 5
+           height = 9
+         } Widget29
+
+        Widget30 {
+           type = BarGraph
+           BackgroundColor = 0x808080
+           name = bar_ammo0
+           x = 83
+           y = 4
+	   width = 18
+           height = 9
+        } Widget30
+        Widget31 {
+           type = TextOutput
+           textalign = Right
+           FontSize = 7
+           FontColor = 0xffffff
+           name = status_ammo0
+           x = 75
+           y = 5
+           width = 25
+           height = 9
+         } Widget31
+         Widget32 {
+           type = BarGraph
+           BackgroundColor = 0x808080
+           name = bar_ammo1
+           x = 83
+           y = 17
+	   width = 18
+           height = 9
+        } Widget32
+        Widget33 {
+           type = TextOutput
+           textalign = Right
+           FontSize = 7
+           FontColor = 0xffffff
+           name = status_ammo1
+           x = 75
+           y = 18
+           width = 25
+           height = 9
+       } Widget33
+         Widget34 {
+           type = BarGraph
+           BackgroundColor = 0x808080
+           name = bar_ammo2
+           x = 83
+           y = 30
+	   width = 18
+           height = 9
+        } Widget34
+        Widget35 {
+           type = TextOutput
+           textalign = Right
+           FontSize = 7
+           FontColor = 0xffffff
+           name = status_ammo2
+           x = 75
+           y = 31
+           width = 25
+           height = 9
+       } Widget35
+         Widget36 {
+           type = BarGraph
+           BackgroundColor = 0x808080
+           name = bar_ammo3
+           x = 83
+           y = 43
+	   width = 18
+           height = 9
+        } Widget36
+        Widget37 {
+           type = TextOutput
+           textalign = Right
+           FontSize = 7
+           FontColor = 0xffffff
+           name = status_ammo3
+           x = 75
+           y = 44
+           width = 25
+           height = 9
+       } Widget37
+         Widget38 {
+           type = BarGraph
+           BackgroundColor = 0x808080
+           name = bar_ammo4
+           x = 83
+           y = 56
+	   width = 18
+           height = 9
+        } Widget38
+        Widget39 {
+           type = TextOutput
+           textalign = Right
+           FontSize = 7
+           FontColor = 0xffffff
+           name = status_ammo4
+           x = 75
+           y = 57
+           width = 25
+           height = 9
+       } Widget39
+         Widget40 {
+           type = BarGraph
+           BackgroundColor = 0x808080
+           name = bar_ammo5
+           x = 83
+           y = 69
+	   width = 18
+           height = 9
+        } Widget40
+        Widget41 {
+           type = TextOutput
+           textalign = Right
+           FontSize = 7
+           FontColor = 0xffffff
+           name = status_ammo5
+           x = 75
+           y = 70
+           width = 25
+           height = 9
+       } Widget41
+         Widget42 {
+           type = BarGraph
+           BackgroundColor = 0x808080
+           name = bar_ammo6
+           x = 83
+           y = 82
+	   width = 18
+           height = 9
+        } Widget42
+        Widget43 {
+           type = TextOutput
+           textalign = Right
+           FontSize = 7
+           FontColor = 0xffffff
+           name = status_ammo6
+           x = 75
+           y = 83
+           width = 25
+           height = 9
+       } Widget43
+         Widget44 {
+           type = BarGraph
+           BackgroundColor = 0x808080
+           name = bar_ammo7
+           x = 83
+           y = 95
+	   width = 18
+           height = 9
+        } Widget44
+        Widget45 {
+           type = TextOutput
+           textalign = Right
+           FontSize = 7
+           FontColor = 0xffffff
+           name = status_ammo7
+           x = 75
+           y = 96
+           width = 25
+           height = 9
+       } Widget45
+         Widget46 {
+           type = BarGraph
+           BackgroundColor = 0x808080
+           name = bar_ammo8
+           x = 83
+           y = 108
+	   width = 18
+           height = 9
+        } Widget46
+        Widget47 {
+           type = TextOutput
+           textalign = Right
+           FontSize = 7
+           FontColor = 0xffffff
+           name = status_ammo8
+           x = 75
+           y = 109
+           width = 25
+           height = 9
+       } Widget47
+         Widget48 {
+           type = BarGraph
+           BackgroundColor = 0x808080
+           name = bar_ammo9
+           x = 83
+           y = 121
+	   width = 18
+           height = 9
+        } Widget48
+        Widget49 {
+           type = TextOutput
+           textalign = Right
+           FontSize = 7
+           FontColor = 0xffffff
+           name = status_ammo9
+           x = 75
+           y = 122
+           width = 25
+           height = 9
+       } Widget49
+         widget50 {
+           type = specialdisplay
+           x = 72
+           y = 40
+           width = 3
+           height = 24
+           name = showplayercolor
+         } widget50
+         widget51 {
+           type = specialdisplay
+           x = 72
+           y = 70
+           width = 3
+           height = 24
+           name = showplayercolor
+         } widget51
+      } widget0   
    } Widget2
 
    Widget3 {
-      type = BarGraph
-      BackgroundColor = 0xff0000
-      name = unitfuel
-      x = 10
-      y = 130
-      x2 = -10
-      height = 20
+      type = area
+      x = 122
+      y = 171
+      width = 40
+      height = 145
+      widgetnum = 1
+      widget0 {
+         type = image
+         Filename = level_display.png
+         x = 5
+         y = 20
+         widgetnum = 1
+         widget0 {
+           type = specialdisplay
+           x = 4
+           y = 3
+           name = unit_level
+           width = 21
+           height = 11
+         } widget0
+      } widget0
    } Widget3
-   
-
-   
+  
+  
 } panel
