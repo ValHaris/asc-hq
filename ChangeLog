@@ -1,3 +1,346 @@
+2004-11-28 11:40  mbickel
+
+	* source/: sg.cpp, strtmesg.cpp:  Updated version number
+
+2004-11-28 00:20  mbickel
+
+	* configure, configure.in, data/dialog/asc_dlg.theme,
+	source/basestrm.h, source/buildings.cpp, source/clipboard.cpp,
+	source/controls.cpp, source/dialog.cpp, source/dlg_box.cpp,
+	source/edevents.cpp, source/edmain.cpp, source/edmisc.cpp,
+	source/gamedlg.cpp, source/gameevent_dialogs.cpp,
+	source/gameevents.h, source/gameeventsystem.cpp,
+	source/gameeventsystem.h, source/gamemap.cpp,
+	source/graphicset.cpp, source/itemrepository.cpp,
+	source/itemrepository.h, source/mapdisplay.cpp,
+	source/mapdisplay.h, source/mappolygons.cpp, source/objecttype.cpp,
+	source/paradialog.cpp, source/paradialog.h,
+	source/prehistoricevents.cpp, source/sg.cpp, source/sgstream.cpp,
+	source/sgstream.h, source/stringtokenizer.cpp,
+	source/terraintype.h, source/textfile_evaluation.cpp,
+	source/textfile_evaluation.h, source/typen.h, source/unitctrl.h,
+	source/vehicletype.cpp, source/ai/base.cpp,
+	source/ai/buildingcapture.cpp, source/ai/misc.cpp,
+	source/ai/service.cpp, source/graphics/blitter.cpp,
+	source/graphics/blitter.h, source/graphics/surface.cpp,
+	source/libs/sdlmm/src/sdlmm_surface.h:	Source code cleanup
+	 Fixed bug in blitter
+	 Continued migration to Paragui
+
+2004-11-26 23:11  mbickel
+
+	* source/: libs/libsigc++/libsigcpp.bpf,
+	libs/libsigc++/libsigcpp.bpr, tools/win/pcx2raw.bpf,
+	tools/win/pcx2raw.bpr:	Added project files for bcppb
+
+2004-11-26 22:21  mbickel
+
+	* configure, libtool, source/gamemap.cpp:  Fixed compilation
+	problems
+
+2004-11-26 21:14  mbickel
+
+	* data/asc015.map, source/tools/infopage.cpp:  Fixed missing fields
+	in weaponguide
+	 Updated campaign maps
+
+2004-11-21 18:35  mbickel
+
+	* source/edmain.cpp:  Removed graphic mode check
+
+2004-11-18 21:25  mbickel
+
+	* data/: Adapter_asc015_BOLT.asctxt, Adapter_asc015_BURRO.asctxt,
+	Adapter_asc015_CALLANDOR.asctxt, Adapter_asc015_COMA II.asctxt,
+	Adapter_asc015_COMA III.asctxt, Adapter_asc015_EXP 5.asctxt,
+	Adapter_asc015_FLUX.asctxt, Adapter_asc015_GUNNER.asctxt,
+	Adapter_asc015_HEAVY GUN.asctxt, Adapter_asc015_HORNET II.asctxt,
+	Adapter_asc015_JUDY.asctxt, Adapter_asc015_PUNCH.asctxt,
+	Adapter_asc015_ROTOS.asctxt, Adapter_asc015_SPEAR.asctxt,
+	asc015.map:  Added campaign map 15
+
+2004-11-18 21:20  mbickel
+
+	* data/asc010a.map, data/asc014.map, source/strtmesg.cpp,
+	source/ai/tactics.cpp:	Update campaign maps
+	 fixed AI error
+
+2004-11-14 17:30  mbickel
+
+	* data/Adapter_asc012_ARMADILLO.asctxt, data/Adapter_asc012_ASSAULT
+	TANK.asctxt, data/tech_asc012_ARMADILLO 2.asctxt,
+	data/tech_asc012_ARMADILLO.asctxt, data/tech_asc012_ASSAULT
+	TANK.asctxt, data/tech_asc012_BLACKOUT.asctxt,
+	data/tech_asc012_COMA.asctxt, data/tech_asc012_COSINUS.asctxt,
+	data/tech_asc012_HORNET.asctxt, data/tech_asc012_LIGHT
+	ASSAULT.asctxt, data/tech_asc012_NOVA 2.asctxt,
+	data/tech_asc012_NOVA.asctxt, data/tech_asc012_SNIPER.asctxt,
+	source/baseaiinterface.h, source/edmisc.cpp, source/gamemap.cpp,
+	source/itemrepository.cpp, source/loadbi3.cpp, source/strtmesg.cpp,
+	source/ai/strategy.cpp:  Updated campaign
+	 Added AI option: reset task after completion
+
+2004-11-14 16:47  mbickel
+
+	* source/resourceplacementdialog.cpp: file
+	resourceplacementdialog.cpp was initially added on branch
+	NewGraphics_branch.
+
+2004-11-14 16:47  mbickel
+
+	* source/resourceplacementdialog.h: file resourceplacementdialog.h
+	was initially added on branch NewGraphics_branch.
+
+2004-11-14 16:47  mbickel
+
+	* source/: edglobal.cpp, edglobal.h, edmain.cpp, edmisc.cpp,
+	paradialog.cpp, paradialog.h, resourceplacementdialog.cpp,
+	resourceplacementdialog.h, unix/mapeditor/Makefile.am,
+	unix/mapeditor/Makefile.in:  Added new resource placement
+
+2004-11-14 13:49  mbickel
+
+	* source/resourceplacement.cpp: file resourceplacement.cpp was
+	initially added on branch NewGraphics_branch.
+
+2004-11-14 13:49  mbickel
+
+	* source/: resourceplacement.cpp, resourceplacement.h:	Added
+	resource placement to mapeditor
+
+2004-11-14 13:49  mbickel
+
+	* source/resourceplacement.h: file resourceplacement.h was
+	initially added on branch NewGraphics_branch.
+
+2004-11-12 23:08  mbickel
+
+	* data/asc005.map, data/asc006.map, data/asc007.map,
+	data/asc010a.map, data/asc012.map, data/asc014.map,
+	source/gamemap.cpp, source/gamemap.h, source/resourcenet.cpp,
+	source/vehicle.cpp, source/tools/infopage.cpp:	Fixed bug in
+	resource transfer between players
+	 Updated campaign maps
+
+2004-11-10 21:22  mbickel
+
+	* source/: edmisc.cpp, objecttype.cpp, sgstream.cpp,
+	textfile_evaluation.cpp, graphics/blitter.h, graphics/surface.cpp,
+	graphics/surface.h, libs/sdlmm/src/sdlmm_pixelformat.h:  Graphics
+	engine starts to be working correctly...
+
+2004-11-04 23:22  mbickel
+
+	* source/: buildings.cpp, buildings.h, buildingtype.cpp,
+	buildingtype.h, containerbase.cpp, containerbase.h,
+	containerbasetype.cpp, dashboard.cpp, dialog.h, edmain.cpp,
+	gamemap.cpp, itemrepository.cpp, itemrepository.h, mapdisplay.cpp,
+	mapdisplay.h, objecttype.cpp, sg.cpp, sgstream.cpp,
+	textfile_evaluation.cpp, typen.h, vehicle.cpp, vehicle.h,
+	vehicletype.cpp, vehicletype.h, graphics/blitter.cpp,
+	graphics/blitter.h, graphics/surface.cpp, graphics/surface.h,
+	libs/sdlmm/src/sdlmm_basesurface.h, libs/sdlmm/src/sdlmm_surface.h,
+	sdl/graphics.cpp:  More integration of new graphics system
+
+2004-11-04 18:59  mbickel
+
+	* source/: gameevents.cpp, strtmesg.cpp, vehicle.cpp, vehicle.h: 
+	Fixed error messages during AI
+
+2004-10-31 22:17  mbickel
+
+	* data/asc004.map, data/asc005.map, data/asc006.map,
+	data/asc009.map, source/gameeventsystem.cpp, source/strtmesg.cpp: 
+	Fixed bug in event system
+
+2004-10-26 18:35  mbickel
+
+	* asc.kdevelop, source/astar2.cpp, source/astar2.h,
+	source/attack.cpp, source/attack.h, source/baseaiinterface.h,
+	source/building.cpp, source/building.h, source/building_controls.h,
+	source/buildings.cpp, source/buildings.h, source/buildingtype.cpp,
+	source/buildingtype.h, source/clipboard.cpp, source/clipboard.h,
+	source/containerbase.h, source/controls.cpp, source/controls.h,
+	source/dashboard.cpp, source/dashboard.h, source/dialog.cpp,
+	source/edmain.cpp, source/edmisc.cpp, source/edmisc.h,
+	source/edselfnt.cpp, source/edselfnt.h, source/events.h,
+	source/gamedlg.cpp, source/gameevent_dialogs.cpp,
+	source/gameevents.cpp, source/gamemap.cpp, source/gamemap.h,
+	source/graphicset.cpp, source/graphicset.h, source/gui.cpp,
+	source/gui.h, source/loadbi3.cpp, source/loadbi3.h,
+	source/loaders.cpp, source/mapalgorithms.cpp,
+	source/mapalgorithms.h, source/mapdisplay.cpp, source/mapdisplay.h,
+	source/objecttype.cpp, source/objecttype.h, source/paradialog.cpp,
+	source/paradialog.h, source/pointers.h,
+	source/prehistoricevents.cpp, source/replay.cpp, source/replay.h,
+	source/research.cpp, source/research.h, source/resourcenet.cpp,
+	source/resourcenet.h, source/sg.cpp, source/sgstream.cpp,
+	source/sgstream.h, source/spfst.cpp, source/spfst.h,
+	source/terraintype.cpp, source/textfile_evaluation.cpp,
+	source/textfile_evaluation.h, source/unitctrl.cpp,
+	source/unitctrl.h, source/vehicle.cpp, source/vehicle.h,
+	source/vehicletype.cpp, source/vehicletype.h,
+	source/viewcalculation.cpp, source/viewcalculation.h,
+	source/ai/ai.h, source/ai/ai_common.h, source/ai/base.cpp,
+	source/ai/buildingcapture.cpp, source/ai/misc.cpp,
+	source/ai/service.cpp, source/ai/strategy.cpp,
+	source/ai/tactics.cpp, source/ai/valuation.cpp,
+	source/graphics/blitter.h, source/graphics/surface.cpp,
+	source/graphics/surface.h, source/sdl/events.cpp,
+	source/tools/guidegenerator.cpp, source/tools/weaponguide.cpp: 
+	Replaced graphic storage in buildings and objects
+	 cleaned up some names: pvehicle, pbuilding
+
+2004-10-23 21:16  mbickel
+
+	* source/: gamedlg.cpp, gamemap.cpp, gamemap.h, strtmesg.cpp,
+	unitctrl.cpp, vehicle.cpp, ai/ai.h, ai/base.cpp, ai/service.cpp,
+	ai/tactics.cpp:  Fixed AI problems
+	 AI speed up
+
+2004-10-17 19:16  mbickel
+
+	* configure, configure.in, source/gamemap.h, source/paradialog.cpp:
+	 Updated paragui to 1.1.7
+
+2004-10-14 22:04  mbickel
+
+	* source/: basegfx.h, graphics/blitter.h:  Fixed compilation
+	problems with gcc
+
+2004-10-14 20:23  mbickel
+
+	* source/: basegfx.cpp, dashboard.cpp, graphics/blitter.h:  Fixed
+	graphic rotation problems
+
+2004-10-13 21:14  mbickel
+
+	* source/: dashboard.cpp, win32/borland/asc.bpr:  Updated dashboard
+	to use scaled unit picture
+
+2004-10-13 21:14  mbickel
+
+	* source/graphics/blitter.h:  Updated blitter
+
+2004-10-11 20:14  mbickel
+
+	* source/graphics/blitter.cpp: file blitter.cpp was initially added
+	on branch NewGraphics_branch.
+
+2004-10-11 20:14  mbickel
+
+	* source/graphics/blitter.h: file blitter.h was initially added on
+	branch NewGraphics_branch.
+
+2004-10-11 20:14  mbickel
+
+	* configure, libtool, source/attack.cpp, source/basegfx.cpp,
+	source/basegfx.h, source/building.cpp, source/dashboard.cpp,
+	source/dialog.cpp, source/edmisc.cpp, source/edselfnt.cpp,
+	source/gamedlg.cpp, source/gameevent_dialogs.cpp,
+	source/mapdisplay.cpp, source/palette.cpp, source/palette.h,
+	source/sgstream.cpp, source/terraintype.cpp, source/vehicle.cpp,
+	source/vehicle.h, source/vehicletype.cpp, source/vehicletype.h,
+	source/graphics/Makefile.am, source/graphics/Makefile.in,
+	source/graphics/blitter.cpp, source/graphics/blitter.h,
+	source/graphics/surface.cpp, source/graphics/surface.h,
+	source/libs/sdlmm/src/sdlmm_basesurface.h,
+	source/tools/guidegenerator.cpp, source/tools/linux/Makefile.am,
+	source/tools/linux/Makefile.in:  Converted units to use new graphic
+	system
+	 Wrote new blitter
+
+2004-10-10 11:18  mbickel
+
+	* data/largehex.pcx: file largehex.pcx was initially added on
+	branch NewGraphics_branch.
+
+2004-10-10 11:18  mbickel
+
+	* data/largehex.pcx, source/itemrepository.cpp,
+	source/strtmesg.cpp, source/terraintype.cpp, source/terraintype.h,
+	source/typen.h, source/vehicle.cpp, source/vehicle.h,
+	source/vehicletype.cpp, source/vehicletype.h,
+	source/graphics/surface.cpp, source/graphics/surface.h:  Migrating
+	VehicleType to new image format
+
+2004-10-09 16:07  mbickel
+
+	* ChangeLog, README, asc.bpg, libtool, data/asc008.map,
+	data/asc010a.map, data/asc010b.map, doc/unitguide/asc.css,
+	doc/unitguide/exkl.gif, doc/unitguide/haken.gif,
+	doc/unitguide/hakenrot.gif, doc/unitguide/hoehe0.gif,
+	doc/unitguide/hoehe1.gif, doc/unitguide/hoehe2.gif,
+	doc/unitguide/hoehe3.gif, doc/unitguide/hoehe4.gif,
+	doc/unitguide/hoehe5.gif, doc/unitguide/hoehe6.gif,
+	doc/unitguide/hoehe7.gif, doc/unitguide/hoehetrans.gif,
+	doc/unitguide/menu.pl, doc/unitguide/pfeil_auf.gif,
+	doc/unitguide/pfeil_zu.gif, doc/unitguide/x.gif,
+	source/building.cpp, source/controls.cpp, source/edmisc.cpp,
+	source/replay.cpp, source/research.cpp, source/research.h,
+	source/resourcenet.cpp, source/sg.cpp, source/sgstream.cpp,
+	source/sgstream.h, source/strtmesg.cpp, source/viewcalculation.cpp,
+	source/tools/bi2pcx.cpp, source/tools/infopage.cpp,
+	source/tools/win/weaponguide.bpr:  Merged 1.15.1.0
+
+2004-10-09 14:05  mbickel
+
+	* libtool:  rerun configure
+
+2004-10-09 12:56  mbickel
+
+	* asc.bpg, source/tools/bi2pcx.cpp:  Updated project files
+
+2004-10-09 11:40  mbickel
+
+	* source/building.cpp:	Removed ESC hotkey for remove production
+	line icon
+
+2004-10-08 20:09  mbickel
+
+	* source/edmisc.cpp:  Fixed compilation problem
+
+2004-10-08 19:35  mbickel
+
+	* source/: sg.cpp, viewcalculation.cpp:  Made viewcalculation more
+	reliable
+
+2004-10-08 18:35  mbickel
+
+	* data/asc008.map, data/asc010a.map, data/asc010b.map,
+	source/controls.cpp:  Updated campaign maps
+
+2004-10-05 20:51  mbickel
+
+	* source/: basestrm.cpp, sg.cpp, graphics/ascttfont.cpp:  patch
+	from Kevin Hirschmann: bugfix in stream seek; font loading update
+
+2004-10-04 22:34  mbickel
+
+	* source/: research.cpp, research.h, tools/infopage.cpp:  Updated
+	weaponguide
+
+2004-10-03 21:28  mbickel
+
+	* source/: research.cpp, tools/win/weaponguide.bpr:  Fixed invalid
+	graphs in weaponguide
+
+2004-10-03 19:30  mbickel
+
+	* source/: sgstream.cpp, graphics/surface.cpp,
+	libs/sdlmm/src/sdlmm_basesurface.cpp:  Still more graphic fixes
+
+2004-10-03 17:35  mbickel
+
+	* source/: itemrepository.cpp, terraintype.cpp,
+	graphics/ascttfont.cpp, graphics/ascttfont.h, graphics/surface.cpp,
+	graphics/surface.h, tools/win/weaponguide.bpr,
+	win32/borland/asc.bpr:	Some more graphic modifications
+
+2004-10-03 14:35  mbickel
+
+	* ChangeLog, source/research.cpp:  Updated weaponguide
+
 2004-10-03 13:17  mbickel
 
 	* asc.bpg, source/controls.cpp, source/replay.cpp,
