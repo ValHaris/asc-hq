@@ -441,35 +441,54 @@ int readgameoptions ( const ASCString& filename )
 
 
    if ( exist ( completeFileName )) {
+      displayLogMessage ( 6, "found, " );
       CGameOptions::Instance()->load( completeFileName );
-      
+
       if ( registryKeyFound ) {
          ASCString primaryPath = CGameOptions::Instance()->getSearchPath(0);
-         if ( primaryPath == "." || primaryPath == ".\\" || primaryPath == "./" )
+         if ( primaryPath == "." || primaryPath == ".\\" || primaryPath == "./" ) {
             CGameOptions::Instance()->setSearchPath(0, installDir );
+            displayLogMessage ( 6, "Setting path0 to " + installDir + ", " );
+         }
       }
+
    } else {
-  
-     if ( registryKeyFound )
+     displayLogMessage ( 6, "not found, using defaults, " );
+
+     if ( registryKeyFound ) {
         CGameOptions::Instance()->setSearchPath(0, installDir );
-   }     
+        displayLogMessage ( 6, "Registry Key HKEY_LOCAL_MACHINE\\SOFTWARE\\Advanced Strategic Command\\InstallDir found, setting path0 to " + installDir);
+     }
+
+     if ( !configFileName.empty() ) {
+        CGameOptions::Instance()->setChanged();
+        if ( writegameoptions( configFileName ))
+           displayLogMessage ( 6, "A config file has been sucessfully written to " + configFileName + " ");
+        else
+           displayLogMessage ( 6, "Failed to write config file to " + configFileName + " ");
+     }
+   }
+
+   displayLogMessage ( 4, "done\n" );
 
    makeDirectory ( CGameOptions::Instance()->getSearchPath(0) );
 
-   displayLogMessage ( 4, "done\n" );
    return 0;
 }
 
-int writegameoptions ( void )
+bool writegameoptions ( ASCString configFileName )
 {
+   if ( configFileName.empty() )
+      configFileName = ::configFileName;
+
    if ( CGameOptions::Instance()->isChanged() && !configFileName.empty() ) {
       char buf[10000];
       if ( makeDirectory ( extractPath ( buf, configFileName.c_str() ))) {
          CGameOptions::Instance()->save( configFileName );
-         return 1;
+         return true;
       }
    }
-   return 0;
+   return false;
 }
 
 void checkFileLoadability ( const ASCString& filename )
@@ -479,20 +498,20 @@ void checkFileLoadability ( const ASCString& filename )
       strm.readChar();
    }
    catch ( ASCexception ) {
-      ASCString msg = "Unable to access " + filename;
+      ASCString msg = "Unable to access " + filename + "\n";
       msg +=           "Make sure the data files are in one of the search paths specified in your \n"
                        "config file ! ASC requires these data files to be present:\n"
                        " main.con ; mk1.con ; buildings.con ; trrobj.con ; trrobj2.con \n"
                        "If you don't have these files , get and install them from http://www.asc-hq.org\n"
                        "If you DO have these files, they are probably outdated. \n";
       msg +=           "The configuration file that is used is: " + configFileName + "\n";
-      
+
       if ( !configFileName.empty() ) {
          CGameOptions::Instance()->setChanged();
-         if ( writegameoptions())
+         if ( writegameoptions( configFileName ))
             msg += "A configuration file has been written to " + configFileName + "\n";
       }
-      
+
       msg +=           "These paths are being searched for data files:\n ";
       
       for ( int i = 0; i < CGameOptions::Instance()->getSearchPathNum(); ++i )

@@ -1740,14 +1740,26 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
               : PG_Widget(NULL, PG_Rect ( 0, 0, app.GetScreen()->w, app.GetScreen()->h ), false),
               app ( application ) 
 {
+
+   displayLogMessage ( 5, "MainScreenWidget: initializing panels:\n");
+
+   displayLogMessage ( 7, "  Mapdisplay ");
    mapDisplay = new MapDisplayPG( this, PG_Rect(20,20,Width() - 200, Height() - 40));
+
+   displayLogMessage ( 7, "done\n  Menu ");
    menu = new Menu(this, PG_Rect(0,0,Width(),20));
 
    SetID( 1 );
-      
+
+   displayLogMessage ( 7, "done\n  ButtonPanel ");
    spawnPanel ( ButtonPanel );
+
+   displayLogMessage ( 7, "done\n  WindInfo ");
    spawnPanel ( WindInfo );
+
+   displayLogMessage ( 7, "done\n  UnitInfo ");
    spawnPanel ( UnitInfo );
+   displayLogMessage ( 5, "done\nMainScreenWidget completed\n");
 }
 
 
@@ -1771,10 +1783,14 @@ void MainScreenWidget::spawnPanel ( Panels panel )
 
 void  mainloop2()
 {
+   displayLogMessage ( 4, "Spawning MainScreenWidget\n ");
+
    mainScreenWidget = new MainScreenWidget( getPGApplication());
    mainScreenWidget->Show();
-   
+
+   displayLogMessage ( 7, "Entering mainloop\n");
    getPGApplication().Run();
+   displayLogMessage ( 7, "mainloop exited\n");
 }
 
 void  mainloop ( void )
