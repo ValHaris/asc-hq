@@ -481,7 +481,10 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
 
       pc.addInteger( "ID", id );
       pc.addInteger( "Armor", _armor );
-      pc.addInteger( "View", view );
+      pc.addInteger( "View", view ).evaluate();
+      if ( view > 255 )
+         view = 255;
+
       pc.addInteger( "Jaming", jamming );
 
       pc.openBracket ( "Cargo" );

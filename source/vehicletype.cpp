@@ -134,12 +134,16 @@ Vehicletype :: Vehicletype ( void )
 int Vehicletype :: vehicleloadable ( pvehicletype fzt ) const
 {
    if (( ( (loadcapabilityreq & fzt->height) || !loadcapabilityreq ) &&
-         ((loadcapabilitynot & fzt->height) == 0))
+         !(loadcapabilitynot & fzt->height) &&
+         (loadcapability & fzt->height))
         || (fzt->functions & cf_trooper))
-
-      if ( maxunitweight >= fzt->weight )
-        return 1;
-      return 0;
+      if ( maxunitweight >= fzt->weight ) {
+         if ( loadcapability & (   chtiefgetaucht | chgetaucht | chschwimmend | chfahrend | chsatellit ))
+            return 1;
+         else
+            return fzt->steigung <= 2;
+      }
+   return 0;
 }
 
 
@@ -738,7 +742,9 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
       infotext = it;
 
    pc.addInteger( "Armor", armor );
-   pc.addInteger("View", view );
+   pc.addInteger("View", view ).evaluate();
+   if ( view > 255 )
+      view = 255;
 
    ASCString fn;
    if ( filename.empty() ) {
