@@ -36,15 +36,12 @@
 
 #ifdef _DOS_
   #include "dos/fileio.h"
-  #include "dos/fileio.cpp"
 #else
  #ifdef _WIN32_
    #include "win32/fileio.h"
-   #include "win32/fileio.cpp"
  #else
   #ifdef _UNIX_
     #include "unix/fileio.h"
-    #include "unix/fileio.cpp"
   #endif
  #endif
 #endif

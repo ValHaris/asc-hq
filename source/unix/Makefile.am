@@ -23,7 +23,8 @@ gamemap.cpp password.cpp password_dialog.cpp replay.cpp research.cpp \
 mapdisplay.cpp resourcenet.cpp dashboard.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp textfileparser.cpp terraintype.cpp \
 objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp \
-messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messagedlg.cpp
+messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messagedlg.cpp \
+simplestream.cpp
 
 asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la \

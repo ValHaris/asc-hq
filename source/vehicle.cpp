@@ -637,7 +637,7 @@ void Vehicle::ReactionFire::endTurn ( void )
    }
 }
 
-bool Vehicle::ReactionFire::canMove()
+bool Vehicle::ReactionFire::canMove() const
 {
    if ( unit->typ->functions & cfmovewithRF )
       return true;

@@ -123,6 +123,15 @@ If your distribution does not include the SDL_image library, you can get it
 from http://www.libsdl.org/projects/SDL_image/ ]]))
 
 
+AC_CHECK_LIB(jpeg, jpeg_CreateDecompress,,
+	      AC_MSG_ERROR([[
+ASC requires the jpeg library. This library will almost certainly be supplied
+with your distribution. If you have it already installed, perhaps a jpeg-devel
+package is missing.
+If your distribution really does not include the jpeg library, you can get it
+from http://www.ijg.org/ ]]))
+
+
 AC_CHECK_LIB( SDL_mixer, 
               Mix_PlayChannelTimed,, 
 	      AC_MSG_ERROR( [[

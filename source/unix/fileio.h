@@ -1,6 +1,9 @@
-//     $Id: fileio.h,v 1.7 2002-10-19 16:42:05 mbickel Exp $
+//     $Id: fileio.h,v 1.8 2003-11-18 18:29:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2002/10/19 16:42:05  mbickel
+//      Fixes to the build system
+//
 //     Revision 1.6  2002/01/29 20:42:16  mbickel
 //      Improved finding of files with relative path
 //      Added wildcards to music playlist files
@@ -81,6 +84,7 @@ extern const char pathdelimitter;
 extern const char* pathdelimitterstring;
 extern const char  foreignPathDelimitter;
 extern const char* foreignPathDelimitterString;
+extern const bool has_drive_letters;
 
 extern const int maxfilenamelength;
 extern const char* asc_configurationfile;

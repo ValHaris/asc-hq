@@ -18,8 +18,8 @@
     Boston, MA  02111-1307  USA
 */
 
-#include <sys\stat.h>
 #include <string.h>
+#include <sys/stat.h>
 #include "simplestream.h"
 #include "errors.h"
 
@@ -27,6 +27,10 @@
    basestrm, but unknotting the two was never completed */
 #include "basestrm.h"
 
+#ifdef _DOS_
+  #include "dos/fileio.h"
+  #include "dos/fileio.cpp"
+#else
  #ifdef _WIN32_
    #include "win32/fileio.h"
    #include "win32/fileio.cpp"
@@ -35,7 +39,8 @@
     #include "unix/fileio.h"
     #include "unix/fileio.cpp"
   #endif
- #endif 
+ #endif
+#endif
 
 
 tnbufstream::tnbufstream (  )

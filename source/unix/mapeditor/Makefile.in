@@ -129,7 +129,7 @@ password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
-textfile_evaluation.cpp containerbasetype.cpp soundList.cpp
+textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp
 
 
 asc_mapedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
@@ -146,7 +146,7 @@ password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
-textfile_evaluation.cpp containerbasetype.cpp soundList.cpp
+textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp
 
 
 asc_map2pcx_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
@@ -179,7 +179,7 @@ am_asc_map2pcx_OBJECTS = map2pcx.$(OBJEXT) weather.$(OBJEXT) \
 	itemrepository.$(OBJEXT) stringtokenizer.$(OBJEXT) \
 	music.$(OBJEXT) messages.$(OBJEXT) paradialog.$(OBJEXT) \
 	textfile_evaluation.$(OBJEXT) containerbasetype.$(OBJEXT) \
-	soundList.$(OBJEXT)
+	soundList.$(OBJEXT) simplestream.$(OBJEXT)
 asc_map2pcx_OBJECTS = $(am_asc_map2pcx_OBJECTS)
 asc_map2pcx_DEPENDENCIES = \
 	$(top_builddir)/source/libs/triangul/libtriangul.la \
@@ -206,7 +206,8 @@ am_asc_mapedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
 	textfiletags.$(OBJEXT) itemrepository.$(OBJEXT) \
 	stringtokenizer.$(OBJEXT) music.$(OBJEXT) messages.$(OBJEXT) \
 	paradialog.$(OBJEXT) textfile_evaluation.$(OBJEXT) \
-	containerbasetype.$(OBJEXT) soundList.$(OBJEXT)
+	containerbasetype.$(OBJEXT) soundList.$(OBJEXT) \
+	simplestream.$(OBJEXT)
 asc_mapedit_OBJECTS = $(am_asc_mapedit_OBJECTS)
 asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/libs/triangul/libtriangul.la
@@ -245,9 +246,9 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/paradialog.Po ./$(DEPDIR)/password.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/password_dialog.Po ./$(DEPDIR)/pd.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/research.Po ./$(DEPDIR)/resourcenet.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/sgstream.Po ./$(DEPDIR)/soundList.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/spfst.Po ./$(DEPDIR)/stack.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/stringtokenizer.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/sgstream.Po ./$(DEPDIR)/simplestream.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/soundList.Po ./$(DEPDIR)/spfst.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/stack.Po ./$(DEPDIR)/stringtokenizer.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/strtmesg.Po ./$(DEPDIR)/terraintype.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/textfile_evaluation.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/textfileparser.Po \
@@ -363,6 +364,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/research.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/resourcenet.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sgstream.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/simplestream.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/soundList.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spfst.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stack.Po@am__quote@

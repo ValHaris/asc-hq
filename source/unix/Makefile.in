@@ -129,7 +129,8 @@ gamemap.cpp password.cpp password_dialog.cpp replay.cpp research.cpp \
 mapdisplay.cpp resourcenet.cpp dashboard.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp textfileparser.cpp terraintype.cpp \
 objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp \
-messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messagedlg.cpp
+messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messagedlg.cpp \
+simplestream.cpp
 
 
 asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
@@ -167,7 +168,7 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	itemrepository.$(OBJEXT) stringtokenizer.$(OBJEXT) \
 	music.$(OBJEXT) messages.$(OBJEXT) paradialog.$(OBJEXT) \
 	textfile_evaluation.$(OBJEXT) containerbasetype.$(OBJEXT) \
-	messagedlg.$(OBJEXT)
+	messagedlg.$(OBJEXT) simplestream.$(OBJEXT)
 asc_OBJECTS = $(am_asc_OBJECTS)
 asc_DEPENDENCIES = $(top_builddir)/source/libs/triangul/libtriangul.la \
 	$(top_builddir)/source/ai/libai.la \
@@ -210,9 +211,9 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/password_dialog.Po ./$(DEPDIR)/pd.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/replay.Po ./$(DEPDIR)/research.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/resourcenet.Po ./$(DEPDIR)/sg.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/sgstream.Po ./$(DEPDIR)/soundList.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/spfst.Po ./$(DEPDIR)/stack.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/stringtokenizer.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/sgstream.Po ./$(DEPDIR)/simplestream.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/soundList.Po ./$(DEPDIR)/spfst.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/stack.Po ./$(DEPDIR)/stringtokenizer.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/strtmesg.Po ./$(DEPDIR)/terraintype.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/textfile_evaluation.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/textfileparser.Po \
@@ -336,6 +337,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/resourcenet.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sgstream.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/simplestream.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/soundList.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spfst.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stack.Po@am__quote@

@@ -80,7 +80,8 @@ int main(int argc, char *argv[] )
             if ( patimat ( argv[i], getvehicletype_forpos ( j )->filename.c_str() )) {
                Vehicletype* vt = getvehicletype_forpos ( j );
 
-               PropertyWritingContainer pc ( "VehicleType", extractFileName_withoutSuffix ( vt->filename ) + "_generated.asctxt" );
+               tn_file_buf_stream stream ( extractFileName_withoutSuffix ( vt->filename ) + "_generated.asctxt", tnstream::writing );
+               PropertyWritingContainer pc ( "VehicleType", stream );
                cout << "Writing file " << pc.getFileName() << "... ";
                vt->runTextIO ( pc );
                pc.run();
@@ -92,7 +93,8 @@ int main(int argc, char *argv[] )
             if ( patimat ( argv[i], getobjecttype_forpos ( j )->filename.c_str() )) {
                ObjectType* ot = getobjecttype_forpos ( j );
 
-               PropertyWritingContainer pc ( "ObjectType", extractFileName_withoutSuffix ( ot->filename ) + "_generated.asctxt" );
+               tn_file_buf_stream stream ( extractFileName_withoutSuffix ( ot->filename ) + "_generated.asctxt", tnstream::writing );
+               PropertyWritingContainer pc ( "ObjectType", stream );
                cout << "Writing file " << pc.getFileName() << "... ";
                ot->runTextIO ( pc );
                pc.run();
@@ -104,7 +106,8 @@ int main(int argc, char *argv[] )
             if ( patimat ( argv[i], getterraintype_forpos ( j )->filename.c_str() )) {
                TerrainType* tt = getterraintype_forpos ( j );
 
-               PropertyWritingContainer pc ( "TerrainType", extractFileName_withoutSuffix ( tt->filename ) + "_generated.asctxt" );
+               tn_file_buf_stream stream ( extractFileName_withoutSuffix ( tt->filename ) + "_generated.asctxt", tnstream::writing );
+               PropertyWritingContainer pc ( "TerrainType", stream );
                cout << "Writing file " << pc.getFileName() << "... ";
                tt->runTextIO ( pc );
                pc.run();
@@ -116,7 +119,8 @@ int main(int argc, char *argv[] )
             if ( patimat ( argv[i], getbuildingtype_forpos ( j )->filename.c_str() )) {
                BuildingType* bt = getbuildingtype_forpos ( j );
 
-               PropertyWritingContainer pc ( "BuildingType", extractFileName_withoutSuffix ( bt->filename ) + "_generated.asctxt" );
+               tn_file_buf_stream stream ( extractFileName_withoutSuffix ( bt->filename ) + "_generated.asctxt", tnstream::writing );
+               PropertyWritingContainer pc ( "BuildingType", stream );
                cout << "Writing file " << pc.getFileName() << "... ";
                bt->runTextIO ( pc );
                pc.run();
