@@ -1,6 +1,9 @@
-//     $Id: dlg_box.cpp,v 1.29 2000-08-12 12:52:45 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.30 2000-08-26 15:33:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/08/12 12:52:45  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.28  2000/08/12 09:17:24  gulliver
 //     *** empty log message ***
 //
@@ -589,6 +592,13 @@ void         tdialogbox::changecoordinates(void)
      /* runerror(211); */ 
 } 
 
+pbutton tdlgengine :: getbutton ( int id )
+{
+   pbutton pb = firstbutton;
+   while ( pb &&  (pb->id != id)) 
+       pb = pb->next;
+   return pb;
+}
 
 void         tdlgengine::buttonpressed(int         id)
 { 
@@ -1134,31 +1144,6 @@ void         tdialogbox::enablebutton(int         id)
       line(x1 + pb->x1,y1 + pb->y1,x1 + pb->x1 + (pb->y2 - pb->y1),y1 + pb->y2, cl);
       line(x1 + pb->x1 + (pb->y2 - pb->y1),y1 + pb->y1,x1 + pb->x1,y1 + pb->y2, cl);
    } 
-
-     /*    if pb^.art = 4 then begin
-   if pb^.max <=255 then begin
-   pbt:=pb^.data;
-   l:=pbt^;
-   end
-   else
-   if pb^.max <=65535 then begin
-   pw:=pb^.data;
-   l:=pw^;
-   end
-   else begin
-   pl:=pb^.data;
-   l:=pl^;
-   end;
-   nbar(x1+pb^.x2+1,y1+pb^.y1,x1+pb^.x2+50,y1+pb^.y2,dblue);
-   showtext2(l,x1+pb^.x2+1,y1+pb^.y1);
-
-   {m:=int(pb^.x1) + int(int(pb^.x2-pb^.x1-20) * pb^.lastvalue) div pb^.max;
-   nrectangle(m-10,y1+pb^.y1+1,l+10,y1+pb^.y2-1,backgrnd);
-
-   m:=int(pb^.x1) + int(int(pb^.x2-pb^.x1-20) * l) div pb^.max;
-   nrectangle(m-10,y1+pb^.y1+1,l+10,y1+pb^.y2-1,backgrnd);
-
-   end;  */ 
 
    if (pb->art == 5) {      // Scrollbar
      word* pw = (word*) pb->data;

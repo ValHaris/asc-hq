@@ -1,6 +1,9 @@
-//     $Id: dlg_box.h,v 1.14 2000-08-12 12:52:45 mbickel Exp $
+//     $Id: dlg_box.h,v 1.15 2000-08-26 15:33:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/08/12 12:52:45  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.13  2000/08/12 09:17:25  gulliver
 //     *** empty log message ***
 //
@@ -215,6 +218,7 @@
                       void                 clearkey ( char id );
                       void                 addkey(int         id, tkey         key);
                       void                 addmarkedkey(word         id, tkey         key);
+                     pbutton getbutton ( int id );
 
                      virtual ~tdlgengine() {};
                   };
@@ -378,7 +382,6 @@ extern char* exitmessage[20];
 
 extern void  help(word         id);
 
-// extern void  viewtextmessage( int id, int player );
 extern void         viewtext2 ( word         id);
 
 extern int  viewtextquery(word         id,
@@ -442,14 +445,6 @@ class tviewtextwithscrolling : public tviewtext {
           int textsizey, textsizeycomplete;
           virtual void repaintscrollbar ( void ) = 0;
       };
-
-/*
-struct tscreensaverparameters {
-                            int         mx, my, mt;
-                            int      lasttick; 
-                         } ; 
-extern tscreensaverparameters screensaverparameters;
-*/
 
 extern int actdisplayedmessage;
 extern long lastdisplayedmessageticker ;

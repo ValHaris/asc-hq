@@ -86,50 +86,63 @@ main(int argc, char *argv[] )
       strcat ( header[0], buf );
    }
           
-   t_carefor_containerstream cfcs;
- 
-
-   tfindfile ff ( wildcard );
- 
-   char* cn = ff.getnextname();
+   int gi = 0;
+   try {
+      t_carefor_containerstream cfcs;
+    
    
-   initgraphics ( 640, 480, 8 );
-   load_palette();
-   loadbi3graphics();
- 
-   while( cn ) { 
+      tfindfile ff ( wildcard );
+    
+      char* cn = ff.getnextname();
+      
+      initgraphics ( 640, 480, 8 );
+      gi = 1;
 
-      pvehicletype   ft;
-      ft = loadvehicletype( cn );
-
-      bar ( 0, 0, 120, 120, 255 );
-      putspriteimage(0,0,ft->picture[0]); 
-
-      char m[100];
-      strcpy ( m, cn );
-      char* d = m;
-      while ( *d != '.' )
-         d++;
-
-      strcpy ( d+1, "pcx" );
-
-
-      int maxx = 100;
-      while ( !searchline ( maxx, 0, maxx, 100 ))
-         maxx--;
+      load_palette();
+      loadbi3graphics();
+    
+      while( cn ) { 
+   
+         pvehicletype   ft;
+         ft = loadvehicletype( cn );
+   
+         bar ( 0, 0, 120, 120, 255 );
+         putspriteimage(0,0,ft->picture[0]); 
+   
+         char m[100];
+         strcpy ( m, cn );
+         char* d = m;
+         while ( *d != '.' )
+            d++;
+   
+         strcpy ( d+1, "pcx" );
    
    
-      int maxy = 100;
-      while ( !searchline ( 0, maxy, 100, maxy ))
-         maxy--;
+         int maxx = 100;
+         while ( !searchline ( maxx, 0, maxx, 100 ))
+            maxx--;
+      
+      
+         int maxy = 100;
+         while ( !searchline ( 0, maxy, 100, maxy ))
+            maxy--;
+   
+         writepcx ( m, 0, 0, maxx+5, maxy+5, pal );
+         cn = ff.getnextname();
+   
+         num++;
+      }
+   
+      closegraphics ( );
+      gi = 0;
+   } /* endtry */
+   catch ( tfileerror err  ) {
+      if ( gi )
+         closegraphics();
+      printf("error accessing file %s\n", err.filename );
+      getch();
+   } /* endcatch */
 
-      writepcx ( m, 0, 0, maxx+5, maxy+5, pal );
-      cn = ff.getnextname();
-
-      num++;
-   }
-
-   closegraphics ( );
 
    return 0;
 };

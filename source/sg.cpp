@@ -1,6 +1,12 @@
-//     $Id: sg.cpp,v 1.83 2000-08-21 17:51:00 mbickel Exp $
+//     $Id: sg.cpp,v 1.84 2000-08-26 15:33:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.83  2000/08/21 17:51:00  mbickel
+//      Fixed: crash when unit reaching max experience
+//      Fixed: crash when displaying research image
+//      Fixed: crash when events referenced a unit that has been shot down
+//      Fixed: screenshot being written to wrong directory
+//
 //     Revision 1.82  2000/08/13 15:22:40  mbickel
 //      Improved data version control
 //      Fixed: not all experience symbols were loaded
@@ -2354,8 +2360,16 @@ void execuseraction ( tuseractions action )
          case ua_startnewsinglelevel: startnewsinglelevelfromgame();
                        break;
                        
-         case ua_changepassword:      actmap->player[actmap->actplayer].passwordcrc = 0;
-                                      enterpassword ( &actmap->player[actmap->actplayer].passwordcrc );
+         case ua_changepassword:      {
+                                         int stat = 0;
+                                         do {
+                                            int oldpwd = actmap->player[actmap->actplayer].passwordcrc;
+                                            actmap->player[actmap->actplayer].passwordcrc = 0;
+                                            stat = enterpassword ( &actmap->player[actmap->actplayer].passwordcrc );
+                                            if ( stat == 10 )
+                                               actmap->player[actmap->actplayer].passwordcrc = oldpwd;
+                                         } while ( !actmap->player[actmap->actplayer].passwordcrc && stat==1 && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
+                                      }
                        break;
                        
          case ua_gamepreferences:     gamepreferences();

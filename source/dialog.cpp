@@ -1,6 +1,13 @@
-//     $Id: dialog.cpp,v 1.50 2000-08-25 13:42:53 mbickel Exp $
+//     $Id: dialog.cpp,v 1.51 2000-08-26 15:33:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2000/08/25 13:42:53  mbickel
+//      Fixed: zoom dialogbox in mapeditor was invisible
+//      Fixed: ammoproduction: no numbers displayed
+//      game options: produceammo and fillammo are now modified together
+//      Fixed: sub could not be seen when standing on a mine
+//      Some AI improvements
+//
 //     Revision 1.49  2000/08/13 14:09:28  mbickel
 //      Removed debug output in unitset info
 //
@@ -5838,7 +5845,7 @@ void tenterpassword :: init ( int* crc, int mode, char* ttl  )
 
    
 
-   addbutton ( "password:", 10, 50, xsize - 10, 75, 1, 0, 2, true );
+   addbutton ( "~p~assword:", 10, 50, xsize - 10, 75, 1, 0, 2, true );
    addeingabe ( 2, strng1, 0, 39 );
 
    if ( *crc == 0 ) {
@@ -5860,17 +5867,17 @@ void tenterpassword :: init ( int* crc, int mode, char* ttl  )
 void tenterpassword :: buttonpressed ( int id )
 {
    tdialogbox::buttonpressed ( id );
-   if ( id == 1 )
+   if ( id == 1 )   // OK
       status = 1;
    else
-      if ( id == 6 )
+      if ( id == 6 )  // cancel
          status = 10;
       else
-         if ( id == 7 ) {
-			 *cr = CGameOptions::Instance()->defaultpassword;
+         if ( id == 7 ) {   // default
+            *cr = CGameOptions::Instance()->defaultpassword;
             status = 2;
          } else
-            if ( id == 8 ) {
+            if ( id == 8 ) {    // exit
                erasemap();
                throw tnomaploaded();
             } else
@@ -5890,28 +5897,26 @@ void tenterpassword :: run ( int* result )
 {
    tdialogbox::run ();
 
-   pbutton pb = firstbutton;
-   while ( pb &&  (pb->id != 2)) 
-      pb = pb->next;
+   pbutton pb = getbutton ( 2 );
 
    if ( pb )
-      if ( pb->id == 2 )
-         execbutton( pb , false );
+      execbutton( pb , false );
 
    if ( strng1[0] ) {
-      pb = firstbutton;
-      while ( pb &&  (pb->id != 3)) 
-         pb = pb->next;
+      pb = getbutton ( 3 );
    
-      if ( pb )
-         if ( pb->id == 3 )
-            execbutton( pb , false );
-   }
+      if ( pb ) 
+         execbutton( pb , false );
+   } 
+
+   pbutton pb2 = getbutton ( 1 );
+   if ( pb2->active )
+      execbutton ( pb2, false );
 
    mousevisible ( true );
-   do {
+   while ( status == 0 ) {
       tdialogbox::run ();
-   } while ( status == 0 ); /* enddo */
+   };
 
    if ( status == 1 )
       *cr = encodepassword ( strng1 );
@@ -5920,12 +5925,15 @@ void tenterpassword :: run ( int* result )
       *result = status;
 }
 
-void enterpassword ( int* cr )
+int  enterpassword ( int* cr )
 {
+   int stat;
    tenterpassword epw;
    epw.init ( cr, 0 );
-   epw.run ( NULL );
+   epw.run ( &stat);
    epw.done ();
+
+   return stat;
 }
 
 

@@ -1,6 +1,13 @@
-//     $Id: gamedlg.cpp,v 1.43 2000-08-25 13:42:54 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.44 2000-08-26 15:33:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2000/08/25 13:42:54  mbickel
+//      Fixed: zoom dialogbox in mapeditor was invisible
+//      Fixed: ammoproduction: no numbers displayed
+//      game options: produceammo and fillammo are now modified together
+//      Fixed: sub could not be seen when standing on a mine
+//      Some AI improvements
+//
 //     Revision 1.42  2000/08/21 17:50:57  mbickel
 //      Fixed: crash when unit reaching max experience
 //      Fixed: crash when displaying research image
@@ -4250,8 +4257,11 @@ void tgamepreferences :: buttonpressed ( int id )
 */
 
    if ( id == 11 ) {
+      int oldpwd = CGameOptions::Instance()->defaultpassword;
       CGameOptions::Instance()->defaultpassword = 0;
-      enterpassword ( &actoptions.defaultpassword );
+      int stat = enterpassword ( &actoptions.defaultpassword );
+      if ( stat == 10 )
+         CGameOptions::Instance()->defaultpassword = oldpwd;
    }
 }
 

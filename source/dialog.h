@@ -1,7 +1,10 @@
-//     $Id: dialog.h,v 1.11 2000-08-13 09:54:00 mbickel Exp $
+//     $Id: dialog.h,v 1.12 2000-08-26 15:33:41 mbickel Exp $
 
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/08/13 09:54:00  mbickel
+//      Refuelling is now logged for replays
+//
 //     Revision 1.10  2000/08/12 12:52:45  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -326,7 +329,13 @@ class taskforsupervisorpassword : public tenterpassword {
 #endif
 
 
-extern void enterpassword ( int* cr );
+extern int enterpassword ( int* cr );
+  /* returns: 1: OK
+              2: default
+              10: cancel
+  */
+
+
 extern int encodepassword ( char* pw );
 extern void viewUnitSetinfo ( void );
 extern int selectgameparameter( int lc );

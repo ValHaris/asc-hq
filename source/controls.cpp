@@ -1,6 +1,13 @@
-//     $Id: controls.cpp,v 1.68 2000-08-25 13:42:51 mbickel Exp $
+//     $Id: controls.cpp,v 1.69 2000-08-26 15:33:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.68  2000/08/25 13:42:51  mbickel
+//      Fixed: zoom dialogbox in mapeditor was invisible
+//      Fixed: ammoproduction: no numbers displayed
+//      game options: produceammo and fillammo are now modified together
+//      Fixed: sub could not be seen when standing on a mine
+//      Some AI improvements
+//
 //     Revision 1.67  2000/08/13 10:24:07  mbickel
 //      Fixed: movement decrease when cloning units
 //      Fixed: refuel skipped next action in replay
@@ -5264,8 +5271,12 @@ void newturnforplayer ( int forcepasswordchecking, char* password )
                if ( forcepasswordchecking < 0 ) {
                   erasemap( actmap );
                   throw tnomaploaded();
-               } else
-                  enterpassword ( &actmap->player[actmap->actplayer].passwordcrc );
+               } else {
+                  int stat;
+                  do {
+                     stat = enterpassword ( &actmap->player[actmap->actplayer].passwordcrc );
+                  } while ( !actmap->player[actmap->actplayer].passwordcrc && stat==1 && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
+               }
          } else
             displaymessage("next player is:\n%s",3,actmap->player[actmap->actplayer].name );
       }
