@@ -150,7 +150,7 @@ MAINCONDATA="palette.pal data.version *.gfx title.jpg \
 dnl what gehts packed into main.con (the data container file)
 AC_SUBST([MAINCONDATA])
 
-AC_OUTPUT(Makefile data/Makefile data/moredata/Makefile doc/Makefile \
+AC_OUTPUT(Makefile source/Makefile source/docs/Makefile source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile source/libs/Makefile source/ai/Makefile source/unix/Makefile )
 doc/manpages/Makefile \
 source/Makefile source/docs/Makefile source/clparser/Makefile \
 source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile \

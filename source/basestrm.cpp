@@ -2,9 +2,15 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.65 2001-10-08 14:12:20 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.66 2001-10-11 10:41:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.65  2001/10/08 14:12:20  mbickel
+//      Fixed crash in AI
+//      Speedup of AI
+//      Map2PCX improvements
+//      Mapeditor usability improvements
+//
 //     Revision 1.64  2001/09/20 15:36:09  mbickel
 //      New object displaying mode
 //
@@ -335,12 +341,15 @@
 
 #ifdef _DOS_
   #include "dos/fileio.h"
+  #include "dos/fileio.cpp"
 #else
  #ifdef _WIN32_
    #include "win32/fileio.h"
+   #include "win32/fileio.cpp"
  #else
   #ifdef _UNIX_
     #include "unix/fileio.h"
+    #include "unix/fileio.cpp"
   #endif
  #endif
 #endif

@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.40 2001-10-11 10:22:49 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.41 2001-10-11 10:41:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2001/10/11 10:22:49  mbickel
+//      Some cleanup and fixes for Visual C++
+//
 //     Revision 1.39  2001/10/08 14:12:20  mbickel
 //      Fixed crash in AI
 //      Speedup of AI
@@ -302,7 +305,8 @@ mc_check mc;
         "unitset transformation",
         "Unitset Information",
         "switch maps",
-        "transform map" };
+        "transform map",
+        "Edit Map Archival Information" };
 
 
 // õS Infomessage
@@ -1075,6 +1079,8 @@ void execaction(int code)
                         showallchoices();
       break;
    case act_transformMap: transformMap();
+      break;
+   case act_editArchivalInformation: editArchivalInformation();
       break;
     }
 }

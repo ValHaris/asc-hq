@@ -5,9 +5,13 @@
 
 */
 
-//     $Id: loaders.h,v 1.18 2001-07-28 11:19:12 mbickel Exp $
+//     $Id: loaders.h,v 1.19 2001-10-11 10:41:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2001/07/28 11:19:12  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.17  2001/02/26 12:35:20  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -163,13 +167,13 @@ extern void  loadicons(void);
 
 extern void  savecampaignrecoveryinformation( const ASCString& filename, int id);
 
-const int actsavegameversion  = 0xff35;
+const int actsavegameversion  = 0xff36;
 const int minsavegameversion  = 0xff31;
-const int actmapversion       = 0xfe26;
+const int actmapversion       = 0xfe27;
 const int minmapversion       = 0xfe24;
-const int actnetworkversion   = 0x0006;
+const int actnetworkversion   = 0x0007;
 const int minnetworkversion   = 0x0004;
-const int actreplayversion    = 0x0002;
+const int actreplayversion    = 0x0003;
 const int minreplayversion    = 0x0001;
 
 

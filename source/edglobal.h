@@ -1,6 +1,12 @@
-//     $Id: edglobal.h,v 1.10 2001-10-08 14:12:20 mbickel Exp $
+//     $Id: edglobal.h,v 1.11 2001-10-11 10:41:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2001/10/08 14:12:20  mbickel
+//      Fixed crash in AI
+//      Speedup of AI
+//      Map2PCX improvements
+//      Mapeditor usability improvements
+//
 //     Revision 1.9  2001/10/02 14:06:28  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -74,7 +80,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 74;
+const int execactionscount = 75;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -152,6 +158,7 @@ enum tuseractions {
      act_unitsettransformation,
      act_unitSetInformation,
      act_switchmaps,
-     act_transformMap };
+     act_transformMap,
+     act_editArchivalInformation };
 
 extern void         execaction(int code);

@@ -180,7 +180,8 @@ void process_BI_map ( const ASCString& filename )
               ainum++;
          }
 
-      printf("%sµ%sµ%dµ%dµ%dµ%dµ%dµ%d\n", s.c_str(), actmap->title, actmap->xsize*2, actmap->ysize/2, width, height, playernum, ainum );
+
+      printf("%sµ%sµ%dµ%dµ%dµ%dµ%dµ%d\n", s.c_str(), actmap->maptitle.c_str(), actmap->xsize*2, actmap->ysize/2, width, height, playernum, ainum );
 
       s = ff.getnextname();
 
@@ -206,6 +207,7 @@ void process_ASC_map ( const ASCString& filename )
          gl.loadmap ( s.c_str() );
       }
       catch ( ASCexception ) {
+         fprintf(stderr, "skipping map %s \n", s.c_str() );
          s = ff.getnextname();
          continue;
       }
@@ -238,7 +240,11 @@ void process_ASC_map ( const ASCString& filename )
               ainum++;
          }
 
-      printf("%sµ%sµ%dµ%dµ%dµ%dµ%dµ%d\n", s.c_str(), actmap->title, actmap->xsize, actmap->ysize, width, height, playernum, ainum );
+      char datebuf[1000];
+      tm* tmbuf = gmtime ( &actmap->archivalInformation.modifytime );
+      strftime ( datebuf, 1000, "%Y-%m-%d", tmbuf );
+
+      printf("%sµ%sµ%dµ%dµ%dµ%dµ%dµ%dµ%sµ%sµ%sµ%sµ%dµ%s\n", s.c_str(), actmap->maptitle.c_str(), actmap->xsize, actmap->ysize, width, height, playernum, ainum, actmap->archivalInformation.author.c_str(), actmap->archivalInformation.description.c_str(),actmap->archivalInformation.requirements.c_str(),actmap->archivalInformation.tags.c_str(),actmap->_resourcemode,datebuf);
 
       s = ff.getnextname();
 

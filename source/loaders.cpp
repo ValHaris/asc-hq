@@ -5,9 +5,15 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.63 2001-10-02 14:06:28 mbickel Exp $
+//     $Id: loaders.cpp,v 1.64 2001-10-11 10:41:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2001/10/02 14:06:28  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.62  2001/09/13 17:43:12  mbickel
 //      Many, many bug fixes
 //
@@ -775,14 +781,14 @@ void   tspfldloaders::writedissections ( void )
 
 
 /**************************************************************/
-/*        Messagess  schreiben / lesen                      ÿ */
+/*        Messages  schreiben / lesen                         */
 /**************************************************************/
 
+const int messageVersion = 0xabcdef;
 
 void      tspfldloaders:: writemessages ( void )
 {
-   int j = 0xabcdef;
-   stream->writeInt ( j );
+   stream->writeInt ( messageVersion );
 
    int id = 0;
    for ( MessageContainer::iterator mi = spfld->messages.begin(); mi != spfld->messages.end();  ) {
@@ -816,13 +822,10 @@ void      tspfldloaders:: writemessages ( void )
 
    writemessagelist ( spfld->unsentmessage );
 
-   stream->writeInt ( j );
+   stream->writeInt ( messageVersion );
 
-   if ( spfld->journal )
-      stream->writepchar ( spfld->journal );
-
-   if ( spfld->newjournal )
-      stream->writepchar ( spfld->newjournal );
+   stream->writeString ( spfld->gameJournal );
+   stream->writeString ( spfld->newJournal );
 
 }
 
@@ -901,11 +904,11 @@ void      tspfldloaders:: readmessages ( void )
 
    stream->readInt(); // magic
 
-   if ( spfld->journal )
-      stream->readpchar ( &spfld->journal );
+   if ( spfld->___loadJournal )
+      spfld->gameJournal = stream->readString();
 
-   if ( spfld->newjournal )
-      stream->readpchar ( &spfld->newjournal );
+   if (  spfld->___loadNewJournal )
+      spfld->newJournal = stream->readString();
 }
 
 

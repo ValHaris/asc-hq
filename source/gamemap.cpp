@@ -50,7 +50,6 @@ tmap :: tmap ( void )
    ypos = 0;
    field = NULL;
    codeword[0] = 0;
-   title = 0;
    campaign = NULL;
 
    actplayer = -1;
@@ -99,8 +98,6 @@ tmap :: tmap ( void )
    }
 
    messageid = 0;
-   journal = NULL;
-   newjournal = NULL;
    for ( i = 0; i< 8; i++ )
       alliances_at_beginofturn[i] = 0;
 
@@ -117,20 +114,37 @@ tmap :: tmap ( void )
 }
 
 
+const int tmapversion = 2;
 
 void tmap :: read ( tnstream& stream )
 {
+   int version;
    int i;
 
    xsize = stream.readWord();
    ysize = stream.readWord();
+
+   if ( xsize == 0xfffe  && ysize == 0xfffc ) {
+     version = stream.readInt();
+     if ( version > tmapversion )
+        throw tinvalidversion ( "tmap", tmapversion, version );
+
+     xsize = stream.readInt();
+     ysize = stream.readInt();
+   } else
+      version = 1;
+
    xpos = stream.readWord();
    ypos = stream.readWord();
    stream.readInt(); // dummy
    field = NULL;
    stream.readdata ( codeword, 11 );
 
-   title = (char*) stream.readInt();
+   if ( version < 2 )
+      ___loadtitle = stream.readInt();
+   else
+      ___loadtitle = true;
+
    bool loadCampaign = stream.readInt();
    actplayer = stream.readChar();
    time.abstime = stream.readInt();
@@ -192,8 +206,14 @@ void tmap :: read ( tnstream& stream )
    __loadmessages = stream.readInt();
 
    messageid = stream.readInt();
-   journal = (char*) stream.readInt();
-   newjournal = (char*) stream.readInt();
+
+   if(  version < 2 ) {
+      ___loadJournal = stream.readInt();
+      ___loadNewJournal = stream.readInt();
+   } else {
+      ___loadJournal = true;
+      ___loadNewJournal = true;
+   }
 
    int exist_humanplayername[9];
    for ( i = 0; i < 8; i++ )
@@ -247,8 +267,8 @@ void tmap :: read ( tnstream& stream )
 /////////////////////
 
 
-    if ( title )
-       stream.readpchar( &title );
+    if ( ___loadtitle )
+       maptitle = stream.readString();
 
     if ( loadCampaign ) {
        campaign = new Campaign;
@@ -410,6 +430,14 @@ void tmap :: read ( tnstream& stream )
        stream.readdata2 ( gpar );
        setgameparameter ( ii, gpar );
     }
+
+    if ( version >= 2 ) {
+       archivalInformation.author = stream.readString();
+       archivalInformation.description = stream.readString();
+       archivalInformation.tags = stream.readString();
+       archivalInformation.requirements = stream.readString();
+       archivalInformation.modifytime = stream.readInt();
+    }
 }
 
 
@@ -417,14 +445,18 @@ void tmap :: write ( tnstream& stream )
 {
    int i;
 
-   stream.writeWord( xsize );
-   stream.writeWord( ysize );
+   stream.writeWord( 0xfffe );
+   stream.writeWord( 0xfffc );
+
+   stream.writeInt ( tmapversion );
+   stream.writeInt( xsize );
+   stream.writeInt( ysize );
+
    stream.writeWord( xpos );
    stream.writeWord( ypos );
    stream.writeInt (1); // dummy
    stream.writedata ( codeword, 11 );
 
-   stream.writeInt( title != NULL );
    stream.writeInt( campaign != NULL);
    stream.writeChar( actplayer );
    stream.writeInt( time.abstime );
@@ -481,8 +513,6 @@ void tmap :: write ( tnstream& stream )
    stream.writeInt( !messages.empty() );
 
    stream.writeInt( messageid );
-   stream.writeInt( journal != NULL );
-   stream.writeInt( newjournal != NULL );
 
    for ( i = 0; i < 8; i++ )
       stream.writeInt( !player[i].humanname.empty() );
@@ -529,83 +559,85 @@ void tmap :: write ( tnstream& stream )
 
 
 
-       if ( title )
-          stream.writepchar( title );
+   stream.writeString( maptitle );
 
-       if ( campaign ) {
-          stream.writeWord( campaign->id );
-          stream.writeWord( campaign->prevmap );
-          stream.writeChar( campaign->player );
-          stream.writeChar( campaign->directaccess );
-          for ( int d = 0; d < 21; d++ )
-             stream.writeChar(0); // dummy
+   if ( campaign ) {
+      stream.writeWord( campaign->id );
+      stream.writeWord( campaign->prevmap );
+      stream.writeChar( campaign->player );
+      stream.writeChar( campaign->directaccess );
+      for ( int d = 0; d < 21; d++ )
+         stream.writeChar(0); // dummy
+   }
+
+   for (int w=0; w<8 ; w++ ) {
+
+      // if (player[w].name)
+      //    stream.writepchar ( player[w].name );
+
+
+     // if (player[w].ai)
+     //    stream.writedata2 ( *player[w].aiparams );
+
+
+      if ( !player[w].humanname.empty() )
+         stream.writeString ( player[w].humanname );
+
+      if ( !player[w].computername.empty() )
+         stream.writeString ( player[w].computername );
+   }
+
+   if ( !tribute.empty() ) {
+       stream.writeInt ( -1 );
+       tribute.write ( stream );
+   } else
+       stream.writeInt ( 0 );
+
+    /*
+    for ( int bb = 0; bb < 8; bb++ )
+       if ( alliance_names_not_used_any_more[bb] ) {
+          char nl = 0;
+          stream.writedata2 ( nl );
        }
+    */
 
-       for (int w=0; w<8 ; w++ ) {
+    int h = 0;
+    stream.writedata2 ( h );
 
-          // if (player[w].name)
-          //    stream.writepchar ( player[w].name );
+    if ( shareview )
+       stream.writedata2 ( *(shareview) );
 
+    int p;
+    for ( p = 0; p < 8; p++ )
+       stream.writeInt( 1 );
 
-         // if (player[w].ai)
-         //    stream.writedata2 ( *player[w].aiparams );
+    for ( p = 0; p < 8; p++ )
+       stream.writeInt( 0 );
 
+    for ( p = 0; p < 8; p++ )
+       stream.writeInt( 1 );
 
-          if ( !player[w].humanname.empty() )
-             stream.writeString ( player[w].humanname );
+    for ( p = 0; p < 8; p++ )
+       stream.writeInt( 0 );
 
-          if ( !player[w].computername.empty() )
-             stream.writeString ( player[w].computername );
-       }
-
-       if ( !tribute.empty() ) {
-           stream.writeInt ( -1 );
-           tribute.write ( stream );
-       } else
-           stream.writeInt ( 0 );
-
-        /*
-        for ( int bb = 0; bb < 8; bb++ )
-           if ( alliance_names_not_used_any_more[bb] ) {
-              char nl = 0;
-              stream.writedata2 ( nl );
-           }
-        */
-
-        int h = 0;
-        stream.writedata2 ( h );
-
-        if ( shareview )
-           stream.writedata2 ( *(shareview) );
-
-        int p;
-        for ( p = 0; p < 8; p++ )
-           stream.writeInt( 1 );
-
-        for ( p = 0; p < 8; p++ )
-           stream.writeInt( 0 );
-
-        for ( p = 0; p < 8; p++ )
-           stream.writeInt( 1 );
-
-        for ( p = 0; p < 8; p++ )
-           stream.writeInt( 0 );
-
-        for ( int k = 0; k < 8; k++ ) {
-           stream.writeString ( preferredFileNames.mapname[k] );
-           stream.writeString ( preferredFileNames.savegame[k] );
-        }
+    for ( int k = 0; k < 8; k++ ) {
+       stream.writeString ( preferredFileNames.mapname[k] );
+       stream.writeString ( preferredFileNames.savegame[k] );
+    }
 
 
-        if ( ellipse )
-           stream.writedata2 ( *(ellipse) );
+    if ( ellipse )
+       stream.writedata2 ( *(ellipse) );
 
-        for ( int ii = 0 ; ii < gameparameter_num; ii++ )
-           stream.writedata2 ( game_parameter[ii] );
-
-
+    for ( int ii = 0 ; ii < gameparameter_num; ii++ )
+       stream.writedata2 ( game_parameter[ii] );
 
 
+    stream.writeString ( archivalInformation.author );
+    stream.writeString ( archivalInformation.description );
+    stream.writeString ( archivalInformation.tags );
+    stream.writeString ( archivalInformation.requirements );
+    stream.writeInt ( ::time ( &archivalInformation.modifytime ));
 }
 
 
@@ -721,45 +753,6 @@ void tmap :: setupResources ( void )
    }
 }
 
-/*
-
-void tmap :: chainunit ( pvehicle eht )
-{
-   if ( eht ) {
-      for ( int i = 0; i< 32; i++ )
-         if ( eht->loading[i] == eht )
-            fatalError ( "tmap::chainunit - unit carries itself as cargo !\nposition is %d / %d", eht->xpos, eht->ypos );
-
-
-
-      eht->next = player[ eht->color / 8 ].firstvehicle;
-      if ( eht->next )
-         eht->next->prev = eht;
-      eht->prev = NULL;
-      player[ eht->color / 8 ].firstvehicle = eht;
-      if ( eht->typ->loadcapacity > 0)
-         for ( int i = 0; i <= 31; i++)
-            if ( eht->loading[i] )
-               if ( eht->loading[i] == eht )
-                  fatalError ( "tmap::chainunit - unit carries itself as cargo !\nposition is %d / %d", eht->xpos, eht->ypos );
-               else
-                  chainunit ( eht->loading[i] );
-   }
-}
-
-void tmap :: chainbuilding ( pbuilding bld )
-{
-   if ( bld ) {
-      bld->next = player[ bld->color / 8 ].firstbuilding;
-      if ( bld->next )
-         bld->next->prev = bld;
-      bld->prev = NULL;
-      player[ bld->color / 8 ].firstbuilding = bld;
-      bld->chainToMap ( this );
-   }
-}
-
-*/
 
 const char* tmap :: getPlayerName ( int playernum )
 {
@@ -908,15 +901,6 @@ tmap :: ~tmap ()
       delete event2;
    }
    firsteventpassed = NULL;
-
-   if ( journal ) {
-      delete[] journal;
-      journal = NULL;
-   }
-   if ( newjournal ) {
-      delete[] newjournal;
-      newjournal = NULL;
-   }
 
    if ( shareview ) {
       delete shareview;

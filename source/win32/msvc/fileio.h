@@ -1,6 +1,9 @@
-//     $Id: fileio.h,v 1.5 2001-07-30 18:03:08 mbickel Exp $
+//     $Id: fileio.h,v 1.6 2001-10-11 10:41:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2001/07/30 18:03:08  mbickel
+//      Fixed some more warnings
+//
 //     Revision 1.4  2001/07/30 17:43:13  mbickel
 //      Added Microsoft Visual Studio .net project files
 //      Fixed some warnings
@@ -54,12 +57,14 @@
  #include "ndir.h"
 // #define direct dirent
 
- const char* filereadmode = "rb";
- const char* filewritemode = "wb";
- const char pathdelimitter = '\\';
- const char* pathdelimitterstring = "\\";
+ extern const char* filereadmode;
+ extern const char* filewritemode;
+ extern const char* filereadmodetext;
+ extern const char* filewritemodetext;
+ extern const char pathdelimitter;
+ extern const char* pathdelimitterstring;
  
- const int maxfilenamelength = 255;
- const char* asc_configurationfile = "asc.ini";
+ extern const int maxfilenamelength;
+ extern const char* asc_configurationfile;
 
 #endif

@@ -30,7 +30,7 @@
  #include "vehicle.h"
  #include "buildings.h"
  #include "basestrm.h"
-
+ #include "time.h"
 
 //! The number of game paramters that can be specified for each map.
 const int gameparameternum = 19;
@@ -272,7 +272,7 @@ class tmap {
       char         codeword[11]; 
 
       //! the title of the map
-      char*        title;
+      ASCString    maptitle;
 
 
       struct Campaign {
@@ -450,8 +450,13 @@ class tmap {
 
       //! each message has an identification number (which is incremented with each message) for referencing it in files. The id of the last message is stored here
       int           messageid;
-      char*         journal;
-      char*         newjournal;
+
+      //! temporary variables for loading the map
+      bool ___loadJournal, ___loadNewJournal, ___loadtitle;
+
+
+      ASCString     gameJournal;
+      ASCString     newJournal;
       Password      supervisorpasswordcrc;
 
       char          alliances_at_beginofturn[8];
@@ -488,12 +493,26 @@ class tmap {
         ASCString savegame[8];
       } preferredFileNames;
 
+      //! for tutorial missions it is possible to highlight elements of the interface with an ellipse using the event system.
       EllipseOnScreen* ellipse;
+
+      //! the ID of the graphic set
       int           graphicset;
       int           gameparameter_num;
       int*          game_parameter;
 
       int           mineralResourcesDisplayed;
+
+      class ArchivalInformation {
+         public:
+            ArchivalInformation() : modifytime ( 0 ) {};
+            ASCString author;
+            ASCString description;
+            ASCString tags;
+            ASCString requirements;
+            time_t modifytime;
+      } archivalInformation;
+
 
       tmap ( void );
 

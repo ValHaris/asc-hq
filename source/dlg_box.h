@@ -2,9 +2,15 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.25 2001-10-02 14:06:28 mbickel Exp $
+//     $Id: dlg_box.h,v 1.26 2001-10-11 10:41:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2001/10/02 14:06:28  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.24  2001/08/09 10:28:22  mbickel
 //      Fixed AI problems
 //      Mapeditor can edit a units AI parameter
@@ -285,7 +291,7 @@ typedef class tdialogbox* pdialogbox;
                      int           ms;
                      void*      tp;
                      char      imagesaved; 
-                     char*        title;
+                     const char*        title;
                      word         windowstyle; 
                      ttaborder    taborder[100]; 
                      int         tabcount; 

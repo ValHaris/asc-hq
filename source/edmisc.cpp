@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.68 2001-10-11 10:22:50 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.69 2001-10-11 10:41:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.68  2001/10/11 10:22:50  mbickel
+//      Some cleanup and fixes for Visual C++
+//
 //     Revision 1.67  2001/10/08 14:44:22  mbickel
 //      Some cleanup
 //
@@ -971,7 +974,8 @@ void         pdsetup(void)
    pd.addbutton ( "~L~oad mapõctrl+L", act_loadmap   );
    pd.addbutton ( "~S~ave mapõS",      act_savemap   );
    pd.addbutton ( "Save map ~a~s",     act_savemapas ); 
-   pd.addbutton ( "seperator",         -1            ); 
+   pd.addbutton ( "Edit Map ~A~rchival Information", act_editArchivalInformation );
+   pd.addbutton ( "seperator",         -1            );
    pd.addbutton ( "~W~rite map to PCX-Fileõctrl+G", act_maptopcx);
    #ifdef HEXAGON
     pd.addbutton ( "~I~mport BI mapõctrl-i", act_import_bi_map );
@@ -1947,9 +1951,10 @@ void changepolygon(ppolygon poly)
 //* õS NewMap
    
   class tnewmap : public tdialogbox {
+            char maptitle[10000];
         public :
                int action;
-               char passwort[11], *sptitle;
+               char passwort[11];
                int sxsize,sysize;
                char valueflag,random,campaign;
                tmap::Campaign cmpgn;
@@ -1969,8 +1974,10 @@ void         tnewmap::init(void)
 
    tdialogbox::init();
    action = 0;
-   if (valueflag == true ) title = "New Map";
-   else title = "Map Values";
+   if (valueflag == true )
+      title = "New Map";
+   else
+      title = "Map Values";
    x1 = 70;
    xsize = 500;
    y1 = 70;
@@ -1978,8 +1985,8 @@ void         tnewmap::init(void)
    campaign = !!actmap->campaign;
    sxsize = actmap->xsize;
    sysize = actmap->ysize;
-   sptitle = new ( char[100] );
-   strcpy( sptitle, actmap->title );
+   strcpy ( maptitle, actmap->maptitle.c_str() );
+
    if (valueflag == true ) {
       strcpy(passwort,"");
       memset(&cmpgn,0,sizeof(cmpgn));
@@ -1999,7 +2006,7 @@ void         tnewmap::init(void)
    windowstyle = windowstyle ^ dlg_in3d; 
 
    addbutton("~T~itle",15,70,xsize - 30,90,1,1,1,true); 
-   addeingabe(1,sptitle,0,100);
+   addeingabe(1,maptitle,0,100);
 
    if (valueflag == true ) {
       addbutton("~X~ Size",15,130,235,150,2,1,2,true);
@@ -2071,10 +2078,9 @@ void         tnewmap::run(void)
             }
          #endif
       } 
-   }  while (!((taste == ct_esc) || (action >= 2))); 
+   }  while (!((taste == ct_esc) || (action >= 2)));
+
    if (action == 3) { 
-      // actmap->xsize = sxsize;
-      // actmap->ysize = sysize;
       if (valueflag == true ) {
          if ( tauswahl->weather[auswahlw] )
             generatemap(tauswahl->weather[auswahlw], sxsize , sysize );
@@ -2085,10 +2091,9 @@ void         tnewmap::run(void)
       }   
 
       mapsaved = false;
-      if ( actmap->title == NULL ) actmap->title = (char *) malloc( strlen(sptitle)+1 );
-      else actmap->title = (char *) realloc( actmap->title, strlen(sptitle)+1 );
-      
-      strcpy(actmap->title,sptitle);
+
+      actmap->maptitle = maptitle;
+
       strcpy(actmap->codeword,passwort);
       if (campaign == true ) {
          if (actmap->campaign == NULL)
@@ -2166,7 +2171,6 @@ void         tnewmap::done(void)
 { 
    tdialogbox::done();
    if (action == 3) displaymap();
-   asc_free( sptitle );
 }
 
 
@@ -4300,4 +4304,98 @@ void transformMap ( )
    }
    calculateallobjects();
    displaymap();
+}
+
+
+class EditArchivalInformation : public tdialogbox {
+         tmap* gamemap;
+         char maptitle[10000];
+         char author[10000];
+         ASCString description;
+         char tags[10000];
+         char requirements[10000];
+         int action;
+       public:
+         EditArchivalInformation ( tmap* map );
+         void init();
+         void run();
+         void buttonpressed ( int id );
+};
+
+
+EditArchivalInformation :: EditArchivalInformation ( tmap* map ) : gamemap ( map )
+{
+  strcpy ( maptitle, map->maptitle.c_str() );
+  strcpy ( author, map->archivalInformation.author.c_str() );
+  description = map->archivalInformation.description;
+  strcpy ( tags, map->archivalInformation.tags.c_str() );
+  strcpy ( requirements, map->archivalInformation.requirements.c_str() );
+}
+
+void EditArchivalInformation::init()
+{
+   tdialogbox::init();
+   title = "Edit Archival Information";
+   xsize = 600;
+   ysize = 410;
+   action = 0;
+
+
+   addbutton("~T~itle",20,70,xsize - 20,90,1,1,10,true);
+   addeingabe(10,maptitle,0,10000);
+
+   addbutton("~A~uthor",20,120,xsize - 20,140,1,1,11,true);
+   addeingabe(11,author,0,10000);
+
+   addbutton("Ta~g~s",20,170,xsize - 20,190,1,1,12,true);
+   addeingabe(12,tags,0,10000);
+
+   addbutton("~R~equirements ( see http://asc-hq.sf.net/req.php for possible values)",20,220,xsize - 20,240,1,1,13,true);
+   addeingabe(13,requirements,0,10000);
+
+
+   addbutton("Edit ~D~escription",20,ysize - 70,170,ysize - 50,0,1,14,true);
+
+   addbutton("~O~k",20,ysize - 40,xsize/2-10,ysize - 20,0,1,1,true);
+   addkey(1,ct_enter);
+   addbutton("~C~ancel",xsize/2+10,ysize - 40,xsize-20,ysize - 20,0,1,2,true);
+   addkey(2,ct_esc);
+
+   buildgraphics();
+}
+
+void EditArchivalInformation :: buttonpressed ( int id )
+{
+   switch ( id ) {
+      case 14: {
+                  MultilineEdit mle ( description, "Map Description" );
+                  mle.init();
+                  mle.run();
+                  mle.done();
+                  break;
+                }
+      case 1: gamemap->archivalInformation.author = author;
+              gamemap->archivalInformation.tags   = tags;
+              gamemap->archivalInformation.requirements   = requirements;
+              gamemap->archivalInformation.description   = description;
+              gamemap->maptitle = maptitle;
+              mapsaved = false;
+      case 2: action = id;
+   }
+}
+
+void EditArchivalInformation :: run ()
+{
+   do {
+      tdialogbox::run();
+   } while ( action == 0);
+}
+
+
+void editArchivalInformation()
+{
+  EditArchivalInformation eai ( actmap );
+  eai.init();
+  eai.run();
+  eai.done();
 }

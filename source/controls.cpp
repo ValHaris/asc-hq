@@ -3,9 +3,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.116 2001-10-08 14:44:22 mbickel Exp $
+//     $Id: controls.cpp,v 1.117 2001-10-11 10:41:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.116  2001/10/08 14:44:22  mbickel
+//      Some cleanup
+//
 //     Revision 1.115  2001/10/02 14:06:27  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -2839,55 +2842,36 @@ void endTurn ( void )
      mi = actmap->unsentmessage.erase ( mi );
   }
 
-  if ( actmap->newjournal ) {
-     int s = 0;
-     if ( actmap->journal )
-        s = strlen ( actmap->journal );
-
-     char* n = new char[ strlen ( actmap->newjournal ) + s + 200 ];
+  if ( !actmap->newJournal.empty() ) {
+     ASCString add = actmap->gameJournal;
 
      char tempstring[100];
-     char tempstring2[50];
+     char tempstring2[100];
      sprintf( tempstring, "#color0# %s ; turn %d #color0##crt##crt#", actmap->player[actmap->actplayer].getName().c_str(), actmap->time.turn() );
      sprintf( tempstring2, "#color%d#", getplayercolor ( actmap->actplayer ));
 
-     if ( actmap->journal ) {
-        strcpy ( n, actmap->journal );
-        int fnd;
-        int num = 0;
-        do {
-           fnd = 0;
-           if ( n[s-1] == '\n' ) {
+     int fnd;
+     do {
+        fnd = 0;
+        if ( !add.empty() )
+           if ( add.find ( '\n', add.length()-1 ) != add.npos ) {
+              add.erase ( add.length()-1 );
               fnd++;
-              num++;
-              s-=1;
            } else
-             if ( s > 4 )
-                if ( strnicmp ( &n[s-5], "#crt#", 5 ) == 0 ) {
-                   fnd++;
-                   num++;
-                   s-=5;
+             if ( add.length() > 4 )
+                if ( add.find ( "#crt#", add.length()-5 ) != add.npos ) {
+                  add.erase ( add.length()-5 );
+                  fnd++;
                 }
 
-        } while ( fnd ); /* enddo */
+     } while ( fnd ); /* enddo */
 
-        strcat ( n, tempstring2 );
-        strcat ( n, actmap->newjournal );
-        strcat ( n, tempstring );
+     add += tempstring2;
+     add += actmap->newJournal;
+     add += tempstring;
 
-        delete[] actmap->journal;
-        actmap->journal = n;
-
-     } else {
-        strcpy ( n, tempstring2 );
-        strcat ( n, actmap->newjournal );
-        strcat ( n, tempstring );
-
-        actmap->journal = n;
-     }
-
-     delete[] actmap->newjournal;
-     actmap->newjournal = NULL;
+     actmap->gameJournal = add;
+     actmap->newJournal.erase();
 
      actmap->lastjournalchange.set ( actmap->time.turn(), actmap->actplayer );
   }

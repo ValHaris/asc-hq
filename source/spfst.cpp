@@ -2,9 +2,15 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.96 2001-10-02 14:06:28 mbickel Exp $
+//     $Id: spfst.cpp,v 1.97 2001-10-11 10:41:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.96  2001/10/02 14:06:28  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.95  2001/09/25 09:35:12  mbickel
 //      Fixed disappearing building when resizing map
 //
@@ -348,7 +354,7 @@ void         generatemap( TerrainType::Weather*   bt,
    for (int k = 1; k < 8; k++)
       actmap->player[k].stat = Player::computer;
 
-   actmap->title = strdup( "new map" );
+   actmap->maptitle = "new map";
 
    actmap->field = new tfield[ xsize * ysize];
 

@@ -2,9 +2,15 @@
     \brief Interface for all the dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.h,v 1.19 2001-10-02 14:06:28 mbickel Exp $
+//     $Id: dialog.h,v 1.20 2001-10-11 10:41:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2001/10/02 14:06:28  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.18  2001/02/01 22:48:36  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -239,6 +245,98 @@ extern int selectgameparameter( int lc );
 
 extern void setmapparameters ( void );
 
+
+
+
+typedef class tparagraph* pparagraph;
+class  tparagraph {
+        public:
+          tparagraph ( void );
+          tparagraph ( pparagraph prv );   // f?gt einen neuen paragraph hinter prv an
+
+          void join ( void );   // returnvalue : paragraph to delete;
+          void changesize ( int newsize );
+
+          void addchar ( char c );
+          pparagraph erasechar ( int c );
+          void checkcursor ( void );
+          pparagraph movecursor ( int dx, int dy );
+          pparagraph cut ( void );
+
+          int  reflow( int all = 1 );
+          void display ( void );
+
+          void checkscrollup ( void );
+          void checkscrolldown ( void );
+          int  checkcursorpos ( void );
+
+          void addtext ( const ASCString& txt );
+          ~tparagraph ();
+
+          void setpos ( int x1, int y1, int y2, int linepos, int linenum );
+
+          void displaycursor ( void );
+          int cursor;
+          int cursorstat;
+          int cursorx;
+          int normcursorx;
+          int cursory;
+          int searchcursorpos;
+          static int maxlinenum;
+
+          int size;
+          int allocated;
+          char* text;
+
+          static int winy1;
+          static int winy2;
+          static int winx1;
+          struct {
+             int line1num;
+          } ps;
+
+          dynamic_array<char*> linestart;
+          dynamic_array<int>   linelength;
+
+          int   linenum;
+
+          pparagraph next;
+          pparagraph prev;
+      };
+
+
+class tmessagedlg : public tdialogbox {
+           protected:
+               int to[8];
+
+                pparagraph firstparagraph;
+                pparagraph actparagraph;
+
+                int tx1, ty1, tx2, ty2,ok;
+                int lastcursortick;
+                int blinkspeed;
+
+            public:
+                tmessagedlg ( void );
+                virtual void setup ( void );
+                void inserttext ( const ASCString& txt );
+                void run ( void );
+                ASCString extracttext ();
+                ~tmessagedlg();
+         };
+
+class MultilineEdit : public tmessagedlg  {
+               ASCString& text;
+               ASCString dlg_title;
+               bool textchanged;
+            public:
+               MultilineEdit ( ASCString& txt, const ASCString& title ) : text ( txt ), dlg_title ( title ), textchanged ( false ) {};
+               void init ( void );
+               void setup ( void );
+               void buttonpressed ( int id );
+               void run ( void );
+               bool changed ( ) { return textchanged; };
+       };
 
 
 #endif

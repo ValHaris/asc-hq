@@ -1,6 +1,12 @@
-//     $Id: edmisc.h,v 1.20 2001-10-02 14:06:28 mbickel Exp $
+//     $Id: edmisc.h,v 1.21 2001-10-11 10:41:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2001/10/02 14:06:28  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.19  2001/05/24 15:37:51  mbickel
 //      Fixed: reaction fire could not be disabled when unit out of ammo
 //      Fixed several AI problems
@@ -344,3 +350,5 @@ extern MapSwitcher mapSwitcher;
 
 //! replaces the terrain and the objects on a map according to a translation table
 extern void transformMap();
+
+extern void editArchivalInformation();

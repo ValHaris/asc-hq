@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.57 2001-10-08 14:12:20 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.58 2001-10-11 10:41:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2001/10/08 14:12:20  mbickel
+//      Fixed crash in AI
+//      Speedup of AI
+//      Map2PCX improvements
+//      Mapeditor usability improvements
+//
 //     Revision 1.56  2001/10/06 11:30:42  mbickel
 //      Fixed bug in gametime calculation
 //
@@ -1517,11 +1523,9 @@ void tloadBImap :: LoadFromFile( const char* path, const char* AFileName, Terrai
        UnPackDF(AktDFNum);
        */
    
-       if ( actmap->title )
-          delete actmap->title;
-       actmap->title = GetStr ( 1, 24 );
-       if ( !actmap->title )
-          actmap->title = strdup ( "imported BI map");
+       actmap->maptitle = GetStr ( 1, 24 );
+       if ( actmap->maptitle.empty() )
+          actmap->maptitle = "imported BI map";
 
     } /* endtry */
     catch ( tfileerror err ) {
