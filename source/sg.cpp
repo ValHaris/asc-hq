@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.27 2000-03-29 09:58:48 mbickel Exp $
+//     $Id: sg.cpp,v 1.28 2000-03-29 15:28:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/03/29 09:58:48  mbickel
+//      Improved memory handling for DOS version
+//      Many small changes I can't remember ;-)
+//
 //     Revision 1.26  2000/03/11 18:22:07  mbickel
 //      Added support for multiple graphic sets
 //
@@ -3040,18 +3044,22 @@ int main(int argc, char *argv[] )
                              resoly = atoi ( &argv[i][3] );
                           }
                           else 
-                             if ( ( strcmpi ( &argv[i][1], "?" ) == 0 ) || ( strcmpi ( &argv[i][1], "h" ) == 0 ) ){
+                             if ( ( strcmpi ( &argv[i][1], "?" ) == 0 ) ||
+                                  ( strcmpi ( &argv[i][1], "h" ) == 0 ) ||
+                                  ( strcmpi ( &argv[i][1], "-help" ) == 0 ) ){
                                 printf( " Parameters: \n"
-                                        "     /h          This page\n"
-                                        "     /v1         Set vesa error recovery level to 1 \n"    
-                                        "     /nocd       Disable music \n"
-                                        "     /8bitonly   Disable truecolor graphic mode \n"
-                                        "     /x:X        Set horizontal resolution to X; default is 800 \n"
-                                        "     /y:Y        Set verticalal resolution to Y; default is 600 \n"
+                                        "     -h          This page\n"
                                        #ifdef _DOS_
-                                        "     /showmodes  Display list of available graphic modes \n" );
+                                        "     -v1         Set vesa error recovery level to 1 \n"
+                                        // "     /nocd       Disable music \n"
+                                        "     -8bitonly   Disable truecolor graphic mode \n"
+                                       #endif
+                                        "     -x:X        Set horizontal resolution to X; default is 800 \n"
+                                        "     -y:Y        Set verticalal resolution to Y; default is 600 \n"
+                                       #ifdef _DOS_
+                                        "     -showmodes  Display list of available graphic modes \n" );
                                        #else
-                                        "     /window Disable fullscreen mode \n" );
+                                        "     -window Disable fullscreen mode \n" );
                                        #endif
 
                                         //"     /game:X     Set gamepath to X \n\n");
