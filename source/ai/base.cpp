@@ -127,8 +127,6 @@ void AI::checkKeys ( void )
 
 void AI:: run ( void )
 {
-   int i = serviceOrders.size();
-
    mapDisplay = rmd;
    int startTime = ticker;
    AiResult res;
@@ -256,8 +254,6 @@ void AI :: read ( tnstream& stream )
 
    if ( version >= 102 )
       originalUnitDistribution.read ( stream );
-
-   int s = serviceOrders.size();
 
    int version2 = stream.readInt();
    if ( version != version2 )

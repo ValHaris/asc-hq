@@ -705,10 +705,13 @@ void AI::UnitDistribution::write ( tnstream& stream ) const
 }
 
 
+#ifndef __BORLANDC__
 // avoiding a gcc 2.95.3 bug....
 typedef AI::UnitDistribution AIUD;
 AIUD AI::calcUnitDistribution ()
-//AI::UnitDistribution AI::calcUnitDistribution ()
+#else
+AI::UnitDistribution AI::calcUnitDistribution ()
+#endif
 {
    UnitDistribution unitDistribution;
    int unitCount = getPlayer().vehicleList.size();

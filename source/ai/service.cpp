@@ -538,8 +538,6 @@ void AI :: runServiceUnit ( pvehicle supplyUnit )
    typedef multimap<float,ServiceOrder*> ServiceMap;
    ServiceMap serviceMap;
 
-   int s = serviceOrders.size();
-
    for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
        if ( !i->getServiceUnit() ) {
           int poss = i->possible( supplyUnit );
@@ -592,7 +590,6 @@ void AI :: runServiceUnit ( pvehicle supplyUnit )
 
 AI::AiResult AI :: executeServices ( )
 {
-   int s = serviceOrders.size();
   // removing all service orders for units which no longer exist
   removeServiceOrdersForUnit ( NULL );
   serviceOrders.erase ( remove_if ( serviceOrders.begin(), serviceOrders.end(), ServiceOrder::invalid ), serviceOrders.end());
@@ -601,7 +598,6 @@ AI::AiResult AI :: executeServices ( )
 
   AiResult res;
 
-   int s2 = serviceOrders.size();
   for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
       pvehicle veh = *vi;
       checkKeys();

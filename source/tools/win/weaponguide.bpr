@@ -20,7 +20,7 @@
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="tlink32"/>
     <USERDEFINES value="_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_"/>
-    <SYSDEFINES value="NO_STRICT;_NO_VCL;_RTLDLL;USEPACKAGES"/>
+    <SYSDEFINES value="NO_STRICT;_NO_VCL;USEPACKAGES"/>
     <MAINSOURCE value="weaponguide.bpf"/>
     <INCLUDEPATH value="..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="..\;..\..\tools;$(BCB)\lib\obj;$(BCB)\lib"/>
@@ -36,7 +36,7 @@
   <LINKER>
     <ALLOBJ value="c0x32.obj $(PACKAGES) $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
-    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cw32mti.lib"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cw32mt.lib"/>
   </LINKER>
   <IDEOPTIONS>
 [Version Info]

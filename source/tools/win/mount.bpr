@@ -20,24 +20,24 @@
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="tlink32"/>
     <USERDEFINES value="_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_"/>
-    <SYSDEFINES value="NO_STRICT;_NO_VCL;_RTLDLL;USEPACKAGES"/>
+    <SYSDEFINES value="NO_STRICT;_NO_VCL;USEPACKAGES"/>
     <MAINSOURCE value="mount.bpf"/>
-    <INCLUDEPATH value="..;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="..;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..\;..\..\tools;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
-    <CFLAG1 value="-tWC -tWM- -Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
-      -v -vi- -c"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -tWC 
+      -tWM- -c"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-Tpe -ap -D&quot;&quot; -x -Gn -v"/>
+    <LFLAGS value="-D&quot;&quot; -ap -Tpe -x -Gn -v"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0x32.obj $(PACKAGES) $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
-    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cw32i.lib"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cw32.lib"/>
   </LINKER>
   <IDEOPTIONS>
 [Version Info]
