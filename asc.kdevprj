@@ -15,11 +15,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/building.cpp,/home/martin/asc/source/controls.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/controls.h,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/sg.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/controls.h
-cpp_file=/home/martin/asc/source/controls.cpp
+header_file=Unbenannt.h
+cpp_file=/home/martin/asc/source/sg.cpp
 browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/welcome/index.html
 [source/gui.h]
 install_location=

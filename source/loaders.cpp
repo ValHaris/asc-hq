@@ -1,6 +1,12 @@
-//     $Id: loaders.cpp,v 1.24 2000-08-21 17:50:59 mbickel Exp $
+//     $Id: loaders.cpp,v 1.25 2000-08-28 15:58:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/08/21 17:50:59  mbickel
+//      Fixed: crash when unit reaching max experience
+//      Fixed: crash when displaying research image
+//      Fixed: crash when events referenced a unit that has been shot down
+//      Fixed: screenshot being written to wrong directory
+//
 //     Revision 1.23  2000/08/12 12:52:48  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -718,6 +724,13 @@ void   tvehicle::read ( pnstream stream )
        reactionfire.enemiesAttackable = stream->readChar (  );
     else
        reactionfire.enemiesAttackable = 0;
+
+    if ( reactionfire.status >= 8 && reactionfire.enemiesAttackable <= 4 ) { // for transition from the old reactionfire system ( < ASC1.2.0 ) to the new one ( >= ASC1.2.0 )
+       int temp = reactionfire.status;
+       reactionfire.status = reactionfire.enemiesAttackable;
+       reactionfire.enemiesAttackable = temp;
+       setMovement ( typ->movement [ log2 ( height ) ], -1 );
+    }
 
     if ( bm & cem_poweron )
        stream->readdata2 ( generatoractive );

@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.85 2000-08-28 14:37:15 mbickel Exp $
+//     $Id: sg.cpp,v 1.86 2000-08-28 15:58:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.85  2000/08/28 14:37:15  mbickel
+//      Fixed: satellite not able to leave orbiter
+//      Restructured next-turn routines
+//
 //     Revision 1.84  2000/08/26 15:33:43  mbickel
 //      Warning message displayed if empty password is entered
 //      pcxtank now displays error messages
@@ -2781,7 +2785,7 @@ void  mainloop ( void )
             case ct_8:  execuseraction ( ua_unitweightinfo );
                break;
                
-            case ct_9:  execuseraction ( ua_writemaptopcx );
+            case ct_9:  displaymessage ( "reactionfire status: %d, enemiesattackable: %x", 1, int(getactfield()->vehicle->reactionfire.status), int(getactfield()->vehicle->reactionfire.enemiesAttackable)) ;
                break;
 
             case ct_0:  execuseraction ( ua_writescreentopcx );
@@ -3646,6 +3650,10 @@ int main(int argc, char *argv[] )
 
                backgroundpict.paint(); 
 
+               if ( emailgame ) {
+                  initNetworkGame ( );
+               }
+
                displaymap();
                cursor.show();
 
@@ -3661,10 +3669,6 @@ int main(int argc, char *argv[] )
                if ( !displayed ) 
                   displaymessage2( "time for startup: %d * 1/100 sec", ticker-cntr );
                displayed = 1;
-
-               if ( emailgame ) {
-                  initNetworkGame ( );
-               }
 
                mainloop();
                mousevisible ( false );
