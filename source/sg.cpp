@@ -1602,9 +1602,6 @@ void  mainloop ( void )
                }
                break;
 
-            case ct_f9: displaymessage ( "%d", 1, getactfield()->vehicle->attacked );
-                         break;
-
             case ct_1:
                execuseraction ( ua_changeresourceview );
                break;
