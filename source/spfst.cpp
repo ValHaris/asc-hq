@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.17 2000-01-24 08:16:50 steb Exp $
+//     $Id: spfst.cpp,v 1.18 2000-01-24 17:35:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/01/24 08:16:50  steb
+//     Changes to existing files to implement sound.  This is the first munge into
+//     CVS.  It worked for me before the munge, but YMMV :)
+//
 //     Revision 1.16  2000/01/07 13:20:05  mbickel
 //      DGA fullscreen mode now working
 //
@@ -555,8 +559,8 @@ boolean   weapexist( const pvehicle     eht)
 
    if (eht->typ->weapons->count > 0) 
       for (b = 0; b < eht->typ->weapons->count ; b++) 
-         if (eht->typ->weapons->weapon[b].typ & cwshootableb ) 
-            if (eht->typ->weapons->weapon[b].typ & cwweapon ) 
+         if (eht->typ->weapons->weapon[b].shootable() ) 
+            if (eht->typ->weapons->weapon[b].offensive() ) 
                if (eht->ammo[b] ) 
                   return true; 
                
@@ -684,7 +688,7 @@ char tweapdist::getweapstrength ( const SingleWeapon* weap, int dist, int attack
   byte         translat[31]  = { 6, 255, 1, 3, 2, 4, 0, 5, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
                                  255, 255, 255, 255, 255, 255}; 
 
-   int typ = translat[ log2 (weap->typ & cwweapon) ];
+   int typ = translat[ weap->getScalarWeaponType() ];
 
 
 
@@ -1200,7 +1204,7 @@ void         generate_vehicle(pvehicletype fztyp,
    if ( vehicle->typ->weapons->count ) { 
       int m;
       for (m = 0; m < vehicle->typ->weapons->count ; m++) { 
-         vehicle->weapstrength[m] = vehicle->typ->weapons->weapon[m].maxstrength * vehicle->typ->classbound[vehicle->klasse].weapstrength[log2(vehicle->typ->weapons->weapon[m].typ & (cwweapon | cwmineb))] / 1024;
+         vehicle->weapstrength[m] = vehicle->typ->weapons->weapon[m].maxstrength * vehicle->typ->classbound[vehicle->klasse].weapstrength[vehicle->typ->weapons->weapon[m].getScalarWeaponType()] / 1024;
          vehicle->ammo[m] = 0;
       } 
 
@@ -2038,7 +2042,6 @@ pattackweap  attackpossible( const pvehicle     angreifer,
   memset(atw, 0, sizeof(*atw));
 
 
-
    if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize))  
       return atw;
    if (angreifer == NULL) 
@@ -2051,8 +2054,8 @@ pattackweap  attackpossible( const pvehicle     angreifer,
    if ( efield->vehicle ) {
       if (getdiplomaticstatus2(efield->vehicle->color, angreifer->color) == cawar) 
          for (i = 0; i <= angreifer->typ->weapons->count - 1; i++) 
-            if (angreifer->typ->weapons->weapon[i].typ & cwshootableb ) 
-               if (angreifer->typ->weapons->weapon[i].typ & cwweapon ) 
+            if (angreifer->typ->weapons->weapon[i].shootable() ) 
+               if (angreifer->typ->weapons->weapon[i].offensive()  ) 
                   if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << efield->vehicle->typ->movemalustyp )))
                      if ( efield->vehicle->height & angreifer->typ->weapons->weapon[i].targ )
                         if (fieldvisiblenow(efield, angreifer->color/8)) { 
@@ -2063,7 +2066,7 @@ pattackweap  attackpossible( const pvehicle     angreifer,
                                     if (angreifer->ammo[i] ) { 
                                        atw->strength[atw->count] = angreifer->weapstrength[i]; 
                                        atw->num[atw->count ] = i; 
-                                       atw->typ[atw->count ] = (angreifer->typ->weapons->weapon[i].typ & cwweapon );
+                                       atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType() ;
                                        atw->count++;
                                     } 
                               } 
@@ -2073,8 +2076,8 @@ pattackweap  attackpossible( const pvehicle     angreifer,
       if (efield->building != NULL) { 
          if (getdiplomaticstatus2(efield->building->color, angreifer->color) == cawar) 
             for (i = 0; i < angreifer->typ->weapons->count ; i++) 
-               if (angreifer->typ->weapons->weapon[i].typ & cwshootableb ) 
-                  if (angreifer->typ->weapons->weapon[i].typ & cwweapon ) 
+               if (angreifer->typ->weapons->weapon[i].shootable() ) 
+                  if (angreifer->typ->weapons->weapon[i].offensive() ) 
                      { 
                         tm = efield->building->typ->buildingheight;
                         if (tm & angreifer->typ->weapons->weapon[i].targ) {
@@ -2085,7 +2088,7 @@ pattackweap  attackpossible( const pvehicle     angreifer,
                                     if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight) 
                                        if (angreifer->ammo[i] > 0) { 
                                           atw->strength[atw->count ] = angreifer->weapstrength[i]; 
-                                          atw->typ[atw->count ] = (angreifer->typ->weapons->weapon[i].typ & cwweapon );
+                                          atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType() ;
                                           atw->num[atw->count ] = i; 
                                           atw->count++;
                                        } 
@@ -2104,8 +2107,9 @@ pattackweap  attackpossible( const pvehicle     angreifer,
       if ( n > 0 ) 
          if ((efield->vehicle == NULL) && ( efield->building == NULL)) {
             for (i = 0; i <= angreifer->typ->weapons->count - 1; i++) 
-               if (angreifer->typ->weapons->weapon[i].typ & cwshootableb ) 
-                  if (angreifer->typ->weapons->weapon[i].typ & (cwcannonb | cwbombb) ) { 
+               if (angreifer->typ->weapons->weapon[i].shootable() ) 
+                  if ( angreifer->typ->weapons->weapon[i].getScalarWeaponType() == cwcannonn ||  
+                       angreifer->typ->weapons->weapon[i].getScalarWeaponType() == cwbombn ) { 
                      if (chfahrend & angreifer->typ->weapons->weapon[i].targ ) { 
                         if (fieldvisiblenow(efield, angreifer->color/8)) { 
                            d = beeline(angreifer->xpos,angreifer->ypos,x,y); 
@@ -2115,7 +2119,7 @@ pattackweap  attackpossible( const pvehicle     angreifer,
                                     if (angreifer->ammo[i] > 0) { 
                                        atw->strength[atw->count ] = angreifer->weapstrength[i];
                                        atw->num[atw->count ] = i;
-                                       atw->typ[atw->count ] = (angreifer->typ->weapons->weapon[i].typ & cwweapon );
+                                       atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
                                        atw->count++;
                                     } 
    
@@ -2144,8 +2148,8 @@ boolean      attackpossible2u( const pvehicle     angreifer,
 
    if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
       for ( int i = 0; i < angreifer->typ->weapons->count ; i++) 
-         if (angreifer->typ->weapons->weapon[i].typ & cwshootableb ) 
-            if (angreifer->typ->weapons->weapon[i].typ & cwweapon ) 
+         if (angreifer->typ->weapons->weapon[i].shootable() ) 
+            if (angreifer->typ->weapons->weapon[i].offensive() ) 
                if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) 
                   if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
                      if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
@@ -2172,8 +2176,8 @@ boolean      attackpossible28( const pvehicle     angreifer,
 
    if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
       for ( int i = 0; i < angreifer->typ->weapons->count ; i++) 
-         if (angreifer->typ->weapons->weapon[i].typ & cwshootableb ) 
-            if (angreifer->typ->weapons->weapon[i].typ & cwweapon ) 
+         if (angreifer->typ->weapons->weapon[i].shootable() ) 
+            if (angreifer->typ->weapons->weapon[i].offensive() ) 
                if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) 
                   if (minmalq <= angreifer->typ->weapons->weapon[i].maxdistance) 
                      if (minmalq >= angreifer->typ->weapons->weapon[i].mindistance) 
@@ -2204,8 +2208,8 @@ boolean      attackpossible2n( const pvehicle     angreifer,
       if ( !angreifer->attacked )
          if ( !angreifer->typ->wait || angreifer->movement == angreifer->typ->movement[log2(angreifer->height)] )
             for ( int i = 0; i < angreifer->typ->weapons->count ; i++) 
-               if (angreifer->typ->weapons->weapon[i].typ & cwshootableb ) 
-                  if (angreifer->typ->weapons->weapon[i].typ & cwweapon ) 
+               if (angreifer->typ->weapons->weapon[i].shootable() ) 
+                  if (angreifer->typ->weapons->weapon[i].offensive() ) 
                      if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) 
                         if (dist <= angreifer->typ->weapons->weapon[i].maxdistance) 
                            if (dist >= angreifer->typ->weapons->weapon[i].mindistance) 
@@ -2242,15 +2246,15 @@ pattackweap   attackpossible3u( const pvehicle     angreifer,
      return atw ;
    if ( getdiplomaticstatus2(angreifer->color, verteidiger->color ) == cawar )
       for (i = 0; i < angreifer->typ->weapons->count ; i++) 
-         if (angreifer->typ->weapons->weapon[i].typ & cwshootableb ) 
-            if (angreifer->typ->weapons->weapon[i].typ & cwweapon ) 
+         if (angreifer->typ->weapons->weapon[i].shootable() ) 
+            if (angreifer->typ->weapons->weapon[i].offensive() ) 
                if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) 
                   if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
                      if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
                         if (angreifer->ammo[i] > 0) {
                            atw->strength[atw->count ] = angreifer->weapstrength[i];
                            atw->num[atw->count ] = i;
-                           atw->typ[atw->count ] = (angreifer->typ->weapons->weapon[i].typ & cwweapon );
+                           atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
                            atw->count++;
                         }
                
@@ -2277,8 +2281,8 @@ pattackweap   attackpossible38( const pvehicle     angreifer,
      return atw ;
    if ( getdiplomaticstatus2(angreifer->color, verteidiger->color ) == cawar )
       for (i = 0; i < angreifer->typ->weapons->count ; i++) 
-         if (angreifer->typ->weapons->weapon[i].typ & cwshootableb ) 
-            if (angreifer->typ->weapons->weapon[i].typ & cwweapon ) 
+         if (angreifer->typ->weapons->weapon[i].shootable() ) 
+            if (angreifer->typ->weapons->weapon[i].offensive() ) 
                if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) { 
                   if (minmalq <= angreifer->typ->weapons->weapon[i].maxdistance) 
                      if (minmalq >= angreifer->typ->weapons->weapon[i].mindistance) { 
@@ -2287,7 +2291,7 @@ pattackweap   attackpossible38( const pvehicle     angreifer,
                               if (angreifer->ammo[i] > 0) {
                                  atw->strength[atw->count ] = angreifer->weapstrength[i];
                                  atw->num[atw->count ] = i;
-                                 atw->typ[atw->count ] = (angreifer->typ->weapons->weapon[i].typ & cwweapon );
+                                 atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
                                  atw->count++;
                               }
                      } 
@@ -2316,8 +2320,8 @@ pattackweap   attackpossible3n( const pvehicle     angreifer,
    int dist = beeline ( angreifer, verteidiger );
    if ( getdiplomaticstatus2(angreifer->color, verteidiger->color ) == cawar )
       for (i = 0; i < angreifer->typ->weapons->count ; i++) 
-         if (angreifer->typ->weapons->weapon[i].typ & cwshootableb ) 
-            if (angreifer->typ->weapons->weapon[i].typ & cwweapon ) 
+         if (angreifer->typ->weapons->weapon[i].shootable() ) 
+            if (angreifer->typ->weapons->weapon[i].offensive() ) 
                if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) { 
                   if (dist <= angreifer->typ->weapons->weapon[i].maxdistance) 
                      if (dist >= angreifer->typ->weapons->weapon[i].mindistance) { 
@@ -2326,7 +2330,7 @@ pattackweap   attackpossible3n( const pvehicle     angreifer,
                               if (angreifer->ammo[i] > 0) {
                                  atw->strength[atw->count ] = angreifer->weapstrength[i];
                                  atw->num[atw->count ] = i;
-                                 atw->typ[atw->count ] = (angreifer->typ->weapons->weapon[i].typ & cwweapon );
+                                 atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
                                  atw->count++;
                               }
                      } 
@@ -6862,13 +6866,6 @@ void tvehicle::convert ( int col )
    #endif      
 }
 
-/* Translate the weapon/mine/service bit pattern into scalar
- * weapon number for use in fetching UI resources.
- */
-unsigned SingleWeapon::getScalarWeaponType(void) {
-  return log2 ( typ & (cwweapon | cwmineb) );
-}
-
 void tvehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
 {
    if ( vehicleconstructable( tnk, x, y )) {
@@ -6882,9 +6879,9 @@ void tvehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
 
       int refuel = 0;
       for ( int i = 0; i < typ->weapons->count; i++ )
-         if ( typ->weapons->weapon[i].typ & cwserviceb )
+         if ( typ->weapons->weapon[i].service()  )
             for ( int j = 0; j < typ->weapons->count ; j++) {
-               if ( typ->weapons->weapon[j].typ & cwammunitionb )
+               if ( typ->weapons->weapon[j].canRefuel() )
                   refuel = 1;
                if ( functions & (cffuelref | cfmaterialref) )
                   refuel = 1; 

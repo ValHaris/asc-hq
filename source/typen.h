@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.9 2000-01-24 08:16:52 steb Exp $
+//     $Id: typen.h,v 1.10 2000-01-24 17:35:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/01/24 08:16:52  steb
+//     Changes to existing files to implement sound.  This is the first munge into
+//     CVS.  It worked for me before the munge, but YMMV :)
+//
 //     Revision 1.8  1999/12/28 21:03:26  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -250,7 +254,7 @@ typedef tbuildrange* pbuildrange;
 
 
 class SingleWeapon {
- public:
+ private:
   int          typ; /* BM <= CWaffentypen.  This is a hirisute bit pattern, so we should wrap it and
 		     *                      make it private ASAP - STEB */
  public:
@@ -266,7 +270,13 @@ class SingleWeapon {
  private:
   int          reserved[9];
  public:
-  unsigned     getScalarWeaponType(void);
+  unsigned     getScalarWeaponType(void) const;
+  int          requiresAmmo(void) const;
+  int          shootable( void ) const;
+  int          service( void ) const;
+  int          canRefuel ( void ) const;
+  void         set ( int type );  // will be enhanced later ...
+  int          offensive( void ) const;
 };
 
 class  UnitWeapon {

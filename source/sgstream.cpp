@@ -1,6 +1,10 @@
-//     $Id: sgstream.cpp,v 1.5 1999-12-28 21:03:20 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.6 2000-01-24 17:35:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/28 21:03:20  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.4  1999/12/27 13:00:10  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -124,7 +128,6 @@ int checkcodemem ( void )
 void logtofile ( char* strng )
 {
    int a = maxavail();
-   int b;// = _memavl();
 
    if ( !logfile )
      logfile = fopen ( "SGLOG.TXT", "at+" );
@@ -1023,7 +1026,7 @@ pvehicletype   loadvehicletype( pnstream stream )
       else {
          fztn->weapons->count = fztn->oldattack.weaponcount;
          for ( i = 0; i < fztn->oldattack.weaponcount; i++ ) {
-            fztn->weapons->weapon[i].typ  = fztn->oldattack.waffe[i].typ;
+            fztn->weapons->weapon[i].set ( fztn->oldattack.waffe[i].typ );
             fztn->weapons->weapon[i].targ  = fztn->oldattack.waffe[i].targ;
             fztn->weapons->weapon[i].sourceheight  = fztn->oldattack.waffe[i].sourceheight;
             fztn->weapons->weapon[i].maxdistance  = fztn->oldattack.waffe[i].maxdistance;

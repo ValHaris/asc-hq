@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <SDL/SDL.h>
+
+#ifndef _DOS_
+ #include <SDL/SDL.h>
+#endif
+
 #include "soundList.h"
-static tSoundList sound;
+tSoundList sound;
 
 #define DEBUG( msg ) printf( "%s\n", msg )
 

@@ -1,6 +1,10 @@
-//     $Id: loaders.cpp,v 1.6 1999-12-28 21:03:03 mbickel Exp $
+//     $Id: loaders.cpp,v 1.7 2000-01-24 17:35:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/12/28 21:03:03  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.5  1999/12/14 20:23:56  mbickel
 //      getfiletime now works on containerfiles too
 //      improved BI3 map import tables
@@ -666,7 +670,7 @@ void         tspfldloaders::readunit ( pvehicle &eht )
        eht->armor = eht->typ->armor * eht->typ->classbound[eht->klasse].armor / 1024;
        if (eht->typ->weapons->count ) 
           for ( int m = 0; m < eht->typ->weapons->count ; m++) 
-             eht->weapstrength[m] = eht->typ->weapons->weapon[m].maxstrength * eht->typ->classbound[eht->klasse].weapstrength[log2(eht->typ->weapons->weapon[m].typ & (cwweapon | cwmineb))] / 1024;
+             eht->weapstrength[m] = eht->typ->weapons->weapon[m].maxstrength * eht->typ->classbound[eht->klasse].weapstrength[ eht->typ->weapons->weapon[m].getScalarWeaponType()] / 1024;
 
     } else {
       if ( eht->typ->classnum ) 

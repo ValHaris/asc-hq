@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.8 2000-01-24 08:16:52 steb Exp $
+//     $Id: typen.cpp,v 1.9 2000-01-24 17:35:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/01/24 08:16:52  steb
+//     Changes to existing files to implement sound.  This is the first munge into
+//     CVS.  It worked for me before the munge, but YMMV :)
+//
 //     Revision 1.7  2000/01/06 11:19:16  mbickel
 //      Worked on the Linux-port again...
 //
@@ -808,6 +812,49 @@ int tvehicle::size ( void )
 { 
    return typ->weight;
 }
+
+/* Translate the weapon/mine/service bit pattern into scalar
+ * weapon number for use in fetching UI resources.
+ */
+unsigned SingleWeapon::getScalarWeaponType(void) const {
+   if ( typ & (cwweapon | cwmineb) )
+      return log2 ( typ & (cwweapon | cwmineb) );
+   else
+      return -1;
+}
+
+
+int SingleWeapon::requiresAmmo(void) const
+{
+   return typ & ( cwweapon | cwmineb );
+}
+
+int SingleWeapon::shootable( void ) const
+{
+   return typ & cwshootableb;
+}
+
+int SingleWeapon::offensive( void ) const
+{
+   return typ & cwweapon;
+}
+
+int SingleWeapon::service( void ) const
+{
+   return typ & cwserviceb;
+}
+
+int SingleWeapon::canRefuel( void ) const
+{
+   return typ & cwammunitionb;
+}
+
+void SingleWeapon::set ( int type )
+{
+   typ = type;
+}
+
+
 
 #ifdef converter
 void tvehicle::convert ( int color )

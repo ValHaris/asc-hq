@@ -1,6 +1,11 @@
-//     $Id: controls.cpp,v 1.16 2000-01-19 22:14:17 mbickel Exp $
+//     $Id: controls.cpp,v 1.17 2000-01-24 17:35:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/01/19 22:14:17  mbickel
+//      Fixed:
+//        - crash in replay
+//        - invalid character highliting in showtext3
+//
 //     Revision 1.15  2000/01/04 19:43:47  mbickel
 //      Continued Linux port
 //
@@ -573,30 +578,31 @@ void         trefuelvehicle::testfield(void)
          int targheight = 0;
          for (i = 0; i < actvehicle->typ->weapons->count ; i++) 
             if ( actvehicle->typ->weapons->weapon[i].sourceheight & actvehicle->height )
-               if ( actvehicle->typ->weapons->weapon[i].typ & cwserviceb)
+               if ( actvehicle->typ->weapons->weapon[i].service() )
                   targheight = actvehicle->typ->weapons->weapon[i].targ;
 
 
          for (i = 0; i < actvehicle->typ->weapons->count ; i++) 
             if ( actvehicle->typ->weapons->weapon[i].sourceheight & actvehicle->height ) 
 
-               if (((actvehicle->typ->weapons->weapon[i].typ & cwserviceb)                    &&  mode == 1 ) || 
-                   ((actvehicle->typ->weapons->weapon[i].typ & (cwammunitionb | cwserviceb))  && ( mode==2 || mode==3 ))) {
+               if (( actvehicle->typ->weapons->weapon[i].service()                    &&  mode == 1 ) || 
+                   ((actvehicle->typ->weapons->weapon[i].canRefuel() || actvehicle->typ->weapons->weapon[i].service() )  && ( mode==2 || mode==3 ))) {
                   fld = getfield(xp,yp); 
                   if ( fld->vehicle ) 
                      if ( !(fld->vehicle->functions & cfnoairrefuel) || fld->vehicle->height <= chfahrend )
                         if (getdiplomaticstatus(fld->vehicle->color) == capeace) 
                            if ( fld->vehicle->height & targheight ) {
-                              if ( actvehicle->typ->weapons->weapon[i].typ & cwammunitionb )
+                              if ( actvehicle->typ->weapons->weapon[i].canRefuel )
                                  if (fld->vehicle->typ->weapons->count > 0) 
                                     for (j = 0; j < fld->vehicle->typ->weapons->count ; j++) 
-                                       if (((fld->vehicle->typ->weapons->weapon[j].typ & (cwweapon | cwmineb)) == (actvehicle->typ->weapons->weapon[i].typ & (cwweapon | cwmineb))) && ((actvehicle->typ->weapons->weapon[i].typ & (cwweapon | cwmineb)) > 0))
+                                       if ( fld->vehicle->typ->weapons->weapon[j].getScalarWeaponType() == actvehicle->typ->weapons->weapon[i].getScalarWeaponType()                                                        
+                                            && actvehicle->typ->weapons->weapon[i].requiresAmmo() )
                                           if ((fld->vehicle->typ->weapons->weapon[j].count > fld->vehicle->ammo[j]) || (mode == 3)) 
                                              { 
                                                 fld->a.temp = 2; 
                                                 numberoffields++;
-                                             } 
-                              if ( actvehicle->typ->weapons->weapon[i].typ & cwserviceb )
+                                             }                        
+                              if ( actvehicle->typ->weapons->weapon[i].service() )
                                  if ( actvehicle->height <= chfahrend || (actvehicle->height == fld->vehicle->height)) {
                                     if ( ((actvehicle->typ->tank > 0) && (fld->vehicle->typ->tank > 0)
                                        && ((fld->vehicle->typ->tank > fld->vehicle->fuel) || (mode == 3))
@@ -641,7 +647,7 @@ void         trefuelvehicle::initrefuelling( word xp1, word yp1, char md )   /* 
          if (actvehicle->functions & cfrepair) 
             if ( actvehicle->movement >= movement_cost_for_repairing_unit )
                for (a = 0; a < actvehicle->typ->weapons->count ; a++) { 
-                  if ( actvehicle->typ->weapons->weapon[a].typ & cwserviceb) 
+                  if ( actvehicle->typ->weapons->weapon[a].service() ) 
                      if ( actvehicle->material ) 
                         if ( actvehicle->fuel ) 
                            f++;
@@ -651,7 +657,7 @@ void         trefuelvehicle::initrefuelling( word xp1, word yp1, char md )   /* 
       if ((md == 2) || (md == 3)) { 
          f = 0; 
          for (a = 0; a < actvehicle->typ->weapons->count ; a++) { 
-            if ( actvehicle->typ->weapons->weapon[a].typ & cwserviceb )  {
+            if ( actvehicle->typ->weapons->weapon[a].service() )  {
                if ((actvehicle->typ->tank > 0) && (actvehicle->functions & cffuelref) ) {
                   if (md == 2) { 
                      if (actvehicle->fuel > 0) 
@@ -668,8 +674,8 @@ void         trefuelvehicle::initrefuelling( word xp1, word yp1, char md )   /* 
                   else 
                      f++; 
                } 
-            } 
-            if ((actvehicle->typ->weapons->weapon[a].typ & cwammunitionb) > 0)
+            }                                       
+            if ( actvehicle->typ->weapons->weapon[a].canRefuel() )
                if (md == 2) { 
                   if (actvehicle->ammo[a] > 0) 
                      f++; 
@@ -739,7 +745,7 @@ void         tputmine::initpm(  char mt, const pvehicle eht )
    mienenraeumen = false; 
    if (eht->typ->weapons->count > 0) 
       for (i = 0; i <= eht->typ->weapons->count - 1; i++) 
-         if ((eht->typ->weapons->weapon[i].typ & (cwshootableb | cwmineb)) == (cwshootableb | cwmineb)) {
+         if ((eht->typ->weapons->weapon[i].getScalarWeaponType() == cwminen) && eht->typ->weapons->weapon[i].shootable() ) {
             mienenraeumen = true; 
             if (eht->ammo[i] > 0) 
                mienenlegen = true; 
@@ -803,7 +809,7 @@ void  legemine(byte         typ)
                fzt = eht->typ; 
                int  strength = 64;
                for (i = 0; i < fzt->weapons->count ; i++) 
-                  if ((fzt->weapons->weapon[i].typ & (cwmineb | cwshootableb)) == (cwmineb | cwshootableb)) {
+                  if ((fzt->weapons->weapon[i].getScalarWeaponType() == cwminen) && fzt->weapons->weapon[i].shootable() ) {
                      eht->ammo[i]--; 
                      eht->movement -= mineputmovedecrease;
                      strength = eht->weapstrength[i];
@@ -2621,7 +2627,7 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle )
          pvehicletype fzt = getvehicletype_forpos ( i );
          if ( fzt )
             for (j = 0; j < fzt->weapons->count; j++ )
-               if ( fzt->weapons->weapon[j].typ & cwshootableb )
+               if ( fzt->weapons->weapon[j].shootable() )
                   for (h = 0; h < 8; h++ )
                      if ( fzt->weapons->weapon[j].targ & ( 1 << h ) )
                         if ( fzt->weapons->weapon[j].maxdistance > maxshootdist[h] )
@@ -3869,10 +3875,10 @@ void         tdashboard::paintweaponammount(int h, int num, int max )
 
 void         tdashboard::paintweapon(byte         h, int num, int strength,  const SingleWeapon  *weap )
 { 
-      if ( weap->typ & cwammunitionb )
-         putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, xlatpict ( &xlattables.light, icons.unitinfoguiweapons[ log2 ( weap->typ & (cwweapon | cwmineb) ) ] ));
+      if ( weap->canRefuel() )
+         putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, xlatpict ( &xlattables.light, icons.unitinfoguiweapons[ weap->getScalarWeaponType() ] ));
       else
-         putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, icons.unitinfoguiweapons[ log2 ( weap->typ & (cwweapon | cwmineb) ) ] );
+         putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, icons.unitinfoguiweapons[ weap->getScalarWeaponType() ] );
 
       paintweaponammount( h, num, weap->count );
 
@@ -3881,7 +3887,7 @@ void         tdashboard::paintweapon(byte         h, int num, int strength,  con
       activefontsettings.font = schriften.guifont;
       activefontsettings.height = 9;
       activefontsettings.length = 27;
-      if ( weap->typ & cwshootableb ) {
+      if ( weap->shootable() ) {
          showtext2c( strrr(strength), agmp->resolutionx - ( 640 - 503), 93 + h * 13);
 
          weaps[h].displayed = 1;
@@ -3936,7 +3942,7 @@ void         tdashboard::paintweapons(void)
                 i++; 
              } 
              else { 
-                if ( vt->weapons->weapon[j].typ & cwserviceb) {
+                if ( vt->weapons->weapon[j].service() ) {
                    serv = 1;
                    if ( materialdisplayed )
                       if ( vt->tank ) { 
@@ -3994,10 +4000,10 @@ void         tdashboard :: paintlargeweaponinfo ( void )
        int count = 0;
        if ( vt->weapons->count ) 
           for ( int j = 0; j < vt->weapons->count ; j++) 
-             if ( vt->weapons->weapon[j].typ & (cwweapon | cwmineb )) 
+             if ( vt->weapons->weapon[j].getScalarWeaponType() >= 0 ) 
                 count++;
              else 
-                if (vt->weapons->weapon[j].typ & cwserviceb) 
+                if (vt->weapons->weapon[j].service() ) 
                    serv = count;
 
 
@@ -4033,7 +4039,7 @@ void         tdashboard :: paintlargeweaponinfo ( void )
 
        if ( vt->weapons->count ) 
           for ( int j = 0; j < vt->weapons->count ; j++) { 
-             if ( vt->weapons->weapon[j].typ & (cwweapon | cwmineb )) { 
+             if ( vt->weapons->weapon[j].getScalarWeaponType() >= 0 ) { 
                 int maxstrength = vt->weapons->weapon[j].maxstrength;
                 int minstrength = vt->weapons->weapon[j].minstrength;
                 if ( vehicle && maxstrength ) {
@@ -4041,9 +4047,9 @@ void         tdashboard :: paintlargeweaponinfo ( void )
                    maxstrength = vehicle->weapstrength[j];
                 }
 
-                paintlargeweapon(i, cwaffentypen[ log2 ( vt->weapons->weapon[j].typ & (cwweapon | cwmineb ))], 
+                paintlargeweapon(i, cwaffentypen[ vt->weapons->weapon[j].getScalarWeaponType() ], 
                                ( vehicle ? vehicle->ammo[j] : vt->weapons->weapon[j].count ) , vt->weapons->weapon[j].count,
-                               vt->weapons->weapon[j].typ & cwshootableb, vt->weapons->weapon[j].typ & cwammunitionb, 
+                               vt->weapons->weapon[j].shootable(), vt->weapons->weapon[j].canRefuel(), 
                                maxstrength, minstrength, 
                                vt->weapons->weapon[j].maxdistance, vt->weapons->weapon[j].mindistance,
                                vt->weapons->weapon[j].sourceheight, vt->weapons->weapon[j].targ );
@@ -4110,8 +4116,8 @@ void         tdashboard :: paintlargeweaponinfo ( void )
          for ( int j = 0; j < vt->weapons->count ; j++) {
             int x = (agmp->resolutionx - 640) / 2;
             int y = 150 + 28 + j * 14;
-            if ( vt->weapons->weapon[j].typ & (cwweapon | cwmineb )) 
-               if ( vt->weapons->weapon[j].typ & cwshootableb ) 
+            if ( vt->weapons->weapon[j].getScalarWeaponType() >= 0) 
+               if ( vt->weapons->weapon[j].shootable() ) 
                   if ( mouseinrect ( x, y, x + 640, y+ 14 ))
                      topaint = j;
          }

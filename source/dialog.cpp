@@ -1,6 +1,11 @@
-//     $Id: dialog.cpp,v 1.16 2000-01-19 22:14:19 mbickel Exp $
+//     $Id: dialog.cpp,v 1.17 2000-01-24 17:35:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/01/19 22:14:19  mbickel
+//      Fixed:
+//        - crash in replay
+//        - invalid character highliting in showtext3
+//
 //     Revision 1.15  2000/01/19 22:03:34  mbickel
 //      Fixed a bug in the DOS keyboard code
 //
@@ -581,7 +586,7 @@ void         tweaponinfo::init( pvehicletype eht, char num  )
 void         tweaponinfo::run(void)
 { 
   char* suffix;
-  word         i, j, k; 
+  word         i; 
   integer      xa, ya; 
   char*        strng;
   char*        strng2;
@@ -602,7 +607,7 @@ void         tweaponinfo::run(void)
 
 
    if (aktvehicle->weapons->weapon[weapnum].maxstrength > 0) 
-      if (aktvehicle->weapons->weapon[weapnum].typ & cwweapon ) { 
+      if (aktvehicle->weapons->weapon[weapnum].getScalarWeaponType() >= 0 ) { 
 
          line(x1 + 300,y1 + starty + 130,x1 + 300,y1 + starty + 260,black); 
          putspriteimage(x1 + 293,y1 + starty + 130,icons.weapinfo.pfeil1); 
@@ -654,19 +659,17 @@ void         tweaponinfo::run(void)
    else 
       suffix = "ground to ";
 
-   if ((aktvehicle->weapons->weapon[weapnum].typ & (cwgroundmissileb | cwairmissileb)) == 0)
-      suffix = "";
-   j = aktvehicle->weapons->weapon[weapnum].typ; 
+   if (!(aktvehicle->weapons->weapon[weapnum].getScalarWeaponType() == cwgroundmissilen || 
+         aktvehicle->weapons->weapon[weapnum].getScalarWeaponType() == cwairmissilen ))
+      suffix = "";                         
    activefontsettings.color = black; 
-   if ((j & cwshootableb) == 0)
+   if ( !aktvehicle->weapons->weapon[weapnum].shootable() )
       showtext2("no",x1 + 50,y1 + starty + 205); 
    else { 
       showtext2("yes",x1 + 50,y1 + starty + 205); 
-      j = j ^ cwshootableb;
    } 
 
-   if (j & cwammunitionb ) { 
-      j = j ^ cwammunitionb;
+   if ( aktvehicle->weapons->weapon[weapnum].canRefuel() ) { 
       activefontsettings.length = 10;
       showtext2("yes",x1 + 50,y1 + starty + 260); 
    } 
@@ -675,12 +678,11 @@ void         tweaponinfo::run(void)
 
    activefontsettings.length = 170;
    strcpy ( strng, suffix );
-   for (k = 0; k <= 15; k++) 
-      if (j & (1 << k) ) 
-         if ( k < cwaffentypennum) {
-            strcat( strng, cwaffentypen[k] );
-            showtext2( strng, x1 + 50,y1 + starty + 40);
-         };
+   int k = aktvehicle->weapons->weapon[weapnum].getScalarWeaponType();
+      if ( k < cwaffentypennum) {
+         strcat( strng, cwaffentypen[k] );
+         showtext2( strng, x1 + 50,y1 + starty + 40);
+      };
 
    itoa(aktvehicle->weapons->weapon[weapnum].maxstrength , strng, 10 );
    showtext2(strng ,x1 + 50,y1 + starty + 90);
@@ -822,7 +824,7 @@ void         tvehicleinfo::paintmarkweap(void)
 { 
   collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );
   byte         mas;
-  int ii,jj,ll;
+  int ii;
   char strng[100];
 
    mas = getmousestatus(); 
@@ -846,19 +848,17 @@ void         tvehicleinfo::paintmarkweap(void)
             strcpy (strng,  "air to ");
          else 
             strcpy(strng, "ground to ");
-         if ((aktvehicle->weapons->weapon[ii].typ & (cwgroundmissileb | cwairmissileb)) == 0)
+
+         if (!(aktvehicle->weapons->weapon[ii].getScalarWeaponType() == cwgroundmissilen || 
+               aktvehicle->weapons->weapon[ii].getScalarWeaponType() == cwairmissilen ))
             strng[0] = 0;
-         jj = aktvehicle->weapons->weapon[ii].typ & ~cwammunitionb;
+
          activefontsettings.color = textcol; 
-         if ((jj & cwshootableb) == 0)
+         if ( !aktvehicle->weapons->weapon[ii].shootable() )
             activefontsettings.color = darkgray; 
-         else 
-            jj &= ~cwshootableb;
 
          activefontsettings.length = 190;
-         for (ll = 0; ll < cwaffentypennum; ll++)
-            if (jj & (1 << ll) )
-                  strcat( strng, cwaffentypen[ ll ] );
+         strcat( strng, cwaffentypen[ aktvehicle->weapons->weapon[ii].getScalarWeaponType() ] );
          showtext2( strng, wepx + 20, wepy + ii * 20);
 
 
@@ -1280,7 +1280,7 @@ void tvehicleinfo::showweaponsvariables( void )
       rectangle ( graphx1, graphy1, graphx2, graphy2 , lightblue);
    
       if (aktvehicle->weapons->weapon[markweap].maxstrength > 0)
-         if (aktvehicle->weapons->weapon[markweap].typ & cwweapon ) {
+         if ( aktvehicle->weapons->weapon[markweap].getScalarWeaponType() >= 0 ) {
    
           /*  line(x1 + 300,y1 + starty + 130,x1 + 300,y1 + starty + 260,black);
             putspriteimage(x1 + 293,y1 + starty + 130,icons.weapinfo.pfeil1); 
@@ -1350,22 +1350,18 @@ void tvehicleinfo::showweaponsvariables( void )
          suffix = "";
       */
    
-      j = aktvehicle->weapons->weapon[markweap].typ; 
-   
       activefontsettings.color = black; 
       activefontsettings.length = 25;
       activefontsettings.justify = lefttext;
    
-      if (j & cwshootableb ) {
-         j = j ^ cwshootableb;
+      if ( aktvehicle->weapons->weapon[markweap].shootable() ) {
          showtext2("yes", wepx + 210, wepy + 160);
       } else { 
          showtext2("no", wepx + 210, wepy + 160);
       } 
    
    
-      if (j & cwammunitionb ) { 
-         j = j ^ cwammunitionb;
+      if ( aktvehicle->weapons->weapon[markweap].canRefuel() ) { 
          showtext2("yes",wepx + 210, wepy + 180);
       } 
       else 
@@ -1501,7 +1497,7 @@ void         tvehicleinfo::showclasses( void )
          activefontsettings.justify = righttext;
         activefontsettings.length = 20;
          for (j = 0 ; j < aktvehicle->weapons->count  ; j++ ) 
-            showtext2 ( strrr ( aktvehicle->weapons->weapon[j].maxstrength * aktvehicle->classbound[i].weapstrength[ log2 ( aktvehicle->weapons->weapon[j].typ & cwweapon) ] / 1024 ), x1 + 250 + j * 30, y1 + starty + 85 + i * 25 );
+            showtext2 ( strrr ( aktvehicle->weapons->weapon[j].maxstrength * aktvehicle->classbound[i].weapstrength[ aktvehicle->weapons->weapon[j].getScalarWeaponType() ] / 1024 ), x1 + 250 + j * 30, y1 + starty + 85 + i * 25 );
 
         activefontsettings.length = 40;
          showtext2 ( strrr ( aktvehicle->armor * aktvehicle->classbound[i].armor / 1024 ), x1 + 250 + j * 30, y1 + starty + 85 + i * 25 );
@@ -5538,7 +5534,7 @@ void         tverlademunition::run(void)
       */
       mx = vehicle2->typ->weapons->count; 
       for (i = 0; i < mx; i++) { 
-         if ( vehicle2->typ->weapons->weapon[i].typ & cwserviceb  /* || ((fast & 2) == 0)  */ ) {
+         if ( vehicle2->typ->weapons->weapon[i].service()  /* || ((fast & 2) == 0)  */ ) {
             if ((vehicle->typ->tank > 0) && (vehicle2->typ->tank > 0) && ( vehicle2->functions & cffuelref)) { 
                   wp.weap[wp.count].typ = csprit; 
                   wp.weap[wp.count].sourcepos = csprit; 
@@ -5583,11 +5579,11 @@ void         tverlademunition::run(void)
          for (i = 0; i < vehicle->typ->weapons->count ; i++) { 
             l = 255; 
             for (k = 0; k < vehicle2->typ->weapons->count ; k++) 
-               if ((vehicle2->typ->weapons->weapon[k].typ & (cwweapon | cwmineb)) & (vehicle->typ->weapons->weapon[i].typ & (cwweapon | cwmineb)) ) 
-                  if (vehicle2->typ->weapons->weapon[k].typ & cwammunitionb ) 
+               if (vehicle2->typ->weapons->weapon[k].getScalarWeaponType() == vehicle->typ->weapons->weapon[i].getScalarWeaponType()  &&  vehicle->typ->weapons->weapon[i].getScalarWeaponType() >= 0) 
+                  if (vehicle2->typ->weapons->weapon[k].canRefuel() ) 
                      l = k; 
-            if (l != 255) { 
-                  wp.weap[wp.count].typ = log2(vehicle->typ->weapons->weapon[i].typ & (cwweapon | cwmineb)); 
+            if (l != 255) {                                                                                          
+                  wp.weap[wp.count].typ = vehicle->typ->weapons->weapon[i].getScalarWeaponType() ; 
                   wp.weap[wp.count].sourcepos = l; 
                   wp.weap[wp.count].destpos = i; 
                   wp.weap[wp.count].sourceamount = vehicle2->ammo[l]; 

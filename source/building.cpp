@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.14 2000-01-04 19:43:46 mbickel Exp $
+//     $Id: building.cpp,v 1.15 2000-01-24 17:35:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/01/04 19:43:46  mbickel
+//      Continued Linux port
+//
 //     Revision 1.13  2000/01/02 19:47:04  mbickel
 //      Continued Linux port
 //      Fixed crash at program exit
@@ -412,14 +415,14 @@ void  ccontainercontrols :: crefill :: material (pvehicle eht, int newmaterial)
 
 void  ccontainercontrols :: crefill :: ammunition (pvehicle eht, char weapon, int newa )
 {
-   if ( eht->typ->weapons->weapon[ weapon ].typ & ( cwweapon | cwmineb ) ) {
+   if ( eht->typ->weapons->weapon[ weapon ].requiresAmmo() ) {
       if ( newa > eht->typ->weapons->weapon[ weapon ].count )
          newa = eht->typ->weapons->weapon[ weapon ].count;
 
       if ( newa > eht->ammo[weapon] ) 
-         eht->ammo[weapon]  +=  cc->getammunition ( log2 ( eht->typ->weapons->weapon[ weapon ].typ & ( cwweapon | cwmineb ) ) , newa - eht->ammo[weapon], 1, gameoptions.container.autoproduceammunition );
+         eht->ammo[weapon]  +=  cc->getammunition ( eht->typ->weapons->weapon[ weapon ].getScalarWeaponType() , newa - eht->ammo[weapon], 1, gameoptions.container.autoproduceammunition );
       else {
-         cc->putammunition ( log2 ( eht->typ->weapons->weapon[ weapon ].typ & ( cwweapon | cwmineb ) ) , eht->ammo[weapon]  - newa, 1 );
+         cc->putammunition ( eht->typ->weapons->weapon[ weapon ].getScalarWeaponType() , eht->ammo[weapon]  - newa, 1 );
          eht->ammo[weapon] = newa;
       }
    }
@@ -433,7 +436,7 @@ void  ccontainercontrols :: crefill :: filleverything ( pvehicle eht )
    fuel     ( eht, maxint );
    material ( eht, maxint );
    for (int i = 0; i < eht->typ->weapons->count; i++) 
-     if ( eht->typ->weapons->weapon[ i ].typ & ( cwweapon | cwmineb ) ) 
+     if ( eht->typ->weapons->weapon[ i ].requiresAmmo() ) 
         ammunition ( eht, i, maxint );
 
 }
@@ -443,7 +446,7 @@ void  ccontainercontrols :: crefill :: emptyeverything ( pvehicle eht )
    fuel     ( eht, 0 );
    material ( eht, 0 );
    for (int i = 0; i < eht->typ->weapons->count; i++) 
-     if ( eht->typ->weapons->weapon[ i ].typ & ( cwweapon | cwmineb ) ) 
+     if ( eht->typ->weapons->weapon[ i ].requiresAmmo() ) 
         ammunition ( eht, i, 0 );
 
 }
@@ -1051,7 +1054,7 @@ int   cbuildingcontrols :: ctrainunit :: available ( pvehicle eht )
          int num = 0;
          int numsh = 0;
          for (int i = 0; i < eht->typ->weapons->count; i++ ) 
-            if ( eht->typ->weapons->weapon[i].typ & cwshootableb )
+            if ( eht->typ->weapons->weapon[i].shootable() )
                if ( eht->ammo[i] )
                   numsh++;
                else
@@ -1072,7 +1075,7 @@ void  cbuildingcontrols :: ctrainunit :: trainunit ( pvehicle eht )
    if ( available ( eht ) ) {
       eht->experience+= trainingexperienceincrease;
       for (int i = 0; i < eht->typ->weapons->count; i++ ) 
-         if ( eht->typ->weapons->weapon[i].typ & cwshootableb )
+         if ( eht->typ->weapons->weapon[i].shootable() )
             eht->ammo[i]--;
 
       eht->attacked = 1;
@@ -1184,7 +1187,7 @@ int   ctransportcontrols :: putammunition ( int weapontype, int ammunition, int 
    int ammo = ammunition;
    for ( int i = 0; i < vehicle->typ->weapons->count; i++ )
       if ( ammo )
-        if ( vehicle->typ->weapons->weapon[i].typ & ( 1 << weapontype ) ) {
+        if ( vehicle->typ->weapons->weapon[i].getScalarWeaponType() == weapontype ) {
           int dif = vehicle->typ->weapons->weapon[i].count - vehicle->ammo[i];
           if ( dif > ammo )
              dif = ammo;
@@ -1253,7 +1256,7 @@ int    ctransportcontrols :: getammunition ( int weapontype, int num, int abbuch
    int ammo = 0;
    for ( int i = 0; i < vehicle->typ->weapons->count ; i++)
       if ( ammo < num )
-        if ( vehicle->typ->weapons->weapon[i].typ & ( 1 << weapontype ) ) {
+        if ( vehicle->typ->weapons->weapon[i].getScalarWeaponType() == weapontype ) {
           int dif = num - ammo;
           if ( dif > vehicle->ammo[i] )
              dif = vehicle->ammo[i];
@@ -1269,7 +1272,7 @@ int    ctransportcontrols :: getammunition ( int weapontype, int num, int abbuch
 int    ctransportcontrols :: ammotypeavail ( int type )
 {
    for ( int i = 0; i < vehicle->typ->weapons->count ; i++)
-      if ( vehicle->typ->weapons->weapon[i].typ & ( 1 << type ) ) 
+      if ( vehicle->typ->weapons->weapon[i].getScalarWeaponType() == type ) 
          return 1;
    return 0;
 }
@@ -2021,8 +2024,8 @@ void  ccontainer :: cammunitiontransfer_subwindow :: reset ( pvehicle veh )
    }
    if ( eht ) {
       for (i = 0; i < eht->typ->weapons->count; i++) {
-         if ( eht->typ->weapons->weapon[i].typ & ( cwweapon | cwmineb ) ) {
-            int typ = log2( eht->typ->weapons->weapon[i].typ & ( cwweapon | cwmineb ));
+         if ( eht->typ->weapons->weapon[i].requiresAmmo() ) {
+            int typ = eht->typ->weapons->weapon[i].getScalarWeaponType() ;
             if ( cc->ammotypeavail ( typ )) {
                weaps[num].name = cwaffentypen [ typ ];
                weaps[num].maxnum = eht->typ->weapons->weapon[i].count;
@@ -5526,7 +5529,7 @@ int   ccontainer_b :: fill_icon_cb :: available    ( void )
       if ( eht->fuel < eht->typ->tank )
         return 1;
       for (int i = 0; i < eht->typ->weapons->count; i++) 
-         if ( eht->typ->weapons->weapon[ i ].typ & ( cwweapon | cwmineb ) ) 
+         if ( eht->typ->weapons->weapon[ i ].requiresAmmo() ) 
             if ( eht->ammo[i] < eht->typ->weapons->weapon[ i ].count )
                return 1;
    }
@@ -6039,12 +6042,12 @@ int   ccontainer_t :: fill_icon_ct :: available    ( void )
       if ( eht->fuel < eht->typ->tank )
         return 1;
       for (int i = 0; i < eht->typ->weapons->count; i++) 
-         if ( eht->typ->weapons->weapon[ i ].typ & ( cwweapon | cwmineb ) ) 
+         if ( eht->typ->weapons->weapon[ i ].requiresAmmo() ) 
             if ( eht->ammo[i] < eht->typ->weapons->weapon[ i ].count )
                for (int j = 0; j < cc_t->vehicle->typ->weapons->count; j++) 
-                  if ( cc_t->vehicle->typ->weapons->weapon[ j ].typ & ( cwweapon | cwmineb ) ) 
+                  if ( cc_t->vehicle->typ->weapons->weapon[ j ].requiresAmmo() ) 
                      if ( cc_t->vehicle->ammo[j] )
-                        if ( eht->typ->weapons->weapon[ i ].typ & ( cwweapon | cwmineb ) & cc_t->vehicle->typ->weapons->weapon[ j ].typ ) 
+                        if ( eht->typ->weapons->weapon[ i ].getScalarWeaponType() ==  cc_t->vehicle->typ->weapons->weapon[ j ].getScalarWeaponType() ) 
                            return 1;
    }
 

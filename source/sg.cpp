@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.19 2000-01-24 08:16:49 steb Exp $
+//     $Id: sg.cpp,v 1.20 2000-01-24 17:35:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/01/24 08:16:49  steb
+//     Changes to existing files to implement sound.  This is the first munge into
+//     CVS.  It worked for me before the munge, but YMMV :)
+//
 //     Revision 1.18  2000/01/19 21:18:35  mbickel
 //      Adjusted case of filenames for Linux version (all data files now
 //        lowercase)
@@ -92,11 +96,10 @@
     Boston, MA  02111-1307  USA
 */
 
+
 #include "config.h"
 #ifdef _DOS_
-#include <i86.h>
 #include <conio.h>
-#include <dos.h>
 #endif
 
 #include <stdio.h>                                  
@@ -142,7 +145,7 @@
 
 
 
-#define MEMCHK
+// #define MEMCHK
 
 extern int startreplaylate;
 

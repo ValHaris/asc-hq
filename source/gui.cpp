@@ -1,6 +1,9 @@
-//     $Id: gui.cpp,v 1.11 2000-01-04 19:43:51 mbickel Exp $
+//     $Id: gui.cpp,v 1.12 2000-01-24 17:35:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/01/04 19:43:51  mbickel
+//      Continued Linux port
+//
 //     Revision 1.10  2000/01/02 19:47:07  mbickel
 //      Continued Linux port
 //      Fixed crash at program exit
@@ -1698,7 +1701,7 @@ int   tnsguiiconrepair::available    ( void )
          if (fld->vehicle->color == actmap->actplayer * 8) 
             if (fld->vehicle->functions & cfrepair ) 
                for ( int i = 0; i < fld->vehicle->typ->weapons->count; i++ )
-                  if ( fld->vehicle->typ->weapons->weapon[i].typ & cwserviceb )
+                  if ( fld->vehicle->typ->weapons->weapon[i].service() )
                      if ( !fld->vehicle->attacked)
                         return 1; 
    } 
@@ -1743,9 +1746,9 @@ int   tnsguiiconrefuel::available    ( void )
             if (fld->vehicle->color == actmap->actplayer * 8) { 
                pvehicletype fzt = fld->vehicle->typ; 
                for ( int i = 0; i < fzt->weapons->count; i++ )
-                  if ( fzt->weapons->weapon[i].typ & cwserviceb )
+                  if ( fzt->weapons->weapon[i].service() )
                      for ( int j = 0; j < fzt->weapons->count ; j++) {
-                        if (fzt->weapons->weapon[j].typ & cwammunitionb )
+                        if (fzt->weapons->weapon[j].canRefuel() )
                            return 1;
                         if ( fld->vehicle->functions & (cffuelref | cfmaterialref) )
                            return 1; 

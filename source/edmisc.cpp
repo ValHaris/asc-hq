@@ -1,6 +1,10 @@
-//     $Id: edmisc.cpp,v 1.6 1999-12-29 12:50:44 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.7 2000-01-24 17:35:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/12/29 12:50:44  mbickel
+//      Removed a fatal error message in GUI.CPP
+//      Made some modifications to allow platform dependant path delimitters
+//
 //     Revision 1.5  1999/12/27 12:59:56  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -2266,7 +2270,7 @@ void         tclass_change::setup(void)
    tklasse = unit->klasse;
    for (j = 0 ; j < unit->typ->weapons->count  ; j++ ) {
        //tweapstr[j] = unit->weapstrength[j];
-       tweapstr[j] = unit->typ->weapons->weapon[j].maxstrength * unit->typ->classbound[tklasse].weapstrength[ log2 ( unit->typ->weapons->weapon[j].typ & cwweapon) ] / 1024;
+       tweapstr[j] = unit->typ->weapons->weapon[j].maxstrength * unit->typ->classbound[tklasse].weapstrength[ unit->typ->weapons->weapon[j].getScalarWeaponType() ] / 1024;
    }
    //tarmor = unit->armor;
    tarmor = unit->typ->armor * unit->typ->classbound[tklasse].armor / 1024;
@@ -2274,11 +2278,10 @@ void         tclass_change::setup(void)
    addeingabe(4,&tarmor,1,65535);
    for (i = 0 ; i < unit->typ->weapons->count  ; i++ ) {
       strcpy ( s, "" );
-      for (k = 0; k < cwaffentypennum; k++)
-         if (unit->typ->weapons->weapon[i].typ & (1 << k) ) {
-            strcat( s, cwaffentypen[k] );
-            strcat( s, " ");
-         }
+
+      strcat( s, cwaffentypen[unit->typ->weapons->weapon[i].getScalarWeaponType() ] );
+      strcat( s, " ");
+
       strcat(s,"(~");
       strcat(s,strrr(i+1));
       strcat(s,"~)");
@@ -2321,7 +2324,7 @@ void         tclass_change::run(void)
          if (tklasse != redline) {
             tklasse = redline;
             for (j = 0 ; j < unit->typ->weapons->count  ; j++ ) {
-               tweapstr[j] = unit->typ->weapons->weapon[j].maxstrength * unit->typ->classbound[tklasse].weapstrength[ log2 ( unit->typ->weapons->weapon[j].typ & cwweapon) ] / 1024;
+               tweapstr[j] = unit->typ->weapons->weapon[j].maxstrength * unit->typ->classbound[tklasse].weapstrength[ unit->typ->weapons->weapon[j].getScalarWeaponType() ] / 1024;
                showbutton(j+5);
             }
             tarmor = unit->typ->armor * unit->typ->classbound[tklasse].armor / 1024;
