@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.52 2001-01-24 11:53:09 mbickel Exp $
+//     $Id: artint.cpp,v 1.53 2001-01-24 14:42:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2001/01/24 11:53:09  mbickel
+//      Fixed some compilation problems with gcc
+//
 //     Revision 1.51  2001/01/23 21:05:05  mbickel
 //      Speed up of AI
 //      Lot of bugfixes in AI
@@ -677,7 +680,7 @@ class  SearchReconquerBuilding : public tsearchfields {
                                    bool returnresult ( );
                                    void unitfound ( pvehicle eht );
                                    bool canUnitCapture ( pvehicle veh );
-                                   SearchReconquerBuilding ( AI& _ai, pbuilding bld ) : tsearchfields ( ai.getMap() ), ai ( _ai ), buildingToCapture ( bld ), mode(3) {};
+                                   SearchReconquerBuilding ( AI& _ai, pbuilding bld ) : tsearchfields ( _ai.getMap() ), ai ( _ai ), buildingToCapture ( bld ), mode(3) {};
                                 };
 
 bool SearchReconquerBuilding :: returnresult( )
