@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.40 2000-08-09 12:39:34 mbickel Exp $
+//     $Id: typen.cpp,v 1.41 2000-08-10 10:20:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2000/08/09 12:39:34  mbickel
+//      fixed invalid height when constructing vehicle with other vehicles
+//      fixed wrong descent icon being shown
+//
 //     Revision 1.39  2000/08/08 13:38:40  mbickel
 //      Fixed: construction of buildings doesn't consume resources
 //      Fixed: no unit information visible for satellites
@@ -236,7 +240,7 @@ const int cminestrength[cminenum]  = { 60, 120, 180, 180 };
 const char*  cbuildingfunctions[cbuildingfunctionnum]  = {"HQ",                "training",             "unused (was: refinery)",           "vehicle production", "ammunition production", 
                                                       "unused (was: energy prod)", "unused (was: material prod)",  "unused (was: fuel prod)",    "repair facility",    "recycling",
                                                       "research",          "sonar",                "wind power plant",     "solar power plant",    "matter converter (was: power plant)",
-                                                      "mining station",    "external loading" };
+                                                      "mining station",    "external loading",         "construct units that cannot move out" };
 
 const char*  cvehiclefunctions[cvehiclefunctionsnum]  = {"sonar",             "paratrooper",       "mine-layer",        "trooper",               "repair vehicle",
                                                          "conquer buildings", "move after attack","view satellites",   "construct ALL buildings", "view mines", 
@@ -262,8 +266,9 @@ const char*  cwaffentypen[cwaffentypennum]  = {"cruise missile", "mine",    "bom
 const char*  cmovemalitypes[cmovemalitypenum] = { "default",
                                                  "light tracked vehicle", "medium tracked vehicle", "heavy tracked vehicle",
                                                  "light wheeled vehicle", "medium wheeled vehicle", "heavy wheeled vehicle",
-                                                 "trooper",               "rail vehicle",           "aircraft",
-                                                 "ships",                 "building / turret / object" };
+                                                 "trooper",               "rail vehicle",           "medium aircraft",
+                                                 "medium ship",           "building / turret / object", "light aircraft",
+                                                 "heavy aircraft",        "light ship",             "heavy ship" };
 
 const char* cnetcontrol[cnetcontrolnum] = { "store energy",           "store material",           "store fuel",           
                                             "move out all energy",           "move out all material",           "move out all fuel", 
@@ -2090,11 +2095,14 @@ int tvehicletype :: vehicleloadable ( pvehicletype fzt )
 
 int    tbuildingtype :: vehicleloadable ( pvehicletype fzt )
 {
-      if ( (loadcapacity >= fzt->maxsize()  &&  ((unitheightreq & fzt->height) || !unitheightreq) && !(unitheight_forbidden & fzt->height)  && (loadcapability & fzt->height))  ||
-           ( fzt->functions & cf_trooper ) )
-           return 1;
-      else
-           return 0;
+   if ( special & cgproduceAllUnitsB )
+      return 1;
+
+   if (    (loadcapacity >= fzt->maxsize()  &&  ((unitheightreq & fzt->height) || !unitheightreq) && !(unitheight_forbidden & fzt->height)  && (loadcapability & fzt->height))  
+        || ( fzt->functions & cf_trooper ) )
+        return 1;
+
+   return 0;
 }
 
 

@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.39 2000-08-09 12:39:40 mbickel Exp $
+//     $Id: typen.h,v 1.40 2000-08-10 10:20:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2000/08/09 12:39:40  mbickel
+//      fixed invalid height when constructing vehicle with other vehicles
+//      fixed wrong descent icon being shown
+//
 //     Revision 1.38  2000/08/08 13:22:14  mbickel
 //      Added unitCategoriesLoadable property to buildingtypes and vehicletypes
 //      Added option: showUnitOwner
@@ -264,7 +268,7 @@ typedef class tshareview *pshareview;
 
 #define waffenanzahl 8
 #define cwettertypennum 6
-#define cmovemalitypenum 12
+const int cmovemalitypenum  = 16;
  #define cmm_building 11
 
 #define choehenstufennum 8
@@ -1866,7 +1870,8 @@ extern  const char*  choehenstufen[8] ;
 
 
 
-#define cbuildingfunctionnum 17
+const int cbuildingfunctionnum = 18;
+
 extern const char*  cbuildingfunctions[cbuildingfunctionnum]; 
  #define cghqn 0  
  #define cghqb ( 1 << cghqn  )
@@ -1894,6 +1899,8 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
  #define cgminingstationb ( 1 << cgminingstationn )
  #define cgexternalloadingn 16
  #define cgexternalloadingb ( 1 << cgexternalloadingn )
+ #define cgproduceAllUnitsN 17
+ #define cgproduceAllUnitsB ( 1 << cgproduceAllUnitsN )
 
 
 
