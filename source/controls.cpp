@@ -3,9 +3,15 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.102 2001-05-21 12:46:18 mbickel Exp $
+//     $Id: controls.cpp,v 1.103 2001-07-02 10:14:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.102  2001/05/21 12:46:18  mbickel
+//      Fixed infinite loop in AI::strategy
+//      Fixed bugs in mapeditor - event editing
+//      Fixed bugs in even loading / writing
+//      Fixed wrong build order AI <-> main program
+//
 //     Revision 1.101  2001/03/30 12:43:15  mbickel
 //      Added 3D pathfinding
 //      some cleanup and documentation
@@ -2914,7 +2920,7 @@ void nextPlayer( void )
    int newplayer = actmap->actplayer;
    actmap->playerView = actmap->actplayer;
 
-   if ( actmap->network &&  oldplayer != actmap->actplayer && actmap->network->player[ newplayer ].compposition != actmap->network->player[ oldplayer ].compposition )
+   if ( oldplayer >= 0 && actmap->network &&  oldplayer != actmap->actplayer && actmap->network->player[ newplayer ].compposition != actmap->network->player[ oldplayer ].compposition )
       sendnetworkgametonextplayer ( oldplayer, newplayer );
    else {
 /*
