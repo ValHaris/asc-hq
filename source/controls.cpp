@@ -471,7 +471,7 @@ int          tputmine::initpm(  char mt, const pvehicle eht )
 
    if (eht->typ->weapons.count > 0)
       for ( int i = 0; i <= eht->typ->weapons.count - 1; i++)
-         if ((eht->typ->weapons.weapon[i].getScalarWeaponType() == cwminen) && eht->typ->weapons.weapon[i].shootable() ) {
+         if ((eht->typ->weapons.weapon[i].getScalarWeaponType() == cwminen) && eht->typ->weapons.weapon[i].shootable() && (eht->typ->weapons.weapon[i].sourceheight & eht->height) ) {
             mienenraeumen = true;
             if (eht->ammo[i] > 0)
                mienenlegen = true;
