@@ -65,9 +65,6 @@ extern void  loadalltechnologies(void);
 extern void  loadallobjecttypes ( void );
 extern void  freetextdata();
 
-extern pobjecttype streetobjectcontainer ;
-extern pobjecttype pathobject;
-extern pobjecttype railroadobject ;
 extern pobjecttype eisbrecherobject;
 extern pobjecttype fahrspurobject;
 

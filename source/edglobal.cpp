@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.49 2002-11-01 20:44:53 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.50 2002-11-02 14:13:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2002/11/01 20:44:53  mbickel
+//      Added function to specify which units can be build by other units
+//
 //     Revision 1.48  2002/10/12 17:28:03  mbickel
 //      Fixed "enemy unit loaded" bug.
 //      Changed map format
@@ -936,7 +939,7 @@ void execaction(int code)
       }
       break;
    case act_smoothcoasts : {
-            smooth ( 6 );
+            ForestCalculation::smooth ( 6, actmap, NULL );
             displaymap();
       }
       break;

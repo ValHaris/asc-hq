@@ -88,8 +88,11 @@
      //! The name of the object
      ASCString name;
 
-     //! if != 0 this object will not graphically connect to neighbouring objects
-     bool no_autonet;
+     static const int netBehaviourNum = 5;
+     enum NetBehaviour { NetToBuildings = 1, NetToBuildingEntry = 2, NetToSelf = 4, NetToBorder = 8, SpecialForest = 0x10 };
+
+     //! specifies how the object is going to connect to other things
+     int netBehaviour;
 
      //! The terrain on which this object can be placed
      TerrainAccess terrainaccess;
@@ -125,11 +128,7 @@
      void* getpic ( int i, int weather = 0 );
 
      //! can the object be build on the field fld
-     int  buildable ( pfield fld );
-
-     //! if the object connects graphically with others, does it connect with buildings too
-     int connectablewithbuildings ( void );
-
+     bool buildable ( pfield fld );
 
      //! reads the objecttype from a stream
      void read ( tnstream& stream );
@@ -148,7 +147,12 @@
 
  };
 
-const int objectDisplayingMethodNum = 3; 
+const int objectDisplayingMethodNum = 3;
+
+namespace ForestCalculation {
+  //! automatically adjusting the pictures of woods and coasts to form coherent structures
+  extern void smooth ( int what, pmap gamemap, pobjecttype woodObj );
+};
 
 
 #endif

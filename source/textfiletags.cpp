@@ -171,6 +171,12 @@ const char*  buildingFunctionTags[cbuildingfunctionnum]  =
         "Shadow",
         "Translation" };
 
+ const char* objectNetMethod[ObjectType::netBehaviourNum]
+    = { "NetToBuilding",
+        "NetToBuildingEntry",
+        "NetToSelf",
+        "NetToBorder",
+        "SpecialBiForest" };
 
 const char* AItasks[AiParameter::taskNum] = { "nothing",
                          "tactics",

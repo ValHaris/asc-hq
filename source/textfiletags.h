@@ -26,6 +26,8 @@
  extern const char* weaponTags[];
  extern const char* unitCategoryTags[];
  extern const char* buildingFunctionTags[];
+ extern const char* objectNetMethod[];
+
 
  extern const char* objectDisplayingMethodTags[];
 

@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: spfst.h,v 1.49 2002-10-09 16:58:46 mbickel Exp $
+//     $Id: spfst.h,v 1.50 2002-11-02 14:13:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2002/10/09 16:58:46  mbickel
+//      Fixed to GrafikSet loading
+//      New item filter for mapeditor
+//
 //     Revision 1.48  2002/10/06 15:44:40  mbickel
 //      Completed inheritance of .asctxt files
 //      Speed up of replays
@@ -314,10 +318,6 @@ extern int          terrainaccessible (  const pfield        field, const pvehic
                   -3   unit cannot drive onto terrain
 */
 extern int          terrainaccessible2 ( const pfield        field, const pvehicle     vehicle, int uheight = -1 );  
-
-
-//! automatically adjusting the pictures of woods and coasts to form coherent structures 
-extern void smooth ( int what, pmap gamemap = actmap );
 
 
 /*!

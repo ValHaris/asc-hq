@@ -143,6 +143,7 @@
               ASCString toString ( ) const;
             public:
                TagIntProperty ( int& property_, int tagNum_, const char** tags_, bool inverted_  ) : PTTI ( property_ ), tagNum (tagNum_), tags ( tags_ ), inverted ( inverted_ ) {};
+               TagIntProperty ( int& property_, int tagNum_, const char** tags_, int defaultValue_, bool inverted_  ) : PTTI ( property_, defaultValue_ ), tagNum (tagNum_), tags ( tags_ ), inverted ( inverted_ ) {};
          };
 
          typedef PropertyTemplate<int> PTNI;
@@ -339,6 +340,12 @@ void PropertyContainer::addTagArray ( const ASCString& name, BitSet& property, i
 void PropertyContainer::addTagInteger ( const ASCString& name, int& property, int tagNum, const char** tags, bool inverted )
 {
    TagIntProperty* ip = new TagIntProperty ( property, tagNum, tags, inverted );
+   setup ( ip, name );
+}
+
+void PropertyContainer::addTagInteger ( const ASCString& name, int& property, int tagNum, const char** tags, int defaultValue, bool inverted )
+{
+   TagIntProperty* ip = new TagIntProperty ( property, tagNum, tags, defaultValue, inverted );
    setup ( ip, name );
 }
 

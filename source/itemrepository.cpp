@@ -37,10 +37,6 @@
 ProgressBar* actprogressbar = NULL;
 #endif 
 
-pobjecttype streetobjectcontainer = NULL;
-pobjecttype pathobject = NULL;
-pobjecttype railroadobject = NULL;
-pobjecttype runwayobject = NULL;
 pobjecttype eisbrecherobject = NULL;
 pobjecttype fahrspurobject = NULL;
 
@@ -190,15 +186,6 @@ void addobjecttype ( pobjecttype obj )
 
       objecttypes[ objecttypenum++] = obj;
       objectmap[obj->id] = obj;
-
-      if ( obj->id == 9 )
-         pathobject = obj;
-
-      if ( obj->id == 1 )
-         streetobjectcontainer = obj;
-
-      if ( obj->id == 2 )
-         railroadobject = obj;
 
       if ( obj->id == 6 )
          eisbrecherobject = obj;
