@@ -26,8 +26,8 @@
 
    basegfx.h additionally includes the definitions of routines, 
     whose implementation is platform dependant, but whose interface
-    are the same on all platforms. Their implementation is in the various
-    various subdirectories for the platforms
+    is the same on all platforms. Their implementation is in the various
+    subdirectories for the platforms
 */
 
 

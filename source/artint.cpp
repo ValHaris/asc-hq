@@ -1,6 +1,11 @@
-//     $Id: artint.cpp,v 1.47 2001-01-04 15:13:23 mbickel Exp $
+//     $Id: artint.cpp,v 1.48 2001-01-11 15:28:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2001/01/04 15:13:23  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.46  2000/12/31 15:25:24  mbickel
 //      The AI now conqueres neutral buildings
 //      Removed "reset password" buttons when starting a game
@@ -274,6 +279,42 @@ int compareinteger ( const void* op1, const void* op2 )
    const int* b = (const int*) op2;
    return *a > *b;
 }
+
+
+   class HiddenAStar : public AStar {
+         AI* ai;
+      protected:
+         virtual int getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle )
+         {
+            int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
+            int visibility = getfield ( x2, y2 )->visible;
+            for ( int i = 0; i< 8; i++ )
+               if ( getdiplomaticstatus2 ( i*8, ai->getPlayer()*8 ) != capeace ) {
+                  int v = (visibility >> ( 2*i)) & 3;
+                  if ( v >= visible_now )
+                     cost += 12;
+               }
+
+            return cost;
+         };
+      public:
+         HiddenAStar ( AI* _ai, pvehicle veh ) : AStar ( _ai->getMap(), veh ), ai ( _ai ) {};
+   };
+
+   class StratAStar : public AStar {
+         AI* ai;
+      protected:
+         virtual int getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle )
+         {
+            int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
+            if ( getfield ( x2, y2 )->vehicle && beeline ( vehicle->xpos, vehicle->ypos, x2, y2) < vehicle->getMovement())
+               cost += 2;
+            return cost;
+         };
+      public:
+         StratAStar ( AI* _ai, pvehicle veh ) : AStar ( _ai->getMap(), veh ), ai ( _ai ) {};
+   };
+
 
 void AiThreat :: reset ( void )
 {
@@ -744,8 +785,8 @@ AI::AiResult AI :: executeServices ( )
 
 float AI :: getCaptureValue ( const pbuilding bld, const pvehicle veh  )
 {
-   AStar ast ( getMap(), veh );
-   AStar::Path path;
+   HiddenAStar ast ( this, veh );
+   HiddenAStar::Path path;
    ast.findPath ( path, bld->getEntry().x, bld->getEntry().y );
    return getCaptureValue ( bld, ast.getTravelTime() );
 }
@@ -868,7 +909,7 @@ void AI :: checkConquer( )
    pvehicle veh = getMap()->player[getPlayer()].firstvehicle;
    while ( veh ) {
       if ( veh->aiparam[getPlayer()]->job == AiParameter::job_conquer && veh->aiparam[getPlayer()]->task == AiParameter::tsk_nothing ) {
-         AStar ast ( getMap(), veh );
+         HiddenAStar ast ( this, veh );
          ast.findAllAccessibleFields();
 
          pbuilding bestBuilding = NULL;
@@ -924,7 +965,7 @@ void AI :: checkConquer( )
          while ( veh ) {
             if ( veh->aiparam[getPlayer()]->job != AiParameter::job_conquer || veh->aiparam[getPlayer()]->task == AiParameter::tsk_nothing)
                if ( fieldaccessible ( bld->getEntryField(), veh ) == 2 ) {
-                  AStar ast ( getMap(), veh );
+                  HiddenAStar ast ( this, veh );
                   vector<MapCoordinate> path;
                   ast.findPath ( path, bld->getEntry().x, bld->getEntry().y );
                   int time = ast.getTravelTime();
@@ -961,7 +1002,7 @@ void AI :: checkConquer( )
       while ( veh ) {
          if ( veh->aiparam[getPlayer()]->job != AiParameter::job_conquer || veh->aiparam[getPlayer()]->task == AiParameter::tsk_nothing )
             if ( fieldaccessible ( (*i)->getEntryField(), veh ) == 2 ) {
-               AStar ast ( getMap(), veh ) ;
+               HiddenAStar ast ( this, veh ) ;
                vector<MapCoordinate> path;
                ast.findPath ( path, (*i)->getEntry().x, (*i)->getEntry().y );
                int time = ast.getTravelTime();
@@ -2311,19 +2352,7 @@ AI::AiResult AI::transports( int process )
    return result;
 }
 
-   class StratAStar : public AStar {
-         AI* ai;
-      protected:
-         virtual int getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle )
-         {
-            int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
-            if ( getfield ( x2, y2 )->vehicle && beeline ( vehicle->xpos, vehicle->ypos, x2, y2) < vehicle->getMovement())
-               cost += 2;
-            return cost;
-         };
-      public:
-         StratAStar ( AI* _ai, pvehicle veh ) : AStar ( _ai->getMap(), veh ), ai ( _ai ) {};
-   };
+
 
 void AI::findStratPath ( vector<MapCoordinate>& path, pvehicle veh, int x, int y )
 {
@@ -2338,7 +2367,16 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate& destination, bool intoB
    vm.execute ( veh, -1, -1, 0, -1, -1 );
 
    std::vector<MapCoordinate> path;
-   findStratPath ( path, veh, destination.x, destination.y );
+   AStar* ast = NULL;
+   if ( veh->aiparam[getPlayer()]->job == AiParameter::job_conquer )
+      ast = new HiddenAStar ( this, veh );
+   else
+      ast = new StratAStar ( this, veh );
+
+   auto_ptr<AStar> ap ( ast );
+
+   ast->findPath ( AStar::HexCoord ( veh->xpos, veh->ypos ), AStar::HexCoord ( destination.x, destination.y ), path );
+
    int xtogo = veh->xpos;
    int ytogo = veh->ypos;
 
