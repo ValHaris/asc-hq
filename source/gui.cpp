@@ -4,9 +4,14 @@
 */
 
 
-//     $Id: gui.cpp,v 1.62 2001-07-27 22:29:05 mbickel Exp $
+//     $Id: gui.cpp,v 1.63 2001-07-28 11:19:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2001/07/27 22:29:05  mbickel
+//      Updated some terrain fields
+//      Added bin2text win32 project files
+//      Some improvement and bugfixes in text-file loading
+//
 //     Revision 1.61  2001/07/27 21:13:35  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -133,6 +138,7 @@
 #include "replay.h"
 #include "gamedlg.h"
 #include "dashboard.h"
+#include "itemrepository.h"
 
 tguihoststandard          gui;
 tselectbuildingguihost    selectbuildinggui;

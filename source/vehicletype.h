@@ -100,7 +100,7 @@ extern const char*  cvehiclefunctions[];
         ASCString    name;          /* z.B. Exterminator  */
         ASCString    description;   /* z.B. Jagdbomber    */
         ASCString    infotext;      /* optional, kann sehr ausf?hrlich sein. Empfehlenswert ?ber eine Textdatei einzulesen */
-
+        const ASCString&    getName() const;
         int armor;
 
         void*        picture[8];    /*  0ø  ,  45ø   */
@@ -163,7 +163,10 @@ extern const char*  cvehiclefunctions[];
         int          autorepairrate;
 
         AiValue* aiparam[8];
-        ASCString    filename;    // just for information purposes in the main program
+
+        ASCString    filename;
+        ASCString    location;    // just for information purposes in the main program
+        
         int          vehicleCategoriesLoadable;
 
         int maxweight ( void ) const ;     // max. weight including fuel and material

@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.57 2001-07-27 21:13:34 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.58 2001-07-28 11:19:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2001/07/27 21:13:34  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.56  2001/07/15 21:00:25  mbickel
 //      Some cleanup in the vehicletype class
 //
@@ -302,6 +306,7 @@
 #include "password_dialog.h"
 #include "mapdisplay.h"
 #include "graphicset.h"
+#include "itemrepository.h"
 
 #ifdef _DOS_
  #include "dos\memory.h"

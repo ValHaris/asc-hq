@@ -2,9 +2,13 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.45 2001-07-14 21:07:46 mbickel Exp $
+//     $Id: edmain.cpp,v 1.46 2001-07-28 11:19:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2001/07/14 21:07:46  mbickel
+//      Sound works now under Win32 too
+//      Error reporting on Win32 during startup works again.
+//
 //     Revision 1.44  2001/05/21 12:46:19  mbickel
 //      Fixed infinite loop in AI::strategy
 //      Fixed bugs in mapeditor - event editing
@@ -245,6 +249,7 @@
 #include "errors.h"
 #include "gameoptions.h"
 #include "mapdisplay.h"
+#include "itemrepository.h"
 
 #include <signal.h>
 

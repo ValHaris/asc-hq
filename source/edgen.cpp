@@ -2,9 +2,13 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.10 2001-07-27 21:13:34 mbickel Exp $
+//     $Id: edgen.cpp,v 1.11 2001-07-28 11:19:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2001/07/27 21:13:34  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.9  2001/02/01 22:48:37  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -65,6 +69,7 @@
 #include "edmisc.h"
 #include "edgen.h"
 #include "vehicletype.h"
+#include "itemrepository.h"
 
 #define layercount 5
 #define centerlayer 65000

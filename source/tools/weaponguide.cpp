@@ -33,10 +33,12 @@
 #include "../errors.h"
 #include "../graphicset.h"
 #include "../ascstring.h"
+#include "../itemrepository.h"
 
 int main(int argc, char *argv[] )
 {
    // mounting all container files
+   initFileIO();
       opencontainer ( "*.con" );
 
    try {
@@ -44,6 +46,9 @@ int main(int argc, char *argv[] )
       loadpalette();
       loadbi3graphics();
 
+      loadallobjecttypes();
+      loadallbuildingtypes();
+      loadallvehicletypes();
 
       char* wildcard;
    
@@ -52,7 +57,7 @@ int main(int argc, char *argv[] )
          // if a command line parameter is specified, use it as wildcard
          // for example: weaponguide s*.veh
       } else {
-         wildcard =  "*.veh";
+         wildcard =  "*.*";
          // else use *.veh
       }
       
@@ -75,35 +80,36 @@ int main(int argc, char *argv[] )
                            "<tr><td><a href=\"overview1.html\">SEE PICTURES</a></td></tr><tr><td></td></tr>\n" );
 
       fprintf ( overview1 , "<html>\n"
-                           "<HEAD>\n" 
+                           "<HEAD>\n"
                            "<TITLE>WEAPONGUIDE OVERVIEW PICTURES</TITLE>\n"
                            "<base target=\"base\">\n"
                            "<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"../../asc/asc.css\">\n"
                            "</HEAD>\n"
                            "\n"
                            "<BODY bgcolor=\"#447744\" text=\"#ffffff\" background=\"../../bilder/asc-hin3.gif\" leftmargin=\"5\" topmargin=\"0\">\n" );
-      
-      tfindfile ff ( wildcard );
-      ASCString cn = ff.getnextname();
-      while( !cn.empty() ) {
-         cn.toLower();
+
+      for ( int unit = 0; unit < vehicletypenum; unit++ ) {
+         pvehicletype  ft = getvehicletype_forpos ( unit );
+         ASCString fn = extractFileName_withoutSuffix( ft->filename );
+         if ( patimat ( wildcard, fn.c_str() )) {
+            ASCString cn = fn;
+            cn.toLower();
       	 // now we are cycling through all files that match wildcard
 
          string s, s1, s2, s3, s4, s5, b1, b2;
          s = s1 = s2 = s3 = s4 = s5 = b1 = b2 = cn;
-         
+
          // this is a C++ string which is much more powerful than the standard C strings ( char* )
 
-         s.replace ( s.find ("veh"), 3, "html");
-         s1.replace ( s1.find (".veh"), 4, "1.html");
-         s2.replace ( s2.find (".veh"), 4, "2.html");
-         s3.replace ( s3.find (".veh"), 4, "3.html");
-         s4.replace ( s4.find (".veh"), 4, "4.html");
-         s5.replace ( s5.find (".veh"), 4, "5.html");
-         b1.replace ( b1.find ("veh"), 3, "gif");
-         b2.replace ( b2.find ("veh"), 3, "jpg");
-         // we are replacing the 3 characters "veh" of the original string by "html"
-         
+         s += ".html";
+         s1 += "1.html";
+         s2 += "2.html";
+         s3 += "3.html";
+         s4 += "4.html";
+         s5 += "5.html";
+         b1 += ".gif";
+         b2 += ".jpg";
+
          FILE* detailed = fopen ( s.c_str(), "w" );
          FILE* detailed1 = fopen ( s1.c_str(), "w" );
          FILE* detailed2 = fopen ( s2.c_str(), "w" );
@@ -111,12 +117,12 @@ int main(int argc, char *argv[] )
          FILE* detailed4 = fopen ( s4.c_str(), "w" );
          FILE* detailed5 = fopen ( s5.c_str(), "w" );
          // c_str() converts a c++ string back to a c string which fopen requires
-         
-         
-         // Beginn Einzelfiles   
+
+
+         // Beginn Einzelfiles
          // UNIT FRAME
          fprintf ( detailed, "<html>\n"
-                             "<HEAD>\n" 
+                             "<HEAD>\n"
                              "<TITLE>UNITGUIDE FRAME</TITLE>\n"
                              "<frameset  rows=\"207,*\" border=0 >\n"
                              "<frame name=\"over\" src=\"%s\" marginheight=\"0\">\n"
@@ -127,7 +133,7 @@ int main(int argc, char *argv[] )
 
          // UNIT GENERAL
          fprintf ( detailed1, "<html>\n"
-                              "<HEAD>\n" 
+                              "<HEAD>\n"
                               "<TITLE>UNITGUIDE GENERAL</TITLE>\n"
                               "<base target=\"under\"> \n"
                               "<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"../../asc/asc.css\">\n"
@@ -157,7 +163,7 @@ int main(int argc, char *argv[] )
                               "<BODY bgcolor=\"#447744\" text=\"black\" background=\"../../bilder/asc-hin2.gif\">\n" );
 
          fprintf ( detailed4, "<html>\n"
-                              "<HEAD>\n" 
+                              "<HEAD>\n"
                               "<TITLE>UNITGUIDE LOADING</TITLE>\n"
                               "<base target=\"under\"> \n"
                               "<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"../../asc/asc.css\">\n"
@@ -174,13 +180,11 @@ int main(int argc, char *argv[] )
                               "\n"
                               "<BODY bgcolor=\"#447744\" text=\"black\" background=\"../../bilder/asc-hin2.gif\">\n" );
         
-         pvehicletype  ft = loadvehicletype( cn.c_str() );
-         // we are loading the vehicletype with the name in cn
 
-// OVERVIEW LEFT   
+// OVERVIEW LEFT
          fprintf ( overview, " <tr><td><A HREF=\"%s\">%s</A></td></tr>\n", s.c_str(), ft->name );
- 
-// OVERVIEW RIGHT 
+
+// OVERVIEW RIGHT
          fprintf ( overview1, "<table align=\"center\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">\n"
                               " <tr><td rowspan=\"2\" width=\"50\">" );
          if ( exist ( b1.c_str() ))
@@ -201,7 +205,7 @@ int main(int argc, char *argv[] )
          if ( exist ( b1.c_str() ))
              fprintf ( detailed1, "<img src=\"%s\">", b1.c_str() );
          fprintf ( detailed1, "</td>\n<td>" );
-                 
+
          fprintf ( detailed1, "<table id=\"H2\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
          fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Name</td>         <td align=\"center\" colspan=\"4\">%s</td> </tr>\n", ft->name );
          fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Description</td>  <td align=\"center\" colspan=\"4\">%s</td> </tr>\n", ft->description );
@@ -366,7 +370,7 @@ int main(int argc, char *argv[] )
             fprintf ( detailed3, "<tr><td>#%d</td>", w+1 );
             fprintf ( detailed3, "    <td align=\"center\">? ?</td>" ); //Abfrage für AMMO funktioniert noch nicht
             fprintf ( detailed3, "    <td align=\"center\">%d</td>", (ft->weapons.weapon[w].mindistance+9)/10 );
-            fprintf ( detailed3, "    <td align=\"center\">%d</td>", ft->weapons.weapon[w].maxstrength ); 
+            fprintf ( detailed3, "    <td align=\"center\">%d</td>", ft->weapons.weapon[w].maxstrength );
             fprintf ( detailed3, "    <td align=\"center\">%d</td>", (ft->weapons.weapon[w].maxdistance)/10 );
             fprintf ( detailed3, "    <td align=\"center\">%d</td>", ft->weapons.weapon[w].minstrength ); 
             // Höhenstufenzeichen einfügen für shoot from und target
@@ -397,7 +401,7 @@ int main(int argc, char *argv[] )
    // noch ungeordnet
    //fprintf ( detailed, "Number of weapons: %d <br>\n", ft->weapons.count );
          for ( w = 0; w < ft->weapons.count ; w++) {
-            // looping through all weapons; w will be increased from 0 until it reaches ft->weapons.count; 
+            // looping through all weapons; w will be increased from 0 until it reaches ft->weapons.count;
             fprintf ( detailed3, "<table id=\"H2\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
             fprintf ( detailed3, "<tr><td id=\"h1\" colspan=\"3\"> Weapon #%d: </td></tr>\n", w+1 );
             fprintf ( detailed3, "</table> \n" );
@@ -408,13 +412,13 @@ int main(int argc, char *argv[] )
             for ( i = 0; i < cmovemalitypenum; i++ ) 
                 fprintf ( detailed3, " <TD><IMG src=\"../typ%d.gif\" ></TD>", i);
             fprintf ( detailed3, "</TR>\n<TR>");
-            for ( i = 0; i < cmovemalitypenum; i++ ) 
+            for ( i = 0; i < cmovemalitypenum; i++ )
                if ( !(ft->weapons.weapon[w].targets_not_hittable & ( 1 << i )) )
                   fprintf ( detailed3, "<td><img src=\"../hacken.gif\"></td>" );
                else
                   fprintf ( detailed3, "<td></td>" );
 
-            for ( i = 0; i < 13; i++ ) 
+            for ( i = 0; i < 13; i++ )
                fprintf(detailed3, "effizienz ber H”henstufendifferenz von %d ist %d%%", i-6, ft->weapons.weapon[w].efficiency[i] );
 
             fprintf ( detailed3, "</tr>\n");
@@ -422,6 +426,41 @@ int main(int argc, char *argv[] )
 
          } /* endfor */
 
+
+         // NEU - noch anzupassen
+         for ( int h = 0; h < 8; h++ ) {
+            if ( ft->loadcapability & (1 << h))
+               printf("Höhenstufe kann geladen werden" );
+
+            if ( ft->loadcapabilityreq & (1 << h))
+               printf("Höhenstufe muß erreichbar sein, um geladen werden zu können" );
+
+            if ( ft->loadcapability & (1 << h))
+               printf("Höhenstufe darf nicht erreichbar sein" );
+         }
+
+         // ft->loadcapacity  ist maximale ladekapazität
+         for ( int c = 0; c < cmovemalitypenum; c++ )
+            if ( ft->vehicleCategoriesLoadable & (1 << c))
+               printf(" Kategorie %s kann geladen werden", cmovemalitypes[c] );
+
+         for ( i = 0; i < ft->buildingsbuildablenum; i++ ) {
+            printf("es können die gebäude mit ids von %d bis %d gebaut werden\n", ft->buildingsbuildable[i].from, ft->buildingsbuildable[i].to );
+            for ( int b = 0; b < buildingtypenum; b++ ) {
+               pbuildingtype bld = getbuildingtype_forpos ( b );
+               if (     bld->id >= ft->buildingsbuildable[i].from
+                     && bld->id <= ft->buildingsbuildable[i].to ) {
+                    printf( "das gebäude mit id %d und dem Namen %s kann gebaut werden\n", bld->id, bld->name.c_str() );
+               }
+            }
+         }
+
+         for ( i = 0; i < ft->vehiclesbuildablenum; i++ ) {
+            printf("die Einheit mit ID %d kann gebaut werden\n", ft->vehiclesbuildableid[i] );
+            pvehicletype veh = getvehicletype_forid ( ft->vehiclesbuildableid[i] );
+            if ( veh )   // there is a vehicle with this ID
+               printf( "die einheit mit id %d und dem Namen %s kann gebaut werden\n", veh->id, veh->getName().c_str() );
+         }
 
 
          fprintf ( detailed1, "</body></html>\n");
@@ -442,9 +481,7 @@ int main(int argc, char *argv[] )
          printf(" processed unit %s \n", ft->description );
          // we are writing this not to a file, but the screen
          
-         cn = ff.getnextname();
       }
-      // getting the name of the next file and closing the loop
         
       // Dokument Übersicht Ende
       fprintf( overview , "</table></body></html>\n" );   
@@ -452,7 +489,7 @@ int main(int argc, char *argv[] )
          
       fclose ( overview );
       fclose ( overview1 );
-   
+      }
    } /* endtry */
    catch ( tfileerror err ) {
       printf("\nfatal error accessing file %s \n", err.getFileName().c_str() );

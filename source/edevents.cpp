@@ -2,9 +2,12 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.24 2001-07-15 21:00:25 mbickel Exp $
+//     $Id: edevents.cpp,v 1.25 2001-07-28 11:19:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2001/07/15 21:00:25  mbickel
+//      Some cleanup in the vehicletype class
+//
 //     Revision 1.23  2001/05/21 12:46:19  mbickel
 //      Fixed infinite loop in AI::strategy
 //      Fixed bugs in mapeditor - event editing
@@ -151,6 +154,7 @@
 #include "edevents.h"
 #include "edselfnt.h"
 #include "mapdisplay.h"
+#include "itemrepository.h"
 
 // õS TplayerSel
 

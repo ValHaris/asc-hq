@@ -3,9 +3,13 @@
   
 */
 
-//     $Id: sgstream.h,v 1.19 2001-07-27 21:13:35 mbickel Exp $
+//     $Id: sgstream.h,v 1.20 2001-07-28 11:19:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2001/07/27 21:13:35  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.18  2001/07/14 19:13:16  mbickel
 //      Rewrote sound system
 //      Moveing units make sounds
@@ -139,11 +143,6 @@ extern void generatedirecpict ( void* orgpict, void* direcpict );
 extern pquickview generateaveragecol ( TerrainType::Weather* bdn );
 
 
-extern pobjecttype streetobjectcontainer ;
-extern pobjecttype pathobject;
-extern pobjecttype railroadobject ;
-extern pobjecttype eisbrecherobject;
-extern pobjecttype fahrspurobject;
 
 class t_carefor_containerstream {       // not necessary any more, now that we have the containercollector
        public:

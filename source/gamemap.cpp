@@ -28,6 +28,7 @@
 #include "spfst.h"
 #include "dlg_box.h"
 #include "dialog.h"
+#include "itemrepository.h"
 
 #ifdef sgmain
  #include "network.h"

@@ -28,6 +28,7 @@
 #include "errors.h"
 #include "spfst.h"
 #include "resourcenet.h"
+#include "itemrepository.h"
 
 
 const float repairEfficiencyBuilding[resourceTypeNum*resourceTypeNum] = { 1./3., 0,     1. / 3. ,

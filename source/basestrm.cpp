@@ -2,9 +2,13 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.60 2001-07-27 21:13:34 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.61 2001-07-28 11:19:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2001/07/27 21:13:34  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.59  2001/07/25 19:01:32  mbickel
 //      Started adding text file formats
 //
@@ -521,11 +525,15 @@ void tnstream :: writerlepict ( const void* buf )
 }
 
 
-const char* tnstream::getDeviceName ( void )
+ASCString tnstream::getDeviceName ( void )
 {
-   return devicename.c_str();
+   return devicename;
 }
 
+ASCString tnstream::getLocation ( void )
+{
+   return devicename;
+}
 
 int  tnstream::readInt  ( void )
 {
@@ -784,9 +792,12 @@ MemoryStreamCopy :: MemoryStreamCopy ( pnstream stream )
   pos = 0;
 
   devicename = stream->getDeviceName();
-  devicename += " (memory bufferd)";
 }
 
+ASCString MemoryStreamCopy::getLocation()
+{
+  return devicename + " (memory bufferd)";
+}
 
 MemoryStreamCopy :: ~MemoryStreamCopy ( )
 {
@@ -1007,7 +1018,7 @@ tnbufstream::~tnbufstream ()
 int tn_file_buf_stream::getstreamsize(void)
 { 
    struct stat buf;
-   if ( stat ( getDeviceName(), &buf) )
+   if ( stat ( getDeviceName().c_str(), &buf) )
       return -1;
    else
       return (buf.st_size );
@@ -1016,7 +1027,7 @@ int tn_file_buf_stream::getstreamsize(void)
 time_t tn_file_buf_stream::get_time ( void )
 {
    struct stat buf;
-   if ( stat ( getDeviceName(), &buf) )
+   if ( stat ( getDeviceName().c_str(), &buf) )
       return -1;
    else
       return (buf.st_mtime);
@@ -1887,14 +1898,20 @@ tn_c_lzw_filestream :: tn_c_lzw_filestream ( const ASCString& name, IOMode mode 
       containerstream = fl.container;
       if ( containerstream ) {
          containerstream->opencontainerfile ( name.c_str() );
-         devicename = name + " located inside " + containerstream->getDeviceName();
+         devicename = name;
+         location = name + " located inside " + containerstream->getDeviceName();
          inp = 2;
       } else
          throw tfileerror ( name );
    }
    fname = name;
 
-   tanycompression :: init (  ); 
+   tanycompression :: init (  );
+}
+
+ASCString tn_c_lzw_filestream::getLocation()
+{
+   return location;
 }
 
 int tn_c_lzw_filestream :: getSize ( void )
@@ -1914,7 +1931,7 @@ void tn_c_lzw_filestream :: writecmpdata ( const void* buf, int size )
 }
 
 int tn_c_lzw_filestream :: readcmpdata  ( void* buf, int size, int excpt  )
-{            
+{
    if ( inp == 2 )
       return containerstream->readcontainerdata ( buf, size, excpt );
    else
@@ -2044,7 +2061,7 @@ int    compressrle ( const void* p, void* q)
             s  += num;   
             xp += num;
          } while ( xp < x );
-         
+
 
       } /* endfor */
 
@@ -2555,7 +2572,7 @@ ASCString extractFileName_withoutSuffix ( const ASCString& filename )
    char* c = strchr ( buf, '.' );
    if ( c )
       *c = 0;
-   return buf;
+   return ASCString(buf);
 }
 
 

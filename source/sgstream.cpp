@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.60 2001-07-27 21:13:35 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.61 2001-07-28 11:19:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2001/07/27 21:13:35  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.59  2001/07/14 19:13:16  mbickel
 //      Rewrote sound system
 //      Moveing units make sounds
@@ -905,16 +909,6 @@ pterraintype loadterraintype( pnstream stream )
     return bbt;
 }
 
-
-
-
-
-pobjecttype streetobjectcontainer = NULL;
-pobjecttype pathobject = NULL;
-pobjecttype railroadobject = NULL;
-pobjecttype runwayobject = NULL;
-pobjecttype eisbrecherobject = NULL;
-pobjecttype fahrspurobject = NULL;
 
 
 

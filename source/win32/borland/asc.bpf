@@ -68,6 +68,7 @@ USEUNIT("..\..\objecttype.cpp");
 USEUNIT("..\..\terraintype.cpp");
 USEUNIT("..\..\textfileparser.cpp");
 USEUNIT("..\..\textfiletags.cpp");
+USEUNIT("..\..\itemrepository.cpp");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 

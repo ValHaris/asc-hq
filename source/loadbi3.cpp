@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.46 2001-07-27 21:13:35 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.47 2001-07-28 11:19:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2001/07/27 21:13:35  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.45  2001/05/17 20:10:22  mbickel
 //      Fixed: mapeditor was unable to load maps
 //      Removed debugging output from bi3 map loader
@@ -119,7 +123,7 @@
 #include "spfst.h"
 #include "loaders.h"
 #include "dialog.h"
-
+#include "itemrepository.h"
 
 #ifdef converter
  #error The small editors should not need to use LoadBi3

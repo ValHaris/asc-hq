@@ -385,7 +385,8 @@ void Vehicletype :: read ( tnstream& stream )
     buildicon = NULL;
    #endif
 
-   filename = strdup ( stream.getDeviceName() );
+   filename = stream.getDeviceName();
+   location = stream.getLocation();
 
 }
 
@@ -561,6 +562,13 @@ void Vehicletype:: write ( tnstream& stream ) const
 
 }
 
+const ASCString& Vehicletype::getName( ) const
+{
+  if ( !name.empty() )
+     return name;
+  else
+     return description;
+}
 
 
 Vehicletype :: ~Vehicletype ( )

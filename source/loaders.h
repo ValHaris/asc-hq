@@ -5,9 +5,15 @@
 
 */
 
-//     $Id: loaders.h,v 1.17 2001-02-26 12:35:20 mbickel Exp $
+//     $Id: loaders.h,v 1.18 2001-07-28 11:19:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2001/02/26 12:35:20  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.16  2001/02/11 11:39:39  mbickel
 //      Some cleanup and documentation
 //
@@ -151,20 +157,9 @@ extern void  loadreplay( pmemorystreambuf streambuf );
 extern void  savereplay( int num );
 
 
-
-extern void  loadallbuildingtypes(void);
-
-extern void  loadallvehicletypes(void);
-
-extern void  loadallterraintypes(void);
-
-extern void  loadalltechnologies(void);
-
 extern void  loadstreets(void);
 
 extern void  loadicons(void);
-
-extern void loadallobjecttypes ( void );
 
 extern void  savecampaignrecoveryinformation( const ASCString& filename, int id);
 
@@ -176,7 +171,7 @@ const int actnetworkversion   = 0x0006;
 const int minnetworkversion   = 0x0004;
 const int actreplayversion    = 0x0002;
 const int minreplayversion    = 0x0001;
-  
+
 
 
 class  tspfldloaders {

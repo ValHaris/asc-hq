@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.61 2001-07-27 21:13:35 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.62 2001-07-28 11:19:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2001/07/27 21:13:35  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.60  2001/07/25 18:00:16  mbickel
 //      Fixed: units could repair without repairing function but
 //      Fixed: airplanes tried to ascend through buildings
@@ -252,6 +256,7 @@
 #include "replay.h"
 #include "dashboard.h"
 #include "gameoptions.h"
+#include "itemrepository.h"
 
 PendingVehicleActions pendingVehicleActions;
 

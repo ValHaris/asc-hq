@@ -57,12 +57,13 @@
            virtual void writerlepict ( const void* pnter );
            virtual void readrlepict( void** pnter, int allocated, int* size);
            virtual ~tnstream() {};
-           virtual const char* getDeviceName ( void );
+           virtual ASCString getDeviceName ( void );
+           virtual ASCString getLocation   ( void );
            virtual void seek ( int newpos );
            virtual int getSize ( void ) { return -1; };
            tnstream ( );
          protected:
-           std::string devicename; // will just contain "abstract"
+           ASCString devicename; // will just contain "abstract"
 };
 
 #endif // basestreaminterface_h_included

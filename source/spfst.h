@@ -5,9 +5,15 @@
 */
 
 
-//     $Id: spfst.h,v 1.42 2001-03-30 12:43:16 mbickel Exp $
+//     $Id: spfst.h,v 1.43 2001-07-28 11:19:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2001/03/30 12:43:16  mbickel
+//      Added 3D pathfinding
+//      some cleanup and documentation
+//      splitted the ai into several files, now located in the ai subdirectory
+//      AI cares about airplane servicing and range constraints
+//
 //     Revision 1.41  2001/02/26 12:35:33  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -151,7 +157,6 @@
   extern pmap actmap; 
 
 
-  extern int  terraintypenum, vehicletypenum, buildingtypenum, technologynum, objecttypenum;
 
 
  //! passes a key to the map-cursor
@@ -304,40 +309,10 @@ extern int getheightdelta ( int height1, int height2 );
 
 
 
-extern pterraintype getterraintype_forid ( int id, int crccheck = 1 );
-extern pobjecttype getobjecttype_forid ( int id, int crccheck = 1 );
-extern pvehicletype getvehicletype_forid ( int id, int crccheck = 1 );
-extern pbuildingtype getbuildingtype_forid ( int id, int crccheck = 1 );
-extern ptechnology gettechnology_forid ( int id, int crccheck = 1 );
-
-extern pterraintype getterraintype_forpos ( int pos, int crccheck = 1 );
-extern pobjecttype getobjecttype_forpos ( int pos, int crccheck = 1 );
-extern pvehicletype getvehicletype_forpos ( int pos, int crccheck = 1 );
-extern pbuildingtype getbuildingtype_forpos ( int pos, int crccheck = 1 );
-extern ptechnology gettechnology_forpos ( int pos, int crccheck = 1 );
-
-extern void addterraintype ( pterraintype bdt );
-extern void addobjecttype ( pobjecttype obj );
-extern void addvehicletype ( pvehicletype vhcl );
-extern void addbuildingtype ( pbuildingtype bld );
-extern void addtechnology ( ptechnology tech );
-
-
-typedef dynamic_array<pvehicletype> VehicleTypeVector;
-extern VehicleTypeVector& getvehicletypevector ( void );
-
-typedef dynamic_array<pterraintype> TerrainTypeVector;
-extern TerrainTypeVector& getterraintypevector ( void );
-
-typedef dynamic_array<pbuildingtype> BuildingTypeVector;
-extern BuildingTypeVector& getbuildingtypevector ( void );
-
-typedef dynamic_array<pobjecttype> ObjectTypeVector;
-extern ObjectTypeVector& getobjecttypevector ( void );
 
 
 class tdrawline8 : public tdrawline {
-         public: 
+         public:
            void start ( int x1, int y1, int x2, int y2 );
            virtual void putpix ( int x, int y );
            virtual void putpix8 ( int x, int y ) = 0;

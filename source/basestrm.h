@@ -4,9 +4,13 @@
 */
 
 
-//     $Id: basestrm.h,v 1.44 2001-07-27 21:13:34 mbickel Exp $
+//     $Id: basestrm.h,v 1.45 2001-07-28 11:19:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2001/07/27 21:13:34  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.43  2001/07/14 13:15:17  mbickel
 //      Rewrote sound handling
 //
@@ -239,6 +243,7 @@ class MemoryStreamCopy : public tnstream {
                void seek ( int newpos );
                int getPosition ( void ) { return pos; };
                int getSize ( void ) { return size; };
+               ASCString getLocation();
          };
 
 
@@ -540,6 +545,7 @@ class tn_c_lzw_filestream : public tnstream, protected tanycompression {
             pncontainerstream containerstream;
             int inp;
             ASCString fname;
+            ASCString location;
          protected:
             int  readcmpdata ( void* buf, int size, int excpt = 1 );
             void writecmpdata ( const void* buf, int size );
@@ -550,6 +556,7 @@ class tn_c_lzw_filestream : public tnstream, protected tanycompression {
             virtual ~tn_c_lzw_filestream  ( );
             virtual time_t get_time ( void );
             virtual int getSize( void );
+            ASCString getLocation();
      };
 
 typedef tn_c_lzw_filestream tnfilestream ;

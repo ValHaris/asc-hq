@@ -3,9 +3,13 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.106 2001-07-27 21:13:34 mbickel Exp $
+//     $Id: controls.cpp,v 1.107 2001-07-28 11:19:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.106  2001/07/27 21:13:34  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.105  2001/07/18 16:05:47  mbickel
 //      Fixed: infinitive loop in displaying "player exterminated" msg
 //      Fixed: construction of units by units: wrong player
@@ -177,6 +181,7 @@
 #include "replay.h"
 #include "dashboard.h"
 #include "resourcenet.h"
+#include "itemrepository.h"
 
          int             windmovement[8];
 

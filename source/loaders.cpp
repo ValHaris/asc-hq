@@ -5,9 +5,13 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.55 2001-07-27 21:13:35 mbickel Exp $
+//     $Id: loaders.cpp,v 1.56 2001-07-28 11:19:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2001/07/27 21:13:35  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.54  2001/07/18 16:05:47  mbickel
 //      Fixed: infinitive loop in displaying "player exterminated" msg
 //      Fixed: construction of units by units: wrong player
@@ -317,6 +321,7 @@
 #include "networkdata.h"
 #include "strtmesg.h"
 #include "textfileparser.h"
+#include "itemrepository.h"
 
 #ifdef sgmain
 #include "missions.h"
@@ -2353,198 +2358,6 @@ void         loadstreets(void)
 
 
 
-void         loadallvehicletypes(void)
-{ 
-   {
-      tfindfile ff ( "*.veh" );
-      string c = ff.getnextname();
-                       
-      while ( !c.empty() ) {
-          if ( actprogressbar )
-             actprogressbar->point();
-    
-          pvehicletype t = loadvehicletype( c.c_str() );
-
-          addvehicletype ( t );
-          c = ff.getnextname();
-       }
-   }
-} 
-
-
-void         loadallobjecttypes (void)
-{
-  {
-     tfindfile ff ( "*.obl" );
-
-     string c = ff.getnextname();
-
-     while ( !c.empty() ) {
-         if ( actprogressbar )
-            actprogressbar->point();
-
-         if ( !exist ( extractFileName_withoutSuffix(c) + ".oblt") )
-            addobjecttype ( loadobjecttype( c.c_str() ));
-
-         c = ff.getnextname();
-      }
-  }
-  {
-      TextPropertyList tpgl;
-
-      tfindfile ff ( "*.oblt" );
-
-      string c = ff.getnextname();
-
-      while( !c.empty() ) {
-         if ( actprogressbar )
-            actprogressbar->point();
-
-         tnfilestream s ( c, tnstream::reading );
-
-         displayLogMessage ( 5, "loadallobjecttypes :: loading " + c + ", " );
-
-         TextFormatParser tfp ( &s, "ObjectType" );
-
-         displayLogMessage ( 5, "TFP running... " );
-
-         tpgl.push_back ( tfp.run() );
-
-         displayLogMessage ( 5, "done\n" );
-
-         c = ff.getnextname();
-      }
-
-      for ( TextPropertyList::iterator i = tpgl.begin(); i != tpgl.end(); i++ ) {
-         if ( actprogressbar )
-            actprogressbar->point();
-
-         PropertyReadingContainer pc ( "ObjectType", *i );
-
-         ObjectType* ot = new ObjectType;
-         ot->runTextIO ( pc );
-         pc.run();
-
-         ot->fileName = (*i)->fileName;
-         ot->location = (*i)->location;
-         addobjecttype ( ot );
-      }
-   }
-}
-
-
-
-void         loadalltechnologies(void)
-{ 
-  int i;
-
-  tfindfile ff ( "*.tec" );
-  string c = ff.getnextname();
-
-  while ( !c.empty() ) {
-      if ( actprogressbar )
-         actprogressbar->point();
-
-      addtechnology ( loadtechnology( c.c_str() ));
-
-      c = ff.getnextname();
-   } 
-
-   for (i = 0; i < technologynum; i++) 
-      for (int l = 0; l < 6; l++) { 
-         ptechnology tech = gettechnology_forpos ( i, 0 );
-         int j = tech->requiretechnologyid[l]; 
-         if ( j > 0 ) 
-            tech->requiretechnology[l] = gettechnology_forid ( j ); 
-      } 
-
-   for (i = 0; i < technologynum; i++) 
-      gettechnology_forpos ( i, 0 ) -> getlvl();
-
-} 
-
-
-void         loadallterraintypes(void)
-{
-   {
-      tfindfile ff ( "*.trr" );
-
-      string c = ff.getnextname();
-
-      while( !c.empty() ) {
-         if ( actprogressbar )
-            actprogressbar->point();
-
-         if ( !exist ( extractFileName_withoutSuffix(c) + ".trrt") )
-            addterraintype ( loadterraintype( c.c_str() ));
-
-         c = ff.getnextname();
-      }
-   }
-
-
-   {
-      TextPropertyList tpgl;
-
-      tfindfile ff ( "*.trrt" );
-
-      string c = ff.getnextname();
-
-      while( !c.empty() ) {
-         if ( actprogressbar )
-            actprogressbar->point();
-
-         tnfilestream s ( c, tnstream::reading );
-
-         displayLogMessage ( 5, "loadallterraintypes :: loading " + c + ", " );
-
-         TextFormatParser tfp ( &s, "TerrainType" );
-
-         displayLogMessage ( 5, "TFP running... " );
-
-         tpgl.push_back ( tfp.run() );
-
-         displayLogMessage ( 5, "done\n" );
-
-         c = ff.getnextname();
-      }
-
-      for ( TextPropertyList::iterator i = tpgl.begin(); i != tpgl.end(); i++ ) {
-         if ( actprogressbar )
-            actprogressbar->point();
-
-         PropertyReadingContainer pc ( "TerrainType", *i );
-
-         TerrainType* tt = new TerrainType;
-         tt->runTextIO ( pc );
-         pc.run();
-
-         tt->fileName = (*i)->fileName;
-         tt->location = (*i)->location;
-         addterraintype ( tt );
-      }
-
-    }
-}
-
-
-
-
-void         loadallbuildingtypes(void)
-{ 
-   tfindfile ff ( "*.bld" );
-
-   string c = ff.getnextname();
-
-   while( !c.empty() ) {
-      if ( actprogressbar )
-         actprogressbar->point();
-
-      addbuildingtype ( loadbuildingtype( c.c_str() ));
-
-      c = ff.getnextname();
-   } 
-} 
 
 
 

@@ -50,7 +50,7 @@
 #include "../astar2.h"
 #include "../sg.h"
 #include "../resourcenet.h"
-
+#include "../itemrepository.h"
 #include "../building_controls.h"
 #include "../viewcalculation.h"
 

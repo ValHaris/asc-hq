@@ -204,6 +204,8 @@ PropertyWritingContainer :: PropertyWritingContainer ( const ASCString& baseName
 {
    setFilename ( filename_ );
    textPropertyGroup = new TextPropertyGroup();
+   textPropertyGroup->fileName = stream.getDeviceName();
+   textPropertyGroup->location = stream.getLocation();
    openBracket ( baseName );
 }
 
@@ -410,7 +412,7 @@ void PropertyContainer::ImageProperty::evaluate_rw ( )
    } else {
       tvirtualdisplay vdp ( 100, 100, 255, 8 );
       putimage ( 0, 0, property );
-      valueToWrite = fileName + ".pcx";
+      valueToWrite = extractFileName_withoutSuffix(fileName) + ".pcx";
       writepcx ( valueToWrite, 0, 0, fieldsizex-1, fieldsizey-1, pal );
    }
 }
@@ -439,8 +441,8 @@ void PropertyContainer::ImageArrayProperty::evaluate_rw ( )
          putimage ( (cnt % 10) * 100, (cnt / 10) * 100, *i );
          cnt++;
       }
-      valueToWrite = fileName + ".pcx" + " " + strrr( cnt );
-      writepcx ( fileName + ".pcx", 0, 0, 1100 - 1, 100 * (num / 10 + 1) - 1, pal );
+      valueToWrite = extractFileName_withoutSuffix(fileName) + ".pcx" + " " + strrr( cnt );
+      writepcx ( extractFileName_withoutSuffix(fileName) + ".pcx", 0, 0, 1100 - 1, 100 * (num / 10 + 1) - 1, pal );
    }
 }
 
@@ -514,8 +516,8 @@ void TextFormatParser::startLevel ( const ASCString& levelName )
 TextPropertyGroup* TextFormatParser::run (  )
 {
    textPropertyGroup = new TextPropertyGroup ;
-   textPropertyGroup->fileName = extractFileName_withoutSuffix ( stream->getDeviceName() );
-   textPropertyGroup->location = stream->getDeviceName();
+   textPropertyGroup->fileName = stream->getDeviceName();
+   textPropertyGroup->location = stream->getLocation();
    parseLine ( stream->readString() );
    return textPropertyGroup;
 }

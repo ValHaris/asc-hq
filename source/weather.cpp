@@ -2,9 +2,15 @@
     \brief Changing the weather and the terrain on the map
 */
 
-//     $Id: weather.cpp,v 1.8 2001-01-28 14:04:22 mbickel Exp $
+//     $Id: weather.cpp,v 1.9 2001-07-28 11:19:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2001/01/28 14:04:22  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.7  2000/11/21 19:13:27  mbickel
 //      libbzip2 can now be linked either statically or dynamically to ASC/linux
 //
@@ -67,6 +73,7 @@
 #include "spfst.h"
 #include "weather.h"
 #include "dlg_box.h"
+#include "itemrepository.h"
 
 static const double pi = 3.141592654;
 

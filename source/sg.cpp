@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: sg.cpp,v 1.154 2001-07-27 21:13:35 mbickel Exp $
+//     $Id: sg.cpp,v 1.155 2001-07-28 11:19:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.154  2001/07/27 21:13:35  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.153  2001/07/25 19:01:32  mbickel
 //      Started adding text file formats
 //
@@ -327,7 +331,7 @@
 #include "dashboard.h"
 #include "graphicset.h"
 #include "loadbi3.h"
-
+#include "itemrepository.h"
 
 
 // #define MEMCHK

@@ -2,9 +2,15 @@
     \brief The event handling of ASC
 */
 
-//     $Id: missions.cpp,v 1.24 2001-02-26 12:35:22 mbickel Exp $
+//     $Id: missions.cpp,v 1.25 2001-07-28 11:19:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2001/02/26 12:35:22  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.23  2001/02/11 11:39:40  mbickel
 //      Some cleanup and documentation
 //
@@ -159,6 +165,7 @@
 #include "sg.h"
 #include "errors.h"
 #include "dashboard.h"
+#include "itemrepository.h"
 
 const  int    translatetriggerstatus[4]  = {0, 1, 1, 0};
 

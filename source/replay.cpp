@@ -35,7 +35,7 @@
 #include "sg.h"
 #include "viewcalculation.h"
 #include "dashboard.h"
-
+#include "itemrepository.h"
 
 
 trunreplay runreplay;

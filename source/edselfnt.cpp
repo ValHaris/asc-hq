@@ -2,9 +2,13 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.27 2001-07-27 21:13:34 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.28 2001-07-28 11:19:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2001/07/27 21:13:34  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.26  2001/07/15 21:00:25  mbickel
 //      Some cleanup in the vehicletype class
 //
@@ -168,7 +172,7 @@
 #include "edselfnt.h"
 #include "edglobal.h"
 #include "mapdisplay.h"
-
+#include "itemrepository.h"
 
 
 

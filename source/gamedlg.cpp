@@ -1,8 +1,12 @@
 /*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.76 2001-07-27 21:13:34 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.77 2001-07-28 11:19:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.76  2001/07/27 21:13:34  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.75  2001/07/25 18:00:16  mbickel
 //      Fixed: units could repair without repairing function but
 //      Fixed: airplanes tried to ascend through buildings
@@ -388,6 +392,7 @@
 #include "password_dialog.h"
 #include "viewcalculation.h"
 #include "replay.h"
+#include "itemrepository.h"
 
 #ifdef _SDL_
  #include "sdl/sound.h"
