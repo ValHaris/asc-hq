@@ -1,6 +1,10 @@
-//     $Id: artint.cpp,v 1.6 2000-07-05 10:49:35 mbickel Exp $
+//     $Id: artint.cpp,v 1.7 2000-07-05 13:26:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/07/05 10:49:35  mbickel
+//      Fixed AI bugs
+//      setbuildingdamage event now updates the screen
+//
 //     Revision 1.5  2000/06/28 18:30:56  mbickel
 //      Started working on AI
 //      Started making loaders independent of memory layout
@@ -2809,7 +2813,7 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( pvehiclety
                } 
 
 
-   if ( !fzt->aiparam )
+   if ( !fzt->aiparam[ai->getplayer()] )
       fzt->aiparam[ ai->getplayer() ] = new AiParameter;
 
    for ( int l = 0; l < 8; l++ ) 
@@ -2852,7 +2856,7 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
    eht = _eht;     
    calc_threat_vehicletype ( eht->typ );
 
-   if ( !eht->aiparam )
+   if ( !eht->aiparam[ai->getplayer()] )
       eht->aiparam[ai->getplayer()] = new AiParameter;
 
    for ( int l = 0; l < 8; l++ ) 
@@ -2900,14 +2904,14 @@ void  AI :: calculateThreat ( pbuilding bld )
    bld->aiparam[ getplayer() ]->value = (bld->plus.a.energy / 10) + (bld->plus.a.fuel / 10) + (bld->plus.a.material / 10) + (bld->actstorage.a.energy / 20) + (bld->actstorage.a.fuel / 20) + (bld->actstorage.a.material / 20) + (bld->maxresearchpoints / 10); 
    for (b = 0; b <= 31; b++) 
       if ( bld->loading[b]  ) {
-         if ( !bld->loading[b]->aiparam )
+         if ( !bld->loading[b]->aiparam[ getplayer() ] )
             calculateThreat ( bld->loading[b] );
          bld->aiparam[ getplayer() ]->value += bld->loading[b]->aiparam[ getplayer() ]->value; 
       }
 
    for (b = 0; b <= 31; b++) 
       if ( bld->production[b] )  {
-         if ( !bld->production[b]->aiparam )
+         if ( !bld->production[b]->aiparam[ getplayer() ] )
             calculateThreat ( bld->production[b] );
          bld->aiparam[ getplayer() ]->value += bld->production[b]->aiparam[ getplayer() ]->value / 10; 
       }
@@ -2983,7 +2987,7 @@ void     AI :: calculateAllThreats( void )
          // Now we cycle through all units of this player
          pvehicle eht = actmap->player[v].firstvehicle; 
          while ( eht ) { 
-            if ( !eht->aiparam )
+            if ( !eht->aiparam[ getplayer() ] )
                eht->aiparam[ getplayer() ] = new AiParameter;
             else
                eht->aiparam[ getplayer() ]->reset();
