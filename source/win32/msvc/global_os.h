@@ -1,6 +1,11 @@
-//     $Id: global_os.h,v 1.3 2001-05-18 22:30:30 mbickel Exp $
+//     $Id: global_os.h,v 1.4 2001-07-30 17:43:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2001/05/18 22:30:30  mbickel
+//      The data file is now installed in the correct directory
+//      If the installation directory is changed with configure, the new path
+//       will now be compiled directly into ASC
+//
 //     Revision 1.2  2000/10/16 14:34:14  mbickel
 //      Win32 port is now running fine.
 //      Removed MSVC project files and put them into a zip file in
@@ -36,16 +41,14 @@
     Boston, MA  02111-1307  USA
 */
 
-#error Visual C sucks ! Please read asc/doc/source.html
+// #error Visual C sucks ! Please read asc/doc/source.html
 
 
 #ifndef global_os_h_included
  #define global_os_h_included
 
-  #ifndef minimalIO
-   #define sdlheader "SDL.h"
-   #include sdlheader
-  #endif 
+  #define sdlheader "SDL.h"
+  #define sdlmixerheader "SDL_mixer.h"
 
   #include <string>
   using namespace std;

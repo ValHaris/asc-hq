@@ -2,9 +2,13 @@
     \brief Changing the weather and the terrain on the map
 */
 
-//     $Id: weather.cpp,v 1.9 2001-07-28 11:19:12 mbickel Exp $
+//     $Id: weather.cpp,v 1.10 2001-07-30 17:43:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2001/07/28 11:19:12  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.8  2001/01/28 14:04:22  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -375,8 +379,8 @@ int   tfillpolygon::paint_polygon   ( ppolygon poly )
           painttriangle ( tripos );
        } /* endfor */
     
-       delete  ( triangles );
-       delete  ( floatpoints );
+       delete[] triangles;
+       delete[] floatpoints;
        return 1;
    } else
      return 0;

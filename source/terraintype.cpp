@@ -314,7 +314,7 @@ TerrainAccess :: TerrainAccess ( void )
    terrain.flip();
 }
 
-int TerrainAccess :: accessible ( const TerrainBits& bts )
+int TerrainAccess :: accessible ( const TerrainBits& bts ) const
 {
    if (     (terrain & bts).any()
          && (terrainreq & bts) == terrainreq

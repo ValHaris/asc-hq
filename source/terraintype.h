@@ -49,7 +49,7 @@
             \returns 1 if the field is accessible;
                       0 if it is not accessible
                       -1 if it is not accessible and the unit is killed by it    */
-       int accessible ( const TerrainBits& bts );
+       int accessible ( const TerrainBits& bts ) const;
 
        void read ( tnstream& stream );
        void write ( tnstream& stream ) const;

@@ -2,9 +2,12 @@
     \brief The implementation of the Pulldown Menu
 */
 
-//     $Id: pd.cpp,v 1.16 2001-02-11 11:39:40 mbickel Exp $
+//     $Id: pd.cpp,v 1.17 2001-07-30 17:43:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2001/02/11 11:39:40  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.15  2001/01/28 14:04:15  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -413,7 +416,7 @@ void         tpulldown::openpdfield(void)
    // char abbrch = false;
    anf = pdb.field[pdfieldnr].xstart + pdfieldtextdistance / 2 - pdfieldenlargement;
    ende =  anf + pdb.field[pdfieldnr].xwidth + pdfieldenlargement*2;
-   char umbau = false;
+   bool umbau = false;
    if (ende > agmp->resolutionx-4 ) { 
       umbau = true; 
       zw = ende - (agmp->resolutionx-4);

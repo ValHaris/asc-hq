@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: pd.h,v 1.7 2001-01-28 14:04:15 mbickel Exp $
+//     $Id: pd.h,v 1.8 2001-07-30 17:43:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2001/01/28 14:04:15  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.6  2000/08/12 12:52:50  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -81,7 +87,7 @@
    class tpulldown {
          int pdfieldnr, buttonnr;
       public :
-         char barstatus;
+         bool barstatus;
          int  action,mousestat;
          int  bkgcolor,textcolor,shortkeycolor,rcolor1,rcolor2;
          int pdfieldtextdistance,textstart,righttextdifference,anf,ende;

@@ -2,9 +2,12 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.92 2001-07-28 21:09:08 mbickel Exp $
+//     $Id: dialog.cpp,v 1.93 2001-07-30 17:43:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.92  2001/07/28 21:09:08  mbickel
+//      Prepared vehicletype structure for textIO
+//
 //     Revision 1.91  2001/07/28 11:19:10  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -255,7 +258,7 @@ void         tstatisticarmies ::newknopfdruck(integer      xx1,
                            integer      yy2)
 { 
     char*      p; 
-    char      kn; 
+    bool      kn; 
     integer      mt; 
     {
         collategraphicoperations cgo ( xx1, yy1, xx2, yy2 );
@@ -2088,8 +2091,8 @@ class   tfileselectsvga : public tdialogbox {
                         ASCString       wildcard;
                         char            swtch;           /* 1: load        2: save */
                         ASCString*      result;
-                        char         sort_name;
-                        char         sort_time;
+                        bool         sort_name;
+                        bool         sort_time;
 
                         void            init( char sw );
                         void            setdata( const ASCString& _wildcard, ASCString* _result );   // result

@@ -708,7 +708,7 @@ void AI::UnitDistribution::write ( tnstream& stream ) const
 }
 
 
-#ifndef __BORLANDC__
+#ifndef _WIN32_
 // avoiding a gcc 2.95.3 bug....
 typedef AI::UnitDistribution AIUD;
 AIUD AI::calcUnitDistribution ()

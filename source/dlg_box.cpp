@@ -3,9 +3,18 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.55 2001-07-18 16:05:47 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.56 2001-07-30 17:43:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2001/07/18 16:05:47  mbickel
+//      Fixed: infinitive loop in displaying "player exterminated" msg
+//      Fixed: construction of units by units: wrong player
+//      Fixed: loading bug of maps with mines
+//      Fixed: invalid map parameter
+//      Fixed bug in game param edit dialog
+//      Fixed: cannot attack after declaring of war
+//      New: ffading of sounds
+//
 //     Revision 1.54  2001/07/15 21:31:03  mbickel
 //      The movement sounds can now fade in and out
 //
@@ -3959,7 +3968,7 @@ void fatalError ( const ASCString& string )
    displaymessage ( string.c_str(), 2 );
 }
 
-void warning ( const ASCString& string )
+void warning ( const ASCString& str )
 {
-   cerr << "ASC: " << string << endl;
+	fprintf(stderr, "ASC: %s \n", str.c_str());
 }

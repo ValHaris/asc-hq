@@ -46,7 +46,7 @@ private:
 
 
 class SoundSystem {
-      int mute;
+      bool mute;
       int off;
       bool sdl_initialized;
       bool mix_initialized;

@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: sg.cpp,v 1.155 2001-07-28 11:19:12 mbickel Exp $
+//     $Id: sg.cpp,v 1.156 2001-07-30 17:43:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.155  2001/07/28 11:19:12  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.154  2001/07/27 21:13:35  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -2365,11 +2369,10 @@ int gamethread ( void* data )
       catch ( tfileerror err ) {
          displaymessage ( "unable to access file %s \n", 2, err.getFileName().c_str() );
       }
-      catch ( toutofmem err ) {
-         displaymessage (
-            "loading of game failed due to insufficient memory", 2 );
+      catch ( toutofmem ) {
+         displaymessage ( "loading of game failed due to insufficient memory", 2 );
       }
-      catch ( ASCexception err ) {
+      catch ( ASCexception ) {
          displaymessage ( "loading of game failed", 2 );
       }
 

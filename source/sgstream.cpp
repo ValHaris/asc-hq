@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.61 2001-07-28 11:19:12 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.62 2001-07-30 17:43:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2001/07/28 11:19:12  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.60  2001/07/27 21:13:35  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -1217,7 +1221,7 @@ void initFileIO ( const char* configFileName )
                    "If you have several *.con files in your ASC directory, try removing all but main.con.\n"
                    "If the error still occurs then, get a new data package from www.asc-hq.org\n" );
    }
-   catch ( ASCexception err ) {
+   catch ( ASCexception ) {
       fatalError ( "a fatal error occured while mounting the container files \n");
    }
    catch ( ... ) {

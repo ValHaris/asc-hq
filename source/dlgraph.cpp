@@ -5,9 +5,12 @@
      which was never finished.
 */
 
-//     $Id: dlgraph.cpp,v 1.12 2001-07-14 14:26:10 mbickel Exp $
+//     $Id: dlgraph.cpp,v 1.13 2001-07-30 17:43:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2001/07/14 14:26:10  mbickel
+//      Some cleanup
+//
 //     Revision 1.11  2001/02/11 11:39:31  mbickel
 //      Some cleanup and documentation
 //
@@ -126,7 +129,6 @@ void         tdialogbox::knopfdruck(int      xx1,
      collategraphicoperations cgs ( xx1, yy1, xx2, yy2 );
 
     void*      p;
-    char      kn;
     integer      mt;
 
      mt = mouseparams.taste;
@@ -141,7 +143,7 @@ void         tdialogbox::knopfdruck(int      xx1,
      rahmen(true, xx1, yy1, xx2, yy2); 
      mousevisible(true); 
      knopfsuccessful = true; 
-     kn = true; 
+     bool kn = true; 
      do { 
            if ((mouseparams.x > xx2) || (mouseparams.x < xx1) || (mouseparams.y > yy2) || (mouseparams.y < yy1)) { 
               knopfsuccessful = false; 
@@ -185,7 +187,7 @@ void         tdialogbox::newknopfdruck2(integer      xx1,
 {
 
     void*      p;
-    char      kn; 
+    bool      kn; 
     integer      mt; 
     {
        collategraphicoperations cgs ( xx1 -1, yy1 -1, xx2 + 1, yy2 + 1 );
@@ -293,7 +295,7 @@ void         tdialogbox::newknopfdruck(integer      xx1,
 {
 
    void*      p;
-   char      kn;
+   bool      kn;
    integer      mt;
    void*    pq ;
    {
