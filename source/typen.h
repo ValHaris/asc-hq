@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.90 2001-07-11 20:44:37 mbickel Exp $
+//     $Id: typen.h,v 1.91 2001-07-13 12:53:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.90  2001/07/11 20:44:37  mbickel
+//      Removed some vehicles from the data file.
+//      Put all legacy units in into the data/legacy directory
+//
 //     Revision 1.89  2001/07/08 22:54:22  mbickel
 //      Added version checking for coordinate loading
 //      Fixed crash when loading AI-savegames
@@ -1133,6 +1137,7 @@ extern const char*  cbodenarten[]  ;
   extern tterrainbits cbhillside ;
   extern tterrainbits cbsmallrocks ;
   extern tterrainbits cblargerocks ;
+  extern tterrainbits cbfrozenwater ;
 
 
 extern const char*  resourceNames[3];

@@ -1,6 +1,10 @@
-//     $Id: gui.h,v 1.20 2001-02-04 21:26:56 mbickel Exp $
+//     $Id: gui.h,v 1.21 2001-07-13 12:53:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2001/02/04 21:26:56  mbickel
+//      The AI status is written to savegames -> new savegame revision
+//      Lots of bug fixes
+//
 //     Revision 1.19  2001/01/28 14:04:14  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -848,6 +852,7 @@ class treplayguihost : public ReplayBaseGuiHost {
      treplayguihost ( ) {};
    };
 
+extern treplayguihost replayGuiHost;
 
 class ContainerBaseGuiHost : public GuiHost<pgeneralicon_c> {
          public:

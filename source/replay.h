@@ -36,7 +36,7 @@ extern void logtoreplayinfo ( trpl_actions action, ... );
 class trunreplay {
          protected:
             int movenum;
-            treplayguihost gui;
+            treplayguihost& gui;
             void execnextreplaymove ( void );
             pmap orgmap;
             pmemorystream stream;

@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.76 2001-07-11 20:44:37 mbickel Exp $
+//     $Id: typen.cpp,v 1.77 2001-07-13 12:53:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.76  2001/07/11 20:44:37  mbickel
+//      Removed some vehicles from the data file.
+//      Put all legacy units in into the data/legacy directory
+//
 //     Revision 1.75  2001/04/03 11:54:16  mbickel
 //      AI Improvements: production , servicing
 //
@@ -821,15 +825,7 @@ tterrainbits cbwater0 ( 1<<22, 0 );
 tterrainbits cbwater1 ( 1, 0 );
 tterrainbits cbwater2 ( 4096, 0 );
 tterrainbits cbwater3 ( 8192, 0 );
-/*
-tterrainbits cbwater ( cbwater0.terrain1 + cbwater1.terrain1 + cbwater2.terrain1 + cbwater3.terrain1, 
-                       cbwater0.terrain2 + cbwater1.terrain2 + cbwater2.terrain2 + cbwater3.terrain2 );
-*/
-
-
 tterrainbits cbwater ( cbwater0 | cbwater1 | cbwater2 | cbwater3 );
-
-
 tterrainbits cb_all ( -1, -1 );
 tterrainbits cbstreet ( 32, 0 );
 tterrainbits cbrailroad ( 64, 0 );
@@ -845,10 +841,11 @@ tterrainbits cbsnow2 ( 1<<20, 0 );
 tterrainbits cbhillside ( 1<<26, 0 );
 tterrainbits cbsmallrocks ( 1<<17, 0 );
 tterrainbits cblargerocks ( 1<<23, 0 );
+tterrainbits cbfrozenwater ( 0, 1 );
 
 
                tterrainbits operator~ ( const tterrainbits &tb )
-               { 
+               {
                   tterrainbits tbs  ( ~(tb.terrain1), ~(tb.terrain2) );
                   return tbs;
                };

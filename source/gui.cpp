@@ -4,9 +4,13 @@
 */
 
 
-//     $Id: gui.cpp,v 1.57 2001-05-24 15:37:51 mbickel Exp $
+//     $Id: gui.cpp,v 1.58 2001-07-13 12:53:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2001/05/24 15:37:51  mbickel
+//      Fixed: reaction fire could not be disabled when unit out of ammo
+//      Fixed several AI problems
+//
 //     Revision 1.56  2001/04/01 12:59:35  mbickel
 //      Updated win32 project files to new ai file structure
 //      Added viewid win32-project
@@ -3061,8 +3065,8 @@ void   treplayguihost :: bi2control (  )
    ReplayBaseGuiHost::bi2control (  );
 }
 
-#ifdef __BORLANDC__
-   // Borland C++ Builder forgets to instantiate these templates...
-   treplayguihost Borland_Cpp_builder_sucks;
-#endif
-   ContainerBaseGuiHost Borland_Cpp_builder_sucks2;
+treplayguihost replayGuiHost;
+
+ContainerBaseGuiHost Borland_Cpp_builder_sucks2;
+
+

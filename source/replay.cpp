@@ -470,7 +470,7 @@ void logtoreplayinfo ( trpl_actions _action, ... )
 }
 
 
-trunreplay :: trunreplay ( void )
+trunreplay :: trunreplay ( void ) : gui ( replayGuiHost ) 
 {
    status = -1;
    movenum = 0;

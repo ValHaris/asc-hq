@@ -1,6 +1,12 @@
-//     $Id: unitctrl.cpp,v 1.53 2001-03-30 12:43:16 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.54 2001-07-13 12:53:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2001/03/30 12:43:16  mbickel
+//      Added 3D pathfinding
+//      some cleanup and documentation
+//      splitted the ai into several files, now located in the ai subdirectory
+//      AI cares about airplane servicing and range constraints
+//
 //     Revision 1.52  2001/03/23 16:02:56  mbickel
 //      Some restructuring;
 //      started rewriting event system
@@ -782,7 +788,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
         if ( vehicle->functions & cficebreaker )
            if ( eisbrecherobject )
               // if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checkobj2 ( eisbrecherobject, 2 )))
-                 if ( (fld1->bdt & cbsnow1 )  || ( fld1->bdt & cbsnow2 ) || fld1->checkforobject ( eisbrecherobject ) ) {
+                 if ( (fld1->bdt & cbfrozenwater ) ||(fld1->bdt & cbsnow1 )  || ( fld1->bdt & cbsnow2 ) || fld1->checkforobject ( eisbrecherobject ) ) {
                     fld1 -> addobject ( eisbrecherobject, 1 << dir );
                     fld1->checkforobject ( eisbrecherobject )->time = actmap->time.a.turn;
                  }

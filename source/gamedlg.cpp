@@ -1,8 +1,12 @@
 /*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.70 2001-07-11 20:44:37 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.71 2001-07-13 12:53:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.70  2001/07/11 20:44:37  mbickel
+//      Removed some vehicles from the data file.
+//      Put all legacy units in into the data/legacy directory
+//
 //     Revision 1.69  2001/07/08 20:09:57  mbickel
 //      Added tank2pcx tool to project
 //      Fixed bug in refuel dialog
@@ -3923,12 +3927,12 @@ void tonlinemousehelp :: displayhelp ( int messagenum )
          char strarr[maxonlinehelplinenum][10000];
          for (i = 0; i < maxonlinehelplinenum; i++ )
             strarr[i][0] = 0;
-   
+
          i = 0;
          int actlinenum = 0;
          int actlinepos = 0;
          while ( str[i] ) {
-            if ( str[i] != '$' ) 
+            if ( str[i] != '$' )
                strarr[actlinenum][actlinepos++] = str[i];
             else {
                strarr[actlinenum][actlinepos] = 0;
@@ -3938,8 +3942,8 @@ void tonlinemousehelp :: displayhelp ( int messagenum )
             i++;
          } /* endwhile */
          strarr[actlinenum][actlinepos] = 0;
-   
-         
+
+
          int width = 0;
          for ( i = 0; i <= actlinenum; i++ ) {
             int j = gettextwdth ( strarr[i], schriften.guifont );
@@ -3953,7 +3957,7 @@ void tonlinemousehelp :: displayhelp ( int messagenum )
          pos.x1 = mouseparams.x - width - 2;
          pos.x2 = mouseparams.x + 2;
         #endif
-   
+
          if ( pos.x1 < 0 ) {
             pos.x1 = 0;
             pos.x2 = width + 4;
@@ -3962,28 +3966,39 @@ void tonlinemousehelp :: displayhelp ( int messagenum )
             pos.x2 = agmp->resolutionx - 1;
             pos.x1 = pos.x2 - width - 4;
          }
-            
-   
+
+         int height = ( actlinenum+1) * (schriften.guifont->height+4) + 2;
          pos.y1 = mouseparams.y + mouseparams.ysize;
-         pos.y2 = pos.y1 + (( actlinenum+1) * (schriften.guifont->height+4)) + 2;
-   
+         pos.y2 = pos.y1 + height;
+
+         if ( pos.y1 < 0 ) {
+            pos.y1 = 0;
+            pos.y2 = height;
+         }
+         if ( pos.y2 >= agmp->resolutiony ) {
+            pos.y2 = agmp->resolutiony - 1;
+            pos.y1 = pos.y2 - height;
+         }
+
+
+
          if ( !rectinoffarea() ) {
             active = 2;
             image = new char[imagesize ( pos.x1, pos.y1, pos.x2, pos.y2 )];
             getimage ( pos.x1, pos.y1, pos.x2, pos.y2, image );
             bar ( pos.x1, pos.y1, pos.x2, pos.y2, black );
             npush ( activefontsettings );
-         
+
             activefontsettings.font = schriften.guifont;
             activefontsettings.background = 255;
             activefontsettings.justify = centertext;
             activefontsettings.length = pos.x2 - pos.x1;
-         
+
             for ( i = 0; i <= actlinenum; i++ )
               showtext2c ( strarr[i], pos.x1, pos.y1 + 3 + i * (schriften.guifont->height+4));
-         
+
             rectangle ( pos.x1, pos.y1, pos.x2, pos.y2, white );
-         
+
             npop ( activefontsettings );
          }
       }
