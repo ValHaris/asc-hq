@@ -4,9 +4,14 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.48 2003-04-15 20:06:49 mbickel Exp $
+//     $Id: controls.h,v 1.49 2003-05-01 18:02:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2003/04/15 20:06:49  mbickel
+//      Made readrlepict Endian independant
+//      Updated weaponguide
+//      Made Replays much more strict
+//
 //     Revision 1.47  2003/02/27 16:11:00  mbickel
 //      Restructuring of new pathfinding code completed
 //
@@ -295,7 +300,7 @@ extern int searchexternaltransferfields ( pbuilding bld );
 
 class treactionfire {
           public:
-             virtual int  checkfield ( int x, int y, pvehicle &eht, MapDisplayInterface* md ) = 0;
+             virtual int  checkfield ( const MapCoordinate3D& pos, pvehicle &eht, MapDisplayInterface* md ) = 0;
              virtual void init ( pvehicle eht, const AStar3D::Path&  fieldlist ) = 0;
              virtual ~treactionfire() {};
         };
@@ -308,7 +313,7 @@ class treactionfirereplay : public treactionfire {
           public:
              treactionfirereplay ( void );
              ~treactionfirereplay ( );
-             virtual int checkfield ( int x, int y, pvehicle &eht, MapDisplayInterface* md );
+             virtual int checkfield ( const MapCoordinate3D& pos, pvehicle &eht, MapDisplayInterface* md );
              virtual void init ( pvehicle eht, const AStar3D::Path& fieldlist );
    };
 
@@ -323,7 +328,7 @@ class tsearchreactionfireingunits : public treactionfire {
 
                 tsearchreactionfireingunits( void );
                 void init ( pvehicle eht, const AStar3D::Path& fieldlist );
-                int  checkfield ( int x, int y, pvehicle &eht, MapDisplayInterface* md );
+                int  checkfield ( const MapCoordinate3D& pos, pvehicle &eht, MapDisplayInterface* md );
                 ~tsearchreactionfireingunits();
       };
 

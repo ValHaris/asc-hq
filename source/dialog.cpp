@@ -3568,7 +3568,8 @@ void         tsetalliances::init( int supervis )
              if ( actmap->player[i].exist() ) {
                 int x = x1 + 10 + ply_x1 + 2 * tsa_namelength;
                 int y = y1 + ply_y1 + i * 22 - 10;
-                addbutton ("reset passw.", x, y, x+ 90, y + 15, 0, 1, 70+i, true );
+                // addbutton ("reset passw.", x, y, x+ 90, y + 15, 0, 1, 70+i, true );
+                addbutton ("set passw.", x, y, x+ 90, y + 15, 0, 1, 80+i, true );
              }
       }
       if ( !mapeditor && oninit ) {
@@ -4713,22 +4714,15 @@ void tprogressbar :: start ( int _color, int _x1, int _y1, int _x2, int _y2, pns
    color = _color;
 
    if ( stream ) {
-      int ver;
-      stream->readdata2 ( ver );
-      stream->readdata2 ( groupnum );
+      int ver  = stream->readInt();
+      groupnum = stream->readInt();
       for ( int i = 0; i < groupnum; i++ ) {
-         stream->readdata2 ( group[i].orgnum );
-         stream->readdata2 ( group[i].time );
-         stream->readdata2 ( group[i].newtime );
-         stream->readdata2 ( group[i].timefromstart );
-
-         /*
-         for ( int j = 0; j < group[i].num; j++ )
-           stream->readdata2 ( group[i].point[j] );
-         */
-
+         group[i].orgnum = stream->readInt();
+         group[i].time   = stream->readInt();
+         group[i].newtime = stream->readInt();
+         group[i].timefromstart = stream->readInt();
       }
-      stream->readdata2 ( time );
+      time = stream->readInt();
       first = 0;
    } else
       first  = 1;
@@ -4748,7 +4742,7 @@ void tprogressbar :: startgroup ( void )
       group[ actgroupnum ].time = t - group[ actgroupnum ].newtime;
       group[ actgroupnum ].orgnum = group[ actgroupnum ].num;
    }
-      
+
    actgroupnum++;
    group[ actgroupnum ].num = 0;
    group[ actgroupnum ].newtime = t;
@@ -4761,7 +4755,7 @@ void tprogressbar :: point ( void )
 {
    int t = ticker - group[ actgroupnum ].newtime;
    if ( !first &&  group[ actgroupnum ].num < group[ actgroupnum ].orgnum ) {
-      if ( group[ actgroupnum ].time ) { 
+      if ( group[ actgroupnum ].time ) {
          float fgtime = (float) group[ actgroupnum ].time;
 
          float gpos = (float) t  /  fgtime;
@@ -4774,7 +4768,7 @@ void tprogressbar :: point ( void )
          if ( pos > 1 )
             pos = 1;
          lineto ( pos );
-         
+
       }
 
    }
@@ -4813,29 +4807,24 @@ void tprogressbar :: writetostream ( pnstream stream )
       end();
 
    int ver = 1;
-   stream->writedata2 ( ver );
-   stream->writedata2 ( groupnum );
+   stream->writeInt ( ver );
+   stream->writeInt ( groupnum );
    for ( int i = 0; i < groupnum; i++ ) {
-      stream->writedata2 ( group[i].orgnum );
-      stream->writedata2 ( group[i].time );
-      stream->writedata2 ( group[i].newtime );
-      stream->writedata2 ( group[i].timefromstart );
-
-      /*
-      for ( int j = 0; j < group[i].num; j++ )
-        stream->writedata2 ( group[i].point[j] );
-      */
+      stream->writeInt ( group[i].orgnum );
+      stream->writeInt ( group[i].time );
+      stream->writeInt ( group[i].newtime );
+      stream->writeInt ( group[i].timefromstart );
    }
-   stream->writedata2 ( time );
+   stream->writeInt ( time );
 }
 
-             
+
 #ifdef FREEMAPZOOM
 class tchoosezoomlevel : public tdialogbox {
              protected:
-                int zoom; 
+                int zoom;
                 int ok;
-             public: 
+             public:
                 void init ( void );
                 void buttonpressed ( int id );
                 void run ( void );

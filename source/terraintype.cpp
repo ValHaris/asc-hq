@@ -180,7 +180,7 @@ void TerrainType::read( tnstream& stream )
             for ( j = 1; j < 6; j++ )
                stream.readInt(); //pgbt->bi_picture[j] =
 
-            stream.readdata2 ( pgbt->art );
+            pgbt->art.read ( stream );
 
             #ifndef converter
              char mmcount = cmovemalitypenum;

@@ -1027,22 +1027,23 @@ void treactionfirereplay :: init ( pvehicle eht, const AStar3D::Path& fieldlist 
    }
 }
 
-int  treactionfirereplay :: checkfield ( int x, int y, pvehicle &eht, MapDisplayInterface* md )
+int  treactionfirereplay :: checkfield ( const MapCoordinate3D& pos, pvehicle &eht, MapDisplayInterface* md )
 {
    int attacks = 0;
 
    if ( eht == unit ) {
       for ( int i = 0; i < num; i++ ) {
          preactionfire_replayinfo rpli = replay[ i ];
-         if ( eht && rpli->x2 == x  && rpli->y2 == y ) {
+         if ( eht && rpli->x2 == pos.x  && rpli->y2 == pos.y ) {
 
              pfield fld = getfield ( rpli->x1, rpli->y1 );
              pfield targ = getfield ( rpli->x2, rpli->y2 );
 
              npush ( targ->vehicle );
              targ->vehicle = eht;
-             eht->xpos = x;
-             eht->ypos = y;
+             eht->xpos = pos.x;
+             eht->ypos = pos.y;
+             eht->height = pos.getBitmappedHeight();
 
 
              int attackvisible = fieldvisiblenow ( fld ) || fieldvisiblenow ( targ );
@@ -1056,7 +1057,7 @@ int  treactionfirereplay :: checkfield ( int x, int y, pvehicle &eht, MapDisplay
                while ( t + 15 > ticker )
                   releasetimeslice();
 
-               cursor.gotoxy ( x, y );
+               cursor.gotoxy ( pos.x, pos.y );
                t = ticker;
                while ( t + 15 > ticker )
                   releasetimeslice();
@@ -1178,7 +1179,7 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle, const AStar3D::Path
                if ( eht->reactionfire.getStatus() >= Vehicle::ReactionFire::ready )
                   if ( eht->reactionfire.enemiesAttackable & ( 1 << ( vehicle->color / 8 )))
                      if ( getdiplomaticstatus ( eht->color ) == cawar )
-                        if ( attackpossible2u ( eht, vehicle ) )
+                        if ( attackpossible2u ( eht, vehicle, NULL, vehicle->typ->height ) )
                            addunit ( eht );
 
       }
@@ -1229,17 +1230,18 @@ void tsearchreactionfireingunits :: removeunit ( pvehicle vehicle )
 }
 
 
-int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle, MapDisplayInterface* md )
+int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, pvehicle &vehicle, MapDisplayInterface* md )
 {
 
    int attacks = 0;
    int result = 0;
 
-   pfield fld = getfield( x, y );
+   pfield fld = getfield( pos.x, pos.y );
    npush ( fld->vehicle );
    fld->vehicle = vehicle;
-   vehicle->xpos = x;
-   vehicle->ypos = y;
+   vehicle->xpos = pos.x;
+   vehicle->ypos = pos.y;
+   vehicle->height = pos.getBitmappedHeight();
 
    for ( int i = 0; i < 8; i++ ) {
       evaluatevisibilityfield ( actmap, fld, i, -1, actmap->getgameparameter ( cgp_initialMapVisibility ) );
@@ -1247,7 +1249,7 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
          punitlist ul  = unitlist[i];
          while ( ul  &&  !result ) {
             punitlist next = ul->next;
-            pattackweap atw = attackpossible ( ul->eht, x, y );
+            pattackweap atw = attackpossible ( ul->eht, pos.x, pos.y );
             if ( atw->count && (ul->eht->reactionfire.enemiesAttackable & (1 << (vehicle->color / 8)))) {
 
                int ad1, ad2, dd1, dd2;
@@ -1271,7 +1273,7 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
                   while ( t + 15 > ticker )
                      releasetimeslice();
 
-                  cursor.gotoxy ( x, y );
+                  cursor.gotoxy ( pos.x, pos.y );
                   t = ticker;
                   while ( t + 15 > ticker )
                      releasetimeslice();

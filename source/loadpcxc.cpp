@@ -51,7 +51,7 @@ typedef struct tpcxheader{
            word     hscreensize ;
            word     vscreensize ;
            char     dummy[50]   ;
-           int      size;            // patch to be able to read pcx files without seeking 
+           int      size;            // patch to be able to read pcx files without seeking
        }tpcxheader;
 
 #pragma pack()
@@ -84,7 +84,27 @@ char loadpcxxy( pnstream stream, int x, int y, bool setpalette, int* xsize, int*
 
    tpcxheader header;
 
-   stream->readdata ( &header, sizeof(header) );
+   header.manufacturer = stream->readChar();
+   header.version      = stream->readChar();
+   header.encoding     = stream->readChar();
+   header.bitsperpixel = stream->readChar();
+   header.xmin         = stream->readWord();
+   header.ymin         = stream->readWord();
+   header.xmax         = stream->readWord();
+   header.ymax         = stream->readWord();
+   header.hdpi         = stream->readWord();
+   header.vdpi         = stream->readWord();
+   stream->readdata ( header.colormap, 48);
+   header.reserved     = stream->readChar();
+   header.nplanes      = stream->readChar();
+   header.bytesperline= stream->readWord();
+   header.paletteinfo = stream->readWord();
+   header.hscreensize = stream->readWord();
+   header.vscreensize = stream->readWord();
+   stream->readdata ( header.dummy, 50 ) ;
+   header.size = stream->readInt();            // patch to be able to read pcx files without seeking
+
+
    read += sizeof(header);
 
    if ( !header.size ) {
@@ -104,9 +124,9 @@ char loadpcxxy( pnstream stream, int x, int y, bool setpalette, int* xsize, int*
    if ( ysize )
       *ysize = height;
 
-   if ( header.manufacturer != 10 || 
+   if ( header.manufacturer != 10 ||
         header.bitsperpixel != 8  || 
-        header.xmax-header.xmin > agmp-> scanlinelength ) 
+        header.xmax-header.xmin > agmp-> scanlinelength )
       return 11;
 
    int colors   = header.nplanes * header.bitsperpixel;
@@ -253,7 +273,9 @@ void writepcx ( const ASCString& name, int x1, int y1, int x2, int y2, dacpalett
    int fsize = 0;
 
    tn_file_buf_stream stream ( name, tnstream::writing );
+
    stream.writedata2 ( header );
+
    fsize += sizeof ( header );
 
    for ( int y = y1; y <= y2; y++ )
@@ -262,7 +284,7 @@ void writepcx ( const ASCString& name, int x1, int y1, int x2, int y2, dacpalett
          int count = 0;
          for ( int x = x1; x < x1 + header.bytesperline; x++ ) {
             char c = (getpixel( x, y ) >> ( plane * 8 )) & 0xff;
-   
+
             if ( (lastbyte == c && count < 63) || lastbyte == -1 ) {
                count ++;
                lastbyte = c;

@@ -2,9 +2,14 @@
     \brief Interface to the event handling of ASC
 */
 
-//     $Id: missions.h,v 1.9 2003-01-28 17:48:42 mbickel Exp $
+//     $Id: missions.h,v 1.10 2003-05-01 18:02:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2003/01/28 17:48:42  mbickel
+//      Added sounds
+//      Rewrote soundsystem
+//      Fixed: tank got stuck when moving from one transport ship to another
+//
 //     Revision 1.8  2001/02/26 12:35:23  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -76,8 +81,8 @@
 #endif
 
 
-#ifndef missions_h
-#define missions_h
+#ifndef missionsH
+#define missionsH
 
 #include "controls.h"
 

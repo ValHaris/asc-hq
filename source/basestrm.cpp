@@ -49,6 +49,8 @@
  #endif
 #endif
 
+//#include sdlheader
+#include <SDL_endian.h>
 
 
 
@@ -56,7 +58,7 @@
 
  const int maxSearchDirNum = 10;
  int searchDirNum = 0;
- char* ascDirectory[maxSearchDirNum] = { NULL, NULL, NULL, NULL, NULL, 
+ char* ascDirectory[maxSearchDirNum] = { NULL, NULL, NULL, NULL, NULL,
                                          NULL, NULL, NULL, NULL, NULL };
 
 
@@ -256,14 +258,14 @@ int  tnstream::readInt  ( void )
 {
    int i;
    readdata2 ( i );
-   return i;
+   return SDL_SwapLE32( i );
 }
 
 word tnstream::readWord ( void )
 {
    word w;
    readdata2 ( w );
-   return w;
+   return SDL_SwapLE16( w );
 }
 
 char tnstream::readChar ( void )
@@ -277,6 +279,9 @@ float tnstream::readFloat ( void )
 {
    float c;
    readdata2 ( c );
+#ifdef BIG_ENDIAN
+   c = SwapFloat(c);
+#endif
    return c;
 }
 
@@ -284,11 +289,13 @@ float tnstream::readFloat ( void )
 
 void tnstream::writeInt  ( int i )
 {
+   i = SDL_SwapLE32(i);
    writedata2 ( i );
 }
 
 void tnstream::writeWord ( word w )
 {
+   w = SDL_SwapLE16(w);
    writedata2 ( w );
 }
 
@@ -587,11 +594,6 @@ static int stream_read(SDL_RWops *context, void *ptr, int size, int maxnum)
 	MemoryStreamCopy* stream = (MemoryStreamCopy*) context->hidden.unknown.data1;
 	size_t nread = stream->readdata ( ptr, size * maxnum, 0 );
 
-	/*
-	if ( nread < 0 ) {
-		SDL_SetError("Error reading from datastream");
-	}
-	*/
 	return(nread / size);
 }
 
@@ -862,19 +864,20 @@ tn_file_buf_stream::~tn_file_buf_stream()
 tncontainerstream :: tncontainerstream ( const char* containerfilename, ContainerIndexer* indexer, int dirLevel )
         : tn_file_buf_stream ( containerfilename, reading )
 {
-   int pos;
    num = 0;
    char magic[4];
-   readdata ( &magic, sizeof(pos) );
+   readdata ( &magic, 4 );
    if ( strncmp ( magic, containermagic, 4 ) == 0) {
-      readdata ( &pos, sizeof(pos) );
+      int pos = readInt();
       seek ( pos );
-      readdata ( &num, sizeof (num) );
+      num = readInt();
       index = new tcontainerindex[num];
       for ( int i = 0; i < num; i++ ) {
 
-         readdata ( &index[i], sizeof ( index[i] ) );
-         if ( index[i].name ) {
+         bool __loadName = readInt();
+         index[i].start = readInt();
+         index[i].end = readInt();
+         if ( __loadName ) {
             readpchar ( &index[i].name );
 
            #if CASE_SENSITIVE_FILE_NAMES == 1
@@ -887,7 +890,8 @@ tncontainerstream :: tncontainerstream ( const char* containerfilename, Containe
            #endif
 
             indexer->addfile ( index[i].name, this, dirLevel );
-         }
+         } else
+            index[i].name = NULL;
       }
    }
    actfile = NULL;
@@ -2070,7 +2074,8 @@ int checkforvaliddirectory ( char* dir )
         stream->writeInt ( initialized );
         stream->writeInt ( used );
         stream->writeInt ( allocated );
-        stream->writedata2 ( dummy );
+        for ( int i = 0; i < 10; i++ )
+           stream->writeInt ( dummy[i] );
         if ( used > 0 )
            stream->writedata ( buf, used );
      }
@@ -2082,7 +2087,9 @@ int checkforvaliddirectory ( char* dir )
         initialized = stream->readInt();
         used        = stream->readInt();
         allocated   = stream->readInt();
-        stream->readdata2 ( dummy );
+        for ( int i = 0; i< 10; i++ )
+           dummy[i] = stream->readInt();
+
         if ( buf ) {
            delete[] buf;
            buf = NULL;

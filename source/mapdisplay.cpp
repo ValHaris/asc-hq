@@ -774,34 +774,39 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
                   /* display buildings */
 
-                      if ( fld->building  &&  (log2(fld->building->typ->buildingheight)+1 == hgt ) && fld->picture )
-                           if ((b == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerview*8 ))
-                              if (fld->building->visible)
-                                 if ( fld->building->typ->buildingheight < chschwimmend )
-                                    putpicturemix ( r + buildingrightshift, yp + buildingdownshift ,fld->picture,fld->building->color, (char*) colormixbuf);
-                                 else {
-                                    if ( fld->building->typ->buildingheight >= chtieffliegend ) {
-                                       int d = 6 * ( log2 ( fld->building->typ->buildingheight ) - log2 ( chfahrend ));
-                                       putshadow ( r + buildingrightshift + d, yp + buildingdownshift + d,fld->picture, &xlattables.a.dark3);
-                                    }
-                                    putrotspriteimage( r + buildingrightshift, yp + buildingdownshift ,fld->picture,fld->building->color);
+                   if ( fld->building  &&  (log2(fld->building->typ->buildingheight)+1 == hgt ) && fld->picture )
+                        if ((b == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerview*8 ))
+                           if (fld->building->visible)
+                              if ( fld->building->typ->buildingheight < chschwimmend )
+                                 putpicturemix ( r + buildingrightshift, yp + buildingdownshift ,fld->picture,fld->building->color, (char*) colormixbuf);
+                              else {
+                                 if ( fld->building->typ->buildingheight >= chtieffliegend ) {
+                                    int d = 6 * ( log2 ( fld->building->typ->buildingheight ) - log2 ( chfahrend ));
+                                    putshadow ( r + buildingrightshift + d, yp + buildingdownshift + d,fld->picture, &xlattables.a.dark3);
                                  }
+                                 putrotspriteimage( r + buildingrightshift, yp + buildingdownshift ,fld->picture,fld->building->color);
+                              }
 
 
                   /* display units */
-                      if ( fld->vehicle  &&  (fld->vehicle->height == binaryheight))
-                         if ( ( fld->vehicle->color == playerview * 8 ) || (b == visible_all) || ((fld->vehicle->height >= chschwimmend) && (fld->vehicle->height <= chhochfliegend)))
-                            fld->vehicle->putimage ( r + unitrightshift , yp + unitdownshift );
+                   if ( fld->vehicle  &&  (fld->vehicle->height == binaryheight))
+                      if ( ( fld->vehicle->color == playerview * 8 ) || (b == visible_all) || ((fld->vehicle->height >= chschwimmend) && (fld->vehicle->height <= chhochfliegend)))
+                         fld->vehicle->putimage ( r + unitrightshift , yp + unitdownshift );
+
+                }
 
                   /* display streets, railroads and pipelines */
-                    //  if ( !fld->building || !fld->building->visible )
-                         for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ ) {
-                            int h = o->typ->height;
-                            if (  h >= hgt*30 && h < 30 + hgt*30 )
-                               o->display ( r - streetleftshift , yp - streettopshift, fld->getweather() );
-                         }
+                for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ ) {
+                   int h = o->typ->height;
+                   if (b > visible_ago || o->typ->visibleago )
+                      if (  h >= hgt*30 && h < 30 + hgt*30 )
+                         o->display ( r - streetleftshift , yp - streettopshift, fld->getweather() );
+                }
 
 
+
+
+               if (b > visible_ago ) {
                   /* display mines */
                       if ( b == visible_all )
                            if ( !fld->mines.empty() && hgt == 3 ) {
@@ -832,33 +837,6 @@ void tgeneraldisplaymap :: pnt_main ( void )
                           showtext2(strrr( fld->temp2 ), r + unitrightshift + 5, yp + unitdownshift + 20 );
                           #endif
 
-                      /* display resources */
-                          #ifndef karteneditor
-                          if ( fld->resourceview && (fld->resourceview->visible & ( 1 << playerview) ) ){
-                             if ( showresources == 1 ) {
-                                showtext2( strrr ( fld->resourceview->materialvisible[playerview] ) , r + unitrightshift + 10 , yp + unitdownshift );
-                                showtext2( strrr ( fld->resourceview->fuelvisible[playerview] )     , r + unitrightshift + 10 , yp + unitdownshift+ 10 );
-                             } else
-                                if ( showresources == 2 ) {
-                                   if ( fld->resourceview->materialvisible[playerview] )
-                                      bar ( r + unitrightshift + 10 , yp + unitdownshift -2, r + unitrightshift + 10 + fld->resourceview->materialvisible[playerview] / 10, yp + unitdownshift +2, 23 );
-
-                                   if ( fld->resourceview->fuelvisible[playerview] )
-                                      bar ( r + unitrightshift + 10 , yp + unitdownshift +10 -2, r + unitrightshift + 10 + fld->resourceview->fuelvisible[playerview] / 10, yp + unitdownshift +10 +2 , 191 );
-                                }
-                          }
-                          #else
-                          if ( showresources == 1 ) {
-                             showtext2( strrr ( fld->material ) , r + unitrightshift + 10 , yp + unitdownshift );
-                             showtext2( strrr ( fld->fuel )     , r + unitrightshift + 10 , yp + unitdownshift+ 10 );
-                          }
-                          else if ( showresources == 2 ) {
-                             if ( fld->material )
-                                bar ( r + unitrightshift + 10 , yp + unitdownshift -2, r + unitrightshift + 10 + fld->material / 10, yp + unitdownshift +2, 23 );
-                             if ( fld->fuel )
-                                bar ( r + unitrightshift + 10 , yp + unitdownshift +10 -2, r + unitrightshift + 10 + fld->fuel / 10, yp + unitdownshift +10 +2 , 191 );
-                          }
-                         #endif
                       }
 
                } else {
@@ -870,6 +848,36 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
                   }
                }
+
+              /* display resources */
+              if ( hgt == 8 && b >= visible_ago) {
+                 #ifndef karteneditor
+                 if ( fld->resourceview && (fld->resourceview->visible & ( 1 << playerview) ) ){
+                    if ( showresources == 1 ) {
+                       showtext2( strrr ( fld->resourceview->materialvisible[playerview] ) , r + unitrightshift + 10 , yp + unitdownshift+10 );
+                       showtext2( strrr ( fld->resourceview->fuelvisible[playerview] )     , r + unitrightshift + 10 , yp + unitdownshift+ 20 );
+                    } else
+                       if ( showresources == 2 ) {
+                          if ( fld->resourceview->materialvisible[playerview] )
+                             bar ( r + unitrightshift + 10 , yp + unitdownshift +2, r + unitrightshift + 10 + fld->resourceview->materialvisible[playerview] / 10, yp + unitdownshift +6, 23 );
+
+                          if ( fld->resourceview->fuelvisible[playerview] )
+                             bar ( r + unitrightshift + 10 , yp + unitdownshift +14 -2, r + unitrightshift + 10 + fld->resourceview->fuelvisible[playerview] / 10, yp + unitdownshift +14 +2 , 191 );
+                       }
+                 }
+                 #else
+                 if ( showresources == 1 ) {
+                    showtext2( strrr ( fld->material ) , r + unitrightshift + 10 , yp + unitdownshift );
+                    showtext2( strrr ( fld->fuel )     , r + unitrightshift + 10 , yp + unitdownshift+ 10 );
+                 }
+                 else if ( showresources == 2 ) {
+                    if ( fld->material )
+                       bar ( r + unitrightshift + 10 , yp + unitdownshift -2, r + unitrightshift + 10 + fld->material / 10, yp + unitdownshift +2, 23 );
+                    if ( fld->fuel )
+                       bar ( r + unitrightshift + 10 , yp + unitdownshift +10 -2, r + unitrightshift + 10 + fld->fuel / 10, yp + unitdownshift +10 +2 , 191 );
+                 }
+                #endif
+              }
 
             }
          }
@@ -893,6 +901,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
             yp = vfbtopspace + y * fielddisty;
 
             if (b == visible_ago) {
+              #if 0
                for (int hgt = 0; hgt < 9 ;hgt++ ) {
                   /*
                   int binaryheight = 0;
@@ -901,7 +910,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
                   */
 
                    /* display objects */
-                   if ( !fld->building )
+                   // if ( !fld->building )
                       for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ )
                          if ( o->typ->visibleago ) {
                             int h = o->typ->height;
@@ -909,10 +918,10 @@ void tgeneraldisplaymap :: pnt_main ( void )
                                o->display ( r - streetleftshift , yp - streettopshift, fld->getweather() );
                          }
                 }
+              #endif
 
                 // putspriteimage( r + unitrightshift , yp + unitdownshift , view.va8);
                 putshadow( r + unitrightshift , yp + unitdownshift , icons.view.nv8, &xlattables.a.dark2 );
-
                 if ( fld->a.temp && tempsvisible )
                    putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
                 else

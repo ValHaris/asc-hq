@@ -54,7 +54,7 @@ const char* ceventactions[ceventactionnum]  = {"message", "weather change", "new
                                                "new technology researchable", "map change", "discarded [ was erase event ]", "end campaign", "next map",
                                                "reinforcement","weather change completed", "new vehicle developed","palette change",
                                                "alliance change","wind change", "nothing", "change game parameter","paint ellipse","remove ellipse",
-                                               "change building damage"};
+                                               "change building damage", "add object"};
 
 const char* ceventtrigger[ceventtriggernum]  = {"*NONE*", "turn/move >=", "building conquered", "building lost",
                                                  "building destroyed", "unit lost", "technology researched",
@@ -200,6 +200,15 @@ void Resources::runTextIO ( PropertyContainer& pc, const Resources& defaultValue
 ////////////////////////////////////////////////////////////////////
 
 
+Event::Event()
+     : triggerNum ( 0 ), action(NULL)
+{
+   triggerTime.abstime = -1;
+}
+
+
+
+
 
 tevent::LargeTriggerData::PolygonEntered :: PolygonEntered ( void )
 {
@@ -280,15 +289,15 @@ tevent :: tevent ( void )
    a.action= 255;
    a.saveas = 0;
    a.num = 0;
-   player = 0; 
+   player = 0;
    rawdata = NULL;
    next = NULL;
    datasize = 0;
    conn = 0;
-   for ( int i = 0; i < 4; i++) { 
+   for ( int i = 0; i < 4; i++) {
       trigger[i] = 0;
       triggerstatus[i] = 0;
-      triggerconnect[i] = 0; 
+      triggerconnect[i] = 0;
       triggertime.set( -1, -1 );
       trigger_data[i] = new LargeTriggerData;
    }
@@ -320,7 +329,7 @@ tevent :: tevent ( const tevent& event )
          trigger_data[i] = NULL;
 
       triggerconnect[i] = event.triggerconnect[i];
-      triggerstatus[i] = event.triggerstatus[i]; 
+      triggerstatus[i] = event.triggerstatus[i];
    }
    triggertime = event.triggertime;
    delayedexecution = event.delayedexecution;
@@ -335,12 +344,27 @@ tevent :: ~tevent ()
         trigger_data[i] = NULL;
       }
 
-   if ( chardata ) {
-      delete[]  chardata ;
-      chardata = NULL;
+   if ( intdata ) {
+      delete[]  intdata ;
+      intdata = NULL;
    }
 }
 
 
+void WindChange::execute()
+{
+   if ( speed != -1 )
+      actmap->weather.windSpeed = speed;
 
+   if ( direction != -1 )
+      actmap->weather.windDirection = direction;
 
+   resetallbuildingpicturepointers();
+}
+
+void ChangeGameParameter::execute()
+{
+   if ( parameterNum >= 0 )
+      if ( gameParameterChangeableByEvent [ parameterNum ] )
+         actmap->setgameparameter( GameParameter(parameterNum) , parameterValue );
+}

@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.127 2003-04-25 09:59:16 mbickel Exp $
+//     $Id: typen.h,v 1.128 2003-05-01 18:02:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.127  2003/04/25 09:59:16  mbickel
+//      Added 6th campaign map
+//      Added Laser weapon
+//
 //     Revision 1.126  2003/04/08 15:04:47  mbickel
 //      Fixed: crash when loading certain events
 //
@@ -323,6 +327,8 @@ class  EllipseOnScreen {
       int active;
       EllipseOnScreen ( void ) { active = 0; };
       void paint ( void );
+      void read( tnstream& stream );
+      void write ( tnstream& stream );
    };
 
 
@@ -530,7 +536,7 @@ class LoadableItemType {
 
        //! The filename and location on disk (including containerfiles) of the object. Can only be used for informational purposes
        ASCString location;
-       
+
        virtual void read ( tnstream& stream ) = 0;
        virtual void write ( tnstream& stream ) const = 0;
        virtual void runTextIO ( PropertyContainer& pc ) = 0;
@@ -538,6 +544,75 @@ class LoadableItemType {
 };
 
 
+
+class EventTrigger {
+   public:
+      enum State { unfulfilled, fulfilled, finally_failed, finally_fulfilled };
+      virtual State getState() = 0;
+      virtual void read ( tnstream& stream ) = 0;
+      virtual void write ( tnstream& stream ) = 0;
+      virtual const ASCString& getName() = 0;
+};
+
+class EventAction {
+   public:
+   /*
+      virtual void read ( tnstream& stream ) = 0;
+      virtual void write ( tnstream& stream ) = 0;
+      virtual const ASCString& getName() = 0;
+   */
+      virtual void execute() = 0;
+
+};
+
+class WindChange: public EventAction {
+   public:
+      WindChange():speed(-1),direction(-1){};
+
+   /*
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
+      const ASCString& getName();
+    */
+      void execute();
+
+
+      int speed;
+      int direction;
+};
+
+class ChangeGameParameter: public EventAction {
+    public:
+     ChangeGameParameter():parameterNum(-1),parameterValue(0){};
+   /*
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
+      const ASCString& getName();
+    */
+      void execute();
+
+      int parameterNum;
+      int parameterValue;
+};
+
+
+
+class Event {
+   public:
+      Event();
+
+      int triggerNum;
+      int id;
+      int player;
+      ASCString  description;
+      GameTime   triggerTime;
+      struct {
+         int turn;
+         int move;   // negative values allowed !!
+      } delayedexecution;
+
+      EventAction* action;
+};
 
 
 class tevent {
@@ -557,6 +632,7 @@ class tevent {
       char*    chardata;
       int*     intdata;
     };
+
     int          datasize;
     pevent       next;
     int          conn;   // wird nur im Spiel gebraucht, BIt 0 gibt an, das andere events abh„nging sind von diesem
@@ -607,27 +683,22 @@ class tevent {
 
     struct {
       int turn;
-      int move;   // negative Zahlen SIND hier zul„ssig !!! 
+      int move;   // negative Zahlen SIND hier zul„ssig !!!
     } delayedexecution;
 
-    /* Funktionsweise der verzoegerten Events: 
+    /* Funktionsweise der verzoegerten Events:
        Sobald die Trigger erf?llt sind, wird triggertime[0] ausgef?llt. Dadurch wird das event ausgeloest,
-       sobald das Spiel diese Zeit erreicht ist, unabh„ngig vom Zustand des mapes 
+       sobald das Spiel diese Zeit erreicht ist, unabh„ngig vom Zustand des mapes
        ( Trigger werden nicht erneut ausgewertet !)
     */
     tevent ( void );
     tevent ( const tevent& event );
     ~tevent ( void );
-};
 
-/*
-  struct teventact { 
-    union { 
-      struct {  word         saveas, action;  }a;  // Id-Nr   ==> Technology.Requireevent; Tevent.trigger; etc.
-      int      ID;    //   CEventActions  
-    };
-  };
-*/
+    EventAction* eventAction;
+    int eventActionType;
+
+};
 
 
   /*  Datenaufbau des triggerData fieldes: [ hi 16 Bit ] [ low 16 Bit ] [ 32 bit Integer ] [ Pointer ]      [ low 24 Bit       ]  [ high 8 Bit ]
@@ -636,7 +707,7 @@ class tevent {
                           disk               ypos           xpos
      'technology researched',                                             Tech. ID
      'event',                                                             Event ID
-     'tribut required'                                                                                         Hoehe des Tributes      Spieler, von dem Tribut gefordert wird 
+     'tribut required'                                                                                         Hoehe des Tributes      Spieler, von dem Tribut gefordert wird
      'all enemy *.*'                                                      Bit 0: alle nicht allierten
                                                                           Bit 1: alle, die ?ber die folgenden Bits festgelegt werden, ob alliiert oder nicht
                                                                             Bit 2 : Spieler 0
@@ -646,7 +717,7 @@ class tevent {
      'unit enters polygon'  pointer auf teventtrigger_polygonentered
 
      der Rest benoetigt keine weiteren Angaben
-    */ 
+    */
 
 
 
@@ -682,22 +753,22 @@ class tevent {
               wetter            ( -> cwettertypen , Wind ist eigene eventaction )
               fieldadressierung      ( 1: gesamtes map     )
                       ³              ( 0: polygone               )
-                      ³              
+                      ³
                       ÃÄÄÄÄÄ 0 ÄÄÄ>  polygonanzahl
                       ³                   ÃÄÄ   eckenanzahl
                       ³                             ÃÄÄ x position
                       ³                                 y position
                       ³
                       ³
-                      ÀÄÄÄÄÄ 1 ÄÄÄ|  
+                      ÀÄÄÄÄÄ 1 ÄÄÄ|
 
-      Twindchange
++     Twindchange
               intensit„t[3]         ( fuer tieffliegend, normalfliegend und hochfliegend ; -1 steht fuer keine Aenderung )
               Richtung[3]           ( dito )
 
 
       Tmapchange               ( je ein int , alles unter Data )        { wetter wird beibehalten ! }
-            numberoffields ( nicht die Anzahl fielder insgesamt, 
+            numberoffields ( nicht die Anzahl fielder insgesamt,
                ÃÄÄ>  bodentypid
                      drehrichtung
                      fieldadressierung   ( wie bei tweatherchange )
@@ -705,7 +776,7 @@ class tevent {
 
       Treinforcements        ( alles unter DATA )
              int num      // ein int , der die Anzahl der vehicle angibt. Die vehicle, die ein Transporter geladen hat, werden NICHT mitgez„hlt.
-                  ÃÄÄÄÄ > die vehicle, mit tspfldloaders::writeunit in einen memory-stream geschrieben. 
+                  ÃÄÄÄÄ > die vehicle, mit tspfldloaders::writeunit in einen memory-stream geschrieben.
 
 
       TnewVehicleDeveloped
@@ -721,7 +792,7 @@ class tevent {
                                                              256 steht fuer unver„ndert,
                                                              257 fuer umkehrung
 
-      TGameParameterchange    
++     TGameParameterchange
            int nummer_des_parameters ( -> gameparametername[] )
            int neuer_wert_des_parameters
 
@@ -997,22 +1068,22 @@ extern const char* ceventtriggerconn[];
                (
                eigentliches event
                )
-    */ 
+    */
 
 
-#define ceventactionnum 21
-extern const char* ceventactions[ceventactionnum]; // not bitmapped 
- enum { cemessage,   ceweatherchange, cenewtechnology, celosecampaign, cerunscript,     cenewtechnologyresearchable, 
-        cemapchange, ceeraseevent,    cecampaignend,   cenextmap,      cereinforcement, ceweatherchangecomplete, 
-        cenewvehicledeveloped, cepalettechange, cealliancechange,      cewindchange,    cenothing, 
-        cegameparamchange, ceellipse, ceremoveellipse, cechangebuildingdamage };
+#define ceventactionnum 22
+extern const char* ceventactions[ceventactionnum]; // not bitmapped
+ enum { cemessage,   ceweatherchange, cenewtechnology, celosecampaign, cerunscript,     cenewtechnologyresearchable,
+        cemapchange, ceeraseevent,    cecampaignend,   cenextmap,      cereinforcement, ceweatherchangecomplete,
+        cenewvehicledeveloped, cepalettechange, cealliancechange,      cewindchange,    cenothing,
+        cegameparamchange, ceellipse, ceremoveellipse, cechangebuildingdamage, ceaddobject };
 
 
-extern const char*  ceventtrigger[]; 
- enum { ceventt_turn = 1 ,               ceventt_buildingconquered, ceventt_buildinglost,  ceventt_buildingdestroyed, ceventt_unitlost, 
-        ceventt_technologyresearched,    ceventt_event,             ceventt_unitconquered, ceventt_unitdestroyed,     
-        ceventt_allenemyunitsdestroyed,  ceventt_allunitslost,      ceventt_allenemybuildingsdestroyed, 
-        ceventt_allbuildingslost,        ceventt_energytribute,     ceventt_materialtribute, ceventt_fueltribute, 
+extern const char*  ceventtrigger[];
+ enum { ceventt_turn = 1 ,               ceventt_buildingconquered, ceventt_buildinglost,  ceventt_buildingdestroyed, ceventt_unitlost,
+        ceventt_technologyresearched,    ceventt_event,             ceventt_unitconquered, ceventt_unitdestroyed,
+        ceventt_allenemyunitsdestroyed,  ceventt_allunitslost,      ceventt_allenemybuildingsdestroyed,
+        ceventt_allbuildingslost,        ceventt_energytribute,     ceventt_materialtribute, ceventt_fueltribute,
         ceventt_any_unit_enters_polygon, ceventt_specific_unit_enters_polygon, ceventt_building_seen, ceventt_irrelevant };
 
 
@@ -1068,7 +1139,7 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 
  #define maxint numeric_limits<int>::max()
  #define minint numeric_limits<int>::min()
- 
+
  #define maxfloat numeric_limits<float>::max()
  #define minfloat numeric_limits<float>::min()
 #else
@@ -1093,7 +1164,7 @@ const int attackmovecost = 0;
 
 #define movement_cost_for_repaired_unit 24
 #define movement_cost_for_repairing_unit 12
-#define attack_after_repair 1       // Can the unit that is beeing repaired attack afterwards? 
+#define attack_after_repair 1       // Can the unit that is beeing repaired attack afterwards?
 
 #define mineputmovedecrease 8  
 #define streetmovemalus 8  
@@ -1118,7 +1189,7 @@ const int attackmovecost = 0;
 #define lookintoenemytransports false  
 #define lookintoenemybuildings false  
 
-#define recyclingoutput 2    /*  Material div RecyclingOutput  */ 
+#define recyclingoutput 2    /*  Material div RecyclingOutput  */
 #define destructoutput 5
 #define nowindplanefuelusage 1      // herrscht kein Wind, braucht ein Flugzeug pro Runde soviel Sprit wie das fliegend dieser Anzahl fielder
   //   #define maxwindplainfuelusage 32   // beim nextturn: tank -= fuelconsumption * (maxwindplainfuelusage*nowindplainfuelusage + windspeed) / maxwindplainfuelusage     

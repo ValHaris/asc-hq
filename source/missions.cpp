@@ -650,7 +650,7 @@ void    viewtextmessage ( int id, int player )
 
 
 void         executeevent ( pevent ev, MapDisplayInterface* md )
-{ 
+{
   pevent       ev2;
   ptechnology  tech; 
 
@@ -908,6 +908,12 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
          }
       }
 
+      if ( ev->a.action == ceaddobject ) {
+         pfield fld = getfield ( ev->intdata[0], ev->intdata[1] );
+         if ( fld )
+            fld->addobject ( getobjecttype_forid ( ev->intdata[2]), -1, true );
+
+      }
 
     
       if (actmap->firsteventtocome == ev) { 

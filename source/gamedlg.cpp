@@ -853,14 +853,12 @@ void         tnewcampaignlevel::searchmapinfo(void)
           // int desclen = strlen ( description.buf ) + 7;
           strncpy ( dateiinfo, description.buf, sizeof ( dateiinfo ) -2  );
 
-          word w;
-          spfldloader.stream->readdata2 ( w );
+          word w = spfldloader.stream->readWord();
 
           if ( w != fileterminator )
              throw tinvalidversion ( filename.c_str(), w, fileterminator );
 
-          int version;
-          spfldloader.stream->readdata2( version );
+          int version =  spfldloader.stream->readInt();
 
          if (version > actmapversion || version < minmapversion )
             throw tinvalidversion ( filename.c_str(), version, actmapversion );
@@ -1239,17 +1237,15 @@ void         tchoosenewmap::readmapinfo(void)
        // int desclen = strlen ( description.buf ) + 7;
        strncpy ( dateiinfo, description.buf, sizeof ( dateiinfo) - 2  );
 
-       word w;
-       spfldloader.stream->readdata2 ( w );
+       word w = spfldloader.stream->readWord();
 
        if ( w != fileterminator )
           throw tinvalidversion ( mapname, w, fileterminator );
 
-       int version;
-       spfldloader.stream->readdata2( version );
+       int version = spfldloader.stream->readInt();
 
-         if (version > actmapversion || version < minmapversion )
-            throw tinvalidversion ( mapname, version, actmapversion );
+       if (version > actmapversion || version < minmapversion )
+          throw tinvalidversion ( mapname, version, actmapversion );
 
        spfldloader.readmap ();
        checkforcampaign( spfldloader.spfld );

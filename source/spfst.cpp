@@ -1184,6 +1184,28 @@ void EllipseOnScreen :: paint ( void )
       ellipse ( x1, y1, x2, y2, color, precision );
 }
 
+void EllipseOnScreen :: read( tnstream& stream )
+{
+  x1 = stream.readInt();
+  y1 = stream.readInt();
+  x2 = stream.readInt();
+  y2 = stream.readInt();
+  color = stream.readInt();
+  precision = stream.readFloat();
+  active = stream.readInt();
+}
+
+void EllipseOnScreen :: write ( tnstream& stream )
+{
+   stream.writeInt( x1 );
+   stream.writeInt( y1 );
+   stream.writeInt( x2 );
+   stream.writeInt( y2 );
+   stream.writeInt( color );
+   stream.writeFloat( precision );
+   stream.writeInt( active );
+}
+
 
 
 int getheightdelta ( int height1, int height2 )

@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: attack.h,v 1.20 2001-10-21 13:16:59 mbickel Exp $
+//     $Id: attack.h,v 1.21 2003-05-01 18:02:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2001/10/21 13:16:59  mbickel
+//      Cleanup and documentation
+//
 //     Revision 1.19  2001/02/26 12:35:00  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -278,7 +281,7 @@ extern pattackweap attackpossible( const pvehicle attacker, int x, int y);
      \param attackweap if != NULL, detailed information about the weapons which can perform
                           the attack are written to attackweap
 */
-extern bool attackpossible2u( const pvehicle attacker, const pvehicle target, pattackweap attackweap = NULL);      // distance is not evaluated
+extern bool attackpossible2u( const pvehicle attacker, const pvehicle target, pattackweap attackweap = NULL, int uheight = -1);      // distance is not evaluated
 
 
 /*! \brief Is attacker able to attack target ? Distance is assumed one field.

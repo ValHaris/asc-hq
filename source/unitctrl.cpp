@@ -192,7 +192,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
          else
             evaluateviewcalculation ( actmap, 0);
 
-         if ( rf->checkfield ( to.x, to.y, vehicle, mapDisplay )) {
+         if ( rf->checkfield ( to, vehicle, mapDisplay )) {
             cancelmovement = 1;
             attackedByReactionFire = true;
             vehicle = actmap->getUnit ( networkID );
@@ -251,7 +251,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
       int newMovement = orgMovement - pos->dist;
 
       if ( vehicle->typ->movement[log2(orgHeight)] )
-         vehicle->setMovement ( int(floor(vehicle->maxMovement() * float(newMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5)) , 0 );
+         vehicle->setMovement ( int(floor(vehicle->maxMovement() * float(newMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5)) );
 
 
       vehicle->tank.fuel -= fueldist * vehicle->typ->fuelConsumption / maxmalq;
@@ -265,7 +265,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
       vehicle->setnewposition ( pos->x, pos->y );
 
-      if ( vehicle && rf->checkfield ( pos->x, pos->y, vehicle, mapDisplay )) {
+      if ( vehicle && rf->checkfield ( *pos, vehicle, mapDisplay )) {
          attackedByReactionFire = true;
          vehicle = actmap->getUnit ( networkID );
       }

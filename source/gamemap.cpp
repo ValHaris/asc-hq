@@ -295,12 +295,6 @@ void tmap :: read ( tnstream& stream )
        if (dummy_playername[w] )
           stream.readString();
 
-      /*
-       if (player[w].aiparams) {
-          player[w].aiparams = new ( taiparams );
-          stream.readdata2 ( *player[w].aiparams );
-       }
-      */
        player[w].ai = NULL;
 
 
@@ -324,75 +318,9 @@ void tmap :: read ( tnstream& stream )
 
     stream.readInt();
 
-
-/*
-    if ( objectcrc ) {
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / vor objectcrcs" );
-       #endif
-
-       objectcrc = new tobjectcontainercrcs;
-       stream.readdata2 ( *objectcrc );
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / vor unitcrcs" );
-       #endif
-       if ( objectcrc->unit.crcnum ) {
-          objectcrc->unit.crc = new tcrc[objectcrc->unit.crcnum];
-          stream.readdata ( objectcrc->unit.crc, objectcrc->unit.crcnum * sizeof ( tcrc ) );
-       } else
-          objectcrc->unit.crc = NULL;
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / vor buildingcrcs" );
-       #endif
-       if ( objectcrc->building.crcnum ) {
-          objectcrc->building.crc = new tcrc[objectcrc->building.crcnum];
-          stream.readdata ( objectcrc->building.crc, objectcrc->building.crcnum * sizeof ( tcrc ) );
-       } else
-          objectcrc->building.crc = NULL;
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / vor object.crcs" );
-       #endif
-       if ( objectcrc->object.crcnum ) {
-          objectcrc->object.crc = new tcrc[objectcrc->object.crcnum];
-          stream.readdata ( objectcrc->object.crc, objectcrc->object.crcnum * sizeof ( tcrc ) );
-       } else
-          objectcrc->object.crc = NULL;
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / vor terraincrcs" );
-       #endif
-       if ( objectcrc->terrain.crcnum ) {
-          objectcrc->terrain.crc = new tcrc[objectcrc->terrain.crcnum];
-          stream.readdata ( objectcrc->terrain.crc, objectcrc->terrain.crcnum * sizeof ( tcrc ) );
-       } else
-          objectcrc->terrain.crc = NULL;
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / vor techcrcs" );
-       #endif
-       if ( objectcrc->technology.crcnum ) {
-          objectcrc->technology.crc = new tcrc[objectcrc->technology.crcnum];
-          stream.readdata ( objectcrc->technology.crc, objectcrc->technology.crcnum * sizeof ( tcrc ) );
-       } else
-          objectcrc->technology.crc = NULL;
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / vor speedcrccheck" );
-       #endif
-       objectcrc->speedcrccheck = new tspeedcrccheck ( objectcrc );
-
-    }
-*/
-
     if ( load_shareview ) {
        shareview = new tmap::Shareview;
-       for ( int i = 0; i < 8; i++ )
-          for ( int j = 0; j < 8; j++ )
-             shareview->mode[i][j] = stream.readChar();
-       shareview->recalculateview = stream.readInt();
+       shareview->read ( stream );
     } else
        shareview = NULL;
 
@@ -428,7 +356,7 @@ void tmap :: read ( tnstream& stream )
 
     if ( ellipse ) {
        ellipse = new EllipseOnScreen;
-       stream.readdata2 ( *(ellipse) );
+       ellipse->read( stream );
     }
 
     int orggpnum = gameparameter_num;
@@ -437,8 +365,7 @@ void tmap :: read ( tnstream& stream )
        setgameparameter ( GameParameter(gp), _oldgameparameter[gp] );
 
     for ( int ii = 0 ; ii < orggpnum; ii++ ) {
-       int gpar;
-       stream.readdata2 ( gpar );
+       int gpar = stream.readInt();
        setgameparameter ( GameParameter(ii), gpar );
     }
 
@@ -592,14 +519,6 @@ void tmap :: write ( tnstream& stream )
 
    for (int w=0; w<8 ; w++ ) {
 
-      // if (player[w].name)
-      //    stream.writepchar ( player[w].name );
-
-
-     // if (player[w].ai)
-     //    stream.writedata2 ( *player[w].aiparams );
-
-
       if ( !player[w].humanname.empty() )
          stream.writeString ( player[w].humanname );
 
@@ -613,19 +532,10 @@ void tmap :: write ( tnstream& stream )
    } else
        stream.writeInt ( 0 );
 
-    /*
-    for ( int bb = 0; bb < 8; bb++ )
-       if ( alliance_names_not_used_any_more[bb] ) {
-          char nl = 0;
-          stream.writedata2 ( nl );
-       }
-    */
-
-    int h = 0;
-    stream.writedata2 ( h );
+    stream.writeInt ( 0 );
 
     if ( shareview )
-       stream.writedata2 ( *(shareview) );
+       shareview->write ( stream );
 
     int p;
     for ( p = 0; p < 8; p++ )
@@ -647,10 +557,10 @@ void tmap :: write ( tnstream& stream )
 
 
     if ( ellipse )
-       stream.writedata2 ( *(ellipse) );
+       ellipse->write( stream );
 
     for ( int ii = 0 ; ii < gameparameter_num; ii++ )
-       stream.writedata2 ( game_parameter[ii] );
+       stream.writeInt ( game_parameter[ii] );
 
 
     stream.writeString ( archivalInformation.author );
@@ -1821,6 +1731,23 @@ tmap::Shareview :: Shareview ( const tmap::Shareview* org )
    memcpy ( mode, org->mode, sizeof ( mode ));
    recalculateview = org->recalculateview;
 }
+
+void tmap::Shareview :: read ( tnstream& stream )
+{
+   for ( int i = 0; i < 8; i++ )
+      for ( int j =0; j < 8; j++ )
+         mode[i][j] = stream.readChar();
+   recalculateview = stream.readInt();
+}
+
+void tmap::Shareview :: write( tnstream& stream )
+{
+   for ( int i = 0; i < 8; i++ )
+      for ( int j =0; j < 8; j++ )
+         stream.writeChar( mode[i][j] );
+   stream.writeInt( recalculateview );
+}
+
 
 void AiThreat :: write ( tnstream& stream )
 {

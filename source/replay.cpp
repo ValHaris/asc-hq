@@ -1175,7 +1175,6 @@ void trunreplay :: execnextreplaymove ( void )
                                            sv->mode[a][b] = stream->readChar();
                                     sv->recalculateview = stream->readInt();
 
-                                    // stream->readdata2 ( *sv );
                                     if ( actmap->shareview )
                                        delete actmap->shareview;
                                     actmap->shareview = sv;

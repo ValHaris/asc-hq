@@ -4,9 +4,14 @@
 */
 
 
-//     $Id: basestrm.h,v 1.53 2003-03-20 10:08:29 mbickel Exp $
+//     $Id: basestrm.h,v 1.54 2003-05-01 18:02:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2003/03/20 10:08:29  mbickel
+//      KI speed up
+//      mapeditor: added clipboard
+//      Fixed movement issues
+//
 //     Revision 1.52  2002/10/02 20:21:00  mbickel
 //      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
 //
@@ -120,8 +125,8 @@
     Boston, MA  02111-1307  USA
 */
 
-#ifndef basestreamH
-#define basestreamH
+#ifndef basestrmH
+#define basestrmH
 
 
 #include <string>

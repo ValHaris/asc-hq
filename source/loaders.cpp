@@ -77,7 +77,7 @@ void         seteventtriggers( pmap actmap )
       else
          event = actmap->firsteventpassed; 
 
-      while ( event ) { 
+      while ( event ) {
          for ( int j = 0; j <= 3; j++) { 
             if ((event->trigger[j] == ceventt_buildingconquered) || 
                 (event->trigger[j] == ceventt_buildinglost) || 
@@ -211,11 +211,17 @@ int eventversion = 2;
 
 void   tspfldloaders::writeevent ( pevent event )
 {
+
+/////////////////////////////////////////////////////
+// don't change anything for Big-Endian compatibility
+// the whole event system will be rewritten
+/////////////////////////////////////////////////////
+
    int magic = -1;
    stream->writeInt ( magic );
    stream->writeInt ( eventversion );
 
-   stream->writedata2( *event );
+   stream->writedata( event, 85 );
 
 /*
    stream->writeInt ( event->id );
@@ -265,7 +271,7 @@ void   tspfldloaders::writeevent ( pevent event )
              }
        } 
        if ((event->trigger[j] == ceventt_unitconquered) || 
-           (event->trigger[j] == ceventt_unitlost) || 
+           (event->trigger[j] == ceventt_unitlost) ||
            (event->trigger[j] == ceventt_unitdestroyed)) { 
            int xp;
            int yp;
@@ -321,28 +327,49 @@ void   tspfldloaders::writeevent ( pevent event )
 
 void    tspfldloaders::readevent ( pevent& event1 )
 {
-     int magic;
+
+/////////////////////////////////////////////////////
+// don't change anything for Big-Endian compatibility
+// the whole event system will be rewritten
+/////////////////////////////////////////////////////
+
+     int magic = stream->readInt();
      int version;
-     stream->readdata2( magic );
      if ( magic == -1 ) {
-        stream->readdata2 ( version );
-        stream->readdata2 ( *event1 );
+        version = stream->readInt();
+        stream->readdata ( event1, 85 );
      } else {
         memcpy ( event1, &magic, sizeof ( magic ));
         int* pi = (int*) event1;
         pi++;
-        stream->readdata ( pi, sizeof ( *event1) - sizeof ( int ));
+        stream->readdata ( pi, 85 - sizeof ( int ));
         version = 0;
      }
 
      if ( version > eventversion )
         throw tinvalidversion ( "event", eventversion, version );
 
-     event1->next = NULL; 
+     event1->next = NULL;
      event1->conn = 0;
      if ( event1->datasize && event1->rawdata ) {
         event1->rawdata = asc_malloc ( event1->datasize );
         stream->readdata ( event1->rawdata, event1->datasize );
+        #if 0
+        if ( event1->action == cewindchange ) {
+           event1->eventActionType = cewindchange;
+           EventWindChange* wc = new WindChange;
+           wc->speed = event1->intdata[0];
+           wc->direction = event1->intdata[3];
+           event1->eventAction = wc;
+        }
+        if ( event1->action == cegameparamchange ) {
+           event1->eventActionType = cegameparamchange;
+           ChangeGameParameter* cgp = new ChangeGameParameter;
+           cgp->parameterNum  = event1->intdata[0];
+           cgp->parameterValue = event1->intdata[1];
+           event1->eventAction = cgp;
+        }
+        #endif
      }  else {
         event1->datasize = 0;
         event1->rawdata = NULL;
@@ -366,7 +393,7 @@ void    tspfldloaders::readevent ( pevent& event1 )
            if ((event1->trigger[m] == ceventt_unitconquered) || 
               (event1->trigger[m] == ceventt_unitlost) ||
               (event1->trigger[m] == ceventt_unitdestroyed)) {
-   
+
               if ( version == 0 ) {
                  integer xpos, ypos;
                  stream->readdata2 ( xpos );
@@ -618,49 +645,56 @@ void      tspfldloaders:: readmessages ( void )
 
 void   tspfldloaders::writeeventstocome ( void )
 {
+/////////////////////////////////////////////////////
+// don't change anything for Big-Endian compatibility
+// the whole event system will be rewritten
+/////////////////////////////////////////////////////
     int      j = 0;
     pevent   event = spfld->firsteventtocome;
     while ( event ) {
        j++;
-       event = event->next; 
-    } 
- 
+       event = event->next;
+    }
+
     stream->writeInt( j );
- 
-    event = spfld->firsteventtocome; 
+
+    event = spfld->firsteventtocome;
     while ( event ) {
        writeevent ( event   );
-       event = event->next; 
+       event = event->next;
     } ;
 }
 
 
 void         tspfldloaders::readeventstocome ( void )
 {
-   int j;
+/////////////////////////////////////////////////////
+// don't change anything for Big-Endian compatibility
+// the whole event system will be rewritten
+/////////////////////////////////////////////////////
+
    pevent event1, event2;
 
-   stream->readdata2 ( j );
+   int j = stream->readInt();
 
-   int k;
    if ( j ) {
-      for (k = 1; k <= j; k++) { 
-         event1 = new ( tevent );
+      for (int k = 1; k <= j; k++) {
+         event1 = new tevent ;
 
          readevent ( event1  );
 
-         if (k == 1) 
-            spfld->firsteventtocome = event1; 
-         else 
-            event2->next = event1; 
+         if (k == 1)
+            spfld->firsteventtocome = event1;
+         else
+            event2->next = event1;
 
 
-         event2 = event1; 
-      } 
+         event2 = event1;
+      }
 
       event1 = spfld->firsteventtocome;
       while ( event1 ) {
-         for ( k = 0; k < 4; k++ )
+         for ( int k = 0; k < 4; k++ )
             if ( event1->trigger[k] == ceventt_event ) {
                event2 = spfld->firsteventtocome;
                while ( event2 ) {
@@ -670,11 +704,9 @@ void         tspfldloaders::readeventstocome ( void )
                } /* endwhile */
             }
 
-
          event1 = event1->next;
       }
-
-   } 
+   }
 }
 
 
@@ -692,66 +724,66 @@ void   tspfldloaders::writeeventspassed ( void )
     event = spfld->firsteventpassed;
     while ( event ) {
        writeevent ( event  );
-       event = event->next; 
+       event = event->next;
     } 
 }
 
 
 void   tspfldloaders::readeventspassed ( void )
 {                      
-   int j;
    pevent event1, event2;
-   stream->readdata2 ( j );
-   if ( j ) {   
+   int j = stream->readInt();
+   if ( j ) {
       for (int k = 1; k <= j; k++) {
          event1 = new ( tevent );
 
          readevent ( event1  );
 
-         if (k == 1) 
+         if (k == 1)
             spfld->firsteventpassed = event1;
-         else 
-            event2->next = event1; 
+         else
+            event2->next = event1;
 
-         event2 = event1; 
-      } 
-   } 
+         event2 = event1;
+      }
+   }
 }
 
 void   tspfldloaders::writeoldevents ( void )
 {
      peventstore oldevent =  spfld->oldevents;
      while ( oldevent ) {
-        stream->writedata2( oldevent->num );
+        stream->writeInt( oldevent->num );
         if (oldevent->num) {
-           stream->writedata ( oldevent->eventid, oldevent->num * sizeof( oldevent->eventid[0] ));
-           stream->writedata ( oldevent->mapid, oldevent->num * sizeof( oldevent->mapid[0] ));
+           for ( int i = 0; i < oldevent->num; i++ )
+              stream->writeInt( oldevent->eventid[i] );
+           for ( int i = 0; i < oldevent->num; i++ )
+              stream->writeInt( oldevent->mapid[i] );
         }
 
-        oldevent = oldevent->next; 
+        oldevent = oldevent->next;
      }
-     if ( spfld->oldevents ) {
-        int n = 0;
-        stream->writedata2( n );
-     }
+     if ( spfld->oldevents )
+        stream->writeInt( 0 );
 }
 
 void   tspfldloaders::readoldevents ( void )
 {
    if ( spfld->loadOldEvents ) {
-      int  num;
-      stream->readdata2 ( num );
+      int  num = stream->readInt();
       spfld->oldevents = NULL;
       peventstore oldevt = NULL;
 
       while ( num ) {
-         oldevt = new ( teventstore );
+         oldevt = new teventstore ;
          oldevt->num = num;
          oldevt->next = spfld->oldevents;
-         stream->readdata ( oldevt->eventid, num * sizeof ( oldevt->eventid[0] ));
-         stream->readdata ( oldevt->mapid, num * sizeof ( oldevt->mapid[0] ));
+         for ( int i = 0;i < num; i++ )
+            oldevt->eventid[i] = stream->readInt();
+         for ( int i = 0;i < num; i++ )
+            oldevt->mapid[i] = stream->readInt();
 
-         stream->readdata2 ( num );
+         num  = stream->readInt();
       }
       spfld->oldevents = oldevt;
    }
@@ -842,6 +874,10 @@ void        tspfldloaders::writenetwork ( void )
 {
   if ( spfld->network ) {
      int i;
+
+      // don't change anything for Big-Endian adaption,
+      // this part is really ugly and I'll rewrite it
+
      stream->writedata2 ( *spfld->network );
      for ( i = 0; i < 8  ; i++ ) 
         if (spfld->network->computer[i].name != NULL)
@@ -855,6 +891,10 @@ void        tspfldloaders::readnetwork ( void )
 {
    if ( spfld->network ) {
       int i;
+
+      // don't change anything for Big-Endian adaption,
+      // this part is really ugly and I'll rewrite it
+
       spfld->network = new ( tnetwork );
       stream->readdata2 ( *spfld->network );
       for (i=0; i<8 ; i++ ) 

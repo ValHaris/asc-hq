@@ -2,9 +2,12 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.36 2003-04-08 15:04:40 mbickel Exp $
+//     $Id: edevents.cpp,v 1.37 2003-05-01 18:02:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2003/04/08 15:04:40  mbickel
+//      Fixed: crash when loading certain events
+//
 //     Revision 1.35  2003/02/27 16:11:08  mbickel
 //      Restructuring of new pathfinding code completed
 //
@@ -1772,6 +1775,21 @@ void         tcreateevent::buttonpressed(int         id)
                       }
                       getxy_building(&ae->intdata[0],&ae->intdata[1]);
                       ae->intdata[2] = getid("damage",ae->intdata[2],0,100);
+                }
+                break;
+             case ceaddobject: {
+                      if ( !ae->intdata || ae->datasize != 3 * sizeof ( int )) {
+                         freedata();
+                         ae->intdata = new int[3];
+                         ae->datasize = 3 * sizeof ( int );
+                         ae->intdata[0] = 0;
+                         ae->intdata[1] = 0;
+                         ae->intdata[2] = 0;
+                      }
+                      getxy(&ae->intdata[0],&ae->intdata[1]);
+                      selobject ( ct_invvalue );
+                      ae->intdata[2] = actobject->id;
+                      redraw();
                 }
                 break;
              }

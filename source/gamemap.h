@@ -478,7 +478,6 @@ class tmap {
       Password      supervisorpasswordcrc;
 
       char          alliances_at_beginofturn[8];
-      // pobjectcontainercrcs   objectcrc;
 
       class  Shareview {
          public:
@@ -486,6 +485,8 @@ class tmap {
             Shareview ( const Shareview* org );
             bool mode[8][8];
             int recalculateview;
+            void read ( tnstream& stream );
+            void write( tnstream& stream );
        };
        // mode[1][6] = visible_all    =>  Spieler 1 gibt Spieler 6 die view frei
 
