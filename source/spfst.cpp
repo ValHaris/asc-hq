@@ -124,7 +124,8 @@ int          terrainaccessible2 ( const pfield        field, const Vehicle*     
 int         fieldAccessible( const pfield        field,
                             const pvehicle     vehicle,
                             int  uheight,
-                            const bool* attacked )
+                            const bool* attacked,
+                            bool ignoreVisibility )
 {
    if ( !field || !vehicle )
       return 0;
@@ -132,13 +133,15 @@ int         fieldAccessible( const pfield        field,
    if ( uheight == -2 )
       uheight = vehicle->height;
 
-   int c = fieldVisibility ( field, vehicle->color/8 );
+   if ( !ignoreVisibility ) {
+      int c = fieldVisibility ( field, vehicle->color/8 );
 
-   if (field == NULL)
-     return 0;
+      if (field == NULL)
+        return 0;
 
-   if (c == visible_not)
-      return 0;
+      if (c == visible_not)
+         return 0;
+   }
 
 /*
    if ( c == visible_all)

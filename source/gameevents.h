@@ -2,9 +2,12 @@
     \brief Interface to the event handling of ASC
 */
 
-//     $Id: gameevents.h,v 1.1 2004-01-16 19:14:55 mbickel Exp $
+//     $Id: gameevents.h,v 1.2 2004-02-01 13:39:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2004/01/16 19:14:55  mbickel
+//      Adding files for new event system
+//
 //     Revision 1.12  2003/07/06 13:16:22  mbickel
 //      Updated maps
 //
@@ -142,7 +145,8 @@ enum EventAction_ID { EventAction_Nothing,
                      EventAction_AddProductionCapabiligy,
                      EventAction_ChangeDiplomaticStatus,
                      EventAction_AddResources,
-                     EventAction_Reinforcements };
+                     EventAction_Reinforcements,
+                     EventAction_SetViewSharing };
 
 
 class EventTriggered;
@@ -716,6 +720,21 @@ class ChangeDiplomaticStatus : public EventAction {
       void execute( MapDisplayInterface* md );
       void setup();
 };
+
+class SetViewSharing : public EventAction {
+      int viewingPlayer;
+      int providingPlayer;
+      bool enable;
+    public:
+      SetViewSharing(): EventAction( EventAction_SetViewSharing ), viewingPlayer(0), providingPlayer(0), enable(true){};
+
+      void readData ( tnstream& stream );
+      void writeData ( tnstream& stream );
+
+      void execute( MapDisplayInterface* md );
+      void setup();
+};
+
 
 class AddResources : public EventAction {
       MapCoordinate pos;

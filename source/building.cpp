@@ -323,11 +323,11 @@ class    ccontainer : public virtual ccontainercontrols
 
       void     showresources  ( void );
       void     showammo ( void );
-      virtual void paintvehicleinfo ( void );
 
       tcontaineronlinemousehelp* containeronlinemousehelp;
 
    public :
+      virtual void paintvehicleinfo ( void );
       virtual void unitchanged( void );
       int      keymode;   // mit tab wird umgeschaltet. 0 : Laderaum ; 1 : Subwin ; 2 : Laschen
       int      repaintammo;
@@ -686,7 +686,6 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
       int    putammunition (int  weapontype, int  ammunition, int abbuchen);
       int    getammunition ( int weapontype, int num, int abbuchen, int produceifrequired = 0 );
       pvehicle getloadedunit (int num);
-      virtual void paintvehicleinfo ( void );
       virtual void     setpictures ( void );
 
       pvehicletype getmarkedunittype ( void );
@@ -711,6 +710,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
 
 
    public :
+      virtual void paintvehicleinfo ( void );
       virtual void unitchanged( void );
       void     init (pbuilding bld);
 
@@ -2741,6 +2741,7 @@ void  ccontainer :: cammunitiontransfer_subwindow :: checkformouse ( void )
 
       if ( objpressedbymouse ( 21 ) && page < pagenum ) {
          page++;
+         actschieber = 0;
          // display();
          displayvariables();
       }
@@ -3134,6 +3135,7 @@ void  ccontainer :: container_icon_c :: exec         ( void )
    main->buildgraphics();
    main->displayloading ();
    main->movemark (repaint);
+   main->paintvehicleinfo();
 }
 
 

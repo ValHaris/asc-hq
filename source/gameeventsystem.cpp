@@ -114,7 +114,8 @@ const char* EventActionName[] = { "Nothing",
                                  "Add Production Capability",
                                  "Change Diplomatic Status",
                                  "Add Resources to Building",
-                                 "Reinforcements" };
+                                 "Reinforcements",
+                                 "Set View Sharing" };
 
 
 Event::Event ( tmap& map_ ) : gamemap ( map_ ), action(NULL), playerBitmap(0xff), reArmNum(0)

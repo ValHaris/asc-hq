@@ -219,15 +219,15 @@ Graphics by Christian Mayer, Steffen Fr”hlich, Daniel Korbely and Frank Fiedler.
 
 The port to Linux was done by Tom Wilson, Simon Britnell and Martin Bickel
 
-Steffen Fröhlich maintains the standard unit set and has created several map graphics.
+Steffen Fr”hlich maintains the standard unit set and has created several map graphics.
 
 Music composed by Michael Kievernagel.
 
-Alexander Schäfer originally implemented the 'small editors' and created the first version of the ASC vehicle set.
+Alexander Sch„fer originally implemented the 'small editors' and created the first version of the ASC vehicle set.
 
 Jeffrey M. Wacheski contributed sound effects
 
-Many thanks go to Jörg Richter for giving us the source of his excellent BI2/3 map editor and enabling us to make the "Battle-Isle"-Version of ASC. 
+Many thanks go to J”rg Richter for giving us the source of his excellent BI2/3 map editor and enabling us to make the "Battle-Isle"-Version of ASC. 
 
 The "Standard MKII" unit set was created by Bas Fournier.
 
@@ -243,7 +243,7 @@ The data compression is based on routines by Julian R Seward.
 
 The windows installer for this product was created using Installer VISE from MindVision Software.
 
-Some tutorial levels are based on Battle Isle maps by Steffen Fröhlich and Thomas Blaser.
+Some tutorial levels are based on Battle Isle maps by Steffen Fr”hlich and Thomas Blaser.
 
 Karel Voracek created the experience symbols. 
 

@@ -1015,7 +1015,8 @@ void tmap::endTurn()
 
 
             if (j < 0) {
-               ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x)+"/"+strrr((*v)->getPosition().y)+") crashed due to lack of fuel";
+               ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x);
+               ident += ASCString("/")+strrr((*v)->getPosition().y)+") crashed due to lack of fuel";
                new Message ( ident, actmap, 1<<(*v)->getOwner());
                toRemove.push_back ( *v );
                // logtoreplayinfo( rpl_removeunit, actvehicle->getPosition().x, actvehicle->getPosition().y, actvehicle->networkid );
@@ -1985,6 +1986,15 @@ tmap::Shareview :: Shareview ( const tmap::Shareview* org )
    memcpy ( mode, org->mode, sizeof ( mode ));
    recalculateview = org->recalculateview;
 }
+
+tmap::Shareview :: Shareview ( void )
+{
+   recalculateview = 0;
+   for ( int i = 0; i < 8; i++ )
+      for ( int j = 0; j< 8; j++ )
+         mode[i][j] = false;
+}
+
 
 void tmap::Shareview :: read ( tnstream& stream )
 {

@@ -157,7 +157,8 @@ extern void  clearfahrspuren(void);
 extern int fieldAccessible( const pfield        field,
                             const pvehicle     vehicle,
                             int  uheight = -2,
-                            const bool* attacked = NULL );
+                            const bool* attacked = NULL,
+                            bool ignoreVisibility = false );
 
 //! returns the image of an (explosive) mine. The type of the mine is specified by num.
 extern void* getmineadress( int num , int uncompressed = 0 );

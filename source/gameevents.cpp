@@ -52,7 +52,7 @@
 
 extern void repaintdisplay();
 
-const int EventActionNum = 20;
+const int EventActionNum = 21;
 const int EventTriggerNum = 18;
 
 
@@ -1436,6 +1436,57 @@ void ChangeDiplomaticStatus :: execute( MapDisplayInterface* md )
 
 
 
+void SetViewSharing :: readData ( tnstream& stream )
+{
+   int version = stream.readInt();
+   viewingPlayer = stream.readInt();
+   providingPlayer = stream.readInt();
+   enable = stream.readInt();
+}
+
+
+void SetViewSharing :: writeData ( tnstream& stream )
+{
+   stream.writeInt( 1 );
+   stream.writeInt ( viewingPlayer );
+   stream.writeInt ( providingPlayer );
+   stream.writeInt ( enable );
+}
+
+
+void SetViewSharing :: setup ()
+{
+   viewingPlayer = editInt("Viewing Player",viewingPlayer,0,7);
+   providingPlayer = editInt("Providing Player",providingPlayer,0,7);
+
+   vector<ASCString> list;
+   list.push_back ( "Disable View Sharing");
+   list.push_back ( "Enable View Sharing");
+
+   enable = chooseString ( "Action", list, enable );
+}
+
+void SetViewSharing :: execute( MapDisplayInterface* md )
+{
+   if ( !gamemap->shareview )
+      gamemap->shareview = new tmap::Shareview;
+
+   if ( enable )
+      gamemap->shareview->mode[providingPlayer][viewingPlayer] = true;
+   else
+      gamemap->shareview->mode[providingPlayer][viewingPlayer] = false;
+   #ifdef sgmain
+   computeview( gamemap );
+   #endif
+   if ( md ) {
+      md->displayMap();
+      md->updateDashboard();
+   }
+}
+
+
+
+
 void AddResources :: readData ( tnstream& stream )
 {
    int version = stream.readInt();
@@ -1545,7 +1596,7 @@ class FindUnitPlacementPos : public SearchFields {
       {
          pfield fld = gamemap->getField( pos );
          if ( fld && !fld->vehicle ) {
-            if ( fieldAccessible( fld, vehicle ) == 2 ) {
+            if ( fieldAccessible( fld, vehicle, -2, NULL, true ) == 2 ) {
                fld->vehicle = vehicle;
                fld->vehicle->setnewposition ( pos );
                fld->vehicle->addview();
@@ -1613,6 +1664,8 @@ void Reinforcements :: execute( MapDisplayInterface* md )
    }
    #ifdef sgmain
    evaluateviewcalculation ( gamemap );
+   // computeview ( gamemap );
+
    #endif
 
    if ( md ) {
@@ -1663,5 +1716,6 @@ namespace {
    const bool s17 = actionFactory::Instance().registerClass( EventAction_ChangeDiplomaticStatus,  ObjectCreator<EventAction, ChangeDiplomaticStatus> );
    const bool s18 = actionFactory::Instance().registerClass( EventAction_AddResources,            ObjectCreator<EventAction, AddResources> );
    const bool s19 = actionFactory::Instance().registerClass( EventAction_Reinforcements,          ObjectCreator<EventAction, Reinforcements> );
+   const bool s20 = actionFactory::Instance().registerClass( EventAction_SetViewSharing,          ObjectCreator<EventAction, SetViewSharing> );
 };
 

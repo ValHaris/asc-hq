@@ -513,7 +513,7 @@ class tmap {
 
       class  Shareview {
          public:
-            Shareview ( void ) { recalculateview = 0; };
+            Shareview ( void );
             Shareview ( const Shareview* org );
             bool mode[8][8];
             int recalculateview;
