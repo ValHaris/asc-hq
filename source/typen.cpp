@@ -350,7 +350,7 @@ tevent :: ~tevent ()
    }
 }
 
-
+/*
 void WindChange::execute()
 {
    if ( speed != -1 )
@@ -368,3 +368,5 @@ void ChangeGameParameter::execute()
       if ( gameParameterChangeableByEvent [ parameterNum ] )
          actmap->setgameparameter( GameParameter(parameterNum) , parameterValue );
 }
+*/
+

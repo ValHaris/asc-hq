@@ -279,8 +279,8 @@ float tnstream::readFloat ( void )
 {
    float c;
    readdata2 ( c );
-#ifdef BIG_ENDIAN
-   c = SwapFloat(c);
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+    c = SwapFloat(c);
 #endif
    return c;
 }

@@ -1,3 +1,86 @@
+2003-05-06 21:06  mbickel
+
+	* source/strtmesg.cpp:	Version now 1.13.5
+
+2003-05-06 21:02  mbickel
+
+	* source/strtmesg.cpp:	Updated version number
+
+2003-05-06 21:01  mbickel
+
+	* data/asc003.map, data/asc005.map, data/asc006.map,
+	data/asc007.map, data/asc008.map, data/asc008.msg,
+	source/dlg_box.cpp, source/missions.cpp, source/strtmesg.cpp,
+	source/typen.h:  Updated campaign maps
+
+2003-05-01 20:02  mbickel
+
+	* source/: attack.cpp, attack.h, basestrm.cpp, basestrm.h,
+	controls.cpp, controls.h, dialog.cpp, edevents.cpp, gamedlg.cpp,
+	gamemap.cpp, gamemap.h, loaders.cpp, loadpcxc.cpp, mapdisplay.cpp,
+	missions.cpp, missions.h, replay.cpp, spfst.cpp, strtmesg.cpp,
+	terraintype.cpp, typen.cpp, typen.h, unitctrl.cpp:  Fixed: no
+	movement decrease for cargo when transport moved
+	 Fixed: reactionfire not working when descending into range
+	 Fixed: objects not sorted
+	 New map event: add object
+
+2003-04-25 12:44  mbickel
+
+	* source/: messagedlg.h, sg.cpp:  Fixed: laser icon not loaded
+
+2003-04-25 11:59  mbickel
+
+	* asc.bpg, data/asc006.map, data/asc006.msg, data/data.version,
+	data/waffen.raw, data/weapicon.raw, source/attack.cpp,
+	source/dashboard.cpp, source/gui.cpp, source/sg.cpp,
+	source/sgstream.cpp, source/strtmesg.cpp, source/typen.cpp,
+	source/typen.h, source/vehicle.cpp, source/vehicletype.cpp,
+	source/vehicletype.h, source/sdl/events.cpp,
+	source/tools/pcx2raw.cpp, source/tools/weaponguide.cpp,
+	source/win32/borland/asc.bpr:  Added 6th campaign map
+	 Added Laser weapon
+
+2003-04-23 20:31  mbickel
+
+	* asc.bpg, data/asc007.map, data/asc007.msg, source/astar2.cpp,
+	source/containerbase.cpp, source/dashboard.cpp, source/dialog.cpp,
+	source/edevents.h, source/edglobal.cpp, source/edglobal.h,
+	source/edmain.cpp, source/edmisc.cpp, source/edmisc.h,
+	source/edselfnt.cpp, source/gamemap.cpp, source/gamemap.h,
+	source/gui.cpp, source/loaders.cpp, source/loaders.h,
+	source/password_dialog.cpp, source/replay.cpp, source/strtmesg.cpp,
+	source/unitctrl.cpp, source/vehicle.cpp, source/vehicle.h,
+	source/ai/ai.h, source/ai/base.cpp, source/ai/tactics.cpp:  Fixed:
+	AI problems
+	 Improved cheating detection in replay
+
+2003-04-16 18:17  mbickel
+
+	* ChangeLog, source/astar2.cpp:  Fixed compilation problems with
+	gcc
+
+2003-04-15 22:06  mbickel
+
+	* source/: astar2.cpp, basestrm.cpp, building.cpp,
+	containerbase.cpp, controls.cpp, controls.h, replay.cpp, replay.h,
+	sg.cpp, strtmesg.cpp, unitctrl.cpp, vehicle.cpp,
+	tools/weaponguide.cpp, win32/borland/asc.bpr:  Made readrlepict
+	Endian independant
+	 Updated weaponguide
+	 Made Replays much more strict
+
+2003-04-10 10:29  mbickel
+
+	* source/sg.cpp:  Fixed maintainence check
+
+2003-04-09 19:39  mbickel
+
+	* source/: loaders.cpp, loaders.h, sg.cpp, strtmesg.cpp,
+	ai/misc.cpp, ai/service.cpp:  Fixed: AI not moving units that can
+	not be refuelled
+	 Fixed: AI parameters not saved in .ASC files
+
 2003-04-08 17:04  mbickel
 
 	* doc/maketank.html, source/astar2.cpp, source/controls.cpp,
