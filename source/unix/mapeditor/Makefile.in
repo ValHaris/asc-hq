@@ -59,15 +59,24 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+host_alias = @host_alias@
+host_triplet = @host@
+AS = @AS@
 CC = @CC@
 CXX = @CXX@
+DLLTOOL = @DLLTOOL@
 DOCBOOK2MAN = @DOCBOOK2MAN@
 GENCL = @GENCL@
 GENCLL = @GENCLL@
 LDADDLIBBZ2 = @LDADDLIBBZ2@
 LIBBZ2 = @LIBBZ2@
+LIBTOOL = @LIBTOOL@
+LIBTOOL_DEPS = @LIBTOOL_DEPS@
+LN_S = @LN_S@
+LTLIBOBJS = @LTLIBOBJS@
 MAINCONDATA = @MAINCONDATA@
 MAKEINFO = @MAKEINFO@
+OBJDUMP = @OBJDUMP@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 SDLMM_CONFIG = @SDLMM_CONFIG@
@@ -79,15 +88,25 @@ SDL_LIBS = @SDL_LIBS@
 SGML2MAN = @SGML2MAN@
 VERSION = @VERSION@
 
-CXXFLAGS = @CXXFLAGS@ -Dkarteneditor -I./ -DFREEMAPZOOM -DNEWKEYB
+MAINTAINERCLEANFILES = Makefile.in
+
+INCLUDES = -I$(top_builddir) -I$(top_src_dir) 			  -I$(top_builddir)/source -I$(top_src_dir)/source
+
+
+CXXFLAGS = @CXXFLAGS@ @SDL_CFLAGS@ @SDLMM_CXXFLAGS@ -Dkarteneditor -DFREEMAPZOOM -DNEWKEYB
+
 
 bin_PROGRAMS = asc_mapedit asc_map2pcx
 
 asc_mapedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp edselfnt.cpp edmisc.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp Named.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp
-asc_mapedit_LDADD = ../../sdl/libsdl.a ../../libs/triangul/libtriangul.a -lSDL -lpthread -lSDL_image -lSDLmm @LDADDLIBBZ2@
+
+asc_mapedit_LDADD = $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/libs/triangul/libtriangul.la @SDLMM_LIBS@ @LDADDLIBBZ2@
+
 
 asc_map2pcx_SOURCES = map2pcx.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp Named.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp
-asc_map2pcx_LDADD = ../../sdl/libsdl.a ../../libs/triangul/libtriangul.a -lSDL -lpthread -lSDL_image -lSDLmm @LDADDLIBBZ2@
+
+asc_map2pcx_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la $(top_builddir)/source/sdl/libsdl.la
+
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../../config.h
 CONFIG_CLEAN_FILES = 
@@ -108,8 +127,8 @@ password_dialog.o research.o mapdisplay.o ascstring.o graphicset.o \
 vehicle.o buildings.o networkdata.o resourcenet.o textfileparser.o \
 terraintype.o objecttype.o textfiletags.o itemrepository.o \
 stringtokenizer.o
-asc_mapedit_DEPENDENCIES =  ../../sdl/libsdl.a \
-../../libs/triangul/libtriangul.a
+asc_mapedit_DEPENDENCIES =  $(top_builddir)/source/sdl/libsdl.la \
+$(top_builddir)/source/libs/triangul/libtriangul.la
 asc_mapedit_LDFLAGS = 
 asc_map2pcx_OBJECTS =  map2pcx.o weather.o typen.o strtmesg.o stack.o \
 spfst.o sgstream.o pd.o palette.o newfont.o misc.o loadpcxc.o loaders.o \
@@ -120,12 +139,14 @@ gamemap.o password.o password_dialog.o research.o mapdisplay.o \
 ascstring.o graphicset.o vehicle.o buildings.o networkdata.o \
 resourcenet.o textfileparser.o terraintype.o objecttype.o \
 textfiletags.o itemrepository.o stringtokenizer.o
-asc_map2pcx_DEPENDENCIES =  ../../sdl/libsdl.a \
-../../libs/triangul/libtriangul.a
+asc_map2pcx_DEPENDENCIES =  \
+$(top_builddir)/source/libs/triangul/libtriangul.la \
+$(top_builddir)/source/sdl/libsdl.la
 asc_map2pcx_LDFLAGS = 
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
-CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@
+CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@
 DIST_COMMON =  Makefile.am Makefile.in
 
 
@@ -153,7 +174,7 @@ OBJECTS = $(asc_mapedit_OBJECTS) $(asc_map2pcx_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .S .c .cpp .o .s
+.SUFFIXES: .S .c .cpp .lo .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu source/unix/mapeditor/Makefile
 
@@ -176,8 +197,8 @@ install-binPROGRAMS: $(bin_PROGRAMS)
 	$(mkinstalldirs) $(DESTDIR)$(bindir)
 	@list='$(bin_PROGRAMS)'; for p in $$list; do \
 	  if test -f $$p; then \
-	    echo "  $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
-	     $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
+	    echo " $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
+	    $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed 's/$(EXEEXT)$$//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
 	  else :; fi; \
 	done
 
@@ -203,6 +224,22 @@ distclean-compile:
 
 maintainer-clean-compile:
 
+.s.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+.S.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+mostlyclean-libtool:
+	-rm -f *.lo
+
+clean-libtool:
+	-rm -rf .libs _libs
+
+distclean-libtool:
+
+maintainer-clean-libtool:
+
 asc_mapedit: $(asc_mapedit_OBJECTS) $(asc_mapedit_DEPENDENCIES)
 	@rm -f asc_mapedit
 	$(CXXLINK) $(asc_mapedit_LDFLAGS) $(asc_mapedit_OBJECTS) $(asc_mapedit_LDADD) $(LIBS)
@@ -212,6 +249,8 @@ asc_map2pcx: $(asc_map2pcx_OBJECTS) $(asc_map2pcx_DEPENDENCIES)
 	$(CXXLINK) $(asc_map2pcx_LDFLAGS) $(asc_map2pcx_OBJECTS) $(asc_map2pcx_LDADD) $(LIBS)
 .cpp.o:
 	$(CXXCOMPILE) -c $<
+.cpp.lo:
+	$(LTCXXCOMPILE) -c $<
 
 tags: TAGS
 
@@ -255,7 +294,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$d/$$file $(distdir)/$$file; \
+	    cp -pr $$/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
@@ -349,25 +388,29 @@ distclean-generic:
 	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
+	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
 mostlyclean-am:  mostlyclean-binPROGRAMS mostlyclean-compile \
-		mostlyclean-tags mostlyclean-depend mostlyclean-generic
+		mostlyclean-libtool mostlyclean-tags mostlyclean-depend \
+		mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
-clean-am:  clean-binPROGRAMS clean-compile clean-tags clean-depend \
-		clean-generic mostlyclean-am
+clean-am:  clean-binPROGRAMS clean-compile clean-libtool clean-tags \
+		clean-depend clean-generic mostlyclean-am
 
 clean: clean-am
 
-distclean-am:  distclean-binPROGRAMS distclean-compile distclean-tags \
-		distclean-depend distclean-generic clean-am
+distclean-am:  distclean-binPROGRAMS distclean-compile distclean-libtool \
+		distclean-tags distclean-depend distclean-generic \
+		clean-am
+	-rm -f libtool
 
 distclean: distclean-am
 
 maintainer-clean-am:  maintainer-clean-binPROGRAMS \
-		maintainer-clean-compile maintainer-clean-tags \
-		maintainer-clean-depend maintainer-clean-generic \
-		distclean-am
+		maintainer-clean-compile maintainer-clean-libtool \
+		maintainer-clean-tags maintainer-clean-depend \
+		maintainer-clean-generic distclean-am
 	@echo "This command is intended for maintainers to use;"
 	@echo "it deletes files that may require special tools to rebuild."
 
@@ -376,14 +419,16 @@ maintainer-clean: maintainer-clean-am
 .PHONY: mostlyclean-binPROGRAMS distclean-binPROGRAMS clean-binPROGRAMS \
 maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
 mostlyclean-compile distclean-compile clean-compile \
-maintainer-clean-compile tags mostlyclean-tags distclean-tags \
-clean-tags maintainer-clean-tags distdir mostlyclean-depend \
-distclean-depend clean-depend maintainer-clean-depend info-am info \
-dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
-install-exec install-data-am install-data install-am install \
-uninstall-am uninstall all-redirect all-am all installdirs \
-mostlyclean-generic distclean-generic clean-generic \
-maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+maintainer-clean-compile mostlyclean-libtool distclean-libtool \
+clean-libtool maintainer-clean-libtool tags mostlyclean-tags \
+distclean-tags clean-tags maintainer-clean-tags distdir \
+mostlyclean-depend distclean-depend clean-depend \
+maintainer-clean-depend info-am info dvi-am dvi check check-am \
+installcheck-am installcheck install-exec-am install-exec \
+install-data-am install-data install-am install uninstall-am uninstall \
+all-redirect all-am all installdirs mostlyclean-generic \
+distclean-generic clean-generic maintainer-clean-generic clean \
+mostlyclean distclean maintainer-clean
 
 
 vpath %.cpp ../..

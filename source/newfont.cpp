@@ -6,9 +6,12 @@
     
 */
 
-//     $Id: newfont.cpp,v 1.12 2001-10-31 18:34:31 mbickel Exp $
+//     $Id: newfont.cpp,v 1.13 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2001/10/31 18:34:31  mbickel
+//      Some adjustments and fixes for gcc 3.0.2
+//
 //     Revision 1.11  2001/02/11 11:39:40  mbickel
 //      Some cleanup and documentation
 //
@@ -106,7 +109,6 @@ const char* fontid = "I\'m a font file on your Disk. Leave me alone !\x01A\x0A0"
 
 typedef dacpalette256 dacpal;
 
-#ifdef _NOASM_
 tfontsettings activefontsettings;
 
 void expand(void* p1, void* q1, int size)
@@ -135,8 +137,6 @@ void expand(void* p1, void* q1, int size)
    }
 }
 
-
-#endif
 
 
 pfont        loadfont(char *       filename)

@@ -1,6 +1,11 @@
-//     $Id: typen.cpp,v 1.84 2001-11-22 13:49:32 mbickel Exp $
+//     $Id: typen.cpp,v 1.85 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.84  2001/11/22 13:49:32  mbickel
+//      Fixed crash in Mapeditor when selection color 9
+//      Fixed: turrets being displayed gray
+//      Fixed: division by 0 by AI movement
+//
 //     Revision 1.83  2001/10/03 20:56:06  mbickel
 //      Updated data files
 //      Updated online help
@@ -462,11 +467,7 @@ const int  cwaffenproduktionskosten[cwaffentypennum][3]    = {{20, 15, 10}, {2, 
 const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoundaryNum] = { 80, 60, 40, 20 };
 
 const int directionangle [ sidenum ] = 
-#ifdef HEXAGON
  { 0, -53, -127, -180, -180 -53 , -180 -127 };
-#else
- { 0, -45, -90, -135, -180, - 225, - 270, -315 };
-#endif
 
 const int resourceWeight[ resourceTypeNum ] = { 0, 4, 12 };
 

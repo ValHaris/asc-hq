@@ -46,32 +46,31 @@
     <cmdsynopsis>
       <command>&dhpackage;</command>
 
-<arg><option>-eg </option><replaceable>file</replaceable> |
-<option>--emailgame </option><replaceable>file</replaceable>
+<arg><option>-c </option><replaceable>file</replaceable> |
+<option>--configfile </option><replaceable>file</replaceable>
 </arg>
-<arg><option>-sg </option><replaceable>file</replaceable> |
-<option>--savegame </option><replaceable>file</replaceable>
+<arg><option>-r </option><replaceable>n</replaceable> |
+<option>--verbose </option><replaceable>n</replaceable>
 </arg>
-<arg><option>-lm </option><replaceable>file</replaceable> |
-<option>--loadmap </option><replaceable>file</replaceable>
+<arg><option>-l </option><replaceable>file</replaceable> |
+<option>--load </option><replaceable>file</replaceable>
 </arg>
 <arg><option>-v </option><replaceable>n</replaceable> |
 <option>--verbose </option><replaceable>n</replaceable>
 </arg>
-<arg><option>-cf </option><replaceable>file</replaceable> |
-<option>--configfile </option><replaceable>file</replaceable>
+<arg><option>-x</option><replaceable>n</replaceable> |
+<option>-xresolution</option><replaceable>n</replaceable>
 </arg>
-<arg><option>-x:</option><replaceable>n</replaceable> 
-</arg>
-<arg><option>-y:</option><replaceable>n</replaceable>
+<arg><option>-y</option><replaceable>n</replaceable> |
+<option>-yresolution</option><replaceable>n</replaceable>
 </arg>
 <arg><option>-w</option> |
 <option>--window</option>
 </arg>
-<arg><option>-fs</option> |
+<arg><option>-f</option> |
 <option>--fullscreen</option>
 </arg>
-<arg><option>-ns</option> |
+<arg><option>-q</option> |
 <option>--nosound</option>
 </arg>
     </cmdsynopsis>
@@ -99,14 +98,14 @@
   <refsect1>
     <title>OPTIONS</title>
 
-    <para>These programs don not follow the usual GNU command line syntax,
+    <para>These programs do follow the usual GNU command line syntax,
       with long options starting with two dashes (`-').  A summary of
       options is included below.
     </para>
 
     <variablelist>
       <varlistentry>
-        <term><option>-cf, </option>
+        <term><option>-c, </option>
 <option>--configfile </option><replaceable>file</replaceable>
         </term>
         <listitem>
@@ -115,15 +114,7 @@
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><option>-eg, </option>
-<option>--emailgame </option><replaceable>file</replaceable>
-        </term>
-        <listitem>
-          <para>opens the specified file in order to continue an email game</para>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term><option>-fs, </option>
+        <term><option>-f, </option>
 <option>--fullscreen </option>
         </term>
         <listitem>
@@ -139,15 +130,16 @@ config file)</para>
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><option>-lm, </option>
-<option>--loadmap </option><replaceable>file</replaceable>
+        <term><option>-l, </option>
+<option>--load </option><replaceable>file</replaceable>
         </term>
         <listitem>
-          <para>starts the game with the given map</para>
+          <para>starts the game with the given map, save game or email game
+	  </para>
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><option>-ns, </option>
+        <term><option>-q, </option>
 <option>--nosound </option>
         </term>
         <listitem>
@@ -155,15 +147,7 @@ config file)</para>
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><option>-sg, </option>
-<option>--savegame </option><replaceable>file</replaceable>
-        </term>
-        <listitem>
-          <para>opens the specified file in order to continue a game</para>
-        </listitem>
-      </varlistentry>
-      <varlistentry>
-        <term><option>-v, </option>
+        <term><option>-r, </option>
 <option>--verbose </option><replaceable>n</replaceable>
         </term>
         <listitem>
@@ -182,7 +166,8 @@ is displayed</para>
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><option>-x:</option><replaceable>n</replaceable>
+        <term><option>-x, </option><option>-xresolution</option>
+	  <replaceable>n</replaceable>
         </term>
         <listitem>
           <para>sets the horizontal resolution to n; defaults to 800
@@ -190,7 +175,8 @@ is displayed</para>
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><option>-y:</option><replaceable>n</replaceable>
+        <term><option>-y, </option><option>-yresolution</option>
+	  <replaceable>n</replaceable>
         </term>
         <listitem>
           <para>sets the horizontal resolution to n; defaults to 600
@@ -202,8 +188,18 @@ is displayed</para>
   <refsect1>
     <title>SEE ALSO</title>
 
-    <para>asc_demount (6), asc_gfx2pcx (6), asc_makegfx (6), asc_mntgraph (6),
-asc_mount (6), asc_viewid (6), ascmap2pcx (6), ascmapedit (6).</para>
+    <para>
+      asc_demount (6),
+      asc_bin2text (6),
+      asc_makegfx (6),
+      asc_map2pcx (6),
+      asc_mapedit (6),
+      asc_mntgraph (6),
+      asc_mount (6),
+      asc_tank2pcx (6),
+      asc_viewid (6),
+      asc_weaponguide (6)
+    </para>
 
   </refsect1>
   <refsect1>

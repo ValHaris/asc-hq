@@ -57,15 +57,24 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+host_alias = @host_alias@
+host_triplet = @host@
+AS = @AS@
 CC = @CC@
 CXX = @CXX@
+DLLTOOL = @DLLTOOL@
 DOCBOOK2MAN = @DOCBOOK2MAN@
 GENCL = @GENCL@
 GENCLL = @GENCLL@
 LDADDLIBBZ2 = @LDADDLIBBZ2@
 LIBBZ2 = @LIBBZ2@
+LIBTOOL = @LIBTOOL@
+LIBTOOL_DEPS = @LIBTOOL_DEPS@
+LN_S = @LN_S@
+LTLIBOBJS = @LTLIBOBJS@
 MAINCONDATA = @MAINCONDATA@
 MAKEINFO = @MAKEINFO@
+OBJDUMP = @OBJDUMP@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 SDLMM_CONFIG = @SDLMM_CONFIG@
@@ -77,15 +86,18 @@ SDL_LIBS = @SDL_LIBS@
 SGML2MAN = @SGML2MAN@
 VERSION = @VERSION@
 
-BUILT_SOURCES = asc.cpp mapedit.cpp map2pcx.cpp mount.cpp demount.cpp viewid.cpp                 makegfx.cpp gfx2pcx.cpp tank2pcx.cpp bin2txt.cpp weaponguide.cpp
+MAINTAINERCLEANFILES = Makefile.in
+
+BUILT_SOURCES = asc.cpp mapedit.cpp map2pcx.cpp mount.cpp demount.cpp viewid.cpp makegfx.cpp gfx2pcx.cpp tank2pcx.cpp bin2txt.cpp weaponguide.cpp
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
 CONFIG_CLEAN_FILES = 
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
+LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
-CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@
+CXXLINK = $(LIBTOOL) --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@
 DIST_COMMON =  Makefile.am Makefile.in
 
 
@@ -108,6 +120,8 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 
 .cpp.o:
 	$(CXXCOMPILE) -c $<
+.cpp.lo:
+	$(LTCXXCOMPILE) -c $<
 
 tags: TAGS
 
@@ -151,7 +165,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$d/$$file $(distdir)/$$file; \
+	    cp -pr $$/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
@@ -244,7 +258,7 @@ distclean-generic:
 	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
-	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+	-test -z "$(BUILT_SOURCES)$(MAINTAINERCLEANFILES)" || rm -f $(BUILT_SOURCES) $(MAINTAINERCLEANFILES)
 mostlyclean-am:  mostlyclean-tags mostlyclean-depend mostlyclean-generic
 
 mostlyclean: mostlyclean-am
@@ -255,6 +269,7 @@ clean: clean-am
 
 distclean-am:  distclean-tags distclean-depend distclean-generic \
 		clean-am
+	-rm -f libtool
 
 distclean: distclean-am
 

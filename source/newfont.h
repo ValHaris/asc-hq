@@ -1,6 +1,9 @@
-//     $Id: newfont.h,v 1.10 2001-07-15 21:00:25 mbickel Exp $
+//     $Id: newfont.h,v 1.11 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2001/07/15 21:00:25  mbickel
+//      Some cleanup in the vehicletype class
+//
 //     Revision 1.9  2001/02/06 17:15:11  mbickel
 //      Some changes for compilation by Borland C++ Builder
 //
@@ -149,30 +152,11 @@ struct tfontsettings {
 #define centertext 1
 #define righttext 2
 
+extern void expand(void* p1, void* q1, int size);
+extern void showtext2( const ASCString& TextToOutput, int x1, int x2 );
+extern void showtext2c( const ASCString& TextToOutput, int x1, int x2 );
 
-
-#ifdef _NOASM_
- extern void expand(void* p1, void* q1, int size);
- extern void showtext2( const ASCString& TextToOutput, int x1, int x2 );
- extern void showtext2c( const ASCString& TextToOutput, int x1, int x2 );
-
- extern tfontsettings activefontsettings;
-
-#else
- extern "C" void expand(void* p1, void* q1, int size);
- #pragma aux expand parm [ eax ] [ ebx ] [ ecx ] modify [ edx edi esi ]
-
- extern "C" void showtext2( const char* TextToOutput, int x1, int x2 );
- #pragma aux showtext2 parm [ ecx ] [ ebx ] [ eax ] modify [ edx esi edi ]
- 
- extern "C" void showtext2c( const char* TextToOutput, int x1, int x2 );
- #pragma aux showtext2c parm [ ecx ] [ ebx ] [ eax ] modify [ edx esi edi ]
-
- extern "C" tfontsettings activefontsettings;
-
-#endif
-
-
+extern tfontsettings activefontsettings;
 
 extern pfont loadfont(char* filename);
 extern pfont loadfont( pnstream stream );

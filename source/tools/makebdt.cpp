@@ -159,39 +159,20 @@ int main(int argc, char *argv[] )
              
                    char  ok=1;
                    int pics = 0;
-                  #ifndef HEXAGON
-                   for ( int m = 0 ; m < 8 ; m++ )
-                      if ( bdt->weather[i]->picture[m] )
-                         pics |= ( 1 << m );
-                   /*
-                     if ( pics == 0 ) 
-                      pics = 1;
-                   */
-                  #else
                    pics = 1;
-                  #endif
+
    
                    do { 
-                      #ifndef HEXAGON
-                      printf ("\n    which pictures shall be changed ?\n");
-                      bitselect (pics, bildnr, 8);
-                      #endif
    
                       int   j = 0;
                       int num = 0;
              
                       do { 
                          if ( pics & ( 1 << j ) ) {
-   
-                           #ifdef HEXAGON
                             printf ("\n    Read own picture or one out of Battle Isle = \n");
    
                             char src = 1;
                             yn_switch ("seperate", "BI3", NO, YES, src );
-                           #else
-                            char src = 0;
-                            printf ("\n    select picturfile %s \n\n", bildnr[j] );
-                           #endif
    
                             if ( src != 1 ) {
    
@@ -199,19 +180,15 @@ int main(int argc, char *argv[] )
                                                          
                                initgraphics ( 640, 480, 8 );
                                loadpcx2(pictfile.name, bdt->weather[i], j);
-                               #ifdef HEXAGON
                                bdt->weather[i]->bi_picture[j] = -1;
-                               #endif
                                num++;
                                settxt50mode (); 
    
                             } else {
-                              #ifdef HEXAGON
                                initgraphics ( 640, 480, 8 );
                                getbi3pict ( &bdt->weather[i]->bi_picture[j], &bdt->weather[i]->picture[j] ); 
                                num++;
                                settxt50mode (); 
-                              #endif
                             }
                          }
                          j++;
@@ -278,100 +255,6 @@ int main(int argc, char *argv[] )
                    num_ed ( bdt->weather[i]->movemalus[j], 0, 255 );
                 } /* endfor */
                 
-   
-                #ifndef HEXAGON
-   
-                pwterraintype pgbt = bdt->weather[i];
-                for (j=0; j<8 ;j++ ) {
-                   if ( !pgbt->picture[j] ) {
-                     if (j == 1) {
-            
-                        pgbt->picture[j]   = malloc( fieldsize );
-                        pgbt->direcpict[j] = malloc ( fielddirecpictsize );
-                        pgbt->direcpict[j] = NULL;
-   
-                        npush ( *agmp );
-            
-                        agmp->windowstatus = 100;
-                        agmp->byteperpix = 1;
-                        agmp->resolutionx = 50;
-                        agmp->resolutiony = 50;
-                        agmp->bytesperscanline = 50;
-                        agmp->scanlinelength = 50;
-            
-                        agmp->linearaddress = (int) malloc ( agmp->resolutionx * agmp->resolutiony );
-                        memset ( (void*) agmp->linearaddress, 255, agmp->resolutionx * agmp->resolutiony );
-                        putrotspriteimage90 ( 10, 10, pgbt->picture[0] , 0);
-                        putrotspriteimage90 ( 11, 10, pgbt->picture[0] , 0);
-            
-            
-                        
-                        getimage(10,10, 10 + fieldxsize-1, 10 + fieldysize-1, pgbt->picture[j] );
-            
-                        char *b = (char*) pgbt->direcpict[j];
-            
-                        for (int t = 1; t < 20; t++) {
-                           for (int u = 20-t; u < 20+t; u++) {
-                              *b = getpixel(  10 + u, 9 + t);
-                              b++;
-                           }
-                        }
-                        
-                        for (t = 20; t > 0; t-- ) {
-                           for (int u =20-t; u<= 19 + t; u++) {
-                              *b = getpixel(  10 + u, 10 + 39 - t );
-                              b++;
-                           }
-                        }
-            
-            
-                        free ( (void*) agmp->linearaddress );
-                        npop  ( *agmp );
-            
-                     } else
-                        if (j >= 2 && j <= 3) {
-            
-                           char *b1, *b2;
-                           int k;
-            
-                           pgbt->picture[j] = malloc ( fieldsize );
-                           b1 = (char*) pgbt->picture[j-2];
-                           b2 = (char*) pgbt->picture[j];
-                           for (k=0; k<4; k++,b1++,b2++)
-                              *b2 = *b1;
-            
-                           b2 = (char*) pgbt->picture[j] + fieldsize - 1;
-            
-                           for (k=4; k<fieldsize; k++) {
-                              *b2 = *b1;
-                              b1++;
-                              b2--;
-                           }
-            
-                           pgbt->direcpict[j] = malloc ( fielddirecpictsize );
-                           b1 = (char*) pgbt->direcpict[j-2];
-                           b2 = (char*) pgbt->direcpict[j] + fielddirecpictsize - 1;
-            
-                           for (k=0; k<fielddirecpictsize; k++) {
-                              *b2 = *b1;
-                              b1++;
-                              b2--;
-                           }
-            
-                        }  else
-                             if ( j <= 7 ) {
-                                pgbt->picture[j]   = malloc ( fieldsize );
-                                pgbt->direcpict[j] = malloc ( fielddirecpictsize );
-                                flippict( pgbt->picture[j-4], pgbt->picture[j] );
-                                generatedirecpict  ( pgbt->picture[j] , pgbt->direcpict[j] );
-                             }
-                   }
-                } /* endfor */
-             
-                pgbt->quickview = generateaveragecol ( pgbt );
-   
-                #endif
-              
    
             } else
               bdt->weather[i] = NULL;
@@ -463,32 +346,10 @@ void        loadpcx2(char *       filestring, TerrainType::Weather* bdt, int i)
    loadpcxxy ( filestring, 1, 0,0); 
 
    bdt->picture[i] = malloc( fieldsize );
-   #ifndef HEXAGON
-   bdt->direcpict[i] = malloc ( fielddirecpictsize );
-   b = (char*) bdt->direcpict[i];
-   #else
    bdt->direcpict[i] = NULL;
-   #endif
 
    getimage(0,0,fieldxsize-1,fieldysize-1, bdt->picture[i] );
    putimage(10,10, bdt->picture[i] );
-
-   #ifndef HEXAGON
-   for (int t = 1; t < 20; t++) {
-      for (int u = 20-t; u < 20+t; u++) {
-         *b = getpixel(  10 + u, 9 + t);
-         b++;
-      }
-   }
-   
-   for (t = 20; t > 0; t-- ) {
-      for (int u =20-t; u<= 19 + t; u++) {
-         *b = getpixel(  10 + u, 10 + 39 - t );
-         b++;
-      }
-   }
-   #endif
-
 
    _wait(); 
 

@@ -45,7 +45,7 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>&dhpackage;</command>
-      <arg><replaceable>FILE</replaceable></arg>...
+      <arg><replaceable>FILE ...</replaceable></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
   <refsect1>

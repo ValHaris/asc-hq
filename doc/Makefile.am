@@ -1,2 +1,4 @@
-SUBDIRS = @SGML2MAN@
-EXTRA_DIST = *.html *.css
+MAINTAINERCLEANFILES	= Makefile.in
+
+SUBDIRS 		= @SGML2MAN@
+EXTRA_DIST 		= *.html *.css

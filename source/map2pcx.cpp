@@ -48,11 +48,7 @@ void         loadcursor(void)
   int          w,i;
 
   {
-     #ifdef HEXAGON
       tnfilestream stream ("hexfeld.raw", tnstream::reading);
-     #else
-      tnfilestream stream ("oktfld2.raw", tnstream::reading);
-     #endif
       stream.readrlepict ( &icons.fieldshape, false, &w );
   }
 
@@ -64,11 +60,7 @@ void         loadcursor(void)
    #endif
 
   {
-    #ifdef HEXAGON
       tnfilestream stream ("hexfld_a.raw",tnstream::reading);
-    #else
-      tnfilestream stream ("markacti.raw",tnstream::reading);
-    #endif
     stream.readrlepict( &icons.stellplatz, false, &w);
   }
 

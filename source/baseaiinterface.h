@@ -55,11 +55,12 @@ class AiThreat {
     goals say that this unit must be protected at all cost (if it is yours) or destroyed
     (if it is the enemies') */
 class AiValue {
-        #ifdef karteneditor
-        public:
-        #endif
+#ifdef karteneditor
+ public:
+#endif
            int value;
            int addedValue;
+	 
         public:
            AiThreat threat;
            int valueType;

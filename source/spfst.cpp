@@ -2,9 +2,13 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.102 2001-11-04 22:52:35 mbickel Exp $
+//     $Id: spfst.cpp,v 1.103 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.102  2001/11/04 22:52:35  mbickel
+//      Fixed bug in wood net calculation
+//      Fixed broken refuel dialog
+//
 //     Revision 1.101  2001/11/04 21:50:16  mbickel
 //      Fixed error messages in AI
 //      Fixed wrong displaying of objects in snow
@@ -224,16 +228,12 @@
    Schriften schriften;
 
 
-#ifdef _NOASM_
-
 int  rol ( int valuetorol, int rolwidth )
 {
    int newvalue = valuetorol << rolwidth;
    newvalue |= valuetorol >> ( 32 - rolwidth );
    return newvalue;
 }
-
-#endif
 
 
 
@@ -388,11 +388,7 @@ void         generatemap( TerrainType::Weather*   bt,
       actmap->field[l].setparams();
    }
 
-   #ifdef HEXAGON
    actmap->_resourcemode = 1;
-   #else
-   actmap->_resourcemode = 0;
-   #endif
    actmap->playerView = 0;
 }
 
@@ -611,21 +607,13 @@ void         tcursor::init ( void )
 
    { 
       int w;
-     #ifndef HEXAGON
-      tnfilestream stream ( "curs3.raw", tnstream::reading );
-     #else
       tnfilestream stream ( "curshex2.raw", tnstream::reading );
-     #endif
       stream.readrlepict ( &cursor.markfield, false, &w);
    }
 
    {
       int w;
-     #ifndef HEXAGON
-      tnfilestream stream ( "cursor3.raw", tnstream::reading );
-     #else
       tnfilestream stream ( "curshex.raw", tnstream::reading );
-     #endif
       stream.readrlepict ( &cursor.orgpicture, false, &w);
       void* newpic = uncompress_rlepict ( cursor.orgpicture );
       if ( newpic ) {
@@ -905,7 +893,6 @@ int        getdiplomaticstatus2(int    b, int    c)
 
 
 
-#ifdef HEXAGON
 
 const int woodformnum = 28;
 int woodform[ woodformnum ] = { 63,30,60,39,51,28,35,48,6,57,15,14,56,7,49,47,59,31,61,60,55, -1,-1,-1,-1,-1,-1,-1 };
@@ -913,7 +900,7 @@ int woodid = 81;
 
 
 
-#ifdef HEXAGON
+
 
 
 
@@ -1372,7 +1359,7 @@ void smooth ( int what, pmap gamemap )
   s.smooth ( what );
 }
 
-#endif // Hexagon
+
 
 
 
@@ -1441,7 +1428,7 @@ void calculateforest( pmap actmap )
       run++;
    } while ( changed );
 }
-#endif
+
 
 
 
@@ -1927,7 +1914,7 @@ int getcrc ( const pvehicletype fzt )
 
 int getcrc ( const ptechnology tech )
 {
-    if ( !tech )
+  if ( !tech )
        return -1;
 
     ttechnology t = *tech;
@@ -1973,9 +1960,7 @@ int getcrc ( const pobjecttype obj )
     o.buildicon = NULL;
     o.removeicon = NULL;
     o.objectslinkable = NULL;
-    #ifdef HEXAGON
     o.oldpicture = NULL;
-    #endif
     o.dirlist = NULL;
     
     return crc32buf ( &o, sizeof ( o )) + crc1 + crc2;
@@ -2017,12 +2002,8 @@ int getcrc ( const pbuildingtype bld )
     for ( int i = 0; i < maxbuildingpicnum; i++ )
        for ( int j = 0; j < 4; j++ )
           for ( int k = 0; k < 6; k++ )
-             #ifdef HEXAGON
               for ( int w = 0; w < cwettertypennum; w++ )
-                 b.w_picture[w][i][j][k] = NULL;
-             #else
-               b.picture[i][j][k] = NULL;
-             #endif
+		b.w_picture[w][i][j][k] = NULL;
 
     b.name = NULL;
     b.guibuildicon = NULL;

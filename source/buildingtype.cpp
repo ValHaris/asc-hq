@@ -77,11 +77,7 @@ BuildingType :: BuildingType ( void )
 
 void*   BuildingType :: getpicture ( const LocalCoordinate& localCoordinate )
 {
-   #ifdef HEXAGON
    return w_picture[0][0][localCoordinate.x][localCoordinate.y];
-   #else
-   return w_picture[0][localCoordinate.x][localCoordinate.y];
-   #endif
 }
 
 

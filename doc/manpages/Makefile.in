@@ -57,15 +57,24 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+host_alias = @host_alias@
+host_triplet = @host@
+AS = @AS@
 CC = @CC@
 CXX = @CXX@
+DLLTOOL = @DLLTOOL@
 DOCBOOK2MAN = @DOCBOOK2MAN@
 GENCL = @GENCL@
 GENCLL = @GENCLL@
 LDADDLIBBZ2 = @LDADDLIBBZ2@
 LIBBZ2 = @LIBBZ2@
+LIBTOOL = @LIBTOOL@
+LIBTOOL_DEPS = @LIBTOOL_DEPS@
+LN_S = @LN_S@
+LTLIBOBJS = @LTLIBOBJS@
 MAINCONDATA = @MAINCONDATA@
 MAKEINFO = @MAKEINFO@
+OBJDUMP = @OBJDUMP@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 SDLMM_CONFIG = @SDLMM_CONFIG@
@@ -77,9 +86,11 @@ SDL_LIBS = @SDL_LIBS@
 SGML2MAN = @SGML2MAN@
 VERSION = @VERSION@
 
-MAINTAINERCLEANFILES = Makefile.in
+MAINTAINERCLEANFILES = Makefile.in asc.6 asc_bin2text.6 asc_demount.6 asc_mount.6 asc_mapedit.6 asc_makegfx.6 asc_viewid.6 asc_map2pcx.6 asc_weaponguide.6
 
-man_MANS = asc.6 asc_demount.6 asc_mount.6 asc_mapedit.6
+
+man_MANS = asc.6 asc_bin2text.6 asc_demount.6 asc_mount.6 asc_mapedit.6 asc_makegfx.6 asc_viewid.6 asc_map2pcx.6 asc_weaponguide.6
+
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
 CONFIG_CLEAN_FILES = 
@@ -159,7 +170,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$d/$$file $(distdir)/$$file; \
+	    cp -pr $$/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
@@ -212,6 +223,7 @@ clean-am:  clean-generic mostlyclean-am
 clean: clean-am
 
 distclean-am:  distclean-generic clean-am
+	-rm -f libtool
 
 distclean: distclean-am
 

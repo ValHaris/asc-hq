@@ -2,9 +2,13 @@
     \brief Changing the weather and the terrain on the map
 */
 
-//     $Id: weather.cpp,v 1.10 2001-07-30 17:43:13 mbickel Exp $
+//     $Id: weather.cpp,v 1.11 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2001/07/30 17:43:13  mbickel
+//      Added Microsoft Visual Studio .net project files
+//      Fixed some warnings
+//
 //     Revision 1.9  2001/07/28 11:19:12  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -340,7 +344,7 @@ typedef double double2[2];
 
 int   tfillpolygon::paint_polygon   ( ppolygon poly )
 {
-
+  displayLogMessage ( 10, "pp1 ");
    if (checkpolygon ( poly )) {
       if ( poly->vertexnum == 1 ) {
          setpoint ( poly->vertex[0].x, poly->vertex[0].y );
@@ -351,7 +355,7 @@ int   tfillpolygon::paint_polygon   ( ppolygon poly )
          return 1;
        }
       
-    
+       displayLogMessage ( 10, "pp2 ");
        sortpolygon ( poly );
     
     
@@ -368,7 +372,9 @@ int   tfillpolygon::paint_polygon   ( ppolygon poly )
        int contours[1];
        contours[0] = poly->vertexnum;
     
+       displayLogMessage ( 10, "pp3 ");
        triangulate_polygon ( 1, contours, floatpoints, triangles );
+       displayLogMessage ( 10, "pp4 ");
     
        tpunkt tripos[3];
     
@@ -381,6 +387,7 @@ int   tfillpolygon::paint_polygon   ( ppolygon poly )
     
        delete[] triangles;
        delete[] floatpoints;
+
        return 1;
    } else
      return 0;

@@ -279,12 +279,10 @@ void         loadcursor(void)
                                                                                                                                                                                                                                                                
    }
 
-  #ifdef HEXAGON
    {
       tnfilestream stream ("windpfei.raw",tnstream::reading);
       stream.readrlepict( &icons.windarrow, false, &w );
    }
-  #endif
 
    {
       tnfilestream stream ("farbe.raw",tnstream::reading);
@@ -314,20 +312,12 @@ void         loadcursor(void)
    }
 
    {
-      #ifndef HEXAGON
-      tnfilestream stream ("va8.raw",tnstream::reading);
-      #else
       tnfilestream stream ("hexinvi2.raw",tnstream::reading);
-      #endif
       stream.readrlepict(   &icons.view.va8, false, &w);
    }
 
    {
-      #ifndef HEXAGON
-      tnfilestream stream ("nv8.raw",tnstream::reading);
-      #else
       tnfilestream stream ("hexinvis.raw",tnstream::reading);
-      #endif
       stream.readrlepict(   &icons.view.nv8, false, &w);
       void* u = uncompress_rlepict ( icons.view.nv8 );
       if ( u ) {
@@ -350,46 +340,8 @@ void         loadcursor(void)
       actprogressbar->point();
 
 
-   #ifndef HEXAGON
-   char s[100];
-   strcpy(s,"nv4-0.raw");
-   for (i=0; i<4 ;i++ ) {
-
-       s[0]='n';
-       s[1]='v';
-       s[4]='0'+i;
-       {
-          tnfilestream stream (s,tnstream::reading);
-          stream.readrlepict(   &view.nv4[i], false, &w);
-       }
-
-       s[0]='v';
-       s[1]='a';
-       {
-          tnfilestream stream (s,tnstream::reading);
-          stream.readrlepict(   &view.va4[i], false, &w);
-       }
-
-       s[0]='f';
-       s[1]='g';
-       {
-          tnfilestream stream (s,tnstream::reading);
-          stream.readrlepict(   &view.fog4[i], false, &w);
-       }
-
-   } /* endfor */
-   mountview();
-   #endif
-
-
-
    {
-      #ifdef HEXAGON
       tnfilestream stream ("hexfld_a.raw",tnstream::reading);
-      #else
-      tnfilestream stream ("markacti.raw",tnstream::reading);
-      #endif
-
       stream.readrlepict(   &icons.container.mark.active, false, &w);
    }
 
@@ -397,55 +349,33 @@ void         loadcursor(void)
       actprogressbar->point();
 
    {
-      #ifdef HEXAGON
       tnfilestream stream ("hexfld.raw",tnstream::reading);
-      #else
-      tnfilestream stream ("markinac.raw",tnstream::reading);
-      #endif
       stream.readrlepict(   &icons.container.mark.inactive, false, &w);
    }
 
    {
-      #ifdef HEXAGON
       tnfilestream stream ("in_ach.raw",tnstream::reading);
-      #else
-      tnfilestream stream ("markain.raw",tnstream::reading);
-      #endif
       stream.readrlepict(   &icons.container.mark.movein_active, false, &w);
    }
 
    {
-      #ifdef HEXAGON
       tnfilestream stream ("in_h.raw",tnstream::reading);
-      #else
-      tnfilestream stream ("markain2.raw",tnstream::reading);
-      #endif
       stream.readrlepict(   &icons.container.mark.movein_inactive, false, &w);
    }
 
    {
-      #ifdef HEXAGON
       tnfilestream stream ("build_ah.raw",tnstream::reading);
-      #else
-      tnfilestream stream ("baumoda.raw",tnstream::reading);
-      #endif
       stream.readrlepict(   &icons.container.mark.repairactive, false, &w);
    }
 
    {
-      #ifdef HEXAGON
       tnfilestream stream ("build_h.raw",tnstream::reading);
-      #else
-      tnfilestream stream ("baumod.raw",tnstream::reading);
-      #endif
       stream.readrlepict(   &icons.container.mark.repairinactive, false, &w);
    }
 
    {
-      #ifdef HEXAGON
       tnfilestream stream ("hexbuild.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.container_window, false, &w);
-      #endif
    }
 
    if ( actprogressbar )
@@ -647,11 +577,7 @@ void         loadcursor(void)
    }
 
    {
-     #ifdef HEXAGON
       tnfilestream stream ("hexfeld.raw", tnstream::reading);
-     #else
-      tnfilestream stream ("oktfld2.raw", tnstream::reading);
-     #endif
       stream.readrlepict ( &icons.fieldshape, false, &w );
    }
 
@@ -1793,15 +1719,7 @@ pfont load_font ( const char* name )
    return loadfont ( &stream );
 }
 
-#ifdef HEXAGON
 const char* progressbarfilename = "progress.6mn";
-#else
-const char* progressbarfilename = "progress.8mn";
-#endif
-
-
-
-
 
 
 
@@ -2346,6 +2264,7 @@ int main(int argc, char *argv[] )
    
    /* Clean up on exit */
    atexit(SDL_Quit);
+
 
    SoundSystem soundSystem ( CGameOptions::Instance()->sound_mute, cl->q() || CGameOptions::Instance()->sound_off );
 

@@ -2,9 +2,16 @@
     \brief The event handling of ASC
 */
 
-//     $Id: missions.cpp,v 1.29 2001-10-28 20:42:17 mbickel Exp $
+//     $Id: missions.cpp,v 1.30 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2001/10/28 20:42:17  mbickel
+//      Fixed AI crashes
+//      Fixed problems when next campaign map could not be found.
+//      Fixed forgotten events.
+//      Added several new experimental map parameters
+//      Some improvements to the campaign maps
+//
 //     Revision 1.28  2001/10/02 14:06:28  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -1181,23 +1188,29 @@ void mark_polygon_fields_with_connection ( pmap gamemap, int* data, int mark )
 {
    int polynum = data[0];
    data++;
+   displayLogMessage ( 10, "mpfwc1 ");
    for ( int i = 0; i < polynum; i++ ) {
       tpolygon poly;
       poly.vertexnum = *data;
       data++;
 
+      displayLogMessage ( 10, "mpfwc2 ");
       poly.vertex = new tpunkt[ poly.vertexnum ];
       for ( int j = 0; j < poly.vertexnum; j++ ) {
          poly.vertex[j].x = data[0];
          poly.vertex[j].y = data[1];
          data+=2;
       }
-
+      displayLogMessage ( 10, "mpfwc3 ");
       tfillpolygon_connectionmarker fpcm;
+      displayLogMessage ( 10, "mpfwc4 ");
       fpcm.initmark ( gamemap, mark );
+      displayLogMessage ( 10, "mpfwc5 ");
       fpcm.paint_polygon ( &poly );
+      displayLogMessage ( 10, "mpfwc6 ");
       delete[] poly.vertex;
    }
+   displayLogMessage ( 10, "mpfwc end ");
 }
 
 

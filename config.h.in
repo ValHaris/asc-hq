@@ -59,9 +59,6 @@
 /* Define if you have the bz2 library (-lbz2).  */
 #undef HAVE_LIBBZ2
 
-/* Define if you have the pthread library (-lpthread).  */
-#undef HAVE_LIBPTHREAD
-
 /* Name of package */
 #undef PACKAGE
 

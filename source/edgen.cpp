@@ -2,9 +2,12 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.14 2001-10-31 18:34:31 mbickel Exp $
+//     $Id: edgen.cpp,v 1.15 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2001/10/31 18:34:31  mbickel
+//      Some adjustments and fixes for gcc 3.0.2
+//
 //     Revision 1.13  2001/10/11 10:22:49  mbickel
 //      Some cleanup and fixes for Visual C++
 //
@@ -582,22 +585,12 @@ void tmapgenerator::setmap(void)
 
    generatefinishmap();
  
-   #ifdef HEXAGON
    int set = 2 - choice_dlg("Choose terrain set","dark","light") ;
    for (i=0;i<numofbdts ;i++ ) {
        btyp[i] = getterraintype_forid( terrain_object_ids[i][set][0] );
        if ( !btyp[i] ) 
           btyp[i] = getterraintype_forpos(0);
    }
-
-   #else
-      for (i=0;i<numofbdts ;i++ ) {
-         if (id[i] != 0 ) {
-            btyp[i] = getterraintype_forid(id[i]);
-            if (btyp[i] == NULL) btyp[i] = getterraintype_forpos(0);
-         } 
-      } /* endfor */
-   #endif
 
    if (initialized[clmaterial] == true ) {
       matdiv[0] = 81 * enhance / ( mblocks[clmaterial]->tileval[1] -mblocks[clmaterial]->tileval[0] +1 ) ;

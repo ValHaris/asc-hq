@@ -314,13 +314,8 @@ main (int argc, char *argv[] )
       printf ("\n    production cost fuel : \n");
       num_ed ( ft->buildcost.fuel, 0, maxint);
    
-     #ifdef HEXAGON
       printf ("\n    production cost movement : \n");
       num_ed ( ft->build_movecost, 0, maxint);
-     #else
-      printf ("\n    production cost movement : \n");
-      num_ed ( ft->movecost, 0, maxint);
-     #endif
    
       printf ("\n    removal cost material : \n");
       num_ed ( ft->removecost.material , 0, maxint);
@@ -328,10 +323,8 @@ main (int argc, char *argv[] )
       printf ("\n    removal cost  fuel : \n");
       num_ed ( ft->removecost.fuel, 0, maxint);
    
-     #ifdef HEXAGON
       printf ("\n    removal cost  movement : \n");
       num_ed ( ft->remove_movecost, 0, maxint);
-     #endif
    
       char va = ft->visibleago;
       printf ("\n    should the object still be displayed if the field is not visible any more ?\n");

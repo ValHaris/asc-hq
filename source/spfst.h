@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: spfst.h,v 1.45 2001-10-31 18:34:33 mbickel Exp $
+//     $Id: spfst.h,v 1.46 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2001/10/31 18:34:33  mbickel
+//      Some adjustments and fixes for gcc 3.0.2
+//
 //     Revision 1.44  2001/08/02 18:50:43  mbickel
 //      Corrected Error handling in Text parsers
 //      Improved version information
@@ -330,11 +333,7 @@ extern int isUnitNotFiltered ( int id ) ;
 extern int isBuildingNotFiltered ( int id ) ;
 
 
-#ifdef _NOASM_
- extern int  rol ( int valuetorol, int rolwidth );
-#else
- #include "dos/spfldutl.h"
-#endif
+extern int  rol ( int valuetorol, int rolwidth );
 
 #pragma pack()
 

@@ -3,9 +3,14 @@
 */
 
 
-//     $Id: attack.cpp,v 1.56 2001-11-28 13:03:16 mbickel Exp $
+//     $Id: attack.cpp,v 1.57 2001-12-14 10:20:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2001/11/28 13:03:16  mbickel
+//      Fixed: attack selectable although 0% hit accuracy
+//      Fixed: refuelling not possible if weapon had wrong target height
+//      Fixed: repair icon displayed when refuelling
+//
 //     Revision 1.55  2001/10/31 18:34:30  mbickel
 //      Some adjustments and fixes for gcc 3.0.2
 //
@@ -169,13 +174,8 @@ bool  AttackFormula :: checkHemming ( pvehicle     d_eht,  int     direc )
 float AttackFormula :: getHemmingFactor ( int relDir )
 {
    const float  maxHemmingFactor = 1.4;  // = +140% !
-   #ifdef HEXAGON
    const float hemming[sidenum-1]  = { 4, 11, 16, 11, 4 };
    const float maxHemmingSum = 46;
-   #else
-   const float hemming[sidenum-1]  = {3, 7, 11, 16, 11, 7, 3};
-   const float maxHemmingSum = 58;
-   #endif
    relDir  %= 6;
    if ( relDir < 0 )
       relDir += sidenum;

@@ -854,7 +854,6 @@ void         tdashboard::paintwind( int repaint )
       }
 
       if ( actmap->weather.wind[height].speed ) {
-        #ifdef HEXAGON
           if ( lastdir != actmap->weather.wind[height].direction ) {
              putimage ( agmp->resolutionx - ( 640 - 506), 227, icons.wind[ 8 ] );
              char* pic = rotatepict ( icons.windarrow, directionangle[ actmap->weather.wind[height].direction ] );
@@ -865,9 +864,6 @@ void         tdashboard::paintwind( int repaint )
              delete[] pic;
              lastdir = actmap->weather.wind[height].direction;
           }
-        #else
-         putimage ( agmp->resolutionx - ( 640 - 506), 227, icons.wind[ actmap->weather.wind[height].direction ] );
-        #endif
       } else
          putimage ( agmp->resolutionx - ( 640 - 506), 227, icons.wind[ 8 ] );
 
@@ -927,8 +923,6 @@ void         tdashboard::paintimage(void)
        putimage ( x1, y1, imagebkgr );
 
     if ( vehicle ) {
-       #ifdef HEXAGON
-
        TrueColorImage* zimg = zoomimage ( vehicle->typ->picture[0], fieldsizex/2, fieldsizey/2, pal, 0 );
        char* pic = convertimage ( zimg, pal ) ;
        putrotspriteimage ( x1+3, y1+3, pic, vehicle->color );
@@ -945,9 +939,6 @@ void         tdashboard::paintimage(void)
        putspriteimage( x1, y1, xlatbuffer );
        */
 
-       #else
-       putrotspriteimage ( x1, y1, vehicle->typ->picture[0], vehicle->color );
-       #endif
        imageshown = 1;
     } else
        imageshown = 0;

@@ -2,9 +2,12 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.102 2001-12-05 15:46:35 mbickel Exp $
+//     $Id: dialog.cpp,v 1.103 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.102  2001/12/05 15:46:35  mbickel
+//      New string class
+//
 //     Revision 1.101  2001/11/12 18:28:34  mbickel
 //      Fixed graphical glitches when unit moves near border
 //      If max num of mines exceeded, no icon is displayed for placing a new one
@@ -1039,17 +1042,12 @@ void         tvehicleinfo::zeigevehicle(void)
 
    bar(x1 + xsize/2 - 20 ,y1 + starty + 5, x1 + xsize/2 + 20, y1 + starty + 40,backgrnd2);
 
-   #ifdef HEXAGON
    putimageprt ( x1 + xsize/2 - 20 ,y1 + starty + 5, x1 + xsize/2 + 20, y1 + starty + 40, aktvehicle->picture[0], (fieldxsize - 40) / 2, (fieldysize - 40) / 2 );
 /*   TrueColorImage* zimg = zoomimage ( aktvehicle->picture[0], 30, 30, pal, 0 );
    void* pic = convertimage ( zimg, pal ) ;
    putrotspriteimage(x1 + xsize/2 - 15 ,y1 + starty + 7, pic, actmap->actplayer * 8);
    delete pic;
    delete zimg;*/
-   #else
-   putrotspriteimage(x1 + xsize/2 - 15 ,y1 + starty + 7,aktvehicle->picture[0],actmap->actplayer * 8);
-   #endif
-
 }
 
 void tvehicleinfo::showgeneralinfos ( void )
@@ -2772,9 +2770,7 @@ tbasicshowmap :: tbasicshowmap ( void )
    bufsizey = 0;
 }
 
-#ifdef HEXAGON
 #define FREEZOOM
-#endif
 
 void tbasicshowmap :: init ( int x1, int y1, int xsize, int ysize )
 {

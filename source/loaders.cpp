@@ -5,9 +5,13 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.64 2001-10-11 10:41:06 mbickel Exp $
+//     $Id: loaders.cpp,v 1.65 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.64  2001/10/11 10:41:06  mbickel
+//      Restructured platform fileio handling
+//      Added map archival information to mapeditor
+//
 //     Revision 1.63  2001/10/02 14:06:28  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -432,7 +436,7 @@ void         seteventtriggers( pmap actmap )
                event->trigger_data[j]->xpos = -1;
                event->trigger_data[j]->ypos = -1;
             }
-   
+	    displayLogMessage ( 10, "3 ");
             if ((event->trigger[j] == ceventt_event)) {     
               // int id = event->trigger_data[j]->id;
                pevent event1 = actmap->firsteventtocome; 
@@ -449,20 +453,28 @@ void         seteventtriggers( pmap actmap )
                   event1 = event1->next; 
                }*/ 
             }  
+           displayLogMessage ( 10, "4 ");
            if (event->trigger[j] == ceventt_any_unit_enters_polygon || 
                event->trigger[j] == ceventt_specific_unit_enters_polygon) {
 
+	     displayLogMessage ( 10, "6 ");
                if ( event->trigger_data[j]->unitpolygon->vehiclenetworkid ) {
                   Vehicle* v = actmap->getUnit ( event->trigger_data[j]->unitpolygon->vehiclenetworkid );
                   if ( v )
                      v->connection |= cconnection_areaentered_specificunit;
                }
+	       displayLogMessage ( 10, "7 ");
               #ifndef karteneditor
-               if ( event->trigger[j] == ceventt_any_unit_enters_polygon )
+	       if ( event->trigger[j] == ceventt_any_unit_enters_polygon ) {
+		 displayLogMessage ( 10, "7-1 ");
                   mark_polygon_fields_with_connection ( actmap, event->trigger_data[j]->unitpolygon->data, cconnection_areaentered_anyunit );
-               else 
+	       }
+               else {
+		 displayLogMessage ( 10, "7-2 ");
                   mark_polygon_fields_with_connection ( actmap, event->trigger_data[j]->unitpolygon->data, cconnection_areaentered_specificunit );
+	       }
               #endif 
+	       displayLogMessage ( 10, "8 ");
            }
          } 
          event = event->next; 
@@ -1747,6 +1759,7 @@ int          tmaploaders::loadmap( const char *       name )
    displayLogMessage ( 10, "setEventTriggers, ");
    seteventtriggers( spfld );
 
+   displayLogMessage ( 10, "calculateallobjects ");
    calculateallobjects( spfld );
 
 

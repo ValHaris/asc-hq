@@ -5,19 +5,30 @@ AM_CONFIG_HEADER(config.h)
 
 AM_INIT_AUTOMAKE(asc,1.2.0)
 
+dnl *************************************************************************
 dnl Checks for programs.
+dnl
 AC_PROG_CC
-CFLAGS="$CFLAGS -D_UNIX_ -D_SDL_ -D_NOASM_"
 AC_PROG_CXX
-CXXFLAGS="$CXXFLAGS -DHEXAGON -Wno-sign-compare -funsigned-char -D_UNIX_ -D_SDL_ -D_NOASM_"
-AC_PROG_RANLIB
+dnl AC_PROG_RANLIB
+AM_PROG_LIBTOOL
+AC_SUBST(LIBTOOL_DEPS)
 
+
+dnl mikem: doesn't like this stuff - ugly right away
+CFLAGS="$CFLAGS -D_UNIX_ -D_SDL_"
+dnl -D_NOASM_"
+CXXFLAGS="$CXXFLAGS -Wno-sign-compare -funsigned-char -D_UNIX_ -D_SDL_"
+dnl -DHEXAGON -D_NOASM_
+dnl here comes the special stuff - done on demand (developers only?)
 AC_ARG_ENABLE( docbook2man, [  --enable-docbook2man    will build the man pages from the sgml source files.], SGML2MAN=manpages )
 AC_SUBST([SGML2MAN])
 if test "X$SGML2MAN" = "Xmanpages"; then
-   AC_CHECK_PROG(DOCBOOK2MAN, docbook-to-man docbook2man )
+   AC_CHECK_PROGS(DOCBOOK2MAN, docbook-to-man docbook2man )
 fi
+AC_SUBST(DOCBOOK2MAN)
 
+dnl mikem: sure this is one is only interesting for martin bickel ;)
 AC_ARG_ENABLE( genparse, [  --enable-genparse       enables recreation of the command line parsers], ENABLEGENPARSE=1 )
 if test "X$ENABLEGENPARSE" = "X1"; then
    AC_CHECK_PROG(GENCLL,genparse,genparse)
@@ -27,61 +38,50 @@ if test "X$ENABLEGENPARSE" = "X1"; then
    AC_SUBST([GENCL])
 fi
 
+dnl *************************************************************************
 dnl Checks for libraries.
+dnl
 
-dnl Checks for some STL header files (which aren't available for gcc at the time of writing).
-AC_CHECK_HEADERS( exception limits )
+dnl should be done by SDL
+dnl AC_CHECK_LIB( pthread, pthread_create )
 
-dnl Checks for other header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS(malloc.h strings.h sys/dirent.h)
-AC_HEADER_DIRENT
-AC_HEADER_TIME
+dnl now save current FLAGS - they are modified to allow SDL test progs to
+dnl be compiled correctly
+SAVE_CXXFLAGS=$CXXFLAGS
+SAVE_CFLAGS=$CFLAGS
+SAVE_LIBS=$LIBS
 
-MY_EXPAND_DIR(game_datadir, "$datadir/games/$PACKAGE")
-AC_DEFINE_UNQUOTED( GAME_DATADIR, "$game_datadir")
-
-dnl Allow location of SDL install to be configured --with-SDL-prefix=
-dnl omitting this parameter will cause the files to be sought in /usr/lib and /usr/include
-dnl note that you need to have run make install in the SDL source for this to work, as the
-dnl SDL distribution source directory isn't layed out correctly even after a make.
-AC_ARG_WITH( SDL-prefix,\
-[  --with-SDL-prefix=sdlp  Look for SDL libs in \${sdlp}/lib and headers in\
- \${sdlp}/include/],\
-CXXFLAGS="$CXXFLAGS -I$withval/include" ; CPPFLAGS="$CPPFLAGS -I$withval/include" ; LDFLAGS="$LDFLAGS -L$withval/lib" )
-
-AC_CHECK_HEADER( SDL/SDL.h, , AC_MSG_ERROR( ASC requires SDL headers to be present ) )
-
-
-
+dnl check for libSDL
 SDL_VERSION=1.1.3
 AM_PATH_SDL($SDL_VERSION,
             :,
             AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!])
 )
 
-
+dnl set up new FLAGS
 CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
 CFLAGS="$CFLAGS $SDL_CFLAGS"
 LIBS="$LIBS $SDL_LIBS"
 
-
-
-dnl Checks for typedefs, structures, and compiler characteristics.
-AC_C_CONST
-AC_TYPE_SIZE_T
-
-dnl Checks for libraries.
-AC_CHECK_LIB( pthread, pthread_create,  )
-AC_CHECK_LIB( SDL_image, IMG_LoadJPG_RW,,  AC_MSG_ERROR( ASC requires the SDL_image library. You can get it at www.libsdl.org ) )
+AC_CHECK_LIB( SDL_image, IMG_LoadJPG_RW,,  AC_MSG_ERROR( ASC requires the SDL_image library. You can get it at www.libsdl.org ), )
 AC_CHECK_LIB( SDL_mixer, Mix_PlayChannelTimed,, AC_MSG_ERROR( ASC requires the SDL_mixer library. You can get it at www.libsdl.org ) )
+
+dnl ugly work around for this yet buggy SDLmm check
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
+
+AM_PATH_SDLMM(0.1.8, :, AC_MSG_ERROR([*** SDLmm version 0.1.8 not found! Get it from http://sdlmm.sf.net ]))
+
 AC_LANG_RESTORE
+
+dnl restore old flags settings
+CXXFLAGS=$SAVE_CXXFLAGS
+CFLAGS=$SAVE_CFLAGS
+LIBS=$SAVE_LIBS
 
 dnl libbz2 stuff (should have a versionnr about 1.0.0)
 lib_bz2_static=no
-AC_ARG_ENABLE( libbz2-static, [  --enable-libbz2-static  compiles a static \
+AC_ARG_ENABLE( libbz2-static, [ --enable-libbz2-static  compiles a static \
 libbz2 into the binary of asc.], [lib_bz2_static=$enableval], \
 [lib_bz2_usecache=yes] )
 AC_CHECK_LIB( bz2, BZ2_bzReadOpen, , [checklib_bz2_static=yes] )
@@ -102,23 +102,38 @@ AC_MSG_RESULT( [making static libbz2... $lib_bz2_static] )
 
 if test "x$lib_bz2_static" = "xyes"; then
   LIBBZ2=bzlib
-  LDADDLIBBZ2=\${top_srcdir}/source/libs/bzlib/libbz2.a;
+  LDADDLIBBZ2=\${top_builddir}/source/libs/bzlib/libbz2.a;
 else 
   LDADDLIBBZ2=-lbz2
 fi
 
+dnl *************************************************************************
+dnl Checks for header files.
 
-AC_LANG_CPLUSPLUS
+dnl Checks for some STL header files (which aren't available for gcc at the time of writing).
+AC_CHECK_HEADERS( exception limits )
 
-dnl AC_CHECK_LIB( SDLmm, SDLmm::WasInit,, AC_MSG_ERROR( ASC requires the SDLmm library. You can get it at http://sourceforge.net/projects/sdlmm/ ) )
-dnl AC_CHECK_HEADER( SDLmm/sdlmm.h, , AC_MSG_ERROR( ASC requires SDLmm headers to be present ) )
-AM_PATH_SDLMM(0.1.8, :, AC_MSG_ERROR([*** SDLmm version 0.1.8 not found! Get it from http://sdlmm.sf.net ]))
+dnl Checks for other header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS(malloc.h strings.h sys/dirent.h)
+AC_HEADER_DIRENT
+AC_HEADER_TIME
 
+MY_EXPAND_DIR(game_datadir, "$datadir/games/$PACKAGE")
+AC_DEFINE_UNQUOTED( GAME_DATADIR, "$game_datadir")
+
+dnl *************************************************************************
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_SIZE_T
 
 dnl Checks for library functions.
 AC_CHECK_FUNCS(select)
 AC_CHECK_FUNCS(itoa)
 AC_CHECK_FUNCS(stricmp)
+
+dnl c++ tests
+AC_LANG_CPLUSPLUS
 
 dnl GCC 2.95.3 came with a broken standard library
 AC_MSG_CHECKING("broken std::string compare")
@@ -134,7 +149,6 @@ else
   AC_MSG_RESULT("yes")
 fi
 
-
 AC_MSG_CHECKING("broken c_str Unicode support")
 AC_TRY_COMPILE( [#include <string>], [
    std::basic_string<wchar_t> test;
@@ -148,7 +162,6 @@ else
   AC_MSG_RESULT("yes")
 fi
 
-
 dnl shell vars set by test&feature flag for libbz2
 AC_SUBST([LIBBZ2])
 AC_SUBST([LDADDLIBBZ2])
@@ -158,45 +171,53 @@ AC_SUBST(DOCBOOK2MAN)
 
 dnl what gehts packed into main.con (the data container file) and in which
 dnl order
+configure.in
 MAINCONDATA="palette.pal data.version *.gfx title.jpg title_mapeditor.jpg \
- 	progress.* smalaril.fnt usablack.fnt arial8.fnt \
- 	msystem.fnt gui.fnt guicol.fnt monogui.fnt sounds.txt \
- 	height2.raw windp.raw windpfei.raw farbe.raw \
- 	allianc.raw weapicon.raw expicons.raw hexinvi2.raw \
- 	hexinvis.raw fg8.raw windrose.raw hexfld_a.raw \
- 	hexfld.raw in_ach.raw in_h.raw build_ah.raw \
- 	build_h.raw hexbuild.raw allianc2.raw iconship.raw \
- 	icontank.raw iconplan.raw pfeil2.raw pfeil3.raw \
- 	height.raw weapons.dat message1.txt waffen.raw \
- 	knorein.raw compi2.raw pfeil-a0.raw mausi.raw \
- 	gebasym2.raw netcontr.raw ammoprod.raw resorinf.raw \
- 	windpowr.raw solarpwr.raw ammotran.raw research.raw \
- 	pwrplant.raw bldinfo.raw mining.raw tabmark.raw \
- 	traninfo.raw attack.raw hexfeld.raw mapbkgr.raw \
- 	hex2oct.raw weapinfo.raw amatur.raw hxborder.raw \
- 	leergui.raw guiremov.raw  *.tec \
- 	hexmines.raw curshex2.raw curshex.raw \
- 	railstat.map cancel.nic poweron.nic poweroff.nic \
- 	extload.nic consttnk.nic reacfoff.nic reacfire.nic \
- 	loading.nic viewmap.nic dig.nic abriss.nic \
- 	building.nic refueld.nic refuel.nic repair.nic \
- 	buildany.nic remomine.nic moormine.nic floatmin.nic \
- 	persmine.nic tankmine.nic putmine.nic endturn.nic \
- 	informat.nic ascent.nic descent.nic attack.nic \
- 	movement.nic *.nic 640480.pcx *.raw *.scr *.fnt \
- 	*.dat *.map helpsys?.txt message?.txt *.pcx lcac2.jpg \
- 	bkgr4.scr helpsys9.msg *.wav *.msg *.gif"
+progress.* smalaril.fnt usablack.fnt arial8.fnt \
+msystem.fnt gui.fnt guicol.fnt monogui.fnt sounds.txt \
+height2.raw windp.raw windpfei.raw farbe.raw \
+allianc.raw weapicon.raw expicons.raw hexinvi2.raw \
+hexinvis.raw fg8.raw windrose.raw hexfld_a.raw \
+hexfld.raw in_ach.raw in_h.raw build_ah.raw \
+build_h.raw hexbuild.raw allianc2.raw iconship.raw \
+icontank.raw iconplan.raw pfeil2.raw pfeil3.raw \
+height.raw weapons.dat message1.txt waffen.raw \
+knorein.raw compi2.raw pfeil-a0.raw mausi.raw \
+gebasym2.raw netcontr.raw ammoprod.raw resorinf.raw \
+windpowr.raw solarpwr.raw ammotran.raw research.raw \
+pwrplant.raw bldinfo.raw mining.raw tabmark.raw \
+traninfo.raw attack.raw hexfeld.raw mapbkgr.raw \
+hex2oct.raw weapinfo.raw amatur.raw hxborder.raw \
+leergui.raw guiremov.raw  *.tec \
+hexmines.raw curshex2.raw curshex.raw \
+railstat.map cancel.nic poweron.nic poweroff.nic \
+extload.nic consttnk.nic reacfoff.nic reacfire.nic \
+loading.nic viewmap.nic dig.nic abriss.nic \
+building.nic refueld.nic refuel.nic repair.nic \
+buildany.nic remomine.nic moormine.nic floatmin.nic \
+persmine.nic tankmine.nic putmine.nic endturn.nic \
+informat.nic ascent.nic descent.nic attack.nic \
+movement.nic *.nic 640480.pcx *.raw *.scr *.fnt \
+*.dat *.map helpsys?.txt message?.txt *.pcx lcac2.jpg \
+bkgr4.scr helpsys9.msg *.wav *.msg *.gif"
 
 dnl what gehts packed into main.con (the data container file)
 AC_SUBST([MAINCONDATA])
 
-AC_OUTPUT( Makefile source/Makefile source/docs/Makefile source/docs/en/Makefile \
-           source/sdl/Makefile source/libs/triangul/Makefile \
-           source/libs/Makefile source/ai/Makefile source/unix/Makefile doc/manpages/Makefile \
+dnl for libtool to work LTLIBOJS is needed (currently bug of autoconf)
+Xsed="sed -e s/^X//"
+LTLIBOBJS=`echo X"$LIBOBJS"|[$Xsed -e "s,\.[^.]* ,.lo ,g;s,\.[^.]*$,.lo,"]`
+AC_SUBST(LTLIBOBJS)
+
+AC_OUTPUT( Makefile source/Makefile source/docs/Makefile \
+	   source/docs/en/Makefile source/sdl/Makefile \
+	   source/libs/triangul/Makefile source/libs/Makefile \
+	   source/ai/Makefile source/unix/Makefile doc/manpages/Makefile \
            source/Makefile source/docs/Makefile source/clparser/Makefile \
            source/docs/en/Makefile source/sdl/Makefile \
            source/libs/triangul/Makefile source/libs/Makefile \
            source/ai/Makefile source/unix/Makefile \
            source/unix/mapeditor/Makefile source/tools/Makefile \
            source/tools/linux/Makefile data/Makefile doc/Makefile )
+
 

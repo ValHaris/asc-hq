@@ -134,14 +134,10 @@ void* Building :: getpicture ( const BuildingType::LocalCoordinate& localCoordin
    if ( fld ) {
       int w = fld->getweather();
 
-      #ifdef HEXAGON
        if ( typ->w_picture[w][_completion][localCoordinate.x][localCoordinate.y] )
           return typ->w_picture[w][_completion][localCoordinate.x][localCoordinate.y];
        else
           return typ->w_picture[0][_completion][localCoordinate.x][localCoordinate.y];
-      #else
-       return typ->picture[_completion][localCoordinate.x][localCoordinate.y];
-      #endif
    } else
       return NULL;
 }

@@ -1,1 +1,3 @@
-SUBDIRS = triangul @LIBBZ2@
+MAINTAINERCLEANFILES	= Makefile.in
+
+SUBDIRS 		= triangul @LIBBZ2@

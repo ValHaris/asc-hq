@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.75 2001-11-22 15:08:24 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.76 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.75  2001/11/22 15:08:24  mbickel
+//      Added gameoption heightChangeMovement
+//
 //     Revision 1.74  2001/11/05 21:31:04  mbickel
 //      Fixed compilation errors
 //      new data version required
@@ -851,9 +854,7 @@ void loadpalette ( void )
       xlattables.light[255] = 255;
   */
       stream.readdata( &truecolor2pal_table,  sizeof ( truecolor2pal_table ));
-      #ifdef HEXAGON
       stream.readdata( &bi2asc_color_translation_table,  sizeof ( bi2asc_color_translation_table ));
-      #endif
 
       xlatpictgraytable = (ppixelxlattable) asc_malloc( sizeof(*xlatpictgraytable) );
       // xlatpictgraytable = new tpixelxlattable;

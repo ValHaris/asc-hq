@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.105 2001-10-31 20:30:38 mbickel Exp $
+//     $Id: typen.h,v 1.106 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.105  2001/10/31 20:30:38  mbickel
+//      Fixed strange problems with gcc
+//
 //     Revision 1.104  2001/10/08 14:44:23  mbickel
 //      Some cleanup
 //
@@ -213,6 +216,7 @@
  #include <limits.h>
 #endif
 
+#include <values.h>
 
 #include "pointers.h"
 #include "tpascal.inc"
@@ -843,12 +847,6 @@ struct ticons {
                void*     nv8;
                void*     va8;
                void*     fog8;
-               #ifndef HEXAGON
-               void*     nv4[4];
-               void*     va4[4];
-               void*     fog4[4];
-               void*     viereck[256];
-               #endif
     } view;  
 }; 
 
@@ -995,7 +993,6 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 #define guiiconsizey 35  
 
 
-#ifdef HEXAGON
  #define maxmalq 10  
  #define minmalq 10
  #define fieldxsize 48    /*  Breite eines terrainbildes  */ 
@@ -1006,17 +1003,6 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 
  //! the number of sides that a field has; is now fixed at 6;
  const int sidenum = 6;
-#else
- #define maxmalq 12  
- #define minmalq 8
- #define fieldxsize 40    /*  Breite eines terrainbildes  */ 
- #define fieldysize 39  
- #define fielddirecpictsize 800
- #define fielddistx 40
- #define fielddisty 20
- #define fielddisthalfx 20
- #define sidenum 8
-#endif
 
 #define fieldsizex fieldxsize
 #define fieldsizey fieldysize

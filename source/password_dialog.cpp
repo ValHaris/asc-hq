@@ -101,15 +101,11 @@ void         tenterpassword ::lne(int          x1,
 
 void tenterpassword :: dispeditstring ( char* st, int x1, int y1 )
 {
-   char* ss2 = strdup ( st );
-
-   int i = 0;
-   while ( ss2[i] )
-     ss2[i++] = '*';
-
-   showtext2(ss2,x1,y1);
-
-  asc_free ( ss2 );
+  ASCString ss2 ( st );
+  ASCString s ( "*" );
+  
+  ss2.replace( 0, ss2.size(), s );
+  showtext2(ss2,x1,y1);
 }
 
 /*

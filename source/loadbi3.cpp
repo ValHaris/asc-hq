@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.64 2001-11-15 20:16:01 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.65 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.64  2001/11/15 20:16:01  mbickel
+//      Added a new BI3 import table
+//      Fixed movement reduction changing height of a nearly empty unit and
+//         refuelling it afterwards
+//      Better error message for "ID not found"
+//
 //     Revision 1.63  2001/10/22 18:53:39  mbickel
 //      Fixed BI3 map translation errors: wrong order of table evaluation
 //
@@ -200,10 +206,6 @@
  #error The small editors should not need to use LoadBi3
 #endif
 
-
-#ifndef HEXAGON
- #error This file should only by used in the hexagonal version
-#endif
 
 #pragma pack(1)
 

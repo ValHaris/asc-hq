@@ -3,9 +3,16 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.122 2001-11-12 18:28:33 mbickel Exp $
+//     $Id: controls.cpp,v 1.123 2001-12-14 10:20:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.122  2001/11/12 18:28:33  mbickel
+//      Fixed graphical glitches when unit moves near border
+//      If max num of mines exceeded, no icon is displayed for placing a new one
+//      Fixed: some airplanes could not move after ascend
+//      Fixed: couldn't build satellites on fields no accessible if satellite was
+//        on ground level.
+//
 //     Revision 1.121  2001/11/08 17:32:14  mbickel
 //      Fixed AI crash
 //      Added Replay to AI
@@ -1139,7 +1146,6 @@ void         constructvehicle( pvehicletype tnk )
 
 
 int windbeeline ( int x1, int y1, int x2, int y2 ) {
-  #ifdef HEXAGON
    int dist = 0;
    while ( x1 != x2  || y1 != y2 ) {
       dist+= minmalq;
@@ -1148,44 +1154,6 @@ int windbeeline ( int x1, int y1, int x2, int y2 ) {
       getnextfield ( x1, y1, direc );
    }
    return dist;
-  #else
-   int direc, dist = 0;
-   int x = x1;
-   int y = y1;
-   int a,b,dx,dy;
-
-   while ( x != x2 || y != y2 ) {
-      dx = (2 * x2 + (y2 & 1)) - (2 * x + (y & 1));
-      dy = y2 - y;
-      if (dx < 0)
-         a = 0;
-      else
-         if (dx == 0)
-            a = 1;
-         else
-            a = 2;
-      if (dy < 0)
-         b = 0;
-      else
-         if (dy == 0)
-            b = 1;
-         else
-            b = 2;
-
-      direc = directions[b][a][0];
-      if (direc & 1)
-         dist += minmalq;
-      else
-         dist += maxmalq;
-
-
-      getnextfield( x, y, direc);
-
-      dist -= windmovement[direc];
-   };
-
-   return dist;
-  #endif
 }
 
 
@@ -1551,11 +1519,7 @@ void         calcmovemalus(int          x1,
                            int&         movecost,              //  fuer movementdecrease
                            int          uheight )
 {
-#ifdef HEXAGON
  static const  int         movemalus[2][6]  = {{ 8, 6, 3, 0, 3, 6 }, {0, 0, 0, 0, 0, 0 }};
-#else
- static const  int         movemalus[2][8]  = {{2, 4, 2, 8, 0, 8, 2, 4}, {4, 2, 5, 2, 0, 2, 5, 2}};
-#endif
 
   int          d;
   int           x, y;
@@ -1577,11 +1541,7 @@ void         calcmovemalus(int          x1,
       }
    }
 
-  #ifndef HEXAGON
-   mode = direc & 1;
-  #else
    mode = 0;
-  #endif
 
    if ( uheight == -1 )
       uheight = vehicle->height;

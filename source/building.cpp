@@ -2,9 +2,12 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.77 2001-11-15 20:46:05 mbickel Exp $
+//     $Id: building.cpp,v 1.78 2001-12-14 10:20:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.77  2001/11/15 20:46:05  mbickel
+//      Fixed: replay not working when moving units out of carriers
+//
 //     Revision 1.76  2001/10/29 20:24:56  mbickel
 //      Fixed AI crash when producing to much units
 //
@@ -935,13 +938,8 @@ int recursiondepth = -1;
 tbuildingparamstack buildingparamstack[maxrecursiondepth];
 
 
-#ifdef HEXAGON
- #define containerxpos 100
- #define containerypos 70
-#else
- #define containerxpos 0
- #define containerypos 0
-#endif
+#define containerxpos 100
+#define containerypos 70
 
 
 const int repaint=0;
@@ -951,15 +949,10 @@ const int cursor_down=2;
 const int cursor_left=3;
 const int cursor_right=4;
 
-#ifdef HEXAGON
- #define unitsshownx 6
-#else
- #define unitsshownx 9
-#endif
+#define unitsshownx 6
 
 #define unitsshowny 3
 
-#ifdef HEXAGON
 int unitposx[ unitsshownx + 1 ] = { containerxpos + 20,
                                     containerxpos + 76,
                                     containerxpos + 135,
@@ -972,25 +965,10 @@ int unitposy[ unitsshowny + 1 ] = { containerypos + 105,
                                     containerypos + 159,
                                     containerypos + 213,
                                     containerypos + 213 + fieldysize };
-#else
-int unitposx[ unitsshownx + 1] = { 57 + 0 * 38,
-                                   57 + 1 * 38,
-                                   57 + 2 * 38,
-                                   57 + 3 * 38,
-                                   57 + 4 * 38,
-                                   57 + 5 * 38,
-                                   57 + 6 * 38,
-                                   57 + 7 * 38,
-                                   57 + 8 * 38,
-                                   57 + 9 * 38 };
-
-int unitposy[ unitsshowny + 1 ] = { 148, 148+35, 148 + 2 * 35, 148 + 3 * 35  };
-
-#endif
 
 
 
-#ifdef HEXAGON
+
  #define subwinx1 (containerxpos + 13)
  #define subwiny1 (containerypos + 276 )
  #define subwinx2 ( subwinx1 + 345 )
@@ -1000,17 +978,7 @@ int unitposy[ unitsshowny + 1 ] = { 148, 148+35, 148 + 2 * 35, 148 + 3 * 35  };
  #define laschdist 50
  #define nameposx containerxpos + 149
  #define nameposy containerypos + 17
-#else
- #define subwinx1 52
- #define subwiny1 264
- #define subwinx2 397
- #define subwiny2 374
- #define laschxpos 52
- #define laschypos 375
- #define laschdist 50
- #define nameposx 188
- #define nameposy 59
-#endif
+
 
 #define laschheight 12
 #define laschstepwidth 3
@@ -1018,14 +986,8 @@ int unitposy[ unitsshowny + 1 ] = { 148, 148+35, 148 + 2 * 35, 148 + 3 * 35  };
 #define bkgrdarkcol 172
 
 
-#ifdef HEXAGON
  int tabmarkpos[3] = { containerypos + 154-42, containerypos + 273-42+54, containerypos + 388-42+54 };
  int tabmarkposx = containerxpos+ 4;
-#else
- int tabmarkpos[3] = { 154, 273, 388 };
- int tabmarkposx = 43;
-#endif
-
 
 const char* resourceusagestring = "; need: ~%d~ energy, ~%d~ material, ~%d~ fuel";
 
@@ -2244,16 +2206,9 @@ ccontainer :: ~ccontainer (void)
 void  ccontainer :: buildgraphics( void )
 {
 
-#ifdef HEXAGON
    getpicsize (icons.container.container_window, windowwidth, windowheight);
    collategraphicoperations cgo ( containerxpos, containerypos, containerxpos+windowwidth, containerypos+windowheight );
    putspriteimage ( containerxpos, containerypos, icons.container.container_window );
-#else
-try {
-   tnfilestream stream ( "bkgr_con.pcx", 1 );
-   loadpcxxy ( &stream, 0, 0);
-} catch ( tfileerror ) {} /* endcatch */
-#endif
 
 
    activefontsettings.color = 15;
@@ -2333,7 +2288,6 @@ int    ccontainer :: getfieldundermouse ( int* x, int* y )
          if ( mouseparams.x >= xp && mouseparams.x < xp+fieldxsize && mouseparams.y >= yp && mouseparams.y < yp + fieldysize) {
             int k=0;
 
-#ifdef HEXAGON
             int xd = mouseparams.x - xp;
             int yd = mouseparams.y - yp;
             short unsigned int* pw = (word*) icons.fieldshape;
@@ -2344,20 +2298,6 @@ int    ccontainer :: getfieldundermouse ( int* x, int* y )
                if ( pc[ yd * ( pw[0] + 1) + xd] != 255 )
                   k++;
 
-#else
-            int y;
-            for (y=0; y<10 ;y++ )
-               if (mouseparams.x >  xp + 10 - y   &&   mouseparams.x <= xp + 20 + y   &&   mouseparams.y == yp + y)
-                  k++;
-
-            for (y=10;y<20 ;y++ )
-               if (mouseparams.x >= xp  &&   mouseparams.x <= xp + 30   &&   mouseparams.y == yp + y)
-                  k++;
-
-            for (y=10; y>0 ;y-- )
-               if (mouseparams.x >  xp + 10 - y   &&   mouseparams.x <= xp + 20 + y   &&   mouseparams.y == yp + 30 - y)
-                  k++;
-#endif
             if ( k ) {
                *x = j;
                *y = i;

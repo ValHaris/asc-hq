@@ -27,7 +27,6 @@
 void movedir(char dir)
 {
   lastdir = dir;
- #ifdef HEXAGON
 
   // int oldx = cxp;
   // int oldy = cyp;
@@ -87,69 +86,6 @@ void movedir(char dir)
       case 7:   cxp -= 2 * strgjmp;
       break; 
    } 
-
- #else
-
-   switch (dir) {
-      
-      case 0 :  cyp-=strgjmp;
-      break; 
-      case 1:   {   /*  rechts oben  */
-                if (strgjmp == 1) { 
-                   if (cyp % 2 == 1) cxp+=strgjmp;
-                   cyp -= strgjmp;
-                } 
-                else { 
-                   cxp += strgjmp;
-                   cyp -= strgjmp * 2;
-                } 
-             } 
-      break; 
-      case 2:   cxp+=strgjmp;
-      break; 
-      case 3:   {   /*  rechts unten  */
-                if (strgjmp == 1) { 
-                   if (cyp % 2 == 1) cxp+= strgjmp;
-                   cyp += strgjmp;
-                } 
-                else { 
-                   cxp += strgjmp;
-                   cyp += strgjmp * 2;
-                } 
-             } 
-      break;
-      case 4:   cyp+=strgjmp;
-      break; 
-      case 5:   {   /* links unten  */
-                if (strgjmp == 1) { 
-                   if (cyp % 2 == 0) cxp-=strgjmp;
-                   cyp += strgjmp;
-                } 
-                else { 
-                   cxp-=strgjmp;
-                   cyp+=strgjmp * 2;
-                } 
-             } 
-      break; 
-      case 6:   cxp-=strgjmp;
-      break; 
-      case 7:   {
-                if (strgjmp == 1) { 
-                   if (cyp % 2 == 0) cxp-=strgjmp;
-                   cyp-= strgjmp;
-                } 
-                else { 
-                   cxp -= strgjmp;
-                   cyp -= strgjmp * 2;
-                } 
-             } 
-      break; 
-      case 8:   cyp -= 2 * strgjmp;
-      break; 
-      case 9:   cyp += 2 * strgjmp;
-      break; 
-   } 
-   #endif
 }
 
 #define strginc 5
@@ -175,7 +111,6 @@ void         movecursor(tkey         ch)
        
    if ( ( ch == ct_up ) || ( ch == ct_down ) || ( ch == ct_left ) || ( ch == ct_right ) || ( ch == ct_rstrg ) || ( ch == ct_lstrg )) {
 
-     #ifdef HEXAGON
       if ( skeypress( ct_left ) ) {
          if ( cyp & 1 )
             movedir( 5 );
@@ -190,20 +125,12 @@ void         movecursor(tkey         ch)
       }
       if ( skeypress( ct_up ) ) movedir(0);
       if ( skeypress( ct_down ) ) movedir(3);
-    #else
-      if ( skeypress( ct_left ) ) movedir(6);
-      if ( skeypress( ct_right ) ) movedir(2);
-      if ( skeypress( ct_up ) ) movedir(0);
-      if ( skeypress( ct_down ) ) movedir(4);
-    #endif
-
    }
    else
    #endif
 
    #ifndef NEWKEYB
    switch (ch) {
-     #ifdef HEXAGON
 
       case ct_up: movedir(0);
       break; 
@@ -226,24 +153,10 @@ void         movecursor(tkey         ch)
             movedir( 2 );
       }
       break; 
-    #else
-      case ct_up: movedir(0);
-      break; 
-      
-      case ct_down: movedir(4);
-      break; 
-      
-      case ct_left: movedir(6);
-      break; 
-      
-      case ct_right: movedir(2);
-      break; 
-    #endif
    }
    #endif
 
 
- #ifdef HEXAGON
    switch (ch) {
       
      #ifdef NEWKEYB
@@ -272,36 +185,6 @@ void         movecursor(tkey         ch)
       case ct_3k:   movedir(2);
       break; 
    } 
- #else
-    switch (ch) {
-      
-     #ifdef NEWKEYB
-      case ct_8k:   movedir(8);
-      break; 
-      
-      case ct_4k:   movedir(6);
-      break; 
-      
-      case ct_6k:   movedir(2);
-      break; 
-      
-      case ct_2k:   movedir(9);
-      break; 
-     #endif
-
-      case ct_7k:   movedir(7);
-      break; 
-      
-      case ct_9k:   movedir(1);
-      break; 
-      
-      case ct_1k:   movedir(5);
-      break; 
-      
-      case ct_3k:   movedir(3);
-      break; 
-   } 
-  #endif
 
    if (cxp < 0) { 
          sxp += cxp;

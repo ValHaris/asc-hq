@@ -1,3 +1,5 @@
+MAINTAINERCLEANFILES	= Makefile.in
+
 ####### kdevelop will overwrite this part!!! (begin)##########
 
 SUBDIRS = en 

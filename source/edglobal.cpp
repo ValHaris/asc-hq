@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.42 2001-10-31 18:34:31 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.43 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2001/10/31 18:34:31  mbickel
+//      Some adjustments and fixes for gcc 3.0.2
+//
 //     Revision 1.41  2001/10/11 10:41:06  mbickel
 //      Restructured platform fileio handling
 //      Added map archival information to mapeditor
@@ -909,14 +912,11 @@ void execaction(int code)
       }
       break;
    case act_smoothcoasts : {
-         #ifdef HEXAGON
             smooth ( 6 );
             displaymap();
-         #endif
       }
       break;
    case act_import_bi_map : {
-         #ifdef HEXAGON
          char filename2[260];
          char* path = getbipath();
          if ( !path )
@@ -940,12 +940,9 @@ void execaction(int code)
             importbattleislemap ( path, filename.c_str(), t );
             displaymap();
          }
-         #endif
       }
       break;
    case act_insert_bi_map : {
-         #ifdef HEXAGON
-
          char filename2[260];
 
          char* path = getbipath();
@@ -967,7 +964,6 @@ void execaction(int code)
             insertbattleislemap ( getxpos(), getypos(), path, filename.c_str() );
             displaymap();
          }
-         #endif
       }
       break;
    case act_resizemap : cursor.hide();

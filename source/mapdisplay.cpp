@@ -67,39 +67,20 @@ int showresources = 0;
 int vfbscanlinelength;
 
 
-#ifdef _NOASM_
  int vfbstartdif;
  int scrstartdif;
  int scrstartpage;
-#else
- extern "C" int vfbstartdif;
- extern "C" int scrstartdif;
- extern "C" int scrstartpage;
-#endif
-
-
 
 #define cursordownshift 0
 
-#ifdef HEXAGON
- #define streettopshift 0
- #define streetleftshift 0
- #define cursorrightshift -8
- #define unitdownshift 0
- #ifdef FREEMAPZOOM
-  #define unitrightshift 0
- #else
-  #define unitrightshift -1
- #endif
+#define streettopshift 0
+#define streetleftshift 0
+#define cursorrightshift -8
+#define unitdownshift 0
+#ifdef FREEMAPZOOM
+ #define unitrightshift 0
 #else
- #define streettopshift 5
- #define streetleftshift 5
- #define cursorrightshift -1
- #define unitdownshift 4
- #define unitrightshift 5
-
- #define viereckdownshift ( unitdownshift + 11 )
- #define viereckrightshift ( unitrightshift - 10  )
+  #define unitrightshift -1
 #endif
 
 
@@ -127,9 +108,6 @@ int scrleftspace = 21;
 
 #define scrfirstpointxdif 9
 #define scrfirstpointydif 0
-
-
-#ifdef _NOASM_
 
 
 void copyvfb2displaymemory_zoom ( void* parmbuf, int x1, int y1, int x2, int y2 )
@@ -177,9 +155,6 @@ void copyvfb2displaymemory_zoom ( void* parmbuf )
 {
    copyvfb2displaymemory_zoom ( parmbuf, idisplaymap.invmousewindow.x1, idisplaymap.invmousewindow.y1, idisplaymap.invmousewindow.x2, idisplaymap.invmousewindow.y2 );
 }
-
-#endif
-
 
 
 
@@ -248,7 +223,6 @@ int   getfieldundermouse ( int* xf, int* yf )
          if ( mouseparams.x >= xp && mouseparams.x < xp+idisplaymap.getfieldsizex() && mouseparams.y >= yp && mouseparams.y < yp + idisplaymap.getfieldsizey() ) {
             k = 0;
 
-           #ifdef HEXAGON
 
             // putspriteimage ( xp, yp, icons.fieldshape );
 
@@ -289,25 +263,6 @@ int   getfieldundermouse ( int* xf, int* yf )
                      if ( pc[ yyy * ( pw[0] + 1) + xxx] != 255 )
                         putpixel ( xp + xxx, yp + yyy, 255 );
            */
-
-           #else
-            int y;
-            for ( y=0; y<10 ;y++ ) {
-               if (mouseparams.x >  xp + 10 - y   &&   mouseparams.x <= xp + 20 + y   &&   mouseparams.y == yp + y)
-                  k++;
-            } /* endfor */
-
-            for (y=10;y<20 ;y++ ) {
-               if (mouseparams.x >= xp  &&   mouseparams.x <= xp + 30   &&   mouseparams.y == yp + y)
-                  k++;
-            } /* endfor */
-
-            for (y=10; y>0 ;y-- ) {
-               if (mouseparams.x >  xp + 10 - y   &&   mouseparams.x <= xp + 20 + y   &&   mouseparams.y == yp + 30 - y)
-                  k++;
-            } /* endfor */
-
-           #endif
 
             if ( k ) {
                *xf = i;
@@ -711,37 +666,6 @@ void tdisplaymap :: cp_buf ( void )
 {
 
     if ( hgmp->windowstatus != 100 ) {
-      #ifndef _NOASM_
-       int linaddress = windowx1 + windowy1 * hgmp->bytesperscanline;
-       int page = hgmp->actsetpage;
-
-       char* edi = (char*) (hgmp->linearaddress + ( linaddress & 0xffff) );
-       char* esi = (char*) (agmp->linearaddress + vfbstartdif );
-
-       int   linlinestart = linaddress;
-       char* esistart = esi;
-
-       for ( int yp = 0; yp < window.ysize; yp++ ) {
-          for ( int xp = 0; xp < window.xsize; xp++ ) {
-             if ( linaddress >> 16 != page ) {
-                page = linaddress >> 16;
-                setvirtualpagepos ( page );
-                edi = (char*) (hgmp->linearaddress + ( linaddress & 0xffff) );
-             }
-             esi += copybufsteps[ xp ] + 1;
-             *edi = *esi;
-             edi++;
-             linaddress++;
-          }
-
-          linaddress = linlinestart + hgmp->bytesperscanline;
-          linlinestart = linaddress;
-
-          edi = (char*) (hgmp->linearaddress + ( linaddress & 0xffff) );
-
-          esi = esistart + agmp->bytesperscanline * ( yp * 100 / zoom);
-       }
-      #endif
     } else {
 
 
@@ -794,11 +718,7 @@ void tdisplaymap :: cp_buf ( int x1, int y1, int x2, int y2 )
        parm.dstdif = hgmp->bytesperscanline - window.xsize;
        parm.vfbsteps = copybufstepwidth;
 
-      #ifdef _NOASM_
        copyvfb2displaymemory_zoom ( &parm.src, getfieldposx ( x1-2, y1-2), getfieldposy( x1-2, y1-2 ), getfieldposx ( x2, y2) + getfieldsizex(), getfieldposy( x2, y2 ) + getfieldsizex());
-      #else
-       copyvfb2displaymemory_zoom ( &parm.src );
-      #endif
 }
 
 
@@ -960,24 +880,6 @@ void tgeneraldisplaymap :: pnt_main ( void )
       /****************************************************************************/
       /*viewbehinderungen: Visible_Ago,  Visible_NOT  zeichnen  ...            ÿ */
       /****************************************************************************/
-     #ifndef HEXAGON
-      for ( y=dispmapdata.disp.y1; y < dispmapdata.disp.y2; y++ ) {
-         for ( x=dispmapdata.disp.x1; x < dispmapdata.disp.x2; x++ ) {
-
-            if (y & 1 )
-               r = vfbleftspace + fielddisthalfx + x * fielddistx;
-            else
-               r = vfbleftspace + x * fielddistx;
-            yp = vfbtopspace + y * fielddisty;
-
-            if ( viereck[x+2][y+2] )           // fr?her mal:   && (! (( x ==0) && ((y & 1) == 0)))   , aber da links genug Platz, m?áte es auch ohne klappen. Noch aus Vor-VFB-Zeiten
-               putspriteimage( r + viereckrightshift , yp + viereckdownshift , view.viereck[viereck[x+2][y+2]]);
-         }
-      }
-     #endif
-
-
-
       for ( y=dispmapdata.disp.y1; y < dispmapdata.disp.y2; y++ ) {
          for ( x=dispmapdata.disp.x1; x < dispmapdata.disp.x2; x++ ) {
             fld = getfield ( actmap->xpos + x, actmap->ypos + y );
@@ -991,7 +893,6 @@ void tgeneraldisplaymap :: pnt_main ( void )
                yp = vfbtopspace + y * fielddisty;
 
                if (b == visible_ago) {
-                 #ifdef HEXAGON
                   for (int hgt = 0; hgt < 9 ;hgt++ ) {
                      /*
                      int binaryheight = 0;
@@ -1008,7 +909,6 @@ void tgeneraldisplaymap :: pnt_main ( void )
                                   o->display ( r - streetleftshift , yp - streettopshift );
                             }
                    }
-                  #endif
 
 
                    // putspriteimage( r + unitrightshift , yp + unitdownshift , view.va8);
@@ -1224,7 +1124,6 @@ pfieldlist generatelst ( int x1, int y1, int x2, int y2 )
 
   int dir = getdirection(x1,y1,x2,y2);
 
- #ifdef HEXAGON
   switch ( dir ) {
 
      case 0: adddirpts ( x1, y1, list, 5 );
@@ -1257,49 +1156,6 @@ pfieldlist generatelst ( int x1, int y1, int x2, int y2 )
              break;
 
   } /* endswitch */
- #else
-  switch ( dir ) {
-
-     case 0: adddirpts ( x1, y1, list, 7 );
-             adddirpts ( x1, y1, list, 1 );
-             adddirpts ( x1, y1, list, 2 );
-             adddirpts ( x1, y1, list, 3 );
-             break;
-
-     case 1: adddirpts ( x1, y1, list, 2 );
-             adddirpts ( x1, y1, list, 3 );
-             break;
-
-     case 2: adddirpts ( x1, y1, list, 1 );
-             adddirpts ( x1, y1, list, 3 );
-             adddirpts ( x2, y2, list, 3 );
-             adddirpts ( x2, y2, list, 4 );
-             break;
-
-     case 3: adddirpts ( x2, y2, list, 3 );
-             break;
-
-     case 4: adddirpts ( x1, y1, list, 3 );
-             adddirpts ( x1, y1, list, 5 );
-             adddirpts ( x2, y2, list, 2 );
-             adddirpts ( x2, y2, list, 3 );
-             break;
-
-     case 5: adddirpts ( x1, y1, list, 3 );
-             adddirpts ( x1, y1, list, 4 );
-             break;
-
-     case 6: adddirpts ( x1, y1, list, 3 );
-             adddirpts ( x1, y1, list, 4 );
-             adddirpts ( x2, y2, list, 1 );
-             adddirpts ( x2, y2, list, 3 );
-             break;
-
-     case 7: adddirpts ( x1, y1, list, 3 );
-             break;
-
-  } /* endswitch */
- #endif
 
   list->minx = 0xffff;
   list->miny = 0xffff;
@@ -1397,7 +1253,6 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
       int dx;
       int dy;
 
-     #ifdef HEXAGON
       switch ( dir ) {
       case 0: dx = 0;
               dy = -fielddisty*2;
@@ -1418,34 +1273,6 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
               dy = -fielddisty;
               break;
       } /* endswitch */
-     #else
-      switch ( dir ) {
-      case 0: dx = 0;
-              dy = -fielddisty*2;
-              break;
-      case 1: dx = fielddisthalfx;
-              dy = -fielddisty;
-              break;
-      case 2: dx = fielddistx;
-              dy = 0;
-              break;
-      case 3: dx = fielddisthalfx;
-              dy = fielddisty;
-              break;
-      case 4: dx = 0;
-              dy = 2*fielddisty;
-              break;
-      case 5: dx = -fielddisthalfx;
-              dy = fielddisty;
-              break;
-      case 6: dx = -fielddistx;
-              dy = 0;
-              break;
-      case 7: dx = -fielddisthalfx;
-              dy = -fielddisty;
-              break;
-      } /* endswitch */
-     #endif
 
       displaymovingunit.eht = eht;
 
@@ -1969,7 +1796,6 @@ void tbackgroundpict :: init ( int reinit )
      int bordery2 = bordery1 + (idisplaymap.getscreenysize() - 1) * fielddisty + fieldsizey - 1;
      int borderx2 = borderx1 + (idisplaymap.getscreenxsize() - 1 ) * fielddistx + fieldsizex + fielddisthalfx - 1;
 
-    #ifdef HEXAGON
      int height, width;
 
      getpicsize ( borderpicture[2], width, height );
@@ -2009,7 +1835,7 @@ void tbackgroundpict :: init ( int reinit )
 
      borderpos[7].x = borderx2 + mapborderwidth - ( width- 1);
      borderpos[7].y = bordery2 + mapborderwidth - ( height - 1 );
-    #endif
+
      inited = 1;
 
    }
@@ -2030,13 +1856,11 @@ void tbackgroundpict :: load ( void )
       #endif
      #endif
    }
-   #ifdef HEXAGON
    {
       tnfilestream stream ("hxborder.raw", tnstream::reading);
       for ( int i = 0; i < 8; i++ )
          stream.readrlepict ( &borderpicture[i], false, &w );
    }
-   #endif
 }
 
 
@@ -2079,19 +1903,6 @@ void  tbackgroundpict :: paint ( int resavebackground )
   collategraphicoperations cgo;
   init();
 
-  #ifndef HEXAGON
-  if (hgmp->resolutionx == 640) {
-     if ( actmap->xsize && !lockdisplaymap ) {
-        tnfilestream stream ( "bkgr4.pcx", 1 );
-        loadpcxxy( &stream, 0, 0 );
-        lastpaintmode = 1;
-     } else {
-        tnfilestream stream ( "bkgr42.pcx", 1 );
-        loadpcxxy( &stream, 0, 0 );
-        lastpaintmode = 0;
-     }
-  } else
-  #endif
   {
      if ( !background ) {
 
@@ -2159,10 +1970,8 @@ void  tbackgroundpict :: paint ( int resavebackground )
 
     lastpaintmode = 0;
 
-    #ifdef HEXAGON
      if ( actmap && actmap->xsize && !lockdisplaymap )
         paintborder( getmapposx ( ), getmapposy ( ) );
-    #endif
   }
   if ( resavebackground  ||  !run ) {
      gui.savebackground ( );

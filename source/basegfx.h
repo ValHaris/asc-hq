@@ -39,7 +39,7 @@
 #ifdef WIN32
 #include <sdlmm.h>
 #else
-#include <SDLmm/sdlmm.h>
+#include <sdlmm.h>
 #endif
 
 #include "tpascal.inc"
@@ -112,7 +112,6 @@ extern tgraphmodeparameters   *hgmp;
 extern dacpalette256* activepalette256;
 
 
-#ifdef _NOASM_
 extern tgraphmodeparameters activegraphmodeparameters;
 extern tgraphmodeparameters hardwaregraphmodeparameters;
 
@@ -120,20 +119,6 @@ extern dacpalette256 activepalette;
 extern int       palette16[256][4];
 extern void*     xlatbuffer;
 
-#else
-
-extern "C" word activegraphmodeparameters;
-extern "C" word hardwaregraphmodeparameters;
-
-extern "C" char      activepalette;
-extern "C" int       palette16[256][4];
-extern "C" void*     xlatbuffer;
-
-#endif
-
-
-
-#ifdef _NOASM_
 
 
  //! paints a colored bar
@@ -207,9 +192,6 @@ extern "C" void*     xlatbuffer;
 
 
 
-#else
- #include "dos/basegfx_asm_interface.h"
-#endif
 
  //! sets the color palette in 8 bit mode
  extern void setvgapalette256 ( dacpalette256 pal );

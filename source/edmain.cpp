@@ -2,9 +2,13 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.56 2001-10-16 19:58:19 mbickel Exp $
+//     $Id: edmain.cpp,v 1.57 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2001/10/16 19:58:19  mbickel
+//      Added title screen for mapeditor
+//      Updated source documentation
+//
 //     Revision 1.55  2001/10/16 15:33:03  mbickel
 //      Added icons to data
 //      ASC displays icons
@@ -314,11 +318,7 @@
 pprogressbar actprogressbar = NULL;
 
 
-#ifdef HEXAGON
 const char* progressbarfilename = "progress.6me";
-#else
-const char* progressbarfilename = "progress.8me";
-#endif
 
 
 // #define MEMCHK
@@ -331,11 +331,7 @@ void         loadcursor(void)
   int          w,i;
 
   {
-     #ifdef HEXAGON
       tnfilestream stream ("hexfeld.raw", tnstream::reading);
-     #else
-      tnfilestream stream ("oktfld2.raw", tnstream::reading);
-     #endif
       stream.readrlepict ( &icons.fieldshape, false, &w );
   }
 
@@ -347,11 +343,7 @@ void         loadcursor(void)
    #endif
 
   {
-    #ifdef HEXAGON
       tnfilestream stream ("hexfld_a.raw", tnstream::reading);
-    #else
-      tnfilestream stream ("markacti.raw", tnstream::reading);
-    #endif
     stream.readrlepict( &icons.stellplatz, false, &w);
   }
 
@@ -455,17 +447,10 @@ void loaddata( void )
 
 void buildemptymap ( void )
 {
-  #ifdef HEXAGON
    if ( getterraintype_forid(30) )
       generatemap(getterraintype_forid(30)->weather[0], idisplaymap.getscreenxsize(1), idisplaymap.getscreenysize());
    else
       generatemap(getterraintype_forpos(0)->weather[0], idisplaymap.getscreenxsize(1), idisplaymap.getscreenysize());
-  #else
-   if ( getterraintype_forid(1) )
-      generatemap(getterraintype_forid(1)->weather[0], idisplaymap.getscreenxsize(1), idisplaymap.getscreenysize());
-   else
-      generatemap(getterraintype_forpos(0)->weather[0], idisplaymap.getscreenxsize(1), idisplaymap.getscreenysize());
-  #endif
 }
 
 

@@ -219,7 +219,6 @@ void         SearchFields::initsearch( const MapCoordinate& startPosition, int _
 }
 
 
-#ifdef HEXAGON
 
 void         SearchFields::startsearch(void)
 {
@@ -263,79 +262,6 @@ void         SearchFields::startsearch(void)
    }  while (!((dist - step == lastDistance) || cancelSearch));
 }
 
-#else
-
-void         tsearchfields::startsearch(void)
-{
-   if ( abbruch )
-      return;
-
-   word         strecke;
-   int          a, c;
-   int          step;
-
-   if (mindistance > maxdistance)
-      step = -1;
-   else
-      step = 1;
-   strecke = mindistance;
-
-   do {
-      dist = strecke;
-      a = startx - strecke;
-
-      xp = a;
-      yp = starty;
-      for (c = 1; c <= 2 * strecke; c++) {
-         yp--;
-         if ((starty & 1) == (c & 1))
-            xp++;
-         if ((xp >= 0) && (yp >= 0) && (xp < gamemap->xsize) && (yp < gamemap->ysize))
-            testfield();
-         if (abbruch) return;
-      }
-
-      xp = startx + strecke + (starty & 1);
-      yp = starty;
-      for (c = 0; c < 2 * strecke ; c++) {
-         if ((starty & 1) != (c & 1))
-            xp--;
-         if ((xp >= 0) && (yp >= 0) && (xp < gamemap->xsize) && (yp < gamemap->ysize))
-            testfield();
-         if (abbruch)
-            return;
-         yp--;
-      }
-
-      yp = starty + strecke * 2 - 1;
-      xp = startx - (yp & 1);
-      for (c = 1; c <= 2 * strecke; c++) {   /*  ????????  */
-         if ((xp >= 0) && (yp >= 0) && (xp < gamemap->xsize) && (yp < gamemap->ysize))
-            testfield();
-         if (abbruch)
-            return;
-         if ((starty & 1) == (c & 1)) xp--;
-
-         yp--;
-      }
-
-      xp = startx;
-      yp = starty + 2 * strecke;
-      for (c = 0; c <= 2 * strecke - 1; c++) {
-         if ((xp >= 0) && (yp >= 0) && (xp < gamemap->xsize) && (yp < gamemap->ysize))
-            testfield();
-         if ((starty & 1) != (c & 1))
-            xp++;
-         yp--;
-         if (abbruch) return;
-      }
-      strecke += step;
-   }  while (!((strecke - step == maxdistance) || abbruch));
-}
-#endif
-
-
-#ifdef HEXAGON
 int         ccmpheighchangemovedir[6]  = {0, 1, 5, 2, 4, 3 };
 
 void         getnextfielddir(int&       x,
@@ -349,21 +275,6 @@ void         getnextfielddir(int&       x,
 
    getnextfield( x, y, newdir );
 }
-
-#else
-int         ccmpheighchangemovedir[8]  = {0, 1, 7, 2, 6, 3, 5, 4};
-
-
-void         getnextfielddir(int&       x,
-                             int&       y,
-                             int       direc,
-                             int       sdir)
-{
-   getnextfield( x, y, (ccmpheighchangemovedir[direc] + sdir) & 7);
-}
-
-#endif
-
 
 MapCoordinate getNeighbouringFieldCoordinate( const MapCoordinate& pos, int direc)
 {
@@ -379,7 +290,6 @@ void         getnextfield(int&       x,
 {
    switch (direc) {
 
-#ifdef HEXAGON
       case 0:
          y-=2   ;                      /*  oben  */
          break;
@@ -408,44 +318,6 @@ void         getnextfield(int&       x,
          y-=1;
          break;
 
-#else
-
-      case 0:
-         y-=2   ;                      /*  oben  */
-         break;
-
-      case 1:
-         if ((y & 1) == 1) x+=1;        /*  rechts oben  */
-         y-=1;
-         break;
-
-      case 2:
-         x+=1;                        /*  rechts  */
-         break;
-
-      case 3:
-         if ((y & 1) == 1) x+=1;        /*  rechts unten  */
-         y+=1;
-         break;
-
-      case 4:
-         y+=2;                          /*  unten  */
-         break;
-
-      case 5:
-         if ((y & 1) == 0) x-=1;        /*  links unten  */
-         y+=1;
-         break;
-
-      case 6:
-         x-=1;                        /*  links  */
-         break;
-
-      case 7:
-         if ((y & 1) == 0) x-=1;        /*  links oben  */
-         y-=1;
-         break;
-#endif
    }
 }
 
@@ -455,7 +327,6 @@ int          getdirection(    int      x1,
                               int      y2)
 
 {
-#ifdef HEXAGON
    int a;
    int dx = (2 * x2 + (y2 & 1)) - (2 * x1 + (y1 & 1));
    int dy = y2 - y1;
@@ -480,38 +351,6 @@ int          getdirection(    int      x1,
             else
                a = -1;
    return a;
-
-
-#else
-   int      a;
-   int      dx, dy;
-
-   dx = (2 * x2 + (y2 & 1)) - (2 * x1 + (y1 & 1));
-   dy = y2 - y1;
-   if (dx < 0)
-      if (dy < 0)
-         a = 7;
-      else
-         if (dy == 0)
-            a = 6;
-         else
-            a = 5;
-   else
-      if (dx > 0)
-         if (dy < 0)
-            a = 1;
-         else
-            if (dy == 0)
-               a = 2;
-            else
-               a = 3;
-      else
-         if (dy < 0)
-            a = 0;
-         else
-            a = 4;
-   return a;
-#endif
 }
 
 
@@ -528,7 +367,6 @@ int beeline ( const MapCoordinate& a, const MapCoordinate& b )
 
 int beeline ( int x1, int y1, int x2, int y2 )
 {
-#ifdef HEXAGON
    int xdist = abs ( (x1 * 2 + (y1 & 1 )) - ( x2 * 2 + ( y2 & 1)) );
    int ydist = abs ( y2 - y1 );
    int num2;
@@ -547,9 +385,4 @@ int beeline ( int x1, int y1, int x2, int y2 )
       printf("beeline inconsistent\n" );
 */
    return minmalq*num2;
-
-#else
-   return luftlinie8( x1, y1, x2, y2 );
-#endif
-
 }

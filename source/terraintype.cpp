@@ -103,37 +103,7 @@ TerrainType::TerrainType()
 void      TerrainType::Weather::paint ( int x1, int y1 )
 {
  #ifndef converter
-  #ifdef HEXAGON
    putspriteimage ( x1, y1, pict );
-  #else
-   char* c = (char*) direcpict[0];
-
-   if ( agmp->windowstatus == 100 ) {
-      int i;
-      char* buf = (char*) (agmp->scanlinelength * y1 + x1 + agmp->linearaddress) + 19;
-
-      for (i=1; i<= 19 ;i++ ) {
-        for ( int num = 0; num < i * 2; num ++ ) {
-           *buf = *c;
-           c++;
-           buf++;
-        }
-
-        buf += agmp->scanlinelength - 2 * i - 1;
-      } /* endfor */
-
-      for (i=20; i > 0 ;i-- ) {
-        for ( int num = 0; num < i * 2; num ++ ) {
-           *buf = *c;
-           c++;
-           buf++;
-        }
-
-        buf += agmp->scanlinelength - 2 * i + 1;
-      } /* endfor */
-
-   }
-  #endif
  #endif
 }
 

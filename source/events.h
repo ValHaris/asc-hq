@@ -106,21 +106,8 @@ class tsubmousehandler {
      };
 
 
-#ifdef _NOASM_
- extern void mouseintproc2( void );
- extern volatile tmousesettings mouseparams;
-
-#else
- extern "C" void            mouseintproc2( void );
- extern "C" volatile tmousesettings  mouseparams;
-
- extern "C" void putmousebackground ( void );
- #pragma aux putmousebackground modify [ eax ebx ecx edx edi esi ]
-
- extern "C" void putmousepointer ( void );
- #pragma aux putmousepointer modify [ eax ebx ecx edx edi esi ]
-
-#endif
+extern void mouseintproc2( void );
+extern volatile tmousesettings mouseparams;
 
 
 extern void addmouseproc ( tsubmousehandler* proc );

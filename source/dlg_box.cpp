@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.62 2001-11-05 21:10:41 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.63 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2001/11/05 21:10:41  mbickel
+//      Updated palette code
+//
 //     Revision 1.61  2001/10/31 18:34:31  mbickel
 //      Some adjustments and fixes for gcc 3.0.2
 //
@@ -331,85 +334,38 @@ char strrstring[200];
 
 void  strrd8d(int  l, char* s)
 { 
-#ifndef HEXAGON
- strcat ( s, "." );
-
- char         s2[50];
- itoa ( l % minmalq, s2, 10);
- strcat ( s, s2 );
-#else
   itoa ( l / minmalq, s, 10);
-#endif
 } 
 
 void  strrd8u(int  l, char* s)
 { 
-#ifndef HEXAGON
-  itoa ( l / minmalq, s, 10);
- strcat ( s, "." );
-
- char         s2[50];
- itoa ( l % minmalq, s2, 10);
- strcat ( s, s2 );
-#else
   itoa ( (l + minmalq - 1) / minmalq, s, 10);
-#endif
 } 
 
 void  strrd8n(int  l, char* s)
 { 
-#ifndef HEXAGON
-  itoa ( l / minmalq, s, 10);
- strcat ( s, "." );
-
- char         s2[50];
- itoa ( l % minmalq, s2, 10);
- strcat ( s, s2 );
-#else
- itoa ( (l + minmalq/2) / minmalq, s, 10);
-#endif
+  itoa ( (l + minmalq/2) / minmalq, s, 10);
 } 
 
 
 char*  strrrd8d(int  l)
 { 
-#ifndef HEXAGON
-  itoa ( l / minmalq, strrstring, 10);
- strcat ( strrstring, "." );
- char         s2[50];
- itoa ( (l % minmalq) * 10 / minmalq , s2, 10);
- strcat ( strrstring, s2 );
-#else
  itoa ( l / minmalq, strrstring, 10);
-#endif
+
  return strrstring;
 } 
 
 char*  strrrd8u(int  l)
 { 
-#ifndef HEXAGON
-  itoa ( l / minmalq, strrstring, 10);
- strcat ( strrstring, "." );
- char         s2[50];
- itoa ( (l % minmalq) * 10 / minmalq , s2, 10);
- strcat ( strrstring, s2 );
-#else
   itoa ( (l + minmalq - 1) / minmalq, strrstring, 10);
-#endif
+
  return strrstring;
 } 
 
 char*  strrrd8n(int  l)
 { 
-#ifndef HEXAGON
-  itoa ( l / minmalq, strrstring, 10);
- strcat ( strrstring, "." );
- char         s2[50];
- itoa ( (l % minmalq) * 10 / minmalq , s2, 10);
- strcat ( strrstring, s2 );
-#else
  itoa ( (l + minmalq/2) / minmalq, strrstring, 10);
-#endif
+
  return strrstring;
 } 
 

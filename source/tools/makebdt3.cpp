@@ -140,10 +140,6 @@ asfasf         {
                  for ( int j = 0; j < 8; j++ ) {
                     if ( bdt->weather[i]->picture[j] && bdt->weather[i]->bi_picture[j] == -1 ) {
                        mainstream.writedata ( ( char*) bdt->weather[i]->picture[j], fieldsize );
-                      #ifndef HEXAGON
-                       if ( bdt->weather[i]->direcpict[j] )
-                          mainstream.writedata ( ( char*) bdt->weather[i]->direcpict[j], fielddirecpictsize );
-                      #endif
                     }
                  }
                  if ( bdt->weather[i]->quickview )

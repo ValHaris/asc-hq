@@ -49,8 +49,10 @@ void read_JPEG_file ( pnstream stream )
 int loadFullscreenImage ( const char* filename )
 {
    try {
+     
       if ( exist ( filename )) {
-         tnfilestream stream ( filename, tnstream::reading );
+	ASCString fname (filename);
+         tnfilestream stream ( fname, tnstream::reading );
          if ( strstr ( filename, ".PCX" ) || strstr ( filename, ".pcx" )) {
             loadpcxxy ( &stream, 0, 0 );
          } else {

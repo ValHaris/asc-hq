@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.80 2001-11-28 14:55:12 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.81 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.80  2001/11/28 14:55:12  mbickel
+//      Fixed: airplane flying out of building has wrong movement left
+//      Fixed: crash in AI
+//
 //     Revision 1.79  2001/11/28 13:03:16  mbickel
 //      Fixed: attack selectable although 0% hit accuracy
 //      Fixed: refuelling not possible if weapon had wrong target height
@@ -529,17 +533,9 @@ int VehicleMovement :: getDistance ( int x, int y )
 }
 
 
-
-
-#ifdef HEXAGON
- int sef_dirnum = 3;
- static const  int          sef_directions[3]  = {0, 1, 5 };
- static const  int          sef_searchorder[6]  = {0, 1, 2, 3, 4, 5 };
-#else
- int sef_dirnum = 5;
- static const  int          sef_directions[5]  = {0, 1, 7, 2, 6};
- static const  int          sef_searchorder[8]  = {0, 2, 4, 6, 1, 3, 5, 7};
-#endif
+int sef_dirnum = 3;
+static const  int          sef_directions[3]  = {0, 1, 5 };
+static const  int          sef_searchorder[6]  = {0, 1, 2, 3, 4, 5 };
 
 
 void VehicleMovement :: searchmove(int         x,
@@ -638,15 +634,9 @@ void VehicleMovement :: searchstart( int x1, int y1, int hgt )
 } 
 
 
-#ifdef HEXAGON
   static const trichtungen  directions[3][3]  = {{{5, 0, 4, 1, 3, 2 }, {0, 1, 5, 2, 4, 3 }, {1, 0, 2, 5, 3, 4 }},
                                                  {{5, 4, 0, 3, 1, 2 }, {0, 1, 2, 3, 4, 5 }, {1, 2, 0, 3, 5, 4 }}, 
                                                  {{4, 3, 5, 2, 0, 1 }, {3, 4, 2, 5, 1, 0 }, {2, 3, 1, 4, 0, 5 }}}; 
-#else
-  static const trichtungen  directions[3][3]  = {{{7, 6, 0, 5, 1, 4, 2, 3}, {0, 1, 7, 2, 6, 3, 5, 4}, {1, 0, 2, 7, 3, 6, 4, 5}},
-                                                 {{6, 7, 5, 0, 4, 1, 3, 2}, {0, 1, 2, 3, 4, 5, 6, 7}, {2, 1, 3, 0, 4, 7, 5, 6}}, 
-                                                 {{5, 6, 4, 7, 3, 0, 2, 1}, {4, 3, 5, 2, 6, 1, 7, 0}, {3, 2, 4, 1, 5, 0, 6, 7}}}; 
-#endif
 
 
  

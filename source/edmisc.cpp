@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.72 2001-11-05 21:31:04 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.73 2001-12-14 10:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.72  2001/11/05 21:31:04  mbickel
+//      Fixed compilation errors
+//      new data version required
+//
 //     Revision 1.71  2001/10/31 18:34:31  mbickel
 //      Some adjustments and fixes for gcc 3.0.2
 //
@@ -988,10 +992,8 @@ void         pdsetup(void)
    pd.addbutton ( "Edit Map ~A~rchival Information", act_editArchivalInformation );
    pd.addbutton ( "seperator",         -1            );
    pd.addbutton ( "~W~rite map to PCX-Fileõctrl+G", act_maptopcx);
-   #ifdef HEXAGON
     pd.addbutton ( "~I~mport BI mapõctrl-i", act_import_bi_map );
     pd.addbutton ( "Insert ~B~I map", act_insert_bi_map );
-   #endif
    #ifdef FREEMAPZOOM
     pd.addbutton ( "seperator", -1 ); 
     pd.addbutton ( "set zoom level", act_setzoom ); 
@@ -1008,9 +1010,7 @@ void         pdsetup(void)
    pd.addbutton ( "~M~ap generatorõG",          act_mapgenerator );
    pd.addbutton ( "Resi~z~e mapõR",             act_resizemap );
    pd.addbutton ( "set global ~w~eatherõctrl-W", act_setactweatherglobal );
-   #ifdef HEXAGON
-    pd.addbutton ( "Sm~o~oth coasts",          act_smoothcoasts );
-   #endif
+   pd.addbutton ( "Sm~o~oth coasts",          act_smoothcoasts );
    pd.addbutton ( "unitset transformation",    act_unitsettransformation );
    pd.addbutton ( "map transformation",        act_transformMap );
 
@@ -3368,11 +3368,7 @@ void tladeraum::redraw ( void )
 
 void         tladeraum::init( char* ttl )
 {
-   #ifdef HEXAGON
-    maxusable = 18;
-   #else
-    maxusable = 27;
-   #endif
+  maxusable = 18;
 
    itemsperline = 8;
 

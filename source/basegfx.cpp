@@ -2,9 +2,14 @@
     \brief Platform indepedant graphic functions. 
 */
 
-//     $Id: basegfx.cpp,v 1.29 2001-09-28 17:43:53 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.30 2001-12-14 10:20:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2001/09/28 17:43:53  mbickel
+//      Fixed bug: wrong graphics with hillside
+//      Fixed bug: crash when vehicle function not found
+//      Updated Helpsystem
+//
 //     Revision 1.28  2001/08/27 21:03:55  mbickel
 //      Terraintype graphics can now be mounted from any number of PNG files
 //      Several AI improvements
@@ -698,21 +703,7 @@ int getpixel(int x1, int y1)
               ( pc[ agmp->greenfieldposition/8 ] << 8 ) + 
               ( pc[ agmp->bluefieldposition/8 ] << 16 );
       } else {
-        #ifndef _NOASM_
-        /*
-         int pos = x1 * agmp->byteperpix + y1 * agmp->scanlinelength;
-         int page = pos >> 16;
-         if ( hgmp->actsetpage != page )
-            setvirtualpagepos ( page );
-
-         char* pc = (char*) ( agmp->linearaddress + (pos & 0xffff) );
-         return pc[ agmp->redfieldposition/8 ] + 
-              ( pc[ agmp->greenfieldposition/8 ] << 8 ) + 
-              ( pc[ agmp->bluefieldposition/8 ] << 16 );
-        */
-        #endif
         return -1;
-        
       }
    }
 }
@@ -1326,17 +1317,16 @@ void copySurface2screen( int x1, int y1, int x2, int y2 )
 
 
 
-#ifdef _NOASM_
 
- tgraphmodeparameters activegraphmodeparameters;
- tgraphmodeparameters hardwaregraphmodeparameters;
+tgraphmodeparameters activegraphmodeparameters;
+tgraphmodeparameters hardwaregraphmodeparameters;
  
- int dpmscapabilities;
- int actdpmsmode;
+int dpmscapabilities;
+int actdpmsmode;
  
- dacpalette256  activepalette;
- int       palette16[256][4];
- void*     xlatbuffer;
+dacpalette256  activepalette;
+int       palette16[256][4];
+void*     xlatbuffer;
  // dacpalette256  *activepalette256;
 
 
@@ -2089,7 +2079,4 @@ void* convertSurface ( SDLmm::Surface& s )
   return buf;
 }
 
-
-
-#endif
 
