@@ -1,0 +1,299 @@
+Dies ist eine Sammlung von emails, die sich auf  das Spielen von ASC beziehen
+(zum Thema Basteln hab' ich noch viel mehr...)
+Die Mails sind alle von mir, und damit der unzitierte Text. Der
+zitierte Text stammt von anderen Leuten und ist folglich keine
+definitive Aussage zu ASC, sondern Fragen, teilweise auch Mutmaáungen
+:-)
+
+Anmerkungen, die ich nachtr„glich hinzugefgt habe, beginnen mit !!!
+
+Noch ein Anmerkung zu ASC: Groáe Teile des Forschungssystem von ASC ist
+zur Zeit auáer Betrieb und mssten vor Verwendung komplett berarbeitet
+werden. Also effektiv bietet ASC zur Zeit keine Forschung an.
+
+Martin Bickel
+
+=======================================================================
+
+>>e) Fuel Consumption bei Wind: Wenn man ein Flugzeug nicht bewegt, verbraucht es ja so viel Fuel, wie die Windst„rke zur Zeit ist. Wie sieht das aus, wenn man das Flugzeug ein Feld bewegt hat? Verliert das Flugzeug dann die Differenz zwischen "Winddistanz" und Flugbewegung? Oder wird dann kein weiterer Fuel am Rundenende abgezogen? (sprich: sollte ein Flugzeug nicht jede Runde mindestens so viel Fuel verbrauchen wie die Windgeschwindigkeit stark ist?)
+>
+>Doch, tut es. Aber wenn Du das Flugzeug bewegst, wird ja der Wind
+>bereits bercksichtigt, wenn ausgerechnet wird, welche Felder berhaupt
+>erreichbar sind. Deshalb sind das zwei getrennte Berechnungen. Einmal
+>eben eine neue Entfernungsberechnung fr die Strecke zwischen zwei
+>Feldern, und zum anderen eben beim Rundenwechsel, wenn das Flugzeug
+>nicht bewegt wurde.
+>Meine šberlegung war die folgende:
+>a) Windspeed 6,5 Felder - keine Flugbewegung. Daraus folgt: es werden 6,5 Felder Fuel abgezogen (so ist es im Moment ja).
+>b) Winspeed 6,5 Felder - Flugzeugbewegung 3 Felder in Windrichtung. Daraus folgt: 3,5 Restfelder die das Flugzeug die Position halten muss. Soviel Fuel wird am Rundenende abgezogen (ist das so?)
+
+So „hnlich. Angenommen, das Flugzeug kann bei Windstelle 12 Felder
+fahren. Dann kann es in Windrichtung bei Wind 18.5 Felder fahren. Wenn
+es nur 3 Felder f„hrt, verbraucht es nur 16% seines Movements. Also
+werden am Rundenende noch 84% von 6,5 Feldern, also 5.4 Felder Fuel
+abgezogen.
+
+>c) Windspeed 6,5 Felder - Flugbewegung 8 Felder. Daraus folgt, dass keine Restfelder mehr sind. Kein weiterer Fuel wird am Ende der Runde abgezogen (so ist es im Moment ja).
+>Sprich: was ich wissen wollte, ob b) auch so gegeben ist? Wenn nein, w„re es eine logische Idee?
+
+Also ich halte meine obige šberlegung fr recht optimal.
+
+----- 8< ----  8< -----  8< ----  8< -----
+
+Du hattest im Canyon-Spiel nach dem Klemmen gefragt. Es k”nnen
+ausschlieálich Einheiten klemmen, die nocht  nicht angegriffen haben.
+Das erfordert ein geschicktes Timing der Angriffe, wenn man mehrere
+nahe beeinanderstehende Einheiten angreift. 
+
+----- 8< ----  8< -----  8< ----  8< -----
+!!!Die Frage nach dem Gentleman-Game bzw. irgendwelchen Savegame-Beschr„nkungen ist schon fast eine FAQ.
+
+>Ich weiss nicht ob ich dir folgende šberlegungen schon mal gemailt hatte... . Mir ist so, als ob ich das schon mal getan habe... . Nun, worum geht's:
+>
+>Bei der ganzen Diskussion um "Gentleman Games" bei BI3 wirft sich die Frage auf, wie sich solche Dinge bei ASC auswirken (sprich: probieren bis die Balken biegen). Eine M”glichkeit so etwas auszuschliessen (zumindest bei Non-EMail-Games) ist das st„ndige aktualisieren der Savegame-Datei nach jedem einzelnen Zug. Ist so etwas bei ASC m”glich? Kann man das beim Spielstart als Option anw„hlen? F„nde ich toll... .
+
+Und dann schaltest Du, w„hrend ASC im Hintergrund l„uft, zu Windows und
+legst eine Sicherheitskopie des Savegames an....
+Es KANN keine Savegame-beschr„nkungen geben, zumindest solange das
+Spiel lokal l„uft. Die einzige M”glichkeit, die meines Wissens
+existiert, ist es, ASC auf einem Server im Internet laufen zu haben, an
+den der Benutzer nicht rankommt. Der Benutzer hat dann nur einen
+Client, der lediglich das Spiel anzeigt und die Befehle entgegennimmt.
+
+----- 8< ----  8< -----  8< ----  8< -----
+
+!!! und hier noch mal ausfhrlich
+
+>(diskutierbare) Regeln fr die Multi-Masters:
+>
+>1. Spielmodus: "Gentleman Game" (Experte, Normal oder Training m”glich)
+[...]
+> Das Gentlement Game beschr„nkt sich in ASC auf das Wiedereinladen, was sich technisch sogar noch weiter einschr„nken l„át.
+
+
+Das neuladen ist ein prinzipielles Problem, das sich nicht l”sen l„át.
+Man kann den Arbeitsaufwand steigern, z.B. indem man die Save-Funktion
+deaktiviert, so daá der Spieler immer vom Rundenbeginn beginnen muá.
+Aber verhindern l„sst sich Ausspionieren nicht.
+
+Deshalb ist meine Meinung dazu : Wenn man's nicht verhindern kann, dann
+legalisiert man es eben. Das Ausspionieren ist in ASC sowieso weniger
+wirkungsvoll, da man eine Einheit ganz normal mehrmals in einer Runde
+bewegen kann, solange sie noch Bewegungspunkte hat. Man kann also zwei
+Felder vorfahren, schauen, noch ein Feld vorfahren, wieder schauen, ein
+Feld zur Seite fahren, nochmal schauen, und wieder zurckfahren. Mit
+dem neu-laden kommt man halt nur ein paar Felder weiter nach vorne.
+Wenn man nun als Spieler verhindern will, daá der Gegner einen auf
+diese Weise ausspioniert, dann baut man eben ein paar St”rfahrzeuge.
+Das ist meiner Meinung nach die wirkungsvollste Methode, um
+Ausspionieren zu verhindern. Auáerdem gibt es noch das Reaction-fire.
+
+Oder man kann mit den neusten ASC-Version auch alternativ die ganze
+Karte von vornherein aufdecken. Dann sieht man sowieso alles. Ich
+selber finde diesen Modus nicht sonderlich reizvoll, aber ich habe ihn
+auf Wunsch von mehreren Spielern eingebaut.
+
+----- 8< ----  8< -----  8< ----  8< -----
+
+!!! und nochmal das Thema
+!!! eine UNDO FUnktion gibt es brigens bisher nicht
+
+>c) Was wrdest du von einer Undo-Funktion halten. Dem Kollegen ist es n„mlich 
+>ein paar mal passiert, dass er einen Zug gemacht hat, den er so berhaupt 
+>nicht machen wollte (einfach weil er die Bedienung noch nicht so genau 
+>kennt). Und damit man nicht st„ndig neu laden muss, w„re so etwas natrlich 
+>brauchbar.
+>Ist natrlich in einer Kampfsimulation eher untypisch (ich kenne so eine 
+>Funktion nur aus Panzergeneral). Dort kann man einen Undo durchfhren, 
+>solange kein neuer Gegner aufgekl„rt wurde, bzw. solange die Einheit keinen 
+>Angriff durchgefhrt hat. Ich denke, dies w„re auch die einzigst sinnvolle 
+>Undo-Funktion. Oder, man msste eine Option fr die Spiele einfhren: Undo 
+>erlaubt Ja/Nein. Und dann kann pro Spiel zu Beginn festgelegt werden, ob Undo 
+>erlaubt ist, oder nicht.
+
+Undo zu verbieten halte ich nicht fr sinnvoll, denn dann máte man
+auch Save/Load game verbieten. Gegen das Ausprobieren mehrerer
+Varianten kann man NICHTS unternehmen, da man ja einfach das
+Turnierfile neu laden kann (ich rede brigens gerade von
+email-Spielen). Von daher: wenn Undo, dann immer Undo. Sonst artet das
+nur wieder in Arbeit fr den Spieler aus, und ich finde es nicht
+sinnvoll die Hrde ins User-Interface zu verschieben (was ja einige
+Spiele machen... bei Civ1 muáte man immer das ganze Programm beenden,
+um wieder aus dem Hauptmen heraus einen Spielstand laden zu k”nnen).
+
+----- 8< ----  8< -----  8< ----  8< -----
+
+!!! Das ist eine sehr gut versteckte, aber wichtige Funktion. Die msste in der Doku ziemlich betont werden. 'Muá mal sehen, ob man das im Dialog selber auch noch deutlicher machen kann.
+
+>Des weiteren suche im im Spiel (nicht im Editor) nach einer 
+>M”glichkeit meinem Alliierten die "Sicht"-Allianz anzubieten. šber 
+>das Icon wie im Editor scheint es nicht zu gehen, oder mache ich 
+>was falsch?
+
+Die Funktion ist gut versteckt: Klick auf 'NONE' 
+
+----- 8< ----  8< -----  8< ----  8< -----
+
+>Ich schicke hier einen Spielstand, in dem ich meine Einheiten nicht richtig
+>ausladen kann. Merw rdigerweise, konnte ich Technos ausladen, kurze zeit
+>sp ter geht das dann nicht mehr. Einige Einheiten lassen sich  berhaupt
+>nicht ausladen, obwohl ich dort eine Br cke gebaut habe.
+
+Einheiten k”nnen nur ber Transporter fahren, wenn der Transporter die
+Einheit auch einladen kann. Wenn der vordere Transporter voll ist,
+kannst Du aus dem hinteren Transporter keine Einheit mehr ausladen,
+weil die ja ber den vorderen Transp. fahren muá. 
+
+!!! Es gibt hier auch noch einen Bug, den ich leider nicht ohne weiteres beseitigen kann.
+!!! In einem Transportschiff befinden sich einheiten, die ausgeladen werden sollen. Neben dem Transportschiff steht ein anderes Transportschiff sowie auf dem angrenzenden Land ein Transportfahrzeug. Die Einheiten k”nnen nun nur in das Transportschiff geladen werden, nicht in das Fahrzeug. F„hrt man das zweite Transportschiff weg, k”nnen die Einheiten pl”tzlich in das Fahrzeug.
+!!! Der Grund ist der, daá die Einheiten fr das Fahrzeug auf der H”henstufe fahrend ausgeladen werden mssen, fr das schiff auf H”henstufe schwimmend. W„hrend eines Aufrufs der Bewegungsfunktion kann die Einheit beim Start aber nur auf einer H”henstufe sein, die ist anfangs dann halt schwimmend.
+
+----- 8< ----  8< -----  8< ----  8< -----
+
+>- beim Reparieren von Einheiten scheinen nicht immer die 
+>Erfahrungspunkte mit zu verschwinden (oder ich verstehe die Regel 
+>nicht; alle 20% ein Punkt, richtig???)
+
+Immer an den 20% Grenzen, ja.
+
+----- 8< ----  8< -----  8< ----  8< -----
+
+>Wie ist eigentlich die generelle Planung gedacht fr Flugzeuge; 
+>ber welches bergige Terrain die drber k”nnen?
+>Es gibt ja die zwei Bits
+>- Mountain
+>- High Mountain
+>
+>Man kann doch generell festlegen, dass Flugzeuge, welche nur im 
+>Tiefflug fliegen k”nnen weder ber Mountain, noch ber High 
+>Mountain drber k”nnen.
+>Flugzeuge, die bis zur mittleren Ebene aufsteigen k”nnen k”nnen 
+>ber Mountain drber, und Flugzeuge die bis auf High-Level-Flight 
+>fliegen k”nnen, k”nnen auch ber High Mointain drber.
+>
+>Die Frage ist, ob wir dies dann in den Einheiten definieren 
+>mssen/sollen, oder ob dies generell von ASC aus abzufragen ist, 
+>da diese Bits ja bei fliegenden Flugzeugen sowieso speziell 
+>abgefragt werden, oder?
+
+Das ist in ASC generell festgelegt. Nur die H”henstufen schwimmend und
+fahrend werten die Einheitenbits aus.
+
+Aber ich sehe eigentlich keine Notwendigkeit, das bisherige System zu
+„ndern. Ob die H”henstufe die H”he ber Meeresspiegel oder ber Boden
+beschreibt ist ja nicht festgelegt. 
+
+----- 8< ----  8< -----  8< ----  8< -----
+
+!!! der >> Teil ist von mir
+
+>> Zu den Ubooten:
+>> Uboote sollten bei FrozenWater (=geschlossener Eisdecke) nat rlich
+>> NICHT aufgetaucht fahren können. Im untergetauchten Zustand werden die
+>> Befahrbar-Bits nicht ausgewertet, sondern je nach Höhenstufe tiefes
+>> Wasser bzw. sehr tiefes Wasser (oder wie immer das hei t) benötigt.
+>> Von daher: Zugefrorenes Wasser muss trotzdem IMMER die Wasser-Bits
+>> gesetzt haben, f r Eisbrecher und Uboote.
+>Sie sollten auch nicht auftauchen können! Kannst du das machen? Bzw. wenn sie 
+>festgefrohren sind, sollten sie auch nicht abtauchen können. Der Rest ist ja 
+>Bit-Def in den Units. Und die WasserBits bleiben! Thats no problem.
+
+Es ist so: sie k”nnen nicht aufgetaucht fahren, sie k”nnen nicht
+auftauchen, aber sie k”nnen abtauchen. Das find ich auch OK.
+
+----- 8< ----  8< -----  8< ----  8< -----
+
+>Dann 'ne Frage: die Werte "expected damage" in der Textzeile, wenn man einen Angriff durchfhren will: was wird da in die Berechnung eingerechnet und was nicht? Ich denke doch mal, dass die Werte nicht den wirklichen Schaden repr„sentieren, oder?
+
+Doch, das ist er exakte Ausgang des Angriffs, mit ALLEN Faktoren. 
+Ich finde es nicht sinnvoll, nur eine grobe Absch„tzung zu liefern,
+weil man dann einfach abspeichern kann, den Angriff durchfhren und
+evt. wieder laden kann. Dann weiá man's auch. Nur daá es tierisch
+umst„ndlich ist. Und ich weiá aus eigener Erfahrung, daá man es, wenn
+es drauf ankommt, dann eben doch so macht.
+Auf die Weise habe ich die Lust an Warlords verloren. Ich hab immer
+”fter abgespeichert, weil die K„mpfe zum teil wirklich unfair
+ausgingen, bis ich nachher nur noch mit laden / speichere besch„ftigt
+war, und das hat kein Spaá mehr gemacht. Und wenn ich es nicht gemacht
+habe, hab' ich mich immer frchterlich drber ge„rgert, wenn gerade mal
+wieder eine Fledermaus meinen Drachen abgemetzelt hat.
+
+----- 8< ----  8< -----  8< ----  8< -----
+
+ich hatte gerade vergessen zu schreiben, daá ich auch den
+Sichtberechnungsalgorithmus korrigiert habe. Der neue ist um die H„lfte
+langsamer und die L”cher treten immer noch auf ... :-|
+Der ursprngliche war total fehlerhaft. Merkwrdig, daá es weder mir
+noch sonst jemandem aufgefallen ist. Der neue arbeitet korrekt
+(hoffentlich...). Diese L”cher entstehen durch die šberlagerung von
+zwei verschieden St”rungssystemen: dem von Einheiten und dem Boden /
+Objekten. Ich k”nnte jetzt das System erkl„ren und genau begrnden,
+warum das so ist, aber ich hab da jetzt keine Lust zu. Ist n„mlich
+nicht ganz einfach...
+
+!!! Zusammenfassung: Das Auftreten von einzelnen sichtbaren Felder mitten im unaufgekl„rten Bereich ist ein Feature und kein Bug !
+
+----- 8< ----  8< -----  8< ----  8< -----
+
+>als Parameter fr Karten sollte einstellbar sein, ob man Geb„ude 
+>zerst”ren kann.
+
+gibt's schon l„ngst: Nennt sich "building armor faktor". Damit wird
+zwar nicht die angreifbarkeit ansich abgeschaltet, aber wenn man den
+auf 1000 oder so setzt, beiát sich der Angreifer die Z„hne aus !
+
+
+----- 8< ----  8< -----  8< ----  8< -----
+
+[Entlangfahren an gegnerischen Einheiten , die die eigene Einheit angreifen 
+k”nnen, kostet Movement.]
+
+Martin antwortete:
+>>>> Das ist doch das ganz normale "am Gegner entlangfahren kostet
+>>>> Movementpunkte". Ich hatte mich bei Deiner ersten Mail etwas gewundert,
+>>>> daá Du berhaupt unter einem Sperber durch kontest, aber der hatte ja
+>>>> keine Munition. Wohl aber die auf den Nachbarfeldern.
+
+>>>Frage an Martin: ist das irgendwo dokumentiert? Ich wuáte bisher davon
+>>>n„mlich nix.
+>> Das ist doch dieses Blocken, daá es auch schon in BI1 - BI3 gab und das
+>> Fiedel fr viel zu schwach hielt....
+>Aha. Also Blocken bei BI ist laut BI-Handbuch etwas anderes. Es stimmt, daá
+>manche Einheiten in BI verhindert haben, daá man auf deren benachbarte Felder
+>hinziehen kann - aber das dadurch Bewegungspunkte verschwinden... ?!? Aber
+>in BI konnte man auch nicht unter oder ber einer Einheit herfahren (manche
+>Flieger schon, aber auch nicht immer). Das hat dann aber keine Bewegungspunkte
+>gekostet/oder man merkte es nicht, weil man sich ja kein zweites mal Bewegen
+>konnte.).
+>
+>Hmmm. Trotzdem wrde ich gerne wissen wie ihr dieses Verhalten findet, weil
+>ich es nicht so prickelnd toll finde, da es das Spiel "unberechenbarer"
+>macht. Vielleicht muá ich mich auch erst an den Gedanken gew”hnen. Vielleicht muá
+>ich auch genau verstehen WIE die Berechnung dabei erfolgt damit ich es klarer
+>Einsch„tzen kann. Also: Martin, bitte, kannst du mir eine kurze Berechnung
+>zeigen wieviel Bewegungspunkte man verliert wenn man "ber" eine gegnerische
+>Einheit hinwegf„hrt? Das w„re nett ;-)
+
+šber eine Einheit, die Dich angreifen kann, kannst Du nicht fahren.
+Deshalb kein movemalus. Fr Nachbareinheiten: movemalus siehe Bild.
+Ich hab' ehrlicherweise gedacht, es g„b' ganz andere Werte. N„mlich
+vorallem dort hoch, wo jetzt die 3 steht.
+Die Werte lassen sich problemlos „ndern, wenn Ihr
+verbesserungsvorschl„ge macht, gebt die in diesem Format an: { 8, 6, 3,
+0, 3, 6 }
+
+
+Siehe hierzu Bild MOVEMALUS.PNG
+
+----- 8< ----  8< -----  8< ----  8< -----
+
+!!! selbes Thema:
+
+>Auch das Blocken scheint nicht zu funktionieren - selbst eine sehr
+>eingeschlossene Einheit hat noch den selben Bewegungsradius - jedenfalls
+>nicht wesentlich eingeschr„nkt in manchen F„llen.....
+
+Also, des R„tsels L”sung: Bei der Fahrt von einem Feld zu einem anderen
+wird immer nur das Zielfeld auf Blocken untersucht, nicht das
+Startfeld.
+
