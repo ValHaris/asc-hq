@@ -830,11 +830,13 @@ bool  Vehicle :: vehicleconstructable ( pvehicletype tnk, int x, int y )
    if ( !tnk->techDependency.available ( gamemap->player[getOwner()].research))
       return 0;
 
-   if ( tnk->terrainaccess.accessible ( gamemap->getField(x,y)->bdt ) > 0 || height >= chtieffliegend)
+   if ( terrainaccessible2( gamemap->getField(x,y), tnk->terrainaccess, height ) > 0 )
+//   tnk->terrainaccess.accessible ( gamemap->getField(x,y)->bdt ) > 0 || height >= chtieffliegend)
       if ( tnk->productionCost.material <= tank.material &&
            tnk->productionCost.energy   <= tank.fuel  )
            if ( beeline (x, y, xpos, ypos) <= maxmalq )
-              if ( getheightdelta( log2(tnk->height), log2(height) ) == 0 )
+//              if ( getheightdelta( log2(tnk->height), log2(height) ) == 0 )
+                if( (tnk->height & height ) || (( tnk->height & (chfahrend | chschwimmend)) && (height & (chfahrend | chschwimmend))))
                  return 1;
 
 

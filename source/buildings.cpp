@@ -881,8 +881,8 @@ bool Building::ResourceSink :: finished()
 {
    for ( int r = 0; r < 3; r++ )
       if ( toGet.resource(r) > 0 )
-         return true;
-   return false;
+         return false;
+   return true;
 }
 
 Resources Building::ResourceSink :: getPlus()

@@ -120,6 +120,32 @@ int          terrainaccessible2 ( const pfield        field, const Vehicle*     
    }
 }
 
+int          terrainaccessible2 ( const pfield        field, const TerrainAccess& terrainAccess, int uheight )
+{
+   if ( uheight >= chtieffliegend)
+      return 2;
+   else {
+        if ( uheight == chtiefgetaucht )
+           if ( (field->bdt & getTerrainBitType(cbwater3) ).any() )
+              return 2;
+           else
+              return -1;
+        else
+           if ( uheight == chgetaucht )
+              if ( (field->bdt & ( getTerrainBitType(cbwater3) | getTerrainBitType(cbwater2 )) ).any() )
+                 return 2;
+              else
+                 return -2;
+           else {
+              if ( terrainAccess.accessible ( field->bdt ) > 0 )
+                 return 2;
+              else
+                 return -3;
+            }
+   }
+}
+
+
 
 int         fieldAccessible( const pfield        field,
                             const pvehicle     vehicle,

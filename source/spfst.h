@@ -204,6 +204,18 @@ extern int          terrainaccessible (  const pfield field, const Vehicle* vehi
 extern int          terrainaccessible2 ( const pfield        field, const Vehicle* vehicle, int uheight = -1 );
 
 
+/** Checks if the field can be accessed
+    \returns 0=unit cannot access this field;
+             1=unit can move across this field but cannot keep standing there;
+             2=unit can move and stand there;
+             < 0 unit cannot access this field, because of:
+                  -1   very deep water required to submerge deep
+                  -2   deep water required to submerge
+                  -3   unit cannot drive onto terrain
+*/
+int          terrainaccessible2 ( const pfield        field, const TerrainAccess& terrainAccess, int uheight );
+
+
 /*!
   \brief calculate the height difference between two levels of height
 
