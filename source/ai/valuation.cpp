@@ -380,6 +380,7 @@ void AI :: calculateFieldInformation ( void )
                         wr.run ( fld->vehicle, xp, yp, singleUnitThreat );
                      }
                   }
+                  tus.restore();
                } else
                   wr.run ( fld->vehicle, x, y, singleUnitThreat );
 

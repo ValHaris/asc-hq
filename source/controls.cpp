@@ -497,7 +497,7 @@ int          tputmine::initpm(  char mt, const pvehicle eht )
       return -119;
    }
    if (mienenlegen || mienenraeumen)
-      initsearch( MapCoordinate( getxpos(),getypos()), weapon->mindistance / maxmalq, weapon->maxdistance / maxmalq );
+      initsearch( MapCoordinate( getxpos(),getypos()), int(ceil(float(weapon->mindistance) / maxmalq)), weapon->maxdistance / maxmalq );
    return 0;
 }
 

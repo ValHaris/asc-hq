@@ -385,6 +385,12 @@ void Vehicletype :: read ( tnstream& stream )
          weapons.weapon[j].maxstrength = stream.readInt();
          weapons.weapon[j].minstrength = stream.readInt();
 
+         /*
+         if ( weapons.weapon[j].getScalarWeaponType() == cwminen )
+            if ( weapons.weapon[j].mindistance < 8 )
+               warning ( ASCString("unit with id ") + strrr ( id ) + " has invalid mine weapon range ");
+         */
+
          for ( int k = 0; k < 13; k++ )
             weapons.weapon[j].efficiency[k] = stream.readInt();
 

@@ -263,12 +263,18 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
    actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 
+   int result = 0;
+
    if ( vehicle ) {
 
       int newMovement = orgMovement - pos->dist;
 
-      if ( vehicle->typ->movement[log2(orgHeight)] )
-         vehicle->setMovement ( int(floor(vehicle->maxMovement() * float(newMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5)) );
+      if ( vehicle->typ->movement[log2(orgHeight)] ) {
+         int nm = int(floor(vehicle->maxMovement() * float(newMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5));
+//         if ( nm < 0 )
+//            result = -1;
+         vehicle->setMovement ( nm );
+      }
 
 
       vehicle->tank.fuel -= fueldist * vehicle->typ->fuelConsumption / maxmalq;
@@ -321,7 +327,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
       else
          mapDisplay->displayPosition ( pos->x, pos->y );
    }
-   return 0;
+   return result;
 }
 
 
@@ -494,6 +500,8 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
                }
          veh->setNewHeight( height );
       }
+      if ( height == -2 )
+         h = -1;
 
       bool heightChange = true; //  = h != -1;
       if ( capabilities & DisableHeightChange )

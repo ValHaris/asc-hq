@@ -876,9 +876,10 @@ void trunreplay :: execnextreplaymove ( void )
                         pvehicle eht = actmap->getUnit ( x1, y1, nwid );
                         if ( eht ) {
                            ReplayMapDisplay rmd( &defaultMapDisplay );
-                           BaseVehicleMovement vm ( vat_move, NULL, &rmd );
+                           VehicleMovement vm ( &rmd );
                            int t = ticker;
-                           vm.execute ( eht, x2, y2, 0, height, -1 );
+                           vm.execute ( eht, x2, y2, 0, -2, 0 );
+                           vm.execute ( eht, x2, y2, 2, height, -1 );
                            wait( MapCoordinate(x1,y1), MapCoordinate(x2,y2), t );
                            vm.execute ( NULL, x2, y2, 3, height, noInterrupt );
 
@@ -1058,28 +1059,34 @@ void trunreplay :: execnextreplaymove ( void )
                               displayActionCursor ( x, y );
 
                               Resources cost;
-                              
+                              int movecost;
+
                               if ( actaction == rpl_remobj || actaction == rpl_remobj2 ) {
                                  cost = obj->removecost;
                                  fld->removeobject ( obj );
+                                 movecost = obj->build_movecost;
                               } else {
                                  cost = obj->buildcost;
                                  fld->addobject ( obj );
+                                 movecost = obj->remove_movecost;
                               }
-                             
+
                               if ( unit > 0 ) {
                                  Vehicle* veh = actmap->getUnit(unit);
                                  if ( veh ) {
                                     Resources res2 =  static_cast<ContainerBase*>(veh)->getResource( cost, 0, 1  );
+                                    if ( veh->getMovement() < movecost )
+                                       error("not enough movement to construct/remove object !");
+                                    veh->decreaseMovement( movecost );
                                     for ( int r = 0; r < 3; r++ )
                                        if ( res2.resource(r) < cost.resource(r)  && cost.resource(r) > 0 )
                                           error("Resource mismatch: not enough resources to construct/remove object !");
-                                       
+
 
                                  } else
                                     error("replay inconsistency:\nCannot find Unit to build/remove Object !");
                               }
-                             
+
                               if ( obj->basicjamming_plus || obj->basicjamming_abs != -1 || obj->viewbonus_plus || obj->viewbonus_abs != -1 )
                                  computeview( actmap );
                               displaymap();
@@ -1183,8 +1190,11 @@ void trunreplay :: execnextreplaymove ( void )
                                        if ( ff <= 0 )
                                           ff = 100;
 
-                                       veh->getResource( bld->productionCost.material * mf / 100, 1, 0 );
-                                       veh->getResource( bld->productionCost.fuel * ff / 100 , 2, 0 );
+                                       Resources res ( 0, bld->productionCost.material * mf / 100, bld->productionCost.fuel * ff / 100 );
+                                       Resources got = static_cast<ContainerBase*>(veh)->getResource( res, 0 );
+                                       if ( got < res )
+                                          error("severe replay inconsistency:\nnot enough resources to build/remove building !");
+
                                      } else
                                         error("severe replay inconsistency:\nCannot find vehicle to build/remove building !");
                                   }

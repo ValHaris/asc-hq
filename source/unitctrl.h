@@ -1,6 +1,12 @@
-//     $Id: unitctrl.h,v 1.35 2004-03-27 21:48:15 mbickel Exp $
+//     $Id: unitctrl.h,v 1.36 2004-08-01 20:13:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2004/03/27 21:48:15  mbickel
+//      Added function ViewPipeNet to ASC
+//      Fixed: trigger specificunitenterespoly not working for fields with buildings
+//      fixed: default map title was asc000 instead of asc001
+//      Speedup for resource transfer operations
+//
 //     Revision 1.34  2004/01/16 15:33:48  mbickel
 //     Completely rewritten game event system
 //     TPWM-decoding-Patch
@@ -343,10 +349,11 @@ class VehicleMovement : public BaseVehicleMovement {
 
 /* VehicleMovement:
  *
- *   Step 0:   execute ( vehicle, -1, -1, step = 0 , height, startheight );
+ *   Step 0:   execute ( vehicle, -1, -1, step = 0 , height, capabilities );
  *                 height is usually -1, which means the aircraft will move on the same level of height it currently has
- *                        But there are situations like starting aircraft from carriers where it has to be set to the height 
+ *                        But there are situations like starting aircraft from carriers where it has to be set to the height
  *                        the aircraft should move on after start. Don't use this height for regular height changing!
+ *                        If it is -2 then return fields on all levels of height
  *
  *             the fields that are reachable will be stored in "reachableFields". "reachableFieldsIndirect" contains fields
  *                 the unit could move to if the field was empty
