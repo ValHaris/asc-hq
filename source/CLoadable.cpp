@@ -36,7 +36,7 @@ CLoadableGameOptions::CLoadableGameOptions(CGameOptions* pOptions)
    add(new IntProperty("SoundMuted"	   						,&_pOptions->sound_mute));
    add(new IntProperty("SoundOff"   							,&_pOptions->sound_off));
    add(new IntProperty("FastMove"								,&_pOptions->fastmove,3));
-   add(new IntProperty("VisibilityCalculationAlgorithm"	,&_pOptions->visibility_calc_algo));
+   add(new IntProperty("HeightChangeMovement"	         ,&_pOptions->heightChangeMovement));
    add(new IntProperty("MovementSpeed"							,&_pOptions->movespeed));
    add(new IntProperty("EndTurnPrompt"							,&_pOptions->endturnquestion));
    add(new IntProperty("SmallMapVisible"						,&_pOptions->smallmapactive));

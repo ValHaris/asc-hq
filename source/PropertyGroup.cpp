@@ -105,8 +105,10 @@ bool	PropertyGroup::Load(std::istream& is)
 
       if ( p )
          p->setValueString(pszValue);
+         /*
       else
          warning (ASCString("PropertyGroup::Load  Property ") + pszName + " not found" );
+         */
    };
    return false;
 }

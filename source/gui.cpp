@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: gui.cpp,v 1.71 2001-11-18 19:31:05 mbickel Exp $
+//     $Id: gui.cpp,v 1.72 2001-11-22 15:08:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.71  2001/11/18 19:31:05  mbickel
+//      Fixed crash when reaction fire kills a unit during height change
+//
 //     Revision 1.70  2001/11/12 18:28:34  mbickel
 //      Fixed graphical glitches when unit moves near border
 //      If max num of mines exceeded, no icon is displayed for placing a new one
@@ -1281,7 +1284,7 @@ void  tnsguiiconascent::exec         ( void )
       new IncreaseVehicleHeight ( &defaultMapDisplay, &pendingVehicleActions );
 
       int res;
-      res = pendingVehicleActions.ascent->execute ( getactfield()->vehicle, -1, -1, 0, getactfield()->vehicle->height << 1, 1 );
+      res = pendingVehicleActions.ascent->execute ( getactfield()->vehicle, -1, -1, 0, getactfield()->vehicle->height << 1, CGameOptions::Instance()->heightChangeMovement );
       if ( res < 0 ) {
          dispmessage2 ( -res, NULL );
          delete pendingVehicleActions.action;
@@ -1394,7 +1397,7 @@ void  tnsguiicondescent::exec         ( void )
       new DecreaseVehicleHeight ( &defaultMapDisplay, &pendingVehicleActions );
 
       int res;
-      res = pendingVehicleActions.descent->execute ( getactfield()->vehicle, -1, -1, 0, getactfield()->vehicle->height >> 1, 1 );
+      res = pendingVehicleActions.descent->execute ( getactfield()->vehicle, -1, -1, 0, getactfield()->vehicle->height >> 1, CGameOptions::Instance()->heightChangeMovement );
       if ( res < 0 ) {
          dispmessage2 ( -res, NULL );
          delete pendingVehicleActions.action;

@@ -42,21 +42,52 @@ class CGameOptions
 	    int getSearchPathNum ( void );
 		
 		int version;
+		
+		//! the number of steps to perform a move: 0 -> 3 step; != 0 -> 2 steps
       int fastmove;
-      int visibility_calc_algo;      // 0 sauber, 1 schnell;
+
+      //! 1/100 sec for a unit to move from one field to the next
       int movespeed;
+
+      //! question "do you want to end your turn"
       int endturnquestion;
+
+      //! either the small map or the wind information is displayed
       int smallmapactive;
+
+      //! are units that cannot move but shoot displayed in gray ?
       int units_gray_after_move;
+
+      //! the zoom of the map display in ASC
       int mapzoom;
+
+      //! the zoom of the map display in the map editor
       int mapzoomeditor;
+
+      //! not used at the moment
       int startupcount;
+
+      //! are fields marked that a unit could move to if there was no other unit standing
       int dontMarkFieldsNotAccessible_movement;
+
+      //! first delay of attack display
       int attackspeed1;
+
+      //! speed of moving bars in attack display
       int attackspeed2;
+
+      //! second delay in attack display
       int attackspeed3;
+
+      //! muted soud can be reactivated during the game
       int sound_mute;
+
+      //! if the sound is off, it can only be reactivated by restarting asc, but doesn't lock the sound device
       int sound_off;
+
+      //! when an airplanes changes its height, should all accessible fields be found from which the height change can be started? May take some time on slower computers
+      int heightChangeMovement;
+
       int runAI;
       int forceWindowedMode;
       int mapeditForceFullscreenMode;

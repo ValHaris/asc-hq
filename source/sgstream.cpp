@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.74 2001-11-05 21:31:04 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.75 2001-11-22 15:08:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.74  2001/11/05 21:31:04  mbickel
+//      Fixed compilation errors
+//      new data version required
+//
 //     Revision 1.73  2001/11/05 21:10:42  mbickel
 //      Updated palette code
 //
@@ -939,7 +943,7 @@ int readgameoptions ( const char* filename )
          int version = stream.readInt ( );
          if ( version == 102 ) {
             CGameOptions::Instance()->fastmove = stream.readInt();
-            CGameOptions::Instance()->visibility_calc_algo = stream.readInt();
+            stream.readInt();
             CGameOptions::Instance()->movespeed = stream.readInt();
             CGameOptions::Instance()->endturnquestion = stream.readInt();
             CGameOptions::Instance()->smallmapactive = stream.readInt();

@@ -59,7 +59,6 @@ void CGameOptions::setDefaults ( void )
    mapeditForceFullscreenMode = 0;
    runAI = 0;
    fastmove	=	1;
-   visibility_calc_algo=0;      // 0 sauber, 1 schnell=0;
    movespeed=20;
    endturnquestion=0;
    smallmapactive=1;
@@ -74,6 +73,7 @@ void CGameOptions::setDefaults ( void )
    sound_off=0;
    sound_mute=0;
    specialForestChaining = 1;
+   heightChangeMovement = 1;
 
    mouse.scrollbutton=0;
    mouse.fieldmarkbutton=2;
@@ -135,7 +135,7 @@ void CGameOptions::setDefaults ( void )
 void CGameOptions::copy ( const CGameOptions& cgo )
 {
    fastmove	             = cgo.fastmove;
-   visibility_calc_algo  = cgo.visibility_calc_algo;
+   heightChangeMovement  = cgo.heightChangeMovement;
    movespeed             = cgo.movespeed;
    endturnquestion       = cgo.endturnquestion;
    smallmapactive        = cgo.smallmapactive;
