@@ -2,9 +2,13 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.41 2001-05-17 14:23:19 mbickel Exp $
+//     $Id: edmain.cpp,v 1.42 2001-05-17 20:10:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2001/05/17 14:23:19  mbickel
+//      Rewrote command line parameters of all programs
+//      Made manpages generation optional
+//
 //     Revision 1.40  2001/05/16 23:21:01  mbickel
 //      The data file is mounted using automake
 //      Added sgml documentation
@@ -741,7 +745,7 @@ int mapeditorMainThread ( const void* _mapname )
    try {
       loaddata();
 
-      if ( mapname )
+      if ( mapname && mapname[0] )
          loadmap ( mapname );
       else
          buildemptymap();

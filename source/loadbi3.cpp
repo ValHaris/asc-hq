@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.44 2001-04-30 11:41:25 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.45 2001-05-17 20:10:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2001/04/30 11:41:25  mbickel
+//      Fixed crash when importing BI maps due to different structure packing
+//
 //     Revision 1.43  2001/02/18 15:37:13  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -577,7 +580,6 @@ pvehicle tloadBImap :: getunit ( int tp, int col )
       pvehicletype vt = getvehicletype ( tp );
       if ( vt ) {
          Vehicle* eht = new Vehicle ( vt, actmap, col );
-         printf ("%d\n", sizeof(Vehicle ));
          eht->fillMagically();
          return eht;
       }

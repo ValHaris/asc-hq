@@ -66,9 +66,9 @@ install_location=
 type=DATA
 [Workspace_1]
 browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/tutorial/index-7.html
-cpp_file=Untitled.cpp
-header_file=/home/martin/asc/configure.in
-openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/configure.in
+cpp_file=/home/martin/asc/source/loadbi3.cpp
+header_file=Untitled.h
+openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/edmain.cpp,/home/martin/asc/source/loadbi3.cpp
 show_outputview=true
 show_treeview=true
 [asc.kdevprj]
