@@ -626,7 +626,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "seperator", -1 );
    addbutton ( "~P~layers + Alliances", ua_setupalliances);
    addbutton ( "transfer ~U~nit control", ua_giveunitaway );
-   addbutton ( "~r~ename unit", ua_renameunit );
+   addbutton ( "~r~ename unit/building", ua_renameunit );
    addbutton ( "~T~ransfer resources", ua_settribute);
    addbutton ( "~C~ancel Research", ua_cancelResearch );
 
@@ -1194,6 +1194,8 @@ void renameUnit()
       pfield fld = getactfield();
       if ( fld && fld->vehicle )
          fld->vehicle->name = editString ( "unit name", fld->vehicle->name );
+      if ( fld && fld->building )
+         fld->building->name = editString ( "building name", fld->building->name );
    }
 }
 
@@ -1765,13 +1767,8 @@ void  mainloop ( void )
                }
                break;
 
-            case ct_f9: execuseraction ( ua_mntnc_morewind );
-               break;
-            case ct_f10: execuseraction ( ua_mntnc_lesswind );
-               break;
-            case ct_f11: execuseraction ( ua_mntnc_rotatewind );
-               break;
-            case ct_f12: {
+            case ct_f11: {
+               //displaymessage(strrr(getactfield()->vehicle->getMovement()),1); 
             }
             break;
                

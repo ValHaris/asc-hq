@@ -2,9 +2,12 @@
     \brief Originally planed to provide history functions for ASC, but was never finished. Long derelicted. 
 */
 
-//     $Id: history.cpp,v 1.3 2001-02-11 11:39:37 mbickel Exp $
+//     $Id: history.cpp,v 1.4 2004-06-23 19:36:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2001/02/11 11:39:37  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.2  1999/11/16 03:41:50  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -525,4 +528,3 @@ END; */
 
 
 
-

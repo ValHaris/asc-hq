@@ -1471,7 +1471,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
 
                  npush( vehicle->height );
 
-                 vehicle->height = dest.getNumericalHeight();
+                 vehicle->height = dest.getBitmappedHeight();
                  if ( attackpossible28(fld->vehicle,vehicle ))
                     movecost += movemalus[d];
                  npop( vehicle->height );
