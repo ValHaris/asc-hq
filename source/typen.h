@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.21 2000-05-22 15:40:37 mbickel Exp $
+//     $Id: typen.h,v 1.22 2000-05-23 20:40:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/05/22 15:40:37  mbickel
+//      Included patches for Win32 version
+//
 //     Revision 1.20  2000/05/07 18:21:22  mbickel
 //      Speed of attack animation can now be specified
 //
@@ -596,7 +599,7 @@ class tvehicle { /*** Bei énderungen unbedingt Save/LoadGame und Konstruktor kor
     Word         dummy;     /*  Laderaum, der momentan gebraucht wird  */
     tvehicle*    loading[32]; 
     unsigned char         experience;    // 0 .. 15 
-    boolean      attacked; 
+    char      attacked; 
     unsigned char         height;       /* BM */   /*  aktuelle Hîhe: z.B. Hochfliegend  */
     unsigned char    movement;     /*  Åbriggebliebene movement fÅr diese Runde  */
     unsigned char         direction;    /*  Blickrichtung  */
@@ -760,7 +763,7 @@ class  tbuilding {
     tthreatvar   threatvalue; 
     int          netcontrol; 
     int      connection; 
-    boolean      visible; 
+    char      visible; 
     pvehicletype  productionbuyable[32];
 
     tresources bi_resourceplus;
@@ -1224,7 +1227,7 @@ class  ttechnology {
 
     tresearchdatachange unitimprovement; 
 
-    boolean      requireevent; 
+    char      requireevent; 
 
     union { 
       ptechnology  requiretechnology[6]; 
@@ -1265,7 +1268,7 @@ struct tcampaign {
     Word         id; 
     word         prevmap;   /*  ID der vorigen Karte  */ 
     unsigned char         player;   /*  Farbenummer des Spielers: 0..7  */ 
-    boolean      directaccess;   /*  Kann die Karte einzeln geladen werden oder nicht ?  */ 
+    char      directaccess;   /*  Kann die Karte einzeln geladen werden oder nicht ?  */ 
     unsigned char         dummy[21];   /*  fÅr zukÅnftige erweiterungen  */ 
 }; 
 
@@ -1352,7 +1355,7 @@ class tmap {
                  
     char         alliances[8][8];
     struct {
-      boolean      existent; 
+      char      existent; 
       pvehicle     firstvehicle; 
       pbuilding    firstbuilding; 
 
@@ -1379,7 +1382,7 @@ class tmap {
 
     int      unitnetworkid; 
 
-    boolean      levelfinished; 
+    char      levelfinished; 
 
     pnetwork     network;
 

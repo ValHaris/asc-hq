@@ -1,6 +1,9 @@
-//     $Id: vesa.cpp,v 1.7 2000-01-07 13:20:07 mbickel Exp $
+//     $Id: vesa.cpp,v 1.8 2000-05-23 20:40:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/01/07 13:20:07  mbickel
+//      DGA fullscreen mode now working
+//
 //     Revision 1.6  2000/01/02 20:23:39  mbickel
 //      Improved keyboard handling in dialog boxes under DOS
 //
@@ -151,7 +154,7 @@ tvesamodeinfo   lastmodecheckvesaparams;
 tvesainfoblock  vesainfo;
 word           *modelist;
 
-boolean         generalparamsread = false;
+char         generalparamsread = false;
 
 int dont_use_linear_framebuffer = 0;
 
@@ -178,7 +181,7 @@ static struct rminfo {
 
 
 
-boolean 
+char 
 getgeneralparameters(void)
 {
 	///////////////////////////
@@ -356,7 +359,7 @@ getgeneralparameters(void)
 }
 
 
-boolean getvesamodeavail(int modenum);
+char getvesamodeavail(int modenum);
 
 
 pavailablemodes 
@@ -394,7 +397,7 @@ searchformode(int x, int y, int col)
 
 
 
-boolean
+char
 getvesamodeavail(int modenum)
 {
 	///////////////////////////
@@ -595,7 +598,7 @@ getvesamodeavail(int modenum)
 #endif
 
 
-boolean
+char
 initsvga(int modenum)
 {
 	if (getvesamodeavail(modenum & 0x3fff)) {

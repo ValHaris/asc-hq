@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.41 2000-05-22 15:40:36 mbickel Exp $
+//     $Id: sg.cpp,v 1.42 2000-05-23 20:40:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2000/05/22 15:40:36  mbickel
+//      Included patches for Win32 version
+//
 //     Revision 1.40  2000/05/18 14:14:48  mbickel
 //      Fixed bug in movemalus calculation for movement
 //      Added "view movement range"
@@ -1758,7 +1761,7 @@ void         showpalette(void)
 
 
 
-boolean      checkinput(char *       s)
+char      checkinput(char *       s)
 { 
    char* d   = s;
    int ss;
@@ -1767,7 +1770,7 @@ boolean      checkinput(char *       s)
    else
      ss = keyinputbuffersize -1;
 
-   boolean b = true;
+   char b = true;
 
    while ( d[1] ) d++;
 
@@ -3244,7 +3247,7 @@ int main(int argc, char *argv[] )
 
         mapborderpainter = &backgroundpict;
 
-        boolean          truecoloravail;
+        char          truecoloravail;
 
         #ifdef logging
         logtofile ( "sg.cpp / main / initmissions ");

@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.28 2000-05-18 14:14:48 mbickel Exp $
+//     $Id: spfst.cpp,v 1.29 2000-05-23 20:40:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/05/18 14:14:48  mbickel
+//      Fixed bug in movemalus calculation for movement
+//      Added "view movement range"
+//
 //     Revision 1.27  2000/05/10 19:15:17  mbickel
 //      Fixed invalid height when trying to change a units height
 //
@@ -244,7 +248,7 @@ int showresources = 0;
   int objecttypenum = 0;
 
 
-   boolean godview, tempsvisible; 
+   char godview, tempsvisible; 
    ffonts schriften; 
    tstreet streets; 
    int lasttick;   /*  fr paintvehicleinfo  */ 
@@ -598,7 +602,7 @@ void         initmap( void )
 
 
 
-boolean   weapexist( const pvehicle     eht)
+char   weapexist( const pvehicle     eht)
 { 
   byte          b;
 
@@ -995,7 +999,7 @@ byte         vehiclegeparkt(pbuilding    eht)
 } 
 
 
-boolean      vehicleplattfahrbar( const pvehicle     vehicle,
+char      vehicleplattfahrbar( const pvehicle     vehicle,
                                   const pfield        field)
 { 
    return false;
@@ -1578,7 +1582,7 @@ int beeline ( const pvehicle a, const pvehicle b )
 }
 
 
-boolean      fieldvisiblenow( const pfield        pe, int player  )
+char      fieldvisiblenow( const pfield        pe, int player  )
 { 
   if ( pe ) { 
       int c = (pe->visible >> ( player * 2)) & 3; 
@@ -2091,7 +2095,7 @@ pattackweap  attackpossible( const pvehicle     angreifer,
 } 
 
 
-boolean      attackpossible2u( const pvehicle     angreifer,
+char      attackpossible2u( const pvehicle     angreifer,
                                const pvehicle     verteidiger, pattackweap atw )
 { 
    int result = false;
@@ -2130,7 +2134,7 @@ boolean      attackpossible2u( const pvehicle     angreifer,
 
 
 
-boolean      attackpossible28( const pvehicle     angreifer,
+char      attackpossible28( const pvehicle     angreifer,
                                const pvehicle     verteidiger, pattackweap atw )
 { 
    int result = false;
@@ -2170,7 +2174,7 @@ boolean      attackpossible28( const pvehicle     angreifer,
 } 
 
 
-boolean      attackpossible2n( const pvehicle     angreifer,
+char      attackpossible2n( const pvehicle     angreifer,
                                const pvehicle     verteidiger, pattackweap atw )
 { 
    int result = false;
@@ -2309,7 +2313,7 @@ int isresourcenetobject ( pobjecttype obj )
 
 void         calculateobject(integer      x,
                               integer      y,
-                              boolean      mof,
+                              char      mof,
                               pobjecttype obj)  /* mof = modify other fields  */        
 { 
   #ifdef HEXAGON
@@ -4708,7 +4712,7 @@ void         displaymap(  )
    activateGraphicSet ( actmap->graphicset );
 
    byte         ms;   /*  mousestatus  */
-   boolean      bb;   /*  cursorstatus   */
+   char      bb;   /*  cursorstatus   */
 
    ms = getmousestatus(); 
    bb = cursor.an;

@@ -1,6 +1,9 @@
-//     $Id: edmisc.cpp,v 1.17 2000-05-10 19:55:49 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.18 2000-05-23 20:40:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/05/10 19:55:49  mbickel
+//      Fixed empty loops when waiting for mouse events
+//
 //     Revision 1.16  2000/05/06 19:57:08  mbickel
 //      Mapeditor/linux is now running
 //
@@ -128,12 +131,12 @@
    selectrec		sr[10];
 
    ppolygon		pfpoly;
-   boolean		tfill,polyfieldmode;
+   char		tfill,polyfieldmode;
    word		fillx1, filly1;
 
    int			i;
    pbuilding		gbde;
-   boolean		mapsaved;
+   char		mapsaved;
    tmycursor		mycursor;
 
    tpolygon_management	polymanage;
@@ -142,7 +145,7 @@
 
 // õS Checkobject
 
-boolean checkobject(pfield pf)
+char checkobject(pfield pf)
 {
    if ( pf->object->objnum > 0 ) return true;
    else return false;
@@ -154,7 +157,7 @@ boolean checkobject(pfield pf)
 
 class   tmousebuttonbox {
            public :
-                 boolean holdbutton; //true : menu only opens if button is held
+                 char holdbutton; //true : menu only opens if button is held
                  int actcode;
                  void init(void);
                  void additem(int code);
@@ -1287,7 +1290,7 @@ void         repaintdisplay(void)
 } 
 
 
-void         k_savemap(boolean saveas)
+void         k_savemap(char saveas)
 { 
 
    #ifdef logging
@@ -1394,7 +1397,7 @@ void         k_loadmap(void)
 
 void         placebuilding(byte               colorr,
                           pbuildingtype   buildingtyp,
-                          boolean            choose)
+                          char            choose)
 
 {     
    #define bx   100
@@ -1747,7 +1750,7 @@ void changepolygon(ppolygon poly)
                byte action;
                char passwort[11], *sptitle;
                int sxsize,sysize;
-               boolean valueflag,random,campaign;
+               char valueflag,random,campaign;
                tcampaign cmpgn;
                pterraintype         tauswahl;
                word auswahlw;
@@ -1761,7 +1764,7 @@ void changepolygon(ppolygon poly)
 void         tnewmap::init(void)
 { 
   word         w;
-  boolean      b;
+  char      b;
 
    tdialogbox::init();
    action = 0;
@@ -1999,7 +2002,7 @@ void         changemapvalues(void)
                int rs,e,m,f,mrs;
                tresources plus,mplus, biplus;
                int col;
-               boolean tvisible;
+               char tvisible;
                char name[260];
                void init(void);
                virtual void run(void);
@@ -2010,7 +2013,7 @@ void         changemapvalues(void)
 
 void         tsel::init(void)
 { word         w; 
-  boolean      b;
+  char      b;
 
    lockmaxproduction = 1;
 
@@ -2530,7 +2533,7 @@ byte        getpolygon(ppolygon *poly) //return Fehlerstatus
                 pvehicle    unit, orgunit;
                 int         w2, heightxs;
               public:
-               // boolean     checkvalue( char id, char* p );
+               // char     checkvalue( char id, char* p );
                 void        init( pvehicle v );
                 void        run( void );
                 void        buttonpressed( char id );
@@ -2679,7 +2682,7 @@ void         tunit::init( pvehicle v )
 } 
 
 /*
-boolean      tunit::checkvalue( char id, void* p)
+char      tunit::checkvalue( char id, void* p)
 { 
    if ( id == 3 ) {
    }

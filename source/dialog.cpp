@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.28 2000-05-22 15:40:34 mbickel Exp $
+//     $Id: dialog.cpp,v 1.29 2000-05-23 20:40:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/05/22 15:40:34  mbickel
+//      Included patches for Win32 version
+//
 //     Revision 1.27  2000/05/10 19:55:45  mbickel
 //      Fixed empty loops when waiting for mouse events
 //
@@ -231,7 +234,7 @@ void         tstatisticarmies ::newknopfdruck(integer      xx1,
                            integer      yy2)
 { 
     char*      p; 
-    boolean      kn; 
+    char      kn; 
     integer      mt; 
     {
         collategraphicoperations cgo ( xx1, yy1, xx2, yy2 );
@@ -2053,7 +2056,7 @@ class   tfileselectsvga : public tdialogbox {
                    public:
                         tfiledata       *files;
                         
-                        boolean         ausgabeaborted;
+                        char         ausgabeaborted;
                         char            searchstring[20];
                         int             searchsize;
                         int             numberoffiles;
@@ -2072,18 +2075,18 @@ class   tfileselectsvga : public tdialogbox {
                         char*           descrip;
                         char            swtch;           /* 1: load        2: save */
                         char*           result;
-                        boolean         sort_name;
-                        boolean         sort_time;
+                        char         sort_name;
+                        char         sort_time;
 
                         void            init( char sw );
                         void            setdata( const char* _wildcard,   char* b, char* description );   // result
                         
                         void            readdirectory ( void );
-                        void            fileausgabe( boolean force , int dispscrollbar);
+                        void            fileausgabe( char force , int dispscrollbar);
                         void            sortentries ( void );
                         virtual void    run ( void );
                         
-                        boolean         speedsearch( char input );
+                        char         speedsearch( char input );
                         void            checkfsf( char lock);   
                         void            displayspeedsearch ( void );
 
@@ -2157,7 +2160,7 @@ void         tfileselectsvga::buttonpressed(byte         id)
       
       case 3:   { 
             collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
-            sort_time = (boolean) !sort_name;
+            sort_time = (char) !sort_name;
             enablebutton(4); 
             sortentries(); 
             fileausgabe(false,1);
@@ -2166,7 +2169,7 @@ void         tfileselectsvga::buttonpressed(byte         id)
       
       case 4:   { 
             collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
-            sort_name = (boolean) !sort_time;
+            sort_name = (char) !sort_time;
             enablebutton(3); 
             sortentries(); 
             fileausgabe(false,1);
@@ -2311,7 +2314,7 @@ void         tfileselectsvga::readdirectory(void)
 
 
 
-void         tfileselectsvga::fileausgabe(boolean     force , int dispscrollbar)
+void         tfileselectsvga::fileausgabe(char     force , int dispscrollbar)
 { 
 
    if (numberoffiles == 0)
@@ -2422,9 +2425,9 @@ void         tfileselectsvga::sortentries(void)
 
 
 
-boolean      tfileselectsvga::speedsearch(char         input)
+char      tfileselectsvga::speedsearch(char         input)
 { 
-    boolean      sps; 
+    char      sps; 
 
 
    searchstring[searchsize] = toupper( input );
@@ -5079,11 +5082,11 @@ class ResizeMap : public tdialogbox {
                         void init ( void );
                         void buttonpressed ( char id );
                         void run ( void );
-                        boolean checkvalue( byte         id, void*      p);
+                        char checkvalue( byte         id, void*      p);
                     };
 
 
-boolean ResizeMap :: checkvalue(byte         id, void*      p)  
+char ResizeMap :: checkvalue(byte         id, void*      p)  
 {
    if ( id >= 3 && id <= 6 ) {
       int* wp = (int*) p;
@@ -5444,7 +5447,7 @@ void choosezoomlevel ( void )
                           int           j;
                           integer       mx, my;
                           char          mp, op;
-                          boolean       frst;
+                          char       frst;
                           
                           // int*          ammunition;
                           int           sprit,energy,material;
@@ -5452,7 +5455,7 @@ void choosezoomlevel ( void )
                           pvehicle      vehicle2;
                           pbuilding     building;
                           char          fast;
-                          boolean       abbruch;
+                          char       abbruch;
                           
                           void          setvariables( pvehicle svehicle, pvehicle svehicle2, pbuilding sbuilding, char sfast);
                           
@@ -6158,7 +6161,7 @@ void         tenterpassword ::lne(int          x1,
                  int          y1,
                  char *       s,
                  int          position,
-                 boolean      einfuegen)
+                 char      einfuegen)
 {
   char* ss2 = strdup ( s );
 

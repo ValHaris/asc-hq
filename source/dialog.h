@@ -1,7 +1,11 @@
-//     $Id: dialog.h,v 1.5 2000-03-29 09:58:44 mbickel Exp $
+//     $Id: dialog.h,v 1.6 2000-05-23 20:40:42 mbickel Exp $
 
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/03/29 09:58:44  mbickel
+//      Improved memory handling for DOS version
+//      Many small changes I can't remember ;-)
+//
 //     Revision 1.4  1999/12/27 12:59:51  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -134,9 +138,9 @@ extern char*        getmessage(word         id);
 class tviewanytext : public tdialogbox, public tviewtextwithscrolling {
                public:
                    char                 *txt;
-                   boolean              ok;
+                   char              ok;
                     
-                   boolean              scrollbarvisible;
+                   char              scrollbarvisible;
                    char                 action;
                    int                  textstart;
 
@@ -152,9 +156,9 @@ class tviewanytext : public tdialogbox, public tviewtextwithscrolling {
   class   tviewanytext : public tdialogbox, public tviewtextwithscrolling {
                public:
                    const char                 *txt;
-                   boolean              ok;
+                   char              ok;
                     
-                   boolean              scrollbarvisible;
+                   char              scrollbarvisible;
                    char                 action;
                    
                    // int                  textsizey, textsizeycomplete;
@@ -287,7 +291,7 @@ class tenterpassword : public tdialogbox {
 
                void dispeditstring ( char* st , int   x1, int   y1 );
                                            
-               void lne(int          x1, int          y1, char *       s, int          position, boolean      einfuegen);
+               void lne(int          x1, int          y1, char *       s, int          position, char      einfuegen);
 
                virtual int checkforreask ( int crc );
 

@@ -1,6 +1,10 @@
-//     $Id: newfont.h,v 1.5 1999-12-28 21:03:14 mbickel Exp $
+//     $Id: newfont.h,v 1.6 2000-05-23 20:40:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/28 21:03:14  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.4  1999/11/25 22:00:07  mbickel
 //      Added weapon information window
 //      Added support for primary offscreen frame buffers to graphics engine
@@ -72,14 +76,14 @@ struct toldfont {
          charr            id;
          char             name[256];
          char             number;
-         boolean          color;
+         char          color;
          toldcharacter    character[256];
          integer          height;
          tkernchartable   kernchartable;
          tkerning         kerning;
          word             dummy;
-         boolean          useems;
-         boolean          caps;
+         char          useems;
+         char          caps;
          dacpalette256*   palette;
          byte             groundline;
       };
@@ -94,8 +98,8 @@ struct  tcharacter {
 
 struct tfont {
          char*            name;
-         boolean          color;
-         boolean          caps;
+         char          color;
+         char          caps;
          integer          height;
          tcharacter       character[256];
          signed char      kerning[256][256]; 
@@ -115,7 +119,7 @@ struct tfontsettings {
          char    color;
          char    background;
          char    markcolor;
-         boolean colorfont;
+         char colorfont;
          word    length;
          char    direction;
          char    justify;

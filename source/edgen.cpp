@@ -1,6 +1,9 @@
-//     $Id: edgen.cpp,v 1.4 2000-05-10 19:55:48 mbickel Exp $
+//     $Id: edgen.cpp,v 1.5 2000-05-23 20:40:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/05/10 19:55:48  mbickel
+//      Fixed empty loops when waiting for mouse events
+//
 //     Revision 1.3  2000/05/05 21:15:02  mbickel
 //      Added Makefiles for mount/demount and mapeditor
 //      mapeditor can now be compiled for linux, but is not running yet
@@ -55,12 +58,12 @@
                void resetmapfield(void);
                void addcoast(void);
                void setmap(void);
-               boolean checkland(int x, int y);
+               char checkland(int x, int y);
                virtual void run(void);
                virtual void buttonpressed(byte  id);
        protected :
-               boolean flip,showland,showdesert,showforest,showmaterial,showfuel,correctvalues,calculatevalues;
-               boolean initialized[ layercount ];
+               char flip,showland,showdesert,showforest,showmaterial,showfuel,correctvalues,calculatevalues;
+               char initialized[ layercount ];
                byte *constructionlayer;
                byte layer,actlayer;
                byte barsize,maxbarsize;
@@ -212,7 +215,7 @@ void         tmapgenerator::init(void)
 void tmapgenerator::montlayer(byte layer)
 {
    int i,j;
-   boolean found;
+   char found;
  
    if ( overwritecolorcount == 0 ){
       for (i=0;i<plasma.blockcount;i++ ) {
@@ -382,7 +385,7 @@ void tmapgenerator::showmap(void)
    showmontlayer(centerlayer,centerlayer,barsize);
 }
 
-boolean tmapgenerator::checkland(int x, int y)
+char tmapgenerator::checkland(int x, int y)
 {
    if ( ! ( getfield(x,y)->typ->art & cbwater ) ) return true;
    else return false;
@@ -1055,7 +1058,7 @@ void tplasma::membar(word x1 ,word y1 ,word x2 ,word y2, word color )
 
 
 
-void tplasma::generateplasma(boolean resettile)
+void tplasma::generateplasma(char resettile)
 {
    word colour;
    word sblocksize;

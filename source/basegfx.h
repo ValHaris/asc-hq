@@ -266,7 +266,7 @@ extern void         generategrayxlattable(ppixelxlattable tab,
                                    byte         offset,
                                    byte         size);
 
-extern void         rahmen(boolean      invers,
+extern void         rahmen(char      invers,
                     integer      x1,
                     integer      y1,
                     integer      x2,

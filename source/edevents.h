@@ -1,6 +1,10 @@
-//     $Id: edevents.h,v 1.3 2000-03-29 09:58:45 mbickel Exp $
+//     $Id: edevents.h,v 1.4 2000-05-23 20:40:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/03/29 09:58:45  mbickel
+//      Improved memory handling for DOS version
+//      Many small changes I can't remember ;-)
+//
 //     Revision 1.2  1999/11/16 03:41:29  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -33,11 +37,11 @@
 class   tstringselect : public tdialogbox {
                 public :
                      char txt[200];
-                     boolean  ok;
+                     char  ok;
                      int sy,ey,sx,ex,action,dx;
                      byte dk;
                      int msel,mouseselect,redline,lnshown,numberoflines,firstvisibleline,startpos;
-                     boolean scrollbarvisible;
+                     char scrollbarvisible;
                      void init(void);
                      virtual void setup(void);
                      virtual void run(void);

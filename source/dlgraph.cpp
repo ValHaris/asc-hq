@@ -1,6 +1,15 @@
-//     $Id: dlgraph.cpp,v 1.5 2000-04-27 16:25:20 mbickel Exp $
+//     $Id: dlgraph.cpp,v 1.6 2000-05-23 20:40:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/04/27 16:25:20  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.4  1999/12/30 20:30:32  mbickel
 //      Improved Linux port again.
 //
@@ -37,7 +46,7 @@
     Boston, MA  02111-1307  USA
 */
 
-void         tdialogbox::rahmen(boolean      invers,
+void         tdialogbox::rahmen(char      invers,
                     int          x1,
                     int          y1,
                     int          x2,
@@ -60,7 +69,7 @@ void         tdialogbox::rahmen(boolean      invers,
      line(x1,y2,x2,y2,col); 
 } 
 
-void                 tdialogbox::rahmen(boolean      invers,
+void                 tdialogbox::rahmen(char      invers,
                                           tmouserect   rect )
 {
    rahmen ( invers, rect.x1, rect.y1, rect.x2,rect.y2 );
@@ -87,7 +96,7 @@ void         tdialogbox::knopfdruck(int      xx1,
      collategraphicoperations cgs;
 
     void*      p;
-    boolean      kn, kn2; 
+    char      kn, kn2; 
     integer      mt; 
 
      mt = mouseparams.taste; 
@@ -145,7 +154,7 @@ void         tdialogbox::newknopfdruck2(integer      xx1,
 {
 
     void*      p;
-    boolean      kn; 
+    char      kn; 
     integer      mt; 
     {
        collategraphicoperations cgs;
@@ -251,7 +260,7 @@ void         tdialogbox::newknopfdruck(integer      xx1,
 {
 
    void*      p;
-   boolean      kn;
+   char      kn;
    integer      mt;
    void*    pq ;
    {

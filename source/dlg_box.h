@@ -1,6 +1,12 @@
-//     $Id: dlg_box.h,v 1.8 2000-05-06 20:25:23 mbickel Exp $
+//     $Id: dlg_box.h,v 1.9 2000-05-23 20:40:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/05/06 20:25:23  mbickel
+//      Fixed: -recognition of a second mouse click when selection a pd menu item
+//             -movement: fields the unit can only pass, but not stand on them,
+//                        are marked darker
+//             -intedit/stredit: mouseclick outside is like hitting enter
+//
 //     Revision 1.7  2000/04/27 16:25:20  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -96,7 +102,7 @@
                 void*      data;
                 void*      data2;
                 int      min, max;   // max = itemsvisible bei scrollbar
-                boolean      active; 
+                char      active; 
                 byte         keynum; 
                 tkey         key[6];
                 byte         markedkeynum; 
@@ -134,13 +140,13 @@
                        byte         lart,
                        byte         lstyle,
                        byte         lid,
-                       boolean      enabled);
+                       char      enabled);
                      void         addbutton( const char *       ltxt,
                        tmouserect   rect1,
                        byte         lart,
                        byte         lstyle,
                        byte         lid,
-                       boolean      enabled);
+                       char      enabled);
 
                                                        /********************************/
                                                        /* art:  0: Normaler Button     */
@@ -191,7 +197,7 @@ typedef class tdialogbox* pdialogbox;
                      integer          starty;
                      byte           ms;
                      void*      tp;
-                     boolean      imagesaved; 
+                     char      imagesaved; 
                      char*        title;
                      word         windowstyle; 
                      ttaborder    taborder[100]; 
@@ -210,13 +216,13 @@ typedef class tdialogbox* pdialogbox;
                      void         done(void);
 
 
-                      virtual boolean      checkvalue(byte         id, void*      p)  ;
+                      virtual char      checkvalue(byte         id, void*      p)  ;
                       void                 editfield(pbutton      pb);
                       void                 editfield( int id );
                       void                 toggleswitch(pbutton      pb);
                       virtual void         enablebutton(byte         id)  ;
                       virtual void         disablebutton(byte         id)  ;
-                      virtual void         execbutton(pbutton      pb, boolean      mouse) ;
+                      virtual void         execbutton(pbutton      pb, char      mouse) ;
                       void         showbutton(byte         id);
                       void         hidebutton(byte         id);
                       void         setscrollspeed(char        id , int  speed);
@@ -274,12 +280,12 @@ typedef class tdialogbox* pdialogbox;
                                                  integer      yy1,
                                                  integer      xx2,
                                                  integer      yy2);
-                      void         rahmen(boolean      invers,
+                      void         rahmen(char      invers,
                                           int          x1,
                                           int          y1,
                                           int          x2,
                                           int          y2);
-                      void         rahmen(boolean      invers,
+                      void         rahmen(char      invers,
                                           tmouserect   rect );
 
                       void         rahmen3(char *       txt,
@@ -308,7 +314,7 @@ typedef class tdialogbox* pdialogbox;
                                                int          y1,
                                                char *       s,
                                                int          position,
-                                               boolean      einfuegen);
+                                               char      einfuegen);
                                                
                       void         intedit(int     *    st,
                                            int          x1,

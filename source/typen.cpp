@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.17 2000-05-22 15:40:37 mbickel Exp $
+//     $Id: typen.cpp,v 1.18 2000-05-23 20:40:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/05/22 15:40:37  mbickel
+//      Included patches for Win32 version
+//
 //     Revision 1.16  2000/05/07 12:12:18  mbickel
 //      New mouse option dialog
 //      weapon info can now be displayed by clicking on a unit
@@ -1828,7 +1831,7 @@ int tmap :: eventpassed( int id, int mapid )
 { 
   pevent       ev2; 
   peventstore  oldevent; 
-  boolean      b; 
+  char      b; 
   word         i; 
 
    b = false; 

@@ -108,6 +108,8 @@ int main(int argc, char *argv[] )
    memset ( bipict, 0, sizeof ( 0 ) );
    try {
       if ( usage ) {
+         FILE* fp = fopen ("itemname.txt", "wt" );
+
          {
             for ( int i = 0; i < getterraintranslatenum(); i++ ) {
                const int* p = getterraintranslate(i);
@@ -129,8 +131,9 @@ int main(int argc, char *argv[] )
                   printf(".");
                fflush ( stdout );
       
-      
                pterraintype bdt = loadterraintype ( c );
+               fprintf(fp, "\n%s ; id %d ; pictures ", c, bdt->id );
+
                for ( int i = 0; i< cwettertypennum; i++ )
                   if ( bdt->weather[i] )
                      for ( int j = 0; j < 6; j++ )
@@ -145,6 +148,7 @@ int main(int argc, char *argv[] )
                                  sprintf ( bipict [ n ].entry[ t ] .text, "-> %d ; w=%d", bdt->weather[0]->bi_picture[0],i );
                                  bipict [ n ].entry[ t ].color = 1;
                               }
+                              fprintf( fp, "%d ", n );
                            }
       
                c = ff.getnextname();
@@ -175,6 +179,8 @@ int main(int argc, char *argv[] )
                fflush ( stdout );
       
                pobjecttype obj = loadobjecttype ( c );
+               fprintf(fp, "\n%s ; id %d ; pictures ", c, obj->id );
+
                for ( int w = 0; w < cwettertypennum; w++ )
                   if ( (obj->weather & ( 1 << w)) && obj->picture[w] )
                      for ( int i = 0; i< obj->pictnum ; i++ )
@@ -189,6 +195,8 @@ int main(int argc, char *argv[] )
                                strcat ( bipict [ n ].entry[ t+1 ] .text, "H" );
                             if ( obj->picture[w][i].flip & 2 )
                                strcat ( bipict [ n ].entry[ t+1 ] .text, "V" );
+
+                            fprintf( fp, "%d ", n );
             
                             bipict [ n ].entry[ t ].color = 2;
                             bipict [ n ].entry[ t+1 ].color = 2;
@@ -210,6 +218,7 @@ int main(int argc, char *argv[] )
                fflush ( stdout );
       
                pbuildingtype bld = loadbuildingtype ( c );
+               fprintf(fp, "\n%s ; id %d ; pictures ", c, bld->id );
       
                for ( int i = 0; i< cwettertypennum ; i++ )
                   for ( int j = 0; j < maxbuildingpicnum; j++ )
@@ -223,6 +232,8 @@ int main(int argc, char *argv[] )
                  
                                  sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", c, bld->id );
                                  sprintf ( bipict [ n ].entry[ t+1 ] .text, "    W=%d #%d X=%d Y=%d", i, j, k, l );
+
+                                 fprintf( fp, "%d ", n );
                  
                                  bipict [ n ].entry[ t ].color = 3;
                                  bipict [ n ].entry[ t+1 ].color = 3;
@@ -244,6 +255,7 @@ int main(int argc, char *argv[] )
                   fflush ( stdout );
          
                   pvehicletype tnk = loadvehicletype ( c );
+                  fprintf(fp, "\n%s ; id %d ; pictures ", c, tnk->id );
          
                   if ( tnk->bipicture > 0 ) {
                      int n = tnk->bipicture;
@@ -251,6 +263,8 @@ int main(int argc, char *argv[] )
                      bipict[n].textnum += 1;
           
                      sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", c, tnk->id );
+
+                     fprintf( fp, "%d ", n );
           
                      bipict [ n ].entry[ t ].color = 4;
                   }
@@ -259,6 +273,7 @@ int main(int argc, char *argv[] )
                }
             
          }
+         fclose(fp);
       } else 
          loadbi3graphics();
    

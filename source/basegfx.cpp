@@ -1,6 +1,9 @@
-//     $Id: basegfx.cpp,v 1.13 2000-05-07 12:53:58 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.14 2000-05-23 20:40:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/05/07 12:53:58  mbickel
+//      some minor adjustments
+//
 //     Revision 1.12  2000/01/25 19:28:06  mbickel
 //      Fixed bugs:
 //        invalid mouse buttons reported when moving the mouse
@@ -90,7 +93,7 @@ int getpicsize2( void* hd2 )
 
 
 void 
-rahmen(boolean invers,
+rahmen(char invers,
        integer x1,
        integer y1,
        integer x2,

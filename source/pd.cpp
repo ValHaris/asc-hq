@@ -1,6 +1,9 @@
-//     $Id: pd.cpp,v 1.10 2000-05-10 19:55:53 mbickel Exp $
+//     $Id: pd.cpp,v 1.11 2000-05-23 20:40:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/05/10 19:55:53  mbickel
+//      Fixed empty loops when waiting for mouse events
+//
 //     Revision 1.9  2000/05/06 20:25:23  mbickel
 //      Fixed: -recognition of a second mouse click when selection a pd menu item
 //             -movement: fields the unit can only pass, but not stand on them,
@@ -153,7 +156,7 @@ void tpulldown::addfield ( char* name )
 void tpulldown::run(void)
 {
    mousestat = mouseparams.taste; 
-   boolean cancel = false;
+   char cancel = false;
    do { 
       if (mouseparams.y <= pdb.pdbreite) {
          if ( (pdfieldnr < pdb.count-1 ) && (mouseparams.x > pdb.field[pdfieldnr+1].xstart)) {
@@ -392,10 +395,10 @@ void         tpulldown::openpdfield(void)
    setvars();
 
    activefontsettings.length = pdb.field[pdfieldnr].xwidth;
-   // boolean abbrch = false;
+   // char abbrch = false;
    anf = pdb.field[pdfieldnr].xstart + pdfieldtextdistance / 2 - pdfieldenlargement;
    ende =  anf + pdb.field[pdfieldnr].xwidth + pdfieldenlargement*2;
-   boolean umbau = false;
+   char umbau = false;
    if (ende > agmp->resolutionx-4 ) { 
       umbau = true; 
       zw = ende - (agmp->resolutionx-4);

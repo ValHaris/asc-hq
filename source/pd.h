@@ -1,6 +1,10 @@
-//     $Id: pd.h,v 1.3 1999-12-28 21:03:18 mbickel Exp $
+//     $Id: pd.h,v 1.4 2000-05-23 20:40:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/12/28 21:03:18  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.2  1999/11/16 03:42:22  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -40,7 +44,7 @@
    typedef struct tpdbutton {
           char         name[maxnamelength];
           tkey         shortkey;
-          boolean      tswitch;
+          char      tswitch;
           int          actionid;
        } tpdbutton;
 
@@ -62,7 +66,7 @@
    class tpulldown {
          int pdfieldnr, buttonnr;
       public :
-         boolean barstatus;
+         char barstatus;
          byte action,mousestat;
          byte bkgcolor,textcolor,shortkeycolor,rcolor1,rcolor2;
          int pdfieldtextdistance,textstart,righttextdifference,anf,ende;

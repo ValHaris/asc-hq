@@ -1,6 +1,15 @@
-//     $Id: missions.cpp,v 1.6 2000-04-27 16:25:26 mbickel Exp $
+//     $Id: missions.cpp,v 1.7 2000-05-23 20:40:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/04/27 16:25:26  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.5  1999/12/29 17:38:17  mbickel
 //      Continued Linux port
 //
@@ -70,7 +79,7 @@ const  byte    translatetriggerstatus[4]  = {0, 1, 1, 0};
    byte         stt[4]; 
    int          quedevents[9];
    tgametime    nexttimedevent[8]; 
-   boolean      eject; 
+   char      eject; 
 
 
 

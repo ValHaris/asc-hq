@@ -1,6 +1,10 @@
-//     $Id: edmisc.h,v 1.8 2000-05-05 21:15:04 mbickel Exp $
+//     $Id: edmisc.h,v 1.9 2000-05-23 20:40:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/05/05 21:15:04  mbickel
+//      Added Makefiles for mount/demount and mapeditor
+//      mapeditor can now be compiled for linux, but is not running yet
+//
 //     Revision 1.7  2000/04/27 16:25:22  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -95,7 +99,7 @@
                   word         xpos, ypos;
                   word         maxx,maxy,maxsr;
                   word         maxanz;
-                  boolean     showall;
+                  char     showall;
                } selectrec; 
 
   typedef struct xy { 
@@ -195,11 +199,11 @@
    extern int                   lastselectiontype;
    extern selectrec              sr[10];
    extern ppolygon               pfpoly;
-   extern boolean                tfill,polyfieldmode;
+   extern char                tfill,polyfieldmode;
    extern word                    fillx1, filly1;
    extern pbuilding               gbde;
    extern word                    variable;
-   extern boolean                mapsaved;
+   extern char                mapsaved;
    extern tmycursor             mycursor;
    extern tpulldown              pd;
    extern tcdrom                 cdrom;
@@ -223,8 +227,8 @@ extern void         setstartvariables(void);
 extern void         pdbaroff(void);
 extern void         pulldown(void);
 extern void         exchg(word *a1,word *a2);
-extern void         placebuilding(byte colorr,pbuildingtype   buildingtyp,boolean choose);
-extern void         k_savemap(boolean saveas);
+extern void         placebuilding(byte colorr,pbuildingtype   buildingtyp,char choose);
+extern void         k_savemap(char saveas);
 extern void         k_loadmap(void);
 extern void         showcoordinates(void);
 extern void         lines(int      x1,int      y,int      x2,int      y2);

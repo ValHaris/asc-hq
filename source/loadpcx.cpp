@@ -70,7 +70,7 @@ extern "C" void   resetdata(int start);
 #pragma aux resetdata modify [ eax ebx ecx edx ]
 
 
-char loadpcxxy(char *name, boolean setpal, word x, word y)
+char loadpcxxy(char *name, char setpal, word x, word y)
 {
 
 /////////////

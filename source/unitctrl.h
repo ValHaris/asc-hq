@@ -1,6 +1,12 @@
-//     $Id: unitctrl.h,v 1.2 2000-05-06 20:25:26 mbickel Exp $
+//     $Id: unitctrl.h,v 1.3 2000-05-23 20:40:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/05/06 20:25:26  mbickel
+//      Fixed: -recognition of a second mouse click when selection a pd menu item
+//             -movement: fields the unit can only pass, but not stand on them,
+//                        are marked darker
+//             -intedit/stredit: mouseclick outside is like hitting enter
+//
 //     Revision 1.1  2000/04/27 16:25:31  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -96,7 +102,7 @@ class BaseVehicleMovement : public VehicleAction {
                         int          maxwegstrecke; 
                         tstrecke     shortestway; 
                         tstrecke     strecke; 
-                        boolean      zielerreicht; 
+                        int          zielerreicht; 
                         int          x1, y1, x2, y2;
                         pvehicle     vehicle;
                         int          mode;

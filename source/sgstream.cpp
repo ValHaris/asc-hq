@@ -1,6 +1,12 @@
-//     $Id: sgstream.cpp,v 1.11 2000-05-06 20:25:24 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.12 2000-05-23 20:40:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/05/06 20:25:24  mbickel
+//      Fixed: -recognition of a second mouse click when selection a pd menu item
+//             -movement: fields the unit can only pass, but not stand on them,
+//                        are marked darker
+//             -intedit/stredit: mouseclick outside is like hitting enter
+//
 //     Revision 1.10  2000/04/27 16:25:26  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -199,13 +205,13 @@ struct tindexstruct {
 
 
 /*
-void         tsrlefilestream::readrlepict( void** pnter, boolean allocated, int* size)
+void         tsrlefilestream::readrlepict( void** pnter, char allocated, int* size)
 {
    readrlepict ( (char**) pnter, allocated. size );
 }
 */
 
-void         tsrlefilestream::readrlepict( char** pnter, boolean allocated, int* size)
+void         tsrlefilestream::readrlepict( char** pnter, char allocated, int* size)
 { 
   trleheader   hd; 
   word         w; 

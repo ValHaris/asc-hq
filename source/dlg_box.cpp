@@ -1,6 +1,9 @@
-//     $Id: dlg_box.cpp,v 1.18 2000-05-10 19:55:47 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.19 2000-05-23 20:40:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/05/10 19:55:47  mbickel
+//      Fixed empty loops when waiting for mouse events
+//
 //     Revision 1.17  2000/05/06 20:25:22  mbickel
 //      Fixed: -recognition of a second mouse click when selection a pd menu item
 //             -movement: fields the unit can only pass, but not stand on them,
@@ -640,7 +643,7 @@ void         tdlgengine::addbutton( const char *       ltxt,
                        byte         lart,
                        byte         lstyle,
                        byte         lid,
-                       boolean      enabled)
+                       char      enabled)
 {
    addbutton ( ltxt, rect1.x1, rect1.y1, rect1.x2, rect1.y2, lart, lstyle, lid, enabled );
 }
@@ -655,7 +658,7 @@ void         tdlgengine::addbutton(  const char *       ltxt,
                                  byte         lart,
                                  byte         lstyle,
                                  byte         lid,
-                                 boolean      enabled)
+                                 char      enabled)
 { 
   pbutton      pb; 
   char         ch; 
@@ -1078,7 +1081,7 @@ void         tdialogbox::enablebutton(byte         id)
       rahmen(true,x1 + pb->x1,y1 + pb->y1,x1 + pb->x1 + (pb->y2 - pb->y1),y1 + pb->y2); 
       showtext3(pb->text,x1 + pb->x1 + (pb->y2 - pb->y1) + 5,y1 + (pb->y1 + pb->y2 - activefontsettings.font->height) / 2); 
 
-      boolean* pbl = (boolean*) pb->data;
+      char* pbl = (char*) pb->data;
 
       int cl;
       if (*pbl) 
@@ -1151,7 +1154,7 @@ void         tdialogbox::disablebutton(byte         id)
   int      *pl; 
   word         *pw, *pw2; 
   byte         *pbt; 
-  boolean      *pbl; 
+  char      *pbl; 
   char*         s;
   char*         t;
   int      l; 
@@ -1225,7 +1228,7 @@ void         tdialogbox::disablebutton(byte         id)
    if (pb->art == 3) { 
        rectangle(x1 + pb->x1,y1 + pb->y1,x1 + pb->x1 + (pb->y2 - pb->y1),y1 + pb->y2,disablecolor);
        showtext2(s,x1 + pb->x1 + (pb->y2 - pb->y1) + 5,y1 + (pb->y1 + pb->y2 - activefontsettings.font->height) / 2);
-       pbl = (boolean*) pb->data;
+       pbl = (char*) pb->data;
        if (*pbl)
          cl = disablecolor; 
        else
@@ -1402,7 +1405,7 @@ void         tdialogbox::done(void)
 } 
 
 
-void         tdialogbox::execbutton( pbutton      pb, boolean      mouse )
+void         tdialogbox::execbutton( pbutton      pb, char      mouse )
 { 
   int      t, l; 
   word         *pw, *pw2; 
@@ -1734,7 +1737,7 @@ void         tdialogbox::toggleswitch(pbutton      pb)
 } 
 
 
-boolean      tdialogbox::checkvalue(byte         id,
+char      tdialogbox::checkvalue(byte         id,
                                   void*      p)
 { 
    return  true;
@@ -2107,7 +2110,7 @@ void         tdialogbox::stredit(char *       s,
 
    int  cc;
    char         *ss, *ss2, *ss3;
-   boolean      einfuegen; 
+   char      einfuegen; 
    byte         position; 
    int          i;
 
@@ -2284,7 +2287,7 @@ void         tdialogbox::lne(int          x1,
                  int          y1,
                  char *       s,
                  int          position,
-                 boolean      einfuegen)
+                 char      einfuegen)
 {
  int          i, j, k;
  char* ss2;
@@ -2315,12 +2318,12 @@ void         tdialogbox::intedit(int *    st,
 { 
    int  cc;
    char         *ss, *ss2, *ss3;
-   boolean      einfuegen; 
+   char      einfuegen; 
    int          position;
    int          j;
    int          i;
    int          ml;
-   boolean ok;
+   char ok;
 
   #ifdef _DOS_
    #ifdef NEWKEYB
@@ -2713,7 +2716,7 @@ void tviewtext::displaytext ( void )
 
   char         *actword, *s5;
   const char* s1;
-  boolean      abbruch; 
+  char      abbruch; 
   integer      i; 
 
   int mss = getmousestatus();
@@ -3194,9 +3197,9 @@ char*  readtextmessage( int id )
   class   thelpsystem : public tdialogbox, public tviewtextwithscrolling {
                public:
                    char                 *txt;
-                   boolean              ok;
+                   char              ok;
                     
-                   boolean              scrollbarvisible;
+                   char              scrollbarvisible;
                    ppicture             firstpict;
                    char                 action;
                    int                  textstart;

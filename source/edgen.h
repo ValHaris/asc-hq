@@ -1,6 +1,10 @@
-//     $Id: edgen.h,v 1.3 2000-03-29 09:58:45 mbickel Exp $
+//     $Id: edgen.h,v 1.4 2000-05-23 20:40:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/03/29 09:58:45  mbickel
+//      Improved memory handling for DOS version
+//      Many small changes I can't remember ;-)
+//
 //     Revision 1.2  1999/11/16 03:41:32  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -69,7 +73,7 @@ struct tmemoryblock {
    word color[maxtilevals+1];
    word tileval[maxtilevals];
    char bordername[maxtilevals][20];
-   boolean generated;
+   char generated;
    word startblocksize;
    byte tilevalcount,acttile;
    };
@@ -79,7 +83,7 @@ typedef tmemoryblock *pmemoryblock;
 class tplasma {
     public :
         word maxx,maxy,maxvalue;
-        boolean flip;
+        char flip;
         int blockcount;
         pmemoryblock memblock;
         tplasma(void);
@@ -89,7 +93,7 @@ class tplasma {
         void setmem(word x, word y,word color);
         /*void preview(word sx, word sy,word barsize);
         void process(word sx, word sy,word barsize);*/
-        void generateplasma(boolean resettile);
+        void generateplasma(char resettile);
 
         int xsymm, ysymm;
    };

@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.30 2000-05-22 15:40:31 mbickel Exp $
+//     $Id: controls.cpp,v 1.31 2000-05-23 20:40:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/05/22 15:40:31  mbickel
+//      Included patches for Win32 version
+//
 //     Revision 1.29  2000/05/18 14:14:47  mbickel
 //      Fixed bug in movemalus calculation for movement
 //      Added "view movement range"
@@ -366,7 +369,7 @@ void         tsearchputbuildingfields::testfield(void)
   int          x2, y2;
   byte         x1, y1; 
   pfield        fld; 
-  boolean      b; 
+  char      b; 
 
 
    if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) { 
@@ -467,7 +470,7 @@ void         putbuildinglevel2( const pbuildingtype bld,
 { 
   int          x1, y1, x2, y2;
   pfield        fld; 
-  boolean      b = true;
+  char      b = true;
 
    if (getfield(xp,yp)->a.temp == 20) 
       if (moveparams.movestatus == 111) { 
@@ -1530,7 +1533,7 @@ int computeview( int player_fieldcount_mask )
 
 procedure fieldreachable(x1,y1,x2,y2:integer; vehicle:pvehicle; strecke:integer);
 var
-  b:boolean;
+  b:char;
   reststrecke:integer;
   m,n,o,p,q,dx,dy,x,y:integer;
   w:word;
@@ -2648,7 +2651,7 @@ void         tsearchattackablevehicleskamikaze::testfield(void)
 
 
 
-void         attack(boolean      kamikaze, int  weapnum )
+void         attack(char      kamikaze, int  weapnum )
 {                                            
 
    if (moveparams.movestatus == 0) { 

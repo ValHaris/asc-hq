@@ -1,6 +1,15 @@
-//     $Id: cdrom.h,v 1.3 2000-04-27 16:25:16 mbickel Exp $
+//     $Id: cdrom.h,v 1.4 2000-05-23 20:40:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/04/27 16:25:16  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.2  1999/11/16 03:41:14  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -195,19 +204,19 @@ class tcdrom {
       ~tcdrom(void);
 
       void* getdevheaderadress(void);
-      boolean testcdromavailable(void);
+      char testcdromavailable(void);
       byte geterror( void );
       byte checkerror( void );
-      boolean testcdromopen(void);
+      char testcdromopen(void);
       void getcdrominfo(void);
       void getcdromdrives(void);
       void changecdromdrive(char nr);
       float get_mscdex_version(void);
-      boolean openclosecdrom(void);
-      boolean lockunlockcdrom(void);
+      char openclosecdrom(void);
+      char lockunlockcdrom(void);
       void getsectortime(int sector,byte *m,byte *s,byte *f);
       int getnormalsector(byte m,byte s,byte f);
-      boolean checkbusy(void);
+      char checkbusy(void);
       int getheadlocation(void);
       void seeksector(int ss);
       void getactivetimes(byte *min,byte *sec,byte *frame,byte *amin,byte *asec,byte *aframe);

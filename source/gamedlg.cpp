@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.25 2000-05-22 15:40:34 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.26 2000-05-23 20:40:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/05/22 15:40:34  mbickel
+//      Included patches for Win32 version
+//
 //     Revision 1.24  2000/05/18 14:39:56  mbickel
 //      Changed version number to 1.1.4
 //
@@ -1846,7 +1849,7 @@ void settributepayments ( void )
    tpm.done();
 }
 
-void  tshownewtanks :: init ( boolean*      buf2 ) 
+void  tshownewtanks :: init ( char*      buf2 ) 
 {
    tdialogbox::init();
 
@@ -3491,9 +3494,9 @@ void viewmessages ( char* title, pmessagelist strt, int editable, int md  )    /
   class   tviewmessage : public tdialogbox, public tviewtextwithscrolling {
                public:
                    char                 *txt;
-                   boolean              ok;
+                   char              ok;
                     
-                   boolean              scrollbarvisible;
+                   char              scrollbarvisible;
                    char                 action;
                    int                  textstart;
                    int                  from;

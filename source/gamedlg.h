@@ -1,6 +1,10 @@
-//     $Id: gamedlg.h,v 1.4 2000-05-07 12:12:17 mbickel Exp $
+//     $Id: gamedlg.h,v 1.5 2000-05-23 20:40:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/05/07 12:12:17  mbickel
+//      New mouse option dialog
+//      weapon info can now be displayed by clicking on a unit
+//
 //     Revision 1.3  1999/11/22 18:27:27  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -154,11 +158,11 @@ extern void  producemunition( pmunition    munition,
 
 class   tshownewtanks : public tdialogbox {
                          public:
-                           void          init ( boolean*      buf2 );
+                           void          init ( char*      buf2 );
                            virtual void  run  ( void );
                            virtual void  buttonpressed ( char id );
                          protected:
-                           boolean*      buf;
+                           char*      buf;
                            int           status;
                         };
 

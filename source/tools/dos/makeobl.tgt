@@ -21,9 +21,8 @@ MCommand
 0
 5
 MCommand
-58
-xcopy makeobl.exe ..\..\..\
-xcopy makeobl.sym ..\..\..\
+25
+\copyexecutable makeobl
 
 6
 MItem

@@ -1,6 +1,15 @@
-//     $Id: spfst.h,v 1.7 2000-04-27 16:25:30 mbickel Exp $
+//     $Id: spfst.h,v 1.8 2000-05-23 20:40:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/04/27 16:25:30  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.6  2000/04/17 16:27:23  mbickel
 //      Optimized vehicle movement for SDL version
 //
@@ -125,7 +134,7 @@
    class tcursor { 
            public:
               int          posx, posy;
-              boolean      an; 
+              char      an; 
               byte         color; 
 
               int  gotoxy (int x, int y, int disp = 1 );     // result: 0: map wurde nicht neu angezeigt     1: map wurde neu angezeigt
@@ -153,7 +162,7 @@
   class   tsearchfields {
                 public:
                     int         startx, starty;
-                    boolean     abbruch;
+                    char     abbruch;
                     word        maxdistance, mindistance;
                     int         xp, yp;
                     word        dist;
@@ -175,7 +184,7 @@
 
 
 
-  extern boolean godview, tempsvisible; 
+  extern char godview, tempsvisible; 
 
   extern ffonts schriften; 
   extern tstreet streets; 
@@ -212,7 +221,7 @@ extern word  getxpos(void);
 
 extern word  getypos(void);
 
-extern boolean fieldvisiblenow( const pfield        pe, int player = actmap->actplayer );
+extern char fieldvisiblenow( const pfield        pe, int player = actmap->actplayer );
 
 extern byte  getdiplomaticstatus(byte         b);
 
@@ -255,7 +264,7 @@ extern void  calculateallobjects(void);
 
 extern void  calculateobject(integer      x,
                               integer      y,
-                              boolean      mof,
+                              char      mof,
                               pobjecttype obj);
 
 extern void  generatemap( const pwterraintype bt,
@@ -296,23 +305,23 @@ extern pattackweap attackpossible( const pvehicle     angreifer,
                             integer      x,
                             integer      y);
 
-extern boolean attackpossible2u( const pvehicle     angreifer,
+extern char attackpossible2u( const pvehicle     angreifer,
                                  const pvehicle     verteidiger, pattackweap attackweap = NULL);      // Entfernung wird nicht berÅcksichtigt !!
 
-extern boolean attackpossible28( const pvehicle     angreifer,
+extern char attackpossible28( const pvehicle     angreifer,
                                  const pvehicle     verteidiger, pattackweap attackweap = NULL);       // Als Entfernung wird 8 angenommen
 
-extern boolean attackpossible2n( const pvehicle     angreifer,
+extern char attackpossible2n( const pvehicle     angreifer,
                                  const pvehicle     verteidiger, pattackweap attackweap = NULL );       // Als Entfernung wird die tatsÑchliche angenommen
 
-extern boolean vehicleplattfahrbar( const pvehicle     vehicle,
+extern char vehicleplattfahrbar( const pvehicle     vehicle,
                                     const pfield        field);
 
 extern byte  fieldaccessible( const pfield        field,
                             const pvehicle     vehicle,
                             int  uheight = -1 );
 
-extern boolean weapexist( const pvehicle     eht);
+extern char weapexist( const pvehicle     eht);
 
   /*  sonstiges  */ 
 

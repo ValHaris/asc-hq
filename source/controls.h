@@ -1,6 +1,10 @@
-//     $Id: controls.h,v 1.10 2000-05-07 12:12:14 mbickel Exp $
+//     $Id: controls.h,v 1.11 2000-05-23 20:40:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/05/07 12:12:14  mbickel
+//      New mouse option dialog
+//      weapon info can now be displayed by clicking on a unit
+//
 //     Revision 1.9  2000/05/02 16:20:54  mbickel
 //      Fixed bug with several simultaneous vehicle actions running
 //      Fixed graphic error at ammo transfer in buildings
@@ -225,7 +229,7 @@ enum tvisibilitytempbuf { vsight, vjamming, vfeatures };
                       int mode;
                       int height;
 
-                      boolean       sonar,satellitenview,minenview;
+                      int sonar,satellitenview,minenview;
                       int        viewdist;
                       int        jamdist;
                       virtual void       initviewcalculation( int view, int jamming, int sx, int sy, int _mode, int _height   );   // mode: +1 = add view  ;  -1 = remove view
@@ -252,11 +256,11 @@ enum tvisibilitytempbuf { vsight, vjamming, vfeatures };
 
   class tsearchattackablevehicles : public tsearchfields {
                 public:
-                                  boolean   messages;
+                                  char   messages;
                                   word      anzahlgegner;
                                   pvehicle  angreifer;
-                                  boolean   attackposs;
-                                  boolean   kamikaze;
+                                  char   attackposs;
+                                  char   kamikaze;
                                   void            init ( const pvehicle eht );
                                   virtual void    testfield ( void );
                                   virtual void    initattacksearch ( void );
@@ -286,7 +290,7 @@ enum tvisibilitytempbuf { vsight, vjamming, vfeatures };
                        int player;
                 public:
                        char             mienentyp;
-                       boolean          mienenlegen, mienenraeumen;
+                       char          mienenlegen, mienenraeumen;
                        char             numberoffields;
                        virtual void     testfield ( void );
                        void             initpm( char mt, const pvehicle eht );
@@ -315,7 +319,7 @@ enum tvisibilitytempbuf { vsight, vjamming, vfeatures };
 extern void  _td_movement(pvehicle     vehicle, int unitheight = -1);
 
 
-extern void  attack(boolean      kamikaze, int  weapnum = 0);
+extern void  attack(char      kamikaze, int  weapnum = 0);
 
 extern void  calcmovemalus(int          x1,
                            int          y1,

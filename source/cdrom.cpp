@@ -1,6 +1,15 @@
-//     $Id: cdrom.cpp,v 1.4 2000-04-27 16:25:16 mbickel Exp $
+//     $Id: cdrom.cpp,v 1.5 2000-05-23 20:40:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/04/27 16:25:16  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.3  2000/03/29 09:58:42  mbickel
 //      Improved memory handling for DOS version
 //      Many small changes I can't remember ;-)
@@ -127,7 +136,7 @@ tcdrom::~tcdrom( void )
 }
 
 
-boolean  tcdrom::testcdromavailable(void)
+char  tcdrom::testcdromavailable(void)
 { 
    ri.setuprmi();
    rmi.eax = 0x1500; 
@@ -162,7 +171,7 @@ byte tcdrom::checkerror( void )
 }
 
 
-boolean tcdrom::openclosecdrom(void)  
+char tcdrom::openclosecdrom(void)  
 { 
    ioctl = ( tioctlo *) ri.protectedsegment;
    ds = ( tdevicestatus * ) &ioctl[1];
@@ -204,7 +213,7 @@ boolean tcdrom::openclosecdrom(void)
    return true;
 } 
 
-boolean tcdrom::testcdromopen(void)
+char tcdrom::testcdromopen(void)
 { 
    ioctl = ( tioctlo *) ri.protectedsegment;
    ds = ( tdevicestatus * ) &ioctl[1];
@@ -279,7 +288,7 @@ void tcdrom::stopaudio(void)
    ri.real_call(0x2f);
 }
 
-boolean tcdrom::checkbusy(void)
+char tcdrom::checkbusy(void)
 { 
    ioctl = ( tioctlo *) ri.protectedsegment;
    ds = ( tdevicestatus * ) &ioctl[1];
@@ -566,7 +575,7 @@ void tcdrom::setaudiochannel()
    ri.real_call(0x2f);
 } 
 
-boolean tcdrom::lockunlockcdrom(void)
+char tcdrom::lockunlockcdrom(void)
 
 { tlockdoor     *ld;
 

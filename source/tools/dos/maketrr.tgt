@@ -21,9 +21,8 @@ MCommand
 0
 5
 MCommand
-58
-xcopy maketrr.exe ..\..\..\
-xcopy maketrr.sym ..\..\..\
+25
+\copyexecutable maketrr
 
 6
 MItem

@@ -1,6 +1,9 @@
-//     $Id: edevents.cpp,v 1.7 2000-05-10 19:55:47 mbickel Exp $
+//     $Id: edevents.cpp,v 1.8 2000-05-23 20:40:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/05/10 19:55:47  mbickel
+//      Fixed empty loops when waiting for mouse events
+//
 //     Revision 1.6  2000/05/07 12:53:58  mbickel
 //      some minor adjustments
 //
@@ -124,7 +127,7 @@ void         tstringselect::buttonpressed(byte         id)
 
 void         tstringselect::run(void)
 { 
-  boolean      view; 
+  char      view; 
   integer      my; 
   byte         ms;
 
@@ -939,9 +942,9 @@ void         tgettm::buttonpressed(byte         id)
 } 
 
 
-boolean      gettm(signed short *       x, signed short *       y)  /* True : Erfolgreich ausgefÅhrt */
+char      gettm(signed short *       x, signed short *       y)  /* True : Erfolgreich ausgefÅhrt */
 { tgettm       ce; 
-  boolean b;
+  char b;
 
    ce.x = *x; 
    ce.y = *y; 
@@ -1423,7 +1426,7 @@ class  tcreateevent : public tdialogbox {
               pevent ae, orgevent;
               int reasonst;
               byte action;
-              boolean build;
+              char build;
               void init(void);
               virtual void run(void);
               virtual void buttonpressed(byte id);
@@ -1715,7 +1718,7 @@ pvehicle selectunit ( pvehicle unit )
 void         tcreateevent::buttonpressed(byte         id)
 {   int           nid, nr, rnr;
     pfield        pf; 
-    boolean    abb; 
+    char    abb; 
     char         s[200];
     word        i;
     int           *puffer= NULL;
@@ -2155,10 +2158,10 @@ void         tcreateevent::buttonpressed(byte         id)
 } 
 
 
-boolean      createevent(pevent ae, pevent orgevent )  /* True=Erfolgreich ausgefÅhrt */
+char      createevent(pevent ae, pevent orgevent )  /* True=Erfolgreich ausgefÅhrt */
 { tcreateevent ce; 
   int i;
-  boolean b;
+  char b;
 
    ce.ae = ae;
    ce.orgevent = orgevent;
@@ -2241,7 +2244,7 @@ void   teventsel::gettext(word nr) //gibt in txt den string zurÅck
 void         teventsel::buttonpressed(byte         id)
 {    pevent       e, ne;
      byte         i; 
-     boolean      b; 
+     char      b; 
 //     char         s[200];
      tevent         *en, *pen;
 

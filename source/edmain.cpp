@@ -1,6 +1,9 @@
-//     $Id: edmain.cpp,v 1.13 2000-05-22 15:40:34 mbickel Exp $
+//     $Id: edmain.cpp,v 1.14 2000-05-23 20:40:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/05/22 15:40:34  mbickel
+//      Included patches for Win32 version
+//
 //     Revision 1.12  2000/05/10 19:55:49  mbickel
 //      Fixed empty loops when waiting for mouse events
 //
@@ -527,7 +530,7 @@ void         editor(void)
 {  int execcode;
    int lastx;
    int lasty;
-   boolean curposchanged;
+   char curposchanged;
 
    cursor.show();
    do {
