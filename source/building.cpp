@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.32 2000-07-29 14:54:11 mbickel Exp $
+//     $Id: building.cpp,v 1.33 2000-07-29 18:40:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/07/29 14:54:11  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.31  2000/07/16 16:15:49  mbickel
 //      Building: ammotransfer improved
 //
@@ -2065,6 +2068,7 @@ ccontainer :: cammunitiontransfer_subwindow :: cammunitiontransfer_subwindow ( v
    }
    actschieber = 0 ;
    externalloadingactive = 0;
+   page = 0;
 }
 
 int  ccontainer :: cammunitiontransfer_subwindow :: subwin_available ( void )
@@ -2231,6 +2235,9 @@ void  ccontainer :: cammunitiontransfer_subwindow :: reset ( pvehicle veh )
    }
    pagenum = num / 8;
    if ( page > pagenum )
+      page = 0;
+
+   if ( page < 0 )
       page = 0;
 }                                                          
 
