@@ -1,6 +1,10 @@
-//     $Id: artint.cpp,v 1.28 2000-09-25 13:25:51 mbickel Exp $
+//     $Id: artint.cpp,v 1.29 2000-09-25 15:05:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/09/25 13:25:51  mbickel
+//      The AI can now change the height of units
+//      Heightchaning routines improved
+//
 //     Revision 1.27  2000/09/24 19:57:02  mbickel
 //      ChangeUnitHeight functions are now more powerful since they use
 //        UnitMovement on their own.
@@ -800,7 +804,7 @@ AI::Section* AI :: Sections :: getBest ( const pvehicle veh, int* xtogo, int* yt
 }
 
 
-int  AI :: getBestHeight ( pvehicle veh )
+int  AI :: getBestHeight ( const pvehicle veh )
 {
    int heightNum = 0;
    for ( int i = 0; i < 8; i++ )
@@ -811,15 +815,15 @@ int  AI :: getBestHeight ( pvehicle veh )
 
    int bestHeight = -1;
    float bestHeightValue = minfloat;
-   for ( int i = 0; i < 8; i++ )
-      if ( veh->typ->height & ( 1 << i )) {
+   for ( int j = 0; j < 8; j++ )
+      if ( veh->typ->height & ( 1 << j )) {
          tvehicle v ( veh, NULL );
-         v.height = 1<<i;
+         v.height = 1<<j;
          calculateThreat ( &v );
 
          float value = v.aiparam[getPlayer()]->value;
-         if ( v.typ->movement[i] )
-            value *=  log( v.typ->movement[i] );
+         if ( v.typ->movement[j] )
+            value *=  log( v.typ->movement[j] );
 
          float threat = sections.getForCoordinate( v.xpos, v.ypos ).avgFieldThreat.threat[ v.aiparam[getPlayer()]->valueType ];
          if ( threat )
@@ -827,7 +831,7 @@ int  AI :: getBestHeight ( pvehicle veh )
 
          if ( value > bestHeightValue ) {
             bestHeightValue = value;
-            bestHeight = 1 << i;
+            bestHeight = 1 << j;
          }
       }
 

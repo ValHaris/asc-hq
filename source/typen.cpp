@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.48 2000-09-25 13:25:53 mbickel Exp $
+//     $Id: typen.cpp,v 1.49 2000-09-25 15:06:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2000/09/25 13:25:53  mbickel
+//      The AI can now change the height of units
+//      Heightchaning routines improved
+//
 //     Revision 1.47  2000/09/07 15:49:47  mbickel
 //      some cleanup and documentation
 //
@@ -1031,11 +1035,11 @@ void Vehicle :: clone ( pvehicle src, pmap actmap )
      else
         loading[i] = NULL;
 
-   for ( int i = 0; i < 8; i++ )
-      if ( src->aiparam[i] )
-         aiparam[i] = new AiParameter ( *src->aiparam[i] );
+   for ( int j = 0; j < 8; j++ )
+      if ( src->aiparam[j] )
+         aiparam[j] = new AiParameter ( *src->aiparam[j] );
       else
-         aiparam[i] = NULL;
+         aiparam[j] = NULL;
 
    if ( actmap )
       actmap->chainunit ( this );
