@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.25 2000-05-07 12:12:12 mbickel Exp $
+//     $Id: controls.cpp,v 1.26 2000-05-08 20:39:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/05/07 12:12:12  mbickel
+//      New mouse option dialog
+//      weapon info can now be displayed by clicking on a unit
+//
 //     Revision 1.24  2000/05/02 16:20:52  mbickel
 //      Fixed bug with several simultaneous vehicle actions running
 //      Fixed graphic error at ammo transfer in buildings
@@ -1780,18 +1784,24 @@ class tdrawgettempline  {
                    {
                       double pi = 3.141592654;
                       double delta = w2 - w1;
-                      if ( delta == 0 )
+                      // printf(" wc : %f %f %f \n", w1, w2, delta );
+                      if ( delta > -0.0001 && delta < 0.0001 )
                          return 0;
 
-                      if ( delta > 0 && delta <= pi )
-                         return 1;
-                      if ( delta < 0 && delta >= -pi )
-                         return -1;
+                      if ( delta > 0 ) {
+                         if ( delta <= pi )
+                            return 1;
+                         else
+                            return -1;
+                      }
 
-                      if ( delta > 0 && delta > pi )
-                         return -1;
-                      if ( delta < 0 && delta < -pi )
-                         return 1;
+                      if ( delta < 0 ) {
+                         if ( delta < -pi )
+                            return 1;
+                         else
+                            return -1;
+                      }
+
                       return 0;
                    }
               };
@@ -1838,18 +1848,22 @@ double tdrawgettempline :: winkel ( int x, int y )
 
    int dx = xp2-xp1;
    int dy = yp2-yp1;
-
    double at = atan2 ( dy, dx );
+   // printf("%d / %d / %f \n", dx, dy, at);
    at -= offset;
    while ( at < 0 )
       at += 2 * 3.14159265;
 
+   // printf("%f \n", at);
    return at;
 }
+
+#define checkvisibility
 
 void tdrawgettempline :: start ( int x1, int y1, int x2, int y2 )
 {
    init();
+
    sx = x2;
    sy = y2;
 
@@ -1871,13 +1885,30 @@ void tdrawgettempline :: start ( int x1, int y1, int x2, int y2 )
       }
    }
 
+  #ifdef checkvisibility
+   int ldist = beeline ( x1, y1, x2, y2 );
+  #endif
 
    int lastdir = winkelcomp ( w, dirs[dir] );
+/*
+   if ( x1 == 18 && y1 == 24 && x2 == 18 && y2 == 9 ) {
+      printf("blurb");
+   }
+*/
 
    getnextfield( x, y, dir );
    while ( x != x2 || y != y2 ) {
+      #ifdef checkvisibility
+       int ldist2 = beeline ( x, y, x2, y2 );
+       if ( ldist2 > ldist ) {
+          displaymessage ( "inconsistency in tdrawgettempline :: start ; parameters are %d/%d ; %d/%d ", 1, x1, y1, x2, y2 );
+          return;
+       }
+      #endif
+
        putpix8 ( x, y );
        double w2 = winkel ( x, y );
+       // printf("%f \n", w2);
        if ( lastdir > 0 ) {
           if ( winkelcomp ( w2,  w ) == 1 ) {
              dir--;
@@ -1991,6 +2022,8 @@ void         tcomputeview::testfield(void)
             if ( height == chtieffliegend )
                freefields = 1;
            tdrawgettempline lne ( freefields );
+           if ( startx == -1 || starty == -1 )
+              displaymessage("error in tcomputeview::testfield",1 );
            lne.start ( startx, starty, xp, yp );
            str -= f;
            str -= lne.tempsum;

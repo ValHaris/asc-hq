@@ -74,7 +74,7 @@ EXTRA_DIST = events.cpp graphics.cpp graphics.h timer.cpp sound.cpp sound.h
 
 ####### kdevelop will overwrite this part!!! (end)############
 
-CXXFLAGS = -g -DHEXAGON -DFREEMAPZOOM -funsigned-char -D_NOASM_ -DNEWKEYB
+CXXFLAGS = @CXXFLAGS@ -DHEXAGON -DFREEMAPZOOM -funsigned-char -D_NOASM_ -DNEWKEYB
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
 CONFIG_CLEAN_FILES = 

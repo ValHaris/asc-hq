@@ -30,12 +30,12 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/configure.in,/home/martin/asc/configure,/home/martin/asc/config.status,/home/martin/asc/config.log,/home/martin/asc/ChangeLog,/home/martin/asc/asc.kdevprj,/home/martin/asc/source/unitctrl.cpp,/home/martin/asc/source/gui.cpp,/home/martin/asc/source/Makefile.am,/home/martin/asc/source/mapedit/Makefile.am,/home/martin/asc/source/sdl/events.cpp,/home/martin/asc/source/sdl/Makefile.am,/home/martin/asc/source/mousehnd.h,/home/martin/asc/source/loadbi3.cpp,/home/martin/asc/source/strtmesg.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/controls.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/Makefile.am
-cpp_file=/home/martin/asc/source/strtmesg.cpp
-browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/reference/C/FUNCTIONS/funcref.htm#headers
+header_file=Unbenannt.h
+cpp_file=/home/martin/asc/source/controls.cpp
+browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/reference/C/FUNCTIONS/format.html
 [source/controls.cpp]
 install_location=
 dist=true

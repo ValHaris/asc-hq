@@ -186,17 +186,14 @@ int rlemain ( char* argv1, char* argv2  )
 int
 bzmain( char *argv1, char* argv2  )
 {
-    int bufsize = 1000000;
-    void* buf = malloc ( bufsize );
+    int size = filesize ( argv1 );
+    void* buf = malloc ( size );
 
 
     tnfilestream instream ( argv1, 1 );
     tnfilestream outstream ( argv2, 2 );
-    int size = filesize ( argv1 );
-    do {
-       instream.readdata ( buf, size, 0 );
-       outstream.writedata ( buf, size );
-    } while ( size == bufsize );
+    instream.readdata ( buf, size, 0 );
+    outstream.writedata ( buf, size );
 
     free ( buf );
     return 0;
@@ -379,7 +376,6 @@ int main(int argc, char *argv[] )
          name++;
       }
 
-// #ifdef _DOS_
       char* c = name;
       while ( *c ) {
          if ( *c == '\n' || *c == '\r' )
@@ -419,35 +415,6 @@ int main(int argc, char *argv[] )
            closedir( dirp ); 
          } 
       }
-/*
-#else
-      char* c;
-      if ((c = index(name,'\n'))) { *c = 0 ; }
-      int fnd = 0;
-      for (int j = 0; j < num; j++ )
-        if (strcmp(nindex[j].name, name) == 0) {
-          fnd = 1;
-          break;
-        }
-      if (!fnd) {
-        struct stat s;
-        if (stat(name,&s) == 0) {
-          if (compress) {
-            testcompress(name,s.st_size);
-          }
-          else {
-            printf("file %14s is not compressed, ", name );
-            copyfile(name, name, s.st_size);
-          }
-        }
-        else {
-          printf("file %14s not found\n", name );
-        }
-      }
-#endif
-*/
-
-
    } /* endwhile */
 
    printf ( "ftell: %d ; pos : %d ; num : %d \n ", ftell ( out ), pos, num );
