@@ -73,16 +73,16 @@ VERSION = @VERSION@
 
 CXXFLAGS = @CXXFLAGS@ -Dconverter
 
-bin_PROGRAMS = ascdemount ascmount asc_gfx2pcx asc_makegfx asc_mntgraph
+bin_PROGRAMS = asc_demount asc_mount asc_gfx2pcx asc_makegfx asc_mntgraph
 
-ascdemount_SOURCES = demount.cpp basestrm.cpp misc.cpp ascstring.cpp
-ascmount_SOURCES = mount.cpp   basestrm.cpp misc.cpp ascstring.cpp
+asc_demount_SOURCES = demount.cpp basestrm.cpp misc.cpp ascstring.cpp
+asc_mount_SOURCES = mount.cpp   basestrm.cpp misc.cpp ascstring.cpp
 asc_gfx2pcx_SOURCES = bi2pcx.cpp    basestrm.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp
 asc_makegfx_SOURCES = makegfx.cpp   basestrm.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp
 asc_mntgraph_SOURCES = mntgraph.cpp  basestrm.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp
 
-ascmount_LDADD = -lSDL -lpthread @LDADDLIBBZ2@
-ascdemount_LDADD = -lSDL -lpthread @LDADDLIBBZ2@
+asc_mount_LDADD = -lSDL -lpthread @LDADDLIBBZ2@
+asc_demount_LDADD = -lSDL -lpthread @LDADDLIBBZ2@
 asc_gfx2pcx_LDADD = ../../sdl/libsdl.a -lSDL -lpthread @LDADDLIBBZ2@
 asc_makegfx_LDADD = ../../sdl/libsdl.a -lSDL -lpthread @LDADDLIBBZ2@
 asc_mntgraph_LDADD = ../../sdl/libsdl.a -lSDL -lpthread @LDADDLIBBZ2@
@@ -96,12 +96,12 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I../../..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-ascdemount_OBJECTS =  demount.o basestrm.o misc.o ascstring.o
-ascdemount_DEPENDENCIES = 
-ascdemount_LDFLAGS = 
-ascmount_OBJECTS =  mount.o basestrm.o misc.o ascstring.o
-ascmount_DEPENDENCIES = 
-ascmount_LDFLAGS = 
+asc_demount_OBJECTS =  demount.o basestrm.o misc.o ascstring.o
+asc_demount_DEPENDENCIES = 
+asc_demount_LDFLAGS = 
+asc_mount_OBJECTS =  mount.o basestrm.o misc.o ascstring.o
+asc_mount_DEPENDENCIES = 
+asc_mount_LDFLAGS = 
 asc_gfx2pcx_OBJECTS =  bi2pcx.o basestrm.o misc.o ascstring.o loadpcxc.o \
 palette.o sgstream.o newfont.o basegfx.o graphicset.o gameoptions.o \
 CLoadable.o Named.o Property.o PropertyGroup.o stack.o buildingtype.o \
@@ -137,8 +137,8 @@ DEP_FILES =  .deps/CLoadable.P .deps/Named.P .deps/Property.P \
 .deps/misc.P .deps/mntgraph.P .deps/mount.P .deps/newfont.P \
 .deps/palette.P .deps/password.P .deps/sgstream.P .deps/stack.P \
 .deps/typen.P .deps/vehicletype.P
-SOURCES = $(ascdemount_SOURCES) $(ascmount_SOURCES) $(asc_gfx2pcx_SOURCES) $(asc_makegfx_SOURCES) $(asc_mntgraph_SOURCES)
-OBJECTS = $(ascdemount_OBJECTS) $(ascmount_OBJECTS) $(asc_gfx2pcx_OBJECTS) $(asc_makegfx_OBJECTS) $(asc_mntgraph_OBJECTS)
+SOURCES = $(asc_demount_SOURCES) $(asc_mount_SOURCES) $(asc_gfx2pcx_SOURCES) $(asc_makegfx_SOURCES) $(asc_mntgraph_SOURCES)
+OBJECTS = $(asc_demount_OBJECTS) $(asc_mount_OBJECTS) $(asc_gfx2pcx_OBJECTS) $(asc_makegfx_OBJECTS) $(asc_mntgraph_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -192,13 +192,13 @@ distclean-compile:
 
 maintainer-clean-compile:
 
-ascdemount: $(ascdemount_OBJECTS) $(ascdemount_DEPENDENCIES)
-	@rm -f ascdemount
-	$(CXXLINK) $(ascdemount_LDFLAGS) $(ascdemount_OBJECTS) $(ascdemount_LDADD) $(LIBS)
+asc_demount: $(asc_demount_OBJECTS) $(asc_demount_DEPENDENCIES)
+	@rm -f asc_demount
+	$(CXXLINK) $(asc_demount_LDFLAGS) $(asc_demount_OBJECTS) $(asc_demount_LDADD) $(LIBS)
 
-ascmount: $(ascmount_OBJECTS) $(ascmount_DEPENDENCIES)
-	@rm -f ascmount
-	$(CXXLINK) $(ascmount_LDFLAGS) $(ascmount_OBJECTS) $(ascmount_LDADD) $(LIBS)
+asc_mount: $(asc_mount_OBJECTS) $(asc_mount_DEPENDENCIES)
+	@rm -f asc_mount
+	$(CXXLINK) $(asc_mount_LDFLAGS) $(asc_mount_OBJECTS) $(asc_mount_LDADD) $(LIBS)
 
 asc_gfx2pcx: $(asc_gfx2pcx_OBJECTS) $(asc_gfx2pcx_DEPENDENCIES)
 	@rm -f asc_gfx2pcx

@@ -66,10 +66,10 @@ install_location=
 type=DATA
 [Workspace_1]
 browser_file=file:/opt/kde2/share/doc/HTML/default/kdeapi/khtml/KHTMLPart.html#ref24
-cpp_file=/home/martin/asc/source/graphicset.cpp
-header_file=/home/martin/asc/source/loadpcx.h
-openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/tools/mntgraph.cpp,/home/martin/asc/source/gui.cpp,/home/martin/asc/source/graphicset.cpp,/home/martin/asc/source/loadpcx.h,/home/martin/asc/source/sgstream.cpp,/home/martin/asc/source/tools/makegfx.cpp
-show_outputview=true
+cpp_file=/home/martin/asc/source/tools/makegfx.cpp
+header_file=Untitled.h
+openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/tools/makegfx.cpp
+show_outputview=false
 show_treeview=true
 [asc.kdevprj]
 dist=true
