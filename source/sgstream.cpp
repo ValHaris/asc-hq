@@ -1,6 +1,10 @@
-//     $Id: sgstream.cpp,v 1.35 2000-10-14 13:07:01 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.36 2000-10-14 14:16:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2000/10/14 13:07:01  mbickel
+//      Moved DOS version into own subdirectories
+//      Win32 version with Watcom compiles and links ! But doesn't run yet...
+//
 //     Revision 1.34  2000/10/12 22:24:02  mbickel
 //      Made the DOS part of the new platform system work again
 //
@@ -221,7 +225,7 @@
 #endif
 
 #ifdef _DOS_
- #include "dos\\memory.h"
+ #include "dos/memory.h"
 #endif
 
 

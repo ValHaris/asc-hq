@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.101 2000-10-14 10:52:52 mbickel Exp $
+//     $Id: sg.cpp,v 1.102 2000-10-14 14:16:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.101  2000/10/14 10:52:52  mbickel
+//      Some adjustments for a Win32 port
+//
 //     Revision 1.100  2000/10/12 22:24:00  mbickel
 //      Made the DOS part of the new platform system work again
 //
@@ -3071,13 +3074,6 @@ void ASC_UpdateRect(SDL_Surface *screen, Sint32 x, Sint32 y, Uint32 w, Uint32 h)
 */
 
 
-void crash ( void )
-{
-  char* c = 0;
-  int crash = *c;
-  printf("%d %c", crash, *c );
-}
-
 int main(int argc, char *argv[] )
 {
    // dont_use_linear_framebuffer = 1;
@@ -3321,7 +3317,6 @@ int main(int argc, char *argv[] )
 
       tnewkeyb nkb;
 
-   // crash();
       try {
          int fs = loadFullscreenImage ( "helisun.jpg" );
          if ( !fs ) {

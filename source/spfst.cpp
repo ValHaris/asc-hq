@@ -1,6 +1,12 @@
-//     $Id: spfst.cpp,v 1.64 2000-10-12 19:00:22 mbickel Exp $
+//     $Id: spfst.cpp,v 1.65 2000-10-14 14:16:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.64  2000/10/12 19:00:22  mbickel
+//      Fixed crash in building placement
+//      Replaced multi-character character constants by strings (there where
+//        problems with the byte order)
+//      Building ID and name are now correctly displayed in mapeditor
+//
 //     Revision 1.63  2000/10/11 15:33:44  mbickel
 //      Adjusted small editors to the new ASC structure
 //      Watcom compatibility
@@ -291,11 +297,6 @@
 
 #include <stdio.h>                                                                   
 #include <string.h>
-#ifdef _DOS_
-#include <conio.h>
-#endif
-
-
 
 #if (__WATCOM_CPLUSPLUS__ >= 1100 )
   #define __use_STL_for_ASC__

@@ -1,6 +1,17 @@
-//     $Id: artint.cpp,v 1.33 2000-10-11 14:26:14 mbickel Exp $
+//     $Id: artint.cpp,v 1.34 2000-10-14 14:16:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/10/11 14:26:14  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.32  2000/09/27 16:08:22  mbickel
 //      AI improvements
 //
@@ -158,12 +169,6 @@
 
 
 #include <stdio.h>
-
-#ifdef _DOS_
- #include <i86.h>
- #include <conio.h>
- #include <dos.h>
-#endif
 
 #include <string.h>
 #include <stdlib.h>

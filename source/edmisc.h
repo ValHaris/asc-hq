@@ -1,6 +1,17 @@
-//     $Id: edmisc.h,v 1.12 2000-10-11 14:26:33 mbickel Exp $
+//     $Id: edmisc.h,v 1.13 2000-10-14 14:16:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/10/11 14:26:33  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.11  2000/08/12 12:52:47  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -74,11 +85,6 @@
 
 #include <string.h>
 #include <stdlib.h>
-#ifdef _DOS_
-#include <conio.h>
-#include <dos.h>
-#endif
-
 #include <malloc.h>
 #include <ctype.h>
 

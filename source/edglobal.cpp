@@ -1,6 +1,17 @@
-//     $Id: edglobal.cpp,v 1.19 2000-10-11 14:26:30 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.20 2000-10-14 14:16:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/10/11 14:26:30  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.18  2000/08/12 12:52:46  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -400,7 +411,7 @@ char* getbipath ( void )
       strcat ( filename2, pathdelimitterstring );
       strcat ( filename2, "*.dat");
       cnt++;
-      #ifndef _DOS_
+      #if CASE_SENSITIVE_FILE_NAMES == 1
       if (!exist ( filename2 ) && cnt == 1 )
          displaymessage("The 'mis' and 'ger' / 'eng' directories must be lower case to import files from them !", 1 );
       #endif

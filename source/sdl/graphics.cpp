@@ -15,9 +15,20 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.13 2000-10-11 14:26:57 mbickel Exp $
+//     $Id: graphics.cpp,v 1.14 2000-10-14 14:16:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/10/11 14:26:57  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.12  2000/08/21 17:51:04  mbickel
 //      Fixed: crash when unit reaching max experience
 //      Fixed: crash when displaying research image
@@ -95,7 +106,7 @@ void setWindowCaption ( const char* s )
 
 int initgraphics ( int x, int y, int depth )
 {
-  if ( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE ) < 0 ) {
+  if ( SDL_Init(SDL_INIT_VIDEO ) < 0 ) {
      fprintf(stderr, "Couldn't initialize SDL: %s\n", SDL_GetError());
      return -1;
   }

@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.47 2000-10-14 10:52:49 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.48 2000-10-14 14:16:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2000/10/14 10:52:49  mbickel
+//      Some adjustments for a Win32 port
+//
 //     Revision 1.46  2000/10/11 14:26:35  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -220,11 +223,6 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <math.h>
-
-#ifdef _DOS_
- #include <dos.h>
- #include <conio.h>
-#endif
 
 #if TIME_WITH_SYS_TIME
 # include <sys/time.h>

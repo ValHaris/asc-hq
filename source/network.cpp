@@ -1,6 +1,9 @@
-//     $Id: network.cpp,v 1.12 2000-10-14 10:52:52 mbickel Exp $
+//     $Id: network.cpp,v 1.13 2000-10-14 14:16:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/10/14 10:52:52  mbickel
+//      Some adjustments for a Win32 port
+//
 //     Revision 1.11  2000/08/12 12:52:49  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -127,11 +130,7 @@ void tfiletransfernetworkconnection::tsetup::init ( void )
    x1 = -1;
    y1 = -1;
    addbutton ( "~f~ilename", 20, starty + 40, xsize - 160, starty + 70, 1 , 0, 1, true );
-   #ifdef _DOS_
-    addeingabe ( 1, filename, 1, 8 );
-   #else
-    addeingabe ( 1, filename, 1, 255 );
-   #endif
+   addeingabe ( 1, filename, 1, maxfilenamelength );
 
    addbutton ( "~s~elect",   xsize - 140, starty + 40, xsize - 20, starty + 70, 0 , 1, 2, true );
 

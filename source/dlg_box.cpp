@@ -1,6 +1,9 @@
-//     $Id: dlg_box.cpp,v 1.32 2000-10-14 10:52:48 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.33 2000-10-14 14:16:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/10/14 10:52:48  mbickel
+//      Some adjustments for a Win32 port
+//
 //     Revision 1.31  2000/10/11 14:26:28  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -164,12 +167,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
-
-#ifdef _DOS_
-#include <conio.h>
-#include <dos.h>
-#endif
-
 #include <stdarg.h>
 
 #include "tpascal.inc"

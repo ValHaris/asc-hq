@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.60 2000-10-14 10:52:46 mbickel Exp $
+//     $Id: dialog.cpp,v 1.61 2000-10-14 14:16:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2000/10/14 10:52:46  mbickel
+//      Some adjustments for a Win32 port
+//
 //     Revision 1.59  2000/10/12 21:37:51  mbickel
 //      Further restructured platform dependant routines
 //
@@ -287,12 +290,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
-
-#ifdef _DOS_
- #include <dos.h>
- #include <conio.h>
-#endif
-
 #include <stdarg.h>
 
 #include "tpascal.inc"
