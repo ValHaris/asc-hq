@@ -1,9 +1,10 @@
-FAQ :
+For information about compiling the Linux version of ASC refer to the file 
+'INSTALL' 
 
-THE COMPILE COMPLAINS IT CAN'T FIND SDL.
+For information about running the Linux version of ASC refer to 
+'doc/readme.linux'.
 
-./configure --with-SDL-prefix=<where>
-<where> should be the prefix you make installed SDL into.
+Information about playing ASC (for example: 'how do mines work?') can be found
+in 'doc/asc.html'. That file is totally platform independant.
 
-
-Check out doc/readme.linux for information about running ASC.
+If you want to improve ASC I recommend to read the file 'doc/source.htm'

@@ -1,9 +1,23 @@
-The linux version of ASC is a direct port of the DOS version. It does not 
+This file describes how to run the Linux version of Advanced Strategic Command.
+
+For information about compiling the Linux version of ASC refer to the file 
+'INSTALL' which is distributed with the source code.
+
+Information about playing ASC (for example: 'how do mines work?') can be found
+in 'doc/asc.html'. That file is totally platform independant.
+
+If you want to improve ASC I recommend to read the file 'doc/source.htm'
+
+------------------------------------------------------------------------------
+
+The linux version of ASC is a direct port of the DOS version. It does not yet
 have any Unix specific behaviour.
 
 To run ASC, ensure you're cded into the directory containing main.con and 
 type ./asc
 All savegames, maps and configuration files will be stored in this directory.
+If you don't have the file 'main.con', get the ASC data package from 
+www.asc-hq.org 
 
 There is help available on setting up email games under the help menu 
 available by moving your mouse to the top of the screen/window and
@@ -11,9 +25,9 @@ clicking on help on the right hand side when the menu bar appears.
 
 Troubleshooting:
 
-1)  ASC complains it can find palette.pal
-    This happens if main.con are not in your current directory when you run asc.  
-    cd to the asc directory ( containing main.con ) and try again.
+1)  ASC complains it can't find palette.pal
+    This happens if main.con are not in your current directory when you run 
+    asc. cd to the asc directory ( containing main.con ) and try again.
 
 2)  ASC complains it can't load libSDL-1.0.so.0
     This happens if you haven't got version 1.0.2 or later of SDL installed
@@ -56,6 +70,7 @@ Some notes:
    The fullscreen code of SDL was recently enhanced to enable fullscreen
    without beeing root. This runs on my system.
  - frame buffer console usage is untested
+
 
 Martin Bickel
 martin@asc-hq.org

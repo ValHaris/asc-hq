@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.29 2000-04-01 11:38:39 mbickel Exp $
+//     $Id: sg.cpp,v 1.30 2000-04-15 15:52:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/04/01 11:38:39  mbickel
+//      Updated the small editors
+//      Added version numbering
+//
 //     Revision 1.28  2000/03/29 15:28:28  mbickel
 //      Preparations for the Linux release:
 //       updated help files and documentation
@@ -3126,11 +3130,26 @@ int main(int argc, char *argv[] )
 
         try {
            opencontainer ( "*.con" );
-   
+        } /* endtry */
+        catch ( tfileerror err ) {
+           displaymessage ( "a fatal error occured while mounting the container files \n", 2 );
+        } /* endcatch */
+        catch ( ... ) {
+           displaymessage ( "loading of game failed during pre graphic initializing", 2 );
+        } /* endcatch */
+
+        try {
+           tnfilestream strm ( "palette.pal", 1 );
+           int a;
+           strm.readdata2 ( a );
+        } /* endtry */
+        catch ( tfileerror err ) {
+           displaymessage ( " unable to access palette.pal\nMake sure the data file 'main.con' is in the active directory !\nIf you don't have a file 'main.con' , get the data package from www.asc-hq.org\n ", 2 );
+        } /* endcatch */
+
+        try {
            readgameoptions();
-          #ifdef HEXAGON
            check_bi3_dir ();
-          #endif
         } /* endtry */
         catch ( tfileerror err ) {
            displaymessage ( "unable to access file %s \n", 2, err.filename );
