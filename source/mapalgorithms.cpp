@@ -425,16 +425,21 @@ WindMovement::WindMovement ( const Vehicle* vehicle )
          float unitspeedy = movement * cos(direc/180*pi);
 
          float angle = atan2( unitspeedx, unitspeedy + abswindspeed );
+         if ( angle < 0 )
+            angle += 2 * pi;
 
-         if ( angle >= 60 * lastDir / (2*pi) ) {
+         if ( angle >= 60 * float(lastDir) * (2*pi) / 360 ) {
             float absspeed = sqrt ( square ( unitspeedy + abswindspeed)+ square ( unitspeedx) );
             wmn[lastDir] = int( 10 - 10*movement/absspeed );
             ++lastDir;
          }
       }
       
-      for ( int i = 0; i < 6; i++ )
+      for ( int i = 0; i <= 3; i++ ) {
          wm[(i+vehicle->getMap()->weather.windDirection)%6] = wmn[i];
+         if ( i > 0 )
+            wm[(6-i+vehicle->getMap()->weather.windDirection)%6] = wmn[i];
+      }
    }
 }
 

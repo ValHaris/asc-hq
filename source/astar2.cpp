@@ -364,16 +364,22 @@ void findPath( pmap actmap, AStar::Path& path, pvehicle veh, int x, int y )
 ///////////////////////////////////////////////////////////////////
 
 
-bool operator < ( const AStar3D::Node& a, const AStar3D::Node& b )
+bool operator< ( const AStar3D::Node& a, const AStar3D::Node& b )
 {
     // To compare two nodes, we compare the `f' value, which is the
     // sum of the g and h values.
-    return (a.gval+a.hval) < (b.gval+b.hval);
+    if ( a.hval >= AStar3D::longestPath || b.hval >= AStar3D::longestPath )
+       return a.gval < b.gval;
+    else
+       return (a.gval+a.hval) < (b.gval+b.hval);
 }
 
-bool operator > ( const AStar3D::Node& a, const AStar3D::Node& b )
+bool operator> ( const AStar3D::Node& a, const AStar3D::Node& b )
 {
-    return (a.gval+a.hval) > (b.gval+b.hval);
+    if ( a.hval >= AStar3D::longestPath || b.hval >= AStar3D::longestPath )
+       return a.gval > b.gval;
+    else
+       return (a.gval+a.hval) > (b.gval+b.hval);
 }
 
 
@@ -510,18 +516,37 @@ AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const
 // to traverse the entire data structure to update certain elements; the
 // abstraction layer on priority_queue wouldn't let me do that.
 
-// Wouldn't maps be fast ?? [MB]
+
 
 inline void AStar3D::get_first( Container& v, Node& n )
 {
+#ifdef _DEBUG_ASTAR
+        for ( Container::iterator i = v.begin(); i != v.end(); i++ )
+           if ( i->gval < v.begin()->gval )
+              warning("warning");
+#endif
+
     n = v.front();
     pop_heap( v.begin(), v.end(), comp );
     v.pop_back();
+
+#ifdef _DEBUG_ASTAR
+        for ( Container::iterator i = v.begin(); i != v.end(); i++ )
+           if ( i->gval < v.begin()->gval )
+              warning("warning");
+#endif
 }
 
 
 void AStar3D :: nodeVisited ( const Node& N2, HexDirection direc, Container& open, int prevHeight, int heightChangeDist )
 {
+
+#ifdef _DEBUG_ASTAR
+        for ( Container::iterator i = open.begin(); i != open.end(); i++ )
+           if ( i->gval < open.begin()->gval )
+              warning("warning");
+#endif
+
    // If this spot (hn) hasn't been visited, its mark is DirNone
    if( getPosDir(N2.h) == DirNone ) {
 
@@ -554,6 +579,7 @@ void AStar3D :: nodeVisited ( const Node& N2, HexDirection direc, Container& ope
            if( N3.gval > N2.gval ) {
                getPosDir(N2.h) = ReverseDirection(direc);
                getPosHHop(N2.h) = 10 + prevHeight + 1000 * heightChangeDist;
+
                // Replace N3 with N2 in the open list
                Container::iterator last = open.end() - 1;
 
@@ -561,11 +587,25 @@ void AStar3D :: nodeVisited ( const Node& N2, HexDirection direc, Container& ope
                *find1 = *last;
 
                *last = N2;
+
                push_heap( open.begin(), open.end(), comp );
            }
-       }
+       } /*else
+          if ( N2.gval <= MAXIMUM_PATH_LENGTH && N2.gval <= longestPath ) {
+             getPosDir(N2.h) = ReverseDirection(direc);
+             getPosHHop(N2.h) = 10 + prevHeight + 1000 * heightChangeDist;
+             open.push_back( N2 );
+             push_heap( open.begin(), open.end(), comp );
+          }*/
    }
-}
+
+#ifdef _DEBUG_ASTAR
+        for ( Container::iterator i = open.begin(); i != open.end(); i++ )
+           if ( i->gval < open.begin()->gval )
+              warning("warning");
+#endif
+
+ }
 
 
 const int* getDirectionOrder ( int x, int y, int x2, int y2 )
@@ -634,6 +674,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
     // While there are still nodes to visit, visit them!
     while( !open.empty() ) {
         get_first( open, N );
+
         visited.push_back( N );
         // If we're at the goal, then exit
         for ( vector<MapCoordinate3D>::const_iterator i = B.begin(); i != B.end(); i++ )

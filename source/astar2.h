@@ -138,7 +138,6 @@ class AStar3D {
        bool markTemps;
        WindMovement* wind;
 
-
        virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const pvehicle vehicle, bool& canStop, bool& hasAttacked );
 
        HexDirection* posDirs;
