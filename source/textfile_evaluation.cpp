@@ -494,7 +494,7 @@ PropertyReadingContainer :: ~PropertyReadingContainer (  )
 {
    closeBracket();
    if ( levelDepth )
-      error ( "PropertyWritingContainer :: ~PropertyWritingContainer - still brackets open" );
+      error ( "PropertyReadingContainer :: ~PropertyReadingContainer - still brackets open" );
 }
 
 PropertyWritingContainer :: PropertyWritingContainer ( const ASCString& baseName, tnstream& stream ) : PropertyContainer ( baseName, NULL, false ), stream ( stream )

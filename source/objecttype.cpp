@@ -919,35 +919,36 @@ void ObjectType :: setupImages()
    #ifndef converter
    for ( int ww = 0; ww < cwettertypennum; ww++ )
       if ( weather.test( ww ) )
-         for ( int n = 0; n < weatherPicture[ww].bi3pic.size(); n++ ) {
-            if ( weatherPicture[ww].flip[n] == 1 ) {
-               void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-               flippict ( weatherPicture[ww].images[n], buf , 1 );
-               asc_free ( weatherPicture[ww].images[n] );
-               weatherPicture[ww].images[n] = buf;
-               copycount++;
-            }
+         for ( int n = 0; n < weatherPicture[ww].bi3pic.size(); n++ ) 
+			   if ( weatherPicture[ww].flip.size() > n ) {
+               if ( weatherPicture[ww].flip[n] == 1 ) {
+                  void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
+                  flippict ( weatherPicture[ww].images[n], buf , 1 );
+                  asc_free ( weatherPicture[ww].images[n] );
+                  weatherPicture[ww].images[n] = buf;
+                  copycount++;
+               }
 
-            if ( weatherPicture[ww].flip[n] == 2 ) {
-               void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-               flippict ( weatherPicture[ww].images[n], buf , 2 );
-               asc_free ( weatherPicture[ww].images[n] );
-               weatherPicture[ww].images[n] = buf;
-               copycount++;
-            }
+               if ( weatherPicture[ww].flip[n] == 2 ) {
+                  void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
+                  flippict ( weatherPicture[ww].images[n], buf , 2 );
+                  asc_free ( weatherPicture[ww].images[n] );
+                  weatherPicture[ww].images[n] = buf;
+                  copycount++;
+               }
 
-            if ( weatherPicture[ww].flip[n] == 3 ) {
-               void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-               flippict ( weatherPicture[ww].images[n], buf , 2 );
-               flippict ( buf, weatherPicture[ww].images[n], 1 );
-               asc_free( buf );
-               copycount++;
-            }
+               if ( weatherPicture[ww].flip[n] == 3 ) {
+                  void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
+                  flippict ( weatherPicture[ww].images[n], buf , 2 );
+                  flippict ( buf, weatherPicture[ww].images[n], 1 );
+                  asc_free( buf );
+                  copycount++;
+               }
 
 
 //            if ( weatherPicture[ww].bi3pic[n] == -1 )
 //               weatherPicture[ww].flip[n] = 0;
-         }
+            }
    #endif
 
    /*
@@ -1203,7 +1204,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                pc.addIntegerArray ( "ImageReference", imgReferences );
 
                for ( int j = 0; j < weatherPicture[i].images.size(); j++ )
-                  if ( imgReferences[j] >= 0 && imgReferences[j] < weatherPicture[i].images.size() ) {
+                  if ( imgReferences.size() > j && imgReferences[j] >= 0 && imgReferences[j] < weatherPicture[i].images.size() ) {
                      if ( weatherPicture[i].images[j] )
                         asc_free ( weatherPicture[i].images[j] );
                      int newimg = imgReferences[j];
