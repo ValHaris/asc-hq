@@ -1,6 +1,10 @@
-//     $Id: edmain.cpp,v 1.27 2000-10-24 15:35:10 schelli Exp $
+//     $Id: edmain.cpp,v 1.28 2000-10-26 18:55:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/10/24 15:35:10  schelli
+//     MapEd FullScreen support added
+//     weapons ammo now editable in MapEd
+//
 //     Revision 1.26  2000/10/18 17:09:39  mbickel
 //      Fixed eventhandling for DOS
 //
@@ -147,6 +151,7 @@
 #include "edselfnt.h"
 #include "edglobal.h"
 #include "errors.h"
+#include "gameoptions.h"
 
 #include <signal.h>
 
@@ -857,7 +862,6 @@ int mapeditorMainThread ( void* _mapname )
 int main(int argc, char *argv[] )
 { 
    signal ( SIGINT, SIG_IGN );
-   fullscreen = 0;
 
    int resolx = 800;
    int resoly = 600;
@@ -877,6 +881,8 @@ int main(int argc, char *argv[] )
 
    char *mapname = NULL, *configfile = NULL;
    int showmodes = 0;
+   int forceWindowedMode = 0;
+   fullscreen = 0;
 
    for (i = 1; i<argc; i++ ) {
       if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
@@ -899,7 +905,7 @@ int main(int argc, char *argv[] )
       if ( strcmpi ( &argv[i][1], "WINDOW" ) == 0 ||
           strcmpi ( &argv[i][1], "W" ) == 0 ||
           strcmpi ( &argv[i][1], "-WINDOW" ) == 0 ) {
-        fullscreen = 0; continue;
+        forceWindowedMode = 1; continue;
       }
 
       if ( strcmpi ( &argv[i][1], "FULLSCREEN" ) == 0 ||
@@ -988,6 +994,8 @@ int main(int argc, char *argv[] )
    atexit ( dispmessageonexit );
 
    initFileIO( configfile );
+   if ( CGameOptions::Instance()->mapeditForceFullscreenMode && !forceWindowedMode )
+      fullscreen = 1;
 
    #ifdef HEXAGON
     check_bi3_dir ();

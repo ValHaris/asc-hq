@@ -1,6 +1,10 @@
-//     $Id: edselfnt.cpp,v 1.16 2000-10-18 14:14:09 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.17 2000-10-26 18:55:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/10/18 14:14:09  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.15  2000/10/12 19:00:21  mbickel
 //      Fixed crash in building placement
 //      Replaced multi-character character constants by strings (there where
@@ -1404,6 +1408,9 @@ void selbuildingcargo( pbuilding bld )
    pvehicletype newcargo = svtfbc.selectitem ( NULL );
    if ( newcargo ) {
       pvehicle unit = new Vehicle ( newcargo, actmap, bld->color / 8 );
+      MapCoordinate mc = bld->getEntry();
+      unit->xpos = mc.x;
+      unit->ypos = mc.y;
       unit->fillMagically();
 
       int match = 0;

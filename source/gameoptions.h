@@ -56,6 +56,7 @@ class CGameOptions
       int disablesound;
       int runAI;
       int forceWindowedMode;
+      int mapeditForceFullscreenMode;
 
       struct Mouse
       {

@@ -1,6 +1,10 @@
-//     $Id: artint.h,v 1.16 2000-10-26 18:14:55 mbickel Exp $
+//     $Id: artint.h,v 1.17 2000-10-26 18:55:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/10/26 18:14:55  mbickel
+//      AI moves damaged units to repair
+//      tmap is not memory layout sensitive any more
+//
 //     Revision 1.15  2000/09/25 20:04:35  mbickel
 //      AI improvements
 //
@@ -144,7 +148,7 @@
            };
 
 
-           struct { 
+           struct Config { 
                // int movesearchshortestway;   /*  kÅrzesten oder nur irgendeinen  */ 
                int lookIntoTransports;   /*  gegnerische transporter einsehen  */ 
                int lookIntoBuildings; 

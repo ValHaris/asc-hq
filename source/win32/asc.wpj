@@ -5,7 +5,7 @@ VpeMain
 1
 WRect
 0
-11
+0
 10240
 9920
 2
@@ -46,7 +46,7 @@ VComponent
 WRect
 3440
 0
-3075
+3066
 7040
 0
 0
@@ -60,10 +60,10 @@ asc.tgt
 VComponent
 15
 WRect
-8044
+8035
 0
-1413
-2642
+1404
+2631
 1
 0
 16
@@ -76,10 +76,10 @@ WFileName
 VComponent
 18
 WRect
-8035
-2654
+8026
+2642
 1440
-2631
+2619
 1
 0
 19
@@ -108,10 +108,10 @@ mapedit\mapedit.tgt
 VComponent
 24
 WRect
-6577
-11
-1448
-7016
+6568
+0
+1440
+7004
 1
 0
 25
@@ -120,4 +120,4 @@ WFileName
 ..\libs\jpeg-6b\jpeg.tgt
 0
 -1
-20
+11

@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.61 2000-10-26 18:15:04 mbickel Exp $
+//     $Id: typen.h,v 1.62 2000-10-26 18:55:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2000/10/26 18:15:04  mbickel
+//      AI moves damaged units to repair
+//      tmap is not memory layout sensitive any more
+//
 //     Revision 1.60  2000/10/17 13:04:14  mbickel
 //      New terrainaccess reading/writing
 //      Added Win32 project files
@@ -1345,7 +1349,7 @@ class tmap {
   
                    
       char         alliances[8][8];
-      struct {
+      struct Player {
          char      existent; 
          pvehicle     firstvehicle; 
          pbuilding    firstbuilding; 
