@@ -350,13 +350,11 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
 
    typedef vector<LocalCoordinate> Fields;
    Fields fields;
-   if ( pc.isReading() ) {
-      StringTokenizer st ( fieldNames );
-      ASCString t = st.getNextToken();
-      while ( !t.empty() ) {
-         fields.push_back ( LocalCoordinate( t ));
-         t = st.getNextToken();
-      }
+   StringTokenizer st ( fieldNames );
+   ASCString t = st.getNextToken();
+   while ( !t.empty() ) {
+      fields.push_back ( LocalCoordinate( t ));
+      t = st.getNextToken();
    }
 
 
@@ -364,7 +362,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
 
    for ( int i = 0; i < 4; i++ )
       for ( int j = 0; j < 6; j++ )
-         if ( bi_picture[0][0][i][j] >= 0 )
+         if ( w_picture[0][0][i][j] && bi_picture[0][0][i][j] >= 0 )
             bi3pics = true;
 
    pc.addBool  ( "UseGFXpics", bi3pics ).evaluate();
@@ -392,7 +390,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
    bool rubble = false;
    for ( int i = 0; i < 4; i++ )
       for ( int j = 0; j < 6; j++ )
-         if ( destruction_objects[i][j] >= 0 )
+         if ( destruction_objects[i][j] > 0 )
             rubble = true;
 
    pc.addBool ( "RubbleObjects", rubble ).evaluate();
