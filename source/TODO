@@ -5,6 +5,7 @@ TODO list for the Linux port:
 1.  Get Truecolor graphics to work (title screen for example)
 2.  Get JPEG images to work. A modified version of the independant JPEG groups
     library is included, but not used by the Linux version yet.
+3.  Clean up the transportcargo routines in mapeditor ( cancel function etc )
     
 11.  Fix comparisons between char and unsigned char that gcc warns about.
 12.  Fix non virtual destructors for classes

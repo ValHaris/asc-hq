@@ -1,6 +1,9 @@
-//     $Id: strtmesg.cpp,v 1.6 2000-04-04 08:31:41 mbickel Exp $
+//     $Id: strtmesg.cpp,v 1.7 2000-04-06 09:07:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/04/04 08:31:41  mbickel
+//      Fixed a bug that exited ASC when trying to give units to your allies.
+//
 //     Revision 1.5  2000/04/03 09:52:16  mbickel
 //      Fixed crash in mine strength calculation
 //
@@ -42,7 +45,7 @@
 
 
 // These strings should be the same as the release tags in CVS !
-const char* asc_release="ASC1.0.3";
+const char* asc_release="ASC1.0.4";
 
 #include <stdio.h>
 

@@ -1,6 +1,10 @@
-//     $Id: edmisc.cpp,v 1.12 2000-04-01 11:38:38 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.13 2000-04-06 09:07:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/04/01 11:38:38  mbickel
+//      Updated the small editors
+//      Added version numbering
+//
 //     Revision 1.11  2000/03/29 09:58:45  mbickel
 //      Improved memory handling for DOS version
 //      Many small changes I can't remember ;-)
@@ -3176,9 +3180,10 @@ char* tvehiclecargo :: getinfotext ( int pos )
 
 void tvehiclecargo :: init ( pvehicle unit )
 {
-   transport = new tvehicle ( unit, NULL ); 
-   orgvehicle = unit;
+   transport = unit;       // if the other way round, freeweight() does not work any more
+   orgvehicle = new tvehicle ( unit, NULL );
    tladeraum::init ( "cargo" );
+   disablebutton ( 8 );
 }
 
 void tvehiclecargo :: displaysingleitem ( int pos, int x, int y )
@@ -3211,10 +3216,10 @@ void tvehiclecargo :: checkforadditionalkeys ( tkey ch )
 
 void tvehiclecargo :: finish ( int cancel )
 {
-   if ( !cancel ) 
-      orgvehicle->clone ( transport, NULL );
+   if ( cancel ) 
+      transport->clone ( orgvehicle, NULL );
    
-   delete transport;
+   delete orgvehicle;
 }
 
 
