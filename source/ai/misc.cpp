@@ -749,13 +749,7 @@ void AI::UnitDistribution::write ( tnstream& stream ) const
 }
 
 
-#if defined( __GNUC__ ) && __GNUC__ <=2 && __GNUC_MINOR__ <= 95
-// avoiding a gcc 2.95.3 bug....
-typedef AI::UnitDistribution AIUD;
-AIUD AI::calcUnitDistribution ()
-#else
 AI::UnitDistribution AI::calcUnitDistribution ()
-#endif
 {
    UnitDistribution unitDistribution;
    int unitCount = getPlayer().vehicleList.size();

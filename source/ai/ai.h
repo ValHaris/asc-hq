@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: ai.h,v 1.8 2001-10-02 14:06:29 mbickel Exp $
+//     $Id: ai.h,v 1.9 2001-10-31 20:10:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2001/10/02 14:06:29  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.7  2001/08/27 21:03:55  mbickel
 //      Terraintype graphics can now be mounted from any number of PNG files
 //      Several AI improvements
@@ -402,7 +408,8 @@
                   UnitDistribution( ) : calculated ( false ) { for ( int i = 0; i < groupCount; i++ ) group[i] = 0; };
                   void read( tnstream& stream );
                   void write ( tnstream& stream ) const;
-            } originalUnitDistribution;
+            };
+            UnitDistribution originalUnitDistribution;
             UnitDistribution::Group getUnitDistributionGroup ( pvehicle veh );
             UnitDistribution::Group getUnitDistributionGroup ( pvehicletype veh );
 

@@ -2798,7 +2798,7 @@ echo "configure:2798: checking "broken std::string compare"" >&5
 cat > conftest.$ac_ext <<EOF
 #line 2800 "configure"
 #include "confdefs.h"
-string
+#include <string>
 int main() {
 
       std::string s = "Hello World";
