@@ -25,7 +25,9 @@
  int RotationCache::xsize = -1;
  int RotationCache::ysize = -1;
  
+ NullParamType nullParam;
 
+ 
  int foobar_func()
  {
     return 0;

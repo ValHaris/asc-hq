@@ -48,12 +48,12 @@ void setWindowCaption ( const char* s )
    SDL_WM_SetCaption ( s, NULL );
 }
 
+
+
 int initgraphics ( int x, int y, int depth, SDLmm::Surface* icon )
 {
   if ( SDL_Init(SDL_INIT_VIDEO  ) < 0 )  // | SDL_INIT_NOPARACHUTE
      fatalError ( ASCString("Couldn't initialize SDL: ") + SDL_GetError());
-
-
   setWindowCaption ( "Advanced Strategic Command" );
 
   if ( icon )

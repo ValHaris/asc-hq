@@ -2,7 +2,7 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.1 2004-10-26 16:35:04 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67.2.2 2004-11-04 22:22:21 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -140,7 +140,8 @@ void loaddata( void )
       
    registerDataLoader ( new PlayListLoader() );
    registerDataLoader ( new BI3TranslationTableLoader() );
-   
+
+   dataLoaderTicker.connect(SigC::slot( *actprogressbar, &tprogressbar::point ));
    loadAllData();
 
    if ( actprogressbar )
@@ -515,11 +516,13 @@ pfont load_font(char* name)
 int mapeditorMainThread ( void* _mapname )
 {
    const char* mapname = (const char*) _mapname;
+   loadpalette();
    initMapDisplay( );
 
    cursor.init();
 
    try {
+      GraphicSetManager::Instance().loadData();
       loaddata();
 
       if ( mapname && mapname[0] ) {
@@ -641,7 +644,6 @@ int main(int argc, char *argv[] )
       fullscreen = 0;
 
    checkDataVersion();
-   GraphicSetManager::Instance().loadData();
 
    SDLmm::Surface* icon = NULL;
    try {
@@ -674,6 +676,8 @@ int main(int argc, char *argv[] )
       return 1;
    atexit ( closesvgamode );
 
+   
+   
    #ifdef pbpeditor
    setWindowCaption ( "Advanced Strategic Command : PBP Editor ");
    #else

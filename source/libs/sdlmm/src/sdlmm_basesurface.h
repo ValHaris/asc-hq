@@ -66,6 +66,8 @@ namespace SDLmm {
     
     BaseSurface(const BaseSurface& other)
       : me(other.me) {
+      if ( other.me )
+         other.me->refcount++;
     }
     
     BaseSurface &operator=(const BaseSurface& other) {

@@ -25,6 +25,8 @@
 #include "vehicletype.h"
 #include "vehicle.h"
 #include "spfst.h"
+#include "graphics/blitter.h"
+
 
 ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, pmap map, int player ) : gamemap ( map ), baseType (bt)
 {
@@ -179,6 +181,50 @@ const ContainerBase* ContainerBase :: findUnit ( const Vehicle* veh ) const
                return loading[i];
    }
    return NULL;
+}
+
+
+void ContainerBase::paintField ( const Surface& img, Surface& dest, SPoint pos, int dir, bool shaded, int shadowDist ) const
+{
+    int height = getHeight();
+    if ( height <= chgetaucht ) {
+        if ( shaded ) {
+           MegaBlitter<1,1,ColorTransform_XLAT, ColorMerger_AlphaMixer, SourcePixelSelector_CacheRotation> blitter; 
+           blitter.setTranslationTable( *xlatpictgraytable );
+           blitter.setAngle( img, directionangle[dir] );
+           blitter.blit ( img, dest, pos );
+        } else {
+           MegaBlitter<1,1,ColorTransform_PlayerCol, ColorMerger_AlphaMixer, SourcePixelSelector_CacheRotation> blitter; 
+           blitter.setPlayer( getOwner() );
+           blitter.setAngle( img, directionangle[dir] );
+           blitter.blit ( img, dest, pos );
+        }   
+    } else {
+        if ( height >= chfahrend ) {  
+           if ( shadowDist == -1 )
+              if ( height >= chtieffliegend ) {
+                 shadowDist = 6 * ( log2 ( height) - log2 ( chfahrend ));
+              } else
+                 shadowDist = 1; 
+
+           MegaBlitter<1,1,ColorTransform_None, ColorMerger_AlphaShadow, SourcePixelSelector_CacheRotation> blitter; 
+           blitter.setAngle( img, directionangle[dir] );
+           blitter.blit ( img, dest, SPoint(pos.x+shadowDist, pos.y+shadowDist) );
+                
+        }        
+        
+        if ( shaded ) {
+           MegaBlitter<1,1,ColorTransform_XLAT, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter; 
+           blitter.setTranslationTable( *xlatpictgraytable );
+           blitter.setAngle( img, directionangle[dir] );
+           blitter.blit ( img, dest, pos );
+        } else {
+           MegaBlitter<1,1,ColorTransform_PlayerCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter; 
+           blitter.setPlayer( getOwner() );
+           blitter.setAngle( img, directionangle[dir] );
+           blitter.blit ( img, dest, pos );
+        }   
+    }
 }
 
 

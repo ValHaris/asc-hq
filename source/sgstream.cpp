@@ -116,7 +116,7 @@ Surface generate_gui_build_icon ( pbuildingtype bld )
    
    
    Surface s3 = leergui.Duplicate();
-   MegaBlitter<1,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Zoom> blitter;
+   MegaBlitter<1,1,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Zoom> blitter;
    
    blitter.setSize( s2.w(), s2.h(), s3.w(), s3.h() );
    blitter.initSource ( s2 );

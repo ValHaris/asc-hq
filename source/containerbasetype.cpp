@@ -20,6 +20,7 @@
 #include "stringtokenizer.h"
 #include "textfile_evaluation.h"
 #include "vehicletype.h"
+#include "graphics/blitter.h"
 
 
 ContainerBaseType :: ContainerBaseType ()

@@ -166,6 +166,8 @@
 
     Resources getTank() { return ContainerBase::getResource(typ->tank,true);};
 
+    int getHeight() const { return height; };
+    
 
     //! weight of unit including cargo, fuel and material
     int weight( void ) const;

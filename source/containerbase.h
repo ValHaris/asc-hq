@@ -27,6 +27,7 @@
 
  #include "typen.h"
  #include "containerbasetype.h"
+ #include "graphics/surface.h"
  
 
 
@@ -49,6 +50,9 @@ class ContainerBase {
       virtual void postRepair ( int oldDamage ) = 0;
       virtual bool isBuilding() const = 0;
       const ContainerBase* findUnit ( const Vehicle* veh ) const;
+      
+      void paintField ( const Surface& src, Surface& dest, SPoint pos, int dir, bool shaded, int shadowDist = -1 ) const;
+      
    public:
       ContainerBase ( const ContainerBaseType* bt, pmap map, int player );
 
@@ -87,6 +91,9 @@ class ContainerBase {
 
       virtual int getIdentification() = 0;
 
+      virtual int getHeight() const = 0;
+      
+      
       //! returns the player this vehicle/building belongs to
       int getOwner() const { return color >> 3; };
 

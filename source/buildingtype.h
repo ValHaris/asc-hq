@@ -78,9 +78,9 @@ extern const char*  cbuildingfunctions[];
 
  //! The class describing properties that are common to all buildings of a certain kind. \sa Building
  class  BuildingType : public ContainerBaseType {
-        bool         field_Exists[4][6];
-        Surface      w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
-        int          bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
+        bool             field_Exists[4][6];
+        Surface8         w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
+        int              bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
    public:
         //! A local coordinate referencing a single field that a building covers.
         class LocalCoordinate {
@@ -154,7 +154,7 @@ extern const char*  cbuildingfunctions[];
         //! bitmapped: units on these levels of height may be refuelled when standing next to the buildings entry
         int          externalloadheight;
 
-        const Surface& getPicture ( const LocalCoordinate& localCoordinate, int weather = 0, int constructionStep = 0 ) const;
+        const Surface8& getPicture ( const LocalCoordinate& localCoordinate, int weather = 0, int constructionStep = 0 ) const;
         void         paint ( Surface& s, SPoint pos, int player = 0, int weather = 0, int constructionStep = 0 ) const;
         void         paintSingleField ( Surface& s, SPoint pos, const LocalCoordinate& localCoordinate, int player = 0, int weather = 0, int constructionStep = 0 ) const;
 

@@ -26,16 +26,9 @@
 #include "sgstream.h"
 #include "textfile_evaluation.h"
 
-#ifndef converter
-#  include "dialog.h"
-#  include "sg.h"
-#else
- class ProgressBar {
-    public:
-       void point() {};
- };
-ProgressBar* actprogressbar = NULL;
-#endif
+
+SigC::Signal0<void> dataLoaderTicker;
+
 
 pobjecttype eisbrecherobject = NULL;
 pobjecttype fahrspurobject = NULL;
@@ -93,8 +86,7 @@ void ItemRepository<T>::read( tnstream& stream )
    int version = stream.readInt();
    int num = stream.readInt();
    for ( int i = 0; i< num; ++i ) {
-      if ( actprogressbar )
-        actprogressbar->point();
+      dataLoaderTicker();
 
       T* t = new T;
       t->read( stream );
@@ -308,8 +300,7 @@ void  loadAllData( bool useCache )
       for ( DataLoaders::iterator dl = dataLoaders.begin(); dl != dataLoaders.end(); ++dl) {
          TextPropertyList& tpl = textFileRepository[ (*dl)->getTypeName() ];
          for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
-            if ( actprogressbar )
-              actprogressbar->point();
+            dataLoaderTicker();
 
             if ( !(*i)->isAbstract() ) {
                PropertyReadingContainer pc ( (*dl)->getTypeName(), *i );
@@ -348,8 +339,7 @@ void  loadalltextfiles ( )
    ASCString c = ff.getnextname();
 
    while( !c.empty() ) {
-      if ( actprogressbar )
-         actprogressbar->point();
+      dataLoaderTicker();
 
       tnfilestream s ( c, tnstream::reading );
 

@@ -93,7 +93,6 @@ class tgeneraldisplaymap : public tgeneraldisplaymapbase {
       protected:
           int zoom;
 
-          void putdirecpict ( int xp, int yp,  const void* ptr );
           void pnt_terrain_rect ( void );
 
           struct {

@@ -83,9 +83,8 @@ namespace SDLmm {
 
     static Surface CreateSurface(const BaseSurface& other) {
       return Surface(
-          SDL_CreateRGBSurface(other.w(), other.h(),
+          SDL_CreateRGBSurface( SDL_SWSURFACE ,other.w(), other.h(),
                                other.GetPixelFormat().BitsPerPixel(),
-                               other.pitch(),
                                other.GetPixelFormat().Rmask(),
                                other.GetPixelFormat().Gmask(),
                                other.GetPixelFormat().Bmask(),

@@ -1483,55 +1483,13 @@ const ASCString&  Vehicle::getName() const
 
 void Vehicle::paint ( Surface& s, SPoint pos, int shadowDist ) const
 {
-
   #ifdef sgmain
    bool shaded = !canMove() && maxMovement() && ( color == gamemap->actplayer*8) && (attacked || !typ->weapons.count || CGameOptions::Instance()->units_gray_after_move );
   #else
    bool shaded = 0;
   #endif
-   const Surface& img = typ->getImage();
 
-
-    if ( height <= chgetaucht ) {
-        if ( shaded ) {
-           MegaBlitter<1,ColorTransform_XLAT, ColorMerger_AlphaMixer, SourcePixelSelector_CacheRotation> blitter; 
-           blitter.setTranslationTable( *xlatpictgraytable );
-           blitter.setAngle( img, directionangle[direction] );
-           blitter.blit ( img, getActiveSurface(), pos );
-        } else {
-           MegaBlitter<1,ColorTransform_PlayerCol, ColorMerger_AlphaMixer, SourcePixelSelector_CacheRotation> blitter; 
-           blitter.setPlayer( getOwner() );
-           blitter.setAngle( img, directionangle[direction] );
-           blitter.blit ( img, getActiveSurface(), pos );
-        }   
-    } else {
-        if ( height >= chfahrend ) {  
-           if ( shadowDist == -1 )
-              if ( height >= chtieffliegend ) {
-                 shadowDist = 6 * ( log2 ( height) - log2 ( chfahrend ));
-              } else
-                 shadowDist = 1; 
-
-           MegaBlitter<1,ColorTransform_None, ColorMerger_AlphaShadow, SourcePixelSelector_CacheRotation> blitter; 
-           blitter.setAngle( img, directionangle[direction] );
-           blitter.blit ( img, getActiveSurface(), SPoint(pos.x+shadowDist, pos.y+shadowDist) );
-                
-        }        
-        
-        if ( shaded ) {
-           MegaBlitter<1,ColorTransform_XLAT, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter; 
-           blitter.setTranslationTable( *xlatpictgraytable );
-           blitter.setAngle( img, directionangle[direction] );
-           blitter.blit ( img, getActiveSurface(), pos );
-        } else {
-           MegaBlitter<1,ColorTransform_PlayerCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter; 
-           blitter.setPlayer( getOwner() );
-           blitter.setAngle( img, directionangle[direction] );
-           blitter.blit ( img, getActiveSurface(), pos );
-        }   
-    }
-
-   // typ->paint(s, pos, getOwner(), direction );
+   paintField( typ->getImage(), s, pos, direction, shaded, shadowDist );
 }
 
 

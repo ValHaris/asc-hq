@@ -155,19 +155,7 @@ const Surface& Building :: getPicture ( const BuildingType::LocalCoordinate& loc
 
 void Building::paintSingleField ( Surface& s, SPoint imgpos, BuildingType::LocalCoordinate pos ) const
 {
-/*
-                           if (fld->building->visible)
-                              if ( fld->building->typ->buildingheight < chschwimmend )
-                                 putpicturemix ( r + buildingrightshift, yp + buildingdownshift ,fld->buildingPicture,fld->building->color, (char*) colormixbuf);
-                              else {
-                                 if ( fld->building->typ->buildingheight >= chtieffliegend ) {
-                                    int d = 6 * ( log2 ( fld->building->typ->buildingheight ) - log2 ( chfahrend ));
-                                    putshadow ( r + buildingrightshift + d, yp + buildingdownshift + d,fld->buildingPicture, &xlattables.a.dark3);
-                                 }
-                                 putrotspriteimage(  ,fld->buildingPicture,fld->building->color);
-                              }
-                              */
-
+   paintField( getPicture( pos ), s, imgpos, 0, false );
 }
 
 
@@ -221,7 +209,7 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
             }
 
             field->building = this;
-           }
+         }
 
    for ( int i = 0; i < 32; i++ )
       if ( loading[i] )
@@ -231,9 +219,19 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
    if ( field )
       field->bdt |= getTerrainBitType(cbbuildingentry) ;
 
-   if ( setupImages ) {
+   if ( setupImages ) 
       gamemap->calculateAllObjects();
-   }
+
+      
+   for ( int a = 0; a < 4; a++)
+      for ( int b = 0; b < 6; b++) 
+         if ( typ->fieldExists(BuildingType::LocalCoordinate(a,b))) {
+            MapCoordinate p = getFieldCoordinates( BuildingType::LocalCoordinate(a,b));
+            BuildingType::LocalCoordinate lc = getLocalCoordinate(p);
+            if ( lc.x != a || lc.y!= b )
+               warning( "bug in building coordinate calculation");
+         }
+         
 
    return 0;
 }

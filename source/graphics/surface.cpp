@@ -22,6 +22,7 @@
 #include <SDL_image.h>
 #include <cmath>
 #include "surface.h"
+#include "blitter.h"
 #include "../basegfx.h"
 #include "../basestrm.h"
 #include "../sdl/SDLStretch.h"
@@ -75,6 +76,32 @@
     return pf;
  }
 
+ 
+ 
+Surface::Surface( SDL_Surface *surface) : SDLmm::Surface ( surface )
+{
+   if ( me )
+      convert();
+}
+
+void Surface::convert()
+{
+   if ( GetPixelFormat().BitsPerPixel() == 24 ) {
+      Surface s = Surface::createSurface(w(), h(), 32 );
+      s.Blit( *this );
+      if ( flags() & SDL_SRCCOLORKEY ) 
+         s.SetColorKey( SDL_SRCCOLORKEY, GetPixelFormat().colorkey() );
+      *this = s;   
+   }
+}
+
+Surface::Surface(const SDLmm::Surface& other) : SDLmm::Surface ( other )
+{
+   if ( me )
+      convert();
+}
+
+ 
  void Surface::readDefaultPixelFormat ( tnstream& stream )
  {
      default8bit = new SDLmm::PixelFormat( readSDLPixelFormat( stream ) );
@@ -108,7 +135,7 @@ void Surface::read ( tnstream& stream )
       void* uncomp = uncompress_rlepict ( pnter );
       delete[] pnter;
 
-      SetSurface( SDL_CreateRGBSurfaceFrom(uncomp, hd.x, hd.y, 8, hd.x, 0, 0, 0, 0 ));
+      SetSurface( SDL_CreateRGBSurfaceFrom(uncomp, hd.x+1, hd.y+1, 8, hd.x+1, 0, 0, 0, 0 ));
       SetColorKey( SDL_SRCCOLORKEY, 255 );
       assignDefaultPalette();
    }
@@ -121,17 +148,13 @@ void Surface::read ( tnstream& stream )
             SDL_Surface* s = SDL_CreateRGBSurface ( SDL_SWSURFACE, hd.x, hd.y, 8, 0xff, 0xff, 0xff, 0xff );
             Uint8* p = (Uint8*)( s->pixels );
             for ( int y = 0; y < hd.y; ++y )
-               for ( int x = 0; x< hd.x; ++x )
-                  *(p++) = stream.readChar();
-/*
-            for ( int i = 0; i < 256; ++i) {
-               s->format->palette->colors[i].r = default8bit->palette()->colors[i].r;
-               s->format->palette->colors[i].g = default8bit->palette()->colors[i].g;
-               s->format->palette->colors[i].b = default8bit->palette()->colors[i].b;
-            }
-*/
-            assignDefaultPalette();
+               stream.readdata( p + y*hd.x, hd.x );
+            
+               /*for ( int x = 0; x< hd.x; ++x )
+                  *(p++) = stream.readChar();*/
+                  
             SetSurface( s );
+            assignDefaultPalette();
 
          } else {
             int Rmask = stream.readInt();
@@ -154,7 +177,7 @@ void Surface::read ( tnstream& stream )
          char* q = pnter + sizeof(hd);
          stream.readdata ( q, w - sizeof(hd) ); // endian ok ?
 
-         SetSurface( SDL_CreateRGBSurfaceFrom(q, hd.id+1, hd.size+1, 8, hd.id+1, 0, 0, 0, 0 ));
+         SetSurface( SDL_CreateRGBSurfaceFrom(pnter+4, hd.id+1, hd.size+1, 8, hd.id+1, 0, 0, 0, 0 ));
          SetColorKey( SDL_SRCCOLORKEY, 255 );
          assignDefaultPalette();
       }
@@ -164,9 +187,19 @@ void Surface::read ( tnstream& stream )
 
 Surface Surface::createSurface( int width, int height, SDLmm::Color color )
 {
-   Surface s ( SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0 ));
-   s.Fill(color);
+   Surface s = createSurface ( width, height, 8, color );
    s.SetColorKey( SDL_SRCCOLORKEY, 255 );
+   return s;
+}
+
+Surface Surface::createSurface( int width, int height, int depth, SDLmm::Color color )
+{
+   assert ( depth == 32 || depth == 8 );
+   Surface s ( SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, depth, 0xff, 0xff00, 0xff0000, 0xff000000 ));
+   s.Fill(color);
+   if ( depth == 8 )
+      s.assignDefaultPalette();
+   // s.SetColorKey( SDL_SRCCOLORKEY, 255 );
    return s;
 }
 
@@ -189,28 +222,6 @@ void Surface::assignDefaultPalette()
          SDL_SetColors ( me, spal, 0, 256 );
    }
 }
-
-
-/*
-void Surface::assignDefaultPalette()
-{
-   if ( me ) {
-        SDL_Color spal[256];
-        int col;
-        for ( int i = 0; i < 256; i++ ) {
-           for ( int c = 0; c < 3; c++ ) {
-              col = pal[i][c];
-              switch ( c ) {
-                 case 0: spal[i].r = col * 4; break;
-                 case 1: spal[i].g = col * 4; break;
-                 case 2: spal[i].b = col * 4; break;
-              };
-             }
-         }
-         SDL_SetColors ( me, spal, 0, 256 );
-   }
-}
-*/
 
 
 void Surface::assignPalette(SDL_Color* colors, int startColor, int colorNum )
@@ -237,8 +248,12 @@ void Surface::write ( tnstream& stream ) const
    stream.writeInt ( GetPixelFormat().colorkey());
    if ( pf.BytesPerPixel() == 1 ) {
       for ( int y = 0; y < h(); ++y )
+         stream.writedata( ((char*)me->pixels) + y*pitch(), w() );
+      /*
+      for ( int y = 0; y < h(); ++y )
          for ( int x = 0; x < w(); ++x )
             stream.writeChar( GetPixel(x,y));
+      */      
    } else {
       SDLmm::PixelFormat pf = GetPixelFormat();
       stream.writeInt(pf.Rmask()) ;
@@ -280,25 +295,67 @@ void Surface::detectColorKey ( bool RLE )
       flags |= SDL_RLEACCEL;
       
    if ( GetPixelFormat().BitsPerPixel() > 8 )
-      SetColorKey( flags, GetPixel(0,0));
+      SetColorKey( flags, GetPixel(0,0) & ( GetPixelFormat().Rmask() | GetPixelFormat().Gmask() | GetPixelFormat().Bmask()));
    else
-      SetColorKey( flags, 255 );
+      SetColorKey( flags, GetPixel(0,0));
+      // SetColorKey( flags, 255 );
 }
 
 
 
+Surface& getFieldMask()
+{
+   static Surface* mask8 = NULL;
+   if ( !mask8 ) {
+      tnfilestream st ( "largehex.pcx", tnstream::reading );
+      mask8 = new Surface ( IMG_LoadPCX_RW ( SDL_RWFromStream( &st )));
+      assert ( mask8->GetPixelFormat().BitsPerPixel() == 8);
+      mask8->SetColorKey( SDL_SRCCOLORKEY, 0 );
+      
+   }
+   return *mask8;
+
+}
 
 
 void applyFieldMask( Surface& s, int x, int y )
 {
-   static Surface* mask = NULL;
-   if ( !mask ) {
-      tnfilestream st ( "largehex.pcx", tnstream::reading );
-      mask = new Surface ( IMG_LoadPCX_RW ( SDL_RWFromStream( &st )));
-      if ( mask->GetPixelFormat().BitsPerPixel() == 8)
-         mask->SetColorKey( SDL_SRCCOLORKEY, 0 );
+   if ( s.GetPixelFormat().BitsPerPixel() == 8 ) {
+      // we don't want any transformations from one palette to another; we just assume that all 8-Bit images use the same colorspace
+      MegaBlitter<1,1,ColorTransform_None,ColorMerger_AlphaOverwrite> blitter;
+      blitter.blit( getFieldMask(), s, SPoint(0,0)  );
+   } else {
+      s.Blit( getFieldMask() );
    }
-   s.Blit( *mask );
+   s.detectColorKey (  );
+}
+
+void applyLegacyFieldMask( Surface& s, int x, int y )
+{
+   static Surface* mask32 = NULL;
+   if ( !mask32 ) {
+      Surface& mask8 = getFieldMask();
+      
+      mask32 = new Surface ( Surface::createSurface( mask8.w(), mask8.h(), 32 ));
+      Uint8* s = (Uint8*) mask8.pixels();
+      Uint32* d = (Uint32*) mask32->pixels();
+      for ( int y = 0; y < mask8.h(); ++y )
+         for ( int x = 0; x < mask8.w(); ++x, ++s, ++d)
+            if ( *s == 0 )
+               *d = 0;   
+            else
+               *d = 0xfefefe;
+              
+      mask32->SetColorKey( SDL_SRCCOLORKEY, 0 );
+      
+   }
+   if ( s.GetPixelFormat().BitsPerPixel() == 8 ) {
+      // we don't want any transformations from one palette to another; we just assume that all 8-Bit images use the same colorspace
+      MegaBlitter<1,1,ColorTransform_None,ColorMerger_AlphaOverwrite> blitter;
+      blitter.blit( getFieldMask(), s, SPoint(0,0)  );
+   } else {
+      s.Blit( *mask32 );
+   }
    s.detectColorKey (  );
 }
 

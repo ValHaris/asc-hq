@@ -29,6 +29,7 @@
 #include "basegfx.h"
 #include "stringtokenizer.h"
 #include "textfile_evaluation.h"
+#include "graphics/surface.h"
 
 #include "errors.h"
 
@@ -91,12 +92,12 @@ int   BuildingType :: getBIPicture( const LocalCoordinate& localCoordinate, int 
 }
         
 
-const Surface&   BuildingType :: getPicture ( const LocalCoordinate& localCoordinate, int weather, int constructionStep ) const
+const TypedSurface<1>&   BuildingType :: getPicture ( const LocalCoordinate& localCoordinate, int weather, int constructionStep ) const
 {
    if ( bi_picture [weather][constructionStep][localCoordinate.x][localCoordinate.y] <= 0 )
       return w_picture[weather][constructionStep][localCoordinate.x][localCoordinate.y];
    else
-      return GraphicSetManager::Instance().getPic(bi_picture [weather][constructionStep][localCoordinate.x][localCoordinate.y]);
+      return castSurface<1>(GraphicSetManager::Instance().getPic(bi_picture [weather][constructionStep][localCoordinate.x][localCoordinate.y]));
 }
 
 void  BuildingType::paint ( Surface& s, SPoint pos, int player, int weather, int constructionStep ) const
@@ -135,14 +136,17 @@ MapCoordinate  BuildingType :: getFieldCoordinate ( const MapCoordinate& entryOn
 
 BuildingType::LocalCoordinate BuildingType::getLocalCoordinate( const MapCoordinate& entryOnMap, const MapCoordinate& field ) const
 {
-   int orgx = entryOnMap.x - entry.x - (entry.y & ~entryOnMap.y & 1 );
-   int orgy = entryOnMap.y - entry.y;
+   int homex = entryOnMap.x - entry.x;
+   int homey = entryOnMap.y - entry.y;
 
-   int dx = orgy & 1;
+   if ( (entry.y & 1) && !(entryOnMap.y & 1))
+      homex -= 1;
+      
 
-   
-   int ly = field.y - orgy;
-   int lx = field.x - orgx - (dx & ~ly );
+   int ly = field.y - homey;
+   int lx = field.x - homex;
+   if ( (ly & 1) && (homey & 1 ))
+      lx -= 1;
    
    if ( lx >= 0 && lx < 4 && ly >= 0 && ly < 6 && fieldExists(LocalCoordinate(lx,ly)))
       return LocalCoordinate(lx,ly);
@@ -165,20 +169,30 @@ void BuildingType :: read ( tnstream& stream )
       for ( int v = 0; v < cwettertypennum; v++ )
          for ( int w = 0; w < maxbuildingpicnum; w++ )
             for ( int x = 0; x < 4; x++ )
-               for ( int y = 0; y < 6 ; y++ )
+               for ( int y = 0; y < 6 ; y++ ) {
                    picsAvail[v][w][x][y] = stream.readInt( );
+                   if ( picsAvail[v][w][x][y] )
+                      field_Exists[x][y] = true;
+               }    
+                   
 
       for ( int v = 0; v < cwettertypennum; v++ )
          for ( int w = 0; w < maxbuildingpicnum; w++ )
             for ( int x = 0; x < 4; x++ )
-               for ( int y = 0; y < 6 ; y++ )
-                   bi_picture[v][w][x][y] = stream.readInt( );
-/*
+               for ( int y = 0; y < 6 ; y++ ) {
+                   int i = stream.readInt( );
+                   bi_picture[v][w][x][y] = i;
+                   if ( i > 0 )
+                      field_Exists[x][y] = true;
+               }  
+
+                   /*
       if ( version >= 9 ) 
          for ( int x = 0; x < 4; x++ )
             for ( int y = 0; y < 6 ; y++ )
                field_Exists[x][y] = stream.readInt( );
-  */    
+         */
+  
      //@todo foobar
      
       
@@ -259,11 +273,10 @@ void BuildingType :: read ( tnstream& stream )
          for ( int j = 0; j <= 5; j++)
             for ( int i = 0; i <= 3; i++)
                for ( int w = 0; w < cwettertypennum; w++ )
-                 if ( picsAvail[w][k][i][j] ) {
+                 if ( picsAvail[w][k][i][j] ) 
                     if ( bi_picture[w][k][i][j] == -1 ) 
                        w_picture[w][k][i][j].read(stream );
-                    field_Exists[i][j] = true;
-                 }   
+                 
 
 
       if ( version >= 4 )
@@ -307,7 +320,7 @@ void BuildingType :: write ( tnstream& stream ) const
             for ( int y = 0; y < 6 ; y++ )
                 stream.writeInt ( bi_picture[v][w][x][y] );
 
-                /*
+           /*     
    for ( int x = 0; x < 4; x++ )
       for ( int y = 0; y < 6 ; y++ )
          stream.writeInt( field_Exists[x][y] );
@@ -505,13 +518,17 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
          } else {
             for ( int w = 0; w < cwettertypennum; w++ )
                if ( weatherBits.test(w) ) {
+                  ASCString fileName = extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".pcx";
                   Surface s;
-                  pc.addImage ( weatherTags[w], s, extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".pcx" );
+                  pc.addImage ( weatherTags[w], s, fileName );
 
+                  if ( s.GetPixelFormat().BitsPerPixel() != 8 )
+                     fatalError("Building image " + filename + " does not have 8 Bit color depth!");
+                  
                   for ( int c = 0; c < construction_steps; c++ )
                      for ( Fields::iterator i = fields.begin(); i != fields.end(); i++ ) {
                         Surface& img = w_picture[w][c][i->x][i->y];
-                        img = Surface::createSurface(fieldsizex,fieldsizey);
+                        img = Surface::createSurface(fieldsizex,fieldsizey,8);
                         int xx = 500*c + i->x * fielddistx + (i->y&1)*fielddisthalfx;
                         int yy = i->y * fielddisty;
                         img.Blit( s, SDLmm::SRect(SPoint(xx,yy),fieldsizex,fieldsizey), SPoint(0,0));

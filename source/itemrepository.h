@@ -19,6 +19,7 @@
 #define itemrepositoryH
 
 #include <vector>
+#include <sigc++/sigc++.h>
 #include "ascstring.h"
 #include "typen.h"
 #include "terraintype.h"
@@ -68,6 +69,7 @@ class ItemRepository: public TextFileDataLoader {
 
 };
 
+extern SigC::Signal0<void> dataLoaderTicker;
 
 
 extern ItemRepository<Vehicletype>  vehicleTypeRepository;

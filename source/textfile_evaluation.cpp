@@ -28,6 +28,7 @@
  #include "loadpcx.h"
  #include "basegfx.h"
  #include "typen.h"
+ #include "graphics/blitter.h"
 #endif
 
 
@@ -1038,7 +1039,7 @@ ASCString NamedIntProperty::toString() const
 }
 
 #ifdef ParserLoadImages
-void* getFieldMask()
+void* getRawFieldMask()
 {
    static void* mask = NULL;
    if ( !mask ) {
@@ -1080,7 +1081,7 @@ vector<void*> loadImage ( const ASCString& file, int num )
           tvirtualdisplay vdp ( 100, 100, 255 );
           void* img = convertimage ( tci, pal );
           putimage ( 0, 0, img );
-          putmask ( 0, 0, getFieldMask(), 0 );
+          putmask ( 0, 0, getRawFieldMask(), 0 );
           getimage ( 0, 0, imgwidth-1, imgheight-1, img );
           images.push_back ( img );
       }
@@ -1096,7 +1097,7 @@ vector<void*> loadImage ( const ASCString& file, int num )
           int x1 = (i % 10) * 100;
           int y1 = (i / 10) * 100;
           if ( num > 1 )
-             putmask ( x1, y1, getFieldMask(), 0 );
+             putmask ( x1, y1, getRawFieldMask(), 0 );
           void* img = new char[imagesize (0, 0, imgheight-1, imgwidth-1)];
           getimage ( x1, y1, x1+imgwidth-1, y1+imgheight-1, img );
           images.push_back ( img );
@@ -1124,13 +1125,27 @@ vector<Surface> loadASCImage ( const ASCString& file, int num )
    tnfilestream fs ( file, tnstream::reading );
    
    Surface s ( IMG_Load_RW ( SDL_RWFromStream( &fs ), 1));
+   if ( s.GetPixelFormat().BitsPerPixel() == 8 )
+      s.assignDefaultPalette();
+      
    for ( int i = 0; i < num; i++ ) {
        int x1 = (i % 10) * 100;
        int y1 = (i / 10) * 100;
-       Surface s2 = Surface::createSurface(fieldsizex,fieldsizey );
-       s2.Blit( s, SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey), SPoint(0,0));
-       applyFieldMask(s2);
-       s2.assignDefaultPalette();
+       int depth = s.GetPixelFormat().BitsPerPixel();
+       if ( depth > 8 && depth < 32 )
+          depth = 32;
+       Surface s2 = Surface::createSurface(fieldsizex,fieldsizey, depth );
+       if ( s2.GetPixelFormat().BitsPerPixel() != 8 || s.GetPixelFormat().BitsPerPixel() != 8 ) {
+          s2.Blit( s, SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey), SPoint(0,0));
+          applyLegacyFieldMask(s2);
+       } else {
+          // we don't want any transformations from one palette to another; we just assume that all 8-Bit images use the same colorspace
+          MegaBlitter<1,1,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Rectangle> blitter;
+          blitter.setRectangle(SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey));
+          blitter.blit( s, s2, SPoint(0,0)  );
+          applyFieldMask(s2);
+       }
+       s2.detectColorKey();
        images.push_back ( s2 );
    }
    return images;
@@ -1226,6 +1241,7 @@ ASCImageProperty::PropertyType ASCImageProperty::operation_eq ( const TextProper
                s.SetColorKey( SDL_SRCCOLORKEY, 255 );
             else 
                s.SetColorKey( SDL_SRCCOLORKEY, 0xfefefe );
+            s.SetAlpha(0,255);
             return s;
          }
    }

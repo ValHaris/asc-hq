@@ -524,42 +524,6 @@ void  tdisplaymap :: deletevehicle ( void )
 }
 
 
-void tgeneraldisplaymap :: putdirecpict ( int x1, int y1, const void* ptr )
-{
-  int i, num;
-
-   char* c = (char*) ptr;
-
-   if ( agmp->windowstatus == 100 ) {
-      char* buf = (char*) (agmp->scanlinelength * y1 + x1 + agmp->linearaddress) + 19;
-
-      for (i=1; i<= 19 ;i++ ) {
-        for (num = 0; num < i * 2; num ++ ) {
-           *buf = *c;
-           c++;
-           buf++;
-        }
-
-//        buf += vfbscanlinelength - 2 * i - 1;
-        buf += agmp->scanlinelength - 2 * i - 1;
-      } /* endfor */
-
-      for (i=20; i > 0 ;i-- ) {
-        for (num = 0; num < i * 2; num ++ ) {
-           *buf = *c;
-           c++;
-           buf++;
-        }
-
-//        buf += vfbscanlinelength - 2 * i + 1;
-        buf += agmp->scanlinelength - 2 * i + 1;
-      } /* endfor */
-
-   }
-
-}
-
-
 
 int  tgeneraldisplaymap :: getscreenxsize( int target )
 {

@@ -2,9 +2,12 @@
     \brief Interface for all the dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.h,v 1.27 2004-07-12 18:15:04 mbickel Exp $
+//     $Id: dialog.h,v 1.27.2.1 2004-11-04 22:22:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2004/07/12 18:15:04  mbickel
+//      Lots of tweaks and fixed for more portability and compilation with mingw
+//
 //     Revision 1.26  2004/05/20 14:01:09  mbickel
 //      Many bugfixes and new features, among them:
 //        - Container.FillUnitsAutomatically = 2
@@ -94,6 +97,8 @@
 #ifndef dialogH
 #define dialogH
 
+
+#include <sigc++/sigc++.h>
 #include "ascstring.h"
 #include "dlg_box.h"
 #include "loaders.h"
@@ -182,7 +187,7 @@ extern const char* getmessage( int id );
 extern void bi3preferences  ( void );
 
 typedef class tprogressbar* pprogressbar;
-class tprogressbar {
+class tprogressbar : public SigC::Object {
        public:
          void start ( int _color, int _x1, int _y1, int _x2, int _y2, pnstream stream );
          void end ( void );

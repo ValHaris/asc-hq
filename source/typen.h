@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.154.2.1 2004-10-10 09:19:00 mbickel Exp $
+//     $Id: typen.h,v 1.154.2.2 2004-11-04 22:22:22 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -48,6 +48,9 @@
 
 // #include "password.h"
 
+
+//! the color depth of the gamemap
+const int gamemapPixelSize = 1;
 
 //! the number of players that ASC can manage. This includes the neutral semi-played, which can't do anything
 const int playerNum = 9;

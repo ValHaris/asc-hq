@@ -2009,25 +2009,7 @@ int  Object :: getdir ( void )
 
 void Object :: display ( Surface& surface, SPoint pos, int weather ) const
 {
-  if ( typ->id == 7 || typ->id == 30 || typ->displayMethod==1 ) { // buried pipeline,
-     MegaBlitter<1,ColorTransform_XLAT, ColorMerger_AlphaOverwrite> blitter; 
-     blitter.setTranslationTable( xlattables.a.dark1 );
-     blitter.blit ( typ->getPicture( dir, weather) , surface, pos );
-  } else
-     if ( typ->displayMethod == 2 ) {  // hillside
-        typ->display ( surface, pos, dir, weather );
-        // putxlatfilter ( x, y,  typ->getpic( dir, weather ), xlattables.nochange );
-     } else
-        if ( typ->displayMethod == 3 ) { // mapeditorOnly
-           #ifdef karteneditor
-           typ->display ( surface, pos, dir, weather );
-           #endif
-        } else
-           if ( typ->displayMethod == 4 ) {
-              MegaBlitter<1,ColorTransform_None, ColorMerger_AlphaMixer> blitter; 
-              blitter.blit ( typ->getPicture( dir, weather) , surface, pos );
-           } else
-              typ->display ( surface, pos, dir, weather );
+   typ->display ( surface, pos, dir, weather );
 }
 
 

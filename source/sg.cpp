@@ -360,9 +360,8 @@ void         loadMoreData(void)
    if ( actprogressbar )
       actprogressbar->point();
 
-   if ( !asc_paletteloaded )
-      loadpalette();
 
+   loadpalette();
    for (w=0;w<256 ;w++ ) {
       palette16[w][0] = pal[w][0];
       palette16[w][1] = pal[w][1];
@@ -2050,6 +2049,7 @@ int gamethread ( void* data )
 {
    GameThreadParams* gtp = (GameThreadParams*) data;
 
+   loadpalette();
    initMapDisplay( );
 
    int resolx = agmp->resolutionx;

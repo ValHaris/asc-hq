@@ -25,6 +25,7 @@
 #include "sgstream.h"
 #include "textfile_evaluation.h"
 #include "mapalgorithms.h"
+#include "graphics/blitter.h"
 
 #ifndef converter
 #include "gamemap.h"
@@ -95,38 +96,55 @@ Surface& ObjectType :: getPicture ( int i, int w )
 
 void ObjectType :: display ( Surface& surface, SPoint pos, int dir, int weather )
 {
-   #ifndef converter
-  if ( id == 1 || id == 2 ) {
-     surface.Blit( getPicture( dir, weather ), pos );
-  } else
-  if ( id == 4 ) {
-     if ( dir == 68 )
-        surface.Blit( getPicture ( 9, weather ), pos );
-     else
-     if ( dir == 34 )
-        surface.Blit( getPicture ( 10, weather ), pos );
-     else
-     if ( dir == 17 )
-        surface.Blit( getPicture ( 11, weather ), pos );
-     else
-     if ( dir == 136)
-        surface.Blit( getPicture ( 12, weather ), pos );
-     else
-     if ( dir == 0)
-        surface.Blit( getPicture ( 0, weather ), pos );
-     else
-        for (int i = 0; i <= 7; i++)
-           if ( dir & (1 << i))
-              surface.Blit( getPicture ( i+1, weather ), pos );
-              
+   vector<int> dirsToDisplay;
+   
+   int actualDir = dir;
 
-  } else
-  if (  id == 5 ) {
-     surface.Blit( getPicture ( 0, weather ), pos );
-  } else
-     surface.Blit( getPicture ( dir, weather ), pos );
-
-  #endif
+   if ( id == 4 ) {
+     switch ( dir ) {
+        case  68 : dirsToDisplay.push_back(  9 ); break;
+        case  34 : dirsToDisplay.push_back( 10 ); break;
+        case  17 : dirsToDisplay.push_back( 11 ); break;
+        case 136 : dirsToDisplay.push_back( 12 ); break;
+        case   0 : dirsToDisplay.push_back(  0 ); break;
+        default  : {
+           for (int i = 0; i <= 7; i++)
+              if ( dir & (1 << i))
+                 dirsToDisplay.push_back( i+1 );
+        
+        }
+     }
+   } else
+      dirsToDisplay.push_back( dir );
+ 
+   for ( vector<int>::iterator i = dirsToDisplay.begin(); i != dirsToDisplay.end(); ++i ) {
+      int flip = 0;
+      if ( *i < weatherPicture[weather].flip.size() )
+         flip = weatherPicture[weather].flip[*i];
+         
+      if ( id == 7 || id == 30 || displayMethod==1 ) { // buried pipeline,
+         megaBlitter<ColorTransform_None, ColorMerger_AlphaShadow, SourcePixelSelector_Flip>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip); 
+      } else
+         if ( displayMethod == 2 ) {  // translation
+            megaBlitter<ColorTransform_None, ColorMerger_Alpha_XLAT_TableShifter, SourcePixelSelector_Flip>(getPicture( dir, weather), surface, pos, nullParam, xlattables.nochange, flip); 
+         } else
+            if ( displayMethod == 4 ) {
+               megaBlitter<ColorTransform_None, ColorMerger_AlphaMixer, SourcePixelSelector_Flip>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip); 
+            } else {
+               bool disp = true;
+               #ifndef karteneditor
+               if ( displayMethod == 3 ) // mapeditorOnly
+                  disp = false;
+               #endif
+               if ( disp ) {
+                  if ( flip )
+                     megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Flip>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip); 
+                  else   
+                     // megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam); 
+                     surface.Blit(getPicture(dir,weather),pos );
+               }
+            }   
+   }
 }
 
 
@@ -786,7 +804,7 @@ void         calculateallobjects( pmap actmap )
 
 
 
-const int object_version = 12;
+const int object_version = 13;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -876,13 +894,16 @@ void ObjectType :: read ( tnstream& stream )
 
             for ( int n = 0; n < pictnum; n++ ) {
                int bi3 = stream.readInt();
-               weatherPicture[ww].flip[n] = 0;
                if ( bi3 == 1 ) {
                   weatherPicture[ww].bi3pic[n] = stream.readInt();
                   weatherPicture[ww].flip[n] = stream.readInt();
                } else {
                   weatherPicture[ww].bi3pic[n] = -1;
                   weatherPicture[ww].images[n].read ( stream );
+                  if ( object_version >= 13 )
+                     weatherPicture[ww].flip[n] = stream.readInt();
+                  else   
+                     weatherPicture[ww].flip[n] = 0;
                }
             }
          }
@@ -1015,11 +1036,11 @@ void ObjectType :: write ( tnstream& stream ) const
              if ( weatherPicture[ww].bi3pic[l] >= 0 ) {
                 stream.writeInt ( 1 );
                 stream.writeInt ( weatherPicture[ww].bi3pic[l] );
-                stream.writeInt ( weatherPicture[ww].flip[l] );
              } else {
                 stream.writeInt ( 2 );
                 weatherPicture[ww].images[l].write( stream );
              }
+             stream.writeInt ( weatherPicture[ww].flip[l] );
           }
        }
 }

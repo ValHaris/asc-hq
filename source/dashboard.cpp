@@ -903,7 +903,7 @@ void         tdashboard::paintwind( int repaint )
 
 
 
-template<int pixelSize> class BBind : public SourcePixelSelector_Rotation< 1, SourcePixelSelector_Zoom<1> >  {};
+// template<int pixelSize> class BBind : public SourcePixelSelector_Rotation< pixelSize, SourcePixelSelector_Zoom<pixelSize> >  {};
 
 
 void         tdashboard::paintimage(void)
@@ -922,7 +922,7 @@ void         tdashboard::paintimage(void)
     if ( vehicle ) {
        // vehicle->paint( getActiveSurface(), SPoint( x1, y1) );
 
-       MegaBlitter<1,ColorTransform_PlayerCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_Zoom > blitter;
+       MegaBlitter<1,1,ColorTransform_PlayerCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_Zoom > blitter;
        blitter.setZoom( 0.8 );
        blitter.setPlayer( vehicle->getOwner() );
        blitter.blit ( vehicle->typ->getImage(), getActiveSurface(), SPoint(x1,y1) );

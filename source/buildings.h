@@ -270,6 +270,9 @@ class  Building : public ContainerBase {
     //! returns the amount of resources that the net which the building is connected to produces each turn
     Resources netResourcePlus( ) const;
 
+    int getHeight() const { return typ->buildingheight; };
+    
+    
     ~Building();
 
   protected:
