@@ -2,9 +2,15 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.81 2001-02-26 12:35:05 mbickel Exp $
+//     $Id: dialog.cpp,v 1.82 2001-03-05 20:57:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.81  2001/02/26 12:35:05  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.80  2001/02/18 15:37:05  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -2291,7 +2297,7 @@ char      tfileselectsvga::speedsearch(char         input)
    else {
       ii = 0;
       while (ii < numberoffiles  &&  !sps ) {
-         if (searchstring.compare ( 0, searchstring.length(), files[ii].name.copyToUpper() ) == 0) {
+         if ( files[ii].name.copyToUpper().compare ( 0, searchstring.length(), searchstring ) == 0) {
             sps = true; 
             markedfile = ii;
          } 

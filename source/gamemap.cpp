@@ -1059,7 +1059,6 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
      }
 
   tfield defaultfield;
-  memset ( &defaultfield, 0, sizeof ( defaultfield ));
   defaultfield.typ = getterraintype_byid ( 30 )->weather[0];
 
   for ( x = 0; x < left; x++ )
@@ -1091,10 +1090,10 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
   ysize = newy;
 
   /*
-  if (xpos + idisplaymap.getscreenxsize() > xsize) 
-     xpos = xsize - idisplaymap.getscreenxsize() ; 
-  if (ypos + idisplaymap.getscreenysize()  > ysize) 
-     ypos = ysize - idisplaymap.getscreenysize() ; 
+  if (xpos + idisplaymap.getscreenxsize() > xsize)
+     xpos = xsize - idisplaymap.getscreenxsize() ;
+  if (ypos + idisplaymap.getscreenysize()  > ysize)
+     ypos = ysize - idisplaymap.getscreenysize() ;
    */
 
   return 0;

@@ -2,9 +2,12 @@
     \brief The artificial intelligence of ASC. 
 */
 
-//     $Id: artint.cpp,v 1.65 2001-03-02 13:24:45 mbickel Exp $
+//     $Id: artint.cpp,v 1.66 2001-03-05 20:57:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.65  2001/03/02 13:24:45  mbickel
+//      AI fixes
+//
 //     Revision 1.64  2001/03/02 11:51:40  mbickel
 //      Fixed infinite loop in AI::buildingcapture search
 //
@@ -1143,7 +1146,7 @@ void AI :: checkConquer( )
         buildingCapture[ (*i)->getEntry() ].state = BuildingCapture::conq_unreachable;
    }
 
-   for ( BuildingCaptureContainer::iterator bi = buildingCapture.begin(); bi != buildingCapture.end(); bi++) {
+   for ( BuildingCaptureContainer::iterator bi = buildingCapture.begin(); bi != buildingCapture.end(); ) {
       BuildingCaptureContainer::iterator nxt = bi;
       ++nxt;
       pvehicle veh = getMap()->getUnit ( bi->second.unit );
