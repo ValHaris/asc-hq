@@ -1,6 +1,17 @@
-//     $Id: missions.h,v 1.4 2000-10-11 14:26:44 mbickel Exp $
+//     $Id: missions.h,v 1.5 2001-01-19 13:33:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/10/11 14:26:44  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.3  2000/07/05 10:49:36  mbickel
 //      Fixed AI bugs
 //      setbuildingdamage event now updates the screen
@@ -36,15 +47,14 @@
 
 
 #ifdef karteneditor
-#error eigentlich sollte der Karteneditor ohne die Missions auskommen k”nnen !
+#error The mapeditor should not use missions.h
 #endif
 
 
 #ifndef missions_h
 #define missions_h
 
-/* unit header for: missions.c -- made by tptc - translate pascal to c */
-
+#include "controls.h"
 
 
 extern void  checkevents( MapDisplayInterface* md );

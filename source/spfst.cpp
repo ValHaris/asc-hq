@@ -1,6 +1,11 @@
-//     $Id: spfst.cpp,v 1.76 2000-12-28 16:58:38 mbickel Exp $
+//     $Id: spfst.cpp,v 1.77 2001-01-19 13:33:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.76  2000/12/28 16:58:38  mbickel
+//      Fixed bugs in AI
+//      Some cleanup
+//      Fixed crash in building construction
+//
 //     Revision 1.75  2000/12/27 22:23:16  mbickel
 //      Fixed crash in loading message text
 //      Removed many unused variables
@@ -554,16 +559,6 @@ int  rol ( int valuetorol, int rolwidth )
 }
 
 
-void setvisibility ( word* visi, int valtoset, int actplayer )
-{
-   int newval = (valtoset ^ 3) << ( 2 * actplayer );
-   int oneval = 3 << ( 2 * actplayer );
-
-   int vis = *visi;
-   vis |= oneval;
-   vis ^= newval;
-   *visi = vis;
-}
 
 void copyvfb2displaymemory_zoom ( void* parmbuf, int x1, int y1, int x2, int y2 )
 {

@@ -1,5 +1,6 @@
 TODO list for ASC:
 
+0.  rewriting tdrawgettempline ( mapalgorithm.cpp )
 1.  Caching of fullscreen image ( file sdl/loadimage.c )
     converting an image from 24 bitt to 8 bit and resizing it is quite slow.
     The image could be cached as PCX with 8 bit and correct resolution to be

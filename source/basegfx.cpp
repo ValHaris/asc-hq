@@ -1,6 +1,10 @@
-//     $Id: basegfx.cpp,v 1.20 2001-01-04 15:10:48 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.21 2001-01-19 13:33:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2001/01/04 15:10:48  mbickel
+//      Fixed: showtext displayed garbage as last character when text had to be
+//        cut shorter to be displayed
+//
 //     Revision 1.19  2000/12/26 21:04:32  mbickel
 //      Fixed: putimageprt not working (used for small map displaying)
 //      Fixed: mapeditor crashed on generating large maps
@@ -585,6 +589,18 @@ void flippict ( void* s, void* d, int dir )
 
 
 
+void putpixel8 ( int x1, int y1, int color )
+{
+    collategraphicoperations cgo ( x1, y1, x1, y1 );
+    char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
+    *buf = color;
+}
+
+int getpixel8 ( int x1, int y1 )
+{
+    char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
+    return *buf;
+}
 
 
 void putpixel(int x1, int y1, int color)
@@ -716,26 +732,8 @@ int TrueColorImage :: getysize( void )
 
 
 
-
-int f2i ( float f )
-{
-   
-//   int b = f;
-
-   int a; 
-   f -= 0.4999;
-   float2int ( &f, &a );
-/*   if ( a != b )
-      return -1; */
-   return a;
-}
-
-int f2i2 ( float f )
-{
-   int a; 
-   float2int ( &f, &a );
-   return a;
-}
+#define f2i(x) (int(x))
+#define f2i2(x) (int(x+0.5))
 
 
 int newpalgenerated = 0;
@@ -1255,20 +1253,6 @@ void copySurface2screen( int x1, int y1, int x2, int y2 )
 
 
 
-void putpixel8 ( int x1, int y1, int color )
-{
-    collategraphicoperations cgo ( x1, y1, x1, y1 );
-    char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
-    *buf = color;
-
-}
-
-int getpixel8 ( int x1, int y1 )
-{
-    char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
-    return *buf;
-
-}
 
 
 void bar(int x1, int y1, int x2, int y2, char color)
@@ -1784,12 +1768,6 @@ int loga2 ( int a )
          l++;
       }
    return l;
-}
-
-
-void float2int ( float* fp, int* ip )
-{
-   *ip = (int) *fp;
 }
 
 

@@ -1,6 +1,11 @@
-//     $Id: unitctrl.h,v 1.20 2000-12-28 16:58:39 mbickel Exp $
+//     $Id: unitctrl.h,v 1.21 2001-01-19 13:33:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/12/28 16:58:39  mbickel
+//      Fixed bugs in AI
+//      Some cleanup
+//      Fixed crash in building construction
+//
 //     Revision 1.19  2000/11/21 20:27:11  mbickel
 //      Fixed crash in tsearchfields (used by object construction for example)
 //      AI improvements
@@ -153,7 +158,8 @@ class FieldList {
        void addField ( int x, int y );
        void setMap ( pmap map );
        pmap getMap ( void );
-       int isMember ( int x, int y );
+       bool isMember ( int x, int y );
+       bool isMember ( const MapCoordinate& mc );
      };
 
 
@@ -619,12 +625,20 @@ template<class T> pmap FieldList<T> :: getMap ( void )
    return localmap;
 }
 
-template<class T> int FieldList<T> :: isMember ( int x, int y )
+template<class T> bool FieldList<T> :: isMember ( int x, int y )
 {
    for ( int i = 0; i < fieldnum; i++ )
       if ( xpos[i] == x && ypos[i] == y )
-         return 1;
-   return 0;
+         return true;
+   return false;
+}
+
+template<class T> bool FieldList<T> :: isMember ( const MapCoordinate& mc )
+{
+   for ( int i = 0; i < fieldnum; i++ )
+      if ( xpos[i] == mc.x && ypos[i] == mc.y )
+         return true;
+   return false;
 }
 
 #endif

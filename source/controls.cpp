@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.88 2000-12-23 13:19:43 mbickel Exp $
+//     $Id: controls.cpp,v 1.89 2001-01-19 13:33:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.88  2000/12/23 13:19:43  mbickel
+//      Made ASC compileable with Borland C++ Builder
+//
 //     Revision 1.87  2000/12/21 11:00:47  mbickel
 //      Added some code documentation
 //
@@ -186,6 +189,7 @@
 #include "artint.h"
 #include "errors.h"
 #include "password_dialog.h"
+#include "viewcalculation.h"
 
          tdashboard  dashboard;
          int             windmovement[8];
@@ -487,7 +491,7 @@ void         putbuildinglevel3(integer      x,
          moveparams.movestatus = 0;
          eht->setMovement ( 0 );
          eht->attacked = true;
-         computeview();
+         computeview( actmap );
       }
 }
 
@@ -569,7 +573,7 @@ void         destructbuildinglevel2( int xp, int yp)
             removebuilding ( &bb );
          }
          logtoreplayinfo ( rpl_removebuilding, xp, yp );
-         computeview();
+         computeview( actmap );
          displaymap();
          moveparams.movestatus = 0;
       }
@@ -695,7 +699,7 @@ void  legemine( int typ, int delta )
                logtoreplayinfo ( rpl_removemine, x, y );
             }
             actmap->cleartemps(7);
-            computeview();
+            computeview( actmap );
             moveparams.movestatus = 0;
          }
       }
@@ -1146,7 +1150,7 @@ void         constructvehicle( pvehicletype tnk )
             int y = getypos();
             eht->constructvehicle ( tnk, x, y );
             logtoreplayinfo ( rpl_buildtnk, x, y, tnk->id, moveparams.vehicletomove->color/8 );
-            computeview();
+            computeview( actmap );
 
          // }
 
@@ -1161,133 +1165,6 @@ void         constructvehicle( pvehicletype tnk )
 
 
 
-
-
-
-
-void         clearvisibility( int  reset )
-{
-  if ((actmap->xsize == 0) || (actmap->ysize == 0))
-     return;
-
-   int l = 0;
-   for ( int x = 0; x < actmap->xsize ; x++)
-         for ( int y = 0; y < actmap->ysize ; y++) {
-            pfield fld = &actmap->field[l];
-            memset ( fld->view, 0, sizeof ( fld->view ));
-            l++;
-         }
-}
-
-int  evaluatevisibilityfield ( pfield fld, int player, int add, int initial )
-{
-   int originalVisibility;
-   if ( initial == 2 ) {
-      setvisibility(&fld->visible,visible_all, player);
-      return 0;
-   } else {
-      originalVisibility = (fld->visible >> (player * 2)) & 3;
-      if ( originalVisibility >= visible_ago || initial == 1)
-           setvisibility(&fld->visible,visible_ago, player);
-   }
-
-   if ( add == -1 ) {
-      add = 0;
-      if ( actmap->shareview )
-         for ( int i = 0; i < 8; i++ )
-            if ( actmap->shareview->mode[i][player] )
-               add |= 1 << i;
-   }
-   add |= 1 << player;
-
-   int sight = 0;
-   int jamming = 0;
-   int mine = 0;
-   int satellite = 0;
-   int direct = 0;
-   int sonar = 0;
-   for ( int i = 0; i < 8; i++ ){
-      if ( add & ( 1 << i )) {
-         sight += fld->view[i].view;
-         mine  += fld->view[i].mine;
-         satellite += fld->view[i].satellite;
-         direct += fld->view[i].direct;
-         sonar += fld->view[i].sonar;
-      } else
-         jamming += fld->view[i].jamming;
-   }
-   if ( sight > jamming   ||  direct  ) {
-      if ( fld->building && (fld->building->connection & cconnection_seen))
-         releaseevent ( NULL, fld->building, cconnection_seen );
-
-      if (( fld->vehicle  && ( fld->vehicle->color  == player * 8 )) ||
-          ( fld->vehicle  && ( fld->vehicle->height  < chschwimmend ) && sonar ) ||
-          ( fld->building && ( fld->building->typ->buildingheight < chschwimmend ) && sonar ) ||
-          ( fld->object && fld->object->mine && ( mine  ||  fld->mineowner() == player)) ||
-          ( fld->vehicle  && ( fld->vehicle->height  >= chsatellit )  && satellite )) {
-             setvisibility(&fld->visible,visible_all, player);
-             return originalVisibility != visible_all;
-      } else {
-             setvisibility(&fld->visible,visible_now, player);
-             return originalVisibility != visible_now;
-      }
-   }
-   return 0;
-}
-
-
-int  evaluateviewcalculation ( int player_fieldcount_mask )
-{
-   int initial = actmap->getgameparameter ( cgp_initialMapVisibility );
-   int fieldsChanged = 0;
-   for ( int player = 0; player < 8; player++ )
-      if ( actmap->player[player].existent ) {
-         int add = 0;
-         if ( actmap->shareview )
-            for ( int i = 0; i < 8; i++ )
-               if ( actmap->shareview->mode[i][player] )
-                  add |= 1 << i;
-
-         int nm = actmap->xsize * actmap->ysize;
-         if ( player_fieldcount_mask & (1 << player ))
-            for ( int i = 0; i < nm; i++ )
-                fieldsChanged += evaluatevisibilityfield ( &actmap->field[i], player, add, initial );
-         else
-            for ( int i = 0; i < nm; i++ )
-                evaluatevisibilityfield ( &actmap->field[i], player, add, initial );
-      }
-   return fieldsChanged;
-}
-
-
-
-int computeview( int player_fieldcount_mask )
-{
-   if ((actmap->xsize == 0) || (actmap->ysize == 0))
-      return 0;
-
-   clearvisibility( 1 );
-
-   for ( int a = 0; a < 8; a++)
-      if (actmap->player[a].existent ) {
-         pvehicle actvehicle = actmap->player[a].firstvehicle;
-         while ( actvehicle ) {
-            if (actvehicle == getfield(actvehicle->xpos,actvehicle->ypos)->vehicle)
-               actvehicle->addview();
-
-            actvehicle = actvehicle->next;
-         }
-
-         pbuilding actbuilding = actmap->player[a].firstbuilding;
-         while ( actbuilding ) {
-            actbuilding->addview();
-            actbuilding = actbuilding->next;
-         }
-      }
-
-
-   return evaluateviewcalculation ( player_fieldcount_mask );
-}
 
 
 
@@ -1765,7 +1642,7 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
    vehicle->ypos = y;
 
    for ( int i = 0; i < 8; i++ ) {
-      evaluatevisibilityfield ( fld, i, -1, actmap->getgameparameter ( cgp_initialMapVisibility ) );
+      evaluatevisibilityfield ( actmap, fld, i, -1, actmap->getgameparameter ( cgp_initialMapVisibility ) );
       if ( fieldvisiblenow ( fld, i )) {
          punitlist ul  = unitlist[i];
          while ( ul  &&  !result ) {
@@ -4494,7 +4371,7 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
 
 
    }
-   computeview();
+   computeview( actmap );
 
    actmap->playerView = actmap->actplayer;
 
@@ -4824,7 +4701,7 @@ void runai( int playerView )
    } else {
       tlockdispspfld displock;
       checkalliances_at_beginofturn ();
-      computeview();
+      computeview( actmap );
       displaymessage("no AI available yet", 1 );
    }
 }
@@ -6408,7 +6285,7 @@ void trunreplay :: execnextreplaymove ( void )
                                 battle.setresult ();
                                 dashboard.x = 0xffff;
                              }
-                             computeview();
+                             computeview( actmap );
                              displaymap();
                           } else
                              displaymessage("severe replay inconsistency:\nno vehicle for attack command !", 1);
@@ -6473,7 +6350,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  if ( fld->building )
                                     fld->building->convert ( col );
 
-                              computeview();
+                              computeview( actmap );
                               displaymap();
                               wait();
                               removeActionCursor();
@@ -6504,7 +6381,7 @@ void trunreplay :: execnextreplaymove ( void )
                               else
                                  fld->addobject ( obj );
 
-                              computeview();
+                              computeview( actmap );
                               displaymap();
                               wait();
                               removeActionCursor();
@@ -6533,7 +6410,7 @@ void trunreplay :: execnextreplaymove ( void )
                               v->ypos = y;
                               fld->vehicle = v;
 
-                              computeview();
+                              computeview( actmap );
                               displaymap();
                               wait();
                               removeActionCursor();
@@ -6559,7 +6436,7 @@ void trunreplay :: execnextreplaymove ( void )
                                if ( bld && fld ) {
                                   displayActionCursor ( x, y );
                                   putbuilding2( x, y, color, bld );
-                                  computeview();
+                                  computeview( actmap );
                                   displaymap();
                                   wait();
                                   removeActionCursor();
@@ -6582,7 +6459,7 @@ void trunreplay :: execnextreplaymove ( void )
                            if ( fld ) {
                               displayActionCursor ( x, y );
                               fld -> putmine ( col, typ, strength );
-                              computeview();
+                              computeview( actmap );
                               displaymap();
                               wait();
                               removeActionCursor();
@@ -6603,7 +6480,7 @@ void trunreplay :: execnextreplaymove ( void )
                            if ( fld ) {
                               displayActionCursor ( x, y );
                               fld -> removemine ( -1 );
-                              computeview();
+                              computeview( actmap );
                               displaymap();
                               wait();
                               removeActionCursor ( );
@@ -6629,7 +6506,7 @@ void trunreplay :: execnextreplaymove ( void )
                               } else {
                                  removebuilding ( &bb );
                               }
-                              computeview();
+                              computeview( actmap );
                               displaymap();
                               wait();
                               removeActionCursor();
@@ -6669,7 +6546,7 @@ void trunreplay :: execnextreplaymove ( void )
                                     } else {
                                        displayActionCursor ( x, y );
                                        fld->vehicle = eht;
-                                       computeview();
+                                       computeview( actmap );
                                        displaymap();
                                        wait();
                                        removeActionCursor();
@@ -6726,7 +6603,7 @@ void trunreplay :: execnextreplaymove ( void )
                                     }
 
                                  readnextaction();
-                                 computeview();
+                                 computeview( actmap );
                                  displaymap();
                               }
          break;
@@ -6884,7 +6761,7 @@ int  trunreplay :: run ( int player )
    else 
       status = 11;
 
-   computeview();
+   computeview( actmap );
    displaymap ();
 
    dashboard.x = 0xffff;

@@ -1,6 +1,11 @@
-//     $Id: gamedlg.cpp,v 1.57 2001-01-04 15:13:49 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.58 2001-01-19 13:33:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2001/01/04 15:13:49  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.56  2000/12/27 22:23:08  mbickel
 //      Fixed crash in loading message text
 //      Removed many unused variables
@@ -292,6 +297,7 @@
 #include "loadimage.h"
 #include "errors.h"
 #include "password_dialog.h"
+#include "viewcalculation.h"
 
 #ifdef _DOS_
  #include "dos/memory.h"
@@ -4937,7 +4943,7 @@ void tgiveunitawaydlg :: run ( void )
          if ( fld->building )
             fld->building->convert ( ply[markedplayer] );
       logtoreplayinfo ( rpl_convert, (int) getxpos(), (int) getypos(), (int) ply[markedplayer] );
-      computeview();
+      computeview( actmap );
    }
 }
 

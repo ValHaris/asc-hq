@@ -1,6 +1,11 @@
-//     $Id: unitctrl.cpp,v 1.43 2001-01-04 15:14:12 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.44 2001-01-19 13:33:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2001/01/04 15:14:12  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.42  2000/11/21 20:27:10  mbickel
 //      Fixed crash in tsearchfields (used by object construction for example)
 //      AI improvements
@@ -166,7 +171,7 @@
 #include "missions.h"
 #include "vehicletype.h"
 #include "buildingtype.h"
-
+#include "viewcalculation.h"
 
 PendingVehicleActions pendingVehicleActions;
 
@@ -777,7 +782,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
 
       int fieldschanged;
       if ( actmap->playerView >= 0 )
-         fieldschanged = evaluateviewcalculation ( 1 << actmap->playerView );
+         fieldschanged = evaluateviewcalculation ( actmap, 1 << actmap->playerView );
       else
          fieldschanged = 0;
 
@@ -895,7 +900,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
 
    int fieldschanged;
    if ( actmap->playerView >= 0 )
-      fieldschanged = computeview( 1 << actmap->playerView );
+      fieldschanged = computeview( actmap, 1 << actmap->playerView );
    else
       fieldschanged = 0;
 
@@ -1596,7 +1601,7 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
 
       logtoreplayinfo ( rpl_attack, xp1, yp1, x, y, ad1, ad2, dd1, dd2, weapnum );
 
-      computeview();
+      computeview( actmap );
 
       if ( mapDisplay && shown )
          mapDisplay->displayMap();
@@ -1805,6 +1810,9 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
 {
    VehicleService::Target targ;
    targ.dest = targetUnit;
+
+   if ( xp == startx && yp == starty )
+      return;
 
    int dist;
    if ( bypassChecks.distance )

@@ -1,6 +1,12 @@
-//     $Id: spfst.h,v 1.32 2000-11-21 20:27:10 mbickel Exp $
+//     $Id: spfst.h,v 1.33 2001-01-19 13:33:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/11/21 20:27:10  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.31  2000/11/08 19:31:15  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -729,7 +735,6 @@ extern MapDisplay defaultMapDisplay;
 
 #ifdef _NOASM_
  int  rol ( int valuetorol, int rolwidth );
- void setvisibility ( word* visi, int valtoset, int actplayer );
 #else
  #include "dos/spfldutl.h"
 #endif

@@ -71,6 +71,8 @@ extern void  getnextfield(int &    x,
                           int &    y,
                           int direc);
 
+extern MapCoordinate  getNeighbouringFieldCoordinate( const MapCoordinate& pos, int direc);
+
 extern void  getnextfielddir(int &    x,
                              int &    y,
                              int direc,
@@ -84,10 +86,10 @@ extern int   getdirection(    int      x1,
                               int      x2,
                               int      y2);
 
-//! returns the distance between (x1/y1) and (x2/y2); Awfully unoptimized !!
+//! returns the distance between (x1/y1) and (x2/y2)
 extern int beeline ( int x1, int y1, int x2, int y2 );
 
-//! returns the distance the units a and b; Awfully unoptimized !!
+//! returns the distance the units a and b
 extern int beeline ( const pvehicle a, const pvehicle b );
 extern int beeline ( const MapCoordinate& a, const MapCoordinate& b );
 

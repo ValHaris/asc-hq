@@ -1,6 +1,10 @@
-//     $Id: edselfnt.cpp,v 1.19 2000-11-29 11:05:28 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.20 2001-01-19 13:33:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/11/29 11:05:28  mbickel
+//      Improved userinterface of the mapeditor
+//      map::preferredfilenames uses now strings (instead of char*)
+//
 //     Revision 1.18  2000/11/21 20:27:02  mbickel
 //      Fixed crash in tsearchfields (used by object construction for example)
 //      AI improvements
@@ -203,6 +207,7 @@ class SelectAnything : public SelectAnythingBase {
                        virtual int getyposforitempos ( int itemy );
                        virtual int getitemsizex ( void ) = 0;
                        virtual int getitemsizey ( void ) = 0;
+                       virtual string getItemName ( T item ) = 0;
                        virtual int getxgap ( void ) { return 5; };
                        virtual int getygap ( void ) { return 5; };
                        virtual void _showiteminfos ( T item, int x1, int y1, int x2, int y2 );
@@ -423,7 +428,9 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
       int oldy = actitemy;
       int oldwiny = winstarty;
       if ( keypress() ) {
-         tkey ch = r_key();
+         int prntkey;
+         tkey ch;
+         getkeysyms ( &ch, &prntkey );
          switch ( ch ) {
          
                #ifdef NEWKEYB
@@ -474,6 +481,38 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
                            }
                   break;
          } 
+         if ((prntkey > ' ') && (prntkey < 256)) {   /* spedsearc */
+            int key = tolower ( prntkey );
+
+            int ax = actitemx;
+            int ay = actitemy;
+            bool finished  = false;
+            do {
+               ax++;
+               while ( ax >= maxx ) {
+                  ax -= maxx;
+                  ay ++;
+               }
+               if ( ay >= maxy )
+                  ay = 0;
+
+               if ( ax == actitemx && ay == actitemy ) {
+                  finished = true;
+               } else {
+                  int pos = ax + ay * maxx;
+                  if ( pos <= itemsavail.getlength() )
+                     if ( itemsavail[pos] ) {
+                        string s = getItemName( itemsavail[pos] );
+                        if ( !s.empty() )
+                           if ( tolower (s[0]) == key ) {
+                              actitemx = ax;
+                              actitemy = ay;
+                              finished = true;
+                           }
+                     }
+               }
+            } while ( !finished );
+         }
       }
 
       if ( mouseparams.taste == 1 ) {
@@ -579,6 +618,7 @@ class SelectVehicleType : public SelectAnything< pvehicletype > {
                        virtual int getitemsizex ( void ) { return fieldsizex; } ;
                        virtual int getitemsizey ( void ) { return fieldsizey; } ;
                        virtual void showiteminfos ( pvehicletype item, int x1, int y1, int x2, int y2 );
+                       virtual string getItemName ( pvehicletype item );
 };
 
 
@@ -602,6 +642,18 @@ void SelectVehicleType :: displaysingleitem ( pvehicletype item, int x, int y )
       putrotspriteimage ( x, y, item->picture[0], farbwahl*8 );
 }
 
+string SelectVehicleType :: getItemName ( pvehicletype item )
+{
+   if ( item->name && item->name[0] )
+      return item->name;
+   else
+      if ( item->description  && item->description[0] )
+         return item->description;
+      else
+         return "-NONE-";
+}
+
+
 void SelectVehicleType :: showiteminfos ( pvehicletype item, int x1, int y1, int x2, int y2 )
 { 
    rectangle ( x1, y1, x2, y2, lightgray );
@@ -616,13 +668,7 @@ void SelectVehicleType :: showiteminfos ( pvehicletype item, int x1, int y1, int
       activefontsettings.height = 0;
       activefontsettings.length = x2 - x1 - 20 - getitemsizex();
 
-      if ( item->name && item->name[0] )
-         showtext4 ( "Name: %s", x1 + 20 + getitemsizex(), y1 + 10, item->name );
-      else
-         if ( item->description  &&  item->description[0] )
-            showtext4 ( "Name: %s", x1 + 20 + getitemsizex(), y1 + 10, item->description );
-         else
-            showtext4 ( "Name: NONE", x1 + 20 + getitemsizex(), y1 + 10 );
+      showtext4 ( "Name: %s", x1 + 20 + getitemsizex(), y1 + 10, getItemName (item).c_str() );
 
       showtext4 ( "ID: %d", x1 + 20 + getitemsizex(), y1 + 30, item->id );
       npop ( activefontsettings );
@@ -640,6 +686,7 @@ class SelectTerrainType : public SelectAnything< pterraintype > {
                        virtual int getitemsizex ( void ) { return fieldsizex; } ;
                        virtual int getitemsizey ( void ) { return fieldsizey; } ;
                        virtual void showiteminfos ( pterraintype item, int x1, int y1, int x2, int y2 );
+                       virtual string getItemName ( pterraintype item );
 };
 
 void SelectTerrainType :: displaysingleitem ( pterraintype item, int x, int y )
@@ -655,6 +702,15 @@ void SelectTerrainType :: displaysingleitem ( pterraintype item, int x, int y )
          item->weather[0]->paint ( x, y );
 }
 
+string SelectTerrainType :: getItemName ( pterraintype item )
+{
+   if ( item->name && item->name[0] )
+      return item->name;
+   else
+      return "-NONE-";
+}
+
+
 void SelectTerrainType :: showiteminfos ( pterraintype item, int x1, int y1, int x2, int y2 )
 { 
    rectangle ( x1, y1, x2, y2, lightgray );
@@ -669,10 +725,7 @@ void SelectTerrainType :: showiteminfos ( pterraintype item, int x1, int y1, int
       activefontsettings.height = 0;
       activefontsettings.length = x2 - x1 - 20 - getitemsizex();
 
-      if ( item->name && item->name[0] )
-         showtext4 ( "Name: %s", x1 + 20 + getitemsizex(), y1 + 10, item->name );
-      else
-         showtext4 ( "Name: NONE", x1 + 20 + getitemsizex(), y1 + 10 );
+      showtext4 ( "Name: %s", x1 + 20 + getitemsizex(), y1 + 10, getItemName(item).c_str() );
 
       showtext4 ( "ID: %d", x1 + 20 + getitemsizex(), y1 + 30, item->id );
       npop ( activefontsettings );
@@ -690,6 +743,7 @@ class SelectObjectType : public SelectAnything< pobjecttype > {
                        virtual int getitemsizex ( void ) { return fieldsizex; } ;
                        virtual int getitemsizey ( void ) { return fieldsizey; } ;
                        virtual void showiteminfos ( pobjecttype item, int x1, int y1, int x2, int y2 );
+                       virtual string getItemName ( pobjecttype item );
 };
 
 void SelectObjectType :: displaysingleitem ( pobjecttype item, int x, int y )
@@ -698,6 +752,15 @@ void SelectObjectType :: displaysingleitem ( pobjecttype item, int x, int y )
    if ( item )
       item->display ( x, y );
 }
+
+string SelectObjectType :: getItemName ( pobjecttype item )
+{
+   if ( item->name && item->name[0] )
+      return item->name;
+   else
+      return "-NONE-";
+}
+
 
 void SelectObjectType :: showiteminfos ( pobjecttype item, int x1, int y1, int x2, int y2 )
 { 
@@ -713,10 +776,7 @@ void SelectObjectType :: showiteminfos ( pobjecttype item, int x1, int y1, int x
       activefontsettings.height = 0;
       activefontsettings.length = x2 - x1 - 20 - getitemsizex();
 
-      if ( item->name && item->name[0] )
-         showtext4 ( "Name: %s", x1 + 20 + getitemsizex(), y1 + 10, item->name );
-      else
-         showtext4 ( "Name: NONE", x1 + 20 + getitemsizex(), y1 + 10 );
+      showtext4 ( "Name: %s", x1 + 20 + getitemsizex(), y1 + 10, getItemName(item).c_str() );
 
       showtext4 ( "ID: %d", x1 + 20 + getitemsizex(), y1 + 30, item->id );
       npop ( activefontsettings );
@@ -735,6 +795,7 @@ class SelectBuildingType : public SelectAnything< pbuildingtype > {
                        virtual int getitemsizex ( void ) { return fieldsizex+(buildingfieldsdisplayedx-1)*fielddistx+fielddisthalfx; } ;
                        virtual int getitemsizey ( void ) { return fieldsizey+(buildingfieldsdisplayedy-1)*fielddisty; } ;
                        virtual void showiteminfos ( pbuildingtype item, int x1, int y1, int x2, int y2 );
+                       virtual string getItemName ( pbuildingtype item );
                     public:
                        SelectBuildingType( void ) { buildingfieldsdisplayedx = 4; buildingfieldsdisplayedy = 6; };
 };
@@ -742,6 +803,14 @@ class SelectBuildingType : public SelectAnything< pbuildingtype > {
 int SelectBuildingType :: isavailable ( pbuildingtype item )
 {
    return isBuildingNotFiltered ( item->id );
+}
+
+string SelectBuildingType :: getItemName ( pbuildingtype item )
+{
+   if ( item->name && item->name[0] )
+      return item->name;
+   else
+      return "-NONE-";
 }
 
 
@@ -769,10 +838,7 @@ void SelectBuildingType :: showiteminfos ( pbuildingtype item, int x1, int y1, i
       activefontsettings.height = 0;
       activefontsettings.length = x2 - x1 - 20 - fieldsizex;
 
-      if ( item->name && item->name[0] )
-         showtext4 ( "Name: %s", x1 + 20 + fieldsizex, y1 + 10, item->name );
-      else
-         showtext4 ( "Name: NONE", x1 + 20 + fieldsizex, y1 + 10 );
+      showtext4 ( "Name: %s", x1 + 20 + fieldsizex, y1 + 10, getItemName(item).c_str() );
 
       showtext4 ( "ID: %d", x1 + 20 + fieldsizex, y1 + 30, item->id );
       npop ( activefontsettings );
@@ -817,7 +883,14 @@ class SelectColor : public SelectAnything< pcolortype > {
                        virtual int getitemsizey ( void ) { return fieldsizey; } ;
                        virtual void showiteminfos ( pcolortype item, int x1, int y1, int x2, int y2 );
                        virtual int getiteminfoheight( void ) { return 20; };
+                       virtual string getItemName ( pcolortype item );
 };
+
+string SelectColor :: getItemName ( pcolortype item )
+{
+  return strrr ( item->col );
+}
+
 
 void SelectColor :: displaysingleitem ( pcolortype item, int x, int y )
 {
@@ -830,7 +903,7 @@ void SelectColor :: displaysingleitem ( pcolortype item, int x, int y )
       activefontsettings.color = black;
       activefontsettings.height = 0;
       activefontsettings.length = getitemsizex();
-      showtext2 ( strrr ( item->col ), x, y + (getitemsizey() - activefontsettings.font->height) / 2 );
+      showtext2 ( getItemName(item).c_str(), x, y + (getitemsizey() - activefontsettings.font->height) / 2 );
       npop ( activefontsettings );
    } else
       bar ( x, y, x + getitemsizex(), y + getitemsizey(), black );
@@ -853,7 +926,13 @@ class SelectWeather : public SelectAnything< pweathertype > {
                        virtual int getitemsizex ( void ) { return 120; } ;
                        virtual int getitemsizey ( void ) { return 25; } ;
                        virtual void showiteminfos ( pweathertype item, int x1, int y1, int x2, int y2 );
+                       virtual string getItemName ( pweathertype  item ) ;
 };
+
+string SelectWeather :: getItemName ( pweathertype  item )
+{
+  return item->name;
+}
 
 void SelectWeather :: displaysingleitem ( pweathertype item, int x, int y )
 {
@@ -866,7 +945,7 @@ void SelectWeather :: displaysingleitem ( pweathertype item, int x, int y )
       activefontsettings.color = white;
       activefontsettings.height = 0;
       activefontsettings.length = getitemsizex() - 10;
-      showtext2 ( item->name, x+5, y + (getitemsizey() - activefontsettings.font->height) / 2 );
+      showtext2 ( getItemName( item ).c_str(), x+5, y + (getitemsizey() - activefontsettings.font->height) / 2 );
       npop ( activefontsettings );
    }
 }
@@ -907,6 +986,7 @@ class SelectMine : public SelectAnything< pminetype > {
                        virtual int getitemsizex ( void ) { return fieldsizex; } ;
                        virtual int getitemsizey ( void ) { return fieldsizey; } ;
                        virtual void showiteminfos ( pminetype item, int x1, int y1, int x2, int y2 );
+                       virtual string getItemName ( pminetype  item );
 };
 
 void SelectMine :: displaysingleitem ( pminetype item, int x, int y )
@@ -914,6 +994,14 @@ void SelectMine :: displaysingleitem ( pminetype item, int x, int y )
    bar ( x, y, x + getitemsizex(), y + getitemsizey(), black );
    if ( item ) 
       item->paint ( x, y );
+}
+
+string SelectMine :: getItemName ( pminetype  item )
+{
+   if ( item->name && item->name[0] )
+      return item->name;
+   else
+      return "-NONE-";
 }
 
 
@@ -931,10 +1019,7 @@ void SelectMine :: showiteminfos ( pminetype item, int x1, int y1, int x2, int y
       activefontsettings.height = 0;
       activefontsettings.length = x2 - x1 - 20 - getitemsizex();
 
-      if ( item->name && item->name[0] )
-         showtext4 ( "Name: %s", x1 + 20 + getitemsizex(), y1 + 10, item->name );
-      else
-         showtext4 ( "Name: NONE", x1 + 20 + getitemsizex(), y1 + 10 );
+      showtext4 ( "Name: %s", x1 + 20 + getitemsizex(), y1 + 10, getItemName(item).c_str() );
 
       npop ( activefontsettings );
    }

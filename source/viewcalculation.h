@@ -54,4 +54,16 @@
                               void              init( const pbuilding    bld, int _mode );
                            };
 
+  extern int computeview( pmap actmap, int player_fieldcount_mask = 0 );
+  extern int  evaluatevisibilityfield ( pmap actmap, pfield fld, int player, int add, int initial );
+
+  extern int  evaluateviewcalculation ( pmap actmap, int player_fieldcount_mask = 0 );     // playermask determines, which players should be counted when the view has changed
+                                                                // returns the number of fields which have changed visibilitystatus
+
+  extern int  evaluateviewcalculation ( pmap actmap, int x, int y, int distance, int player_fieldcount_mask = 0 );     // playermask determines, which players should be counted when the view has changed
+                                                                // returns the number of fields which have changed visibilitystatus
+
+
+  extern void setvisibility ( word* visi, int valtoset, int actplayer );
+
 #endif

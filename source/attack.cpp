@@ -1,6 +1,10 @@
-//     $Id: attack.cpp,v 1.34 2000-10-18 14:13:48 mbickel Exp $
+//     $Id: attack.cpp,v 1.35 2001-01-19 13:33:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2000/10/18 14:13:48  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.33  2000/10/11 14:26:15  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -203,7 +207,7 @@
 
 
 
-int  AttackFormula :: checkHemming ( pvehicle     d_eht,  int     direc )
+bool  AttackFormula :: checkHemming ( pvehicle     d_eht,  int     direc )
 { 
    pvehicle     s_eht; 
 
@@ -227,29 +231,33 @@ int  AttackFormula :: checkHemming ( pvehicle     d_eht,  int     direc )
 } 
 
 
+float AttackFormula :: getHemmingFactor ( int relDir )
+{
+   const float  maxHemmingFactor = 1.4;  // = +140% !
+   #ifdef HEXAGON
+   const float hemming[sidenum-1]  = { 4, 11, 16, 11, 4 };
+   const float maxHemmingSum = 46;
+   #else
+   const float hemming[sidenum-1]  = {3, 7, 11, 16, 11, 7, 3};
+   const float maxHemmingSum = 58;
+   #endif
+   relDir  %= 6;
+   if ( relDir < 0 )
+      relDir += sidenum;
+   return hemming[relDir]*maxHemmingFactor/maxHemmingSum;
+}
 
 
 float AttackFormula :: strength_hemming ( int  ax,  int ay,  pvehicle d_eht )
 {
-   const float  maxHemmingFactor = 1.4;  // 1 + factor !!!
-   #ifdef HEXAGON
-   const int   hemming[5]  = { 4, 11, 16, 11, 4 };
-   const int   maxHemmingSum = 46;
-   #else
-   const int   hemming[7]  = {3, 7, 11, 16, 11, 7, 3};
-   const int   maxHemmingSum = 58;
-   #endif
-
-
-   float hemm = 0; 
-   int direction = getdirection(ax,ay,d_eht->xpos,d_eht->ypos); 
+   float hemm = 0;
+   int attackDir = getdirection(ax,ay,d_eht->xpos,d_eht->ypos);
    for ( int i = 0; i < sidenum-1; i++)
-      if ( checkHemming (d_eht,i+1 + (direction-sidenum/2) ))
-         hemm += hemming[i];
+      if ( checkHemming (d_eht,i+1 + (attackDir-sidenum/2) ))
+         hemm += getHemmingFactor(i);
 
 
-   return  hemm * maxHemmingFactor / maxHemmingSum + 1;
-
+   return  hemm + 1;
 }
 
 
@@ -580,12 +588,12 @@ void tfight :: calcdisplay ( int ad, int dd )
 
 
 
-tunitattacksunit :: tunitattacksunit ( pvehicle &attackingunit, pvehicle &attackedunit, int respond, int weapon )
+tunitattacksunit :: tunitattacksunit ( pvehicle &attackingunit, pvehicle &attackedunit, bool respond, int weapon )
 {
    setup ( attackingunit, attackedunit, respond, weapon );
 }
 
-void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit, int respond, int weapon )
+void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit, bool respond, int weapon )
 {
    _attackingunit = attackingunit;
    _attackedunit  = attackedunit;

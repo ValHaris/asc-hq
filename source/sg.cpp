@@ -1,6 +1,11 @@
-//     $Id: sg.cpp,v 1.122 2001-01-04 15:14:03 mbickel Exp $
+//     $Id: sg.cpp,v 1.123 2001-01-19 13:33:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.122  2001/01/04 15:14:03  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.121  2000/12/29 16:33:53  mbickel
 //      The supervisor may now reset passwords
 //
@@ -162,6 +167,7 @@
 #include "errors.h"
 #include "password.h"
 #include "password_dialog.h"
+#include "viewcalculation.h"
 
 #ifdef HEXAGON
 #include "loadbi3.h"
@@ -1329,7 +1335,7 @@ void         ladespiel(void)
       if ( actmap->network )
          setallnetworkpointers ( actmap->network );
 
-      computeview();
+      computeview( actmap );
       displaymap();
       dashboard.x = 0xffff;
       moveparams.movestatus = 0;
@@ -1447,7 +1453,7 @@ void         startnewsinglelevelfromgame(void)
 {
     cursor.hide();
     newsinglelevel();
-    computeview();
+    computeview( actmap );
     displaymap();
     cursor.show();
 }
@@ -1563,7 +1569,7 @@ void benchgame ( int mode )
    do {
       if ( mode <= 1 ) {
          if ( mode == 1 )
-            computeview();
+            computeview( actmap );
          displaymap();
       } else {
         #ifndef _DOS_
@@ -1699,7 +1705,7 @@ void execuseraction ( tuseractions action )
 
             case ua_mntnc_morefog: if (actmap->weather.fog < 255   && maintainencecheck() ) {
                                       actmap->weather.fog++;
-                                      computeview();
+                                      computeview( actmap );
                                       displaymessage2("fog intensity set to %d ", actmap->weather.fog);
                                       displaymap();
                                    }
@@ -1707,7 +1713,7 @@ void execuseraction ( tuseractions action )
 
             case ua_mntnc_lessfog: if (actmap->weather.fog  && maintainencecheck()) {
                                       actmap->weather.fog--;
-                                      computeview();
+                                      computeview( actmap );
                                       displaymessage2("fog intensity set to %d ", actmap->weather.fog);
                                       displaymap();
                                    }
@@ -1828,7 +1834,7 @@ void execuseraction ( tuseractions action )
 
          case ua_newcampaign:         cursor.hide();
                                       newcampaign();
-                                      computeview();
+                                      computeview( actmap );
                                       displaymap();
                                       cursor.show();
                        break;
@@ -1845,7 +1851,7 @@ void execuseraction ( tuseractions action )
 
                                       if ( actmap->shareview && actmap->shareview->recalculateview ) {
                                          logtoreplayinfo ( rpl_shareviewchange );
-                                         computeview();
+                                         computeview( actmap );
                                          actmap->shareview->recalculateview = 0;
                                          displaymap();
                                       }
@@ -2188,6 +2194,10 @@ void  mainloop ( void )
             case ct_f8:  if ( actmap->player[ actmap->actplayer].ai ) {
                               AI* ai = (AI*) actmap->player[ actmap->actplayer].ai;
                               ai->showFieldInformation ( getxpos(), getypos() );
+                         } else {
+                             int x = getxpos();
+                             int y = getypos();
+                             displaymessage("cursorposition: %d / %d", 3, x, y );
                          }
                break;
 
@@ -2408,7 +2418,6 @@ void loaddata( int resolx, int resoly,
    if ( actprogressbar ) actprogressbar->startgroup();
 
    ladestartkarte( emailgame, mapname, savegame );
-   // computeview();
 
    if ( actprogressbar ) actprogressbar->startgroup();
 

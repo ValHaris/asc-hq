@@ -1,6 +1,9 @@
-//     $Id: controls.h,v 1.33 2000-12-21 11:00:49 mbickel Exp $
+//     $Id: controls.h,v 1.34 2001-01-19 13:33:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/12/21 11:00:49  mbickel
+//      Added some code documentation
+//
 //     Revision 1.32  2000/11/21 20:26:59  mbickel
 //      Fixed crash in tsearchfields (used by object construction for example)
 //      AI improvements
@@ -420,9 +423,6 @@ extern void dissectvehicle ( pvehicle eht );
 
 
 
-
-
-
 //! calculates some mining statistics for a mining station
 class tgetmininginfo : public tsearchfields {
           protected:
@@ -640,9 +640,6 @@ extern int searchexternaltransferfields ( pbuilding bld );
 extern void transfer_all_outstanding_tribute( void );
 
 
-extern int computeview( int player_fieldcount_mask = 0 );
-extern int  evaluateviewcalculation ( int player_fieldcount_mask = 0 );     // playermask determines, which players should be counted when the view has changed
-                                                                // returns the number which have changed visibilitystatus
 
 class treactionfire {
           public:

@@ -201,11 +201,6 @@ extern "C" void*     xlatbuffer;
  extern int loga2 ( int a );
  
 
- /** Converts a float to an int. Since Watcom C/C++ is awfully slow on this conversion, 
-      I rewrote it myself in assembler. Function is now obsolete and will be removed sooner
-      or later          */
- extern void float2int ( float* fp, int* ip );
-
 
 
 #else

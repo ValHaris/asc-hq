@@ -1,6 +1,17 @@
-//     $Id: attack.h,v 1.15 2000-10-11 14:26:16 mbickel Exp $
+//     $Id: attack.h,v 1.16 2001-01-19 13:33:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/10/11 14:26:16  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.14  2000/09/16 11:47:21  mbickel
 //      Some cleanup and documentation again
 //
@@ -101,7 +112,7 @@
 
 
 class AttackFormula {
-            int checkHemming ( pvehicle d_eht, int direc );
+            bool checkHemming ( pvehicle d_eht, int direc );
          public:
             float strength_experience ( int experience );
             float strength_damage ( int damage );
@@ -109,6 +120,7 @@ class AttackFormula {
             float strength_hemming ( int  ax,  int ay,  pvehicle d_eht );
             float defense_experience ( int experience );
             float defense_defensebonus ( int defensebonus );
+            static float getHemmingFactor ( int relDir );  // 0 <= reldir <= sidenum-2
         };
 
 class tfight : public AttackFormula {
@@ -149,8 +161,8 @@ class tunitattacksunit : public tfight {
            int _respond; 
            void paintimages ( int xa, int ya, int xd, int yd );
          public:
-           tunitattacksunit ( pvehicle &attackingunit, pvehicle &attackedunit, int respond, int weapon );
-           void setup ( pvehicle &attackingunit, pvehicle &attackedunit, int respond, int weapon );
+           tunitattacksunit ( pvehicle &attackingunit, pvehicle &attackedunit, bool respond = true, int weapon = -1);
+           void setup ( pvehicle &attackingunit, pvehicle &attackedunit, bool respond, int weapon );
            void setresult ( void );
            virtual void calcdisplay(int ad = -1, int dd = -1);
 
@@ -162,7 +174,7 @@ class tunitattacksbuilding : public tfight {
            int _x, _y;
            void paintimages ( int xa, int ya, int xd, int yd );
          public:
-           tunitattacksbuilding ( pvehicle attackingunit, int x, int y, int weapon );
+           tunitattacksbuilding ( pvehicle attackingunit, int x, int y, int weapon = -1);
            void setup ( pvehicle attackingunit, int x, int y, int weapon );
            void setresult ( void );
            virtual void calcdisplay(int ad = -1, int dd = -1);
@@ -191,14 +203,13 @@ class tunitattacksobject : public tfight {
            void paintimages ( int xa, int ya, int xd, int yd );
            int _x, _y;
          public:
-           tunitattacksobject ( pvehicle attackingunit, int obj_x, int obj_y, int weapon );
+           tunitattacksobject ( pvehicle attackingunit, int obj_x, int obj_y, int weapon = -1 );
            void setup ( pvehicle attackingunit, int obj_x, int obj_y, int weapon );
            void setresult ( void );
            virtual void calcdisplay(int ad = -1, int dd = -1);
       };
 
-   //! Some very old system to calculate the weapon efficiency over a given distance.
-   class AttackWeap { 
+   class AttackWeap {
                public:
                     int          count; 
                     int          strength[16]; 
@@ -249,7 +260,8 @@ extern bool attackpossible2n( const pvehicle attacker, const pvehicle target, pa
 extern bool vehicleplattfahrbar( const pvehicle vehicle, const pfield field );
 
 
-class WeapDist { 
+//! Some very old system to calculate the weapon efficiency over a given distance.
+class WeapDist {
             char         data[7][256];        /* mg,bomb,gmissile,amissile,torpedo,cannon,cruise missile  */ 
          public:
             void loaddata ( void ) ;

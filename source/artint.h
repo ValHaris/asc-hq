@@ -1,6 +1,11 @@
-//     $Id: artint.h,v 1.26 2001-01-04 15:13:27 mbickel Exp $
+//     $Id: artint.h,v 1.27 2001-01-19 13:33:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2001/01/04 15:13:27  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.25  2000/12/31 15:25:25  mbickel
 //      The AI now conqueres neutral buildings
 //      Removed "reset password" buttons when starting a game
@@ -290,23 +295,29 @@
                int movex, movey;
                int attackx, attacky;
                pvehicle enemy;
+               pvehicle attacker;
                int enemyOrgDamage;
                int enemyDamage;
                int weapNum;
                int result;
                int moveDist;
+               bool neighbouringFieldsReachable[ sidenum ]; // used for the hemming tactic
             };
          private:
+
+            typedef vector<MoveVariant> MoveVariantContainer;
 
             class AiResult {
                public:
                   int unitsMoved;
                   int unitsWaiting;
-                  AiResult ( ) : unitsMoved ( 0 ), unitsWaiting ( 0 ) {};
+                  int unitsDestroyed;
+                  AiResult ( ) : unitsMoved ( 0 ), unitsWaiting ( 0 ), unitsDestroyed( 0 ) {};
 
                   AiResult& operator+= ( const AiResult& a ) {
                      unitsMoved += a.unitsMoved;
                      unitsWaiting += a.unitsWaiting;
+                     unitsDestroyed += a.unitsDestroyed;
                      return *this;
                   };
             };
@@ -323,8 +334,8 @@
 
             bool moveUnit ( pvehicle veh, const MapCoordinate& destination, bool intoBuildings = false, bool intoTransports = false );
 
-            void getAttacks ( VehicleMovement& vm, pvehicle veh, TargetVector& tv );
-            void searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int moveDist );
+            void getAttacks ( VehicleMovement& vm, pvehicle veh, TargetVector& tv, int hemmingBonus );
+            void searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int moveDist, VehicleMovement& vm, int hemmingBonus );
             AiResult executeMoveAttack ( pvehicle veh, TargetVector& tv );
             int getDirForBestTacticsMove ( const pvehicle veh, TargetVector& tv );
             MapCoordinate getDestination ( const pvehicle veh );
@@ -346,7 +357,8 @@
 
             void  calculateAllThreats( void );
             AiResult  tactics( void );
-
+            void tactics_findBestAttackOrder ( pvehicle* units, int* attackOrder, pvehicle enemy, int depth, int damage, int& finalDamage, int* finalOrder, int& finalAttackNum );
+            void tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, pvehicle* positions, float value, pvehicle* finalposition, float& finalvalue, int unitsPositioned );
             /** a special path finding where fields occupied by units get an addidional movemalus.
                 This helps finding a path that is not thick with units and prevents units to queue all one after another
             */

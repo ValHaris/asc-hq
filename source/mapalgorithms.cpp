@@ -358,6 +358,12 @@ void         getnextfielddir(int&       x,
 #endif
 
 
+MapCoordinate getNeighbouringFieldCoordinate( const MapCoordinate& pos, int direc)
+{
+  MapCoordinate mc = pos;
+  getnextfield ( mc.x, mc.y, direc );
+  return mc;
+}
 
 
 void         getnextfield(int&       x,

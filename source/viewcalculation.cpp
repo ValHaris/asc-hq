@@ -21,6 +21,10 @@
 #include "vehicletype.h"
 #include "buildingtype.h"
 
+#ifdef sgmain
+#include "missions.h"
+#endif
+
 extern void fatalError ( const char* formatstring, ... );
 
 
@@ -188,3 +192,185 @@ void         tcomputebuildingview::init( const pbuilding    bld,  int _mode )
          }
 }
 
+
+
+
+
+void         clearvisibility( pmap actmap, int  reset )
+{
+  if ((actmap->xsize == 0) || (actmap->ysize == 0))
+     return;
+
+   int l = 0;
+   for ( int x = 0; x < actmap->xsize ; x++)
+         for ( int y = 0; y < actmap->ysize ; y++) {
+            pfield fld = &actmap->field[l];
+            memset ( fld->view, 0, sizeof ( fld->view ));
+            l++;
+         }
+}
+
+int  evaluatevisibilityfield ( pmap actmap, pfield fld, int player, int add, int initial )
+{
+   int originalVisibility;
+   if ( initial == 2 ) {
+      setvisibility(&fld->visible,visible_all, player);
+      return 0;
+   } else {
+      originalVisibility = (fld->visible >> (player * 2)) & 3;
+      if ( originalVisibility >= visible_ago || initial == 1)
+           setvisibility(&fld->visible,visible_ago, player);
+   }
+
+   if ( add == -1 ) {
+      add = 0;
+      if ( actmap->shareview )
+         for ( int i = 0; i < 8; i++ )
+            if ( actmap->shareview->mode[i][player] )
+               add |= 1 << i;
+   }
+   add |= 1 << player;
+
+   int sight = 0;
+   int jamming = 0;
+   int mine = 0;
+   int satellite = 0;
+   int direct = 0;
+   int sonar = 0;
+   for ( int i = 0; i < 8; i++ ){
+      if ( add & ( 1 << i )) {
+         sight += fld->view[i].view;
+         mine  += fld->view[i].mine;
+         satellite += fld->view[i].satellite;
+         direct += fld->view[i].direct;
+         sonar += fld->view[i].sonar;
+      } else
+         jamming += fld->view[i].jamming;
+   }
+   if ( sight > jamming   ||  direct  ) {
+      #ifdef sgmain
+      if ( fld->building && (fld->building->connection & cconnection_seen))
+         releaseevent ( NULL, fld->building, cconnection_seen );
+      #endif
+
+      if (( fld->vehicle  && ( fld->vehicle->color  == player * 8 )) ||
+          ( fld->vehicle  && ( fld->vehicle->height  < chschwimmend ) && sonar ) ||
+          ( fld->building && ( fld->building->typ->buildingheight < chschwimmend ) && sonar ) ||
+          ( fld->object && fld->object->mine && ( mine  ||  fld->mineowner() == player)) ||
+          ( fld->vehicle  && ( fld->vehicle->height  >= chsatellit )  && satellite )) {
+             setvisibility(&fld->visible,visible_all, player);
+             return originalVisibility != visible_all;
+      } else {
+             setvisibility(&fld->visible,visible_now, player);
+             return originalVisibility != visible_now;
+      }
+   }
+   return 0;
+}
+
+
+int  evaluateviewcalculation ( pmap actmap, int player_fieldcount_mask )
+{
+   int initial = actmap->getgameparameter ( cgp_initialMapVisibility );
+   int fieldsChanged = 0;
+   for ( int player = 0; player < 8; player++ )
+      if ( actmap->player[player].existent ) {
+         int add = 0;
+         if ( actmap->shareview )
+            for ( int i = 0; i < 8; i++ )
+               if ( actmap->shareview->mode[i][player] )
+                  add |= 1 << i;
+
+         int nm = actmap->xsize * actmap->ysize;
+         if ( player_fieldcount_mask & (1 << player ))
+            for ( int i = 0; i < nm; i++ )
+                fieldsChanged += evaluatevisibilityfield ( actmap, &actmap->field[i], player, add, initial );
+         else
+            for ( int i = 0; i < nm; i++ )
+                evaluatevisibilityfield ( actmap, &actmap->field[i], player, add, initial );
+      }
+   return fieldsChanged;
+}
+
+int  evaluateviewcalculation ( pmap actmap, int x, int y, int distance, int player_fieldcount_mask )
+{
+   distance = (distance+maxmalq-1)/maxmalq;
+   int x1 = x - distance;
+   if ( x1 < 0 )
+      x1 = 0;
+
+   int y1 = y - distance*2;
+   if ( y1 < 0 )
+      y1 = 0;
+
+   int x2 = x + distance;
+   if ( x2 >= actmap->xsize )
+      x2 = actmap->xsize-1;
+
+   int y2 = y + distance*2;
+   if ( y2 >= actmap->ysize )
+      y2 = actmap->ysize-1;
+
+   int initial = actmap->getgameparameter ( cgp_initialMapVisibility );
+   int fieldsChanged = 0;
+   for ( int player = 0; player < 8; player++ )
+      if ( actmap->player[player].existent ) {
+         int add = 0;
+         if ( actmap->shareview )
+            for ( int i = 0; i < 8; i++ )
+               if ( actmap->shareview->mode[i][player] )
+                  add |= 1 << i;
+
+         for ( int yy = y1; yy <= y2; yy++ )
+            for ( int xx = x1; xx <= x2; xx++ ) {
+               pfield fld = actmap->getField ( xx, yy );
+               if ( player_fieldcount_mask & (1 << player ))
+                  fieldsChanged += evaluatevisibilityfield ( actmap, fld, player, add, initial );
+               else
+                  evaluatevisibilityfield ( actmap, fld, player, add, initial );
+            }
+      }
+   return fieldsChanged;
+}
+
+
+
+int computeview( pmap actmap, int player_fieldcount_mask )
+{
+   if ((actmap->xsize == 0) || (actmap->ysize == 0))
+      return 0;
+
+   clearvisibility( actmap, 1 );
+
+   for ( int a = 0; a < 8; a++)
+      if (actmap->player[a].existent ) {
+         pvehicle actvehicle = actmap->player[a].firstvehicle;
+         while ( actvehicle ) {
+            if ( actvehicle == actmap->getField(actvehicle->xpos,actvehicle->ypos)->vehicle)
+               actvehicle->addview();
+
+            actvehicle = actvehicle->next;
+         }
+
+         pbuilding actbuilding = actmap->player[a].firstbuilding;
+         while ( actbuilding ) {
+            actbuilding->addview();
+            actbuilding = actbuilding->next;
+         }
+      }
+
+
+   return evaluateviewcalculation ( actmap, player_fieldcount_mask );
+}
+
+
+void setvisibility ( word* visi, int valtoset, int actplayer )
+{
+   int newval = (valtoset ^ 3) << ( 2 * actplayer );
+   int oneval = 3 << ( 2 * actplayer );
+
+   int vis = *visi;
+   vis |= oneval;
+   vis ^= newval;
+   *visi = vis;
+}
