@@ -1,3 +1,7 @@
+//     $Id: mousehnd.h,v 1.2 1999-11-16 03:42:12 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -96,10 +100,10 @@ extern void removemouseproc ( tsubmousehandler* proc );
 extern void pushallmouseprocs ( void );
 extern void popallmouseprocs ( void );
 
-extern "C" putmousebackground ( void );
+extern "C" void putmousebackground ( void );
 #pragma aux putmousebackground modify [ eax ebx ecx edx edi esi ]
 
-extern "C" putmousepointer ( void );
+extern "C" void putmousepointer ( void );
 #pragma aux putmousepointer modify [ eax ebx ecx edx edi esi ]
 
 #define mousedblclickxdif 5

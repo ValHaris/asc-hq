@@ -1,3 +1,7 @@
+//     $Id: typen.h,v 1.2 1999-11-16 03:42:45 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*                                                           
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -25,6 +29,7 @@
 #include <time.h>
 #include "tpascal.inc"
 #include "misc.h"
+
 
 
    #define maxint 0x7ffffffe
@@ -150,11 +155,11 @@ typedef tterrainaccess *pterrainaccess;
 
    struct tweapon {
              word         typ;            /*  BM      <= CWaffentypen  */
-             Byte         targ;           /*  BM      <= CHoehenstufen  */
-             Byte         sourceheight;   /*  BM  "  */
+             unsigned char         targ;           /*  BM      <= CHoehenstufen  */
+             unsigned char         sourceheight;   /*  BM  "  */
              Word         maxdistance;
              Word         mindistance;
-             Byte         count;
+             unsigned char         count;
              char         maxstrength;    // Wenn der Waffentyp == Mine ist, dann ist hier die MinenstÑrke als Produkt mit der Bassi 64 abgelegt.
              char         minstrength;
           } ;
@@ -165,7 +170,7 @@ typedef tterrainaccess *pterrainaccess;
 
 
    struct tweapons { 
-               Byte         weaponcount; 
+               unsigned char         weaponcount; 
                tweapon      waffe[8]; 
             }; 
 
@@ -239,13 +244,13 @@ typedef tterrainaccess *pterrainaccess;
                     tpk          production;    /*  Produktionskosten der vehicle  */
                     Word         armor; 
                     Pointer      picture[8];    /*  0¯  ,  45¯   */
-                    Byte         height;        /*  BM  Besteht die Mîglichkeit zum Hîhenwechseln  */
+                    unsigned char         height;        /*  BM  Besteht die Mîglichkeit zum Hîhenwechseln  */
                     word         researchid;    // inzwischen ÅberflÅssig, oder ?
                     int          _terrain;    /*  BM     befahrbare terrain: z.B. Schiene, Wasser, Wald, ...  */
                     int          _terrainreq; /*  BM     diese Bits MöSSEN in ( field->typ->art & terrain ) gesetzt sein */
                     int          _terrainkill;  /* falls das aktuelle field nicht befahrbar ist, und bei field->typ->art eine dieser Bits gesetzt ist, verschwindet die vehicle */
-                    Byte         steigung;      /*  max. befahrbare Hîhendifferenz zwischen 2 fieldern  */
-                    Byte         jamming;      /*  StÑrke der Stîrstrahlen  */
+                    unsigned char         steigung;      /*  max. befahrbare Hîhendifferenz zwischen 2 fieldern  */
+                    unsigned char         jamming;      /*  StÑrke der Stîrstrahlen  */
                     Word         view;         /*  viewweite  */
                     char         wait;        /*  Kann vehicle nach movement sofort schie·en ?  */
                     char         dummy2;
@@ -302,8 +307,9 @@ typedef class  tbuildingtype* pbuildingtype;
    class tvehicle { /*** Bei énderungen unbedingt Save/LoadGame und Konstruktor korrigieren !!! ***/ 
                public:
                  pvehicletype typ;          /*  vehicleart: z.B. Schwere Fu·truppe  */
-                 Byte         color; 
-                 Byte         damage; 
+                 unsigned char         color; 
+                 unsigned char         damage; 
+		 tmunition munition;
                  int      fuel; 
                  int*         ammo; 
                  int          evenmoredummy[3];
@@ -311,26 +317,26 @@ typedef class  tbuildingtype* pbuildingtype;
                  int          moredummy[3];
                  Word         dummy;     /*  Laderaum, der momentan gebraucht wird  */
                  tvehicle*    loading[32]; 
-                 Byte         experience;    // 0 .. 15 
+                 unsigned char         experience;    // 0 .. 15 
                  boolean      attacked; 
-                 Byte         height;       /* BM */   /*  aktuelle Hîhe: z.B. Hochfliegend  */
-                 Byte         movement;     /*  Åbriggebliebene movement fÅr diese Runde  */
-                 Byte         direction;    /*  Blickrichtung  */
+                 unsigned char         height;       /* BM */   /*  aktuelle Hîhe: z.B. Hochfliegend  */
+                 char         movement;     /*  Åbriggebliebene movement fÅr diese Runde  */
+                 unsigned char         direction;    /*  Blickrichtung  */
                  Integer      xpos, ypos;   /*  Position auf map  */
                  int      material;     /*  aktuelle loading an Material und  */
                  int      energy;       /*  energy  */
                  pvehicle     next;
                  pvehicle     prev;         /*  fÅr lineare Liste der vehicle */
                  
-                 byte          _cmpchecked;   /*  fÅr Computerintelligenz  */ 
+                 short          cmpchecked;   /*  fÅr Computerintelligenz  */ 
 
-                 tthreatvar   _completethreatvaluesurr; 
-                 tthreatvar   _completethreatvalue;   /*  Wird von ArtInt benîtigt, au·erhalb keine Bedeutung  */ 
-                 tthreatvar   _threatvalue[8]; 
-                 int          _threats;   /* BM  => CCA_Threats  */ 
-                 word         _order; 
+                 tthreatvar   completethreatvaluesurr; 
+                 tthreatvar   completethreatvalue;   /*  Wird von ArtInt benîtigt, au·erhalb keine Bedeutung  */ 
+                 tthreatvar   threatvalue[8]; 
+                 int          threats;   /* BM  => CCA_Threats  */ 
+                 word         order; 
                  int      connection; 
-                 Byte         klasse;
+                 unsigned char         klasse;
                  word         armor; 
                  int      networkid; 
                  char*        name;
@@ -414,12 +420,12 @@ typedef class  tbuildingtype* pbuildingtype;
                          Word         id; 
                          char*        name; 
                          Word         armor; 
-                         Byte         jamming; 
-                         Byte         view; 
+                         unsigned char         jamming; 
+                         unsigned char         view; 
                          Word         loadcapacity; 
-                         Byte         loadcapability;   /*  BM => CHoehenstufen; aktuelle Hîhe der reinzufahrenden vehicle
+                         unsigned char         loadcapability;   /*  BM => CHoehenstufen; aktuelle Hîhe der reinzufahrenden vehicle
                                                                               mu· hier enthalten sein  */ 
-                         Byte         unitheightreq;   /*   "       , es dÅrfen nur Fahrzeuge ,
+                         unsigned char         unitheightreq;   /*   "       , es dÅrfen nur Fahrzeuge ,
                                         die in eine dieser Hîhenstufen kînnen , geladen werden  */ 
 
                          struct  { 
@@ -429,8 +435,8 @@ typedef class  tbuildingtype* pbuildingtype;
                          int      special;   /*  HQ, Trainingslager, ...  */ 
 
 
-                         Byte         technologylevel; 
-                         Byte         researchid; 
+                         unsigned char         technologylevel; 
+                         unsigned char         researchid; 
                          struct  { 
                                             shortint     x, y; 
                                           } powerlineconnect, pipelineconnect; 
@@ -473,9 +479,9 @@ typedef class  tbuildingtype* pbuildingtype;
                          int          jamming; 
                          int          view; 
                          int          loadcapacity; 
-                         Byte         loadcapability;   /*  BM => CHoehenstufen; aktuelle Hîhe der reinzufahrenden vehicle
+                         unsigned char         loadcapability;   /*  BM => CHoehenstufen; aktuelle Hîhe der reinzufahrenden vehicle
                                                                               mu· hier enthalten sein  */ 
-                         Byte         unitheightreq;   /*   "       , es dÅrfen nur Fahrzeuge ,
+                         unsigned char         unitheightreq;   /*   "       , es dÅrfen nur Fahrzeuge ,
                                         die in eine dieser Hîhenstufen kînnen , geladen werden  */ 
 
                          struct  { 
@@ -485,8 +491,8 @@ typedef class  tbuildingtype* pbuildingtype;
                          int          special;   /*  HQ, Trainingslager, ...  */ 
 
 
-                         Byte         technologylevel; 
-                         Byte         researchid; 
+                         unsigned char         technologylevel; 
+                         unsigned char         researchid; 
 
                          tterrainaccess terrainaccess;
 
@@ -531,10 +537,10 @@ typedef class  tbuilding* pbuilding;
             public:
                   pbuildingtype typ; 
                   tmunition    munitionsautoproduction; 
-                  Byte         color; 
+                  unsigned char         color; 
                   tproduction  production; 
                   tloading      loading; 
-                  Byte         damage; 
+                  unsigned char         damage; 
 
                   tresources   plus;
                   tresources   maxplus;
@@ -550,7 +556,7 @@ typedef class  tbuilding* pbuilding;
                   Integer      xpos, ypos; 
                   pbuilding    next;
                   pbuilding    prev; 
-                  Byte         completion; 
+                  unsigned char         completion; 
                   tthreatvar   threatvalue; 
                   int          netcontrol; 
                   int      connection; 
@@ -828,12 +834,12 @@ struct thexpic {
            public:
               pwterraintype typ;   
 
-              Byte         fuel, material; 
+              unsigned char         fuel, material; 
               Word         visible;   /*  BM  */ 
-              Byte         direction; 
+              unsigned char         direction; 
 
               Pointer      picture;   
-              Byte         movemalus[cmovemalitypenum];
+              unsigned char         movemalus[cmovemalitypenum];
               union  {
                  struct { 
                     char         temp;      
@@ -1092,7 +1098,7 @@ struct thexpic {
    struct tresearchdatachange { 
                    word         weapons[waffenanzahl];   /*  Basis 1024  */
                    word         armor;         /*  Basis 1024  */
-                   Byte         dummy[20+(12-waffenanzahl)*2];
+                   unsigned char         dummy[20+(12-waffenanzahl)*2];
                  }; 
 
    typedef class  ttechnology* ptechnology ;
@@ -1150,9 +1156,9 @@ struct thexpic {
    struct tcampaign { 
                  Word         id; 
                  word         prevmap;   /*  ID der vorigen Karte  */ 
-                 Byte         player;   /*  Farbenummer des Spielers: 0..7  */ 
+                 unsigned char         player;   /*  Farbenummer des Spielers: 0..7  */ 
                  boolean      directaccess;   /*  Kann die Karte einzeln geladen werden oder nicht ?  */ 
-                 Byte         dummy[21];   /*  fÅr zukÅnftige erweiterungen  */ 
+                 unsigned char         dummy[21];   /*  fÅr zukÅnftige erweiterungen  */ 
                }; 
 
 
@@ -1507,10 +1513,10 @@ struct thexpic {
   struct tguiicon { 
             Pointer      picture[2]; 
             char         txt[31]; 
-            Byte         id; 
+            unsigned char         id; 
             char         key[4]; 
             word         realkey[4]; 
-            Byte         order; 
+            unsigned char         order; 
           };
 
    struct ticons { 
@@ -1746,7 +1752,7 @@ struct thexpic {
       #define cmmooredmine 3  
       #define cmfloatmine 4  
 
-   extern const Byte cminestrength[cminenum]  ;
+   extern const unsigned char cminestrength[cminenum]  ;
 
 
    extern const char*  cbuildingfunctions[cbuildingfunctionnum]; 
@@ -1906,7 +1912,7 @@ extern tterrainbits cblargerocks ;
    #define attack_after_repair 1       // Can the unit that is beeing repaired attack afterwards? 
 
    #define mineputmovedecrease 8  
-   extern const Byte     cstreetdestructioncosts[3];
+   extern const unsigned char     cstreetdestructioncosts[3];
    #define streetmovemalus 8  
    #define railroadmovemalus 8  
    #define searchforresorcesmovedecrease 8

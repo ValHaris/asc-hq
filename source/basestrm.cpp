@@ -1,3 +1,7 @@
+//     $Id: basestrm.cpp,v 1.2 1999-11-16 03:41:06 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -18,8 +22,11 @@
     Boston, MA  02111-1307  USA
 */
 
+#include "config.h"
 #include <stdio.h> 
+#ifdef _DOS_
 #include <direct.h> 
+#endif
 #include <string.h>
 #include <ctype.h>
 #include <malloc.h>
@@ -27,7 +34,34 @@
 #include <string.h>
 #include "basestrm.h"
 
+#ifdef HAVE_SYS_DIRENT_H
+#include <sys/dirent.h>
+#endif
 
+#if HAVE_DIRENT_H
+# include <dirent.h>
+# define NAMLEN(dirent) strlen((dirent)->d_name)
+#else
+# define dirent direct
+# define NAMLEN(dirent) (dirent)->d_namlen
+# if HAVE_SYS_NDIR_H
+#  include <sys/ndir.h>
+# endif
+# if HAVE_SYS_DIR_H
+#  include <sys/dir.h>
+# endif
+# if HAVE_NDIR_H
+#  include <ndir.h>
+# endif
+#endif
+
+#ifndef HAVE_ITOA
+#define itoa(a, b, c) sprintf(b, "%##c##d", a);
+#endif
+
+#ifndef HAVE_STRICMP
+#define stricmp strcasecmp
+#endif
 
 // #define printexternfilenams
 // #define logfiles
@@ -240,7 +274,7 @@ void         tnstream::readrlepict( void** pnter, int allocated, int* size)
 
 void tnstream :: writerlepict ( const void* buf )
 {
-   void* tempbuf = new char [ 0xffff ];
+   char* tempbuf = new char [ 0xffff ];
    if ( tempbuf ){
       int   size    = compressrle ( buf, tempbuf );
       writedata ( tempbuf, size );
@@ -522,7 +556,11 @@ int tn_file_buf_stream::getstreamsize(void)
           direntp = readdir( dirp ); 
           if ( direntp == NULL ) 
              break; 
-          size = direntp -> d_size;
+#ifdef NAMLEN
+          size = NAMLEN(direntp);
+#else
+	  size = direntp->d_size;
+#endif
         } 
         closedir( dirp ); 
       } 
@@ -544,7 +582,7 @@ int tn_file_buf_stream::gettime ( void )
           direntp = readdir( dirp ); 
           if ( direntp == NULL ) 
              break; 
-          time =  ( direntp ->d_date << 16) + direntp ->d_time;
+	  //          time =  ( direntp ->d_date << 16) + direntp ->d_time;
         } 
         closedir( dirp ); 
       } 
@@ -565,7 +603,7 @@ int getfiletime ( char* devicename )
           direntp = readdir( dirp ); 
           if ( direntp == NULL ) 
              break; 
-          time =  ( direntp ->d_date << 16) + direntp ->d_time;
+	  //          time =  ( direntp ->d_date << 16) + direntp ->d_time;
         } 
         closedir( dirp ); 
       } 
@@ -846,7 +884,8 @@ char* ContainerCollector :: getnextname ( void )
 
 ContainerCollector :: ~ContainerCollector()
 {
-   for ( int i = 0; i < containernum; i++ )
+  int i;
+   for (i = 0; i < containernum; i++ )
       delete container[i];
    for ( int j = 0; j < 255; j++ )
       for ( int k = 0; k <= index[i].getlength(); k++ )
@@ -1397,8 +1436,9 @@ int    compressrle ( const void* p, void* q)
 
    {
       int bts[256];
+      int i;
       memset ( bts, 0, sizeof ( bts ));
-      for (int i = 0; i < size ;i++ ) 
+      for (i = 0; i < size ;i++ ) 
         bts[s[i+4]]++;
 
       int min = 70000;
@@ -1419,8 +1459,8 @@ int    compressrle ( const void* p, void* q)
 
       for (int j = 0; j < y ; j++ ) {
          xp = 0;
-         char num;
-         char actbyte ;
+         unsigned char num;
+         unsigned char actbyte ;
 
          do {
             num = 1;
@@ -1728,7 +1768,7 @@ char* getnextfilenumname ( const char* first, const char* suffix, int num )
    char tmp[260];
    do {
       strcpy ( tmp, first );
-      _itoa ( num, tempstringbuf, 10 );
+      itoa ( num, tempstringbuf, 10 );
       while ( strlen ( tmp ) + strlen ( tempstringbuf ) < 8 )
          strcat ( tmp, "0" );
       strcat ( tmp, tempstringbuf );

@@ -1,3 +1,7 @@
+//     $Id: mousehnd.cpp,v 1.2 1999-11-16 03:42:11 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -24,6 +28,8 @@
 
 	Compile and link: wcl386 /l=dos4g mouse
 */
+#ifdef _DOS_
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <dos.h>
@@ -518,3 +524,4 @@ tinitmousehandler :: tinitmousehandler ( void ) {
    memset ( mrp, 0 , sizeof ( mouseparams ));
 };
 
+#endif

@@ -1,3 +1,7 @@
+//     $Id: vesa.h,v 1.2 1999-11-16 03:42:48 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -311,7 +315,7 @@ void putinterlacedrotimage ( int x1, int y1, void* ptr, int rotation );
 void rotatepict90 ( void* s, void* d );
 void flippict ( void* s, void* d, int dir = 1 );
 void* halfpict ( void* vbuf );
-void* rotatepict ( void* image, int organgle );
+char* rotatepict ( void* image, int organgle );
 
 class tdrawline {
          public: 
@@ -360,7 +364,7 @@ class TrueColorImage {
    };
 
 extern TrueColorImage* zoomimage ( void* buf, int xsize, int ysize, dacpalette256 pal, int interpolate = 1, int proportional = 1 );
-extern void* convertimage ( TrueColorImage* img, dacpalette256 pal );
+extern char* convertimage ( TrueColorImage* img, dacpalette256 pal );
 extern TrueColorImage* convertimage2tc ( void* buf, dacpalette256 pal );
 
 extern "C" int gettimestampcounter( void ); 

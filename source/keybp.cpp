@@ -1,3 +1,7 @@
+//     $Id: keybp.cpp,v 1.2 1999-11-16 03:41:51 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -18,14 +22,19 @@
     Boston, MA  02111-1307  USA
 */
 
+#ifdef _DOS_
 #include <dos.h>
 #include <conio.h>
+#endif
+
 #include <ctype.h>
 #include <stdio.h>
 #include "keybp.h"
 
+#ifdef _DOS_
     void             (__interrupt __far *bioskeyboardhandler)();
     void             (__interrupt __far *keybpointer)()=NULL;
+#endif
     char             callbioshandler,keyboardinit=0;
     char             pufferpos,maxpufferkeys;
     long             oldticker,ticker;
@@ -53,7 +62,7 @@ char  skeypress(char keynr)
 
 
 
-char *get_key(char keynr)
+char *get_key(unsigned char keynr)
 { 
    switch (keynr) {
       
@@ -242,7 +251,7 @@ void clearpuffer(void)
       "pop ax"                       \
       modify [ax dx];*/
 
-
+#ifdef _DOS_
 void keyintr( void )
 {
    key = inp(keyport);
@@ -301,8 +310,9 @@ void keyintr( void )
       } /* endif */
    } /* endif */
 }
+#endif
 
-
+#ifdef _DOS_
 static void __interrupt __far keyboard()
 { 
    int           ekey;
@@ -357,11 +367,12 @@ static void __interrupt __far keyboard()
    outp(0x20,0x20);
    _enable();
 } 
+#endif
 
 
 void shleft()
 
-{ char  i; 
+{ int  i; 
 
    for (i = 0; i <= 255; i++) {
       puffer[i] = puffer[i + 1];
@@ -394,17 +405,20 @@ tkey r_key(void)
    } else 
 #endif
    {
+
       int  cch;
+      /*
       cch = getch();
       if ( cch == 0 ) {
          cch = getch() + 256;
       } /* endif */
+
       return cch;
    }
 }  
 
 
-
+#ifdef _DOS_
 int keypress(void)
 
 { 
@@ -422,7 +436,7 @@ int keypress(void)
                   return 0;
               }
 } 
-
+#endif
 
 void initkeyb(void)
 { 
@@ -462,9 +476,9 @@ void wait(void)
 { 
    tkey   cha; 
 
-   do {
-      cha = r_key();
-     } while (kbhit() != 0);
+   //   do {
+   //      cha = r_key();
+      //     } while (kbhit() != 0);
    //cha = r_key(); 
 } 
 
@@ -527,4 +541,5 @@ tkey char2key (int ch)
      return ch;
    #endif   
 } 
+
 

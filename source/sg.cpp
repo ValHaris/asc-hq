@@ -1,3 +1,7 @@
+//     $Id: sg.cpp,v 1.2 1999-11-16 03:42:25 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*                                 
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -18,12 +22,16 @@
     Boston, MA  02111-1307  USA
 */
 
-#include <stdio.h>                                  
+#include "config.h"
+#ifdef _DOS_
 #include <i86.h>
-#include <string.h>
-#include <stdlib.h>
 #include <conio.h>
 #include <dos.h>
+#endif
+
+#include <stdio.h>                                  
+#include <string.h>
+#include <stdlib.h>
 #include <new.h>
 #include <malloc.h>
 #include <ctype.h>
@@ -57,20 +65,24 @@
 #include "sg.h"
 #include "artint.h"
 
+#ifndef HAVE_STRICMP
+#define strcmpi strcasecmp
+#define strncmpi strncasecmp
+#define strnicmp strncasecmp
+#endif
+
 #ifdef HEXAGON
- #include "loadbi3.h"
+#include "loadbi3.h"
 #endif
 
 // #define MEMCHK
 
 extern int startreplaylate;
 
-
 class tsgonlinemousehelp : public tonlinemousehelp {
-            public:
-                tsgonlinemousehelp ( void );
-          } ;
-
+public:
+  tsgonlinemousehelp ( void );
+};
 
 tsgonlinemousehelp :: tsgonlinemousehelp ( void )
 {
@@ -433,7 +445,7 @@ void  tbackgroundpict :: paint ( int resavebackground )
               tvirtualdisplay vdp ( agmp->resolutionx, agmp->resolutiony );
               tnfilestream stream ( "640480.pcx", 1 );
               loadpcxxy( &stream ,0,0);
-              void* pic = new char[ imagesize ( 0, 0, 639, 479 )];
+              char* pic = new char[ imagesize ( 0, 0, 639, 479 )];
               getimage ( 0, 0, 639, 479, pic );
    
               TrueColorImage* img = zoomimage ( pic, x, y, pal, 1, 0  );
@@ -700,8 +712,9 @@ void showmemory ( void )
       setinvisiblemouserectanglestk ( 0, agmp->resolutiony, 640, agmp->resolutiony + 80 ); 
 
    int a = maxavail();
-   int b = _memavl();
-   showtext2( strrr ( _memmax() ), 10,agmp->resolutiony );
+   int b;
+   //   int b = _memavl();
+   //   showtext2( strrr ( _memmax() ), 10,agmp->resolutiony );
    showtext2( strrr ( b  ), 110,agmp->resolutiony );
    showtext2( strrr ( a ), 210,agmp->resolutiony );
    showtext2( strrr ( b+a ), 310,agmp->resolutiony );
@@ -1873,11 +1886,14 @@ void execuseraction ( tuseractions action )
                                          displaymap();
                              break;
                              
-            case ua_heapcheck:  if ( _heapchk() == _HEAPOK )
-                                    displaymessage(" Heap OK", 3 );
-                                 else
-                                    displaymessage(" Heap not OK", 1 );
-                     break;
+            case ua_heapcheck: 
+#ifdef _DOS_
+	      if ( _heapchk() == _HEAPOK )
+		displaymessage(" Heap OK", 3 );
+	      else
+		displaymessage(" Heap not OK", 1 );
+#endif
+	      break;
                      
             case ua_benchgamewov:  benchgame( 0 );
             break;
@@ -2337,7 +2353,7 @@ void dispmessageonexit ( void ) {
           } /* endif */
       }
       printf("\npress any key to exit\n");
-      getch();
+      //      getch();
    } else {
       printf( getstartupmessage() );
       printf("exiting ... \n \n");
@@ -2817,6 +2833,8 @@ int main(int argc, char *argv[] )
 {  
    // dont_use_linear_framebuffer = 1;
 
+  int i;
+
   #ifdef HEXAGON
    int resolx = 800;
    int resoly = 600;
@@ -2842,7 +2860,7 @@ int main(int argc, char *argv[] )
         printf( getstartupmessage() );
 
 
-        for (int i = 1; i<argc; i++ ) {
+        for (i = 1; i<argc; i++ ) {
            if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
               if ( strcmpi ( &argv[i][1], "V1" ) == 0 ) 
                  vesaerrorrecovery = 1;
@@ -2912,20 +2930,25 @@ int main(int argc, char *argv[] )
            return 0;
        }
 
+       // The following code is DOS only.  Unix machines will swap to make
+       // room for the memory needed.  Only need to make sure we check all
+       // dynamic allocation calls for failure.
 
+#ifdef _DOS_
        int memneeded = 20000000;
        int ma = maxavail() + _memavl();
 
        printf(" \n memory avaiable: %d \n ", ma );
        if ( ma < memneeded ) {
-          printf(" Not enough momory available, at least %d MB recommended.\n"
-                 " You may try to run the game, but unpredictable results can happen.\n"
-                 " Press R to start the game anyway or any other key to quit\n", memneeded/1000000 );
-
-          int ch = getch();
-          if ( toupper ( ch ) != 'R' )
-             exit(2);
+	 printf(" Not enough momory available, at least %d MB recommended.\n"
+		" You may try to run the game, but unpredictable results can happen.\n"
+		" Press R to start the game anyway or any other key to quit\n", memneeded/1000000 );
+	 
+	 int ch = getch();
+	 if ( toupper ( ch ) != 'R' )
+	   exit(2);
        }
+#endif
 
 
         #ifdef logging
@@ -3233,7 +3256,4 @@ int main(int argc, char *argv[] )
         #endif
         return(0);
 }
-
-
-
 

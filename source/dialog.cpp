@@ -1,3 +1,7 @@
+//     $Id: dialog.cpp,v 1.2 1999-11-16 03:41:20 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -18,13 +22,18 @@
     Boston, MA  02111-1307  USA
 */
 
-                   
+
+#include "config.h"                   
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+
+#ifdef _DOS_
 #include <dos.h>
 #include <conio.h>
+#endif
+
 #include <stdarg.h>
 
 #include "tpascal.inc"
@@ -47,6 +56,15 @@
 #ifndef karteneditor
 #include "network.h"
 #include "gamedlg.h"
+#endif
+
+#ifndef HAVE_STRICMP
+#define strcmpi strcasecmp
+#define strnicmp strncasecmp
+#endif
+
+#ifndef HAVE_ITOA
+#define itoa(a, b, c) sprintf (b, "%##c##d", a)
 #endif
 
 #define markedlettercolor red  
@@ -104,7 +122,8 @@ void         tstatisticarmies ::newknopfdruck(integer      xx1,
                            integer      yy1,
                            integer      xx2,
                            integer      yy2)
-{ pointer      p; 
+{ 
+    char*      p; 
     boolean      kn; 
     integer      mt; 
 
@@ -1382,6 +1401,8 @@ void         tvehicleinfo::showinfotext( void )
 
 void         tvehicleinfo::showclasses( void )
 {
+  int i, j;
+
    if ( aktvehicle->classnum) {
       if (category == 10) 
          paintsurface ( 40, starty + 60, 170, starty + 80);
@@ -1392,14 +1413,14 @@ void         tvehicleinfo::showclasses( void )
       activefontsettings.justify = righttext;
       showtext2 ( "weapon:", x1 + 170 , y1 + starty + 60 );
       activefontsettings.length = 20;
-      for (int j = 0 ; j < aktvehicle->weapons->count  ; j++ ) 
+      for (j = 0 ; j < aktvehicle->weapons->count  ; j++ ) 
           showtext2 (  letter[ j ], x1 + 250 + j * 30, y1 + starty + 60 );
 
         activefontsettings.length = 40;
       showtext2 ( "armor", x1 + 250 + j * 30, y1 + starty + 60 );
       doubleline ( x1 + 25, y1 + starty + 80, x1 + xsize - 25, y1 + starty + 80 );
 
-      for (int i = 0; i<aktvehicle->classnum ;i++ ) {
+      for (i = 0; i<aktvehicle->classnum ;i++ ) {
         activefontsettings.background = backgrnd2;
         activefontsettings.color = black;
         activefontsettings.length = 200;
@@ -2557,23 +2578,6 @@ void         fileselectsvga( const char*       ext,
    tss.done(); 
 } 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void testdisptext ( void )
 {
    tnfilestream stream ("tst.txt",1 );
@@ -2590,20 +2594,6 @@ void testdisptext ( void )
        delete[] cct;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void tenterfiledescription::init ( char* descrip )
 {
@@ -3136,7 +3126,7 @@ void tbasicshowmap::generatemap_var ( void )
          bufsizey = mysize;
       int size = bufsizex * bufsizey + 4;
   
-      buffer = new char [ size + 1000 ] ;
+      buffer = new unsigned char [ size + 1000 ] ;
    }
 
    word* k = (word*) buffer;
@@ -3191,7 +3181,7 @@ void tbasicshowmap::generatemap_var ( void )
             pix = getpixelfromimage ( icons.fieldshape, xo, yo );
          }
 
-         char* b = &buffer2[ j * mxsize + i ];
+         unsigned char* b = &buffer2[ j * mxsize + i ];
          if ( !(pix == -1  || pix == 255) ) {
              fld1 = getfield ( xd, yd );
              if ( fld1 ) {
@@ -3745,7 +3735,9 @@ void         tsetalliances::init( int supervis )
 
    int lastcomppos = 0;
    int plnum = 0;
-   for ( int i = 0; i <= 7; i++) { 
+   int i, j;
+
+   for (i = 0; i <= 7; i++) { 
 
      if ( actmap->player[i].firstvehicle || actmap->player[i].firstbuilding )
         actmap->player[i].existent = true;
@@ -3780,7 +3772,7 @@ void         tsetalliances::init( int supervis )
       if (actmap->player[i].existent) 
         lastplayer = i; 
 
-      for (int j = 0; j < 8 ; j++) 
+      for (j = 0; j < 8 ; j++) 
          if ( actmap->shareview ) 
             sv.mode[i][j] = actmap->shareview->mode[i][j];
          else
@@ -3969,8 +3961,9 @@ void         tsetalliances::paintkeybar(void)
 void          tsetalliances::checkfornetwork ( void )
 {
   int cmp = 0;
+  int i, j;
 
-  for (int i = 0; i < 8; i++) 
+  for (i = 0; i < 8; i++) 
      if ( actmap->player[i].existent )
         cmp |= 1 << location[i];
 
@@ -4004,18 +3997,20 @@ void         tsetalliances::setparams ( void )
   #ifdef logging
   char tmpcbuf[300];
   #endif
-    
+
+  int i, j;
+
   if ( actmap->network ) {
      for ( int i = 0; i < 8; i++ )
          actmap->network->computer[i].existent = 0;
   }
-  for (int i = 0; i < 8; i++) {
+  for (i = 0; i < 8; i++) {
       
       #ifdef logging
       logtofile ( "6/dialog / tsetalliances::setparams / alliancedata" );
       #endif
          
-      for (int j = 0; j < 8; j++) 
+      for (j = 0; j < 8; j++) 
          actmap->alliances[i][j] = alliancedata[i][j];
 //      actmap->player[i].alliance = alliances[i];
 
@@ -4091,7 +4086,7 @@ void         tsetalliances::setparams ( void )
             actmap->network->computernum++;
   }
   for ( i = 0; i < 8; i++ )
-     for ( int j = 0; j < 8; j++ ) {
+     for (j = 0; j < 8; j++ ) {
         if ( actmap->alliances[i][j] == canewsetwar1 ) {
            actmap->alliances[i][j] = canewsetwar2;
            if ( actmap->shareview ) {
@@ -4147,7 +4142,7 @@ void         tsetalliances::click(byte         bxx,
    activefontsettings.background = dblue; 
    if (bxx == 0) { 
       if (x == 0  && ( y == actmap->actplayer || supervisor ) ) { 
-         playermode[y]++;
+	(int)playermode[y] += 1; //++;
          if ( actmap->actplayer == -1 ) {
             if (playermode[y] > 2) 
                playermode[y] = ps_human; 
@@ -4196,7 +4191,7 @@ void         tsetalliances::click(byte         bxx,
             if ( sv.mode[actmap->actplayer][y] == sv_shareview )
                sv.mode[actmap->actplayer][y] = sv_none;
             else
-               sv.mode[actmap->actplayer][y]++;
+	      (int)sv.mode[actmap->actplayer][y] += 1; //++;
    
    
             activefontsettings.color = 23 + y * 8; 
@@ -4281,6 +4276,8 @@ void taskforsupervisorpassword :: init ( int* crc, int mode )
 
 void         tsetalliances::buttonpressed( char id )
 { 
+  int i;
+
    switch (id) {
       
       case 1:   status = 10; 
@@ -4308,7 +4305,7 @@ void         tsetalliances::buttonpressed( char id )
       case 3: {
                  tenternamestrings   enternamestrings;
                  tnamestrings names;
-                 for ( int i = 0; i < 8; i++ ) {
+                 for (i = 0; i < 8; i++ ) {
                      char* c;
                      switch ( playermode[i] ) {
                         case 0: c = humanplayername[i];
@@ -5115,7 +5112,7 @@ void tprogressbar :: lineto ( float pos )
    if ( pos > 1 )
       pos = 1;
 
-   int newpos = x1 + ( x2 - x1 ) * pos;
+   int newpos = (int)(x1 + ( x2 - x1 ) * pos);
    if ( newpos > lastpaintedpos ) {
       for ( int x = lastpaintedpos+1; x <= newpos; x++ )
          for ( int y = y1; y <= y2; y++ )
@@ -5906,3 +5903,4 @@ void viewterraininfo ( void )
       displaymessage(" basejamming: %d ", 1, getactfield()->getjamming());
    }
 }
+

@@ -1,3 +1,7 @@
+//     $Id: dlg_box.cpp,v 1.2 1999-11-16 03:41:22 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -18,12 +22,17 @@
     Boston, MA  02111-1307  USA
 */
 
+#include "config.h"
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+
+#ifdef _DOS_
 #include <conio.h>
 #include <dos.h>
+#endif
+
 #include <stdarg.h>
 
 #include "tpascal.inc"
@@ -41,11 +50,26 @@
 #include "timer.h"
 #include "loadpcx.h"
 
+
 #ifdef sgmain
  #include "building.h"
 #endif
 
+#ifndef HAVE_ITOA
+#define itoa(a, b, c) sprintf (b, "%##c##d", a)
+#endif
 
+#ifndef HAVE_STRICMP
+#define stricmp strcasecmp
+#define strnicmp strncasecmp
+#endif
+
+#ifndef HAVE_KBHIT
+extern int kbhit (void);
+extern int getch (void);
+void set_keypress (void);
+void reset_keypress (void);
+#endif
 
 char strrstring[200];
 
@@ -141,7 +165,7 @@ tscreensaverparameters screensaverparameters;
 void *dialogtexture = NULL;
 
 int actdisplayedmessage = 0;
-int lastdisplayedmessageticker = 0xffffff;
+long int lastdisplayedmessageticker = 0xffffff;
 
 void         checkscreensaver(void)
 { 
@@ -352,7 +376,7 @@ void           tdialogbox::redrawall2 ( int xx1, int yy1, int xx2, int yy2 )
 }
 
 
-static pdialogbox tdialogbox::first = NULL; 
+pdialogbox tdialogbox::first = NULL; 
 
 void          tdialogbox::setvirtualframebuf ( void )
 {
@@ -2009,17 +2033,21 @@ void         tdialogbox::stredit(char *       s,
    einfuegen = true; 
    lne(x1,y1,ss,position,einfuegen); 
 
+#ifndef HAVE_KBHIT
+   set_keypress ();
+#endif
+
    do { 
-      if ( kbhit() )
-         cc = getch();
-      else 
-         cc = 0x01;
-      if (cc == 0x00 ) {
-         cc = getch();
-         lne(x1,y1,ss,position,einfuegen); 
-         switch (cc) {
-            
-            case 'R':   {
+     if ( kbhit() )
+       cc = getch();
+     else 
+       cc = 0x01;
+     if (cc == 0x00 ) {
+       cc = getch();
+       lne(x1,y1,ss,position,einfuegen); 
+       switch (cc) {
+	 
+       case 'R':   {
                     if (einfuegen == false) 
                        einfuegen = true; 
                     else 
@@ -2137,6 +2165,10 @@ void         tdialogbox::stredit(char *       s,
    delete[] ss;
    delete[] ss2;
 
+#ifndef HAVE_KBHIT
+   reset_keypress ();
+#endif
+
    #ifdef NEWKEYB
    initkeyb();
    #endif
@@ -2206,16 +2238,21 @@ void         tdialogbox::intedit(int *    st,
    einfuegen = true; 
 
    ok = false;
+
+#ifndef HAVE_KBHIT
+   set_keypress ();
+#endif
+
    do { 
       lne(x1,y1,ss,position,einfuegen); 
       do {
- 
+	
         if ( kbhit() )
           cc = getch();
         else 
           cc = 0x01;
         if (cc == 0x00 ) {
-          cc = getch();
+	  cc = getch();
           lne(x1,y1,ss,position,einfuegen); 
           switch (cc) {
              
@@ -2358,6 +2395,10 @@ void         tdialogbox::intedit(int *    st,
 
  delete[] ss;
  delete[] ss2;
+
+#ifndef HAVE_KBHIT
+ reset_keypress ();
+#endif
 
    #ifdef NEWKEYB
    initkeyb();
@@ -3437,3 +3478,4 @@ void  loadtexture ( void )
       npop ( *agmp );
    }
 }
+

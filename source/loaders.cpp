@@ -1,3 +1,7 @@
+//     $Id: loaders.cpp,v 1.2 1999-11-16 03:41:57 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -18,8 +22,10 @@
     Boston, MA  02111-1307  USA
 */
 
-               
+#ifdef _DOS_               
 #include <dos.h> 
+#endif
+#include "config.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -1077,6 +1083,7 @@ void      tspfldloaders:: writemessagelist( pmessagelist lst )
 
 void      tspfldloaders:: writemessages ( void )
 {
+  int i;
    int j = 0xabcdef;
    stream->writedata2 ( j );
 
@@ -1093,7 +1100,7 @@ void      tspfldloaders:: writemessages ( void )
       msg = msg->next;
    }
 
-   for ( int i = 0; i < 8; i++ ) 
+   for (i = 0; i < 8; i++ ) 
       writemessagelist ( spfld->player[ i ].oldmessage );
 
    for ( i = 0; i < 8; i++ ) 
@@ -1142,6 +1149,7 @@ void      tspfldloaders:: readmessagelist( pmessagelist* lst )
 void      tspfldloaders:: readmessages ( void )
 {
    int j;
+   int i;
    stream->readdata2 ( j );
 
    pmessage msg = spfld->message;
@@ -1157,7 +1165,7 @@ void      tspfldloaders:: readmessages ( void )
       spfld->message = msg2;
    }
 
-   for ( int i = 0; i < 8; i++ ) 
+   for (i = 0; i < 8; i++ ) 
       readmessagelist ( &spfld->player[ i ].oldmessage );
 
    for ( i = 0; i < 8; i++ ) 
@@ -1357,6 +1365,7 @@ void   tspfldloaders::readoldevents ( void )
 
 void    tspfldloaders::writemap ( void )
 {
+  int v;
 
        #ifdef logging
        logtofile ( "loaders / tspfldloaders::writemap / started" );
@@ -1366,7 +1375,7 @@ void    tspfldloaders::writemap ( void )
           displaymessage ( "tspfldloaders::writemap  ; no map to write ! ",2);
 
        char* temp[8];
-       for ( int v= 0; v < 8; v++) {
+       for (v= 0; v < 8; v++) {
           temp[v] = spfld->player[v].name;
           spfld->player[v].name = NULL;
        }
@@ -3837,6 +3846,8 @@ void         loadallobjecttypes (void)
 
 void         loadalltechnologies(void)
 { 
+  int i;
+
   tfindfile ff ( "*.tec" );
   char *c = ff.getnextname();
 
@@ -3849,7 +3860,7 @@ void         loadalltechnologies(void)
       c = ff.getnextname();
    } 
 
-   for (int i = 0; i < technologynum; i++) 
+   for (i = 0; i < technologynum; i++) 
       for (int l = 0; l < 6; l++) { 
          ptechnology tech = gettechnology_forpos ( i, 0 );
          int j = tech->requiretechnologyid[l]; 
@@ -4235,9 +4246,10 @@ void tspeedcrccheck :: appendstring ( char* s, char* d, int id, int mode )
       strng[0] = 0;
    }
 
+#ifdef _DOS_
    if ( _heapchk() != _HEAPOK ) 
       beep();
-
+#endif
 
    while ( strlen ( strng ) + strlen ( st ) > strnglen ) {
       char* tmp = strng;
@@ -4317,5 +4329,3 @@ int  tspeedcrccheck :: getstatus ( void )
    }
    return status;
 }
-
-

@@ -1,3 +1,7 @@
+//     $Id: sgstream.cpp,v 1.2 1999-11-16 03:42:28 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -19,9 +23,11 @@
 */
 
                                                
-
+#include "config.h"
 #include <malloc.h>
+#ifdef _DOS_
 #include <dos.h> 
+#endif
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -97,7 +103,7 @@ int checkcodemem ( void )
 void logtofile ( char* strng )
 {
    int a = maxavail();
-   int b = _memavl();
+   int b;// = _memavl();
 
    if ( !logfile )
      logfile = fopen ( "SGLOG.TXT", "at+" );
@@ -108,8 +114,10 @@ void logtofile ( char* strng )
       fprintf ( f, "%d; ", crctest );
    */
 
+#ifdef _DOS_
    if ( _heapchk() != _HEAPOK  )
      fprintf( logfile, "HEAP DAMAGED!!" );
+#endif
 /*
    if ( !checkcodemem() )
      fprintf( logfile, "CODE DAMAGED!!" );
@@ -125,10 +133,10 @@ void logtofile ( char* strng )
 char gamepath[200];
 
 
-class  {
-         public:
-           initgamepath( void ) { gamepath[0] = 0; };
-      } initgamepath;
+class initgamepath {
+public:
+  initgamepath( void ) { gamepath[0] = 0; };
+};
 
 struct tindexstruct {
                     char         filename[13]; 
@@ -714,8 +722,8 @@ void  rotatepict45 ( void *s, void *d )
                 if ( ny < 0 )
                    ny -= 0.5;
        
-                int inx = nx;
-                int iny = ny;
+                int inx = (int)nx;
+                int iny = (int)ny;
                 if ( inx > 15 )
                    inx = 15;
                 if ( inx < -15 )
@@ -781,10 +789,10 @@ void  rotatepict45 ( void *s, void *d )
 
 }
 
-   union tpix {
-              struct { char r,g,b,a; };
-              int all;
-         };
+union tpix {
+  struct { char r,g,b,a; } s;
+  int all;
+};
 
 typedef tpix timage[ fieldxsize ][ fieldysize ];
 
@@ -805,7 +813,7 @@ int getimagepixel ( void* image, int x, int y )
 }
 
 
-void* rotatepict ( void* image, int organgle )
+char* rotatepict ( void* image, int organgle )
 {
    float angle = ((float)organgle) / 360 * 2 * pi + pi;
 
@@ -849,7 +857,7 @@ void* rotatepict ( void* image, int organgle )
                }
          
 
-         int newpix = getimagepixel ( image, -nx, ny );
+         int newpix = getimagepixel ( image, (int)-nx, (int)ny );
          if ( newpix == -1 )
             *pnt = 255;
          else
@@ -922,7 +930,7 @@ void* generate_vehicle_gui_build_icon ( pvehicletype tnk )
    putimage ( 0, 0, leergui );
    putspriteimage ( (wd - maxx) / 2, (hg - maxy) / 2, buf );
 
-   void* newbuildingpic = new char [ imagesize ( 0, 0, wd-1, hg-1 ) ];
+   char* newbuildingpic = new char [ imagesize ( 0, 0, wd-1, hg-1 ) ];
    getimage ( 0, 0, wd-1, hg-1, newbuildingpic );
    delete[] buf;
 
@@ -1068,6 +1076,8 @@ pvehicletype   loadvehicletype( pnstream stream )
 
 void writevehicle( pvehicletype ft, pnstream stream )
 {
+  int i;
+
    stream->writedata2 ( vehicle_version ); 
    stream->writedata2 ( *ft );
 
@@ -1077,7 +1087,7 @@ void writevehicle( pvehicletype ft, pnstream stream )
       stream->writepchar( ft->description );
    if (ft->infotext)
       stream->writepchar( ft->infotext );
-   for (int i=0; i<8; i++)
+   for (i=0; i<8; i++)
       if ( ft->classnames[i] )
          stream->writepchar( ft->classnames[i] );
 
@@ -1197,7 +1207,7 @@ void* generate_building_gui_build_icon ( pbuildingtype bld )
    maxy += fieldysize;
 
    int sze = imagesize ( minx, miny, maxx, maxy );
-   void* buf = new char [ sze ];
+   char* buf = new char [ sze ];
    getimage ( minx, miny, maxx, maxy, buf );
 
 /*
@@ -1226,7 +1236,7 @@ void* generate_building_gui_build_icon ( pbuildingtype bld )
    putimage ( 0, 0, leergui );
    putspriteimage ( (wd - maxx) / 2, (hg - maxy) / 2, buf );
 
-   void* newbuildingpic = new char [ imagesize ( 0, 0, wd-1, hg-1 ) ];
+   char* newbuildingpic = new char [ imagesize ( 0, 0, wd-1, hg-1 ) ];
    getimage ( 0, 0, wd-1, hg-1, newbuildingpic );
    delete[] buf;
 
@@ -1409,20 +1419,22 @@ void writebuildingtype ( pbuildingtype bld, pnstream stream )
 
 void generatedirecpict ( void* orgpict, void* direcpict )
 {
+  int t, u;
+
    tvirtualdisplay vfb ( 100, 100 );
    putspriteimage ( 10, 10, orgpict );
 
    char *b = (char*) direcpict;
 
-   for (int t = 1; t < 20; t++) {
-       for (int u = 20-t; u < 20+t; u++) {
+   for (t = 1; t < 20; t++) {
+       for (u = 20-t; u < 20+t; u++) {
           *b = getpixel(  10 + u, 9 + t);
           b++;
        }
     }
     
     for (t = 20; t > 0; t-- ) {
-       for (int u =20-t; u<= 19 + t; u++) {
+       for (u =20-t; u<= 19 + t; u++) {
           *b = getpixel(  10 + u, 10 + 39 - t );
           b++;
        }
@@ -1738,9 +1750,10 @@ pobjecttype   loadobjecttype(char *       name)
 
 pobjecttype   loadobjecttype( pnstream stream )
 { 
-
-   int version;
-   stream->readdata2 ( version );
+  int j;
+  int version;
+  
+ stream->readdata2 ( version );
    if ( version == object_version ) {
 
       pobjecttype fztn = new tobjecttype;
@@ -1807,7 +1820,7 @@ pobjecttype   loadobjecttype( pnstream stream )
    
        fztn->movemalus_plus = new char[ mmcount ] ;
    
-       for (int j=0; j< mmcount ; j++ ) {
+       for (j=0; j< mmcount ; j++ ) {
           if (j < fztn->movemalus_plus_count )
              stream->readdata ( fztn->movemalus_plus + j, 1);
           else
@@ -2021,4 +2034,5 @@ int writegameoptions ( void )
 }
 
 structure_size_tester sst3;
+
 

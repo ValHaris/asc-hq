@@ -1,3 +1,7 @@
+//     $Id: flview.h,v 1.2 1999-11-16 03:41:43 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -66,3 +70,4 @@ extern void showflic(char *name,int x, int y);
 extern void showconvflic(char *name,int x, int y);
 extern void flicplayer(char *name,int x, int y); //mit Fktns-Tasten
 extern void play_flc(int unitid,int prevx,int prevy);
+

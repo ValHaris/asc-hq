@@ -1,3 +1,7 @@
+//     $Id: weather.cpp,v 1.2 1999-11-16 03:42:51 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -18,7 +22,9 @@
     Boston, MA  02111-1307  USA
 */
 
+#ifdef _DOS_
 #include <conio.h>
+#endif
 #include <math.h>
 #include <stdio.h>
 #include "tpascal.inc"
@@ -589,12 +595,4 @@ void displaywindspeed( void )
 {
    displaymessage2("wind speed is %d; %d; %d ; effective 0 speed is %d = %s fields.", actmap->weather.wind[0].speed, actmap->weather.wind[1].speed, actmap->weather.wind[2].speed, actmap->weather.wind[0].speed * maxwindspeed / 256, strrrd8d ( actmap->weather.wind[0].speed * maxwindspeed / 256 ));
 }
-
-
-
-
-
-
-
-
 

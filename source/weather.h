@@ -1,3 +1,7 @@
+//     $Id: weather.h,v 1.2 1999-11-16 03:42:52 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -18,8 +22,14 @@
     Boston, MA  02111-1307  USA
 */
 
+#ifdef _DOS_
 #include "libs\triangul\interfac.h"
 #include "libs\triangul\triangul.h"
+#else
+#include "libs/triangul/interfac.h"
+#include "libs/triangul/triangul.h"
+#endif
+
 #include "typen.h"
 
 struct tpunkt {
@@ -82,3 +92,4 @@ void setbdtfields ( int id, int fieldnum, int* coordinates );
 void setbdtall ( int id );
 void setbdtpoly ( int id, ppolygon poly1 );
 void displaywindspeed(void);
+

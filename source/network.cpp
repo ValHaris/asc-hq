@@ -1,3 +1,7 @@
+//     $Id: network.cpp,v 1.2 1999-11-16 03:42:13 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -18,6 +22,7 @@
     Boston, MA  02111-1307  USA
 */
 
+#include "config.h"
 #include <stdio.h>                    
 #include <stdlib.h>
 #include <string.h>
@@ -32,6 +37,10 @@
 #include "sgstream.h"
 #include "spfldutl.h"
 #include "loadpcx.h"
+
+#ifndef HAVE_ITOA
+#define itoa(a, b, c) sprintf(b, "%##c##d", a);
+#endif
 
 int netlevel;
 
@@ -602,3 +611,4 @@ void setallnetworkpointers ( pnetwork net )
          net->computer[i].receive.transfermethod = getconnectforid ( net->computer[i].receive.transfermethodid );
    } /* endfor */
 }
+

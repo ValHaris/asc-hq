@@ -1,3 +1,7 @@
+//     $Id: realint.h,v 1.2 1999-11-16 03:42:24 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -17,7 +21,7 @@
     Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
     Boston, MA  02111-1307  USA
 */
-
+#ifdef _DOS_
 #include <stdio.h>
 #include <i86.h>
 #include <string.h>
@@ -64,3 +68,4 @@ struct rminfo {
      } ;
 
 extern rminfo rmi;
+#endif

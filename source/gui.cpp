@@ -1,3 +1,7 @@
+//     $Id: gui.cpp,v 1.2 1999-11-16 03:41:47 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -88,7 +92,7 @@ void setmouseongui( void )
 
 
 
-static void*    tguihost::background[30][30];
+//static void*    tguihost::background[30][30];
 
 
 tguihost::tguihost ( void )
@@ -622,7 +626,7 @@ void      tguihost :: setfirsticon( pnguiicon ic )
 
 
 
-static pnguiicon  tnguiicon::first = NULL;
+//static pnguiicon  tnguiicon::first = NULL;
 
 
 tnguiicon::tnguiicon ( void )
@@ -633,7 +637,7 @@ tnguiicon::tnguiicon ( void )
    } 
 
    infotext    = NULL;
-   filename[0] = NULL;
+   filename[0] = '\0';;
    host = NULL;
    priority = 0;
    next = first;
@@ -767,7 +771,7 @@ void  tnguiicon::iconpressed ( void )
       host->returncoordinates ( this, &x,  &y );
 
    if ( host->paintsize == 0 ) {
-      void* buf = new char [ imagesize ( 8,8, 40,26 )];
+      char* buf = new char [ imagesize ( 8,8, 40,26 )];
    
       setinvisiblemouserectanglestk ( x, y, x + guiiconsizex, y + guiiconsizey );
       display();
@@ -779,7 +783,7 @@ void  tnguiicon::iconpressed ( void )
       delete[] buf;
       
    } else {
-      void* buf = new char [ imagesize ( 4,4, 20,13 )];
+      char* buf = new char [ imagesize ( 4,4, 20,13 )];
    
       setinvisiblemouserectanglestk ( x, y, x + guismalliconsizex, y + guismalliconsizey );
       getimage ( x+4, y+4, x+20, y+13, buf );
@@ -883,7 +887,7 @@ void tnguiicon::display      ( void )
 
 
 
-static pnsguiicon tnsguiicon ::first = NULL;
+//static pnsguiicon tnsguiicon ::first = NULL;
 
 tnsguiicon::tnsguiicon ( void )
 {
@@ -2167,18 +2171,8 @@ void tguihost::reset ( void )
       actshownicons[i/columncount][i%columncount] = NULL;
 }
 
-
-
-
-
-
-
-
-
-
-
-static pnputbuildingguiicon tnputbuildingguiicon :: first    = NULL;
-static int             tnputbuildingguiicon :: buildnum = 0;
+//static pnputbuildingguiicon tnputbuildingguiicon :: first    = NULL;
+//static int             tnputbuildingguiicon :: buildnum = 0;
 
 tnputbuildingguiicon :: tnputbuildingguiicon ( pbuildingtype bld )
 {
@@ -2256,15 +2250,8 @@ void   tnputbuildingguiicon :: sethost      ( pselectbuildingguihost hst )
       bnxt()->sethost( hst );
 }
 
-
-
-
-
-
-
-
-static pnputobjectcontainerguiicon tnputobjectcontainerguiicon :: first    = NULL;
-static int             tnputobjectcontainerguiicon :: buildnum = 0;
+//static pnputobjectcontainerguiicon tnputobjectcontainerguiicon :: first    = NULL;
+//static int             tnputobjectcontainerguiicon :: buildnum = 0;
 
 tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( pobjecttype obj, int bld )
 {
@@ -2373,16 +2360,8 @@ void   tnputobjectcontainerguiicon :: sethost      ( pselectobjectcontainerguiho
       bnxt()->sethost( hst );
 }
 
-
-
-
-
-
-
-
-
-static pnputvehiclecontainerguiicon tnputvehiclecontainerguiicon :: first    = NULL;
-static int                          tnputvehiclecontainerguiicon :: buildnum = 0;
+//static pnputvehiclecontainerguiicon tnputvehiclecontainerguiicon :: first    = NULL;
+//static int                          tnputvehiclecontainerguiicon :: buildnum = 0;
 
 
 tnputvehiclecontainerguiicon :: tnputvehiclecontainerguiicon ( pvehicletype obj )
@@ -2477,9 +2456,6 @@ int         tnputvehiclecontainerguiicon::available( void )
       return 1;
 }
 
-
-
-
 void   tnputvehiclecontainerguiicon :: sethost      ( pselectvehiclecontainerguihost hst )
 {
    bldhost = hst;
@@ -2487,13 +2463,6 @@ void   tnputvehiclecontainerguiicon :: sethost      ( pselectvehiclecontainergui
    if ( bnxt () )
       bnxt()->sethost( hst );
 }
-
-
-
-
-
-
-
 
 tselectweaponguihost::tselectweaponguihost ( void )
 {
@@ -2516,15 +2485,11 @@ void tselectweaponguihost :: init ( int resolutionx, int resolutiony )
     y = getypos();
 }
 
-
-
-
 int     tselectweaponguihost ::  painticons ( void )
 {
    checkcoordinates();
    return tguihost::painticons();
 }
-
 
 void    tselectweaponguihost ::  checkforkey ( tkey key )
 {
@@ -2587,7 +2552,7 @@ void      tselectvehiclecontainerguihost :: setfirsticon( pnguiicon ic )
 }
 
 
-static pnweapselguiicon tnweapselguiicon::first = NULL;
+//static pnweapselguiicon tnweapselguiicon::first = NULL;
 
 tnweapselguiicon::tnweapselguiicon ( void )
 {
@@ -2803,23 +2768,7 @@ void  tnweapselguiicon::setup        ( pattackweap atw, int n )
       next->setup ( atw, ++n );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-static preplayguiicon treplayguiicon ::first = NULL;
+//static preplayguiicon treplayguiicon ::first = NULL;
 
 treplayguiicon::treplayguiicon ( void )
 {
@@ -2847,12 +2796,6 @@ void        treplayguiicon::setfrst  ( pnguiicon ts )
    first = (preplayguiicon) ts;
 }
 
-
-
-
-
-
-
 trguiicon_play :: trguiicon_play ( void )
 {
    strcpy ( filename, "rp_play" );
@@ -2872,9 +2815,6 @@ void trguiicon_play :: exec ( void )
   dashboard.x = -1;
 
 }
-
-
-
 
 trguiicon_pause :: trguiicon_pause ( void )
 {
@@ -3019,4 +2959,3 @@ void   treplayguihost :: bi2control (  )
    icons.cancel.display();
    tguihost::bi2control (  );
 }
-

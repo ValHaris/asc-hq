@@ -1,3 +1,7 @@
+//     $Id: typen.cpp,v 1.2 1999-11-16 03:42:44 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -50,7 +54,7 @@ const char* ceventtrigger[ceventtriggernum]  = {"*NONE*", "turn/move >=", "build
                                                  "energy tribute <", "material tribute <", "fuel tribute <",
                                                  "any unit enters polygon", "specific unit enters polygon", "building is seen"};
 const char*  cminentypen[cminenum]  = {"antipersonnel mine", "antitank mine", "moored mine", "floating mine"};
-const char   cminestrength[cminenum]  = { 60, 120, 180, 180 };
+const unsigned char cminestrength[cminenum]  = { 60, 120, 180, 180 };
 
 const char*  cbuildingfunctions[cbuildingfunctionnum]  = {"HQ",                "training",             "refinery",           "vehicle production", "ammunition production", 
                                                       "energy production", "material production",  "fuel production",    "repair facility",    "recycling",
@@ -1130,7 +1134,7 @@ tmessagelist :: ~tmessagelist ()
 
 }
 
-tmessagelist :: getlistsize ( void )
+int tmessagelist :: getlistsize ( void )
 {
    if ( next || prev )
       return 1;
@@ -1256,16 +1260,16 @@ tnetworkcomputer :: ~tnetworkcomputer ( )
 {
    #ifdef sgmain
    if ( send.transfermethod ) {
-      if ( send.transfermethod->transferopen )
+      if ( send.transfermethod->transferopen () )
          send.transfermethod->closetransfer();
-      if ( send.transfermethod->connectionopen )
+      if ( send.transfermethod->connectionopen () )
          send.transfermethod->closeconnection();
    }
 
    if ( receive.transfermethod ) {
-      if ( receive.transfermethod->transferopen )
+      if ( receive.transfermethod->transferopen () )
          receive.transfermethod->closetransfer();
-      if ( receive.transfermethod->connectionopen )
+      if ( receive.transfermethod->connectionopen () )
          receive.transfermethod->closeconnection();
    }
    #endif
@@ -1839,7 +1843,4 @@ tevent :: ~tevent ()
 
 // is there any way to do this test at compile time ??
 structure_size_tester sst1;
-
-
-
 

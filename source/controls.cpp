@@ -1,3 +1,7 @@
+//     $Id: controls.cpp,v 1.2 1999-11-16 03:41:16 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*                            
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -18,6 +22,7 @@
     Boston, MA  02111-1307  USA
 */
 
+#include "config.h"
 #include <stdio.h>           
 #include <string.h>
 #include <math.h>
@@ -46,6 +51,11 @@
 #include "timer.h"
 #include "sg.h"
 #include "weather.h"
+
+#ifndef HAVE_STRICMP
+#define stricmp strcasecmp
+#define strnicmp strncasecmp
+#endif
 
 
          tdashboard  dashboard;
@@ -2088,9 +2098,9 @@ class tdrawgettempline  {
                    }
               };
 
-static int tdrawgettempline :: initialized = 0;
-static double tdrawgettempline :: dirs[ sidenum ];
-static double tdrawgettempline :: offset;
+int tdrawgettempline :: initialized = 0;
+double tdrawgettempline :: dirs[ sidenum ];
+double tdrawgettempline :: offset;
 
 void tdrawgettempline :: init ( void )
 { 
@@ -2528,7 +2538,7 @@ class tsearchreactionfireingunits : public treactionfire {
                 ~tsearchreactionfireingunits();
       };
 
-static int tsearchreactionfireingunits :: maxshootdist[8] = { -1, -1, -1, -1, -1, -1, -1, -1 };
+int tsearchreactionfireingunits :: maxshootdist[8] = { -1, -1, -1, -1, -1, -1, -1, -1 };
 
 tsearchreactionfireingunits :: tsearchreactionfireingunits ( void )
 {
@@ -2542,17 +2552,18 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle )
    int y1 = maxint;
    int x2 = 0;
    int y2 = 0;
+   int i, j, h;
 
    if ( maxshootdist[0] == -1 ) {
-      for ( int i = 0; i < 8; i++ )
+      for (i = 0; i < 8; i++ )
          maxshootdist[i] = 0;
 
-      for ( i = 0; i < vehicletypenum; i++ ) {
+      for (i = 0; i < vehicletypenum; i++ ) {
          pvehicletype fzt = getvehicletype_forpos ( i );
          if ( fzt )
-            for ( int j = 0; j < fzt->weapons->count; j++ )
+            for (j = 0; j < fzt->weapons->count; j++ )
                if ( fzt->weapons->weapon[j].typ & cwshootableb )
-                  for ( int h = 0; h < 8; h++ )
+                  for (h = 0; h < 8; h++ )
                      if ( fzt->weapons->weapon[j].targ & ( 1 << h ) )
                         if ( fzt->weapons->weapon[j].maxdistance > maxshootdist[h] )
                            maxshootdist[h] = fzt->weapons->weapon[j].maxdistance;
@@ -3468,7 +3479,7 @@ int squareroot ( int i )
    double b = (double) i;
    double a =  sqrt ( i );
    int c = (int) a;
-   return a;
+   return c;
 }
 
 int square ( int i )
@@ -3618,7 +3629,7 @@ void initwindmovement(  const pvehicle vehicle ) {
        }
       #endif
 
-      int disttofly = sqrt ( square ( xtg - relwindspeedx) + square ( ytg - relwindspeedy ) );
+      int disttofly = (int)sqrt ( square ( xtg - relwindspeedx) + square ( ytg - relwindspeedy ) );
 
       #ifdef HEXAGON
        windmovement[direc] =  (120 - disttofly) / 10;
@@ -4027,6 +4038,8 @@ void         tdashboard::paintarmor(void)
 
 void         tdashboard::paintwind( int repaint )
 {
+  int j, i;
+
 /*   void *p;
    if (actmap->weather.wind.direction & 1) 
       p = icons.wind.southwest[actmap->weather.wind.speed >> 6];
@@ -4088,7 +4101,7 @@ void         tdashboard::paintwind( int repaint )
         #ifdef HEXAGON
           if ( lastdir != actmap->weather.wind[height].direction ) {
              putimage ( agmp->resolutionx - ( 640 - 506), 227, icons.wind[ 8 ] );
-             void* pic = rotatepict ( icons.windarrow, directionangle[ actmap->weather.wind[height].direction ] );
+             char* pic = rotatepict ( icons.windarrow, directionangle[ actmap->weather.wind[height].direction ] );
              int h1,w1, h2, w2;
              getpicsize ( pic, w2, h2 );
              getpicsize ( icons.wind[ 8 ], w1, h1 );
@@ -4114,7 +4127,7 @@ void         tdashboard::paintwind( int repaint )
    
       windheight = height;
    
-      for (int i = 0; i < (actmap->weather.wind[height].speed+31) / 32 ; i++ ) {
+      for (i = 0; i < (actmap->weather.wind[height].speed+31) / 32 ; i++ ) {
          int color = green;
    
          if ( vehicle == NULL ) {
@@ -4136,7 +4149,7 @@ void         tdashboard::paintwind( int repaint )
          }
          bar ( agmp->resolutionx - ( 640 - 597), 282-i*7, agmp->resolutionx - ( 640 - 601), 284-i*7, color );
       } /* endfor */
-      for ( int j = i; j < 8; j++ )
+      for (j = i; j < 8; j++ )
          bar ( agmp->resolutionx - ( 640 - 597), 282-j*7, agmp->resolutionx - ( 640 - 601), 284-j*7, black );
 
       getinvisiblemouserectanglestk (  );
@@ -4161,7 +4174,7 @@ void         tdashboard::paintimage(void)
        #ifdef HEXAGON
        
        TrueColorImage* zimg = zoomimage ( vehicle->typ->picture[0], fieldsizex/2, fieldsizey/2, pal, 0 );
-       void* pic = convertimage ( zimg, pal ) ;
+       char* pic = convertimage ( zimg, pal ) ;
        putrotspriteimage ( x1+3, y1+3, pic, vehicle->color );
        delete[] pic;
        delete zimg;
@@ -4777,8 +4790,10 @@ void checkalliances_at_endofturn ( void )
 
 void checkalliances_at_beginofturn ( void )
 {
+  int i;
+
    int act = actmap->actplayer ;
-   for ( int i = 0; i < 8; i++ ) {
+   for (i = 0; i < 8; i++ ) {
       if ( actmap->alliances[i][act] == cawarannounce || actmap->alliances[i][act] == canewsetwar2 ) {
          actmap->alliances[i][act] = cawar;
          actmap->alliances[act][i] = cawar;
@@ -5284,7 +5299,7 @@ c          =     568.88887 ;
 d          =     6.1111109 ;
 
    double f = a / ( b * (dist + d)) - c;
-  return f;
+  return (int)f;
 }
 
 
@@ -6480,8 +6495,8 @@ void returnresourcenuseforresearch ( const pbuilding bld, int research, int* ene
 
    double m = 1 / log ( minresearchcost + maxresearchcost );
 
-   *energy   = researchenergycost   * research * ( exp ( deg / m ) - ( 1 - minresearchcost ) ) / 1000 * (researchcostdouble+res)/researchcostdouble;
-   *material = researchmaterialcost * research * ( exp ( deg / m ) - ( 1 - minresearchcost ) ) / 1000 * (researchcostdouble+res)/researchcostdouble;
+   *energy   = (int)researchenergycost   * research * ( exp ( deg / m ) - ( 1 - minresearchcost ) ) / 1000 * (researchcostdouble+res)/researchcostdouble;
+   *material = (int)researchmaterialcost * research * ( exp ( deg / m ) - ( 1 - minresearchcost ) ) / 1000 * (researchcostdouble+res)/researchcostdouble;
 /*
    if ( bld->typ->maxresearchpoints > 0 ) {
       *material = researchmaterialcost * research * 
@@ -6497,15 +6512,17 @@ void returnresourcenuseforresearch ( const pbuilding bld, int research, int* ene
 
 void dissectvehicle ( pvehicle eht )
 {
+  int i,j,k;
+
    ptechnology techs[32];
    int technum = 0;
    memset ( techs, 0, sizeof ( techs ));
-   for ( int i = 0; i <= eht->klasse; i++) 
-      for ( int j = 0; j < 4; j++ )
+   for (i = 0; i <= eht->klasse; i++) 
+      for (j = 0; j < 4; j++ )
          if ( eht->typ->classbound[i].techrequired[j] ) 
            if ( !actmap->player[actmap->actplayer].research.technologyresearched ( eht->typ->classbound[i].techrequired[j] )) {
                int found =  0;
-               for ( int k = 0; k < technum; k++ )
+               for (k = 0; k < technum; k++ )
                   if ( techs[k]->id == eht->typ->classbound[i].techrequired[j] )
                      found = 1;
                if ( !found ) {
@@ -6615,6 +6632,8 @@ void         generatevehicle_cl ( pvehicletype fztyp,
 
 void MapNetwork :: searchfield ( int x, int y, int dir )
 {
+  int s;
+
    pfield fld = getfield ( x, y );
    if ( !fld )
       return;
@@ -6651,7 +6670,7 @@ void MapNetwork :: searchfield ( int x, int y, int dir )
          olddir -= sidenum; 
 
          int r = 0; 
-         for ( int s = 0; s < sidenum; s++) { 
+         for (s = 0; s < sidenum; s++) { 
             if ( (d & (1 << s))  &&  ( s != olddir )) {
                arr[ r ] = s; 
                r++;
@@ -6713,7 +6732,7 @@ void MapNetwork :: searchbuilding ( int x, int y )
 }
 
 
-static int MapNetwork :: instancesrunning = 0;
+int MapNetwork :: instancesrunning = 0;
 
 MapNetwork :: MapNetwork ( void )
 {
@@ -7637,7 +7656,7 @@ int    trunreplay :: removeunit ( pvehicle eht, int nwid )
              if ( ld )
                 return ld;
           }
-   return NULL;
+   return 0;
 }
 
 int  trunreplay :: removeunit ( int x, int y, int nwid )
@@ -7656,9 +7675,9 @@ int  trunreplay :: removeunit ( int x, int y, int nwid )
                   return ld;
             }
          }
-         return NULL;
+         return 0;
       } else
-         return NULL;
+         return 0;
    else
       if ( fld->vehicle->networkid == nwid ) {
          removevehicle ( &fld->vehicle );
@@ -8332,4 +8351,5 @@ void trunreplay :: firstinit ( void )
     gui.starticonload();
     status = 0;
 }
+
 

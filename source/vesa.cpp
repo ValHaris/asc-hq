@@ -1,3 +1,7 @@
+//     $Id: vesa.cpp,v 1.2 1999-11-16 03:42:47 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -18,6 +22,7 @@
     Boston, MA  02111-1307  USA
 */
 
+#ifdef _DOS_
 #include <stdio.h>
 #include <i86.h>
 #include <string.h>
@@ -1560,7 +1565,7 @@ TrueColorImage* convertimage2tc ( void* buf, dacpalette256 pal )
 }
 
 
-void* convertimage ( TrueColorImage* img, dacpalette256 pal )
+char* convertimage ( TrueColorImage* img, dacpalette256 pal )
 {
   #ifndef minimal
    if ( truecolor2pal_table[0] == 255 ) {
@@ -1739,3 +1744,4 @@ void ellipse ( int x1, int y1, int x2, int y2, int color, float tolerance )
 
 }
 
+#endif

@@ -1,3 +1,7 @@
+//     $Id: dlg_box.h,v 1.2 1999-11-16 03:41:25 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -372,7 +376,7 @@ struct tscreensaverparameters {
                          } ; 
 extern tscreensaverparameters screensaverparameters;
 extern int actdisplayedmessage;
-extern lastdisplayedmessageticker ;
+extern long lastdisplayedmessageticker ;
 
 
 #define linesshown 13  
@@ -404,3 +408,4 @@ extern char*  readtextmessage( int id );
 
 
 #endif
+

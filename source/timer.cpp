@@ -1,3 +1,7 @@
+//     $Id: timer.cpp,v 1.2 1999-11-16 03:42:41 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -18,6 +22,7 @@
     Boston, MA  02111-1307  USA
 */
 
+#ifdef _DOS_
 #include <dos.h>
 #include <conio.h>
 #include <stdio.h>
@@ -106,3 +111,4 @@ void closetimer(void)
    outp(0x40,0);
    _dos_setvect(timerintr,biostimerhandler);
 } 
+#endif

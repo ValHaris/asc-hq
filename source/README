@@ -1,0 +1,6 @@
+** This code will _most likely_ still compile under DOS.  However, the Linux
+port is far from complete.  You wont even be able to get this to compile
+correctly yet!
+
+Tom
+tmwilson@cyberhighway.net

@@ -1,3 +1,7 @@
+//     $Id: spfst.cpp,v 1.2 1999-11-16 03:42:32 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -20,8 +24,9 @@
 
 #include <stdio.h>                                                                   
 #include <string.h>
+#ifdef _DOS_
 #include <conio.h>
-
+#endif
 
 
 #if (__WATCOM_CPLUSPLUS__ >= 1100 )
@@ -1738,7 +1743,7 @@ int        tcursor::checkposition ( int x, int y )
 }
 
 
-int          tcursor::gotoxy(word         x, word         y, int disp)
+int tcursor::gotoxy(int x, int y, int disp)
 { 
    if ( x >= actmap->xsize )
       x = actmap->xsize-1;
@@ -4072,13 +4077,15 @@ void  tdisplaymap :: deletevehicle ( void )
 
 void tgeneraldisplaymap :: putdirecpict ( int x1, int y1, const void* ptr )
 {
+  int i, num;
+
    char* c = (char*) ptr;
 
    if ( agmp->windowstatus == 100 ) {
       char* buf = (char*) (agmp->scanlinelength * y1 + x1 + agmp->linearaddress) + 19;
 
-      for (int i=1; i<= 19 ;i++ ) {
-        for ( int num = 0; num < i * 2; num ++ ) {
+      for (i=1; i<= 19 ;i++ ) {
+        for (num = 0; num < i * 2; num ++ ) {
            *buf = *c;
            c++;
            buf++;
@@ -4089,7 +4096,7 @@ void tgeneraldisplaymap :: putdirecpict ( int x1, int y1, const void* ptr )
       } /* endfor */
                             
       for (i=20; i > 0 ;i-- ) {
-        for ( int num = 0; num < i * 2; num ++ ) {
+        for (num = 0; num < i * 2; num ++ ) {
            *buf = *c;
            c++;
            buf++;
@@ -4879,7 +4886,7 @@ void  tdisplaymap :: movevehicle(integer      x1,
       if ( yp2 > dispmapdata.vfbheight )
          yp2 = dispmapdata.vfbheight;
    
-      void* picbuf = new char [ imagesize ( xp1, yp1, xp2, yp2 ) ];
+      char* picbuf = new char [ imagesize ( xp1, yp1, xp2, yp2 ) ];
       getimage ( xp1, yp1, xp2, yp2, picbuf );
    
    
@@ -6832,4 +6839,3 @@ void EllipseOnScreen :: paint ( void )
    if ( active ) 
       ellipse ( x1, y1, x2, y2, color, precision );
 }
-

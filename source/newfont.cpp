@@ -1,3 +1,7 @@
+//     $Id: newfont.cpp,v 1.2 1999-11-16 03:42:15 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -41,7 +45,8 @@ pfont        loadfont(char *       filename)
    toldfont     *font1; 
    FILE         *fp;
    int          i; 
-   void         *p, *q;
+   char *p;
+   void         *q;
    int      ll, ll2, completesize; 
    word*         pg;
 
@@ -152,10 +157,11 @@ pfont        loadfont(char *       filename)
 pfont        loadfont( pnstream stream )
 {                
    toldfont     *font1; 
-   void         *p, *q;
+   char *p;
+   void         *q;
    int      ll, ll2, completesize; 
    word*         pg;
-
+   int i;
 
    font1 = new toldfont;
 
@@ -171,7 +177,7 @@ pfont        loadfont( pnstream stream )
    font1->useems = false;
    font1->palette = NULL; 
 
-   for ( int i = 0; i <= 255; i++) { 
+   for (i = 0; i <= 255; i++) { 
       if ( font1->character[i].size ) { 
          ll2 = ( font1->character[i].size / 8 + 1) * 8; 
          q = new char [ ll2+2 ];
@@ -471,5 +477,3 @@ class InitNewfont {
               memset( &activefontsettings, 0, sizeof ( activefontsettings ));
            };
       } initnewfont;
-
-

@@ -1,3 +1,7 @@
+//     $Id: edevents.cpp,v 1.2 1999-11-16 03:41:28 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -19,7 +23,7 @@
 */
 
 #include <math.h>
-#include "edmisc.h";                      
+#include "edmisc.h"
 #include "edevents.h"
 #include "edselfnt.h"
 
@@ -2394,3 +2398,4 @@ void setmapparameters ( void )
    } while ( param >= 0 && param < gameparameternum );      
 }
 
+

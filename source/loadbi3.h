@@ -1,3 +1,7 @@
+//     $Id: loadbi3.h,v 1.2 1999-11-16 03:41:55 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -32,7 +36,7 @@ extern void loadbi3pict_double ( int num, void** pict, int interpolate = 0 );
 extern void loadbi3pict ( int num, void** pict );
 extern int bi3graphnum;
 extern void check_bi3_dir ( void );
-extern  char bi2asc_color_translation_table[256];
+extern unsigned char bi2asc_color_translation_table[256];
 extern void importbattleislemap ( char* path, char* filename, pwterraintype trrn );
 extern void insertbattleislemap ( int x, int y, char* path, char* filename  );
 

@@ -1,3 +1,7 @@
+//     $Id: edgen.cpp,v 1.2 1999-11-16 03:41:31 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -18,7 +22,7 @@
     Boston, MA  02111-1307  USA
 */
 
-#include "edmisc.h";                
+#include "edmisc.h"
 #include "edgen.h"
 
 #define layercount 5
@@ -1123,3 +1127,4 @@ void tplasma::generateplasma(boolean resettile)
 }  
 
 
+

@@ -1,3 +1,7 @@
+//     $Id: building.cpp,v 1.2 1999-11-16 03:41:10 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -39,12 +43,18 @@
 #include "mousehnd.h"
 #include "building.h"
 #include "controls.h"
-#include "conio.h"
 #include "loadpcx.h"
 #include "sg.h"
 #include "stack.h"
 #include "gamedlg.h"
 #include "basestrm.h"
+#ifdef _DOS_
+#include <conio.h>
+#endif
+
+#ifndef HAVE_ITOA
+#define itoa(a, b, c) sprintf(b, "%##c##d", a)
+#endif
 
 int                        autofill_prodtnk = 1;
 pcontainercontrols         cc;
@@ -159,13 +169,13 @@ const char* resourceusagestring = "; need: ~%d~ energy, ~%d~ material, ~%d~ fuel
 
 int getstepwidth ( int max )
 {
-   int ep = log10 ( max );
-   if ( ep > 2 )
-      ep -= 2;
+   double ep = log10 ( max );
+   if ( ep > 2.0 )
+      ep -= 2.0;
    else
-      ep = 0;
+      ep = 0.0;
 
-   return pow ( 10, ep );
+   return (int)pow ( 10, ep );
 }
 
 
@@ -1501,8 +1511,8 @@ int    ccontainer :: getfieldundermouse ( int* x, int* y )
                #ifdef HEXAGON
                 int xd = mouseparams.x - xp;
                 int yd = mouseparams.y - yp;
-                word* pw = (word*) icons.fieldshape;
-                char* pc = (char*) icons.fieldshape;
+                short unsigned int* pw = (word*) icons.fieldshape;
+                unsigned char* pc = (unsigned char*) icons.fieldshape;
                 pc+=4;
                
                 if ( pw[0] >= xd  && pw[1] >= yd )
@@ -1923,6 +1933,8 @@ void  ccontainer :: cammunitiontransfer_subwindow :: paintobj ( int numm, int st
 
 void  ccontainer :: cammunitiontransfer_subwindow :: reset ( pvehicle veh )
 {
+  int i;
+
    num = 0;
    if ( veh )
       eht = veh;
@@ -1931,7 +1943,7 @@ void  ccontainer :: cammunitiontransfer_subwindow :: reset ( pvehicle veh )
          eht = hostcontainer->getmarkedunit();
    }
    if ( eht ) {
-      for (int i = 0; i < eht->typ->weapons->count; i++) {
+      for (i = 0; i < eht->typ->weapons->count; i++) {
          if ( eht->typ->weapons->weapon[i].typ & ( cwweapon | cwmineb ) ) {
             int typ = log2( eht->typ->weapons->weapon[i].typ & ( cwweapon | cwmineb ));
             if ( cc->ammotypeavail ( typ )) {
@@ -2052,7 +2064,7 @@ void  ccontainer :: cammunitiontransfer_subwindow :: displayvariables ( void )
          int y1 = 0;
          int x2 = 55;
          int y2 = 14;
-         void* buf = new char [ imagesize ( x1, y1, x2, y2 ) ];
+         char* buf = new char [ imagesize ( x1, y1, x2, y2 ) ];
       
          memset ( (void*) agmp-> linearaddress, bkgrcol, 10000 );
          activefontsettings.length = 0;
@@ -2066,7 +2078,7 @@ void  ccontainer :: cammunitiontransfer_subwindow :: displayvariables ( void )
          npop ( *agmp );
       
          delete buf;
-         delete  ( (void*) agmp-> linearaddress );
+         delete  ( (void*)agmp-> linearaddress );
          npop  ( *agmp );
       } else
         if ( actdisp[i] != 1 )
@@ -3052,13 +3064,14 @@ void ccontainer_b :: unitchanged( void )
 
 void  ccontainer_b :: setpictures ( void )
 {
+  int i;
    if ( unitmode == mnormal  || unitmode == mloadintocontainer ) {
       ccontainer::setpictures();
    } else 
 
    if ( unitmode == mproduction ) {
       int num = 0;
-      for ( int i = 0; i < 32; i++ )
+      for (i = 0; i < 32; i++ )
          if ( building->production[i]  &&  
               actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( building->production[i], actmap )  &&  
               building->typ->vehicleloadable( building->production[i] ) ) {
@@ -3689,6 +3702,8 @@ void ccontainer_b :: cconventionelpowerplant_subwindow :: setnewpower ( int pwr 
 
 void  ccontainer_b :: cconventionelpowerplant_subwindow :: displayvariables ( void )
 {
+  int x;
+
    npush ( activefontsettings );
    activefontsettings.color = white;
    activefontsettings.font = schriften.guifont;
@@ -3729,7 +3744,7 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: displayvariables ( vo
       max = material * 17/16;
 
    int dist = gx2-gx1;
-   for (int x = dist; x >0 ; x--) {
+   for (x = dist; x >0 ; x--) {
        int res = cc_b->building->maxplus.a.energy * x / dist;
        returnresourcenuseforpowerplant ( cc_b->building, res, &material, &fuel );
 
@@ -4014,9 +4029,11 @@ void ccontainer_b :: csolarpowerplant_subwindow :: resetresources ( int mode )
 
 ccontainer_b :: cammunitionproduction_subwindow :: cammunitionproduction_subwindow ( void )
 {
+  int i;
+
    strcpy ( name, "ammunition production" );
 
-   for (int i = 0; i < waffenanzahl; i++) {
+   for (i = 0; i < waffenanzahl; i++) {
       objcoordinates[i].x1 = subwinx1 + 23  + 37 * i ;
       objcoordinates[i].x2 = objcoordinates[i].x1 + 10;
       objcoordinates[i].y1 = subwiny1 + 28;
@@ -4085,6 +4102,8 @@ void  ccontainer_b :: cammunitionproduction_subwindow :: displayusage ( void )
 
 void  ccontainer_b :: cammunitionproduction_subwindow :: display ( void )
 {
+  int i;
+
    npush ( activefontsettings );
    setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    putimage ( subwinx1, subwiny1, icons.container.subwin.ammoproduction.main );
@@ -4105,9 +4124,9 @@ void  ccontainer_b :: cammunitionproduction_subwindow :: display ( void )
    int y1 = 0;
    int x2 = 66;
    int y2 = 14;
-   void* buf = new char [ imagesize ( x1, y1, x2, y2 ) ];
+   char* buf = new char [ imagesize ( x1, y1, x2, y2 ) ];
 
-   for (int i = 0; i < waffenanzahl; i++) {
+   for (i = 0; i < waffenanzahl; i++) {
       memset ( (void*) agmp-> linearaddress, 255, 10000 );
       activefontsettings.length = 0;
       activefontsettings.justify = lefttext;
@@ -4158,11 +4177,11 @@ int  ccontainer_b :: cammunitionproduction_subwindow :: pos2num ( int pos )
   int ydiff = objcoordinates[0].y2 - objcoordinates[0].y1 - objcoordinates[0].t2;
 //  return ( (double) maxproduceablenum * pow ( pos, grad )  /  pow ( ydiff , grad ) );
 
-  int result = ( maxproduceablenum * ( exp ( pos / grad ) - 1 ) / ( exp ( ydiff / grad ) - 1 ));
+  int result = (int)( maxproduceablenum * ( exp ( pos / grad ) - 1 ) / ( exp ( ydiff / grad ) - 1 ));
   if ( result < 0 )
      result = 0;
   if ( result > maxproduceablenum )
-     result = maxproduceablenum;
+     result = (int)maxproduceablenum;
   return result;
 }
 
@@ -4171,7 +4190,7 @@ int  ccontainer_b :: cammunitionproduction_subwindow :: num2pos ( int num )
   int ydiff = objcoordinates[0].y2 - objcoordinates[0].y1 - objcoordinates[0].t2;
 //  return sqrt ( (double) num * pow ( ydiff, grad ) / maxproduceablenum );
 
-  int result = ( grad * log ( num / maxproduceablenum  * ( exp ( ydiff / grad ) - 1 ) + 1 ));
+  int result = (int)( grad * log ( num / maxproduceablenum  * ( exp ( ydiff / grad ) - 1 ) + 1 ));
   if ( result < 0 )
      result = 0;
   if ( result > ydiff )
@@ -4261,8 +4280,10 @@ void ccontainer_b :: cammunitionproduction_subwindow :: paintobj ( int num, int 
 
 void  ccontainer_b :: cammunitionproduction_subwindow :: checkformouse ( void )
 {
+  int i;
+
    if ( mouseparams.taste == 1 ) {
-      for (int i = 0; i < waffenanzahl; i++) {
+      for (i = 0; i < waffenanzahl; i++) {
          if ( mouseparams.x >= objcoordinates[i].x1    && mouseparams.x <= objcoordinates[i].x2  &&
               mouseparams.y >= objcoordinates[i].y1    && mouseparams.y <= objcoordinates[i].y2 ) {
 
@@ -4376,6 +4397,8 @@ const char* resourceinfotxt2[3] = {  "local", "net",      "global" };
 
 void  ccontainer_b :: cresourceinfo_subwindow :: display ( void )
 {
+  int y;
+
    npush ( activefontsettings );
    setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    putimage ( subwinx1, subwiny1, icons.container.subwin.resourceinfo.main );
@@ -4386,7 +4409,7 @@ void  ccontainer_b :: cresourceinfo_subwindow :: display ( void )
    activefontsettings.justify = lefttext;
    activefontsettings.background = 255;
 
-   for ( int y = 0; y < 4; y++ )
+   for (y = 0; y < 4; y++ )
       showtext2c ( resourceinfotxt[y], subwinx1 + 5, subwiny1 + 58 + y * 13 );
 
    activefontsettings.length = 40;
@@ -4525,8 +4548,8 @@ char* ccontainer_b :: cresourceinfo_subwindow :: int2string ( int i, char* buf )
       itoa ( i, &buf[1], 10 );
    }
    if ( gettextwdth ( buf, NULL ) > activefontsettings.length   &&  activefontsettings.length) {
-      int pot  = log10 ( i );
-      int base = pow ( 10, pot );
+      int pot  = (int)log10 ( i );
+      int base = (int)pow ( 10, pot );
       int first = i / base;
       int rest = i - first * base;
 
@@ -4607,7 +4630,7 @@ void ccontainer_b :: cresourceinfo_subwindow :: resetresources ( int mode )
 
 //............................................................................................
 
-static int ccontainer_b :: cresearch_subwindow :: allbuildings = 0;
+int ccontainer_b :: cresearch_subwindow :: allbuildings = 0;
 
 ccontainer_b :: cresearch_subwindow :: cresearch_subwindow ( void )
 {
@@ -4724,6 +4747,8 @@ void ccontainer_b :: cresearch_subwindow :: setnewresearch ( int res )
 
 void  ccontainer_b :: cresearch_subwindow :: displayvariables ( void )
 {
+  int x;
+
    npush ( activefontsettings );
    activefontsettings.color = white;
    activefontsettings.font = schriften.guifont;
@@ -4777,7 +4802,7 @@ void  ccontainer_b :: cresearch_subwindow :: displayvariables ( void )
       max = material * 17/16;
 
    int dist = gx2-gx1;
-   for (int x = dist; x >0 ; x--) {
+   for (x = dist; x >0 ; x--) {
        int res = cc_b->building->maxresearchpoints * x / dist;
        returnresourcenuseforresearch ( cc_b->building, res, &energy, &material );
 
@@ -4902,7 +4927,7 @@ void  ccontainer_b :: cresearch_subwindow :: checkforkey ( tkey taste )
 
 //............................................................................................
 
-static int ccontainer_b :: cminingstation_subwindow :: allbuildings = 0;
+int ccontainer_b :: cminingstation_subwindow :: allbuildings = 0;
 
 ccontainer_b :: cminingstation_subwindow :: cminingstation_subwindow ( void )
 {
@@ -5071,6 +5096,8 @@ void ccontainer_b :: cminingstation_subwindow :: setnewextraction ( int res )
 
 void  ccontainer_b :: cminingstation_subwindow :: displayvariables ( void )
 {
+  int i;
+
    npush ( activefontsettings );
    activefontsettings.color = white;
    activefontsettings.font = schriften.guifont;
@@ -5094,7 +5121,7 @@ void  ccontainer_b :: cminingstation_subwindow :: displayvariables ( void )
 
 
    int dist = 100;
-   for ( int i = maxminingrange; i >= 0; i-- )
+   for (i = maxminingrange; i >= 0; i-- )
       if ( mininginfo->avail[ i ].resource[ mode ] )
          dist = i;
 
@@ -6024,16 +6051,6 @@ generalicon_c:: ~generalicon_c ( )
 {
     first = NULL;
 }
-
-
-
-
-
-
-
-
-
-
 
 void tcontaineronlinemousehelp :: checkforhelp ( void )
 {

@@ -1,3 +1,7 @@
+//     $Id: basestrm.h,v 1.2 1999-11-16 03:41:07 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -28,7 +32,12 @@
 #include <stdio.h>
 #include "lzw.h"
 extern "C" {
+#ifdef _DOS_
     #include "libs\bzlib\bzlib.h"
+#else
+#include "libs/bzlib/bzlib.h"
+#endif
+
 }
 
 #ifndef MAX
@@ -623,3 +632,4 @@ extern void opencontainer ( const char* wildcard );
 extern const int containermagic;
 
 #endif
+

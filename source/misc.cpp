@@ -1,3 +1,7 @@
+//     $Id: misc.cpp,v 1.2 1999-11-16 03:42:05 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -18,13 +22,24 @@
     Boston, MA  02111-1307  USA
 */
 
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <i86.h>
 #include <string.h>
-#include <dos.h>
 #include "tpascal.inc"
 #include "misc.h"
+
+#ifdef _DOS_
+#include <i86.h>
+#include <dos.h>
+#else
+#include <sys/stat.h>
+#include <unistd.h>
+#endif
+
+#ifndef HAVE_ITOA
+#define itoa(a, b, c) sprintf(b, "%##c##d", a)
+#endif
 
 const char* digit[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 const char* letter[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", 
@@ -44,13 +59,19 @@ int filesize( char *name)
    fseek( fp, ipos, SEEK_SET );
    return(length);
 */
+#ifdef _DOS_
   find_t  fileinfo;
   unsigned rc;       
 
   rc = _dos_findfirst( name, _A_NORMAL, &fileinfo );
 
   return fileinfo.size;
+#else
+  struct stat *buf;
 
+  stat (name, buf);
+  return (buf->st_size);
+#endif
 }
 
 
@@ -87,6 +108,7 @@ struct tmeminfo {
 
 void getmeminfo( void )
 {
+#ifdef _DOS_
     union REGS regs;
     struct SREGS sregs;
 
@@ -96,6 +118,7 @@ void getmeminfo( void )
     regs.x.edi = FP_OFF( &meminfo );
 
     int386x( DPMI_INT, &regs, &regs, &sregs );
+#endif
 }
 
 
@@ -240,3 +263,4 @@ structure_size_tester :: structure_size_tester ( void )
       exit(1);
    }
 }
+

@@ -1,3 +1,7 @@
+//     $Id: network.h,v 1.2 1999-11-16 03:42:14 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger

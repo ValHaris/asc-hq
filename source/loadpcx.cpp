@@ -1,3 +1,7 @@
+//     $Id: loadpcx.cpp,v 1.2 1999-11-16 03:42:02 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -48,7 +52,7 @@ typedef struct tpcxheader{
 
 word  columncount;
 extern "C" word  planenum;
-extern "C" void* scratch;
+extern "C" char* scratch;
 
 extern "C" integer linelength;
 
@@ -61,7 +65,7 @@ extern "C" int  dataread;
 extern "C" int  scanlineret[3];
 extern "C" size_t datalength;
 
-const buffsize = 2000;
+const int buffsize = 2000;
 
 extern "C" void   decode_pcx256();
 #pragma aux decode_pcx256 parm [ eax ] modify [ ebx ecx edx esi edi ]

@@ -1,3 +1,7 @@
+//     $Id: attack.cpp,v 1.2 1999-11-16 03:41:02 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -143,7 +147,7 @@ void tfight :: calc ( void )
 {
 
    if ( av.strength ) { 
-      int w = dv.damage + 
+      int w = (int)(dv.damage + 
             (  1000 * av.strength 
                * (10 + av.experience*10 / 4) / 10
                * attackstrength(av.damage) / 100
@@ -152,7 +156,7 @@ void tfight :: calc ( void )
                  / (dv.armor / 4 
                     * (10 + dv.defensebonus*10 / 8) / 10 )
                * 100 / damagefaktor )
-            / 1000;
+            / 1000);
 
       if (dv.damage > w ) 
          displaymessage("fatal error at attack: \ndecrease of damage d!",1);
@@ -809,5 +813,3 @@ void tunitattacksobject :: paintimages ( int xa, int ya, int xd, int yd )
    putrotspriteimage ( xa, ya, _attackingunit->typ->picture[0], _attackingunit->color );
    _obji->typ->display ( xd - 5, yd - 5 );
 }
-
-

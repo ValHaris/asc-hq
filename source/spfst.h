@@ -1,3 +1,7 @@
+//     $Id: spfst.h,v 1.2 1999-11-16 03:42:35 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*                       
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -69,7 +73,7 @@
                  int          distance;
               }; 
    struct tmoveparams { 
-                        byte         movestatus;       /*  Folgende Modi sind definiert : 
+                        unsigned char         movestatus;       /*  Folgende Modi sind definiert : 
                                                                              0:  garnichts, standard
                                                                              1:  movement l1
                                                                              2:  movement l2
@@ -107,7 +111,7 @@
                   void loaddata ( void ) ;
                  // byte getweapstrength2 (word typ, word pos, byte mindist, byte maxdist );
                  // byte getweapstrength  (word typ, byte pos, byte mindist, byte maxdist );
-                  char getweapstrength ( const SingleWeapon* weap, int dist, int attacker_height, int defender_height, int reldiff = -1 );
+                  char getweapstrength ( const SingleWeapon* weap, int dist =-1, int attacker_height =-1, int defender_height = -1, int reldiff = -1 );
                }; 
 
    typedef class tweapdist* pweapdist ;
@@ -127,7 +131,7 @@
               boolean      an; 
               byte         color; 
 
-              int  gotoxy ( word x, word y, int disp = 1 );     // result: 0: map wurde nicht neu angezeigt     1: map wurde neu angezeigt
+              int  gotoxy (int x, int y, int disp = 1 );     // result: 0: map wurde nicht neu angezeigt     1: map wurde neu angezeigt
               void show ( void );
               void hide ( void );
               void setcolor ( byte col );

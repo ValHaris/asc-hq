@@ -1,3 +1,7 @@
+//     $Id: loadjpg.cpp,v 1.2 1999-11-16 03:42:00 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -19,10 +23,13 @@
 */
 
 
- #include <conio.h>
- #include <string.h>
+#ifdef _DOS_
+#include <conio.h>
+#endif
+#include "config.h"
+#include <string.h>
 
- #include "vesa.h"
+#include "vesa.h"
 
 
 /*
@@ -50,7 +57,11 @@
  * You may also wish to include "jerror.h".
  */
 
+#ifdef _DOS_
 #include "libs\jpeg\jpeglib.h"
+#else
+#include "libs/jpeg/jpeglib.h"
+#endif
 
 /*
  * <setjmp.h> is used for the optional error recovery mechanism shown in
@@ -462,4 +473,5 @@ int getbestpictname ( char* filename , char* c, char* e )
 
    return n;   
 }
+
 

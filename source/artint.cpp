@@ -1,3 +1,7 @@
+//     $Id: artint.cpp,v 1.2 1999-11-16 03:41:00 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -21,11 +25,15 @@
 
 
 #include <stdio.h>
+
+#ifdef _DOS_
 #include <i86.h>
-#include <string.h>
-#include <stdlib.h>
 #include <conio.h>
 #include <dos.h>
+#endif
+
+#include <string.h>
+#include <stdlib.h>
 #include <malloc.h>
 // #include <vector>
 
@@ -163,10 +171,10 @@ void         beep2(void)
   integer      i; 
 
    for (i = 1; i <= 10; i++) { 
-      sound(500 + i * 200); 
+     //      sound(500 + i * 200); 
       ndelay(1); 
    } 
-   nosound(); 
+   //   nosound(); 
 } 
 
 
@@ -175,10 +183,10 @@ void         beep3(void)
   integer      i; 
 
    for (i = 10; i >= 0; i--) { 
-      sound(500 + i * 200); 
+     //      sound(500 + i * 200); 
       ndelay(1); 
    } 
-   nosound(); 
+   //   nosound(); 
 } 
 
 
@@ -423,12 +431,13 @@ int      tsearchsurroundingunits :: unitposition(pvehicle     eht,
 { 
   int      l, m, n, o; 
   double       ex1, ex2, ex3, ex4, ex5; 
-               
+  int b;
+
    char sh = 1 << height; 
    l = -units->enemythreats[height]; 
 
    o = 0; 
-   for ( int b = 0; b <= 7; b++) { 
+   for (b = 0; b <= 7; b++) { 
       if (units->alliedthreatpos[b] == 0) 
          units->alliedthreatpos[b] = 1; 
       n = units->enemythreats[b] * units->alliedthreatpos[b]; 
@@ -455,7 +464,7 @@ int      tsearchsurroundingunits :: unitposition(pvehicle     eht,
       if (ex1 > maxint ) 
          l = maxint ; 
       else 
-         l = ex1; 
+         l = (int)ex1; 
    } 
    else 
       if (l > 0) 
@@ -684,7 +693,7 @@ void         generatethreatvaluebuilding(pbuilding    bld)
 { 
   byte         b; 
 
-   bld->threatvalue = (bld->plus.energy / 10) + (bld->plus.fuel / 10) + (bld->plus.material / 10) + (bld->actstorage.energy / 20) + (bld->actstorage.fuel / 20) + (bld->actstorage.material / 20) + (bld->maxresearchpoints / 10); 
+   bld->threatvalue = (bld->plus.a.energy / 10) + (bld->plus.a.fuel / 10) + (bld->plus.a.material / 10) + (bld->actstorage.a.energy / 20) + (bld->actstorage.a.fuel / 20) + (bld->actstorage.a.material / 20) + (bld->maxresearchpoints / 10); 
    for (b = 0; b <= 31; b++) 
       if ( bld->loading[b] )
          bld->threatvalue += bld->loading[b]->completethreatvalue; 
@@ -705,8 +714,9 @@ void         generatethreatvaluebuilding(pbuilding    bld)
 
 void         generatethreatvalues(void)
 { 
+  int v;
 
-   for ( int v = 0; v <= 8; v++) 
+   for (v = 0; v <= 8; v++) 
       if (actmap->player[v].existent) { 
          pvehicle eht = actmap->player[v].firstvehicle; 
          while ( eht ) { 
@@ -1109,7 +1119,8 @@ void         tcmpcheckreconquerbuilding :: returnresult( int*       a )
 
 void         checkconquerbuilding(pvehicle     eht)
 { 
-   for ( int i = 0; i <= 8; i++)
+  int i;
+   for (i = 0; i <= 8; i++)
       if ( actmap->player[i].existent )
          if (getdiplomaticstatus(i * 8) != capeace) { 
             pbuilding bld = actmap->player[i].firstbuilding; 
@@ -1157,7 +1168,7 @@ void         checkconquerbuilding(pvehicle     eht)
                            if (j == 0) { 
                               moveparams.movestatus = 2; 
                               cursor.gotoxy(bld->xpos,bld->ypos); 
-                              getfield(bld->xpos,bld->ypos)->temp = 1; 
+                              getfield(bld->xpos,bld->ypos)->a.temp = 1; 
                               movement(moveparams.vehicletomove); 
                               eht->cmpchecked = 255; 
                            } 
@@ -2321,7 +2332,7 @@ void         tcmprefuelunit :: testfield(void)
 
    inherited :: testfield();
    pfield fld = getfield(xp,yp);
-   if (fld->temp == 2) { 
+   if (fld->a.temp == 2) { 
       if (mode == 1) { 
          actvehicle->repairunit( fld->vehicle ); 
       } 
@@ -2336,6 +2347,7 @@ void         checkorders(pvehicle     eht)
 { 
   prequireunit ru; 
   int          x1, y1;
+  int i;
   struct  { 
                               prequireunit order; 
                               int          prir;
@@ -2352,13 +2364,13 @@ void         checkorders(pvehicle     eht)
       b |= ccn_repair;
 
    if (eht->typ->weapons->count > 0) 
-      for ( int i = 0; i < eht->typ->weapons->count ; i++)
+      for (i = 0; i < eht->typ->weapons->count ; i++)
          if (eht->munition[i] > 0) 
             if (eht->typ->weapons->count & cwammunitionb ) 
                b |= ccn_remunitionier;
    if (b > 0) { 
       memset(&bestorder, 0, sizeof(bestorder));
-      for ( int i = 0; i < 4; i++) {
+      for (i = 0; i < 4; i++) {
          bestorder[i].prir = minint;
          bestorder[i].effprir = minint;
       } 
@@ -2482,7 +2494,7 @@ void         tsearchforanything :: exec(void)
                   getnextfielddir(x1,y1,f,c); 
                pfield fld = getfield(x1,y1);
                if ( fld )
-                  if (fld->temp > 0) 
+                  if (fld->a.temp > 0) 
                      g = 1; 
                d++;
             }  while ( (d < 8) && (g != 1) );
@@ -2574,10 +2586,12 @@ void         checkservice(pvehicle     eht)
 
 void         initcomputerturn(void)
 { 
+  int i;
+
    tempsvisible = false; 
    displaymessage2("generating threatvalues ... "); 
    generatethreatvalues(); 
-   for ( int i = 0; i < 8; i++)
+   for (i = 0; i < 8; i++)
       if (actmap->player[i].existent) { 
          pvehicle vehicle = actmap->player[i].firstvehicle;
          if (i == actmap->actplayer) { 

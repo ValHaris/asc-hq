@@ -1,3 +1,7 @@
+//     $Id: edmisc.h,v 1.2 1999-11-16 03:41:39 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -20,8 +24,11 @@
 
 #include <string.h>
 #include <stdlib.h>
+#ifdef _DOS_
 #include <conio.h>
 #include <dos.h>
+#endif
+
 #include <malloc.h>
 #include <ctype.h>
 
@@ -222,3 +229,4 @@ extern int rightmousebox(void);
 extern int leftmousebox(void);
 extern void movebuilding();
 
+

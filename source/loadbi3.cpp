@@ -1,3 +1,7 @@
+//     $Id: loadbi3.cpp,v 1.2 1999-11-16 03:41:54 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -132,7 +136,7 @@ void checkbi3dir ( void )
   battleisleversion = 3;
 }
 
-char bi2asc_color_translation_table[256];
+unsigned char bi2asc_color_translation_table[256];
 
 class initloadbi3 {
       public:
@@ -214,7 +218,7 @@ void loadbi3graphics( void )
                word* pw = (word*) pic;
                pw[0] = 23;
                pw[1] = 23;
-               char* pc = (char*) &pw[2];
+               unsigned char* pc = (unsigned char*) &pw[2];
                stream.readdata ( pc, LIBFiles[ lib ].DataSize );
                for ( int m = 0; m < LIBFiles[ lib ].DataSize; m++ ) {
                   if ( lib == 1 ) {
@@ -482,7 +486,7 @@ void loadbi3pict ( int num, void** pict )
    } 
 
    if ( (bi3graphmode[num] & 0xff ) == 1 ) {
-      void* buf = new char [ imagesize ( 100, 100, 99+fieldxsize/2, 99+fieldysize/2 )];
+      char* buf = new char [ imagesize ( 100, 100, 99+fieldxsize/2, 99+fieldysize/2 )];
    
       char* src = (char*) bi3graphics[num];
       char* dst = (char*) buf;
@@ -659,7 +663,7 @@ class tloadBImap {
               word Num;
        };
           
-       typedef word TVehContent[8];
+       typedef int TVehContent[8];
        typedef TVehContent *PVehContent;
           
           union TShopContent {
@@ -689,7 +693,7 @@ class tloadBImap {
                word Prior;
                word Owner;
                word Stuff66[7];  // { Zero }
-            };
+            } a;
             struct {
                 char Zero2[6];
                 word W0A;
@@ -698,7 +702,7 @@ class tloadBImap {
                 word W4A;
                 char Zero4[2];
                 word W4E;
-            };
+            } b;
             char raw[76];
          };
        };
@@ -1079,7 +1083,11 @@ void        tloadBImap ::   ReadACTNPart(void)
     } 
 } 
  
-
+struct blds {
+  pbuildingtype bld;
+  int pictnum;
+  int terrainmatch;
+} ;
    
 void       tloadBImap :: ReadSHOPPart( void )
 { 
@@ -1087,9 +1095,9 @@ void       tloadBImap :: ReadSHOPPart( void )
    TFileShop    FileShop; 
 //   PVehContent  PVC; 
  
-   int firstmissingbuilding = 1;
-
-   MissFile->seekstream ( Header.ShopPos ); 
+ int firstmissingbuilding = 1;
+ 
+  MissFile->seekstream ( Header.ShopPos ); 
    MissFile->readdata2 ( SHOPHead ); 
    if ( SHOPHead.ID != SHOPID ) {
       strcat ( missing, "\nFatal error: No Battle Isle mission; invalid ShopID\n"  );
@@ -1102,10 +1110,10 @@ void       tloadBImap :: ReadSHOPPart( void )
    for ( int I = 0; I < SHOPHead.Num ; I++ ) { 
       MissFile->readdata2 ( FileShop ); 
       if ( FileShop.ID == 1) {   //  wenn kein ki punkt  
-        if (FileShop.ShopType == 32) {   //  Vehicle  
+        if (FileShop.a.ShopType == 32) {   //  Vehicle  
            int IsVehCont = false; 
            for ( int J = 0; J < 8; J++ ) 
-              if ( FileShop.Content.Veh[J] != 0xFFFF ) 
+              if ( FileShop.a.Content.Veh[J] != 0xFFFF ) 
                  IsVehCont = true; 
            if ( IsVehCont ) {
               int Y = FileShop.Pos1 / 64;
@@ -1114,8 +1122,8 @@ void       tloadBImap :: ReadSHOPPart( void )
               int nm = 0;
               if ( fld->vehicle ) 
                  for ( int j = 0; j < 8; j++ ) 
-                    if ( FileShop.Content.Veh[j] >= 0 ) {
-                       pvehicle eht = getunit ( FileShop.Content.Veh[j], fld->vehicle->color/8 );
+                    if ( FileShop.a.Content.Veh[j] >= 0 ) {
+                       pvehicle eht = getunit ( FileShop.a.Content.Veh[j], fld->vehicle->color/8 );
                        if ( eht ) {
                           eht->xpos = xoffset + X / 2;
                           eht->ypos = yoffset + Y * 2 + (X & 1);
@@ -1133,12 +1141,6 @@ void       tloadBImap :: ReadSHOPPart( void )
            int newy = Y * 2 + (X & 1);
             
            pfield fld = getfield ( newx, newy );
-
-           struct blds {
-              pbuildingtype bld;
-              int pictnum;
-              int terrainmatch;
-           } ;
 
            dynamic_array<blds> bldlist;
            int bldlistnum = 0;
@@ -1240,20 +1242,20 @@ void       tloadBImap :: ReadSHOPPart( void )
               /*
               else
                  ArrShop.NameStr = GetStr(FileShop.Name, 16);    /*  bi2 wahrscheinlich so  */ 
-              int newcol = convcol ( FileShop.Owner );
+              int newcol = convcol ( FileShop.a.Owner );
               if ( newcol != fld->building->color/8 )
                  fld->building->convert ( newcol );
 
               int unitnum = 0;
               for ( int j = 0; j < 16; j++ ) {
-                 pvehicle eht = getunit ( FileShop.Content.All[j], fld->building->color/8 );
+                 pvehicle eht = getunit ( FileShop.a.Content.All[j], fld->building->color/8 );
                  if ( eht )
                     fld->building->loading[unitnum++] = eht;
               }
 
               int prodnum = 0;
               for ( int k= 0; k < 4; k++ ) {
-                 pvehicletype vt = getvehicletype ( FileShop.Produce[k] );
+                 pvehicletype vt = getvehicletype ( FileShop.a.Produce[k] );
                  if ( vt ) {
                     int fnd = 0;
                     for ( int l = 0; l < prodnum; l++ )
@@ -1279,13 +1281,13 @@ void       tloadBImap :: ReadSHOPPart( void )
                                  fld->building->production [ prodnum++ ] = vt;
                     }
                  }
-              fld->building->bi_resourceplus.a.energy = energyfactor * FileShop.EP;
-              fld->building->bi_resourceplus.a.material = materialfactor * FileShop.MP;
-              fld->building->bi_resourceplus.a.fuel = fuelfactor * FileShop.EP;
+              fld->building->bi_resourceplus.a.energy = energyfactor * FileShop.a.EP;
+              fld->building->bi_resourceplus.a.material = materialfactor * FileShop.a.MP;
+              fld->building->bi_resourceplus.a.fuel = fuelfactor * FileShop.a.EP;
 
-              fld->building->actstorage.a.energy = energyfactor * FileShop.E;
-              fld->building->actstorage.a.material = materialfactor * FileShop.M;
-              fld->building->actstorage.a.fuel = fuelfactor * FileShop.E;
+              fld->building->actstorage.a.energy = energyfactor * FileShop.a.E;
+              fld->building->actstorage.a.material = materialfactor * FileShop.a.M;
+              fld->building->actstorage.a.fuel = fuelfactor * FileShop.a.E;
 
            } else {
               if ( found == 254 ) {
@@ -1565,3 +1567,4 @@ void insertbattleislemap ( int x, int y, char* path, char* filename  )
 
 
 #endif
+

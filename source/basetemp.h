@@ -1,3 +1,7 @@
+//     $Id: basetemp.h,v 1.2 1999-11-16 03:41:09 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -140,7 +144,7 @@ template<class T> int dynamic_array<T> :: getlength( void )
 template<class T> void dynamic_initialized_array<T> :: resize ( int newsize )
 {
    int oldsize = size;
-   dynamic_array :: resize ( newsize );
+   dynamic_array<int> :: resize ( newsize );
    for ( int i = oldsize; i < newsize; i++ )
       buf[i] = initval;
 }
@@ -155,6 +159,3 @@ template<class T> dynamic_initialized_array<T> :: dynamic_initialized_array ( T 
 {
    initval = ival;
 }
-
-
-

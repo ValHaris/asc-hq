@@ -1,3 +1,7 @@
+//     $Id: pd.h,v 1.2 1999-11-16 03:42:22 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -74,7 +78,7 @@
          virtual void setshortkeys(void);
          virtual void lines(int x1,int y1,int x2,int y2);
          virtual void nolines(int x1,int y1,int x2,int y2);
-         virtual void tpulldown::getleftrighttext(char *qtext,char **ltext,char **rtext);
+         virtual void tpulldown::getleftrighttext(char *qtext, char **ltext, char **rtext);
          virtual int getpdfieldheight(byte pdfieldnr,byte pos);
          virtual void done(void);
          void addbutton ( char* name, int id );

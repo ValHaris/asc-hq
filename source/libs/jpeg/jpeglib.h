@@ -1,4 +1,4 @@
-#include "..\..\basestrm.h"
+#include "basestrm.h"
 
 
 /*

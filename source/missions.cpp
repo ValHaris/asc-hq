@@ -1,3 +1,7 @@
+//     $Id: missions.cpp,v 1.2 1999-11-16 03:42:08 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*                          
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -56,8 +60,9 @@ const  byte    translatetriggerstatus[4]  = {0, 1, 1, 0};
 
 void         getnexteventtime(void)
 { 
+  int b;
 
-  for ( int b = 0; b < 8; b++ )
+  for (b = 0; b < 8; b++ )
     nexttimedevent[b].abstime = maxint; 
 
    pevent ev = actmap->firsteventtocome; 
@@ -1075,6 +1080,3 @@ int unit_in_polygon ( peventtrigger_polygonentered trigger )
    }
    return found;
 }
-
-
-

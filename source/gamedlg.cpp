@@ -1,3 +1,7 @@
+//     $Id: gamedlg.cpp,v 1.2 1999-11-16 03:41:44 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -18,12 +22,27 @@
     Boston, MA  02111-1307  USA
 */
 
+#include "config.h"
 #include <stdio.h>                        
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+
+#ifdef _DOS_
 #include <dos.h>
 #include <conio.h>
+#endif
+
+#if TIME_WITH_SYS_TIME
+# include <sys/time.h>
+# include <time.h>
+#else
+# if HAVE_SYS_TIME_H
+#  include <sys/time.h>
+# else
+#  include <time.h>
+# endif
+#endif
 
 #include "gamedlg.h"
 #include "missions.h"
@@ -36,7 +55,28 @@
 #include "loadpcx.h"
 #include "loadjpg.h"
 
+#ifndef HAVE_STRICMP
+#define stricmp strcasecmp
+#define strnicmp strncasecmp
 
+char *strupr (const char *a)
+{
+  int i;
+  int j;
+  char *b;
+
+  j = strlen (a);
+  b = (char *) malloc (j);
+  for (i = 0; i < j; i++)
+    b[i] = toupper (a[i]);
+  return (b);
+}
+
+#endif
+
+#ifndef HAVE_ITOA
+#define itoa(a, b, c) sprintf(b, "%##c##d", a)
+#endif
 
 class   tchoosetechnology : public tdialogbox {
                            dynamic_array<ptechnology> techs;
@@ -79,10 +119,12 @@ void         tchoosetechnology::init(void)
 
 void         tchoosetechnology::check(void)
 {
+  int i;
+
    technum = 0;
    presearch resrch = &actmap->player[actmap->actplayer].research;
 
-   for ( int i = 0; i < technologynum; i++) {
+   for (i = 0; i < technologynum; i++) {
        ptechnology tech = gettechnology_forpos( i );
        if ( tech ) { 
           int k = 0; 
@@ -356,6 +398,8 @@ void tchoosetransfermethod :: buttonpressed ( char id )
 
 void tchoosetransfermethod :: viewdata ( void )
 {
+  int i;
+
    linedist = 25;
    linex1 = x1 + 20;
    linelength = xsize - 50;
@@ -367,7 +411,7 @@ void tchoosetransfermethod :: viewdata ( void )
    activefontsettings.justify = lefttext;
    activefontsettings.background = dblue;
    pbasenetworkconnection nc = firstnetworkconnection;
-   for ( int i=0; i < mfirst; i++ )
+   for (i=0; i < mfirst; i++ )
       nc = nc->next;
 
    i = 0;
@@ -772,19 +816,9 @@ int  setupnetwork ( tnetwork* nw, int edt, int player )
 
 }
 
-
-
-
-
 /*********************************************************************************************************/
 /*   Neuen Level starten                                                                               ÿ */
 /*********************************************************************************************************/
-
-
-
-
-
-
 
 void         tchoosenewcampaign::evaluatemapinfo( char* srname )             
 { 
@@ -829,12 +863,6 @@ void         tchoosenewsinglelevel::evaluatemapinfo( char* srname )
 
 } 
 
-
-
-
-
-
-
 void         tnewcampaignlevel::init(void)
 { 
    tdialogbox::init();
@@ -847,10 +875,6 @@ void         tnewcampaignlevel::init(void)
    status = 0; 
    spfld = NULL; 
 } 
-
-
-
-
 
 void         tnewcampaignlevel::searchmapinfo(void)
 { 
@@ -1021,19 +1045,6 @@ void         tnewcampaignlevel::done (void)
 { 
    tdialogbox::done();
 } 
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void         tcontinuecampaign::setid(word         id)
 { 
@@ -1279,32 +1290,6 @@ void         tcontinuecampaign::run(void)
       exit( 0 );
 } 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void         tchoosenewmap::readmapinfo(void)
 { 
 
@@ -1365,8 +1350,6 @@ void         tchoosenewmap::readmapinfo(void)
 
 } 
  
-
-
 void         tchoosenewmap::buttonpressed( char id )
 { 
   char         t[100];
@@ -1469,16 +1452,6 @@ void         tchoosenewsinglelevel::checkforcampaign( void )
 
 } 
 
-
-
-
-
-
-
-
-
-
-
 void         tchoosenewcampaign::checkforcampaign( void )
 { 
    if ( spfld->campaign == NULL ) {
@@ -1500,10 +1473,6 @@ void         tchoosenewcampaign::checkforcampaign( void )
 
 }            
        
-
-
-
-
 void         tchoosenewcampaign::run(void)
 { 
 
@@ -1515,21 +1484,6 @@ void         tchoosenewcampaign::run(void)
       loadcampaignmap(); 
    } 
 } 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void         tchoosenewsinglelevel::run(void)
 { 
@@ -1620,12 +1574,6 @@ void         tchoosenewcampaign::init(void)
    tchoosenewmap::init("new campaign");
 } 
 
-
-
-
-
-
-
      class ttributepayments : public tdialogbox {
                        tresourcetribute trib;
                        int oldplayer;
@@ -1646,6 +1594,8 @@ void         tchoosenewcampaign::init(void)
 
 void  ttributepayments :: init ( void )
 {
+  int i;
+
    tdialogbox::init();
    oldplayer = -1;
    player = 0;
@@ -1672,7 +1622,7 @@ void  ttributepayments :: init ( void )
 
    buildgraphics();
 
-   for (int i = 0; i < 3; i++) 
+   for (i = 0; i < 3; i++) 
       addbutton ( NULL, 250, wind1y + 15 + i * 40, 350, wind1y + 32 + i * 40, 2, 1, 3 + i, true );
 
    int pos = 0;
@@ -1834,17 +1784,6 @@ void settributepayments ( void )
    tpm.done();
 }
 
-
-
-
-
-
-
-
-
-
-
-
 void  tshownewtanks :: init ( boolean*      buf2 ) 
 {
    tdialogbox::init();
@@ -1898,23 +1837,6 @@ void  tshownewtanks :: buttonpressed ( char id )
    if (id == 1)
       status = 1;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class tresearchinfo: public tdialogbox {
                     protected:
@@ -2315,11 +2237,6 @@ void choosetechlevel ( void )
 
 #define blocksize 256
 
-
-
-
-
-
 typedef class tparagraph* pparagraph;
 class  tparagraph {
         public:
@@ -2376,10 +2293,12 @@ class  tparagraph {
           pparagraph prev;
       };
 
+/*
 static int tparagraph :: winy1;
 static int tparagraph :: winy2;
 static int tparagraph :: winx1;
 static int tparagraph :: maxlinenum;
+*/
 
 tparagraph :: tparagraph ( void )
 {
@@ -3240,15 +3159,6 @@ void editmessage ( pmessage msg )
   nm.done();
 }
 
-
-
-
-
-
-
-
-
-
 class tviewmessages : public tdialogbox {
                pmessagelist start;
                pmessagelist *message;
@@ -3375,11 +3285,21 @@ void tviewmessages :: paintmessages ( void )
     
           activefontsettings.length = 190;
     
-          tm tmbuf;
+          tm *tmbuf;
           char buf[26];
-          _localtime( &message[a]->message->time, &tmbuf ); 
+#ifdef _DOS_
+          localtime( &message[a]->message->time, tmbuf ); 
+#else
+	  tmbuf = localtime (&message[a]->message->time);
+#endif
+
           int y = y1 + starty + 10 + ( a - firstdisplayed ) * 20 ;
-          showtext2 (  _asctime( &tmbuf, buf ) , x1 + 20, y ); 
+
+#ifdef _DOS_
+          showtext2 (  asctime( tmbuf, buf ) , x1 + 20, y ); 
+#else
+	  showtext2 (asctime (tmbuf), x1 + 20, y);
+#endif
     
           activefontsettings.length = 100;
           if ( mode ) {
@@ -3599,6 +3519,8 @@ void         tviewmessage::repaintscrollbar( void )
 
 void         tviewmessage::redraw(void)
 { 
+  int i;
+
    tdialogbox::redraw();
    rahmen(true,x1 + 10,y1 + textstart - 2,x1 + xsize - rightspace,y1 + textstart + textsizey + 2); 
 
@@ -3629,7 +3551,7 @@ void         tviewmessage::redraw(void)
       showtext2 ( "to: ", x1 + 13, y1 + textstart - yp ); 
 
    int n = 0;
-   for ( int i = 0; i < 8; i++ )
+   for (i = 0; i < 8; i++ )
       if ( actmap->player[i].existent  && i != actmap->actplayer )
          if ( cc & ( 1 << i ))
             n++;
@@ -3691,12 +3613,6 @@ void viewmessage ( pmessage message )
    vm.done();
 }
 
-
-
-
-
-
-
 void viewjournal ( void )
 {
    if ( actmap->journal ) {
@@ -3706,10 +3622,6 @@ void viewjournal ( void )
       vat.done();
    }
 }
-
-
-
-
 
 class teditjournal : public tmessagedlg  {
             public:
@@ -3819,9 +3731,6 @@ void editjournal ( void )
       ej.done ();
 }
 
-
-
-
 tonlinemousehelp :: tonlinemousehelp ( void )
 {
    active = 1;
@@ -3851,12 +3760,13 @@ void tonlinemousehelp :: mouseaction ( void )
 
 void tonlinemousehelp :: displayhelp ( int messagenum )
 {
+  int i;
    if ( active == 1 ) {
       char* str = getmessage ( messagenum );
       if ( str ) {
 
          char strarr[maxonlinehelplinenum][100];
-         for ( int i = 0; i < maxonlinehelplinenum; i++ )
+         for (i = 0; i < maxonlinehelplinenum; i++ )
             strarr[i][0] = 0;
    
          i = 0;
@@ -4972,7 +4882,7 @@ tmountpicture::pb tmultiplayersettings :: tmountbuildingpictures :: add_item ( v
 
 void tmultiplayersettings :: tmountbuildingpictures :: putpict ( pb n, int y  )
 {
-   void* pbuf;
+   char* pbuf;
    {
       tvirtualdisplay vfb ( 8 * fieldsizex, 8 * fieldsizey, 255 );
    
@@ -5278,12 +5188,6 @@ void tmultiplayersettings :: tmountobjectcontainerpictures :: additem ( pobjectt
 {
    additem2 ( a );
 }
-
-
-
-
-
-
 
 void tmultiplayersettings :: taddcrcs :: save ( pcrcblock c )
 {
@@ -6370,4 +6274,5 @@ void giveunitaway ( void )
       while ( mouseparams.taste );
    }
 }
+
 

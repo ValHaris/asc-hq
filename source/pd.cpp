@@ -1,3 +1,7 @@
+//     $Id: pd.cpp,v 1.2 1999-11-16 03:42:21 tmwilson Exp $
+//
+//     $Log: not supported by cvs2svn $
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -198,7 +202,7 @@ void tpulldown::run(void)
       action2execute = pdb.field [ pdfieldnr] .button [ buttonnr].actionid;
 }
 
-void tpulldown::getleftrighttext(char *qtext,char **ltext,char **rtext)
+void tpulldown::getleftrighttext(char *qtext, char **ltext,char **rtext)
 {  
    if (ltext != NULL) 
       asc_free (ltext);
@@ -410,10 +414,12 @@ void tpulldown::showbutton(void)
 
 void tpulldown::setshortkeys(void)
 { 
+  int j;
+
    for (int i = 0; i < pdb.count; i++)
       { 
          pdb.field[i].shortkey = 0;
-         for (int j = 0; j < strlen(pdb.field[i].name); j++)
+         for (j = 0; j < strlen(pdb.field[i].name); j++)
             if (pdb.field[i].name[j] == '~') {
                pdb.field[i].shortkey = char2key( toupper ( pdb.field[i].name[j+1] ) );
                j = strlen(pdb.field[i].name); 
