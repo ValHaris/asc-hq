@@ -401,20 +401,20 @@ int main(int argc, char *argv[] )
 {
 
    if ( argc < 3 ) {
-      printf("usage: mount listfile containerfile\n");
+      printf("usage: mount datafile [...] containerfile\n");
       return 1;
    }
 
    addSearchPath(".");
 
-   FILE* fp = fopen ( argv[1], "rt" );
-
-   out = fopen ( argv[2], "wb" );
+   out = fopen ( argv[argc-1], filewritemode );
 
    int i = 0;
    pos += fwrite ( containermagic, 1, 4, out );
    pos += fwrite ( &i, 1, 4, out );
 
+   for ( int df = 1; df < argc-2; df++ ) {
+   /*
    char buf[1000];
    while ( fgets ( buf, 1000, fp )) {
       char* name = buf;
@@ -433,6 +433,9 @@ int main(int argc, char *argv[] )
       }
 
       if ( name[0] ) {
+   */
+         int compress = 1;
+
          DIR *dirp; 
          struct dirent *direntp; 
      
@@ -443,7 +446,7 @@ int main(int argc, char *argv[] )
              if ( direntp == NULL ) 
                 break; 
                 
-             if ( patimat ( name , direntp->d_name ) ) {
+             if ( patimat ( argv[df] , direntp->d_name ) ) {
                 int fnd = 0;
 
                 for ( int j = 0; j < num; j++ )
@@ -462,7 +465,7 @@ int main(int argc, char *argv[] )
            } 
            closedir( dirp ); 
          } 
-      }
+
    } /* endwhile */
 
    printf ( "ftell: %d ; pos : %d ; num : %d \n ", int( ftell ( out )), pos, num );

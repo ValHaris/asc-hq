@@ -86,6 +86,8 @@ dnl shell vars set by test&feature flag for libbz2
 AC_SUBST([LIBBZ2])
 AC_SUBST([LDADDLIBBZ2])
 
-AC_OUTPUT(Makefile source/Makefile source/docs/Makefile source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile source/libs/Makefile source/ai/Makefile )
-
+AC_OUTPUT(Makefile source/Makefile source/docs/Makefile \
+source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile \
+source/libs/Makefile source/ai/Makefile source/mapedit/Makefile \
+source/tools/Makefile source/tools/linux/Makefile)
 

@@ -66,9 +66,9 @@ install_location=
 type=DATA
 [Workspace_1]
 browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/about/intro.html
-cpp_file=/home/martin/asc/source/loadpcxc.cpp
-header_file=/home/martin/asc/source/buildings.h
-openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/loaders.cpp,/home/martin/asc/source/loadbi3.cpp,/home/martin/asc/source/edmain.cpp,/home/martin/asc/source/ai/base.cpp,/home/martin/asc/source/containerbase.h,/home/martin/asc/source/vehicle.h,/home/martin/asc/source/vehicle.cpp,/home/martin/asc/source/newfont.h,/home/martin/asc/source/building.h,/home/martin/asc/source/weather.h,/home/martin/asc/source/basegfx.h,/home/martin/asc/source/palette.h,/home/martin/asc/source/networkdata.h,/home/martin/asc/source/basestrm.h,/home/martin/asc/source/spfst.h,/home/martin/asc/source/basestrm.cpp,/home/martin/asc/source/misc.h,/home/martin/asc/source/typen.h,/home/martin/asc/source/loadpcxc.cpp,/home/martin/asc/source/buildings.h
+cpp_file=/home/martin/asc/source/sg.cpp
+header_file=/home/martin/asc/source/strtmesg.h
+openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/tools/mount.cpp,/home/martin/asc/source/dos/global_os.h,/home/martin/asc/source/dos/fileio.h,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/strtmesg.h,/home/martin/asc/source/strtmesg.cpp
 show_outputview=true
 show_treeview=true
 [asc.kdevprj]
