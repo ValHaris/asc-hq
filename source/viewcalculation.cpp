@@ -118,6 +118,9 @@ void         tcomputevehicleview::init( const pvehicle eht, int _mode  )   // mo
 {
    player = eht->color / 8;
 
+   if ( player >= 8 )
+      fatalError ( "ComputeVehicleView::init - invalid player ");
+
    if ( eht->height == chsatellit )
       satellitenview = 1;
    else
@@ -141,6 +144,9 @@ void         tcomputevehicleview::init( const pvehicle eht, int _mode  )   // mo
 void         tcomputebuildingview::init( const pbuilding    bld,  int _mode )
 {
    player = bld->color / 8;
+
+   if ( player >= 8 )
+      fatalError ( "ComputeBuildingView::init - invalid player ");
 
    int  c, j ;
 

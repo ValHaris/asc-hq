@@ -360,9 +360,11 @@ void Building :: addview ( void )
 
 void Building :: removeview ( void )
 {
-   tcomputebuildingview bes ( gamemap );
-   bes.init( this, -1 );
-   bes.startsearch();
+   if ( color != 64 ) {
+      tcomputebuildingview bes ( gamemap );
+      bes.init( this, -1 );
+      bes.startsearch();
+   }
 }
 
 

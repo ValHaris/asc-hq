@@ -404,10 +404,12 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
    pc.addInteger ( "AttackBonus",  attackbonus );
    pc.addInteger ( "BasicJamming", basicjamming );
    pc.addDFloatArray ( "MoveMalus", move_malus );
-   int mm = move_malus.size();
-   move_malus.resize( cmovemalitypenum );
-   for ( int i = mm; i < cmovemalitypenum; i++ )
-      move_malus[i] = move_malus[0];
+   while ( move_malus.size() < cmovemalitypenum ) 
+     if ( move_malus.size() == 0 )
+        move_malus.push_back ( minmalq );
+     else
+        move_malus.push_back ( move_malus[0] );
+
 
    pc.addTagArray ( "TerrainProperties", art, cbodenartennum, bodenarten );
 }
