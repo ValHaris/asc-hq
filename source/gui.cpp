@@ -1,6 +1,9 @@
-//     $Id: gui.cpp,v 1.34 2000-08-12 15:01:41 mbickel Exp $
+//     $Id: gui.cpp,v 1.35 2000-08-29 17:42:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2000/08/12 15:01:41  mbickel
+//      Restored old versions of GUI ; new ones were broken
+//
 //     Revision 1.32  2000/08/09 12:39:27  mbickel
 //      fixed invalid height when constructing vehicle with other vehicles
 //      fixed wrong descent icon being shown
@@ -203,7 +206,7 @@ tselectbuildingguihost    selectbuildinggui;
 tselectobjectcontainerguihost      selectobjectcontainergui;
 tselectvehiclecontainerguihost     selectvehiclecontainergui;
 tselectweaponguihost      selectweaponguihost;
-tguihost*        actgui = &gui;
+BasicGuiHost*        actgui = &gui;
 
 
 int guixpos;
@@ -221,11 +224,12 @@ void setguiposy ( int y )
 }
 
 
-#ifndef _NoStaticClassMembers_
-StaticClassVariable void*    tguihost::background[30][30];
-#endif
+StaticClassVariable void*    BasicGuiHost::background[30][30];
+StaticClassVariable int      BasicGuiHost::numpainted;
 
-tguihost::tguihost ( void )
+
+template<class T>              
+GuiHost<T>::GuiHost ( void )
 {
    columncount = 3;
    iconspaintable = 12;
@@ -238,17 +242,18 @@ tguihost::tguihost ( void )
    smalliconpos.buf = NULL;
 }
 
-             
-void   tguihost::starticonload ( void )
+template<class T>              
+void   GuiHost<T>::starticonload ( void )
 {
    getfirsticon()->loaddata();
    getfirsticon()->sort ( NULL );
    chainiconstohost ( getfirsticon() );
 }
 
-
-void   tguihost::returncoordinates ( pnguiicon icon, int* x, int * y )
+template<class T> 
+void   GuiHost<T>::returncoordinates ( void* icn, int* x, int * y )
 {
+   T icon = (T) icn;
    int found = 0;
 
    icon->seticonsize ( paintsize );
@@ -296,14 +301,16 @@ void   tguihost::returncoordinates ( pnguiicon icon, int* x, int * y )
    }
 }
 
-void   tguihost::chainiconstohost ( pnguiicon icn )
+template<class T> 
+void   GuiHost<T>::chainiconstohost ( T icn )
 {
-   setfirsticon( icn->frst() );
+   setfirsticon( (T) icn->frst() );
    getfirsticon()->sethost ( this );
 }
 
 
-void   tguihost::savebackground ( void )
+template<class T> 
+void   GuiHost<T>::savebackground ( void )
 {
    int size = imagesize ( 0, 0, guiiconsizex, guiiconsizey );
    for (int j = 0; j < iconspaintable/columncount ; j++ ) 
@@ -315,17 +322,18 @@ void   tguihost::savebackground ( void )
 }
 
 
-void tguihost :: putbackground ( int xx , int yy )
+template<class T> 
+void GuiHost<T> :: putbackground ( int xx , int yy )
 {
      int x = guixpos + xx * ( guiiconsizex + guigapx );
      int y = guiypos + yy * ( guiiconsizey + guigapy );
      putimage ( x, y, background[ xx ][ yy ] );
 }
 
-int    tguihost::painticons ( void )
+template<class T> 
+int    GuiHost<T>::painticons ( void )
 {
    collategraphicoperations cgo ( guixpos, guiypos, guixpos + columncount*(guiiconsizex + guigapx), guiypos + iconspaintable/columncount*(guiiconsizey + guigapy) + guiiconsizey );
-   // int oldnumpainted = numpainted;
    numpainted = 0;
 
    firstpaint = 1;
@@ -347,7 +355,8 @@ int    tguihost::painticons ( void )
 }
 
 
-void   tguihost :: cleanup ( void )    // wird zum entfernen der kleinen guiicons aufgerufen, bevor das icon ausgefÅhrt wird
+template<class T> 
+void   GuiHost<T> :: cleanup ( void )    // wird zum entfernen der kleinen guiicons aufgerufen, bevor das icon ausgefÅhrt wird
 {
    if ( smalliconpos.buf ) {
       setinvisiblemouserectanglestk ( smalliconpos.x, smalliconpos.y, smalliconpos.x + smalliconpos.xsize, smalliconpos.y + guismalliconsizey );
@@ -362,7 +371,8 @@ void   tguihost :: cleanup ( void )    // wird zum entfernen der kleinen guiicon
 }
 
 
-void   tguihost::paintsmallicons ( int taste, int up )
+template<class T> 
+void   GuiHost<T>::paintsmallicons ( int taste, int up )
 {
    int num;
    {
@@ -477,12 +487,11 @@ void   tguihost::paintsmallicons ( int taste, int up )
 
    infotextshown = NULL;
    
-
 }
 
 
-
-void   tguihost::checkformouse ( void )
+template<class T> 
+void   GuiHost<T>::checkformouse ( void )
 {
    int msg;
    int found = 0;
@@ -512,7 +521,8 @@ void   tguihost::checkformouse ( void )
 }
 
 
-void   tguihost :: runpressedmouse ( int taste  )
+template<class T> 
+void   GuiHost<T> :: runpressedmouse ( int taste  )
 {
    
    mousevisible ( false );
@@ -570,8 +580,8 @@ void   tguihost :: runpressedmouse ( int taste  )
 
 
 
-
-void   tguihost::checkforkey ( tkey key )
+template<class T> 
+void   GuiHost<T>::checkforkey ( tkey key )
 {
    if ( key == ct_enter ) {
       if ( actshownicons[0][0] )
@@ -583,12 +593,8 @@ void   tguihost::checkforkey ( tkey key )
 
 
 
-
-
-
-
-
-void   tguihost::bi2control (  )
+template<class T> 
+void   GuiHost<T>::bi2control (  )
 {
 
       int xp = 0;
@@ -707,23 +713,15 @@ void   tguihost::bi2control (  )
 
 
 
-
-
-
-
-
-
-
-void   tguihost::init ( int resolutionx, int resolutiony )
+template<class T> 
+void   GuiHost<T>::init ( int resolutionx, int resolutiony )
 {
    guixpos = resolutionx - guixdif;
    iconspaintable =  (resolutiony - 360) / ( guiiconsizey + guigapy ) * columncount;
 }
 
-int    tguihost::numpainted;
-
-
-void   tguihost::restorebackground ( void )
+template<class T> 
+void   GuiHost<T>::restorebackground ( void )
 {
    setinvisiblemouserectanglestk ( guixpos, guiypos, guixpos + columncount*(guiiconsizex + guigapx) + guiiconsizex, guiypos + iconspaintable/columncount*(guiiconsizey + guigapy) + guiiconsizey );
    collategraphicoperations cgo ( guixpos, guiypos, guixpos + columncount*(guiiconsizex + guigapx) + guiiconsizex, guiypos + iconspaintable/columncount*(guiiconsizey + guigapy) + guiiconsizey );
@@ -736,40 +734,44 @@ void   tguihost::restorebackground ( void )
 }
 
 
+template<class T> 
+T GuiHost<T> :: getfirsticon( void )
+{
+   return first_icon;
+}
+
+
+template<class T> 
+void GuiHost<T> :: setfirsticon( T ic )
+{
+   first_icon = ic;
+}
+
+template<class T> 
+void GuiHost<T>::reset ( void )
+{
+   restorebackground();
+   numpainted = 0;
+   infotextshown = NULL;
+   for (int i = 0; i < iconspaintable ; i++ ) 
+      actshownicons[i/columncount][i%columncount] = NULL;
+}
 
 
 
 void   tguihoststandard     :: init ( int resolutionx, int resolutiony )
 {
    chainiconstohost ( &icons.movement );
-   tguihost::init ( resolutionx, resolutiony );
+   GuiHost::init ( resolutionx, resolutiony );
 }
 
 
 void   tguihoststandard :: bi2control (  )
 {
    icons.cancel.display();
-   tguihost::bi2control (  );
+   GuiHost::bi2control (  );
 }
 
-
-
-
-
-pnguiicon tguihost :: getfirsticon( void )
-{
-   return first_icon;
-}
-
-void      tguihost :: setfirsticon( pnguiicon ic )
-{
-   first_icon = ic;
-}
-
-
-#ifndef _NoStaticClassMembers_
-StaticClassVariable pnguiicon  tnguiicon::first = NULL;
-#endif
 
 
 tnguiicon::tnguiicon ( void )
@@ -779,15 +781,12 @@ tnguiicon::tnguiicon ( void )
       picturepressed[i] = NULL;
    } 
 
-   infotext    = NULL;
-   filename[0] = '\0';;
    host = NULL;
    priority = 0;
-   next = first;
-   first = this;
    x = -1;
    lasticonsize = -1;
 }
+
 
 void      tnguiicon::setnxt   ( pnguiicon ts )
 {
@@ -799,6 +798,7 @@ pnguiicon   tnguiicon::nxt( void )
    return next;
 }
 
+/*
 pnguiicon   tnguiicon::frst( void )
 {
    return first;
@@ -808,7 +808,7 @@ void        tnguiicon::setfrst  ( pnguiicon ts )
 {
    first = ts;
 }
-
+*/
 
 void        tnguiicon ::  seticonsize  ( int size )
 {
@@ -867,12 +867,10 @@ void tnguiicon::sort( pnguiicon last )
 
 void   tnguiicon::loaddata ( void )
 {
-   char tempfilename[15];
-   strcpy ( tempfilename, filename );
-   strcat ( tempfilename, ".nic" );
+   std::string tempfilename = filename + ".nic";
    
    {
-     tnfilestream stream ( tempfilename ,1 );
+     tnfilestream stream ( tempfilename.c_str() ,1 );
      loadspecifics( &stream );
    }
 
@@ -886,7 +884,7 @@ void  tnguiicon::loadspecifics( pnstream stream )
    tnguiiconfiledata  rawdata;
    stream->readdata ( &rawdata, sizeof ( rawdata ));
    if ( rawdata.infotext )
-      stream->readpchar ( &infotext );
+      stream->readTextString ( infotext );
 
    priority = rawdata.priority;
    for (int i = 0; i < 8; i++) {
@@ -903,9 +901,9 @@ void  tnguiicon::loadspecifics( pnstream stream )
 }
 
 
-char* tnguiicon::getinfotext  ( void )
+const char* tnguiicon::getinfotext  ( void )
 {
-   return infotext;
+   return infotext.c_str();
 }
 
 void  tnguiicon::iconpressed ( void )
@@ -1012,7 +1010,7 @@ void   tnguiicon::paintifavail ( void )
 }
 
 
-void   tnguiicon::sethost ( pguihost hst )
+void   tnguiicon::sethost ( BasicGuiHost* hst )
 {
    host = hst;
    if ( nxt () )
@@ -1038,19 +1036,11 @@ StaticClassVariable pnsguiicon tnsguiicon ::first = NULL;
 
 tnsguiicon::tnsguiicon ( void )
 {
-   next = first;
+   setnxt ( first );
    first = this;
 }
 
 
-pnguiicon   tnsguiicon::nxt( void )
-{
-   return next;
-}
-void      tnsguiicon::setnxt   ( pnguiicon ts )
-{
-   next = (pnsguiicon) ts ;
-}
 
 pnguiicon   tnsguiicon::frst( void )
 {
@@ -1102,8 +1092,6 @@ tnguiicon:: ~tnguiicon (  )
       if ( picturepressed[i] )
          delete[] picturepressed[i];
    } 
-   if ( infotext )
-      delete[] infotext;
 }
 
 
@@ -1115,9 +1103,9 @@ tnguiicon:: ~tnguiicon (  )
 tnsguiiconmove::tnsguiiconmove  ( void ) 
                :vehicleMovement ( NULL )
 {
-   strcpy ( filename, "movement" );
+   filename = "movement";
 }
-
+          
 
 int   tnsguiiconmove::available    ( void ) 
 {
@@ -1238,7 +1226,7 @@ void  tnsguiiconmove::display      ( void )
 tnsguiiconattack::tnsguiiconattack ( void )
                  :vehicleAttack ( NULL )
 {
-   strcpy ( filename, "attack" );
+   filename =  "attack" ;
 }
 
 
@@ -1296,7 +1284,7 @@ void  tnsguiiconattack::exec         ( void )
 tnsguiiconascent::tnsguiiconascent ( void )
                  :increaseVehicleHeight ( NULL )
 {
-   strcpy ( filename, "ascent" );
+   filename = "ascent";
 }
 
 int   tnsguiiconascent::available    ( void ) 
@@ -1404,7 +1392,7 @@ void  tnsguiiconascent::display      ( void )
 tnsguiicondescent::tnsguiicondescent ( void )
                  : decreaseVehicleHeight ( NULL )
 {
-   strcpy ( filename, "descent" );
+   filename = "descent";
 }
 
 
@@ -1510,7 +1498,7 @@ void  tnsguiicondescent::display      ( void )
 
 tnsguiiconinformation::tnsguiiconinformation ( void )
 {
-   strcpy ( filename, "informat" );
+   filename = "informat";
 }
 
 
@@ -1564,7 +1552,7 @@ void  tnsguiiconinformation::display      ( void )
 
 tnsguiiconendturn::tnsguiiconendturn ( void )
 {
-   strcpy ( filename, "endturn" );
+   filename = "endturn";
 }
 
 
@@ -1609,7 +1597,7 @@ void  tnsguiiconendturn::exec         ( void )
 
 tnsguiiconexternalloading::tnsguiiconexternalloading ( void )
 {
-   strcpy ( filename, "extload" );
+   filename = "extload";
 }
 
 int   tnsguiiconexternalloading::available    ( void ) 
@@ -1631,7 +1619,7 @@ void  tnsguiiconexternalloading::exec         ( void )
 
 tnsguiiconpoweron::tnsguiiconpoweron ( void )
 {
-   strcpy ( filename, "poweron" );
+   filename = "poweron";
 }
 
 int   tnsguiiconpoweron::available    ( void ) 
@@ -1656,7 +1644,7 @@ void  tnsguiiconpoweron::exec         ( void )
 
 tnsguiiconpoweroff::tnsguiiconpoweroff ( void )
 {
-   strcpy ( filename, "poweroff" );
+   filename = "poweroff" ;
 }
 
 int   tnsguiiconpoweroff::available    ( void ) 
@@ -1682,7 +1670,7 @@ void  tnsguiiconpoweroff::exec         ( void )
 
 tnsguiiconconstructvehicle::tnsguiiconconstructvehicle ( void )
 {
-   strcpy ( filename, "consttnk" );
+   filename = "consttnk" ;
 }
 
 
@@ -1723,7 +1711,7 @@ void  tnsguiiconconstructvehicle::exec         ( void )
 
 tnsguiiconputmine::tnsguiiconputmine ( void )
 {
-   strcpy ( filename, "putmine" );
+   filename = "putmine" ;
 }
 
 
@@ -1753,12 +1741,8 @@ void tnsguiiconputmine::loadspecifics ( pnstream stream )
    tnsguiicon::loadspecifics ( stream );
    itoa ( mineputmovedecrease, buf2, 10 );
    strcat ( buf2, "/10" );
-   sprintf( buf, infotext, buf2 );
-   
-   char* buf3 = new char[ strlen ( buf ) + 5 ];
-   strcpy ( buf3, buf );
-   delete[] infotext;
-   infotext = buf3;
+   sprintf( buf, infotext.c_str(), buf2 );
+   infotext = buf;
 }
 
 
@@ -1778,7 +1762,7 @@ int   tnsguiiconputgroundmine::available    ( void )
 
 tnsguiiconputantitankmine::tnsguiiconputantitankmine ( void )
 {
-   strcpy ( filename, "tankmine" );
+   filename = "tankmine" ;
 }
 
 void  tnsguiiconputantitankmine::exec         ( void ) 
@@ -1792,7 +1776,7 @@ void  tnsguiiconputantitankmine::exec         ( void )
 
 tnsguiiconputantipersonalmine::tnsguiiconputantipersonalmine ( void )
 {
-   strcpy ( filename, "persmine" );
+   filename = "persmine";
 }
 
 void  tnsguiiconputantipersonalmine::exec         ( void ) 
@@ -1818,7 +1802,7 @@ int   tnsguiiconputseamine::available    ( void )
 
 tnsguiiconputfloatingmine::tnsguiiconputfloatingmine ( void )
 {
-   strcpy ( filename, "floatmin" );
+   filename = "floatmin" ;
 }
 
 void  tnsguiiconputfloatingmine::exec         ( void ) 
@@ -1830,7 +1814,7 @@ void  tnsguiiconputfloatingmine::exec         ( void )
 
 tnsguiiconputmooredmine::tnsguiiconputmooredmine ( void )
 {
-   strcpy ( filename, "moormine" );
+   filename = "moormine" ;
 }
 
 void  tnsguiiconputmooredmine::exec         ( void ) 
@@ -1852,7 +1836,7 @@ void  tnsguiiconputmooredmine::exec         ( void )
 
 tnsguiiconremovemine::tnsguiiconremovemine ( void )
 {
-   strcpy ( filename, "remomine" );
+   filename = "remomine";
 }
 
 
@@ -1883,7 +1867,7 @@ void  tnsguiiconremovemine::exec         ( void )
 
 tnsguiiconbuildany::tnsguiiconbuildany ( void )
 {
-   strcpy ( filename, "buildany" );
+   filename = "buildany" ;
 }
 
 
@@ -1911,7 +1895,7 @@ void  tnsguiiconbuildany::exec         ( void )
 
 tnsguiiconrepair::tnsguiiconrepair ( void )
 {
-   strcpy ( filename, "repair" );
+   filename = "repair" ;
 }
 
 int   tnsguiiconrepair::available    ( void ) 
@@ -1949,15 +1933,11 @@ void tnsguiiconrepair::loadspecifics ( pnstream stream )
    tnsguiicon::loadspecifics ( stream );
    itoa ( movement_cost_for_repairing_unit, buf2, 10 );
    strcat ( buf2, "/10" );
-   sprintf( buf, infotext, buf2 );
-   
-   char* buf3 = new char[ strlen ( buf ) + 5 ];
-   strcpy ( buf3, buf );
-   delete[] infotext;
-   infotext = buf3;
+   sprintf( buf, infotext.c_str(), buf2 );
+   infotext = buf;
 }
 
-
+            
 
 
 
@@ -1966,7 +1946,7 @@ void tnsguiiconrepair::loadspecifics ( pnstream stream )
 
 tnsguiiconrefuel::tnsguiiconrefuel ( void )
 {
-   strcpy ( filename, "refuel" );
+   filename =  "refuel" ;
 }
 
 
@@ -2039,7 +2019,7 @@ void  tnsguiiconrefuel::display      ( void )
 
 tnsguiiconrefueldialog::tnsguiiconrefueldialog ( void )
 {
-   strcpy ( filename, "refueld" );
+   filename =  "refueld" ;
 }
 
 
@@ -2070,7 +2050,7 @@ void  tnsguiiconrefueldialog::exec         ( void )
 
 tnsguiiconputbuilding::tnsguiiconputbuilding ( void )
 {
-   strcpy ( filename, "building" );
+   filename = "building";
 }
 
 
@@ -2124,7 +2104,7 @@ void  tnsguiiconputbuilding::exec         ( void )
 
 tnsguiicondestructbuilding::tnsguiicondestructbuilding ( void )
 {
-   strcpy ( filename, "abriss" );
+   filename = "abriss";
 }
 
 
@@ -2167,7 +2147,7 @@ void  tnsguiicondestructbuilding::exec         ( void )
 
 tnsguiicondig::tnsguiicondig ( void )
 {
-   strcpy ( filename, "dig" );
+   filename =  "dig";
 }
 
 
@@ -2201,7 +2181,7 @@ void  tnsguiicondig::exec         ( void )
 
 tnsguiiconviewmap::tnsguiiconviewmap ( void )
 {
-   strcpy ( filename, "viewmap" );
+   filename = "viewmap";
 }
 
 
@@ -2225,7 +2205,7 @@ void  tnsguiiconviewmap::exec         ( void )
 
 tnsguiiconenablereactionfire::tnsguiiconenablereactionfire ( void )
 {
-   strcpy ( filename, "reacfire" );
+   filename = "reacfire";
 }
 
 int   tnsguiiconenablereactionfire::available    ( void ) 
@@ -2253,7 +2233,7 @@ void  tnsguiiconenablereactionfire::exec         ( void )
 
 tnsguiicondisablereactionfire::tnsguiicondisablereactionfire ( void )
 {
-   strcpy ( filename, "reacfoff" );
+   filename = "reacfoff";
 }
 
 int   tnsguiicondisablereactionfire::available    ( void ) 
@@ -2286,7 +2266,7 @@ int tnsguiiconcontainer :: containeractive;
 
 tnsguiiconcontainer ::tnsguiiconcontainer ( void )
 {
-   strcpy ( filename, "loading" );
+   filename = "loading" ;
    containeractive = 0;
 }
 
@@ -2329,7 +2309,7 @@ void tnsguiiconcontainer :: exec         ( void )
 
 tnsguiiconcancel::tnsguiiconcancel ( void )
 {
-   strcpy ( filename, "cancel" );
+   filename = "cancel";
    forcedeneable = 0;
 }
 
@@ -2370,7 +2350,7 @@ void  tnsguiiconcancel::exec         ( void )
 
 void    tselectobjectcontainerguihost :: init ( int resolutionx, int resolutiony )
 {
-   tguihost :: init ( resolutionx, resolutiony );
+   GuiHost :: init ( resolutionx, resolutiony );
    icons = new pnputobjectcontainerguiicon[ 1 + objecttypenum * 2 ] ;
    icons[0] = new tnputobjectcontainerguiicon ( NULL, 1 );
    for (int i = 0; i < objecttypenum ; i++ ) 
@@ -2380,16 +2360,15 @@ void    tselectobjectcontainerguihost :: init ( int resolutionx, int resolutiony
       }
 
 
-   icons[0]->bfrst()->sethost ( this );
-   setfirsticon ( icons[0]->frst() );
+   icons[0]->frst()->sethost ( this );
+   setfirsticon ( (tnputobjectcontainerguiicon*) icons[0]->frst() );
 
 
 }
 
 void tselectobjectcontainerguihost ::reset ( void )
 {
-   tguihost::reset();
-
+   GuiHost::reset();
    cancel = 0;
 }  
 
@@ -2404,7 +2383,7 @@ void tselectobjectcontainerguihost ::reset ( void )
 
 void    tselectvehiclecontainerguihost :: init ( int resolutionx, int resolutiony )
 {
-   tguihost :: init ( resolutionx, resolutiony );
+   GuiHost :: init ( resolutionx, resolutiony );
    icons = new pnputvehiclecontainerguiicon[ 1 + vehicletypenum ] ;
    icons[0] = new tnputvehiclecontainerguiicon ( NULL );
    for (int i = 0; i < vehicletypenum ; i++ ) 
@@ -2412,16 +2391,16 @@ void    tselectvehiclecontainerguihost :: init ( int resolutionx, int resolution
          icons[1+i] = new tnputvehiclecontainerguiicon ( getvehicletype_forpos( i ) );
 
 
-   icons[0]->bfrst()->sethost ( this );
-   setfirsticon ( icons[0]->frst() );
-
+   icons[0]->frst()->sethost ( this );
+   setfirsticon ( (pnputvehiclecontainerguiicon) icons[0]->frst() );
+                
 }
 
 void tselectvehiclecontainerguihost ::reset ( pvehicle _constructingvehicle )
 {
    constructingvehicle = _constructingvehicle;
 
-   tguihost::reset();
+   GuiHost::reset();
    cancel = 0;
 }  
 
@@ -2439,35 +2418,27 @@ tselectbuildingguihost :: tselectbuildingguihost( void )
 
 void    tselectbuildingguihost :: init ( int resolutionx, int resolutiony )
 {                                      
-   tguihost :: init ( resolutionx, resolutiony );
+   GuiHost :: init ( resolutionx, resolutiony );
    icons = new ( pnputbuildingguiicon[ buildingtypenum ] );
    for (int i = 0; i < buildingtypenum ; i++ ) 
       if ( getbuildingtype_forpos( i ) )
          icons[i] = new tnputbuildingguiicon ( getbuildingtype_forpos( i ) );
 
 
-   icons[0]->bfrst()->sethost ( this );
-   setfirsticon ( icons[0]->frst() );
+   icons[0]->frst()->sethost ( this );
+   setfirsticon ( pnputbuildingguiicon( icons[0]->frst() ));
 
 }
 
 void tselectbuildingguihost ::reset ( pvehicle v )
 {
    vehicle = v;
-   tguihost::reset();
+   GuiHost::reset();
    selectedbuilding = NULL;
               
    cancel = 0;
 }
 
-void tguihost::reset ( void )
-{
-   restorebackground();
-   numpainted = 0;
-   infotextshown = NULL;
-   for (int i = 0; i < iconspaintable ; i++ ) 
-      actshownicons[i/columncount][i%columncount] = NULL;
-}
 
 #ifndef _NoStaticClassMembers_
 StaticClassVariable pnputbuildingguiicon tnputbuildingguiicon :: first    = NULL;
@@ -2476,37 +2447,23 @@ StaticClassVariable int             tnputbuildingguiicon :: buildnum = 0;
 
 tnputbuildingguiicon :: tnputbuildingguiicon ( pbuildingtype bld )
 {
-   next = first;
+   setnxt ( first );
    first = this;
+
    building = bld;
    buildnum++;
    picture[0]    = building->guibuildicon;
-   infotext      = new char[100];
-   sprintf ( infotext, "%s : %d material and %d fuel needed", building->name, building->productioncost.material, building->productioncost.fuel );
+   char buf[10000];
+   sprintf ( buf, "%s : %d material and %d fuel needed", building->name, building->productioncost.material, building->productioncost.fuel );
+   infotext = buf;
    if ( building->construction_steps > 1 ) {
-      char tmp[50];
-      sprintf(tmp, " ; %d turns required", building->construction_steps );
-      strcat ( infotext, tmp );
+      sprintf(buf, " ; %d turns required", building->construction_steps );
+      infotext += buf;
    }
 
 }
 
-tnputbuildingguiicon ::  ~tnputbuildingguiicon ( )
-{
-   delete[] infotext;
-}
 
-
-
-pnguiicon   tnputbuildingguiicon::nxt( void )
-{
-   return next;
-}
-
-void      tnputbuildingguiicon::setnxt   ( pnguiicon ts )
-{
-   next = (pnputbuildingguiicon) ts ;
-}
 
 pnguiicon   tnputbuildingguiicon::frst( void )
 {
@@ -2518,37 +2475,22 @@ void        tnputbuildingguiicon::setfrst  ( pnguiicon ts )
    first = (pnputbuildingguiicon) ts;
 }
 
-pnputbuildingguiicon   tnputbuildingguiicon::bnxt( void )
-{
-   return next;
-}
-
-pnputbuildingguiicon   tnputbuildingguiicon::bfrst( void )
-{
-   return first;
-}
-
 void              tnputbuildingguiicon::exec( void )
 {
+   tselectbuildingguihost* bldhost = (tselectbuildingguihost*) host;
    bldhost->selectedbuilding = building;
 }
 
 
 int         tnputbuildingguiicon::available( void )
 {
+   tselectbuildingguihost* bldhost = (tselectbuildingguihost*) host;
    return bldhost->vehicle->buildingconstructable ( building );
 }
 
 
 
 
-void   tnputbuildingguiicon :: sethost      ( pselectbuildingguihost hst )
-{
-   bldhost = hst;
-   host = hst;
-   if ( bnxt () )
-      bnxt()->sethost( hst );
-}
 
 #ifndef _NoStaticClassMembers_
 StaticClassVariable pnputobjectcontainerguiicon tnputobjectcontainerguiicon :: first    = NULL;
@@ -2558,7 +2500,7 @@ StaticClassVariable int             tnputobjectcontainerguiicon :: buildnum = 0;
 
 tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( pobjecttype obj, int bld )
 {
-   next = first;
+   setnxt ( first );
    first = this;
    object = obj;
    forcedeneable = 0;
@@ -2566,14 +2508,16 @@ tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( pobjecttype obj, in
       priority = 100;
       buildnum++;
       build = bld;
-      infotext      = new char[100];
+
+      char buf[10000];
       if ( bld ) {
          picture[0]    = object->buildicon;
-         sprintf ( infotext, "%s : %d material and %d fuel needed", object->name, object->buildcost.a.material, object->buildcost.a.fuel );
+         sprintf ( buf, "%s : %d material and %d fuel needed", object->name, object->buildcost.a.material, object->buildcost.a.fuel );
       } else {
          picture[0]    = object->removeicon;
-         sprintf ( infotext, "%s : %d material and %d fuel needed", object->name, object->removecost.a.material, object->removecost.a.fuel );
+         sprintf ( buf, "%s : %d material and %d fuel needed", object->name, object->removecost.a.material, object->removecost.a.fuel );
       }
+      infotext = buf;
    } else {
         picture[0] = icons.selectweaponguicancel;
         infotext = "Cancel";
@@ -2583,22 +2527,6 @@ tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( pobjecttype obj, in
 }
                                                                                                                              
 
-tnputobjectcontainerguiicon ::  ~tnputobjectcontainerguiicon ( )                                      
-{
-   delete[] infotext;
-}
-
-
-
-pnguiicon   tnputobjectcontainerguiicon::nxt( void )
-{
-   return next;
-}
-
-void      tnputobjectcontainerguiicon::setnxt   ( pnguiicon ts )
-{
-   next = (pnputobjectcontainerguiicon) ts ;
-}
 
 pnguiicon   tnputobjectcontainerguiicon::frst( void )
 {
@@ -2608,16 +2536,6 @@ pnguiicon   tnputobjectcontainerguiicon::frst( void )
 void        tnputobjectcontainerguiicon::setfrst  ( pnguiicon ts )
 {
    first = (pnputobjectcontainerguiicon) ts;
-}
-
-pnputobjectcontainerguiicon   tnputobjectcontainerguiicon::bnxt( void )
-{
-   return next;
-}
-
-pnputobjectcontainerguiicon   tnputobjectcontainerguiicon::bfrst( void )
-{
-   return first;
 }
 
 void              tnputobjectcontainerguiicon::exec( void )
@@ -2655,24 +2573,14 @@ int         tnputobjectcontainerguiicon::available( void )
 
 
 
-
-void   tnputobjectcontainerguiicon :: sethost      ( pselectobjectcontainerguihost hst )
-{
-   bldhost = hst;
-   host = hst;
-   if ( bnxt () )
-      bnxt()->sethost( hst );
-}
-
-#ifndef _NoStaticClassMembers_
 StaticClassVariable pnputvehiclecontainerguiicon tnputvehiclecontainerguiicon :: first    = NULL;
 StaticClassVariable int                          tnputvehiclecontainerguiicon :: buildnum = 0;
-#endif
 
 tnputvehiclecontainerguiicon :: tnputvehiclecontainerguiicon ( pvehicletype obj )
 {
-   next = first;
+   setnxt ( first );
    first = this;
+
    vehicle = obj;
    forcedeneable = 0;
    if ( obj ) {
@@ -2686,7 +2594,9 @@ tnputvehiclecontainerguiicon :: tnputvehiclecontainerguiicon ( pvehicletype obj 
       else
          c = vehicle->description;
 
-      sprintf ( infotext, "%s : %d material and %d fuel needed", c, vehicle->production.material, vehicle->production.energy );
+      char buf[10000];
+      sprintf ( buf, "%s : %d material and %d fuel needed", c, vehicle->production.material, vehicle->production.energy );
+      infotext = buf;
    } else {
       picture[0] = icons.selectweaponguicancel;
       infotext = "Cancel";
@@ -2695,22 +2605,6 @@ tnputvehiclecontainerguiicon :: tnputvehiclecontainerguiicon ( pvehicletype obj 
 
 }
                                                                                                                              
-tnputvehiclecontainerguiicon ::  ~tnputvehiclecontainerguiicon ( )                                      
-{
-   delete[] infotext;
-}
-
-
-
-pnguiicon   tnputvehiclecontainerguiicon::nxt( void )
-{
-   return next;
-}
-
-void      tnputvehiclecontainerguiicon::setnxt   ( pnguiicon ts )
-{
-   next = (pnputvehiclecontainerguiicon) ts ;
-}
 
 pnguiicon   tnputvehiclecontainerguiicon::frst( void )
 {
@@ -2720,16 +2614,6 @@ pnguiicon   tnputvehiclecontainerguiicon::frst( void )
 void        tnputvehiclecontainerguiicon::setfrst  ( pnguiicon ts )
 {
    first = (pnputvehiclecontainerguiicon) ts;
-}
-
-pnputvehiclecontainerguiicon   tnputvehiclecontainerguiicon::bnxt( void )
-{
-   return next;
-}
-
-pnputvehiclecontainerguiicon   tnputvehiclecontainerguiicon::bfrst( void )
-{
-   return first;
 }
 
 void              tnputvehiclecontainerguiicon::exec( void )
@@ -2747,6 +2631,7 @@ int         tnputvehiclecontainerguiicon::available( void )
       pfield fld = getactfield();
       if ( !fld->vehicle ) {
 
+         tselectvehiclecontainerguihost* bldhost = (tselectvehiclecontainerguihost*) host;
          pvehicle actvehicle = bldhost->constructingvehicle;
 
          for ( int i = 0; i < actvehicle->typ->vehiclesbuildablenum; i++ ) 
@@ -2760,14 +2645,6 @@ int         tnputvehiclecontainerguiicon::available( void )
       return 1;
 }
 
-void   tnputvehiclecontainerguiicon :: sethost      ( pselectvehiclecontainerguihost hst )
-{
-   bldhost = hst;
-   host = hst;
-   if ( bnxt () )
-      bnxt()->sethost( hst );
-}
-
 tselectweaponguihost::tselectweaponguihost ( void )
 {
    chainiconstohost ( &icon[0] );
@@ -2775,7 +2652,7 @@ tselectweaponguihost::tselectweaponguihost ( void )
 
 void tselectweaponguihost :: init ( int resolutionx, int resolutiony )
 {
-    tguihost :: init ( resolutionx, resolutiony );
+    GuiHost :: init ( resolutionx, resolutiony );
    
     // pvehicle eht = getfield(moveparams.movesx,moveparams.movesy)->vehicle;
     // pattackweap atw = attackpossible(eht, getxpos(),getypos());
@@ -2796,19 +2673,19 @@ void tselectweaponguihost :: init ( int resolutionx, int resolutiony )
 int     tselectweaponguihost ::  painticons ( void )
 {
    checkcoordinates();
-   return tguihost::painticons();
+   return GuiHost::painticons();
 }
 
 void    tselectweaponguihost ::  checkforkey ( tkey key )
 {
    checkcoordinates();
-   tguihost::checkforkey( key );            
+   GuiHost::checkforkey( key );            
 }
 
 void    tselectweaponguihost ::  checkformouse ( void )
 {
    checkcoordinates();        
-   tguihost::checkformouse ( );
+   GuiHost::checkformouse ( );
 }
 
 void    tselectweaponguihost ::  checkcoordinates ( void )
@@ -2819,81 +2696,28 @@ void    tselectweaponguihost ::  checkcoordinates ( void )
 }
 
 
-pnweapselguiicon tselectweaponguihost :: getfirsticon( void )
-{
-   return first_icon;
-}
-void      tselectweaponguihost :: setfirsticon( pnguiicon ic )
-{
-   first_icon = (pnweapselguiicon)  ic;
-}
-
-
-
-pnguiicon tselectbuildingguihost :: getfirsticon( void )
-{
-   return first_icon;
-}
-void      tselectbuildingguihost :: setfirsticon( pnguiicon ic )
-{
-   first_icon = ic;
-}
-
-
-pnguiicon tselectobjectcontainerguihost :: getfirsticon( void )
-{
-   return first_icon;
-}
-void      tselectobjectcontainerguihost :: setfirsticon( pnguiicon ic )
-{
-   first_icon = ic;
-}
-
-
-
-pnguiicon tselectvehiclecontainerguihost :: getfirsticon( void )
-{
-   return first_icon;
-}
-void      tselectvehiclecontainerguihost :: setfirsticon( pnguiicon ic )
-{
-   first_icon = ic;
-}
-
-
-#ifndef _NoStaticClassMembers_
 StaticClassVariable pnweapselguiicon tnweapselguiicon::first = NULL;
-#endif
+
 
 tnweapselguiicon::tnweapselguiicon ( void )
 {
-   next = first;
+   setnxt ( first );
    first = this;
    iconnum = -1;
    weapnum = -1;
    typ = -1;                   
    strength = -1;
-   infotext = new char[1000];
 }
 
 
-pnweapselguiicon   tnweapselguiicon::nxt( void )
-{
-   return next;
-}
-void      tnweapselguiicon::setnxt   ( pnguiicon ts )
-{
-   next = (pnweapselguiicon) ts ;
-}
-
-pnweapselguiicon   tnweapselguiicon::frst( void )
+pnguiicon   tnweapselguiicon::frst( void )
 {
    return first;
 }
 
 void        tnweapselguiicon::setfrst  ( pnguiicon ts )
 {
-   first = (pnweapselguiicon) ts;
+   first = (tnweapselguiicon*) ts;
 }
 
 
@@ -2905,24 +2729,21 @@ int         tnweapselguiicon::available    ( void )
       return 0;
 }
 
-char*       tnweapselguiicon::getinfotext  ( void )
+const char*       tnweapselguiicon::getinfotext  ( void )
 {
    if ( weapnum > -1 ) {
-      infotext[0] = 0;
+      infotext = "";
 
       pvehicle eht = getfield ( moveparams.movesx, moveparams.movesy ) -> vehicle;
    
-      char weapname[100];
-      weapname[0] = 0;
-
       if ( typ == cwairmissilen   ||   typ == cwgroundmissilen ) {
          if ( eht->height >= chtieffliegend ) 
-            strcpy( weapname, "air-");
+            infotext += "air-";
          else 
-            strcat( weapname, "ground-");
+            infotext += "ground-";
       } /* endif */
    
-      strcat( weapname, cwaffentypen[typ] );
+      infotext += cwaffentypen[typ];
 
       pfield fld = getactfield();
 
@@ -2942,9 +2763,11 @@ char*       tnweapselguiicon::getinfotext  ( void )
       int ad = battle->av.damage;
       battle->calc ( );
 
-      sprintf(infotext, "(~%c~) %s; eff strength: %d; damage inflicted to enemy: %d, making a total of ~%d~; own damage will be +%d = %d", (int)('A'+weapnum), weapname, battle->av.strength, battle->dv.damage-dd, battle->dv.damage, battle->av.damage-ad, battle->av.damage );
+      char buf[10000];
+      sprintf(buf, "(~%c~) %s; eff strength: %d; damage inflicted to enemy: %d, making a total of ~%d~; own damage will be +%d = %d", (int)('A'+weapnum), infotext.c_str(), battle->av.strength, battle->dv.damage-dd, battle->dv.damage, battle->av.damage-ad, battle->av.damage );
+      infotext = buf;
 
-      return infotext;
+      return infotext.c_str();
    } else
       return "cancel ( ~ESC~ )";
 
@@ -3047,8 +2870,10 @@ void  tnweapselguiicon::setup        ( pattackweap atw, int n )
         picture[0] = NULL;
       }
 
-   if ( next )
-      next->setup ( atw, ++n );
+   if ( nxt() ) {
+      tnweapselguiicon* ne = (tnweapselguiicon*) nxt();
+      ne->setup ( atw, ++n );
+   }
 }
 
 #ifndef _NoStaticClassMembers_
@@ -3057,19 +2882,10 @@ StaticClassVariable preplayguiicon treplayguiicon ::first = NULL;
 
 treplayguiicon::treplayguiicon ( void )
 {
-   next = first;
+   setnxt ( first );
    first = this;
 }
 
-
-pnguiicon   treplayguiicon::nxt( void )
-{
-   return next;
-}
-void      treplayguiicon::setnxt   ( pnguiicon ts )
-{
-   next = (preplayguiicon) ts ;
-}
 
 pnguiicon   treplayguiicon::frst( void )
 {
@@ -3083,7 +2899,7 @@ void        treplayguiicon::setfrst  ( pnguiicon ts )
 
 trguiicon_play :: trguiicon_play ( void )
 {
-   strcpy ( filename, "rp_play" );
+   filename = "rp_play";
 }
 
 int trguiicon_play :: available ( void )
@@ -3103,7 +2919,7 @@ void trguiicon_play :: exec ( void )
 
 trguiicon_pause :: trguiicon_pause ( void )
 {
-   strcpy ( filename, "rp_pause" );
+   filename = "rp_pause" ;
 }
 
 int trguiicon_pause :: available ( void )
@@ -3125,7 +2941,7 @@ void trguiicon_pause :: exec ( void )
 
 trguiicon_faster :: trguiicon_faster ( void )
 {
-   strcpy ( filename, "rp_fast" );
+   filename = "rp_fast";
 }
 
 int trguiicon_faster :: available ( void )
@@ -3152,7 +2968,7 @@ void trguiicon_faster :: exec ( void )
 
 trguiicon_slower :: trguiicon_slower ( void )
 {
-   strcpy ( filename, "rp_slow" );
+   filename = "rp_slow";
 }
 
 int trguiicon_slower :: available ( void )
@@ -3175,7 +2991,7 @@ void trguiicon_slower :: exec ( void )
 
 trguiicon_back :: trguiicon_back ( void )
 {
-   strcpy ( filename, "rp_back" );
+   filename = "rp_back";
 }
 
 int trguiicon_back :: available ( void )
@@ -3195,7 +3011,7 @@ void trguiicon_back :: exec ( void )
 
 trguiicon_exit :: trguiicon_exit ( void )
 {
-   strcpy ( filename, "rp_exit" );
+   filename = "rp_exit";
 }
 
 int trguiicon_exit :: available ( void )
@@ -3214,7 +3030,7 @@ void trguiicon_exit :: exec ( void )
 
 trguiicon_cancel::trguiicon_cancel ( void )
 {
-   strcpy ( filename, "cancel" );
+   filename = "cancel";
    forcedeneable = 0;
 }
 
@@ -3236,11 +3052,11 @@ void  trguiicon_cancel::exec         ( void )
 void   treplayguihost    :: init ( int resolutionx, int resolutiony )
 {
    chainiconstohost ( &icons.play );
-   tguihost::init ( resolutionx, resolutiony );
+   GuiHost::init ( resolutionx, resolutiony );
 }
 
 void   treplayguihost :: bi2control (  )
 {
    icons.cancel.display();
-   tguihost::bi2control (  );
+   GuiHost::bi2control (  );
 }

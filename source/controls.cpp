@@ -1,6 +1,11 @@
-//     $Id: controls.cpp,v 1.71 2000-08-28 19:49:38 mbickel Exp $
+//     $Id: controls.cpp,v 1.72 2000-08-29 17:42:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.71  2000/08/28 19:49:38  mbickel
+//      Fixed: replay exits when moving satellite out of orbiter
+//      Fixed: airplanes being able to endlessly takeoff and land
+//      Fixed: buildings constructable by unit without resources
+//
 //     Revision 1.70  2000/08/28 14:37:12  mbickel
 //      Fixed: satellite not able to leave orbiter
 //      Restructured next-turn routines
@@ -1152,7 +1157,7 @@ class tobjectcontainers_buildable_on_field {
 typedef class tobjectcontainers_buildable *pobjectcontainers_buildable ;
 class tobjectcontainers_buildable {
         int inited;
-        pguihost oldgui;
+        BasicGuiHost* oldgui;
        public:
         dynamic_array<pobjectcontainers_buildable_on_field> field;
         int fieldnum;

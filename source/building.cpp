@@ -1,6 +1,11 @@
-//     $Id: building.cpp,v 1.47 2000-08-28 19:49:36 mbickel Exp $
+//     $Id: building.cpp,v 1.48 2000-08-29 17:42:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2000/08/28 19:49:36  mbickel
+//      Fixed: replay exits when moving satellite out of orbiter
+//      Fixed: airplanes being able to endlessly takeoff and land
+//      Fixed: buildings constructable by unit without resources
+//
 //     Revision 1.46  2000/08/28 14:37:11  mbickel
 //      Fixed: satellite not able to leave orbiter
 //      Restructured next-turn routines
@@ -2737,7 +2742,7 @@ void  ccontainer :: hosticons_c :: seticonmains ( pcontainer maintemp )
 
 ccontainer :: moveicon_c :: moveicon_c ( void )
 {
-   strcpy ( filename, "movement" );
+   filename = "movement";
 };
 
 int   ccontainer :: moveicon_c :: available    ( void ) 
@@ -2829,7 +2834,7 @@ void  ccontainer :: moveicon_c :: exec         ( void )
 
 ccontainer :: repairicon_c :: repairicon_c ( void )
 {
-   strcpy ( filename, "repair" );
+   filename = "repair";
 };
 
 int   ccontainer :: repairicon_c :: available    ( void ) 
@@ -2852,7 +2857,7 @@ void  ccontainer :: repairicon_c :: exec         ( void )
   dashboard.x = 0xffff;
 }
 
-char* ccontainer :: repairicon_c :: getinfotext  ( void )
+const char* ccontainer :: repairicon_c :: getinfotext  ( void )
 {
    static char buf[200];
    checkto ( main->getmarkedunit() , 0 );
@@ -2865,7 +2870,7 @@ char* ccontainer :: repairicon_c :: getinfotext  ( void )
 
 ccontainer :: fill_dialog_icon_c :: fill_dialog_icon_c ( void )
 {
-   strcpy ( filename, "refueld" );
+   filename = "refueld";
 };
 
 int   ccontainer :: fill_dialog_icon_c :: available    ( void ) 
@@ -2885,7 +2890,7 @@ int   ccontainer :: fill_dialog_icon_c :: available    ( void )
 
 ccontainer :: fill_icon_c :: fill_icon_c ( void )
 {
-   strcpy ( filename, "refuel" );
+   filename =  "refuel";
 };
 
 void  ccontainer :: fill_icon_c :: exec         ( void ) 
@@ -2900,7 +2905,7 @@ void  ccontainer :: fill_icon_c :: exec         ( void )
 
 ccontainer :: exit_icon_c :: exit_icon_c ( void )
 {
-   strcpy ( filename, "exit" );
+   filename = "exit";
 };
 
 void  ccontainer :: exit_icon_c :: exec         ( void ) 
@@ -2918,7 +2923,7 @@ int   ccontainer :: exit_icon_c :: available    ( void )
 
 ccontainer :: container_icon_c :: container_icon_c ( void )
 {
-   strcpy ( filename, "loadinga" );
+   filename = "loadinga";
 };
 
 void  ccontainer :: container_icon_c :: exec         ( void ) 
@@ -2965,7 +2970,7 @@ void  ccontainer :: cmoveup_icon_c :: exec ( void )
 
 ccontainer :: cmoveup_icon_c :: cmoveup_icon_c ( void )
 {
-   strcpy ( filename, "contnup" );
+   filename = "contnup" ;
 }
 
 
@@ -2988,7 +2993,7 @@ void  ccontainer :: cunitinformation_icon :: exec ( void )
 
 ccontainer :: cunitinformation_icon :: cunitinformation_icon ( void )
 {
-   strcpy ( filename, "informat" );
+   filename = "informat";
 }
 
 
@@ -3028,7 +3033,7 @@ void  ccontainer :: cmovedown_icon_c :: exec ( void )
 
 ccontainer :: cmovedown_icon_c :: cmovedown_icon_c ( void )
 {
-   strcpy ( filename, "contndwn" );
+   filename = "contndwn";
 }
 
 
@@ -3636,7 +3641,7 @@ int    ccontainer_b :: getfuel ( int need, int abbuchen )
 void  ccontainer_b :: chosticons_cb :: init ( int resolutionx, int resolutiony )
 {
    chainiconstohost ( &icons.movement );     //   muá erst eingesetzt werden !
-   tguihost::init ( resolutionx, resolutiony );
+   GuiHost::init ( resolutionx, resolutiony );
 }
 
 
@@ -5996,7 +6001,7 @@ int      ccontainer_b :: repairicon_cb :: checkto  (pvehicle eht, char newdamage
 
 ccontainer_b :: trainuniticon_cb :: trainuniticon_cb ( void )
 {
-   strcpy ( filename, "training" );
+   filename = "training";
 };
 
 int   ccontainer_b :: trainuniticon_cb :: available    ( void ) 
@@ -6023,7 +6028,7 @@ void  ccontainer_b :: trainuniticon_cb :: exec         ( void )
 
 ccontainer_b :: dissectuniticon_cb :: dissectuniticon_cb ( void )
 {
-   strcpy ( filename, "sezieren" );
+   filename = "sezieren";
 };
 
 int   ccontainer_b :: dissectuniticon_cb :: available    ( void ) 
@@ -6077,7 +6082,7 @@ int   ccontainer_b :: fill_icon_cb :: available    ( void )
 
 ccontainer_b :: produceuniticon_cb :: produceuniticon_cb ( void )
 {
-   strcpy ( filename, "produnit" );
+   filename = "produnit";
 };
 
 int   ccontainer_b :: produceuniticon_cb :: available    ( void ) 
@@ -6119,7 +6124,7 @@ void  ccontainer_b :: produceuniticon_cb :: exec         ( void )
 }
 
 
-char* ccontainer_b :: produceuniticon_cb :: getinfotext  ( void )
+const char* ccontainer_b :: produceuniticon_cb :: getinfotext  ( void )
 {
    pvehicletype fzt = main->getmarkedunittype();
    if ( fzt ) {
@@ -6135,16 +6140,16 @@ char* ccontainer_b :: produceuniticon_cb :: getinfotext  ( void )
          fu += fzt->tank;
          ma += fzt->material;
 
-         strcpy ( infotextbuf, infotext );
+         strcpy ( infotextbuf, infotext.c_str() );
          sprintf ( &infotextbuf[strlen( infotextbuf)], resourceusagestring, en, ma, fu );
          sprintf ( &infotextbuf[strlen( infotextbuf)], "(empty: %d energy, %d material, %d fuel)", en1, ma1, fu1 );
       } else {
-         strcpy ( infotextbuf, infotext );
+         strcpy ( infotextbuf, infotext.c_str() );
          sprintf ( &infotextbuf[strlen( infotextbuf)], resourceusagestring, en, ma, fu );
       }
       return infotextbuf;
    } else {
-      return infotext;
+      return infotext.c_str();
    }
 }
 
@@ -6154,7 +6159,7 @@ char* ccontainer_b :: produceuniticon_cb :: getinfotext  ( void )
 
 ccontainer :: productioncancelicon_cb :: productioncancelicon_cb ( void )
 {
-   strcpy ( filename, "cancel" );
+   filename = "cancel";
 };
 
 int   ccontainer :: productioncancelicon_cb :: available    ( void ) 
@@ -6177,7 +6182,7 @@ void  ccontainer :: productioncancelicon_cb :: exec         ( void )
 
 ccontainer_b :: recyclingicon_cb :: recyclingicon_cb ( void )
 {
-    strcpy ( filename, "c_recycl" );
+    filename = "c_recycl";
 };
 
 int  ccontainer_b :: recyclingicon_cb :: available ( void )
@@ -6198,10 +6203,10 @@ void    ccontainer_b :: recyclingicon_cb :: exec ( void )
 
 
 
-char* ccontainer_b :: recyclingicon_cb :: getinfotext  ( void )
+const char* ccontainer_b :: recyclingicon_cb :: getinfotext  ( void )
 {
    resourceuse ( main->getmarkedunit() );
-   strcpy ( &infotextbuf[100], infotext );
+   strcpy ( &infotextbuf[100], infotext.c_str() );
    int n = 0;
    sprintf ( &infotextbuf[100+strlen( &infotextbuf[100])], resourceusagestring, energy, -material, n );
    return &infotextbuf[100];
@@ -6214,7 +6219,7 @@ char* ccontainer_b :: recyclingicon_cb :: getinfotext  ( void )
 
 ccontainer_b :: takeofficon_cb :: takeofficon_cb             ( void ) 
 {
-    strcpy ( filename, "takeoff" );
+    filename = "takeoff";
 }
 
 
@@ -6535,7 +6540,7 @@ int    ccontainer_t :: getfuel ( int need, int abbuchen )
 void  ccontainer_t :: chosticons_ct :: init ( int resolutionx, int resolutiony )
 {
    chainiconstohost ( &icons.movement );     //   muá erst eingesetzt werden !
-   tguihost::init ( resolutionx, resolutiony );
+   GuiHost::init ( resolutionx, resolutiony );
 }
 
 

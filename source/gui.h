@@ -1,6 +1,9 @@
-//     $Id: gui.h,v 1.10 2000-08-12 15:01:42 mbickel Exp $
+//     $Id: gui.h,v 1.11 2000-08-29 17:42:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/08/12 15:01:42  mbickel
+//      Restored old versions of GUI ; new ones were broken
+//
 //     Revision 1.8  2000/06/08 21:03:41  mbickel
 //      New vehicle action: attack
 //      wrote documentation for vehicle actions
@@ -80,30 +83,44 @@ const int guismalliconsizey = 17;
 const int guismallicongap = 3;
 
 
-typedef class tguihost* pguihost;
 typedef class tnguiicon* pnguiicon;
 
 typedef class tnputbuildingguiicon* pnputbuildingguiicon; 
 typedef class tnputobjectcontainerguiicon* pnputobjectcontainerguiicon; 
 typedef class tnweapselguiicon* pnweapselguiicon;
 
-
-
-class tguihost {
-        pnguiicon first_icon;
+class BasicGuiHost {
       protected:
+        static void*     background[30][30];
+        static int    numpainted;
+
+      public:
+        virtual void   returncoordinates ( void* icn, int* x, int * y ) = 0;
+        int paintsize;  // 0 : normale grî·e; 1: klein
+        virtual void   cleanup ( void ) = 0;    // wird zum entfernen der kleinen guiicons aufgerufen, bevor das icon ausgefÅhrt wird
+        virtual int    painticons ( void ) = 0;
+        virtual void   paintsmallicons ( int taste, int up ) = 0;
+        virtual void   restorebackground ( void ) = 0;
+        virtual void   checkforkey ( tkey key ) = 0;
+        virtual void   checkformouse ( void ) = 0;
+        virtual void   runpressedmouse ( int taste ) = 0;
+   };
+
+template <class T>
+class GuiHost : public BasicGuiHost {
+      protected:
+        T first_icon;
+
         int columncount;
         int iconspaintable;
         int  firstshownline;
-        pnguiicon actshownicons[3][30];
-        static void*     background[30][30];
+        T actshownicons[3][30];
 
-        static int    numpainted;
         int       firstpaint;
         pnguiicon infotextshown;
         virtual void      bi2control (  );
-        virtual pnguiicon getfirsticon();
-        virtual void      setfirsticon( pnguiicon ic );
+        virtual T getfirsticon();
+        virtual void      setfirsticon( T ic );
         void putbackground ( int xx , int yy );
 
         struct {
@@ -113,25 +130,24 @@ class tguihost {
               } smalliconpos;
 
       public:
-        int paintsize;  // 0 : normale grî·e; 1: klein
 
-        tguihost ( void );
-        virtual ~tguihost ( ) {};
+        virtual void   returncoordinates ( void* icn, int* x, int * y );
+        GuiHost ( void );
+        virtual ~GuiHost ( ) {};
 
         void   starticonload ( void );
-        void   returncoordinates ( pnguiicon icon, int* x, int * y );
 
         virtual void   checkforkey ( tkey key );
         virtual void   checkformouse ( void );
         void   savebackground ( void );
         virtual int    painticons ( void );
         virtual void   paintsmallicons ( int taste, int up );
-        void   chainiconstohost ( pnguiicon icn );
-        void   restorebackground ( void );
+        void   chainiconstohost ( T icn );
         void   runpressedmouse ( int taste );
+        void   cleanup ( void ) ;    // wird zum entfernen der kleinen guiicons aufgerufen, bevor das icon ausgefÅhrt wird
+        virtual void   restorebackground ( void );
 
         void   reset ( void );
-        void   cleanup ( void );    // wird zum entfernen der kleinen guiicons aufgerufen, bevor das icon ausgefÅhrt wird
         
         virtual void init ( int resolutionx, int resolutiony );
    };
@@ -141,13 +157,10 @@ class tguihost {
 
 typedef class tselectbuildingguihost* pselectbuildingguihost;
 
-class tselectbuildingguihost : public tguihost {
-         pnguiicon               first_icon;
-         pnputbuildingguiicon*   icons;
+class tselectbuildingguihost : public GuiHost<pnputbuildingguiicon> {
 
        protected:
-         virtual pnguiicon getfirsticon();
-         virtual void      setfirsticon( pnguiicon ic );
+         pnputbuildingguiicon*   icons;
 
        public:
          tselectbuildingguihost( void );
@@ -166,13 +179,8 @@ class tselectbuildingguihost : public tguihost {
 
 typedef class tselectobjectcontainerguihost *pselectobjectcontainerguihost;
 
-class tselectobjectcontainerguihost : public tguihost {
-         pnguiicon               first_icon;
+class tselectobjectcontainerguihost : public GuiHost<pnputobjectcontainerguiicon> {
          pnputobjectcontainerguiicon*   icons;
-
-       protected:
-         virtual pnguiicon getfirsticon();
-         virtual void      setfirsticon( pnguiicon ic );
 
        public:
          void              init ( int resolutionx, int resolutiony );
@@ -188,13 +196,8 @@ typedef class tselectvehiclecontainerguihost *pselectvehiclecontainerguihost;
 typedef class tnputvehiclecontainerguiicon *pnputvehiclecontainerguiicon;
 
 
-class tselectvehiclecontainerguihost : public tguihost {
-         pnguiicon               first_icon;
+class tselectvehiclecontainerguihost : public GuiHost<pnputvehiclecontainerguiicon> {
          pnputvehiclecontainerguiicon*   icons;
-
-       protected:
-         virtual pnguiicon getfirsticon();
-         virtual void      setfirsticon( pnguiicon ic );
 
        public:
          pvehicle constructingvehicle;
@@ -211,66 +214,57 @@ class tselectvehiclecontainerguihost : public tguihost {
 
 class tnguiicon {
           pnguiicon next;
-          static pnguiicon first;
-
         protected:
+
           void*     picture[8];
           void*     picturepressed[8];
-          char*     infotext;
+          std::string    infotext;
           tkey      keys[6][6];
           int       priority;
           int       lasticonsize;
 
 
-          pguihost  host;
-          char      filename[9];
+          BasicGuiHost*  host;
+          std::string    filename;
           int       x,y;
 
-          // char      infotextbuf[300];
-
-
-          virtual pnguiicon nxt      ( void )          = 0;
-          virtual void      setnxt   ( pnguiicon ts )  = 0;
-          virtual pnguiicon frst     ( void )          = 0;
+          virtual pnguiicon nxt      ( void )          ;
+          virtual void      setnxt   ( pnguiicon ts )  ;
           virtual void      setfrst  ( pnguiicon ts )  = 0;
           
-          friend void tguihost::chainiconstohost ( pnguiicon icn  );
+          // friend void template class<T> GuiHost::chainiconstohost ( pnguiicon icn  );
 
           void putpict ( void* buf );
                                                     
 
         public:
+          virtual pnguiicon frst     ( void )          = 0;
+
           virtual int   available    ( void ) = 0;
           virtual void  exec         ( void ) = 0;
           virtual void  display      ( void );
-          virtual char* getinfotext  ( void );
+          virtual const char* getinfotext  ( void );
 
           void          loaddata     ( void );
           void          paintifavail ( void );
           void          seticonsize  ( int size );
           int           count        ( void );
           virtual void  loadspecifics( pnstream stream );
-          virtual void  sethost      ( pguihost hst );
+          virtual void  sethost      ( BasicGuiHost* hst );
 
           virtual void  checkforkey  ( tkey key );
           virtual int   pressedbymouse ( void );
           virtual void  iconpressed  ( void );
           void          sort         ( pnguiicon last );
-	  //          friend void tnguiicon::sort( pnguiicon last );
 
           tnguiicon ( void );
           virtual ~tnguiicon ( );
-          static pnguiicon firstguiicon;
-        };
-
+};
 
 class tnweapselguiicon : public tnguiicon {
-          pnweapselguiicon        next;
-          static pnweapselguiicon first;
         protected:
-          virtual pnweapselguiicon nxt      ( void );
-          virtual void      setnxt   ( pnguiicon ts );
-          virtual pnweapselguiicon frst     ( void );
+          static pnweapselguiicon first;
+
           virtual void      setfrst  ( pnguiicon ts );
 
           int iconnum;
@@ -278,9 +272,11 @@ class tnweapselguiicon : public tnguiicon {
           int typ;
           int strength;
        public:
+          virtual pnguiicon frst     ( void );
+
           virtual int   available    ( void );
           virtual void  exec         ( void );
-          virtual char* getinfotext  ( void );
+          virtual const char* getinfotext  ( void );
           virtual void  checkforkey  ( tkey key );
           virtual void  setup        ( pattackweap atw, int n );
                                                                                        
@@ -289,15 +285,10 @@ class tnweapselguiicon : public tnguiicon {
 
 
 
-class tselectweaponguihost : public tguihost {
-       private:
-         pnweapselguiicon   first_icon;
+class tselectweaponguihost : public GuiHost<pnweapselguiicon> {
          tnweapselguiicon   icon[20];
          pattackweap        atw;
          int                x,y;
-       protected:
-         virtual pnweapselguiicon getfirsticon();
-         virtual void      setfirsticon( pnguiicon ic );
 
        public:
          tselectweaponguihost( void );
@@ -311,26 +302,20 @@ class tselectweaponguihost : public tguihost {
 
 
 class tnputbuildingguiicon : public tnguiicon {
-            pnputbuildingguiicon        next;
-            static pnputbuildingguiicon first;
             static int             buildnum;
           protected:
-            virtual pnguiicon nxt      ( void );
-            virtual void      setnxt   ( pnguiicon ts );
-            virtual pnguiicon frst     ( void );
+            static pnputbuildingguiicon first;
+
             virtual void      setfrst  ( pnguiicon ts );
-            pnputbuildingguiicon  bnxt      ( void );
-            pnputbuildingguiicon  bfrst     ( void );
+
             pbuildingtype           building;
-            pselectbuildingguihost     bldhost;
 
            friend void tselectbuildingguihost ::init( int resolutionx, int resolutiony );
 
           public:
-            static pnputbuildingguiicon firstsguiicon;
+            virtual pnguiicon frst     ( void );
+
             tnputbuildingguiicon ( pbuildingtype bld );
-            ~tnputbuildingguiicon ( );
-            void sethost      ( pselectbuildingguihost hst );
             int   available    ( void );
             void  exec         ( void );
          };
@@ -340,52 +325,37 @@ class tnputbuildingguiicon : public tnguiicon {
 
 class tnputobjectcontainerguiicon : public tnguiicon {
             int build;
-            pnputobjectcontainerguiicon        next;
+          protected:
             static pnputobjectcontainerguiicon first;
             static int             buildnum;
-          protected:
-            virtual pnguiicon nxt      ( void );
-            virtual void      setnxt   ( pnguiicon ts );
-            virtual pnguiicon frst     ( void );
+
             virtual void      setfrst  ( pnguiicon ts );
-            pnputobjectcontainerguiicon  bnxt      ( void );
-            pnputobjectcontainerguiicon  bfrst     ( void );
             pobjecttype           object;
-            pselectobjectcontainerguihost     bldhost;
 
            friend void tselectobjectcontainerguihost ::init( int resolutionx, int resolutiony );
 
           public:
-            static pnputobjectcontainerguiicon firstsguiicon;
+            virtual pnguiicon frst     ( void );
+
             tnputobjectcontainerguiicon ( pobjecttype obj, int bld );
-            ~tnputobjectcontainerguiicon ( );
-            void sethost      ( pselectobjectcontainerguihost hst );
             int   available    ( void );
             void  exec         ( void );
             int forcedeneable;
          };
 
 class tnputvehiclecontainerguiicon : public tnguiicon {
-            pnputvehiclecontainerguiicon        next;
             static pnputvehiclecontainerguiicon first;
             static int             buildnum;
           protected:
-            virtual pnguiicon nxt      ( void );
-            virtual void      setnxt   ( pnguiicon ts );
-            virtual pnguiicon frst     ( void );
             virtual void      setfrst  ( pnguiicon ts );
-            pnputvehiclecontainerguiicon  bnxt      ( void );
-            pnputvehiclecontainerguiicon  bfrst     ( void );
             pvehicletype           vehicle;
-            pselectvehiclecontainerguihost     bldhost;
 
            friend void tselectvehiclecontainerguihost ::init( int resolutionx, int resolutiony );
 
           public:
-            static pnputvehiclecontainerguiicon firstsguiicon;
+            virtual pnguiicon frst     ( void );
+
             tnputvehiclecontainerguiicon ( pvehicletype obj );
-            ~tnputvehiclecontainerguiicon ( );
-            void sethost      ( pselectvehiclecontainerguihost hst );
             int   available    ( void );
             void  exec         ( void );
             int forcedeneable;
@@ -395,16 +365,13 @@ class tnputvehiclecontainerguiicon : public tnguiicon {
 
 typedef class tnsguiicon* pnsguiicon; 
 class tnsguiicon : public tnguiicon {
-            pnsguiicon next;
             static pnsguiicon first;
           protected:
-            virtual pnguiicon nxt      ( void );
-            virtual void      setnxt   ( pnguiicon ts );
-            virtual pnguiicon frst     ( void );
             virtual void      setfrst  ( pnguiicon ts );
 
           public:
-            static pnsguiicon firstsguiicon;
+            virtual pnguiicon frst     ( void );
+
             tnsguiicon ( void );
          };
 
@@ -664,7 +631,7 @@ class tnsguiiconcancel : public tnsguiicon {
 
 
 
-class tguihoststandard : public tguihost {
+class tguihoststandard : public GuiHost<pnsguiicon> {
    protected:
         virtual void      bi2control (  );
 
@@ -712,16 +679,13 @@ class tguihoststandard : public tguihost {
 
 typedef class treplayguiicon* preplayguiicon; 
 class treplayguiicon : public tnguiicon {
-            preplayguiicon next;
             static preplayguiicon first;
           protected:
-            virtual pnguiicon nxt      ( void );
-            virtual void      setnxt   ( pnguiicon ts );
-            virtual pnguiicon frst     ( void );
             virtual void      setfrst  ( pnguiicon ts );
 
           public:
-            static preplayguiicon firstsguiicon;
+            virtual pnguiicon frst     ( void );
+
             treplayguiicon ( void );
          };
 
@@ -787,7 +751,7 @@ class trguiicon_cancel : public treplayguiicon {
 
 
 
-class treplayguihost : public tguihost {
+class treplayguihost : public GuiHost<preplayguiicon> {
    protected:
         virtual void      bi2control (  );
 
@@ -813,7 +777,7 @@ extern tselectbuildingguihost    selectbuildinggui;
 extern tselectobjectcontainerguihost      selectobjectcontainergui;
 extern tselectvehiclecontainerguihost     selectvehiclecontainergui;
 extern tselectweaponguihost      selectweaponguihost;
-extern tguihost*                 actgui;
+extern BasicGuiHost*                 actgui;
 extern void setguiposy ( int y );
 
 #endif

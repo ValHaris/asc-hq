@@ -1,6 +1,11 @@
-//     $Id: building.h,v 1.12 2000-08-28 19:49:38 mbickel Exp $
+//     $Id: building.h,v 1.13 2000-08-29 17:42:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/08/28 19:49:38  mbickel
+//      Fixed: replay exits when moving satellite out of orbiter
+//      Fixed: airplanes being able to endlessly takeoff and land
+//      Fixed: buildings constructable by unit without resources
+//
 //     Revision 1.11  2000/08/12 09:17:18  gulliver
 //     *** empty log message ***
 //
@@ -349,10 +354,10 @@ class generalicon_c : public tnguiicon {       // f?r Container //grundlage für 
                         pcontainer main;
                         virtual pnguiicon nxt      ( void );
                         virtual void      setnxt   ( pnguiicon ts );
-                        virtual pnguiicon frst     ( void );
                         virtual void      setfrst  ( pnguiicon ts );
 
                     public:
+                        virtual pnguiicon frst     ( void );
                         void setmain ( pcontainer maintemp );
                         generalicon_c ( void );
                         ~generalicon_c ();
@@ -468,19 +473,18 @@ class    ccontainer : public virtual ccontainercontrols {
 
 
                         //0 cguihostcontainer 
-                class   hosticons_c: public tguihost { // basis fuer icons ->struct mit allen icons
+                class   hosticons_c: public GuiHost<generalicon_c*> { // basis fuer icons ->struct mit allen icons
                     public: 
                         void seticonmains ( pcontainer maintemp );
                 };
 
 
-                class repairicon_c 
-					:	public generalicon_c , 
-						public virtual ccontainercontrols::crepairunit {
+                class repairicon_c : public generalicon_c , 
+						                   public virtual ccontainercontrols::crepairunit {
                     public:
                         virtual int   available    ( void ) ;
                         virtual void  exec         ( void ) ;
-                        virtual char* getinfotext  ( void );
+                        virtual const char* getinfotext  ( void );
                         repairicon_c ( void );
                 };
 
@@ -635,7 +639,7 @@ class    ccontainer : public virtual ccontainercontrols {
                 psubwindow actsubwindow;
                 int  allsubwindownum;
                 int end;
-                pguihost          oldguihost;
+                BasicGuiHost*    oldguihost;
                 virtual void     setpictures ( void );
 
                 tunitmode unitmode;  // wird erst im Building-Container ben”tigt, aber damit die Icons darauf zugreifen k”nnen ist das teil schon hier ...
@@ -700,7 +704,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
                     public:
                         virtual int   available    ( void ) ;
                         virtual void  exec         ( void ) ;
-                        virtual char* getinfotext  ( void );
+                        virtual const char* getinfotext  ( void );
                         repairicon_c ( void );
                 };
 */
@@ -713,7 +717,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
                     public:
                         virtual int   available    ( void ) ;
                         virtual void  exec         ( void ) ;
-                        virtual char* getinfotext  ( void );
+                        virtual const char* getinfotext  ( void );
                         recyclingicon_cb ( void );
                 };
 
@@ -745,7 +749,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
                     public:
                         virtual int   available    ( void ) ;
                         virtual void  exec         ( void ) ;
-                        virtual char* getinfotext  ( void );
+                        virtual const char* getinfotext  ( void );
                         produceuniticon_cb ( void );
                 };
 
