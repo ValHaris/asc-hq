@@ -1,9 +1,12 @@
 /*! \file gamedlg.cpp    
     \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.95 2002-10-02 20:21:00 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.96 2002-10-12 17:28:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.95  2002/10/02 20:21:00  mbickel
+//      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
+//
 //     Revision 1.94  2002/09/19 20:20:05  mbickel
 //      Cleanup and various bug fixes
 //
@@ -1371,7 +1374,10 @@ void         tnewcampaignlevel::loadcampaignmap(void)
          throw NoMapLoaded();
    } /* endcatch */
    catch ( tinvalidversion err ) {
-      displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.getFileName().c_str(), err.expected, err.found );
+      if ( err.expected < err.found )
+         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nPlease install the latest version from www.asc-hq.org", 1, err.getFileName().c_str(), err.expected, err.found );
+      else
+         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nThis is a bug, please report it!", 1, err.getFileName().c_str(), err.expected, err.found );
       if ( !actmap || actmap->xsize <= 0)
          throw NoMapLoaded();
    } /* endcatch */
@@ -1863,7 +1869,11 @@ void         tchoosenewsinglelevel::run(void)
             throw NoMapLoaded();
       } /* endcatch */
       catch ( tinvalidversion err ) {
-         displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.getFileName().c_str(), err.expected, err.found );
+         if ( err.expected < err.found )
+            displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nPlease install the latest version from www.asc-hq.org", 1, err.getFileName().c_str(), err.expected, err.found );
+         else
+            displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nThis is a bug, please report it!", 1, err.getFileName().c_str(), err.expected, err.found );
+
          if ( !actmap || actmap->xsize <= 0)
             throw NoMapLoaded();
       } /* endcatch */

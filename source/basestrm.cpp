@@ -2,9 +2,12 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.74 2002-09-19 20:20:04 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.75 2002-10-12 17:28:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.74  2002/09/19 20:20:04  mbickel
+//      Cleanup and various bug fixes
+//
 //     Revision 1.73  2002/04/05 09:25:05  mbickel
 //      Project files now for Borland C++ Builder 6
 //      Fixed: netcontrol not working
@@ -1957,10 +1960,11 @@ tn_c_lzw_filestream :: tn_c_lzw_filestream ( const ASCString& name, IOMode mode 
    if ( fl.container == NULL ) {
       char string[2000];
 
-      strm = new tn_file_buf_stream ( constructFileName ( string, fl.directoryLevel, NULL, name.c_str()), mode );
+      ASCString fileNameComplete = constructFileName ( string, fl.directoryLevel, NULL, name.c_str());
+      strm = new tn_file_buf_stream ( fileNameComplete, mode );
       inp = 1;
-      devicename = name;
-      location = name;
+      devicename = fileNameComplete;
+      location = fileNameComplete;
 
    } else {
       containerstream = fl.container;

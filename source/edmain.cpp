@@ -2,9 +2,13 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.60 2002-10-09 16:58:46 mbickel Exp $
+//     $Id: edmain.cpp,v 1.61 2002-10-12 17:28:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2002/10/09 16:58:46  mbickel
+//      Fixed to GrafikSet loading
+//      New item filter for mapeditor
+//
 //     Revision 1.59  2002/10/06 15:44:40  mbickel
 //      Completed inheritance of .asctxt files
 //      Speed up of replays
@@ -895,7 +899,8 @@ int main(int argc, char *argv[] )
    }
 
    if ( cl->v() ) {
-      printf( kgetstartupmessage() );
+      ASCString msg = kgetstartupmessage();
+      printf( msg.c_str() );
       exit(0);
    }
 

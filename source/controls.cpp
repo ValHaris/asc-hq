@@ -3,9 +3,13 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.134 2002-10-09 16:58:45 mbickel Exp $
+//     $Id: controls.cpp,v 1.135 2002-10-12 17:28:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.134  2002/10/09 16:58:45  mbickel
+//      Fixed to GrafikSet loading
+//      New item filter for mapeditor
+//
 //     Revision 1.133  2002/10/01 09:23:41  mbickel
 //      Fixed many bugs
 //      Added inheritance to text files
@@ -298,6 +302,7 @@
 #include "dashboard.h"
 #include "resourcenet.h"
 #include "itemrepository.h"
+#include "strtmesg.h"
 
          int             windmovement[8];
 
@@ -2802,6 +2807,7 @@ void endTurn ( void )
       actmap->cursorpos.position[actmap->actplayer].cy = getypos();
       actmap->cursorpos.position[actmap->actplayer].sx = actmap->xpos;
       actmap->cursorpos.position[actmap->actplayer].sy = actmap->ypos;
+      actmap->player[actmap->actplayer].ASCversion = getNumericVersion();
 
       tmap::Player::VehicleList toRemove;
       for ( tmap::Player::VehicleList::iterator v = actmap->player[actmap->actplayer].vehicleList.begin(); v != actmap->player[actmap->actplayer].vehicleList.end(); v++ ) {
@@ -3028,6 +3034,15 @@ void initNetworkGame ( void )
    }
 
    newTurnForHumanPlayer( 0 );
+
+   for ( int i = 0; i < 8; i++ )
+      if  ( actmap->player[i].exist() )
+         if ( actmap->player[i].ASCversion > 0 )
+            if ( (actmap->player[i].ASCversion & 0xffffff00) > getNumericVersion() ) {
+               new Message ( ASCString("Player ") + actmap->player[i].getName() + " is using a newer version of ASC. \nPlease check www.asc-hq.org for updates.", actmap, 1<<actmap->actplayer );
+               return;
+            }
+
 }
 
 
@@ -3094,7 +3109,11 @@ void continuenetworkgame ( void )
       throw NoMapLoaded();
    } /* endcatch */
    catch ( tinvalidversion err ) {
-      displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.getFileName().c_str(), err.expected, err.found );
+      if ( err.expected < err.found )
+         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nPlease install the latest version from www.asc-hq.org", 1, err.getFileName().c_str(), err.expected, err.found );
+      else
+         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nThis is a bug, please report it!", 1, err.getFileName().c_str(), err.expected, err.found );
+
       throw NoMapLoaded();
    } /* endcatch */
    catch ( tcompressionerror err ) {

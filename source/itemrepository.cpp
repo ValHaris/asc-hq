@@ -255,7 +255,7 @@ void  loadalltextfiles ( )
 
       tnfilestream s ( c, tnstream::reading );
 
-      displayLogMessage ( 5, "loadalltextfiles :: loading " + c + ", " );
+      displayLogMessage ( 6, "loadalltextfiles :: loading " + s.getLocation() + ", " );
 
       TextFormatParser tfp ( &s );
 

@@ -81,6 +81,7 @@ tmap :: tmap ( void )
       player[i].computername = "computer ";
       player[i].computername += strrr( i );
       player[i].research.chainToMap ( this, i );
+      player[i].ASCversion = 0;
    }
 
    oldevents = NULL;
@@ -117,7 +118,7 @@ tmap :: tmap ( void )
 }
 
 
-const int tmapversion = 2;
+const int tmapversion = 3;
 
 void tmap :: read ( tnstream& stream )
 {
@@ -181,6 +182,10 @@ void tmap :: read ( tnstream& stream )
       player[i].__loadunreadmessage = stream.readInt();
       player[i].__loadoldmessage = stream.readInt();
       player[i].__loadsentmessage = stream.readInt();
+      if ( version >= 3 )
+         player[i].ASCversion = stream.readInt();
+      else
+         player[i].ASCversion = 0;
    }
 
    oldevents = NULL;
@@ -493,6 +498,7 @@ void tmap :: write ( tnstream& stream )
       stream.writeInt( 1 );
       stream.writeInt( 1 );
       stream.writeInt( 1 );
+      stream.writeInt ( player[i].ASCversion );
    }
 
    stream.writeInt( oldevents != NULL );

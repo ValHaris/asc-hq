@@ -175,11 +175,14 @@ void loadbi3graphics( void )
    #endif
 
 
+   ASCString location;
    tfindfile ff ( "*.gfx" );
-   string filename = ff.getnextname();
+   ASCString filename = ff.getnextname( NULL, NULL, &location);
    while ( !filename.empty() ) {
 
       tnfilestream s ( filename.c_str(), tnstream::reading );
+
+      displayLogMessage ( 5, "loading graphic set " + location + filename + "\n" );
 
       int magic = s.readInt();
       if ( magic == -1 ) {

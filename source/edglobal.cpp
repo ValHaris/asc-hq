@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.47 2002-04-14 17:21:17 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.48 2002-10-12 17:28:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2002/04/14 17:21:17  mbickel
+//      Renamed global variable pf to pf2 due to name clash with SDL_mixer library
+//
 //     Revision 1.46  2002/03/17 21:25:18  mbickel
 //      Fixed: View unit movement revealed the reaction fire status of enemy units
 //      Mapeditor: new function "resource comparison"
@@ -920,7 +923,8 @@ void execaction(int code)
     case act_aboutbox : {
          help(1020);
          tviewanytext vat;
-         vat.init ( "about", kgetstartupmessage() );
+         ASCString msg = kgetstartupmessage();
+         vat.init ( "about", msg.c_str() );
          vat.run();
          vat.done();
       }

@@ -2029,7 +2029,8 @@ int main(int argc, char *argv[] )
    }*/
 
    if ( cl->v() ) {
-      printf( getstartupmessage() );
+      ASCString msg = getstartupmessage();
+      printf( msg.c_str() );
       exit(0);
    }
 

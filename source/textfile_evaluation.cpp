@@ -126,6 +126,7 @@
               bool inverted;
             protected:
               BitSet operation_eq ( const TextPropertyGroup::Entry& entry ) const;
+              BitSet operation_add ( const TextPropertyGroup::Entry& entry ) const;
               ASCString toString ( ) const;
             public:
                TagArrayProperty ( BitSet& property_, int tagNum_, const char** tags_, bool inverted_  ) : PTTA ( property_ ), tagNum (tagNum_), tags ( tags_ ), inverted ( inverted_ ) {};
@@ -138,6 +139,7 @@
               bool inverted;
             protected:
               int operation_eq ( const TextPropertyGroup::Entry& entry ) const ;
+              int operation_add ( const TextPropertyGroup::Entry& entry ) const ;
               ASCString toString ( ) const;
             public:
                TagIntProperty ( int& property_, int tagNum_, const char** tags_, bool inverted_  ) : PTTI ( property_ ), tagNum (tagNum_), tags ( tags_ ), inverted ( inverted_ ) {};
@@ -747,6 +749,10 @@ ASCString IntRangeArrayProperty::toString() const
 }
 
 
+BitSet TagArrayProperty::operation_add ( const TextPropertyGroup::Entry& entry ) const
+{
+   return parse ( *entry.parent ) | operation_eq ( entry );
+}
 
 BitSet TagArrayProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
@@ -787,6 +793,12 @@ ASCString TagArrayProperty::toString() const
          valueToWrite += " ";
       }
    return valueToWrite;
+}
+
+
+int TagIntProperty::operation_add ( const TextPropertyGroup::Entry& entry ) const
+{
+   return parse ( *entry.parent ) | operation_eq ( entry );
 }
 
 int TagIntProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const

@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.84 2002-10-09 16:58:46 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.85 2002-10-12 17:28:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.84  2002/10/09 16:58:46  mbickel
+//      Fixed to GrafikSet loading
+//      New item filter for mapeditor
+//
 //     Revision 1.83  2002/10/02 20:21:01  mbickel
 //      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
 //
@@ -879,6 +883,9 @@ int readgameoptions ( const char* filename )
    constructFileName ( completeFileName, -3, NULL, fn.c_str() );
 
    configFileNameToWrite = strdup ( completeFileName );
+
+   displayLogMessage ( 6, ASCString("Path is ") + completeFileName + "; " );
+
 
    if ( exist ( completeFileName )) {
       configFileNameUsed = strdup ( completeFileName );

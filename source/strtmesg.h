@@ -1,6 +1,15 @@
-//     $Id: strtmesg.h,v 1.4 2001-07-18 16:05:47 mbickel Exp $
+//     $Id: strtmesg.h,v 1.5 2002-10-12 17:28:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2001/07/18 16:05:47  mbickel
+//      Fixed: infinitive loop in displaying "player exterminated" msg
+//      Fixed: construction of units by units: wrong player
+//      Fixed: loading bug of maps with mines
+//      Fixed: invalid map parameter
+//      Fixed bug in game param edit dialog
+//      Fixed: cannot attack after declaring of war
+//      New: ffading of sounds
+//
 //     Revision 1.3  2001/05/17 14:23:20  mbickel
 //      Rewrote command line parameters of all programs
 //      Made manpages generation optional
@@ -34,17 +43,21 @@
     Boston, MA  02111-1307  USA
 */
 
-#ifndef strtmesg_h
-#define strtmesg_h 1
+#ifndef strtmesgH
+#define strtmesgH
 
-extern const char* getstartupmessage (  );
-extern const char* getaboutmessage (  );
+#include "ascstring.h"
 
-extern const char* kgetstartupmessage (  );
-extern const char* kgetaboutmessage (  );
+ASCString getstartupmessage (  );
+ASCString getaboutmessage (  );
+
+ASCString kgetstartupmessage (  );
+ASCString kgetaboutmessage (  );
 
 extern const char* getVersionString (  );
 extern const char* getFullVersionString (  );
+
+extern int getNumericVersion ( );
 
 
 #endif

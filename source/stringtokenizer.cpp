@@ -21,13 +21,21 @@
 #include "errors.h"
 
 
+StringTokenizer :: StringTokenizer ( const ASCString& _str, bool includeOperators_ )
+                 : str( _str ), i ( 0 )
+{
+   includeOperators = includeOperators_ ;
+   // if ( includeOperators_ ) {
+      delimitter = "=*/+-";
+//   }
+}
+
 int StringTokenizer::CharSpace ( char c )
 {
   if ( c <= ' ' )
      return 0;
 
-  const char* ops = "=*/+-";
-  const char* d = ops;
+  const char* d = delimitter.c_str();
   do {
      if( *d == c && !includeOperators )
         return 2;

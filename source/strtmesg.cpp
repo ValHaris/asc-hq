@@ -1,4 +1,4 @@
-//     $Id: strtmesg.cpp,v 1.123 2002-10-09 16:58:46 mbickel Exp $
+//     $Id: strtmesg.cpp,v 1.124 2002-10-12 17:28:04 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -22,11 +22,12 @@
 
 
 // These strings should be the same as the release tags in CVS !
-const char* asc_release="ASC1.10.2.13";
+const char* asc_release="ASC1.10.3.1";
 
 #include <stdio.h>
-
-char startupmessagebuffer[200];
+#include "strtmesg.h"
+#include "stringtokenizer.h";
+#include "misc.h"
 
 
 const char* getVersionString (  )
@@ -34,33 +35,50 @@ const char* getVersionString (  )
   return &asc_release[3];
 }
 
+int getNumericVersion ( )
+{
+   int vers = 0;
+   StringTokenizer st ( &asc_release[3], "." );
+   for ( int i = 0; i < 4; i++ ) {
+      ASCString s = st.getNextToken();
+      vers *= 256;
+      if ( !s.empty() )
+         vers += atoi ( s.c_str() );
+      
+   }
+}
+
 const char* getFullVersionString (  )
 {
   return asc_release;
 }
 
-const char* getstartupmessage (  )
+ASCString getstartupmessage (  )
 {
+    char startupmessagebuffer[1000];
     sprintf( startupmessagebuffer, "\nAdvanced Strategic Command : %s\nmade %s      %s\n\n", asc_release, __DATE__, __TIME__);
-    return startupmessagebuffer;
+    return ASCString(startupmessagebuffer);
 }
 
-const char* getaboutmessage (  )
+ASCString getaboutmessage (  )
 {
+    char startupmessagebuffer[1000];
     sprintf( startupmessagebuffer, "Advanced Strategic Command : %s ; made %s ; %s", asc_release, __DATE__, __TIME__);
-    return startupmessagebuffer;
+    return ASCString(startupmessagebuffer);
 }
 
-const char* kgetstartupmessage (  )
+ASCString kgetstartupmessage (  )
 {
+    char startupmessagebuffer[1000];
     sprintf( startupmessagebuffer, "\n      Mapeditor for\nAdvanced Strategic Command \n%s\nmade %s      %s\n\n", asc_release, __DATE__, __TIME__);
-    return startupmessagebuffer;
+    return ASCString(startupmessagebuffer);
 }
 
-const char* kgetaboutmessage (  )
+ASCString kgetaboutmessage (  )
 {
+    char startupmessagebuffer[1000];
     sprintf( startupmessagebuffer, "Mapeditor for Advanced Strategic Command : %s ; made %s ; %s", asc_release, __DATE__, __TIME__);
-    return startupmessagebuffer;
+    return ASCString(startupmessagebuffer);
 }
 
 

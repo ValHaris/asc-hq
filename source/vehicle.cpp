@@ -1343,8 +1343,11 @@ void   Vehicle::readData ( tnstream& stream )
        char c = stream.readChar();
 
        if ( c ) {
-          for (int k = 0; k < c; k++)
+          for (int k = 0; k < c; k++) {
              loading[k] = Vehicle::newFromStream ( gamemap, stream );
+             if ( loading[k]->color != color )
+                loading[k]->convert( color/8 );
+          }
 
           for ( int l = c; l < 32; l++ )
              loading[l] = NULL;

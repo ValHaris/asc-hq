@@ -5,9 +5,13 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.71 2002-10-09 16:58:46 mbickel Exp $
+//     $Id: loaders.cpp,v 1.72 2002-10-12 17:28:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.71  2002/10/09 16:58:46  mbickel
+//      Fixed to GrafikSet loading
+//      New item filter for mapeditor
+//
 //     Revision 1.70  2002/09/19 20:20:05  mbickel
 //      Cleanup and various bug fixes
 //
@@ -2124,7 +2128,11 @@ void  loadmap( const char *       name )
          throw NoMapLoaded();
    } /* endcatch */
    catch ( tinvalidversion err ) {
-      displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.getFileName().c_str(), err.expected, err.found );
+      if ( err.expected < err.found )
+         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nPlease install the latest version from www.asc-hq.org", 1, err.getFileName().c_str(), err.expected, err.found );
+      else
+         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nThis is a bug, please report it!", 1, err.getFileName().c_str(), err.expected, err.found );
+
       if ( !actmap || actmap->xsize <= 0)
          throw NoMapLoaded();
    } /* endcatch */
@@ -2168,7 +2176,10 @@ void  loadgame( const char *       name )
          throw NoMapLoaded();
    } /* endcatch */
    catch ( tinvalidversion err ) {
-      displaymessage( "File %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.getFileName().c_str(), err.expected, err.found );
+      if ( err.expected < err.found )
+         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nPlease install the latest version from www.asc-hq.org", 1, err.getFileName().c_str(), err.expected, err.found );
+      else
+         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nThis is a bug, please report it!", 1, err.getFileName().c_str(), err.expected, err.found );
       if ( !actmap || actmap->xsize <= 0)
          throw NoMapLoaded();
    } /* endcatch */
@@ -2245,7 +2256,10 @@ void  loadreplay( pmemorystreambuf streambuf )
          throw NoMapLoaded();
    } /* endcatch */
    catch ( tinvalidversion err ) {
-      displaymessage( "Replay stream %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.getFileName().c_str(), err.expected, err.found );
+      if ( err.expected < err.found )
+         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nPlease install the latest version from www.asc-hq.org", 1, err.getFileName().c_str(), err.expected, err.found );
+      else
+         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nThis is a bug, please report it!", 1, err.getFileName().c_str(), err.expected, err.found );
       if ( !actmap || actmap->xsize == 0)
          throw NoMapLoaded();
    } /* endcatch */

@@ -401,6 +401,9 @@ class tmap {
 
             //! if ASC should check all events for fullfilled triggers, this variable will be set to true. This does not mean that there really ARE events that are ready to be executed
             int queuedEvents;
+
+            //! the version of ASC that this player has used to make his last turn 
+            int ASCversion;
       } player[9];
 
       //! a container for events that were executed during previous maps of the campaign

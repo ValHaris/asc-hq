@@ -20,8 +20,8 @@
  ***************************************************************************/
 
 
-#ifndef stringtokenizer_h_included
- #define stringtokenizer_h_included
+#ifndef stringtokenizerH
+ #define stringtokenizerH
 
  #include "ascstring.h"
 
@@ -29,10 +29,12 @@
        const ASCString& str;
        int i;
        bool includeOperators;
+       ASCString delimitter;
     private:
        int CharSpace ( char c );
     public:
-       StringTokenizer ( const ASCString & _str, bool includeOperators_ = false ) : str( _str ), i ( 0 ), includeOperators ( includeOperators_ ) {};
+       StringTokenizer ( const ASCString& _str, bool includeOperators_ = false );
+       StringTokenizer ( const ASCString& _str, const ASCString& delimitter_ ) : str( _str ), i ( 0 ), includeOperators ( true ), delimitter(delimitter_) {};
        ASCString getNextToken ( );
        ASCString getRemaining ( );
  };

@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.86 2002-10-09 16:58:46 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.87 2002-10-12 17:28:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.86  2002/10/09 16:58:46  mbickel
+//      Fixed to GrafikSet loading
+//      New item filter for mapeditor
+//
 //     Revision 1.85  2002/10/06 15:44:40  mbickel
 //      Completed inheritance of .asctxt files
 //      Speed up of replays
@@ -898,8 +902,7 @@ void placeunit(void)
 
          if (pf2 != NULL) 
               // !( pf2->bdt & cbbuildingentry)
-            if ( !( pf2->building             ) && ( accessible || 
-actmap->getgameparameter( cgp_movefrominvalidfields)) ) {
+            if ( !( pf2->building ) && ( accessible || actmap->getgameparameter( cgp_movefrominvalidfields)) ) {
                int set = 1;
                if ( pf2->vehicle ) {
                   if ( pf2->vehicle->typ != auswahlf ) {
@@ -907,26 +910,21 @@ actmap->getgameparameter( cgp_movefrominvalidfields)) ) {
                      pf2->vehicle = NULL;
                    } else {
                       set = 0;
-                      pf2->vehicle->color = farbwahl * 8;
+                      pf2->vehicle->convert( farbwahl );
                    }
                }
                if ((auswahlf != NULL) && set ) {
-                  pf2->vehicle = new Vehicle ( auswahlf, actmap, farbwahl 
-);
+                  pf2->vehicle = new Vehicle ( auswahlf, actmap, farbwahl );
                   pf2->vehicle->setnewposition ( getxpos(), getypos() );
                   pf2->vehicle->fillMagically();
                   pf2->vehicle->height=1;
-                  while ( ! ( ( ( ( pf2->vehicle->height & 
-pf2->vehicle->typ->height ) > 0) && (terrainaccessible(pf2,pf2->vehicle) 
-== 2) ) ) && (pf2->vehicle->height != 0) )
+                  while ( ! ( ( ( ( pf2->vehicle->height & pf2->vehicle->typ->height ) > 0) && (terrainaccessible(pf2,pf2->vehicle) == 2) ) ) && (pf2->vehicle->height != 0) )
                      pf2->vehicle->height = pf2->vehicle->height * 2;
                   if (pf2->vehicle->height == 0 ) {
                      if ( actmap->getgameparameter( cgp_movefrominvalidfields) ) {
                         pf2->vehicle->height=1;
-                        while ( !(pf2->vehicle->height & 
-pf2->vehicle->typ->height) && pf2->vehicle->height )
-                           pf2->vehicle->height = pf2->vehicle->height * 
-2;
+                        while ( !(pf2->vehicle->height & pf2->vehicle->typ->height) && pf2->vehicle->height )
+                           pf2->vehicle->height = pf2->vehicle->height * 2;
                      }
                      if (pf2->vehicle->height == 0 ) {
                         delete pf2->vehicle;
@@ -938,16 +936,16 @@ pf2->vehicle->typ->height) && pf2->vehicle->height )
                      pf2->vehicle->direction = auswahld;
                   }
                }
-            } 
+            }
             else
                if (auswahlf == NULL)
                   if (pf2->vehicle != NULL) {
                      delete pf2->vehicle;
                      pf2->vehicle = NULL;
                   }
-         displaymap(); 
-         mousevisible(true); 
-         cursor.show(); 
+         displaymap();
+         mousevisible(true);
+         cursor.show();
       }
    } /* endif */
 }
@@ -956,7 +954,7 @@ pf2->vehicle->typ->height) && pf2->vehicle->height )
 void placeobject(void)
 {
    cursor.hide();
-   mousevisible(false); 
+   mousevisible(false);
    mapsaved = false;
    pf2 = getactfield(); 
    if (tfill) { 
