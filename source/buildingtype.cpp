@@ -368,10 +368,12 @@ void Building :: getresourceusage ( Resources* usage ) {  usage->energy = 0;
 int Building :: putResource ( int amount, int resourcetype, int queryonly, int scope ) { return 0; };
 int Building :: getResource ( int amount, int resourcetype, int queryonly, int scope ) { return 0; };
 #endif
-void Building :: setCompletion ( int d )
+
+void Building :: setCompletion ( int completion, bool setupImages )
 {
-  _completion += d;
-  resetPicturePointers ( );
+  _completion = completion;
+  if ( setupImages )
+     resetPicturePointers ( );
 }
 
 
@@ -743,7 +745,7 @@ void Building:: read ( tnstream& stream )
 
 void Building :: readData ( tnstream& stream, int version )
 {
-    setCompletion ( stream.readChar() );
+    setCompletion ( stream.readChar(), false );
 
     int i;
     for ( i = 0; i < waffenanzahl; i++)

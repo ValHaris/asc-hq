@@ -236,7 +236,7 @@ class  Building : public ContainerBase {
     void getpowerplantefficiency ( int* material, int* fuel );
 
     int getCompletion() const { return _completion; };
-    void setCompletion ( int d );
+    void setCompletion ( int completion, bool setupImages = true  );
 
     ~Building();
 

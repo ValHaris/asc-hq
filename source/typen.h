@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.81 2001-02-04 21:27:00 mbickel Exp $
+//     $Id: typen.h,v 1.82 2001-02-06 16:27:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.81  2001/02/04 21:27:00  mbickel
+//      The AI status is written to savegames -> new savegame revision
+//      Lots of bug fixes
+//
 //     Revision 1.80  2001/02/01 22:48:52  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -358,12 +362,16 @@ class Resources {
      Resources ( int e, int m, int f ) : energy ( e ), material ( m ), fuel ( f ) {};
      Resources& operator-= ( const Resources& res ) { energy-=res.energy; material-=res.material; fuel-=res.fuel; return *this;};
      bool operator>= ( const Resources& res ) { return energy >= res.energy && material>=res.material && fuel>=res.fuel; };
+     bool operator< ( const Resources& res ) { return !(*this >= res); };
+     Resources operator* ( double d );
+     Resources& operator+= ( const Resources& res ) { energy+=res.energy; material+=res.material; fuel+=res.fuel; return *this;};
      enum { Energy, Material, Fuel };
      void read ( tnstream& stream );
      void write ( tnstream& stream ) const;
 };
 
 extern Resources operator- ( const Resources& res1, const Resources& res2 );
+extern Resources operator+ ( const Resources& res1, const Resources& res2 );
 
 
 //! A mathematical matrix that can be multiplied with a #Resources instance (which is mathematically a vector) to form a new #Resources vector
@@ -495,6 +503,7 @@ class MapCoordinate {
             MapCoordinate ( ) : x(-1), y(-1 ) {};
             MapCoordinate ( int _x, int _y) : x(_x), y(_y) {};
             bool operator< ( const MapCoordinate& mc ) const { return y < mc.y || ( y == mc.y && x < mc.x );};
+            bool operator== ( const MapCoordinate& mc ) const { return y == mc.y && x == mc.x;};
             void write( tnstream& stream ) const { stream.writeInt ( 3000 ); stream.writeInt ( x ); stream.writeInt ( y); };
             void read( tnstream& stream ) {
                int version = stream.readInt ( );

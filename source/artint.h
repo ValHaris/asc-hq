@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: artint.h,v 1.33 2001-02-04 21:26:53 mbickel Exp $
+//     $Id: artint.h,v 1.34 2001-02-06 16:27:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2001/02/04 21:26:53  mbickel
+//      The AI status is written to savegames -> new savegame revision
+//      Lots of bug fixes
+//
 //     Revision 1.32  2001/02/01 22:48:27  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -148,7 +152,7 @@
                   void setServiceUnit ( pvehicle veh ) { serviceUnitID = veh->networkid; };
                   int possible ( pvehicle supplier );
                   bool execute1st ( pvehicle supplier );
-                  bool timeOut ( ) ;
+                  bool timeOut ( );
 
                   void write ( tnstream& stream ) const;
                   void read ( tnstream& read );
@@ -157,6 +161,9 @@
                   {
                      return !so.getTargetUnit();
                   };
+                  static bool invalid ( const ServiceOrder& so );
+                  bool valid ( ) const;
+
                   bool operator==( const ServiceOrder& );
 
                   ~ServiceOrder ();
@@ -228,7 +235,8 @@
            };
            friend class BuildingValueComp;
 
-           map<MapCoordinate,BuildingCapture> buildingCapture;
+           typedef map<MapCoordinate,BuildingCapture> BuildingCaptureContainer;
+           BuildingCaptureContainer buildingCapture;
 
 
            void calculateFieldThreats ( void );

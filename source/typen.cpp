@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.69 2001-02-04 21:27:00 mbickel Exp $
+//     $Id: typen.cpp,v 1.70 2001-02-06 16:27:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.69  2001/02/04 21:27:00  mbickel
+//      The AI status is written to savegames -> new savegame revision
+//      Lots of bug fixes
+//
 //     Revision 1.68  2001/02/01 22:48:51  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -962,6 +966,15 @@ Resources operator- ( const Resources& res1, const Resources& res2 )
    res -= res2;
    return res;
 }
+
+Resources Resources::operator* ( double d )
+{
+   Resources rs;
+   for ( int i = 0; i < resourceTypeNum; i++ )
+      rs.resource(i) = int( resource(i)*d );
+   return rs;
+}
+
 
 ////////////////////////////////////////////////////////////////////
 

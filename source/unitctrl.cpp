@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.48 2001-02-04 21:27:01 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.49 2001-02-06 16:27:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2001/02/04 21:27:01  mbickel
+//      The AI status is written to savegames -> new savegame revision
+//      Lots of bug fixes
+//
 //     Revision 1.47  2001/02/01 22:48:53  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -801,11 +805,11 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
          vehicle->addview();
       }
 
-      int fieldschanged;
+      int fieldschanged = 0;
       if ( actmap->playerView >= 0 )
          fieldschanged = evaluateviewcalculation ( actmap, 1 << actmap->playerView );
       else
-         fieldschanged = 0;
+         evaluateviewcalculation ( actmap, 0);
 
       if ( rf->checkfield ( x, y, vehicle, mapDisplay ))
          cancelmovement = 1;

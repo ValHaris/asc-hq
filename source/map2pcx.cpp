@@ -152,15 +152,16 @@ int mapeditorMainThread ( void* _mapname )
           string s = ff.getnextname();
           while ( !s.empty () ) {
              string errormsg;
-             importbattleislemap ( "/home/martin/binetwork/", s.c_str(), getterraintype_forpos(0)->weather[0], &errormsg, true );
+             importbattleislemap ( "data/", s.c_str(), getterraintype_forpos(0)->weather[0], &errormsg, true );
              if ( !errormsg.empty() )
                 fprintf(stderr, "map %s : %s \n", s.c_str(), errormsg.c_str() );
-             string fn = "images/pcx/"+s;
-             fn.replace ( fn.find ("dat"), 3, "pcx");
+             string fn = "data/images/pcx/"+s;
+             fn.replace ( fn.find (".dat"), 4, ".pcx");
 
              int width, height;
 
-             int maptime = get_filetime ( s.c_str());
+             string t = "data/mis/"+s;
+             int maptime = get_filetime ( t.c_str());
              int pcxtime = get_filetime ( fn.c_str() );
              if ( maptime > pcxtime || pcxtime < 0 )
                 writemaptopcx ( false, fn, &width, &height );

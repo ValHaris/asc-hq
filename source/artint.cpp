@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: artint.cpp,v 1.57 2001-02-04 21:26:52 mbickel Exp $
+//     $Id: artint.cpp,v 1.58 2001-02-06 16:27:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2001/02/04 21:26:52  mbickel
+//      The AI status is written to savegames -> new savegame revision
+//      Lots of bug fixes
+//
 //     Revision 1.56  2001/02/01 22:48:25  mbickel
 //      rewrote the storing of units and buildings
 //      Fixed bugs in bi3 map importing routines
@@ -327,6 +331,9 @@ pbuilding AI :: findServiceBuilding ( const ServiceOrder& so )
    pbuilding bestBuilding = NULL;
    int bestDistance = maxint;
 
+   pbuilding bestBuilding_p = NULL;
+   int bestDistance_p = maxint;
+
    for ( tmap::Player::BuildingList::iterator bi = getMap()->player[ getPlayer() ].buildingList.begin(); bi != getMap()->player[ getPlayer() ].buildingList.end(); bi++ ) {
       pbuilding bld = *bi;
       if ( bld->getEntryField()->a.temp ) {
@@ -344,27 +351,45 @@ pbuilding AI :: findServiceBuilding ( const ServiceOrder& so )
 
          if ( loadable ) {
             int fullfillableServices = 0;
+            int partlyFullfillabelServices = 0;
             switch ( so.requiredService ) {
                case VehicleService::srv_repair : if ( bld->canRepair() ) {
                                                     int mr =  bld->getMaxRepair( veh );
                                                     if ( mr == 0 )
                                                        fullfillableServices++;
+
+                                                    if ( mr < veh->damage )
+                                                       partlyFullfillabelServices++;
+
                                                  }
                                                  break;
                case VehicleService::srv_resource:  {
-                                                     Resources res =  veh->typ->tank - veh->tank;
-                                                     Resources res2 = bld->getResource ( res, 1 );
+                                                     Resources needed =  veh->typ->tank - veh->tank;
+                                                     Resources avail = bld->getResource ( needed, 1 );
+                                                     if ( avail < needed ) {
+                                                        Resources plus;
+                                                        bld->getresourceplus ( -1, &plus, 1 );
+                                                        avail += plus*2;
+                                                     }
                                                      int missing = 0;
-                                                     for ( int r = 0; r < resourceTypeNum; r++ )
-                                                        if( res.resource(r) * 75 / 100 > res2.resource(r) )
+                                                     int pmissing = 0;
+                                                     for ( int r = 0; r < resourceTypeNum; r++ ) {
+                                                        if( needed.resource(r) * 75 / 100 > avail.resource(r) )
                                                            missing ++;
 
+                                                        if( needed.resource(r) * 10 / 100 > avail.resource(r) )
+                                                           pmissing ++;
+                                                     }
                                                      if ( missing == 0 )
                                                         fullfillableServices++;
+
+                                                     if ( pmissing == 0)
+                                                       partlyFullfillabelServices++;
                                                  }
                                                  break;
                case VehicleService::srv_ammo :  {
                                                    int missing = 0;
+                                                   int pmissing = 0;
                                                    int ammoNeeded[waffenanzahl];
                                                    for ( int t = 0; t < waffenanzahl; t++ )
                                                       ammoNeeded[t] = 0;
@@ -373,23 +398,36 @@ pbuilding AI :: findServiceBuilding ( const ServiceOrder& so )
                                                       if ( veh->typ->weapons->weapon[i].requiresAmmo() )
                                                          ammoNeeded[ veh->typ->weapons->weapon[i].getScalarWeaponType() ] += veh->typ->weapons->weapon[i].count - veh->ammo[i];
 
-                                                   Resources res;
+                                                   Resources needed;
                                                    for ( int  j = 0; j < waffenanzahl; j++ ) {
                                                        int n = ammoNeeded[j] - bld->munition[j];
                                                        if ( n > 0 )
                                                           if ( bld->typ->special & cgammunitionproductionb ) {
                                                              for ( int r = 0; r < resourceTypeNum; r++ )
-                                                                res.resource(r) += (n+4)/5 * cwaffenproduktionskosten[j][r];
+                                                                needed.resource(r) += (n+4)/5 * cwaffenproduktionskosten[j][r];
                                                           } else
                                                              missing++;
                                                    }
-                                                   Resources res2 = bld->getResource ( res, 1 );
-                                                   for ( int r = 0; r < resourceTypeNum; r++ )
-                                                      if ( res2.resource(r) < res.resource (r) )
+                                                   Resources avail = bld->getResource ( needed, 1 );
+                                                   if ( avail < needed ) {
+                                                      Resources plus;
+                                                      bld->getresourceplus ( -1, &plus, 1 );
+                                                      avail += plus*2;
+                                                   }
+
+                                                   for ( int r = 0; r < resourceTypeNum; r++ ) {
+                                                      if ( avail.resource(r) < needed.resource (r) )
                                                          missing++;
+                                                      if ( avail.resource(r) <= needed.resource (r)/3 )
+                                                         pmissing++;
+                                                   }
 
                                                    if ( missing == 0 )
                                                        fullfillableServices++;
+
+                                                   if ( pmissing == 0)
+                                                     partlyFullfillabelServices++;
+
                                                  }
                                                  break;
 
@@ -404,12 +442,25 @@ pbuilding AI :: findServiceBuilding ( const ServiceOrder& so )
                   bestDistance = path.size();
                   bestBuilding = bld;
                }
-            }
+            } else
+               if ( partlyFullfillabelServices ) {
+                  MapCoordinate entry = bld->getEntry ( );
+                  AStar ast ( getMap(), veh );
+                  vector<MapCoordinate> path;
+                  ast.findPath (  path, entry.x, entry.y );
+                  if ( path.size() < bestDistance_p ) {
+                     bestDistance_p = path.size();
+                     bestBuilding_p = bld;
+                  }
+               }
          }
       }
    }
 
-   return bestBuilding;
+   if ( bestBuilding && (bestDistance < bestDistance_p*3))
+      return bestBuilding;
+   else
+      return bestBuilding_p;
 }
 
 int AI::ServiceOrder::possible ( pvehicle supplier )
@@ -548,6 +599,22 @@ bool AI::ServiceOrder::timeOut ( )
 }
 
 
+bool AI::ServiceOrder::valid (  ) const
+{
+   switch ( requiredService ) {
+      case VehicleService::srv_repair     : return getTargetUnit()->damage > 0;
+      case VehicleService::srv_ammo       : return getTargetUnit()->ammo[position] < getTargetUnit()->typ->weapons[position].count;
+      case VehicleService::srv_resource   : return getTargetUnit()->tank.resource(position) < getTargetUnit()->typ->tank.resource(position);
+      default: return false;
+   }
+}
+
+bool AI::ServiceOrder::invalid ( const ServiceOrder& so )
+{
+   return !so.valid();
+}
+
+
 void AI::removeServiceOrdersForUnit ( const pvehicle veh )
 {
    remove_if ( serviceOrders.begin(), serviceOrders.end(), ServiceTargetEquals( veh ) );
@@ -625,6 +692,7 @@ AI::AiResult AI :: executeServices ( )
 {
   // removing all service orders for units which no longer exist
   removeServiceOrdersForUnit ( NULL );
+  remove_if ( serviceOrders.begin(), serviceOrders.end(), ServiceOrder::invalid );
 
   AiResult res;
 
@@ -643,7 +711,7 @@ AI::AiResult AI :: executeServices ( )
          if ( bld )
             veh->aiparam[ getPlayer() ]->dest = bld->getEntry ( );
          else {
-            displaymessage("warning: no service building found!",1);
+            // displaymessage("warning: no service building found found for unit %s - %d!",1, veh->typ->description, veh->typ->id);
          }
 
       }
@@ -689,6 +757,21 @@ AI::AiResult AI :: executeServices ( )
         }
      }
   }
+
+  for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
+      if ( !i->timeOut() && i->requiredService == VehicleService::srv_repair ) {
+         pvehicle veh = i->getTargetUnit();
+         veh->aiparam[getPlayer()]->task = AiParameter::tsk_serviceRetreat;
+         pbuilding bld = findServiceBuilding( *i );
+         if ( bld )
+            veh->aiparam[ getPlayer() ]->dest = bld->getEntry ( );
+         else {
+            displaymessage("warning: no service building found found for unit %s - %d!",1, veh->typ->description, veh->typ->id);
+         }
+
+      }
+  }
+
   return res;
 
 }
@@ -761,7 +844,7 @@ void         SearchReconquerBuilding :: unitfound(pvehicle     eht)
 
 bool SearchReconquerBuilding :: canUnitCapture( pvehicle eht )
 {
-   return ((eht->functions & cf_conquer ) || (buildingToCapture->color == 8*8))
+   return ((eht->functions & cf_conquer ))
            && fieldaccessible ( buildingToCapture->getEntryField(), eht) == 2 ;
 
 }
@@ -961,6 +1044,19 @@ void AI :: checkConquer( )
         conquerer->aiparam[getPlayer()]->dest = (*i)->getEntry();
       } else
         buildingCapture[ (*i)->getEntry() ].state = BuildingCapture::conq_unreachable;
+   }
+
+   for ( BuildingCaptureContainer::iterator bi = buildingCapture.begin(); bi != buildingCapture.end(); bi++) {
+      pvehicle veh = getMap()->getUnit ( bi->second.unit );
+      if ( veh ) {
+         MapCoordinate dest = veh->aiparam[getPlayer()]->dest;
+         moveUnit ( veh, dest, true );
+         if ( veh->getPosition() == dest ) {
+            veh->aiparam[getPlayer()]->task = AiParameter::tsk_nothing;
+            buildingCapture.erase ( bi );
+         }
+      } else
+         buildingCapture.erase ( bi );
    }
 
 }
@@ -2769,7 +2865,7 @@ void AI:: run ( void )
    setupTime = ticker-setupTime;
 
    int serviceTime = ticker;
-   issueServices();
+   issueServices( );
    executeServices();
    serviceTime = ticker-serviceTime;
 
