@@ -637,14 +637,19 @@ IncreaseVehicleHeight :: IncreaseVehicleHeight ( MapDisplayInterface* md, PPendi
       pva->ascent = this;
 }
 
-int IncreaseVehicleHeight :: available ( Vehicle* veh ) const
+bool IncreaseVehicleHeight :: avail ( Vehicle* veh )
 {
    if ( veh )
-      // if ( veh->getMovement() )
-         if ( veh->getHeightChange( +1 ))
-            return 1;
-   return 0;
+      if ( veh->getHeightChange( +1 ))
+         return true;
+   return false;
 }
+
+int IncreaseVehicleHeight :: available ( Vehicle* veh ) const
+{
+   return avail( veh );
+}
+
 
 IncreaseVehicleHeight :: ~IncreaseVehicleHeight ( )
 {
@@ -661,14 +666,19 @@ DecreaseVehicleHeight :: DecreaseVehicleHeight ( MapDisplayInterface* md, PPendi
       pva->descent = this;
 }
 
-int DecreaseVehicleHeight :: available ( Vehicle* veh ) const
+bool DecreaseVehicleHeight :: avail ( Vehicle* veh )
 {
    if ( veh )
-      // if ( veh->getMovement() )
          if ( veh->getHeightChange( -1 ))
-            return 1;
-   return 0;
+            return true;
+   return false;
 }
+
+int DecreaseVehicleHeight :: available ( Vehicle* veh ) const
+{
+   return avail(veh);
+}
+
 
 DecreaseVehicleHeight :: ~DecreaseVehicleHeight ( )
 {

@@ -1122,9 +1122,6 @@ void  tnsguiiconattack::exec         ( void )
 }
 
 
-#endif
-
-
 
 
 
@@ -1360,7 +1357,7 @@ void  tnsguiicondescent::display      ( void )
 }
 
 
-
+#endif
 
 
 

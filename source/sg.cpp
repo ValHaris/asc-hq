@@ -1778,6 +1778,19 @@ void MainScreenWidget::spawnPanel ( Panels panel )
 }
 
 
+bool mainloopidle(  )
+{
+   if ( actmap ) {
+      while ( actmap->player[ actmap->actplayer ].queuedEvents )
+         checkevents( &getDefaultMapDisplay() );
+
+      checktimedevents( &getDefaultMapDisplay() );
+
+      checkforvictory();
+   }
+   return NULL;
+}
+
 void  mainloop2()
 {
    displayLogMessage ( 4, "Spawning MainScreenWidget\n ");
@@ -2314,6 +2327,8 @@ int main(int argc, char *argv[] )
 
    ASC_PG_App app ( "asc2_dlg" );
    app.sigKeyUp.connect( SigC::slot(&GameDialog::gameDialog ));
+
+   app.sigAppIdle.connect ( SigC::slot( mainloopidle ));
 
 
    int flags = SDL_SWSURFACE;

@@ -1,4 +1,4 @@
-//     $Id: unitctrl.h,v 1.36.2.5 2004-12-29 17:23:57 mbickel Exp $
+//     $Id: unitctrl.h,v 1.36.2.6 2005-02-09 20:28:03 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -200,6 +200,7 @@ class ChangeVehicleHeight : public BaseVehicleMovement {
 class IncreaseVehicleHeight : public ChangeVehicleHeight {
            public:
               IncreaseVehicleHeight ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
+              static bool avail ( Vehicle* veh );
               int available ( Vehicle* veh ) const;
               ~IncreaseVehicleHeight();
           };
@@ -207,6 +208,7 @@ class IncreaseVehicleHeight : public ChangeVehicleHeight {
 class DecreaseVehicleHeight : public ChangeVehicleHeight {
            public:
               DecreaseVehicleHeight ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
+              static bool avail ( Vehicle* veh );
               int available ( Vehicle* veh ) const;
               ~DecreaseVehicleHeight();
           };

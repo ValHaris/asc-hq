@@ -2,9 +2,12 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.33 2004-07-12 18:15:04 mbickel Exp $
+//     $Id: dlg_box.h,v 1.33.2.1 2005-02-09 20:28:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2004/07/12 18:15:04  mbickel
+//      Lots of tweaks and fixed for more portability and compilation with mingw
+//
 //     Revision 1.32  2004/05/11 20:22:33  mbickel
 //      Readded research system to ASC
 //
@@ -326,6 +329,7 @@ extern bool gameStartupComplete;
 typedef class tdialogbox* pdialogbox;
 
   class   tdialogbox : public tdlgengine  {
+                     bool eventQueue;
                  public:
                      int             textcolor;
                      integer          starty;

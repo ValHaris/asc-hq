@@ -144,6 +144,8 @@ collategraphicoperations* tdialogbox::pcgo = NULL;
 
 tdialogbox::tdialogbox()
 {
+   eventQueue = setEventRouting ( false, true );
+
    npush ( activefontsettings );
    activefontsettings.font = schriften.smallarial;
    activefontsettings.color = black;
@@ -2565,6 +2567,8 @@ tdialogbox::~tdialogbox()
       repaintDisplay();
    }
    npop ( activefontsettings );
+
+   setEventRouting ( eventQueue, !eventQueue );
 }
 
 

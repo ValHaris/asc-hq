@@ -318,6 +318,211 @@ void Movement::execute( const MapCoordinate& pos, int num )
 
 
 
+
+
+
+
+class Ascend : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num );
+      void execute( const MapCoordinate& pos, int num );
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("ascend-airplane.png");
+      };
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "ascend";
+      };
+};
+
+bool Ascend::available( const MapCoordinate& pos, int num )
+{
+   if ( moveparams.movestatus == 0 && !pendingVehicleActions.action ) {
+      Vehicle* eht = actmap->getField(pos)->vehicle;
+      if ( !eht )
+         return false;
+      if (eht->color == actmap->actplayer * 8)
+         return IncreaseVehicleHeight::avail ( eht );
+   } else
+      if ( pendingVehicleActions.actionType == vat_ascent ) {
+         switch ( pendingVehicleActions.ascent->getStatus() ) {
+           case 2: return pendingVehicleActions.ascent->reachableFields.isMember ( pos.x, pos.y );
+           case 3: return pendingVehicleActions.ascent->path.rbegin()->x == pos.x && pendingVehicleActions.ascent->path.rbegin()->y == pos.y;
+         } /* endswitch */
+      }
+   return false;
+}
+
+void Ascend::execute( const MapCoordinate& pos, int num )
+{
+   if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
+      new IncreaseVehicleHeight ( &getDefaultMapDisplay(), &pendingVehicleActions );
+
+      bool simpleMode = false;
+      if (  skeypress( ct_lshift ) ||  skeypress ( ct_rshift ))
+         simpleMode = true;
+
+      int res = pendingVehicleActions.ascent->execute ( actmap->getField(pos)->vehicle, -1, -1, 0, actmap->getField(pos)->vehicle->height << 1, simpleMode );
+      if ( res < 0 ) {
+         dispmessage2 ( -res, NULL );
+         delete pendingVehicleActions.action;
+         return;
+      }
+
+      if ( res == 1000 )
+         delete pendingVehicleActions.action;
+      else {
+         for ( int i = 0; i < pendingVehicleActions.ascent->reachableFields.getFieldNum(); i++ )
+            pendingVehicleActions.ascent->reachableFields.getField( i ) ->a.temp = 1;
+         displaymap();
+      }
+
+   } else
+     if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_ascent &&  (pendingVehicleActions.ascent->getStatus() == 2 || pendingVehicleActions.ascent->getStatus() == 3 )) {
+        int xdst = pos.x;
+        int ydst = pos.y;
+        int res = pendingVehicleActions.ascent->execute ( NULL, xdst, ydst, pendingVehicleActions.ascent->getStatus(), -1, 0 );
+        if ( res >= 0 && CGameOptions::Instance()->fastmove ) {
+           actmap->cleartemps(7);
+           displaymap();
+           // if the status is 1000 at this position, the unit has been shot down by reactionfire before initiating the height change
+           if ( res < 1000 )
+              res = pendingVehicleActions.ascent->execute ( NULL, xdst, ydst, pendingVehicleActions.ascent->getStatus(), -1, 0 );
+        } else {
+           actmap->cleartemps(7);
+           if ( res < 1000 )
+              for ( int i = 0; i < pendingVehicleActions.ascent->path.size(); i++ )
+                 actmap->getField( pendingVehicleActions.ascent->path[i]) ->a.temp = 1;
+           displaymap();
+        }
+
+        if ( res < 0 ) {
+           dispmessage2 ( -res, NULL );
+           delete pendingVehicleActions.action;
+           updateFieldInfo();
+           return;
+        }
+
+        if ( pendingVehicleActions.ascent->getStatus() == 1000 ) {
+           delete pendingVehicleActions.ascent;
+
+        }
+     }
+
+   updateFieldInfo();
+}
+
+
+
+
+
+class Descend : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num );
+      void execute( const MapCoordinate& pos, int num );
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("descent-airplane.png");
+      };
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "descend";
+      };
+};
+
+bool Descend::available( const MapCoordinate& pos, int num )
+{
+   if ( moveparams.movestatus == 0 && !pendingVehicleActions.action ) {
+      Vehicle* eht = actmap->getField(pos)->vehicle;
+      if ( !eht )
+         return false;
+
+      if (eht->color == actmap->actplayer * 8)
+         return DecreaseVehicleHeight::avail ( eht );
+   } else
+      if ( pendingVehicleActions.actionType == vat_descent ) {
+         switch ( pendingVehicleActions.descent->getStatus() ) {
+           case 2: return pendingVehicleActions.descent->reachableFields.isMember ( pos.x, pos.y );
+           case 3: return pendingVehicleActions.descent->path.rbegin()->x == pos.x && pendingVehicleActions.descent->path.rbegin()->y == pos.y;
+         } /* endswitch */
+      }
+   return false;
+}
+
+void Descend::execute( const MapCoordinate& pos, int num )
+{
+   if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
+      new DecreaseVehicleHeight ( &getDefaultMapDisplay(), &pendingVehicleActions );
+
+
+      bool simpleMode = false;
+      if (  skeypress( ct_lshift ) ||  skeypress ( ct_rshift ))
+         simpleMode = true;
+
+      int res = pendingVehicleActions.descent->execute ( actmap->getField(pos)->vehicle, -1, -1, 0, actmap->getField(pos)->vehicle->height >> 1, simpleMode );
+      if ( res < 0 ) {
+         dispmessage2 ( -res, NULL );
+         delete pendingVehicleActions.action;
+         return;
+      }
+
+      if ( res == 1000 )
+         delete pendingVehicleActions.action;
+      else {
+         for ( int i = 0; i < pendingVehicleActions.descent->reachableFields.getFieldNum(); i++ )
+            pendingVehicleActions.descent->reachableFields.getField( i ) ->a.temp = 1;
+         displaymap();
+      }
+
+   } else
+     if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_descent &&  (pendingVehicleActions.descent->getStatus() == 2 || pendingVehicleActions.descent->getStatus() == 3 )) {
+        int res = pendingVehicleActions.descent->execute ( NULL, pos.x, pos.y, pendingVehicleActions.descent->getStatus(), -1, 0 );
+        if ( res >= 0 && CGameOptions::Instance()->fastmove ) {
+           actmap->cleartemps(7);
+           displaymap();
+           // if the status is 1000 at this position, the unit has been shot down by reactionfire before initiating the height change
+           if ( res < 1000 )
+              res = pendingVehicleActions.descent->execute ( NULL, pos.x, pos.y, pendingVehicleActions.descent->getStatus(), -1, 0 );
+        } else {
+           actmap->cleartemps(7);
+           if ( res < 1000 )
+              for ( int i = 0; i < pendingVehicleActions.descent->path.size(); i++ )
+                 actmap->getField( pendingVehicleActions.descent->path[i]) ->a.temp = 1;
+           displaymap();
+        }
+
+
+        if ( res < 0 ) {
+           dispmessage2 ( -res, NULL );
+           delete pendingVehicleActions.action;
+           updateFieldInfo();
+           return;
+        }
+
+        if ( pendingVehicleActions.descent->getStatus() == 1000 ) {
+           delete pendingVehicleActions.descent;
+
+/*           if ( CGameOptions::Instance()->smallguiiconopenaftermove ) {
+              actgui->painticons();
+              actgui->paintsmallicons ( CGameOptions::Instance()->mouse.smallguibutton, 0 );
+           }
+           */
+        }
+     }
+   updateFieldInfo();
+}
+
+
+
+
+
+
+
+
+
 class EndTurn : public GuiFunction
 {
    public:
@@ -712,7 +917,7 @@ class DisableReactionfire : public GuiFunction
 
       void execute( const MapCoordinate& pos, int num )
       {
-         getactfield()->vehicle->reactionfire.disable();
+         actmap->getField(pos)->vehicle->reactionfire.disable();
          updateFieldInfo();
       }
 
@@ -1688,5 +1893,7 @@ void registerGuiFunctions( GuiIconHandler& handler )
    handler.registerUserFunction( new GuiFunctions::OpenContainer() );
    handler.registerUserFunction( new GuiFunctions::EnableReactionfire() );
    handler.registerUserFunction( new GuiFunctions::DisableReactionfire() );
+   handler.registerUserFunction( new GuiFunctions::Ascend );
+   handler.registerUserFunction( new GuiFunctions::Descend );
 }
 

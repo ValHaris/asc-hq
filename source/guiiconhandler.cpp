@@ -101,6 +101,11 @@ SmallGuiButton::SmallGuiButton( PG_Widget *parent, const PG_Rect &r, GuiButton* 
      smallIcon = NULL;
 }
 
+void SmallGuiButton::press()
+{
+   SetPressed(true);
+   Update();
+}   
 
 SmallGuiButton::~SmallGuiButton()
 {
@@ -250,6 +255,8 @@ bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SDL_MouseBut
             SmallGuiButton* sgi = new SmallGuiButton( mapDisplay, PG_Rect( p.x, p.y, smallGuiIconSizeX, smallGuiIconSizeY ), b, this );
             p.x += smallGuiIconSizeX + smallGuiIconSpace;
             smallButtons.push_back ( sgi );
+            if ( j == 0  && positionedUnderCursor )
+               sgi->press();
          }
       }
 

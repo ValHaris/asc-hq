@@ -65,6 +65,7 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
 {
    this->themeName = themeName;
    EnableSymlinks(true);
+   EnableAppIdleCalls();
    int i = 0;
    bool themeFound = false;
    ASCString path;
@@ -153,7 +154,7 @@ int ASC_PG_App::Run ( )
             pgApp->PumpIntoEventQueue( &event );
 
       } else
-         SDL_Delay ( 2 );
+         eventIdle();
    }
    enableLegacyEventHandling ( true );
    return quitModalLoopValue;
