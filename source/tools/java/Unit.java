@@ -1,6 +1,9 @@
-//     $Id: Unit.java,v 1.5 2000-10-31 10:41:20 mbickel Exp $
+//     $Id: Unit.java,v 1.6 2000-11-07 16:19:40 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/10/31 10:41:20  mbickel
+//      Fixed crash when loading a unit that can "construct specific building"
+//
 //     Revision 1.4  2000/10/17 17:28:27  schelli
 //     minor bugs fixed in lots of sources
 //     add & remove weapon works now
@@ -104,19 +107,27 @@ public class Unit {   /*  vehicleart: z.B. Schwere Fuátruppe  */
     BuildRange      buildingsbuildable[];
     UnitWeapon weapons; //UnitWeapon*
     int       autorepairrate;
-
     int       vehicleCategoriesLoadable;    
+    RLEPackage picPackage[];
 
     private String fileLocation;
     private SgStream stream;
-    private RLEPackage picPackage[];
+    
 
 
     public Unit(String s) {
         fileLocation = s;
     }
 
-    public void makeNew() {
+    public void createNew() {
+        production = new PK();
+        picture = new int[8];
+        movement = new int[8];
+        classnames = new String[8];
+        classbound = new ClassBound[8];
+        for (int j=0;j < 8;j++) classbound[j] = new ClassBound();
+        picPackage = new RLEPackage[8];
+        weapons = new UnitWeapon();
     }
 
     public int load () {
@@ -288,7 +299,7 @@ public class Unit {   /*  vehicleart: z.B. Schwere Fuátruppe  */
             weapons = new UnitWeapon();
             if ( (weapons != null)&& (version > 1) ) {
                 weapons.count = stream.readInt();
-                weapons.weapon = new SingleWeapon[16];
+                //weapons.weapon = new SingleWeapon[16];
                 for (int j = 0; j < 16; j++ ) {
                     weapons.weapon[j] = new SingleWeapon();
                     weapons.weapon[j].typ = stream.readInt();
@@ -300,7 +311,7 @@ public class Unit {   /*  vehicleart: z.B. Schwere Fuátruppe  */
                     weapons.weapon[j].maxStrength = stream.readInt();
                     weapons.weapon[j].minStrength = stream.readInt();
 
-                    weapons.weapon[j].efficiency = new int[13];
+                    //weapons.weapon[j].efficiency = new int[13];
                     for (int k = 0; k < 13; k++ )
                     weapons.weapon[j].efficiency[k] = stream.readInt();
 
@@ -351,8 +362,12 @@ public class Unit {   /*  vehicleart: z.B. Schwere Fuátruppe  */
                 }
             }
 
+            stream.close();
             return 0;
-        } else return 1;
+        } else {
+            stream.close();
+            return 1;
+        }
 
     }
 
@@ -522,6 +537,7 @@ public class Unit {   /*  vehicleart: z.B. Schwere Fuátruppe  */
         }
 
         version = vehicle_version;
+        stream.close();
         return 0;
     }
 

@@ -1,6 +1,14 @@
-//     $Id: PK.java,v 1.3 2000-10-17 17:28:26 schelli Exp $
+//     $Id: PK.java,v 1.4 2000-11-07 16:19:39 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/10/17 17:28:26  schelli
+//     minor bugs fixed in lots of sources
+//     add & remove weapon works now
+//     revert to save button removed
+//     class-handling bugs fixed
+//     load & save routines fully implemented
+//     terrainacces added
+//
 //     Revision 1.2  2000/10/13 13:15:46  schelli
 //     Load&Save routines finished
 //
@@ -35,6 +43,8 @@ public class PK extends Object {
         
   /** Creates new tPK */
   public PK() {
+    energy = 0;
+    material = 0;
   }
   
 }

@@ -1,7 +1,7 @@
-//     $Id: ClassBound.java,v 1.4 2000-11-07 16:19:39 schelli Exp $
+//     $Id: Building.java,v 1.1 2000-11-07 16:19:39 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
-//     Revision 1.3  2000/10/17 17:28:26  schelli
+//     Revision 1.1  2000/10/17 17:28:26  schelli
 //     minor bugs fixed in lots of sources
 //     add & remove weapon works now
 //     revert to save button removed
@@ -9,15 +9,13 @@
 //     load & save routines fully implemented
 //     terrainacces added
 //
-//     Revision 1.2  2000/10/13 13:15:46  schelli
-//     Load&Save routines finished
 //
 
 /*
- * ClassBound.java
+ * Building.java
  *
- * Created on 22. November 1999, 14:09
- 
+ * Created on 6. November 2000, 15:20
+  
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-2000  Martin Bickel  and  Marc Schellenberger
 
@@ -37,25 +35,39 @@
     Boston, MA  02111-1307  USA
 */
 
-public class ClassBound {
-  
-     static int weaponcount = 8;
-         
-     int          weapstrength[]; //w     
-     int          armor;  //w
-     int          techlevel; //w  Techlevel ist eine ALTERNATIVE zu ( techrequired und envetrequired )
-     int          techrequired[]; //w
-     int          eventrequired; //c
-     int          vehiclefunctions;   
+public class Building extends Object {
+
+    private String fileLocation;
+    private SgStream stream;
+
+    /** Creates new Building */    
+    public Building(String s) {
+        fileLocation = s;
+    }
+
+    public void createNew() {
+    }
+
+    public int load () {
+
+        stream = new SgStream(fileLocation,SgStream.STREAM_READ);
+
+        if (stream.error != 0) return stream.error;
+        
+        return 0;
+    }
     
-  /** Creates new tClassBound */
-  public ClassBound() {
-    weapstrength = new int[weaponcount];
-    techrequired = new int[4];
-    armor = 0;
-    techlevel = 0;
-    eventrequired = 0;
-    vehiclefunctions = 0;
-  }
-  
+    public int write () {
+        
+        int  one  = 1;
+        int  zero = 0;
+
+        stream = new SgStream(fileLocation,stream.STREAM_WRITE);
+
+        if (stream.error != 0) return stream.error;
+        
+        return 0;
+    }
+    
+
 }

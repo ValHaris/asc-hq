@@ -1,6 +1,14 @@
-//     $Id: BuildRange.java,v 1.1 2000-10-17 17:28:26 schelli Exp $
+//     $Id: BuildRange.java,v 1.2 2000-11-07 16:19:38 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/10/17 17:28:26  schelli
+//     minor bugs fixed in lots of sources
+//     add & remove weapon works now
+//     revert to save button removed
+//     class-handling bugs fixed
+//     load & save routines fully implemented
+//     terrainacces added
+//
 //
 
 /*
@@ -34,6 +42,8 @@ public class BuildRange extends Object {
 
     /** Creates new tBuildRange */
     public BuildRange() {        
+        from = 0;
+        to = 0;        
     }
 
 }

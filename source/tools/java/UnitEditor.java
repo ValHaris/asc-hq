@@ -1,6 +1,10 @@
-//     $Id: UnitEditor.java,v 1.7 2000-11-01 11:41:05 mbickel Exp $
+//     $Id: UnitEditor.java,v 1.8 2000-11-07 16:19:40 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/11/01 11:41:05  mbickel
+//      Fixed: Selection in MainWindow-List not being evaluated, the first list
+//       entry was always edited.
+//
 //     Revision 1.6  2000/10/31 18:06:46  mbickel
 //      Fileselector now displays files too
 //
@@ -59,7 +63,8 @@ public class UnitEditor extends javax.swing.JFrame {
 
     public int initDone;
 
-    public String errorMessage;
+    public String errorMessage;    
+    public SgStream s;
 
     private Unit tUnit;
     private ErrorMessage errMsg;
@@ -132,6 +137,9 @@ public class UnitEditor extends javax.swing.JFrame {
     private javax.swing.JCheckBox accessNecessaryHeightTableTableCheckBox[];
     private javax.swing.JCheckBox accessNoneHeightTableCheckBox[];
     private javax.swing.JCheckBox accessDiesHeightTableCheckBox[];
+    //Image-Table
+    private ImgCanvas canvas;
+    private ImageProcess imgProcess;
 
 
 
@@ -139,7 +147,7 @@ public class UnitEditor extends javax.swing.JFrame {
     /** Creates new form UnitWindow */
     public UnitEditor(String unitPath, String unitFileName, int action,int exitAct){
         // action new / load;
-        //exitAct exit / dispose
+        //exitAct exit / dispose        
         initDone = 0;
 
         if (unitPath.length() == 0) return;
@@ -149,7 +157,7 @@ public class UnitEditor extends javax.swing.JFrame {
         if ( unitPath.endsWith(java.io.File.separator ) == false ) unitPath = unitPath.concat(java.io.File.separator);
         String unitAbsoluteFileName = unitPath.concat(unitFileName);
         tUnit = new Unit(unitAbsoluteFileName);
-        if (action == 0 ) tUnit.makeNew();
+        if (action == tUnit.NEW) tUnit.createNew();
         else tUnit.load();
 
         setTitle(unitFileName+" - "+tUnit.name+" - "+tUnit.description);
@@ -211,7 +219,7 @@ public class UnitEditor extends javax.swing.JFrame {
         //*Field-Value-Initialisations*
 
         // Main-Panel
-        if (tUnit.name != null) jTxtFieldName.setText (tUnit.name);
+        if ((tUnit.name != null) && (action == tUnit.LOAD)) jTxtFieldName.setText (tUnit.name);
         else jTxtFieldName.setText ("");
         if (tUnit.description != null)
         jTxtFieldDescription.setText (tUnit.description);
@@ -225,13 +233,13 @@ public class UnitEditor extends javax.swing.JFrame {
         jIntFieldProductionMaterial.setInt(tUnit.production.material);
         jIntFieldView.setInt(tUnit.view);
         jIntFieldJamming.setInt(tUnit.jamming);
-        
+
         // InfoText-Panel
-        if (tUnit.infotext != null) 
-           jTextPaneInfoText.setText (tUnit.infotext);
-        else 
-           jTextPaneInfoText.setText ("");
-        
+        if (tUnit.infotext != null)
+        jTextPaneInfoText.setText (tUnit.infotext);
+        else
+        jTextPaneInfoText.setText ("");
+
         // Movement-Panel
         jIntFieldFuelconsumption.setInt(tUnit.fuelconsumption);
         jIntFieldTank.setInt(tUnit.tank);
@@ -262,8 +270,8 @@ public class UnitEditor extends javax.swing.JFrame {
 
             movementTableTextField[i] = new javax.swing.JTextField();
             movementTableTextField[i].setBorder (
-               new javax.swing.border.TitledBorder(new javax.swing.border.EtchedBorder(),cHeightLevel[i]
-               .concat(".Movement (0-255)"), 1, 2, new java.awt.Font ("Arial", 0, 10)));
+            new javax.swing.border.TitledBorder(new javax.swing.border.EtchedBorder(),cHeightLevel[i]
+            .concat(".Movement (0-255)"), 1, 2, new java.awt.Font ("Arial", 0, 10)));
             movementTableTextField[i].setText ("0");
             movementTableTextField[i].setEnabled (false);
             jIntFieldMovementTable[i] = new MakeCheckIntRangeField
@@ -618,6 +626,15 @@ public class UnitEditor extends javax.swing.JFrame {
             accessDiesHeightTableCheckBox[i].setSelected(true);
         }
 
+        
+        canvas = new ImgCanvas();
+        s = new SgStream("E:\\Demount\\palette.pal",s.STREAM_READ);
+        if ( s.error == 0 ) canvas.palette = s.readPalette();
+        s.close();
+        canvas.setVisible(false);
+        jPanelPicture.add (canvas, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 10, 110, 110));
+        imgProcess = new ImageProcess(tUnit.picPackage[0],canvas);
+
         initDone = 1;
 
         pack ();
@@ -710,7 +727,7 @@ public class UnitEditor extends javax.swing.JFrame {
         jScrollPaneInfoText = new javax.swing.JScrollPane ();
         jTextPaneInfoText = new javax.swing.JTextPane ();
         jPanelTerrainAccess = new javax.swing.JPanel ();
-        jPanel2 = new javax.swing.JPanel ();
+        jPanelPicture = new javax.swing.JPanel ();
         jLabelErrorMessage = new javax.swing.JLabel ();
         getContentPane ().setLayout (new org.netbeans.lib.awtextra.AbsoluteLayout ());
         addWindowListener (new java.awt.event.WindowAdapter () {
@@ -1209,8 +1226,9 @@ public class UnitEditor extends javax.swing.JFrame {
   
           jTabbedPaneMain.addTab ("TerrainAccess", jPanelTerrainAccess);
   
+          jPanelPicture.setLayout (new org.netbeans.lib.awtextra.AbsoluteLayout ());
   
-          jTabbedPaneMain.addTab ("not implemented yet", jPanel2);
+          jTabbedPaneMain.addTab ("Picture", jPanelPicture);
   
 
         getContentPane ().add (jTabbedPaneMain, new org.netbeans.lib.awtextra.AbsoluteConstraints (0, 0, 790, 510));
@@ -1298,6 +1316,9 @@ private void jTabbedPaneMainStateChanged (javax.swing.event.ChangeEvent evt) {//
         else classFunctionSelectCheckBox[i].setEnabled(false);
         // check if functions are available on this unit, then they can be available at this class
         // functions -> class panel
+        canvas.setVisible(true);
+        canvas.showImage();
+        //showImage, if Image-Tab selected
     }
   }//GEN-LAST:event_jTabbedPaneMainStateChanged
 
@@ -1929,7 +1950,7 @@ private javax.swing.JPanel jPanelInfoText;
 private javax.swing.JScrollPane jScrollPaneInfoText;
 private javax.swing.JTextPane jTextPaneInfoText;
 private javax.swing.JPanel jPanelTerrainAccess;
-private javax.swing.JPanel jPanel2;
+private javax.swing.JPanel jPanelPicture;
 private javax.swing.JLabel jLabelErrorMessage;
 // End of variables declaration//GEN-END:variables
 

@@ -1,6 +1,10 @@
-//     $Id: MainWindow.java,v 1.8 2000-11-01 11:41:04 mbickel Exp $
+//     $Id: MainWindow.java,v 1.9 2000-11-07 16:19:39 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/11/01 11:41:04  mbickel
+//      Fixed: Selection in MainWindow-List not being evaluated, the first list
+//       entry was always edited.
+//
 //     Revision 1.7  2000/10/31 18:06:46  mbickel
 //      Fileselector now displays files too
 //
@@ -177,6 +181,12 @@ public class MainWindow extends javax.swing.JFrame {
 
         jButtonNew.setActionCommand ("New");
         jButtonNew.setText ("New");
+        jButtonNew.addActionListener (new java.awt.event.ActionListener () {
+            public void actionPerformed (java.awt.event.ActionEvent evt) {
+                jButtonNewActionPerformed (evt);
+            }
+        }
+        );
 
 
         getContentPane ().add (jButtonNew, new org.netbeans.lib.awtextra.AbsoluteConstraints (380, 100, 130, 60));
@@ -192,6 +202,15 @@ public class MainWindow extends javax.swing.JFrame {
         getContentPane ().add (jComboBoxType, new org.netbeans.lib.awtextra.AbsoluteConstraints (10, 10, 350, 50));
 
     }//GEN-END:initComponents
+
+  private void jButtonNewActionPerformed (java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewActionPerformed
+    // Add your handling code here:
+    switch (selection) {
+        case 0 : new UnitEditor (paths[selection],"new.veh",tUnit.NEW,new UnitEditor("","",0,0).DISPOSE).show ();
+        default : ;
+    }
+
+  }//GEN-LAST:event_jButtonNewActionPerformed
 
   private void jComboBoxTypeItemStateChanged (java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxTypeItemStateChanged
     // Add your handling code here:
@@ -213,7 +232,7 @@ public class MainWindow extends javax.swing.JFrame {
   }//GEN-LAST:event_jTextFieldPathActionPerformed
 
   private void jButtonEditActionPerformed (java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditActionPerformed
-    // Add your handling code here:    
+    // Add your handling code here:
     int sel = fileList.getSelectedIndex();
     if (sel >= 0) {
         String selName = files[sel];
@@ -228,17 +247,17 @@ private void jButtonBrowsePathActionPerformed (java.awt.event.ActionEvent evt) {
     // Add your handling code here:
     String dir;
     if ( (dir = browsePath(paths[selection])) != null ) {
-        
-       int i = dir.lastIndexOf(java.io.File.separator);
-       if(i>0 && i<dir.length()-1) {
-           paths[selection] =  dir.substring(0, i);
-        
-           //paths[selection] = dir;
-           jTextFieldPath.setText (paths[selection]);
-           selFiles();
-           fileList.setSelectedValue(dir.substring(i+1), true);
 
-       };
+        int i = dir.lastIndexOf(java.io.File.separator);
+        if(i>0 && i<dir.length()-1) {
+            paths[selection] =  dir.substring(0, i);
+
+            //paths[selection] = dir;
+            jTextFieldPath.setText (paths[selection]);
+            selFiles();
+            fileList.setSelectedValue(dir.substring(i+1), true);
+
+        };
     }
   }//GEN-LAST:event_jButtonBrowsePathActionPerformed
 
@@ -269,7 +288,7 @@ private void pathAction() {
 private String browsePath(String startPath) {
     javax.swing.JFileChooser jFileCh;
     ExampleFileFilter filter = new ExampleFileFilter( extensions ); //extensions
-    
+
     jFileCh = new javax.swing.JFileChooser(startPath);
     jFileCh.setFileFilter ( filter );
     //jFileCh.setFileSelectionMode(jFileCh.DIRECTORIES_ONLY);

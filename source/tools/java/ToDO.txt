@@ -1,6 +1,8 @@
 Not working components:
 ----------------------------------
 
+New Button
+
 Missing functions :
 ---------------------
 

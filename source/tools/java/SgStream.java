@@ -1,6 +1,14 @@
-//     $Id: SgStream.java,v 1.3 2000-10-17 17:28:26 schelli Exp $
+//     $Id: SgStream.java,v 1.4 2000-11-07 16:19:40 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/10/17 17:28:26  schelli
+//     minor bugs fixed in lots of sources
+//     add & remove weapon works now
+//     revert to save button removed
+//     class-handling bugs fixed
+//     load & save routines fully implemented
+//     terrainacces added
+//
 //     Revision 1.2  2000/10/13 13:15:47  schelli
 //     Load&Save routines finished
 //
@@ -138,29 +146,30 @@ public class SgStream {
         if (s == null) return " ";
         else return s;
     }
-    
+
     public byte[] readByteArray(int size){
-    
-    if (mode == STREAM_WRITE) return null;    
-    
-    b = new byte[size];
-    
-    try {
-      istream.read(b);
-    } catch (java.io.IOException e ) {
-      errorMessage=e.getMessage();
-      error = 2;
+
+        if (mode == STREAM_WRITE) return null;
+
+        b = new byte[size];
+
+        try {
+            istream.read(b);
+        } catch (java.io.IOException e ) {
+            errorMessage=e.getMessage();
+            error = 2;
+        }
+
+        return b;
     }
-    
-    return b;
-  }
 
     public RLEPackage readRlePicture() {
 
         RLEPackage pack;
-        pack = new RLEPackage();
 
-        if (mode == STREAM_WRITE) return pack;
+        if (mode == STREAM_WRITE) return null;
+
+        pack = new RLEPackage();
 
         RLEHeader head;
         int calculatedSize;
@@ -176,8 +185,8 @@ public class SgStream {
             }
         }
         else {
-            calculatedSize = (pack.head.id + 1) * (pack.head.size + 1) + 4;
-            pack.b = new byte[calculatedSize - 9 ];    // 9 = sizeOf(Head)
+            calculatedSize = (pack.head.x + 1) * (pack.head.y + 1);
+            pack.b = new byte[calculatedSize];
             try {
                 istream.read(pack.b);
             } catch (java.io.IOException e ) {
@@ -187,6 +196,22 @@ public class SgStream {
         }
         return pack;
     }
+
+    public PaletteInfo readPalette() {
+
+        if (mode == STREAM_WRITE) return null;
+
+        PaletteInfo p;
+
+        p = new PaletteInfo();
+
+        for (int i = 0;i < p.size;i++) p.r[i] = (byte) readChar();
+        for (int i = 0;i < p.size;i++) p.g[i] = (byte) readChar();
+        for (int i = 0;i < p.size;i++) p.b[i] = (byte) readChar();
+
+        return p;
+    }
+
 
 
     public void writeChar(int x){
@@ -275,7 +300,7 @@ public class SgStream {
         }
 
     }
-    
+
     public void writeByteArray(byte[] b){
 
         if (mode == STREAM_READ) return;
@@ -299,6 +324,25 @@ public class SgStream {
         } catch (java.io.IOException e ) {
             errorMessage=e.getMessage();
             error = 2;
+        }
+    }
+
+    public void close() {
+        if (mode == STREAM_READ) {
+            try {
+                istream.close();
+            } catch (java.io.IOException e ) {
+                errorMessage=e.getMessage();
+                error = 3;
+            }
+        }
+        else {
+            try {
+                ostream.close();
+            } catch (java.io.IOException e ) {
+                errorMessage=e.getMessage();
+                error = 3;
+            }            
         }
     }
 

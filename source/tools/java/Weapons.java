@@ -1,6 +1,9 @@
-//     $Id: Weapons.java,v 1.2 2000-10-13 13:15:48 schelli Exp $
+//     $Id: Weapons.java,v 1.3 2000-11-07 16:19:41 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/10/13 13:15:48  schelli
+//     *** empty log message ***
+//
 
 /*
  * tWeapons.java
@@ -32,6 +35,7 @@ public class Weapons extends Object {
 
   /** Creates new tWeapons */
   public Weapons() {
+    weaponcount = 0;
     weapon = new Weapon[8];  
   }
   
