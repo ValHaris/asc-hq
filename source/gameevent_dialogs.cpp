@@ -247,7 +247,7 @@ class  tgetxyunit : public tgetxy {
           public :
               ASCString getTitle() { return "Select Unit"; };
               virtual int condition(void);
-              virtual bool container( ContainerBase* cnt );
+              //virtual bool container( ContainerBase* cnt );
               };
 
 
