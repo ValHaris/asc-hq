@@ -553,13 +553,13 @@ void Building :: readData ( tnstream& stream, int version )
     for ( i = 0; i < waffenanzahl; i++)
        ammo[i] = stream.readWord();
 
-    /*
+/*
     if ( ammo[cwairmissilen] > 20 )
        ammo[cwairmissilen] = 20;
 
     if ( ammo[cwcruisemissile] > 10 )
        ammo[cwcruisemissile] = 10;
-    */
+*/    
 
     maxresearchpoints = stream.readWord();
     researchpoints = stream.readWord();
@@ -617,11 +617,19 @@ void Building :: readData ( tnstream& stream, int version )
 
 
     for ( i = 0; i< 3; i++ ) {
-       if ( plus.resource(i) > typ->maxplus.resource(i) )
-         plus.resource(i) = typ->maxplus.resource(i);
+       if ( typ->maxplus.resource(i) > 0 ) {
+          if ( plus.resource(i) > typ->maxplus.resource(i) )
+            plus.resource(i) = typ->maxplus.resource(i);
 
-       if ( maxplus.resource(i) > typ->maxplus.resource(i) )
-         maxplus.resource(i) = typ->maxplus.resource(i);
+          if ( maxplus.resource(i) > typ->maxplus.resource(i) )
+            maxplus.resource(i) = typ->maxplus.resource(i);
+       } else {
+          if ( plus.resource(i) < typ->maxplus.resource(i) )
+            plus.resource(i) = typ->maxplus.resource(i);
+
+          if ( maxplus.resource(i) < typ->maxplus.resource(i) )
+            maxplus.resource(i) = typ->maxplus.resource(i);
+       }
     }
 }
 
