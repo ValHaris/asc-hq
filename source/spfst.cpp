@@ -2,9 +2,12 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.114 2002-11-17 11:43:23 mbickel Exp $
+//     $Id: spfst.cpp,v 1.115 2002-11-24 10:54:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.114  2002/11/17 11:43:23  mbickel
+//      Fixed replay errors when replaying the AI moves
+//
 //     Revision 1.113  2002/11/02 14:13:18  mbickel
 //      New net handling for objects
 //
@@ -420,14 +423,12 @@ void         generatemap( TerrainType::Weather*   bt,
 { 
    delete actmap;
    actmap = new tmap;
-   actmap->xsize = xsize;
-   actmap->ysize = ysize; 
    for (int k = 1; k < 8; k++)
       actmap->player[k].stat = Player::computer;
 
    actmap->maptitle = "new map";
 
-   actmap->field = new tfield[ xsize * ysize];
+   actmap->allocateFields(xsize, ysize);
 
    if ( actmap->field== NULL)
       displaymessage ( "Could not generate map !! \nProbably out of enough memory !",2);
@@ -435,6 +436,7 @@ void         generatemap( TerrainType::Weather*   bt,
    for ( int l = 0; l < xsize*ysize; l++ ) {
       actmap->field[l].typ = bt;
       actmap->field[l].setparams();
+      actmap->field[l].setMap( actmap );
    }
 
    actmap->_resourcemode = 1;

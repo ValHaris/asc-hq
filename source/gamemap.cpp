@@ -685,6 +685,14 @@ void tmap :: cleartemps( int b, int value )
      }
 }
 
+void tmap :: allocateFields ( int x, int y )
+{
+   field = new tfield[x*y];
+   for ( int i = 0; i < x*y; i++ )
+      field[i].setMap ( this );
+   xsize = x;
+   ysize = y;
+}
 
 
 void tmap :: calculateAllObjects ( void )
@@ -1371,6 +1379,8 @@ void tfield::init ()
    building = NULL;
    a.temp = 0;
    a.temp2 = 0;
+   temp3 = 0;
+   temp4 = 0;
    visible = 0;
    direction = 0;
    fuel = 0;

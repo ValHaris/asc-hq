@@ -5,9 +5,12 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.74 2002-11-23 18:36:24 mbickel Exp $
+//     $Id: loaders.cpp,v 1.75 2002-11-24 10:54:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.74  2002/11/23 18:36:24  mbickel
+//      Fixed crash when deleting map that contained rubble generating buildings
+//
 //     Revision 1.73  2002/11/07 18:42:57  mbickel
 //      Fixed crash in reaction fire
 //      Improved autoborder object netification
@@ -1370,19 +1373,10 @@ void tspfldloaders::readfields ( void )
    int cnt2 = 0;
    int cnt1 = spfld->xsize * spfld->ysize;
 
-   spfld->field = new tfield [ cnt1 ];
+   spfld->allocateFields ( spfld->xsize , spfld->ysize );
+   
    if (spfld->field == NULL)
       displaymessage ( "Could not allocate memory for map ",2);
-
-   for ( int i = 0; i < cnt1; i++ ) {
-      spfld->field[i].building = NULL;
-      spfld->field[i].picture = NULL;
-      spfld->field[i].vehicle = NULL;
-      spfld->field[i].tempw = 0;
-      spfld->field[i].resourceview = NULL;
-      spfld->field[i].connection = 0;
-      spfld->field[i].setMap ( spfld );
-   }
 
    int l = 0;
    pfield lfld = NULL;

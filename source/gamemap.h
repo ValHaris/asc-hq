@@ -116,9 +116,11 @@ class Mine {
 class  tfield {
     pmap gamemap;
     void init();
+  protected:
+    tfield (  );
+    friend class tmap;
   public:
     tfield ( pmap gamemap_ );
-    tfield (  );
     void operator= ( const tfield& f );
 
     void setMap ( pmap gamemap_ ) { gamemap = gamemap_; };
@@ -467,6 +469,7 @@ class tmap {
       //! temporary variables for loading the map
       bool ___loadJournal, ___loadNewJournal, ___loadtitle;
 
+      void allocateFields ( int x, int y );
 
       ASCString     gameJournal;
       ASCString     newJournal;
