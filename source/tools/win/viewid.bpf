@@ -4,6 +4,7 @@ USELIB("..\..\..\..\sdl\bin\sdl.lib");
 USELIB("..\..\libs\bzlib\win\bzlib.lib");
 USELIB("..\..\..\..\SDL_image\bin\SDL_image.lib");
 USELIB("..\..\libs\sdlmm\SDLmm.lib");
+USEUNIT("..\..\itemrepository.cpp");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 

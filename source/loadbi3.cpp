@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.58 2001-10-11 10:41:06 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.59 2001-10-12 00:32:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2001/10/11 10:41:06  mbickel
+//      Restructured platform fileio handling
+//      Added map archival information to mapeditor
+//
 //     Revision 1.57  2001/10/08 14:12:20  mbickel
 //      Fixed crash in AI
 //      Speedup of AI
@@ -1522,8 +1526,12 @@ void tloadBImap :: LoadFromFile( const char* path, const char* AFileName, Terrai
        LoadDFs();
        UnPackDF(AktDFNum);
        */
-   
-       actmap->maptitle = GetStr ( 1, 24 );
+
+       if ( GetStr ( 1, 24 ) )
+          actmap->maptitle = GetStr ( 1, 24 );
+       else
+          actmap->maptitle.clear();
+
        if ( actmap->maptitle.empty() )
           actmap->maptitle = "imported BI map";
 
