@@ -7,7 +7,7 @@ INCLUDES		= -I$(top_builddir) -I$(top_src_dir) \
 
 SUBDIRS 		= mapeditor
 
-CXXFLAGS 		= @CXXFLAGS@ @SDL_CFLAGS@ @SDLMM_CXXFLAGS@ \
+AM_CXXFLAGS 		= @SDL_CFLAGS@ @SDLMM_CXXFLAGS@ \
 -Dsgmain -DFREEMAPZOOM -DNEWKEYB @PARAGUI_CFLAGS@
 
 bin_PROGRAMS		= asc

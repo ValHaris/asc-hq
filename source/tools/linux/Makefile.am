@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.28 2002-10-12 18:06:27 mbickel Exp $
+## $Id: Makefile.am,v 1.29 2002-10-16 13:14:42 mbickel Exp $
 
 vpath %.cpp ..:../..
 
@@ -10,7 +10,7 @@ INCLUDES		= -I $(top_builddir) -I$(top_src_dir) \
 -I$(top_builddir)/source -I$(top_src_dir)/source
 ## @OS_INCLUDE@
 
-CXXFLAGS 		= @CXXFLAGS@ @SDL_CFLAGS@ @SDLMM_CXXFLAGS@ -Dconverter
+AM_CXXFLAGS 		= @SDL_CFLAGS@ @SDLMM_CXXFLAGS@ -Dconverter
 
 bin_PROGRAMS 		= asc_demount \
 			asc_mount \

@@ -3,7 +3,7 @@
 set -x
 
 aclocal
-libtoolize --force --copy
+libtoolize --force --copy --automake
 aclocal
 autoheader
 automake --gnu --add-missing --copy

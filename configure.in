@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl AC_REVISION($Revision: 1.66 $)dnl
+dnl AC_REVISION($Revision: 1.67 $)dnl
 dnl AM_MAINTAINER_MODE
 AC_INIT(source/typen.h)
 
@@ -9,6 +9,10 @@ asc_version=`cat source/strtmesg.cpp | awk -F\" '/asc_release=/{print \$2}' | se
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE(asc,$asc_version)
+
+AC_DISABLE_SHARED
+AC_PROG_LIBTOOL
+
 
 dnl *************************************************************************
 dnl Checks for programs.
@@ -38,8 +42,6 @@ fi
 
 
 
-AC_DISABLE_SHARED
-AC_PROG_LIBTOOL
 
 dnl mikem: doesn't like this stuff - ugly right away
 CFLAGS="$CFLAGS -D_UNIX_ -D_SDL_"
@@ -297,27 +299,40 @@ AC_SUBST([MUSICDIR])
 
 
 
-AC_OUTPUT( Makefile \
-           asc.spec \
-	   doc/Makefile \
-           doc/manpages/Makefile \
-           source/Makefile \
-	   source/ai/Makefile \
-           source/clparser/Makefile \
-           source/docs/Makefile \
-	   source/docs/en/Makefile \
-           source/libs/Makefile \
-	   source/libs/triangul/Makefile \
-           source/sdl/Makefile \
-           source/tools/Makefile \
-	   source/tools/lib/Makefile \
-           source/tools/linux/Makefile \
-           source/unix/Makefile \
-           source/unix/mapeditor/Makefile \
-	   data/Makefile \
-           data/dialog/Makefile \
-           data/music/Makefile  )
+AC_OUTPUT(  Makefile \
+	    asc.spec \
+	    doc/Makefile \
+	    doc/manpages/Makefile \
+	    source/Makefile \
+	    source/ai/Makefile \
+	    source/clparser/Makefile \
+	    source/docs/Makefile \
+	    source/docs/en/Makefile \
+	    source/libs/Makefile \
+	    source/libs/triangul/Makefile \
+	    source/sdl/Makefile \
+	    source/tools/Makefile \
+	    source/tools/lib/Makefile \
+	    source/tools/linux/Makefile \
+	    source/unix/Makefile \
+	    source/unix/mapeditor/Makefile \
+	    data/Makefile \
+	    data/dialog/Makefile \
+	    data/music/Makefile  )
 
+AC_ARG_ENABLE( debug, [  --enable-debug       enables some debugging options], ENABLEDEBUG=1 )
+if test "X$ENABLEDEBUG" = "X1"; then
+   CXXFLAGS="$CXXFLAGS -g3"
+   echo SDL_CFLAGS $SDL_CFLAGS
+   echo SDL_LIBS $SDL_LIBS
+   echo SDLMM_CFLAGS $SDLMM_CXXFLAGS
+   echo SDLMM_LIBS $SDLMM_LIBS
+   echo PARAGUI_CFLAGS $PARAGUI_CFLAGS
+   echo PARAGUI_LIBS $PARAGUI_LIBS
+   echo CFLAGS $CFLAGS
+   echo LIBS $LIBS
+   echo LDFLAGS $LDFLAGS
+fi
 	
 if test "x$missingmusic" != x ; then
   AC_MSG_WARN( [ 
