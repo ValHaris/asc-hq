@@ -127,7 +127,7 @@ int AI::ServiceOrder::possible ( pvehicle supplier )
             } else
                if ( target.service[j].targetPos == position ) {  // is this stuff the one we need
                   int requiredAmount = target.service[j].maxAmount - target.service[j].curAmount;
-                  if ( requiredAmount > 0 ) {
+                  if ( requiredAmount >= 0 ) {
                      if ( requiredService == VehicleService::srv_resource ) {
                         if ( target.service[j].targetPos == Resources::Fuel ) { // fuel  ; 30 fields requiredForHome
                             if ( requiredAmount < target.service[j].orgSourceAmount - supplier->typ->fuelConsumption * 30 )

@@ -50,7 +50,7 @@ void         tcomputeview::initviewcalculation(  int view, int jamming, int sx, 
    else
       md = jamdist / minmalq + 1;
 
-   initsearch( MapCoordinate(sx, sy), md, 1 );
+   initsearch( MapCoordinate(sx, sy), md, 0 );
 }
 
 
@@ -140,7 +140,7 @@ void         tcomputevehicleview::init( const pvehicle eht, int _mode  )   // mo
       eht->searchForMineralResources();
 
    tcomputeview::initviewcalculation( eht->typ->view+1, eht->typ->jamming, eht->xpos, eht->ypos, _mode, eht->height );
-   testfield( eht->getPosition() );
+ //  testfield( eht->getPosition() );
 
 }
 
