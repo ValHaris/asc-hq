@@ -2,9 +2,15 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.34 2001-10-02 14:06:28 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.35 2001-10-29 20:24:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2001/10/02 14:06:28  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.33  2001/09/20 15:36:09  mbickel
 //      New object displaying mode
 //
@@ -1547,21 +1553,25 @@ void selunitcargo( pvehicle transport )
 
             if ( transport->vehicleloadable ( unit )) {
                int p = 0;
-               while ( transport->loading[p] )
+               while ( transport->loading[p] && p < 32)
                   p++;
-               transport->loading[p] = unit;
-               match = 1;
+               if ( p < 32 ) {
+                  transport->loading[p] = unit;
+                  match = 1;
+               }
                break;
             } else {
                unit->tank.material = 0;
                unit->tank.fuel = 0;
                if ( transport->vehicleloadable ( unit )) {
                   int p = 0;
-                  while ( transport->loading[p] )
+                  while ( transport->loading[p] && p < 32 )
                      p++;
-                  transport->loading[p] = unit;
-                  match = 1;
-                  displaymessage("Warning:\nThe unit you just set could not be loaded with full material and fuel\nPlease set these values manually",1);
+                  if ( p < 32 ) {
+                     transport->loading[p] = unit;
+                     displaymessage("Warning:\nThe unit you just set could not be loaded with full material and fuel\nPlease set these values manually",1);
+                     match = 1;
+                  }
                   break;
                }
             }
@@ -1626,11 +1636,15 @@ void selbuildingcargo( pbuilding bld )
 
        if ( match ) {
           int p = 0;
-          while ( bld->loading[p] )
+          while ( bld->loading[p] && p < 32 )
             p++;
-          bld->loading[p] = unit;
-          unit->setMovement ( unit->typ->movement[log2( unit->height)] );
-       } else {
+          if ( p < 32 ) {
+             bld->loading[p] = unit;
+             unit->setMovement ( unit->typ->movement[log2( unit->height)] );
+          } else
+             match = 0;
+       }
+       if ( !match ) {
            displaymessage("The unit could not be loaded !",1);
            delete unit;
        }

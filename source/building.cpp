@@ -2,9 +2,12 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.75 2001-10-11 10:22:49 mbickel Exp $
+//     $Id: building.cpp,v 1.76 2001-10-29 20:24:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.75  2001/10/11 10:22:49  mbickel
+//      Some cleanup and fixes for Visual C++
+//
 //     Revision 1.74  2001/09/23 23:06:20  mbickel
 //      Fixed:
 //       - ascent/descent during reactionfire
@@ -1703,10 +1706,13 @@ int   cbuildingcontrols :: cproduceunit :: available (pvehicletype fzt, int* lac
    if ( lack )
       *lack = l;
 
-   if ( l == 0)
-      return 1;
-   else
-      return 0;
+   if ( l == 0) {
+      for ( int i = 0; i < 32; i++ )
+         if ( !cc_b->building->loading[ i ] )
+            return 1;
+   }
+
+   return 0;
 }
 
 
