@@ -75,8 +75,6 @@ Vehicletype :: Vehicletype ( void )
 
    armor = 0;
 
-   for ( i = 0; i < 8; i++ )
-      picture[i] = NULL;
    height     = 0;
    cargoMovementDivisor = 2;
    wait = 0;
@@ -120,7 +118,7 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 18;
+const int vehicle_version = 19;
 
 
 
@@ -169,8 +167,10 @@ void Vehicletype :: read ( tnstream& stream )
    productionCost.energy   = stream.readWord();
    productionCost.material = stream.readWord();
    armor = stream.readWord();
+
+   bool picture[8];
    for ( j = 0; j < 8; j++ )
-       picture[j] = (void*)  stream.readInt();
+       picture[j] = stream.readInt();
 
    height = stream.readChar();
    stream.readWord(); // was: researchID
@@ -310,16 +310,26 @@ void Vehicletype :: read ( tnstream& stream )
       if ( !autorepairrate )
          autorepairrate = autorepairdamagedecrease; // which is 10
 
-   int size;
-   for (i=0;i<8  ;i++ )
-      if ( picture[i] ) {
-         // if ( bipicture <= 0 )
-            stream.readrlepict ( &picture[i], false, &size);
+   if ( version <= 18 ) {
+      int size;
+      if ( picture[0] )
+         image[0][0].read ( stream );
+
+      setupPictures();
+
+      for ( int i=1;i<8  ;i++ ) {
+         if ( picture[i] ) {
+            Surface s;
+            s.read ( stream );
             bipicture = 0;
-         /* else
-            loadbi3pict_double ( bipicture, &picture[i], 1); // CGameOptions::Instance()->bi3.interpolate.units );
-            */
+         }
       }
+   } else {
+      for ( int i = 0; i < playerNum; ++i )
+         image[i][0].read ( stream );
+
+      setupPictures();
+   }
 
 
    if ( objectsbuildablenum )
@@ -429,10 +439,6 @@ void Vehicletype :: read ( tnstream& stream )
 
    }
 
-   #ifndef converter
-   setupPictures();
-   #endif
-
    if ( ___loadterrainaccess || version >= 5 )
       terrainaccess.read ( stream );
    else {
@@ -488,30 +494,28 @@ void Vehicletype :: read ( tnstream& stream )
 void Vehicletype::setupPictures()
 {
    #ifndef converter
-      if ( !picture[0] )
-         fatalError ( "The vehicletype " + getName() + " (ID: " + strrr( id ) + ") has an invalid picture" );
 
-      if ( bipicture <= 0 ) {
-         int count = 0;
-         for ( int i = 0; i < 6; i++ )
-            if ( picture[i] )
-               ++count;
-               
-         if ( count == 6 )
-            return;
+      // if ( bipicture <= 0 ) {
+         if ( !image[0][0].valid() )
+            fatalError ( "The vehicletype " + getName() + " (ID: " + strrr( id ) + ") has an invalid picture" );
 
-         TrueColorImage* zimg = zoomimage ( picture[0], fieldxsize, fieldysize, pal, 0 );
-         void* pic = convertimage ( zimg, pal ) ;
-         for ( int i = 1; i < 6; i++ )
-             picture[i] = rotatepict ( pic, directionangle[i] );
-         delete[] picture[0];
-         picture[0] = pic;
-         delete zimg;
+         image[0][0].strech ( fieldsizex, fieldsizey );
+         for ( int i = 1; i < playerNum; ++i ) {
+            if ( !image[i][0].valid() ) {
+               image[i][0] = image[0][0];
+               colorShift(image[i][0], 16,8, 8*i);
+            }
+            for ( int j = 1; j < 6; ++j)
+               if ( !image[i][j].valid())
+                  image[i][j] = rotateSurface ( image[i][0], directionangle[i] );
+         }
+      /*
       } else {
          for ( int i = 1; i < 6; i++ )
             if ( !picture[i] )
                picture[i] = rotatepict ( picture[0], directionangle[i] );
       }
+      */
    #endif
 }
 
@@ -541,13 +545,6 @@ void Vehicletype:: write ( tnstream& stream ) const
    stream.writeWord( productionCost.energy );
    stream.writeWord( productionCost.material );
    stream.writeWord( armor );
-
-   for ( j = 0; j < 8; j++ )
-      if ( picture[j] )
-         stream.writeInt( 1 );
-      else
-         stream.writeInt( 0 );
-
    stream.writeChar( height );
    stream.writeWord(0); // researchid
    stream.writeChar(0); // steigung
@@ -597,10 +594,8 @@ void Vehicletype:: write ( tnstream& stream ) const
    if ( !infotext.empty() )
       stream.writeString( infotext );
 
-   // if ( bipicture <= 0 )
-      for (i=0;i<8  ;i++ )
-         if ( picture[i] )
-            stream.writeImage ( picture[i], false );
+   for (i=0;i<playerNum  ;i++ )
+      image[i][0].write( stream );
 
    for ( i = 0; i < objectsBuildable.size(); i++ ) {
       stream.writeInt ( objectsBuildable[i].from );
@@ -695,20 +690,12 @@ int Vehicletype :: maxSpeed ( ) const
 
 Vehicletype :: ~Vehicletype ( )
 {
-   int i;
-
-   for ( i = 0; i < 8; i++ )
-      if ( picture[i] ) {
-         delete picture[i];
-         picture[i] = NULL;
-      }
-
    if ( buildicon ) {
       delete buildicon;
       buildicon = NULL;
    }
 
-   for ( i = 0; i < 8; i++ )
+   for ( int i = 0; i < 8; i++ )
       if ( aiparam[i] ) {
          delete aiparam[i];
          aiparam[i] = NULL;
@@ -826,7 +813,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    } else
       fn = extractFileName_withoutSuffix( filename );
 
-   pc.addImage( "Picture", picture[0], fn );
+   pc.addImage( "Picture", image[0][0], fn );
 
    pc.addTagInteger( "Height", height, choehenstufennum, heightTags );
    pc.addBool ( "WaitFortack", wait );
@@ -926,6 +913,11 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    #ifndef converter
    buildicon = generate_vehicle_gui_build_icon ( this );
    #endif
+}
+
+void  Vehicletype::paint ( Surface& s, SPoint pos, int player, int direction )
+{
+   s.Blit( image[player][direction] , pos);
 }
 
 

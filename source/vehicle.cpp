@@ -685,34 +685,6 @@ bool Vehicle :: weapexist( void )
 }
 
 
-void Vehicle :: putimage ( int x, int y )
-{
-  #ifdef sgmain
-   int shaded = !canMove() && maxMovement() && ( color == gamemap->actplayer*8) && (attacked || !typ->weapons.count || CGameOptions::Instance()->units_gray_after_move );
-  #else
-   int shaded = 0;
-  #endif
-    if ( height <= chgetaucht ) {
-       if ( shaded )
-          putpicturemix ( x, y, xlatpict(xlatpictgraytable,  typ->picture[  direction ]),  color, (char*) colormixbuf );
-       else
-          putpicturemix ( x, y,  typ->picture[ direction],  color, (char*) colormixbuf );
-    } else {
-          if ( height >= chtieffliegend ) {
-             int d = 6 * ( log2 ( height) - log2 ( chfahrend ));
-             putshadow ( x + d, y + d, typ->picture[direction] , &xlattables.a.dark3);
-          } else
-             if ( height == chfahrend )
-                putshadow ( x + 1, y + 1,  typ->picture[ direction] , &xlattables.a.dark3);
-
-          if ( shaded )
-             putrotspriteimage( x, y, xlatpict(xlatpictgraytable,  typ->picture[  direction ]),  color);
-          else
-             putrotspriteimage( x, y,  typ->picture[ direction],  color);
-    }
-}
-
-
 void Vehicle :: setnewposition ( int x , int y )
 {
   xpos = x;
@@ -1508,6 +1480,40 @@ const ASCString&  Vehicle::getName() const
    else
       return name;
 }
+
+void Vehicle::paint ( Surface& s, SPoint pos )
+{
+
+  #ifdef sgmain
+   bool shaded = !canMove() && maxMovement() && ( color == gamemap->actplayer*8) && (attacked || !typ->weapons.count || CGameOptions::Instance()->units_gray_after_move );
+  #else
+   bool shaded = 0;
+  #endif
+   Surface& img = typ->getImage( owner(), direction );
+
+
+    if ( height <= chgetaucht ) {
+       if ( shaded )
+          putpicturemix ( x, y, xlatpict(xlatpictgraytable,  typ->picture[  direction ]),  color, (char*) colormixbuf );
+       else
+          putpicturemix ( x, y,  typ->picture[ direction],  color, (char*) colormixbuf );
+    } else {
+          if ( height >= chtieffliegend ) {
+             int d = 6 * ( log2 ( height) - log2 ( chfahrend ));
+             putshadow ( x + d, y + d, typ->picture[direction] , &xlattables.a.dark3);
+          } else
+             if ( height == chfahrend )
+                putshadow ( x + 1, y + 1,  typ->picture[ direction] , &xlattables.a.dark3);
+
+          if ( shaded )
+             putrotspriteimage( x, y, xlatpict(xlatpictgraytable,  typ->picture[  direction ]),  color);
+          else
+             putrotspriteimage( x, y,  typ->picture[ direction],  color);
+    }
+
+
+}
+
 
 
 Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream )

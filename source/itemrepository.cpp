@@ -40,6 +40,7 @@ ProgressBar* actprogressbar = NULL;
 pobjecttype eisbrecherobject = NULL;
 pobjecttype fahrspurobject = NULL;
 
+const char* cacheFileName = "asc2.cache";
 
 typedef vector<TextFileDataLoader*> DataLoaders;
 DataLoaders dataLoaders;
@@ -186,8 +187,8 @@ FileCache::FileCache( )
          actualFileInfo.push_back ( fi );
    }
 
-   if ( exist ( "asc.cache" )) {
-      stream = new tnfilestream ( "asc.cache", tnstream::reading );
+   if ( exist ( cacheFileName )) {
+      stream = new tnfilestream ( cacheFileName, tnstream::reading );
       int version = stream->readInt();
 
       if ( version == cacheVersion )
@@ -244,7 +245,7 @@ void FileCache::write()
    if ( stream )
       delete stream;
 
-   stream = new tn_file_buf_stream ( "asc.cache", tnstream::writing );
+   stream = new tn_file_buf_stream ( cacheFileName, tnstream::writing );
 
    stream->writeInt ( cacheVersion );
    writeClassContainer ( actualFileInfo, *stream );
@@ -298,7 +299,7 @@ void  loadAllData( bool useCache )
          cache.load();
       }
       catch ( tinvalidversion err ) {
-         fatalError("the cache seems to have been generated with a newer version of ASC than this one.\nPlease upgrade to that version, or delete asc.cache and try again");
+         fatalError("the cache seems to have been generated with a newer version of ASC than this one.\nPlease upgrade to that version, or delete " + ASCString(cacheFileName) + " and try again");
       }
       displayLogMessage ( 4, "loading of cache completed\n");
    } else {

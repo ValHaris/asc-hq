@@ -213,9 +213,6 @@
     //! checks whether the unit can construct a vehicle of the given type at the given position.
     bool vehicleconstructable ( pvehicletype tnk, int x, int y );
 
-    //! displays the unit at position x/y on the screen
-    void putimage ( int x, int y );
-
     //! sets the unit (and its cargo) the a new position (the unit will not be chained to a field)
     void setnewposition ( int x, int y );
     void setnewposition ( const MapCoordinate& mc );
@@ -287,6 +284,11 @@
     void read ( tnstream& stream );
 
     void write ( tnstream& stream, bool includeLoadedUnits = true );
+
+    //! displays the unit at position spos on s
+    void paint ( Surface& s, SPoint pos );
+
+
   private:
     void readData ( tnstream& stream );
   public:

@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.154 2004-09-13 16:56:54 mbickel Exp $
+//     $Id: typen.h,v 1.154.2.1 2004-10-10 09:19:00 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -49,6 +49,8 @@
 // #include "password.h"
 
 
+//! the number of players that ASC can manage. This includes the neutral semi-played, which can't do anything
+const int playerNum = 9;
 
 
 
@@ -692,6 +694,7 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
  #define maxfloat FLT_MAX
  #define minfloat FLT_MIN
 #endif
+
 
 
 

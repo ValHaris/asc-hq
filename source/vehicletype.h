@@ -132,6 +132,8 @@ extern const char*  cvehiclefunctions[];
 
  //! The class describing properties that are common to all vehicles of a certain kind. \sa Vehicle
  class Vehicletype : public ContainerBaseType {
+        //! the image of the unit.
+        Surface      image[playerNum][6];
     public:
         //! short description of the units role, for example "strategic bomber"
         ASCString    description;
@@ -139,9 +141,6 @@ extern const char*  cvehiclefunctions[];
         const ASCString&    getName() const;
 
         int armor;
-
-        //! the image of the unit. Only 6 images are used
-        void*        picture[8];
 
         //! the levels of height which this unit can enter
         int          height;
@@ -260,6 +259,10 @@ extern const char*  cvehiclefunctions[];
         void runTextIO ( PropertyContainer& pc );
         ~Vehicletype ( );
         Resources calcProductionsCost();
+
+        void  paint ( Surface& s, SPoint pos, int player, int direction );
+        Surface&  getImage ( int player, int direction ) { return image[player][direction];};
+
      private:
         void setupPictures();
         void setupRemovableObjectsFromOldFileLayout();

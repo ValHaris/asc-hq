@@ -19,9 +19,12 @@
     Boston, MA  02111-1307  USA
 */
 
+#include <SDL_image.h>
+#include <cmath>
 #include "surface.h"
 #include "../basegfx.h"
-
+#include "../basestrm.h"
+#include "../sdl/SDLStretch.h"
 
  SDLmm::PixelFormat* Surface::default8bit  = NULL;
  SDLmm::PixelFormat* Surface::default32bit = NULL;
@@ -159,7 +162,7 @@ void Surface::read ( tnstream& stream )
 
 void Surface::assignDefaultPalette()
 {
-   if ( me ) { 
+   if ( me ) {
         SDL_Color spal[256];
         int col;
         for ( int i = 0; i < 256; i++ ) {
@@ -175,6 +178,46 @@ void Surface::assignDefaultPalette()
          SDL_SetColors ( me, spal, 0, 256 );
    }
 }
+
+SDL_Color* getPalette( Palettes pal )
+{
+   static SDL_Color* grey = NULL;
+
+   if ( pal == GreyScale ) {
+      if ( !grey ) {
+         grey = new SDL_Color[256];
+
+   }
+}
+
+
+void Surface::assignDefaultPalette()
+{
+   if ( me ) {
+        SDL_Color spal[256];
+        int col;
+        for ( int i = 0; i < 256; i++ ) {
+           for ( int c = 0; c < 3; c++ ) {
+              col = pal[i][c];
+              switch ( c ) {
+                 case 0: spal[i].r = col * 4; break;
+                 case 1: spal[i].g = col * 4; break;
+                 case 2: spal[i].b = col * 4; break;
+              };
+             }
+         }
+         SDL_SetColors ( me, spal, 0, 256 );
+   }
+}
+
+
+
+void Surface::assignPalette(SDL_Color* colors, int startColor, int colorNum )
+{
+   if ( me )
+      SDL_SetColors ( me, colors, startColor, colorNum );
+}
+
 
 
 void Surface::write ( tnstream& stream ) const
@@ -208,9 +251,130 @@ void Surface::write ( tnstream& stream ) const
 
 }
 
+void Surface::strech ( int width, int height )
+{
+   if ( width != w() || height != h() ) {
+      SDL_Surface* s = SDL_CreateRGBSurface ( SDL_SWSURFACE, width, height, 32, 0xff, 0xff00, 0xff0000, 0xff000000 );
+      SDL_StretchSurface( me,0,0,w()-1,h()-1,
+                          s, 0,0,width-1, height-1);
+
+      SetSurface(s);
+   }
+}
+
+
 void Surface::detectColorKey (  )
 {
    if ( GetPixelFormat().BitsPerPixel() > 8 )
       SetColorKey( SDL_SRCCOLORKEY, GetPixel(0,0));
+}
+
+
+
+
+
+void applyFieldMask( Surface& s, int x, int y )
+{
+   static Surface* mask = NULL;
+   if ( !mask ) {
+      tnfilestream st ( "largehex.pcx", tnstream::reading );
+      mask = new Surface ( IMG_LoadPCX_RW ( SDL_RWFromStream( &st )));
+      if ( mask->GetPixelFormat().BitsPerPixel() == 8)
+         mask->SetColorKey( SDL_SRCCOLORKEY, 0 );
+   }
+   s.Blit( *mask );
+   s.detectColorKey (  );
+}
+
+
+void colorShift ( Surface& s, int startcolor, int colNum, int shift )
+{
+   if ( s.GetPixelFormat().BitsPerPixel() != 8)
+      fatalError ( "colorShift can only be done with 8 Bit surfaces");
+
+   SDL_Color spal[256];
+   int col;
+   for ( int i = 0; i < 256; i++ ) {
+      int src;
+      if ( i >= startcolor && i < startcolor + colNum )
+         src = i + shift;
+      else
+         src = i;
+      for ( int c = 0; c < 3; c++ ) {
+         col = pal[src][c];
+         switch ( c ) {
+            case 0: spal[i].r = col * 4; break;
+            case 1: spal[i].g = col * 4; break;
+            case 2: spal[i].b = col * 4; break;
+         };
+      }
+   }
+   s.assignPalette( spal, 0, 256 );
+}
+
+class SurfaceLock {
+      Surface& surf;
+   public:
+      SurfaceLock( Surface& s ) : surf(s) { s.Lock(); };
+      ~SurfaceLock() { surf.Unlock(); };
+};
+
+Surface rotateSurface( Surface& s, double degrees )
+{
+   const float pi = 3.14159265;
+
+   float angle = degrees / 360 * 2 * pi + pi;
+
+   SurfaceLock sl1 ( s );
+
+   Surface dest = s.Duplicate();
+
+   SurfaceLock sl2( dest );
+
+   if ( s.GetPixelFormat().BitsPerPixel() == 8 )
+      dest.Fill ( 255 );
+   else {
+      dest.Fill(0xfefefe);
+   }
+   dest.detectColorKey();
+
+   for ( int y = 0; y < s.h(); y++ ) {
+      for ( int x = 0; x < s.w(); x++ ) {
+         double dx = x - s.w()/2 ;
+         double dy = s.h()/2 - y;
+         float nx, ny;
+         if ( degrees != 0 && degrees != -180 && degrees != 180) {
+            float wnk ;
+            if ( dx  )
+               wnk = atan2 ( dy, dx );
+            else
+               if ( dy > 0 )
+                  wnk = pi/2;
+               else
+                  wnk = -pi/2;
+
+            wnk -= angle;
+            float radius = sqrt ( dx * dx + dy * dy );
+
+            nx = -radius * cos ( wnk );
+            ny = radius * sin ( wnk );
+         } else
+            if ( degrees == 0 ) {
+               nx = dx;
+               ny = -dy;
+            } else
+               if ( degrees == 180 || degrees == -180) {
+                  nx = -dx;
+                  ny = dy;
+               }
+
+
+
+         if ( nx >= 0 && ny >= 0 && nx < s.w() && ny < s.h() )
+            dest.SetPixel( x, y, s.GetPixel ( int(nx), int(ny) ));
+      }
+   }
+
+   return dest;
 }
 

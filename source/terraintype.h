@@ -101,7 +101,7 @@ const int cbodenartennum = 35;
           TerrainType::MoveMalus   move_malus;
 
           //! displays the image on the screen coordinates x1/y1
-          void           paint ( int x1, int y1 );
+          void           paint ( SPoint pos );
 
           //! the image index from the graphic set. -1 if graphics is not from graphic set. \see  GraphicSet
           int            bi_pict;

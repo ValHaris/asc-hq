@@ -39,6 +39,7 @@
 
       void read ( tnstream& stream ) ;
       void write ( tnstream& stream ) const;
+      void strech ( int width, int height );
 
       void writeDefaultPixelFormat ( tnstream& stream ) ;
       static void readDefaultPixelFormat ( tnstream& stream );
@@ -46,14 +47,25 @@
       //! assigns the default ASC palette to the surface (only for 8 Bit surfaces)
       void assignDefaultPalette();
 
+      void assignPalette(SDL_Color* colors, int startColor = 0, int colorNum = 256 );
+
+
       //! tries to automatically detect the color key of the surface
       void detectColorKey();
    private:
       static SDLmm::PixelFormat* default8bit;
       static SDLmm::PixelFormat* default32bit;
-      
+
  };
 
+ void applyFieldMask( Surface& s, int x = 0, int y = 0 );
+ void colorShift ( Surface& s, int startcolor, int colNum, int shift );
+
+ Surface rotateSurface( Surface& s, double degrees );
+
+ enum Palettes { GreyScale };
+
+ SDL_Color* getPalette( Palettes pal );
 
 #endif
 
