@@ -5,9 +5,14 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.78 2003-01-28 17:48:42 mbickel Exp $
+//     $Id: loaders.cpp,v 1.79 2003-01-28 23:04:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.78  2003/01/28 17:48:42  mbickel
+//      Added sounds
+//      Rewrote soundsystem
+//      Fixed: tank got stuck when moving from one transport ship to another
+//
 //     Revision 1.77  2003/01/12 19:37:18  mbickel
 //      Rewrote resource production
 //
@@ -1159,6 +1164,7 @@ void     tspfldloaders::readmap ( void )
 
 void tgameloaders :: writeAI ( )
 {
+ #ifdef sgmain
    int a = 0;
    for ( int i = 0; i< 8; i++ )
       if ( spfld->player[i].ai )
@@ -1187,11 +1193,13 @@ void tgameloaders :: writeAI ( )
    for ( int i = 0; i < 8; i++ )
       if ( spfld->player[i].ai )
          spfld->player[i].ai->write( *stream );
+  #endif 
 
 }
 
 void tgameloaders :: readAI ( )
 {
+#ifdef sgmain
    int a = stream->readInt();
    for ( int i = 0; i< 8; i++ )
       if ( a & ( 1 << i ) ) {
@@ -1201,6 +1209,7 @@ void tgameloaders :: readAI ( )
       } else {
          spfld->player[i].ai = NULL;
       }
+ #endif
 }
 
 

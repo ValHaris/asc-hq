@@ -11276,7 +11276,7 @@ fi
 
 MAINCONDATA="palette.pal data.version title.jpg title_mapeditor.jpg \
 progress.* smalaril.fnt usablack.fnt arial8.fnt \
-msystem.fnt gui.fnt guicol.fnt monogui.fnt sounds.txt \
+msystem.fnt gui.fnt guicol.fnt monogui.fnt sounds.asctxt \
 height2.raw windp.raw windpfei.raw farbe.raw \
 allianc.raw weapicon.raw expicons.raw hexinvi2.raw \
 hexinvis.raw fg8.raw windrose.raw hexfld_a.raw \
