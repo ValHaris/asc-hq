@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: building_controls.h,v 1.18 2004-05-16 15:40:32 mbickel Exp $
+//     $Id: building_controls.h,v 1.19 2004-05-23 17:05:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2004/05/16 15:40:32  mbickel
+//      Fixed compilation problems with gcc
+//      Included SDLmm library
+//
 //     Revision 1.17  2003/02/27 16:10:47  mbickel
 //      Restructuring of new pathfinding code completed
 //
@@ -276,6 +280,20 @@ class    cbuildingcontrols : public virtual ccontainercontrols
             cproduceammunition ( void );
       }
       produceammunition;
+
+      class    BuildProductionLine
+      {
+         public:
+            Resources resourcesNeeded( Vehicletype* veh );
+            int build( Vehicletype* veh  );
+      } buildProductionLine;
+      class    RemoveProductionLine
+      {
+         public:
+            Resources resourcesNeeded( Vehicletype* veh );
+            int remove( Vehicletype* veh  );
+      } removeProductionLine;
+
 
 
       void  removevehicle ( pvehicle *peht );

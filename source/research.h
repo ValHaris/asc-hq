@@ -154,8 +154,6 @@ class TechAdapterDependency {
 
      AvailabilityStatus techAvailable ( const Technology* tech );
 
-     void initchoosentechnology();
-
      /** is used by the chooseTechnology dialog: the first time no techs are available this variable is still true,
          so the dialog shows "now techs avail". THen it sets techAvail to false, preventing the same message at the
          beginning of each turn */

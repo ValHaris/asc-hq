@@ -422,14 +422,14 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
             trainuniticon_cb ( void );
       };
 
-      class BuildProductionLine : public generalicon_c
+      class BuildProductionLineIcon : public generalicon_c
       {
          public:
             virtual int   available    ( void ) ;
             virtual void  exec         ( void ) ;
             void loadspecifics( pnstream stream );
 
-            BuildProductionLine ( void );
+            BuildProductionLineIcon ( void );
       };
 
       class RemoveProductionLine : public generalicon_c
@@ -483,7 +483,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
                repairicon_c        repair;
                trainuniticon_cb    training;
                dissectuniticon_cb  dissect;
-               BuildProductionLine buildProductionLine;
+               BuildProductionLineIcon buildProductionLine;
                RemoveProductionLine removeProductionLine;
                //fill_dialog_icon_cb filldialog;
                fill_icon_cb        fill;
@@ -1679,6 +1679,51 @@ void   cbuildingcontrols :: cdissectunit :: dissectunit ( pvehicle eht )
       dissectvehicle ( eht );
       cc_b->removevehicle ( &eht );
    }
+}
+
+
+
+Resources cbuildingcontrols :: BuildProductionLine :: resourcesNeeded( Vehicletype* veh )
+{
+   return veh->productionCost * productionLineConstructionCostFactor;
+}
+
+
+int cbuildingcontrols :: BuildProductionLine :: build( Vehicletype* veh  )
+{
+   for ( int i = 0; i < 18; ++i ) {
+      if ( !cc_b->building->production[i] ) {
+         if ( cc_b->building->getResource( resourcesNeeded(veh), 1 ) < resourcesNeeded(veh))
+            return -500;
+
+         cc_b->building->getResource( resourcesNeeded(veh), 0 );
+         cc_b->building->production[i] = veh;
+         return 0;
+      }
+   }
+   return -501;
+}
+
+
+Resources cbuildingcontrols :: RemoveProductionLine :: resourcesNeeded( Vehicletype* veh )
+{
+   return veh->productionCost * productionLineRemovalCostFactor;
+}
+
+
+int cbuildingcontrols :: RemoveProductionLine :: remove( Vehicletype* veh  )
+{
+   for ( int i = 0; i < 18; ++i ) {
+      if ( cc_b->building->production[i] == veh ) {
+         if ( cc_b->building->getResource( resourcesNeeded(veh), 1 ) < resourcesNeeded(veh))
+            return -500;
+
+         cc_b->building->getResource( resourcesNeeded(veh), 0 );
+         cc_b->building->production[i] = NULL;
+         return 0;
+      }
+   }
+   return -502;
 }
 
 
@@ -5353,6 +5398,8 @@ void ccontainer_b :: cresearch_subwindow :: setnewresearch ( int res )
             bld->researchpoints = bld->maxresearchpoints * research/1024;
             if ( bld->researchpoints > bld->maxresearchpoints )
                bld->researchpoints = bld->maxresearchpoints;
+
+            logtoreplayinfo ( rpl_setResearch, bld->getIdentification(), bld->researchpoints );
          }
       }
    } else {
@@ -5360,6 +5407,8 @@ void ccontainer_b :: cresearch_subwindow :: setnewresearch ( int res )
       bld->researchpoints = bld->maxresearchpoints * research/1024;
       if ( bld->researchpoints > bld->maxresearchpoints )
          bld->researchpoints = bld->maxresearchpoints;
+
+      logtoreplayinfo ( rpl_setResearch, bld->getIdentification(), bld->researchpoints );
    }
 }
 
@@ -6170,12 +6219,12 @@ void  ccontainer_b :: cmineralresources_subwindow :: checkforkey ( tkey taste )
 
 
 
-ccontainer_b :: BuildProductionLine :: BuildProductionLine ()
+ccontainer_b :: BuildProductionLineIcon :: BuildProductionLineIcon ()
 {
    filename = "buyprodline";
 }
 
-void ccontainer_b :: BuildProductionLine :: loadspecifics( pnstream stream )
+void ccontainer_b :: BuildProductionLineIcon :: loadspecifics( pnstream stream )
 {
     infotext = "~B~uy production line";
     priority = 20;
@@ -6184,7 +6233,7 @@ void ccontainer_b :: BuildProductionLine :: loadspecifics( pnstream stream )
     keys[0][0] = 'b' ;
 }
 
-int  ccontainer_b :: BuildProductionLine :: available ( )
+int  ccontainer_b :: BuildProductionLineIcon :: available ( )
 {
    if ( main->unitmode != mproduction )
       return 0;
@@ -6203,7 +6252,7 @@ int  ccontainer_b :: BuildProductionLine :: available ( )
    return 1;
 }
 
-void ccontainer_b :: BuildProductionLine :: exec( )
+void ccontainer_b :: BuildProductionLineIcon :: exec( )
 {
    vector<ASCString> list;
    vector<int>       idList;
@@ -6219,7 +6268,7 @@ void ccontainer_b :: BuildProductionLine :: exec( )
 
 
          if ( cc_b->building->typ->vehicleFit ( veh ) && !found )
-            if ( cc->baseContainer->vehicleUnloadable(veh) || (cc_b->building->typ->special & cgproduceAllUnitsB )) 
+            if ( cc->baseContainer->vehicleUnloadable(veh) || (cc_b->building->typ->special & cgproduceAllUnitsB ))
                if ( veh->techDependency.available ( actmap->player[actmap->actplayer].research )) {
                   ASCString s;
                   if ( r < veh->productionCost * productionLineConstructionCostFactor  ) {
@@ -6241,20 +6290,18 @@ void ccontainer_b :: BuildProductionLine :: exec( )
       int pos =  chooseString ( "Select Unit Type", list );
       if ( pos >= 0 && pos < 255) {
          int id = idList[pos];
-         if ( id >= 0 )
-            for ( int i = 0; i < 18; ++i ) {
-               if ( !cc_b->building->production[i] ) {
-                  Vehicletype* veh = actmap->getvehicletype_byid ( id );
-                  cc_b->building->production[i] = veh;
-                  main->setpictures();
-                  main->movemark (repaint);
-                  main->repaintresources = 1;
-                  cc_b->building->getResource( veh->productionCost * productionLineConstructionCostFactor, 0 );
-                  break;
-               }
-            }
-         else
-            displaymessage ( "not enough resources", 1);
+         if ( id >= 0 ) {
+            Vehicletype* veh = actmap->getvehicletype_byid ( id );
+            int result = cc_b->buildProductionLine.build( veh );
+            if ( result < 0 )
+               dispmessage2( -result );
+            else
+               logtoreplayinfo ( rpl_buildProdLine, cc_b->building->getIdentification(), id );
+               
+            main->setpictures();
+            main->movemark (repaint);
+            main->repaintresources = 1;
+         }
       }
    } else
       displaymessage ( "No Unit Types researched", 1);
@@ -6290,21 +6337,20 @@ int  ccontainer_b :: RemoveProductionLine :: available ( )
 void ccontainer_b :: RemoveProductionLine :: exec( )
 {
    Vehicletype* veh = main->getmarkedunittype();
+   if ( veh )
+      if (choice_dlg("do you really want to remove this production line ?","~y~es","~n~o") == 1) {
+         int result = cc_b->removeProductionLine.remove ( veh );
+         if ( result < 0 ) {
+            dispmessage2( result );
+            return;
+         }
 
-   Resources r = cc_b->building->getResource( Resources(maxint, maxint, maxint), 1 );
-   if ( r < veh->productionCost * productionLineRemovalCostFactor  ) {
-      displaymessage("not enough resourcese to remove production line", 1 );
-      return;
-   }
-
-   if (choice_dlg("do you really want to remove this production line ?","~y~es","~n~o") == 1) {
-      cc_b->building->production[main->mark.y*unitsshownx + main->mark.x] = NULL;
-      main->setpictures();
-      main->movemark (repaint);
-      main->repaintresources = 1;
-      dashboard.x = 0xffff;
-      cc_b->building->getResource( veh->productionCost * productionLineConstructionCostFactor, 0 );
-   }
+         main->setpictures();
+         main->movemark (repaint);
+         main->repaintresources = 1;
+         dashboard.x = 0xffff;
+         logtoreplayinfo ( rpl_removeProdLine, cc_b->building->getIdentification(), veh->id );
+      }
 }
 
 

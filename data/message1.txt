@@ -86,6 +86,12 @@ No space to construct unit
 There are no vehicles standing next to the entrance
 450
 No unit or building selected
+500
+Not enough resources
+501
+No space to build production line
+502
+Unit type not found
 9999
 No error message found for this error
 10001

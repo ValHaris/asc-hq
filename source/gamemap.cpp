@@ -905,8 +905,8 @@ bool tmap :: compareResources( tmap* replaymap, int player, ASCString* log )
                   *log += s;
                }
             } else {
-               int ab1 = b1->getResource( maxint, r, true );
-               int ab2 = b2->getResource( maxint, r, true );
+               int ab1 = b1->getResource( maxint, r, true, 0 );
+               int ab2 = b2->getResource( maxint, r, true, 0 );
                if ( ab1 != ab2 ) {
                   diff = true;
                   if ( log ) {
@@ -951,6 +951,73 @@ bool tmap :: compareResources( tmap* replaymap, int player, ASCString* log )
       if ( log ) {
          s.format ( "The number of buildings differ. Replay: %d ; actual map: %d", replaymap->player[player].buildingList.size(), this->player[player].buildingList.size());
          *log += s;
+      }
+   }
+
+   if ( this->player[player].research.progress != replaymap->player[player].research.progress ) {
+      diff = true;
+      if ( log ) {
+         s.format ( "Research points mismatch! Replay: %d ; actual map: %d", replaymap->player[player].research.progress, this->player[player].research.progress);
+         *log += s;
+      }
+   }
+
+   sort ( this->player[player].research.developedTechnologies.begin(), this->player[player].research.developedTechnologies.end() );
+   sort ( replaymap->player[player].research.developedTechnologies.begin(), replaymap->player[player].research.developedTechnologies.end() );
+   if ( replaymap->player[player].research.developedTechnologies.size() != this->player[player].research.developedTechnologies.size() ) {
+      diff = true;
+      if ( log ) {
+         s.format ( "Number of developed technologies differ !\n" );
+         *log += s;
+      }
+   } else {
+      for ( int i = 0; i < replaymap->player[player].research.developedTechnologies.size(); ++i )
+         if ( replaymap->player[player].research.developedTechnologies[i] != this->player[player].research.developedTechnologies[i] ) {
+            diff = true;
+            if ( log ) {
+               s.format ( "Different technologies developed !\n" );
+               *log += s;
+            }
+         }
+   }
+
+   for ( Player::BuildingList::iterator b = this->player[player].buildingList.begin(); b != this->player[player].buildingList.end(); ++b ) {
+      Building* b1 = *b;
+      Building* b2 = dynamic_cast<Building*>(replaymap->getContainer( b1->getIdentification() ));
+      if ( !b1 || !b2 ) {
+         if ( log ) {
+            s.format ( "Building missing! \n");
+            *log += s;
+         }
+      } else {
+         bool mismatch = false;
+         for ( int i = 0; i < 32; ++i )
+            if ( b1->production[i] ) {
+               bool found = false;
+               for ( int j = 0; j < 32; ++j)
+                  if ( b2->production[j] == b1->production[i] )
+                     found = true;
+               if ( !found)
+                  mismatch = true;
+            }
+
+         for ( int j = 0; j < 32; ++j )
+            if ( b2->production[j] ) {
+               bool found = false;
+               for ( int i = 0; i < 32; ++i)
+                  if ( b1->production[i] == b2->production[j] )
+                     found = true;
+               if ( !found)
+                  mismatch = true;
+            }
+
+         if ( mismatch ) {
+            diff = true;
+            if ( log ) {
+               s.format ( "Building (%d,%d) production line mismatch !\n", b1->getPosition().x, b1->getPosition().y );
+               *log += s;
+            }
+         }
       }
    }
 

@@ -26,7 +26,7 @@
 */
 
 
-enum trpl_actions { rpl_attack, 
+enum trpl_actions { rpl_attack,
                     rpl_move, 
                     rpl_changeheight, 
                     rpl_convert, 
@@ -61,7 +61,11 @@ enum trpl_actions { rpl_attack,
                     rpl_repairUnit2,
                     rpl_refuel3,
                     rpl_produceAmmo,
-                    rpl_buildtnk4 };
+                    rpl_buildtnk4,
+                    rpl_buildProdLine,
+                    rpl_removeProdLine,
+                    rpl_setResearch,
+                    rpl_techResearched };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 

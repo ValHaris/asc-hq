@@ -651,6 +651,24 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( type );
          stream->writeInt ( amount );
       }
+      if ( action == rpl_buildProdLine || action == rpl_removeProdLine) {
+         int building = va_arg ( paramlist, int );
+         int id = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 2;
+         stream->writeInt ( size );
+         stream->writeInt ( building );
+         stream->writeInt ( id );
+      }
+      if ( action == rpl_techResearched ) {
+         int tech = va_arg ( paramlist, int );
+         int player = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 2;
+         stream->writeInt ( size );
+         stream->writeInt ( tech );
+         stream->writeInt ( player );
+      }
 
 
       va_end ( paramlist );
@@ -1484,6 +1502,70 @@ void trunreplay :: execnextreplaymove ( void )
 
                               }
          break;
+      case rpl_buildProdLine : {
+                                 stream->readInt();  // size
+                                 int building = stream->readInt();
+                                 int vehicleid = stream->readInt();
+                                 readnextaction();
+                                 Building* bld = dynamic_cast<Building*>( actmap->getContainer(building));
+                                 Vehicletype* veh = actmap->getvehicletype_byid ( vehicleid );
+                                 if ( bld && veh ) {
+                                    cbuildingcontrols bc;
+                                    bc.init ( bld );
+                                    int result = bc.buildProductionLine.build( veh );
+                                    if ( result < 0)
+                                       displaymessage("severe replay inconsistency:\ncould not build production line!\n%s !", 1, getmessage(result));
+
+                                 } else
+                                    displaymessage("severe replay inconsistency:\nno building for build production line command !", 1);
+
+                              }
+         break;
+      case rpl_removeProdLine : {
+                                 stream->readInt();  // size
+                                 int building = stream->readInt();
+                                 int vehicleid = stream->readInt();
+                                 readnextaction();
+                                 Building* bld = dynamic_cast<Building*>( actmap->getContainer(building));
+                                 Vehicletype* veh = actmap->getvehicletype_byid ( vehicleid );
+                                 if ( bld && veh ) {
+                                    cbuildingcontrols bc;
+                                    bc.init ( bld );
+                                    int result = bc.removeProductionLine.remove( veh );
+                                    if ( result < 0)
+                                       displaymessage("severe replay inconsistency:\ncould not remove production line!\n%s !", 1, getmessage(result));
+
+                                 } else
+                                    displaymessage("severe replay inconsistency:\nno building for remove production line command !", 1);
+
+                              }
+         break;
+      case rpl_setResearch : {
+                                 stream->readInt();  // size
+                                 int building = stream->readInt();
+                                 int amount = stream->readInt();
+                                 readnextaction();
+                                 Building* bld = dynamic_cast<Building*>( actmap->getContainer(building));
+                                 if ( bld )
+                                    bld->researchpoints = amount;
+                                 else
+                                    displaymessage("severe replay inconsistency:\nno building for set research command !", 1);
+
+                              }
+         break;
+      case rpl_techResearched: {
+                                 stream->readInt();  // size
+                                 int techID = stream->readInt();
+                                 int player = stream->readInt();
+                                 readnextaction();
+                                 Technology* tech = technologyRepository.getObject_byID( techID );
+                                 if ( tech ) {
+                                    actmap->player[player].research.addanytechnology( tech );
+                                    actmap->player[player].research.progress -= tech->researchpoints;
+                                 } else
+                                    displaymessage("severe replay inconsistency:\nno technology for tech researched command !", 1);
+         break;
+      }
 
 
 
@@ -1573,8 +1655,6 @@ int  trunreplay :: run ( int player )
    actmap->ypos = orgmap->cursorpos.position[ actplayer ].sy;
 
    cursor.gotoxy ( orgmap->cursorpos.position[ actplayer ].cx, orgmap->cursorpos.position[ actplayer ].cy , 0);
-   // lastvisiblecursorpos.x = orgmap.cursorpos.position[ actplayer ].cx;
-   // lastvisiblecursorpos.y = orgmap.cursorpos.position[ actplayer ].cy;
 
 
    if ( stream->dataavail () )
@@ -1605,6 +1685,9 @@ int  trunreplay :: run ( int player )
           if ( !cursor.an )
              cursor.show();
           if ( nextaction == rpl_finished && !resourcesCompared ) {
+
+             displaymessage2("running final comparison \n" );
+
              actmap->endTurn();
              actmap->nextPlayer();
              resourcesCompared = true;

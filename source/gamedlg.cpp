@@ -1770,12 +1770,12 @@ void tresearchinfo::init ( void )
    int textxpos = x1 + xsize / 2 - 5 - activefontsettings.length;
 
    showtext2 ( "name:", textxpos, y1 + 110 );
-   showtext2 ( "research points at all:", textxpos, y1 + 140 );
+   showtext2 ( "research points:", textxpos, y1 + 140 );
    showtext2 ( "research points done:", textxpos, y1 + 170 );
-   showtext2 ( "research points needed:", textxpos, y1 + 200 );
+   showtext2 ( "research points still needed:", textxpos, y1 + 200 );
    showtext2 ( "research done ( % ):", textxpos, y1 + 230 );
    showtext2 ( "research points / turn:", textxpos, y1 + 260 );
-   showtext2 ( "time left:", textxpos, y1 + 290 );
+   showtext2 ( "time left (turns):", textxpos, y1 + 290 );
 
 
    activefontsettings.justify = lefttext;

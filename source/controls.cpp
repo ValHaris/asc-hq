@@ -1676,32 +1676,6 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
 
       checkforreplay();
 
-      if (actmap->player[actmap->actplayer].research.activetechnology == NULL )
-         if ( actmap->player[actmap->actplayer].research.progress ) {
-            int mx  = actmap->player[actmap->actplayer].research.progress;
-            choosetechnology();
-            actmap->player[actmap->actplayer].research.initchoosentechnology();
-            actmap->player[actmap->actplayer].research.progress += mx;
-         }
-      while ((actmap->player[actmap->actplayer].research.activetechnology != NULL ) &&
-             (actmap->player[actmap->actplayer].research.progress >= actmap->player[actmap->actplayer].research.activetechnology->researchpoints)) {
-              int mx = actmap->player[actmap->actplayer].research.progress -  actmap->player[actmap->actplayer].research.activetechnology->researchpoints;
-
-              showtechnology(actmap->player[actmap->actplayer].research.activetechnology);
-
-              NewVehicleTypeDetection pfzt;
-
-              actmap->player[actmap->actplayer].research.addtechnology();
-
-              pfzt.evalbuffer ();
-
-
-              choosetechnology();
-              actmap->player[actmap->actplayer].research.initchoosentechnology();
-
-              actmap->player[actmap->actplayer].research.progress += mx;
-      }
-
       if ( actmap->lastjournalchange.abstime )
          if ( (actmap->lastjournalchange.turn() == actmap->time.turn() ) ||
               (actmap->lastjournalchange.turn() == actmap->time.turn()-1  &&  actmap->lastjournalchange.move() > actmap->actplayer ) )
@@ -1718,6 +1692,32 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
    actmap->playerView = actmap->actplayer;
 
    initReplayLogging();
+
+   if ( actmap->player[actmap->actplayer].stat == Player::human ) {
+      Research& research = actmap->player[actmap->actplayer].research;
+      if (research.activetechnology == NULL )
+         if ( research.progress ) {
+            choosetechnology();
+         }
+      while ((research.activetechnology != NULL ) &&
+             (research.progress >= research.activetechnology->researchpoints)) {
+              int mx = research.progress - research.activetechnology->researchpoints;
+
+              showtechnology( research.activetechnology );
+              if ( research.activetechnology )
+                 logtoreplayinfo ( rpl_techResearched, research.activetechnology->id, actmap->actplayer );
+
+              NewVehicleTypeDetection pfzt;
+
+              research.addtechnology();
+
+              pfzt.evalbuffer ();
+
+              choosetechnology();
+
+              research.progress = mx;
+      }
+   }
 
    actmap->xpos = actmap->cursorpos.position[ actmap->actplayer ].sx;
    actmap->ypos = actmap->cursorpos.position[ actmap->actplayer ].sy;

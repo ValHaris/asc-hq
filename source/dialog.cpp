@@ -2179,9 +2179,16 @@ void         tfileselectsvga::displayspeedsearch(void)
    npush ( activefontsettings );
    activefontsettings.length = 190;
    showtext2(searchstring.c_str(),x1 + 225, y1 + ysize - 30);
+
+   if ( ticker & 128 ) {
+      int x = gettextwdth ( searchstring.c_str(), activefontsettings.font );
+      line ( x1 + 225 + x, y1 + ysize - 30, x1 + 225 + x, y1 + ysize - 30 + activefontsettings.font->height-1, black);
+   }
+
+
    npop ( activefontsettings );
-   mousevisible(true); 
-} 
+   mousevisible(true);
+}
 
 
 
@@ -2353,6 +2360,8 @@ void         tfileselectsvga::run(void)
             while (mouseparams.taste & 1)
               releasetimeslice();
          }
+         if ( ticker & 64 )
+            displayspeedsearch();
       }  while ( abrt == 0);
       mousevisible(false); 
       if (abrt > 1) { 

@@ -484,7 +484,7 @@ bool Research :: vehicletypeavailable ( const Vehicletype* fztyp )
       return true; // vehicleclassavailable( fztyp, 0 );
 }
 
-
+/*
 void Research::initchoosentechnology()
 {
    Player& player = map->player[map->actplayer];
@@ -499,7 +499,7 @@ void Research::initchoosentechnology()
          di++;
    }
 }
-
+*/
 
 Research::~Research () {};
 

@@ -640,9 +640,9 @@ void         tsgpulldown :: init ( void )
    addbutton ( "~U~nit weightõ8", ua_unitweightinfo );
    addbutton ( "show ~P~ipeline netõ9", ua_viewPipeNet );
    addbutton ( "seperator", -1 );
-   // addbutton ( "~R~esearch", ua_researchinfo );
+   addbutton ( "~R~esearch", ua_researchinfo );
    addbutton ( "~P~lay time", ua_showPlayerSpeed );
-   addbutton ( "~R~esearch status", ua_showResearchStatus );
+   // addbutton ( "~R~esearch status", ua_showResearchStatus );
 
    // addbutton ( "vehicle ~I~mprovementõF7", ua_dispvehicleimprovement);
    // addbutton ( "show game ~P~arameters", ua_GameParameterInfo );
@@ -1589,7 +1589,7 @@ void execuseraction ( tuseractions action )
             s += "\n\n";
 
             s += "Research Points: \n";
-            s += actmap->player[actmap->actplayer].research.progress;
+            s += strrr( actmap->player[actmap->actplayer].research.progress );
             if ( actmap->player[actmap->actplayer].research.activetechnology )
                s += ASCString(" / ") + strrr ( actmap->player[actmap->actplayer].research.activetechnology->researchpoints );
             s += "\n\n";
