@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.44 2000-12-26 14:45:58 mbickel Exp $
+//     $Id: artint.cpp,v 1.45 2000-12-28 16:58:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2000/12/26 14:45:58  mbickel
+//      Made ASC compilable (and runnable) with Borland C++ Builder
+//
 //     Revision 1.43  2000/11/29 11:18:36  mbickel
 //      Mapeditor compiles with Watcom again
 //
@@ -616,7 +619,7 @@ bool AI :: runUnitTask ( pvehicle veh )
 void AI :: runServiceUnit ( pvehicle supplyUnit )
 {
    bool destinationReached = false;
-   typedef multimap<float,ServiceOrder*,lessfloat> ServiceMap;
+   typedef multimap<float,ServiceOrder*> ServiceMap;
    ServiceMap serviceMap;
 
    for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
@@ -1257,6 +1260,16 @@ AI::Section* AI :: Sections :: getBest ( const pvehicle veh, int* xtogo, int* yt
 
    float d = minfloat;
    AI::Section* frst = NULL;
+
+   float maxSectionThread = 0;
+   for ( int y = 0; y < numY; y++ )
+      for ( int x = 0; x < numX; x++ ) {
+          AI::Section& sec = getForPos( x, y );
+          if ( sec.avgUnitThreat.threat[aip.valueType] > maxSectionThread )
+              maxSectionThread =  sec.avgUnitThreat.threat[aip.valueType];
+      }
+
+
    for ( int y = 0; y < numY; y++ )
       for ( int x = 0; x < numX; x++ ) {
           int xtogoSec = -1;
@@ -1267,11 +1280,19 @@ AI::Section* AI :: Sections :: getBest ( const pvehicle veh, int* xtogo, int* yt
           for ( int i = 0; i < aiValueTypeNum; i++ )
              t += aip.threat.threat[i] * sec.value[i];
 
-          float f;
-          if ( sec.avgUnitThreat.threat[aip.valueType] )
-             f = t / sec.avgUnitThreat.threat[aip.valueType];
+          float f = t;
+
+          if ( sec.avgUnitThreat.threat[aip.valueType] ) {
+             int relThreat = int( 4*maxSectionThread / sec.avgUnitThreat.threat[aip.valueType] + 1);
+             f /= relThreat;
+          }
+
+          /*
+          if ( sec.avgUnitThreat.threat[aip.valueType] >= 0 )
+             f = t / log( sec.avgUnitThreat.threat[aip.valueType] );
           else
              f = t;
+          */
 
           int dist = beeline ( veh->xpos, veh->ypos, sec.centerx, sec.centery );
           if ( dist )
@@ -1649,6 +1670,7 @@ AI::AiResult AI::moveToSavePlace ( pvehicle veh, VehicleMovement& vm3 )
    int xtogo = veh->xpos;
    int ytogo = veh->ypos;
    int threat = maxint;
+   int dist = maxint;
 
    if ( getfield ( veh->xpos, veh->ypos)->unitHere ( veh ) ) {  // vehicle not in building / transport
       threat = int( getFieldThreat ( veh->xpos, veh->ypos).threat[ veh->aiparam[ getPlayer()]->valueType] * 1.5 + 1);
@@ -1660,14 +1682,16 @@ AI::AiResult AI::moveToSavePlace ( pvehicle veh, VehicleMovement& vm3 )
          int x,y;
          vm3.reachableFields.getFieldCoordinates ( f, &x, &y );
          AiThreat& ait = getFieldThreat ( x, y );
+         int _dist = beeline ( x, y, veh->xpos, veh->ypos);
 
             // make fields far away a bit unattractive; we don't want to move the whole distance back again next turn
-         int t = int( ait.threat[ veh->aiparam[ getPlayer()]->valueType ] * log ( beeline ( x, y, veh->ypos, veh->ypos))/log(10) );
+         int t = int( ait.threat[ veh->aiparam[ getPlayer()]->valueType ] * log ( _dist )/log(10) );
 
-         if ( t < threat ) {
+         if ( t < threat || ( t == threat && _dist < dist )) {
             threat = t;
             xtogo = x;
             ytogo = y;
+            dist = _dist;
          }
       }
 

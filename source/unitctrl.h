@@ -1,6 +1,12 @@
-//     $Id: unitctrl.h,v 1.19 2000-11-21 20:27:11 mbickel Exp $
+//     $Id: unitctrl.h,v 1.20 2000-12-28 16:58:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/11/21 20:27:11  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.18  2000/11/14 20:36:47  mbickel
 //      The AI can now use supply vehicles
 //      Rewrote objecttype IO routines to make the structure independant of
@@ -465,8 +471,7 @@ class VehicleService : public VehicleAction {
                     };
                     vector<Service> service;
               };
-              typedef less<int> lessint;     // Watcom C++ can not use default template arguments :(
-              typedef map<int,Target,lessint> TargetContainer;
+              typedef map<int,Target> TargetContainer;
               TargetContainer dest;
 
               int getStatus( void ) { return status; };
@@ -516,6 +521,7 @@ class PendingVehicleActions {
             ~PendingVehicleActions ( );
          };
 
+//! a structure to keep track of the vehicleActions that are currently running
 extern PendingVehicleActions pendingVehicleActions;
 
 

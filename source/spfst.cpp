@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.75 2000-12-27 22:23:16 mbickel Exp $
+//     $Id: spfst.cpp,v 1.76 2000-12-28 16:58:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.75  2000/12/27 22:23:16  mbickel
+//      Fixed crash in loading message text
+//      Removed many unused variables
+//
 //     Revision 1.74  2000/11/21 20:27:08  mbickel
 //      Fixed crash in tsearchfields (used by object construction for example)
 //      AI improvements
@@ -339,19 +343,8 @@
 
 #include <stdio.h>                                                                   
 #include <string.h>
-
-#if (__WATCOM_CPLUSPLUS__ >= 1100 )
-  #define __use_STL_for_ASC__
-#endif
-
-#ifndef __WATCOM_CPLUSPLUS__
-  #define __use_STL_for_ASC__
-#endif
-
-#ifdef __use_STL_for_ASC__
-  #include <utility>
-  #include <map>
-#endif
+#include <utility>
+#include <map>
 
 
 #include "vehicletype.h"
@@ -445,77 +438,31 @@ int showresources = 0;
    tpaintmapborder* mapborderpainter = NULL;
 
 
-#ifdef __use_STL_for_ASC__
-  #ifdef __WATCOM_CPLUSPLUS__
-   typedef less<int> lessint;
-   map< int, pterraintype, lessint>  terrainmap;
-   map< int, pobjecttype,  lessint>  objectmap;
-   map< int, pvehicletype,  lessint>  vehiclemap;
-   map< int, pbuildingtype, lessint>  buildingmap;
-   map< int, ptechnology, lessint>  technologymap;
-  #else
-   std::map< int, pterraintype>  terrainmap;
-   std::map< int, pobjecttype>  objectmap;
-   std::map< int, pvehicletype>  vehiclemap;
-   std::map< int, pbuildingtype>  buildingmap;
-   std::map< int, ptechnology>  technologymap;
-  #endif
-#endif
+   map< int, pterraintype>  terrainmap;
+   map< int, pobjecttype>  objectmap;
+   map< int, pvehicletype>  vehiclemap;
+   map< int, pbuildingtype>  buildingmap;
+   map< int, ptechnology>  technologymap;
 
 pterraintype getterraintype_forid ( int id, int crccheck )
 {
-  #ifdef __use_STL_for_ASC__
    return terrainmap[id];
-  #else
-   for ( int i = 0; i < terraintypenum; i++ )
-      if ( terrain[i]->id == id )
-         return terrain[i];
-   return NULL;
-  #endif
 }
 pobjecttype getobjecttype_forid ( int id, int crccheck  )
 {
-  #ifdef __use_STL_for_ASC__
    return objectmap[id];
-  #else
-   for ( int i = 0; i < objecttypenum; i++ )
-      if ( objecttypes[i]->id == id )
-         return objecttypes[i];
-   return NULL;
-  #endif
 }
 pvehicletype getvehicletype_forid ( int id, int crccheck  )
 {
-  #ifdef __use_STL_for_ASC__
    return vehiclemap[id];
-  #else
-   for ( int i = 0; i < vehicletypenum; i++ )
-      if ( vehicletypes[i]->id == id )
-         return vehicletypes[i];
-   return NULL;
-  #endif
 }
 pbuildingtype getbuildingtype_forid ( int id, int crccheck  )
 {
-  #ifdef __use_STL_for_ASC__
    return buildingmap[id];
-  #else
-   for ( int i = 0; i < buildingtypenum; i++ )
-      if ( buildingtypes[i]->id == id )
-         return buildingtypes[i];
-   return NULL;
-  #endif
 }
 ptechnology gettechnology_forid ( int id, int crccheck  )
 {
-  #ifdef __use_STL_for_ASC__
    return technologymap[id];
-  #else
-   for ( int i = 0; i < technologynum; i++ )
-      if ( technology[i]->id == id )
-         return technology[i];
-   return NULL;
-  #endif
 }
 
 
@@ -559,50 +506,35 @@ void addterraintype ( pterraintype bdt )
 {
    if ( bdt ) {
       terrain[ terraintypenum++] = bdt;
-
-      #ifdef __use_STL_for_ASC__
       terrainmap[bdt->id] = bdt;
-      #endif
    }
 }
 void addobjecttype ( pobjecttype obj )
 {
    if ( obj ) {
       objecttypes[ objecttypenum++] = obj;
-
-      #ifdef __use_STL_for_ASC__
       objectmap[obj->id] = obj;
-      #endif
    }
 }
 void addvehicletype ( pvehicletype vhcl )
 {
    if ( vhcl ) {
       vehicletypes[ vehicletypenum++] = vhcl;
-
-      #ifdef __use_STL_for_ASC__
       vehiclemap[vhcl->id] = vhcl;
-      #endif
    }
 }
 void addbuildingtype ( pbuildingtype bld )
 {
    if ( bld ) {
       buildingtypes[ buildingtypenum++] = bld;
-
-      #ifdef __use_STL_for_ASC__
       buildingmap[bld->id] = bld;
-      #endif
    }
 }
 void addtechnology ( ptechnology tech )
 {
    if ( tech ) {
       technology[ technologynum++] = tech;
-
-      #ifdef __use_STL_for_ASC__
       technologymap[tech->id] = tech;
-      #endif
    }
 }
 
@@ -693,18 +625,7 @@ void         initmap( void )
    getnexteventtime();
    #endif
 
-  #ifdef logging
-   logtofile("initmap anfang");
-       {
-           for ( int jj = 0; jj < 8; jj++ ) {
-           char tmpcbuf[200];
-           sprintf(tmpcbuf,"humanplayername; address is %x", actmap->humanplayername[jj]);
-           logtofile ( tmpcbuf );
-           }
-       }
-  #endif
-  
-   actmap->levelfinished = false; 
+   actmap->levelfinished = false;
    actmap->firsteventpassed = NULL;
    actmap->network = NULL;
    int num = 0;
@@ -722,18 +643,6 @@ void         initmap( void )
       actmap->cursorpos.position[ i ].sy = 0;
 
    }
-      
-   #ifdef logging
-   logtofile("initmap mitte");
-       {
-           for ( int jj = 0; jj < 8; jj++ ) {
-           char tmpcbuf[200];
-           sprintf(tmpcbuf,"humanplayername; address is %x", actmap->humanplayername[jj]);
-           logtofile ( tmpcbuf );
-           }
-       }
-  #endif     
-
 
    i = 0;                                                                        
    int sze = actmap->xsize * actmap->ysize;
@@ -888,8 +797,6 @@ int  resizemap( int top, int bottom, int left, int right )  // positive: larger
 
   return 0;
 }
-
-
 
 
 

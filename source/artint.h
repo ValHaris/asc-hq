@@ -1,6 +1,9 @@
-//     $Id: artint.h,v 1.23 2000-12-21 11:00:44 mbickel Exp $
+//     $Id: artint.h,v 1.24 2000-12-28 16:58:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/12/21 11:00:44  mbickel
+//      Added some code documentation
+//
 //     Revision 1.22  2000/11/26 14:39:02  mbickel
 //      Added Project Files for Borland C++
 //      Some modifications to compile source with BCC
@@ -121,13 +124,6 @@
 #include "spfst.h"
 #include "unitctrl.h"
 #include "building_controls.h"
-
-#ifdef __WATCOM_CPLUSPLUS__
- typedef less<int> lessint;
-#endif
- typedef less<float> lessfloat;
-
-
 
 
     class AI : public BaseAI {

@@ -767,6 +767,7 @@ void tmap :: chainbuilding ( pbuilding bld )
          bld->next->prev = bld;
       bld->prev = NULL;
       player[ bld->color / 8 ].firstbuilding = bld;
+      bld->chainToMap ( this );
    }
 }
 

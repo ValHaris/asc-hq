@@ -1948,9 +1948,9 @@ void   Vehicle::read ( pnstream stream )
        height = 1 << log2 ( typ->height );
 
     if ( bm & cem_movement )
-       setMovement ( stream->readChar ( ), -1 );
+       setMovement ( stream->readChar ( ), 0 );
     else
-       setMovement ( typ->movement [ log2 ( height ) ], -1 );
+       setMovement ( typ->movement [ log2 ( height ) ], 0 );
 
     if ( bm & cem_direction )
        direction = stream->readChar();

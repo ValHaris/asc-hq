@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.119 2000-12-28 11:12:46 mbickel Exp $
+//     $Id: sg.cpp,v 1.120 2000-12-28 16:58:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.119  2000/12/28 11:12:46  mbickel
+//      Fixed: no redraw when restoring fullscreen focus in WIN32
+//      Better error message handing in WIN32
+//
 //     Revision 1.118  2000/12/27 22:23:13  mbickel
 //      Fixed crash in loading message text
 //      Removed many unused variables
@@ -117,11 +121,6 @@
 #include <malloc.h>
 #include <ctype.h>
 #include <signal.h>
-
-#include <windows.h>
-#ifdef _SDL_
-#include "SDL_byteorder.h"
-#endif
 
 #include "vehicletype.h"
 #include "buildingtype.h"
@@ -1987,7 +1986,6 @@ void mainloopgeneralmousecheck ( void )
 
 //  if (lasttick + 5 < ticker)
       if ((dashboard.x != getxpos()) || (dashboard.y != getypos())) {
-         // collategraphicoperations cgo;
          mousevisible(false);
 
          dashboard.paint ( getactfield(), actmap->playerView );
@@ -2005,8 +2003,6 @@ void mainloopgeneralmousecheck ( void )
 
    if ( mousecontrol )
       mousecontrol->chkmouse();
-
-   // checkfieldsformouse();
 
    {
       int oldx = actmap->xpos;
@@ -2185,9 +2181,6 @@ void  mainloop ( void )
                               AI* ai = (AI*) actmap->player[ actmap->actplayer].ai;
                               ai->showFieldInformation ( getxpos(), getypos() );
                          }
-               break;
-
-             case ct_f10:  displaymessage("this is the \nerror message",2);
                break;
 
             case ct_1:  execuseraction ( ua_changeresourceview );
@@ -2413,29 +2406,10 @@ void loaddata( int resolx, int resoly,
 
    gui.starticonload();
 
-#ifdef logging
-   logtofile("nach gui.starticonload");
-   for ( int jj = 0; jj < 8; jj++ ) {
-     char tmpcbuf[200];
-     sprintf(tmpcbuf,"humanplayername; address is %x",
-         actmap->humanplayername[jj]);
-     logtofile ( tmpcbuf );
-  }
-#endif
-
    if ( actprogressbar ) actprogressbar->startgroup();
 
    dashboard.allocmem ();
 
-#ifdef logging
-   logtofile("vor mousecontrol");
-   for ( int jj = 0; jj < 8; jj++ ) {
-      char tmpcbuf[200];
-      sprintf(tmpcbuf,"humanplayername; address is %x",
-         actmap->humanplayername[jj]);
-      logtofile ( tmpcbuf );
-   }
-#endif
    mousecontrol = new cmousecontrol;
 
    if ( actprogressbar ) {
