@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.4 1999-11-18 17:31:02 mbickel Exp $
+//     $Id: controls.cpp,v 1.5 1999-11-22 18:26:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/18 17:31:02  mbickel
+//      Improved BI-map import translation tables
+//      Moved macros to substitute Watcom specific routines into global.h
+//
 //     Revision 1.3  1999/11/16 17:03:58  mbickel
 //     Made ASC compilable for DOS again :-)
 //     Merged all the bug fixes in that I did last week
@@ -43,7 +47,7 @@
 #include "tpascal.inc"
 #include "typen.h"
 #include "keybp.h"
-#include "vesa.h"
+#include "basegfx.h"
 #include "newfont.h"
 #include "spfst.h"
 #include "loaders.h"
@@ -1296,7 +1300,7 @@ void evaluatevisibilityfield ( pfield fld, int player, int add )
         setvisibility(&fld->visible,visible_ago, player);
 
    if ( add == -1 ) {
-      int add = 0;
+      add = 0;
       if ( actmap->shareview )
          for ( int i = 0; i < 8; i++ )
             if ( actmap->shareview->mode[i][player] )

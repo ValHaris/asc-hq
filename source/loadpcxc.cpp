@@ -1,3 +1,15 @@
+//     $Id: loadpcxc.cpp,v 1.1 1999-11-22 18:27:40 mbickel Exp $
+//
+//     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:02  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -42,141 +54,8 @@ typedef struct tpcxheader{
            word     hscreensize ;
            word     vscreensize ;
            byte     dummy[50]   ;
-           int      size;
+           int      size;            // patch to be able to read pcx files without seeking 
        }tpcxheader;
-
-
-word  columncount;
-extern "C" word  planenum;
-extern "C" void* scratch;
-
-extern "C" integer linelength;
-
-integer spacelengthp;
-integer spacelength;
-
-extern "C" int  datatoread;
-extern "C" int  dataread;
-
-extern "C" int  scanlineret[3];
-extern "C" size_t datalength;
-
-const buffsize = 2000;
-
-extern "C" void   decode_pcx256();
-#pragma aux decode_pcx256 parm [ eax ] modify [ ebx ecx edx esi edi ]
-
-extern "C" void   resetdata(int start);
-#pragma aux resetdata modify [ eax ebx ecx edx ]
-
-
-char loadpcxxy(char *name, boolean setpal, word x, word y)
-{
-
-/////////////
-//variablen
-////////////
-
-  tpcxheader header;
-  FILE       *fp;
-  dacpalette256 pal;
-  word       b,c;
-  int        m;
-  fpos_t     l;
-  byte       colors;
-
-///////////
-/// code
-//////////
-
-   m = y * agmp-> scanlinelength * agmp->byteperpix + x;
-
-   fp = fopen(name, "rb");
-
-   if (fp == NULL) {
-      return(100);
-   } /* endif */
-
-      fread(&header,sizeof(header),1,fp);
-       if (header.manufacturer != 10 || header.bitsperpixel != 8 || header.xmax-header.xmin > agmp-> scanlinelength ) {
-         fclose(fp);
-         return(11);
-       }
-
-   colors   = header.nplanes * header.bitsperpixel;
-   planenum = header.nplanes;
-   
-   if (colors == 8) {
-      fgetpos( fp, &l );
-      b=0;
-      fseek(fp, filesize( name ) - 769, SEEK_SET );
-      fread( &b, 1, 1, fp );
-      if (b != 12) {
-         fclose( fp );
-         return(10);
-      } /* endif */
-      fread( pal, 1, sizeof( pal ), fp );
-      for (b=0;b <=255 ;b++ ) {
-         for (c=0;c<=2 ;c++ ) {
-            pal[b][c]>>= 2;
-         } /* endfor */
-      } /* endfor */
-      if (setpal) {
-         setvgapalette256(pal);
-      } /* endif */
-      fseek( fp,l, SEEK_SET );
-   }
-
-   linelength =  header.bytesperline;
-   if (agmp->byteperpix > 1) {
-      
-      scanlineret[0] =agmp-> redfieldposition / 8;
-      scanlineret[1] =  linelength * agmp->byteperpix - agmp->greenfieldposition / 8 + agmp-> redfieldposition / 8;
-      scanlineret[2] =  linelength * agmp->byteperpix - agmp->bluefieldposition / 8 + agmp-> greenfieldposition / 8;
-      scanlineret[3] = agmp-> scanlinelength  -
-                       linelength* agmp->byteperpix + agmp->redfieldposition / 8 - agmp->bluefieldposition / 8;
-                      
- 
-
-   } else {
-      scanlineret[0]=0;
-      scanlineret[1]=agmp-> scanlinelength - linelength* agmp->byteperpix;
-   }
-
-/*
-   if (maxavail < buffsize) {
-      buffsize=maxavail;
-   }
-*/
-
-   datatoread=(header.ymax-header.ymin+1) * header.bytesperline * header.nplanes;
-   dataread=datatoread;
-
-
-   if ( agmp->windowstatus == 100 ) 
-      resetdata( m );
-   else {
-      setvirtualpagepos( m >> 16 );
-      resetdata( m & 0xffff );
-   }
-
-
-   scratch = new char [ buffsize*2 ];
-
-   do {
-
-      datalength = fread( scratch, 1, buffsize,fp) + 1;
-      decode_pcx256();
- 
-   } while ( !feof(fp) && dataread > 0); /* enddo */
-   int a = ftell ( fp );
-   fclose(fp);
-   delete[] scratch;
-   return(0);
-} /* endif */
-  
-
-
 
 
 char loadpcxxy( pnstream stream, int x, int y, int setpalette )
@@ -194,7 +73,8 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
    if ( !header.size )
       return 12;
 
-   int dataend = header.size;
+   int width = (header.xmax - header.xmin + 1 );
+   int pixels = width * (header.ymax - header.ymin + 1) * header.nplanes;
 
    if ( header.manufacturer != 10 || 
         header.bitsperpixel != 8  || 
@@ -202,61 +82,83 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
       return 11;
 
    int colors   = header.nplanes * header.bitsperpixel;
-   if ( colors == 8 )
-      dataend -= (sizeof ( dacpalette256 ) + 1);
 
-   planenum = header.nplanes;
-   
-   linelength =  header.bytesperline;
+   int scanlineret[4];
+
    if (agmp->byteperpix > 1) {
       
       scanlineret[0] = agmp-> redfieldposition / 8;
-      scanlineret[1] =  linelength * agmp->byteperpix - agmp->greenfieldposition / 8 + agmp-> redfieldposition / 8;
-      scanlineret[2] =  linelength * agmp->byteperpix - agmp->bluefieldposition / 8 + agmp-> greenfieldposition / 8;
-      scanlineret[3] = agmp-> scanlinelength  -
-                       linelength* agmp->byteperpix + agmp->redfieldposition / 8 - agmp->bluefieldposition / 8;
+      scanlineret[1] = header.bytesperline * agmp->byteperpix - agmp->greenfieldposition / 8 + agmp-> redfieldposition / 8;
+      scanlineret[2] = header.bytesperline * agmp->byteperpix - agmp->bluefieldposition / 8 + agmp-> greenfieldposition / 8;
+      scanlineret[3] = -(agmp-> scanlinelength  -
+                       header.bytesperline* agmp->byteperpix + agmp->redfieldposition / 8 - agmp->bluefieldposition / 8);
                       
    } else {
       scanlineret[0]=0;
-      scanlineret[1]=agmp-> scanlinelength - linelength* agmp->byteperpix;
+      scanlineret[1]=agmp-> scanlinelength - header.bytesperline * agmp->byteperpix;
    }
 
+   int totalbytes = header.nplanes * header.bytesperline;
 
-   datatoread=(header.ymax-header.ymin+1) * header.bytesperline * header.nplanes;
-   dataread=datatoread;
 
-   if ( agmp->windowstatus == 100 ) 
-      resetdata( m );
-   else {
-      setvirtualpagepos( m >> 16 );
-      resetdata( m & 0xffff );
-   }
+   int ttlbytes = 0;
+   int xpos = 0;
+   int planenum = 0;
 
-   scratch = new char [ buffsize ];
+   int byteperpix = agmp->byteperpix;
 
-   do {
-      if ( buffsize > dataend - read )
-         datalength = dataend - read;
-      else
-         datalength = buffsize;
 
-      stream->readdata ( scratch, datalength );
-      read += datalength;
+   char* dest = (char*) (agmp->linearaddress + x * agmp->byteperpix + y * agmp->bytesperscanline + scanlineret[0]);
+   while ( pixels ) {
+      char a;
+      stream->readdata2 ( a );   // if you really want speed, use my asm code :-)
+      read++;
 
-      datalength ++ ;
-      decode_pcx256();
- 
-   } while ( header.size > read && dataread ); /* enddo */
+      int count;
+      if ( a >= 192 ) {
+         count = a ^192;
+         stream->readdata2 ( a );
+         read++;
+      } else
+         count = 1;
+
+      while ( count ) {
+         if ( xpos >= header.bytesperline ) {
+            planenum++;
+            dest -= scanlineret[planenum];
+            if ( planenum >= header.nplanes ) {
+               planenum = 0;
+               ttlbytes = 0;
+            }
+            xpos = 0;
+         }
+         if ( xpos < width )
+            *dest = a;
+         dest+= byteperpix;
+         xpos++;
+         ttlbytes++;
+         count--;
+         pixels--;
+      } /* endwhile */
+
+   } /* endwhile */
+
 
    if ( setpalette && colors == 8 ) {
-      while ( read < dataend ) {
-         if ( buffsize > dataend - read )
-            datalength = dataend - read;
-         else
-            datalength = buffsize;
-         stream->readdata ( scratch, datalength );
-      }
-         
+      if ( header.size ) {
+         int dataend = header.size - sizeof ( dacpalette256 ) - 1;
+         while ( read < dataend ) {
+            char scratch[100];
+            int datalength;
+            if ( 100 > dataend - read )
+               datalength = dataend - read;
+            else
+               datalength = 100;
+            stream->readdata ( scratch, datalength );
+            read+= datalength;;
+         }
+      }    
+
       char c;
       stream->readdata ( &c, 1 );
       if ( c == 12 ) {
@@ -267,17 +169,18 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
                pal[j][i] >>= 2;
          setvgapalette256 ( pal );
       }
-
-
    }
-
-   delete[] scratch;
 
    return 0;
 } 
 
-#define writedata2(a)  writedata ( &(a), sizeof(a) )
-#define readdata2(a)   readdata  ( &(a), sizeof(a) )
+
+char loadpcxxy (char *name, boolean setpal, word x, word y)
+{
+   tnfilestream s ( name, 1 );
+   return loadpcxxy ( &s, x, y, setpal );
+}
+
 
 void writepcx ( char* name, int x1, int y1, int x2, int y2, dacpalette256 pal )
 {

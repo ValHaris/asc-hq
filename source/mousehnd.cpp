@@ -1,6 +1,14 @@
-//     $Id: mousehnd.cpp,v 1.2 1999-11-16 03:42:11 tmwilson Exp $
+//     $Id: mousehnd.cpp,v 1.3 1999-11-22 18:27:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:11  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -38,7 +46,7 @@
 #include <string.h>
 
 #include "tpascal.inc"
-#include "vesa.h"
+#include "basegfx.h"
 #include "misc.h"
 #include "mousehnd.h"
 #include "stack.h"
@@ -49,7 +57,17 @@
 */
 
 
-extern "C" int handleractive;
+#ifdef _NOASM_
+ void mouseintproc2( void );
+ volatile tmousesettings mouseparams;
+
+ int handleractive;
+
+#else
+
+ extern "C" int handleractive;
+
+#endif
 
 #define mouseprocnum 10
 tsubmousehandler* pmouseprocs[ mouseprocnum ];
@@ -105,6 +123,65 @@ int mouse_in_off_area ( void )
                mouseparams.y1 <= mouseparams.off.y2 ) ;
 }
 
+
+#ifdef _NOASM_
+
+void putmousebackground ( void )
+{
+//   putimage ( mouseparams.altx, mouseparams.alty, mouseparams.background );
+}
+
+
+void putmousepointer ( void )
+{
+   /*
+   getimage ( mouseparams.x1, mouseparams.y1, mouseparams.x1 + mouseparams.xsize, mouseparams.y1 + mouseparams.ysize, mouseparams.background );
+   putimage ( mouseparams.x1, mouseparams.y1, mouseparams.pictpointer );
+   mouseparams.altx = mouseparams.x1;
+   mouseparams.alty = mouseparams.y1;
+   */
+}
+
+
+
+void _loadds far click_handler (int max, int mbx, int mcx, int mdx,
+				int msi, int mdi)
+#pragma aux click_handler parm [EAX] [EBX] [ECX] [EDX] [ESI] [EDI]
+{
+  if (handleractive==0) {
+     handleractive = 1;
+
+     mouseparams.taste = mbx & 0xff;
+     mouseparams.x1 = mcx & 0xffff;
+     mouseparams.y1 = mdx & 0xffff;
+
+     callsubhandler();
+
+     if ( mouseparams.x1 + mouseparams.xsize > hgmp->resolutionx )
+        mouseparams.x1 = hgmp->resolutionx - mouseparams.xsize;
+     if ( mouseparams.y1 + mouseparams.ysize > hgmp->resolutiony )
+        mouseparams.y1 = hgmp->resolutiony - mouseparams.ysize;
+
+     mouseparams.x = mouseparams.x1 + mouseparams.hotspotx;
+     mouseparams.y = mouseparams.y1 + mouseparams.hotspoty;
+
+     if ( mouseparams.status == 2 )
+        if ( !mouse_in_off_area() ) {
+          if ( mouseparams.x1 != mouseparams.altx  || mouseparams.y1 != mouseparams.alty ) {
+              if ( mouseparams.altx != -1 )
+                 putmousebackground();
+              putmousepointer();
+             
+          }
+        } else
+          if ( mouseparams.altx != -1 )
+             putmousebackground();
+
+     handleractive = 0;
+  }
+}
+
+#else
 void _loadds far click_handler ( void )
 {
   if (handleractive==0) {
@@ -136,6 +213,8 @@ void _loadds far click_handler ( void )
   }
 }
 
+
+#endif
 
 void cbc_end (void) /* Dummy function so we can */
 {		    /* calculate size of code to lock */
@@ -268,11 +347,22 @@ int initmousehandler ( void* pic )
      
         inregs.w.ax = 0xC;
         inregs.w.cx = 0x0001 + 0x0002 + 0x0004 + 0x0008 + 0x00010;
-//        function_ptr = ( void(*)(void) ) click_handler;
+
+#ifndef _NOASM_
         inregs.x.edx = FP_OFF (click_handler);
         sregs.es	 = FP_SEG (click_handler);
         int386x (0x33, &inregs, &outregs, &sregs);
+#endif
 
+/*
+    void (far *function_ptr)();
+
+	    function_ptr = ( void(__far *)(void) ) click_handler;
+	    inregs.x.edx = FP_OFF (function_ptr);
+	    sregs.es	    = FP_SEG (function_ptr);
+
+        int386x (0x33, &inregs, &outregs, &sregs);
+*/
      } else
         return 1;
        

@@ -1,6 +1,14 @@
-//     $Id: mousehnd.h,v 1.2 1999-11-16 03:42:12 tmwilson Exp $
+//     $Id: mousehnd.h,v 1.3 1999-11-22 18:27:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:12  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -91,8 +99,22 @@ class tsubmousehandler {
      };
 
 
-extern "C" void            mouseintproc2( void );
-extern "C" volatile tmousesettings  mouseparams;
+#ifdef _NOASM_
+ extern void mouseintproc2( void );
+ extern volatile tmousesettings mouseparams;
+
+#else
+ extern "C" void            mouseintproc2( void );
+ extern "C" volatile tmousesettings  mouseparams;
+ 
+ extern "C" void putmousebackground ( void );
+ #pragma aux putmousebackground modify [ eax ebx ecx edx edi esi ]
+ 
+ extern "C" void putmousepointer ( void );
+ #pragma aux putmousepointer modify [ eax ebx ecx edx edi esi ]
+
+#endif
+
 
 extern void addmouseproc ( tsubmousehandler* proc );
 extern void removemouseproc ( tsubmousehandler* proc );
@@ -100,11 +122,6 @@ extern void removemouseproc ( tsubmousehandler* proc );
 extern void pushallmouseprocs ( void );
 extern void popallmouseprocs ( void );
 
-extern "C" void putmousebackground ( void );
-#pragma aux putmousebackground modify [ eax ebx ecx edx edi esi ]
-
-extern "C" void putmousepointer ( void );
-#pragma aux putmousepointer modify [ eax ebx ecx edx edi esi ]
 
 #define mousedblclickxdif 5
 #define mousedblclickydif 5

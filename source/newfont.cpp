@@ -1,6 +1,14 @@
-//     $Id: newfont.cpp,v 1.2 1999-11-16 03:42:15 tmwilson Exp $
+//     $Id: newfont.cpp,v 1.3 1999-11-22 18:27:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:15  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -26,6 +34,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <stdarg.h>
+#include "global.h"
 #include "tpascal.inc"
 #include "newfont.h"
 #include "stack.h"
@@ -39,6 +48,39 @@ const char* fontid = "I\'m a font file on your Disk. Leave me alone !\x01A\x0A0"
 #define spacewidthkey 'n'
 
 typedef dacpalette256 dacpal;
+
+#ifdef _NOASM_
+tfontsettings activefontsettings;
+
+void expand(void* p1, void* q1, int size)
+{
+   char* src = (char*) p1;
+   char* dst = (char*) q1;
+
+   dst[0] = src[0];
+   dst[1] = src[1];
+
+   src+=2;
+   dst+=2;
+
+   while ( size ) {
+      char al = *(src++);
+      for ( int i = 0; i < 8; i++ )
+         if ( size ) {
+            if ( al & (1 << i ))
+               dst[i] = 1;
+            else
+               dst[i] = 0;
+   
+            size--;
+         }
+      dst += 8;
+   }
+}
+
+
+#endif
+
 
 pfont        loadfont(char *       filename)
 {                

@@ -1,6 +1,10 @@
-//     $Id: building.cpp,v 1.4 1999-11-18 17:31:01 mbickel Exp $
+//     $Id: building.cpp,v 1.5 1999-11-22 18:26:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/18 17:31:01  mbickel
+//      Improved BI-map import translation tables
+//      Moved macros to substitute Watcom specific routines into global.h
+//
 //     Revision 1.3  1999/11/16 17:03:56  mbickel
 //     Made ASC compilable for DOS again :-)
 //     Merged all the bug fixes in that I did last week
@@ -43,7 +47,7 @@
 #include "tpascal.inc"
 #include "typen.h"
 #include "misc.h"
-#include "vesa.h"
+#include "basegfx.h"
 #include "newfont.h"
 #include "keybp.h"
 #include "timer.h"

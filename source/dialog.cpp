@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.4 1999-11-18 17:31:05 mbickel Exp $
+//     $Id: dialog.cpp,v 1.5 1999-11-22 18:27:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/18 17:31:05  mbickel
+//      Improved BI-map import translation tables
+//      Moved macros to substitute Watcom specific routines into global.h
+//
 //     Revision 1.3  1999/11/16 17:04:00  mbickel
 //     Made ASC compilable for DOS again :-)
 //     Merged all the bug fixes in that I did last week
@@ -51,7 +55,7 @@
 #include "tpascal.inc"
 #include "typen.h"
 #include "keybp.h"
-#include "vesa.h"
+#include "basegfx.h"
 #include "newfont.h"
 #include "spfst.h"
 #include "loaders.h"
@@ -5072,7 +5076,7 @@ void tprogressbar :: start ( int _color, int _x1, int _y1, int _x2, int _y2, pns
 
   actgroupnum = -1;
 
-  starttick = gettimestampcounter();
+  starttick = ticker;
   lastpaintedpos = -1;
 
   startgroup();
@@ -5080,7 +5084,7 @@ void tprogressbar :: start ( int _color, int _x1, int _y1, int _x2, int _y2, pns
 
 void tprogressbar :: startgroup ( void )
 {
-   int t = gettimestampcounter();
+   int t = ticker;
    if ( actgroupnum >= 0 ) {
       group[ actgroupnum ].time = t - group[ actgroupnum ].newtime;
       group[ actgroupnum ].orgnum = group[ actgroupnum ].num;
@@ -5096,7 +5100,7 @@ void tprogressbar :: startgroup ( void )
 
 void tprogressbar :: point ( void )
 {
-   int t = gettimestampcounter() - group[ actgroupnum ].newtime;
+   int t = ticker - group[ actgroupnum ].newtime;
    if ( !first &&  group[ actgroupnum ].num < group[ actgroupnum ].orgnum ) {
       if ( group[ actgroupnum ].time ) { 
          float fgtime = (float) group[ actgroupnum ].time;
@@ -5137,7 +5141,7 @@ void tprogressbar :: lineto ( float pos )
 
 void tprogressbar :: end ( void )
 {
-   time = gettimestampcounter()- starttick;
+   time = ticker - starttick;
    ended = 1;
    groupnum = actgroupnum;
 }

@@ -1,6 +1,14 @@
-//     $Id: oldlzw.cpp,v 1.2 1999-11-16 03:42:17 tmwilson Exp $
+//     $Id: oldlzw.cpp,v 1.3 1999-11-22 18:27:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:17  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -341,7 +349,8 @@ int tlzwstreamcompression  :: readdata ( void* buf, int size, int excpt  )
 
              // getting byte
 
-             readlzwdata ( &rledata, 1 );
+             if ( !readlzwdata ( &rledata, 1, excpt ))
+                return pos;
 
              if ( rledata == rlestartbyte ) {
                 readlzwdata ( &rlenum, 1 );
@@ -352,7 +361,7 @@ int tlzwstreamcompression  :: readdata ( void* buf, int size, int excpt  )
           }
 
       } /* endwhile */
-      return size;
+      return pos;
 
    } else {
    

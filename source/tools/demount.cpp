@@ -22,12 +22,7 @@
 #include <stdio.h>
 #include <malloc.h>
 
-                 struct tcontainerindex {
-                    char* name;
-                    int start;  // das erste Byte
-                    int end;    // das letzte Byte
-                 };
-
+#include "..\sgstream.h"
 
 int main(int argc, char *argv[] )
 {
@@ -59,18 +54,29 @@ int main(int argc, char *argv[] )
          } while ( index[i].name[p] ); /* enddo */
       }
    }
+   fclose ( fp );
+   opencontainer ( argv[1] );
+
+   int bufsize = 1000000;
+   void* buf = malloc ( bufsize );
+
    for ( i = 0; i < num; i++ ) {
-      printf("writing %s \n", index[i].name );
-      FILE* dest = fopen ( index[i].name, "wb" );
-      int size = index[i].end - index[i].start + 1;
-      void* p = malloc ( size );
-      fseek ( fp, index[i].start, SEEK_SET );
-      fread ( p, 1, size, fp );
-      fwrite ( p, 1, size, dest );
-      fclose ( dest );
-      free ( p );
+      try {
+         tnfilestream instream ( index[i].name, 1 );
+         tn_file_buf_stream outstream ( index[i].name, 2 );
+         int size ;
+         do {
+            size = instream.readdata ( buf, bufsize, 0 );
+            outstream.writedata ( buf, size );
+         } while ( size == bufsize );
+      } /* endtry */
+      catch ( tfileerror err) {
+         printf( "error writing file %s ", err.filename );
+         return 1;
+      } /* endcatch */
+     
    } /* endfor */
 
-   fclose ( fp );
+   free ( buf );
    return 0;
 }

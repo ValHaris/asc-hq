@@ -1,6 +1,10 @@
-//     $Id: basestrm.cpp,v 1.4 1999-11-18 17:30:59 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.5 1999-11-22 18:26:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/18 17:30:59  mbickel
+//      Improved BI-map import translation tables
+//      Moved macros to substitute Watcom specific routines into global.h
+//
 //     Revision 1.3  1999/11/16 17:03:54  mbickel
 //     Made ASC compilable for DOS again :-)
 //     Merged all the bug fixes in that I did last week
@@ -1806,9 +1810,7 @@ int exist ( char* s )
 #include "oldlzw.cpp"
 
 void  tnbufstream :: writebuffer( void ) {
-   printf("Why the hell does Watcom C require me to implement this method although it is pure ???");
 }
-
 
 void opencontainer ( const char* wildcard )
 {

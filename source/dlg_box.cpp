@@ -1,6 +1,10 @@
-//     $Id: dlg_box.cpp,v 1.3 1999-11-18 17:31:08 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.4 1999-11-22 18:27:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/18 17:31:08  mbickel
+//      Improved BI-map import translation tables
+//      Moved macros to substitute Watcom specific routines into global.h
+//
 //     Revision 1.2  1999/11/16 03:41:22  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -46,7 +50,7 @@
 #include "tpascal.inc"
 #include "typen.h"
 #include "keybp.h"
-#include "vesa.h"
+#include "basegfx.h"
 #include "newfont.h"
 #include "spfst.h"
 #include "loaders.h"
@@ -151,14 +155,16 @@ char*  strrrd8n(int  l)
 } 
 
 
-static const int dpms_times[3]  = {60000, 70000, 80000};
-
-
-tscreensaverparameters screensaverparameters; 
 void *dialogtexture = NULL;
 
 int actdisplayedmessage = 0;
 long int lastdisplayedmessageticker = 0xffffff;
+
+
+/*
+static const int dpms_times[3]  = {60000, 70000, 80000};
+
+tscreensaverparameters screensaverparameters; 
 
 void         checkscreensaver(void)
 { 
@@ -193,6 +199,7 @@ void         checkscreensaver(void)
 
 } 
 
+*/
 
 tvirtualscreenbuf virtualscreenbuf; 
 
@@ -1045,7 +1052,7 @@ void         tdialogbox::enablebutton(byte         id)
      word* pw2 =(word*) pb->data2; 
      rahmen(true,x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2); 
 
-     waitretrace();
+     // waitretrace();
 
      paintsurface2(x1 + pb->x1 + 1,y1 + pb->y1 + 1,x1 + pb->x2 - 1,y1 + pb->y2 - 1 );
 
@@ -1161,7 +1168,7 @@ void         tdialogbox::disablebutton(byte         id)
    if (pb->art == 5) { 
      pw = (word*) pb->data;
      pw2 = (word*) pb->data2;
-     waitretrace(); 
+     // waitretrace(); 
      rectangle(x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2,disablecolor); 
 
      paintsurface2(x1 + pb->x1 + 1,y1 + pb->y1 + 1,x1 + pb->x2 - 1,y1 + pb->y2 - 1);
@@ -1412,7 +1419,7 @@ void         tdialogbox::execbutton( pbutton      pb, boolean      mouse )
 
                 if ( ys1 != ys1b ) {
                    ys1b = ys1;
-                   waitretrace();
+                   // waitretrace();
                    mousevisible(false);
                    paintsurface2(x1 + pb->x1 + 1,y1 + pb->y1 + 1,x1 + pb->x2 - 1,y1 + pb->y2 - 1 );
                    rahmen(true, xb1 + 1, ys1, xb2 - 1, ys1 + ysd);
@@ -1562,7 +1569,7 @@ void         tdialogbox::run(void)
    } 
    if (keypress()) {
       taste = r_key (); 
-      screensaverparameters.lasttick = ticker; 
+      // screensaverparameters.lasttick = ticker; 
    } 
    else {
       taste = ct_invvalue; 
@@ -1605,7 +1612,7 @@ void         tdialogbox::run(void)
          pb = pb->next; 
       } 
    } 
-   checkscreensaver(); 
+   // checkscreensaver(); 
 } 
 
 

@@ -1,6 +1,14 @@
-//     $Id: edmain.cpp,v 1.2 1999-11-16 03:41:36 tmwilson Exp $
+//     $Id: edmain.cpp,v 1.3 1999-11-22 18:27:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:36  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -598,11 +606,6 @@ void closemouse ( void )
 }
 
 
-void setnormtext( void )
-{
-   settextmode(3);
-}
-
 //* õS Diverse
 
 void dispmessageonexit ( void ) {
@@ -623,8 +626,7 @@ void dispmessageonexit ( void ) {
 
 void closesvgamode( void )
 {
-    closesvga();
-    settextmode(3);
+   closegraphics();
 }    
 
 
@@ -667,7 +669,6 @@ int main(int argc, char *argv[] )
    signal ( SIGINT, SIG_IGN );
    int resolx = 800;
    int resoly = 600;
-   pavailablemodes  avm;
    int              modenum8;
    int              i;
 
@@ -684,12 +685,6 @@ int main(int argc, char *argv[] )
               if ( strcmpi ( &argv[i][1], "V1" ) == 0 ) 
                  vesaerrorrecovery = 1;
               else
-              /*
-              if ( strcmpi ( &argv[i][1], "SUPERHIRES" ) == 0 ) {
-                 resolx = 1280;
-                 resoly = 1024;
-              }
-              */
               if ( strnicmp ( &argv[i][1], "x=", 2 ) == 0 ) {
                  resolx = atoi ( &argv[i][3] );
               } else
@@ -736,23 +731,14 @@ int main(int argc, char *argv[] )
    atexit ( dispmessageonexit );
         
    
-    avm = searchformode ( resolx, resoly, 8 );
-    if (avm->num > 0) {
-      for (i=0;i<avm->num ;i++ ) {
-         printf("8 Bit mode available: %x        X: %d   Y: %d \n", avm->mode[i].num, avm->mode[i].x, avm->mode[i].y);
-         modenum8 = avm->mode[i].num;
-      } /* endfor */
- 
-      printf("Initializing ... \n");
-      initsvga( modenum8 );
-      atexit( closesvgamode );
-    }
-    else {
-        printf("8 Bit mode nicht available");
-        return 1;
-    }
+   modenum8 = initgraphics( resolx, resoly, 8 );
+   if ( modenum8 < 0 )
+      return 1;
+   atexit ( closesvgamode ); 
 
-   asc_free ( avm );
+
+   inittimer(100);
+   atexit ( closetimer );
 
    schriften.smallarial = load_font("smalaril.FNT");
    schriften.large = load_font("USABLACK.FNT");
@@ -812,7 +798,6 @@ int main(int argc, char *argv[] )
    cursor.init();
                
    atexit( closemouse );
-   atexit( setnormtext );
       
    xlatpictgraytable = (ppixelxlattable) malloc( sizeof(*xlatpictgraytable) );
    generategrayxlattable(xlatpictgraytable,160,16); 
@@ -834,8 +819,6 @@ int main(int argc, char *argv[] )
    addmouseproc ( &mousescrollproc );
 
    godview = true; 
-   inittimer(100);
-   atexit ( closetimer );
 
    #ifdef NEWKEYB   
        initkeyb(); 
@@ -860,4 +843,3 @@ int main(int argc, char *argv[] )
    return 0;
 }
 
-

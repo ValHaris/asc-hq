@@ -25,6 +25,8 @@
   #define HAVE_STRICMP 
   #define HAVE_KBHIT
   #define HAVE_ITOA
+ #else
+  #define _NOASM_
  #endif
 
  #ifndef HAVE_ITOA

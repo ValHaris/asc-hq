@@ -1,6 +1,10 @@
-//     $Id: gamedlg.cpp,v 1.4 1999-11-18 17:31:09 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.5 1999-11-22 18:27:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/18 17:31:09  mbickel
+//      Improved BI-map import translation tables
+//      Moved macros to substitute Watcom specific routines into global.h
+//
 //     Revision 1.3  1999/11/16 17:04:02  mbickel
 //     Made ASC compilable for DOS again :-)
 //     Merged all the bug fixes in that I did last week
@@ -56,6 +60,8 @@
 # endif
 #endif
 
+
+#include "basegfx.h"
 #include "gamedlg.h"
 #include "missions.h"
 #include "mousehnd.h"
@@ -2064,8 +2070,7 @@ void         showtechnology(ptechnology  tech )
 
          if ( pic ) {
 
-            closesvga();
-            initsvga( modenum24 );
+            reinitgraphics( modenum24 );
             try {
                {
                   if ( pic & 1 ) {
@@ -2088,8 +2093,7 @@ void         showtechnology(ptechnology  tech )
    
             } while ( t + 600 > ticker  &&  !keypress()  && !mouseparams.taste && !abrt ); /* enddo */
    
-            closesvga();
-            initsvga( modenum8 );
+            reinitgraphics( modenum8 );
          }            
 
 

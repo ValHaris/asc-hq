@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.4 1999-11-18 17:31:18 mbickel Exp $
+//     $Id: sg.cpp,v 1.5 1999-11-22 18:27:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/18 17:31:18  mbickel
+//      Improved BI-map import translation tables
+//      Moved macros to substitute Watcom specific routines into global.h
+//
 //     Revision 1.3  1999/11/16 17:04:09  mbickel
 //     Made ASC compilable for DOS again :-)
 //     Merged all the bug fixes in that I did last week
@@ -49,7 +53,7 @@
 #include <ctype.h>
 
 #include "tpascal.inc"
-#include "vesa.h"
+#include "basegfx.h"
 #include "misc.h"
 #include "loadpcx.h"
 #include "newfont.h"
@@ -1401,7 +1405,7 @@ void         repaintdisplay(void)
 
 void         repaintdisplayhard(void)
 { 
-   initsvga( modenum8 );
+   reinitgraphics( modenum8 );
    setdisplaystart ( 0, videostartpos  );
    repaintdisplay();
 } 
@@ -2069,7 +2073,7 @@ void checkpulldown( tkey* ch )
 
 void mainloopgeneralkeycheck ( tkey& ch )
 {
-    screensaverparameters.lasttick = ticker; 
+    // screensaverparameters.lasttick = ticker; 
     ch = r_key(); 
     pd.key = ch;
     checkpulldown( &ch );
@@ -2336,7 +2340,7 @@ void  mainloop ( void )
       checkpulldown( &ch );
 
 
-      checkscreensaver(); 
+      // checkscreensaver(); 
 
 
       while ( quedevents[ actmap->actplayer ] )
@@ -2372,8 +2376,7 @@ void dispmessageonexit ( void ) {
 
 
 void returntotextmode ( void ) {
-   closesvga();
-   settextmode ( 3 );
+   closegraphics();
 }
 
 
@@ -2829,15 +2832,6 @@ class tnewkeyb {
                };
           };
 
-void showavailablemodes ( void ) 
-{
-   printf("\navailable graphic modes:\n");
-   pavailablemodes avm = searchformode ( 0, 0, 8 );
-   for ( int i = 0; i < avm->num; i++ )
-      if ( avm->mode[i].x >= 640  &&  avm->mode[i].y >= 480 )
-         printf("  %d * %d \n", avm->mode[i].x, avm->mode[i].y );
-}
-
 
 int main(int argc, char *argv[] )
 {  
@@ -2867,74 +2861,72 @@ int main(int argc, char *argv[] )
    int showmodes = 0;
 
    #ifdef logging
-   logtofile ( getstartupmessage() );
-   logtofile ( "\n\n new log started ");
-   #ifdef NEWKEYB
-   logtofile ( "new keyboard handler ist enabled" );
-   #else
-   logtofile ( "new keyboard handler ist disabled" );
-   #endif
+    logtofile ( getstartupmessage() );
+    logtofile ( "\n\n new log started ");
+    #ifdef NEWKEYB
+    logtofile ( "new keyboard handler ist enabled" );
+    #else
+    logtofile ( "new keyboard handler ist disabled" );
+    #endif
    #endif
 
-       int cntr = gettimestampcounter();
+   #ifdef logging
+   logtofile ( "sg.cpp / main / initializing timer handler ");
+   #endif
+   inittimer(100);
+   atexit ( closetimer );
+
+
+       int cntr = ticker;
 
         printf( getstartupmessage() );
 
 
         for (i = 1; i<argc; i++ ) {
            if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
+             #ifdef _DOS_
               if ( strcmpi ( &argv[i][1], "V1" ) == 0 ) 
                  vesaerrorrecovery = 1;
               else 
+             #endif
                  if ( strcmpi ( &argv[i][1], "NOCD" ) == 0 )
                     cdrom = 0;
                  else
-                    /*
-                    if ( (strnicmp ( &argv[i][1], "GAME:" , 5) == 0) || (strnicmp ( &argv[i][1], "GAME=" , 5) == 0)) {
-                       strcpy ( gamepath, &argv[i][6]);
-                       if ( gamepath[strlen(gamepath)-1] != '\\' )
-                          strcat ( gamepath, "\\" );
-
-                       if ( !checkforvaliddirectory ( gamepath ) ) {
-                           printf ( "\nInvalid directory: %s \n", gamepath );
-                           exit(1);
-                       }
-                    } else */
-                       if ( strcmpi ( &argv[i][1], "SHOWMODES" ) == 0 ) {
-                          showmodes = 1;
-                       } else
-                          if ( strcmpi ( &argv[i][1], "8BITONLY" ) == 0 )
-                             modenum24 = -2;
-                          else
-                             if ( strnicmp ( &argv[i][1], "x=", 2 ) == 0 ) {
-                                resolx = atoi ( &argv[i][3] );
-                             } else
-                             if ( strnicmp ( &argv[i][1], "x:" ,2 ) == 0 ) {
-                                resolx = atoi ( &argv[i][3] );
-                             } else
-                             if ( strnicmp ( &argv[i][1], "y=" ,2 ) == 0 ) {
-                                resoly = atoi ( &argv[i][3] );
-                             } else
-                             if ( strnicmp ( &argv[i][1], "y:" ,2 ) == 0 ) {
-                                resoly = atoi ( &argv[i][3] );
+                    if ( strcmpi ( &argv[i][1], "SHOWMODES" ) == 0 ) {
+                       showmodes = 1;
+                    } else
+                       if ( strcmpi ( &argv[i][1], "8BITONLY" ) == 0 )
+                          modenum24 = -2;
+                       else
+                          if ( strnicmp ( &argv[i][1], "x=", 2 ) == 0 ) {
+                             resolx = atoi ( &argv[i][3] );
+                          } else
+                          if ( strnicmp ( &argv[i][1], "x:" ,2 ) == 0 ) {
+                             resolx = atoi ( &argv[i][3] );
+                          } else
+                          if ( strnicmp ( &argv[i][1], "y=" ,2 ) == 0 ) {
+                             resoly = atoi ( &argv[i][3] );
+                          } else
+                          if ( strnicmp ( &argv[i][1], "y:" ,2 ) == 0 ) {
+                             resoly = atoi ( &argv[i][3] );
+                          }
+                          else 
+                             if ( ( strcmpi ( &argv[i][1], "?" ) == 0 ) || ( strcmpi ( &argv[i][1], "h" ) == 0 ) ){
+                                printf( " Parameters: \n"
+                                        "     /h          This page\n"
+                                        "     /v1         Set vesa error recovery level to 1 \n"    
+                                        "     /nocd       Disable music \n"
+                                        "     /8bitonly   Disable truecolor graphic mode \n"
+                                        "     /x:X        Set horizontal resolution to X; default is 800 \n"
+                                        "     /y:Y        Set verticalal resolution to Y; default is 600 \n"
+                                        "     /showmodes  Display list of available graphic modes \n");
+                                        //"     /game:X     Set gamepath to X \n\n");
+                                exit (0);
+             
+                             } else {
+                                 printf ( "\nInvalid command line parameter: %s \nUse /h to for help\n", argv[i] );
+                                 exit(1);
                              }
-                             else 
-                                if ( ( strcmpi ( &argv[i][1], "?" ) == 0 ) || ( strcmpi ( &argv[i][1], "h" ) == 0 ) ){
-                                   printf( " Parameters: \n"
-                                           "     /h          This page\n"
-                                           "     /v1         Set vesa error recovery level to 1 \n"    
-                                           "     /nocd       Disable music \n"
-                                           "     /8bitonly   Disable truecolor graphic mode \n"
-                                           "     /x:X        Set horizontal resolution to X; default is 800 \n"
-                                           "     /y:Y        Set verticalal resolution to Y; default is 600 \n"
-                                           "     /showmodes  Display list of available graphic modes \n");
-                                           //"     /game:X     Set gamepath to X \n\n");
-                                   exit (0);
-                
-                                } else {
-                                    printf ( "\nInvalid command line parameter: %s \nUse /h to for help\n", argv[i] );
-                                    exit(1);
-                                }
            } else {
                printf ( "\nInvalid command line parameter: %s \n", argv[i] );
                exit(1);
@@ -3010,91 +3002,30 @@ int main(int argc, char *argv[] )
         check_bi3_dir ();
        #endif
 
-/*
-        for ( int z = 0; i < 20; i++ ) {
-           int a = maxavail();
-           int b = _memavl();
-           char buf[15000];
-           tnfilestream stream ( "smalaril.fnt", 1 );
-           stream.readdata ( buf, 15000 );
-        }
-        int a = maxavail();
-        int b = _memavl();
-*/
+
 
         #ifdef logging
         logtofile ( "sg.cpp / main / searching for 8 bit graphic mode ");
         #endif
-         pavailablemodes avm = searchformode ( resolx, resoly, 8 );
 
-        if (avm->num > 0) {
-
-           for (i=0;i<avm->num ;i++ ) {
-              printf("8 Bit mode available: %x        X: %d   Y: %d \n", avm->mode[i].num, avm->mode[i].x, avm->mode[i].y);
-              modenum8 = avm->mode[i].num;
-           } /* endfor */
-
-           printf("Initializing ... \n");
-           
-           #ifdef logging
-           logtofile ( "sg.cpp / main / initializing 8-Bit graphic mode ");
-           #endif
-           
-           initsvga( modenum8 );
+        modenum8 = initgraphics ( resolx, resoly, 8 );
+        if ( modenum8 > 0 ) {
            atexit ( returntotextmode );
-
-           
-           #ifdef logging
-           logtofile ( "sg.cpp / main / initspfst ");
-           #endif
-
+   
            #ifdef HEXAGON
            initspfst( -1, -1 ); // 6, 16 
            #else
            initspfst();
            #endif
-
-           gui.init ( resolx, resoly );
-
-           virtualscreenbuf.init();
-
-           delete  ( avm );
-
-
-           #ifdef logging
-           logtofile ( "sg.cpp / main / searching for 32-Bit graphic mode ");
-           #endif
-           
-           if ( modenum24 == -1 ) {      // modenum24 is -2 when the command line parameter /8bitonly is used
-              avm = searchformode ( 640, 480,32 );
-              if (avm->num > 0) {
-      
-                 for (i=0;i<avm->num ;i++ ) {
-                    // printf("32 Bit mode available: %x        X: %d   Y: %d \n", avm->mode[i].num, avm->mode[i].x, avm->mode[i].y);
-                    modenum24 = avm->mode[i].num;
-                 } /* endfor */
-      
-              } else {
-                 delete  ( avm );
-                 avm = searchformode ( 640 ,480, 24 );
-                 if (avm->num > 0) {
-                    for (i=0;i<avm->num ;i++ ) {
-                      // printf("24 Bit mode available: %x        X: %d   Y: %d \n", avm->mode[i].num, avm->mode[i].x, avm->mode[i].y);
-                      modenum24 = avm->mode[i].num;
-                    } /* endfor */
-                 }
-              } /* endif */
-              delete  ( avm );
-           }
    
-
+           gui.init ( resolx, resoly );
+   
+           virtualscreenbuf.init();
+   
+           if ( modenum24 == -1 )      // modenum24 is -2 when the command line parameter /8bitonly is used
+              modenum24 = initgraphics ( 640, 480,32 );
+           
            if ( modenum24 > 0 ) {
-              closesvga();
-              
-              #ifdef logging
-              logtofile ( "sg.cpp / main / initializing truecolor graphic mode ");
-              #endif
-              initsvga( modenum24 );
 
               char pcx[300];
               char jpg[300];
@@ -3125,8 +3056,7 @@ int main(int argc, char *argv[] )
                  displaymessage ( "loading of game failed", 2 );
               } /* endcatch */
 
-              closesvga();
-              initsvga( modenum8 );
+              reinitgraphics( modenum8 );
            } else {
               truecoloravail = false;
 
@@ -3182,12 +3112,6 @@ int main(int argc, char *argv[] )
 
            loadtexture();
 
-           #ifdef logging
-           logtofile ( "sg.cpp / main / initializing timer handler ");
-           #endif
-           inittimer(100);
-           atexit ( closetimer );
-           
            onlinehelp = new tsgonlinemousehelp;
            onlinehelpwind = new tsgonlinemousehelpwind;
 
@@ -3242,7 +3166,7 @@ int main(int argc, char *argv[] )
                     #endif
                     static int displayed = 0;
                     if ( !displayed ) 
-                       displaymessage2( "million clock ticks for startup: %d", gettimestampcounter()-cntr );
+                       displaymessage2( "time for startup: %d * 1/100 sec", ticker-cntr );
                     displayed = 1;
                     mainloop();
                     mousevisible ( false );
@@ -3252,7 +3176,7 @@ int main(int argc, char *argv[] )
               } /* endcatch */
            } while ( abortgame == 0);
 
-           closesvga();
+           closegraphics();
 
            writegameoptions ();
 
@@ -3260,14 +3184,7 @@ int main(int argc, char *argv[] )
            onlinehelp = NULL;
            delete onlinehelpwind;
            onlinehelpwind = NULL;
-
-     
-        } else {
-           printf("No graphic-mode available !\n");
-           showavailablemodes();
-           return 1;
-        } /* endif */
-        
+        } // if 8 bit initialization successfull
 
         #ifdef logging
         logtofile ( "sg.cpp / main / returning ");

@@ -1,6 +1,14 @@
-//     $Id: loadjpg.cpp,v 1.2 1999-11-16 03:42:00 tmwilson Exp $
+//     $Id: loadjpg.cpp,v 1.3 1999-11-22 18:27:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:00  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -23,13 +31,10 @@
 */
 
 
-#ifdef _DOS_
-#include <conio.h>
-#endif
 #include "config.h"
 #include <string.h>
 
-#include "vesa.h"
+#include "basegfx.h"
 
 
 /*
@@ -213,7 +218,7 @@ void put_scanline_someplace ( char* ptr, int width )
          }
 
    } else {
-
+     #ifndef _NOASM_
       bankparams.actpos = linenum * bankparams.linelen;
       int p = bankparams.actpos >> 16;
       if ( bankparams.page != p ) {
@@ -276,7 +281,7 @@ void put_scanline_someplace ( char* ptr, int width )
          }
 
       }
-
+     #endif
    }
 
    linenum++;
@@ -290,7 +295,10 @@ read_JPEG_file ( pnstream strm )
   bankparams.actpos = 0;
   bankparams.page = 0;
   linenum = 0;
-  setvirtualpagepos( 0 );
+ #ifndef _NOASM_
+  if ( agmp->windowstatus != 100 ) 
+    setvirtualpagepos( 0 );
+ #endif
 
   /* This struct contains the JPEG decompression parameters and pointers to
    * working space (which is allocated as needed by the JPEG library).

@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.3 1999-11-16 17:04:14 mbickel Exp $
+//     $Id: spfst.cpp,v 1.4 1999-11-22 18:27:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/16 17:04:14  mbickel
+//     Made ASC compilable for DOS again :-)
+//     Merged all the bug fixes in that I did last week
+//
 //     Revision 1.2  1999/11/16 03:42:32  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -56,7 +60,7 @@
 #include "tpascal.inc"
 #include "misc.h"
 #include "keybp.h"
-#include "vesa.h"
+#include "basegfx.h"
 #include "newfont.h"
 #include "typen.h"
 #include "spfst.h"
@@ -307,6 +311,69 @@ void addtechnology ( ptechnology tech )
    }
 }
 
+
+
+
+
+
+
+#ifdef _NOASM_
+
+int  rol ( int valuetorol, int rolwidth )
+{
+   int newvalue = valuetorol << rolwidth;
+   newvalue |= valuetorol >> ( 32 - rolwidth );
+   return newvalue;
+}
+
+
+void setvisibility ( word* visi, int valtoset, int actplayer )
+{
+   int newval = (valtoset ^ 3) << ( 2 * actplayer );
+   int oneval = 3 << ( 2 * actplayer );
+
+   int vis = *visi;
+   vis |= oneval;
+   vis ^= newval;
+   *visi = vis;
+}
+
+void copyvfb2displaymemory_zoom ( void* parmbuf )
+{
+   int* parmi = (int*) parmbuf;
+
+   char* esi = (char*) parmi[0];
+   char* edi = (char*) parmi[1];
+
+   int edx = parmi[3];
+   int ecx;
+   int* ebp;
+   do {
+      ebp = (int*) parmi[4];
+      ecx =  parmi[2];
+      do {
+
+         esi += *ebp;
+   
+         *(edi++) = *(esi++);
+         ebp++;
+   
+         ecx--;
+
+      } while ( ecx ); /* enddo */
+
+      esi += parmi[5];
+      edi += parmi[6];
+      ebp = (int*) parmi[7];
+
+      edx--;
+      esi += ebp[edx];
+
+   } while ( edx ); /* enddo */
+
+}
+
+#endif
 
 
 void         initmap( void )
@@ -1206,9 +1273,17 @@ void         generatemap( const pwterraintype   bt,
 
 
            int vfbscanlinelength;
-extern "C" int vfbstartdif;
-extern "C" int scrstartdif;
-extern "C" int scrstartpage;
+
+
+#ifdef _NOASM_
+ int vfbstartdif;
+ int scrstartdif;
+ int scrstartpage;
+#else
+ extern "C" int vfbstartdif;
+ extern "C" int scrstartdif;
+ extern "C" int scrstartpage;
+#endif
 
 
 
@@ -4220,6 +4295,7 @@ void tdisplaymap :: cp_buf ( void )
 {
 
     if ( hgmp->windowstatus != 100 ) {
+      #ifndef _NOASM_
        int linaddress = windowx1 + windowy1 * hgmp->bytesperscanline;
        int page = hgmp->actsetpage;
 
@@ -4249,7 +4325,7 @@ void tdisplaymap :: cp_buf ( void )
 
           esi = esistart + agmp->bytesperscanline * ( yp * 100 / zoom);
        }
-
+      #endif
     } else {
 
 

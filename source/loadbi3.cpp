@@ -1,6 +1,10 @@
-//     $Id: loadbi3.cpp,v 1.4 1999-11-18 17:31:13 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.5 1999-11-22 18:27:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/18 17:31:13  mbickel
+//      Improved BI-map import translation tables
+//      Moved macros to substitute Watcom specific routines into global.h
+//
 //     Revision 1.3  1999/11/16 17:04:08  mbickel
 //     Made ASC compilable for DOS again :-)
 //     Merged all the bug fixes in that I did last week
@@ -39,7 +43,7 @@
 #include "loadbi3.h"
 #include "newfont.h"
 #include "string.h"
-#include "vesa.h"
+#include "basegfx.h"
 #include "keybp.h"
 #include "typen.h"
 #include "misc.h"
@@ -138,8 +142,7 @@ void checkbi3dir ( void )
                strcat ( gameoptions.bi3.dir, "\\" );
             gameoptions.changed = 1;
          } else {
-            closesvga();
-            settextmode(3);
+            closegraphics();
             printf("\nplease run ASC first to create a config file !\n");
             exit(0);
          }
@@ -1053,7 +1056,7 @@ void        tloadBImap ::   ReadACTNPart(void)
 
          for ( int m = 0; m < xl; m++ ) {
             int found_without_force = 0;
-            for ( int pass = 0; pass < 1 && !found_without_force; pass++ ) 
+            for ( int pass = 0; pass < 2 && !found_without_force; pass++ ) 
                for ( int i = 0; i < objecttypenum; i++ ) {
                   pobjecttype obj = getobjecttype_forpos ( i );
                   if ( obj ) 

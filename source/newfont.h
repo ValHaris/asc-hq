@@ -1,6 +1,14 @@
-//     $Id: newfont.h,v 1.2 1999-11-16 03:42:16 tmwilson Exp $
+//     $Id: newfont.h,v 1.3 1999-11-22 18:27:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:16  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -107,16 +115,29 @@ struct tfontsettings {
 #define righttext 2
 
 
-extern "C" void expand(void* p1, void* q1, int size);
-#pragma aux expand parm [ eax ] [ ebx ] [ ecx ] modify [ edx edi esi ]
 
-extern "C" void showtext2( const char* TextToOutput, int x1, int x2 );
-#pragma aux showtext2 parm [ ecx ] [ ebx ] [ eax ] modify [ edx esi edi ]
+#ifdef _NOASM_
+ extern void expand(void* p1, void* q1, int size);
+ extern void showtext2( const char* TextToOutput, int x1, int x2 );
+ extern void showtext2c( const char* TextToOutput, int x1, int x2 );
 
-extern "C" void showtext2c( const char* TextToOutput, int x1, int x2 );
-#pragma aux showtext2c parm [ ecx ] [ ebx ] [ eax ] modify [ edx esi edi ]
+ extern tfontsettings activefontsettings;
 
-extern "C" tfontsettings activefontsettings;
+#else
+ extern "C" void expand(void* p1, void* q1, int size);
+ #pragma aux expand parm [ eax ] [ ebx ] [ ecx ] modify [ edx edi esi ]
+
+ extern "C" void showtext2( const char* TextToOutput, int x1, int x2 );
+ #pragma aux showtext2 parm [ ecx ] [ ebx ] [ eax ] modify [ edx esi edi ]
+ 
+ extern "C" void showtext2c( const char* TextToOutput, int x1, int x2 );
+ #pragma aux showtext2c parm [ ecx ] [ ebx ] [ eax ] modify [ edx esi edi ]
+
+ extern "C" tfontsettings activefontsettings;
+
+#endif
+
+
 
 extern pfont loadfont(char* filename);
 extern pfont loadfont( pnstream stream );
