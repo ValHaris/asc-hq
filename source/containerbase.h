@@ -108,7 +108,7 @@ class ContainerBase {
       const ContainerBaseType::TransportationIO* vehicleUnloadSystem ( const Vehicle* vehicle, int height );
 
       //! returns the levels of height on which this unit can be transfered by docking; or 0 if no unloading is possible
-      int  vehicleDocking ( const Vehicle* vehicle ) const;
+      int  vehicleDocking ( const Vehicle* vehicle, bool out  ) const;
 
       /** Does the vehicle fit into the container? This does not include checking if it can reach the entry
       */

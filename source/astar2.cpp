@@ -704,15 +704,15 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
              }
           }
 
-          if ( !operationLimiter || operationLimiter->allowDocking() )
+          if ( !operationLimiter || operationLimiter->allowDocking() ) {
+             int dock = actmap->getField(A)->getContainer()->vehicleDocking(veh, true );
              for ( int dir = 0; dir < 6; dir++ ) {
-                int dock = actmap->getField(A)->getContainer()->vehicleDocking(veh);
                 if ( dock ) {
                    for ( int dir = 0; dir < 6; dir++ ) {
                       MapCoordinate3D pos = getNeighbouringFieldCoordinate ( A, dir );
                       pfield fld = actmap->getField( pos );
                       if ( fld && fld->getContainer() && ( fld->getContainer() != actmap->getField(A)->getContainer() ))
-                         if ( fld->getContainer()->vehicleDocking(veh) & dock )
+                         if ( fld->getContainer()->vehicleDocking(veh, false ) & dock )
                             if ( !fld->building || (fld->bdt & getTerrainBitType(cbbuildingentry) ).any()) {
                                Node N2;
                                N2.h.setnum ( pos.x, pos.y, -1);
@@ -724,6 +724,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                    }
                 }
             }
+          }
 
 
         } else {

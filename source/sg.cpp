@@ -615,7 +615,7 @@ void         tsgpulldown :: init ( void )
 
    addbutton ( "seperator", -1);
    addbutton ( "~L~oad gameõctrl-l", ua_loadgame );
-   addbutton ( "~S~ave game", ua_savegame );
+   addbutton ( "~S~ave gameõctrl-s", ua_savegame );
    addbutton ( "seperator", -1 );
    addbutton ( "Continue network gameõF3", ua_continuenetworkgame);
    addbutton ( "setup Net~w~ork", ua_setupnetwork );
@@ -1088,9 +1088,12 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
       TemporaryContainerStorage tcs ( veh, true );
       veh->reactionfire.disable();
       veh->setMovement ( veh->typ->movement[log2(veh->height)]);
+      int oldcolor = veh->color;
+      veh->color = actmap->actplayer*8;
       VehicleMovement vm ( NULL, NULL );
       if ( vm.available ( veh )) {
          vm.execute ( veh, -1, -1, 0, -1, -1 );
+         veh->color = oldcolor;
          if ( vm.reachableFields.getFieldNum()) {
             for  ( int i = 0; i < vm.reachableFields.getFieldNum(); i++ )
                if ( fieldvisiblenow ( vm.reachableFields.getField ( i ) ))
@@ -1120,6 +1123,7 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
             displaymap();
          }
       }
+      veh->color = oldcolor;
       tcs.restore();
    }
 }
@@ -1583,6 +1587,11 @@ void  mainloop ( void )
             case ct_stp + ct_l:
                execuseraction ( ua_loadgame );
                break;
+
+            case ct_stp + ct_s:
+               execuseraction ( ua_savegame );
+               break;
+
 
             case ct_stp + ct_n:
                execuseraction ( ua_startnewsinglelevel );

@@ -716,12 +716,19 @@ AI::AiResult AI::tactics( void )
 
 
                      pfield enemyField = getMap()->getField(enemy->xpos, enemy->ypos);
-                     for ( int i = 0; i < finalAttackNum && enemyField->vehicle == enemy; i++ ) {
+                     for ( int i = 0; i < finalAttackNum && enemyField->vehicle == enemy && finalAttackNum < maxint; i++ ) {
                         checkKeys();
+                        if ( finalOrder[i] < 0 )
+                           warning("!!!");
                         // if ( i+1 < finalAttackNum ) {
                         if ( i < finalAttackNum && finalPositions[finalOrder[i]] ) {
                            pvehicle a = finalPositions[finalOrder[i]];
                            VehicleAttack va ( mapDisplay, NULL );
+                           if ( finalOrder[i] < 0 )
+                              warning("!!!");
+                           int iiii = (int) finalPositions[finalOrder[i]];
+                           if ( iiii < 20 )
+                              warning("!!!");
                            va.execute ( finalPositions[finalOrder[i]], -1, -1, 0, 0, -1 );
                            if ( va.getStatus() != 2 && strictChecks )
                               displaymessage("inconsistency #1 in AI::tactics attack", 1 );

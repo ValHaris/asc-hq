@@ -556,6 +556,8 @@ void Building :: readData ( tnstream& stream, int version )
     for ( i = 0; i< 3; i++ )
        actstorage.resource(i) = stream.readInt();
 
+    // printf("building at %d / %d has %d / %d / %d EMF \n", getEntry().x, getEntry().y, actstorage.energy, actstorage.material, actstorage.fuel );
+
     for ( i = 0; i < waffenanzahl; i++)
        ammo[i] = stream.readWord();
 

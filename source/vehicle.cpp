@@ -397,6 +397,9 @@ void Vehicle :: endTurn( void )
       if ( typ->weapons.weapon[w].gettype() & cwlaserb ) {
          int cnt = 0;
          while ( cnt < typ->weapons.weapon[w].laserRechargeRate  && ammo[w] < typ->weapons.weapon[w].count ) {
+            for ( int r = 0; r < 3; r++ )
+               if ( typ->weapons.weapon[w].laserRechargeCost.resource(r) < 0 )
+                  fatalError (" negative Laser recharge cost !");
             if ( ! (ContainerBase::getResource( typ->weapons.weapon[w].laserRechargeCost, 1 ) < typ->weapons.weapon[w].laserRechargeCost )) {
                ContainerBase::getResource( typ->weapons.weapon[w].laserRechargeCost, 0 );
                ammo[w] += 1;
@@ -523,7 +526,7 @@ bool Vehicle :: canMove ( void ) const
          if ( cnt )
             for ( int i = 0; i < 32; i++ )
                if ( cnt->loading[i] == this )
-                  if ( cnt->vehicleUnloadable( this ) > 0 || cnt->vehicleDocking( this ) > 0 )
+                  if ( cnt->vehicleUnloadable( this ) > 0 || cnt->vehicleDocking( this, true ) > 0 )
                      return true;
       }
    }
