@@ -1,6 +1,15 @@
-//     $Id: loaders.cpp,v 1.9 2000-04-27 16:25:24 mbickel Exp $
+//     $Id: loaders.cpp,v 1.10 2000-05-06 19:57:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/04/27 16:25:24  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.8  2000/01/25 19:28:14  mbickel
 //      Fixed bugs:
 //        invalid mouse buttons reported when moving the mouse
@@ -2217,22 +2226,7 @@ void tspfldloaders::readfields ( void )
 
          if (b3 & csm_object ) {
 
-                     /*
-                         class  tobjectcontainer {
-                         public:
-                           char         mine;   
-                           char         minestrength;  
-                       
-                           int objnum;
-                           pobject object[ maxobjectonfieldnum ];
-                       
-                           tobjectcontainer ( void );
-                           int checkforemptyness ( void );
-                           pobject checkforobject ( pobjecttype o );
-                         };
-                     */
-
-            if ( !fld2->object ) 
+            if ( !fld2->object )
                fld2->object = new tobjectcontainer;
 
             char minetype;
@@ -2241,10 +2235,7 @@ void tspfldloaders::readfields ( void )
             stream->readdata2 ( minestrength );
 
             if ( minetype >> 4 ) {
-               fld2->object->minenum = 1;
-               fld2->object->mine[0]->strength = minestrength;
-               fld2->object->mine[0]->type = minetype >> 4;
-               fld2->object->mine[0]->color = (minetype >> 1) & 7;
+               fld2->putmine ( (minetype >> 1) & 7, minetype >> 4, minestrength );
                fld2->object->mine[0]->time = 0;
             } else
                fld2->object->minenum = 0;

@@ -1,6 +1,15 @@
-//     $Id: basestrm.cpp,v 1.19 2000-04-27 16:25:14 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.20 2000-05-06 19:57:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/04/27 16:25:14  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.18  2000/03/29 09:58:41  mbickel
 //      Improved memory handling for DOS version
 //      Many small changes I can't remember ;-)
@@ -1671,6 +1680,11 @@ int patimat (const char *pat, const char *str)
 
 tfindfile :: tfindfile ( const char* name )
 {
+   found = 0;
+   act = 0;
+   if ( !name )
+      return;
+
    char* directory;
    char wildcard[1000];
 
@@ -1689,10 +1703,6 @@ tfindfile :: tfindfile ( const char* name )
       strcpy ( wildcard, name );
    }
 
-   found = 0;
-   act = 0;
-   if ( !name )
-      return;
 
    {
       DIR *dirp; 

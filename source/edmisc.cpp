@@ -1,6 +1,10 @@
-//     $Id: edmisc.cpp,v 1.15 2000-05-05 21:15:03 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.16 2000-05-06 19:57:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/05/05 21:15:03  mbickel
+//      Added Makefiles for mount/demount and mapeditor
+//      mapeditor can now be compiled for linux, but is not running yet
+//
 //     Revision 1.14  2000/04/27 16:25:21  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -538,39 +542,45 @@ void placeunit(void)
          cursor.hide(); 
          mousevisible(false); 
          mapsaved = false;
-         pf = getactfield(); 
+         pf = getactfield();
+         int accessible = 1;
+         if ( auswahlf ) {
+            accessible = auswahlf->terrainaccess->accessible ( pf->bdt );
+            if ( auswahlf->height >= chtieffliegend )
+               accessible = 1;
+         }
+
          if (pf != NULL) 
               // !( pf->bdt & cbbuildingentry)
-            if ( !( pf->building             ) && ( terrainaccessible(pf,pf->vehicle) || actmap->getgameparameter( cgp_movefrominvalidfields)) ) 
-               { 
-                  int set = 1;
-                  if ( pf->vehicle ) {
-                     if ( pf->vehicle->typ != auswahlf )
-                        removevehicle(&pf->vehicle); 
-                      else {
-                         set = 0;
-                         pf->vehicle->color = farbwahl * 8;
-                      }
-                  }
-                  if ((auswahlf != NULL) && set ) { 
-                     generatevehicle_ka(auswahlf,farbwahl ,pf->vehicle);
-                     pf->vehicle->height=1;
-                     while ( ! ( ( ( ( pf->vehicle->height & pf->vehicle->typ->height ) > 0) && (terrainaccessible(pf,pf->vehicle) == 2) ) ) && (pf->vehicle->height != 0) )
-                        pf->vehicle->height = pf->vehicle->height * 2;
-                     if (pf->vehicle->height == 0 ) {
-                        if ( actmap->getgameparameter( cgp_movefrominvalidfields) ) {
-                           pf->vehicle->height=1;
-                           while ( !(pf->vehicle->height & pf->vehicle->typ->height) && pf->vehicle->height )
-                              pf->vehicle->height = pf->vehicle->height * 2;
-                        }
-                        if (pf->vehicle->height == 0 ) 
-                           removevehicle(&pf->vehicle); 
-                     } 
-                     if ( pf->vehicle ) {
-                        pf->vehicle->movement = pf->vehicle->typ->movement[log2(pf->vehicle->height)];
-                        pf->vehicle->direction = auswahld;
+            if ( !( pf->building             ) && ( accessible || actmap->getgameparameter( cgp_movefrominvalidfields)) ) {
+               int set = 1;
+               if ( pf->vehicle ) {
+                  if ( pf->vehicle->typ != auswahlf )
+                     removevehicle(&pf->vehicle);
+                   else {
+                      set = 0;
+                      pf->vehicle->color = farbwahl * 8;
+                   }
+               }
+               if ((auswahlf != NULL) && set ) {
+                  generatevehicle_ka(auswahlf,farbwahl ,pf->vehicle);
+                  pf->vehicle->height=1;
+                  while ( ! ( ( ( ( pf->vehicle->height & pf->vehicle->typ->height ) > 0) && (terrainaccessible(pf,pf->vehicle) == 2) ) ) && (pf->vehicle->height != 0) )
+                     pf->vehicle->height = pf->vehicle->height * 2;
+                  if (pf->vehicle->height == 0 ) {
+                     if ( actmap->getgameparameter( cgp_movefrominvalidfields) ) {
+                        pf->vehicle->height=1;
+                        while ( !(pf->vehicle->height & pf->vehicle->typ->height) && pf->vehicle->height )
+                           pf->vehicle->height = pf->vehicle->height * 2;
                      }
-                  } 
+                     if (pf->vehicle->height == 0 )
+                        removevehicle(&pf->vehicle);
+                  }
+                  if ( pf->vehicle ) {
+                     pf->vehicle->movement = pf->vehicle->typ->movement[log2(pf->vehicle->height)];
+                     pf->vehicle->direction = auswahld;
+                  }
+               }
             } 
             else if (auswahlf == NULL) if (pf->vehicle != NULL) removevehicle(&pf->vehicle); 
          displaymap(); 
@@ -682,12 +692,12 @@ void lines(int x1,int y1,int x2,int y2)
 void         pdsetup(void)
 { 
   pd.addfield ( "~F~ile" );
-   pd.addbutton ( "~N~ew mapctrl+N" , act_newmap    );
-   pd.addbutton ( "~L~oad mapctrl+L", act_loadmap   ); 
-   pd.addbutton ( "~S~ave mapS",      act_savemap   ); 
+   pd.addbutton ( "~N~ew mapõctrl+N" , act_newmap    );
+   pd.addbutton ( "~L~oad mapõctrl+L", act_loadmap   );
+   pd.addbutton ( "~S~ave mapõS",      act_savemap   );
    pd.addbutton ( "Save map ~a~s",     act_savemapas ); 
    pd.addbutton ( "seperator",         -1            ); 
-   pd.addbutton ( "~W~rite map to PCX-Filectrl+G", act_maptopcx); 
+   pd.addbutton ( "~W~rite map to PCX-Fileõctrl+G", act_maptopcx);
    #ifdef HEXAGON
     pd.addbutton ( "~I~mport BI mapõctrl-i", act_import_bi_map );
     pd.addbutton ( "Insert ~B~I map", act_insert_bi_map );
@@ -697,125 +707,44 @@ void         pdsetup(void)
     pd.addbutton ( "set zoom level", act_setzoom ); 
    #endif
    pd.addbutton ( "seperator", -1 ); 
-   pd.addbutton ( "E~x~itEsc", act_end); 
+   pd.addbutton ( "E~x~itõEsc", act_end);
       
   pd.addfield ("~T~ools"); 
-   pd.addbutton ( "~V~iew mapctrl+V",          act_viewmap );
-   pd.addbutton ( "~S~how paletteL",           act_showpalette ); 
-   pd.addbutton ( "~R~ebuild displayctrl+R",   act_repaintdisplay ); 
+   pd.addbutton ( "~V~iew mapõctrl+V",          act_viewmap );
+   pd.addbutton ( "~S~how palette",           act_showpalette );
+   pd.addbutton ( "~R~ebuild displayõctrl+R",   act_repaintdisplay );
    pd.addbutton ( "seperator",                  -1 ); 
-   pd.addbutton ( "~C~reate ressourcesctrl+F", act_createresources ); 
-   pd.addbutton ( "~M~ap generatorG",          act_mapgenerator ); 
-   pd.addbutton ( "Resi~z~e mapR",             act_resizemap ); 
+   pd.addbutton ( "~C~reate ressourcesõctrl+F", act_createresources );
+   pd.addbutton ( "~M~ap generatorõG",          act_mapgenerator );
+   pd.addbutton ( "Resi~z~e mapõR",             act_resizemap );
    pd.addbutton ( "set global ~w~eatherõctrl-W", act_setactweatherglobal );
    #ifdef HEXAGON
-    pd.addbutton ( "Sm~o~oth coasts",          act_smoothcoasts ); 
+    pd.addbutton ( "Sm~o~oth coasts",          act_smoothcoasts );
    #endif
    pd.addbutton ( "unitset transformation",    act_unitsettransformation );
 
-   pd.addfield ("~O~ptions"); 
-    pd.addbutton ( "~M~ap valuesctrl+M",          act_changemapvals );
-    pd.addbutton ( "~C~hange playersO",           act_changeplayers); 
-    pd.addbutton ( "~E~dit eventsE",              act_events ); 
-    pd.addbutton ( "~S~etup Alliancesctrl+A",     act_setupalliances );
-    pd.addbutton ( "seperator",                    -1); 
-    pd.addbutton ( "~T~oggle ResourceViewõctrl+B", act_toggleresourcemode); 
-    pd.addbutton ( "~B~I ResourceMode",            act_bi_resource ); 
-    pd.addbutton ( "~A~sc ResourceMode",           act_asc_resource ); 
+   pd.addfield ("~O~ptions");
+    pd.addbutton ( "~M~ap valuesõctrl+M",          act_changemapvals );
+    pd.addbutton ( "~C~hange playersõO",           act_changeplayers);
+    pd.addbutton ( "~E~dit eventsõE",              act_events );
+    pd.addbutton ( "~S~etup Alliancesõctrl+A",     act_setupalliances );
+    pd.addbutton ( "seperator",                    -1);
+    pd.addbutton ( "~T~oggle ResourceViewõctrl+B", act_toggleresourcemode);
+    pd.addbutton ( "~B~I ResourceMode",            act_bi_resource );
+    pd.addbutton ( "~A~sc ResourceMode",           act_asc_resource );
     pd.addbutton ( "edit map ~P~arameters",        act_setmapparameters );
     pd.addbutton ( "setup unit ~F~iltersõctrl+h",  act_setunitfilter );
     pd.addbutton ( "select ~G~raphic set",         act_selectgraphicset );
 
-   pd.addfield ("~H~elp"); 
-    pd.addbutton ( "~U~nit Informationctrl+U",    act_unitinfo );
+   pd.addfield ("~H~elp");
+    pd.addbutton ( "~U~nit Informationõctrl+U",    act_unitinfo );
     pd.addbutton ( "~T~errain Information",        act_terraininfo );
-    pd.addbutton ( "seperator",                    -1 ); 
-    pd.addbutton ( "~H~elp SystemF1",             act_help );
+    pd.addbutton ( "seperator",                    -1 );
+    pd.addbutton ( "~H~elp SystemõF1",             act_help );
     pd.addbutton ( "~A~bout",                      act_about ); 
-      
 
-
-/*
-   pd.pdb.count = 4; 
-   for (int i=0;i < pd.pdb.count ;i++ ) pd.pdb.pdfield[i] = new( tpdfield );
-
-   strcpy(pd.pdb.pdfield[0]->name,"~F~ile");
-   strcpy(pd.pdb.pdfield[1]->name,"~T~ools"); 
-   strcpy(pd.pdb.pdfield[2]->name,"~O~ptions"); 
-   strcpy(pd.pdb.pdfield[3]->name,"~H~elp"); 
-   //strcpy(pd.pdb.pdfield[5]->name,"");
-   //strcpy(pd.pdb.pdfield[6]->name,"");
-   //strcpy(pd.pdb.pdfield[7]->name,"");
-   //strcpy(pd.pdb.pdfield[8]->name,"");
-      
-//File
-      strcpy(pd.pdb.pdfield[0]->button[0].name,"~N~ew mapStrg+N");
-      strcpy(pd.pdb.pdfield[0]->button[1].name,"~L~oad mapStrg+L"); 
-      strcpy(pd.pdb.pdfield[0]->button[2].name,"~S~ave mapS"); 
-      strcpy(pd.pdb.pdfield[0]->button[3].name,"Save map ~a~s"); 
-      strcpy(pd.pdb.pdfield[0]->button[4].name,"seperator"); 
-      strcpy(pd.pdb.pdfield[0]->button[5].name,"~W~rite map to PCX-FileStrg+G"); 
-      #ifdef HEXAGON
-         strcpy(pd.pdb.pdfield[0]->button[6].name,"~I~mport BI map");
-         strcpy(pd.pdb.pdfield[0]->button[7].name,"Insert ~B~I map");
-         strcpy(pd.pdb.pdfield[0]->button[8].name,"seperator"); 
-         strcpy(pd.pdb.pdfield[0]->button[9].name,"E~x~itEsc"); 
-         pd.pdb.pdfield[0]->count = 10;
-      #else
-         strcpy(pd.pdb.pdfield[0]->button[6].name,"seperator"); 
-         strcpy(pd.pdb.pdfield[0]->button[7].name,"E~x~itEsc"); 
-         pd.pdb.pdfield[0]->count = 8;
-      #endif
-      
-      
-//Tools
-      strcpy(pd.pdb.pdfield[1]->button[0].name,"~V~iew mapStrg+V");
-      strcpy(pd.pdb.pdfield[1]->button[1].name,"~S~how paletteL"); 
-      strcpy(pd.pdb.pdfield[1]->button[2].name,"~R~ebuild displayStrg+R"); 
-      strcpy(pd.pdb.pdfield[1]->button[3].name,"seperator"); 
-      strcpy(pd.pdb.pdfield[1]->button[4].name,"~C~reate ressourcesStrg+F"); 
-      strcpy(pd.pdb.pdfield[1]->button[5].name,"~M~ap generatorG"); 
-      strcpy(pd.pdb.pdfield[1]->button[6].name,"Resi~z~e mapR"); 
-      #ifdef HEXAGON
-         strcpy(pd.pdb.pdfield[1]->button[7].name,"Sm~o~oth coasts"); 
-         pd.pdb.pdfield[1]->count = 8;
-      #else
-         pd.pdb.pdfield[1]->count = 7;
-      #endif
-      
-      
-//Options
-      strcpy(pd.pdb.pdfield[2]->button[0].name,"~M~ap valuesStrg+M");
-      strcpy(pd.pdb.pdfield[2]->button[1].name,"~C~hange playersO"); 
-      strcpy(pd.pdb.pdfield[2]->button[2].name,"~E~dit eventsE"); 
-      strcpy(pd.pdb.pdfield[2]->button[3].name,"~S~etup AlliancesStrg+A");
-      strcpy(pd.pdb.pdfield[2]->button[4].name,"seperator"); 
-      strcpy(pd.pdb.pdfield[2]->button[5].name,"~T~oggle ResourceViewõStrg+B"); 
-      strcpy(pd.pdb.pdfield[2]->button[6].name,"~B~I ResourceMode"); 
-      strcpy(pd.pdb.pdfield[2]->button[7].name,"~A~sc ResourceMode"); 
-      strcpy(pd.pdb.pdfield[2]->button[8].name,""); 
-      pd.pdb.pdfield[2]->count = 8;
-      
-//Help
-      strcpy(pd.pdb.pdfield[3]->button[0].name,"~U~nit InformationStrg+U");
-      strcpy(pd.pdb.pdfield[3]->button[1].name,"seperator"); 
-      strcpy(pd.pdb.pdfield[3]->button[2].name,"~H~elp SystemF1");
-      strcpy(pd.pdb.pdfield[3]->button[3].name,"~A~bout"); 
-      strcpy(pd.pdb.pdfield[3]->button[4].name,""); 
-      strcpy(pd.pdb.pdfield[3]->button[5].name,""); 
-      strcpy(pd.pdb.pdfield[3]->button[6].name,""); 
-      pd.pdb.pdfield[3]->count = 4;
-      
-     /* strcpy(pd.pdb.pdfield[4]->button[0].name,"Fill");
-      strcpy(pd.pdb.pdfield[4]->button[1].name,""); 
-      strcpy(pd.pdb.pdfield[4]->button[2].name,""); 
-      strcpy(pd.pdb.pdfield[4]->button[3].name,""); 
-      strcpy(pd.pdb.pdfield[4]->button[4].name,""); 
-      pd.pdb.pdfield[4]->count = 1;
-*/
-
-      pd.init();
-      pd.setshortkeys();
+    pd.init();
+    pd.setshortkeys();
 }
 
 // õS PlayerChange
@@ -2715,8 +2644,8 @@ void         tunit::init( pvehicle v )
    float pi = 3.14159265;
    for ( int i = 0; i < sidenum; i++ ) {
                               
-      int x = dirx + radius * sin ( 2 * pi * (float) i / (float) sidenum );
-      int y = diry - radius * cos ( 2 * pi * (float) i / (float) sidenum );
+      int x = (int) (dirx + radius * sin ( 2 * pi * (float) i / (float) sidenum ));
+      int y = (int) (diry - radius * cos ( 2 * pi * (float) i / (float) sidenum ));
 
       addbutton("", x-10, y - 10, x + 10, y + 10,0,1,14+i,true);
       enablebutton ( 14 + i );

@@ -1,6 +1,15 @@
-//     $Id: typen.cpp,v 1.13 2000-04-27 16:25:30 mbickel Exp $
+//     $Id: typen.cpp,v 1.14 2000-05-06 19:57:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/04/27 16:25:30  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.12  2000/03/16 14:06:56  mbickel
 //      Added unitset transformation to the mapeditor
 //
@@ -256,7 +265,11 @@ int  tfield :: putmine( int col, int typ, int strength )
    object->mine[ object->minenum ]->strength = strength ;
    object->mine[ object->minenum ]->color = col;
    object->mine[ object->minenum ]->type = typ;
-   object->mine[ object->minenum ]->time = actmap->time.a.turn;
+   if ( actmap && actmap->time.a.turn>= 0 )
+      object->mine[ object->minenum ]->time = actmap->time.a.turn;
+   else
+      object->mine[ object->minenum ]->time = 0;
+
    object->minenum++;
    return 1;
   #else

@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.35 2000-05-02 17:28:16 mbickel Exp $
+//     $Id: sg.cpp,v 1.36 2000-05-06 19:57:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2000/05/02 17:28:16  mbickel
+//      Linux: Added makefile for demount and mount(con)
+//
 //     Revision 1.34  2000/05/02 16:20:54  mbickel
 //      Fixed bug with several simultaneous vehicle actions running
 //      Fixed graphic error at ammo transfer in buildings
@@ -3378,7 +3381,6 @@ int main(int argc, char *argv[] )
            onlinehelp = new tsgonlinemousehelp;
            onlinehelpwind = new tsgonlinemousehelpwind;
 
-           /* erstaufbau();  */
            pd.init();
 
            memset( keyinput, 0, sizeof(keyinput));
@@ -3399,14 +3401,11 @@ int main(int argc, char *argv[] )
                     #endif
 
                     displaymap();
-
                     #ifdef logging
                     logtofile ( "sg.cpp / main / nach displaymap ; vor cursor.show ");
                     #endif
 
-                    // cursor.gotoxy ( actmap->cursorpos.position[ actmap->actplayer ].x, actmap->cursorpos.position[ actmap->actplayer ].y , 0);
-                    cursor.show(); 
-         
+                    cursor.show();
                     #ifdef logging
                     logtofile ( "sg.cpp / main / vor painticons ");
                     #endif
@@ -3419,12 +3418,6 @@ int main(int argc, char *argv[] )
                     dashboard.x = 0xffff; 
                     dashboard.y = 0xffff; 
                     #ifdef logging
-                    /*
-                    // char* a = (char*) 0x600000;
-                    // char* a = (char*) 0xb80000;
-                    char* a = (char*) computerturn;
-                    *a = 123;
-                    */
                     logtofile ( "sg.cpp / main / starting mainloop ");
                     #endif
                     static int displayed = 0;

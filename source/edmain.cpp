@@ -1,6 +1,10 @@
-//     $Id: edmain.cpp,v 1.10 2000-05-05 21:15:02 mbickel Exp $
+//     $Id: edmain.cpp,v 1.11 2000-05-06 19:57:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/05/05 21:15:02  mbickel
+//      Added Makefiles for mount/demount and mapeditor
+//      mapeditor can now be compiled for linux, but is not running yet
+//
 //     Revision 1.9  2000/04/27 16:25:21  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -729,6 +733,7 @@ void         editor(void)
             }
       
             checkformousescrolling();
+            releasetimeslice();
       
          }  while (! (ch == ct_esc) || (ch == ct_altp+ct_x ) );
       } /* endtry */
@@ -773,7 +778,7 @@ void closesvgamode( void )
 
 void showmemory ( void )
 {
-/*
+  #ifdef _DOS_
    npush ( activefontsettings );
    activefontsettings.length = 99;
    activefontsettings.background = 0;
@@ -793,7 +798,7 @@ void showmemory ( void )
       setinvisiblemouserectangle ( -1, -1, -1, -1 );
 
    npop  ( activefontsettings );
-   */
+  #endif
 }
 
 //* õS Main-Program
@@ -812,6 +817,8 @@ pfont load_font(char* name)
 int main(int argc, char *argv[] )
 { 
    signal ( SIGINT, SIG_IGN );
+   fullscreen = 0;
+
    int resolx = 800;
    int resoly = 600;
    int              modenum8;
@@ -912,13 +919,18 @@ int main(int argc, char *argv[] )
 
    }
    #ifdef HEXAGON
-       initspfst( -1, -1 );
+    initspfst( -1, -1 );
    #else
-      if ( resolx == 640  && resoly == 480 )
-         initspfst();
-      else
-         initspfst( -1, -1 );
+    if ( resolx == 640  && resoly == 480 )
+       initspfst();
+    else
+       initspfst( -1, -1 );
    #endif
+
+   #ifdef NEWKEYB
+    initkeyb();
+   #endif
+
 
    try {
       loaddata();
@@ -938,12 +950,6 @@ int main(int argc, char *argv[] )
    activefontsettings.length =100;
    activefontsettings.justify =lefttext;
 
-   //tplasma plasma;
-   //plasma.process(10,10,2);
- 
-
-//   showtext2("Loading ...",80,200); 
-
    cursor.init();
                
    atexit( closemouse );
@@ -954,32 +960,19 @@ int main(int argc, char *argv[] )
 
    buildemptymap();
 
-   //loadmap("test.map");
+   (*xlatpictgraytable)[255] = 255;
 
-   //showmemory();
-   //r_key();
-
-   ( * xlatpictgraytable)[255] = 255;
-
-   
-   //konst2();
-   setstartvariables(); 
+   setstartvariables();
    
    addmouseproc ( &mousescrollproc );
 
    godview = true; 
-
-   #ifdef NEWKEYB   
-       initkeyb(); 
-       lasttick = ticker; 
-   #endif   
 
    bar( 0, 0, hgmp->resolutionx-1, hgmp->resolutiony-1, 0 );
    setvgapalette256(pal); 
 
    displaymap();
    showallchoices();
-   //pulldownbaroff();
    pdsetup();
    pdbaroff();
 
@@ -989,6 +982,12 @@ int main(int argc, char *argv[] )
    editor();
    cursor.hide();
    writegameoptions ();
+
+  #ifdef NEWKEYB
+   closekeyb();
+  #endif
+
+
   #ifdef MEMCHK
    verifyallblocks();
   #endif

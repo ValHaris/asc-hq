@@ -1,10 +1,10 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.1 2000-05-05 21:15:04 mbickel Exp $
+## $Id: Makefile.am,v 1.2 2000-05-06 19:57:11 mbickel Exp $
 
 vpath %.cpp ..
 
-CXXFLAGS = @CXXFLAGS@ -Usgmain -Dkarteneditor -I./ -DHEXAGON -DFREEMAPZOOM -funsigned-char -D_NOASM_
+CXXFLAGS = @CXXFLAGS@ -Usgmain -Dkarteneditor -I./ -DHEXAGON -DFREEMAPZOOM -funsigned-char -D_NOASM_ -DNEWKEYB
 
 bin_PROGRAMS = mapedit
 
