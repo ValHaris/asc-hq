@@ -36,7 +36,7 @@ class ClipBoardBase {
       enum Type { ClipVehicle, ClipBuilding };
       int objectNum;
 
-      friend class Loki::CreateUsingNew<ClipBoardBase>;
+      friend struct Loki::CreateUsingNew<ClipBoardBase>;
       ClipBoardBase();
       ~ClipBoardBase() {};
    public:

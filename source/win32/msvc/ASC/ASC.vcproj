@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="ASC"
 	ProjectGUID="{B7F902AB-FD64-48FB-B36A-50D48B03447F}"
 	Keyword="Win32Proj">
@@ -19,13 +19,13 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;&quot;$(SDLmm)/src&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/getopt"
-				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_"
+				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;$(Libsigcpp)&quot;;&quot;$(paragui1)/include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;NO_PARAGUI"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="0"
-				RuntimeLibrary="3"
 				DisableLanguageExtensions="FALSE"
 				DefaultCharIsUnsigned="TRUE"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				BrowseInformation="0"
 				WarningLevel="3"
@@ -35,11 +35,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib"
+				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.lib"
 				ShowProgress="0"
 				OutputFile="$(OutDir)/bin/ASC.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SDL_mixer)/lib;$(SDL)/lib;$(SDL_image)/lib;$(SDLmm)/lib;$(OutDir)/lib"
+				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/Release&quot;;&quot;$(SDL_image)/VisualC/Release&quot;;&quot;$(OutDir)/lib&quot;;../../../libs/SDLmm/SDLmm/debug;&quot;$(SDL)/VisualC/SDLmain/Release&quot;;&quot;$(SDL)/VisualC/SDL/Release&quot;;&quot;$(libsigcpp)/MSVC_Net2003/Release&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/ASC.pdb"
@@ -58,7 +58,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -68,33 +74,25 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
-				GlobalOptimizations="TRUE"
-				InlineFunctionExpansion="1"
-				FavorSizeOrSpeed="1"
-				OmitFramePointers="TRUE"
-				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="../.;$(SDL)/include;$(SDL_image)/include;$(SDLmm)/include;$(SDL_mixer)/include;../../../libs/getopt"
-				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_"
-				StringPooling="TRUE"
+				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)/include&quot;;../../../libs/SDLmm/include;&quot;$(SDL_mixer)&quot;;../../../libs/;&quot;../../../libs/sigc++&quot;;../../../libs/getopt"
+				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;NO_PARAGUI"
 				RuntimeLibrary="2"
-				BufferSecurityCheck="FALSE"
-				EnableFunctionLevelLinking="FALSE"
 				DefaultCharIsUnsigned="TRUE"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				BrowseInformation="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="FALSE"
+				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib"
+				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc++.lib"
 				OutputFile="$(OutDir)/bin/ASC.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SDL_mixer)/lib;$(SDL)/lib;$(SDL_image)/lib;$(SDLmm)/lib;$(OutDir)/lib"
+				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/Release&quot;;&quot;$(SDL_image)/VisualC/Release&quot;;&quot;$(OutDir)/lib&quot;;&quot;../../../libs/sigc++/sigc++/release&quot;;../../../libs/SDLmm/SDLmm/debug;&quot;$(SDL)/VisualC/SDLmain/Release&quot;;&quot;$(SDL)/VisualC/SDL/Release&quot;;&quot;$(libsigcpp)/MSVC_Net2003/Release&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/ASC.pdb"
 				SubSystem="2"
@@ -114,9 +112,17 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"
@@ -159,10 +165,16 @@
 				RelativePath="..\..\..\buildingtype.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\clipboard.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\CLoadable.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\containerbase.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\containerbasetype.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\controls.cpp">
@@ -178,6 +190,15 @@
 			</File>
 			<File
 				RelativePath="..\..\..\gamedlg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\gameevent_dialogs.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\gameevents.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\gameeventsystem.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\gamemap.cpp">
@@ -216,6 +237,15 @@
 				RelativePath="..\..\..\mapdisplay.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\mappolygons.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\messagedlg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\messages.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\ai\misc.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -234,7 +264,7 @@
 				RelativePath="..\..\..\misc.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\missions.cpp">
+				RelativePath="..\..\..\music.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\Named.cpp">
@@ -258,6 +288,9 @@
 				RelativePath="..\..\..\palette.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\paradialog.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\password.cpp">
 			</File>
 			<File
@@ -265,6 +298,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\pd.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\prehistoricevents.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\Property.cpp">
@@ -291,6 +327,9 @@
 				RelativePath="..\..\..\sgstream.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\simplestream.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\soundList.cpp">
 			</File>
 			<File
@@ -300,7 +339,13 @@
 				RelativePath="..\..\..\stack.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\statisticdialog.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\ai\strategy.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\stringtokenizer.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\strtmesg.cpp">
@@ -310,6 +355,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\terraintype.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\textfile_evaluation.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\textfileparser.cpp">
@@ -334,9 +382,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\viewcalculation.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\weather.cpp">
 			</File>
 		</Filter>
 		<Filter

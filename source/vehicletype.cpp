@@ -120,7 +120,7 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 18;
+const int vehicle_version = 19;
 
 
 
@@ -195,7 +195,10 @@ void Vehicletype :: read ( tnstream& stream )
    stream.readChar(); // dummy
    stream.readChar(); // dummy
    stream.readChar(); // dummy
-   id = stream.readWord();
+   if ( version <= 18 )
+      id = stream.readWord();
+   else
+      id = stream.readInt();
    tank.fuel = stream.readInt();
    fuelConsumption = stream.readWord();
    tank.energy = stream.readInt();
@@ -559,7 +562,7 @@ void Vehicletype:: write ( tnstream& stream ) const
    stream.writeChar(0);
    stream.writeChar(0);
    stream.writeChar(0);
-   stream.writeWord(id );
+   stream.writeInt(id );
    stream.writeInt(tank.fuel );
    stream.writeWord(fuelConsumption );
    stream.writeInt(tank.energy );

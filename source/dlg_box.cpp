@@ -3790,6 +3790,11 @@ void errorMessage ( const ASCString& string )
    displaymessage ( string.c_str(), 1 );
 }
 
+void infoMessage ( const ASCString& string )
+{
+   displaymessage ( string.c_str(), 3 );
+}
+
 
 class   ChooseString : public tstringselect {
                  const vector<ASCString>& strings;

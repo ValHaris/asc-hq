@@ -465,7 +465,7 @@ PrehistoricEventStructure :: ~PrehistoricEventStructure ()
 
 
 
-Event*   readOldEvent( pnstream stream, pmap map, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents )
+Event*   readOldEvent( pnstream stream, pmap gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents )
 {
 
 /////////////////////////////////////////////////////
@@ -474,7 +474,7 @@ Event*   readOldEvent( pnstream stream, pmap map, map<int,int>& eventTranslation
 // only used for converting old maps and savegames
 /////////////////////////////////////////////////////
 
-     Event* ev = new Event( *map );
+     Event* ev = new Event( *gamemap );
 
      PrehistoricEventStructure event1;
 
@@ -565,7 +565,7 @@ Event*   readOldEvent( pnstream stream, pmap map, map<int,int>& eventTranslation
 
      if ( ea ) {
         ev->action = ea;
-        ea->setMap ( map );
+        ea->setMap ( gamemap );
      }
 
      int ANDcounter = 0;
@@ -710,7 +710,7 @@ Event*   readOldEvent( pnstream stream, pmap map, map<int,int>& eventTranslation
 
            if ( et ) {
               ev->trigger.push_back ( et );
-              et->setMap ( map );
+              et->setMap ( gamemap );
               et->setEvent ( ev );
            } else
               displaymessage("The trigger %d (%s) for event %s could not be converted !", 1,m,ceventtrigger[event1.trigger[m]],event1.description );

@@ -45,6 +45,7 @@ const char* fileNameDelimitter = " =*/+<>,";
                virtual T parse ( const TextPropertyGroup::Entry& entry ) const;
                virtual T operation_mult ( const TextPropertyGroup::Entry& entry ) const;
                virtual T operation_add ( const TextPropertyGroup::Entry& entry ) const;
+               virtual T operation_sub ( const TextPropertyGroup::Entry& entry ) const;
                virtual T operation_eq ( const TextPropertyGroup::Entry& entry ) const;
 
 
@@ -162,6 +163,7 @@ const char* fileNameDelimitter = " =*/+<>,";
             protected:
               BitSet operation_eq ( const TextPropertyGroup::Entry& entry ) const;
               BitSet operation_add ( const TextPropertyGroup::Entry& entry ) const;
+              BitSet operation_sub ( const TextPropertyGroup::Entry& entry ) const;
               ASCString toString ( ) const;
             public:
                TagArrayProperty ( BitSet& property_, int tagNum_, const char** tags_, bool inverted_  ) : PTTA ( property_ ), tagNum (tagNum_), tags ( tags_ ), inverted ( inverted_ ) {};
@@ -175,6 +177,7 @@ const char* fileNameDelimitter = " =*/+<>,";
             protected:
               int operation_eq ( const TextPropertyGroup::Entry& entry ) const ;
               int operation_add ( const TextPropertyGroup::Entry& entry ) const ;
+              int operation_sub ( const TextPropertyGroup::Entry& entry ) const ;
               ASCString toString ( ) const;
             public:
                TagIntProperty ( int& property_, int tagNum_, const char** tags_, bool inverted_  ) : PTTI ( property_ ), tagNum (tagNum_), tags ( tags_ ), inverted ( inverted_ ) {};
@@ -556,6 +559,7 @@ T PropertyTemplate<T>::parse ( const TextPropertyGroup::Entry& entry ) const
    switch ( entry.op ) {
       case TextPropertyGroup::Entry::mult_eq : return operation_mult ( entry );
       case TextPropertyGroup::Entry::add_eq :  return operation_add ( entry );
+      case TextPropertyGroup::Entry::sub_eq :  return operation_sub ( entry );
    }
    propertyContainer->error ( "PropertyTemplate::parse - invalid operator !");
    return defaultValue;
@@ -588,6 +592,14 @@ T PropertyTemplate<T>::operation_add ( const TextPropertyGroup::Entry& entry ) c
    operation_not_defined( entry );
    return T();
 }
+
+template <class T>
+T PropertyTemplate<T>::operation_sub ( const TextPropertyGroup::Entry& entry ) const
+{
+   operation_not_defined( entry );
+   return T();
+}
+
 
 template <class T>
 void PropertyTemplate<T>::evaluate ()
@@ -889,6 +901,12 @@ BitSet TagArrayProperty::operation_add ( const TextPropertyGroup::Entry& entry )
    return parse ( *entry.parent ) | operation_eq ( entry );
 }
 
+BitSet TagArrayProperty::operation_sub ( const TextPropertyGroup::Entry& entry ) const
+{
+   return parse ( *entry.parent ) & ~operation_eq ( entry );
+}
+
+
 BitSet TagArrayProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
    BitSet bs;
@@ -935,6 +953,12 @@ int TagIntProperty::operation_add ( const TextPropertyGroup::Entry& entry ) cons
 {
    return parse ( *entry.parent ) | operation_eq ( entry );
 }
+
+int TagIntProperty::operation_sub ( const TextPropertyGroup::Entry& entry ) const
+{
+   return parse ( *entry.parent ) & ~operation_eq ( entry );
+}
+
 
 int TagIntProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {

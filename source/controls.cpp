@@ -1146,13 +1146,13 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle, const AStar3D::Path
    int y1 = maxint;
    int x2 = 0;
    int y2 = 0;
-   int i, j, h;
+   int j, h;
 
    if ( maxshootdist[0] == -1 ) {
-      for (i = 0; i < 8; i++ )
+      for (int i = 0; i < 8; i++ )
          maxshootdist[i] = 0;
 
-      for (i = 0; i < vehicleTypeRepository.getNum(); i++ ) {
+      for (int i = 0; i < vehicleTypeRepository.getNum(); i++ ) {
          pvehicletype fzt = vehicleTypeRepository.getObject_byPos ( i );
          if ( fzt )
             for (j = 0; j < fzt->weapons.count; j++ )
@@ -1204,7 +1204,7 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle, const AStar3D::Path
 
       }
    if ( getfield(vehicle->xpos, vehicle->ypos)->vehicle == vehicle )
-      for ( i = 0; i < 8; i++ )
+      for ( int i = 0; i < 8; i++ )
          if ( fieldvisiblenow ( getfield ( vehicle->xpos, vehicle->ypos ), i )) {
             punitlist ul  = unitlist[i];
             while ( ul ) {

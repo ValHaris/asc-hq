@@ -2,9 +2,13 @@
     \brief Interface to the event handling of ASC
 */
 
-//     $Id: gameevents.h,v 1.3 2004-02-07 12:34:50 mbickel Exp $
+//     $Id: gameevents.h,v 1.4 2005-04-02 12:59:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2004/02/07 12:34:50  mbickel
+//      Fixed compilation problems
+//      Version now 1.14.0.0
+//
 //     Revision 1.2  2004/02/01 13:39:53  mbickel
 //      New event action: set view sharing
 //      Fixed lots of bugs
@@ -180,7 +184,7 @@ class FieldAddressing: protected PolygonPainerSquareCoordinate  {
       void setpointabs ( int x,  int y  );
 
       void setup();
-      friend Event* readOldEvent( pnstream stream, pmap map, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents );
+      friend Event* readOldEvent( pnstream stream, pmap gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents );
 };
 
 

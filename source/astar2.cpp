@@ -805,7 +805,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                                 break;
                              }
 
-                             if (  !fieldAccessible ( fld, veh, N.h.getBitmappedHeight()) && actmap->getgameparameter( cgp_movefrominvalidfields)==0 )
+                             if (  !fieldAccessible ( fld, veh, N.h.getBitmappedHeight()) && (actmap->getgameparameter( cgp_movefrominvalidfields)==0 || step>0))
                                 access = false;
 
                              if ( !fieldAccessible( fld, veh, 1 << (N.h.getNumericalHeight() + hcm->heightDelta)) )

@@ -921,7 +921,7 @@ int getstepwidth ( int max )
    else
       ep = 0.0;
 
-   return (int)pow ( 10, ep );
+   return int(pow ( double(10), ep ));
 }
 
 

@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="demount"
 	ProjectGUID="{9DB90739-BAA7-11D5-8156-00805F852A9B}"
 	Keyword="ManagedCProj">
@@ -16,7 +16,7 @@
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
 			CharacterSet="2"
-			ManagedExtensions="TRUE">
+			ManagedExtensions="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
@@ -28,7 +28,6 @@
 				DefaultCharIsUnsigned="TRUE"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				CompileAsManaged="0"
 				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
@@ -54,7 +53,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -62,7 +67,7 @@
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
 			CharacterSet="2"
-			ManagedExtensions="TRUE">
+			ManagedExtensions="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
@@ -79,7 +84,6 @@
 				BufferSecurityCheck="FALSE"
 				DefaultCharIsUnsigned="TRUE"
 				WarningLevel="3"
-				CompileAsManaged="0"
 				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
@@ -104,9 +108,17 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"

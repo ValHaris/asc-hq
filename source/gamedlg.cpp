@@ -3199,7 +3199,7 @@ void         tverlademunition::run(void)
                             int step =  ( target->service[displayed[mp]].maxAmount - target->service[displayed[mp]].minAmount ) / 100;
                             if ( step == 0 )
                                step = 1;
-                            step = int( pow ( 10, log10 (double(step))));
+                            step = int( pow ( double(10), double(log10 (double(step)))));
 
                             oldpos[mp] = newpos[mp];
 

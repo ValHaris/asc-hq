@@ -1131,11 +1131,14 @@ void Vehicle :: fillMagically( void )
 
 
 
-const int vehicleVersion = 2;
+const int vehicleVersion = 3;
 
 void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 {
-    stream.writeWord ( typ->id );
+    stream.writeWord ( 0 );
+    stream.writeInt( vehicleVersion );
+    stream.writeInt( typ->id );
+
     stream.writeChar ( color );
 
     int bm = cem_version;
@@ -1296,6 +1299,12 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 void   Vehicle::read ( tnstream& stream )
 {
     int _id = stream.readWord ();
+    int version = 0;
+    if ( _id == 0 ) {
+       version = stream.readInt();
+       _id = stream.readInt();
+    }
+
     stream.readChar (); // color
     if ( _id != typ->id )
        fatalError ( "Vehicle::read - trying to read a unit of different type" );
@@ -1523,6 +1532,12 @@ const ASCString&  Vehicle::getName() const
 Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream, int forceNetworkID )
 {
    int id = stream.readWord ();
+   int version = 0;
+   if ( id == 0 ) {
+      version = stream.readInt();
+      id = stream.readInt();
+   }
+
    pvehicletype fzt = gamemap->getvehicletype_byid ( id );
    if ( !fzt )
       throw InvalidID ( "vehicle", id );
