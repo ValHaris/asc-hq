@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.26 2000-07-05 10:49:37 mbickel Exp $
+//     $Id: typen.cpp,v 1.27 2000-07-29 14:54:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/07/05 10:49:37  mbickel
+//      Fixed AI bugs
+//      setbuildingdamage event now updates the screen
+//
 //     Revision 1.25  2000/07/05 09:24:01  mbickel
 //      New event action: change building damage
 //
@@ -140,7 +144,8 @@
 #endif
 
 #ifdef sgmain
-#include "network.h"
+ #include "network.h"
+ #include "gameoptions.h"
 #endif
 
 const char*  choehenstufen[choehenstufennum] = {"deep submerged", "submerged", "floating", "ground level", "low-level flight", "flight", "high-level flight", "orbit"}; 
@@ -214,8 +219,6 @@ const int directionangle [ sidenum ] =
  { 0, -45, -90, -135, -180, - 225, - 270, -315 };
 #endif
 
-
-tgameoptions gameoptions;
 
 const int gameparameterdefault [ gameparameternum ] = { 1, 2, 0, 100, 100, 1, 0, 0, 1, 0, 0, 0, 0 };
 const char* gameparametername[ gameparameternum ] = { "lifetime of tracks", 
@@ -1302,7 +1305,7 @@ int tvehicle :: weapexist( void )
 
 void tvehicle :: putimage ( int x, int y )
 {
-   #ifndef converter
+ #ifndef converter
   #ifdef sgmain
    int shaded = ( movement < minmalq ) && ( color == actmap->actplayer*8) && (attacked || !typ->weapons->count || gameoptions.units_gray_after_move );
   #else
@@ -1592,6 +1595,7 @@ int  ttechnology :: getlvl( void )
    return lvl;
 }
 
+/*
 tgameoptions :: tgameoptions ( void )
 {
     setdefaults ( );
@@ -1635,6 +1639,7 @@ void tgameoptions :: setdefaults ( void )
    mapzoom = 80;
    disablesound = 0;
 }
+*/
 
 int twind::operator== ( const twind& b ) const
 {

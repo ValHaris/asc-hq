@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.40 2000-07-28 10:15:31 mbickel Exp $
+//     $Id: spfst.cpp,v 1.41 2000-07-29 14:54:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2000/07/28 10:15:31  mbickel
+//      Fixed broken movement
+//      Fixed graphical artefacts when moving some airplanes
+//
 //     Revision 1.39  2000/07/16 14:57:42  mbickel
 //      Datafile versioning
 //
@@ -198,7 +202,7 @@
 
 #ifdef __use_STL_for_ASC__
   #include <utility>
-  #include <map.h>
+  #include <map>
 #endif
 
 
@@ -217,6 +221,7 @@
 #include "stack.h"
 #include "loadpcx.h"
 #include "attack.h"
+#include "gameoptions.h"
 
 #ifndef karteneditor
   #include "missions.h"
@@ -2227,7 +2232,7 @@ end;  */
 
 
 
-void tmap :: cleartemps( int b )
+void tmap :: cleartemps( int b, int value )
 { 
   if ( xsize <= 0 || ysize <= 0)  
      return;
@@ -2235,13 +2240,16 @@ void tmap :: cleartemps( int b )
   int l = 0; 
   for ( int x = 0; x < actmap->xsize ; x++) 
      for ( int y = 0; y <  actmap->ysize ; y++) {
+
          if (b & 1 ) 
-           field[l].a.temp = 0;
+           field[l].a.temp = value;
          if (b & 2 ) 
-           field[l].a.temp2 = 0;
+           field[l].a.temp2 = value;
          if (b & 4 ) 
-           field[l].temp3 = 0;
-           
+           field[l].temp3 = value;
+         if (b & 8 ) 
+           field[l].temp4 = value;
+
          l++;
      } 
 } 

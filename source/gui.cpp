@@ -1,6 +1,12 @@
-//     $Id: gui.cpp,v 1.25 2000-07-16 14:20:02 mbickel Exp $
+//     $Id: gui.cpp,v 1.26 2000-07-29 14:54:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/07/16 14:20:02  mbickel
+//      AI has now some primitive tactics implemented
+//      Some clean up
+//        moved weapon functions to attack.cpp
+//      Mount doesn't modify PCX files any more.
+//
 //     Revision 1.24  2000/06/28 18:30:59  mbickel
 //      Started working on AI
 //      Started making loaders independent of memory layout
@@ -155,7 +161,7 @@
 #include "attack.h"
 #include "stack.h"
 #include "sg.h"
-
+#include "gameoptions.h"
 
 tguihoststandard          gui;
 tselectbuildingguihost    selectbuildinggui;

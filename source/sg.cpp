@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.61 2000-07-28 10:15:28 mbickel Exp $
+//     $Id: sg.cpp,v 1.62 2000-07-29 14:54:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2000/07/28 10:15:28  mbickel
+//      Fixed broken movement
+//      Fixed graphical artefacts when moving some airplanes
+//
 //     Revision 1.60  2000/07/22 18:57:57  mbickel
 //      New message during save operation
 //      Weapon efficiency displayed did not correspond to mouse position when
@@ -297,10 +301,10 @@
 #include "gamedlg.h"
 #include "network.h"
 #include "building.h"
-//#include "cdrom.h"
 #include "loadjpg.h"
 #include "sg.h"
 #include "soundList.h"
+#include "gameoptions.h"
 
 #ifdef HEXAGON
 #include "loadbi3.h"
@@ -1712,18 +1716,14 @@ void         ladekarte(void)
       } while ( actmap->player[actmap->actplayer].stat != ps_human ); /* enddo */
 
       removemessage(); 
-      if (loaderror > 0) { 
-         displaymessage("error nr %d",1, loaderror );
-      } 
-      else { 
-         if (actmap->campaign != NULL) { 
-            delete  ( actmap->campaign );
-            actmap->campaign = NULL; 
-         } 
+      if (actmap->campaign != NULL) { 
+         delete  ( actmap->campaign );
+         actmap->campaign = NULL; 
       } 
 
       // computeview(); 
       // cursor.gotoxy ( actmap->cursorpos.position[ actmap->actplayer ].x, actmap->cursorpos.position[ actmap->actplayer ].y , 0);
+
       displaymap(); 
       dashboard.x = 0xffff;
       moveparams.movestatus = 0; 
@@ -1739,16 +1739,9 @@ void         ladespiel(void)
    mousevisible(false); 
    char s2 [200];
    char temp[200];
-   strcpy ( temp, gamepath );
-   strcat ( temp, savegameextension );
+   strcpy ( temp, savegameextension );
 
    fileselectsvga(temp, s1, 1, s2 );
-
-   if ( gamepath[0] && s1[0] ) {
-      strcpy ( temp, gamepath );
-      strcat ( temp, s1 );
-      strcpy ( s1, temp );
-   }
 
    if ( s1[0] ) {
       mousevisible(false); 
@@ -1756,9 +1749,6 @@ void         ladespiel(void)
       displaymessage("loading %s ",0, s2);
       loadgame(s1 );
       removemessage(); 
-      if (loaderror > 0) { 
-         displaymessage( "error nr. %d",1, loaderror);
-      } 
       if ( !actmap || actmap->xsize == 0 || actmap->ysize == 0 )
          throw  tnomaploaded();
          
@@ -2020,8 +2010,6 @@ void ladestartkarte( char *emailgame=NULL, char *mapname=NULL, char *savegame=NU
               }
           }
 #endif     
-      if (loaderror != 0) 
-         displaymessage("loadmap: \n could not open startup map", 2);
    }
 } 
 
@@ -3263,9 +3251,9 @@ int main(int argc, char *argv[] )
     logtofile ( getstartupmessage() );
     logtofile ( "\n\n new log started ");
     #ifdef NEWKEYB
-    logtofile ( "new keyboard handler ist enabled" );
+     logtofile ( "new keyboard handler ist enabled" );
     #else
-    logtofile ( "new keyboard handler ist disabled" );
+     logtofile ( "new keyboard handler ist disabled" );
     #endif
     #ifdef MEMCHK
      logtofile ( "memory checking is enabled" );
@@ -3291,7 +3279,7 @@ int main(int argc, char *argv[] )
 
 
    int cntr = ticker;
-   char *emailgame = NULL, *mapname = NULL, *savegame = NULL;
+   char *emailgame = NULL, *mapname = NULL, *savegame = NULL, *configfile = NULL;
    int useSound = 1;
 
    for (i = 1; i<argc; i++ ) {
@@ -3359,6 +3347,11 @@ int main(int argc, char *argv[] )
          mapname = argv[++i]; continue;
       }
 
+      if ( strcmpi ( &argv[i][1], "configfile" ) == 0 ||
+           strcmpi ( &argv[i][1], "cf" ) == 0 ) {
+         configfile = argv[++i]; continue;
+      }
+
      if ( ( strcmpi ( &argv[i][1], "?" ) == 0 ) ||
           ( strcmpi ( &argv[i][1], "h" ) == 0 ) ||
           ( strcmpi ( &argv[i][1], "-help" ) == 0 ) ){
@@ -3367,6 +3360,7 @@ int main(int argc, char *argv[] )
                 "\t-eg file\n\t-emailgame file\tcontinue an email game\n"
                 "\t-sg file\n\t-savegame file\tcontinue a saved game\n"
                 "\t-lm file\n\t-loadmap file\tstart with a given map\n"
+                "\t-cf file\n\t-configfile file\tuse given configuration file\n"
                 "\t-x:X\t\tSet horizontal resolution to X; default is 800 \n"
                 "\t-y:Y\t\tSet verticalal resolution to Y; default is 600 \n"
 #ifdef _DOS_
@@ -3378,7 +3372,6 @@ int main(int argc, char *argv[] )
                 "\t-window\t\tDisable fullscreen mode \n"
                 "\t-ns\n\t-nosound\tDisable sound \n" );
 #endif
-                //"\t/game:X\t\tSet gamepath to X \n\n");
         exit (0);
      }
 
@@ -3442,7 +3435,7 @@ int main(int argc, char *argv[] )
       } else
          dataVersion = 0;
 
-      readgameoptions();
+      readgameoptions( configfile );
       if ( gameoptions.disablesound )
          useSound = 0;
 
@@ -3605,7 +3598,7 @@ int main(int argc, char *argv[] )
       } while ( abortgame == 0);
 
       closegraphics();
-      writegameoptions ();
+      writegameoptions ( configfile );
 
       delete onlinehelp;
       onlinehelp = NULL;

@@ -1,6 +1,10 @@
-//     $Id: network.cpp,v 1.7 2000-05-30 18:39:25 mbickel Exp $
+//     $Id: network.cpp,v 1.8 2000-07-29 14:54:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/05/30 18:39:25  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.6  2000/05/22 15:40:36  mbickel
 //      Included patches for Win32 version
 //
@@ -138,13 +142,11 @@ void  tfiletransfernetworkconnection::tsetup::buttonpressed ( char id )
    switch ( id ) {
       case 2:    mousevisible( false ); 
                  char temp[200];
-                 strcpy ( temp, gamepath );
-                 strcat ( temp, tournamentextension );
+                 strcpy ( temp, tournamentextension );
 
                  fileselectsvga( temp, s1, 1);
                  if ( s1[0] ) {
-                    strcpy ( filename, gamepath );
-                    strcat ( filename, s1 );
+                    strcpy ( filename, s1 );
                     showbutton ( 1 );
                  }
                  mousevisible( true );
@@ -282,13 +284,6 @@ void  tfiletransfernetworkconnection::mountfilename ( char* newname, char* oldna
 
    if ( strchr ( newname, '.' ) == NULL )
       strcat ( newname, &suffix[1] );
-
-   if ( gamepath[0] &&  !strchr(newname, '\\' )) {
-      char tmp[100];
-      strcpy ( tmp, newname );
-      strcpy ( newname, gamepath );
-      strcat ( newname, tmp );
-   }
 
 }
 

@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.48 2000-07-23 17:59:51 mbickel Exp $
+//     $Id: controls.cpp,v 1.49 2000-07-29 14:54:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2000/07/23 17:59:51  mbickel
+//      various AI improvements
+//      new terrain information window
+//
 //     Revision 1.47  2000/07/22 18:57:56  mbickel
 //      New message during save operation
 //      Weapon efficiency displayed did not correspond to mouse position when
@@ -251,7 +255,7 @@
 #include "timer.h"
 #include "sg.h"
 #include "weather.h"
-
+#include "gameoptions.h"
 
          tdashboard  dashboard;
          int             windmovement[8];

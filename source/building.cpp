@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.31 2000-07-16 16:15:49 mbickel Exp $
+//     $Id: building.cpp,v 1.32 2000-07-29 14:54:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/07/16 16:15:49  mbickel
+//      Building: ammotransfer improved
+//
 //     Revision 1.30  2000/07/16 14:19:59  mbickel
 //      AI has now some primitive tactics implemented
 //      Some clean up
@@ -189,9 +192,7 @@
 #include "gamedlg.h"
 #include "basestrm.h"
 #include "unitctrl.h"
-#ifdef _DOS_
-#include <conio.h>
-#endif
+#include "gameoptions.h"
 
 
 int                        autofill_prodtnk = 1;

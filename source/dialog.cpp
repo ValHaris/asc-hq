@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.34 2000-07-23 17:59:52 mbickel Exp $
+//     $Id: dialog.cpp,v 1.35 2000-07-29 14:54:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2000/07/23 17:59:52  mbickel
+//      various AI improvements
+//      new terrain information window
+//
 //     Revision 1.33  2000/07/16 14:20:01  mbickel
 //      AI has now some primitive tactics implemented
 //      Some clean up
@@ -171,8 +175,8 @@
 #include <stdlib.h>
 
 #ifdef _DOS_
-#include <dos.h>
-#include <conio.h>
+ #include <dos.h>
+ #include <conio.h>
 #endif
 
 #include <stdarg.h>
@@ -193,10 +197,11 @@
 #include "sgstream.h"
 #include "timer.h"
 #include "attack.h"
+#include "gameoptions.h"
 
 #ifndef karteneditor
-#include "network.h"
-#include "gamedlg.h"
+ #include "network.h"
+ #include "gamedlg.h"
 #endif
 
 
@@ -4984,7 +4989,7 @@ void         tviewanytext::run(void)
 
 
 class tbi3preferences : public tdialogbox {
-                        tgameoptions actoptions;
+                        CGameOptions actoptions;
                         int status;
                         tmouserect delta, r1, r2, r3, r4, r5, r6, r7, r8;
                         tmouserect dlgoffset;
@@ -4993,6 +4998,7 @@ class tbi3preferences : public tdialogbox {
                         void init ( void );
                         void buttonpressed ( char id );
                         void run ( void );
+                        tbi3preferences ( ) : actoptions ( gameoptions ) {};
                     };
 
 
@@ -5006,8 +5012,6 @@ void tbi3preferences :: init ( void )
 
    x1 = -1;
    y1 = -1;
-
-   actoptions = gameoptions;
 
    addbutton ( "~O~K", 10, ysize - 35, xsize / 2 - 5, ysize - 10, 0, 1, 1, true );
    addbutton ( "~C~ancel", xsize / 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1, 2, true );
@@ -5067,14 +5071,12 @@ void tbi3preferences :: buttonpressed ( char id )
    tdialogbox :: buttonpressed ( id );
 
    if ( id == 1 ) {
-      gameoptions = actoptions;
-      gameoptions.changed = 1;
+      gameoptions.copy ( actoptions );
       status = 10;
    }
 
    if ( id == 2 ) 
       status = 10;
-
 }
 
 

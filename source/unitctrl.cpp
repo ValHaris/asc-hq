@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.17 2000-07-28 10:15:39 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.18 2000-07-29 14:54:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/07/28 10:15:39  mbickel
+//      Fixed broken movement
+//      Fixed graphical artefacts when moving some airplanes
+//
 //     Revision 1.16  2000/07/26 15:58:10  mbickel
 //      Fixed: infinite loop when landing with an aircraft which is low on fuel
 //      Fixed a bug in loadgame
@@ -96,6 +100,9 @@
     Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
     Boston, MA  02111-1307  USA
 */
+
+#include <vector> // From STL
+#include <algorithm>   // From STL
 
 
 #include "unitctrl.h"

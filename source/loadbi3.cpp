@@ -1,6 +1,12 @@
-//     $Id: loadbi3.cpp,v 1.20 2000-07-16 14:20:03 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.21 2000-07-29 14:54:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/07/16 14:20:03  mbickel
+//      AI has now some primitive tactics implemented
+//      Some clean up
+//        moved weapon functions to attack.cpp
+//      Mount doesn't modify PCX files any more.
+//
 //     Revision 1.19  2000/07/02 21:04:13  mbickel
 //      Fixed crash in Replay
 //      Fixed graphic errors in replay
@@ -114,6 +120,7 @@
 #include "misc.h"
 #include "stack.h"
 #include "palette.h"
+#include "gameoptions.h"
 
 #ifndef converter
  #include "dlg_box.h"
@@ -283,26 +290,36 @@ void check_bi3_dir ( void )
 
 void checkbi3dir ( void )
 {
-   char temp[260];
+   char temp[1000];
 
-   if ( !gameoptions.bi3.dir ) {
+   if ( !gameoptions.bi3.dir.getName() ) {
       readgameoptions();
-      if ( !gameoptions.bi3.dir ) {
+      /*
+      if ( !gameoptions.bi3.dir.getName() ) {
          gameoptions.bi3.dir = new char [300];
          gameoptions.bi3.dir[0] = 0;
       }
+      */
    }
 
-  int notfound ;
+   int notfound;
    do {
       notfound = 0;
 
       for ( int i = 0; i < libs_to_load ; i++ ) {
-         strcpy ( temp, gameoptions.bi3.dir );
+         if ( gameoptions.bi3.dir.getName() )
+            strcpy ( temp, gameoptions.bi3.dir.getName() );
+         else
+            temp[0] = 0;
+
          strcat ( temp, LIBFiles[i].Name );
          
          if ( !exist ( temp ) ) {
-            strcpy ( temp, gameoptions.bi3.dir );
+            if ( gameoptions.bi3.dir.getName() )
+               strcpy ( temp, gameoptions.bi3.dir.getName() );
+            else
+               temp[0] = 0;
+
             strcat ( temp, "LIB" );
             strcat ( temp, pathdelimitterstring );
             strcat ( temp, LIBFiles[i].Name );
@@ -314,10 +331,13 @@ void checkbi3dir ( void )
       }
      if ( notfound ) {
          if ( !graphicinitialized ) {
+            char bi3path[10000];
             printf("Enter Battle Isle directory:\n" );
-            scanf ( "%s", gameoptions.bi3.dir );
-            if ( gameoptions.bi3.dir[ strlen ( gameoptions.bi3.dir )-1 ] != pathdelimitter )
-               strcat ( gameoptions.bi3.dir, "pathdelimitterstring" );
+            scanf ( "%s", bi3path );
+            if ( bi3path[ strlen ( bi3path )-1 ] != pathdelimitter )
+               strcat ( bi3path, pathdelimitterstring );
+
+            gameoptions.bi3.dir.setName ( bi3path );
             gameoptions.changed = 1;
          } else {
             closegraphics();
@@ -326,7 +346,7 @@ void checkbi3dir ( void )
          }
      }
    } while ( notfound ); /* enddo */
-  battleisleversion = 3;
+   battleisleversion = 3;
 }
 
 tpixelxlattable bi2asc_color_translation_table;
@@ -775,9 +795,9 @@ void loadbi3pict ( int num, void** pict )
 }
 
 
-char* getbi3path ( void )
+const char* getbi3path ( void )
 {
-   return gameoptions.bi3.dir;
+   return gameoptions.bi3.dir.getName();
 }
 
 

@@ -1,6 +1,10 @@
-//     $Id: gamedlg.cpp,v 1.31 2000-07-26 15:58:09 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.32 2000-07-29 14:54:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/07/26 15:58:09  mbickel
+//      Fixed: infinite loop when landing with an aircraft which is low on fuel
+//      Fixed a bug in loadgame
+//
 //     Revision 1.30  2000/07/12 08:27:06  mbickel
 //      Prepared 1.1.9 release
 //
@@ -171,6 +175,7 @@
 #include "sg.h"
 #include "loadpcx.h"
 #include "loadjpg.h"
+#include "gameoptions.h"
 
 #ifdef _DOS_
  #include "dos/memory.h"
@@ -1103,10 +1108,7 @@ void         tnewcampaignlevel::loadcampaignmap(void)
            }
          } while ( actmap->player[actmap->actplayer].stat != ps_human ); /* enddo */
          
-      } else {
-         if (loaderror > 0) 
-            displaymessage("error nr. %d : %s", 1, loaderror, loaderrormsg(loaderror));
-      }
+      } 
    } /* endtry */
    catch ( tinvalidid err ) {
       displaymessage( err.msg, 1 );
@@ -1370,15 +1372,12 @@ void         tcontinuecampaign::run(void)
       }
 
       loadcampaignmap(); 
-      if (loaderror == 0) {
-         actmap->oldevents = oldevent;
-         for (i=0;i<8 ; i++) {
-            actmap->player[i].research.developedtechnologies = tech[i];
-            actmap->player[ i ].dissectedunit = dissectedunits[i];
-         }
+      actmap->oldevents = oldevent;
+      for (i=0;i<8 ; i++) {
+         actmap->player[i].research.developedtechnologies = tech[i];
+         actmap->player[ i ].dissectedunit = dissectedunits[i];
+      }
 
-      } else
-         status = 0;
    } 
    if (status == 50)
       exit( 0 );
@@ -1616,8 +1615,6 @@ void         tchoosenewsinglelevel::run(void)
                  throw tnomaploaded();
               }
             } while ( actmap->player[actmap->actplayer].stat != ps_human ); /* enddo */
-         } else {
-            displaymessage("error nr. %d",1, loaderror );
          }
       } /* endtry */
 
@@ -3976,7 +3973,7 @@ const char* smallguiiconsundermouse[3] = { "never", "always", "units, buildings,
 const char* mousekeynames[9] = { "none", "left", "right", "left + right", "center", "center + left", "center + right", "center + left + right", "disabled"};
 
 class tgamepreferences : public tdialogbox {
-                        tgameoptions actoptions;
+                        CGameOptions actoptions;
                         int status;
                         tmouserect r1, r5, r6, r7, r8;
                         tmouserect dlgoffset;
@@ -3987,6 +3984,7 @@ class tgamepreferences : public tdialogbox {
                         void init ( void );
                         void buttonpressed ( char id );
                         void run ( void );
+                        tgamepreferences ( ) : actoptions ( gameoptions ) {};
                     };
 
 
@@ -4000,8 +3998,6 @@ void tgamepreferences :: init ( void )
 
    x1 = -1;
    y1 = -1;
-
-   actoptions = gameoptions;
 
    addbutton ( "~O~K", 10, ysize - 35, xsize / 2 - 5, ysize - 10, 0, 1, 1, true );
    addkey ( 1, ct_enter );
@@ -4163,12 +4159,7 @@ void tgamepreferences :: buttonpressed ( char id )
    tdialogbox :: buttonpressed ( id );
 
    if ( id == 1 ) {
-      gameoptions = actoptions;
-      gameoptions.changed = 1;
-      strcpy( gamepath, actgamepath );
-      if ( gamepath[0] )
-         if ( gamepath[strlen(gamepath)-1] != '\\' )
-            strcat ( gamepath, "\\" );
+      gameoptions.copy ( actoptions );
       status = 10;
    }
 
@@ -4252,7 +4243,7 @@ const char* mousebuttonnames[mousebuttonnum] = { "left", "right", "center" };
 
 
 class tmousepreferences : public tdialogbox {
-                        tgameoptions actoptions;
+                        CGameOptions actoptions;
                         int status;
                         tmouserect r1, r2, ydelta;
                         tmouserect dlgoffset;
@@ -4273,6 +4264,7 @@ class tmousepreferences : public tdialogbox {
                         void buttonpressed ( char id );
                         void paintbutt ( char id );
                         void run ( void );
+                        tmousepreferences ( ) : actoptions ( gameoptions ) {};
                     };
 
 
@@ -4286,9 +4278,6 @@ void tmousepreferences :: init ( void )
    ysize = 460;
 
    title = "mouse options";
-
-   actoptions = gameoptions;
-
 
    mouseAction[0].name = "mouse button for small gui icons";
    mouseAction[0].unallowMouseButtons = 0;
@@ -4424,8 +4413,7 @@ void tmousepreferences :: buttonpressed ( char id )
    tdialogbox :: buttonpressed ( id );
 
    if ( id == 1 ) {
-      gameoptions = actoptions;
-      gameoptions.changed = 1;
+      gameoptions.copy ( actoptions );
       status = 10;
    }
 

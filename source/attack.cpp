@@ -1,6 +1,12 @@
-//     $Id: attack.cpp,v 1.20 2000-07-16 14:19:59 mbickel Exp $
+//     $Id: attack.cpp,v 1.21 2000-07-29 14:54:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/07/16 14:19:59  mbickel
+//      AI has now some primitive tactics implemented
+//      Some clean up
+//        moved weapon functions to attack.cpp
+//      Mount doesn't modify PCX files any more.
+//
 //     Revision 1.19  2000/07/06 11:07:25  mbickel
 //      More AI work
 //      Started modularizing the attack formula
@@ -123,6 +129,7 @@
 #include "mousehnd.h"
 #include "timer.h"
 #include "loaders.h"
+#include "gameoptions.h"
 
 #ifdef sgmain
  #include "soundList.h"

@@ -1,6 +1,10 @@
-//     $Id: loaders.cpp,v 1.15 2000-07-26 15:58:10 mbickel Exp $
+//     $Id: loaders.cpp,v 1.16 2000-07-29 14:54:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/07/26 15:58:10  mbickel
+//      Fixed: infinite loop when landing with an aircraft which is low on fuel
+//      Fixed a bug in loadgame
+//
 //     Revision 1.14  2000/07/16 14:20:03  mbickel
 //      AI has now some primitive tactics implemented
 //      Some clean up
@@ -1612,11 +1616,6 @@ void     tspfldloaders::readmap ( void )
     spfld = new tmap;
 
     stream->readdata2 ( *spfld );
-    if ( spfld->xsize * spfld->ysize * sizeof(tfield) > memavail() - 512 * 1024) {
-       loaderror = 4; 
-       delete spfld;
-       return;
-    } 
 
     initmap();
  
@@ -4180,17 +4179,6 @@ void         loadicons(void)
 
    weapDist.loaddata(); 
 } 
-
-
-
-
-
-
-void         initloaders(void)
-{ 
-   loaderror = 0; 
-}
-
 
 
 

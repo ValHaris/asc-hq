@@ -1,6 +1,10 @@
-//     $Id: sgstream.cpp,v 1.15 2000-07-28 10:15:29 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.16 2000-07-29 14:54:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/07/28 10:15:29  mbickel
+//      Fixed broken movement
+//      Fixed graphical artefacts when moving some airplanes
+//
 //     Revision 1.14  2000/06/28 19:26:17  mbickel
 //      fixed bug in object generation by building removal
 //      Added artint.cpp to makefiles
@@ -104,6 +108,8 @@
 #include <stdarg.h>
 
 
+#include "cloadable.h"
+
 #include "tpascal.inc"
 #include "typen.h"
 #include "basegfx.h"
@@ -112,11 +118,12 @@
 #include "stack.h"
 #include "basestrm.h"
 #include "palette.h"
+#include "gameoptions.h"
 
 #ifndef converter
-#include "keybp.h"
-#include "dlg_box.h"
-#include "dialog.h"
+ #include "keybp.h"
+ #include "dlg_box.h"
+ #include "dialog.h"
 #endif
 
 #ifdef HEXAGON
@@ -127,42 +134,17 @@
  #include "dos\\memory.h"
 #endif
 
-int loaderror; 
+
+const char* asc_EnvironmentName = "asc_configfile";
+
+// #if defined(_DOS_) | defined(WIN32)
+ const char* asc_configurationfile = "asc.ini";
+// #else
+//  const char* asc_configurationfile = "~/.ascrc";
+// #endif
+
 
 FILE* logfile = NULL;
-
-/*
-extern void* getfirstpointer ( void );
-extern void* getlastpointer ( void );
-
-
-void* memorybuf = NULL;
-
-int checkcodemem ( void )
-{
-    char* a = (char*) getfirstpointer();
-    char* b = (char*) getlastpointer();
-    int size = b-a;
-    if ( !memorybuf ) {
-        memorybuf = malloc ( b-a );
-        char* mbuf = (char*) memorybuf ;
-        for ( int i = 0; i < size; i++ )
-          mbuf[i] = a[i];
-
-           char tmpcbuf[200];
-           sprintf(tmpcbuf,"codebuf initialized, start=%x, end=%x", a,b);
-           logtofile ( tmpcbuf );
-
-    } else {
-        char* mbuf = (char*) memorybuf ;
-        for ( int i = 0; i < size; i++ )
-          if ( mbuf[i] != a[i] )
-             return 0;
-    }
-    return 1;
-
-}
-*/
 
 #ifndef converter
 void logtofile ( char* strng, ... )
@@ -187,26 +169,13 @@ void logtofile ( char* strng, ... )
    if ( _heapchk() != _HEAPOK  )
      fprintf( logfile, "HEAP DAMAGED!!" );
 #endif
-/*
-   if ( !checkcodemem() )
-     fprintf( logfile, "CODE DAMAGED!!" );
-*/     
    fprintf ( logfile, buf );
    fprintf ( logfile, "\n" );
    fflush ( logfile );
-//   fclose ( f );
    va_end ( arglist );
 }
 #endif
 
-
-char gamepath[200];
-
-
-class initgamepath {
-public:
-  initgamepath( void ) { gamepath[0] = 0; };
-};
 
 
 #pragma pack(1)
@@ -2435,46 +2404,114 @@ t_carefor_containerstream :: t_carefor_containerstream ( void )
    opencontainer ( "*.con" );
 }
 
-int readgameoptions ( void )
-{
-   if ( exist ( gameoptions.filename ) ) {
-      tnfilestream mainstream ( gameoptions.filename, 1);
-      int version;
-      mainstream.readdata ( &version, sizeof(version));
-      if ( version == gameoptions.version ) {
-         mainstream.readdata ( &gameoptions.fastmove, sizeof(gameoptions)-sizeof(int));
-         if ( gameoptions.bi3.dir )
-            mainstream.readpchar ( &gameoptions.bi3.dir );
+CLoadableGameOptions* loadableGameOptions = NULL;
 
-         #ifdef sgmain
-         if ( gameoptions.startupcount < 10 ) {
-            gameoptions.startupcount++;
+int readgameoptions ( const char* filename )
+{
+   if ( !loadableGameOptions)
+      loadableGameOptions = new CLoadableGameOptions (&gameoptions);
+
+   const char* fn;
+   if ( filename )
+      fn = filename;
+   else
+      if ( getenv ( asc_EnvironmentName )) 
+         fn = getenv ( asc_EnvironmentName );
+      else
+         fn = asc_configurationfile;
+
+   if ( exist ( fn )) {
+      std::ifstream is( fn );
+      loadableGameOptions->Load(is);	
+      
+   } else
+      if ( exist ( "sg.cfg" ) ) {
+         tnfilestream stream ( "sg.cfg", 1);
+         int version = stream.readInt ( );
+         if ( version == 102 ) {
+            gameoptions.fastmove = stream.readInt();
+            gameoptions.visibility_calc_algo = stream.readInt();
+            gameoptions.movespeed = stream.readInt();
+            gameoptions.endturnquestion = stream.readInt();
+            gameoptions.smallmapactive = stream.readInt();
+            gameoptions.units_gray_after_move = stream.readInt();
+            gameoptions.mapzoom = stream.readInt();
+            gameoptions.mapzoomeditor = stream.readInt();
+            gameoptions.startupcount = stream.readInt();
+            gameoptions.dontMarkFieldsNotAccessible_movement = stream.readInt();
+            gameoptions.attackspeed1 = stream.readInt();
+            gameoptions.attackspeed2 = stream.readInt();
+            gameoptions.attackspeed3 = stream.readInt();
+            gameoptions.disablesound = stream.readInt();
+            for ( int i = 0; i < 9; i++ )
+               stream.readInt();  // dummy
+
+            gameoptions.mouse.scrollbutton = stream.readInt();
+            gameoptions.mouse.fieldmarkbutton = stream.readInt();
+            gameoptions.mouse.smallguibutton = stream.readInt();
+            gameoptions.mouse.largeguibutton = stream.readInt();
+            gameoptions.mouse.smalliconundermouse = stream.readInt();
+            gameoptions.mouse.centerbutton = stream.readInt();
+            gameoptions.mouse.unitweaponinfo = stream.readInt();
+            gameoptions.mouse.dragndropmovement = stream.readInt();
+            for ( int j = 0; j < 7; j++ )
+               stream.readInt();
+
+            gameoptions.container.autoproduceammunition = stream.readInt();
+            gameoptions.container.filleverything = stream.readInt();
+            gameoptions.container.emptyeverything = stream.readInt();
+            for ( int k = 0; k < 10; k++ )
+               stream.readInt();
+
+            gameoptions.onlinehelptime = stream.readInt();
+            gameoptions.smallguiiconopenaftermove = stream.readInt();
+            gameoptions.defaultpassword = stream.readInt();
+            gameoptions.replayspeed = stream.readInt();
+            int bi3dir = stream.readInt();
+            gameoptions.bi3.interpolate.terrain = stream.readInt();
+            gameoptions.bi3.interpolate.units = stream.readInt();
+            gameoptions.bi3.interpolate.objects = stream.readInt();
+            gameoptions.bi3.interpolate.buildings = stream.readInt();
+
+            if ( bi3dir ) {
+               char* tmp;
+               stream.readpchar ( &tmp );
+               gameoptions.bi3.dir.setName( tmp );
+               delete[] tmp;
+            }
+   
             gameoptions.changed = 1;
          }
-         #endif
-         return 0;
-      }
-   } 
-   gameoptions.startupcount++;
-   gameoptions.changed = 1;
-   return 1;
+      } 
+
+   #ifdef sgmain
+   if ( gameoptions.startupcount < 10 ) {
+      gameoptions.startupcount++;
+      gameoptions.changed = 1;
+   }
+   #endif
+
+   return 0;
 }
 
-int writegameoptions ( void )
+int writegameoptions ( const char* filename )
 {
    if ( gameoptions.changed ) {
-      gameoptions.changed = 0;
- 
-      try {
-         tnfilestream mainstream ( gameoptions.filename, 2);
-         mainstream.writedata ( &gameoptions, sizeof(gameoptions));
-         if ( gameoptions.bi3.dir )
-            mainstream.writepchar ( gameoptions.bi3.dir );
-      }
-      catch ( terror ) {
-         printf ( "Could not save gameoptions !\n");
-         return 1;
-      } /* endcatch */
+      const char* fn;
+      if ( filename )
+         fn = filename;
+      else
+         if ( getenv ( asc_EnvironmentName )) 
+            fn = getenv ( asc_EnvironmentName );
+         else
+            fn = asc_configurationfile;
+
+      std::ofstream os( fn );
+
+      if ( !loadableGameOptions)
+         loadableGameOptions = new CLoadableGameOptions (&gameoptions);
+      
+      loadableGameOptions->Save(os);
    }
    return 0;
 }

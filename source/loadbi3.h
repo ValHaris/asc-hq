@@ -1,6 +1,10 @@
-//     $Id: loadbi3.h,v 1.4 2000-04-01 11:38:39 mbickel Exp $
+//     $Id: loadbi3.h,v 1.5 2000-07-29 14:54:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/04/01 11:38:39  mbickel
+//      Updated the small editors
+//      Added version numbering
+//
 //     Revision 1.3  2000/03/11 18:22:07  mbickel
 //      Added support for multiple graphic sets
 //
@@ -57,7 +61,7 @@ extern tpixelxlattable bi2asc_color_translation_table;
 extern void importbattleislemap ( char* path, char* filename, pwterraintype trrn );
 extern void insertbattleislemap ( int x, int y, char* path, char* filename  );
 
-extern char* getbi3path ( void );
+extern const char* getbi3path ( void );
 
 extern int getterraintranslatenum ( void );
 extern int getobjectcontainertranslatenum ( void );

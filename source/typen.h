@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.30 2000-07-28 10:15:34 mbickel Exp $
+//     $Id: typen.h,v 1.31 2000-07-29 14:54:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/07/28 10:15:34  mbickel
+//      Fixed broken movement
+//      Fixed graphical artefacts when moving some airplanes
+//
 //     Revision 1.29  2000/07/16 14:20:06  mbickel
 //      AI has now some primitive tactics implemented
 //      Some clean up
@@ -166,10 +170,12 @@
 typedef class tterrainaccess *pterrainaccess;
 typedef struct tcrc *pcrc;
 typedef struct tvehicle* pvehicle ;
+typedef struct tvehicle Vehicle;
 typedef struct tvehicletype* pvehicletype ;
 typedef struct tbuildrange* pbuildrange;
 typedef class tobjecttype* pobjecttype;
 typedef class tmap*  pmap;
+typedef class tmap Map;
 typedef class  tbuildingtype* pbuildingtype;
 typedef struct tevent* pevent ;
 typedef class  ttechnology* ptechnology ;
@@ -1020,7 +1026,8 @@ class  tfield {
       }a;
       word tempw;
     };
-    char         temp3;
+    int          temp3;
+    int          temp4;
     pvehicle     vehicle; 
     pbuilding    building; 
 
@@ -1475,7 +1482,7 @@ class tmap {
       pvehicle getunit ( int x, int y, int nwid );
       int  getgameparameter ( int num );
       void setgameparameter ( int num, int value );
-      void cleartemps( int b );
+      void cleartemps( int b, int value = 0 );
    private:
       pvehicle getunit ( pvehicle eht, int nwid );
 
@@ -1492,7 +1499,7 @@ class tmap {
 
 enum tnetworkchannel { TN_RECEIVE, TN_SEND };
 
-
+/*
 class tgameoptions {
   public:
     tgameoptions ( void );
@@ -1538,10 +1545,10 @@ class tgameoptions {
     struct {
       char* dir;
       struct {
-	int terrain;
-	int units;
-	int objects;
-	int buildings;
+         int terrain;
+         int units;
+         int objects;
+         int buildings;
       } interpolate;
     } bi3;
     int dummy2[41];
@@ -1550,7 +1557,7 @@ class tgameoptions {
 };
 
 extern tgameoptions gameoptions;
-
+*/
 
 
 

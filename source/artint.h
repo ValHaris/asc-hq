@@ -1,6 +1,10 @@
-//     $Id: artint.h,v 1.8 2000-07-23 17:59:51 mbickel Exp $
+//     $Id: artint.h,v 1.9 2000-07-29 14:54:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/07/23 17:59:51  mbickel
+//      various AI improvements
+//      new terrain information window
+//
 //     Revision 1.7  2000/07/16 14:19:59  mbickel
 //      AI has now some primitive tactics implemented
 //      Some clean up
@@ -53,7 +57,7 @@
 
 
 #include <utility>
-#include <map.h>
+#include <map>
 
 #include "typen.h"
 #include "spfst.h"

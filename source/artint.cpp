@@ -1,6 +1,10 @@
-//     $Id: artint.cpp,v 1.10 2000-07-23 17:59:50 mbickel Exp $
+//     $Id: artint.cpp,v 1.11 2000-07-29 14:54:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/07/23 17:59:50  mbickel
+//      various AI improvements
+//      new terrain information window
+//
 //     Revision 1.9  2000/07/16 14:19:58  mbickel
 //      AI has now some primitive tactics implemented
 //      Some clean up
@@ -98,7 +102,7 @@
 #include "gamedlg.h"
 #include "building.h"
 #include "attack.h"
-
+#include "gameoptions.h"
 
 
 

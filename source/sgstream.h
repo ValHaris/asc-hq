@@ -1,6 +1,9 @@
-//     $Id: sgstream.h,v 1.4 2000-05-23 20:40:49 mbickel Exp $
+//     $Id: sgstream.h,v 1.5 2000-07-29 14:54:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/05/23 20:40:49  mbickel
+//      Removed boolean type
+//
 //     Revision 1.3  2000/03/29 09:58:49  mbickel
 //      Improved memory handling for DOS version
 //      Many small changes I can't remember ;-)
@@ -139,8 +142,6 @@ extern pobjecttype   loadobjecttype(char *       name);
 extern pobjecttype   loadobjecttype( pnstream stream );
 void writeobject ( pobjecttype object, pnstream stream, int compressed = 0 );
 
-extern int loaderror; 
-
 #ifndef converter
 extern pquickview generateaveragecol ( pwterraintype bdn );
 #endif
@@ -174,15 +175,12 @@ class t_carefor_containerstream {       // not necessary any more, now that we h
          t_carefor_containerstream ( void );
        };
 
-extern char gamepath[200];
-
-
 extern void logtofile ( char* strng, ... );
 
 
 extern void loadpalette ( void );
-extern int readgameoptions ( void );
-extern int writegameoptions ( void );
+extern int readgameoptions ( const char* filename = NULL );
+extern int writegameoptions ( const char* filename = NULL );
 extern void loadguipictures( void );
 
 

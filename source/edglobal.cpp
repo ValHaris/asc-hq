@@ -1,6 +1,11 @@
-//     $Id: edglobal.cpp,v 1.13 2000-06-28 19:26:15 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.14 2000-07-29 14:54:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/06/28 19:26:15  mbickel
+//      fixed bug in object generation by building removal
+//      Added artint.cpp to makefiles
+//      Some cleanup
+//
 //     Revision 1.12  2000/05/11 20:12:05  mbickel
 //      mapedit(lin) can now import BI3 maps
 //
@@ -78,7 +83,8 @@
 #include "edselfnt.h"
 #include "edglobal.h"
 #include "timer.h"
-   
+#include "gameoptions.h"   
+
 mc_check mc;
 UnitSet unitSet;
 
@@ -347,10 +353,9 @@ void appendbackslash ( char* string )
 
 char* getbipath ( void )
 {
-   char* path = getbi3path();
    char filename[1000];
-   if ( path )
-      strcpy ( filename, path );
+   if ( getbi3path() )
+      strcpy ( filename, getbi3path() );
    else
       filename[0] = 0;
 
@@ -368,6 +373,8 @@ char* getbipath ( void )
       if ( res == NULL )
          return NULL;
 
+      gameoptions.changed = 1;
+
       strcpy ( filename2, filename );
       appendbackslash( filename2 );
       strcat ( filename2, "mis");
@@ -381,17 +388,8 @@ char* getbipath ( void )
    }
    appendbackslash( filename );
    char* buf = strdup ( filename );
-   if ( gameoptions.bi3.dir ) {
-      if ( stricmp ( gameoptions.bi3.dir, filename ) != 0 ) {
-         asc_free ( gameoptions.bi3.dir );
-         gameoptions.bi3.dir = strdup ( filename );
-         gameoptions.changed = 1;
-      }
+   gameoptions.bi3.dir.setName( filename );
 
-   } else {
-      gameoptions.bi3.dir = strdup ( filename );
-      gameoptions.changed = 1;
-   }
    return buf;
 }
 
