@@ -1296,7 +1296,9 @@ float WeapDist::getWeapStrength ( const SingleWeapon* weap, int dist, int attack
 
    float relstrength = weap->maxstrength - relpos * ( weap->maxstrength - weap->minstrength );
 
-   return relstrength / float(weap->maxstrength);
+   int hd = getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ));
+
+   return relstrength * weap->efficiency[6+hd] / float(weap->maxstrength * 100) ;
 
 /*   if ( attacker_height != -1 && defender_height!= -1 ) {
       int hd = getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ));

@@ -18,8 +18,6 @@ Bugs:
 
 Small tasks:
 
--4- Replay: don't repeat identical inconsistency messages
-
 -8- rewriting tdrawgettempline ( mapalgorithm.cpp ) which is way to slow
    
 -7- direct invocation of and from mail clients to automate email games
@@ -103,10 +101,6 @@ Larger Tasks:
      Especially the user interface of the mapeditor has some room for
      improvements. This jobs involves asking the map-designers what they think
      should be improved there and then do it...
-     Some things like copy&paste would be really nice there too.
-     Not to mention the reinforcements event...
-     Or a function to make a diff between two maps and use it for a 
-      map-change event...
 
 -3- Paragui has been chosen to be the new dialog engine for ASC.
     Now many old and outdated dialogs (like the VehicleInfo dialog)
