@@ -26,7 +26,7 @@
       obj\gameevents.obj obj\Singleton.obj obj\prehistoricevents.obj 
       obj\mappolygons.obj obj\gameeventsystem.obj obj\gameevent_dialogs.obj 
       obj\statisticdialog.obj obj\clipboard.obj obj\surface.obj 
-      obj\ascttfont.obj obj\SDL_ttf.obj"/>
+      obj\ascttfont.obj obj\SDL_ttf.obj obj\blitter.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -166,6 +166,7 @@
       <FILE FILENAME="..\..\graphics\surface.cpp" FORMNAME="" UNITNAME="surface" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\graphics\ascttfont.cpp" FORMNAME="" UNITNAME="ascttfont" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\..\SDL_ttf\SDL_ttf.c" FORMNAME="" UNITNAME="SDL_ttf" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\graphics\blitter.cpp" FORMNAME="" UNITNAME="blitter" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

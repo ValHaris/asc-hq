@@ -20,7 +20,7 @@
  *                                                                         *
  ***************************************************************************/
 
-
+#include "graphics/blitter.h"
 #include "mapdisplay.h"
 #include "vehicletype.h"
 #include "buildingtype.h"
@@ -915,7 +915,12 @@ void         tdashboard::paintimage(void)
        putimage ( x1, y1, imagebkgr );
 
     if ( vehicle ) {
-       vehicle->paint( getActiveSurface(), SPoint( x1, y1) );
+       // vehicle->paint( getActiveSurface(), SPoint( x1, y1) );
+       MegaBlitter<1,ColorTransform_PlayerCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_Zoom> blitter;
+       blitter.setZoom( 0.7 );
+       blitter.setPlayer( vehicle->getOwner() );
+       blitter.blit ( vehicle->typ->getImage(), getActiveSurface(), SPoint(x1,y1) );
+
        imageshown = 1;
     } else
        imageshown = 0;
