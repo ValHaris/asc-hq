@@ -1,6 +1,12 @@
-//     $Id: misc.h,v 1.6 2000-05-06 20:25:23 mbickel Exp $
+//     $Id: misc.h,v 1.7 2000-05-07 12:53:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/05/06 20:25:23  mbickel
+//      Fixed: -recognition of a second mouse click when selection a pd menu item
+//             -movement: fields the unit can only pass, but not stand on them,
+//                        are marked darker
+//             -intedit/stredit: mouseclick outside is like hitting enter
+//
 //     Revision 1.5  2000/03/11 18:22:07  mbickel
 //      Added support for multiple graphic sets
 //
@@ -69,8 +75,6 @@
    extern void passtring2cstring ( char* s );
    
    extern int  crc32buf(void *vbuf, int len);
-
-   extern int  releasetimeslice( void );
 
 
  #pragma pack(1)

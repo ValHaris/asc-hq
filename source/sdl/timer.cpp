@@ -1,6 +1,15 @@
-//     $Id: timer.cpp,v 1.4 2000-04-27 16:25:34 mbickel Exp $
+//     $Id: timer.cpp,v 1.5 2000-05-07 12:53:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/04/27 16:25:34  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.3  2000/02/05 12:13:47  steb
 //     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
 //     startup due to actmap being null when trying to report errors.
@@ -92,6 +101,19 @@ void inittimer(int frequence)
    init = 1;
 */
 } 
+
+
+int  releasetimeslice( void )
+{
+   #ifndef _DOS_
+    SDL_Delay(10);
+   #endif
+/*    union REGS inregs, outregs;
+    inregs.w.ax = 0x1680;
+    int386 (0x2f, &inregs, &outregs);
+    return outregs.w.ax == 0; */
+    return 0;
+}
 
 
 void closetimer(void)

@@ -1,6 +1,10 @@
-//     $Id: edevents.cpp,v 1.5 2000-05-05 21:15:02 mbickel Exp $
+//     $Id: edevents.cpp,v 1.6 2000-05-07 12:53:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/05/05 21:15:02  mbickel
+//      Added Makefiles for mount/demount and mapeditor
+//      mapeditor can now be compiled for linux, but is not running yet
+//
 //     Revision 1.4  2000/04/27 16:25:20  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -46,6 +50,7 @@
 #include "edmisc.h"
 #include "edevents.h"
 #include "edselfnt.h"
+#include "timer.h"
 
 // õS TStringselect
 
@@ -1232,8 +1237,8 @@ void         twindchange::init(void)
    float pi = 3.14159265;
    for ( i = 0; i < sidenum; i++ ) {
                               
-      int x = dirx + radius * sin ( 2 * pi * (float) i / (float) sidenum );
-      int y = diry - radius * cos ( 2 * pi * (float) i / (float) sidenum );
+      int x = (int) (dirx + radius * sin ( 2 * pi * (float) i / (float) sidenum ));
+      int y = (int) (diry - radius * cos ( 2 * pi * (float) i / (float) sidenum ));
 
       addbutton("", x-10, y - 10, x + 10, y + 10,0,1,14+i,true);
       enablebutton ( 14+i);

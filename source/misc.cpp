@@ -1,6 +1,12 @@
-//     $Id: misc.cpp,v 1.9 2000-05-06 20:25:23 mbickel Exp $
+//     $Id: misc.cpp,v 1.10 2000-05-07 12:53:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/05/06 20:25:23  mbickel
+//      Fixed: -recognition of a second mouse click when selection a pd menu item
+//             -movement: fields the unit can only pass, but not stand on them,
+//                        are marked darker
+//             -intedit/stredit: mouseclick outside is like hitting enter
+//
 //     Revision 1.8  2000/03/11 18:22:07  mbickel
 //      Added support for multiple graphic sets
 //
@@ -61,11 +67,6 @@
 #include "tpascal.inc"
 #include "misc.h"
 #include "global.h"
-
-/*
-#include <unistd.h>
-#endif
-*/
 
 const char* digit[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 const char* letter[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", 
@@ -212,19 +213,6 @@ structure_size_tester :: structure_size_tester ( void )
       printf("This program had been compiled with invalid compiler option!\nThe structures had not benn packed !\n");
       exit(1);
    }
-}
-
-
-int  releasetimeslice( void )
-{
-   #ifndef _DOS_
-    SDL_Delay(10);
-   #endif
-/*    union REGS inregs, outregs;
-    inregs.w.ax = 0x1680;
-    int386 (0x2f, &inregs, &outregs);
-    return outregs.w.ax == 0; */
-    return 0;
 }
 
 

@@ -1,6 +1,9 @@
-//     $Id: timer.h,v 1.4 1999-12-28 22:04:29 mbickel Exp $
+//     $Id: timer.h,v 1.5 2000-05-07 12:53:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/28 22:04:29  mbickel
+//      Had to make some changes again to compile it for DOS...
+//
 //     Revision 1.3  1999/12/28 21:03:25  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -45,5 +48,7 @@
 
     extern void starttimer(void); //resets Timer
     extern char time_elapsed(int time); //check if time msecs are elapsed, since starttimer
+    extern int  releasetimeslice( void );
+
 
 

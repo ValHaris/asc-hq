@@ -1,6 +1,15 @@
-//     $Id: basegfx.cpp,v 1.12 2000-01-25 19:28:06 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.13 2000-05-07 12:53:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/01/25 19:28:06  mbickel
+//      Fixed bugs:
+//        invalid mouse buttons reported when moving the mouse
+//        missing service weapon in weapon information
+//        invalid text displayed in ammo production
+//        undamaged units selected in repair vehicle function
+//
+//      speed up when playing weapon sound
+//
 //     Revision 1.11  2000/01/19 22:14:17  mbickel
 //      Fixed:
 //        - crash in replay
@@ -736,9 +745,9 @@ TrueColorImage* zoomimage ( void* buf, int xsize, int ysize, dacpalette256 pal, 
       float ratioy = (float)ysize / (float)orgy;
       if ( proportional ) {
          if ( ratiox > ratioy )
-            xsize = ratioy * orgx;
+            xsize = (int) (ratioy * orgx);
          else
-            ysize = ratiox * orgy;
+            ysize = (int) (ratiox * orgy);
       }
    }
 
@@ -1753,7 +1762,7 @@ int loga2 ( int a )
 
 void float2int ( float* fp, int* ip )
 {
-   *ip = *fp;
+   *ip = (int) *fp;
 }
 
 

@@ -30,12 +30,12 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/mousehnd.h,/home/martin/asc/source/edmisc.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/typen.h,/home/martin/asc/source/sdl/events.cpp,/home/martin/asc/source/edmain.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/edevents.cpp,/home/martin/asc/source/misc.cpp,/home/martin/asc/source/basegfx.h,/home/martin/asc/source/basegfx.cpp,/home/martin/asc/source/sdl/timer.cpp,/home/martin/asc/source/sdl/events.cpp,/home/martin/asc/source/timer.h,/home/martin/asc/source/timer.cpp,/home/martin/asc/source/misc.h,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/typen.h
-cpp_file=/home/martin/asc/source/edmisc.cpp
-browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/index-4.html#ss4.3
+header_file=/home/martin/asc/source/misc.h
+cpp_file=/home/martin/asc/source/basegfx.cpp
+browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/reference/C/FUNCTIONS/funcref.htm#headers
 [source/controls.cpp]
 install_location=
 dist=true
@@ -370,6 +370,7 @@ lfv_open_groups=Headers,Quellen,GNU,Andere,
 workspace=1
 project_name=ASC
 version=0.1
+AMChanged=false
 sgml_file=/home/martin/source/source/docs/en/index.sgml
 short_info=,
 email=bickel@asc-hq.org
