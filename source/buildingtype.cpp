@@ -517,6 +517,11 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
        maxplus.runTextIO ( pc );
       pc.closeBracket ();
 
+      pc.openBracket ( "ResourceExtractionEfficiency");
+       pc.addInteger( "Material", efficiencymaterial, 1024 );
+       pc.addInteger( "Fuel", efficiencyfuel, 1024 );
+      pc.closeBracket ();
+
       pc.openBracket ( "StorageCapacity" );
        pc.openBracket( "BImode" );
         _bi_maxstorage.runTextIO ( pc );

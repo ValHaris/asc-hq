@@ -99,7 +99,7 @@ class PropertyContainer {
          TextPropertyGroup* textPropertyGroup;
       public:
 
-         
+
          class Property {
             protected:
                ASCString name;
@@ -108,6 +108,7 @@ class PropertyContainer {
                TextPropertyGroup::Entry* entry;
                virtual void evaluate_rw ( ) = 0;
                ASCString valueToWrite;
+               virtual bool hasDefault() { return false; };
             public:
                Property () : propertyContainer ( NULL ), entry ( NULL ), evaluated(false) {};
                void evaluate ( );
@@ -121,13 +122,25 @@ class PropertyContainer {
          };
          friend class Property;
 
-         class IntProperty : public Property {
-              int& property;
+         template <class T> class PropertyTemplate : public Property {
+            protected:
+               T& property;
+               T defaultValue;
+               bool defaultValueAvail;
+               virtual bool hasDefault() { return defaultValueAvail; };
+            public:
+               PropertyTemplate ( T& property_ ) : property ( property_ ), defaultValueAvail ( false ) {};
+               PropertyTemplate ( T& property_, const T& defaultValue_ ) : property ( property_ ), defaultValueAvail ( true ), defaultValue ( defaultValue_) {};
+         };
+
+         class IntProperty : public PropertyTemplate<int> {
             protected:
               void evaluate_rw ( );
             public:
-               IntProperty ( int& property_ ) : property ( property_ ) {};
+               IntProperty ( int& property_ ) : PropertyTemplate<int> ( property_ ) {};
+               IntProperty ( int& property_, int defaultValue_ ) : PropertyTemplate<int> ( property_, defaultValue_ ) {};
          };
+
          class BoolProperty : public Property {
               bool& property;
             protected:
@@ -227,6 +240,7 @@ class PropertyContainer {
          StringProperty&        addString ( const ASCString& name, ASCString& property );
          StringArrayProperty&   addStringArray ( const ASCString& name, vector<ASCString>& property );
          IntProperty&           addInteger ( const ASCString& name, int& property );
+         IntProperty&           addInteger ( const ASCString& name, int& property, int defaultValue );
          IntegerArrayProperty&  addIntegerArray ( const ASCString& name, vector<int>& property );
          IntRangeArrayProperty& addIntRangeArray ( const ASCString& name, vector<IntRange>& property );
          TagArrayProperty&      addTagArray ( const ASCString& name, BitSet& property, int tagNum, const char** tags, bool inverted = false );

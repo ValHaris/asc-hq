@@ -149,6 +149,14 @@ PropertyContainer::IntProperty& PropertyContainer::addInteger ( const ASCString&
    return *ip;
 }
 
+PropertyContainer::IntProperty& PropertyContainer::addInteger ( const ASCString& name, int& property, int defaultValue )
+{
+   IntProperty* ip = new IntProperty ( property, defaultValue );
+   setup ( ip, name );
+   return *ip;
+}
+
+
 PropertyContainer::BoolProperty& PropertyContainer::addBool ( const ASCString& name, bool& property )
 {
    BoolProperty* ip = new BoolProperty ( property );
@@ -303,7 +311,9 @@ void PropertyContainer::Property::findEntry ()
              return;
           }
    }
-   propertyContainer->error ( "entry " + name +" not found" );
+
+   if ( !hasDefault() )
+      propertyContainer->error ( "entry " + name +" not found" );
 }
 
 void PropertyContainer::Property::evaluate ()
@@ -326,9 +336,12 @@ void PropertyContainer::Property::evaluate ()
 
 void PropertyContainer::IntProperty::evaluate_rw ( )
 {
-   if ( propertyContainer->isReading() )
-      property = atoi ( entry->value.c_str() );    //   strtol(nptr, NULL, 10);
-   else
+   if ( propertyContainer->isReading() ) {
+      if ( entry )
+         property = atoi ( entry->value.c_str() );    //   strtol(nptr, NULL, 10);
+      else
+         property = defaultValue;
+   } else
       valueToWrite = strrr ( property );
 }
 
