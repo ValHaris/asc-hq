@@ -25,10 +25,16 @@
 /* This is a JPEG image file loading framework */
 
 #include <stdio.h>
+#include <string.h>
+
 #include "../global.h"
 #include sdlheader
 
+#ifdef _WIN32_
+#include "../libs/jpeg-6b/jpeglib.h"
+#else
 #include <jpeglib.h>
+#endif
 
 /* Define this for fast loading and not as good image quality */
 /*#define FAST_JPEG*/
@@ -36,28 +42,28 @@
 /* See if an image is contained in a data source */
 int IMG_isJPG(SDL_RWops *src)
 {
-	int is_JPG;
-	Uint8 magic[4];
+        int is_JPG;
+        Uint8 magic[4];
 
-	is_JPG = 0;
-	if ( SDL_RWread(src, magic, 2, 1) ) {
-		if ( (magic[0] == 0xFF) && (magic[1] == 0xD8) ) {
-			SDL_RWread(src, magic, 4, 1);
-			SDL_RWread(src, magic, 4, 1);
-			if ( strncmp(magic, "JFIF", 4) == 0 ) {
-				is_JPG = 1;
-			}
-		}
-	}
-	return(is_JPG);
+        is_JPG = 0;
+        if ( SDL_RWread(src, magic, 2, 1) ) {
+                if ( (magic[0] == 0xFF) && (magic[1] == 0xD8) ) {
+                        SDL_RWread(src, magic, 4, 1);
+                        SDL_RWread(src, magic, 4, 1);
+                        if ( strncmp(magic, "JFIF", 4) == 0 ) {
+                                is_JPG = 1;
+                        }
+                }
+        }
+        return(is_JPG);
 }
 
-#define INPUT_BUFFER_SIZE	4096
+#define INPUT_BUFFER_SIZE       4096
 typedef struct {
-	struct jpeg_source_mgr pub;
+        struct jpeg_source_mgr pub;
 
-	SDL_RWops *ctx;
-	Uint8 buffer[INPUT_BUFFER_SIZE];
+        SDL_RWops *ctx;
+        Uint8 buffer[INPUT_BUFFER_SIZE];
 } my_source_mgr;
 
 /*
@@ -66,8 +72,8 @@ typedef struct {
  */
 void _init_source (j_decompress_ptr cinfo)
 {
-	/* We don't actually need to do anything */
-	return;
+        /* We don't actually need to do anything */
+        return;
 }
 
 /*
@@ -75,20 +81,20 @@ void _init_source (j_decompress_ptr cinfo)
  */
 int _fill_input_buffer (j_decompress_ptr cinfo)
 {
-	my_source_mgr * src = (my_source_mgr *) cinfo->src;
-	int nbytes;
+        my_source_mgr * src = (my_source_mgr *) cinfo->src;
+        int nbytes;
 
-	nbytes = SDL_RWread(src->ctx, src->buffer, 1, INPUT_BUFFER_SIZE);
-	if (nbytes <= 0) {
-		/* Insert a fake EOI marker */
-		src->buffer[0] = (Uint8) 0xFF;
-		src->buffer[1] = (Uint8) JPEG_EOI;
-		nbytes = 2;
-	}
-	src->pub.next_input_byte = src->buffer;
-	src->pub.bytes_in_buffer = nbytes;
+        nbytes = SDL_RWread(src->ctx, src->buffer, 1, INPUT_BUFFER_SIZE);
+        if (nbytes <= 0) {
+                /* Insert a fake EOI marker */
+                src->buffer[0] = (Uint8) 0xFF;
+                src->buffer[1] = (Uint8) JPEG_EOI;
+                nbytes = 2;
+        }
+        src->pub.next_input_byte = src->buffer;
+        src->pub.bytes_in_buffer = nbytes;
 
-	return TRUE;
+        return TRUE;
 }
 
 
@@ -105,23 +111,23 @@ int _fill_input_buffer (j_decompress_ptr cinfo)
  */
 void _skip_input_data (j_decompress_ptr cinfo, long num_bytes)
 {
-	my_source_mgr * src = (my_source_mgr *) cinfo->src;
+        my_source_mgr * src = (my_source_mgr *) cinfo->src;
 
-	/* Just a dumb implementation for now.	Could use fseek() except
-	 * it doesn't work on pipes.  Not clear that being smart is worth
-	 * any trouble anyway --- large skips are infrequent.
-	 */
-	if (num_bytes > 0) {
-		while (num_bytes > (long) src->pub.bytes_in_buffer) {
-			num_bytes -= (long) src->pub.bytes_in_buffer;
-			(void) src->pub.fill_input_buffer(cinfo);
-			/* note we assume that fill_input_buffer will never
-			 * return FALSE, so suspension need not be handled.
-			 */
-		}
-		src->pub.next_input_byte += (size_t) num_bytes;
-		src->pub.bytes_in_buffer -= (size_t) num_bytes;
-	}
+        /* Just a dumb implementation for now.  Could use fseek() except
+         * it doesn't work on pipes.  Not clear that being smart is worth
+         * any trouble anyway --- large skips are infrequent.
+         */
+        if (num_bytes > 0) {
+                while (num_bytes > (long) src->pub.bytes_in_buffer) {
+                        num_bytes -= (long) src->pub.bytes_in_buffer;
+                        (void) src->pub.fill_input_buffer(cinfo);
+                        /* note we assume that fill_input_buffer will never
+                         * return FALSE, so suspension need not be handled.
+                         */
+                }
+                src->pub.next_input_byte += (size_t) num_bytes;
+                src->pub.bytes_in_buffer -= (size_t) num_bytes;
+        }
 }
 
 /*
@@ -130,8 +136,8 @@ void _skip_input_data (j_decompress_ptr cinfo, long num_bytes)
  */
 void _term_source (j_decompress_ptr cinfo)
 {
-	/* We don't actually need to do anything */
-	return;
+        /* We don't actually need to do anything */
+        return;
 }
 
 /*
@@ -150,10 +156,10 @@ void jpeg_SDL_RW_src (j_decompress_ptr cinfo, SDL_RWops *ctx)
    * This makes it unsafe to use this manager and a different source
    * manager serially with the same JPEG object.  Caveat programmer.
    */
-  if (cinfo->src == NULL) {	/* first time for this JPEG object? */
+  if (cinfo->src == NULL) {     /* first time for this JPEG object? */
     cinfo->src = (struct jpeg_source_mgr *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
-				  sizeof(my_source_mgr));
+                                  sizeof(my_source_mgr));
     src = (my_source_mgr *) cinfo->src;
   }
 
@@ -171,83 +177,83 @@ void jpeg_SDL_RW_src (j_decompress_ptr cinfo, SDL_RWops *ctx)
 /* Load a JPEG type image from an SDL datasource */
 SDL_Surface *IMG_LoadJPG_RW_D(SDL_RWops *src, int depth)
 {
-	struct jpeg_error_mgr errmgr;
-	struct jpeg_decompress_struct cinfo;
-	JSAMPROW rowptr[1];
-	SDL_Surface *surface;
-	int i;
+        struct jpeg_error_mgr errmgr;
+        struct jpeg_decompress_struct cinfo;
+        JSAMPROW rowptr[1];
+        SDL_Surface *surface;
+        int i;
 
-	/* Create a decompression structure and load the JPEG header */
-	cinfo.err = jpeg_std_error(&errmgr);
-	jpeg_create_decompress(&cinfo);
-	jpeg_SDL_RW_src(&cinfo, src);
-	jpeg_read_header(&cinfo, TRUE);
+        /* Create a decompression structure and load the JPEG header */
+        cinfo.err = jpeg_std_error(&errmgr);
+        jpeg_create_decompress(&cinfo);
+        jpeg_SDL_RW_src(&cinfo, src);
+        jpeg_read_header(&cinfo, TRUE);
 
-	cinfo.out_color_space = JCS_RGB;
+        cinfo.out_color_space = JCS_RGB;
         switch ( depth ) {
-		case 24: 
-			cinfo.quantize_colors = FALSE;
+                case 24: 
+                        cinfo.quantize_colors = FALSE;
 #ifdef FAST_JPEG
-			cinfo.scale_num   = 1;
-			cinfo.scale_denom = 1;
-			cinfo.dct_method = JDCT_FASTEST;
-			cinfo.do_fancy_upsampling = FALSE;
+                        cinfo.scale_num   = 1;
+                        cinfo.scale_denom = 1;
+                        cinfo.dct_method = JDCT_FASTEST;
+                        cinfo.do_fancy_upsampling = FALSE;
 #endif
-			break;
-		case 8:
-			cinfo.quantize_colors = TRUE;
-			break;
-		default:
-			//IMG_SetError("Invalid depth");
-			goto done;
-	}
-		
-	jpeg_calc_output_dimensions(&cinfo);
-	
-	/* Allocate an output surface to hold the image */
+                        break;
+                case 8:
+                        cinfo.quantize_colors = TRUE;
+                        break;
+                default:
+                        //IMG_SetError("Invalid depth");
+                        goto done;
+        }
+                
+        jpeg_calc_output_dimensions(&cinfo);
+        
+        /* Allocate an output surface to hold the image */
         switch ( depth ) {
-		case 24: surface = SDL_AllocSurface(SDL_SWSURFACE,
-		               cinfo.output_width, cinfo.output_height, 24,
+                case 24: surface = SDL_AllocSurface(SDL_SWSURFACE,
+                               cinfo.output_width, cinfo.output_height, 24,
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
-		                           0x0000FF, 0x00FF00, 0xFF0000,
+                                           0x0000FF, 0x00FF00, 0xFF0000,
 #else
-		                           0xFF0000, 0x00FF00, 0x0000FF,
+                                           0xFF0000, 0x00FF00, 0x0000FF,
 #endif
-		                           0); 
-			break;
-		case 8: surface = SDL_AllocSurface(SDL_SWSURFACE, 
-		                       cinfo.output_width, cinfo.output_height,
-		                       8, 0, 0, 0, 0 );
-			break;
-	}
-						
-	if ( surface == NULL ) {
-		// IMG_SetError("Out of memory");
-		goto done;
-	}
+                                           0); 
+                        break;
+                case 8: surface = SDL_AllocSurface(SDL_SWSURFACE, 
+                                       cinfo.output_width, cinfo.output_height,
+                                       8, 0, 0, 0, 0 );
+                        break;
+        }
+                                                
+        if ( surface == NULL ) {
+                // IMG_SetError("Out of memory");
+                goto done;
+        }
 
-	
-	/* Decompress the image */
-	jpeg_start_decompress(&cinfo);
-	while ( cinfo.output_scanline < cinfo.output_height ) {
-		rowptr[0] = (JSAMPROW)(Uint8 *)surface->pixels +
-		                    cinfo.output_scanline * surface->pitch;
-		jpeg_read_scanlines(&cinfo, rowptr, (JDIMENSION) 1);
-	}
-	
-	if ( depth == 8 ) 
-		for ( i = 0; i < 256; i++ ) {
-			surface->format->palette->colors[i].r = cinfo.colormap[0][i];
-			surface->format->palette->colors[i].g = cinfo.colormap[1][i];
-			surface->format->palette->colors[i].b = cinfo.colormap[2][i];
-		}
-		
-	
-	jpeg_finish_decompress(&cinfo);
+        
+        /* Decompress the image */
+        jpeg_start_decompress(&cinfo);
+        while ( cinfo.output_scanline < cinfo.output_height ) {
+                rowptr[0] = (JSAMPROW)(Uint8 *)surface->pixels +
+                                    cinfo.output_scanline * surface->pitch;
+                jpeg_read_scanlines(&cinfo, rowptr, (JDIMENSION) 1);
+        }
+        
+        if ( depth == 8 ) 
+                for ( i = 0; i < 256; i++ ) {
+                        surface->format->palette->colors[i].r = cinfo.colormap[0][i];
+                        surface->format->palette->colors[i].g = cinfo.colormap[1][i];
+                        surface->format->palette->colors[i].b = cinfo.colormap[2][i];
+                }
+                
+        
+        jpeg_finish_decompress(&cinfo);
 
-	/* Clean up and return */
+        /* Clean up and return */
 done:
-	jpeg_destroy_decompress(&cinfo);
-	return(surface);
+        jpeg_destroy_decompress(&cinfo);
+        return(surface);
 }
 

@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.106 2000-10-18 17:09:39 mbickel Exp $
+//     $Id: sg.cpp,v 1.107 2000-10-18 18:53:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.106  2000/10/18 17:09:39  mbickel
+//      Fixed eventhandling for DOS
+//
 //     Revision 1.105  2000/10/18 15:10:04  mbickel
 //      Fixed event handling for windows and dos
 //
@@ -2983,8 +2986,6 @@ struct GameThreadParams {
 
 int gamethread ( void* data )
 {
-     printf(" gamethread reached \n"); fflush ( stdout );
-
       GameThreadParams* gtp = (GameThreadParams*) data;
 
       initspfst( -1, -1 ); // 6, 16

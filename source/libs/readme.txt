@@ -1,7 +1,8 @@
 Here are some libraries that are used by ASC:
- bzlib  is used for the DOS and the Linux version. Although most Linux systems
-        have this library preinstalled, there are two different and incompatible
-	versions around ( 0.9 and 1.0 ). 
+ bzlib  is used for the DOS, WIN32 and Linux version. Although most Linux 
+        systems have this library preinstalled, there are two different and 
+        incompatible versions around ( 0.9 and 1.0 ). That's why we 
+        principially use the one supplied with ASC.
  jpeg   the DOS version requires the Independant Jpeg Library. I had to modify 
         parts of it to be able to load images out of ASCs container files. 
         Since the Linux version does not use it, it is not included here any 
@@ -10,6 +11,9 @@ Here are some libraries that are used by ASC:
            http://www.asc-hq.org/jpeg_ascdos_bin.zip
         and the source code at
            http://www.asc-hq.org/jpeg_ascdos_src.zip
+ jpeg-6b The original JPEG library, unmodified. Required by the Win32 
+        Version of ASC. Get the JPEG Source code und uncompress it into
+        this directory.
  STL    is not included any more. For the DOS-Version, get STLPORT from
         www.stlport.org
  triangul  a polygon triangulation library. Used by DOS and Linux version

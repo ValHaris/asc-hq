@@ -154,7 +154,7 @@ void SDL_StretchSurface(SDL_Surface* src_surface, int xs1, int ys1, int xs2, int
                         switch(src_bpp){
 
                                 case 1:
-                                        RectStretchTemplate(src_surface, (Uint8*)src_surface->pixels, xs1, ys1, xs2, ys2, dst_surface, (Uint8*)dst_surface->pixels, xd1, yd1, xd2, yd2, NULL);
+                                        RectStretchTemplate(src_surface, (Uint8*)src_surface->pixels, xs1, ys1, xs2, ys2, dst_surface, (Uint8*)dst_surface->pixels, xd1, yd1, xd2, yd2, (Uint32*)NULL);
                                         break;
 
                                 case 2:
@@ -167,7 +167,7 @@ void SDL_StretchSurface(SDL_Surface* src_surface, int xs1, int ys1, int xs2, int
                         switch(src_bpp){
 
                                 case 2:
-                                        RectStretchTemplate(src_surface, (Uint16*)src_surface->pixels, xs1, ys1, xs2, ys2, dst_surface, (Uint16*)dst_surface->pixels, xd1, yd1, xd2, yd2, NULL);
+                                        RectStretchTemplate(src_surface, (Uint16*)src_surface->pixels, xs1, ys1, xs2, ys2, dst_surface, (Uint16*)dst_surface->pixels, xd1, yd1, xd2, yd2, (Uint32*)NULL);
                                         break;
                         }
                         break;
@@ -184,7 +184,7 @@ void SDL_StretchSurface(SDL_Surface* src_surface, int xs1, int ys1, int xs2, int
                                         break;
 
                                 case 4:
-                                        RectStretchTemplate(src_surface, (Uint32*)src_surface->pixels, xs1, ys1, xs2, ys2, dst_surface, (Uint32*)dst_surface->pixels, xd1, yd1, xd2, yd2, NULL);
+                                        RectStretchTemplate(src_surface, (Uint32*)src_surface->pixels, xs1, ys1, xs2, ys2, dst_surface, (Uint32*)dst_surface->pixels, xd1, yd1, xd2, yd2, (Uint32*)NULL);
                                         break;
 
                         }
