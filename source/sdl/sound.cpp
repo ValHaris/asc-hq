@@ -20,6 +20,7 @@
 #include "../basestrm.h"
 #include "../sgstream.h"
 #include "../music.h"
+#include "../sgstream.h"
 
 /** How long should this process sleep while waiting for a sound to play
  */
@@ -123,7 +124,13 @@ void SoundSystem :: nextTrack( void )
         musicState = playing;
         musicBuf = Mix_LoadMUS( filename.c_str() );
 
-        Mix_PlayMusic ( musicBuf, 1 );
+        if ( !musicBuf ) {
+           displayLogMessage ( 1, "Could not load music file " + filename + " ; SDL reports error " + SDL_GetError() + "\n" );
+           SDL_ClearError();
+        } else {
+           int chan = Mix_PlayMusic ( musicBuf, 1 );
+           displayLogMessage ( 4, "Playing music on channel %d \n", chan );
+        }
      }
   }
 }
