@@ -1637,9 +1637,6 @@ void mainloopgeneralmousecheck ( void )
 }
 
 
-template<class T>
-kill (T* t ) { delete t; };
-
 void  mainloop ( void )
 {
    tkey ch;

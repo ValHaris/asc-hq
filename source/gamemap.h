@@ -292,10 +292,10 @@ class tmap {
       void operator= ( const tmap& map );
    public:
       //! the size of the map
-      word         xsize, ysize;
+      int          xsize, ysize;
 
       //! the coordinate of the map that is displayed on upper left corner of the screen
-      word         xpos, ypos;
+      int          xpos, ypos;
 
       //! the array of fields
       pfield       field;

@@ -1,3 +1,177 @@
+2004-02-07 13:34  mbickel
+
+	* asc.kdevprj, data/railstat.map, source/gameevents.h,
+	source/gamemap.h, source/prehistoricevents.cpp,
+	source/strtmesg.cpp, source/viewcalculation.cpp:  Fixed compilation
+	problems
+	 Version now 1.14.0.0
+
+2004-02-04 19:47  mbickel
+
+	* source/terraintype.h:  Fixed broken vector::at() with gcc 2.95
+
+2004-02-01 16:56  mbickel
+
+	* libtool, source/sg.cpp, source/unix/Makefile.am,
+	source/unix/Makefile.in:  Updated makefiles
+
+2004-02-01 16:17  mbickel
+
+	* data/: asc003.map, asc004.map, asc005.map, asc006.map,
+	asc007.map, asc008.map, asc009.map, asc001.map, asc002.map,
+	asc010a.map, asc010b.map:  Updated campaign maps
+
+2004-02-01 14:39  mbickel
+
+	* data/helpsyst.txt, source/building.cpp, source/gameevents.cpp,
+	source/gameevents.h, source/gameeventsystem.cpp,
+	source/gamemap.cpp, source/gamemap.h, source/spfst.cpp,
+	source/spfst.h, source/strtmesg.cpp:  New event action: set view
+	sharing
+	 Fixed lots of bugs
+
+2004-01-25 20:44  mbickel
+
+	* source/: baseaiinterface.h, basestrm.h, buildings.h, dlg_box.cpp,
+	edevents.cpp, edmisc.cpp, gamedlg.h, gameevents.cpp,
+	gameeventsystem.cpp, mapalgorithms.cpp, misc.h, sg.cpp, spfst.h,
+	strtmesg.cpp, textfiletags.cpp, typen.h, vehicle.h,
+	tools/win/tools.bpr:  Many, many bugfixes
+	 Removed #pragma pack whereever possible
+
+2004-01-23 19:32  mbickel
+
+	* data/: asc003.map, asc004.map, asc005.map, asc006.map,
+	asc007.map, asc008.map, asc009.map, first.map, first.msg,
+	paybacktime.map, paybacktime.msg:  Updated campaign maps
+
+2004-01-23 19:29  mbickel
+
+	* data/helpsyst.txt, source/building.cpp, source/controls.cpp,
+	source/dlg_box.cpp, source/errors.h, source/gameeventsystem.cpp,
+	source/gamemap.cpp, source/gamemap.h, source/graphicset.cpp,
+	source/gui.cpp, source/itemrepository.h, source/loaders.cpp,
+	source/loaders.h, source/mapdisplay.cpp, source/replay.cpp,
+	source/replay.h, source/sg.cpp, source/spfst.cpp, source/spfst.h,
+	source/strtmesg.cpp, source/textfile_evaluation.cpp,
+	source/unitctrl.cpp, source/vehicle.cpp, source/vehicle.h,
+	source/ai/misc.cpp, source/ai/service.cpp, source/sdl/sound.cpp,
+	source/tools/mount.cpp:  Fixed replay problems
+	 Fixed crash when landing with unit
+
+2004-01-21 15:42  mbickel
+
+	* source/: baseaiinterface.h, building.cpp, buildings.cpp,
+	buildings.h, buildingtype.h, containerbase.h, controls.cpp,
+	edglobal.cpp, edglobal.h, edmisc.cpp, gamemap.cpp, gamemap.h,
+	objecttype.cpp, objecttype.h, replay.cpp, replay.h, sg.cpp,
+	statisticdialog.cpp, statisticdialog.h, strtmesg.cpp, unitctrl.cpp,
+	vehicle.h, vehicletype.cpp, ai/buildingcapture.cpp, ai/misc.cpp,
+	win32/borland/asc.bpr:	Fixed: external loading not working
+	 Improved AI
+	 Fixed and improved replay resource checking
+	 Fixed various display errors
+
+2004-01-16 22:47  mbickel
+
+	* asc.bpg:  Updated project files
+
+2004-01-16 22:17  mbickel
+
+	* ChangeLog, Makefile.in, asc.kdevprj, bootstrap, configure,
+	configure.in, libtool, data/Makefile.in, data/dialog/Makefile.in,
+	data/music/Makefile.in, doc/Makefile.in, doc/manpages/Makefile.in,
+	source/Makefile.in, source/dlg_box.cpp,
+	source/polygontriangulation.h, source/ai/Makefile.am,
+	source/ai/Makefile.in, source/clparser/Makefile.in,
+	source/docs/Makefile.in, source/docs/en/Makefile.in,
+	source/libs/Makefile.in, source/libs/triangul/Makefile.in,
+	source/sdl/Makefile.in, source/tools/Makefile.in,
+	source/tools/lib/Makefile.in, source/tools/linux/Makefile.am,
+	source/tools/linux/Makefile.in, source/unix/Makefile.am,
+	source/unix/Makefile.in, source/unix/mapeditor/Makefile.am,
+	source/unix/mapeditor/Makefile.in:  Updated unix build system for
+	new gameevents
+
+2004-01-16 20:16  mbickel
+
+	* source/: weather.cpp, weather.h:  Removing weather.cpp weather.h
+
+2004-01-16 20:14  mbickel
+
+	* source/: gameevent_dialogs.cpp, gameevent_dialogs.h,
+	gameevents.cpp, gameevents.h, gameeventsystem.cpp,
+	gameeventsystem.h, mappolygons.cpp, mappolygons.h,
+	prehistoricevents.cpp, prehistoricevents.h:  Adding files for new
+	event system
+
+2004-01-16 16:33  mbickel
+
+	* asc.bpg, data/asc003.map, data/message1.txt,
+	source/CLoadable.cpp, source/TODO, source/astar2.cpp,
+	source/building.cpp, source/buildings.cpp, source/buildingtype.cpp,
+	source/buildingtype.h, source/containerbase.cpp,
+	source/containerbase.h, source/containerbasetype.cpp,
+	source/containerbasetype.h, source/controls.cpp, source/controls.h,
+	source/dashboard.cpp, source/dlg_box.cpp, source/dlg_box.h,
+	source/edevents.cpp, source/edevents.h, source/edglobal.cpp,
+	source/edmisc.cpp, source/edmisc.h, source/gamedlg.cpp,
+	source/gamedlg.h, source/gamemap.cpp, source/gamemap.h,
+	source/gameoptions.cpp, source/gameoptions.h, source/gui.cpp,
+	source/loadbi3.cpp, source/loaders.cpp, source/loaders.h,
+	source/mapdisplay.cpp, source/mapdisplay.h, source/missions.cpp,
+	source/missions.h, source/objecttype.cpp, source/objecttype.h,
+	source/paradialog.cpp, source/password_dialog.h,
+	source/polygontriangulation.h, source/resourcenet.cpp,
+	source/resourcenet.h, source/sg.cpp, source/simplestream.cpp,
+	source/soundList.cpp, source/soundList.h, source/spfst.cpp,
+	source/strtmesg.cpp, source/terraintype.cpp, source/terraintype.h,
+	source/textfiletags.cpp, source/typen.cpp, source/typen.h,
+	source/unitctrl.cpp, source/unitctrl.h, source/vehicle.cpp,
+	source/viewcalculation.cpp, source/viewcalculation.h,
+	source/ai/ai.bpr, source/ai/ai_common.h,
+	source/libs/loki/AbstractFactory.h, source/libs/loki/AssocVector.h,
+	source/libs/loki/EmptyType.h, source/libs/loki/Factory.h,
+	source/libs/loki/Functor.h, source/libs/loki/HierarchyGenerators.h,
+	source/libs/loki/MultiMethods.h, source/libs/loki/NullType.h,
+	source/libs/loki/Singleton.cpp, source/libs/loki/Singleton.h,
+	source/libs/loki/SmallObj.cpp, source/libs/loki/SmallObj.h,
+	source/libs/loki/SmartPtr.h, source/libs/loki/Threads.h,
+	source/libs/loki/Tuple.h, source/libs/loki/TypeInfo.h,
+	source/libs/loki/TypeManip.h, source/libs/loki/TypeTraits.h,
+	source/libs/loki/Typelist.h, source/libs/loki/Visitor.h,
+	source/libs/loki/readme.txt, source/libs/loki/static_check.h,
+	source/tools/weaponguide.cpp, source/tools/win/bin2text.bpr,
+	source/tools/win/gfx2pcx.bpr, source/tools/win/makegfx.bpr,
+	source/tools/win/tank2pcx.bpr, source/tools/win/tools.bpr,
+	source/tools/win/viewid.bpr, source/tools/win/weaponguide.bpr,
+	source/unix/Makefile.am, source/unix/mapeditor/Makefile.am,
+	source/win32/borland/asc.bpr, source/win32/borland/asc.mak,
+	source/win32/borland/mapeditor/mapeditor.bpr,
+	source/win32/borland/mapeditor/mapeditor.mak: Completely rewritten
+	game event system TPWM-decoding-Patch Fixed: swallog message: wrong
+	coordinates Autotraining for units with max ammo only Movement
+	required for clearing mines Unit names can be edited weather
+	dependen object properties Unit swallowed by ground -> unified
+	message units cannot enter enemy transports Building entry has
+	constant movemalus Message for resource transfer for providing
+	player increased ammo production cost Fixed: unit could attack
+	after movement (with RF on) although "no attack after move"
+	property was set Buildings: new properties:
+	"ExternalResourceTransfer", "ExternalAmmoTransfer" Container:
+	Movemalus override for unloading Startup map specified in ASC.INI
+
+2004-01-06 15:41  mbickel
+
+	* data/message1.txt, source/buildings.cpp, source/buildingtype.h,
+	source/edmisc.cpp, source/strtmesg.cpp:  Fixed: resource sink not
+	working
+
+2003-12-29 19:24  mbickel
+
+	* source/: building.cpp, strtmesg.cpp:	Fixed graphical errors when
+	producing units
+
 2003-12-28 19:09  mbickel
 
 	* source/: buildings.cpp, strtmesg.cpp:  Updated version to 1.13.9

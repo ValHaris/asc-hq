@@ -1103,11 +1103,11 @@ void Building::MiningStation :: testfield ( const MapCoordinate& mc )
             // is enough resource available on the field
             perc = min  ( perc, (*fieldResource * resourceFactor) / (toExtract_thisTurn.resource(r) * distEfficiency));
 
-            perc = min ( perc, double(spaceAvail.resource(r)) / (toExtract_thisTurn.resource(r) * distEfficiency ));
+            perc = min ( perc, float( double(spaceAvail.resource(r)) / (toExtract_thisTurn.resource(r) * distEfficiency )));
 
             for ( int i = 0; i < 3; ++i )
                if ( usageRatio[i] * toExtract_thisTurn.resource(r) > 0 )
-                  perc = min  ( perc, double(powerAvail.resource(i)) / usageRatio[i] * toExtract_thisTurn.resource(r));
+                  perc = min  ( perc, float( double(powerAvail.resource(i)) / usageRatio[i] * toExtract_thisTurn.resource(r)));
 
             if ( !justQuery )
                *fieldResource -= toExtract_thisTurn.resource(r) * perc * distEfficiency / resourceFactor ;
