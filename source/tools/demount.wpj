@@ -39,7 +39,7 @@ WRect
 0
 0
 5680
-4207
+4195
 0
 0
 11
@@ -52,10 +52,10 @@ dos\demount.tgt
 VComponent
 13
 WRect
-1297
-3022
+1288
+3010
 5680
-4231
+4219
 0
 0
 14
@@ -68,10 +68,10 @@ os2\demount.tgt
 VComponent
 16
 WRect
-3688
-1671
+3680
+1659
 5680
-4254
+4242
 0
 0
 17
@@ -80,4 +80,4 @@ WFileName
 win\demount.tgt
 0
 4
-12
+9

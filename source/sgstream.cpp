@@ -1,6 +1,11 @@
-//     $Id: sgstream.cpp,v 1.22 2000-08-02 15:53:01 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.23 2000-08-02 17:27:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/08/02 15:53:01  mbickel
+//      New unit set definition files
+//      demount accepts now more than one container file
+//      Unitset information dialog added
+//
 //     Revision 1.21  2000/08/02 10:28:27  mbickel
 //      Fixed: generator vehicle not working
 //      Streams can now report their name
@@ -2743,10 +2748,8 @@ void SingleUnitSet::TranslationTable::parseString ( const char* s )
       if ( tname )
          name = tname;
 
-
       char* xl = strtok ( NULL, ";\n\r" );
       while ( xl ) {
-         int from, to;
          if ( strchr ( xl, ',' )) {
             char* a = strchr ( xl, ',' );
             *a = 0;
@@ -2787,7 +2790,7 @@ void SingleUnitSet::read ( pnstream stream )
                active = atoi ( e.c_str() );
 
 
-            if ( b == "TRANSLATION" ) {
+            if ( b == "TRANSFORMATION" ) {
                TranslationTable* tt = new TranslationTable;
                tt->parseString ( e.c_str() );
                transtab.push_back ( tt );
@@ -2843,66 +2846,3 @@ void loadUnitSets ( void )
 
 vector<SingleUnitSet*> unitSets;
 
-/*
-      do
-
-      strcpy ( buf2, buf );
-      int rangenum = 0;
-
-      char* filename = strtok ( buf, ";\r\n");
-      unitSet.set[setnum].init ( filename );
-
-      char* piclist = strtok ( NULL, ";\r\n" );
-
-      char* pic = strtok ( piclist, "," );
-      while ( pic ) {
-         int from, to;
-         if ( strchr ( pic, '-' )) {
-            char* a = strchr ( pic, '-' );
-            *a = 0;
-            from = atoi ( pic );
-            to = atoi ( ++a );
-         } else
-            from = to = atoi ( pic );
-
-         unitSet.set[setnum].ids[rangenum].from = from;
-         unitSet.set[setnum].ids[rangenum].to   = to;
-
-         rangenum ++;
-         pic = strtok ( NULL, "," );
-      }
-
-      strcpy ( buf, buf2 );
-
-      dynamic_array<char*> transtable;
-      int transtablenum = 0;
-      const char* sectionlabel = "#";
-      char* transstart  = strstr ( buf, sectionlabel );
-      if ( transstart ) {
-         char* pc = strtok ( transstart, "#\n\r" );
-         while ( pc ) {
-            transtable[transtablenum++] = pc;
-            pc = strtok ( NULL, "#\n\r" );
-         }
-      }
-      for ( int t = 0; t < transtablenum; t++ ) {
-         char* tname = strtok ( transtable[t], ";" );
-         char* trans = strtok ( NULL, ";" );
-         int entrynum = 0;
-         if ( trans )
-            strcpy ( unitSet.set[setnum].transtab[t].name , tname );
-
-         while ( trans ) {
-            char* pc = strchr ( trans, ',' );
-            unitSet.set[setnum].transtab[t].translation[entrynum].to = atoi ( pc+1 );
-            *pc = 0;
-            unitSet.set[setnum].transtab[t].translation[entrynum].from = atoi ( trans );
-            entrynum++;
-
-            trans = strtok ( NULL, ";" );
-         } /* endwhile
-
-      }
-
-      setnum++;
-*/
