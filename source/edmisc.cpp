@@ -1,6 +1,10 @@
-//     $Id: edmisc.cpp,v 1.36 2000-10-24 15:35:10 schelli Exp $
+//     $Id: edmisc.cpp,v 1.37 2000-11-08 19:31:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2000/10/24 15:35:10  schelli
+//     MapEd FullScreen support added
+//     weapons ammo now editable in MapEd
+//
 //     Revision 1.35  2000/10/19 11:40:03  mbickel
 //      Fixed crash when editing unit values
 //
@@ -1827,7 +1831,7 @@ void changepolygon(ppolygon poly)
                char passwort[11], *sptitle;
                int sxsize,sysize;
                char valueflag,random,campaign;
-               tcampaign cmpgn;
+               tmap::Campaign cmpgn;
                pterraintype         tauswahl;
                word auswahlw;
                void init(void);
@@ -1966,15 +1970,18 @@ void         tnewmap::run(void)
       strcpy(actmap->title,sptitle);
       strcpy(actmap->codeword,passwort);
       if (campaign == true ) {
-         if (actmap->campaign == NULL) actmap->campaign = new (tcampaign);
+         if (actmap->campaign == NULL)
+            actmap->campaign = new tmap::Campaign;
+
          actmap->campaign->id = cmpgn.id; 
          actmap->campaign->prevmap = cmpgn.prevmap; 
          actmap->campaign->directaccess = cmpgn.directaccess; 
       } 
-      else if (actmap->campaign != NULL) {
-         asc_free(actmap->campaign);
-         actmap->campaign = NULL; 
-      } 
+      else
+         if ( actmap->campaign ) {
+            delete actmap->campaign;
+            actmap->campaign = NULL;
+         }
    } 
 } 
 
@@ -2115,8 +2122,7 @@ void         tsel::init(void)
    biplus = gbde->bi_resourceplus;
    col = gbde->color / 8;
 
-   if ( gbde->name != NULL ) strcpy(name,gbde->name);
-   else strcpy(name,"");
+   strcpy( name, gbde->name.c_str() );
 
    addbutton("~N~ame",15,50,215,70,1,1,10,true); 
    addeingabe(10,&name[0],0,25);
@@ -2275,16 +2281,8 @@ void         tsel::buttonpressed(int         id)
            gbde->maxresearchpoints = mrs;
            gbde->visible = tvisible;
            gbde->bi_resourceplus = biplus;
-           if ( strlen(name) > 0 ) {
-              gbde->name = (char * ) realloc ( gbde->name ,strlen(name) +1 );
-              strcpy(gbde->name,name);
-           }
-           else 
-             if ( gbde->name ) {
-                asc_free(gbde->name);
-                gbde->name = NULL;
-             }
-        } 
+           gbde->name = name;
+        }
         break;
      case 8: action = 1; 
         break;
@@ -2606,6 +2604,7 @@ int        getpolygon(ppolygon *poly) //return Fehlerstatus
                 int        action;
                 pvehicle    unit, orgunit;
                 int         w2, heightxs;
+                char        namebuffer[1000];
               public:
                // char     checkvalue( char id, char* p );
                 void        init( pvehicle v );
@@ -2638,13 +2637,11 @@ void         tunit::init( pvehicle v )
    diry= y1 + 100;
    action = 0; 
 
-   if ( !unit->name ) {
-      unit->name = new  char[100] ;
-      unit->name[0] = 0;
-   }
+
+   strcpy ( namebuffer, unit->name.c_str() );
 
    addbutton("~N~ame",50,80,250,100,1,1,29,true);
-   addeingabe(29, unit->name, 0, 100);
+   addeingabe(29, namebuffer, 0, 100);
 
    addbutton("E~x~p of Unit",50,120,250,140,2,1,1,true);
    addeingabe(1, &unit->experience, 0, maxunitexperience);
@@ -2807,7 +2804,7 @@ void         tunit::buttonpressed(int         id)
             unit->reactionfire.status = tvehicle::ReactionFire::ready;
             unit->reactionfire.enemiesAttackable = 0xff;
          }
-
+         unit->name = namebuffer;
          delete orgunit ;
         }
         break;
@@ -3008,7 +3005,7 @@ class tladeraum : public tdialogbox {
                     int maxusable;
                     int itemsperline;
                     int action;
-                    virtual char* getinfotext ( int pos );
+                    virtual const char* getinfotext ( int pos );
                     void displayinfotext ( void );
 
                     virtual void additem ( void ) = 0;
@@ -3105,7 +3102,7 @@ int tladeraum :: mouseoverfield ( int pos )
    return mouseinrect ( x, y, x+fieldsizex, y + fieldsizey );
 }
 
-char* tladeraum :: getinfotext( int pos ) 
+const char* tladeraum :: getinfotext( int pos )
 {
    return NULL;
 }
@@ -3121,7 +3118,7 @@ void         tladeraum::displayinfotext ( void )
    activefontsettings.color = red; 
    activefontsettings.length = 185;
    activefontsettings.font = schriften.smallarial;
-   char* it = getinfotext( cursorpos );
+   const char* it = getinfotext( cursorpos );
    if ( it )
       showtext2(it, x1 + 240, y1 + 50);
    npop ( activefontsettings );
@@ -3213,7 +3210,7 @@ class tvehiclecargo : public tladeraum {
                protected:
                     pvehicle transport;
                     pvehicle orgvehicle;
-                    virtual char* getinfotext ( int pos );
+                    virtual const char* getinfotext ( int pos );
                     virtual void additem ( void );
                     virtual void removeitem ( int pos );
                     virtual void checkforadditionalkeys ( tkey ch );
@@ -3227,11 +3224,11 @@ class tvehiclecargo : public tladeraum {
 };
 
 
-char* tvehiclecargo :: getinfotext ( int pos )
+const char* tvehiclecargo :: getinfotext ( int pos )
 {
    if ( transport->loading[ pos ] ) 
-      if ( transport->loading[ pos ]->name && transport->loading[ pos ]->name[0] )
-         return transport->loading[ pos ]->name;
+      if ( !transport->loading[ pos ]->name.empty() )
+         return transport->loading[ pos ]->name.c_str();
       else
          if ( transport->loading[ pos ]->typ->name && transport->loading[ pos ]->typ->name[0] )
             return transport->loading[ pos ]->typ->name;
@@ -3328,7 +3325,7 @@ void tbuildingcargoprod :: finish ( int cancel )
 
 class tbuildingcargo : public tbuildingcargoprod {
                protected:
-                    virtual char* getinfotext ( int pos );
+                    virtual const char* getinfotext ( int pos );
                     virtual void additem ( void );
                     virtual void removeitem ( int pos );
                     virtual void checkforadditionalkeys ( tkey ch );
@@ -3364,11 +3361,11 @@ void tbuildingcargo :: checkforadditionalkeys ( tkey ch )
    }
 } 
 
-char* tbuildingcargo :: getinfotext ( int pos )
+const char* tbuildingcargo :: getinfotext ( int pos )
 {
    if ( building->loading[ pos ] ) 
-      if ( building->loading[ pos ]->name && building->loading[ pos ]->name[0] )
-         return building->loading[ pos ]->name;
+      if ( !building->loading[ pos ]->name.empty() )
+         return building->loading[ pos ]->name.c_str();
       else
          if ( building->loading[ pos ]->typ->name && building->loading[ pos ]->typ->name[0] )
             return building->loading[ pos ]->typ->name;
@@ -3392,7 +3389,7 @@ void         building_cargo( pbuilding bld )
 
 class tbuildingproduction : public tbuildingcargoprod {
                protected:
-                    virtual char* getinfotext ( int pos );
+                    virtual const char* getinfotext ( int pos );
                     virtual void additem ( void );
                     virtual void removeitem ( int pos );
                     void displaysingleitem ( int pos, int x, int y );
@@ -3414,7 +3411,7 @@ void tbuildingproduction :: removeitem ( int pos )
    building->production[ pos ] = NULL;
 }
 
-char* tbuildingproduction :: getinfotext ( int pos )
+const char* tbuildingproduction :: getinfotext ( int pos )
 {
    if ( building->production[ pos ] ) 
       if ( building->production[ pos ]->name && building->production[ pos ]->name[0] )

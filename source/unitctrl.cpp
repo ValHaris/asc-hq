@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.38 2000-10-31 10:42:48 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.39 2000-11-08 19:31:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2000/10/31 10:42:48  mbickel
+//      Added building->vehicle service to vehicle controls
+//      Moved tmap methods to gamemap.cpp
+//
 //     Revision 1.37  2000/10/11 15:33:47  mbickel
 //      Adjusted small editors to the new ASC structure
 //      Watcom compatibility
@@ -706,12 +710,12 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
         if ( vehicle->functions & cffahrspur )
            if ( fahrspurobject )
               if ( fld1->bdt & cbfahrspur )
-                 if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checkobj2 ( fahrspurobject, 2 ))) 
+                 // if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checkobj2 ( fahrspurobject, 2 )))
                     fld1 -> addobject ( fahrspurobject, 1 << dir );
 
         if ( vehicle->functions & cficebreaker )
            if ( eisbrecherobject )
-              if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checkobj2 ( eisbrecherobject, 2 ))) 
+              // if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checkobj2 ( eisbrecherobject, 2 )))
                  if ( (fld1->bdt & cbsnow1 )  || ( fld1->bdt & cbsnow2 ) || fld1->checkforobject ( eisbrecherobject ) ) {
                     fld1 -> addobject ( eisbrecherobject, 1 << dir );
                     fld1->checkforobject ( eisbrecherobject )->time = actmap->time.a.turn;
@@ -726,7 +730,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
       if (vehicle->functions & cffahrspur) {
          if ( fahrspurobject )
             if ( field3->bdt & cbfahrspur )
-               if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checkobj2 ( fahrspurobject, 2 ))) 
+               // if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checkobj2 ( fahrspurobject, 2 )))
                   if (dir >= sidenum/2) 
                     getfield ( x, y ) -> addobject ( fahrspurobject, 1 << (dir - sidenum/2));
                   else 
@@ -734,7 +738,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
       } 
       if ( vehicle->functions & cficebreaker )
          if ( eisbrecherobject )
-            if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checkobj2 ( eisbrecherobject, 2 ))) 
+            // if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checkobj2 ( eisbrecherobject, 2 )))
                  if ( (field3->bdt & cbsnow1 )  || ( field3->bdt & cbsnow2 ) || field3->checkforobject ( eisbrecherobject ) ) {
                   if (dir >= sidenum/2) 
                     getfield ( x, y ) -> addobject ( eisbrecherobject, 1 << (dir - sidenum/2));
@@ -905,10 +909,12 @@ ChangeVehicleHeight :: ChangeVehicleHeight ( MapDisplayInterface* md, PPendingVe
 
 ChangeVehicleHeight :: ~ChangeVehicleHeight ()
 {
+/*
    if ( vmove ) {
       delete vmove;
       vmove = NULL;
    }
+*/
 }
 
 int ChangeVehicleHeight :: execute_withmove ( int allFields )
@@ -1919,6 +1925,18 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
       }
 
 
+   if ( bld->canRepair() )
+      if ( vehicle->damage ) {
+         VehicleService::Target::Service s;
+         s.type = VehicleService::srv_repair;
+         s.sourcePos = -1;
+         s.targetPos = -1;
+         s.curAmount = vehicle->damage;
+         s.orgSourceAmount = 100;
+         s.maxAmount = vehicle->damage;
+         s.minAmount = bld->getMaxRepair ( vehicle );
+         targ.service.push_back ( s );
+      }
 
    if ( vs.dest.find ( targ.dest->networkid ) != vs.dest.end() ) {
       vs.dest[ targ.dest->networkid ] = targ;
@@ -2104,7 +2122,7 @@ int VehicleService :: execute ( pvehicle veh, int targetNWID, int dummy, int ste
 }
 
 
-int VehicleService :: fillEverything ( pvehicle veh, int targetNWID )
+int VehicleService :: fillEverything ( int targetNWID, bool repairsToo )
 {
    if ( status != 2 )
       return -1;
@@ -2117,7 +2135,10 @@ int VehicleService :: fillEverything ( pvehicle veh, int targetNWID )
 
    for ( int j = 0; j< t.service.size(); j++ )
       if ( t.service[j].type != srv_repair )
-         execute ( veh, targetNWID, -1, 2, j, t.service[j].maxAmount );
+         execute ( NULL, targetNWID, -1, 2, j, t.service[j].maxAmount );
+      else
+         if ( repairsToo )
+            execute ( NULL, targetNWID, -1, 2, j, t.service[j].minAmount );
    return 0;
 }
 

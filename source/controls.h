@@ -1,6 +1,10 @@
-//     $Id: controls.h,v 1.30 2000-10-31 10:42:41 mbickel Exp $
+//     $Id: controls.h,v 1.31 2000-11-08 19:30:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/10/31 10:42:41  mbickel
+//      Added building->vehicle service to vehicle controls
+//      Moved tmap methods to gamemap.cpp
+//
 //     Revision 1.29  2000/10/18 14:13:57  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -450,7 +454,7 @@ class trunreplay {
             int movenum;
             treplayguihost gui;
             void execnextreplaymove ( void );
-            tmap orgmap;
+            pmap orgmap;
             pmemorystream stream;
             int removeunit ( int x, int y, int nwid );
             int removeunit ( pvehicle eht, int nwid );

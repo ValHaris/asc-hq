@@ -1,6 +1,6 @@
 Begin3
 Title:          ASC 
-Version:        0.1
+Version:        1.3.2
 Entered-date:   
 Description:    
 Keywords:        
@@ -9,6 +9,6 @@ Maintained-by:  Martin Bickel <bickel@asc-hq.org>
 Primary-site:   	        
 Home-page:      http://www.asc-hq.org
 Original-site:  
-Platforms:       Linux and DOS
+Platforms:      Linux, Win32 and DOS
 Copying-policy: GNU Public License
 End

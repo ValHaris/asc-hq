@@ -1,6 +1,17 @@
-//     $Id: building_controls.h,v 1.3 2000-10-11 14:26:21 mbickel Exp $
+//     $Id: building_controls.h,v 1.4 2000-11-08 19:30:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/10/11 14:26:21  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.2  2000/09/25 20:04:37  mbickel
 //      AI improvements
 //
@@ -36,6 +47,11 @@
 
 #ifndef building_controls_h
 #define building_controls_h
+
+/*! \file building_controls.h
+   The interface for controlling the building functions for use by the AI.
+*/
+
 
 #include "containerbase.h"
 

@@ -1,6 +1,10 @@
-//     $Id: sgstream.cpp,v 1.40 2000-10-26 18:15:00 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.41 2000-11-08 19:31:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2000/10/26 18:15:00  mbickel
+//      AI moves damaged units to repair
+//      tmap is not memory layout sensitive any more
+//
 //     Revision 1.39  2000/10/18 14:14:18  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -1351,8 +1355,8 @@ pbuildingtype       loadbuildingtype( pnstream stream )
       pgbt->loadcapacity = stream->readInt( );
       pgbt->loadcapability = stream->readChar( );
       pgbt->unitheightreq = stream->readChar( );
-      pgbt->productioncost.material = stream->readInt( );
-      pgbt->productioncost.fuel = stream->readInt( );
+      pgbt->productionCost.material = stream->readInt( );
+      pgbt->productionCost.fuel = stream->readInt( );
       pgbt->special = stream->readInt( );
       pgbt->technologylevel = stream->readChar( );
       pgbt->researchid = stream->readChar( );
@@ -1464,8 +1468,8 @@ void writebuildingtype ( pbuildingtype bld, pnstream stream )
    stream->writeInt ( bld->loadcapacity );
    stream->writeChar ( bld->loadcapability );
    stream->writeChar ( bld->unitheightreq );
-   stream->writeInt ( bld->productioncost.material );
-   stream->writeInt ( bld->productioncost.fuel );
+   stream->writeInt ( bld->productionCost.material );
+   stream->writeInt ( bld->productionCost.fuel );
    stream->writeInt ( bld->special );
    stream->writeChar ( bld->technologylevel );
    stream->writeChar ( bld->researchid );

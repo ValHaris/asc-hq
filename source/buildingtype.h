@@ -71,13 +71,7 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
                                                                 muss hier enthalten sein  */
         char         unitheightreq;   /*   "       , es d?rfen nur Fahrzeuge ,
                                                      die in eine dieser Hoehenstufen koennen , geladen werden  */
-
-        struct  {
-          int          material;
-          int          fuel;
-        } productioncost;
         int          special;   /*  HQ, Trainingslager, ...  */
-
 
         unsigned char         technologylevel;
         unsigned char         researchid;
@@ -133,7 +127,7 @@ class  Building : public ContainerBase {
     word         maxresearchpoints;
     word         researchpoints;
 
-    char*        name;
+    string       name;
     Integer      xpos, ypos;
     pbuilding    next;
     pbuilding    prev;
@@ -195,6 +189,8 @@ class  Building : public ContainerBase {
 
     int  putResource ( int amount,    int resourcetype, int queryonly, int scope = 1 );
     int  getResource ( int amount,    int resourcetype, int queryonly, int scope = 1 );
+    Resources putResource ( const Resources& res, int queryonly, int scope = 1 ) { return ContainerBase::putResource ( res, queryonly, scope ); };
+    Resources getResource ( const Resources& res, int queryonly, int scope = 1 ) { return ContainerBase::getResource ( res, queryonly, scope ); };
 
     void getresourceusage ( Resources* usage );
     void changecompletion ( int d );

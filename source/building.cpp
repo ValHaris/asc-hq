@@ -1,6 +1,10 @@
-//     $Id: building.cpp,v 1.54 2000-10-18 14:13:50 mbickel Exp $
+//     $Id: building.cpp,v 1.55 2000-11-08 19:30:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2000/10/18 14:13:50  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.53  2000/10/11 14:26:17  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -262,7 +266,7 @@ class   hosticons_c: public ContainerBaseGuiHost
 class    ccontainer : public virtual ccontainercontrols
 {
       void*  containerpicture;
-      char*  name1;
+      string  name1;
       char*  name2;
       int mousestat;
    public:
@@ -445,7 +449,7 @@ class    ccontainer : public virtual ccontainercontrols
 
       tunitmode unitmode;  // wird erst im Building-Container ben”tigt, aber damit die Icons darauf zugreifen k”nnen ist das teil schon hier ...
 
-      void     init ( void *pict, int col, char *name, char *descr);
+      void     init ( void *pict, int col, const string& name, char *descr);
       void     registersubwindow ( psubwindow subwin );
       void     run (void);
       void     done (void);
@@ -2236,8 +2240,8 @@ try {
    activefontsettings.justify = centertext;
    activefontsettings.font = schriften.guifont;
 
-   if ( name1 )
-      showtext2c (name1, nameposx, nameposy );
+   if ( !name1.empty() )
+      showtext2c (name1.c_str(), nameposx, nameposy );
 
    if ( name2 )
       showtext2c (name2, nameposx+112, nameposy );
@@ -2257,7 +2261,7 @@ try {
 }
 
 
-void  ccontainer :: init (void *pict, int col, char *name, char *descr)
+void  ccontainer :: init (void *pict, int col, const string& name, char *descr)
 {
    containerpicture = pict;
    name1 = name;
@@ -3968,7 +3972,7 @@ void  ccontainer_b :: init ( pbuilding bld )
       cursor.gotoxy ( x , y );
 
       ccontainer :: init ( building->getpicture ( building->typ->entry.x , building->typ->entry.y ),
-                           building->color, building->name, building->typ->name);
+                           building->color, building->name.c_str(), building->typ->name);
       ccontainer :: displayloading ();
       ccontainer :: movemark (repaint);
 
@@ -6987,7 +6991,7 @@ void  ccontainer_t :: init (pvehicle eht)
             cursor.show ();
       */
 
-      ccontainer :: init ( vehicle->typ->picture[0], vehicle->color, vehicle->name, vehicle->typ->description );
+      ccontainer :: init ( vehicle->typ->picture[0], vehicle->color, vehicle->name.c_str(), vehicle->typ->description );
       ccontainer :: displayloading ();
       ccontainer :: movemark (repaint);
 

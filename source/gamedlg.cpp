@@ -1,6 +1,10 @@
-//     $Id: gamedlg.cpp,v 1.50 2000-10-31 10:42:42 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.51 2000-11-08 19:31:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2000/10/31 10:42:42  mbickel
+//      Added building->vehicle service to vehicle controls
+//      Moved tmap methods to gamemap.cpp
+//
 //     Revision 1.49  2000/10/18 14:14:09  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -328,7 +332,7 @@ void         tchoosetechnology::check(void)
 
           int l = 0; 
           if (k == 0) {   /*  technology not yet developed  */ 
-             if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checktech2 ( tech, 0 ))) {
+             // if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checktech2 ( tech, 0 )))
                 for (int j = 0; j <= 5; j++) { 
                    int m = 0; 
                    if ( tech->requiretechnology[j] ) { 
@@ -351,7 +355,7 @@ void         tchoosetechnology::check(void)
                          l = 0; 
    
                 } 
-             }
+
           } 
           if (l == 6) { 
              techs[technum] = tech; 
@@ -476,9 +480,11 @@ void         tchoosetechnology::run(void)
 
      }  while ( !fertig ); 
 
+     /*
      if ( actmap->objectcrc )
        if ( !actmap->objectcrc->speedcrccheck->checktech2 ( techs[markedtech] )) 
           displaymessage ("CRC-check inconsistency in choosetechnology :: run ", 2 );
+     */
 
      actmap->player[actmap->actplayer].research.activetechnology = techs[markedtech];
 
@@ -1011,7 +1017,7 @@ int  setupnetwork ( tnetwork* nw, int edt, int player )
 /*   Neuen Level starten                                                                               ÿ */
 /*********************************************************************************************************/
 
-void         tchoosenewcampaign::evaluatemapinfo( char* srname )
+void         tchoosenewcampaign::evaluatemapinfo( char* srname, tmap* spfld )
 {
    if ( spfld->campaign &&  ( stricmp( spfld->codeword, password ) == 0 )) {
       strcat(message1, srname );
@@ -1032,7 +1038,7 @@ void         tchoosenewcampaign::evaluatemapinfo( char* srname )
 }
 
 
-void         tchoosenewsinglelevel::evaluatemapinfo( char* srname )
+void         tchoosenewsinglelevel::evaluatemapinfo( char* srname, tmap* spfld )
 {
 
    if ( stricmp ( spfld->codeword, password ) == 0) {
@@ -1064,14 +1070,12 @@ void         tnewcampaignlevel::init(void)
    message2[0] = 0;
    dateiinfo[0]= 0;
    status = 0;
-   spfld = NULL;
 }
 
 void         tnewcampaignlevel::searchmapinfo(void)
 {
 
    status = 0;
-   freespfld ();
    message1[0] = 0;
    message2[0] = 0;
    mapinfo[0] = 0;
@@ -1107,10 +1111,9 @@ void         tnewcampaignlevel::searchmapinfo(void)
             throw tinvalidversion ( filename, version, actmapversion );
 
           spfldloader.readmap ();
-          spfld = spfldloader.spfld;
+          spfldloader.readeventstocome();
 
-          evaluatemapinfo( filename );
-          spfld = NULL;
+          evaluatemapinfo( filename, spfldloader.spfld );
       }
       catch ( tfileerror ) {
       } /* endcatch */
@@ -1129,9 +1132,6 @@ void         tnewcampaignlevel::searchmapinfo(void)
    if (status == 0) {
       strcpy ( message1 , "no maps found" );
    }
-   spfld = NULL;
-
-   freespfld ();
 }
 
 
@@ -1178,7 +1178,7 @@ void         tnewcampaignlevel::loadcampaignmap(void)
    displaymessage("loading: %s", 0, mapname);
 
    try {
-      if (loadmap(mapname) == 0) {
+      if (loader.loadmap(mapname) == 0) {
          ::initmap();
          actmap->setupResources();
 
@@ -1186,7 +1186,8 @@ void         tnewcampaignlevel::loadcampaignmap(void)
            next_turn();
            if ( actmap->time.a.turn == 2 ) {
               displaymessage("no human players found !", 1 );
-              erasemap();
+              delete actmap;
+              actmap = NULL;
               throw NoMapLoaded();
            }
          } while ( actmap->player[actmap->actplayer].stat != ps_human ); /* enddo */
@@ -1256,7 +1257,7 @@ void         tcontinuecampaign::showmapinfo(word         ypos)
 }
 
 
-void         tcontinuecampaign::evaluatemapinfo(char *       srname)
+void         tcontinuecampaign::evaluatemapinfo(char *       srname, tmap* spfld )
 {
 
    if ( spfld->campaign ) {
@@ -1469,9 +1470,6 @@ void         tcontinuecampaign::run(void)
 void         tchoosenewmap::readmapinfo(void)
 {
 
-   if (mapname[0] != 0)
-      freespfld ();
-
    message1[0] = 0;
    message2[0] = 0;
    mapinfo[0] = 0;
@@ -1503,17 +1501,12 @@ void         tchoosenewmap::readmapinfo(void)
             throw tinvalidversion ( mapname, version, actmapversion );
 
        spfldloader.readmap ();
-       spfld = spfldloader.spfld;
-
-       checkforcampaign(  );
-
+       checkforcampaign( spfldloader.spfld );
    }
    catch ( tfileerror ) {
       strcpy( message1, "invalid map version" );
       status = 1;
    } /* endcatch */
-   spfld = NULL;
-
 }
 
 void         tchoosenewmap::buttonpressed( int id )
@@ -1552,6 +1545,8 @@ void         tchoosenewmap::buttonpressed( int id )
 }
 
 
+
+
 void         tchoosenewmap::init( char* ptitle )
 {
    tnewcampaignlevel::init();
@@ -1566,8 +1561,6 @@ void         tchoosenewmap::init( char* ptitle )
    xsize = 400;
    y1 = 20;
    ysize = 440;
-   spfld = NULL;
-
 
    addbutton("~p~assword",25,105,140,125,1,0,1,true);
    addeingabe(1, password,10,10);
@@ -1591,7 +1584,7 @@ void         tchoosenewmap::init( char* ptitle )
 
 
 
-void         tchoosenewsinglelevel::checkforcampaign( void )
+void         tchoosenewsinglelevel::checkforcampaign( tmap* spfld )
 {
    if ( spfld->campaign ) {
       if ( spfld->campaign->directaccess == 0 ) {
@@ -1618,7 +1611,7 @@ void         tchoosenewsinglelevel::checkforcampaign( void )
 
 }
 
-void         tchoosenewcampaign::checkforcampaign( void )
+void         tchoosenewcampaign::checkforcampaign( tmap* spfld )
 {
    if ( spfld->campaign == NULL ) {
       strcpy( message1, "no campaign map" );
@@ -1662,47 +1655,49 @@ void         tchoosenewsinglelevel::run(void)
       displaymessage("loading: %s ",0, mapname);
 
       try {
-         if ( loadmap( mapname ) == 0) {
-            ::initmap();
+         loadmap( mapname );
+         initmap();
 
-            removemessage();
-            if (actmap->campaign != NULL) {
-               delete actmap->campaign;
-               actmap->campaign = NULL;
-            }
-
-            setupalliances();
-
-            int human = 0;
-            for ( int i = 0; i < 8; i++ )
-               if ( actmap->player[i].stat == ps_human )
-                  if ( actmap->player[i].existent )
-                     human++;
-
-            if ( !human ) {
-               displaymessage ( "no human players found !", 1 );
-               erasemap();
-               throw NoMapLoaded();
-            }
-
-            if ( human > 1 )
-               multiplayersettings ();
-            else {
-               choosetechlevel();
-               setmapparameters();
-            }
-
-            actmap->setupResources();
-
-            do {
-              next_turn();
-              if ( actmap->time.a.turn == 2 ) {
-                 displaymessage("no human players found !", 1 );
-                 erasemap();
-                 throw NoMapLoaded();
-              }
-            } while ( actmap->player[actmap->actplayer].stat != ps_human ); /* enddo */
+         removemessage();
+         if (actmap->campaign != NULL) {
+            delete actmap->campaign;
+            actmap->campaign = NULL;
          }
+
+         setupalliances();
+
+         int human = 0;
+         for ( int i = 0; i < 8; i++ )
+            if ( actmap->player[i].stat == ps_human )
+               if ( actmap->player[i].existent )
+                  human++;
+
+         if ( !human ) {
+            displaymessage ( "no human players found !", 1 );
+            delete actmap;
+            actmap = NULL;
+            throw NoMapLoaded();
+         }
+
+         if ( human > 1 )
+            multiplayersettings ();
+         else {
+            choosetechlevel();
+            setmapparameters();
+         }
+
+         actmap->setupResources();
+
+         do {
+           next_turn();
+           if ( actmap->time.a.turn == 2 ) {
+              displaymessage("no human players found !", 1 );
+              delete actmap;
+              actmap = NULL;
+              throw NoMapLoaded();
+           }
+         } while ( actmap->player[actmap->actplayer].stat != ps_human ); /* enddo */
+
       } /* endtry */
 
       catch ( InvalidID err ) {
@@ -1808,8 +1803,7 @@ void  ttributepayments :: init ( void )
 
    for ( i = 0; i < pos; i++) {
       bar ( x1 + 30, y1 + starty + 30 + i * 30, x1 + 50, y1 + starty + 50 + i * 30, 20 + players[i] * 8 );
-      if ( actmap->player[players[i]].name )
-         showtext2 ( actmap->player[players[i]].name, x1 + 55, y1 + starty + 30 + i * 30 );
+      showtext2 ( actmap->player[players[i]].getName().c_str(), x1 + 55, y1 + starty + 30 + i * 30 );
    }
 
    wind2y = starty + ( ysize - starty - 60 ) /2 + 5;
@@ -3109,7 +3103,7 @@ void tmessagedlg :: setup ( void )
          if ( actmap->actplayer != i ) {
             int x = 20 + ( num % 2 ) * 200;
             int y = ty2 + 10 + ( num / 2 ) * 20;
-            addbutton ( actmap->player[i].name, x, y, x+ 180, y+15, 3, 0, num+3, true );
+            addbutton ( actmap->player[i].getName().c_str(), x, y, x+ 180, y+15, 3, 0, num+3, true );
             addeingabe ( num+3, &to[i], 0, dblue );
             num++;
          }
@@ -3451,7 +3445,7 @@ void tviewmessages :: paintmessages ( void )
           if ( mode ) {
              int fr = log2 ( message[a]->message->from );
              if ( fr < 8 )
-                showtext2 ( actmap->player[ fr ].name, x1 + 220, y );
+                showtext2 ( actmap->player[ fr ].getName().c_str(), x1 + 220, y );
              else
                 showtext2 ( "system", x1 + 220, y );
           } else {
@@ -3683,7 +3677,7 @@ void         tviewmessage::redraw(void)
       int n = log2 ( from );
       if ( n < 8 ) {
          activefontsettings.color = 20 + 8 * n;
-         showtext2 ( actmap->player[n].name, x1 + 60, y1 + textstart - 45 ); 
+         showtext2 ( actmap->player[n].getName().c_str(), x1 + 60, y1 + textstart - 45 );
       } else
          showtext2 ( "system", x1 + 60, y1 + textstart - 45 ); 
 
@@ -3710,7 +3704,7 @@ void         tviewmessage::redraw(void)
             if ( cc & ( 1 << i )) {
                activefontsettings.color = 20 + 8 * i;
                //activefontsettings.background = 17 + 8 * i;
-               showtext2 ( actmap->player[i].name, x1 + 60 + n * activefontsettings.length + n * 5 , y1 + textstart - yp );
+               showtext2 ( actmap->player[i].getName().c_str(), x1 + 60 + n * activefontsettings.length + n * 5 , y1 + textstart - yp );
                n++;
             }
    }
@@ -4575,6 +4569,7 @@ void showGameParameters ( void )
    */
 }
 
+/*
 
 typedef class tbaseitemlist* pbaseitemlist;
 class tbaseitemlist {
@@ -4659,11 +4654,12 @@ class  tmountpicture : public tbaseitemlist {
                           virtual ~tmountpicture ( );
                           void processmouseclick ( void );
                    };
-
+*/
 
 
 class tmultiplayersettings : public tdialogbox {
               protected:
+                /*
                 class tmountbuildingpictures : public tmountpicture {
                        protected:
                          virtual void putpict ( pb n, int y  );
@@ -4760,22 +4756,25 @@ class tmultiplayersettings : public tdialogbox {
                            public: 
                              void additem2 ( void* item );
                 };
-
+                  */
 
                 int techlevel;
                 int replays;
                 int status;
+                /*
                 pmountpicture leftlist;
                 pmountpicture rightlist;
 
                 pmountpicture allleftlists[5];
                 pmountpicture allrightlists[5];
+                */
 
-
+                /*
                 void checkforscrollbar ( void );
                 int leftscrollstatus;
                 int rightscrollstatus;
-                void toggleuseofchecksums  ( void );
+                */
+                // void toggleuseofchecksums  ( void );
 
                 tmouserect dlgpos;
                 tmouserect list1 , list2 ;
@@ -4794,8 +4793,8 @@ class tmultiplayersettings : public tdialogbox {
                 int restricted[5];
                 int checksumsused;
 
-                void setcrcs ( void );
-                int checklimits ( void );  // 0 : alles ok;   1: Geb„ude fehlen  2: vehicle fehlen ...
+                // void setcrcs ( void );
+                // int checklimits ( void );  // 0 : alles ok;   1: Geb„ude fehlen  2: vehicle fehlen ...
 
                 char* categoryname[5];
 
@@ -4807,7 +4806,7 @@ class tmultiplayersettings : public tdialogbox {
                 ~tmultiplayersettings ( );
      };
 
-
+/*
 tmountpicture  :: tmountpicture ( int x_1, int y_1, int x_2, int y_2 )
 {
    setcoordinates ( x_1, y_1, x_2, y_2 );
@@ -4885,10 +4884,10 @@ void tmountpicture  :: dispimage ( void )
          bar ( x1, y1 + piclen, x1 + xsize, y1 + ysize, dblue );
       } else {
          putimageprt ( x1, y1, x1 + xsize, y1 + ysize-1, buf, 0, ystart );
-         /*
-         if ( ystart + ysize > effpiclen )
-            bar ( x1, effpiclen - ystart, x1 + xsize, y1 + ysize, dblue );*/
-      } /* endif */
+
+         //if ( ystart + ysize > effpiclen )
+         //    bar ( x1, effpiclen - ystart, x1 + xsize, y1 + ysize, dblue );
+      }
       getinvisiblemouserectanglestk ();
    }
 
@@ -5718,7 +5717,7 @@ int tmultiplayersettings :: checklimits ( void )         // 0 : alles ok;   1: G
                   return 1;
 
                bld = bld->next;
-            } /* endwhile */
+            }
          }
       }
 
@@ -5738,7 +5737,7 @@ int tmultiplayersettings :: checklimits ( void )         // 0 : alles ok;   1: G
                         return 2;
                }
                bld = bld->next;
-            } /* endwhile */
+            }
          }
          for ( s = 0; s < 8; s++ ) {
             pvehicle eht = actmap->player[s].firstvehicle;
@@ -5751,7 +5750,7 @@ int tmultiplayersettings :: checklimits ( void )         // 0 : alles ok;   1: G
                if ( !unitlist2->checkforexistence ( eht->typ ))
                   return 2;
                eht = eht->next;
-            } /* endwhile */
+            }
          }
       }
 
@@ -5778,7 +5777,7 @@ int tmultiplayersettings :: checklimits ( void )         // 0 : alles ok;   1: G
    return 0;
 
 }
-
+*/
 
 
 void tmultiplayersettings :: buttonpressed ( int id )
@@ -5788,14 +5787,18 @@ void tmultiplayersettings :: buttonpressed ( int id )
       setmapparameters();
 
    if ( id == 1 ) {             // OK
+      /*
       int ck = checklimits() ;
       if ( ck ) 
          displaymessage ( "some %s exist on the map, but are not included in the crc list", 1, categoryname[ck-1]  );
       else {
+       */
 
          status = 2;
+         /*
          if ( checksumsused )
             setcrcs();
+            */
 
          if ( techlevel )
             settechlevel ( techlevel, 0xff );
@@ -5808,7 +5811,7 @@ void tmultiplayersettings :: buttonpressed ( int id )
                actmap->replayinfo = NULL;
             }
 
-        }
+        // }
    }
 
    if ( id == 2 )
@@ -5820,9 +5823,10 @@ void tmultiplayersettings :: buttonpressed ( int id )
        afsp.run( NULL );
        afsp.done();
    }
-
+/*
    if ( id == 5 ) 
       toggleuseofchecksums ();
+*/
 
    if ( id == 12 ) {
       lim2 = 0;
@@ -5843,6 +5847,7 @@ void tmultiplayersettings :: buttonpressed ( int id )
       enablebutton ( 13 );
    }
 
+/*
    if ( id >= 12 && id <= 14 ) {
       if ( lim1 )
          restricted[actcategory] = 0;
@@ -5853,7 +5858,6 @@ void tmultiplayersettings :: buttonpressed ( int id )
             if ( lim3 )
                restricted[actcategory] = 2;
    }
-
    if ( id == 20  ||  id == 40  ||  id == 60  ||  id == 80  ||  id == 100 ) {
       leftlist->display();
    }
@@ -5874,7 +5878,7 @@ void tmultiplayersettings :: buttonpressed ( int id )
             while ( bld ) {
                buildinglist2->additem ( bld->typ );
                bld = bld->next;
-            } /* endwhile */
+            }
          }
       } else
       if ( actcategory == 1 ) {     // units
@@ -5889,7 +5893,7 @@ void tmultiplayersettings :: buttonpressed ( int id )
                      unitlist2->additem ( bld->production[i] );
                }
                bld = bld->next;
-            } /* endwhile */
+            }
          }
          for ( s = 0; s < 8; s++ ) {
             pvehicle eht = actmap->player[s].firstvehicle;
@@ -5900,7 +5904,7 @@ void tmultiplayersettings :: buttonpressed ( int id )
                }
                unitlist2->additem ( eht->typ );
                eht = eht->next;
-            } /* endwhile */
+            }
          }
       } else
       if ( actcategory == 3 ) {   // terrain
@@ -5939,6 +5943,7 @@ void tmultiplayersettings :: buttonpressed ( int id )
       rightlist->removemarkeditems();
       checkforscrollbar();
    }
+   */
 }
 
 
@@ -6004,20 +6009,20 @@ void tmultiplayersettings :: setcategory ( int n )
 
 
    actcategory = n;
-
+/*
    leftlist = allleftlists[n];
    rightlist = allrightlists[n];
 
    leftlist->display();
    rightlist->display();
 
- 
    checkforscrollbar();
    checkforscrollbar();
+*/
 
 }
 
-
+/*
 void tmultiplayersettings :: toggleuseofchecksums ( void )
 {
    int lnum  = leftscrollstatus / 10;
@@ -6058,7 +6063,7 @@ void tmultiplayersettings :: toggleuseofchecksums ( void )
    }
    paintcategories();
 }
-
+*/
 
 void tmultiplayersettings :: setcoordinates ( void )
 {
@@ -6066,6 +6071,7 @@ void tmultiplayersettings :: setcoordinates ( void )
    dlgpos.y1 = y1;
    dlgpos.x2 = x1;
    dlgpos.y2 = y1;
+   /*
    buildinglist1->setcoordinates ( list1 + dlgpos );
    buildinglist2->setcoordinates ( list2 + dlgpos );
 
@@ -6080,7 +6086,7 @@ void tmultiplayersettings :: setcoordinates ( void )
 
    technologylist1->setcoordinates ( list1 + dlgpos );
    technologylist2->setcoordinates ( list2 + dlgpos );
-
+     */
 }
 
 void tmultiplayersettings :: init ( void )
@@ -6173,7 +6179,7 @@ void tmultiplayersettings :: init ( void )
 
 /////////////  Geb„ude
 
-
+/*
    buildinglist1 = new tmultiplayersettings :: tmountbuildingpictures ( list1 + dlgpos );
    leftlist = buildinglist1;
    for (i = 0; i < buildingtypenum; i++) 
@@ -6346,10 +6352,12 @@ void tmultiplayersettings :: init ( void )
    addbutton ( "", categoryrect.x1, categoryrect.y2 + 130, categoryrect.x1 + 15, categoryrect.y2 + 145, 3, 10, 14, checksumsused );
    addeingabe ( 14, &lim3, black, dblue );
 
+*/
+
    buildgraphics();
 
    setcoordinates();
-
+/*
    categoryrect = categoryrect + dlgpos;
 
    activefontsettings.font = schriften.smallarial;
@@ -6379,13 +6387,15 @@ void tmultiplayersettings :: init ( void )
 
    rahmen ( true, list1 + dlgpos + rahmenoffs );
    rahmen ( true, list2 + dlgpos + rahmenoffs );
-
+*/
+   /*
    if ( checksumsused ) {
       buildinglist1->display ();
       buildinglist2->display ();
    }
+   */
 
-   paintcategories();
+  // paintcategories();
 
    status = 0;
 
@@ -6403,7 +6413,7 @@ void tmultiplayersettings :: hidescrollbar ( int id )
    hidebutton ( id );
 }
 
-
+/*
 void tmultiplayersettings :: checkforscrollbar ( void )
 {
    int mode = leftscrollstatus % 10;
@@ -6454,6 +6464,7 @@ void tmultiplayersettings :: checkforscrollbar ( void )
    }
 
 }
+*/
 
 void tmultiplayersettings :: run ( void )
 {
@@ -6465,6 +6476,7 @@ void tmultiplayersettings :: run ( void )
       if ( _heapchk() != _HEAPOK )
          displaymessage(" Heap not OK", 1 );
       */
+      /*
 
       if ( mouseparams.taste == 1 && checksumsused ) {
          tmouserect ll = list1 + dlgpos;
@@ -6485,13 +6497,15 @@ void tmultiplayersettings :: run ( void )
             }
 
 
-      } 
+      }
+      */
    } while ( !status ); /* enddo */
 }
 
 
 tmultiplayersettings :: ~tmultiplayersettings ( )
 {
+/*
    if ( buildinglist1 ) {
       delete buildinglist1;
       buildinglist1 = NULL;
@@ -6537,6 +6551,7 @@ tmultiplayersettings :: ~tmultiplayersettings ( )
       delete technologylist2;
       technologylist2 = NULL;
    }
+   */
 }
 
 
@@ -6584,7 +6599,7 @@ void tgiveunitawaydlg :: paintplayer ( int i )
    activefontsettings.length = 0;
 
    if ( ply[i] < 8 )
-      showtext2 ( actmap->player[ply[i]].name, x1 + 60, y1 + starty + xs+17 + i * 40 - activefontsettings.font->height / 2 );
+      showtext2 ( actmap->player[ply[i]].getName().c_str(), x1 + 60, y1 + starty + xs+17 + i * 40 - activefontsettings.font->height / 2 );
    else
       showtext2 ( "neutral", x1 + 60, y1 + starty + xs+17 + i * 40 - activefontsettings.font->height / 2 );
 

@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.25 2000-10-18 15:10:07 mbickel Exp $
+//     $Id: events.cpp,v 1.26 2000-11-08 19:31:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/10/18 15:10:07  mbickel
+//      Fixed event handling for windows and dos
+//
 //     Revision 1.24  2000/10/18 14:14:23  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -197,12 +200,18 @@ void callsubhandler ( void )
          pmouseprocs[i]->mouseaction();
 }
 
-const int mousetranslate[3] =
-   {
-      0, 2,1
-   }
-;  // in DOS  right button is 1 and center is 2
+int mouseTranslate ( int m)
+{
 
+   const int mousetranslate[3] = {
+      0, 2,1
+   } ;  // in DOS  right button is 1 and center is 2
+
+   if ( m >= 3 )
+      return m;
+   else
+      return mousetranslate[m];
+}
 
 
 
@@ -504,7 +513,7 @@ int processEvents ( )
          case SDL_MOUSEBUTTONUP:
          case SDL_MOUSEBUTTONDOWN:
             {
-               int taste = mousetranslate[event.button.button - 1];
+               int taste = mouseTranslate(event.button.button - 1);
                int state = event.button.type == SDL_MOUSEBUTTONDOWN;
                if ( state )
                   mouseparams.taste |= (1 << taste);
@@ -525,7 +534,7 @@ int processEvents ( )
                mouseparams.taste = 0;
                for ( int i = 0; i < 3; i++ )
                   if ( event.motion.state & (1 << i) )
-                     mouseparams.taste |= 1 << mousetranslate[i];
+                     mouseparams.taste |= 1 << mouseTranslate(i);
                callsubhandler();
             }
             break;

@@ -1,6 +1,10 @@
-//     $Id: dlg_box.cpp,v 1.35 2000-10-18 14:14:02 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.36 2000-11-08 19:31:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2000/10/18 14:14:02  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.34  2000/10/16 09:37:35  mbickel
 //      Fixed Win32: not recognizing keys in dialog box
 //
@@ -1920,6 +1924,7 @@ void tdisplaymessage::init ( tstringa a, int md, int linenum )
       addkey(1, ct_enter);
       addkey(1, ct_esc);
       addkey(1, ct_enterk );
+      addkey(1, ct_space );
    };
 
    buildgraphics();

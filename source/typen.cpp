@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.57 2000-10-31 10:42:47 mbickel Exp $
+//     $Id: typen.cpp,v 1.58 2000-11-08 19:31:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2000/10/31 10:42:47  mbickel
+//      Added building->vehicle service to vehicle controls
+//      Moved tmap methods to gamemap.cpp
+//
 //     Revision 1.56  2000/10/26 18:15:03  mbickel
 //      AI moves damaged units to repair
 //      tmap is not memory layout sensitive any more
@@ -317,7 +321,7 @@ const char*  cbodenarten[cbodenartennum]  = {"shallow water , coast"       ,    
                                              "track possible",                  "small rocks",      "mud",         "snow", 
                                              "deep snow",                       "mountains",        "very shallow water",
                                              "large rocks",                     "small trench",     "ditch",  "hillside",
-                                             "turret foundation",               "swamp thin",       "Installation", "pack ice", "river", "frozen water" };
+                                             "turret foundation",               "swamp thin",       "Installation", "pack ice", "river", "frozen water", "lava" };
                                                              
 
 const char*  cwaffentypen[cwaffentypennum]  = {"cruise missile", "mine",    "bomb",       "air - missile", "ground - missile", "torpedo", "machine gun",
@@ -877,6 +881,13 @@ void Resources :: write ( tnstream& stream )
 }
 
 
+Resources operator- ( const Resources& res1, const Resources& res2 )
+{
+   Resources res = res1;
+   res -= res2;
+   return res;
+}
+
 ////////////////////////////////////////////////////////////////////
 
 
@@ -1285,6 +1296,7 @@ void      twterraintype  ::   paint ( int x1, int y1 )
  #endif
 }
 
+/*
 tobjectcontainercrcs :: tobjectcontainercrcs ( void )
 {
    speedcrccheck = NULL;
@@ -1296,6 +1308,7 @@ tcrcblock :: tcrcblock ( void )
    crc = NULL;
    restricted = 0;
 }
+*/
 
 treplayinfo :: treplayinfo ( void )
 {

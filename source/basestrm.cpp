@@ -1,6 +1,9 @@
-//     $Id: basestrm.cpp,v 1.44 2000-10-12 22:24:00 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.45 2000-11-08 19:30:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2000/10/12 22:24:00  mbickel
+//      Made the DOS part of the new platform system work again
+//
 //     Revision 1.43  2000/10/12 20:21:40  mbickel
 //      Restructuring operating system dependant files
 //
@@ -608,7 +611,7 @@ void         tnstream::readpnchar(char** pc, int maxlength )
 }
 
 
-int  tnstream::readTextString ( std::string& s )
+int  tnstream::readTextString ( string& s )
 {
   char c;
   int red = 1;
@@ -630,6 +633,19 @@ int  tnstream::readTextString ( std::string& s )
      return 1;
 }
 
+
+string  tnstream::readString ( )
+{
+  string s;
+  readTextString ( s );
+  return s;
+}
+
+
+void         tnstream::writeString(const string& pc)
+{
+   writepchar ( pc.c_str() );
+}
 
 
 void         tnstream::writepchar(const char* pc)

@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.69 2000-10-31 10:42:44 mbickel Exp $
+//     $Id: spfst.cpp,v 1.70 2000-11-08 19:31:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.69  2000/10/31 10:42:44  mbickel
+//      Added building->vehicle service to vehicle controls
+//      Moved tmap methods to gamemap.cpp
+//
 //     Revision 1.68  2000/10/26 18:15:01  mbickel
 //      AI moves damaged units to repair
 //      tmap is not memory layout sensitive any more
@@ -412,9 +416,8 @@ int showresources = 0;
   int objecttypenum = 0;
 
 
-   char godview, tempsvisible; 
+   char tempsvisible;
    Schriften schriften; 
-   int lasttick;   /*  f?r paintvehicleinfo  */ 
 
    tpaintmapborder* mapborderpainter = NULL;
 
@@ -1025,10 +1028,10 @@ void         generatemap( const pwterraintype   bt,
 { 
    tfield    leerfield;
 
-   erasemap();
+   delete actmap;
    actmap = new tmap;
-   memset( actmap, 0, sizeof( *actmap ));
-   actmap->xsize = xsize; 
+
+   actmap->xsize = xsize;
    actmap->ysize = ysize; 
    actmap->campaign = NULL;
    for (int k = 1; k < 8; k++) 
@@ -1072,13 +1075,6 @@ void         generatemap( const pwterraintype   bt,
    for ( i = 0; i < 7; i++ )
       for ( int j = 0; j < 7; j++ )
          actmap->alliances[i][j] = cawar;
-
-   /*
-   for ( int j = 0; j < 8; j++) 
-      actmap->player[j].alliance = j;
-   */
-   
-   checkplayernames ();
 
 
    for ( i = 0; i < gameparameternum; i++ )
@@ -1200,7 +1196,6 @@ void         initspfst( int x , int y)
       y--;
 
    int          i;
-   /* godview = true; */
 
    if ( actmap ) {
       actmap->actplayer = 0;
@@ -1341,8 +1336,9 @@ bool fieldvisiblenow( const pfield pe, int player )
 
   if ( pe ) { 
       int c = (pe->visible >> ( player * 2)) & 3; 
-      if ( godview ) 
+      #ifdef karteneditor
          c = visible_all;
+      #endif
 
       if ( actmap->player[player].ai && actmap->player[player].ai->isRunning() )
          if ( c == visible_not )
@@ -1370,8 +1366,9 @@ int fieldVisibility( const pfield pe, int player )
 {
   if ( pe && player >= 0 ) {
       int c = (pe->visible >> ( player * 2)) & 3;
-      if ( godview )
+      #ifdef karteneditor
          c = visible_all;
+      #endif
 
       if ( actmap->player[player].ai && actmap->player[player].ai->isRunning() )
          if ( c == visible_not )
@@ -2207,7 +2204,6 @@ void         putbuilding(int          x,
    gbde->actstorage.energy = 0;
    gbde->maxresearchpoints = 0; 
    gbde->researchpoints = 0; 
-   gbde->name = NULL;
    gbde->netcontrol = 0;
    gbde->connection = 0; 
    gbde->visible = true; 
@@ -2229,11 +2225,11 @@ void         putbuilding2(integer      x,
   integer      orgx, orgy; 
   int         dx; 
 
-
+/*
   if ( actmap->objectcrc ) 
      if ( !actmap->objectcrc->speedcrccheck->checkbuilding2 ( buildingtyp ))
         return;
-
+*/
 
    if ( color & 7 )
       displaymessage("putbuilding muá eine farbe aus 0,8,16,24,.. ?bergeben werden !",2); 
@@ -2342,7 +2338,6 @@ void         putbuilding2(integer      x,
          gbde->actstorage.energy = 0;
          gbde->maxresearchpoints = maxresearch; 
          gbde->researchpoints = 0; 
-         gbde->name = NULL;
          gbde->netcontrol = 0;
          gbde->connection = 0; 
          gbde->visible = true; 
@@ -3738,7 +3733,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
    
    
                   /* display mines */
-                      if ((b == visible_all) || godview) 
+                      if ( b == visible_all )
                            if (fld->minenum() && hgt == 2 ) {
                               if ( fld->object->mine[0]->type != cmmooredmine )
                                  putspriteimage( r + unitrightshift , yp + unitdownshift ,getmineadress(fld->object->mine[0]->type) );
@@ -3814,99 +3809,98 @@ void tgeneraldisplaymap :: pnt_main ( void )
       /****************************************************************************/
       /*viewbehinderungen: Visible_Ago,  Visible_NOT  zeichnen  ...            ÿ */
       /****************************************************************************/
-      if (!godview) {
-        #ifndef HEXAGON          
-         for ( y=dispmapdata.disp.y1; y < dispmapdata.disp.y2; y++ ) {
-            for ( x=dispmapdata.disp.x1; x < dispmapdata.disp.x2; x++ ) {
-   
-               if (y & 1 )   
+     #ifndef HEXAGON
+      for ( y=dispmapdata.disp.y1; y < dispmapdata.disp.y2; y++ ) {
+         for ( x=dispmapdata.disp.x1; x < dispmapdata.disp.x2; x++ ) {
+
+            if (y & 1 )
+               r = vfbleftspace + fielddisthalfx + x * fielddistx;
+            else
+               r = vfbleftspace + x * fielddistx;
+            yp = vfbtopspace + y * fielddisty;
+
+            if ( viereck[x+2][y+2] )           // fr?her mal:   && (! (( x ==0) && ((y & 1) == 0)))   , aber da links genug Platz, m?áte es auch ohne klappen. Noch aus Vor-VFB-Zeiten
+               putspriteimage( r + viereckrightshift , yp + viereckdownshift , view.viereck[viereck[x+2][y+2]]);
+         }
+      }
+     #endif
+
+
+
+      for ( y=dispmapdata.disp.y1; y < dispmapdata.disp.y2; y++ ) {
+         for ( x=dispmapdata.disp.x1; x < dispmapdata.disp.x2; x++ ) {
+            fld = getfield ( actmap->xpos + x, actmap->ypos + y );
+            if ( fld ) {
+               b = fieldVisibility (fld, playerview );
+
+               if (y & 1 )   /*  ungerade reihennummern  */
                   r = vfbleftspace + fielddisthalfx + x * fielddistx;
-               else 
+               else
                   r = vfbleftspace + x * fielddistx;
                yp = vfbtopspace + y * fielddisty;
-   
-               if ( viereck[x+2][y+2] )           // fr?her mal:   && (! (( x ==0) && ((y & 1) == 0)))   , aber da links genug Platz, m?áte es auch ohne klappen. Noch aus Vor-VFB-Zeiten
-                  putspriteimage( r + viereckrightshift , yp + viereckdownshift , view.viereck[viereck[x+2][y+2]]);
-            } 
-         } 
-        #endif
+
+               if (b == visible_ago) {
+                 #ifdef HEXAGON
+                  for (int hgt = 0; hgt < 9 ;hgt++ ) {
+                     int binaryheight = 0;
+                     if ( hgt > 0 )
+                        binaryheight = 1 << ( hgt-1);
+
+                      /* display objects */
+                      if ( !fld->building )
+                           if ( fld->object )
+                              for ( int n = 0; n < fld->object->objnum; n++ )
+                                 if ( fld->object->object[n]->typ->visibleago ) {
+                                    int h = fld->object->object[n]->typ->height;
+                                    if (  h >= hgt*30 && h < 30 + hgt*30 )
+                                       fld->object->object[n]->display ( r - streetleftshift , yp - streettopshift );
+                                 }
+                   }
+                  #endif
 
 
+                   // putspriteimage( r + unitrightshift , yp + unitdownshift , view.va8);
+                   putshadow( r + unitrightshift , yp + unitdownshift , icons.view.nv8, &xlattables.a.dark2 );
 
-         for ( y=dispmapdata.disp.y1; y < dispmapdata.disp.y2; y++ ) {
-            for ( x=dispmapdata.disp.x1; x < dispmapdata.disp.x2; x++ ) {
-               fld = getfield ( actmap->xpos + x, actmap->ypos + y );
-               if ( fld ) {
-                  b = fieldVisibility (fld, playerview );
+                   if ( fld->a.temp && tempsvisible )
+                      putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
+                   else
+                      if ( fld->a.temp2 && tempsvisible )
+                         putspriteimage(  r + unitrightshift , yp + unitdownshift , xlatpict ( &xlattables.a.dark2 , cursor.markfield));
 
-                  if (y & 1 )   /*  ungerade reihennummern  */
-                     r = vfbleftspace + fielddisthalfx + x * fielddistx;
-                  else 
-                     r = vfbleftspace + x * fielddistx;
-                  yp = vfbtopspace + y * fielddisty;
-      
-                  if (b == visible_ago) {
-                    #ifdef HEXAGON
-                     for (int hgt = 0; hgt < 9 ;hgt++ ) {
-                        int binaryheight = 0;
-                        if ( hgt > 0 )
-                           binaryheight = 1 << ( hgt-1);
-      
-                         /* display objects */
-                         if ( !fld->building ) 
-                              if ( fld->object )
-                                 for ( int n = 0; n < fld->object->objnum; n++ )  
-                                    if ( fld->object->object[n]->typ->visibleago ) {
-                                       int h = fld->object->object[n]->typ->height;
-                                       if (  h >= hgt*30 && h < 30 + hgt*30 ) 
-                                          fld->object->object[n]->display ( r - streetleftshift , yp - streettopshift );
-                                    }
-                      }
-                     #endif
+                   #ifdef showtempnumber
+                   activefontsettings.color = white;
+                   showtext2(strrr( fld->temp ), r + unitrightshift + 5, yp + unitdownshift + 5 );
+                   activefontsettings.color = black;
+                   showtext2(strrr( fld->temp2 ), r + unitrightshift + 5, yp + unitdownshift + 20 );
+                   #endif
 
+               } else
+                 if (b == visible_not) {
+                     putspriteimage( r + unitrightshift, yp + unitdownshift , icons.view.nv8 );
+                     if ( ( fld->a.temp || fld->a.temp2 ) && tempsvisible )
+                           putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
 
-                      // putspriteimage( r + unitrightshift , yp + unitdownshift , view.va8);
-                      putshadow( r + unitrightshift , yp + unitdownshift , icons.view.nv8, &xlattables.a.dark2 );
-                                                                           
-                      if ( fld->a.temp && tempsvisible )
-                         putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
-                      else
-                         if ( fld->a.temp2 && tempsvisible )
-                            putspriteimage(  r + unitrightshift , yp + unitdownshift , xlatpict ( &xlattables.a.dark2 , cursor.markfield));
+                   #ifdef showtempnumber
+                   activefontsettings.color = white;
+                   showtext2(strrr( fld->temp ), r + unitrightshift + 5, yp + unitdownshift + 5 );
+                   activefontsettings.color = black;
+                   showtext2(strrr( fld->temp2 ), r + unitrightshift + 5, yp + unitdownshift + 20 );
+                   #endif
 
-                      #ifdef showtempnumber   
-                      activefontsettings.color = white;
-                      showtext2(strrr( fld->temp ), r + unitrightshift + 5, yp + unitdownshift + 5 );
-                      activefontsettings.color = black;
-                      showtext2(strrr( fld->temp2 ), r + unitrightshift + 5, yp + unitdownshift + 20 );
-                      #endif   
-                          
-                  } else 
-                    if (b == visible_not) {
-                        putspriteimage( r + unitrightshift, yp + unitdownshift , icons.view.nv8 );
-                        if ( ( fld->a.temp || fld->a.temp2 ) && tempsvisible )   
-                              putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
-                          
-                      #ifdef showtempnumber   
-                      activefontsettings.color = white;
-                      showtext2(strrr( fld->temp ), r + unitrightshift + 5, yp + unitdownshift + 5 );
-                      activefontsettings.color = black;
-                      showtext2(strrr( fld->temp2 ), r + unitrightshift + 5, yp + unitdownshift + 20 );
-                      #endif   
-                       
-                    }  
-                  /*  
-                          activefontsettings.color = white;
-                          activefontsettings.font = schriften.guifont;
-                          activefontsettings.length = 0;
-                          activefontsettings.background = 255;
-                          showtext2(strrr( fld->view[1].view ), r + 10 + 5, yp + 10 + 5 );
-                          showtext2(strrr( fld->view[0].jamming ), r + 10 + 5, yp + 10 + 15 );
-                   */  
-               } 
+                 }
+               /*
+                       activefontsettings.color = white;
+                       activefontsettings.font = schriften.guifont;
+                       activefontsettings.length = 0;
+                       activefontsettings.background = 255;
+                       showtext2(strrr( fld->view[1].view ), r + 10 + 5, yp + 10 + 5 );
+                       showtext2(strrr( fld->view[0].jamming ), r + 10 + 5, yp + 10 + 15 );
+                */
             }
-         } 
+         }
       }
+
     
 
 }
@@ -4519,36 +4513,6 @@ int  getmaxwindspeedforunit ( const pvehicle eht )
 
 
 
-
-
-
-
-
-void checkplayernames ( void )
-{
-  for ( int i = 0; i < 8; i++ ) {
-     if ( !actmap->humanplayername[i] ) {
-        actmap->humanplayername[i] = new char [10];
-        strcpy ( actmap->humanplayername[i], "player " );
-        strcat ( actmap->humanplayername[i], digit[i] );
-     }
-     if ( !actmap->computerplayername[i] ) {
-        actmap->computerplayername[i] = new char [10];
-        strcpy ( actmap->computerplayername[i], "ai " );
-        strcat ( actmap->computerplayername[i], digit[i] );
-     }
-
-     if ( !actmap->player[i].name ) 
-        if ( actmap->player[i].stat == 0 )
-           actmap->player[i].name = actmap->humanplayername[i];
-        else
-           if ( actmap->player[i].stat == 1 )
-              actmap->player[i].name = actmap->computerplayername[i];
-
-     if ( actmap->player[i].stat == 2 )
-        actmap->player[i].name = NULL;
-  }
-}
 
 
 int getcrc ( const pvehicletype fzt )

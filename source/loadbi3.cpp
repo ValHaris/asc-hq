@@ -1,6 +1,10 @@
-//     $Id: loadbi3.cpp,v 1.29 2000-10-18 14:14:13 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.30 2000-11-08 19:31:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/10/18 14:14:13  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.28  2000/10/12 19:51:44  mbickel
 //      Added a stub program for generating a weapon guide
 //      Added makefiles to compile this weaponguide with the free borland C++
@@ -1492,8 +1496,8 @@ void       tloadBImap :: ReadSHOPPart( void )
    }
 
    int ShopNum = 0; 
-   int VehContNum = 0; 
-   int AINum = 0; 
+ //  int VehContNum = 0;
+ //   int AINum = 0;
    for ( int I = 0; I < SHOPHead.Num ; I++ ) { 
       MissFile->readdata2 ( FileShop ); 
       if ( FileShop.ID == 1) {   //  wenn kein ki punkt  
@@ -1624,8 +1628,6 @@ void       tloadBImap :: ReadSHOPPart( void )
 
 
            if ( fld->building ) {
-              if ( fld->building->name )
-                 delete fld->building->name;
 
               if ( battleisleversion == 3 )
                  fld->building->name = GetStr( ShopNum + 2,16);   /*  bi3 macht das so  */ 

@@ -1,6 +1,10 @@
-//     $Id: artint.cpp,v 1.36 2000-10-26 18:14:54 mbickel Exp $
+//     $Id: artint.cpp,v 1.37 2000-11-08 19:30:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2000/10/26 18:14:54  mbickel
+//      AI moves damaged units to repair
+//      tmap is not memory layout sensitive any more
+//
 //     Revision 1.35  2000/10/18 14:13:47  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -354,6 +358,48 @@ pbuilding AI :: findServiceBuilding ( const ServiceOrder& so )
                                                        fullfillableServices++;
                                                  }
                                                  break;
+               case VehicleService::srv_resource:  {
+                                                     Resources res =  veh->typ->tank - veh->tank;
+                                                     Resources res2 = bld->getResource ( res, 1 );
+                                                     int missing = 0;
+                                                     for ( int r = 0; r < resourceTypeNum; r++ )
+                                                        if( res.resource(r) * 75 / 100 > res2.resource(r) )
+                                                           missing ++;
+
+                                                     if ( missing == 0 )
+                                                        fullfillableServices++;
+                                                 }
+                                                 break;
+               case VehicleService::srv_ammo :  {
+                                                   int missing = 0;
+                                                   int ammoNeeded[waffenanzahl];
+                                                   for ( int t = 0; t < waffenanzahl; t++ )
+                                                      ammoNeeded[t] = 0;
+
+                                                   for ( int i = 0; i < veh->typ->weapons->count; i++ )
+                                                      if ( veh->typ->weapons->weapon[i].requiresAmmo() )
+                                                         ammoNeeded[ veh->typ->weapons->weapon[i].getScalarWeaponType() ] += veh->typ->weapons->weapon[i].count - veh->ammo[i];
+
+                                                   Resources res;
+                                                   for ( int  j = 0; j < waffenanzahl; j++ ) {
+                                                       int n = ammoNeeded[j] - bld->munition[j];
+                                                       if ( n > 0 )
+                                                          if ( bld->typ->special & cgammunitionproductionb ) {
+                                                             for ( int r = 0; r < resourceTypeNum; r++ )
+                                                                res.resource(r) += (n+4)/5 * cwaffenproduktionskosten[j][r];
+                                                          } else
+                                                             missing++;
+                                                   }
+                                                   Resources res2 = bld->getResource ( res, 1 );
+                                                   for ( int r = 0; r < waffenanzahl; r++ )
+                                                      if ( res2.resource(r) < res.resource (r) )
+                                                         missing++;
+
+                                                   if ( missing == 0 )
+                                                       fullfillableServices++;
+                                                 }
+                                                 break;
+
             };
 
             if ( fullfillableServices ) {
@@ -396,22 +442,34 @@ AI::AiResult AI :: executeServices ( )
      if ( veh->aiparam[getPlayer()]->task == AiParameter::tsk_serviceRetreat ) {
         moveUnit ( veh, MapCoordinate ( veh->aiparam[ getPlayer() ]->xtogo, veh->aiparam[ getPlayer() ]->ytogo ), true);
         if ( veh->xpos == veh->aiparam[ getPlayer() ]->xtogo && veh->ypos == veh->aiparam[ getPlayer() ]->ytogo ) {
+           VehicleService vc ( mapDisplay, NULL );
            pfield fld = getfield ( veh->xpos, veh->ypos );
            if ( fld->building ) {
-              if ( veh->damage )
-                 fld->building->repairItem ( veh );
-
-              ServiceOrderContainer::iterator i = serviceOrders.begin();
-              while ( i != serviceOrders.end() ) {
-                  if ( (*i)->getTargetUnit() == veh ) {
-                     serviceOrders.erase ( i );
-                     i = serviceOrders.begin();
-                  } else
-                     i++;
-              }
-              veh->aiparam[getPlayer()]->task = AiParameter::tsk_nothing;
+              MapCoordinate mc = fld->building->getEntry();
+              vc.execute ( NULL, mc.x, mc.y, 0, -1, -1 );
            } else
-              displaymessage ( "AI :: executeServices / Invalid service retreat position ", 1);
+              if ( fld->vehicle )
+                 vc.execute ( fld->vehicle, -1, -1, 0, -1, -1 );
+
+           if ( vc.getStatus () == 2 ) {
+              if ( vc.dest.find ( veh->networkid ) != vc.dest.end() )
+                 vc.fillEverything ( veh->networkid, true );
+              else
+                 displaymessage ( "AI :: executeServices / Vehicle cannot be serviced (1) ", 1);
+           }
+           else
+              displaymessage ( "AI :: executeServices / Vehicle cannot be serviced (2) ", 1);
+
+
+           ServiceOrderContainer::iterator i = serviceOrders.begin();
+           while ( i != serviceOrders.end() ) {
+               if ( (*i)->getTargetUnit() == veh ) {
+                  serviceOrders.erase ( i );
+                  i = serviceOrders.begin();
+               } else
+                  i++;
+           }
+           veh->aiparam[getPlayer()]->task = AiParameter::tsk_nothing;
         }
      }
      veh = veh->next;
@@ -1353,7 +1411,7 @@ int AI::changeVehicleHeight ( pvehicle veh, VehicleMovement* vm, int preferredDi
       if ( newheight & veh->typ->height ) {
          if ( cvh->available ( veh ) ) {
             if ( vm )
-               cvh->registerStartMovement ( vm );
+               cvh->registerStartMovement ( *vm );
 
             int stat = cvh->execute ( veh, -1, -1, 0, newheight, 1 );
             if ( stat == 2 ) {   // if the unit could change its height vertically, or the height change is not available, skip this block
@@ -1363,11 +1421,13 @@ int AI::changeVehicleHeight ( pvehicle veh, VehicleMovement* vm, int preferredDi
                int moveremain = minint;
 
                if ( preferredDirection == -1 ) {
+                  // making a backup
                   tvehicle dummy ( veh, NULL );
-                  dummy.height = newheight;
-                  dummy.resetMovement ( );
-                  MapCoordinate mc = getDestination ( &dummy );
-                  preferredDirection = getdirection ( dummy.xpos, dummy.ypos, mc.x, mc.y );
+                  veh->height = newheight;
+                  veh->resetMovement ( );
+                  MapCoordinate mc = getDestination ( veh );
+                  preferredDirection = getdirection ( veh->xpos, veh->ypos, mc.x, mc.y );
+                  veh->clone ( &dummy, NULL );
                }
 
                for ( int i = 0; i < cvh->reachableFields.getFieldNum(); i++ ) {
@@ -1511,26 +1571,28 @@ AI::AiResult  AI :: container ( ccontainercontrols& cc )
       if ( getBestHeight ( *i ) != (*i)->height ) {
          VehicleMovement* vm = cc.movement ( *i );
          if ( vm ) {
+
             auto_ptr<VehicleMovement> avm ( vm );
             int stat = changeVehicleHeight ( *i, vm );
             if ( stat == -1 ) {
                result.unitsWaiting++;
                (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_wait;
             } else {
-               if ( stat== -2 )
+               if ( stat== -2 ) {
                   simplyMove = 1;
-               else {
+               } else {
                   result.unitsMoved++;
                   (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
                   if ( (*i)->getMovement() >= minmalq && !(*i)->attacked && (*i)->weapexist() )
                      simplyMove = 1;
                   else {
-                     VehicleMovement vm ( mapDisplay, NULL );
-                     if ( vm.available ( *i ))
-                        moveToSavePlace ( *i, vm );
+                     VehicleMovement vm2 ( mapDisplay, NULL );
+                     if ( vm2.available ( *i ))
+                        moveToSavePlace ( *i, vm2 );
                   }
                }
             }
+
          }
       } else
          simplyMove = 2;

@@ -1,6 +1,10 @@
-//     $Id: gui.cpp,v 1.42 2000-10-31 10:42:44 mbickel Exp $
+//     $Id: gui.cpp,v 1.43 2000-11-08 19:31:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2000/10/31 10:42:44  mbickel
+//      Added building->vehicle service to vehicle controls
+//      Moved tmap methods to gamemap.cpp
+//
 //     Revision 1.41  2000/10/18 14:14:12  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -2558,7 +2562,7 @@ tnputbuildingguiicon :: tnputbuildingguiicon ( pbuildingtype bld )
    buildnum++;
    picture[0]    = building->guibuildicon;
    char buf[10000];
-   sprintf ( buf, "%s : %d material and %d fuel needed", building->name, building->productioncost.material, building->productioncost.fuel );
+   sprintf ( buf, "%s : %d material and %d fuel needed", building->name, building->productionCost.material, building->productionCost.fuel );
    infotext = buf;
    if ( building->construction_steps > 1 ) {
       sprintf(buf, " ; %d turns required", building->construction_steps );
@@ -2655,18 +2659,22 @@ int         tnputobjectcontainerguiicon::available( void )
 {
    if ( object ) {
       if ( build ) {
-         if ( object_constructable ( getxpos(), getypos(), object )) 
+         if ( object_constructable ( getxpos(), getypos(), object ))
+            /*
             if ( actmap->objectcrc ) {
                if ( actmap->objectcrc->speedcrccheck->checkobj2 ( object, 0 ))
                   return true;                          
             } else
+            */
                return true;
       } else {
-         if ( object_removeable ( getxpos(), getypos(), object )) 
+         if ( object_removeable ( getxpos(), getypos(), object ))
+         /*
             if ( actmap->objectcrc ) {
                if ( actmap->objectcrc->speedcrccheck->checkobj2 ( object, 0 ))
                   return true;
             } else
+         */
                return true;
       }     
    

@@ -1,6 +1,9 @@
-//     $Id: edmain.cpp,v 1.29 2000-10-26 19:17:49 mbickel Exp $
+//     $Id: edmain.cpp,v 1.30 2000-11-08 19:31:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/10/26 19:17:49  mbickel
+//      Removed fullscreen settings in mapeditor
+//
 //     Revision 1.28  2000/10/26 18:55:28  mbickel
 //      Fixed crash when editing the properties of a vehicle inside a building
 //      Added mapeditorFullscreen switch to asc.ini
@@ -845,8 +848,6 @@ int mapeditorMainThread ( void* _mapname )
 
    addmouseproc ( &mousescrollproc );
 
-   godview = true;
-
    bar( 0, 0, hgmp->resolutionx-1, hgmp->resolutiony-1, 0 );
    setvgapalette256(pal);
 
@@ -881,10 +882,10 @@ int main(int argc, char *argv[] )
 
    #ifdef _DOS_
     initmemory();
+    int showmodes = 0;
    #endif
 
    char *mapname = NULL, *configfile = NULL;
-   int showmodes = 0;
    int forceWindowedMode = 0;
    fullscreen = 0;
 

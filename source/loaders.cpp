@@ -1,6 +1,10 @@
-//     $Id: loaders.cpp,v 1.32 2000-10-26 18:14:57 mbickel Exp $
+//     $Id: loaders.cpp,v 1.33 2000-11-08 19:31:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/10/26 18:14:57  mbickel
+//      AI moves damaged units to repair
+//      tmap is not memory layout sensitive any more
+//
 //     Revision 1.31  2000/10/18 14:14:14  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -422,7 +426,7 @@ void         tspfldloaders::writebuilding ( pbuilding bld )
     stream->writeChar ( bld->visible );
     stream->writeChar ( bld->damage );
     stream->writeInt  ( bld->netcontrol );
-    stream->writepchar ( bld->name );
+    stream->writeString ( bld->name );
 
     stream->writeInt ( bld->repairedThisTurn );
 
@@ -475,11 +479,14 @@ void         tspfldloaders::readbuilding ( pbuilding &bld )
        if ( !bld->typ )
           throw InvalidID ( "building", id );
 
+       bld->baseType = bld->typ;
        for ( int i = 0; i < 3; i++ )
           bld->bi_resourceplus.resource(i) = stream->readInt();
-   
-       if ( spfld->objectcrc ) 
+
+       /*
+       if ( spfld->objectcrc )
           spfld->objectcrc->speedcrccheck->checkbuilding2 ( bld->typ );
+       */
    
        bld->color = stream->readChar();
        bld->xpos = stream->readWord() ;
@@ -490,8 +497,10 @@ void         tspfldloaders::readbuilding ( pbuilding &bld )
        if ( !bld->typ )
           throw InvalidID ( "building", id );
 
+       /*
        if ( spfld->objectcrc ) 
-          spfld->objectcrc->speedcrccheck->checkbuilding2 ( bld->typ );
+         spfld->objectcrc->speedcrccheck->checkbuilding2 ( bld->typ );
+       */
 
        bld->color = stream->readChar();
        bld->xpos  = stream->readWord();
@@ -522,7 +531,7 @@ void         tspfldloaders::readbuilding ( pbuilding &bld )
     bld->visible = stream->readChar();
     bld->damage = stream->readChar();
     bld->netcontrol = stream->readInt();
-    stream->readpchar ( &bld->name );
+    bld->name = stream->readString ();
 
     if ( version == -2 )
        bld->repairedThisTurn = stream->readInt ( );
@@ -545,8 +554,10 @@ void         tspfldloaders::readbuilding ( pbuilding &bld )
            if ( !bld->production[k] )
               throw InvalidID ( "unit", id );
 
+           /*
            if ( spfld->objectcrc ) 
               spfld->objectcrc->speedcrccheck->checkunit2 ( bld->production[k] );
+           */
 
        }
 
@@ -558,9 +569,10 @@ void         tspfldloaders::readbuilding ( pbuilding &bld )
 
            if ( !bld->productionbuyable[k] )
               throw InvalidID ( "unit", id );
-
+           /*
            if ( spfld->objectcrc ) 
               spfld->objectcrc->speedcrccheck->checkunit2 ( bld->productionbuyable[k] );
+           */
        }
 
 }
@@ -1095,136 +1107,10 @@ void   tspfldloaders::readoldevents ( void )
 
 void    tspfldloaders::writemap ( void )
 {
-  int v;
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::writemap / started" );
-       #endif
-
        if ( !spfld )
           displaymessage ( "tspfldloaders::writemap  ; no map to write ! ",2);
 
-       char* temp[8];
-       for (v= 0; v < 8; v++) {
-          temp[v] = spfld->player[v].name;
-          spfld->player[v].name = NULL;
-       }
-
        spfld->write ( *stream );
-    
-       if ( spfld->title )
-          stream->writepchar( spfld->title );
-    
-       if ( spfld->campaign )
-          stream->writedata2( *spfld->campaign );
-
-       for (int w=0; w<8 ; w++ ) {
-
-          // if (spfld->player[w].name)
-          //    stream->writepchar ( spfld->player[w].name );
-
-         /*
-          if (spfld->player[w].ai)
-             stream->writedata2 ( *spfld->player[w].aiparams );
-         */
-
-          if ( spfld->humanplayername[w] )
-             stream->writepchar ( spfld->humanplayername[w] );
-   
-          if ( spfld->computerplayername[w] )
-             stream->writepchar ( spfld->computerplayername[w] );
-       } /* endfor */
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::writemap / names written" );
-       #endif
-
-       int t = 0;
-       if ( spfld->tribute )
-          for (int i = 0; i < 8; i++) {
-             for (int j = 0; j < 8; j++) {
-                for (int k = 0; k < 3; k++) {
-                   if ( spfld->tribute->avail.resource[k][i][j] )
-                      t++;
-                   if ( spfld->tribute->paid.resource[k][i][j] )
-                      t++;
-                } /* endfor */
-             } /* endfor */
-          } /* endfor */
-
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::writemap / tribute written" );
-       #endif
-
-        stream->writedata2 ( t );
-        if ( t )
-           stream->writedata2 ( *spfld->tribute );
-
-        for ( int i = 0; i < 8; i++ )
-           if ( spfld->alliance_names_not_used_any_more[i] ) {
-              char nl = 0;
-              stream->writedata2 ( nl );
-           }
-
-
-        int h = 0;
-        stream->writedata2 ( h );
-
-        for (  v= 0; v < 8; v++) 
-           spfld->player[v].name = temp[v];
-
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::writemap / vor crc" );
-       #endif
-
-        if ( spfld->objectcrc ) {
-           stream->writedata2 ( *spfld->objectcrc );
-    
-           if ( spfld->objectcrc->unit.crcnum ) 
-              stream->writedata ( spfld->objectcrc->unit.crc, spfld->objectcrc->unit.crcnum * sizeof ( tcrc ) );
-    
-           if ( spfld->objectcrc->building.crcnum ) 
-              stream->writedata ( spfld->objectcrc->building.crc, spfld->objectcrc->building.crcnum * sizeof ( tcrc ) );
-    
-           if ( spfld->objectcrc->object.crcnum ) 
-              stream->writedata ( spfld->objectcrc->object.crc, spfld->objectcrc->object.crcnum * sizeof ( tcrc ) );
-    
-           if ( spfld->objectcrc->terrain.crcnum ) 
-              stream->writedata ( spfld->objectcrc->terrain.crc, spfld->objectcrc->terrain.crcnum * sizeof ( tcrc ) );
-    
-           if ( spfld->objectcrc->technology.crcnum ) 
-              stream->writedata ( spfld->objectcrc->technology.crc, spfld->objectcrc->technology.crcnum * sizeof ( tcrc ) );
-    
-        }
-        if ( spfld->shareview ) 
-           stream->writedata2 ( *(spfld->shareview) );
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::writemap / shareview written" );
-       #endif
-
-        if ( spfld->preferredfilenames ) {
-           stream->writedata2 ( *(spfld->preferredfilenames) );
-           for ( int i = 0; i < 8; i++ ) {
-              if ( spfld->preferredfilenames->mapname[i] )
-                 stream->writepchar ( spfld->preferredfilenames->mapname[i] );
-              if ( spfld->preferredfilenames->mapdescription_not_used_any_more[i] )
-                 stream->writepchar ( spfld->preferredfilenames->mapdescription_not_used_any_more[i] );
-              if ( spfld->preferredfilenames->savegame[i] )
-                 stream->writepchar ( spfld->preferredfilenames->savegame[i] );
-              if ( spfld->preferredfilenames->savegamedescription_not_used_any_more[i] )
-                 stream->writepchar ( spfld->preferredfilenames->savegamedescription_not_used_any_more[i] );
-           }
-        }
-
-        if ( spfld->ellipse )
-           stream->writedata2 ( *(spfld->ellipse) );
-
-        for ( int ii = 0 ; ii < spfld->gameparameter_num; ii++ )
-           stream->writedata2 ( spfld->game_parameter[ii] );
-
 }
 
 
@@ -1265,225 +1151,9 @@ void     tspfldloaders::readmap ( void )
 
     spfld->read ( *stream );
 
-    initmap();
- 
-    if ( spfld->title )
-       stream->readpchar( &spfld->title );
- 
-    if ( spfld->campaign ) {
-       spfld->campaign = new ( tcampaign );
-       stream->readdata2( *spfld->campaign );
-    }
-
-    for (char w=0; w<8 ; w++ ) {
-       if (spfld->player[w].name) {
-          stream->readpchar ( &spfld->player[w].name );
-          delete[] spfld->player[w].name;
-          spfld->player[w].name = NULL;
-       }
-          
-      /*
-       if (spfld->player[w].aiparams) {
-          spfld->player[w].aiparams = new ( taiparams );
-          stream->readdata2 ( *spfld->player[w].aiparams );
-       }
-      */
-       spfld->player[w].ai = NULL;
-
-
-       #ifdef logging
-       {
-           char tmpcbuf[200];
-           sprintf(tmpcbuf,"loaders / tspfldloaders::readmap / humanplayername; org address is %x, del address is %x",spfld->humanplayername[w], spfld->humanplayername[w]);
-           logtofile ( tmpcbuf );
-       }    
-       #endif
-      
-       if ( spfld->humanplayername[w] ) {
-          char* tempname = NULL;
-          stream->readpchar ( &tempname );
-          spfld->humanplayername[w] = new char[100];
-          strncpy( spfld->humanplayername[w], tempname, 99 );
-          spfld->humanplayername[w][99] = 0;
-          delete[] tempname;
-       }
-
-       #ifdef logging
-       {
-           char tmpcbuf[200];
-           sprintf(tmpcbuf,"loaders / tspfldloaders::readmap / humanplayername; new address is %x",spfld->humanplayername[w] );
-           logtofile ( tmpcbuf );
-       }    
-       #endif
-
-
-       if ( spfld->computerplayername[w] ){
-          char* tempname = NULL;
-          stream->readpchar ( &tempname );
-          spfld->computerplayername[w] = new char[100];
-          strncpy( spfld->computerplayername[w], tempname, 99 );
-          spfld->computerplayername[w][99] = 0;
-          delete[] tempname;
-       }
-
-    } /* endfor */
-
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / nach namen" );
-       #endif
-
-    int t;
-    stream->readdata2 ( t );
-    spfld->tribute = new ( tresourcetribute );
-    if ( t )
-       stream->readdata2 ( *spfld->tribute );
-    else
-       memset ( spfld->tribute, 0, sizeof ( *spfld->tribute ));
-
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / vor alliances" );
-       #endif
-
-    for ( int i = 0; i < 8; i++ )
-       if ( spfld->alliance_names_not_used_any_more[i] ) {
-          char* tempname = NULL;
-          stream->readpchar ( &tempname );
-          delete[] tempname;
-
-          spfld->alliance_names_not_used_any_more[i] = 0;
-       }
-
-
-
-
-    int h;
-    stream->readdata2 ( h );
-
-
-
-    if ( spfld->objectcrc ) {
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / vor objectcrcs" );
-       #endif
-
-       spfld->objectcrc = new tobjectcontainercrcs;
-       stream->readdata2 ( *spfld->objectcrc );
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / vor unitcrcs" );
-       #endif
-       if ( spfld->objectcrc->unit.crcnum ) {
-          spfld->objectcrc->unit.crc = new tcrc[spfld->objectcrc->unit.crcnum];
-          stream->readdata ( spfld->objectcrc->unit.crc, spfld->objectcrc->unit.crcnum * sizeof ( tcrc ) );
-       } else
-          spfld->objectcrc->unit.crc = NULL;
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / vor buildingcrcs" );
-       #endif
-       if ( spfld->objectcrc->building.crcnum ) {
-          spfld->objectcrc->building.crc = new tcrc[spfld->objectcrc->building.crcnum];
-          stream->readdata ( spfld->objectcrc->building.crc, spfld->objectcrc->building.crcnum * sizeof ( tcrc ) );
-       } else
-          spfld->objectcrc->building.crc = NULL;
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / vor object.crcs" );
-       #endif
-       if ( spfld->objectcrc->object.crcnum ) {
-          spfld->objectcrc->object.crc = new tcrc[spfld->objectcrc->object.crcnum];
-          stream->readdata ( spfld->objectcrc->object.crc, spfld->objectcrc->object.crcnum * sizeof ( tcrc ) );
-       } else
-          spfld->objectcrc->object.crc = NULL;
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / vor terraincrcs" );
-       #endif
-       if ( spfld->objectcrc->terrain.crcnum ) {
-          spfld->objectcrc->terrain.crc = new tcrc[spfld->objectcrc->terrain.crcnum];
-          stream->readdata ( spfld->objectcrc->terrain.crc, spfld->objectcrc->terrain.crcnum * sizeof ( tcrc ) );
-       } else
-          spfld->objectcrc->terrain.crc = NULL;
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / vor techcrcs" );
-       #endif
-       if ( spfld->objectcrc->technology.crcnum ) {
-          spfld->objectcrc->technology.crc = new tcrc[spfld->objectcrc->technology.crcnum];
-          stream->readdata ( spfld->objectcrc->technology.crc, spfld->objectcrc->technology.crcnum * sizeof ( tcrc ) );
-       } else
-          spfld->objectcrc->technology.crc = NULL;
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / vor speedcrccheck" );
-       #endif
-       spfld->objectcrc->speedcrccheck = new tspeedcrccheck ( spfld->objectcrc );
-
-    }
-
-    if ( spfld->shareview ) {
-       spfld->shareview = new tshareview;
-       stream->readdata2 ( *(spfld->shareview) );
-    }
-
-    if ( spfld->preferredfilenames ) {
-       spfld->preferredfilenames = new PreferredFilenames;
-       stream->readdata2 ( *(spfld->preferredfilenames) );
-       for ( int i = 0; i < 8; i++ ) {
-          if ( spfld->preferredfilenames->mapname[i] )
-             stream->readpchar ( &spfld->preferredfilenames->mapname[i] );
-          if ( spfld->preferredfilenames->mapdescription_not_used_any_more[i] )
-             stream->readpchar ( &spfld->preferredfilenames->mapdescription_not_used_any_more[i] );
-          if ( spfld->preferredfilenames->savegame[i] )
-             stream->readpchar ( &spfld->preferredfilenames->savegame[i] );
-          if ( spfld->preferredfilenames->savegamedescription_not_used_any_more[i] )
-             stream->readpchar ( &spfld->preferredfilenames->savegamedescription_not_used_any_more[i] );
-       }
-    }
-
-    if ( spfld->ellipse ) {
-       spfld->ellipse = new EllipseOnScreen;
-       stream->readdata2 ( *(spfld->ellipse) );
-    }
-
-    int orggpnum = spfld->gameparameter_num;
-    spfld->gameparameter_num = 0;
-    for ( int gp = 0; gp < 8; gp ++ )
-       spfld->setgameparameter ( gp, spfld->_oldgameparameter[gp] );
-
-    for ( int ii = 0 ; ii < orggpnum; ii++ ) {
-       int gpar;
-       stream->readdata2 ( gpar );
-       spfld->setgameparameter ( ii, gpar );
-    }
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / returning" );
-       #endif
+    // initmap();
 }
 
-
-void           tspfldloaders::freespfld()
-{
-   if ( spfld ) {
-
-      if ( spfld->title )
-         delete[] spfld->title;
-
-      if ( spfld->campaign )
-         delete spfld->campaign;
-     
-      for ( int w=0; w<8 ; w++ )
-         if ( spfld->player[w].ai ) 
-            delete spfld->player[w].ai;
-     
-
-      delete spfld;
-   }
-   spfld = NULL;
-}
 
 
 /**************************************************************/
@@ -1559,9 +1229,10 @@ void      tspfldloaders::readtechnologies ( void )
 
           devtech = new ( tdevelopedtechnologies );
           devtech->tech = tec;
-
+          /*
           if ( spfld->objectcrc ) 
              spfld->objectcrc->speedcrccheck->checktech2 ( devtech->tech );
+          */
 
           devtech->next = spfld->player[i].research.developedtechnologies;
           spfld->player[i].research.developedtechnologies = devtech;
@@ -1578,8 +1249,10 @@ void      tspfldloaders::readtechnologies ( void )
           if ( !spfld->player[i].research.activetechnology )
              throw InvalidID ( "technology", w );
 
+          /*
           if ( spfld->objectcrc ) 
              spfld->objectcrc->speedcrccheck->checktech2 ( spfld->player[i].research.activetechnology );
+          */
        }
 
     } /* endfor */
@@ -1865,8 +1538,10 @@ void tspfldloaders::readfields ( void )
          if ( !fld2->typ ) 
             throw InvalidID ( "terrain", k );
 
-         if ( spfld->objectcrc ) 
+         /*
+         if ( spfld->objectcrc )
             spfld->objectcrc->speedcrccheck->checkterrain2 ( fld2->typ->terraintype );
+         */
 
 
          if (b1 & csm_direction ) 
@@ -1974,8 +1649,10 @@ void tspfldloaders::readfields ( void )
                if ( !fld2->object->object[n]->typ )
                   throw InvalidID ( "object", id );
 
+               /*
                if ( spfld->objectcrc ) 
                   spfld->objectcrc->speedcrccheck->checkobj2 ( fld2->object->object[n]->typ );
+               */
             }
             fld2->sortobjects();
          }
@@ -2083,7 +1760,8 @@ tspfldloaders::tspfldloaders ( void )
 
 tspfldloaders::~tspfldloaders ( void )
 {
-  freespfld();
+  delete spfld;
+  spfld = NULL;
 }
 
 
@@ -2186,8 +1864,10 @@ int          tmaploaders::savemap( const char * name )
 
 tmaploaders :: ~tmaploaders()
 {
-   if ( oldmap )
-      erasemap ( oldmap );
+   if ( oldmap ) {
+      delete oldmap ;
+      oldmap = NULL;
+   }
 }
 
 int          tmaploaders::loadmap( const char *       name )
@@ -2248,21 +1928,18 @@ int          tmaploaders::loadmap( const char *       name )
 
    stream->readdata( &version, sizeof(version)); 
    if (version > actmapversion || version < minmapversion ) { 
-      erasemap_unchained ( spfld );
+      delete spfld;
+      spfld = NULL;
       throw tinvalidversion ( name, actmapversion, version );
    } 
 
    #ifdef logging
    logtofile ( "loaders / tmaploaders::loadmap / erasemap");
    #endif
-   erasemap( oldmap );
+   delete oldmap;
    oldmap = NULL;
    
    actmap = spfld;
-/*
-   memcpy ( actmap, spfld, sizeof ( *actmap ));
-   delete  ( spfld );
-*/
    spfld = NULL;
 
 
@@ -2296,11 +1973,6 @@ int          tmaploaders::loadmap( const char *       name )
 
 /*   starthistory();  */
    actmap->levelfinished = false; 
-
-   #ifdef logging
-   logtofile ( "loaders / tmaploaders::loadmap / checkplayernames");
-   #endif
-   checkplayernames ();
 
    #ifdef logging
    logtofile ( "loaders / tmaploaders::loadmap / returning");
@@ -2437,44 +2109,26 @@ int          tsavegameloaders::loadgame( const char *       name )
        #endif
    readreplayinfo ();
  
-    stream->readdata( &version, sizeof(version));
-    if (version > actsavegameversion || version < minsavegameversion ) {
-       erasemap_unchained ( spfld );
-       throw tinvalidversion ( name, actsavegameversion, version );
-    } 
- 
-    erasemap();
-    actmap = spfld;
-/*
-    memcpy ( actmap, spfld, sizeof ( *actmap ));
-    delete  spfld; */
-    spfld = NULL;
- 
- 
+   stream->readdata( &version, sizeof(version));
+   if (version > actsavegameversion || version < minsavegameversion ) {
+      delete spfld ;
+      spfld = NULL;
+      throw tinvalidversion ( name, actsavegameversion, version );
+   }
 
-
-
+   delete actmap;
+   actmap = spfld;
+   spfld = NULL;
+ 
    chainitems ();
 
-   setbuildingsonmap(); 
+   setbuildingsonmap();
 
-//   setplayerexistencies ();
+   seteventtriggers();
 
-   seteventtriggers(); 
+   calculateallobjects();
 
-   calculateallobjects(); 
-
-/*   starthistory();  */
-
-   actmap->levelfinished = false; 
-
-   checkplayernames ();
-
-   if ( actmap->objectcrc ) 
-      if ( actmap->objectcrc->speedcrccheck->getstatus ( )  ) {
-         erasemap();
-         throw NoMapLoaded();
-      }
+   actmap->levelfinished = false;
 
    if ( actmap->replayinfo ) {
       if ( actmap->replayinfo->actmemstream )
@@ -2499,7 +2153,7 @@ int          tsavegameloaders::loadgame( const char *       name )
 
 
 
-
+/*
 void         tnetworkloaders::checkcrcs ( void )
 {
    if ( actmap )
@@ -2532,7 +2186,7 @@ void         tnetworkloaders::checkcrcs ( void )
          }
       }
 }
-
+*/
 
 
 int          tnetworkloaders::savenwgame( pnstream strm )
@@ -2646,83 +2300,30 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
 
 
    stream->readdata2( version );
-   if (version > actnetworkversion || version < minnetworkversion ) {
-      erasemap_unchained ( spfld );
+   if (version > actnetworkversion || version < minnetworkversion )
       throw tinvalidversion ( name, actnetworkversion, version );
-   } 
 
-   #ifdef logging
-   logtofile ( "loaders / tnetworkloaders::loadnwgame / vor erasemap" );
-   #endif
-   erasemap();
+
+   delete actmap;
    actmap = spfld;
-/*
-   memcpy ( actmap, spfld, sizeof ( *actmap ));
-   delete  spfld ; */
    spfld = NULL;
 
-
-
-
-
-   #ifdef logging
-   logtofile ( "loaders / tnetworkloaders::loadnwgame / vor chainitems" );
-   #endif
   chainitems ();
 
-   #ifdef logging
-   logtofile ( "loaders / tnetworkloaders::loadnwgame / vor setbuildingsonmap" );
-   #endif
-  setbuildingsonmap(); 
+  setbuildingsonmap();
 
-   #ifdef logging
-   logtofile ( "loaders / tnetworkloaders::loadnwgame / vor checkcrcs" );
-   #endif
-  checkcrcs();
+  seteventtriggers();
 
+  calculateallobjects();
 
-//  setplayerexistencies ();
-
-   #ifdef logging
-   logtofile ( "loaders / tnetworkloaders::loadnwgame / vor seteventtriggers" );
-   #endif
-  seteventtriggers(); 
-
-   #ifdef logging
-   logtofile ( "loaders / tnetworkloaders::loadnwgame / vor calculateallobjects" );
-   #endif
-  calculateallobjects(); 
-
-/*   starthistory();  */
-
-  actmap->levelfinished = false; 
-
-   #ifdef logging
-   logtofile ( "loaders / tnetworkloaders::loadnwgame / vor checkplayernames" );
-   #endif
-  checkplayernames ();
-
-   if ( actmap->objectcrc ) 
-      if ( actmap->objectcrc->speedcrccheck->getstatus ( )  ) {
-         #ifdef logging
-         logtofile ( "loaders / tnetworkloaders::loadnwgame / crc check failed; vor erasemap" );
-         #endif
-         erasemap();
-         throw NoMapLoaded();
-      }
-
-   #ifdef logging
-   logtofile ( "loaders / tnetworkloaders::loadnwgame / returning" );
-   #endif
+  actmap->levelfinished = false;
 
   #ifdef sgmain
    getnexteventtime();
   #endif
 
   return 0;
-
-
-} 
+}
 
 
 
@@ -2947,11 +2548,10 @@ void treplayloaders :: loadreplay ( pmemorystreambuf streambuf )
    readfields ( );
  
    stream->readdata2( version );
-   if (version > actreplayversion || version < minreplayversion ) {
-      erasemap_unchained ( spfld );
+   if (version > actreplayversion || version < minreplayversion )
       throw tinvalidversion ( name, actreplayversion, version );
-   } 
 
+   delete actmap;
    actmap = spfld;
    spfld = NULL;
 
@@ -2970,8 +2570,6 @@ void treplayloaders :: loadreplay ( pmemorystreambuf streambuf )
   calculateallobjects(); 
 
   actmap->levelfinished = false; 
-
-  checkplayernames ();
 
 }
 
@@ -2993,41 +2591,40 @@ void treplayloaders :: savereplay ( int num )
 
    tmemorystream memstream ( actmap->replayinfo->map[num], 2 );
 
-   tmap replayfield = *actmap;
+   tmap* replayfield = new tmap;
+   *replayfield = *actmap;
 
-   replayfield.campaign = NULL;
-   replayfield.title = NULL;
+   replayfield->campaign = NULL;
+   replayfield->title = NULL;
    for ( int i = 0; i < 8; i++ ) {
-      replayfield.player[i].dissectedunit = NULL;
-      replayfield.player[i].unreadmessage = NULL;
-      replayfield.player[i].oldmessage = NULL;
-      replayfield.player[i].sentmessage = NULL;
-      replayfield.player[i].ai = NULL;
-      replayfield.player[i].research.activetechnology = NULL;
-      replayfield.player[i].research.developedtechnologies = NULL;
-      replayfield.humanplayername[i] = NULL;
-      replayfield.computerplayername[i] = NULL;
+      replayfield->player[i].dissectedunit = NULL;
+      replayfield->player[i].unreadmessage = NULL;
+      replayfield->player[i].oldmessage = NULL;
+      replayfield->player[i].sentmessage = NULL;
+      replayfield->player[i].ai = NULL;
+      replayfield->player[i].research.activetechnology = NULL;
+      replayfield->player[i].research.developedtechnologies = NULL;
+      replayfield->player[i].humanname = "";
+      replayfield->player[i].computername = "";
    }
-   replayfield.oldevents = NULL;
-   replayfield.firsteventtocome = NULL;
-   replayfield.firsteventpassed = NULL;
-   replayfield.network = NULL;
-   replayfield.tribute = NULL;
-   replayfield.unsentmessage = NULL;
-   replayfield.message = NULL;
-   replayfield.journal = NULL;
-   replayfield.newjournal = NULL;
-   replayfield.objectcrc = NULL;
+   replayfield->oldevents = NULL;
+   replayfield->firsteventtocome = NULL;
+   replayfield->firsteventpassed = NULL;
+   replayfield->network = NULL;
+   replayfield->tribute = NULL;
+   replayfield->unsentmessage = NULL;
+   replayfield->message = NULL;
+   replayfield->journal = NULL;
+   replayfield->newjournal = NULL;
+   // replayfield->objectcrc = NULL;
    if ( actmap->shareview )
-      replayfield.shareview = new tshareview ( actmap->shareview );
+      replayfield->shareview = new tshareview ( actmap->shareview );
 
-   replayfield.replayinfo = NULL;
-
-
+   replayfield->replayinfo = NULL;
 
    stream = &memstream;
 
-   spfld = &replayfield;
+   spfld = replayfield;
 
    stream->writedata2( actreplayversion );
    writemap ();
@@ -3179,92 +2776,27 @@ void         savecampaignrecoveryinformation(char*        name,
 } 
 
 
-void deletemessagelist ( pmessagelist list )
-{
-   if ( list ) {
-      while ( list->prev ) 
-         list = list->prev;
-   
-      while ( list->next )
-         delete list->next;
-   
-      delete list;
-   }
-}
 
-
-void         erasemap( pmap spfld )
+void         __erasemap( pmap& spfld )
 { 
    if ( !spfld )
       return;
+
   int         i; 
-  pvehicle     aktvehicle; 
-  pbuilding    aktbuilding; 
+  // pvehicle     aktvehicle;
+  // pbuilding    aktbuilding;
   pdevelopedtechnologies devtech1, devtech2;
 
 
    if (spfld->xsize == 0) 
       return;
 
-   pevent       event;
-   pevent       event2;
-
-   event = spfld->firsteventtocome;
-   while (event != NULL) {
-      event2 = event;
-      event = event->next;
-      delete  event2;
-   }
-   event = spfld->firsteventpassed;
-   while (event != NULL) {
-      event2 = event;
-      event = event->next;
-      delete event2;
-   }
-
-
 
    for (i = 0; i <= 8; i++) { 
-      #ifdef logging
-      logtofile ( "5/loaders.cpp / erasemap / deleting units ");
-      #endif
-      aktvehicle = spfld->player[i].firstvehicle; 
-      while (aktvehicle != NULL) { 
-         if (aktvehicle->next != NULL) { 
-            aktvehicle = aktvehicle->next; 
-            delete  ( aktvehicle->prev);
-         } 
-         else { 
-            delete  (aktvehicle);
-            aktvehicle = NULL; 
-         } 
-      } 
-      spfld->player[i].firstvehicle = NULL; 
-
-
-      #ifdef logging
-      logtofile ( "5/loaders.cpp / erasemap / deleting buildings ");
-      #endif
-      aktbuilding = spfld->player[i].firstbuilding; 
-      while (aktbuilding != NULL) { 
-         if (aktbuilding->next != NULL) { 
-            aktbuilding = aktbuilding->next; 
-            delete   (aktbuilding->prev); 
-         } 
-         else { 
-            delete  (aktbuilding); 
-            aktbuilding = NULL; 
-         } 
-      } 
-      spfld->player[i].firstbuilding = NULL; 
-
-
       if ( spfld->player[i].ai ) {
          delete spfld->player[i].ai;
          spfld->player[i].ai = NULL;
       }
-
-
 
 
       #ifdef logging
@@ -3280,214 +2812,29 @@ void         erasemap( pmap spfld )
 
    }
 
+   delete spfld;
+   spfld = NULL;
 
-   for (i = 0; i < 8; i++) { 
-      #ifdef logging
-      {
-          char tmpcbuf[200];
-          sprintf(tmpcbuf,"5/loaders.cpp / erasemap / names ; address is %x",spfld->humanplayername[i] );
-          logtofile ( tmpcbuf );
-      }    
-      #endif
-      if ( spfld->humanplayername[i] ) {
-         delete[] spfld->humanplayername[i];
-         spfld->humanplayername[i] = NULL;
-      }
-      if ( spfld->computerplayername[i] ) {
-         delete[] spfld->computerplayername[i];
-         spfld->computerplayername[i] = NULL;
-      }
-      /*
-      if ( spfld->alliancenames[i] ) {
-         delete spfld->alliancenames[i];
-         spfld->alliancenames[i] = NULL;
-      }
-      */
-   }
-
-
-   /****************************************/
-   /*     Sezierungen l”schen            ÿ */
-   /****************************************/
-   
-   #ifdef logging
-   logtofile ( "loaders.cpp / erasemap / deleting dissected units ");
-   #endif
-   for ( i = 0; i < 8; i++ ) {
-      pdissectedunit du = spfld->player[ i ].dissectedunit;
-      while ( du ) {
-         pdissectedunit du2 = du->next;
-         delete du;
-         du = du2;
-      }
-   }
-
-
-   /****************************************/
-   /*        CRCs  l”schen               ÿ */
-   /****************************************/
-
-   #ifdef logging
-   logtofile ( "loaders.cpp / erasemap / deleting CRCs ");
-   #endif
-   if ( spfld->objectcrc ) {
-      if ( spfld->objectcrc->speedcrccheck )
-         delete spfld->objectcrc->speedcrccheck;
-      if ( spfld->objectcrc->unit.crc )
-         delete spfld->objectcrc->unit.crc;
-      if ( spfld->objectcrc->building.crc )
-         delete spfld->objectcrc->building.crc;
-      if ( spfld->objectcrc->object.crc )
-         delete spfld->objectcrc->object.crc;
-      if ( spfld->objectcrc->terrain.crc )
-         delete spfld->objectcrc->terrain.crc;
-      if ( spfld->objectcrc->technology.crc )
-         delete spfld->objectcrc->technology.crc;
-
-      delete spfld->objectcrc;
-      spfld->objectcrc = NULL;
-   }
-
-   /****************************************/
-   /*        Messages l”schen            ÿ */
-   /****************************************/
-   
-   #ifdef logging
-   logtofile ( "loaders.cpp / erasemap / deleting messages ");
-   #endif
-   pmessage msg = spfld->message;
-   while ( msg ) {
-      pmessage temp = msg->next;
-      delete msg;
-      msg= temp;
-   }
-
-   for ( i = 0; i < 8; i++ ) {
-      deletemessagelist ( spfld->player[ i ].sentmessage ) ;
-      spfld->player[ i ].sentmessage = NULL;
-
-      deletemessagelist ( spfld->player[ i ].unreadmessage );
-      spfld->player[ i ].unreadmessage = NULL;
-
-      deletemessagelist ( spfld->player[ i ].oldmessage );
-      spfld->player[ i ].oldmessage = NULL;
-   }
-   deletemessagelist ( spfld->unsentmessage );
-   spfld->unsentmessage = NULL;
-
-   if ( spfld->journal ) {
-      delete[] spfld->journal;
-      spfld->journal = NULL;
-   }
-   if ( spfld->newjournal ) {
-      delete[] spfld->newjournal;
-      spfld->newjournal = NULL;
-   }
-
-   if ( spfld->shareview ) {
-      delete spfld->shareview;
-      spfld->shareview = NULL;
-   }
-
-   if ( spfld->replayinfo ) {
-      delete spfld->replayinfo;
-      spfld->replayinfo = NULL;
-   }
-
-   if ( spfld->game_parameter ) {
-      delete[] spfld->game_parameter;
-      spfld->game_parameter = NULL;
-   }
-
-
-   #ifdef logging
-   logtofile ( "loaders.cpp / erasemap / deleting fields ");
-   #endif
-   delete[] spfld->field;
-   spfld->field = NULL;
-   spfld->xsize = 0; 
-   spfld->ysize = 0; 
-   spfld->xpos = 0; 
-   spfld->ypos = 0; 
-   
-   cursor.hide(); 
-   cursor.posx = 0;
-   cursor.posy = 0; 
-   
-   memset (spfld, 0, sizeof(*spfld));
-   #ifdef logging
-   logtofile ( "loaders.cpp / erasemap / returning");
-   #endif
-} 
+}
 
 
 
-void         erasemap_unchained( tmap* spfld )
+void         __erasemap_unchained( pmap& spfld )
 { 
    if ( !spfld )
       return;
 
 
   int         i; 
-  pvehicle     aktvehicle; 
-  pbuilding    aktbuilding; 
-  pevent       event;
-  pevent       event2;
 
    if (spfld->xsize == 0) return;
 
-   int l;
-   for (l=0 ;l < spfld->xsize * spfld->ysize ; l++ ) {
-
-      if ( spfld->field[l].bdt & cbbuildingentry ) {
-         aktbuilding = spfld->field[l].building;
-         for (i=0; i<31 ; i++ ) 
-            if (aktbuilding->loading[i]) {
-               if (aktbuilding->loading[i]->name)
-                  delete[] aktbuilding->loading[i]->name;
-               delete aktbuilding->loading[i] ;
-            }
-         if (aktbuilding->name)
-            delete[] aktbuilding->name;
-         delete aktbuilding ;
-      }
-
-      aktvehicle = spfld->field[l].vehicle;
-      if ( aktvehicle ) {
-         for (i=0; i<31 ; i++ ) 
-            if (aktvehicle->loading[i]) {
-               if (aktvehicle->loading[i]->name)
-                  delete[] aktvehicle->loading[i]->name ;
-               delete aktvehicle->loading[i] ;
-            }
-         if (aktvehicle->name)
-            delete[] aktvehicle->name;
-         delete aktvehicle;
-      }
-
-   } /* endfor */
 
    for (i=0; i<9 ; i++) {
       if ( spfld->player[i].ai  ) {
          delete spfld->player[i].ai;
          spfld->player[i].ai = NULL;
       }
-
-
-      if ( spfld->humanplayername[i] ) {
-         delete[] spfld->humanplayername[i];
-         spfld->humanplayername[i] = NULL;
-      }
-      if ( spfld->computerplayername[i] ) {
-         delete[] spfld->computerplayername[i];
-         spfld->computerplayername[i] = NULL;
-      }
-      /*
-      if ( spfld->alliancenames[i] ) {
-         delete spfld->alliancenames[i];
-         spfld->alliancenames[i] = NULL;
-      }
-      */
 
 
       pdevelopedtechnologies devtech1, devtech2;
@@ -3503,110 +2850,9 @@ void         erasemap_unchained( tmap* spfld )
    }
 
 
-   /****************************************/
-   /*     Events l”schen                 ÿ */
-   /****************************************/
-
-   event = spfld->firsteventtocome; 
-   while (event != NULL) { 
-      event2 = event; 
-      event = event->next; 
-      delete event2; 
-   } 
-   event = spfld->firsteventpassed; 
-   while (event != NULL) { 
-      event2 = event; 
-      event = event->next; 
-      delete event2; 
-   } 
-
-
-   /****************************************/
-   /*     Sezierungen l”schen            ÿ */
-   /****************************************/
-   
-   for ( i = 0; i < 8; i++ ) {
-      pdissectedunit du = spfld->player[ i ].dissectedunit;
-      while ( du ) {
-         pdissectedunit du2 = du->next;
-         delete du;
-         du = du2;
-      }
-   }
-
-
-   /****************************************/
-   /*        CRCs  l”schen               ÿ */
-   /****************************************/
-
-   if ( spfld->objectcrc ) {
-      if ( spfld->objectcrc->speedcrccheck )
-         delete spfld->objectcrc->speedcrccheck;
-      if ( spfld->objectcrc->unit.crc )
-         delete spfld->objectcrc->unit.crc;
-      if ( spfld->objectcrc->building.crc )
-         delete spfld->objectcrc->building.crc;
-      if ( spfld->objectcrc->object.crc )
-         delete spfld->objectcrc->object.crc;
-      if ( spfld->objectcrc->terrain.crc )
-         delete spfld->objectcrc->terrain.crc;
-      if ( spfld->objectcrc->technology.crc )
-         delete spfld->objectcrc->technology.crc;
-
-      delete spfld->objectcrc;
-      spfld->objectcrc = NULL;
-   }
-
-   /****************************************/
-   /*        Messages l”schen            ÿ */
-   /****************************************/
-   
-   pmessage msg = spfld->message;
-   while ( msg ) {
-      pmessage temp = msg->next;
-      delete msg;
-      msg= temp;
-   }
-
-   for ( i = 0; i < 8; i++ ) {
-      deletemessagelist ( spfld->player[ i ].sentmessage ) ;
-      spfld->player[ i ].sentmessage = NULL;
-
-      deletemessagelist ( spfld->player[ i ].unreadmessage );
-      spfld->player[ i ].unreadmessage = NULL;
-
-      deletemessagelist ( spfld->player[ i ].oldmessage );
-      spfld->player[ i ].oldmessage = NULL;
-   }
-   deletemessagelist ( spfld->unsentmessage );
-   spfld->unsentmessage = NULL;
-
-
-   if ( spfld->journal ) {
-      delete[] spfld->journal;
-      spfld->journal = NULL;
-   }
-   if ( spfld->newjournal ) {
-      delete[] spfld->newjournal;
-      spfld->newjournal = NULL;
-   }
-   if ( spfld->shareview ) {
-      delete spfld->shareview;
-      spfld->shareview = NULL;
-   }
-   if ( spfld->replayinfo ) {
-      delete spfld->replayinfo;
-      spfld->replayinfo = NULL;
-   }
-   if ( spfld->game_parameter ) {
-      delete[] spfld->game_parameter;
-      spfld->game_parameter = NULL;
-   }
-
-
-   delete[] spfld->field;
-   memset (spfld, 0, sizeof( *spfld ));
-} 
+   delete spfld;
+   spfld = NULL;
+}
 
 
 
@@ -3821,7 +3067,7 @@ void         loadicons(void)
 } 
 
 
-
+/*
 tspeedcrccheck :: tspeedcrccheck ( pobjectcontainercrcs crclist )
 {
    status = 0;
@@ -3830,7 +3076,7 @@ tspeedcrccheck :: tspeedcrccheck ( pobjectcontainercrcs crclist )
    strnglen = 0;
 
    int i;
-
+*/
 /*
    for ( i = 0; i <= maxterrainanz; i++ )
       bdt[i] = 0;
@@ -3847,7 +3093,7 @@ tspeedcrccheck :: tspeedcrccheck ( pobjectcontainercrcs crclist )
    for ( i = 0; i <= maxobjectnumber; i++ )
       obj[i] = 0;
 */
-
+/*
    list = crclist;
 
 
@@ -4083,7 +3329,7 @@ void tspeedcrccheck :: appendstring ( char* s, char* d, int id, int mode )
          break;
       case 3:sprintf ( st, "#color4#ERROR#color0#: the %s named %s , id %d , has an invalid crc\n", s, d, id );
          break;
-   } /* endswitch */
+   }
 
    if ( !strng ) {
       strnglen = 500;
@@ -4174,3 +3420,4 @@ int  tspeedcrccheck :: getstatus ( void )
    }
    return status;
 }
+*/

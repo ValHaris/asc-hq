@@ -97,9 +97,9 @@ int    Buildingtype :: vehicleloadable ( pvehicletype fzt ) const
 
 
 
-const float repairEfficiencyBuilding[resourceTypeNum*resourceTypeNum] = { 1./3., 0,     0,
+const float repairEfficiencyBuilding[resourceTypeNum*resourceTypeNum] = { 1./3., 0,     1. / 3. ,
                                                                           0,     1./3., 0,
-                                                                          0,     0,     1. / 3. };
+                                                                          0,     0,     0 };
 
 Building :: Building ( pmap actmap )
            : ContainerBase ( NULL ), repairEfficiency ( repairEfficiencyBuilding )
@@ -120,7 +120,6 @@ Building :: Building ( pmap actmap )
       munition[i] = 0;
       munitionsautoproduction[i] = 0;
    }
-   name = NULL;
    netcontrol = 0;
    next = NULL;
    prev = NULL;
@@ -166,10 +165,7 @@ Building :: Building ( pbuilding src, tmap* actmap )
    maxresearchpoints = src->maxresearchpoints;
    researchpoints = src->researchpoints;
 
-   if ( src->name )
-      name = strdup ( src->name );
-   else
-      name = NULL;
+   name = src->name;
 
    xpos = src->xpos;
    ypos = src->ypos;

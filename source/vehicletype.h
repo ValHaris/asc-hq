@@ -206,7 +206,7 @@ extern const char*  cvehiclefunctions[];
     char         klasse;
     word         armor;
     int          networkid;
-    char*        name;
+    string       name;
     int          functions;
     class  ReactionFire {
          Vehicle* unit;

@@ -21,6 +21,7 @@
  #include "global.h"
  #include "tpascal.inc"
 
+ #include <string>
 
  typedef class tnstream* pnstream;
  class tnstream {
@@ -30,8 +31,10 @@
 
            virtual void readpchar( char** pc, int maxlength = 0) ;
            virtual void readpnchar( char** pc, int maxlength = 0) ;
-           virtual int readTextString ( std::string& s ); // return 0 if end of file is reached
+           virtual int readTextString ( string& s ); // return 0 if end of file is reached
+           virtual string readString ( );
            virtual void writepchar( const char* pc) ;
+           virtual void writeString( const string& pc) ;
 
            virtual int  readInt  ( void );
            virtual word readWord ( void );

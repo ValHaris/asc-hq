@@ -34,7 +34,7 @@
 
 tmap :: tmap ( void )
 {
-   int i;
+      int i;
 
       xsize = 0;
       ysize = 0;
@@ -68,13 +68,16 @@ tmap :: tmap ( void )
          else
             player[i].stat = 2;
 
-         player[i].name = NULL;
          player[i].passwordcrc = 0;
          player[i].dissectedunit = 0;
          player[i].unreadmessage = NULL;
          player[i].oldmessage = NULL;
          player[i].sentmessage = NULL;
          player[i].queuedEvents = 0;
+         player[i].humanname = "human ";
+         player[i].humanname += strrr( i );
+         player[i].computername = "computer ";
+         player[i].computername += strrr( i );
       }
 
       oldevents = NULL;
@@ -103,13 +106,10 @@ tmap :: tmap ( void )
       messageid = 0;
       journal = NULL;
       newjournal = NULL;
-      for ( i = 0; i< 8; i++ ) {
-         humanplayername[i] = NULL;
-         computerplayername[i] = NULL;
+      for ( i = 0; i< 8; i++ )
          alliances_at_beginofturn[i] = 0;
-      }
+
       supervisorpasswordcrc = 0;
-      objectcrc = NULL;
       shareview = NULL;
       continueplaying = 0;
       replayinfo = NULL;
@@ -121,8 +121,6 @@ tmap :: tmap ( void )
       gameparameter_num = 0;
       game_parameter = NULL;
       mineralResourcesDisplayed = 0;
-      for ( i = 0; i< 8; i++ )
-         _oldgameparameter[ i ] = 0;
 }
 
 
@@ -139,7 +137,7 @@ void tmap :: read ( tnstream& stream )
    stream.readdata ( codeword, 11 );
 
    title = (char*) stream.readInt();
-   campaign = (pcampaign) stream.readInt();
+   bool loadCampaign = stream.readInt();
    actplayer = stream.readChar();
    time.abstime = stream.readInt();
 
@@ -157,6 +155,7 @@ void tmap :: read ( tnstream& stream )
       for ( int j = 0; j < 8; j++ )
          alliances[j][i] = stream.readChar();
 
+   int dummy_playername[9];
    for ( i = 0; i< 9; i++ ) {
       player[i].existent = stream.readChar();
       player[i].firstvehicle = NULL; stream.readInt(); // dummy
@@ -164,8 +163,8 @@ void tmap :: read ( tnstream& stream )
       player[i].research.read ( stream );
       player[i].ai = (BaseAI*) stream.readInt();
       player[i].stat = stream.readChar();
-      player[i].dummy = stream.readChar();
-      player[i].name = (char*) stream.readInt();
+      stream.readChar(); // dummy
+      dummy_playername[i] = stream.readInt();
       player[i].passwordcrc = stream.readInt();
       player[i].dissectedunit = (pdissectedunit) stream.readInt();
       player[i].unreadmessage = (pmessagelist) stream.readInt();
@@ -173,9 +172,13 @@ void tmap :: read ( tnstream& stream )
       player[i].sentmessage = (pmessagelist) stream.readInt();
    }
 
-   oldevents = (peventstore) stream.readInt();
-   firsteventtocome = (pevent) stream.readInt();
-   firsteventpassed = (pevent) stream.readInt();
+   oldevents = NULL;
+
+   //! practically dummy
+   int loadeventstore = stream.readInt();
+   int loadeventstocome = stream.readInt();
+   int loadeventpassed = stream.readInt();
+
    unitnetworkid = stream.readInt();
    levelfinished = stream.readChar();
    network = (pnetwork) stream.readInt();
@@ -199,18 +202,23 @@ void tmap :: read ( tnstream& stream )
    journal = (char*) stream.readInt();
    newjournal = (char*) stream.readInt();
 
+   int exist_humanplayername[9];
    for ( i = 0; i < 8; i++ )
-      humanplayername[i] = (char*) stream.readInt();
+      exist_humanplayername[i] = stream.readInt();
+   exist_humanplayername[8] = 0;
 
+
+   int exist_computerplayername[9];
    for ( i = 0; i < 8; i++ )
-      computerplayername[i] = (char*) stream.readInt();
+      exist_computerplayername[i] = stream.readInt();
+   exist_computerplayername[8] = 0;
 
    supervisorpasswordcrc = stream.readInt();
 
    for ( i = 0; i < 8; i++ )
       alliances_at_beginofturn[i] = stream.readChar();
 
-   objectcrc = (pobjectcontainercrcs) stream.readInt();
+   stream.readInt(); // was objectcrc = (pobjectcontainercrcs)
    shareview = (pshareview) stream.readInt();
 
    continueplaying = stream.readInt();
@@ -226,7 +234,7 @@ void tmap :: read ( tnstream& stream )
    graphicset = stream.readInt();
    gameparameter_num = stream.readInt();
 
-   game_parameter = (int*) stream.readInt();
+   stream.readInt(); // dummy
    mineralResourcesDisplayed = stream.readInt();
    for ( i = 0; i< 9; i++ )
        player[i].queuedEvents = stream.readInt();
@@ -234,8 +242,180 @@ void tmap :: read ( tnstream& stream )
    for ( i = 0; i < 19; i++ )
        stream.readInt();
 
+   int _oldgameparameter[8];
    for ( i = 0; i < 8; i++ )
        _oldgameparameter[i] = stream.readInt();
+
+// return;
+
+/////////////////////
+// Here initmap was called
+/////////////////////
+
+
+    if ( title )
+       stream.readpchar( &title );
+
+    if ( loadCampaign ) {
+       campaign = new Campaign;
+       campaign->id = stream.readWord();
+       campaign->prevmap = stream.readWord();
+       campaign->player = stream.readChar();
+       campaign->directaccess = stream.readChar();
+       for ( int d = 0; d < 21; d++ )
+          stream.readChar(); // dummy
+    }
+
+    for (char w=0; w<9 ; w++ ) {
+       if (dummy_playername[w] )
+          stream.readString();
+
+      /*
+       if (player[w].aiparams) {
+          player[w].aiparams = new ( taiparams );
+          stream.readdata2 ( *player[w].aiparams );
+       }
+      */
+       player[w].ai = NULL;
+
+
+       if ( exist_humanplayername[w] )
+          player[w].humanname = stream.readString();
+
+       if ( exist_computerplayername[w] )
+          player[w].computername = stream.readString();
+
+    } /* endfor */
+
+    tribute = new ( tresourcetribute );
+    if ( stream.readInt() )
+       stream.readdata2 ( *tribute );
+    else
+       memset ( tribute, 0, sizeof ( *tribute ));
+
+
+       #ifdef logging
+       logtofile ( "loaders / tspfldloaders::readmap / vor alliances" );
+       #endif
+
+    for ( int i = 0; i < 8; i++ )
+       if ( alliance_names_not_used_any_more[i] ) {
+          char* tempname = NULL;
+          stream.readpchar ( &tempname );
+          delete[] tempname;
+
+          alliance_names_not_used_any_more[i] = 0;
+       }
+
+
+
+
+    int h = stream.readInt();
+
+
+/*
+    if ( objectcrc ) {
+       #ifdef logging
+       logtofile ( "loaders / tspfldloaders::readmap / vor objectcrcs" );
+       #endif
+
+       objectcrc = new tobjectcontainercrcs;
+       stream.readdata2 ( *objectcrc );
+
+       #ifdef logging
+       logtofile ( "loaders / tspfldloaders::readmap / vor unitcrcs" );
+       #endif
+       if ( objectcrc->unit.crcnum ) {
+          objectcrc->unit.crc = new tcrc[objectcrc->unit.crcnum];
+          stream.readdata ( objectcrc->unit.crc, objectcrc->unit.crcnum * sizeof ( tcrc ) );
+       } else
+          objectcrc->unit.crc = NULL;
+
+       #ifdef logging
+       logtofile ( "loaders / tspfldloaders::readmap / vor buildingcrcs" );
+       #endif
+       if ( objectcrc->building.crcnum ) {
+          objectcrc->building.crc = new tcrc[objectcrc->building.crcnum];
+          stream.readdata ( objectcrc->building.crc, objectcrc->building.crcnum * sizeof ( tcrc ) );
+       } else
+          objectcrc->building.crc = NULL;
+
+       #ifdef logging
+       logtofile ( "loaders / tspfldloaders::readmap / vor object.crcs" );
+       #endif
+       if ( objectcrc->object.crcnum ) {
+          objectcrc->object.crc = new tcrc[objectcrc->object.crcnum];
+          stream.readdata ( objectcrc->object.crc, objectcrc->object.crcnum * sizeof ( tcrc ) );
+       } else
+          objectcrc->object.crc = NULL;
+
+       #ifdef logging
+       logtofile ( "loaders / tspfldloaders::readmap / vor terraincrcs" );
+       #endif
+       if ( objectcrc->terrain.crcnum ) {
+          objectcrc->terrain.crc = new tcrc[objectcrc->terrain.crcnum];
+          stream.readdata ( objectcrc->terrain.crc, objectcrc->terrain.crcnum * sizeof ( tcrc ) );
+       } else
+          objectcrc->terrain.crc = NULL;
+
+       #ifdef logging
+       logtofile ( "loaders / tspfldloaders::readmap / vor techcrcs" );
+       #endif
+       if ( objectcrc->technology.crcnum ) {
+          objectcrc->technology.crc = new tcrc[objectcrc->technology.crcnum];
+          stream.readdata ( objectcrc->technology.crc, objectcrc->technology.crcnum * sizeof ( tcrc ) );
+       } else
+          objectcrc->technology.crc = NULL;
+
+       #ifdef logging
+       logtofile ( "loaders / tspfldloaders::readmap / vor speedcrccheck" );
+       #endif
+       objectcrc->speedcrccheck = new tspeedcrccheck ( objectcrc );
+
+    }
+*/
+
+    if ( shareview ) {
+       shareview = new tshareview;
+       stream.readdata2 ( *(shareview) );
+    }
+
+    if ( preferredfilenames ) {
+       preferredfilenames = new PreferredFilenames;
+       stream.readdata2 ( *(preferredfilenames) );
+       for ( int i = 0; i < 8; i++ ) {
+          if ( preferredfilenames->mapname[i] )
+             stream.readpchar ( &preferredfilenames->mapname[i] );
+          if ( preferredfilenames->mapdescription_not_used_any_more[i] )
+             stream.readpchar ( &preferredfilenames->mapdescription_not_used_any_more[i] );
+          if ( preferredfilenames->savegame[i] )
+             stream.readpchar ( &preferredfilenames->savegame[i] );
+          if ( preferredfilenames->savegamedescription_not_used_any_more[i] )
+             stream.readpchar ( &preferredfilenames->savegamedescription_not_used_any_more[i] );
+       }
+    }
+
+    if ( ellipse ) {
+       ellipse = new EllipseOnScreen;
+       stream.readdata2 ( *(ellipse) );
+    }
+
+    int orggpnum = gameparameter_num;
+    gameparameter_num = 0;
+    for ( int gp = 0; gp < 8; gp ++ )
+       setgameparameter ( gp, _oldgameparameter[gp] );
+
+    for ( int ii = 0 ; ii < orggpnum; ii++ ) {
+       int gpar;
+       stream.readdata2 ( gpar );
+       setgameparameter ( ii, gpar );
+    }
+
+       #ifdef logging
+       logtofile ( "loaders / tspfldloaders::readmap / returning" );
+       #endif
+
+
 
 }
 
@@ -279,7 +459,7 @@ void tmap :: write ( tnstream& stream )
       stream.writeInt( player[i].ai != NULL );
       stream.writeChar( player[i].stat );
       stream.writeChar( 0 ); // dummy
-      stream.writeInt( player[i].name != NULL );
+      stream.writeInt( 0 );
       stream.writeInt( player[i].passwordcrc );
       stream.writeInt( player[i].dissectedunit != NULL );
       stream.writeInt( player[i].unreadmessage != NULL );
@@ -312,17 +492,17 @@ void tmap :: write ( tnstream& stream )
    stream.writeInt( newjournal != NULL );
 
    for ( i = 0; i < 8; i++ )
-      stream.writeInt( humanplayername[i] != NULL );
+      stream.writeInt( !player[i].humanname.empty() );
 
    for ( i = 0; i < 8; i++ )
-      stream.writeInt( computerplayername[i] != NULL );
+      stream.writeInt( !player[i].computername.empty() );
 
    stream.writeInt( supervisorpasswordcrc );
 
    for ( i = 0; i < 8; i++ )
       stream.writeChar( alliances_at_beginofturn[i] );
 
-   stream.writeInt( objectcrc != NULL );
+   stream.writeInt( 0 );
    stream.writeInt( shareview != NULL );
 
    stream.writeInt( continueplaying );
@@ -347,7 +527,115 @@ void tmap :: write ( tnstream& stream )
        stream.writeInt( 0 );
 
    for ( i = 0; i < 8; i++ )
-       stream.writeInt( _oldgameparameter[i] );
+       stream.writeInt( -2 );
+
+
+///////////////////
+// second part
+//////////////////
+
+
+
+       if ( title )
+          stream.writepchar( title );
+
+       if ( campaign ) {
+          stream.writeWord( campaign->id );
+          stream.writeWord( campaign->prevmap );
+          stream.writeChar( campaign->player );
+          stream.writeChar( campaign->directaccess );
+          for ( int d = 0; d < 21; d++ )
+             stream.writeChar(0); // dummy
+       }
+
+       for (int w=0; w<8 ; w++ ) {
+
+          // if (player[w].name)
+          //    stream.writepchar ( player[w].name );
+
+
+         // if (player[w].ai)
+         //    stream.writedata2 ( *player[w].aiparams );
+
+
+          if ( !player[w].humanname.empty() )
+             stream.writeString ( player[w].humanname );
+
+          if ( !player[w].computername.empty() )
+             stream.writeString ( player[w].computername );
+       }
+
+       #ifdef logging
+       logtofile ( "loaders / tspfldloaders::writemap / names written" );
+       #endif
+
+       int t = 0;
+       if ( tribute )
+          for (int i = 0; i < 8; i++) {
+             for (int j = 0; j < 8; j++) {
+                for (int k = 0; k < 3; k++) {
+                   if ( tribute->avail.resource[k][i][j] )
+                      t++;
+                   if ( tribute->paid.resource[k][i][j] )
+                      t++;
+                }
+             }
+          }
+
+
+       #ifdef logging
+       logtofile ( "loaders / tspfldloaders::writemap / tribute written" );
+       #endif
+
+        stream.writedata2 ( t );
+        if ( t )
+           stream.writedata2 ( *tribute );
+
+        for ( int i = 0; i < 8; i++ )
+           if ( alliance_names_not_used_any_more[i] ) {
+              char nl = 0;
+              stream.writedata2 ( nl );
+           }
+
+
+        int h = 0;
+        stream.writedata2 ( h );
+
+
+       #ifdef logging
+       logtofile ( "loaders / tspfldloaders::writemap / vor crc" );
+       #endif
+
+        if ( shareview )
+           stream.writedata2 ( *(shareview) );
+
+       #ifdef logging
+       logtofile ( "loaders / tspfldloaders::writemap / shareview written" );
+       #endif
+
+        if ( preferredfilenames ) {
+           stream.writedata2 ( *(preferredfilenames) );
+           for ( int i = 0; i < 8; i++ ) {
+              if ( preferredfilenames->mapname[i] )
+                 stream.writepchar ( preferredfilenames->mapname[i] );
+              if ( preferredfilenames->mapdescription_not_used_any_more[i] )
+                 stream.writepchar ( preferredfilenames->mapdescription_not_used_any_more[i] );
+              if ( preferredfilenames->savegame[i] )
+                 stream.writepchar ( preferredfilenames->savegame[i] );
+              if ( preferredfilenames->savegamedescription_not_used_any_more[i] )
+                 stream.writepchar ( preferredfilenames->savegamedescription_not_used_any_more[i] );
+           }
+        }
+
+        if ( ellipse )
+           stream.writedata2 ( *(ellipse) );
+
+        for ( int ii = 0 ; ii < gameparameter_num; ii++ )
+           stream.writedata2 ( game_parameter[ii] );
+
+
+
+
 }
 
 
@@ -501,11 +789,7 @@ const char* tmap :: getPlayerName ( int playernum )
    if ( playernum >= 8 )
       playernum /= 8;
 
-   switch ( player[playernum].stat ) {
-      case 0: return humanplayername[playernum];
-      case 1: return computerplayername[playernum];
-      default: return "off";
-   } /* endswitch */
+   return player[playernum].getName().c_str();
 }
 
 
@@ -621,9 +905,52 @@ pvehicletype tmap :: getVehicleType_byId ( int id )
 }
 
 
+void deletemessagelist ( pmessagelist list )
+{
+   if ( list ) {
+      while ( list->prev )
+         list = list->prev;
+
+      while ( list->next )
+         delete list->next;
+
+      delete list;
+   }
+}
+
 
 tmap :: ~tmap ()
 {
+   if ( field )
+      for ( int l=0 ;l < xsize * ysize ; l++ ) {
+         if ( field[l].bdt & cbbuildingentry ) {
+            pbuilding aktbuilding = field[l].building;
+            for ( int i=0; i<31 ; i++ )
+               if (aktbuilding->loading[i])
+                  delete aktbuilding->loading[i] ;
+
+            delete aktbuilding ;
+         }
+
+         pvehicle aktvehicle = field[l].vehicle;
+         if ( aktvehicle ) {
+            for ( int i=0; i<31 ; i++ )
+               if (aktvehicle->loading[i])
+                  delete aktvehicle->loading[i] ;
+
+            delete aktvehicle;
+         }
+      } /* endfor */
+
+   int i;
+   for ( i = 0; i <= 8; i++) {
+      if ( player[i].ai ) {
+         delete player[i].ai;
+         player[i].ai = NULL;
+      }
+   }
+
+
    pevent       event;
    pevent       event2;
 
@@ -633,12 +960,83 @@ tmap :: ~tmap ()
       event = event->next;
       delete  event2;
    }
+   firsteventtocome = NULL;
+
    event = firsteventpassed;
    while (event != NULL) {
       event2 = event;
       event = event->next;
       delete event2;
    }
+   firsteventpassed = NULL;
 
+   if ( journal ) {
+      delete[] journal;
+      journal = NULL;
+   }
+   if ( newjournal ) {
+      delete[] newjournal;
+      newjournal = NULL;
+   }
+
+   if ( shareview ) {
+      delete shareview;
+      shareview = NULL;
+   }
+
+   if ( replayinfo ) {
+      delete replayinfo;
+      replayinfo = NULL;
+   }
+
+   if ( game_parameter ) {
+      delete[] game_parameter;
+      game_parameter = NULL;
+   }
+
+   if ( field ) {
+      delete[] field;
+      field = NULL;
+   }
+
+
+   /****************************************/
+   /*        Messages l”schen            ÿ */
+   /****************************************/
+
+   pmessage msg = message;
+   while ( msg ) {
+      pmessage temp = msg->next;
+      delete msg;
+      msg= temp;
+   }
+
+   for ( i = 0; i < 8; i++ ) {
+      deletemessagelist ( player[ i ].sentmessage ) ;
+      player[ i ].sentmessage = NULL;
+
+      deletemessagelist ( player[ i ].unreadmessage );
+      player[ i ].unreadmessage = NULL;
+
+      deletemessagelist ( player[ i ].oldmessage );
+      player[ i ].oldmessage = NULL;
+   }
+   deletemessagelist ( unsentmessage );
+   unsentmessage = NULL;
+
+
+
+   /****************************************/
+   /*     Sezierungen l”schen            ÿ */
+   /****************************************/
+
+   for ( i = 0; i < 8; i++ ) {
+      pdissectedunit du = player[ i ].dissectedunit;
+      while ( du ) {
+         pdissectedunit du2 = du->next;
+         delete du;
+         du = du2;
+      }
+   }
 }
 

@@ -733,7 +733,6 @@ Vehicle :: ~Vehicle (  )
 
 void Vehicle :: init ( void )
 {
-   name = NULL;
    xpos = -1;
    ypos = -1;
    
@@ -783,7 +782,6 @@ void Vehicle :: init ( void )
    connection = 0;
    klasse = 0;
    networkid = -1;
-   name = NULL;
    reactionfire.status = 0;
    reactionfire.enemiesAttackable = 0;
    generatoractive = 0;
@@ -854,10 +852,7 @@ void Vehicle :: clone ( pvehicle src, pmap actmap )
    klasse = src->klasse;
    armor = src->armor;
    networkid = src->networkid;
-   if ( src->name )
-      name = strdup ( src->name );
-   else
-      name = NULL;
+   name = src->name ;
    functions = src->functions;
    reactionfire.status = src->reactionfire.status;
    reactionfire.enemiesAttackable = src->reactionfire.enemiesAttackable;
@@ -1346,7 +1341,7 @@ int Vehicle :: buildingconstructable ( pbuildingtype building )
       return 0;
 
 
-   if ( building->productioncost.material * mf / 100 <= tank.material   &&   building->productioncost.fuel * ff / 100 <= tank.fuel ) {
+   if ( building->productionCost.material * mf / 100 <= tank.material   &&   building->productionCost.fuel * ff / 100 <= tank.fuel ) {
       int found = 0;
       if ( functions & cfputbuilding )
          found = 1;
@@ -1776,7 +1771,7 @@ void   Vehicle::write ( pnstream stream )
     if ( networkid )
        bm |= cem_networkid;
 
-    if ( name      )
+    if ( !name.empty() )
        bm |= cem_name;
 
     if ( reactionfire.status )
@@ -1850,7 +1845,7 @@ void   Vehicle::write ( pnstream stream )
          stream->writeChar ( attacked );
 
     if ( bm & cem_name     )
-         stream->writepchar ( name );
+         stream->writeString ( name );
 
     if ( bm & cem_reactionfire )
        stream->writeChar ( reactionfire.status );
@@ -1989,7 +1984,7 @@ void   Vehicle::read ( pnstream stream )
        attacked = stream->readChar();
 
     if ( bm & cem_name )
-       stream->readpchar ( &name );
+       name = stream->readString ( );
 
     if ( bm & cem_reactionfire )
        reactionfire.status = stream->readChar();

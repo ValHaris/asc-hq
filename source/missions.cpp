@@ -1,6 +1,10 @@
-//     $Id: missions.cpp,v 1.15 2000-10-26 18:14:59 mbickel Exp $
+//     $Id: missions.cpp,v 1.16 2000-11-08 19:31:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/10/26 18:14:59  mbickel
+//      AI moves damaged units to repair
+//      tmap is not memory layout sensitive any more
+//
 //     Revision 1.14  2000/10/18 14:14:15  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -789,7 +793,8 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
          else { 
            viewtext2(904); 
            if (choice_dlg("Do you want to continue playing ?","~y~es","~n~o") == 2) {
-              erasemap();
+              delete actmap;
+              actmap = NULL;
               throw NoMapLoaded();
            } else {
               actmap->continueplaying = 1;

@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.62 2000-10-18 14:13:58 mbickel Exp $
+//     $Id: dialog.cpp,v 1.63 2000-11-08 19:30:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2000/10/18 14:13:58  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.61  2000/10/14 14:16:02  mbickel
 //      Cleaned up includes
 //      Added mapeditor to win32 watcom project
@@ -520,7 +524,7 @@ void         tstatisticarmies::count(void)
                b = 2; 
       actvehicle = actmap->player[j].firstvehicle; 
       while (actvehicle != NULL) { 
-         if (godview || fieldvisiblenow(getfield(actvehicle->xpos,actvehicle->ypos))) { 
+         if (fieldvisiblenow(getfield(actvehicle->xpos,actvehicle->ypos))) {
             if (actvehicle->typ->height & (chtieffliegend | chfliegend | chhochfliegend | chsatellit)) { 
                l[0][b]++; 
                m[0][j]++; 
@@ -559,7 +563,7 @@ void         tstatisticbuildings::count(void)
                b = 2; 
       actbuilding = actmap->player[j].firstbuilding; 
       while (actbuilding != NULL) { 
-         if (godview || fieldvisiblenow(getfield(actbuilding->xpos,actbuilding->ypos))) { 
+         if (fieldvisiblenow(getfield(actbuilding->xpos,actbuilding->ypos))) {
             l[0][b]++; 
             m[0][j]++; 
          } 
@@ -3194,7 +3198,7 @@ void tbasicshowmap::generatemap1 ( void )
                if ( v == visible_ago)
                   buffer2[ j * mxsize + 1 + i*2] = xlattables.a.dark1[ c ];
                else 
-                  if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 || godview ) )
+                  if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 ) )
                      buffer2[ j * mxsize + 1 + i*2] = fld1->building->color + buildingcoloroffset;
                   else
                      if ( fld1->vehicle && ((v == visible_all) || ((fld1->vehicle->height >= chschwimmend) && (fld1->vehicle->height <= chhochfliegend))))
@@ -3208,7 +3212,7 @@ void tbasicshowmap::generatemap1 ( void )
                if ( v == visible_ago)
                   buffer2[ j * mxsize + i*2] = xlattables.a.dark1[ c ];
                else 
-                  if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 || godview ))
+                  if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 ))
                      buffer2[ j * mxsize + i*2] = fld1->building->color + buildingcoloroffset;
                   else
                      if ( fld1->vehicle && ((v == visible_all) || ((fld1->vehicle->height >= chschwimmend) && (fld1->vehicle->height <= chhochfliegend))))
@@ -3258,7 +3262,7 @@ void tbasicshowmap::generatemap2 ( void )
                           buffer2 [ (j * 2 + 1) * mxsize + (i * 4) + 4 ] = xlattables.a.dark1[ fld1->typ->quickview->dir[fld1->direction].p3[2][1] ];
                           buffer2 [ (j * 2 + 2) * mxsize + (i * 4) + 3 ] = xlattables.a.dark1[ fld1->typ->quickview->dir[fld1->direction].p3[1][2] ];
                         } else {
-                          if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 || godview ) ) {
+                          if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 ) ) {
                              buffer2 [ (j * 2 + 0) * mxsize + (i * 4) + 3 ] = fld1->building->color + buildingcoloroffset;
                              buffer2 [ (j * 2 + 1) * mxsize + (i * 4) + 2 ] = fld1->building->color + buildingcoloroffset;
                              buffer2 [ (j * 2 + 1) * mxsize + (i * 4) + 3 ] = fld1->building->color + buildingcoloroffset;
@@ -3294,7 +3298,7 @@ void tbasicshowmap::generatemap2 ( void )
                           buffer2 [ (j * 2 + 1) * mxsize + (i * 4) + 2 ] = xlattables.a.dark1[ fld1->typ->quickview->dir[fld1->direction].p3[2][1] ];
                           buffer2 [ (j * 2 + 2) * mxsize + (i * 4) + 1 ] = xlattables.a.dark1[ fld1->typ->quickview->dir[fld1->direction].p3[1][2] ];
                         } else {
-                          if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 || godview ) ) {
+                          if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 ) ) {
                              buffer2 [ (j * 2 + 0) * mxsize + (i * 4) + 1 ] = fld1->building->color + buildingcoloroffset;
                              buffer2 [ (j * 2 + 1) * mxsize + (i * 4) + 0 ] = fld1->building->color + buildingcoloroffset;
                              buffer2 [ (j * 2 + 1) * mxsize + (i * 4) + 1 ] = fld1->building->color + buildingcoloroffset;
@@ -3356,7 +3360,7 @@ void tbasicshowmap::generatemap3 ( void )
                        if ( v == visible_ago)
                           buffer2 [ (j * 3 + 0 + l) * mxsize + (i * 6) + 3 + n ] = xlattables.a.dark1[ fld1->typ->quickview->dir[fld1->direction].p5[n][l] ];
                        else
-                          if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 || godview ) )
+                          if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 ) )
                              buffer2 [ (j * 3 + 0 + l) * mxsize + (i * 6) + 3 + n ]= fld1->building->color + buildingcoloroffset;
                           else
                              if ( fld1->vehicle && ((v == visible_all) || ((fld1->vehicle->height >= chschwimmend) && (fld1->vehicle->height <= chhochfliegend))))
@@ -3372,7 +3376,7 @@ void tbasicshowmap::generatemap3 ( void )
                        if ( v == visible_ago)
                           buffer2 [ (j * 3 + 0 + l) * mxsize + (i * 6) + 0 + n ] = xlattables.a.dark1[ fld1->typ->quickview->dir[fld1->direction].p5[n][l] ];
                        else
-                          if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 || godview ) )
+                          if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 ) )
                              buffer2 [ (j * 3 + 0 + l) * mxsize + (i * 6) + 0 + n ] = fld1->building->color + buildingcoloroffset;
                           else
                              if ( fld1->vehicle && ((v == visible_all) || ((fld1->vehicle->height >= chschwimmend) && (fld1->vehicle->height <= chhochfliegend))))
@@ -3472,7 +3476,7 @@ void tbasicshowmap::generatemap_var ( void )
                    if ( v == visible_ago)
                       *b = xlattables.a.dark1[ fld1->typ->quickview->dir[fld1->direction].p5[ xo * 5 / fieldxsize ][ yo * 5 / fieldysize ] ];
                    else
-                      if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 || godview ) )
+                      if ( fld1->building && fieldvisiblenow ( fld1, actmap->playerView ) && ( fld1->building->visible || fld1->building->color == actmap->playerView*8 ) )
                          *b = fld1->building->color + buildingcoloroffset;
                       else
                          if ( fld1->vehicle && ((v == visible_all) || ((fld1->vehicle->height >= chschwimmend) && (fld1->vehicle->height <= chhochfliegend))))
@@ -3802,26 +3806,24 @@ void showmap ( void )
 
 
 
-typedef char* tnamestrings[8];
-typedef tnamestrings* pnamestrings ;
-
-
-
+typedef string* tnamestrings[9];
 
 class  tenternamestrings : public tdialogbox {
                      typedef tdialogbox inherited;
                   public:
                        char             status;
                        char             playerexist;
-                       pnamestrings     orgnames;
-                       char             names[8][100];
-                       char             buttonnames[8][100];
+                       tnamestrings&    orgnames;
+                       char             names[9][100];
+                       char             buttonnames[9][100];
 
-                       void             init( pnamestrings namestrings, char plyexistyte, char md);
+                       void             init( char plyexistyte, char md);
                        virtual void     run ( void );
                        virtual void     buttonpressed( int id );
                        void             done ( void );
                        virtual int      getcapabilities ( void );
+
+                       tenternamestrings ( tnamestrings& n ) : orgnames ( n ) {};
                     };
 
 
@@ -3832,17 +3834,12 @@ class  tsetalliances : public tdialogbox {
                      tshareview          sv;
                public:
                      char                status;
-                     // char                alliances[8];
                      char                alliancedata[8][8];
-                     tnamestrings        computername;
-                     tnamestrings        computerplayername;
-                     tnamestrings        humanplayername;
-                     // tnamestrings        alliancename;
                      char                location[8];
                      int                 playerpos[8];  // Beispiel: Es existieren Spieler 0 und Spieler 6; dann ist playerpos[0] = 0 und playerpos[1] = 6
-                     int                 playermode[8];    /*  0: player
-                                                               1: ai
-                                                               2: off  */
+                     // int                 playermode[8];    /*  0: player
+                     //                                          1: ai
+                     //                                          2: off  */
 
                      char                playernum;
                      char                playerexist;
@@ -3868,7 +3865,7 @@ class  tsetalliances : public tdialogbox {
 static const char*    cens[]  = { "player", "alliance", "computer" };
 
 
-void         tenternamestrings::init(  pnamestrings namestrings, char plyexist, char md )
+void         tenternamestrings::init(  char plyexist, char md )
 { 
 
   char         i, j;
@@ -3892,18 +3889,12 @@ void         tenternamestrings::init(  pnamestrings namestrings, char plyexist, 
 
 
   for (i=0;i<8 ;i++ ) {
-     if ( (*namestrings)[i] ) 
-        strcpy ( names[i], (*namestrings)[i] );
-     else 
-        names[i][0] = 0;
-
+     strcpy ( names[i], orgnames[i]->c_str() );
      strcpy( buttonnames [i], cens[md] );
      strcat( buttonnames [i], digit[i] );
   } /* endfor */
 
-  orgnames =  namestrings ;
-
-  j = 0; 
+  j = 0;
   for (i = 0; i <= 7; i++) 
     if ( (playerexist & (1 << i)) && names[i] ) { 
       j++;
@@ -3938,16 +3929,10 @@ void         tenternamestrings::run(void)
     tdialogbox::run();
   }  while (status == 0);
 
-  if (status == 2) { 
-     for (int i=0;i<8 ;i++ ) {
-        if ( (*orgnames)[i] ) {
-           if ( names[i] )
-              strcpy ( (*orgnames)[i] , names[i] );
-           else
-              (*orgnames)[i][0] = 0;
-        } /* endif */
-     } /* endfor */
-  } 
+  if (status == 2)
+     for (int i=0;i<8 ;i++ )
+        *orgnames[i] = names[i];
+
 } 
 
 
@@ -3965,7 +3950,7 @@ int               tenternamestrings::getcapabilities ( void )
   #define ali_x1 30 + tsa_namelength  
   #define ali_y1 275  
 
-const char*  playermodenames[]  = {"player ", "ai ", "off "};
+// const char*  playermodenames[]  = {"player ", "ai ", "off "};
 const char   alliancecolors[]  = {0, 1, 2, 3, 4, 5, 6, 7};
 
 
@@ -4002,7 +3987,7 @@ void         tsetalliances::init( int supervis )
 
    addbutton("~p~layer names",400,80,xsize - 20,105,0,1,3,true); 
    #ifndef karteneditor
-   addbutton("~c~omputer names",400,115,xsize - 20,140,0,1,4,true); 
+   addbutton("~a~i names",400,115,xsize - 20,140,0,1,4,true);
    addbutton("~n~etwork",400,160,xsize - 20,190,0,1,5, actmap->network != NULL ); 
    #endif
    if ( !supervisor ) 
@@ -4021,24 +4006,10 @@ void         tsetalliances::init( int supervis )
      else
         actmap->player[i].existent = false;
 
-      playermode[i] = (enum tplayerstat) actmap->player[i].stat;
+      // playermode[i] = (enum tplayerstat) actmap->player[i].stat;
 
       if ( actmap->player[i].existent )  // ((playermode[i] == ps_human) || (playermode[i] == ps_computer)) &&
          playerpos[plnum++] = i;
-
-      humanplayername[i] = new char [100];
-      strcpy ( humanplayername[i] , actmap->humanplayername[i] ); 
-
-      computerplayername[i] = new char [ 100 ];
-      strcpy ( computerplayername[i] , actmap->computerplayername[i] ); 
-
-      computername[i] = new char [ 100 ];
-      if ( actmap->network && actmap->network->computer[i].name )
-         strcpy ( computername[i] , actmap->network->computer[i].name ); 
-      else {
-         strcpy ( computername[i] , "computer " ); 
-         strcat ( computername[i] , digit[i] ); 
-      }
 
       if ( actmap->player[i].existent && actmap->network ) {
         location[i] = actmap->network->player[i].compposition; 
@@ -4126,13 +4097,7 @@ void         tsetalliances::displayplayernamesintable( void )
    activefontsettings.length = ali_x1 - 41 ;
    for (int j = 0; j < playernum ; j++) {   /*  y */ 
       activefontsettings.color = 20 + 8 * playerpos[j]; 
-      if ( playermode[playerpos[j]] == ps_human )
-         showtext2( humanplayername[playerpos[j]], x1 + 40,y1 + ali_y1 + j * 22);
-      else
-         if ( playermode[playerpos[j]] == ps_computer )
-            showtext2( computerplayername[playerpos[j]], x1 + 40,y1 + ali_y1 + j * 22);
-         else
-            showtext2( "off", x1 + 40,y1 + ali_y1 + j * 22);
+      showtext2( actmap->player[ playerpos[j]].getName().c_str(), x1 + 40,y1 + ali_y1 + j * 22);
    }
    npop ( activefontsettings );
 }
@@ -4158,23 +4123,16 @@ void         tsetalliances::buildhlgraphics(void)
          activefontsettings.background = 17 + i * 8; 
          activefontsettings.length = tsa_namelength;
 
-         char* c;
-         switch ( playermode[i] ) {
-            case 0: c = humanplayername[i];
-                    break;
-            case 1: c = computerplayername[i];
-                    break;
-            case 2: c = "off";
-                    break;
-         } /* endswitch */
-
-         showtext2( c, x1 + ply_x1,y1 + ply_y1 + i * 22); 
+         showtext2( actmap->player[i].getName().c_str(), x1 + ply_x1,y1 + ply_y1 + i * 22);
 
          activefontsettings.background = dblue; 
          showtext2("(at)",x1 + ply_x1 + tsa_namelength,y1 + ply_y1 + i * 22);
 
-         activefontsettings.color = alliancecolors[location[i]]; 
-         showtext2(computername[location[i]],x1 + ply_x1 + 30 + tsa_namelength,y1 + ply_y1 + i * 22); 
+         activefontsettings.color = alliancecolors[location[i]];
+
+         char temp[1000];
+         sprintf(temp, "computer %d", location[i] );
+         showtext2(temp ,x1 + ply_x1 + 30 + tsa_namelength,y1 + ply_y1 + i * 22);
 
          #ifndef kartened
          if ( actmap->actplayer >= 0   &&  !oninit )
@@ -4200,13 +4158,13 @@ void         tsetalliances::buildhlgraphics(void)
       activefontsettings.color = 20 + 8 * playerpos[j]; 
       showtext2( letter[j] ,x1 + 25,y1 + ali_y1 + j * 22);
 
-      if ( playermode[playerpos[j]] != 2 )
+      if ( actmap->player[playerpos[j]].stat != 2 )
          for (i = 0; i < playernum ; i++) {   /*  x  */ 
               /* if i=j then
                nputimage(x1+ali_x1+i*30,y1+ali_y1+j*22,icons.diplomaticstatusinv)
             else */ 
             if (i != j) 
-              if ( playermode[playerpos[i]] != 2 )
+              if ( actmap->player[playerpos[i]].stat != 2 )
                   putimage(x1 + ali_x1 + i * 30,y1 + ali_y1 + j * 22,icons.diplomaticstatus[alliancedata[playerpos[i]][playerpos[j]]]); 
          } 
    } 
@@ -4277,10 +4235,6 @@ void          tsetalliances::checkfornetwork ( void )
 
 void         tsetalliances::setparams ( void )
 {
-  #ifdef logging
-  char tmpcbuf[300];
-  #endif
-
   int i, j;
 
   if ( actmap->network ) {
@@ -4289,76 +4243,23 @@ void         tsetalliances::setparams ( void )
   }
   for (i = 0; i < 8; i++) {
       
-      #ifdef logging
-      logtofile ( "6/dialog / tsetalliances::setparams / alliancedata" );
-      #endif
-         
-      for (j = 0; j < 8; j++) 
+      for (j = 0; j < 8; j++)
          actmap->alliances[i][j] = alliancedata[i][j];
-//      actmap->player[i].alliance = alliances[i];
-
-      #ifdef logging
-      sprintf(tmpcbuf,"6/dialog / tsetalliances::setparams / humanplayername; old address is %x, source address is %x",actmap->humanplayername[i], humanplayername[i] );
-      logtofile ( tmpcbuf );
-      #endif
-      delete[] actmap->humanplayername[i];
-      actmap->humanplayername[i] = strdup ( humanplayername[i] );
-     
-      #ifdef logging
-      sprintf(tmpcbuf,"6/dialog / tsetalliances::setparams / humanplayername; new address is %x",actmap->humanplayername[i] );
-      logtofile ( tmpcbuf );
-      #endif
-
-
-      #ifdef logging
-      sprintf(tmpcbuf,"6/dialog / tsetalliances::setparams / computerplayername; old address is %x, source address is %x",actmap->computerplayername[i], computerplayername[i] );
-      logtofile ( tmpcbuf );
-      #endif
-      delete[] actmap->computerplayername[i];
-      actmap->computerplayername[i] = strdup ( computerplayername[i] ); 
-      #ifdef logging
-      sprintf(tmpcbuf,"6/dialog / tsetalliances::setparams / computerplayername; new address is %x",actmap->computerplayername[i] );
-      logtofile ( tmpcbuf );
-      #endif
-
-      /*
-      #ifdef logging
-      logtofile ( "6/dialog / tsetalliances::setparams / alliancename" );
-      #endif
-
-      delete actmap->alliancenames[i];
-      actmap->alliancenames[i] = strdup ( alliancename[i] ); 
-      */
-
 
       if ( actmap->player[i].existent ) {
-         char* c;
-         switch ( playermode[i] ) {
-            case 0: c = actmap->humanplayername[i];
-                    break;
-            case 1: c = actmap->computerplayername[i];
-                    break;
-            case 2: c = NULL;
-                    break;
-         } /* endswitch */
-
-         actmap->player[i].name = c;
-
          if ( actmap->network )
             actmap->network->computer[ location[i] ].existent = 1;
       }
 
-      #ifdef logging
-      logtofile ( "6/dialog / tsetalliances::setparams / network" );
-      #endif
       if ( actmap->network ) {
          if ( actmap->network->computer[i].name )
             delete[]  actmap->network->computer[i].name ;
-         actmap->network->computer[i].name = strdup ( computername [ i ] );
+
+         string s = "computer ";
+         s += strrr( i );
+         actmap->network->computer[i].name = strdup ( s.c_str() );
          actmap->network->player[i].compposition = location[i];
       }
-
-      actmap->player[i].stat = playermode[i];
 
    } /* endfor */
 
@@ -4426,31 +4327,17 @@ void         tsetalliances::click(pascal_byte         bxx,
    activefontsettings.background = dblue; 
    if (bxx == 0) { 
       if (x == 0  && ( y == actmap->actplayer || supervisor ) ) { 
-        #ifdef __WATCOM_CPLUSPLUS__
-         playermode[y]++;
-        #else
-         playermode[y] += 1;
-        #endif
+         actmap->player[y].stat++;
          if ( actmap->actplayer == -1 ) {
-            if (playermode[y] > 2) 
-               playermode[y] = ps_human; 
+            if (actmap->player[y].stat > 2)
+               actmap->player[y].stat = ps_human;
          } else {
-            if (playermode[y] > 1) 
-               playermode[y] = ps_human; 
+            if (actmap->player[y].stat > 1)
+               actmap->player[y].stat = ps_human;
          }
 
-         char* c;
-         switch ( playermode[y] ) {
-            case 0: c = humanplayername[y];
-                    break;
-            case 1: c = computerplayername[y];
-                    break;
-            case 2: c = "off";
-                    break;
-         } /* endswitch */
-
          activefontsettings.background = 17 + y * 8;
-         showtext2( c, x1 + ply_x1,y1 + ply_y1 + y * 22); 
+         showtext2( actmap->player[y].getName().c_str(), x1 + ply_x1,y1 + ply_y1 + y * 22);
          displayplayernamesintable(  );
       } 
       #ifndef karteneditor
@@ -4467,7 +4354,9 @@ void         tsetalliances::click(pascal_byte         bxx,
          if (location[y] >= playernum) 
             location[y] = 0; 
          activefontsettings.color = alliancecolors[location[y]]; 
-         showtext2(computername[location[y]],x1 + ply_x1 + 30 + tsa_namelength,y1 + ply_y1 + y * 22); 
+         char temp[1000];
+         sprintf(temp, "computer %d", location[y] );
+         showtext2(temp,x1 + ply_x1 + 30 + tsa_namelength,y1 + ply_y1 + y * 22);
          checkfornetwork();
       } 
       #endif
@@ -4501,7 +4390,7 @@ void         tsetalliances::click(pascal_byte         bxx,
       if (x != y) { 
          if ( oninit ) {
             if (x < playernum  && y < playernum) {
-               if ( playermode[playerpos[x]] != 2  &&  playermode[playerpos[y]] != 2 ) {
+               if ( actmap->player[playerpos[x]].stat != 2  &&  actmap->player[playerpos[y]].stat != 2 ) {
 
                   if ( alliancedata[playerpos[x]][playerpos[y]] == capeace )
                      alliancedata[playerpos[x]][playerpos[y]] = capeace_with_shareview;
@@ -4518,7 +4407,7 @@ void         tsetalliances::click(pascal_byte         bxx,
                }
             } /* endif */
          } else {
-            if ( x < playernum  && y < playernum && playermode[playerpos[x]] != 2  &&  playermode[playerpos[y]] != 2 ) 
+            if ( x < playernum  && y < playernum && actmap->player[playerpos[x]].stat != 2  &&  actmap->player[playerpos[y]].stat != 2 )
                if ( playerpos[y] == actmap->actplayer  &&  x < playernum ) {
                   char* c = &alliancedata[playerpos[x]][playerpos[y]];
                   if ( *c == capeaceproposal ||  *c == cawar ) {
@@ -4579,68 +4468,41 @@ void         tsetalliances::buttonpressed( int id )
               else
                  help ( 60 );
       break; 
-/*      
-      case 2: {   
-                tenternamestrings   enternamestrings;
-                int allianceexist = 0;
-                for (int i = 0; i < playernum; i++ ) 
-                   allianceexist |= ( 1 << i );
-                   
-                enternamestrings.init( &alliancename, allianceexist, 1);
-                enternamestrings.run(); 
-                enternamestrings.done(); 
-                buildhlgraphics(); 
-              }
-              break; 
-*/      
 
       case 3: {
-                 tenternamestrings   enternamestrings;
                  tnamestrings names;
-                 for (i = 0; i < 8; i++ ) {
-                     char* c;
-                     switch ( playermode[i] ) {
-                        case 0: c = humanplayername[i];
-                                break;
-                        case 1: c = computerplayername[i];
-                                break;
-                        case 2: c = NULL;
-                                break;
-                     } /* endswitch */
-                     names[i] = c;
+                 for (i = 0; i < 9; i++ ) {
+                     if ( actmap->player[i].stat == 0 )
+                        names[i] = &actmap->player[i].humanname;
+                     else
+                        names[i] = &actmap->player[i].computername;
                  }
+
+                 tenternamestrings   enternamestrings ( names );
+
                  int plx;
                  if ( oninit || supervisor || actmap->actplayer == -1)
                     plx = playerexist;
                  else
                     plx = 1 << actmap->actplayer;
-                 enternamestrings.init( &names, plx ,0);
+                 enternamestrings.init( plx ,0);
                  enternamestrings.run(); 
                  enternamestrings.done(); 
-                 for ( i = 0; i < 8; i++ ) {
-                     char* c = names[i];
-                     switch ( playermode[i] ) {
-                        case 0: humanplayername[i] = c;
-                                break;
-                        case 1: computerplayername[i] = c;
-                                break;
-                     } /* endswitch */
-                 }
-                 buildhlgraphics(); 
+                 buildhlgraphics();
            }
       break; 
-      
+/*
       case 4:  {  
                  int plx = 0;
                  for ( int j = 0; j < 8; j++ )
                     if ( actmap->player[j].existent )
                        plx = plx * 2 + 1;
-                 /*
-                 if ( oninit || supervisor || actmap->actplayer == -1) {
-                    plx = playerexist;
-                 } else
-                    plx = 1 << actmap->actplayer;
-                  */
+                 //
+                 //if ( oninit || supervisor || actmap->actplayer == -1) {
+                 //   plx = playerexist;
+                 //} else
+                 //   plx = 1 << actmap->actplayer;
+
                   tenternamestrings   enternamestrings;
                   enternamestrings.init( &computername, plx ,2);
                   enternamestrings.run(); 
@@ -4648,7 +4510,7 @@ void         tsetalliances::buttonpressed( int id )
                   buildhlgraphics(); 
                }
       break; 
-      
+*/
       #ifndef karteneditor
       case 5: setparams();
               setupnetwork ( actmap->network );
@@ -4809,38 +4671,8 @@ void         tsetalliances::run(void)
 
    }  while ( status < 10 );
    
-   #ifdef logging
-   logtofile ( "dialog / tsetalliances::run / setparams ");
-   #endif
    setparams();
-   for ( i = 0; i < 8; i++ ) {
-      #ifdef logging
-      logtofile ( "dialog / tsetalliances::run / humanplayername ");
-      #endif
-      delete[]  humanplayername[i] ;
-
-     /*
-      #ifdef logging
-      logtofile ( "dialog / tsetalliances::run / alliancename ");
-      #endif
-      delete  alliancename[i] ;
-    */
-
-      #ifdef logging
-      logtofile ( "dialog / tsetalliances::run / computerplayername ");
-      #endif
-      delete[]  computerplayername[i] ;
-
-      #ifdef logging
-      logtofile ( "dialog / tsetalliances::run / computername ");
-      #endif
-      delete[]  computername[i] ;
-   }
-
-  #ifdef logging
-  logtofile ( "dialog / tsetalliances::run / returning ");
-  #endif
-} 
+}
 
 
 void         setupalliances( int supervisor )
@@ -5894,7 +5726,8 @@ void tenterpassword :: buttonpressed ( int id )
             status = 2;
          } else
             if ( id == 8 ) {    // exit
-               erasemap();
+               delete actmap;
+               actmap = NULL;
                throw NoMapLoaded();
             } else
                if ( reask == 0 )

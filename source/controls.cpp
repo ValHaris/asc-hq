@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.82 2000-10-31 10:42:39 mbickel Exp $
+//     $Id: controls.cpp,v 1.83 2000-11-08 19:30:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.82  2000/10/31 10:42:39  mbickel
+//      Added building->vehicle service to vehicle controls
+//      Moved tmap methods to gamemap.cpp
+//
 //     Revision 1.81  2000/10/26 18:14:55  mbickel
 //      AI moves damaged units to repair
 //      tmap is not memory layout sensitive any more
@@ -438,20 +442,20 @@ void         putbuildinglevel3(integer      x,
          if ( ff <= 0 )
             ff = 100;
 
-         if (eht->tank.material < bld->productioncost.material * mf / 100 ) {
+         if (eht->tank.material < bld->productionCost.material * mf / 100 ) {
             displaymessage("not enough material!",1); 
             eht->tank.material = 0;
          } 
          else 
-            eht->tank.material -= bld->productioncost.material * mf / 100;
+            eht->tank.material -= bld->productionCost.material * mf / 100;
 
 
-         if (eht->tank.fuel < bld->productioncost.fuel * ff / 100) {
+         if (eht->tank.fuel < bld->productionCost.fuel * ff / 100) {
             displaymessage("not enough fuel!",1); 
             eht->tank.fuel = 0;
          } 
          else 
-            eht->tank.fuel -= bld->productioncost.fuel * ff / 100;
+            eht->tank.fuel -= bld->productionCost.fuel * ff / 100;
 
          moveparams.movestatus = 0; 
          eht->setMovement ( 0 );
@@ -525,7 +529,7 @@ void         destructbuildinglevel2( int xp, int yp)
 
          pbuilding bb = fld->building;
 
-         eht->tank.material += bld->productioncost.material * (100 - bb->damage) / destruct_building_material_get / 100;
+         eht->tank.material += bld->productionCost.material * (100 - bb->damage) / destruct_building_material_get / 100;
          if ( eht->tank.material > eht->typ->tank.material )
             eht->tank.material = eht->typ->tank.material;
 
@@ -1024,7 +1028,9 @@ void         setspec( pobjecttype obj )
          pvehicle eht = getfield(moveparams.movesx,moveparams.movesy)->vehicle; 
          pfield fld = getactfield();
 
+         /*
          int stat = 0;
+
          if ( actmap->objectcrc ) {
             if ( actmap->objectcrc->speedcrccheck->checkobj2 ( obj ))
                stat = 1;
@@ -1032,6 +1038,7 @@ void         setspec( pobjecttype obj )
             stat = 1;
 
          if ( stat ) {
+         */
             int movecost;
             Resources cost;
             getobjbuildcosts ( obj, fld, &cost, &movecost );
@@ -1049,7 +1056,7 @@ void         setspec( pobjecttype obj )
             eht->tank -= cost;
             eht->setMovement ( eht->getMovement() - movecost );
 
-         }
+         // }
 
          build_objects_reset();
       } 
@@ -1095,6 +1102,7 @@ void         constructvehicle( pvehicletype tnk )
          pvehicle eht = moveparams.vehicletomove; 
          // pfield fld = getactfield();
 
+         /*
          int stat = 0;
          if ( actmap->objectcrc ) {
             if ( actmap->objectcrc->speedcrccheck->checkunit2 ( tnk ))
@@ -1103,6 +1111,7 @@ void         constructvehicle( pvehicletype tnk )
             stat = 1;
 
          if ( stat ) {
+         */
 
             int x = getxpos();
             int y = getypos();
@@ -1110,7 +1119,7 @@ void         constructvehicle( pvehicletype tnk )
             logtoreplayinfo ( rpl_buildtnk, x, y, tnk->id, moveparams.vehicletomove->color/8 );
             computeview();
    
-         }
+         // }
 
          build_vehicles_reset();
       } 
@@ -3071,8 +3080,8 @@ void         tdashboard::paintname ( void )
          vt = vehicletype;
 
       if ( vehicle || vt ) {
-         if ( vehicle && vehicle->name && vehicle->name[0] )
-            showtext2c( vehicle->name , agmp->resolutionx - ( 640 - 500 ), 27);
+         if ( vehicle && !vehicle->name.empty() )
+            showtext2c( vehicle->name.c_str() , agmp->resolutionx - ( 640 - 500 ), 27);
          else
             if ( vt->name && vt->name[0] )
                showtext2c( vt->name , agmp->resolutionx - ( 640 - 500 ), 27);
@@ -3083,8 +3092,8 @@ void         tdashboard::paintname ( void )
                   bar ( agmp->resolutionx - ( 640 - 499 ), 27, agmp->resolutionx - ( 640 - 575 ), 35, 171 );
 
       } else {
-         if ( building->name && building->name[0] )
-            showtext2c( building->name , agmp->resolutionx - ( 640 - 500), 27);
+         if ( !building->name.empty() )
+            showtext2c( building->name.c_str() , agmp->resolutionx - ( 640 - 500), 27);
          else
             showtext2c( building->typ->name , agmp->resolutionx - ( 640 - 500), 27);
 
@@ -3400,7 +3409,7 @@ void checkalliances_at_endofturn ( void )
 
             char txt[200];
             char* sp = getmessage( 10001 ); 
-            sprintf ( txt, sp, actmap->player[act].name, actmap->player[i].name );
+            sprintf ( txt, sp, actmap->player[act].getName().c_str(), actmap->player[i].getName().c_str() );
             sp = strdup ( txt );
             new tmessage ( sp, to );
          }
@@ -3413,7 +3422,7 @@ void checkalliances_at_endofturn ( void )
 
             char txt[200];
             char* sp = getmessage( 10003 ); 
-            sprintf ( txt, sp, actmap->player[act].name );
+            sprintf ( txt, sp, actmap->player[act].getName().c_str() );
             sp = strdup ( txt );
             new tmessage ( sp, to );
          }
@@ -3426,7 +3435,7 @@ void checkalliances_at_endofturn ( void )
 
             char txt[200];
             char* sp = getmessage( 10002 ); 
-            sprintf ( txt, sp, actmap->player[act].name );
+            sprintf ( txt, sp, actmap->player[act].getName().c_str() );
             sp = strdup ( txt );
             new tmessage ( sp, to );
          }
@@ -4410,7 +4419,8 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
          if ( (actmap->player[actmap->actplayer].passwordcrc && actmap->player[actmap->actplayer].passwordcrc != CGameOptions::Instance()->defaultpassword ) // && actmap->player[actmap->actplayer].passwordcrc != encodepassword ( password )
             || actmap->time.a.turn == 1 || (actmap->network && actmap->network->globalparams.reaskpasswords) ) {
                if ( forcepasswordchecking < 0 ) {
-                  erasemap( actmap );
+                  delete actmap;
+                  actmap = NULL;
                   throw NoMapLoaded();
                } else {
                   int stat;
@@ -4419,7 +4429,7 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
                   } while ( !actmap->player[actmap->actplayer].passwordcrc && stat==1 && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
                }
          } else
-            displaymessage("next player is:\n%s",3,actmap->player[actmap->actplayer].name );
+            displaymessage("next player is:\n%s",3,actmap->player[actmap->actplayer].getName().c_str() );
       }
 
       checkforreplay();
@@ -4543,7 +4553,8 @@ void sendnetworkgametonextplayer ( int oldplayer, int newplayer )
       displaymessage ( "error saving file", 1 );
    } /* endcatch */
 
-   erasemap();
+   delete actmap;
+   actmap = NULL;
    displaymessage( " data transfer finished",1);
 
    throw NoMapLoaded ();
@@ -4560,178 +4571,178 @@ void endTurn ( void )
          actmap->replayinfo->actmemstream = NULL;
       }
 
-
+ /*
    if ( actmap->objectcrc )
       if ( actmap->objectcrc->speedcrccheck->getstatus ( )  ) {
          erasemap();
          throw NoMapLoaded();
       }
+*/
+     /* *********************  vehicle ********************  */
 
-        /* *********************  vehicle ********************  */
+   mousevisible(false);
+   if ( actmap->actplayer >= 0 ) {
+      actmap->cursorpos.position[actmap->actplayer].cx = getxpos();
+      actmap->cursorpos.position[actmap->actplayer].cy = getypos();
+      actmap->cursorpos.position[actmap->actplayer].sx = actmap->xpos;
+      actmap->cursorpos.position[actmap->actplayer].sy = actmap->ypos;
 
-      mousevisible(false);
-      if ( actmap->actplayer >= 0 ) {
-         actmap->cursorpos.position[actmap->actplayer].cx = getxpos();
-         actmap->cursorpos.position[actmap->actplayer].cy = getypos();
-         actmap->cursorpos.position[actmap->actplayer].sx = actmap->xpos;
-         actmap->cursorpos.position[actmap->actplayer].sy = actmap->ypos;
-
-         pvehicle actvehicle = actmap->player[actmap->actplayer].firstvehicle;
-         while ( actvehicle ) {
-            pvehicle nxeht = actvehicle->next;
-
-
-            /* fuel and movement */
-
-            int j = 1;
+      pvehicle actvehicle = actmap->player[actmap->actplayer].firstvehicle;
+      while ( actvehicle ) {
+         pvehicle nxeht = actvehicle->next;
 
 
-            // Bei Žnderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
+         /* fuel and movement */
 
-            if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
-               if ( getmaxwindspeedforunit ( actvehicle ) < actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed*maxwindspeed ){
-                  removevehicle ( &actvehicle );
-                  j = -1;
-               } else {
-
-                  j = actvehicle->tank.fuel - actvehicle->typ->fuelConsumption * nowindplanefuelusage;
-
-                  if ( actvehicle->height <= chhochfliegend )
-                     j -= ( actvehicle->getMovement() * 64 / actvehicle->typ->movement[log2(actvehicle->height)] ) * (actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
-
-                 //          movement * 64        windspeed * maxwindspeed         fuelConsumption
-                 // j -=   ----------------- *  ----------------------------- *   -----------
-                 //          typ->movement                 256                       64 * 8
-                 //
-                 //
-
-                 //gek?rzt:
-                 //
-                 //             movement            windspeed * maxwindspeed
-                 // j -= --------------------- *  ----------------------------   * fuelConsumption
-                 //           typ->movement             256   *      8
-                 //
-                 //
-                 //
-                 // Falls eine vehicle sich nicht bewegt hat, bekommt sie soviel Sprit abgezogen, wie sie zum zur?cklegen der Strecke,
-                 // die der Wind pro Runde zur?ckgelegt hat, fuelConsumptionen w?rde.
-                 // Wenn die vehicle sich schon bewegt hat, dann wurde dieser Abzug schon beim movement vorgenommen, so daá er hier nur
-                 // noch fuer das ?briggebliebene movement stattfinden muá.
-                 //
+         int j = 1;
 
 
-                  if (j < 0)
-                     removevehicle(&actvehicle);
-                  else
-                     actvehicle->tank.fuel = j;
-               }
+         // Bei Žnderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
+
+         if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
+            if ( getmaxwindspeedforunit ( actvehicle ) < actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed*maxwindspeed ){
+               removevehicle ( &actvehicle );
+               j = -1;
+            } else {
+
+               j = actvehicle->tank.fuel - actvehicle->typ->fuelConsumption * nowindplanefuelusage;
+
+               if ( actvehicle->height <= chhochfliegend )
+                  j -= ( actvehicle->getMovement() * 64 / actvehicle->typ->movement[log2(actvehicle->height)] ) * (actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
+
+              //          movement * 64        windspeed * maxwindspeed         fuelConsumption
+              // j -=   ----------------- *  ----------------------------- *   -----------
+              //          typ->movement                 256                       64 * 8
+              //
+              //
+
+              //gek?rzt:
+              //
+              //             movement            windspeed * maxwindspeed
+              // j -= --------------------- *  ----------------------------   * fuelConsumption
+              //           typ->movement             256   *      8
+              //
+              //
+              //
+              // Falls eine vehicle sich nicht bewegt hat, bekommt sie soviel Sprit abgezogen, wie sie zum zur?cklegen der Strecke,
+              // die der Wind pro Runde zur?ckgelegt hat, fuelConsumptionen w?rde.
+              // Wenn die vehicle sich schon bewegt hat, dann wurde dieser Abzug schon beim movement vorgenommen, so daá er hier nur
+              // noch fuer das ?briggebliebene movement stattfinden muá.
+              //
+
+
+               if (j < 0)
+                  removevehicle(&actvehicle);
+               else
+                  actvehicle->tank.fuel = j;
             }
-            if (j >= 0)  {
-                  if ( actvehicle->reactionfire.getStatus()) {
-                     if ( actvehicle->reactionfire.getStatus()< 3 )
-                        actvehicle->reactionfire.status++;
+         }
+         if (j >= 0)  {
+               if ( actvehicle->reactionfire.getStatus()) {
+                  if ( actvehicle->reactionfire.getStatus()< 3 )
+                     actvehicle->reactionfire.status++;
 
-                     if ( actvehicle->reactionfire.getStatus() == 3 )  {
-                        //actvehicle->reactionfire = 0xff;
-                        actvehicle->attacked = false;
-                     } else {
-                        //actvehicle->reactionfire = 0;
-                        actvehicle->attacked = true;
-                     }
-
-                     // actvehicle->setMovement ( 0 );
-                     actvehicle->resetMovement();
+                  if ( actvehicle->reactionfire.getStatus() == 3 )  {
+                     //actvehicle->reactionfire = 0xff;
                      actvehicle->attacked = false;
                   } else {
-                     actvehicle->resetMovement();
-                     actvehicle->attacked = false;
+                     //actvehicle->reactionfire = 0;
+                     actvehicle->attacked = true;
                   }
+
+                  // actvehicle->setMovement ( 0 );
+                  actvehicle->resetMovement();
+                  actvehicle->attacked = false;
+               } else {
+                  actvehicle->resetMovement();
+                  actvehicle->attacked = false;
                }
-                        if ( actvehicle )
-               actvehicle->endTurn();
+            }
+                     if ( actvehicle )
+            actvehicle->endTurn();
 
-            actvehicle = nxeht;
-         }
-
-         checkunitsforremoval ();
+         actvehicle = nxeht;
       }
 
-        /* *********************  allianzen ********************  */
+      checkunitsforremoval ();
+   }
 
-     checkalliances_at_endofturn ();
+     /* *********************  allianzen ********************  */
 
-        /* *********************  messages ********************  */
+  checkalliances_at_endofturn ();
+
+     /* *********************  messages ********************  */
 
 
-     while ( actmap->unsentmessage ) {
-        pmessagelist list = actmap->unsentmessage;
+  while ( actmap->unsentmessage ) {
+     pmessagelist list = actmap->unsentmessage;
 
-        pmessagelist nw = new tmessagelist ( &actmap->player[ actmap->actplayer ].sentmessage );
-        nw->message = list->message;
-        for ( int i = 0; i < 8; i++ )
-           if ( nw->message->to & ( 1 << i )) {
-              pmessagelist dst = new tmessagelist ( &actmap->player[ i ].unreadmessage );
-              dst->message = nw->message;
-           }
-
-        actmap->unsentmessage = list->next;
-        delete list;
-     }
-
-     if ( actmap->newjournal ) {
-        int s = 0;
-        if ( actmap->journal )
-           s = strlen ( actmap->journal );
-
-        char* n = new char[ strlen ( actmap->newjournal ) + s + 200 ];
-
-        char tempstring[100];
-        char tempstring2[50];
-        sprintf( tempstring, "#color0# %s ; turn %d #color0##crt##crt#", actmap->player[actmap->actplayer].name, actmap->time.a.turn );
-        sprintf( tempstring2, "#color%d#", getplayercolor ( actmap->actplayer ));
-
-        if ( actmap->journal ) {
-           strcpy ( n, actmap->journal );
-           int fnd;
-           int num = 0;
-           do {
-              fnd = 0;
-              if ( n[s-1] == '\n' ) {
-                 fnd++;
-                 num++;
-                 s-=1;
-              } else
-                if ( s > 4 )
-                   if ( strnicmp ( &n[s-5], "#crt#", 5 ) == 0 ) {
-                      fnd++;
-                      num++;
-                      s-=5;
-                   }
-
-           } while ( fnd ); /* enddo */
-
-           strcat ( n, tempstring2 );
-           strcat ( n, actmap->newjournal );
-           strcat ( n, tempstring );
-
-           delete[] actmap->journal;
-           actmap->journal = n;
-
-        } else {
-           strcpy ( n, tempstring2 );
-           strcat ( n, actmap->newjournal );
-           strcat ( n, tempstring );
-
-           actmap->journal = n;
+     pmessagelist nw = new tmessagelist ( &actmap->player[ actmap->actplayer ].sentmessage );
+     nw->message = list->message;
+     for ( int i = 0; i < 8; i++ )
+        if ( nw->message->to & ( 1 << i )) {
+           pmessagelist dst = new tmessagelist ( &actmap->player[ i ].unreadmessage );
+           dst->message = nw->message;
         }
 
-        delete[] actmap->newjournal;
-        actmap->newjournal = NULL;
+     actmap->unsentmessage = list->next;
+     delete list;
+  }
 
-        actmap->lastjournalchange.a.turn = actmap->time.a.turn;
-        actmap->lastjournalchange.a.move = actmap->actplayer;
+  if ( actmap->newjournal ) {
+     int s = 0;
+     if ( actmap->journal )
+        s = strlen ( actmap->journal );
 
+     char* n = new char[ strlen ( actmap->newjournal ) + s + 200 ];
+
+     char tempstring[100];
+     char tempstring2[50];
+     sprintf( tempstring, "#color0# %s ; turn %d #color0##crt##crt#", actmap->player[actmap->actplayer].getName().c_str(), actmap->time.a.turn );
+     sprintf( tempstring2, "#color%d#", getplayercolor ( actmap->actplayer ));
+
+     if ( actmap->journal ) {
+        strcpy ( n, actmap->journal );
+        int fnd;
+        int num = 0;
+        do {
+           fnd = 0;
+           if ( n[s-1] == '\n' ) {
+              fnd++;
+              num++;
+              s-=1;
+           } else
+             if ( s > 4 )
+                if ( strnicmp ( &n[s-5], "#crt#", 5 ) == 0 ) {
+                   fnd++;
+                   num++;
+                   s-=5;
+                }
+
+        } while ( fnd ); /* enddo */
+
+        strcat ( n, tempstring2 );
+        strcat ( n, actmap->newjournal );
+        strcat ( n, tempstring );
+
+        delete[] actmap->journal;
+        actmap->journal = n;
+
+     } else {
+        strcpy ( n, tempstring2 );
+        strcat ( n, actmap->newjournal );
+        strcat ( n, tempstring );
+
+        actmap->journal = n;
      }
+
+     delete[] actmap->newjournal;
+     actmap->newjournal = NULL;
+
+     actmap->lastjournalchange.a.turn = actmap->time.a.turn;
+     actmap->lastjournalchange.a.move = actmap->actplayer;
+
+  }
 }
 
 
@@ -4754,7 +4765,8 @@ void nextPlayer( void )
 
    if (runde > 2) {
       displaymessage("There are no players left any more !",2);
-      erasemap();
+      delete actmap;
+      actmap = NULL;
       throw NoMapLoaded ();
    }
 
@@ -4826,7 +4838,8 @@ void next_turn ( int playerView )
 
      if ( actmap->time.a.turn >= startTurn+2 ) {
         displaymessage("no human players found !", 1 );
-        erasemap();
+        delete actmap;
+        actmap = NULL;
         throw NoMapLoaded();
      }
 
@@ -5690,7 +5703,7 @@ void transfer_all_outstanding_tribute ( void )
                            strcpy ( txt_got, "nothing" );
 
                         char* sp = getmessage( 10020 ); 
-                        sprintf ( txt1b, sp, txt_topay, actmap->player[player].name, txt_got );
+                        sprintf ( txt1b, sp, txt_topay, actmap->player[player].getName().c_str(), txt_got );
                         strcat ( text, txt1b );
                      }
                   }
@@ -6823,14 +6836,14 @@ int  trunreplay :: run ( int player )
 
    actplayer = actmap->actplayer;
 
-   orgmap = *actmap;
-   memset ( actmap, 0, sizeof ( *actmap ));
+   orgmap = actmap;
+   actmap = NULL;
 
-   loadreplay ( orgmap.replayinfo->map[player]  );
+   loadreplay ( orgmap->replayinfo->map[player]  );
 
    actmap->playerView = actplayer;
 
-   tmemorystream guidatastream ( orgmap.replayinfo->guidata [ player ], 1 );
+   tmemorystream guidatastream ( orgmap->replayinfo->guidata [ player ], 1 );
    stream = &guidatastream;
 
    if ( stream->dataavail () )
@@ -6840,17 +6853,14 @@ int  trunreplay :: run ( int player )
 
 //   orgmap.replayinfo->actmemstream = stream;
 
-   npush ( godview );
-//   godview = 1;
-
    npush (actgui);
    actgui = &gui;
    actgui->restorebackground();
 
-   actmap->xpos = orgmap.cursorpos.position[ actplayer ].sx;
-   actmap->ypos = orgmap.cursorpos.position[ actplayer ].sy;
+   actmap->xpos = orgmap->cursorpos.position[ actplayer ].sx;
+   actmap->ypos = orgmap->cursorpos.position[ actplayer ].sy;
 
-   cursor.gotoxy ( orgmap.cursorpos.position[ actplayer ].cx, orgmap.cursorpos.position[ actplayer ].cy , 0);
+   cursor.gotoxy ( orgmap->cursorpos.position[ actplayer ].cx, orgmap->cursorpos.position[ actplayer ].cy , 0);
    // lastvisiblecursorpos.x = orgmap.cursorpos.position[ actplayer ].cx;
    // lastvisiblecursorpos.y = orgmap.cursorpos.position[ actplayer ].cy;
 
@@ -6896,19 +6906,15 @@ int  trunreplay :: run ( int player )
 
    actgui->restorebackground();
 
-   erasemap ( );
-
-//    orgmap.replayinfo->actmemstream = NULL;
-   *actmap = orgmap;
+   delete actmap;
+   actmap = orgmap;
 
    npop ( actgui );
-
-   npop ( godview );
 
    int st = status;
    status = 0;
 
-   cursor.gotoxy ( orgmap.cursorpos.position[ actplayer ].cx, orgmap.cursorpos.position[ actplayer ].cy );
+   cursor.gotoxy ( orgmap->cursorpos.position[ actplayer ].cx, orgmap->cursorpos.position[ actplayer ].cy );
    dashboard.x = 0xffff;
 
    if ( st == 101 )

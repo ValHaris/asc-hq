@@ -25,12 +25,12 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/controls.cpp,/home/martin/asc/source/controls.h,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/loaders.cpp,/home/martin/asc/source/viewcalculation.cpp,/home/martin/asc/source/vehicletype.cpp,/home/martin/asc/source/buildingtype.cpp,/home/martin/asc/source/vehicletype.h,/home/martin/asc/source/buildingtype.h,/home/martin/asc/source/sgstream.cpp,/home/martin/asc/source/containerbase.h,/home/martin/asc/source/gui.cpp,/home/martin/asc/source/controls.cpp,/home/martin/asc/source/building_controls.h,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/controls.h
-cpp_file=/home/martin/asc/source/controls.cpp
-browser_file=file:/opt/kde/share/doc/HTML/default/kdevelop/reference/C/cref.html
+header_file=/home/martin/asc/source/building_controls.h
+cpp_file=/home/martin/asc/source/buildingtype.cpp
+browser_file=file:/home/martin/.kde/share/apps/kdevelop/search_result.html
 [source/gui.h]
 install_location=
 dist=true

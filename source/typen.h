@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.63 2000-10-31 10:42:47 mbickel Exp $
+//     $Id: typen.h,v 1.64 2000-11-08 19:31:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2000/10/31 10:42:47  mbickel
+//      Added building->vehicle service to vehicle controls
+//      Moved tmap methods to gamemap.cpp
+//
 //     Revision 1.62  2000/10/26 18:55:30  mbickel
 //      Fixed crash when editing the properties of a vehicle inside a building
 //      Added mapeditorFullscreen switch to asc.ini
@@ -342,7 +346,6 @@ typedef class tfield* pfield ;
 typedef class tobjectcontainer* pobjectcontainer;
 typedef struct tresourceview* presourceview;
 typedef class tobject* pobject;
-typedef struct tcampaign* pcampaign;
 typedef class tshareview *pshareview;
                    
 //////////////////////////////////////////////////////////////
@@ -579,6 +582,9 @@ class Resources {
      void write ( tnstream& stream );
 };
 
+extern Resources operator- ( const Resources& res1, const Resources& res2 );
+
+
 class ResourceMatrix {
            float e[resourceTypeNum][resourceTypeNum];
         public:
@@ -702,7 +708,7 @@ struct teventstore {
     int getlistsize ( void );  // liefert 1 falls noch weitere Glieder in der Liste existieren, sonst 0;
   };
 
-
+/*
   typedef class tspeedcrccheck* pspeedcrccheck;
   typedef class tcrcblock* pcrcblock;
 
@@ -716,6 +722,7 @@ struct teventstore {
     //                              2 = limitiert: es d?rfen nur vehicle verwendet werden, deren CRCs bekannt sind
     tcrcblock ( void );
   };
+
 
   typedef class tobjectcontainercrcs *pobjectcontainercrcs;
   class tobjectcontainercrcs {
@@ -733,6 +740,7 @@ struct teventstore {
     int dummy[40];
   };
 
+*/
 
 //! how many different target types are there?
 const int aiValueTypeNum = 8;  
@@ -1262,15 +1270,6 @@ class tresearch {
 };
 
 
-struct tcampaign { 
-    Word         id; 
-    word         prevmap;   /*  ID der vorigen Karte  */ 
-    unsigned char         player;   /*  Farbenummer des Spielers: 0..7  */ 
-    char      directaccess;   /*  Kann die Karte einzeln geladen werden oder nicht ?  */ 
-    unsigned char         dummy[21];   /*  fuer zuk?nftige erweiterungen  */ 
-}; 
-
-
 class twind {
   public:
     char speed;
@@ -1338,7 +1337,15 @@ class tmap {
       pfield        field;           /*  die fielder selber */
       char         codeword[11]; 
       char*        title;
-      pcampaign    campaign; 
+
+      struct Campaign {
+          Word         id;
+          word         prevmap;   /*  ID der vorigen Karte  */
+          unsigned char         player;   /*  Farbenummer des Spielers: 0..7  */
+          char      directaccess;   /*  Kann die Karte einzeln geladen werden oder nicht ?  */
+      };
+
+      Campaign*    campaign;
   
       signed char  actplayer; 
       tgametime    time;
@@ -1346,14 +1353,14 @@ class tmap {
       struct tweather {
          char fog;
          twind wind[3];
-         // char dummy[12];
       } weather;
   
       int _resourcemode;  // 1 = Battle-Isle-Mode
   
                    
       char         alliances[8][8];
-      struct Player {
+      class Player {
+        public:
          char      existent; 
          pvehicle     firstvehicle; 
          pbuilding    firstbuilding; 
@@ -1362,8 +1369,14 @@ class tmap {
          BaseAI*      ai;
    
          char         stat;           // 0: human; 1: computer; 2: off
-         char         dummy;
-         char         *name;          // kein eigenst„ndiger string; zeigt entweder auf computernames oder playernames 
+         string       humanname;
+         string       computername;
+         string       getName( ) { switch ( stat ) {
+                                      case 0: return humanname;
+                                      case 1: return computername;
+                                      default: return "off";
+                                    }
+                                 };
          int          passwordcrc;
          pdissectedunit dissectedunit;
          pmessagelist  unreadmessage;
@@ -1374,8 +1387,11 @@ class tmap {
   
       peventstore  oldevents; 
       pevent       firsteventtocome; 
-      pevent       firsteventpassed; 
-  
+      pevent       firsteventpassed;
+
+      //! required for loading the old map file format; no usage outside the loading routine
+      // bool loadeventstore,loadeventstocome,loadeventpassed;
+
       int eventpassed ( int saveas, int action, int mapid );
       int eventpassed ( int id, int mapid );
   
@@ -1402,11 +1418,9 @@ class tmap {
       int           messageid;
       char*         journal;
       char*         newjournal;
-      char*         humanplayername[8];
-      char*         computerplayername[8];
       int           supervisorpasswordcrc;
       char          alliances_at_beginofturn[8];
-      pobjectcontainercrcs   objectcrc; 
+      // pobjectcontainercrcs   objectcrc;
       pshareview    shareview;
       int           continueplaying;         // als einzig ?briggebliebener Spieler
       treplayinfo*  replayinfo;
@@ -1420,9 +1434,6 @@ class tmap {
       int*          game_parameter;
     public:
       int           mineralResourcesDisplayed;
-      // int           dummy[19];
-      int           _oldgameparameter[ 8 ];
-
 
       tmap ( void );
 
@@ -1713,7 +1724,7 @@ extern  const char*  choehenstufen[8] ;
 
 
 
-#define cbodenartennum 33
+#define cbodenartennum 34
 extern const char*  cbodenarten[]  ; 
   extern tterrainbits cbwater0 ;
   extern tterrainbits cbwater1 ;

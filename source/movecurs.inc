@@ -343,7 +343,7 @@ void         movecursor(tkey         ch)
 
    if ((oldcxp != cxp) || (oldcyp != cyp) || sxp != actmap->xpos || syp != actmap->ypos ) {
       cursor.hide(); 
-      lasttick = ticker; 
+      // lasttick = ticker;
 
       if ((actmap->ypos != syp) || (actmap->xpos != sxp)) 
          displaymap();

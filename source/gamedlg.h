@@ -1,6 +1,10 @@
-//     $Id: gamedlg.h,v 1.12 2000-10-18 14:14:11 mbickel Exp $
+//     $Id: gamedlg.h,v 1.13 2000-11-08 19:31:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/10/18 14:14:11  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.11  2000/10/11 14:26:37  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -106,7 +110,9 @@ typedef struct tstringlist* pstringlist ;
         };
 
 
-class   tnewcampaignlevel : public tdialogbox, public tmaploaders {
+class   tnewcampaignlevel : public tdialogbox {
+                      protected:
+                         tmaploaders  loader;
                       public:
                          int           status;
                          char           dateiinfo[100];
@@ -119,7 +125,7 @@ class   tnewcampaignlevel : public tdialogbox, public tmaploaders {
 
                          void           init ( void );
                          void           searchmapinfo ( void );
-                         virtual void   evaluatemapinfo( char* srname ) = 0;
+                         virtual void   evaluatemapinfo( char* srname, tmap* spfld ) = 0;
                          void           loadcampaignmap ( void );
                          void           showmapinfo( word ypos );
                          void           done ( void );
@@ -132,7 +138,7 @@ class  tcontinuecampaign : public tnewcampaignlevel {
                          pdissectedunit dissectedunits[8]; 
                     public:
                          void           init ( void );
-                         virtual void   evaluatemapinfo( char* srname );
+                         virtual void   evaluatemapinfo( char* srname, tmap* spfld );
                          void           showmapinfo( word ypos );
                          virtual void   run ( void );
                          void           setid( word id );
@@ -145,23 +151,23 @@ class  tchoosenewmap    : public tnewcampaignlevel {
                           void          init( char* ptitle );
                           virtual void  buttonpressed( int id );
                           void          readmapinfo ( void );
-                          virtual void  checkforcampaign( void ) = 0;
+                          virtual void  checkforcampaign( tmap* spfld ) = 0;
                       };
 
 class  tchoosenewcampaign : public tchoosenewmap {
                      public:
                           void          init ( void );
                           virtual void  run ( void );
-                          virtual void  checkforcampaign( void );
-                          virtual void  evaluatemapinfo( char* srname );
+                          virtual void  checkforcampaign( tmap* spfld );
+                          virtual void  evaluatemapinfo( char* srname, tmap* spfld );
                       };
 
 class  tchoosenewsinglelevel : public tchoosenewmap {
                      public:
                           void          init ( void );
                           virtual void  run ( void );
-                          virtual void  checkforcampaign( void );
-                          virtual void  evaluatemapinfo( char* srname );
+                          virtual void  checkforcampaign( tmap* spfld );
+                          virtual void  evaluatemapinfo( char* srname, tmap* spfld );
                       };
 
 

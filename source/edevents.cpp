@@ -1,6 +1,10 @@
-//     $Id: edevents.cpp,v 1.13 2000-10-18 14:14:04 mbickel Exp $
+//     $Id: edevents.cpp,v 1.14 2000-11-08 19:31:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/10/18 14:14:04  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.12  2000/10/11 14:26:29  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -1314,8 +1318,8 @@ void         tcreateevent::run(void)
                     ae->trigger[i] == ceventt_building_seen  ||
                     ae->trigger[i] == ceventt_buildingdestroyed ) {
                     pbuilding building = ae->trigger_data[i]->building;
-                    if ( building->name )
-                       displaymessage ( building->name, 1 );
+                    if ( !building->name.empty() )
+                       displaymessage ( building->name.c_str(), 1 );
                     else
                        displaymessage ( building->typ->name, 1 );
 
@@ -1330,8 +1334,8 @@ void         tcreateevent::run(void)
                     else
                        vehicle = ae->trigger_data[i]->vehicle;
 
-                    if ( vehicle->name )
-                       displaymessage ( vehicle->name, 1 );
+                    if ( !vehicle->name.empty() )
+                       displaymessage ( vehicle->name.c_str(), 1 );
                     else
                        if ( vehicle->typ->name )
                           displaymessage ( vehicle->typ->name, 1 );

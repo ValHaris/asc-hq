@@ -1,6 +1,9 @@
-//     $Id: spfst.h,v 1.30 2000-10-18 17:09:42 mbickel Exp $
+//     $Id: spfst.h,v 1.31 2000-11-08 19:31:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/10/18 17:09:42  mbickel
+//      Fixed eventhandling for DOS
+//
 //     Revision 1.29  2000/10/18 14:14:21  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -223,9 +226,7 @@
   extern int  terraintypenum, vehicletypenum, buildingtypenum, technologynum, objecttypenum;
 
 
-  extern char godview, tempsvisible; 
-
-  extern int lasttick;   /*  f?r paintvehicleinfo  */ 
+  extern char tempsvisible;
 
 extern void  movecursor(tkey         ch);
 
@@ -577,7 +578,6 @@ class tdisplaymap : public tgeneraldisplaymap {
 
 extern tdisplaymap idisplaymap;
 extern int showresources;
-extern void checkplayernames ( void );
 
 extern int   getfieldundermouse ( int* x, int* y );
 

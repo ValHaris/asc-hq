@@ -1,6 +1,10 @@
-//     $Id: unitctrl.h,v 1.15 2000-10-31 10:42:48 mbickel Exp $
+//     $Id: unitctrl.h,v 1.16 2000-11-08 19:31:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/10/31 10:42:48  mbickel
+//      Added building->vehicle service to vehicle controls
+//      Moved tmap methods to gamemap.cpp
+//
 //     Revision 1.14  2000/10/11 15:33:48  mbickel
 //      Adjusted small editors to the new ASC structure
 //      Watcom compatibility
@@ -302,7 +306,7 @@ class ChangeVehicleHeight : public BaseVehicleMovement {
               ~ChangeVehicleHeight (  );
 
               //! execute a movement before changing height; primarily used for AI; vm is destructed when ChangeVehicleHeight ends
-              void registerStartMovement ( VehicleMovement* vm ) { vmove = vm; };
+              void registerStartMovement ( VehicleMovement& vm ) { vmove = &vm; };
            protected:
               VehicleMovement* vmove;
 
@@ -447,7 +451,7 @@ class VehicleService : public VehicleAction {
               virtual int available ( pvehicle veh ) const;
               int getServices ( pvehicle veh ) const;
               int execute ( pvehicle veh, int targetNWID, int dummy, int step, int pos, int amount );
-              int fillEverything ( pvehicle veh, int targetNWID );
+              int fillEverything ( int targetNWID, bool repairsToo );
               virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
               VehicleService ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
               virtual ~VehicleService ( );
@@ -455,17 +459,22 @@ class VehicleService : public VehicleAction {
 
 
 
-/* VehicleAttack:
+/* VehicleService:
  *
- *   Step 0:   execute ( vehicle, -1, -1, step = 0 , kamikaze, -1 );
- *                 kamikaze attack is not implemented yet. Always pass 0
+ *   Step 0:   execute ( vehicle, -1, -1, step = 0 , -1, -1 );
+ *                 if vehicle is going to service some units
+ *                  OR
+ *             execute ( NULL, xpos, ypos, step = 0 , -1, -1 );
+ *                 if the building at xpos, ypos is going to service some units
  *
- *                 "attackableVehicles", "attackableBuildings", "attackableObjects" contains the possible targets of the
- *                   unit, along with information about the weapon(s) which can be used for the attack
+ *                 dest then contains all units that can be services together with the services
+ *                 Use the units networkID as Index
  *
- *   Step 2:   execute ( NULL, target-x, target-y, step = 2, -1, weapnum );
- *                The target destination must be part of one of the "attackable*" fields.
- *                weapnum may either be a specific weapon or -1 if the most powerful one should be used
+ *
+ *   Step 2:   execute ( NULL, targetNWID, -1, step = 2, pos, amount );
+ *                 targetNWID is the unit that is going to be serviced
+ *                 pos is the position of the service: dest[targetNWID].service[pos]
+ *                 amount is the amount of the service that is going to be transferred
  */
 
 

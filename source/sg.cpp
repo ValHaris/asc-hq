@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.108 2000-10-26 18:14:59 mbickel Exp $
+//     $Id: sg.cpp,v 1.109 2000-11-08 19:31:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.108  2000/10/26 18:14:59  mbickel
+//      AI moves damaged units to repair
+//      tmap is not memory layout sensitive any more
+//
 //     Revision 1.107  2000/10/18 18:53:02  mbickel
 //      Added JPEG support to windows version
 //
@@ -365,13 +369,11 @@ cmousecontrol* mousecontrol = NULL;
 
 
 
+#define maintainence
 
-#define CHEATS
-
-int checkforcheats( void )
+int maintainencecheck( void )
 {
-   #ifdef CHEATS
-
+   #ifdef maintainence
     int num = 0;
 
     for ( int i = 0; i < 8; i++ )
@@ -1432,12 +1434,12 @@ void         loadcursor(void)
 
 } 
 
-enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_dispvehicleimprovement, ua_mainmenu, ua_cheat_morefog, 
-                    ua_cheat_lessfog,   ua_cheat_morewind,   ua_cheat_lesswind, ua_cheat_rotatewind, ua_changeresourceview, ua_heapcheck,
+enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_dispvehicleimprovement, ua_mainmenu, ua_mntnc_morefog,
+                    ua_mntnc_lessfog,   ua_mntnc_morewind,   ua_mntnc_lesswind, ua_mntnc_rotatewind, ua_changeresourceview, ua_heapcheck,
                     ua_benchgamewv,     ua_benchgamewov,     ua_viewterraininfo, ua_unitweightinfo,  ua_writemaptopcx,  ua_writescreentopcx,
                     ua_scrolltodebugpage, ua_scrolltomainpage, ua_startnewsinglelevel, ua_changepassword, ua_gamepreferences, ua_bi3preferences,
-                    ua_exitgame,        ua_newcampaign,      ua_loadgame,  ua_savegame, ua_setupalliances, ua_settribute, ua_giveunitaway, 
-                    ua_vehicleinfo,     ua_researchinfo,     ua_unitstatistics, ua_buildingstatistics, ua_newmessage, ua_viewqueuedmessages, 
+                    ua_exitgame,        ua_newcampaign,      ua_loadgame,  ua_savegame, ua_setupalliances, ua_settribute, ua_giveunitaway,
+                    ua_vehicleinfo,     ua_researchinfo,     ua_unitstatistics, ua_buildingstatistics, ua_newmessage, ua_viewqueuedmessages,
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo  };
@@ -1449,68 +1451,68 @@ class tsgpulldown : public tpulldown {
 } pd;
 
 void         tsgpulldown :: init ( void )
-{ 
-  addfield ( "Glo~b~al" ); 
-   addbutton ( "toggle ~R~esourceviewõ1", ua_changeresourceview ); 
-   addbutton ( "toggle unit shadingõ2", ua_toggleunitshading ); 
-   addbutton ( "seperator", -1); 
-   addbutton ( "~O~ptions", ua_gamepreferences ); 
-   addbutton ( "~M~ouse options", ua_mousepreferences ); 
+{
+  addfield ( "Glo~b~al" );
+   addbutton ( "toggle ~R~esourceviewõ1", ua_changeresourceview );
+   addbutton ( "toggle unit shadingõ2", ua_toggleunitshading );
+   addbutton ( "seperator", -1);
+   addbutton ( "~O~ptions", ua_gamepreferences );
+   addbutton ( "~M~ouse options", ua_mousepreferences );
 /*
    #ifdef HEXAGON
-    addbutton ( "~B~I options",ua_bi3preferences); 
+    addbutton ( "~B~I options",ua_bi3preferences);
    #endif
 */
-   addbutton ( "seperator", -1); 
+   addbutton ( "seperator", -1);
    addbutton ( "~M~ain MenuõF2", ua_mainmenu );
    addbutton ( "E~x~itõctrl-x", ua_exitgame );
 
 
   addfield ("~G~ame");
-   addbutton ( "New ~C~ampaign", ua_newcampaign); 
-   addbutton ( "~N~ew single Levelõctrl-n", ua_startnewsinglelevel ); 
+   addbutton ( "New ~C~ampaign", ua_newcampaign);
+   addbutton ( "~N~ew single Levelõctrl-n", ua_startnewsinglelevel );
 
-   addbutton ( "seperator", -1); 
-   addbutton ( "~L~oad gameõctrl-l", ua_loadgame ); 
-   addbutton ( "~S~ave game", ua_savegame ); 
-   addbutton ( "seperator", -1 ); 
-   addbutton ( "Continue network gameõF3", ua_continuenetworkgame); 
-   addbutton ( "setup Net~w~ork", ua_setupnetwork ); 
-   addbutton ( "Change ~P~assword", ua_changepassword ); 
-   addbutton ( "seperator", -1 ); 
-   addbutton ( "~P~layers", ua_setupalliances); 
-   addbutton ( "transfer ~U~nit control", ua_giveunitaway ); 
-   addbutton ( "~T~ransfer resources", ua_settribute); 
+   addbutton ( "seperator", -1);
+   addbutton ( "~L~oad gameõctrl-l", ua_loadgame );
+   addbutton ( "~S~ave game", ua_savegame );
+   addbutton ( "seperator", -1 );
+   addbutton ( "Continue network gameõF3", ua_continuenetworkgame);
+   addbutton ( "setup Net~w~ork", ua_setupnetwork );
+   addbutton ( "Change ~P~assword", ua_changepassword );
+   addbutton ( "seperator", -1 );
+   addbutton ( "~P~layers", ua_setupalliances);
+   addbutton ( "transfer ~U~nit control", ua_giveunitaway );
+   addbutton ( "~T~ransfer resources", ua_settribute);
 
   addfield ( "~I~nfo" );
-   addbutton ( "~V~ehicle types", ua_vehicleinfo ); 
-   addbutton ( "~U~nit weightõ8", ua_unitweightinfo ); 
-   addbutton ( "~T~errainõ7", ua_viewterraininfo ); 
-   addbutton ( "seperator", -1 ); 
-   addbutton ( "~R~esearch", ua_researchinfo ); 
+   addbutton ( "~V~ehicle types", ua_vehicleinfo );
+   addbutton ( "~U~nit weightõ8", ua_unitweightinfo );
+   addbutton ( "~T~errainõ7", ua_viewterraininfo );
+   addbutton ( "seperator", -1 );
+   addbutton ( "~R~esearch", ua_researchinfo );
    addbutton ( "vehicle ~I~mprovementõF7", ua_dispvehicleimprovement);
    addbutton ( "unit ~S~et informationõ6", ua_UnitSetInfo );
    addbutton ( "show game ~P~arameters", ua_GameParameterInfo );
 
 
   addfield ( "~S~tatistics" );
-   addbutton ( "~U~nits", ua_unitstatistics ); 
-   addbutton ( "~B~uildings", ua_buildingstatistics ); 
-   // addbutton ( "seperator"); 
-   // addbutton ( "~H~istory"); 
+   addbutton ( "~U~nits", ua_unitstatistics );
+   addbutton ( "~B~uildings", ua_buildingstatistics );
+   // addbutton ( "seperator");
+   // addbutton ( "~H~istory");
 
   addfield ( "~M~essage");
-   addbutton ( "~n~ew message", ua_newmessage ); 
-   addbutton ( "view ~q~ueued messages", ua_viewqueuedmessages ); 
-   addbutton ( "view ~s~end messages", ua_viewsentmessages ); 
-   addbutton ( "view ~r~eceived messages", ua_viewreceivedmessages); 
-   addbutton ( "seperator", -1 ); 
-   addbutton ( "view ~j~ournal", ua_viewjournal ); 
-   addbutton ( "~a~ppend to journal", ua_editjournal ); 
+   addbutton ( "~n~ew message", ua_newmessage );
+   addbutton ( "view ~q~ueued messages", ua_viewqueuedmessages );
+   addbutton ( "view ~s~end messages", ua_viewsentmessages );
+   addbutton ( "view ~r~eceived messages", ua_viewreceivedmessages);
+   addbutton ( "seperator", -1 );
+   addbutton ( "view ~j~ournal", ua_viewjournal );
+   addbutton ( "~a~ppend to journal", ua_editjournal );
 
   addfield ( "~T~ools" );
-   addbutton ( "save ~M~ap as PCXõ9", ua_writemaptopcx ); 
-   addbutton ( "save ~S~creen as PCXõ0", ua_writescreentopcx ); 
+   addbutton ( "save ~M~ap as PCXõ9", ua_writemaptopcx );
+   addbutton ( "save ~S~creen as PCXõ0", ua_writescreentopcx );
    addbutton ( "benchmark without view calc", ua_benchgamewov );
    addbutton ( "benchmark with view calc", ua_benchgamewv);
    addbutton ( "test memory integrity", ua_heapcheck );
@@ -1518,16 +1520,16 @@ void         tsgpulldown :: init ( void )
    addbutton ( "select graphic set", ua_selectgraphicset );
 
   addfield ( "~H~elp" );
-   addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem ); 
-   addbutton ( "HowTo ~C~ontinue email games", ua_howtocontinuepbem ); 
-   addbutton ( "seperator", -1); 
-   addbutton ( "~K~eys", ua_help ); 
+   addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
+   addbutton ( "HowTo ~C~ontinue email games", ua_howtocontinuepbem );
+   addbutton ( "seperator", -1);
+   addbutton ( "~K~eys", ua_help );
 
-   addbutton ( "~A~bout", ua_viewaboutmessage ); 
+   addbutton ( "~A~bout", ua_viewaboutmessage );
 
    tpulldown :: init();
    setshortkeys();
-} 
+}
 
 
 
@@ -1544,9 +1546,9 @@ void         repaintdisplay(void)
    int cv = cursor.an;
 
    if ( mapexist && cv )
-      cursor.hide(); 
-   backgroundpict.paint(); 
-   setvgapalette256(pal); 
+      cursor.hide();
+   backgroundpict.paint();
+   setvgapalette256(pal);
 
    if ( mapexist ) {
       displaymap();
@@ -1567,62 +1569,62 @@ void         repaintdisplay(void)
 
       actgui->painticons();
 
-} 
+}
 
 void         repaintdisplayhard(void)
-{ 
+{
    reinitgraphics( modenum8 );
    setdisplaystart ( 0, videostartpos  );
    repaintdisplay();
-} 
+}
 
 
 void         ladekarte(void)
-{ 
+{
   char         s1[300];
 
-   mousevisible(false); 
+   mousevisible(false);
    fileselectsvga(mapextension, s1, 1 );
 
    if ( s1[0] ) {
-      mousevisible(false); 
-      cursor.hide(); 
+      mousevisible(false);
+      cursor.hide();
       displaymessage("loading map %s",0, s1 );
-      loadmap(s1); 
-      initmap(); 
+      loadmap(s1);
+      initmap();
 
       next_turn();
 
-      removemessage(); 
-      if (actmap->campaign != NULL) { 
+      removemessage();
+      if (actmap->campaign != NULL) {
          delete  ( actmap->campaign );
-         actmap->campaign = NULL; 
-      } 
+         actmap->campaign = NULL;
+      }
 
       displaymap();
       dashboard.x = 0xffff;
-      moveparams.movestatus = 0; 
-   } 
-   mousevisible(true); 
-} 
+      moveparams.movestatus = 0;
+   }
+   mousevisible(true);
+}
 
 
 void         ladespiel(void)
-{ 
+{
   char         s1[300];
 
-   mousevisible(false); 
+   mousevisible(false);
    char temp[200];
    strcpy ( temp, savegameextension );
 
    fileselectsvga(temp, s1, 1 );
 
    if ( s1[0] ) {
-      mousevisible(false); 
-      cursor.hide(); 
+      mousevisible(false);
+      cursor.hide();
       displaymessage("loading %s ",0, s1);
       loadgame(s1 );
-      removemessage(); 
+      removemessage();
       if ( !actmap || actmap->xsize == 0 || actmap->ysize == 0 )
          throw  NoMapLoaded();
 
@@ -1907,7 +1909,7 @@ void  checkforvictory ( void )
                char txt[1000];
                char* sp = getmessage( 10010 ); // Message "player has been terminated"
 
-               sprintf ( txt, sp, actmap->player[i].name );
+               sprintf ( txt, sp, actmap->player[i].getName().c_str() );
                sp = strdup ( txt );
                new tmessage ( sp, to );
 
@@ -1921,7 +1923,8 @@ void  checkforvictory ( void )
                   if ( humannum )
                      next_turn();
                   else {
-                     erasemap();
+                     delete actmap;
+                     actmap = NULL;
                      throw NoMapLoaded();
                   }
                }
@@ -1931,7 +1934,8 @@ void  checkforvictory ( void )
       if ( plnum <= 1 ) {
          displaymessage("Congratulations!\nYou won!",1);
          if (choice_dlg("Do you want to continue playing ?","~y~es","~n~o") == 2) {
-            erasemap();
+            delete actmap;
+            actmap = NULL;
             throw NoMapLoaded();
          } else {
             actmap->continueplaying = 1;
@@ -1997,12 +2001,13 @@ void execuseraction ( tuseractions action )
                                                   break;
 
             case ua_mainmenu:  if (choice_dlg("do you really want to close the current game ?","~y~es","~n~o") == 1) {
-                                   erasemap();
+                                  delete actmap;
+                                   actmap = NULL;
                                    throw NoMapLoaded();
                                }
                                break;
 
-            case ua_cheat_morefog: if (actmap->weather.fog < 255   && checkforcheats() ) {
+            case ua_mntnc_morefog: if (actmap->weather.fog < 255   && maintainencecheck() ) {
                                       actmap->weather.fog++;
                                       computeview();
                                       displaymessage2("fog intensity set to %d ", actmap->weather.fog);
@@ -2010,7 +2015,7 @@ void execuseraction ( tuseractions action )
                                    }
                         break;
 
-            case ua_cheat_lessfog: if (actmap->weather.fog  && checkforcheats()) {
+            case ua_mntnc_lessfog: if (actmap->weather.fog  && maintainencecheck()) {
                                       actmap->weather.fog--;
                                       computeview();
                                       displaymessage2("fog intensity set to %d ", actmap->weather.fog);
@@ -2018,7 +2023,7 @@ void execuseraction ( tuseractions action )
                                    }
                         break;
 
-            case ua_cheat_morewind: if ((actmap->weather.wind[0].speed < 254) &&  checkforcheats()) {
+            case ua_mntnc_morewind: if ((actmap->weather.wind[0].speed < 254) &&  maintainencecheck()) {
                                        actmap->weather.wind[0].speed+=2;
                                        actmap->weather.wind[2].speed = actmap->weather.wind[1].speed = actmap->weather.wind[0].speed;
                                        displaywindspeed (  );
@@ -2026,7 +2031,7 @@ void execuseraction ( tuseractions action )
                                     }
                          break;
 
-            case ua_cheat_lesswind: if ((actmap->weather.wind[0].speed > 1)  && checkforcheats() ) {
+            case ua_mntnc_lesswind: if ((actmap->weather.wind[0].speed > 1)  && maintainencecheck() ) {
                                        actmap->weather.wind[0].speed-=2;
                                        actmap->weather.wind[2].speed = actmap->weather.wind[1].speed = actmap->weather.wind[0].speed;
                                        displaywindspeed (  );
@@ -2034,7 +2039,7 @@ void execuseraction ( tuseractions action )
                                     }
                          break;
 
-            case ua_cheat_rotatewind:  if ( checkforcheats() ) {
+            case ua_mntnc_rotatewind:  if ( maintainencecheck() ) {
                                           if (actmap->weather.wind[0].direction < sidenum-1 )
                                              actmap->weather.wind[0].direction++;
                                           else
@@ -2219,7 +2224,7 @@ void execuseraction ( tuseractions action )
                                           displaymessage("units that can not move and cannot shoot will now be displayed gray", 3);
                        break;
 
-        case ua_computerturn:          if ( checkforcheats() ) {
+        case ua_computerturn:          if ( maintainencecheck() || 1 ) {
                                           displaymessage("This function is under development and for programmers only\n"
                                                          "unpredicatable things may happen ...",3 ) ;
 
@@ -2228,6 +2233,7 @@ void execuseraction ( tuseractions action )
                                              if ( !actmap->player[ actmap->actplayer ].ai )
                                                 actmap->player[ actmap->actplayer ].ai = new AI ( actmap );
 
+                                             savegame ( "aistart.map" );
                                              actmap->player[ actmap->actplayer ].ai->run();
                                           }
                                        }
@@ -2284,7 +2290,7 @@ void mainloopgeneralmousecheck ( void )
 
     dashboard.checkformouse();
 
-  if (lasttick + 5 < ticker) {
+//  if (lasttick + 5 < ticker)
       if ((dashboard.x != getxpos()) || (dashboard.y != getypos())) {
          // collategraphicoperations cgo;
          mousevisible(false);
@@ -2294,7 +2300,7 @@ void mainloopgeneralmousecheck ( void )
 
          mousevisible(true);
       }
-   }
+
    if ( memcheckticker + 100 < ticker ) {
       showmemory();
       memcheckticker = ticker ;
@@ -2747,8 +2753,10 @@ void networksupervisor ( void )
           public:
             ~tcarefordeletionofmap (  )
             {
-                if ( actmap->xsize > 0  ||  actmap->ysize > 0 )
-                   erasemap();
+                if ( actmap->xsize > 0  ||  actmap->ysize > 0 ) {
+                     delete actmap;
+                     actmap = NULL;
+                }
             };
          } carefordeletionofmap;
 
@@ -2787,12 +2795,14 @@ void networksupervisor ( void )
 
    catch ( tfileerror ) {
       displaymessage ("a file error occured while loading game",1 );
-      erasemap();
+      delete actmap;
+      actmap = NULL;
       return;
    } /* endcatch */
    catch ( ASCexception ) {
       displaymessage ("error loading game",1 );
-      erasemap();
+      delete actmap;
+      actmap = NULL;
       return;
    } /* endcatch */
 
@@ -2809,7 +2819,8 @@ void networksupervisor ( void )
          ok = 1;
    } else {
       displaymessage ("no supervisor defined",1 );
-      erasemap();
+      delete actmap;
+      actmap = NULL;
       return;
    }
 
@@ -2826,7 +2837,8 @@ void networksupervisor ( void )
          stat = setupnetwork( &network, 2+8 );
          if ( stat == 1 ) {
             displaymessage ("no changes were saved",1 );
-            erasemap();
+            delete actmap;
+            actmap = NULL;
             return;
          }
 
@@ -2853,12 +2865,14 @@ void networksupervisor ( void )
          displaymessage ( "error saving file", 1 );
       } /* endcatch */
 
-      erasemap();
+      delete actmap;
+      actmap = NULL;
       displaymessage ( "data transfer finished",1);
 
    } else {
       displaymessage ("no supervisor defined or invalid password",1 );
-      erasemap();
+      delete actmap;
+      actmap = NULL;
    }
 
 }
