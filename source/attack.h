@@ -1,6 +1,12 @@
-//     $Id: attack.h,v 1.9 2000-07-16 14:19:59 mbickel Exp $
+//     $Id: attack.h,v 1.10 2000-08-03 13:11:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/07/16 14:19:59  mbickel
+//      AI has now some primitive tactics implemented
+//      Some clean up
+//        moved weapon functions to attack.cpp
+//      Mount doesn't modify PCX files any more.
+//
 //     Revision 1.8  2000/07/06 11:07:25  mbickel
 //      More AI work
 //      Started modularizing the attack formula
@@ -79,10 +85,12 @@ typedef struct tattackresult* pattackresult;
 class AttackFormula {
             int checkHemming ( pvehicle d_eht, int direc );
          public:
-            float experience ( int experience );
-            float damage ( int damage );
-            float attackbonus ( int abonus );
-            float hemming ( int  ax,  int ay,  pvehicle d_eht );
+            float strength_experience ( int experience );
+            float strength_damage ( int damage );
+            float strength_attackbonus ( int abonus );
+            float strength_hemming ( int  ax,  int ay,  pvehicle d_eht );
+            float defense_experience ( int experience );
+            float defense_defensebonus ( int defensebonus );
         };
 
 class tfight : public AttackFormula {

@@ -1,6 +1,9 @@
-//     $Id: dlg_box.cpp,v 1.23 2000-08-02 08:48:04 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.24 2000-08-03 13:12:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/08/02 08:48:04  mbickel
+//      Fixed: Mineral resources where visible for all players
+//
 //     Revision 1.22  2000/06/23 09:48:32  mbickel
 //      Improved key handling in intedit/stredit
 //
@@ -1933,7 +1936,7 @@ char* exitmessage[20];
 //       2 : Programm wird beendet; 
 //       3 : normaler text ( OK)
 
-void displaymessage( char* formatstring, int num, ... )
+void displaymessage( const char* formatstring, int num, ... )
 {
 
    va_list paramlist;
@@ -3561,7 +3564,7 @@ byte         viewtextquery(word         id,
 tdisplaymessage* messagebox = NULL;
 
 
-int displaymessage2( char* formatstring, ... )
+int displaymessage2( const char* formatstring, ... )
 {
    char stringtooutput[200];
    char* b;

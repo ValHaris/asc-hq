@@ -1,6 +1,9 @@
-//     $Id: loaders.h,v 1.4 2000-05-25 11:07:44 mbickel Exp $
+//     $Id: loaders.h,v 1.5 2000-08-03 13:12:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/05/25 11:07:44  mbickel
+//      Added functions to check files for valid mail / savegame files.
+//
 //     Revision 1.3  2000/04/27 16:25:26  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -97,11 +100,11 @@ extern void         erasemap_unchained( tmap* spfld = actmap );
 
 
 
-const int actsavegameversion  = 0xff32;
+const int actsavegameversion  = 0xff33;
 const int minsavegameversion  = 0xff31;
-const int actmapversion       = 0xfe25;
+const int actmapversion       = 0xfe26;
 const int minmapversion       = 0xfe24;
-const int actnetworkversion   = 0x0005;
+const int actnetworkversion   = 0x0006;
 const int minnetworkversion   = 0x0004;
 const int actreplayversion    = 0x0001;
 const int minreplayversion    = 0x0001;

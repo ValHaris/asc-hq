@@ -1,6 +1,11 @@
-//     $Id: typen.cpp,v 1.28 2000-08-02 10:28:27 mbickel Exp $
+//     $Id: typen.cpp,v 1.29 2000-08-03 13:12:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/08/02 10:28:27  mbickel
+//      Fixed: generator vehicle not working
+//      Streams can now report their name
+//      Field information shows units filename
+//
 //     Revision 1.27  2000/07/29 14:54:49  mbickel
 //      plain text configuration file implemented
 //
@@ -214,6 +219,9 @@ const char*  cwettertypen[cwettertypennum] = {"dry (standard)","light rain", "he
 const char*  resourceNames[3]  = {"energy", "material", "fuel"}; 
 const int  cwaffenproduktionskosten[cwaffentypennum][3]  = {{20, 15, 10}, {2, 2, 0}, {3, 2, 0}, {3, 3, 2}, {3, 3, 2}, {4, 3, 2},
                                                             {1, 1, 0},    {1, 2, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}; // jeweils fr weaponpackagesize Pack !
+// const int experienceDecreaseDamageBoundaryNum = 4;
+const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoundaryNum] = { 80, 60, 40, 20 };
+
 
 const int directionangle [ sidenum ] = 
 #ifdef HEXAGON
@@ -402,7 +410,7 @@ int tfield :: getattackbonus ( void )
    int a = typ->attackbonus;
    if ( object )
       for ( int i = 0; i < object->objnum; i++ ) {
-         if ( object->object[i]->typ->attackbonus_abs >= 0 )
+         if ( object->object[i]->typ->attackbonus_abs != -1 )
             a = object->object[i]->typ->attackbonus_abs;
          else
             a += object->object[i]->typ->attackbonus_plus;
@@ -415,7 +423,7 @@ int tfield :: getdefensebonus ( void )
    int a = typ->defensebonus;
    if ( object )
       for ( int i = 0; i < object->objnum; i++ ) {
-         if ( object->object[i]->typ->defensebonus_abs >= 0 )
+         if ( object->object[i]->typ->defensebonus_abs != -1 )
             a = object->object[i]->typ->defensebonus_abs;
          else
             a += object->object[i]->typ->defensebonus_plus;
@@ -846,6 +854,7 @@ void tvehicle :: init ( void )
    ypos = -1;
    material = 0;
    energy = 0;
+   energyUsed = 0;
    prev = 0;
    next = 0;
    connection = 0; 
@@ -884,6 +893,7 @@ void tvehicle :: clone ( pvehicle src, pmap actmap )
    ypos = src->ypos;
    material = src->material;
    energy = src->energy;
+   energyUsed = src->energyUsed;
    connection = src->connection; 
    klasse = src->klasse;
    armor = src->armor; 
@@ -912,13 +922,14 @@ void tvehicle :: setpower ( int status )
    if ( functions & cfgenerator ) {
       generatoractive = status;
       if ( status )
-         energy = typ->energy;
+         energy = typ->energy - energyUsed;
       else {
-         int endiff = typ->energy- energy;
+         int endiff = typ->energy- energy - energyUsed;
          if ( fuel < endiff * generatortruckefficiency )
             endiff = fuel / generatortruckefficiency;
  
          fuel -= endiff * generatortruckefficiency ;
+         energyUsed += endiff;
          energy = 0;
       }
    } else
@@ -1220,6 +1231,8 @@ void tvehicle :: repairunit(pvehicle vehicle, int maxrepair )
 { 
    if ( vehicle->damage  &&  fuel  &&  material ) { 
 
+      int orgdam = vehicle->damage;
+
       int dam;
       if ( vehicle->damage > maxrepair )
          dam = maxrepair;
@@ -1241,6 +1254,12 @@ void tvehicle :: repairunit(pvehicle vehicle, int maxrepair )
 
 
       vehicle->damage -= dam * w / 10000; 
+
+      for ( int i = 0; i < experienceDecreaseDamageBoundaryNum; i++)
+         if ( orgdam > experienceDecreaseDamageBoundaries[i] && vehicle->damage < experienceDecreaseDamageBoundaries[i] )
+            if ( vehicle->experience > 0 )
+               vehicle->experience-=1;
+
 
       if ( vehicle != this ) {
          if ( vehicle->movement > movement_cost_for_repaired_unit )
@@ -1269,6 +1288,19 @@ void tvehicle :: repairunit(pvehicle vehicle, int maxrepair )
    } 
 } 
 
+void tvehicle :: turnwrap ( void )
+{
+   if ( energy < typ->energy - energyUsed  && generatoractive )
+      if ( functions & cfgenerator ) {
+         int endiff = typ->energy- energy - energyUsed;
+         if ( fuel < endiff * generatortruckefficiency )
+            endiff = fuel / generatortruckefficiency;
+
+         energy += endiff;
+         fuel -= endiff * generatortruckefficiency ;
+         energyUsed = 0;
+      }
+}
 
 void tvehicle :: nextturn( void )
 {

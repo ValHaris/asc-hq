@@ -1,6 +1,11 @@
-//     $Id: edmisc.cpp,v 1.20 2000-08-02 15:52:56 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.21 2000-08-03 13:12:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/08/02 15:52:56  mbickel
+//      New unit set definition files
+//      demount accepts now more than one container file
+//      Unitset information dialog added
+//
 //     Revision 1.19  2000/06/28 19:26:15  mbickel
 //      fixed bug in object generation by building removal
 //      Added artint.cpp to makefiles
@@ -1306,8 +1311,6 @@ void         k_savemap(char saveas)
    logtofile ( "edmisc / k_savemap /  started" );
    #endif
 
-  tenterfiledescription efd;
-
    char filename[300];
 
    int nameavail = 0;
@@ -1338,10 +1341,6 @@ void         k_savemap(char saveas)
          filedescription[0] = 0;
 
       cursor.hide();
-      efd.init( filedescription );
-      efd.run();
-
-      strcpy ( filedescription , efd.description );
 
       #ifdef logging
       logtofile ( "edmisc / k_savemap /  description entered" );
@@ -1360,7 +1359,6 @@ void         k_savemap(char saveas)
       actmap->preferredfilenames->mapname[0] = strdup ( filename );
 
 
-      efd.done();
       #ifdef logging
       logtofile ( "edmisc / k_savemap /  vor savemap" );
       #endif

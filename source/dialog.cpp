@@ -1,6 +1,11 @@
-//     $Id: dialog.cpp,v 1.38 2000-08-02 15:52:44 mbickel Exp $
+//     $Id: dialog.cpp,v 1.39 2000-08-03 13:11:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2000/08/02 15:52:44  mbickel
+//      New unit set definition files
+//      demount accepts now more than one container file
+//      Unitset information dialog added
+//
 //     Revision 1.37  2000/08/02 10:28:25  mbickel
 //      Fixed: generator vehicle not working
 //      Streams can now report their name
@@ -6207,7 +6212,7 @@ void viewUnitSetinfo ( void )
       s += "\nNo unit selected";
 
    while ( s.find ( "@" ) != string::npos )
-      s.replace ( s.find ( "@" ), 1, " (at) "); // the default font has not @ character
+      s.replace ( s.find ( "@" ), 1, "(at)"); // the default font has not @ character
 
    tviewanytext vat;
    vat.init ( "Unit information", s.c_str() );

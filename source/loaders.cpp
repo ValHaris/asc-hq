@@ -1,6 +1,9 @@
-//     $Id: loaders.cpp,v 1.16 2000-07-29 14:54:37 mbickel Exp $
+//     $Id: loaders.cpp,v 1.17 2000-08-03 13:12:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/07/29 14:54:37  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.15  2000/07/26 15:58:10  mbickel
 //      Fixed: infinite loop when landing with an aircraft which is low on fuel
 //      Fixed a bug in loadgame
@@ -398,6 +401,7 @@ void         renumevents(void)
 #define cem_poweron       0x40000
 #define cem_weapstrength2 0x80000
 #define cem_ammunition2   0x100000
+#define cem_energyUsed    0x200000
 
 
 
@@ -452,6 +456,9 @@ void         tspfldloaders::writeunit ( pvehicle eht )
 
     if ( eht->energy   < eht->typ->energy   )
        bm |= cem_energy;
+
+    if ( eht->energyUsed )
+       bm |= cem_energyUsed;
 
     if ( eht->klasse    )
        bm |= cem_class;
@@ -547,6 +554,9 @@ void         tspfldloaders::writeunit ( pvehicle eht )
 
     if ( bm & cem_poweron )
        stream->writedata2 ( eht->generatoractive );
+
+    if ( bm & cem_energyUsed )
+       stream->writeInt ( eht->energyUsed );
 }
 
 
@@ -698,6 +708,11 @@ void         tspfldloaders::readunit ( pvehicle &eht )
        stream->readdata2 ( eht->generatoractive );
     else
        eht->generatoractive = 0;
+
+    if ( bm & cem_energyUsed )
+       eht->energyUsed =  stream->readInt ();
+    else
+       eht->energyUsed = 0;
 
 
 

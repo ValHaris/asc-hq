@@ -1,6 +1,9 @@
-//     $Id: dlg_box.h,v 1.9 2000-05-23 20:40:42 mbickel Exp $
+//     $Id: dlg_box.h,v 1.10 2000-08-03 13:12:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/05/23 20:40:42  mbickel
+//      Removed boolean type
+//
 //     Revision 1.8  2000/05/06 20:25:23  mbickel
 //      Fixed: -recognition of a second mouse click when selection a pd menu item
 //             -movement: fields the unit can only pass, but not stand on them,
@@ -339,8 +342,8 @@ class tdisplaymessage : public tdialogbox {
                         virtual void run ( void );
                    };
 
-extern int  displaymessage2( char* formatstring, ... );
-extern void displaymessage( char* formatstring, int num, ... );   // num   0: Box bleibt aufgeklappt, 1 box wird geschlossen , text rot (Fehler), 2 : Programm wird beendet; 3 : normaler text ( OK)
+extern int  displaymessage2( const char* formatstring, ... );
+extern void displaymessage( const char* formatstring, int num, ... );   // num   0: Box bleibt aufgeklappt, 1 box wird geschlossen , text rot (Fehler), 2 : Programm wird beendet; 3 : normaler text ( OK)
 extern void removemessage( void );
 
 extern tdisplaymessage* messagebox;

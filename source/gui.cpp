@@ -1,6 +1,10 @@
-//     $Id: gui.cpp,v 1.27 2000-08-01 10:39:10 mbickel Exp $
+//     $Id: gui.cpp,v 1.28 2000-08-03 13:12:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/08/01 10:39:10  mbickel
+//      Updated documentation
+//      Refined configuration file handling
+//
 //     Revision 1.26  2000/07/29 14:54:31  mbickel
 //      plain text configuration file implemented
 //
@@ -1604,11 +1608,12 @@ tnsguiiconpoweron::tnsguiiconpoweron ( void )
 
 int   tnsguiiconpoweron::available    ( void ) 
 {
-   if ( getactfield()->vehicle )
-      if ( getactfield()->vehicle->color == actmap->actplayer*8  &&
-           (getactfield()->vehicle->functions & cfgenerator))
-           if ( !getactfield()->vehicle->generatoractive )
-              return 1;
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) 
+      if ( getactfield()->vehicle )
+         if ( getactfield()->vehicle->color == actmap->actplayer*8  &&
+              (getactfield()->vehicle->functions & cfgenerator))
+              if ( !getactfield()->vehicle->generatoractive )
+                 return 1;
 
   return 0;         
 }
@@ -1628,11 +1633,12 @@ tnsguiiconpoweroff::tnsguiiconpoweroff ( void )
 
 int   tnsguiiconpoweroff::available    ( void ) 
 {
-   if ( getactfield()->vehicle )
-      if ( getactfield()->vehicle->color == actmap->actplayer*8  &&
-           (getactfield()->vehicle->functions & cfgenerator))
-           if ( getactfield()->vehicle->generatoractive )
-              return 1;
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) 
+      if ( getactfield()->vehicle )
+         if ( getactfield()->vehicle->color == actmap->actplayer*8  &&
+              (getactfield()->vehicle->functions & cfgenerator))
+              if ( getactfield()->vehicle->generatoractive )
+                 return 1;
 
   return 0;         
 }

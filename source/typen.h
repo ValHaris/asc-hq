@@ -1,6 +1,11 @@
-//     $Id: typen.h,v 1.32 2000-08-02 10:28:28 mbickel Exp $
+//     $Id: typen.h,v 1.33 2000-08-03 13:12:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/08/02 10:28:28  mbickel
+//      Fixed: generator vehicle not working
+//      Streams can now report their name
+//      Field information shows units filename
+//
 //     Revision 1.31  2000/07/29 14:54:54  mbickel
 //      plain text configuration file implemented
 //
@@ -661,6 +666,7 @@ class tvehicle { /*** Bei Žnderungen unbedingt Save/LoadGame und Konstruktor kor
     Integer      xpos, ypos;   /*  Position auf map  */
     int          material;     /*  aktuelle loading an Material und  */
     int          energy;       /*  energy  */
+    int          energyUsed;
     pvehicle     next;
     pvehicle     prev;         /*  fr lineare Liste der vehicle */
                    
@@ -686,7 +692,8 @@ class tvehicle { /*** Bei Žnderungen unbedingt Save/LoadGame und Konstruktor kor
     int getmaxmaterialforweight ( void );
     int freeweight ( int what = 0 );      // what: 0 = cargo ; 1 = material/fuel
     int size ( void );
-    void nextturn( void );
+    void nextturn( void );    // is executed when the player hits "end turn"
+    void turnwrap ( void );   // is executed when the game starts a new turn ( player8 -> player1 )
     void repairunit ( pvehicle vehicle, int maxrepair = 100 );
     void constructvehicle ( pvehicletype tnk, int x, int y );      // current cursor position will be used
     int  vehicleconstructable ( pvehicletype tnk, int x, int y );
@@ -1941,6 +1948,10 @@ extern const char*  ceventtrigger[];
 
 
 extern const char*  cmovemalitypes[cmovemalitypenum];
+
+
+const int experienceDecreaseDamageBoundaryNum = 4;
+extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoundaryNum];
 
 
 /////////////////////////////////////////////////////////////////////

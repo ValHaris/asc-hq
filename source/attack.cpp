@@ -1,6 +1,9 @@
-//     $Id: attack.cpp,v 1.21 2000-07-29 14:54:10 mbickel Exp $
+//     $Id: attack.cpp,v 1.22 2000-08-03 13:11:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/07/29 14:54:10  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.20  2000/07/16 14:19:59  mbickel
 //      AI has now some primitive tactics implemented
 //      Some clean up
@@ -165,7 +168,7 @@ int  AttackFormula :: checkHemming ( pvehicle     d_eht,  int     direc )
 
 
 
-float AttackFormula :: hemming ( int  ax,  int ay,  pvehicle d_eht )
+float AttackFormula :: strength_hemming ( int  ax,  int ay,  pvehicle d_eht )
 {
    const float  maxHemmingFactor = 1.4;  // 1 + factor !!!
    #ifdef HEXAGON
@@ -189,26 +192,40 @@ float AttackFormula :: hemming ( int  ax,  int ay,  pvehicle d_eht )
 }
 
 
-float AttackFormula :: damage ( int damage )
+float AttackFormula :: strength_damage ( int damage )
 {
    float a = (300 - 2 * damage) / 3;
    return a / 100;
 }
 
-float AttackFormula :: experience ( int experience )
+float AttackFormula :: strength_experience ( int experience )
 {
    float e = experience;
-   if ( e < 1 )
-      e = 1;
+   if ( e < 0 )
+      e = 0;
    return 1 + e/4;
 }
 
-float AttackFormula :: attackbonus ( int abonus )
+float AttackFormula :: defense_experience ( int experience )
+{
+   float e = experience;
+   if ( e < 0 )
+      e = 0;
+   return 1 + e * 0.75 / 16;
+}
+
+float AttackFormula :: strength_attackbonus ( int abonus )
 {
    float a = abonus;
    return 1 + a/8;
 }
 
+
+float AttackFormula :: defense_defensebonus ( int defensebonus )
+{
+   float d = defensebonus;
+   return 1 + d/8;
+}
 
 
 
@@ -220,20 +237,22 @@ tfight :: tfight ( void )
 
 void tfight :: calc ( void )
 {
-   const int damagefactor = 4;
+   const float damagefactor = 4;
+   const float armordivisor = 5;
 
 
    if ( av.strength ) { 
-      int w = (int)(dv.damage + 
-            (  1000 * av.strength 
-               * experience ( av.experience )
-               * damage ( av.damage ) 
-               * attackbonus ( av.attackbonus ) 
-               * dv.hemming
-                 / (dv.armor / 4 
-                    * (10 + dv.defensebonus*10 / 8) / 10 )
-               * 100 / damagefactor )
-            / 1000);
+      float absstrength = float(av.strength )
+                          * strength_experience ( av.experience )
+                          * strength_damage ( av.damage ) 
+                          * strength_attackbonus ( av.attackbonus ) 
+                          * dv.hemming;
+
+      float absdefense = float(dv.armor / armordivisor )
+                          * defense_defensebonus ( dv.defensebonus )
+                          * defense_experience ( dv.experience );
+
+      int w = int(dv.damage + absstrength / absdefense * 100 / damagefactor );
 
       if (dv.damage > w ) 
          displaymessage("fatal error at attack: \ndecrease of damage d!",1);
@@ -262,16 +281,17 @@ void tfight :: calc ( void )
    } 
 
    if ( dv.strength ) { 
-      int w = av.damage + 
-         ( 1000 * dv.strength 
-           * experience ( dv.experience )
-           * damage ( dv.damage ) 
-           * attackbonus ( dv.attackbonus )
-             / (av.armor / 4 
-                * (10 + av.defensebonus*10 / 8) / 10)
-           * 100 / damagefactor )
-         / 1000;
 
+      float absstrength = float(av.strength )
+                          * strength_experience ( dv.experience )
+                          * strength_damage ( dv.damage ) 
+                          * strength_attackbonus ( dv.attackbonus ) ;
+
+      float absdefense = float(dv.armor / armordivisor)
+                          * defense_defensebonus ( av.defensebonus )
+                          * defense_experience ( av.experience );
+
+      int w = int(dv.damage + absstrength / absdefense * 100 / damagefactor );
 
       if (av.damage > w ) 
          displaymessage("fatal error at attack: \ndecrease of damage a!",1);
@@ -607,7 +627,7 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    dv.damage    = attackedunit->damage;
    dv.experience = attackedunit->experience;
    if ( dist <= maxmalq )
-      dv.hemming = hemming ( attackingunit->xpos, attackingunit->ypos, attackedunit );
+      dv.hemming = strength_hemming ( attackingunit->xpos, attackingunit->ypos, attackedunit );
    else
       dv.hemming = 1;
 

@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.33 2000-07-29 18:40:08 mbickel Exp $
+//     $Id: building.cpp,v 1.34 2000-08-03 13:11:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/07/29 18:40:08  mbickel
+//      Fixed crash in ammo transfer window inside buildings/transports
+//
 //     Revision 1.32  2000/07/29 14:54:11  mbickel
 //      plain text configuration file implemented
 //
@@ -451,8 +454,15 @@ int   ccontainercontrols :: crepairunit :: repairto (pvehicle eht, char newdamag
             if ( mp < m )
                displaymessage2 ( " %d material lost ! ", m - mp );
        */
-   } else
+   } else {
+      int orgdam = eht->damage;
       eht->damage = ndamage;
+      for ( int i = 0; i < experienceDecreaseDamageBoundaryNum; i++)
+         if ( orgdam > experienceDecreaseDamageBoundaries[i] && eht->damage < experienceDecreaseDamageBoundaries[i] )
+            if ( eht->experience > 0 )
+               eht->experience-=1;
+
+   }
 
    return ndamage;
 }

@@ -1,6 +1,11 @@
-//     $Id: artint.cpp,v 1.12 2000-08-02 15:52:37 mbickel Exp $
+//     $Id: artint.cpp,v 1.13 2000-08-03 13:11:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/08/02 15:52:37  mbickel
+//      New unit set definition files
+//      demount accepts now more than one container file
+//      Unitset information dialog added
+//
 //     Revision 1.11  2000/07/29 14:54:07  mbickel
 //      plain text configuration file implemented
 //
@@ -2852,7 +2857,7 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( pvehiclety
                   AttackFormula af;
                   for ( int e = (fzt->weapons->weapon[i].mindistance + maxmalq - 1)/ maxmalq; e <= fzt->weapons->weapon[i].maxdistance / maxmalq; e++ ) {    // the distance between two fields is maxmalq
                      d++; 
-                     int n = weapDist.getWeapStrength( &fzt->weapons->weapon[i], e*maxmalq ) * fzt->weapons->weapon[i].maxstrength * af.damage(getdamage()) * af.experience(getexpirience());
+                     int n = weapDist.getWeapStrength( &fzt->weapons->weapon[i], e*maxmalq ) * fzt->weapons->weapon[i].maxstrength * af.strength_damage(getdamage()) * af.strength_experience(getexpirience());
                      m += n / (2*(1+d)); 
                   } 
                   if (getammunition(i) == 0) 
@@ -3007,9 +3012,9 @@ void AI :: WeaponThreatRange :: testfield ( void )
             AttackFormula af;
             int strength = weapDist.getWeapStrength( &veh->typ->weapons->weapon[weap], dist*maxmalq, veh->height, 1 << height ) 
                          * veh->typ->weapons->weapon[weap].maxstrength              
-                         * af.experience ( veh->experience ) 
-                         * af.attackbonus ( getfield(startx,starty)->getattackbonus() )
-                         * af.damage ( veh->damage );
+                         * af.strength_experience ( veh->experience ) 
+                         * af.strength_attackbonus ( getfield(startx,starty)->getattackbonus() )
+                         * af.strength_damage ( veh->damage );
 
             if ( strength ) {
                int pos = xp + yp * ai->getmap()->xsize;

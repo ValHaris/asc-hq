@@ -274,13 +274,13 @@ main (int argc, char *argv[] )
       printf ("\n    attackbonus_plus : \n");
       num_ed ( ft->attackbonus_plus , minint, maxint);
    
-      printf ("\n    attackbonus_abs : \n");
+      printf ("\n    attackbonus_abs ( -1 is ignore ): \n");
       num_ed ( ft->attackbonus_abs , minint, maxint);
    
       printf ("\n    defensebonus_plus : \n");
       num_ed ( ft->defensebonus_plus , minint, maxint);
    
-      printf ("\n    defensebonus_abs : \n");
+      printf ("\n    defensebonus_abs ( -1 is ignore ): \n");
       num_ed ( ft->defensebonus_abs , minint, maxint);
    
       printf ("\n    basicjamming_plus : \n");

@@ -1,6 +1,11 @@
-//     $Id: controls.cpp,v 1.53 2000-08-02 15:52:42 mbickel Exp $
+//     $Id: controls.cpp,v 1.54 2000-08-03 13:11:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2000/08/02 15:52:42  mbickel
+//      New unit set definition files
+//      demount accepts now more than one container file
+//      Unitset information dialog added
+//
 //     Revision 1.52  2000/08/02 10:28:23  mbickel
 //      Fixed: generator vehicle not working
 //      Streams can now report their name
@@ -5046,15 +5051,7 @@ void turnwrap ( void )
    
           pvehicle eht = actmap->player[i].firstvehicle;
           while ( eht ) {
-             if ( eht->energy < eht->typ->energy  && eht->generatoractive )
-                if ( eht->functions & cfgenerator ) {
-                   int endiff = eht->typ->energy- eht->energy;
-                   if ( eht->fuel < endiff * generatortruckefficiency )
-                      endiff = eht->fuel / generatortruckefficiency;
-
-                   eht->energy += endiff;
-                   eht->fuel -= endiff * generatortruckefficiency ;
-                }
+             eht->turnwrap();
              eht = eht->next;
           }
 
