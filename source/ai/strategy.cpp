@@ -60,7 +60,7 @@ AI::AiResult AI::strategy( void )
                   if ( sec ) {
                      int nwid = veh->networkid;
                      int movement = veh->getMovement();
-                     moveUnit ( veh, dest, false);
+                     moveUnit ( veh, dest, false, false );
 
                      if ( getMap()->getUnit(nwid)) {
                         AiParameter& aip = *veh->aiparam[getPlayerNum()];

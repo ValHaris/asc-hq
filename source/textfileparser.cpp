@@ -82,6 +82,7 @@ void TextPropertyGroup :: print( int indent )
          displayLogMessage(10, "  " );
 
       displayLogMessage(10,  i->toString());
+      displayLogMessage(10,  "\n");
    }
 
    for ( Parents::iterator i = parents.begin(); i != parents.end(); i++ ) {

@@ -2,9 +2,14 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.98 2003-03-26 19:16:46 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.99 2003-03-30 13:19:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.98  2003/03/26 19:16:46  mbickel
+//      Fixed AI bugs
+//      Fixed clipboard bugs
+//      Fixed: unable to move units out of some transport
+//
 //     Revision 1.97  2003/03/20 11:16:17  mbickel
 //      Fixed: compilation problems with gcc
 //
@@ -3795,7 +3800,7 @@ void tvehiclecargo :: removeitem ( int pos )
 void tvehiclecargo :: checkforadditionalkeys ( tkey ch )
 {
    if ( transport->loading[ cursorpos ] ) {
-       if ( ch == ct_v )
+       if ( ch == ct_p )
           changeunitvalues( transport->loading[ cursorpos ] );
        if ( ch == ct_c )
           unit_cargo( transport->loading[ cursorpos ] );
@@ -3890,7 +3895,7 @@ void tbuildingcargo :: removeitem ( int pos )
 void tbuildingcargo :: checkforadditionalkeys ( tkey ch )
 {
    if ( building->loading[ cursorpos ] ) {
-       if ( ch == ct_v )
+       if ( ch == ct_p )
           changeunitvalues( building->loading[ cursorpos ] );
        if ( ch == ct_c )
           unit_cargo( building->loading[ cursorpos ] );

@@ -528,11 +528,11 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
       AStar3D::Path path;
       ast->findPath ( path, destination );
 
-      return moveUnit ( veh, path ) == 1 ;
+      return moveUnit ( veh, path, intoBuildings, intoTransports ) == 1 ;
 //   }
 }
 
-int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path )
+int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path, bool intoBuildings, bool intoTransports )
 {
    AStar3D::Path::const_iterator pi = path.begin();
    if ( pi == path.end() )
@@ -543,7 +543,19 @@ int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path )
    AStar3D::Path::const_iterator lastmatch = pi;
    while ( pi != path.end() ) {
       pfield fld = getfield ( pi->x, pi->y );
-      if ( !fld->getContainer() || pi+1==path.end() )
+      bool ok = true;
+      if ( fld->getContainer() ) {
+         if ( pi+1 !=path.end() )
+             ok = false;
+         else {
+            if ( fld->building && !intoBuildings )
+               ok = false;
+            if ( fld->vehicle && !intoTransports )
+               ok = false;
+         }
+      }
+
+      if ( ok )
       // if ( !fld->building || getdiplomaticstatus2 ( fld->building->color, getPlayerNum()*8) == cawar || fld->building->getOwner() == veh->getOwner() )
          if ( pi->dist <= veh->getMovement() )
             lastmatch = pi;

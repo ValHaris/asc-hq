@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: ai.h,v 1.15 2003-03-08 14:24:38 mbickel Exp $
+//     $Id: ai.h,v 1.16 2003-03-30 13:19:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2003/03/08 14:24:38  mbickel
+//      Code cleanup
+//      AI fixes and improvements
+//
 //     Revision 1.14  2003/03/07 17:11:41  mbickel
 //      AI improvements
 //
@@ -380,13 +384,13 @@
                   };
             };
 
-            bool moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool intoBuildings = false, bool intoTransports = false );
+            bool moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool intoBuildings = true, bool intoTransports = true );
 
             /** \returns 1 = destination reached;
                          0 = everything ok, but not enough movement to reach destination;
                          -1 = error
              */
-            int moveUnit ( pvehicle veh, const AStar3D::Path& path );
+            int moveUnit ( pvehicle veh, const AStar3D::Path& path, bool intoBuildings = true, bool intoTransports = true );
 
             void getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBonus, bool justOne = false );
             void searchTargets ( pvehicle veh, const MapCoordinate3D& pos, TargetVector& tl, int moveDist, AStar3D& vm, int hemmingBonus );
