@@ -1605,9 +1605,11 @@ void float2int ( float* fp, int* ip )
 void showtext ( const char* text, int x, int y, int textcol )
 {
    if ( !activefontsettings.font )
-      return;
+     return;
 
-
+   if ( !text )
+     return;
+ 
    char* fb = (char*)(x * agmp->byteperpix + y * agmp->scanlinelength + agmp->linearaddress);
    int negkernwidth = 0;
    int fontheight; 

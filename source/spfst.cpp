@@ -1,6 +1,15 @@
-//     $Id: spfst.cpp,v 1.4 1999-11-22 18:27:57 mbickel Exp $
+//     $Id: spfst.cpp,v 1.5 1999-11-23 21:07:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/22 18:27:57  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.3  1999/11/16 17:04:14  mbickel
 //     Made ASC compilable for DOS again :-)
 //     Merged all the bug fixes in that I did last week
@@ -1377,13 +1386,15 @@ void         initspfst( int x , int y)
    int          i;
    /* godview = true; */
 
-   actmap->actplayer = 0;
-   actmap->xsize = 0;
-   actmap->ysize = 0;
-   actmap->field = NULL;
-   for (i = 0; i <= 7; i++) {
-       actmap->player[i].existent = false; 
-       actmap->player[i].firstvehicle = NULL; 
+   if ( actmap ) {
+      actmap->actplayer = 0;
+      actmap->xsize = 0;
+      actmap->ysize = 0;
+      actmap->field = NULL;
+      for (i = 0; i <= 7; i++) {
+          actmap->player[i].existent = false; 
+          actmap->player[i].firstvehicle = NULL; 
+      }
    }
          
    tempsvisible = true; 
@@ -4703,9 +4714,11 @@ void tdisplaymap :: displayadditionalunits ( int height )
 }
 
 
-
 void         displaymap(  )
 { 
+   if ( !actmap )
+      return;
+
    if ( !actmap->xsize  ||  !actmap->ysize   || lockdisplaymap ) 
       return;
 

@@ -1,6 +1,15 @@
-//     $Id: loaders.cpp,v 1.3 1999-11-22 18:27:34 mbickel Exp $
+//     $Id: loaders.cpp,v 1.4 1999-11-23 21:07:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/22 18:27:34  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:41:57  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -2719,34 +2728,35 @@ int          tsavegameloaders::loadgame(char *       name )
 
 void         tnetworkloaders::checkcrcs ( void )
 {
-   if ( spfld->objectcrc ) {
-      tspeedcrccheck* ck = spfld->objectcrc->speedcrccheck;
-
-      int i;
-      for ( i = 0; i < 9; i++ ) {
-         pbuilding bld = spfld->player[i].firstbuilding;
-         while ( bld ) {
-            ck->checkbuilding2 ( bld->typ );
-            for (int j = 0; j< 32 ; j++) {
-                ck->checkunit2 ( bld->production[j] );
-                ck->checkunit2 ( bld->loading[j]->typ );
+   if ( actmap )
+      if ( actmap->objectcrc ) {
+         tspeedcrccheck* ck = actmap->objectcrc->speedcrccheck;
+   
+         int i;
+         for ( i = 0; i < 9; i++ ) {
+            pbuilding bld = actmap->player[i].firstbuilding;
+            while ( bld ) {
+               ck->checkbuilding2 ( bld->typ );
+               for (int j = 0; j< 32 ; j++) {
+                   ck->checkunit2 ( bld->production[j] );
+                   ck->checkunit2 ( bld->loading[j]->typ );
+               }
+   
+               bld = bld->next;
             }
-
-            bld = bld->next;
+         }
+   
+         for ( i = 0; i < 8; i++ ) {
+            pvehicle eht = actmap->player[i].firstvehicle;
+            while ( eht ) {
+               ck->checkunit2 ( eht->typ );
+               for (int j = 0; j< 32 ; j++) 
+                   ck->checkunit2 ( eht->loading[j]->typ );
+               
+               eht = eht->next;
+            }
          }
       }
-
-      for ( i = 0; i < 8; i++ ) {
-         pvehicle eht = spfld->player[i].firstvehicle;
-         while ( eht ) {
-            ck->checkunit2 ( eht->typ );
-            for (int j = 0; j< 32 ; j++) 
-                ck->checkunit2 ( eht->loading[j]->typ );
-            
-            eht = eht->next;
-         }
-      }
-   }
 }
 
 

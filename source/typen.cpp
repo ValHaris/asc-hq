@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.3 1999-11-16 17:04:17 mbickel Exp $
+//     $Id: typen.cpp,v 1.4 1999-11-23 21:07:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/16 17:04:17  mbickel
+//     Made ASC compilable for DOS again :-)
+//     Merged all the bug fixes in that I did last week
+//
 //     Revision 1.2  1999/11/16 03:42:44  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -78,7 +82,7 @@ const char*  cvehiclefunctions[cvehiclefunctionsnum]  = {"sonar",             "p
                                                             
 const char*  cbodenarten[cbodenartennum]  = {"shallow water , coast"       ,    "normal lowland",   "swamp thick",       "forest",       
                                              "high mountains",                  "road",             "railroad",    "entry of building (not to be used for terrain)" ,
-                                             "harbour",                         "runway"  ,         "pipeline",    "buried pipeline",        
+                                             "harbour (safe for ships at storm)",                         "runway"  ,         "pipeline",    "buried pipeline",        
                                              "water",                           "deep water",       "hard sand",   "soft sand",  
                                              "track possible",                  "small rocks",      "mud",         "snow", 
                                              "deep snow",                       "mountains",        "very shallow water",

@@ -1,6 +1,15 @@
-//     $Id: dlg_box.cpp,v 1.4 1999-11-22 18:27:10 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.5 1999-11-23 21:07:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/22 18:27:10  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.3  1999/11/18 17:31:08  mbickel
 //      Improved BI-map import translation tables
 //      Moved macros to substitute Watcom specific routines into global.h
@@ -545,6 +554,7 @@ void         tdlgengine::buttonpressed(byte         id)
           } 
           else 
             if ( *pw + pb->max < *pw2 ) {
+
                if (  pb->newpressed == 0 )          // Tastatur
                   (*pw)++;
                else
@@ -556,6 +566,7 @@ void         tdlgengine::buttonpressed(byte         id)
                         int dst = ticker - pb->lasttick;
                         if  ( *pw + dst + pb->max >= *pw2 )
                            *pw = *pw2 - pb->max; 
+
                         else
                            (*pw) += dst;
                         pb->lasttick = ticker;
@@ -588,6 +599,7 @@ void         tdlgengine::addbutton( const char *       ltxt,
    addbutton ( ltxt, rect1.x1, rect1.y1, rect1.x2, rect1.y2, lart, lstyle, lid, enabled );
 }
 
+const char* emptystring = "";
 
 void         tdlgengine::addbutton(  const char *       ltxt,
                                  int          lx1,
@@ -619,7 +631,10 @@ void         tdlgengine::addbutton(  const char *       ltxt,
    pb->style = lstyle; 
    pb->id = lid; 
    pb->next = firstbutton; 
-   pb->text = ltxt;
+   if ( ltxt )
+      pb->text = ltxt;
+   else
+      pb->text = emptystring;
    pb->art = lart; 
    pb->active = enabled; 
    pb->status = 1; 
@@ -629,7 +644,7 @@ void         tdlgengine::addbutton(  const char *       ltxt,
 
    firstbutton = pb; 
 
-   ch = getletter(ltxt); 
+   ch = getletter(pb->text); 
    if (ch != 0) { 
       pb->key[0] = char2key( tolower(ch) );
       pb->keynum = 1; 

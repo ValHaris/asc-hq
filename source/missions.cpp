@@ -1,6 +1,15 @@
-//     $Id: missions.cpp,v 1.3 1999-11-22 18:27:40 mbickel Exp $
+//     $Id: missions.cpp,v 1.4 1999-11-23 21:07:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/22 18:27:40  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:42:08  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -828,7 +837,7 @@ void         executeevent(pevent       ev)
       }
 
       if ( ev->a.action == ceellipse ) {
-         if ( actmap->ellipse )
+         if ( !actmap->ellipse )
             actmap->ellipse = new EllipseOnScreen; 
 
          if ( ev->intdata[4] ) {     // x orientation

@@ -1,6 +1,15 @@
-//     $Id: building.cpp,v 1.5 1999-11-22 18:26:53 mbickel Exp $
+//     $Id: building.cpp,v 1.6 1999-11-23 21:07:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/11/22 18:26:53  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.4  1999/11/18 17:31:01  mbickel
 //      Improved BI-map import translation tables
 //      Moved macros to substitute Watcom specific routines into global.h
@@ -1849,8 +1858,8 @@ void    ccontainer ::  setactunittogray ( void )
 ccontainer :: cammunitiontransfer_subwindow :: cammunitiontransfer_subwindow ( void )
 {
    strcpy ( name, "ammunition transfer" );
-   laschpic1 = icons.container.lasche.ammotransfer[0];
-   laschpic2 = icons.container.lasche.ammotransfer[1];
+   laschpic1 = icons.container.lasche.a.ammotransfer[0];
+   laschpic2 = icons.container.lasche.a.ammotransfer[1];
    eht = NULL;
    txtptr = "external";
    num = 0;
@@ -3259,8 +3268,8 @@ void  ccontainer_b :: chosticons_cb :: init ( int resolutionx, int resolutiony )
 ccontainer_b :: crepairbuilding_subwindow :: crepairbuilding_subwindow ( void )
 {
    strcpy ( name, "building info / repair" );
-   laschpic1 = icons.container.lasche.buildinginfo[0];
-   laschpic2 = icons.container.lasche.buildinginfo[1];
+   laschpic1 = icons.container.lasche.a.buildinginfo[0];
+   laschpic2 = icons.container.lasche.a.buildinginfo[1];
 
    objcoordinates[0].x1 = subwinx1 + 164;
    objcoordinates[0].y1 = subwiny1 +  34;
@@ -3432,8 +3441,8 @@ void  ccontainer_b :: crepairbuilding_subwindow :: checkforkey ( tkey taste )
 ccontainer_b :: cnetcontrol_subwindow :: cnetcontrol_subwindow ( void )
 {
    strcpy ( name, "net control" );
-   laschpic1 = icons.container.lasche.netcontrol[0];
-   laschpic2 = icons.container.lasche.netcontrol[1];
+   laschpic1 = icons.container.lasche.a.netcontrol[0];
+   laschpic2 = icons.container.lasche.a.netcontrol[1];
 }
 
 int  ccontainer_b :: cnetcontrol_subwindow :: subwin_available ( void )
@@ -3609,8 +3618,8 @@ void  ccontainer_b :: cnetcontrol_subwindow :: checkforkey ( tkey taste )
 ccontainer_b :: cconventionelpowerplant_subwindow :: cconventionelpowerplant_subwindow ( void )
 {
    strcpy ( name, "power plant" );
-   laschpic1 = icons.container.lasche.powerplant[0];
-   laschpic2 = icons.container.lasche.powerplant[1];
+   laschpic1 = icons.container.lasche.a.powerplant[0];
+   laschpic2 = icons.container.lasche.a.powerplant[1];
 
    materialcolor = 232;
    fuelcolor = 125;
@@ -3880,8 +3889,8 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: checkforkey ( tkey ta
 ccontainer_b :: cwindpowerplant_subwindow :: cwindpowerplant_subwindow ( void )
 {
    strcpy ( name, "wind power" );
-   laschpic1 = icons.container.lasche.wind[0];
-   laschpic2 = icons.container.lasche.wind[1];
+   laschpic1 = icons.container.lasche.a.wind[0];
+   laschpic2 = icons.container.lasche.a.wind[1];
 }
 
 int  ccontainer_b :: cwindpowerplant_subwindow :: subwin_available ( void )
@@ -3960,8 +3969,8 @@ void ccontainer_b :: cwindpowerplant_subwindow :: resetresources ( int mode )
 ccontainer_b :: csolarpowerplant_subwindow :: csolarpowerplant_subwindow ( void )
 {
    strcpy ( name, "solar power" );
-   laschpic1 = icons.container.lasche.solar[0];
-   laschpic2 = icons.container.lasche.solar[1];
+   laschpic1 = icons.container.lasche.a.solar[0];
+   laschpic2 = icons.container.lasche.a.solar[1];
 }
 
 int  ccontainer_b :: csolarpowerplant_subwindow :: subwin_available ( void )
@@ -4061,8 +4070,8 @@ ccontainer_b :: cammunitionproduction_subwindow :: cammunitionproduction_subwind
 
    txtptr = "produce";
 
-   laschpic1 = icons.container.lasche.ammoproduction[0];
-   laschpic2 = icons.container.lasche.ammoproduction[1];
+   laschpic1 = icons.container.lasche.a.ammoproduction[0];
+   laschpic2 = icons.container.lasche.a.ammoproduction[1];
    maxproduceablenum = 20;
    grad = 50;
    materialneeded = 0;
@@ -4394,8 +4403,8 @@ void  ccontainer_b :: cammunitionproduction_subwindow :: checkforkey ( tkey tast
 ccontainer_b :: cresourceinfo_subwindow :: cresourceinfo_subwindow ( void )
 {                                     
    strcpy ( name, "resource info" );
-   laschpic1 = icons.container.lasche.resourceinfo[0];
-   laschpic2 = icons.container.lasche.resourceinfo[1];
+   laschpic1 = icons.container.lasche.a.resourceinfo[0];
+   laschpic2 = icons.container.lasche.a.resourceinfo[1];
    recalc = 1;
 }
 
@@ -4651,8 +4660,8 @@ int ccontainer_b :: cresearch_subwindow :: allbuildings = 0;
 ccontainer_b :: cresearch_subwindow :: cresearch_subwindow ( void )
 {
    strcpy ( name, "research" );
-   laschpic1 = icons.container.lasche.research[0];
-   laschpic2 = icons.container.lasche.research[1];
+   laschpic1 = icons.container.lasche.a.research[0];
+   laschpic2 = icons.container.lasche.a.research[1];
    materialcolor = 125;
    energycolor = 232;
    objcoordinates[0].x1 = subwinx1 + 117;
@@ -4948,8 +4957,8 @@ int ccontainer_b :: cminingstation_subwindow :: allbuildings = 0;
 ccontainer_b :: cminingstation_subwindow :: cminingstation_subwindow ( void )
 {
    strcpy ( name, "mining" );
-   laschpic1 = icons.container.lasche.miningstation[0];
-   laschpic2 = icons.container.lasche.miningstation[1];
+   laschpic1 = icons.container.lasche.a.miningstation[0];
+   laschpic2 = icons.container.lasche.a.miningstation[1];
    materialcolor = 125;
    energycolor = 232;
    objcoordinates[0].x1 = subwinx1 + 316;
@@ -5643,8 +5652,8 @@ void  ccontainer_b :: takeofficon_cb :: exec         ( void )
 ccontainer_t :: ctransportinfo_subwindow :: ctransportinfo_subwindow ( void )
 {
    strcpy ( name, "transport info" );
-   laschpic1 = icons.container.lasche.transportinfo[0];
-   laschpic2 = icons.container.lasche.transportinfo[1];
+   laschpic1 = icons.container.lasche.a.transportinfo[0];
+   laschpic2 = icons.container.lasche.a.transportinfo[1];
 
    helplist.num = 3;
 

@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.3 1999-11-16 17:04:18 mbickel Exp $
+//     $Id: typen.h,v 1.4 1999-11-23 21:07:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/16 17:04:18  mbickel
+//     Made ASC compilable for DOS again :-)
+//     Merged all the bug fixes in that I did last week
+//
 //     Revision 1.2  1999/11/16 03:42:45  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -1627,17 +1631,19 @@ struct thexpic {
                                } subwin;
                   union        {
                                   void* sym[11][2];
-                                  void*  ammotransfer[2];
-                                  void*  research[2];
-                                  void*  resourceinfo[2];
-                                  void*  netcontrol[2];
-                                  void*  solar[2];
-                                  void*  ammoproduction[2];
-                                  void*  wind[2];
-                                  void*  powerplant[2];
-                                  void*  buildinginfo[2];
-                                  void*  miningstation[2];
-                                  void*  transportinfo[2];
+                                  struct {
+                                     void*  ammotransfer[2];
+                                     void*  research[2];
+                                     void*  resourceinfo[2];
+                                     void*  netcontrol[2];
+                                     void*  solar[2];
+                                     void*  ammoproduction[2];
+                                     void*  wind[2];
+                                     void*  powerplant[2];
+                                     void*  buildinginfo[2];
+                                     void*  miningstation[2];
+                                     void*  transportinfo[2];
+                                  } a;
                                } lasche;
     
                   void* tabmark[2];

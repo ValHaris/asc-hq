@@ -1,6 +1,15 @@
-//     $Id: controls.cpp,v 1.5 1999-11-22 18:26:59 mbickel Exp $
+//     $Id: controls.cpp,v 1.6 1999-11-23 21:07:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/11/22 18:26:59  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.4  1999/11/18 17:31:02  mbickel
 //      Improved BI-map import translation tables
 //      Moved macros to substitute Watcom specific routines into global.h
@@ -6399,6 +6408,7 @@ void continuenetworkgame ( void )
        nwl.loadnwgame ( network.computer[0].receive.transfermethod->stream );
     
        network.computer[0].receive.transfermethod->closetransfer();
+
        network.computer[0].receive.transfermethod->closeconnection();
     
        removemessage();
@@ -6434,6 +6444,9 @@ void continuenetworkgame ( void )
 
 void checkforreplay ( void )
 {
+   if ( !actmap->replayinfo )
+      return;
+
    int rpnum  = 0;
    int s = actmap->actplayer + 1;
    if ( s >= 8 )

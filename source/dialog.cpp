@@ -1,6 +1,15 @@
-//     $Id: dialog.cpp,v 1.5 1999-11-22 18:27:06 mbickel Exp $
+//     $Id: dialog.cpp,v 1.6 1999-11-23 21:07:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/11/22 18:27:06  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.4  1999/11/18 17:31:05  mbickel
 //      Improved BI-map import translation tables
 //      Moved macros to substitute Watcom specific routines into global.h
@@ -2224,7 +2233,10 @@ void         tfileselectsvga::fileausgabe(boolean     force , int dispscrollbar)
 
             activefontsettings.length = 130;
             activefontsettings.justify = righttext;
-            showtext2( files[ii].sdate, x1 + 145,y1 + starty + jj * 20 + 20);
+            if ( files[ii].sdate ) 
+              showtext2( files[ii].sdate, x1 + 145,y1 + starty + jj * 20 + 20);
+            else 
+              bar ( x1 + 145,y1 + starty + jj * 20 + 20, x1 + 145 + activefontsettings.length, y1 + starty + jj * 20 + 20 + activefontsettings.font->height, activefontsettings.background );
 
             activefontsettings.justify = lefttext;
             activefontsettings.length = 300;
@@ -2514,7 +2526,10 @@ void         tfileselectsvga::run(void)
             if ( (swtch == 1)  ||   (abrt == 3)   ||  (!searchstring[0]) ) {  // load
                strcpy ( result , files[markedfile].name );
                if ( descrip ) 
-                  strcpy ( descrip, files[markedfile].description );
+                  if ( files[markedfile].description )
+                     strcpy ( descrip, files[markedfile].description );
+                  else
+                     descrip[0] = 0;
             } else {
                char* aa = searchstring;
                while (*aa != 0  && *aa != '.') 
