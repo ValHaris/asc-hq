@@ -1,6 +1,11 @@
-//     $Id: unitctrl.cpp,v 1.79 2001-11-28 13:03:16 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.80 2001-11-28 14:55:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.79  2001/11/28 13:03:16  mbickel
+//      Fixed: attack selectable although 0% hit accuracy
+//      Fixed: refuelling not possible if weapon had wrong target height
+//      Fixed: repair icon displayed when refuelling
+//
 //     Revision 1.78  2001/11/22 13:49:32  mbickel
 //      Fixed crash in Mapeditor when selection color 9
 //      Fixed: turrets being displayed gray
@@ -478,7 +483,9 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
           logtoreplayinfo ( rpl_move3, x1, y1, x, y, vehicle->networkid, newheight, noInterrupt );
           if ( newheight != -1 )
              vehicle->height = newheight;
- 
+
+       vehicle->setMovement( initialMovement, 0 );
+
        if ( mapDisplay )
           mapDisplay->startAction();
        int stat = moveunitxy( x, y, path, noInterrupt );

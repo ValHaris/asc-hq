@@ -562,6 +562,14 @@ AI::AiResult AI::tactics( void )
                      directAttack = true;
 
                   if ( directAttack ) {
+                     /* to avoid recalculating the vision with every variant we are going to make it
+                        easy...
+                        Since all units now only attack the neighbouring fields, which is generally
+                        visible, the AI does not cheat here.
+                     */
+                     int org_vision =  _vision ;
+                     _vision = 3;
+
                      AiResult res = executeMoveAttack ( veh, tv );
                      i = tactVehicles.erase ( i );
 
@@ -570,6 +578,8 @@ AI::AiResult AI::tactics( void )
 
                      result += res;
                      directAttackNum++;
+
+                     _vision = org_vision;
 
                   } else {
                      targets[mv->enemy->networkid].push_back( *mv );
