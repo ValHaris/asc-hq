@@ -1,6 +1,9 @@
-//     $Id: edgen.cpp,v 1.6 2000-08-12 12:52:45 mbickel Exp $
+//     $Id: edgen.cpp,v 1.7 2000-12-23 13:19:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/08/12 12:52:45  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.5  2000/05/23 20:40:44  mbickel
 //      Removed boolean type
 //
@@ -1030,7 +1033,7 @@ word tplasma::getmem(word x, word y)
 }
 
 
-void tplasma::setmem(word x, word y,word color)
+void tplasma::setmemory(word x, word y,word color)
 {
    if (x >= maxx ) x -= maxx;
    if (y >= maxy ) y -= maxy;
@@ -1054,7 +1057,7 @@ void tplasma::membar(word x1 ,word y1 ,word x2 ,word y2, word color )
    for (int j=y1;j<=y2;j++ ) {
       for (int i=x1;i<=x2;i++) {
           //memblock->mempointer[ i + (j * maxx ) ] = color;
-          setmem(i,j,color);
+          setmemory(i,j,color);
       } /* endfor */
    } /* endfor */
 }
@@ -1104,8 +1107,8 @@ void tplasma::generateplasma(char resettile)
                return 1;
             }*/
             if(blocksize == sblocksize) {
-               colour = random(memblock->maxset + 1);
-               if(random(5000) > 3500) colour = 1 + memblock->maxset - random(memblock->maxset / (1 + random(8)));
+               colour = std::random(memblock->maxset + 1);
+               if(std::random(5000) > 3500) colour = 1 + memblock->maxset - std::random(memblock->maxset / (1 + std::random(8)));
                colour %= (memblock->maxset + 1);
             }
             else {
@@ -1121,7 +1124,7 @@ void tplasma::generateplasma(char resettile)
                colour /= 4; 
             }
             if(blocksize != 1) membar(x * blocksize, y * blocksize, x * blocksize + blocksize - 1, y * blocksize + blocksize - 1,colour);
-            else setmem(x,y,colour);
+            else setmemory(x,y,colour);
             //memblock->mempointer[ x + (y * maxx ) ] = colour;
          }
       }
@@ -1132,12 +1135,12 @@ void tplasma::generateplasma(char resettile)
    if ( ysymm )
       for(int y = maxy/2; y < maxy; y++) 
          for(int x = 0; x < maxx ; x++) 
-            setmem(x , y, getmem ( x, maxy-y ));
+            setmemory(x , y, getmem ( x, maxy-y ));
 
    if ( xsymm )
       for(int x = maxx/2; x < maxx ; x++) 
          for(int y = 0; y < maxy; y++) 
-            setmem(x , y, getmem ( maxx-x, y ));
+            setmemory(x , y, getmem ( maxx-x, y ));
 
 
    //showmemory();

@@ -1,6 +1,12 @@
-//     $Id: loadbi3.cpp,v 1.30 2000-11-08 19:31:08 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.31 2000-12-23 13:19:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/11/08 19:31:08  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.29  2000/10/18 14:14:13  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -1292,7 +1298,6 @@ void        tloadBImap ::   ReadACTNPart(void)
     } Size;
 
     TACTN        ACTNHead; 
-    Word         Line[64]; 
   
     MissFile->seek ( Header.ACTNPos );
     MissFile->readdata2( ACTNHead ); 
@@ -1314,6 +1319,7 @@ void        tloadBImap ::   ReadACTNPart(void)
     int missnum = 0;
     dynamic_array<int> miss;
 
+    Word*         Line = new word[Size.X]; 
 
     for (Y = 0; Y < Size.Y ; Y++) { 
       MissFile->readdata( Line, Size.X * 2); 
@@ -1366,6 +1372,7 @@ void        tloadBImap ::   ReadACTNPart(void)
          }
       }
     } 
+    
     if ( missnum ) {
        strcat ( missing, "The following terrain fields could not be found: " );
        for ( int k = 0; k < missnum; k++ ) {
@@ -1472,6 +1479,7 @@ void        tloadBImap ::   ReadACTNPart(void)
          }
       }
     } 
+    delete[] Line;
 } 
  
 struct blds {

@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.58 2000-12-21 16:41:54 mbickel Exp $
+//     $Id: building.cpp,v 1.59 2000-12-23 13:19:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2000/12/21 16:41:54  mbickel
+//      Fixed some compilation errors that were made during documentation
+//
 //     Revision 1.57  2000/12/21 11:00:45  mbickel
 //      Added some code documentation
 //
@@ -265,7 +268,7 @@ class tcontaineronlinemousehelp : public tonlinemousehelp
 
 
 
-
+// ContainerBaseGuiHost Borland_cpp_builder_is_buggy;
 
 //0 cguihostcontainer
 class   hosticons_c: public ContainerBaseGuiHost
@@ -973,10 +976,10 @@ tbuildingparamstack buildingparamstack[maxrecursiondepth];
 
 const int repaint=0;
 const int repaintall=0;
-const int up=1;
-const int down=2;
-const int left=3;
-const int right=4;
+const int cursor_up=1;
+const int cursor_down=2;
+const int cursor_left=3;
+const int cursor_right=4;
 
 #ifdef HEXAGON
  #define unitsshownx 6
@@ -2471,10 +2474,10 @@ void  ccontainer :: run ()
          if ( keymode == 0 ) {
             actgui->checkforkey (input);
 
-            if ( input==ct_up || input==ct_8k)    movemark(up);
-            if ( input==ct_down || input==ct_2k)  movemark(down);
-            if ( input==ct_left || input==ct_4k)  movemark(left);
-            if ( input==ct_right || input==ct_6k) movemark(right);
+            if ( input==ct_up || input==ct_8k)    movemark(cursor_up);
+            if ( input==ct_down || input==ct_2k)  movemark(cursor_down);
+            if ( input==ct_left || input==ct_4k)  movemark(cursor_left);
+            if ( input==ct_right || input==ct_6k) movemark(cursor_right);
 
          }
          if ( input == ct_0 )  {
@@ -2560,19 +2563,19 @@ void  ccontainer :: movemark (int direction)
 
 
    switch (direction) {
-      case up :
+      case cursor_up :
          mark.y--;
          if (mark.y < 0) mark.y=unitsshowny-1;
          break;
-      case down :
+      case cursor_down :
          mark.y++;
          if (mark.y >= unitsshowny ) mark.y=0;
          break;
-      case left :
+      case cursor_left :
          mark.x--;
          if (mark.x < 0) mark.x=unitsshownx-1;
          break;
-      case right :
+      case cursor_right :
          mark.x++;
          if (mark.x >= unitsshownx ) mark.x=0;
          break;

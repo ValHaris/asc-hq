@@ -1,6 +1,11 @@
-//     $Id: loadpcxc.cpp,v 1.8 2000-11-09 17:48:47 mbickel Exp $
+//     $Id: loadpcxc.cpp,v 1.9 2000-12-23 13:19:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/11/09 17:48:47  mbickel
+//      The size of a stream can now be queried
+//      PCX loader (in C) can now load unpatched images provided they are not
+//        compressed
+//
 //     Revision 1.7  2000/10/11 14:26:43  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -143,7 +148,7 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
                       
    } else {
       scanlineret[0]=0;
-      scanlineret[1]= -(agmp-> scanlinelength - header.bytesperline * agmp->byteperpix);
+      scanlineret[1]= -(agmp->scanlinelength - header.bytesperline * agmp->byteperpix);
    }
 
    // int totalbytes = header.nplanes * header.bytesperline;

@@ -1,6 +1,9 @@
-//     $Id: edgen.h,v 1.5 2000-08-12 12:52:46 mbickel Exp $
+//     $Id: edgen.h,v 1.6 2000-12-23 13:19:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/08/12 12:52:46  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.4  2000/05/23 20:40:44  mbickel
 //      Removed boolean type
 //
@@ -93,7 +96,7 @@ class tplasma {
         void membar(word x1 ,word y1 ,word x2 ,word y2, word color );
         word getmem(word x, word y);
         int creatememblock(void);
-        void setmem(word x, word y,word color);
+        void setmemory(word x, word y, word color);
         /*void preview(word sx, word sy,word barsize);
         void process(word sx, word sy,word barsize);*/
         void generateplasma(char resettile);

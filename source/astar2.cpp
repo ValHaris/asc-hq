@@ -37,6 +37,12 @@ bool operator < ( const AStar::Node& a, const AStar::Node& b )
     return (a.gval+a.hval) < (b.gval+b.hval);
 }
 
+bool operator > ( const AStar::Node& a, const AStar::Node& b )
+{
+    return (a.gval+a.hval) > (b.gval+b.hval);
+}
+
+
 bool operator == ( const AStar::HexCoord& a, const AStar::HexCoord& b )
 {
    return (a.m == b.m) && (a.n == b.n );
@@ -240,7 +246,7 @@ void AStar::findPath( pmap actmap, HexCoord A, HexCoord B, std::vector<MapCoordi
         std::vector<int> tempPath;
 
         HexCoord h = B;
-        while( h != A )
+        while( !(h == A) )
         {
             HexDirection dir = HexDirection ( getfield (h.m, h.n)->temp3 );
             tempPath.push_back( int( ReverseDirection( dir ) ) );

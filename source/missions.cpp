@@ -1,6 +1,9 @@
-//     $Id: missions.cpp,v 1.17 2000-11-11 11:05:19 mbickel Exp $
+//     $Id: missions.cpp,v 1.18 2000-12-23 13:19:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/11/11 11:05:19  mbickel
+//      started AI service functions
+//
 //     Revision 1.16  2000/11/08 19:31:11  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -105,6 +108,7 @@
 #include <stdio.h>                                                                
 #include <string.h>
 
+#include "global.h"
 #include "buildingtype.h"
 #include "vehicletype.h"
 #include "newfont.h"

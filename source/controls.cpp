@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.87 2000-12-21 11:00:47 mbickel Exp $
+//     $Id: controls.cpp,v 1.88 2000-12-23 13:19:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.87  2000/12/21 11:00:47  mbickel
+//      Added some code documentation
+//
 //     Revision 1.86  2000/11/29 09:40:13  mbickel
 //      The mapeditor has now two maps simultaneously active
 //      Moved memorychecking functions to its own file: memorycheck.cpp
@@ -4109,16 +4112,16 @@ void Building :: getresourceusage ( Resources* usage )
 
 void doresearch ( int i )
 {
-   typedef struct tresbuild* presbuild;
+   // typedef struct tresbuild* presbuild;
 
    struct  tresbuild {
                int        eff;
                pbuilding  bld;
-               presbuild  next;
+               tresbuild  *next;
            };
 
 
-   presbuild first = NULL;
+   tresbuild* first = NULL;
 
    pbuilding bld = actmap->player[i].firstbuilding;
    while ( bld ) {
@@ -4126,7 +4129,7 @@ void doresearch ( int i )
          int energy, material;
          returnresourcenuseforresearch ( bld, bld->researchpoints, &energy, &material );
 
-         presbuild  a = new ( tresbuild );
+         tresbuild* a = new tresbuild;
          if ( energy )
             a->eff = 16384 * bld->researchpoints / energy ;
          else
@@ -4134,8 +4137,8 @@ void doresearch ( int i )
 
          a->bld = bld;
 
-         presbuild b  = first;
-         presbuild bp = NULL;
+         tresbuild* b  = first;
+         tresbuild* bp = NULL;
          while ( b && ( b->eff > a->eff ) ) {
             bp = b;
             b = b->next;
@@ -4151,7 +4154,7 @@ void doresearch ( int i )
       bld = bld->next;
    }
 
-   presbuild  a = first;
+   tresbuild*  a = first;
    while ( a ) {
       bld = a->bld;
       int energy, material;
@@ -4198,7 +4201,7 @@ void doresearch ( int i )
 
    }
 
-   presbuild  b;
+   tresbuild*  b;
    a = first;
    while ( a ) {
       b = a;

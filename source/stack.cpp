@@ -1,6 +1,14 @@
-//     $Id: stack.cpp,v 1.2 1999-11-16 03:42:36 tmwilson Exp $
+//     $Id: stack.cpp,v 1.3 2000-12-23 13:19:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:36  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -30,8 +38,8 @@
 
 #define stacksize 10000  
 
-char*        stackpointer;
-int          stackofs;
+char*        stackpointer = NULL;
+int          stackofs = 0;
 
 const int magic = 0x12345678;
 
@@ -58,6 +66,10 @@ void         pop_data(char *       daten,
 void         pushdata(char *       daten,
                       int          size)
 { 
+   if ( !stackpointer ) {
+      stackpointer = new char [ stacksize ];
+      stackofs = 0;
+   }
    push_data ( daten, size );
    push_data ( (char*) &magic, sizeof ( magic ));
 } 
@@ -79,12 +91,3 @@ int          stackfree(void)
   return ( stacksize - stackofs);
 } 
 
-
-
-class    tinitstack {
-           public:
-            tinitstack ( void ) { 
-               stackpointer = new char [ stacksize ];
-               stackofs = 0;
-            };
-         } initstack ;

@@ -40,22 +40,24 @@ Please read the <A HREF="../source/libs/readme.txt">library readme</A> file as w
 As host platform for the development we use OS/2 and as target platform (you should have already noticed that) DOS with DOS4GW as 32bit extender. It should be no problem to develop with Win9x as host platform with Watcom C/C++ except that debugging might be a bit problematic, but that's neither our not Watcom's fault (why is Microsoft not capable of implementing DPMI 1.0 ??).<P>
 
 <H4>for building the Windows version</H4>
-We are building ASC/win with Watcom C/C++ Version 11.0b. It should be possible to build ASC with other Windows compilers too, if they have some sufficient understanding of the C++ language. Microsoft Visual C++ has not, at least not the version 5 which I tested. Don't invest any time trying to make ASC compilable with MSVC, I'm not going to restrict my programming to Microsofts subset of C++. Period. There are more capable Win32 compilers around, even some free ones. 
+We are building ASC/win with Borland C++ Builder 5. It should be possible to build ASC with other Windows compilers too, if they have some sufficient understanding of the C++ language. Microsoft Visual C++ has not, at least not the version 5 which I tested. Don't invest any time trying to make ASC compilable with MSVC, I'm not going to restrict my programming to Microsofts subset of C++. Period. There are more capable Win32 compilers around, even some free ones. 
 
 <A HREF="http://www.borland.com">Borland</A> C++ for example. The command line version of compiler and debugger are available for free download. Compiling ASC with it should just be a matter of writing Makefiles. <P>
 
+Until December 2000 we built ASC/win with Watcom C/C++ , but since it is not fully ANSI C++ compliant, it cannot compile the AI which I'm writing at the time of writing (Dec. 2000). Perhaps some future version of Watcom C++ will understand all the C++, so here are the (old) instructions on how to build ASC with Watcom C++
+<BLOCKQUOTE>
 To build ASC/win with Watcom, you need:
 <UL>
 <LI>STLport. See the paragraph about it in the DOS section.
 <LI>JPEG-lib by the <A HREF="http://www.ijg.org">Independant Jpeg Group</A>. On their homepage are links where you can download the source code.
 <LI>Uncompress the JPEG-lib source code into asc/source/libs/jpeg-6b/
 <LI>SDL. It can be downloaded from <A HREF="http://www.libsdl.org">www.libsdl.org</A>. You need the source code and the DLL file (version 1.1 or newer). 
-<LI>Uncompress the SDL source  to some directory and define an environment variable SDLDIR which points this directory (without a trailing backslash). 
+<LI>Uncompress the SDL source  to some directory and define an environment variable SDLDIR which points to this directory (without a trailing backslash). 
 <LI>Create a subdirectory called DLL in asc/source/sdl and put the SDL.DLL into it.
 </UL>
 The project files for the Watcom IDE are included in the asc/source/win32 directory. 
 <P>
-
+</BLOCKQUOTE>
 
 <H4>for building the Linux version</H4>
 Well, nothing special about that. We build ASC with the standard GNU development tools. Refer to INSTALL for (generic) build instructions.

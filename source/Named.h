@@ -18,6 +18,7 @@
 #define NAMED_H
 
 #include <string>
+#include "global_os.h"
 
 /** 
 * A simple Interface-class for a named Thing 

@@ -1,6 +1,10 @@
-//     $Id: dlg_box.cpp,v 1.40 2000-11-29 17:58:17 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.41 2000-12-23 13:19:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2000/11/29 17:58:17  mbickel
+//      BI3 map loading routines can now handles maps > 64*64
+//      Fixed: pressing enter in dialog_box triggered wrong buttons
+//
 //     Revision 1.39  2000/11/29 11:05:26  mbickel
 //      Improved userinterface of the mapeditor
 //      map::preferredfilenames uses now strings (instead of char*)
@@ -311,46 +315,6 @@ void *dialogtexture = NULL;
 int actdisplayedmessage = 0;
 long int lastdisplayedmessageticker = 0xffffff;
 
-
-/*
-static const int dpms_times[3]  = {60000, 70000, 80000};
-
-tscreensaverparameters screensaverparameters; 
-
-void         checkscreensaver(void)
-{ 
- int         dpmss; 
-
-  if (getmousestatus() == 2) 
-      if ((mouseparams.x != screensaverparameters.mx) || (mouseparams.y != screensaverparameters.my) || (mouseparams.taste != screensaverparameters.mt)) { 
-         screensaverparameters.lasttick = ticker; 
-         screensaverparameters.mx = mouseparams.x; 
-         screensaverparameters.my = mouseparams.y; 
-         screensaverparameters.mt = mouseparams.taste; 
-      } 
-  if (screensaverparameters.lasttick + dpms_times[0] < ticker) { 
-    controldpms(1); 
-    dpmss = 1; 
-    screensaverparameters.mt = mouseparams.taste; 
-    screensaverparameters.mx = mouseparams.x; 
-    screensaverparameters.my = mouseparams.y; 
-    do { 
-      if (dpmss < 3) 
-        if (screensaverparameters.lasttick + dpms_times[dpmss] < ticker) { 
-          controldpms( (char) (1 << dpmss)); 
-          dpmss++; 
-        } 
-    }  while (! (keypress() || (mouseparams.x != screensaverparameters.mx) || (mouseparams.y != screensaverparameters.my) || (mouseparams.taste != screensaverparameters.mt)));
-
-    controldpms(0); 
-    while (keypress()) r_key(); 
-    dpmss = 0; 
-    screensaverparameters.lasttick = ticker; 
-  } 
-
-} 
-
-*/
 
 tvirtualscreenbuf virtualscreenbuf; 
 

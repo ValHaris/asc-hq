@@ -1,6 +1,9 @@
-//     $Id: global_os.h,v 1.1 2000-10-12 21:37:58 mbickel Exp $
+//     $Id: global_os.h,v 1.2 2000-12-23 13:19:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/10/12 21:37:58  mbickel
+//      Further restructured platform dependant routines
+//
 //     Revision 1.1  2000/10/12 20:21:43  mbickel
 //      Restructuring operating system dependant files
 //
@@ -25,19 +28,19 @@
     Boston, MA  02111-1307  USA
 */
 
-// this file takes care that the necessary header files for opendir / readdir
-// are being included in basestrm.cpp
-
 #ifndef global_os_h_included
  #define global_os_h_included
 
   #ifndef minimalIO
    #define sdlheader "SDL.h"
    #include sdlheader
-  #endif 
+  #endif
+  #ifdef __cplusplus
   using namespace std;
-  #define HAVE_STRICMP 
+  #endif
+  #define HAVE_STRICMP
   #define HAVE_ITOA
-  #define HAVE_DIRENT_H 
+  #define HAVE_DIRENT_H
+  #define StaticClassVariable
 
 #endif

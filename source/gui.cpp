@@ -1,6 +1,12 @@
-//     $Id: gui.cpp,v 1.43 2000-11-08 19:31:07 mbickel Exp $
+//     $Id: gui.cpp,v 1.44 2000-12-23 13:19:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2000/11/08 19:31:07  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.42  2000/10/31 10:42:44  mbickel
 //      Added building->vehicle service to vehicle controls
 //      Moved tmap methods to gamemap.cpp
@@ -3180,3 +3186,6 @@ void   treplayguihost :: bi2control (  )
    icons.cancel.display();
    ReplayBaseGuiHost::bi2control (  );
 }
+
+   treplayguihost Borland_Cpp_builder_sucks;
+   ContainerBaseGuiHost blurb;
