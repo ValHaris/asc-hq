@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.76 2002-03-17 21:25:18 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.77 2002-03-18 09:31:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.76  2002/03/17 21:25:18  mbickel
+//      Fixed: View unit movement revealed the reaction fire status of enemy units
+//      Mapeditor: new function "resource comparison"
+//
 //     Revision 1.75  2002/03/02 23:04:01  mbickel
 //      Some cleanup of source code
 //      Improved Paragui Integration
@@ -4430,10 +4434,12 @@ void resourceComparison ( )
       Resources plus;
       Resources have;
       for ( Player::BuildingList::iterator b = actmap->player[i].buildingList.begin(); b != actmap->player[i].buildingList.end(); ++b ) {
-         Resources res2;
-         (*b)->getresourceplus ( -1, &res2, 1 );
-         plus += res2;
-         have += (*b)->getResource ( Resources ( maxint, maxint, maxint), 1 );
+         if ( actmap->_resourcemode == 0 )
+            plus += (*b)->plus;
+         else
+            plus += (*b)->bi_resourceplus;
+
+         have += (*b)->actstorage;
       }
       for ( int r = 0; r < resourceTypeNum; r++ )
          s += ASCString(resourceNames[r]) + " " + strrr ( have.resource(r)) + " +" + strrr(plus.resource(r)) + "; ";

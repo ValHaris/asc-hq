@@ -11,7 +11,7 @@ BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
 PROJECTS = bzlib.lib libjpeg.lib triangulation.lib tools.lib SDLmm.lib \
   mount.exe demount.exe weaponguide.exe bin2text.exe viewid.exe makegfx.exe \
-  makepal.exe tank2pcx.exe ai.lib mapeditor.exe Paragui.lib asc.exe
+  makepal.exe tank2pcx.exe ai.lib Paragui.lib asc.exe mapeditor.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------

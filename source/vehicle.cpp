@@ -514,7 +514,7 @@ int Vehicle::ReactionFire::enable ( void )
 
       if ( unit->typ->wait ) {
          if ( unit->hasMoved())
-            status = init1;
+            status = init1a;
          else
             status = init2;
       } else {
@@ -528,7 +528,7 @@ int Vehicle::ReactionFire::enable ( void )
 void Vehicle::ReactionFire::disable ( void )
 {
    if ( status != off ) {
-       if ( status != init1 && status != init2 ) {
+       if ( status != init1a && status != init2 ) {
           enemiesAttackable = 0;
           unit->setMovement ( 0, 0 );
        }
@@ -540,11 +540,11 @@ void Vehicle::ReactionFire::disable ( void )
 
 void Vehicle::ReactionFire::endTurn ( void )
 {
-   if ( status >= init1 ) {
-      if ( status == init1 )
-         status = init2;
+   if ( status >= init1a ) {
+      if ( status == init1a )
+         status = init1b;
       else
-         if ( status == init2 )
+         if ( status == init2 || status == init1b )
             status = ready;
 
       if ( status == ready )
