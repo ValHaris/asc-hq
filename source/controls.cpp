@@ -1288,19 +1288,26 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, pve
                      num = j;
                   }
 
+               int visibility = 0;
                if ( md ) {
                   displaymessage2 ( "attacking with weapon %d ", atw->num[num] );
                   cursor.setcolor ( 8 );
 
-                  cursor.gotoxy ( ul->eht->xpos, ul->eht->ypos );
-                  int t = ticker;
-                  while ( t + 15 > ticker )
-                     releasetimeslice();
+                  if ( fieldvisiblenow ( getfield (ul->eht->xpos, ul->eht->ypos ), actmap->playerView)) {
+                     ++visibility;
+                     cursor.gotoxy ( ul->eht->xpos, ul->eht->ypos );
+                     int t = ticker;
+                     while ( t + 15 > ticker )
+                        releasetimeslice();
+                  }
 
-                  cursor.gotoxy ( pos.x, pos.y );
-                  t = ticker;
-                  while ( t + 15 > ticker )
-                     releasetimeslice();
+                  if ( fieldvisiblenow ( fld, actmap->playerView)) {
+                     ++visibility;
+                     cursor.gotoxy ( pos.x, pos.y );
+                     int t = ticker;
+                     while ( t + 15 > ticker )
+                        releasetimeslice();
+                  }
 
                   cursor.setcolor ( 0 );
                   cursor.hide();
@@ -1312,7 +1319,7 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, pve
                ad1 = battle.av.damage;
                dd1 = battle.dv.damage;
 
-               if ( md )
+               if ( md && visibility)
                   battle.calcdisplay ();
                else
                   battle.calc();

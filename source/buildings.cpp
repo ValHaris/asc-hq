@@ -544,6 +544,7 @@ void Building :: readData ( tnstream& stream, int version )
     for ( i = 0; i< 3; i++ )
        maxplus.resource(i) = stream.readInt();
 
+
     for ( i = 0; i< 3; i++ )
        actstorage.resource(i) = stream.readInt();
 
@@ -604,6 +605,15 @@ void Building :: readData ( tnstream& stream, int version )
        }
        for ( int l = c; l < 32; l++ )
           productionbuyable[l] = NULL;
+    }
+
+
+    for ( i = 0; i< 3; i++ ) {
+       if ( plus.resource(i) > typ->maxplus.resource(i) )
+         plus.resource(i) = typ->maxplus.resource(i);
+
+       if ( maxplus.resource(i) > typ->maxplus.resource(i) )
+         maxplus.resource(i) = typ->maxplus.resource(i);
     }
 }
 
