@@ -38,7 +38,7 @@ namespace SDLmm {
   // Error...
   const char *GetError() { return SDL_GetError(); }
 
-  const char *version() { return VERSION; }
+//  const char *version() { return VERSION; }
 
 }
 

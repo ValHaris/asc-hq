@@ -4,16 +4,10 @@
   <MACROS>
     <VERSION value="BCB.06.00"/>
     <PROJECT value="SDLmm.lib"/>
-    <OBJFILES value="..\..\..\..\sdlmm\src\sdlmm_videoinfo.obj 
-      ..\..\..\..\sdlmm\src\sdlmm_basesurface.obj 
-      ..\..\..\..\sdlmm\src\sdlmm_cd.obj ..\..\..\..\sdlmm\src\sdlmm_display.obj 
-      ..\..\..\..\sdlmm\src\sdlmm_event.obj 
-      ..\..\..\..\sdlmm\src\sdlmm_global.obj 
-      ..\..\..\..\sdlmm\src\sdlmm_joystick.obj 
-      ..\..\..\..\sdlmm\src\sdlmm_pixelformat.obj 
-      ..\..\..\..\sdlmm\src\sdlmm_srect.obj 
-      ..\..\..\..\sdlmm\src\sdlmm_surface.obj 
-      ..\..\..\..\sdlmm\src\sdlmm_timer.obj ..\..\..\..\sdlmm\src\sdlmm_audio.obj"/>
+    <OBJFILES value="src\sdlmm_videoinfo.obj src\sdlmm_basesurface.obj src\sdlmm_cd.obj 
+      src\sdlmm_display.obj src\sdlmm_event.obj src\sdlmm_global.obj 
+      src\sdlmm_joystick.obj src\sdlmm_pixelformat.obj src\sdlmm_srect.obj 
+      src\sdlmm_surface.obj src\sdlmm_timer.obj src\sdlmm_audio.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -21,7 +15,7 @@
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value=""/>
-    <PATHCPP value=".;..\..\..\..\sdlmm\src"/>
+    <PATHCPP value=".;src"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -29,8 +23,8 @@
     <USERDEFINES value="_DEBUG;WIN32"/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="SDLmm.bpf"/>
-    <INCLUDEPATH value="..\..\..\..\sdlmm\src;src;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\SDL\include"/>
-    <LIBPATH value="..\..\..\..\sdlmm\src;src;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="src;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\SDL\include"/>
+    <LIBPATH value="src;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
     <LISTFILE value=""/>
     <OTHERFILES value=""/>
@@ -50,18 +44,18 @@
   </LINKER>
   <FILELIST>
       <FILE FILENAME="SDLmm.bpf" FORMNAME="" UNITNAME="SDLmm" CONTAINERID="BPF" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\..\sdlmm\src\sdlmm_videoinfo.cpp" FORMNAME="" UNITNAME="sdlmm_videoinfo" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\..\sdlmm\src\sdlmm_basesurface.cpp" FORMNAME="" UNITNAME="sdlmm_basesurface" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\..\sdlmm\src\sdlmm_cd.cpp" FORMNAME="" UNITNAME="sdlmm_cd" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\..\sdlmm\src\sdlmm_display.cpp" FORMNAME="" UNITNAME="sdlmm_display" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\..\sdlmm\src\sdlmm_event.cpp" FORMNAME="" UNITNAME="sdlmm_event" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\..\sdlmm\src\sdlmm_global.cpp" FORMNAME="" UNITNAME="sdlmm_global" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\..\sdlmm\src\sdlmm_joystick.cpp" FORMNAME="" UNITNAME="sdlmm_joystick" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\..\sdlmm\src\sdlmm_pixelformat.cpp" FORMNAME="" UNITNAME="sdlmm_pixelformat" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\..\sdlmm\src\sdlmm_srect.cpp" FORMNAME="" UNITNAME="sdlmm_srect" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\..\sdlmm\src\sdlmm_surface.cpp" FORMNAME="" UNITNAME="sdlmm_surface" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\..\sdlmm\src\sdlmm_timer.cpp" FORMNAME="" UNITNAME="sdlmm_timer" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\..\..\sdlmm\src\sdlmm_audio.cpp" FORMNAME="" UNITNAME="sdlmm_audio" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="src\sdlmm_videoinfo.cpp" FORMNAME="" UNITNAME="sdlmm_videoinfo.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="src\sdlmm_basesurface.cpp" FORMNAME="" UNITNAME="sdlmm_basesurface.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="src\sdlmm_cd.cpp" FORMNAME="" UNITNAME="sdlmm_cd.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="src\sdlmm_display.cpp" FORMNAME="" UNITNAME="sdlmm_display.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="src\sdlmm_event.cpp" FORMNAME="" UNITNAME="sdlmm_event.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="src\sdlmm_global.cpp" FORMNAME="" UNITNAME="sdlmm_global.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="src\sdlmm_joystick.cpp" FORMNAME="" UNITNAME="sdlmm_joystick.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="src\sdlmm_pixelformat.cpp" FORMNAME="" UNITNAME="sdlmm_pixelformat.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="src\sdlmm_srect.cpp" FORMNAME="" UNITNAME="sdlmm_srect.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="src\sdlmm_surface.cpp" FORMNAME="" UNITNAME="sdlmm_surface.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="src\sdlmm_timer.cpp" FORMNAME="" UNITNAME="sdlmm_timer.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="src\sdlmm_audio.cpp" FORMNAME="" UNITNAME="sdlmm_audio.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
@@ -95,14 +89,18 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=3
-Item0=src;$(BCB)\include;$(BCB)\include\vcl;..\SDL\include
-Item1=src;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascdev\SDL\include
-Item2=src;$(BCB)\include;$(BCB)\include\vcl
+Count=5
+Item0=src;src;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\SDL\include
+Item1=..\..\..\..\sdlmm\src;src;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\SDL\include
+Item2=src;$(BCB)\include;$(BCB)\include\vcl;..\SDL\include
+Item3=src;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascdev\SDL\include
+Item4=src;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=1
-Item0=src;$(BCB)\lib\obj;$(BCB)\lib
+Count=3
+Item0=src;src;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\..\..\..\sdlmm\src;src;$(BCB)\lib\obj;$(BCB)\lib
+Item2=src;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1
@@ -132,10 +130,5 @@ RemoteDebug=0
 ShowInfoMsgs=0
 LinkDebugVcl=0
 LinkCGLIB=0
-
-[Language]
-ActiveLang=
-ProjectLang=
-RootDir=
   </IDEOPTIONS>
 </PROJECT>

@@ -22,7 +22,9 @@
 #ifndef SDLMM_SDLMM_CONFIG_H
 #define SDLMM_SDLMM_CONFIG_H
 
+#ifndef WIN32
 # include "../../../../config.h"
+#endif
 
 #ifdef ASSERTIONS
 #include <cassert>
