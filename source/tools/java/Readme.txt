@@ -1,7 +1,11 @@
 Readme for Java ASC File Editor
 --------------------------------
 Current JDK 				: v1.3				(http://java.sun.com/j2se/1.3/)
+(Size Win9x 30,916,766 bytes)
 Current Java-Development-Environment 	: Forte 4 Java CE v1.0 UR 2 	(http://www.sun.com/forte/ffj/ce/download.html)
+(Size Win9x 12,60 MB)
+Aditional Tools				: Java Hotspot v2.0		(http://java.sun.com/products/hotspot/index.html)
+(Size Win9x 1324 KB)
 
 This is just a short manual to tell you what these sources and the batch-files are about:
 

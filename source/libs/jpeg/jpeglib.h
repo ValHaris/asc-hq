@@ -23,12 +23,6 @@
  * manual configuration options that most people need not worry about.
  */
 
-#ifndef _DOS_
- #ifdef __cplusplus
-  extern "C" {
- #endif
-#endif
-
 #ifndef JCONFIG_INCLUDED	/* in case jinclude.h already did */
 #include "jconfig.h"		/* widely used configuration options */
 #endif
@@ -1100,12 +1094,6 @@ struct jpeg_color_quantizer { long dummy; };
 #ifdef JPEG_INTERNALS
 #include "jpegint.h"		/* fetch private declarations */
 #include "jerror.h"		/* fetch error codes too */
-#endif
-
-#ifndef _DOS_
- #ifdef __cplusplus
- };
- #endif
 #endif
 
 #endif /* JPEGLIB_H */

@@ -1,6 +1,9 @@
-//     $Id: edmisc.cpp,v 1.35 2000-10-19 11:40:03 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.36 2000-10-24 15:35:10 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2000/10/19 11:40:03  mbickel
+//      Fixed crash when editing unit values
+//
 //     Revision 1.34  2000/10/18 14:14:07  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -2617,6 +2620,7 @@ void         tunit::init( pvehicle v )
    unit = v;
 
    word         w;
+   char *weaponammo;
 
    tdialogbox::init();
    action = 0; 
@@ -2624,13 +2628,13 @@ void         tunit::init( pvehicle v )
 
    windowstyle = windowstyle ^ dlg_in3d; 
 
-   x1 = 70;
-   xsize = 500;
+   x1 = 20;
+   xsize = 600;
    y1 = 40;
    ysize = 400;
    w = (xsize - 60) / 2; 
    w2 = (xsize - 40) / 8;
-   dirx= x1 + 350;
+   dirx= x1 + 300;
    diry= y1 + 100;
    action = 0; 
 
@@ -2658,7 +2662,7 @@ void         tunit::init( pvehicle v )
    int unitheights = 0;
    heightxs = 320;
    pfield fld = getfield ( orgunit->xpos, orgunit->ypos);
-   if ( fld->vehicle == orgunit ) {
+   /*if ( fld->vehicle == orgunit ) {*/
       npush ( unit->height );
       for (i=0;i<=7 ;i++) {
           unit->height = 1 << i;
@@ -2669,43 +2673,31 @@ void         tunit::init( pvehicle v )
           unitheights |= 1 << i;
       } /* endfor  Buttons 4-11*/
       npop ( unit->height );
-   }
+   //}
 
-   // 8 im Kreis bis 7
-/*
-   addbutton("",dirx-22,diry-45,dirx-2,diry-17,0,1,14,true);
-   addkey(14,ct_8k);
-
-   addbutton("",dirx+22,diry-45,dirx+50,diry-17,0,1,15,true);
-   addkey(15,ct_9k);
-
-   addbutton("",dirx+22,diry+6,dirx+50,diry+26,0,1,16,true);
-   addkey(16,ct_6k);
-
-   addbutton("",dirx+22,diry+47,dirx+50,diry+75,0,1,17,true);
-   addkey(17,ct_3k);
- 
-   addbutton("",dirx-22,diry+47,dirx-2,diry+75,0,1,18,true);
-   addkey(18,ct_2k);
-
-   addbutton("",dirx-70,diry+47,dirx-42,diry+75,0,1,19,true);
-   addkey(19,ct_1k);
- 
-   addbutton("",dirx-70,diry+6,dirx-42,diry+26,0,1,20,true);
-   addkey(20,ct_4k);
-
-   addbutton("",dirx-70,diry-45,dirx-42,diry-17,0,1,21,true);
-   addkey(21,ct_7k);
-*/
    if ( unit->typ->classnum > 0 ) addbutton("C~h~ange Class",280,280,450,300,0,1,32,true);
 
-   addbutton("~R~eactionfire",350,250,450,260,3,1,22,true);
+   addbutton("~R~eactionfire",dirx-50,250,dirx+50,260,3,1,22,true);
    addeingabe(22,&unit->reactionfire.status, 0, lightgray);
 
    addbutton("~S~et Values",20,ysize - 40,20 + w,ysize - 10,0,1,30,true);
    addkey(30,ct_enter );
    addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,31,true);
    addkey(31,ct_esc );
+   
+   #define maxeditable 6
+   
+   for(i =0;i < unit->typ->weapons->count;i++) {   	
+   	if (i < maxeditable) {
+   	weaponammo = new(char[25]);
+   	strcpy(weaponammo,"Wpn Ammo ");
+        strcat(weaponammo,strrr(i+1));
+        strcat(weaponammo," (0-255)");
+   	addbutton(weaponammo,410,80+i*40,570,100+i*40,2,1,33+i,true);
+   	addeingabe( 33+i, &unit->typ->weapons->weapon[i].count, 0, 255 );
+   	} else showtext2("6 weapons max at the moment",x1+410,y1+80+maxeditable*40);
+   	
+   }
 
    buildgraphics(); 
  
@@ -2717,7 +2709,7 @@ void         tunit::init( pvehicle v )
               bar(x1 + 25+( i * w2),y1 + heightxs-5,x1 + w2 * (i +1 ) - 5,y1 + heightxs-3,red);
     
            if ( unitheights & ( 1 << i ))
-              putimage(x1 + 23+( i * w2), y1 + heightxs + 2 ,icons.height[i]);
+              putimage(x1 + 28+( i * w2), y1 + heightxs + 2 ,icons.height[i]);
        }
 
    // 8 im Kreis bis 7
@@ -2735,18 +2727,7 @@ void         tunit::init( pvehicle v )
       getpicsize ( pic, w, h );
       putspriteimage ( x1 + x - w/2, y1 + y - h/2, pic );
       delete pic;
-  }
-
-   /*
-   putspriteimage(dirx + x1 - 20,diry + y1 -39,icons.pfeil2[0]);
-   putspriteimage(dirx + x1 + 30,diry + y1 -39,icons.pfeil2[1]);
-   putspriteimage(dirx + x1 + 30,diry + y1 + 8,icons.pfeil2[2]);
-   putspriteimage(dirx + x1 + 30,diry + y1 + 53,icons.pfeil2[3]);
-   putspriteimage(dirx + x1 - 20,diry + y1 + 53,icons.pfeil2[4]);
-   putspriteimage(dirx + x1 - 63,diry + y1 + 53,icons.pfeil2[5]);
-   putspriteimage(dirx + x1 - 63,diry + y1 + 8,icons.pfeil2[6]);                            
-   putspriteimage(dirx + x1 - 63,diry + y1 -39,icons.pfeil2[7]);
-   */
+  } /*Buttons 14 - 14 +sidenum*/
 
    putrotspriteimage(dirx + x1 - fieldsizex/2 ,diry + y1 - fieldsizey/2, unit->typ->picture[ unit->direction ],unit->color);
    mousevisible(true); 

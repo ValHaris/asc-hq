@@ -1,6 +1,9 @@
-//     $Id: edmain.cpp,v 1.26 2000-10-18 17:09:39 mbickel Exp $
+//     $Id: edmain.cpp,v 1.27 2000-10-24 15:35:10 schelli Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/10/18 17:09:39  mbickel
+//      Fixed eventhandling for DOS
+//
 //     Revision 1.25  2000/10/18 15:10:03  mbickel
 //      Fixed event handling for windows and dos
 //
@@ -877,6 +880,7 @@ int main(int argc, char *argv[] )
 
    for (i = 1; i<argc; i++ ) {
       if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
+      	
 #ifdef _DOS_
       if ( strcmpi ( &argv[i][1], "V1" ) == 0 ) {
          vesaerrorrecovery = 1; continue;
@@ -885,8 +889,10 @@ int main(int argc, char *argv[] )
       if ( strcmpi ( &argv[i][1], "SHOWMODES" ) == 0 ) {
          showmodes = 1; continue;
       }
+      if ( strcmpi ( &argv[i][1], "8BITONLY" ) == 0 ) {
+         setFullscreenSetting ( FIS_noTrueColor, 0 ); continue;
+      }
 #else
-   /*
       // Added support for the -w and --window options
       // (equivalent to -window), since -w and --window are more
       // intuitive for *ux users (gnu option convention)
@@ -895,9 +901,15 @@ int main(int argc, char *argv[] )
           strcmpi ( &argv[i][1], "-WINDOW" ) == 0 ) {
         fullscreen = 0; continue;
       }
-   */
 
-#endif
+      if ( strcmpi ( &argv[i][1], "FULLSCREEN" ) == 0 ||
+          strcmpi ( &argv[i][1], "FS" ) == 0 ||
+          strcmpi ( &argv[i][1], "-FULLSCREEN" ) == 0 ) {
+        fullscreen = 1;        
+        continue;
+      }      
+#endif      
+
       if ( strnicmp ( &argv[i][1], "x=", 2 ) == 0 ) {
            resolx = atoi ( &argv[i][3] ); continue;
       }
@@ -938,11 +950,15 @@ int main(int argc, char *argv[] )
 #ifdef _DOS_
                 "\t-v1                Set vesa error recovery level to 1 \n"
                 //"\t/nocd\t\tDisable music \n"
-                //"\t-8bitonly          Disable truecolor graphic mode \n"
+                "\t-8bitonly          Disable truecolor graphic mode \n"
                 "\t-showmodes         Display list of available graphic modes \n" );
 #else
-                // "\t-window\t\tDisable fullscreen mode \n"
-                );
+                "\t-w\n"
+                "\t--window           Disable fullscreen mode \n"
+                "\t-fs\n"
+                "\t--fullscreen       Enable fullscreen mode (overriding config file)\n"
+                "\t-ns\n");
+                
 #endif
         exit (0);
      }
