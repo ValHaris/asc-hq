@@ -2070,11 +2070,8 @@ int main(int argc, char *argv[] )
    soundSystem.setMusicVolume ( CGameOptions::Instance()->sound.musicVolume );
    soundSystem.setEffectVolume ( CGameOptions::Instance()->sound.soundVolume );
 
-   ASC_PG_App app;
+   ASC_PG_App app ( "asc_dlg" );
    pgApp = &app;
-
-   if ( !app.LoadTheme("asc_dlg"))
-      fatalError ( "Could not load Paragui theme for ASC");
 
    int flags = SDL_SWSURFACE;
    if ( fullscreen )

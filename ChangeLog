@@ -1,8 +1,359 @@
+2002-03-03 23:57  mbickel
+
+	* source/: strtmesg.cpp, win32/borland/asc.bpr,
+	win32/borland/mapeditor/mapeditor.bpr:	Changed version to 1.10
+	 Updated project files
+
+2002-03-03 23:19  mbickel
+
+	* asc.kdevprj, configure.in, data/curs2.raw, data/curs3.raw,
+	data/cursor2.raw, data/cursor3.raw, data/helpsyst.txt,
+	data/markedfield.pcx, data/markedfield.png, data/music1.asctxt,
+	data/dialog/asc_dlg.theme, doc/example.msg, doc/install.html,
+	doc/mapedit.html, source/CLoadable.cpp, source/TODO,
+	source/basegfx.cpp, source/basegfx.h, source/controls.cpp,
+	source/gamedlg.cpp, source/gameoptions.cpp, source/gameoptions.h,
+	source/messages.h, source/music.cpp, source/spfst.cpp:	Updated
+	documentation
+	 Improved user interface
+	 Fixed AI bug
+
+2002-03-03 19:52  mbickel
+
+	* source/: basestrm.cpp, libs/bzlib/CHANGES, libs/bzlib/LICENSE,
+	libs/bzlib/Makefile-libbz2_so, libs/bzlib/README,
+	libs/bzlib/README.COMPILATION.PROBLEMS, libs/bzlib/blocksort.c,
+	libs/bzlib/bzip2.1, libs/bzlib/bzip2.1.preformatted,
+	libs/bzlib/bzip2.c, libs/bzlib/bzip2.txt,
+	libs/bzlib/bzip2recover.c, libs/bzlib/bzlib.c, libs/bzlib/bzlib.h,
+	libs/bzlib/bzlib_private.h, libs/bzlib/compress.c,
+	libs/bzlib/crctable.c, libs/bzlib/decompress.c,
+	libs/bzlib/dlltest.c, libs/bzlib/huffman.c,
+	libs/bzlib/makefile.msc, libs/bzlib/manual.ps,
+	libs/bzlib/manual.texi, libs/bzlib/manual_1.html,
+	libs/bzlib/manual_2.html, libs/bzlib/manual_3.html,
+	libs/bzlib/manual_4.html, libs/bzlib/manual_toc.html,
+	libs/bzlib/randtable.c, libs/bzlib/words3, tools/mount.cpp,
+	tools/win/mount.bpf, tools/win/mount.bpr, tools/win/tools.bpr: 
+	Updated bzlib to 1.0.2
+	 Fixed bug in mount that compressed only part of files
+
+2002-03-03 15:13  mbickel
+
+	* configure.in, data/data.version, data/markedfield.png,
+	data/dialog/asc_dlg.theme, source/dialog.h, source/doxygen.config,
+	source/gamemap.h, source/gameoptions.cpp, source/gameoptions.h,
+	source/mapdisplay.cpp, source/paradialog.cpp, source/paradialog.h,
+	source/sg.cpp, source/sgstream.cpp, source/spfst.cpp,
+	source/typen.h, source/ai/ai.h, source/ai/misc.cpp,
+	source/sdl/graphics.cpp, source/sdl/graphics.h,
+	source/sdl/sound.cpp, source/sdl/sound.h,
+	source/tools/linux/Makefile.am:  Some documentation updates
+	 Soundsystem update
+	 AI bug fixed
+
+2002-03-03 00:04  mbickel
+
+	* asc.bpg, doc/install.html, doc/linux_faq.html,
+	doc/source_borland.html, source/CLoadable.cpp, source/TODO,
+	source/attack.cpp, source/building.cpp, source/dashboard.cpp,
+	source/dialog.cpp, source/dlg_box.cpp, source/edglobal.cpp,
+	source/edmisc.cpp, source/edselfnt.cpp, source/events.h,
+	source/gamedlg.cpp, source/gameoptions.cpp, source/gameoptions.h,
+	source/gui.cpp, source/mapdisplay.cpp, source/messages.cpp,
+	source/paradialog.cpp, source/paradialog.h, source/sg.cpp,
+	source/sgstream.cpp, source/spfst.cpp, source/sdl/events.cpp,
+	source/sdl/sound.cpp, source/sdl/sound.h, source/tools/mount.cpp,
+	source/win32/borland/asc.bpf, source/win32/borland/asc.bpr,
+	source/win32/borland/mapeditor/mapeditor.bpf,
+	source/win32/borland/mapeditor/mapeditor.bpr:  Some cleanup of
+	source code
+	 Improved Paragui Integration
+	 Updated documentation
+	 Improved Sound System
+
+2002-02-23 23:19  mbickel
+
+	* source/sg.cpp:  Paragui usage updated
+
+2002-02-21 18:06  mbickel
+
+	* asc.kdevprj, configure.in, data/Makefile.am,
+	data/dialog/Makefile.am, data/dialog/asc_dlg.theme,
+	data/dialog/asc/check_off.bmp, data/dialog/asc/check_on.bmp,
+	data/dialog/asc/close_active.bmp,
+	data/dialog/asc/close_clicked.bmp,
+	data/dialog/asc/close_normal.bmp, data/dialog/asc/down_down.bmp,
+	data/dialog/asc/down_high.bmp, data/dialog/asc/down_up.bmp,
+	data/dialog/asc/drag.bmp, data/dialog/asc/font.ttf,
+	data/dialog/asc/hscroll_back.bmp, data/dialog/asc/left_down.bmp,
+	data/dialog/asc/left_high.bmp, data/dialog/asc/left_up.bmp,
+	data/dialog/asc/pb_back.bmp, data/dialog/asc/pb_indicator.bmp,
+	data/dialog/asc/radio_off.bmp, data/dialog/asc/radio_on.bmp,
+	data/dialog/asc/right_down.bmp, data/dialog/asc/right_high.bmp,
+	data/dialog/asc/right_up.bmp, data/dialog/asc/spin_down.bmp,
+	data/dialog/asc/spin_up.bmp, data/dialog/asc/top_grey.bmp,
+	data/dialog/asc/up_down.bmp, data/dialog/asc/up_high.bmp,
+	data/dialog/asc/up_up.bmp, data/dialog/asc/vscroll_back.bmp,
+	source/dialog.cpp, source/dialog.h, source/edmisc.cpp,
+	source/edmisc.h, source/gamedlg.cpp, source/gamedlg.h,
+	source/gamemap.h, source/messages.cpp, source/messages.h,
+	source/network.cpp, source/network.h, source/paradialog.cpp,
+	source/paradialog.h, source/sg.cpp, source/sg.h, source/typen.cpp,
+	source/typen.h, source/sdl/graphics.cpp, source/sdl/graphics.h,
+	source/unix/Makefile.am, source/unix/mapeditor/Makefile.am: 
+	Completed Paragui integration
+	 Moved mail functions to own file (messages)
+
+2002-02-17 23:04  mbickel
+
+	* AUTHORS, INSTALL, README, configure.in, data/helpsyst.txt,
+	doc/contact.html, doc/demount.html, doc/index.html,
+	doc/install.html, doc/linux_faq.html, doc/maketank.html,
+	doc/mount.html, doc/readme.linux:  Updated documentation
+	 Updated configure.in
+
+2002-02-14 22:13  mbickel
+
+	* source/sg.cpp: [no log message]
+
+2002-02-14 21:58  mbickel
+
+	* acconfig.h, config.h.in, configure.in, source/basestrm.h,
+	source/events.h, source/sg.cpp, source/vehicle.h,
+	source/libs/bzlib/Makefile, source/sdl/events.cpp,
+	source/sdl/graphics.cpp, source/sdl/graphics.h,
+	source/tools/mount.cpp, source/tools/linux/Makefile.am,
+	source/unix/Makefile.am, source/unix/mapeditor/Makefile.am: 
+	Started integration of paragui
+
+2002-01-30 00:14  mbickel
+
+	* doc/raw/: ascpalette.gif, building-raster.pcx:  Added some which
+	should be incorporated into the documentation
+
+2002-01-29 21:42  mbickel
+
+	* configure.in, source/basestrm.cpp, source/basestrm.h,
+	source/edglobal.cpp, source/music.cpp, source/sdl/sound.cpp,
+	source/unix/fileio.cpp, source/unix/fileio.h,
+	source/win32/fileio.cpp, source/win32/borland/fileio.h,
+	source/win32/msvc/fileio.h:  Improved finding of files with
+	relative path
+	 Added wildcards to music playlist files
+
+2002-01-20 12:43  mbickel
+
+	* configure.in, source/sg.cpp:	Some updates to the music system
+
+2002-01-20 00:10  mbickel
+
+	* configure.in, source/music.cpp, source/sg.cpp,
+	source/sdl/sound.cpp, source/unix/Makefile.am,
+	source/unix/mapeditor/Makefile.am:  Added music playing routines to
+	unix build
+
+2002-01-19 23:39  mbickel
+
+	* source/: dlg_box.cpp, itemrepository.cpp, music.cpp, music.h,
+	pd.cpp, pd.h, sg.cpp, soundList.h, strtmesg.cpp,
+	textfileparser.cpp, textfileparser.h, sdl/sound.cpp, sdl/sound.h,
+	win32/borland/asc.bpf, win32/borland/asc.bpr:  Added music playing
+	functions to ASC
+
+2002-01-07 12:40  mbickel
+
+	* source/: buildings.cpp, controls.cpp, dialog.cpp,
+	itemrepository.cpp, loaders.cpp, pd.cpp, pd.h, sg.cpp:	Fixed some
+	syntax errors
+
+2002-01-06 10:50  mbickel
+
+	* source/: buildings.cpp, buildings.h, gamedlg.cpp, gameoptions.h,
+	graphicset.h, itemrepository.cpp, itemrepository.h, map2pcx.cpp,
+	mapalgorithms.cpp, mapalgorithms.h, password.h, replay.h, sg.cpp,
+	terraintype.h, textfileparser.h, vehicletype.h, ai/ai_common.h: 
+	Some cleanup and documentation
+
+2001-12-19 18:41  mbickel
+
+	* asc.kdevprj, source/sdl/asc_IMG_jpg.c:  Fixed invalid include
+	file
+
+2001-12-19 18:16  mbickel
+
+	* source/: Named.cpp, basegfx.cpp, controls.cpp, dialog.cpp,
+	dlg_box.cpp, dlg_box.h, gamedlg.cpp, gui.cpp, loadbi3.cpp,
+	loaders.cpp, loadpcxc.cpp, misc.cpp, misc.h, missions.cpp,
+	network.cpp, networkdata.cpp, newfont.cpp, pd.cpp, research.h,
+	sg.cpp, sgstream.cpp, spfst.cpp, stack.cpp, typen.cpp,
+	unitctrl.cpp, libs/getopt/getopt.c, sdl/SDLStretch.cpp,
+	sdl/asc_IMG_jpg.c, sdl/sound.cpp, tools/demount.cpp,
+	tools/mount.cpp, tools/lib/errorout.cpp, tools/win/demount.bpr,
+	tools/win/mount.bpr, tools/win/tools.bpf, tools/win/tools.bpr,
+	win32/borland/global_os.h:  Some include file cleanups
+
+2001-12-19 12:46  mbickel
+
+	* acinclude.m4, config.h.in, configure.in, install-sh, missing,
+	mkinstalldirs, data/Makefile.am, source/basegfx.cpp,
+	source/itemrepository.cpp, source/loadbi3.cpp, source/misc.cpp,
+	source/misc.h, source/sg.cpp, source/sgstream.cpp,
+	source/sgstream.h, source/tools/Makefile.am,
+	source/tools/demount.cpp, source/tools/mount.cpp,
+	source/tools/linux/Makefile.am, source/unix/Makefile.am:  Applied
+	patches from Michael Moerz:
+	  - 64bit cleanup of demount.cpp, mount.cpp
+	  - removal of #ifdef converter and moved conveter specific
+	functions
+	    to independant lib
+
+2001-12-18 15:14  mbickel
+
+	* checkfordata.pl, configure.in, getdata:  Added check for data
+	files to configure
+
+2001-12-17 20:41  mbickel
+
+	* data/helpsyst.txt, doc/readme.linux, source/TODO,
+	source/edmain.cpp, source/edselfnt.cpp, source/vehicle.cpp,
+	source/tools/demount.cpp, source/tools/mntgraph.cpp,
+	source/win32/borland/asc.bpr:  Reactionfire can now be deactivated
+	without consequences if it has just
+	   been activated
+	 Mapeditor: Objects are selected on the palette map too
+
+2001-12-17 16:44  mbickel
+
+	* aclocal.m4:  Removed aclocal
+
+2001-12-17 16:44  mbickel
+
+	* INSTALL:  Updated installation instructions
+
+2001-12-17 16:20  mbickel
+
+	* bootstrap, configure:  Removed configure from CVS ; added
+	bootstrap
+
+2001-12-14 11:59  mbickel
+
+	* .cvsignore, Makefile.in, data/.cvsignore, data/Makefile.in,
+	doc/.cvsignore, doc/Makefile.in, doc/manpages/.cvsignore,
+	doc/manpages/Makefile.in, source/.cvsignore, source/Makefile.in,
+	source/ai/.cvsignore, source/ai/Makefile.in,
+	source/clparser/.cvsignore, source/clparser/Makefile.in,
+	source/docs/.cvsignore, source/docs/Makefile.in,
+	source/docs/en/.cvsignore, source/docs/en/Makefile.in,
+	source/libs/.cvsignore, source/libs/Makefile.in,
+	source/libs/triangul/.cvsignore, source/libs/triangul/Makefile.in,
+	source/sdl/.cvsignore, source/sdl/Makefile.in,
+	source/tools/.cvsignore, source/tools/Makefile.in,
+	source/tools/java/.cvsignore, source/tools/lib/Makefile.am,
+	source/tools/lib/errorout.cpp, source/tools/linux/.cvsignore,
+	source/tools/linux/Makefile.in, source/unix/.cvsignore,
+	source/unix/Makefile.in, source/unix/mapeditor/.cvsignore,
+	source/unix/mapeditor/Makefile.in:  Removed all Makefile.in from
+	repository
+	 Added .cvsignore files to ignore the Makefile.in
+
+2001-12-14 11:34  mbickel
+
+	* source/strtmesg.cpp:	Changed version to 1.9.5.5b1
+
+2001-12-14 11:20  mbickel
+
+	* Makefile.am, Makefile.in, aclocal.m4, config.h.in, configure,
+	configure.in, data/Makefile.am, data/Makefile.in, doc/Makefile.am,
+	doc/Makefile.in, doc/manpages/Makefile.am,
+	doc/manpages/Makefile.in, doc/manpages/asc.sgml,
+	doc/manpages/asc_demount.sgml, doc/manpages/asc_mount.sgml,
+	source/Makefile.am, source/Makefile.in, source/attack.cpp,
+	source/baseaiinterface.h, source/basegfx.cpp, source/basegfx.h,
+	source/building.cpp, source/buildings.cpp, source/buildingtype.cpp,
+	source/controls.cpp, source/dashboard.cpp, source/dialog.cpp,
+	source/dlg_box.cpp, source/edgen.cpp, source/edglobal.cpp,
+	source/edmain.cpp, source/edmisc.cpp, source/events.h,
+	source/loadbi3.cpp, source/loaders.cpp, source/map2pcx.cpp,
+	source/mapalgorithms.cpp, source/mapdisplay.cpp,
+	source/missions.cpp, source/movecurs.inc, source/newfont.cpp,
+	source/newfont.h, source/password_dialog.cpp, source/sg.cpp,
+	source/sgstream.cpp, source/spfst.cpp, source/spfst.h,
+	source/terraintype.cpp, source/typen.cpp, source/typen.h,
+	source/unitctrl.cpp, source/weather.cpp, source/ai/Makefile.am,
+	source/ai/Makefile.in, source/clparser/Makefile.am,
+	source/clparser/Makefile.in, source/docs/Makefile.am,
+	source/docs/Makefile.in, source/docs/en/Makefile.am,
+	source/docs/en/Makefile.in, source/libs/Makefile.am,
+	source/libs/Makefile.in, source/libs/triangul/Makefile.am,
+	source/libs/triangul/Makefile.in, source/sdl/Makefile.am,
+	source/sdl/Makefile.in, source/sdl/loadimage.cpp,
+	source/tools/Makefile.am, source/tools/Makefile.in,
+	source/tools/makebdt.cpp, source/tools/makebdt3.cpp,
+	source/tools/makeobl.cpp, source/tools/makeobl4.cpp,
+	source/tools/linux/Makefile.am, source/tools/linux/Makefile.in,
+	source/unix/Makefile.am, source/unix/Makefile.in,
+	source/unix/global_os.h, source/unix/mapeditor/Makefile.am,
+	source/unix/mapeditor/Makefile.in:  Cleanup and enhancements to
+	configure.in
+	 Removed last remains of octagonal version from source files
+
+2001-12-06 16:14  mbickel
+
+	* data/moredata/Makefile.am:  Removed moredata directory
+
+2001-12-05 18:05  mbickel
+
+	* Makefile.in, asc.kdevprj, configure, configure.in,
+	data/Makefile.in, doc/Makefile.in, doc/manpages/Makefile.in,
+	source/ASCStringHelpers.h, source/Makefile.in,
+	source/ai/Makefile.in, source/clparser/Makefile.in,
+	source/docs/Makefile.in, source/docs/en/Makefile.in,
+	source/libs/Makefile.in, source/libs/triangul/Makefile.in,
+	source/sdl/Makefile.in, source/tools/Makefile.in,
+	source/tools/linux/Makefile.in, source/unix/Makefile.in,
+	source/unix/mapeditor/Makefile.in:  Some more fixes for the new
+	string class
+
+2001-12-05 17:34  mbickel
+
+	* configure, configure.in, source/ASCStringHelpers.h,
+	source/ascstring.cpp, source/ascstring.h,
+	source/tools/linux/Makefile.am, source/tools/linux/Makefile.in,
+	source/unix/Makefile.am, source/unix/Makefile.in,
+	source/unix/mapeditor/Makefile.am,
+	source/unix/mapeditor/Makefile.in:  Refinements around the new
+	string class
+
+2001-12-05 16:54  mbickel
+
+	* source/ASCStringHelpers.h:  Added ASCStringHelpers.h
+
+2001-12-05 16:46  mbickel
+
+	* configure.in, source/ascstring.cpp, source/ascstring.h,
+	source/buildingtype.cpp, source/dialog.cpp, source/soundList.cpp,
+	source/stringtokenizer.cpp, source/stringtokenizer.h,
+	source/textfileparser.cpp, source/tools/win/tools.bpf,
+	source/tools/win/tools.bpr, source/win32/borland/asc.bpf,
+	source/win32/borland/asc.bpr,
+	source/win32/borland/mapeditor/mapeditor.bpf,
+	source/win32/borland/mapeditor/mapeditor.bpr:  New string class
+
+2001-11-29 20:16  mbickel
+
+	* ChangeLog:  Updated Changelog
+
 2001-11-29 18:34  mbickel
 
 	* source/: sg.cpp, strtmesg.cpp, ai/ai.h, ai/base.cpp,
 	ai/tactics.cpp, ai/valuation.cpp:  AI can be used as benchmark
 	 Improved AI unit job determination mechanism
+
+2001-11-28 19:06  mbickel
+
+	* doc/raw/: movemalus.png, spielen.txt:  Added raw documentation in
+	German
 
 2001-11-28 15:55  mbickel
 

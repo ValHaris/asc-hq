@@ -49,17 +49,25 @@
 ASC_PG_App* pgApp = NULL;
 
 
-ASC_PG_App :: ASC_PG_App ( )
+ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
 {
    EnableSymlinks(true);
    int i = 0;
+   bool themeFound = false;
    ASCString path;
    do {
-      getSearchPath ( i++ );
-      if ( !path.empty() )
+      path = getSearchPath ( i++ );
+      if ( !path.empty() ) {
          AddArchive ( path.c_str() );
+         if ( !themeFound )
+             themeFound = AddArchive ( (path + themeName + ".zip").c_str() );
+      }
    } while ( !path.empty() );
    PG_LogConsole::SetLogLevel ( PG_LOG_ERR );
+
+   if ( !LoadTheme(themeName.c_str()))
+      fatalError ( "Could not load Paragui theme for ASC");
+
 }
 
 

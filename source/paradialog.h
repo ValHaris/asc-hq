@@ -48,10 +48,11 @@
 #include "pgmenubar.h"
 
 #include "sdl/graphics.h"
+#include "ascstring.h"
 
  class ASC_PG_App : public PG_Application {
     public:
-       ASC_PG_App ();
+       ASC_PG_App ( const ASCString& themeName );
       // PG_Theme* LoadTheme(const char* xmltheme, bool asDefault = true, const char* searchpath = NULL );
  };
 
