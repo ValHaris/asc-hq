@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.39 2000-08-08 13:38:40 mbickel Exp $
+//     $Id: typen.cpp,v 1.40 2000-08-09 12:39:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2000/08/08 13:38:40  mbickel
+//      Fixed: construction of buildings doesn't consume resources
+//      Fixed: no unit information visible for satellites
+//
 //     Revision 1.38  2000/08/08 13:22:12  mbickel
 //      Added unitCategoriesLoadable property to buildingtypes and vehicletypes
 //      Added option: showUnitOwner
@@ -284,7 +288,7 @@ const int directionangle [ sidenum ] =
 #endif
 
 
-const int gameparameterdefault [ gameparameternum ] = { 1, 2, 0, 100, 100, 1, 0, 0, 1, 0, 0, 0, 0, 100, 100, 100, 1 };
+const int gameparameterdefault [ gameparameternum ] = { 1, 2, 0, 100, 100, 1, 0, 0, 1, 0, 0, 0, 0, 100, 100, 100, 1, maxunitexperience };
 const char* gameparametername[ gameparameternum ] = { "lifetime of tracks", 
                                                       "freezing time of broken ice cover ( icebreaker )",
                                                       "move vehicles from unaccessible fields",
@@ -301,7 +305,8 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "building armor factor (percent)", 
                                                       "max building damage repair / turn",
                                                       "building repair cost increase (percent)",
-                                                      "fuel globally available (BI resource mode)"};
+                                                      "fuel globally available (BI resource mode)",
+                                                      "maximum experience that can be gained by training"};
 
 
 const int csolarkraftwerkleistung[cwettertypennum] = { 1024, 512, 256, 756, 384 }; // 1024 ist Maximum 
@@ -1433,8 +1438,8 @@ int tvehicle::hasMoved ( void )
 int tvehicle :: getMovement ( void )
 {
    if ( typ->fuelConsumption ) {
-      if ( fuel / typ->fuelConsumption * 8 < _movement )
-         return fuel / typ->fuelConsumption * 8;
+      if ( fuel * minmalq / typ->fuelConsumption < _movement )
+         return fuel * minmalq / typ->fuelConsumption;
       else
          return _movement;
    } else

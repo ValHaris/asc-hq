@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.50 2000-08-08 13:38:34 mbickel Exp $
+//     $Id: spfst.cpp,v 1.51 2000-08-09 12:39:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2000/08/08 13:38:34  mbickel
+//      Fixed: construction of buildings doesn't consume resources
+//      Fixed: no unit information visible for satellites
+//
 //     Revision 1.49  2000/08/08 09:48:25  mbickel
 //
 //      speed up of dialog boxes in linux
@@ -6587,6 +6591,22 @@ void tvehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
       generate_vehicle ( tnk, color/8, v );
       v->xpos = x;
       v->ypos = y;
+
+      for ( int j = 0; j < 8; j++ ) {
+         int a = int(height) << j;
+         int b = int(height) >> j;
+         if ( v->typ->height & a ) {
+            v->height = a;
+            break;
+         }
+         if ( v->typ->height & b ) {
+            v->height = b;
+            break;
+         }
+      }
+      v->setMovement ( 0 );
+
+
       getfield ( x, y )->vehicle = v;
       material -= tnk->production.material;
       fuel -= tnk->production.energy;

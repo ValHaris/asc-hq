@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.38 2000-08-08 13:22:14 mbickel Exp $
+//     $Id: typen.h,v 1.39 2000-08-09 12:39:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2000/08/08 13:22:14  mbickel
+//      Added unitCategoriesLoadable property to buildingtypes and vehicletypes
+//      Added option: showUnitOwner
+//
 //     Revision 1.37  2000/08/07 16:29:23  mbickel
 //      orbiting units don't consume fuel any more
 //      Fixed bug in attack formula; improved attack formula
@@ -267,7 +271,7 @@ typedef class tshareview *pshareview;
 #define maxbuildingpicnum 8
 #define maxminesonfield 20
 
-const int gameparameternum = 17;
+const int gameparameternum = 18;
 
 #define maxobjectonfieldnum 16
 
@@ -1818,7 +1822,7 @@ extern const int gameparameterdefault [ gameparameternum ];
 enum { cgp_fahrspur, cgp_eis, cgp_movefrominvalidfields, cgp_building_material_factor, cgp_building_fuel_factor,
        cgp_forbid_building_construction, cgp_forbid_unitunit_construction, cgp_bi3_training, cgp_maxminesonfield,
        cgp_antipersonnelmine_lifetime, cgp_antitankmine_lifetime, cgp_mooredmine_lifetime, cgp_floatingmine_lifetime,
-       cgp_buildingarmor, cgp_maxbuildingrepair, cgp_buildingrepairfactor, cgp_globalfuel };
+       cgp_buildingarmor, cgp_maxbuildingrepair, cgp_buildingrepairfactor, cgp_globalfuel, cgp_maxtrainingexperience };
 
 
 

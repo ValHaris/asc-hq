@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.42 2000-08-08 13:21:56 mbickel Exp $
+//     $Id: dialog.cpp,v 1.43 2000-08-09 12:39:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2000/08/08 13:21:56  mbickel
+//      Added unitCategoriesLoadable property to buildingtypes and vehicletypes
+//      Added option: showUnitOwner
+//
 //     Revision 1.41  2000/08/06 11:38:41  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -6516,9 +6520,12 @@ void         tgameparamsel ::buttonpressed(byte         id)
    tstringselect::buttonpressed(id);
    switch (id) {
 
-      case 12:
+      case 12:  if ( redline >= 0 ) 
+                   action = id-10;
+                break;
+                 
       case 13:   action = id-10;
-   break;
+                 break;
    }
 }
 
@@ -6537,7 +6544,8 @@ void         tgameparamsel ::run(void)
    do {
       tstringselect::run();
    }  while ( ! ( (taste == ct_esc) || ( (action == 2) || (action == 3) ) || (msel == 1)) );
-   if ( (action == 3) || (taste == ct_esc) ) redline = 255;
+   if ( action == 3 || taste == ct_esc ) 
+      redline = 255;
 }
 
 

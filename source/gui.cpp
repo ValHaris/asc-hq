@@ -1,6 +1,13 @@
-//     $Id: gui.cpp,v 1.31 2000-08-08 09:48:17 mbickel Exp $
+//     $Id: gui.cpp,v 1.32 2000-08-09 12:39:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/08/08 09:48:17  mbickel
+//
+//      speed up of dialog boxes in linux
+//      fixed graphical errors in attack
+//      fixed graphical error in ammo transfer
+//      fixed reaction fire not allowing manual attack
+//
 //     Revision 1.30  2000/08/07 16:29:21  mbickel
 //      orbiting units don't consume fuel any more
 //      Fixed bug in attack formula; improved attack formula
@@ -1477,10 +1484,10 @@ void  tnsguiicondescent::display      ( void )
       return;
 
    int h = chfahrend;
-   if ( !pendingVehicleActions.descent )
+   if ( !pendingVehicleActions.descent ) {
       if ( getactfield()->vehicle )
          h = getactfield()->vehicle->typ->height ;
-   else
+   } else
       h = pendingVehicleActions.descent->getVehicle()->typ->height ;
 
    if ( h >= chtieffliegend )
