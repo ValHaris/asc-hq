@@ -1,6 +1,10 @@
-//     $Id: artint.cpp,v 1.27 2000-09-24 19:57:02 mbickel Exp $
+//     $Id: artint.cpp,v 1.28 2000-09-25 13:25:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/09/24 19:57:02  mbickel
+//      ChangeUnitHeight functions are now more powerful since they use
+//        UnitMovement on their own.
+//
 //     Revision 1.26  2000/09/17 16:16:44  mbickel
 //      Some fixes for Watcom
 //
@@ -150,6 +154,7 @@
 #include <malloc.h>
 #include <math.h>
 #include <algorithm>
+#include <memory>
 
 #include "artint.h"
 
@@ -795,6 +800,41 @@ AI::Section* AI :: Sections :: getBest ( const pvehicle veh, int* xtogo, int* yt
 }
 
 
+int  AI :: getBestHeight ( pvehicle veh )
+{
+   int heightNum = 0;
+   for ( int i = 0; i < 8; i++ )
+      if ( veh->typ->height & ( 1 << i ))
+         heightNum++;
+   if ( heightNum == 1 )
+      return veh->typ->height;
+
+   int bestHeight = -1;
+   float bestHeightValue = minfloat;
+   for ( int i = 0; i < 8; i++ )
+      if ( veh->typ->height & ( 1 << i )) {
+         tvehicle v ( veh, NULL );
+         v.height = 1<<i;
+         calculateThreat ( &v );
+
+         float value = v.aiparam[getPlayer()]->value;
+         if ( v.typ->movement[i] )
+            value *=  log( v.typ->movement[i] );
+
+         float threat = sections.getForCoordinate( v.xpos, v.ypos ).avgFieldThreat.threat[ v.aiparam[getPlayer()]->valueType ];
+         if ( threat )
+            value /= threat;
+
+         if ( value > bestHeightValue ) {
+            bestHeightValue = value;
+            bestHeight = 1 << i;
+         }
+      }
+
+   return bestHeight;
+}
+
+
 void    AI :: setup (void)
 {
    displaymessage2("calculating all threats ... ");
@@ -1028,9 +1068,75 @@ void AI::moveToSavePlace ( pvehicle veh, VehicleMovement& vm3 )
 }
 
 
+int AI::changeVehicleHeight ( pvehicle veh, VehicleMovement* vm )
+{
+   int bh = getBestHeight ( veh );
+   if ( bh != veh->height && bh != -1 ) {
+      ChangeVehicleHeight* cvh;
+      int newheight;
+      if ( bh > veh->height ) {
+         cvh = new IncreaseVehicleHeight ( mapDisplay, NULL );
+         newheight = veh->height << 1;
+      } else {
+         cvh = new DecreaseVehicleHeight ( mapDisplay, NULL );
+         newheight = veh->height >> 1;
+      }
+      auto_ptr<ChangeVehicleHeight> acvh ( cvh );
+
+      if ( newheight & veh->typ->height ) {
+         if ( cvh->available ( veh ) ) {
+            if ( vm )
+               cvh->registerStartMovement ( vm );
+
+            int stat = cvh->execute ( veh, -1, -1, 0, newheight, 1 );
+            if ( stat == 2 ) {   // if the unit could change its height vertically, or the height change is not available, skip this block
+
+               int bestx = -1;
+               int besty = -1;
+               int moveremain = minint;
+               for ( int i = 0; i < cvh->reachableFields.getFieldNum(); i++ )
+                  if ( cvh->reachableFields.getData ( i ).dist > moveremain ) {
+                     cvh->reachableFields.getFieldCoordinates ( i, &bestx, &besty );
+                     moveremain = cvh->reachableFields.getData( i ).dist;
+                  }
+
+               if ( bestx != -1 && besty != -1 ) {
+                  cvh->execute ( NULL, bestx, besty, 2, -1, -1 );
+                  if ( cvh->getStatus() != 3 )
+                     displaymessage ( "AI :: tactics \n error in changeHeight step 2 with unit %d", 1, veh->networkid );
+
+                  cvh->execute ( NULL, bestx, besty, 3, -1, -1 );
+                  if ( cvh->getStatus() != 1000 )
+                     displaymessage ( "AI :: tactics \n error in changeHeight step 3 with unit %d", 1, veh->networkid );
+
+                  return 1;
+               } else
+                  return -1;
+            } else {
+               if ( stat == 1000 )
+                 return 1;
+
+               if ( veh->typ->steigung == 0 )
+                 return -2;
+
+               return -1;
+            }
+         } else {  // cvh->available
+            return -2;
+         }
+      }
+
+   }
+   return 0;
+}
+
+
 void AI::tactics( void )
 {
    displaymessage2("starting tactics ... ");
+
+   int waitingUnits = 0;
+   int movedUnits = 0;
 
    pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
    while ( veh ) {
@@ -1038,19 +1144,27 @@ void AI::tactics( void )
          unitCounter++;
          displaymessage2("tact: unit %d moved", unitCounter );
 
-         VehicleMovement vm ( NULL, NULL );
-         if ( vm.available ( veh )) {
-            vm.execute ( veh, -1, -1, 0, -1, -1 );
+         int stat = changeVehicleHeight ( veh, NULL );
+         if ( stat == -1 ) {
+            veh->aiparam[ getPlayer() ]->task = AiParameter::tsk_wait;
+            waitingUnits++;
+         } else {
 
-            TargetVector tv;
-            getAttacks ( vm, veh, tv );
+            VehicleMovement vm ( NULL, NULL );
+            if ( vm.available ( veh )) {
+               vm.execute ( veh, -1, -1, 0, -1, -1 );
 
-            if ( tv.size() ) {
-               executeMoveAttack ( veh, tv );
-               veh->aiparam[ getPlayer() ]->task = AiParameter::tsk_tactics;
-            } else
-               veh->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
+               TargetVector tv;
+               getAttacks ( vm, veh, tv );
 
+               if ( tv.size() ) {
+                  executeMoveAttack ( veh, tv );
+                  veh->aiparam[ getPlayer() ]->task = AiParameter::tsk_tactics;
+                  movedUnits++;
+               } else
+                  veh->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
+
+            }
          }
       }
       veh = veh->next;
@@ -1075,6 +1189,8 @@ void AI::buildings( int process )
 {
    displaymessage2("checking buildings ... ");
 
+   int unitsMoved = 0;
+   int waitingUnits = 0;
 
    int buildingCounter = 0;
    pbuilding bld = getMap()->player[ getPlayer() ].firstbuilding;
@@ -1097,27 +1213,55 @@ void AI::buildings( int process )
       sort ( idleUnits.begin(), idleUnits.end(), vehicleValueComp );
 
       for ( std::vector<pvehicle>::iterator i = idleUnits.begin(); i != idleUnits.end(); i++ ) {
-         VehicleMovement* vm = bc.movement ( *i );
-         VehicleAttack va ( NULL, NULL );
-         int attack = 0;
-         if ( va.available ( *i )) {
-            TargetVector tv;
-            getAttacks ( *vm, *i, tv );
+         int simplyMove = 0;
+         if ( getBestHeight ( *i ) != (*i)->height ) {
+            VehicleMovement* vm = bc.movement ( *i );
+            int stat = changeVehicleHeight ( *i, vm );
+            if ( stat == -1 ) {
+               waitingUnits++;
+               (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_wait;
+            } else {
+               if ( stat== -2 )
+                  simplyMove = 1;
+               else {
+                  unitsMoved++;
+                  (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
+                  if ( (*i)->getMovement() > minmalq && !(*i)->attacked )
+                     simplyMove = 1;
+                  else {
+                     VehicleMovement vm ( mapDisplay, NULL );
+                     if ( vm.available ( *i ))
+                        moveToSavePlace ( *i, vm );
+                  }
+               }
+            }
+         } else
+            simplyMove = 1;
 
-            if ( tv.size() ) {
-               executeMoveAttack ( *i, tv );
-               (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_tactics;
-               attack = 1;
+         if ( simplyMove ) {
+            // VehicleMovement* vm = bc.movement ( *i );
+            // auto_ptr<VehicleMovement> avm ( vm );
+            auto_ptr<VehicleMovement> vm ( bc.movement ( *i ) );
+
+            VehicleAttack va ( NULL, NULL );
+            int attack = 0;
+            if ( va.available ( *i )) {
+               TargetVector tv;
+               getAttacks ( *vm, *i, tv );
+
+               if ( tv.size() ) {
+                  executeMoveAttack ( *i, tv );
+                  (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_tactics;
+                  attack = 1;
+               }
+
+            }
+            if ( !attack ) {
+               moveToSavePlace ( *i, *vm );
+               (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
             }
 
          }
-         if ( !attack ) {
-            moveToSavePlace ( *i, *vm );
-            (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
-         }
-
-
-         delete vm;
       }
 
 

@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.52 2000-09-24 19:57:06 mbickel Exp $
+//     $Id: typen.h,v 1.53 2000-09-25 13:25:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2000/09/24 19:57:06  mbickel
+//      ChangeUnitHeight functions are now more powerful since they use
+//        UnitMovement on their own.
+//
 //     Revision 1.51  2000/09/17 16:16:44  mbickel
 //      Some fixes for Watcom
 //
@@ -591,7 +595,7 @@ class AiParameter {
            AiThreat threat;
            int value;
            int valueType;
-           enum { tsk_nothing, tsk_tactics } task;
+           enum { tsk_nothing, tsk_tactics, tsk_tactwait, tsk_stratwait, tsk_wait } task;
 
            int xtogo;
            int ytogo;
@@ -599,6 +603,7 @@ class AiParameter {
 
            void reset ( void );
            AiParameter ( void ) { reset(); };
+           // AiParameter ( const AiParameter& aip );
  };
 
 class BaseAI { 

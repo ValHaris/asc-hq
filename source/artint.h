@@ -1,6 +1,9 @@
-//     $Id: artint.h,v 1.13 2000-09-17 15:17:44 mbickel Exp $
+//     $Id: artint.h,v 1.14 2000-09-25 13:25:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/09/17 15:17:44  mbickel
+//      some restructuring; moving units out of buildings
+//
 //     Revision 1.12  2000/09/07 16:42:27  mbickel
 //      Made some adjustments so that ASC compiles with Watcom again...
 //
@@ -156,6 +159,15 @@
             void searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int moveDist );
             void executeMoveAttack ( pvehicle veh, TargetVector& tv );
             void moveToSavePlace ( pvehicle veh, VehicleMovement& vm );
+            int  getBestHeight ( const pvehicle veh );
+
+            /** chenges a vehicles height
+                \returns 1 = height change successful ;
+                         0 = no need to change height;
+                         -1 = no space to change height
+                         -2 = cannot change height here principially
+            */
+            int changeVehicleHeight ( pvehicle veh, VehicleMovement* vm );
 
             void  calculateThreat ( pvehicletype vt);
             void  calculateThreat ( pvehicle eht );
@@ -165,6 +177,7 @@
             void  tactics( void );
             void  strategy ( void );
             void  buildings ( int process );
+            //void  container ( ccontainercontrols* cc );
             void  setup( void );
 
             void reset ( void );

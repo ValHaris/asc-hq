@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.55 2000-09-17 15:20:32 mbickel Exp $
+//     $Id: dialog.cpp,v 1.56 2000-09-25 13:25:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2000/09/17 15:20:32  mbickel
+//      AI is now automatically invoked (depending on gameoptions)
+//      Some cleanup
+//
 //     Revision 1.54  2000/09/16 11:47:24  mbickel
 //      Some cleanup and documentation again
 //
@@ -5945,8 +5949,8 @@ void         tgameparamsel ::setup(void)
    numberoflines = gameparameternum;
    ey = ysize - 60;
    startpos = lastchoice;
-   addbutton("~s~elect",20,ysize - 40,xsize/2-10,ysize - 20,0,1,12,true);
-   addbutton("~c~lose",xsize/2+10,ysize - 40,xsize-20,ysize - 20,0,1,13,true);
+   addbutton("~c~lose",20,ysize - 40,xsize/2-10,ysize - 20,0,1,13,true);
+   addbutton("~s~elect",xsize/2+10,ysize - 40,xsize-20,ysize - 20,0,1,12,true);
    addkey ( 13, ct_esc );
 
 }

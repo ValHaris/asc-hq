@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.47 2000-09-07 15:49:47 mbickel Exp $
+//     $Id: typen.cpp,v 1.48 2000-09-25 13:25:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2000/09/07 15:49:47  mbickel
+//      some cleanup and documentation
+//
 //     Revision 1.46  2000/09/01 17:46:43  mbickel
 //      Improved A* code
 //      Renamed tvehicle class to Vehicle
@@ -986,7 +989,9 @@ void Vehicle :: init ( void )
    setMovement ( 0 );
 
 }
-   
+
+
+
 
 void Vehicle :: clone ( pvehicle src, pmap actmap )
 {
@@ -1025,6 +1030,12 @@ void Vehicle :: clone ( pvehicle src, pmap actmap )
         loading[i] = new tvehicle ( src->loading[i], NULL );
      else
         loading[i] = NULL;
+
+   for ( int i = 0; i < 8; i++ )
+      if ( src->aiparam[i] )
+         aiparam[i] = new AiParameter ( *src->aiparam[i] );
+      else
+         aiparam[i] = NULL;
 
    if ( actmap )
       actmap->chainunit ( this );

@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.32 2000-09-24 19:57:06 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.33 2000-09-25 13:25:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/09/24 19:57:06  mbickel
+//      ChangeUnitHeight functions are now more powerful since they use
+//        UnitMovement on their own.
+//
 //     Revision 1.31  2000/09/17 15:20:38  mbickel
 //      AI is now automatically invoked (depending on gameoptions)
 //      Some cleanup
@@ -277,7 +281,7 @@ int VehicleMovement :: getDistance ( int x, int y )
    int dist = 0;
    int lastx = vehicle->xpos;
    int lasty = vehicle->ypos;
-   for  ( int i = 0; i < path.getFieldNum(); i++ ) {
+   for  ( int i = 1; i < path.getFieldNum(); i++ ) {
       int mm1, mm2;
       int x;
       int y;
@@ -870,10 +874,16 @@ ChangeVehicleHeight :: ChangeVehicleHeight ( MapDisplayInterface* md, PPendingVe
 {
    status = 0;
    mapDisplay = md;
+   vmove = NULL;
 }
 
-
-
+ChangeVehicleHeight :: ~ChangeVehicleHeight ()
+{
+   if ( vmove ) {
+      delete vmove;
+      vmove = NULL;
+   }
+}
 
 int ChangeVehicleHeight :: execute_withmove ( int allFields )
 {
@@ -928,24 +938,25 @@ int ChangeVehicleHeight :: moveheight( int allFields )
 
    FieldList<StartPosition> startpos;
    if ( allFields == 1 ) {
-      VehicleMovement vm ( NULL );
-      if ( vm.available ( vehicle )) {
-         vm.execute ( vehicle, -1, -1, 0, -1, -1 );
-         for ( int i = 0; i < vm.reachableFields.getFieldNum(); i++ ) {
-            StartPosition sp;
-            vm.reachableFields.getFieldCoordinates( i, &sp.x, &sp.y );
-            sp.dist = vm.getDistance ( sp.x, sp.y);
-            startpos.addField ( sp.x, sp.y, sp );
-         }
-      }
-   }// else {
-      StartPosition sp;
-      sp.x = vehicle->xpos;
-      sp.y = vehicle->ypos;
-      sp.dist = 0;
-      startpos.addField ( vehicle->xpos, vehicle->ypos, sp );
-   //}
+      if ( !vmove ) {
+         StartPosition sp;
+         sp.x = vehicle->xpos;
+         sp.y = vehicle->ypos;
+         sp.dist = 0;
+         startpos.addField ( vehicle->xpos, vehicle->ypos, sp );
 
+         vmove = new VehicleMovement ( NULL, NULL );
+         if ( vmove->available ( vehicle ))
+            vmove->execute ( vehicle, -1, -1, 0, -1, -1 );
+      }
+
+      for ( int i = 0; i < vmove->reachableFields.getFieldNum(); i++ ) {
+          StartPosition sp;
+          vmove->reachableFields.getFieldCoordinates( i, &sp.x, &sp.y );
+          sp.dist = vmove->getDistance ( sp.x, sp.y);
+          startpos.addField ( sp.x, sp.y, sp );
+      }
+   }
 
    int ok2 = false; 
 
@@ -987,6 +998,10 @@ int ChangeVehicleHeight :: moveheight( int allFields )
 
                if ( fieldaccessible(fld, vehicle, newheight ) < 1)
                   ok = false;
+
+               if ( dist < vehicle->typ->steigung * minmalq )
+                  if ( fld->building )
+                     ok = false;
             }
          }
          if ( mx < 0 )
@@ -1267,16 +1282,18 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int h
 
       StartPosition& sp = reachableFields.getData ( x, y );
       if ( sp.x != vehicle->xpos || sp.y != vehicle->ypos ) {
-         fieldReachableRek.run( sp.x, sp.y, vehicle, vehicle->height, &path1 );
-         npush ( vehicle->xpos );
-         npush ( vehicle->ypos );
-         vehicle->xpos = sp.x;  // some cheating because fieldReachableRec starts from the units position
-         vehicle->ypos = sp.y;
-         fieldReachableRek.run( x, y, vehicle, height, &path );
-         npop ( vehicle->ypos );
-         npop ( vehicle->xpos );
-      } else
-         fieldReachableRek.run( x, y, vehicle, height, &path );
+         vmove->registerMapDisplay ( mapDisplay );
+
+         int stat = vmove->execute( NULL, sp.x, sp.y, 2, -1, -1 );
+         if ( stat != 3 )
+            displaymessage ( "ChangeVehicleHeight :: execute / vmove step 2 failed !", 2 );
+
+         stat = vmove->execute ( NULL, sp.x, sp.y, 3, -1, 0 );
+         if ( stat != 1000 )
+            displaymessage ( "ChangeVehicleHeight :: execute / vmove step 3 failed !", 2 );
+      }
+
+      fieldReachableRek.run( x, y, vehicle, height, &path );
 
       status = 3;
       return status;
@@ -1342,10 +1359,13 @@ int IncreaseVehicleHeight :: available ( pvehicle veh ) const
       if ( veh->getMovement() )
          if (veh->height < 128) 
             if ((veh->height << 1) & veh->typ->height ) 
-               if ( veh->typ->steigung )
+               if ( veh->typ->steigung ) {
                   return 1;
-               else
-                  return 2;
+               } else
+                  if ( getfield ( veh->xpos, veh->ypos )->vehicle != veh )
+                     return 0;
+                  else
+                     return 2;
    return 0;
 }
 
@@ -1383,7 +1403,10 @@ int DecreaseVehicleHeight :: available ( pvehicle veh ) const
                if ( veh->typ->steigung )
                   return 1;
                else
-                  return 2;
+                  if ( getfield ( veh->xpos, veh->ypos )->vehicle != veh )
+                     return 0;
+                  else
+                     return 2;
    return 0;
 }
 

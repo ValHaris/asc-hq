@@ -1,6 +1,10 @@
-//     $Id: unitctrl.h,v 1.9 2000-09-24 19:57:06 mbickel Exp $
+//     $Id: unitctrl.h,v 1.10 2000-09-25 13:25:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/09/24 19:57:06  mbickel
+//      ChangeUnitHeight functions are now more powerful since they use
+//        UnitMovement on their own.
+//
 //     Revision 1.8  2000/09/17 15:20:38  mbickel
 //      AI is now automatically invoked (depending on gameoptions)
 //      Some cleanup
@@ -153,6 +157,8 @@ class BaseVehicleMovement : public VehicleAction {
               BaseVehicleMovement ( VehicleActionType _actionType, PPendingVehicleActions _pva ) : VehicleAction ( _actionType, _pva ) {};
               IntFieldList path;
               pvehicle getVehicle ( void ) { return vehicle; };
+              void registerMapDisplay ( MapDisplayInterface* _mapDisplay ) { mapDisplay = _mapDisplay; };
+
 
             protected:
                pvehicle vehicle;
@@ -266,7 +272,13 @@ class ChangeVehicleHeight : public BaseVehicleMovement {
               int getStatus ( void ) { return status; };
               int execute ( pvehicle veh, int x, int y, int step, int height, int allFields );
               ChangeVehicleHeight ( MapDisplayInterface* md, PPendingVehicleActions _pva , VehicleActionType vat );
+              ~ChangeVehicleHeight (  );
+
+              //! execute a movement before changing height; primarily used for AI; vm is destructed when ChangeVehicleHeight ends
+              void registerStartMovement ( VehicleMovement* vm ) { vmove = vm; };
            protected:
+              VehicleMovement* vmove;
+
               int verticalHeightChange ( void );
 
               int moveunitxy ( int xt1, int yt1, IntFieldList& pathToMove );
@@ -304,6 +316,8 @@ class DecreaseVehicleHeight : public ChangeVehicleHeight {
  *                   by moving a distance ( normal airplanes ), execute will either immediatly change the units height and 
  *                   finish (status == 1000), or follow the same procedure as VehicleMovement.
  *   (Step 2)  see VehicleMovement
+ *               if a movement is executed prior to changing the height (allFields == 1 in step 0),
+ *               step 2 and step 3 of the movement are executed here !
  *   (Step 3)  see VehicleMovement
  */
 
