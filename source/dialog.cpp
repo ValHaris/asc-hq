@@ -2,9 +2,16 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.117 2002-12-12 11:34:17 mbickel Exp $
+//     $Id: dialog.cpp,v 1.118 2002-12-17 22:02:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.117  2002/12/12 11:34:17  mbickel
+//      Fixed: ai crashing when weapon has no ammo
+//      Fixed: ASC crashed when loading game with ID not found
+//      Fixed: more ai problems
+//      AI now faster
+//      Fixed: removing objects overfill a units tank
+//
 //     Revision 1.116  2002/11/20 20:00:53  mbickel
 //      New features: specify passwords when starting a game
 //      Better error messages when loading a game through command line parameters
@@ -5248,7 +5255,9 @@ void viewterraininfo ( void )
       for ( tfield::MineContainer::iterator m = fld->mines.begin(); m != fld->mines.end(); ++m )
          if ( m->player == actmap->actplayer || fieldVisibility  ( fld ) == visible_all ) {
             mines[m->type-1]++;
-            mineDissolve[m->type-1] = min ( m->time, mineDissolve[m->type-1] );
+            int lifetime = actmap->getgameparameter( GameParameter(cgp_antipersonnelmine_lifetime + m->type-1 ));
+            if ( lifetime > 0)
+               mineDissolve[m->type-1] = min ( m->time + lifetime, mineDissolve[m->type-1] );
          }
 
       if ( mines[0] || mines[1] || mines[2] || mines[3] ) {

@@ -2,9 +2,14 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.116 2002-12-15 23:54:46 mbickel Exp $
+//     $Id: spfst.cpp,v 1.117 2002-12-17 22:02:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.116  2002/12/15 23:54:46  mbickel
+//      New: system sends mail if units die
+//      Fixed: orbiting and submerged units could crash on water due to wind
+//      Updated documentation
+//
 //     Revision 1.115  2002/11/24 10:54:19  mbickel
 //      made field allocation more robust
 //
@@ -353,14 +358,14 @@ int         fieldaccessible( const pfield        field,
    if (c == visible_not)
       return 0;
 
+/*
    if ( c == visible_all)
       if ( field->mines.size() )
          for ( int i = 0; i < field->mines.size(); i++ )
             if ( field->getMine(i).attacksunit( vehicle ))
                return 0;
-//         if (vehicle->height <= chfahrend && getdiplomaticstatus2 ( vehicle->color, field->mineowner()*8 ) == cawar )
-//            return 0;
-      
+*/
+
 
    if ( !field->vehicle && !field->building ) {
       if ( vehicle->typ->height & uheight )

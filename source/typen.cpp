@@ -1,6 +1,11 @@
-//     $Id: typen.cpp,v 1.91 2002-11-15 20:54:11 mbickel Exp $
+//     $Id: typen.cpp,v 1.92 2002-12-17 22:02:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.91  2002/11/15 20:54:11  mbickel
+//      Added third snow-weather
+//      Added aliase in text files
+//      Fixed bad pointer access in gui.cpp
+//
 //     Revision 1.90  2002/10/06 15:44:40  mbickel
 //      Completed inheritance of .asctxt files
 //      Speed up of replays
@@ -475,7 +480,7 @@ const char* cnetcontrol[cnetcontrolnum] = { "store energy",           "store mat
                                             "move out all energy",           "move out all material",           "move out all fuel", 
                                             "stop storing energy", "stop storing material", "stop storing fuel", 
                                             "stop energy extraction", "stop material extraction", "stop fuelextraction" };
-const char* cgeneralnetcontrol[4] = {       "store",  "move out", "stop storing", "stop extraction" };
+const char* cgeneralnetcontrol[4] = {       "store",  "move out", "stop storing", "stop using" };
                                           // Functionen in Geb„uden ....
 
 const char*  cwettertypen[cwettertypennum] = {"dry (standard)","light rain", "heavy rain", "few snow", "lot of snow", "lot of snow + ice"};

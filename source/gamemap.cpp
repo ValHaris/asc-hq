@@ -117,6 +117,8 @@ tmap :: tmap ( void )
    gameparameter_num = 0;
    game_parameter = NULL;
    mineralResourcesDisplayed = 0;
+
+   setgameparameter( cgp_objectsDestroyedByTerrain, 1 );
 }
 
 
@@ -433,12 +435,12 @@ void tmap :: read ( tnstream& stream )
     int orggpnum = gameparameter_num;
     gameparameter_num = 0;
     for ( int gp = 0; gp < 8; gp ++ )
-       setgameparameter ( gp, _oldgameparameter[gp] );
+       setgameparameter ( GameParameter(gp), _oldgameparameter[gp] );
 
     for ( int ii = 0 ; ii < orggpnum; ii++ ) {
        int gpar;
        stream.readdata2 ( gpar );
-       setgameparameter ( ii, gpar );
+       setgameparameter ( GameParameter(ii), gpar );
     }
 
     if ( version >= 2 ) {
@@ -568,7 +570,7 @@ void tmap :: write ( tnstream& stream )
        stream.writeInt( 0 );
 
    for ( i = 0; i < 8; i++ )
-       stream.writeInt( getgameparameter(i) );
+       stream.writeInt( getgameparameter(GameParameter(i)) );
 
 
 ///////////////////
@@ -736,7 +738,7 @@ bool tmap :: isResourceGlobal ( int resource )
    }
 }
 
-int tmap :: getgameparameter ( int num )
+int tmap :: getgameparameter ( GameParameter num )
 {
   if ( game_parameter && num < gameparameter_num ) {
      return game_parameter[num];
@@ -747,7 +749,7 @@ int tmap :: getgameparameter ( int num )
         return 0;
 }
 
-void tmap :: setgameparameter ( int num, int value )
+void tmap :: setgameparameter ( GameParameter num, int value )
 {
    if ( game_parameter ) {
      if ( num < gameparameter_num )
@@ -1715,11 +1717,12 @@ void tfield :: setparams ( void )
    }
 
    for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
-      if ( o->typ->terrainaccess.accessible( bdt ) == -1 ) {
-         objects.erase(o);
-         setparams();
-         return;
-      }
+      if ( gamemap->getgameparameter ( cgp_objectsDestroyedByTerrain ))
+         if ( o->typ->terrainaccess.accessible( bdt ) == -1 ) {
+            objects.erase(o);
+            setparams();
+            return;
+         }
 
       bdt  &=  o->typ->terrain_and;
       bdt  |=  o->typ->terrain_or;
@@ -2099,7 +2102,8 @@ const bool gameParameterChangeableByEvent [ gameparameternum ] = { true,
                                                                  true,
                                                                  true,
                                                                  true,
-                                                                 false };
+                                                                 false,
+                                                                 true };
 
 const int gameParameterLowerLimit [ gameparameternum ] = { 1,
                                                            1,
@@ -2121,6 +2125,7 @@ const int gameParameterLowerLimit [ gameparameternum ] = { 1,
                                                            0,
                                                            0,
                                                            1,
+                                                           0,
                                                            0,
                                                            0,
                                                            0 };
@@ -2147,6 +2152,7 @@ const int gameParameterUpperLimit [ gameparameternum ] = { maxint,
                                                            100,
                                                            1000,
                                                            100,
+                                                           1,
                                                            1 };
 
 const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
@@ -2171,5 +2177,6 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "attack power (EXPERIMENTAL!)",
                                                       "jamming amplifier (EXPERIMENTAL!)",
                                                       "jamming slope (EXPERIMENTAL!)",
-                                                      "The Supervisor may save a game as new map (spying!!!)" };
+                                                      "The Supervisor may save a game as new map (spying!!!)",
+                                                      "objects can be destroyed by terrain" };
 

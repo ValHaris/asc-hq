@@ -4,9 +4,14 @@
 */
 
 
-//     $Id: gui.cpp,v 1.83 2002-12-12 20:36:06 mbickel Exp $
+//     $Id: gui.cpp,v 1.84 2002-12-17 22:02:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.83  2002/12/12 20:36:06  mbickel
+//      Updated documentation
+//      Fixed: hotkey for gui icons not allways working
+//      Fixed: objects in fog of war were always displayed for normal weather
+//
 //     Revision 1.82  2002/12/06 10:00:42  mbickel
 //      Fixed: object construction icon missing when unit can only remove objects
 //      mapeditor: Fixed: neutral buildings not working
@@ -1803,29 +1808,31 @@ void  tnsguiiconputantipersonalmine::exec         ( void )
 
 
 
-int   tnsguiiconputseamine::available    ( void )
-{
-   if (moveparams.movestatus == 90) {
-      pfield fld = getactfield();
-      if ( (fld->typ->art & getTerrainBitType(cbwater)).any() )
-         if (fld->a.temp & 1 )
-            if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
-               return true; 
-   } 
-   return 0;
-}
-
-
 
 tnsguiiconputfloatingmine::tnsguiiconputfloatingmine ( void )
 {
    filename = "floatmin" ;
 }
 
-void  tnsguiiconputfloatingmine::exec         ( void ) 
+void  tnsguiiconputfloatingmine::exec         ( void )
 {
-   legemine(cmfloatmine, 1); 
+   legemine(cmfloatmine, 1);
    displaymap();
+}
+
+int   tnsguiiconputfloatingmine::available    ( void )
+{
+   if (moveparams.movestatus == 90) {
+      pfield fld = getactfield();
+      if ( (fld->typ->art & getTerrainBitType(cbwater0)).any()
+           || (fld->typ->art & getTerrainBitType(cbwater1)).any()
+           || (fld->typ->art & getTerrainBitType(cbwater2)).any()
+           || (fld->typ->art & getTerrainBitType(cbwater3)).any() )
+         if (fld->a.temp & 1 )
+            if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
+               return true;
+   }
+   return 0;
 }
 
 
@@ -1834,9 +1841,23 @@ tnsguiiconputmooredmine::tnsguiiconputmooredmine ( void )
    filename = "moormine" ;
 }
 
-void  tnsguiiconputmooredmine::exec         ( void ) 
+int   tnsguiiconputmooredmine::available    ( void )
 {
-   legemine(cmmooredmine,1 ); 
+   if (moveparams.movestatus == 90) {
+      pfield fld = getactfield();
+      if ( (fld->typ->art & getTerrainBitType(cbwater2)).any()
+           || (fld->typ->art & getTerrainBitType(cbwater3)).any() )
+         if (fld->a.temp & 1 )
+            if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
+               return true;
+   }
+   return 0;
+}
+
+
+void  tnsguiiconputmooredmine::exec         ( void )
+{
+   legemine(cmmooredmine,1 );
    displaymap();
 }
 

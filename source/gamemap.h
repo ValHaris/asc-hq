@@ -34,7 +34,7 @@
  #include "messages.h"
 
 //! The number of game paramters that can be specified for each map.
-const int gameparameternum = 23;
+const int gameparameternum = 24;
 
 //! The names of the game paramter. \sa gameparameterdefault
 extern const char* gameparametername[ gameparameternum ];
@@ -45,7 +45,7 @@ extern const int gameParameterLowerLimit [ gameparameternum ];
 extern const int gameParameterUpperLimit [ gameparameternum ];
 extern const bool gameParameterChangeableByEvent [ gameparameternum ];
 
-enum { cgp_fahrspur,
+enum GameParameter { cgp_fahrspur,
        cgp_eis,
        cgp_movefrominvalidfields,
        cgp_building_material_factor,
@@ -67,7 +67,8 @@ enum { cgp_fahrspur,
        cgp_attackPower,
        cgp_jammingAmplifier,
        cgp_jammingSlope,
-       cgp_superVisorCanSaveMap };
+       cgp_superVisorCanSaveMap,
+       cgp_objectsDestroyedByTerrain };
 
 
 //! an instance of an object type (#tobjecttype) on the map
@@ -561,8 +562,8 @@ class tmap {
 
       pvehicle getUnit ( int x, int y, int nwid );
       pvehicle getUnit ( int nwid );
-      int  getgameparameter ( int num );
-      void setgameparameter ( int num, int value );
+      int  getgameparameter ( GameParameter num );
+      void setgameparameter ( GameParameter num, int value );
       void cleartemps( int b, int value = 0 );
       bool isResourceGlobal ( int resource );
       void setupResources ( void );

@@ -1,6 +1,11 @@
-//     $Id: gui.h,v 1.23 2002-12-12 20:36:06 mbickel Exp $
+//     $Id: gui.h,v 1.24 2002-12-17 22:02:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2002/12/12 20:36:06  mbickel
+//      Updated documentation
+//      Fixed: hotkey for gui icons not allways working
+//      Fixed: objects in fog of war were always displayed for normal weather
+//
 //     Revision 1.22  2002/09/19 20:20:05  mbickel
 //      Cleanup and various bug fixes
 //
@@ -558,20 +563,18 @@ class tnsguiiconputantipersonalmine : public tnsguiiconputgroundmine {
 
 
 
-class tnsguiiconputseamine : public tnsguiicon {
-           public:
-             virtual int   available    ( void ) ;
-      };
 
-class tnsguiiconputfloatingmine : public tnsguiiconputseamine {
+class tnsguiiconputfloatingmine : public tnsguiicon {
         public:
           virtual void  exec         ( void ) ;
           tnsguiiconputfloatingmine ( void );
+          virtual int   available    ( void ) ;
        };
-class tnsguiiconputmooredmine : public tnsguiiconputseamine {
+class tnsguiiconputmooredmine : public tnsguiicon {
         public:
           virtual void  exec         ( void ) ;
           tnsguiiconputmooredmine ( void );
+          virtual int   available    ( void ) ;
        };
 
 
