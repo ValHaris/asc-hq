@@ -3,9 +3,12 @@
   
 */
 
-//     $Id: sgstream.h,v 1.28 2004-05-11 20:22:33 mbickel Exp $
+//     $Id: sgstream.h,v 1.29 2004-05-23 12:54:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2004/05/11 20:22:33  mbickel
+//      Readded research system to ASC
+//
 //     Revision 1.27  2003/02/13 00:56:07  mbickel
 //      Updated weaponguide
 //      ASC compiles with gcc again
@@ -156,30 +159,10 @@
 #include "objecttype.h"
 
 
-extern pvehicletype loadvehicletype( const char *       name);
-extern pvehicletype loadvehicletype( tnstream& stream );
-extern void writevehicle( pvehicletype ft, tnstream& stream );
-
-extern pterraintype loadterraintype( const char *       name);
-extern pterraintype loadterraintype( pnstream stream );
-
-extern pbuildingtype loadbuildingtype( const char *       name);
-extern pbuildingtype loadbuildingtype( pnstream stream );
-extern void writebuildingtype ( pbuildingtype bld, pnstream stream );
-
-extern pobjecttype   loadobjecttype( const char *       name);
-extern pobjecttype   loadobjecttype( pnstream stream );
-void writeobject ( pobjecttype object, pnstream stream, int compressed = 0 );
 
 extern void generatedirecpict ( void* orgpict, void* direcpict );
 FieldQuickView* generateAverageCol ( void* image );
 
-
-
-class t_carefor_containerstream {       // not necessary any more, now that we have the containercollector
-       public:
-         t_carefor_containerstream ( void );
-       };
 
 
 extern void loadpalette ( void );

@@ -4,7 +4,7 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.53 2004-05-12 20:05:52 mbickel Exp $
+//     $Id: controls.h,v 1.54 2004-05-23 12:54:28 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -35,7 +35,7 @@
 #define controlsH
 #include "gui.h"
 #include "typen.h"
-#include "mousecontrol.h"
+// #include "mousecontrol.h"
 #include "soundList.h"
 #include "astar2.h"
 

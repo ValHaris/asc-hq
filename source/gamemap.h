@@ -34,6 +34,7 @@
  #include "messages.h"
  #include "gameeventsystem.h"
  #include "research.h"
+ #include "password.h"
 
 //! The number of game paramters that can be specified for each map.
 const int gameparameternum = 29;

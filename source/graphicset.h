@@ -22,7 +22,7 @@
 #ifndef graphicsetH
  #define graphicsetH
 
- #include "typen.h"
+#include "typen.h"
 
  extern int getGraphicSetIdFromFilename ( const char* filename );
  extern int activateGraphicSet ( int id  );

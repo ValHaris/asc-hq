@@ -23,7 +23,7 @@
  #define buildingtypeH
 
  #include "typen.h"
- #include "containerbase.h"
+ #include "containerbasetype.h"
  #include "ascstring.h"
  #include "terraintype.h"
  #include "objecttype.h"

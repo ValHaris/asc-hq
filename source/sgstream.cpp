@@ -120,30 +120,6 @@ void* generate_vehicle_gui_build_icon ( pvehicletype tnk )
 
 
 
-pvehicletype   loadvehicletype( const char* name)
-{
-   displayLogMessage ( 5, " loading vehicle type %s ...", name );
-   tnfilestream stream ( name, tnstream::reading );
-   pvehicletype vt = loadvehicletype ( stream );
-   vt->filename = name;
-   displayLogMessage ( 5, " done\n");
-   return vt;
-}
-
-
-pvehicletype   loadvehicletype( tnstream& stream )
-{
-   pvehicletype veh = new Vehicletype;
-   veh->read( stream );
-   veh->location = stream.getLocation();
-   return veh;
-}
-
-
-
-
-
-
 
 
 void* generate_building_gui_build_icon ( pbuildingtype bld )
@@ -289,33 +265,6 @@ void loadguipictures( void )
 }
 
 
-pbuildingtype       loadbuildingtype( const char *       name)
-{
-   displayLogMessage ( 5, " loading building type %s ...", name );
-
-   tnfilestream stream ( name, tnstream::reading );
-   pbuildingtype bt = loadbuildingtype ( &stream );
-   bt->filename = name;
-
-   displayLogMessage ( 5, " done\n");
-   return bt;
-}
-
-
-pbuildingtype       loadbuildingtype( pnstream stream )
-{
-  pbuildingtype bdt = new BuildingType;
-  bdt->read ( *stream );
-  bdt->location = stream->getLocation();
-  return bdt;
-}
-
-
-void writebuildingtype ( pbuildingtype bld, pnstream stream )
-{
-  bld->write ( *stream );
-}
-
 
 void generatedirecpict ( void* orgpict, void* direcpict )
 {
@@ -332,7 +281,7 @@ void generatedirecpict ( void* orgpict, void* direcpict )
           b++;
        }
     }
-    
+
     for (t = 20; t > 0; t-- ) {
        for (u =20-t; u<= 19 + t; u++) {
           *b = getpixel(  10 + u, 10 + 39 - t );
@@ -426,61 +375,6 @@ FieldQuickView* generateAverageCol ( void* image )
 }
 
 
-pterraintype      loadterraintype( const char *       name)
-{
-   displayLogMessage ( 5, " loading terrain type %s ...", name );
-   tnfilestream stream ( name, tnstream::reading );
-   pterraintype tt = loadterraintype ( &stream );
-   tt->filename = name;
-   displayLogMessage ( 5, " done\n" );
-   return tt;
-}
-
-pterraintype loadterraintype( pnstream stream )
-{
-    pterraintype bbt = new TerrainType;
-    bbt->read ( *stream );
-    bbt->location = stream->getLocation();
-    return bbt;
-}
-
-
-
-
-pobjecttype   loadobjecttype( const char *       name)
-{
-   displayLogMessage ( 5, " loading object type %s ...", name );
-   tnfilestream stream ( name, tnstream::reading );
-   pobjecttype ot = loadobjecttype ( &stream );
-   ot->filename = name;
-   displayLogMessage ( 5, " done\n" );
-   return ot;
-/*
-   pobjecttype fztn = loadobjecttype ( &stream );
-   for ( int i = 0 ; i < cmovemalitypenum; i++) {
-       if ( fztn->movemalus_abs[i] > 0  && fztn->movemalus_abs[i] < 10 )
-          fprintf(stderr, "The object %s has invalid movemali\n", name );
-   }
-   return fztn;
-*/
-}
-
-
-
-pobjecttype   loadobjecttype( pnstream stream )
-{
-   pobjecttype fztn = new ObjectType;
-   fztn->read ( *stream );
-   fztn->location = stream->getLocation();
-
-   return fztn;
-}
-
-void writeobject ( pobjecttype object, pnstream stream, int compressed )
-{
-   object->write ( *stream );
-}
-
 
 
 void loadpalette ( void )
@@ -526,11 +420,6 @@ void loadpalette ( void )
 }
 
 
-
-t_carefor_containerstream :: t_carefor_containerstream ( void ) 
-{ 
-   opencontainer ( "*.con" );
-}
 
 
 bool makeDirectory ( const char* path )

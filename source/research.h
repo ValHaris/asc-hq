@@ -29,7 +29,6 @@
 
  #include "basestreaminterface.h"
  #include "basictypes.h"
- #include "pointers.h"
  #include "typen.h"
 
 
@@ -45,6 +44,7 @@ class TechDependency: public LoadableItemType {
      void read ( tnstream& stream );
      void write ( tnstream& stream ) const;
      void runTextIO ( PropertyContainer& pc);
+     bool empty() const { return requiredTechnologies.size() == 0; } ;
 
      //! outputs the dependencies in text format for processing by GraphViz
      void writeTreeOutput ( const ASCString& sourceTechName, tnstream& stream, bool reduce ) const;

@@ -52,7 +52,7 @@
 #include "../attack.h"
 #include "../gameoptions.h"
 #include "../astar2.h"
-#include "../sg.h"
+//#include "../sg.h"
 #include "../resourcenet.h"
 #include "../itemrepository.h"
 #include "../building_controls.h"

@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.147 2004-05-20 14:01:10 mbickel Exp $
+//     $Id: typen.h,v 1.148 2004-05-23 12:54:28 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -45,7 +45,7 @@
 #include "basestrm.h"
 #include "errors.h"
 
-#include "password.h"
+// #include "password.h"
 
 
 
@@ -154,15 +154,6 @@ class ResourceMatrix {
 
 
 
-//! the image for a terraintype ( #tterraintype ) that is shown on the small map
-struct FieldQuickView {
-      char p1;
-      char p3[3][3];
-      char p5[5][5];
-};
-
-
-
 //! the time in ASC, measured in turns and moves
 struct GameTime {
   GameTime() { abstime = 0; };
@@ -173,6 +164,13 @@ struct GameTime {
   int abstime;
 };
 
+
+//! the image for a terraintype ( #tterraintype ) that is shown on the small map
+struct FieldQuickView {
+      char p1;
+      char p3[3][3];
+      char p5[5][5];
+};
 
 
 

@@ -2,9 +2,17 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.112 2004-05-20 14:01:09 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.113 2004-05-23 12:54:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.112  2004/05/20 14:01:09  mbickel
+//      Many bugfixes and new features, among them:
+//        - Container.FillUnitsAutomatically = 2
+//        - generate Tech Tree
+//        - show research info
+//        - edit research in mapeditor
+//        - limit production to units that can leave a building
+//
 //     Revision 1.111  2004/05/12 20:05:52  mbickel
 //      Restructured file loading routines for upcoming data cache
 //
@@ -5025,7 +5033,7 @@ void generateTechTree()
 
          tn_file_buf_stream f ( filename, tnstream::writing );
 
-         f.writeString ( "digraph \"ASC Technology Tree\" { \n", false );
+         f.writeString ( "digraph \"ASC Technology Tree\" { \nnode [color=gray]\n", false );
 
          for ( int i = 0; i < technologyRepository.getNum(); ++i ) {
             const Technology* t  = technologyRepository.getObject_byPos(i);

@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: sg.h,v 1.9 2002-05-07 19:52:47 mbickel Exp $
+//     $Id: sg.h,v 1.10 2004-05-23 12:54:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2002/05/07 19:52:47  mbickel
+//      Updated documentation
+//      Dialog themes can be reloaded during runtime.
+//
 //     Revision 1.8  2002/02/21 17:06:52  mbickel
 //      Completed Paragui integration
 //      Moved mail functions to own file (messages)
@@ -73,7 +77,7 @@ extern void mainloopgeneralkeycheck ( tkey& ch );
 extern void repaintdisplay();
 
 #ifdef sgmain
- #include "controls.h"
+ #include "mousecontrol.h"
  extern cmousecontrol* mousecontrol;
 #endif
 

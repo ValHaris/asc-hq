@@ -138,7 +138,7 @@ void TechDependency::writeTreeOutput ( const ASCString& sourceTechName, tnstream
             s += stn2 + "\"\n";
             stream.writeString ( s, false );
 
-            stream.writeString ( "\"" + stn + "\" [shape=box] \n", false );
+            stream.writeString ( "\"" + stn + "\" [color=black] \n", false );
          }
       }
 }

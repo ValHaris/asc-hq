@@ -27,7 +27,6 @@
 #include "typen.h"
 #include "sgstream.h"
 #include "palette.h"
-#include "textfile_evaluation.h"
 #include "itemrepository.h"
 
 
