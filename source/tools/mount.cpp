@@ -386,7 +386,7 @@ int main(int argc, char *argv[] )
          int compress = 1;
 
          DIR *dirp;
-         struct direct *direntp;
+         struct ASC_direct *direntp;
 
          dirp = opendir( "." );
          if( dirp != NULL ) {

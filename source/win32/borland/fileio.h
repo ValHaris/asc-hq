@@ -1,6 +1,10 @@
-//     $Id: fileio.h,v 1.6 2002-01-29 20:42:17 mbickel Exp $
+//     $Id: fileio.h,v 1.7 2002-10-19 16:11:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2002/01/29 20:42:17  mbickel
+//      Improved finding of files with relative path
+//      Added wildcards to music playlist files
+//
 //     Revision 1.5  2001/10/11 10:41:06  mbickel
 //      Restructured platform fileio handling
 //      Added map archival information to mapeditor
@@ -52,7 +56,7 @@
 
  #include <direct.h>
  #include <dirent.h>
- #define direct dirent
+ #define ASC_direct dirent
 
  extern const char* filereadmode;
  extern const char* filewritemode;

@@ -26,7 +26,7 @@ int filesize ( char* name )
    int size = -1;
    {
       DIR *dirp; 
-      struct dirent *direntp; 
+      struct ASC_direct *direntp; 
   
       dirp = opendir( name ); 
       if( dirp != NULL ) { 

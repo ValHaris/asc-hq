@@ -2,9 +2,14 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.75 2002-10-12 17:28:03 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.76 2002-10-19 16:11:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.75  2002/10/12 17:28:03  mbickel
+//      Fixed "enemy unit loaded" bug.
+//      Changed map format
+//      Improved log messages
+//
 //     Revision 1.74  2002/09/19 20:20:04  mbickel
 //      Cleanup and various bug fixes
 //
@@ -1441,7 +1446,7 @@ void ContainerCollector :: init ( const char* wildcard )
 {
    for ( int i = 0; i < searchDirNum; i++ ) {
       DIR *dirp; 
-      struct direct *direntp; 
+      struct ASC_direct *direntp;
 
       char buf[ maxFileStringSize ];
       char buf2[ maxFileStringSize ];
@@ -2260,7 +2265,7 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition )
 
    for ( int i = 0; i < dirNum; i++ ) {
       DIR *dirp; 
-      struct direct *direntp; 
+      struct ASC_direct *direntp; 
   
       dirp = opendir( directory[i].c_str() );
       if( dirp != NULL ) { 
@@ -2364,7 +2369,7 @@ int checkforvaliddirectory ( char* dir )
    int stat = 0;
 
       DIR *dirp; 
-      struct direct *direntp; 
+      struct ASC_direct *direntp; 
   
 /*      char temp[200];
       int l = strlen(dir) - 1;
