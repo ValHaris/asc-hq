@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.86 2002-04-09 22:19:06 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.87 2002-05-07 19:52:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.86  2002/04/09 22:19:06  mbickel
+//      Fixed AI bugs
+//      Fixed: invalid player name displayed in dashboard
+//
 //     Revision 1.85  2002/04/05 19:01:45  mbickel
 //      Fixed: reaction fire attackes being replayed twice
 //      Fixed: crash when reaction fire during landing on carrier
@@ -863,13 +867,13 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
    pathToMove.getFieldCoordinates ( 0, &x, &y );
 
    tsearchreactionfireingunits srfu;
-   treactionfirereplay rfr;    
+//   treactionfirereplay rfr;
 
-   treactionfire* rf;
-   if ( runreplay.status > 0  )
-      rf = &rfr;
-   else
-      rf = &srfu;
+//   treactionfire* rf;
+//   if ( runreplay.status > 0  )
+//      rf = &rfr;
+//   else
+   treactionfire* rf = &srfu;
 
    rf->init( vehicle, &pathToMove );
 

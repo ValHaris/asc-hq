@@ -9,9 +9,14 @@ Bugs:
  -  unit can only leave a transport on one level height
     ( bigger-prob )
 
+ -  640*480 building dlg
+ -  subbase.map
+
  -  redraw problems with Win9x after task switch
  
 Small tasks:
+
+-4- Replay: don't repeat identical inconsistency messages
 
 -5- Message of crashed airplanes when they run out of fuel
 

@@ -26,6 +26,7 @@ version of ASC, refer to the <A HREF="install.html">Linux installation</A>. <p>
 
 <HR>
 
+
 <H3> There is no music playing</h3>
     The music must be downloaded separately and placed in a 'music' subdirectory, see the <A HREF="install.html#music">installation instructions</A>.
 
@@ -37,6 +38,19 @@ version of ASC, refer to the <A HREF="install.html">Linux installation</A>. <p>
     make install<br></tt><p>
     SDL_mixer requires the <A HREF="http://freshmeat.net/projects/smpeg/">SMPEG library</A> to decode MP3 files.
 
+<H3>How do I disable / enable debug symbols</h3>
+    This is determined by the environment variable CXXFLAGS. Prior to runnine configure you can specify:
+    <tt>
+    export CXXFLAGS="-O0 -g"
+    </tt>
+    (for a debug build with symbols) <br>
+    or 
+    <tt>
+    export CXXFLAGS="-O2"
+    </tt>
+    (for a release build without symbols) <p>
+    
+    
 <H3> ASC complains it can't load libSDL-1.1.so.0 </h3>
     This happens if you haven't got version 1.1.0 or later of SDL installed
     on your system.  Get it from <A HREF="http://www.libsdl.org">www.libsdl.org</A>
@@ -155,7 +169,7 @@ example, ASC will load the files there, but write new ones to searchPath0.
 
 <hr>
 <i>
-$Id: linux_faq.html,v 1.3 2002-03-04 23:30:53 mbickel Exp $
+$Id: linux_faq.html,v 1.4 2002-05-07 19:52:47 mbickel Exp $
 </i>
 </BODY>
 </HTML>

@@ -51,6 +51,7 @@ ASC_PG_App* pgApp = NULL;
 
 ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
 {
+   this->themeName = themeName;
    EnableSymlinks(true);
    int i = 0;
    bool themeFound = false;
@@ -64,10 +65,13 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
       }
    } while ( !path.empty() );
    PG_LogConsole::SetLogLevel ( PG_LOG_ERR );
+   reloadTheme();
+}
 
+void ASC_PG_App :: reloadTheme()
+{
    if ( !LoadTheme(themeName.c_str()))
       fatalError ( "Could not load Paragui theme for ASC");
-
 }
 
 

@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef vehicle_h_included
- #define vehicle_h_included
+#ifndef vehicleH
+ #define vehicleH
 
  #include "typen.h"
  #include "vehicletype.h"

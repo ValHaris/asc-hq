@@ -848,7 +848,7 @@ int main(int argc, char *argv[] )
             }
             //            fprintf ( detailed6, "<tr><td><br><br>%s</td></tr>", ft->infotext );
             else {
-               fprintf ( detailed6, "<tr><td><br><br>keine Beschreibung verf&uumlgbar !<br><br></td></tr>" );
+               fprintf ( detailed6, "<tr><td><br><br>no description available / keine Beschreibung verf&uuml;gbar!<br><br></td></tr>" );
             }
             //Ende tabelle
             fprintf ( detailed6, "</table> \n" );

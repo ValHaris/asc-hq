@@ -566,7 +566,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
-                    ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog };
+                    ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme };
 
 
 class tsgpulldown : public tpulldown
@@ -645,6 +645,7 @@ void         tsgpulldown :: init ( void )
    // addbutton ( "test memory integrity", ua_heapcheck );
    addbutton ( "seperator", -1 );
    addbutton ( "select graphic set", ua_selectgraphicset );
+   addbutton ( "reload dialog theme", ua_reloadDlgTheme );
 
    addfield ( "~H~elp" );
    addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
@@ -1453,6 +1454,12 @@ void execuseraction ( tuseractions action )
 
       case ua_soundDialog:
          soundSettings();
+         break;
+      case ua_reloadDlgTheme:
+         if ( pgApp ) {
+             pgApp->reloadTheme();
+             soundSettings();
+         }
          break;
 
    }

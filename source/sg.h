@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: sg.h,v 1.8 2002-02-21 17:06:52 mbickel Exp $
+//     $Id: sg.h,v 1.9 2002-05-07 19:52:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2002/02/21 17:06:52  mbickel
+//      Completed Paragui integration
+//      Moved mail functions to own file (messages)
+//
 //     Revision 1.7  2001/01/28 14:04:19  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -59,8 +63,8 @@
 */
 
 
-#ifndef sg_h
-#define sg_h
+#ifndef sgH
+#define sgH
 
 #include "dialog.h"
 

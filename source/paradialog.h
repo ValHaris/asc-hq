@@ -19,8 +19,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef paradialog_h_included
- #define paradialog_h_included
+#ifndef paradialogH
+ #define paradialogH
 
 #include "global.h"
 
@@ -51,15 +51,18 @@
 #include "ascstring.h"
 
  class ASC_PG_App : public PG_Application {
+       ASCString themeName;
     public:
        ASC_PG_App ( const ASCString& themeName );
+       void reloadTheme();
       // PG_Theme* LoadTheme(const char* xmltheme, bool asDefault = true, const char* searchpath = NULL );
  };
 
  extern void soundSettings();
 
  extern void setupMainScreenWidget();
- 
+
  extern ASC_PG_App* pgApp;
 
 #endif
+
