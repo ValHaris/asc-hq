@@ -18,12 +18,12 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    along with this program; see the file COPYING. If not, write to the
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
 
-#include <stdio.h>                           
+#include <stdio.h>
 #include <cstring>
 #include <stdlib.h>
 #include <SDL_image.h>
@@ -40,7 +40,7 @@ const int guiIconColumnNum = 3;
 
 
 
-GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent, r, "", -1, "GuiButton"), func( NULL ) 
+GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent, r, "", -1, "GuiButton"), func( NULL )
 {
   sigClick.connect ( SigC::slot( *this, &GuiButton::exec ));
   SetBackground( PRESSED, IconRepository::getIcon("empty-pressed.png").getBaseSurface() );
@@ -49,13 +49,13 @@ GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent,
   SetBorderSize(0,0,0);
 }
 
-bool GuiButton::exec() 
+bool GuiButton::exec()
 {
   if ( func ) {
      func->execute( pos );
      return true;
-  } 
-  return false;   
+  }
+  return false;
 }
 
 
@@ -69,7 +69,7 @@ void GuiButton::registerFunc( GuiFunction* f, const MapCoordinate& position )
 void GuiButton::unregisterFunc()
 {
    func = NULL;
-   SetIcon ( NULL );
+   SetIcon ( (SDL_Surface*) NULL );
 }
 
 
@@ -77,7 +77,7 @@ void GuiButton::unregisterFunc()
 void GuiIconHandler::eval()
 {
    MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
-   
+
    int num = 0;
    for ( Functions::iterator i = functions.begin(); i != functions.end(); ++i ) {
       if ( (*i)->available(mc )) {
@@ -88,7 +88,7 @@ void GuiIconHandler::eval()
       }
    }
 
-   host->disableButtons(num);   
+   host->disableButtons(num);
 }
 
 
@@ -100,9 +100,9 @@ void GuiIconHandler::registerUserFunction( GuiFunction* function )
 
 GuiIconHandler::~GuiIconHandler()
 {
-   for ( Functions::iterator i = functions.begin(); i != functions.end(); ++i ) 
+   for ( Functions::iterator i = functions.begin(); i != functions.end(); ++i )
       delete *i;
-   
+
 }
 
 
@@ -115,7 +115,7 @@ NewGuiHost :: NewGuiHost (PG_Widget *parent, const PG_Rect &r )
          : Panel( parent, r ) , handler(NULL)
 {
    updateFieldInfo.connect ( SigC::slot( *this, &NewGuiHost::eval ));
-}         
+}
 
 void NewGuiHost::eval()
 {
@@ -148,12 +148,12 @@ void NewGuiHost::disableButtons( int i )
       GuiButton* b = getButton(j);
       b->Hide();
       b->unregisterFunc();
-   }   
+   }
 }
 
 NewGuiHost::~NewGuiHost()
 {
    if ( handler )
       handler->registerHost( NULL );
-}      
+}
 

@@ -18,12 +18,12 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    along with this program; see the file COPYING. If not, write to the
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
 
-#include <stdio.h>                           
+#include <stdio.h>
 #include <cstring>
 #include <stdlib.h>
 
@@ -80,7 +80,7 @@ StaticClassVariable void*    BasicGuiHost::background[30][30];
 StaticClassVariable int      BasicGuiHost::numpainted;
 
 
-template<class T>              
+template<class T>
 GuiHost<T>::GuiHost ( void )
 {
    columncount = 3;
@@ -94,7 +94,7 @@ GuiHost<T>::GuiHost ( void )
    smalliconpos.buf = NULL;
 }
 
-template<class T>              
+template<class T>
 void   GuiHost<T>::starticonload ( void )
 {
    getfirsticon()->loaddata();
@@ -102,7 +102,7 @@ void   GuiHost<T>::starticonload ( void )
    chainiconstohost ( getfirsticon() );
 }
 
-template<class T> 
+template<class T>
 void   GuiHost<T>::returncoordinates ( void* icn, int* x, int * y )
 {
    T icon = (T) icn;
@@ -110,15 +110,15 @@ void   GuiHost<T>::returncoordinates ( void* icn, int* x, int * y )
 
    icon->seticonsize ( paintsize );
    if ( paintsize == 0 ) {
-   
-      if ( firstpaint == 0) 
+
+      if ( firstpaint == 0)
          for ( int i = firstshownline*columncount; i < firstshownline*columncount + iconspaintable; i++ )
             if ( actshownicons[i % columncount][i / columncount] == icon ) {
               *x = guixpos + ( i % columncount ) * ( guiiconsizex + guigapx );
               *y = guiypos + ( i / columncount - firstshownline ) * ( guiiconsizey + guigapy );
               found = 1;
             }
-      
+
       if ( found == 0) {
          if ( numpainted < firstshownline*columncount + iconspaintable   &&   numpainted >= firstshownline*columncount) {
             *x = guixpos + ( numpainted % columncount ) * ( guiiconsizex + guigapx );
@@ -153,7 +153,7 @@ void   GuiHost<T>::returncoordinates ( void* icn, int* x, int * y )
    }
 }
 
-template<class T> 
+template<class T>
 void   GuiHost<T>::chainiconstohost ( T icn )
 {
    if ( icn ) {
@@ -167,7 +167,7 @@ template<class T>
 void   GuiHost<T>::savebackground ( void )
 {
    int size = imagesize ( 0, 0, guiiconsizex, guiiconsizey );
-   for (int j = 0; j < iconspaintable/columncount ; j++ ) 
+   for (int j = 0; j < iconspaintable/columncount ; j++ )
       for (int i = 0; i< columncount ; i++) {
          background[i][j] = new char [ size ];
          getimage ( guixpos + i*(guiiconsizex + guigapx), guiypos + j*(guiiconsizey + guigapy), guixpos + i*(guiiconsizex + guigapx) + guiiconsizex, guiypos + j*(guiiconsizey + guigapy) + guiiconsizey,  background[i][j] );
@@ -176,7 +176,7 @@ void   GuiHost<T>::savebackground ( void )
 }
 
 
-template<class T> 
+template<class T>
 void GuiHost<T> :: putbackground ( int xx , int yy )
 {
      int x = guixpos + xx * ( guiiconsizex + guigapx );
@@ -187,7 +187,7 @@ void GuiHost<T> :: putbackground ( int xx , int yy )
         displaymessage("Warning: GuiHost :: putbackground ; no background avail", 1);
 }
 
-template<class T> 
+template<class T>
 int    GuiHost<T>::painticons ( void )
 {
    collategraphicoperations cgo ( guixpos, guiypos, guixpos + columncount*(guiiconsizex + guigapx), guiypos + iconspaintable/columncount*(guiiconsizey + guigapy) + guiiconsizey );
@@ -209,21 +209,21 @@ int    GuiHost<T>::painticons ( void )
 }
 
 
-template<class T> 
-void   GuiHost<T> :: cleanup ( void )    // wird zum entfernen der kleinen guiicons aufgerufen, bevor das icon ausgefÅhrt wird
+template<class T>
+void   GuiHost<T> :: cleanup ( void )    // wird zum entfernen der kleinen guiicons aufgerufen, bevor das icon ausgef\uFFFDhrt wird
 {
    if ( smalliconpos.buf ) {
       collategraphicoperations cgo ( smalliconpos.x, smalliconpos.y, smalliconpos.x + smalliconpos.xsize, smalliconpos.y + guismalliconsizey );
       putimage ( smalliconpos.x, smalliconpos.y, smalliconpos.buf );
 
-      delete[] smalliconpos.buf;
+//      delete[] smalliconpos.buf;
       smalliconpos.buf = NULL;
       paintsize = 0;
    }
 }
 
 
-template<class T> 
+template<class T>
 void   GuiHost<T>::paintsmallicons ( int taste, int up )
 {
    int num;
@@ -269,11 +269,11 @@ void   GuiHost<T>::paintsmallicons ( int taste, int up )
          mousestat++;
 
       int fnd = 0;
-      for ( int j = 0; j < num; j++ ) 
+      for ( int j = 0; j < num; j++ )
          if ( mouseinrect ( smalliconpos.x + j * ( guismallicongap + guismalliconsizex ), smalliconpos.y, smalliconpos.x + j * ( guismallicongap + guismalliconsizex ) + guismalliconsizex, smalliconpos.y + guismalliconsizey )) {
             fnd = 1;
             if ( actshownicons[j % columncount][j / columncount] ) {
-                if ( actshownicons[j % columncount][j / columncount] != infotextshown ) 
+                if ( actshownicons[j % columncount][j / columncount] != infotextshown )
                    msg = displaymessage2 ( actshownicons[j % columncount][j / columncount]->getinfotext() );
 
                 infotextshown = actshownicons[j % columncount][j / columncount];
@@ -291,7 +291,7 @@ void   GuiHost<T>::paintsmallicons ( int taste, int up )
             int mx = mouseparams.x;
             int my = mouseparams.y;
             if ( mx >= smalliconpos.x + i * ( guismallicongap + guismalliconsizex )  &&      my  >=  smalliconpos.y &&
-                 mx <  smalliconpos.x + (i + 1) * ( guismallicongap + guismalliconsizex ) && my  <   smalliconpos.y + guismalliconsizey ) 
+                 mx <  smalliconpos.x + (i + 1) * ( guismallicongap + guismalliconsizex ) && my  <   smalliconpos.y + guismalliconsizey )
             {
                if ( acticon->pressedbymouse() )
                   hit = 2;
@@ -303,13 +303,13 @@ void   GuiHost<T>::paintsmallicons ( int taste, int up )
 
 
          }
-         if ( hit >= 2 ) 
+         if ( hit >= 2 )
             mousestat = 100;
 
          if ( hit == -1   &&  mousestat && !mouseinrect ( smalliconpos.x, smalliconpos.y, smalliconpos.x + num * ( guismallicongap + guismalliconsizex ) - guismallicongap, smalliconpos.y + guismalliconsizey ) )
             mousestat = 101;
 
-      } 
+      }
 
 //      if ( /*mouseparams.taste != 1   &&*/   mouseparams.taste != 0   &&   (mouseparams.taste != taste  || mousestat == 1 ))
 //         mousestat = 102;
@@ -321,14 +321,14 @@ void   GuiHost<T>::paintsmallicons ( int taste, int up )
 
    npop ( paintsize );
 
-   if ( infotextshown  && msg == actdisplayedmessage ) 
+   if ( infotextshown  && msg == actdisplayedmessage )
       displaymessage2 ( "" );
 
    infotextshown = NULL;
 }
 
 
-template<class T> 
+template<class T>
 void   GuiHost<T>::checkformouse ( void )
 {
 //   int msg;
@@ -342,7 +342,7 @@ void   GuiHost<T>::checkformouse ( void )
               {
                  if ( actshownicons[i][j] ) {
                     if ( actshownicons[i][j] != infotextshown )
-                       // msg = 
+                       // msg =
                        displaymessage2 ( actshownicons[i][j]->getinfotext() );
                     found = 1;
                     if ( mouseparams.taste == 1)
@@ -360,16 +360,16 @@ void   GuiHost<T>::checkformouse ( void )
 }
 
 
-template<class T> 
+template<class T>
 void   GuiHost<T> :: runpressedmouse ( int taste  )
 {
-   
+
    mousevisible ( false );
    int oldmousex = mouseparams.x;
    int oldmousey = mouseparams.y;
    setmouseposition ( guixpos + guiiconsizex / 2, guiypos + guiiconsizey / 2);
    mousevisible ( true );
-  
+
    int zy = -1;
    int zx = -1;
 
@@ -378,8 +378,8 @@ void   GuiHost<T> :: runpressedmouse ( int taste  )
 
    while ( mouseparams.taste == taste ) {
 
-      for (int j = 0; j < iconspaintable/columncount ; j++ ) 
-          for (int i = 0; i< columncount ; i++) 
+      for (int j = 0; j < iconspaintable/columncount ; j++ )
+          for (int i = 0; i< columncount ; i++)
              if ( ( mouseparams.x >= guixpos + i*(guiiconsizex + guigapx))    &&
                   ( mouseparams.y >= guiypos + j*(guiiconsizey + guigapy))    &&
                   ( mouseparams.x <= guixpos + i*(guiiconsizex + guigapx) + guiiconsizex)    &&
@@ -390,13 +390,13 @@ void   GuiHost<T> :: runpressedmouse ( int taste  )
               }
 
 
-       if ((zx != xp) || (zy != yp)) { 
-          if ( zx != -1  && zy != -1  &&  actshownicons[zx][zy] ) 
+       if ((zx != xp) || (zy != yp)) {
+          if ( zx != -1  && zy != -1  &&  actshownicons[zx][zy] )
              actshownicons[zx][zy]->display();
 
           if ( actshownicons[xp][yp] ) {
              actshownicons[xp][yp]->iconpressed();
-       
+
              displaymessage2( actshownicons[xp][yp]->getinfotext() );
              infotextshown = actshownicons[xp][yp];
           }
@@ -420,7 +420,7 @@ void   GuiHost<T> :: runpressedmouse ( int taste  )
 
 
 
-template<class T> 
+template<class T>
 void   GuiHost<T>::checkforkey ( tkey key, int keyprn )
 {
    if ( key == ct_enter ) {
@@ -433,7 +433,7 @@ void   GuiHost<T>::checkforkey ( tkey key, int keyprn )
 
 
 
-template<class T> 
+template<class T>
 void   GuiHost<T>::bi2control (  )
 {
 
@@ -443,29 +443,29 @@ void   GuiHost<T>::bi2control (  )
       char mss = getmousestatus ();
       if (mss == 2)
          mousevisible(false);
-   
+
       actshownicons[xp][yp]->iconpressed();
 
       int msg = displaymessage2( actshownicons[xp][yp]->getinfotext() );
       infotextshown = actshownicons[xp][yp];
-   
+
       int zx = xp;
       int zy = yp;
 
       int newfirstshownline = firstshownline;
 
       tkey ky;
-   
+
       #ifdef NEWKEYB
-      while (skeypress(ct_enter) | skeypress(ct_enterk)) {       
+      while (skeypress(ct_enter) | skeypress(ct_enterk)) {
       #else
       do {
       #endif
 
-            if (keypress()) { 
-               ky = r_key(); 
+            if (keypress()) {
+               ky = r_key();
                if ((ky == ct_up) || (ky == ct_8k)) {
-                  if (yp > 0) 
+                  if (yp > 0)
                      yp--;
                   if ( yp < newfirstshownline )
                      newfirstshownline = yp;
@@ -476,37 +476,37 @@ void   GuiHost<T>::bi2control (  )
                   if ( yp > newfirstshownline+iconspaintable/columncount-1 )
                      newfirstshownline = yp - (iconspaintable/columncount-1);
                }
-               if ((ky == ct_right) || (ky == ct_6k)) { 
-                  if (xp < columncount-1) { 
+               if ((ky == ct_right) || (ky == ct_6k)) {
+                  if (xp < columncount-1) {
                      if ( actshownicons[xp+1][yp] )
                         xp++;
-                  } 
-                  else 
+                  }
+                  else
                      if ( actshownicons[0][yp+1] ) {
-                        xp = 0; 
+                        xp = 0;
                         yp++;
                         if ( yp > newfirstshownline+iconspaintable/columncount-1 )
                            newfirstshownline = yp - (iconspaintable/columncount-1);
-                     } 
-               } 
-               if ((ky == ct_left) || (ky == ct_4k)) { 
-                  if (xp > 0) { 
+                     }
+               }
+               if ((ky == ct_left) || (ky == ct_4k)) {
+                  if (xp > 0) {
                      xp--;
-                  } 
-                  else 
-                     if (yp > 0) { 
+                  }
+                  else
+                     if (yp > 0) {
                         yp--;
-                        xp = columncount-1; 
+                        xp = columncount-1;
                         if ( yp < newfirstshownline )
                            newfirstshownline = yp;
-                     } 
-               } 
+                     }
+               }
                if ( ky == ct_esc )
                   break;
-            } 
-            if ((zx != xp) || (zy != yp)) { 
+            }
+            if ((zx != xp) || (zy != yp)) {
                actshownicons[zx][zy]->display();
-               if ( firstshownline == newfirstshownline ) 
+               if ( firstshownline == newfirstshownline )
                   actshownicons[xp][yp]->iconpressed();
                else {
                   firstshownline = newfirstshownline;
@@ -517,7 +517,7 @@ void   GuiHost<T>::bi2control (  )
                        else
                           if ( actshownicons[ix][iy] )
                              actshownicons[ix][iy]->display();
-                          else 
+                          else
                              putbackground ( ix, iy - firstshownline );
 
 
@@ -529,11 +529,11 @@ void   GuiHost<T>::bi2control (  )
             }
             releasetimeslice();
       #ifdef NEWKEYB
-      }  
+      }
       #else
       } while ( ky != ct_enter );
       #endif
-   
+
       actshownicons[xp][yp]->display();
       if ( ky != ct_esc )
          if ( actshownicons[xp][yp]->available() )
@@ -555,14 +555,14 @@ void   GuiHost<T>::bi2control (  )
 
 
 
-template<class T> 
+template<class T>
 void   GuiHost<T>::init ( int resolutionx, int resolutiony )
 {
    guixpos = resolutionx - guixdif;
    iconspaintable =  (resolutiony - 360) / ( guiiconsizey + guigapy ) * columncount;
 }
 
-template<class T> 
+template<class T>
 void   GuiHost<T>::restorebackground ( void )
 {
    collategraphicoperations cgo ( guixpos, guiypos, guixpos + columncount*(guiiconsizex + guigapx) + guiiconsizex, guiypos + iconspaintable/columncount*(guiiconsizey + guigapy) + guiiconsizey );
@@ -574,26 +574,26 @@ void   GuiHost<T>::restorebackground ( void )
 }
 
 
-template<class T> 
+template<class T>
 T GuiHost<T> :: getfirsticon( void )
 {
    return first_icon;
 }
 
 
-template<class T> 
+template<class T>
 void GuiHost<T> :: setfirsticon( T ic )
 {
    first_icon = ic;
 }
 
-template<class T> 
+template<class T>
 void GuiHost<T>::reset ( void )
 {
    restorebackground();
    numpainted = 0;
    infotextshown = NULL;
-   for (int i = 0; i < iconspaintable ; i++ ) 
+   for (int i = 0; i < iconspaintable ; i++ )
       actshownicons[i%columncount][i/columncount] = NULL;
 }
 
@@ -619,7 +619,7 @@ tnguiicon::tnguiicon ( void )
    for (int i = 0; i < 8; i++) {
       picture[i] = NULL;
       picturepressed[i] = NULL;
-   } 
+   }
 
    host = NULL;
    priority = 0;
@@ -680,7 +680,7 @@ void tnguiicon::sort( pnguiicon last )
       temp = nxt();
       setnxt( frst() );
       setfrst ( this );
-      last->setnxt( temp ); 
+      last->setnxt( temp );
       if ( temp )
          temp->sort ( last );
    } else {
@@ -688,12 +688,12 @@ void tnguiicon::sort( pnguiicon last )
       if ( temp != this ) {
          while ( temp->nxt() != this  && ( temp->nxt()->priority >= priority ) )
             temp = temp->nxt();
-   
+
          if ( temp->nxt()->priority < priority ) {
             pnguiicon temp2 = nxt();
             setnxt ( temp->nxt() );
             temp->setnxt( this  );
-            last->setnxt( temp2 ); 
+            last->setnxt( temp2 );
             if ( temp2 )
                temp2->sort ( last );
          } else
@@ -708,7 +708,7 @@ void tnguiicon::sort( pnguiicon last )
 void   tnguiicon::loaddata ( void )
 {
    std::string tempfilename = filename + ".nic";
-   
+
    {
      tnfilestream stream ( tempfilename.c_str() , tnstream::reading );
      loadspecifics( &stream );
@@ -762,7 +762,7 @@ void  tnguiicon::iconpressed ( void )
 
    if ( host->paintsize == 0 ) {
       char* buf = new char [ imagesize ( 8,8, 40,26 )];
-   
+
       collategraphicoperations cgo ( x, y, x + guiiconsizex, y + guiiconsizey );
       display();
       getimage ( x+8, y+8, x+40, y+26, buf );
@@ -770,7 +770,7 @@ void  tnguiicon::iconpressed ( void )
       putimage ( x+9, y+9, buf );
 
       delete[] buf;
-      
+
    } else {
       char* buf = new char [ imagesize ( 4,4, 20,13 )];
 
@@ -799,7 +799,7 @@ int  tnguiicon::pressedbymouse( void )
       } else {
          xs = guismalliconsizex;
          ys = guismalliconsizey;
-      } 
+      }
 
       if ( ! ( mouseparams.x >= x   &&  mouseparams.y >= y   &&  mouseparams.x <= x+xs   &&  mouseparams.y <= y+ys  ))
          return 0;
@@ -865,11 +865,11 @@ void   tnguiicon::sethost ( BasicGuiHost* hst )
       nxt()->sethost( hst );
 }
 
-void tnguiicon::display      ( void ) 
+void tnguiicon::display      ( void )
 {
    host->returncoordinates ( this, &x, &y );
 
-   if ( x == -1   ||    y == -1 ) 
+   if ( x == -1   ||    y == -1 )
       return;
 
    putpict ( picture[0] );
@@ -936,7 +936,7 @@ tnguiicon:: ~tnguiicon (  )
 
       if ( picturepressed[i] )
          delete[] picturepressed[i];
-   } 
+   }
 }
 
 
@@ -945,23 +945,23 @@ tnguiicon:: ~tnguiicon (  )
 
 
 
-tnsguiiconmove::tnsguiiconmove  ( void ) 
+tnsguiiconmove::tnsguiiconmove  ( void )
                :vehicleMovement ( NULL )
 {
    filename = "movement";
 }
-          
 
-int   tnsguiiconmove::available    ( void ) 
+
+int   tnsguiiconmove::available    ( void )
 {
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
-      Vehicle* eht = getactfield()->vehicle; 
-      if ( eht ) 
-         if ( eht->color == actmap->actplayer * 8) 
+      Vehicle* eht = getactfield()->vehicle;
+      if ( eht )
+         if ( eht->color == actmap->actplayer * 8)
             if ( vehicleMovement.available ( eht ))
-               return 1; 
-   } 
-   else 
+               return 1;
+   }
+   else
       if ( pendingVehicleActions.actionType == vat_move ) {
          switch ( pendingVehicleActions.move->getStatus() ) {
            case 2: return pendingVehicleActions.move->reachableFields.isMember ( getxpos(), getypos() );
@@ -972,7 +972,7 @@ int   tnsguiiconmove::available    ( void )
    return 0;
 }
 
-void  tnsguiiconmove::exec         ( void ) 
+void  tnsguiiconmove::exec         ( void )
 {
    if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
       new VehicleMovement ( &defaultMapDisplay, &pendingVehicleActions );
@@ -987,7 +987,7 @@ void  tnsguiiconmove::exec         ( void )
          delete pendingVehicleActions.action;
          return;
       }
-      for ( int i = 0; i < pendingVehicleActions.move->reachableFields.getFieldNum(); i++ ) 
+      for ( int i = 0; i < pendingVehicleActions.move->reachableFields.getFieldNum(); i++ )
          pendingVehicleActions.move->reachableFields.getField( i ) ->a.temp = 1;
 
       // if ( !CGameOptions::Instance()->dontMarkFieldsNotAccessible_movement )
@@ -998,7 +998,7 @@ void  tnsguiiconmove::exec         ( void )
    } else {
      if ( !pendingVehicleActions.move )
         return;
-        
+
      int ms = pendingVehicleActions.move->getStatus();
      if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_move &&  (ms == 2 || ms == 3 )) {
         int res;
@@ -1028,7 +1028,7 @@ void  tnsguiiconmove::exec         ( void )
 
         if ( pendingVehicleActions.move->getStatus() == 1000 ) {
            delete pendingVehicleActions.move;
-   
+
            if ( CGameOptions::Instance()->smallguiiconopenaftermove ) {
               actgui->painticons();
               actgui->paintsmallicons ( CGameOptions::Instance()->mouse.smallguibutton, 0 );
@@ -1041,11 +1041,11 @@ void  tnsguiiconmove::exec         ( void )
 
 }
 
-void  tnsguiiconmove::display      ( void ) 
+void  tnsguiiconmove::display      ( void )
 {
    host->returncoordinates ( this, &x, &y );
 
-   if ( x == -1   ||    y == -1 ) 
+   if ( x == -1   ||    y == -1 )
       return;
 
    int h = chfahrend;
@@ -1079,19 +1079,19 @@ tnsguiiconattack::tnsguiiconattack ( void )
 
 
 
-int   tnsguiiconattack::available    ( void ) 
+int   tnsguiiconattack::available    ( void )
 {
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
-      Vehicle* eht = getactfield()->vehicle; 
-      if ( eht ) 
-         if ( eht->color == actmap->actplayer * 8) 
+      Vehicle* eht = getactfield()->vehicle;
+      if ( eht )
+         if ( eht->color == actmap->actplayer * 8)
             if ( vehicleAttack.available ( eht ))
-               return 1; 
-   } 
+               return 1;
+   }
    return 0;
 }
 
-void  tnsguiiconattack::exec         ( void ) 
+void  tnsguiiconattack::exec         ( void )
 {
    if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
       new VehicleAttack ( &defaultMapDisplay, &pendingVehicleActions );
@@ -1105,11 +1105,11 @@ void  tnsguiiconattack::exec         ( void )
       }
 
       int i;
-      for ( i = 0; i < pendingVehicleActions.attack->attackableVehicles.getFieldNum(); i++ ) 
+      for ( i = 0; i < pendingVehicleActions.attack->attackableVehicles.getFieldNum(); i++ )
          pendingVehicleActions.attack->attackableVehicles.getField( i ) ->a.temp = 1;
-      for ( i = 0; i < pendingVehicleActions.attack->attackableBuildings.getFieldNum(); i++ ) 
+      for ( i = 0; i < pendingVehicleActions.attack->attackableBuildings.getFieldNum(); i++ )
          pendingVehicleActions.attack->attackableBuildings.getField( i ) ->a.temp = 1;
-      for ( i = 0; i < pendingVehicleActions.attack->attackableObjects.getFieldNum(); i++ ) 
+      for ( i = 0; i < pendingVehicleActions.attack->attackableObjects.getFieldNum(); i++ )
          pendingVehicleActions.attack->attackableObjects.getField( i ) ->a.temp = 1;
 
       displaymap();
@@ -1135,9 +1135,9 @@ tnsguiiconascent::tnsguiiconascent ( void )
    filename = "ascent";
 }
 
-int   tnsguiiconascent::available    ( void ) 
+int   tnsguiiconascent::available    ( void )
 {
-   if ( moveparams.movestatus == 0 && !pendingVehicleActions.action ) { 
+   if ( moveparams.movestatus == 0 && !pendingVehicleActions.action ) {
       Vehicle* eht = getactfield()->vehicle;
       if ( !eht )
          return 0;
@@ -1256,14 +1256,14 @@ tnsguiicondescent::tnsguiicondescent ( void )
 
 
 
-int   tnsguiicondescent::available    ( void ) 
+int   tnsguiicondescent::available    ( void )
 {
    if ( moveparams.movestatus == 0 && !pendingVehicleActions.action ) {
       Vehicle* eht = getactfield()->vehicle;
       if ( !eht )
          return 0;
 
-      if (eht->color == actmap->actplayer * 8) 
+      if (eht->color == actmap->actplayer * 8)
          return decreaseVehicleHeight.available ( eht );
    } else
       if ( pendingVehicleActions.actionType == vat_descent ) {
@@ -1372,26 +1372,26 @@ tnsguiiconinformation::tnsguiiconinformation ( void )
 
 
 
-int   tnsguiiconinformation::available    ( void ) 
+int   tnsguiiconinformation::available    ( void )
 {
-    Vehicle* eht = getactfield()->vehicle; 
-    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
-    if (eht != NULL)      
+    Vehicle* eht = getactfield()->vehicle;
+    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
+    if (eht != NULL)
        if (fieldvisiblenow(getactfield()))
-          return 1; 
+          return 1;
    return 0;
 }
 
-void  tnsguiiconinformation::exec         ( void ) 
+void  tnsguiiconinformation::exec         ( void )
 {
-   vehicle_information(); 
+   vehicle_information();
 }
 
-void  tnsguiiconinformation::display      ( void ) 
+void  tnsguiiconinformation::display      ( void )
 {
    host->returncoordinates ( this, &x, &y );
 
-   if ( x == -1   ||    y == -1 ) 
+   if ( x == -1   ||    y == -1 )
       return;
 
    int h = getactfield()->vehicle->typ->height ;
@@ -1426,16 +1426,16 @@ tnsguiiconendturn::tnsguiiconendturn ( void )
 
 
 
-int   tnsguiiconendturn::available    ( void ) 
+int   tnsguiiconendturn::available    ( void )
 {
-   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
-      if (actmap->levelfinished == false) 
-         return 1; 
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
+      if (actmap->levelfinished == false)
+         return 1;
    return 0;
 }
 
 
-void  tnsguiiconendturn::exec         ( void ) 
+void  tnsguiiconendturn::exec         ( void )
 {
    if ( !CGameOptions::Instance()->endturnquestion || (choice_dlg("do you really want to end your turn ?","~y~es","~n~o") == 1)) {
 
@@ -1451,11 +1451,11 @@ void  tnsguiiconendturn::exec         ( void )
 
       strcat ( name, &savegameextension[1] );
       savegame ( name );
-  
+
       autosave = !autosave;
-  
+
       next_turn();
-  
+
       displaymap();
       cursor.show();
    }
@@ -1467,16 +1467,16 @@ tnsguiiconexternalloading::tnsguiiconexternalloading ( void )
    filename = "extload";
 }
 
-int   tnsguiiconexternalloading::available    ( void ) 
+int   tnsguiiconexternalloading::available    ( void )
 {
-   if (moveparams.movestatus == 130) 
+   if (moveparams.movestatus == 130)
       if ( getactfield()->a.temp == 123 )
-         return 1; 
+         return 1;
 
    return 0;
 }
 
-void  tnsguiiconexternalloading::exec         ( void ) 
+void  tnsguiiconexternalloading::exec         ( void )
 {
    moveparams.movestatus++;
 }
@@ -1489,19 +1489,19 @@ tnsguiiconpoweron::tnsguiiconpoweron ( void )
    filename = "poweron";
 }
 
-int   tnsguiiconpoweron::available    ( void ) 
+int   tnsguiiconpoweron::available    ( void )
 {
-   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) 
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing )
       if ( getactfield()->vehicle )
          if ( getactfield()->vehicle->color == actmap->actplayer*8  &&
               (getactfield()->vehicle->typ->functions & cfgenerator))
               if ( !getactfield()->vehicle->getGeneratorStatus() )
                  return 1;
 
-  return 0;         
+  return 0;
 }
 
-void  tnsguiiconpoweron::exec         ( void ) 
+void  tnsguiiconpoweron::exec         ( void )
 {
    getactfield()->vehicle->setGeneratorStatus ( true );
    logtoreplayinfo ( rpl_setGeneratorStatus, getactfield()->vehicle->networkid, int(1) );
@@ -1547,7 +1547,7 @@ tnsguiiconconstructvehicle::tnsguiiconconstructvehicle ( void )
 
 
 
-int   tnsguiiconconstructvehicle::available    ( void ) 
+int   tnsguiiconconstructvehicle::available    ( void )
 {
   if ( actmap->getgameparameter(cgp_forbid_unitunit_construction) == 1 )
       return 0;
@@ -1588,27 +1588,27 @@ tnsguiiconputmine::tnsguiiconputmine ( void )
 
 
 
-int   tnsguiiconputmine::available    ( void ) 
+int   tnsguiiconputmine::available    ( void )
 {
-   pfield fld = getactfield(); 
-   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
-      if ( fld->vehicle ) 
-         if (fld->vehicle->color == actmap->actplayer * 8) 
+   pfield fld = getactfield();
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
+      if ( fld->vehicle )
+         if (fld->vehicle->color == actmap->actplayer * 8)
             if (fld->vehicle->typ->functions & cfminenleger )
                if ( !fld->vehicle->attacked )
-                  return true; 
+                  return true;
    return 0;
 }
 
-void  tnsguiiconputmine::exec         ( void ) 
+void  tnsguiiconputmine::exec         ( void )
 {
-   legemine(0, 0); 
+   legemine(0, 0);
    dashboard.x = 0xffff;
    displaymap();
 }
 
 void tnsguiiconputmine::loadspecifics ( pnstream stream )
-{  
+{
    char buf[1000];
    char buf2[1000];
    tnsguiicon::loadspecifics ( stream );
@@ -1619,10 +1619,10 @@ void tnsguiiconputmine::loadspecifics ( pnstream stream )
 }
 
 
-int   tnsguiiconputgroundmine::available    ( void ) 
+int   tnsguiiconputgroundmine::available    ( void )
 {
-   if (moveparams.movestatus == 90) { 
-      pfield fld = getactfield(); 
+   if (moveparams.movestatus == 90) {
+      pfield fld = getactfield();
       if ( (fld->bdt & (getTerrainBitType( cbwater ).flip())).any() )
          if ( fld->a.temp & 1)
             if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
@@ -1730,19 +1730,19 @@ tnsguiiconremovemine::tnsguiiconremovemine ( void )
 
 
 
-int   tnsguiiconremovemine::available    ( void ) 
+int   tnsguiiconremovemine::available    ( void )
 {
-   if (moveparams.movestatus == 90) { 
-      pfield fld = getactfield(); 
-      if ( fld->a.temp ) 
+   if (moveparams.movestatus == 90) {
+      pfield fld = getactfield();
+      if ( fld->a.temp )
          return !fld->mines.empty();
    }
    return 0;
 }
 
-void  tnsguiiconremovemine::exec         ( void ) 
+void  tnsguiiconremovemine::exec         ( void )
 {
-   legemine(0, -1);  
+   legemine(0, -1);
    displaymap();
 }
 
@@ -1760,21 +1760,21 @@ tnsguiiconbuildany::tnsguiiconbuildany ( void )
 
 
 
-int   tnsguiiconbuildany::available    ( void ) 
+int   tnsguiiconbuildany::available    ( void )
 {
    pfield fld = getactfield();
-   if ( fld->vehicle ) 
-      if (fld->vehicle->color == actmap->actplayer * 8) 
+   if ( fld->vehicle )
+      if (fld->vehicle->color == actmap->actplayer * 8)
          if ( fld->vehicle->typ->objectsBuildable.size() || fld->vehicle->typ->objectsRemovable.size() || fld->vehicle->typ->objectGroupsBuildable.size() || fld->vehicle->typ->objectGroupsRemovable.size())
-            if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
+            if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
                if ( !fld->vehicle->attacked )
-                  return true; 
+                  return true;
    return 0;
 }
 
-void  tnsguiiconbuildany::exec         ( void ) 
+void  tnsguiiconbuildany::exec         ( void )
 {
-   setspec(0); 
+   setspec(0);
    displaymap();
 }
 
@@ -1855,7 +1855,7 @@ void  tnsguiiconrepair::exec         ( void )
 }
 
 void tnsguiiconrepair::loadspecifics ( pnstream stream )
-{  
+{
    char buf[1000];
    char buf2[1000];
    tnsguiicon::loadspecifics ( stream );
@@ -1865,7 +1865,7 @@ void tnsguiiconrepair::loadspecifics ( pnstream stream )
    infotext = buf;
 }
 
-            
+
 
 
 
@@ -1955,24 +1955,24 @@ void  tnsguiiconrefuel::exec         ( void )
 }
 
 
-void  tnsguiiconrefuel::display      ( void ) 
+void  tnsguiiconrefuel::display      ( void )
 {
    host->returncoordinates ( this, &x, &y );
 
-   if ( x == -1   ||    y == -1 ) 
+   if ( x == -1   ||    y == -1 )
       return;
 
    int pict = 0;
 
    /*
-   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) { 
-      pfield fld = getactfield(); 
-      if ( fld->vehicle ) 
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
+      pfield fld = getactfield();
+      if ( fld->vehicle )
          if ( fld->vehicle->typ->functions & cffuelref  )
-            pict = 0; 
-   } else 
+            pict = 0;
+   } else
       if ( getfield(moveparams.movesx,moveparams.movesy)->vehicle->typ->functions & cffuelref  )
-         pict = 0; 
+         pict = 0;
    */
    putpict ( picture[pict] );
 }
@@ -2023,45 +2023,45 @@ tnsguiiconputbuilding::tnsguiiconputbuilding ( void )
 
 
 
-int   tnsguiiconputbuilding::available    ( void ) 
+int   tnsguiiconputbuilding::available    ( void )
 {
    if ( actmap->getgameparameter(cgp_forbid_building_construction) )
       return 0;
 
     pfield fld = getactfield();
-    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) { 
+    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
        if ( fld->vehicle )
-          if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() ) 
+          if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() )
              if (fld->vehicle->color == actmap->actplayer * 8)
                if (fld->vehicle->typ->functions & (cfputbuilding | cfspecificbuildingconstruction))
                   return 1;
-    } 
-    else 
-       if (moveparams.movestatus == 111) { 
-          if (fld->a.temp == 20) 
-             return 2; 
-       } 
-       else 
-          if (moveparams.movestatus == 112) 
-             if (fld->a.temp == 23) 
-                return 3; 
-                    
+    }
+    else
+       if (moveparams.movestatus == 111) {
+          if (fld->a.temp == 20)
+             return 2;
+       }
+       else
+          if (moveparams.movestatus == 112)
+             if (fld->a.temp == 23)
+                return 3;
+
    return 0;
 }
 
-void  tnsguiiconputbuilding::exec         ( void ) 
+void  tnsguiiconputbuilding::exec         ( void )
 {
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
-      putbuildinglevel1(); 
+      putbuildinglevel1();
       displaymap();
    }
-   else 
+   else
       if (moveparams.movestatus == 111) {
-         putbuildinglevel2(moveparams.buildingtobuild, getxpos(), getypos()); 
+         putbuildinglevel2(moveparams.buildingtobuild, getxpos(), getypos());
          displaymap();
-      } else 
+      } else
          if (moveparams.movestatus == 112) {
-            putbuildinglevel3( getxpos(), getypos()); 
+            putbuildinglevel3( getxpos(), getypos());
             displaymap();
             dashboard.x = 0xffff;
          }
@@ -2077,33 +2077,33 @@ tnsguiicondestructbuilding::tnsguiicondestructbuilding ( void )
 
 
 
-int   tnsguiicondestructbuilding::available    ( void ) 
+int   tnsguiicondestructbuilding::available    ( void )
 {
     pfield fld = getactfield();
-    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) { 
+    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
        if ( fld->vehicle )
-          if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() ) 
+          if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() )
              if (fld->vehicle->color == actmap->actplayer * 8)
                if ((fld->vehicle->typ->functions & cfputbuilding) || !fld->vehicle->typ->buildingsBuildable.empty() )
                   if ( fld->vehicle->getTank().fuel >= destruct_building_fuel_usage * fld->vehicle->typ->fuelConsumption )
                      return 1;
-    } 
-    else 
-       if (moveparams.movestatus == 115) { 
-          if (fld->a.temp == 20) 
-             return 2; 
-       } 
-                    
+    }
+    else
+       if (moveparams.movestatus == 115) {
+          if (fld->a.temp == 20)
+             return 2;
+       }
+
    return 0;
 }
 
-void  tnsguiicondestructbuilding::exec         ( void ) 
+void  tnsguiicondestructbuilding::exec         ( void )
 {
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
-      destructbuildinglevel1( getxpos(), getypos() ); 
+      destructbuildinglevel1( getxpos(), getypos() );
       displaymap();
    }
-   else 
+   else
       if (moveparams.movestatus == 115) {
          destructbuildinglevel2( getxpos(), getypos());
          dashboard.x = -1;
@@ -2121,18 +2121,18 @@ tnsguiicondig::tnsguiicondig ( void )
 
 
 
-int   tnsguiicondig::available    ( void ) 
+int   tnsguiicondig::available    ( void )
 {
    pfield fld = getactfield();
-   if (fld->vehicle != NULL) 
-      if (fld->vehicle->color == actmap->actplayer * 8) 
+   if (fld->vehicle != NULL)
+      if (fld->vehicle->color == actmap->actplayer * 8)
          if ( (fld->vehicle->typ->functions &  cfmanualdigger) && !(fld->vehicle->typ->functions &  cfautodigger) )
             if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
                return fld->vehicle->searchForMineralResourcesAvailable();
    return 0;
 }
 
-void  tnsguiicondig::exec         ( void ) 
+void  tnsguiicondig::exec         ( void )
 {
     getactfield()->vehicle->searchForMineralResources( ) ;
     showresources = 1;
@@ -2153,14 +2153,14 @@ tnsguiiconviewmap::tnsguiiconviewmap ( void )
 
 
 
-int   tnsguiiconviewmap::available    ( void ) 
+int   tnsguiiconviewmap::available    ( void )
 {
    if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
       return true;
    return false;
 }
 
-void  tnsguiiconviewmap::exec         ( void ) 
+void  tnsguiiconviewmap::exec         ( void )
 {
     cursor.hide();
     showmap ();
@@ -2175,11 +2175,11 @@ tnsguiiconenablereactionfire::tnsguiiconenablereactionfire ( void )
    filename = "reacfire";
 }
 
-int   tnsguiiconenablereactionfire::available    ( void ) 
+int   tnsguiiconenablereactionfire::available    ( void )
 {
    Vehicle* eht = getactfield()->vehicle;
    if ( eht )
-      if ( eht->color == actmap->actplayer * 8) 
+      if ( eht->color == actmap->actplayer * 8)
          if ( eht->reactionfire.getStatus() == Vehicle::ReactionFire::off )
             if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
                if ( eht->weapexist() )
@@ -2189,7 +2189,7 @@ int   tnsguiiconenablereactionfire::available    ( void )
 
 }
 
-void  tnsguiiconenablereactionfire::exec         ( void ) 
+void  tnsguiiconenablereactionfire::exec         ( void )
 {
    int res = getactfield()->vehicle->reactionfire.enable();
    if ( res < 0 )
@@ -2205,11 +2205,11 @@ tnsguiicondisablereactionfire::tnsguiicondisablereactionfire ( void )
    filename = "reacfoff";
 }
 
-int   tnsguiicondisablereactionfire::available    ( void ) 
+int   tnsguiicondisablereactionfire::available    ( void )
 {
    Vehicle* eht = getactfield()->vehicle;
    if ( eht )
-      if ( eht->color == actmap->actplayer * 8) 
+      if ( eht->color == actmap->actplayer * 8)
          if ( eht->reactionfire.getStatus() != Vehicle::ReactionFire::off )
             if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
                // if ( eht->weapexist() )
@@ -2219,7 +2219,7 @@ int   tnsguiicondisablereactionfire::available    ( void )
 
 }
 
-void  tnsguiicondisablereactionfire::exec         ( void ) 
+void  tnsguiicondisablereactionfire::exec         ( void )
 {
    getactfield()->vehicle->reactionfire.disable();
    dashboard.x = 0xffff;
@@ -2239,17 +2239,17 @@ tnsguiiconcontainer ::tnsguiiconcontainer ( void )
    containeractive = 0;
 }
 
-int tnsguiiconcontainer :: available    ( void ) 
+int tnsguiiconcontainer :: available    ( void )
 {
   pfield fld = getactfield();
   if ( fieldvisiblenow ( fld ))
      if ( !containeractive && !moveparams.movestatus && pendingVehicleActions.actionType == vat_nothing && !pendingVehicleActions.action )
-        if ( fld->building  &&  ((fld->building->color == actmap->actplayer * 8) || (fld->building->color == 8*8) )) 
+        if ( fld->building  &&  ((fld->building->color == actmap->actplayer * 8) || (fld->building->color == 8*8) ))
            if ( fld->building->getCompletion() == fld->building->typ->construction_steps-1 )
               return 1;
            else
               return 0;
-         else 
+         else
            if ( fld->vehicle && fld->vehicle->typ->maxLoadableUnits  &&  fld->vehicle->color == actmap->actplayer * 8 )
               return 1;
            else
@@ -2258,14 +2258,14 @@ int tnsguiiconcontainer :: available    ( void )
   return 0;
 }
 
-void tnsguiiconcontainer :: exec         ( void ) 
+void tnsguiiconcontainer :: exec         ( void )
 {
    containeractive++;
    mousecontrol->reset();
    pfield fld = getactfield ();
    /*
    if ( fld->vehicle && fld->building )
-      displaymessage( "gui.cpp   tnsguiiconcontainer :: exec  ; both unit and building on a field", 1 ); 
+      displaymessage( "gui.cpp   tnsguiiconcontainer :: exec  ; both unit and building on a field", 1 );
    */
    container( fld->vehicle, fld->building );
    containeractive--;
@@ -2284,7 +2284,7 @@ tnsguiiconcancel::tnsguiiconcancel ( void )
 
 
 
-int   tnsguiiconcancel::available    ( void ) 
+int   tnsguiiconcancel::available    ( void )
 {
    if ( moveparams.movestatus || pendingVehicleActions.action )
       return 1;
@@ -2293,16 +2293,16 @@ int   tnsguiiconcancel::available    ( void )
    return 0;
 }
 
-void  tnsguiiconcancel::exec         ( void ) 
+void  tnsguiiconcancel::exec         ( void )
 {
    if ( moveparams.movestatus || pendingVehicleActions.action ) {
-      moveparams.movestatus = 0; 
-      if ( pendingVehicleActions.action ) 
+      moveparams.movestatus = 0;
+      if ( pendingVehicleActions.action )
          delete pendingVehicleActions.action;
-      
-      actmap->cleartemps(7); 
+
+      actmap->cleartemps(7);
       dashboard.x = 0xffff;
-      displaymap(); 
+      displaymap();
    }
 }
 
@@ -2338,7 +2338,7 @@ void tselectobjectcontainerguihost ::reset ( void )
 {
    SelectObjectBaseGuiHost::reset();
    cancel = 0;
-}  
+}
 
 
 
@@ -2359,7 +2359,7 @@ void    tselectvehiclecontainerguihost :: init ( int resolutionx, int resolution
 
    icons[0]->frst()->sethost ( this );
    setfirsticon ( (pnputvehiclecontainerguiicon) icons[0]->frst() );
-                
+
 }
 
 void tselectvehiclecontainerguihost ::reset ( Vehicle* _constructingvehicle )
@@ -2368,7 +2368,7 @@ void tselectvehiclecontainerguihost ::reset ( Vehicle* _constructingvehicle )
 
    SelectVehicleBaseGuiHost::reset();
    cancel = 0;
-}  
+}
 
 
 
@@ -2380,10 +2380,10 @@ tselectbuildingguihost :: tselectbuildingguihost( void )
 {
     selectedbuilding = NULL;
     vehicle = NULL;
-}   
+}
 
 void    tselectbuildingguihost :: init ( int resolutionx, int resolutiony )
-{                                      
+{
    SelectBuildingBaseGuiHost :: init ( resolutionx, resolutiony );
    icons = new ( pnputbuildingguiicon[ buildingTypeRepository.getNum() ] );
    for (int i = 0; i < buildingTypeRepository.getNum() ; i++ )
@@ -2402,7 +2402,7 @@ void tselectbuildingguihost ::reset ( Vehicle* v )
    vehicle = v;
    SelectBuildingBaseGuiHost::reset();
    selectedbuilding = NULL;
-              
+
    cancel = 0;
 }
 
@@ -2494,7 +2494,7 @@ tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( pobjecttype obj, in
    }
 
 }
-                                                                                                                             
+
 
 
 pnguiicon   tnputobjectcontainerguiicon::frst( void )
@@ -2509,7 +2509,7 @@ void        tnputobjectcontainerguiicon::setfrst  ( pnguiicon ts )
 
 void              tnputobjectcontainerguiicon::exec( void )
 {
-   if ( object ) 
+   if ( object )
       setspec ( object );
    else
       build_objects_reset();
@@ -2525,10 +2525,10 @@ int         tnputobjectcontainerguiicon::available( void )
       } else {
          if ( object_removeable ( getxpos(), getypos(), object ))
             return true;
-      }     
-   
+      }
+
       return false;
-   } else 
+   } else
       return 1;
 }
 
@@ -2556,7 +2556,7 @@ tnputvehiclecontainerguiicon :: tnputvehiclecontainerguiicon ( pvehicletype obj 
    }
 
 }
-                                                                                                                             
+
 
 pnguiicon   tnputvehiclecontainerguiicon::frst( void )
 {
@@ -2570,7 +2570,7 @@ void        tnputvehiclecontainerguiicon::setfrst  ( pnguiicon ts )
 
 void              tnputvehiclecontainerguiicon::exec( void )
 {
-   if ( vehicle ) 
+   if ( vehicle )
       constructvehicle ( vehicle );
    else
       build_vehicles_reset();
@@ -2587,14 +2587,14 @@ int         tnputvehiclecontainerguiicon::available( void )
          Vehicle* actvehicle = bldhost->constructingvehicle;
 
          for ( int i = 0; i < actvehicle->typ->vehiclesBuildable.size(); i++ )
-           for ( int j = actvehicle->typ->vehiclesBuildable[i].from; j <= actvehicle->typ->vehiclesBuildable[i].to; j++ ) 
+           for ( int j = actvehicle->typ->vehiclesBuildable[i].from; j <= actvehicle->typ->vehiclesBuildable[i].to; j++ )
               if ( j == vehicle->id )
                  if ( actvehicle->vehicleconstructable ( vehicle, getxpos(), getypos() ))
                     return 1;
 
       }
       return false;
-   } else 
+   } else
       return 1;
 }
 
@@ -2606,7 +2606,7 @@ tselectweaponguihost::tselectweaponguihost ( void )
 void tselectweaponguihost :: init ( int resolutionx, int resolutiony )
 {
     SelectWeaponBaseGuiHost :: init ( resolutionx, resolutiony );
-   
+
     // Vehicle* eht = getfield(moveparams.movesx,moveparams.movesy)->vehicle;
     // pattackweap atw = attackpossible(eht, getxpos(),getypos());
 
@@ -2619,9 +2619,9 @@ void tselectweaponguihost :: init ( int resolutionx, int resolutiony )
        else
           if ( pendingVehicleActions.attack->attackableObjects.isMember ( getxpos(), getypos() ))
              atw = &pendingVehicleActions.attack->attackableObjects.getData( getxpos(), getypos() );
- 
+
     getfirsticon()->setup ( atw, 0 );
-    
+
     x = getxpos();
     y = getypos();
 }
@@ -2641,7 +2641,7 @@ void    tselectweaponguihost ::  checkforkey ( tkey key, int keyprn )
 
 void    tselectweaponguihost ::  checkformouse ( void )
 {
-   checkcoordinates();        
+   checkcoordinates();
    SelectWeaponBaseGuiHost::checkformouse ( );
 }
 
@@ -2649,7 +2649,7 @@ void    tselectweaponguihost ::  checkcoordinates ( void )
 {
    if ( x != getxpos()   ||  y != getypos()  )
       init ( hgmp->resolutionx, hgmp->resolutiony );
-                                                          
+
 }
 
 
@@ -2662,7 +2662,7 @@ tnweapselguiicon::tnweapselguiicon ( void )
    first = this;
    iconnum = -1;
    weapnum = -1;
-   typ = -1;                   
+   typ = -1;
    strength = -1;
 }
 
@@ -2697,15 +2697,15 @@ const char*       tnweapselguiicon::getinfotext  ( void )
 
       tfight* battle;
 
-      if ( fld->vehicle ) 
+      if ( fld->vehicle )
          battle = new tunitattacksunit ( eht, fld->vehicle, 1, weapnum );
       else
-      if ( fld->building ) 
+      if ( fld->building )
          battle = new tunitattacksbuilding ( eht, getxpos(), getypos(), weapnum );
       else
       if ( !fld->objects.empty() )
          battle = new tunitattacksobject ( eht, getxpos(), getypos(), weapnum );
-      
+
 
       int dd = battle->dv.damage;
       int ad = battle->av.damage;
@@ -2988,7 +2988,7 @@ trguiicon_cancel::trguiicon_cancel ( void )
 
 
 
-int   trguiicon_cancel::available    ( void ) 
+int   trguiicon_cancel::available    ( void )
 {
    if ( forcedeneable )
       return 2;
