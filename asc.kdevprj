@@ -30,11 +30,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/controls.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/spfst.h,/home/martin/asc/source/spfst.cpp,/home/martin/asc/source/unitctrl.h,/home/martin/asc/source/unitctrl.cpp,/home/martin/asc/source/libs/triangul/Makefile.am,/home/martin/asc/source/libs/triangul/Makefile.in,/home/martin/asc/source/gui.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/sdl/sound.cpp,/home/martin/asc/source/sdl/timer.cpp,/usr/local/lib/gcc-lib/i586-pc-linux-gnu/2.95.2/include/new.h,/home/martin/asc/source/edmain.cpp,/home/martin/asc/source/spfst.cpp,/home/martin/asc/source/network.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/libs/triangul/Makefile.am
-cpp_file=/home/martin/asc/source/spfst.cpp
+header_file=/usr/local/lib/gcc-lib/i586-pc-linux-gnu/2.95.2/include/new.h
+cpp_file=/home/martin/asc/source/network.cpp
 browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/reference/C/FUNCTIONS/format.html
 [source/controls.cpp]
 install_location=

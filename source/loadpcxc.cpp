@@ -1,6 +1,10 @@
-//     $Id: loadpcxc.cpp,v 1.3 1999-12-28 21:03:07 mbickel Exp $
+//     $Id: loadpcxc.cpp,v 1.4 2000-05-23 21:09:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/12/28 21:03:07  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.2  1999/12/27 13:00:06  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -204,7 +208,7 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
 } 
 
 
-char loadpcxxy (char *name, boolean setpal, word x, word y)
+char loadpcxxy (char *name, char setpal, word x, word y)
 {
    tnfilestream s ( name, 1 );
    return loadpcxxy ( &s, x, y, setpal );
