@@ -1,6 +1,9 @@
-//     $Id: loaders.cpp,v 1.11 2000-05-25 11:07:44 mbickel Exp $
+//     $Id: loaders.cpp,v 1.12 2000-06-28 18:31:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/05/25 11:07:44  mbickel
+//      Added functions to check files for valid mail / savegame files.
+//
 //     Revision 1.10  2000/05/06 19:57:09  mbickel
 //      Mapeditor/linux is now running
 //
@@ -1451,8 +1454,10 @@ void    tspfldloaders::writemap ( void )
           // if (spfld->player[w].name)
           //    stream->writepchar ( spfld->player[w].name );
 
-          if (spfld->player[w].aiparams)
+         /*
+          if (spfld->player[w].ai)
              stream->writedata2 ( *spfld->player[w].aiparams );
+         */
 
           if ( spfld->humanplayername[w] )
              stream->writepchar ( spfld->humanplayername[w] );
@@ -1613,10 +1618,13 @@ void     tspfldloaders::readmap ( void )
           spfld->player[w].name = NULL;
        }
           
+      /*
        if (spfld->player[w].aiparams) {
           spfld->player[w].aiparams = new ( taiparams );
           stream->readdata2 ( *spfld->player[w].aiparams );
        }
+      */
+       spfld->player[w].ai = NULL;
 
 
        #ifdef logging
@@ -1796,15 +1804,17 @@ void     tspfldloaders::readmap ( void )
 void           tspfldloaders::freespfld()
 {
    if ( spfld ) {
+
       if ( spfld->title )
          delete[] spfld->title;
+
       if ( spfld->campaign )
          delete spfld->campaign;
-
-      for (char w=0; w<8 ; w++ )
-
-         if (spfld->player[w].aiparams) 
-            delete spfld->player[w].aiparams;
+     
+      for ( int w=0; w<8 ; w++ )
+         if ( spfld->player[w].ai ) 
+            delete spfld->player[w].ai;
+     
 
       delete spfld;
    }
@@ -3334,7 +3344,7 @@ void treplayloaders :: savereplay ( int num )
       replayfield.player[i].unreadmessage = NULL;
       replayfield.player[i].oldmessage = NULL;
       replayfield.player[i].sentmessage = NULL;
-      replayfield.player[i].aiparams = NULL;
+      replayfield.player[i].ai = NULL;
       replayfield.player[i].research.activetechnology = NULL;
       replayfield.player[i].research.developedtechnologies = NULL;
       replayfield.humanplayername[i] = NULL;
@@ -3574,12 +3584,9 @@ void         erasemap( pmap spfld )
       spfld->player[i].firstbuilding = NULL; 
 
 
-      if ( spfld->player[i].aiparams ) {
-         #ifdef logging
-         logtofile ( "5/loaders.cpp / erasemap / deleting aiparams ");
-         #endif
-         delete  ( spfld->player[i].aiparams );
-         spfld->player[i].aiparams = NULL;
+      if ( spfld->player[i].ai ) {
+         delete spfld->player[i].ai;
+         spfld->player[i].ai = NULL;
       }
 
 
@@ -3808,9 +3815,9 @@ void         erasemap_unchained( tmap* spfld )
    } /* endfor */
 
    for (i=0; i<9 ; i++) {
-      if ( spfld->player[i].aiparams ) {
-         delete  ( spfld->player[i].aiparams );
-         spfld->player[i].aiparams = NULL;
+      if ( spfld->player[i].ai  ) {
+         delete spfld->player[i].ai;
+         spfld->player[i].ai = NULL;
       }
 
 
@@ -3996,7 +4003,6 @@ void         loadallvehicletypes(void)
              t->steigung = 0;
 
           addvehicletype ( t );
-
           if ( verbosity >= 2)
             printf("vehicletype %s loaded\n", c );
 

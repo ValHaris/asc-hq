@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.38 2000-06-23 09:24:15 mbickel Exp $
+//     $Id: controls.cpp,v 1.39 2000-06-28 18:30:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2000/06/23 09:24:15  mbickel
+//      Fixed crash in replay
+//      enabled cursor movement in stredit
+//
 //     Revision 1.37  2000/06/19 20:05:04  mbickel
 //      Fixed crash when transfering ammo to vehicle with > 8 weapons
 //
@@ -550,20 +554,20 @@ void         putbuildinglevel3(integer      x,
          int mf = actmap->getgameparameter ( cgp_building_material_factor );
          int ff = actmap->getgameparameter ( cgp_building_fuel_factor );
       
-         if (eht->material < bld->produktionskosten.material * mf / 100 ) { 
+         if (eht->material < bld->productioncost.material * mf / 100 ) { 
             displaymessage("not enough material!",1); 
             eht->material = 0; 
          } 
          else 
-            eht->material -= bld->produktionskosten.material * mf / 100; 
+            eht->material -= bld->productioncost.material * mf / 100; 
 
 
-         if (eht->fuel < bld->produktionskosten.sprit * ff / 100) { 
+         if (eht->fuel < bld->productioncost.fuel * ff / 100) { 
             displaymessage("not enough fuel!",1); 
             eht->fuel = 0; 
          } 
          else 
-            eht->fuel -= bld->produktionskosten.sprit * ff / 100; 
+            eht->fuel -= bld->productioncost.fuel * ff / 100; 
 
          moveparams.movestatus = 0; 
          eht->movement = 0;
@@ -638,7 +642,7 @@ void         destructbuildinglevel2( int xp, int yp)
 
          pbuilding bb = fld->building;
 
-         eht->material += bld->produktionskosten.material * (100 - bb->damage) / destruct_building_material_get / 100;
+         eht->material += bld->productioncost.material * (100 - bb->damage) / destruct_building_material_get / 100;
          if ( eht->material > eht->typ->material )
             eht->material = eht->typ->material;
 
@@ -2781,8 +2785,8 @@ void         repairbuilding(pbuilding    building,
 
 
    if ((building->damage != 0) && (*energy > 0) && (*material > 0)) { 
-      ekost = int(building->damage) * building->typ->produktionskosten.sprit / (100 * reparierersparnis); 
-      mkost = int(building->damage) * building->typ->produktionskosten.material / (100 * reparierersparnis); 
+      ekost = int(building->damage) * building->typ->productioncost.sprit / (100 * reparierersparnis); 
+      mkost = int(building->damage) * building->typ->productioncost.material / (100 * reparierersparnis); 
 
       if (mkost <= *material) 
          w = 10000; 

@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.53 2000-06-23 12:09:30 mbickel Exp $
+//     $Id: sg.cpp,v 1.54 2000-06-28 18:31:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2000/06/23 12:09:30  mbickel
+//      Graphicsets now selectable in ASC too.
+//
 //     Revision 1.52  2000/06/22 12:36:30  mbickel
 //      Fixed compilation problems with gcc
 //      version now ASC1.1.6
@@ -237,6 +240,7 @@
 #include <malloc.h>
 #include <ctype.h>
 
+#include "artint.h"
 #include "tpascal.inc"
 #include "basegfx.h"
 #include "misc.h"
@@ -264,7 +268,6 @@
 //#include "cdrom.h"
 #include "loadjpg.h"
 #include "sg.h"
-#include "artint.h"
 #include "soundList.h"
 
 #ifdef HEXAGON
@@ -2326,12 +2329,18 @@ void execuseraction ( tuseractions action )
                                        else
                                           displaymessage("units that can not move and cannot shoot will now be displayed gray", 3);
                        break;
-/*
+
         case ua_computerturn:          displaymessage("This function is under development and for programmers only\n"
                                                       "unpredicatable things may happen ...",3 ) ;
-                                        if (choice_dlg("do you really want to start the AI?","~y~es","~n~o") == 1) 
-                                           computerturn();
-                       break;  */
+
+                                       if (choice_dlg("do you really want to start the AI?","~y~es","~n~o") == 1) {
+
+                                          if ( !actmap->player[ actmap->actplayer ].ai )
+                                             actmap->player[ actmap->actplayer ].ai = new AI ( actmap );
+                                        
+                                          actmap->player[ actmap->actplayer ].ai->run();
+                                       }
+                       break; 
         case ua_setupnetwork:       if ( actmap->network )
                                        setupnetwork ( actmap->network );
                                     else
@@ -3178,8 +3187,7 @@ int main(int argc, char *argv[] )
    // dont_use_linear_framebuffer = 1;
 
   
-  if( sizeof(tvehicletype) != 601 || 
-      sizeof(byte) != 1 ||
+  if( sizeof(byte) != 1 ||
       sizeof(word) != 2 || 
       sizeof(integer) != 2 ) {
       printf("\n ASC was compiled with invalid structure sizes! Pack all structures ! \n\n" );

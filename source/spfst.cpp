@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.33 2000-06-23 11:53:09 mbickel Exp $
+//     $Id: spfst.cpp,v 1.34 2000-06-28 18:31:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/06/23 11:53:09  mbickel
+//      Fixed a bug that crashed ASC when trying to ascend with a unit near the
+//       border of the map
+//
 //     Revision 1.32  2000/06/09 13:12:27  mbickel
 //      Fixed tribute function and renamed it to "transfer resources"
 //
@@ -2745,7 +2749,7 @@ int  tbuilding :: unchainbuildingfromfield ( void )
       for (int j = 0; j <= 5; j++) 
          if ( typ->getpicture ( i, j ) ) {
             pfield fld = getbuildingfield( this, i, j ); 
-            if ( fld->building == this ) {
+            if ( fld && fld->building == this ) {
                set = 1;
                fld->building = NULL; 
                fld->picture = fld->typ->picture[0]; 
@@ -2756,6 +2760,13 @@ int  tbuilding :: unchainbuildingfromfield ( void )
                tterrainbits t2 = ~t1;
 
                fld->bdt &= t2; 
+
+               #ifndef karteneditor
+                if ( typ->destruction_objects[i][j] )
+                   fld->addobject ( getobjecttype_forid ( typ->destruction_objects[i][j] ), -1, 1 );
+
+               #endif
+
             }
          } 
    return set;
@@ -5296,11 +5307,8 @@ int getcrc ( const pvehicletype fzt )
     fz.infotext = NULL;
     for ( int i = 0; i < 8; i++ ) {
        fz.picture[i] = NULL;
-       fz.threatvalue[i] = 0;
        fz.classnames[i] = NULL;
-
     }
-    fz.generalthreatvalue = 0;
     fz.buildicon = NULL;
     int terr = fz.terrainaccess->getcrc();
     fz.terrainaccess = NULL;
@@ -5329,6 +5337,9 @@ int getcrc ( const pvehicletype fzt )
    fz.weapons = NULL;
 
    memset ( &fz.oldattack, 0 , sizeof ( fz.oldattack ));
+   
+   for ( int j = 0; j < 8; j++ )
+      fz.aiparam[j] = NULL;
 
    fz.terrainaccess = NULL;
    return crc32buf ( &fz, sizeof ( fz )) + crcob + crctr + crcfz + crcbld + terr + crcweap;
@@ -6370,7 +6381,7 @@ int tvehicle :: buildingconstructable ( pbuildingtype building )
       return 0;
 
 
-   if ( building->produktionskosten.material * mf / 100 <= material   &&   building->produktionskosten.sprit * ff / 100 <= fuel ) {
+   if ( building->productioncost.material * mf / 100 <= material   &&   building->productioncost.fuel * ff / 100 <= fuel ) {
       int found = 0;
       if ( functions & cfputbuilding )
          found = 1;

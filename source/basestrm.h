@@ -1,6 +1,10 @@
-//     $Id: basestrm.h,v 1.11 2000-05-30 18:39:20 mbickel Exp $
+//     $Id: basestrm.h,v 1.12 2000-06-28 18:30:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/05/30 18:39:20  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.10  2000/04/27 16:25:15  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -79,6 +83,7 @@ extern "C" {
  #include "libs/bzlib/bzlib.h"
 }
 
+#include "tpascal.inc"
 
 
 #ifndef MAX
@@ -244,6 +249,14 @@ class tnstream {
            virtual void readpchar( char** pc, int maxlength = 0) ;
            virtual void readpnchar( char** pc, int maxlength = 0) ;
            virtual void writepchar( const char* pc) ;
+
+           virtual int  readint  ( void );
+           virtual word readword ( void );
+           virtual char readchar ( void );
+
+           virtual void writeint  ( int  i );
+           virtual void writeword ( word w );
+           virtual void writechar ( char c );
 
            virtual void writerlepict ( const void* pnter );
            virtual void readrlepict( void** pnter, int allocated, int* size);

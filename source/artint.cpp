@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.4 2000-06-19 20:05:01 mbickel Exp $
+//     $Id: artint.cpp,v 1.5 2000-06-28 18:30:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/06/19 20:05:01  mbickel
+//      Fixed crash when transfering ammo to vehicle with > 8 weapons
+//
 //     Revision 1.3  1999/11/22 18:26:43  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -54,6 +57,8 @@
 #include <malloc.h>
 // #include <vector>
 
+#include "artint.h"
+
 #include "tpascal.inc"
 #include "basegfx.h"
 #include "misc.h"
@@ -71,8 +76,15 @@
 #include "gamedlg.h"
 #include "building.h"
 #include "attack.h"
-#include "artint.h"
 
+
+
+
+
+/**********************************************************************************
+      The first AI attempt, originally written in Pascal and never run after
+      being converted to C . It is here to be cannibalized.
+ **********************************************************************************
 
     typedef struct tattackableunit* pattackableunit;
     struct tattackableunit { 
@@ -97,7 +109,6 @@
                      prequireunit next;
                   } ;
 
-/*
    class tcmpsearchattackablevehicles : public tsearchattackablevehicles
                                  {             
                                       typedef tsearchattackablevehicles inherited;
@@ -169,6 +180,8 @@
      // bedrohung vermindert. dadurch wird die bedrohung eines panzers verringert, da man
      // sich aus dessen schussreichweite entfernen kann, dieser vor einem angriff aber wieder
      // an die vehicle ranfahren kann.  
+
+
 
 
 
@@ -513,6 +526,7 @@ int      getposval(void)
    } 
 } 
 
+
   class tgeneratethreatvaluefzt {
                          protected:
                               pvehicletype         fzt;
@@ -525,11 +539,10 @@ int      getposval(void)
                               virtual int       getammunition( int i );
                               virtual int       getheight ( void );
                           public:
-                              void              init ( void );
                               void              generatethreatvalue ( void );
                               void              gtvfzt ( void );
-                              void              done ( void );
-                         };
+                       };
+
   class tgeneratethreatvalueunit : public tgeneratethreatvaluefzt {
                                 typedef tgeneratethreatvaluefzt inherited;
                            protected:
@@ -540,13 +553,8 @@ int      getposval(void)
                                 virtual int       getheight ( void );
                            public:
                                 void              gtveht( pvehicle vehicle );
-                           };
+                       };
 
-
-
-void         tgeneratethreatvaluefzt :: init( void )
-{ 
-} 
 
 
 int          tgeneratethreatvaluefzt :: getammunition( int      i)
@@ -641,12 +649,6 @@ void         tgeneratethreatvaluefzt :: generatethreatvalue(void)
 } 
 
 
-void         tgeneratethreatvaluefzt :: done(void)
-{ 
-} 
-
-
-
 int          tgeneratethreatvalueunit :: getammunition( int         i)
 { 
    return eht->munition[i]; 
@@ -703,7 +705,7 @@ void         generatethreatvalueunit(pvehicle     eht)
 
 void         generatethreatvaluebuilding(pbuilding    bld)
 { 
-  byte         b; 
+   int b; 
 
    bld->threatvalue = (bld->plus.a.energy / 10) + (bld->plus.a.fuel / 10) + (bld->plus.a.material / 10) + (bld->actstorage.a.energy / 20) + (bld->actstorage.a.fuel / 20) + (bld->actstorage.a.material / 20) + (bld->maxresearchpoints / 10); 
    for (b = 0; b <= 31; b++) 
@@ -724,9 +726,9 @@ void         generatethreatvaluebuilding(pbuilding    bld)
 
 
 
-void         generatethreatvalues(void)
+void         generatethreatvalues( void )
 { 
-  int v;
+   int v;
 
    for (v = 0; v <= 8; v++) 
       if (actmap->player[v].existent) { 
@@ -774,7 +776,6 @@ void         generatethreatvalues(void)
       }
    } 
 } 
-
 
 void         tcmpsearchattackablevehicles :: init(  pvehicle eht  )
 { 
@@ -2693,9 +2694,364 @@ class tartintinit {
 tartintconfig artintconfig;
 
    
-*/
-void         computerturn(void)
-{
+ **********************************************************************************
+ **********************************************************************************
+      The new AI starts here !
+ **********************************************************************************
+ **********************************************************************************/
 
+
+
+#define value_armorfactor 100
+#define value_weaponfactor 70
+
+#define ccbt_repairfacility 200    //  basic threatvalues for buildings  
+#define ccbt_hq 10000  
+#define ccbt_recycling 50  
+#define ccbt_training 150  
+
+
+int compareinteger ( const void* op1, const void* op2 )
+{
+   const int* a = (const int*) op1;
+   const int* b = (const int*) op2;
+   return *a > *b;
 }
+
+void AiParameter :: reset ( void )
+{
+   value = 0;
+   for ( int i = 0; i < 8; i++ )
+      threat[i] = 0;
+
+   task = tsk_nothing;
+}
+
+void AI :: reset ( void )
+{
+   maxTrooperMove = 0;  
+   maxTransportMove = 0; 
+   for ( int i= 0; i < 8; i++ )
+      maxWeapDist[i] = -1;  
+   baseThreatsCalculated = 0;
+}
+
+
+
+
+
+
+  class CalculateThreat_VehicleType {
+                         protected:
+                              AI*               ai;
+
+                              pvehicletype      fzt;
+                              int               weapthreat[8];
+                              int               value;
+
+                              virtual int       getdamage ( void )      { return 0;   };
+                              virtual int       getexpirience ( void )  { return 0;   };
+                              virtual int       getammunition( int i )  { return 1;   };
+                              virtual int       getheight ( void )      { return 255; };
+                          public:
+                              void              calc_threat_vehicletype ( pvehicletype _fzt );
+                              CalculateThreat_VehicleType ( AI* _ai ) { ai = _ai; };
+                       };
+
+  class CalculateThreat_Vehicle : public CalculateThreat_VehicleType {
+                           protected:
+                                pvehicle          eht;
+                                virtual int       getdamage ( void );
+                                virtual int       getexpirience ( void );
+                                virtual int       getammunition( int i );
+                                virtual int       getheight ( void );
+                           public:
+                              void              calc_threat_vehicle ( pvehicle _eht );
+                              CalculateThreat_Vehicle ( AI* _ai ) : CalculateThreat_VehicleType ( _ai ) {};
+                       };
+
+
+void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( pvehicletype _fzt )
+{ 
+   fzt = _fzt;
+
+   for ( int j = 0; j < 8; j++ )
+      weapthreat[j] = 0;
+
+   for ( int i = 0; i < fzt->weapons->count; i++) 
+      if ( fzt->weapons->weapon[i].shootable() ) 
+         if ( fzt->weapons->weapon[i].offensive() ) 
+            for ( int j = 0; j < 8; j++) 
+               if ( fzt->weapons->weapon[i].targ & (1 << j) ) { 
+                  int d = 0; 
+                  int m = 0; 
+                  for ( int e = fzt->weapons->weapon[i].mindistance / maxmalq; e < fzt->weapons->weapon[i].maxdistance / maxmalq; e++ ) {    // the distance between two fields is maxmalq
+                     d++; 
+                     int n = weapdist->getweapstrength( &fzt->weapons->weapon[i], e ) * fzt->weapons->weapon[i].maxstrength * attackstrength(getdamage()) * (getexpirience() + 8) / (256 * 100 * 8);
+                     m += n / (2*(1+d)); 
+                  } 
+                  if (getammunition(i) == 0) 
+                     m /= 2; 
+
+                  if ( (fzt->weapons->weapon[i].sourceheight & getheight()) == 0) 
+                     m /= 2; 
+
+                  if ( !(getheight() & ( 1 << j )))
+                     m /= 2;
+
+                  if (m > weapthreat[j]) 
+                     weapthreat[j] = m; 
+               } 
+
+
+   if ( !fzt->aiparam )
+      fzt->aiparam[ ai->getplayer() ] = new AiParameter;
+
+   for ( int l = 0; l < 8; l++ ) 
+      fzt->aiparam[ ai->getplayer() ]->threat[l] = weapthreat[l];
+
+   value = fzt->armor * value_armorfactor * (100 - getdamage()) / 100 ; 
+   qsort ( weapthreat, 8, sizeof(int), compareinteger );
+
+   for ( int k = 0; k < 8; k++ ) 
+      value += weapthreat[k] * value_weaponfactor / (k+1);
+
+   fzt->aiparam[ ai->getplayer() ]->value = value;
+} 
+
+
+int          CalculateThreat_Vehicle :: getammunition( int         i)
+{ 
+   return eht->munition[i]; 
+} 
+
+int          CalculateThreat_Vehicle :: getheight(void)
+{ 
+   return eht->height; 
+} 
+
+int          CalculateThreat_Vehicle :: getdamage(void)
+{ 
+   return eht->damage; 
+} 
+
+int          CalculateThreat_Vehicle :: getexpirience(void)
+{ 
+   return eht->experience; 
+} 
+
+
+void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
+{ 
+
+   eht = _eht;     
+   calc_threat_vehicletype ( eht->typ );
+
+   if ( !eht->aiparam )
+      eht->aiparam[ai->getplayer()] = new AiParameter;
+
+   for ( int l = 0; l < 8; l++ ) 
+      eht->aiparam[ai->getplayer()]->threat[l] = eht->typ->aiparam[ ai->getplayer() ]->threat[l];
+
+   eht->aiparam[ai->getplayer()]->value = eht->typ->aiparam[ ai->getplayer() ]->value;
+
+/*
+   generatethreatvalue(); 
+   int l = 0; 
+   for ( int b = 0; b <= 7; b++) { 
+      eht->threatvalue[b] = weapthreatvalue[b]; 
+      if (weapthreatvalue[b] > l) 
+         l = weapthreatvalue[b]; 
+   } 
+   eht->completethreatvalue = threatvalue2 + l; 
+   eht->completethreatvaluesurr = threatvalue2 + l; 
+   eht->threats = 0; 
+*/
+} 
+
+
+void  AI :: calculateThreat ( pvehicletype vt)
+{ 
+   CalculateThreat_VehicleType ctvt ( this ); 
+   ctvt.calc_threat_vehicletype( vt );
+} 
+
+
+void  AI :: calculateThreat ( pvehicle eht )
+{ 
+   CalculateThreat_Vehicle ctv ( this ); 
+   ctv.calc_threat_vehicle( eht );
+} 
+
+
+void  AI :: calculateThreat ( pbuilding bld )
+{ 
+   if ( !bld->aiparam[ getplayer() ] )
+      bld->aiparam[ getplayer() ] = new AiParameter;
+
+   int b; 
+
+   // Since we have two different resource modes now, this calculation should be rewritten....
+   bld->aiparam[ getplayer() ]->value = (bld->plus.a.energy / 10) + (bld->plus.a.fuel / 10) + (bld->plus.a.material / 10) + (bld->actstorage.a.energy / 20) + (bld->actstorage.a.fuel / 20) + (bld->actstorage.a.material / 20) + (bld->maxresearchpoints / 10); 
+   for (b = 0; b <= 31; b++) 
+      if ( bld->loading[b]  ) {
+         if ( !bld->loading[b]->aiparam )
+            calculateThreat ( bld->loading[b] );
+         bld->aiparam[ getplayer() ]->value += bld->loading[b]->aiparam[ getplayer() ]->value; 
+      }
+
+   for (b = 0; b <= 31; b++) 
+      if ( bld->production[b] )  {
+         if ( !bld->production[b]->aiparam )
+            calculateThreat ( bld->production[b] );
+         bld->aiparam[ getplayer() ]->value += bld->production[b]->aiparam[ getplayer() ]->value / 10; 
+      }
+
+   if (bld->typ->special & cgrepairfacilityb ) 
+      bld->aiparam[ getplayer() ]->value += ccbt_repairfacility; 
+   if (bld->typ->special & cghqb ) 
+      bld->aiparam[ getplayer() ]->value += ccbt_hq; 
+   if (bld->typ->special & cgtrainingb ) 
+      bld->aiparam[ getplayer() ]->value += ccbt_training; 
+   if (bld->typ->special & cgrecyclingplantb ) 
+      bld->aiparam[ getplayer() ]->value += ccbt_recycling; 
+} 
+
+
+
+void     AI :: calculateAllThreats( void )
+{ 
+   // Calculates the basethreats for all vehicle types
+   if ( !baseThreatsCalculated ) { 
+      for ( int w = 0; w < vehicletypenum; w++) { 
+         pvehicletype fzt = getvehicletype_forpos(w); 
+         if ( fzt ) 
+            calculateThreat( fzt ); 
+         
+      }
+      baseThreatsCalculated = 1; 
+   }
+
+   // Some further calculations that only need to be done once.
+   if ( maxTrooperMove == 0) { 
+      for ( int v = 0; v < vehicletypenum; v++) {
+         pvehicletype fzt = getvehicletype_forpos( v );
+         if ( fzt )
+            if ( fzt->functions & ( cf_conquer ) ) 
+               if ( fzt->movement[chfahrend] > maxTrooperMove )   // buildings can only be conquered on ground level, or by moving to adjecent field which is less
+                  maxTrooperMove = fzt->movement[chfahrend]; 
+      }
+   } 
+   if ( maxTransportMove == 0 ) {
+      for (int v = 0; v < vehicletypenum; v++) {
+         pvehicletype fzt = getvehicletype_forpos( v );
+         if ( fzt )
+            for ( int w = 0; w <= 7; w++) // cycle through all levels of height
+               if (fzt->movement[w] > maxTransportMove) 
+                  maxTransportMove = fzt->movement[w]; 
+      }
+   }
+   for ( int height = 0; height < 8; height++ ) 
+      if ( maxWeapDist[height] < 0 ) { 
+
+         maxWeapDist[height] = 0; // It may be possible that there is no weapon to shoot to a specific height
+
+         for ( int v = 0; v < vehicletypenum; v++) {
+            pvehicletype fzt = getvehicletype_forpos( v );
+            if ( fzt )
+               for ( int w = 0; w < fzt->weapons->count ; w++)    
+                  if ( fzt->weapons->weapon[w].maxdistance > maxWeapDist[height] ) 
+                     if ( fzt->weapons->weapon[w].targ & ( 1 << height ))   // targ is a bitmap, each bit standing for a level of height
+                         maxWeapDist[height] = fzt->weapons->weapon[w].maxdistance; 
+         }
+      } 
+
+
+
+   // Resetting all previos AI parameters for the units. This should later be removed to allow long-time planning,
+   // but at the moment it provides clean starting conditions
+
+   // There are only 8 players in ASC, but there may be neutral units (player == 8)
+   for ( int v = 0; v < 9; v++)      
+      if (actmap->player[v].existent) { 
+
+         // Now we cycle through all units of this player
+         pvehicle eht = actmap->player[v].firstvehicle; 
+         while ( eht ) { 
+            if ( !eht->aiparam )
+               eht->aiparam[ getplayer() ] = new AiParameter;
+            else
+               eht->aiparam[ getplayer() ]->reset();
+
+            eht = eht->next; 
+         } 
+      } 
+} 
+
+
+
+void    AI :: setup (void)
+{ 
+   tempsvisible = false; 
+
+   displaymessage2("calculating all threats ... "); 
+   calculateAllThreats (); 
+/*
+   for (i = 0; i < 8; i++)
+      if (actmap->player[i].existent) { 
+         pvehicle vehicle = actmap->player[i].firstvehicle;
+         if (i == actmap->actplayer) { 
+            while (vehicle != NULL) { 
+               vehicle->cmpchecked = 0; 
+               generatethreatvalueunit(vehicle); 
+               vehicle = vehicle->next; 
+            } 
+         } 
+         else { 
+            while (vehicle != NULL) { 
+               generatethreatvalueunit(vehicle); 
+               vehicle = vehicle->next; 
+            } 
+         } 
+      } 
+
+   for ( i = 0; i <= 8; i++) {
+      pbuilding building = actmap->player[i].firstbuilding;
+      while (building != NULL) { 
+         generatethreatvaluebuilding(building); 
+         building = building->next; 
+      } 
+      if (i == actmap->actplayer) { 
+         building = actmap->player[i].firstbuilding; 
+         while (building != NULL) { 
+            tcmpcheckreconquerbuilding ccrcb;
+            ccrcb.init(3); 
+            ccrcb.initsuche(building->xpos,building->ypos,(maxfusstruppenmove + maxtransportmove) / 8 + 1,0); 
+            ccrcb.startsuche(); 
+            int j;
+            ccrcb.returnresult( &j ); 
+            ccrcb.done(); 
+            building = building->next; 
+         } 
+      } 
+   }     
+   */
+
+   /*
+    punits units = new tunits;
+    tjugdesituationspfd jugdesituationspfd; 
+    jugdesituationspfd.init(units,1); 
+    jugdesituationspfd.startsuche(); 
+    jugdesituationspfd.done(); 
+    delete units;
+   */
+
+   // showthreats("init: threatvals generated"); 
+} 
+
+void AI:: run ( void )
+{
+   setup();
+}
+
 

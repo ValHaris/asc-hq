@@ -1,6 +1,10 @@
-//     $Id: gui.cpp,v 1.23 2000-06-08 21:03:41 mbickel Exp $
+//     $Id: gui.cpp,v 1.24 2000-06-28 18:30:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/06/08 21:03:41  mbickel
+//      New vehicle action: attack
+//      wrote documentation for vehicle actions
+//
 //     Revision 1.22  2000/06/04 21:39:20  mbickel
 //      Added OK button to ViewText dialog (used in "About ASC", for example)
 //      Invalid command line parameters are now reported
@@ -2421,7 +2425,7 @@ tnputbuildingguiicon :: tnputbuildingguiicon ( pbuildingtype bld )
    buildnum++;
    picture[0]    = building->guibuildicon;
    infotext      = new char[100];
-   sprintf ( infotext, "%s : %d material and %d fuel needed", building->name, building->produktionskosten.material, building->produktionskosten.sprit );
+   sprintf ( infotext, "%s : %d material and %d fuel needed", building->name, building->productioncost.material, building->productioncost.fuel );
    if ( building->construction_steps > 1 ) {
       char tmp[50];
       sprintf(tmp, " ; %d turns required", building->construction_steps );

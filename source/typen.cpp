@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.20 2000-06-08 21:03:43 mbickel Exp $
+//     $Id: typen.cpp,v 1.21 2000-06-28 18:31:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/06/08 21:03:43  mbickel
+//      New vehicle action: attack
+//      wrote documentation for vehicle actions
+//
 //     Revision 1.19  2000/06/06 20:03:19  mbickel
 //      Fixed graphical error when transfering ammo in buildings
 //      Sound can now be disable by a command line parameter and the game options
@@ -828,8 +832,9 @@ void tvehicle :: init ( void )
 
    for ( int j = 0; j < 32; j++ )
        loading[j] = NULL;
-}
 
+}
+   
 
 void tvehicle :: clone ( pvehicle src, pmap actmap )
 {
@@ -1032,16 +1037,151 @@ int tvehicletype::maxsize ( void )
 
 tvehicletype :: tvehicletype ( void )
 {
-   memset ( &name, 0, (int) ((char*) &dummy[1] - (char*)&name)  );
+   int i;
+
+   name = NULL; 
+   description = NULL;
+   infotext = NULL;
+
+   memset ( &oldattack, 0, sizeof ( oldattack ));
+
+   production.energy = 0; 
+   production.material = 0; 
+   armor = 0; 
+
+   for ( i = 0; i < 8; i++ )
+      picture[i] = NULL;    
+   height     = 0;
+   researchid = 0;    
+   _terrain   = 0;
+   _terrainreq = 0;
+   _terrainkill = 0;
+   steigung = 0;
+   jamming = 0;
+   view = 0;
+   wait = 0;
+   loadcapacity = 0; 
+   maxunitweight = 0;
+   loadcapability = 0; 
+   loadcapabilityreq = 0;
+   loadcapabilitynot = 0;
+   id = 0; 
+   tank = 0; 
+   fuelconsumption = 0; 
+   energy = 0; 
+   material = 0; 
+   functions = 0;
+   for ( i = 0; i < 8; i++ )
+      movement[i] = 0; 
+   movemalustyp = 0; 
+   classnum = 0; 
+   for ( i = 0; i < 8; i++ ) {
+      classnames[i] = NULL; 
+      for ( int j = 0; j< 8; j++)
+         classbound[i].weapstrength[j] = 0; 
+
+      classbound[i].armor = 0;
+      classbound[i].techlevel = 0;
+      classbound[i].techrequired[0] = 0;
+      classbound[i].techrequired[1] = 0;
+      classbound[i].techrequired[2] = 0;
+      classbound[i].techrequired[3] = 0;
+      classbound[i].eventrequired = 0;
+      classbound[i].vehiclefunctions = 0;
+   }
+
+   maxwindspeedonwater = 0;
+   digrange = 0;
+   initiative = 0;
+   _terrainnot = 0;
+   _terrainreq1 = 0;  
+   objectsbuildablenum = 0;
+   objectsbuildableid = NULL;
+ 
+   weight = 0;
+   bipicture = -1;
+   vehiclesbuildablenum = 0;
+   vehiclesbuildableid = NULL;
+ 
+   buildicon = NULL;
+   buildingsbuildablenum = 0;
+   buildingsbuildable = NULL;
+   autorepairrate = 0;
+
+   for ( i = 0; i < 8; i++ )
+      aiparam[i] = NULL;
+
    weapons = new UnitWeapon;
    terrainaccess = new tterrainaccess;
+}
+
+tvehicletype :: ~tvehicletype ( )
+{
+   int i;
+
+   if ( name ) {
+      delete[] name;
+      name = NULL;
+   }
+
+   if ( description ) {
+      delete[] description;
+      description = NULL;
+   }
+
+   if ( infotext ) {
+      delete[] infotext;
+      infotext = NULL;
+   }
+
+   for ( i = 0; i < 8; i++ )
+      if ( picture[i] ) {
+         delete picture[i];
+         picture[i] = NULL;
+      }
+
+   for ( i = 0; i < 8; i++ )
+      if ( classnames[i] ) {
+         delete[] classnames[i];
+         classnames[i] = NULL;
+      }
+
+   if ( objectsbuildableid ) {
+      delete[] objectsbuildableid;
+      objectsbuildableid = NULL;
+   }
+
+   if ( terrainaccess ) {
+      delete[] terrainaccess;
+      terrainaccess = NULL;
+   }
+
+   if ( buildicon ) {
+      delete buildicon;
+      buildicon = NULL;
+   }
+
+   if ( buildingsbuildable ) {
+      delete[] buildingsbuildable;
+      buildingsbuildable = NULL;
+   }
+
+   if ( weapons ) {
+      delete weapons;
+      weapons = NULL;
+   }
+
+   for ( i = 0; i < 8; i++ ) 
+      if ( aiparam[i] ) {
+         delete aiparam[i];
+         aiparam[i] = NULL;
+      }
 }
 
 UnitWeapon :: UnitWeapon ( void )
 {
    count = 0;
    memset ( weapon, 0, sizeof ( weapon ));
-   memset ( reserved, 0, sizeof ( reserved ));
 }
 
 
@@ -1530,7 +1670,6 @@ tnetwork :: tnetwork ( void )
 
 void      twterraintype  ::   paint ( int x1, int y1 )
 {
-   int i;
  #ifndef converter
   #ifdef HEXAGON
    putspriteimage ( x1, y1, picture[0] ); 
@@ -1538,6 +1677,7 @@ void      twterraintype  ::   paint ( int x1, int y1 )
    char* c = (char*) direcpict[0];
 
    if ( agmp->windowstatus == 100 ) {
+      int i;
       char* buf = (char*) (agmp->scanlinelength * y1 + x1 + agmp->linearaddress) + 19;
 
       for (i=1; i<= 19 ;i++ ) {

@@ -1,6 +1,10 @@
-//     $Id: basestrm.cpp,v 1.24 2000-06-05 18:21:21 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.25 2000-06-28 18:30:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/06/05 18:21:21  mbickel
+//      Fixed a security hole which was opened with the new method of loading
+//        mail games by command line parameters
+//
 //     Revision 1.23  2000/05/30 19:59:18  mbickel
 //      Fixed bug in basestrm: container having higher priority than single file
 //
@@ -372,6 +376,45 @@ void tnstream :: writerlepict ( const void* buf )
       writedata ( buf, ( pw[0] + 1 ) * ( pw[1] + 1 ) + 4 );
    }
 }
+
+
+int  tnstream::readint  ( void )
+{
+   int i;
+   readdata2 ( i );
+   return i;
+}
+
+word tnstream::readword ( void )
+{
+   word w;
+   readdata2 ( w );
+   return w;
+}
+
+char tnstream::readchar ( void )
+{
+   char c;
+   readdata2 ( c );
+   return c;
+}
+
+
+void tnstream::writeint  ( int i )
+{
+   writedata2 ( i );
+}
+
+void tnstream::writeword ( word w )
+{
+   writedata2 ( w );
+}
+
+void tnstream::writechar ( char c )
+{
+   writedata2 ( c );
+}
+
 
 void         tnstream::readpchar(char** pc, int maxlength )
 { 

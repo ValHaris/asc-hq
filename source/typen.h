@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.25 2000-06-09 13:12:29 mbickel Exp $
+//     $Id: typen.h,v 1.26 2000-06-28 18:31:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2000/06/09 13:12:29  mbickel
+//      Fixed tribute function and renamed it to "transfer resources"
+//
 //     Revision 1.24  2000/06/08 21:03:44  mbickel
 //      New vehicle action: attack
 //      wrote documentation for vehicle actions
@@ -169,7 +172,6 @@ typedef class tobject* pobject;
 typedef struct tcampaign* pcampaign;
 typedef class tshareview *pshareview;
                    
-
 //////////////////////////////////////////////////////////////
 ///    Some miscellaneous defintions. Not very intersting...
 //////////////////////////////////////////////////////////////
@@ -266,25 +268,23 @@ extern int operator& ( tterrainbits tb2, tterrainbits tb3 ) ;
 extern tterrainbits& operator^ ( tterrainbits tb2, tterrainbits tb3 ) ;
 
 class tterrainaccess {
- public:
-  tterrainaccess ( void ) ;
-  tterrainbits  terrain;      /*  BM     befahrbare terrain: z.B. Schiene, Wasser, Wald, ...  ; es mu· lediglich eins gesetzt sein */
-  tterrainbits  terrainreq;   /*  BM     diese Bits MöSSEN ALLE in gesetzt sein */
-  tterrainbits  terrainnot;   /*  BM     sobald eines dieser Bits gesetzt ist, kann die vehicle NICHT auf das field fahren  */
-  tterrainbits  terrainkill;  /* falls das aktuelle field nicht befahrbar ist, und bei field->typ->art eine dieser Bits gesetzt ist, verschwindet die vehicle */
-  int dummy[10];
-  int accessible ( tterrainbits bts );
-  int getcrc ( void ) {
-    return terrain.getcrc() + terrainreq.getcrc()*7 + terrainnot.getcrc()*97 + terrainkill.getcrc()*997;  
-  };
+   public:
+      tterrainaccess ( void ) ;
+      tterrainbits  terrain;      /*  BM     befahrbare terrain: z.B. Schiene, Wasser, Wald, ...  ; es mu· lediglich eins gesetzt sein */
+      tterrainbits  terrainreq;   /*  BM     diese Bits MöSSEN ALLE in gesetzt sein */
+      tterrainbits  terrainnot;   /*  BM     sobald eines dieser Bits gesetzt ist, kann die vehicle NICHT auf das field fahren  */
+      tterrainbits  terrainkill;  /* falls das aktuelle field nicht befahrbar ist, und bei field->typ->art eine dieser Bits gesetzt ist, verschwindet die vehicle */
+      int dummy[10];
+      int accessible ( tterrainbits bts );
+      int getcrc ( void ) {
+        return terrain.getcrc() + terrainreq.getcrc()*7 + terrainnot.getcrc()*97 + terrainkill.getcrc()*997;  
+      };
 };
 
 union tgametime {
   struct { signed short move, turn; }a ;
   int abstime;
 };
-
-typedef word tthreatvar; 
 
 struct tcrc {
   int id;
@@ -293,17 +293,6 @@ struct tcrc {
 
 typedef word tmunition[waffenanzahl];
 typedef tmunition* pmunition ;
-
-struct tclassbound { 
-  word         weapstrength[waffenanzahl]; 
-  word         dummy2;
-  word         armor; 
-  word         techlevel;             //  Techlevel ist eine ALTERNATIVE zu ( techrequired und envetrequired )
-  word         techrequired[4];
-  char         eventrequired;
-  int          vehiclefunctions;
-  char         dummy;
-};
 
 
 struct tbuildrange {
@@ -365,12 +354,6 @@ struct tquickview {
     int   bi3pic;
     int   flip;  // Bit 1: Horizontal ; Bit 2: Vertikal
   };
-
-
-typedef struct taiparams* paiparams;
-struct taiparams {
-    char    dummy[128];
-};
 
 
 typedef struct teventstore* peventstore;
@@ -471,6 +454,26 @@ struct teventstore {
 
 
 
+class AiParameter {
+        public:
+           int value;
+           int threat[8];
+           enum { tsk_nothing } task;
+
+           void reset ( void );
+           AiParameter ( void ) { reset(); };
+ };
+
+class BaseAI { 
+       public: 
+         BaseAI ( pmap map ) {};
+         virtual void run ( void ) = 0;
+         virtual ~BaseAI () {};
+      };
+
+       
+
+
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 ///    Now, these are the main structures ASC consists of
@@ -495,8 +498,6 @@ class SingleWeapon {
     int          minstrength;
     int          efficiency[13]; // floating and driving are the same ; 0-5 is lower ; 6 is same height ; 7-12 is higher
     int          targets_not_hittable; // BM   <=  cmovemalitypes
-   private:
-    int          reserved[9];
    public:
     int          getScalarWeaponType(void) const;
     int          requiresAmmo(void) const;
@@ -504,6 +505,7 @@ class SingleWeapon {
     int          service( void ) const;
     int          canRefuel ( void ) const;
     void         set ( int type );  // will be enhanced later ...
+    int          gettyp ( void ) { return typ; };
     int          offensive( void ) const;
 };
 
@@ -511,24 +513,24 @@ class  UnitWeapon {
   public:
     int count;
     SingleWeapon weapon[16];
-    int reserved[10];
     UnitWeapon ( void );
 };
 
-class tvehicletype {   /*  vehicleart: z.B. Schwere Fu·truppe  */
+
+class tvehicletype {    // This structure does not have a fixed layout any more !
    public:
        char*        name;          /* z.B. Exterminator  */
        char*        description;   /* z.B. Jagdbomber    */
        char*        infotext;      /* optional, kann sehr ausfÅhrlich sein. Empfehlenswert Åber eine Textdatei einzulesen */
-       struct tweapons { 
-         unsigned char         weaponcount; 
+       struct tweapons {  // fixed layout
+         char         weaponcount; 
          struct tweapon {
            word         typ;            /*  BM      <= CWaffentypen  */
-           unsigned char         targ;           /*  BM      <= CHoehenstufen  */
-           unsigned char         sourceheight;   /*  BM  "  */
+           char         targ;           /*  BM      <= CHoehenstufen  */
+           char         sourceheight;   /*  BM  "  */
            Word         maxdistance;
            Word         mindistance;
-           unsigned char         count;
+           char         count;
            char         maxstrength;    // Wenn der Waffentyp == Mine ist, dann ist hier die MinenstÑrke als Produkt mit der Bassi 64 abgelegt.
            char         minstrength;
          } waffe[8];
@@ -541,34 +543,40 @@ class tvehicletype {   /*  vehicleart: z.B. Schwere Fu·truppe  */
 
        Word         armor; 
        void*        picture[8];    /*  0¯  ,  45¯   */
-       unsigned char height;        /*  BM  Besteht die Mîglichkeit zum Hîhenwechseln  */
+       char         height;        /*  BM  Besteht die Mîglichkeit zum Hîhenwechseln  */
        word         researchid;    // inzwischen ÅberflÅssig, oder ?
        int          _terrain;    /*  BM     befahrbare terrain: z.B. Schiene, Wasser, Wald, ...  */
        int          _terrainreq; /*  BM     diese Bits MöSSEN in ( field->typ->art & terrain ) gesetzt sein */
        int          _terrainkill;  /* falls das aktuelle field nicht befahrbar ist, und bei field->typ->art eine dieser Bits gesetzt ist, verschwindet die vehicle */
-       unsigned char         steigung;      /*  max. befahrbare Hîhendifferenz zwischen 2 fieldern  */
-       unsigned char         jamming;      /*  StÑrke der Stîrstrahlen  */
-       Word         view;         /*  viewweite  */
+       char         steigung;      /*  max. befahrbare Hîhendifferenz zwischen 2 fieldern  */
+       char         jamming;      /*  StÑrke der Stîrstrahlen  */
+       int          view;         /*  viewweite  */
        char         wait;        /*  Kann vehicle nach movement sofort schie·en ?  */
-       char         dummy2;
        Word         loadcapacity;      /*  Transportmîglichkeiten  */
        word         maxunitweight; /*  maximales Gewicht einer zu ladenden vehicle */
        char         loadcapability;     /*  BM     CHoehenStufen   die zu ladende vehicle mu· sich auf einer dieser Hîhenstufen befinden */
        char         loadcapabilityreq;  /*  eine vehicle, die geladen werden soll, mu· auf eine diese Hîhenstufen kommen kînnen */
        char         loadcapabilitynot;  /*  eine vehicle, die auf eine dieser Hîhenstufen kann, darf NICHT geladen werden. Beispiel: Flugzeuge in Transportflieger */
        Word         id; 
-       int      tank; 
+       int          tank; 
        Word         fuelconsumption; 
-       int      energy; 
-       int      material; 
-       int      functions;
+       int          energy; 
+       int          material; 
+       int          functions;
        char         movement[8];      /*  max. movementsstrecke  */
        char         movemalustyp;     /*  wenn ein Bodentyp mehrere Movemali fÅr unterschiedliche vehiclearten, wird dieser genommen.  <= cmovemalitypes */
-       tthreatvar   generalthreatvalue;   /*  Wird von ArtInt benîtigt, au·erhalb keine Bedeutung  */ 
-       tthreatvar   threatvalue[8];       /*  dito                                                 */
        char         classnum;         /* Anzahl der Klassen, max 8, min 0 ;  Der EINZIGE Unterschied zwischen 0 und 1 ist der NAME ! */
        char*        classnames[8];    /* Name der einzelnen Klassen */
-       tclassbound  classbound[8];    /* untergrenze (minimum), die zum erreichen dieser Klasse notwendig ist, classbound[0] gilt fÅr vehicletype allgemein*/
+
+       struct tclassbound { 
+        word         weapstrength[8]; 
+        word         armor; 
+        word         techlevel;             //  Techlevel ist eine ALTERNATIVE zu ( techrequired und envetrequired )
+        word         techrequired[4];
+        char         eventrequired;
+        int          vehiclefunctions;
+      } classbound[8];    /* untergrenze (minimum), die zum erreichen dieser Klasse notwendig ist, classbound[0] gilt fÅr vehicletype allgemein*/
+
        char         maxwindspeedonwater;
        char         digrange;        // Radius, um den nach bodenschÑtzen gesucht wird. 
        int          initiative;      // 0 ist ausgeglichen // 256 ist verdoppelung
@@ -588,54 +596,54 @@ class tvehicletype {   /*  vehicleart: z.B. Schwere Fu·truppe  */
        pbuildrange  buildingsbuildable;
        UnitWeapon*  weapons;
        int          autorepairrate;
-       int          dummy[1];
+
+       AiParameter* aiparam[8];
+
        int maxweight ( void );     // max. weight including fuel and material
        int maxsize   ( void );     // without fuel and material
        int vehicleloadable ( pvehicletype fzt );
        tvehicletype ( void );
+       ~tvehicletype ( );
 }; 
 
 
 class tvehicle { /*** Bei énderungen unbedingt Save/LoadGame und Konstruktor korrigieren !!! ***/ 
   public:
     pvehicletype typ;          /*  vehicleart: z.B. Schwere Fu·truppe  */
-    unsigned char         color; 
-    unsigned char         damage; 
-    tmunition munition;
-    int      fuel; 
+    char         color; 
+    char         damage; 
+    tmunition    munition;
+    int          fuel; 
     int*         ammo; 
     int          evenmoredummy[3];
     int*         weapstrength;
     int          moredummy[3];
-    Word         dummy;     /*  Laderaum, der momentan gebraucht wird  */
+    Word         dummy;     
     tvehicle*    loading[32]; 
-    unsigned char         experience;    // 0 .. 15 
-    char      attacked; 
-    unsigned char         height;       /* BM */   /*  aktuelle Hîhe: z.B. Hochfliegend  */
-    unsigned char    movement;     /*  Åbriggebliebene movement fÅr diese Runde  */
-    unsigned char         direction;    /*  Blickrichtung  */
+    char         experience;    // 0 .. 15 
+    char         attacked; 
+    char         height;       /* BM */   /*  aktuelle Hîhe: z.B. Hochfliegend  */
+    char         movement;     /*  Åbriggebliebene movement fÅr diese Runde  */
+    char         direction;    /*  Blickrichtung  */
     Integer      xpos, ypos;   /*  Position auf map  */
-    int      material;     /*  aktuelle loading an Material und  */
-    int      energy;       /*  energy  */
+    int          material;     /*  aktuelle loading an Material und  */
+    int          energy;       /*  energy  */
     pvehicle     next;
     pvehicle     prev;         /*  fÅr lineare Liste der vehicle */
                    
-    short          cmpchecked;   /*  fÅr Computerintelligenz  */ 
-  
-    tthreatvar   completethreatvaluesurr; 
-    tthreatvar   completethreatvalue;   /*  Wird von ArtInt benîtigt, au·erhalb keine Bedeutung  */ 
-    tthreatvar   threatvalue[8]; 
-    int          threats;   /* BM  => CCA_Threats  */ 
-    word         order; 
-    int      connection; 
-    unsigned char         klasse;
+    short        dummy3;   
+    word         dummy1[13]; 
+
+    int          connection; 
+    char         klasse;
     word         armor; 
-    int      networkid; 
+    int          networkid; 
     char*        name;
     int          functions;
     char         reactionfire;     // BM   ; gibt an, gegen welche Spieler die vehicle noch reactionfiren kann.
     char         reactionfire_active;
     int          generatoractive;
+    AiParameter* aiparam[8];
   
     int enablereactionfire( void );
     int disablereactionfire ( void );
@@ -690,6 +698,7 @@ class  tbuildingtype {
    public:                         
         void*        w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
         int          bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
+        int          destruction_objects [4][6];
         struct { 
           int     x, y; 
         } entry, powerlineconnect, pipelineconnect; 
@@ -699,15 +708,15 @@ class  tbuildingtype {
         int          jamming; 
         int          view; 
         int          loadcapacity; 
-        unsigned char         loadcapability;   /*  BM => CHoehenstufen; aktuelle Hîhe der reinzufahrenden vehicle
-    						mu· hier enthalten sein  */ 
-        unsigned char         unitheightreq;   /*   "       , es dÅrfen nur Fahrzeuge ,
-    						die in eine dieser Hîhenstufen kînnen , geladen werden  */ 
+        char         loadcapability;   /*  BM => CHoehenstufen; aktuelle Hîhe der reinzufahrenden vehicle
+                                                                mu· hier enthalten sein  */ 
+        char         unitheightreq;   /*   "       , es dÅrfen nur Fahrzeuge ,
+                                                     die in eine dieser Hîhenstufen kînnen , geladen werden  */ 
     
         struct  { 
           int          material; 
-          int          sprit; 
-        } produktionskosten; 
+          int          fuel; 
+        } productioncost; 
         int          special;   /*  HQ, Trainingslager, ...  */ 
     
     
@@ -771,14 +780,18 @@ class  tbuilding {
     Integer      xpos, ypos; 
     pbuilding    next;
     pbuilding    prev; 
-    unsigned char         completion; 
-    tthreatvar   threatvalue; 
+    char         completion; 
+    word         dummy; 
     int          netcontrol; 
-    int      connection; 
-    char      visible; 
+    int          connection; 
+    char         visible; 
     pvehicletype  productionbuyable[32];
 
-    tresources bi_resourceplus;
+    tresources    bi_resourceplus;
+
+    int           dummy2;
+
+    AiParameter*  aiparam[8];
 
     tbuilding( void );
     int lastmineddist;
@@ -1367,22 +1380,21 @@ class tmap {
                  
     char         alliances[8][8];
     struct {
-      char      existent; 
-      pvehicle     firstvehicle; 
-      pbuilding    firstbuilding; 
-
-      tresearch    research; 
-      paiparams    aiparams;
-
-      char         stat;           // 0: human; 1: computer; 2: off
-      // char         alliance;       // => actmap->alliances ;  8 bedeuted parteilos
-      char         dummy;
-      char         *name;          // kein eigenstÑndiger string; zeigt entweder auf computernames oder playernames 
-      int          passwordcrc;
-      pdissectedunit dissectedunit;
-      pmessagelist  unreadmessage;
-      pmessagelist  oldmessage; 
-      pmessagelist  sentmessage; 
+       char      existent; 
+       pvehicle     firstvehicle; 
+       pbuilding    firstbuilding; 
+ 
+       tresearch    research; 
+       BaseAI*      ai;
+ 
+       char         stat;           // 0: human; 1: computer; 2: off
+       char         dummy;
+       char         *name;          // kein eigenstÑndiger string; zeigt entweder auf computernames oder playernames 
+       int          passwordcrc;
+       pdissectedunit dissectedunit;
+       pmessagelist  unreadmessage;
+       pmessagelist  oldmessage; 
+       pmessagelist  sentmessage; 
     } player[9]; 
 
     peventstore  oldevents; 
@@ -1432,6 +1444,7 @@ class tmap {
     int           graphicset;
     int           gameparameter_num;
     int*          game_parameter;
+   public:
     int           dummy[29];
     int           _oldgameparameter[ 8 ];
     void chainunit ( pvehicle unit );

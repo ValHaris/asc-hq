@@ -521,9 +521,9 @@ main ()
    
          printf ("\n    production costs : \n");
          printf ("\n       material :\n");
-         num_ed (bld->produktionskosten.material, 0, 65535);
+         num_ed (bld->productioncost.material, 0, 65535);
          printf ("\n       fuel : \n" );
-         num_ed (bld->produktionskosten.sprit, 0, 65535);
+         num_ed (bld->productioncost.fuel, 0, 65535);
    
    
          printf ("\n    armor  ");
@@ -623,6 +623,24 @@ main ()
          printf ("\n    view  \n");
          num_ed (bld->view, 0, 255);
    
+
+         printf ("\n    objects may be generated when the building is destroyed \n");
+         char  d=0;
+         yn_switch (" change ", " keep setting ", 1,0, d);
+         if ( d==1 ) {
+            for ( int x = 0; x < 4; x++ )
+               for ( int y = 0; y < 6; y++ ) 
+                  if ( bld->w_picture[0][0][x][y] ) {
+                     initgraphics ( 640, 480, 8 );
+                     setvgapalette256 ( pal );
+                     putimage ( 100, 100, bld->w_picture[0][0][x][y] );
+                     wait();
+                     settxt50mode ();
+                     printf ("\n    object ID for this field  \n");
+                     num_ed (bld->destruction_objects[x][y], 0, maxint);
+                  } else
+                     bld->destruction_objects[x][y] = 0;
+         }
       } 
    
    

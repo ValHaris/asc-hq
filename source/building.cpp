@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.24 2000-06-19 20:05:02 mbickel Exp $
+//     $Id: building.cpp,v 1.25 2000-06-28 18:30:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/06/19 20:05:02  mbickel
+//      Fixed crash when transfering ammo to vehicle with > 8 weapons
+//
 //     Revision 1.23  2000/06/09 13:12:22  mbickel
 //      Fixed tribute function and renamed it to "transfer resources"
 //
@@ -929,7 +932,7 @@ int   cbuildingcontrols :: crepairbuilding :: available ( void )
 
 int   cbuildingcontrols :: crepairbuilding :: checkto ( char newdamage )
 {
-   return cbuildingcontrols :: crepairanything :: checkto ( cc_b->building->damage, newdamage, cc_b->building->typ->produktionskosten.sprit, cc_b->building->typ->produktionskosten.material, 0, repairefficiency_building );
+   return cbuildingcontrols :: crepairanything :: checkto ( cc_b->building->damage, newdamage, cc_b->building->typ->productioncost.fuel, cc_b->building->typ->productioncost.material, 0, repairefficiency_building );
 };
 
 

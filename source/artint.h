@@ -1,6 +1,9 @@
-//     $Id: artint.h,v 1.4 2000-06-19 20:05:02 mbickel Exp $
+//     $Id: artint.h,v 1.5 2000-06-28 18:30:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/06/19 20:05:02  mbickel
+//      Fixed crash when transfering ammo to vehicle with > 8 weapons
+//
 //     Revision 1.3  2000/05/23 20:40:36  mbickel
 //      Removed boolean type
 //
@@ -34,18 +37,51 @@
 */
 
 
-/* unit header for: artint.c -- made by tptc - translate pascal to c */
+#include <utility>
+#include <map.h>
 
-  struct tartintconfig { 
-                  char      movesearchshortestway;   /*  kÅrzesten oder nur irgendeinen  */ 
-                  char      lookintotransports;   /*  gegnerische transporter einsehen  */ 
-                  char      lookintobuildings; 
-               }; 
-extern tartintconfig artintconfig;
+#include "typen.h"
 
-extern void  computerturn(void);
 
-extern int getposval(void);
+#ifdef __WATCOM_CPLUSPLUS__
+ typedef less<int> lessint;
+#endif
 
-extern void  longdistmove(void);
+
+
+    class AI : public BaseAI {
+           #ifdef __WATCOM_CPLUSPLUS__
+            map< int, AiParameter, lessint>  unitai;
+           #else
+            map< int, AiParameter>  unitai;
+           #endif
+
+           int maxTrooperMove; 
+           int maxTransportMove; 
+           int maxWeapDist[8]; 
+           int baseThreatsCalculated;
+
+           pmap activemap;
+
+
+           struct { 
+               int movesearchshortestway;   /*  kÅrzesten oder nur irgendeinen  */ 
+               int lookintotransports;   /*  gegnerische transporter einsehen  */ 
+               int lookintobuildings; 
+            } aiconfig; 
+
+            void  calculateThreat ( pvehicletype vt);
+            void  calculateThreat ( pvehicle eht );
+            void  calculateThreat ( pbuilding bld );
+
+            void  calculateAllThreats( void );
+            void  setup( void );
+
+            void reset ( void );
+
+        public:
+           AI ( pmap _map ) : BaseAI ( _map ) { reset(); activemap = _map; };
+           void  run ( void );
+           int getplayer ( void ) { return activemap->actplayer; };
+    };
 
