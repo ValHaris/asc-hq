@@ -28,7 +28,7 @@ OBJFILES = obj\edmain.obj obj\vehicletype.obj obj\basegfx.obj obj\basestrm.obj \
     obj\ascstring.obj obj\mapdisplay.obj obj\viewcalculation.obj \
     obj\vehicle.obj obj\buildings.obj obj\networkdata.obj obj\getopt1.obj \
     obj\getopt.obj obj\objecttype.obj obj\terraintype.obj \
-    obj\textfileparser.obj obj\textfiletags.obj
+    obj\textfileparser.obj obj\textfiletags.obj obj\itemrepository.obj
 RESFILES = 
 MAINSOURCE = mapeditor.bpf
 RESDEPEN = $(RESFILES)
@@ -42,7 +42,7 @@ PACKAGES = VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi
 SPARELIBS = VCL50.lib
 DEFFILE = 
 # ---------------------------------------------------------------------------
-PATHCPP = .;..\..\..;..\..\..\sdl;..\..\..\..\..\sdl\src\main\win32;..\..\..\LIBS\getopt
+PATHCPP = .;..\..\..\..\source;..\..\..\sdl;..\..\..\..\..\sdl\src\main\win32;..\..\..\LIBS\getopt
 PATHASM = .;
 PATHPAS = .;
 PATHRC = .;

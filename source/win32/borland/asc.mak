@@ -30,7 +30,7 @@ OBJFILES = obj\sg.obj obj\dlg_box.obj obj\attack.obj obj\basegfx.obj obj\basestr
     obj\ascstring.obj obj\resourcenet.obj obj\mapdisplay.obj obj\vehicle.obj \
     obj\buildings.obj obj\networkdata.obj obj\getopt1.obj obj\getopt.obj \
     obj\objecttype.obj obj\terraintype.obj obj\textfileparser.obj \
-    obj\textfiletags.obj
+    obj\textfiletags.obj obj\itemrepository.obj
 RESFILES = 
 MAINSOURCE = asc.bpf
 RESDEPEN = $(RESFILES)
@@ -44,7 +44,7 @@ PACKAGES = VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi
 SPARELIBS = VCL50.lib
 DEFFILE = 
 # ---------------------------------------------------------------------------
-PATHCPP = .;..\..;..\..\..\..\sdl\src\main\win32;..\..\sdl;..\..\LIBS\getopt
+PATHCPP = .;..\..\..\source;..\..\..\..\sdl\src\main\win32;..\..\sdl;..\..\LIBS\getopt
 PATHASM = .;
 PATHPAS = .;
 PATHRC = .;

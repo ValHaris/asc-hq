@@ -28,7 +28,7 @@
     <LIBRARIES value="VCL50.lib"/>
     <SPARELIBS value="VCL50.lib"/>
     <PACKAGES value="VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi"/>
-    <PATHCPP value=".;..\..\..;..\..\..\sdl;..\..\..\..\..\sdl\src\main\win32;..\..\..\LIBS\getopt"/>
+    <PATHCPP value=".;..\..\..\..\source;..\..\..\sdl;..\..\..\..\..\sdl\src\main\win32;..\..\..\LIBS\getopt"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>

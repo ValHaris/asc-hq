@@ -26,7 +26,7 @@ PACKAGES = VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi
 SPARELIBS = 
 DEFFILE = 
 # ---------------------------------------------------------------------------
-PATHCPP = .;..;..\..
+PATHCPP = .;..\..\tools;..\..\..\source
 PATHASM = .;
 PATHPAS = .;
 PATHRC = .;
