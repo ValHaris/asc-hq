@@ -33,11 +33,27 @@
 
 #include "soundList.h"
 #include "basestrm.h"
+#include "sgstream.h"
 #include "stringtokenizer.h"
 
 SoundList* SoundList::instance = NULL;
 
 
+SoundLoopManager :: SoundLoopManager ( Sound* snd, bool _active )
+                  : sound( snd ), active ( _active )
+{
+	displayLogMessage ( 10, " Instantiating SoundLoopManager: sound = %x, active = %d \n", int(snd), int(_active) );
+}
+
+
+void SoundLoopManager :: activate ( )
+{
+   if ( !active && sound ) {
+      sound->playLoop();
+      displayLogMessage ( 10, " SoundLoopManager: playing sound\n" );
+   }
+   active = true;
+}
 
 
 SoundList& SoundList::getInstance()
@@ -139,7 +155,10 @@ void SoundList::initialize(  )
 
 Sound* SoundList::getSound( const ASCString& filename, int fadeIn )
 {
-  if ( soundFiles.find ( filename ) == soundFiles.end() ) {
+	displayLogMessage ( 10, " SoundList::getSound(1) : trying to acquire handle for sound %s \n", filename.c_str() );
+
+   if ( soundFiles.find ( filename ) == soundFiles.end() ) {
+     displayLogMessage ( 10, " Sound has not been loaded !\n" );
      Sound* s = new Sound ( filename, fadeIn );
      soundFiles[filename] = s;
      return s;
@@ -160,12 +179,16 @@ Sound* SoundList::getSound( Sample snd, int subType, const ASCString& label )
       ASCString newlabel = copytoLower(label);
       for ( vector<SoundAssignment>::iterator i = soundAssignments.begin(); i != soundAssignments.end(); i++ )
          if ( snd == i->sample && subType == i->subType )
-            if ( newlabel.empty() || i->snd.find( newlabel ) == i->snd.end() )
+            if ( newlabel.empty() || i->snd.find( newlabel ) == i->snd.end() ) {
+            	displayLogMessage ( 10, " SoundList::getSound(2) : label not found, returning default sound \n" );
                return i->defaultSound;
-            else
+            } else {
+	            displayLogMessage ( 10, " SoundList::getSound(2) : label found, returning matching sound \n" );
                return i->snd[newlabel];
+            }
    }
 
+	displayLogMessage ( 10, " SoundList::getSound(2) : sound not found, returning NULL \n" );
    return NULL;
 }
 

@@ -20,9 +20,9 @@ class SoundLoopManager {
       Sound* sound;
       bool active;
    public:
-      SoundLoopManager ( Sound* snd, bool _active = true ) : sound( snd ), active ( _active ) {};
+      SoundLoopManager ( Sound* snd, bool _active = true );
       // void setSound ( Sound* snd ) { sound = snd; };
-      void activate ( ) { if ( !active && sound ) sound->playLoop(); active = true; };
+      void activate ( );
       void fadeOut ( int ms ) { if ( sound && active ) sound->fadeOut( ms ); };
       ~SoundLoopManager() { if ( sound && active ) sound->stop(); };
 };
