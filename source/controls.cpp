@@ -3,9 +3,13 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.123 2001-12-14 10:20:04 mbickel Exp $
+//     $Id: controls.cpp,v 1.124 2001-12-19 17:16:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.123  2001/12/14 10:20:04  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.122  2001/11/12 18:28:33  mbickel
 //      Fixed graphical glitches when unit moves near border
 //      If max num of mines exceeded, no icon is displayed for placing a new one
@@ -215,7 +219,7 @@
 */
 
 #include <stdio.h>           
-#include <string.h>
+#include <cstring>
 #include <math.h>
 #include <stdarg.h>
 

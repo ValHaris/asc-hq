@@ -31,6 +31,7 @@ USEUNIT("..\..\terraintype.cpp");
 USEUNIT("..\..\textfileparser.cpp");
 USEUNIT("..\..\textfiletags.cpp");
 USEUNIT("..\..\stringtokenizer.cpp");
+USEUNIT("..\lib\errorout.cpp");
 //---------------------------------------------------------------------------
 #define Library
 

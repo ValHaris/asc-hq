@@ -59,7 +59,7 @@
 
 
 #include <stdio.h>
-#include <string.h>
+#include <cstring>
 #include <stdlib.h>
 #include <new.h>
 #include <malloc.h>

@@ -7,9 +7,15 @@
 */
 
 
-//     $Id: network.cpp,v 1.24 2001-10-02 14:06:28 mbickel Exp $
+//     $Id: network.cpp,v 1.25 2001-12-19 17:16:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2001/10/02 14:06:28  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.23  2001/07/15 10:36:25  mbickel
 //      Added explanation message in email game save dialog
 //
@@ -128,7 +134,7 @@
 
 #include <stdio.h>                    
 #include <stdlib.h>
-#include <string.h>
+#include <cstring>
 
 #include "global.h"
 #include "misc.h"

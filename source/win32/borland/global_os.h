@@ -1,6 +1,10 @@
-//     $Id: global_os.h,v 1.6 2001-07-14 21:07:47 mbickel Exp $
+//     $Id: global_os.h,v 1.7 2001-12-19 17:16:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2001/07/14 21:07:47  mbickel
+//      Sound works now under Win32 too
+//      Error reporting on Win32 during startup works again.
+//
 //     Revision 1.5  2001/05/18 22:30:30  mbickel
 //      The data file is now installed in the correct directory
 //      If the installation directory is changed with configure, the new path
@@ -60,6 +64,7 @@
   #define HAVE_STRICMP
   #define HAVE_ITOA
   #define HAVE_DIRENT_H
+  #define HAVE_STDIO_H
   #define StaticClassVariable
   #define NoStdio
 

@@ -2,9 +2,15 @@
     \brief Platform indepedant graphic functions. 
 */
 
-//     $Id: basegfx.cpp,v 1.31 2001-12-19 11:46:35 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.32 2001-12-19 17:16:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2001/12/19 11:46:35  mbickel
+//      Applied patches from Michael Moerz:
+//       - 64bit cleanup of demount.cpp, mount.cpp
+//       - removal of #ifdef converter and moved conveter specific functions
+//         to independant lib
+//
 //     Revision 1.30  2001/12/14 10:20:04  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -111,7 +117,7 @@
 //
 
 
-#include <string.h>
+#include <cstring>
 #include <malloc.h>
 #include <math.h>
 #include "global.h"

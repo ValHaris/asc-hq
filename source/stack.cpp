@@ -2,9 +2,15 @@
     \brief A small general-purpose stack (not type safe)
 */
 
-//     $Id: stack.cpp,v 1.4 2001-01-28 14:04:20 mbickel Exp $
+//     $Id: stack.cpp,v 1.5 2001-12-19 17:16:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2001/01/28 14:04:20  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.3  2000/12/23 13:19:47  mbickel
 //      Made ASC compileable with Borland C++ Builder
 //
@@ -37,9 +43,9 @@
     Boston, MA  02111-1307  USA
 */
 
+#include <cstring>
 
-#include <string.h>
-
+#include "global.h"
 #include "stack.h"
 
 

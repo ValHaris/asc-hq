@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <string.h>
+#include <cstring>
 #include "misc.h"
 #include "networkdata.h"
 

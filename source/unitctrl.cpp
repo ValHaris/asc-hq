@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.81 2001-12-14 10:20:05 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.82 2001-12-19 17:16:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.81  2001/12/14 10:20:05  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.80  2001/11/28 14:55:12  mbickel
 //      Fixed: airplane flying out of building has wrong movement left
 //      Fixed: crash in AI
@@ -1416,7 +1420,7 @@ int ChangeVehicleHeight :: verticalHeightChangeMoveCost ( pvehicle vehicle, cons
       return md;
 
    }
-   return -unspecified_error;
+//   return -unspecified_error;
 }
 
 
@@ -1447,7 +1451,7 @@ int ChangeVehicleHeight :: verticalHeightChange ( void )
 
          vehicle->setMovement ( newmovement ); 
          if ( !helicopter_attack_after_descent )
-            vehicle->attacked = true; 
+            vehicle->attacked = true;
          vehicle->tank.fuel -= fuelcost;
 
       } else

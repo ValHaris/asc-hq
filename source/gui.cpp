@@ -4,9 +4,14 @@
 */
 
 
-//     $Id: gui.cpp,v 1.73 2001-11-28 13:03:16 mbickel Exp $
+//     $Id: gui.cpp,v 1.74 2001-12-19 17:16:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.73  2001/11/28 13:03:16  mbickel
+//      Fixed: attack selectable although 0% hit accuracy
+//      Fixed: refuelling not possible if weapon had wrong target height
+//      Fixed: repair icon displayed when refuelling
+//
 //     Revision 1.72  2001/11/22 15:08:23  mbickel
 //      Added gameoption heightChangeMovement
 //
@@ -157,7 +162,7 @@
 */
 
 #include <stdio.h>                           
-#include <string.h>
+#include <cstring>
 #include <stdlib.h>
 
 #include "vehicletype.h"

@@ -2,9 +2,13 @@
     \brief The event handling of ASC
 */
 
-//     $Id: missions.cpp,v 1.30 2001-12-14 10:20:05 mbickel Exp $
+//     $Id: missions.cpp,v 1.31 2001-12-19 17:16:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2001/12/14 10:20:05  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.29  2001/10/28 20:42:17  mbickel
 //      Fixed AI crashes
 //      Fixed problems when next campaign map could not be found.
@@ -168,7 +172,7 @@
 
 #include <stdio.h>                                                                
 
-#include <string.h>
+#include <cstring>
 
 #include "global.h"
 #include "buildingtype.h"

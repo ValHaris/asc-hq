@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.85 2001-12-14 10:20:05 mbickel Exp $
+//     $Id: typen.cpp,v 1.86 2001-12-19 17:16:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.85  2001/12/14 10:20:05  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.84  2001/11/22 13:49:32  mbickel
 //      Fixed crash in Mapeditor when selection color 9
 //      Fixed: turrets being displayed gray
@@ -392,7 +396,7 @@
 */
 
 #include <stdio.h>
-#include <string.h>
+#include <cstring>
 
 #include "global.h"
 #include "misc.h"

@@ -6,9 +6,13 @@
     
 */
 
-//     $Id: newfont.cpp,v 1.13 2001-12-14 10:20:05 mbickel Exp $
+//     $Id: newfont.cpp,v 1.14 2001-12-19 17:16:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2001/12/14 10:20:05  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.12  2001/10/31 18:34:31  mbickel
 //      Some adjustments and fixes for gcc 3.0.2
 //
@@ -86,7 +90,7 @@
     Boston, MA  02111-1307  USA
 */
 
-#include <string.h>
+#include <cstring>
 #include <stdio.h>
 #include <errno.h>
 #include <stdarg.h>

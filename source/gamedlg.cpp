@@ -1,8 +1,12 @@
 /*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.85 2001-11-04 22:52:35 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.86 2001-12-19 17:16:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.85  2001/11/04 22:52:35  mbickel
+//      Fixed bug in wood net calculation
+//      Fixed broken refuel dialog
+//
 //     Revision 1.84  2001/10/28 20:42:17  mbickel
 //      Fixed AI crashes
 //      Fixed problems when next campaign map could not be found.
@@ -394,7 +398,7 @@
 */
 
 #include <stdio.h>                        
-#include <string.h>
+#include <cstring>
 #include <ctype.h>
 #include <stdlib.h>
 #include <math.h>

@@ -5,9 +5,12 @@
     which is called #loadpcx.cpp , but not used any more.
 */
 
-//     $Id: loadpcxc.cpp,v 1.18 2001-10-21 13:16:59 mbickel Exp $
+//     $Id: loadpcxc.cpp,v 1.19 2001-12-19 17:16:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2001/10/21 13:16:59  mbickel
+//      Cleanup and documentation
+//
 //     Revision 1.17  2001/08/09 22:08:22  mbickel
 //      Improved building text file IO
 //
@@ -124,7 +127,7 @@
 */
 
 #include <stdio.h>
-#include <string.h>
+#include <cstring>
 
 #include "basestrm.h"
 #include "tpascal.inc"

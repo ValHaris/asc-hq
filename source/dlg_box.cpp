@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.63 2001-12-14 10:20:05 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.64 2001-12-19 17:16:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2001/12/14 10:20:05  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.62  2001/11/05 21:10:41  mbickel
 //      Updated palette code
 //
@@ -304,7 +308,7 @@
 */
 
 #include <stdio.h>
-#include <string.h>
+#include <cstring>
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdarg.h>

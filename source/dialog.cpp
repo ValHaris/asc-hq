@@ -2,9 +2,13 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.103 2001-12-14 10:20:05 mbickel Exp $
+//     $Id: dialog.cpp,v 1.104 2001-12-19 17:16:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.103  2001/12/14 10:20:05  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.102  2001/12/05 15:46:35  mbickel
 //      New string class
 //
@@ -212,7 +216,7 @@
 
 
 #include <stdio.h>
-#include <string.h>
+#include <cstring>
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdarg.h>

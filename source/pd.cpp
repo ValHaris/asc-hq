@@ -2,9 +2,13 @@
     \brief The implementation of the Pulldown Menu
 */
 
-//     $Id: pd.cpp,v 1.17 2001-07-30 17:43:13 mbickel Exp $
+//     $Id: pd.cpp,v 1.18 2001-12-19 17:16:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2001/07/30 17:43:13  mbickel
+//      Added Microsoft Visual Studio .net project files
+//      Fixed some warnings
+//
 //     Revision 1.16  2001/02/11 11:39:40  mbickel
 //      Some cleanup and documentation
 //
@@ -91,7 +95,7 @@
     Boston, MA  02111-1307  USA
 */
 
-#include <string.h>
+#include <cstring>
 #include <stdlib.h>
 #include <malloc.h>
 #include <ctype.h>

@@ -24,7 +24,7 @@
 #ifndef research_h_included
  #define research_h_included
 
- #include <string.h>
+#include <cstring>
  #include <map>
 
  #include "basestreaminterface.h"

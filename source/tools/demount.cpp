@@ -22,11 +22,7 @@
 #  include <config.h>
 #endif
 
-#ifdef HAVE_STRING_H
-#  include <string.h>
-#elif #ifdef HAVE_STRINGS_H
-#  include <strings.h>
-#endif
+#include <cstring>
 
 #include <SDL_types.h>
 

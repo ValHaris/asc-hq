@@ -17,7 +17,7 @@
 
 #include "Named.h"
 
-#include <string.h>
+#include <cstring>
 #include <malloc.h>
 
 Named::Named()

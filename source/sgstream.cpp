@@ -5,9 +5,15 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.77 2001-12-19 11:46:36 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.78 2001-12-19 17:16:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.77  2001/12/19 11:46:36  mbickel
+//      Applied patches from Michael Moerz:
+//       - 64bit cleanup of demount.cpp, mount.cpp
+//       - removal of #ifdef converter and moved conveter specific functions
+//         to independant lib
+//
 //     Revision 1.76  2001/12/14 10:20:05  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -190,7 +196,7 @@
 
                                                
 #include <malloc.h>
-#include <string.h>
+#include <cstring>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>

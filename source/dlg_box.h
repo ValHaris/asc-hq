@@ -2,9 +2,13 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.26 2001-10-11 10:41:06 mbickel Exp $
+//     $Id: dlg_box.h,v 1.27 2001-12-19 17:16:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2001/10/11 10:41:06  mbickel
+//      Restructured platform fileio handling
+//      Added map archival information to mapeditor
+//
 //     Revision 1.25  2001/10/02 14:06:28  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -154,7 +158,7 @@
 #ifndef dlg_box_h
 #define dlg_box_h
 
-#include <string.h>
+#include <cstring>
 
 #include "newfont.h"
 #include "events.h"

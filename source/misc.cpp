@@ -1,6 +1,12 @@
-//     $Id: misc.cpp,v 1.23 2001-12-19 11:46:35 mbickel Exp $
+//     $Id: misc.cpp,v 1.24 2001-12-19 17:16:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2001/12/19 11:46:35  mbickel
+//      Applied patches from Michael Moerz:
+//       - 64bit cleanup of demount.cpp, mount.cpp
+//       - removal of #ifdef converter and moved conveter specific functions
+//         to independant lib
+//
 //     Revision 1.22  2001/10/31 18:34:31  mbickel
 //      Some adjustments and fixes for gcc 3.0.2
 //
@@ -123,7 +129,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <cstring>
 #include <ctype.h>
 #include <stdarg.h>
 #include <iostream>

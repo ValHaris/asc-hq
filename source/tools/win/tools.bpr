@@ -10,14 +10,15 @@
       obj\graphicselector.obj obj\loadpcxc.obj obj\newfont.obj obj\CLoadable.obj 
       obj\Property.obj obj\PropertyGroup.obj obj\graphics.obj obj\getopt1.obj 
       obj\getopt.obj obj\strtmesg.obj obj\objecttype.obj obj\terraintype.obj 
-      obj\textfileparser.obj obj\textfiletags.obj obj\stringtokenizer.obj"/>
+      obj\textfileparser.obj obj\textfiletags.obj obj\stringtokenizer.obj 
+      obj\errorout.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value="..\..\libs\bzlib\win\bzlib.lib ..\..\..\..\sdl\bin\sdl.lib"/>
     <LIBRARIES value=""/>
     <PACKAGES value=""/>
-    <PATHCPP value=".;..\..;..\..\sdl;..\..\LIBS\getopt"/>
+    <PATHCPP value=".;..\..;..\..\sdl;..\..\LIBS\getopt;..\lib"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -25,8 +26,8 @@
     <USERDEFINES value="_DEBUG;HEXAGON;_WIN32_;WIN32;converter;_NOASM_;_SDL_"/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="tools.bpf"/>
-    <INCLUDEPATH value="..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image"/>
-    <LIBPATH value="..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\lib;..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image"/>
+    <LIBPATH value="..\lib;..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par -w-csu"/>
     <LISTFILE value=""/>
   </MACROS>

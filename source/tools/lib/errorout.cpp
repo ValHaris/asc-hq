@@ -7,13 +7,11 @@
 #  include <config.h>
 #endif
 
-#ifdef HAVE_STDIO_H
-#  include <stdio.h>
-#endif
+#include <iostream>
+#include <cstdio>
+#include <cstdarg>
 
-/* mikem: BIG FAT WARNING-> this is not really portable */
-#include <stdarg.h>
-
+#include "../../global.h"
 #include "ascstring.h"
 
 void fatalError ( const ASCString& text )
