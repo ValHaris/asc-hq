@@ -391,7 +391,7 @@ int main(int argc, char *argv[] )
                               "</tr>\n" );
 
          // Werte der Waffen
-         for ( int w = 0; w < ft->weapons->count ; w++) {
+         for ( w = 0; w < ft->weapons->count ; w++) {
             fprintf ( detailed3, "<tr><td>#%d</td>", w+1 );
             fprintf ( detailed3, "    <td align=\"center\">? ?</td>" ); //Abfrage für AMMO funktioniert noch nicht
             fprintf ( detailed3, "    <td align=\"center\">%d</td>", (ft->weapons->weapon[w].mindistance+9)/10 );
