@@ -708,7 +708,7 @@ void Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
 
 bool  Vehicle :: vehicleconstructable ( pvehicletype tnk, int x, int y )
 {
-   if ( tnk->terrainaccess.accessible ( gamemap->getField(x,y)->bdt ) > 0 )
+   if ( tnk->terrainaccess.accessible ( gamemap->getField(x,y)->bdt ) > 0 || height >= chtieffliegend)
       if ( tnk->productionCost.material <= tank.material &&
            tnk->productionCost.energy   <= tank.fuel  )
            if ( beeline (x, y, xpos, ypos) <= maxmalq )

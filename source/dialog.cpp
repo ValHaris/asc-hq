@@ -2,9 +2,12 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.100 2001-10-31 18:34:30 mbickel Exp $
+//     $Id: dialog.cpp,v 1.101 2001-11-12 18:28:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.100  2001/10/31 18:34:30  mbickel
+//      Some adjustments and fixes for gcc 3.0.2
+//
 //     Revision 1.99  2001/10/11 10:41:06  mbickel
 //      Restructured platform fileio handling
 //      Added map archival information to mapeditor
@@ -3663,7 +3666,6 @@ void         tenternamestrings::init(  char plyexist, char md )
 
 void         tenternamestrings::done ( void ) 
 {
-  delete[] title;
   tdialogbox::done();
 }
 

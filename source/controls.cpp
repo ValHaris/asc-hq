@@ -3,9 +3,14 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.121 2001-11-08 17:32:14 mbickel Exp $
+//     $Id: controls.cpp,v 1.122 2001-11-12 18:28:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.121  2001/11/08 17:32:14  mbickel
+//      Fixed AI crash
+//      Added Replay to AI
+//      New replay commands
+//
 //     Revision 1.120  2001/11/04 22:52:35  mbickel
 //      Fixed bug in wood net calculation
 //      Fixed broken refuel dialog
@@ -619,7 +624,7 @@ void         tputmine::testfield(const MapCoordinate& mc)
          fld->a.temp += 2;
          numberoffields++;
       }
-      if (mienenlegen && (fld->mines.empty() || fld->mineowner() == player)) {
+      if (mienenlegen && (fld->mines.empty() || fld->mineowner() == player) && fld->mines.size() < gamemap->getgameparameter ( cgp_maxminesonfield )) {
          fld->a.temp += 1;
          numberoffields++;
       }

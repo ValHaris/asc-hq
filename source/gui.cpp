@@ -4,9 +4,15 @@
 */
 
 
-//     $Id: gui.cpp,v 1.69 2001-10-21 20:00:30 mbickel Exp $
+//     $Id: gui.cpp,v 1.70 2001-11-12 18:28:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.69  2001/10/21 20:00:30  mbickel
+//      Fixed AI problems
+//      Fixed: wrong message when unit could not attack
+//      Fxied: invalid order in which objects were displayed
+//      Replay: moving units are only displayed if BOTH fields are visible
+//
 //     Revision 1.68  2001/09/20 15:36:09  mbickel
 //      New object displaying mode
 //
@@ -1706,7 +1712,7 @@ int   tnsguiiconputgroundmine::available    ( void )
    if (moveparams.movestatus == 90) { 
       pfield fld = getactfield(); 
       if ( (fld->typ->art & getTerrainBitType(cbwater)).none() )
-         if ( fld->a.temp ) 
+         if ( fld->a.temp & 1)
             if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
                return true; 
    } 
@@ -1734,19 +1740,19 @@ tnsguiiconputantipersonalmine::tnsguiiconputantipersonalmine ( void )
    filename = "persmine";
 }
 
-void  tnsguiiconputantipersonalmine::exec         ( void ) 
+void  tnsguiiconputantipersonalmine::exec         ( void )
 {
-   legemine(cmantipersonnelmine, 1); 
+   legemine(cmantipersonnelmine, 1);
 }
 
 
 
-int   tnsguiiconputseamine::available    ( void ) 
+int   tnsguiiconputseamine::available    ( void )
 {
-   if (moveparams.movestatus == 90) { 
-      pfield fld = getactfield(); 
+   if (moveparams.movestatus == 90) {
+      pfield fld = getactfield();
       if ( (fld->typ->art & getTerrainBitType(cbwater)).any() )
-         if (fld->a.temp ) 
+         if (fld->a.temp & 1 )
             if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
                return true; 
    } 

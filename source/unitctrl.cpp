@@ -1,6 +1,11 @@
-//     $Id: unitctrl.cpp,v 1.73 2001-11-08 17:32:14 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.74 2001-11-12 18:28:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.73  2001/11/08 17:32:14  mbickel
+//      Fixed AI crash
+//      Added Replay to AI
+//      New replay commands
+//
 //     Revision 1.72  2001/10/21 20:00:30  mbickel
 //      Fixed AI problems
 //      Fixed: wrong message when unit could not attack
@@ -1275,10 +1280,7 @@ int ChangeVehicleHeight :: moveunitxy ( int xt1, int yt1, IntFieldList& pathToMo
          if ( vehicle->tank.fuel < 0 )
             vehicle->tank.fuel = 0;
 
-         if ( vehicle->typ->steigung * minmalq <= airplanemoveafterstart )
-            vehicle->setMovement ( 0 );
-         else
-            vehicle->setMovement ( airplanemoveafterstart );
+         vehicle->setMovement ( airplanemoveafterstart );
 
          vehicle->attacked = 1;
          vehicle->height = chtieffliegend;

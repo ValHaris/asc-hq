@@ -1,4 +1,4 @@
-/*! \file mapdisplay.cpp    
+/*! \file mapdisplay.cpp
     \brief everything for displaying the map on the screen
 */
 
@@ -86,12 +86,11 @@ int vfbscanlinelength;
  #define streetleftshift 0
  #define cursorrightshift -8
  #define unitdownshift 0
-#ifdef FREEMAPZOOM
- #define unitrightshift 0
-#else
- #define unitrightshift -1
-#endif
-
+ #ifdef FREEMAPZOOM
+  #define unitrightshift 0
+ #else
+  #define unitrightshift -1
+ #endif
 #else
  #define streettopshift 5
  #define streetleftshift 5
@@ -117,21 +116,14 @@ int scrleftspace = 21;
 
 #define vfbbottomspace 25
 
-#ifdef HEXAGON
- #define scrtopspace 22
- #define vfbfieldxdif 19
- #define vfbfirstpointxdif ( vfbfieldxdif - 3 )
- #define vfbfirstpointydif 0
- #define vfbleftspace 80
- #define vfbtopspace 80
-#else
- #define scrtopspace 19
- #define vfbfieldxdif 19
- #define vfbfirstpointxdif ( vfbfieldxdif - 4 )
- #define vfbfirstpointydif 5
- #define vfbleftspace 40
- #define vfbtopspace 40
-#endif
+#define scrtopspace 22
+/*
+#define vfbfieldxdif 19
+#define vfbfirstpointxdif ( vfbfieldxdif - 3 )
+#define vfbfirstpointydif 0
+*/
+#define vfbleftspace 80
+#define vfbtopspace 80
 
 #define scrfirstpointxdif 9
 #define scrfirstpointydif 0
@@ -803,7 +795,7 @@ void tdisplaymap :: cp_buf ( int x1, int y1, int x2, int y2 )
        parm.vfbsteps = copybufstepwidth;
 
       #ifdef _NOASM_
-       copyvfb2displaymemory_zoom ( &parm.src, getfieldposx ( x1-1, y1-1), getfieldposy( x1-1, y1-1 ), getfieldposx ( x2, y2) + getfieldsizex(), getfieldposy( x2, y2 ) + getfieldsizex());
+       copyvfb2displaymemory_zoom ( &parm.src, getfieldposx ( x1-2, y1-2), getfieldposy( x1-2, y1-2 ), getfieldposx ( x2, y2) + getfieldsizex(), getfieldposy( x2, y2 ) + getfieldsizex());
       #else
        copyvfb2displaymemory_zoom ( &parm.src );
       #endif
@@ -1394,13 +1386,13 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
       yp1 = vfbtopspace + touchedfields->miny * fielddisty;
       if ( yp1 < 0 )
          yp1 = 0;
+
       yp2 = vfbtopspace + touchedfields->maxy * fielddisty + fieldysize;
       if ( yp2 > dispmapdata.vfbheight )
          yp2 = dispmapdata.vfbheight;
 
       char* picbuf = new char [ imagesize ( xp1, yp1, xp2, yp2 ) ];
       getimage ( xp1, yp1, xp2, yp2, picbuf );
-
 
       int dx;
       int dy;
@@ -1953,9 +1945,9 @@ void tbackgroundpict :: paintrectangleborder ( void )
                for ( x = rectangleborder.x1 - p; x < rectangleborder.x2 + p; x++ )
                   putpixel ( x, rectangleborder.y1 - p, xlattables.a.dark2[ getpixel ( x, rectangleborder.y1-p )] );
                for ( y = rectangleborder.y1 - p; y < rectangleborder.y2 + p; y++ )
-                  putpixel ( rectangleborder.x2 + p, y, xlattables.a.light[ getpixel ( rectangleborder.x2 + p, y )] );
+                  putpixel ( rectangleborder.x2 + p, y, xlattables.a.light3[ getpixel ( rectangleborder.x2 + p, y )] );
                for ( x = rectangleborder.x2 + p; x > rectangleborder.x1 - p; x-- )
-                  putpixel ( x, rectangleborder.y2 + p, xlattables.a.light[ getpixel ( x, rectangleborder.y2+p )] );
+                  putpixel ( x, rectangleborder.y2 + p, xlattables.a.light3[ getpixel ( x, rectangleborder.y2+p )] );
                for ( y = rectangleborder.y2 + p; y > rectangleborder.y1 - p; y-- )
                   putpixel ( rectangleborder.x1 - p, y, xlattables.a.dark2[ getpixel ( rectangleborder.x1 - p, y )] );
 
