@@ -685,7 +685,8 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_vehicleinfo,     ua_researchinfo,     ua_unitstatistics, ua_buildingstatistics, ua_newmessage, ua_viewqueuedmessages,
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
-                    ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange };
+                    ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
+                    ua_aibench };
 
 
 class tsgpulldown : public tpulldown {
@@ -757,6 +758,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "save ~S~creen as PCXõ0", ua_writescreentopcx );
    addbutton ( "benchmark without view calc", ua_benchgamewov );
    addbutton ( "benchmark with view calc", ua_benchgamewv);
+   addbutton ( "compiler benchmark (AI)", ua_aibench );
    addbutton ( "test memory integrity", ua_heapcheck );
    addbutton ( "seperator", -1 );
    addbutton ( "select graphic set", ua_selectgraphicset );
@@ -1507,6 +1509,18 @@ void execuseraction ( tuseractions action )
 
         case ua_viewunitmovementrange: viewunitmovementrange ( getactfield()->vehicle, ct_invvalue );
                        break;
+
+        case ua_aibench: if ( maintainencecheck() || 1 ) {
+                            if ( !actmap->player[ actmap->actplayer ].ai )
+                               actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
+
+                            if ( AI* ai = dynamic_cast<AI*>( actmap->player[ actmap->actplayer ].ai )) {
+                               savegame ( "ai-bench-start.sav" );
+                               ai->run( true );
+                            }
+                         }
+                       break;
+
     }
 
 

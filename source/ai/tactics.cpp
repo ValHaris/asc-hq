@@ -839,7 +839,7 @@ class UnitAttacksUnit_FakeHemming : public tunitattacksunit {
 
 void AI :: tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, pvehicle* positions, float value, pvehicle* finalPosition, float& finalValue, int unitsPositioned, int recursionDepth, int startTime )
 {
-   if ( m == mvc.end() || unitsPositioned >= 6 || recursionDepth >= 8 || startTime + config.maxTactTime < ticker ) {
+   if ( m == mvc.end() || unitsPositioned >= 6 || recursionDepth >= 8 || (startTime + config.maxTactTime < ticker && !benchMark)) {
       float value = 0;
       pvehicle target = mvc.begin()->enemy;
       npush ( target->damage );

@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: ai.h,v 1.9 2001-10-31 20:10:26 mbickel Exp $
+//     $Id: ai.h,v 1.10 2001-11-29 17:34:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2001/10/31 20:10:26  mbickel
+//      Circumvented a bug in gcc
+//
 //     Revision 1.8  2001/10/02 14:06:29  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -80,6 +83,8 @@
 
 
     class AI : public BaseAI {
+           bool benchMark;
+
            bool _isRunning;
            int _vision;
            int unitCounter;
@@ -479,10 +484,14 @@
 
             void checkKeys ( void );
 
-
         public:
            AI ( pmap _map, int _player ) ;
-           void  run ( void );
+
+           void run (  ) { run ( false );};
+           //! starts the Ai. If benchmark is true, the AI might take longer since it is not time limited, it won't display any graphics and will output the time it needed to run completely
+           void run ( bool benchmark );
+
+
            pmap getMap ( void ) { return activemap; };
            int getPlayerNum ( void ) { return player; };
            Player& getPlayer ( void ) { return getMap()->player[player]; };

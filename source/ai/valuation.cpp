@@ -204,6 +204,7 @@ AiParameter::JobList AI::chooseJob ( const Vehicletype* typ, int functions )
    for ( int w = 0; w < typ->weapons.count; w++ )
       if ( typ->weapons.weapon[w].service() )
          service = true;
+
    if ( ((functions & cfrepair) || service) && maxmove >= minmalq )
       jobList.push_back ( AiParameter::job_supply );
 
@@ -218,7 +219,9 @@ AiParameter::JobList AI::chooseJob ( const Vehicletype* typ, int functions )
       }
    }
 
-   if ( (maxstrength*1.5 < typ->view  || maxstrength*1.5 < typ->jamming) && maxmove > minmalq )
+   if ( ( maxstrength*1.5 < typ->view
+        || (maxstrength*1.5 < typ->jamming && !(typ->functions & cfownFieldJamming)))
+       && maxmove > minmalq  )
       jobList.push_back (  AiParameter::job_recon );
 
    if ( maxstrength > 0 )

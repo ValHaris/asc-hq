@@ -20,6 +20,8 @@
 
 AI :: AI ( pmap _map, int _player ) : activemap ( _map ) , sections ( this )
 {
+   benchMark = false;
+
    player = _player;
 
    _isRunning = false;
@@ -129,9 +131,11 @@ void AI::checkKeys ( void )
 }
 
 
-void AI:: run ( void )
+void AI:: run ( bool benchMark )
 {
-   if ( getMap()->playerView >= 0 )
+   this->benchMark = benchMark;
+
+   if ( getMap()->playerView >= 0 && !benchMark)
       mapDisplay = rmd;
    else
       mapDisplay = NULL;
@@ -197,22 +201,21 @@ void AI:: run ( void )
 
    closeReplayLogging();
 
-   if ( CGameOptions::Instance()->runAI == 2 )
-      if ( duration > 100*60 )
-         displaymessage ("The AI took %d seconds to run\n"
-                         " setup: %d \n"
-                         " service: %d \n"
-                         " conquer: %d \n"
-                         " container: %d \n"
-                         " tactics: %d \n"
-                         " strategy: %d \n",
-           3, duration / 100,
-              setupTime / 100,
-              serviceTime/100,
-              conquerTime /100,
-              containerTime/100,
-              tacticsTime/100,
-              strategyTime/100 );
+   if ( (CGameOptions::Instance()->runAI == 2 && duration > 100*60) || benchMark )
+      displaymessage ("The AI took %.2f seconds to run\n"
+                      " setup: %d \n"
+                      " service: %d \n"
+                      " conquer: %d \n"
+                      " container: %d \n"
+                      " tactics: %d \n"
+                      " strategy: %d \n",
+        3, float(duration)/100,
+           setupTime / 100,
+           serviceTime/100,
+           conquerTime /100,
+           containerTime/100,
+           tacticsTime/100,
+           strategyTime/100 );
 
    displaymessage2("AI completed in %d second", duration/100);
 
