@@ -76,9 +76,9 @@ type=DATA
 
 [Workspace_1]
 browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/about/intro.html
-cpp_file=Untitled.cpp
-header_file=/home/martin/games/asc/source/ASCStringHelpers.h
-openfiles=Untitled.h,Untitled.cpp,/home/martin/games/asc/source/ASCStringHelpers.h
+cpp_file=/home/martin/games/asc/source/sdl/asc_IMG_jpg.c
+header_file=Untitled.h
+openfiles=Untitled.h,Untitled.cpp,/home/martin/games/asc/source/sdl/asc_IMG_jpg.c
 show_outputview=true
 show_treeview=true
 

@@ -24,9 +24,6 @@
 
 /* This is a JPEG image file loading framework */
 
-// #include <stdio.h>
-#include <cstring>
-
 #include "../global.h"
 #include sdlheader
 
