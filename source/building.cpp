@@ -54,12 +54,14 @@
 #include "resourcenet.h"
 #include "research.h"
 #include "itemrepository.h"
+#include "gui.h"
 
 
 
 
 
-
+class csubwindow;
+class ccontainer;
 
 //typedef class ccontainer*   pcontainer;
 typedef class ccontainer_b* pcontainer_b;

@@ -31,7 +31,6 @@
 
 #ifndef controlsH
 #define controlsH
-#include "gui.h"
 #include "typen.h"
 // #include "mousecontrol.h"
 #include "soundList.h"

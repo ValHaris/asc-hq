@@ -117,7 +117,7 @@ SmallGuiButton::~SmallGuiButton()
 
 void GuiIconHandler::eval()
 {
-   MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
+   MapCoordinate mc = actmap->player[actmap->playerView].cursorPos;
 
    if ( !mc.valid() )
       return;

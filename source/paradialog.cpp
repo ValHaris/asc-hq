@@ -124,36 +124,46 @@ return true;
 }
 */
 
+bool ASC_PG_App::processEvents ( )
+{
+   int eventNum = 0;
+
+   SDL_Event event;
+   int motionx = 0;
+   int motiony = 0;
+   while ( getQueuedEvent( event )) {
+      bool skipEvent = false;
+      if ( event.type == SDL_MOUSEMOTION ) {
+         SDL_Event nextEvent;
+         if ( peekEvent ( nextEvent ) )
+            if ( nextEvent.type == SDL_MOUSEMOTION ) {
+               skipEvent = true;
+               motionx += event.motion.xrel;
+               motiony += event.motion.yrel;
+            }
+         if ( !skipEvent ) {
+            event.motion.xrel += motionx;
+            event.motion.yrel += motiony;
+            motionx = 0;
+            motiony = 0;
+         }
+      }
+
+      if ( !skipEvent ) {
+         pgApp->PumpIntoEventQueue( &event );
+         ++eventNum;
+      }
+   }
+   return eventNum  > 0;
+}
+
+
 int ASC_PG_App::Run ( )
 {
    enableLegacyEventHandling ( false );
 
    while ( !quitModalLoopValue ) {
-      SDL_Event event;
-      int motionx = 0;
-      int motiony = 0;
-      if ( getQueuedEvent( event )) {
-         bool skipEvent = false;
-         if ( event.type == SDL_MOUSEMOTION ) {
-            SDL_Event nextEvent;
-            if ( peekEvent ( nextEvent ) )
-               if ( nextEvent.type == SDL_MOUSEMOTION ) {
-                  skipEvent = true;
-                  motionx += event.motion.xrel;
-                  motiony += event.motion.yrel;
-               }
-            if ( !skipEvent ) {
-               event.motion.xrel += motionx;
-               event.motion.yrel += motiony;
-               motionx = 0;
-               motiony = 0;
-            }
-         }
-
-         if ( !skipEvent )
-            pgApp->PumpIntoEventQueue( &event );
-
-      } else
+      if ( !processEvents() )
          eventIdle();
    }
    enableLegacyEventHandling ( true );
@@ -741,11 +751,12 @@ bool Panel::setup()
       }
 
 
+
+
       WidgetParameters widgetParameters = defaultWidgetParameters;
-      widgetParameters.assign ( this );
-      SetBackground( IconRepository::getIcon(panelBackgroundImage).getBaseSurface() );
 
       widgetParameters.runTextIO( pc );
+      widgetParameters.assign ( this );
 
       parsePanelASCTXT( pc, this, widgetParameters );
 

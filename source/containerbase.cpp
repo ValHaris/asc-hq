@@ -202,6 +202,7 @@ const ContainerBase* ContainerBase :: findUnit ( const Vehicle* veh ) const
  };
 
 
+
 void ContainerBase::paintField ( const Surface& img, Surface& dest, SPoint pos, int dir, bool shaded, int shadowDist ) const
 {
 
@@ -244,11 +245,17 @@ void ContainerBase::paintField ( const Surface& img, Surface& dest, SPoint pos, 
                         TargetPixelSelector_All>
                       ( img, dest, pos, nullParam,nullParam, dirpair, nullParam);
         } else {
-           megaBlitter< ColorTransform_PlayerCol,
-                        ColorMerger_AlphaOverwrite,
-                        SourcePixelSelector_CacheRotation,
-                        TargetPixelSelector_All>
-                      ( img, dest, pos, getOwner(),nullParam, dirpair, nullParam);
+           if ( img.GetPixelFormat().BytesPerPixel() == 1 ) {
+               MegaBlitter<1,4,ColorTransform_PlayerCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter;
+               blitter.setPlayer( getOwner() );
+               blitter.setAngle( img, directionangle[dir] );
+               blitter.blit( img, dest, pos );
+           } else {
+               MegaBlitter<4,4,ColorTransform_PlayerTrueCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter;
+               blitter.setColor( gamemap->player[getOwner()].getColor() );
+               blitter.setAngle( img, directionangle[dir] );
+               blitter.blit( img, dest, pos );
+           }
         }
     }
 }

@@ -82,7 +82,7 @@
 
   
   
-  
+
   
   
   
@@ -166,7 +166,7 @@
              destColorKey = targetSurface.GetPixelFormat().colorkey();
           else   
              destColorKey = 0xff;
-             
+
              
        };
        
@@ -208,7 +208,7 @@
              ashift = firstBit( ~( targetSurface.GetPixelFormat().Rmask() | targetSurface.GetPixelFormat().Gmask() | targetSurface.GetPixelFormat().Bmask()));
           
        };
-       
+
        TargetPixelType convert ( SourcePixelType sp ) { 
             if ( sp == 0xff ) {
                if ( hasColorKey )
@@ -250,7 +250,7 @@
 
         int getWidth()  { return SourcePixelSelector<BytesPerTargetPixel>::getWidth(); };
         int getHeight() { return SourcePixelSelector<BytesPerTargetPixel>::getHeight(); };
-        
+
         void initSource( const Surface& src )
         {
            SourcePixelSelector<BytesPerSourcePixel>::init( src );
@@ -292,7 +292,7 @@
                        pix += s;
                        x += s - 1 ;
                     } else
-                       return;   
+                       return;
                  }   
               }
               SourcePixelSelector<BytesPerSourcePixel>::nextLine();
@@ -363,7 +363,7 @@
       case 3:
       case 4:  {
                  switch ( dst.GetPixelFormat().BytesPerPixel() ) {
-                     case 1: { 
+                     case 1: {
                                MegaBlitter< 
                                             4,1,
                                             SourceColorTransform,
@@ -523,10 +523,10 @@
            int g = (col >> 8) & 0xff;
            int b = (col ) & 0xff;
            if ( g==0 && b==0) {
-              return ((refr * r / 256) << 16) + ((refg * r / 256) << 8) + (refb * r / 256);
+              return ((refr * r / 256) << 16) + ((refg * r / 256) << 8) + (refb * r / 256) + (col & 0xff000000);
            } else
               if ( r==255 && g==b ) {
-                 return ((refr + ( 255-refr) * g / 255) << 16) + ((refg + ( 255-refg) * g / 255) << 8) + (refb + ( 255-refb) * g / 255);
+                 return ((refr + ( 255-refr) * g / 255) << 16) + ((refg + ( 255-refg) * g / 255) << 8) + (refb + ( 255-refb) * g / 255) + (col & 0xff000000);
               } else
                  return col;
         };
@@ -547,6 +547,7 @@
            refb = (color ) & 0xff;
         };
  };
+
 
 
  template<int pixelSize>
@@ -1022,7 +1023,7 @@ template<>
        };
 
        void skipPixels( int pixNum ) { currentPixel += pixNum; tableIndex += pixNum; };
-       
+
        
        void nextLine()
        {
@@ -1190,7 +1191,7 @@ template<>
                 int a2 =  int( float(i+1) / zoomFactor );
                 
                 buf[i] = a2 - a1 - 1;
-             }   
+             }
                 
              zoomCache[zoomFactor] = buf;  
              cacheit = zoomCache.find( factor );

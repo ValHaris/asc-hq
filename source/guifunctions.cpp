@@ -1198,7 +1198,198 @@ class ViewMap : public GuiFunction
 
 
 
+class PutMine : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         pfield fld = actmap->getField(pos);
+         if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
+            if ( fld->vehicle )
+               if (fld->vehicle->color == actmap->actplayer * 8)
+                  if (fld->vehicle->typ->functions & cfminenleger )
+                     if ( !fld->vehicle->attacked )
+                        return true;
+         return false;
+      };
 
+      void execute( const MapCoordinate& pos, int num )
+      {
+         legemine(0, 0);
+         updateFieldInfo();
+         displaymap();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("putmine.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "put / remove mines";
+      };
+};
+
+
+
+class PutGroundMine : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         if (moveparams.movestatus == 90) {
+            pfield fld = actmap->getField(pos);
+            if ( (fld->bdt & (getTerrainBitType( cbwater ).flip())).any() )
+               if ( fld->a.temp & 1)
+                  if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
+                     return true;
+         }
+         return false;
+      };
+};
+
+class PutAntiTankMine : public PutGroundMine
+{
+   public:
+      void execute( const MapCoordinate& pos, int num )
+      {
+         legemine(cmantitankmine, 1 );
+         displaymap();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("putantitankmine.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "put anti-tank mine";
+      };
+};
+
+class PutAntiPersonalMine : public PutGroundMine
+{
+   public:
+      void execute( const MapCoordinate& pos, int num )
+      {
+         legemine(cmantipersonnelmine, 1);
+         displaymap();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("putantipersonalmine.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "put anti-personal mine";
+      };
+};
+
+
+
+
+class PutAntiShipMine : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         if (moveparams.movestatus == 90) {
+            pfield fld = actmap->getField(pos);
+            if ( (fld->bdt & getTerrainBitType(cbwater0)).any()
+                 || (fld->bdt & getTerrainBitType(cbwater1)).any()
+                 || (fld->bdt & getTerrainBitType(cbwater2)).any()
+                 || (fld->bdt & getTerrainBitType(cbwater3)).any() )
+               if (fld->a.temp & 1 )
+                  if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
+                     return true;
+         }
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+         legemine(cmfloatmine, 1);
+         displaymap();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("putantishipmine.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "put anti-ship mine";
+      };
+};
+
+class PutAntiSubMine : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         if (moveparams.movestatus == 90) {
+            pfield fld = actmap->getField(pos);
+            if ( (fld->typ->art & getTerrainBitType(cbwater2)).any()
+                 || (fld->typ->art & getTerrainBitType(cbwater3)).any() )
+               if (fld->a.temp & 1 )
+                  if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
+                     return true;
+         }
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+         legemine(cmmooredmine,1 );
+         displaymap();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("putantisubmine.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "put anti-submarine mine";
+      };
+};
+
+
+class RemoveMine : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         if (moveparams.movestatus == 90) {
+            pfield fld = actmap->getField(pos);
+            if ( fld->a.temp )
+               return !fld->mines.empty();
+         }
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+         legemine(0, -1);
+         displaymap();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("removemine.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "remove mine";
+      };
+};
 
 
 
@@ -2136,12 +2327,212 @@ void ConstructBuilding::execute(  const MapCoordinate& pos, int num )
 
 
 
+
+
+class ReplayPlay : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         if ( runreplay.status == 1 )
+            return true;
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+        runreplay.status = 2;
+        updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("replay-play.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "start replay";
+      };
+};
+
+
+class ReplayPause : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         if ( runreplay.status == 2 )
+            return true;
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+        runreplay.status = 1;
+        updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("replay-pause.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "pause replay";
+      };
+};
+
+
+
+class ReplayFaster : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         if ( runreplay.status == 2 )
+            if ( CGameOptions::Instance()->replayspeed > 0 )
+              return true;
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+         if ( CGameOptions::Instance()->replayspeed > 20 )
+            CGameOptions::Instance()->replayspeed -= 20;
+         else
+            CGameOptions::Instance()->replayspeed = 0;
+
+         CGameOptions::Instance()->setChanged ( 1 );
+         displaymessage2 ( "delay set to %d / 100 sec", CGameOptions::Instance()->replayspeed );
+         updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("replay-faster.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "increase replay speed";
+      };
+};
+
+
+class ReplaySlower : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         if ( runreplay.status == 2 )
+            return true;
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+         CGameOptions::Instance()->replayspeed += 20;
+         CGameOptions::Instance()->setChanged ( 1 );
+         displaymessage2 ( "delay set to %d / 100 sec", CGameOptions::Instance()->replayspeed );
+         updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("replay-slow.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "decrease replay speed";
+      };
+};
+
+
+class ReplayRewind : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         if ( runreplay.status == 1  ||  runreplay.status == 10 )
+              return true;
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+         runreplay.status = 101;
+         updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("replay-back.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "restart replay";
+      };
+};
+
+
+class ReplayExit : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, int num )
+      {
+         if ( runreplay.status == 1 || runreplay.status == 10 || runreplay.status == 11 )
+              return true;
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, int num )
+      {
+         runreplay.status = 100;
+         updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, int num )
+      {
+         return IconRepository::getIcon("replay-exit.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, int num )
+      {
+         return "restart replay";
+      };
+};
+
+
+
 GuiIconHandler primaryGuiIcons;
+
+
+
 
 
 
 } // namespace GuiFunctions
 
+
+void registerReplayGuiFunctions( GuiIconHandler& handler )
+{
+   handler.registerUserFunction( new GuiFunctions::ReplayPlay() );
+   handler.registerUserFunction( new GuiFunctions::ReplayPause() );
+   handler.registerUserFunction( new GuiFunctions::ReplayFaster() );
+   handler.registerUserFunction( new GuiFunctions::ReplaySlower() );
+   handler.registerUserFunction( new GuiFunctions::ReplayRewind() );
+   handler.registerUserFunction( new GuiFunctions::ReplayExit() );
+}
 
 void registerGuiFunctions( GuiIconHandler& handler )
 {
@@ -2165,5 +2556,11 @@ void registerGuiFunctions( GuiIconHandler& handler )
    handler.registerUserFunction( new GuiFunctions::RefuelUnit );
    handler.registerUserFunction( new GuiFunctions::RefuelUnitDialog );
    handler.registerUserFunction( new GuiFunctions::ViewMap );
+   handler.registerUserFunction( new GuiFunctions::PutMine );
+   handler.registerUserFunction( new GuiFunctions::PutAntiTankMine );
+   handler.registerUserFunction( new GuiFunctions::PutAntiPersonalMine );
+   handler.registerUserFunction( new GuiFunctions::PutAntiShipMine );
+   handler.registerUserFunction( new GuiFunctions::PutAntiSubMine );
+   handler.registerUserFunction( new GuiFunctions::RemoveMine );
 }
 

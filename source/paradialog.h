@@ -62,7 +62,8 @@
        ASC_PG_App ( const ASCString& themeName );
        bool InitScreen ( int w, int h, int depth = 0, Uint32 flags = SDL_SWSURFACE|SDL_HWPALETTE );
        void reloadTheme();
-       int ASC_PG_App::Run ();
+       int Run ();
+       bool processEvents();
        void quit() { quitModalLoopValue = 1; };
        bool enableLegacyEventHandling( bool use );
       // PG_Theme* LoadTheme(const char* xmltheme, bool asDefault = true, const char* searchpath = NULL );

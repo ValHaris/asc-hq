@@ -10,6 +10,8 @@
  #include <vector>
  #include <map>
  #include <set>
+ #include "mapalgorithms.h"
+ #include "gamemap.h"
 
 
 

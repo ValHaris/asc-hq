@@ -9,7 +9,7 @@
       obj\building.obj obj\buildings.obj obj\buildingtype.obj 
       obj\containerbase.obj obj\containerbasetype.obj obj\controls.obj 
       obj\dashboard.obj obj\dialog.obj obj\dlg_box.obj obj\gamedlg.obj 
-      obj\gamemap.obj obj\gameoptions.obj obj\graphicset.obj obj\gui.obj 
+      obj\gamemap.obj obj\gameoptions.obj obj\graphicset.obj 
       obj\itemrepository.obj obj\loadbi3.obj obj\loaders.obj obj\loadpcxc.obj 
       obj\mapalgorithms.obj obj\mapdisplay.obj obj\messages.obj obj\misc.obj 
       obj\music.obj obj\network.obj obj\networkdata.obj obj\newfont.obj 
@@ -28,7 +28,7 @@
       obj\ascttfont.obj obj\SDL_ttf.obj obj\blitter.obj obj\iconrepository.obj 
       obj\guiiconhandler.obj obj\guifunctions.obj obj\weatherarea.obj 
       obj\SDL_loadso.obj obj\geometry.obj obj\SmallObj.obj obj\drawing.obj 
-      obj\gamedialog.obj obj\guidimension.obj"/>
+      obj\gamedialog.obj obj\guidimension.obj obj\gui.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -101,7 +101,6 @@
       <FILE FILENAME="..\..\gamemap.cpp" FORMNAME="" UNITNAME="gamemap" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\gameoptions.cpp" FORMNAME="" UNITNAME="gameoptions" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\graphicset.cpp" FORMNAME="" UNITNAME="graphicset" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\gui.cpp" FORMNAME="" UNITNAME="gui" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\itemrepository.cpp" FORMNAME="" UNITNAME="itemrepository" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\libs\bzlib\win\bzlib.lib" FORMNAME="" UNITNAME="bzlib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\libs\jpeg-6b\libjpeg.lib" FORMNAME="" UNITNAME="libjpeg" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
@@ -175,6 +174,7 @@
       <FILE FILENAME="..\..\graphics\drawing.cpp" FORMNAME="" UNITNAME="drawing" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\gamedialog.cpp" FORMNAME="" UNITNAME="gamedialog" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\guidimension.cpp" FORMNAME="" UNITNAME="guidimension" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\gui.cpp" FORMNAME="" UNITNAME="gui" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
@@ -298,7 +298,7 @@ Item2=C:\Programme\ascsrc\games\asc\source\win32\borland
 DebugSourceDirs=c:\programme\borland\cbuilder5\source\vcl;C:\Programme\ascdev\paragui\include\
 
 [Parameters]
-RunParams=-w -r 9
+RunParams=-w -r 9 -l ttest.sav
 Launcher=
 UseLauncher=0
 DebugCWD=

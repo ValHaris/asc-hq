@@ -18,7 +18,6 @@
 #ifndef replayH
  #define replayH
 
-#include "gui.h"
 #include "controls.h"
 
 /*! \file replay.h
@@ -79,7 +78,6 @@ class trunreplay {
             ASCString lastErrorMessage;
          protected:
             int movenum;
-            treplayguihost& gui;
             void execnextreplaymove ( void );
             pmap orgmap;
             pmemorystream stream;

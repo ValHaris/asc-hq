@@ -1,4 +1,4 @@
-//     $Id: guifunctions.h,v 1.1.2.2 2004-12-12 11:35:12 mbickel Exp $
+//     $Id: guifunctions.h,v 1.1.2.3 2005-03-06 18:02:50 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -31,6 +31,7 @@
 #include "guiiconhandler.h"
 
 extern void registerGuiFunctions( GuiIconHandler& handler );
+extern void registerReplayGuiFunctions( GuiIconHandler& handler );
 
 namespace GuiFunctions {
    extern GuiIconHandler primaryGuiIcons;

@@ -37,7 +37,8 @@
 #include "itemrepository.h"
 #include "building_controls.h"
 #include "resourcenet.h"
-
+#include "guiiconhandler.h"
+#include "guifunctions.h"
 
 trunreplay runreplay;
 
@@ -764,7 +765,7 @@ void logtoreplayinfo ( trpl_actions _action, ... )
 }
 
 
-trunreplay :: trunreplay ( void ) : gui ( replayGuiHost ) 
+trunreplay :: trunreplay ( void )  
 {
    status = -1;
    movenum = 0;
@@ -1867,9 +1868,13 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
 //   orgmap.replayinfo->actmemstream = stream;
 
-   npush (actgui);
-   actgui = &gui;
-   actgui->restorebackground();
+   static GuiIconHandler* replayIconHandler = NULL;
+   if ( !replayIconHandler ) {
+      replayIconHandler = new GuiIconHandler();
+      registerReplayGuiFunctions( *replayIconHandler );
+   }
+
+   NewGuiHost::pushIconHandler( replayIconHandler );
 
    actmap->xpos = orgmap->cursorpos.position[ viewingplayer ].sx;
    actmap->ypos = orgmap->cursorpos.position[ viewingplayer ].sy;
@@ -1935,22 +1940,14 @@ int  trunreplay :: run ( int player, int viewingplayer )
           if ( cursor.an )
              cursor.hide();
 
-
-       tkey input;
-       while (keypress ()) {
-           mainloopgeneralkeycheck ( input );
-       }
-
-       mainloopgeneralmousecheck ();
+       getPGApplication().processEvents();
 
    } while ( status > 0  &&  status < 100 ) ;
-
-   actgui->restorebackground();
 
    delete actmap;
    actmap = orgmap;
 
-   npop ( actgui );
+   NewGuiHost::popIconHandler();
 
    int st = status;
    status = 0;
@@ -1966,7 +1963,5 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
 void trunreplay :: firstinit ( void )
 {
-    gui.init ( hgmp->resolutionx, hgmp->resolutiony );
-    gui.starticonload();
     status = 0;
 }

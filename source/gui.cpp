@@ -1357,7 +1357,6 @@ void  tnsguiicondescent::display      ( void )
 }
 
 
-#endif
 
 
 
@@ -1558,7 +1557,6 @@ void  tnsguiiconremovemine::exec         ( void )
 
 
 
-#if 0
 
 
 
