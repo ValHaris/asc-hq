@@ -6,7 +6,9 @@ gui.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp building.cpp \
 basestrm.cpp basegfx.cpp attack.cpp artint.cpp CLoadable.cpp Property.cpp \
 PropertyGroup.cpp gameoptions.cpp Named.cpp astar2.cpp vehicletype.cpp \
 buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp \
-gamemap.cpp password.cpp password_dialog.cpp replay.cpp research.cpp
+gamemap.cpp password.cpp password_dialog.cpp replay.cpp research.cpp \
+mapdisplay.cpp
+
 asc_LDADD   = ./sdl/libsdl.a ./libs/triangul/libtriangul.a -lSDL -lpthread \
 -lSDL_image @LDADDLIBBZ2@
 

@@ -1,6 +1,12 @@
-//     $Id: edselfnt.cpp,v 1.20 2001-01-19 13:33:50 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.21 2001-01-25 23:44:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2001/01/19 13:33:50  mbickel
+//      The AI now uses hemming
+//      Several bugfixes in Vehicle Actions
+//      Moved all view calculation to viewcalculation.cpp
+//      Mapeditor: improved keyboard support for item selection
+//
 //     Revision 1.19  2000/11/29 11:05:28  mbickel
 //      Improved userinterface of the mapeditor
 //      map::preferredfilenames uses now strings (instead of char*)
@@ -130,6 +136,7 @@
 #include "flview.h"
 #include "edselfnt.h"
 #include "edglobal.h"
+#include "mapdisplay.h"
 
 
 

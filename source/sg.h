@@ -1,6 +1,9 @@
-//     $Id: sg.h,v 1.5 2001-01-21 12:48:36 mbickel Exp $
+//     $Id: sg.h,v 1.6 2001-01-25 23:45:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2001/01/21 12:48:36  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.4  2000/08/05 20:18:03  mbickel
 //      Restructured Fullscreen Image loading
 //
@@ -41,6 +44,7 @@
 #define sg_h
 
 
+
 extern void mainloopgeneralmousecheck ( void );
 extern void mainloopgeneralkeycheck ( tkey& ch );
 extern void         repaintdisplay(void);
@@ -51,30 +55,6 @@ extern void         repaintdisplay(void);
 #endif
 
 extern pprogressbar actprogressbar ;
-
-
-class tbackgroundpict : public tpaintmapborder {
-               int lastpaintmode;
-               void* dashboard[7];
-               void* borderpicture[8];
-               void* background;
-               int run;
-               struct {
-                      int x,y;
-                 } borderpos[8];
-               int inited;
-            protected:
-               void paintrectangleborder ( void );
-            public: 
-               void init ( int reinit = 0 );
-               void load ( void );
-               void paint ( int resavebackground = 0 );
-               void paintborder ( int x, int y, int reinit );
-               void paintborder ( int x, int y );
-               tbackgroundpict ( void );
-               int getlastpaintmode ( void );
-};
-extern tbackgroundpict backgroundpict;
 
 extern void viewunreadmessages ( void );
 

@@ -1,6 +1,11 @@
-//     $Id: edevents.cpp,v 1.15 2001-01-04 15:13:43 mbickel Exp $
+//     $Id: edevents.cpp,v 1.16 2001-01-25 23:44:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2001/01/04 15:13:43  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.14  2000/11/08 19:31:03  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -97,6 +102,7 @@
 #include "edmisc.h"
 #include "edevents.h"
 #include "edselfnt.h"
+#include "mapdisplay.h"
 
 // õS TplayerSel
 

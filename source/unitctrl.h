@@ -1,6 +1,12 @@
-//     $Id: unitctrl.h,v 1.21 2001-01-19 13:33:57 mbickel Exp $
+//     $Id: unitctrl.h,v 1.22 2001-01-25 23:45:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2001/01/19 13:33:57  mbickel
+//      The AI now uses hemming
+//      Several bugfixes in Vehicle Actions
+//      Moved all view calculation to viewcalculation.cpp
+//      Mapeditor: improved keyboard support for item selection
+//
 //     Revision 1.20  2000/12/28 16:58:39  mbickel
 //      Fixed bugs in AI
 //      Some cleanup
@@ -133,6 +139,8 @@
 #include "basestrm.h"
 #include "spfst.h"
 #include "attack.h"
+#include "mapdisplay.h"
+
 
 /** \file unitctrl.h
    New system for actions performed by units

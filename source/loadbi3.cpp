@@ -1,6 +1,13 @@
-//     $Id: loadbi3.cpp,v 1.34 2001-01-23 21:05:17 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.35 2001-01-25 23:45:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2001/01/23 21:05:17  mbickel
+//      Speed up of AI
+//      Lot of bugfixes in AI
+//      Moved Research to own files (research.*)
+//      Rewrote storing of developed technologies
+//      Some cleanup and documentation
+//
 //     Revision 1.33  2001/01/21 16:37:18  mbickel
 //      Moved replay code to own file ( replay.cpp )
 //      Fixed compile problems done by cleanup
@@ -1102,7 +1109,7 @@ class tloadBImap {
         int xoffset, yoffset;
         TerrainType::Weather* defaultterraintype;
      public:
-       void LoadFromFile( char* path, char* AFileName, TerrainType::Weather* trrn );
+       void LoadFromFile( const char* path, const char* AFileName, TerrainType::Weather* trrn, string* errorOutput );
        tloadBImap ( void ) { 
           xoffset = 0;
           yoffset = 0;
@@ -1351,6 +1358,12 @@ void        tloadBImap ::   ReadACTNPart(void)
        Size.Y++;
 
     preparemap ( Size.X / 2, Size.Y * 2 );
+
+    for ( int i = 0; i < 6; i++ )
+       if ( OrgMissRec.WhoPlays & (1<< i))
+          actmap->player[ convcol ( 1 << i) ].stat = (OrgMissRec.PlayType>>i) & 1;
+       else
+          actmap->player[convcol ( 1 << i) ].stat = 2;
 
     /*  Terrain  */ 
     int Y, X;
@@ -1958,7 +1971,7 @@ void tloadBImap :: LoadTXTFile ( char* filename )
    */
 }
 
-void tloadBImap :: LoadFromFile( char* path, char* AFileName, TerrainType::Weather* trrn )
+void tloadBImap :: LoadFromFile( const char* path, const char* AFileName, TerrainType::Weather* trrn, string* errorOutput )
 {
    defaultterraintype = trrn;
    char temp[4000];
@@ -2012,30 +2025,34 @@ void tloadBImap :: LoadFromFile( char* path, char* AFileName, TerrainType::Weath
 
     calculateallobjects();
     if ( missing[0] ) {
-      tviewanytext vat;
-      vat.init ( "warning", missing );
-      vat.run();
-      vat.done();
+      if ( errorOutput )
+         (*errorOutput)=missing;
+      else {
+         tviewanytext vat;
+         vat.init ( "warning", missing );
+         vat.run();
+         vat.done();
+      }
     }
 
 }
 
 
-void importbattleislemap ( char* path, char* filename, TerrainType::Weather* trrn  )
+void importbattleislemap ( const char* path, const char* filename, TerrainType::Weather* trrn, string* errorOutput  )
 {
     activateGraphicSet ( 1 );
     ImportBiMap lbim;  
-    lbim.LoadFromFile ( path, filename, trrn );
+    lbim.LoadFromFile ( path, filename, trrn, errorOutput );
     actmap->_resourcemode = 1;
     actmap->cleartemps ( 7 );
 }
 
 
-void insertbattleislemap ( int x, int y, char* path, char* filename  )
+void insertbattleislemap ( int x, int y, const char* path, const char* filename  )
 {
     activateGraphicSet ( 1 );
     InsertBiMap lbim ( x, y );  
-    lbim.LoadFromFile ( path, filename, NULL );
+    lbim.LoadFromFile ( path, filename, NULL, NULL );
     actmap->_resourcemode = 1;
     actmap->cleartemps ( 7 );
 }

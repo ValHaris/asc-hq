@@ -1,6 +1,13 @@
-//     $Id: spfst.h,v 1.36 2001-01-23 21:05:22 mbickel Exp $
+//     $Id: spfst.h,v 1.37 2001-01-25 23:45:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2001/01/23 21:05:22  mbickel
+//      Speed up of AI
+//      Lot of bugfixes in AI
+//      Moved Research to own files (research.*)
+//      Rewrote storing of developed technologies
+//      Some cleanup and documentation
+//
 //     Revision 1.35  2001/01/21 16:37:22  mbickel
 //      Moved replay code to own file ( replay.cpp )
 //      Fixed compile problems done by cleanup
@@ -121,8 +128,6 @@
 
  extern void  movecursor(tkey         ch);
  
- //! displays the map that #actmap points to
- extern void  displaymap(void);
 
 
   /*  zugriffe auf map und andere strukturen  */ 
@@ -224,8 +229,6 @@ extern int fieldaccessible( const pfield        field,
 
 extern void* getmineadress( int num , int uncompressed = 0 );
 
-extern void         initspfst( int x = 10, int y = 20 );
-
 extern void generatespfdspaces();
 
 extern void  checkunitsforremoval ( void );
@@ -257,223 +260,7 @@ extern int          terrainaccessible (  const pfield        field, const pvehic
 */
 extern int          terrainaccessible2 ( const pfield        field, const pvehicle     vehicle, int uheight = -1 );  
 
-//! return the screencoordinates of the upper left position of the displayed map
-extern int getmapposx ( void );  
 
-//! return the screencoordinates of the upper left position of the displayed map
-extern int getmapposy ( void );
-
-class tgeneraldisplaymapbase {
-           protected:
-             struct {
-                   struct {
-                      int x1, y1, x2, y2;
-                   } disp;
-                   int     numberoffieldsx;
-                   int     numberoffieldsy;
-                   int     orgnumberoffieldsx;
-                   int     orgnumberoffieldsy;
-                   void*   vfbadress;
-                   int     vfbheight;
-                   int     vfbwidth;
-                 } dispmapdata;
-
-              struct {
-                       void*   address;
-                       tgraphmodeparameters parameters;
-              } vfb;
-
-           public:
-              tmouserect invmousewindow;
-              virtual int getfieldsizex ( void ) = 0;
-              virtual int getfieldsizey ( void ) = 0;
-              virtual int getfielddistx ( void ) = 0; 
-              virtual int getfielddisty ( void ) = 0;
-              virtual int getfieldposx ( int x, int y ) = 0; 
-              virtual int getfieldposy ( int x, int y ) = 0;
-
-              virtual void pnt_terrain ( void ) = 0;
-              virtual void pnt_main ( void ) = 0;
-              virtual void cp_buf ( void ) = 0;
-              void setmouseinvisible ( void );
-              void restoremouse ( void );
-              tgeneraldisplaymapbase ( void );
-};
-
-#ifndef FREEMAPZOOM
-
-class tgeneraldisplaymap : public tgeneraldisplaymapbase {
-      protected:
-         #ifndef HEXAGON
-          char**     viereck; 
-         #endif
-
-          void putdirecpict ( int xp, int yp,  const void* ptr );
-          void pnt_terrain_rect ( void );
-
-          void clearvf ( void );
-          virtual void displayadditionalunits ( int height );
-
-      public:
-          void calcviereck(void);
-          int playerview;
-          virtual void init ( int xs, int ys );
-
-          virtual void pnt_terrain ( void );
-          virtual void pnt_main ( void );
-
-          virtual int  getscreenxsize( int target = 0 );   // since the screen sizes for the mapeditor and the game may be different target = 1 return the maximum of both 
-          virtual int  getscreenysize( int target = 0 );
-          virtual int getfieldsizex ( void ) { return fieldsizex; };
-          virtual int getfieldsizey ( void ) { return fieldsizey; };
-          virtual int getfielddistx ( void ) { return fielddistx; };
-          virtual int getfielddisty ( void ) { return fielddisty; };
-          virtual int getfieldposx ( int x, int y ) ; 
-          virtual int getfieldposy ( int x, int y ) ;
-      };
-
-
-
-class tdisplaymap : public tgeneraldisplaymap {
-        protected:
-          struct {
-                    pvehicle eht;
-                    int xpos, ypos;
-                    int dx,   dy;
-                    int hgt;
-                 } displaymovingunit ;
-
-          struct {
-             #ifndef HEXAGON
-              int*    spacingbuf;
-              int*    direcpictbuf;
-             #endif
-              int*    screenmaskbuf;
-          } displaybuffer;
-          int resolutionx;
-          int resolutiony;
-
-          virtual void displayadditionalunits ( int height );
-
-          void generate_map_mask ( int* sze );
-
-          tgraphmodeparameters rgmp;
-          int game_x;
-          int maped_x;
-
-          virtual void gnt_terrain ( void );
-
-       public:
-          void* getbufptr( void ) { return dispmapdata.vfbadress; };
-          virtual void init ( int xs, int ys );
-          void setxsizes ( int _game_x, int _maped_x );
-         #ifndef HEXAGON
-          void generatespfdspaces ( void );
-          void generatespfdptrs ( int xp, int yp );
-         #endif
-
-          void setup_map_mask ( void );
-
-
-          virtual void pnt_terrain ( void );
-          virtual void cp_buf ( void );
-		
-		  virtual void cp_buf ( int x1, int y1, int x2, int y2 );
-
-          void  movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, int height1, int height2, int fieldnum, int totalmove );
-          void  deletevehicle ( void ); 
-
-          void resetmovement ( void );
-          virtual int  getscreenxsize( int target = 0 );
-     } ;
-
-#else
-
-class tgeneraldisplaymap : public tgeneraldisplaymapbase {
-      protected:
-          int zoom;
-
-          void putdirecpict ( int xp, int yp,  const void* ptr );
-          void pnt_terrain_rect ( void );
-
-          struct {
-             int xsize, ysize;
-          } window;
-
-          virtual void displayadditionalunits ( int height );
-
-          virtual void _init ( int xs, int ys );
-
-      public:
-          virtual void init ( int xs, int ys );
-          int playerview;
-
-          virtual void pnt_terrain ( void );
-          virtual void pnt_main ( void );
-          virtual void setnewsize ( int _zoom );
-
-          virtual int  getscreenxsize( int target = 0 );   // since the screen sizes for the mapeditor and the game may be different target = 1 return the maximum of both 
-          virtual int  getscreenysize( int target = 0 );
-          virtual int getfieldsizex ( void );
-          virtual int getfieldsizey ( void );
-          virtual int getfielddistx ( void );
-          virtual int getfielddisty ( void );
-      };
-
-
-
-class tdisplaymap : public tgeneraldisplaymap {
-         tgraphmodeparameters oldparameters;
-        protected:
-          struct {
-                    pvehicle eht;
-                    int xpos, ypos;
-                    int dx,   dy;
-                    int hgt;
-                 } displaymovingunit ;
-
-          int windowx1, windowy1;
-
-          virtual void displayadditionalunits ( int height );
-
-          void generate_map_mask ( int* sze );
-
-          tgraphmodeparameters rgmp;
-
-          int* copybufsteps;
-          int* copybufstepwidth;
-          int vfbwidthused;
-          void calcdisplaycache( void );
-
-       public:
-          virtual void init ( int x1, int y1, int x2, int y2 );
-          virtual void setnewsize ( int _zoom );
-
-
-          virtual void cp_buf ( void );
-          virtual void cp_buf ( int x1, int y1, int x2, int y2 );
-
-          void  movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, int height1, int height2, int fieldnum, int totalmove );
-          void  deletevehicle ( void ); 
-
-          void resetmovement ( void );
-
-          virtual int getfieldposx ( int x, int y ) ; 
-          virtual int getfieldposy ( int x, int y ) ;
-          tdisplaymap ( void );
-     } ;
-#endif
-
-
-
-
-
-
-
-extern tdisplaymap idisplaymap;
-extern int showresources;
-
-extern int   getfieldundermouse ( int* x, int* y );
 
 extern int getcrc ( const pvehicletype fzt );
 extern int getcrc ( const ptechnology tech );
@@ -481,15 +268,6 @@ extern int getcrc ( const pobjecttype obj );
 extern int getcrc ( const pterraintype bdn );
 extern int getcrc ( const pbuildingtype bld );
 
-extern void writemaptopcx ( void );
-
-class tlockdispspfld {
-      public:
-        tlockdispspfld ( void );
-        ~tlockdispspfld ();
-      };
-
-extern int lockdisplaymap;
 
 extern void smooth ( int what );
 
@@ -526,53 +304,8 @@ typedef dynamic_array<pobjecttype> ObjectTypeVector;
 extern ObjectTypeVector& getobjecttypevector ( void );
 
 
-class tpaintmapborder {
-          protected:
-            struct {
-               int x1, y1, x2, y2;
-               int initialized;
-            } rectangleborder;
-          public:
-            virtual void paintborder ( int x, int y ) = 0;
-            virtual void paint ( int resavebackground = 0 ) = 0;
-            virtual int getlastpaintmode ( void ) = 0;
-            virtual void setrectangleborderpos ( int x1, int y1, int x2, int y2 ) {
-               rectangleborder.x1 = x1;
-               rectangleborder.x2 = x2;
-               rectangleborder.y1 = y1;
-               rectangleborder.y2 = y2;
-               rectangleborder.initialized = 1;
-            };
-            tpaintmapborder ( void ) {
-               rectangleborder.initialized = 0;
-            };
-      };
-
-extern tpaintmapborder* mapborderpainter;
 extern void swapbuildings ( pbuilding orgbuilding, pbuilding building );
 
-extern void checkformousescrolling ( void );
-
-class tmousescrollproc : public tsubmousehandler {
-         public:
-           void mouseaction ( void );
-};
-extern tmousescrollproc mousescrollproc ;
-extern const int mousehotspots[9][2];
-
-#ifdef FREEMAPZOOM
-class ZoomLevel {
-         int zoom;
-         int queried;
-       public:
-         int getzoomlevel ( void );
-         void setzoomlevel ( int newzoom );
-         int getmaxzoom( void );
-         int getminzoom( void );
-         ZoomLevel ( void );
-      };
-extern ZoomLevel zoomlevel;
-#endif
 
 
 class tdrawline8 : public tdrawline {
@@ -582,36 +315,6 @@ class tdrawline8 : public tdrawline {
            virtual void putpix8 ( int x, int y ) = 0;
        };
 
-class MapDisplayInterface {
-         public:
-           virtual int displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove ) = 0;
-           virtual void deleteVehicle ( pvehicle vehicle ) = 0;
-           virtual void displayMap ( void ) = 0;
-           virtual void displayPosition ( int x, int y ) = 0;
-           virtual void resetMovement ( void ) = 0;
-           virtual void startAction ( void ) = 0;
-           virtual void stopAction ( void ) = 0;
-           virtual void displayActionCursor ( int x1, int y1, int x2, int y2 ) = 0;
-           virtual void removeActionCursor ( void ) = 0;
-           virtual ~MapDisplayInterface () {};
-       };
-
-class MapDisplay : public MapDisplayInterface {
-           dynamic_array<int> cursorstat;
-           int cursorstatnum;
-         public:
-           int displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove );
-           void deleteVehicle ( pvehicle vehicle );
-           void displayMap ( void );
-           void displayPosition ( int x, int y );
-           void resetMovement ( void );
-           void startAction ( void );
-           void stopAction ( void );
-           void displayActionCursor ( int x1, int y1, int x2, int y2 ) {};
-           void removeActionCursor ( void ) {};
-    };
-
-extern MapDisplay defaultMapDisplay;
 
 
 extern int isUnitNotFiltered ( int id ) ;

@@ -1,6 +1,11 @@
-//     $Id: dialog.cpp,v 1.70 2001-01-04 15:13:32 mbickel Exp $
+//     $Id: dialog.cpp,v 1.71 2001-01-25 23:44:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.70  2001/01/04 15:13:32  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.69  2000/12/31 15:25:25  mbickel
 //      The AI now conqueres neutral buildings
 //      Removed "reset password" buttons when starting a game
@@ -350,6 +355,8 @@
 #include "gameoptions.h"
 #include "errors.h"
 #include "password_dialog.h"
+
+#include "mapdisplay.h"
 
 #ifndef karteneditor
  #include "network.h"

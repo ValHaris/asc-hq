@@ -1,3 +1,137 @@
+2001-01-24 15:42  mbickel
+
+	* asc.kdevprj, source/artint.cpp:  Fixed a crash in the AI
+
+2001-01-24 12:53  mbickel
+
+	* asc.kdevprj, source/artint.cpp, source/building.cpp,
+	source/building.h, source/building_controls.h, source/gui.cpp,
+	source/gui.h:  Fixed some compilation problems with gcc
+
+2001-01-24 12:00  mbickel
+
+	* source/: research.cpp, win32/borland/asc.bpf,
+	win32/borland/asc.bpr, win32/borland/mapeditor/mapeditor.bpf,
+	win32/borland/mapeditor/mapeditor.bpr:	Updated win32 project files
+
+2001-01-23 22:05  mbickel
+
+	* asc.kdevprj, source/Makefile.am, source/Makefile.in, source/TODO,
+	source/artint.cpp, source/artint.h, source/astar2.cpp,
+	source/astar2.h, source/building.cpp, source/controls.cpp,
+	source/controls.h, source/gamedlg.cpp, source/gamedlg.h,
+	source/gamemap.cpp, source/loadbi3.cpp, source/loaders.cpp,
+	source/loaders.h, source/missions.cpp, source/pointers.h,
+	source/research.cpp, source/research.h, source/spfst.cpp,
+	source/spfst.h, source/typen.cpp, source/typen.h,
+	source/vehicletype.cpp, source/mapedit/Makefile.am,
+	source/mapedit/Makefile.in:  Speed up of AI
+	 Lot of bugfixes in AI
+	 Moved Research to own files (research.*)
+	 Rewrote storing of developed technologies
+	 Some cleanup and documentation
+
+2001-01-22 21:00  mbickel
+
+	* asc.kdevprj, source/gamemap.cpp, source/loaders.cpp,
+	source/typen.cpp, source/typen.h:  Fixed bug that made savegamefrom
+	campaign games unloadable
+	 Optimized the terrainAccess-checking
+
+2001-01-21 17:37  mbickel
+
+	* asc.kdevprj, source/Makefile.am, source/Makefile.in,
+	source/building.cpp, source/controls.cpp, source/controls.h,
+	source/edglobal.cpp, source/gamedlg.cpp, source/gui.cpp,
+	source/loadbi3.cpp, source/loadbi3.h, source/replay.cpp,
+	source/replay.h, source/sg.cpp, source/sgstream.cpp,
+	source/sgstream.h, source/spfst.cpp, source/spfst.h,
+	source/typen.cpp, source/typen.h, source/unitctrl.cpp:	Moved
+	replay code to own file ( replay.cpp )
+	 Fixed compile problems done by cleanup
+
+2001-01-21 13:48  mbickel
+
+	* source/: artint.cpp, artint.h, astar2.cpp, astar2.h, attack.cpp,
+	buildingtype.h, controls.h, dialog.h, password_dialog.cpp,
+	password_dialog.h, sg.h, sgstream.cpp, sgstream.h, spfst.h,
+	stack.h, typen.h:  Some cleanup and documentation
+
+2001-01-19 14:33  mbickel
+
+	* asc.kdevprj, source/TODO, source/artint.cpp, source/artint.h,
+	source/attack.cpp, source/attack.h, source/basegfx.cpp,
+	source/basegfx.h, source/controls.cpp, source/controls.h,
+	source/edselfnt.cpp, source/gamedlg.cpp, source/mapalgorithms.cpp,
+	source/mapalgorithms.h, source/missions.h, source/sg.cpp,
+	source/spfst.cpp, source/spfst.h, source/unitctrl.cpp,
+	source/unitctrl.h, source/viewcalculation.cpp,
+	source/viewcalculation.h:  The AI now uses hemming
+	 Several bugfixes in Vehicle Actions
+	 Moved all view calculation to viewcalculation.cpp
+	 Mapeditor: improved keyboard support for item selection
+
+2001-01-14 15:58  mbickel
+
+	* source/: basegfx.h, dos/basegfx_asm_interface.h:  added
+	documentation for the graphics functions
+	 moved interface of assembler routines to seperate file in dos
+	directory
+
+2001-01-11 16:27  mbickel
+
+	* asc.kdevprj, source/artint.cpp, source/basegfx.h,
+	source/strtmesg.cpp:  AI: conquering units try to move on fields
+	hidden to the enemy
+
+2001-01-04 16:13  mbickel
+
+	* asc.kdevprj, config.h.in, configure, configure.in, source/TODO,
+	source/artint.cpp, source/artint.h, source/astar2.cpp,
+	source/astar2.h, source/basestrm.cpp, source/basestrm.h,
+	source/dialog.cpp, source/dlg_box.cpp, source/edevents.cpp,
+	source/edmain.cpp, source/edmisc.cpp, source/gamedlg.cpp,
+	source/gamedlg.h, source/gui.cpp, source/loadbi3.cpp,
+	source/loaders.cpp, source/mapalgorithms.h, source/sg.cpp,
+	source/sgstream.cpp, source/sgstream.h, source/typen.h,
+	source/unitctrl.cpp, source/vehicletype.cpp,
+	source/libs/triangul/Makefile.in:  configure now checks for
+	libSDL_image
+	 AI only conquers building that cannot be conquered back
+	immediately
+	 tfindfile now returns strings instead of char*
+
+2001-01-04 16:10  mbickel
+
+	* source/basegfx.cpp:  Fixed: showtext displayed garbage as last
+	character when text had to be
+	   cut shorter to be displayed
+
+2000-12-31 16:25  mbickel
+
+	* asc.kdevprj, source/artint.cpp, source/artint.h,
+	source/astar2.cpp, source/astar2.h, source/dialog.cpp,
+	source/gamemap.cpp, source/typen.h:  The AI now conqueres neutral
+	buildings
+	 Removed "reset password" buttons when starting a game
+
+2000-12-29 17:33  mbickel
+
+	* ChangeLog, asc.kdevprj, source/dialog.cpp, source/sg.cpp:  The
+	supervisor may now reset passwords
+
+2000-12-28 19:34  mbickel
+
+	* source/tools/weaponguide.cpp:  Compileable with Watcom
+
+2000-12-28 19:04  mbickel
+
+	* source/: borland.DSW, borland.OBR, borland.ide, borland.met,
+	mapalgorithms.cpp, win32/borland/asc.bpr,
+	win32/borland/mapeditor/mapeditor.bpr:	Removed old Borland C++
+	Project files
+	 Optimized beeline
+
 2000-12-28 17:58  mbickel
 
 	* asc.kdevprj, source/artint.cpp, source/artint.h,

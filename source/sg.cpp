@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.124 2001-01-21 16:37:18 mbickel Exp $
+//     $Id: sg.cpp,v 1.125 2001-01-25 23:45:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.124  2001/01/21 16:37:18  mbickel
+//      Moved replay code to own file ( replay.cpp )
+//      Fixed compile problems done by cleanup
+//
 //     Revision 1.123  2001/01/19 13:33:52  mbickel
 //      The AI now uses hemming
 //      Several bugfixes in Vehicle Actions
@@ -305,264 +309,6 @@ int maintainencecheck( void )
     return 0;
    #endif
 }   
-
-
-
-tbackgroundpict backgroundpict;
-
-tbackgroundpict :: tbackgroundpict ( void )
-{
-   background = NULL;
-   inited = 0;
-   run = 0;
-   lastpaintmode = -1;
-}
-
-void tbackgroundpict :: paintrectangleborder ( void )
-{
-   if ( rectangleborder.initialized ) {
-         int width = 2;
-         for ( int i = 0; i < 3; i++ ) 
-            for ( int j = 0; j < width; j++ ) {
-               int p = i * width + j;
-               int x; 
-               int y;
-               for ( x = rectangleborder.x1 - p; x < rectangleborder.x2 + p; x++ )
-                  putpixel ( x, rectangleborder.y1 - p, xlattables.a.dark2[ getpixel ( x, rectangleborder.y1-p )] );
-               for ( y = rectangleborder.y1 - p; y < rectangleborder.y2 + p; y++ )
-                  putpixel ( rectangleborder.x2 + p, y, xlattables.light[ getpixel ( rectangleborder.x2 + p, y )] );
-               for ( x = rectangleborder.x2 + p; x > rectangleborder.x1 - p; x-- )
-                  putpixel ( x, rectangleborder.y2 + p, xlattables.light[ getpixel ( x, rectangleborder.y2+p )] );
-               for ( y = rectangleborder.y2 + p; y > rectangleborder.y1 - p; y-- )
-                  putpixel ( rectangleborder.x1 - p, y, xlattables.a.dark2[ getpixel ( rectangleborder.x1 - p, y )] );
-      
-            }
-      }
-}
-
-
-void tbackgroundpict :: init ( int reinit )
-{
-   if ( !inited || reinit ) {
-     /*
-     int borderx1 = getmapposx ( );
-     int bordery1 = getmapposy ( );
-     */
-     int borderx1 = 0;
-     int bordery1 = 0;
-
-     int bordery2 = bordery1 + (idisplaymap.getscreenysize() - 1) * fielddisty + fieldsizey - 1;
-     int borderx2 = borderx1 + (idisplaymap.getscreenxsize() - 1 ) * fielddistx + fieldsizex + fielddisthalfx - 1;
-
-    #ifdef HEXAGON
-     int height, width;
-     const int mapborderwidth = 4;
-
-     getpicsize ( borderpicture[2], width, height );
-   
-     borderpos[0].x = borderx1 - mapborderwidth;
-     borderpos[0].y = bordery1 - mapborderwidth;
-
-     borderpos[2].x = borderx2 + mapborderwidth - ( width -1 );
-     borderpos[2].y = bordery1 - mapborderwidth;
-
-
-     getpicsize ( borderpicture[6], width, height );
-
-     borderpos[1].x = borderx1 - mapborderwidth + 28;
-     borderpos[1].y = bordery1 - mapborderwidth;
-
-     borderpos[6].x = borderx1 - mapborderwidth + 28 + fielddisthalfx;
-     borderpos[6].y = bordery2 + mapborderwidth - ( height-1);
-
-
-     getpicsize ( borderpicture[4], width, height );
-
-     borderpos[3].x = borderx1 - mapborderwidth;
-     borderpos[3].y = bordery1 + fielddisty;
-
-     borderpos[4].x = borderx2 + mapborderwidth - ( width - 1 );
-     borderpos[4].y = bordery1 + 2 * fielddisty;
-
-
-     getpicsize ( borderpicture[5], width, height );
-
-     borderpos[5].x = borderx1 - mapborderwidth;
-     borderpos[5].y = bordery2 + mapborderwidth - ( height - 1 );
-
-
-     getpicsize ( borderpicture[7], width, height );
-
-     borderpos[7].x = borderx2 + mapborderwidth - ( width- 1);
-     borderpos[7].y = bordery2 + mapborderwidth - ( height - 1 );
-    #endif
-     inited = 1;
-
-   }
-}
-
-
-
-void tbackgroundpict :: load ( void )
-{
-   int w;
-   {
-      tnfilestream stream ("amatur.raw", 1);
-      for ( int i = 0; i< 7; i++ )
-         stream.readrlepict ( &dashboard[i], false, &w );
-     #ifdef FREEMAPZOOM
-      ::dashboard.zoom.pic = dashboard[6];
-     #endif
-   }
-   #ifdef HEXAGON
-   {
-      tnfilestream stream ("hxborder.raw", 1);
-      for ( int i = 0; i < 8; i++ )
-         stream.readrlepict ( &borderpicture[i], false, &w );
-   }
-   #endif
-}
-
-
-void tbackgroundpict :: paintborder ( int dx, int dy )
-{
-   paintborder ( dx, dy , 0 );
-}
-
-void tbackgroundpict :: paintborder ( int dx, int dy, int reinit )
-{
-   if ( lastpaintmode < 1 ) {
-      #ifdef FREEMAPZOOM 
-       paintrectangleborder (  );
-      #else
-   
-      if ( !inited || reinit )
-           init( reinit );
-       putspriteimage ( borderpos[0].x + dx, borderpos[0].y + dy,  borderpicture[0] ); 
-       putspriteimage ( borderpos[2].x + dx, borderpos[2].y + dy,  borderpicture[2] ); 
-   
-       for ( int x = 0; x < idisplaymap.getscreenxsize() -1; x++ ) {
-          putspriteimage ( borderpos[1].x + dx + x * fielddistx, borderpos[1].y + dy,  borderpicture[1] ); 
-          putspriteimage ( borderpos[6].x + dx + x * fielddistx, borderpos[6].y + dy,  borderpicture[6] ); 
-       }
-   
-       for ( int y = 0; y < idisplaymap.getscreenysize() -2; y+=2 ) {
-          putspriteimage ( borderpos[3].x + dx, borderpos[3].y + y * fielddisty + dy,  borderpicture[3] ); 
-          putspriteimage ( borderpos[4].x + dx, borderpos[4].y + y * fielddisty + dy,  borderpicture[4] ); 
-       }
-   
-       putspriteimage ( borderpos[5].x + dx, borderpos[5].y + dy,  borderpicture[5] ); 
-       putspriteimage ( borderpos[7].x + dx, borderpos[7].y + dy,  borderpicture[7] ); 
-      #endif
-      lastpaintmode = 1;
-   }
-}
-
-void  tbackgroundpict :: paint ( int resavebackground )
-{
-  collategraphicoperations cgo;
-  init();
-
-  #ifndef HEXAGON
-  if (hgmp->resolutionx == 640) { 
-     if ( actmap->xsize && !lockdisplaymap ) {
-        tnfilestream stream ( "bkgr4.pcx", 1 );
-        loadpcxxy( &stream, 0, 0 ); 
-        lastpaintmode = 1;
-     } else {
-        tnfilestream stream ( "bkgr42.pcx", 1 );
-        loadpcxxy( &stream, 0, 0 ); 
-        lastpaintmode = 0;
-     }
-  } else 
-  #endif
-  {
-     if ( !background ) {
-
-        char filename[100];
-        sprintf( filename, "%d%d.pcx", hgmp->resolutionx, hgmp->resolutiony );
-        if ( exist ( filename )) {
-           tnfilestream stream ( filename, 1 );
-           loadpcxxy( &stream ,0,0);
-
-           background = new char[ imagesize ( 0, 0, agmp->resolutionx, agmp->resolutiony  )];
-        } else {
-           displaymessage2("generating background picture; please wait ..." );
-           if ( !asc_paletteloaded )
-              loadpalette();
-           int x = hgmp->resolutionx;
-           int y = hgmp->resolutiony;
-           {
-              tvirtualdisplay vdp ( agmp->resolutionx, agmp->resolutiony );
-              tnfilestream stream ( "640480.pcx", 1 );
-              loadpcxxy( &stream ,0,0);
-              char* pic = new char[ imagesize ( 0, 0, 639, 479 )];
-              getimage ( 0, 0, 639, 479, pic );
-   
-              TrueColorImage* img = zoomimage ( pic, x, y, pal, 1, 0  );
-              delete pic;
-              background = convertimage ( img, pal );
-           }
-           putimage ( 0, 0, background );
-           writepcx ( filename, 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, pal );
-   
-           /*
-           bar ( 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, greenbackgroundcol );
-           found = 0;
-           */
-        }
-
-        putimage ( agmp->resolutionx - ( 640 - 450), 15,  dashboard[0] );
-        putimage ( agmp->resolutionx - ( 640 - 450), 211, dashboard[1] );
-        putimage ( agmp->resolutionx - ( 640 - 450), agmp->resolutiony - ( 480 - 433),  dashboard[2] );
-        int l_width, l_height;
-        int m_width, m_height;
-        int r_width, r_height;
-        getpicsize ( dashboard[3], l_width, l_height );
-        getpicsize ( dashboard[4], m_width, m_height );
-        getpicsize ( dashboard[5], r_width, r_height );
-   
-        int lpos = 14;
-        putimage ( lpos,  agmp->resolutiony - ( 480 - 442),  dashboard[3] );
-        putimage ( lpos + l_width,  agmp->resolutiony - ( 480 - 442),  dashboard[4] );
-   
-        int rpos = agmp->resolutionx - ( 640 - 433) - r_width + 1;
-        lpos += l_width + m_width;
-   
-        putimage ( rpos,  agmp->resolutiony - ( 480 - 442),  dashboard[5] );
-   
-        while ( rpos > lpos ) {
-           rpos -= m_width;
-           putimage ( rpos,  agmp->resolutiony - ( 480 - 442),  dashboard[4] );
-        }
-
-        getimage ( 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, background );
-
-     } else 
-        putimage ( 0, 0, background );
-
-    lastpaintmode = 0;
-
-    #ifdef HEXAGON
-     if ( actmap && actmap->xsize && !lockdisplaymap )
-        paintborder( getmapposx ( ), getmapposy ( ) );
-    #endif
-  }
-  if ( resavebackground  ||  !run ) {
-     gui.savebackground ( );
-  }
-  run++;
-  ::dashboard.repainthard = 1;
-
-} 
-
-int tbackgroundpict :: getlastpaintmode ( void )
-{
-   return lastpaintmode;
-}
-
-
-
 
 
 
@@ -1946,7 +1692,7 @@ void execuseraction ( tuseractions action )
                                           if (choice_dlg("do you really want to start the AI?","~y~es","~n~o") == 1) {
 
                                              if ( !actmap->player[ actmap->actplayer ].ai )
-                                                actmap->player[ actmap->actplayer ].ai = new AI ( actmap );
+                                                actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
                                              savegame ( "aistart.sav" );
                                              actmap->player[ actmap->actplayer ].ai->run();
@@ -2198,13 +1944,21 @@ void  mainloop ( void )
             case ct_f7:  execuseraction ( ua_dispvehicleimprovement );
                break;
 
-            case ct_f8:  if ( actmap->player[ actmap->actplayer].ai ) {
-                              AI* ai = (AI*) actmap->player[ actmap->actplayer].ai;
-                              ai->showFieldInformation ( getxpos(), getypos() );
-                         } else {
-                             int x = getxpos();
-                             int y = getypos();
-                             displaymessage("cursorposition: %d / %d", 3, x, y );
+            case ct_f8:  {
+                            int color;
+                            if ( getactfield()->vehicle )
+                               color = getactfield()->vehicle->color / 8 ;
+                            else
+                               color = actmap->actplayer;
+
+                            if ( actmap->player[color].ai ) {
+                                AI* ai = (AI*) actmap->player[color].ai;
+                                ai->showFieldInformation ( getxpos(), getypos() );
+                            } else {
+                                int x = getxpos();
+                                int y = getypos();
+                                displaymessage("cursorposition: %d / %d", 3, x, y );
+                            }
                          }
                break;
 
@@ -2698,7 +2452,8 @@ int gamethread ( void* data )
 {
       GameThreadParams* gtp = (GameThreadParams*) data;
 
-      initspfst( -1, -1 ); // 6, 16
+      initMapDisplay( );
+
       int resolx = agmp->resolutionx;
       int resoly = agmp->resolutiony;
       gui.init ( resolx, resoly );

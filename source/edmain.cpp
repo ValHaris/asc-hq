@@ -1,6 +1,11 @@
-//     $Id: edmain.cpp,v 1.34 2001-01-04 15:13:45 mbickel Exp $
+//     $Id: edmain.cpp,v 1.35 2001-01-25 23:44:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2001/01/04 15:13:45  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.33  2000/11/29 11:05:27  mbickel
 //      Improved userinterface of the mapeditor
 //      map::preferredfilenames uses now strings (instead of char*)
@@ -178,6 +183,7 @@
 #include "edglobal.h"
 #include "errors.h"
 #include "gameoptions.h"
+#include "mapdisplay.h"
 
 #include <signal.h>
 
@@ -692,14 +698,7 @@ pfont load_font(char* name)
 int mapeditorMainThread ( void* _mapname )
 {
    char* mapname = (char*) _mapname;
-   #ifdef HEXAGON
-    initspfst( -1, -1 );
-   #else
-    if ( resolx == 640  && resoly == 480 )
-       initspfst();
-    else
-       initspfst( -1, -1 );
-   #endif
+   initMapDisplay( );
 
    cursor.init();
 

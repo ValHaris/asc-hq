@@ -1,6 +1,10 @@
-//     $Id: loadpcx.h,v 1.4 2000-05-30 18:39:25 mbickel Exp $
+//     $Id: loadpcx.h,v 1.5 2001-01-25 23:45:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/05/30 18:39:25  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.3  2000/05/23 20:40:47  mbickel
 //      Removed boolean type
 //
@@ -39,9 +43,9 @@
 #include "basestrm.h"
 #include "basegfx.h"
 
-extern char loadpcxxy (char *name, char setpal, word x, word y);
+extern char loadpcxxy ( const char *name, char setpal, word x, word y);
 extern char loadpcxxy( pnstream stream, int x, int y, int setpalette = 0 );
-extern void writepcx ( char* name, int x1, int y1, int x2, int y2, dacpalette256 pal );
+extern void writepcx ( const char* name, int x1, int y1, int x2, int y2, dacpalette256 pal );
 
 
 #endif

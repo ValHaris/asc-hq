@@ -1,6 +1,13 @@
-//     $Id: artint.h,v 1.29 2001-01-23 21:05:09 mbickel Exp $
+//     $Id: artint.h,v 1.30 2001-01-25 23:44:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2001/01/23 21:05:09  mbickel
+//      Speed up of AI
+//      Lot of bugfixes in AI
+//      Moved Research to own files (research.*)
+//      Rewrote storing of developed technologies
+//      Some cleanup and documentation
+//
 //     Revision 1.28  2001/01/21 12:48:35  mbickel
 //      Some cleanup and documentation
 //
@@ -88,6 +95,7 @@
            bool _isRunning;
            int _vision;
            int unitCounter;
+           int player;
 
            int maxTrooperMove; 
            int maxTransportMove;
@@ -97,6 +105,7 @@
 
            pmap activemap;
            MapDisplayInterface* mapDisplay;
+           MapDisplayInterface* rmd;
 
            class ServiceOrder {
                   AI* ai;
@@ -324,6 +333,7 @@
                   int x1,y1,x2,y2;
                   int xp, yp;
                   int centerx, centery;
+                  int units_heading_here;
 
                   int numberOfFields;
                   AiThreat absUnitThreat;
@@ -351,7 +361,7 @@
                   void calculate ( void );
                   Section& getForCoordinate ( int xc, int yc );         //!< returns the section whose center is nearest to x,y
                   Section& getForPos ( int xn, int yn );                //!< returns the xth and yth section
-                  Section* getBest ( const pvehicle veh, int* xtogo = NULL, int* ytogo = NULL );
+                  Section* getBest ( int pass, const pvehicle veh, int* xtogo = NULL, int* ytogo = NULL );
                   Sections ( AI* _ai );
                   void reset( void );
             } sections;
@@ -362,10 +372,10 @@
            AiThreat& getFieldThreat ( int x, int y );
 
         public:
-           AI ( pmap _map ) ;
+           AI ( pmap _map, int _player ) ;
            void  run ( void );
            pmap getMap ( void ) { return activemap; };
-           int getPlayer ( void ) { return activemap->actplayer; };
+           int getPlayer ( void ) { return player; };
            void showFieldInformation ( int x, int y );
            bool isRunning ( void );
            int getVision ( void );

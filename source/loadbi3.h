@@ -1,6 +1,10 @@
-//     $Id: loadbi3.h,v 1.8 2001-01-21 16:37:18 mbickel Exp $
+//     $Id: loadbi3.h,v 1.9 2001-01-25 23:45:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2001/01/21 16:37:18  mbickel
+//      Moved replay code to own file ( replay.cpp )
+//      Fixed compile problems done by cleanup
+//
 //     Revision 1.7  2000/10/14 13:07:00  mbickel
 //      Moved DOS version into own subdirectories
 //      Win32 version with Watcom compiles and links ! But doesn't run yet...
@@ -71,8 +75,8 @@ extern void loadbi3pict ( int num, void** pict );
 extern int bi3graphnum;
 extern void check_bi3_dir ( void );
 extern tpixelxlattable bi2asc_color_translation_table;
-extern void importbattleislemap ( char* path, char* filename, TerrainType::Weather* trrn );
-extern void insertbattleislemap ( int x, int y, char* path, char* filename  );
+extern void importbattleislemap ( const char* path, const char* filename, TerrainType::Weather* trrn, string* errorOutput = NULL );
+extern void insertbattleislemap ( int x, int y, const char* path, const char* filename  );
 
 extern const char* getbi3path ( void );
 

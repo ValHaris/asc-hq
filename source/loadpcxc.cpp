@@ -1,6 +1,9 @@
-//     $Id: loadpcxc.cpp,v 1.9 2000-12-23 13:19:47 mbickel Exp $
+//     $Id: loadpcxc.cpp,v 1.10 2001-01-25 23:45:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/12/23 13:19:47  mbickel
+//      Made ASC compileable with Borland C++ Builder
+//
 //     Revision 1.8  2000/11/09 17:48:47  mbickel
 //      The size of a stream can now be queried
 //      PCX loader (in C) can now load unpatched images provided they are not
@@ -242,14 +245,14 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
 } 
 
 
-char loadpcxxy (char *name, char setpal, word x, word y)
+char loadpcxxy ( const char *name, char setpal, word x, word y)
 {
    tnfilestream s ( name, 1 );
    return loadpcxxy ( &s, x, y, setpal );
 }
 
 
-void writepcx ( char* name, int x1, int y1, int x2, int y2, dacpalette256 pal )
+void writepcx ( const char* name, int x1, int y1, int x2, int y2, dacpalette256 pal )
 {
    tpcxheader header;
    memset ( &header, 0, sizeof (header ));

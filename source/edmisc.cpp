@@ -1,6 +1,11 @@
-//     $Id: edmisc.cpp,v 1.43 2001-01-04 15:13:46 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.44 2001-01-25 23:44:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2001/01/04 15:13:46  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.42  2000/12/26 21:04:35  mbickel
 //      Fixed: putimageprt not working (used for small map displaying)
 //      Fixed: mapeditor crashed on generating large maps
@@ -229,12 +234,11 @@
 #include "edselfnt.h"
 #include "edglobal.h"
 #include "password_dialog.h"
+#include "mapdisplay.h"
 
 #ifdef _DOS_
  #include "dos\memory.h"
 #endif
-
-// #define smallestweight 8 //gewicht der kleinsten vehicle fÅr selunitcargo
 
    tkey         ch;
    pfield               pf;

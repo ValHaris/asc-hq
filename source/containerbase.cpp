@@ -79,14 +79,17 @@ int ContainerBase :: getMaxRepair ( const ContainerBase* item, int newDamage, Re
    for ( i = 0; i < resourceTypeNum; i++ )
       needed.resource(i) = needed.resource(i) * (item->damage-newDamage) / 100;
 
-   cost = getResource ( needed, 1 );
+   Resources avail = getResource ( needed, 1 );
 
    for ( i = 0; i < resourceTypeNum; i++ )
-      if ( cost.resource(i) ) {
-         int nd = toRepair * cost.resource(i) / cost.resource(i);
-         if ( item->damage - nd > newDamage )
-            newDamage = item->damage - nd;
+      if ( needed.resource(i) ) {
+         int repairable = toRepair * avail.resource(i) / needed.resource(i);
+         if ( item->damage - repairable > newDamage )
+            newDamage = item->damage - repairable;
       }
+
+   for ( i = 0; i < resourceTypeNum; i++ )
+      cost.resource(i) = needed.resource(i) * (item->damage-newDamage) / 100;
 
    return newDamage;
 }

@@ -1,6 +1,10 @@
-//     $Id: edglobal.cpp,v 1.25 2001-01-21 16:37:16 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.26 2001-01-25 23:44:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2001/01/21 16:37:16  mbickel
+//      Moved replay code to own file ( replay.cpp )
+//      Fixed compile problems done by cleanup
+//
 //     Revision 1.24  2000/12/26 21:04:34  mbickel
 //      Fixed: putimageprt not working (used for small map displaying)
 //      Fixed: mapeditor crashed on generating large maps
@@ -141,6 +145,7 @@
 #include "edselfnt.h"
 #include "edglobal.h"
 #include "gameoptions.h"
+#include "mapdisplay.h"
 
 mc_check mc;
 

@@ -1,6 +1,13 @@
-//     $Id: controls.cpp,v 1.91 2001-01-23 21:05:12 mbickel Exp $
+//     $Id: controls.cpp,v 1.92 2001-01-25 23:44:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.91  2001/01/23 21:05:12  mbickel
+//      Speed up of AI
+//      Lot of bugfixes in AI
+//      Moved Research to own files (research.*)
+//      Rewrote storing of developed technologies
+//      Some cleanup and documentation
+//
 //     Revision 1.90  2001/01/21 16:37:14  mbickel
 //      Moved replay code to own file ( replay.cpp )
 //      Fixed compile problems done by cleanup
@@ -4675,7 +4682,7 @@ void runai( int playerView )
       actmap->playerView = playerView;
 
       if ( !actmap->player[ actmap->actplayer ].ai )
-         actmap->player[ actmap->actplayer ].ai = new AI ( actmap );
+         actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
       actmap->player[ actmap->actplayer ].ai->run();
 
