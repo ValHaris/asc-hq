@@ -2,9 +2,13 @@
     \brief Interface for changing the weather and the terrain on the map
 */
 
-//     $Id: weather.h,v 1.6 2001-07-27 21:13:35 mbickel Exp $
+//     $Id: weather.h,v 1.7 2001-10-31 18:34:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2001/07/27 21:13:35  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.5  2001/01/28 14:04:22  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard

@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.60 2001-10-02 14:06:28 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.61 2001-10-31 18:34:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2001/10/02 14:06:28  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.59  2001/08/19 10:48:49  mbickel
 //      Fixed display problems in event dlg in mapeditor
 //      Fixed error when starting campaign with AI as first player
@@ -3977,6 +3983,7 @@ void fatalError ( const char* formatstring, ... )
    char tempbuf[1000];
 
    int lng = vsprintf( tempbuf, formatstring, paramlist );
+   va_end ( paramlist );
    if ( lng >= 1000 )
       displaymessage ( "dlg_box.cpp / fatalError:   string to long !\nPlease report this error",1 );
 

@@ -6,9 +6,12 @@
     
 */
 
-//     $Id: newfont.cpp,v 1.11 2001-02-11 11:39:40 mbickel Exp $
+//     $Id: newfont.cpp,v 1.12 2001-10-31 18:34:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2001/02/11 11:39:40  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.10  2000/12/27 22:23:12  mbickel
 //      Fixed crash in loading message text
 //      Removed many unused variables
@@ -564,6 +567,7 @@ void showtext4 ( const char* TextToOutput, int x1, int y1, ... )
    char tempbuf[1000];
 
    vsprintf( tempbuf, TextToOutput, paramlist );
+   va_end ( paramlist );
    showtext2 ( tempbuf, x1, y1 );
 }
 
@@ -575,6 +579,7 @@ void showtext4c ( const char* TextToOutput, int x1, int y1, ... )
    char tempbuf[1000];
 
    vsprintf( tempbuf, TextToOutput, paramlist );
+   va_end ( paramlist );
    showtext2c ( tempbuf, x1, y1 );
 }
 

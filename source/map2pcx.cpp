@@ -255,7 +255,7 @@ void process_ASC_map ( const ASCString& filename )
 
 
 
-int mapeditorMainThread ( const void* _mapname )
+int mapeditorMainThread (  void* _mapname )
 {
    tvirtualdisplay buf ( 800, 600 );
    initMapDisplay( );

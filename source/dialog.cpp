@@ -2,9 +2,13 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.99 2001-10-11 10:41:06 mbickel Exp $
+//     $Id: dialog.cpp,v 1.100 2001-10-31 18:34:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.99  2001/10/11 10:41:06  mbickel
+//      Restructured platform fileio handling
+//      Added map archival information to mapeditor
+//
 //     Revision 1.98  2001/10/08 14:44:22  mbickel
 //      Some cleanup
 //
@@ -2034,6 +2038,7 @@ int         choice_dlg(char *       title,
    char tempbuf[1000];
 
    int lng = vsprintf( tempbuf, title, paramlist );
+   va_end ( paramlist );
    if ( lng >= 1000 )
       displaymessage ( "dialog.cpp / choice_dlg:   string to long !\nPlease report this error",1 );
 

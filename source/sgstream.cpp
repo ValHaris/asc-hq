@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.71 2001-10-16 19:58:19 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.72 2001-10-31 18:34:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.71  2001/10/16 19:58:19  mbickel
+//      Added title screen for mapeditor
+//      Updated source documentation
+//
 //     Revision 1.70  2001/10/11 10:22:50  mbickel
 //      Some cleanup and fixes for Visual C++
 //

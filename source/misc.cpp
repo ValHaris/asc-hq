@@ -1,6 +1,9 @@
-//     $Id: misc.cpp,v 1.21 2001-10-21 13:16:59 mbickel Exp $
+//     $Id: misc.cpp,v 1.22 2001-10-31 18:34:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2001/10/21 13:16:59  mbickel
+//      Cleanup and documentation
+//
 //     Revision 1.20  2001/10/16 19:58:19  mbickel
 //      Added title screen for mapeditor
 //      Updated source documentation
@@ -333,6 +336,7 @@ void fatalError ( const char* formatstring, ... )
 
    char buf[10000];
    vsprintf ( buf, formatstring, paramlist );
+   va_end ( paramlist );
    fatalError ( ASCString ( buf ));
 }
 

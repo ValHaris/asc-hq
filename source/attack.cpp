@@ -3,9 +3,16 @@
 */
 
 
-//     $Id: attack.cpp,v 1.54 2001-10-28 20:42:17 mbickel Exp $
+//     $Id: attack.cpp,v 1.55 2001-10-31 18:34:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2001/10/28 20:42:17  mbickel
+//      Fixed AI crashes
+//      Fixed problems when next campaign map could not be found.
+//      Fixed forgotten events.
+//      Added several new experimental map parameters
+//      Some improvements to the campaign maps
+//
 //     Revision 1.53  2001/10/22 18:22:47  mbickel
 //      Reaction fire doesn't prevent units with the wait attribute from attacking
 //       manually
@@ -391,7 +398,7 @@ void tfight :: calcdisplay ( int ad, int dd )
 
    // einkeilung;
 
-   paintbar ( 6, 100 *  (dv.hemming - 1 ) / 4, dc );
+   paintbar ( 6, int( 100 *  (dv.hemming - 1 ) / 4), dc );
 
    if ( av.attackbonus > 0 )
       if ( av.attackbonus > maxattackshown )

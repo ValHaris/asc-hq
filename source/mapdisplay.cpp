@@ -1477,7 +1477,7 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
 
       if ( height1 != height2  && ( height1 > chfahrend  || height2 > chfahrend )) {
 
-         int compl = totalmove;
+         int completion = totalmove;
          int went = fieldnum;
          // int togo = totalmove - fieldnum;
 
@@ -1487,8 +1487,8 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
 
          if ( height1 < height2 ) {
             if ( height1 == chfahrend ) {
-               int takeoff = compl * 2 / 3 ;
-               int ascend = compl - takeoff;
+               int takeoff = completion * 2 / 3 ;
+               int ascend = completion - takeoff;
                if ( went >=  takeoff ) {
                   h1 = ht1 + htd * ( went-takeoff ) / ascend;
                   h2 = ht1 + htd * ( went-takeoff + 1 ) / ascend;
@@ -1497,12 +1497,12 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
                   h2 = ht1;
                }
             } else {
-               h1 = ht1 + htd * went / compl;
-               h2 = ht1 + htd * (went + 1) / compl;
+               h1 = ht1 + htd * went / completion;
+               h2 = ht1 + htd * (went + 1) / completion;
             }
          } else {
             if ( height2 == chfahrend ) {
-               int landpos = (compl+2) / 3;
+               int landpos = (completion+2) / 3;
 
                if ( went <  landpos ) {
                   h1 = ht1 + htd * went / landpos;
@@ -1512,8 +1512,8 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
                   h2 = ht2;
                }
             } else {
-               h1 = ht1 + htd * went / compl;
-               h2 = ht1 + htd * (went + 1) / compl;
+               h1 = ht1 + htd * went / completion;
+               h2 = ht1 + htd * (went + 1) / completion;
             }
          }
 

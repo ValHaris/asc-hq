@@ -2,9 +2,12 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.67 2001-10-21 13:16:59 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.68 2001-10-31 18:34:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.67  2001/10/21 13:16:59  mbickel
+//      Cleanup and documentation
+//
 //     Revision 1.66  2001/10/11 10:41:05  mbickel
 //      Restructured platform fileio handling
 //      Added map archival information to mapeditor
@@ -1033,10 +1036,6 @@ void         tnbufstream::writedata( const void* buf, int size )
 
 tnbufstream::~tnbufstream ()
 { 
-   if (_mode == writing ) 
-      writebuffer();
-
-
    if ( memsize > 1)
       delete []  zeiger ;
 } 

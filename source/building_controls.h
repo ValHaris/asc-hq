@@ -5,9 +5,16 @@
 */
 
 
-//     $Id: building_controls.h,v 1.9 2001-09-23 23:06:20 mbickel Exp $
+//     $Id: building_controls.h,v 1.10 2001-10-31 18:34:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2001/09/23 23:06:20  mbickel
+//      Fixed:
+//       - ascent/descent during reactionfire
+//       - movement with nearly empty fuel tank
+//       - production icon displayed although unit could not be produced
+//       - invisible building becoming visible in fog of war
+//
 //     Revision 1.8  2001/07/29 21:26:37  mbickel
 //      Fixed: Torpedo-units could not leave submerged submarine
 //
@@ -306,3 +313,4 @@ class    ctransportcontrols : public virtual ccontainercontrols
 };
 
 #endif // building_controls_h
+

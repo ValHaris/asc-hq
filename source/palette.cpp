@@ -2,9 +2,12 @@
     \brief The color palette and various color translation tables
 */
 
-//     $Id: palette.cpp,v 1.6 2001-09-20 15:36:09 mbickel Exp $
+//     $Id: palette.cpp,v 1.7 2001-10-31 18:34:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2001/09/20 15:36:09  mbickel
+//      New object displaying mode
+//
 //     Revision 1.5  2001/01/28 20:42:14  mbickel
 //      Introduced a new string class, ASCString, which should replace all
 //        char* and std::string in the long term
@@ -69,4 +72,4 @@ bool asc_paletteloaded = 0;
 char* borland_c_sucks ( void )
 {
    return "just some code";
-}   
+}

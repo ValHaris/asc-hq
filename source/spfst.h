@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: spfst.h,v 1.44 2001-08-02 18:50:43 mbickel Exp $
+//     $Id: spfst.h,v 1.45 2001-10-31 18:34:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2001/08/02 18:50:43  mbickel
+//      Corrected Error handling in Text parsers
+//      Improved version information
+//
 //     Revision 1.43  2001/07/28 11:19:12  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -202,7 +206,7 @@ extern int getdiplomaticstatus2( int c, int b);
 extern void  putbuilding( const MapCoordinate& entryPosition,
                          int          color,
                          pbuildingtype buildingtyp,
-                         int          compl,
+                         int          completion,
                          int          ignoreunits = 0 ); // f?r Kartened
 
 extern void  putbuilding2( const MapCoordinate& entryPosition,

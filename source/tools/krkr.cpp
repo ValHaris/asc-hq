@@ -1352,6 +1352,7 @@ void fatalError ( const char* formatstring, ... )
    char tempbuf[1000];
 
    int lng = vsprintf( tempbuf, formatstring, paramlist );
+   va_end ( paramlist );
    fprintf(stderr, tempbuf );
    exit(1);
 }

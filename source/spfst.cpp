@@ -2,9 +2,13 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.99 2001-10-21 20:18:39 mbickel Exp $
+//     $Id: spfst.cpp,v 1.100 2001-10-31 18:34:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.99  2001/10/21 20:18:39  mbickel
+//      Fixed non-empty table problem with BI3 map import
+//      Added ini parameter to specify wood behaviour
+//
 //     Revision 1.98  2001/10/16 19:58:20  mbickel
 //      Added title screen for mapeditor
 //      Updated source documentation
@@ -1582,7 +1586,7 @@ void         clearfahrspuren(void)
 void         putbuilding( const MapCoordinate& entryPosition,
                          int          color,
                          pbuildingtype buildingtyp,
-                         int          compl,
+                         int          completion,
                          int          ignoreunits )
 { 
    if ( color & 7 )
@@ -1605,8 +1609,8 @@ void         putbuilding( const MapCoordinate& entryPosition,
 
    pbuilding gbde = new Building ( actmap , entryPosition, buildingtyp, color/8 );
 
-   if (compl >= buildingtyp->construction_steps)
-      compl = buildingtyp->construction_steps - 1;
+   if (completion >= buildingtyp->construction_steps)
+      completion = buildingtyp->construction_steps - 1;
 
    gbde->damage = 0;
    gbde->maxresearchpoints = 0;
@@ -1614,7 +1618,7 @@ void         putbuilding( const MapCoordinate& entryPosition,
    gbde->netcontrol = 0;
    gbde->connection = 0; 
    gbde->visible = true; 
-   gbde->setCompletion ( compl );
+   gbde->setCompletion ( completion );
 }
 
 

@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.41 2001-10-11 10:41:06 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.42 2001-10-31 18:34:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2001/10/11 10:41:06  mbickel
+//      Restructured platform fileio handling
+//      Added map archival information to mapeditor
+//
 //     Revision 1.40  2001/10/11 10:22:49  mbickel
 //      Some cleanup and fixes for Visual C++
 //
@@ -328,78 +332,9 @@ int infomessage( char* formatstring, ... )
    va_list paramlist;
    va_start ( paramlist, formatstring );
 
-   while (*a != 0) {
-      if (*a == '%' ) {
-         switch (a[1]) {
-         case 'c': 
-            *b = va_arg ( paramlist, char );
-            b++;
-            break;
-         case 'd':
-         case 'i':
-         case 'u':
-            i = va_arg ( paramlist, int );
-            itoa ( i, c, 10 );
-            i=0;
-            while (c[i]) {
-               *b = c[i];
-               b++;
-               i++;
-            } /* endwhile */
-            break;
-         case 'o':
-            i = va_arg ( paramlist, int );
-            itoa ( i, c, 8 );
-            i=0;
-            while (c[i]) {
-               *b = c[i];
-               b++;
-               i++;
-            } /* endwhile */
-            break;
-         case 'p':
-         case 'x':
-            i = va_arg ( paramlist, int );
-            itoa ( i, c, 16 );
-            i=0;
-            while (c[i]) {
-               *b = c[i];
-               b++;
-               i++;
-            } /* endwhile */
-            break;
-         case 'X':
-            i = va_arg ( paramlist, int );
-            itoa ( i, c, 16 );
-            strupr ( c );
-            i=0;
-            while (c[i]) {
-               *b = c[i];
-               b++;
-               i++;
-            } /* endwhile */
-            break;
-         case 's':
-            d = va_arg ( paramlist, char* );
-            while (*d) {
-               *b = *d;
-               b++;
-               d++;
-            } /* endwhile */
-            break;
-         } /* endswitch */
-         a+=2;
-      } else {
-         *b = *a;
-         b++;
-         a++;
-      } /* endif */
-   } /* endwhile */
-   *b = 0;
+   vsprintf ( stringtooutput, formatstring, paramlist );
 
    va_end ( paramlist );
-
-
 
    npush ( activefontsettings );
    activefontsettings.justify = lefttext;

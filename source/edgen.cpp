@@ -2,9 +2,12 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.13 2001-10-11 10:22:49 mbickel Exp $
+//     $Id: edgen.cpp,v 1.14 2001-10-31 18:34:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2001/10/11 10:22:49  mbickel
+//      Some cleanup and fixes for Visual C++
+//
 //     Revision 1.12  2001/08/09 10:28:22  mbickel
 //      Fixed AI problems
 //      Mapeditor can edit a units AI parameter

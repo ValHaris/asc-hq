@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.70 2001-10-16 19:58:19 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.71 2001-10-31 18:34:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.70  2001/10/16 19:58:19  mbickel
+//      Added title screen for mapeditor
+//      Updated source documentation
+//
 //     Revision 1.69  2001/10/11 10:41:06  mbickel
 //      Restructured platform fileio handling
 //      Added map archival information to mapeditor
