@@ -7,4 +7,3 @@ class cmousecontrol {
             void reset ( void );
 };
 
- 

@@ -120,6 +120,10 @@ The experience after many many problem reports is that compiling the source make
 
 <h2>Compiling ASC: FAQ</h2>
 
+<h3>configure complains it can't find sdl-config</h3>
+
+If you have installed a SDL.RPM that came with your distribution, you might need to install SDL_devel.rpm too.
+
 <h3>configure or bootstrap complains it can't find sdl or paragui </h3>
 
 If you compiled the library yourself and installed it, the problem may be that aclocal doesn't search in all required paths. Paragui and SDL install their .m3
@@ -324,7 +328,7 @@ operates.
 
 <hr>
 <i>
-$Id: install.html,v 1.6 2002-09-19 20:20:04 mbickel Exp $
+$Id: install.html,v 1.7 2002-10-02 20:21:00 mbickel Exp $
 </i>
 </BODY>
 </HTML>

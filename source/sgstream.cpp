@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.82 2002-04-10 21:12:13 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.83 2002-10-02 20:21:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.82  2002/04/10 21:12:13  mbickel
+//      Win32 version now searches registry for install path
+//
 //     Revision 1.81  2002/03/25 18:48:15  mbickel
 //      Applications can now specify which data checks to perform
 //
@@ -298,7 +301,7 @@ void* generate_vehicle_gui_build_icon ( pvehicletype tnk )
 
    char* newbuildingpic = new char [ imagesize ( 0, 0, wd-1, hg-1 ) ];
    getimage ( 0, 0, wd-1, hg-1, newbuildingpic );
-   delete[] buf;
+   asc_free ( buf );
 
    return newbuildingpic;
 }
@@ -518,7 +521,7 @@ void* generate_object_gui_build_icon ( pobjecttype obj, int remove )
 
    void* newbuildingpic = new char [ imagesize ( 0, 0, wd-1, hg-1 ) ];
    getimage ( 0, 0, wd-1, hg-1, newbuildingpic );
-   delete[] buf;
+   asc_free( buf );
 
    return newbuildingpic;
 }

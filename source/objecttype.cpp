@@ -324,7 +324,7 @@ void ObjectType :: setupImages()
                void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
                flippict ( weatherPicture[ww].images[n], buf , 2 );
                flippict ( buf, weatherPicture[ww].images[n], 1 );
-               delete[] buf;
+               asc_free( buf );
                copycount++;
             }
 

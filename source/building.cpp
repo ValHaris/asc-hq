@@ -2,9 +2,14 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.83 2002-10-01 09:23:41 mbickel Exp $
+//     $Id: building.cpp,v 1.84 2002-10-02 20:21:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.83  2002/10/01 09:23:41  mbickel
+//      Fixed many bugs
+//      Added inheritance to text files
+//      updated graphics
+//
 //     Revision 1.82  2002/09/19 20:20:04  mbickel
 //      Cleanup and various bug fixes
 //
@@ -1022,7 +1027,7 @@ int windowheight = -1;
 
 int getstepwidth ( int max )
 {
-   double ep = log10 ( max );
+   double ep = log10 ( double(max) );
    if ( ep > 2.0 )
       ep -= 2.0;
    else

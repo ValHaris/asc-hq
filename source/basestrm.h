@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: basestrm.h,v 1.51 2002-02-14 20:58:13 mbickel Exp $
+//     $Id: basestrm.h,v 1.52 2002-10-02 20:21:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2002/02/14 20:58:13  mbickel
+//      Started integration of paragui
+//
 //     Revision 1.50  2002/01/29 20:42:16  mbickel
 //      Improved finding of files with relative path
 //      Added wildcards to music playlist files
@@ -510,7 +513,7 @@ class tn_file_buf_stream : public tnbufstream {
 
 
 
-class tanycompression : public t_compressor_stream_interface, protected tlzwstreamcompression {
+class tanycompression : public t_compressor_stream_interface, public tlzwstreamcompression {
 
                             typedef deque<char> CDQ;
                             queue<char, CDQ> _queue;

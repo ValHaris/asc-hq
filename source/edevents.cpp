@@ -2,9 +2,12 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.31 2002-04-14 17:21:17 mbickel Exp $
+//     $Id: edevents.cpp,v 1.32 2002-10-02 20:21:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2002/04/14 17:21:17  mbickel
+//      Renamed global variable pf to pf2 due to name clash with SDL_mixer library
+//
 //     Revision 1.30  2001/10/11 10:22:49  mbickel
 //      Some cleanup and fixes for Visual C++
 //
@@ -189,7 +192,7 @@ class   tplayersel : public tstringselect {
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void gettext(word nr);
+                 virtual void get_text(word nr);
                  };
 
 void         tplayersel::setup(void)
@@ -218,7 +221,7 @@ void         tplayersel::buttonpressed(int         id)
 } 
 
 
-void         tplayersel::gettext(word nr)
+void         tplayersel::get_text(word nr)
 { 
    if (nr == 8) strcpy(txt,"Neutral");
    else {
@@ -260,7 +263,7 @@ class   verknuepfsel : public tstringselect {
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void gettext(word nr);
+                 virtual void get_text(word nr);
                  };
 
 void         verknuepfsel::setup(void)
@@ -288,7 +291,7 @@ void         verknuepfsel::buttonpressed(int         id)
 } 
 
 
-void         verknuepfsel::gettext(word nr)
+void         verknuepfsel::get_text(word nr)
 { 
    strcpy(txt,ceventtriggerconn[nr]);
 } 
@@ -440,7 +443,7 @@ class   teventtype : public tstringselect {
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void gettext(word nr);
+                 virtual void get_text(word nr);
                  };
 
 void         teventtype::setup(void)
@@ -457,7 +460,7 @@ void         teventtype::setup(void)
    addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,5,true);
 } 
 
-void teventtype::gettext(word nr)
+void teventtype::get_text(word nr)
 {
    strcpy(txt,ceventactions[nr]);
 }
@@ -503,7 +506,7 @@ class   treason : public tstringselect {
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void gettext(word nr);
+                 virtual void get_text(word nr);
                  };
 
 void         treason::setup(void)
@@ -520,7 +523,7 @@ void         treason::setup(void)
 } 
 
 
-void         treason::gettext(word nr)
+void         treason::get_text(word nr)
 { 
    strcpy(txt,ceventtrigger[nr]);
 } 
@@ -815,7 +818,7 @@ class   tgeteventid : public tstringselect {
                  void rebuildlines(void);
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
-                 virtual void gettext(word nr);
+                 virtual void get_text(word nr);
                  virtual void run(void);
                  };
 
@@ -852,7 +855,7 @@ void         tgeteventid::setup(void)
    addbutton("~C~ancel",330,40,420,70,0,1,8,true);
 } 
 
-void   tgeteventid::gettext(word nr) //gibt in txt den string zur…k
+void   tgeteventid::get_text(word nr) //gibt in txt den string zur…k
 {
    word    count;
    pevent  e;
@@ -933,13 +936,13 @@ class   tgettechnologyid : public tstringselect {
                  void rebuildlines(void);
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
-                 virtual void gettext(word nr);
+                 virtual void get_text(word nr);
                  virtual void run(void);
                  };
 
 
 void         tgettechnologyid::setup(void)
-{ 
+{
    title = "Select Technology";
    numberoflines = technologynum;
    ttechnologyid = 0;
@@ -948,26 +951,26 @@ void         tgettechnologyid::setup(void)
          startpos = i;
          ttechnologyid = gettechnology_forpos(i)->id;
          i = technologynum;
-      } 
+      }
    } /* endfor */
-   xsize = 440; 
-   ysize = 360; 
-   sy = 120; 
-   ey = ysize - 20; 
+   xsize = 440;
+   ysize = 360;
+   sy = 120;
+   ey = ysize - 20;
    addbutton("~I~D",20,50,200,70,2,1,5,true);
    addeingabe(5,&ttechnologyid,1,maxint);
    addbutton("~D~one",220,40,310,70,0,1,7,true);
    addbutton("~C~ancel",330,40,420,70,0,1,8,true);
-} 
+}
 
-void   tgettechnologyid::gettext(word nr) //gibt in txt den string zur…k
+void   tgettechnologyid::get_text(word nr) //gibt in txt den string zur…k
 {
    strcpy(txt,gettechnology_forpos(nr)->name);
 }
-                        
+
 
 void         tgettechnologyid::buttonpressed(int         id)
-{    
+{
    tstringselect::buttonpressed(id);
    switch (id) {
    case 7:  if ( ttechnologyid )
@@ -979,20 +982,20 @@ void         tgettechnologyid::buttonpressed(int         id)
                ttechnologyid = 0;
               }
       break;
-   } 
-} 
+   }
+}
 
 
 void         tgettechnologyid::run(void)
-{ 
+{
    do {
       tstringselect::run();
       if ( (msel == 1 ) || (taste == ct_enter ) ) {
          ttechnologyid = gettechnology_forpos(redline)->id;
          showbutton(5);
-      }                            
+      }
    }  while ((taste != ct_esc) && (action != 1));
-} 
+}
 
 
 int         gettechnologyid(int lid)
@@ -1004,7 +1007,7 @@ int         gettechnologyid(int lid)
    tt.done();
    ch = 0;
    return tt.ttechnologyid;
-} 
+}
 
 //  ChangeWind
 
@@ -1026,17 +1029,17 @@ void         twindchange::init(void)
   int            i;
 
    tdialogbox::init();
-   action = 0; 
+   action = 0;
    title = "Wind Change";
    x1 = 70;
    xsize = 500;
    y1 = 40;
    ysize = 250;
-   w = (xsize - 60) / 2; 
+   w = (xsize - 60) / 2;
    dirx= 370;
    diry= 110;
-   action = 0; 
- 
+   action = 0;
+
    activeheight = 0;
 
    if ( (we->datasize == 24) && we->rawdata  ) {
@@ -1049,12 +1052,12 @@ void         twindchange::init(void)
       for (i=0;i<=2;i++ ) {
          tdirect[i] = 0;
          tinten[i] = 0;
-      } 
+      }
    } /* endif */
 
    tsintensity = tinten[activeheight];
 
-   windowstyle = windowstyle ^ dlg_in3d; 
+   windowstyle = windowstyle ^ dlg_in3d;
 
    addbutton("~I~ntensity",50,60,250,80,2,1,1,true);
    addeingabe(1,&tsintensity,0,255);
@@ -1065,7 +1068,7 @@ void         twindchange::init(void)
        addbutton("",40+( i * w2),heightxs,20 + w2 * ( i +1 ),heightxs+24,0,1,i+2,true);
        addkey(i+2,ct_1+i);
    } // Buttons 2-4
-            
+
    // 8 im Kreis bis 7
 
 
@@ -1074,13 +1077,13 @@ void         twindchange::init(void)
    addkey(30,ct_enter);
    addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,31,true);
 
-   buildgraphics(); 
+   buildgraphics();
 
 
    float radius = 50;
    float pi = 3.14159265;
    for ( i = 0; i < sidenum; i++ ) {
-                              
+
       int x = (int) (dirx + radius * sin ( 2 * pi * (float) i / (float) sidenum ));
       int y = (int) (diry - radius * cos ( 2 * pi * (float) i / (float) sidenum ));
 
@@ -1094,21 +1097,21 @@ void         twindchange::init(void)
   }
 
    showdir_and_height();
- 
+
    mousevisible(false);
    for (i=0;i<=2 ;i++) {
       putimage(x1 + 43+( i * w2), y1 + heightxs + 2 ,icons.height[i+4]);
-   } 
+   }
 
-   mousevisible(true); 
-} 
+   mousevisible(true);
+}
 
 void         twindchange::run(void)
-{ 
-   do { 
+{
+   do {
       tdialogbox::run();
-   }  while (!((taste == ct_esc) || (action == 1))); 
-} 
+   }  while (!((taste == ct_esc) || (action == 1)));
+}
 
 void         twindchange::showdir_and_height(void)
 {
@@ -1129,11 +1132,11 @@ void         twindchange::showdir_and_height(void)
 
 
 void         twindchange::buttonpressed(int         id)
-{ 
+{
    switch (id) {
       case 2:
       case 3:
-      case 4: 
+      case 4:
          {
               if (id-2 != activeheight ) {
                  tinten[activeheight] = tsintensity;
@@ -1141,16 +1144,16 @@ void         twindchange::buttonpressed(int         id)
                  showdir_and_height();
                  tsintensity = tinten[activeheight];
                  showbutton(1);
-              } 
+              }
          }
          break;
-      case 14 : 
-      case 15 :  
-      case 16 : 
-      case 17 : 
-      case 18 : 
-      case 19 : 
-      case 20 : 
+      case 14 :
+      case 15 :
+      case 16 :
+      case 17 :
+      case 18 :
+      case 19 :
+      case 20 :
       case 21 : {
                    tdirect[activeheight] = id-14;
                    showdir_and_height();
@@ -1159,7 +1162,7 @@ void         twindchange::buttonpressed(int         id)
       case 30:
          {
             tinten[activeheight] = tsintensity;
-            action = 1; 
+            action = 1;
             abort = 0;
             we->datasize = 24;
             int* puffer = new int[6];
@@ -1167,10 +1170,10 @@ void         twindchange::buttonpressed(int         id)
                 puffer[i] = tinten[i];
                 puffer[i+3] = tdirect[i];
             } /* endfor */
-            if ( we->rawdata ) 
+            if ( we->rawdata )
                asc_free( we->rawdata );
             we->intdata = puffer;
-       } 
+       }
        break;
     case 31 : {
             action = 1;
@@ -1178,11 +1181,11 @@ void         twindchange::buttonpressed(int         id)
          }
          break;
    } /* endswitch */
-} 
+}
 
 
 int         changewind(pevent acte)
-{ 
+{
    twindchange        wc;
 
    wc.we = acte;
@@ -1190,7 +1193,7 @@ int         changewind(pevent acte)
    wc.run();
    wc.done();
    return wc.abort;
-} 
+}
 
 
 
@@ -1249,8 +1252,8 @@ void tcreateevent::showeventtype(void)
 void tcreateevent::showreason(int nr)
 {
    npush ( activefontsettings );
-   activefontsettings.font = schriften.smallarial; 
-   activefontsettings.justify = lefttext; 
+   activefontsettings.font = schriften.smallarial;
+   activefontsettings.justify = lefttext;
    activefontsettings.color = red;
    activefontsettings.markcolor = lightred;
    activefontsettings.background = lightgray;
@@ -1293,8 +1296,8 @@ void         tcreateevent::showeventid ( void )
    npush ( activefontsettings );
 
    int reasonx = xsize - 230;
-   activefontsettings.font = schriften.smallarial; 
-   activefontsettings.justify = lefttext; 
+   activefontsettings.font = schriften.smallarial;
+   activefontsettings.justify = lefttext;
    activefontsettings.color = red;
    activefontsettings.markcolor = lightred;
    activefontsettings.background = lightgray;
@@ -1307,8 +1310,8 @@ void         tcreateevent::showeventid ( void )
 
 void tcreateevent::draw_additional_graphics ( void )
 {
-   activefontsettings.font = schriften.smallarial; 
-   activefontsettings.justify = lefttext; 
+   activefontsettings.font = schriften.smallarial;
+   activefontsettings.justify = lefttext;
    activefontsettings.color = red;
    activefontsettings.markcolor = lightred;
    activefontsettings.background = lightgray;
@@ -1320,7 +1323,7 @@ void tcreateevent::draw_additional_graphics ( void )
    showeventtype();
    showplayer();
 
-   for ( int i=0 ;i < 4 ;i++ ) 
+   for ( int i=0 ;i < 4 ;i++ )
       showreason(i);
 }
 
@@ -1336,19 +1339,19 @@ void tcreateevent::redraw ( void )
 void         tcreateevent::init(void)
 {
 
-   tdialogbox::init(); 
-   title = "New Event"; 
+   tdialogbox::init();
+   title = "New Event";
    x1 = 30;
-   xsize = 580; 
+   xsize = 580;
    y1 = 50;
    ysize = 380;
-   action = 0; 
+   action = 0;
 
-   windowstyle = windowstyle ^ dlg_in3d; 
+   windowstyle = windowstyle ^ dlg_in3d;
 
-   addbutton("~D~one",20,ysize - 40,280,ysize - 20,0,1,1,true); 
-   addkey(1,ct_enter); 
-   addbutton("~C~ancel",300,ysize - 40,560,ysize - 20,0,1,2,true); 
+   addbutton("~D~one",20,ysize - 40,280,ysize - 20,0,1,1,true);
+   addkey(1,ct_enter);
+   addbutton("~C~ancel",300,ysize - 40,560,ysize - 20,0,1,2,true);
 
    addbutton("~E~venttype",20,40,100 ,60,0,1,3,true);
 /*
@@ -1378,7 +1381,7 @@ void         tcreateevent::init(void)
 
 
    int verkx = xsize -120;
- 
+
    int i;
    for ( i=0;i<4 ;i++ ) {
         static char* bname[4] = { "Connection ~F1~", "Connection ~F2~", "Connection ~F3~", "Connection ~F4~" };
@@ -1387,16 +1390,16 @@ void         tcreateevent::init(void)
         addkey(9 + i,ct_f1 + i);
    } /* endfor */
 
-   buildgraphics(); 
+   buildgraphics();
 
-   mousevisible(true); 
-} 
+   mousevisible(true);
+}
 
 
 void         tcreateevent::run(void)
-{ 
-   do { 
-      tdialogbox::run(); 
+{
+   do {
+      tdialogbox::run();
       for ( int i = 0; i < 4; i++ )
          if ( mouseparams.taste == 2 )
             if ( mouseinrect ( x1 + 117, y1 + reasonst + 2 + i * 40, x1 + 117 + 20, y1 + reasonst + 2 + i * 40 + 20 )) {
@@ -1407,7 +1410,7 @@ void         tcreateevent::run(void)
                         displaymessage ( ev->description, 1 );
                      ev = ev->next;
                   }
-               }   
+               }
                if ( ae->trigger[i] == ceventt_buildingconquered  ||
                     ae->trigger[i] == ceventt_buildinglost  ||
                     ae->trigger[i] == ceventt_building_seen  ||
@@ -1433,12 +1436,12 @@ void         tcreateevent::run(void)
                           displaymessage ( vehicle->typ->name, 1 );
                        else
                           displaymessage ( vehicle->typ->description, 1 );
-   
+
 
                }
             }
    }  while (!((taste == ct_esc) || ((action == 1) || (action == 2))));
-} 
+}
 
 void tcreateevent::freedata( void )
 {
@@ -1467,18 +1470,18 @@ pvehicle selectunit ( pvehicle unit )
           y = 0;
        }
 
-       do { 
-          getxy_unit(&x,&y); 
-          if ((x != 50000)) { 
+       do {
+          getxy_unit(&x,&y);
+          if ((x != 50000)) {
              pf2 = getfield(x,y);
              abb = false;
-             if ( pf2 && pf2->vehicle ) 
+             if ( pf2 && pf2->vehicle )
                 abb = true;
           }
-       }  while (!((x == 50000) || abb)); 
-       if ((x != 50000) && abb) 
+       }  while (!((x == 50000) || abb));
+       if ((x != 50000) && abb)
           return pf2->vehicle;
-       else 
+       else
           return NULL;
     } else {
        displaymessage("no vehicles on map !", 1 );
@@ -1504,8 +1507,8 @@ int selectunit ( int unitnetworkid )
 
 void         tcreateevent::buttonpressed(int         id)
 {   int           nid, nr, rnr;
-    pfield        pf2; 
-    char    abb; 
+    pfield        pf2;
+    char    abb;
     word        i;
     int           *puffer= NULL;
     int           x,y;
@@ -1516,10 +1519,10 @@ void         tcreateevent::buttonpressed(int         id)
 
    // const int         stringpriority[7]     = {32, 64, 1, 2, 4, 8, 16};
    // const int         stringprioritynumber[7]     = {5, 6, 0, 1, 2, 3, 4};
- 
+
    switch (id) {
-      
-      case 1: {  
+
+      case 1: {
                   int dup;
                   do {
                      dup = 0;
@@ -1549,14 +1552,14 @@ void         tcreateevent::buttonpressed(int         id)
                   }
 
               }
-      case 2:   action = id; 
-      break; 
-      
-      case 3:   { 
+      case 2:   action = id;
+      break;
+
+      case 3:   {
              nr = eventtypeselect(ae->a.action);
-             if ((nr >= 0) && (nr <= ceventactionnum-1)) 
+             if ((nr >= 0) && (nr <= ceventactionnum-1))
                 ae->a.action = nr;
-             else 
+             else
                 return;
 
              activefontsettings.font = schriften.smallarial;
@@ -1566,19 +1569,19 @@ void         tcreateevent::buttonpressed(int         id)
                        nr = ( word ) getid("Message ID",ae->a.saveas,0,maxint);
                        if (nr != 0) ae->a.saveas = nr;
                        else ae->a.action = 255;
-                    } 
-                break; 
+                    }
+                break;
                 case cepalettechange: {
                     mousevisible(false);
                     ASCString filename;
                     fileselectsvga("*.pal", filename , true);
-                    mousevisible(true); 
+                    mousevisible(true);
                     freedata();
                     if ( !filename.empty() ) {
                        ae->datasize = filename.length() + 1;
                        ae->chardata = new char [ ae->datasize ];
                        strcpy( ae->chardata, filename.c_str() );
-                    } 
+                    }
                     else {
                        ae->a.action = 255;
                        ae->datasize = 0;
@@ -1586,7 +1589,7 @@ void         tcreateevent::buttonpressed(int         id)
                 }
                 break;
                 case cerunscript: {
-                    mousevisible(false); 
+                    mousevisible(false);
                     ASCString filename;
                     fileselectsvga("*.scr", filename , true);
                     mousevisible(true);
@@ -1601,11 +1604,11 @@ void         tcreateevent::buttonpressed(int         id)
                           ae->a.action = 255;
                           freedata();
                        }
-                    } 
+                    }
                     else ae->a.action = 255;
                 }
                 break;
-                case ceweatherchange: 
+                case ceweatherchange:
                 case cemapchange:
                 {
                         createpolygon(&poly,0,ae->a.action);
@@ -1635,7 +1638,7 @@ void         tcreateevent::buttonpressed(int         id)
 
                            npop ( auswahlw );
                            npop ( lastselectiontype );
-                        } 
+                        }
                         else {
                            npush ( lastselectiontype );
                            npush ( auswahl );
@@ -1660,7 +1663,7 @@ void         tcreateevent::buttonpressed(int         id)
                            npop ( auswahl );
                            npop ( lastselectiontype );
                         } /* endif */
-                        
+
                         activefontsettings.color = red;
 
                         redraw();
@@ -1672,9 +1675,9 @@ void         tcreateevent::buttonpressed(int         id)
                          nr = gettechnologyid(ae->a.saveas);
                          if (nr != 0) ae->a.saveas = nr;
                          else ae->a.action = 255;
-                      } 
-                break; 
-             
+                      }
+                break;
+
                 case ceeraseevent:   {
 
                        int eventid;
@@ -1690,7 +1693,7 @@ void         tcreateevent::buttonpressed(int         id)
                        ae->a.saveas = 0;
 
                        geteventid( &eventid, &mapid );
-                       if ( eventid != 0) { 
+                       if ( eventid != 0) {
                           freedata();
                           ae->datasize = 8;
                           ae->intdata = new int ;
@@ -1701,23 +1704,23 @@ void         tcreateevent::buttonpressed(int         id)
                           freedata();
                        }
                     }
-             break; 
+             break;
              case cenextmap:   {
                           freedata();
-                          nr = getid("Map ID",ae->a.saveas,0,maxint); 
+                          nr = getid("Map ID",ae->a.saveas,0,maxint);
                           if (nr != 0) ae->a.saveas = nr;
                           else ae->a.action = 255;
-                       } 
-                break; 
+                       }
+                break;
              case cewindchange: {
                        if (changewind( ae ) != 0) ae->a.action = 255;
                        }
                 break;
              case cegameparamchange: {
                    int oldval;
-                   if ( !ae->rawdata ) 
+                   if ( !ae->rawdata )
                       oldval = 0;
-                   else 
+                   else
                       oldval = ae->intdata[0] ;
                    int nr = selectgameparameter( oldval );
                    if ( (nr >= 0) && ( nr < gameparameternum) ) {
@@ -1732,20 +1735,20 @@ void         tcreateevent::buttonpressed(int         id)
                 break;
              case ceellipse: {
                       if ( ae->intdata && ae->datasize == 6 * sizeof ( int )) {
-                         ae->intdata[0] = getid("x1",ae->intdata[0],0,639); 
-                         ae->intdata[1] = getid("y1",ae->intdata[1],0,479); 
-                         ae->intdata[2] = getid("x2",ae->intdata[2],0,639); 
-                         ae->intdata[3] = getid("y2",ae->intdata[3],0,479); 
+                         ae->intdata[0] = getid("x1",ae->intdata[0],0,639);
+                         ae->intdata[1] = getid("y1",ae->intdata[1],0,479);
+                         ae->intdata[2] = getid("x2",ae->intdata[2],0,639);
+                         ae->intdata[3] = getid("y2",ae->intdata[3],0,479);
                          ae->intdata[4] = choice_dlg("x orientation","~l~eft","~r~ight") - 1;
                          ae->intdata[5] = choice_dlg("y orientation","~t~op","~b~ottom") - 1;
                       } else {
                          freedata();
                          ae->intdata = new int[6];
                          ae->datasize = 6 * sizeof ( int );
-                         ae->intdata[0] = getid("x1",0,0,639); 
-                         ae->intdata[1] = getid("y1",0,0,479); 
-                         ae->intdata[2] = getid("x2",0,0,639); 
-                         ae->intdata[3] = getid("y2",0,0,479); 
+                         ae->intdata[0] = getid("x1",0,0,639);
+                         ae->intdata[1] = getid("y1",0,0,479);
+                         ae->intdata[2] = getid("x2",0,0,639);
+                         ae->intdata[3] = getid("y2",0,0,479);
                          ae->intdata[4] = choice_dlg("x orientation","~l~eft","~r~ight") - 1;
                          ae->intdata[5] = choice_dlg("y orientation","~t~op","~b~ottom") - 1;
                       }
@@ -1760,43 +1763,43 @@ void         tcreateevent::buttonpressed(int         id)
                          ae->intdata[1] = 0;
                          ae->intdata[2] = 0;
                       }
-                      getxy_building(&ae->intdata[0],&ae->intdata[1]); 
-                      ae->intdata[2] = getid("damage",ae->intdata[2],0,100); 
+                      getxy_building(&ae->intdata[0],&ae->intdata[1]);
+                      ae->intdata[2] = getid("damage",ae->intdata[2],0,100);
                 }
                 break;
-             } 
+             }
              activefontsettings.font = schriften.smallarial;
-             mousevisible(false); 
+             mousevisible(false);
              showeventtype();
              showeventid();
              mousevisible(true);
-          }  
-      break; 
-      
-      case 4:   { 
-             nr = playerselect(ae->player); 
-             if ((nr >= 0) && (nr <= 8)) ae->player = nr; 
-             mousevisible(false); 
+          }
+      break;
+
+      case 4:   {
+             nr = playerselect(ae->player);
+             if ((nr >= 0) && (nr <= 8)) ae->player = nr;
+             mousevisible(false);
              showplayer();
              mousevisible(true);
-          } 
-      break;                 
-      
-      case 5:   
-      case 6:   
-      case 7:   
-      case 8:   { 
-                  nid = id - 5; 
+          }
+      break;
+
+      case 5:
+      case 6:
+      case 7:
+      case 8:   {
+                  nid = id - 5;
                   rnr = getreason(ae->trigger[nid]);
                   switch (rnr) {
                      case ceventt_turn:   {
                             abb = gettm( ae->trigger_data[nid]->time );
                             if (abb == false)
                                return;
-                            ae->trigger[nid] = rnr; 
-                         } 
+                            ae->trigger[nid] = rnr;
+                         }
                          break;
-                     
+
                      case ceventt_buildingconquered:
                      case ceventt_buildinglost:
                      case ceventt_building_seen:
@@ -1814,54 +1817,54 @@ void         tcreateevent::buttonpressed(int         id)
                                       x = 0;
                                       y = 0;
                                    }
-                                   do { 
-                                       getxy_building(&x,&y); 
-                                       if ((x != 50000)) { 
+                                   do {
+                                       getxy_building(&x,&y);
+                                       if ((x != 50000)) {
                                           pf2 = getfield(x,y);
                                           abb = false;
                                           if (pf2 != NULL) if (pf2->building != NULL) abb = true;
                                        }
-                                   }  while (!((x == 50000) || abb)); 
+                                   }  while (!((x == 50000) || abb));
                                    redraw();
                                    if ((x != 50000) && abb) {
                                       if ( !ae->trigger_data[nid] )
                                          ae->trigger_data[nid] = new tevent::LargeTriggerData;
-                                      ae->trigger_data[nid]->building = pf2->building; 
-                                      ae->trigger[nid] = rnr; 
-                                   } 
+                                      ae->trigger_data[nid]->building = pf2->building;
+                                      ae->trigger[nid] = rnr;
+                                   }
                                    else
                                       ae->trigger[nid] = 0;
                                 } else {
                                    displaymessage("no buildings on map !", 1 );
                                    ae->trigger[nid] = 0;
                                 }
-                             } 
+                             }
                              break;
-                     
+
                      case ceventt_technologyresearched:   {
                             nr = gettechnologyid( ae->trigger_data[nid]->id );
-                            if (nr != 0) { 
-                               ae->trigger_data[nid]->id = nr; 
-                               ae->trigger[nid] = rnr; 
-                            } 
+                            if (nr != 0) {
+                               ae->trigger_data[nid]->id = nr;
+                               ae->trigger[nid] = rnr;
+                            }
                             else ae->a.action = 255;
-                         } 
+                         }
                          break;
-                     
+
                      case ceventt_event:   {
                             int mapid = 0;
                             int eventid = ae->trigger_data[nid]->id;
                             geteventid( &eventid, &mapid );
-                            if ( eventid != 0) { 
-                               ae->trigger_data[nid]->id = eventid; 
-                               ae->trigger_data[nid]->mapid = mapid; 
-                               ae->trigger[nid] = rnr; 
-                            } 
-                            else 
+                            if ( eventid != 0) {
+                               ae->trigger_data[nid]->id = eventid;
+                               ae->trigger_data[nid]->mapid = mapid;
+                               ae->trigger[nid] = rnr;
+                            }
+                            else
                                ae->a.action = 255;
-                         } 
+                         }
                          break;
-                     
+
                      case ceventt_unitlost:
                      case ceventt_unitconquered:
                      case ceventt_unitdestroyed:   {
@@ -1871,7 +1874,7 @@ void         tcreateevent::buttonpressed(int         id)
                                  else
                                     ae->trigger[nid] = 0;
                                  redraw();
-                             } 
+                             }
                              break;
                   case ceventt_energytribute :
                   case ceventt_materialtribute :
@@ -1879,13 +1882,13 @@ void         tcreateevent::buttonpressed(int         id)
                      /*{
                         nr = playerselect( ae->trigger_data[nid]->time.a.move );
                         if ((nr >= 0) && (nr <= 7)) {
-                           ae->trigger[nid] = rnr; 
+                           ae->trigger[nid] = rnr;
                            ae->trigger_data[nid]->time.a.move = nr;
                            nr = getid("Tribute",ae->trigger_data[nid]->time.a.turn,0,maxint);
                            if (nr == 0 ) ae->trigger[nid] = 0;
                            ae->trigger_data[nid]->time.a.turn = nr;
                         }
-                        else ae->trigger[nid] = 0; 
+                        else ae->trigger[nid] = 0;
                      }
                      */
                      break;
@@ -1923,28 +1926,28 @@ void         tcreateevent::buttonpressed(int         id)
                                        etpe.data[2 + i * 2] = poly->vertex[i].x;
                                        etpe.data[3 + i * 2] = poly->vertex[i].y;
                                     } /* endfor */
-                                    ae->trigger[nid] = rnr; 
+                                    ae->trigger[nid] = rnr;
                                     if ( ae->trigger_data[nid]->unitpolygon )
                                        delete ae->trigger_data[nid]->unitpolygon;
                                     ae->trigger_data[nid]->unitpolygon = new tevent::LargeTriggerData::PolygonEntered ( etpe );
-                                 } else 
-                                    ae->trigger[nid] = 0; 
-   
+                                 } else
+                                    ae->trigger[nid] = 0;
+
 
                      break;
-                  } 
-                  mousevisible(false); 
+                  }
+                  mousevisible(false);
                   if ((rnr < 0) && (rnr > ceventtriggernum -1 )) return;
 
                   showreason(nid);
-                  mousevisible(true); 
-               } 
-      break; 
-      
-      case 9:   
-      case 10:   
-      case 11:   
-      case 12:    
+                  mousevisible(true);
+               }
+      break;
+
+      case 9:
+      case 10:
+      case 11:
+      case 12:
       case 13:   {
                     nr = verknuepfselect();
                     if ((nr >= 0) && (nr <= 7)) {
@@ -1958,16 +1961,16 @@ void         tcreateevent::buttonpressed(int         id)
                        showreason(id-9);
                        mousevisible(true);
                     }
-            } 
-   break; 
+            }
+   break;
    case 14: showeventid();
    break;
-   } 
-} 
+   }
+}
 
 
 char      createevent(pevent ae, pevent orgevent )  /* True=Erfolgreich ausgef”rt */
-{ tcreateevent ce; 
+{ tcreateevent ce;
   int i;
   char b;
 
@@ -1988,13 +1991,13 @@ char      createevent(pevent ae, pevent orgevent )  /* True=Erfolgreich ausgef”
 //  EventSel
 
 class   teventsel : public tstringselect {
-           public :        
+           public :
                  pevent pe,ae;
                  int oi;
                  void rebuildlines(void);
                  void setup(void);
                  virtual void buttonpressed(int id);
-                 virtual void gettext(word nr);
+                 virtual void get_text(word nr);
                  virtual void run(void);
                  };
 
@@ -2026,7 +2029,7 @@ void         teventsel::setup(void)
    addbutton("E~x~it",360,40,420,70,0,1,8,true);
 }
 
-void   teventsel::gettext(word nr) //gibt in txt den string zur…k
+void   teventsel::get_text(word nr) //gibt in txt den string zur…k
 {
    word    count;
    pevent  e;

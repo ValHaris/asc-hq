@@ -92,7 +92,7 @@ class   PlayListSelector : public tstringselect {
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void gettext(word nr);
+                 virtual void get_text(word nr);
               };
 
 void         PlayListSelector ::setup(void)
@@ -127,7 +127,7 @@ void         PlayListSelector ::buttonpressed(int         id)
 }
 
 
-void         PlayListSelector ::gettext(word nr)
+void         PlayListSelector ::get_text(word nr)
 {
    strcpy(txt,playLists[nr]->getName().c_str() );
 }

@@ -62,7 +62,7 @@
 #include <stdio.h>
 #include <cstring>
 #include <stdlib.h>
-#include <new.h>
+#include <new>
 #include <malloc.h>
 #include <ctype.h>
 #include <signal.h>
@@ -284,7 +284,7 @@ void         loadMoreData(void)
       stream.readrlepict(   &icons.view.nv8, false, &w);
       void* u = uncompress_rlepict ( icons.view.nv8 );
       if ( u ) {
-         delete[] icons.view.nv8;
+         asc_free( icons.view.nv8 );
          icons.view.nv8 = u;
       }
    }

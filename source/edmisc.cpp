@@ -2,9 +2,14 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.83 2002-10-01 09:23:42 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.84 2002-10-02 20:21:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.83  2002/10/01 09:23:42  mbickel
+//      Fixed many bugs
+//      Added inheritance to text files
+//      updated graphics
+//
 //     Revision 1.82  2002/04/21 21:27:00  mbickel
 //      Mapeditor: Fixed crash in "Put Resources"
 //      Updating the small map after AI
@@ -1102,38 +1107,38 @@ void         pdsetup(void)
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void gettext(word nr);
+                 virtual void get_text(word nr);
                  };
 
 void         tcolorsel::setup(void)
-{ 
+{
 
    action = 0;
-   title = "Select Color"; 
+   title = "Select Color";
    numberoflines = 9;
    xsize = 250;
    ex = xsize - 100;
-   ey = ysize - 60; 
-   addbutton("~D~one",20,ysize - 40,120,ysize - 20,0,1,2,true); 
-   addkey(2,ct_enter); 
-   addbutton("~C~ancel",130,ysize - 40,230,ysize - 20,0,1,3,true); 
-} 
+   ey = ysize - 60;
+   addbutton("~D~one",20,ysize - 40,120,ysize - 20,0,1,2,true);
+   addkey(2,ct_enter);
+   addbutton("~C~ancel",130,ysize - 40,230,ysize - 20,0,1,3,true);
+}
 
 
 void         tcolorsel::buttonpressed(int         id)
-{ 
+{
    tstringselect::buttonpressed(id);
    switch (id) {
-      
-      case 2:   
-      case 3:   action = id; 
-   break; 
-   } 
-} 
+
+      case 2:
+      case 3:   action = id;
+   break;
+   }
+}
 
 
-void         tcolorsel::gettext(word nr)
-{ 
+void         tcolorsel::get_text(word nr)
+{
    if (nr == 8) strcpy(txt,"Neutral");
    else {
       if ((nr>=0) && (nr<=7)) {
@@ -1141,31 +1146,31 @@ void         tcolorsel::gettext(word nr)
          strcat(txt,strrr(nr+1));
       } else {
          strcpy(txt,"");
-      } 
+      }
    }
-} 
+}
 
 
 void         tcolorsel::run(void)
-{ 
-   mousevisible(false); 
+{
+   mousevisible(false);
    for (i=0;i<=8 ;i++ ) bar(x1 + 160,y1 + 52 + i*21 ,x1 + 190 ,y1 + 62 + i * 21,20 + i * 8);
-   mousevisible(true); 
-   do { 
-      tstringselect::run(); 
+   mousevisible(true);
+   do {
+      tstringselect::run();
    }  while ( ! ( (taste == ct_esc) || ( (action == 2) || (action == 3) ) || (msel == 1)) );
    if ( (action == 3) || (taste == ct_esc) ) redline = 255;
-} 
+}
 
 
 int         colorselect(void)
-{ 
-  tcolorsel  sm; 
+{
+  tcolorsel  sm;
 
-   sm.init(); 
-   sm.run(); 
-   sm.done(); 
-   return sm.redline; 
+   sm.init();
+   sm.run();
+   sm.done();
+   return sm.redline;
 } */
 
 
@@ -1184,21 +1189,21 @@ class  tplayerchange : public tdialogbox {
 
 
 void         tplayerchange::init(void)
-{ 
+{
    char *s1;
 
-   tdialogbox::init(); 
+   tdialogbox::init();
    title = "Player Change";
    x1 = 50;
-   xsize = 370; 
-   y1 = 50; 
-   ysize = 410; 
-   action = 0; 
+   xsize = 370;
+   y1 = 50;
+   ysize = 410;
+   action = 0;
    sel1 = 255;
    sel2 = 255;
    bkgcolor = lightgray;
 
-   windowstyle = windowstyle ^ dlg_in3d; 
+   windowstyle = windowstyle ^ dlg_in3d;
 
    for (i=0;i<=8 ;i++ ) {
       s1 = new(char[12]);
@@ -1208,27 +1213,27 @@ void         tplayerchange::init(void)
          strcpy(s1,"Player ~");
          strcat(s1,strrr(i+1));
          strcat(s1,"~");
-      } 
-      addbutton(s1,20,55+i*30,150,75+i*30,0,1,6+i,true); 
-      addkey(1,ct_1+i); 
-   }  
+      }
+      addbutton(s1,20,55+i*30,150,75+i*30,0,1,6+i,true);
+      addkey(1,ct_1+i);
+   }
 
-   //addbutton("~C~hange",20,ysize - 70,80,ysize - 50,0,1,3,true); 
-   addbutton("X~c~hange",20,ysize - 70,170,ysize - 50,0,1,4,true); 
-   addbutton("~M~erge",200,ysize - 70,350,ysize - 50,0,1,5,true); 
+   //addbutton("~C~hange",20,ysize - 70,80,ysize - 50,0,1,3,true);
+   addbutton("X~c~hange",20,ysize - 70,170,ysize - 50,0,1,4,true);
+   addbutton("~M~erge",200,ysize - 70,350,ysize - 50,0,1,5,true);
 
-   addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,1,true); 
-   addkey(1,ct_enter); 
-   addbutton("E~x~it",200,ysize - 40,350,ysize - 20,0,1,2,true); 
+   addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,1,true);
+   addkey(1,ct_enter);
+   addbutton("E~x~it",200,ysize - 40,350,ysize - 20,0,1,2,true);
 
-   buildgraphics(); 
+   buildgraphics();
 
    for (i=0;i<=8 ;i++ ) bar(x1 + 170,y1 + 60 + i*30 ,x1 + 190 ,y1 + 70 + i * 30,20 + ( i << 3 ));
 
    anzeige();
 
-   mousevisible(true); 
-} 
+   mousevisible(true);
+}
 
 void         tplayerchange::anzeige(void)
 {
@@ -1245,7 +1250,7 @@ void         tplayerchange::anzeige(void)
    activefontsettings.color = red;
    activefontsettings.justify = lefttext;
    activefontsettings.font = schriften.smallarial;
-   mousevisible(false); 
+   mousevisible(false);
    showtext2("Units",x1+210,y1+35);
    showtext2("Build.",x1+260,y1+35);
    showtext2("Mines",x1+310,y1+35);
@@ -1260,35 +1265,35 @@ void         tplayerchange::anzeige(void)
       showtext2(strrr(b),x1+255,y1+56+i*30);
       showtext2(strrr(m[i]),x1+310,y1+56+i*30);
    } /* endfor */
-   mousevisible(true); 
+   mousevisible(true);
 }
 
 
 void         tplayerchange::run(void)
-{ 
+{
 
-   do { 
-      tdialogbox::run(); 
+   do {
+      tdialogbox::run();
       if (taste == ct_f1) help ( 1050 );
-   }  while (!((taste == ct_esc) || ((action == 1) || (action ==2)))); 
+   }  while (!((taste == ct_esc) || ((action == 1) || (action ==2))));
  // ????  if ((action == 2) || (taste == ct_esc)) ;
-} 
+}
 
 
 void         tplayerchange::buttonpressed(int         id)
-{ 
-   tdialogbox::buttonpressed(id); 
+{
+   tdialogbox::buttonpressed(id);
    switch (id) {
-      
-      case 1:   
-      case 2:   action = id; 
+
+      case 1:
+      case 2:   action = id;
         break;
 /*     case 3: {
            int sel = colorselect();
-           if ( ( sel != 255) && ( sel != sel1 ) && ( sel1 != 255 ) && 
+           if ( ( sel != 255) && ( sel != sel1 ) && ( sel1 != 255 ) &&
               ( actmap->player[sel].firstvehicle == NULL ) && ( actmap->player[sel].firstbuilding == NULL )   ) {
 
-           } 
+           }
         }
         break; */
      case 4: {
@@ -1347,8 +1352,8 @@ void         tplayerchange::buttonpressed(int         id)
                     else
                        if ( i->player == sel2 )
                           i->player = sel1;
-                    
-                 
+
+
               } /* endfor */
               anzeige();
            }
@@ -1389,24 +1394,24 @@ void         tplayerchange::buttonpressed(int         id)
       case 10:
       case 11:
       case 12:
-      case 13:  
+      case 13:
       case 14: if ( id-6 != sel1 ) {
          sel2 = sel1;
          sel1 = id-6;
          anzeige();
       }
-   break; 
-   } 
-} 
+   break;
+   }
+}
 
 
-void playerchange(void)  
-{ tplayerchange       sc; 
+void playerchange(void)
+{ tplayerchange       sc;
 
-   sc.init(); 
-   sc.run(); 
-   sc.done(); 
-} 
+   sc.init();
+   sc.run();
+   sc.done();
+}
 
 
 //* õS Mycursor
@@ -1425,7 +1430,7 @@ void       tmycursor::getimg ( void )
         npop (*agmp);
      } else {
         getimage(xp, yp, xp + fieldsizex, yp + fieldsizey, backgrnd );
-     } 
+     }
 }
 
 void       tmycursor::putbkgr ( void )
@@ -1461,7 +1466,7 @@ void       tmycursor::putimg ( void )
         npop ( *agmp );
      } else {
         putrotspriteimage(xp, yp, picture,color );
-     } 
+     }
 }
 
 
@@ -1469,28 +1474,28 @@ void         exchg(word *       a1,
                    word *       a2)
 { word        ex;
 
-   ex = *a1; 
-   *a1 = *a2; 
-   *a2 = ex; 
-} 
+   ex = *a1;
+   *a1 = *a2;
+   *a2 = ex;
+}
 
 
 void         pdbaroff(void)
-{ 
+{
    mousevisible(false);
    pd.baroff();
-   rsavefont = activefontsettings; 
+   rsavefont = activefontsettings;
 
    activefontsettings.font = schriften.smallarial;
    activefontsettings.color = 1;
    activefontsettings.background = black;
    activefontsettings.length = 200;
    activefontsettings.justify = lefttext;
-      
+
    showStatusBar();
    activefontsettings = rsavefont;
-   mousevisible(true); 
-} 
+   mousevisible(true);
+}
 
 
 // õS TCDPlayer
@@ -1502,11 +1507,11 @@ class   tcdplayer : public tstringselect {
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void gettext(word nr);
+                 virtual void get_text(word nr);
                  };
 
 void         tcdplayer ::setup(void)
-{ 
+{
 
    action = 0;
    xsize = 400;
@@ -1520,14 +1525,14 @@ void         tcdplayer ::setup(void)
    addbutton("~P~lay",320,90,390,110,0,1,12,true);
    addbutton("~S~top",320,130,390,150,0,1,13,true);
    addbutton("E~x~it",10,ysize - 40,290,ysize - 20,0,1,10,true);
-} 
+}
 
 
 void         tcdplayer ::buttonpressed(int         id)
-{ 
+{
    tstringselect::buttonpressed(id);
    switch (id) {
-      
+
    case 10:   action = 3;
       break;
    case 11:  {
@@ -1544,12 +1549,12 @@ void         tcdplayer ::buttonpressed(int         id)
       break;
    case  13: cdrom.stopaudio ();
       break;
-   } 
-} 
+   }
+}
 
 
-void         tcdplayer ::gettext(word nr)
-{ 
+void         tcdplayer ::get_text(word nr)
+{
     if (cdrom.cdinfo.track[nr]->type > 3) {
        strcpy(txt,"Data Track ");
        strcat(txt,strrr(nr+1));
@@ -1563,16 +1568,16 @@ void         tcdplayer ::gettext(word nr)
        strcat(txt,"   Track ");
        strcat(txt,strrr(nr+1));
     }
-} 
+}
 
 
 void         tcdplayer ::run(void)
-{ 
-   do { 
-      tstringselect::run(); 
+{
+   do {
+      tstringselect::run();
       if ( (msel == 1)  || ( taste == ct_enter ) ) cdrom.playtrack(redline);
    }  while ( ! ( (taste == ct_esc) || (action == 3) ) );
-} 
+}
 
 
 void cdplayer( void )
@@ -1587,22 +1592,22 @@ void cdplayer( void )
 */
 
 void         repaintdisplay(void)
-{ 
+{
    mousevisible(false);
    cursor.hide();
    bar(0,0,agmp->resolutionx-1,agmp->resolutiony-1,0);
    if ( !lockdisplaymap )
-      displaymap(); 
+      displaymap();
 
-   pdbaroff(); 
-   showallchoices(); 
+   pdbaroff();
+   showallchoices();
    cursor.show();
    mousevisible(true);
-} 
+}
 
 
 void         k_savemap(char saveas)
-{ 
+{
    ASCString filename;
 
    int nameavail = 0;
@@ -1614,7 +1619,7 @@ void         k_savemap(char saveas)
    mousevisible(false);
    if ( saveas || !nameavail ) {
       fileselectsvga(mapextension, filename, false);
-   } 
+   }
    if ( !filename.empty() ) {
       mapsaved = true;
       cursor.hide();
@@ -1622,8 +1627,8 @@ void         k_savemap(char saveas)
       savemap( filename.c_str() );
       displaymap();
       cursor.show();
-   } 
-   mousevisible(true); 
+   }
+   mousevisible(true);
 }
 
 
@@ -1631,41 +1636,41 @@ void         k_loadmap(void)
 {
    ASCString s1;
 
-   mousevisible(false); 
+   mousevisible(false);
    fileselectsvga( mapextension, s1, true );
    if ( !s1.empty() ) {
-      cursor.hide(); 
+      cursor.hide();
       displaymessage("loading map %s",0, s1.c_str() );
       loadmap(s1.c_str());
       actmap->startGame();
 
       if ( actmap->campaign && !actmap->campaign->directaccess && actmap->codeword[0]) {
          tlockdispspfld ldsf;
-         removemessage(); 
+         removemessage();
          Password pwd;
          pwd.setUnencoded ( actmap->codeword );
          enterpassword ( pwd );
       } else
-         removemessage(); 
-   
+         removemessage();
 
-      displaymap(); 
+
+      displaymap();
       cursor.show();
       mapsaved = true;
-   } 
-   mousevisible(true); 
-} 
+   }
+   mousevisible(true);
+}
 
 void         placebuilding(int               colorr,
                           pbuildingtype   buildingtyp,
                           char            choose)
 
-{     
+{
    #define bx   100
-   #define by   100  
-   #define sts  bx + 200  
+   #define by   100
+   #define sts  bx + 200
 
-   pbuilding    gbde; 
+   pbuilding    gbde;
 
    mousevisible(false);
    cursor.hide();
@@ -1698,16 +1703,16 @@ void         placebuilding(int               colorr,
    activefontsettings.color = 1;
    activefontsettings.background = lightgray;
    activefontsettings.length = 100;
-   
+
    changebuildingvalues(*gbde);
-   if (choose == true) 
+   if (choose == true)
       building_cargo( gbde );
 
-   lastselectiontype = cselbuilding; 
+   lastselectiontype = cselbuilding;
    displaymap();
    cursor.show();
    mousevisible(true);
-} 
+}
 
 
 
@@ -1717,25 +1722,25 @@ void         freevariables(void)
 }
 
 
-void         setstartvariables(void) 
-{ 
+void         setstartvariables(void)
+{
    activefontsettings.font = schriften.smallarial;
-   activefontsettings.color = 1; 
+   activefontsettings.color = 1;
    activefontsettings. background = 0;
-   
+
    mapsaved = true;
    polyfieldmode = false;
 
    auswahl  = getterraintype_forpos(0);
-   auswahlf = getvehicletype_forpos(0); 
-   auswahlb = getbuildingtype_forpos(0); 
+   auswahlf = getvehicletype_forpos(0);
+   auswahlb = getbuildingtype_forpos(0);
    actobject = getobjecttype_forpos(0);
    auswahls = 0;
-   auswahlm = 1; 
+   auswahlm = 1;
    auswahlw = 0;
    auswahld = 0;
-   farbwahl = 0; 
-   
+   farbwahl = 0;
+
    sr[0].maxanz = terraintypenum;
    sr[0].showall = true;
    sr[1].maxanz = vehicletypenum;
@@ -1761,7 +1766,7 @@ void         setstartvariables(void)
    mycursor.backgrnd = malloc (10000);
 
    atexit( freevariables );
-} 
+}
 
 
 int  selectfield(int * cx ,int  * cy)
@@ -1852,7 +1857,7 @@ void tfillpolygonwevent::initevent ( void )
 
 void createpolygon (ppolygon *poly, int place, int id)
 {
-   polymanage.addpolygon(poly,place,id); 
+   polymanage.addpolygon(poly,place,id);
    changepolygon(*poly);
 }
 
@@ -1863,13 +1868,13 @@ void tfillpolygonbodentyp::setpointabs    ( int x,  int y  )
        pfield ffield = getfield ( x , y );
        if (ffield) {
            ffield->a.temp = tempvalue;
-           if ( auswahl->weather[auswahlw] ) 
-              ffield->typ = auswahl->weather[auswahlw]; 
+           if ( auswahl->weather[auswahlw] )
+              ffield->typ = auswahl->weather[auswahlw];
            else
-              ffield->typ = auswahl->weather[0]; 
+              ffield->typ = auswahl->weather[0];
            ffield->direction = auswahld;
            ffield->setparams();
-           if (ffield->vehicle != NULL) 
+           if (ffield->vehicle != NULL)
               if ( terrainaccessible(ffield,ffield->vehicle) == false ) {
                  delete ffield->vehicle;
                  ffield->vehicle = NULL;
@@ -1887,8 +1892,8 @@ void tfillpolygonunit::setpointabs    ( int x,  int y  )
 {
        pfield ffield = getfield ( x , y );
        if (ffield) {
-          if ( terrainaccessible(ffield,ffield->vehicle) ) 
-               { 
+          if ( terrainaccessible(ffield,ffield->vehicle) )
+               {
                   if (ffield->vehicle != NULL) {
                      delete ffield->vehicle;
                      ffield->vehicle = NULL;
@@ -1906,8 +1911,8 @@ void tfillpolygonunit::setpointabs    ( int x,  int y  )
                      }
                      else ffield->vehicle->setMovement ( ffield->vehicle->typ->movement[log2(ffield->vehicle->height)] );
                      ffield->vehicle->direction = auswahld;
-                  } 
-            } 
+                  }
+            }
             else
                if (auswahlf == NULL)
                   if (ffield->vehicle != NULL) {
@@ -1933,7 +1938,7 @@ void tchangepoly::setpolytemps (int value)
    fillpoly.tempvalue = value ;
 
    if (fillpoly.paint_polygon ( poly ) == 0) {
-      if ( value ) 
+      if ( value )
          displaymessage("Invalid Polygon !",1 );
       setpolypoints(0);
    }
@@ -1999,14 +2004,14 @@ void  tchangepoly::run(void)
             setpolypoints(2);
          }
          else deletepolypoint(x,y);
-      } 
+      }
    } while ( r != 1 ); /* enddo */
    if ( poly->vertexnum >= 3) setpolytemps(0);
    else setpolypoints(0);
 }
 
 void changepolygon(ppolygon poly)
-{ 
+{
   tchangepoly cp;
 
   cp.poly = poly;
@@ -2016,7 +2021,7 @@ void changepolygon(ppolygon poly)
 
 
 //* õS NewMap
-   
+
   class tnewmap : public tdialogbox {
             char maptitle[10000];
         public :
@@ -2035,7 +2040,7 @@ void changepolygon(ppolygon poly)
 
 
 void         tnewmap::init(void)
-{ 
+{
   word         w;
   char      b;
 
@@ -2066,20 +2071,20 @@ void         tnewmap::init(void)
       }
       else memset(&cmpgn,0,sizeof(cmpgn));
    }
-   random = false; 
+   random = false;
    auswahlw = 0; /* !!! */
 
-   w = (xsize - 60) / 2; 
-   windowstyle = windowstyle ^ dlg_in3d; 
+   w = (xsize - 60) / 2;
+   windowstyle = windowstyle ^ dlg_in3d;
 
-   addbutton("~T~itle",15,70,xsize - 30,90,1,1,1,true); 
+   addbutton("~T~itle",15,70,xsize - 30,90,1,1,1,true);
    addeingabe(1,maptitle,0,100);
 
    if (valueflag == true ) {
       addbutton("~X~ Size",15,130,235,150,2,1,2,true);
       addeingabe(2,&sxsize,idisplaymap.getscreenxsize(1),65534);
 
-      addbutton("~Y~ Size",250,130,470,150,2,1,3,true); 
+      addbutton("~Y~ Size",250,130,470,150,2,1,3,true);
       addeingabe(3,&sysize,idisplaymap.getscreenysize(1),65534);
 
       addbutton("~R~andom",250,190,310,210,3,1,11,true);
@@ -2089,73 +2094,73 @@ void         tnewmap::init(void)
       else b =false;
 
       addbutton("~B~dt",350,190,410,210,0,1,12,b);
-   } 
+   }
 
    addbutton("~P~assword (10 letters)",15,190,235,210,1,1,9,true);
    addeingabe(9,passwort,10,10);
 
-   addbutton("C~a~mpaign",15,230,235,245,3,1,5,true); 
+   addbutton("C~a~mpaign",15,230,235,245,3,1,5,true);
    addeingabe(5,&campaign,0,lightgray);
 
-   addbutton("~M~ap ID",15,270,235,290,2,1,6,campaign); 
+   addbutton("~M~ap ID",15,270,235,290,2,1,6,campaign);
    addeingabe(6,&cmpgn.id,0,65535);
 
-   addbutton("Pr~e~vious Map ID",250,270,470,290,2,1,7,campaign); 
+   addbutton("Pr~e~vious Map ID",250,270,470,290,2,1,7,campaign);
    addeingabe(7,&cmpgn.prevmap,0,65535);
 
-   addbutton("~D~irect access to map",250,230,470,245,3,1,8,campaign); 
+   addbutton("~D~irect access to map",250,230,470,245,3,1,8,campaign);
    addeingabe(8,&cmpgn.directaccess,0,lightgray);
 
    if (valueflag == true ) addbutton("~S~et Map",20,ysize - 40,20 + w,ysize - 10,0,1,10,true);
-   else addbutton("~S~et Mapvalues",20,ysize - 40,20 + w,ysize - 10,0,1,10,true); 
-   addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,4,true); 
+   else addbutton("~S~et Mapvalues",20,ysize - 40,20 + w,ysize - 10,0,1,10,true);
+   addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,4,true);
 
    tauswahl = auswahl;
 
-   buildgraphics(); 
+   buildgraphics();
    if (valueflag == true )
       if ( ! random ) {
-         mousevisible(false); 
-         if ( tauswahl->weather[auswahlw] ) 
+         mousevisible(false);
+         if ( tauswahl->weather[auswahlw] )
             putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[auswahlw]->pict );
          else
             putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[0]->pict );
-         mousevisible(true); 
-      } 
-   rahmen(true,x1 + 10,y1 + starty,x1 + xsize - 10,y1 + ysize - 45); 
-   rahmen(true,x1 + 11,y1 + starty + 1,x1 + xsize - 11,y1 + ysize - 46); 
-   mousevisible(true); 
-} 
+         mousevisible(true);
+      }
+   rahmen(true,x1 + 10,y1 + starty,x1 + xsize - 10,y1 + ysize - 45);
+   rahmen(true,x1 + 11,y1 + starty + 1,x1 + xsize - 11,y1 + ysize - 46);
+   mousevisible(true);
+}
 
 
 void         tnewmap::run(void)
-{ 
-   do { 
+{
+   do {
       tdialogbox::run();
       if (action == 3) {
          if ( sysize & 1 ) {
-            displaymessage("YSize must be even !",1 ); 
-            action = 0; 
+            displaymessage("YSize must be even !",1 );
+            action = 0;
          }
          #ifdef UseMemAvail
-         if (action != 4) 
+         if (action != 4)
             if ( sxsize * sysize * sizeof( tfield ) > memavail() ) {
                displaymessage("Not enough memory for map.\nGenerate smaller map or free more memory",1);
-               action = 0; 
+               action = 0;
             }
          #endif
-      } 
+      }
    }  while (!((taste == ct_esc) || (action >= 2)));
 
-   if (action == 3) { 
+   if (action == 3) {
       if (valueflag == true ) {
          if ( tauswahl->weather[auswahlw] )
             generatemap(tauswahl->weather[auswahlw], sxsize , sysize );
          else
             generatemap(tauswahl->weather[0], sxsize , sysize );
-         if ( random) 
+         if ( random)
             mapgenerator();
-      }   
+      }
 
       mapsaved = false;
 
@@ -2166,47 +2171,47 @@ void         tnewmap::run(void)
          if (actmap->campaign == NULL)
             actmap->campaign = new tmap::Campaign;
 
-         actmap->campaign->id = cmpgn.id; 
-         actmap->campaign->prevmap = cmpgn.prevmap; 
-         actmap->campaign->directaccess = cmpgn.directaccess; 
-      } 
+         actmap->campaign->id = cmpgn.id;
+         actmap->campaign->prevmap = cmpgn.prevmap;
+         actmap->campaign->directaccess = cmpgn.directaccess;
+      }
       else
          if ( actmap->campaign ) {
             delete actmap->campaign;
             actmap->campaign = NULL;
          }
-   } 
-} 
+   }
+}
 
 
 void         tnewmap::buttonpressed(int id)
-{ 
-   if (id == 4) 
-      action = 2; 
-   if (id == 10) 
-      action = 3; 
-   if (id == 5) 
-      if (campaign) { 
-         enablebutton(6); 
-         enablebutton(7); 
-         enablebutton(8); 
-      } 
-      else { 
-         disablebutton(6); 
-         disablebutton(7); 
-         disablebutton(8); 
-      } 
-   if (id == 12) { 
+{
+   if (id == 4)
+      action = 2;
+   if (id == 10)
+      action = 3;
+   if (id == 5)
+      if (campaign) {
+         enablebutton(6);
+         enablebutton(7);
+         enablebutton(8);
+      }
+      else {
+         disablebutton(6);
+         disablebutton(7);
+         disablebutton(8);
+      }
+   if (id == 12) {
       npush ( lastselectiontype );
       npush ( auswahl );
 
       void *p;
- 
+
       mousevisible(false);
       p=malloc( imagesize(430,0,639,479) );
       getimage(430,0,639,479,p);
       mousevisible(true);
-                  
+
       lastselectiontype = cselbodentyp;
       selterraintype( ct_invvalue );
 
@@ -2223,19 +2228,19 @@ void         tnewmap::buttonpressed(int id)
          putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[auswahlw]->pict );
       else
          putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[0]->pict );
-   } 
-   if (id == 11) 
+   }
+   if (id == 11)
       if ( ! random) {
-         enablebutton(12); 
-      } 
-      else { 
-         disablebutton(12); 
-      } 
-} 
+         enablebutton(12);
+      }
+      else {
+         disablebutton(12);
+      }
+}
 
 
 void         tnewmap::done(void)
-{ 
+{
    tdialogbox::done();
    if (action == 3) displaymap();
 }
@@ -2243,30 +2248,30 @@ void         tnewmap::done(void)
 
 
 void         newmap(void)
-{ 
-  tnewmap      nm; 
+{
+  tnewmap      nm;
 
-   nm.valueflag = true; 
-   nm.init(); 
-   nm.run(); 
-   nm.done(); 
-   pdbaroff(); 
-} 
+   nm.valueflag = true;
+   nm.init();
+   nm.run();
+   nm.done();
+   pdbaroff();
+}
 
 
 //* õS MapVals
 
 
 void         changemapvalues(void)
-{ 
-  tnewmap      nm; 
+{
+  tnewmap      nm;
 
-   nm.valueflag = false; 
-   nm.init(); 
-   nm.run(); 
-   nm.done(); 
+   nm.valueflag = false;
+   nm.init();
+   nm.run();
+   nm.done();
 //   if (actmap->campaign != NULL) setupalliances();
-   pdbaroff(); 
+   pdbaroff();
 }
 
 
@@ -2496,17 +2501,17 @@ void         BuildingValues::buttonpressed(int         id)
 
         }
         break;
-     case 8: action = 1; 
+     case 8: action = 1;
         break;
-        
+
      /*
-     
+
      case 13: {
                      addeingabe(4,&plus.energy,0,mplus.energy);
                      if (mplus.energy < plus.energy ) {
                         plus.energy = mplus.energy;
                         enablebutton(4);
-                     } 
+                     }
                   }
         break;
      case 14: {
@@ -2514,24 +2519,24 @@ void         BuildingValues::buttonpressed(int         id)
                       if (mplus.material < plus.material) {
                          plus.material =mplus.material;
                          enablebutton(5);
-                      } 
+                      }
                    }
-     
+
         break;
      case 15: {
                    addeingabe(6,&plus.fuel,0,mplus.fuel);
                       if (plus.fuel > mplus.fuel) {
                          plus.fuel = mplus.fuel;
                          enablebutton(6);
-                      } 
-                   } 
+                      }
+                   }
         break;
-     */   
+     */
   case 110: help ( 41 );
      break;
 
   }
-} 
+}
 
 
 void         changebuildingvalues( Building& b )
@@ -2542,7 +2547,7 @@ void         changebuildingvalues( Building& b )
    bval.done();
 
    displaymap();
-} 
+}
 
 // õS Class-Change
 
@@ -2555,7 +2560,7 @@ class   tclass_change: public tstringselect {
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void gettext(word nr);
+                 virtual void get_text(word nr);
                  };
 
 void         tclass_change::setup(void)
@@ -2617,7 +2622,7 @@ void         tclass_change::buttonpressed(int         id)
 }
 
 
-void         tclass_change::gettext(word nr)
+void         tclass_change::get_text(word nr)
 {
    strcpy(txt,unit->typ->classnames[nr].c_str());
 }
@@ -2671,7 +2676,7 @@ class tpolygon_managementbox: public tstringselect {
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void gettext(word nr);
+                 virtual void get_text(word nr);
                  };
 
 
@@ -2710,7 +2715,7 @@ void         tpolygon_managementbox::buttonpressed(int         id)
 }
 
 
-void         tpolygon_managementbox::gettext(word nr)
+void         tpolygon_managementbox::get_text(word nr)
 {
    char s[200];
    ppolystructure pps;
@@ -2809,7 +2814,7 @@ class   StringSelector : public tstringselect {
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void gettext(word nr);
+                 virtual void get_text(word nr);
                  };
 
 void         StringSelector ::setup(void)
@@ -2837,7 +2842,7 @@ void         StringSelector ::buttonpressed(int         id)
 }
 
 
-void         StringSelector ::gettext(word nr)
+void         StringSelector ::get_text(word nr)
 {
    strcpy(txt, text[nr] );
 }
@@ -3051,7 +3056,7 @@ void         tunit::init(  )
 
    #define maxeditable 6
 
-   for(i =0;i < unit->typ->weapons.count;i++) {   	
+   for(i =0;i < unit->typ->weapons.count;i++) {
      if (i < maxeditable) {
         weaponammo = new(char[25]);
         strcpy(weaponammo,"Wpn Ammo ");
@@ -3061,7 +3066,7 @@ void         tunit::init(  )
         addeingabe( 33+i, &unit->ammo[i], 0, 255 );
    	} else
    	    showtext2("6 weapons max at the moment",x1+410,y1+80+maxeditable*40);
-   	
+
    }
 
    buildgraphics();
@@ -3607,7 +3612,7 @@ class tvehiclecargo : public tladeraum {
 
 const char* tvehiclecargo :: getinfotext ( int pos )
 {
-   if ( transport->loading[ pos ] ) 
+   if ( transport->loading[ pos ] )
       if ( !transport->loading[ pos ]->name.empty() )
          return transport->loading[ pos ]->name.c_str();
       else
@@ -3646,12 +3651,12 @@ void tvehiclecargo :: removeitem ( int pos )
 void tvehiclecargo :: checkforadditionalkeys ( tkey ch )
 {
    if ( transport->loading[ cursorpos ] ) {
-       if ( ch == ct_v )  
+       if ( ch == ct_v )
           changeunitvalues( transport->loading[ cursorpos ] );
-       if ( ch == ct_c )  
+       if ( ch == ct_c )
           unit_cargo( transport->loading[ cursorpos ] );
    }
-} 
+}
 
 
 void tvehiclecargo :: finish ( int cancel )
@@ -3662,14 +3667,14 @@ void tvehiclecargo :: finish ( int cancel )
 
 
 void         unit_cargo( pvehicle vh )
-{ 
+{
    if ( vh && vh->typ->loadcapacity ) {
       tvehiclecargo laderaum ( vh );
       laderaum.init();
-      laderaum.run(); 
-      laderaum.done(); 
+      laderaum.run();
+      laderaum.done();
    }
-} 
+}
 
 
 //* õS Laderaum2 Building-Cargo
@@ -3725,16 +3730,16 @@ void tbuildingcargo :: removeitem ( int pos )
 void tbuildingcargo :: checkforadditionalkeys ( tkey ch )
 {
    if ( building->loading[ cursorpos ] ) {
-       if ( ch == ct_v )  
+       if ( ch == ct_v )
           changeunitvalues( building->loading[ cursorpos ] );
-       if ( ch == ct_c )  
+       if ( ch == ct_c )
           unit_cargo( building->loading[ cursorpos ] );
    }
-} 
+}
 
 const char* tbuildingcargo :: getinfotext ( int pos )
 {
-   if ( building->loading[ pos ] ) 
+   if ( building->loading[ pos ] )
       if ( !building->loading[ pos ]->name.empty() )
          return building->loading[ pos ]->name.c_str();
       else
@@ -3751,10 +3756,10 @@ void         building_cargo( pbuilding bld )
    if ( bld  ) {
       tbuildingcargo laderaum ( bld );
       laderaum.init( "cargo" );
-      laderaum.run(); 
-      laderaum.done(); 
+      laderaum.run();
+      laderaum.done();
    }
-} 
+}
 
 //* õS Production Building-Production
 
@@ -3786,7 +3791,7 @@ void tbuildingproduction :: removeitem ( int pos )
 
 const char* tbuildingproduction :: getinfotext ( int pos )
 {
-   if ( building->production[ pos ] ) 
+   if ( building->production[ pos ] )
       if ( !building->production[ pos ]->name.empty() )
          return building->production[ pos ]->name.c_str();
       else
@@ -3800,8 +3805,8 @@ void         building_production( pbuilding bld )
    if ( bld  && (bld->typ->special & cgvehicleproductionb ) ) {
       tbuildingproduction laderaum ( bld );
       laderaum.init( "production" );
-      laderaum.run(); 
-      laderaum.done(); 
+      laderaum.run();
+      laderaum.done();
    }
 }
 
@@ -3812,7 +3817,7 @@ void movebuilding ( void )
    if ( fld->vehicle ) {
       pvehicle v = fld->vehicle;
       fld->vehicle = NULL;
-   
+
       int x = v->xpos;
       int y = v->ypos;
       int res2 = -1;
@@ -3833,7 +3838,7 @@ void movebuilding ( void )
    }
    if ( fld->building ) {
       pbuilding bld = fld->building;
- 
+
       bld->unchainbuildingfromfield ();
 
       MapCoordinate mc = bld->getEntry();
@@ -3852,7 +3857,7 @@ void movebuilding ( void )
       if ( res2 == 0 ) {   // operation canceled
          if ( bld->chainbuildingtofield ( oldPosition ))
             displaymessage ( "severe inconsistency in movebuilding !", 1 );
-      } 
+      }
       displaymap();
    }
 }
@@ -3870,19 +3875,19 @@ class SelectUnitSet : public tdialogbox {
 
 
 void         SelectUnitSet::init(void)
-{ 
+{
 
    tdialogbox::init();
-   action = 0; 
+   action = 0;
    title = "Select Unit Sets";
    x1 = 90;
    xsize = 445;
    y1 = 10;
    ysize = 440;
-   int w = (xsize - 60) / 2; 
-   action = 0; 
+   int w = (xsize - 60) / 2;
+   action = 0;
 
-   windowstyle = windowstyle ^ dlg_in3d; 
+   windowstyle = windowstyle ^ dlg_in3d;
 
 
 
@@ -3894,41 +3899,41 @@ void         SelectUnitSet::init(void)
       addeingabe ( 10 + i, &active[i], black, dblue );
    }
 
-   addbutton("~O~k",20,ysize - 40,20 + w,ysize - 10,0,1,7,true); 
-   addkey(7,ct_enter ); 
+   addbutton("~O~k",20,ysize - 40,20 + w,ysize - 10,0,1,7,true);
+   addkey(7,ct_enter );
 
    addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,8,true);
-   addkey(8, ct_esc ); 
+   addkey(8, ct_esc );
 
-   buildgraphics(); 
+   buildgraphics();
 
-   mousevisible(true); 
-} 
+   mousevisible(true);
+}
 
 
 void         SelectUnitSet::run(void)
-{ 
-   do { 
+{
+   do {
       tdialogbox::run();
-   }  while ( action == 0 ); 
-} 
+   }  while ( action == 0 );
+}
 
 
 void         SelectUnitSet::buttonpressed(int         id)
 {
    switch(id) {
-       case 7: { 
-                  action = 1; 
+       case 7: {
+                  action = 1;
                   for ( int i = 0; i < unitSets.size(); i++ )
                       unitSets[i]->active = active[i];
                   resetvehicleselector();
                   resetbuildingselector();
           }
           break;
-       case 8: action = 2; 
+       case 8: action = 2;
           break;
-  } 
-} 
+  }
+}
 
 void selectunitsetfilter ( void )
 {
@@ -3949,7 +3954,7 @@ class UnitTypeTransformation {
                              virtual void setup(void);
                              virtual void buttonpressed(int id);
                              virtual void run(void);
-                             virtual void gettext(word nr);
+                             virtual void get_text(word nr);
                          };
               class   TranslationTableSelection : public tstringselect {
                               int unitsetnum;
@@ -3958,7 +3963,7 @@ class UnitTypeTransformation {
                                void setup2 ( int _unitset ) { unitsetnum = _unitset; };
                                virtual void buttonpressed(int id);
                                virtual void run(void);
-                               virtual void gettext(word nr);
+                               virtual void get_text(word nr);
                            };
 
                 int unitstransformed;
@@ -3974,67 +3979,67 @@ class UnitTypeTransformation {
 
 
 void         UnitTypeTransformation :: UnitSetSelection::setup(void)
-{ 
+{
    action = 0;
    title = "Select UnitSet";
    numberoflines = unitSets.size();
-   ey = ysize - 60; 
-   addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,2,true); 
-   addkey(2,ct_enter); 
-   addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,3,true); 
+   ey = ysize - 60;
+   addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,2,true);
+   addkey(2,ct_enter);
+   addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,3,true);
    addkey(3,ct_esc);
-} 
+}
 
 void         UnitTypeTransformation :: UnitSetSelection::buttonpressed(int         id)
-{ 
+{
    tstringselect::buttonpressed(id);
    switch (id) {
-      case 2:   
-      case 3:   action = id; 
-                break; 
-   } 
-} 
+      case 2:
+      case 3:   action = id;
+                break;
+   }
+}
 
-void         UnitTypeTransformation :: UnitSetSelection::gettext(word nr)
-{ 
+void         UnitTypeTransformation :: UnitSetSelection::get_text(word nr)
+{
    strcpy(txt,unitSets[nr]->name.c_str() );
-} 
+}
 
 void         UnitTypeTransformation :: UnitSetSelection::run(void)
-{ 
-   do { 
-      tstringselect::run(); 
+{
+   do {
+      tstringselect::run();
    }  while ( ! ( action > 0 || (msel == 1)) );
 
-   if ( action == 3) 
+   if ( action == 3)
       redline = -1;
-} 
+}
 
 
 
 void         UnitTypeTransformation :: TranslationTableSelection::setup( void )
-{ 
+{
    action = 0;
    title = "Select Transformation Table";
    numberoflines = unitSets[unitsetnum]->transtab.size();
-   ey = ysize - 60; 
-   addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,2,true); 
-   addkey(2,ct_enter); 
-   addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,3,true); 
+   ey = ysize - 60;
+   addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,2,true);
+   addkey(2,ct_enter);
+   addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,3,true);
    addkey(3,ct_esc);
-} 
+}
 
 void         UnitTypeTransformation :: TranslationTableSelection::buttonpressed(int         id)
-{ 
+{
    tstringselect::buttonpressed(id);
    switch (id) {
-      case 2:   
-      case 3:   action = id; 
-                break; 
-   } 
-} 
+      case 2:
+      case 3:   action = id;
+                break;
+   }
+}
 
-void         UnitTypeTransformation :: TranslationTableSelection::gettext(word nr)
+void         UnitTypeTransformation :: TranslationTableSelection::get_text(word nr)
 { 
    strcpy(txt, unitSets[unitsetnum]->transtab[nr]->name.c_str() );
 } 

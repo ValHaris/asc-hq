@@ -3,9 +3,17 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.68 2002-04-05 09:25:08 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.69 2002-10-02 20:21:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.68  2002/04/05 09:25:08  mbickel
+//      Project files now for Borland C++ Builder 6
+//      Fixed: netcontrol not working
+//      Fixed: replay errors when constructing turrets
+//      Submarine require no fuel for sufacing
+//      Field info dialog extended
+//      Fixed several buffer overruns
+//
 //     Revision 1.67  2002/03/19 20:38:56  mbickel
 //      Some cleanup and documentation in dlg_box
 //      Fixed some type assignment errors
@@ -324,11 +332,11 @@
 */
 
 #include <stdio.h>
-#include <cstring>
-#include <ctype.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include <iostream.h>
+#include <ctype.h>
+#include <cstring>
+#include <iostream>
 #ifdef _WIN32_
  #include <windows.h>
  #include <winuser.h>
@@ -417,7 +425,7 @@ void tvirtualscreenbuf:: init ( void )
 
 tvirtualscreenbuf:: ~tvirtualscreenbuf ()
 {
-   delete[] buf;
+   asc_free( buf );
    buf = NULL;
 }
 
@@ -3005,7 +3013,7 @@ void tviewtext::displaytext ( void )
    delete[] actword;
    delete[] actline;
 
-   delete[] tvt_firstlinebuf;
+   asc_free( tvt_firstlinebuf );
 
    npop ( activefontsettings );
 
@@ -3473,7 +3481,7 @@ void         thelpsystem::done(void)
    while (firstpict != NULL) { 
       pic1 = firstpict; 
       firstpict = firstpict->next; 
-      delete ( pic1->pict );
+      asc_free ( pic1->pict );
       delete ( pic1 );
    }
 }
@@ -3778,7 +3786,7 @@ void         tstringselect::resettextfield(void)
    rahmen(true,x1 + sx ,y1 + sy,x1 + ex,y1 + ey);
 }
 
-void   tstringselect::gettext(word nr) //gibt in txt den string zur?ck
+void   tstringselect::get_text(int nr) //gibt in txt den string zur?ck
 {
   strcpy(txt,"");
   nr = 0;
@@ -3805,7 +3813,7 @@ void         tstringselect::viewtext(void)
    l = firstvisibleline;
    if (numberoflines > 0) {
          while ((l<numberoflines) && (l-firstvisibleline < lnshown)) {
-            gettext(l);
+            get_text(l);
             strcpy(s1,txt);
             if (l == redline ) activefontsettings.color=red;
             else activefontsettings.color=lightblue;
@@ -3955,7 +3963,7 @@ class   ChooseString : public tstringselect {
                  void setup( );
                  virtual void buttonpressed(int id);
                  void run(void);
-                 virtual void gettext(word nr);
+                 virtual void get_text(word nr);
               };
 
 ChooseString :: ChooseString ( const ASCString& _title, const vector<ASCString>& _strings )
@@ -3986,7 +3994,7 @@ void         ChooseString ::buttonpressed(int         id)
 }
 
 
-void         ChooseString ::gettext(word nr)
+void         ChooseString ::get_text(word nr)
 {
    strcpy ( txt, strings[nr].c_str());
 }

@@ -1,9 +1,12 @@
 /*! \file gamedlg.cpp    
     \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.94 2002-09-19 20:20:05 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.95 2002-10-02 20:21:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.94  2002/09/19 20:20:05  mbickel
+//      Cleanup and various bug fixes
+//
 //     Revision 1.93  2002/03/26 22:23:09  mbickel
 //      Fixed: music was started even if turned off in ini file
 //      Fixed: crash in reaction fire
@@ -2636,7 +2639,7 @@ void tonlinemousehelp :: removehelp ( void )
 {
    if ( active == 2 ) {
       putimage ( pos.x1, pos.y1, image );
-      delete[] image;
+      asc_free( image );
       active = 1;
    }
    lastmousemove = ticker;
@@ -3788,7 +3791,7 @@ void         tverlademunition::run(void)
                             int step =  ( target->service[displayed[mp]].maxAmount - target->service[displayed[mp]].minAmount ) / 100;
                             if ( step == 0 )
                                step = 1;
-                            step = int( pow ( 10, int ( log10 ( step ))));
+                            step = int( pow ( 10, log10 (double(step))));
 
                             oldpos[mp] = newpos[mp];
 

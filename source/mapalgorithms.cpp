@@ -117,7 +117,7 @@ double tdrawgettempline :: winkel ( int x, int y )
 
    int dx = xp2-xp1;
    int dy = yp2-yp1;
-   double at = atan2 ( dy, dx );
+   double at = atan2 ( double(dy), double(dx) );
    // printf("%d / %d / %f \n", dx, dy, at);
    at -= offset;
    while ( at < 0 )

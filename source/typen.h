@@ -1,6 +1,11 @@
-//     $Id: typen.h,v 1.112 2002-10-01 09:23:42 mbickel Exp $
+//     $Id: typen.h,v 1.113 2002-10-02 20:21:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.112  2002/10/01 09:23:42  mbickel
+//      Fixed many bugs
+//      Added inheritance to text files
+//      updated graphics
+//
 //     Revision 1.111  2002/04/05 09:25:09  mbickel
 //      Project files now for Borland C++ Builder 6
 //      Fixed: netcontrol not working
@@ -401,20 +406,20 @@ struct GameTime {
 
 
 //! A vector that stores pointers, but deletes the objects (and not only the pointers) on destruction. The erase method does NOT delete the objects !
-template <class T> class PointerVector : public vector<T> {
+template <class T> class PointerVector : public std::vector<T> {
    public:
      ~PointerVector() {
-        for ( vector<T>::iterator it=begin(); it!=end(); it++ )
+        for ( typename std::vector<T>::iterator it=begin(); it!=end(); it++ )
             delete *it;
      };
 };
 
 
 //! A list that stores pointers, but deletes the objects (and not only the pointers) on destruction. The erase method does NOT delete the objects !
-template <class T> class PointerList : public list<T> {
+template <class T> class PointerList : public std::list<T> {
    public:
      ~PointerList() {
-        for ( list<T>::iterator it=begin(); it!=end(); it++ )
+        for ( typename std::list<T>::iterator it=begin(); it!=end(); it++ )
             delete *it;
      };
 };

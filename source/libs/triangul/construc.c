@@ -191,10 +191,10 @@ static int init_query_structure(segnum)
 
   tr[t1].hi = tr[t2].hi = tr[t4].lo = qs[i1].yval;
   tr[t1].lo = tr[t2].lo = tr[t3].hi = qs[i3].yval;
-  tr[t4].hi.y = (double) (INFINITY);
-  tr[t4].hi.x = (double) (INFINITY);
-  tr[t3].lo.y = (double) -1* (INFINITY);
-  tr[t3].lo.x = (double) -1* (INFINITY);
+  tr[t4].hi.y = (double) (TRI_INFINITY);
+  tr[t4].hi.x = (double) (TRI_INFINITY);
+  tr[t3].lo.y = (double) -1* (TRI_INFINITY);
+  tr[t3].lo.x = (double) -1* (TRI_INFINITY);
   tr[t1].rseg = tr[t2].lseg = segnum;
   tr[t1].u0 = tr[t2].u0 = t4;
   tr[t1].d0 = tr[t2].d0 = t3;

@@ -2,9 +2,13 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.28 2002-03-19 20:38:56 mbickel Exp $
+//     $Id: dlg_box.h,v 1.29 2002-10-02 20:21:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2002/03/19 20:38:56  mbickel
+//      Some cleanup and documentation in dlg_box
+//      Fixed some type assignment errors
+//
 //     Revision 1.27  2001/12/19 17:16:28  mbickel
 //      Some include file cleanups
 //
@@ -549,6 +553,7 @@ extern char*  strrrd8n(int  l);           // mathematisch korrekt runden
 extern ASCString readtextmessage( int id );
 
 
+
 class   tstringselect : public tdialogbox {
                 public :
                      char txt[2000];
@@ -564,8 +569,8 @@ class   tstringselect : public tdialogbox {
                      virtual void buttonpressed(int id);
                      void scrollbar_on(void);
                      void viewtext(void);
-                     virtual void gettext(word nr);
                      virtual void resettextfield(void);
+                     virtual void get_text( int nr);
                      void done(void);
                  };
 

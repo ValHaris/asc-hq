@@ -2,9 +2,17 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.110 2002-04-05 09:25:08 mbickel Exp $
+//     $Id: dialog.cpp,v 1.111 2002-10-02 20:21:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.110  2002/04/05 09:25:08  mbickel
+//      Project files now for Borland C++ Builder 6
+//      Fixed: netcontrol not working
+//      Fixed: replay errors when constructing turrets
+//      Submarine require no fuel for sufacing
+//      Field info dialog extended
+//      Fixed several buffer overruns
+//
 //     Revision 1.109  2002/03/18 21:42:17  mbickel
 //      Some cleanup and documentation in the Mine class
 //      The number of mines is now displayed in the field information window
@@ -5306,7 +5314,7 @@ class   tgameparamsel : public tstringselect {
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
-                 virtual void gettext(word nr);
+                 virtual void get_text(word nr);
                  };
 
 void         tgameparamsel ::setup(void)
@@ -5346,7 +5354,7 @@ void         tgameparamsel ::buttonpressed(int         id)
 }
 
 
-void         tgameparamsel ::gettext(word nr)
+void         tgameparamsel ::get_text(word nr)
 {
    strcpy(txt,gameparametername[nr] );
    strcat(txt, " (" );
