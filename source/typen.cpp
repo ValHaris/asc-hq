@@ -48,7 +48,7 @@ const char*  choehenstufen[choehenstufennum] = {"deep submerged", "submerged", "
 
 
 const char*  cwaffentypen[cwaffentypennum]  = {"cruise missile", "mine",    "bomb",       "large missile", "small missile", "torpedo", "machine gun",
-                                               "cannon",         "service", "ammunition refuel", "laser", "shootable"};
+                                               "cannon",         "service", "ammunition refuel", "laser", "shootable", "object placement"};
 
 const char*  cmovemalitypes[cmovemalitypenum] = { "default",
                                                  "light tracked vehicle", "medium tracked vehicle", "heavy tracked vehicle",
@@ -78,7 +78,9 @@ const int  cwaffenproduktionskosten[cwaffentypennum][3]    = { {1500,1500,1500},
                                                                {0, 0, 0},     // service
                                                                {0, 0, 0},     // ammo refuel
                                                                {0, 0, 0},     // laser
-                                                               {0, 0, 0}};    // shootable
+                                                               {0, 0, 0},     // shootable
+                                                               {0, 0, 0}};    // objectPlacement
+
                                                                               // jeweils f?r weaponpackagesize Pack !
 
 //! when repairing a unit, the experience of the unit is decreased by one when passing each of these damage levels

@@ -107,10 +107,11 @@ extern const char*  cvehiclefunctions[];
      ASCString    soundLabel;
 
      int          getScalarWeaponType(void) const;
-     bool          requiresAmmo(void) const;
-     bool          shootable( void ) const;
-     bool          service( void ) const;
-     bool          canRefuel ( void ) const;
+     bool         requiresAmmo(void) const;
+     bool         shootable( void ) const;
+     bool         service( void ) const;
+     bool         placeObjects() const;
+     bool         canRefuel ( void ) const;
      void         set ( int type );  // will be enhanced later ...
      int          gettype ( void ) const { return typ; };
      bool         offensive( void ) const;

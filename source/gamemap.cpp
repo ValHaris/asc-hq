@@ -1779,7 +1779,7 @@ void tfield :: setweather ( int weather )
 
 bool compareObjectHeight ( const Object& o1, const Object& o2 )
 {
-   return o1.typ->height < o2.typ->height;
+   return o1.typ->imageHeight < o2.typ->imageHeight;
 }
 
 void tfield :: sortobjects ( void )

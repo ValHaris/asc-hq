@@ -478,12 +478,16 @@ int          tputmine::initpm(  char mt, const pvehicle eht )
    numberoffields = 0;
    mienenlegen = false;
    mienenraeumen = false;
+
+   const SingleWeapon* weapon = NULL;
+
    if (eht->typ->weapons.count > 0)
       for ( int i = 0; i <= eht->typ->weapons.count - 1; i++)
          if ((eht->typ->weapons.weapon[i].getScalarWeaponType() == cwminen) && eht->typ->weapons.weapon[i].shootable() ) {
             mienenraeumen = true;
             if (eht->ammo[i] > 0)
                mienenlegen = true;
+            weapon = &eht->typ->weapons.weapon[i];
          }
    player = eht->color / 8;
    mienentyp = mt;
@@ -493,7 +497,7 @@ int          tputmine::initpm(  char mt, const pvehicle eht )
       return -119;
    }
    if (mienenlegen || mienenraeumen)
-      initsearch( MapCoordinate( getxpos(),getypos()), 1, 1 );
+      initsearch( MapCoordinate( getxpos(),getypos()), weapon->mindistance / maxmalq, weapon->maxdistance / maxmalq );
    return 0;
 }
 
@@ -769,7 +773,11 @@ void tbuildstreet::checkObject( pfield fld, pobjecttype objtype, Mode mode )
        return;
 
     if ( mode == Build ) {
-       if ( objtype->getFieldModification(fld->getweather()).terrainaccess.accessible( fld->bdt ) > 0 &&  !fld->checkforobject ( objtype ) && objtype->techDependency.available(actmap->player[actvehicle->getOwner()].research) ) {
+       if ( objtype->getFieldModification(fld->getweather()).terrainaccess.accessible( fld->bdt ) > 0
+            &&  !fld->checkforobject ( objtype )
+            && objtype->techDependency.available(actmap->player[actvehicle->getOwner()].research) ){
+//            && !getheightdelta ( log2( actvehicle->height), log2(objtype->getEffectiveHeight())) ) {
+
           int movecost;
           Resources cost;
           getobjbuildcosts ( objtype, fld, &cost, &movecost );
@@ -782,6 +790,7 @@ void tbuildstreet::checkObject( pfield fld, pobjecttype objtype, Mode mode )
        }
     } else {
        if ( fld->checkforobject ( objtype ) ) {
+//          &&  !getheightdelta ( log2( actvehicle->height), log2(objtype->getEffectiveHeight())) ) {
           int movecost;
           Resources cost;
           getobjbuildcosts ( objtype, fld, &cost, &movecost );

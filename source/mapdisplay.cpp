@@ -784,7 +784,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
                   /* display streets, railroads and pipelines */
                 for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ ) {
-                   int h = o->typ->height;
+                   int h = o->typ->imageHeight;
                    if (b > visible_ago || o->typ->visibleago )
                       if (  h >= hgt*30 && h < 30 + hgt*30 )
                          o->display ( r - streetleftshift , yp - streettopshift, fld->getweather() );

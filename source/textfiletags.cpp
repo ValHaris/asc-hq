@@ -118,7 +118,8 @@ const char*  weaponTags[cwaffentypennum]
         "service",
         "ammo_transfer",
         "laser",
-        "shootable" };
+        "shootable",
+        "objectPlacement" };
 
 const char*  unitCategoryTags[cmovemalitypenum] =
    { "default",
@@ -165,7 +166,7 @@ const char*  buildingFunctionTags[cbuildingfunctionnum]  =
                 "ExternalAmmoTransfer",
                 "NoObjectChaining",
                 "Selfdestruct_at_conquer",
-                "SatView" };
+                "satelliteview" };
 
 
  const char* weatherAbbrev[cwettertypennum]

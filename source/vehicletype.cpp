@@ -755,6 +755,12 @@ bool SingleWeapon::service( void ) const
    return typ & cwserviceb;
 }
 
+bool SingleWeapon::placeObjects(  ) const
+{
+   return typ & cwobjectplacementb;
+}
+
+
 bool SingleWeapon::canRefuel( void ) const
 {
    return typ & cwammunitionb;
@@ -773,7 +779,7 @@ ASCString SingleWeapon::getName ( void ) const
    if ( k < cwaffentypennum && k >= 0 )
       s = cwaffentypen[k];
    else
-      if ( service() )
+      if ( service() || placeObjects() )
          s = cwaffentypen[cwservicen];
       else
          s = "undefined";

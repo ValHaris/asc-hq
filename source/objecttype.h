@@ -89,8 +89,11 @@
 
 
 
-     //! the level of height the object is on. This is not the simple system of 8 levels used for units and building, but one with 255 levels which are documented in docs/biimport.html
-     int height;
+     //! the level of height the object is on. This is not the simple system of 8 levels used for units and building, but one with 255 levels to allow a fine grained specification of the order in which different objects are painted
+     int imageHeight;
+
+     //! the 'real' height of the object, which evaluated for construction and attack. The destinction between imageHeight and physicalHeight was made because of compatibility reasons
+     int physicalHeight;
 
      //! The resources required to construct the object with a unit; Note that units usually don't have any energy available
      Resources buildcost;

@@ -47,6 +47,8 @@ ObjectType :: ObjectType ( void )
    netBehaviour = 0;
    viewbonus_abs = -1;
    viewbonus_plus = 0;
+   imageHeight = 0;
+   physicalHeight = 0;
 }
 
 ObjectType::FieldModification&  ObjectType::getFieldModification ( int weather )
@@ -72,7 +74,7 @@ bool  ObjectType :: buildable ( pfield fld )
 
 int ObjectType :: getEffectiveHeight()
 {
-  return (height - 15) / 30;
+  return physicalHeight;
 }
 
 
@@ -800,7 +802,7 @@ void         calculateallobjects( pmap actmap )
 
 
 
-const int object_version = 10;
+const int object_version = 11;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -850,8 +852,14 @@ void ObjectType :: read ( tnstream& stream )
           viewbonus_abs = stream.readInt();
        }
 
+       if ( version <= 10 ) {
+         imageHeight = stream.readInt();
+         physicalHeight = imageHeight / 30;
+       } else {
+         imageHeight = stream.readInt();
+         physicalHeight = stream.readInt();
+       }
 
-       height = stream.readInt();
 
        buildcost.read( stream );
        removecost.read ( stream );
@@ -997,7 +1005,8 @@ void ObjectType :: write ( tnstream& stream ) const
     stream.writeInt ( viewbonus_abs );
 
 
-    stream.writeInt ( height );
+    stream.writeInt ( imageHeight );
+    stream.writeInt ( physicalHeight );
 
     buildcost.write( stream );
     removecost.write ( stream );
@@ -1101,7 +1110,12 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
    pc.addInteger  ( "DefenseBonus_plus", defensebonus_plus );
    pc.addInteger  ( "Jamming_abs", basicjamming_abs );
    pc.addInteger  ( "Jammming_plus", basicjamming_plus );
-   pc.addInteger  ( "Height", height );
+   pc.addInteger  ( "Height", imageHeight );
+   if ( pc.find ( "PhysicalHeight" ) || !pc.isReading() ) {
+      pc.addInteger  ( "PhysicalHeight", physicalHeight );
+   } else
+      physicalHeight = imageHeight / 30;
+
    pc.addInteger  ( "ViewBonus_abs", viewbonus_abs, -1 );
    pc.addInteger  ( "ViewBonus_plus", viewbonus_plus, 0 );
 

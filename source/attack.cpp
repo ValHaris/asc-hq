@@ -900,7 +900,7 @@ void tunitattacksobject :: setup ( pvehicle attackingunit, int obj_x, int obj_y,
 
    const SingleWeapon *weap = &attackingunit->typ->weapons.weapon[weapon];
    av.strength  = int( attackingunit->weapstrength[weapon]
-                       * weapDist.getWeapStrength(weap, dist, -1, -1  )
+                       * weapDist.getWeapStrength(weap, dist, attackingunit->height, _obji->typ->getEffectiveHeight() )
                        * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[cmm_building] / 100 );
 
    av.armor = attackingunit->armor;
@@ -1044,33 +1044,41 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
 
       if ( n > 0 )
          if ((efield->vehicle == NULL) && ( efield->building == NULL)) {
-            for ( int i = 0; i <= angreifer->typ->weapons.count - 1; i++)
-               if (angreifer->typ->weapons.weapon[i].shootable() )
-                  if ( angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwcannonn ||
-                       angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwlasern ||
-                       angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwcruisemissile ||
-                       angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwairmissilen ||
-                       angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwbombn ) {
-                     if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[cmm_building] )
-                        if (chfahrend & angreifer->typ->weapons.weapon[i].targ ) {
-                           if (fieldvisiblenow(efield, angreifer->color/8)) {
-                              int d = beeline(angreifer->xpos,angreifer->ypos,x,y);
-                              if (d <= angreifer->typ->weapons.weapon[i].maxdistance)
-                                 if (d >= angreifer->typ->weapons.weapon[i].mindistance) {
-                                    if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
-                                       if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), log2(chfahrend))] )
-                                          if (angreifer->ammo[i] > 0) {
-                                             atw->strength[atw->count ] = angreifer->weapstrength[i];
-                                             atw->num[atw->count ] = i;
-                                             atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
-                                             atw->target = AttackWeap::object;
-                                             atw->count++;
-                                          }
+            bool found = false;
+            for ( tfield::ObjectContainer::reverse_iterator j = efield->objects.rbegin(); j != efield->objects.rend(); ++j ) {
+               for ( int i = 0; i <= angreifer->typ->weapons.count - 1; i++)
+                  if (angreifer->typ->weapons.weapon[i].shootable() )
+                     if ( angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwcannonn ||
+                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwlasern ||
+                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwcruisemissile ||
+                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwairmissilen ||
+                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwbombn ) {
+                        if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[cmm_building] )
+                           if (chfahrend & angreifer->typ->weapons.weapon[i].targ ) {
+                              if (fieldvisiblenow(efield, angreifer->color/8)) {
+                                 int d = beeline(angreifer->xpos,angreifer->ypos,x,y);
+                                 if (d <= angreifer->typ->weapons.weapon[i].maxdistance)
+                                    if (d >= angreifer->typ->weapons.weapon[i].mindistance) {
+                                       if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
+                                          if ( angreifer->typ->weapons.weapon[i].targ & j->typ->getEffectiveHeight() )
+                                             if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), log2(j->typ->getEffectiveHeight()))] )
+                                                if (angreifer->ammo[i] > 0) {
+                                                   atw->strength[atw->count ] = angreifer->weapstrength[i];
+                                                   atw->num[atw->count ] = i;
+                                                   atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
+                                                   atw->target = AttackWeap::object;
+                                                   atw->count++;
+                                                   found = true;
+                                                }
 
-                                 }
+                                    }
+                              }
                            }
-                        }
-                  }
+                     }
+               if ( found )
+                  return atw;
+            }
+
          }
    }
 

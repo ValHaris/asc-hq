@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.151 2004-07-31 15:13:45 mbickel Exp $
+//     $Id: typen.h,v 1.152 2004-08-01 09:44:12 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -561,26 +561,26 @@ extern  const char*  choehenstufen[8] ;
  #define chsatellit 128  
 
 
-#define cwaffentypennum 12
- extern const char*  cwaffentypen[cwaffentypennum] ; 
+#define cwaffentypennum 13
+ extern const char*  cwaffentypen[cwaffentypennum] ;
  #define cwcruisemissile 0
  #define cwcruisemissileb ( 1 << cwcruisemissile )
- #define cwminen 1  
+ #define cwminen 1
  #define cwmineb ( 1 << cwminen   )
- #define cwbombn 2  
+ #define cwbombn 2
  #define cwbombb ( 1 << cwbombn  )
- #define cwairmissilen 3  
+ #define cwairmissilen 3
  #define cwairmissileb ( 1 << cwairmissilen  )
- #define cwgroundmissilen 4  
+ #define cwgroundmissilen 4
  #define cwgroundmissileb ( 1 << cwgroundmissilen  )
  #define cwtorpedon 5
  #define cwtorpedob ( 1 << cwtorpedon  )
- #define cwmachinegunn 6  
+ #define cwmachinegunn 6
  #define cwmachinegunb ( 1 << cwmachinegunn )
  #define cwcannonn 7
  #define cwcannonb ( 1 << cwcannonn )
  #define cwweapon ( cwcruisemissileb | cwbombb | cwairmissileb | cwgroundmissileb | cwtorpedob | cwmachinegunb | cwcannonb | cwlaserb )
- #define cwshootablen 11  
+ #define cwshootablen 11
  #define cwshootableb ( 1 << cwshootablen  )
  #define cwlasern 10
  #define cwlaserb ( 1 << cwlasern  )
@@ -588,6 +588,8 @@ extern  const char*  choehenstufen[8] ;
  #define cwammunitionb ( 1 << cwammunitionn )
  #define cwservicen 8
  #define cwserviceb ( 1 << cwservicen )
+ #define cwobjectplacementn 12
+ #define cwobjectplacementb ( 1 << cwobjectplacementn )
  extern const int cwaffenproduktionskosten[cwaffentypennum][3];  /*  Angabe: Waffentyp; energy - Material - Sprit ; jeweils fuer 5er Pack */
 
 
