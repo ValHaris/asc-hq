@@ -1,6 +1,11 @@
-//     $Id: controls.cpp,v 1.43 2000-07-10 15:21:29 mbickel Exp $
+//     $Id: controls.cpp,v 1.44 2000-07-16 14:19:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2000/07/10 15:21:29  mbickel
+//      Fixed crash in replay (alliancechange)
+//      Fixed some movement problems when moving units out of transports / buildings
+//      Removed save game description dialog
+//
 //     Revision 1.42  2000/07/06 11:07:26  mbickel
 //      More AI work
 //      Started modularizing the attack formula
@@ -275,7 +280,7 @@ void         tsearchexternaltransferfields :: testfield( void )
 
 void tsearchexternaltransferfields :: searchtransferfields( pbuilding building )
 {
-   cleartemps( 7 );
+   actmap->cleartemps( 7 );
    bld = building;
    int x;
    int y;
@@ -392,7 +397,7 @@ void         tsearchputbuildingfields::initputbuilding( word x, word y, pbuildin
       dispmessage2(302,""); 
       return;
    } 
-   cleartemps(7); 
+   actmap->cleartemps(7); 
    initsuche(x,y,1,1); 
    bld = building; 
    numberoffields = 0; 
@@ -518,7 +523,7 @@ void         putbuildinglevel2( const pbuildingtype bld,
 
    if (getfield(xp,yp)->a.temp == 20) 
       if (moveparams.movestatus == 111) { 
-         cleartemps(7); 
+         actmap->cleartemps(7); 
          for (y1 = 0; y1 <= 5; y1++) 
             for (x1 = 0; x1 <= 3; x1++) 
                if ( bld->getpicture ( x1, y1 ) ) {        
@@ -558,7 +563,7 @@ void         putbuildinglevel3(integer      x,
 
    if (getfield(x,y)->a.temp == 23) 
       if (moveparams.movestatus == 112) { 
-         cleartemps(7); 
+         actmap->cleartemps(7); 
          bld = moveparams.buildingtobuild; 
          eht = moveparams.vehicletomove; 
          putbuilding2(x,y,eht->color,bld); 
@@ -604,7 +609,7 @@ void         tsearchdestructbuildingfields::initdestructbuilding( int x, int y )
       dispmessage2(305,NULL); 
       return;
    } 
-   cleartemps(7); 
+   actmap->cleartemps(7); 
    initsuche(x,y,1,1); 
    numberoffields = 0; 
    startfield = getfield(x,y); 
@@ -647,7 +652,7 @@ void         destructbuildinglevel2( int xp, int yp)
    pfield fld = getfield(xp,yp);
    if (fld->a.temp == 20) 
       if (moveparams.movestatus == 115) { 
-         cleartemps(7); 
+         actmap->cleartemps(7); 
          pvehicle eht = moveparams.vehicletomove; 
          pbuildingtype bld = fld->building->typ;
 
@@ -811,7 +816,7 @@ void         trefuelvehicle::initrefuelling( word xp1, word yp1, char md )   /* 
 void         trefuelvehicle::startsuche(void)
 { 
    if ((mode == 1) || ( mode == 3 )) {
-      cleartemps(7); 
+      actmap->cleartemps(7); 
       tsearchfields::startsuche();
       if (numberoffields > 0) { 
          if ((mode == 2) || (mode == 3))
@@ -936,7 +941,7 @@ void  legemine( int typ, int delta )
                fld -> removemine( -1 );
                logtoreplayinfo ( rpl_removemine, x, y );
             } 
-            cleartemps(7); 
+            actmap->cleartemps(7); 
             computeview(); 
             moveparams.movestatus = 0; 
          } 
@@ -964,7 +969,7 @@ void         refuelvehicle(byte         b)
          if (getactfield()->a.temp > 0) { 
             actvehicle = getfield(moveparams.movesx,moveparams.movesy)->vehicle; 
             verlademunition(getactfield()->vehicle,actvehicle,NULL,3 - b); 
-            cleartemps(7); 
+            actmap->cleartemps(7); 
             moveparams.movestatus = 0; 
          } 
       } 
@@ -973,7 +978,7 @@ void         refuelvehicle(byte         b)
             if (getactfield()->a.temp > 0) { 
                actvehicle = getfield(moveparams.movesx,moveparams.movesy)->vehicle; 
                actvehicle->repairunit( getactfield()->vehicle ); 
-               cleartemps(7); 
+               actmap->cleartemps(7); 
                moveparams.movestatus = 0; 
             } 
       dashboard.x = 0xffff; 
@@ -1083,7 +1088,7 @@ int  object_removeable ( int x, int y, pobjecttype obj )
 void build_objects_reset( void )
 {
    objects_buildable.reset();
-   cleartemps(7); 
+   actmap->cleartemps(7); 
    moveparams.movestatus = 0; 
    displaymap();
    actgui->restorebackground();
@@ -1339,7 +1344,7 @@ void         setspec( pobjecttype obj )
 void build_vehicles_reset( void )
 {
    objects_buildable.reset();
-   cleartemps(7); 
+   actmap->cleartemps(7); 
    moveparams.movestatus = 0; 
    displaymap();
    actgui->restorebackground();
@@ -1997,7 +2002,7 @@ void testline ( void )
       ryy = getypos();
       rn++;
    } else {
-      cleartemps ( 7 );
+      actmap->cleartemps ( 7 );
       tdrawgettempline a ( 0 );
       a.start ( rxx, ryy, getxpos(), getypos() );
       rn = 0;
@@ -2523,7 +2528,7 @@ void         attack(char      kamikaze, int  weapnum )
                dispmessage2(203,""); 
                return;
             } 
-            cleartemps(7); 
+            actmap->cleartemps(7); 
             if (!kamikaze) { 
                tsearchattackablevehicles sae; 
                sae.init(getactfield()->vehicle); 
@@ -2593,7 +2598,7 @@ void         attack(char      kamikaze, int  weapnum )
 
           computeview();
 
-          cleartemps(7); 
+          actmap->cleartemps(7); 
           dashboard.x = 0xffff; 
           moveparams.movestatus = 0; 
 
@@ -2966,8 +2971,8 @@ void         tdashboard::paintweapon(byte         h, int num, int strength,  con
          showtext2c( strrr(strength), agmp->resolutionx - ( 640 - 503), 93 + h * 13);
 
          weaps[h].displayed = 1;
-         weaps[h].maxstrength = strength * weapdist->getweapstrength(weap, weap->mindistance, -1, -1 ) / 255;
-         weaps[h].minstrength = strength * weapdist->getweapstrength(weap, weap->maxdistance, -1, -1 ) / 255;
+         weaps[h].maxstrength = strength * weapDist.getWeapStrength(weap, weap->mindistance, -1, -1 );
+         weaps[h].minstrength = strength * weapDist.getWeapStrength(weap, weap->maxdistance, -1, -1 );
          weaps[h].mindist = weap->mindistance;
          weaps[h].maxdist = weap->maxdistance;
 
@@ -5937,17 +5942,17 @@ void MapNetwork :: start ( int x, int y )
          }
    } else 
       if ( globalsearch() == 1 ) {
-         cleartemps(7);
+         actmap->cleartemps(7);
          startposition.x = x;
          startposition.y = y;
          searchfield ( x, y, -1 );
-         cleartemps(7);
+         actmap->cleartemps(7);
          if ( searchfinished() ) {
             pass++;
             startposition.x = x;
             startposition.y = y;
             searchfield ( x, y, -1 );
-            cleartemps(7);
+            actmap->cleartemps(7);
          }
       } else  
          if ( globalsearch() == 0 ) {

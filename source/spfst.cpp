@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.37 2000-07-06 11:07:28 mbickel Exp $
+//     $Id: spfst.cpp,v 1.38 2000-07-16 14:20:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2000/07/06 11:07:28  mbickel
+//      More AI work
+//      Started modularizing the attack formula
+//
 //     Revision 1.36  2000/07/02 21:04:13  mbickel
 //      Fixed crash in Replay
 //      Fixed graphic errors in replay
@@ -203,6 +207,7 @@
 #include "loaders.h"
 #include "stack.h"
 #include "loadpcx.h"
+#include "attack.h"
 
 #ifndef karteneditor
   #include "missions.h"
@@ -239,7 +244,6 @@ int showresources = 0;
    int lockdisplaymap = 0;
 
    tcursor            cursor;
-   tview             view;
    pmap              actmap;
 
    MapDisplay        defaultMapDisplay;
@@ -280,14 +284,10 @@ int showresources = 0;
 
 
    char godview, tempsvisible; 
-   ffonts schriften; 
-   tstreet streets; 
+   Schriften schriften; 
    int lasttick;   /*  fr paintvehicleinfo  */ 
 
    tpaintmapborder* mapborderpainter = NULL;
-
-
-   pweapdist weapdist = NULL; 
 
 
 #ifdef __use_STL_for_ASC__
@@ -695,63 +695,6 @@ int          getdirection(    int      x1,
 
 
 
-void tweapdist::loaddata(void)
-{ 
-   tnfilestream stream ( "weapons.dat", 1 );
-   stream.readdata ( &data, sizeof( data ));
-} 
-
-
-char tweapdist::getweapstrength ( const SingleWeapon* weap, int dist, int attacker_height, int defender_height, int reldiff  )
-{
-  byte         translat[31]  = { 6, 255, 1, 3, 2, 4, 0, 5, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-                                 255, 255, 255, 255, 255, 255}; 
-
-   if ( !weap )
-      return 0;
-
-   int scalar = weap->getScalarWeaponType();
-   if ( scalar >= 31 || scalar < 0 )
-      return 0;
-
-   if ( scalar == 1 )     // mine
-      return 255;
-
-   int typ = translat[ scalar ];
-   if ( typ == 255 ) {
-      displaymessage("tweapdist::getweapstrength: invalid type ", 1 );
-      return 255;
-   }
-
-
-   if ( weap->maxdistance == 0 )
-      return 0;
-
-   if ( weap->minstrength == 0 )
-      return 0;
-
-   if ( reldiff == -1) {
-      if ( dist < weap->mindistance || dist > weap->maxdistance ) {
-         displaymessage("tweapdist::getweapstrength: invalid range: \n min = %d ; max = %d ; req = %d ",1, weap->mindistance, weap->maxdistance, dist);
-         return 0;
-      }
-
-      if ( weap->maxdistance - weap->mindistance != 0 )
-         reldiff = 255 * (dist - weap->mindistance) / ( weap->maxdistance - weap->mindistance) ;
-      else
-         reldiff = 0;
-   }
-
-   int minstrength = 255 - 255 * weap->minstrength / weap->maxstrength;
-
-   int relstrength = 255 - ( 255 - data[typ][reldiff] ) * minstrength / ( 255 - data[typ][255] );
-                                 
-   if ( attacker_height != -1 && defender_height!= -1 ) {
-      int hd = getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ));
-      return relstrength * weap->efficiency[6+hd] / 100;
-   } else
-      return relstrength;
-}
 
 int getheightdelta ( int height1, int height2 )
 {
@@ -1010,28 +953,6 @@ byte         vehiclegeparkt(pbuilding    eht)
    return a; 
 } 
 
-
-char      vehicleplattfahrbar( const pvehicle     vehicle,
-                                  const pfield        field)
-{ 
-   return false;
-/*
-   if (vehicle == NULL)  
-      return ( false );
-   if (field == NULL) 
-      return ( false );
-   if (field->vehicle == NULL) 
-      return ( false );
-
-   if ((vehicle->color != field->vehicle->color) && 
-      (vehicle->height == chfahrend) && 
-      (field->vehicle->height == chfahrend) && 
-      (field->vehicle->functions & cftrooper) && 
-      (vehicle->weight() >= fusstruppenplattfahrgewichtsfaktor * field->vehicle->weight()))
-      return ( true ); 
-   return ( false );
-*/
-} 
 
 int          terrainaccessible ( const pfield        field, const pvehicle     vehicle, int uheight )
 {
@@ -1484,6 +1405,12 @@ word         getypos(void)
 } 
 
 
+
+int beeline ( const pvehicle a, const pvehicle b )
+{
+   return beeline ( a->xpos, a->ypos, b->xpos, b->ypos );
+}
+
 int beeline ( int x1, int y1, int x2, int y2 )
 {
   #ifdef HEXAGON
@@ -1589,12 +1516,6 @@ word         beeline(integer      x1,
 } 
 
 */
-
-
-int beeline ( const pvehicle a, const pvehicle b )
-{
-   return beeline ( a->xpos, a->ypos, b->xpos, b->ypos );
-}
 
 
 char      fieldvisiblenow( const pfield        pe, int player  )
@@ -1704,11 +1625,11 @@ void* uncompressedMinePictures[4] = { NULL, NULL, NULL, NULL };
 void*      getmineadress(  int num , int uncompressed )
 { 
    if ( !uncompressed ) 
-      return streets.mineposition[num-1].position; 
+      return icons.mine[num-1]; 
    else {
       int type = num-1;
       if ( !uncompressedMinePictures[type] ) 
-         uncompressedMinePictures[type] = uncompress_rlepict ( streets.mineposition[num-1].position );
+         uncompressedMinePictures[type] = uncompress_rlepict ( icons.mine[num-1] );
 
       return uncompressedMinePictures[type];
    }
@@ -2017,218 +1938,6 @@ byte        getdiplomaticstatus2(byte    b, byte    c)
 } 
 
 
-pattackweap  attackpossible( const pvehicle     angreifer,
-                            integer      x,
-                            integer      y)
-{ 
-  pattackweap atw = new AttackWeap;
-           
-  memset(atw, 0, sizeof(*atw));
-
-
-   if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize))  
-      return atw;
-   if (angreifer == NULL) 
-      return atw;
-   if (angreifer->typ->weapons->count == 0) 
-      return atw;
-
-   pfield efield = getfield(x,y);
-                       
-   if ( efield->vehicle ) {
-      if (fieldvisiblenow(efield, angreifer->color/8)) 
-         attackpossible2n ( angreifer, efield->vehicle, atw );
-   } 
-   else 
-      if (efield->building != NULL) { 
-         if (getdiplomaticstatus2(efield->building->color, angreifer->color) == cawar) 
-            for (int i = 0; i < angreifer->typ->weapons->count ; i++) 
-               if (angreifer->typ->weapons->weapon[i].shootable() ) 
-                  if (angreifer->typ->weapons->weapon[i].offensive() ) 
-                     if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << cmm_building ))) { 
-                        int tm = efield->building->typ->buildingheight;
-                        if (tm & angreifer->typ->weapons->weapon[i].targ) {
-                           if (fieldvisiblenow(efield, angreifer->color/8)) { 
-                              int d = beeline(angreifer->xpos,angreifer->ypos,x,y); 
-                              if (d <= angreifer->typ->weapons->weapon[i].maxdistance) 
-                                 if (d >= angreifer->typ->weapons->weapon[i].mindistance) { 
-                                    if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight) 
-                                       if (angreifer->ammo[i] > 0) { 
-                                          atw->strength[atw->count ] = angreifer->weapstrength[i]; 
-                                          atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType() ;
-                                          atw->num[atw->count ] = i; 
-                                          atw->target = AttackWeap::building;
-                                          atw->count++;
-                                       } 
-
-                                 } 
-                           } 
-                        } 
-                     } 
-      } 
-
-   if ( efield->object ) {
-      int n = 0;
-      for ( int j = 0; j < efield->object->objnum; j++ )
-         if ( efield->object->object[j]->typ->armor > 0 )
-            n++;
-
-      if ( n > 0 ) 
-         if ((efield->vehicle == NULL) && ( efield->building == NULL)) {
-            for ( int i = 0; i <= angreifer->typ->weapons->count - 1; i++) 
-               if (angreifer->typ->weapons->weapon[i].shootable() ) 
-                  if ( angreifer->typ->weapons->weapon[i].getScalarWeaponType() == cwcannonn ||  
-                       angreifer->typ->weapons->weapon[i].getScalarWeaponType() == cwbombn ) { 
-                     if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << cmm_building ))) 
-                        if (chfahrend & angreifer->typ->weapons->weapon[i].targ ) { 
-                           if (fieldvisiblenow(efield, angreifer->color/8)) { 
-                              int d = beeline(angreifer->xpos,angreifer->ypos,x,y); 
-                              if (d <= angreifer->typ->weapons->weapon[i].maxdistance) 
-                                 if (d >= angreifer->typ->weapons->weapon[i].mindistance) { 
-                                    if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                                       if (angreifer->ammo[i] > 0) { 
-                                          atw->strength[atw->count ] = angreifer->weapstrength[i];
-                                          atw->num[atw->count ] = i;
-                                          atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
-                                          atw->target = AttackWeap::object;
-                                          atw->count++;
-                                       } 
-      
-                                 } 
-                           } 
-                        } 
-                  } 
-         } 
-   }
-
-   return atw;
-} 
-
-
-char      attackpossible2u( const pvehicle     angreifer,
-                               const pvehicle     verteidiger, pattackweap atw )
-{ 
-   int result = false;
-   if ( atw ) 
-      atw->count = 0;
-
-   if ( !angreifer ) 
-     return false ;
-
-   if ( !verteidiger ) 
-     return false ;
-
-   if (angreifer->typ->weapons->count == 0) 
-     return false ;
-
-   if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
-      for ( int i = 0; i < angreifer->typ->weapons->count ; i++) 
-         if (angreifer->typ->weapons->weapon[i].shootable() ) 
-            if (angreifer->typ->weapons->weapon[i].offensive() ) 
-               if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) 
-                  if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                     if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
-                        if (angreifer->ammo[i] > 0) {
-                           result = true;
-                           if ( atw ) {
-                              atw->strength[atw->count] = angreifer->weapstrength[i];
-                              atw->num[atw->count ] = i;
-                              atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
-                              atw->target = AttackWeap::vehicle;
-                              atw->count++;
-                           }
-                        }
-                  
-            
-   return result; 
-} 
-
-
-
-char      attackpossible28( const pvehicle     angreifer,
-                               const pvehicle     verteidiger, pattackweap atw )
-{ 
-   int result = false;
-   if ( atw ) 
-      atw->count = 0;
-
-   if (angreifer == NULL) 
-     return false ;
-
-   if (verteidiger == NULL) 
-     return false ;
-
-   if (angreifer->typ->weapons->count == 0) 
-     return false ;
-
-   if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
-      for ( int i = 0; i < angreifer->typ->weapons->count ; i++) 
-         if (angreifer->typ->weapons->weapon[i].shootable() ) 
-            if (angreifer->typ->weapons->weapon[i].offensive() ) 
-               if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) 
-                  if (minmalq <= angreifer->typ->weapons->weapon[i].maxdistance) 
-                     if (minmalq >= angreifer->typ->weapons->weapon[i].mindistance) 
-                        if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                           if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
-                              if (angreifer->ammo[i] > 0) {
-                                 result =  true;
-                                 if ( atw ) {
-                                    atw->strength[atw->count] = angreifer->weapstrength[i];
-                                    atw->num[atw->count ] = i;
-                                    atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
-                                    atw->target = AttackWeap::vehicle;
-                                    atw->count++;
-                                 }
-                              }
-                  
-            
-   return result; 
-} 
-
-
-char      attackpossible2n( const pvehicle     angreifer,
-                               const pvehicle     verteidiger, pattackweap atw )
-{ 
-   int result = false;
-   if ( atw ) 
-      atw->count = 0;
-
-   if (angreifer == NULL) 
-     return false ;
-
-   if (verteidiger == NULL) 
-     return false ;
-
-   if (angreifer->typ->weapons->count == 0) 
-     return false ;
-
-   int dist = beeline ( angreifer, verteidiger );
-   if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
-      if ( !angreifer->attacked )
-         if ( !angreifer->typ->wait || angreifer->movement == angreifer->typ->movement[log2(angreifer->height)] )
-            for ( int i = 0; i < angreifer->typ->weapons->count ; i++) 
-               if (angreifer->typ->weapons->weapon[i].shootable() ) 
-                  if (angreifer->typ->weapons->weapon[i].offensive() ) 
-                     if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) 
-                        if (dist <= angreifer->typ->weapons->weapon[i].maxdistance) 
-                           if (dist >= angreifer->typ->weapons->weapon[i].mindistance) 
-                              if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                                 if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
-                                    if (angreifer->ammo[i] > 0) {
-                                       result = true;
-                                       if ( atw ) {
-                                          atw->strength[atw->count] = angreifer->weapstrength[i];
-                                          atw->num[atw->count ] = i;
-                                          atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
-                                          atw->target = AttackWeap::vehicle;
-                                          atw->count++;
-                                       }
-                                    }
-                     
-            
-   return result; 
-} 
-
 
 #ifdef HEXAGON
 
@@ -2508,28 +2217,23 @@ end;  */
 
 
 
-void         cleartemps(byte         b)
+void tmap :: cleartemps( int b )
 { 
-  word         x, y; 
-  int      l; 
-
-  if ((actmap->xsize == 0) || (actmap->ysize == 0))  
+  if ( xsize <= 0 || ysize <= 0)  
      return;
 
-   l = 0; 
-   for (x = 0; x < actmap->xsize ; x++) 
-         for (y = 0; y <  actmap->ysize ; y++) {
-               if (b & 1 ) 
-                 actmap->field[l].a.temp = 0;
-               if (b & 2 ) 
-                 actmap->field[l].a.temp2 = 0;
-               if (b & 4 ) 
-                 actmap->field[l].temp3 = 0;
-            
-            l++;
-         } 
-    
-   
+  int l = 0; 
+  for ( int x = 0; x < actmap->xsize ; x++) 
+     for ( int y = 0; y <  actmap->ysize ; y++) {
+         if (b & 1 ) 
+           field[l].a.temp = 0;
+         if (b & 2 ) 
+           field[l].a.temp2 = 0;
+         if (b & 4 ) 
+           field[l].temp3 = 0;
+           
+         l++;
+     } 
 } 
 
 
@@ -4613,8 +4317,8 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
 
                       // putspriteimage( r + unitrightshift , yp + unitdownshift , view.va8);
-                      putshadow( r + unitrightshift , yp + unitdownshift , view.nv8, &xlattables.a.dark2 );
-
+                      putshadow( r + unitrightshift , yp + unitdownshift , icons.view.nv8, &xlattables.a.dark2 );
+                                                                           
                       if ( fld->a.temp && tempsvisible )
                          putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
                       else
@@ -4630,8 +4334,8 @@ void tgeneraldisplaymap :: pnt_main ( void )
                           
                   } else 
                     if (b == visible_not) {
-                        putspriteimage( r + unitrightshift, yp + unitdownshift , view.nv8 );
-                        if ( ( fld->a.temp || fld->a.temp2 ) && tempsvisible ) 
+                        putspriteimage( r + unitrightshift, yp + unitdownshift , icons.view.nv8 );
+                        if ( ( fld->a.temp || fld->a.temp2 ) && tempsvisible )   
                               putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
                           
                       #ifdef showtempnumber   
@@ -6922,7 +6626,7 @@ int tvehicle :: getstrongestweapon( int aheight, int distance)
           ( typ->weapons->weapon[i].maxdistance >= distance) &&
           ( typ->weapons->weapon[i].targ & aheight ) &&
           ( typ->weapons->weapon[i].sourceheight & height )) {
-            int astr = weapstrength[i] * weapdist->getweapstrength( &typ->weapons->weapon[i], distance, height, aheight) / 256;
+            int astr = weapstrength[i] * weapDist.getWeapStrength( &typ->weapons->weapon[i], distance, height, aheight);
             if ( astr > str ) {
                str = astr;
                hw  = i;

@@ -1,6 +1,10 @@
-//     $Id: artint.h,v 1.6 2000-07-06 11:07:25 mbickel Exp $
+//     $Id: artint.h,v 1.7 2000-07-16 14:19:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/07/06 11:07:25  mbickel
+//      More AI work
+//      Started modularizing the attack formula
+//
 //     Revision 1.5  2000/06/28 18:30:57  mbickel
 //      Started working on AI
 //      Started making loaders independent of memory layout
@@ -91,13 +95,32 @@
                int lookIntoTransports;   /*  gegnerische transporter einsehen  */ 
                int lookIntoBuildings; 
                int wholeMapVisible;
+               float aggressiveness;   // 1: units are equally worth ; 2
             } config; 
+
+            struct MoveVariant { 
+               int orgDamage;
+               int damageAfterMove;
+               int damageAfterAttack;
+               int movex, movey;
+               int attackx, attacky;
+               pvehicle enemy;
+               int enemyOrgDamage;
+               int enemyDamage;
+               int weapNum;
+               int result;
+            };
+
+            typedef dynamic_array<MoveVariant> TargetList;
+
+            void searchTargets ( pvehicle veh, int x, int y, TargetList* tl );
 
             void  calculateThreat ( pvehicletype vt);
             void  calculateThreat ( pvehicle eht );
             void  calculateThreat ( pbuilding bld );
 
             void  calculateAllThreats( void );
+            void  tactics( void );
             void  setup( void );
 
             void reset ( void );

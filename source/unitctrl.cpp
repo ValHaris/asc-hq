@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.12 2000-07-02 21:04:14 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.13 2000-07-16 14:20:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/07/02 21:04:14  mbickel
+//      Fixed crash in Replay
+//      Fixed graphic errors in replay
+//
 //     Revision 1.11  2000/06/23 11:53:11  mbickel
 //      Fixed a bug that crashed ASC when trying to ascend with a unit near the
 //       border of the map
@@ -167,7 +171,7 @@ int VehicleMovement :: available ( pvehicle veh ) const
 }
 
 
-int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int height, int param2 )
+int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int height, int noInterrupt )
 {
    if ( step != status )
       return -1;
@@ -222,7 +226,7 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
  
        if ( mapDisplay )
           mapDisplay->startAction();
-       int stat = moveunitxy( x, y );
+       int stat = moveunitxy( x, y, noInterrupt );
        if ( mapDisplay )
           mapDisplay->stopAction();
 
@@ -348,7 +352,7 @@ void VehicleMovement :: searchstart( int x1, int y1, int hgt )
    search.height = hgt;
    search.tiefe = 0; 
 
-   cleartemps(7); 
+   actmap->cleartemps(7); 
    initwindmovement( vehicle );
 
    int maindir; 
@@ -371,7 +375,7 @@ void VehicleMovement :: searchstart( int x1, int y1, int hgt )
       search.tiefe--;
    }
 
-   cleartemps(7); 
+   actmap->cleartemps(7); 
 } 
 
 
@@ -505,7 +509,7 @@ void   VehicleMovement :: FieldReachableRek :: run(int          x22,
 /*  mode :  1 krzesten weg finden
             2 irgendeinen weg finden  */ 
 { 
-   cleartemps(7); 
+   actmap->cleartemps(7); 
 
    x2 = x22;
    y2 = y22;
@@ -558,13 +562,13 @@ void   VehicleMovement :: FieldReachableRek :: run(int          x22,
    for ( int d = 1; d <= shortestway.tiefe; d++) 
       path->addField ( shortestway.field[d].x, shortestway.field[d].y ); 
 
-   cleartemps(7); 
+   actmap->cleartemps(7); 
 } 
 
 
 
 
-int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1 )
+int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, int noInterrupt )
 { 
    pfield fld = getfield( xt1, yt1 ); 
 
@@ -731,8 +735,9 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1 )
          if ( field3->vehicle || field3->building )
             cancelmovement++;
 
-      if ( newheight != -1 && newheight != vehicle->height && cancelmovement ) 
+      if ( (newheight != -1 && newheight != vehicle->height && cancelmovement) || ( noInterrupt != -1 )) 
          cancelmovement = 0;
+
 
 
       if ( vehicle ) {

@@ -1,6 +1,11 @@
-//     $Id: gui.cpp,v 1.24 2000-06-28 18:30:59 mbickel Exp $
+//     $Id: gui.cpp,v 1.25 2000-07-16 14:20:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/06/28 18:30:59  mbickel
+//      Started working on AI
+//      Started making loaders independent of memory layout
+//      Destroyed buildings can now leave objects behind.
+//
 //     Revision 1.23  2000/06/08 21:03:41  mbickel
 //      New vehicle action: attack
 //      wrote documentation for vehicle actions
@@ -2294,7 +2299,7 @@ void  tnsguiiconcancel::exec         ( void )
       if ( pendingVehicleActions.action ) 
          delete pendingVehicleActions.action;
       
-      cleartemps(7); 
+      actmap->cleartemps(7); 
       dashboard.x = 0xffff;
       displaymap(); 
    }
@@ -2904,7 +2909,7 @@ void  tnweapselguiicon::exec         ( void )
 
       }
       delete pendingVehicleActions.attack;
-      cleartemps ( 0xff );
+      actmap->cleartemps ( 0xff );
       displaymap();
       dashboard.x = 0xffff;
 

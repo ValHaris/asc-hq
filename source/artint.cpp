@@ -1,6 +1,10 @@
-//     $Id: artint.cpp,v 1.8 2000-07-06 11:07:24 mbickel Exp $
+//     $Id: artint.cpp,v 1.9 2000-07-16 14:19:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/07/06 11:07:24  mbickel
+//      More AI work
+//      Started modularizing the attack formula
+//
 //     Revision 1.7  2000/07/05 13:26:06  mbickel
 //      AI
 //
@@ -2723,6 +2727,10 @@ tartintconfig artintconfig;
 #define ccbt_training 150  
 
 
+void nop ( void )
+{
+}
+
 int compareinteger ( const void* op1, const void* op2 )
 {
    const int* a = (const int*) op1;
@@ -2770,6 +2778,7 @@ void AI :: reset ( void )
    config.wholeMapVisible = 1;
    config.lookIntoTransports = 1;
    config.lookIntoBuildings = 1;
+   config.aggressiveness  = 1;
 
 }
 
@@ -2822,9 +2831,10 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( pvehiclety
                if ( fzt->weapons->weapon[i].targ & (1 << j) ) { 
                   int d = 0; 
                   int m = 0; 
+                  AttackFormula af;
                   for ( int e = (fzt->weapons->weapon[i].mindistance + maxmalq - 1)/ maxmalq; e <= fzt->weapons->weapon[i].maxdistance / maxmalq; e++ ) {    // the distance between two fields is maxmalq
                      d++; 
-                     int n = weapdist->getweapstrength( &fzt->weapons->weapon[i], e*maxmalq ) * fzt->weapons->weapon[i].maxstrength * attackstrength(getdamage()) * (getexpirience() + 8) / (256 * 100 * 8);
+                     int n = weapDist.getWeapStrength( &fzt->weapons->weapon[i], e*maxmalq ) * fzt->weapons->weapon[i].maxstrength * af.damage(getdamage()) * af.experience(getexpirience());
                      m += n / (2*(1+d)); 
                   } 
                   if (getammunition(i) == 0) 
@@ -2857,7 +2867,7 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( pvehiclety
 } 
 
 
-int          CalculateThreat_Vehicle :: getammunition( int         i)
+int          CalculateThreat_Vehicle :: getammunition( int i )
 { 
    return eht->munition[i]; 
 } 
@@ -2977,12 +2987,11 @@ void AI :: WeaponThreatRange :: testfield ( void )
       if ( dist*maxmalq <= veh->typ->weapons->weapon[weap].maxdistance ) 
          if ( dist*maxmalq >= veh->typ->weapons->weapon[weap].mindistance ) {
             AttackFormula af;
-            int strength = weapdist->getweapstrength( &veh->typ->weapons->weapon[weap], dist*maxmalq, veh->height, 1 << height ) 
+            int strength = weapDist.getWeapStrength( &veh->typ->weapons->weapon[weap], dist*maxmalq, veh->height, 1 << height ) 
                          * veh->typ->weapons->weapon[weap].maxstrength              
                          * af.experience ( veh->experience ) 
                          * af.attackbonus ( getfield(startx,starty)->getattackbonus() )
-                         * af.damage ( veh->damage )
-                         / 256;
+                         * af.damage ( veh->damage );
 
             if ( strength ) {
                int pos = xp + yp * ai->getmap()->xsize;
@@ -3137,25 +3146,8 @@ void    AI :: setup (void)
    calculateAllThreats (); 
    displaymessage2("calculating field threats ... "); 
    calculateFieldThreats();
-/*
-   for (i = 0; i < 8; i++)
-      if (actmap->player[i].existent) { 
-         pvehicle vehicle = actmap->player[i].firstvehicle;
-         if (i == actmap->actplayer) { 
-            while (vehicle != NULL) { 
-               vehicle->cmpchecked = 0; 
-               generatethreatvalueunit(vehicle); 
-               vehicle = vehicle->next; 
-            } 
-         } 
-         else { 
-            while (vehicle != NULL) { 
-               generatethreatvalueunit(vehicle); 
-               vehicle = vehicle->next; 
-            } 
-         } 
-      } 
 
+/*
    for ( i = 0; i <= 8; i++) {
       pbuilding building = actmap->player[i].firstbuilding;
       while (building != NULL) { 
@@ -3191,11 +3183,147 @@ void    AI :: setup (void)
    displaymessage2("setup completed ... "); 
 } 
 
+void AI :: searchTargets ( pvehicle veh, int x, int y, TargetList* tl )
+{
+   npush ( veh->xpos );
+   npush ( veh->ypos );
+   veh->xpos = x;
+   veh->ypos = y;
+
+   VehicleAttack va ( NULL, NULL );
+   if ( va.available ( veh )) {
+      va.execute ( veh, -1, -1, 0 , 0, -1 );
+      for ( int g = 0; g < va.attackableVehicles.getFieldNum(); g++ ) {
+         int xp, yp;
+         va.attackableVehicles.getFieldCoordinates ( g, &xp, &yp );
+         pattackweap aw = va.attackableVehicles.getData ( g );
+
+         int bestweap = -1;  
+         int targdamage = -1;
+         int weapstrength = -1;
+         for ( int w = 0; w < aw->count; w++ ) {
+            tunitattacksunit uau ( veh, getfield ( xp, yp)->vehicle, 1, aw->num[w] );
+            uau.calc();
+            if ( uau.dv.damage > targdamage ) {
+               bestweap = aw->num[w];
+               targdamage = uau.dv.damage;
+               weapstrength = aw->strength[w];
+            } else
+            if ( uau.dv.damage == 100 ) 
+               if ( weapstrength == -1 || weapstrength > aw->strength[w] ) {
+                  bestweap = aw->num[w];
+                  targdamage = uau.dv.damage;
+                  weapstrength = aw->strength[w];
+               }
+         }
+
+         if ( bestweap == -1 )
+            displaymessage ( "inconsistency in AI :: searchTarget", 1 );
+
+         MoveVariant* mv = &(*tl)[tl->getlength()+1 ];  // sometime this should all be modified to use the STL...
+
+         tunitattacksunit uau ( veh, getfield ( xp, yp)->vehicle, 1, bestweap );
+         mv->orgDamage = uau.av.damage;
+         mv->damageAfterMove = uau.av.damage;
+         mv->enemyOrgDamage = uau.dv.damage;
+         uau.calc();
+
+
+         mv->damageAfterAttack = uau.av.damage;
+         mv->enemyDamage = uau.dv.damage;
+         mv->enemy = getfield ( xp, yp )->vehicle;
+         mv->movex = x;
+         mv->movey = y;
+         mv->attackx = xp;
+         mv->attacky = yp;
+         mv->weapNum = bestweap;
+
+      }
+   }
+
+   npop ( veh->ypos );
+   npop ( veh->xpos );
+}
+
+
+void AI::tactics( void )
+{
+   pvehicle veh = getmap()->player[ getplayer() ].firstvehicle;
+   while ( veh ) {
+      if ( veh->weapexist() ) {
+         int orgmovement = veh->movement;
+         int orgxpos = veh->xpos ;
+         int orgypos = veh->ypos ;
+
+         VehicleMovement vm ( NULL, NULL );
+         if ( vm.available ( veh )) {
+            vm.execute ( veh, -1, -1, 0, -1, -1 );
+
+            TargetList targetList;
+
+            searchTargets ( veh, veh->xpos, veh->ypos, &targetList );
+
+            // Now we cycle through all fields that are reachable...
+            if ( !veh->typ->wait )
+               for ( int f = 0; f < vm.reachableFields.getFieldNum(); f++ ) 
+                  if ( !vm.reachableFields.getField( f )->vehicle ) {
+                      int xp, yp;
+                      vm.reachableFields.getFieldCoordinates ( f, &xp, &yp );
+                      searchTargets ( veh, xp, yp, &targetList );
+                   }
+
+            int bestpos = -1;
+            int bestres = -1;
+            for ( int i = 0; i < targetList.getlength(); i++ ) {
+               MoveVariant* mv = &targetList[i];
+               mv->result = (mv->enemyDamage - mv->enemyOrgDamage) * mv->enemy->aiparam[getplayer()]->value - config.aggressiveness * (mv->damageAfterAttack - mv->orgDamage) * veh->aiparam[getplayer()]->value ;
+               if ( mv->result > bestres ) {
+                  bestres = mv->result;
+                  bestpos = i;
+               }
+            }
+            if ( bestpos >= 0 ) {
+               MoveVariant* mv = &targetList[bestpos];
+
+               if ( mv->movex != veh->xpos || mv->movey != veh->ypos ) {
+                  VehicleMovement vm2 ( &defaultMapDisplay, NULL );
+                  vm2.execute ( veh, -1, -1, 0, -1, -1 );
+                  if ( vm2.getStatus() != 2 )
+                     displaymessage ( "AI :: tactics \n error in movement step 0 with unit %d", 1, veh->networkid );
+   
+                  vm2.execute ( NULL, mv->movex, mv->movey, 2, -1, -1 );
+                  if ( vm2.getStatus() != 3 )
+                     displaymessage ( "AI :: tactics \n error in movement step 2 with unit %d", 1, veh->networkid );
+   
+                  vm2.execute ( NULL, mv->movex, mv->movey, 3, -1,  1 );
+                  if ( vm2.getStatus() != 1000 )
+                     displaymessage ( "AI :: tactics \n error in movement step 3 with unit %d", 1, veh->networkid );
+               }
+
+               VehicleAttack va ( &defaultMapDisplay, NULL );
+               va.execute ( veh, -1, -1, 0 , 0, -1 );
+               if ( va.getStatus() != 2 )
+                  displaymessage ( "AI :: tactics \n error in attack step 2 with unit %d", 1, veh->networkid );
+
+               va.execute ( NULL, mv->attackx, mv->attacky, 2 , -1, mv->weapNum );
+               if ( va.getStatus() != 1000 )
+                  displaymessage ( "AI :: tactics \n error in attack step 3 with unit %d", 1, veh->networkid );
+
+            }
+         }
+      }
+      veh = veh->next;
+   }
+}
+
+
 void AI:: run ( void )
 {
    tempsvisible = false; 
    setup();
    tempsvisible = true; 
+
+   tactics();
 }
 
 void AI :: showFieldInformation ( int x, int y )

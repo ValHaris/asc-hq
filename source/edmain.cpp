@@ -1,6 +1,9 @@
-//     $Id: edmain.cpp,v 1.14 2000-05-23 20:40:44 mbickel Exp $
+//     $Id: edmain.cpp,v 1.15 2000-07-16 14:20:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/05/23 20:40:44  mbickel
+//      Removed boolean type
+//
 //     Revision 1.13  2000/05/22 15:40:34  mbickel
 //      Included patches for Win32 version
 //
@@ -362,7 +365,6 @@ void         loadcursor(void)
       xlattables.nochange[w] = w;
    } /* endfor */
 
-   weapdist = new tweapdist;
    loadicons(); 
    loadmessages(); 
 

@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.32 2000-07-02 21:04:12 mbickel Exp $
+//     $Id: dialog.cpp,v 1.33 2000-07-16 14:20:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/07/02 21:04:12  mbickel
+//      Fixed crash in Replay
+//      Fixed graphic errors in replay
+//
 //     Revision 1.31  2000/06/04 21:39:20  mbickel
 //      Added OK button to ViewText dialog (used in "About ASC", for example)
 //      Invalid command line parameters are now reported
@@ -182,6 +186,7 @@
 #include "dialog.h"
 #include "sgstream.h"
 #include "timer.h"
+#include "attack.h"
 
 #ifndef karteneditor
 #include "network.h"
@@ -706,16 +711,13 @@ void         tweaponinfo::run(void)
          showtext2(strng, x1 + 292,y1 + starty + 137);
          showtext2("0", x1 + 292,y1 + starty + 257);
 
-            for (i = 0; i <= 255; i++) { 
-               xa = x1 + 325 + (510 - 325) * i / 256;
-               ya = y1 + starty + 260 - (260 - 140) * 
-                   weapdist->getweapstrength(&aktvehicle->weapons->weapon[weapnum], aktvehicle->weapons->weapon[weapnum].mindistance + ( aktvehicle->weapons->weapon[weapnum].maxdistance - aktvehicle->weapons->weapon[weapnum].mindistance) * i / 256, -1, -1 )
-                   / 256;
-               putpixel(xa,ya,darkgray); 
-             
+         for (i = 0; i <= 255; i++) { 
+            xa = x1 + 325 + (510 - 325) * i / 256;
+            ya = y1 + starty + 260 - (260 - 140) * weapDist.getWeapStrength(&aktvehicle->weapons->weapon[weapnum], aktvehicle->weapons->weapon[weapnum].mindistance + ( aktvehicle->weapons->weapon[weapnum].maxdistance - aktvehicle->weapons->weapon[weapnum].mindistance) * i / 256, -1, -1 );
+            putpixel(xa,ya,darkgray); 
          } 
       } 
-      
+     
 
 
    activefontsettings.color = black; 
@@ -1406,8 +1408,7 @@ void tvehicleinfo::showweaponsvariables( void )
             for (ii = 0; ii <= 255; ii++) {
                 xa = graphx1 + ii * dx / 255;
                 ya = graphy2 - dy *
-                      weapdist->getweapstrength(&aktvehicle->weapons->weapon[markweap], 0, -1, -1, ii )
-                      / 256;
+                      weapDist.getWeapStrength(&aktvehicle->weapons->weapon[markweap], 0, -1, -1, ii );
                 putpixel(xa,ya,14); 
              
             } 

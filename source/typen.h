@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.28 2000-07-06 11:07:29 mbickel Exp $
+//     $Id: typen.h,v 1.29 2000-07-16 14:20:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/07/06 11:07:29  mbickel
+//      More AI work
+//      Started modularizing the attack formula
+//
 //     Revision 1.27  2000/07/05 09:24:01  mbickel
 //      New event action: change building damage
 //
@@ -1463,8 +1467,9 @@ class tmap {
       void chainunit ( pvehicle unit );
       void chainbuilding ( pbuilding bld );
       pvehicle getunit ( int x, int y, int nwid );
-      int getgameparameter ( int num );
+      int  getgameparameter ( int num );
       void setgameparameter ( int num, int value );
+      void cleartemps( int b );
    private:
       pvehicle getunit ( pvehicle eht, int nwid );
 
@@ -1615,6 +1620,9 @@ struct ticons {
            void* schieber[4];
            void* schiene;
            void* schieneinactive;
+           void* singlepage[2];
+           void* plus[2];
+           void* minus[2];
          } ammotransfer;
          struct {
            void* start;
@@ -1687,6 +1695,18 @@ struct ticons {
    void*        fieldshape;
    void*        hex2octmask;
    void*        mapbackground;
+   void*        mine[8]; // explosive mines
+   struct {                  
+               void*     nv8;
+               void*     va8;
+               void*     fog8;
+               #ifndef HEXAGON
+               void*     nv4[4];
+               void*     va4[4];
+               void*     fog4[4];
+               void*     viereck[256];
+               #endif
+    } view;  
 }; 
 
 

@@ -1,6 +1,10 @@
-//     $Id: loadbi3.cpp,v 1.19 2000-07-02 21:04:13 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.20 2000-07-16 14:20:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/07/02 21:04:13  mbickel
+//      Fixed crash in Replay
+//      Fixed graphic errors in replay
+//
 //     Revision 1.18  2000/05/28 21:05:03  mbickel
 //      Linux version of mapedit was unable to load buildings in BI3 map
 //
@@ -1891,7 +1895,7 @@ void importbattleislemap ( char* path, char* filename, pwterraintype trrn  )
     ImportBiMap lbim;  
     lbim.LoadFromFile ( path, filename, trrn );
     actmap->resourcemode = 1;
-    cleartemps ( 7 );
+    actmap->cleartemps ( 7 );
 }
 
 
@@ -1901,7 +1905,7 @@ void insertbattleislemap ( int x, int y, char* path, char* filename  )
     InsertBiMap lbim ( x, y );  
     lbim.LoadFromFile ( path, filename, NULL );
     actmap->resourcemode = 1;
-    cleartemps ( 7 );
+    actmap->cleartemps ( 7 );
 }
 
 

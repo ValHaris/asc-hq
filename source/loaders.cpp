@@ -1,6 +1,11 @@
-//     $Id: loaders.cpp,v 1.13 2000-06-28 19:26:16 mbickel Exp $
+//     $Id: loaders.cpp,v 1.14 2000-07-16 14:20:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/06/28 19:26:16  mbickel
+//      fixed bug in object generation by building removal
+//      Added artint.cpp to makefiles
+//      Some cleanup
+//
 //     Revision 1.12  2000/06/28 18:31:00  mbickel
 //      Started working on AI
 //      Started making loaders independent of memory layout
@@ -106,6 +111,7 @@
 #include "dialog.h"
 #include "sgstream.h"
 #include "sg.h"
+#include "attack.h"
 
 #ifdef sgmain
 #include "missions.h"
@@ -3970,7 +3976,7 @@ void         loadstreets(void)
 
   tnfilestream stream ( "hexmines.raw", 1 ); 
   for ( int i = 0; i < 4; i++) 
-      stream.readrlepict( &streets.mineposition[i].position, false, &w);
+      stream.readrlepict( &icons.mine[i], false, &w);
   
 #else
 
@@ -4166,10 +4172,7 @@ void         loadicons(void)
          stream.readrlepict( &icons.height[i],false,w);
    }
 
-   weapdist->loaddata(); 
-
-
-
+   weapDist.loaddata(); 
 } 
 
 

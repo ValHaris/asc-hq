@@ -1,6 +1,10 @@
-//     $Id: spfst.h,v 1.13 2000-07-06 11:07:29 mbickel Exp $
+//     $Id: spfst.h,v 1.14 2000-07-16 14:20:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/07/06 11:07:29  mbickel
+//      More AI work
+//      Started modularizing the attack formula
+//
 //     Revision 1.12  2000/07/02 21:04:14  mbickel
 //      Fixed crash in Replay
 //      Fixed graphic errors in replay
@@ -90,7 +94,7 @@
 
 #pragma pack(1)
 
-   struct ffonts {          
+   struct Schriften {          
                pfont        smallarial;
                pfont        smallsystem;
                pfont        large;
@@ -98,62 +102,9 @@
                pfont        guifont;
                pfont        guicolfont;
                pfont        monogui;
-            }; 
+            } ; 
+   extern Schriften schriften;
 
-   struct tstreet { 
-                struct { 
-                                               byte         page; 
-                                               void*      position; 
-                                            } mineposition[8]; 
-             } ; 
-
-   struct tview {                  
-               void*     nv8;
-               void*     va8;
-               void*     fog8;
-               #ifndef HEXAGON
-               void*     nv4[4];
-               void*     va4[4];
-               void*     fog4[4];
-               void*     viereck[256];
-               #endif
-            }; 
-
-
-
-
-   struct tstpunkt { 
-             word         x, y; 
-          }; 
-   struct tstrecke {
-                 tstpunkt       field[31]; 
-                 byte         tiefe; 
-              }; 
-
-
-   class tweapdist { 
-                  char         data[7][256];        /* mg,bomb,gmissile,amissile,torpedo,cannon,cruise missile  */ 
-                public:
-                  void loaddata ( void ) ;
-                 // byte getweapstrength2 (word typ, word pos, byte mindist, byte maxdist );
-                 // byte getweapstrength  (word typ, byte pos, byte mindist, byte maxdist );
-                  char getweapstrength ( const SingleWeapon* weap, int dist =-1, int attacker_height =-1, int defender_height = -1, int reldiff = -1 );
-               }; 
-
-   typedef class tweapdist* pweapdist ;
-
-
-   class AttackWeap { 
-               public:
-                    int          count; 
-                    int          strength[16]; 
-                    int          num[16]; 
-                    int          typ[16];
-
-                    enum Target { nothing, vehicle, building, object } target;
-                 }; 
-
-   typedef class AttackWeap* pattackweap ;
 
    class tcursor { 
            public:
@@ -198,9 +149,8 @@
 
 
   extern tcursor cursor; 
-  extern tview view; 
 
- extern pmap actmap; 
+  extern pmap actmap; 
 
   extern int  terraintypenum, vehicletypenum, buildingtypenum, technologynum, objecttypenum;
   extern int guiiconnum;
@@ -209,11 +159,7 @@
 
   extern char godview, tempsvisible; 
 
-  extern ffonts schriften; 
-  extern tstreet streets; 
   extern int lasttick;   /*  fÅr paintvehicleinfo  */ 
-
-  extern pweapdist weapdist; 
 
 extern int getheightdelta ( int height1, int height2 );
 
@@ -315,29 +261,11 @@ extern int   getdirection(    int      x1,
 
 extern int resizemap( int top, int bottom, int left, int right );
 
-extern void  cleartemps(byte         b);
-
 extern void  clearfahrspuren(void);
 
 extern void  initmap(void);
 
   /*  vehicle  */ 
-
-extern pattackweap attackpossible( const pvehicle     angreifer,
-                            integer      x,
-                            integer      y);
-
-extern char attackpossible2u( const pvehicle     angreifer,
-                                 const pvehicle     verteidiger, pattackweap attackweap = NULL);      // Entfernung wird nicht berÅcksichtigt !!
-
-extern char attackpossible28( const pvehicle     angreifer,
-                                 const pvehicle     verteidiger, pattackweap attackweap = NULL);       // Als Entfernung wird 8 angenommen
-
-extern char attackpossible2n( const pvehicle     angreifer,
-                                 const pvehicle     verteidiger, pattackweap attackweap = NULL );       // Als Entfernung wird die tatsÑchliche angenommen
-
-extern char vehicleplattfahrbar( const pvehicle     vehicle,
-                                    const pfield        field);
 
 extern byte  fieldaccessible( const pfield        field,
                             const pvehicle     vehicle,
@@ -603,6 +531,7 @@ class tlockdispspfld {
 extern int lockdisplaymap;
 
 extern int beeline ( int x1, int y1, int x2, int y2 );
+extern int beeline ( const pvehicle a, const pvehicle b );
 extern void smooth ( int what );
 extern void  stu_height ( pvehicle vehicle );
 

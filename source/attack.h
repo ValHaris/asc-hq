@@ -1,6 +1,10 @@
-//     $Id: attack.h,v 1.8 2000-07-06 11:07:25 mbickel Exp $
+//     $Id: attack.h,v 1.9 2000-07-16 14:19:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/07/06 11:07:25  mbickel
+//      More AI work
+//      Started modularizing the attack formula
+//
 //     Revision 1.7  2000/06/08 21:03:39  mbickel
 //      New vehicle action: attack
 //      wrote documentation for vehicle actions
@@ -73,10 +77,12 @@ typedef struct tattackresult* pattackresult;
 
 
 class AttackFormula {
+            int checkHemming ( pvehicle d_eht, int direc );
          public:
             float experience ( int experience );
             float damage ( int damage );
             float attackbonus ( int abonus );
+            float hemming ( int  ax,  int ay,  pvehicle d_eht );
         };
 
 class tfight : public AttackFormula {
@@ -93,7 +99,7 @@ class tfight : public AttackFormula {
                      int experience;
                      int defensebonus;
                      int attackbonus;
-                     int einkeilung;
+                     float hemming;
                      int weapnum;
                      int weapcount;
                      int color;
@@ -163,7 +169,42 @@ class tunitattacksobject : public tfight {
       };
 
 
-extern int attackstrength(byte         damage);
+   class AttackWeap { 
+               public:
+                    int          count; 
+                    int          strength[16]; 
+                    int          num[16]; 
+                    int          typ[16];
+
+                    enum Target { nothing, vehicle, building, object } target;
+                 }; 
+
+   typedef class AttackWeap* pattackweap ;
+
+
+extern pattackweap attackpossible( const pvehicle  angreifer, int x, int y);
+
+extern int attackpossible2u( const pvehicle     angreifer,
+                             const pvehicle     verteidiger, pattackweap attackweap = NULL);      // distance is not evaluated 
+
+extern int attackpossible28( const pvehicle     angreifer,
+                             const pvehicle     verteidiger, pattackweap attackweap = NULL);       // distance is fixed as 1 field
+
+extern int attackpossible2n( const pvehicle     angreifer,
+                             const pvehicle     verteidiger, pattackweap attackweap = NULL );       // actual distance is used 
+
+extern int vehicleplattfahrbar( const pvehicle     vehicle,
+                                const pfield        field );
+
+
+class WeapDist { 
+            char         data[7][256];        /* mg,bomb,gmissile,amissile,torpedo,cannon,cruise missile  */ 
+         public:
+            void loaddata ( void ) ;
+            float getWeapStrength ( const SingleWeapon* weap, int dist =-1, int attacker_height =-1, int defender_height = -1, int reldiff = -1 );
+         }; 
+
+extern WeapDist weapDist;
 
 
 #endif

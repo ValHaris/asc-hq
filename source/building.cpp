@@ -1,6 +1,11 @@
-//     $Id: building.cpp,v 1.29 2000-07-10 15:21:28 mbickel Exp $
+//     $Id: building.cpp,v 1.30 2000-07-16 14:19:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/07/10 15:21:28  mbickel
+//      Fixed crash in replay (alliancechange)
+//      Fixed some movement problems when moving units out of transports / buildings
+//      Removed save game description dialog
+//
 //     Revision 1.28  2000/07/06 11:07:25  mbickel
 //      More AI work
 //      Started modularizing the attack formula
@@ -2532,7 +2537,7 @@ void ccontainer_b :: cammunitiontransferb_subwindow :: execexternalload ( void )
         cursor.posx = cursorx;
         cursor.posy = cursory;
         cursor.show ();
-        cleartemps(7);
+        actmap->cleartemps(7);
         hostcontainer->buildgraphics();
         hostcontainer->displayloading ();
         hostcontainer->movemark (repaint);
@@ -2546,7 +2551,7 @@ void ccontainer_b :: cammunitiontransferb_subwindow :: execexternalload ( void )
 
         reset ( markedvehicle );
         displayvariables();
-        cleartemps ( 7 );
+        actmap->cleartemps ( 7 );
      } else
         dispmessage2 ( 401, NULL );
    } else {
@@ -2637,7 +2642,7 @@ void  ccontainer :: moveicon_c :: exec         ( void )
        cursor.posx = cursorx;
        cursor.posy = cursory;
        cursor.show ();
-       cleartemps(7);
+       actmap->cleartemps(7);
        main->buildgraphics();
        main->displayloading ();
        main->movemark (repaint);

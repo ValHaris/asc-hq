@@ -189,10 +189,13 @@ bzmain( char *argv1, char* argv2  )
     int size = filesize ( argv1 );
     void* buf = malloc ( size );
 
+    FILE* fp = fopen ( argv1, filereadmode );
+    fread ( buf, size, 1, fp );
+    fclose ( fp );
 
-    tnfilestream instream ( argv1, 1 );
+    // tnfilestream instream ( argv1, 1 );
     tnfilestream outstream ( argv2, 2 );
-    instream.readdata ( buf, size, 0 );
+    // instream.readdata ( buf, size, 0 );
     outstream.writedata ( buf, size );
 
     free ( buf );
@@ -254,15 +257,44 @@ void copyfile ( const char* name, const char* orgname, int size )
 
 void testcompress ( char* name, int size )
 {
+   char newname[1000];
+   char* orgname = name;
    if ( patimat ( "*.pcx", name ) ) {
-      FILE* file = fopen ( name, "rb+" );
-      if ( !file ) {
-         printf(" Unable to open %s for writing. \n\n", name );
+
+      FILE* infile = fopen ( name, filereadmode );
+
+
+      if ( getenv ( "temp" ))
+         strcpy ( newname, getenv ( "temp" ));
+      else
+         if ( getenv ( "tmp" ))
+            strcpy ( newname, getenv ( "tmp" ));
+         else {
+            strcpy ( newname, pathdelimitterstring );
+            strcat ( newname, "tmp" );
+         }
+      if ( strlen ( newname ) && newname[strlen ( newname ) -1] != pathdelimitter )
+         strcat ( newname, pathdelimitterstring );
+
+      strcat ( newname, name );
+
+      FILE* outfile = fopen ( newname, filewritemode );
+      if ( !outfile ) {
+         printf(" Unable to open %s for writing. \n\n", newname );
          exit ( 1 );
       }
-      fseek ( file, 124, SEEK_SET );
-      fwrite ( &size, 1, 4, file );
-      fclose ( file );
+
+      int size = filesize ( name );
+      char* pc = (char*) malloc ( size );
+      fread ( pc, size, 1, infile );
+      fclose ( infile );
+
+      int* ip = (int*) (pc + size-124);
+      *ip = size;
+
+      fwrite ( pc, 1, size, outfile );
+      fclose ( outfile );
+      name = newname;
    }
 
    uncompsize += size;
@@ -336,18 +368,22 @@ void testcompress ( char* name, int size )
  #ifndef NOLZW
    if ( compr == lz ) {
       printf ( "lzw compressed" );
-      copyfile ( "temp.lzw", name, compr );
+      copyfile ( "temp.lzw", orgname, compr );
    } else
  #endif
    if ( compr == rl ) {
       printf ( "rle compressed" );
-      copyfile ( "temp.rle", name, compr );
+      copyfile ( "temp.rle", orgname, compr );
    } else
    if ( compr == mz ) {
       printf ( "mzl compressed" );
-      copyfile ( "temp.mzl", name, compr );
+      copyfile ( "temp.mzl", orgname, compr );
    }
    
+
+   if ( name == newname )
+      remove ( newname );
+
 }
 
 

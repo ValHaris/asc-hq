@@ -1,6 +1,10 @@
-//     $Id: unitctrl.h,v 1.6 2000-06-09 10:51:00 mbickel Exp $
+//     $Id: unitctrl.h,v 1.7 2000-07-16 14:20:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/06/09 10:51:00  mbickel
+//      Repaired keyboard control of pulldown menu
+//      Fixed compile errors at fieldlist with gcc
+//
 //     Revision 1.5  2000/06/08 21:03:44  mbickel
 //      New vehicle action: attack
 //      wrote documentation for vehicle actions
@@ -56,6 +60,7 @@
 #include "typen.h"
 #include "basestrm.h"
 #include "spfst.h"
+#include "attack.h"
 
 
 template<class T>
@@ -135,9 +140,17 @@ class BaseVehicleMovement : public VehicleAction {
                pvehicle vehicle;
                int newheight;
  
-               int moveunitxy ( int xt1, int yt1 );
+               int moveunitxy ( int xt1, int yt1, int noInterrupt = -1 );
 
                   class FieldReachableRek {
+
+                       struct tstrecke {
+                                 struct { 
+                                     int x, y; 
+                                  } field[31]; 
+                                  int tiefe; 
+                              }; 
+
                         int          distance;
                         int          fuelusage;
                         int          maxwegstrecke; 
@@ -171,7 +184,7 @@ class VehicleMovement : public BaseVehicleMovement {
               IntFieldList reachableFieldsIndirect;
               int available ( pvehicle veh ) const;
               int getStatus ( void ) { return status; };
-              int execute ( pvehicle veh, int x, int y, int step, int height, int param2 );
+              int execute ( pvehicle veh, int x, int y, int step, int height, int noInterrupt );
 
               virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
               VehicleMovement ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
@@ -210,8 +223,9 @@ class VehicleMovement : public BaseVehicleMovement {
  *                the effect of this step is that "path" contains the fields that the unit will move over to reach the 
  *                 destination.
  *            
- *   Step 3:   execute ( NULL, destination-x, destination-y, step = 3, -1, -1 );
+ *   Step 3:   execute ( NULL, destination-x, destination-y, step = 3, -1, NoInterrupt );
  *                The destination must be one of the fields in "path"
+ *                If NoInterrupt is != -1 the unit will not stop when being attacked by mines and reactionfire.
  */
 
 

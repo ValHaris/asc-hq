@@ -1,6 +1,11 @@
-//     $Id: sg.cpp,v 1.57 2000-07-10 15:21:30 mbickel Exp $
+//     $Id: sg.cpp,v 1.58 2000-07-16 14:20:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2000/07/10 15:21:30  mbickel
+//      Fixed crash in replay (alliancechange)
+//      Fixed some movement problems when moving units out of transports / buildings
+//      Removed save game description dialog
+//
 //     Revision 1.56  2000/07/06 11:07:27  mbickel
 //      More AI work
 //      Started modularizing the attack formula
@@ -1165,7 +1170,7 @@ void         loadcursor(void)
       #else
       tnfilestream stream ("hexinvi2.raw",1);
       #endif
-      stream.readrlepict(   &view.va8, false, &w);
+      stream.readrlepict(   &icons.view.va8, false, &w);
    }
 
    {
@@ -1174,17 +1179,17 @@ void         loadcursor(void)
       #else
       tnfilestream stream ("hexinvis.raw",1);
       #endif
-      stream.readrlepict(   &view.nv8, false, &w);
-      void* u = uncompress_rlepict ( view.nv8 );
+      stream.readrlepict(   &icons.view.nv8, false, &w);
+      void* u = uncompress_rlepict ( icons.view.nv8 );
       if ( u ) {
-         delete[] view.nv8;
-         view.nv8 = u;
+         delete[] icons.view.nv8;
+         icons.view.nv8 = u;
       }
    }
 
    {
       tnfilestream stream ("fg8.raw",1);
-      stream.readrlepict(   &view.fog8, false, &w);
+      stream.readrlepict(   &icons.view.fog8, false, &w);
    }
 
    {
@@ -2519,7 +2524,7 @@ int  WeaponRange :: run ( const pvehicle veh )
 void viewunitweaponrange ( const pvehicle veh, tkey taste )
 {
    if ( veh && !moveparams.movestatus  ) {
-      cleartemps ( 7 );
+      actmap->cleartemps ( 7 );
       WeaponRange wr;
       int res = wr.run ( veh );
       if ( res ) {
@@ -2540,7 +2545,7 @@ void viewunitweaponrange ( const pvehicle veh, tkey taste )
             while ( mouseparams.taste == mb )
                releasetimeslice();
          }
-         cleartemps ( 7 );
+         actmap->cleartemps ( 7 );
          displaymap();
       }
    }
@@ -2549,7 +2554,7 @@ void viewunitweaponrange ( const pvehicle veh, tkey taste )
 void viewunitmovementrange ( pvehicle veh, tkey taste )
 {
    if ( veh && !moveparams.movestatus && fieldvisiblenow ( getfield ( veh->xpos, veh->ypos ))) {
-      cleartemps ( 7 );
+      actmap->cleartemps ( 7 );
       npush ( veh->movement );
       veh->movement = veh->typ->movement[log2(veh->height)];
       VehicleMovement vm ( NULL, NULL );
@@ -2578,7 +2583,7 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
                while ( mouseparams.taste == mb )
                   releasetimeslice();
             }
-            cleartemps ( 7 );
+            actmap->cleartemps ( 7 );
             displaymap();
          }
       }
@@ -2791,8 +2796,6 @@ void loaddata( int resolx, int resoly,
             agmp->resolutiony-1, NULL );
       }
    }
-
-   weapdist = new tweapdist;
 
    schriften.smallarial = load_font("smalaril.fnt");
    schriften.large = load_font("usablack.fnt");
