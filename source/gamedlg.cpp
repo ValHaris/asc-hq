@@ -3544,4 +3544,29 @@ void         verlademunition( VehicleService* serv, int targetNWID )
    vlm.done(); 
 }
 
+void showPlayerTime()
+{
+   ASCString text;
+
+   int p = actmap->actplayer;
+   for ( int i = 0; i < 8; i++ ) {
+       if ( actmap->player[p].exist() && actmap->player[p].playTime.size() ) {
+          text += actmap->player[p].getName();
+          text += " completed turn no. " ;
+          text += strrr(actmap->player[p].playTime.rbegin()->turn);
+          text += " on ";
+          text += asctime ( localtime ( &actmap->player[p].playTime.rbegin()->date));
+       }
+
+
+       ++p;
+       if ( p >= 8 )
+          p = 0;
+   }
+
+   tviewanytext vat ;
+   vat.init ( "Play Time Information", text.c_str(), 20, -1 , 530, 480 );
+   vat.run();
+   vat.done();
+}
 

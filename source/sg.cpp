@@ -587,7 +587,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
-                    ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme };
+                    ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme, ua_showPlayerSpeed };
 
 
 class tsgpulldown : public tpulldown
@@ -637,8 +637,9 @@ void         tsgpulldown :: init ( void )
    addbutton ( "unit ~S~et informationõ6", ua_UnitSetInfo );
    addbutton ( "~T~errainõ7", ua_viewterraininfo );
    addbutton ( "~U~nit weightõ8", ua_unitweightinfo );
-   // addbutton ( "seperator", -1 );
+   addbutton ( "seperator", -1 );
    // addbutton ( "~R~esearch", ua_researchinfo );
+   addbutton ( "~P~lay time", ua_showPlayerSpeed );
 
    // addbutton ( "vehicle ~I~mprovementõF7", ua_dispvehicleimprovement);
    // addbutton ( "show game ~P~arameters", ua_GameParameterInfo );
@@ -1487,6 +1488,9 @@ void execuseraction ( tuseractions action )
 
       case ua_soundDialog:
          soundSettings();
+         break;
+      case ua_showPlayerSpeed:
+         showPlayerTime();
          break;
 #ifndef NO_PARAGUI
       case ua_reloadDlgTheme:

@@ -1,6 +1,13 @@
-//     $Id: gamedlg.h,v 1.20 2003-06-22 17:41:22 mbickel Exp $
+//     $Id: gamedlg.h,v 1.21 2003-08-17 20:26:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2003/06/22 17:41:22  mbickel
+//      Updated campaign maps
+//      Fixed crash at 640*480
+//      Fixed: some units could not attack while reaction fire active
+//      Fixed: destruction of buildings not working
+//      New map parameters for customizing the effects of experience
+//
 //     Revision 1.19  2002/02/21 17:06:51  mbickel
 //      Completed Paragui integration
 //      Moved mail functions to own file (messages)
@@ -68,8 +75,8 @@
     Boston, MA  02111-1307  USA
 
 */
-#ifndef  gamedlg_h
-#define  gamedlg_h
+#ifndef  gamedlgH
+#define  gamedlgH
 
 
 /*! \file gamedlg.h
@@ -237,6 +244,9 @@ extern void showGameParameters ( void );
 
 //! a dialog box to transfer resources from one vehicle to another
 extern void  verlademunition( VehicleService* serv, int targetNWID );
+
+extern void showPlayerTime();
+
 
 #endif  // ifndef gamedlg_h
 
