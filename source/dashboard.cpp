@@ -1110,7 +1110,11 @@ void         tdashboard::checkformouse ( int func )
 {
     if ( vehicle ) {
        // tmouserect experience = { 0,0,0,0};
-       tmouserect experience = { agmp->resolutionx - ( 640 - 587), 27, agmp->resolutionx - ( 640 - 587) + 25, 27 + 24 };
+       tmouserect experience;
+       experience.x1 = agmp->resolutionx - ( 640 - 587);
+       experience.y1 = 27;
+       experience.x2 = agmp->resolutionx - ( 640 - 587) + 25;
+       experience.y2 = 27 + 24 ;
 
        if ( mouseinrect ( &experience ) && mouseparams.taste != 0 ) {
           int xnum = 4;
@@ -1118,10 +1122,14 @@ void         tdashboard::checkformouse ( int func )
           int xwidth;
           int ywidth;
           getpicsize ( icons.experience[0], xwidth, ywidth );
-          tmouserect r = { experience.x2 - xnum*(xwidth+2)-2, experience.y1, experience.x2, experience.y1 + (ywidth+2)*ynum+2 };
+          tmouserect r;
+          r.x1 = experience.x2 - xnum*(xwidth+2)-2;
+          r.y1 = experience.y1;
+          r.x2 = experience.x2;
+          r.y2 = experience.y1 + (ywidth+2)*ynum+2 ;
           void* p = asc_malloc ( imagesize ( r.x1, r.y1, r.x2, r.y2 ));
           getimage  ( r.x1, r.y1, r.x2, r.y2, p );
-          rahmen ( r.x1, r.y1, r.x2, r.y2, true );
+          rahmen ( true, r.x1, r.y1, r.x2, r.y2 );
           bar ( r.x1, r.y1, r.x2, r.y2, 171 );
           for ( int x = 0; x < xnum; x++ )
              for ( int y = 0; y < ynum; y++ )

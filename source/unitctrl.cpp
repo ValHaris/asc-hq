@@ -1,6 +1,11 @@
-//     $Id: unitctrl.cpp,v 1.55 2001-07-13 14:02:48 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.56 2001-07-13 19:33:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2001/07/13 14:02:48  mbickel
+//      Fixed inconsistency in replay (shareviewchange)
+//      Fixed sound initialization problem
+//      Speed up of movement
+//
 //     Revision 1.54  2001/07/13 12:53:01  mbickel
 //      Fixed duplicate icons in replay
 //      Fixed crash in tooltip help
@@ -1001,33 +1006,35 @@ int ChangeVehicleHeight :: execute_withmove ( int allFields )
    int steigung = vehicle->typ->steigung;
 
    if ( vehicle->typ->height & (chtieffliegend | chfliegend | chhochfliegend) ) {
-      int w;
       if ( vehicle->tank.fuel < steigung * maxmalq )
          return -115;
 
-      if ( newheight > vehicle->height ) { 
+      int w;
+      if ( newheight > vehicle->height ) {
          w = (vehicle->height << 1);
-         if ( w != chtieffliegend) { 
-            if (vehicle->getMovement() < steigung * maxmalq + air_heightincmovedecrease) 
+         if ( w != chtieffliegend) {
+            if (vehicle->getMovement() < steigung * maxmalq + air_heightincmovedecrease)
                return -110;
 
-         } 
-         else { 
-            if (vehicle->getMovement() < steigung * maxmalq ) 
+         }
+         else {
+            if (vehicle->getMovement() < steigung * maxmalq )
                return -110;
-         } 
+         }
 
-      } 
-      else { 
+      }
+      else {
          w = (vehicle->height >> 1);
-         if (vehicle->getMovement() < steigung * maxmalq) 
+         if (vehicle->getMovement() < steigung * maxmalq)
             return -111;
 
-      } 
+      }
+
       if ((w & vehicle->typ->height) == 0)
          return -112;
 
       newheight = w;
+
 
       return moveheight( allFields );
    } else {
@@ -1095,6 +1102,9 @@ int ChangeVehicleHeight :: moveHeightMoveCost( pvehicle vehicle, const MapCoordi
          ok = false;
 */
 
+   if ( newheight > pos.z && pos.z != chfahrend )
+      dist += air_heightincmovedecrease;
+
    if ( ok )
       return dist;
    else
@@ -1102,7 +1112,7 @@ int ChangeVehicleHeight :: moveHeightMoveCost( pvehicle vehicle, const MapCoordi
 }
 
 int ChangeVehicleHeight :: moveheight( int allFields )
-{ 
+{
    initwindmovement( vehicle );
 
    FieldList<StartPosition> startpos;
@@ -1122,8 +1132,10 @@ int ChangeVehicleHeight :: moveheight( int allFields )
       for ( int i = 0; i < vmove->reachableFields.getFieldNum(); i++ ) {
           StartPosition sp;
           vmove->reachableFields.getFieldCoordinates( i, &sp.x, &sp.y );
-          sp.dist = vmove->getDistance ( sp.x, sp.y);
-          startpos.addField ( sp.x, sp.y, sp );
+          if ( !getfield( sp.x, sp.y)->vehicle ) {
+             sp.dist = vmove->getDistance ( sp.x, sp.y);
+             startpos.addField ( sp.x, sp.y, sp );
+          }
       }
    } else {
       StartPosition sp;
@@ -1133,7 +1145,7 @@ int ChangeVehicleHeight :: moveheight( int allFields )
       startpos.addField ( vehicle->xpos, vehicle->ypos, sp );
    }
 
-   int ok2 = false; 
+   int ok2 = false;
 
    for ( int i = 0; i < startpos.getFieldNum(); i++ ) {
       StartPosition& sp = startpos.getData ( i );
@@ -1175,7 +1187,7 @@ int ChangeVehicleHeight :: moveheight( int allFields )
       return 0;
    else
       return -116;
-} 
+}
 
 
 int ChangeVehicleHeight :: moveunitxy ( int xt1, int yt1, IntFieldList& pathToMove )

@@ -1,11 +1,3 @@
-Known Bugs:
-
-- aicraft take-off has inconsistent movement consumption 
-- replay doesn't work in certain etrongame
-- GeBeine: map load bug
-
-
-
 TODO list for ASC, programming department.
 
 -1- is very high priority
@@ -95,6 +87,7 @@ Medium sized tasks
 -5-  new image storage for objects, so the images can be changed by graphic 
      sets even when they were generated on runtime (mirroring)
 
+
 -5-  displaying objects on the small map
 
 -8-  embedding of units/objects/... in map
@@ -147,7 +140,7 @@ Larger Tasks:
 
 
 
-Requested features (all low priority)
+Requested features:
 
 -  A result screen in multiplayergames (who list how many units until now,
     lost buildings, gained resources, ... )

@@ -7,9 +7,14 @@
 */
 
 
-//     $Id: network.cpp,v 1.21 2001-07-13 14:02:48 mbickel Exp $
+//     $Id: network.cpp,v 1.22 2001-07-13 19:33:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2001/07/13 14:02:48  mbickel
+//      Fixed inconsistency in replay (shareviewchange)
+//      Fixed sound initialization problem
+//      Speed up of movement
+//
 //     Revision 1.20  2001/07/11 20:44:37  mbickel
 //      Removed some vehicles from the data file.
 //      Put all legacy units in into the data/legacy directory
@@ -189,10 +194,8 @@ void tfiletransfernetworkconnection::tsetup::init ( void )
       addbutton ( "~O~k", 10, ysize - 40, xsize - 10, ysize - 10, 0, 1, 3 , true);
       addkey ( 3, ct_enter );
    }
-   if ( !filename[0] ) {
-      ASCString fn;
-      if ( actmap )
-         fn = actmap->preferredFileNames.mapname[0];
+   if ( !filename[0] && actmap ) {
+      ASCString fn = actmap->preferredFileNames.mapname[0];
       if ( fn.find ( "." ) != ASCString::npos )
          fn.erase ( fn.find ( "." ) );
 
