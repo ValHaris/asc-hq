@@ -61,6 +61,7 @@
 #include "resourcenet.h"
 #include "itemrepository.h"
 #include "strtmesg.h"
+#include "messagedlg.h"
 
 tmoveparams moveparams;
 

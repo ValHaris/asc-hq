@@ -1,6 +1,9 @@
-//     $Id: unitctrl.h,v 1.32 2003-03-07 17:11:41 mbickel Exp $
+//     $Id: unitctrl.h,v 1.33 2003-03-24 11:18:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2003/03/07 17:11:41  mbickel
+//      AI improvements
+//
 //     Revision 1.31  2003/02/27 16:12:46  mbickel
 //      Restructuring of new pathfinding code completed
 //
@@ -191,6 +194,10 @@
 /** \file unitctrl.h
    New system for actions performed by units
 */
+
+#ifdef karteneditor
+#error The mapeditor does not need any pathfinding
+#endif
 
 
 

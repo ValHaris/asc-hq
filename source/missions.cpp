@@ -45,6 +45,7 @@
 #include "errors.h"
 #include "dashboard.h"
 #include "itemrepository.h"
+#include "messagedlg.h"
 
 const  int    translatetriggerstatus[4]  = {0, 1, 1, 0};
 

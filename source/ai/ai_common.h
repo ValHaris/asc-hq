@@ -18,6 +18,11 @@
 #ifndef ai_common_h_included
  #define ai_common_h_included
 
+ #ifdef karteneditor
+ #error The mapeditor does not need any AI
+ #endif
+
+
  // This header collects all other headers used by the various AI files so
  // compilers that are able to use precompiled headers may do so.
 

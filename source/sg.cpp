@@ -116,7 +116,7 @@
 #include "loadbi3.h"
 #include "itemrepository.h"
 #include "music.h"
-
+#include "messagedlg.h"
 
 
 

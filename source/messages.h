@@ -61,14 +61,4 @@ typedef list<Message*> MessagePntrContainer;
 
 
 
-extern void editmessage ( Message& msg );
-extern void newmessage ( void );
-extern void viewmessages ( char* title, const MessagePntrContainer& msgc, bool editable, int md  ) ;   // mode : 0 verschickte ; 1 empfangene
-extern void viewmessage ( const Message& message );
-extern void editmessage ( Message& msg );
-extern void editjournal ( void );
-extern void viewjournal ( void );
-extern void viewunreadmessages ( void );
-
-
 #endif
