@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 58
+   ;Bezeichnung der verknüpften Technologie: CALLANDOR
+   TechnologiesRequired = 101058
+} TechAdapter
