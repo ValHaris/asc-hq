@@ -3,9 +3,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.140 2002-11-12 13:55:11 mbickel Exp $
+//     $Id: controls.cpp,v 1.141 2002-11-18 10:47:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.140  2002/11/12 13:55:11  mbickel
+//      Fixed: invalid icons displayed when building construction failed
+//
 //     Revision 1.139  2002/11/09 19:10:49  mbickel
 //      Fixed: invalid data return after EOF if file very small
 //      Resourceproduction of matter converter now working if not all resources could be stored
@@ -1575,7 +1578,7 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
                battle.setresult();
 
                if ( ad2 < 100 )
-                  ul->eht->attacked = false;
+                  veh->attacked = false;
 
 //               logtoreplayinfo ( rpl_reactionfire, ulex, uley, x, y, ad1, ad2, dd1, dd2, atw->num[num] );
 
@@ -2862,10 +2865,14 @@ void endTurn ( void )
 
                int j = actvehicle->tank.fuel - actvehicle->typ->fuelConsumption * nowindplanefuelusage;
 
-               if ( actvehicle->height <= chhochfliegend )
-                  j -= ( actvehicle->getMovement() * 64 / actvehicle->typ->movement[log2(actvehicle->height)] )
-                       * (actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
-
+               if ( actvehicle->height <= chhochfliegend ) {
+                  int mo = actvehicle->typ->movement[log2(actvehicle->height)];
+                  if ( mo )
+                     j -= ( actvehicle->getMovement() * 64 / mo)
+                          * (actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
+                  else
+                     j -= (actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
+               }
               //          movement * 64        windspeed * maxwindspeed         fuelConsumption
               // j -=   ----------------- *  ----------------------------- *   -----------
               //          typ->movement                 256                       64 * 8
