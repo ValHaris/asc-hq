@@ -519,7 +519,7 @@ void tmap :: write ( tnstream& stream )
        stream.writeInt( 0 );
 
    for ( i = 0; i < 8; i++ )
-       stream.writeInt( -2 );
+       stream.writeInt( getgameparameter(i) );
 
 
 ///////////////////

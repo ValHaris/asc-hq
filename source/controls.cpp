@@ -3,9 +3,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.104 2001-07-15 21:00:25 mbickel Exp $
+//     $Id: controls.cpp,v 1.105 2001-07-18 16:05:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.104  2001/07/15 21:00:25  mbickel
+//      Some cleanup in the vehicletype class
+//
 //     Revision 1.103  2001/07/02 10:14:41  mbickel
 //      Fixed crash when starting new email games
 //      New version: 1.3.19
@@ -3420,5 +3423,64 @@ void cmousecontrol :: chkmouse ( void )
 
 }
 
+
+void  checkforvictory ( )
+{
+   if ( !actmap->continueplaying ) {
+      int plnum = 0;
+      for ( int i = 0; i < 8; i++ )
+         if ( !actmap->player[i].exist() && actmap->player[i].existanceAtBeginOfTurn ) {
+            int to = 0;
+            for ( int j = 0; j < 8; j++ )
+               if ( j != i )
+                  to |= 1 << j;
+
+
+            char txt[1000];
+            char* sp = getmessage( 10010 ); // Message "player has been terminated"
+
+            sprintf ( txt, sp, actmap->player[i].getName().c_str() );
+            new Message ( txt, actmap, to  );
+
+            actmap->player[i].existanceAtBeginOfTurn = false;
+
+            if ( i == actmap->actplayer ) {
+               displaymessage ( getmessage ( 10011 ),1 );
+
+               int humannum=0;
+               for ( int j = 0; j < 8; j++ )
+                  if (actmap->player[j].exist() && actmap->player[j].stat == Player::human )
+                     humannum++;
+               if ( humannum )
+                  next_turn();
+               else {
+                  delete actmap;
+                  actmap = NULL;
+                  throw NoMapLoaded();
+               }
+            }
+         } else
+            plnum++;
+
+      if ( plnum <= 1 ) {
+         if ( actmap->player[actmap->actplayer].ai &&  actmap->player[actmap->actplayer].ai->isRunning() ) {
+            displaymessage("You lost!",1);
+         } else {
+            displaymessage("Congratulations!\nYou won!",1);
+            if (choice_dlg("Do you want to continue playing ?","~y~es","~n~o") == 2) {
+               delete actmap;
+               actmap = NULL;
+               throw NoMapLoaded();
+            } else {
+               actmap->continueplaying = 1;
+               if ( actmap->replayinfo ) {
+                  delete actmap->replayinfo;
+                  actmap->replayinfo = 0;
+               }
+            }
+         }
+      }
+   }
+}
 
 

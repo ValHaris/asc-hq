@@ -2,9 +2,15 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.87 2001-03-30 12:43:16 mbickel Exp $
+//     $Id: spfst.cpp,v 1.88 2001-07-18 16:05:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.87  2001/03/30 12:43:16  mbickel
+//      Added 3D pathfinding
+//      some cleanup and documentation
+//      splitted the ai into several files, now located in the ai subdirectory
+//      AI cares about airplane servicing and range constraints
+//
 //     Revision 1.86  2001/02/26 12:35:31  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -916,26 +922,26 @@ void         tcursor::show(void)
       
    an = true; 
 
-   if (ms == 2) 
-      mousevisible(true); 
-} 
+   if (ms == 2)
+      mousevisible(true);
+}
 
 
 void         tcursor::hide(void)
-{ 
-   int ms = getmousestatus(); 
-   if (ms == 2) mousevisible(false); 
-   if ( an ) 
+{
+   int ms = getmousestatus();
+   if (ms == 2) mousevisible(false);
+   if ( an )
       putbkgr();
-   an = false; 
-   if (ms == 2) mousevisible(true); 
-} 
+   an = false;
+   if (ms == 2) mousevisible(true);
+}
 
 
 
 int         getdiplomaticstatus(int         b)
-{ 
-   if ( b & 7 ) 
+{
+   if ( b & 7 )
      displaymessage("getdiplomaticstatus: \n parameter has to be in [0,8,16,..,64]",2);
 
    if ( b/8 == actmap->actplayer )
@@ -944,18 +950,20 @@ int         getdiplomaticstatus(int         b)
    if ( b == 64 )  // neutral
       return capeace;
 
-   char *d = &actmap->alliances[ b/8 ][ actmap->actplayer ] ;
+   char d = actmap->alliances[ b/8 ][ actmap->actplayer ] ;
+   char e = actmap->alliances[ actmap->actplayer ][ b/8 ] ;
 
-   if ( *d == capeace || *d == canewsetwar1 || *d == cawarannounce )
+   if (  (d == capeace || d == canewsetwar1 || d == cawarannounce || d == capeace_with_shareview )
+       &&(e == capeace || e == canewsetwar1 || e == cawarannounce || e == capeace_with_shareview))
       return capeace;
    else
       return cawar;
-} 
+}
 
 
 int        getdiplomaticstatus2(int    b, int    c)
-{ 
-   if ( (b & 7) || ( c & 7 ) ) 
+{
+   if ( (b & 7) || ( c & 7 ) )
       displaymessage("getdiplomaticstatus: \n parameters have to be in [0,8,16,..,64]",2);
 
    if ( b == c )
@@ -965,13 +973,15 @@ int        getdiplomaticstatus2(int    b, int    c)
       return capeace;
 
 
-   char *d = &actmap->alliances [ b/8][ c/8 ];
+   char d = actmap->alliances [ b/8][ c/8 ];
+   char e = actmap->alliances [ c/8][ b/8 ];
 
-   if ( *d == capeace || *d == canewsetwar1 || *d == cawarannounce )
+   if (  (d == capeace || d == canewsetwar1 || d == cawarannounce || d == capeace_with_shareview )
+       &&(e == capeace || e == canewsetwar1 || e == cawarannounce || e == capeace_with_shareview))
       return capeace;
    else
       return cawar;
-} 
+}
 
 
 

@@ -183,7 +183,7 @@ void AI :: checkConquer( )
 
    for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
       pvehicle veh = *vi;
-      if ( veh->aiparam[getPlayerNum()]->job == AiParameter::job_conquer && veh->aiparam[getPlayerNum()]->task == AiParameter::tsk_nothing ) {
+      if ( veh->aiparam[getPlayerNum()]->job == AiParameter::job_conquer && veh->aiparam[getPlayerNum()]->task == AiParameter::tsk_nothing && veh->canMove() ) {
 
          HiddenAStar ast ( this, veh );
          ast.findAllAccessibleFields( veh->maxMovement() * config.maxCaptureTime );
@@ -216,8 +216,6 @@ void AI :: checkConquer( )
             veh->aiparam[getPlayerNum()]->task = AiParameter::tsk_move;
             veh->aiparam[getPlayerNum()]->dest = bestBuilding->getEntry();
          }
-
-
       }
    }
 

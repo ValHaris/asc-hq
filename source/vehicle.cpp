@@ -467,6 +467,19 @@ int Vehicle :: getMovement ( void )
       return _movement;
 }
 
+
+
+bool Vehicle :: canMove ( void )
+{
+   if ( gamemap->getField ( xpos, ypos )->unitHere ( this ) )
+      if ( getMovement() >= minmalq && reactionfire.getStatus() == Vehicle::ReactionFire::off )
+         if ( terrainaccessible ( gamemap->getField ( xpos, ypos ), this ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
+            return true;
+   return false;
+}
+
+
+
 void Vehicle::ReactionFire::enable ( void )
 {
    #ifdef karteneditor
@@ -626,7 +639,7 @@ void Vehicle::convert ( int col )
 void Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
 {
    if ( gamemap && vehicleconstructable( tnk, x, y )) {
-      pvehicle v = new Vehicle( tnk, gamemap, color );
+      pvehicle v = new Vehicle( tnk, gamemap, color/8 );
       v->xpos = x;
       v->ypos = y;
 
@@ -1199,7 +1212,7 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 void   Vehicle::read ( tnstream& stream )
 {
     int _id = stream.readWord ();
-    int _color = stream.readChar ();
+    stream.readChar (); // color
     if ( _id != typ->id )
        fatalError ( "Vehicle::read - trying to read a unit of different type" );
 

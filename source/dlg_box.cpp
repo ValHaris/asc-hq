@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.54 2001-07-15 21:31:03 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.55 2001-07-18 16:05:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2001/07/15 21:31:03  mbickel
+//      The movement sounds can now fade in and out
+//
 //     Revision 1.53  2001/07/15 21:00:25  mbickel
 //      Some cleanup in the vehicletype class
 //
@@ -3848,6 +3851,8 @@ void         tstringselect::done(void)
 
 class  tgetid : public tdialogbox {
           public :
+              tgetid () { onCancel = ReturnZero; };
+              enum { ReturnZero, ReturnOriginal } onCancel;
               int action;
               int mid;
               char nt[200];
@@ -3855,7 +3860,7 @@ class  tgetid : public tdialogbox {
               int max,min;
               virtual void run(void);
               virtual void buttonpressed(int id);
-              };
+          };
 
 void         tgetid::init(void)
 {
@@ -3867,7 +3872,7 @@ void         tgetid::init(void)
    ysize = 140;
    action = 0;
 
-   if ((mid < min) || (mid > max)) mid = 10;   /* ! */
+   if ((mid < min) || (mid > max)) mid = 42;   /* ! */
 
    windowstyle = windowstyle ^ dlg_in3d;
 
@@ -3886,6 +3891,7 @@ void         tgetid::init(void)
 
 void         tgetid::run(void)
 {
+   int orig = mid;
    tdialogbox::run ();
    pbutton pb = firstbutton;
    while ( pb &&  (pb->id != 3))
@@ -3898,7 +3904,12 @@ void         tgetid::run(void)
    do {
       tdialogbox::run();
    }  while (!((taste == ct_esc) || ((action == 1) || (action == 2))));
-   if ((action == 2) || (taste == ct_esc)) mid = 0;
+   if ((action == 2) || (taste == ct_esc)){
+       if ( onCancel == ReturnZero )
+          mid = 0;
+       else
+          mid = orig;
+   }
 }
 
 
@@ -3917,6 +3928,7 @@ void         tgetid::buttonpressed(int         id)
 int      getid( char*  title, int lval,int min,int max)
 
 { tgetid     gi;
+   gi.onCancel = tgetid::ReturnOriginal;
 
    strcpy( gi.nt, title );
    gi.max = max;

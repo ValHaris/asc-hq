@@ -1,6 +1,11 @@
-//     $Id: gamedlg.h,v 1.16 2001-02-26 12:35:14 mbickel Exp $
-//
+//     $Id: gamedlg.h,v 1.17 2001-07-18 16:05:47 mbickel Exp $//
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2001/02/26 12:35:14  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.15  2001/01/23 21:05:17  mbickel
 //      Speed up of AI
 //      Lot of bugfixes in AI
@@ -23,59 +28,7 @@
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
 //
-//     Revision 1.11  2000/10/11 14:26:37  mbickel
-//      Modernized the internal structure of ASC:
-//       - vehicles and buildings now derived from a common base class
-//       - new resource class
-//       - reorganized exceptions (errors.h)
-//      Split some files:
-//        typen -> typen, vehicletype, buildingtype, basecontainer
-//        controls -> controls, viewcalculation
-//        spfst -> spfst, mapalgorithm
-//      bzlib is now statically linked and sources integrated
-//
-//     Revision 1.10  2000/09/16 11:47:28  mbickel
-//      Some cleanup and documentation again
-//
-//     Revision 1.9  2000/08/13 09:54:02  mbickel
-//      Refuelling is now logged for replays
-//
-//     Revision 1.8  2000/08/12 12:52:48  mbickel
-//      Made DOS-Version compile and run again.
-//
-//     Revision 1.7  2000/08/12 09:17:28  gulliver
-//     *** empty log message ***
-//
-//     Revision 1.6  2000/08/07 16:29:21  mbickel
-//      orbiting units don't consume fuel any more
-//      Fixed bug in attack formula; improved attack formula
-//      Rewrote reactionfire
-//
-//     Revision 1.5  2000/05/23 20:40:47  mbickel
-//      Removed boolean type
-//
-//     Revision 1.4  2000/05/07 12:12:17  mbickel
-//      New mouse option dialog
-//      weapon info can now be displayed by clicking on a unit
-//
-//     Revision 1.3  1999/11/22 18:27:27  mbickel
-//      Restructured graphics engine:
-//        VESA now only for DOS
-//        BASEGFX should be platform independant
-//        new interface for initialization
-//      Rewrote all ASM code in C++, but it is still available for the Watcom
-//        versions
-//      Fixed bugs in RLE decompression, BI map importer and the view calculation
-//
-//     Revision 1.2  1999/11/16 03:41:46  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
+
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -91,35 +44,30 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    along with this program; see the file COPYING. If not, write to the
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
-*/
 
+*/
 #ifndef  gamedlg_h
 #define  gamedlg_h
 
-/*! \file gamedlg.h
-   A lot of dialog boxes that are only used by both ASC.
+
+/*! \file gamedlg.h   A lot of dialog boxes that are only used by both ASC.
 */
 
 
-#include "typen.h"
-#include "basegfx.h"
+#include "typen.h"#include "basegfx.h"
 #include "newfont.h"
 #include "spfst.h"
 #include "loaders.h"
 #include "misc.h"
 
-
-#include "dialog.h"
-#include "dlg_box.h"
+#include "dialog.h"#include "dlg_box.h"
 #include "unitctrl.h"
 
 
-
-class   tnewcampaignlevel : public tdialogbox {
-                      protected:
+class   tnewcampaignlevel : public tdialogbox {                      protected:
                          tmaploaders  loader;
                       public:
                          int           status;
@@ -190,7 +138,7 @@ extern int   setupnetwork ( tnetwork* nw, int edt = 7, int player = -1 );
       bit 0 :  receive einstellbar
           1 :  send einstellbar
           2 :  computer wechselbar
-                  falls 0 dann: 
+                  falls 0 dann:
            3:  prinzipiell computer 0 verwenden
 */
 
@@ -234,7 +182,7 @@ class tonlinehelplist {
               num = 0;
               item = NULL;
            }
-           
+
        };
 
 class tonlinemousehelp : public tsubmousehandler {
@@ -247,7 +195,7 @@ class tonlinemousehelp : public tsubmousehandler {
 
               int lastmousemove;
 
-             
+
               tonlinehelplist helplist;
 
            public:
@@ -271,10 +219,8 @@ extern void giveunitaway ( void );
 
 extern void showGameParameters ( void );
 
-
 //! a dialog box to transfer resources from one vehicle to another
 extern void  verlademunition( VehicleService* serv, int targetNWID );
 
 #endif  // ifndef gamedlg_h
-
 

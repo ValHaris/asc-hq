@@ -4,9 +4,14 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.41 2001-07-14 19:13:15 mbickel Exp $
+//     $Id: controls.h,v 1.42 2001-07-18 16:05:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2001/07/14 19:13:15  mbickel
+//      Rewrote sound system
+//      Moveing units make sounds
+//      Added sound files to data
+//
 //     Revision 1.40  2001/03/30 12:43:15  mbickel
 //      Added 3D pathfinding
 //      some cleanup and documentation
@@ -174,6 +179,9 @@ extern void  calcmovemalus(int          x1,
     \param playerView -2 = detect automatically; -1 = don't display anything; 0-7 = this player is watching
 */
 extern void next_turn ( int playerView = -2 );
+
+//! checks if the current player has terminated another player or even won
+extern void  checkforvictory ( );
 
 
 /////////////////////////////////////////////////////////////////////

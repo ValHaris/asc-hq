@@ -2,9 +2,12 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.88 2001-07-15 21:00:25 mbickel Exp $
+//     $Id: dialog.cpp,v 1.89 2001-07-18 16:05:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.88  2001/07/15 21:00:25  mbickel
+//      Some cleanup in the vehicletype class
+//
 //     Revision 1.87  2001/07/14 14:26:10  mbickel
 //      Some cleanup
 //
@@ -5231,10 +5234,10 @@ void         tgameparamsel ::setup(void)
    action = 0;
    title = "Select Gameparameter";
    numberoflines = gameparameternum;
-   ey = ysize - 60;
+   ey = ysize - 90;
    startpos = lastchoice;
-   addbutton("~c~lose",20,ysize - 40,xsize/2-10,ysize - 20,0,1,13,true);
-   addbutton("~s~elect",xsize/2+10,ysize - 40,xsize-20,ysize - 20,0,1,12,true);
+   addbutton("~O~k",20,ysize - 50,xsize-20,ysize - 20,0,1,13,true);
+   addbutton("~E~dit Selected",20,ysize - 80,xsize-20,ysize - 60,0,1,12,true);
    addkey ( 13, ct_esc );
 
 }
@@ -5245,10 +5248,10 @@ void         tgameparamsel ::buttonpressed(int         id)
    tstringselect::buttonpressed(id);
    switch (id) {
 
-      case 12:  if ( redline >= 0 ) 
+      case 12:  if ( redline >= 0 )
                    action = id-10;
                 break;
-                 
+
       case 13:   action = id-10;
                  break;
    }
@@ -5273,8 +5276,8 @@ void         tgameparamsel ::run(void)
             action = 2;
          else
             action = 3;
-   }  while ( action == 0 ); // ! (( action == 2 || action == 3 ) || (msel == 1)) 
-   if ( action == 3 ) 
+   }  while ( action == 0 ); // ! (( action == 2 || action == 3 ) || (msel == 1))
+   if ( action == 3 )
       redline = 255;
 }
 
@@ -5297,6 +5300,6 @@ void setmapparameters ( void )
    do {
       param = selectgameparameter( -1 );
       if ( param >= 0 && param < gameparameternum )
-         actmap->setgameparameter( param , getid("Parameter Val",actmap->getgameparameter( param ),0,maxint));
+         actmap->setgameparameter( param , getid("Parameter Val",actmap->getgameparameter( param ),minint,maxint));
    } while ( param >= 0 && param < gameparameternum );
 }

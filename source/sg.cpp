@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: sg.cpp,v 1.149 2001-07-15 21:00:25 mbickel Exp $
+//     $Id: sg.cpp,v 1.150 2001-07-18 16:05:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.149  2001/07/15 21:00:25  mbickel
+//      Some cleanup in the vehicletype class
+//
 //     Revision 1.148  2001/07/14 21:07:46  mbickel
 //      Sound works now under Win32 too
 //      Error reporting on Win32 during startup works again.
@@ -1272,60 +1275,6 @@ void benchgame ( int mode )
    char buf[100];
    sprintf ( buf, "%3.1f", d );
    displaymessage2 ( " %s fps ", buf );
-}
-
-void  checkforvictory ( void )
-{
-
-   if ( !actmap->continueplaying ) {
-      int plnum = 0;
-      for ( int i = 0; i < 8; i++ )
-         if ( !actmap->player[i].exist() && actmap->player[i].existanceAtBeginOfTurn ) {
-            int to = 0;
-            for ( int j = 0; j < 8; j++ )
-               if ( j != i )
-                  to |= 1 << j;
-
-
-            char txt[1000];
-            char* sp = getmessage( 10010 ); // Message "player has been terminated"
-
-            sprintf ( txt, sp, actmap->player[i].getName().c_str() );
-            new Message ( txt, actmap, to  );
-
-            if ( i == actmap->actplayer ) {
-               displaymessage ( getmessage ( 10011 ),1 );
-
-               int humannum=0;
-               for ( int j = 0; j < 8; j++ )
-                  if (actmap->player[j].exist() && actmap->player[j].stat == Player::human )
-                     humannum++;
-               if ( humannum )
-                  next_turn();
-               else {
-                  delete actmap;
-                  actmap = NULL;
-                  throw NoMapLoaded();
-               }
-            }
-         } else
-            plnum++;
-
-      if ( plnum <= 1 ) {
-         displaymessage("Congratulations!\nYou won!",1);
-         if (choice_dlg("Do you want to continue playing ?","~y~es","~n~o") == 2) {
-            delete actmap;
-            actmap = NULL;
-            throw NoMapLoaded();
-         } else {
-            actmap->continueplaying = 1;
-            if ( actmap->replayinfo ) {
-               delete actmap->replayinfo;
-               actmap->replayinfo = 0;
-            }
-         }
-      }
-   }
 }
 
 

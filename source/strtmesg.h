@@ -1,6 +1,10 @@
-//     $Id: strtmesg.h,v 1.3 2001-05-17 14:23:20 mbickel Exp $
+//     $Id: strtmesg.h,v 1.4 2001-07-18 16:05:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2001/05/17 14:23:20  mbickel
+//      Rewrote command line parameters of all programs
+//      Made manpages generation optional
+//
 //     Revision 1.2  1999/11/16 03:42:40  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -40,6 +44,7 @@ extern const char* kgetstartupmessage (  );
 extern const char* kgetaboutmessage (  );
 
 extern const char* getVersionString (  );
+extern const char* getFullVersionString (  );
 
 
 #endif

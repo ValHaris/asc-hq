@@ -5,9 +5,13 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.53 2001-07-11 20:13:27 mbickel Exp $
+//     $Id: loaders.cpp,v 1.54 2001-07-18 16:05:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2001/07/11 20:13:27  mbickel
+//      Fixed crash when exception occures during game loading
+//      Fixed wrong sender of mails
+//
 //     Revision 1.52  2001/07/09 12:08:40  mbickel
 //      Fixed: crash when saving game
 //
@@ -302,6 +306,7 @@
 #include "attack.h"
 #include "errors.h"
 #include "networkdata.h"
+#include "strtmesg.h"
 
 #ifdef sgmain
 #include "missions.h"
@@ -1406,8 +1411,12 @@ void tspfldloaders::readfields ( void )
             char minetype = stream->readChar();
             char minestrength = stream->readChar();
             if ( minetype >> 4 ) {
-               fld2->putmine ( (minetype >> 1) & 7, minetype >> 4, minestrength );
-               fld2->mines.begin()->time = 0;
+               Mine m;
+               m.type = (minetype >> 1) & 7;
+               m.strength = minestrength;
+               m.time = 0;
+               m.color = minetype >> 4;
+               fld2->mines.push_back ( m );
             }
 
             tempObjectNum = stream->readInt();
@@ -1588,7 +1597,7 @@ int          tmaploaders::savemap( const char * name )
    /*   Stream initialisieren, Dateiinfo schreiben , map schreiben         ÿ */
    /********************************************************************************/
    {
-       stream->writepchar ( NULL );  // description is not used any more
+       stream->writepchar ( getFullVersionString() );  // description is not used any more
        stream->writeWord ( fileterminator );
        stream->writeInt ( actmapversion  );
 
@@ -1718,7 +1727,7 @@ void   tsavegameloaders::savegame( pnstream strm, pmap gamemap, bool writeReplay
    stream = strm;
    spfld = gamemap;
 
-   stream->writepchar( NULL ); // description is not used any more
+   stream->writepchar( getFullVersionString() );
    stream->writeWord( fileterminator );
 
    stream->writeInt( actsavegameversion );
@@ -1898,7 +1907,7 @@ int          tnetworkloaders::savenwgame( pnstream strm )
 
    stream = strm;
 
-   stream->writepchar ( NULL );  // description is not used any more
+   stream->writepchar ( getFullVersionString() );  // description is not used any more
    stream->writeWord ( fileterminator );
  
    stream->writeInt ( actnetworkversion );

@@ -111,6 +111,10 @@
 
     AiParameter* aiparam[8];
 
+    //! can the unit move from its current position (does not check neighbouring fields)
+    bool canMove ( void );
+
+    //! returns the movement points the unit has left for this turn
     int getMovement ( void );
 
     /** sets a new distance that the unit can move
