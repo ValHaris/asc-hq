@@ -11,8 +11,8 @@
       obj\loadbi3.obj obj\loaders.obj obj\loadpcxc.obj obj\mapalgorithms.obj 
       obj\misc.obj obj\missions.obj obj\Named.obj obj\network.obj 
       obj\newfont.obj obj\palette.obj obj\password.obj obj\password_dialog.obj 
-      obj\pd.obj obj\Property.obj obj\PropertyGroup.obj obj\sgstream.obj 
-      obj\soundList.obj obj\spfst.obj obj\stack.obj obj\strtmesg.obj 
+      obj\pd.obj obj\Property.obj obj\PropertyGroup.obj obj\spfst.obj 
+      obj\sgstream.obj obj\soundList.obj obj\stack.obj obj\strtmesg.obj 
       obj\typen.obj obj\unitctrl.obj obj\vehicletype.obj obj\viewcalculation.obj 
       obj\gamedlg.obj obj\SDL_main.obj obj\asc_IMG_jpg.obj obj\sound.obj 
       obj\graphics.obj obj\loadimage.obj obj\SDLStretch.obj obj\events.obj 
@@ -97,9 +97,9 @@
       <FILE FILENAME="..\..\pd.cpp" FORMNAME="" UNITNAME="pd" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Property.cpp" FORMNAME="" UNITNAME="Property" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\PropertyGroup.cpp" FORMNAME="" UNITNAME="PropertyGroup" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\spfst.cpp" FORMNAME="" UNITNAME="spfst" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\sgstream.cpp" FORMNAME="" UNITNAME="sgstream" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\soundList.cpp" FORMNAME="" UNITNAME="soundList" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\spfst.cpp" FORMNAME="" UNITNAME="spfst" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\stack.cpp" FORMNAME="" UNITNAME="stack" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\strtmesg.cpp" FORMNAME="" UNITNAME="strtmesg" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\typen.cpp" FORMNAME="" UNITNAME="typen" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
@@ -261,7 +261,7 @@ Item2=C:\Programme\ascsrc\games\asc\source\win32\borland
 DebugSourceDirs=c:\programme\borland\cbuilder5\source\vcl;C:\Programme\ascdev\paragui\include\
 
 [Parameters]
-RunParams=-w -q -c C:\Programme\ascdev\asc\source\win32\borland\asc2.ini
+RunParams=-w -q
 Launcher=
 UseLauncher=0
 DebugCWD=

@@ -398,9 +398,12 @@ AStar3D :: AStar3D ( pmap actmap_, pvehicle veh_, bool markTemps_, int maxDistan
    if ( MAXIMUM_PATH_LENGTH > longestPath )
       MAXIMUM_PATH_LENGTH =  int(2* longestPath);
 
-
-   if ( !veh->maxMovement() )
-      fatalError ( "AStar3D :: AStar3D  -  trying to move a immobile unit");
+/*
+   if ( !veh->maxMovement() ) {
+      // fatalError ( "AStar3D :: AStar3D  -  trying to move a immobile unit");
+      int foo = veh->maxMovement()*2;
+   }
+*/
 
    if ( veh->getPosition().getNumericalHeight() >= 0 )
       for ( int i = 0; i < 8; i++ )

@@ -2398,6 +2398,19 @@ void         generatevehicle_cl ( pvehicletype fztyp,
       vehicle->ypos = y;
       vehicle->setup_classparams_after_generation ();
 
+      int height = -1;
+      int maxmove = -1;
+      for ( int h = 0; h < 8; h++ )
+         if ( fztyp->height & ( 1 << h ))
+            if ( fztyp->movement[h] > maxmove ) {
+               maxmove = fztyp->movement[h];
+               height = h;
+            }
+      vehicle->height = 1 << height;
+      vehicle->setMovement ( vehicle->maxMovement() );
+
+
+
       if ( actmap->getgameparameter(cgp_bi3_training) >= 1 ) {
          int cnt = 0;
 

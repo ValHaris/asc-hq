@@ -865,7 +865,7 @@ void         newsinglelevel(void)
    tnc.init();
    tnc.run();
    tnc.done();
-   actmap->player[0].exist();
+   // actmap->player[0].exist();
 }
 
 void         startnewsinglelevelfromgame(void)

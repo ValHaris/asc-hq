@@ -55,8 +55,9 @@ void BaseVehicleMovement :: PathFinder :: getMovementFields ( IntFieldList& reac
    // Since the UI is only in xy, we need to find the height which is the easiest to reach
    typedef multimap<MapCoordinate,Container::iterator > Fields;
    Fields fields;
+   int orgHeight=-1;
+   int minMovement = maxint;
    for ( Container::iterator i = visited.begin(); i != visited.end(); ++i ) {
-
       if ( i->h.x != veh->getPosition().x || i->h.y != veh->getPosition().y || i->h.getNumericalHeight() != unitHeight ) {
          int h = i->h.getNumericalHeight();
          if ( h == -1 )
@@ -67,6 +68,11 @@ void BaseVehicleMovement :: PathFinder :: getMovementFields ( IntFieldList& reac
             else
                reachableFieldsIndirect.addField ( i->h, i->h.getNumericalHeight() );
       }
+      if ( i->h.getNumericalHeight() >= 0 )
+         if ( i->gval < minMovement ) {
+            orgHeight = i->h.getNumericalHeight();
+            minMovement = i->gval;
+         }
    }
    for ( Fields::iterator i = fields.begin(); i != fields.end();  ) {
       int height = i->second->h.getNumericalHeight();
@@ -74,7 +80,7 @@ void BaseVehicleMovement :: PathFinder :: getMovementFields ( IntFieldList& reac
       Fields::key_type key = i->first;
       ++i;
       while ( i->first == key ) {
-         if ( i->second->gval  < move )
+         if ( i->second->gval  < move || ( i->second->gval == move && abs(i->second->h.getNumericalHeight()-orgHeight) < abs(height-orgHeight) ))
             height = i->second->h.getNumericalHeight();
          ++i;
       }

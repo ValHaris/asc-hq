@@ -199,10 +199,6 @@ int main(int argc, char *argv[] )
 
             printf(" processing unit %s , ID %d ... ", ft->description.c_str(), ft->id );
 
-
-            // b1 += ".gif";    // little pic
-            // b2 += ".jpg";    // big pic
-
             FILE* framePage = createFile ( prefixDir + fileName + ".html" );
             FILE* generalPage = createFile ( prefixDir + fileName + "1.html" );
             FILE* movePage = createFile ( prefixDir + fileName + "2.html" );
@@ -672,6 +668,29 @@ int main(int argc, char *argv[] )
             if ( !names.empty() )
                printMainLine ( constructionPage, "Destructable Objects", names);
 
+            for ( vector<IntRange>::iterator  i = ft->objectGroupsBuildable.begin(); i != ft->objectGroupsBuildable.end(); ++i )
+               for ( int j = i->from; j <= i->to; j++ ) {
+                  ASCString s;
+                  s.format ( "%d <br>", j );
+                  names += s;
+                  ++size;
+               }
+            if ( !names.empty() )
+               printMainLine ( constructionPage, "Constructable Object-Groups", names);
+
+             // Objekte abreissbar
+            names = "";
+            for ( vector<IntRange>::iterator i = ft->objectGroupsRemovable.begin(); i != ft->objectGroupsRemovable.end(); ++i )
+               for ( int j = i->from; j <= i->to; j++ ) {
+                  ASCString s;
+                  s.format ( "%d <br>", j );
+                  names += s;
+                  ++size;
+               }
+            if ( !names.empty() )
+               printMainLine ( constructionPage, "Destructable Object-Groups", names);
+
+
             // UNITS
             names = "";
             for ( unsigned int i = 0; i < ft->vehiclesBuildable.size(); i++ ) {
@@ -836,7 +855,13 @@ int main(int argc, char *argv[] )
 
 
             //BEGINN DESCRIPTION
-            fprintf ( infoPage, "<H2>Informationen about this Unit</H2>" );
+            fprintf ( infoPage, "<H2>Informationen about this Unit</H2>\n" );
+
+
+            if ( exist ( prefixDir + fileName + ".jpg" )) {
+               fprintf( infoPage, "<img src=\"%s\">\n", fileName.c_str() );
+            }
+
             if ( !ft->infotext.empty() ) {
                ASCString text = ft->infotext;
                while ( text.find ( "#crt#" ) != ASCString::npos )
