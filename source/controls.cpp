@@ -1,6 +1,11 @@
-//     $Id: controls.cpp,v 1.7 1999-11-25 22:00:02 mbickel Exp $
+//     $Id: controls.cpp,v 1.8 1999-12-07 21:57:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  1999/11/25 22:00:02  mbickel
+//      Added weapon information window
+//      Added support for primary offscreen frame buffers to graphics engine
+//      Restored file time handling for DOS version
+//
 //     Revision 1.6  1999/11/23 21:07:23  mbickel
 //      Many small bugfixes
 //
@@ -545,41 +550,42 @@ void         trefuelvehicle::testfield(void)
                if ((((actvehicle->typ->weapons->weapon[i].typ & cwserviceb) > 0) && (mode == 1)) || (((actvehicle->typ->weapons->weapon[i].typ & (cwammunitionb | cwserviceb)) > 0) && ((mode==2)||(mode==3)))) {
                   fld = getfield(xp,yp); 
                   if (fld->vehicle != NULL) 
-                     if (getdiplomaticstatus(fld->vehicle->color) == capeace) 
-                        if ((fld->vehicle->height & actvehicle->typ->weapons->weapon[i].targ) > 0) {
-                           if ((actvehicle->typ->weapons->weapon[i].typ & cwammunitionb) > 0)
-                              if (fld->vehicle->typ->weapons->count > 0) 
-                                 for (j = 0; j < fld->vehicle->typ->weapons->count ; j++) 
-                                    if (((fld->vehicle->typ->weapons->weapon[j].typ & (cwweapon | cwmineb)) == (actvehicle->typ->weapons->weapon[i].typ & (cwweapon | cwmineb))) && ((actvehicle->typ->weapons->weapon[i].typ & (cwweapon | cwmineb)) > 0))
-                                       if ((fld->vehicle->typ->weapons->weapon[j].count > fld->vehicle->ammo[j]) || (mode == 3)) 
-                                          { 
-                                             fld->a.temp = 2; 
-                                             numberoffields++;
-                                          } 
-                           if ((actvehicle->typ->weapons->weapon[i].typ & cwserviceb) > 0) 
-                              if ( actvehicle->height <= chfahrend || (actvehicle->height == fld->vehicle->height)) {
-                                 if ( ((actvehicle->typ->tank > 0) && (fld->vehicle->typ->tank > 0)
-                                    && ((fld->vehicle->typ->tank > fld->vehicle->fuel) || (mode == 3))
-                                    &&  ((actvehicle->functions & cffuelref) > 0))
-                                    ||
-                                    ((actvehicle->typ->material > 0) && (fld->vehicle->typ->material > 0)
-                                    && ((fld->vehicle->typ->material > fld->vehicle->material) || (mode == 3))
-                                    && ((actvehicle->functions & cfmaterialref) > 0)) )
-                                    { 
-                                       fld->a.temp = 2; 
-                                       numberoffields++;
-                                    } 
-   
-                                 if ( actvehicle->functions & cfrepair )
-                                    if ( actvehicle->fuel && actvehicle->material ) 
-                                       // if ( fld->vehicle->movement >= movement_costtype_for_repaired_unit )
-                                          if ( fld->vehicle->damage ) 
+                     if ( !(fld->vehicle->functions & cfnoairrefuel) || fld->vehicle->height <= chfahrend )
+                        if (getdiplomaticstatus(fld->vehicle->color) == capeace) 
+                           if ((fld->vehicle->height & actvehicle->typ->weapons->weapon[i].targ) > 0) {
+                              if ((actvehicle->typ->weapons->weapon[i].typ & cwammunitionb) > 0)
+                                 if (fld->vehicle->typ->weapons->count > 0) 
+                                    for (j = 0; j < fld->vehicle->typ->weapons->count ; j++) 
+                                       if (((fld->vehicle->typ->weapons->weapon[j].typ & (cwweapon | cwmineb)) == (actvehicle->typ->weapons->weapon[i].typ & (cwweapon | cwmineb))) && ((actvehicle->typ->weapons->weapon[i].typ & (cwweapon | cwmineb)) > 0))
+                                          if ((fld->vehicle->typ->weapons->weapon[j].count > fld->vehicle->ammo[j]) || (mode == 3)) 
                                              { 
                                                 fld->a.temp = 2; 
                                                 numberoffields++;
                                              } 
-                              } 
-                        } 
+                              if ((actvehicle->typ->weapons->weapon[i].typ & cwserviceb) > 0) 
+                                 if ( actvehicle->height <= chfahrend || (actvehicle->height == fld->vehicle->height)) {
+                                    if ( ((actvehicle->typ->tank > 0) && (fld->vehicle->typ->tank > 0)
+                                       && ((fld->vehicle->typ->tank > fld->vehicle->fuel) || (mode == 3))
+                                       &&  ((actvehicle->functions & cffuelref) > 0))
+                                       ||
+                                       ((actvehicle->typ->material > 0) && (fld->vehicle->typ->material > 0)
+                                       && ((fld->vehicle->typ->material > fld->vehicle->material) || (mode == 3))
+                                       && ((actvehicle->functions & cfmaterialref) > 0)) )
+                                       { 
+                                          fld->a.temp = 2; 
+                                          numberoffields++;
+                                       } 
+      
+                                    if ( actvehicle->functions & cfrepair )
+                                       if ( actvehicle->fuel && actvehicle->material ) 
+                                          // if ( fld->vehicle->movement >= movement_costtype_for_repaired_unit )
+                                             if ( fld->vehicle->damage ) 
+                                                { 
+                                                   fld->a.temp = 2; 
+                                                   numberoffields++;
+                                                } 
+                                 } 
+                           } 
                } 
 
    } 
@@ -3718,9 +3724,9 @@ tdashboard::tdashboard ( void )
 void tdashboard::paint ( const pfield ffield, int playerview )
 {
    if (fieldvisiblenow(ffield, playerview ))
-      paintvehicleinfo ( ffield->vehicle, ffield->building, ffield->object );
+      paintvehicleinfo ( ffield->vehicle, ffield->building, ffield->object, NULL );
    else 
-      paintvehicleinfo( NULL, NULL, NULL ); 
+      paintvehicleinfo( NULL, NULL, NULL, NULL ); 
 }
 
 void         tdashboard::putheight(integer      i, integer      sel) 
@@ -3748,9 +3754,16 @@ void         tdashboard::paintheight(void)
           } 
        
     else
-       // if ( building )  
+       if ( vehicletype ) {
+          for ( int i = 0; i <= 7; i++) { 
+             if (vehicletype->height & (1 << (7 - i)))
+               putheight(i,2);
+             else 
+               putheight(i,0);
+          } 
+       } else
           for ( int i = 0; i <= 7; i++) 
-            putheight(i,0);
+              putheight(i,0);
 } 
  
  
@@ -3880,20 +3893,27 @@ void         tdashboard::paintweapons(void)
     activefontsettings.justify = righttext; 
     i = 0; 
     int k = 7;
-    if ( vehicle ) { 
-       if ( vehicle->typ->weapons->count ) 
-          for (j = 0; j < vehicle->typ->weapons->count ; j++) { 
-             if ( vehicle->typ->weapons->weapon[j].count ) { 
-                paintweapon(i, vehicle->ammo[j], vehicle-> weapstrength[j], &vehicle->typ->weapons->weapon[j] );
+
+   pvehicletype vt;
+   if ( vehicle )
+      vt = vehicle->typ;
+   else
+      vt = vehicletype;
+
+    if ( vt ) { 
+       if ( vt->weapons->count ) 
+          for (j = 0; j < vt->weapons->count && j < 8; j++) { 
+             if ( vt->weapons->weapon[j].count ) { 
+                paintweapon(i, ( vehicle ? vehicle->ammo[j] : vt->weapons->weapon[j].count ), ( vehicle ? vehicle-> weapstrength[j] : vt->weapons->weapon[j].maxstrength ), &vt->weapons->weapon[j] );
                 i++; 
              } 
              else { 
-                if (vehicle->typ->weapons->weapon[j].typ & cwserviceb) {
+                if ( vt->weapons->weapon[j].typ & cwserviceb) {
                    serv = 1;
                    if ( materialdisplayed )
-                      if ( vehicle->typ->tank ) { 
+                      if ( vt->tank ) { 
                          putimage ( xp, 93 + k * 13, xlatpict ( &xlattables.light, icons.unitinfoguiweapons[ 8 ] ));
-                         paintweaponammount ( k, vehicle->fuel, vehicle->typ->tank );
+                         paintweaponammount ( k, ( vehicle ? vehicle->fuel : vt->tank ), vt->tank );
                          k--;
                       } 
                 } 
@@ -3901,20 +3921,20 @@ void         tdashboard::paintweapons(void)
           }
        
        if ( materialdisplayed ) {
-          if ( vehicle->typ->material ) { 
+          if ( vt->material ) { 
              if ( serv )
                 putimage ( xp, 93 + k * 13, xlatpict ( &xlattables.light, icons.unitinfoguiweapons[ 11 ] ));
              else
                 putimage ( xp, 93 + k * 13, icons.unitinfoguiweapons[ 11 ] );
-              paintweaponammount ( k, vehicle->material, vehicle->typ->material );
+              paintweaponammount ( k, ( vehicle ? vehicle->material : vt->material ), vt->material );
               k--;
           } 
-          if ( vehicle->typ->energy ) { 
+          if ( vt->energy ) { 
              if ( serv )
                 putimage ( xp, 93 + k * 13, xlatpict ( &xlattables.light, icons.unitinfoguiweapons[ 9 ] ));
              else
                 putimage ( xp, 93 + k * 13, icons.unitinfoguiweapons[ 9 ] );
-              paintweaponammount ( k, vehicle->energy, vehicle->typ->energy );
+              paintweaponammount ( k, ( vehicle ? vehicle->energy : vt->energy ), vt->energy );
               k--;
           } 
        }
@@ -3930,55 +3950,102 @@ void         tdashboard::paintweapons(void)
 
 void         tdashboard :: paintlargeweaponinfo ( void )
 {
-   int x = (agmp->resolutionx - 640) / 2;
-
-   int height, width;
-   getpicsize ( icons.weaponinfo[0], width, height );
-
-   setinvisiblemouserectanglestk ( x, 150, x + width, 150 + height );
-   putimage ( x, 150, icons.weaponinfo[0] );
-   getinvisiblemouserectanglestk ();
-
    int i = 0;
    int serv = -1;
-   if ( vehicle ) { 
-       if ( vehicle->typ->weapons->count ) 
-          for ( int j = 0; j < vehicle->typ->weapons->count ; j++) { 
-             if ( vehicle->typ->weapons->weapon[j].typ & (cwweapon | cwmineb )) { 
-                paintlargeweapon(i, cwaffentypen[ log2 ( vehicle->typ->weapons->weapon[j].typ & (cwweapon | cwmineb ))], vehicle->ammo[j], vehicle->typ->weapons->weapon[j].count,
-                               vehicle->typ->weapons->weapon[j].typ & cwshootableb, vehicle->typ->weapons->weapon[j].typ & cwammunitionb, 
-                               vehicle->typ->weapons->weapon[j].maxstrength, vehicle->typ->weapons->weapon[j].minstrength, 
-                               vehicle->typ->weapons->weapon[j].maxdistance, vehicle->typ->weapons->weapon[j].mindistance,
-                               vehicle->typ->weapons->weapon[j].sourceheight, vehicle->typ->weapons->weapon[j].targ );
+   pvehicletype vt;
+   if ( vehicle )
+      vt = vehicle->typ;
+   else
+      vt = vehicletype;
+   if ( vt ) { 
+       npush ( activefontsettings );
+
+       int x1 = (agmp->resolutionx - 640) / 2;
+       int y1 = 150;
+
+       int count = 0;
+       if ( vt->weapons->count ) 
+          for ( int j = 0; j < vt->weapons->count ; j++) 
+             if ( vt->weapons->weapon[j].typ & (cwweapon | cwmineb )) 
+                count++;
+             else 
+                if (vt->weapons->weapon[j].typ & cwserviceb) 
+                   serv = count;
+
+
+       if ( serv >= 0 ) 
+          count++; 
+       
+       if ( vt->energy ) 
+          count++; 
+
+       int funcs;
+       if ( vehicle )
+          funcs = vehicle->functions;
+       else
+          funcs  = vt->functions;
+
+
+       if ( (serv>= 0 || (funcs & cfmaterialref)) && vt->material ) 
+          count++; 
+
+       if ( (serv>= 0 || (funcs & cffuelref)) && vt->tank ) 
+          count++; 
+
+       count++;
+
+       setinvisiblemouserectanglestk ( x1, y1, x1 + 640, y1 + count * 25 + 40 );
+       void* imgbuf = asc_malloc ( imagesize ( x1, y1, x1 + 640, y1 + count * 25 + 40 ));
+       getimage ( x1, y1, x1 + 640, y1 + count * 25 + 40, imgbuf );
+
+       putimage ( x1, y1, icons.weaponinfo[0] );
+
+       getinvisiblemouserectanglestk ();
+
+
+       if ( vt->weapons->count ) 
+          for ( int j = 0; j < vt->weapons->count ; j++) { 
+             if ( vt->weapons->weapon[j].typ & (cwweapon | cwmineb )) { 
+                int maxstrength = vt->weapons->weapon[j].maxstrength;
+                int minstrength = vt->weapons->weapon[j].minstrength;
+                if ( vehicle ) {
+                   minstrength = minstrength * vehicle->weapstrength[j] / maxstrength;
+                   maxstrength = vehicle->weapstrength[j];
+                }
+
+                paintlargeweapon(i, cwaffentypen[ log2 ( vt->weapons->weapon[j].typ & (cwweapon | cwmineb ))], 
+                               ( vehicle ? vehicle->ammo[j] : vt->weapons->weapon[j].count ) , vt->weapons->weapon[j].count,
+                               vt->weapons->weapon[j].typ & cwshootableb, vt->weapons->weapon[j].typ & cwammunitionb, 
+                               maxstrength, minstrength, 
+                               vt->weapons->weapon[j].maxdistance, vt->weapons->weapon[j].mindistance,
+                               vt->weapons->weapon[j].sourceheight, vt->weapons->weapon[j].targ );
                 i++; 
              } 
-             else 
-                if (vehicle->typ->weapons->weapon[j].typ & cwserviceb) 
-                   serv = j;
           }
        
        if ( serv >= 0 ) {
           paintlargeweapon(i, cwaffentypen[ cwservicen ], -1, -1, -1, -1, -1, -1, 
-                         vehicle->typ->weapons->weapon[serv].maxdistance, vehicle->typ->weapons->weapon[serv].mindistance,
-                         vehicle->typ->weapons->weapon[serv].sourceheight, vehicle->typ->weapons->weapon[serv].targ );
+                         vt->weapons->weapon[serv].maxdistance, vt->weapons->weapon[serv].mindistance,
+                         vt->weapons->weapon[serv].sourceheight, vt->weapons->weapon[serv].targ );
           i++; 
        }
-       if ( vehicle->typ->energy ) { 
-          paintlargeweapon(i, cdnames[ 0 ], vehicle->energy, vehicle->typ->energy, -1, -1, -1, -1, -1, -1, -1, -1 );
+       if ( vt->energy ) { 
+          paintlargeweapon(i, cdnames[ 0 ], ( vehicle ? vehicle->energy : vt->energy ), vt->energy, -1, -1, -1, -1, -1, -1, -1, -1 );
           i++; 
        } 
-       if ( (serv>= 0 || (vehicle->functions & cfmaterialref)) && vehicle->typ->material ) { 
-          paintlargeweapon(i, cdnames[ 1 ], vehicle->material, vehicle->typ->material, -1, -1, -1, -1, -1, -1, -1, -1 );
+
+       if ( (serv>= 0 || (funcs & cfmaterialref)) && vt->material ) { 
+          paintlargeweapon(i, cdnames[ 1 ], ( vehicle ? vehicle->material : vt->material ), vt->material, -1, -1, -1, -1, -1, -1, -1, -1 );
           i++; 
        } 
-       if ( (serv>= 0 || (vehicle->functions & cffuelref)) && vehicle->typ->tank ) { 
-          paintlargeweapon(i, cdnames[ 2 ], vehicle->fuel, vehicle->typ->tank, -1, -1, -1, -1, -1, -1, -1, -1 );
+       if ( (serv>= 0 || (funcs & cffuelref)) && vt->tank ) { 
+          paintlargeweapon(i, cdnames[ 2 ], ( vehicle ? vehicle->fuel : vt->tank ), vt->tank, -1, -1, -1, -1, -1, -1, -1, -1 );
           i++; 
        } 
        
       {
-         int x = (agmp->resolutionx - 640) / 2;
-         int y = 150 + 28 + i * 14;
+         int x = x1;
+         int y = y1 + i * 14 + 28;
       
          int height, width;
          getpicsize ( icons.weaponinfo[4], width, height );
@@ -3992,12 +4059,12 @@ void         tdashboard :: paintlargeweaponinfo ( void )
          activefontsettings.height = 11;
          activefontsettings.length = 80;
          activefontsettings.background = 255;
-         if ( vehicle->typ->wait )
+         if ( vt->wait )
             showtext2c ( "no", x + 140, y +  2 );
          else
             showtext2c ( "yes", x + 140, y +  2 );
 
-         if ( vehicle->functions & cf_moveafterattack )
+         if ( funcs & cf_moveafterattack )
             showtext2c ( "yes", x + 364, y +  2 );
          else
             showtext2c ( "no", x + 364, y +  2 );
@@ -4012,11 +4079,11 @@ void         tdashboard :: paintlargeweaponinfo ( void )
       int first = 1;
       while ( mouseparams.taste == 2) {
          int topaint  = -1;
-         for ( int j = 0; j < vehicle->typ->weapons->count ; j++) {
+         for ( int j = 0; j < vt->weapons->count ; j++) {
             int x = (agmp->resolutionx - 640) / 2;
             int y = 150 + 28 + j * 14;
-            if ( vehicle->typ->weapons->weapon[j].typ & (cwweapon | cwmineb )) 
-               if ( vehicle->typ->weapons->weapon[j].typ & cwshootableb ) 
+            if ( vt->weapons->weapon[j].typ & (cwweapon | cwmineb )) 
+               if ( vt->weapons->weapon[j].typ & cwshootableb ) 
                   if ( mouseinrect ( x, y, x + 640, y+ 14 ))
                      topaint = j;
          }
@@ -4026,13 +4093,13 @@ void         tdashboard :: paintlargeweaponinfo ( void )
             else {
                int effic[13];
                for ( int k = 0; k < 13; k++ )
-                  effic[k] = vehicle->typ->weapons->weapon[topaint].efficiency[k];
+                  effic[k] = vt->weapons->weapon[topaint].efficiency[k];
                int mindelta = 1000;
                int maxdelta = -1000;
                for ( int h1 = 0; h1 < 8; h1++ )
                   for ( int h2 = 0; h2 < 8; h2++ )
-                     if ( vehicle->typ->weapons->weapon[topaint].sourceheight & ( 1 << h1 ))
-                        if ( vehicle->typ->weapons->weapon[topaint].targ & ( 1 << h2 )) {
+                     if ( vt->weapons->weapon[topaint].sourceheight & ( 1 << h1 ))
+                        if ( vt->weapons->weapon[topaint].targ & ( 1 << h2 )) {
                            int delta = getheightdelta ( h1, h2);
                            if ( delta > maxdelta )
                               maxdelta = delta;
@@ -4050,6 +4117,14 @@ void         tdashboard :: paintlargeweaponinfo ( void )
             first = 0;
          }
       }
+
+      setinvisiblemouserectanglestk ( x1, y1, x1 + 640, y1 + count * 25 + 40 );
+      putimage ( x1, y1, imgbuf );
+      getinvisiblemouserectanglestk ();
+
+      asc_free  ( imgbuf );
+
+      npop ( activefontsettings );
    }
 
 }
@@ -4631,6 +4706,7 @@ void         tdashboard::paintsmallmap ( int repaint )
 
 void         tdashboard::checkformouse ( void )
 {
+
     if ( mouseinrect ( agmp->resolutionx - ( 800 - 612), 213, agmp->resolutionx - ( 800 - 781), 305 ) && (mouseparams.taste == 2)) {
        gameoptions.smallmapactive = !gameoptions.smallmapactive;
        gameoptions.changed = 1;
@@ -4690,10 +4766,8 @@ void         tdashboard::checkformouse ( void )
           }
    }
 
-   if ( vehicle && mouseinrect ( agmp->resolutionx - ( 640 - 461 ), 89, agmp->resolutionx - ( 640 - 577 ), 196 ) && (mouseparams.taste == 2)) {
+   if ( (vehicle || vehicletype  ) && mouseinrect ( agmp->resolutionx - ( 640 - 461 ), 89, agmp->resolutionx - ( 640 - 577 ), 196 ) && (mouseparams.taste == 2)) 
       paintlargeweaponinfo();
-      repaintdisplay();
-   }
     
    #ifdef FREEMAPZOOM
     if ( mouseparams.taste == 1 )
@@ -4718,13 +4792,15 @@ void         tdashboard::checkformouse ( void )
           }
        }      
     #endif
+
 }
 
 
 
 void   tdashboard :: paintvehicleinfo( const pvehicle     vehicle,
                                        const pbuilding    building,
-                                       const pobjectcontainer      object )
+                                       const pobjectcontainer      object,
+                                       const pvehicletype vt )
 { 
 
 
@@ -4742,6 +4818,7 @@ void   tdashboard :: paintvehicleinfo( const pvehicle     vehicle,
    dashboard.vehicle        = vehicle;
    dashboard.building       = building;
    dashboard.object         = object;
+   dashboard.vehicletype    = vt;
 
    dashboard.paintheight();
    dashboard.paintweapons(); 

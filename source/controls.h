@@ -1,6 +1,11 @@
-//     $Id: controls.h,v 1.3 1999-11-25 22:00:05 mbickel Exp $
+//     $Id: controls.h,v 1.4 1999-12-07 21:57:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/25 22:00:05  mbickel
+//      Added weapon information window
+//      Added support for primary offscreen frame buffers to graphics engine
+//      Restored file time handling for DOS version
+//
 //     Revision 1.2  1999/11/16 03:41:18  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -55,6 +60,7 @@
                        pfont        font; 
                        int         x, y; 
                        pvehicle     vehicle;
+                       pvehicletype vehicletype;
                        pbuilding    building;
                        pobjectcontainer      object;
 
@@ -103,7 +109,8 @@
                        tdashboard ( void );
                        void paintvehicleinfo( const pvehicle     vehicle,
                                               const pbuilding    building,
-                                              const pobjectcontainer      object );
+                                              const pobjectcontainer      object,
+                                              const pvehicletype  vehicletype );
 
                        int backgrndcol ;
                        int vgcol       ;
