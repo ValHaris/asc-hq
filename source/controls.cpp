@@ -3,9 +3,14 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.142 2002-11-20 20:00:53 mbickel Exp $
+//     $Id: controls.cpp,v 1.143 2002-11-27 21:25:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.142  2002/11/20 20:00:53  mbickel
+//      New features: specify passwords when starting a game
+//      Better error messages when loading a game through command line parameters
+//      Fixed .ASCTXT problems with alias and inheritance
+//
 //     Revision 1.141  2002/11/18 10:47:36  mbickel
 //      Fixed: units with reaction fire could not attack manually
 //      Fixed: crash at end of turn when airplane has maxmovement 0
@@ -1729,6 +1734,11 @@ void         calcmovemalus(int          x1,
    if (uheight >= chtieffliegend && uheight <= chhochfliegend && actmap->weather.wind[ getwindheightforunit ( vehicle, uheight ) ].speed  ) {
       movecost -=  windmovement[direc];
       fuelcost -=  windmovement[direc];
+      if ( movecost < minmalq )
+        movecost = minmalq;
+
+      if ( fuelcost <= 0 )
+        fuelcost = 0;
    }
 
 

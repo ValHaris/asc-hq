@@ -65,6 +65,14 @@ void TextPropertyGroup :: error ( const ASCString& msg )
    fatalError ( "Error evaluating file " + location + "\n" + msg );
 }
 
+void TextPropertyGroup :: print()
+{
+   for ( EntryCache::iterator i = entryCache.begin(); i != entryCache.end(); i++ )
+      printf ( "  %s %s %s \n", i->second->propertyName.c_str(), TextFormatParser::operations[i->second->op], i->second->value.c_str());
+
+}
+
+
 void TextPropertyGroup :: buildInheritance(TextPropertyList& tpl )
 {
    static list<TextPropertyGroup*> callStack;

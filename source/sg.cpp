@@ -1645,10 +1645,9 @@ void  mainloop ( void )
                break;
 
             case ct_9: {
-                for ( int i = 0;i < 9; i++ )
-                   for ( tmap::Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); j++ )
-                      if ( (*j)->networkid == 29809 )
-                         displaymessage ( actmap->getPlayerName(i ), 1);
+                pfield fld = getactfield();
+                pvehicle v = fld->vehicle;
+                displaymessage ( "%d", 1, fld->vehicle->typ->id);
 
             }
                {

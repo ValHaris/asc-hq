@@ -1682,9 +1682,16 @@ int tfield :: getmovemalus ( const pvehicle veh )
       if ( veh->color == col*8 )
          movemalus += movemalus * mine_movemalus_increase * mnum / 100;
 
+      if ( movemalus < minmalq )
+         fatalError ( "invalid movemalus for terraintype ID %d used on field %d / %d" , typ->terraintype->id, getx(), gety() );
+
       return movemalus;
-   } else
-      return __movemalus.at(veh->typ->movemalustyp);
+   } else {
+      int mm = __movemalus.at(veh->typ->movemalustyp);
+      if ( mm < minmalq )
+         fatalError ( "invalid movemalus for terraintype ID %d used on field %d / %d" , typ->terraintype->id, getx(), gety() );
+      return mm;
+   }
 }
 
 int tfield :: getmovemalus ( int type )

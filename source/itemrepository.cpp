@@ -260,10 +260,15 @@ void  loadalltextfiles ( )
 
    displayLogMessage ( 4, "Building inheritance...");
 
+   displayLogMessage ( 10, " Printing all .ASCTXT files after inheritance and aliases have been resolved");
    for ( TextFileRepository::iterator i = textFileRepository.begin(); i != textFileRepository.end(); i++ ) {
       i->second.buildIDs();
       for ( TextPropertyList::iterator j = i->second.begin(); j != i->second.end(); j++ ) {
           (*j)->buildInheritance( i->second );
+          if ( verbosity >= 10 ) {
+             printf("%s \n", (*j)->location.c_str() );
+             (*j)->print();
+          }
           // (*j)->resolveAllAlias();
       }
    }

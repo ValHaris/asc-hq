@@ -157,6 +157,11 @@ void AI:: run ( bool benchMark )
    tempsvisible = false;
    setup();
 
+//   tmap::Weather weatherBackup = getMap()->weather;
+//   for ( int i = 0; i < 3; i++ )
+//      getMap()->weather.wind[i].speed = 0;
+
+
    if ( !originalUnitDistribution.calculated )
       originalUnitDistribution = calcUnitDistribution();
 
@@ -202,6 +207,8 @@ void AI:: run ( bool benchMark )
 
 
    closeReplayLogging();
+
+//   getMap()->weather = weatherBackup;
 
    if ( (CGameOptions::Instance()->runAI == 2 && duration > 100*60) || benchMark )
       displaymessage ("The AI took %.2f seconds to run\n"

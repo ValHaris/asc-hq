@@ -160,8 +160,14 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
 {
    findPath();
 
-   for ( int x = 0; x < actmap->xsize; x++ )
-      for ( int y = 0; y < actmap->ysize; y++ )
+   int x1,y1,x2,y2;
+   x1 = max(veh->xpos - veh->tank.fuel / veh->typ->fuelConsumption, 0 );
+   y1 = max(veh->ypos - veh->tank.fuel / veh->typ->fuelConsumption, 0 );
+   x2 = min(veh->xpos + veh->tank.fuel / veh->typ->fuelConsumption, actmap->xsize );
+   y2 = min(veh->ypos + veh->tank.fuel / veh->typ->fuelConsumption, actmap->ysize );
+
+   for ( int x = x1; x < x2; x++ )
+      for ( int y = y1; y < y2; y++ )
          for ( int h = 0; h < 8; h++ )
             if ( veh->typ->height & ( 1 << h)) {
                 pfield fld = getfield( x,y );

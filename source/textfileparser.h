@@ -91,6 +91,7 @@ class TextPropertyGroup {
          void buildInheritance( TextPropertyList& tpl );
          void resolveAllAlias( );
          bool isAbstract() { return abstract; };
+         void print();
 };
 
 
