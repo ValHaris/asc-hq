@@ -352,20 +352,59 @@ void generateaveragecolprt ( int x1, int y1, int x2, int y2, void* buf, char* pi
 }
 
 
+char generateaveragecolprt ( int x1, int y1, int x2, int y2, const Surface& img )
+{
+   int pixnum = 0;
+
+   int i,j;
+   int r=0, g=0, b=0;
+   for (j=y1; j< y2 ; j++ ) {
+       for (i=x1; i< x2 ; i++ ) {
+          Uint8 rr,gg,bb,aa;
+          img.GetPixelFormat().GetRGBA( img.GetPixel( i, j ), rr,gg,bb,aa);
+          if ( aa > 0x80) {
+             r+=rr;
+             g+=gg;
+             b+=bb;
+             pixnum ++;
+          }
+      } /* endfor */
+   } /* endfor */
+
+   if (pixnum) {
+      int r1 = r / pixnum;
+      int g1 = g / pixnum;
+      int b1 = b / pixnum;
+
+
+      int diff = 0xFFFFFFF;
+      int actdif;
+
+
+      int pix1;
+      for (i=0;i<256 ;i++ ) {
+         actdif = sqr( pal[i][0] - r1 ) + sqr( pal[i][1] - g1 ) + sqr( pal[i][2] - b1 );
+         if (actdif < diff) {
+            diff = actdif;
+            pix1 = i;
+         }
+      }
+   } else {
+      return 255;
+   }
+}
+
+
 
 FieldQuickView* generateAverageCol ( void* image )
 {
    FieldQuickView* qv = new FieldQuickView ;
-
    char* c = &qv->p1 ;
-   // int dx,dy;
 
    for ( int i=1; i<6 ;i+=2 ) {
-      // dx = fieldxsize / i;
-      // dy = fieldysize / i;
       for ( int k=0;k<i ; k++) {
          for ( int j=0 ; j<i ; j++) {
-             generateaveragecolprt ( k * fieldxsize / i, j * fieldysize / i, (k+1) * fieldxsize / i, (j+1) * fieldysize / i, image,  c );
+             generateaveragecolprt ( k * fieldxsize / i, j * fieldysize / i, (k+1) * fieldxsize / i, (j+1) * fieldysize / i, image, c );
              c++;
          } /* endfor */
       } /* endfor */
@@ -374,6 +413,23 @@ FieldQuickView* generateAverageCol ( void* image )
    return qv;
 }
 
+FieldQuickView* generateAverageCol ( const Surface& image )
+{
+   FieldQuickView* qv = new FieldQuickView ;
+
+   char* c = &qv->p1 ;
+
+   for ( int i=1; i<6 ;i+=2 ) {
+      for ( int k=0;k<i ; k++) {
+         for ( int j=0 ; j<i ; j++) {
+             *c = generateaveragecolprt ( k * fieldxsize / i, j * fieldysize / i, (k+1) * fieldxsize / i, (j+1) * fieldysize / i, image );
+             c++;
+         } /* endfor */
+      } /* endfor */
+   } /* endfor */
+
+   return qv;
+}
 
 
 

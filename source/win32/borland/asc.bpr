@@ -25,7 +25,7 @@
       obj\viewcalculation.obj obj\messagedlg.obj obj\simplestream.obj 
       obj\gameevents.obj obj\Singleton.obj obj\prehistoricevents.obj 
       obj\mappolygons.obj obj\gameeventsystem.obj obj\gameevent_dialogs.obj 
-      obj\statisticdialog.obj obj\clipboard.obj"/>
+      obj\statisticdialog.obj obj\clipboard.obj obj\surface.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -40,7 +40,7 @@
     <LIBRARIES value="vcl.lib rtl.lib"/>
     <SPARELIBS value="rtl.lib vcl.lib"/>
     <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi bcbsmp.bpi dclocx.bpi"/>
-    <PATHCPP value=".;..\..\..\..\sdl\src\main\win32;..\..;..\..\LIBS\getopt;..\..\sdl;..\..\libs\loki"/>
+    <PATHCPP value=".;..\..\..\..\sdl\src\main\win32;..\..;..\..\LIBS\getopt;..\..\sdl;..\..\libs\loki;..\..\graphics"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -50,8 +50,8 @@
     <USERDEFINES value="HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32;_DEBUG"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="asc.bpf"/>
-    <INCLUDEPATH value="..\..\libs\sdlmm\src;..\..\libs\loki;..\..\..\..\..\Borland\CBuilder6\Projects;..\..;..\..\LIBS\getopt;..\..\AI;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl_mixer;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image;..\..\..\..\paragui\include;..\..\..\..\freetype2\include;..\..\libs\libsigc++"/>
-    <LIBPATH value="..\..\libs\sdlmm\src;..\..\libs\loki;..\..\..\..\..\Borland\CBuilder6\Projects;..\..;..\..\LIBS\getopt;..\..\AI;C:\BORLAND\CBuilder5\Projects;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\..\graphics;..\..\libs\sdlmm\src;..\..\libs\loki;..\..\..\..\..\Borland\CBuilder6\Projects;..\..;..\..\LIBS\getopt;..\..\AI;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl_mixer;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image;..\..\..\..\paragui\include;..\..\..\..\freetype2\include;..\..\libs\libsigc++"/>
+    <LIBPATH value="..\..\graphics;..\..\libs\sdlmm\src;..\..\libs\loki;..\..\..\..\..\Borland\CBuilder6\Projects;..\..;..\..\LIBS\getopt;..\..\AI;C:\BORLAND\CBuilder5\Projects;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-pck -w-par -w-8027 -w-8026 -w-csu -w-big"/>
     <OTHERFILES value=""/>
   </MACROS>
@@ -162,6 +162,7 @@
       <FILE FILENAME="..\..\gameevent_dialogs.cpp" FORMNAME="" UNITNAME="gameevent_dialogs.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\statisticdialog.cpp" FORMNAME="" UNITNAME="statisticdialog" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\clipboard.cpp" FORMNAME="" UNITNAME="clipboard" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\graphics\surface.cpp" FORMNAME="" UNITNAME="surface" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
