@@ -278,6 +278,9 @@ AI::AiResult AI::executeMoveAttack ( pvehicle veh, TargetVector& tv )
       return result;
    }
 
+   if ( veh->attacked )
+      return result;
+
    VehicleAttack va ( mapDisplay, NULL );
    va.execute ( veh, -1, -1, 0 , 0, -1 );
    if ( va.getStatus() != 2 )
@@ -546,6 +549,16 @@ AI::AiResult AI::tactics( void )
          for ( int j = 0; j < tsk_num; j++ )
             if ( veh->aiparam[ getPlayerNum() ]->getTask() == tasks[j] )
                unitUsable = true;
+
+      if ( getMap()->getField(veh->getPosition())->vehicle != veh ) {
+         Vehicle* transport = getMap()->getField(veh->getPosition())->vehicle;
+         if ( transport ) {
+            const ContainerBaseType::TransportationIO* unloadSystem = transport->vehicleUnloadSystem( veh->typ, -1 );
+            if ( unloadSystem && unloadSystem->disableAttack )
+               continue;
+         }
+      }
+
 
       int maxWeapDist = minint;
       for ( int w = 0; w < veh->typ->weapons.count; w++ )
