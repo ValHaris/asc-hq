@@ -1,0 +1,16 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+USEUNIT("..\blocksort.c");
+USEUNIT("..\crctable.c");
+USEUNIT("..\huffman.c");
+USEUNIT("..\randtable.c");
+USEUNIT("..\bzlib.c");
+USEUNIT("..\compress.c");
+USEUNIT("..\decompress.c");
+//---------------------------------------------------------------------------
+#define Library
+
+// To add a file to the library use the Project menu 'Add to Project'.
+

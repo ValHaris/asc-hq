@@ -1,0 +1,55 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+USEUNIT("jutils.c");
+USEUNIT("jcapistd.c");
+USEUNIT("jccoefct.c");
+USEUNIT("jccolor.c");
+USEUNIT("jcdctmgr.c");
+USEUNIT("jchuff.c");
+USEUNIT("jcinit.c");
+USEUNIT("jcmainct.c");
+USEUNIT("jcmarker.c");
+USEUNIT("jcmaster.c");
+USEUNIT("jcomapi.c");
+USEUNIT("jcparam.c");
+USEUNIT("jcphuff.c");
+USEUNIT("jcprepct.c");
+USEUNIT("jcsample.c");
+USEUNIT("jctrans.c");
+USEUNIT("jdapimin.c");
+USEUNIT("jdapistd.c");
+USEUNIT("jdatadst.c");
+USEUNIT("jdatasrc.c");
+USEUNIT("jdcoefct.c");
+USEUNIT("jdcolor.c");
+USEUNIT("jddctmgr.c");
+USEUNIT("jdhuff.c");
+USEUNIT("jdinput.c");
+USEUNIT("jdmainct.c");
+USEUNIT("jdmarker.c");
+USEUNIT("jdmaster.c");
+USEUNIT("jdmerge.c");
+USEUNIT("jdphuff.c");
+USEUNIT("jdpostct.c");
+USEUNIT("jdsample.c");
+USEUNIT("jdtrans.c");
+USEUNIT("jerror.c");
+USEUNIT("jfdctflt.c");
+USEUNIT("jfdctfst.c");
+USEUNIT("jfdctint.c");
+USEUNIT("jidctflt.c");
+USEUNIT("jidctfst.c");
+USEUNIT("jidctint.c");
+USEUNIT("jidctred.c");
+USEUNIT("jmemmgr.c");
+USEUNIT("jmemnobs.c");
+USEUNIT("jquant1.c");
+USEUNIT("jquant2.c");
+USEUNIT("jcapimin.c");
+//---------------------------------------------------------------------------
+#define Library
+
+// To add a file to the library use the Project menu 'Add to Project'.
+

@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value="win32\borland\asc.exe"/>
+    <OBJFILES value="win32\borland\sg.obj win32\borland\artint.obj win32\borland\dlg_box.obj 
+      win32\borland\attack.obj win32\borland\basegfx.obj 
+      win32\borland\basestrm.obj win32\borland\building.obj 
+      win32\borland\buildingtype.obj win32\borland\CLoadable.obj 
+      win32\borland\containerbase.obj win32\borland\controls.obj 
+      win32\borland\dialog.obj win32\borland\astar2.obj 
+      win32\borland\weather.obj win32\borland\gamemap.obj 
+      win32\borland\gameoptions.obj win32\borland\gui.obj 
+      win32\borland\loadbi3.obj win32\borland\loaders.obj 
+      win32\borland\loadpcxc.obj win32\borland\mapalgorithms.obj 
+      win32\borland\misc.obj win32\borland\missions.obj win32\borland\Named.obj 
+      win32\borland\network.obj win32\borland\newfont.obj 
+      win32\borland\palette.obj win32\borland\password.obj 
+      win32\borland\password_dialog.obj win32\borland\pd.obj 
+      win32\borland\Property.obj win32\borland\PropertyGroup.obj 
+      win32\borland\sgstream.obj win32\borland\soundList.obj 
+      win32\borland\spfst.obj win32\borland\stack.obj win32\borland\strtmesg.obj 
+      win32\borland\typen.obj win32\borland\unitctrl.obj 
+      win32\borland\vehicletype.obj win32\borland\viewcalculation.obj 
+      win32\borland\gamedlg.obj win32\borland\asc_IMG_jpg.obj 
+      win32\borland\SDL_main.obj win32\borland\sound.obj 
+      win32\borland\graphics.obj win32\borland\loadimage.obj 
+      win32\borland\SDLStretch.obj win32\borland\events.obj"/>
+    <RESFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES)"/>
+    <LIBFILES value="libs\bzlib\win\bzlib.lib libs\jpeg-6b\libjpeg.lib 
+      libs\triangul\win32\triangulation.lib ..\..\sdl\bin\sdl.lib"/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="VCL50.lib"/>
+    <PACKAGES value="VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi"/>
+    <PATHCPP value=".;sdl;..\..\..\SDL-1.1.5\src\main\win32"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="tlink32"/>
+    <USERDEFINES value="HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32"/>
+    <SYSDEFINES value="NO_STRICT;_NO_VCL;USEPACKAGES"/>
+    <MAINSOURCE value="asc.bpf"/>
+    <INCLUDEPATH value="..\..\..\SDL-1.1.5\src\main\win32;..\..\sdl\include;sdl;win32;..\..\..\SDL-1.1.5\include;..\..\..\..\BORLAND\CBuilder5\Projects\$(SDLDIR)\include;$(BCB)\include"/>
+    <LIBPATH value="..\..\..\SDL-1.1.5\src\main\win32;sdl;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-rch -w-par -w-csu -w-ccc"/>
+  </MACROS>
+  <OPTIONS>
+    <CFLAG1 value="-O2 -Vx -Ve -X- -a1 -5 -b -k -y -v -vi- -tW -tWM -c"/>
+    <PFLAGS value="-N2win32\borland -N0win32\borland -$YD -$W -$O- -v -JPHNE -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="-Iwin32\borland -D&quot;&quot; -aa -Tpe -GD -s -Gn -M -v"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cw32mt.lib"/>
+  </LINKER>
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1031
+CodePage=1252
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[HistoryLists\hlIncludePath]
+Count=11
+Item0=..\..\..\SDL-1.1.5\src\main\win32;..\..\sdl\include;sdl;win32;..\..\..\SDL-1.1.5\include;..\..\..\..\BORLAND\CBuilder5\Projects\$(SDLDIR)\include;$(BCB)\include
+Item1=C:\Programme\ascsrc\games\sdl\include;sdl;win32;..\..\..\SDL-1.1.5\include;..\..\..\..\BORLAND\CBuilder5\Projects\$(SDLDIR)\include;$(BCB)\include
+Item2=..\..\..\SDL-1.1.5\src\main\win32;sdl;win32;..\..\..\SDL-1.1.5\include;..\..\..\..\BORLAND\CBuilder5\Projects\$(SDLDIR)\include;$(BCB)\include
+Item3=win32;..\..\..\SDL-1.1.5\include;..\..\..\..\BORLAND\CBuilder5\Projects\$(SDLDIR)\include;$(BCB)\include
+Item4=..\..\..\ascsrc\games\asc\source\win32;..\..\..\ascsrc\SDL-1.1.5\include;$(SDLDIR)\include;..\..\..\ascsrc\games\asc\source;$(BCB)\include
+Item5=C:\Programme\ascsrc\games\asc\source\win32;..\..\..\ascsrc\SDL-1.1.5\include;$(SDLDIR)\include;..\..\..\ascsrc\games\asc\source;$(BCB)\include
+Item6=..\..\..\ascsrc\SDL-1.1.5\include;$(SDLDIR)\include;..\..\..\ascsrc\games\asc\source;$(BCB)\include
+Item7=C:\Programme\ascsrc\SDL-1.1.5\include;$(SDLDIR)\include;..\..\..\ascsrc\games\asc\source;$(BCB)\include
+Item8=$(SDLDIR)\include;..\..\..\ascsrc\games\asc\source;$(BCB)\include
+Item9=..\..\..\ascsrc\games\asc\source;$(BCB)\include;$(SDLDIR)\include
+Item10=..\..\..\ascsrc\games\asc\source;$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=4
+Item0=..\..\..\SDL-1.1.5\src\main\win32;sdl;$(BCB)\lib\obj;$(BCB)\lib
+Item1=sdl;$(BCB)\lib\obj;$(BCB)\lib
+Item2=$(BCB)\lib\obj;$(BCB)\lib
+Item3=..\..\..\ascsrc\games\asc\source;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=4
+Item0=HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32
+Item1=HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_
+Item2=_DEBUG;_WIN32_
+Item3=_DEBUG
+
+[HistoryLists\hlIntOutputDir]
+Count=2
+Item0=win32\borland
+Item1=C:\Programme\ascsrc\games\asc\source\win32\borland
+
+[HistoryLists\hlFinalOutputDir]
+Count=2
+Item0=win32\borland\
+Item1=C:\Programme\ascsrc\games\asc\source\win32\borland
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=0
+  </IDEOPTIONS>
+</PROJECT>

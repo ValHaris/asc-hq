@@ -1,0 +1,13 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+USEUNIT("..\trimisc.c");
+USEUNIT("..\monotone.c");
+USEUNIT("..\tri.c");
+USEUNIT("..\construc.c");
+//---------------------------------------------------------------------------
+#define Library
+
+// To add a file to the library use the Project menu 'Add to Project'.
+
