@@ -1365,7 +1365,10 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
          displaymovingunit.ypos = y2;
          displaymovingunit.dx = 0 ;// -dx;
          displaymovingunit.dy = 0 ;// -dy;
-         displaymovingunit.hgt = h2 - ( h2 - h1 ) * tick / CGameOptions::Instance()->movespeed;
+         if ( CGameOptions::Instance()->movespeed )
+            displaymovingunit.hgt = h2 - ( h2 - h1 ) * tick / CGameOptions::Instance()->movespeed;
+         else
+            displaymovingunit.hgt = h2;
 
          int r;
          if ( displaymovingunit.ypos & 1 )   /*  ungerade reihennummern  */
@@ -1391,8 +1394,14 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
          }
 
 
-         dx = sdx * tick / CGameOptions::Instance()->movespeed;
-         dy = sdy * tick / CGameOptions::Instance()->movespeed;
+         if ( CGameOptions::Instance()->movespeed ) {
+            dx = sdx * tick / CGameOptions::Instance()->movespeed;
+            dy = sdy * tick / CGameOptions::Instance()->movespeed;
+         } else {
+            dx = 0;
+            dy = 0;
+         }
+
 
          /*
          if ( dx > 0 )
