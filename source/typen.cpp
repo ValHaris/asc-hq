@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.7 2000-01-06 11:19:16 mbickel Exp $
+//     $Id: typen.cpp,v 1.8 2000-01-24 08:16:52 steb Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/01/06 11:19:16  mbickel
+//      Worked on the Linux-port again...
+//
 //     Revision 1.6  1999/12/27 13:00:14  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -771,7 +774,8 @@ void tvehicle :: setup_classparams_after_generation ( void )
       if ( typ->weapons->count ) { 
          for ( int m = 0; m < typ->weapons->count ; m++) {
             ammo[m] = 0;
-            weapstrength[m] = typ->weapons->weapon[m].maxstrength * typ->classbound[klasse].weapstrength[log2(typ->weapons->weapon[m].typ & (cwweapon | cwmineb))] / 1024;
+            weapstrength[m] = typ->weapons->weapon[m].maxstrength *
+	      typ->classbound[klasse].weapstrength[typ->weapons->weapon[m].getScalarWeaponType()] / 1024;
          } 
       }
 

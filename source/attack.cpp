@@ -1,6 +1,9 @@
-//     $Id: attack.cpp,v 1.5 2000-01-20 16:52:09 mbickel Exp $
+//     $Id: attack.cpp,v 1.6 2000-01-24 08:16:49 steb Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/01/20 16:52:09  mbickel
+//      Added Kamikaze attack
+//
 //     Revision 1.4  2000/01/01 19:04:13  mbickel
 //     /tmp/cvsVhJ4Z3
 //
@@ -57,8 +60,9 @@
 #include "mousehnd.h"
 #include "timer.h"
 #include "loaders.h"
+#include "soundList.hh"
 
-
+#define DEBUG( msg ) fprintf( stderr, "DEBUG : %s\n", msg )
 
    #define damagefaktor 4
    #define  verteidigungsfaktor  14     /* wird durch 8 geteilt */
@@ -274,6 +278,13 @@ void tfight :: paintline ( int num, int val, int col )
 #define maxdefenseshown 24
 #define maxattackshown 24
 
+void tunitattacksunit::calcdisplay( int ad, int dd ) {
+  sound.weaponSound(_attackingunit->getWeapon(av.weapnum)->getScalarWeaponType())->playWait();
+  if(dv.strength>0)
+    sound.weaponSound(_attackedunit->getWeapon(dv.weapnum)->getScalarWeaponType())->playWait();
+  tfight::calcdisplay(ad,dd);
+}
+  
 void tfight :: calcdisplay ( int ad, int dd )
 {
    collategraphicoperations cgo;
@@ -438,7 +449,11 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    else
       _weapon  = weapon;
 
-   SingleWeapon* weap = &attackingunit->typ->weapons->weapon[_weapon];
+   SingleWeapon* weap = attackingunit->getWeapon(_weapon);
+
+//     // Play sound for attacking weapon
+//     sound.weaponSound(weap->getScalarWeaponType())->playWait();
+
    av.strength   = attackingunit->weapstrength[_weapon] * weapdist->getweapstrength(weap, dist, attackingunit->height, attackedunit->height ) / 255;
    av.armor  = attackingunit->armor;
    av.damage     = attackingunit->damage;
@@ -485,7 +500,11 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
       respond = 0;
 
    if ( respond ) {
-      weap = &attackedunit->typ->weapons->weapon[ dv.weapnum ];
+      weap = attackedunit->getWeapon( dv.weapnum );
+
+//        // Play defenders weapon sound
+//        sound.weaponSound(weap->getScalarWeaponType())->playWait();
+
       dv.strength  = attackedunit->weapstrength[ dv.weapnum ] * weapdist->getweapstrength(weap, dist, attackedunit->height, attackingunit->height ) / 255;
       field = getfield ( attackedunit->xpos, attackedunit->ypos );
       dv.attackbonus  = field->getattackbonus();
@@ -546,11 +565,19 @@ void tunitattacksunit :: setresult ( void )
       _attackedunit->ammo[ dv.weapnum ] = dv.weapcount;
    }
 
-   if ( _attackingunit->damage >= 100 )
-      removevehicle ( _pattackingunit );
+   /* If the attacking vehicle was destroyed, remove it */
+   if ( _attackingunit->damage >= 100 ) {
+     DEBUG("Attacker Destroyed");
+     sound.boom->play();
+     removevehicle ( _pattackingunit );
+   }
 
-   if ( _attackedunit->damage >= 100 )
-      removevehicle ( _pattackedunit );
+   /* If the attacked vehicle was destroyed, remove it */
+   if ( _attackedunit->damage >= 100 ) {
+     DEBUG("Target Destroyed");
+     sound.boom->play();
+     removevehicle ( _pattackedunit );
+   }
 
 
    actmap->time.a.move++;
@@ -643,11 +670,17 @@ void tunitattacksbuilding :: setresult ( void )
 
    _attackedbuilding->damage    = dv.damage;
 
-   if ( _attackingunit->damage >= 100 )
+   /* Remove the attacking unit if it was destroyed */
+   if ( _attackingunit->damage >= 100 ) {
+      sound.boom->play();
       removevehicle ( &_attackingunit );
+   }
 
-   if ( _attackedbuilding->damage >= 100 )
-      removebuilding ( &_attackedbuilding );
+   /* Remove attacked building if it was destroyed */
+   if ( _attackedbuilding->damage >= 100 ) {
+     sound.boom->play();
+     removebuilding ( &_attackedbuilding );
+   }
 
    actmap->time.a.move++;
 }
@@ -723,8 +756,11 @@ void tmineattacksunit :: setresult ( void )
 
    _attackedunit->damage = dv.damage;
 
-   if ( _attackedunit->damage >= 100 )
-      removevehicle ( _pattackedunit );
+   /* Remove the mined vehicle if it was destroyed */
+   if ( _attackedunit->damage >= 100 ) {
+     sound.boom->play();
+     removevehicle ( _pattackedunit );
+   }
 
 }
 
@@ -835,8 +871,11 @@ void tunitattacksobject :: setresult ( void )
 
    _obji->damage    = dv.damage;
 
-   if ( _obji->damage >= 100 )
-      getfield ( _x, _y )-> removeobject ( _obji->typ );
+   /* Remove the object if it was destroyed */
+   if ( _obji->damage >= 100 ) {
+     sound.boom->play();
+     getfield ( _x, _y )-> removeobject ( _obji->typ );
+   }
 
    actmap->time.a.move++;
 

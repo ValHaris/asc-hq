@@ -1,6 +1,9 @@
-//     $Id: attack.h,v 1.3 2000-01-20 16:52:09 mbickel Exp $
+//     $Id: attack.h,v 1.4 2000-01-24 08:16:49 steb Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/01/20 16:52:09  mbickel
+//      Added Kamikaze attack
+//
 //     Revision 1.2  1999/11/16 03:41:04  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -69,7 +72,7 @@ class tfight {
                   } av, dv;
 
            void calc ( void ) ;
-           void calcdisplay ( int ad = -1, int dd = -1 );
+           virtual void calcdisplay ( int ad = -1, int dd = -1 );
            virtual void setresult ( void ) = 0;
            tfight ( void );
       };
@@ -86,6 +89,7 @@ class tunitattacksunit : public tfight {
          public:
            void setup ( pvehicle &attackingunit, pvehicle &attackedunit, int respond, int weapon );
            void setresult ( void );
+	   virtual void calcdisplay(int ad = -1, int dd = -1);
 
       };
 

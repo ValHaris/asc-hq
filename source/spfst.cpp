@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.16 2000-01-07 13:20:05 mbickel Exp $
+//     $Id: spfst.cpp,v 1.17 2000-01-24 08:16:50 steb Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/01/07 13:20:05  mbickel
+//      DGA fullscreen mode now working
+//
 //     Revision 1.15  2000/01/06 11:19:14  mbickel
 //      Worked on the Linux-port again...
 //
@@ -6436,6 +6439,15 @@ void tbuilding :: changecompletion ( int d )
    
 
 
+/** Returns the SingleWeapon corresponding to the weaponNum for this
+ *  vehicle.
+ */
+SingleWeapon *tvehicle::getWeapon( unsigned weaponNum ) {
+  printf( "getWeapon(%u)\n", weaponNum );
+  UnitWeapon *weapons=typ->weapons;
+  return (weaponNum<=weapons->count)?weapons->weapon+weaponNum:NULL;;
+}
+
 int tvehicle :: buildingconstructable ( pbuildingtype building )
 {
    if ( !building )
@@ -6850,6 +6862,12 @@ void tvehicle::convert ( int col )
    #endif      
 }
 
+/* Translate the weapon/mine/service bit pattern into scalar
+ * weapon number for use in fetching UI resources.
+ */
+unsigned SingleWeapon::getScalarWeaponType(void) {
+  return log2 ( typ & (cwweapon | cwmineb) );
+}
 
 void tvehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
 {

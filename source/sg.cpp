@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.18 2000-01-19 21:18:35 mbickel Exp $
+//     $Id: sg.cpp,v 1.19 2000-01-24 08:16:49 steb Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/01/19 21:18:35  mbickel
+//      Adjusted case of filenames for Linux version (all data files now
+//        lowercase)
+//
 //     Revision 1.17  2000/01/07 13:20:04  mbickel
 //      DGA fullscreen mode now working
 //
@@ -130,7 +134,7 @@
 #include "loadjpg.h"
 #include "sg.h"
 #include "artint.h"
-
+#include "soundList.h"
 
 #ifdef HEXAGON
 #include "loadbi3.h"
@@ -3107,6 +3111,12 @@ int main(int argc, char *argv[] )
         #endif
 
         modenum8 = initgraphics ( resolx, resoly, 8 );
+        fprintf( stderr, "About to initSoundList()" );
+        initSoundList();
+        fprintf( stderr, "Done it" );
+        sound.boom->play();
+        fprintf( stderr, "And played a sound!" );
+
         if ( modenum8 > 0 ) {
            atexit ( returntotextmode );
    

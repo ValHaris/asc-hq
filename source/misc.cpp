@@ -1,6 +1,10 @@
-//     $Id: misc.cpp,v 1.5 2000-01-02 19:47:08 mbickel Exp $
+//     $Id: misc.cpp,v 1.6 2000-01-24 08:16:49 steb Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/01/02 19:47:08  mbickel
+//      Continued Linux port
+//      Fixed crash at program exit
+//
 //     Revision 1.4  1999/12/28 21:03:08  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -88,7 +92,8 @@ int filesize( char *name)
 #endif
 }
 
-
+/** Count the number of zero bits on the LSB side of "zahl"
+ */
 word log2(int zahl)
 {
    char log;
