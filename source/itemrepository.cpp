@@ -24,6 +24,7 @@
 #include "itemrepository.h"
 #include "textfileparser.h"
 #include "sgstream.h"
+#include "textfile_evaluation.h"
 
 #ifndef converter
 #  include "dialog.h"

@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.84 2002-10-02 20:21:00 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.85 2002-10-06 15:44:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.84  2002/10/02 20:21:00  mbickel
+//      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
+//
 //     Revision 1.83  2002/10/01 09:23:42  mbickel
 //      Fixed many bugs
 //      Added inheritance to text files
@@ -410,6 +413,8 @@
 #include "mapdisplay.h"
 #include "graphicset.h"
 #include "itemrepository.h"
+#include "textfileparser.h"
+#include "textfile_evaluation.h"
 
 #ifdef _DOS_
  #include "dos\memory.h"

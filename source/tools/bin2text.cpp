@@ -36,6 +36,7 @@
 #include "../strtmesg.h"
 #include "../textfileparser.h"
 #include "../itemrepository.h"
+#include "../textfile_evaluation.h"
 
 #ifdef WIN32
 #undef main

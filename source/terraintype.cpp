@@ -22,6 +22,7 @@
 #include "sgstream.h"
 #include "textfileparser.h"
 #include "textfiletags.h"
+#include "textfile_evaluation.h"
 
 const char*  cbodenarten[cbodenartennum]  = {"shallow water , coast"       ,
                                              "normal lowland",
@@ -31,7 +32,7 @@ const char*  cbodenarten[cbodenartennum]  = {"shallow water , coast"       ,
                                              "road",
                                              "railroad",
                                              "entry of building (not to be used for terrain)" ,
-                                             "harbour (safe for ships at storm)",
+                                             "harbour",
                                              "runway"  ,
                                              "pipeline",
                                              "buried pipeline",

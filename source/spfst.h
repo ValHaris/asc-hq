@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: spfst.h,v 1.47 2002-03-18 21:42:17 mbickel Exp $
+//     $Id: spfst.h,v 1.48 2002-10-06 15:44:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2002/03/18 21:42:17  mbickel
+//      Some cleanup and documentation in the Mine class
+//      The number of mines is now displayed in the field information window
+//
 //     Revision 1.46  2001/12/14 10:20:05  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -113,8 +117,8 @@
     Boston, MA  02111-1307  USA
 */
 
-#ifndef spfst_h
-  #define spfst_h
+#ifndef spfstH
+  #define spfstH
 
   #include "newfont.h"
   #include "basegfx.h"

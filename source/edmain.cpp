@@ -2,9 +2,14 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.58 2001-12-17 19:41:22 mbickel Exp $
+//     $Id: edmain.cpp,v 1.59 2002-10-06 15:44:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2001/12/17 19:41:22  mbickel
+//      Reactionfire can now be deactivated without consequences if it has just
+//        been activated
+//      Mapeditor: Objects are selected on the palette map too
+//
 //     Revision 1.57  2001/12/14 10:20:05  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -827,7 +832,7 @@ int mapeditorMainThread ( void* _mapname )
 
    } /* end try */
    catch ( ParsingError err ) {
-      displaymessage ( "Error parsing text file" + err.getMessage(), 2 );
+      displaymessage ( "Error parsing text file " + err.getMessage(), 2 );
    }
    catch ( tfileerror err ) {
       displaymessage ( " error loading file %s ",2, err.getFileName().c_str() );

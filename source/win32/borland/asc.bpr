@@ -21,7 +21,8 @@
       obj\buildings.obj obj\networkdata.obj obj\getopt1.obj obj\getopt.obj 
       obj\objecttype.obj obj\terraintype.obj obj\textfileparser.obj 
       obj\textfiletags.obj obj\itemrepository.obj obj\stringtokenizer.obj 
-      obj\music.obj obj\paradialog.obj obj\messages.obj"/>
+      obj\music.obj obj\paradialog.obj obj\messages.obj 
+      obj\textfile_evaluation.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -145,6 +146,7 @@
       <FILE FILENAME="..\..\..\..\paragui\borland\Paragui.lib" FORMNAME="" UNITNAME="Paragui" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\..\freetype2\objs\freetype.lib" FORMNAME="" UNITNAME="freetype" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\..\Expat\Libs\exp.lib" FORMNAME="" UNITNAME="exp" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\textfile_evaluation.cpp" FORMNAME="" UNITNAME="textfile_evaluation" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

@@ -1524,8 +1524,6 @@ void mainloopgeneralmousecheck ( void )
 
    if ( onlinehelpwind && !CGameOptions::Instance()->smallmapactive )
       onlinehelpwind->checkforhelp();
-
-   releasetimeslice();
 }
 
 
@@ -1730,6 +1728,7 @@ void  mainloop ( void )
 
       checkforvictory();
 
+      releasetimeslice();
 
    }  while ( !abortgame );
 }

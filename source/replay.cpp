@@ -616,7 +616,7 @@ int  trunreplay :: removeunit ( int x, int y, int nwid )
 
 void trunreplay :: wait ( int t )
 {
-   if ( fieldvisiblenow ( getactfield(), actmap->playerView ))
+//   if ( fieldvisiblenow ( getactfield(), actmap->playerView ))
     while ( ticker < t + CGameOptions::Instance()->replayspeed  && !keypress()) {
        /*
        tkey input;
@@ -627,9 +627,20 @@ void trunreplay :: wait ( int t )
        */
        releasetimeslice();
     }
-
-
 }
+
+void trunreplay :: wait ( MapCoordinate pos, int t )
+{
+   if ( fieldvisiblenow ( actmap->getField ( pos ), actmap->playerView ))
+      wait();
+}
+
+void trunreplay :: wait ( MapCoordinate pos1, MapCoordinate pos2, int t )
+{
+   if ( fieldvisiblenow ( actmap->getField ( pos1 ), actmap->playerView ) || fieldvisiblenow ( actmap->getField ( pos2 ), actmap->playerView ))
+      wait();
+}
+
 
 /*
 void trunreplay :: setcursorpos ( int x, int y )
@@ -685,7 +696,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                            int t = ticker;
                            vm.execute ( NULL, x2, y2, 2, -1, -1 );
-                           wait( t );
+                           wait( MapCoordinate(x1,y1), MapCoordinate(x2,y2), t );
                            vm.execute ( NULL, x2, y2, 3, -1, -1 );
 
                            if ( vm.getStatus() != 1000 )
@@ -721,7 +732,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                            int t = ticker;
                            vm.execute ( NULL, x2, y2, 2, -1, -1 );
-                           wait( t );
+                           wait( MapCoordinate(x1,y1), MapCoordinate(x2,y2), t );
                            vm.execute ( NULL, x2, y2, 3, -1, noInterrupt );
 
                            if ( vm.getStatus() != 1000 )
@@ -833,7 +844,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                            int t = ticker;
                            va->execute ( NULL, x2, y2, 2, -1, -1 );
-                           wait( t );
+                           wait( MapCoordinate(x1,y1), MapCoordinate(x2,y2), t );
                            va->execute ( NULL, x2, y2, 3, -1, noInterrupt );
 
                            if ( va->getStatus() != 1000 )
@@ -867,7 +878,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                               computeview( actmap );
                               displaymap();
-                              wait();
+                              wait( MapCoordinate(x,y) );
                               removeActionCursor();
                            } else
                               displaymessage("severe replay inconsistency:\nno vehicle for convert command !", 1);
@@ -896,7 +907,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                               computeview( actmap );
                               displaymap();
-                              wait();
+                              wait(MapCoordinate(x,y));
                               removeActionCursor();
                            } else
                               displaymessage("severe replay inconsistency:\nCannot find Object to build/remove !", 1 );
@@ -929,7 +940,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                               computeview( actmap );
                               displaymap();
-                              wait();
+                              wait(MapCoordinate(x,y) );
                               removeActionCursor();
                            } else
                               displaymessage("severe replay inconsistency:\nCannot find Vehicle to build !", 1 );
@@ -953,7 +964,7 @@ void trunreplay :: execnextreplaymove ( void )
                                   putbuilding2( MapCoordinate(x, y), color, bld );
                                   computeview( actmap );
                                   displaymap();
-                                  wait();
+                                  wait(MapCoordinate(x,y));
                                   removeActionCursor();
                                } else
                                   displaymessage("severe replay inconsistency:\nCannot find building to build/remove !", 1 );
@@ -973,8 +984,10 @@ void trunreplay :: execnextreplaymove ( void )
                               displayActionCursor ( x, y );
                               fld -> putmine ( col, typ, strength );
                               computeview( actmap );
-                              displaymap();
-                              wait();
+                              if ( fieldvisiblenow ( actmap->getField(x,y), actmap->playerView )) {
+                                 displaymap();
+                                 wait();
+                              }
                               removeActionCursor();
                            } else
                               displaymessage("severe replay inconsistency:\nno field for putmine command !", 1);
@@ -992,8 +1005,10 @@ void trunreplay :: execnextreplaymove ( void )
                               displayActionCursor ( x, y );
                               fld -> removemine ( -1 );
                               computeview( actmap );
-                              displaymap();
-                              wait();
+                              if ( fieldvisiblenow ( actmap->getField(x,y), actmap->playerView )) {
+                                 displaymap();
+                                 wait();
+                              }
                               removeActionCursor ( );
                            } else
                               displaymessage("severe replay inconsistency:\nno field for remove mine command !", 1);
@@ -1056,7 +1071,7 @@ void trunreplay :: execnextreplaymove ( void )
                                        fld->vehicle = eht;
                                        computeview( actmap );
                                        displaymap();
-                                       wait();
+                                       wait( MapCoordinate(x,y) );
                                        removeActionCursor();
                                     }
                                  } else
@@ -1333,7 +1348,8 @@ int  trunreplay :: run ( int player )
           if ( getxpos () != lastvisiblecursorpos.x || getypos () != lastvisiblecursorpos.y )
              setcursorpos ( lastvisiblecursorpos.x, lastvisiblecursorpos.y );
          */
-       }
+       } else
+          releasetimeslice();
 
        if (nextaction == rpl_finished  || status != 2) {
           if ( !cursor.an )

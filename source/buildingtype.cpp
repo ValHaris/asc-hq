@@ -28,6 +28,7 @@
 #include "textfiletags.h"
 #include "basegfx.h"
 #include "stringtokenizer.h"
+#include "textfile_evaluation.h"
 
 #include "errors.h"
 

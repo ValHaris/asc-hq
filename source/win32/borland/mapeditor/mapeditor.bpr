@@ -20,7 +20,7 @@
       obj\getopt.obj obj\objecttype.obj obj\terraintype.obj 
       obj\textfileparser.obj obj\textfiletags.obj obj\itemrepository.obj 
       obj\asc_IMG_jpg.obj obj\stringtokenizer.obj obj\messages.obj 
-      obj\paradialog.obj"/>
+      obj\paradialog.obj obj\textfile_evaluation.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -131,6 +131,7 @@
       <FILE FILENAME="..\..\..\stringtokenizer.cpp" FORMNAME="" UNITNAME="stringtokenizer" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\messages.cpp" FORMNAME="" UNITNAME="messages" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\paradialog.cpp" FORMNAME="" UNITNAME="paradialog" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\textfile_evaluation.cpp" FORMNAME="" UNITNAME="textfile_evaluation" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

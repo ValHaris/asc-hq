@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.68 2002-03-19 19:29:31 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.69 2002-10-06 15:44:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.68  2002/03/19 19:29:31  mbickel
+//      Changed BI3 map import to work in map2pcx without user intervention
+//
 //     Revision 1.67  2001/12/19 17:16:29  mbickel
 //      Some include file cleanups
 //
@@ -214,6 +217,7 @@
 #include "loaders.h"
 #include "dialog.h"
 #include "itemrepository.h"
+#include "textfile_evaluation.h"
 
 /*#ifdef convert/er
   #error The small editors should not need to use LoadBi3

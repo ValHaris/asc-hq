@@ -22,6 +22,7 @@
 #include "textfileparser.h"
 #include "textfiletags.h"
 #include "sgstream.h"
+#include "textfile_evaluation.h"
 
 
 ObjectType :: ObjectType ( void )

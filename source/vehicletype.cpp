@@ -25,6 +25,7 @@
 #include "objecttype.h"
 #include "textfileparser.h"
 #include "textfiletags.h"
+#include "textfile_evaluation.h"
 
 
 const char*  cvehiclefunctions[cvehiclefunctionsnum]  = {

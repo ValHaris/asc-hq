@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.89 2002-03-27 00:18:21 mbickel Exp $
+//     $Id: typen.cpp,v 1.90 2002-10-06 15:44:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.89  2002/03/27 00:18:21  mbickel
+//      Changed the resource weight
+//
 //     Revision 1.88  2002/03/18 21:42:17  mbickel
 //      Some cleanup and documentation in the Mine class
 //      The number of mines is now displayed in the field information window
@@ -427,6 +430,7 @@
 #include "vehicletype.h"
 #include "buildingtype.h"
 #include "textfileparser.h"
+#include "textfile_evaluation.h"
 
 //! The different levels of height
 const char*  choehenstufen[choehenstufennum] = {"deep submerged", "submerged", "floating", "ground level", "low-level flight", "flight", "high-level flight", "orbit"}; 

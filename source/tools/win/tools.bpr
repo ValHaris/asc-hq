@@ -11,7 +11,7 @@
       obj\Property.obj obj\PropertyGroup.obj obj\graphics.obj obj\getopt1.obj 
       obj\getopt.obj obj\strtmesg.obj obj\objecttype.obj obj\terraintype.obj 
       obj\textfileparser.obj obj\textfiletags.obj obj\stringtokenizer.obj 
-      obj\errorout.obj"/>
+      obj\errorout.obj obj\textfile_evaluation.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -77,6 +77,7 @@
       <FILE FILENAME="..\..\textfiletags.cpp" FORMNAME="" UNITNAME="textfiletags" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\stringtokenizer.cpp" FORMNAME="" UNITNAME="stringtokenizer" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\lib\errorout.cpp" FORMNAME="" UNITNAME="errorout" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\textfile_evaluation.cpp" FORMNAME="" UNITNAME="textfile_evaluation" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

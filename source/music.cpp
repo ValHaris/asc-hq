@@ -12,6 +12,7 @@
 #include "music.h"
 #include "itemrepository.h"
 #include "dlg_box.h"
+#include "textfile_evaluation.h"
 
 
 typedef vector<MusicPlayList*> PlayLists;
