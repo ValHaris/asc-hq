@@ -40,7 +40,7 @@
 
 
 
-const char*  cbuildingfunctions[cbuildingfunctionnum]  =
+const char*  cbuildingfunctions[cbuildingfunctionnum+1]  =
               { "HQ",
                 "training",
                 "unused (was: refinery)",
@@ -64,7 +64,8 @@ const char*  cbuildingfunctions[cbuildingfunctionnum]  =
                 "external ammo transfer",
                 "no object chaining",
                 "self destruct on conquer",
-                "view satellites" };
+                "view satellites",
+                NULL };
 
 
 BuildingType :: BuildingType ( void )

@@ -136,6 +136,7 @@ bool ContainerBase :: searchAndRemove( Vehicle* veh )
          if ( loading[b] )
             if ( loading[b]->searchAndRemove ( veh ))
                return true;
+   return false;
 }
 
 

@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.18 2004-05-16 15:40:33 mbickel Exp $
+## $Id: Makefile.am,v 1.19 2004-09-25 12:37:52 mbickel Exp $
 
 vpath %.cpp ../..
 
@@ -27,7 +27,7 @@ terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
 textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
 mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
-gameevent_dialogs.cpp 
+gameevent_dialogs.cpp clipboard.cpp
 
 asc_mapedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
@@ -45,7 +45,7 @@ $(PARAGUI_LIBS) $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la
 #stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
 #textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
 #mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
-#gameevent_dialogs.cpp 
+#gameevent_dialogs.cpp clipboard.cpp
 
 #asc_map2pcx_LDADD   	= $(top_builddir)/source/libs/triangul/libtriangul.la \
 #$(top_builddir)/source/sdl/libsdl.la  @LDADDLIBBZ2@ $(PARAGUI_LIBS) \

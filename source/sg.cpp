@@ -119,6 +119,7 @@
 #include "music.h"
 #include "messagedlg.h"
 #include "statisticdialog.h"
+#include "clipboard.h"
 
 
 // #define MEMCHK
@@ -585,7 +586,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
                     ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme, ua_showPlayerSpeed, ua_renameunit,
-                    ua_statisticdialog, ua_viewPipeNet, ua_cancelResearch, ua_showResearchStatus };
+                    ua_statisticdialog, ua_viewPipeNet, ua_cancelResearch, ua_showResearchStatus, ua_exportUnitToFile };
 
 
 class tsgpulldown : public tpulldown
@@ -1619,6 +1620,30 @@ void execuseraction ( tuseractions action )
             vat.done();
          }
          break;
+      case ua_exportUnitToFile:
+         if ( getactfield()->vehicle && getactfield()->vehicle->getOwner() == actmap->actplayer ){
+            ASCString s = "do you really want to cut this unit from the game?";
+            if (choice_dlg(s.c_str(),"~y~es","~n~o") == 1) {
+               Vehicle* veh = getactfield()->vehicle;
+               ClipBoard::Instance().clear();
+               ClipBoard::Instance().addUnit( veh );
+
+               ASCString filename;
+               fileselectsvga(clipboardFileExtension, filename, false);
+               if ( !filename.empty() ) {
+                  tnfilestream stream ( filename, tnstream::writing );
+                  ClipBoard::Instance().write( stream );
+                  logtoreplayinfo ( rpl_cutFromGame, veh->networkid );
+                  veh->prepareForCleanRemove();
+                  delete veh;
+                  computeview( actmap );
+                  displaymap();
+               }
+            }
+         }
+         break;
+
+
 #ifndef NO_PARAGUI
       case ua_reloadDlgTheme:
          if ( pgApp ) {
@@ -1732,6 +1757,10 @@ void  mainloop ( void )
                execuseraction ( ua_startnewsinglelevel );
                break;
 
+            case ct_stp + ct_f12:
+               execuseraction ( ua_exportUnitToFile );
+               break;
+
             case ct_r:
                execuseraction ( ua_repaint );
                break;
@@ -1769,7 +1798,7 @@ void  mainloop ( void )
             case ct_f11: {
             }
             break;
-               
+
             case ct_1:
                execuseraction ( ua_changeresourceview );
                break;

@@ -89,7 +89,7 @@ Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player, int networkI
 Vehicle :: ~Vehicle (  )
 {
    #ifndef karteneditor
-   if ( !typ->wreckageObject.empty() && gamemap && !gamemap->__mapDestruction ) {
+   if ( !typ->wreckageObject.empty() && gamemap && !gamemap->__mapDestruction && !cleanRemove) {
       pfield fld = getMap()->getField(getPosition());
       if ( fld->vehicle ==  this ) {
          for ( vector<int>::const_iterator i = typ->wreckageObject.begin(); i != typ->wreckageObject.end(); ++i ) {
@@ -119,13 +119,15 @@ Vehicle :: ~Vehicle (  )
          delete loading[i];
 
    pfield fld = gamemap->getField( xpos, ypos);
-   if ( fld && fld->vehicle  == this )
-     fld->vehicle = NULL;
-   else {
-     if ( fld->building )
-        fld->building->searchAndRemove(this);
-     if ( fld->vehicle )
-        fld->vehicle->searchAndRemove(this);
+   if ( fld ) {
+      if ( fld->vehicle  == this )
+        fld->vehicle = NULL;
+      else {
+        if ( fld->building )
+           fld->building->searchAndRemove(this);
+        if ( fld->vehicle )
+           fld->vehicle->searchAndRemove(this);
+      }
    }
 }
 
@@ -181,6 +183,8 @@ void Vehicle :: init ( void )
    reactionfire.enemiesAttackable = 0;
 
    generatoractive = 0;
+
+   cleanRemove = false;
 
    for ( int a = 0; a < 8 ; a++ )
       aiparam[a] = NULL;

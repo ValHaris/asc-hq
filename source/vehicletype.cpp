@@ -34,7 +34,7 @@
 #include "textfile_evaluation.h"
 
 
-const char*  cvehiclefunctions[cvehiclefunctionsnum]  = {
+const char*  cvehiclefunctions[cvehiclefunctionsnum+1]  = {
                    "sonar",
                    "paratrooper",
                    "mine-layer",
@@ -62,7 +62,8 @@ const char*  cvehiclefunctions[cvehiclefunctionsnum]  = {
                    "immune to mines",
                    "refuels energy",
                    "jams only own field",
-                   "move with reaction fire on" };
+                   "move with reaction fire on",
+                   NULL };
 
 
 

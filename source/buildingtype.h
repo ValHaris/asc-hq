@@ -33,7 +33,7 @@
 
 
 const int cbuildingfunctionnum = 24;
-extern const char*  cbuildingfunctions[cbuildingfunctionnum];
+extern const char*  cbuildingfunctions[];
  #define cghqn 0
  #define cghqb ( 1 << cghqn  )
  #define cgtrainingn 1

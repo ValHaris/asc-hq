@@ -2,9 +2,15 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.61 2004-09-13 16:56:53 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.62 2004-09-25 12:37:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2004/09/13 16:56:53  mbickel
+//      Added many reset data functions to mapeditor
+//      cargomovecostdivisor for vehicles is now float
+//      Fixed: objects could not be attacked
+//      Filenames in cache
+//
 //     Revision 1.60  2004/05/29 15:07:37  mbickel
 //      Fixed maps
 //      Fixed crash with asc.cache
@@ -309,8 +315,8 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    along with this program; see the file COPYING. If not, write to the
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
 
@@ -327,6 +333,7 @@
 #include "gameoptions.h"
 #include "mapdisplay.h"
 #include "itemrepository.h"
+#include "clipboard.h"
 
 mc_check mc;
 
@@ -1159,29 +1166,29 @@ void execaction(int code)
    case act_specifyunitproduction: unitProductionLimitation();
       break;
    case act_pasteFromClipboard: if ( !getactfield()->getContainer() ) {
-                                   clipBoard.place( MapCoordinate(getxpos(), getypos() ));
+                                   ClipBoard::Instance().place( MapCoordinate(getxpos(), getypos() ));
                                    mapsaved = false;
                                    displaymap();
                                 }
       break;
    case act_copyToClipboard: if ( getactfield()->vehicle ) {
-                                clipBoard.clear();
-                                clipBoard.addUnit( getactfield()->vehicle );
+                                ClipBoard::Instance().clear();
+                                ClipBoard::Instance().addUnit( getactfield()->vehicle );
                              } else
                                 if ( getactfield()->building ) {
-                                   clipBoard.clear();
-                                   clipBoard.addBuilding( getactfield()->building );
+                                   ClipBoard::Instance().clear();
+                                   ClipBoard::Instance().addBuilding( getactfield()->building );
                                 }
       break;
    case act_cutToClipboard: if ( getactfield()->vehicle ) {
-                                clipBoard.clear();
-                                clipBoard.addUnit( getactfield()->vehicle );
+                                ClipBoard::Instance().clear();
+                                ClipBoard::Instance().addUnit( getactfield()->vehicle );
                                 execaction ( act_deleteunit );
                                 mapsaved = false;
                              } else
                                 if ( getactfield()->building ) {
-                                   clipBoard.clear();
-                                   clipBoard.addBuilding( getactfield()->building );
+                                   ClipBoard::Instance().clear();
+                                   ClipBoard::Instance().addBuilding( getactfield()->building );
                                    execaction ( act_deletebuilding );
                                    mapsaved = false;
                                 }

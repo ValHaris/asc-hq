@@ -45,24 +45,6 @@ const ASCString BuildingCargoPage::TITLE = "Cargo";
 const ASCString BuildingResourcePage::TITLE  = "Resource";
 const ASCString BuildingResearchPage::TITLE  = "Research";
 
-const ASCString BuildingMainPage::VEHICLEPROD = "Vehicle production";
-const ASCString BuildingMainPage::AMMUNITIONPROD = "Ammunition production";
-const ASCString BuildingMainPage::REPAIR = "Repair capability";
-const ASCString BuildingMainPage::SOLARENERGY = "Solar energy production";
-const ASCString BuildingMainPage::WINDENERGY = "Wind energy production";
-const ASCString BuildingMainPage::SONAR =  "Sonar detection";
-const ASCString BuildingMainPage::MATTERCON = "Matter convertion";
-const ASCString BuildingMainPage::TRAINING = "Train units";
-const ASCString BuildingMainPage::MINING = "Mining";
-const ASCString BuildingMainPage::RECYCLING = "Recycling";
-const ASCString BuildingMainPage::RESEARCH = "Researching";
-const ASCString BuildingMainPage::SELFDESTRUCTCONQ = "Self destruct by conquer";
-const ASCString BuildingMainPage::NOOBCHAIN = "No object chaining";
-const ASCString BuildingMainPage::EXAMMOLOADING = "External ammo loading";
-const ASCString BuildingMainPage::PRODALLUNITS = "Can produce all units";
-const ASCString BuildingMainPage::SINK = "Resource sink";
-const ASCString BuildingMainPage::EXLOADING = "External loading";
-const ASCString BuildingMainPage::EXRESLOADING = "External Resource loading";
 
 
 const ASCString UnitCargoPage::TITLE = "Cargo";
@@ -71,34 +53,6 @@ const ASCString UnitTerrainPage::TITLE = "Movement";
 const ASCString UnitWeaponPage::TITLE = "Weapon Systems";
 const ASCString UnitConstructionPage::TITLE = "Construction";
 const ASCString UnitResearchPage::TITLE = "Research";
-
-
-
-const ASCString UnitMainPage::SONAR = "Sonar";
-const ASCString UnitMainPage::PARA = "Paratrooper";
-const ASCString UnitMainPage::REPAIR = "Repair Vehicles";
-const ASCString UnitMainPage::MINELAYER = "Lay Mines";
-const ASCString UnitMainPage::CONQUER = "Conquer Buildings";
-const ASCString UnitMainPage::MAA = "Move after Attack";
-const ASCString UnitMainPage::PUTBUILDING = "Construct Building";
-const ASCString UnitMainPage::MINEVIEW = "View Mines";
-const ASCString UnitMainPage::VEHICLECONST = "Construct vehicles";
-const ASCString UnitMainPage::SPECBUILDING = "Construct special Buildings";
-const ASCString UnitMainPage::REFUEL = "Refuel Units";
-const ASCString UnitMainPage::ICEBREAKER = "Icebreaker";
-const ASCString UnitMainPage::NOAIRREFUEL = "No refuelling in air";
-const ASCString UnitMainPage::TRACKS = "Make tracks";
-const ASCString UnitMainPage::MANDIGGER = "Manual Digging";
-const ASCString UnitMainPage::NOREACT = "No Reaction Fire";
-const ASCString UnitMainPage::AUTOREPAIR = "Auto Repair";
-const ASCString UnitMainPage::MOVEWITHREACT = "Move with Reaction Fire";
-const ASCString UnitMainPage::ENERGYREF = "Energy Ref???";
-const ASCString UnitMainPage::GENERATOR = "Generator";
-const ASCString UnitMainPage::AUTODIGGER = "Auto Digging";
-const ASCString UnitMainPage::MINEIMMUNE = "Immune to Mines";
-const ASCString UnitMainPage::OWNFIELDJAM = "Jams only own Field";
-const ASCString UnitMainPage::KAMIKAZE = "Kamikaze";
-const ASCString UnitMainPage::REEQUIPMAT ="Reequip with material";
 
 
 InfoPage::~InfoPage() {}
@@ -454,65 +408,10 @@ void BuildingMainPage::addCategory() {
 
 void BuildingMainPage::addCapabilities() {
   ASCString cap;
-  if ( bt.special & cgvehicleproductionb ) {
-    cap = addTREntryln(cap, VEHICLEPROD);
+  for ( int i = 0; i < cbuildingfunctionnum; ++i)
+  if ( bt.special & ( 1 << i )){
+     cap = addTREntryln(cap, cbuildingfunctions[i] );
   }
-
-  if ( bt.special & cgwindkraftwerkb ) {
-    cap = addTREntryln(cap, WINDENERGY );
-  }
-  if ( bt.special & cgsolarkraftwerkb ) {
-    cap = addTREntryln(cap, SOLARENERGY );
-  }
-  if ( bt.special & cgconventionelpowerplantb ) {
-    cap = addTREntryln(cap, MATTERCON );
-  }
-  if ( bt.special & cgminingstationb ) {
-    cap = addTREntryln(cap, MINING );
-  }
-
-  if ( bt.special & cgrepairfacilityb ) {
-    cap = addTREntryln(cap, REPAIR );
-  }
-  if ( bt.special & cgtrainingb ) {
-    cap = addTREntryln(cap, TRAINING );
-  }
-  if ( bt.special & cgammunitionproductionb ) {
-    cap = addTREntryln(cap, AMMUNITIONPROD );
-  }
-  if ( bt.special & cgrecyclingplantb ) {
-    cap = addTREntryln(cap, RECYCLING );
-  }
-  if ( bt.special & cgresearchb ) {
-    cap = addTREntryln(cap, RESEARCH );
-  }
-  if ( bt.special & cgresearchb ) {
-    cap = addTREntryln(cap, SONAR );
-  }
-  if ( bt.special & cgexternalloadingb ) {
-    cap = addTREntryln(cap, EXLOADING );
-  }
-  if ( bt.special & cgproduceAllUnitsB ) {
-    cap = addTREntryln(cap, PRODALLUNITS );
-  }
-  if ( bt.special & cgresourceSinkB) {
-    cap = addTREntryln(cap, SINK );
-  }
-  if ( bt.special & cgexternalresourceloadingb) {
-    cap = addTREntryln(cap, EXRESLOADING );
-  }
-  if ( bt.special & cgexternalammoloadingb) {
-    cap = addTREntryln(cap, EXAMMOLOADING );
-  }
-
-  if ( bt.special & cgnoobjectchainingb) {
-    cap = addTREntryln(cap, NOOBCHAIN );
-  }
-
-  if ( bt.special & cgselfdestruct_at_conquerb) {
-    cap = addTREntryln(cap, SELFDESTRUCTCONQ );
-  }
-
   addTREntry("Capabilities", cap);
   return;
 
@@ -528,7 +427,7 @@ void BuildingMainPage::buildContent() {
   addCapabilities();
   addTREntry("Default Armor", bt._armor);
   addTREntry("View", bt.view);
-  addTREntry("Jamming", bt.jamming);
+  addTREntry("Jamming", bt.jamming);  
   endTable();
 
 }
@@ -943,90 +842,15 @@ UnitMainPage::UnitMainPage(const VehicleType&  vtype, ASCString filePath, UnitGu
 
 
 void UnitMainPage::addCapabilities() {
-  ASCString cap;
-  if ( vt.functions & cfsonar ) {
-    cap = addTREntryln(cap, SONAR);
-  }
-  if ( vt.functions & cfparatrooper ) {
-    cap = addTREntryln(cap, PARA );
-  }
-  if (vt.functions & cfminenleger ) {
-    cap = addTREntryln(cap, MINELAYER );
-  }
-  if ( vt.functions & cfrepair ) {
-    cap = addTREntryln(cap, REPAIR );
-  }
-  if ( vt.functions & cf_conquer ) {
-    cap = addTREntryln(cap, CONQUER );
-  }
 
-  if ( vt.functions & cf_moveafterattack ) {
-    cap = addTREntryln(cap, MAA );
-  }
-  if ( vt.functions & cfputbuilding ) {
-    cap = addTREntryln(cap, PUTBUILDING );
-  }
-  if ( vt.functions & cfmineview ) {
-    cap = addTREntryln(cap, MINEVIEW );
-  }
-  if ( vt.functions & cfvehicleconstruction ) {
-    cap = addTREntryln(cap, VEHICLECONST );
-  }
-  if ( vt.functions & cfspecificbuildingconstruction ) {
-    cap = addTREntryln(cap, SPECBUILDING );
-  }
-  if ( vt.functions & cffuelref ) {
-    cap = addTREntryln(cap, REFUEL );
-  }
-  if ( vt.functions & cficebreaker ) {
-    cap = addTREntryln(cap, ICEBREAKER );
-  }
-  if ( vt.functions & cfnoairrefuel ) {
-    cap = addTREntryln(cap, NOAIRREFUEL );
-  }
-  if ( vt.functions &  cfmaterialref) {
-    cap = addTREntryln(cap, REEQUIPMAT );
-  }
-  if ( vt.functions & cffahrspur) {
-    cap = addTREntryln(cap, TRACKS );
-  }
-  if ( vt.functions & cfmanualdigger) {
-    cap = addTREntryln(cap, MANDIGGER );
-  }
+ ASCString cap;
 
-  if ( vt.functions & cfno_reactionfire) {
-    cap = addTREntryln(cap, NOREACT );
-  }
-
-  if ( vt.functions & cfautorepair) {
-    cap = addTREntryln(cap, AUTOREPAIR );
-  }
-  if ( vt.functions & cfgenerator) {
-    cap = addTREntryln(cap, GENERATOR );
-  }
-  if ( vt.functions & cfautodigger) {
-    cap = addTREntryln(cap, AUTODIGGER );
-  }
-  if ( vt.functions & cfkamikaze) {
-    cap = addTREntryln(cap, KAMIKAZE );
-  }
-  if ( vt.functions & cfmineimmune) {
-    cap = addTREntryln(cap, MINEIMMUNE );
-  }
-  if ( vt.functions & cfenergyref) {
-    cap = addTREntryln(cap, ENERGYREF );
-  }
-  if ( vt.functions & cfownFieldJamming) {
-    cap = addTREntryln(cap, OWNFIELDJAM );
-  }
-  if ( vt.functions & cfmovewithRF) {
-    cap = addTREntryln(cap, MOVEWITHREACT );
-  }
-
-  addTREntry("Capabilities & Properties", cap);
-  return;
-
-
+ for ( int i = 0; i < cvehiclefunctionsnum; ++i)
+  if ( vt.functions & ( 1 << i )){       
+   cap = addTREntryln(cap, cvehiclefunctions[i] );
+ }
+ addTREntry("Capabilities & Properties", cap);
+ return;
 }
 
 void UnitMainPage::addConstructionCosts() {
@@ -1045,6 +869,7 @@ void UnitMainPage::buildContent() {
   addTREntry("Name", vt.name);
   addTREntry("ID", vt.id);
   addTREntry("Group", cmovemalitypes[vt.movemalustyp]);
+  addTREntry("Branch of Service", vt.description);
   addCapabilities();
   addTREntry("Default Armor", vt.armor);
   addTREntry("View", vt.view);
@@ -1577,6 +1402,7 @@ void TechTreePage::buildPage() {
   endHTML();
 
 }
+
 
 
 

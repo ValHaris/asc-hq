@@ -24,6 +24,8 @@
  #include "ascstring.h"
 
  class Vehicle : public ContainerBase {
+    bool cleanRemove;
+
     //! a vehicle must not be created without a type or map
     Vehicle (  );
 
@@ -307,6 +309,7 @@
 
     //! Is the unit able to shoot ?
     bool weapexist ( void );
+    void prepareForCleanRemove() { cleanRemove = true; };
     ~Vehicle ( );
 };
 

@@ -257,6 +257,15 @@ LockReplayRecording::~LockReplayRecording()
 }
 
 
+Resources getUnitResourceCargo ( Vehicle* veh )
+{
+   Resources res = veh->getTank();
+   for ( int i = 0; i < 32; ++i )
+      if ( veh->loading[i] )
+         res += getUnitResourceCargo ( veh->loading[i] );
+   return res;
+}
+
 void logtoreplayinfo ( trpl_actions _action, ... )
 {
    char action = _action;
@@ -688,6 +697,17 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( size );
          stream->writeInt ( vehid );
          stream->writeInt ( status );
+      }
+      if ( action == rpl_cutFromGame ) {
+         int vehid = va_arg( paramlist, int );
+         Resources res = getUnitResourceCargo ( actmap->getUnit ( vehid ));
+         stream->writeChar ( action );
+         int size = 4;
+         stream->writeInt ( size );
+         stream->writeInt ( vehid );
+         stream->writeInt ( res.energy );
+         stream->writeInt ( res.material );
+         stream->writeInt ( res.fuel );
       }
 
 
@@ -1650,11 +1670,30 @@ void trunreplay :: execnextreplaymove ( void )
                                     eht->setGeneratorStatus( status );
                                  else
                                     error("severe replay inconsistency:\nvehicle for generator switching not found !");
+                              }
 
 
          break;
-      }
+         case rpl_cutFromGame: {
+                              stream->readInt();
+                              int vehid = stream->readInt();
+                              Vehicle* veh = actmap->getUnit ( vehid );
+                              Resources res;
+                              res.energy = stream->readInt();
+                              res.material = stream->readInt();
+                              res.fuel = stream->readInt();
 
+                              readnextaction();
+
+                              if ( veh && res == getUnitResourceCargo ( veh )) {
+                                 veh->prepareForCleanRemove();
+                                 delete veh;
+                                 computeview( actmap );
+                                 displaymap();
+                              } else
+                                 error ( "resource mismatch at cut unit operation! ");
+                           }
+         break;
 
 
       default:{

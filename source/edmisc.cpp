@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.123 2004-09-19 15:45:02 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.124 2004-09-25 12:37:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.123  2004/09/19 15:45:02  mbickel
+//      Fixed crashed in editor
+//      updated automatic vehicle cost calculation
+//
 //     Revision 1.122  2004/09/13 16:56:54  mbickel
 //      Added many reset data functions to mapeditor
 //      cargomovecostdivisor for vehicles is now float
@@ -587,6 +591,7 @@
 #include "textfileparser.h"
 #include "textfile_evaluation.h"
 #include "textfiletags.h"
+#include "clipboard.h"
 
 #ifdef _DOS_
  #include "dos\memory.h"
@@ -3770,12 +3775,12 @@ void tvehiclecargo :: checkforadditionalkeys ( tkey ch )
 
        if ( ch == ct_c + ct_stp )
           if ( transport->loading[ cursorpos ] ) {
-             clipBoard.clear();
-             clipBoard.addUnit( transport->loading[ cursorpos ] );
+             ClipBoard::Instance().clear();
+             ClipBoard::Instance().addUnit( transport->loading[ cursorpos ] );
           }
    }
    if ( ch == ct_v + ct_stp ) {
-      Vehicle* veh = clipBoard.pasteUnit();
+      Vehicle* veh = ClipBoard::Instance().pasteUnit();
       if ( transport->vehicleFit( veh ))
          for ( int i = 0; i < 32; i++ )
             if ( !transport->loading[i] ) {
@@ -3951,12 +3956,12 @@ void tbuildingcargo :: checkforadditionalkeys ( tkey ch )
 
        if ( ch == ct_c + ct_stp )
           if ( building->loading[ cursorpos ] ) {
-             clipBoard.clear();
-             clipBoard.addUnit( building->loading[ cursorpos ] );
+             ClipBoard::Instance().clear();
+             ClipBoard::Instance().addUnit( building->loading[ cursorpos ] );
           }
    }
    if ( ch == ct_v + ct_stp ) {
-      Vehicle* veh = clipBoard.pasteUnit();
+      Vehicle* veh = ClipBoard::Instance().pasteUnit();
       if ( building->vehicleFit( veh ))
          for ( int i = 0; i < 32; i++ )
             if ( !building->loading[i] ) {
@@ -4778,139 +4783,7 @@ void resourceComparison ( )
 }
 
 
-ClipBoard::ClipBoard()
-{
-   objectNum = 0;
-//   TClipboard* cb = Clipboard();
-}
 
-void ClipBoard::clear()
-{
-   buf.clear();
-   objectNum = 0;
-}
-
-
-void ClipBoard::addUnit ( pvehicle unit )
-{
-  tmemorystream stream ( &buf, tnstream::appending );
-  stream.writeInt( ClipVehicle );
-  unit->write ( stream );
-  objectNum++;
-}
-
-void ClipBoard::addBuilding ( pbuilding bld )
-{
-  tmemorystream stream ( &buf, tnstream::appending );
-  stream.writeInt( ClipBuilding );
-  bld->write ( stream );
-  objectNum++;
-}
-
-
-Vehicle* ClipBoard::pasteUnit( tnstream& stream )
-{
-   Vehicle* veh = Vehicle::newFromStream( actmap, stream );
-
-   actmap->unitnetworkid++;
-   veh->networkid = actmap->unitnetworkid;
-
-   return veh;
-}
-
-Vehicle* ClipBoard::pasteUnit(  )
-{
-  if ( !objectNum )
-     return NULL;
-
-  tmemorystream stream ( &buf, tnstream::reading );
-  Type type = Type(stream.readInt());
-  if ( type == ClipVehicle ) 
-     return pasteUnit ( stream );
-
-  return NULL;
-}
-
-
-void ClipBoard::place ( const MapCoordinate& pos )
-{
-  if ( !objectNum )
-     return;
-
-  tmemorystream stream ( &buf, tnstream::reading );
-  Type type = Type(stream.readInt());
-  if ( type == ClipVehicle ) {
-     pfield fld = actmap->getField ( pos );
-     Vehicle* veh = pasteUnit ( stream );
-
-     if ( !fieldAccessible ( fld, veh ) && !actmap->getgameparameter( cgp_movefrominvalidfields) ) {
-        delete veh;
-        return;
-     }
-
-     if ( fld->vehicle )
-        delete fld->vehicle;
-     fld->vehicle = veh;
-     veh->setnewposition( pos.x, pos.y );
-  }
-  if ( type == ClipBuilding ) {
-     Building* bld = Building::newFromStream ( actmap, stream, false );
-     pfield fld = actmap->getField ( pos );
-
-     for ( int x = 0; x < 4; x++ )
-        for ( int y = 0; y < 6; y++ )
-           if ( bld->typ->getpicture ( BuildingType::LocalCoordinate( x , y ) )) {
-              pfield field = actmap->getField( bld->typ->getFieldCoordinate( pos, BuildingType::LocalCoordinate( x, y) ));
-              if ( !field ) {
-                 delete bld;
-                 displaymessage("building does not fit here", 1 );
-                 return;
-              }
-
-              /*
-              if ( !bld->typ->terrainaccess.accessible ( field->bdt ) ) {
-                 delete bld;
-                 displaymessage("building does can not be build here", 1 );
-                 return;
-              }
-              */
-
-
-              if ( field->vehicle ) {
-                 delete field->vehicle;
-                 field->vehicle = NULL;
-              }
-              if ( field->building ) {
-                 delete field->building;
-                 field->building = NULL;
-              }
-           }
-
-
-     bld->chainbuildingtofield( pos );
-  }
-}
-
-static int clipboardVersion = 1;
-
-void ClipBoard::write( tnstream& stream )
-{
-   stream.writeInt( clipboardVersion );
-   stream.writeInt( objectNum );
-   buf.writetostream ( &stream );
-}
-
-void ClipBoard::read( tnstream& stream )
-{
-   stream.readInt(); // Version
-   objectNum = stream.readInt();
-   buf.readfromstream ( &stream );
-}
-
-ClipBoard clipBoard;
-
-
-const char* clipboardFileExtension = "*.ascclipboard";
 
 void readClipboard()
 {
@@ -4918,7 +4791,7 @@ void readClipboard()
    fileselectsvga(clipboardFileExtension, filename, true);
    if ( !filename.empty() ) {
       tnfilestream stream ( filename, tnstream::reading );
-      clipBoard.read( stream );
+      ClipBoard::Instance().read( stream );
    }
 }
 
@@ -4928,7 +4801,7 @@ void saveClipboard()
    fileselectsvga(clipboardFileExtension, filename, false);
    if ( !filename.empty() ) {
       tnfilestream stream ( filename, tnstream::writing );
-      clipBoard.write( stream );
+      ClipBoard::Instance().write( stream );
    }
 }
 

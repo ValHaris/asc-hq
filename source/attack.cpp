@@ -507,7 +507,7 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    }
 
 
-   if ( dist <= maxmalq  &&  respond  && !av.kamikaze ) {
+   if ( dist <= maxmalq  &&  respond  && !av.kamikaze  && fieldvisiblenow( field, attackedunit->getOwner()) ) {
       AttackWeap atw;
       attackpossible2n ( attackedunit, attackingunit, &atw );
       int n = -1;

@@ -1,6 +1,12 @@
-//     $Id: edmisc.h,v 1.37 2004-09-13 16:56:54 mbickel Exp $
+//     $Id: edmisc.h,v 1.38 2004-09-25 12:37:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2004/09/13 16:56:54  mbickel
+//      Added many reset data functions to mapeditor
+//      cargomovecostdivisor for vehicles is now float
+//      Fixed: objects could not be attacked
+//      Filenames in cache
+//
 //     Revision 1.36  2004/09/08 19:34:31  mbickel
 //      Added multiple reaction fire
 //
@@ -437,24 +443,6 @@ extern void resourceComparison ( );
 //! the function to edit the vehicle type that are allowed to be build by units
 extern void unitProductionLimitation();
 
-class ClipBoard {
-      tmemorystreambuf buf;
-      enum Type { ClipVehicle, ClipBuilding };
-      int objectNum; 
-   public:
-      ClipBoard();
-      void clear();
-      void addUnit ( pvehicle unit );
-      void addBuilding ( pbuilding bld );
-      Vehicle* pasteUnit();
-      Vehicle* pasteUnit( tnstream& stream);
-      void place ( const MapCoordinate& pos );
-
-      void write( tnstream& stream );
-      void read( tnstream& stream );
-};
-
-extern ClipBoard clipBoard;
 
 extern void saveClipboard();
 extern void readClipboard();

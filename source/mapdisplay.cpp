@@ -1694,7 +1694,7 @@ int  MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCo
    pfield fld2 = actmap->getField ( dest );
    int view2 = fieldVisibility ( fld2, actmap->playerView );
 
-   if (  view1 >= visible_now  &&  view2 >= visible_now )
+   if (  (view1 >= visible_now  &&  view2 >= visible_now ) || ( vehicle->getOwner() == actmap->playerView ))
       if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) && ( view2 == visible_all )) || ( actmap->actplayer == actmap->playerView )) {
          slm->activate(  );
          idisplaymap.movevehicle( start.x, start.y, dest.x, dest.y, vehicle, height1, height2, fieldnum, totalmove );

@@ -370,9 +370,12 @@ void         tdashboard :: paintlargeweaponinfo ( void )
                 paintlargeweapon(i, cwaffentypen[ vt->weapons.weapon[j].getScalarWeaponType() ],
                                ( vehicle ? vehicle->ammo[j] : vt->weapons.weapon[j].count ) , vt->weapons.weapon[j].count,
                                vt->weapons.weapon[j].shootable(), vt->weapons.weapon[j].canRefuel(),
-                               maxstrength, minstrength,
-                               vt->weapons.weapon[j].maxdistance, vt->weapons.weapon[j].mindistance,
-                               vt->weapons.weapon[j].sourceheight, vt->weapons.weapon[j].targ );
+                               maxstrength,
+                               minstrength,
+                               vt->weapons.weapon[j].maxdistance,
+                               vt->weapons.weapon[j].mindistance,
+                               vt->weapons.weapon[j].sourceheight & vt->height,
+                               vt->weapons.weapon[j].targ );
                 largeWeaponsDisplayPos[i] = j;
                 i++;
              }
@@ -507,6 +510,13 @@ void         tdashboard::paintlargeweaponefficiency ( int pos, int* e, int first
    activefontsettings.font = schriften.guifont;
    activefontsettings.height = 10;
    activefontsettings.length = 36;
+
+/*   int maxunitheigt = 0;
+   int minunitheight = 1000;
+   int maxtargetheight = 0;
+   int mintargetheight = 1000; */
+
+
    for ( int i = 0; i < 13; i++ )
       if ( e && e[i] != -1 ) {
          activefontsettings.background = bk1;

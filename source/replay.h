@@ -67,7 +67,8 @@ enum trpl_actions { rpl_attack,
                     rpl_setResearch,
                     rpl_techResearched,
                     rpl_putbuilding2,
-                    rpl_setGeneratorStatus };
+                    rpl_setGeneratorStatus,
+                    rpl_cutFromGame };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 

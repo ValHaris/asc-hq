@@ -397,27 +397,7 @@ public:
   *@brief filePath The path to where the page is stored
   *@brief generator The BuildingGuideGen constructing the page
   */
-  BuildingMainPage(const BuildingType&  bt, ASCString filePath, BuildingGuideGen* generator);
-
-protected:
-  static const ASCString VEHICLEPROD;
-  static const ASCString AMMUNITIONPROD;
-  static const ASCString REPAIR;
-  static const ASCString SOLARENERGY;
-  static const ASCString WINDENERGY;
-  static const ASCString SONAR;
-  static const ASCString MATTERCON;
-  static const ASCString TRAINING;
-  static const ASCString MINING;
-  static const ASCString RECYCLING;
-  static const ASCString RESEARCH;
-  static const ASCString SELFDESTRUCTCONQ;
-  static const ASCString NOOBCHAIN;
-  static const ASCString EXAMMOLOADING;
-  static const ASCString PRODALLUNITS;
-  static const ASCString SINK;
-  static const ASCString EXLOADING;
-  static const ASCString EXRESLOADING;
+  BuildingMainPage(const BuildingType&  bt, ASCString filePath, BuildingGuideGen* generator); 
 
 private:
   /**
@@ -640,32 +620,7 @@ protected:
   /**
   *@brief  Adds the construction costs of the unit
   */
-  void addConstructionCosts();
-  static const ASCString SONAR;
-  static const ASCString PARA;
-  static const ASCString REPAIR;
-  static const ASCString MINELAYER;
-  static const ASCString CONQUER;
-  static const ASCString MAA;
-  static const ASCString PUTBUILDING;
-  static const ASCString MINEVIEW;
-  static const ASCString VEHICLECONST;
-  static const ASCString SPECBUILDING;
-  static const ASCString REFUEL;
-  static const ASCString ICEBREAKER;
-  static const ASCString NOAIRREFUEL;
-  static const ASCString TRACKS;
-  static const ASCString MANDIGGER;
-  static const ASCString NOREACT;
-  static const ASCString AUTOREPAIR;
-  static const ASCString MOVEWITHREACT;
-  static const ASCString ENERGYREF;
-  static const ASCString GENERATOR;
-  static const ASCString AUTODIGGER;
-  static const ASCString MINEIMMUNE;
-  static const ASCString OWNFIELDJAM;
-  static const ASCString KAMIKAZE;
-  static const ASCString REEQUIPMAT;
+  void addConstructionCosts();  
 
 };
 
@@ -780,6 +735,7 @@ private:
 };
 
 #endif
+
 
 
 
