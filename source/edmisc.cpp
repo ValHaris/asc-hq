@@ -1,6 +1,9 @@
-//     $Id: edmisc.cpp,v 1.9 2000-03-11 18:22:04 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.10 2000-03-16 14:06:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/03/11 18:22:04  mbickel
+//      Added support for multiple graphic sets
+//
 //     Revision 1.8  2000/02/03 20:54:39  mbickel
 //      Some cleanup
 //      getfiletime now works under Linux too
@@ -683,6 +686,7 @@ void         pdsetup(void)
    #ifdef HEXAGON
     pd.addbutton ( "Sm~o~oth coasts",          act_smoothcoasts ); 
    #endif
+   pd.addbutton ( "unitset transformation",    act_unitsettransformation );
 
    pd.addfield ("~O~ptions"); 
     pd.addbutton ( "~M~ap valuesctrl+M",          act_changemapvals );
@@ -3501,3 +3505,189 @@ void selectgraphicset ( void )
       }
    }
 }
+
+
+
+class UnitTypeTransformation {
+
+              class   UnitSetSelection : public tstringselect {
+                       public :
+                             virtual void setup(void);
+                             virtual void buttonpressed(byte id);
+                             virtual void run(void);
+                             virtual void gettext(word nr);
+                         };
+              class   TranslationTableSelection : public tstringselect {
+                              int unitsetnum;
+                         public :
+                               virtual void setup( void );
+                               void setup2 ( int _unitset ) { unitsetnum = _unitset; };
+                               virtual void buttonpressed(byte id);
+                               virtual void run(void);
+                               virtual void gettext(word nr);
+                           };
+
+                int unitstransformed;
+                int unitsnottransformed;
+
+                pvehicletype transformvehicletype ( pvehicletype type, int unitsetnum, int translationnum );
+                void transformvehicle ( pvehicle veh, int unitsetnum, int translationnum );
+             public:
+                 void run ( void );
+      } ;
+
+
+void         UnitTypeTransformation :: UnitSetSelection::setup(void)
+{ 
+   action = 0;
+   title = "Select UnitSet";
+   numberoflines = unitSet.set.getlength() + 1;
+   ey = ysize - 60; 
+   addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,2,true); 
+   addkey(2,ct_enter); 
+   addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,3,true); 
+   addkey(3,ct_esc);
+} 
+
+void         UnitTypeTransformation :: UnitSetSelection::buttonpressed(byte         id)
+{ 
+   tstringselect::buttonpressed(id);
+   switch (id) {
+      case 2:   
+      case 3:   action = id; 
+                break; 
+   } 
+} 
+
+void         UnitTypeTransformation :: UnitSetSelection::gettext(word nr)
+{ 
+   strcpy(txt,unitSet.set[nr].name );
+} 
+
+void         UnitTypeTransformation :: UnitSetSelection::run(void)
+{ 
+   do { 
+      tstringselect::run(); 
+   }  while ( ! ( action > 0 || (msel == 1)) );
+
+   if ( action == 3) 
+      redline = -1;
+} 
+
+
+
+void         UnitTypeTransformation :: TranslationTableSelection::setup( void )
+{ 
+   action = 0;
+   title = "Select Transformation Table";
+   numberoflines = unitSet.set[unitsetnum].transtab.getlength() + 1;
+   ey = ysize - 60; 
+   addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,2,true); 
+   addkey(2,ct_enter); 
+   addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,3,true); 
+   addkey(3,ct_esc);
+} 
+
+void         UnitTypeTransformation :: TranslationTableSelection::buttonpressed(byte         id)
+{ 
+   tstringselect::buttonpressed(id);
+   switch (id) {
+      case 2:   
+      case 3:   action = id; 
+                break; 
+   } 
+} 
+
+void         UnitTypeTransformation :: TranslationTableSelection::gettext(word nr)
+{ 
+   strcpy(txt, unitSet.set[unitsetnum].transtab[nr].name );
+} 
+
+void         UnitTypeTransformation :: TranslationTableSelection::run(void)
+{ 
+   do { 
+      tstringselect::run(); 
+   }  while ( ! ( action > 0 || (msel == 1)) );
+
+   if ( action == 3) 
+      redline = -1;
+} 
+
+pvehicletype UnitTypeTransformation :: transformvehicletype ( pvehicletype type, int unitsetnum, int translationnum )
+{
+   for ( int i = 0; i <= unitSet.set[unitsetnum].transtab[translationnum].translation.getlength(); i++ )
+      if ( unitSet.set[unitsetnum].transtab[translationnum].translation[i].from == type->id ) 
+         return getvehicletype_forid ( unitSet.set[unitsetnum].transtab[translationnum].translation[i].to );
+   return NULL;
+}
+
+void  UnitTypeTransformation ::transformvehicle ( pvehicle veh, int unitsetnum, int translationnum )
+{
+   for ( int i = 0; i < 32; i++ )
+      if ( veh->loading[i] )
+         transformvehicle ( veh->loading[i], unitsetnum, translationnum );
+
+   pvehicletype nvt = transformvehicletype ( veh->typ, unitsetnum, translationnum );
+   if ( !nvt ) {
+      unitsnottransformed++;
+      return;
+   }
+   veh->transform ( nvt );
+
+   unitstransformed++;
+}
+
+void UnitTypeTransformation :: run ( void )
+{
+   UnitSetSelection uss;
+   uss.init();
+   uss.run();
+   uss.done();
+
+   int unitsetnum = uss.redline;
+   if ( unitsetnum == -1 )
+      return;
+
+   TranslationTableSelection tss;
+   tss.setup2( unitsetnum );
+   tss.init();
+   tss.run();
+   tss.done();
+
+   int translationsetnum = tss.redline;
+   if ( translationsetnum == -1 )
+      return;
+
+   unitstransformed = 0;
+   unitsnottransformed = 0;
+
+
+   for ( int y = 0; y < actmap->ysize; y++ )
+      for ( int x = 0; x < actmap->xsize; x++ ) {
+         pfield fld = getfield ( x, y );
+         if ( fld->vehicle )
+            transformvehicle ( fld->vehicle, unitsetnum, translationsetnum );
+         if ( fld->building && (fld->bdt & cbbuildingentry))
+            for ( int i = 0; i < 32; i++ ) {
+               if ( fld->building->loading[i] ) 
+                  transformvehicle ( fld->building->loading[i], unitsetnum, translationsetnum );
+               if ( fld->building->production[i] ) {
+                  pvehicletype vt = transformvehicletype ( fld->building->production[i], unitsetnum, translationsetnum );
+                  if ( vt ) {
+                     fld->building->production[i] = vt;
+                     unitstransformed++;
+                  } else
+                     unitsnottransformed++;
+               }
+            }
+      }
+
+   displaymessage ( "%d units were transformed\n%d units were NOT transformed\n (production included)", 1, unitstransformed, unitsnottransformed );
+}
+
+void unitsettransformation( void )
+{
+   UnitTypeTransformation utt;
+   utt.run();
+}
+

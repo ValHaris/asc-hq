@@ -1,6 +1,9 @@
-//     $Id: edmisc.h,v 1.5 2000-03-11 18:22:05 mbickel Exp $
+//     $Id: edmisc.h,v 1.6 2000-03-16 14:06:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/03/11 18:22:05  mbickel
+//      Added support for multiple graphic sets
+//
 //     Revision 1.4  1999/12/27 12:59:57  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -249,6 +252,7 @@ extern void putactthing ( void );
 extern int rightmousebox(void);
 extern int leftmousebox(void);
 extern void selectunitsetfilter ( void );
-extern void movebuilding();
+extern void movebuilding();     
+extern void unitsettransformation( void );
 extern void selectgraphicset(void);
 

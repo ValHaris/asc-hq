@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.14 2000-03-11 18:22:11 mbickel Exp $
+//     $Id: typen.h,v 1.15 2000-03-16 14:06:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/03/11 18:22:11  mbickel
+//      Added support for multiple graphic sets
+//
 //     Revision 1.13  2000/02/07 19:45:43  mbickel
 //      fixed map structure size bug
 //
@@ -450,6 +453,7 @@ class tvehicle { /*** Bei Žnderungen unbedingt Save/LoadGame und Konstruktor kor
   tvehicle ( void );
   tvehicle ( pvehicle src, pmap actmap ); // if actmap == NULL  ==> unit will not be chained
   void clone ( pvehicle src, pmap actmap ); // if actmap == NULL  ==> unit will not be chained
+  void transform ( pvehicletype type );     // to be used with extreme caution, and only in the mapeditor !!
   ~tvehicle ( ); 
  private:
   void init ( void );

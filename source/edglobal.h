@@ -1,6 +1,9 @@
-//     $Id: edglobal.h,v 1.4 2000-03-11 18:22:04 mbickel Exp $
+//     $Id: edglobal.h,v 1.5 2000-03-16 14:06:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/03/11 18:22:04  mbickel
+//      Added support for multiple graphic sets
+//
 //     Revision 1.3  1999/12/27 12:59:53  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -49,7 +52,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-#define execactionscount 67
+#define execactionscount 68
 
 extern const char*  execactionnames[execactionscount];
 
@@ -122,7 +125,8 @@ enum tuseractions {
      act_setmapparameters, 
      act_terraininfo,
      act_setunitfilter,
-     act_selectgraphicset };
+     act_selectgraphicset,
+     act_unitsettransformation };
 
 extern void         execaction(int code);
 
@@ -132,11 +136,19 @@ struct IdRange {
         int to;
        };
 
+class TranslationTable {
+         public:
+           dynamic_array<IdRange> translation;
+           char name[1000];
+           TranslationTable ( void ) { name[0] = 0; };
+      };
+
 class SingeUnitSet {
       public:
          int active;
          char* name;
          dynamic_array<IdRange> ids;
+         dynamic_array<TranslationTable> transtab;
 
          SingeUnitSet ( void ) 
          { 

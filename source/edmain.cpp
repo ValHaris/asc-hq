@@ -1,6 +1,9 @@
-//     $Id: edmain.cpp,v 1.7 2000-02-24 10:54:08 mbickel Exp $
+//     $Id: edmain.cpp,v 1.8 2000-03-16 14:06:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/02/24 10:54:08  mbickel
+//      Some cleanup and bugfixes
+//
 //     Revision 1.6  2000/02/03 20:54:39  mbickel
 //      Some cleanup
 //      getfiletime now works under Linux too
@@ -317,10 +320,12 @@ void loadUnitSets ( void )
    while ( n ) {
       tnfilestream s ( n, 1 );
       char buf[10000];
+      char buf2[10000];
       int read = s.readdata ( buf, 10000, 0 );
       buf[read] = 0;
 
       if ( buf[0] ) {
+         strcpy ( buf2, buf );
          int rangenum = 0;
 
          char* filename = strtok ( buf, ";\r\n");
@@ -345,13 +350,44 @@ void loadUnitSets ( void )
             rangenum ++;
             pic = strtok ( NULL, "," );
          }
+
+         strcpy ( buf, buf2 );
+
+         dynamic_array<char*> transtable;
+         int transtablenum = 0;
+         const char* sectionlabel = "#";
+         char* transstart  = strstr ( buf, sectionlabel );
+         if ( transstart ) {
+            char* pc = strtok ( transstart, "#\n\r" );
+            while ( pc ) {
+               transtable[transtablenum++] = pc;
+               pc = strtok ( NULL, "#\n\r" );
+            }
+         }
+         for ( int t = 0; t < transtablenum; t++ ) {
+            char* tname = strtok ( transtable[t], ";" );
+            char* trans = strtok ( NULL, ";" );
+            int entrynum = 0;
+            if ( trans ) 
+               strcpy ( unitSet.set[setnum].transtab[t].name , tname );
+            
+            while ( trans ) {
+               char* pc = strchr ( trans, ',' );
+               unitSet.set[setnum].transtab[t].translation[entrynum].to = atoi ( pc+1 );
+               *pc = 0;
+               unitSet.set[setnum].transtab[t].translation[entrynum].from = atoi ( trans );
+               entrynum++;
+
+               trans = strtok ( NULL, ";" );
+            } /* endwhile */
+
+         }
+
          setnum++;
       }
 
       n = ff.getnextname();
    } /* endwhile */
-
-
 }
 
 

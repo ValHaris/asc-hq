@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.11 2000-01-31 16:08:39 mbickel Exp $
+//     $Id: typen.cpp,v 1.12 2000-03-16 14:06:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/01/31 16:08:39  mbickel
+//      Fixed crash in line
+//      Improved error handling in replays
+//
 //     Revision 1.10  2000/01/25 19:28:16  mbickel
 //      Fixed bugs:
 //        invalid mouse buttons reported when moving the mouse
@@ -763,7 +767,6 @@ void tvehicle :: clone ( pvehicle src, pmap actmap )
 
    if ( actmap )
       actmap->chainunit ( this );
-
 }
 
 void tvehicle :: setpower ( int status )
@@ -825,6 +828,25 @@ int tvehicle::size ( void )
 { 
    return typ->weight;
 }
+
+void tvehicle::transform ( pvehicletype type )
+{
+   typ = type;
+
+   fuel = typ->tank;
+   material = typ->material;
+   energy = 0;
+   generatoractive = 0;
+
+   for ( int m = 0; m < typ->weapons->count ; m++) {
+      ammo[m] = typ->weapons->weapon[m].count;
+      weapstrength[m] = typ->weapons->weapon[m].maxstrength;
+   }
+   armor = typ->armor;
+   klasse = 255;
+}
+
+
 
 /* Translate the weapon/mine/service bit pattern into scalar
  * weapon number for use in fetching UI resources.

@@ -1,6 +1,9 @@
-//     $Id: edglobal.cpp,v 1.7 2000-03-11 18:22:04 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.8 2000-03-16 14:06:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/03/11 18:22:04  mbickel
+//      Added support for multiple graphic sets
+//
 //     Revision 1.6  2000/02/02 20:48:34  mbickel
 //      Fixed bug in BI3 path verification
 //
@@ -68,7 +71,8 @@ UnitSet unitSet;
       "Mirror CX-Pos","Mirror CY-Pos","Place terrain","Place Unit","Place building","Place special object","Place mine",
       "Place active thing","Delete Unit","Delete building","Delete special object","Delete mine","AboutBox","Save map as ...",
       "End PolygonMode","Smooth coasts","Import BI-Map","SEPERATOR","BI-Resource Mode","Insert BI map", "Set zoom level", 
-      "Move Building", "set weather of whole map", "set map parameters", "terrain info", "set unit filter", "select graphic set" };
+      "Move Building", "set weather of whole map", "set map parameters", "terrain info", "set unit filter", "select graphic set",
+      "unitset transformation"};
 
 
 // õS Infomessage
@@ -787,7 +791,8 @@ void execaction(int code)
    case act_setzoom : choosezoomlevel();
       break;
   #endif
-
+   case act_unitsettransformation: unitsettransformation();
+      break;
 
     }
 }

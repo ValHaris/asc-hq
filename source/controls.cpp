@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.20 2000-02-24 10:54:07 mbickel Exp $
+//     $Id: controls.cpp,v 1.21 2000-03-16 14:06:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/02/24 10:54:07  mbickel
+//      Some cleanup and bugfixes
+//
 //     Revision 1.19  2000/01/31 16:08:38  mbickel
 //      Fixed crash in line
 //      Improved error handling in replays
@@ -7892,7 +7895,7 @@ void logtoreplayinfo ( trpl_actions _action, ... )
       pnstream stream = actmap->replayinfo->actmemstream;
 
       va_list paramlist;
-      va_start ( paramlist, action );
+      va_start ( paramlist, _action );
 
       if ( action == rpl_attack || action == rpl_reactionfire ) {
          int x1 =  va_arg ( paramlist, int );
