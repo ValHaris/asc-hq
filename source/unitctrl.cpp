@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.10 2000-06-09 10:51:00 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.11 2000-06-23 11:53:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/06/09 10:51:00  mbickel
+//      Repaired keyboard control of pulldown menu
+//      Fixed compile errors at fieldlist with gcc
+//
 //     Revision 1.9  2000/06/08 21:03:44  mbickel
 //      New vehicle action: attack
 //      wrote documentation for vehicle actions
@@ -906,7 +910,7 @@ int ChangeVehicleHeight :: moveheight( void )
          ok = false;
 
 
-      if ( fieldaccessible( getfield(x,y), vehicle, newheight ) < 2) 
+      if ( ok && fieldaccessible( getfield(x,y), vehicle, newheight ) < 2)
          ok = false;
 /*
       if ( ok )

@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.32 2000-06-09 13:12:27 mbickel Exp $
+//     $Id: spfst.cpp,v 1.33 2000-06-23 11:53:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/06/09 13:12:27  mbickel
+//      Fixed tribute function and renamed it to "transfer resources"
+//
 //     Revision 1.31  2000/06/08 21:03:42  mbickel
 //      New vehicle action: attack
 //      wrote documentation for vehicle actions
@@ -1052,9 +1055,12 @@ int          terrainaccessible2 ( const pfield        field, const pvehicle     
 byte         fieldaccessible( const pfield        field,
                             const pvehicle     vehicle,
                             int  uheight )
-{ 
-  if ( uheight == -1 )
-     uheight = vehicle->height;
+{
+   if ( !field || !vehicle )
+      return 0;
+
+   if ( uheight == -1 )
+      uheight = vehicle->height;
 
 //   int c = ((field->visible >> (actmap->actplayer << 1)) & 3);
    int c = ((field->visible >> (vehicle->color / 4 )) & 3);
