@@ -111,10 +111,7 @@ void ObjectType :: display ( int x, int y, int dir, int weather )
          putspriteimage ( x, y, getpic ( 0, weather ) );
 
       } else
-        if ( dir < weatherPicture[weather].images.size() )
-           putspriteimage ( x, y, getpic ( dir, weather ) );
-        else
-           putspriteimage ( x, y, getpic ( 0, weather ) );
+         putspriteimage ( x, y, getpic ( dir, weather ) );
 
   #endif
 }

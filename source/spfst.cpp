@@ -2,9 +2,12 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.100 2001-10-31 18:34:33 mbickel Exp $
+//     $Id: spfst.cpp,v 1.101 2001-11-04 21:50:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.100  2001/10/31 18:34:33  mbickel
+//      Some adjustments and fixes for gcc 3.0.2
+//
 //     Revision 1.99  2001/10/21 20:18:39  mbickel
 //      Fixed non-empty table problem with BI3 map import
 //      Added ini parameter to specify wood behaviour
@@ -296,8 +299,11 @@ int         fieldaccessible( const pfield        field,
 
    if ( c == visible_all)
       if ( field->mines.size() )
-         if (vehicle->height <= chfahrend && getdiplomaticstatus2 ( vehicle->color, field->mineowner()*8 ) == cawar )  
-            return 0;
+         for ( int i = 0; i < field->mines.size(); i++ )
+            if ( field->getMine(i).attacksunit( vehicle ))
+               return 0;
+//         if (vehicle->height <= chfahrend && getdiplomaticstatus2 ( vehicle->color, field->mineowner()*8 ) == cawar )
+//            return 0;
       
 
    if ( !field->vehicle && !field->building ) {

@@ -610,7 +610,7 @@ AI::AiResult AI::tactics( void )
             Since all units now only attack the neighbouring fields, which is generally
             visible, the AI does not cheat here.
          */
-         npush ( _vision );
+         int org_vision =  _vision ;
          _vision = 3;
 
          /* we don't need to discard all the calculations made above after a single attack.
@@ -625,6 +625,8 @@ AI::AiResult AI::tactics( void )
                affectedFields.push_back ( MapCoordinate(enemy->xpos, enemy->ypos) );
 
                MoveVariantContainer attacker = currentTarget->second;
+
+               // use the most effective units first
                sort( attacker.begin(), attacker.end() );
 
                MoveVariantContainer::iterator mvci = attacker.begin();
@@ -642,7 +644,10 @@ AI::AiResult AI::tactics( void )
                   for ( int i = 0; i < sidenum; i++ )
                      if ( finalPositions[i] ) {
                         int nwid = finalPositions[i]->networkid;
+                        _vision = org_vision;
                         moveUnit ( finalPositions[i], getNeighbouringFieldCoordinate( MapCoordinate( enemy->xpos, enemy->ypos), i));
+                        _vision = 3;
+
                         affectedFields.push_back ( MapCoordinate(finalPositions[i]->xpos, finalPositions[i]->ypos) );
                         // the unit may have been shot down due to reaction fire
 
@@ -715,7 +720,7 @@ AI::AiResult AI::tactics( void )
 
          } while ( currentTarget != targets.end() );
 
-         npop ( _vision );
+         _vision = org_vision;
 
       } else {
          // no attacks are possible
