@@ -776,7 +776,6 @@ bool Building::MatterConverter :: run()
    for ( int r = 0; r < 3; r++ )
       if ( bld->plus.resource(r) > 0 ) {
          bld->putResource( bld->plus.resource(r) * perc  / 100, r , 0);
-         printf ("building %s %d / %d : put mc res %d %d \n", bld->typ->name.c_str(), bld->getPosition().x, bld->getPosition().y, r, bld->plus.resource(r) * perc  / 100  );
          if ( bld->plus.resource(r) * perc / 100  > 0)
             didSomething = true;
 
@@ -952,7 +951,6 @@ bool Building::RegenerativePowerPlant :: finished()
 bool Building::RegenerativePowerPlant :: run()
 {
    Resources tp = bld->putResource( toProduce , 0 );
-   printf ("building %s %d / %d : put reg. %d %d %d \n", bld->typ->name.c_str(), bld->getPosition().x, bld->getPosition().y, tp.energy, tp.material, tp.fuel );
    bool didSomething = false;
    for  ( int r = 0; r < 3; r++ )
       if ( tp.resource(r) ) {
@@ -1008,9 +1006,22 @@ Resources Building::BiResourceGeneration::getPlus()
 
 Building::MiningStation :: MiningStation( Building* bld_  , bool justQuery_) : bld ( bld_ ), justQuery( justQuery_ ), SearchFields ( bld_->getMap() )
 {
-   for ( int r = 1; r < 3; r++ )
-      if ( bld->plus.resource(r) > 0 )
+   int counter = 0;
+   for ( int r = 1; r < 3; r++ ) {
+      if ( bld->plus.resource(r) > 0 ) {
+         ++counter;
+         if ( counter == 2 )
+            fatalError( ASCString("A mining station can only produce ONE kind of resource; building ID" ) + strrr(bld->typ->id) + " is violating this" );
+
          toExtract_thisTurn.resource(r) = bld->plus.resource(r);
+
+         for ( int rr = 0; rr < 3; rr++ )
+            if ( bld->plus.resource(rr) < 0 )
+               usageRatio[rr] = -double(bld->plus.resource(rr)) / double(bld->plus.resource(r));
+            else
+               usageRatio[rr] = 0;
+      }
+   }
 
    if( justQuery ) {
       hasRun = false;
@@ -1025,75 +1036,38 @@ bool Building::MiningStation :: run()
    if ( justQuery && hasRun )
       return false;
 
-   extracted = Resources();
-   int perc = 100;
-   if ( !justQuery ) {
-      Resources netAvail = bld->putResource( toExtract_thisTurn, 1 );
-      for ( int r = 0 ; r < 3 ; r++ )
-         if ( toExtract_thisTurn.resource(r) > 0 )
-            perc = min ( perc, 100 * netAvail.resource(r) / toExtract_thisTurn.resource(r) );
-   }
-   toExtract_thisLoop = toExtract_thisTurn * perc / 100;
+   actuallyExtracted = Resources();
 
-   perc = 100;
-   if ( !justQuery ) {
-      Resources storable = bld->putResource( toExtract_thisLoop, 1 );
-      for ( int r = 0; r < 3; r++ )
-         if ( toExtract_thisLoop.resource(r) )
-            perc = min ( perc, 100 * storable.resource(r) / toExtract_thisLoop.resource(r) );
-   }
+   for ( int r = 0; r < 3;++r)
+      consumed[r] = 0;
 
-   // check how much resources the production of toExtract_thisTurn would need
+   if ( !justQuery ) {
+      spaceAvail = bld->putResource( toExtract_thisTurn, 1 );
+   } else
+      spaceAvail = toExtract_thisTurn;
+
    Resources toConsume;
-   int absperc = 0; 
-   for ( int r = 0; r < 3; r++ )
-      if ( bld->plus.resource(r) > 0 )
-         absperc = 1000 * toExtract_thisTurn.resource(r) / bld->plus.resource(r);
-
    for ( int r = 0; r < 3; r++ )
       if ( bld->plus.resource(r) < 0 )
-         toConsume.resource(r) = -bld->plus.resource(r) * absperc / 1000;
+         toConsume.resource(r) = -bld->plus.resource(r);
 
    if ( !justQuery ) {
-   // how much of it is available ?
-      Resources avail = bld->getResource( toConsume, 1 );
-
-      for ( int r = 0; r < 3; r++ )
-         if ( toConsume.resource(r) )
-            perc = min ( perc, 100 * avail.resource(r) / toConsume.resource(r) );
-   }
-
-   // now all limitations have been considered...
-   for ( int r = 0; r < 3; r++ )
-      toExtract_thisLoop.resource(r) = toExtract_thisLoop.resource(r) * perc / 100;
+      powerAvail = bld->getResource( toConsume, 1 );
+   } else
+      powerAvail = toConsume;
 
 
    initsearch( bld->getEntry(), 0, maxminingrange );
    startsearch();
 
-   perc = 100;
-   for ( int r = 0 ; r < 3 ; r++ )
-      if ( bld->plus.resource(r) > 0 ) {
-         int p = 100 * extracted.resource(r) / bld->plus.resource(r);
-         if ( p < perc )
-            perc = p;
-      }
-
-   consumed = bld->plus * perc / -100;
-   for ( int r = 0; r < 3; r++ )
-     if ( consumed.resource(r) < 0 )
-        consumed.resource(r) = 0;
-
    if ( !justQuery) {
-      bld->getResource(consumed, 0 );
-      bld->putResource(extracted, 0 );
-      printf ("building %s %d / %d : put mining %d %d %d \n", bld->typ->name.c_str(), bld->getPosition().x, bld->getPosition().y, extracted.energy, extracted.material, extracted.fuel );
+      for ( int r = 0; r < 3; ++r )
+         bld->getResource(consumed[r],r, 0 );
+      bld->putResource(actuallyExtracted, 0 );
    }
 
-   toExtract_thisTurn -= extracted;
-
    for ( int r = 0; r < 3; r++ )
-      if ( extracted.resource(r) > 0 )
+      if ( actuallyExtracted.resource(r) > 0 )
          return true;
 
    return false;
@@ -1103,40 +1077,53 @@ void Building::MiningStation :: testfield ( const MapCoordinate& mc )
 {
    cancelSearch = true;
    for ( int r = 0; r < 3; r++ )
-      if ( toExtract_thisLoop.resource(r) > 0 )
+      if ( toExtract_thisTurn.resource(r) > 0 )
          cancelSearch = false;
 
    if ( cancelSearch == false ) {
       pfield fld = gamemap->getField ( mc );
-      float distefficiency = getminingstationeficency ( dist );
+      float distEfficiency = getminingstationeficency ( dist );
 
       for ( int r = 1; r < 3; r++ ) {
-         if ( toExtract_thisLoop.resource(r) > 0 ) {
-            float e = toExtract_thisLoop.resource(r) * distefficiency;
-            float got = 0;
-            float buildingEfficiency;
-            if ( r == 1)
-               buildingEfficiency =  double(bld->typ->efficiencymaterial) / 1024;
-            else
-               buildingEfficiency =  double(bld->typ->efficiencyfuel) / 1024;
+         if ( toExtract_thisTurn.resource(r) > 0 ) {
 
-            if ( resource_material_factor * buildingEfficiency == 0)
-               return;
+            float resourceFactor;
+            char *fieldResource;
 
-            if ( r == 1 ) {
-               got = min( fld->material * resource_material_factor  * buildingEfficiency, e );
-               if ( !justQuery )
-                  fld->material -= int( ceil( got / (resource_material_factor  * buildingEfficiency)));
+            if ( r==1) {
+               resourceFactor = resource_material_factor * double(bld->typ->efficiencymaterial) / 1024;
+               fieldResource = &fld->material;
             } else {
-               got = min( fld->fuel * resource_fuel_factor  * buildingEfficiency, e );
-               if ( !justQuery )
-                  fld->fuel -= int( ceil( got  / (resource_fuel_factor * buildingEfficiency)));
+               resourceFactor = resource_fuel_factor * double(bld->typ->efficiencyfuel) / 1024;
+               fieldResource = &fld->fuel;
             }
-            toExtract_thisLoop.resource(r) -= int(ceil(got / distefficiency));
-            if ( toExtract_thisLoop.resource(r) < 0 )
-               toExtract_thisLoop.resource(r) = 0;
 
-            extracted.resource(r) += int(got);
+            float perc = 1;
+
+            // is enough resource available on the field
+            perc = min  ( perc, (*fieldResource * resourceFactor) / (toExtract_thisTurn.resource(r) * distEfficiency));
+
+            perc = min ( perc, double(spaceAvail.resource(r)) / (toExtract_thisTurn.resource(r) * distEfficiency ));
+
+            for ( int i = 0; i < 3; ++i )
+               if ( usageRatio[i] * toExtract_thisTurn.resource(r) > 0 )
+                  perc = min  ( perc, double(powerAvail.resource(i)) / usageRatio[i] * toExtract_thisTurn.resource(r));
+
+            if ( !justQuery )
+               *fieldResource -= toExtract_thisTurn.resource(r) * perc * distEfficiency / resourceFactor ;
+
+            int ex = ceil(toExtract_thisTurn.resource(r) * perc * distEfficiency);
+            actuallyExtracted.resource(r) += ex;
+            spaceAvail.resource(r) -= ex;
+
+            for ( int i = 0; i < 3; i++ ) {
+               float c = usageRatio[i] * toExtract_thisTurn.resource(r) * perc;
+               consumed[i] += c;
+               powerAvail.resource(i) -= ceil(c);
+            }
+
+            toExtract_thisTurn.resource(r) -= toExtract_thisTurn.resource(r) * perc;
+
 
             if ( !justQuery ) {
                if ( !fld->resourceview )
@@ -1160,12 +1147,15 @@ bool Building::MiningStation :: finished()
 
 Resources Building::MiningStation :: getPlus()
 {
-   return extracted;
+   return actuallyExtracted;
 }
 
 Resources Building::MiningStation :: getUsage()
 {
-   return consumed;
+   Resources res;
+   for ( int r = 0; r < 3; ++r)
+      res.resource(r) = ceil(consumed[r]);
+   return res;
 }
 
 
@@ -1179,7 +1169,7 @@ Resources Building :: getResourcePlus( )
     r = w->getPlus();
   delete w;
 
-  printf ("building %s %d / %d : plus %d %d %d \n", typ->name.c_str(), getPosition().x, getPosition().y, r.energy, r.material, r.fuel );
+//  printf ("building %s %d / %d : plus %d %d %d \n", typ->name.c_str(), getPosition().x, getPosition().y, r.energy, r.material, r.fuel );
 
   return r;
 }

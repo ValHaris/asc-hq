@@ -2,9 +2,13 @@
     miscellaneous functions which are used by ASC and all its tools
 */
 
-//     $Id: misc.h,v 1.22 2004-01-25 19:44:16 mbickel Exp $
+//     $Id: misc.h,v 1.23 2004-03-28 12:43:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2004/01/25 19:44:16  mbickel
+//      Many, many bugfixes
+//      Removed #pragma pack whereever possible
+//
 //     Revision 1.21  2001/12/19 17:16:29  mbickel
 //      Some include file cleanups
 //
@@ -112,8 +116,8 @@
 
 
 
-#ifndef misc_h
-   #define misc_h
+#ifndef miscH
+   #define miscH
 
    #include "global.h"
 
@@ -157,10 +161,40 @@
 #undef max
 #endif
 
-   extern int min ( int a, int b );
-   extern int min ( int a, int b, int c );
-   extern int max ( int a, int b );
-   extern int max ( int a, int b, int c );
+/*
+template<typename T>
+T min ( T a, T b )
+{
+   if ( a > b )
+      return b;
+   else
+      return a;
+}
+*/
+
+template<typename T>
+const T& min ( const T& a, const T& b, const T&  c )
+{
+   return min ( a, min ( b, c ));
+}
+
+/*
+template<typename T>
+T max ( T a, T b )
+{
+   if ( a > b )
+      return a;
+   else
+      return b;
+}
+*/
+
+template<typename T>
+const T& max ( const T& a, const T& b, const T& c )
+{
+   return max ( a, max ( b, c ));
+}
+
 
    extern char *strupr (const char *a);
 

@@ -119,9 +119,12 @@ class  Building : public ContainerBase {
          bool justQuery;
          bool hasRun;
          Resources toExtract_thisTurn;
-         Resources toExtract_thisLoop;
-         Resources extracted;
-         Resources consumed;
+         Resources spaceAvail;
+         Resources powerAvail;
+         Resources actuallyExtracted; // with increasing distance this gets lower and lower
+
+         float consumed[3];
+         float usageRatio[3];
       protected:
           void testfield ( const MapCoordinate& mc );
       public:

@@ -43,35 +43,7 @@ const char* letter[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", 
 char strstring[1000];
 
 
-int min ( int a, int b )
-{
-   if ( a > b )
-      return b;
-   else
-      return a;
-}
-
-int min ( int a, int b, int c )
-{
-   return min ( a, min ( b, c ));
-}
-
-
-int max ( int a, int b )
-{
-   if ( a > b )
-      return a;
-   else
-      return b;
-}
-
-int max ( int a, int b, int c )
-{
-   return max ( a, max ( b, c ));
-}
-
-
-#ifndef UseMemAvail 
+#ifndef UseMemAvail
 int memavail ( void )
 {
    return 0x7fffffff ;

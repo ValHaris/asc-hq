@@ -664,7 +664,7 @@ void         tsgpulldown :: init ( void )
 
    addfield ( "~T~ools" );
    addbutton ( "save ~M~ap as PCXõ9", ua_writemaptopcx );
-   addbutton ( "save ~S~creen as PCXõ0", ua_writescreentopcx );
+   addbutton ( "save ~S~creen as PCX", ua_writescreentopcx );
    addbutton ( "benchmark without view calc", ua_benchgamewov );
    addbutton ( "benchmark with view calc", ua_benchgamewv);
    addbutton ( "compiler benchmark (AI)", ua_aibench );
@@ -962,11 +962,16 @@ void loadStartupMap ( const char *gameToLoad=NULL )
    } else {  // resort to loading defaults
 
       ASCString s;
-      if ( CGameOptions::Instance()->startupMap.getName() )
+      if ( CGameOptions::Instance()->startupMap.getName() ) {
+         if ( ASCString ( CGameOptions::Instance()->startupMap.getName() ) == "asc000.map" )
+            CGameOptions::Instance()->startupMap.setName( "asc001.map");
+
          s= CGameOptions::Instance()->startupMap.getName();
+      }
 
       if ( s.empty() )
          s = "asc001.map";
+
 
       int maploadable;
       {
@@ -1754,8 +1759,12 @@ void  mainloop ( void )
                viewPipeNet ( ct_9 );
                break;
 
-            case ct_0:
-               execuseraction ( ua_writescreentopcx );
+            case ct_0: {
+                  getactfield()->objects.clear();
+                  getactfield()->setparams();
+                  displaymap();
+               }
+
                break;
 
             case ct_x + ct_stp:
