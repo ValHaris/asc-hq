@@ -1,6 +1,11 @@
-//     $Id: artint.cpp,v 1.45 2000-12-28 16:58:35 mbickel Exp $
+//     $Id: artint.cpp,v 1.46 2000-12-31 15:25:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2000/12/28 16:58:35  mbickel
+//      Fixed bugs in AI
+//      Some cleanup
+//      Fixed crash in building construction
+//
 //     Revision 1.44  2000/12/26 14:45:58  mbickel
 //      Made ASC compilable (and runnable) with Borland C++ Builder
 //
@@ -606,12 +611,17 @@ void AI::removeServiceOrdersForUnit ( const pvehicle veh )
 bool AI :: runUnitTask ( pvehicle veh )
 {
    if ( veh->aiparam[getPlayer()]->task == AiParameter::tsk_move ) {
-      moveUnit ( veh, veh->aiparam[getPlayer()]->dest, false );
+      bool moveIntoBuildings = false;
+      if ( veh->aiparam[getPlayer()]->job == AiParameter::job_conquer )
+         moveIntoBuildings = true;
+
+      moveUnit ( veh, veh->aiparam[getPlayer()]->dest, moveIntoBuildings );
       if ( veh->xpos == veh->aiparam[getPlayer()]->dest.x && veh->ypos == veh->aiparam[getPlayer()]->dest.y )
          return true;
       else
          return false;
    }
+
    return false;
 }
 
@@ -725,6 +735,99 @@ AI::AiResult AI :: executeServices ( )
   }
   return res;
 
+}
+
+
+void AI :: checkConquer( )
+{
+   // cycle through all neutral buildings which can be conquered by any unit
+
+   typedef vector<pbuilding> BuildingList;
+   BuildingList buildingList;
+
+   pbuilding bld = getMap()->player[8].firstbuilding;
+   while ( bld ) {
+      if ( buildingCapture[ bld->getEntry() ].state == BuildingCapture::conq_noUnit ) {
+         buildingList.push_back ( bld );
+
+         int travelTime = maxint;
+         pvehicle conquerer = NULL;
+
+         pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
+         while ( veh ) {
+            if ( veh->aiparam[getPlayer()]->job != AiParameter::job_conquer || veh->aiparam[getPlayer()]->task == AiParameter::tsk_nothing)
+               if ( fieldaccessible ( bld->getEntryField(), veh ) == 2 ) {
+                  AStar ast;
+                  vector<MapCoordinate> path;
+                  ast.findPath ( getMap(), path, veh, bld->getEntry().x, bld->getEntry().y );
+                  int time = ast.getTravelTime();
+                  if ( time >= 0 && time < travelTime ) {
+                     conquerer = veh;
+                     travelTime = time;
+                  }
+               }
+            veh = veh->next;
+         }
+         if ( conquerer ) {
+            BuildingCapture& bc = buildingCapture[ bld->getEntry() ];
+
+            bc.nearestUnit  = conquerer->networkid;
+            if ( travelTime >= 0 )
+               bc.captureValue = float(bld->aiparam[getPlayer()]->value) / float(travelTime+1);
+            else
+               bc.captureValue = 0;
+         }
+
+      }
+
+      bld = bld->next;
+   }
+
+   sort ( buildingList.begin(), buildingList.end(), BuildingValueComp ( this ));
+
+   for ( BuildingList::iterator i = buildingList.begin(); i != buildingList.end(); i++ ) {
+      pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
+
+      int travelTime = maxint;
+      pvehicle conquerer = NULL;
+
+      while ( veh ) {
+         if ( veh->aiparam[getPlayer()]->job != AiParameter::job_conquer || veh->aiparam[getPlayer()]->task == AiParameter::tsk_nothing )
+            if ( fieldaccessible ( (*i)->getEntryField(), veh ) == 2 ) {
+               AStar ast;
+               vector<MapCoordinate> path;
+               ast.findPath ( getMap(), path, veh, (*i)->getEntry().x, (*i)->getEntry().y );
+               int time = ast.getTravelTime();
+               if ( time >= 0 && time < travelTime ) {
+                  conquerer = veh;
+                  travelTime = time;
+               }
+            }
+         veh = veh->next;
+      }
+
+      if ( conquerer ) {
+        BuildingCapture& bc = buildingCapture[ (*i)->getEntry() ];
+        if ( conquerer->functions & cf_conquer )
+           bc.state = BuildingCapture::conq_conqUnit;
+        else
+           bc.state = BuildingCapture::conq_unitNotConq;
+        bc.unit = conquerer->networkid;
+        conquerer->aiparam[getPlayer()]->job = AiParameter::job_conquer;
+        conquerer->aiparam[getPlayer()]->task = AiParameter::tsk_move;
+        conquerer->aiparam[getPlayer()]->dest = (*i)->getEntry();
+      } else
+        buildingCapture[ (*i)->getEntry() ].state = BuildingCapture::conq_unreachable;
+   }
+
+   /*
+   pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
+   while ( veh ) {
+      if ( veh->aiparam[getPlayer()]->job == AiParameter::job_undefined ) {
+      }
+      veh = veh->next;
+   }
+   */
 }
 
 
@@ -861,26 +964,28 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
    aip->value = eht->typ->aiparam[ ai->getPlayer() ]->value;
    aip->valueType = log2 ( eht->height );
 
-   if ( eht->weapexist() )
-      aip->job = AiParameter::job_fight;
+   if ( aip->job == AiParameter::job_undefined ) {
+      if ( eht->weapexist() )
+         aip->job = AiParameter::job_fight;
 
-   if ( eht->functions & cf_conquer ) {
-      if ( eht->functions & cf_trooper )  {
-         if ( eht->typ->height & chfahrend )
-            aip->job = AiParameter::job_conquer;
-      } else {
-         int maxmove = minint;
-         for ( int i = 0; i< 8; i++ )
-            if ( eht->typ->height & ( 1 << i ))
-               maxmove = max ( eht->typ->movement[i] , maxmove );
+      if ( eht->functions & cf_conquer ) {
+         if ( eht->functions & cf_trooper )  {
+            if ( eht->typ->height & chfahrend )
+               aip->job = AiParameter::job_conquer;
+         } else {
+            int maxmove = minint;
+            for ( int i = 0; i< 8; i++ )
+               if ( eht->typ->height & ( 1 << i ))
+                  maxmove = max ( eht->typ->movement[i] , maxmove );
 
-         int maxstrength = minint;
-         for ( int w = 0; w < eht->typ->weapons->count; w++ )
-             maxstrength= max (  eht->typ->weapons->weapon[w].maxstrength, maxstrength );
+            int maxstrength = minint;
+            for ( int w = 0; w < eht->typ->weapons->count; w++ )
+                maxstrength= max (  eht->typ->weapons->weapon[w].maxstrength, maxstrength );
 
-         if ( maxstrength < maxmove )
-            aip->job = AiParameter::job_conquer;
+            if ( maxstrength < maxmove )
+               aip->job = AiParameter::job_conquer;
 
+         }
       }
    }
 
@@ -922,35 +1027,41 @@ void  AI :: calculateThreat ( pvehicle eht )
 
 void  AI :: calculateThreat ( pbuilding bld )
 {
-   if ( !bld->aiparam[ getPlayer() ] )
-      bld->aiparam[ getPlayer() ] = new AiValue ( log2 ( bld->typ->buildingheight ) );
+   calculateThreat ( bld, getPlayer());
+//   calculateThreat ( bld, 8 );
+}
+
+void  AI :: calculateThreat ( pbuilding bld, int player )
+{
+   if ( !bld->aiparam[ player ] )
+      bld->aiparam[ player ] = new AiValue ( log2 ( bld->typ->buildingheight ) );
 
    int b;
 
    // Since we have two different resource modes now, this calculation should be rewritten....
-   bld->aiparam[ getPlayer() ]->value = (bld->plus.energy / 10) + (bld->plus.fuel / 10) + (bld->plus.material / 10) + (bld->actstorage.energy / 20) + (bld->actstorage.fuel / 20) + (bld->actstorage.material / 20) + (bld->maxresearchpoints / 10);
+   bld->aiparam[ player ]->value = (bld->plus.energy / 10) + (bld->plus.fuel / 10) + (bld->plus.material / 10) + (bld->actstorage.energy / 20) + (bld->actstorage.fuel / 20) + (bld->actstorage.material / 20) + (bld->maxresearchpoints / 10);
    for (b = 0; b <= 31; b++)
       if ( bld->loading[b]  ) {
-         if ( !bld->loading[b]->aiparam[ getPlayer() ] )
+         if ( !bld->loading[b]->aiparam[ player ] )
             calculateThreat ( bld->loading[b] );
-         bld->aiparam[ getPlayer() ]->value += bld->loading[b]->aiparam[ getPlayer() ]->value;
+         bld->aiparam[ player ]->value += bld->loading[b]->aiparam[ player ]->value;
       }
 
    for (b = 0; b <= 31; b++)
       if ( bld->production[b] )  {
-         if ( !bld->production[b]->aiparam[ getPlayer() ] )
+         if ( !bld->production[b]->aiparam[ player ] )
             calculateThreat ( bld->production[b] );
-         bld->aiparam[ getPlayer() ]->value += bld->production[b]->aiparam[ getPlayer() ]->value / 10;
+         bld->aiparam[ player ]->value += bld->production[b]->aiparam[ player ]->value / 10;
       }
 
    if (bld->typ->special & cgrepairfacilityb )
-      bld->aiparam[ getPlayer() ]->value += ccbt_repairfacility;
+      bld->aiparam[ player ]->value += ccbt_repairfacility;
    if (bld->typ->special & cghqb )
-      bld->aiparam[ getPlayer() ]->value += ccbt_hq;
+      bld->aiparam[ player ]->value += ccbt_hq;
    if (bld->typ->special & cgtrainingb )
-      bld->aiparam[ getPlayer() ]->value += ccbt_training;
+      bld->aiparam[ player ]->value += ccbt_training;
    if (bld->typ->special & cgrecyclingplantb )
-      bld->aiparam[ getPlayer() ]->value += ccbt_recycling;
+      bld->aiparam[ player ]->value += ccbt_recycling;
 }
 
 
@@ -1108,7 +1219,7 @@ void     AI :: calculateAllThreats( void )
 
    // There are only 8 players in ASC, but there may be neutral units (player == 8)
    for ( int v = 0; v < 9; v++)
-      if (activemap->player[v].existent) {
+      if (activemap->player[v].existent || v == 8) {
 
          // Now we cycle through all units of this player
          pvehicle eht = activemap->player[v].firstvehicle;
@@ -1118,6 +1229,13 @@ void     AI :: calculateAllThreats( void )
 
             calculateThreat ( eht );
             eht = eht->next;
+         }
+
+         // Now we cycle through all buildings
+         pbuilding bld = activemap->player[v].firstbuilding;
+         while ( bld ) {
+            calculateThreat ( bld );
+            bld = bld->next;
          }
       }
 
@@ -1880,18 +1998,17 @@ AI::AiResult AI::tactics( void )
    return result;
 }
 
-/*
-bool AI::vehicleValueComp ( const pvehicle v1, const pvehicle v2 )
-{
-   return v1->aiparam[ getPlayer() ]->value < v2->aiparam[ getPlayer() ]->value;
-}
-*/
 
-
-bool vehicleValueComp ( const pvehicle v1, const pvehicle v2 )
+bool AI :: vehicleValueComp ( const pvehicle v1, const pvehicle v2 )
 {
    return v1->aiparam[ v1->color/8 ]->value < v2->aiparam[ v1->color/8 ]->value;
 }
+
+bool AI :: buildingValueComp ( const pbuilding v1, const pbuilding v2 )
+{
+   return v1->aiparam[ v1->color/8 ]->value < v2->aiparam[ v1->color/8 ]->value;
+}
+
 
 AI::AiResult  AI :: container ( ccontainercontrols& cc )
 {
@@ -2008,7 +2125,7 @@ AI::AiResult AI::transports( int process )
    pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
    while ( veh ) {
       transportCounter++;
-      displaymessage2("processing transport %d", transportCounter );
+      displaymessage2("processing unit %d for transportation ", transportCounter );
 
       ctransportcontrols tc;
       tc.init ( veh );
@@ -2045,7 +2162,7 @@ void AI::findStratPath ( vector<MapCoordinate>& path, pvehicle veh, int x, int y
 }
 
 
-bool AI :: moveUnit ( pvehicle veh, const MapCoordinate& destination, bool intoContainers )
+bool AI :: moveUnit ( pvehicle veh, const MapCoordinate& destination, bool intoBuildings, bool intoTransports )
 {
    VehicleMovement vm ( mapDisplay, NULL );
    vm.execute ( veh, -1, -1, 0, -1, -1 );
@@ -2066,7 +2183,8 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate& destination, bool intoC
 
       if (    vm.reachableFields.isMember ( x, y )
            && fieldaccessible ( fld, veh ) == 2
-           && ((!fld->building && !fld->vehicle) || intoContainers) ) {
+           && (!fld->building  || intoBuildings)
+           && (!fld->vehicle || intoTransports )) {
          xtogo = x;
          ytogo = y;
       }
@@ -2101,7 +2219,7 @@ AI::AiResult AI::strategy( void )
       displaymessage2("starting strategy loop %d ... ", ++stratloop);
       pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
       while ( veh ) {
-         if ( veh->aiparam[ getPlayer() ]->job == AiParameter::job_fight )
+         if ( veh->aiparam[ getPlayer() ]->job == AiParameter::job_fight ) {
             if ( veh->weapexist() && veh->aiparam[ getPlayer() ]->task != AiParameter::tsk_tactics ) {
                /*
                int orgmovement = veh->getMovement();
@@ -2126,6 +2244,9 @@ AI::AiResult AI::strategy( void )
                   }
                }
             }
+         } else {
+            runUnitTask ( veh );
+         }
 
          veh = veh->next;
          checkKeys();
@@ -2168,6 +2289,7 @@ void AI:: run ( void )
 
    issueServices();
    executeServices();
+   checkConquer();
    buildings( 3 );
    transports ( 3 );
    do {

@@ -1,6 +1,11 @@
-//     $Id: artint.h,v 1.24 2000-12-28 16:58:36 mbickel Exp $
+//     $Id: artint.h,v 1.25 2000-12-31 15:25:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/12/28 16:58:36  mbickel
+//      Fixed bugs in AI
+//      Some cleanup
+//      Fixed crash in building construction
+//
 //     Revision 1.23  2000/12/21 11:00:44  mbickel
 //      Added some code documentation
 //
@@ -124,6 +129,7 @@
 #include "spfst.h"
 #include "unitctrl.h"
 #include "building_controls.h"
+#include "buildingtype.h"
 
 
     class AI : public BaseAI {
@@ -187,6 +193,10 @@
            */
 
            // typedef PointerList<ServiceOrder*> ServiceOrderContainer;
+
+           static bool vehicleValueComp ( const pvehicle v1, const pvehicle v2 );
+           static bool buildingValueComp ( const pbuilding v1, const pbuilding v2 );
+
            typedef list<ServiceOrder> ServiceOrderContainer;
            ServiceOrderContainer serviceOrders;
            void issueServices ( );
@@ -198,6 +208,42 @@
            AiThreat* fieldThreats;
            pbuilding findServiceBuilding ( const ServiceOrder& so );
            int fieldNum;
+
+           void checkConquer( );
+
+           class BuildingCapture {
+                  public:
+                    enum BuildingCaptureState { conq_noUnit,
+                           conq_unitNotConq,
+                           conq_conqUnit,
+                           conq_unreachable } state;
+                    int unit;
+                    vector<int> guards;
+
+                    float captureValue;
+                    int nearestUnit;
+
+
+                    BuildingCapture ( ) {
+                       state = conq_noUnit;
+                       unit = 0;
+                       nearestUnit = 0;
+                       captureValue = 0;
+                    };
+           };
+
+           class BuildingValueComp : public binary_function<pbuilding,pbuilding,bool> {
+                 AI* ai;
+              public:
+                 explicit BuildingValueComp ( AI* _ai ) : ai ( _ai ) {};
+                 bool operator() (const pbuilding& a, const pbuilding& b ) const {
+                     return ai->buildingCapture[ a->getEntry() ].captureValue > ai->buildingCapture[ b->getEntry() ].captureValue;
+                 };
+           };
+           friend class BuildingValueComp;
+
+           map<MapCoordinate,BuildingCapture> buildingCapture;
+
 
            void calculateFieldThreats ( void );
            void calculateFieldThreats_SinglePosition ( pvehicle eht, int x, int y );
@@ -264,7 +310,7 @@
                   };
             };
 
-            bool moveUnit ( pvehicle veh, const MapCoordinate& destination, bool intoContainers );
+            bool moveUnit ( pvehicle veh, const MapCoordinate& destination, bool intoBuildings = false, bool intoTransports = false );
 
             void getAttacks ( VehicleMovement& vm, pvehicle veh, TargetVector& tv );
             void searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int moveDist );
@@ -285,6 +331,7 @@
             void  calculateThreat ( pvehicletype vt);
             void  calculateThreat ( pvehicle eht );
             void  calculateThreat ( pbuilding bld );
+            void  calculateThreat ( pbuilding bld, int player );
 
             void  calculateAllThreats( void );
             AiResult  tactics( void );

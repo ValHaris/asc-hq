@@ -1,6 +1,11 @@
-//     $Id: typen.h,v 1.72 2000-12-28 16:58:39 mbickel Exp $
+//     $Id: typen.h,v 1.73 2000-12-31 15:25:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.72  2000/12/28 16:58:39  mbickel
+//      Fixed bugs in AI
+//      Some cleanup
+//      Fixed crash in building construction
+//
 //     Revision 1.71  2000/12/21 11:00:50  mbickel
 //      Added some code documentation
 //
@@ -527,7 +532,9 @@ class MapCoordinate {
             int y;
             MapCoordinate ( ) : x(-1), y(-1 ) {};
             MapCoordinate ( int _x, int _y) : x(_x), y(_y) {};
+            bool operator< ( const MapCoordinate& mc ) const { return y < mc.y || ( y == mc.y && x < mc.x );};
       };
+
 
 //! Coordinate on the map including height
 class MapCoordinate3D : public MapCoordinate {
@@ -1433,6 +1440,7 @@ class tmap {
       void setupResources ( void );
       const char* getPlayerName ( int playernum );
       pfield getField ( int x, int y );
+      pfield getField ( const MapCoordinate& pos );
 
       void calculateAllObjects ( void );
 

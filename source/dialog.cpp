@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.68 2000-12-29 16:33:51 mbickel Exp $
+//     $Id: dialog.cpp,v 1.69 2000-12-31 15:25:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.68  2000/12/29 16:33:51  mbickel
+//      The supervisor may now reset passwords
+//
 //     Revision 1.67  2000/12/27 22:23:05  mbickel
 //      Fixed crash in loading message text
 //      Removed many unused variables
@@ -4051,7 +4054,7 @@ void         tsetalliances::init( int supervis )
    if ( !supervisor )
      addbutton("~s~upervisor",400,200,xsize - 20,230,0,1,6, !actmap->supervisorpasswordcrc.empty() );
    else {
-      if ( !mapeditor )
+      if ( !mapeditor && !oninit )
           for ( int i = 0; i < 8; i++ )
              if ( actmap->player[i].existent ) {
                 int x = x1 + 10 + ply_x1 + 2 * tsa_namelength;
