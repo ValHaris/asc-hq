@@ -1,6 +1,10 @@
-//     $Id: building.cpp,v 1.41 2000-08-09 13:18:09 mbickel Exp $
+//     $Id: building.cpp,v 1.42 2000-08-11 11:38:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2000/08/09 13:18:09  mbickel
+//      Fixed: invalid movement cost for airplanes flying with wind
+//      Fixed: building mineral resource info: wrong lines for availability
+//
 //     Revision 1.40  2000/08/08 09:47:55  mbickel
 //
 //      speed up of dialog boxes in linux
@@ -3811,7 +3815,7 @@ ccontainer_b :: cnetcontrol_subwindow :: cnetcontrol_subwindow ( void )
 
 int  ccontainer_b :: cnetcontrol_subwindow :: subwin_available ( void )
 {
-   if ( actmap->_resourcemode != 1 )
+   // if ( actmap->_resourcemode != 1 )
       cbuildingsubwindow :: subwin_available ( );
 
    if ( next )
@@ -4892,10 +4896,28 @@ void ccontainer_b :: cresourceinfo_subwindow :: displayvariables( void )
 
    char buf[50];
 
-   for ( int c = 0; c < 3; c++ )
+   int value[3][3][4];
+   int mx = 0;
+   int c;
+
+   for ( c = 0; c < 3; c++ )
+      for ( int x = 0; x < 3; x++ )
+         for ( int y = 0; y < 4; y++ ) {
+            value[c][x][y] = getvalue ( x, y, c );
+            if ( y != 1 )
+               if ( value[c][x][y] > mx )
+                  mx = value[c][x][y];
+         }
+
+
+
+   for ( c = 0; c < 3; c++ )
       for ( int x = 0; x < 3; x++ )
          for ( int y = 0; y < 4; y++ ) 
-            showtext2c ( int2string ( getvalue ( x, y, c ), buf ), subwinx1 + 49 + ( c * 3 + x ) * 33, subwiny1 + 57 + y * 13 );
+            if ( y != 1 || value[c][x][y] < mx*10 || value[c][x][y] < 1000000000 )   // don't show extremely high numbers
+               showtext2c ( int2string ( value[c][x][y], buf ), subwinx1 + 49 + ( c * 3 + x ) * 33, subwiny1 + 57 + y * 13 );
+            else
+               showtext2c ( "-", subwinx1 + 49 + ( c * 3 + x ) * 33, subwiny1 + 57 + y * 13 );
 
    activefontsettings.length = 0;
    activefontsettings.length = 100;

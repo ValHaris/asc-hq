@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.43 2000-08-09 12:39:25 mbickel Exp $
+//     $Id: dialog.cpp,v 1.44 2000-08-11 11:38:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2000/08/09 12:39:25  mbickel
+//      fixed invalid height when constructing vehicle with other vehicles
+//      fixed wrong descent icon being shown
+//
 //     Revision 1.42  2000/08/08 13:21:56  mbickel
 //      Added unitCategoriesLoadable property to buildingtypes and vehicletypes
 //      Added option: showUnitOwner
@@ -6509,9 +6513,10 @@ void         tgameparamsel ::setup(void)
    numberoflines = gameparameternum;
    ey = ysize - 60;
    startpos = lastchoice;
-   addbutton("~s~elect",20,ysize - 40,170,ysize - 20,0,1,12,true);
-   addkey(2,ct_enter);
-   addbutton("~c~lose",190,ysize - 40,340,ysize - 20,0,1,13,true);
+   addbutton("~s~elect",20,ysize - 40,xsize/2-10,ysize - 20,0,1,12,true);
+   addbutton("~c~lose",xsize/2+10,ysize - 40,xsize-20,ysize - 20,0,1,13,true);
+   addkey ( 13, ct_esc );
+
 }
 
 
@@ -6543,8 +6548,13 @@ void         tgameparamsel ::run(void)
 {
    do {
       tstringselect::run();
-   }  while ( ! ( (taste == ct_esc) || ( (action == 2) || (action == 3) ) || (msel == 1)) );
-   if ( action == 3 || taste == ct_esc ) 
+      if ( taste == ct_enter )
+         if ( redline >= 0 )
+            action = 2;
+         else
+            action = 3;
+   }  while ( action == 0 ); // ! (( action == 2 || action == 3 ) || (msel == 1)) 
+   if ( action == 3 ) 
       redline = 255;
 }
 
