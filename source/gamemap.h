@@ -427,6 +427,10 @@ class tmap {
       int           continueplaying;
       treplayinfo*  replayinfo;
 
+      //! a helper variable to store some information during the loading process. No usage outside.
+      bool          __loadreplayinfo;
+
+
       //! the player which is currently viewing the map. During replays, for example, this will be different from the player that moves units
       int           playerView;
       tgametime     lastjournalchange;

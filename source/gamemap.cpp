@@ -214,7 +214,7 @@ void tmap :: read ( tnstream& stream )
    bool load_shareview = stream.readInt();
 
    continueplaying = stream.readInt();
-   replayinfo = (treplayinfo*) stream.readInt();
+   __loadreplayinfo =  stream.readInt();
    playerView = stream.readInt();
    lastjournalchange.abstime = stream.readInt();
 

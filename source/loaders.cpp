@@ -5,9 +5,12 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.52 2001-07-09 12:08:40 mbickel Exp $
+//     $Id: loaders.cpp,v 1.53 2001-07-11 20:13:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2001/07/09 12:08:40  mbickel
+//      Fixed: crash when saving game
+//
 //     Revision 1.51  2001/05/21 12:46:19  mbickel
 //      Fixed infinite loop in AI::strategy
 //      Fixed bugs in mapeditor - event editing
@@ -1112,7 +1115,7 @@ void            tspfldloaders::writereplayinfo ( void )
 
 void            tspfldloaders::readreplayinfo ( void )
 {
-   if ( spfld->replayinfo ) {
+   if ( spfld->__loadreplayinfo ) {
        spfld->replayinfo = new treplayinfo;
        stream->readdata2 ( *(spfld->replayinfo) );
        for ( int i = 0; i < 8; i++ ) {
