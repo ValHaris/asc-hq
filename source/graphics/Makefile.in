@@ -111,7 +111,7 @@ AM_CXXFLAGS = @SDL_CFLAGS@ @SIGC_CFLAGS@
 
 noinst_LTLIBRARIES = libgraphics.la
 
-libgraphics_la_SOURCES = surface.cpp ascttfont.cpp blitter.cpp
+libgraphics_la_SOURCES = surface.cpp ascttfont.cpp blitter.cpp drawing.cpp
 libgraphics_la_LIBADD = @SDL_LIBS@ 
 subdir = source/graphics
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -121,7 +121,8 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 
 libgraphics_la_LDFLAGS =
 libgraphics_la_DEPENDENCIES =
-am_libgraphics_la_OBJECTS = surface.lo ascttfont.lo blitter.lo
+am_libgraphics_la_OBJECTS = surface.lo ascttfont.lo blitter.lo \
+	drawing.lo
 libgraphics_la_OBJECTS = $(am_libgraphics_la_OBJECTS)
 
 DEFS = @DEFS@
@@ -132,7 +133,8 @@ LIBS = @LIBS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/ascttfont.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/blitter.Plo ./$(DEPDIR)/surface.Plo
+@AMDEP_TRUE@	./$(DEPDIR)/blitter.Plo ./$(DEPDIR)/drawing.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/surface.Plo
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) \
@@ -175,6 +177,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ascttfont.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/blitter.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/drawing.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/surface.Plo@am__quote@
 
 distclean-depend:
