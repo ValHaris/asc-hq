@@ -2,7 +2,7 @@
 **
 ** weaponguide.cpp
 **
-** Fri Jun 25 21:35:00 2004
+** Sun Jul 25 18:09:49 2004
 ** Linux 2.4.21-198-default (#1 Thu Mar 11 17:43:56 UTC 2004) i686
 ** martin@linux. (Martin Bickel)
 **
@@ -62,7 +62,6 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
   _t = "../../ug.css";
   _m = "asc.css";
   _b = false;
-  _h = -1;
   _v = false;
 
   while ((c = getopt_long(argc, argv, "c:r:d:l:s:iz:f:t:m:bh:v", long_options, &option_index)) != EOF)
@@ -138,13 +137,7 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
           break;
 
         case 'h': 
-          _h = atoi(optarg);
-          if (_h < -1)
-            {
-              string s;
-              s += "parameter range error: h must be >= -1";
-              throw(s);
-            }
+          _h = optarg;
           break;
 
         case 'v': 
@@ -262,11 +255,9 @@ void Cmdline::usage()
   cout << "[ --roottech ]  ";
   cout << "(";
   cout << "type=";
-  cout << "INTEGER,";
-  cout << " range=-1...,";
-  cout << " default=-1";
+  cout << "STRING";
   cout << ")\n";
-  cout << "         specify root technology for tech dependency\n";
+  cout << "         specify root technologies for tech dependency\n";
   cout << "  [ -v ] ";
   cout << "[ --version ]  ";
   cout << "(";

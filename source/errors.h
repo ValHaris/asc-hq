@@ -22,7 +22,7 @@
 #ifndef errors_h_included
  #define errors_h_included
 
- #include "ASCString.h"
+ #include "ascstring.h"
  #include "global.h"
  #include "misc.h"
 
