@@ -1,6 +1,10 @@
-//     $Id: basestrm.h,v 1.21 2000-09-24 19:57:03 mbickel Exp $
+//     $Id: basestrm.h,v 1.22 2000-09-26 18:05:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/09/24 19:57:03  mbickel
+//      ChangeUnitHeight functions are now more powerful since they use
+//        UnitMovement on their own.
+//
 //     Revision 1.20  2000/08/12 09:17:16  gulliver
 //     *** empty log message ***
 //
@@ -124,9 +128,16 @@
 
 #include "global.h"
 #include "lzw.h"
-extern "C" {
- #include "libs/bzlib/bzlib.h"
-}
+
+#ifdef _DOS_
+ extern "C" {
+  #include "libs/bzlib/bzlib.h"
+ }
+#else
+ #include <bzlib.h>
+// #define total_in   total_in_lo32
+// #define total_out  total_out_lo32
+#endif
 
 #include "tpascal.inc"
 

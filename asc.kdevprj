@@ -20,11 +20,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/unitctrl.cpp,/home/martin/asc/source/unitctrl.h,/home/martin/asc/source/building.cpp,/home/martin/asc/source/artint.cpp,/home/martin/asc/source/artint.h,/home/martin/asc/source/typen.h,/home/martin/asc/source/spfst.h,/home/martin/asc/source/typen.cpp,/home/martin/asc/source/dialog.cpp,/home/martin/asc/acconfig.h,/home/martin/asc/source/building_controls.h,/home/martin/asc/source/sgstream.cpp,/home/martin/asc/source/loaders.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/artint.cpp,/home/martin/asc/configure.in,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/artint.h
-cpp_file=/home/martin/asc/source/loaders.cpp
+header_file=/home/martin/asc/configure.in
+cpp_file=/home/martin/asc/source/artint.cpp
 browser_file=file:/home/martin/asc/source/api/unitctrl_h.html
 [source/gui.h]
 install_location=
@@ -411,7 +411,7 @@ version_control=None
 author=Martin Bickel
 project_type=normal_cpp
 sub_dir=source/
-lfv_open_groups=Headers,Quellen,GNU,
+lfv_open_groups=Headers,Quellen,GNU,Andere,
 workspace=1
 version=1.2.0
 project_name=ASC

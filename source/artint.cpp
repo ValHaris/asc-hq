@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.30 2000-09-25 20:04:34 mbickel Exp $
+//     $Id: artint.cpp,v 1.31 2000-09-26 18:05:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/09/25 20:04:34  mbickel
+//      AI improvements
+//
 //     Revision 1.29  2000/09/25 15:05:59  mbickel
 //      Some fixes for Watcom
 //
@@ -316,7 +319,7 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( pvehiclety
                   for ( int e = (fzt->weapons->weapon[i].mindistance + maxmalq - 1)/ maxmalq; e <= fzt->weapons->weapon[i].maxdistance / maxmalq; e++ ) {    // the distance between two fields is maxmalq
                      d++; 
                      int n = int( weapDist.getWeapStrength( &fzt->weapons->weapon[i], e*maxmalq ) * fzt->weapons->weapon[i].maxstrength * af.strength_damage(getdamage()) * ( 1 + af.strength_experience(getexpirience())) );
-                     m += n / log10(10*d);
+                     m += int( n / log10(10*d));
                   } 
                   if (getammunition(i) == 0) 
                      m /= 2; 
@@ -1355,26 +1358,28 @@ AI::AiResult  AI :: container ( ccontainercontrols& cc )
          simplyMove = 2;
 
       if ( simplyMove ) {
-         // VehicleMovement* vm = bc.movement ( *i );
-         // auto_ptr<VehicleMovement> avm ( vm );
-         auto_ptr<VehicleMovement> vm ( cc.movement ( *i ) );
+         VehicleMovement* vm = cc.movement ( *i );
+         // auto_ptr<VehicleMovement> vm ( cc.movement ( *i ) );
+         if ( vm ) {
+            auto_ptr<VehicleMovement> avm ( vm );
 
-         VehicleAttack va ( NULL, NULL );
-         int attack = 0;
-         if ( va.available ( *i )) {
-            TargetVector tv;
-            getAttacks ( *vm, *i, tv );
+            VehicleAttack va ( NULL, NULL );
+            int attack = 0;
+            if ( va.available ( *i )) {
+               TargetVector tv;
+               getAttacks ( *vm, *i, tv );
 
-            if ( tv.size() ) {
-               result += executeMoveAttack ( *i, tv );
-               (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_tactics;
-               attack = 1;
+               if ( tv.size() ) {
+                  result += executeMoveAttack ( *i, tv );
+                  (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_tactics;
+                  attack = 1;
+               }
+
             }
-
-         }
-         if ( !attack ) {
-            result += moveToSavePlace ( *i, *vm );
-            (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
+            if ( !attack ) {
+               result += moveToSavePlace ( *i, *vm );
+               (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
+            }
          }
 
       }
@@ -1435,21 +1440,24 @@ AI::AiResult AI::transports( int process )
    return result;
 }
 
-void AI::findStratPath ( vector<MapCoordinate>& path, pvehicle veh, int x, int y )
-{
    class StratAStar : public AStar {
          AI* ai;
       protected:
          virtual int getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle )
          {
-            int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
+            int cost;
+            // int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
             if ( getfield ( x2, y2 )->vehicle && beeline ( vehicle->xpos, vehicle->ypos, x2, y2) < vehicle->getMovement())
                cost += 2;
             return cost;
          };
       public:
          StratAStar ( AI* _ai ) : ai ( _ai ) {};
-   } stratAStar ( this );
+   };
+
+void AI::findStratPath ( vector<MapCoordinate>& path, pvehicle veh, int x, int y )
+{
+ StratAStar stratAStar ( this );
 
    stratAStar.findPath ( getMap(), AStar::HexCoord ( veh->xpos, veh->ypos ), AStar::HexCoord ( x, y ), path, veh );
 }
