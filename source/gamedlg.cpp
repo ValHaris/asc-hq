@@ -1,6 +1,12 @@
-//     $Id: gamedlg.cpp,v 1.54 2000-11-21 20:27:03 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.55 2000-11-29 09:40:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2000/11/21 20:27:03  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.53  2000/11/12 15:19:06  mbickel
 //      Applied patch to configure.in to enable finding SDL if it isn't installed
 //       in the default directory
@@ -276,6 +282,7 @@
 #include "gameoptions.h"
 #include "loadimage.h"
 #include "errors.h"
+#include "password_dialog.h"
 
 #ifdef _DOS_
  #include "dos/memory.h"
@@ -4292,11 +4299,10 @@ void tgamepreferences :: buttonpressed ( int id )
 */
 
    if ( id == 11 ) {
-      int oldpwd = CGameOptions::Instance()->defaultpassword;
-      CGameOptions::Instance()->defaultpassword = 0;
-      int stat = enterpassword ( &actoptions.defaultpassword );
-      if ( stat == 10 )
-         CGameOptions::Instance()->defaultpassword = oldpwd;
+      Password pwd = actoptions.getDefaultPassword();
+      bool success = enterpassword ( pwd, true, true, false );
+      if ( success )
+         actoptions.defaultPassword.setName ( pwd.toString().c_str() );
    }
 }
 
@@ -4587,6 +4593,11 @@ void showGameParameters ( void )
 
 class tmultiplayersettings : public tdialogbox {
               protected:
+                //! the encoded supervisor password
+                char svpwd_enc[1000];
+
+                //! the plaintext supervisor password
+                char svpwd_plt[1000];
 
                 int techlevel;
                 int replays;
@@ -4613,41 +4624,42 @@ void tmultiplayersettings :: buttonpressed ( int id )
       setmapparameters();
 
    if ( id == 1 ) {             // OK
-      /*
-      int ck = checklimits() ;
-      if ( ck ) 
-         displaymessage ( "some %s exist on the map, but are not included in the crc list", 1, categoryname[ck-1]  );
-      else {
-       */
+      status = 2;
 
-         status = 2;
-         /*
-         if ( checksumsused )
-            setcrcs();
-            */
+      if ( techlevel )
+         settechlevel ( techlevel, 0xff );
 
-         if ( techlevel )
-            settechlevel ( techlevel, 0xff );
+      if ( replays )
+         actmap->replayinfo = new treplayinfo;
+      else
+         if ( actmap->replayinfo ) {
+            delete actmap->replayinfo;
+            actmap->replayinfo = NULL;
+         }
 
-         if ( replays )
-            actmap->replayinfo = new treplayinfo;
-         else 
-            if ( actmap->replayinfo ) {
-               delete actmap->replayinfo;
-               actmap->replayinfo = NULL;
-            }
-
-        // }
+      if ( supervisor )
+         actmap->supervisorpasswordcrc.setEncoded( svpwd_enc );
+      else
+         actmap->supervisorpasswordcrc.reset();
    }
 
    if ( id == 2 )
       help(50);
 
+      /*
    if ( id == 4 ) {
        taskforsupervisorpassword afsp;
        afsp.init ( &actmap->supervisorpasswordcrc, 0 );
        afsp.run( NULL );
        afsp.done();
+   }
+   */
+
+   if ( id == 10 ) {
+      Password pwd;
+      pwd.setUnencoded ( svpwd_plt );
+      strcpy ( svpwd_enc, pwd.toString().c_str() );
+      enablebutton ( 11 );
    }
 
    if ( id == 100 ) {
@@ -4655,11 +4667,23 @@ void tmultiplayersettings :: buttonpressed ( int id )
          enablebutton ( 101 );
          enablebutton ( 3 );
          enablebutton ( 8 );
+         enablebutton ( 10 );
+         enablebutton ( 11 );
+         enablebutton ( 12 );
+         // enablebutton ( 13 );
       } else {
          disablebutton ( 101 );
          disablebutton ( 3 );
          disablebutton ( 8 );
+         disablebutton ( 10 );
+         disablebutton ( 11 );
+         disablebutton ( 12 );
+         // disablebutton ( 13 );
       }
+   }
+   if ( id == 12 ) {
+      CGameOptions::Instance()->defaultSuperVisorPassword.setName ( svpwd_enc );
+      CGameOptions::Instance()->setChanged();
    }
 }
 
@@ -4671,6 +4695,8 @@ void tmultiplayersettings :: setcoordinates ( void )
 void tmultiplayersettings :: init ( void )
 {
    techlevel = 0;
+
+   strcpy ( svpwd_enc, CGameOptions::Instance()->getDefaultSupervisorPassword().toString().c_str() );
 
    tdialogbox::init();
    x1 = 20;
@@ -4716,16 +4742,19 @@ void tmultiplayersettings :: init ( void )
    addbutton ( "modify game parameters", 20, ysize - 80, 160, ysize - 65, 0, 1 , 125, true );
 
 
+   addbutton ( "supervisor password (plain text)", 20 , 220, 150 , 240, 1, 3 , 10, false );
+   addeingabe ( 10, &svpwd_plt, 0, 900 );
 
+   addbutton ( "supervisor password (encoded)", 20 , 250, 150 , 270, 1, 3 , 11, false );
+   addeingabe ( 11, &svpwd_enc, 0, 900 );
 
-
-   addbutton ( "supervisor", xsize - 120, ysize - 80, xsize - 20, ysize - 60, 0, 1 , 4, true );
+   addbutton ( "~s~ave password as default",  20, 280, xsize / 2 - 5 , 300, 0, 1 , 12, false );
 
    buildgraphics();
 
    rahmen3 ( "advanced options", x1 + 10, y1 + 100, x1 + xsize - 10, y1 + ysize - 45, 1  );
 
-   rahmen3 ( "supervisor", x1 + 15, y1 + 185, x1 + xsize - 15, y1 + ysize - 55, 1  );
+   rahmen3 ( "supervisor", x1 + 15, y1 + 185, x1 + xsize - 15, y1 + ysize - 85, 1  );
 
    status = 0;
 }

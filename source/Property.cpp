@@ -35,6 +35,7 @@ TextProperty::TextProperty	(	const char* pszName,
 	
 	this->_ptrValue	=	pszValue;
 }
+
 		
 TextProperty::~TextProperty()
 {}

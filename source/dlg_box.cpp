@@ -1,6 +1,12 @@
-//     $Id: dlg_box.cpp,v 1.37 2000-11-21 20:27:00 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.38 2000-11-29 09:40:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2000/11/21 20:27:00  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.36  2000/11/08 19:31:02  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -1135,8 +1141,10 @@ void         tdialogbox::enablebutton(int         id)
                showtext3(pb->text,x1 + pb->x1,y1 + pb->y1 - activefontsettings.font->height);
             else {
                npush ( activefontsettings.length );
-               activefontsettings.length = 0;
+               activefontsettings.length = 300;
+               cgo.off();
                showtext3(pb->text,x1 + pb->x2 + 10,y1 + pb->y1 );
+               cgo.on();
                npop ( activefontsettings.length );
             }
 
@@ -1265,8 +1273,12 @@ void         tdialogbox::disablebutton(int         id)
            if ( pb->style != 3 )
 
               showtext2(pb->text,x1 + pb->x1,y1 + pb->y1 - activefontsettings.font->height);
-           else
+           else {
+              npush ( activefontsettings );
+              activefontsettings.length = 0;
               showtext2(pb->text,x1 + pb->x2 + 10,y1 + pb->y1 );
+              npop ( activefontsettings );
+           }
 
       if (pb->art == 1) { 
          showtext2( (char*)pb->data,x1 + pb->x1 + 5,y1 + pb->y1 + 2);
@@ -1357,7 +1369,7 @@ void         tdialogbox::redraw(void)
             if (title[0]  ) {
               activefontsettings.font = schriften.large;
               if ( windowstyle & dlg_3dtitle ) {
-                 if ( actmap->actplayer == 7 ) {
+                 if ( actmap && actmap->actplayer == 7 ) {
                     activefontsettings.color = xlattables.a.dark1[textcolor];
                     showtext2(title, x1 + 4, y1 + 4 );
                     activefontsettings.color = xlattables.light[textcolor];
@@ -3192,8 +3204,6 @@ void tviewtextwithscrolling::checkscrolling ( void )
 
 char*  readtextmessage( int id )
 {
-
-
    char         s1[10];
    sprintf ( s1, "##%4d", id );
    {
@@ -3204,8 +3214,6 @@ char*  readtextmessage( int id )
          b++;
       }
    }
-
-
 
   int        txtsize = 10000;
 

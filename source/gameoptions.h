@@ -17,7 +17,9 @@
 #ifndef GAMEOPTIONS_H
 #define GAMEOPTIONS_H
 
+#include <string>
 #include "Named.h"
+#include "password.h"
 
 class CGameOptions
 {
@@ -60,7 +62,6 @@ class CGameOptions
 
       struct Mouse
       {
-         Mouse(){};
          int scrollbutton;
          int fieldmarkbutton;
          int smallguibutton;
@@ -74,7 +75,6 @@ class CGameOptions
       class Container
       {
          public:
-            Container(){};
             int autoproduceammunition;
             int filleverything;
             int emptyeverything;
@@ -82,13 +82,12 @@ class CGameOptions
 
       int onlinehelptime;
       int smallguiiconopenaftermove;
-      int defaultpassword;
+
       int replayspeed;
       int showUnitOwner;
 
       struct Bi3
       {
-         Bi3(){};
          Named dir;
          struct Interpolate
          {
@@ -100,6 +99,12 @@ class CGameOptions
          }
          interpolate;
       } bi3;
+
+      Named defaultPassword;
+      Named defaultSuperVisorPassword;
+      Password getDefaultPassword ( );
+      Password getDefaultSupervisorPassword ( );
+
 	private:     
 	  bool	_changed;
       Named* searchPath;

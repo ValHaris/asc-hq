@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.68 2000-11-15 19:28:36 mbickel Exp $
+//     $Id: typen.h,v 1.69 2000-11-29 09:40:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.68  2000/11/15 19:28:36  mbickel
+//      AI improvements
+//
 //     Revision 1.67  2000/11/14 20:36:45  mbickel
 //      The AI can now use supply vehicles
 //      Rewrote objecttype IO routines to make the structure independant of
@@ -330,6 +333,8 @@
 #include "misc.h"
 #include "basestrm.h"
 #include "errors.h"
+
+#include "password.h"
 
 #pragma pack(1)
 
@@ -1400,29 +1405,29 @@ class tmap {
                    
       char         alliances[8][8];
       class Player {
-        public:
-         bool         existent;
-         pvehicle     firstvehicle; 
-         pbuilding    firstbuilding; 
-   
-         tresearch    research; 
-         BaseAI*      ai;
-   
-         char         stat;           // 0: human; 1: computer; 2: off
-         string       humanname;
-         string       computername;
-         string       getName( ) { switch ( stat ) {
-                                      case 0: return humanname;
-                                      case 1: return computername;
-                                      default: return "off";
-                                    }
-                                 };
-         int          passwordcrc;
-         pdissectedunit dissectedunit;
-         pmessagelist  unreadmessage;
-         pmessagelist  oldmessage; 
-         pmessagelist  sentmessage; 
-         int queuedEvents;
+         public:
+            bool         existent;
+            pvehicle     firstvehicle;
+            pbuilding    firstbuilding;
+
+            tresearch    research;
+            BaseAI*      ai;
+
+            char         stat;           // 0: human; 1: computer; 2: off
+            string       humanname;
+            string       computername;
+            string       getName( ) { switch ( stat ) {
+                                         case 0: return humanname;
+                                         case 1: return computername;
+                                         default: return "off";
+                                       }
+                                    };
+            Password passwordcrc;
+            pdissectedunit dissectedunit;
+            pmessagelist  unreadmessage;
+            pmessagelist  oldmessage;
+            pmessagelist  sentmessage;
+            int queuedEvents;
       } player[9];
   
       peventstore  oldevents; 
@@ -1467,7 +1472,7 @@ class tmap {
       int           messageid;
       char*         journal;
       char*         newjournal;
-      int           supervisorpasswordcrc;
+      Password      supervisorpasswordcrc;
       char          alliances_at_beginofturn[8];
       // pobjectcontainercrcs   objectcrc;
       pshareview    shareview;

@@ -75,7 +75,7 @@ CXXFLAGS = @CXXFLAGS@ -Dkarteneditor -I./ -DFREEMAPZOOM -DNEWKEYB
 
 bin_PROGRAMS = ascmapedit
 
-ascmapedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp edselfnt.cpp edmisc.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp Named.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp gamemap.cpp
+ascmapedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp edselfnt.cpp edmisc.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp Named.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp password_dialog.cpp
 ascmapedit_LDADD = ../sdl/libsdl.a ../libs/triangul/libtriangul.a -lSDL 		    -lpthread @LDADDLIBBZ2@
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -93,7 +93,8 @@ edmisc.o weather.o typen.o strtmesg.o stack.o spfst.o sgstream.o pd.o \
 palette.o newfont.o misc.o loadpcxc.o loaders.o loadbi3.o dlg_box.o \
 dialog.o basestrm.o basegfx.o attack.o CLoadable.o Property.o \
 PropertyGroup.o gameoptions.o Named.o buildingtype.o vehicletype.o \
-containerbase.o mapalgorithms.o viewcalculation.o gamemap.o
+containerbase.o mapalgorithms.o viewcalculation.o gamemap.o password.o \
+password_dialog.o
 ascmapedit_DEPENDENCIES =  ../sdl/libsdl.a \
 ../libs/triangul/libtriangul.a
 ascmapedit_LDFLAGS = 
@@ -114,9 +115,9 @@ DEP_FILES =  .deps/CLoadable.P .deps/Named.P .deps/Property.P \
 .deps/edmain.P .deps/edmisc.P .deps/edselfnt.P .deps/gamemap.P \
 .deps/gameoptions.P .deps/loadbi3.P .deps/loaders.P .deps/loadpcxc.P \
 .deps/mapalgorithms.P .deps/misc.P .deps/newfont.P .deps/palette.P \
-.deps/pd.P .deps/sgstream.P .deps/spfst.P .deps/stack.P \
-.deps/strtmesg.P .deps/typen.P .deps/vehicletype.P \
-.deps/viewcalculation.P .deps/weather.P
+.deps/password.P .deps/password_dialog.P .deps/pd.P .deps/sgstream.P \
+.deps/spfst.P .deps/stack.P .deps/strtmesg.P .deps/typen.P \
+.deps/vehicletype.P .deps/viewcalculation.P .deps/weather.P
 SOURCES = $(ascmapedit_SOURCES)
 OBJECTS = $(ascmapedit_OBJECTS)
 

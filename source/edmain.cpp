@@ -1,6 +1,10 @@
-//     $Id: edmain.cpp,v 1.31 2000-11-26 22:18:53 mbickel Exp $
+//     $Id: edmain.cpp,v 1.32 2000-11-29 09:40:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/11/26 22:18:53  mbickel
+//      Added command line parameters for setting the verbosity
+//      Increased verbose output
+//
 //     Revision 1.30  2000/11/08 19:31:03  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -188,206 +192,7 @@ const char* progressbarfilename = "progress.8me";
 
 
 //  #define MEMCHK
-
-
-#ifdef MEMCHK
-
-  int blocknum = 0;
-  int blocklist[1000000];
-
-
-  void addblock ( void* p )
-  {
-     blocklist[blocknum++] = (int) p;
-  }
-
-  int removeblock ( void* p )
-  {
-     if ( blocknum== 0 )
-        return 0;
-
-     int error = 0;
-     int found = 0;
-     int pos = 0;
-     while ( !found && pos < blocknum) {
-        if ( blocklist[pos] == (int) p )
-           found++;
-        else
-           pos++;
-     } /* endwhile */
-     if ( found ) {
-        for ( int i = pos+1; i < blocknum; i++ )
-           blocklist[i-1] = blocklist[i];
-        blocknum--;
-     } 
-
-     return found;
-  }
-
-  int blockavail( void* p )
-  {
-     int found = 0;
-     int pos = 0;
-     while ( !found && pos < blocknum) {
-        if ( blocklist[pos] == (int) p )
-           found++;
-        else
-           pos++;
-     } /* endwhile */
-     return found;
-  }
-
-  void verifyallblocks( void );
-
-  void* memchkAlloc ( int tp, size_t amt )
-  {
-     // verifyallblocks();
-     int error;
-     void* tmp = malloc ( amt + 53 * 4 );
-    #ifdef _DOS_
-     if ( !tmp )
-        new_new_handler();
-    #endif
-
-     int* tmpi = (int*) tmp;
-     /*
-     if ( (int) tmpi == 0x1bb2138 || (int) tmpi == 0x1bcf178 ) 
-        error++;
-        */
-     tmpi[0] = tp;
-     tmpi[1] = (int) tmp;
-     tmpi[2] = amt;
-     for ( int i = 0; i < 25; i++ ) {
-        tmpi[3 + i] = 0x12345678;
-        tmpi[3 + i + (amt+3)/4 + 25] = 0x87654321;
-     }
-     void* p = &tmpi[28];
-
-     addblock ( p );
-     return p;
-  }
-
-
-  void* verifyblock ( int tp, void* p )
-  {
-     int error = 0;
-     int* tmpi = (int*) p;
-     tmpi -= 28;
-
-     if ( tp != -1 )
-        if ( tmpi[0] != tp )
-           error++;
-
-     if ( tmpi[1] != (int) tmpi) {
-        error++;
-        #ifdef logging
-         logtofile ( "memory check: verifyblock : error A at address %x", p );
-        #endif
-     }
-
-     int amt = tmpi[2];
-
-     for ( int i = 0; i < 25; i++ ) {
-
-        if ( tmpi[3 + i] != 0x12345678)
-           if ( i == 1  &&  tmpi[3 + i] == -2) {
-              error++;  // deallocated twice 
-              #ifdef logging
-               logtofile ( "memory check: verifyblock : error B at address %x", p );
-              #endif
-           } else {
-              error++;
-              #ifdef logging
-               logtofile ( "memory check: verifyblock : error C at address %x", p );
-              #endif
-           }
-
-        if ( tmpi[3 + i + (amt+3)/4 + 25] != 0x87654321 ) {
-           error++;
-           #ifdef logging
-            logtofile ( "memory check: verifyblock : error D at address %x", p );
-           #endif
-        }
-     }
-     return tmpi;
-  }
-
-  void verifyallblocks ( void )
-  {
-     for ( int i = 0; i < blocknum; i++ )
-        verifyblock ( -1, (void*) blocklist[i] );
-  }
-
-  void memchkFree ( int tp, void* buf )
-  {
-     if ( removeblock ( buf )) {
-        void* tmpi = verifyblock ( tp, buf );
-
-        int* tmpi2 = (int*) buf;
-        tmpi2 -= 28;
-        tmpi2[4] = -2;
-
-
-        free ( tmpi );
-     } else
-       free ( buf );
-  }
-
-  void *operator new( size_t amt )
-  {
-      return( memchkAlloc( 100, amt ) );
-  }
-  
-  void operator delete( void *p )
-  {
-     if ( p )
-      memchkFree( 100, p );
-  }
-  
-  void *operator new []( size_t amt )
-  {
-      return( memchkAlloc( 102, amt ) );
-  }
-  
-  void operator delete []( void *p )
-  {
-     if ( p )
-      memchkFree( 102, p );
-  }
-
-  void* asc_malloc ( size_t size )
-  {
-     void* tmp = memchkAlloc ( 104, size );
-     if ( tmp == NULL ) 
-        new_new_handler();
-     return tmp;
-  }
-
-  void asc_free ( void* p )
-  {
-     memchkFree ( 104, p );
-  }
-
-#else
-
-  void* asc_malloc ( size_t size )
-  {
-     void* tmp = malloc ( size );
-    #ifdef _DOS_
-     if ( tmp == NULL ) 
-        new_new_handler();
-    #endif
-     return tmp;
-  }
-
-  void asc_free ( void* p )
-  {
-     free ( p );
-  }
-
-
-#endif
-
+#include "memorycheck.cpp"
 
 
 
@@ -671,6 +476,8 @@ void         editor(void)
                      break;
                   case ct_8 : execaction(act_placemine);
                      break;
+                  case ct_tab: execaction(act_switchmaps );
+                     break;
                   case ct_space : execaction(act_placething);
                      break;
                   case ct_esc : {
@@ -829,12 +636,27 @@ int mapeditorMainThread ( void* _mapname )
        initspfst( -1, -1 );
    #endif
 
+   cursor.init();
+
    try {
       loaddata();
+
       if ( mapname )
          loadmap ( mapname );
       else
          buildemptymap();
+
+      mapSwitcher.toggle();
+      if ( exist ( "palette.map" ))
+         loadmap ( "palette.map");
+      else
+         buildemptymap();
+
+      if ( actmap->preferredfilenames )
+         actmap->preferredfilenames->mapname[0] = 0;
+
+      mapSwitcher.toggle();
+
    } /* end try */
    catch ( tfileerror err ) {
       displaymessage ( " error loading file %s ",2,err.filename );
@@ -848,7 +670,6 @@ int mapeditorMainThread ( void* _mapname )
    activefontsettings.length =100;
    activefontsettings.justify =lefttext;
 
-   cursor.init();
 
    setstartvariables();
 

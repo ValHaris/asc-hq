@@ -1,6 +1,10 @@
-//     $Id: edglobal.cpp,v 1.21 2000-10-18 14:14:06 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.22 2000-11-29 09:40:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/10/18 14:14:06  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.20  2000/10/14 14:16:04  mbickel
 //      Cleaned up includes
 //      Added mapeditor to win32 watcom project
@@ -139,7 +143,7 @@ mc_check mc;
       "Place active thing","Delete Unit","Delete building","Delete special object","Delete mine","AboutBox","Save map as ...",
       "End PolygonMode","Smooth coasts","Import BI-Map","SEPERATOR","BI-Resource Mode","Insert BI map", "Set zoom level", 
       "Move Building", "set weather of whole map", "set map parameters", "terrain info", "set unit filter", "select graphic set",
-      "unitset transformation", "Unitset Information"};
+      "unitset transformation", "Unitset Information", "switch maps"};
 
 
 // õS Infomessage
@@ -610,14 +614,14 @@ void execaction(int code)
        break;
     case act_setactivefieldvals : {
                   pfield fld = getactfield();
-                  /*
+
                   if ( fld->vehicle ) {
                      auswahlf = fld->vehicle->typ;
                      altefarbwahl = farbwahl;
                      farbwahl = fld->vehicle->color/8;
                      lastselectiontype = cselunit;
                      setnewvehicleselection ( auswahlf );
-                  } else */
+                  } else
 
                   if ( fld->object && fld->object->objnum ) {
                      actobject = fld->object->object[ fld->object->objnum -1 ]->typ ;
@@ -863,6 +867,9 @@ void execaction(int code)
    case act_unitsettransformation: unitsettransformation();
       break;
    case act_unitSetInformation: viewUnitSetinfo();
+      break;
+   case act_switchmaps: mapSwitcher.toggle();
+                        displaymap();
       break;
     }
 }

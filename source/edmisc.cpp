@@ -1,6 +1,12 @@
-//     $Id: edmisc.cpp,v 1.39 2000-11-21 20:27:01 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.40 2000-11-29 09:40:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2000/11/21 20:27:01  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.38  2000/11/14 20:36:40  mbickel
 //      The AI can now use supply vehicles
 //      Rewrote objecttype IO routines to make the structure independant of
@@ -209,6 +215,7 @@
 #include "edgen.h"
 #include "edselfnt.h"
 #include "edglobal.h"
+#include "password_dialog.h"
 
 #ifdef _DOS_
  #include "dos\memory.h"
@@ -1472,8 +1479,9 @@ void         k_loadmap(void)
       if ( actmap->campaign && !actmap->campaign->directaccess && actmap->codeword[0]) {
          tlockdispspfld ldsf;
          removemessage(); 
-         int cr = encodepassword ( actmap->codeword );
-         enterpassword ( &cr );
+         Password pwd;
+         pwd.setUnencoded ( actmap->codeword );
+         enterpassword ( pwd );
       } else
          removemessage(); 
    
@@ -3821,3 +3829,19 @@ void unitsettransformation( void )
    utt.run();
 }
 
+
+void MapSwitcher :: toggle ( )
+{
+   maps[active].map = actmap;
+   maps[active].changed = !mapsaved;
+   maps[active].cursorx = getxpos();
+   maps[active].cursory = getypos();
+   active = !active;
+
+   actmap = maps[active].map;
+   mapsaved = !maps[active].changed;
+   if  ( actmap )
+      cursor.gotoxy( maps[active].cursorx, maps[active].cursory );
+}
+
+MapSwitcher mapSwitcher;

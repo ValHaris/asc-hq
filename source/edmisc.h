@@ -1,6 +1,12 @@
-//     $Id: edmisc.h,v 1.15 2000-11-21 20:27:02 mbickel Exp $
+//     $Id: edmisc.h,v 1.16 2000-11-29 09:40:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/11/21 20:27:02  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.14  2000/10/18 14:14:09  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -295,3 +301,19 @@ extern void placeunit(void);
 extern void placeobject(void);
 extern void placemine(void);
 extern void putactthing ( void );
+
+class MapSwitcher {
+        int active;
+        class Mappntr {
+           public:
+              pmap map;
+              bool changed;
+              int cursorx, cursory;
+              Mappntr ( ) : map ( NULL ), changed ( false ) { cursorx=cursory=0;};
+        } maps[2];
+     public:
+        void toggle ();
+        MapSwitcher ( ) : active ( 0 ) {};
+};
+
+extern MapSwitcher mapSwitcher;

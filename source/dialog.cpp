@@ -1,6 +1,11 @@
-//     $Id: dialog.cpp,v 1.64 2000-11-14 20:36:39 mbickel Exp $
+//     $Id: dialog.cpp,v 1.65 2000-11-29 09:40:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.64  2000/11/14 20:36:39  mbickel
+//      The AI can now use supply vehicles
+//      Rewrote objecttype IO routines to make the structure independant of
+//       the memory layout
+//
 //     Revision 1.63  2000/11/08 19:30:59  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -324,6 +329,7 @@
 #include "attack.h"
 #include "gameoptions.h"
 #include "errors.h"
+#include "password_dialog.h"
 
 #ifndef karteneditor
  #include "network.h"
@@ -3997,7 +4003,7 @@ void         tsetalliances::init( int supervis )
    addbutton("~n~etwork",400,160,xsize - 20,190,0,1,5, actmap->network != NULL ); 
    #endif
    if ( !supervisor ) 
-     addbutton("~s~upervisor",400,200,xsize - 20,230,0,1,6, actmap->supervisorpasswordcrc != 0 ); 
+     addbutton("~s~upervisor",400,200,xsize - 20,230,0,1,6, !actmap->supervisorpasswordcrc.empty() );
 
    // buildgraphics(); 
 
@@ -4443,28 +4449,11 @@ void         tsetalliances::click(pascal_byte         bxx,
       }
    } 
    mousevisible(true); 
-} 
-
-
-#ifndef karteneditor
-
-
-int taskforsupervisorpassword :: checkforreask ( int crc )
-{
-   if ( crc == 0 || actmap->actplayer == -1 )
-      return 1;
-   else 
-      return 0;
-
-}
-
-void taskforsupervisorpassword :: init ( int* crc, int mode )
-{
-   tenterpassword::init ( crc, mode, "supervisor password" );
 }
 
 
-#endif
+
+
 
 void         tsetalliances::buttonpressed( int id )
 { 
@@ -4528,14 +4517,9 @@ void         tsetalliances::buttonpressed( int id )
               break;
               
       case 6: {
-                 if ( actmap->supervisorpasswordcrc ) {
-                    taskforsupervisorpassword afsp;
-                    int a;
-                    afsp.init ( &actmap->supervisorpasswordcrc, 1 );
-                    afsp.run( &a );
-                    afsp.done();
-   
-                    if ( a == 1 ) {
+                 if ( !actmap->supervisorpasswordcrc.empty() ) {
+                    bool success = enterpassword ( actmap->supervisorpasswordcrc, false, true );
+                    if ( success ) {
                       supervisor = 1;
                       disablebutton ( 6 );
                     }
@@ -5551,250 +5535,11 @@ void viewUnitSetinfo ( void )
    vat.init ( "Unit information", s.c_str() );
    vat.run();
    vat.done();
-
-
-}
-
-
-int encodepassword ( const char* pw )
-{
-   if ( !pw )
-      return 0;
-
-   int len = strlen ( pw );
-
-   if ( len )
-      return crc32buf( pw, len+1 );
-   else
-      return 0;
-
-   /*
-   char* p = pw;
-   int cr = 0;
-   while ( pw[0] ) {
-      cr+= ( pw[0] ^ pw[1] );
-      cr = rol ( cr, pw[1]+1 );
-      cr^= pw[0];
-      pw++;
-   } 
-
-   if ( *p && !cr )
-      cr = 1;
-
-   return cr;
-
-   */
 }
 
 
 
-int   tenterpassword :: gettextwdth_stredit ( char* txt, pfont font )
-{
-  char* ss2 = strdup ( txt );
 
-  int i = 0;
-  while ( ss2[i] )
-     ss2[i++] = '*';
-  
-  ss2 [ i ] = 0;
-
-  i = gettextwdth(ss2, font);
-  asc_free ( ss2 );
-
-  return i;
-}
-
-
-int   tenterpassword :: getcapabilities ( void )
-{
-   return 0;
-}
-
-
-void         tenterpassword ::lne(int          x1,
-                 int          y1,
-                 char *       s,
-                 int          position,
-                 char      einfuegen)
-{
-  char* ss2 = strdup ( s );
-
-  int i = 0;
-  while ( ss2[i] )
-     ss2[i++] = '*';
-  
-  ss2 [ position ] = 0;
-  i = x1 + gettextwdth(ss2,activefontsettings.font);
-  int j = y1; 
-  int k = y1 + activefontsettings.font->height; 
-  collategraphicoperations cgo ( i-1, j, i+1, k );
-  xorline(i,j,i,k,3);
-  if (einfuegen == false) { 
-     xorline(i + 1,j,i + 1,k,3); 
-     xorline(i - 1,j,i - 1,k,3); 
-  }  
-  asc_free ( ss2 );
-} 
-
-void tenterpassword :: dispeditstring ( char* st, int x1, int y1 )
-{
-   char* ss2 = strdup ( st );
-
-   int i = 0;
-   while ( ss2[i] )
-     ss2[i++] = '*';
-
-   showtext2(ss2,x1,y1); 
-
-  asc_free ( ss2 );
-}
-
-int tenterpassword :: checkforreask ( int crc )
-{
-   if ( crc == 0 || actmap->network && actmap->network->globalparams.reaskpasswords )
-      return 1;
-   else 
-      return 0;
-}
-
-void tenterpassword :: init ( int* crc, int mode, char* ttl  )
-{
-   tdialogbox::init();
-   xsize = 200;
-   if ( *crc )
-     ysize = 150;
-   else
-     ysize = 180;
-   y1 = -1;
-   x1 = -1;
-   cr = crc;
-
-
-   reask = checkforreask( *crc );
-
-   windowstyle ^= dlg_in3d;
-   if ( mode == 0 ) {
-           if ( *crc == 0   &&  CGameOptions::Instance()->defaultpassword ) {
-         addbutton ( "~O~k", 10, ysize - 35, xsize / 2 - 5, ysize - 10, 0, 1, 1, reask );
-         addbutton ( "~D~efault", xsize / 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1,7, true );
-      } else {
-         addbutton ( "~O~k", 10, ysize - 35, xsize / 2 - 5, ysize - 10, 0, 1, 1, reask );
-         addbutton ( "e~x~it", xsize / 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1,8, true );
-      }
-
-   } else {
-           if ( *crc == 0   &&  CGameOptions::Instance()->defaultpassword ) {
-         addbutton ( "~O~k", 10, ysize - 35, xsize / 3 - 5, ysize - 10, 0, 1, 1, reask );
-         addbutton ( "~D~efault", xsize / 3 + 5,   ysize - 35, 2 * xsize / 3 - 5, ysize - 10, 0, 1,7, true );
-         addbutton ( "~C~ancel", 2 * xsize / 3 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1, 6, true );
-      } else {
-         addbutton ( "~O~k", 10, ysize - 35, xsize / 2 - 5, ysize - 10, 0, 1, 1, reask );
-         addbutton ( "~C~ancel", xsize / 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1, 6, true );
-      }
-   }
-
-   addkey ( 1, ct_enter );
-   addkey ( 1, ct_enterk );
-
-
-   if ( !ttl )
-      title = "enter password";
-   else 
-      title = ttl;
-
-   
-
-   addbutton ( "~p~assword:", 10, 50, xsize - 10, 75, 1, 0, 2, true );
-   addeingabe ( 2, strng1, 0, 39 );
-
-   if ( *crc == 0 ) {
-      addbutton ( "confirmation:", 10, 95, xsize - 10, 120, 1, 0, 3, true );
-      addeingabe ( 3, strng2, 0, 39 );
-      confirm = 1;
-   } else
-      confirm = 0;
-
-   strng1[0] = 0;
-   strng2[0] = 0;
-   status = 0;
-
-   buildgraphics();
-
-};
-
-
-void tenterpassword :: buttonpressed ( int id )
-{
-   tdialogbox::buttonpressed ( id );
-   if ( id == 1 )   // OK
-      status = 1;
-   else
-      if ( id == 6 )  // cancel
-         status = 10;
-      else
-         if ( id == 7 ) {   // default
-            *cr = CGameOptions::Instance()->defaultpassword;
-            status = 2;
-         } else
-            if ( id == 8 ) {    // exit
-               delete actmap;
-               actmap = NULL;
-               throw NoMapLoaded();
-            } else
-               if ( reask == 0 )
-                  if ( encodepassword ( strng1 ) == *cr )
-                     enablebutton ( 1 );
-                  else
-                     disablebutton ( 1 );
-               else
-                  if ( strcmp ( strng1, strng2 ) == 0)
-                     enablebutton ( 1 );
-                  else
-                     disablebutton ( 1 );
-}
-
-void tenterpassword :: run ( int* result )
-{
-   tdialogbox::run ();
-
-   pbutton pb = getbutton ( 2 );
-
-   if ( pb )
-      execbutton( pb , false );
-
-   if ( strng1[0] ) {
-      pb = getbutton ( 3 );
-   
-      if ( pb ) 
-         execbutton( pb , false );
-   } 
-
-   pbutton pb2 = getbutton ( 1 );
-   if ( pb2->active )
-      execbutton ( pb2, false );
-
-   mousevisible ( true );
-   while ( status == 0 ) {
-      tdialogbox::run ();
-   };
-
-   if ( status == 1 )
-      *cr = encodepassword ( strng1 );
-
-   if ( result )
-      *result = status;
-}
-
-int  enterpassword ( int* cr )
-{
-   int stat;
-   tenterpassword epw;
-   epw.init ( cr, 0 );
-   epw.run ( &stat);
-   epw.done ();
-
-   return stat;
-}
 
 
 

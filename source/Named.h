@@ -17,6 +17,8 @@
 #ifndef NAMED_H
 #define NAMED_H
 
+#include <string>
+
 /** 
 * A simple Interface-class for a named Thing 
 * @author Frank Landgraf
@@ -37,6 +39,10 @@ class Named	{
 		* @param pszName 
 		*/
 		Named(const char* pszName);
+		Named(const string& pszName);
+		Named(const Named& n);
+		
+		Named& operator= (const Named& n);
 		
 		/** 
 		* (virtual) destructor 

@@ -1,6 +1,10 @@
-//     $Id: sgstream.cpp,v 1.44 2000-11-26 22:18:56 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.45 2000-11-29 09:40:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2000/11/26 22:18:56  mbickel
+//      Added command line parameters for setting the verbosity
+//      Increased verbose output
+//
 //     Revision 1.43  2000/11/21 20:27:07  mbickel
 //      Fixed crash in tsearchfields (used by object construction for example)
 //      AI improvements
@@ -1997,7 +2001,7 @@ int readgameoptions ( const char* filename )
       configFileNameUsed = strdup ( completeFileName );
 
       if ( !loadableGameOptions )
-                  loadableGameOptions = new CLoadableGameOptions (CGameOptions::Instance());
+         loadableGameOptions = new CLoadableGameOptions (CGameOptions::Instance());
 
       std::ifstream is( completeFileName );
       loadableGameOptions->Load(is);    
@@ -2043,7 +2047,7 @@ int readgameoptions ( const char* filename )
 
             CGameOptions::Instance()->onlinehelptime = stream.readInt();
             CGameOptions::Instance()->smallguiiconopenaftermove = stream.readInt();
-            CGameOptions::Instance()->defaultpassword = stream.readInt();
+            CGameOptions::Instance()->defaultPassword.setName ( strrr ( stream.readInt() ));
             CGameOptions::Instance()->replayspeed = stream.readInt();
             int bi3dir = stream.readInt();
             CGameOptions::Instance()->bi3.interpolate.terrain = stream.readInt();

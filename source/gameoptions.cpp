@@ -84,7 +84,6 @@ void CGameOptions::setDefaults ( void )
 
    onlinehelptime=150;
    smallguiiconopenaftermove=0;
-   defaultpassword=0;
    replayspeed=0;
    showUnitOwner = 0;
 
@@ -94,6 +93,8 @@ void CGameOptions::setDefaults ( void )
    bi3.interpolate.units=0;
    bi3.interpolate.objects=0;
    bi3.interpolate.buildings=0;
+
+   defaultSuperVisorPassword.setName ( "" );
 
   #if USE_HOME_DIRECTORY == 0
    searchPath[0].setName ( ".\\" );
@@ -145,7 +146,9 @@ void CGameOptions::copy ( const CGameOptions& cgo )
 
    onlinehelptime            = cgo.onlinehelptime;
    smallguiiconopenaftermove = cgo.smallguiiconopenaftermove;
-   defaultpassword           = cgo.defaultpassword;
+   defaultPassword           = cgo.defaultPassword;
+   defaultSuperVisorPassword = cgo.defaultSuperVisorPassword;
+
    replayspeed               = cgo.replayspeed;
    showUnitOwner             = cgo.showUnitOwner;
 
@@ -164,4 +167,23 @@ void CGameOptions::copy ( const CGameOptions& cgo )
 int CGameOptions :: getSearchPathNum ( void )
 {
    return searchPathNum;
+}
+
+Password CGameOptions :: getDefaultPassword ( )
+{
+   Password pwd;
+   if ( defaultPassword.getName() )
+      pwd.setEncoded ( defaultPassword.getName() );
+
+   return pwd;
+}
+
+
+Password CGameOptions :: getDefaultSupervisorPassword ( )
+{
+   Password pwd;
+   if ( defaultSuperVisorPassword.getName() )
+      pwd.setEncoded ( defaultSuperVisorPassword.getName() );
+
+   return pwd;
 }

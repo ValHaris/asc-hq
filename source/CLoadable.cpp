@@ -56,7 +56,8 @@ CLoadableGameOptions::CLoadableGameOptions(CGameOptions* pOptions)
 	
 	add(new IntProperty("ToolTipHelpDelay"					,	&_pOptions->onlinehelptime));
 	add(new IntProperty("SmallGuiIconOpensAfterMove"	,	&_pOptions->smallguiiconopenaftermove));
-	add(new IntProperty("DefaultPassword"					,	&_pOptions->defaultpassword));
+	add(new TextProperty("DefaultPassword"					,	&_pOptions->defaultPassword));
+	add(new TextProperty("DefaultSupervisorPassword"					,	&_pOptions->defaultSuperVisorPassword));
 	add(new IntProperty("ReplayDelay"						,	&_pOptions->replayspeed));
    add(new IntProperty("ShowUnitOwner"                ,  &_pOptions->showUnitOwner));
 	

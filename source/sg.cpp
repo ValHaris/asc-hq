@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.112 2000-11-26 22:18:54 mbickel Exp $
+//     $Id: sg.cpp,v 1.113 2000-11-29 09:40:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.112  2000/11/26 22:18:54  mbickel
+//      Added command line parameters for setting the verbosity
+//      Increased verbose output
+//
 //     Revision 1.111  2000/11/21 20:27:05  mbickel
 //      Fixed crash in tsearchfields (used by object construction for example)
 //      AI improvements
@@ -283,6 +287,8 @@
 #include "loadimage.h"
 #include "astar2.h"
 #include "errors.h"
+#include "password.h"
+#include "password_dialog.h"
 
 #ifdef HEXAGON
 #include "loadbi3.h"
@@ -294,7 +300,7 @@
 
 
 // #define MEMCHK
-
+#include "memorycheck.cpp"
 
 class tsgonlinemousehelp : public tonlinemousehelp {
    public:
@@ -669,205 +675,6 @@ int tbackgroundpict :: getlastpaintmode ( void )
 
 
 
-#ifdef MEMCHK
-
-  int blocknum = 0;
-  int blocklist[1000000];
-
-
-  void addblock ( void* p )
-  {
-     blocklist[blocknum++] = (int) p;
-  }
-
-  int removeblock ( void* p )
-  {
-     if ( blocknum== 0 )
-        return 0;
-
-     int error = 0;
-     int found = 0;
-     int pos = 0;
-     while ( !found && pos < blocknum) {
-        if ( blocklist[pos] == (int) p )
-           found++;
-        else
-           pos++;
-     } /* endwhile */
-     if ( found ) {
-        for ( int i = pos+1; i < blocknum; i++ )
-           blocklist[i-1] = blocklist[i];
-        blocknum--;
-     } 
-
-     return found;
-  }
-
-  int blockavail( void* p )
-  {
-     int found = 0;
-     int pos = 0;
-     while ( !found && pos < blocknum) {
-        if ( blocklist[pos] == (int) p )
-           found++;
-        else
-           pos++;
-     } /* endwhile */
-     return found;
-  }
-
-  void verifyallblocks( void );
-
-  void* memchkAlloc ( int tp, size_t amt )
-  {
-     // verifyallblocks();
-     int error;
-     void* tmp = malloc ( amt + 53 * 4 );
-    #ifdef _DOS_
-     if ( !tmp )
-        new_new_handler();
-    #endif
-
-     int* tmpi = (int*) tmp;
-     /*
-     if ( (int) tmpi == 0x1bb2138 || (int) tmpi == 0x1bcf178 ) 
-        error++;
-        */
-     tmpi[0] = tp;
-     tmpi[1] = (int) tmp;
-     tmpi[2] = amt;
-     for ( int i = 0; i < 25; i++ ) {
-        tmpi[3 + i] = 0x12345678;
-        tmpi[3 + i + (amt+3)/4 + 25] = 0x87654321;
-     }
-     void* p = &tmpi[28];
-
-     addblock ( p );
-     return p;
-  }
-
-
-  void* verifyblock ( int tp, void* p )
-  {
-     int error = 0;
-     int* tmpi = (int*) p;
-     tmpi -= 28;
-
-     if ( tp != -1 )
-        if ( tmpi[0] != tp )
-           error++;
-
-     if ( tmpi[1] != (int) tmpi) {
-        error++;
-        #ifdef logging
-         logtofile ( "memory check: verifyblock : error A at address %x", p );
-        #endif
-     }
-
-     int amt = tmpi[2];
-
-     for ( int i = 0; i < 25; i++ ) {
-
-        if ( tmpi[3 + i] != 0x12345678)
-           if ( i == 1  &&  tmpi[3 + i] == -2) {
-              error++;  // deallocated twice 
-              #ifdef logging
-               logtofile ( "memory check: verifyblock : error B at address %x", p );
-              #endif
-           } else {
-              error++;
-              #ifdef logging
-               logtofile ( "memory check: verifyblock : error C at address %x", p );
-              #endif
-           }
-
-        if ( tmpi[3 + i + (amt+3)/4 + 25] != 0x87654321 ) {
-           error++;
-           #ifdef logging
-            logtofile ( "memory check: verifyblock : error D at address %x", p );
-           #endif
-        }
-     }
-     return tmpi;
-  }
-
-  void verifyallblocks ( void )
-  {
-     for ( int i = 0; i < blocknum; i++ )
-        verifyblock ( -1, (void*) blocklist[i] );
-  }
-
-  void memchkFree ( int tp, void* buf )
-  {
-     if ( removeblock ( buf )) {
-        void* tmpi = verifyblock ( tp, buf );
-
-        int* tmpi2 = (int*) buf;
-        tmpi2 -= 28;
-        tmpi2[4] = -2;
-
-
-        free ( tmpi );
-     } else
-       free ( buf );
-  }
-
-  void *operator new( size_t amt )
-  {
-      return( memchkAlloc( 100, amt ) );
-  }
-  
-  void operator delete( void *p )
-  {
-     if ( p )
-      memchkFree( 100, p );
-  }
-  
-  void *operator new []( size_t amt )
-  {
-      return( memchkAlloc( 102, amt ) );
-  }
-  
-  void operator delete []( void *p )
-  {
-     if ( p )
-      memchkFree( 102, p );
-  }
-
-  void* asc_malloc ( size_t size )
-  {
-     void* tmp = memchkAlloc ( 104, size );
-    #ifdef _DOS_
-     if ( tmp == NULL ) 
-        new_new_handler();
-    #endif
-     return tmp;
-  }
-
-  void asc_free ( void* p )
-  {
-     memchkFree ( 104, p );
-  }
-
-#else
-
-  void* asc_malloc ( size_t size )
-  {
-     void* tmp = malloc ( size );
-    #ifdef _DOS_
-     if ( tmp == NULL ) 
-        new_new_handler();
-    #endif
-     return tmp;
-  }
-
-  void asc_free ( void* p )
-  {
-     free ( p );
-  }
-
-
-#endif
 
 
 
@@ -2127,14 +1934,14 @@ void execuseraction ( tuseractions action )
                        break;
 
          case ua_changepassword:      {
-                                         int stat = 0;
+                                         bool success;
                                          do {
-                                            int oldpwd = actmap->player[actmap->actplayer].passwordcrc;
-                                            actmap->player[actmap->actplayer].passwordcrc = 0;
-                                            stat = enterpassword ( &actmap->player[actmap->actplayer].passwordcrc );
-                                            if ( stat == 10 )
+                                            Password oldpwd = actmap->player[actmap->actplayer].passwordcrc;
+                                            actmap->player[actmap->actplayer].passwordcrc.reset();
+                                            success = enterpassword ( actmap->player[actmap->actplayer].passwordcrc, true, true );
+                                            if ( !success )
                                                actmap->player[actmap->actplayer].passwordcrc = oldpwd;
-                                         } while ( !actmap->player[actmap->actplayer].passwordcrc && stat==1 && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
+                                         } while ( actmap->player[actmap->actplayer].passwordcrc.empty() && success && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
                                       }
                        break;
 
@@ -2778,7 +2585,7 @@ void networksupervisor ( void )
           public:
             ~tcarefordeletionofmap (  )
             {
-                if ( actmap->xsize > 0  ||  actmap->ysize > 0 ) {
+                if ( actmap && (actmap->xsize > 0  ||  actmap->ysize > 0) ) {
                      delete actmap;
                      actmap = NULL;
                 }
@@ -2833,7 +2640,9 @@ void networksupervisor ( void )
 
 
    int ok = 0;
-   if ( actmap->supervisorpasswordcrc ) {
+   if ( !actmap->supervisorpasswordcrc.empty() ) {
+       ok = enterpassword ( actmap->supervisorpasswordcrc );
+       /*
        taskforsupervisorpassword afsp;
        int a;
        afsp.init ( &actmap->supervisorpasswordcrc, 1 );
@@ -2842,6 +2651,7 @@ void networksupervisor ( void )
 
        if ( a == 1 )
          ok = 1;
+       */
    } else {
       displaymessage ("no supervisor defined",1 );
       delete actmap;

@@ -68,7 +68,6 @@ tmap :: tmap ( void )
          else
             player[i].stat = 2;
 
-         player[i].passwordcrc = 0;
          player[i].dissectedunit = 0;
          player[i].unreadmessage = NULL;
          player[i].oldmessage = NULL;
@@ -105,7 +104,6 @@ tmap :: tmap ( void )
       for ( i = 0; i< 8; i++ )
          alliances_at_beginofturn[i] = 0;
 
-      supervisorpasswordcrc = 0;
       shareview = NULL;
       continueplaying = 0;
       replayinfo = NULL;
@@ -118,6 +116,7 @@ tmap :: tmap ( void )
       game_parameter = NULL;
       mineralResourcesDisplayed = 0;
 }
+
 
 
 void tmap :: read ( tnstream& stream )
@@ -161,7 +160,7 @@ void tmap :: read ( tnstream& stream )
       player[i].stat = stream.readChar();
       stream.readChar(); // dummy
       dummy_playername[i] = stream.readInt();
-      player[i].passwordcrc = stream.readInt();
+      player[i].passwordcrc.read ( stream );
       player[i].dissectedunit = (pdissectedunit) stream.readInt();
       player[i].unreadmessage = (pmessagelist) stream.readInt();
       player[i].oldmessage = (pmessagelist) stream.readInt();
@@ -208,7 +207,7 @@ void tmap :: read ( tnstream& stream )
       exist_computerplayername[i] = stream.readInt();
    exist_computerplayername[8] = 0;
 
-   supervisorpasswordcrc = stream.readInt();
+   supervisorpasswordcrc.read ( stream );
 
    for ( i = 0; i < 8; i++ )
       alliances_at_beginofturn[i] = stream.readChar();
@@ -442,7 +441,7 @@ void tmap :: write ( tnstream& stream )
       stream.writeChar( player[i].stat );
       stream.writeChar( 0 ); // dummy
       stream.writeInt( 0 );
-      stream.writeInt( player[i].passwordcrc );
+      player[i].passwordcrc.write ( stream );
       stream.writeInt( player[i].dissectedunit != NULL );
       stream.writeInt( player[i].unreadmessage != NULL );
       stream.writeInt( player[i].oldmessage != NULL );
@@ -479,7 +478,7 @@ void tmap :: write ( tnstream& stream )
    for ( i = 0; i < 8; i++ )
       stream.writeInt( !player[i].computername.empty() );
 
-   stream.writeInt( supervisorpasswordcrc );
+   supervisorpasswordcrc.write ( stream );
 
    for ( i = 0; i < 8; i++ )
       stream.writeChar( alliances_at_beginofturn[i] );

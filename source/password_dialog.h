@@ -1,9 +1,9 @@
 /***************************************************************************
-                          Named.cpp  -  description
+                          password_dialog.h  -  description
                              -------------------
-    begin                : Thu Jun 29 2000
-    copyright            : (C) 2000 by frank landgraf
-    email                : 
+    begin                : Mon Nov 27 2000
+    copyright            : (C) 2000 by Martin Bickel
+    email                : bickel@asc-hq.org
  ***************************************************************************/
 
 /***************************************************************************
@@ -14,46 +14,14 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#include "Named.h"
 
-#include <string.h>
-#include <malloc.h>
+#ifndef password_dialog_h_included
+ #define password_dialog_h_included
 
-Named::Named()	
-	:	_name(NULL)	
-{}
+ #include "password.h"
 
-Named::Named(const char* pszName)	
-{	this->setName(pszName);	}
+  extern bool enterpassword ( Password& pwd, bool firstTime = false,
+                                             bool cancelAllowed = false,
+                                             bool defaultAllowed = true );
 
-
-Named::Named(const Named& n)	
-{	
-   setName(n.getName());	
-}
-
-Named::Named(const string& pszName)	
-{	this->setName(pszName.c_str());	}
-
-Named& Named::operator= (const Named& n)
-{
-   setName ( n.getName());
-   return *this;
-}
-
-
-Named::~Named()	
-{
-	if (_name!=NULL)
-		free(_name);
-}
-
-const char*	Named::getName() const	
-{	return _name;	}
-
-void	Named::setName(const char* pszName)
-{	
-	if (_name!=NULL)
-		free(_name);
-	_name	=	(pszName!=NULL && pszName[0])	?	strdup(pszName)	:	NULL;
-}
+#endif

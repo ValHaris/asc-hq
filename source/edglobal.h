@@ -1,6 +1,11 @@
-//     $Id: edglobal.h,v 1.6 2000-08-02 15:52:56 mbickel Exp $
+//     $Id: edglobal.h,v 1.7 2000-11-29 09:40:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/08/02 15:52:56  mbickel
+//      New unit set definition files
+//      demount accepts now more than one container file
+//      Unitset information dialog added
+//
 //     Revision 1.5  2000/03/16 14:06:54  mbickel
 //      Added unitset transformation to the mapeditor
 //
@@ -55,7 +60,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-#define execactionscount 69
+const int execactionscount = 70;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -130,6 +135,7 @@ enum tuseractions {
      act_setunitfilter,
      act_selectgraphicset,
      act_unitsettransformation,
-     act_unitSetInformation };
+     act_unitSetInformation,
+     act_switchmaps };
 
 extern void         execaction(int code);

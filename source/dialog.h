@@ -1,6 +1,9 @@
-//     $Id: dialog.h,v 1.13 2000-09-16 11:47:26 mbickel Exp $
+//     $Id: dialog.h,v 1.14 2000-11-29 09:40:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/09/16 11:47:26  mbickel
+//      Some cleanup and documentation again
+//
 //     Revision 1.12  2000/08/26 15:33:41  mbickel
 //      Warning message displayed if empty password is entered
 //      pcxtank now displays error messages
@@ -82,6 +85,7 @@
 
 #include "dlg_box.h"
 #include "loaders.h"
+#include "password.h"
 
 const int dbluedark = 248;
 
@@ -278,39 +282,6 @@ extern void viewterraininfo ( void );
 
 
 
-class tenterpassword : public tdialogbox {
-             protected:
-               char strng1[40];
-               char strng2[40];
-               
-               int status;
-               int *cr;
-               int reask;
-               int confirm;
-
-               void dispeditstring ( char* st , int   x1, int   y1 );
-                                           
-               void lne(int          x1, int          y1, char *       s, int          position, char      einfuegen);
-
-               virtual int checkforreask ( int crc );
-
-               virtual int    gettextwdth_stredit ( char* txt, pfont font );             
-            public:
-               int  getcapabilities ( void );
-               void init ( int* crc, int mode, char* ttl = NULL );  // mode : 0 = es muá unbedingt ein passwort eingegeben werden; 1 = Eingabe kann abgebrochen werden
-               void  run ( int* result );
-               void buttonpressed ( int id );
-           };
-
-
-#ifndef karteneditor
- #include "network.h"
- class taskforsupervisorpassword : public tenterpassword {
-                            virtual int checkforreask ( int crc );
-                          public:
-                            void init ( int* crc, int mode );
-                         };
-#endif
 
 
 /*! a dialog box for entering a password. 
@@ -322,10 +293,6 @@ class tenterpassword : public tdialogbox {
               2: default (only if new password has been entered),
              10: cancel (only if new password has been entered)
 */
-extern int enterpassword ( int* cr );
-
-
-extern int encodepassword ( const char* pw );
 
 extern void viewUnitSetinfo ( void );
 

@@ -1,6 +1,12 @@
-//     $Id: controls.cpp,v 1.85 2000-11-21 20:26:56 mbickel Exp $
+//     $Id: controls.cpp,v 1.86 2000-11-29 09:40:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.85  2000/11/21 20:26:56  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.84  2000/11/11 11:05:15  mbickel
 //      started AI service functions
 //
@@ -171,6 +177,7 @@
 #include "gameoptions.h"
 #include "artint.h"
 #include "errors.h"
+#include "password_dialog.h"
 
          tdashboard  dashboard;
          int             windmovement[8];
@@ -4431,17 +4438,18 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
          tlockdispspfld ldsf;
          backgroundpict.paint();
 
-         if ( (actmap->player[actmap->actplayer].passwordcrc && actmap->player[actmap->actplayer].passwordcrc != CGameOptions::Instance()->defaultpassword ) // && actmap->player[actmap->actplayer].passwordcrc != encodepassword ( password )
-            || actmap->time.a.turn == 1 || (actmap->network && actmap->network->globalparams.reaskpasswords) ) {
+         bool firstRound = actmap->time.a.turn == 1;
+         if ( (!actmap->player[actmap->actplayer].passwordcrc.empty() && actmap->player[actmap->actplayer].passwordcrc != CGameOptions::Instance()->getDefaultPassword() ) // && actmap->player[actmap->actplayer].passwordcrc != encodepassword ( password )
+            || firstRound || (actmap->network && actmap->network->globalparams.reaskpasswords) ) {
                if ( forcepasswordchecking < 0 ) {
                   delete actmap;
                   actmap = NULL;
                   throw NoMapLoaded();
                } else {
-                  int stat;
+                  bool stat;
                   do {
-                     stat = enterpassword ( &actmap->player[actmap->actplayer].passwordcrc );
-                  } while ( !actmap->player[actmap->actplayer].passwordcrc && stat==1 && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
+                     stat = enterpassword ( actmap->player[actmap->actplayer].passwordcrc, firstRound );
+                  } while ( actmap->player[actmap->actplayer].passwordcrc.empty() && stat && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
                }
          } else
             displaymessage("next player is:\n%s",3,actmap->player[actmap->actplayer].getName().c_str() );
