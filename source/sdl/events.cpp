@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.32 2001-06-25 15:36:11 mbickel Exp $
+//     $Id: events.cpp,v 1.33 2001-07-09 17:01:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2001/06/25 15:36:11  mbickel
+//      Help on experience icon
+//
 //     Revision 1.31  2001/05/24 15:37:51  mbickel
 //      Fixed: reaction fire could not be disabled when unit out of ammo
 //      Fixed several AI problems
@@ -597,8 +600,8 @@ int processEvents ( )
             break;
 #ifdef _WIN32_
          case SDL_ACTIVEEVENT:
-              if ( event.active.state == SDL_APPACTIVE )
-                 if ( event.active.gain )
+              // if ( event.active.state == SDL_APPACTIVE )
+              //   if ( event.active.gain )
                     redrawScreen = true;
             break;
 #endif            

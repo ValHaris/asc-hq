@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.48 2001-05-21 12:46:19 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.49 2001-07-09 17:01:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2001/05/21 12:46:19  mbickel
+//      Fixed infinite loop in AI::strategy
+//      Fixed bugs in mapeditor - event editing
+//      Fixed bugs in even loading / writing
+//      Fixed wrong build order AI <-> main program
+//
 //     Revision 1.47  2001/02/26 12:35:07  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -396,12 +402,19 @@ collategraphicoperations* tdialogbox::pcgo = NULL;
 
 tdialogbox::tdialogbox()
 {
+   npush ( activefontsettings );
+   activefontsettings.font = schriften.smallarial;
+   activefontsettings.color = black;
+   activefontsettings.background = 255;
+   activefontsettings.markcolor = red;
+
+
    virtualbufoffset = 0;
    boxstatus = 0;
 
    pushallmouseprocs ( );
 
-   if ( mouseparams.pictpointer != icons.mousepointer ) 
+   if ( mouseparams.pictpointer != icons.mousepointer )
        setnewmousepointer ( icons.mousepointer, 0,0 );
 
    dlg_mode =  0;
@@ -428,10 +441,8 @@ tdialogbox::tdialogbox()
       rdw = 0;
 #endif
 
-
-   if ( rdw ) 
+   if ( rdw )
      dlg_mode |= 2;
-   
 }
 
 
@@ -2660,7 +2671,7 @@ tdialogbox::~tdialogbox()
       pcgo = NULL;
    }
 
-   if ( boxstatus ) 
+   if ( boxstatus )
       done();
    boxstatus = 0;
 
@@ -2672,13 +2683,14 @@ tdialogbox::~tdialogbox()
    if ( prev ) {
       prev->next = NULL;
 
-      if ( dlg_mode & 2 ) 
+      if ( dlg_mode & 2 )
          prev->redrawall2( x1, y1, x1 + xsize, y1 + ysize );
    } else {
       first = NULL;
-      if ( dlg_mode & 2 ) 
+      if ( dlg_mode & 2 )
          repaintdisplay();
    }
+   npop ( activefontsettings );
 }
 
 
@@ -3491,7 +3503,6 @@ void         tviewtextquery::setup( void )
 
 void         tviewtextquery::init( int id, char* titel, char* s1, char* s2 )
 { 
-
    st1 = s1;
    st2 = s2;
 
@@ -3519,7 +3530,7 @@ int         viewtextquery(word         id,
   tviewtextquery vtq; 
   char result;
 
-   vtq.init(id,title,s1,s2); 
+   vtq.init(id,title,s1,s2);
    vtq.run(); 
    result = vtq.action - 11;
    vtq.done(); 

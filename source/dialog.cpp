@@ -2,9 +2,14 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.84 2001-06-14 14:46:46 mbickel Exp $
+//     $Id: dialog.cpp,v 1.85 2001-07-09 17:01:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.84  2001/06/14 14:46:46  mbickel
+//      The resolution of ASC can be specified in the configuration file
+//      The fileselect dialog box shows the file's location
+//      new ascmap2pcx param: outputdir
+//
 //     Revision 1.83  2001/05/16 23:21:01  mbickel
 //      The data file is mounted using automake
 //      Added sgml documentation
@@ -2726,8 +2731,8 @@ void tbasicshowmap :: init ( int x1, int y1, int xsize, int ysize )
    else
       zoom = zz1;
 
-   if ( zoom < 2 )   // ##
-      zoom = 2;
+   if ( zoom < 1 )   // ##
+      zoom = 1;
    if ( zoom > maxzoom )
       zoom = maxzoom;
 
