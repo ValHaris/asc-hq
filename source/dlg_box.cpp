@@ -1,6 +1,9 @@
-//     $Id: dlg_box.cpp,v 1.22 2000-06-23 09:48:32 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.23 2000-08-02 08:48:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/06/23 09:48:32  mbickel
+//      Improved key handling in intedit/stredit
+//
 //     Revision 1.21  2000/06/23 09:24:16  mbickel
 //      Fixed crash in replay
 //      enabled cursor movement in stredit
@@ -1885,6 +1888,7 @@ void tdisplaymessage::init ( tstringa a, int md, int linenum )
       addbutton ( "~O~K",10, ysize - 35 , xsize - 10 , ysize -  10 ,0,1,1,true );
       addkey(1, ct_enter);
       addkey(1, ct_esc);
+      addkey(1, ct_enterk );
    };
 
    buildgraphics();

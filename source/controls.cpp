@@ -1,6 +1,13 @@
-//     $Id: controls.cpp,v 1.50 2000-07-31 19:16:33 mbickel Exp $
+//     $Id: controls.cpp,v 1.51 2000-08-02 08:47:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2000/07/31 19:16:33  mbickel
+//      Improved handing of multiple directories
+//      Fixed: wind direction not displayed when cycling through wind heights
+//      Fixed: oil rig not working
+//      Fixed: resources becomming visible when checking mining station status
+//      Fixed: division by zero when moving unit without fuel consumption
+//
 //     Revision 1.49  2000/07/29 14:54:12  mbickel
 //      plain text configuration file implemented
 //
@@ -347,6 +354,7 @@ int searchexternaltransferfields ( pbuilding bld )
                              };
 
   class   tsearchforminablefields: public tsearchfields {
+                                int shareview;
                       public:
                                 int                     numberoffields;
                                 void                    run ( pvehicle     eht );
@@ -364,10 +372,13 @@ void         tsearchforminablefields::testfield(void)
            if ( !fld->vehicle  ||  fld->vehicle->color == actmap->actplayer*8 ||  fld->vehicle->color == 8*8) {
               if ( !fld->resourceview )
                  fld->resourceview = new tresourceview;
-   
-              fld->resourceview->visible |= ( 1 << actmap->actplayer );
-              fld->resourceview->fuelvisible[actmap->actplayer] = fld->fuel;
-              fld->resourceview->materialvisible[actmap->actplayer] = fld->material;
+
+              for ( int c = 0; c < 8; c++ )
+                 if ( shareview & (1 << c) ) {
+                    fld->resourceview->visible |= ( 1 << c );
+                    fld->resourceview->fuelvisible[c] = fld->fuel;
+                    fld->resourceview->materialvisible[c] = fld->material;
+                 }
            }
      } 
 } 
@@ -383,7 +394,14 @@ void         tsearchforminablefields::run( pvehicle     eht )
          dispmessage2(311,"");
          return;
       } 
-  
+
+   shareview = 1 << ( eht->color / 8);
+   if ( actmap->shareview )
+      for ( int i = 0; i < 8; i++ )
+         if ( i*8 != eht->color )
+            if ( actmap->player[i].existent )
+               if ( actmap->shareview->mode[eht->color/8][i] == sv_shareview )
+                  shareview += 1 << i;
 
    numberoffields = 0;
    initsuche(eht->xpos, eht->ypos,eht->typ->digrange,1); 
@@ -2152,7 +2170,7 @@ void         tcomputevehicleview::init( const pvehicle eht, int _mode  )   // mo
    sonar =           !!(eht->functions & cfsonar);
    minenview =      !!(eht->functions & cfmineview);
 
-   if ( eht->functions & cfautodigger )
+   if ( (eht->functions & cfautodigger) && mode == 1 )
       searchforminablefields ( eht );
 
   // pfield efield = getfield( eht->xpos, eht->ypos );
@@ -5877,7 +5895,7 @@ void         generatevehicle_cl ( pvehicletype fztyp,
 
 
 
-void MapNetwork :: searchfield ( int x, int y, int dir )
+void MapNetwork :: searchfield ( int x, int y, int dir, int nexttobuilding )
 {
   int s;
 
@@ -5930,7 +5948,7 @@ void MapNetwork :: searchfield ( int x, int y, int dir )
                int nx = x;
                int ny = y;
                getnextfield ( nx, ny, arr[s] );
-               searchfield( nx, ny, arr[s] ); 
+               searchfield( nx, ny, arr[s], 0 );
                if ( searchfinished() )
                   return ;
             } 
@@ -5976,7 +5994,7 @@ void MapNetwork :: searchbuilding ( int x, int y )
                   getnextfield ( xp2, yp2, d );
                   pfield newfield = getfield ( xp2, yp2 );
                   if ( newfield && newfield->building != bld  && !newfield->a.temp )
-                     searchfield ( xp2, yp2, d );
+                     searchfield ( xp2, yp2, d, 1 );
                } /* endfor */
          }
 }
@@ -6020,13 +6038,13 @@ void MapNetwork :: start ( int x, int y )
          actmap->cleartemps(7);
          startposition.x = x;
          startposition.y = y;
-         searchfield ( x, y, -1 );
+         searchfield ( x, y, -1, 0 );
          actmap->cleartemps(7);
          if ( searchfinished() ) {
             pass++;
             startposition.x = x;
             startposition.y = y;
-            searchfield ( x, y, -1 );
+            searchfield ( x, y, -1, 0 );
             actmap->cleartemps(7);
          }
       } else  
