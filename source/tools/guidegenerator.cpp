@@ -39,7 +39,6 @@
 
 typedef vector<InfoPage*> InfoPageVector;
 
-
 const ASCString BuildingGuideGen::APPENDIX ="B";
 const ASCString UnitGuideGen::APPENDIX ="U";
 
@@ -124,24 +123,15 @@ ASCString InfoPageUtil::getTmpPath() {
 }
 
 void InfoPageUtil::updateFile(ASCString fileName, ASCString exportPath) {  
-  ASCString destilledFileName = fileName;
-  ASCString uploadDir = exportPath + UPLOADDIR;
+  ASCString destilledFileName = fileName; 
 #ifdef _WIN32_
-  destilledFileName.erase(0, fileName.find_last_of("\\") + 1);
-  uploadDir += "\\";
+  destilledFileName.erase(0, fileName.find_last_of("\\") + 1);  
 #else
-  destilledFileName.erase(0, fileName.find_last_of("/") + 1);
-  uploadDir += "/";
+  destilledFileName.erase(0, fileName.find_last_of("/") + 1);  
 #endif
   ASCString exportTarget = exportPath + destilledFileName ;
   ASCString tmpTarget = InfoPageUtil::getTmpPath() + destilledFileName;
-  bool updatedFile = InfoPageUtil::diffMove(tmpTarget, exportTarget);  
-  ASCString uploadTarget = uploadDir + destilledFileName;
-  if(updatedFile) {
-    InfoPageUtil::copyFile(exportTarget, uploadTarget);
-  } else {
-    remove(uploadTarget.c_str());
-  }
+  bool updatedFile = InfoPageUtil::diffMove(tmpTarget, exportTarget);    
 }
 //*************************************************************************************************************
 ImageConverter::ImageConverter() {}
@@ -305,7 +295,7 @@ void BuildingGuideGen::generateCategories() const {
 
         for ( int building = 0; building < buildingTypeRepository.getNum(); building++ ) {
           BuildingType*  bt = buildingTypeRepository.getObject_byPos ( building );
-          if(s->isMember(bt->id, SingleUnitSet::unit)) {
+          if(s->isMember(bt->id, SingleUnitSet::building)) {
             ASCString fileLink = strrr(bt->id) + APPENDIX + ASCString(MAINLINKSUFFIX) + HTML;
             CategoryMember* dataEntry = new CategoryMember(bt->name.toUpper(), cssFile, fileLink, TARGET);
             if ( bt->special & cghqb ) {
@@ -327,7 +317,7 @@ void BuildingGuideGen::generateCategories() const {
             } else {
               noCat->addEntry(dataEntry);
             }
-            CategoryMember* idEntry = new CategoryMember(strrr(bt->id) + ASCString (MAINLINKSUFFIX) + HTML, cssFile, fileLink, TARGET);
+            CategoryMember* idEntry = new CategoryMember(ASCString(strrr(bt->id)) + "(" +  bt->name +")", cssFile, fileLink, TARGET);
             idCat->addEntry(idEntry);
           }
         }
@@ -355,9 +345,8 @@ void BuildingGuideGen::processSubjects() {
     if(setID > 0) {
       for ( std::vector<SingleUnitSet*>::iterator i = unitSets.begin(); i != unitSets.end(); i++  ) {
         SingleUnitSet* s = (*i);
-        if((s->ID == setID) && (s->isMember(bt->id,SingleUnitSet::unit))) {
-          if(buildingNames.end() != buildingNames.find(strrr(s->ID) +bt->name)||(!buildingsUnique)) {
-            cout << "Test 1 " << setID << endl;
+        if((s->ID == setID) && (s->isMember(bt->id,SingleUnitSet::building))) {
+          if(buildingNames.end() != buildingNames.find(strrr(s->ID) +bt->name)||(!buildingsUnique)) {            
             processBuilding(*bt);
             buildingNames.insert(strrr(s->ID) +bt->name);
           }
@@ -504,7 +493,7 @@ void UnitGuideGen::generateCategories() const {
               miscCat->addEntry(dataEntry);
               break;
             };
-            CategoryMember* idEntry = new CategoryMember(strrr(vt->id) + ASCString (MAINLINKSUFFIX) + HTML, cssFile, fileLink, TARGET);
+            CategoryMember* idEntry = new CategoryMember(ASCString(strrr(vt->id)) + "(" + vt->name + ")", cssFile, fileLink, TARGET);
             idCat->addEntry(idEntry);
           }
         }
@@ -520,6 +509,7 @@ void UnitGuideGen::generateCategories() const {
     cout << e.getMessage() << endl;
   }
 }
+
 
 
 

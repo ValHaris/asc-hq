@@ -39,7 +39,6 @@
 
 #define VehicleType Vehicletype
 #define RELATIVEIMGPATH "./"
-#define UPLOADDIR "upload"
 
 typedef map<int, ASCString> Int2String;
 typedef map<int, Category*> GroupFileEntriesMap;
@@ -359,6 +358,7 @@ private:
 
 };
 #endif
+
 
 
 

@@ -1343,7 +1343,6 @@ void UnitConstructionPage::buildContent() {
                  && obj->id <= vt.objectsBuildable[i].to ) {
           names = addTREntryln(names, obj->name.c_str() + ASCString("(") + strrr(obj->id )+ ")");
         }
-
       }
     }
     if(!names.empty()) {
@@ -1557,4 +1556,5 @@ void TechTreePage::buildPage() {
   endHTML();
 
 }
+
 

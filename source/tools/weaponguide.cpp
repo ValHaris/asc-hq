@@ -146,20 +146,6 @@ int main(int argc, char *argv[] ) {
     wildcard =  "*";
     // else use all verhicles
   }
-  if(false) {
-    ASCString uploadDir = prefixDir + UPLOADDIR;
-    ASCString command;
-#ifdef _WIN32_
-    command = "md " + uploadDir;
-    system(command.c_str());
-    command = "attrib -R " +uploadDir;
-#else
-    command = "mkdir " + uploadDir;
-    system(command.c_str());
-    command = "chmod 750 " +uploadDir;
-#endif
-  system(command.c_str());
-  }
 
 
   BuildingGuideGen gen(prefixDir, cl.m(), cl.s(), cl.roottech(), cl.i(), false, true);
@@ -167,22 +153,11 @@ int main(int argc, char *argv[] ) {
   cout << "*******Buildings done*******" << endl;
   UnitGuideGen unitGen(prefixDir, cl.m(), cl.s(), cl.roottech(), cl.i(), true, false);
   unitGen.processSubjects();
-  cout << "*******Units done*******" << endl;
-  if(false) {
-    ASCString uploadDir = prefixDir + UPLOADDIR;
-    ASCString command;
-#ifdef _WIN32_
-    system(command.c_str());
-    command = "attrib +R " +uploadDir;
-#else
-    command = "chmod 550 " +uploadDir;
-#endif
-  system(command.c_str());
-  }
-
+  cout << "*******Units done*******" << endl; 
   cout << "******Guide generated*******" << endl;
   return 0;
 };
+
 
 
 
