@@ -18,7 +18,7 @@
     Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
     Boston, MA  02111-1307  USA
 */
-// Version v1.8 , change also GENERAL
+// Version v2.0 , change also GENERAL
 
 
 #include <stdio.h>
@@ -236,22 +236,22 @@ int main(int argc, char *argv[] )
 
             // UNIT GENERAL
             fprintf ( detailed1, "<table width=\"100%\" id=\"H2\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n"
-                      "<tr><td colspan=\"2\"></td><td id=\"H9\" align=\"right\">UNIT GUIDE v1.9 german </td></tr>"
+                      "<tr><td colspan=\"2\"></td><td id=\"H9\" align=\"right\">UNIT GUIDE v2.0 german </td></tr>"
                       "<tr><td width=\"50\">" );
             if ( exist ( b1.c_str() ))
                fprintf ( detailed1, "<img src=\"%s\">", b1.c_str() );
             fprintf ( detailed1, "</td>\n<td>" );
 
             fprintf ( detailed1, "<table width=\"500\" id=\"H2\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
-            fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Name</td>         <td align=\"center\" colspan=\"4\">%s</td> </tr>\n", ft->name.c_str() );
+            fprintf ( detailed1, "<tr>  <td bgcolor=\"#20483f\"><img src=\" ../m-name.png\" alt=\"Name\"></td>  <td align=\"center\" colspan=\"4\">%s</td> </tr>\n", ft->name.c_str() );
             if ( !ft->description.empty() )
-               fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Kurzbeschreibung</td>  <td align=\"center\" colspan=\"4\">%s</td> </tr>\n", ft->description.c_str() );
+               fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\"><img src=\"../m-description.png\" alt=\"Kurzbeschreibung\"></td>  <td align=\"center\" colspan=\"4\">%s</td> </tr>\n", ft->description.c_str() );
             else
-               fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Kurzbeschreibung</td>  <td align=\"center\" colspan=\"4\">--</td> </tr>\n" );
-            fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">ID</td>           <td align=\"center\">%i</td> <td></td><td bgcolor=\"#20483f\">Gewicht</td> <td align=\"center\">%d</td> <td bgcolor=\"#20483f\">Typ</td><td width=\"200\">%s</td> </tr>\n", ft->id, ft->weight, cmovemalitypes[ft->movemalustyp]  );
-            fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Panzerung</td>        <td align=\"center\">%i</td> <td></td><td bgcolor=\"#20483f\">Sicht</td>   <td align=\"center\">%d</td> </tr>\n", ft->armor, (ft->view/10) );
-            fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Kosten Energie</td>  <td align=\"center\">%i</td> <td></td><td bgcolor=\"#20483f\">St&ouml;rung</td><td align=\"center\">%d</td> </tr>\n", ft->productionCost.material, (ft->jamming/10) );
-            fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Kosten Material</td><td align=\"center\">%i</td> </tr>\n", ft->productionCost.energy );
+               fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\"><img src=\"../m-description.png\" alt=\"Kurzbeschreibung\"></td>  <td align=\"center\" colspan=\"4\">--</td> </tr>\n" );
+            fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\"><img src=\"../m-id.png\" alt=\"Identifikationsnummer\"></td>           <td align=\"center\">%i</td> <td></td><td bgcolor=\"#20483f\"><img src=\"../m-weight.png\" alt=\"Gewicht\"></td> <td align=\"center\">%d</td> <td bgcolor=\"#20483f\"><img src=\"../m-type.png\" alt=\"Einheitentyp\"></td><td width=\"200\">%s</td> </tr>\n", ft->id, ft->weight, cmovemalitypes[ft->movemalustyp]  );
+            fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\"><img src=\"../m-armor.png\" alt=\"Panzerung\"></td>        <td align=\"center\">%i</td> <td></td><td bgcolor=\"#20483f\"><img src=\"../m-view.png\" alt=\"Sicht/Radar\"></td>   <td align=\"center\">%d</td> </tr>\n", ft->armor, (ft->view/10) );
+            fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\"><img src=\"../m-coste.png\" alt=\"Produktionskosten Energie\"></td>  <td align=\"center\">%i</td> <td></td><td bgcolor=\"#20483f\"><img src=\"../m-jamming.png\" alt=\"Radarstoerung\"></td><td align=\"center\">%d</td> </tr>\n", ft->productionCost.material, (ft->jamming/10) );
+            fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\"><img src=\"../m-costm.png\" alt=\"Produktionskosten Material\"></td><td align=\"center\">%i</td> </tr>\n", ft->productionCost.energy );
 
             if ( ft->wait )
                fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\" colspan=\"4\">Angriff nach Bewegung</td> <td>No</td> </tr>\n" );
@@ -294,9 +294,27 @@ int main(int argc, char *argv[] )
                      "<TR><td colspan=\"9\" bgcolor=\"#20483f\" id=\"H2\" align=\"center\">Erreichbare H&ouml;henstufen:</td></tr>\n<tr>");
             // Spaltentitel
             fprintf ( detailed2, "<td></td>" );
-            for ( i = 0; i < 8; i++ )
-               fprintf ( detailed2, " <TD><IMG src=\"../hoehe%d.gif\" ></TD>", i);
-            fprintf( detailed2, "</TR>\n<TR>");
+            for ( i = 0; i < 8; i++ ) {
+               fprintf ( detailed2, " <TD><IMG src=\"../hoehe%d.gif\" ", i);
+               if ( i==0 )
+                    fprintf (detailed2, " alt=\"deep_submerged / tief getaucht\" " );
+               if ( i==1 )
+                    fprintf (detailed2, " alt=\"submerged / getaucht\" ");
+               if ( i==2 )
+                    fprintf (detailed2, " alt=\"floating / schwimmend\" ");
+               if ( i==3 )
+                    fprintf (detailed2, " alt=\"ground_based / fahrend\" ");
+               if ( i==4 )
+                    fprintf (detailed2, " alt=\"low_level_flight / tief fliegend\" ");
+               if ( i==5 )
+                    fprintf (detailed2, " alt=\"medium_level_flight / normale Flugh&ouml;he\" ");
+               if ( i==6 )
+                    fprintf (detailed2, " alt=\"high_level_flight / sehr hoch fliegend\" ");
+               if ( i==7 )
+                    fprintf (detailed2, " alt=\"orbit / Erdumlaufbahn\" ");
+			   fprintf ( detailed2, " ></TD>");
+			}
+			fprintf( detailed2, "</TR>\n<TR>");
             // Spaltenwerte Hacken
             fprintf ( detailed2, "<td></td>" );
             for ( i = 0; i < 8; i++ )
@@ -313,16 +331,6 @@ int main(int argc, char *argv[] )
                else
                   fprintf ( detailed2, " <TD></TD>"  );
             fprintf( detailed2, "</TR>\n<TR>\n");
-
-            /* ????
-                     // Spaltenwerte Maximum
-                     fprintf ( detailed2, "<td>Max.</td>" );
-                     for ( i = 0; i < 8; i++ )
-                        if ( (ft->height & ( 1 << i )) && ft->fuelConsumption )
-                           fprintf ( detailed2, " <TD align=\"center\">%d</TD>", ft->tank.fuel/ft->fuelConsumption );
-                        else
-                           fprintf ( detailed2, " <TD></TD>"  );
-            */
             fprintf( detailed2, "\n</TR>\n</TABLE>\n");
 
             // Einzelne Werte
@@ -389,12 +397,54 @@ int main(int argc, char *argv[] )
                   fprintf ( detailed2, "<td></td>" );
             } /* endfor */
             fprintf ( detailed2, "</tr></table>\n" );
+
+            // Erklaerungen
+            fprintf( detailed2,"<br><br>\n<table id=\"H2\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"><tr><td colspan=\"3\" bgcolor=\"#20483f\" align=\"center\">" );
+            fprintf( detailed2,"Erklaerungen zu den Bodentypen</td></tr>\n" );
+              //only ANY  (lowland)
+            fprintf( detailed2,"<tr><td colspan=\"3\" bgcolor=\"#20483f\">Basistypen</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx1.gif\"></td><td>lowland / Flachland, Wiese, Feld</td><td rowspan=\"15\">(BASIS) Diese Felder sind nur befahrbar, wenn das weisse Hackchen gesetz ist. Die Zerstörung tritt nur ein, wenn sich auf dem Feld kein anders Objekt befindet, welches ein gefahrlosen befahren zulaesst. (Brücke ueber Fluß)</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx14.gif\"></td><td>hard sand / fester Sand</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx15.gif\"></td><td>soft sand / Mullsand-Sandwueste</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx21.gif\"></td><td>mountains / normale Berge</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx4.gif\"></td><td>high mountains / hohe Berge</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx22.gif\"></td><td>very shallow water / sehr flaches wasser</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx0.gif\"></td><td>shallow water / flaches wasser</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx12.gif\"></td><td>water / normales Wasser</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx13.gif\"></td><td>deep water / tiefes Wasser</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx24.gif\"></td><td>Lava</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx25.gif\"></td><td>ditch / Befestigungen- Schützengräben</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx26.gif\"></td><td>hillside / Huegel-Gefaelle</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx27.gif\"></td><td>turret foundation / spezieller Untergrund fuer stationaere Einheiten</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx29.gif\"></td><td>Instalation</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx31.gif\"></td><td>river / fluss</td></tr>\n" );
+              //only NOT (swamp,forest)
+            fprintf( detailed2,"<tr><td colspan=\"3\" bgcolor=\"#20483f\">Wettertypen und besondere Eigenschaften</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx18.gif\"></td><td>mud / Matsch, feuchte Wiesen</td><td rowspan=\"10\">Diese Feldtypen sind generell befahrbar. Eine Einheit die z.B. nicht durch Sumpf oder Wald fahren kann, hat dies speziell bei \"nicht befahrbar\" vermerkt !! Bei Einheiten darf diese Eigenschaft niemals bei \"befahrbar\" gesetzt sein. Einzige Ausnahme ist \"fozen_water\" bei Einheiten, die ueber zugefrorenes Wasser fahren koennen.</tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx28.gif\"></td><td>morass / Morast, sehr schwer befahrbares Gelaende</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx2.gif\"></td><td>swamp / Sumpf</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx19.gif\"></td><td>snow / wenig Schnee</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx20.gif\"></td><td>deep snow / tiefer Schnee</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx30.gif\"></td><td>pack ice / Packeis</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx32.gif\"></td><td>frozen water / gefrorenes Wasser</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx3.gif\"></td><td>forest / Wald</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx17.gif\"></td><td>small rocks / kleine Steine - wenig Geröll</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx23.gif\"></td><td>large rocks / große Steine - viel Geröll</td></tr>\n" );
+              // plus ANY (road, rail,)
+            fprintf( detailed2,"<tr><td colspan=\"3\" bgcolor=\"#20483f\">Typen fuer spezielle Objekte</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx5.gif\"></td><td>road / Straße</td><td rowspan=\"5\">Diese Eigenschaften werden hauptsaechlich bei Objekten verwendet. Felder mit dieser Eigenschaft sind generell befahrbar, auch wenn dies nicht speziell vermerkt ist, denn sie treten nur in Zusammenhang mit einem Basisfeld auf. Ein Panzer kann Schienen ueberqueren - aber nicht, wenn sie sich über Wasser befinden. Ein Zug, der diese Eigenschaft speziell besitzt, kann das.</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx6.gif\"></td><td>railroad / Schienen</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx9.gif\"></td><td>runway / Landebahn</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx10.gif\"></td><td>pipeline / oberirdische Rohrleitung</td></tr>\n" );
+            fprintf( detailed2,"<tr><td><img src=\"../gfx11.gif\"></td><td>buried pipeline / unterirdische Pipeline</td></tr>\n" );
+            fprintf ( detailed2, "</table>\n" );
+
             // ENDE MOVEMENT
 
-			
-			
-			
-			
+
+
+
+
             // BEGIN WEAPONS
             // Waffen NR-AMMO-DISTANCE-STRENGS-SHOT FROM-ATTACK TO-TYP
             fprintf ( detailed3, "<table id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
@@ -408,18 +458,54 @@ int main(int argc, char *argv[] )
                       "</tr>\n" );
             // GFX
             fprintf ( detailed3, "<tr><td></td>"
-                      "    <td><img src=\"../ammo.gif\"</td>"
-                      "    <td><img src=\"../dis1.gif\"</td>"
-                      "    <td><img src=\"../str1.gif\"</td>"
-                      "    <td><img src=\"../dis2.gif\"</td>"
-                      "    <td><img src=\"../str2.gif\"</td>" );
+                      "    <td><img src=\"../ammo.gif\" alt=\"max.ammunition / max. Anzahl Munition\"></td>"
+                      "    <td><img src=\"../dis1.gif\" alt=\"min.targetrange / min. Angriffsreichweite\"></td>"
+                      "    <td><img src=\"../str1.gif\" alt=\"weaponstrengs by min.targetrange / Angriffsst&auml;re bei min. Angriffsreichweite\"></td>"
+                      "    <td><img src=\"../dis2.gif\" alt=\"max.targetrange / max. Angriffsreichweite\"></td>"
+                      "    <td><img src=\"../str2.gif\" alt=\"weaponstrengs by max.targetrange / Angriffsstr&auml;rke bei max. Angriffsreichweite\"></td>" );
             // Höhenstufenzeichen einfügen für shoot from und target
-            for ( i = 0; i < 8; i++ )
-               fprintf ( detailed3, " <TD><IMG src=\"../hoehe%d.gif\" ></TD>", i);
+            for ( i = 0; i < 8; i++ ) {
+               fprintf ( detailed3, " <TD><IMG src=\"../hoehe%d.gif\" ", i);
+			   if ( i==0 )
+                    fprintf (detailed3, " alt=\"deep_submerged / tief getaucht\" " );
+               if ( i==1 )
+                    fprintf (detailed3, " alt=\"submerged / getaucht\" ");
+               if ( i==2 )
+                    fprintf (detailed3, " alt=\"floating / schwimmend\" ");
+               if ( i==3 )
+                    fprintf (detailed3, " alt=\"ground_based / fahrend\" ");
+               if ( i==4 )
+                    fprintf (detailed3, " alt=\"low_level_flight / tief fliegend\" ");
+               if ( i==5 )
+                    fprintf (detailed3, " alt=\"medium_level_flight / normale Flugh&ouml;he\" ");
+               if ( i==6 )
+                    fprintf (detailed3, " alt=\"high_level_flight / sehr hoch fliegend\" ");
+               if ( i==7 )
+                    fprintf (detailed3, " alt=\"orbit / Erdumlaufbahn\" ");
+			   fprintf ( detailed3, " ></TD>" );
+			}
             fprintf (detailed3, "<td></td> ");
-            for ( i = 0; i < 8; i++ )
-               fprintf ( detailed3, " <TD><IMG src=\"../hoehe%d.gif\" ></TD>", i);
-            fprintf ( detailed3, "    <td></td>"
+            for ( i = 0; i < 8; i++ ) {
+               fprintf ( detailed3, " <TD><IMG src=\"../hoehe%d.gif\" ", i);
+			                  if ( i==0 )
+                    fprintf (detailed3, " alt=\"deep_submerged / tief getaucht\" " );
+               if ( i==1 )
+                    fprintf (detailed3, " alt=\"submerged / getaucht\" ");
+               if ( i==2 )
+                    fprintf (detailed3, " alt=\"floating / schwimmend\" ");
+               if ( i==3 )
+                    fprintf (detailed3, " alt=\"ground_based / fahrend\" ");
+               if ( i==4 )
+                    fprintf (detailed3, " alt=\"low_level_flight / tief fliegend\" ");
+               if ( i==5 )
+                    fprintf (detailed3, " alt=\"medium_level_flight / normale Flugh&ouml;he\" ");
+               if ( i==6 )
+                    fprintf (detailed3, " alt=\"high_level_flight / sehr hoch fliegend\" ");
+               if ( i==7 )
+                    fprintf (detailed3, " alt=\"orbit / Erdumlaufbahn\" ");
+			   fprintf ( detailed3, " ></TD>" );
+            }
+			fprintf ( detailed3, "    <td></td>"
                       "</tr>\n" );
 
             // Werte der Waffen
@@ -631,7 +717,7 @@ int main(int argc, char *argv[] )
 
 			
 			
-			
+
 			
 			
 			
@@ -663,9 +749,27 @@ int main(int argc, char *argv[] )
                // GFX
                fprintf ( detailed5, "<tr><td></td>\n");
                // Höhenstufenzeichen einfügen für shoot from und target
-               for ( i = 0; i < 8; i++ )
-                  fprintf ( detailed5, " <TD><IMG src=\"../hoehe%d.gif\" ></TD>", i);
-               fprintf ( detailed5, "</tr>\n" );
+               for ( i = 0; i < 8; i++ ) {
+                  fprintf ( detailed5, " <TD><IMG src=\"../hoehe%d.gif\" ", i);
+				  if ( i==0 )
+                    fprintf (detailed5, " alt=\"deep_submerged / tief getaucht\" " );
+                  if ( i==1 )
+                    fprintf (detailed5, " alt=\"submerged / getaucht\" ");
+                  if ( i==2 )
+                    fprintf (detailed5, " alt=\"floating / schwimmend\" ");
+                  if ( i==3 )
+                    fprintf (detailed5, " alt=\"ground_based / fahrend\" ");
+                  if ( i==4 )
+                    fprintf (detailed5, " alt=\"low_level_flight / tief fliegend\" ");
+                  if ( i==5 )
+                    fprintf (detailed5, " alt=\"medium_level_flight / normale Flugh&ouml;he\" ");
+                  if ( i==6 )
+                    fprintf (detailed5, " alt=\"high_level_flight / sehr hoch fliegend\" ");
+                  if ( i==7 )
+                    fprintf (detailed5, " alt=\"orbit / Erdumlaufbahn\" ");
+				  fprintf ( detailed5, "></TD>" );
+               }
+			   fprintf ( detailed5, "</tr>\n" );
                
 			   // Höhenstufenzeichen einfügen für can load and unload from:
                fprintf ( detailed5, "<tr><td>UNIT muss auf dieser Stufe sein</td>" );

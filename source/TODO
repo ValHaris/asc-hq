@@ -17,9 +17,6 @@ Small tasks:
 
 -7- writing a TPWM decoder for Battle Isle maps
 
--5- writing a platform independant wrapper around vsnprintf (used in
-    ASCString.cpp)
-
 -8- rewriting tdrawgettempline ( mapalgorithm.cpp ) which is way to slow
    
 -7- writing a script that makes an RPM package of ASC
