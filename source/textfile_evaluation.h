@@ -79,6 +79,7 @@ class PropertyContainer {
          void addInteger ( const ASCString& name, int& property, int defaultValue );
          void addIntegerArray ( const ASCString& name, vector<int>& property );
          void addDFloatArray ( const ASCString& name, vector<double>& property );
+         void addDFloatArray ( const ASCString& name, vector<int>& property ); // still higher internal resolution than int
          void addIntRangeArray ( const ASCString& name, vector<IntRange>& property, bool required = true );
          void addTagArray ( const ASCString& name, BitSet& property, int tagNum, const char** tags, bool inverted = false );
          void addTagInteger ( const ASCString& name, int& property, int tagNum, const char** tags, bool inverted = false );

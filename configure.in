@@ -249,6 +249,22 @@ else
   AC_MSG_RESULT("yes")
 fi
 
+
+AC_MSG_CHECKING("broken std::vector")
+AC_TRY_COMPILE( [#include <vector>], [
+      std::vector<int> s;
+      s.push_back(1);
+      s.at(0);
+],, stdvector_broken=yes)
+
+if test "x$stdvector_broken" = x ; then
+  AC_MSG_RESULT("no")
+else
+  CXXFLAGS="$CXXFLAGS -D_vector_at_broken_"
+  AC_MSG_RESULT("yes")
+fi
+
+
 dnl shell vars set by test&feature flag for libbz2
 AC_SUBST([LIBBZ2])
 AC_SUBST([LDADDLIBBZ2])

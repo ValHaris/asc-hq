@@ -69,8 +69,11 @@ const int cbodenartennum = 34;
     public:
       int                id;
       ASCString          name;
-      class MoveMalus: public vector<double> {
+      class MoveMalus: public vector<int> {
          public: MoveMalus();
+           #ifdef _vector_at_broken_
+            int& at(size_t pos) { return operator[](pos); };
+           #endif
       };
 
       class  Weather {
