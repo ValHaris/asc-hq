@@ -75,10 +75,10 @@ install_location=
 type=DATA
 
 [Workspace_1]
-browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/index.html
-cpp_file=/home/martin/asc/source/mapdisplay.cpp
-header_file=Untitled.h
-openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/mapdisplay.cpp
+browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/about/intro.html
+cpp_file=/home/martin/games/asc-302/source/ai/misc.cpp
+header_file=/home/martin/games/asc-302/source/ai/ai.h
+openfiles=Untitled.h,Untitled.cpp,/home/martin/games/asc-302/source/ai/ai.h,/home/martin/games/asc-302/source/ai/misc.cpp
 show_outputview=true
 show_treeview=true
 
