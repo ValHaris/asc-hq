@@ -1,3 +1,153 @@
+2002-04-27 16:32  mbickel
+
+	* data/evilisle.map:  Fixed: data bugs in Evil Island map
+
+2002-04-27 16:30  mbickel
+
+	* data/railstat.map, source/buildings.cpp, source/vehicle.cpp,
+	source/vehicletype.cpp, source/ai/ai.bpr,
+	source/win32/borland/asc.bpf, source/win32/borland/asc.bpr:  Fixed:
+	missing planes in railstation map
+	 Airplanes cannot land on carriers after attacking
+
+2002-04-22 22:37  mbickel
+
+	* buildnewrpm.sh, source/buildingtype.cpp,
+	source/textfileparser.cpp, source/textfileparser.h:  Added: default
+	value for text file entries
+	 Fixed: oil platform not working
+
+2002-04-21 23:50  mbickel
+
+	* asc.another.spec, asc.spec, asc.spec.in, configure.in,
+	source/attack.cpp, source/buildings.cpp, source/containerbase.h,
+	source/vehicle.cpp:  ASC spec files: automatic versioning
+	 Some cleanup and documentation
+
+2002-04-21 23:27  mbickel
+
+	* source/: TODO, controls.cpp, edgen.cpp, edmisc.cpp, edmisc.h,
+	sg.cpp, ai/base.cpp:  Mapeditor: Fixed crash in "Put Resources"
+	 Updating the small map after AI
+	 Fixed infinite loop "quit game" after sending signal
+
+2002-04-18 00:41  mbickel
+
+	* configure.in, getmusic, data/Makefile.am, data/music/Makefile.am,
+	source/edgen.cpp:  Updated build system to warn about missing music
+	 Updated build system to insert version information automatically
+	 edgen.cpp compiles with gcc 3.0.4 again
+
+2002-04-14 19:21  mbickel
+
+	* source/: edevents.cpp, edglobal.cpp, edmisc.cpp, edmisc.h: 
+	Renamed global variable pf to pf2 due to name clash with SDL_mixer
+	library
+
+2002-04-14 19:12  mbickel
+
+	* doc/credits.html, source/dashboard.cpp, source/strtmesg.cpp,
+	source/win32/borland/asc.bpr:  Added credits section do
+	documentation
+	 Selecting vehicle types for production: description now shown
+
+2002-04-11 22:18  mbickel
+
+	* data/helpsyst.txt, doc/credits.html, doc/index.html,
+	source/sg.cpp, source/win32/borland/asc.bpr:  Added credits section
+	to documentation
+	 Improved command line parameters
+
+2002-04-11 20:33  mbickel
+
+	* source/sg.cpp:  Enhanced command line options
+
+2002-04-10 23:12  mbickel
+
+	* source/: gameoptions.cpp, gameoptions.h, sgstream.cpp:  Win32
+	version now searches registry for install path
+
+2002-04-10 00:19  mbickel
+
+	* source/: dashboard.cpp, edmisc.cpp, gamemap.cpp, gamemap.h,
+	sg.cpp, strtmesg.cpp, textfileparser.cpp, unitctrl.cpp, ai/ai.bpr,
+	ai/buildingcapture.cpp, ai/service.cpp, ai/tactics.cpp:  Fixed AI
+	bugs
+	 Fixed: invalid player name displayed in dashboard
+
+2002-04-09 23:14  mbickel
+
+	* asc.spec:  Added asc.spec file
+
+2002-04-09 23:03  mbickel
+
+	* source/tools/raw2pcx.cpp:  Added missing file: raw2pcx.cpp
+
+2002-04-09 20:49  mbickel
+
+	* source/basegfx.h:  Added a bit of documentation
+
+2002-04-05 21:01  mbickel
+
+	* source/: controls.cpp, unitctrl.cpp:	Fixed: reaction fire
+	attackes being replayed twice
+	 Fixed: crash when reaction fire during landing on carrier
+
+2002-04-05 11:25  mbickel
+
+	* source/: ASCStringHelpers.h, ascstring.cpp, basestrm.cpp,
+	building.cpp, controls.cpp, dialog.cpp, dlg_box.cpp, edgen.cpp,
+	gamemap.cpp, gamemap.h, gui.cpp, replay.cpp, replay.h,
+	strtmesg.cpp, typen.h, vehicle.cpp, vehicle.h, ai/ai.bpr,
+	libs/bzlib/bzlib.h, libs/bzlib/win/bzlib.bpr,
+	libs/jpeg-6b/libjpeg.bpr, libs/sdlmm/SDLmm.bpr,
+	libs/triangul/win32/triangulation.bpr, tools/lib/errorout.cpp,
+	tools/win/bin2text.bpr, tools/win/demount.bpr,
+	tools/win/makegfx.bpr, tools/win/makepal.bpr, tools/win/mount.bpr,
+	tools/win/tank2pcx.bpr, tools/win/tools.bpr, tools/win/viewid.bpr,
+	tools/win/weaponguide.bpr, win32/borland/asc.bpr,
+	win32/borland/mapeditor/mapeditor.bpr:	Project files now for
+	Borland C++ Builder 6
+	 Fixed: netcontrol not working
+	 Fixed: replay errors when constructing turrets
+	 Submarine require no fuel for sufacing
+	 Field info dialog extended
+	 Fixed several buffer overruns
+
+2002-04-02 23:57  mbickel
+
+	* source/newfont.cpp:  Fixed buffer overflow
+
+2002-03-27 01:18  mbickel
+
+	* source/: building.cpp, sg.cpp, strtmesg.cpp, typen.cpp, typen.h,
+	unitctrl.cpp, vehicle.cpp, vehicletype.cpp:  Changed the resource
+	weight
+
+2002-03-26 23:23  mbickel
+
+	* source/: gamedlg.cpp, gui.cpp, unitctrl.cpp, unitctrl.h,
+	sdl/sound.cpp, sdl/sound.h, win32/borland/asc.bpr:  Fixed: music
+	was started even if turned off in ini file
+	 Fixed: crash in reaction fire
+	 Fixed: reaction fire not occuring when changing height
+
+2002-03-25 19:48  mbickel
+
+	* source/: paradialog.cpp, sgstream.cpp, sgstream.h,
+	tools/weaponguide.cpp, win32/borland/asc.bpr:  Applications can now
+	specify which data checks to perform
+
+2002-03-22 15:53  mbickel
+
+	* data/dialog/Makefile.am, source/TODO, source/libs/bzlib/Makefile:
+	 Fixed: asc_dlg.zip was installed in wrong directory
+
+2002-03-20 13:59  mbickel
+
+	* ChangeLog, source/unix/Makefile.am:  Fixed build problem:
+	freetype not linked
+
 2002-03-19 21:38  mbickel
 
 	* source/: baseaiinterface.h, dlg_box.cpp, dlg_box.h,

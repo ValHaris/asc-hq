@@ -133,12 +133,15 @@ class PropertyContainer {
                PropertyTemplate ( T& property_, const T& defaultValue_ ) : property ( property_ ), defaultValueAvail ( true ), defaultValue ( defaultValue_) {};
          };
 
-         class IntProperty : public PropertyTemplate<int> {
+
+         typedef PropertyTemplate<int> PTI;
+
+         class IntProperty : public PTI {
             protected:
               void evaluate_rw ( );
             public:
-               IntProperty ( int& property_ ) : PropertyTemplate<int> ( property_ ) {};
-               IntProperty ( int& property_, int defaultValue_ ) : PropertyTemplate<int> ( property_, defaultValue_ ) {};
+               IntProperty ( int& property_ ) : PTI ( property_ ) {};
+               IntProperty ( int& property_, int defaultValue_ ) : PTI ( property_, defaultValue_ ) {};
          };
 
          class BoolProperty : public Property {
