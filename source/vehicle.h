@@ -106,7 +106,7 @@
 
          //! for each player that can still be attacked one bit is set
          int enemiesAttackable;
-         Status getStatus()  { return status;};
+         Status getStatus() const { return status;};
 
          //! enables the reaction fire or returns an error code ( result < 0 = -errorNr ) 
          int enable();

@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.120 2003-02-19 19:47:26 mbickel Exp $
+//     $Id: typen.h,v 1.121 2003-02-19 21:18:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.120  2003/02/19 19:47:26  mbickel
+//      Completely rewrote Pathfinding code
+//      Wind not different any more on different levels of height
+//
 //     Revision 1.119  2003/02/13 00:56:07  mbickel
 //      Updated weaponguide
 //      ASC compiles with gcc again
@@ -469,7 +473,7 @@ class MapCoordinate {
                x = stream.readInt ( );
                y = stream.readInt ( );
             };
-            bool valid() { return x >= 0 && y >= 0 ; };
+            bool valid() const { return x >= 0 && y >= 0 ; } ;
       };
 
 

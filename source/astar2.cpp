@@ -608,7 +608,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
                    N2.hval = dist(pos,B);
 
-                   nodeVisited ( N2, dir, open, N.h.getNumericalHeight(), maxmalq );
+                   nodeVisited ( N2, HexDirection(dir), open, N.h.getNumericalHeight(), maxmalq );
                 }
 
              int dock = actmap->getField(A)->getContainer()->vehicleDocking(veh);
