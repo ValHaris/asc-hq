@@ -3555,7 +3555,8 @@ void showPlayerTime()
           text += actmap->player[p].getName();
           text += " completed turn no. ";
           text += strrr(actmap->player[p].playTime.rbegin()->turn);
-          text += " using ASC " + getVersionString( actmap->player[p].ASCversion );
+          text += " using ASC ";
+          text += getVersionString( actmap->player[p].ASCversion );
           text += "\non ";
           text += asctime ( localtime ( &actmap->player[p].playTime.rbegin()->date));
           text += "\n";
