@@ -1056,7 +1056,6 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
    if ( veh && !moveparams.movestatus && fieldvisiblenow ( getfield ( veh->xpos, veh->ypos ))) {
       actmap->cleartemps ( 7 );
       TemporaryContainerStorage tcs ( veh, true );
-      int move = veh->getMovement();
       veh->reactionfire.disable();
       veh->setMovement ( veh->typ->movement[log2(veh->height)]);
       VehicleMovement vm ( NULL, NULL );
@@ -2089,7 +2088,14 @@ int main(int argc, char *argv[] )
    initASCGraphicSubsystem ( app.GetScreen(), icon );
 
    GameThreadParams gtp;
-   gtp.filename = cl->l(); {
+   gtp.filename = cl->l();
+
+   if ( cl->next_param()+1 < argc )
+      for ( int i = cl->next_param()+1; i < argc; i++ )
+         gtp.filename = argv[i];
+
+
+   {
       int w;
       tnfilestream stream ("mausi.raw", tnstream::reading);
       stream.readrlepict(   &icons.mousepointer, false, &w );
