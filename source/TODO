@@ -1,14 +1,35 @@
-TODO list for the Linux port:
-  (code fixes only right now - no graphics port work in this file yet.  Is
-   anyone working on that yet?)
+TODO list for ASC:
 
+Write functions for handling a configuration file. A sample session using the
+code could perhaps look like this:
+    ConfigurationFile cf ( "~/.asc/asc.rc" );
+    int someinteger = cf.getInt ("MouseScrollButton", 2 );   
+         // "MouseScrollbutton" is the variable name and 2 the default value 
+         // that is returned if the entry (or the whole file) does not exist
+
+    char* somestring = cf.getString("searchpath2", "/var/local/games/asc" );
+
+    // later
+    cf.setInt ("MouseScrollbutton", someinteger ); 
+    cf.setString("searchpath2", somestring );
+    cf.write();
+
+  Some notes: 
+    -the configuration should be plain text
+    -if comments are allowed (which would be nice), they must of course not be 
+        overwritten when writing configuration data
+    -Perhaps adding sections to structure the data?
+        int someinteger = cf.getInt ("Mouse", "scrollbutton", 2 );   
+    -Use plain C / C++ file IO, no ASC specific streams, because they need
+        exactly this configuration data to be initialized
+
+0.  Add a commandline parameter to disable sound 
 1.  Get Truecolor graphics to work (title screen for example)
 2.  Get JPEG images to work. A modified version of the independant JPEG groups
     library is included, but not used by the Linux version yet.
 3.  Clean up the transportcargo routines in mapeditor ( cancel function etc )
     
 11.  Fix comparisons between char and unsigned char that gcc warns about.
-12.  Fix non virtual destructors for classes
 13.  Fix delete[] void warnings
 14.  Reformat the code to something a little more readable (use indent maybe?)
 15.  Run this through 'gcc -W -Wall' and fix other problems
