@@ -98,17 +98,20 @@ class ContainerBase {
       /** can the vehicle be loaded. If uheight is passed, it is assumed that vehicle is at
           the height 'uheight' and not the actual level of height
       */
-      bool vehicleLoadable ( const pvehicle vehicle, int uheight = -1 ) const;
+      bool vehicleLoadable ( const Vehicle* vehicle, int uheight = -1, const bool* attacked = NULL ) const;
 
       //! returns the levels of height on which this unit can be unloaded; or 0 if no unloading is possible
-      int  vehicleUnloadable ( const pvehicle vehicle ) const;
+      int  vehicleUnloadable ( const Vehicle* vehicle ) const;
+
+      //! returns the unloading system
+      const ContainerBaseType::TransportationIO* vehicleUnloadSystem ( const Vehicle* vehicle, int height );
 
       //! returns the levels of height on which this unit can be transfered by docking; or 0 if no unloading is possible
-      int  vehicleDocking ( const pvehicle vehicle ) const;
+      int  vehicleDocking ( const Vehicle* vehicle ) const;
 
       /** Does the vehicle fit into the container? This does not include checking if it can reach the entry
       */
-      bool vehicleFit ( const pvehicle vehicle ) const;
+      bool vehicleFit ( const Vehicle* vehicle ) const;
 
       //! weight of all loaded units
       int cargo ( void ) const;

@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.89 2003-02-13 00:56:07 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.90 2003-02-27 16:12:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.89  2003/02/13 00:56:07  mbickel
+//      Updated weaponguide
+//      ASC compiles with gcc again
+//
 //     Revision 1.88  2003/02/02 13:04:56  mbickel
 //      Increased version of main.con
 //      Updated makefiles
@@ -1117,7 +1121,7 @@ void checkDataVersion( )
    if ( exist ( "mk1.version" )) {
       tnfilestream s ( "mk1.version", tnstream::reading );
       char v = s.readChar();
-      if ( v < '3' )
+      if ( v < '4' )
          dataOk = false;
    } else
       dataOk = false;
@@ -1126,6 +1130,21 @@ void checkDataVersion( )
    if ( !dataOk )
       fatalError("A newer version of the data file 'mk1.con' is required. \n"
                  "You can get a new data package at http://www.asc-hq.org", 2 );
+
+
+   if ( exist ( "buildings.version" )) {
+      tnfilestream s ( "buildings.version", tnstream::reading );
+      char v = s.readChar();
+      if ( v < '2' || v >= 0xffff)
+         dataOk = false;
+   } else
+      dataOk = false;
+
+
+   if ( !dataOk )
+      fatalError("A newer version of the data file 'buildings.con' is required. \n"
+                 "You can get a new data package at http://www.asc-hq.org", 2 );
+
 }
 
 //===================================================================================

@@ -50,6 +50,7 @@
 
     bool generatoractive;
 
+    bool movementLeft() const;
 
     Vehicle ( const Vehicletype* t, pmap actmap, int player, int networkID  );
 
@@ -123,9 +124,9 @@
     AiParameter* aiparam[8];
 
     //! can the unit move from its current position (does not check neighbouring fields)
-    bool canMove ( void );
+    bool canMove ( void ) const;
 
-    //! returns the movement points the unit has left for this turn. CheckFuel should almost always be true. 
+    //! returns the movement points the unit has left for this turn. CheckFuel should almost always be true.
     int getMovement ( bool checkFuel = true );
 
     /** sets a new distance that the unit can move
@@ -246,6 +247,9 @@
 
     //! returns the units position
     MapCoordinate3D getPosition ( ) const;
+
+    //! returns the units position; if  inside building then Height is -1
+    MapCoordinate3D getPosition3D ( ) const;
 
     /** can the unit repair anything? This does not necessarily mean that the unit can repair
         other units, because a service weapon is additionally needed for that. It may be the

@@ -2,9 +2,13 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.95 2003-02-19 19:47:25 mbickel Exp $
+//     $Id: building.cpp,v 1.96 2003-02-27 16:10:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.95  2003/02/19 19:47:25  mbickel
+//      Completely rewrote Pathfinding code
+//      Wind not different any more on different levels of height
+//
 //     Revision 1.94  2003/02/12 20:11:53  mbickel
 //      Some significant changes to the Transportation code
 //
@@ -1325,10 +1329,14 @@ void ccontainercontrols :: cmove_unit_in_container :: movedown ( pvehicle eht, p
    }
 }
 
-VehicleMovement*   ccontainercontrols :: movement (  pvehicle eht )
+VehicleMovement*   ccontainercontrols :: movement (  pvehicle eht, bool simpleMode )
 {
    VehicleMovement* vehicleMovement = new VehicleMovement ( &defaultMapDisplay, NULL );
-   int status = vehicleMovement->execute ( eht, -1, -1, 0, -1, -1 );
+   int mode = 0;
+   if ( simpleMode )
+      mode |= VehicleMovement::DisableHeightChange;
+
+   int status = vehicleMovement->execute ( eht, -1, -1, 0, -1, mode );
 
    if ( status > 0 )
       return vehicleMovement;
@@ -3107,7 +3115,11 @@ int   ccontainer :: moveicon_c :: available    ( void )
 
 void  ccontainer :: moveicon_c :: exec         ( void )
 {
-   VehicleMovement* vehicleMovement = main->movement ( main->getmarkedunit() );
+   bool simpleMode = false;
+   if (  skeypress( ct_lshift ) ||  skeypress ( ct_rshift ))
+      simpleMode = true;
+
+   VehicleMovement* vehicleMovement = main->movement ( main->getmarkedunit(), simpleMode );
    if ( vehicleMovement ) {
       int ms = getmousestatus();
       if (ms == 2)
@@ -3142,6 +3154,7 @@ void  ccontainer :: moveicon_c :: exec         ( void )
          }
 
          mainloopgeneralmousecheck ();
+         releasetimeslice();
 
       } while ( pendingVehicleActions.actionType == vat_move ) ;
       removemouseproc ( &mousescrollproc );
@@ -3811,16 +3824,9 @@ void ccontainer_b :: unitchanged( void )
          int ma = fzt->productionCost.material;
          int fu = 0;
 
-         if ( CGameOptions::Instance()->container.filleverything ) {
-            int en1 = en;
-            int ma1 = ma;
-            int fu1 = fu;
-
-            fu += fzt->tank.fuel;
-            ma += fzt->tank.material;
-
-            displaymessage2(" production costs ~%d~ energy, ~%d~ material and ~%d~ fuel (empty: %d energy, %d material, %d fuel)", en, ma, fu, en1, ma1, fu1 );
-         } else
+         if ( CGameOptions::Instance()->container.filleverything )
+            displaymessage2(" production costs ~%d~ energy, ~%d~ material and ~%d~ fuel ( + %d energy, %d material, %d fuel for filling the tanks)", en, ma, fu, 0, fzt->tank.material, fzt->tank.fuel  );
+         else
             displaymessage2(" production costs ~%d~ energy, ~%d~ material and ~%d~ fuel ", en, ma, fu );
 
 

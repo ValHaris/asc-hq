@@ -1,7 +1,7 @@
 
 
-#ifndef _ASC_STRING_H_INCLUDED_
-#define _ASC_STRING_H_INCLUDED_
+#ifndef ascstringH
+#define ascstringH
 
 #include "ASCStringHelpers.h"
 #include <stdexcept>      // for range_error
@@ -69,7 +69,7 @@ public:
     ASCString&  toUpper    ();
 
     // Printing and formating helpers.
-    ASCString&  format     ( charT* pFormat, ... );
+    ASCString&  format     ( const charT* pFormat, ... );
     void        printf     ();
 };
 

@@ -272,6 +272,13 @@ MapCoordinate3D getNeighbouringFieldCoordinate( const MapCoordinate3D& pos, int 
   return mc;
 }
 
+MapCoordinate getNeighbouringFieldCoordinate( const MapCoordinate& pos, int direc)
+{
+  MapCoordinate mc = pos;
+  getnextfield ( mc.x, mc.y, direc );
+  return mc;
+}
+
 
 void         getnextfield(int&       x,
                           int&       y,
@@ -380,3 +387,58 @@ int beeline ( int x1, int y1, int x2, int y2 )
 */
    return minmalq*num2;
 }
+
+
+int square ( int i )
+{
+   return i*i;
+}
+
+float square ( float i )
+{
+   return i*i;
+}
+
+
+WindMovement::WindMovement ( const Vehicle* vehicle )
+{
+   for ( int i = 0; i < sidenum; i++ )
+      wm[i] = 0;
+
+   int movement = maxint;
+   for ( int height = 4; height <= 6; height++ )
+      if ( vehicle->typ->movement[height] )
+         if ( vehicle->typ->movement[height] < movement )
+            movement = vehicle->typ->movement[height];
+
+
+   if ( movement ) {
+      for ( int direc = 0; direc < sidenum; direc++) {
+         float abswindspeed = ( vehicle->getMap()->weather.windSpeed * maxwindspeed * minmalq / 256 );
+
+         float relwindspeed  =  abswindspeed / movement;
+
+         float pi = 3.14159265;
+
+         float relwindspeedx = 10 * relwindspeed * sin ( 2 * pi * vehicle->getMap()->weather.windDirection / sidenum );
+         float relwindspeedy = -10 * relwindspeed * cos ( 2 * pi * vehicle->getMap()->weather.windDirection / sidenum );
+
+         float xtg = 120 * sin ( 2 * pi * direc / sidenum );
+         float ytg = -120 * cos ( 2 * pi * direc / sidenum );
+
+         int disttofly = (int)sqrt ( square ( xtg - relwindspeedx) + square ( ytg - relwindspeedy ) );
+
+         wm[direc] =  (120 - disttofly) / 10;
+      }
+   }
+}
+
+
+
+int WindMovement::getDist ( int dir )
+{
+   return wm[dir];
+}
+
+
+

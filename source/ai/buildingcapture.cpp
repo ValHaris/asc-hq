@@ -316,7 +316,7 @@ void AI :: checkConquer( )
       ++nxt;
       pvehicle veh = getMap()->getUnit ( bi->second.unit );
       if ( veh ) {
-         MapCoordinate dest = veh->aiparam[getPlayerNum()]->dest;
+         MapCoordinate3D dest = veh->aiparam[getPlayerNum()]->dest;
          int nwid = veh->networkid;
          moveUnit ( veh, dest, true );
          if ( getMap()->getUnit ( nwid ) && veh->getPosition() == dest ) {

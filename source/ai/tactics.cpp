@@ -361,7 +361,7 @@ AI::AiResult AI::moveToSavePlace ( pvehicle veh, VehicleMovement& vm3 )
 
 int AI::changeVehicleHeight ( pvehicle veh, VehicleMovement* vm, int preferredDirection )
 {
-#if 0
+#if 0  // ####
    int bh = getBestHeight ( veh );
    if ( bh != veh->height && bh != -1 ) {
       ChangeVehicleHeight* cvh;
@@ -665,7 +665,9 @@ AI::AiResult AI::tactics( void )
                      if ( finalPositions[i] ) {
                         int nwid = finalPositions[i]->networkid;
                         _vision = org_vision;
-                        moveUnit ( finalPositions[i], getNeighbouringFieldCoordinate( MapCoordinate( enemy->xpos, enemy->ypos), i));
+                        MapCoordinate3D dst = getNeighbouringFieldCoordinate( MapCoordinate3D( enemy->xpos, enemy->ypos, finalPositions[i]->height ), i);
+                        dst.setnum ( dst.x, dst.y, finalPositions[i]->getPosition3D().getNumericalHeight() );
+                        moveUnit ( finalPositions[i], dst );
                         _vision = visible_all;
 
                         affectedFields.push_back ( MapCoordinate(finalPositions[i]->xpos, finalPositions[i]->ypos) );

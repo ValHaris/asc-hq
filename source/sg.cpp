@@ -42,7 +42,7 @@
    These are stored in the data files which are loaded on startup and are globally 
    available. They are not modified during runtime in any way and are referenced 
    by the instances of Vehicle and Building. The Vehicletype has information that are shared
-   by all vehicles of this 'type', like speed, weapon systems, accessable 
+   by all vehicles of this 'type', like speed, weapon systems, accessable
    terrain etc, while the vehicle stores things like remaining movement for this
    turn, ammo, fuel and cargo.
    
@@ -197,7 +197,7 @@ cmousecontrol* mousecontrol = NULL;
 
 
 
-#define maintainence2
+#define maintainence
 
 int maintainencecheck( void )
 {
@@ -205,7 +205,7 @@ int maintainencecheck( void )
    int num = 0;
 
    for ( int i = 0; i < 8; i++ )
-      if ( actmap->player[i].stat == Player::human )
+      if ( actmap->player[i].stat == Player::human  && actmap->player[i].exist())
          num++;
 
    if ( actmap->campaign )
@@ -865,6 +865,7 @@ void         newsinglelevel(void)
    tnc.init();
    tnc.run();
    tnc.done();
+   actmap->player[0].exist();
 }
 
 void         startnewsinglelevelfromgame(void)
@@ -1602,6 +1603,13 @@ void  mainloop ( void )
                }
                break;
 
+            case ct_f9: execuseraction ( ua_mntnc_morewind );
+               break;
+            case ct_f10: execuseraction ( ua_mntnc_lesswind );
+               break;
+            case ct_f11: execuseraction ( ua_mntnc_rotatewind );
+               break;
+               
             case ct_1:
                execuseraction ( ua_changeresourceview );
                break;

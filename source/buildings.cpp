@@ -68,9 +68,12 @@ Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const p
    gamemap->player[player].buildingList.push_back ( this );
 
    chainbuildingtofield ( entryPosition, setupImages );
+   /*
    #ifdef karteneditor
    plus = maxplus = typ->maxplus;
    #endif
+   */
+   plus = typ->defaultProduction;
 }
 
 

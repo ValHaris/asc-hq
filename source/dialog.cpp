@@ -2,9 +2,13 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.126 2003-02-19 19:47:25 mbickel Exp $
+//     $Id: dialog.cpp,v 1.127 2003-02-27 16:11:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.126  2003/02/19 19:47:25  mbickel
+//      Completely rewrote Pathfinding code
+//      Wind not different any more on different levels of height
+//
 //     Revision 1.125  2003/02/12 20:11:53  mbickel
 //      Some significant changes to the Transportation code
 //
@@ -5339,8 +5343,8 @@ void viewterraininfo ( void )
       }
 
 
-      tviewanytext vat;
-      vat.init ( "Field information", text );
+      tviewanytext vat ;
+      vat.init ( "Field information", text, 20, -1 , 450, 480 );
       vat.run();
       vat.done();
 

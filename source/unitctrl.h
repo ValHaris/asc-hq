@@ -1,6 +1,10 @@
-//     $Id: unitctrl.h,v 1.30 2003-02-19 19:47:26 mbickel Exp $
+//     $Id: unitctrl.h,v 1.31 2003-02-27 16:12:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2003/02/19 19:47:26  mbickel
+//      Completely rewrote Pathfinding code
+//      Wind not different any more on different levels of height
+//
 //     Revision 1.29  2002/09/19 20:20:06  mbickel
 //      Cleanup and various bug fixes
 //
@@ -201,8 +205,8 @@ class FieldList {
        T& getData ( int num );
        T& getData ( int x, int y );
        void getFieldCoordinates ( int num, int* x, int* y ) const;
-       void addField ( int x, int y, T& _data );
-       void addField ( const MapCoordinate& mc, T& _data );
+       void addField ( int x, int y, const T& _data );
+       void addField ( const MapCoordinate& mc, const T& _data );
        void addField ( int x, int y );
        void addField ( const MapCoordinate& mc );
        void setMap ( pmap map );
@@ -278,7 +282,7 @@ class BaseVehicleMovement : public VehicleAction {
 
                class PathFinder : public AStar3D {
                  public:
-                   PathFinder ( pmap actmap, pvehicle veh, int maxDistance, bool changeHeight_ ) : AStar3D(actmap, veh, false, maxDistance, changeHeight_ ) {};
+                   PathFinder ( pmap actmap, pvehicle veh, int maxDistance ) : AStar3D(actmap, veh, false, maxDistance ) {};
 
                    /** searches for all fields that are within the range of maxDist and marks them.
                        On each field one bit for each level of height will be set.
@@ -294,7 +298,9 @@ class VehicleMovement : public BaseVehicleMovement {
               IntFieldList reachableFields;
               IntFieldList reachableFieldsIndirect;
               int available ( pvehicle veh ) const;
-              int execute ( pvehicle veh, int x, int y, int step, int height, int noInterrupt );
+
+              enum  { NoInterrupt = 1, DisableHeightChange = 2 };
+              int execute ( pvehicle veh, int x, int y, int step, int height, int capabilities );
 
               virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
               VehicleMovement ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
@@ -328,7 +334,7 @@ class ChangeVehicleHeight : public BaseVehicleMovement {
               int dir;
            public:
               IntFieldList reachableFields;
-              int execute ( pvehicle veh, int x, int y, int step, int noInterrupt, int dummy2 );
+              int execute ( pvehicle veh, int x, int y, int step, int noInterrupt, int disableMovement );
               ChangeVehicleHeight ( MapDisplayInterface* md, PPendingVehicleActions _pva , VehicleActionType vat, int dir_ );
           };
 
@@ -573,12 +579,12 @@ template<class T> void FieldList<T> :: getFieldCoordinates ( int num, int* x, in
 }
 
 
-template<class T> void FieldList<T> :: addField ( const MapCoordinate& mc, T& _data )
+template<class T> void FieldList<T> :: addField ( const MapCoordinate& mc, const T& _data )
 {
    addField ( mc.x, mc.y, _data );
 }
 
-template<class T> void FieldList<T> :: addField ( int x, int y, T& _data )
+template<class T> void FieldList<T> :: addField ( int x, int y, const T& _data )
 {
    int found = 0;
    for( int i = 0; i < fieldnum; i++ )

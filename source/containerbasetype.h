@@ -64,6 +64,10 @@ class ContainerBaseType: public LoadableItemType {
 
             int dockingHeight_rel;
 
+            int requireUnitFunction;
+
+            bool disableAttack;
+
             void runTextIO ( PropertyContainer& pc );
             void read ( tnstream& stream ) ;
             void write ( tnstream& stream ) const ;

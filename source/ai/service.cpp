@@ -208,7 +208,7 @@ bool AI::ServiceOrder::execute1st ( pvehicle supplier )
 
 
    AStar3D ast ( ai->getMap(), supplier, true, supplier->typ->maxSpeed()*6 );
-   vector<MapCoordinate3D> path;
+   AStar3D::Path path;
    ast.findPath(  path, dest );
    if ( path.size() ) {
       meet = *path.rbegin();
@@ -383,7 +383,7 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
    pvehicle veh = so.getTargetUnit();
    if ( getMap()->getField( veh->getPosition())->unitHere ( veh ))
       if ( !veh->canMove() )
-         return MapCoordinate ( -1, -1 );
+         return MapCoordinate3D ( -1, -1, 1 );
 
    /*
    RefuelConstraint* rc = NULL;
@@ -410,6 +410,7 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
       pbuilding bld = *bi;
       if ( astar.getFieldAccess( bld->getEntry())  ) { // ####TRANS
          MapCoordinate3D buildingPos = bld->getEntry();
+         buildingPos.setnum ( buildingPos.x, buildingPos.y, -1 );
          /*
          if ( !(bld->typ->loadcapability & buildingPos.z))
             buildingPos.z = 1 << log2 ( astar.getFieldAccess(bld->getEntry()) & bld->typ->loadcapability );
@@ -683,7 +684,7 @@ AI::AiResult AI :: executeServices ( )
 
         // the unit may have been shot down
         if ( getMap()->getUnit ( nwid )) {
-           if ( veh->getPosition() == veh->aiparam[ getPlayerNum() ]->dest ) {
+           if ( veh->getPosition3D() == veh->aiparam[ getPlayerNum() ]->dest ) {
               VehicleService vc ( mapDisplay, NULL );
               pfield fld = getfield ( veh->xpos, veh->ypos );
               if ( fld->building ) {

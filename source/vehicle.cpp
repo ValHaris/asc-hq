@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <math.h>
 #include "research.h"
 #include "vehicletype.h"
 #include "vehicle.h"
@@ -453,9 +454,9 @@ void Vehicle :: resetMovement ( void )
 
 void Vehicle :: setNewHeight( int newHeight )
 {
-  int oldperc = 1000 * getMovement ( false ) / maxMovement();
+  float oldperc = float(getMovement ( false )) / float(maxMovement());
   height = newHeight;
-  setMovement ( maxMovement() * oldperc / 1000 , 0 );
+  setMovement ( floor(maxMovement() * oldperc + 0.5) , 0 );
 }
 
 
@@ -491,7 +492,7 @@ int Vehicle :: getMovement ( bool checkFuel )
 {
    if ( reactionfire.getStatus() != ReactionFire::off )
       return 0;
-      
+
    if ( typ->fuelConsumption && checkFuel ) {
       if ( tank.fuel * minmalq / typ->fuelConsumption < _movement )
          return tank.fuel * minmalq / typ->fuelConsumption;
@@ -511,10 +512,26 @@ void Vehicle :: decreaseMovement ( int amount )
   setMovement ( newMovement );
 }
 
-
-bool Vehicle :: canMove ( void )
+bool Vehicle::movementLeft() const
 {
-   if ( getMovement() >= minmalq && reactionfire.getStatus() == ReactionFire::off  ) {
+   int mv  = getMovement();
+   if ( mv <= 0 )
+      return false;
+   if ( mv >= 10 )
+      return true;
+
+   if ( height & ( chtieffliegend |chfliegend | chhochfliegend )) {
+      WindMovement wm ( this );
+      for ( int i = 0; i < 6; i++ )
+         if ( 10 - wm.getDist( i ) <= mv )
+            return true;
+   }
+   return false;
+}
+
+bool Vehicle :: canMove ( void ) const
+{
+   if ( movementLeft() && reactionfire.getStatus() == ReactionFire::off  ) {
       pfield fld = gamemap->getField ( getPosition() );
       if ( fld->unitHere ( this ) ) {
          if ( terrainaccessible ( fld, this ) || actmap->getgameparameter( cgp_movefrominvalidfields))
@@ -670,7 +687,7 @@ bool Vehicle :: weapexist( void )
 void Vehicle :: putimage ( int x, int y )
 {
   #ifdef sgmain
-   int shaded = ( getMovement() < minmalq ) && maxMovement() && ( color == gamemap->actplayer*8) && (attacked || !typ->weapons.count || CGameOptions::Instance()->units_gray_after_move );
+   int shaded = !canMove() && maxMovement() && ( color == gamemap->actplayer*8) && (attacked || !typ->weapons.count || CGameOptions::Instance()->units_gray_after_move );
   #else
    int shaded = 0;
   #endif
@@ -1508,6 +1525,18 @@ MapCoordinate3D Vehicle :: getPosition ( ) const
 {
    return MapCoordinate3D ( xpos, ypos, height );
 }
+
+MapCoordinate3D Vehicle :: getPosition3D ( ) const
+{
+   if ( gamemap->getField(xpos,ypos)->unitHere(this) )
+      return MapCoordinate3D ( xpos, ypos, height );
+   else {
+      MapCoordinate3D pos;
+      pos.setnum ( xpos, ypos, -1 );
+      return pos;
+   }
+}
+
 
 const ASCString&  Vehicle::getName() const
 {

@@ -8,6 +8,9 @@
 
  #include <vector>
 
+
+
+
  enum HexDirection { DirN, DirNE, DirSE, DirS, DirSW, DirNW, DirNone };
 
 
@@ -90,17 +93,42 @@ extern void findPath( pmap actmap, AStar::Path& path, pvehicle veh, int x, int y
 //! A 3D path finding algorithm, based on the 2D algorithm by Amit J. Patel
 class AStar3D {
     public:
-       typedef vector<MapCoordinate3D> Path;
+       typedef float DistanceType;
+       static const DistanceType longestPath;
+       class OperationLimiter {
+           public:
+              virtual bool allowHeightChange() = 0;
+              virtual bool allowMovement() = 0;
+              virtual bool allowLeavingContainer() = 0;
+              virtual bool allowDocking() = 0;
+       };
+
+
+       class PathPoint: public MapCoordinate3D {
+          public:
+             PathPoint ( const MapCoordinate3D& mc, int dist_, int enterHeight_, bool hasAttacked_ ) : MapCoordinate3D(mc), dist(dist_), enterHeight(enterHeight_), hasAttacked(hasAttacked_) {};
+             // PathPoint ( const MapCoordinate3D& mc ) : MapCoordinate3D(mc), dist(-1), enterHeight(-1), hasAttacked(false) {};
+             int getRealHeight() { if ( getNumericalHeight() != -1 ) return getNumericalHeight(); else return enterHeight; };
+             MapCoordinate3D getRealPos() { MapCoordinate3D p; p.setnum(x,y, getRealHeight()); return p; };
+             int dist;
+             int enterHeight;
+             bool hasAttacked;
+       };
+
+       typedef vector<PathPoint> Path;
        struct Node {
            MapCoordinate3D h;        // location on the map, in hex coordinates
-           int gval;        // g in A* represents how far we've already gone
-           int hval;        // h in A* represents an estimate of how far is left
+           AStar3D::DistanceType gval;        // g in A* represents how far we've already gone
+           AStar3D::DistanceType hval;        // h in A* represents an estimate of how far is left
            bool canStop;
-           Node(): gval(0), hval(0), canStop(false) {}
+           bool hasAttacked;
+           int enterHeight;
+           Node(): gval(0), hval(0), canStop(false), enterHeight(-1) {}
            bool operator< ( const Node& a );
        };
 
     protected:
+       OperationLimiter* operationLimiter;
        int MAXIMUM_PATH_LENGTH;
        pmap tempsMarked;
        Path *_path;
@@ -108,14 +136,15 @@ class AStar3D {
        pmap actmap;
        float vehicleSpeedFactor[8];
        bool markTemps;
-       bool changeHeight;
+       WindMovement* wind;
 
 
-       virtual int getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const pvehicle vehicle, bool& canStop );
+       virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const pvehicle vehicle, bool& canStop, bool& hasAttacked );
 
        HexDirection* posDirs;
        int*          posHHops;
-       int*         fieldAccess;
+       int*          fieldAccess;
+
        HexDirection& getPosDir ( const MapCoordinate3D& pos ) { return posDirs [(pos.y * actmap->xsize + pos.x) * 8 + 1+pos.getNumericalHeight()]; };
        int& getPosHHop ( const MapCoordinate3D& pos )         { return posHHops[(pos.y * actmap->xsize + pos.x) * 8 + 1+pos.getNumericalHeight()]; };
 
@@ -132,7 +161,10 @@ class AStar3D {
        Container visited;
 
     public:
-       AStar3D ( pmap actmap, pvehicle veh, bool markTemps_ = true, int maxDistance = maxint, bool changeHeight_= true );
+       AStar3D ( pmap actmap, pvehicle veh, bool markTemps_ = true, int maxDistance = maxint );
+
+       //! the search can be restricted to certain operations
+       void registerOperationLimiter( OperationLimiter* ol ) { operationLimiter = ol; };
 
        //! searches for a path from A to B and stores it in path
        void findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>& B, Path& path );

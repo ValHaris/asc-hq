@@ -99,7 +99,7 @@ MapCoordinate  BuildingType :: getFieldCoordinate ( const MapCoordinate& entryPo
 }
 
 
-const int building_version = 4;
+const int building_version = 5;
 
 #ifndef converter
 extern void* generate_building_gui_build_icon ( pbuildingtype bld );
@@ -162,6 +162,13 @@ void BuildingType :: read ( tnstream& stream )
       _bi_maxstorage.energy = stream.readInt( );
       _bi_maxstorage.material = stream.readInt( );
       _bi_maxstorage.fuel = stream.readInt( );
+
+      if ( version >= 5 ) {
+         defaultProduction.energy = stream.readInt( );
+         defaultProduction.material = stream.readInt( );
+         defaultProduction.fuel = stream.readInt( );
+      }
+
 
       buildingheight = 1 << log2 ( stream.readInt() );
       stream.readInt( ); // was: unitheight_forbidden =
@@ -273,6 +280,10 @@ void BuildingType :: write ( tnstream& stream ) const
    stream.writeInt ( _bi_maxstorage.energy );
    stream.writeInt ( _bi_maxstorage.material );
    stream.writeInt ( _bi_maxstorage.fuel );
+
+   stream.writeInt ( defaultProduction.energy );
+   stream.writeInt ( defaultProduction.material );
+   stream.writeInt ( defaultProduction.fuel );
 
    stream.writeInt ( buildingheight );
    stream.writeInt ( 0 );
@@ -513,6 +524,11 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
         _tank.runTextIO ( pc );
        pc.closeBracket();
       pc.closeBracket ();
+
+      pc.openBracket( "DefaultResourceProduction" );
+       defaultProduction.runTextIO ( pc, Resources(0,0,0) );
+      pc.closeBracket();
+
 
       pc.addTagInteger( "Height", buildingheight, choehenstufennum, heightTags );
 

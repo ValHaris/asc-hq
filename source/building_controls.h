@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: building_controls.h,v 1.16 2003-02-19 19:47:25 mbickel Exp $
+//     $Id: building_controls.h,v 1.17 2003-02-27 16:10:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2003/02/19 19:47:25  mbickel
+//      Completely rewrote Pathfinding code
+//      Wind not different any more on different levels of height
+//
 //     Revision 1.15  2003/02/12 20:11:53  mbickel
 //      Some significant changes to the Transportation code
 //
@@ -171,7 +175,7 @@ class    ccontainercontrols
       virtual int    getxpos (void) = 0;
       virtual int    getypos (void) = 0;
 
-      virtual VehicleMovement*  movement ( pvehicle eht );
+      virtual VehicleMovement*  movement ( pvehicle eht, bool simpleMode = false );
       virtual int    getHeight ( void ) = 0;
 
 

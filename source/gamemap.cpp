@@ -60,8 +60,6 @@ tmap :: tmap ( void )
    actplayer = -1;
    time.abstime = 0;
 
-   weather.fog = 0;
-
    _resourcemode = 0;
 
    for ( i = 0; i < 8; i++ )
@@ -1549,7 +1547,7 @@ void tfield :: deleteeverything ( void )
 }
 
 
-bool tfield :: unitHere ( const pvehicle veh )
+bool tfield :: unitHere ( const Vehicle* veh )
 {
    if ( vehicle == veh )
       return true;

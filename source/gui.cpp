@@ -4,9 +4,13 @@
 */
 
 
-//     $Id: gui.cpp,v 1.88 2003-02-19 19:47:26 mbickel Exp $
+//     $Id: gui.cpp,v 1.89 2003-02-27 16:11:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.88  2003/02/19 19:47:26  mbickel
+//      Completely rewrote Pathfinding code
+//      Wind not different any more on different levels of height
+//
 //     Revision 1.87  2003/02/12 20:11:53  mbickel
 //      Some significant changes to the Transportation code
 //
@@ -1026,7 +1030,7 @@ void  tnguiicon::checkforkey  ( tkey key )
       for (int i = 0; i < 6 ; i++ )
 
          if ( keys[0][i] && key )
-           if ( char2key( keys[0][i] ) == key ) {
+           if ( tolower(char2key( keys[0][i] )) == tolower(key) ) {
               exec();
               return;
             }
@@ -1166,8 +1170,11 @@ void  tnsguiiconmove::exec         ( void )
    if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
       new VehicleMovement ( &defaultMapDisplay, &pendingVehicleActions );
 
-      int res;
-      res = pendingVehicleActions.move->execute ( getactfield()->vehicle, -1, -1, 0, -1, 0 );
+      int mode = 0;
+      if (  skeypress( ct_lshift ) ||  skeypress ( ct_rshift ))
+         mode |= VehicleMovement::DisableHeightChange;
+
+      int res = pendingVehicleActions.move->execute ( getactfield()->vehicle, -1, -1, 0, -1, mode );
       if ( res < 0 ) {
          dispmessage2 ( -res, NULL );
          delete pendingVehicleActions.action;
@@ -1347,8 +1354,11 @@ void  tnsguiiconascent::exec         ( void )
    if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
       new IncreaseVehicleHeight ( &defaultMapDisplay, &pendingVehicleActions );
 
-      int res;
-      res = pendingVehicleActions.ascent->execute ( getactfield()->vehicle, -1, -1, 0, getactfield()->vehicle->height << 1, CGameOptions::Instance()->heightChangeMovement );
+      bool simpleMode = false;
+      if (  skeypress( ct_lshift ) ||  skeypress ( ct_rshift ))
+         simpleMode = true;
+
+      int res = pendingVehicleActions.ascent->execute ( getactfield()->vehicle, -1, -1, 0, getactfield()->vehicle->height << 1, simpleMode );
       if ( res < 0 ) {
          dispmessage2 ( -res, NULL );
          delete pendingVehicleActions.action;
@@ -1465,8 +1475,12 @@ void  tnsguiicondescent::exec         ( void )
    if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
       new DecreaseVehicleHeight ( &defaultMapDisplay, &pendingVehicleActions );
 
-      int res;
-      res = pendingVehicleActions.descent->execute ( getactfield()->vehicle, -1, -1, 0, getactfield()->vehicle->height >> 1, CGameOptions::Instance()->heightChangeMovement );
+
+      bool simpleMode = false;
+      if (  skeypress( ct_lshift ) ||  skeypress ( ct_rshift ))
+         simpleMode = true;
+
+      int res = pendingVehicleActions.descent->execute ( getactfield()->vehicle, -1, -1, 0, getactfield()->vehicle->height >> 1, simpleMode );
       if ( res < 0 ) {
          dispmessage2 ( -res, NULL );
          delete pendingVehicleActions.action;

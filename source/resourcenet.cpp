@@ -177,7 +177,7 @@ void MapNetwork :: searchAllVehiclesNextToBuildings ( int player )
 {
    pass++;
    for ( tmap::Player::VehicleList::iterator j = actmap->player[player].vehicleList.begin(); j != actmap->player[player].vehicleList.end(); j++ ) {
-      MapCoordinate mc = (*j)->getPosition();
+      MapCoordinate3D mc = (*j)->getPosition();
       for ( int s = 0; s < sidenum; s++ ) {
          pfield fld = actmap->getField ( getNeighbouringFieldCoordinate ( mc, s ));
          if ( fld ) {

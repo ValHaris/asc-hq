@@ -3,9 +3,13 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.150 2003-02-19 19:47:25 mbickel Exp $
+//     $Id: controls.cpp,v 1.151 2003-02-27 16:10:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.150  2003/02/19 19:47:25  mbickel
+//      Completely rewrote Pathfinding code
+//      Wind not different any more on different levels of height
+//
 //     Revision 1.149  2003/01/12 19:37:18  mbickel
 //      Rewrote resource production
 //
@@ -1273,26 +1277,12 @@ void         constructvehicle( pvehicletype tnk )
    else {
       if (moveparams.movestatus == 120 ) {
          pvehicle eht = moveparams.vehicletomove;
-         // pfield fld = getactfield();
 
-         /*
-         int stat = 0;
-         if ( actmap->objectcrc ) {
-            if ( actmap->objectcrc->speedcrccheck->checkunit2 ( tnk ))
-               stat = 1;
-         } else
-            stat = 1;
-
-         if ( stat ) {
-         */
-
-            int x = getxpos();
-            int y = getypos();
-            eht->constructvehicle ( tnk, x, y );
-            logtoreplayinfo ( rpl_buildtnk, x, y, tnk->id, moveparams.vehicletomove->color/8 );
-            computeview( actmap );
-
-         // }
+         int x = getxpos();
+         int y = getypos();
+         eht->constructvehicle ( tnk, x, y );
+         logtoreplayinfo ( rpl_buildtnk, x, y, tnk->id, moveparams.vehicletomove->color/8 );
+         computeview( actmap );
 
          build_vehicles_reset();
       }
@@ -1305,11 +1295,13 @@ void         constructvehicle( pvehicletype tnk )
 
 
 
-int windbeeline ( int x1, int y1, int x2, int y2, WindMovement* wm ) {
+int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, WindMovement* wm ) {
+   int x1 = start.x;
+   int y1 = start.y;
    int dist = 0;
-   while ( x1 != x2  || y1 != y2 ) {
+   while ( x1 != dest.x  || y1 != dest.y ) {
       dist+= minmalq;
-      int direc = getdirection ( x1, y1, x2, y2 );
+      int direc = getdirection ( x1, y1, dest.x, dest.y );
       dist -= wm->getDist(direc);
       getnextfield ( x1, y1, direc );
    }
@@ -1662,18 +1654,7 @@ tsearchreactionfireingunits :: ~tsearchreactionfireingunits()
 
 
 
-int square ( int i )
-{
-   return i*i;
-}
-
-float square ( float i )
-{
-   return i*i;
-}
-
-
-pair<int,int> calcmovemalus( const MapCoordinate3D& start,
+pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
                             const MapCoordinate3D& dest,
                             pvehicle     vehicle,
                             WindMovement* wm,
@@ -1685,12 +1666,11 @@ pair<int,int> calcmovemalus( const MapCoordinate3D& start,
    int direc = getdirection ( start.x, start.y, dest.x, dest.y );
 
 
-
-
-   int fuelcost = 1;
+   int fuelcost = 10;
    int movecost;
    bool checkHemming = true;
    bool checkWind = wm != NULL;
+   int dist = 1;
 
    if ( start.getNumericalHeight() >= 0 && dest.getNumericalHeight() >= 0 ) {
       // changing height
@@ -1698,12 +1678,14 @@ pair<int,int> calcmovemalus( const MapCoordinate3D& start,
           const Vehicletype::HeightChangeMethod* hcm = vehicle->getHeightChange( start.getNumericalHeight() < dest.getNumericalHeight() ? 1 : -1, start.getBitmappedHeight());
           if ( !hcm || hcm->dist != beeline ( start, dest )/maxmalq )
              fatalError("Calcmovemalus called with invalid height change distance");
+          dist = hcm->dist;
           movecost = hcm->moveCost;
-          fuelcost = max(hcm->dist,1);
+          fuelcost = max(hcm->dist*10,10);
           if ( inhibitAttack && !hcm->canAttack )
-            *inhibitAttack = !hcm->canAttack; 
+            *inhibitAttack = !hcm->canAttack;
           checkHemming = false;
-          checkWind = false;
+          if ( start.getNumericalHeight() < 4 || dest.getNumericalHeight() < 4 )
+             checkWind = false;
       } else
          // flying
          if (start.getNumericalHeight() >= 4  )
@@ -1764,56 +1746,16 @@ pair<int,int> calcmovemalus( const MapCoordinate3D& start,
       if (dest.getNumericalHeight() >= 4 && dest.getNumericalHeight() <= 6 &&
           start.getNumericalHeight() >= 4 && start.getNumericalHeight() <= 6 &&
           actmap->weather.windSpeed  ) {
-         movecost -=  wm->getDist( direc );
-         fuelcost -=  wm->getDist ( direc );
-         if ( movecost < minmalq )
-           movecost = minmalq;
+         movecost -=  wm->getDist( direc ) * dist;
+         fuelcost -=  wm->getDist ( direc ) * dist;
+
+         if ( movecost < 1 )
+           movecost = 1;
 
          if ( fuelcost <= 0 )
            fuelcost = 0;
       }
    return make_pair(movecost,fuelcost);
-}
-
-
-WindMovement::WindMovement ( const pvehicle vehicle )
-{
-   for ( int i = 0; i < sidenum; i++ )
-      wm[i] = 0;
-
-   int movement = maxint;
-   for ( int height = 4; height <= 6; height++ )
-      if ( vehicle->typ->movement[height] )
-         if ( vehicle->typ->movement[height] < movement )
-            movement = vehicle->typ->movement[height];
-
-
-   if ( movement ) {
-      for ( int direc = 0; direc < sidenum; direc++) {
-         float abswindspeed = ( actmap->weather.windSpeed * maxwindspeed * minmalq / 256 );
-
-         float relwindspeed  =  abswindspeed / movement;
-
-         float pi = 3.14159265;
-
-         float relwindspeedx = 10 * relwindspeed * sin ( 2 * pi * actmap->weather.windDirection / sidenum );
-         float relwindspeedy = -10 * relwindspeed * cos ( 2 * pi * actmap->weather.windDirection / sidenum );
-
-         float xtg = 120 * sin ( 2 * pi * direc / sidenum );
-         float ytg = -120 * cos ( 2 * pi * direc / sidenum );
-
-         int disttofly = (int)sqrt ( square ( xtg - relwindspeedx) + square ( ytg - relwindspeedy ) );
-
-         wm[direc] =  (120 - disttofly) / 10;
-      }
-   }
-}
-
-
-
-int WindMovement::getDist ( int dir )
-{
-   return 0;
 }
 
 
@@ -1833,9 +1775,8 @@ void checkalliances_at_endofturn ( void )
                if ( j != act )
                   to |= 1 << j;
 
-            char txt[200];
-            const char* sp = getmessage( 10001 );
-            sprintf ( txt, sp, actmap->player[act].getName().c_str(), actmap->player[i].getName().c_str() );
+            ASCString txt;
+            txt.format ( getmessage( 10001 ), actmap->player[act].getName().c_str(), actmap->player[i].getName().c_str() );
             new Message ( txt, actmap, to );
          }
 

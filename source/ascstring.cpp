@@ -75,7 +75,7 @@ ASCString& ASCString::toUpper ( )
 
     See standard system documentation for more information on \e sprintf.
 */
-ASCString& ASCString::format ( charT* pFormat, ... )
+ASCString& ASCString::format ( const charT* pFormat, ... )
 {
     std::va_list arg_ptr;
     va_start ( arg_ptr, pFormat );
@@ -83,9 +83,9 @@ ASCString& ASCString::format ( charT* pFormat, ... )
     int  l_iNbChar = 10000;
     bool l_bIsDone = false;
 
-    while ( l_bIsDone == false ) 
+    while ( l_bIsDone == false )
     {
-        charT* l_pBuf = new charT [ l_iNbChar ];    
+        charT* l_pBuf = new charT [ l_iNbChar ];
 
         int l_iNbCharWritten = ASCStringHelpers::_Vsnprintf ( l_pBuf, l_iNbChar, pFormat, arg_ptr );
 

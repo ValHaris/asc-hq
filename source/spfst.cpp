@@ -2,9 +2,13 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.119 2003-02-19 19:47:26 mbickel Exp $
+//     $Id: spfst.cpp,v 1.120 2003-02-27 16:12:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.119  2003/02/19 19:47:26  mbickel
+//      Completely rewrote Pathfinding code
+//      Wind not different any more on different levels of height
+//
 //     Revision 1.118  2003/02/12 20:11:53  mbickel
 //      Some significant changes to the Transportation code
 //
@@ -306,7 +310,7 @@ int  rol ( int valuetorol, int rolwidth )
 
 
 
-int          terrainaccessible ( const pfield        field, const pvehicle     vehicle, int uheight )
+int          terrainaccessible ( const pfield        field, const Vehicle*     vehicle, int uheight )
 {
    int res  = terrainaccessible2 ( field, vehicle, uheight );
    if ( res < 0 )
@@ -315,7 +319,7 @@ int          terrainaccessible ( const pfield        field, const pvehicle     v
       return res;
 }
 
-int          terrainaccessible2 ( const pfield        field, const pvehicle     vehicle, int uheight )
+int          terrainaccessible2 ( const pfield        field, const Vehicle*     vehicle, int uheight )
 {
    if ( uheight == -1 )
       uheight = vehicle->height;
@@ -350,7 +354,8 @@ int          terrainaccessible2 ( const pfield        field, const pvehicle     
 
 int         fieldaccessible( const pfield        field,
                             const pvehicle     vehicle,
-                            int  uheight )
+                            int  uheight,
+                            const bool* attacked )
 {
    if ( !field || !vehicle )
       return 0;
@@ -360,7 +365,7 @@ int         fieldaccessible( const pfield        field,
 
    int c = fieldVisibility ( field, vehicle->color/8 );
 
-   if (field == NULL) 
+   if (field == NULL)
      return 0;
 
    if (c == visible_not)
@@ -381,19 +386,6 @@ int         fieldaccessible( const pfield        field,
       else
          return 0;
    } else {
-   /*
-      int m1 = vehicle->weight();
-      int mx = vehicle->weight();
-      int b = 1;
-      for (int c = 0; c <= 31; c++)
-         if ( vehicle->loading[c] ) {
-            b++;
-            m1 += vehicle->loading[c]->weight();
-            if ( vehicle->loading[c]->weight() > mx )
-               mx = vehicle->loading[c]->weight();
-         }
-     */
-
       if (field->vehicle) {
          if (field->vehicle->color == vehicle->color) {
             if ( field->vehicle->vehicleLoadable ( vehicle, uheight ) )
@@ -417,7 +409,7 @@ int         fieldaccessible( const pfield        field,
 
       }
       else {   // building
-        if ((field->bdt & getTerrainBitType(cbbuildingentry) ).any() && field->building->vehicleLoadable ( vehicle, uheight ))
+        if ((field->bdt & getTerrainBitType(cbbuildingentry) ).any() && field->building->vehicleLoadable ( vehicle, uheight, attacked ))
            return 2;
         else
            if (uheight >= chtieffliegend || (field->building->typ->buildingheight <= chgetaucht && uheight >=  chschwimmend ))

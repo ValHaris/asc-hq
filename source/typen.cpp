@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.95 2003-01-21 21:00:48 mbickel Exp $
+//     $Id: typen.cpp,v 1.96 2003-02-27 16:12:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.95  2003/01/21 21:00:48  mbickel
+//      Fixed some warnings
+//
 //     Revision 1.94  2003/01/12 19:37:19  mbickel
 //      Rewrote resource production
 //
@@ -597,6 +600,13 @@ void Resources::runTextIO ( PropertyContainer& pc )
    pc.addInteger  ( "Energy", energy );
    pc.addInteger  ( "Material", material );
    pc.addInteger  ( "fuel", fuel );
+}
+
+void Resources::runTextIO ( PropertyContainer& pc, const Resources& defaultValue )
+{
+   pc.addInteger  ( "Energy", energy, defaultValue.energy );
+   pc.addInteger  ( "Material", material, defaultValue.material );
+   pc.addInteger  ( "fuel", fuel, defaultValue.fuel );
 }
 
 

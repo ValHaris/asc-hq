@@ -443,6 +443,7 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
 {
    // are we operating in 3D space or 2D space? Pathfinding in 3D has not
    // been available at the beginning of the AI work; and it is faster anyway
+   #if 0
    if ( destination.getNumericalHeight() == -1 ) {
 
       VehicleMovement vm ( mapDisplay, NULL );
@@ -505,6 +506,7 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
       }
       return false;
    } else {
+   #endif
       AStar3D* ast = NULL;
       if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer )
          ast = new HiddenAStar3D ( this, veh );
@@ -517,7 +519,7 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
       ast->findPath ( path, destination );
 
       return moveUnit ( veh, path ) == 1 ;
-   }
+//   }
 }
 
 int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path )
@@ -526,92 +528,50 @@ int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path )
    if ( pi == path.end() )
       return 0;
 
+   int nwid = veh->networkid;
+
+   AStar3D::Path::const_iterator lastmatch = pi;
    while ( pi != path.end() ) {
-      int nwid = veh->networkid;
-      if ( pi->getBitmappedHeight() == veh->height ) {
-         VehicleMovement vm ( mapDisplay, NULL );
-         vm.execute ( veh, -1, -1, 0, -1, -1 );
+      pfield fld = getfield ( pi->x, pi->y );
+      if ( !fld->getContainer() || pi+1==path.end() )
+      // if ( !fld->building || getdiplomaticstatus2 ( fld->building->color, getPlayerNum()*8) == cawar || fld->building->getOwner() == veh->getOwner() )
+         if ( pi->dist <= veh->getMovement() )
+            lastmatch = pi;
 
-         bool fieldFound = false;
-         AStar3D::Path::const_iterator lastmatch = pi;
-         AStar3D::Path::const_iterator i = pi;
-         while ( i != path.end() && i->getBitmappedHeight() == veh->height ) {
-            if ( vm.reachableFields.isMember ( i->x, i->y )) {
-               // don't accidently conquer the buildings of your allies
-               if ( !getfield ( i->x, i->y )->building || getdiplomaticstatus2 ( getfield ( i->x, i->y )->building->color, getPlayerNum()*8) == cawar ) {
-                  lastmatch = i;
-                  fieldFound = true;
-               }
-            }
-            i++;
-         }
-
-         if ( (lastmatch->x != veh->xpos || lastmatch->y != veh->ypos) && fieldFound ) {
-            if ( getfield ( lastmatch->x, lastmatch->y )->building )
-               if ( checkReConquer ( getfield ( lastmatch->x, lastmatch->y )->building, veh ))
-                  return false;
-
-            vm.execute ( NULL, lastmatch->x, lastmatch->y, 2, -1, -1 );
-            if ( vm.getStatus() != 3 )
-               displaymessage ( "AI :: moveUnit (path) \n error in movement step 2 with unit %d", 1, veh->networkid );
-
-            vm.execute ( NULL, lastmatch->x, lastmatch->y, 3, -1,  1 );
-            if ( vm.getStatus() != 1000 )
-               displaymessage ( "AI :: moveUnit (path) \n error in movement step 3 with unit %d", 1, veh->networkid );
-
-            pi = lastmatch+1;
-         }
-      }
-
-      //! the unit may have been shot down
-      if ( ! getMap()->getUnit ( nwid ))
-         return -1;
-
-      if ( pi == path.end() ) {
-         if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer )
-            if ( getMap()->getField ( veh->getPosition() )->building )
-               veh->aiparam[getPlayerNum()]->clearJobs();
-         return 1;
-      }
-
-      if ( pi->getBitmappedHeight() == veh->height ) {
-         // movement exhausted
-         return 0;
-      }
-
-      ChangeVehicleHeight* cvh;
-      if ( pi->getBitmappedHeight() > veh->height )
-         cvh = new IncreaseVehicleHeight ( mapDisplay );
-      else
-         cvh = new DecreaseVehicleHeight ( mapDisplay );
-
-      auto_ptr<ChangeVehicleHeight> ap ( cvh );
-      cvh->execute ( veh, -1, -1, 0, pi->getBitmappedHeight(), 0 );
-      if ( cvh->getStatus() != 1000 ) {
-          if ( cvh->getStatus() < 0 ) {
-             displaymessage ( "AI :: moveUnit (path) \n error in changeHeight step 0 with unit %d", 1, veh->networkid );
-             return -1;
-          }
-
-          cvh->execute ( NULL, pi->x, pi->y, 2, -1, -1 );
-          if ( cvh->getStatus() < 0 ) {
-             displaymessage ( "AI :: moveUnit (path) \n error in changeHeight step 2 with unit %d", 1, veh->networkid );
-             return -1;
-          }
-
-          cvh->execute ( NULL, pi->x, pi->y, 3, -1, 1 );
-          if ( cvh->getStatus() < 0 ) {
-             displaymessage ( "AI :: moveUnit (path) \n error in changeHeight step 3 with unit %d", 1, veh->networkid );
-             return -1;
-          }
-      }
-
-      //! the unit may have been shot down
-      if ( ! getMap()->getUnit ( nwid ))
-         return -1;
-
-      pi++;
+      ++pi;
    }
+
+   if ( getfield ( lastmatch->x, lastmatch->y )->building )
+      if ( checkReConquer ( getfield ( lastmatch->x, lastmatch->y )->building, veh ))
+         return false;
+
+   if ( lastmatch == path.begin() )
+      return 0;
+
+   BaseVehicleMovement vm ( vat_move, NULL, mapDisplay );
+   vm.execute ( veh, lastmatch->x, lastmatch->y, 0, lastmatch->getNumericalHeight(), 1 );
+
+   if ( vm.getStatus() != 3 ) {
+      displaymessage ( "AI :: moveUnit (path) \n error in movement step 3 with unit %d", 1, veh->networkid );
+      return -1;
+   }
+
+   vm.execute ( NULL, lastmatch->x, lastmatch->y, 3, -1,  1 );
+   if ( vm.getStatus() != 1000 ) {
+      displaymessage ( "AI :: moveUnit (path) \n error in movement step 3 with unit %d", 1, veh->networkid );
+      return -1;
+   }
+
+
+   //! the unit may have been shot down
+   if ( ! getMap()->getUnit ( nwid ))
+      return 1;
+
+   if ( pi == path.end() ) 
+      if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer )
+         if ( getMap()->getField ( veh->getPosition() )->building )
+            veh->aiparam[getPlayerNum()]->clearJobs();
+
    return 1;
 }
 
@@ -700,7 +660,7 @@ void AI ::  runReconUnits ( )
                }
             }
             if( mindist < maxint ) {
-               veh->aiparam[getPlayerNum()]->dest = mc;
+               veh->aiparam[getPlayerNum()]->dest = MapCoordinate3D(mc, veh->height);
                veh->aiparam[getPlayerNum()]->setTask( AiParameter::tsk_move );
                runUnitTask ( veh );
             }

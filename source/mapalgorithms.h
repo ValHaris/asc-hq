@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef mapalgorithms_h_included
- #define mapalgorithms_h_included
+#ifndef mapalgorithmsH
+ #define mapalgorithmsH
 
  #include "typen.h"
 
@@ -72,6 +72,7 @@ extern void  getnextfield(int &    x,
 
 //! returns the coordinate of the field that is adjecent to the given field in the direction of direc
 extern MapCoordinate3D  getNeighbouringFieldCoordinate( const MapCoordinate3D& pos, int direc);
+extern MapCoordinate    getNeighbouringFieldCoordinate( const MapCoordinate  & pos, int direc);
 
 
 /** gets the direction from x1/y1 to x2/y2
@@ -91,6 +92,14 @@ extern int beeline ( const pvehicle a, const pvehicle b );
 
 //! returns the distance between map positions a and b
 extern int beeline ( const MapCoordinate& a, const MapCoordinate& b );
+
+//! caches some calculations for the effects that wind has on the movement of units
+class WindMovement {
+      int wm[6];
+   public:
+      WindMovement ( const Vehicle* vehicle );
+      int getDist ( int dir );
+};
 
 
 #endif

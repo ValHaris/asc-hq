@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.121 2003-02-19 21:18:26 mbickel Exp $
+//     $Id: typen.h,v 1.122 2003-02-27 16:12:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.121  2003/02/19 21:18:26  mbickel
+//      Updated weaponguide
+//      compilation fixed
+//
 //     Revision 1.120  2003/02/19 19:47:26  mbickel
 //      Completely rewrote Pathfinding code
 //      Wind not different any more on different levels of height
@@ -385,6 +389,7 @@ class Resources {
      void read ( tnstream& stream );
      void write ( tnstream& stream ) const;
      void runTextIO ( PropertyContainer& pc );
+     void runTextIO ( PropertyContainer& pc, const Resources& defaultValue );
 };
 
 extern Resources operator- ( const Resources& res1, const Resources& res2 );
@@ -481,15 +486,15 @@ class MapCoordinate {
 class MapCoordinate3D : public MapCoordinate {
             int z;
          public:
-            int getBitmappedHeight ( ) const { return 1<<z; };
+            int getBitmappedHeight ( ) const { if ( z >= 0 ) return 1<<z; else return 0;};
             int getNumericalHeight ( ) const { return z; };
             // MapCoordinate3D& operator= ( const MapCoordinate& mc ) { x = mc.x; y = mc.y; z = -1 );
             MapCoordinate3D ( ) : MapCoordinate(), z(-1) {};
             MapCoordinate3D ( int _x, int _y, int bitmappedz) : MapCoordinate ( _x, _y ), z ( log2(bitmappedz) ) {};
-            MapCoordinate3D ( const MapCoordinate& mc ) : MapCoordinate ( mc ), z ( -1 ) {};
+            // MapCoordinate3D ( const MapCoordinate& mc ) : MapCoordinate ( mc ), z ( -2 ) {};
             MapCoordinate3D ( const MapCoordinate& mc, int bitmappedHeight ) : MapCoordinate ( mc ), z ( log2(bitmappedHeight) ) {};
             void setnum ( int _x, int _y, int numericalz ) { x = _x; y = _y; z = numericalz; };
-            bool operator== ( const MapCoordinate3D& mc ) const { return y == mc.y && x == mc.x && (z == mc.z || z == -1 || mc.z == -1);};
+            bool operator== ( const MapCoordinate3D& mc ) const { return y == mc.y && x == mc.x && (z == mc.z || z == -2 || mc.z == -2);};
             void write( tnstream& stream ) const { stream.writeInt ( 3500 ); stream.writeInt ( z ); MapCoordinate::write( stream ); };
             void read( tnstream& stream ) {
                stream.readInt ( );

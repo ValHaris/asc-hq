@@ -4,9 +4,13 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.46 2003-02-19 19:47:25 mbickel Exp $
+//     $Id: controls.h,v 1.47 2003-02-27 16:11:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2003/02/19 19:47:25  mbickel
+//      Completely rewrote Pathfinding code
+//      Wind not different any more on different levels of height
+//
 //     Revision 1.45  2003/01/28 17:48:42  mbickel
 //      Added sounds
 //      Rewrote soundsystem
@@ -117,7 +121,7 @@
 #include "typen.h"
 #include "mousecontrol.h"
 #include "soundList.h"
-
+#include "astar2.h"
 
 
 
@@ -175,26 +179,18 @@
 
                };
 
-//! caches some calculations for the effects that wind has on the movement of units
-class WindMovement {
-      int wm[6];
-   public:
-      WindMovement ( const pvehicle vehicle );
-      int getDist ( int dir );
-};
-
 
 /*! calculates the movement cost for moving vehicle from start to dest.
     \returns : first: movement ; second: fuel consumption
 */
-extern pair<int,int> calcmovemalus( const MapCoordinate3D& start,
+extern pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
                                     const MapCoordinate3D& dest,
                                     pvehicle     vehicle,
                                     WindMovement* wm = NULL,
                                     bool*  inhibitAttack = NULL );
 
 //! return the distance between x1/y1 and x2/y2 using the power of the wind factors calculated for a specific unit with #initwindmovement
-extern int windbeeline ( int x1, int y1, int x2, int y2, WindMovement* wm );
+extern int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, WindMovement* wm );
 
 
 /*! Ends the turn of the current player and runs AI until a player is human again

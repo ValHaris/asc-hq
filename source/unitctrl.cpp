@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.99 2003-02-19 19:47:26 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.100 2003-02-27 16:12:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.99  2003/02/19 19:47:26  mbickel
+//      Completely rewrote Pathfinding code
+//      Wind not different any more on different levels of height
+//
 //     Revision 1.98  2003/02/12 20:11:53  mbickel
 //      Some significant changes to the Transportation code
 //
@@ -62,7 +66,7 @@
 
 #include <vector> // From STL
 #include <algorithm>   // From STL
-
+#include <cmath>
 
 #include "unitctrl.h"
 #include "controls.h"
@@ -88,24 +92,35 @@ void BaseVehicleMovement :: PathFinder :: getMovementFields ( IntFieldList& reac
 {
    Path dummy;
    findPath ( dummy, MapCoordinate3D(actmap->xsize, actmap->ysize, veh->height) );  //this field does not exist...
+
+   int unitHeight = veh->getPosition().getNumericalHeight();
+   if ( !actmap->getField ( veh->getPosition())->unitHere ( veh ))
+      unitHeight = -1;
+
    for ( Container::iterator i = visited.begin(); i != visited.end(); i++ ) {
-      int unitHeight = veh->getPosition().getNumericalHeight();
-      if ( !actmap->getField ( veh->getPosition())->unitHere ( veh ))
-         unitHeight = -1;
 
       if ( i->h.x != veh->getPosition().x || i->h.y != veh->getPosition().y || i->h.getNumericalHeight() != unitHeight ) {
          int h = i->h.getNumericalHeight();
+         if ( h == -1 )
+            h = i->enterHeight;
          if ( h == -1 || height == -1 || h == height )
             if ( i->canStop )
-               reachableFields.addField ( i->h, h);
+               reachableFields.addField ( i->h, i->h.getNumericalHeight() );
             else
-               reachableFieldsIndirect.addField ( i->h, h );
+               reachableFieldsIndirect.addField ( i->h, i->h.getNumericalHeight() );
       }
    }
 }
 
 int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrupt )
 {
+   WindMovement* wind;
+   if ( (vehicle->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weather.windSpeed ) {
+      wind = new WindMovement ( vehicle );
+   } else
+      wind = NULL;
+
+
    pfield oldfield = getfield( vehicle->xpos, vehicle->ypos );
 
    AStar3D::Path::iterator pos = path.begin();
@@ -113,6 +128,9 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
    tsearchreactionfireingunits srfu;
    treactionfire* rf = &srfu;
+
+   int orgMovement = vehicle->getMovement( false );
+   int orgHeight = vehicle->height;
 
    rf->init( vehicle, pathToMove );
 
@@ -144,13 +162,20 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
       AStar3D::Path::iterator next = pos+1;
 
-      pair<int,int> mm = calcmovemalus( *pos, *next, vehicle, NULL, &inhibitAttack );
+
+
+      pair<int,int> mm = calcMoveMalus( pos->getRealPos(), next->getRealPos(), vehicle, wind, &inhibitAttack );
       movedist += mm.first;
       fueldist += mm.second;
 
-      vehicle->decreaseMovement( movedist );
-      if ( next->getNumericalHeight() != pos->getNumericalHeight() && next->getNumericalHeight() > 0 )
-         vehicle->setNewHeight ( next->getBitmappedHeight() );
+      if ( pos->hasAttacked )
+         vehicle->attacked = true;
+
+
+      // vehicle->decreaseMovement( mm.first );
+
+      if ( next->getRealHeight() != pos->getRealHeight() && next->getRealHeight() >= 0 )
+         vehicle->setNewHeight ( 1 << next->getRealHeight() );
 
       int pathStepNum = beeline ( *pos, *next ) / maxmalq;
       int pathStep = 0;
@@ -160,10 +185,10 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
       MapCoordinate3D to = *pos;
       do {
          MapCoordinate3D from;
-         from.setnum ( to.x, to.y, pos->getNumericalHeight() );
+         from.setnum ( to.x, to.y, pos->getRealHeight() );
          if ( next->x != from.x || next->y != from.y )
             to = getNeighbouringFieldCoordinate ( to, getdirection ( to, *next ));
-         to.setnum ( to.x, to.y, next->getNumericalHeight() );
+         to.setnum ( to.x, to.y, next->getRealHeight() );
 
          pfield dest = getfield ( to.x, to.y );
 
@@ -246,11 +271,17 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
    if ( vehicle ) {
 
-      vehicle->tank.fuel -= fueldist * vehicle->typ->fuelConsumption;
+      int newMovement = orgMovement - pos->dist;
+
+      if ( vehicle->typ->movement[log2(orgHeight)] )
+         vehicle->setMovement ( floor(vehicle->maxMovement() * float(newMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5) , 0 );
+
+
+      vehicle->tank.fuel -= fueldist * vehicle->typ->fuelConsumption / maxmalq;
       if ( vehicle->tank.fuel < 0 )
          vehicle->tank.fuel = 0;
 
-      if ( fld->vehicle && fld->building ) {
+      if ( fld->vehicle || fld->building ) {
          vehicle->setMovement ( 0 );
          vehicle->attacked = true;
       }
@@ -272,7 +303,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             while ( cn->loading[i] && (i < 31))
                i++;
             cn->loading[i] = vehicle;
-            if (cn->getOwner() != cn->getOwner() && fld->building ) {
+            if (cn->getOwner() != vehicle->getOwner() && fld->building ) {
                fld->building->convert( vehicle->color / 8 );
                if ( fieldvisiblenow ( fld, actmap->playerView ) || actmap->playerView*8  == vehicle->color )
                   SoundList::getInstance().playSound ( SoundList::conquer_building, 0 );
@@ -316,7 +347,7 @@ int BaseVehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int h
       MapCoordinate3D dest;
       dest.setnum ( x, y, height );
 
-      AStar3D ast ( actmap, vehicle, false, maxint, true );
+      AStar3D ast ( actmap, vehicle, false, maxint );
       ast.findPath ( path, dest );
 
       status = 3;
@@ -429,7 +460,7 @@ int VehicleMovement :: available ( pvehicle veh ) const
 
 
 
-int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int height, int noInterrupt )
+int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int height, int capabilities )
 {
    if ( step != status )
       return -1;
@@ -441,13 +472,30 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
          return status;
       }
 
+      class HeightChangeLimitation: public AStar3D::OperationLimiter {
+              bool allow_Height_Change;
+           public:
+              HeightChangeLimitation ( bool allow_Height_Change_ ) : allow_Height_Change ( allow_Height_Change_ ) {};
+              virtual bool allowHeightChange() { return allow_Height_Change; };
+              virtual bool allowMovement() { return true; };
+              virtual bool allowEnteringContainer() { return true; };
+              virtual bool allowLeavingContainer() { return true; };
+              virtual bool allowDocking() { return true; };
+      };
+
       int h;
       if ( actmap->getField(veh->getPosition())->unitHere(veh) )
-         h = log2(veh->height);
+         h = log2(veh->height); // != height-change: true
       else
-         h = -1;
+         h = -1; // height-change = false
 
-      PathFinder pf ( actmap, vehicle, vehicle->getMovement(), h != -1 );
+      bool heightChange = true; //  = h != -1;
+      if ( capabilities & DisableHeightChange )
+        heightChange = false;
+      HeightChangeLimitation hcl ( heightChange );
+
+      PathFinder pf ( actmap, vehicle, vehicle->getMovement() );
+      pf.registerOperationLimiter ( &hcl );
       pf.getMovementFields ( reachableFields, reachableFieldsIndirect, h );
 
       if ( reachableFields.getFieldNum() == 0 ) {
@@ -467,14 +515,14 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
       MapCoordinate3D dest;
       dest.setnum ( x, y, reachableFields.getData(x,y) );
 
-      AStar3D ast ( actmap, vehicle, false, maxint, true );
+      AStar3D ast ( actmap, vehicle, false, maxint );
       ast.findPath ( path, dest );
 
       status = 3;
       return status;
    } else
     if ( status == 3 )
-       return BaseVehicleMovement::execute ( veh, x, y, step, height, noInterrupt );
+       return BaseVehicleMovement::execute ( veh, x, y, step, height, capabilities & NoInterrupt );
     else
        status = 0;
   return status;
@@ -496,7 +544,7 @@ ChangeVehicleHeight :: ChangeVehicleHeight ( MapDisplayInterface* md, PPendingVe
 
 
 
-int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int noInterrupt, int dummy )
+int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int noInterrupt, int disableMovement )
 {
    if ( step != status )
       return -1;
@@ -517,7 +565,22 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int n
 
       newheight = veh->getPosition().getNumericalHeight() + hcm->heightDelta;
 
-      PathFinder pf ( actmap, vehicle, vehicle->getMovement(), true );
+
+      class MovementLimitation: public AStar3D::OperationLimiter {
+              bool simpleMode;
+              int hcNum;
+           public:
+              MovementLimitation ( bool simpleMode_ ) : simpleMode ( simpleMode_ ), hcNum(0) {};
+              virtual bool allowHeightChange() { ++hcNum; if ( simpleMode) return hcNum <= 1 ; else return true; };
+              virtual bool allowMovement() { return !simpleMode; };
+              virtual bool allowEnteringContainer() { return true; };
+              virtual bool allowLeavingContainer() { return true; };
+              virtual bool allowDocking() { return true; };
+      };
+
+      PathFinder pf ( actmap, vehicle, vehicle->getMovement() );
+      MovementLimitation ml ( disableMovement );
+      pf.registerOperationLimiter ( &ml );
 
       IntFieldList reachableFieldsIndirect;
       pf.getMovementFields ( reachableFields, reachableFieldsIndirect, newheight );
@@ -540,7 +603,7 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int n
       MapCoordinate3D dest;
       dest.setnum ( x, y, reachableFields.getData(x,y) );
 
-      AStar3D ast ( actmap, vehicle, false, maxint, true );
+      AStar3D ast ( actmap, vehicle, false, maxint );
       ast.findPath ( path, dest );
 
       status = 3;
@@ -704,6 +767,10 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
             if ( attackableBuildings.isMember ( x, y ))
                atw = &attackableBuildings.getData ( x, y );
 
+      if ( !atw ) {
+         status = -1;
+         return status;
+      }
       tfight* battle = NULL;
       switch ( atw->target ) {
          case AttackWeap::vehicle: battle = new tunitattacksunit ( vehicle, getfield(x,y)->vehicle, 1, weapnum );
@@ -746,7 +813,7 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
 
 
       status = 1000;
-  } 
+  }
   return status;
 }
 

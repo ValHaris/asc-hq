@@ -275,6 +275,7 @@ int   getfieldundermouse ( int* xf, int* yf )
       } /* endfor */
    } /* endfor */
    #ifdef FREEMAPZOOM
+   /*
    if ( mouseinrect ( &idisplaymap.invmousewindow  )) {
       int stepx =   fielddistx * zoomlevel.getzoomlevel() / 100 ;
       int stepy = 2*fielddisty * zoomlevel.getzoomlevel() / 100 ;
@@ -313,6 +314,7 @@ int   getfieldundermouse ( int* xf, int* yf )
          return getfieldundermouse ( xf, yf );
       }
    }
+   */
    #endif
 
    return 0;

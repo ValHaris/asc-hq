@@ -39,7 +39,8 @@ ContainerBaseType::TransportationIO::TransportationIO()
   vehicleCategoriesLoadable = -1;
   dockingHeight_abs = 0;
   dockingHeight_rel = 0;
-
+  requireUnitFunction = 0;
+  disableAttack = false;
 }
 
 
@@ -50,8 +51,10 @@ void ContainerBaseType :: TransportationIO :: runTextIO ( PropertyContainer& pc 
    pc.addInteger( "UnitHeightRel", height_rel, -100 );
    pc.addTagInteger( "ContainerHeight", container_height, choehenstufennum, heightTags );
    pc.addTagInteger( "CategoriesNOT", vehicleCategoriesLoadable, cmovemalitypenum, unitCategoryTags, true );
-   pc.addTagInteger( "DockingHeightAbs", dockingHeight_abs, choehenstufennum, heightTags );
+   pc.addTagInteger( "DockingHeightAbs", dockingHeight_abs, choehenstufennum, heightTags, 0 );
    pc.addInteger( "DockingHeightRel", dockingHeight_rel, -100 );
+   pc.addTagInteger( "RequireUnitFunction", requireUnitFunction, cvehiclefunctionsnum, vehicleAbilities, 0 );
+   pc.addBool( "DisableAttack", disableAttack, false );
 }
 
 
@@ -80,7 +83,7 @@ bool ContainerBaseType :: vehicleFit ( const Vehicletype* fzt ) const
       if ( maxLoadableWeight > 0 )
          if ( vehicleCategoriesStorable & (1<<fzt->movemalustyp) )
             if ( maxLoadableUnitSize >= fzt->maxsize() )
-                 return true;
+               return true;
 
    return false;
 }
@@ -135,6 +138,8 @@ void ContainerBaseType :: TransportationIO :: read ( tnstream& stream )
    vehicleCategoriesLoadable = stream.readInt();
    dockingHeight_abs = stream.readInt();
    dockingHeight_rel = stream.readInt();
+   requireUnitFunction = stream.readInt();
+   disableAttack = stream.readInt();
 }
 
 void ContainerBaseType :: TransportationIO :: write ( tnstream& stream ) const
@@ -147,6 +152,8 @@ void ContainerBaseType :: TransportationIO :: write ( tnstream& stream ) const
    stream.writeInt ( vehicleCategoriesLoadable );
    stream.writeInt ( dockingHeight_abs );
    stream.writeInt ( dockingHeight_rel );
+   stream.writeInt ( requireUnitFunction );
+   stream.writeInt ( disableAttack );
 }
 
 

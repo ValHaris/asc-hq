@@ -131,6 +131,9 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
         //! the maximum resource storage in BI resource mode.
         Resources    _bi_maxstorage;
 
+        //! if a new building is constructed, this will be the resource production of the building
+        Resources    defaultProduction;
+
         //! bitmapped: the level of height that this building will reside on.
         int          buildingheight;
 

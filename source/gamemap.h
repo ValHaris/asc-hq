@@ -230,7 +230,7 @@ class  tfield {
     void checkminetime ( int time );
 
     //! checks if the unit is standing on this field. Since units are being cloned for some checks, this method should be used instead of comparing the pointers to the unit
-    bool unitHere ( const pvehicle veh );
+    bool unitHere ( const Vehicle* veh );
 
     //! returns a pointer to the #ContainerBase of the field or NULL if there is none
     ContainerBase* getContainer() { if ( vehicle ) return vehicle; else return building; };

@@ -2,9 +2,13 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.34 2002-11-01 14:06:53 mbickel Exp $
+//     $Id: edevents.cpp,v 1.35 2003-02-27 16:11:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2002/11/01 14:06:53  mbickel
+//      Changing the height between floating and driving has no movecost any more
+//      submarines evalute the field properties, not the terrain type properties
+//
 //     Revision 1.33  2002/11/01 12:40:50  mbickel
 //      Added supervisor-save-map function
 //
@@ -1070,10 +1074,6 @@ void         twindchange::init(void)
 
    heightxs = 120;
    w2 = 57;
-   for (i=0;i<=2 ;i++) {
-       addbutton("",40+( i * w2),heightxs,20 + w2 * ( i +1 ),heightxs+24,0,1,i+2,true);
-       addkey(i+2,ct_1+i);
-   } // Buttons 2-4
 
    // 8 im Kreis bis 7
 
@@ -1103,11 +1103,6 @@ void         twindchange::init(void)
   }
 
    showdir_and_height();
-
-   mousevisible(false);
-   for (i=0;i<=2 ;i++) {
-      putimage(x1 + 43+( i * w2), y1 + heightxs + 2 ,icons.height[i+4]);
-   }
 
    mousevisible(true);
 }

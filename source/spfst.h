@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: spfst.h,v 1.51 2002-11-17 11:43:23 mbickel Exp $
+//     $Id: spfst.h,v 1.52 2003-02-27 16:12:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2002/11/17 11:43:23  mbickel
+//      Fixed replay errors when replaying the AI moves
+//
 //     Revision 1.50  2002/11/02 14:13:18  mbickel
 //      New net handling for objects
 //
@@ -261,7 +264,8 @@ extern void  clearfahrspuren(void);
 */
 extern int fieldaccessible( const pfield        field,
                             const pvehicle     vehicle,
-                            int  uheight = -1 );
+                            int  uheight = -1,
+                            const bool* attacked = NULL );
 
 //! returns the image of an (explosive) mine. The type of the mine is specified by num.
 extern void* getmineadress( int num , int uncompressed = 0 );
@@ -292,19 +296,19 @@ extern void         resetallbuildingpicturepointers ( void );
              1=unit can move across this field but cannot keep standing there
              2=unit can move and stand there
 */
-extern int          terrainaccessible (  const pfield        field, const pvehicle     vehicle, int uheight = -1 );
+extern int          terrainaccessible (  const pfield field, const Vehicle* vehicle, int uheight = -1 );
 
 /** Checks if the unit can drive on the field
     \param uheight if != -1, the unit is assumed to be on this height instead of the actual one.
-    \returns 0=unit cannot access this field; 
-             1=unit can move across this field but cannot keep standing there; 
-             2=unit can move and stand there; 
+    \returns 0=unit cannot access this field;
+             1=unit can move across this field but cannot keep standing there;
+             2=unit can move and stand there;
              < 0 unit cannot access this field, because of:
                   -1   very deep water required to submerge deep
-                  -2   deep water required to submerge 
+                  -2   deep water required to submerge
                   -3   unit cannot drive onto terrain
 */
-extern int          terrainaccessible2 ( const pfield        field, const pvehicle     vehicle, int uheight = -1 );  
+extern int          terrainaccessible2 ( const pfield        field, const Vehicle* vehicle, int uheight = -1 );
 
 
 /*!
