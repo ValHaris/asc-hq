@@ -230,7 +230,7 @@ void AI :: read ( tnstream& stream )
    if ( version > currentServiceOrderVersion )
       throw tinvalidversion ( "AI :: read", currentServiceOrderVersion, version );
    _isRunning = stream.readInt ();
-   _vision = stream.readInt ( );
+   _vision = VisibilityStates(stream.readInt ( ));
    unitCounter = stream.readInt ( );
 
    int i = stream.readInt();
@@ -323,7 +323,7 @@ bool AI :: isRunning ( void )
 }
 
 
-int AI :: getVision ( void )
+VisibilityStates AI:: getVision ( void )
 {
    return _vision;
 }

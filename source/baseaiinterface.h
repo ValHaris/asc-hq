@@ -121,7 +121,7 @@ class BaseAI {
        public:
          virtual void run ( void ) = 0;
          virtual bool isRunning ( void ) = 0;
-         virtual int getVision ( void ) = 0;
+         virtual VisibilityStates getVision ( void ) = 0;
          virtual void read ( tnstream& stream ) = 0;
          virtual void write ( tnstream& stream ) const = 0;
          virtual ~BaseAI () {};

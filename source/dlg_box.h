@@ -2,9 +2,12 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.27 2001-12-19 17:16:28 mbickel Exp $
+//     $Id: dlg_box.h,v 1.28 2002-03-19 20:38:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2001/12/19 17:16:28  mbickel
+//      Some include file cleanups
+//
 //     Revision 1.26  2001/10/11 10:41:06  mbickel
 //      Restructured platform fileio handling
 //      Added map archival information to mapeditor
@@ -175,56 +178,54 @@
     standard Win32 dialog during startup, while during game it will use ASCs dialog system */
 extern bool gameStartupComplete;
 
-
-  typedef word* pword ;
-  typedef struct tbutton* pbutton;
-
-  struct tbutton { 
-                int  art;                   /*  art:  0: normaler button  
-                                                                   style:
-                                                                     þ 1:   standard
-                                                                     þ 2:   mit "dauerfeuer"  */
-                                                                     
-                integer      x1, y1, x2, y2;              /*  1: texteingabefield  */
-                int id;                          /*  2: zahleingabefield  */
-                int style;                       /*  3: checkbox         
-                                                                   style: 
-                                                                      þ 10 : nur einschaltbar */
-                int status;                      /*  4: schieberegler    */
-                pbutton      next;                        /*  5: scrollbar        */
-                const char*  text;
-                void*      data;
-                void*      data2;
-                int      min, max;   // max = itemsvisible bei scrollbar
-                char      active; 
-
-                int          keynum; 
-                tkey         key[6];
-
-                int          markedkeynum; 
-                tkey         markedkey[6]; 
-                int          scrollspeed;
-                char         pressed;
-                int          newpressed;     // nur f?r Maus-"Dauerfeuer"
-                int          lasttick;      //  nur f?r Maus-"Dauerfeuer"
-             };
-
-
-   struct ttaborder { 
-      int         id; 
-      pbutton      button; 
-      integer      x1, y1, x2, y2; 
-   }; 
-
-
-
-
   class   tdlgengine {
                  protected:
                     int              x1, y1, xsize, ysize;
-                     pbutton      firstbutton; 
 
                  public:
+
+                    struct tbutton {
+                               int  art;                   /*  art:  0: normaler button
+                                                                                  style:
+                                                                                    þ 1:   standard
+                                                                                    þ 2:   mit "dauerfeuer"  */
+
+                               integer      x1, y1, x2, y2;              /*  1: texteingabefield  */
+                               int id;                          /*  2: zahleingabefield  */
+                               int style;                       /*  3: checkbox
+                                                                                  style:
+                                                                                     þ 10 : nur einschaltbar */
+                               int status;                      /*  4: schieberegler    */
+                               tbutton*      next;                        /*  5: scrollbar        */
+                               const char*  text;
+                               void*      data;
+                               void*      data2;
+                               int      min, max;   // max = itemsvisible bei scrollbar
+                               char      active;
+
+                               int          keynum;
+                               tkey         key[6];
+
+                               int          markedkeynum;
+                               tkey         markedkey[6];
+                               int          scrollspeed;
+                               char         pressed;
+                               int          newpressed;     // nur f?r Maus-"Dauerfeuer"
+                               int          lasttick;      //  nur f?r Maus-"Dauerfeuer"
+                            };
+
+                    typedef tbutton* pbutton;
+
+
+
+                  struct ttaborder {
+                     int         id;
+                     tbutton*      button;
+                     integer      x1, y1, x2, y2;
+                  };
+
+                     pbutton      firstbutton;
+
                      tkey         taste;
                      int          prntkey;
 
@@ -424,38 +425,46 @@ typedef class tdialogbox* pdialogbox;
                       virtual ~tdialogbox();
                    };
 
-typedef char* tstringa[30];
-typedef tstringa* pstringa;
 
-class tdisplaymessage : public tdialogbox {
-                        char status;
-                        int  mode;
-                    public:
-                        void init ( tstringa a, int md, int linenum, char* buttonText = NULL );
-                        virtual void buttonpressed ( int id );
-                        virtual void run ( void );
-                   };
-
+//! displays a message in the status line of ASC
 extern int  displaymessage2( const char* formatstring, ... );
-extern void displaymessage( const char* formatstring, int num, ... );   // num   0: Box bleibt aufgeklappt, 1 box wird geschlossen , text rot (Fehler), 2 : Programm wird beendet; 3 : normaler text ( OK)
-extern void displaymessage( const ASCString& text, int num );           // num   0: Box bleibt aufgeklappt, 1 box wird geschlossen , text rot (Fehler), 2 : Programm wird beendet; 3 : normaler text ( OK)
+
+/** displays a dialog box with a message
+   \param formatstring the text, which may contain the same format arguments as sprintf
+   \param num 0 normal text, the dialog box will stay visible until removemessage() is called
+              1 red text for error message
+              2 fatal error, the program will be closed
+              3 normal text
+*/
+extern void displaymessage( const char* formatstring, int num, ... );
+
+
+/** displays a dialog box with a message
+   \param text the text
+   \param num 0 normal text, the dialog box will stay visible until removemessage() is called
+              1 red text for error message
+              2 fatal error, the program will be closed
+              3 normal text
+*/
+extern void displaymessage( const ASCString& text, int num );
+
+//! closes a message dialog box that has been opened by displaymessage()
 extern void removemessage( void );
 
-extern tdisplaymessage* messagebox;
+//! displays a dialogbog with the given help topic \sa viewtext2(int)
+extern void  help( int id);
 
-
-extern void  help(word         id);
-
-extern void         viewtext2 ( word         id);
+//! displays a dialogbog with the given message \sa help(int)
+extern void viewtext2 ( int id);
 
 extern int  viewtextquery(word         id,
                            char *       title,
                            char *       s1,
                            char *       s2);
 
-extern void  loadtexture ( void );
 
-         typedef struct tstartpoint* pstartpoint;
+class tviewtext {
+      protected:
          struct tstartpoint {
                      int ypos;
                      int textcolor;
@@ -465,12 +474,11 @@ extern void  loadtexture ( void );
                      int aeinzug;
                      int height;
                      const char* textpointer;
-                     pstartpoint next;
+                     tstartpoint* next;
                      int xpos;
                      int maxlineheight;
                 };
-
-class tviewtext {
+         typedef tstartpoint* pstartpoint;
 
        public: 
          tviewtext();
@@ -535,6 +543,9 @@ extern char*  strrrd8u(int  l);           // aufrunden
 extern char*  strrrd8d(int  l);           // abrunden
 extern char*  strrrd8n(int  l);           // mathematisch korrekt runden
 
+
+/** returns the message with the given ID from the message system. This system spans
+    the helpfiles and the message files associated with the maps */
 extern ASCString readtextmessage( int id );
 
 
@@ -561,7 +572,11 @@ class   tstringselect : public tdialogbox {
 extern int getid( char* title, int lval, int min, int max );
 
 
-
+/** displays a dialogbox which lets you chose one of a number of strings.
+    \param tittle the title of the dialog box
+    \param entires the list of strings
+    \returns the selected index or -1 if nothing was selected
+*/
 extern int chooseString ( const ASCString& title, const vector<ASCString>& entries );
 
 #endif

@@ -2,9 +2,13 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.108 2002-03-18 21:42:17 mbickel Exp $
+//     $Id: spfst.cpp,v 1.109 2002-03-19 20:38:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.108  2002/03/18 21:42:17  mbickel
+//      Some cleanup and documentation in the Mine class
+//      The number of mines is now displayed in the field information window
+//
 //     Revision 1.107  2002/03/03 22:19:33  mbickel
 //      Updated documentation
 //      Improved user interface
@@ -565,7 +569,7 @@ bool fieldvisiblenow( const pfield pe, int player )
 VisibilityStates fieldVisibility( const pfield pe, int player )
 {
   if ( pe && player >= 0 ) {
-      VisibilityStates c = (pe->visible >> ( player * 2)) & 3;
+      VisibilityStates c = VisibilityStates((pe->visible >> ( player * 2)) & 3);
       #ifdef karteneditor
          c = visible_all;
       #endif

@@ -62,7 +62,7 @@ void CGameOptions::setDefaults ( void )
    mapeditForceFullscreenMode = 0;
    runAI = 0;
    fastmove	=	1;
-   movespeed=20;
+   movespeed=15;
    endturnquestion=0;
    smallmapactive=1;
    units_gray_after_move=0;
@@ -97,7 +97,7 @@ void CGameOptions::setDefaults ( void )
 
    container.emptyeverything=1;
 
-   onlinehelptime=150;
+   onlinehelptime=100;
    smallguiiconopenaftermove=0;
    replayspeed=0;
    showUnitOwner = 0;

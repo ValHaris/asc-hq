@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.66 2002-03-02 23:04:01 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.67 2002-03-19 20:38:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.66  2002/03/02 23:04:01  mbickel
+//      Some cleanup of source code
+//      Improved Paragui Integration
+//      Updated documentation
+//      Improved Sound System
+//
 //     Revision 1.65  2002/01/19 22:39:19  mbickel
 //      Added music playing functions to ASC
 //
@@ -651,7 +657,7 @@ void         tdialogbox::changecoordinates(void)
      /* runerror(211); */ 
 } 
 
-pbutton tdlgengine :: getbutton ( int id )
+tdlgengine::pbutton tdlgengine :: getbutton ( int id )
 {
    pbutton pb = firstbutton;
    while ( pb &&  (pb->id != id)) 
@@ -1926,6 +1932,20 @@ void         tdialogbox::rahmen3(char *       txt,
 } 
 
 
+typedef char* tstringa[30];
+typedef tstringa* pstringa;
+
+
+class tdisplaymessage : public tdialogbox {
+                        char status;
+                        int  mode;
+                    public:
+                        void init ( tstringa a, int md, int linenum, char* buttonText = NULL );
+                        virtual void buttonpressed ( int id );
+                        virtual void run ( void );
+                   };
+
+extern tdisplaymessage* messagebox;
 
 
 void tdisplaymessage::init ( tstringa a, int md, int linenum, char* buttonText )
@@ -3453,7 +3473,7 @@ void         thelpsystem::done(void)
             
 
 
-void         help(word         id)
+void  help( int id)
 { 
   thelpsystem  hs; 
 
@@ -3464,7 +3484,7 @@ void         help(word         id)
 } 
 
 
-void         viewtext2 ( word         id)
+void  viewtext2 ( int id)
 { 
    thelpsystem  hs; 
 
@@ -3587,29 +3607,6 @@ int displaymessage2( const char* formatstring, ... )
 
 
 
-
-
-
-
-
-
-
-
-void  loadtexture ( void )
-{
-   if ( exist ( "texture.pcx" )) {
-      npush ( *agmp );
-   
-      agmp-> windowstatus = 100;
-      agmp-> scanlinelength = hgmp-> scanlinelength;
-      agmp-> linearaddress = (int) new char [ hgmp-> scanlinelength * (hgmp-> resolutiony + 20) ];
-      dialogtexture = (void*) agmp-> linearaddress;
-      if ( dialogtexture ) 
-         loadpcxxy( "texture.pcx", false, 0, 0 );
-
-      npop ( *agmp );
-   }
-}
 
 
 

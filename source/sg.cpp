@@ -1927,8 +1927,6 @@ int gamethread ( void* data )
 
    addmouseproc ( &mousescrollproc );
 
-   loadtexture();
-
    startMusic();
 
    onlinehelp = new tsgonlinemousehelp;

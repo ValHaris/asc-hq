@@ -3,9 +3,14 @@
 */
 
 
-//     $Id: ai.h,v 1.11 2002-03-03 14:13:49 mbickel Exp $
+//     $Id: ai.h,v 1.12 2002-03-19 20:38:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2002/03/03 14:13:49  mbickel
+//      Some documentation updates
+//      Soundsystem update
+//      AI bug fixed
+//
 //     Revision 1.10  2001/11/29 17:34:18  mbickel
 //      AI can be used as benchmark
 //      Improved AI unit job determination mechanism
@@ -90,7 +95,7 @@
            bool benchMark;
 
            bool _isRunning;
-           int _vision;
+           VisibilityStates _vision;
            int unitCounter;
            int player;
 
@@ -511,7 +516,7 @@
                 play. This function returns the minimum visibility state of a field.
                 \sa tfield::visible , VisibilityStates
            */
-           int getVision ( void );
+           VisibilityStates getVision ( void );
 
            void read ( tnstream& stream );
            void write ( tnstream& stream ) const ;
