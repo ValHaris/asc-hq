@@ -2,9 +2,15 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.65 2001-10-02 14:06:28 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.66 2001-10-08 14:12:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.65  2001/10/02 14:06:28  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.64  2001/09/13 17:43:12  mbickel
 //      Many, many bug fixes
 //
@@ -422,6 +428,11 @@ void tmousebuttonbox::additem(int code)
 {  int txtwidth;
 
    if (itemcount < maxslots ) {
+
+      // two times the same item will be discarded; usually happens with separators only
+      if ( itemcount > 0 && item[itemcount-1] == code )
+         return;
+
       item[itemcount] = code;
       txtwidth = gettextwdth((char * ) execactionnames[code], activefontsettings.font);
       if (txtwidth > boxxsize) boxxsize = txtwidth;
@@ -488,10 +499,12 @@ void tmousebuttonbox::run(void)
    mousevisible(true);
    while (mouseparams.taste == mousestat) {
       checkfields();
+      releasetimeslice();
    } /* endwhile */
    if ( (actpos == -1) && (holdbutton == false ) ) {
       while ( (mouseparams.taste == 0) && (ch != ct_esc) ) {
          checkfields();
+         releasetimeslice();
       } /* endwhile */
    }
 }
@@ -522,31 +535,39 @@ int rightmousebox(void)
    pf = getactfield();
    if (pf != NULL) {
 
-      if ( pf->vehicle != NULL) tmb.additem(act_changeunitvals);
-      if ( (pf->vehicle != NULL) && (pf->vehicle->typ->loadcapacity > 0) ) tmb.additem(act_changecargo);
-      if ( (pf->building != NULL) && (pf->building->typ->loadcapacity > 0 ) ) tmb.additem(act_changecargo);
-      if ( (pf->building != NULL) && (pf->building->typ->special & cgvehicleproductionb) ) tmb.additem(act_changeproduction);
-      if ( !pf->mines.empty() ) tmb.additem(act_changeminestrength);
+      if ( pf->vehicle ) {
+         tmb.additem(act_changeunitvals);
+         if ( pf->vehicle->typ->loadcapacity > 0 )
+            tmb.additem(act_changecargo);
+         tmb.additem(act_deleteunit);
+      }
+      tmb.additem(act_seperator);
+      if ( pf->building ) {
+         tmb.additem(act_changeunitvals);
+         if ( pf->building->typ->loadcapacity > 0  )
+            tmb.additem(act_changecargo);
+         if ( pf->building->typ->special & cgvehicleproductionb )
+            tmb.additem(act_changeproduction);
+         tmb.additem(act_deletebuilding);
+         tmb.additem(act_deleteunit);
+      }
+      tmb.additem(act_seperator);
+      if ( !pf->mines.empty() ) {
+         tmb.additem(act_changeminestrength);
+         tmb.additem(act_deletemine);
+      }
+      tmb.additem(act_seperator);
+
       tmb.additem(act_changeresources);
 
       tmb.additem(act_seperator);
 
-      tmb.additem(act_changeterraindir);
-      if (pf->vehicle != NULL) tmb.additem(act_changeunitdir);
-      tmb.additem(act_changeglobaldir);
-
-      tmb.additem(act_seperator);
-
-      if (pf->vehicle != NULL) tmb.additem(act_deleteunit);
-      if (pf->building != NULL) tmb.additem(act_deletebuilding);
-      if ( !pf->objects.empty() ) tmb.additem(act_deleteobject);
-      if ( !pf->mines.empty() ) tmb.additem(act_deletemine);
-
-      tmb.additem(act_seperator);
-
-      if (pf->vehicle != NULL) tmb.additem(act_unitinfo);
+      if ( !pf->objects.empty() ) {
+         tmb.additem( act_deletetopmostobject );
+         tmb.additem( act_deleteobject );
+         tmb.additem( act_deleteallobjects );
+      }
    }
-   tmb.additem(act_help);
 
    tmb.run();
    tmb.done();

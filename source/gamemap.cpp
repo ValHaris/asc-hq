@@ -1422,14 +1422,21 @@ void tfield :: removeobject( pobjecttype obj )
         return;
    #endif
 
-   for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); )
-      if ( o->typ == obj )
-         o = objects.erase( o );
-      else
-         o++;
+   if ( !obj ) {
+      if ( objects.size() ) {
+         obj = objects.rbegin()->typ;
+         objects.pop_back();
+      }
+   } else
+      for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); )
+         if ( o->typ == obj )
+            o = objects.erase( o );
+         else
+            o++;
 
    setparams();
-   calculateobject( getx(), gety(), true, obj );
+   if ( obj )
+      calculateobject( getx(), gety(), true, obj );
 } 
 
 void tfield :: deleteeverything ( void )

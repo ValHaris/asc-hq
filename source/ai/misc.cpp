@@ -214,8 +214,10 @@ bool AI::RefuelConstraint::returnFromPositionPossible ( const MapCoordinate3D& p
       theoreticalFuel = veh->tank.fuel;
 
    findPath();
-   if ( !positionsCalculated )
+   if ( !positionsCalculated ) {
       getNearestRefuellingPosition ( true, true, false );
+      positionsCalculated = true;
+   }
 
    int dist  = ast->fieldVisited(pos)->gval;
    int dist2;

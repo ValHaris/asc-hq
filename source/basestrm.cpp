@@ -2,9 +2,12 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.64 2001-09-20 15:36:09 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.65 2001-10-08 14:12:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.64  2001/09/20 15:36:09  mbickel
+//      New object displaying mode
+//
 //     Revision 1.63  2001/09/13 17:43:11  mbickel
 //      Many, many bug fixes
 //
@@ -2121,6 +2124,7 @@ tfindfile :: tfindfile ( ASCString _name )
 {
    found = 0;
    act = 0;
+   int dirshift = 0;
    if ( _name.empty() )
       return;
 
@@ -2140,6 +2144,7 @@ tfindfile :: tfindfile ( ASCString _name )
       name2[i+1] = 0;
       directory[0] = name2;
       dirNum = 1;
+      dirshift = 1;
 
       strcpy ( wildcard, &name[i+1] );
 
@@ -2232,7 +2237,14 @@ string tfindfile :: getnextname ( int* loc, bool* inContainer, ASCString* locati
       if ( location )
          *location = this->location[act];
 
-      return names[act++];
+      /*
+      if ( directoryLevel[act] >= 0 && this->location[act] != ascDirectory[directoryLevel[act]] ) {
+         ASCString s = this->location[act];
+         appendbackslash ( s );
+         s += names[act++];
+         return s;
+      } else */
+         return names[act++];
    } else {
       if ( loc )
          *loc = -1;
@@ -2598,6 +2610,13 @@ void appendbackslash ( char* string )
    if ( strlen ( string ) && string[strlen ( string ) -1] != pathdelimitter )
       strcat ( string, pathdelimitterstring );
 }
+
+void appendbackslash ( ASCString& string )
+{
+   if ( !string.empty()  && string[ string.length() -1] != pathdelimitter )
+      string += pathdelimitterstring ;
+}
+
 
 int createDirectory ( const char* name )
 {

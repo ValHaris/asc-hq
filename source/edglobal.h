@@ -1,6 +1,12 @@
-//     $Id: edglobal.h,v 1.9 2001-10-02 14:06:28 mbickel Exp $
+//     $Id: edglobal.h,v 1.10 2001-10-08 14:12:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2001/10/02 14:06:28  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.8  2001/08/02 15:33:01  mbickel
 //      Completed text based file formats
 //
@@ -68,14 +74,13 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 71;
+const int execactionscount = 74;
 
 extern const char*  execactionnames[execactionscount];
 
 enum tuseractions {
      act_end,
      act_help,
-     
      act_seteditmode,
      act_selbodentyp,
      act_selbodentypAll,
@@ -85,7 +90,6 @@ enum tuseractions {
      act_selobject,
      act_selmine,
      act_selweather,
-     
      act_setupalliances,
      act_toggleresourcemode,
      act_changeunitdir,
@@ -126,6 +130,8 @@ enum tuseractions {
      act_deleteunit,
      act_deletebuilding,
      act_deleteobject,
+     act_deletetopmostobject,
+     act_deleteallobjects,
      act_deletemine,
      act_aboutbox,
      act_savemapas,

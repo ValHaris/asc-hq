@@ -4,9 +4,13 @@
 */
 
 
-//     $Id: basestrm.h,v 1.46 2001-08-27 21:03:55 mbickel Exp $
+//     $Id: basestrm.h,v 1.47 2001-10-08 14:12:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2001/08/27 21:03:55  mbickel
+//      Terraintype graphics can now be mounted from any number of PNG files
+//      Several AI improvements
+//
 //     Revision 1.45  2001/07/28 11:19:10  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -715,6 +719,7 @@ extern int filesize( char *name);
 
 extern void addSearchPath ( const char* path );
 extern void appendbackslash ( char* string );
+extern void appendbackslash ( ASCString& string );
 extern char* constructFileName( char* buf, int directoryLevel, const char* path, const char* filename );
 extern int directoryExist ( const char* path );
 extern char* extractPath ( char* buf, const char* filename );

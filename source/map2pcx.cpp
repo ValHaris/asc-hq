@@ -37,6 +37,7 @@
 #include "strtmesg.h"
 #include "itemrepository.h"
 #include "memorycheck.cpp"
+#include "graphicset.h"
 
 pprogressbar actprogressbar = NULL;
 
@@ -137,6 +138,117 @@ pfont load_font(char* name)
 string outputDir;
 
 
+void process_BI_map ( const ASCString& filename )
+{
+   string fn;
+   if ( filename.find ( "mis/" ) == filename.npos )
+      fn = "mis/"+filename;
+   else
+      fn = filename;
+
+   tfindfile ff ( fn );
+   string s = ff.getnextname();
+   while ( !s.empty () ) {
+      string errormsg;
+      importbattleislemap ( outputDir.c_str(), s.c_str(), getterraintype_forpos(0)->weather[0], &errormsg, true );
+      if ( !errormsg.empty() && 0 )
+         fprintf(stderr, "map %s : %s \n", s.c_str(), errormsg.c_str() );
+      string fn = outputDir+"images/pcx/"+s;
+      fn.replace ( fn.find (".dat"), 4, ".pcx");
+
+      int width, height;
+
+      string t = outputDir+"mis/"+s;
+      int maptime = get_filetime ( t.c_str());
+      int pcxtime = get_filetime ( fn.c_str() );
+      if ( maptime > pcxtime || pcxtime < 0 )
+         writemaptopcx ( false, fn, &width, &height );
+      else {
+         tdisplaywholemap wm ( fn );
+         wm.init ( actmap->xsize, actmap->ysize );
+         width = wm.getWidth();
+         height = wm.getHeight();
+      }
+
+      int playernum = 0;
+      int ainum = 0;
+      for ( int i = 0; i < 8; i++ )
+        if ( actmap->player[i].exist() ) {
+           if ( actmap->player[i].stat == 0 )
+              playernum++;
+           if ( actmap->player[i].stat == 1 )
+              ainum++;
+         }
+
+      printf("%sµ%sµ%dµ%dµ%dµ%dµ%dµ%d\n", s.c_str(), actmap->title, actmap->xsize*2, actmap->ysize/2, width, height, playernum, ainum );
+
+      s = ff.getnextname();
+
+      delete actmap;
+      actmap = NULL;
+   }
+}
+
+
+void process_ASC_map ( const ASCString& filename )
+{
+   string fn;
+   if ( filename.find ( "mis/" ) == filename.npos )
+      fn = "mis/"+filename;
+   else
+      fn = filename;
+
+   tfindfile ff ( fn );
+   string s = ff.getnextname();
+   while ( !s.empty () ) {
+      try {
+         tmaploaders gl;
+         gl.loadmap ( s.c_str() );
+      }
+      catch ( ASCexception ) {
+         s = ff.getnextname();
+         continue;
+      }
+
+      activateGraphicSet ( actmap->graphicset );
+      string fn = outputDir+"images/pcx/"+s;
+      fn.replace ( fn.find (".map"), 4, ".pcx");
+
+      int width, height;
+
+      string t = outputDir+"mis/"+s;
+      int maptime = get_filetime ( t.c_str());
+      int pcxtime = get_filetime ( fn.c_str() );
+      if ( maptime > pcxtime || pcxtime < 0 )
+         writemaptopcx ( false, fn, &width, &height );
+      else {
+         tdisplaywholemap wm ( fn );
+         wm.init ( actmap->xsize, actmap->ysize );
+         width = wm.getWidth();
+         height = wm.getHeight();
+      }
+
+      int playernum = 0;
+      int ainum = 0;
+      for ( int i = 0; i < 8; i++ )
+        if ( actmap->player[i].exist() ) {
+           if ( actmap->player[i].stat == 0 )
+              playernum++;
+           if ( actmap->player[i].stat == 1 )
+              ainum++;
+         }
+
+      printf("%sµ%sµ%dµ%dµ%dµ%dµ%dµ%d\n", s.c_str(), actmap->title, actmap->xsize, actmap->ysize, width, height, playernum, ainum );
+
+      s = ff.getnextname();
+
+      delete actmap;
+      actmap = NULL;
+   }
+}
+
+
+
 int mapeditorMainThread ( const void* _mapname )
 {
    tvirtualdisplay buf ( 800, 600 );
@@ -147,57 +259,11 @@ int mapeditorMainThread ( const void* _mapname )
    try {
       loaddata();
 
-      for ( FilesToLoad::iterator i = filesToLoad.begin(); i != filesToLoad.end(); i++ ) {
-          string fn;
-          if ( i->find ( "mis/" ) == i->npos )
-             fn = "mis/"+*i;
+      for ( FilesToLoad::iterator i = filesToLoad.begin(); i != filesToLoad.end(); i++ )
+          if ( patimat ( "*.dat", i->c_str() ))
+             process_BI_map( *i );
           else
-             fn = *i;
-
-          tfindfile ff ( fn );
-          string s = ff.getnextname();
-          while ( !s.empty () ) {
-             string errormsg;
-             importbattleislemap ( outputDir.c_str(), s.c_str(), getterraintype_forpos(0)->weather[0], &errormsg, true );
-             if ( !errormsg.empty() && 0 )
-                fprintf(stderr, "map %s : %s \n", s.c_str(), errormsg.c_str() );
-             string fn = outputDir+"images/pcx/"+s;
-             fn.replace ( fn.find (".dat"), 4, ".pcx");
-
-             int width, height;
-
-             string t = outputDir+"mis/"+s;
-             int maptime = get_filetime ( t.c_str());
-             int pcxtime = get_filetime ( fn.c_str() );
-             if ( maptime > pcxtime || pcxtime < 0 )
-                writemaptopcx ( false, fn, &width, &height );
-             else {
-                tdisplaywholemap wm ( fn );
-                wm.init ( actmap->xsize, actmap->ysize );
-                width = wm.getWidth();
-                height = wm.getHeight();
-             }
-
-             int playernum = 0;
-             int ainum = 0;
-             for ( int i = 0; i < 8; i++ )
-               if ( actmap->player[i].exist() ) {
-                  if ( actmap->player[i].stat == 0 )
-                     playernum++;
-                  if ( actmap->player[i].stat == 1 )
-                     ainum++;
-                }
-
-             printf("%sµ%sµ%dµ%dµ%dµ%dµ%dµ%d\n", s.c_str(), actmap->title, actmap->xsize*2, actmap->ysize/2, width, height, playernum, ainum );
-
-             s = ff.getnextname();
-
-             delete actmap;
-             actmap = NULL;
-          }
-
-
-      }
+             process_ASC_map ( *i );
 
    } /* end try */
    catch ( tfileerror err ) {

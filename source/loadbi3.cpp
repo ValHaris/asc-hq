@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.56 2001-10-06 11:30:42 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.57 2001-10-08 14:12:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2001/10/06 11:30:42  mbickel
+//      Fixed bug in gametime calculation
+//
 //     Revision 1.55  2001/10/02 14:06:28  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -381,7 +384,7 @@ void Bi3MapTranslationTable :: runTextIO ( PropertyContainer& pc )
       Objecttranslataion ot;
       ot.BIpic = _objecttranslation[i*5];
       for ( int j = 0; j < 4; j++ )
-         ot.objects[i] = _objecttranslation[i*5 + 1 + j];
+         ot.objects[j] = _objecttranslation[i*5 + 1 + j];
 
       objecttranslate.push_back ( ot );
    }

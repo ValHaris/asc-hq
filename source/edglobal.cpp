@@ -2,9 +2,15 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.38 2001-10-02 14:06:28 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.39 2001-10-08 14:12:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2001/10/02 14:06:28  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.37  2001/09/24 12:05:18  mbickel
 //      Fixed: airplanes landing in wrong building for repairs
 //
@@ -221,6 +227,7 @@ mc_check mc;
         "Help",
         "Goto EditMode",
         "Select terrain",
+        "Select terrainALL",
         "Select unit",
         "Select color",
         "Select building",
@@ -255,7 +262,7 @@ mc_check mc;
         "View/Change mapvalues",
         "View/Change production",
         "Save map",
-        "View/Change UnitValues",
+        "View/Change item Values",
         "Mirror CX-Pos",
         "Mirror CY-Pos",
         "Place terrain",
@@ -266,7 +273,9 @@ mc_check mc;
         "Place active thing",
         "Delete Unit",
         "Delete building",
-        "Delete special object",
+        "Delete selected object",
+        "Delete topmost object",
+        "Delete all objects",
         "Delete mine",
         "AboutBox",
         "Save map as ...",
@@ -275,6 +284,7 @@ mc_check mc;
         "Import BI-Map",
         "SEPERATOR",
         "BI-Resource Mode",
+        "Resize map",
         "Insert BI map",
         "Set zoom level",
         "Move Building",
@@ -826,9 +836,28 @@ void execaction(int code)
         break;
      case act_deleteobject : {
                          pf = getactfield();
-                         if (pf != NULL) {
+                         if ( pf ) {
                             mapsaved = false;
                             pf->removeobject( actobject );
+                            displaymap();
+                         }
+                      }
+        break;
+     case act_deletetopmostobject : {
+                         pf = getactfield();
+                         if ( pf ) {
+                            mapsaved = false;
+                            pf->removeobject( NULL );
+                            displaymap();
+                         }
+                      }
+        break;
+     case act_deleteallobjects : {
+                         pf = getactfield();
+                         if ( pf ) {
+                            mapsaved = false;
+                            pf->objects.clear( );
+                            calculateallobjects();
                             displaymap();
                          }
                       }
