@@ -15,9 +15,14 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.21 2000-10-16 14:34:12 mbickel Exp $
+//     $Id: events.cpp,v 1.22 2000-10-17 10:46:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/10/16 14:34:12  mbickel
+//      Win32 port is now running fine.
+//      Removed MSVC project files and put them into a zip file in
+//        asc/source/win32/msvc/
+//
 //     Revision 1.20  2000/10/14 13:07:04  mbickel
 //      Moved DOS version into own subdirectories
 //      Win32 version with Watcom compiles and links ! But doesn't run yet...
@@ -246,7 +251,9 @@ int processEvents ( )
 int eventhandler ( void* nothing )
 {
    while ( !closethread ) {
-       // if ( !processEvents() )
+       #ifndef _WIN32_
+       if ( !processEvents() )
+       #endif
           SDL_Delay(10);
        ticker = SDL_GetTicks() / 10;
    }
@@ -286,7 +293,9 @@ int closeeventthread ( void )
 
 int  releasetimeslice( void )
 {
+    #ifdef _WIN32_
     if ( !processEvents())
+    #endif
        SDL_Delay(10);
     return 0;
 }

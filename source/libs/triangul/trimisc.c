@@ -1,13 +1,10 @@
 #include "triangul.h"
 #include <math.h>
+#include "../../global.h"
 
-/*
-#ifdef __STDC__
-extern double log2(double);
-#else
+#ifndef HAVE_LOG2
 extern double log2();
 #endif
-*/
 
 static int choose_idx;
 static int permute[SEGSIZE];
@@ -146,10 +143,8 @@ int math_N(n, h)
 }
 
 
-/*
-double log2(
-	double v
-)
+#ifndef HAVE_LOG2
+double log2( double v )
 {
 	static double tmp_log2 = -1.0;
 
@@ -159,4 +154,4 @@ double log2(
 
 	return(log(v) * tmp_log2);
 }
-*/
+#endif

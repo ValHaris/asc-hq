@@ -51,6 +51,7 @@ dnl Checks for library functions.
 AC_CHECK_FUNCS(select)
 AC_CHECK_FUNCS(itoa)
 AC_CHECK_FUNCS(stricmp)
+AC_CHECK_FUNCS(log2)
 
 AC_OUTPUT(Makefile source/Makefile source/mapedit/Makefile source/docs/Makefile source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile source/tools/Makefile source/tools/linux/Makefile source/libs/Makefile )
 
