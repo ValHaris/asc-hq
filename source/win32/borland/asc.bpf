@@ -62,7 +62,6 @@ USEUNIT("..\..\networkdata.cpp");
 USELIB("..\..\AI\ai.lib");
 USEUNIT("..\..\LIBS\getopt\getopt1.c");
 USEUNIT("..\..\LIBS\getopt\getopt.c");
-USELIB("..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB");
 USEUNIT("..\..\objecttype.cpp");
 USEUNIT("..\..\terraintype.cpp");
 USEUNIT("..\..\textfileparser.cpp");
@@ -72,6 +71,8 @@ USELIB("..\..\..\..\SDL_image\bin\SDL_image.lib");
 USELIB("..\..\libs\sdlmm\SDLmm.lib");
 USELIB("..\..\libs\jpeg-6b\libjpeg.lib");
 USEUNIT("..\..\stringtokenizer.cpp");
+USEUNIT("..\..\music.cpp");
+USELIB("..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 

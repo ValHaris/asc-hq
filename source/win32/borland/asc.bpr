@@ -20,15 +20,15 @@
       obj\ascstring.obj obj\resourcenet.obj obj\mapdisplay.obj obj\vehicle.obj 
       obj\buildings.obj obj\networkdata.obj obj\getopt1.obj obj\getopt.obj 
       obj\objecttype.obj obj\terraintype.obj obj\textfileparser.obj 
-      obj\textfiletags.obj obj\itemrepository.obj obj\stringtokenizer.obj"/>
+      obj\textfiletags.obj obj\itemrepository.obj obj\stringtokenizer.obj 
+      obj\music.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value="..\..\libs\bzlib\win\bzlib.lib ..\..\libs\triangul\win32\triangulation.lib 
       ..\..\..\..\sdl\bin\sdl.lib ..\..\AI\ai.lib 
-      ..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB 
       ..\..\..\..\SDL_image\bin\SDL_image.lib ..\..\libs\sdlmm\SDLmm.lib 
-      ..\..\libs\jpeg-6b\libjpeg.lib"/>
+      ..\..\libs\jpeg-6b\libjpeg.lib ..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB"/>
     <LIBRARIES value="Vcl50.lib"/>
     <SPARELIBS value="Vcl50.lib"/>
     <PACKAGES value="VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi"/>

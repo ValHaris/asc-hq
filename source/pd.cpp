@@ -2,9 +2,12 @@
     \brief The implementation of the Pulldown Menu
 */
 
-//     $Id: pd.cpp,v 1.19 2002-01-07 11:40:40 mbickel Exp $
+//     $Id: pd.cpp,v 1.20 2002-01-19 22:39:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2002/01/07 11:40:40  mbickel
+//      Fixed some syntax errors
+//
 //     Revision 1.18  2001/12/19 17:16:29  mbickel
 //      Some include file cleanups
 //
@@ -362,6 +365,13 @@ void tpulldown::done(void)
    closepdfield();
    activefontsettings = savefont; 
 }
+
+void tpulldown::redraw( )
+{
+   barstatus = false;
+   baron();
+}
+
 
 void tpulldown::baron(void)
 { 

@@ -108,6 +108,7 @@
 #include "graphicset.h"
 #include "loadbi3.h"
 #include "itemrepository.h"
+#include "music.h"
 
 
 
@@ -612,7 +613,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
-                    ua_aibench, ua_networksupervisor };
+                    ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_pauseResumeMusic };
 
 
 class tsgpulldown : public tpulldown {
@@ -628,8 +629,9 @@ void         tsgpulldown :: init ( void )
    addbutton ( "seperator", -1);
    addbutton ( "~O~ptions", ua_gamepreferences );
    addbutton ( "~M~ouse options", ua_mousepreferences );
+   addbutton ( "Select Music Play ~L~ist ", ua_selectPlayList );
+   addbutton ( "~P~ause / Resume Music", ua_pauseResumeMusic );
    addbutton ( "seperator", -1);
-   addbutton ( "~M~ain MenuõF2", ua_mainmenu );
    addbutton ( "E~x~itõctrl-x", ua_exitgame );
 
 
@@ -715,6 +717,8 @@ void         MainMenuPullDown :: init ( void )
   addfield ( "Glo~b~al" );
    addbutton ( "~O~ptions", ua_gamepreferences );
    addbutton ( "~M~ouse options", ua_mousepreferences );
+   addbutton ( "Select Music Play ~L~ist ", ua_selectPlayList );
+   addbutton ( "~P~ause / Resume Music", ua_pauseResumeMusic );
    addbutton ( "seperator", -1);
    addbutton ( "E~x~itõctrl-x", ua_exitgame );
 
@@ -1622,7 +1626,13 @@ void execuseraction ( tuseractions action )
                        break;
         case ua_networksupervisor: networksupervisor();
                                    displaymap();
-        break;
+                       break;
+
+        case ua_selectPlayList: selectPlayList();
+                       break;
+                       
+        case ua_pauseResumeMusic: SoundSystem::getInstance()->resumePauseMusic();
+                       break;
 
     }
 
@@ -1936,6 +1946,11 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
    loadalltextfiles();
 
    if ( actprogressbar ) actprogressbar->startgroup();
+
+   loadAllMusicPlayLists();
+
+   if ( actprogressbar ) actprogressbar->startgroup();
+
    loadguipictures();
    loadallobjecttypes();
 
@@ -1958,6 +1973,7 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
    loadallterraintypes();
 
    if ( actprogressbar ) actprogressbar->startgroup();
+
 
    freetextdata();
 
@@ -2019,7 +2035,13 @@ void runmainmenu ( void )
          ch = r_key();
 
          switch (ch) {
+            case ct_f3:  execuseraction ( ua_continuenetworkgame );
+               break;
             case 'R':   execuseraction ( ua_repainthard );
+               break;
+            case ct_stp + ct_l: execuseraction ( ua_loadgame );
+               break;
+            case ct_x + ct_stp:   execuseraction ( ua_exitgame );
                break;
          };
        }
@@ -2031,12 +2053,12 @@ void runmainmenu ( void )
          tuseractions ua = (tuseractions) pd.action2execute;
          pd.action2execute = -1;
          execuseraction ( ua );
+         pd.redraw();
       }
 
        releasetimeslice();
-    } while ( !actmap  ); /* enddo */
+    } while ( !actmap && !abortgame ); /* enddo */
 
-    // backgroundpict.paint();
 }
 
 
@@ -2083,6 +2105,8 @@ int gamethread ( void* data )
       addmouseproc ( &mousescrollproc );
 
       loadtexture();
+
+      startMusic();
 
       onlinehelp = new tsgonlinemousehelp;
       onlinehelpwind = new tsgonlinemousehelpwind;
@@ -2227,13 +2251,15 @@ int main(int argc, char *argv[] )
    if ( cl->y() != 600 )
       yr = cl->y();
 
+   SoundSystem soundSystem ( CGameOptions::Instance()->sound_mute, cl->q() || CGameOptions::Instance()->sound_off );
+
    modenum8 = initgraphics ( xr, yr, 8, icon );
-   
+
    /* Clean up on exit */
    atexit(SDL_Quit);
 
 
-   SoundSystem soundSystem ( CGameOptions::Instance()->sound_mute, cl->q() || CGameOptions::Instance()->sound_off );
+
 
    if ( modenum8 > 0 ) {
       #ifdef _DOS_

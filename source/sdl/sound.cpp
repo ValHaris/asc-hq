@@ -31,6 +31,9 @@ SoundSystem* SoundSystem::instance = NULL;
 
 SoundSystem  :: SoundSystem ( bool mute, bool _off )
 {
+   musicState = uninitialized;
+   currentPlaylist = NULL;
+   musicBuf = NULL;
    this->mute = mute;
    this->off = _off;
 
@@ -69,6 +72,7 @@ SoundSystem  :: SoundSystem ( bool mute, bool _off )
       displayLogMessage ( 5, "Opened audio at %d Hz %d bit %s\n", audio_rate,
 			(audio_format&0xFF),
 			(audio_channels > 1) ? "stereo" : "mono");
+      Mix_HookMusicFinished ( trackFinished );
    }
 }
 
@@ -90,13 +94,77 @@ void SoundSystem::setMute ( bool mute )
 }
 
 
+void SoundSystem :: trackFinished( void )
+{
+   getInstance()->nextTrack();
+}
+
+void SoundSystem :: nextTrack( void )
+{
+  if ( musicBuf ) {
+     Mix_FreeMusic( musicBuf );
+     musicBuf = NULL;
+  }
+
+  if ( currentPlaylist ) {
+     ASCString filename = currentPlaylist->getNextTrack();
+     if ( !filename.empty() ) {
+        musicState = playing;
+        musicBuf = Mix_LoadMUS( filename.c_str() );
+
+        Mix_PlayMusic ( musicBuf, 1 );
+     }
+  }
+}
+
+void SoundSystem :: playMusic ( MusicPlayList* playlist )
+{
+  currentPlaylist = playlist;
+
+  nextTrack();
+}
+
+
+void SoundSystem :: pauseMusic()
+{
+   if ( musicState == playing ) {
+      Mix_PauseMusic ();
+      musicState = paused;
+   }
+}
+
+void SoundSystem :: resumeMusic()
+{
+   if ( musicState == paused ) {
+      Mix_ResumeMusic ();
+      musicState = playing;
+   }
+}
+
+void SoundSystem :: resumePauseMusic()
+{
+   if ( musicState == playing )
+      pauseMusic();
+   else
+      resumeMusic();
+}
+
+
 SoundSystem::~SoundSystem()
 {
+   Mix_HaltMusic();
+
+   if ( musicBuf ) {
+      Mix_FreeMusic( musicBuf );
+      musicBuf = NULL;
+   }
+
    if( mix_initialized )
       Mix_CloseAudio();
 
    if( sdl_initialized )
       SDL_CloseAudio();
+
 
    instance = NULL;
 }
@@ -185,6 +253,7 @@ void Sound :: fadeOut ( int ms )
       if ( SoundSystem::instance->channel[ i ] == this  && Mix_Playing(i)  )
           Mix_FadeOutChannel( i, ms );
 }
+
 
 
 Sound::~Sound(void)

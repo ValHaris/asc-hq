@@ -7,6 +7,7 @@
 
 #include <map>
 
+#include "global.h"
 #include "sdl/sound.h"
 #include "ascstring.h"
 

@@ -11,8 +11,9 @@
 #ifndef sound_h_included
 #define sound_h_included
 
-#include sdlmixerheader
+#include <SDL_mixer.h>
 #include "../ascstring.h"
+#include "../music.h"
 
 
 class Sound {
@@ -52,9 +53,17 @@ class SoundSystem {
       bool mix_initialized;
 
       static SoundSystem* instance;
+      Mix_Music *musicBuf;
+      MusicPlayList* currentPlaylist;
 
       Sound* channel[MIX_CHANNELS];
 
+      //! callback for SDL_mixer
+      static void trackFinished( void );
+
+      void nextTrack ( void );
+
+      enum MusicState { uninitialized, playing, paused } musicState;
    protected:
 
       //! loads a sound from the wave file called name to an Mix_buffer.
@@ -76,6 +85,19 @@ class SoundSystem {
 
       //! is the soundsystem completely disabled ?
       bool isOff ( ) { return off; };
+
+      //! plays the pieces of music which are referenced in the playlist
+      void playMusic ( MusicPlayList* playlist );
+
+      //! Pauses the music that is currently being played
+      void pauseMusic();
+
+      //! resumes the music
+      void resumeMusic();
+
+      //! resumes or resumes the music, depending whether is music is paused or playing
+      void resumePauseMusic();
+
 
       static SoundSystem* getInstance() { return instance; };
 

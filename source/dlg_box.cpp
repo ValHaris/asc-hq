@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.64 2001-12-19 17:16:28 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.65 2002-01-19 22:39:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.64  2001/12/19 17:16:28  mbickel
+//      Some include file cleanups
+//
 //     Revision 1.63  2001/12/14 10:20:05  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -3257,7 +3260,10 @@ ASCString  readtextmessage( int id )
 
   int wldcrdnum = 3;
 
-  ASCString tmpstr = actmap->preferredFileNames.mapname[0];
+  ASCString tmpstr;
+  if ( actmap )
+     tmpstr = actmap->preferredFileNames.mapname[0];
+
   while ( tmpstr.find ( ".map") != string::npos )
      tmpstr.replace ( tmpstr.find ( ".map"), 4, ".msg" );
 

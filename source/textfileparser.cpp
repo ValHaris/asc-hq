@@ -164,6 +164,13 @@ PropertyContainer::StringProperty& PropertyContainer::addString ( const ASCStrin
    return *ip;
 }
 
+PropertyContainer::StringArrayProperty&  PropertyContainer::addStringArray ( const ASCString& name, vector<ASCString>& property )
+{
+   StringArrayProperty* ip = new StringArrayProperty ( property );
+   setup ( ip, name );
+   return *ip;
+}
+
 
 PropertyContainer::IntegerArrayProperty&  PropertyContainer::addIntegerArray ( const ASCString& name, vector<int>& property )
 {
@@ -369,6 +376,24 @@ void PropertyContainer::StringProperty::evaluate_rw ( )
          } else
             pos = ASCString::npos;
       } while ( pos != ASCString::npos );
+   }
+}
+
+void PropertyContainer::StringArrayProperty::evaluate_rw ( )
+{
+   if ( propertyContainer->isReading() ) {
+      property.clear();
+      StringTokenizer st ( entry->value, true );
+      ASCString s = st.getNextToken();
+      while ( !s.empty() ) {
+         property.push_back ( s.c_str() );
+         s = st.getNextToken();
+      }
+   } else {
+      for ( PropertyType::iterator i = property.begin(); i != property.end(); i++ ) {
+         valueToWrite += *i;
+         valueToWrite += " ";
+      }
    }
 }
 

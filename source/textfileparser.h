@@ -25,6 +25,8 @@
 
 #include <vector>
 #include "ascstring.h"
+#include "errors.h"
+#include "typen.h"
 
 
 class ParsingError : public ASCmsgException {
@@ -141,6 +143,14 @@ class PropertyContainer {
             public:
                StringProperty ( ASCString& property_ ) : property ( property_ ) {};
          };
+         class StringArrayProperty : public Property {
+              typedef vector<ASCString> PropertyType;
+              PropertyType& property;
+            protected:
+              void evaluate_rw ( );
+            public:
+               StringArrayProperty ( vector<ASCString>& property_ ) : property ( property_ ) {};
+         };
          class IntegerArrayProperty : public Property {
               typedef vector<int> PropertyType;
               PropertyType& property;
@@ -215,6 +225,7 @@ class PropertyContainer {
          virtual void closeBracket();
 
          StringProperty&        addString ( const ASCString& name, ASCString& property );
+         StringArrayProperty&   addStringArray ( const ASCString& name, vector<ASCString>& property );
          IntProperty&           addInteger ( const ASCString& name, int& property );
          IntegerArrayProperty&  addIntegerArray ( const ASCString& name, vector<int>& property );
          IntRangeArrayProperty& addIntRangeArray ( const ASCString& name, vector<IntRange>& property );

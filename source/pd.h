@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: pd.h,v 1.9 2002-01-07 11:40:40 mbickel Exp $
+//     $Id: pd.h,v 1.10 2002-01-19 22:39:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2002/01/07 11:40:40  mbickel
+//      Fixed some syntax errors
+//
 //     Revision 1.8  2001/07/30 17:43:13  mbickel
 //      Added Microsoft Visual Studio .net project files
 //      Fixed some warnings
@@ -108,6 +111,7 @@
          virtual void setvars(void);
          virtual void baron(void);
          virtual void baroff(void);
+         void redraw ();
          virtual void openpdfield(void);
          virtual void closepdfield(void);
          virtual void showbutton(void);
