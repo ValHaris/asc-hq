@@ -230,7 +230,8 @@ int main(int argc, char *argv[] )
                 "<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"%s\">\n"
                 "</HEAD>\n"
                 "\n"
-                "<BODY class=\"wg\">\n", cl.t().c_str() );
+                "<BODY class=\"wg\">\n"
+                "<table class=\"wgov\" align=\"center\">\n", cl.t().c_str() );
 
       for ( int unit = 0; unit < vehicletypenum; unit++ ) {
          pvehicletype  ft = getvehicletype_forpos ( unit );
@@ -311,11 +312,9 @@ int main(int argc, char *argv[] )
             fprintf ( overview, " </A></td></tr>\n" );
 
             // OVERVIEW RIGHT
-            fprintf ( overview1, "<table align=\"center\"  class=\"wg\" >\n"
-                      " <tr><td rowspan=\"2\" width=\"50\">" );
-            if ( exist ( fileName + ".gif" ))
-               fprintf ( overview1, "<img src=\"%s\" border=\"0\" alt=\"image of unit\">", (fileName + ".gif").c_str() );
-            fprintf ( overview1, "</td><td width=\"140\"><A HREF=\"%s.html\">%s</A></td></tr><tr><td><a href=\"%s.html\">%s</a></td></tr></table>\n", fileName.c_str(), ft->name.c_str(), fileName.c_str(), ft->description.c_str() );
+            fprintf ( overview1, " <tr><td rowspan=\"2\" class=\"wgov\">" );
+            fprintf ( overview1, "<img src=\"%s\" alt=\"image of unit\" width=\"%d\" height=\"%d\"> </td>", (fileName + ".gif").c_str(), cl.z(), cl.z() );
+            fprintf ( overview1, "<td class=\"wgov\" ><A HREF=\"%s.html\">%s</A></td></tr><tr><td class=\"wgov\"><a href=\"%s.html\">%s</a></td></tr>\n", fileName.c_str(), ft->name.c_str(), fileName.c_str(), ft->description.c_str() );
 
             // END OVERVIEW RIGHT
 
@@ -419,7 +418,7 @@ int main(int argc, char *argv[] )
 
             // Spaltenwerte Haken
             fprintf ( movePage, "<th>Reachable</th>" );
-            for ( i = 7; i >=0; i-- )
+            for ( i = 0; i < 8; i++ )
                if ( ft->height & ( 1 << i ))
                   fprintf ( movePage, " <TD><img src=\"../haken.gif\" alt=\"tick\"></TD>" );
                else
@@ -428,7 +427,7 @@ int main(int argc, char *argv[] )
             // Spaltenwerte pro Runde
             fprintf ( movePage, "<th>Movement</th>" );
 
-            for ( i = 7; i >=0; i-- )
+            for ( i = 0; i < 8 ; i++ )
                if ( ft->height & ( 1 << i ))
                   fprintf ( movePage, " <TD align=\"center\">%d</TD>", (ft->movement[i]/10) );
                else
@@ -1018,7 +1017,7 @@ int main(int argc, char *argv[] )
       // Dokument Übersicht Ende
 
       fprintf( overview , "</table></body></html>\n" );
-      fprintf ( overview1, "</body></html>\n" );
+      fprintf ( overview1, "</table></body></html>\n" );
 
       fclose ( overview );
       fclose ( overview1 );
@@ -1045,8 +1044,8 @@ int main(int argc, char *argv[] )
             fprintf(ff, "%s;asc.css;-;\n", (*i)->name.c_str() );
 
 
-            const int groupNum = 5;
-            const char* groupNames[groupNum] = { "ground units", "aircraft", "marine units", "turrets", "misc" };
+            const int groupNum = 6;
+            const char* groupNames[groupNum] = { "trooper", "ground units", "aircraft", "marine units", "turrets", "misc" };
 
             for ( int j = 0; j < groupNum; j++ ) {
                fprintf(ff, ".%s;asc.css;-;\n", groupNames[j] );
@@ -1057,36 +1056,38 @@ int main(int argc, char *argv[] )
                   if ( (*i)->isMember( ft->id )) {
                      int group;
                      switch ( ft->movemalustyp ) {
+                         case 7:  //   "trooper"
+                                 group = 0;
+                                 break;
                          case 1:  // "light tracked vehicle"
                          case 2:  // "medium tracked vehicle"
                          case 3:  // "heavy tracked vehicle",
                          case 4:  // "light wheeled vehicle",
                          case 5:  //  "medium wheeled vehicle",
                          case 6:  //  "heavy wheeled vehicle",
-                         case 7:  //   "trooper"
                          case 8:   // "rail vehicle",
-                                  group = 0;
+                                  group = 1;
                                   break;
                          case 9:   // "medium aircraft",
                          case 12:  // "light aircraft",
                          case 13:  // "heavy aircraft",
                          case 16:  //  "helicopter",
-                                  group = 1;
+                                  group = 2;
                                   break;
                          case 10:  // "medium ship",
                          case 14:  // "light ship",
                          case 15:  // "heavy ship",
-                                  group = 2;
+                                  group = 3;
                                   break;
 
                          case 11:  // "building / turret / object",
-                                  group = 3;
+                                  group = 4;
                                   break;
 
                          case 0:  // default",
                          case 17: // "hoovercraft"
                          default:
-                                  group = 4;
+                                  group = 5;
                                   break;
                      };
                      if ( group == j ) {
