@@ -500,7 +500,17 @@ main ()
          showbld ();
          setvgapalette256(pal);
    
-         wait();
+         activefontsettings.color = blue; 
+         activefontsettings.length = 600;
+         activefontsettings.justify = lefttext; 
+         showtext2( "press s to save image, any other key to continue", 10, 500 );
+         
+      
+         int ch = getch();
+         if ( ch == 's' ) {
+            char* nm = getnextfilenumname ( "bldng", "pcx", 0 );
+            writepcx ( nm, 100, 100, 100 + fielddistx * 6, 100 + fielddisty * 8, pal );
+         }
    
          settxt50mode ();
          printf ("\n    everything correct ? \n");

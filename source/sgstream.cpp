@@ -1,6 +1,9 @@
-//     $Id: sgstream.cpp,v 1.23 2000-08-02 17:27:50 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.24 2000-08-02 18:18:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/08/02 17:27:50  mbickel
+//      Renamed translation to transformation in unitset definition file
+//
 //     Revision 1.22  2000/08/02 15:53:01  mbickel
 //      New unit set definition files
 //      demount accepts now more than one container file
@@ -2649,15 +2652,23 @@ void checkFileLoadability ( const char* filename )
             sprintf(temp3, "A configuration file has been written to %s\n", configFileNameToWrite );
       }
 
+      char temp5[10000];
       char temp2[1000];
-      displaymessage ( "Unable to access %s\n"
+      sprintf ( temp5, "Unable to access %s\n"
                        "Make sure the data file 'main.con' is in one of the search paths specified\n"
                        "in your config file !\n"
                        "The configuration file that is used is: %s \n%s"
                        "These pathes are being searched:\n%s\n"
                        "If you don't have a file 'main.con' , get and install the data package from\n"
                        "http://www.asc-hq.org\n",
-                       2, filename, getConfigFileName(temp2), temp3, temp );
+                       filename, getConfigFileName(temp2), temp3, temp );
+
+     #ifndef converter
+      displaymessage ( temp5, 2 );
+     #else
+      fprintf(stderr, temp5 );
+      exit(1);
+     #endif
    }
 }
 
@@ -2675,10 +2686,22 @@ void initFileIO ( const char* configFileName )
      opencontainer ( "*.con" );
    }
    catch ( tfileerror err ) {
-      displaymessage ( "a fatal IO error occured while mounting the container files \n", 2 );
+      const char* msg = "a fatal IO error occured while mounting the container files \n";
+      #ifndef converter
+       displaymessage ( msg, 2 );
+      #else
+       fprintf( stderr, msg );
+       exit(1);
+      #endif
    }
    catch ( ... ) {
-      displaymessage ( "loading of game failed during pre graphic initializing", 2 );
+       const char* msg = "loading of game failed during pre graphic initializing";
+      #ifndef converter
+       displaymessage ( msg, 2 );
+      #else
+       fprintf( stderr, msg );
+       exit(1);
+      #endif
    }
 
    checkFileLoadability ( "palette.pal" );
