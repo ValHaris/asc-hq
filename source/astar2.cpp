@@ -363,6 +363,18 @@ void findPath( pmap actmap, AStar::Path& path, pvehicle veh, int x, int y )
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 
+
+bool AStar3D::Node::operator< ( const AStar3D::Node& b ) const
+{
+    // To compare two nodes, we compare the `f' value, which is the
+    // sum of the g and h values.
+    if ( hval >= AStar3D::longestPath || b.hval >= AStar3D::longestPath )
+       return gval < b.gval;
+    else
+       return (gval+hval) < (b.gval+b.hval);
+
+}
+/*
 bool operator< ( const AStar3D::Node& a, const AStar3D::Node& b )
 {
     // To compare two nodes, we compare the `f' value, which is the
@@ -372,7 +384,7 @@ bool operator< ( const AStar3D::Node& a, const AStar3D::Node& b )
     else
        return (a.gval+a.hval) < (b.gval+b.hval);
 }
-
+*/
 bool operator> ( const AStar3D::Node& a, const AStar3D::Node& b )
 {
     if ( a.hval >= AStar3D::longestPath || b.hval >= AStar3D::longestPath )
@@ -653,7 +665,8 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
                          DistanceType k = getMoveCost( N.h, N2.h, veh, N2.canStop, N2.hasAttacked );
                          if ( k > veh->typ->movement[N2.h.getNumericalHeight()]  )
-                            k = max(MAXIMUM_PATH_LENGTH,k);
+                            if ( k < MAXIMUM_PATH_LENGTH )
+                               k = MAXIMUM_PATH_LENGTH;
 
                          if ( k >= longestPath || N.gval >= longestPath )
                             N2.gval = longestPath;

@@ -2,9 +2,14 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.96 2003-03-20 10:08:29 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.97 2003-03-20 11:16:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.96  2003/03/20 10:08:29  mbickel
+//      KI speed up
+//      mapeditor: added clipboard
+//      Fixed movement issues
+//
 //     Revision 1.95  2003/03/14 17:35:57  mbickel
 //      Fixed AI errors
 //
@@ -4690,7 +4695,7 @@ void ClipBoard::place ( const MapCoordinate& pos )
      return;
 
   tmemorystream stream ( &buf, tnstream::reading );
-  Type type = stream.readInt();
+  Type type = Type(stream.readInt());
   if ( type == ClipVehicle ) {
      Vehicle* veh = Vehicle::newFromStream( actmap, stream );
      pfield fld = actmap->getField ( pos );

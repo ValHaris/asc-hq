@@ -124,8 +124,8 @@ class AStar3D {
            bool hasAttacked;
            int enterHeight;
            Node(): gval(0), hval(0), canStop(false), enterHeight(-1), deleted(false) {}
-           bool operator< ( const Node& a );
            bool deleted;
+           bool operator< ( const Node& b ) const;
        };
 
     protected:
