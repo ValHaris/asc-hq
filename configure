@@ -2793,6 +2793,36 @@ fi
 done
 
 
+echo $ac_n "checking "broken std::string compare"""... $ac_c" 1>&6
+echo "configure:2798: checking "broken std::string compare"" >&5
+cat > conftest.$ac_ext <<EOF
+#line 2800 "configure"
+#include "confdefs.h"
+string
+int main() {
+
+      std::string s = "Hello World";
+      s.compare  ( 0, 0, "Hello");
+
+; return 0; }
+EOF
+if { (eval echo configure:2810: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+  :
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  string_compare_broken=yes
+fi
+rm -f conftest*
+
+if test "x$string_compare_broken" = x ; then
+  echo "$ac_t"""no"" 1>&6
+else
+  CXXFLAGS="$CXXFLAGS -D_string_compare_broken_"
+  echo "$ac_t"""yes"" 1>&6
+fi
+
 
 
 

@@ -121,6 +121,20 @@ AC_CHECK_FUNCS(select)
 AC_CHECK_FUNCS(itoa)
 AC_CHECK_FUNCS(stricmp)
 
+dnl GCC 2.95.3 came with a broken standard library
+AC_MSG_CHECKING("broken std::string compare")
+AC_TRY_COMPILE( string, [
+      std::string s = "Hello World";
+      s.compare  ( 0, 0, "Hello");
+],, string_compare_broken=yes)
+
+if test "x$string_compare_broken" = x ; then
+  AC_MSG_RESULT("no")
+else
+  CXXFLAGS="$CXXFLAGS -D_string_compare_broken_"
+  AC_MSG_RESULT("yes")
+fi
+
 dnl shell vars set by test&feature flag for libbz2
 AC_SUBST([LIBBZ2])
 AC_SUBST([LDADDLIBBZ2])
