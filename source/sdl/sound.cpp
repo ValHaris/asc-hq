@@ -137,8 +137,10 @@ void Sound::play(void)
    int channel;
    if ( fadeIn )
       channel = Mix_FadeInChannel ( -1, wave, 0, fadeIn );
-   else
+   else {
       channel = Mix_PlayChannel ( -1, wave, 0 );
+      Mix_Volume ( channel, 128 );
+   }
    SoundSystem::instance->channel[ channel ] = this;
 }
 

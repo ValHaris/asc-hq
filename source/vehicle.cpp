@@ -111,7 +111,7 @@ void Vehicle :: init ( void )
 
    xpos = -1;
    ypos = -1;
-   
+
    weapstrength = new int[16];
    ammo = new int[16];
    for ( int i = 0; i < 16; i++ ) {
@@ -119,6 +119,7 @@ void Vehicle :: init ( void )
       ammo[i] = 0;
    }
 
+   klasse = 0;
    damage = 0;
 
    experience = 0;
@@ -153,7 +154,6 @@ void Vehicle :: init ( void )
    ypos = -1;
    energyUsed = 0;
    connection = 0;
-   klasse = 0;
    networkid = -1;
    reactionfire.status = ReactionFire::off;
    reactionfire.enemiesAttackable = 0;

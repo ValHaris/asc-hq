@@ -571,10 +571,11 @@ void         tdashboard::paintlargeweapon ( int pos, const char* name, int ammoa
       activefontsettings.length = 20;
       char buf[100];
       char buf2[100];
-      sprintf(buf, "%s / %s", int2string ( ammoact, buf ), int2string ( ammomax, buf2 ) );
+      char buf3[100];
+      sprintf(buf3, "%s / %s", int2string ( ammoact, buf ), int2string ( ammomax, buf2 ) );
       activefontsettings.length = 50;
       activefontsettings.justify = centertext;
-      showtext2c ( buf, x + 77, y );
+      showtext2c ( buf3, x + 77, y );
    }
 
    if ( shoot >= 0 ) {
