@@ -5,9 +5,14 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.80 2002-03-03 14:13:48 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.81 2002-03-25 18:48:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.80  2002/03/03 14:13:48  mbickel
+//      Some documentation updates
+//      Soundsystem update
+//      AI bug fixed
+//
 //     Revision 1.79  2002/03/02 23:04:01  mbickel
 //      Some cleanup of source code
 //      Improved Paragui Integration
@@ -963,9 +968,10 @@ void checkFileLoadability ( const char* filename )
       fatalError ( "checkFileLoadability threw an unspecified exception\n" );
    }
 }
-void initFileIO ( const char* configFileName )
+
+void initFileIO ( const ASCString& configFileName, int skipChecks )
 {
-   readgameoptions( configFileName );
+   readgameoptions( configFileName.c_str() );
 
    for ( int i = 0; i < CGameOptions::Instance()->getSearchPathNum(); i++ )
       if ( CGameOptions::Instance()->getSearchPath(i)   ) {
@@ -991,12 +997,23 @@ void initFileIO ( const char* configFileName )
        fatalError ( "loading of game failed during pre graphic initializing" );
    }
 
-   checkFileLoadability ( "palette.pal" );
-   checkFileLoadability ( "data.version" );
-   checkFileLoadability ( "mk1.version" );
-   checkFileLoadability ( "trrobj.version" );
-   checkFileLoadability ( "trrobj2.version" );
-   checkFileLoadability ( "buildings.version" );
+   if ( ! (skipChecks & 1 ))
+      checkFileLoadability ( "palette.pal" );
+
+   if ( ! (skipChecks & 2 ))
+      checkFileLoadability ( "data.version" );
+
+   if ( ! (skipChecks & 4 ))
+      checkFileLoadability ( "mk1.version" );
+
+   if ( ! (skipChecks & 8 ))
+      checkFileLoadability ( "trrobj.version" );
+
+   if ( ! (skipChecks & 0x10 ))
+      checkFileLoadability ( "trrobj2.version" );
+
+   if ( ! (skipChecks & 0x20 ))
+      checkFileLoadability ( "buildings.version" );
 }
 
 void checkDataVersion( )

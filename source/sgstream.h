@@ -3,9 +3,15 @@
   
 */
 
-//     $Id: sgstream.h,v 1.23 2001-12-19 11:46:36 mbickel Exp $
+//     $Id: sgstream.h,v 1.24 2002-03-25 18:48:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2001/12/19 11:46:36  mbickel
+//      Applied patches from Michael Moerz:
+//       - 64bit cleanup of demount.cpp, mount.cpp
+//       - removal of #ifdef converter and moved conveter specific functions
+//         to independant lib
+//
 //     Revision 1.22  2001/08/06 20:54:43  mbickel
 //      Fixed lots of crashes related to the new text files
 //      Fixed delayed events
@@ -171,7 +177,8 @@ extern int writegameoptions ( void );
 extern char* getConfigFileName ( char* buffer );
 extern void loadguipictures( void );
 extern void checkFileLoadability ( const char* filename );
-extern void initFileIO ( const char* configFileName );
+
+extern void initFileIO ( const ASCString& configFileName, int skipChecks = 0 );
 
 
 

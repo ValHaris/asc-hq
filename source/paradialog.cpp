@@ -250,7 +250,7 @@ int ASC_PG_Dialog::Run ( )
  };
 
 SoundSettings::SoundSettings(PG_Widget* parent, const PG_Rect& r ) :
-ASC_PG_Dialog(parent, r, "Sound Settings", WF_SHOW_CLOSE )
+               ASC_PG_Dialog(parent, r, "Sound Settings", WF_SHOW_CLOSE )
 {
         soundSettings = CGameOptions::Instance()->sound;
 
@@ -264,6 +264,7 @@ ASC_PG_Dialog(parent, r, "Sound Settings", WF_SHOW_CLOSE )
         else
            musb->SetPressed();
 
+
         PG_CheckButton* sndb = new PG_CheckButton(this, 30, PG_Rect( 30, 150, 200, 20 ), "Enable Sound" );
         new PG_Label ( this, PG_Rect(30, 180, 150, 20), "Sound Volume" );
 	PG_Slider* snd = new PG_Slider(this, 31, PG_Rect(180, 180, 200, 20), PG_SB_HORIZONTAL);
@@ -273,6 +274,7 @@ ASC_PG_Dialog(parent, r, "Sound Settings", WF_SHOW_CLOSE )
            sndb->SetUnpressed();
         else
            sndb->SetPressed();
+
 
 	new PG_Button(this, 100, PG_Rect(30,r.h-40,(r.w-70)/2,30), "OK");
 	new PG_Button(this, 101, PG_Rect(r.w/2+5,r.h-40,(r.w-70)/2,30), "Cancel");

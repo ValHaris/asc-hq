@@ -51,7 +51,7 @@ int main(int argc, char *argv[] )
 
    verbosity = cl.r();
 
-   initFileIO( cl.c().c_str() );  // passing the filename from the command line options
+   initFileIO( cl.c(), 4 );  // passing the filename from the command line options
 
    try {
 
