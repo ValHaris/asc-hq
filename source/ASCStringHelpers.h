@@ -12,7 +12,7 @@
 using std::auto_ptr;
 using std::string;
 
-#ifndef _USE_GCC_2_95
+#ifndef _UNICODE_BROKEN_
 
     using std::wstring;
 
@@ -20,26 +20,26 @@ using std::string;
 
     #undef _UNICODE
 
-#endif // _USE_GCC_2_95
+#endif // _UNICODE_BROKEN_
 
 /*! \class ASCCharTString ASCStringHelpers.h
 
     \brief \e ASCCharTString represents the STL parent's string class of ASCString.
-    
+
     \li If the preprocessor definition _UNICODE is defined, \e ASCCharTString is an
     STL's \e std::wstring to use \e wchar_t type.
     \li If _UNICODE is not defined, \e ASCCharTString is an STL's \e std::string
     to use \e char type.
 
-    \par 
-    That way, \e ASCCharTString will addapt itself to the right character type needed for its internal 
-    string representation depending on the _UNICODE preprocessor definition. 
+    \par
+    That way, \e ASCCharTString will addapt itself to the right character type needed for its internal
+    string representation depending on the _UNICODE preprocessor definition.
 
 
     \e ASCCharTString is defined through a typedef :
 
     \code
-    
+
     #ifdef _UNICODE
 
         typedef wstring      ASCCharTString;
@@ -67,14 +67,14 @@ using std::string;
     for its internal string representation, \e ASCAdaptatorString will use \e wchar_t types.
     On the other hand, if ASCCharTString is using \e wchar_t, \e ASCAdaptatorString will use \e char.
 
-    \li If the preprocessor definition _UNICODE is defined, \e ASCAdaptatorString is an 
+    \li If the preprocessor definition _UNICODE is defined, \e ASCAdaptatorString is an
     STL's \e std::string to use \e char type.
     \li If _UNICODE is not defined, \e ASCAdaptatorString is an STL's \e std::wstring to use \e wchar_t type.
-    
+
     \e ASCAdaptatorString is defined through a typedef :
 
     \code
-    
+
     #ifdef _UNICODE
 
         typedef string       ASCAdaptatorString;
@@ -110,11 +110,11 @@ using std::string;
 
         typedef string       ASCCharTString;
 
-        #ifndef _USE_GCC_2_95
+        #ifndef _UNICODE_BROKEN_
 
             typedef wstring      ASCAdaptatorString;
 
-        #endif // _USE_GCC_2_95
+        #endif // _UNICODE_BROKEN_
 
         #ifndef _T
             #define  _T( text )   text
@@ -126,13 +126,13 @@ using std::string;
 
 #endif // DOXYGEN_SHOULD_SKIP_THIS
 
-/*! 
+/*!
     \class ASCStringHelpers ASCStringHelpers.h
-    
+
     \brief The \e ASCStringHelpers class provides helper's functions used by ASCString.
 
     \par
-    \e ASCStringHelpers provides standard interfaces to utility functions across platforms and char types 
+    \e ASCStringHelpers provides standard interfaces to utility functions across platforms and char types
     ( char or wchar_t ).
 
     \sa ASCCharTString, ASCAdaptatorString
@@ -143,7 +143,7 @@ class ASCStringHelpers
 public:
 
     /*!
-        charT is an alias to ASCCharTString::value_type, the character type used to represent strings 
+        charT is an alias to ASCCharTString::value_type, the character type used to represent strings
         internally.
 
         \li If _UNICODE is defined, charT is a \e wchar_t.
@@ -153,10 +153,10 @@ public:
     */
     typedef ASCCharTString::value_type  charT;
 
-#ifndef _USE_GCC_2_95
+#ifndef _UNICODE_BROKEN_
 
     /*!
-        NoncharT is an alias to ASCAdaptatorString::value_type, the character type used to represent 
+        NoncharT is an alias to ASCAdaptatorString::value_type, the character type used to represent
         complementary strings internally.
 
         \li If _UNICODE is defined, NoncharT is a \e char.
@@ -166,7 +166,7 @@ public:
     */
     typedef ASCAdaptatorString::value_type  NoncharT;
 
-#endif // _USE_GCC_2_95
+#endif // _UNICODE_BROKEN_
 
     static size_t  _Strlen    ( const charT* pS );
     static charT*  _Strcpy    ( charT* pDest, const charT* pSrc );
@@ -176,11 +176,11 @@ public:
     static int     _Vsnprintf ( charT* buffer, size_t count, const charT* format, va_list argptr );
     static int     _Printf    ( const charT* format, ... );
 
-#ifndef _USE_GCC_2_95
+#ifndef _UNICODE_BROKEN_
 
     static size_t  _ConvertToCharT ( charT* pDest, const NoncharT* pSrc, size_t count );
 
-#endif // _USE_GCC_2_95
+#endif // _UNICODE_BROKEN_
 
 };
 
@@ -191,8 +191,8 @@ public:
     Get the length of a string.
 
     \param pS a pointer to a NULL-terminated string.
-    
-    \return returns the number of characters in string, excluding the terminal NULL. 
+
+    \return returns the number of characters in string, excluding the terminal NULL.
     No return value is reserved to indicate an error.
 
     \remarks
@@ -217,8 +217,8 @@ inline size_t ASCStringHelpers::_Strlen ( const charT* pS )
     \param pDest a pointer to a NULL-terminated string which will receive a copy of \a pSrc.
 
     \param pSrc a pointer to a NULL-terminated string which will be copied.
-    
-    \return returns a pointer to the destination string. No return value is reserved to indicate an error. 
+
+    \return returns a pointer to the destination string. No return value is reserved to indicate an error.
 
     \remarks
     See standard system documentation for more information about \e strcpy.
@@ -242,7 +242,7 @@ inline ASCStringHelpers::charT* ASCStringHelpers::_Strcpy ( charT* pDest, const 
 
     \param pS a pointer to a NULL-terminated string.
 
-    \return returns a pointer to the destination string. No return value is reserved to indicate an error. 
+    \return returns a pointer to the destination string. No return value is reserved to indicate an error.
 
     \remarks
     See standard system documentation for more information about \e strlwr.
@@ -270,7 +270,7 @@ inline ASCStringHelpers::charT* ASCStringHelpers::_Strlwr ( charT* pS )
         #else
             *pTemp = ::tolower  ( *pTemp );
         #endif
-        
+
         ++pTemp;
     };
     return pS;
@@ -286,7 +286,7 @@ inline ASCStringHelpers::charT* ASCStringHelpers::_Strlwr ( charT* pS )
 
     \param pS a pointer to a NULL-terminated string.
 
-    \return returns a pointer to the destination string. No return value is reserved to indicate an error. 
+    \return returns a pointer to the destination string. No return value is reserved to indicate an error.
 
     \remarks
     See standard system documentation for more information about \e strupr.
@@ -330,12 +330,12 @@ inline ASCStringHelpers::charT* ASCStringHelpers::_Strupr ( charT* pS )
 
     \param pS1 a pointer to a NULL-terminated string.
 
-    \param pS2 a pointer to a NULL-terminated string. 
- 
+    \param pS2 a pointer to a NULL-terminated string.
+
     \return returns a value indicating the relationship between the compared strings :
-    
-    < 0 pS1 less than pS2 
-      0 pS1 identical to pS2 
+
+    < 0 pS1 less than pS2
+      0 pS1 identical to pS2
     > 0 pS1 greater than pS2
 
     \remarks
@@ -346,7 +346,7 @@ inline int ASCStringHelpers::_Stricmp ( const charT* pS1, const charT* pS2 )
 {
     assert ( pS1 != NULL );
     assert ( pS2 != NULL );
-    
+
 #ifndef _UNIX_
 
     #ifdef _UNICODE
@@ -393,7 +393,7 @@ inline int ASCStringHelpers::_Stricmp ( const charT* pS1, const charT* pS2 )
 
     \param argptr pointer to a list of arguments.
 
-    \return returns the number of characters written. 
+    \return returns the number of characters written.
 
     \remarks
     See standard system documentation for more information about \e vsnprintf.
@@ -424,7 +424,7 @@ inline int ASCStringHelpers::_Vsnprintf ( charT* buffer, size_t count, const cha
 
     \param ... optional arguments.
 
-    \return returns the number of characters printed. 
+    \return returns the number of characters printed.
 
     \remarks
     See standard system documentation for more information about \e printf.
@@ -448,7 +448,7 @@ inline int ASCStringHelpers::_Printf ( const charT* format, ... )
     return nRes;
 }
 
-#ifndef _USE_GCC_2_95
+#ifndef _UNICODE_BROKEN_
 
 /*!
     \fn size_t ASCStringHelpers::_ConvertToCharT ( charT* pDest, const NoncharT* pSrc, size_t count )
@@ -459,7 +459,7 @@ inline int ASCStringHelpers::_Printf ( const charT* format, ... )
 
     \param pSrc a pointer to a NULL-terminated string which will be converted.
 
-    \return returns the number of characters written to \a pDest. 
+    \return returns the number of characters written to \a pDest.
 
 */
 inline size_t ASCStringHelpers::_ConvertToCharT ( charT* pDest, const NoncharT* pSrc, size_t count )
@@ -474,7 +474,7 @@ inline size_t ASCStringHelpers::_ConvertToCharT ( charT* pDest, const NoncharT* 
     #endif
 }
 
-#endif // _USE_GCC_2_95
+#endif // _UNICODE_BROKEN_
 
 #endif // __ASC_STRING_HELPERS_H_INCLUDED__
 

@@ -19,7 +19,7 @@ public:
     */
     typedef ASCStringHelpers::charT     charT;
 
-#ifndef _USE_GCC_2_95
+#ifndef _UNICODE_BROKEN_
 
     /*!
         NoncharT is an alias to ASCStringHelpers::NoncharT, the complementary character type used to convert strings
@@ -27,7 +27,7 @@ public:
     */
     typedef ASCStringHelpers::NoncharT        NoncharT;
 
-#endif // _USE_GCC_2_95
+#endif // _UNICODE_BROKEN_
 
     // Constructors
     ASCString ( );
@@ -40,7 +40,7 @@ public:
     ASCString ( const ASCCharTString& s );
     ASCString ( const ASCCharTString& s, size_type pos, size_type n );
 
-#ifndef _USE_GCC_2_95
+#ifndef _UNICODE_BROKEN_
 
     // Constructors for ASCAdaptatorString type
     explicit ASCString ( const ASCAdaptatorString& s );
@@ -49,7 +49,7 @@ public:
     // Copy Operators for ASCAdaptatorString type
     ASCString& operator=( const ASCAdaptatorString& s );
 
-#endif // _USE_GCC_2_95
+#endif // _UNICODE_BROKEN_
 
     // Copy Operators for ASCCharTString type
     ASCString& operator= ( const ASCCharTString& s );
@@ -67,7 +67,7 @@ public:
     // Case-manipulation helpers
     ASCString&  toLower    ();
     ASCString&  toUpper    ();
-    
+
     // Printing and formating helpers.
     ASCString&  format     ( charT* pFormat, ... );
     void        printf     ();
@@ -119,7 +119,7 @@ inline ASCString::ASCString ( size_type n, charT c )
 /*!
     \overload ASCString::ASCString ( const_iterator first, const_iterator last )
 
-    \param first a const iterator delimiting the begining of a range of \a charT element types to be used 
+    \param first a const iterator delimiting the begining of a range of \a charT element types to be used
     to construct this ASCString.
 
     \param last a const iterator delimiting the ending of a range of \a charT element types to be used
@@ -156,7 +156,7 @@ inline ASCString::ASCString ( const ASCCharTString& s, size_type pos, size_type 
 }
 
 
-#ifndef _USE_GCC_2_95
+#ifndef _UNICODE_BROKEN_
 
 // Constructors for ASCAdaptatorString type
 
@@ -235,15 +235,7 @@ inline ASCString& ASCString::operator= ( const ASCAdaptatorString& s )
     return *this;
 }
 
-
-inline ASCString& ASCString::operator= ( const charT* pS )
-{
-    ASCString str ( pS );
-    assign ( str );
-    return *this;
-}
-
-#endif // _USE_GCC_2_95
+#endif // _UNICODE_BROKEN_
 
 
 // Copy Operators
@@ -258,6 +250,14 @@ inline ASCString& ASCString::operator= ( const charT* pS )
 inline ASCString& ASCString::operator= ( const ASCCharTString& s )
 {
     assign ( s );
+    return *this;
+}
+
+
+inline ASCString& ASCString::operator= ( const charT* pS )
+{
+    ASCString str ( pS );
+    assign ( str );
     return *this;
 }
 

@@ -11,7 +11,7 @@ buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp \
 gamemap.cpp password.cpp password_dialog.cpp replay.cpp research.cpp \
 mapdisplay.cpp resourcenet.cpp dashboard.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp textfileparser.cpp terraintype.cpp \
-objecttype.cpp textfiletags.cpp itemrepository.cpp
+objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp
 
 asc_LDADD   = ../ai/libai.a ../sdl/libsdl.a ../libs/triangul/libtriangul.a \
 -lSDL -lpthread -lSDL_image -lSDL_mixer -lSDLmm @LDADDLIBBZ2@

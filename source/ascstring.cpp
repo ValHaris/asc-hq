@@ -1,5 +1,5 @@
 
-#include "ASCString.h"
+#include "ascstring.h"
 
 /*! \class ASCString ASCString.h
 

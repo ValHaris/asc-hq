@@ -134,6 +134,21 @@ else
   AC_MSG_RESULT("yes")
 fi
 
+
+AC_MSG_CHECKING("broken c_str Unicode support")
+AC_TRY_COMPILE( [#include <string>], [
+   basic_string<wchar_t> test;
+   test.c_str();
+],, Unicode_broken=yes)
+
+if test "x$Unicode_broken" = x ; then
+  AC_MSG_RESULT("no")
+else
+  CXXFLAGS="$CXXFLAGS -D_UNICODE_BROKEN_"
+  AC_MSG_RESULT("yes")
+fi
+
+
 dnl shell vars set by test&feature flag for libbz2
 AC_SUBST([LIBBZ2])
 AC_SUBST([LDADDLIBBZ2])
