@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: sg.cpp,v 1.152 2001-07-20 21:27:31 mbickel Exp $
+//     $Id: sg.cpp,v 1.153 2001-07-25 19:01:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.152  2001/07/20 21:27:31  mbickel
+//      even more diagnostic messages
+//
 //     Revision 1.151  2001/07/20 20:37:48  mbickel
 //      Enhanced logging capabilities
 //
@@ -1778,6 +1781,7 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
 }
 
 extern void testland();
+extern void testtext();
 
 void  mainloop ( void )
 {
@@ -1873,6 +1877,8 @@ void  mainloop ( void )
                break;
 
             case ct_9: {
+                          testtext ( );
+                                     /*
                           static pvehicle veh = 0;
                           if ( !veh ) {
                              veh = getactfield()->vehicle;
@@ -1886,7 +1892,7 @@ void  mainloop ( void )
                                 for ( int y = 0; y < actmap->ysize; y++ )
                                     if ( !(getfield( x,y )->a.temp & chfahrend) )
                                         getfield( x,y )->a.temp = 0;
-
+                                       */
 /*
                              int x = veh->xpos;
                              int y = veh->ypos;
@@ -1912,9 +1918,11 @@ void  mainloop ( void )
                                    if ( ast.fieldVisited ( xp, yp ))
                                       getfield ( xp, yp )->a.temp = 1;
                              */
+                             /*
                              displaymap();
                              veh = NULL;
-                          }
+
+                          }  */
                           /*
                           static AStar* ast = 0;
                           if ( ast ) {

@@ -760,7 +760,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, MapCoordi
       if ( sectionsPossibleWithMaxFuell && allowRefuellOrder )
          ai->issueRefuelOrder ( veh, false );
       else
-        if ( AirplaneLanding::canUnitCrash ( veh ))
+        if ( AirplaneLanding::canUnitCrash ( veh ) && !secondRun )
            return getBest ( pass, veh, dest, allowRefuellOrder, true );
 
    }

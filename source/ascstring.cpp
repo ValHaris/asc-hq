@@ -106,3 +106,44 @@ int ASCString :: compare_cis ( const ASCString& s )
    // could be optimized a bit...
    return copyToUpper().compare ( 0, npos, s.copyToUpper());
 }
+
+
+
+int StringTokenizer::CharSpace ( char c )
+{
+  if ( c <= ' ' )
+     return 0;
+
+  const char* ops = "=*/+-";
+  const char* d = ops;
+  do {
+     if( *d == c )
+        return 2;
+     if ( *d == 0 )
+        return 1;
+     d++;
+  } while ( true );
+}
+
+
+ASCString StringTokenizer::getNextToken( )
+{
+   while ( i < str.length() && !CharSpace(str[i]) )
+     i++;
+
+   if ( i == str.length() )
+      return "";
+
+   int begin = i;
+   int cs = CharSpace( str[i] );
+   do {
+      i++;
+   } while ( i < str.length() && CharSpace( str[i] ) == cs );
+   return str.substr(begin, i-begin);
+}
+
+
+ASCString StringTokenizer::getRemaining( )
+{
+   return str.substr(i);
+}

@@ -66,9 +66,9 @@ install_location=
 type=DATA
 [Workspace_1]
 browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/index.html
-cpp_file=/home/martin/asc/source/gamedlg.cpp
-header_file=/home/martin/asc/source/gamedlg.h
-openfiles=Untitled.cpp,Untitled.h,/home/martin/asc/source/ai/misc.cpp,/home/martin/asc/source/astar2.cpp,/home/martin/asc/source/gamemap.h,/home/martin/asc/source/typen.cpp,/home/martin/asc/source/gamedlg.h,/home/martin/asc/source/gamedlg.cpp,/home/martin/asc/source/typen.h,/home/martin/asc/source/controls.cpp
+cpp_file=/home/martin/asc/source/ai/valuation.cpp
+header_file=/home/martin/asc/source/ai/ai.h
+openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/PropertyGroup.cpp,/home/martin/asc/source/errors.h,/home/martin/asc/source/misc.cpp,/home/martin/asc/source/strtmesg.cpp,/home/martin/asc/source/ai/ai.h,/home/martin/asc/source/ai/strategy.cpp,/home/martin/asc/source/ai/valuation.cpp
 show_outputview=true
 show_treeview=true
 [asc.kdevprj]

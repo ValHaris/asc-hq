@@ -2,9 +2,12 @@
     \brief The various streams that ASC offers, like file and memory streams. 
 */
 
-//     $Id: basestrm.cpp,v 1.58 2001-07-14 13:15:17 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.59 2001-07-25 19:01:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2001/07/14 13:15:17  mbickel
+//      Rewrote sound handling
+//
 //     Revision 1.57  2001/06/14 14:46:46  mbickel
 //      The resolution of ASC can be specified in the configuration file
 //      The fileselect dialog box shows the file's location
@@ -299,6 +302,7 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <string>
+#include <list>
 
 #include <sys/stat.h>
 
@@ -2560,4 +2564,99 @@ ASCString FileName::suffix ( )
          return substr(point+1);
       else
          return "";
+}
+
+
+const int operationsNum = 5;
+const char* operations[operationsNum] =  { "=", "*=", "/=", "+=", "-=" };
+
+
+
+class TextFormatParser {
+         class Entry {
+            public:
+               ASCString propertyName;
+               enum Operator { eq, mult_eq } op;
+               ASCString value;
+               Entry ( const ASCString& propertyName_, Operator op_, const ASCString& value_ ) : propertyName ( propertyName_ ), op ( op_ ), value ( value_ ) {};
+         };
+
+         typedef list<Entry> Entries;
+         Entries entries;
+
+         tnstream *stream;
+         typedef list<ASCString> Level;
+         Level level;
+         ASCString s1, s2, s3;
+         int levelDepth;
+
+     public:
+        TextFormatParser( tnstream* stream_ ) { levelDepth = 0; stream = stream_; };
+        void startLevel ( const ASCString& levelName );
+        void parseLine ( const ASCString& line );
+        void error ( const ASCString& errmsg ) {};
+};
+
+
+
+void TextFormatParser::parseLine ( const ASCString& line )
+{
+
+   StringTokenizer st ( line );
+   s1 = st.getNextToken();
+   s2 = st.getNextToken();
+   s3 = st.getRemaining();
+
+   int op = -1;
+   for ( int i = 0; i < operationsNum; i++ )
+      if ( s2 == operations[i] )
+         op = i;
+
+   if ( op != -1 ) {
+      if ( s3.empty() )
+         error ( "missing data after operand");
+
+      ASCString s;
+      for ( Level::iterator i = level.begin(); i != level.end(); i++ )
+         s += *i + ".";
+      s += s1;
+      entries.push_back ( Entry (s, Entry::Operator(op), s3 ) );
+      return;
+   }
+
+   if ( !s1.empty() && s2 == "{" ) {
+      startLevel ( s1 );
+      return;
+   }
+
+   if ( s1 == "}" && !s2.empty() && s3.empty() ) {
+      if ( level.empty() )
+         error ("closing unopened bracket");
+
+      if ( s2 != level.back() )
+         error ( "unmatching bracket closed");
+
+      level.pop_back();
+      levelDepth--;
+   }
+}
+
+
+void TextFormatParser::startLevel ( const ASCString& levelName )
+{
+   level.push_back ( levelName );
+   int curlevel = ++levelDepth;
+   do {
+       parseLine ( stream->readString() );
+   } while ( levelDepth >= curlevel );
+}
+
+
+
+void testtext (  )
+{
+   tnfilestream s ( "vehicleformat.draft", tnstream::reading );
+   TextFormatParser tfp ( &s );
+
+   tfp.startLevel ( "vehicletype" );
 }

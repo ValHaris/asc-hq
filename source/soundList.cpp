@@ -53,49 +53,6 @@ struct {
 
 
 
-class StringTokenizer {
-       ASCString& str;
-       int i;
-   private:
-       int CharSpace ( char c );
-   public:
-       StringTokenizer ( ASCString & _str ) : str( _str ), i ( 0 ) {};
-       ASCString getNextToken ( );
-};
-
-
-int StringTokenizer::CharSpace ( char c )
-{
-  if ( c <= ' ' )
-     return 0;
-
-  const char* ops = "=*/+-";
-  const char* d = ops;
-  do {
-     if( *d == c )
-        return 2;
-     if ( *d == 0 )
-        return 1;
-     d++;
-  } while ( true );
-}
-
-ASCString StringTokenizer::getNextToken( )
-{
-   while ( i < str.length() && !CharSpace(str[i]) )
-     i++;
-
-   if ( i == str.length() )
-      return "";
-
-   int begin = i;
-   int cs = CharSpace( str[i] );
-   do {
-      i++;
-   } while ( i < str.length() && CharSpace( str[i] ) == cs );
-   return str.substr(begin, i-begin);
-}
-
 
 SoundList& SoundList::getInstance()
 {

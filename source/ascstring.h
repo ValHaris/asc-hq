@@ -44,5 +44,16 @@
         int compare_cis ( const ASCString& s );
  };
 
+ class StringTokenizer {
+       const ASCString& str;
+       int i;
+    private:
+       int CharSpace ( char c );
+    public:
+       StringTokenizer ( const ASCString & _str ) : str( _str ), i ( 0 ) {};
+       ASCString getNextToken ( );
+       ASCString getRemaining ( );
+ };
+
 
 #endif

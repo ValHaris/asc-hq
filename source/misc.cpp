@@ -1,6 +1,9 @@
-//     $Id: misc.cpp,v 1.16 2001-01-28 23:19:55 mbickel Exp $
+//     $Id: misc.cpp,v 1.17 2001-07-25 19:01:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2001/01/28 23:19:55  mbickel
+//      Finally, the linux version compiles again too...
+//
 //     Revision 1.15  2001/01/28 21:39:30  mbickel
 //      Updated Borland C++ Building project files
 //      Fixed some compilation problems with Borland
@@ -96,9 +99,11 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdarg.h>
+#include <iostream>
 #include "global.h"
 #include "tpascal.inc"
 #include "misc.h"
+#include "ascstring.h"
 
 const char* digit[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 const char* letter[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", 
@@ -298,4 +303,10 @@ void fatalError ( const char* formatstring, ... )
    vfprintf ( stderr, formatstring, paramlist );
    exit ( 1 );
 }
+
+void warning ( const ASCString& output )
+{
+   cerr << "ASC: " << output.c_str() << endl;
+}
+
 #endif
