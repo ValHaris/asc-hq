@@ -25,11 +25,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/artint.cpp,/home/martin/asc/source/spfst.cpp,/home/martin/asc/source/controls.h,/home/martin/asc/source/typen.h,/home/martin/asc/source/artint.h,/home/martin/asc/source/vehicletype.h,/home/martin/asc/source/spfst.h,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/Makefile.am,/home/martin/asc/configure.in,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/typen.h
-cpp_file=/home/martin/asc/source/spfst.cpp
+header_file=/home/martin/asc/configure.in
+cpp_file=Unbenannt.cpp
 browser_file=file:/home/martin/.kde/share/apps/kdevelop/search_result.html
 [source/gui.h]
 install_location=

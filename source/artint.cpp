@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.40 2000-11-15 19:28:32 mbickel Exp $
+//     $Id: artint.cpp,v 1.41 2000-11-21 20:26:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2000/11/15 19:28:32  mbickel
+//      AI improvements
+//
 //     Revision 1.39  2000/11/14 20:36:37  mbickel
 //      The AI can now use supply vehicles
 //      Rewrote objecttype IO routines to make the structure independant of
@@ -931,9 +934,8 @@ void  AI :: calculateThreat ( pbuilding bld )
 
 
 
-void AI :: WeaponThreatRange :: run ( pvehicle _veh, int x, int y, AiThreat* _threat, AI* _ai )
+void AI :: WeaponThreatRange :: run ( pvehicle _veh, int x, int y, AiThreat* _threat )
 {
-   ai = _ai;
    threat = _threat;
    veh = _veh;
    for ( height = 0; height < 8; height++ )
@@ -941,8 +943,8 @@ void AI :: WeaponThreatRange :: run ( pvehicle _veh, int x, int y, AiThreat* _th
          if ( veh->height & veh->typ->weapons->weapon[weap].sourceheight )
             if ( (1 << height) & veh->typ->weapons->weapon[weap].targ )
                 if ( veh->typ->weapons->weapon[weap].shootable()  && veh->typ->weapons->weapon[weap].offensive() ) {
-                   initsuche ( ai->getMap(), x, y, veh->typ->weapons->weapon[weap].maxdistance/maxmalq, veh->typ->weapons->weapon[weap].mindistance/maxmalq );
-                   startsuche();
+                   initsearch ( x, y, veh->typ->weapons->weapon[weap].maxdistance/maxmalq, veh->typ->weapons->weapon[weap].mindistance/maxmalq );
+                   startsearch();
                 }
 }
 
@@ -988,7 +990,7 @@ void AI :: calculateFieldThreats ( void )
          pfield fld = getfield ( x, y );
          if ( config.wholeMapVisible || fieldvisiblenow ( fld, getPlayer() ) )
             if ( fld->vehicle && getdiplomaticstatus2 ( getPlayer()*8, fld->vehicle->color) == cawar ) {
-               WeaponThreatRange wr;
+               WeaponThreatRange wr ( this );
                if ( !fld->vehicle->typ->wait ) {
 
                   // The unit may have already moved this turn.
@@ -1007,18 +1009,18 @@ void AI :: calculateFieldThreats ( void )
                         int xp, yp;
                         vm.reachableFields.getFieldCoordinates ( f, &xp, &yp );
                         // ... and check for each which fields are threatened if the unit was standing there
-                        wr.run ( fld->vehicle, xp, yp, singleUnitThreat, this );
+                        wr.run ( fld->vehicle, xp, yp, singleUnitThreat );
                      }
 
                      for ( int g = 0; g < vm.reachableFieldsIndirect.getFieldNum(); g++ ) {
                         int xp, yp;
                         vm.reachableFieldsIndirect.getFieldCoordinates ( g, &xp, &yp );
-                        wr.run ( fld->vehicle, xp, yp, singleUnitThreat, this );
+                        wr.run ( fld->vehicle, xp, yp, singleUnitThreat );
                      }
                   }
                   fld->vehicle->setMovement ( move, 0 );
                } else
-                  wr.run ( fld->vehicle, x, y, singleUnitThreat, this );
+                  wr.run ( fld->vehicle, x, y, singleUnitThreat );
 
 
                for ( int a = 0; a < fieldNum; a++ ) {

@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.73 2000-11-15 19:28:34 mbickel Exp $
+//     $Id: spfst.cpp,v 1.74 2000-11-21 20:27:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.73  2000/11/15 19:28:34  mbickel
+//      AI improvements
+//
 //     Revision 1.72  2000/11/14 20:36:42  mbickel
 //      The AI can now use supply vehicles
 //      Rewrote objecttype IO routines to make the structure independant of
@@ -1346,8 +1349,13 @@ word         beeline(integer      x1,
 
 bool fieldvisiblenow( const pfield pe, int player )
 {
-  if ( player < 0 )
+  if ( player < 0 ) {
+     #ifdef karteneditor
+     return true;
+     #else
      return false;
+     #endif
+  }
 
   if ( pe ) { 
       int c = (pe->visible >> ( player * 2)) & 3; 
@@ -5708,4 +5716,14 @@ int isUnitNotFiltered ( int id )
    return 1;
 }
 
+int isBuildingNotFiltered ( int id )
+{
+   if ( unitSets.size() > 0 ) {
+      for ( int i = 0; i < unitSets.size(); i++ )
+         if ( unitSets[i]->isMember ( id ))
+            if ( !unitSets[i]->active && unitSets[i]->filterBuildings)
+                return 0;
+   }
+   return 1;
+}
 

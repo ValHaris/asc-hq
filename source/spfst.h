@@ -1,6 +1,12 @@
-//     $Id: spfst.h,v 1.31 2000-11-08 19:31:15 mbickel Exp $
+//     $Id: spfst.h,v 1.32 2000-11-21 20:27:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/11/08 19:31:15  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.30  2000/10/18 17:09:42  mbickel
 //      Fixed eventhandling for DOS
 //
@@ -733,3 +739,5 @@ extern MapDisplay defaultMapDisplay;
 #endif
 
 
+extern int isUnitNotFiltered ( int id ) ;
+extern int isBuildingNotFiltered ( int id ) ;

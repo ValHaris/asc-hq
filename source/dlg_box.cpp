@@ -1,6 +1,12 @@
-//     $Id: dlg_box.cpp,v 1.36 2000-11-08 19:31:02 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.37 2000-11-21 20:27:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2000/11/08 19:31:02  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.35  2000/10/18 14:14:02  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -1124,8 +1130,15 @@ void         tdialogbox::enablebutton(int         id)
       rahmen(true,x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2); 
       paintsurface( pb->x1 + 1, pb->y1 + 1, pb->x2 - 1, pb->y2 - 1 ); 
       if ( pb->text )  
-         if (pb->text[0] ) 
-            showtext3(pb->text,x1 + pb->x1,y1 + pb->y1 - activefontsettings.font->height); 
+         if (pb->text[0] )
+            if ( pb->style != 3 )
+               showtext3(pb->text,x1 + pb->x1,y1 + pb->y1 - activefontsettings.font->height);
+            else {
+               npush ( activefontsettings.length );
+               activefontsettings.length = 0;
+               showtext3(pb->text,x1 + pb->x2 + 10,y1 + pb->y1 );
+               npop ( activefontsettings.length );
+            }
 
       if (pb->art == 1)  
          showtext2((char*) pb->data , x1 + pb->x1 + 5,y1 + pb->y1 + 2);
@@ -1150,8 +1163,9 @@ void         tdialogbox::enablebutton(int         id)
       } 
    } 
    if (pb->art == 3) { 
-      rahmen(true,x1 + pb->x1,y1 + pb->y1,x1 + pb->x1 + (pb->y2 - pb->y1),y1 + pb->y2); 
-      showtext3(pb->text,x1 + pb->x1 + (pb->y2 - pb->y1) + 5,y1 + (pb->y1 + pb->y2 - activefontsettings.font->height) / 2); 
+      rahmen(true,x1 + pb->x1,y1 + pb->y1,x1 + pb->x1 + (pb->y2 - pb->y1),y1 + pb->y2);
+
+      showtext3(pb->text,x1 + pb->x1 + (pb->y2 - pb->y1) + 5,y1 + (pb->y1 + pb->y2 - activefontsettings.font->height) / 2);
 
       char* pbl = (char*) pb->data;
 
@@ -1247,8 +1261,12 @@ void         tdialogbox::disablebutton(int         id)
    if ((pb->art == 1) || (pb->art == 2)) {
       rectangle(x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2,disablecolor); 
       if (pb->text != NULL)  
-        if (pb->text[0] != 0) 
-         showtext2(s,x1 + pb->x1,y1 + pb->y1 - activefontsettings.font->height); 
+        if (pb->text[0] != 0)
+           if ( pb->style != 3 )
+
+              showtext2(pb->text,x1 + pb->x1,y1 + pb->y1 - activefontsettings.font->height);
+           else
+              showtext2(pb->text,x1 + pb->x2 + 10,y1 + pb->y1 );
 
       if (pb->art == 1) { 
          showtext2( (char*)pb->data,x1 + pb->x1 + 5,y1 + pb->y1 + 2);

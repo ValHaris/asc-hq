@@ -1,6 +1,11 @@
-//     $Id: edmisc.cpp,v 1.38 2000-11-14 20:36:40 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.39 2000-11-21 20:27:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2000/11/14 20:36:40  mbickel
+//      The AI can now use supply vehicles
+//      Rewrote objecttype IO routines to make the structure independant of
+//       the memory layout
+//
 //     Revision 1.37  2000/11/08 19:31:03  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -470,7 +475,7 @@ int leftmousebox(void)
 
 void tputresources :: init ( int sx, int sy, int dst, int restype, int resmax, int resmin )
 {
-   initsuche(actmap,sx,sy,dst,0);
+   initsearch(sx,sy,dst,0);
    resourcetype = restype;
    maxresource = resmax;
    minresource = resmin;
@@ -478,7 +483,7 @@ void tputresources :: init ( int sx, int sy, int dst, int restype, int resmax, i
    xp = sx;
    yp = sy;
    testfield();
-   startsuche();
+   startsearch();
 }
 
 void tputresources :: testfield ( void )
@@ -554,7 +559,7 @@ void tputresourcesdlg :: run ( void )
       tdialogbox :: run ( );
    } while ( status < 10 ); /* enddo */
    if ( status == 11 ) {
-      tputresources pr;
+      tputresources pr ( actmap );
       pr.init ( getxpos(), getypos(), dist, resourcetype ? 1 : 2, maxresource, minresource );
    }
 }

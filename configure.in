@@ -46,9 +46,9 @@ lib_bz2_static=no
 AC_ARG_ENABLE( libbz2-static, [  --enable-libbz2-static compiles a static \
 libbz2 into the binary of asc.], [lib_bz2_static=$enableval], \
 [lib_bz2_usecache=yes] )
-AC_CHECK_LIB( bz2, BZ2_bzReadOpen, [], [checklib_bz2_static=yes] )
-AC_CACHE_CHECK( [for static libbz2 flag state], [ac_cv_lib_bz2_static],
-[ ac_cv_lib_bz2_static=$lib_bz2_static ] )
+
+AC_CHECK_LIB( bz2, BZ2_bzReadOpen, [ ], [checklib_bz2_static=yes] )
+AC_CACHE_CHECK( [for static libbz2 flag state], [ac_cv_lib_bz2_static], [ ac_cv_lib_bz2_static=$lib_bz2_static ] )
 dnl ac_cv_lib_bz2_static holds cached flag state, checklib_bz2... holds check
 dnl now combine them with the current flag state if needed
 if test "x$lib_bz2_usecache" = "xyes"; then
@@ -85,6 +85,9 @@ AC_CHECK_FUNCS(log2)
 dnl shell vars set by test&feature flag for libbz2
 AC_SUBST([LIBBZ2])
 AC_SUBST([LDADDLIBBZ2])
+
+AC_MSG_RESULT( [DEBUG: libbz2 is: $LIBBZ2] )
+AC_MSG_RESULT( [DEBUG: lddaddlibbz2 is: $LDADDLIBBZ2] )
 
 AC_OUTPUT(Makefile source/Makefile source/mapedit/Makefile source/docs/Makefile source/docs/en/Makefile source/sdl/Makefile source/libs/triangul/Makefile source/tools/Makefile source/tools/linux/Makefile source/libs/Makefile )
 

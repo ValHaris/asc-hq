@@ -1,6 +1,12 @@
-//     $Id: controls.h,v 1.31 2000-11-08 19:30:59 mbickel Exp $
+//     $Id: controls.h,v 1.32 2000-11-21 20:26:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/11/08 19:30:59  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.30  2000/10/31 10:42:41  mbickel
 //      Added building->vehicle service to vehicle controls
 //      Moved tmap methods to gamemap.cpp
@@ -296,6 +302,7 @@
                        virtual void     testfield ( void );
                        void             initpm( char mt, const pvehicle eht );
                        void             run ( void );
+                       tputmine ( pmap _gamemap ) : tsearchfields ( _gamemap ) {};
               };
 
     //! checks, which vehicle types are newly available 
@@ -416,7 +423,7 @@ class tgetmininginfo : public tsearchfields {
              void testfield ( void );
           public:
              tmininginfo* mininginfo;
-             tgetmininginfo ( void );
+             tgetmininginfo ( pmap _gamemap );
              void run ( const pbuilding bld );
          };
 

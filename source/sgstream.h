@@ -1,6 +1,10 @@
-//     $Id: sgstream.h,v 1.11 2000-10-17 12:12:23 mbickel Exp $
+//     $Id: sgstream.h,v 1.12 2000-11-21 20:27:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/10/17 12:12:23  mbickel
+//      Improved vehicletype loading/saving routines
+//      documented some global variables
+//
 //     Revision 1.10  2000/09/01 15:47:50  mbickel
 //      Added Astar path finding code
 //      Fixed: viewid crashed
@@ -240,8 +244,9 @@ class SingleUnitSet {
 
          std::vector<IdRange> ids;
          std::vector<TranslationTable*> transtab;
+         bool filterBuildings;
 
-         SingleUnitSet ( void ) : active ( 1 ) {};
+         SingleUnitSet ( void ) : active ( 1 ), filterBuildings ( true ) {};
          int isMember ( int id );
          void read ( pnstream stream );
          void parseIDs ( const char* s );

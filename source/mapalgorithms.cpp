@@ -202,14 +202,14 @@ void tdrawgettempline :: start ( int x1, int y1, int x2, int y2 )
 
 
 
-tsearchfields :: tsearchfields ( void )
+tsearchfields :: tsearchfields ( pmap _gamemap )
 {
+   gamemap = _gamemap;
    abbruch = 0;
 }
 
-void         tsearchfields::initsuche( pmap _gamemap, int  sx, int  sy, int max, int min )
+void         tsearchfields::initsearch( int  sx, int  sy, int max, int min )
 {
-   gamemap = _gamemap;
    maxdistance = max;
    mindistance = min;
    if (mindistance == 0) mindistance = 1;
@@ -221,7 +221,7 @@ void         tsearchfields::initsuche( pmap _gamemap, int  sx, int  sy, int max,
 
 #ifdef HEXAGON
 
-void         tsearchfields::startsuche(void)
+void         tsearchfields::startsearch(void)
 {
    if ( abbruch )
       return;
@@ -258,7 +258,7 @@ void         tsearchfields::startsuche(void)
 
 #else
 
-void         tsearchfields::startsuche(void)
+void         tsearchfields::startsearch(void)
 {
    if ( abbruch )
       return;

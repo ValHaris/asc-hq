@@ -1,6 +1,12 @@
-//     $Id: building.cpp,v 1.55 2000-11-08 19:30:54 mbickel Exp $
+//     $Id: building.cpp,v 1.56 2000-11-21 20:26:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2000/11/08 19:30:54  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.54  2000/10/18 14:13:50  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -6314,7 +6320,7 @@ void  ccontainer_b :: cmineralresources_subwindow :: display ( void )
 
    if ( !mininginfo ) {
 
-      tgetmininginfo gmi;
+      tgetmininginfo gmi ( actmap );
 
       gmi.run ( cc_b->building );
 

@@ -1,6 +1,10 @@
-//     $Id: edselfnt.cpp,v 1.17 2000-10-26 18:55:29 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.18 2000-11-21 20:27:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/10/26 18:55:29  mbickel
+//      Fixed crash when editing the properties of a vehicle inside a building
+//      Added mapeditorFullscreen switch to asc.ini
+//
 //     Revision 1.16  2000/10/18 14:14:09  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -731,7 +735,7 @@ class SelectBuildingType : public SelectAnything< pbuildingtype > {
 
 int SelectBuildingType :: isavailable ( pbuildingtype item )
 {
-   return isUnitNotFiltered ( item->id );
+   return isBuildingNotFiltered ( item->id );
 }
 
 

@@ -1,6 +1,10 @@
-//     $Id: edmisc.h,v 1.14 2000-10-18 14:14:09 mbickel Exp $
+//     $Id: edmisc.h,v 1.15 2000-11-21 20:27:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/10/18 14:14:09  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.13  2000/10/14 14:16:04  mbickel
 //      Cleaned up includes
 //      Added mapeditor to win32 watcom project
@@ -183,6 +187,7 @@
                            public:
                                void            init ( int sx , int sy, int dst, int restype, int resmax, int resmin );
                                virtual void    testfield ( void );
+                               tputresources ( pmap _gamemap ) : tsearchfields ( _gamemap ) {};
                             };
 
    class tputresourcesdlg : public tdialogbox {
@@ -290,4 +295,3 @@ extern void placeunit(void);
 extern void placeobject(void);
 extern void placemine(void);
 extern void putactthing ( void );
-extern int isUnitNotFiltered ( int id ) ;

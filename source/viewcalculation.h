@@ -24,7 +24,7 @@
 
   class tcomputeview : public tsearchfields {
                 protected:
-                      pmap gamemap;
+                      // pmap gamemap;
                       int actView;
                       int player;
                       int mode;
@@ -37,7 +37,7 @@
                       virtual void  testfield ( void );
 
                 public:
-                      tcomputeview ( pmap actmap ) { gamemap = actmap; actView = actmap->playerView; };
+                      tcomputeview ( pmap _actmap ) : tsearchfields ( _actmap ) { actView = _actmap->playerView; };
                  };
 
   class tcomputevehicleview : public tcomputeview {

@@ -1,6 +1,11 @@
-//     $Id: unitctrl.cpp,v 1.41 2000-11-14 20:36:46 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.42 2000-11-21 20:27:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2000/11/14 20:36:46  mbickel
+//      The AI can now use supply vehicles
+//      Rewrote objecttype IO routines to make the structure independant of
+//       the memory layout
+//
 //     Revision 1.40  2000/11/11 11:05:21  mbickel
 //      started AI service functions
 //
@@ -1477,7 +1482,7 @@ PendingVehicleActions :: ~PendingVehicleActions ( )
 
 
 VehicleAttack :: VehicleAttack ( MapDisplayInterface* md, PPendingVehicleActions _pva )
-               : VehicleAction ( vat_attack, _pva )
+               : VehicleAction ( vat_attack, _pva ), search ( actmap )
 {
    status = 0;
    mapDisplay = md;
@@ -1679,8 +1684,8 @@ int      VehicleAttack :: tsearchattackablevehicles::run( void )
    if (d == 0) 
       return -204;
    
-   initsuche( actmap, angreifer->xpos,angreifer->ypos, maxdist + 1, mindist );
-   startsuche();
+   initsearch( angreifer->xpos,angreifer->ypos, maxdist + 1, mindist );
+   startsearch();
 
    return 0;
 } 
@@ -1705,7 +1710,7 @@ VehicleAttack :: ~VehicleAttack ( )
 
 
 VehicleService :: VehicleService ( MapDisplayInterface* md, PPendingVehicleActions _pva )
-               : VehicleAction ( vat_service, _pva ), fieldSearch ( *this )
+               : VehicleAction ( vat_service, _pva ), fieldSearch ( *this, actmap )
 {
    building = NULL;
    vehicle = NULL;
@@ -2005,21 +2010,20 @@ void  VehicleService :: FieldSearch ::initrefuelling( int xp1, int yp1 )
    if ( bld ) {
       maxdist = 1;
       mindist = 1;
-      initsuche(actmap, xp1,yp1,mindist,maxdist);
    }
 
-   initsuche(actmap, xp1,yp1,mindist,maxdist);
+   initsearch(xp1,yp1,mindist,maxdist);
 
 }
 
 void  VehicleService :: FieldSearch ::startsuche( void )
 {
   if ( veh )
-     tsearchfields :: startsuche();
+     tsearchfields :: startsearch();
 
   if ( bld ) {
      if ( bld->typ->special & cgexternalloadingb )
-        tsearchfields :: startsuche();
+        tsearchfields :: startsearch();
      xp = startx;
      yp = starty;
      testfield (  );

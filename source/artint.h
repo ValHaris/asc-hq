@@ -1,6 +1,9 @@
-//     $Id: artint.h,v 1.20 2000-11-15 19:28:33 mbickel Exp $
+//     $Id: artint.h,v 1.21 2000-11-21 20:26:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/11/15 19:28:33  mbickel
+//      AI improvements
+//
 //     Revision 1.19  2000/11/14 20:36:38  mbickel
 //      The AI can now use supply vehicles
 //      Rewrote objecttype IO routines to make the structure independant of
@@ -192,8 +195,9 @@
                      AiThreat* threat;
                      AI*       ai;
                   public:
-                     void run ( pvehicle _veh, int x, int y, AiThreat* _threat, AI* _ai );
+                     void run ( pvehicle _veh, int x, int y, AiThreat* _threat );
                      void testfield ( void );
+                     WeaponThreatRange( AI* _ai ) : tsearchfields ( _ai->getMap()), ai ( _ai ) {};
            };
 
 

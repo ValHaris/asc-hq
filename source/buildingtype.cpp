@@ -494,14 +494,14 @@ void Building :: addview ( void )
 {
    tcomputebuildingview bes ( gamemap );
    bes.init( this, +1 );
-   bes.startsuche();
+   bes.startsearch();
 }
 
 void Building :: removeview ( void )
 {
    tcomputebuildingview bes ( gamemap );
    bes.init( this, -1 );
-   bes.startsuche();
+   bes.startsearch();
 }
 
 

@@ -31,10 +31,10 @@
                     int         maxdistance, mindistance;
                     int         xp, yp;
                     int         dist;
-                    tsearchfields ( void );
+                    tsearchfields ( pmap _gamemap );
                     virtual void testfield ( void ) = 0;
-                    void initsuche ( pmap _gamemap, int sx, int sy, int max, int min );
-                    virtual void startsuche ( void );
+                    void initsearch ( int sx, int sy, int max, int min );
+                    virtual void startsearch ( void );
                  };
 
   /** draws a straight line on the hexagonal map and calls putpix8 for each field.

@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.110 2000-11-15 19:28:33 mbickel Exp $
+//     $Id: sg.cpp,v 1.111 2000-11-21 20:27:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.110  2000/11/15 19:28:33  mbickel
+//      AI improvements
+//
 //     Revision 1.109  2000/11/08 19:31:11  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -2354,6 +2357,7 @@ class WeaponRange : public tsearchfields {
        public:
          int run ( const pvehicle veh );
          void testfield ( void ) { if ( getfield ( xp, yp )) getfield ( xp, yp )->tempw = 1; };
+         WeaponRange ( pmap _gamemap ) : tsearchfields ( _gamemap ) {};
 };
 
 int  WeaponRange :: run ( const pvehicle veh )
@@ -2362,8 +2366,8 @@ int  WeaponRange :: run ( const pvehicle veh )
    if ( fieldvisiblenow ( getfield ( veh->xpos, veh->ypos )))
       for ( int i = 0; i < veh->typ->weapons->count; i++ ) {
          if ( veh->typ->weapons->weapon[i].shootable() ) {
-            initsuche ( actmap, veh->xpos, veh->ypos, veh->typ->weapons->weapon[i].maxdistance/maxmalq, veh->typ->weapons->weapon[i].mindistance/maxmalq );
-            startsuche();
+            initsearch ( veh->xpos, veh->ypos, veh->typ->weapons->weapon[i].maxdistance/maxmalq, veh->typ->weapons->weapon[i].mindistance/maxmalq );
+            startsearch();
             found++;
          }
       }
@@ -2375,7 +2379,7 @@ void viewunitweaponrange ( const pvehicle veh, tkey taste )
 {
    if ( veh && !moveparams.movestatus  ) {
       actmap->cleartemps ( 7 );
-      WeaponRange wr;
+      WeaponRange wr ( actmap );
       int res = wr.run ( veh );
       if ( res ) {
          displaymap();

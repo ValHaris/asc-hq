@@ -1,6 +1,11 @@
-//     $Id: sgstream.cpp,v 1.42 2000-11-14 20:36:41 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.43 2000-11-21 20:27:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2000/11/14 20:36:41  mbickel
+//      The AI can now use supply vehicles
+//      Rewrote objecttype IO routines to make the structure independant of
+//       the memory layout
+//
 //     Revision 1.41  2000/11/08 19:31:13  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -2263,7 +2268,7 @@ void SingleUnitSet::read ( pnstream stream )
 
          int seppos = s2.find_first_of ( separator );
          if ( seppos >= 0 ) {
-                         std::string b = s2.substr(0, seppos);
+            std::string b = s2.substr(0, seppos);
             std::string e = s2.substr( seppos+1 );
             if ( b == "NAME" )
                name = e;
@@ -2283,6 +2288,9 @@ void SingleUnitSet::read ( pnstream stream )
 
             if ( b == "INFORMATION" )
                information = e;
+
+            if ( b == "FILTERBUILDINGS" )
+               filterBuildings = atoi ( e.c_str() );
 
             if ( b == "ID" )
                parseIDs ( e.c_str() );

@@ -1,6 +1,10 @@
-//     $Id: dlg_box.h,v 1.16 2000-10-18 14:14:04 mbickel Exp $
+//     $Id: dlg_box.h,v 1.17 2000-11-21 20:27:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/10/18 14:14:04  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.15  2000/08/26 15:33:42  mbickel
 //      Warning message displayed if empty password is entered
 //      pcxtank now displays error messages
@@ -475,7 +479,6 @@ extern char*  strrrd8d(int  l);           // abrunden
 extern char*  strrrd8n(int  l);           // mathematisch korrekt runden
 
 extern char*  readtextmessage( int id );
-extern int isUnitNotFiltered ( int id ) ;
 
 
 class   tstringselect : public tdialogbox {

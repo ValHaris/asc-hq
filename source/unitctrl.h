@@ -1,6 +1,11 @@
-//     $Id: unitctrl.h,v 1.18 2000-11-14 20:36:47 mbickel Exp $
+//     $Id: unitctrl.h,v 1.19 2000-11-21 20:27:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/11/14 20:36:47  mbickel
+//      The AI can now use supply vehicles
+//      Rewrote objecttype IO routines to make the structure independant of
+//       the memory layout
+//
 //     Revision 1.17  2000/11/11 11:05:21  mbickel
 //      started AI service functions
 //
@@ -376,6 +381,7 @@ class VehicleAttack : public VehicleAction {
                                   void            init ( const pvehicle eht, int _kamikaze, VehicleAttack* _va );
                                   virtual void    testfield ( void );
                                   int             run ( void );
+                                  tsearchattackablevehicles ( pmap _gamemap ) : tsearchfields ( _gamemap ) {};
                           } search;
 
            protected:
@@ -432,7 +438,7 @@ class VehicleService : public VehicleAction {
                      void             startsuche ( void );
                      void             init ( pvehicle _veh, pbuilding _bld );
                      void             run (  );
-                     FieldSearch ( VehicleService& _vs ) : vs ( _vs ) { bypassChecks.distance = false; bypassChecks.height = false; };
+                     FieldSearch ( VehicleService& _vs, pmap _gamemap ) : tsearchfields ( _gamemap ), vs ( _vs ) { bypassChecks.distance = false; bypassChecks.height = false; };
                   } fieldSearch;
 
 

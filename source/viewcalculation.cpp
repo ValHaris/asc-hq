@@ -37,7 +37,7 @@ void         tcomputeview::initviewcalculation(  int view, int jamming, int sx, 
    else
       md = jamdist / minmalq + 1;
 
-   initsuche( gamemap, sx, sy, md, 1 );
+   initsearch( sx, sy, md, 1 );
 }
 
 

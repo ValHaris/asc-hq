@@ -1522,14 +1522,14 @@ void Vehicle :: addview ( void )
 {
    tcomputevehicleview bes ( gamemap );
    bes.init( this, +1 );
-   bes.startsuche();
+   bes.startsearch();
 }
 
 void Vehicle :: removeview ( void )
 {
    tcomputevehicleview bes ( gamemap );
    bes.init( this, -1 );
-   bes.startsuche();
+   bes.startsearch();
 }
 
 
@@ -1537,8 +1537,9 @@ class tsearchforminablefields: public tsearchfields {
       int shareview;
     public:
       int numberoffields;
-      int  run ( pvehicle     eht, pmap gamemap );
+      int  run ( pvehicle     eht );
       virtual void            testfield ( void );
+      tsearchforminablefields ( pmap _gamemap ) : tsearchfields ( _gamemap ) {};
   };
 
 
@@ -1564,7 +1565,7 @@ void         tsearchforminablefields::testfield(void)
 
 
 
-int  tsearchforminablefields::run( pvehicle eht, pmap gamemap )
+int  tsearchforminablefields::run( pvehicle eht )
 {
    if ( (eht->functions & cfmanualdigger) && !(eht->functions & cfautodigger) )
       if ( eht->attacked ||
@@ -1582,9 +1583,9 @@ int  tsearchforminablefields::run( pvehicle eht, pmap gamemap )
                   shareview += 1 << i;
 
    numberoffields = 0;
-   initsuche( gamemap, eht->xpos, eht->ypos,eht->typ->digrange,1);
+   initsearch( eht->xpos, eht->ypos,eht->typ->digrange,1);
    if ( eht->typ->digrange )
-      startsuche();
+      startsearch();
 
    xp = eht->xpos;
    yp = eht->ypos;
@@ -1603,8 +1604,8 @@ int  tsearchforminablefields::run( pvehicle eht, pmap gamemap )
 
 int Vehicle::searchForMineralResources ( void )
 {
-    tsearchforminablefields sfmf;
-    return sfmf.run( this, gamemap );
+    tsearchforminablefields sfmf ( gamemap );
+    return sfmf.run( this );
 }
 
 
