@@ -21,15 +21,25 @@
 
 class CGameOptions
 {
-      const int searchPathNum;
    public:
-      CGameOptions(void);
-      CGameOptions( const CGameOptions& cgo );
+		friend class CLoadableGameOptions;	
+	   static const int searchPathNum;
+		/** returns the only Instance */
+		static	CGameOptions* Instance();
 
-      void setDefaults( void );
-      void copy ( const CGameOptions& cgo );
+		CGameOptions(void);
+		CGameOptions( const CGameOptions& cgo );
+	  
+		void setDefaults( void );
+		void copy ( const CGameOptions& cgo );
 
-      int version;
+		bool	isChanged();
+		void	setChanged(bool flag	=	true);		
+      
+		const char*	getSearchPath(int i)	{	return(searchPath+i)->getName();};
+	    int getSearchPathNum ( void );
+		
+		int version;
       int fastmove;
       int visibility_calc_algo;      // 0 sauber, 1 schnell;
       int movespeed;
@@ -87,11 +97,22 @@ class CGameOptions
          }
          interpolate;
       } bi3;
-      int changed;
+	private:     
+	  bool	_changed;
       Named* searchPath;
-      int getSearchPathNum ( void );
 };
 
-extern CGameOptions gameoptions;
+inline
+bool	CGameOptions::isChanged()
+{
+	return _changed;
+}
+
+inline
+void	CGameOptions::setChanged(bool flag	)
+{
+	_changed	=	flag;
+}		
+      
 
 #endif //#ifndef GAMEOPTIONS_H

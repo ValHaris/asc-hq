@@ -15,7 +15,6 @@
  *                                                                         *
  ***************************************************************************/
 
-//#include <stdio.h>
 #include <iostream>
 #include <iomanip>
 
@@ -109,9 +108,10 @@ bool	PropertyGroup::Load(std::istream& is)
 		if	(p)
 			p->setValueString(pszValue);
 		else
-			cerr	<<	"PropertyGroup::Load  Property "
-					<<	pszName	
-					<<	" not found"	<<endl;
+			std::cerr	<<	"PropertyGroup::Load  Property "
+						<<	pszName	
+						<<	" not found"	
+						<<	std::endl;
 	};
 	return false;
 }
@@ -127,7 +127,7 @@ bool	PropertyGroup::Save(std::ostream& os)
 		os	<<	(*it)->getName()
 			<<	SEPARATOR
 			<<	(*it)->getValueString()		
-			<<	endl;
+			<<	std::endl;
 	};
 	return false;
 }

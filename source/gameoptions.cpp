@@ -17,16 +17,31 @@
 #include "gameoptions.h"
 #include "CLoadable.h"
 
+CGameOptions* pStaticGameOptions=NULL;
+
+class Destroyer	{
+	public:
+		~Destroyer()	{
+			delete pStaticGameOptions;
+		};
+} destroyer;	
+
+CGameOptions* CGameOptions::Instance()
+{
+	 if (!pStaticGameOptions)
+		 pStaticGameOptions	=	new CGameOptions;
+	return pStaticGameOptions;
+}
+
+const int CGameOptions::searchPathNum	=	10;
+	
 CGameOptions::CGameOptions( const CGameOptions& cgo )
-             : searchPathNum ( 10 )
 {
    searchPath = new Named[ searchPathNum ];
    copy ( cgo );
 }
 
-
 CGameOptions::CGameOptions(void)
-             : searchPathNum ( 10 )
 {
    searchPath = new Named[ searchPathNum ];
    setDefaults();
@@ -54,7 +69,8 @@ void CGameOptions::setDefaults ( void )
    mouse.smallguibutton=1;
    mouse.largeguibutton=0;
    mouse.smalliconundermouse=2;  // 0: nie=0;  1: immer=0; 2: nur wenn vehicle, gebÑude, oder temp unter MAUS
-   mouse.centerbutton=4;    // Maustaste zum zentrieren des fielder, Åber dem sich die Maus befindet=0;
+   mouse.centerbutton=4;    // Maustaste zum zentrieren des fielder, ?ber dem sich die Maus befindet=0;
+
    mouse.unitweaponinfo=0;
    mouse.dragndropmovement=0;
 
@@ -90,7 +106,7 @@ void CGameOptions::setDefaults ( void )
       searchPath[i].setName ( NULL );
   #endif
 
-   changed	=	0;
+  setChanged();
 }
 
 void CGameOptions::copy ( const CGameOptions& cgo )
@@ -139,13 +155,10 @@ void CGameOptions::copy ( const CGameOptions& cgo )
    for ( int i = 0; i < getSearchPathNum(); i++ )
       searchPath[i].setName ( cgo.searchPath[i].getName() );
 
-   changed = 1;
+   setChanged();
 }
 
 int CGameOptions :: getSearchPathNum ( void )
 {
    return searchPathNum;
 }
-
-
-CGameOptions gameoptions;
