@@ -2,7 +2,7 @@
 **
 ** weaponguide.cpp
 **
-** Sun Jun 20 13:52:28 2004
+** Fri Jun 25 21:35:00 2004
 ** Linux 2.4.21-198-default (#1 Thu Mar 11 17:43:56 UTC 2004) i686
 ** martin@linux. (Martin Bickel)
 **
@@ -45,7 +45,8 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
     {"framename", 1, 0, 'f'},
     {"style", 1, 0, 't'},
     {"menustyle", 1, 0, 'm'},
-    {"help", 0, 0, 'h'},
+    {"allbuildings", 0, 0, 'b'},
+    {"roottech", 1, 0, 'h'},
     {"version", 0, 0, 'v'},
     {0, 0, 0, 0}
   };
@@ -60,10 +61,11 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
   _f = "main";
   _t = "../../ug.css";
   _m = "asc.css";
-  _h = false;
+  _b = false;
+  _h = -1;
   _v = false;
 
-  while ((c = getopt_long(argc, argv, "c:r:d:l:s:iz:f:t:m:hv", long_options, &option_index)) != EOF)
+  while ((c = getopt_long(argc, argv, "c:r:d:l:s:iz:f:t:m:bh:v", long_options, &option_index)) != EOF)
     {
       switch(c)
         {
@@ -131,9 +133,18 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
           _m = optarg;
           break;
 
+        case 'b': 
+          _b = true;
+          break;
+
         case 'h': 
-          _h = true;
-          this->usage();
+          _h = atoi(optarg);
+          if (_h < -1)
+            {
+              string s;
+              s += "parameter range error: h must be >= -1";
+              throw(s);
+            }
           break;
 
         case 'v': 
@@ -159,8 +170,8 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
 
 void Cmdline::usage()
 {
-  cout << "generates html files that document ASCs units " << endl;
-  cout << "usage: " << _executable << " [ -crdlsizftmhv ]  vehicleFiles" << endl;
+  cout << "generates html files that document ASCs units and buildings " << endl;
+  cout << "usage: " << _executable << " [ -crdlsizftmbhv ]  vehicleFiles" << endl;
   cout << "  [ -c ] ";
   cout << "[ --configfile ]  ";
   cout << "(";
@@ -240,13 +251,22 @@ void Cmdline::usage()
   cout << " default=asc.css";
   cout << ")\n";
   cout << "         name of the menu stylesheet\n";
-  cout << "  [ -h ] ";
-  cout << "[ --help ]  ";
+  cout << "  [ -b ] ";
+  cout << "[ --allbuildings ]  ";
   cout << "(";
   cout << "type=";
   cout << "FLAG";
   cout << ")\n";
-  cout << "         Display help information.\n";
+  cout << "         generate doc for all buildings instead of uniquely named ones\n";
+  cout << "  [ -h ] ";
+  cout << "[ --roottech ]  ";
+  cout << "(";
+  cout << "type=";
+  cout << "INTEGER,";
+  cout << " range=-1...,";
+  cout << " default=-1";
+  cout << ")\n";
+  cout << "         specify root technology for tech dependency\n";
   cout << "  [ -v ] ";
   cout << "[ --version ]  ";
   cout << "(";

@@ -2,7 +2,7 @@
 **
 ** weaponguide.h
 **
-** Sun Jun 20 13:52:28 2004
+** Fri Jun 25 21:35:00 2004
 ** Linux 2.4.21-198-default (#1 Thu Mar 11 17:43:56 UTC 2004) i686
 ** martin@linux. (Martin Bickel)
 **
@@ -42,7 +42,8 @@ private:
   string _f;
   string _t;
   string _m;
-  bool _h;
+  bool _b;
+  int _h;
   bool _v;
 
   /* other stuff to keep track of */
@@ -72,7 +73,8 @@ public:
   string f() { return _f; }
   string t() { return _t; }
   string m() { return _m; }
-  bool h() { return _h; }
+  bool b() { return _b; }
+  int h() { return _h; }
   bool v() { return _v; }
 };
 

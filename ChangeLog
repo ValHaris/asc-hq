@@ -1,3 +1,403 @@
+2004-06-23 21:36  mbickel
+
+	* source/: controls.cpp, history.cpp, sg.cpp:  Fixed: bug in
+	detection of units that can fire on a moving unit
+	 Added: rename building
+
+2004-06-20 21:06  mbickel
+
+	* libtool, doc/Makefile.am, doc/Makefile.in,
+	doc/manpages/Makefile.am, doc/manpages/Makefile.in,
+	doc/manpages/asc.6, doc/manpages/asc.sgml,
+	doc/manpages/asc_demount.6, doc/manpages/asc_demount.sgml,
+	doc/manpages/asc_makegfx.6, doc/manpages/asc_mapedit.6,
+	doc/manpages/asc_mapedit.sgml, doc/manpages/asc_mount.6,
+	doc/manpages/asc_mount.sgml, doc/manpages/asc_weaponguide.6,
+	source/clparser/weaponguide.cpp, source/clparser/weaponguide.h: 
+	Added manpages
+
+2004-06-20 20:43  mbickel
+
+	* source/: itemrepository.cpp, tools/bin2text.cpp:  Updated Item
+	loader
+
+2004-06-20 14:26  mbickel
+
+	* data/: asc012.map, campain_tech_filter.asctxt,
+	tech_asc012_ARMADILLO 2.asctxt, tech_asc012_ARMADILLO.asctxt,
+	tech_asc012_ASSAULT TANK.asctxt, tech_asc012_BLACKOUT.asctxt,
+	tech_asc012_COMA.asctxt, tech_asc012_COSINUS.asctxt,
+	tech_asc012_HORNET.asctxt, tech_asc012_LIGHT ASSAULT.asctxt,
+	tech_asc012_NOVA 2.asctxt, tech_asc012_NOVA.asctxt,
+	tech_asc012_SNIPER.asctxt:  Updated map12
+
+2004-06-20 13:25  mbickel
+
+	* source/strtmesg.cpp:	Updated version number
+
+2004-06-19 15:09  mbickel
+
+	* data/Adapter_asc012_ARMADILLO 2.asctxt,
+	data/Adapter_asc012_ARMADILLO.asctxt, data/Adapter_asc012_ASSAULT
+	TANK.asctxt, data/Adapter_asc012_BLACKOUT.asctxt,
+	data/Adapter_asc012_COMA.asctxt,
+	data/Adapter_asc012_COSINUS.asctxt,
+	data/Adapter_asc012_HORNET.asctxt, data/Adapter_asc012_LIGHT
+	ASSAULT.asctxt, data/Adapter_asc012_NOVA 2.asctxt,
+	data/Adapter_asc012_NOVA.asctxt, data/Adapter_asc012_SNIPER.asctxt,
+	data/asc012.map, data/tech_asc012_ARMADILLO 2.asctxt,
+	data/tech_asc012_ARMADILLO.asctxt, data/tech_asc012_ASSAULT
+	TANK.asctxt, data/tech_asc012_BLACKOUT.asctxt,
+	data/tech_asc012_COMA.asctxt, data/tech_asc012_COSINUS.asctxt,
+	data/tech_asc012_HORNET.asctxt, data/tech_asc012_LIGHT
+	ASSAULT.asctxt, data/tech_asc012_NOVA 2.asctxt,
+	data/tech_asc012_NOVA.asctxt, data/tech_asc012_SNIPER.asctxt,
+	data/tech_asc012_base.asctxt, data/tech_asc012_tg1.asctxt,
+	data/tech_asc012_tg2.asctxt, data/tech_asc012_tg3.asctxt,
+	data/tech_asc012_tg4.asctxt, source/itemrepository.cpp,
+	source/prehistoricevents.cpp, source/sg.cpp, source/strtmesg.cpp,
+	source/vehicle.cpp, source/vehicletype.cpp, source/vehicletype.h,
+	source/win32/borland/asc.bpr:  Updated campaign maps
+	 Multiply wreckage objects for units
+
+2004-06-16 21:38  mbickel
+
+	* data/miss525e.map, data/railstations2.map, source/TODO,
+	source/attack.cpp:  Fixed: height delta not evaluated in attack
+	 Updated maps
+
+2004-06-13 12:34  mbickel
+
+	* source/: edmisc.cpp, replay.cpp:  Fixed cut&paste in Mapeditor
+
+2004-06-10 16:05  mbickel
+
+	* source/: buildingtype.cpp, itemrepository.cpp, objecttype.cpp,
+	simplestream.cpp, vehicle.cpp, vehicle.h, vehicletype.cpp,
+	vehicletype.h:	Improved error handling
+	 VehicleTypes can specify CargoMovementDivisor
+
+2004-06-10 12:41  mbickel
+
+	* configure, configure.in, libtool, data/Railstation2.map,
+	data/railstations2.map:  Fixed compilation problems
+
+2004-06-10 11:02  mbickel
+
+	* configure.in, data/Railstation2.map, data/railstat.map,
+	source/strtmesg.cpp:  Updated campaign maps
+
+2004-06-10 09:02  mbickel
+
+	* source/: replay.cpp, replay.h:  Improved replay messages
+
+2004-06-09 16:44  mbickel
+
+	* data/asc009.map, data/asc010a.map, data/asc010b.map,
+	data/helpsyst.txt, doc/index.html, source/CLoadable.cpp,
+	source/attack.cpp, source/buildings.cpp, source/buildings.h,
+	source/buildingtype.cpp, source/buildingtype.h,
+	source/containerbasetype.cpp, source/controls.cpp,
+	source/dlg_box.cpp, source/edmisc.cpp, source/gamedlg.cpp,
+	source/gamemap.cpp, source/gamemap.h, source/gameoptions.cpp,
+	source/gameoptions.h, source/itemrepository.cpp,
+	source/objecttype.cpp, source/objecttype.h, source/replay.cpp,
+	source/replay.h, source/research.cpp, source/research.h,
+	source/strtmesg.cpp, source/textfiletags.cpp, source/unitctrl.cpp,
+	source/viewcalculation.cpp, source/ai/tactics.cpp,
+	source/tools/weaponguide.cpp:  Replay fixes
+	 Updated maps
+
+2004-05-30 10:54  mbickel
+
+	* doc/: biimport.html, contact.html, demount.html, example.msg,
+	index.html, install.html, install_cvs.html, install_tgz.html,
+	mount.html, source.html, source_borland.html, source_watcom.html,
+	text.html:  Updated documentation
+
+2004-05-30 09:24  mbickel
+
+	* libtool, source/clparser/weaponguide.cpp,
+	source/clparser/weaponguide.h:	Updated weaponguide command line
+	params
+
+2004-05-30 08:54  mbickel
+
+	* doc/editors.html:  Updated doc
+
+2004-05-30 08:47  mbickel
+
+	* doc/graphics.html, doc/index.html, doc/makeobject.html,
+	doc/maketank.html, doc/maketech.html, doc/mapedit.html,
+	source/viewcalculation.cpp:  Updated documentation
+
+2004-05-29 21:37  mbickel
+
+	* doc/dos4gw.doc, doc/prnttank.html, source/research.cpp,
+	source/research.h, source/strtmesg.cpp, source/ai/tactics.cpp: 
+	Added BlockingOtherTechnology
+
+2004-05-29 17:07  mbickel
+
+	* data/asc001.map, data/asc003.map, source/attack.cpp,
+	source/basestrm.h, source/buildings.cpp, source/edglobal.cpp,
+	source/edglobal.h, source/edmisc.cpp, source/edmisc.h,
+	source/itemrepository.cpp, source/loadbi3.cpp, source/music.cpp,
+	source/replay.cpp, source/research.cpp, source/research.h,
+	source/sg.cpp, source/strtmesg.cpp, source/vehicle.cpp,
+	source/ai/tactics.cpp, source/clparser/weaponguide.gp,
+	source/tools/weaponguide.cpp, source/tools/win/weaponguide.bpr,
+	source/win32/borland/asc.bpr:  Fixed maps
+	 Fixed crash with asc.cache
+	 ai speed up
+
+2004-05-23 20:54  mbickel
+
+	* data/asc009.map:  Updated messages for asc009 map
+
+2004-05-23 20:02  mbickel
+
+	* configure, configure.in, libtool:  Updated makefile
+
+2004-05-23 19:34  mbickel
+
+	* data/data.version, source/sgstream.cpp, source/strtmesg.cpp: 
+	Updated version information
+
+2004-05-23 19:05  mbickel
+
+	* data/message1.txt, source/building.cpp,
+	source/building_controls.h, source/controls.cpp, source/dialog.cpp,
+	source/gamedlg.cpp, source/gamemap.cpp, source/replay.cpp,
+	source/replay.h, source/research.cpp, source/research.h,
+	source/sg.cpp, source/strtmesg.cpp:  Added research checking to
+	replay
+
+2004-05-23 14:54  mbickel
+
+	* data/asc001.map, data/asc002.map, data/asc003.map,
+	data/asc003.msg, data/asc004.map, data/asc004.msg, data/asc005.map,
+	data/asc005.msg, data/asc006.map, data/asc006.msg, data/asc007.map,
+	data/asc007.msg, data/asc008.map, data/asc008.msg, data/asc009.map,
+	data/asc010a.map, data/asc010b.map, data/asc011.map,
+	source/buildingtype.h, source/controls.h, source/edmisc.cpp,
+	source/gamemap.h, source/graphicset.h, source/loadbi3.h,
+	source/research.cpp, source/research.h, source/sg.h,
+	source/sgstream.cpp, source/sgstream.h, source/typen.h,
+	source/ai/ai_common.h, source/ai/base.cpp:  Updated campaign maps
+	 improved tech tree generation
+
+2004-05-20 16:49  mbickel
+
+	* libtool, source/tools/lib/errorout.cpp:  Fixed compilation
+	problem for tools
+
+2004-05-20 16:01  mbickel
+
+	* source/: attack.cpp, building.cpp, buildings.cpp,
+	buildingtype.cpp, buildingtype.h, controls.cpp, dialog.cpp,
+	dialog.h, edglobal.cpp, edglobal.h, edmisc.cpp, edmisc.h, errors.h,
+	gamedlg.cpp, gameevents.cpp, gameoptions.cpp, itemrepository.cpp,
+	itemrepository.h, newfont.cpp, newfont.h, objecttype.cpp,
+	objecttype.h, research.cpp, research.h, sg.cpp, strtmesg.cpp,
+	terraintype.cpp, textfile_evaluation.cpp, textfiletags.cpp,
+	typen.h:  Many bugfixes and new features, among them:
+	   - Container.FillUnitsAutomatically = 2
+	   - generate Tech Tree
+	   - show research info
+	   - edit research in mapeditor
+	   - limit production to units that can leave a building
+
+2004-05-16 20:31  mbickel
+
+	* configure, configure.in:  Updated SDL version check in
+	configure.in
+
+2004-05-16 19:25  mbickel
+
+	* source/: itemrepository.cpp, libs/sdlmm/SDLmm.bpf,
+	libs/sdlmm/SDLmm.bpr, libs/sdlmm/src/sdlmm_config.h,
+	libs/sdlmm/src/sdlmm_global.cpp, win32/borland/asc.bpr:  Updated
+	borldand project files
+
+2004-05-16 17:40  mbickel
+
+	* Makefile.in, configure, configure.in, libtool, data/Makefile.in,
+	data/dialog/Makefile.in, data/music/Makefile.in, doc/Makefile.in,
+	doc/manpages/Makefile.in, source/Makefile.in, source/basegfx.h,
+	source/basetemp.h, source/basictypes.h, source/building.cpp,
+	source/building_controls.h, source/buildings.cpp,
+	source/buildings.h, source/controls.cpp, source/itemrepository.cpp,
+	source/research.cpp, source/research.h,
+	source/textfile_evaluation.cpp, source/typen.h,
+	source/ai/Makefile.am, source/ai/Makefile.in,
+	source/clparser/Makefile.in, source/docs/Makefile.in,
+	source/docs/en/Makefile.in, source/libs/Makefile.am,
+	source/libs/Makefile.in, source/libs/sdlmm/Makefile.am,
+	source/libs/sdlmm/Makefile.in, source/libs/sdlmm/src/Makefile.am,
+	source/libs/sdlmm/src/Makefile.in, source/libs/sdlmm/src/sdlmm.h,
+	source/libs/sdlmm/src/sdlmm.tmpl,
+	source/libs/sdlmm/src/sdlmm_audio.cpp,
+	source/libs/sdlmm/src/sdlmm_audio.h,
+	source/libs/sdlmm/src/sdlmm_basesurface.cpp,
+	source/libs/sdlmm/src/sdlmm_basesurface.h,
+	source/libs/sdlmm/src/sdlmm_cd.cpp,
+	source/libs/sdlmm/src/sdlmm_cd.h,
+	source/libs/sdlmm/src/sdlmm_color.h,
+	source/libs/sdlmm/src/sdlmm_config.h,
+	source/libs/sdlmm/src/sdlmm_display.cpp,
+	source/libs/sdlmm/src/sdlmm_display.h,
+	source/libs/sdlmm/src/sdlmm_event.cpp,
+	source/libs/sdlmm/src/sdlmm_event.h,
+	source/libs/sdlmm/src/sdlmm_eventhandler.h,
+	source/libs/sdlmm/src/sdlmm_global.cpp,
+	source/libs/sdlmm/src/sdlmm_global.h,
+	source/libs/sdlmm/src/sdlmm_incl.tmpl,
+	source/libs/sdlmm/src/sdlmm_joystick.cpp,
+	source/libs/sdlmm/src/sdlmm_joystick.h,
+	source/libs/sdlmm/src/sdlmm_misc.h,
+	source/libs/sdlmm/src/sdlmm_pixelformat.cpp,
+	source/libs/sdlmm/src/sdlmm_pixelformat.h,
+	source/libs/sdlmm/src/sdlmm_spoint.h,
+	source/libs/sdlmm/src/sdlmm_srect.cpp,
+	source/libs/sdlmm/src/sdlmm_srect.h,
+	source/libs/sdlmm/src/sdlmm_surface.cpp,
+	source/libs/sdlmm/src/sdlmm_surface.h,
+	source/libs/sdlmm/src/sdlmm_timer.cpp,
+	source/libs/sdlmm/src/sdlmm_timer.h,
+	source/libs/sdlmm/src/sdlmm_videoinfo.cpp,
+	source/libs/sdlmm/src/sdlmm_videoinfo.h,
+	source/libs/triangul/Makefile.in, source/sdl/Makefile.am,
+	source/sdl/Makefile.in, source/tools/Makefile.in,
+	source/tools/lib/Makefile.in, source/tools/linux/Makefile.am,
+	source/tools/linux/Makefile.in, source/unix/Makefile.am,
+	source/unix/Makefile.in, source/unix/mapeditor/Makefile.am,
+	source/unix/mapeditor/Makefile.in:  Fixed compilation problems with
+	gcc
+	 Included SDLmm library
+
+2004-05-16 13:27  mbickel
+
+	* source/: basestrm.cpp, basestrm.h, containerbasetype.cpp,
+	edmain.cpp, gamedlg.cpp, gameevents.cpp, itemrepository.cpp,
+	itemrepository.h, loadbi3.cpp, loadbi3.h, mappolygons.cpp,
+	music.cpp, music.h, objecttype.cpp, research.cpp, research.h,
+	sg.cpp, simplestream.cpp, simplestream.h, strtmesg.cpp,
+	terraintype.cpp, typen.h, vehicletype.cpp, tools/weaponguide.cpp,
+	tools/win/weaponguide.bpf, tools/win/weaponguide.bpr,
+	win32/borland/mapeditor/mapeditor.bpr:	Speed up of startup loading
+	by using a cache file
+
+2004-05-12 22:05  mbickel
+
+	* source/: building.cpp, buildings.cpp, controls.cpp, controls.h,
+	dialog.cpp, edevents.cpp, edgen.cpp, edglobal.cpp, edmain.cpp,
+	edmisc.cpp, edselfnt.cpp, edselfnt.h, gamedlg.cpp,
+	gameevent_dialogs.cpp, gameevents.cpp, gamemap.cpp, gui.cpp,
+	itemrepository.cpp, itemrepository.h, loadbi3.cpp, loaders.cpp,
+	loaders.h, map2pcx.cpp, objecttype.cpp, objecttype.h, replay.cpp,
+	sg.cpp, strtmesg.cpp, typen.h, ai/valuation.cpp:  Restructured file
+	loading routines for upcoming data cache
+
+2004-05-11 22:22  mbickel
+
+	* source/: attack.cpp, basictypes.h, building.cpp, buildings.cpp,
+	buildingtype.cpp, buildingtype.h, containerbasetype.h,
+	controls.cpp, controls.h, dialog.cpp, dlg_box.cpp, dlg_box.h,
+	edevents.cpp, edglobal.cpp, edglobal.h, edmisc.cpp, edmisc.h,
+	gamedlg.cpp, gameevent_dialogs.cpp, gameevent_dialogs.h,
+	gamemap.cpp, gamemap.h, gui.cpp, itemrepository.cpp,
+	itemrepository.h, loaders.cpp, loaders.h, objecttype.cpp,
+	objecttype.h, pointers.h, replay.cpp, research.cpp, research.h,
+	sg.cpp, sgstream.cpp, sgstream.h, spfst.cpp, stringtokenizer.cpp,
+	stringtokenizer.h, strtmesg.cpp, textfile_evaluation.cpp,
+	textfile_evaluation.h, typen.cpp, typen.h, vehicle.cpp, vehicle.h,
+	vehicletype.cpp, vehicletype.h:  Readded research system to ASC
+
+2004-05-09 21:42  mbickel
+
+	* data/: asc012.map, buyprodline.nic, message1.txt,
+	removeprodline.nic:  Added icons for production line
+	construction/removal
+
+2004-05-07 19:52  mbickel
+
+	* source/: buildings.cpp, strtmesg.cpp:  Fixed: power setting of
+	refineries reset after each loading of game
+
+2004-04-23 19:43  mbickel
+
+	* source/itemrepository.cpp:  Fixed compilation problems
+
+2004-04-23 18:35  mbickel
+
+	* source/: attack.cpp, building.cpp, buildings.cpp, controls.cpp,
+	controls.h, dialog.cpp, gamemap.cpp, gamemap.h, graphicset.cpp,
+	gui.cpp, loaders.h, pointers.h, sgstream.cpp, strtmesg.cpp,
+	typen.cpp, typen.h, win32/borland/asc.mak:  Ammo more expensive
+	 newly produced units can't move out of buildings
+	 attack / defense experience divisor
+
+2004-04-12 15:45  mbickel
+
+	* source/: buildings.cpp, controls.cpp:  Fixed: reaction fire
+	revealed location of firing unit
+	 building plus can not be larger than type maxplus
+
+2004-04-12 14:03  mbickel
+
+	* data/asc008.map:  Updated campaign maps
+
+2004-04-10 14:25  mbickel
+
+	* data/asc008.map, data/asc010a.map, source/strtmesg.cpp,
+	source/viewcalculation.cpp, source/ai/service.cpp:  Updated
+	campaign maps
+	 fixed building jamming
+	 fixed AI bug: units not moving
+
+2004-04-09 15:25  mbickel
+
+	* ChangeLog, libtool, source/buildings.cpp, source/gamemap.h,
+	source/sg.cpp:	Fixed linux compilation problems
+
+2004-04-04 17:35  mbickel
+
+	* source/: unitctrl.cpp, vehicle.cpp, viewcalculation.cpp: 
+	Buildings can't view mines
+	 Vehicles now always save their resource cargo
+
+2004-03-28 14:43  mbickel
+
+	* source/: buildings.cpp, buildings.h, misc.cpp, misc.h, sg.cpp,
+	strtmesg.cpp:  rewrote mining station code
+
+2004-03-27 22:49  mbickel
+
+	* data/: asc001.map, asc002.map, asc003.map, asc004.map,
+	asc005.map, asc006.map, asc007.map, asc008.map, asc009.map,
+	asc010a.map, asc010b.map, asc011.map:  Updated campaign maps:
+	   ASC004: Taktischer Hinweis (Minen), + 1 Ceti
+	   ASC005: Gegner-Abwehr  etwas verstärkt
+	   ASC008: +1 Mine, +1 Bohrturm
+	   ASC009: Training auf 5 begrenzt, Trooper können nicht gebaut
+	werden, Ressourcen im Boden verringert, Gegner etwas verstärkt
+	   ASC010a: +2 WindPP, damit Cone gebaut werden kann (interims! die
+	2 PP verschwinden wieder sobald das Akku-Gebäude fertig ist),
+	+2MonsterWIg
+	   ASC010b: Gegner mit MG-Nest-Abwehr verstärkt
+	 Added campaign map11
+
+2004-03-27 22:48  mbickel
+
+	* source/: buildings.cpp, gameevents.cpp, gameoptions.cpp, sg.cpp,
+	strtmesg.cpp, unitctrl.cpp, unitctrl.h, win32/borland/asc.bpr: 
+	Added function ViewPipeNet to ASC
+	 Fixed: trigger specificunitenterespoly not working for fields with
+	buildings
+	 fixed: default map title was asc000 instead of asc001
+	 Speedup for resource transfer operations
+
 2004-02-07 13:34  mbickel
 
 	* asc.kdevprj, data/railstat.map, source/gameevents.h,
@@ -1001,9 +1401,9 @@
 	* asc.bpg, data/first.map, data/hheli.wav, data/jet.wav,
 	data/paybacktime.map, data/raketenari.wav, data/sounds.asctxt,
 	data/sounds.txt, data/tankmove.wav, data/train.wav, doc/asc.html,
-	doc/raw/spielen.txt, source/attack.cpp, source/building.h,
-	source/building_controls.h, source/controls.h, source/dialog.cpp,
-	source/gamemap.h, source/gui.cpp, source/gui.h, source/loaders.cpp,
+	source/attack.cpp, source/building.h, source/building_controls.h,
+	source/controls.h, source/dialog.cpp, source/gamemap.h,
+	source/gui.cpp, source/gui.h, source/loaders.cpp,
 	source/missions.h, source/network.h, source/soundList.cpp,
 	source/soundList.h, source/strtmesg.cpp,
 	source/textfile_evaluation.cpp, source/textfile_evaluation.h,
@@ -1967,11 +2367,6 @@
 	source/unix/Makefile.am, source/unix/mapeditor/Makefile.am: 
 	Started integration of paragui
 
-2002-01-30 00:14  mbickel
-
-	* doc/raw/: ascpalette.gif, building-raster.pcx:  Added some which
-	should be incorporated into the documentation
-
 2002-01-29 21:42  mbickel
 
 	* configure.in, source/basestrm.cpp, source/basestrm.h,
@@ -2185,11 +2580,6 @@
 	* source/: sg.cpp, strtmesg.cpp, ai/ai.h, ai/base.cpp,
 	ai/tactics.cpp, ai/valuation.cpp:  AI can be used as benchmark
 	 Improved AI unit job determination mechanism
-
-2001-11-28 19:06  mbickel
-
-	* doc/raw/: movemalus.png, spielen.txt:  Added raw documentation in
-	German
 
 2001-11-28 15:55  mbickel
 
@@ -4181,8 +4571,6 @@
 	doc/graphics.html, doc/index.html, doc/makeobject.html,
 	doc/maketank.html, doc/maketech.html, doc/mapedit.html,
 	doc/mount.html, doc/prnttank.html, doc/text.html,
-	doc/graphics/attackformula.gif, doc/graphics/direction_example.gif,
-	doc/graphics/directions.gif, doc/graphics/hemming.gif,
 	source/Makefile.am, source/Makefile.in, source/sg.cpp,
 	source/vehicle.cpp, source/libs/triangul/trimisc.c,
 	source/unix/Makefile.am, source/unix/Makefile.in,
@@ -5589,9 +5977,8 @@
 
 2000-09-23 19:46  mbickel
 
-	* asc.kdevprj, doc/asc.css, doc/contact.html, doc/source.html,
-	doc/graphics/body2b.jpg, doc/graphics/join.gif,
-	doc/graphics/sflogo.gif:  Updated documentation directory
+	* asc.kdevprj, doc/asc.css, doc/contact.html, doc/source.html: 
+	Updated documentation directory
 
 2000-09-22 21:05  mbickel
 
