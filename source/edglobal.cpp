@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.62.2.1 2004-11-14 15:47:41 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.62.2.2 2004-12-07 21:11:19 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -39,6 +39,7 @@
 #include "itemrepository.h"
 #include "clipboard.h"
 #include "resourceplacementdialog.h"
+#include "weatherdialog.h"
 
 mc_check mc;
 
@@ -133,7 +134,8 @@ mc_check mc;
         "Generate TechTree",
         "Edit TechAdapter",
         "Reset Player Data...",
-        "Fill map with resources" };
+        "Fill map with resources",
+        "setup weather generation" };
 
 
 // õS Infomessage
@@ -919,6 +921,8 @@ void execaction(int code)
    case act_editTechAdapter: editTechAdapter();
       break;
    case act_resetPlayerData: resetPlayerData();
+      break;
+   case act_setactnewweather: weatherConfigurationDialog();
       break;
 
     }

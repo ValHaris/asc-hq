@@ -1,4 +1,4 @@
-//     $Id: edglobal.h,v 1.20.2.1 2004-11-14 15:47:41 mbickel Exp $
+//     $Id: edglobal.h,v 1.20.2.2 2004-12-07 21:11:19 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -35,7 +35,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 90;
+const int execactionscount = 91;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -129,6 +129,8 @@ enum tuseractions {
      act_generateTechTree,
      act_editTechAdapter,
      act_resetPlayerData,
-     act_createresources2 };
+     act_createresources2,
+     act_setactnewweather
+ };
 
 extern void         execaction(int code);
