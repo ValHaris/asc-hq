@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.8 2000-01-07 13:20:07 mbickel Exp $
+//     $Id: events.cpp,v 1.9 2000-01-25 19:28:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/01/07 13:20:07  mbickel
+//      DGA fullscreen mode now working
+//
 //     Revision 1.7  2000/01/06 11:19:16  mbickel
 //      Worked on the Linux-port again...
 //
@@ -135,9 +138,9 @@ int eventhandler ( void* nothing )
                mouseparams.x1 = event.motion.x;
                mouseparams.y1 = event.motion.y;
                mouseparams.taste = 0;
-               mouseparams.taste =  ((event.motion.state & 1) > 0) ||
-                                   (((event.motion.state & 2) > 0) >> 2) ||
-                                   (((event.motion.state & 4) > 0) >> 1);
+               for ( int i = 0; i < 3; i++ )
+                  if ( event.motion.state & (1 << i) )
+                     mouseparams.taste |= 1 << mousetranslate[i];
                callsubhandler();
             }
             break;

@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.17 2000-01-24 17:35:42 mbickel Exp $
+//     $Id: dialog.cpp,v 1.18 2000-01-25 19:28:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/01/24 17:35:42  mbickel
+//      Added dummy routines for sound under DOS
+//      Cleaned up weapon specification
+//
 //     Revision 1.16  2000/01/19 22:14:19  mbickel
 //      Fixed:
 //        - crash in replay
@@ -858,7 +862,12 @@ void         tvehicleinfo::paintmarkweap(void)
             activefontsettings.color = darkgray; 
 
          activefontsettings.length = 190;
-         strcat( strng, cwaffentypen[ aktvehicle->weapons->weapon[ii].getScalarWeaponType() ] );
+         if ( aktvehicle->weapons->weapon[ii].getScalarWeaponType() >= 0 )
+            strcat( strng, cwaffentypen[ aktvehicle->weapons->weapon[ii].getScalarWeaponType() ] );
+         else
+            if ( aktvehicle->weapons->weapon[ii].service() )
+               strcat( strng, cwaffentypen[ cwservicen ] );
+
          showtext2( strng, wepx + 20, wepy + ii * 20);
 
 
@@ -1489,15 +1498,16 @@ void         tvehicleinfo::showclasses( void )
       doubleline ( x1 + 25, y1 + starty + 80, x1 + xsize - 25, y1 + starty + 80 );
 
       for (i = 0; i<aktvehicle->classnum ;i++ ) {
-        activefontsettings.background = backgrnd2;
-        activefontsettings.color = black;
-        activefontsettings.length = 200;
+         activefontsettings.background = backgrnd2;
+         activefontsettings.color = black;
+         activefontsettings.length = 200;
          activefontsettings.justify = lefttext;
          showtext2 ( aktvehicle->classnames[i], x1 + 40, y1 + starty + 85 + i * 25 );
          activefontsettings.justify = righttext;
-        activefontsettings.length = 20;
-         for (j = 0 ; j < aktvehicle->weapons->count  ; j++ ) 
-            showtext2 ( strrr ( aktvehicle->weapons->weapon[j].maxstrength * aktvehicle->classbound[i].weapstrength[ aktvehicle->weapons->weapon[j].getScalarWeaponType() ] / 1024 ), x1 + 250 + j * 30, y1 + starty + 85 + i * 25 );
+         activefontsettings.length = 20;
+         for (j = 0 ; j < aktvehicle->weapons->count  ; j++ )
+            if ( aktvehicle->weapons->weapon[j].getScalarWeaponType() >= 0 )
+               showtext2 ( strrr ( aktvehicle->weapons->weapon[j].maxstrength * aktvehicle->classbound[i].weapstrength[ aktvehicle->weapons->weapon[j].getScalarWeaponType() ] / 1024 ), x1 + 250 + j * 30, y1 + starty + 85 + i * 25 );
 
         activefontsettings.length = 40;
          showtext2 ( strrr ( aktvehicle->armor * aktvehicle->classbound[i].armor / 1024 ), x1 + 250 + j * 30, y1 + starty + 85 + i * 25 );
@@ -2722,6 +2732,7 @@ void tenterfiledescription::buttonpressed ( char id )
 
 void tenterfiledescription::run ( void )
 {
+   tdialogbox::run();
    pbutton pb = firstbutton;
    while (pb->id != 1) 
       pb = pb->next;

@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.10 2000-01-24 17:35:48 mbickel Exp $
+//     $Id: typen.h,v 1.11 2000-01-25 19:28:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/01/24 17:35:48  mbickel
+//      Added dummy routines for sound under DOS
+//      Cleaned up weapon specification
+//
 //     Revision 1.9  2000/01/24 08:16:52  steb
 //     Changes to existing files to implement sound.  This is the first munge into
 //     CVS.  It worked for me before the munge, but YMMV :)
@@ -270,7 +274,7 @@ class SingleWeapon {
  private:
   int          reserved[9];
  public:
-  unsigned     getScalarWeaponType(void) const;
+  int          getScalarWeaponType(void) const;
   int          requiresAmmo(void) const;
   int          shootable( void ) const;
   int          service( void ) const;

@@ -1,6 +1,11 @@
-//     $Id: basegfx.cpp,v 1.11 2000-01-19 22:14:17 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.12 2000-01-25 19:28:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/01/19 22:14:17  mbickel
+//      Fixed:
+//        - crash in replay
+//        - invalid character highliting in showtext3
+//
 //     Revision 1.10  2000/01/04 19:43:46  mbickel
 //      Continued Linux port
 //
@@ -1523,14 +1528,14 @@ void putrotspriteimage90(int x1, int y1, void *pic, int rotationvalue)
 {
    word* w = (word*) pic;
    // char* c = (char*) pic + 4;
-   int spacelength = agmp->scanlinelength - *w - 1;
-   collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
+   int spacelength = agmp->scanlinelength - w[1] - 1;
+   collategraphicoperations cgo ( x1, y1, x1+w[1], y1+w[0] );
 
    if ( agmp->windowstatus == 100 ) {
       char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
-      for ( int y = 0; y <= w[1] ; y++ ) {
-         for ( int x = 0; x <= w[0]; x++ ) {
-            int d = getpixelfromimage ( pic, y, w[0] - x );
+      for ( int y = 0; y <= w[0] ; y++ ) {
+         for ( int x = 0; x <= w[1]; x++ ) {
+            int d = getpixelfromimage ( pic, y, w[1] - x );
             if ( d != 255 && d != -1) {
                if ( d >= 16 && d < 24 )
                   d += rotationvalue;

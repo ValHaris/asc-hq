@@ -1,6 +1,10 @@
-//     $Id: loaders.cpp,v 1.7 2000-01-24 17:35:45 mbickel Exp $
+//     $Id: loaders.cpp,v 1.8 2000-01-25 19:28:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/01/24 17:35:45  mbickel
+//      Added dummy routines for sound under DOS
+//      Cleaned up weapon specification
+//
 //     Revision 1.6  1999/12/28 21:03:03  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -669,8 +673,11 @@ void         tspfldloaders::readunit ( pvehicle &eht )
 
        eht->armor = eht->typ->armor * eht->typ->classbound[eht->klasse].armor / 1024;
        if (eht->typ->weapons->count ) 
-          for ( int m = 0; m < eht->typ->weapons->count ; m++) 
-             eht->weapstrength[m] = eht->typ->weapons->weapon[m].maxstrength * eht->typ->classbound[eht->klasse].weapstrength[ eht->typ->weapons->weapon[m].getScalarWeaponType()] / 1024;
+          for ( int m = 0; m < eht->typ->weapons->count ; m++)
+             if ( eht->typ->weapons->weapon[m].getScalarWeaponType() >= 0 )
+                eht->weapstrength[m] = eht->typ->weapons->weapon[m].maxstrength * eht->typ->classbound[eht->klasse].weapstrength[ eht->typ->weapons->weapon[m].getScalarWeaponType()] / 1024;
+             else
+                eht->weapstrength[m] = 0;
 
     } else {
       if ( eht->typ->classnum ) 

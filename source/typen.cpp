@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.9 2000-01-24 17:35:48 mbickel Exp $
+//     $Id: typen.cpp,v 1.10 2000-01-25 19:28:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/01/24 17:35:48  mbickel
+//      Added dummy routines for sound under DOS
+//      Cleaned up weapon specification
+//
 //     Revision 1.8  2000/01/24 08:16:52  steb
 //     Changes to existing files to implement sound.  This is the first munge into
 //     CVS.  It worked for me before the munge, but YMMV :)
@@ -816,7 +820,7 @@ int tvehicle::size ( void )
 /* Translate the weapon/mine/service bit pattern into scalar
  * weapon number for use in fetching UI resources.
  */
-unsigned SingleWeapon::getScalarWeaponType(void) const {
+int SingleWeapon::getScalarWeaponType(void) const {
    if ( typ & (cwweapon | cwmineb) )
       return log2 ( typ & (cwweapon | cwmineb) );
    else

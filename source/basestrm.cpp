@@ -1,6 +1,9 @@
-//     $Id: basestrm.cpp,v 1.13 2000-01-06 11:19:11 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.14 2000-01-25 19:28:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/01/06 11:19:11  mbickel
+//      Worked on the Linux-port again...
+//
 //     Revision 1.12  2000/01/01 19:04:13  mbickel
 //     /tmp/cvsVhJ4Z3
 //
@@ -1952,8 +1955,8 @@ int getfiletime ( char* devicename )
           direntp = readdir( dirp ); 
           if ( direntp == NULL ) 
              break; 
-         #ifdef _DOS_    
-	  time =  ( direntp ->d_date << 16) + direntp ->d_time;
+         #ifdef _DOS_
+          time =  ( direntp ->d_date << 16) + direntp ->d_time;
          #endif
         } 
         closedir( dirp ); 

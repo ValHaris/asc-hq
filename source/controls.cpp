@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.17 2000-01-24 17:35:41 mbickel Exp $
+//     $Id: controls.cpp,v 1.18 2000-01-25 19:28:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/01/24 17:35:41  mbickel
+//      Added dummy routines for sound under DOS
+//      Cleaned up weapon specification
+//
 //     Revision 1.16  2000/01/19 22:14:17  mbickel
 //      Fixed:
 //        - crash in replay
@@ -592,7 +596,7 @@ void         trefuelvehicle::testfield(void)
                      if ( !(fld->vehicle->functions & cfnoairrefuel) || fld->vehicle->height <= chfahrend )
                         if (getdiplomaticstatus(fld->vehicle->color) == capeace) 
                            if ( fld->vehicle->height & targheight ) {
-                              if ( actvehicle->typ->weapons->weapon[i].canRefuel )
+                              if ( actvehicle->typ->weapons->weapon[i].canRefuel() && mode != 1 )
                                  if (fld->vehicle->typ->weapons->count > 0) 
                                     for (j = 0; j < fld->vehicle->typ->weapons->count ; j++) 
                                        if ( fld->vehicle->typ->weapons->weapon[j].getScalarWeaponType() == actvehicle->typ->weapons->weapon[i].getScalarWeaponType()                                                        
@@ -612,8 +616,10 @@ void         trefuelvehicle::testfield(void)
                                        && ((fld->vehicle->typ->material > fld->vehicle->material) || (mode == 3))
                                        && (actvehicle->functions & cfmaterialref ) ) )
                                        { 
-                                          fld->a.temp = 2; 
-                                          numberoffields++;
+				          if ( mode != 1 ) {
+                                             fld->a.temp = 2; 
+                                             numberoffields++;
+					  }
                                        } 
       
                                     if ( actvehicle->functions & cfrepair )
@@ -3874,11 +3880,16 @@ void         tdashboard::paintweaponammount(int h, int num, int max )
  
 
 void         tdashboard::paintweapon(byte         h, int num, int strength,  const SingleWeapon  *weap )
-{ 
-      if ( weap->canRefuel() )
-         putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, xlatpict ( &xlattables.light, icons.unitinfoguiweapons[ weap->getScalarWeaponType() ] ));
+{
+      if ( weap->getScalarWeaponType() >= 0 )
+         if ( weap->canRefuel() )
+            putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, xlatpict ( &xlattables.light, icons.unitinfoguiweapons[ weap->getScalarWeaponType() ] ));
+         else
+            putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, icons.unitinfoguiweapons[ weap->getScalarWeaponType() ] );
       else
-         putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, icons.unitinfoguiweapons[ weap->getScalarWeaponType() ] );
+         if ( weap->service() )
+            putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, icons.unitinfoguiweapons[ cwservicen ] );
+
 
       paintweaponammount( h, num, weap->count );
 

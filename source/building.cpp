@@ -1,6 +1,10 @@
-//     $Id: building.cpp,v 1.15 2000-01-24 17:35:39 mbickel Exp $
+//     $Id: building.cpp,v 1.16 2000-01-25 19:28:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/01/24 17:35:39  mbickel
+//      Added dummy routines for sound under DOS
+//      Cleaned up weapon specification
+//
 //     Revision 1.14  2000/01/04 19:43:46  mbickel
 //      Continued Linux port
 //
@@ -2133,34 +2137,27 @@ void  ccontainer :: cammunitiontransfer_subwindow :: displayvariables ( void )
    for (int i = 0; i < 8; i++) {
 
       if ( i < num ) {
+         char* buf;
          paintobj ( i, 0 );
-         npush ( *agmp );
-      
-         agmp-> linearaddress = (int) new char [ 10000 ];
-      
-         agmp-> scanlinelength = 100;
-         agmp-> windowstatus = 100;
-      
-         int x1 = 0;
-         int y1 = 0;
-         int x2 = 55;
-         int y2 = 14;
-         char* buf = new char [ imagesize ( x1, y1, x2, y2 ) ];
-      
-         memset ( (void*) agmp-> linearaddress, bkgrcol, 10000 );
-         activefontsettings.length = 0;
-         activefontsettings.justify = lefttext;
-         activefontsettings.background = 255;
-         showtext2c ( weaps[i].name, 10, 10 );
-         getimage ( 10, 10, 10 + x2, 10 + y2, buf );
-         npush ( *agmp );
-         *agmp = *hgmp;
+         {
+            tvirtualdisplay vdp ( 100, 100, 255 );
+
+            int x1 = 0;
+            int y1 = 0;
+            int x2 = 55;
+            int y2 = 14;
+
+            buf = new char [ imagesize ( x1, y1, x2, y2 ) ];
+
+            activefontsettings.length = 0;
+            activefontsettings.justify = lefttext;
+            activefontsettings.background = 255;
+            showtext2c ( weaps[i].name, 10, 10 );
+            getimage ( 10, 10, 10 + x2, 10 + y2, buf );
+         }
          putrotspriteimage90 ( subwinx1 + 31 + 40 * i , subwiny1 + 38, buf, 0 );
-         npop ( *agmp );
-      
-         delete buf;
-         delete  ( (void*)agmp-> linearaddress );
-         npop  ( *agmp );
+
+         delete[] buf;
       } else
         if ( actdisp[i] != 1 )
            paintobj ( i, 0 );
@@ -4226,12 +4223,6 @@ void  ccontainer_b :: cammunitionproduction_subwindow :: display ( void )
    activefontsettings.justify = lefttext;
 
 
-   npush ( *agmp );
-
-   agmp-> linearaddress = (int) new char [ 10000 ];
-
-   agmp-> scanlinelength = 100;
-   agmp-> windowstatus = 100;
 
    int x1 = 0;
    int y1 = 0;
@@ -4240,24 +4231,20 @@ void  ccontainer_b :: cammunitionproduction_subwindow :: display ( void )
    char* buf = new char [ imagesize ( x1, y1, x2, y2 ) ];
 
    for (i = 0; i < waffenanzahl; i++) {
-      memset ( (void*) agmp-> linearaddress, 255, 10000 );
-      activefontsettings.length = 0;
-      activefontsettings.justify = lefttext;
-      activefontsettings.background = 255;
-      showtext2c ( cwaffentypen[i], 10, 10 );
-      getimage ( 10, 10, 10 + x2, 10 + y2, buf );
-      npush ( *agmp );
-      *agmp = *hgmp;
+      {
+         tvirtualdisplay vdp ( 100, 100, 255 );
+         activefontsettings.length = 0;
+         activefontsettings.justify = lefttext;
+         activefontsettings.background = 255;
+         showtext2c ( cwaffentypen[i], 10, 10 );
+         getimage ( 10, 10, 10 + x2, 10 + y2, buf );
+      }
       putrotspriteimage90 ( subwinx1 + 5 + 37 * i , subwiny1 + 27, buf, 0 );
-      npop ( *agmp );
 
       objcoordinates[i].t1 = num2pos ( toproduce[i] );
    }
 
-   delete buf;
-   delete  ( (void*) agmp-> linearaddress );
-   npop  ( *agmp );
-
+   delete[] buf;
 
    for (i = 0; i < waffenanzahl; i++) 
       paintobj ( i, 0 );

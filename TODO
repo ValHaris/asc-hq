@@ -7,3 +7,8 @@
   6) pause *briefly*
 - Add motor sounds during movement
 - Tidy up code so that doxygen produces good output.
+
+basestrm.cpp
+   implement getfiletime()
+             tn_file_buf_stream::gettime()
+

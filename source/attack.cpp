@@ -1,6 +1,10 @@
-//     $Id: attack.cpp,v 1.7 2000-01-24 09:08:55 steb Exp $
+//     $Id: attack.cpp,v 1.8 2000-01-25 19:28:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/01/24 09:08:55  steb
+//     Tidied up configure.in to support SDL properly.  Added sounds to Makefile.am
+//     Tested.  It built ok for me. Still YMMV however :)
+//
 //     Revision 1.6  2000/01/24 08:16:49  steb
 //     Changes to existing files to implement sound.  This is the first munge into
 //     CVS.  It worked for me before the munge, but YMMV :)
@@ -283,9 +287,12 @@ void tfight :: paintline ( int num, int val, int col )
 #define maxattackshown 24
 
 void tunitattacksunit::calcdisplay( int ad, int dd ) {
-  sound.weaponSound(_attackingunit->getWeapon(av.weapnum)->getScalarWeaponType())->playWait();
-  if(dv.strength>0)
-    sound.weaponSound(_attackedunit->getWeapon(dv.weapnum)->getScalarWeaponType())->playWait();
+  if ( dv.strength ) {
+     sound.weaponSound(_attackingunit->getWeapon(av.weapnum)->getScalarWeaponType())->playWait();
+     sound.weaponSound(_attackedunit->getWeapon(dv.weapnum)->getScalarWeaponType())->play();
+  } else
+     sound.weaponSound(_attackingunit->getWeapon(av.weapnum)->getScalarWeaponType())->play();
+
   tfight::calcdisplay(ad,dd);
 }
   
