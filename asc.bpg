@@ -9,9 +9,9 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = bzlib.lib libjpeg.lib triangulation.lib tools.lib mount.exe \
-  demount.exe weaponguide.exe gfx2pcx.exe makegfx.exe viewid.exe tank2pcx.exe \
-  bin2text.exe ai.lib mapeditor.exe asc.exe
+PROJECTS = bzlib.lib libjpeg.lib triangulation.lib tools.lib SDLmm.lib \
+  mount.exe demount.exe weaponguide.exe gfx2pcx.exe makegfx.exe viewid.exe \
+  tank2pcx.exe bin2text.exe ai.lib mapeditor.exe asc.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -76,6 +76,10 @@ tank2pcx.exe: SOURCE\TOOLS\WIN\tank2pcx.bpr
 
 bin2text.exe: source\tools\win\bin2text.bpr
   $(ROOT)\bin\bpr2mak $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+SDLmm.lib: source\libs\sdlmm\SDLmm.bpr
+  $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 

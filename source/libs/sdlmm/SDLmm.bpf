@@ -1,0 +1,21 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+USEUNIT("..\..\..\..\sdlmm\src\sdlmm_videoinfo.cpp");
+USEUNIT("..\..\..\..\sdlmm\src\sdlmm_basesurface.cpp");
+USEUNIT("..\..\..\..\sdlmm\src\sdlmm_cd.cpp");
+USEUNIT("..\..\..\..\sdlmm\src\sdlmm_display.cpp");
+USEUNIT("..\..\..\..\sdlmm\src\sdlmm_event.cpp");
+USEUNIT("..\..\..\..\sdlmm\src\sdlmm_global.cpp");
+USEUNIT("..\..\..\..\sdlmm\src\sdlmm_joystick.cpp");
+USEUNIT("..\..\..\..\sdlmm\src\sdlmm_pixelformat.cpp");
+USEUNIT("..\..\..\..\sdlmm\src\sdlmm_srect.cpp");
+USEUNIT("..\..\..\..\sdlmm\src\sdlmm_surface.cpp");
+USEUNIT("..\..\..\..\sdlmm\src\sdlmm_timer.cpp");
+USEUNIT("..\..\..\..\sdlmm\src\sdlmm_audio.cpp");
+//---------------------------------------------------------------------------
+#define Library
+
+// To add a file to the library use the Project menu 'Add to Project'.
+

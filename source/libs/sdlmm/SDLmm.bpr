@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value="SDLmm.lib"/>
+    <OBJFILES value="..\..\..\..\sdlmm\src\sdlmm_videoinfo.obj 
+      ..\..\..\..\sdlmm\src\sdlmm_basesurface.obj 
+      ..\..\..\..\sdlmm\src\sdlmm_cd.obj ..\..\..\..\sdlmm\src\sdlmm_display.obj 
+      ..\..\..\..\sdlmm\src\sdlmm_event.obj 
+      ..\..\..\..\sdlmm\src\sdlmm_global.obj 
+      ..\..\..\..\sdlmm\src\sdlmm_joystick.obj 
+      ..\..\..\..\sdlmm\src\sdlmm_pixelformat.obj 
+      ..\..\..\..\sdlmm\src\sdlmm_srect.obj 
+      ..\..\..\..\sdlmm\src\sdlmm_surface.obj 
+      ..\..\..\..\sdlmm\src\sdlmm_timer.obj ..\..\..\..\sdlmm\src\sdlmm_audio.obj"/>
+    <RESFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES)"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value=""/>
+    <PACKAGES value=""/>
+    <PATHCPP value=".;..\..\..\..\sdlmm\src"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <LINKER value="TLib"/>
+    <USERDEFINES value="_DEBUG;WIN32"/>
+    <SYSDEFINES value="_RTLDLL;NO_STRICT"/>
+    <MAINSOURCE value="SDLmm.bpf"/>
+    <INCLUDEPATH value="..\..\..\..\sdlmm\src;src;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\SDL\include"/>
+    <LIBPATH value="..\..\..\..\sdlmm\src;src;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par"/>
+    <LISTFILE value=""/>
+  </MACROS>
+  <OPTIONS>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Q -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- 
+      -c -tW -tWM"/>
+    <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value=""/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="$(OBJFILES)"/>
+    <ALLLIB value=""/>
+  </LINKER>
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1031
+CodePage=1252
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[HistoryLists\hlIncludePath]
+Count=3
+Item0=src;$(BCB)\include;$(BCB)\include\vcl;..\SDL\include
+Item1=src;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascdev\SDL\include
+Item2=src;$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=1
+Item0=src;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=2
+Item0=_DEBUG;WIN32
+Item1=_DEBUG
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=0
+  </IDEOPTIONS>
+</PROJECT>

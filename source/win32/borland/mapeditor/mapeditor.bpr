@@ -25,8 +25,8 @@
     <LIBFILES value="..\..\..\..\..\sdl\bin\sdl.lib ..\..\..\libs\bzlib\win\bzlib.lib 
       ..\..\..\libs\triangul\win32\triangulation.lib 
       ..\..\..\libs\jpeg-6b\libjpeg.lib 
-      ..\..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB ..\..\..\..\..\SDLmm\SDLmm.lib 
-      ..\..\..\..\..\SDL_image\bin\SDL_image.lib"/>
+      ..\..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB 
+      ..\..\..\..\..\SDL_image\bin\SDL_image.lib ..\..\..\libs\sdlmm\SDLmm.lib"/>
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value="VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi"/>
