@@ -27,7 +27,7 @@ debug_args=-window
 email=bickel@asc-hq.org
 execute_args=
 kdevprj_version=1.0beta2
-lfv_open_groups=Quellen
+lfv_open_groups=Headers,Quellen
 make_options=-j1
 makefiles=Makefile.am,source/Makefile.am,source/docs/Makefile.am,source/docs/en/Makefile.am,source/sdl/Makefile.am,source/libs/triangul/Makefile.am,source/libs/Makefile.am,source/ai/Makefile.am
 modifyMakefiles=false
@@ -65,10 +65,10 @@ install=false
 install_location=
 type=DATA
 [Workspace_1]
-browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/programming/index-11.html#ss11.1
-cpp_file=/home/martin/asc/source/strtmesg.cpp
-header_file=Untitled.h
-openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/strtmesg.cpp
+browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/index.html
+cpp_file=/home/martin/asc/source/dashboard.cpp
+header_file=/home/martin/asc/source/vehicletype.h
+openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/dialog.cpp,/home/martin/asc/source/vehicletype.cpp,/home/martin/asc/source/basestreaminterface.h,/home/martin/asc/source/gui.cpp,/home/martin/asc/source/dashboard.cpp,/home/martin/asc/source/vehicletype.h
 show_outputview=true
 show_treeview=true
 [asc.kdevprj]

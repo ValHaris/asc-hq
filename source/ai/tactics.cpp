@@ -472,9 +472,9 @@ AI::AiResult AI::tactics( void )
                unitUsable = true;
 
       int maxWeapDist = minint;
-      for ( int w = 0; w < veh->typ->weapons->count; w++ )
-         if ( veh->typ->weapons->weapon[w].shootable() )
-            maxWeapDist = max ( veh->typ->weapons->weapon[w].maxdistance , maxWeapDist );
+      for ( int w = 0; w < veh->typ->weapons.count; w++ )
+         if ( veh->typ->weapons.weapon[w].shootable() )
+            maxWeapDist = max ( veh->typ->weapons.weapon[w].maxdistance , maxWeapDist );
 
       int maxMove = minint;
       for ( int h = 0; h < 8; h++ )
@@ -782,9 +782,11 @@ class UnitAttacksUnit_FakeHemming : public tunitattacksunit {
           {
              for ( int i = 0; i < sidenum; i++ ) {
                 pfield fld = ai->getMap()->getField ( getNeighbouringFieldCoordinate ( attacker->getPosition(), i ));
+
                 pvehicle v = NULL;
                 if ( fld )
-                   pvehicle v = fld->vehicle;
+                   v = fld->vehicle;
+
 
                 if ( v && attackpossible2n ( v, defender ) )
                    neighbours[i] = true;

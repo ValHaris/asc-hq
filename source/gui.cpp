@@ -4,9 +4,14 @@
 */
 
 
-//     $Id: gui.cpp,v 1.59 2001-07-14 19:13:15 mbickel Exp $
+//     $Id: gui.cpp,v 1.60 2001-07-15 21:00:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.59  2001/07/14 19:13:15  mbickel
+//      Rewrote sound system
+//      Moveing units make sounds
+//      Added sound files to data
+//
 //     Revision 1.58  2001/07/13 12:53:01  mbickel
 //      Fixed duplicate icons in replay
 //      Fixed crash in tooltip help
@@ -2577,11 +2582,11 @@ tnputvehiclecontainerguiicon :: tnputvehiclecontainerguiicon ( pvehicletype obj 
       buildnum++;
       infotext      = new char[100];
       picture[0]    = vehicle->buildicon;
-      char* c;
-      if ( vehicle->name && vehicle->name[0] )
-         c = vehicle->name;
+      const char* c;
+      if ( !vehicle->name.empty()  )
+         c = vehicle->name.c_str();
       else
-         c = vehicle->description;
+         c = vehicle->description.c_str();
 
       char buf[10000];
       sprintf ( buf, "%s : %d material and %d fuel needed", c, vehicle->productionCost.material, vehicle->productionCost.energy );

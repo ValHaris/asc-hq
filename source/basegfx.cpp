@@ -2,9 +2,13 @@
     \brief Platform indepedant graphic functions. 
 */
 
-//     $Id: basegfx.cpp,v 1.26 2001-02-28 14:10:04 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.27 2001-07-15 21:00:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2001/02/28 14:10:04  mbickel
+//      Added some small editors to linux makefiles
+//      Added even more dirty hacks to basegfx: some more truecolor functions
+//
 //     Revision 1.25  2001/02/26 21:14:30  mbickel
 //      Added two small editors to the linux makefiles
 //      Added some more truecolor hacks to the graphics engine
@@ -2034,14 +2038,14 @@ void showtext ( const char* text, int x, int y, int textcol )
 
 }
 
-void showtext2 ( const char* text, int x, int y )
+void showtext2 ( const ASCString& text, int x, int y )
 {
-   showtext ( text, x, y, activefontsettings.color );
+   showtext ( text.c_str(), x, y, activefontsettings.color );
 }
 
-void showtext2c ( const char* text, int x, int y )
+void showtext2c ( const ASCString& text, int x, int y )
 {           
-   showtext ( text, x, y, -1 );
+   showtext ( text.c_str(), x, y, -1 );
 }
 
 

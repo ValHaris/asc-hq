@@ -56,12 +56,6 @@ Vehicletype :: Vehicletype ( void )
 {
    int i;
 
-   name = NULL;
-   description = NULL;
-   infotext = NULL;
-
-   memset ( &oldattack, 0, sizeof ( oldattack ));
-
    armor = 0;
 
    for ( i = 0; i < 8; i++ )
@@ -88,7 +82,6 @@ Vehicletype :: Vehicletype ( void )
    movemalustyp = 0;
    classnum = 0;
    for ( i = 0; i < 8; i++ ) {
-      classnames[i] = NULL;
       for ( int j = 0; j< 8; j++)
          classbound[i].weapstrength[j] = 0;
 
@@ -123,9 +116,7 @@ Vehicletype :: Vehicletype ( void )
    for ( i = 0; i < 8; i++ )
       aiparam[i] = NULL;
 
-   weapons = new UnitWeapon;
    terrainaccess = new tterrainaccess;
-   filename = NULL;
    vehicleCategoriesLoadable = -1;
 }
 
@@ -160,6 +151,7 @@ const int vehicle_version = 4;
 
 void Vehicletype :: read ( tnstream& stream )
 {
+
    int version = stream.readInt();
    if ( version > vehicle_version || version < 1) {
       string s = "invalid version for reading vehicle: ";
@@ -170,21 +162,23 @@ void Vehicletype :: read ( tnstream& stream )
 
    int   j;
 
-   name = (char*) stream.readInt();
-   description = (char*) stream.readInt();
-   infotext = (char*) stream.readInt();
+   bool ___load_name = stream.readInt();
+   bool ___load_description = stream.readInt();
+   bool ___load_infotext = stream.readInt();
 
    if ( version <= 2 ) {
-      oldattack.weaponcount = stream.readChar();
+      weapons.count = stream.readChar();
       for ( j = 0; j< 8; j++ ) {
-         oldattack.waffe[j].typ = stream.readWord();
-         oldattack.waffe[j].targ = stream.readChar();
-         oldattack.waffe[j].sourceheight = stream.readChar();
-         oldattack.waffe[j].maxdistance = stream.readWord();
-         oldattack.waffe[j].mindistance = stream.readWord();
-         oldattack.waffe[j].count = stream.readChar();
-         oldattack.waffe[j].maxstrength = stream.readChar();
-         oldattack.waffe[j].minstrength = stream.readChar();
+         weapons.weapon[j].set ( stream.readWord() );
+         weapons.weapon[j].targ = stream.readChar();
+         weapons.weapon[j].sourceheight = stream.readChar();
+         weapons.weapon[j].maxdistance = stream.readWord();
+         weapons.weapon[j].mindistance = stream.readWord();
+         weapons.weapon[j].count = stream.readChar();
+         weapons.weapon[j].maxstrength = stream.readChar();
+         weapons.weapon[j].minstrength = stream.readChar();
+         for ( int k = 0; k < 13; k++ )
+            weapons.weapon[j].efficiency[k] = 100;
       }
    }
 
@@ -232,8 +226,10 @@ void Vehicletype :: read ( tnstream& stream )
           stream.readWord( ); // dummy1
 
    classnum = stream.readChar();
+
+   bool ___load_classnames[8];
    for ( j = 0; j < 8; j++ )
-       classnames[j] = (char*) stream.readInt();
+       ___load_classnames[j] = stream.readInt();
 
    for ( j = 0; j < 8; j++ ) {
       int k;
@@ -269,7 +265,7 @@ void Vehicletype :: read ( tnstream& stream )
    buildicon = (void*) stream.readInt();
    buildingsbuildablenum = stream.readInt();
    buildingsbuildable = (Vehicletype::tbuildrange*) stream.readInt();
-   weapons = (UnitWeapon*) stream.readInt();
+   bool load_weapons = stream.readInt();
    autorepairrate = stream.readInt();
    if ( version <= 2 )
       stream.readInt( ); // dummy
@@ -279,19 +275,19 @@ void Vehicletype :: read ( tnstream& stream )
    else
       vehicleCategoriesLoadable = -1;
 
-   if (name)
-      stream.readpchar( &name );
+   if (___load_name)
+      name = stream.readString( true );
 
-   if (description)
-      stream.readpchar( &description );
+   if (___load_description)
+      description = stream.readString( true );
 
-   if (infotext)
-      stream.readpchar( &infotext );
+   if (___load_infotext)
+      infotext = stream.readString ( true );
 
    int i;
    for ( i=0;i<8  ;i++ )
-      if ( classnames[i] )
-         stream.readpchar( &(classnames[i]) );
+      if ( ___load_classnames[i] )
+         classnames[i] = stream.readString ( true );
 
    if ( functions & cfautorepair )
       if ( !autorepairrate )
@@ -318,23 +314,22 @@ void Vehicletype :: read ( tnstream& stream )
          vehiclesbuildableid[i] = stream.readInt() ;
    }
 
-   weapons = new UnitWeapon;
-   if ( weapons && version > 1) {
-      weapons->count = stream.readInt();
+   if ( load_weapons && version > 1) {
+      weapons.count = stream.readInt();
       for ( j = 0; j< 16; j++ ) {
-         weapons->weapon[j].set ( stream.readInt() );
-         weapons->weapon[j].targ = stream.readInt();
-         weapons->weapon[j].sourceheight = stream.readInt();
-         weapons->weapon[j].maxdistance = stream.readInt();
-         weapons->weapon[j].mindistance = stream.readInt();
-         weapons->weapon[j].count = stream.readInt();
-         weapons->weapon[j].maxstrength = stream.readInt();
-         weapons->weapon[j].minstrength = stream.readInt();
+         weapons.weapon[j].set ( stream.readInt() );
+         weapons.weapon[j].targ = stream.readInt();
+         weapons.weapon[j].sourceheight = stream.readInt();
+         weapons.weapon[j].maxdistance = stream.readInt();
+         weapons.weapon[j].mindistance = stream.readInt();
+         weapons.weapon[j].count = stream.readInt();
+         weapons.weapon[j].maxstrength = stream.readInt();
+         weapons.weapon[j].minstrength = stream.readInt();
 
          for ( int k = 0; k < 13; k++ )
-            weapons->weapon[j].efficiency[k] = stream.readInt();
+            weapons.weapon[j].efficiency[k] = stream.readInt();
 
-         weapons->weapon[j].targets_not_hittable = stream.readInt();
+         weapons.weapon[j].targets_not_hittable = stream.readInt();
 
          if ( version <= 2 )
             for ( int l = 0; l < 9; l++ )
@@ -346,21 +341,6 @@ void Vehicletype :: read ( tnstream& stream )
          for ( int m = 0; m< 10; m++ )
             stream.readInt(); // dummy
 
-   } else {
-      weapons->count = oldattack.weaponcount;
-      for ( i = 0; i < oldattack.weaponcount; i++ ) {
-         weapons->weapon[i].set ( oldattack.waffe[i].typ );
-         weapons->weapon[i].targ  = oldattack.waffe[i].targ;
-         weapons->weapon[i].sourceheight  = oldattack.waffe[i].sourceheight;
-         weapons->weapon[i].maxdistance  = oldattack.waffe[i].maxdistance;
-         weapons->weapon[i].mindistance  = oldattack.waffe[i].mindistance;
-         weapons->weapon[i].count  = oldattack.waffe[i].count;
-         weapons->weapon[i].maxstrength  = oldattack.waffe[i].maxstrength;
-         weapons->weapon[i].minstrength  = oldattack.waffe[i].minstrength;
-         for ( int j = 0; j < 13; j++ )
-            weapons->weapon[i].efficiency[j] = 100;
-
-      }
    }
 
    #ifndef converter
@@ -416,17 +396,17 @@ void Vehicletype:: write ( tnstream& stream ) const
 
    stream.writeInt ( vehicle_version );
 
-   if ( name )
+   if ( !name.empty() )
       stream.writeInt( 1 );
    else
       stream.writeInt( 0 );
 
-   if ( description )
+   if ( !description.empty() )
       stream.writeInt( 1 );
    else
       stream.writeInt( 0 );
 
-   if ( infotext )
+   if ( !infotext.empty() )
       stream.writeInt( 1 );
    else
       stream.writeInt( 0 );
@@ -465,7 +445,7 @@ void Vehicletype:: write ( tnstream& stream ) const
    stream.writeChar(movemalustyp );
    stream.writeChar(classnum );
    for ( j = 0; j < 8; j++ )
-      if ( classnames[j] )
+      if ( !classnames[j].empty() )
           stream.writeInt( 1 );
       else
           stream.writeInt( 0 );
@@ -521,28 +501,25 @@ void Vehicletype:: write ( tnstream& stream ) const
    else
       stream.writeInt( 0 );
 
-   if ( weapons )
-      stream.writeInt( 1 );
-   else
-      stream.writeInt( 0 );
+   stream.writeInt( 1 ); // weapons
 
    stream.writeInt( autorepairrate );
 
    stream.writeInt( vehicleCategoriesLoadable );
 
 
-   if (name)
-      stream.writepchar( name );
+   if ( !name.empty() )
+      stream.writeString( name );
 
-   if (description)
-      stream.writepchar( description );
+   if ( !description.empty() )
+      stream.writeString( description );
 
-   if (infotext)
-      stream.writepchar( infotext );
+   if ( !infotext.empty() )
+      stream.writeString( infotext );
 
    for (i=0; i<8; i++)
-      if ( classnames[i] )
-         stream.writepchar( classnames[i] );
+      if ( !classnames[i].empty() )
+         stream.writeString( classnames[i] );
 
    if ( bipicture <= 0 )
       for (i=0;i<8  ;i++ )
@@ -555,21 +532,21 @@ void Vehicletype:: write ( tnstream& stream ) const
    for ( i = 0; i < vehiclesbuildablenum; i++ )
       stream.writeInt ( vehiclesbuildableid[i] );
 
-   stream.writeInt(weapons->count );
+   stream.writeInt(weapons.count );
    for ( j = 0; j< 16; j++ ) {
-      stream.writeInt(weapons->weapon[j].gettype( ));
-      stream.writeInt(weapons->weapon[j].targ);
-      stream.writeInt(weapons->weapon[j].sourceheight );
-      stream.writeInt(weapons->weapon[j].maxdistance );
-      stream.writeInt(weapons->weapon[j].mindistance );
-      stream.writeInt(weapons->weapon[j].count );
-      stream.writeInt(weapons->weapon[j].maxstrength );
-      stream.writeInt(weapons->weapon[j].minstrength );
+      stream.writeInt(weapons.weapon[j].gettype( ));
+      stream.writeInt(weapons.weapon[j].targ);
+      stream.writeInt(weapons.weapon[j].sourceheight );
+      stream.writeInt(weapons.weapon[j].maxdistance );
+      stream.writeInt(weapons.weapon[j].mindistance );
+      stream.writeInt(weapons.weapon[j].count );
+      stream.writeInt(weapons.weapon[j].maxstrength );
+      stream.writeInt(weapons.weapon[j].minstrength );
 
       for ( int k = 0; k < 13; k++ )
-         stream.writeInt(weapons->weapon[j].efficiency[k] );
+         stream.writeInt(weapons.weapon[j].efficiency[k] );
 
-      stream.writeInt(weapons->weapon[j].targets_not_hittable );
+      stream.writeInt(weapons.weapon[j].targets_not_hittable );
    }
 
    if ( terrainaccess )
@@ -588,31 +565,10 @@ Vehicletype :: ~Vehicletype ( )
 {
    int i;
 
-   if ( name ) {
-      delete[] name;
-      name = NULL;
-   }
-
-   if ( description ) {
-      delete[] description;
-      description = NULL;
-   }
-
-   if ( infotext ) {
-      delete[] infotext;
-      infotext = NULL;
-   }
-
    for ( i = 0; i < 8; i++ )
       if ( picture[i] ) {
          delete picture[i];
          picture[i] = NULL;
-      }
-
-   for ( i = 0; i < 8; i++ )
-      if ( classnames[i] ) {
-         delete[] classnames[i];
-         classnames[i] = NULL;
       }
 
    if ( objectsbuildableid ) {
@@ -633,11 +589,6 @@ Vehicletype :: ~Vehicletype ( )
    if ( buildingsbuildable ) {
       delete[] buildingsbuildable;
       buildingsbuildable = NULL;
-   }
-
-   if ( weapons ) {
-      delete weapons;
-      weapons = NULL;
    }
 
    for ( i = 0; i < 8; i++ )

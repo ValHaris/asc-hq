@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.52 2001-07-14 21:07:46 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.53 2001-07-15 21:00:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2001/07/14 21:07:46  mbickel
+//      Sound works now under Win32 too
+//      Error reporting on Win32 during startup works again.
+//
 //     Revision 1.51  2001/07/14 14:26:10  mbickel
 //      Some cleanup
 //
@@ -2029,7 +2033,14 @@ void displaymessage( const char* formatstring, int num, ... )
    if ( lng >= 1000 )
       displaymessage ( "dlg_box.cpp / displaymessage:   string to long !\nPlease report this error",1 );
 
-   char* a = tempbuf;
+   va_end ( paramlist );
+
+   displaymessage ( ASCString ( tempbuf ), num  );
+}
+
+void displaymessage( const ASCString& text, int num  )
+{
+   const char* a = text.c_str();
 
    tstringa stringtooutput;
    memset (stringtooutput, 0, sizeof ( stringtooutput ));
@@ -2055,7 +2066,6 @@ void displaymessage( const char* formatstring, int num, ... )
 
    *b = 0;
 
-   va_end ( paramlist );
 
    bool displayInternally = true;
 

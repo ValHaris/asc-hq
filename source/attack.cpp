@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: attack.cpp,v 1.44 2001-07-14 13:15:17 mbickel Exp $
+//     $Id: attack.cpp,v 1.45 2001-07-15 21:00:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2001/07/14 13:15:17  mbickel
+//      Rewrote sound handling
+//
 //     Revision 1.43  2001/02/26 12:34:59  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -516,7 +519,7 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    } else
       _weapon  = weapon;
 
-   SingleWeapon* weap = attackingunit->getWeapon(_weapon);
+   const SingleWeapon* weap = attackingunit->getWeapon(_weapon);
 
    av.strength = int( attackingunit->weapstrength[_weapon] * weapDist.getWeapStrength(weap, dist, attackingunit->height, attackedunit->height ));
    av.armor  = attackingunit->armor;
@@ -680,7 +683,7 @@ void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int w
    } else
       _weapon  = weapon;
 
-   SingleWeapon *weap = &attackingunit->typ->weapons->weapon[_weapon];
+   const SingleWeapon *weap = &attackingunit->typ->weapons.weapon[_weapon];
    av.strength  = int( attackingunit->weapstrength[_weapon] * weapDist.getWeapStrength(weap, dist, attackingunit->height, _attackedbuilding->typ->buildingheight ));
    av.armor = attackingunit->armor;
    av.damage    = attackingunit->damage;
@@ -740,10 +743,10 @@ void tunitattacksbuilding :: setresult ( void )
    _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
-   _attackingunit->attacked = true; 
+   _attackingunit->attacked = true;
    if ( _attackingunit->functions & cf_moveafterattack )
       _attackingunit->setMovement ( _attackingunit->getMovement() - _attackingunit->typ->movement[log2(_attackingunit->height)]*attackmovecost / 100 );
-   else   
+   else
       _attackingunit->setMovement ( 0 );
 
 
@@ -764,7 +767,7 @@ void tunitattacksbuilding :: setresult ( void )
    actmap->time.a.move++;
 }
 
-void tunitattacksbuilding :: paintimages ( int xa, int ya, int xd, int yd ) 
+void tunitattacksbuilding :: paintimages ( int xa, int ya, int xd, int yd )
 {
    putrotspriteimage ( xa, ya, _attackingunit->typ->picture[0], _attackingunit->color );
    putrotspriteimage ( xd, yd, getfield ( _x, _y ) -> picture , _attackedbuilding->color  );
@@ -875,7 +878,7 @@ void tmineattacksunit :: setresult ( void )
 
 }
 
-void tmineattacksunit :: paintimages ( int xa, int ya, int xd, int yd ) 
+void tmineattacksunit :: paintimages ( int xa, int ya, int xd, int yd )
 {
    if ( _minenum == -1 ) {
       tfield::MineContainer::iterator m = _mineposition->mines.begin();
@@ -899,7 +902,7 @@ tunitattacksobject :: tunitattacksobject ( pvehicle attackingunit, int obj_x, in
 
 void tunitattacksobject :: setup ( pvehicle attackingunit, int obj_x, int obj_y, int weapon )
 {
-   
+
    _x = obj_x;
    _y = obj_y;
 
@@ -927,15 +930,15 @@ void tunitattacksobject :: setup ( pvehicle attackingunit, int obj_x, int obj_y,
             s = atw->strength[i];
             n = i;
          }
-   
+
       _weapon = atw->num[n];
-   
+
       delete atw;
-   
+
    } else
       _weapon  = weapon;
 
-   SingleWeapon *weap = &attackingunit->typ->weapons->weapon[weapon];
+   const SingleWeapon *weap = &attackingunit->typ->weapons.weapon[weapon];
    av.strength  = int( attackingunit->weapstrength[weapon] * weapDist.getWeapStrength(weap, dist, -1, -1  ));
    av.armor = attackingunit->armor;
    av.damage    = attackingunit->damage;
@@ -985,11 +988,11 @@ void tunitattacksobject :: setresult ( void )
    // _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
-   _attackingunit->attacked = true; 
+   _attackingunit->attacked = true;
 
    if ( _attackingunit->functions & cf_moveafterattack )
       _attackingunit->setMovement ( _attackingunit->getMovement() - _attackingunit->typ->movement[log2(_attackingunit->height)]*attackmovecost / 100 );
-   else   
+   else
       _attackingunit->setMovement ( 0 );
 
 
@@ -1020,52 +1023,52 @@ void tunitattacksobject :: paintimages ( int xa, int ya, int xd, int yd )
 
 
 pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
-{ 
+{
   pattackweap atw = new AttackWeap;
-           
+
   memset(atw, 0, sizeof(*atw));
 
 
-   if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize))  
+   if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize))
       return atw;
-   if (angreifer == NULL) 
+   if (angreifer == NULL)
       return atw;
-   if (angreifer->typ->weapons->count == 0) 
+   if (angreifer->typ->weapons.count == 0)
       return atw;
 
    pfield efield = getfield(x,y);
-                       
+
    if ( efield->vehicle ) {
-      if (fieldvisiblenow(efield, angreifer->color/8)) 
+      if (fieldvisiblenow(efield, angreifer->color/8))
          attackpossible2n ( angreifer, efield->vehicle, atw );
-   } 
-   else 
-      if (efield->building != NULL) { 
-         if (getdiplomaticstatus2(efield->building->color, angreifer->color) == cawar) 
-            for (int i = 0; i < angreifer->typ->weapons->count ; i++) 
-               if (angreifer->typ->weapons->weapon[i].shootable() ) 
-                  if (angreifer->typ->weapons->weapon[i].offensive() ) 
-                     if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << cmm_building ))) { 
+   }
+   else
+      if (efield->building != NULL) {
+         if (getdiplomaticstatus2(efield->building->color, angreifer->color) == cawar)
+            for (int i = 0; i < angreifer->typ->weapons.count ; i++)
+               if (angreifer->typ->weapons.weapon[i].shootable() )
+                  if (angreifer->typ->weapons.weapon[i].offensive() )
+                     if (!( angreifer->typ->weapons.weapon[i].targets_not_hittable & ( 1 << cmm_building ))) {
                         int tm = efield->building->typ->buildingheight;
-                        if (tm & angreifer->typ->weapons->weapon[i].targ) {
-                           if (fieldvisiblenow(efield, angreifer->color/8)) { 
-                              int d = beeline(angreifer->xpos,angreifer->ypos,x,y); 
-                              if (d <= angreifer->typ->weapons->weapon[i].maxdistance) 
-                                 if (d >= angreifer->typ->weapons->weapon[i].mindistance) { 
-                                    if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight) 
-                                       if (angreifer->ammo[i] > 0) { 
-                                          atw->strength[atw->count ] = angreifer->weapstrength[i]; 
-                                          atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType() ;
-                                          atw->num[atw->count ] = i; 
+                        if (tm & angreifer->typ->weapons.weapon[i].targ) {
+                           if (fieldvisiblenow(efield, angreifer->color/8)) {
+                              int d = beeline(angreifer->xpos,angreifer->ypos,x,y);
+                              if (d <= angreifer->typ->weapons.weapon[i].maxdistance)
+                                 if (d >= angreifer->typ->weapons.weapon[i].mindistance) {
+                                    if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight)
+                                       if (angreifer->ammo[i] > 0) {
+                                          atw->strength[atw->count ] = angreifer->weapstrength[i];
+                                          atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType() ;
+                                          atw->num[atw->count ] = i;
                                           atw->target = AttackWeap::building;
                                           atw->count++;
-                                       } 
+                                       }
 
-                                 } 
-                           } 
-                        } 
-                     } 
-      } 
+                                 }
+                           }
+                        }
+                     }
+      }
 
    if ( efield->objects.size() ) {
       int n = 0;
@@ -1073,156 +1076,156 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
          if ( j->typ->armor > 0 )
             n++;
 
-      if ( n > 0 ) 
+      if ( n > 0 )
          if ((efield->vehicle == NULL) && ( efield->building == NULL)) {
-            for ( int i = 0; i <= angreifer->typ->weapons->count - 1; i++) 
-               if (angreifer->typ->weapons->weapon[i].shootable() ) 
-                  if ( angreifer->typ->weapons->weapon[i].getScalarWeaponType() == cwcannonn ||  
-                       angreifer->typ->weapons->weapon[i].getScalarWeaponType() == cwbombn ) { 
-                     if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << cmm_building ))) 
-                        if (chfahrend & angreifer->typ->weapons->weapon[i].targ ) { 
-                           if (fieldvisiblenow(efield, angreifer->color/8)) { 
-                              int d = beeline(angreifer->xpos,angreifer->ypos,x,y); 
-                              if (d <= angreifer->typ->weapons->weapon[i].maxdistance) 
-                                 if (d >= angreifer->typ->weapons->weapon[i].mindistance) { 
-                                    if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                                       if (angreifer->ammo[i] > 0) { 
+            for ( int i = 0; i <= angreifer->typ->weapons.count - 1; i++)
+               if (angreifer->typ->weapons.weapon[i].shootable() )
+                  if ( angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwcannonn ||
+                       angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwbombn ) {
+                     if (!( angreifer->typ->weapons.weapon[i].targets_not_hittable & ( 1 << cmm_building )))
+                        if (chfahrend & angreifer->typ->weapons.weapon[i].targ ) {
+                           if (fieldvisiblenow(efield, angreifer->color/8)) {
+                              int d = beeline(angreifer->xpos,angreifer->ypos,x,y);
+                              if (d <= angreifer->typ->weapons.weapon[i].maxdistance)
+                                 if (d >= angreifer->typ->weapons.weapon[i].mindistance) {
+                                    if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
+                                       if (angreifer->ammo[i] > 0) {
                                           atw->strength[atw->count ] = angreifer->weapstrength[i];
                                           atw->num[atw->count ] = i;
-                                          atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
+                                          atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
                                           atw->target = AttackWeap::object;
                                           atw->count++;
-                                       } 
-      
-                                 } 
-                           } 
-                        } 
-                  } 
-         } 
+                                       }
+
+                                 }
+                           }
+                        }
+                  }
+         }
    }
 
    return atw;
-} 
+}
 
 
 bool attackpossible2u( const pvehicle attacker, const pvehicle target, pattackweap atw )
-{ 
+{
    pvehicle angreifer = attacker;
    pvehicle verteidiger = target;
    int result = false;
-   if ( atw ) 
+   if ( atw )
       atw->count = 0;
 
-   if ( !angreifer ) 
+   if ( !angreifer )
      return false ;
 
-   if ( !verteidiger ) 
+   if ( !verteidiger )
      return false ;
 
-   if (angreifer->typ->weapons->count == 0) 
+   if (angreifer->typ->weapons.count == 0)
      return false ;
 
    if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
-      for ( int i = 0; i < angreifer->typ->weapons->count ; i++) 
-         if (angreifer->typ->weapons->weapon[i].shootable() ) 
-            if (angreifer->typ->weapons->weapon[i].offensive() ) 
-               if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) 
-                  if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                     if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
+      for ( int i = 0; i < angreifer->typ->weapons.count ; i++)
+         if (angreifer->typ->weapons.weapon[i].shootable() )
+            if (angreifer->typ->weapons.weapon[i].offensive() )
+               if (verteidiger->height & angreifer->typ->weapons.weapon[i].targ )
+                  if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
+                     if (!( angreifer->typ->weapons.weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
                         if (angreifer->ammo[i] > 0) {
                            result = true;
                            if ( atw ) {
                               atw->strength[atw->count] = angreifer->weapstrength[i];
                               atw->num[atw->count ] = i;
-                              atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
+                              atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
                               atw->target = AttackWeap::vehicle;
                               atw->count++;
                            }
                         }
-                  
-   return result; 
-} 
+
+   return result;
+}
 
 
 
 bool attackpossible28( const pvehicle attacker, const pvehicle target, pattackweap atw )
-{ 
+{
    pvehicle angreifer = attacker;
    pvehicle verteidiger = target;
 
    int result = false;
-   if ( atw ) 
+   if ( atw )
       atw->count = 0;
 
-   if (angreifer == NULL) 
+   if (angreifer == NULL)
      return false ;
 
-   if (verteidiger == NULL) 
+   if (verteidiger == NULL)
      return false ;
 
-   if (angreifer->typ->weapons->count == 0) 
+   if (angreifer->typ->weapons.count == 0)
      return false ;
 
    if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
-      for ( int i = 0; i < angreifer->typ->weapons->count ; i++) 
-         if (angreifer->typ->weapons->weapon[i].shootable() ) 
-            if (angreifer->typ->weapons->weapon[i].offensive() ) 
-               if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) 
-                  if (minmalq <= angreifer->typ->weapons->weapon[i].maxdistance) 
-                     if (minmalq >= angreifer->typ->weapons->weapon[i].mindistance) 
-                        if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                           if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
+      for ( int i = 0; i < angreifer->typ->weapons.count ; i++)
+         if (angreifer->typ->weapons.weapon[i].shootable() )
+            if (angreifer->typ->weapons.weapon[i].offensive() )
+               if (verteidiger->height & angreifer->typ->weapons.weapon[i].targ )
+                  if (minmalq <= angreifer->typ->weapons.weapon[i].maxdistance)
+                     if (minmalq >= angreifer->typ->weapons.weapon[i].mindistance)
+                        if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
+                           if (!( angreifer->typ->weapons.weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
                               if (angreifer->ammo[i] > 0) {
                                  result =  true;
                                  if ( atw ) {
                                     atw->strength[atw->count] = angreifer->weapstrength[i];
                                     atw->num[atw->count ] = i;
-                                    atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
+                                    atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
                                     atw->target = AttackWeap::vehicle;
                                     atw->count++;
                                  }
                               }
-            
-   return result; 
-} 
+
+   return result;
+}
 
 
 bool attackpossible2n( const pvehicle attacker, const pvehicle target, pattackweap atw )
-{ 
+{
    pvehicle angreifer = attacker;
    pvehicle verteidiger = target;
 
    int result = false;
-   if ( atw ) 
+   if ( atw )
       atw->count = 0;
 
-   if (angreifer == NULL) 
+   if (angreifer == NULL)
      return false ;
 
-   if (verteidiger == NULL) 
+   if (verteidiger == NULL)
      return false ;
 
-   if (angreifer->typ->weapons->count == 0) 
+   if (angreifer->typ->weapons.count == 0)
      return false ;
 
    int dist = beeline ( angreifer, verteidiger );
    if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
       if ( !angreifer->attacked )
          if ( !angreifer->typ->wait || !angreifer->hasMoved() )
-            for ( int i = 0; i < angreifer->typ->weapons->count ; i++) 
-               if (angreifer->typ->weapons->weapon[i].shootable() ) 
-                  if (angreifer->typ->weapons->weapon[i].offensive() ) 
-                     if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) 
-                        if (dist <= angreifer->typ->weapons->weapon[i].maxdistance) 
-                           if (dist >= angreifer->typ->weapons->weapon[i].mindistance) 
-                              if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                                 if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
+            for ( int i = 0; i < angreifer->typ->weapons.count ; i++)
+               if (angreifer->typ->weapons.weapon[i].shootable() )
+                  if (angreifer->typ->weapons.weapon[i].offensive() )
+                     if (verteidiger->height & angreifer->typ->weapons.weapon[i].targ )
+                        if (dist <= angreifer->typ->weapons.weapon[i].maxdistance)
+                           if (dist >= angreifer->typ->weapons.weapon[i].mindistance)
+                              if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
+                                 if (!( angreifer->typ->weapons.weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
                                     if (angreifer->ammo[i] > 0) {
                                        result = true;
                                        if ( atw ) {
                                           atw->strength[atw->count] = angreifer->weapstrength[i];
                                           atw->num[atw->count ] = i;
-                                          atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
+                                          atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
                                           atw->target = AttackWeap::vehicle;
                                           atw->count++;
                                        }

@@ -2,9 +2,13 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.22 2001-07-14 21:07:46 mbickel Exp $
+//     $Id: dlg_box.h,v 1.23 2001-07-15 21:00:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2001/07/14 21:07:46  mbickel
+//      Sound works now under Win32 too
+//      Error reporting on Win32 during startup works again.
+//
 //     Revision 1.21  2001/05/21 12:46:19  mbickel
 //      Fixed infinite loop in AI::strategy
 //      Fixed bugs in mapeditor - event editing
@@ -417,6 +421,7 @@ class tdisplaymessage : public tdialogbox {
 
 extern int  displaymessage2( const char* formatstring, ... );
 extern void displaymessage( const char* formatstring, int num, ... );   // num   0: Box bleibt aufgeklappt, 1 box wird geschlossen , text rot (Fehler), 2 : Programm wird beendet; 3 : normaler text ( OK)
+extern void displaymessage( const ASCString& text, int num );           // num   0: Box bleibt aufgeklappt, 1 box wird geschlossen , text rot (Fehler), 2 : Programm wird beendet; 3 : normaler text ( OK)
 extern void removemessage( void );
 
 extern tdisplaymessage* messagebox;

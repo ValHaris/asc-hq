@@ -1,6 +1,11 @@
-//     $Id: unitctrl.cpp,v 1.57 2001-07-14 19:13:16 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.58 2001-07-15 21:00:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2001/07/14 19:13:16  mbickel
+//      Rewrote sound system
+//      Moveing units make sounds
+//      Added sound files to data
+//
 //     Revision 1.56  2001/07/13 19:33:30  mbickel
 //      Fixed crashes in the dashboards experience display
 //      Fixed inconsistent movement cost calculation (which caused
@@ -1320,7 +1325,7 @@ int ChangeVehicleHeight :: verticalHeightChange ( void )
    if ( !vehicle ) 
       return -unspecified_error;
 
-   pfield fld = getfield(vehicle->xpos,vehicle->ypos); 
+//   pfield fld = getfield(vehicle->xpos,vehicle->ypos);
 
    int oldheight = vehicle->height;
 
@@ -1840,32 +1845,32 @@ int      VehicleAttack :: tsearchattackablevehicles::run( void )
       return -202;
    
 
-   if (angreifer->typ->weapons->count == 0) 
+   if (angreifer->typ->weapons.count == 0)
       return -204;
-   
-   if ( angreifer->typ->wait && angreifer->hasMoved() ) 
+
+   if ( angreifer->typ->wait && angreifer->hasMoved() )
          return -205;
-      
 
-   int d = 0; 
-   int maxdist = 0; 
-   int mindist = 20000; 
-   for ( int a = 0; a < angreifer->typ->weapons->count; a++) 
+
+   int d = 0;
+   int maxdist = 0;
+   int mindist = 20000;
+   for ( int a = 0; a < angreifer->typ->weapons.count; a++)
       if (angreifer->ammo[a] > 0) {
-         d++; 
-         maxdist = max( maxdist, angreifer->typ->weapons->weapon[a].maxdistance / maxmalq );
-         mindist = min ( mindist, (angreifer->typ->weapons->weapon[a].mindistance + maxmalq - 1) / maxmalq);
+         d++;
+         maxdist = max( maxdist, angreifer->typ->weapons.weapon[a].maxdistance / maxmalq );
+         mindist = min ( mindist, (angreifer->typ->weapons.weapon[a].mindistance + maxmalq - 1) / maxmalq);
       }
-   
 
-   if (d == 0) 
+
+   if (d == 0)
       return -204;
-   
+
    initsearch( angreifer->getPosition(), maxdist, mindist );
    startsearch();
 
    return 0;
-} 
+}
 
 void VehicleAttack :: registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva )
 {
@@ -1903,14 +1908,14 @@ int VehicleService :: available ( pvehicle veh ) const
    int av = 0;
    if ( veh && !veh->attacked ) {
       if ( veh->canRepair() )
-         for ( int i = 0; i < veh->typ->weapons->count; i++ )
-            if ( veh->typ->weapons->weapon[i].service() )
+         for ( int i = 0; i < veh->typ->weapons.count; i++ )
+            if ( veh->typ->weapons.weapon[i].service() )
                av++;
 
 
       const Vehicletype* fzt = veh->typ;
-      for ( int i = 0; i < fzt->weapons->count; i++ ) {
-         if ( fzt->weapons->weapon[i].service() ) {
+      for ( int i = 0; i < fzt->weapons.count; i++ ) {
+         if ( fzt->weapons.weapon[i].service() ) {
 
             if ( veh->functions & cfenergyref )
                if ( fzt->tank.energy )
@@ -1925,7 +1930,7 @@ int VehicleService :: available ( pvehicle veh ) const
                   av++;
 
          }
-         if ( fzt->weapons->weapon[i].canRefuel() )
+         if ( fzt->weapons.weapon[i].canRefuel() )
             av++;
       }
    }
@@ -1937,15 +1942,15 @@ int VehicleService :: getServices ( pvehicle veh ) const
    int res = 0;
    if ( veh ) {
       if ( veh->canRepair() )
-         for ( int i = 0; i < veh->typ->weapons->count; i++ )
-            if ( veh->typ->weapons->weapon[i].service() )
+         for ( int i = 0; i < veh->typ->weapons.count; i++ )
+            if ( veh->typ->weapons.weapon[i].service() )
                if ( !veh->attacked )
                   res |= 1 << srv_repair;
 
 
       const Vehicletype* fzt = veh->typ;
-      for ( int i = 0; i < fzt->weapons->count; i++ ) {
-         if ( fzt->weapons->weapon[i].service() ) {
+      for ( int i = 0; i < fzt->weapons.count; i++ ) {
+         if ( fzt->weapons.weapon[i].service() ) {
             if ( veh->functions & cfenergyref )
                if ( fzt->tank.energy )
                   res |= 1 << srv_resource;
@@ -1958,7 +1963,7 @@ int VehicleService :: getServices ( pvehicle veh ) const
          }
 
 
-         if ( fzt->weapons->weapon[i].canRefuel() )
+         if ( fzt->weapons.weapon[i].canRefuel() )
             res |= 1 << srv_ammo;
       }
    }
@@ -1982,8 +1987,8 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
    else
       dist = beeline ( xp, yp , startPos.x, startPos.y );
 
-   for (int i = 0; i < veh->typ->weapons->count ; i++) {
-      SingleWeapon& sourceWeapon = veh->typ->weapons->weapon[i];
+   for (int i = 0; i < veh->typ->weapons.count ; i++) {
+      const SingleWeapon& sourceWeapon = veh->typ->weapons.weapon[i];
       if ( (sourceWeapon.sourceheight & veh->height) || ( bypassChecks.height && (sourceWeapon.sourceheight & veh->typ->height)))
          if ( sourceWeapon.service() || sourceWeapon.canRefuel() ) {
             int targheight = 0;
@@ -1999,8 +2004,8 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
                      if ( (sourceWeapon.maxdistance >= dist && sourceWeapon.mindistance <= dist) || bypassChecks.distance )
                         if (   targetUnit->height & targheight || ( bypassChecks.height && ( targetUnit->typ->height & targheight) )) {
                            if ( sourceWeapon.canRefuel() ) {
-                              for ( int j = 0; j < targetUnit->typ->weapons->count ; j++) {
-                                 SingleWeapon& targetWeapon = targetUnit->typ->weapons->weapon[j];
+                              for ( int j = 0; j < targetUnit->typ->weapons.count ; j++) {
+                                 const SingleWeapon& targetWeapon = targetUnit->typ->weapons.weapon[j];
                                  if ( targetWeapon.getScalarWeaponType() == sourceWeapon.getScalarWeaponType()
                                       && targetWeapon.requiresAmmo() ) {
                                     VehicleService::Target::Service s;
@@ -2051,10 +2056,10 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
                                           targ.service.push_back ( s );
                                        }
 
-                           } 
+                           }
                         }
-         } 
-   } 
+         }
+   }
 
    if ( vs.dest.find ( targ.dest->networkid ) != vs.dest.end() ) {
       vs.dest[ targ.dest->networkid ] = targ;
@@ -2075,12 +2080,12 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
 
    targ.dest = targetUnit;
 
-   for (int i = 0; i < targetUnit->typ->weapons->count ; i++)
-      if ( targetUnit->typ->weapons->weapon[i].requiresAmmo() ) {
-         int type = targetUnit->typ->weapons->weapon[i].getScalarWeaponType();
+   for (int i = 0; i < targetUnit->typ->weapons.count ; i++)
+      if ( targetUnit->typ->weapons.weapon[i].requiresAmmo() ) {
+         int type = targetUnit->typ->weapons.weapon[i].getScalarWeaponType();
          if ( type >= 0 )
             if ( bld->ammo[type] || targetUnit->ammo[i] || (bld->typ->special & cgammunitionproductionb)) {
-               SingleWeapon& destWeapon = targetUnit->typ->weapons->weapon[i];
+               const SingleWeapon& destWeapon = targetUnit->typ->weapons.weapon[i];
 
                VehicleService::Target::Service s;
                s.type = VehicleService::srv_ammo;
@@ -2180,8 +2185,8 @@ bool  VehicleService :: FieldSearch ::initrefuelling( int xp1, int yp1 )
    int mindist = maxint;
    int maxdist = minint;
    if ( veh ) {
-      for ( int i = 0; i < veh->typ->weapons->count; i++ ) {
-         SingleWeapon& w = veh->typ->weapons->weapon[i];
+      for ( int i = 0; i < veh->typ->weapons.count; i++ ) {
+         const SingleWeapon& w = veh->typ->weapons.weapon[i];
          if ( w.service() || w.canRefuel() ) {
             maxdist = max( maxdist, w.maxdistance / maxmalq );
             mindist = min ( mindist, (w.mindistance + maxmalq - 1) / maxmalq);

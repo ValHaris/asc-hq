@@ -2,9 +2,12 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.87 2001-07-14 14:26:10 mbickel Exp $
+//     $Id: dialog.cpp,v 1.88 2001-07-15 21:00:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.87  2001/07/14 14:26:10  mbickel
+//      Some cleanup
+//
 //     Revision 1.86  2001/07/11 20:44:36  mbickel
 //      Removed some vehicles from the data file.
 //      Put all legacy units in into the data/legacy directory
@@ -657,103 +660,103 @@ void         tweaponinfo::run(void)
    showtext2("unit can refuel other units:",x1 + 30,y1 + starty + 240); 
 
 
-   if (aktvehicle->weapons->weapon[weapnum].maxstrength > 0) 
-      if (aktvehicle->weapons->weapon[weapnum].getScalarWeaponType() >= 0 ) { 
+   if (aktvehicle->weapons.weapon[weapnum].maxstrength > 0)
+      if (aktvehicle->weapons.weapon[weapnum].getScalarWeaponType() >= 0 ) {
 
-         line(x1 + 300,y1 + starty + 130,x1 + 300,y1 + starty + 260,black); 
-         putspriteimage(x1 + 293,y1 + starty + 130,icons.weapinfo.pfeil1); 
-         line(x1 + 297,y1 + starty + 140,x1 + 303,y1 + starty + 140,black); 
-         line(x1 + 297,y1 + starty + 260,x1 + 303,y1 + starty + 260,black); 
+         line(x1 + 300,y1 + starty + 130,x1 + 300,y1 + starty + 260,black);
+         putspriteimage(x1 + 293,y1 + starty + 130,icons.weapinfo.pfeil1);
+         line(x1 + 297,y1 + starty + 140,x1 + 303,y1 + starty + 140,black);
+         line(x1 + 297,y1 + starty + 260,x1 + 303,y1 + starty + 260,black);
 
-         line(x1 + 310,y1 + starty + 260,x1 + 520,y1 + starty + 260,black); 
-         putrotspriteimage90(x1 + 516,y1 + starty + 253,icons.weapinfo.pfeil1,0); 
+         line(x1 + 310,y1 + starty + 260,x1 + 520,y1 + starty + 260,black);
+         putrotspriteimage90(x1 + 516,y1 + starty + 253,icons.weapinfo.pfeil1,0);
 
-         line(x1 + 325,y1 + starty + 257,x1 + 325,y1 + starty + 263,black); 
-         line(x1 + 510,y1 + starty + 257,x1 + 510,y1 + starty + 263,black); 
+         line(x1 + 325,y1 + starty + 257,x1 + 325,y1 + starty + 263,black);
+         line(x1 + 510,y1 + starty + 257,x1 + 510,y1 + starty + 263,black);
 
 
          /*
-         showtext(strrd8(aktvehicle->weapons->weapon[weapnum].mindistance),schriften.smallsystem,x1 + 320,y1 + starty + 270,black);
-         showtext(strrd8(aktvehicle->weapons->weapon[weapnum].maxdistance),schriften.smallsystem,x1 + 500,y1 + starty + 270,black); 
+         showtext(strrd8(aktvehicle->weapons.weapon[weapnum].mindistance),schriften.smallsystem,x1 + 320,y1 + starty + 270,black);
+         showtext(strrd8(aktvehicle->weapons.weapon[weapnum].maxdistance),schriften.smallsystem,x1 + 500,y1 + starty + 270,black);
          */
-         activefontsettings.justify = centertext; 
+         activefontsettings.justify = centertext;
 
          showtext2("distance",x1 + 410,y1 + starty + 270);
-         activefontsettings.direction = 90; 
+         activefontsettings.direction = 90;
 
          showtext2("strength", x1 + 285,y1 + starty + 200);
-         activefontsettings.direction = 0; 
-         activefontsettings.justify = righttext; 
-         itoa(aktvehicle->weapons->weapon[weapnum].maxstrength, strng, 10 );
+         activefontsettings.direction = 0;
+         activefontsettings.justify = righttext;
+         itoa(aktvehicle->weapons.weapon[weapnum].maxstrength, strng, 10 );
          showtext2(strng, x1 + 292,y1 + starty + 137);
          showtext2("0", x1 + 292,y1 + starty + 257);
 
-         for (i = 0; i <= 255; i++) { 
+         for (i = 0; i <= 255; i++) {
             xa = x1 + 325 + (510 - 325) * i / 256;
-            ya = int( y1 + starty + 260 - (260 - 140) * weapDist.getWeapStrength(&aktvehicle->weapons->weapon[weapnum], aktvehicle->weapons->weapon[weapnum].mindistance + ( aktvehicle->weapons->weapon[weapnum].maxdistance - aktvehicle->weapons->weapon[weapnum].mindistance) * i / 256, -1, -1 ) );
-            putpixel(xa,ya,darkgray); 
-         } 
-      } 
-     
+            ya = int( y1 + starty + 260 - (260 - 140) * weapDist.getWeapStrength(&aktvehicle->weapons.weapon[weapnum], aktvehicle->weapons.weapon[weapnum].mindistance + ( aktvehicle->weapons.weapon[weapnum].maxdistance - aktvehicle->weapons.weapon[weapnum].mindistance) * i / 256, -1, -1 ) );
+            putpixel(xa,ya,darkgray);
+         }
+      }
 
 
-   activefontsettings.color = black; 
-   activefontsettings.background = backgrnd2; 
-   activefontsettings.justify = lefttext; 
+
+   activefontsettings.color = black;
+   activefontsettings.background = backgrnd2;
+   activefontsettings.justify = lefttext;
    activefontsettings.length = 170;
 
-   if (aktvehicle->height >= chtieffliegend) 
+   if (aktvehicle->height >= chtieffliegend)
       suffix = "air to ";
-   else 
+   else
       suffix = "ground to ";
 
-   if (!(aktvehicle->weapons->weapon[weapnum].getScalarWeaponType() == cwgroundmissilen || 
-         aktvehicle->weapons->weapon[weapnum].getScalarWeaponType() == cwairmissilen ))
-      suffix = "";                         
-   activefontsettings.color = black; 
-   if ( !aktvehicle->weapons->weapon[weapnum].shootable() )
-      showtext2("no",x1 + 50,y1 + starty + 205); 
-   else { 
-      showtext2("yes",x1 + 50,y1 + starty + 205); 
-   } 
+   if (!(aktvehicle->weapons.weapon[weapnum].getScalarWeaponType() == cwgroundmissilen ||
+         aktvehicle->weapons.weapon[weapnum].getScalarWeaponType() == cwairmissilen ))
+      suffix = "";
+   activefontsettings.color = black;
+   if ( !aktvehicle->weapons.weapon[weapnum].shootable() )
+      showtext2("no",x1 + 50,y1 + starty + 205);
+   else {
+      showtext2("yes",x1 + 50,y1 + starty + 205);
+   }
 
-   if ( aktvehicle->weapons->weapon[weapnum].canRefuel() ) { 
+   if ( aktvehicle->weapons.weapon[weapnum].canRefuel() ) {
       activefontsettings.length = 10;
-      showtext2("yes",x1 + 50,y1 + starty + 260); 
-   } 
-   else 
-      showtext2("no",x1 + 50,y1 + starty + 260); 
+      showtext2("yes",x1 + 50,y1 + starty + 260);
+   }
+   else
+      showtext2("no",x1 + 50,y1 + starty + 260);
 
    activefontsettings.length = 170;
    strcpy ( strng, suffix );
-   int k = aktvehicle->weapons->weapon[weapnum].getScalarWeaponType();
+   int k = aktvehicle->weapons.weapon[weapnum].getScalarWeaponType();
       if ( k < cwaffentypennum) {
          strcat( strng, cwaffentypen[k] );
          showtext2( strng, x1 + 50,y1 + starty + 40);
       };
 
-   itoa(aktvehicle->weapons->weapon[weapnum].maxstrength , strng, 10 );
+   itoa(aktvehicle->weapons.weapon[weapnum].maxstrength , strng, 10 );
    showtext2(strng ,x1 + 50,y1 + starty + 90);
 
-   itoa(aktvehicle->weapons->weapon[weapnum].count , strng, 10 );
+   itoa(aktvehicle->weapons.weapon[weapnum].count , strng, 10 );
    showtext2(strng ,x1 + 50,y1 + starty + 145);
 
 
-   bar(x1 + 330,y1 + starty + 40,x1 + 550,y1 + starty + 70,dblue);   /* ## */ 
-   k = 0; 
-   for (i = 0; i <= 7; i++) 
-      if (aktvehicle->weapons->weapon[weapnum].sourceheight & (1 << i)) { 
-         putimage(x1 + 330 + k * 35,y1 + starty + 40,icons.height[i]); 
-         k++; 
-      } 
+   bar(x1 + 330,y1 + starty + 40,x1 + 550,y1 + starty + 70,dblue);   /* ## */
+   k = 0;
+   for (i = 0; i <= 7; i++)
+      if (aktvehicle->weapons.weapon[weapnum].sourceheight & (1 << i)) {
+         putimage(x1 + 330 + k * 35,y1 + starty + 40,icons.height[i]);
+         k++;
+      }
 
-   bar(x1 + 330,y1 + starty + 95,x1 + 550,y1 + starty + 125,dblue);   /* ## */ 
-   k = 0; 
-   for (i = 0; i <= 7; i++) 
-      if (aktvehicle->weapons->weapon[weapnum].targ & (1 << i) ) { 
-         putimage(x1 + 330 + k * 35,y1 + starty + 95,icons.height[i]); 
-         k++; 
-      } 
+   bar(x1 + 330,y1 + starty + 95,x1 + 550,y1 + starty + 125,dblue);   /* ## */
+   k = 0;
+   for (i = 0; i <= 7; i++)
+      if (aktvehicle->weapons.weapon[weapnum].targ & (1 << i) ) {
+         putimage(x1 + 330 + k * 35,y1 + starty + 95,icons.height[i]);
+         k++;
+      }
 
    delete[]  strng ;
    delete[]  strng2;
@@ -761,27 +764,27 @@ void         tweaponinfo::run(void)
    do {
       releasetimeslice();
    }  while (!((mouseparams.taste == 0) || keypress()) );
-   mousevisible(true); 
-   k = 0;                                  
+   mousevisible(true);
+   k = 0;
 
-   do { 
+   do {
       tdialogbox::run();
-   }  while (!((taste != ct_invvalue) || (mouseparams.taste == 1))); 
-   if (taste == ct_invvalue) 
+   }  while (!((taste != ct_invvalue) || (mouseparams.taste == 1)));
+   if (taste == ct_invvalue)
       do {
         releasetimeslice();
-      }  while (!(mouseparams.taste == 0)); 
+      }  while (!(mouseparams.taste == 0));
 
-   mousevisible(false); 
+   mousevisible(false);
 
-} 
+}
 
 
 
 
 
 void         tvehicleinfo::init( const Vehicletype* type )
-{ 
+{
 
    if ( type )
       aktvehicle = getvehicletype_forid ( type->id);
@@ -790,23 +793,23 @@ void         tvehicleinfo::init( const Vehicletype* type )
 
    tdialogbox::init();
    category = 0;
-   x1 = 20; 
-   xsize = 600; 
-   y1 = 15; 
+   x1 = 20;
+   xsize = 600;
+   y1 = 15;
    ysize = 460;
-   action = 0; 
-   randunten = 35; 
-   windowstyle = windowstyle ^ dlg_in3d; 
+   action = 0;
+   randunten = 35;
+   windowstyle = windowstyle ^ dlg_in3d;
    title = "vehicle info";
-   addbutton("e~x~it",50,ysize - randunten + 5,xsize - 50,ysize - 5,0,1,1,true); 
-   addbutton("",10,ysize - randunten + 5,40,ysize - 5,0,2,2,true); 
-   addkey(2,ct_left); 
-   addbutton("",xsize - 40,ysize - randunten + 5,xsize - 10,ysize - 5,0,2,3,true); 
+   addbutton("e~x~it",50,ysize - randunten + 5,xsize - 50,ysize - 5,0,1,1,true);
+   addbutton("",10,ysize - randunten + 5,40,ysize - 5,0,2,2,true);
+   addkey(2,ct_left);
+   addbutton("",xsize - 40,ysize - randunten + 5,xsize - 10,ysize - 5,0,2,3,true);
    addbutton("general infos", 10, ysize - randunten- 25, (xsize - 50) / 4 + 10 , ysize - randunten - 5, 0,1,4,true);
    addbutton("weapons", (xsize - 50) / 4 + 20, ysize - randunten- 25, (xsize - 50) * 2 / 4 + 20 , ysize - randunten - 5, 0,1,5,true);
    addbutton("classes", (xsize - 50) * 2 / 4 + 30, ysize - randunten- 25, (xsize - 50) * 3 / 4 + 30 , ysize - randunten - 5, 0,1,6,true);
    addbutton("info",    (xsize - 50) * 3 / 4 + 40, ysize - randunten- 25, xsize - 10 , ysize - randunten - 5, 0,1,7,true);
-   addkey(3,ct_right); 
+   addkey(3,ct_right);
 
    textsizey = ( ysize - 65) - ( starty + 55 );
 
@@ -826,9 +829,9 @@ void         tvehicleinfo::init( const Vehicletype* type )
 
    line( x1 + 15, y1 + starty + 45, x1 + xsize - 15, y1 + starty + 45, darkgray);
    line( x1 + 15, y1 + starty + 46, x1 + xsize - 15, y1 + starty + 46, white);
-   
 
-   rahmen(true,x1 + 5,y1 + starty,x1 + xsize - 5,y1 + ysize - randunten); 
+
+   rahmen(true,x1 + 5,y1 + starty,x1 + xsize - 5,y1 + ysize - randunten);
    putrotspriteimage(x1 + 565,y1 + starty + 395,icons.weapinfo.pfeil2, actmap->actplayer * 8);
    putrotspriteimage180(x1 + 12,y1 + starty + 395,icons.weapinfo.pfeil2, actmap->actplayer * 8);
 
@@ -837,10 +840,10 @@ void         tvehicleinfo::init( const Vehicletype* type )
    backgrnd2 = dblue + 1;
 
 
-   wepx = x1 + 30; 
-   wepy = y1 + starty + 70; 
-   markweap = 0; 
-} 
+   wepx = x1 + 30;
+   wepy = y1 + starty + 70;
+   markweap = 0;
+}
 
 
 void         tvehicleinfo::lines(integer      xp1,
@@ -848,15 +851,15 @@ void         tvehicleinfo::lines(integer      xp1,
                                  integer      xp2,
                                  integer      yp2,
                                  char *       st)
-{ 
+{
   collategraphicoperations cgo ( xp1, yp1, xp2, yp2);
    rahmen(true,xp1,yp1,xp2,yp2);
-   rahmen(false,xp1 + 1,yp1 + 1,xp2 - 1,yp2 - 1); 
-} 
+   rahmen(false,xp1 + 1,yp1 + 1,xp2 - 1,yp2 - 1);
+}
 
 
-  #define wepshown 6  
-  #define movespeed 20  
+  #define wepshown 6
+  #define movespeed 20
 
 
 #define column2x ( x1 + 420 - 20 )
@@ -871,77 +874,77 @@ void         tvehicleinfo::lines(integer      xp1,
 #define graphy1 (wepy )
 #define graphx2 (x1 + 580)
 #define graphy2 (wepy + 160)
- 
+
 
 
 void         tvehicleinfo::paintmarkweap(void)
-{ 
+{
   collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );
   int         mas;
   int ii;
   char strng[100];
 
-   mas = getmousestatus(); 
-   if (mas == 2) 
-      mousevisible(false); 
+   mas = getmousestatus();
+   if (mas == 2)
+      mousevisible(false);
 
-   activefontsettings.font = schriften.smallarial; 
-   activefontsettings.color = textcol; 
+   activefontsettings.font = schriften.smallarial;
+   activefontsettings.color = textcol;
    activefontsettings.justify = lefttext;
 
-   if (aktvehicle->weapons->count ) 
+   if (aktvehicle->weapons.count )
 
-      for (ii = 0; ii < aktvehicle->weapons->count ; ii++) { 
+      for (ii = 0; ii < aktvehicle->weapons.count ; ii++) {
 
          if (ii == markweap)
             activefontsettings.background = white;
          else
             activefontsettings.background = dblue;
 
-         if (aktvehicle->height >= chtieffliegend) 
+         if (aktvehicle->height >= chtieffliegend)
             strcpy (strng,  "air to ");
-         else 
+         else
             strcpy(strng, "ground to ");
 
-         if (!(aktvehicle->weapons->weapon[ii].getScalarWeaponType() == cwgroundmissilen || 
-               aktvehicle->weapons->weapon[ii].getScalarWeaponType() == cwairmissilen ))
+         if (!(aktvehicle->weapons.weapon[ii].getScalarWeaponType() == cwgroundmissilen ||
+               aktvehicle->weapons.weapon[ii].getScalarWeaponType() == cwairmissilen ))
             strng[0] = 0;
 
-         activefontsettings.color = textcol; 
-         if ( !aktvehicle->weapons->weapon[ii].shootable() )
-            activefontsettings.color = darkgray; 
+         activefontsettings.color = textcol;
+         if ( !aktvehicle->weapons.weapon[ii].shootable() )
+            activefontsettings.color = darkgray;
 
          activefontsettings.length = 190;
-         if ( aktvehicle->weapons->weapon[ii].getScalarWeaponType() >= 0 )
-            strcat( strng, cwaffentypen[ aktvehicle->weapons->weapon[ii].getScalarWeaponType() ] );
+         if ( aktvehicle->weapons.weapon[ii].getScalarWeaponType() >= 0 )
+            strcat( strng, cwaffentypen[ aktvehicle->weapons.weapon[ii].getScalarWeaponType() ] );
          else
-            if ( aktvehicle->weapons->weapon[ii].service() )
+            if ( aktvehicle->weapons.weapon[ii].service() )
                strcat( strng, cwaffentypen[ cwservicen ] );
 
          showtext2( strng, wepx + 20, wepy + ii * 20);
 
 
          activefontsettings.length = 40;
-         itoa(aktvehicle->weapons->weapon[ii].maxstrength , strng, 10 );
+         itoa(aktvehicle->weapons.weapon[ii].maxstrength , strng, 10 );
          showtext2(strng ,wepx + 210, wepy + ii * 20);
-      
-         itoa(aktvehicle->weapons->weapon[ii].count , strng, 10 );
+
+         itoa(aktvehicle->weapons.weapon[ii].count , strng, 10 );
          showtext2(strng ,wepx + 250, wepy + ii * 20);
 
-      } 
-    
-   for (ii = aktvehicle->weapons->count; ii <= 7; ii++)
+      }
+
+   for (ii = aktvehicle->weapons.count; ii <= 7; ii++)
        paintsurface2(wepx + 20 ,wepy + ii * 20,wepx + 290,wepy + 20 + ii * 20);
 
 
    showweaponsvariables();
 
 
-   if (mas == 2) 
-      mousevisible(true); 
+   if (mas == 2)
+      mousevisible(true);
 
 
-} 
+}
 
 void         tvehicleinfo::repaintscrollbar ( void )
 {
@@ -951,22 +954,22 @@ void         tvehicleinfo::repaintscrollbar ( void )
 extern dacpalette256 pal;
 
 void         tvehicleinfo::zeigevehicle(void)
-{ 
+{
   collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
 
-      activefontsettings.font = schriften.smallarial; 
+      activefontsettings.font = schriften.smallarial;
       activefontsettings.length = 240;
-      activefontsettings.background = backgrnd2; 
-      activefontsettings.color = textcol; 
+      activefontsettings.background = backgrnd2;
+      activefontsettings.color = textcol;
    activefontsettings.justify = righttext;
-   
-   if ( aktvehicle->name )
-      showtext2(aktvehicle->name,x1 + 20,y1 + starty + 15);
+
+   if ( !aktvehicle->name.empty() )
+      showtext2(aktvehicle->name, x1 + 20,y1 + starty + 15);
    else
       showtext2("",x1 + 20,y1 + starty + 15);
 
-   activefontsettings.justify = lefttext; 
-   if ( aktvehicle->description )
+   activefontsettings.justify = lefttext;
+   if ( !aktvehicle->description.empty() )
       showtext2(aktvehicle->description, x1 + xsize - 260, y1 + starty + 15);
    else
       showtext2("", x1 + xsize - 260, y1 + starty + 15);
@@ -983,26 +986,26 @@ void         tvehicleinfo::zeigevehicle(void)
    #else
    putrotspriteimage(x1 + xsize/2 - 15 ,y1 + starty + 7,aktvehicle->picture[0],actmap->actplayer * 8);
    #endif
-                         
+
 }
 
-void tvehicleinfo::showgeneralinfos ( void ) 
+void tvehicleinfo::showgeneralinfos ( void )
 {
   collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
  char mss = getmousestatus();
  if (mss == 2)
     mousevisible(false);
- 
+
   paintsurface ( 11, starty + 48, xsize - 11, ysize - randunten- 30  );
 
 
 
 
-   activefontsettings.color = textcol; 
-   activefontsettings.background = 255; 
-   activefontsettings.font = schriften.smallarial; 
-   activefontsettings.markcolor = red; 
- 
+   activefontsettings.color = textcol;
+   activefontsettings.background = 255;
+   activefontsettings.font = schriften.smallarial;
+   activefontsettings.markcolor = red;
+
    activefontsettings.justify = lefttext;
    activefontsettings.length = 200;
    showtext2("production cost", productioncostx , productioncosty );
@@ -1048,21 +1051,21 @@ void  tvehicleinfo::showgeneralinfovariables( void )
 {
   collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
  int          ii, kk;
- void*      q; 
+ void*      q;
  char         strng[100];
 
       activefontsettings.length = 50;
-      activefontsettings.background = backgrnd2; 
-      activefontsettings.justify = lefttext; 
-      activefontsettings.color = textcol; 
-   
+      activefontsettings.background = backgrnd2;
+      activefontsettings.justify = lefttext;
+      activefontsettings.color = textcol;
+
 
    activefontsettings.length = 30;
 
-   for (ii = 7; ii >= 0; ii--) { 
-      if (aktvehicle->height & (1 << ii) ) 
+   for (ii = 7; ii >= 0; ii--) {
+      if (aktvehicle->height & (1 << ii) )
          q = icons.height[ii];
-      else 
+      else
          q = xlatpict(xlatpictgraytable,icons.height[ii]);
 
       putimage(x1 + 155 + ii * 37,y1 + starty + 273,q);
@@ -1070,18 +1073,18 @@ void  tvehicleinfo::showgeneralinfovariables( void )
       strrd8d(aktvehicle->movement[ii], strng );
       showtext2(strng, x1 + 155 + ii * 37,y1 + starty + 297);
 
-   } 
+   }
 
 
-   for (ii = 7; ii >= 0; ii--) { 
+   for (ii = 7; ii >= 0; ii--) {
       if (aktvehicle->loadcapability & (1 << ii) )
          q = icons.height[ii];
-      else 
+      else
          q = xlatpict(xlatpictgraytable,icons.height[ii]);
 
       putimage(x1 + 155 + ii * 37,y1 + starty + 225,q);
 
-   } 
+   }
 
 
    activefontsettings.length = 150;
@@ -1089,10 +1092,10 @@ void  tvehicleinfo::showgeneralinfovariables( void )
 
    kk=0;
    for (ii = 0; ii < cvehiclefunctionsnum; ii++)
-      if ((aktvehicle->functions & cfvehiclefunctionsanzeige) & (1 << ii ) ) { 
+      if ((aktvehicle->functions & cfvehiclefunctionsanzeige) & (1 << ii ) ) {
          showtext2( cvehiclefunctions[ii], x1 + xsize/2 - activefontsettings.length/2, y1 + starty + 60 + kk * 20);
          kk++;
-      } 
+      }
 
    paintsurface ( xsize/2 - activefontsettings.length/2, starty + 60 + kk * 20, xsize/2 + activefontsettings.length/2, starty + 60 + 6 * 20 );
 
@@ -1127,9 +1130,9 @@ void  tvehicleinfo::showgeneralinfovariables( void )
    activefontsettings.justify = lefttext;
    activefontsettings.length = 70;
 
-   if (aktvehicle->height >= chfahrend) 
+   if (aktvehicle->height >= chfahrend)
       showtext2("weight :",column2x + 10, productioncosty + 110);
-   else 
+   else
       showtext2("draught :",column2x + 10, productioncosty + 110);
 
    npop ( activefontsettings );
@@ -1139,7 +1142,7 @@ void  tvehicleinfo::showgeneralinfovariables( void )
 
 
 //   strng = (char*) malloc ( 200 );
-/*         
+/*
    itoa ( aktvehicle->production.energy, strng, 10 );
    showtext2(strng, x1 + 490,y1 + starty + 5);
 
@@ -1163,23 +1166,23 @@ void  tvehicleinfo::showgeneralinfovariables( void )
    itoa ( aktvehicle->armor, strng, 10 );
    showtext2(strng, x1 + 490,y1 + starty + 190);
 
-   if (aktvehicle->wait) 
-      showtext2("yes",x1 + 490,y1 + starty + 230); 
-   else 
-      showtext2("no",x1 + 490,y1 + starty + 230); 
+   if (aktvehicle->wait)
+      showtext2("yes",x1 + 490,y1 + starty + 230);
+   else
+      showtext2("no",x1 + 490,y1 + starty + 230);
 
-   push(activefontsettings,sizeof(activefontsettings)); 
-      activefontsettings.color = textcol; 
-      activefontsettings.background = dblue; 
-      activefontsettings.font = schriften.smallarial; 
-      activefontsettings.justify = righttext; 
+   push(activefontsettings,sizeof(activefontsettings));
+      activefontsettings.color = textcol;
+      activefontsettings.background = dblue;
+      activefontsettings.font = schriften.smallarial;
+      activefontsettings.justify = righttext;
       activefontsettings.length = 60;
-   
-   if (aktvehicle->height >= chfahrend) 
+
+   if (aktvehicle->height >= chfahrend)
       showtext2("weight :",wepx + 390, y1 + starty + 210);
-   else 
+   else
       showtext2("draught :",wepx + 390, y1 + starty + 210);
-   pop(activefontsettings,sizeof(activefontsettings)); 
+   pop(activefontsettings,sizeof(activefontsettings));
 
    itoa ( aktvehicle->weight, strng, 10 );
    showtext2(strng, x1 + 490,y1 + starty + 210);
@@ -1187,15 +1190,15 @@ void  tvehicleinfo::showgeneralinfovariables( void )
    itoa ( aktvehicle->loadcapacity, strng, 10 );
    showtext2(strng, x1 + 490,y1 + starty + 300);
 
-   kk = 0; 
-   bar(x1 + 130,y1 + starty + 265,x1 + 350,y1 + starty + 295,background); 
-   if (aktvehicle->loadcapacity ) { 
-      for (ii = 0; ii <= 7; ii++) 
-         if (aktvehicle->loadcapability & (1 << ii) ) { 
-            putimage(x1 + 130 + kk * 35,y1 + starty + 265,icons.height[ii]); 
-            kk++; 
-         } 
-   } 
+   kk = 0;
+   bar(x1 + 130,y1 + starty + 265,x1 + 350,y1 + starty + 295,background);
+   if (aktvehicle->loadcapacity ) {
+      for (ii = 0; ii <= 7; ii++)
+         if (aktvehicle->loadcapability & (1 << ii) ) {
+            putimage(x1 + 130 + kk * 35,y1 + starty + 265,icons.height[ii]);
+            kk++;
+         }
+   }
 
    itoa ( aktvehicle->energy, strng, 10 );
    showtext2(strng, x1 + 490,y1 + starty + 260);
@@ -1206,71 +1209,71 @@ void  tvehicleinfo::showgeneralinfovariables( void )
 
 
    activefontsettings.length = 150;
-   kk = 0; 
+   kk = 0;
 
-   bar(wepx + 10,y1 + starty + 320,wepx + 330,y1 + starty + 360,background); 
-
-
+   bar(wepx + 10,y1 + starty + 320,wepx + 330,y1 + starty + 360,background);
 
 
-   activefontsettings.justify = lefttext; 
-   if (aktvehicle->weapons->count == 0) 
-      bar(wepx + 10,wepy,wepx + 340,wepy + 20 + wepshown * 20,background); 
-   else { 
-      kk = aktvehicle->weapons->count - 1; 
-      if (kk > wepshown) kk = wepshown; 
-      for (ii = 0; ii <= kk; ii++) { 
-         if (aktvehicle->height >= chtieffliegend) 
+
+
+   activefontsettings.justify = lefttext;
+   if (aktvehicle->weapons.count == 0)
+      bar(wepx + 10,wepy,wepx + 340,wepy + 20 + wepshown * 20,background);
+   else {
+      kk = aktvehicle->weapons.count - 1;
+      if (kk > wepshown) kk = wepshown;
+      for (ii = 0; ii <= kk; ii++) {
+         if (aktvehicle->height >= chtieffliegend)
             strcpy (strng,  "air to ");
-         else 
+         else
             strcpy(strng, "ground to ");
-         if ((aktvehicle->weapons->weapon[ii].typ & (cwgroundmissileb | cwairmissileb)) == 0)
+         if ((aktvehicle->weapons.weapon[ii].typ & (cwgroundmissileb | cwairmissileb)) == 0)
             strng[0] = 0;
-         jj = aktvehicle->weapons->weapon[ii].typ; 
-         activefontsettings.color = textcol; 
+         jj = aktvehicle->weapons.weapon[ii].typ;
+         activefontsettings.color = textcol;
          if ((jj & cwshootableb) == 0)
-            activefontsettings.color = darkgray; 
-         else 
+            activefontsettings.color = darkgray;
+         else
             jj &= ~cwshootableb;
 
-         if (jj & cwammunitionb ) { 
+         if (jj & cwammunitionb ) {
             jj &= ~cwammunitionb;
             activefontsettings.length = 10;
             showtext2( letter[0], wepx + 120,wepy + ii * 20);
-         } 
+         }
          activefontsettings.length = 170;
-         for (ll = 0; ll <= 15; ll++) 
-            if (jj & (1 << ll) ) 
+         for (ll = 0; ll <= 15; ll++)
+            if (jj & (1 << ll) )
                if ( ll < cwaffentypennum) {
                   strcat( strng, cwaffentypen[ ll ] );
                   showtext2( strng, wepx + 20, wepy + ii * 20);
                }
          activefontsettings.length =  30;
 
-         itoa ( aktvehicle->weapons->weapon[ii].maxstrength, strng , 10);
+         itoa ( aktvehicle->weapons.weapon[ii].maxstrength, strng , 10);
          showtext2(strng, wepx + 195,wepy + ii * 20);
 
-         strrd8u ( aktvehicle->weapons->weapon[ii].mindistance, strng );
+         strrd8u ( aktvehicle->weapons.weapon[ii].mindistance, strng );
          showtext2(strng, wepx + 230, wepy + ii * 20);
 
-         strrd8d ( aktvehicle->weapons->weapon[ii].maxdistance, strng );
+         strrd8d ( aktvehicle->weapons.weapon[ii].maxdistance, strng );
          showtext2(strng, wepx + 265, wepy + ii * 20);
 
-         itoa ( aktvehicle->weapons->weapon[ii].count, strng ,10);
+         itoa ( aktvehicle->weapons.weapon[ii].count, strng ,10);
          showtext2(strng, wepx + 300,wepy + ii * 20);
-      } 
-      if (aktvehicle->weapons->count < 8) 
-         for (ii = aktvehicle->weapons->count; ii <= wepshown; ii++) 
-            bar(wepx + 10,wepy + ii * 20,wepx + 340,wepy + 20 + ii * 20,dblue); 
-   } 
+      }
+      if (aktvehicle->weapons.count < 8)
+         for (ii = aktvehicle->weapons.count; ii <= wepshown; ii++)
+            bar(wepx + 10,wepy + ii * 20,wepx + 340,wepy + 20 + ii * 20,dblue);
+   }
   */
-} 
+}
 
 
 
 
 void tvehicleinfo::showweapons ( void )
-{                             
+{
   collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
 
  char mss = getmousestatus();
@@ -1279,9 +1282,9 @@ void tvehicleinfo::showweapons ( void )
 
   paintsurface ( 11, starty + 48, xsize - 11, ysize - randunten- 30  );
 
-  activefontsettings.color = textcol; 
+  activefontsettings.color = textcol;
   activefontsettings.background = 255;
-  activefontsettings.font = schriften.smallarial; 
+  activefontsettings.font = schriften.smallarial;
   activefontsettings.justify = lefttext;
   activefontsettings.length = 200;
 
@@ -1309,179 +1312,179 @@ void tvehicleinfo::showweaponsvariables( void )
 
    char strng[100];
    int xa,ya,ii;
-      
-   activefontsettings.color = textcol; 
-   activefontsettings.background = dblue; 
-   activefontsettings.font = schriften.smallarial; 
-   activefontsettings.justify = righttext; 
+
+   activefontsettings.color = textcol;
+   activefontsettings.background = dblue;
+   activefontsettings.font = schriften.smallarial;
+   activefontsettings.justify = righttext;
    activefontsettings.length = 60;
 
 
-   if (aktvehicle->weapons->count) {
+   if (aktvehicle->weapons.count) {
 
       void *q;
-   
-      for (ii = 7; ii >= 0; ii--) { 
-         if (aktvehicle->weapons->weapon[markweap].sourceheight & (1 << ii) )
+
+      for (ii = 7; ii >= 0; ii--) {
+         if (aktvehicle->weapons.weapon[markweap].sourceheight & (1 << ii) )
             q = icons.height[ii];
-         else 
+         else
             q = xlatpict(xlatpictgraytable,icons.height[ii]);
-   
+
          putimage(wepx + 210 + ii * 35, y1 + starty + 300,q);
-      } 
-   
-      for (ii = 7; ii >= 0; ii--) { 
-         if (aktvehicle->weapons->weapon[markweap].targ & (1 << ii) )
+      }
+
+      for (ii = 7; ii >= 0; ii--) {
+         if (aktvehicle->weapons.weapon[markweap].targ & (1 << ii) )
             q = icons.height[ii];
-         else 
+         else
             q = xlatpict(xlatpictgraytable,icons.height[ii]);
-   
+
          putimage(wepx + 210 + ii * 35, y1 + starty + 325, q);
-      } 
-   
-   
+      }
+
+
       paintsurface2 ( graphx1, graphy1, graphx2, graphy2 );
       rectangle ( graphx1, graphy1, graphx2, graphy2 , lightblue);
-   
-      if (aktvehicle->weapons->weapon[markweap].maxstrength > 0)
-         if ( aktvehicle->weapons->weapon[markweap].getScalarWeaponType() >= 0 ) {
-   
+
+      if (aktvehicle->weapons.weapon[markweap].maxstrength > 0)
+         if ( aktvehicle->weapons.weapon[markweap].getScalarWeaponType() >= 0 ) {
+
           /*  line(x1 + 300,y1 + starty + 130,x1 + 300,y1 + starty + 260,black);
-            putspriteimage(x1 + 293,y1 + starty + 130,icons.weapinfo.pfeil1); 
-            line(x1 + 297,y1 + starty + 140,x1 + 303,y1 + starty + 140,black); 
-            line(x1 + 297,y1 + starty + 260,x1 + 303,y1 + starty + 260,black); 
-   
-            line(x1 + 310,y1 + starty + 260,x1 + 520,y1 + starty + 260,black); 
-            putrotspriteimage90(x1 + 516,y1 + starty + 253,icons.weapinfo.pfeil1,0); 
-   
-            line(x1 + 325,y1 + starty + 257,x1 + 325,y1 + starty + 263,black); 
+            putspriteimage(x1 + 293,y1 + starty + 130,icons.weapinfo.pfeil1);
+            line(x1 + 297,y1 + starty + 140,x1 + 303,y1 + starty + 140,black);
+            line(x1 + 297,y1 + starty + 260,x1 + 303,y1 + starty + 260,black);
+
+            line(x1 + 310,y1 + starty + 260,x1 + 520,y1 + starty + 260,black);
+            putrotspriteimage90(x1 + 516,y1 + starty + 253,icons.weapinfo.pfeil1,0);
+
+            line(x1 + 325,y1 + starty + 257,x1 + 325,y1 + starty + 263,black);
             line(x1 + 510,y1 + starty + 257,x1 + 510,y1 + starty + 263,black); */
-   
+
             activefontsettings.font = schriften.smallsystem;
             activefontsettings.background = dblue;
             activefontsettings.length = 20;
             activefontsettings.justify = lefttext;
-   
-            strrd8u(aktvehicle->weapons->weapon[markweap].mindistance, strng);
+
+            strrd8u(aktvehicle->weapons.weapon[markweap].mindistance, strng);
             showtext2( strng, graphx1, graphy2 + 5);
-   
+
             activefontsettings.justify = righttext;
-            strrd8d(aktvehicle->weapons->weapon[markweap].maxdistance, strng);
+            strrd8d(aktvehicle->weapons.weapon[markweap].maxdistance, strng);
             showtext2( strng, graphx2 - 20, graphy2 + 5);
-            
-            activefontsettings.justify = centertext; 
+
+            activefontsettings.justify = centertext;
             activefontsettings.length = gettextwdth("distance",NULL);
-   
+
             showtext2("distance",graphx1 + (graphx2 - graphx1  - activefontsettings.length ) / 2, graphy2 + 5);
-   
+
    /*         activefontsettings.direction = 90;
-   
+
             showtext2("strength", x1 + 285,y1 + starty + 200);
-            activefontsettings.direction = 0; 
-            activefontsettings.justify = righttext; 
-            itoa(aktvehicle->weapons->weapon[weapnum].maxstrength, strng, 10 );
+            activefontsettings.direction = 0;
+            activefontsettings.justify = righttext;
+            itoa(aktvehicle->weapons.weapon[weapnum].maxstrength, strng, 10 );
             showtext2(strng, x1 + 292,y1 + starty + 137);
             showtext2("0", x1 + 292,y1 + starty + 257); */
-                     
+
             int dx = graphx2 - graphx1;
             int dy = graphy2 - graphy1;
-   
+
             for (ii = 0; ii <= 255; ii++) {
                 xa = graphx1 + ii * dx / 255;
                 ya = int ( graphy2 - dy *
-                           weapDist.getWeapStrength(&aktvehicle->weapons->weapon[markweap], 0, -1, -1, ii ));
-                putpixel(xa,ya,14); 
-             
-            } 
-         } 
-   
+                           weapDist.getWeapStrength(&aktvehicle->weapons.weapon[markweap], 0, -1, -1, ii ));
+                putpixel(xa,ya,14);
+
+            }
+         }
+
       activefontsettings.font = schriften.smallarial;
-   
+
       /*
-   
-      activefontsettings.color = black; 
-      activefontsettings.background = backgrnd2; 
-      activefontsettings.justify = lefttext; 
+
+      activefontsettings.color = black;
+      activefontsettings.background = backgrnd2;
+      activefontsettings.justify = lefttext;
       activefontsettings.length = 170;
-   
-      if (aktvehicle->height >= chtieffliegend) 
+
+      if (aktvehicle->height >= chtieffliegend)
          suffix = "air - ";
-      else 
+      else
          suffix = "ground - ";
-   
-      if ((aktvehicle->weapons->weapon[markweap].typ & (cwgroundmissileb | cwairmissileb)) == 0)
+
+      if ((aktvehicle->weapons.weapon[markweap].typ & (cwgroundmissileb | cwairmissileb)) == 0)
          suffix = "";
       */
-   
-      activefontsettings.color = black; 
+
+      activefontsettings.color = black;
       activefontsettings.length = 25;
       activefontsettings.justify = lefttext;
-   
-      if ( aktvehicle->weapons->weapon[markweap].shootable() ) {
+
+      if ( aktvehicle->weapons.weapon[markweap].shootable() ) {
          showtext2("yes", wepx + 210, wepy + 160);
-      } else { 
+      } else {
          showtext2("no", wepx + 210, wepy + 160);
-      } 
-   
-   
-      if ( aktvehicle->weapons->weapon[markweap].canRefuel() ) { 
+      }
+
+
+      if ( aktvehicle->weapons.weapon[markweap].canRefuel() ) {
          showtext2("yes",wepx + 210, wepy + 180);
-      } 
-      else 
+      }
+      else
          showtext2("no",wepx + 210, wepy + 180);
-   
-   
+
+
    /*
       activefontsettings.length = 170;
       strcpy ( strng, suffix );
-      for (k = 0; k <= 15; k++) 
-         if (j & (1 << k) ) 
+      for (k = 0; k <= 15; k++)
+         if (j & (1 << k) )
             if ( k < cwaffentypennum) {
                strcat( strng, cwaffentypen[k] );
                showtext2( strng, x1 + 50,y1 + starty + 40);
-            };                             
-   
-      itoa(aktvehicle->weapons->weapon[markweap].maxstrength , strng, 10 );
+            };
+
+      itoa(aktvehicle->weapons.weapon[markweap].maxstrength , strng, 10 );
       showtext2(strng ,x1 + 50,y1 + starty + 90);
-   
-      itoa(aktvehicle->weapons->weapon[markweap].count , strng, 10 );
+
+      itoa(aktvehicle->weapons.weapon[markweap].count , strng, 10 );
       showtext2(strng ,x1 + 50,y1 + starty + 145);
-   
-   
+
+
       bar(x1 + 330,y1 + starty + 40,x1 + 550,y1 + starty + 70,dblue);
-      k = 0; 
-      for (i = 0; i <= 7; i++) 
-         if (aktvehicle->weapons->weapon[markweap].sourceheight & (1 << i)) { 
-            putimage(x1 + 330 + k * 35,y1 + starty + 40,icons.height[i]); 
-            k++; 
-         } 
-   
-      bar(x1 + 330,y1 + starty + 95,x1 + 550,y1 + starty + 125,dblue);   
-      k = 0; 
-      for (i = 0; i <= 7; i++) 
-         if (aktvehicle->weapons->weapon[markweap].targ & (1 << i) ) { 
-            putimage(x1 + 330 + k * 35,y1 + starty + 95,icons.height[i]); 
-            k++; 
-         } 
+      k = 0;
+      for (i = 0; i <= 7; i++)
+         if (aktvehicle->weapons.weapon[markweap].sourceheight & (1 << i)) {
+            putimage(x1 + 330 + k * 35,y1 + starty + 40,icons.height[i]);
+            k++;
+         }
+
+      bar(x1 + 330,y1 + starty + 95,x1 + 550,y1 + starty + 125,dblue);
+      k = 0;
+      for (i = 0; i <= 7; i++)
+         if (aktvehicle->weapons.weapon[markweap].targ & (1 << i) ) {
+            putimage(x1 + 330 + k * 35,y1 + starty + 95,icons.height[i]);
+            k++;
+         }
       */
-   
-   
+
+
    /*
             activefontsettings.length =  30;
-   
-            itoa ( aktvehicle->weapons->weapon[ii].maxstrength, strng , 10);
+
+            itoa ( aktvehicle->weapons.weapon[ii].maxstrength, strng , 10);
             showtext2(strng, wepx + 195,wepy + ii * 20);
-   
-            strrd8 ( aktvehicle->weapons->weapon[ii].mindistance, strng );
+
+            strrd8 ( aktvehicle->weapons.weapon[ii].mindistance, strng );
             showtext2(strng, wepx + 230, wepy + ii * 20);
-   
-            strrd8 ( aktvehicle->weapons->weapon[ii].maxdistance, strng );
+
+            strrd8 ( aktvehicle->weapons.weapon[ii].maxdistance, strng );
             showtext2(strng, wepx + 265, wepy + ii * 20);
-   
-            itoa ( aktvehicle->weapons->weapon[ii].count, strng ,10);
+
+            itoa ( aktvehicle->weapons.weapon[ii].count, strng ,10);
             showtext2(strng, wepx + 300,wepy + ii * 20);
    */
-   
+
    } else {
       paintsurface2 ( graphx1, graphy1, graphx2, graphy2 );
       rectangle ( graphx1, graphy1, graphx2, graphy2 , lightblue);
@@ -1493,12 +1496,12 @@ void         tvehicleinfo::showinfotext( void )
 {
   collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
 
-   char *b;
-   if (aktvehicle->infotext)
-      b = aktvehicle->infotext;
+   const char *b;
+   if ( !aktvehicle->infotext.empty() )
+      b = aktvehicle->infotext.c_str();
    else
       b = "No information available ";
-   
+
    if (category < 21)
       paintsurface ( xsize - 44, starty + 55, xsize - 20, ysize - 65 );
    setparams ( x1 + 20, y1 + starty + 55, x1 + xsize - 45, y1 + ysize - 65, b, black, backgrnd2);
@@ -1508,11 +1511,11 @@ void         tvehicleinfo::showinfotext( void )
    tvt_dispactive = 1;
 
 
-   tvt_starty = 0; 
+   tvt_starty = 0;
 
-   if (category < 21  &&   textsizeycomplete >= textsizey) 
+   if (category < 21  &&   textsizeycomplete >= textsizey)
       showbutton ( 8 );
-                                                                                          
+
 
    if (category == 21  &&   textsizeycomplete < textsizey) {
       hidebutton ( 8 );
@@ -1535,7 +1538,7 @@ void         tvehicleinfo::showclasses( void )
   int i, j;
 
    if ( aktvehicle->classnum) {
-      if (category == 10) 
+      if (category == 10)
          paintsurface ( 40, starty + 60, 170, starty + 80);
       else
          if (category < 9)
@@ -1544,7 +1547,7 @@ void         tvehicleinfo::showclasses( void )
       activefontsettings.justify = righttext;
       showtext2 ( "weapon:", x1 + 170 , y1 + starty + 60 );
       activefontsettings.length = 20;
-      for (j = 0 ; j < aktvehicle->weapons->count  ; j++ ) 
+      for (j = 0 ; j < aktvehicle->weapons.count  ; j++ )
           showtext2 (  letter[ j ], x1 + 250 + j * 30, y1 + starty + 60 );
 
         activefontsettings.length = 40;
@@ -1559,9 +1562,9 @@ void         tvehicleinfo::showclasses( void )
          showtext2 ( aktvehicle->classnames[i], x1 + 40, y1 + starty + 85 + i * 25 );
          activefontsettings.justify = righttext;
          activefontsettings.length = 20;
-         for (j = 0 ; j < aktvehicle->weapons->count  ; j++ )
-            if ( aktvehicle->weapons->weapon[j].getScalarWeaponType() >= 0 )
-               showtext2 ( strrr ( aktvehicle->weapons->weapon[j].maxstrength * aktvehicle->classbound[i].weapstrength[ aktvehicle->weapons->weapon[j].getScalarWeaponType() ] / 1024 ), x1 + 250 + j * 30, y1 + starty + 85 + i * 25 );
+         for (j = 0 ; j < aktvehicle->weapons.count  ; j++ )
+            if ( aktvehicle->weapons.weapon[j].getScalarWeaponType() >= 0 )
+               showtext2 ( strrr ( aktvehicle->weapons.weapon[j].maxstrength * aktvehicle->classbound[i].weapstrength[ aktvehicle->weapons.weapon[j].getScalarWeaponType() ] / 1024 ), x1 + 250 + j * 30, y1 + starty + 85 + i * 25 );
 
         activefontsettings.length = 40;
          showtext2 ( strrr ( aktvehicle->armor * aktvehicle->classbound[i].armor / 1024 ), x1 + 250 + j * 30, y1 + starty + 85 + i * 25 );
@@ -1570,7 +1573,7 @@ void         tvehicleinfo::showclasses( void )
       paintsurface ( 291 + j * 30, starty + 60, xsize - 25, starty + 85 + i*25 );
 
       category = 9;
-   } else 
+   } else
      if (category != 10) {
         paintsurface( 20, starty + 55, xsize - 20, ysize - 65);
         activefontsettings.length = 0;
@@ -1581,19 +1584,19 @@ void         tvehicleinfo::showclasses( void )
         category = 10;
      }
    activefontsettings.justify = lefttext;
-}                    
+}
 
 
 
 void         tvehicleinfo::buttonpressed( int id )
-{ 
+{
    tdialogbox::buttonpressed ( id );
-   if (id == 1) 
-      action = 20; 
+   if (id == 1)
+      action = 20;
 
    if (( id == 2 ) || ( id == 3)) {
       pvehicletype type;
-      if (id == 2) { 
+      if (id == 2) {
          do {
             if ( i > 0 )
                i--;
@@ -1601,10 +1604,10 @@ void         tvehicleinfo::buttonpressed( int id )
                i = vehicletypenum - 1;
             type = getvehicletype_forpos ( i );
          } while ( !type || !isUnitNotFiltered ( type->id ) ); /* enddo */
-         markweap = 0; 
-      } 
-             
-      if (id == 3) { 
+         markweap = 0;
+      }
+
+      if (id == 3) {
          do {
             if ( i < vehicletypenum - 1 )
                i++;
@@ -1614,9 +1617,9 @@ void         tvehicleinfo::buttonpressed( int id )
          } while ( !type || !isUnitNotFiltered ( type->id ) ); /* enddo */
 
          markweap = 0;
-      }                     
-      checknextunit(); 
-   } 
+      }
+      checknextunit();
+   }
    if (id == 5 && category != 1) {
       if (category == 21)
          hidebutton ( 8 );
@@ -1644,52 +1647,52 @@ void         tvehicleinfo::buttonpressed( int id )
    if (id == 8  && category >= 20)
       displaytext(  );
 
-} 
+}
 
 
 void         tvehicleinfo::checknextunit(void)
-{ 
-   if (i != j) { 
-      mousevisible(false); 
-      aktvehicle = getvehicletype_forpos ( i ); 
+{
+   if (i != j) {
+      mousevisible(false);
+      aktvehicle = getvehicletype_forpos ( i );
       zeigevehicle();
       if ( category == 0 ) {
          showgeneralinfovariables();
-      } else 
+      } else
          if ( category == 1) {
             markweap = 0;
             paintmarkweap();
          } else
            if (category < 20)
               showclasses ();
-           else 
+           else
               showinfotext ();
 
 
-      mousevisible(true); 
-      j = i; 
-   } 
-} 
+      mousevisible(true);
+      j = i;
+   }
+}
 
 
 
 
 void         tvehicleinfo::run(void)
-{ 
-   tweaponinfo  weapinf; 
+{
+   tweaponinfo  weapinf;
    int         k;
 
-   i = 0; 
+   i = 0;
    if ( !aktvehicle ) {
       pvehicle eht = getactfield()->vehicle;
       if ( !fieldvisiblenow(getactfield()) )
-         eht = NULL; 
-      if ( eht ) { 
-         while (eht->typ != getvehicletype_forpos ( i )) 
+         eht = NULL;
+      if ( eht ) {
+         while (eht->typ != getvehicletype_forpos ( i ))
             i++;
-      } 
+      }
    } else {
-      while ( aktvehicle != getvehicletype_forpos ( i )) 
+      while ( aktvehicle != getvehicletype_forpos ( i ))
         i++;
    }
 
@@ -1707,41 +1710,41 @@ void         tvehicleinfo::run(void)
 
    j = i;
 
-   aktvehicle = getvehicletype_forpos ( i ); 
+   aktvehicle = getvehicletype_forpos ( i );
    zeigevehicle();
    showgeneralinfos();
 
-   mousevisible(true); 
-   do { 
+   mousevisible(true);
+   do {
 
       tdialogbox::run();
 
       if (category == 1) {
-         if (mouseparams.taste == 1) 
+         if (mouseparams.taste == 1)
             if ((mouseparams.x > wepx + 10) && (mouseparams.x < wepx + 340))
-               if (aktvehicle->weapons->count > 0) 
-                  for (k = 0; k < aktvehicle->weapons->count ; k++) 
+               if (aktvehicle->weapons.count > 0)
+                  for (k = 0; k < aktvehicle->weapons.count ; k++)
                      if ((mouseparams.y > wepy + k * 20 - 3) && (mouseparams.y < wepy + 17 + k * 20)) {
-                        if (k != markweap ) { 
-                           markweap = k ; 
-                           mousevisible(false); 
-                           paintmarkweap(); 
-                           mousevisible(true); 
-                        } 
-                     } 
+                        if (k != markweap ) {
+                           markweap = k ;
+                           mousevisible(false);
+                           paintmarkweap();
+                           mousevisible(true);
+                        }
+                     }
 
 
-         if (taste == ct_up) 
-            if (aktvehicle->weapons->count > 0) { 
+         if (taste == ct_up)
+            if (aktvehicle->weapons.count > 0) {
                markweap--;
                if (markweap < 0)
-                  markweap = aktvehicle->weapons->count-1;
-               paintmarkweap(); 
-            } 
-         if (taste == ct_down) 
-            if (aktvehicle->weapons->count ) { 
+                  markweap = aktvehicle->weapons.count-1;
+               paintmarkweap();
+            }
+         if (taste == ct_down)
+            if (aktvehicle->weapons.count ) {
                markweap++;
-               if (markweap >= aktvehicle->weapons->count)
+               if (markweap >= aktvehicle->weapons.count)
                   markweap = 0;
                paintmarkweap(); 
             } 
@@ -5103,18 +5106,18 @@ void viewterraininfo ( void )
 
 
          strcat ( text, "Unit name: " );
-         if ( typ->name && typ->name[0] )
-            strcat( text, typ->name );
+         if ( !typ->name.empty() )
+            strcat( text, typ->name.c_str() );
          else
-            if ( typ->description  &&  typ->description[0] )
-               strcat( text, typ->description );
+            if ( !typ->description.empty() )
+               strcat( text, typ->description.c_str() );
 
          char t3[1000];
          sprintf(t3, "\nUnit ID: %d \n", typ->id );
          strcat ( text, t3 );
 
-         if ( typ->filename ) {
-            sprintf(t3, "file name: %s\n", typ->filename );
+         if ( !typ->filename.empty() ) {
+            sprintf(t3, "file name: %s\n", typ->filename.c_str() );
             strcat ( text, t3 );
          }
 
@@ -5156,11 +5159,10 @@ void viewUnitSetinfo ( void )
          s += strrr ( getactfield()->vehicle->reactionfire.enemiesAttackable );
 */
          s += "Unit name: " ;
-         if ( typ->name && typ->name[0] )
+         if ( !typ->name.empty() )
             s += typ->name ;
          else
-            if ( typ->description  &&  typ->description[0] )
-               s += typ->description;
+            s += typ->description;
 
          s += "\nUnit owner: ";
          s += strrr ( fld->vehicle->color / 8 );
@@ -5171,10 +5173,9 @@ void viewUnitSetinfo ( void )
          sprintf(t3, "\nUnit ID: %d \n", typ->id );
          s += t3;
 
-         if ( typ->filename ) {
-            sprintf(t3, "file name: %s\n\n", typ->filename );
+         if ( !typ->filename.empty() ) {
+            sprintf(t3, "file name: %s\n\n", typ->filename.c_str() );
             s += t3;
-
          }
 
          if ( unitSets.size() > 0 )

@@ -239,14 +239,14 @@ void         tdashboard::paintweapons(void)
       vt = vehicletype;
 
     if ( vt ) {
-       if ( vt->weapons->count )
-          for (j = 0; j < vt->weapons->count && j < 8; j++) {
-             if ( vt->weapons->weapon[j].count ) {
-                paintweapon(i, ( vehicle ? vehicle->ammo[j] : vt->weapons->weapon[j].count ), ( vehicle ? vehicle-> weapstrength[j] : vt->weapons->weapon[j].maxstrength ), &vt->weapons->weapon[j] );
+       if ( vt->weapons.count )
+          for (j = 0; j < vt->weapons.count && j < 8; j++) {
+             if ( vt->weapons.weapon[j].count ) {
+                paintweapon(i, ( vehicle ? vehicle->ammo[j] : vt->weapons.weapon[j].count ), ( vehicle ? vehicle-> weapstrength[j] : vt->weapons.weapon[j].maxstrength ), &vt->weapons.weapon[j] );
                 i++;
              }
              else {
-                if ( vt->weapons->weapon[j].service() ) {
+                if ( vt->weapons.weapon[j].service() ) {
                    serv = 1;
                    if ( materialdisplayed )
                       if ( vt->tank.fuel ) {
@@ -309,12 +309,12 @@ void         tdashboard :: paintlargeweaponinfo ( void )
        int y1 = 150;
 
        int count = 0;
-       if ( vt->weapons->count )
-          for ( int j = 0; j < vt->weapons->count ; j++)
-             if ( vt->weapons->weapon[j].getScalarWeaponType() >= 0 )
+       if ( vt->weapons.count )
+          for ( int j = 0; j < vt->weapons.count ; j++)
+             if ( vt->weapons.weapon[j].getScalarWeaponType() >= 0 )
                 count++;
              else
-                if (vt->weapons->weapon[j].service() )
+                if (vt->weapons.weapon[j].service() )
                    serv = count;
 
 
@@ -348,22 +348,22 @@ void         tdashboard :: paintlargeweaponinfo ( void )
        getinvisiblemouserectanglestk ();
 
 
-       if ( vt->weapons->count )
-          for ( int j = 0; j < vt->weapons->count ; j++) {
-             if ( vt->weapons->weapon[j].getScalarWeaponType() >= 0 ) {
-                int maxstrength = vt->weapons->weapon[j].maxstrength;
-                int minstrength = vt->weapons->weapon[j].minstrength;
+       if ( vt->weapons.count )
+          for ( int j = 0; j < vt->weapons.count ; j++) {
+             if ( vt->weapons.weapon[j].getScalarWeaponType() >= 0 ) {
+                int maxstrength = vt->weapons.weapon[j].maxstrength;
+                int minstrength = vt->weapons.weapon[j].minstrength;
                 if ( vehicle && maxstrength ) {
                    minstrength = minstrength * vehicle->weapstrength[j] / maxstrength;
                    maxstrength = vehicle->weapstrength[j];
                 }
 
-                paintlargeweapon(i, cwaffentypen[ vt->weapons->weapon[j].getScalarWeaponType() ],
-                               ( vehicle ? vehicle->ammo[j] : vt->weapons->weapon[j].count ) , vt->weapons->weapon[j].count,
-                               vt->weapons->weapon[j].shootable(), vt->weapons->weapon[j].canRefuel(),
+                paintlargeweapon(i, cwaffentypen[ vt->weapons.weapon[j].getScalarWeaponType() ],
+                               ( vehicle ? vehicle->ammo[j] : vt->weapons.weapon[j].count ) , vt->weapons.weapon[j].count,
+                               vt->weapons.weapon[j].shootable(), vt->weapons.weapon[j].canRefuel(),
                                maxstrength, minstrength,
-                               vt->weapons->weapon[j].maxdistance, vt->weapons->weapon[j].mindistance,
-                               vt->weapons->weapon[j].sourceheight, vt->weapons->weapon[j].targ );
+                               vt->weapons.weapon[j].maxdistance, vt->weapons.weapon[j].mindistance,
+                               vt->weapons.weapon[j].sourceheight, vt->weapons.weapon[j].targ );
                 largeWeaponsDisplayPos[i] = j;
                 i++;
              }
@@ -371,8 +371,8 @@ void         tdashboard :: paintlargeweaponinfo ( void )
 
        if ( serv >= 0 ) {
           paintlargeweapon(i, cwaffentypen[ cwservicen ], -1, -1, -1, -1, -1, -1,
-                         vt->weapons->weapon[serv].maxdistance, vt->weapons->weapon[serv].mindistance,
-                         vt->weapons->weapon[serv].sourceheight, vt->weapons->weapon[serv].targ );
+                         vt->weapons.weapon[serv].maxdistance, vt->weapons.weapon[serv].mindistance,
+                         vt->weapons.weapon[serv].sourceheight, vt->weapons.weapon[serv].targ );
           largeWeaponsDisplayPos[i] = serv;
           i++;
        }
@@ -430,7 +430,7 @@ void         tdashboard :: paintlargeweaponinfo ( void )
       while ( mouseparams.taste == 2) {
          int topaint  = -1;
          int serv = 0;
-         for ( int j = 0; j < vt->weapons->count ; j++) {
+         for ( int j = 0; j < vt->weapons.count ; j++) {
             int x = (agmp->resolutionx - 640) / 2;
             int y = 150 + 28 + (j - serv) * 14;
             if ( mouseinrect ( x, y, x + 640, y+ 14 ))
@@ -444,13 +444,13 @@ void         tdashboard :: paintlargeweaponinfo ( void )
             else {
                int effic[13];
                for ( int k = 0; k < 13; k++ )
-                  effic[k] = vt->weapons->weapon[topaint].efficiency[k];
+                  effic[k] = vt->weapons.weapon[topaint].efficiency[k];
                int mindelta = 1000;
                int maxdelta = -1000;
                for ( int h1 = 0; h1 < 8; h1++ )
                   for ( int h2 = 0; h2 < 8; h2++ )
-                     if ( vt->weapons->weapon[topaint].sourceheight & ( 1 << h1 ))
-                        if ( vt->weapons->weapon[topaint].targ & ( 1 << h2 )) {
+                     if ( vt->weapons.weapon[topaint].sourceheight & ( 1 << h1 ))
+                        if ( vt->weapons.weapon[topaint].targ & ( 1 << h2 )) {
                            int delta = getheightdelta ( h1, h2);
                            if ( delta > maxdelta )
                               maxdelta = delta;
@@ -462,7 +462,7 @@ void         tdashboard :: paintlargeweaponinfo ( void )
                for ( int b = maxdelta+1; b < 7; b++ )
                   effic[6+b] = -1;
 
-               paintlargeweaponefficiency ( i, effic, first, vt->weapons->weapon[topaint].targets_not_hittable );
+               paintlargeweaponefficiency ( i, effic, first, vt->weapons.weapon[topaint].targets_not_hittable );
             }
             lastpainted = topaint;
             first = 0;
@@ -996,16 +996,16 @@ void         tdashboard::paintname ( void )
          if ( vehicle && !vehicle->name.empty() )
             showtext2c( vehicle->name.c_str() , agmp->resolutionx - ( 640 - 500 ), 27);
          else
-            if ( vt->name && vt->name[0] )
+            if ( !vt->name.empty() )
                showtext2c( vt->name , agmp->resolutionx - ( 640 - 500 ), 27);
             else
-               if ( vt->description  &&  vt->description[0] )
+               if ( !vt->description.empty() )
                   showtext2c( vt->description ,agmp->resolutionx - ( 640 - 500 ), 27);
                else
                   bar ( agmp->resolutionx - ( 640 - 499 ), 27, agmp->resolutionx - ( 640 - 575 ), 35, 171 );
 
       } else
-         showtext2c( building->getName().c_str() , agmp->resolutionx - ( 640 - 500), 27);
+         showtext2c( building->getName(), agmp->resolutionx - ( 640 - 500), 27);
 
       activefontsettings.height = 0;
    } else

@@ -1,6 +1,9 @@
-//     $Id: newfont.h,v 1.9 2001-02-06 17:15:11 mbickel Exp $
+//     $Id: newfont.h,v 1.10 2001-07-15 21:00:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2001/02/06 17:15:11  mbickel
+//      Some changes for compilation by Borland C++ Builder
+//
 //     Revision 1.8  2000/08/12 12:52:50  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -150,8 +153,8 @@ struct tfontsettings {
 
 #ifdef _NOASM_
  extern void expand(void* p1, void* q1, int size);
- extern void showtext2( const char* TextToOutput, int x1, int x2 );
- extern void showtext2c( const char* TextToOutput, int x1, int x2 );
+ extern void showtext2( const ASCString& TextToOutput, int x1, int x2 );
+ extern void showtext2c( const ASCString& TextToOutput, int x1, int x2 );
 
  extern tfontsettings activefontsettings;
 

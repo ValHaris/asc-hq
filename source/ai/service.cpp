@@ -281,7 +281,7 @@ bool AI::ServiceOrder::valid (  ) const
 {
    switch ( requiredService ) {
       case VehicleService::srv_repair     : return getTargetUnit()->damage > 0;
-      case VehicleService::srv_ammo       : return getTargetUnit()->ammo[position] < getTargetUnit()->typ->weapons[position].count;
+      case VehicleService::srv_ammo       : return getTargetUnit()->ammo[position] < getTargetUnit()->typ->weapons.weapon[position].count;
       case VehicleService::srv_resource   : return getTargetUnit()->tank.resource(position) < getTargetUnit()->typ->tank.resource(position);
       default: return false;
    }
@@ -344,9 +344,9 @@ void AI :: issueServices ( )
             if ( veh->tank.resource(i) < veh->typ->tank.resource(i) * config.resourceLimit.resource(i) / 100 )
                issueService ( VehicleService::srv_resource, veh->networkid, i);
 
-      for ( int w = 0; w< veh->typ->weapons->count; w++ )
-         if ( veh->typ->weapons->weapon[w].count )
-            if ( veh->ammo[w] <= veh->typ->weapons->weapon[w].count * config.ammoLimit / 100 )
+      for ( int w = 0; w< veh->typ->weapons.count; w++ )
+         if ( veh->typ->weapons.weapon[w].count )
+            if ( veh->ammo[w] <= veh->typ->weapons.weapon[w].count * config.ammoLimit / 100 )
                issueService ( VehicleService::srv_ammo, veh->networkid, w);
 
    }
@@ -449,9 +449,9 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
                                                    for ( int t = 0; t < waffenanzahl; t++ )
                                                       ammoNeeded[t] = 0;
 
-                                                   for ( int i = 0; i < veh->typ->weapons->count; i++ )
-                                                      if ( veh->typ->weapons->weapon[i].requiresAmmo() )
-                                                         ammoNeeded[ veh->typ->weapons->weapon[i].getScalarWeaponType() ] += veh->typ->weapons->weapon[i].count - veh->ammo[i];
+                                                   for ( int i = 0; i < veh->typ->weapons.count; i++ )
+                                                      if ( veh->typ->weapons.weapon[i].requiresAmmo() )
+                                                         ammoNeeded[ veh->typ->weapons.weapon[i].getScalarWeaponType() ] += veh->typ->weapons.weapon[i].count - veh->ammo[i];
 
                                                    Resources needed;
                                                    for ( int  j = 0; j < waffenanzahl; j++ ) {

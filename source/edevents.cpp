@@ -2,9 +2,15 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.23 2001-05-21 12:46:19 mbickel Exp $
+//     $Id: edevents.cpp,v 1.24 2001-07-15 21:00:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2001/05/21 12:46:19  mbickel
+//      Fixed infinite loop in AI::strategy
+//      Fixed bugs in mapeditor - event editing
+//      Fixed bugs in even loading / writing
+//      Fixed wrong build order AI <-> main program
+//
 //     Revision 1.22  2001/03/23 16:02:56  mbickel
 //      Some restructuring;
 //      started rewriting event system
@@ -1386,7 +1392,7 @@ void         tcreateevent::run(void)
                     if ( !vehicle->name.empty() )
                        displaymessage ( vehicle->name.c_str(), 1 );
                     else
-                       if ( vehicle->typ->name )
+                       if ( !vehicle->typ->name.empty() )
                           displaymessage ( vehicle->typ->name, 1 );
                        else
                           displaymessage ( vehicle->typ->description, 1 );

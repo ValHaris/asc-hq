@@ -80,7 +80,7 @@ extern const char*  cvehiclefunctions[];
      bool          service( void ) const;
      bool          canRefuel ( void ) const;
      void         set ( int type );  // will be enhanced later ...
-     int          gettype ( void ) { return typ; };
+     int          gettype ( void ) const { return typ; };
      bool         offensive( void ) const;
      ASCString    getName ( void );
  };
@@ -97,22 +97,9 @@ extern const char*  cvehiclefunctions[];
 
  class Vehicletype : public ContainerBaseType {
     public:
-        char*        name;          /* z.B. Exterminator  */
-        char*        description;   /* z.B. Jagdbomber    */
-        char*        infotext;      /* optional, kann sehr ausf?hrlich sein. Empfehlenswert ?ber eine Textdatei einzulesen */
-        struct tweapons {
-          char         weaponcount;
-          struct tweapon {
-            word         typ;            /*  BM      <= CWaffentypen  */
-            char         targ;           /*  BM      <= CHoehenstufen  */
-            char         sourceheight;   /*  BM  "  */
-            Word         maxdistance;
-            Word         mindistance;
-            char         count;
-            char         maxstrength;    // Wenn der Waffentyp == Mine ist, dann ist hier die Minenst„rke als Produkt mit der Bassi 64 abgelegt.
-            char         minstrength;
-          } waffe[8];
-        } oldattack;
+        ASCString    name;          /* z.B. Exterminator  */
+        ASCString    description;   /* z.B. Jagdbomber    */
+        ASCString    infotext;      /* optional, kann sehr ausf?hrlich sein. Empfehlenswert ?ber eine Textdatei einzulesen */
 
         int armor;
 
@@ -138,7 +125,7 @@ extern const char*  cvehiclefunctions[];
         char         movement[8];      /*  max. movementsstrecke  */
         char         movemalustyp;     /*  wenn ein Bodentyp mehrere Movemali fuer unterschiedliche vehiclearten, wird dieser genommen.  <= cmovemalitypes */
         char         classnum;         /* Anzahl der Klassen, max 8, min 0 ;  Der EINZIGE Unterschied zwischen 0 und 1 ist der NAME ! */
-        char*        classnames[8];    /* Name der einzelnen Klassen */
+        ASCString    classnames[8];    /* Name der einzelnen Klassen */
 
         struct tclassbound {
          word         weapstrength[8];
@@ -172,11 +159,11 @@ extern const char*  cvehiclefunctions[];
         };
         tbuildrange*  buildingsbuildable;
 
-        UnitWeapon*  weapons;
+        UnitWeapon   weapons;
         int          autorepairrate;
 
         AiValue* aiparam[8];
-        char*        filename;    // just for information purposes in the main program
+        ASCString    filename;    // just for information purposes in the main program
         int          vehicleCategoriesLoadable;
 
         int maxweight ( void ) const ;     // max. weight including fuel and material

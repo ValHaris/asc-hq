@@ -3,9 +3,13 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.103 2001-07-02 10:14:41 mbickel Exp $
+//     $Id: controls.cpp,v 1.104 2001-07-15 21:00:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.103  2001/07/02 10:14:41  mbickel
+//      Fixed crash when starting new email games
+//      New version: 1.3.19
+//
 //     Revision 1.102  2001/05/21 12:46:18  mbickel
 //      Fixed infinite loop in AI::strategy
 //      Fixed bugs in mapeditor - event editing
@@ -559,9 +563,9 @@ void         tputmine::initpm(  char mt, const pvehicle eht )
    numberoffields = 0;
    mienenlegen = false;
    mienenraeumen = false;
-   if (eht->typ->weapons->count > 0)
-      for (i = 0; i <= eht->typ->weapons->count - 1; i++)
-         if ((eht->typ->weapons->weapon[i].getScalarWeaponType() == cwminen) && eht->typ->weapons->weapon[i].shootable() ) {
+   if (eht->typ->weapons.count > 0)
+      for (i = 0; i <= eht->typ->weapons.count - 1; i++)
+         if ((eht->typ->weapons.weapon[i].getScalarWeaponType() == cwminen) && eht->typ->weapons.weapon[i].shootable() ) {
             mienenraeumen = true;
             if (eht->ammo[i] > 0)
                mienenlegen = true;
@@ -617,8 +621,8 @@ void  legemine( int typ, int delta )
             if ( (fld->a.temp & 1) && ( delta > 0 )) {
                const Vehicletype* fzt = eht->typ;
                int  strength = 64;
-               for ( int i = 0; i < fzt->weapons->count ; i++)
-                  if ((fzt->weapons->weapon[i].getScalarWeaponType() == cwminen) && fzt->weapons->weapon[i].shootable() )
+               for ( int i = 0; i < fzt->weapons.count ; i++)
+                  if ((fzt->weapons.weapon[i].getScalarWeaponType() == cwminen) && fzt->weapons.weapon[i].shootable() )
                      if ( fld-> putmine( actmap->actplayer, typ, cminestrength[typ-1] * strength / 64 )) {
                         eht->ammo[i]--;
                         eht->setMovement ( eht->getMovement() - mineputmovedecrease );
@@ -1272,12 +1276,12 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle, IntFieldList* field
       for (i = 0; i < vehicletypenum; i++ ) {
          pvehicletype fzt = getvehicletype_forpos ( i );
          if ( fzt )
-            for (j = 0; j < fzt->weapons->count; j++ )
-               if ( fzt->weapons->weapon[j].shootable() )
+            for (j = 0; j < fzt->weapons.count; j++ )
+               if ( fzt->weapons.weapon[j].shootable() )
                   for (h = 0; h < 8; h++ )
-                     if ( fzt->weapons->weapon[j].targ & ( 1 << h ) )
-                        if ( fzt->weapons->weapon[j].maxdistance > maxshootdist[h] )
-                           maxshootdist[h] = fzt->weapons->weapon[j].maxdistance;
+                     if ( fzt->weapons.weapon[j].targ & ( 1 << h ) )
+                        if ( fzt->weapons.weapon[j].maxdistance > maxshootdist[h] )
+                           maxshootdist[h] = fzt->weapons.weapon[j].maxdistance;
       }
    }
 

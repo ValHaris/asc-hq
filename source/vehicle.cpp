@@ -136,8 +136,8 @@ void Vehicle :: init ( void )
 
       armor = typ->armor * typ->classbound[klasse].armor / 1024;
       functions = typ->functions & typ->classbound[klasse].vehiclefunctions;
-      for ( int m = 0; m < typ->weapons->count ; m++)
-         weapstrength[m] = typ->weapons->weapon[m].maxstrength * typ->classbound[klasse].weapstrength[typ->weapons->weapon[m].getScalarWeaponType()] / 1024;
+      for ( int m = 0; m < typ->weapons.count ; m++)
+         weapstrength[m] = typ->weapons.weapon[m].maxstrength * typ->classbound[klasse].weapstrength[typ->weapons.weapon[m].getScalarWeaponType()] / 1024;
 
       setMovement ( typ->movement[log2(height)] );
    } else {
@@ -158,7 +158,7 @@ void Vehicle :: init ( void )
    reactionfire.status = ReactionFire::off;
    reactionfire.enemiesAttackable = 0;
    generatoractive = 0;
-   
+
    for ( int a = 0; a < 8 ; a++ )
       aiparam[a] = NULL;
 }
@@ -266,11 +266,11 @@ void Vehicle :: setGeneratorStatus ( bool status )
 void Vehicle :: setup_classparams_after_generation ( void )
 {
       armor = typ->armor * typ->classbound[klasse].armor / 1024;
-      if ( typ->weapons->count ) {
-         for ( int m = 0; m < typ->weapons->count ; m++) {
+      if ( typ->weapons.count ) {
+         for ( int m = 0; m < typ->weapons.count ; m++) {
             ammo[m] = 0;
-            weapstrength[m] = typ->weapons->weapon[m].maxstrength *
-	      typ->classbound[klasse].weapstrength[typ->weapons->weapon[m].getScalarWeaponType()] / 1024;
+            weapstrength[m] = typ->weapons.weapon[m].maxstrength *
+	      typ->classbound[klasse].weapstrength[typ->weapons.weapon[m].getScalarWeaponType()] / 1024;
          }
       }
 
@@ -313,9 +313,9 @@ void Vehicle::transform ( const pvehicletype type )
    tank.energy = 0;
    generatoractive = 0;
 
-   for ( int m = 0; m < typ->weapons->count ; m++) {
-      ammo[m] = typ->weapons->weapon[m].count;
-      weapstrength[m] = typ->weapons->weapon[m].maxstrength;
+   for ( int m = 0; m < typ->weapons.count ; m++) {
+      ammo[m] = typ->weapons.weapon[m].count;
+      weapstrength[m] = typ->weapons.weapon[m].maxstrength;
    }
    armor = typ->armor;
    klasse = 255;
@@ -516,10 +516,10 @@ void Vehicle::ReactionFire::endTurn ( void )
 
 bool Vehicle :: weapexist( void )
 {
-   if ( typ->weapons->count > 0)
-      for ( int b = 0; b < typ->weapons->count ; b++)
-         if ( typ->weapons->weapon[b].shootable() )
-            if ( typ->weapons->weapon[b].offensive() )
+   if ( typ->weapons.count > 0)
+      for ( int b = 0; b < typ->weapons.count ; b++)
+         if ( typ->weapons.weapon[b].shootable() )
+            if ( typ->weapons.weapon[b].offensive() )
                if ( ammo[b] )
                   return 1;
     return 0;
@@ -529,7 +529,7 @@ bool Vehicle :: weapexist( void )
 void Vehicle :: putimage ( int x, int y )
 {
   #ifdef sgmain
-   int shaded = ( getMovement() < minmalq ) && ( color == gamemap->actplayer*8) && (attacked || !typ->weapons->count || CGameOptions::Instance()->units_gray_after_move );
+   int shaded = ( getMovement() < minmalq ) && ( color == gamemap->actplayer*8) && (attacked || !typ->weapons.count || CGameOptions::Instance()->units_gray_after_move );
   #else
    int shaded = 0;
   #endif
@@ -574,14 +574,14 @@ int Vehicle :: getstrongestweapon( int aheight, int distance)
 {
    int str = 0;
    int hw = 255;   //  error-wert  ( keine waffe gefunden )
-   for ( int i = 0; i < typ->weapons->count; i++) {
+   for ( int i = 0; i < typ->weapons.count; i++) {
 
       if (( ammo[i]) &&
-          ( typ->weapons->weapon[i].mindistance <= distance) &&
-          ( typ->weapons->weapon[i].maxdistance >= distance) &&
-          ( typ->weapons->weapon[i].targ & aheight ) &&
-          ( typ->weapons->weapon[i].sourceheight & height )) {
-            int astr = int( weapstrength[i] * weapDist.getWeapStrength( &typ->weapons->weapon[i], distance, height, aheight));
+          ( typ->weapons.weapon[i].mindistance <= distance) &&
+          ( typ->weapons.weapon[i].maxdistance >= distance) &&
+          ( typ->weapons.weapon[i].targ & aheight ) &&
+          ( typ->weapons.weapon[i].sourceheight & height )) {
+            int astr = int( weapstrength[i] * weapDist.getWeapStrength( &typ->weapons.weapon[i], distance, height, aheight));
             if ( astr > str ) {
                str = astr;
                hw  = i;
@@ -649,10 +649,10 @@ void Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
       tank -= tnk->productionCost;
 
       int refuel = 0;
-      for ( int i = 0; i < typ->weapons->count; i++ )
-         if ( typ->weapons->weapon[i].service()  )
-            for ( int j = 0; j < typ->weapons->count ; j++) {
-               if ( typ->weapons->weapon[j].canRefuel() )
+      for ( int i = 0; i < typ->weapons.count; i++ )
+         if ( typ->weapons.weapon[i].service()  )
+            for ( int j = 0; j < typ->weapons.count ; j++) {
+               if ( typ->weapons.weapon[j].canRefuel() )
                   refuel = 1;
                if ( functions & (cffuelref | cfmaterialref) )
                   refuel = 1;
@@ -985,9 +985,9 @@ void Vehicle :: fillMagically( void )
    #endif
    tank = typ->tank;
 
-   for ( int m = 0; m < typ->weapons->count ; m++) {
-      ammo[m] = typ->weapons->weapon[m].count;
-      weapstrength[m] = typ->weapons->weapon[m].maxstrength;
+   for ( int m = 0; m < typ->weapons.count ; m++) {
+      ammo[m] = typ->weapons.weapon[m].count;
+      weapstrength[m] = typ->weapons.weapon[m].maxstrength;
    }
    armor = typ->armor;
    klasse = 255;
@@ -1041,11 +1041,11 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
     if ( tank.fuel < typ->tank.fuel )
        bm |= cem_fuel;
 
-    if ( typ->weapons->count )
-       for (char m = 0; m < typ->weapons->count ; m++) {
-          if ( ammo[m] < typ->weapons->weapon[m].count )
+    if ( typ->weapons.count )
+       for (char m = 0; m < typ->weapons.count ; m++) {
+          if ( ammo[m] < typ->weapons.weapon[m].count )
              bm |= cem_ammunition2;
-          if ( weapstrength[m] != typ->weapons->weapon[m].maxstrength )
+          if ( weapstrength[m] != typ->weapons.weapon[m].maxstrength )
              bm |= cem_weapstrength2;
 
        }
@@ -1233,15 +1233,15 @@ void   Vehicle::readData ( tnstream& stream )
      if ( bm & cem_ammunition2 ) {
         for ( int i = 0; i < 16; i++ ) {
           ammo[i] = stream.readInt();
-          if ( ammo[i] > typ->weapons->weapon[i].count )
-             ammo[i] = typ->weapons->weapon[i].count;
+          if ( ammo[i] > typ->weapons.weapon[i].count )
+             ammo[i] = typ->weapons.weapon[i].count;
           if ( ammo[i] < 0 )
              ammo[i] = 0;
         }
 
      } else
-       for (int i=0; i < typ->weapons->count ;i++ )
-          ammo[i] = typ->weapons->weapon[i].count;
+       for (int i=0; i < typ->weapons.count ;i++ )
+          ammo[i] = typ->weapons.weapon[i].count;
 
 
     if ( bm & cem_weapstrength ) {
@@ -1253,8 +1253,8 @@ void   Vehicle::readData ( tnstream& stream )
         for ( int i = 0; i < 16; i++ )
            weapstrength[i] = stream.readInt();
      } else
-       for (int i=0; i < typ->weapons->count ;i++ )
-          weapstrength[i] = typ->weapons->weapon[i].maxstrength;
+       for (int i=0; i < typ->weapons.count ;i++ )
+          weapstrength[i] = typ->weapons.weapon[i].maxstrength;
 
     if ( bm & cem_loading ) {
        char c = stream.readChar();
@@ -1388,10 +1388,10 @@ void   Vehicle::readData ( tnstream& stream )
        }
 
        armor = typ->armor * typ->classbound[klasse].armor / 1024;
-       if (typ->weapons->count )
-          for ( int m = 0; m < typ->weapons->count ; m++)
-             if ( typ->weapons->weapon[m].getScalarWeaponType() >= 0 )
-                weapstrength[m] = typ->weapons->weapon[m].maxstrength * typ->classbound[klasse].weapstrength[ typ->weapons->weapon[m].getScalarWeaponType()] / 1024;
+       if (typ->weapons.count )
+          for ( int m = 0; m < typ->weapons.count ; m++)
+             if ( typ->weapons.weapon[m].getScalarWeaponType() >= 0 )
+                weapstrength[m] = typ->weapons.weapon[m].maxstrength * typ->classbound[klasse].weapstrength[ typ->weapons.weapon[m].getScalarWeaponType()] / 1024;
              else
                 weapstrength[m] = 0;
 
@@ -1431,9 +1431,11 @@ Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream )
 /** Returns the SingleWeapon corresponding to the weaponNum for this
  *  vehicle.
  */
-SingleWeapon *Vehicle::getWeapon( unsigned weaponNum ) {
-  // printf( "getWeapon(%u)\n", weaponNum );
-  UnitWeapon *weapons=typ->weapons;
-  return (weaponNum<=weapons->count)?weapons->weapon+weaponNum:NULL;;
+const SingleWeapon* Vehicle::getWeapon( unsigned weaponNum )
+{
+  if ( weaponNum <= typ->weapons.count )
+     return &typ->weapons.weapon[weaponNum];
+  else
+     return NULL;
 }
 

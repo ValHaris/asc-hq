@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: sg.cpp,v 1.148 2001-07-14 21:07:46 mbickel Exp $
+//     $Id: sg.cpp,v 1.149 2001-07-15 21:00:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.148  2001/07/14 21:07:46  mbickel
+//      Sound works now under Win32 too
+//      Error reporting on Win32 during startup works again.
+//
 //     Revision 1.147  2001/07/14 19:13:16  mbickel
 //      Rewrote sound system
 //      Moveing units make sounds
@@ -1731,9 +1735,9 @@ int  WeaponRange :: run ( const pvehicle veh )
 {
    int found = 0;
    if ( fieldvisiblenow ( getfield ( veh->xpos, veh->ypos )))
-      for ( int i = 0; i < veh->typ->weapons->count; i++ ) {
-         if ( veh->typ->weapons->weapon[i].shootable() ) {
-            initsearch ( veh->getPosition(), veh->typ->weapons->weapon[i].maxdistance/minmalq, (veh->typ->weapons->weapon[i].mindistance+maxmalq-1)/maxmalq );
+      for ( int i = 0; i < veh->typ->weapons.count; i++ ) {
+         if ( veh->typ->weapons.weapon[i].shootable() ) {
+            initsearch ( veh->getPosition(), veh->typ->weapons.weapon[i].maxdistance/minmalq, (veh->typ->weapons.weapon[i].mindistance+maxmalq-1)/maxmalq );
             startsearch();
             found++;
          }

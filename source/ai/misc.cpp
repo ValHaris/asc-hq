@@ -648,9 +648,9 @@ AI::UnitDistribution::Group AI::getUnitDistributionGroup ( pvehicletype vt )
             case AiParameter::job_fight:
             case AiParameter::job_guard: {
                                             bool range = false;
-                                            for ( int w = 0; w < vt->weapons->count; w++ )
-                                               if ( vt->weapons->weapon[w].offensive() )
-                                                  if ( vt->weapons->weapon[w].maxdistance >= 2 * minmalq )
+                                            for ( int w = 0; w < vt->weapons.count; w++ )
+                                               if ( vt->weapons.weapon[w].offensive() )
+                                                  if ( vt->weapons.weapon[w].maxdistance >= 2 * minmalq )
                                                      range = true;
                                             if ( range )
                                                return UnitDistribution::rangeattack;
@@ -671,9 +671,9 @@ AI::UnitDistribution::Group AI::getUnitDistributionGroup ( pvehicle veh )
             case AiParameter::job_fight:
             case AiParameter::job_guard: {
                                             bool range = false;
-                                            for ( int w = 0; w < veh->typ->weapons->count; w++ )
-                                               if ( veh->typ->weapons->weapon[w].offensive() )
-                                                  if ( veh->typ->weapons->weapon[w].maxdistance >= 2 * minmalq )
+                                            for ( int w = 0; w < veh->typ->weapons.count; w++ )
+                                               if ( veh->typ->weapons.weapon[w].offensive() )
+                                                  if ( veh->typ->weapons.weapon[w].maxdistance >= 2 * minmalq )
                                                      range = true;
                                             if ( range )
                                                return UnitDistribution::rangeattack;

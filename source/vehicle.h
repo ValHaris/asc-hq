@@ -195,7 +195,7 @@
     void addview ( void );
     void removeview ( void );
     bool isViewing ( ) const { return viewOnMap; };
-    SingleWeapon *getWeapon( unsigned weaponNum );
+    const SingleWeapon *getWeapon( unsigned weaponNum );
     bool buildingconstructable ( pbuildingtype bld );
 
     /** searches for mineral resources.

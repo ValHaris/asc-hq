@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.55 2001-07-11 20:44:37 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.56 2001-07-15 21:00:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2001/07/11 20:44:37  mbickel
+//      Removed some vehicles from the data file.
+//      Put all legacy units in into the data/legacy directory
+//
 //     Revision 1.54  2001/05/24 15:37:51  mbickel
 //      Fixed: reaction fire could not be disabled when unit out of ammo
 //      Fixed several AI problems
@@ -2270,7 +2274,6 @@ void         BuildingValues::init(void)
 
 
    for ( int i = 0; i < waffenanzahl; i++ ) {
-      char buf[1000];
       addbutton ( cwaffentypen[i], 460, 90+i*40, 620, 110+i*40, 2, 1, 200+i, 1 );
       addeingabe(200+i, &ammo[i], 0, maxint );
    }
@@ -2437,18 +2440,18 @@ void         tclass_change::setup(void)
    if (unit->klasse > unit->typ->classnum-1) unit->klasse = 0;
       redline = unit->klasse;
    tklasse = unit->klasse;
-   for (j = 0 ; j < unit->typ->weapons->count  ; j++ ) {
+   for (j = 0 ; j < unit->typ->weapons.count  ; j++ ) {
        //tweapstr[j] = unit->weapstrength[j];
-       tweapstr[j] = unit->typ->weapons->weapon[j].maxstrength * unit->typ->classbound[tklasse].weapstrength[ unit->typ->weapons->weapon[j].getScalarWeaponType() ] / 1024;
+       tweapstr[j] = unit->typ->weapons.weapon[j].maxstrength * unit->typ->classbound[tklasse].weapstrength[ unit->typ->weapons.weapon[j].getScalarWeaponType() ] / 1024;
    }
    //tarmor = unit->armor;
    tarmor = unit->typ->armor * unit->typ->classbound[tklasse].armor / 1024;
    addbutton("~A~rmor",220,210,420,230,2,1,4,true);
    addeingabe(4,&tarmor,1,65535);
-   for (i = 0 ; i < unit->typ->weapons->count  ; i++ ) {
+   for (i = 0 ; i < unit->typ->weapons.count  ; i++ ) {
       strcpy ( s, "" );
 
-      strcat( s, cwaffentypen[unit->typ->weapons->weapon[i].getScalarWeaponType() ] );
+      strcat( s, cwaffentypen[unit->typ->weapons.weapon[i].getScalarWeaponType() ] );
       strcat( s, " ");
 
       strcat(s,"(~");
@@ -2462,71 +2465,71 @@ void         tclass_change::setup(void)
    addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,20,true);
    addkey(20,ct_enter);
    addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,21,true);
-} 
+}
 
 
 void         tclass_change::buttonpressed(int         id)
-{ 
+{
    tstringselect::buttonpressed(id);
    switch (id) {
-      
+
       case 20:
       case 21:   action = id-18;
-   break; 
-   } 
-} 
+   break;
+   }
+}
 
 
 void         tclass_change::gettext(word nr)
-{ 
-   strcpy(txt,unit->typ->classnames[nr]);
-} 
+{
+   strcpy(txt,unit->typ->classnames[nr].c_str());
+}
 
 
 void         tclass_change::run(void)
-{ 
+{
    int j;
 
-   do { 
-      tstringselect::run(); 
+   do {
+      tstringselect::run();
       if ( (msel == 1 ) || ( taste == ct_enter ) ){
          if (tklasse != redline) {
             tklasse = redline;
-            for (j = 0 ; j < unit->typ->weapons->count  ; j++ ) {
-               tweapstr[j] = unit->typ->weapons->weapon[j].maxstrength * unit->typ->classbound[tklasse].weapstrength[ unit->typ->weapons->weapon[j].getScalarWeaponType() ] / 1024;
+            for (j = 0 ; j < unit->typ->weapons.count  ; j++ ) {
+               tweapstr[j] = unit->typ->weapons.weapon[j].maxstrength * unit->typ->classbound[tklasse].weapstrength[ unit->typ->weapons.weapon[j].getScalarWeaponType() ] / 1024;
                showbutton(j+5);
             }
             tarmor = unit->typ->armor * unit->typ->classbound[tklasse].armor / 1024;
             tfunktion = unit->typ->functions  & unit->typ->classbound[tklasse].vehiclefunctions;
-                              
+
             showbutton(4);
-         } 
-      } 
+         }
+      }
       switch (taste) {
       } /* endswitch */
    }  while ( ! ( (taste == ct_esc) || ( (action == 2) || (action == 3) ) ) );
    if (action == 2) {
       unit->klasse = tklasse;
-      for (j = 0 ; j < unit->typ->weapons->count  ; j++ ) unit->weapstrength[j] = tweapstr[j];
+      for (j = 0 ; j < unit->typ->weapons.count  ; j++ ) unit->weapstrength[j] = tweapstr[j];
       unit->armor = tarmor;
       unit->functions = tfunktion;
    }
-} 
+}
 
 
 void         class_change(pvehicle p)
-{ 
+{
   tclass_change cc;
 
    cc.unit = p;
    cc.init();
    cc.run();
    cc.done();
-} 
+}
 
 
 // õS Polygon-Management
-                
+
 class tpolygon_managementbox: public tstringselect {
               public:
                  ppolygon poly;
@@ -2535,7 +2538,7 @@ class tpolygon_managementbox: public tstringselect {
                  virtual void run(void);
                  virtual void gettext(word nr);
                  };
-                 
+
 
 tpolygon_management::tpolygon_management(void)
 {
@@ -2544,7 +2547,7 @@ tpolygon_management::tpolygon_management(void)
 }
 
 void         tpolygon_managementbox::setup(void)
-{ 
+{
    action = 0;
    title = "Choose Polygon";
 
@@ -2558,22 +2561,22 @@ void         tpolygon_managementbox::setup(void)
    addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,1,true);
    addkey(1,ct_enter);
    addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,2,true);
-} 
+}
 
 
 void         tpolygon_managementbox::buttonpressed(int         id)
-{ 
+{
    tstringselect::buttonpressed(id);
    switch (id) {
       case 1:
       case 2:   action = id;
-   break; 
-   } 
-} 
+   break;
+   }
+}
 
 
 void         tpolygon_managementbox::gettext(word nr)
-{ 
+{
    char s[200];
    ppolystructure pps;
    int i,vn;
@@ -2592,7 +2595,7 @@ void         tpolygon_managementbox::gettext(word nr)
       strcat(s,ceventactions[pps->id]);
       }
       break;
-   } 
+   }
    for (i=0;i <= vn-1;i++ ) {
        strcat(s,"(");
        strcat(s,strrr(pps->poly->vertex[i].x));
@@ -2602,13 +2605,13 @@ void         tpolygon_managementbox::gettext(word nr)
    } /* endfor */
    if (vn < pps->poly->vertexnum )  strcat(s,"...");
    strcpy(txt,s);
-} 
+}
 
 
 void         tpolygon_managementbox::run(void)
-{ 
-   do { 
-      tstringselect::run(); 
+{
+   do {
+      tstringselect::run();
       if (taste ==ct_f1) help (1030);
    }  while ( ! ( (taste == ct_enter ) || (taste == ct_esc) || ( (action == 1) || (action == 2) ) ) );
    if ( ( ( taste == ct_enter ) || (action == 1 ) ) && (redline != 255 ) ) {
@@ -2617,8 +2620,8 @@ void         tpolygon_managementbox::run(void)
       pps = polymanage.firstpolygon;
       for (i=0 ;i<redline; i++ ) pps =pps->next;
       poly = pps->poly;
-   } 
-} 
+   }
+}
 
 void tpolygon_management::addpolygon(ppolygon *poly, int place, int id)
 {
@@ -2650,7 +2653,7 @@ void tpolygon_management::deletepolygon(ppolygon *poly)
 int        getpolygon(ppolygon *poly) //return Fehlerstatus
 {
    tpolygon_managementbox polymanagebox;
-    
+
    polymanagebox.poly = (*poly);
    polymanagebox.init();
    polymanagebox.run();
@@ -2658,7 +2661,7 @@ int        getpolygon(ppolygon *poly) //return Fehlerstatus
    (*poly) = polymanagebox.poly;
    if ( (polymanagebox.action == 2) || (polymanagebox.taste == ct_esc ) ) return 1;
    else return 0;
-} 
+}
 
 // õS Unit-Values
 
@@ -2752,7 +2755,7 @@ void         tunit::init(  )
 
    #define maxeditable 6
 
-   for(i =0;i < unit->typ->weapons->count;i++) {   	
+   for(i =0;i < unit->typ->weapons.count;i++) {   	
      if (i < maxeditable) {
         weaponammo = new(char[25]);
         strcpy(weaponammo,"Wpn Ammo ");
@@ -3310,10 +3313,10 @@ const char* tvehiclecargo :: getinfotext ( int pos )
       if ( !transport->loading[ pos ]->name.empty() )
          return transport->loading[ pos ]->name.c_str();
       else
-         if ( transport->loading[ pos ]->typ->name && transport->loading[ pos ]->typ->name[0] )
-            return transport->loading[ pos ]->typ->name;
+         if ( !transport->loading[ pos ]->typ->name.empty() )
+            return transport->loading[ pos ]->typ->name.c_str();
          else
-            return transport->loading[ pos ]->typ->description;
+            return transport->loading[ pos ]->typ->description.c_str();
    return NULL;
 }
 
@@ -3437,10 +3440,10 @@ const char* tbuildingcargo :: getinfotext ( int pos )
       if ( !building->loading[ pos ]->name.empty() )
          return building->loading[ pos ]->name.c_str();
       else
-         if ( building->loading[ pos ]->typ->name && building->loading[ pos ]->typ->name[0] )
-            return building->loading[ pos ]->typ->name;
+         if ( !building->loading[ pos ]->typ->name.empty() )
+            return building->loading[ pos ]->typ->name.c_str();
          else
-            return building->loading[ pos ]->typ->description;
+            return building->loading[ pos ]->typ->description.c_str();
    return NULL;
 }
 
@@ -3486,10 +3489,10 @@ void tbuildingproduction :: removeitem ( int pos )
 const char* tbuildingproduction :: getinfotext ( int pos )
 {
    if ( building->production[ pos ] ) 
-      if ( building->production[ pos ]->name && building->production[ pos ]->name[0] )
-         return building->production[ pos ]->name;
+      if ( !building->production[ pos ]->name.empty() )
+         return building->production[ pos ]->name.c_str();
       else
-         return building->production[ pos ]->description;
+         return building->production[ pos ]->description.c_str();
    return NULL;
 }
 
@@ -3853,7 +3856,7 @@ void UnitTypeTransformation :: run ( void )
           s += strrr ( vehicleTypesNotTransformed[i] );
           s += " : ";
           pvehicletype vt = getvehicletype_forid ( vehicleTypesNotTransformed[i] );
-          if ( vt-> name && vt->name[0] )
+          if ( !vt-> name.empty() )
              s += vt->name;
           else
              s += vt->description;

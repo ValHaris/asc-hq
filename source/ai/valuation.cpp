@@ -67,23 +67,23 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( Vehicletyp
    for ( int j = 0; j < 8; j++ )
       weapthreat[j] = 0;
 
-   for ( int i = 0; i < fzt->weapons->count; i++)
-      if ( fzt->weapons->weapon[i].shootable() )
-         if ( fzt->weapons->weapon[i].offensive() )
+   for ( int i = 0; i < fzt->weapons.count; i++)
+      if ( fzt->weapons.weapon[i].shootable() )
+         if ( fzt->weapons.weapon[i].offensive() )
             for ( int j = 0; j < 8; j++)
-               if ( fzt->weapons->weapon[i].targ & (1 << j) ) {
+               if ( fzt->weapons.weapon[i].targ & (1 << j) ) {
                   int d = 0;
                   int m = 0;
                   AttackFormula af;
-                  for ( int e = (fzt->weapons->weapon[i].mindistance + maxmalq - 1)/ maxmalq; e <= fzt->weapons->weapon[i].maxdistance / maxmalq; e++ ) {    // the distance between two fields is maxmalq
+                  for ( int e = (fzt->weapons.weapon[i].mindistance + maxmalq - 1)/ maxmalq; e <= fzt->weapons.weapon[i].maxdistance / maxmalq; e++ ) {    // the distance between two fields is maxmalq
                      d++;
-                     int n = int( weapDist.getWeapStrength( &fzt->weapons->weapon[i], e*maxmalq ) * fzt->weapons->weapon[i].maxstrength * af.strength_damage(getdamage()) * ( 1 + af.strength_experience(getexpirience())) );
+                     int n = int( weapDist.getWeapStrength( &fzt->weapons.weapon[i], e*maxmalq ) * fzt->weapons.weapon[i].maxstrength * af.strength_damage(getdamage()) * ( 1 + af.strength_experience(getexpirience())) );
                      m += int( n / log10(10*d));
                   }
                   if (getammunition(i) == 0)
                      m /= 2;
 
-                  if ( (fzt->weapons->weapon[i].sourceheight & getheight()) == 0)
+                  if ( (fzt->weapons.weapon[i].sourceheight & getheight()) == 0)
                      m /= 2;
 
                   /*
@@ -194,13 +194,13 @@ AiParameter::Job AI::chooseJob ( const Vehicletype* typ, int functions )
          maxmove = max ( typ->movement[i] , maxmove );
 
    int maxstrength = minint;
-   for ( int w = 0; w < typ->weapons->count; w++ )
-      if ( typ->weapons->weapon[w].offensive() )
-         maxstrength= max (  typ->weapons->weapon[w].maxstrength, maxstrength );
+   for ( int w = 0; w < typ->weapons.count; w++ )
+      if ( typ->weapons.weapon[w].offensive() )
+         maxstrength= max (  typ->weapons.weapon[w].maxstrength, maxstrength );
 
    bool service = false;
-   for ( int w = 0; w < typ->weapons->count; w++ )
-      if ( typ->weapons->weapon[w].service() )
+   for ( int w = 0; w < typ->weapons.count; w++ )
+      if ( typ->weapons.weapon[w].service() )
          service = true;
    if ( ((functions & cfrepair) || service) && maxmove >= minmalq )
       return AiParameter::job_supply;
@@ -290,22 +290,22 @@ void AI :: WeaponThreatRange :: run ( pvehicle _veh, int x, int y, AiThreat* _th
    threat = _threat;
    veh = _veh;
    for ( height = 0; height < 8; height++ )
-      for ( weap = 0; weap < veh->typ->weapons->count; weap++ )
-         if ( veh->height & veh->typ->weapons->weapon[weap].sourceheight )
-            if ( (1 << height) & veh->typ->weapons->weapon[weap].targ )
-                if ( veh->typ->weapons->weapon[weap].shootable()  && veh->typ->weapons->weapon[weap].offensive() ) {
-                   initsearch ( MapCoordinate(x, y), veh->typ->weapons->weapon[weap].maxdistance/maxmalq, veh->typ->weapons->weapon[weap].mindistance/maxmalq );
+      for ( weap = 0; weap < veh->typ->weapons.count; weap++ )
+         if ( veh->height & veh->typ->weapons.weapon[weap].sourceheight )
+            if ( (1 << height) & veh->typ->weapons.weapon[weap].targ )
+                if ( veh->typ->weapons.weapon[weap].shootable()  && veh->typ->weapons.weapon[weap].offensive() ) {
+                   initsearch ( MapCoordinate(x, y), veh->typ->weapons.weapon[weap].maxdistance/maxmalq, veh->typ->weapons.weapon[weap].mindistance/maxmalq );
                    startsearch();
                 }
 }
 
 void AI :: WeaponThreatRange :: testfield ( const MapCoordinate& mc )
 {
-   if ( dist*maxmalq <= veh->typ->weapons->weapon[weap].maxdistance )
-      if ( dist*maxmalq >= veh->typ->weapons->weapon[weap].mindistance ) {
+   if ( dist*maxmalq <= veh->typ->weapons.weapon[weap].maxdistance )
+      if ( dist*maxmalq >= veh->typ->weapons.weapon[weap].mindistance ) {
          AttackFormula af;
-         int strength = int ( weapDist.getWeapStrength( &veh->typ->weapons->weapon[weap], dist*maxmalq, veh->height, 1 << height )
-                              * veh->typ->weapons->weapon[weap].maxstrength
+         int strength = int ( weapDist.getWeapStrength( &veh->typ->weapons.weapon[weap], dist*maxmalq, veh->height, 1 << height )
+                              * veh->typ->weapons.weapon[weap].maxstrength
                               * (1 + af.strength_experience ( veh->experience ) + af.strength_attackbonus ( gamemap->getField(startPos)->getattackbonus() ))
                               * af.strength_damage ( veh->damage )
                              );
@@ -443,10 +443,10 @@ void     AI :: calculateAllThreats( void )
          for ( int v = 0; v < vehicletypenum; v++) {
             pvehicletype fzt = getvehicletype_forpos( v );
             if ( fzt )
-               for ( int w = 0; w < fzt->weapons->count ; w++)
-                  if ( fzt->weapons->weapon[w].maxdistance > maxWeapDist[height] )
-                     if ( fzt->weapons->weapon[w].targ & ( 1 << height ))   // targ is a bitmap, each bit standing for a level of height
-                         maxWeapDist[height] = fzt->weapons->weapon[w].maxdistance;
+               for ( int w = 0; w < fzt->weapons.count ; w++)
+                  if ( fzt->weapons.weapon[w].maxdistance > maxWeapDist[height] )
+                     if ( fzt->weapons.weapon[w].targ & ( 1 << height ))   // targ is a bitmap, each bit standing for a level of height
+                         maxWeapDist[height] = fzt->weapons.weapon[w].maxdistance;
          }
       }
 

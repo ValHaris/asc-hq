@@ -2,9 +2,13 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.70 2001-07-11 20:44:36 mbickel Exp $
+//     $Id: building.cpp,v 1.71 2001-07-15 21:00:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.70  2001/07/11 20:44:36  mbickel
+//      Removed some vehicles from the data file.
+//      Put all legacy units in into the data/legacy directory
+//
 //     Revision 1.69  2001/05/16 23:21:01  mbickel
 //      The data file is mounted using automake
 //      Added sgml documentation
@@ -1115,14 +1119,14 @@ void  ccontainercontrols :: crefill :: material (pvehicle eht, int newmaterial)
 
 void  ccontainercontrols :: crefill :: ammunition (pvehicle eht, char weapon, int newa )
 {
-   if ( eht->typ->weapons->weapon[ weapon ].requiresAmmo() ) {
-      if ( newa > eht->typ->weapons->weapon[ weapon ].count )
-         newa = eht->typ->weapons->weapon[ weapon ].count;
+   if ( eht->typ->weapons.weapon[ weapon ].requiresAmmo() ) {
+      if ( newa > eht->typ->weapons.weapon[ weapon ].count )
+         newa = eht->typ->weapons.weapon[ weapon ].count;
 
       if ( newa > eht->ammo[weapon] )
-         eht->ammo[weapon]  +=  cc->getammunition ( eht->typ->weapons->weapon[ weapon ].getScalarWeaponType() , newa - eht->ammo[weapon], 1, CGameOptions::Instance()->container.autoproduceammunition );
+         eht->ammo[weapon]  +=  cc->getammunition ( eht->typ->weapons.weapon[ weapon ].getScalarWeaponType() , newa - eht->ammo[weapon], 1, CGameOptions::Instance()->container.autoproduceammunition );
       else {
-         cc->putammunition ( eht->typ->weapons->weapon[ weapon ].getScalarWeaponType() , eht->ammo[weapon]  - newa, 1 );
+         cc->putammunition ( eht->typ->weapons.weapon[ weapon ].getScalarWeaponType() , eht->ammo[weapon]  - newa, 1 );
          eht->ammo[weapon] = newa;
       }
    }
@@ -1136,8 +1140,8 @@ void  ccontainercontrols :: crefill :: filleverything ( pvehicle eht )
 {
    fuel     ( eht, maxint );
    material ( eht, maxint );
-   for (int i = 0; i < eht->typ->weapons->count; i++)
-      if ( eht->typ->weapons->weapon[ i ].requiresAmmo() )
+   for (int i = 0; i < eht->typ->weapons.count; i++)
+      if ( eht->typ->weapons.weapon[ i ].requiresAmmo() )
          ammunition ( eht, i, maxint );
 
 }
@@ -1146,8 +1150,8 @@ void  ccontainercontrols :: crefill :: emptyeverything ( pvehicle eht )
 {
    fuel     ( eht, 0 );
    material ( eht, 0 );
-   for (int i = 0; i < eht->typ->weapons->count; i++)
-      if ( eht->typ->weapons->weapon[ i ].requiresAmmo() )
+   for (int i = 0; i < eht->typ->weapons.count; i++)
+      if ( eht->typ->weapons.weapon[ i ].requiresAmmo() )
          ammunition ( eht, i, 0 );
 
 }
@@ -1742,8 +1746,8 @@ int   cbuildingcontrols :: ctrainunit :: available ( pvehicle eht )
          if (  cc->getspecfunc ( mbuilding ) & cgtrainingb ) {
             int num = 0;
             int numsh = 0;
-            for (int i = 0; i < eht->typ->weapons->count; i++ )
-               if ( eht->typ->weapons->weapon[i].shootable() )
+            for (int i = 0; i < eht->typ->weapons.count; i++ )
+               if ( eht->typ->weapons.weapon[i].shootable() )
                   if ( eht->ammo[i] )
                      numsh++;
                   else
@@ -1763,8 +1767,8 @@ void  cbuildingcontrols :: ctrainunit :: trainunit ( pvehicle eht )
 {
    if ( available ( eht ) ) {
       eht->experience+= trainingexperienceincrease;
-      for (int i = 0; i < eht->typ->weapons->count; i++ )
-         if ( eht->typ->weapons->weapon[i].shootable() )
+      for (int i = 0; i < eht->typ->weapons.count; i++ )
+         if ( eht->typ->weapons.weapon[i].shootable() )
             eht->ammo[i]--;
 
       if ( eht->experience > actmap->getgameparameter ( cgp_maxtrainingexperience ) )
@@ -1887,10 +1891,10 @@ int   ctransportcontrols :: putenergy (int e, int abbuchen )
 int   ctransportcontrols :: putammunition ( int weapontype, int ammunition, int abbuchen)
 {
    int ammo = ammunition;
-   for ( int i = 0; i < vehicle->typ->weapons->count; i++ )
+   for ( int i = 0; i < vehicle->typ->weapons.count; i++ )
       if ( ammo )
-         if ( vehicle->typ->weapons->weapon[i].getScalarWeaponType() == weapontype ) {
-            int dif = vehicle->typ->weapons->weapon[i].count - vehicle->ammo[i];
+         if ( vehicle->typ->weapons.weapon[i].getScalarWeaponType() == weapontype ) {
+            int dif = vehicle->typ->weapons.weapon[i].count - vehicle->ammo[i];
             if ( ammo > dif )
                ammo = dif;
             if ( abbuchen )
@@ -1955,9 +1959,9 @@ int   ctransportcontrols :: getfuel ( int need, int abbuchen )
 int    ctransportcontrols :: getammunition ( int weapontype, int num, int abbuchen, int produceifrequired  )
 {
    int ammo = 0;
-   for ( int i = 0; i < vehicle->typ->weapons->count ; i++)
+   for ( int i = 0; i < vehicle->typ->weapons.count ; i++)
       if ( ammo < num )
-         if ( vehicle->typ->weapons->weapon[i].getScalarWeaponType() == weapontype ) {
+         if ( vehicle->typ->weapons.weapon[i].getScalarWeaponType() == weapontype ) {
             int dif = num - ammo;
             if ( dif > vehicle->ammo[i] )
                dif = vehicle->ammo[i];
@@ -1972,8 +1976,8 @@ int    ctransportcontrols :: getammunition ( int weapontype, int num, int abbuch
 
 int    ctransportcontrols :: ammotypeavail ( int type )
 {
-   for ( int i = 0; i < vehicle->typ->weapons->count ; i++)
-      if ( vehicle->typ->weapons->weapon[i].getScalarWeaponType() == type )
+   for ( int i = 0; i < vehicle->typ->weapons.count ; i++)
+      if ( vehicle->typ->weapons.weapon[i].getScalarWeaponType() == type )
          return 1;
    return 0;
 }
@@ -2794,12 +2798,12 @@ void  ccontainer :: cammunitiontransfer_subwindow :: reset ( pvehicle veh )
          eht = hostcontainer->getmarkedunit();
    }
    if ( eht ) {
-      for (i = 0; i < eht->typ->weapons->count; i++) {
-         if ( eht->typ->weapons->weapon[i].requiresAmmo() ) {
-            int typ = eht->typ->weapons->weapon[i].getScalarWeaponType() ;
+      for (i = 0; i < eht->typ->weapons.count; i++) {
+         if ( eht->typ->weapons.weapon[i].requiresAmmo() ) {
+            int typ = eht->typ->weapons.weapon[i].getScalarWeaponType() ;
             if ( cc->ammotypeavail ( typ )) {
                weaps[num].name = cwaffentypen [ typ ];
-               weaps[num].maxnum = eht->typ->weapons->weapon[i].count;
+               weaps[num].maxnum = eht->typ->weapons.weapon[i].count;
                weaps[num].orgnum = eht->ammo[i];
                weaps[num].actnum = weaps[num].orgnum;
                weaps[num].buildnum = cc->getammunition ( typ, maxint, 0 );
@@ -6586,9 +6590,9 @@ int   ccontainer_b :: fill_icon_cb :: available    ( void )
          return 1;
       if ( eht->tank.fuel < eht->typ->tank.fuel )
          return 1;
-      for (int i = 0; i < eht->typ->weapons->count; i++)
-         if ( eht->typ->weapons->weapon[ i ].requiresAmmo() )
-            if ( eht->ammo[i] < eht->typ->weapons->weapon[ i ].count )
+      for (int i = 0; i < eht->typ->weapons.count; i++)
+         if ( eht->typ->weapons.weapon[ i ].requiresAmmo() )
+            if ( eht->ammo[i] < eht->typ->weapons.weapon[ i ].count )
                return 1;
    }
 
@@ -7100,13 +7104,13 @@ int   ccontainer_t :: fill_icon_ct :: available    ( void )
          return 1;
       if ( eht->tank.fuel < eht->typ->tank.fuel )
          return 1;
-      for (int i = 0; i < eht->typ->weapons->count; i++)
-         if ( eht->typ->weapons->weapon[ i ].requiresAmmo() )
-            if ( eht->ammo[i] < eht->typ->weapons->weapon[ i ].count )
-               for (int j = 0; j < cc_t->vehicle->typ->weapons->count; j++)
-                  if ( cc_t->vehicle->typ->weapons->weapon[ j ].requiresAmmo() )
+      for (int i = 0; i < eht->typ->weapons.count; i++)
+         if ( eht->typ->weapons.weapon[ i ].requiresAmmo() )
+            if ( eht->ammo[i] < eht->typ->weapons.weapon[ i ].count )
+               for (int j = 0; j < cc_t->vehicle->typ->weapons.count; j++)
+                  if ( cc_t->vehicle->typ->weapons.weapon[ j ].requiresAmmo() )
                      if ( cc_t->vehicle->ammo[j] )
-                        if ( eht->typ->weapons->weapon[ i ].getScalarWeaponType() ==  cc_t->vehicle->typ->weapons->weapon[ j ].getScalarWeaponType() )
+                        if ( eht->typ->weapons.weapon[ i ].getScalarWeaponType() ==  cc_t->vehicle->typ->weapons.weapon[ j ].getScalarWeaponType() )
                            return 1;
    }
 
