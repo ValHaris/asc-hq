@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.58 2000-10-14 10:52:54 mbickel Exp $
+//     $Id: typen.h,v 1.59 2000-10-17 12:12:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2000/10/14 10:52:54  mbickel
+//      Some adjustments for a Win32 port
+//
 //     Revision 1.57  2000/10/11 15:33:47  mbickel
 //      Adjusted small editors to the new ASC structure
 //      Watcom compatibility
@@ -367,12 +370,19 @@ const int cwettertypennum = 6;
 //! The number of vehicle categories; Each category has its own move malus
 const int cmovemalitypenum  = 16;
 
- #define cmm_building 11
+//! The movemalus type for a building. It is used for #SingleWeapon.targets_not_hittable .
+const int cmm_building = 11;
 
-#define choehenstufennum 8
-#define maxbuildingpicnum 8
-#define maxminesonfield 20
+//! The number of levels of height
+const int choehenstufennum =  8;
 
+//! The maximum number of number of different images for a building and a weather. For example, A wind power plant might have 6 different images, depending on the direction of the wind.
+const int maxbuildingpicnum  = 8;
+
+//! The maximum number of mines that can be placed on a single field
+const int maxminesonfield = 20;
+
+//! The number of game paramters that can be specified for each map.
 const int gameparameternum = 19;
 
 //! The maximum number of objects ( #tobject ) that can be placed on a single field ( #tfield )
@@ -405,6 +415,15 @@ class tterrainbits {
      terrain1 = i; 
      terrain2 = j; 
   };
+
+  int get32bit ( int pos ) {
+     if ( pos == 0 )
+        return terrain1;
+     else
+        return terrain2;
+  };
+
+
   int toand ( tterrainbits bts );
   int existall ( tterrainbits bdt ) {
       return  ((terrain1 & bdt.terrain1) == bdt.terrain1) && ((terrain2 & bdt.terrain2) == bdt.terrain2);
@@ -434,6 +453,10 @@ class tterrainbits {
   }
 };
 
+
+/* These operators are crap. But since they are used only be tterrainaccess.accessible, which knows
+   that they are crap, the system is working ...
+*/
 extern tterrainbits& operator~ ( tterrainbits &tb );
 extern tterrainbits& operator| ( tterrainbits tb2, tterrainbits tb3 ) ;
 extern int operator& ( tterrainbits tb2, tterrainbits tb3 ) ;
@@ -470,7 +493,9 @@ struct tbuildrange {
 };
 
 
+//! The number of different resources that ASC uses
 const int resourceTypeNum = 3;
+//! The number of different resources that ASC uses
 const int resourceNum = resourceTypeNum;
 
 class Resources {
@@ -665,7 +690,8 @@ struct teventstore {
   };
 
 
-const int aiValueTypeNum = 8;  //!< how many different target types are there?
+//! how many different target types are there?
+const int aiValueTypeNum = 8;  
 
 class AiThreat {
        public:
@@ -1768,7 +1794,8 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
-const int attackmovecost = 20;  // 20% movement decrease for attacking; only used for units that can move after attacking
+//! The movement decrease in percent of the total movemnt that is used for attacking; only used for units that can move after attacking
+const int attackmovecost = 20;  
 
 #define movement_cost_for_repaired_unit 24
 #define movement_cost_for_repairing_unit 12
@@ -1857,20 +1884,21 @@ const int attackmovecost = 20;  // 20% movement decrease for attacking; only use
 #define dissectunitresearchpointsplus2 3    // Beim dissectn einer vehicle wird der sovielte Teil der Researchpoints jeder unbekannten Technologie gutgeschrieben.
   // fuer die Technologie existieren aber bereits von einem anderen sezierten vehicletype gutschriften.
 
-#define maxminingrange 10     // soviele fielder such ein Bergwerk ab.
+//! The maximum number of fields a mining station can extract mineral resources from; Counted from its entry
+const int maxminingrange = 10;
 
+//! The weight of 1024 units of aa Resource 
 extern const int resourceWeight[ resourceTypeNum ];
-/*
-#define fuelweight  4         // 1024 fuel wiegen soviel
-#define materialweight 12     // 1024 material wiegen soviel
-*/
 
 #define objectbuildmovecost 16  // vehicle->movement -= (8 + ( fld->movemalus[0] - 8 ) / ( objectbuildmovecost / 8 ) ) * kosten des obj
 
 
 extern const int csolarkraftwerkleistung[];
 
-#define cnetcontrolnum 12
+//! The number of netcontrol actions ; see #cnetcontrol 
+const int cnetcontrolnum  = 12;
+
+//! The actions that can be used to control a ResourceNet
 extern const char* cnetcontrol[cnetcontrolnum];
 
 extern const char* cgeneralnetcontrol[];

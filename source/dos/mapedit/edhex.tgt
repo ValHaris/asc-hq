@@ -22,8 +22,8 @@ MCommand
 wtouch ..\..\strtmesg.cpp
 5
 MCommand
-46
-if exist \copyexecutable \copyexecutable edhex
+50
+if exist \copyexecutable.cmd \copyexecutable edhex
 6
 MItem
 9

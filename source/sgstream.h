@@ -1,6 +1,11 @@
-//     $Id: sgstream.h,v 1.10 2000-09-01 15:47:50 mbickel Exp $
+//     $Id: sgstream.h,v 1.11 2000-10-17 12:12:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/09/01 15:47:50  mbickel
+//      Added Astar path finding code
+//      Fixed: viewid crashed
+//      Fixed display error in ynswitch ( krkr.cpp )
+//
 //     Revision 1.9  2000/08/12 09:17:34  gulliver
 //     *** empty log message ***
 //
@@ -145,8 +150,8 @@ class tsrlefilestream : public tsfilestream {
                         };
 
 extern pvehicletype loadvehicletype(char *       name);
-extern pvehicletype loadvehicletype( pnstream stream );
-extern void writevehicle( pvehicletype ft, pnstream stream );
+extern pvehicletype loadvehicletype( tnstream& stream );
+extern void writevehicle( pvehicletype ft, tnstream& stream );
 
 extern pterraintype loadterraintype(char *       name);
 extern pterraintype loadterraintype( pnstream stream );

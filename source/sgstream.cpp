@@ -1,6 +1,10 @@
-//     $Id: sgstream.cpp,v 1.36 2000-10-14 14:16:08 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.37 2000-10-17 12:12:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2000/10/14 14:16:08  mbickel
+//      Cleaned up includes
+//      Added mapeditor to win32 watcom project
+//
 //     Revision 1.35  2000/10/14 13:07:01  mbickel
 //      Moved DOS version into own subdirectories
 //      Win32 version with Watcom compiles and links ! But doesn't run yet...
@@ -1070,141 +1074,141 @@ void* generate_vehicle_gui_build_icon ( pvehicletype tnk )
 pvehicletype   loadvehicletype( char* name)
 {
    tnfilestream stream ( name, 1 );
-   return loadvehicletype ( &stream );
+   return loadvehicletype ( stream );
 }
 
 
-pvehicletype   loadvehicletype( pnstream stream )
+pvehicletype   loadvehicletype( tnstream& stream )
 { 
-   int version = stream->readInt();
+   int version = stream.readInt();
    if ( version <= vehicle_version && version >= 1) {
 
       int   j;
 
       pvehicletype fztn = new Vehicletype;
    
-      fztn->name = (char*) stream->readInt();
-      fztn->description = (char*) stream->readInt();
-      fztn->infotext = (char*) stream->readInt();
+      fztn->name = (char*) stream.readInt();
+      fztn->description = (char*) stream.readInt();
+      fztn->infotext = (char*) stream.readInt();
 
       if ( version <= 2 ) {
-         fztn->oldattack.weaponcount = stream->readChar();
+         fztn->oldattack.weaponcount = stream.readChar();
          for ( j = 0; j< 8; j++ ) {
-            fztn->oldattack.waffe[j].typ = stream->readWord();
-            fztn->oldattack.waffe[j].targ = stream->readChar();
-            fztn->oldattack.waffe[j].sourceheight = stream->readChar();
-            fztn->oldattack.waffe[j].maxdistance = stream->readWord();
-            fztn->oldattack.waffe[j].mindistance = stream->readWord();
-            fztn->oldattack.waffe[j].count = stream->readChar();
-            fztn->oldattack.waffe[j].maxstrength = stream->readChar();
-            fztn->oldattack.waffe[j].minstrength = stream->readChar();
+            fztn->oldattack.waffe[j].typ = stream.readWord();
+            fztn->oldattack.waffe[j].targ = stream.readChar();
+            fztn->oldattack.waffe[j].sourceheight = stream.readChar();
+            fztn->oldattack.waffe[j].maxdistance = stream.readWord();
+            fztn->oldattack.waffe[j].mindistance = stream.readWord();
+            fztn->oldattack.waffe[j].count = stream.readChar();
+            fztn->oldattack.waffe[j].maxstrength = stream.readChar();
+            fztn->oldattack.waffe[j].minstrength = stream.readChar();
          }
       }
 
-      fztn->productionCost.energy   = stream->readWord();
-      fztn->productionCost.material = stream->readWord();
-      fztn->armor = stream->readWord();
+      fztn->productionCost.energy   = stream.readWord();
+      fztn->productionCost.material = stream.readWord();
+      fztn->armor = stream.readWord();
       for ( j = 0; j < 8; j++ ) 
-          fztn->picture[j] = (void*)  stream->readInt();
+          fztn->picture[j] = (void*)  stream.readInt();
       
-      fztn->height = stream->readChar();
-      fztn->researchid = stream->readWord();
+      fztn->height = stream.readChar();
+      fztn->researchid = stream.readWord();
       if ( version <= 2 ) {
-         fztn->_terrain = stream->readInt();
-         fztn->_terrainreq = stream->readInt();
-         fztn->_terrainkill = stream->readInt();
+         fztn->_terrain = stream.readInt();
+         fztn->_terrainreq = stream.readInt();
+         fztn->_terrainkill = stream.readInt();
       }
-      fztn->steigung = stream->readChar();
-      fztn->jamming = stream->readChar();
-      fztn->view = stream->readWord();
-      fztn->wait = stream->readChar();
+      fztn->steigung = stream.readChar();
+      fztn->jamming = stream.readChar();
+      fztn->view = stream.readWord();
+      fztn->wait = stream.readChar();
 
       if ( version <= 2 )
-         stream->readChar (); // dummy 
+         stream.readChar (); // dummy 
 
-      fztn->loadcapacity = stream->readWord();
-      fztn->maxunitweight = stream->readWord();
-      fztn->loadcapability = stream->readChar();
-      fztn->loadcapabilityreq = stream->readChar();
-      fztn->loadcapabilitynot = stream->readChar();
-      fztn->id = stream->readWord();
-      fztn->tank.fuel = stream->readInt();
-      fztn->fuelConsumption = stream->readWord();
-      fztn->tank.energy = stream->readInt();
-      fztn->tank.material = stream->readInt();
-      fztn->functions = stream->readInt();
+      fztn->loadcapacity = stream.readWord();
+      fztn->maxunitweight = stream.readWord();
+      fztn->loadcapability = stream.readChar();
+      fztn->loadcapabilityreq = stream.readChar();
+      fztn->loadcapabilitynot = stream.readChar();
+      fztn->id = stream.readWord();
+      fztn->tank.fuel = stream.readInt();
+      fztn->fuelConsumption = stream.readWord();
+      fztn->tank.energy = stream.readInt();
+      fztn->tank.material = stream.readInt();
+      fztn->functions = stream.readInt();
 
       for ( j = 0; j < 8; j++ ) 
-         fztn->movement[j] = stream->readChar();
+         fztn->movement[j] = stream.readChar();
       
 
-      fztn->movemalustyp = stream->readChar();
+      fztn->movemalustyp = stream.readChar();
 
       if ( version <= 2 ) 
          for ( j = 0; j < 9; j++ )
-             stream->readWord( ); // dummy1
+             stream.readWord( ); // dummy1
 
-      fztn->classnum = stream->readChar();
+      fztn->classnum = stream.readChar();
       for ( j = 0; j < 8; j++ ) 
-          fztn->classnames[j] = (char*) stream->readInt();
+          fztn->classnames[j] = (char*) stream.readInt();
 
       for ( j = 0; j < 8; j++ ) {
          int k;
          for ( k = 0; k < 8; k++ ) 
-            fztn->classbound[j].weapstrength[k] = stream->readWord();
+            fztn->classbound[j].weapstrength[k] = stream.readWord();
          
          if ( version <= 2 ) 
-            stream->readWord (  ); // dummy2
+            stream.readWord (  ); // dummy2
 
-         fztn->classbound[j].armor = stream->readWord();
-         fztn->classbound[j].techlevel = stream->readWord();
+         fztn->classbound[j].armor = stream.readWord();
+         fztn->classbound[j].techlevel = stream.readWord();
          for ( k = 0; k < 4; k++ ) 
-            fztn->classbound[j].techrequired[k] = stream->readWord();
+            fztn->classbound[j].techrequired[k] = stream.readWord();
          
-         fztn->classbound[j].eventrequired = stream->readChar();
-         fztn->classbound[j].vehiclefunctions = stream->readInt();
+         fztn->classbound[j].eventrequired = stream.readChar();
+         fztn->classbound[j].vehiclefunctions = stream.readInt();
          if ( version <= 2 )
-            stream->readChar( ); // dummy
+            stream.readChar( ); // dummy
       }
 
-      fztn->maxwindspeedonwater = stream->readChar();
-      fztn->digrange = stream->readChar();
-      fztn->initiative = stream->readInt();
-      fztn->_terrainnot = stream->readInt();
-      fztn->_terrainreq1 = stream->readInt();
-      fztn->objectsbuildablenum = stream->readInt();
-      fztn->objectsbuildableid = (int*) stream->readInt();
-      fztn->weight = stream->readInt();
-      fztn->terrainaccess = (pterrainaccess) stream->readInt();
-      fztn->bipicture = stream->readInt();
-      fztn->vehiclesbuildablenum = stream->readInt();
-      fztn->vehiclesbuildableid = (int*) stream->readInt();
-      fztn->buildicon = (void*) stream->readInt();
-      fztn->buildingsbuildablenum = stream->readInt();
-      fztn->buildingsbuildable = (pbuildrange) stream->readInt();
-      fztn->weapons = (UnitWeapon*) stream->readInt();
-      fztn->autorepairrate = stream->readInt();
+      fztn->maxwindspeedonwater = stream.readChar();
+      fztn->digrange = stream.readChar();
+      fztn->initiative = stream.readInt();
+      fztn->_terrainnot = stream.readInt();
+      fztn->_terrainreq1 = stream.readInt();
+      fztn->objectsbuildablenum = stream.readInt();
+      fztn->objectsbuildableid = (int*) stream.readInt();
+      fztn->weight = stream.readInt();
+      fztn->terrainaccess = (pterrainaccess) stream.readInt();
+      fztn->bipicture = stream.readInt();
+      fztn->vehiclesbuildablenum = stream.readInt();
+      fztn->vehiclesbuildableid = (int*) stream.readInt();
+      fztn->buildicon = (void*) stream.readInt();
+      fztn->buildingsbuildablenum = stream.readInt();
+      fztn->buildingsbuildable = (pbuildrange) stream.readInt();
+      fztn->weapons = (UnitWeapon*) stream.readInt();
+      fztn->autorepairrate = stream.readInt();
       if ( version <= 2 )
-         stream->readInt( ); // dummy
+         stream.readInt( ); // dummy
 
       if ( version >= 4 )
-         fztn->vehicleCategoriesLoadable = stream->readInt();
+         fztn->vehicleCategoriesLoadable = stream.readInt();
       else
          fztn->vehicleCategoriesLoadable = -1;
 
       if (fztn->name)
-         stream->readpchar( &fztn->name );
+         stream.readpchar( &fztn->name );
 
       if (fztn->description)
-         stream->readpchar( &fztn->description );
+         stream.readpchar( &fztn->description );
 
       if (fztn->infotext)
-         stream->readpchar( &fztn->infotext );
+         stream.readpchar( &fztn->infotext );
 
       int i;
       for ( i=0;i<8  ;i++ ) 
          if ( fztn->classnames[i] )
-            stream->readpchar( &(fztn->classnames[i]) );
+            stream.readpchar( &(fztn->classnames[i]) );
    
       if ( fztn->functions & cfautorepair )
          if ( !fztn->autorepairrate )
@@ -1214,7 +1218,7 @@ pvehicletype   loadvehicletype( pnstream stream )
       for (i=0;i<8  ;i++ ) 
          if ( fztn->picture[i] ) 
             if ( fztn->bipicture <= 0 )
-               stream->readrlepict ( &fztn->picture[i], false, &size);
+               stream.readrlepict ( &fztn->picture[i], false, &size);
             else
                loadbi3pict_double ( fztn->bipicture, 
                                                                         &fztn->picture[i], 
@@ -1223,42 +1227,42 @@ pvehicletype   loadvehicletype( pnstream stream )
       if ( fztn->objectsbuildablenum ) {
          fztn->objectsbuildableid = new int [ fztn->objectsbuildablenum ];
          for ( i = 0; i < fztn->objectsbuildablenum; i++ ) 
-            fztn->objectsbuildableid[i] = stream->readInt ( );
+            fztn->objectsbuildableid[i] = stream.readInt ( );
       }
 
       if ( fztn->vehiclesbuildablenum ) {
          fztn->vehiclesbuildableid = new int [ fztn->vehiclesbuildablenum ];
          for ( i = 0; i < fztn->vehiclesbuildablenum; i++ ) 
-            fztn->vehiclesbuildableid[i] = stream->readInt() ;
+            fztn->vehiclesbuildableid[i] = stream.readInt() ;
       }
 
       fztn->weapons = new UnitWeapon;
       if ( fztn->weapons && version > 1) {
-         fztn->weapons->count = stream->readInt();
+         fztn->weapons->count = stream.readInt();
          for ( j = 0; j< 16; j++ ) {
-            fztn->weapons->weapon[j].set ( stream->readInt() );
-            fztn->weapons->weapon[j].targ = stream->readInt();
-            fztn->weapons->weapon[j].sourceheight = stream->readInt();
-            fztn->weapons->weapon[j].maxdistance = stream->readInt();
-            fztn->weapons->weapon[j].mindistance = stream->readInt();
-            fztn->weapons->weapon[j].count = stream->readInt();
-            fztn->weapons->weapon[j].maxstrength = stream->readInt();
-            fztn->weapons->weapon[j].minstrength = stream->readInt();
+            fztn->weapons->weapon[j].set ( stream.readInt() );
+            fztn->weapons->weapon[j].targ = stream.readInt();
+            fztn->weapons->weapon[j].sourceheight = stream.readInt();
+            fztn->weapons->weapon[j].maxdistance = stream.readInt();
+            fztn->weapons->weapon[j].mindistance = stream.readInt();
+            fztn->weapons->weapon[j].count = stream.readInt();
+            fztn->weapons->weapon[j].maxstrength = stream.readInt();
+            fztn->weapons->weapon[j].minstrength = stream.readInt();
 
             for ( int k = 0; k < 13; k++ ) 
-               fztn->weapons->weapon[j].efficiency[k] = stream->readInt();
+               fztn->weapons->weapon[j].efficiency[k] = stream.readInt();
             
-            fztn->weapons->weapon[j].targets_not_hittable = stream->readInt();
+            fztn->weapons->weapon[j].targets_not_hittable = stream.readInt();
 
             if ( version <= 2 )
                for ( int l = 0; l < 9; l++ ) 
-                  stream->readInt(); // dummy
+                  stream.readInt(); // dummy
             
          }
 
          if ( version <= 2 )
             for ( int m = 0; m< 10; m++ ) 
-               stream->readInt(); // dummy 
+               stream.readInt(); // dummy 
          
       } else {
          fztn->weapons->count = fztn->oldattack.weaponcount;
@@ -1293,7 +1297,15 @@ pvehicletype   loadvehicletype( pnstream stream )
    
       if ( fztn->terrainaccess ) {
          fztn->terrainaccess = new tterrainaccess;
-         stream->readdata2 ( *(fztn->terrainaccess) );
+
+         fztn->terrainaccess->terrain.set ( stream.readInt(), stream.readInt() );
+         fztn->terrainaccess->terrainreq.set ( stream.readInt(), stream.readInt() );
+         fztn->terrainaccess->terrainnot.set ( stream.readInt(), stream.readInt() );
+         fztn->terrainaccess->terrainkill.set ( stream.readInt(), stream.readInt() );
+
+         for ( int a = 0; a < 10; a++ )
+            stream.readInt(); //dummy
+
       } else {
          fztn->terrainaccess = new tterrainaccess;
          fztn->terrainaccess->terrain.set ( fztn->_terrain, 0 );
@@ -1304,8 +1316,10 @@ pvehicletype   loadvehicletype( pnstream stream )
    
       if ( fztn->buildingsbuildablenum ) {
          fztn->buildingsbuildable = new tbuildrange[fztn->buildingsbuildablenum];
-         for ( i = 0; i < fztn->buildingsbuildablenum; i++ )
-            stream->readdata2( fztn->buildingsbuildable[i] );
+         for ( i = 0; i < fztn->buildingsbuildablenum; i++ ) {
+            fztn->buildingsbuildable[i].from = stream.readInt();
+            fztn->buildingsbuildable[i].to = stream.readInt();
+         }
       }
 
 
@@ -1315,7 +1329,7 @@ pvehicletype   loadvehicletype( pnstream stream )
        fztn->buildicon = NULL;
       #endif
 
-      fztn->filename = strdup ( stream->getDeviceName() );
+      fztn->filename = strdup ( stream.getDeviceName() );
 
       return fztn;
    } else
@@ -1325,177 +1339,189 @@ pvehicletype   loadvehicletype( pnstream stream )
 
 
 
-void writevehicle( pvehicletype fztn, pnstream stream )
+void writevehicle( pvehicletype fztn, tnstream& stream )
 {
-   const int  one  = 1;
-   const int  zero = 0;
-
    int i,j;
 
-   stream->writeInt ( vehicle_version ); 
+   stream.writeInt ( vehicle_version ); 
 
    if ( fztn->name )
-      stream->writeInt( one );  
+      stream.writeInt( 1 );  
    else
-      stream->writeInt( zero );  
+      stream.writeInt( 0 );  
 
    if ( fztn->description )
-      stream->writeInt( one );  
+      stream.writeInt( 1 );  
    else
-      stream->writeInt( zero );  
+      stream.writeInt( 0 );  
 
    if ( fztn->infotext )
-      stream->writeInt( one );  
+      stream.writeInt( 1 );  
    else
-      stream->writeInt( zero );  
+      stream.writeInt( 0 );  
 
-   stream->writeWord( fztn->productionCost.energy );
-   stream->writeWord( fztn->productionCost.material );
-   stream->writeWord( fztn->armor );
+   stream.writeWord( fztn->productionCost.energy );
+   stream.writeWord( fztn->productionCost.material );
+   stream.writeWord( fztn->armor );
 
    for ( j = 0; j < 8; j++ )
       if ( fztn->picture[j] )
-         stream->writedata2( one ); 
+         stream.writeInt( 1 ); 
       else
-         stream->writedata2( zero ); 
+         stream.writeInt( 0 ); 
    
-   stream->writeChar( fztn->height );
-   stream->writeWord(fztn->researchid);
-   stream->writeChar(fztn->steigung);
-   stream->writeChar(fztn->jamming);
-   stream->writeWord(fztn->view);
-   stream->writeChar(fztn->wait);
-   stream->writeWord(fztn->loadcapacity);
-   stream->writeWord(fztn->maxunitweight);
-   stream->writeChar(fztn->loadcapability);
-   stream->writeChar(fztn->loadcapabilityreq);
-   stream->writeChar(fztn->loadcapabilitynot);
-   stream->writeWord(fztn->id );
-   stream->writeInt(fztn->tank.fuel );
-   stream->writeWord(fztn->fuelConsumption );
-   stream->writeInt(fztn->tank.energy );
-   stream->writeInt(fztn->tank.material );
-   stream->writeInt(fztn->functions );
+   stream.writeChar( fztn->height );
+   stream.writeWord(fztn->researchid);
+   stream.writeChar(fztn->steigung);
+   stream.writeChar(fztn->jamming);
+   stream.writeWord(fztn->view);
+   stream.writeChar(fztn->wait);
+   stream.writeWord(fztn->loadcapacity);
+   stream.writeWord(fztn->maxunitweight);
+   stream.writeChar(fztn->loadcapability);
+   stream.writeChar(fztn->loadcapabilityreq);
+   stream.writeChar(fztn->loadcapabilitynot);
+   stream.writeWord(fztn->id );
+   stream.writeInt(fztn->tank.fuel );
+   stream.writeWord(fztn->fuelConsumption );
+   stream.writeInt(fztn->tank.energy );
+   stream.writeInt(fztn->tank.material );
+   stream.writeInt(fztn->functions );
    for ( j = 0; j < 8; j++ ) 
-       stream->writeChar( fztn->movement[j] );
+       stream.writeChar( fztn->movement[j] );
    
 
-   stream->writeChar(fztn->movemalustyp );
-   stream->writeChar(fztn->classnum );
+   stream.writeChar(fztn->movemalustyp );
+   stream.writeChar(fztn->classnum );
    for ( j = 0; j < 8; j++ ) 
       if ( fztn->classnames[j] )
-          stream->writedata2( one ); 
+          stream.writeInt( 1 ); 
       else
-          stream->writedata2( zero ); 
+          stream.writeInt( 0 ); 
       
 
    for ( j = 0; j < 8; j++ ) {
       int k;
       for ( k = 0; k < 8; k++ ) 
-         stream->writeWord(fztn->classbound[j].weapstrength[k]);
+         stream.writeWord(fztn->classbound[j].weapstrength[k]);
       
-      stream->writeWord(fztn->classbound[j].armor);
-      stream->writeWord(fztn->classbound[j].techlevel );
+      stream.writeWord(fztn->classbound[j].armor);
+      stream.writeWord(fztn->classbound[j].techlevel );
       for ( k = 0; k < 4; k++ ) 
-         stream->writeWord(fztn->classbound[j].techrequired[k]);
+         stream.writeWord(fztn->classbound[j].techrequired[k]);
       
-      stream->writeChar(fztn->classbound[j].eventrequired );
-      stream->writeInt(fztn->classbound[j].vehiclefunctions );
+      stream.writeChar(fztn->classbound[j].eventrequired );
+      stream.writeInt(fztn->classbound[j].vehiclefunctions );
    }
 
-   stream->writeChar(fztn->maxwindspeedonwater );
-   stream->writeChar(fztn->digrange );
-   stream->writeInt(fztn->initiative );
-   stream->writeInt(fztn->_terrainnot );
-   stream->writeInt(fztn->_terrainreq1 );
-   stream->writeInt(fztn->objectsbuildablenum );
+   stream.writeChar(fztn->maxwindspeedonwater );
+   stream.writeChar(fztn->digrange );
+   stream.writeInt(fztn->initiative );
+   stream.writeInt(fztn->_terrainnot );
+   stream.writeInt(fztn->_terrainreq1 );
+   stream.writeInt(fztn->objectsbuildablenum );
 
    if ( fztn->objectsbuildableid ) 
-      stream->writedata2( one ); 
+      stream.writeInt( 1 ); 
    else
-      stream->writedata2( zero ); 
+      stream.writeInt( 0 ); 
 
-   stream->writeInt(fztn->weight );
+   stream.writeInt(fztn->weight );
    if ( fztn->terrainaccess )
-      stream->writedata2( one ); 
+      stream.writeInt( 1 ); 
    else
-      stream->writedata2( zero ); 
+      stream.writeInt( 0 ); 
 
-   stream->writeInt(fztn->bipicture );
-   stream->writeInt(fztn->vehiclesbuildablenum );
+   stream.writeInt(fztn->bipicture );
+   stream.writeInt(fztn->vehiclesbuildablenum );
    if ( fztn->vehiclesbuildableid )
-      stream->writedata2( one ); 
+      stream.writeInt( 1 ); 
    else
-      stream->writedata2( zero ); 
+      stream.writeInt( 0 ); 
 
    if ( fztn->buildicon )
-      stream->writedata2( one ); 
+      stream.writeInt( 1 ); 
    else
-      stream->writedata2( zero ); 
+      stream.writeInt( 0 ); 
 
-   stream->writeInt(fztn->buildingsbuildablenum );
+   stream.writeInt(fztn->buildingsbuildablenum );
    if ( fztn->buildingsbuildable )
-      stream->writedata2( one ); 
+      stream.writeInt( 1 ); 
    else
-      stream->writedata2( zero ); 
+      stream.writeInt( 0 ); 
 
    if ( fztn->weapons )
-      stream->writedata2( one ); 
+      stream.writeInt( 1 ); 
    else
-      stream->writedata2( zero ); 
+      stream.writeInt( 0 ); 
 
-   stream->writeInt( fztn->autorepairrate );
+   stream.writeInt( fztn->autorepairrate );
 
-   stream->writeInt( fztn->vehicleCategoriesLoadable );
+   stream.writeInt( fztn->vehicleCategoriesLoadable );
 
 
    if (fztn->name)
-      stream->writepchar( fztn->name );
+      stream.writepchar( fztn->name );
 
    if (fztn->description)
-      stream->writepchar( fztn->description );
+      stream.writepchar( fztn->description );
 
    if (fztn->infotext)
-      stream->writepchar( fztn->infotext );
+      stream.writepchar( fztn->infotext );
 
    for (i=0; i<8; i++)
       if ( fztn->classnames[i] )
-         stream->writepchar( fztn->classnames[i] );
+         stream.writepchar( fztn->classnames[i] );
 
    if ( fztn->bipicture <= 0 )
       for (i=0;i<8  ;i++ ) 
          if ( fztn->picture[i] ) 
-            stream->writedata ( fztn->picture[i], getpicsize2 ( fztn->picture[i] ) );
+            stream.writedata ( fztn->picture[i], getpicsize2 ( fztn->picture[i] ) );
 
    for ( i = 0; i < fztn->objectsbuildablenum; i++ )
-      stream->writeInt ( fztn->objectsbuildableid[i] );
+      stream.writeInt ( fztn->objectsbuildableid[i] );
 
    for ( i = 0; i < fztn->vehiclesbuildablenum; i++ )
-      stream->writeInt ( fztn->vehiclesbuildableid[i] );
+      stream.writeInt ( fztn->vehiclesbuildableid[i] );
 
-   stream->writeInt(fztn->weapons->count ); 
+   stream.writeInt(fztn->weapons->count ); 
    for ( j = 0; j< 16; j++ ) {
-      stream->writeInt(fztn->weapons->weapon[j].gettype( )); 
-      stream->writeInt(fztn->weapons->weapon[j].targ); 
-      stream->writeInt(fztn->weapons->weapon[j].sourceheight ); 
-      stream->writeInt(fztn->weapons->weapon[j].maxdistance ); 
-      stream->writeInt(fztn->weapons->weapon[j].mindistance ); 
-      stream->writeInt(fztn->weapons->weapon[j].count ); 
-      stream->writeInt(fztn->weapons->weapon[j].maxstrength ); 
-      stream->writeInt(fztn->weapons->weapon[j].minstrength ); 
+      stream.writeInt(fztn->weapons->weapon[j].gettype( )); 
+      stream.writeInt(fztn->weapons->weapon[j].targ); 
+      stream.writeInt(fztn->weapons->weapon[j].sourceheight ); 
+      stream.writeInt(fztn->weapons->weapon[j].maxdistance ); 
+      stream.writeInt(fztn->weapons->weapon[j].mindistance ); 
+      stream.writeInt(fztn->weapons->weapon[j].count ); 
+      stream.writeInt(fztn->weapons->weapon[j].maxstrength ); 
+      stream.writeInt(fztn->weapons->weapon[j].minstrength ); 
 
       for ( int k = 0; k < 13; k++ ) 
-         stream->writeInt(fztn->weapons->weapon[j].efficiency[k] ); 
+         stream.writeInt(fztn->weapons->weapon[j].efficiency[k] ); 
 
-      stream->writeInt(fztn->weapons->weapon[j].targets_not_hittable ); 
+      stream.writeInt(fztn->weapons->weapon[j].targets_not_hittable ); 
    }
 
-   if ( fztn->terrainaccess ) 
-      stream->writedata2 ( *(fztn->terrainaccess) );
+   if ( fztn->terrainaccess ) {
+      stream.writeInt ( fztn->terrainaccess->terrain.get32bit ( 0 ) );
+      stream.writeInt ( fztn->terrainaccess->terrain.get32bit ( 1 ) );
+
+      stream.writeInt ( fztn->terrainaccess->terrainreq.get32bit ( 0 ) );
+      stream.writeInt ( fztn->terrainaccess->terrainreq.get32bit ( 1 ) );
+
+      stream.writeInt ( fztn->terrainaccess->terrainnot.get32bit ( 0 ) );
+      stream.writeInt ( fztn->terrainaccess->terrainnot.get32bit ( 1 ) );
+
+      stream.writeInt ( fztn->terrainaccess->terrainkill.get32bit ( 0 ) );
+      stream.writeInt ( fztn->terrainaccess->terrainkill.get32bit ( 1 ) );
+
+      for ( int a = 0; a < 10; a++ )
+          stream.writeInt( 0 ); //dummy
+
+   }
    
    for ( i = 0; i < fztn->buildingsbuildablenum; i++ ) {
-      stream->writeInt( fztn->buildingsbuildable[i].from );
-      stream->writeInt( fztn->buildingsbuildable[i].to );
+      stream.writeInt( fztn->buildingsbuildable[i].from );
+      stream.writeInt( fztn->buildingsbuildable[i].to );
    }
 
 }

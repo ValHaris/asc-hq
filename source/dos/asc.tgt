@@ -21,8 +21,8 @@ MCommand
 0
 5
 MCommand
-70
-if exist \copyexecutable \copyexecutable asc
+74
+if exist \copyexecutable.cmd \copyexecutable asc
 wtouch ..\strtmesg.cpp
 
 6

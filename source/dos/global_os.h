@@ -1,6 +1,11 @@
-//     $Id: global_os.h,v 1.2 2000-10-16 14:34:12 mbickel Exp $
+//     $Id: global_os.h,v 1.3 2000-10-17 12:12:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/10/16 14:34:12  mbickel
+//      Win32 port is now running fine.
+//      Removed MSVC project files and put them into a zip file in
+//        asc/source/win32/msvc/
+//
 //     Revision 1.1  2000/10/12 21:37:56  mbickel
 //      Further restructured platform dependant routines
 //
@@ -40,7 +45,9 @@
   #define HAVE_LIMITS
   #define HAVE_LOG2
   #define StaticClassVariable static
+  #ifdef __WATCOM_CPLUSPLUS__      // and not Watcom C
   namespace std {};
+  #endif
 
   #ifndef converter
    #define UseMemAvail
