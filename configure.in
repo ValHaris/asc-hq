@@ -17,6 +17,12 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS(malloc.h strings.h sys/dirent.h)
 AC_HEADER_DIRENT
 AC_HEADER_TIME
+dnl Allow location of SDL install to be configured --with-SDL-prefix=
+dnl omitting this parameter will cause the files to be sought in /usr/lib and /usr/include
+dnl note that you need to have run make install in the SDL source for this to work, as the
+dnl SDL distribution source directory isn't layed out correctly even after a make.
+AC_ARG_WITH( SDL-prefix,[  --with-SDL-prefix=sdlp  Look for SDL libs in \${sdlp}/lib and headers in \${sdlp}/include/],CXXFLAGS="$CXXFLAGS -I$withval/include" ; LDFLAGS="$LDFLAGS -L$withval/lib" )
+
 AC_CHECK_HEADER( SDL/SDL.h, , AC_MSG_ERROR( ASC requires SDL headers to be present ) )
 
 dnl Checks for typedefs, structures, and compiler characteristics.
@@ -25,8 +31,7 @@ AC_TYPE_SIZE_T
 
 dnl Checks for libraries.
 AC_CHECK_LIB( pthread, pthread_create )
-AC_CHECK_LIB( SDL, SDL_GetVideoSurface, , AC_MSG_ERROR( ASC requires SDL to be installed ) )
-AC_CHECK_LIB( SDL, SDL_EnableKeyRepeat, , AC_MSG_ERROR( SDL is not up to date ) )
+AC_CHECK_LIB( SDL, SDL_EnableKeyRepeat, , AC_MSG_ERROR( ASC requires SDL 1.0.2 or newer to be installed ) )
 AC_CHECK_LIB( bz2, bzReadOpen )
 
 dnl Checks for library functions.

@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.13 2000-01-04 19:43:51 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.14 2000-01-06 11:19:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/01/04 19:43:51  mbickel
+//      Continued Linux port
+//
 //     Revision 1.12  2000/01/02 19:47:06  mbickel
 //      Continued Linux port
 //      Fixed crash at program exit
@@ -1087,7 +1090,7 @@ void         tcontinuecampaign::setid(word         id)
 
 void         tcontinuecampaign::showmapinfo(word         ypos)
 { 
-   collategraphicoperations cgo;
+   collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + xsize );
    tnewcampaignlevel::showmapinfo(ypos);
    npush( activefontsettings );
 
@@ -1169,8 +1172,6 @@ void         tcontinuecampaign::evaluatemapinfo(char *       srname)
 void         tcontinuecampaign::init(void)
 { 
   #define leftspace 25  
-
-   collategraphicoperations cgo;
 
    tnewcampaignlevel::init();
    title = "next campaign level";
@@ -2684,7 +2685,6 @@ int  tparagraph :: reflow( int all  )
 
 pparagraph tparagraph :: movecursor ( int dx, int dy )
 {
-   collategraphicoperations cgo;
    pparagraph newcursorpos = this;
 
    if ( cursorstat )
@@ -2749,7 +2749,6 @@ pparagraph tparagraph :: movecursor ( int dx, int dy )
 void tparagraph :: displaycursor ( void )
 {
    if ( cursor >= 0 ) {
-      collategraphicoperations cgo;
       int startline;
       int starty;
       if ( ps.line1num < 0 ) {
@@ -2761,6 +2760,7 @@ void tparagraph :: displaycursor ( void )
       }
                    
       if ( starty  < winy2 ) {
+         collategraphicoperations cgo ( winx1 + cursorx-2,   starty, winx1 + cursorx+2,   starty + activefontsettings.height );
          setinvisiblemouserectanglestk ( winx1 + cursorx-2,   starty, winx1 + cursorx+2,   starty + activefontsettings.height  );
          xorline ( winx1 + cursorx,   starty+1, winx1 + cursorx,   starty + activefontsettings.height - 1, blue  );
          if ( cursorx )
@@ -2782,7 +2782,6 @@ void tparagraph :: setpos ( int x1, int y1, int y2, int linepos, int linenum  )
 
 void tparagraph :: display ( void )
 {
-   collategraphicoperations cgo;
    if ( cursorstat )
       displaycursor();
    cursorstat = 0;
@@ -3017,7 +3016,6 @@ tnewmessage :: tnewmessage ( void )
 
 void tnewmessage :: init ( void )
 {
-   collategraphicoperations cgo;
    tdialogbox :: init ( );
    title = rtitle;
    for ( int i = 0; i < 8; i++ ) 
@@ -3115,7 +3113,6 @@ class teditmessage : public tmessagedlg  {
 
 void teditmessage :: init ( pmessage msg  )
 {
-   collategraphicoperations cgo;
    message = msg;
    tdialogbox :: init ( );
    title = "edit message";

@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.15 2000-01-04 19:43:53 mbickel Exp $
+//     $Id: sg.cpp,v 1.16 2000-01-06 11:19:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/01/04 19:43:53  mbickel
+//      Continued Linux port
+//
 //     Revision 1.14  2000/01/02 19:47:08  mbickel
 //      Continued Linux port
 //      Fixed crash at program exit
@@ -2138,12 +2141,10 @@ void checkpulldown( tkey* ch )
    }
 }
 
-extern int a;
 void mainloopgeneralkeycheck ( tkey& ch )
 {
     // screensaverparameters.lasttick = ticker;
     ch = r_key();
-    a--;
     pd.key = ch;
     checkpulldown( &ch );
     keyinput[keyinputptr] = ch;

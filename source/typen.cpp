@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.6 1999-12-27 13:00:14 mbickel Exp $
+//     $Id: typen.cpp,v 1.7 2000-01-06 11:19:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/12/27 13:00:14  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.5  1999/12/07 22:02:08  mbickel
 //      Added vehicle function "no air refuelling"
 //
@@ -1237,7 +1241,7 @@ void tgameoptions :: setdefaults ( void )
    mouse.smallguibutton = 1;
    mouse.largeguibutton = -1;
    mouse.smalliconundermouse = 2;
-   mouse.centerbutton = 0;
+   mouse.centerbutton = 4;
    container.autoproduceammunition = 1;
    smallguiiconopenaftermove = 0;
    startupcount = 0;

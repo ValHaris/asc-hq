@@ -1,6 +1,9 @@
-//     $Id: dlg_box.cpp,v 1.11 2000-01-04 19:43:50 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.12 2000-01-06 11:19:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/01/04 19:43:50  mbickel
+//      Continued Linux port
+//
 //     Revision 1.10  2000/01/01 19:04:17  mbickel
 //     /tmp/cvsVhJ4Z3
 //
@@ -253,6 +256,9 @@ tvirtualscreenbuf:: ~tvirtualscreenbuf ()
 
 int  releasetimeslice( void )
 {
+   #ifndef _DOS_
+    SDL_Delay(10);
+   #endif
 /*    union REGS inregs, outregs;
     inregs.w.ax = 0x1680;
     int386 (0x2f, &inregs, &outregs);
@@ -1853,6 +1859,10 @@ void tdisplaymessage::init ( tstringa a, int md, int linenum )
       showtext2( a[i], x1+10, y1+20+i*20 );
    } /* endfor */
    status = 0;
+   if ( pcgo ) {
+      delete pcgo;
+      pcgo = NULL;
+   }
 }
 
 void tdisplaymessage::buttonpressed ( char id )

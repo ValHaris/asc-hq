@@ -1,6 +1,9 @@
-//     $Id: basestrm.cpp,v 1.12 2000-01-01 19:04:13 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.13 2000-01-06 11:19:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/01/01 19:04:13  mbickel
+//     /tmp/cvsVhJ4Z3
+//
 //     Revision 1.11  1999/12/29 17:38:05  mbickel
 //      Continued Linux port
 //
@@ -419,40 +422,36 @@ void         tnstream::readpnchar(char** pc, int maxlength )
    maxav--;
 
 
-   char* pch2 = charbuf.buf + 1;
-   pch2--;
+   char* pch2 = charbuf.buf;
 
    int ende = 0;
 
    do {
-     actpos2++;
-     pch2++;
+     char bt;
 
-     int red = readdata( pch2, 1, 0 );
+     int red = readdata( &bt, 1, 0 );
 
      if ( red < 1 ) {
-        ende = 1;
+        ende = 2;
         *pch2 = 0;
-     } 
+     } else
+       if ( bt == '\n' || bt == 0 ) {
+          *pch2 = 0;
+          ende = 1;
+       } else
+          if ( bt != '\r' ) {
+            *pch2 = bt;
+            pch2++;
+            actpos2++;
+          }
 
-     if ( !ende && *pch2 == '\r' ) {
-        actpos2--;
-        pch2--;
-     }
-
-     if ( !ende && *pch2 == '\n' ) 
-        *pch2 = 0;
-
-   } while ( !ende  && 
-             *pch2  && 
-             actpos2 < maxav ); /* enddo */
+   } while ( !ende  && actpos2 < maxav ); /* enddo */
 
 
    if ( !ende ) {
       if ( actpos2 >= maxav ) {
-         pch2[1] = 0;
-         actpos2++;
-   
+         *pch2 = 0;
+
          if ( pch2[0] ) {
             char temp;
             do {
@@ -460,17 +459,22 @@ void         tnstream::readpnchar(char** pc, int maxlength )
                int red = readdata( &temp, 1, 0 );
                if ( red < 1 )  {
                   temp = 0;
-               } 
+               }  else
+                 if ( temp == '\n' )
+                    temp = 0;
 
             } while ( temp ); /* enddo */
          }
       }
-                         
-      *pc = strdup ( charbuf.buf+1 );
-
+   }
+   if ( ende == 2 ) {
+      if ( !actpos2 )
+         *pc = NULL;
+      else
+         *pc = strdup ( charbuf.buf );
    } else
-      *pc = NULL;
-} 
+      *pc = strdup ( charbuf.buf );
+}
 
 
 

@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.4 2000-01-04 19:43:55 mbickel Exp $
+//     $Id: graphics.cpp,v 1.5 2000-01-06 11:19:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/01/04 19:43:55  mbickel
+//      Continued Linux port
+//
 //     Revision 1.3  2000/01/02 19:47:09  mbickel
 //      Continued Linux port
 //      Fixed crash at program exit
@@ -56,6 +59,7 @@ int initgraphics ( int x, int y, int depth )
   /* Clean up on exit */
   atexit(SDL_Quit);
 
+  SDL_WM_SetCaption ( "Advanced Strategic Command", NULL );
   /* Initialize the display in a 640x480 8-bit palettized mode */
   screen = SDL_SetVideoMode(x, y, depth, SDL_SWSURFACE | SDL_FULLSCREEN );
   if ( screen == NULL ) {

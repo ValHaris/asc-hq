@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.13 2000-01-04 19:43:49 mbickel Exp $
+//     $Id: dialog.cpp,v 1.14 2000-01-06 11:19:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/01/04 19:43:49  mbickel
+//      Continued Linux port
+//
 //     Revision 1.12  2000/01/02 20:23:37  mbickel
 //      Improved keyboard handling in dialog boxes under DOS
 //
@@ -4037,7 +4040,7 @@ void         tsetalliances::buildhlgraphics(void)
 
 void         tsetalliances::paintkeybar(void)
 { 
-  collategraphicoperations cgo;
+  collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );
  int          xx1, xx2;
 
    if (bx == 0) { 
@@ -4236,7 +4239,6 @@ void         tsetalliances::click(byte         bxx,
                                 byte         x,
                                 byte         y)
 { 
-  collategraphicoperations cgo;
 
    mousevisible(false);
    activefontsettings.color = 23 + y * 8; 
@@ -4788,7 +4790,6 @@ void         tviewanytext::run(void)
 
 void         tviewanytext:: init( char* ttl, char* text , int xx1 , int yy1  , int xxsize , int yysize  )
 { 
-  collategraphicoperations cgo;
 
    // dialogbox initialisieren
 
@@ -4844,7 +4845,7 @@ void         tviewanytext::repaintscrollbar ( void )
 
 void         tviewanytext::redraw(void)
 { 
-  collategraphicoperations cgo;
+  collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize);
 
    tdialogbox::redraw();
    rahmen(true,x1 + 10,y1 + textstart - 2,x1 + xsize - rightspace,y1 + textstart + textsizey + 2); 
@@ -5047,7 +5048,6 @@ boolean ResizeMap :: checkvalue(byte         id, pointer      p)
 
 void ResizeMap :: init ( void )
 {
-  collategraphicoperations cgo;
 
    top = 0;
    bottom = 0;
@@ -5427,7 +5427,6 @@ char* tmunitionsbox::strr ( int a ) {
 
 void         tverlademunition::init(void)
 { 
-  collategraphicoperations cgo;
 
    tmunitionsbox::init();
    x1 = 40;
@@ -5604,7 +5603,6 @@ void         tverlademunition::run(void)
 
    if ((fast & 1) == 0) {
       {
-         collategraphicoperations cgo;
          for (i = 0; i <= wp.count - 1; i++) {
             oldpos[i] = wp.weap[i].newdestamount;
          }
@@ -5744,7 +5742,6 @@ void         tverlademunition::run(void)
                mousevisible(true); 
             } 
             if ((op != 20) && (mp != op)) { 
-               collategraphicoperations cgo;
 
                mousevisible(false);
                if (!frst) 
@@ -5817,7 +5814,7 @@ void         tverlademunition::setvariables(  pvehicle svehicle, pvehicle svehic
 
 void         tverlademunition::zeichneschieberegler(byte         b)
 { 
-  collategraphicoperations cgo;
+//  collategraphicoperations cgo;
 
    int      l;
    byte         r;
@@ -6096,7 +6093,6 @@ void         tenterpassword ::lne(int          x1,
                  int          position,
                  boolean      einfuegen)
 {
-  collategraphicoperations cgo;
   char* ss2 = strdup ( s );
 
   int i = 0;
@@ -6107,7 +6103,8 @@ void         tenterpassword ::lne(int          x1,
   i = x1 + gettextwdth(ss2,activefontsettings.font);
   int j = y1; 
   int k = y1 + activefontsettings.font->height; 
-  xorline(i,j,i,k,3); 
+  collategraphicoperations cgo ( i-1, j, i+1, j );
+  xorline(i,j,i,k,3);
   if (einfuegen == false) { 
      xorline(i + 1,j,i + 1,k,3); 
      xorline(i - 1,j,i - 1,k,3); 

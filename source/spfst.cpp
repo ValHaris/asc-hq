@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.14 2000-01-04 19:43:53 mbickel Exp $
+//     $Id: spfst.cpp,v 1.15 2000-01-06 11:19:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/01/04 19:43:53  mbickel
+//      Continued Linux port
+//
 //     Revision 1.13  2000/01/01 19:04:19  mbickel
 //     /tmp/cvsVhJ4Z3
 //
@@ -6275,6 +6278,8 @@ const int mousehotspots[9][2] = { { 8, 0 }, { 15, 0 }, { 15, 8 }, { 15, 15 },
 
 void checkformousescrolling ( void )
 {
+
+   #ifdef _DOS_         // under Linux this does not work somehow
    if ( !mouseparams.x  ||  !mouseparams.y   ||  mouseparams.x >= hgmp->resolutionx-1  ||   mouseparams.y >= hgmp->resolutiony-1 ) {
       if ( mouseparams.taste == gameoptions.mouse.scrollbutton ) {
          if ( lastmousemapscrolltick + mousescrollspeed < ticker ) {
@@ -6339,6 +6344,7 @@ void checkformousescrolling ( void )
          }
       }
    }
+   #endif
 }
 
 

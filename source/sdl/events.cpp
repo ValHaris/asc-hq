@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.6 2000-01-04 19:43:54 mbickel Exp $
+//     $Id: events.cpp,v 1.7 2000-01-06 11:19:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/01/04 19:43:54  mbickel
+//      Continued Linux port
+//
 //     Revision 1.5  2000/01/02 19:47:08  mbickel
 //      Continued Linux port
 //      Fixed crash at program exit
@@ -94,9 +97,6 @@ byte getmousestatus ()
       return 0;
 }
 
-int a = 0;
-int b = 0;
-
 void callsubhandler ( void )
 {
      for ( int i = 0; i < mouseprocnum; i++ )
@@ -104,6 +104,7 @@ void callsubhandler ( void )
            pmouseprocs[i]->mouseaction();
 }
 
+const int mousetranslate[3] = { 0, 2,1 };  // in DOS  right button is 1 and center is 2
 
 int eventhandler ( void* nothing )
 {
@@ -113,7 +114,7 @@ int eventhandler ( void* nothing )
          switch ( event.type ) {
             case SDL_MOUSEBUTTONUP:
             case SDL_MOUSEBUTTONDOWN: {
-               int taste = event.button.button - 1;
+               int taste = mousetranslate[event.button.button - 1];
                int state = event.button.type == SDL_MOUSEBUTTONDOWN;
                if ( state )
                   mouseparams.taste |= (1 << taste);
@@ -128,7 +129,10 @@ int eventhandler ( void* nothing )
             case SDL_MOUSEMOTION: {
                mouseparams.x = event.motion.x;
                mouseparams.y = event.motion.y;
-               mouseparams.taste = event.motion.state;
+               mouseparams.taste = 0;
+               mouseparams.taste =  ((event.motion.state & 1) > 0) ||
+                                   (((event.motion.state & 2) > 0) >> 2) ||
+                                   (((event.motion.state & 4) > 0) >> 1);
                callsubhandler();
             }
             break;
@@ -145,9 +149,7 @@ int eventhandler ( void* nothing )
             	   keybuffer_sym.push ( key );
             	   keybuffer_prnt.push ( event.key.keysym.unicode );
             	   r = SDL_mutexV ( keyboardmutex );
-            	   a++;
-            	} else
-            	   b++;
+            	}
             }
             break;
             case SDL_KEYUP: {
@@ -157,7 +159,8 @@ int eventhandler ( void* nothing )
             case SDL_QUIT: exitprogram = 1;
             break;
          }
-      }
+      } else
+         SDL_Delay(10);
    }
    return 0;
 }
@@ -257,7 +260,8 @@ int mouseinrect ( const tmouserect* rect )
 
 void addmouseproc ( tsubmousehandler* proc )
 {
-   for (int i = 0; i < mouseprocnum ; i++) {
+   int i;
+   for (i = 0; i < mouseprocnum ; i++) {
       if ( !pmouseprocs[i] ) {
          pmouseprocs[i] = proc;
          break;
