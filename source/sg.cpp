@@ -1,6 +1,11 @@
-//     $Id: sg.cpp,v 1.63 2000-07-31 18:02:53 mbickel Exp $
+//     $Id: sg.cpp,v 1.64 2000-07-31 19:16:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2000/07/31 18:02:53  mbickel
+//      New configuration file handling
+//      ASC searches its data files in all directories specified in ascrc
+//      Renamed all tools so they begin with asc
+//
 //     Revision 1.62  2000/07/29 14:54:42  mbickel
 //      plain text configuration file implemented
 //
@@ -2423,42 +2428,6 @@ void mainloopgeneralmousecheck ( void )
     actgui->checkformouse();
 
     dashboard.checkformouse();
-
-    if ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )   &&   mouseparams.y >= 71    &&   mouseparams.y <= 79   && (mouseparams.taste & 1) ) {
-       pfield fld = getactfield();
-       if ( fieldvisiblenow ( fld ) ) {
-          if ( fld->vehicle )
-             displaymessage2("damage is %d", fld->vehicle->damage );
-          else
-          if ( fld->building )
-             displaymessage2("damage is %d", fld->building->damage );
-          else
-          if ( fld->object ) {
-             char temp[1000];
-             strcpy ( temp, "damage is " );
-             for ( int i = fld->object->objnum-1; i >= 0; i-- ) 
-                if ( fld->object->object[i]->typ->armor >= 0 ) {
-                   strcat ( temp, strrr ( fld->object->object[i]->damage ));
-                   strcat ( temp, " ");
-                }
-
-             displaymessage2( temp );
-          }
-
-       }
-       while ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )  &&   mouseparams.y >= 71    &&   mouseparams.y <= 79   && (mouseparams.taste & 1) )
-          releasetimeslice();
-    }
-
-    if ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )   &&   mouseparams.y >= 59    &&   mouseparams.y <= 67   && (mouseparams.taste & 1) ) {
-       pfield fld = getactfield();
-       if ( fieldvisiblenow ( fld ) ) {
-          if ( fld->vehicle )
-             displaymessage2("unit has %d fuel", fld->vehicle->fuel );
-       }
-       while ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )   &&   mouseparams.y >= 59    &&   mouseparams.y <= 67   && (mouseparams.taste & 1) )
-          releasetimeslice();
-    }
 
   if (lasttick + 5 < ticker) {
       if ((dashboard.x != getxpos()) || (dashboard.y != getypos())) {

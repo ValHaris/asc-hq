@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.18 2000-07-29 14:54:55 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.19 2000-07-31 19:16:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/07/29 14:54:55  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.17  2000/07/28 10:15:39  mbickel
 //      Fixed broken movement
 //      Fixed graphical artefacts when moving some airplanes
@@ -817,8 +820,9 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, int noInterrupt )
          else 
            vehicle->movement = 0;
 
-         if ( (vehicle->movement >> 3) > (vehicle->fuel / vehicle->typ->fuelconsumption) )
-            vehicle->movement = (vehicle->fuel << 3) / vehicle->typ->fuelconsumption;
+         if ( vehicle->typ->fuelconsumption )
+           if ( (vehicle->movement >> 3) > (vehicle->fuel / vehicle->typ->fuelconsumption) )
+              vehicle->movement = (vehicle->fuel << 3) / vehicle->typ->fuelconsumption;
       } 
       else { 
          vehicle->movement = 0;

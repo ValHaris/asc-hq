@@ -426,7 +426,7 @@ main (int argc, char *argv[] )
                 yn_switch ("yes", "no", 1, 0, change);
 
                 if ( change ) {
-                   printf("\n remember that floating and ground level count as same height !\n");
+                   printf("\n remember that floating and ground level count as same height !\nnegative height differences: shooting 'down', positive is shooting 'up'\n");
                    for ( int k = 0; k < 13; k++ ) {
                       printf(" \n height difference = %d \n", k - 6 );
                       num_ed ( ft->weapons->weapon[i].efficiency[k], 0, 100);

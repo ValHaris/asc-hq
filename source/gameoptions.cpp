@@ -68,13 +68,15 @@ void CGameOptions::setDefaults ( void )
    bi3.interpolate.buildings=0;
 
   #if defined ( _DOS_ ) | defined ( WIN32 )
-   searchPath[0].setName ( "./" );
+   searchPath[0].setName ( ".\\" );
    for ( int i = 1; i < 5; i++ )
       searchPath[i].setName ( NULL );
   #else
    searchPath[0].setName ( "~/.asc/" );
-   for ( int i = 1; i < 5; i++ )
-      searchPath[i].setName ( NULL );
+   searchPath[1].setName ( "/var/local/games/asc/" );
+   searchPath[2].setName ( "/var/games/asc/" );
+   searchPath[3].setName ( "/usr/local/share/games/asc/" );
+   searchPath[4].setName ( "/usr/share/games/asc/" );
   #endif
 
    changed	=	0;

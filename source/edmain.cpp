@@ -1,6 +1,11 @@
-//     $Id: edmain.cpp,v 1.16 2000-07-31 18:02:53 mbickel Exp $
+//     $Id: edmain.cpp,v 1.17 2000-07-31 19:16:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/07/31 18:02:53  mbickel
+//      New configuration file handling
+//      ASC searches its data files in all directories specified in ascrc
+//      Renamed all tools so they begin with asc
+//
 //     Revision 1.15  2000/07/16 14:20:02  mbickel
 //      AI has now some primitive tactics implemented
 //      Some clean up
@@ -857,6 +862,7 @@ int main(int argc, char *argv[] )
    #endif
 
    char *mapname = NULL, *configfile = NULL;
+   int showmodes = 0;
 
    for (i = 1; i<argc; i++ ) {
       if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {

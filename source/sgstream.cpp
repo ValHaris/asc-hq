@@ -1,6 +1,11 @@
-//     $Id: sgstream.cpp,v 1.18 2000-07-31 18:02:54 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.19 2000-07-31 19:16:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/07/31 18:02:54  mbickel
+//      New configuration file handling
+//      ASC searches its data files in all directories specified in ascrc
+//      Renamed all tools so they begin with asc
+//
 //     Revision 1.17  2000/07/29 15:28:36  mbickel
 //      Plaintext configfile runs now in Linux version too
 //
@@ -113,7 +118,33 @@
 #include <math.h>
 #include <stdarg.h>
 #include <sys/types.h>
-#include <dirent.h>
+
+
+#ifdef _DOS_
+ #include <direct.h> 
+#else
+
+ #ifdef HAVE_SYS_DIRENT_H
+  #include <sys/dirent.h>
+ #endif
+
+ #if HAVE_DIRENT_H
+  #include <dirent.h>
+  #define NAMLEN(dirent) strlen((dirent)->d_name)
+ #else
+  #define dirent direct
+  #define NAMLEN(dirent) (dirent)->d_namlen
+  #if HAVE_SYS_NDIR_H
+   #include <sys/ndir.h>
+  #endif
+  #if HAVE_SYS_DIR_H
+   #include <sys/dir.h>
+  #endif
+  #if HAVE_NDIR_H
+   #include <ndir.h>
+  #endif
+ #endif
+#endif
 
 
 #include <sys/stat.h>
@@ -2416,25 +2447,19 @@ t_carefor_containerstream :: t_carefor_containerstream ( void )
 }
 
 
-bool checkDirectoryExistance ( const char* path )
+bool MakeDirectory ( const char* path )
 {
    char tmp[10000];
    constructFileName( tmp, 0, path, NULL );
 
-   int existence = 0;
-
-   DIR *dirp = opendir( tmp );
-   if( dirp ) {
-      if ( readdir( dirp ) )
-         existence = 1;
-      else
-         existence = 0;
-
-      closedir( dirp );
-   }
+   int existence = directoryExist ( tmp );
 
    if ( !existence ) {
-      int res = mkdir ( tmp, 0700 );
+      #if defined(_DOS_) | defined(WIN32)
+       int res = mkdir ( tmp );
+      #else
+       int res = mkdir ( tmp, 0700 );
+      #endif
       if ( res ) {
          fprintf(stderr, "could neither access nor create work directory %s\n", tmp );
          return false;
@@ -2553,7 +2578,7 @@ int readgameoptions ( const char* filename )
    }
    #endif
 
-   checkDirectoryExistance ( gameoptions.searchPath[0].getName() );
+   MakeDirectory ( gameoptions.searchPath[0].getName() );
 
    return 0;
 }

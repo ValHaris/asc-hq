@@ -1,6 +1,11 @@
-//     $Id: basestrm.cpp,v 1.27 2000-07-31 18:02:52 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.28 2000-07-31 19:16:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/07/31 18:02:52  mbickel
+//      New configuration file handling
+//      ASC searches its data files in all directories specified in ascrc
+//      Renamed all tools so they begin with asc
+//
 //     Revision 1.26  2000/07/28 10:15:26  mbickel
 //      Fixed broken movement
 //      Fixed graphical artefacts when moving some airplanes
@@ -150,30 +155,29 @@
 #include "basestrm.h"
 
 #ifdef _DOS_
-#include <direct.h> 
+ #include <direct.h> 
 #else
 
-#ifdef HAVE_SYS_DIRENT_H
-#include <sys/dirent.h>
-#endif
+ #ifdef HAVE_SYS_DIRENT_H
+  #include <sys/dirent.h>
+ #endif
 
-#if HAVE_DIRENT_H
-# include <dirent.h>
-# define NAMLEN(dirent) strlen((dirent)->d_name)
-#else
-# define dirent direct
-# define NAMLEN(dirent) (dirent)->d_namlen
-# if HAVE_SYS_NDIR_H
-#  include <sys/ndir.h>
-# endif
-# if HAVE_SYS_DIR_H
-#  include <sys/dir.h>
-# endif
-# if HAVE_NDIR_H
-#  include <ndir.h>
-# endif
-#endif
-
+ #if HAVE_DIRENT_H
+  #include <dirent.h>
+  #define NAMLEN(dirent) strlen((dirent)->d_name)
+ #else
+  #define dirent direct
+  #define NAMLEN(dirent) (dirent)->d_namlen
+  #if HAVE_SYS_NDIR_H
+   #include <sys/ndir.h>
+  #endif
+  #if HAVE_SYS_DIR_H
+   #include <sys/dir.h>
+  #endif
+  #if HAVE_NDIR_H
+   #include <ndir.h>
+  #endif
+ #endif
 #endif
 
 
@@ -1038,14 +1042,16 @@ char* constructFileName( char* buf, int directoryLevel, const char* path, const 
            strcpy ( buf, name2);
      }
 
-     if ( buf[0] == '~' && buf[1] == pathdelimitter )
-        if ( char* home = getenv ( "HOME" )) {
+     if ( buf[0] == '~' && buf[1] == pathdelimitter ) {
+        char* home = getenv ( "HOME" );
+        if ( home ) {
            char temp[1000];
            strcpy ( temp, buf );
            strcpy ( buf, home );
            appendbackslash ( buf );
            strcat ( buf, &temp[2]);
         }
+     }
 
 
      appendbackslash ( buf );
@@ -2210,14 +2216,40 @@ int filesize( char *name)
 }
 
 
+int directoryExist ( const char* path )
+{
+   int existence = 0;
+
+   DIR *dirp = opendir( path );
+   if( dirp ) {
+      if ( readdir( dirp ) )
+         existence = 1;
+      else
+         existence = 0;
+
+      closedir( dirp );
+   }
+   return existence;
+}
+
 void addSearchPath ( const char* path )
 {
    if ( path ) {
       char buf[1000];
-      char* string = new char[ strlen(path) + 10 ];
+      char* string = new char[ strlen(path) + 1000 ];
       strcpy ( string, constructFileName ( buf, -3, path, NULL ) );
 
-      ascDirectory[ searchDirNum++ ] = string;
+      if ( directoryExist( buf )) {
+         int found = 0;
+         for ( int i = 0; i < searchDirNum; i++ )
+            if ( strcmp ( string, ascDirectory[i]) == 0 )
+               found++;
+   
+         if ( !found ) 
+            ascDirectory[ searchDirNum++ ] = string;
+         else
+            delete[] string;
+      }
    }
 }
 

@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.49 2000-07-29 14:54:12 mbickel Exp $
+//     $Id: controls.cpp,v 1.50 2000-07-31 19:16:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2000/07/29 14:54:12  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.48  2000/07/23 17:59:51  mbickel
 //      various AI improvements
 //      new terrain information window
@@ -3923,6 +3926,7 @@ void         tdashboard::checkformouse ( int func )
              if ( dashboard.windheight > 2 )
                 dashboard.windheight = 0;
              dashboard.x = 0xffff;
+             paintwind(1);
              while ( mouseinrect ( agmp->resolutionx - ( 640 - 489 ), 284, agmp->resolutionx - ( 640 - 509 ), 294 ) && (mouseparams.taste & 1) )
                 releasetimeslice();
           }
@@ -3977,6 +3981,42 @@ void         tdashboard::checkformouse ( int func )
    if ( (vehicle || vehicletype  ) && mouseinrect ( agmp->resolutionx - ( 640 - 461 ), 89, agmp->resolutionx - ( 640 - 577 ), 196 ) && (mouseparams.taste == 2)) 
       paintlargeweaponinfo();
     
+
+   if ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )   &&   mouseparams.y >= 71    &&   mouseparams.y <= 79   && (mouseparams.taste & 1) ) {
+       pfield fld = getactfield();
+       if ( fieldvisiblenow ( fld ) ) {
+          if ( fld->vehicle )
+             displaymessage2("damage is %d", fld->vehicle->damage );
+          else
+          if ( fld->building )
+             displaymessage2("damage is %d", fld->building->damage );
+          else
+          if ( fld->object ) {
+             char temp[1000];
+             strcpy ( temp, "damage is " );
+             for ( int i = fld->object->objnum-1; i >= 0; i-- ) 
+                if ( fld->object->object[i]->typ->armor >= 0 ) {
+                   strcat ( temp, strrr ( fld->object->object[i]->damage ));
+                   strcat ( temp, " ");
+                }
+
+             displaymessage2( temp );
+          }
+
+       }
+       while ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )  &&   mouseparams.y >= 71    &&   mouseparams.y <= 79   && (mouseparams.taste & 1) )
+          releasetimeslice();
+   }
+
+   if ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )   &&   mouseparams.y >= 59    &&   mouseparams.y <= 67   && (mouseparams.taste & 1) ) {
+       pfield fld = getactfield();
+       if ( fieldvisiblenow ( fld ) ) {
+          if ( fld->vehicle )
+             displaymessage2("unit has %d fuel", fld->vehicle->fuel );
+       }
+       while ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )   &&   mouseparams.y >= 59    &&   mouseparams.y <= 67   && (mouseparams.taste & 1) )
+          releasetimeslice();
+   }
 }
 
 
@@ -4432,7 +4472,7 @@ int  tbuilding :: getresourceplus( int mode, tresources* gplus, int queryonly )
       }
 
       if ( (typ->special & cgminingstationb) && ( mode & 16 ) ) 
-         if ( queryonly || !work.mining.finished ) {
+         if ( queryonly || work.mining.finished < 3 ) {
             int mp = 0;
             int fp = 0;
             if ( queryonly )
@@ -4524,7 +4564,7 @@ class tprocessminingfields : public tsearchfields {
 
           public:
              void testfield ( void );
-             int  setup ( pbuilding bld, int& mm, int cm, int& mf, int cf, int abbuch );  // mm: maxmaterial, cm: capacity material
+             int  setup ( pbuilding bld, int& mm, int cm, int& mf, int cf, int abbuch, int resource );  // mm: maxmaterial, cm: capacity material
           };
 
 void tprocessminingfields :: testfield ( void )
@@ -4586,11 +4626,13 @@ void tprocessminingfields :: testfield ( void )
               fld->fuel =  fuelavail / resource_fuel_factor;
         }
 
-        if ( !fld->resourceview )
-           fld->resourceview = new tresourceview;
-        fld->resourceview->visible |= 1 << color;
-        fld->resourceview->fuelvisible[color] = fld->fuel;
-        fld->resourceview->materialvisible[color] = fld->material;
+        if ( abbuchen ) {
+           if ( !fld->resourceview )
+              fld->resourceview = new tresourceview;
+           fld->resourceview->visible |= 1 << color;
+           fld->resourceview->fuelvisible[color] = fld->fuel;
+           fld->resourceview->materialvisible[color] = fld->material;
+        }
 
 
      }
@@ -4598,13 +4640,15 @@ void tprocessminingfields :: testfield ( void )
 }
 
 
-int   tprocessminingfields :: setup ( pbuilding bld, int& mm, int cm, int& mf, int cf, int abbuch )  // mm: maxmaterial, cm: capacity material
+int   tprocessminingfields :: setup ( pbuilding bld, int& mm, int cm, int& mf, int cf, int abbuch, int res )  // mm: maxmaterial, cm: capacity material
 {
-   if ( bld->work.mining.finished ) {
+   if ( (bld->work.mining.finished & res) == res ) {
       mm =0;
       mf =0;
       return 0;
    }
+   int oldmm = mm;
+   int oldmf = mf;
 
    color = bld->color/8;
    abbuchen = abbuch;
@@ -4681,8 +4725,9 @@ int   tprocessminingfields :: setup ( pbuilding bld, int& mm, int cm, int& mf, i
             int g = bld->get_energy ( -bld->plus.resource[r] * perc / 1000, r, 0 );
             bld->work.mining.touse.resource[r] -= g;
          }
-      if ( !resourcesrequired )
-         bld->work.mining.finished = 1;
+      if ( !resourcesrequired ) 
+            bld->work.mining.finished+= res;
+      
 
    }
    return range;
@@ -4710,7 +4755,7 @@ int  tbuilding :: processmining ( int res, int abbuchen )
    tprocessminingfields pmf;
 
 
-   lastmineddist = pmf.setup ( this, maxmaterial, capmaterial, maxfuel, capfuel, abbuchen );
+   lastmineddist = pmf.setup ( this, maxmaterial, capmaterial, maxfuel, capfuel, abbuchen, res );
 
    if ( abbuchen ) {
       put_energy ( maxmaterial, 1 , 0 );
@@ -4855,7 +4900,7 @@ void tbuilding :: initwork ( void )
    tresources nul;
    nul.a.energy = 0; nul.a.material = 0; nul.a.fuel = 0;
 
-   work.mining.finished        = 1;
+   work.mining.finished        = 3;
    work.mining.did_something_atall      = 0;
 
    work.mining.did_something_lastpass   = 0;
@@ -4917,7 +4962,7 @@ int tbuilding :: worktodo ( void )
    if ( !work.wind_done  || !work.solar_done )
       return 1;
 
-   if ( !work.mining.finished  )
+   if ( work.mining.finished < 3 )
       return 1;
 
    if ( !work.resource_production.finished  )

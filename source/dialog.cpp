@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.35 2000-07-29 14:54:17 mbickel Exp $
+//     $Id: dialog.cpp,v 1.36 2000-07-31 19:16:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2000/07/29 14:54:17  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.34  2000/07/23 17:59:52  mbickel
 //      various AI improvements
 //      new terrain information window
@@ -6099,8 +6102,19 @@ void viewterraininfo ( void )
          strcat ( text, "#aeinzug0##eeinzug0#\n\n"
                         "#font02#Vehicle Information:#font01##aeinzug20##eeinzug20##crtp10#" );
 
-
          pvehicletype typ = getactfield()->vehicle->typ;
+
+
+         strcat ( text, "Unit name: " );
+         if ( typ->name && typ->name[0] )
+            strcat( text, typ->name );
+         else
+            if ( typ->description  &&  typ->description[0] )
+               strcat( text, typ->description );
+
+         char t3[1000];
+         sprintf(t3, "Unit ID: %d \n", typ->id );
+         strcat ( text, t3 );
 
          strcat ( text, "the unit can drive onto the following fields:\n" );
          appendTerrainBits ( text, &typ->terrainaccess->terrain );
