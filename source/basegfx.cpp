@@ -13,6 +13,11 @@ tgraphmodeparameters *hgmp = (tgraphmodeparameters *) & hardwaregraphmodeparamet
 
 int xlatbuffersize = 66000;
 
+#ifdef _DOS_
+ #define CheckForDirectScreenAccess 
+#else
+ #define CheckForDirectScreenAccess if (agmp->directscreenaccess == 0) copy2screen();
+#endif
 
 void generategrayxlattable( ppixelxlattable tab, byte offset, byte size)
 {
@@ -72,6 +77,7 @@ rahmen(boolean invers,
 		col = darkgray;
 	line(x2, y1, x2, y2, col);
 	line(x1, y2, x2, y2, col);
+    CheckForDirectScreenAccess
 }
 
 void tdrawline :: start ( int x1, int y1, int x2, int y2 )
@@ -211,6 +217,8 @@ line(int  x1,
         	}
          } /* endif */
      }
+
+     CheckForDirectScreenAccess
 }
 
 void 
@@ -262,6 +270,8 @@ xorline(int  x1,
 
 	}
      }
+
+     CheckForDirectScreenAccess
 }
 
 
@@ -277,6 +287,8 @@ rectangle(int x1,
 	line(x1, y1, x2, y1, color);
 	line(x2, y1, x2, y2, color);
 	line(x1, y2, x2, y2, color);
+
+   CheckForDirectScreenAccess
 }
 
 
@@ -290,6 +302,8 @@ void xorrectangle(int x1,
           xorline(x1,y1,x2,y1,color);
           xorline(x2,y1,x2,y2,color); 
           xorline(x1,y2,x2,y2,color);
+
+   CheckForDirectScreenAccess
 }
 
 /*
@@ -408,8 +422,9 @@ void putshadow ( int x1, int y1, void* ptr, ppixelxlattable xl )
          }
          buf+=spacelength;
       }
-   } else {
    }
+
+   CheckForDirectScreenAccess
 }
 
 void putpicturemix ( int x1, int y1, void* ptr, int rotation, char* mixbuf )
@@ -435,6 +450,8 @@ void putpicturemix ( int x1, int y1, void* ptr, int rotation, char* mixbuf )
          buf+=spacelength;
       }
    }
+
+   CheckForDirectScreenAccess
 }
 
 
@@ -459,8 +476,9 @@ void putinterlacedrotimage ( int x1, int y1, void* ptr, int rotation )
          }
          buf+=spacelength;
       }
-   } else {
    }
+
+   CheckForDirectScreenAccess
 }
 
 
@@ -555,6 +573,8 @@ void putpixel(int x1, int y1, int color)
         */ 
       }
    }
+
+   CheckForDirectScreenAccess
 }
 
 int getpixel(int x1, int y1)
@@ -1023,6 +1043,8 @@ void ellipse ( int x1, int y1, int x2, int y2, int color, float tolerance )
             putpixel ( x, y, color );
       }
 
+   CheckForDirectScreenAccess
+
 }
 
 
@@ -1069,6 +1091,7 @@ void tvirtualdisplay :: init ( int x, int y, int color )
    agmp->byteperpix   = 1    ;
    agmp->linearaddress = (int) buf ;
    agmp->bitperpix          = 8;
+   agmp->directscreenaccess = 1;
 
 }
 
@@ -1111,12 +1134,16 @@ void putpixel8 ( int x1, int y1, int color )
 {
     char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
     *buf = color;
+
+   CheckForDirectScreenAccess
 }
 
 int getpixel8 ( int x1, int y1 )
 {
     char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
     return *buf;
+
+   CheckForDirectScreenAccess
 }
 
 
@@ -1132,6 +1159,8 @@ void bar(int x1, int y1, int x2, int y2, char color)
          buf+=spacelength;
       }
    }
+
+   CheckForDirectScreenAccess
 }
 
 
@@ -1155,6 +1184,8 @@ void getimage(int x1, int y1, int x2, int y2, void *buffer)
          buf+=spacelength;
       }
    }
+
+   CheckForDirectScreenAccess
 }
 
 void putimage ( int x1, int y1, void* img )
@@ -1204,6 +1235,8 @@ void putimage ( int x1, int y1, void* img )
          }
       }
    }
+
+   CheckForDirectScreenAccess
 }
 
 void putxlatfilter ( int x1, int y1, void* pic, char* xlattables )
@@ -1256,6 +1289,8 @@ void putxlatfilter ( int x1, int y1, void* pic, char* xlattables )
          }
       }
    }
+
+   CheckForDirectScreenAccess
 }
 
 
@@ -1311,6 +1346,8 @@ void putspriteimage ( int x1, int y1, void* pic )
          }
       }
    }
+
+   CheckForDirectScreenAccess
 }
 
 void putrotspriteimage(int x1, int y1, void *pic, int rotationvalue)
@@ -1379,6 +1416,8 @@ void putrotspriteimage(int x1, int y1, void *pic, int rotationvalue)
          }
       }
    }
+
+   CheckForDirectScreenAccess
 }
 
 void putrotspriteimage90(int x1, int y1, void *pic, int rotationvalue)
@@ -1404,6 +1443,8 @@ void putrotspriteimage90(int x1, int y1, void *pic, int rotationvalue)
          buf+=spacelength;
       }
    }
+
+   CheckForDirectScreenAccess
 }
 
 void putrotspriteimage180(int x1, int y1, void *pic, int rotationvalue)
@@ -1429,6 +1470,8 @@ void putrotspriteimage180(int x1, int y1, void *pic, int rotationvalue)
          buf+=spacelength;
       }
    }
+
+   CheckForDirectScreenAccess
 }
 
 void putrotspriteimage270(int x1, int y1, void *pic, int rotationvalue)
@@ -1454,6 +1497,8 @@ void putrotspriteimage270(int x1, int y1, void *pic, int rotationvalue)
          buf+=spacelength;
       }
    }
+
+   CheckForDirectScreenAccess
 }
 
 void puttexture ( int x1, int y1, int x2, int y2, void *texture )
@@ -1473,6 +1518,8 @@ void puttexture ( int x1, int y1, int x2, int y2, void *texture )
          offset+=spacelength;
       }
    }
+
+   CheckForDirectScreenAccess
 }
 
 
@@ -1495,6 +1542,8 @@ void putspritetexture ( int x1, int y1, int x2, int y2, void *texture )
          offset+=spacelength;
       }
    }
+
+   CheckForDirectScreenAccess
 }
 
 void putimageprt ( int x1, int y1, int x2, int y2, void *texture, int dx, int dy )
@@ -1515,11 +1564,15 @@ void putimageprt ( int x1, int y1, int x2, int y2, void *texture, int dx, int dy
          buf+=spacelength;
       }
    }
+
+   CheckForDirectScreenAccess
 }
 
 void copybuf2displaymemory(int size, void *buf)
 {
    memcpy ( (void*) agmp->linearaddress, buf, size );
+
+   CheckForDirectScreenAccess
 }         
 
 
@@ -1741,6 +1794,8 @@ void showtext ( const char* text, int x, int y, int textcol )
              *(fb++) = activefontsettings.background;
           fb += spacelength;
        }
+
+   CheckForDirectScreenAccess
 }
 
 void showtext2 ( const char* text, int x, int y )

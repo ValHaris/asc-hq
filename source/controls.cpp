@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.6 1999-11-23 21:07:23 mbickel Exp $
+//     $Id: controls.cpp,v 1.7 1999-11-25 22:00:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/11/23 21:07:23  mbickel
+//      Many small bugfixes
+//
 //     Revision 1.5  1999/11/22 18:26:59  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -3924,6 +3927,268 @@ void         tdashboard::paintweapons(void)
     } 
  } 
  
+
+void         tdashboard :: paintlargeweaponinfo ( void )
+{
+   int x = (agmp->resolutionx - 640) / 2;
+
+   int height, width;
+   getpicsize ( icons.weaponinfo[0], width, height );
+
+   setinvisiblemouserectanglestk ( x, 150, x + width, 150 + height );
+   putimage ( x, 150, icons.weaponinfo[0] );
+   getinvisiblemouserectanglestk ();
+
+   int i = 0;
+   int serv = -1;
+   if ( vehicle ) { 
+       if ( vehicle->typ->weapons->count ) 
+          for ( int j = 0; j < vehicle->typ->weapons->count ; j++) { 
+             if ( vehicle->typ->weapons->weapon[j].typ & (cwweapon | cwmineb )) { 
+                paintlargeweapon(i, cwaffentypen[ log2 ( vehicle->typ->weapons->weapon[j].typ & (cwweapon | cwmineb ))], vehicle->ammo[j], vehicle->typ->weapons->weapon[j].count,
+                               vehicle->typ->weapons->weapon[j].typ & cwshootableb, vehicle->typ->weapons->weapon[j].typ & cwammunitionb, 
+                               vehicle->typ->weapons->weapon[j].maxstrength, vehicle->typ->weapons->weapon[j].minstrength, 
+                               vehicle->typ->weapons->weapon[j].maxdistance, vehicle->typ->weapons->weapon[j].mindistance,
+                               vehicle->typ->weapons->weapon[j].sourceheight, vehicle->typ->weapons->weapon[j].targ );
+                i++; 
+             } 
+             else 
+                if (vehicle->typ->weapons->weapon[j].typ & cwserviceb) 
+                   serv = j;
+          }
+       
+       if ( serv >= 0 ) {
+          paintlargeweapon(i, cwaffentypen[ cwservicen ], -1, -1, -1, -1, -1, -1, 
+                         vehicle->typ->weapons->weapon[serv].maxdistance, vehicle->typ->weapons->weapon[serv].mindistance,
+                         vehicle->typ->weapons->weapon[serv].sourceheight, vehicle->typ->weapons->weapon[serv].targ );
+          i++; 
+       }
+       if ( vehicle->typ->energy ) { 
+          paintlargeweapon(i, cdnames[ 0 ], vehicle->energy, vehicle->typ->energy, -1, -1, -1, -1, -1, -1, -1, -1 );
+          i++; 
+       } 
+       if ( (serv>= 0 || (vehicle->functions & cfmaterialref)) && vehicle->typ->material ) { 
+          paintlargeweapon(i, cdnames[ 1 ], vehicle->material, vehicle->typ->material, -1, -1, -1, -1, -1, -1, -1, -1 );
+          i++; 
+       } 
+       if ( (serv>= 0 || (vehicle->functions & cffuelref)) && vehicle->typ->tank ) { 
+          paintlargeweapon(i, cdnames[ 2 ], vehicle->fuel, vehicle->typ->tank, -1, -1, -1, -1, -1, -1, -1, -1 );
+          i++; 
+       } 
+       
+      {
+         int x = (agmp->resolutionx - 640) / 2;
+         int y = 150 + 28 + i * 14;
+      
+         int height, width;
+         getpicsize ( icons.weaponinfo[4], width, height );
+      
+         setinvisiblemouserectanglestk ( x, y, x + width, y + height );
+      
+         putspriteimage ( x, y, icons.weaponinfo[4] );
+      
+         activefontsettings.justify = centertext;
+         activefontsettings.font = schriften.guifont;
+         activefontsettings.height = 11;
+         activefontsettings.length = 80;
+         activefontsettings.background = 255;
+         if ( vehicle->typ->wait )
+            showtext2c ( "no", x + 140, y +  2 );
+         else
+            showtext2c ( "yes", x + 140, y +  2 );
+
+         if ( vehicle->functions & cf_moveafterattack )
+            showtext2c ( "yes", x + 364, y +  2 );
+         else
+            showtext2c ( "no", x + 364, y +  2 );
+      
+         getinvisiblemouserectanglestk ();
+         i++;
+      }
+
+
+    
+      int lastpainted = -1;
+      int first = 1;
+      while ( mouseparams.taste == 2) {
+         int topaint  = -1;
+         for ( int j = 0; j < vehicle->typ->weapons->count ; j++) {
+            int x = (agmp->resolutionx - 640) / 2;
+            int y = 150 + 28 + j * 14;
+            if ( vehicle->typ->weapons->weapon[j].typ & (cwweapon | cwmineb )) 
+               if ( vehicle->typ->weapons->weapon[j].typ & cwshootableb ) 
+                  if ( mouseinrect ( x, y, x + 640, y+ 14 ))
+                     topaint = j;
+         }
+         if ( topaint != lastpainted ) {
+            if ( topaint == -1 )
+               paintlargeweaponefficiency ( i, NULL, first );
+            else {
+               int effic[13];
+               for ( int k = 0; k < 13; k++ )
+                  effic[k] = vehicle->typ->weapons->weapon[topaint].efficiency[k];
+               int mindelta = 1000;
+               int maxdelta = -1000;
+               for ( int h1 = 0; h1 < 8; h1++ )
+                  for ( int h2 = 0; h2 < 8; h2++ )
+                     if ( vehicle->typ->weapons->weapon[topaint].sourceheight & ( 1 << h1 ))
+                        if ( vehicle->typ->weapons->weapon[topaint].targ & ( 1 << h2 )) {
+                           int delta = getheightdelta ( h1, h2);
+                           if ( delta > maxdelta )
+                              maxdelta = delta;
+                           if ( delta < mindelta )
+                              mindelta = delta;
+                        }
+               for ( int a = -6; a < mindelta; a++ )
+                  effic[6+a] = -1;
+               for ( int b = maxdelta+1; b < 7; b++ )
+                  effic[6+b] = -1;
+   
+               paintlargeweaponefficiency ( i, effic, first );
+            }
+            lastpainted = topaint;
+            first = 0;
+         }
+      }
+   }
+
+}
+
+void         tdashboard::paintlargeweaponefficiency ( int pos, int* e, int first )
+{
+   int x = (agmp->resolutionx - 640) / 2;
+   int y = 150 + 28 + pos * 14;
+
+   int height, width;
+   getpicsize ( icons.weaponinfo[1], width, height );
+
+   setinvisiblemouserectanglestk ( x, y, x + width, y + height );
+
+   if ( first )
+      putspriteimage ( x, y, icons.weaponinfo[3] );
+
+   static int bk1 = -1;
+   static int bk2 = -1;
+   if ( bk1 == -1 ) 
+      bk1 = getpixel ( x + 100, y + 5 );
+   if ( bk2 == -1 ) 
+      bk2 = getpixel ( x + 100, y + 19);
+   
+   activefontsettings.justify = centertext;
+   activefontsettings.font = schriften.guifont;
+   activefontsettings.height = 10;
+   activefontsettings.length = 36;
+   for ( int i = 0; i < 13; i++ )
+      if ( e && e[i] != -1 ) {
+         activefontsettings.background = bk1;
+         showtext2c ( strrr ( i - 6 ), x + 88 + i * 42, y +  2 );
+         activefontsettings.background = bk2;
+         showtext4c ( "%s%%", x + 88 + i * 42, y + 15, strrr ( e[i] ) );
+      } else {
+         activefontsettings.background = bk1;
+         showtext2c ( "", x + 88 + i * 42, y +  2 );
+         activefontsettings.background = bk2;
+         showtext2c ( "",  x + 88 + i * 42, y + 15 );
+     }
+
+     getinvisiblemouserectanglestk ();
+}
+
+
+void         tdashboard::paintlargeweapon ( int pos, const char* name, int ammoact, int ammomax, int shoot, int refuel, int strengthmax, int strengthmin, int distmax, int distmin, int from, int to )
+{
+   int height, width;
+   getpicsize ( icons.weaponinfo[1], width, height );
+
+
+   int x = (agmp->resolutionx - 640) / 2;
+   int y = 150 + 28 + pos * 14;
+
+   setinvisiblemouserectanglestk ( x, y, x + width, y + height );
+
+   putspriteimage ( x, y, icons.weaponinfo[1] );
+   y += 4;
+
+   activefontsettings.background = 255;
+   activefontsettings.font = schriften.guifont;
+   activefontsettings.height = 11;
+   activefontsettings.length = 75;
+
+   if ( name ) {
+      activefontsettings.justify = lefttext;
+      activefontsettings.length = 75;
+      showtext2c ( name, x + 2, y );
+   }
+
+   if ( ammoact >= 0 ) {
+      activefontsettings.length = 20;
+      char buf[100];
+      char buf2[100];
+      sprintf(buf, "%s / %s", int2string ( ammoact, buf ), int2string ( ammomax, buf2 ) );
+      activefontsettings.length = 50;
+      activefontsettings.justify = centertext;
+      showtext2c ( buf, x + 77, y );
+   }
+
+   if ( shoot >= 0 ) {
+      activefontsettings.justify = centertext;
+      activefontsettings.length = 25;
+      if ( shoot )
+         showtext2c ( "yes", x + 130, y );
+      else
+         showtext2c ( "no", x + 130, y );
+   }
+
+   if ( refuel >= 0 ) {
+      activefontsettings.justify = centertext;
+      activefontsettings.length = 25;
+      if ( refuel )
+         showtext2c ( "yes", x + 158, y );
+      else
+         showtext2c ( "no", x + 158, y );
+   }
+
+   if ( strengthmax >= 0 ) {
+      activefontsettings.justify = lefttext;
+      activefontsettings.length = 38;
+      showtext2c ( strrr( strengthmax ), x + 190, y );
+   }
+
+   if ( strengthmin >= 0 ) {
+      activefontsettings.length = 38;
+      activefontsettings.justify = righttext;
+      showtext2c ( strrr( strengthmin ), x + 190, y );
+   }
+   
+   if ( distmin >= 0 ) {
+      activefontsettings.length = 36;
+      activefontsettings.justify = lefttext;
+      showtext2c ( strrrd8u( distmin ), x + 237, y );
+   }
+
+   if ( distmax >= 0 ) {
+      activefontsettings.length = 36;
+      activefontsettings.justify = righttext;
+      showtext2c ( strrrd8d( distmax ), x + 237, y );
+   }
+
+   if ( from > 0 ) 
+      for ( int i = 0; i < 8; i++ )
+         if ( from & ( 1 << i ))
+            putimage ( x + 285 + i * 22, y-2, icons.weaponinfo[2] );
+
+   if ( to > 0 ) 
+      for ( int i = 0; i < 8; i++ )
+         if ( to & ( 1 << i ))
+            putimage ( x + 465 + i * 22, y-2, icons.weaponinfo[2] );
+
+   activefontsettings.justify = lefttext;
+
+   getinvisiblemouserectanglestk ();
+}
+
+
+
  
 void         tdashboard::allocmem ( void )
 {
@@ -4377,7 +4642,7 @@ void         tdashboard::checkformouse ( void )
 
        while ( mouseparams.taste == 2 );
     }
-
+    /*
     if ( mouseinrect ( agmp->resolutionx - ( 800 - 620),  90, agmp->resolutionx - ( 800 - 735), 196 ) && (mouseparams.taste == 2)) {
        npush ( activefontsettings );
        materialdisplayed = !materialdisplayed;
@@ -4387,6 +4652,7 @@ void         tdashboard::checkformouse ( void )
        getinvisiblemouserectanglestk ();
        npop ( activefontsettings );
     }
+    */
 
     if ( smallmap  &&  gameoptions.smallmapactive )
        smallmap->checkformouse();
@@ -4411,7 +4677,7 @@ void         tdashboard::checkformouse ( void )
        while ( mouseparams.x >= agmp->resolutionx - ( 640 - 578 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 609 )  &&   mouseparams.y >=  59   &&   mouseparams.y <=  67  && (mouseparams.taste & 1) ) ;
     }
 
-    for ( int i = 0; i < 8; i++ )
+    for ( int i = 0; i < 8; i++ ) {
        if ( dashboard.weaps[i].displayed )
           if ( mouseinrect ( agmp->resolutionx - ( 640 - 502 ), 92 + i * 13, agmp->resolutionx - ( 640 - 572 ), 102 + i * 13 ) && (mouseparams.taste == 1)) {
              char tmp1[100];
@@ -4422,7 +4688,13 @@ void         tdashboard::checkformouse ( void )
 
              while ( mouseinrect ( agmp->resolutionx - ( 640 - 502 ), 92 + i * 13, agmp->resolutionx - ( 640 - 572 ), 102 + i * 13 ) && (mouseparams.taste == 1));
           }
+   }
 
+   if ( vehicle && mouseinrect ( agmp->resolutionx - ( 640 - 461 ), 89, agmp->resolutionx - ( 640 - 577 ), 196 ) && (mouseparams.taste == 2)) {
+      paintlargeweaponinfo();
+      repaintdisplay();
+   }
+    
    #ifdef FREEMAPZOOM
     if ( mouseparams.taste == 1 )
        if ( mouseinrect ( zoom.x1, zoom.y1, zoom.x2, zoom.y2 )) {

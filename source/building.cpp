@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.6 1999-11-23 21:07:21 mbickel Exp $
+//     $Id: building.cpp,v 1.7 1999-11-25 21:59:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/11/23 21:07:21  mbickel
+//      Many small bugfixes
+//
 //     Revision 1.5  1999/11/22 18:26:53  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -4562,37 +4565,6 @@ int  ccontainer_b :: cresourceinfo_subwindow :: getvalue ( int resourcetype, int
   return -1;
 }
 
-
-char* ccontainer_b :: cresourceinfo_subwindow :: int2string ( int i, char* buf )
-{
-   if ( i >= 0 ) 
-      itoa ( i, buf, 10 );
-   else {
-      buf[0] = '-';
-      i = -i;
-      itoa ( i, &buf[1], 10 );
-   }
-   if ( gettextwdth ( buf, NULL ) > activefontsettings.length   &&  activefontsettings.length) {
-      int pot  = (int)log10 ( i );
-      int base = (int)pow ( 10, pot );
-      int first = i / base;
-      int rest = i - first * base;
-
-      buf[0] = digit[ first ][0];
-      buf[1] = '.';
-      int p = 2;
-      for ( int a = 0; a < 2; a++ ) {
-         base /= 10;
-         buf[p++] = digit[ rest /  base ][0];
-         rest = rest % base;
-      }
-      buf[4] = 'E';
-      buf[5] = 0;
-      strcat ( buf, strrr ( pot ));
-   }
-   return buf;
-
-}
 
 void ccontainer_b :: cresourceinfo_subwindow :: displayvariables( void )
 {

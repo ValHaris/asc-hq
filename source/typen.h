@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.4 1999-11-23 21:07:41 mbickel Exp $
+//     $Id: typen.h,v 1.5 1999-11-25 22:00:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/23 21:07:41  mbickel
+//      Many small bugfixes
+//
 //     Revision 1.3  1999/11/16 17:04:18  mbickel
 //     Made ASC compilable for DOS again :-)
 //     Merged all the bug fixes in that I did last week
@@ -1553,6 +1556,7 @@ struct thexpic {
                void*        computer;
                void*        windbackground;
                void*        smallmapbackground;
+               void*        weaponinfo[5];
                void*        X;
                struct {
                   struct       {

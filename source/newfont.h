@@ -1,6 +1,15 @@
-//     $Id: newfont.h,v 1.3 1999-11-22 18:27:45 mbickel Exp $
+//     $Id: newfont.h,v 1.4 1999-11-25 22:00:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/22 18:27:45  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:42:16  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -143,6 +152,7 @@ extern pfont loadfont(char* filename);
 extern pfont loadfont( pnstream stream );
 
 extern void showtext4 ( const char* TextToOutput, int x1, int y1, ... );
+extern void showtext4c ( const char* TextToOutput, int x1, int y1, ... );
 
 
 extern void         showtext3( const char *       txt,
@@ -157,5 +167,7 @@ extern void shrinkfont ( pfont font, int diff );
 
 
 extern const char* fontid;
+extern char* int2string ( int i, char* buf );
+
 
 #endif

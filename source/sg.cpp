@@ -1,6 +1,15 @@
-//     $Id: sg.cpp,v 1.5 1999-11-22 18:27:49 mbickel Exp $
+//     $Id: sg.cpp,v 1.6 1999-11-25 22:00:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/11/22 18:27:49  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.4  1999/11/18 17:31:18  mbickel
 //      Improved BI-map import translation tables
 //      Moved macros to substitute Watcom specific routines into global.h
@@ -1273,6 +1282,12 @@ void         loadcursor(void)
    {
       tnfilestream stream ("hex2oct.raw", 1);
       stream.readrlepict (   &icons.hex2octmask, false, &w );
+   }
+
+   {
+      tnfilestream stream ("weapinfo.raw", 1);
+      for ( int i = 0; i < 5; i++ )
+         stream.readrlepict (   &icons.weaponinfo[i], false, &w );
    }
 
    backgroundpict.load();

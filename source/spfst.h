@@ -1,6 +1,15 @@
-//     $Id: spfst.h,v 1.3 1999-11-22 18:28:02 mbickel Exp $
+//     $Id: spfst.h,v 1.4 1999-11-25 22:00:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/22 18:28:02  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:42:35  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -194,8 +203,7 @@
 
   extern pweapdist weapdist; 
 
-
-  /*  bildschirmanzeige mit cursor  */ 
+extern int getheightdelta ( int height1, int height2 );
 
 extern void  movecursor(tkey         ch);
 

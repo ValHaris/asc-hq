@@ -1,6 +1,14 @@
-//     $Id: controls.h,v 1.2 1999-11-16 03:41:18 tmwilson Exp $
+//     $Id: controls.h,v 1.3 1999-11-25 22:00:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:18  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -77,6 +85,9 @@
                        void         paintplayer( void );
                        void         paintalliances ( void ); 
                        void         paintsmallmap ( int repaint = 0  );
+                       void         paintlargeweaponinfo ( void );
+                       void         paintlargeweapon ( int pos, const char* name, int ammoact, int ammomax, int shoot, int refuel, int strengthmax, int strengthmin, int distmax, int distmin, int from, int to );
+                       void         paintlargeweaponefficiency ( int pos, int* e, int alreadypainted );
                      #ifdef FREEMAPZOOM
                        void         paintzoom( void );
                      public:

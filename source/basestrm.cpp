@@ -1,6 +1,15 @@
-//     $Id: basestrm.cpp,v 1.5 1999-11-22 18:26:50 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.6 1999-11-25 21:59:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/11/22 18:26:50  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.4  1999/11/18 17:30:59  mbickel
 //      Improved BI-map import translation tables
 //      Moved macros to substitute Watcom specific routines into global.h
@@ -593,7 +602,9 @@ int tn_file_buf_stream::gettime ( void )
           direntp = readdir( dirp ); 
           if ( direntp == NULL ) 
              break; 
-	  //          time =  ( direntp ->d_date << 16) + direntp ->d_time;
+         #ifdef _DOS_    
+	  time =  ( direntp ->d_date << 16) + direntp ->d_time;
+         #endif
         } 
         closedir( dirp ); 
       } 
@@ -614,7 +625,9 @@ int getfiletime ( char* devicename )
           direntp = readdir( dirp ); 
           if ( direntp == NULL ) 
              break; 
-	  //          time =  ( direntp ->d_date << 16) + direntp ->d_time;
+         #ifdef _DOS_    
+	  time =  ( direntp ->d_date << 16) + direntp ->d_time;
+         #endif
         } 
         closedir( dirp ); 
       } 

@@ -1,6 +1,15 @@
-//     $Id: newfont.cpp,v 1.3 1999-11-22 18:27:44 mbickel Exp $
+//     $Id: newfont.cpp,v 1.4 1999-11-25 22:00:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/22 18:27:44  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:42:15  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -34,11 +43,14 @@
 #include <stdio.h>
 #include <errno.h>
 #include <stdarg.h>
+#include <stdlib.h>
+#include <math.h>
 #include "global.h"
 #include "tpascal.inc"
 #include "newfont.h"
 #include "stack.h"
 #include "basestrm.h"
+#include "misc.h"
 
 #define blockread(a,b,c) fread(b,1,c,a)
 #define seek(a,b) fseek(a,b,SEEK_SET)
@@ -511,6 +523,16 @@ void showtext4 ( const char* TextToOutput, int x1, int y1, ... )
    showtext2 ( tempbuf, x1, y1 );
 }
 
+void showtext4c ( const char* TextToOutput, int x1, int y1, ... )
+{
+   va_list paramlist;
+   va_start ( paramlist, y1 );
+
+   char tempbuf[1000];
+
+   int lng = vsprintf( tempbuf, TextToOutput, paramlist );
+   showtext2c ( tempbuf, x1, y1 );
+}
 
 class InitNewfont {
          public:
@@ -519,3 +541,43 @@ class InitNewfont {
               memset( &activefontsettings, 0, sizeof ( activefontsettings ));
            };
       } initnewfont;
+
+char* int2string ( int i, char* buf )
+{
+   if ( i >= 0 ) 
+      itoa ( i, buf, 10 );
+   else {
+      buf[0] = '-';
+      i = -i;
+      itoa ( i, &buf[1], 10 );
+   }
+   if ( gettextwdth ( buf, NULL ) > activefontsettings.length   &&  activefontsettings.length) {
+      char buf2[50];
+
+      int pot  = log10 ( i );
+      int base = pow ( 10, pot );
+      int first = i / base;
+      int rest = i - first * base;
+
+      buf2[0] = digit[ first ][0];
+      int p = 1;
+      buf2[p] = 'E';
+      buf2[p+1] = 0;
+      strcat ( buf2, strrr ( pot ));
+
+      while ( gettextwdth ( buf2, NULL ) < activefontsettings.length) {
+         strcpy ( buf, buf2 );
+         base /= 10;
+         if ( p == 1 )
+            buf2[p++] = '.';
+         buf2[p++] = digit[ rest /  base ][0];
+         rest = rest % base;
+
+         buf2[p] = 'E';
+         buf2[p+1] = 0;
+         strcat ( buf2, strrr ( pot ));
+      } /* endwhile */
+   }
+   return buf;
+
+}

@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.5 1999-11-23 21:07:35 mbickel Exp $
+//     $Id: spfst.cpp,v 1.6 1999-11-25 22:00:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/11/23 21:07:35  mbickel
+//      Many small bugfixes
+//
 //     Revision 1.4  1999/11/22 18:27:57  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -649,18 +652,24 @@ char tweapdist::getweapstrength ( const SingleWeapon* weap, int dist, int attack
    int relstrength = 255 - ( 255 - data[typ][reldiff] ) * minstrength / ( 255 - data[typ][255] );
                                  
    if ( attacker_height != -1 && defender_height!= -1 ) {
-      int ah = log2 ( attacker_height );
-      int dh = log2 ( defender_height );
-      int hd = dh - ah;
-   
-      if ( ah >= 3 && dh <= 2 ) 
-         hd++;
-      if (dh >= 3 && ah <= 2 )
-         hd--;
-   
+      int hd = getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ));
       return relstrength * weap->efficiency[6+hd] / 100;
    } else
       return relstrength;
+}
+
+int getheightdelta ( int height1, int height2 )
+{
+   int ah = height1;
+   int dh = height2;
+   int hd = dh - ah;
+ 
+   if ( ah >= 3 && dh <= 2 ) 
+      hd++;
+   if (dh >= 3 && ah <= 2 )
+      hd--;
+ 
+   return hd;
 }
 
 /*
