@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: ai.h,v 1.3 2001-04-03 11:54:17 mbickel Exp $
+//     $Id: ai.h,v 1.4 2001-05-24 15:37:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2001/04/03 11:54:17  mbickel
+//      AI Improvements: production , servicing
+//
 //     Revision 1.2  2001/04/01 12:59:35  mbickel
 //      Updated win32 project files to new ai file structure
 //      Added viewid win32-project
@@ -356,6 +359,10 @@
             static AiParameter::Job chooseJob ( const Vehicletype* typ, int functions );
             friend class CalculateThreat_Vehicle;
 
+            /** This structure helps identifying units which don't reach any
+                action because the AI wants to put them into the wrong sections.
+
+            map<int,int> wrongSectionDetection; */
 
             void  calculateAllThreats( void );
             AiResult  tactics( void );

@@ -108,7 +108,7 @@ int AStar::getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle 
        return MAXIMUM_PATH_LENGTH;
 
     int movecost, fuelcost;
-    calcmovemalus ( x1, y1, x2, y2, vehicle, -1, movecost, fuelcost );
+    calcmovemalus ( x1, y1, x2, y2, vehicle, -1, fuelcost, movecost );
     return movecost;
 }
 
@@ -203,6 +203,9 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
 
             // cursor.gotoxy ( hn.m, hn.n );
             int k = getMoveCost( N.h.m, N.h.n, hn.m, hn.n, veh );
+            if ( k > veh->maxMovement() )
+               k = MAXIMUM_PATH_LENGTH;
+
             Node N2;
             N2.h = hn;
             N2.gval = N.gval + k;
@@ -436,7 +439,7 @@ int AStar3D::getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& 
        return MAXIMUM_PATH_LENGTH;
 
     int movecost, fuelcost;
-    calcmovemalus ( start.x, start.y, dest.x, dest.y, vehicle, -1, movecost, fuelcost, dest.z );
+    calcmovemalus ( start.x, start.y, dest.x, dest.y, vehicle, -1, fuelcost, movecost, dest.z );
     return int(movecost / vehicleSpeedFactor[log2(dest.z)]);
 }
 
@@ -559,6 +562,8 @@ void AStar3D::findPath( const MapCoordinate3D& A, const MapCoordinate3D& B, Path
 
             // cursor.gotoxy ( hn.m, hn.n );
             int k = getMoveCost( N.h, hn, veh );
+            if ( k > veh->typ->movement[log2(hn.z)]  )
+               k = MAXIMUM_PATH_LENGTH;
             Node N2;
             N2.h = hn;
             N2.gval = N.gval + k;

@@ -4,9 +4,14 @@
 */
 
 
-//     $Id: gui.cpp,v 1.56 2001-04-01 12:59:35 mbickel Exp $
+//     $Id: gui.cpp,v 1.57 2001-05-24 15:37:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2001/04/01 12:59:35  mbickel
+//      Updated win32 project files to new ai file structure
+//      Added viewid win32-project
+//      Improved AI : production and service path finding
+//
 //     Revision 1.55  2001/02/26 12:35:15  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -2229,7 +2234,7 @@ int   tnsguiicondisablereactionfire::available    ( void )
       if ( eht->color == actmap->actplayer * 8) 
          if ( eht->reactionfire.getStatus() != Vehicle::ReactionFire::off )
             if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
-               if ( eht->weapexist() )
+               // if ( eht->weapexist() )
                   return 1;
 
    return 0;

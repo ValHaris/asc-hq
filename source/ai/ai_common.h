@@ -18,6 +18,9 @@
 #ifndef ai_common_h_included
  #define ai_common_h_included
 
+ // This header collects all other headers used by the various AI files so
+ // compilers that are able to use precompiled headers may do so.
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

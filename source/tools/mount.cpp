@@ -508,7 +508,7 @@ int main(int argc, char *argv[] )
    fclose ( out );
 
    if ( verbose ) {
-      printf(" average compression is %d%% \noverhead is %d byte \n", 100 * compsize / uncompsize, filesize ( argv[2] ) - compsize );
+     // printf(" average compression is %d%% \noverhead is %d byte \n", 100 * compsize / uncompsize, filesize ( argv[2] ) - compsize );
 
       printf ( "completed \n" );
    }

@@ -503,9 +503,10 @@ AI::AiResult AI::tactics( void )
 
    int hemmingBonus = 5;
 
-   int lastTactVehiclesSize = tactVehicles.size();
+   int lastTactVehiclesSize; // = tactVehicles.size();
 
    while ( !tactVehicles.empty() ) {
+      lastTactVehiclesSize = tactVehicles.size();
 
       typedef map<int, MoveVariantContainer> Targets;
       Targets targets;
@@ -706,7 +707,7 @@ AI::AiResult AI::tactics( void )
          tactVehicles.clear();
       }
       if ( lastTactVehiclesSize == tactVehicles.size() ) {
-         displaymessage ("AI :: tactics ; escaping infinite loop; please report this error !",1 );
+         // displaymessage ("AI :: tactics ; escaping infinite loop; please report this error !",1 );
          return result;
       }
 

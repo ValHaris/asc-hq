@@ -460,7 +460,7 @@ void     AI :: calculateAllThreats( void )
          // Now we cycle through all units of this player
          for ( Player::VehicleList::iterator vi = getPlayer(v).vehicleList.begin(); vi != getPlayer(v).vehicleList.end(); vi++ ) {
             pvehicle veh = *vi;
-            if ( !veh->aiparam[ getPlayerNum() ] )
+            // if ( !veh->aiparam[ getPlayerNum() ] )
                calculateThreat ( veh );
          }
 

@@ -182,7 +182,7 @@ mostlyclean-am:  mostlyclean-generic
 
 mostlyclean: mostlyclean-am
 
-clean-am:  clean-generic mostlyclean-am
+clean-am:  clean-generic mostlyclean-am clean-local
 
 clean: clean-am
 
@@ -206,6 +206,9 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 main.con: @MAINCONDATA@
 	../source/tools/linux/asc_mount @MAINCONDATA@ main.con
+
+clean-local:
+	rm main.con
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

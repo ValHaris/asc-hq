@@ -65,10 +65,10 @@ install=false
 install_location=
 type=DATA
 [Workspace_1]
-browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/tutorial/index-7.html
-cpp_file=/home/martin/asc/source/ai/buildingcapture.cpp
-header_file=/home/martin/asc/configure.in
-openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/strtmesg.cpp,/home/martin/asc/source/ai/ai.h,/home/martin/asc/source/ai/ai_common.h,/home/martin/asc/source/ai/buildingcapture.cpp,/home/martin/asc/configure.in
+browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/about/intro.html
+cpp_file=/home/martin/asc/source/ai/tactics.cpp
+header_file=Untitled.h
+openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/ai/tactics.cpp
 show_outputview=true
 show_treeview=true
 [asc.kdevprj]

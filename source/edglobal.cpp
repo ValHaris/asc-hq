@@ -2,9 +2,15 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.30 2001-02-26 12:35:10 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.31 2001-05-24 15:37:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2001/02/26 12:35:10  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.29  2001/02/11 11:39:32  mbickel
 //      Some cleanup and documentation
 //
@@ -757,14 +763,13 @@ void execaction(int code)
        break;
     case act_changeunitvals :   {
                  pf = getactfield();
-                 if (pf != NULL ) {
-                    if (pf->vehicle != NULL ) {
+                 if ( pf  ) {
+                    if ( pf->vehicle ) {
                        changeunitvalues(pf->vehicle); 
                        displaymap();
                     }
-                    else if (pf->building != NULL ) {
-                       gbde = getactfield()->building;
-                       changebuildingvalues(&gbde);
+                    else if ( pf->building ) {
+                       changebuildingvalues(*pf->building);
                     } /* endif */
                  } /* endif */
               } 

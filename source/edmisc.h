@@ -1,6 +1,12 @@
-//     $Id: edmisc.h,v 1.18 2001-03-30 12:43:16 mbickel Exp $
+//     $Id: edmisc.h,v 1.19 2001-05-24 15:37:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2001/03/30 12:43:16  mbickel
+//      Added 3D pathfinding
+//      some cleanup and documentation
+//      splitted the ai into several files, now located in the ai subdirectory
+//      AI cares about airplane servicing and range constraints
+//
 //     Revision 1.17  2000/11/29 11:05:28  mbickel
 //      Improved userinterface of the mapeditor
 //      map::preferredfilenames uses now strings (instead of char*)
@@ -274,7 +280,7 @@ extern void         lines(int      x1,int      y,int      x2,int      y2);
 
 extern void         changeunitvalues(pvehicle ae);
 extern void         changeresource(void);
-extern void         changebuildingvalues(pbuilding *  b);
+extern void         changebuildingvalues( Building& b);
 extern void         changeminestrength(void);
 extern void         newmap(void);
 extern void         changemapvalues(void);

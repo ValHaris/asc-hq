@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.30 2001-05-19 13:07:58 mbickel Exp $
+//     $Id: events.cpp,v 1.31 2001-05-24 15:37:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2001/05/19 13:07:58  mbickel
+//      ASC now compiles with Borland C++ Builder again
+//      Added getopt for use with BCB
+//
 //     Revision 1.29  2001/05/16 23:21:05  mbickel
 //      The data file is mounted using automake
 //      Added sgml documentation
@@ -646,7 +650,6 @@ void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mou
 #endif
 
    SDL_WaitThread ( secondThreadHandle, NULL );
-
 }
 
 

@@ -608,22 +608,24 @@ AI::AiResult AI :: executeServices ( )
   for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
       if ( !i->canWait() ) {
          pvehicle veh = i->getTargetUnit();
-         veh->aiparam[getPlayerNum()]->task = AiParameter::tsk_serviceRetreat;
          if ( i->getServiceUnit()) {
             veh->aiparam[ getPlayerNum() ]->dest = i->getServiceUnit()->getPosition();
             veh->aiparam[ getPlayerNum() ]->dest_nwid = i->getServiceUnit()->networkid;
+            veh->aiparam[ getPlayerNum() ]->task = AiParameter::tsk_serviceRetreat;
          } else {
             if ( (veh->height & ( chtieffliegend | chfliegend | chhochfliegend )) && veh->typ->fuelConsumption ) {
                AirplaneLanding apl ( *this, veh );
                MapCoordinate3D dst = apl.getNearestLandingPosition( true, true, false );
                if ( dst.x != -1 ) {
                   veh->aiparam[ getPlayerNum() ]->dest = dst;
+                  veh->aiparam[ getPlayerNum() ]->task = AiParameter::tsk_serviceRetreat;
                }
             } else {
                MapCoordinate3D dest = findServiceBuilding( *i );
-               if ( dest.valid() )
+               if ( dest.valid() ) {
                   veh->aiparam[ getPlayerNum() ]->dest = dest;
-               else {
+                  veh->aiparam[ getPlayerNum() ]->task = AiParameter::tsk_serviceRetreat;
+               } else {
                   // displaymessage("warning: no service building found found for unit %s - %d!",1, veh->typ->description, veh->typ->id);
                }
             }

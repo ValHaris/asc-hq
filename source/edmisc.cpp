@@ -2,9 +2,15 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.53 2001-03-30 12:43:15 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.54 2001-05-24 15:37:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2001/03/30 12:43:15  mbickel
+//      Added 3D pathfinding
+//      some cleanup and documentation
+//      splitted the ai into several files, now located in the ai subdirectory
+//      AI cares about airplane servicing and range constraints
+//
 //     Revision 1.52  2001/03/07 21:40:51  mbickel
 //      Lots of bugfixes in the mapeditor
 //
@@ -1548,7 +1554,7 @@ void         placebuilding(int               colorr,
    activefontsettings.background = lightgray;
    activefontsettings.length = 100;
    
-   changebuildingvalues(&gbde);
+   changebuildingvalues(*gbde);
    if (choose == true) 
       building_cargo( gbde );
 
@@ -2120,33 +2126,40 @@ void         changemapvalues(void)
 
 
 
-     class tsel : public tdialogbox {
-           public :
+     class BuildingValues : public tdialogbox {
                int action;
-               pbuilding gbde;
+               Building& gbde;
                int rs,mrs;
                Resources plus,mplus, biplus,storage;
                int col;
                char tvisible;
                char name[260];
-               void init(void);
-               virtual void run(void);
+               int ammo[waffenanzahl];
                virtual void buttonpressed(int id);
                int lockmaxproduction;
+               TemporaryContainerStorage buildingBackup; // if the editing is cancelled
+
+           public :
+               BuildingValues ( Building& building ) : gbde ( building ), buildingBackup ( &building ) {};
+               void init(void);
+               virtual void run(void);
             };
 
 
-void         tsel::init(void)
+void         BuildingValues::init(void)
 { word         w; 
   char      b;
+
+  for ( int i = 0; i< waffenanzahl; i++ )
+     ammo[i] = gbde.ammo[i];
 
    lockmaxproduction = 1;
 
    tdialogbox::init();
    action = 0; 
    title = "Building Values";
-   x1 = 90;
-   xsize = 445;
+   x1 = 0;
+   xsize = 640;
    y1 = 10;
    ysize = 440;
    w = (xsize - 60) / 2; 
@@ -2154,71 +2167,71 @@ void         tsel::init(void)
 
    windowstyle = windowstyle ^ dlg_in3d; 
 
-   storage = gbde->actstorage;
-   plus = gbde->plus;
-   mplus = gbde->maxplus; 
-   rs = gbde->researchpoints; 
-   mrs = gbde->maxresearchpoints;
-   tvisible = gbde->visible;
-   biplus = gbde->bi_resourceplus;
-   col = gbde->color / 8;
+   storage = gbde.actstorage;
+   plus = gbde.plus;
+   mplus = gbde.maxplus;
+   rs = gbde.researchpoints;
+   mrs = gbde.maxresearchpoints;
+   tvisible = gbde.visible;
+   biplus = gbde.bi_resourceplus;
+   col = gbde.color / 8;
 
-   strcpy( name, gbde->name.c_str() );
+   strcpy( name, gbde.name.c_str() );
 
-   addbutton("~N~ame",15,50,215,70,1,1,10,true); 
+   addbutton("~N~ame",15,50,215,70,1,1,10,true);
    addeingabe(10,&name[0],0,25);
 
-   addbutton("~E~nergy-Storage",15,90,215,110,2,1,1,true); 
-   addeingabe(1,&storage.energy,0,gbde->gettank(0));
+   addbutton("~E~nergy-Storage",15,90,215,110,2,1,1,true);
+   addeingabe(1,&storage.energy,0,gbde.gettank(0));
 
-   addbutton("~M~aterial-Storage",15,130,215,150,2,1,2,true); 
-   addeingabe(2,&storage.material,0,gbde->gettank(1));
+   addbutton("~M~aterial-Storage",15,130,215,150,2,1,2,true);
+   addeingabe(2,&storage.material,0,gbde.gettank(1));
 
-   addbutton("~F~uel-Storage",15,170,215,190,2,1,3,true); 
-   addeingabe(3,&storage.fuel,0,gbde->gettank(2));
+   addbutton("~F~uel-Storage",15,170,215,190,2,1,3,true);
+   addeingabe(3,&storage.fuel,0,gbde.gettank(2));
 
-   if ( gbde->typ->special & (cgconventionelpowerplantb | cgsolarkraftwerkb | cgwindkraftwerkb | cgminingstationb )) b = true;
+   if ( gbde.typ->special & (cgconventionelpowerplantb | cgsolarkraftwerkb | cgwindkraftwerkb | cgminingstationb )) b = true;
    else b = false;
 
    addbutton("Energy-Max-Plus",230,50,430,70,2,1,13,b);
-   addeingabe(13,&mplus.energy,0,gbde->typ->maxplus.energy);
-   
-   if ( gbde->typ->special & (cgconventionelpowerplantb | cgminingstationb )) b = true;
+   addeingabe(13,&mplus.energy,0,gbde.typ->maxplus.energy);
+
+   if ( gbde.typ->special & (cgconventionelpowerplantb | cgminingstationb )) b = true;
    else b = false;
 
    addbutton("Energ~y~-Plus",230,90,430,110,2,1,4,b);
    addeingabe(4,&plus.energy,0,mplus.energy);
-   
-   if ( (gbde->typ->special & cgconventionelpowerplantb) || ((gbde->typ->special & cgminingstationb ) && gbde->typ->efficiencymaterial ))
+
+   if ( (gbde.typ->special & cgconventionelpowerplantb) || ((gbde.typ->special & cgminingstationb ) && gbde.typ->efficiencymaterial ))
       b = true;
-   else 
+   else
       b = false;
 
    addbutton("Material-Max-Plus",230,130,430,150,2,1,14,b);
-   addeingabe(14,&mplus.material,0,gbde->typ->maxplus.material);
+   addeingabe(14,&mplus.material,0,gbde.typ->maxplus.material);
 
    addbutton("M~a~terial-Plus",230,170,430,190,2,1,5,b);
    addeingabe(5,&plus.material,0,mplus.material);
 
-   if ( (gbde->typ->special & cgconventionelpowerplantb) || ((gbde->typ->special & cgminingstationb ) && gbde->typ->efficiencyfuel ))
+   if ( (gbde.typ->special & cgconventionelpowerplantb) || ((gbde.typ->special & cgminingstationb ) && gbde.typ->efficiencyfuel ))
       b = true;
-   else 
+   else
       b = false;
 
    addbutton("Fuel-Max-Plus",230,210,430,230,2,1,15,b);
-   addeingabe(15,&mplus.fuel,0,gbde->typ->maxplus.fuel);
+   addeingabe(15,&mplus.fuel,0,gbde.typ->maxplus.fuel);
 
    addbutton("F~u~el-Plus",230,250,430,270,2,1,6,b);
    addeingabe(6,&plus.fuel, 0, mplus.fuel);
 
-   if ( (  ( gbde->typ->special & cgresearchb ) > 0) && ( gbde->typ->maxresearchpoints > 0)) b = true;
+   if ( (  ( gbde.typ->special & cgresearchb ) > 0) && ( gbde.typ->maxresearchpoints > 0)) b = true;
    else b = false;
 
    addbutton("~R~esearch-Points",15,210,215,230,2,1,9,b);
-   addeingabe(9,&rs,0,gbde->typ->maxresearchpoints);
+   addeingabe(9,&rs,0,gbde.typ->maxresearchpoints);
 
    addbutton("Ma~x~research-Points",15,250,215,270,2,1,11,b);
-   addeingabe(11,&mrs,0,gbde->typ->maxresearchpoints);
+   addeingabe(11,&mrs,0,gbde.typ->maxresearchpoints);
 
 
    addbutton("~V~isible",15,290,215,300,3,1,12,true);
@@ -2242,8 +2255,8 @@ void         tsel::init(void)
    addeingabe(103,&biplus.fuel,0,maxint);
 
 
-   addbutton("~S~et Values",10,ysize - 40, xsize/3-5,ysize - 10,0,1,7,true); 
-   addkey(7,ct_enter); 
+   addbutton("~S~et Values",10,ysize - 40, xsize/3-5,ysize - 10,0,1,7,true);
+   addkey(7,ct_enter);
 
    addbutton("Help (~F1~)", xsize/3+5, ysize - 40, xsize/3*2-5, ysize-10, 0, 1, 110, true );
    addkey(110, ct_f1 );
@@ -2251,21 +2264,32 @@ void         tsel::init(void)
    addbutton("~C~ancel",xsize/3*2+5,ysize - 40,xsize-10,ysize - 10,0,1,8,true);
    addkey(8, ct_esc );
 
-   buildgraphics(); 
 
-   mousevisible(true); 
-} 
+   for ( int i = 0; i < waffenanzahl; i++ ) {
+      char buf[1000];
+      addbutton ( cwaffentypen[i], 460, 90+i*40, 620, 110+i*40, 2, 1, 200+i, 1 );
+      addeingabe(200+i, &ammo[i], 0, maxint );
+   }
+
+   buildgraphics();
+   line(x1+450, y1+45, x1+450, y1+55+9*40, darkgray );
+   activefontsettings.length =0;
+   activefontsettings.font = schriften.smallarial;
+   showtext2("ammunition:", x1 + 460, y1 + 50 );
+
+   mousevisible(true);
+}
 
 
-void         tsel::run(void)
-{ 
-   do { 
+void         BuildingValues::run(void)
+{
+   do {
       tdialogbox::run();
-   }  while (!((taste == ct_esc) || (action == 1))); 
-} 
+   }  while (!((taste == ct_esc) || (action == 1)));
+}
 
 
-void         tsel::buttonpressed(int         id)
+void         BuildingValues::buttonpressed(int         id)
 {
    switch(id) {
    case 4:            // energy, material & fuel plus
@@ -2273,7 +2297,7 @@ void         tsel::buttonpressed(int         id)
    case 6: {
               int changed_resource = id - 4;
               for ( int r = 0; r < 3; r++ )
-                 if ( r != changed_resource ) 
+                 if ( r != changed_resource )
                     if ( mplus.resource(changed_resource) ) {
                        int a = mplus.resource(r) * plus.resource(changed_resource) / mplus.resource(changed_resource);
                        if ( a != plus.resource(r) ) {
@@ -2287,11 +2311,11 @@ void         tsel::buttonpressed(int         id)
    case 14:
    case 15: {
               int changed_resource = id - 13;
-              if ( lockmaxproduction ) 
+              if ( lockmaxproduction )
                  for ( int r = 0; r < 3; r++ )
-                    if ( r != changed_resource ) 
-                       if ( gbde->typ->maxplus.resource(changed_resource) ) {
-                          int a = gbde->typ->maxplus.resource(r) * mplus.resource(changed_resource) / gbde->typ->maxplus.resource(changed_resource);
+                    if ( r != changed_resource )
+                       if ( gbde.typ->maxplus.resource(changed_resource) ) {
+                          int a = gbde.typ->maxplus.resource(r) * mplus.resource(changed_resource) / gbde.typ->maxplus.resource(changed_resource);
                           if ( a != mplus.resource(r) ) {
                              mplus.resource(r) = a;
                              showbutton ( 13 + r );
@@ -2308,21 +2332,24 @@ void         tsel::buttonpressed(int         id)
               }
             }
       break;
-     case 7: { 
+     case 7: {
            mapsaved = false;
-           action = 1; 
-           gbde->actstorage = storage;
+           action = 1;
+           gbde.actstorage = storage;
 
-           gbde->plus = plus;
-           gbde->maxplus = mplus; 
-           if ( col != gbde->color/8 )
-              gbde->convert ( col );
-        
-           gbde->researchpoints = rs; 
-           gbde->maxresearchpoints = mrs;
-           gbde->visible = tvisible;
-           gbde->bi_resourceplus = biplus;
-           gbde->name = name;
+           gbde.plus = plus;
+           gbde.maxplus = mplus;
+           if ( col != gbde.color/8 )
+              gbde.convert ( col );
+
+           gbde.researchpoints = rs;
+           gbde.maxresearchpoints = mrs;
+           gbde.visible = tvisible;
+           gbde.bi_resourceplus = biplus;
+           gbde.name = name;
+           for ( int i = 0; i< waffenanzahl; i++ )
+               gbde.ammo[i] = ammo[i];
+
         }
         break;
      case 8: action = 1; 
@@ -2363,19 +2390,14 @@ void         tsel::buttonpressed(int         id)
 } 
 
 
-void         changebuildingvalues(pbuilding *  b)
-{ 
-   tsel         sel;
-   if (*b == NULL) return;
-   sel.gbde = *b; 
-   sel.init(); 
-   sel.run(); 
-   sel.done(); 
-   *b = sel.gbde; 
+void         changebuildingvalues( Building& b )
+{
+   BuildingValues bval ( b );
+   bval.init();
+   bval.run();
+   bval.done();
 
-   (*b) -> plus = (*b) ->maxplus;
-
-   if (sel.tvisible == false) displaymap();
+   displaymap();
 } 
 
 // õS Class-Change
