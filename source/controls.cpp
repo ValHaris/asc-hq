@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.45 2000-07-16 14:57:41 mbickel Exp $
+//     $Id: controls.cpp,v 1.46 2000-07-16 16:15:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2000/07/16 14:57:41  mbickel
+//      Datafile versioning
+//
 //     Revision 1.44  2000/07/16 14:19:59  mbickel
 //      AI has now some primitive tactics implemented
 //      Some clean up
@@ -3302,7 +3305,7 @@ void         tdashboard::paintlargeweaponefficiency ( int pos, int* e, int first
          pnt = !(nohit & (1 << j ));
       else
          pnt = nohit & (1 << j );
-      if ( pnt{
+      if ( pnt ) { 
          activefontsettings.font = schriften.guifont;
          showtext2c ( cmovemalitypes[j],   x + 88 + (j % 3) * 180, y + 15 + 16 + (j / 3) * 12 );
       } else {

@@ -1,6 +1,12 @@
-//     $Id: building.cpp,v 1.30 2000-07-16 14:19:59 mbickel Exp $
+//     $Id: building.cpp,v 1.31 2000-07-16 16:15:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/07/16 14:19:59  mbickel
+//      AI has now some primitive tactics implemented
+//      Some clean up
+//        moved weapon functions to attack.cpp
+//      Mount doesn't modify PCX files any more.
+//
 //     Revision 1.29  2000/07/10 15:21:28  mbickel
 //      Fixed crash in replay (alliancechange)
 //      Fixed some movement problems when moving units out of transports / buildings
@@ -2031,18 +2037,31 @@ ccontainer :: cammunitiontransfer_subwindow :: cammunitiontransfer_subwindow ( v
    objcoordinates[19].type = 5;
    
 
-   objcoordinates[20].x1 = subwinx1 + 193;
-   objcoordinates[20].x2 = subwinx1 + 215;
-   objcoordinates[20].y1 = subwiny1 + 4;
-   objcoordinates[20].y2 = subwiny1 + 14;
-   objcoordinates[20].type = 6;
-
-   objcoordinates[21].x1 = subwinx1 + 305;
-   objcoordinates[21].x2 = subwinx1 + 327;
-   objcoordinates[21].y1 = subwiny1 + 4;
-   objcoordinates[21].y2 = subwiny1 + 14;
-   objcoordinates[21].type = 6;
-
+   if ( dataVersion < 2 ) {
+      objcoordinates[20].x1 = subwinx1 + 193;
+      objcoordinates[20].x2 = subwinx1 + 215;
+      objcoordinates[20].y1 = subwiny1 + 4;
+      objcoordinates[20].y2 = subwiny1 + 14;
+      objcoordinates[20].type = 6;
+   
+      objcoordinates[21].x1 = subwinx1 + 305;
+      objcoordinates[21].x2 = subwinx1 + 327;
+      objcoordinates[21].y1 = subwiny1 + 4;
+      objcoordinates[21].y2 = subwiny1 + 14;
+      objcoordinates[21].type = 6;
+   } else {
+      objcoordinates[20].x1 = subwinx1 + 192;
+      objcoordinates[20].x2 = subwinx1 + 216;
+      objcoordinates[20].y1 = subwiny1 + 3;
+      objcoordinates[20].y2 = subwiny1 + 14;
+      objcoordinates[20].type = 6;
+   
+      objcoordinates[21].x1 = subwinx1 + 306;
+      objcoordinates[21].x2 = subwinx1 + 327;
+      objcoordinates[21].y1 = subwiny1 + 3;
+      objcoordinates[21].y2 = subwiny1 + 14;
+      objcoordinates[21].type = 6;
+   }
    actschieber = 0 ;
    externalloadingactive = 0;
 }
@@ -2067,8 +2086,8 @@ void  ccontainer :: cammunitiontransfer_subwindow :: paintobj ( int numm, int st
 
    if ( objcoordinates[numm].type == 3 ) {
       int nnumm = numm + page * 8;
-      setinvisiblemouserectanglestk ( objcoordinates[numm].x1,   objcoordinates[numm].y1,   objcoordinates[numm].x2+10,   objcoordinates[numm].y2 );
-      collategraphicoperations cgo  ( objcoordinates[numm].x1,   objcoordinates[numm].y1,   objcoordinates[numm].x2+10,   objcoordinates[numm].y2 );
+      setinvisiblemouserectanglestk ( subwinx1 + 31 + numm * 40,   subwiny1 + 25,   subwinx1 + 31 + numm * 40 + 30,   subwiny1 + 96 + 10);
+      collategraphicoperations cgo  ( subwinx1 + 31 + numm * 40,   subwiny1 + 25,   subwinx1 + 31 + numm * 40 + 30,   subwiny1 + 96 + 10 );
       if ( nnumm < num ) {
          putimage ( objcoordinates[numm].x1-1,   objcoordinates[numm].y1-1,  icons.container.subwin.ammotransfer.schiene );
    
@@ -2119,24 +2138,38 @@ void  ccontainer :: cammunitiontransfer_subwindow :: paintobj ( int numm, int st
    if ( objcoordinates[numm].type == 6 ) {
       setinvisiblemouserectanglestk ( objcoordinates[numm].x1,   objcoordinates[numm].y1,   objcoordinates[numm].x2+10,   objcoordinates[numm].y2 );
       collategraphicoperations cgo  ( objcoordinates[numm].x1,   objcoordinates[numm].y1,   objcoordinates[numm].x2+10,   objcoordinates[numm].y2 );
-      activefontsettings.font = schriften.guifont;
-      activefontsettings.background = 255;
-      activefontsettings.length = objcoordinates[numm].x2 - objcoordinates[numm].x1;
-      activefontsettings.height = 0;
-      activefontsettings.justify = centertext;
-      char* text;
-      if ( numm == 20 )
-         text = "-";
-      else
-         if ( numm == 21 )
-            text = "+";
-
-      if ( stat == 0 ) {
-         bar ( objcoordinates[numm].x1, objcoordinates[numm].y1, objcoordinates[numm].x2, objcoordinates[numm].y2, bkgrcol);
-         showtext2c ( text, objcoordinates[numm].x1 + 1, objcoordinates[numm].y1 + 1 );
+      if ( dataVersion < 2 ) {
+         activefontsettings.font = schriften.guifont;
+         activefontsettings.background = 255;
+         activefontsettings.length = objcoordinates[numm].x2 - objcoordinates[numm].x1;
+         activefontsettings.height = 0;
+         activefontsettings.justify = centertext;
+         char* text;
+         if ( numm == 20 )
+            text = "-";
+         else
+            if ( numm == 21 )
+               text = "+";
+   
+         if ( stat == 0 ) {
+            bar ( objcoordinates[numm].x1, objcoordinates[numm].y1, objcoordinates[numm].x2, objcoordinates[numm].y2, bkgrcol);
+            showtext2c ( text, objcoordinates[numm].x1 + 1, objcoordinates[numm].y1 + 1 );
+         } else {
+            bar ( objcoordinates[numm].x1, objcoordinates[numm].y1, objcoordinates[numm].x2, objcoordinates[numm].y2, bkgrdarkcol);
+            showtext2c ( text, objcoordinates[numm].x1 + 2, objcoordinates[numm].y1 + 2 );
+         }
       } else {
-         bar ( objcoordinates[numm].x1, objcoordinates[numm].y1, objcoordinates[numm].x2, objcoordinates[numm].y2, bkgrdarkcol);
-         showtext2c ( text, objcoordinates[numm].x1 + 2, objcoordinates[numm].y1 + 2 );
+         if ( pagenum == 0 ) {
+            if ( numm == 20 )
+               putimage ( objcoordinates[numm].x1, objcoordinates[numm].y1, icons.container.subwin.ammotransfer.singlepage[0] );
+            else
+               putimage ( objcoordinates[numm].x1, objcoordinates[numm].y1, icons.container.subwin.ammotransfer.singlepage[1] );
+         } else {
+            if ( numm == 20 )
+               putimage ( objcoordinates[numm].x1, objcoordinates[numm].y1, icons.container.subwin.ammotransfer.minus[stat] );
+            else
+               putimage ( objcoordinates[numm].x1, objcoordinates[numm].y1, icons.container.subwin.ammotransfer.plus[stat] );
+         }
       }
       getinvisiblemouserectanglestk ( ); 
    }
@@ -2264,6 +2297,11 @@ void  ccontainer :: cammunitiontransfer_subwindow :: display ( void )
 
 void  ccontainer :: cammunitiontransfer_subwindow :: displayvariables ( void )
 {
+   setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
+
+   paintobj ( 20, 0 );
+   paintobj ( 21, 0 );
+
    activefontsettings.color = white;
    activefontsettings.font = schriften.guifont;
    activefontsettings.justify = lefttext;
@@ -2293,9 +2331,9 @@ void  ccontainer :: cammunitiontransfer_subwindow :: displayvariables ( void )
          delete[] buf;
       } else
          paintobj ( i, 0 );
-        
    }
 
+   getinvisiblemouserectanglestk ( );
 }
 
 void  ccontainer :: cammunitiontransfer_subwindow :: transfer ( void )
@@ -2318,7 +2356,7 @@ void  ccontainer :: cammunitiontransfer_subwindow :: unitchanged ( void )
    if ( !externalloadingactive ) {
       if ( hostcontainer->getmarkedunit() != eht )
          reset();
-      display();
+      // display();
       displayvariables();
    }
 }
@@ -2556,11 +2594,12 @@ void ccontainer_b :: cammunitiontransferb_subwindow :: execexternalload ( void )
         dispmessage2 ( 401, NULL );
    } else {
       externalloadingactive = 0;
-      paintobj ( 9, 0 );
+      paintobj ( 19, 0 );
       unitchanged();
    }
 }
 
+// -------------------------------- ----------------------------------------------------------
 
 
 void  ccontainer :: hosticons_c :: seticonmains ( pcontainer maintemp )
