@@ -1,6 +1,11 @@
-//     $Id: spfst.h,v 1.11 2000-06-28 19:26:18 mbickel Exp $
+//     $Id: spfst.h,v 1.12 2000-07-02 21:04:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/06/28 19:26:18  mbickel
+//      fixed bug in object generation by building removal
+//      Added artint.cpp to makefiles
+//      Some cleanup
+//
 //     Revision 1.10  2000/06/08 21:03:43  mbickel
 //      New vehicle action: attack
 //      wrote documentation for vehicle actions
@@ -690,7 +695,7 @@ class tdrawline8 : public tdrawline {
 
 class MapDisplayInterface {
          public:
-           virtual void displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove ) = 0;
+           virtual int displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove ) = 0;
            virtual void deleteVehicle ( pvehicle vehicle ) = 0;
            virtual void displayMap ( void ) = 0;
            virtual void displayPosition ( int x, int y ) = 0;
@@ -704,7 +709,7 @@ class MapDisplay : public MapDisplayInterface {
            dynamic_array<int> cursorstat;
            int cursorstatnum;
          public:
-           void displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove );
+           int displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove );
            void deleteVehicle ( pvehicle vehicle );
            void displayMap ( void );
            void displayPosition ( int x, int y );

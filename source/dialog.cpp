@@ -1,6 +1,12 @@
-//     $Id: dialog.cpp,v 1.31 2000-06-04 21:39:20 mbickel Exp $
+//     $Id: dialog.cpp,v 1.32 2000-07-02 21:04:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/06/04 21:39:20  mbickel
+//      Added OK button to ViewText dialog (used in "About ASC", for example)
+//      Invalid command line parameters are now reported
+//      new text for attack result prediction
+//      Added constructors to attack functions
+//
 //     Revision 1.30  2000/05/30 18:39:23  mbickel
 //      Added support for multiple directories
 //      Moved DOS specific files to a separate directory
@@ -4321,7 +4327,7 @@ void         tsetalliances::click(byte         bxx,
         #ifdef __WATCOM_CPLUSPLUS__
          playermode[y]++;
         #else
-	 playermode[y] += 1;
+         playermode[y] += 1;
         #endif
          if ( actmap->actplayer == -1 ) {
             if (playermode[y] > 2) 
@@ -4410,7 +4416,7 @@ void         tsetalliances::click(byte         bxx,
                }
             } /* endif */
          } else {
-            if ( playermode[playerpos[x]] != 2  &&  playermode[playerpos[y]] != 2 ) 
+            if ( x < playernum  && y < playernum && playermode[playerpos[x]] != 2  &&  playermode[playerpos[y]] != 2 ) 
                if ( playerpos[y] == actmap->actplayer  &&  x < playernum ) {
                   char* c = &alliancedata[playerpos[x]][playerpos[y]];
                   if ( *c == capeaceproposal ||  *c == cawar ) {

@@ -1,6 +1,11 @@
-//     $Id: spfst.cpp,v 1.35 2000-06-28 19:26:17 mbickel Exp $
+//     $Id: spfst.cpp,v 1.36 2000-07-02 21:04:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2000/06/28 19:26:17  mbickel
+//      fixed bug in object generation by building removal
+//      Added artint.cpp to makefiles
+//      Some cleanup
+//
 //     Revision 1.34  2000/06/28 18:31:02  mbickel
 //      Started working on AI
 //      Started making loaders independent of memory layout
@@ -1618,15 +1623,7 @@ char      fieldvisiblenow( const pfield        pe, int player  )
 pfield        getactfield(void)
 
 { 
-  word         x, y; 
-  int      l; 
-  pfield        fld;
-
-   x = actmap->xpos + cursor.posx; 
-   y = actmap->ypos + cursor.posy; 
-   l = y * actmap->xsize + x; 
-   fld =   &actmap->field[l]; 
-   return ( fld );
+   return getfield ( actmap->xpos + cursor.posx, actmap->ypos + cursor.posy ); 
 } 
 
 
@@ -6995,7 +6992,7 @@ class MapDisplay {
     };
 */
 
-void MapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove )
+int  MapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove )
 {
    if ( height2 == -1 )
       height2 = height1;
@@ -7010,10 +7007,19 @@ void MapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle v
    if ( godview ) 
       view2 = visible_all; 
 
-   if (  view1 >= visible_now  &&  view2 >= visible_now ) 
+   if (  view1 >= visible_now  ||  view2 >= visible_now ) 
       if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) && ( view2 == visible_all )) || ( actmap->actplayer == actmap->playerview ))
          idisplaymap.movevehicle( x1, y1, x2, y2, vehicle, height1, height2, fieldnum, totalmove );
 
+
+   int result = 0;
+   if (view1 >= visible_now )
+      result +=1;
+
+   if ( view2 >= visible_now ) 
+      result +=2;
+
+   return result;
 }
 
 void MapDisplay :: deleteVehicle ( pvehicle vehicle )

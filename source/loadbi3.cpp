@@ -1,6 +1,9 @@
-//     $Id: loadbi3.cpp,v 1.18 2000-05-28 21:05:03 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.19 2000-07-02 21:04:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/05/28 21:05:03  mbickel
+//      Linux version of mapedit was unable to load buildings in BI3 map
+//
 //     Revision 1.17  2000/05/21 17:18:50  mbickel
 //      Moved BI3 import tables to a separate file: objxlat.cpp
 //
@@ -1155,6 +1158,7 @@ void ImportBiMap :: preparemap ( int x, int y  )
 {
     generatemap ( defaultterraintype, x, y ); 
     actmap->setgameparameter( cgp_movefrominvalidfields, 1);
+    actmap->setgameparameter( cgp_forbid_building_construction, 1);
 }
 
 void InsertBiMap :: preparemap ( int x, int y  )

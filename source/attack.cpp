@@ -1,6 +1,10 @@
-//     $Id: attack.cpp,v 1.17 2000-06-08 21:03:39 mbickel Exp $
+//     $Id: attack.cpp,v 1.18 2000-07-02 21:04:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/06/08 21:03:39  mbickel
+//      New vehicle action: attack
+//      wrote documentation for vehicle actions
+//
 //     Revision 1.16  2000/06/04 21:39:17  mbickel
 //      Added OK button to ViewText dialog (used in "About ASC", for example)
 //      Invalid command line parameters are now reported
@@ -627,10 +631,8 @@ void tunitattacksunit :: setresult ( void )
    _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
-  // This was commented out. Don't have a clue why I did this ...
    if ( _attackingunit->reactionfire_active >= 3 ) 
-      _attackingunit->reactionfire ^= 1 <<  dv.color;
-  //  
+      _attackingunit->reactionfire &= 0xff ^ ( 1 <<  dv.color );
 
    _attackingunit->attacked = true; 
    if ( !(_attackingunit->functions & cf_moveafterattack) )

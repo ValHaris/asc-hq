@@ -1,6 +1,11 @@
-//     $Id: typen.cpp,v 1.22 2000-06-28 19:26:18 mbickel Exp $
+//     $Id: typen.cpp,v 1.23 2000-07-02 21:04:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/06/28 19:26:18  mbickel
+//      fixed bug in object generation by building removal
+//      Added artint.cpp to makefiles
+//      Some cleanup
+//
 //     Revision 1.21  2000/06/28 18:31:03  mbickel
 //      Started working on AI
 //      Started making loaders independent of memory layout
@@ -200,7 +205,7 @@ const int directionangle [ sidenum ] =
 
 tgameoptions gameoptions;
 
-const int gameparameterdefault [ gameparameternum ] = { 1, 2, 0, 100, 100, 0, 0, 0, 1, 0, 0, 0, 0 };
+const int gameparameterdefault [ gameparameternum ] = { 1, 2, 0, 100, 100, 1, 0, 0, 1, 0, 0, 0, 0 };
 const char* gameparametername[ gameparameternum ] = { "lifetime of tracks", 
                                                       "freezing time of broken ice cover ( icebreaker )",
                                                       "move vehicles from unaccessible fields",

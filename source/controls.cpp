@@ -1,6 +1,11 @@
-//     $Id: controls.cpp,v 1.39 2000-06-28 18:30:58 mbickel Exp $
+//     $Id: controls.cpp,v 1.40 2000-07-02 21:04:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2000/06/28 18:30:58  mbickel
+//      Started working on AI
+//      Started making loaders independent of memory layout
+//      Destroyed buildings can now leave objects behind.
+//
 //     Revision 1.38  2000/06/23 09:24:15  mbickel
 //      Fixed crash in replay
 //      enabled cursor movement in stredit
@@ -2406,6 +2411,7 @@ void tsearchreactionfireingunits :: removeunit ( pvehicle vehicle )
 
 int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle, MapDisplayInterface* md )
 {
+
    int attacks = 0;
    int result = 0;
 
@@ -2415,7 +2421,6 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
    vehicle->xpos = x;
    vehicle->ypos = y;
 
-
    for ( int i = 0; i < 8; i++ ) {
       evaluatevisibilityfield ( fld, i, -1 );
       if ( fieldvisiblenow ( fld, i )) {
@@ -2423,7 +2428,7 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
          while ( ul  &&  !result ) {
             punitlist next = ul->next;
             pattackweap atw = attackpossible ( ul->eht, x, y );
-            if ( atw->count ) {
+            if ( atw->count && (ul->eht->reactionfire & (1 << (vehicle->color / 8)))) {
 
                int ad1, ad2, dd1, dd2;
 
@@ -2476,7 +2481,7 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
                logtoreplayinfo ( rpl_reactionfire, ul->eht->xpos, ul->eht->ypos, x, y, ad1, ad2, dd1, dd2, atw->num[num] );
 
                dashboard.x = 0xffff;
-               ul->eht->reactionfire -= 1 << (vehicle->color / 8);
+               ul->eht->reactionfire &= 0xff ^ ( 1 <<  (vehicle->color / 8) );
                ul->eht->attacked = false;
                removeunit ( ul->eht );
 
@@ -6615,7 +6620,7 @@ class ReplayMapDisplay : public MapDisplayInterface {
            MapDisplay* mapDisplay;
          public:
            ReplayMapDisplay ( MapDisplay* md ) { mapDisplay = md; };
-           void displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove );
+           int displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove );
            void displayPosition ( int x, int y );
            void deleteVehicle ( pvehicle vehicle ) { mapDisplay->deleteVehicle ( vehicle ); };
            void displayMap ( void ) { mapDisplay->displayMap(); };
@@ -6670,14 +6675,21 @@ int ReplayMapDisplay :: checkMapPosition ( int x, int y )
 }
 
 
-void ReplayMapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove )
+int  ReplayMapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove )
 {
    if ( fieldvisiblenow ( getfield ( x1, y1 ), actmap->playerview) || fieldvisiblenow ( getfield ( x2, y2 ), actmap->playerview)) {
       if ( checkMapPosition  ( x1, y1 ))
          displayMap();
 
-      mapDisplay->displayMovingUnit ( x1, y1, x2, y2, vehicle, height1, height2, fieldnum, totalmove );
-   }
+      int fc = mapDisplay->displayMovingUnit ( x1, y1, x2, y2, vehicle, height1, height2, fieldnum, totalmove );
+      if ( fc == 1 ) {
+         mapDisplay->resetMovement();
+         mapDisplay->displayMap();
+      }
+
+      return fc;
+   } else
+      return 0;
 }
 
 void ReplayMapDisplay :: displayPosition ( int x, int y )

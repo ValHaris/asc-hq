@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.11 2000-06-23 11:53:11 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.12 2000-07-02 21:04:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/06/23 11:53:11  mbickel
+//      Fixed a bug that crashed ASC when trying to ascend with a unit near the
+//       border of the map
+//
 //     Revision 1.10  2000/06/09 10:51:00  mbickel
 //      Repaired keyboard control of pulldown menu
 //      Fixed compile errors at fieldlist with gcc
@@ -633,7 +637,8 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1 )
       pfield fld2 = getfield ( x2, y2 );
 
 
-      if ( mapDisplay )
+
+      if ( mapDisplay ) 
          mapDisplay->displayMovingUnit ( x, y, x2, y2, vehicle, vehicle->height, newheight, i, fieldnum );
 
       int dir;
