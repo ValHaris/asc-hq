@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.47 2001-07-28 11:19:12 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.48 2001-07-28 21:09:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2001/07/28 11:19:12  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.46  2001/07/27 21:13:35  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -652,13 +656,13 @@ void  stu_height ( pvehicle vehicle )
 
    for (l=chtiefgetaucht; l<= chschwimmend ;  ) {
       if (vehicle->typ->height & l )
-        if (vehicle->typ->terrainaccess->accessible (  fld->bdt ) > 0 )
+        if (vehicle->typ->terrainaccess.accessible (  fld->bdt ) > 0 )
            vehicle->height = l;
       l<<=1;
    }
 
    if (vehicle->typ->height & chfahrend)
-      if (vehicle->typ->terrainaccess->accessible ( fld->bdt ) > 0 )
+      if (vehicle->typ->terrainaccess.accessible ( fld->bdt ) > 0 )
          vehicle->height = chfahrend;
 
    vehicle->setMovement ( vehicle->typ->movement[log2( vehicle->height )] );

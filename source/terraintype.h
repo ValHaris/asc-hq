@@ -52,7 +52,7 @@
        int accessible ( const TerrainBits& bts );
 
        void read ( tnstream& stream );
-       void write ( tnstream& stream );
+       void write ( tnstream& stream ) const;
        void runTextIO ( PropertyContainer& pc );
 
  };

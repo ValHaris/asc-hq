@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.94 2001-07-27 21:13:35 mbickel Exp $
+//     $Id: typen.h,v 1.95 2001-07-28 21:09:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.94  2001/07/27 21:13:35  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.93  2001/07/18 18:15:52  mbickel
 //      Fixed: invalid sender of mails
 //      Fixed: unmoveable units are moved by AI
@@ -228,6 +232,13 @@ const int maxunitexperience = 23;
 //! the number of bits that specify the terrain of a field
 const int cbodenartennum = 33;
 
+class IntRange {
+     public:
+           int from;
+           int to;
+           IntRange(): from(-1), to(-1) {};
+           IntRange( int from_, int to_ ): from(from_), to(to_) {};
+};
 
 
 typedef bitset<64> BitSet;

@@ -4,9 +4,13 @@
 */
 
 
-//     $Id: gui.cpp,v 1.63 2001-07-28 11:19:12 mbickel Exp $
+//     $Id: gui.cpp,v 1.64 2001-07-28 21:09:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2001/07/28 11:19:12  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.62  2001/07/27 22:29:05  mbickel
 //      Updated some terrain fields
 //      Added bin2text win32 project files
@@ -422,9 +426,9 @@ void   GuiHost<T>::paintsmallicons ( int taste, int up )
 template<class T> 
 void   GuiHost<T>::checkformouse ( void )
 {
-   int msg;
+//   int msg;
    int found = 0;
-   for (int j = 0; j < iconspaintable/columncount ; j++ ) 
+   for (int j = 0; j < iconspaintable/columncount ; j++ )
       for (int i = 0; i< columncount ; i++) {
          if ( ( mouseparams.x >= guixpos + i*(guiiconsizex + guigapx))    &&
               ( mouseparams.y >= guiypos + j*(guiiconsizey + guigapy))    &&
@@ -432,10 +436,11 @@ void   GuiHost<T>::checkformouse ( void )
               ( mouseparams.y <= guiypos + j*(guiiconsizey + guigapy) + guiiconsizey) )
               {
                  if ( actshownicons[i][j] ) {
-                    if ( actshownicons[i][j] != infotextshown ) 
-                       msg = displaymessage2 ( actshownicons[i][j]->getinfotext() );
+                    if ( actshownicons[i][j] != infotextshown )
+                       // msg = 
+                       displaymessage2 ( actshownicons[i][j]->getinfotext() );
                     found = 1;
-                    if ( mouseparams.taste == 1) 
+                    if ( mouseparams.taste == 1)
                        actshownicons[i][j]->pressedbymouse();
 
                     infotextshown = actshownicons[i][j];
@@ -1614,8 +1619,8 @@ int   tnsguiiconconstructvehicle::available    ( void )
    if ( fld )
       if ( fld->vehicle )
          if (fld->vehicle->color == actmap->actplayer * 8) 
-            if ( fld->vehicle->typ->vehiclesbuildablenum )
-               if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
+            if ( fld->vehicle->typ->vehiclesBuildable.size() )
+               if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
                   if ( !fld->vehicle->attacked )
                      return 1;
 
@@ -1805,7 +1810,7 @@ int   tnsguiiconbuildany::available    ( void )
    pfield fld = getactfield();
    if ( fld->vehicle ) 
       if (fld->vehicle->color == actmap->actplayer * 8) 
-         if ( fld->vehicle->typ->objectsbuildablenum ) 
+         if ( fld->vehicle->typ->objectsBuildable.size() )
             if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
                if ( !fld->vehicle->attacked )
                   return true; 
@@ -2641,11 +2646,12 @@ int         tnputvehiclecontainerguiicon::available( void )
          tselectvehiclecontainerguihost* bldhost = (tselectvehiclecontainerguihost*) host;
          pvehicle actvehicle = bldhost->constructingvehicle;
 
-         for ( int i = 0; i < actvehicle->typ->vehiclesbuildablenum; i++ ) 
-            if ( actvehicle->typ->vehiclesbuildableid[i] == vehicle->id ) {
-               if ( actvehicle->vehicleconstructable ( vehicle, getxpos(), getypos() ))
-                  return 1;
-            }
+         for ( int i = 0; i < actvehicle->typ->vehiclesBuildable.size(); i++ )
+           for ( int j = actvehicle->typ->vehiclesBuildable[i].from; j <= actvehicle->typ->vehiclesBuildable[i].to; j++ ) 
+              if ( j == vehicle->id )
+                 if ( actvehicle->vehicleconstructable ( vehicle, getxpos(), getypos() ))
+                    return 1;
+
       }
       return false;
    } else 

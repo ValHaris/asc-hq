@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.58 2001-07-28 11:19:10 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.59 2001-07-28 21:09:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2001/07/28 11:19:10  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.57  2001/07/27 21:13:34  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -756,7 +760,7 @@ void placeunit(void)
          pf = getactfield();
          int accessible = 1;
          if ( auswahlf ) {
-            accessible = auswahlf->terrainaccess->accessible ( pf->bdt );
+            accessible = auswahlf->terrainaccess.accessible ( pf->bdt );
             if ( auswahlf->height >= chtieffliegend )
                accessible = 1;
          }
@@ -1145,7 +1149,7 @@ void         tplayerchange::run(void)
       tdialogbox::run(); 
       if (taste == ct_f1) help ( 1050 );
    }  while (!((taste == ct_esc) || ((action == 1) || (action ==2)))); 
-   if ((action == 2) || (taste == ct_esc)) ; 
+ // ????  if ((action == 2) || (taste == ct_esc)) ;
 } 
 
 
@@ -2163,7 +2167,7 @@ void         changemapvalues(void)
 
 
 void         BuildingValues::init(void)
-{ word         w; 
+{
   char      b;
 
   for ( int i = 0; i< waffenanzahl; i++ )
@@ -2172,16 +2176,16 @@ void         BuildingValues::init(void)
    lockmaxproduction = 1;
 
    tdialogbox::init();
-   action = 0; 
+   action = 0;
    title = "Building Values";
    x1 = 0;
    xsize = 640;
    y1 = 10;
    ysize = 440;
-   w = (xsize - 60) / 2; 
-   action = 0; 
+   // int w = (xsize - 60) / 2;
+   action = 0;
 
-   windowstyle = windowstyle ^ dlg_in3d; 
+   windowstyle = windowstyle ^ dlg_in3d;
 
    storage = gbde.actstorage;
    plus = gbde.plus;

@@ -347,7 +347,7 @@ int main(int argc, char *argv[] )
             // Spaltenwerte befahrbare Bodentypen
             fprintf ( detailed2, "<td>can&nbsp;drive&nbsp;on</td>" );
             for ( int i = 0; i < cbodenartennum ; i++) {
-               if ( ft->terrainaccess->terrain.test(i) )
+               if ( ft->terrainaccess.terrain.test(i) )
                   fprintf ( detailed2, "<td><img src=\"../hacken.gif\"></td>" );
                else
                   fprintf ( detailed2, "<td></td>" );
@@ -357,7 +357,7 @@ int main(int argc, char *argv[] )
             // Spaltenwerte stirbt auf
             fprintf ( detailed2, "<td>dies on</td>" );
             for ( i = 0; i < cbodenartennum ; i++) {
-               if ( ft->terrainaccess->terrainkill.test(i))
+               if ( ft->terrainaccess.terrainkill.test(i))
                   fprintf ( detailed2, "<td><img src=\"../hacken.gif\"></td>" );
                else
                   fprintf ( detailed2, "<td></td>" );
@@ -367,7 +367,7 @@ int main(int argc, char *argv[] )
             // Spaltenwerte can not drive on
             fprintf ( detailed2, "<td>not drive on</td>" );
             for ( i = 0; i < cbodenartennum ; i++) {
-               if ( ft->terrainaccess->terrainnot.test(i) )
+               if ( ft->terrainaccess.terrainnot.test(i) )
                   fprintf ( detailed2, "<td><img src=\"../hacken.gif\"></td>" );
                else
                   fprintf ( detailed2, "<td></td>" );
@@ -377,7 +377,7 @@ int main(int argc, char *argv[] )
             // Spaltenwerte can need terrain
             fprintf ( detailed2, "<td>required</td>" );
             for ( i = 0; i < cbodenartennum ; i++) {
-               if ( ft->terrainaccess->terrainreq.test(i) )
+               if ( ft->terrainaccess.terrainreq.test(i) )
                   fprintf ( detailed2, "<td><img src=\"../hacken.gif\"></td>" );
                else
                   fprintf ( detailed2, "<td></td>" );
@@ -585,24 +585,38 @@ int main(int argc, char *argv[] )
                if ( ft->vehicleCategoriesLoadable & (1 << c))
                   printf(" Kategorie %s kann geladen werden", cmovemalitypes[c] );
 
-            for ( i = 0; i < ft->buildingsbuildablenum; i++ ) {
-               printf("es k÷nnen die gebõude mit ids von %d bis %d gebaut werden\n", ft->buildingsbuildable[i].from, ft->buildingsbuildable[i].to );
+            for ( i = 0; i < ft->buildingsBuildable.size(); i++ ) {
+               printf("es können die gebäude mit ids von %d bis %d gebaut werden\n", ft->buildingsBuildable[i].from, ft->buildingsBuildable[i].to );
                for ( int b = 0; b < buildingtypenum; b++ ) {
                   pbuildingtype bld = getbuildingtype_forpos ( b );
-                  if (     bld->id >= ft->buildingsbuildable[i].from
-                           && bld->id <= ft->buildingsbuildable[i].to ) {
+                  if (     bld->id >= ft->buildingsBuildable[i].from
+                           && bld->id <= ft->buildingsBuildable[i].to ) {
                      printf( "das gebõude mit id %d und dem Namen %s kann gebaut werden\n", bld->id, bld->name.c_str() );
                   }
                }
             }
 
-            for ( i = 0; i < ft->vehiclesbuildablenum; i++ ) {
-               printf("die Einheit mit ID %d kann gebaut werden\n", ft->vehiclesbuildableid[i] );
-               pvehicletype veh = getvehicletype_forid ( ft->vehiclesbuildableid[i] );
-               if ( veh )   // there is a vehicle with this ID
-                  printf( "die einheit mit id %d und dem Namen %s kann gebaut werden\n", veh->id, veh->getName().c_str() );
+            for ( i = 0; i < ft->vehiclesBuildable.size(); i++ ) {
+               printf("es können die einheiten mit ids von %d bis %d gebaut werden\n", ft->vehiclesBuildable[i].from, ft->vehiclesBuildable[i].to );
+               for ( int b = 0; b < vehicletypenum; b++ ) {
+                  pvehicletype veh = getvehicletype_forpos ( b );
+                  if (     veh->id >= ft->vehiclesBuildable[i].from
+                        && veh->id <= ft->vehiclesBuildable[i].to ) {
+                     printf( "die einheit mit id %d und dem Namen %s kann gebaut werden\n", veh->id, veh->getName().c_str() );
+                  }
+               }
             }
 
+            for ( i = 0; i < ft->objectsBuildable.size(); i++ ) {
+               printf("es können die Objekte mit ids von %d bis %d gebaut werden\n", ft->vehiclesBuildable[i].from, ft->vehiclesBuildable[i].to );
+               for ( int b = 0; b < objecttypenum; b++ ) {
+                  pobjecttype obj = getobjecttype_forpos ( b );
+                  if (     obj->id >= ft->objectsBuildable[i].from
+                        && obj->id <= ft->objectsBuildable[i].to ) {
+                     printf( "die einheit mit id %d und dem Namen %s kann gebaut werden\n", obj->id, obj->name.c_str() );
+                  }
+               }
+            }
 
             // ABSCHLU˜ DER DOKUMENTE
 

@@ -22,6 +22,7 @@
  #include "containerbase.h"
  #include "ascstring.h"
  #include "baseaiinterface.h"
+ #include "terraintype.h"
 
 
 //! The number of 'special' vehicle functions
@@ -106,9 +107,6 @@ extern const char*  cvehiclefunctions[];
         void*        picture[8];    /*  0ø  ,  45ø   */
         char         height;        /*  BM  Besteht die Moeglichkeit zum Hoehenwechseln  */
         word         researchid;    // inzwischen ?berfl?ssig, oder ?
-        int          _terrain;    /*  BM     befahrbare terrain: z.B. Schiene, Wasser, Wald, ...  */
-        int          _terrainreq; /*  BM     diese Bits MšSSEN in ( field->typ->art & terrain ) gesetzt sein */
-        int          _terrainkill;  /* falls das aktuelle field nicht befahrbar ist, und bei field->typ->art eine dieser Bits gesetzt ist, verschwindet die vehicle */
         char         steigung;      /*  max. befahrbare Hoehendifferenz zwischen 2 fieldern  */
         char         jamming;      /*  St„rke der Stoerstrahlen  */
         int          view;         /*  viewweite  */
@@ -122,7 +120,7 @@ extern const char*  cvehiclefunctions[];
         Resources    tank;
         Word         fuelConsumption;
         int          functions;
-        char         movement[8];      /*  max. movementsstrecke  */
+        vector<int>  movement;      /*  max. movementsstrecke  */
         char         movemalustyp;     /*  wenn ein Bodentyp mehrere Movemali fuer unterschiedliche vehiclearten, wird dieser genommen.  <= cmovemalitypes */
         char         classnum;         /* Anzahl der Klassen, max 8, min 0 ;  Der EINZIGE Unterschied zwischen 0 und 1 ist der NAME ! */
         ASCString    classnames[8];    /* Name der einzelnen Klassen */
@@ -139,25 +137,16 @@ extern const char*  cvehiclefunctions[];
         char         maxwindspeedonwater;
         char         digrange;        // Radius, um den nach bodensch„tzen gesucht wird.
         int          initiative;      // 0 ist ausgeglichen // 256 ist verdoppelung
-        int          _terrainnot;    /*  BM     sobald eines dieser Bits gesetzt ist, kann die vehicle NICHT auf das field fahren  */
-        int          _terrainreq1;  // wie terrainreq, es braucht aber nur 1 bit gesetzt zu sein
-        int          objectsbuildablenum;
-        int*         objectsbuildableid;
 
-        int          weight;           // basic weight, without fuel etc.
-        pterrainaccess terrainaccess;
-        int          bipicture;
-        int          vehiclesbuildablenum;
-        int*         vehiclesbuildableid;
+        int           weight;           // basic weight, without fuel etc.
+        TerrainAccess terrainaccess;
+        int           bipicture;
 
         void*        buildicon;
-        int          buildingsbuildablenum;
 
-        struct tbuildrange {
-           int from;
-           int to;
-        };
-        tbuildrange*  buildingsbuildable;
+        vector<IntRange> buildingsBuildable;
+        vector<IntRange> vehiclesBuildable;
+        vector<IntRange> objectsBuildable;
 
         UnitWeapon   weapons;
         int          autorepairrate;
@@ -166,7 +155,7 @@ extern const char*  cvehiclefunctions[];
 
         ASCString    filename;
         ASCString    location;    // just for information purposes in the main program
-        
+
         int          vehicleCategoriesLoadable;
 
         int maxweight ( void ) const ;     // max. weight including fuel and material

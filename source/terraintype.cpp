@@ -72,7 +72,7 @@ void TerrainAccess::read ( tnstream& stream ) {
        stream.readInt( ); //dummy
 };
 
-void TerrainAccess::write ( tnstream& stream ) {
+void TerrainAccess::write ( tnstream& stream ) const {
    terrain.write ( stream );
    terrainreq.write ( stream );
    terrainnot.write ( stream );

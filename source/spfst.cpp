@@ -2,9 +2,13 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.90 2001-07-28 11:19:12 mbickel Exp $
+//     $Id: spfst.cpp,v 1.91 2001-07-28 21:09:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.90  2001/07/28 11:19:12  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.89  2001/07/27 21:13:35  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -232,7 +236,7 @@ int          terrainaccessible2 ( const pfield        field, const pvehicle     
               else
                  return -2;
            else {
-              if ( vehicle->typ->terrainaccess->accessible ( field->bdt ) > 0 )
+              if ( vehicle->typ->terrainaccess.accessible ( field->bdt ) > 0 )
                  return 2;
               else
                  return -3;
@@ -1769,7 +1773,7 @@ void  checkunitsforremoval ( void )
 
           if (field->vehicle == eht) {
              if ( eht->height <= chfahrend )
-                if ( eht->typ->terrainaccess->accessible ( field->bdt ) < 0 )
+                if ( eht->typ->terrainaccess.accessible ( field->bdt ) < 0 )
                    erase = true;
              if ( eht )
                 if ( getmaxwindspeedforunit( eht ) < actmap->weather.wind[getwindheightforunit ( eht )].speed*maxwindspeed )

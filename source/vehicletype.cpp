@@ -64,9 +64,6 @@ Vehicletype :: Vehicletype ( void )
       picture[i] = NULL;
    height     = 0;
    researchid = 0;
-   _terrain   = 0;
-   _terrainreq = 0;
-   _terrainkill = 0;
    steigung = 0;
    jamming = 0;
    view = 0;
@@ -79,6 +76,7 @@ Vehicletype :: Vehicletype ( void )
    id = 0;
    fuelConsumption = 0;
    functions = 0;
+   movement.resize(8);
    for ( i = 0; i < 8; i++ )
       movement[i] = 0;
    movemalustyp = 0;
@@ -100,25 +98,16 @@ Vehicletype :: Vehicletype ( void )
    maxwindspeedonwater = 0;
    digrange = 0;
    initiative = 0;
-   _terrainnot = 0;
-   _terrainreq1 = 0;
-   objectsbuildablenum = 0;
-   objectsbuildableid = NULL;
 
    weight = 0;
    bipicture = -1;
-   vehiclesbuildablenum = 0;
-   vehiclesbuildableid = NULL;
 
    buildicon = NULL;
-   buildingsbuildablenum = 0;
-   buildingsbuildable = NULL;
    autorepairrate = 0;
 
    for ( i = 0; i < 8; i++ )
       aiparam[i] = NULL;
 
-   terrainaccess = new TerrainAccess;
    vehicleCategoriesLoadable = -1;
 }
 
@@ -148,7 +137,7 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 4;
+const int vehicle_version = 5;
 
 
 void Vehicletype :: read ( tnstream& stream )
@@ -192,6 +181,9 @@ void Vehicletype :: read ( tnstream& stream )
 
    height = stream.readChar();
    researchid = stream.readWord();
+   int _terrain = 0;
+   int _terrainreq = 0;
+   int _terrainkill = 0;
    if ( version <= 2 ) {
       _terrain = stream.readInt();
       _terrainreq = stream.readInt();
@@ -218,7 +210,10 @@ void Vehicletype :: read ( tnstream& stream )
    functions = stream.readInt();
 
    for ( j = 0; j < 8; j++ )
-      movement[j] = stream.readChar();
+      if ( version <= 4 )
+         movement[j] = stream.readChar();
+      else
+         movement[j] = stream.readInt();
 
 
    movemalustyp = stream.readChar();
@@ -255,18 +250,34 @@ void Vehicletype :: read ( tnstream& stream )
    maxwindspeedonwater = stream.readChar();
    digrange = stream.readChar();
    initiative = stream.readInt();
-   _terrainnot = stream.readInt();
-   _terrainreq1 = stream.readInt();
-   objectsbuildablenum = stream.readInt();
-   objectsbuildableid = (int*) stream.readInt();
+   int _terrainnot = 0;
+   int _terrainreq1 = 0;
+   if ( version <= 4 ) {
+      _terrainnot = stream.readInt();
+      _terrainreq1 = stream.readInt();
+   }
+   int objectsbuildablenum = stream.readInt();
+   if ( version <= 4 )
+      stream.readInt(); // objectsbuildableid = (int*)
+
    weight = stream.readInt();
-   terrainaccess = (pterrainaccess) stream.readInt();
+
+   bool ___loadterrainaccess = false;
+   if ( version <= 4 )
+      ___loadterrainaccess = stream.readInt();
+
    bipicture = stream.readInt();
-   vehiclesbuildablenum = stream.readInt();
-   vehiclesbuildableid = (int*) stream.readInt();
-   buildicon = (void*) stream.readInt();
-   buildingsbuildablenum = stream.readInt();
-   buildingsbuildable = (Vehicletype::tbuildrange*) stream.readInt();
+   int vehiclesbuildablenum = stream.readInt();
+   if ( version <= 4 )
+      stream.readInt(); // vehiclesbuildableid = (int*)
+
+   if ( version <= 4 )
+      buildicon = (void*) stream.readInt();
+
+   int buildingsbuildablenum = stream.readInt();
+   if ( version <= 4 )
+      stream.readInt(); // buildingsbuildable = (Vehicletype::tbuildrange*)
+
    bool load_weapons = stream.readInt();
    autorepairrate = stream.readInt();
    if ( version <= 2 )
@@ -304,17 +315,29 @@ void Vehicletype :: read ( tnstream& stream )
             loadbi3pict_double ( bipicture, &picture[i], 1); // CGameOptions::Instance()->bi3.interpolate.units );
 
 
-   if ( objectsbuildablenum ) {
-      objectsbuildableid = new int [ objectsbuildablenum ];
-      for ( i = 0; i < objectsbuildablenum; i++ )
-         objectsbuildableid[i] = stream.readInt ( );
-   }
+   if ( objectsbuildablenum )
+      for ( i = 0; i < objectsbuildablenum; i++ ) {
+         int from = stream.readInt ( );
+         int to;
+         if ( version <= 4 )
+            to = from;
+         else
+            to = stream.readInt();
 
-   if ( vehiclesbuildablenum ) {
-      vehiclesbuildableid = new int [ vehiclesbuildablenum ];
-      for ( i = 0; i < vehiclesbuildablenum; i++ )
-         vehiclesbuildableid[i] = stream.readInt() ;
-   }
+         objectsBuildable.push_back ( IntRange ( from, to ));
+      }
+
+   if ( vehiclesbuildablenum )
+      for ( i = 0; i < vehiclesbuildablenum; i++ ) {
+         int from = stream.readInt ( );
+         int to;
+         if ( version <= 4 )
+            to = from;
+         else
+            to = stream.readInt();
+
+         vehiclesBuildable.push_back ( IntRange ( from, to ));
+      }
 
    if ( load_weapons && version > 1) {
       weapons.count = stream.readInt();
@@ -359,24 +382,22 @@ void Vehicletype :: read ( tnstream& stream )
       }
    #endif
 
-   if ( terrainaccess ) {
-      terrainaccess = new TerrainAccess;
-      terrainaccess->read ( stream );
-   } else {
-      terrainaccess = new TerrainAccess;
-      terrainaccess->terrain.set ( _terrain, 0 );
-      terrainaccess->terrainreq.set ( _terrainreq, 0 );
-      terrainaccess->terrainnot.set ( _terrainnot, 0 );
-      terrainaccess->terrainkill.set ( _terrainkill, 0 );
+   if ( ___loadterrainaccess || version >= 5 )
+      terrainaccess.read ( stream );
+   else {
+      terrainaccess.terrain.set ( _terrain, 0 );
+      terrainaccess.terrainreq.set ( _terrainreq, 0 );
+      terrainaccess.terrainnot.set ( _terrainnot, 0 );
+      terrainaccess.terrainkill.set ( _terrainkill, 0 );
    }
 
-   if ( buildingsbuildablenum ) {
-      buildingsbuildable = new tbuildrange[buildingsbuildablenum];
+   if ( buildingsbuildablenum )
       for ( i = 0; i < buildingsbuildablenum; i++ ) {
-         buildingsbuildable[i].from = stream.readInt();
-         buildingsbuildable[i].to = stream.readInt();
+         int from = stream.readInt();
+         int to = stream.readInt();
+         buildingsBuildable.push_back ( IntRange ( from, to ));
       }
-   }
+
 
 
    #ifndef converter
@@ -442,7 +463,7 @@ void Vehicletype:: write ( tnstream& stream ) const
    stream.writeInt(tank.material );
    stream.writeInt(functions );
    for ( j = 0; j < 8; j++ )
-       stream.writeChar( movement[j] );
+       stream.writeInt( movement[j] );
 
 
    stream.writeChar(movemalustyp );
@@ -471,45 +492,18 @@ void Vehicletype:: write ( tnstream& stream ) const
    stream.writeChar(maxwindspeedonwater );
    stream.writeChar(digrange );
    stream.writeInt(initiative );
-   stream.writeInt(_terrainnot );
-   stream.writeInt(_terrainreq1 );
-   stream.writeInt(objectsbuildablenum );
-
-   if ( objectsbuildableid )
-      stream.writeInt( 1 );
-   else
-      stream.writeInt( 0 );
+   stream.writeInt( objectsBuildable.size() );
 
    stream.writeInt(weight );
-   if ( terrainaccess )
-      stream.writeInt( 1 );
-   else
-      stream.writeInt( 0 );
 
    stream.writeInt(bipicture );
-   stream.writeInt(vehiclesbuildablenum );
-   if ( vehiclesbuildableid )
-      stream.writeInt( 1 );
-   else
-      stream.writeInt( 0 );
-
-   if ( buildicon )
-      stream.writeInt( 1 );
-   else
-      stream.writeInt( 0 );
-
-   stream.writeInt(buildingsbuildablenum );
-   if ( buildingsbuildable )
-      stream.writeInt( 1 );
-   else
-      stream.writeInt( 0 );
-
+   stream.writeInt(vehiclesBuildable.size() );
+   stream.writeInt( buildingsBuildable.size() );
    stream.writeInt( 1 ); // weapons
 
    stream.writeInt( autorepairrate );
 
    stream.writeInt( vehicleCategoriesLoadable );
-
 
    if ( !name.empty() )
       stream.writeString( name );
@@ -529,11 +523,15 @@ void Vehicletype:: write ( tnstream& stream ) const
          if ( picture[i] )
             stream.writedata ( picture[i], getpicsize2 ( picture[i] ) );
 
-   for ( i = 0; i < objectsbuildablenum; i++ )
-      stream.writeInt ( objectsbuildableid[i] );
+   for ( i = 0; i < objectsBuildable.size(); i++ ) {
+      stream.writeInt ( objectsBuildable[i].from );
+      stream.writeInt ( objectsBuildable[i].to );
+   }
 
-   for ( i = 0; i < vehiclesbuildablenum; i++ )
-      stream.writeInt ( vehiclesbuildableid[i] );
+   for ( i = 0; i < vehiclesBuildable.size(); i++ ) {
+      stream.writeInt ( vehiclesBuildable[i].from );
+      stream.writeInt ( vehiclesBuildable[i].to );
+   }
 
    stream.writeInt(weapons.count );
    for ( j = 0; j< 16; j++ ) {
@@ -552,13 +550,12 @@ void Vehicletype:: write ( tnstream& stream ) const
       stream.writeInt(weapons.weapon[j].targets_not_hittable );
    }
 
-   if ( terrainaccess )
-      terrainaccess->write ( stream );
+   terrainaccess.write ( stream );
 
-   for ( i = 0; i < buildingsbuildablenum; i++ ) {
-      stream.writeInt( buildingsbuildable[i].from );
-      stream.writeInt( buildingsbuildable[i].to );
-   }
+   for ( i = 0; i < buildingsBuildable.size(); i++ ) {
+      stream.writeInt( buildingsBuildable[i].from );
+      stream.writeInt( buildingsBuildable[i].to );
+   }                            
 
 }
 
@@ -581,24 +578,9 @@ Vehicletype :: ~Vehicletype ( )
          picture[i] = NULL;
       }
 
-   if ( objectsbuildableid ) {
-      delete[] objectsbuildableid;
-      objectsbuildableid = NULL;
-   }
-
-   if ( terrainaccess ) {
-      delete[] terrainaccess;
-      terrainaccess = NULL;
-   }
-
    if ( buildicon ) {
       delete buildicon;
       buildicon = NULL;
-   }
-
-   if ( buildingsbuildable ) {
-      delete[] buildingsbuildable;
-      buildingsbuildable = NULL;
    }
 
    for ( i = 0; i < 8; i++ )

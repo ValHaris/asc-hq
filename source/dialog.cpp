@@ -2,9 +2,13 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.91 2001-07-28 11:19:10 mbickel Exp $
+//     $Id: dialog.cpp,v 1.92 2001-07-28 21:09:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.91  2001/07/28 11:19:10  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.90  2001/07/27 21:13:34  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -5059,7 +5063,7 @@ void showbdtbits( void )
    displaymessage( m, 3 );
 }
 
-void appendTerrainBits ( char* text, TerrainBits* bdt )
+void appendTerrainBits ( char* text, const TerrainBits* bdt )
 {
    int num = 0;
    for (int i = 0; i < cbodenartennum ; i++) {
@@ -5133,16 +5137,16 @@ void viewterraininfo ( void )
          }
 
          strcat ( text, "the unit can drive onto the following fields:\n" );
-         appendTerrainBits ( text, &typ->terrainaccess->terrain );
+         appendTerrainBits ( text, &typ->terrainaccess.terrain );
 
          strcat ( text, "\n\nthese bits must be set:\n" );
-         appendTerrainBits ( text, &typ->terrainaccess->terrainreq );
+         appendTerrainBits ( text, &typ->terrainaccess.terrainreq );
 
          strcat ( text, "\n\nthese bits must NOT be set:\n" );
-         appendTerrainBits ( text, &typ->terrainaccess->terrainnot );
+         appendTerrainBits ( text, &typ->terrainaccess.terrainnot );
 
          strcat ( text, "\n\nthe unit ist killed by:\n" );
-         appendTerrainBits ( text, &typ->terrainaccess->terrainkill );
+         appendTerrainBits ( text, &typ->terrainaccess.terrainkill );
       }
 
       tviewanytext vat;

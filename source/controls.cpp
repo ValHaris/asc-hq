@@ -3,9 +3,13 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.107 2001-07-28 11:19:10 mbickel Exp $
+//     $Id: controls.cpp,v 1.108 2001-07-28 21:09:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.107  2001/07/28 11:19:10  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.106  2001/07/27 21:13:34  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -894,9 +898,10 @@ void         tbuildstreet::testfield( const MapCoordinate& mc )
    if ( !fld->vehicle ) {
       if ( !fld->building ) {
 
-         for ( int i = 0; i < actvehicle->typ->objectsbuildablenum; i++ ) {
-            pobjecttype objtype = getobjecttype_forid ( actvehicle->typ->objectsbuildableid[i] );
-            if ( objtype )
+         for ( int i = 0; i < actvehicle->typ->objectsBuildable.size(); i++ )
+           for ( int j = actvehicle->typ->objectsBuildable[i].from; j <= actvehicle->typ->objectsBuildable[i].to; j++ ) {
+             pobjecttype objtype = getobjecttype_forid ( j );
+             if ( objtype )
                 if ( objtype->terrainaccess.accessible( fld->bdt ) > 0 || fld->checkforobject ( objtype ) ) {
                    int movecost;
                    Resources cost;
@@ -952,8 +957,9 @@ void         SearchVehicleConstructionFields::testfield(const MapCoordinate& mc)
 {
    pfield fld = gamemap->getField(mc);
    if ( !fld->vehicle && !fld->building ) {
-      for ( int i = 0; i < actvehicle->typ->vehiclesbuildablenum; i++ ) {
-         pvehicletype v = getvehicletype_forid (  actvehicle->typ->vehiclesbuildableid[i] );
+     for ( int i = 0; i < actvehicle->typ->vehiclesBuildable.size(); i++ )
+       for ( int j = actvehicle->typ->vehiclesBuildable[i].from; j <= actvehicle->typ->vehiclesBuildable[i].to; j++ ) {
+         pvehicletype v = getvehicletype_forid ( j );
          if ( v && actvehicle->vehicleconstructable ( v, mc.x, mc.y )) {
             fld->a.temp = 1;
             numberoffields++;
