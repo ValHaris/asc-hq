@@ -105,7 +105,7 @@ class tgeneraldisplaymap : public tgeneraldisplaymapbase {
           virtual void _init ( int xs, int ys );
 
       public:
-          virtual void init ( int xs, int ys );
+          void init ( int xs, int ys );
           int playerview;
 
           virtual void pnt_terrain ( void );
@@ -146,7 +146,7 @@ class tdisplaymap : public tgeneraldisplaymap {
           void calcdisplaycache( void );
 
        public:
-          virtual void init ( int x1, int y1, int x2, int y2 );
+          void init ( int x1, int y1, int x2, int y2 );
           virtual void setnewsize ( int _zoom );
 
 

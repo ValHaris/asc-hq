@@ -47,7 +47,7 @@ void AI :: BuildingCapture :: write ( tnstream& stream ) const
 
 void AI :: BuildingCapture :: read ( tnstream& stream )
 {
-  int version = stream.readInt();
+  stream.readInt(); // version
   state = BuildingCaptureState( stream.readInt ( ));
   unit = stream.readInt ( );
   int i = stream.readInt ();

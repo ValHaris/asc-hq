@@ -2,9 +2,16 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.30 2001-08-09 14:50:37 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.31 2001-08-09 17:06:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2001/08/09 14:50:37  mbickel
+//      Added palette.map to data directory
+//      Improved usability of terrain selection in mapeditor
+//      New terrain translation in bi3 import function
+//      Better error messages in text parser
+//      Better error message: duplicate ID
+//
 //     Revision 1.29  2001/08/07 21:24:36  mbickel
 //      Fixed invalid height of planes inside carriers (mapeditor)
 //      Added namespace std usage to unix config
@@ -252,8 +259,8 @@ class SelectAnything : public SelectAnythingBase {
                        virtual int isavailable ( T item ) = 0;
                        virtual void displaysingleitem ( T item, int x, int y ) = 0;
                        virtual void _displaysingleitem ( T item, int x, int y );
-                       virtual void displaysingleitem ( int itemx, int itemy, int picx, int picy );
-                       virtual void displaysingleitem ( int itemx, int itemy );
+                       virtual void displayItem ( int itemx, int itemy, int picx, int picy );
+                       virtual void displayItem ( int itemx, int itemy );
                        virtual int getxposforitempos ( int itemx );
                        virtual int getyposforitempos ( int itemy );
                        virtual int getitemsizex ( void ) = 0;
@@ -262,8 +269,8 @@ class SelectAnything : public SelectAnythingBase {
                        virtual int getxgap ( void ) { return 5; };
                        virtual int getygap ( void ) { return 5; };
                        virtual void _showiteminfos ( T item, int x1, int y1, int x2, int y2 );
-                       virtual void showiteminfos ( T item, int x1, int y1, int x2, int y2 ) { };
-                       virtual void showiteminfos ( T item );
+                       virtual void showiteminfos ( T item, int x1, int y1, int x2, int y2 ) = 0;
+                       void showiteminfos ( T item );
                        virtual void showactiteminfos ( void );
                        vect<T> itemsavail;
 
@@ -371,7 +378,7 @@ template<class T> void SelectAnything<T> :: _displaysingleitem ( T item, int x, 
 }
 
 
-template<class T> void SelectAnything<T> :: displaysingleitem ( int itemx, int itemy, int picx, int picy )
+template<class T> void SelectAnything<T> :: displayItem ( int itemx, int itemy, int picx, int picy )
 {
    setinvisiblemouserectanglestk ( picx, picy, picx + getitemsizex(), picy + getitemsizey() );
 
@@ -404,16 +411,16 @@ template<class T> int SelectAnything<T> :: getyposforitempos ( int itemy )
 }
 
 
-template<class T> void SelectAnything<T> :: displaysingleitem ( int itemx, int itemy )
+template<class T> void SelectAnything<T> :: displayItem ( int itemx, int itemy )
 {
-   displaysingleitem ( itemx, itemy, getxposforitempos ( itemx ), getyposforitempos ( itemy ) );
+   displayItem ( itemx, itemy, getxposforitempos ( itemx ), getyposforitempos ( itemy ) );
 }
 
 template<class T> void SelectAnything<T> ::  display ( void ) 
 {
    for ( int y = winstarty; y < winstarty + winsizey; y++ ) 
       for ( int x = 0; x < maxx; x++ ) 
-         displaysingleitem ( x, y );
+         displayItem ( x, y );
       
 }
 
@@ -638,8 +645,8 @@ template<class T> T SelectAnything<T> :: selectitem( T previtem, tkey neutralkey
          display();
       else 
          if ( oldx != actitemx  || oldy != actitemy ) {
-            displaysingleitem ( oldx, oldy );
-            displaysingleitem ( actitemx, actitemy );
+            displayItem ( oldx, oldy );
+            displayItem ( actitemx, actitemy );
          }
       
       if ( oldx != actitemx  || oldy != actitemy ) 

@@ -202,12 +202,6 @@ void         initMapDisplay( )
       maped_x = ( agmp->resolutionx - 290 ) / fielddistx;
   #ifdef sgmain
       x = game_x;
-    #ifndef FREEMAPZOOM
-      int xw = ( x - 1) * fielddistx + fieldsizex + 2 * mapborderwidth + fielddisthalfx;
-      int sw = (agmp->resolutionx - 640) + 433 - 16;
-      scrleftspace += 2 + ( sw - xw ) / 2;
-    #endif
-
   #else
       x = maped_x;
   #endif
@@ -231,18 +225,11 @@ void         initMapDisplay( )
 
    tempsvisible = true;
    cursor.color = 0;
-   // checkfieldmousestatus = 0;
-
-  #ifdef FREEMAPZOOM
    #ifdef sgmain
     idisplaymap.init( scrleftspace, 21, agmp->resolutionx - 215, agmp->resolutiony - 55 );
    #else
     idisplaymap.init( scrleftspace, 21, agmp->resolutionx - 295, agmp->resolutiony - 40 );
    #endif
-  #else
-   idisplaymap.init( x, y  );
-   idisplaymap.setxsizes ( game_x, maped_x );
-  #endif
 }
 
 

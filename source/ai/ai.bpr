@@ -22,7 +22,7 @@
     <MAINSOURCE value="ai.bpf"/>
     <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer"/>
     <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
-    <WARNINGS value="-w-par"/>
+    <WARNINGS value="-w-par -w-csu"/>
     <LISTFILE value=""/>
   </MACROS>
   <OPTIONS>
@@ -65,11 +65,12 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=4
-Item0=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer\
-Item1=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include
-Item2=$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\SDL\include
-Item3=$(BCB)\include;$(BCB)\include\vcl
+Count=5
+Item0=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer
+Item1=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include;..\..\..\SDL_mixer\
+Item2=$(BCB)\include;$(BCB)\include\vcl;..\..\..\SDL\include
+Item3=$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\SDL\include
+Item4=$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
 Count=1
