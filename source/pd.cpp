@@ -2,88 +2,9 @@
     \brief The implementation of the Pulldown Menu
 */
 
-//     $Id: pd.cpp,v 1.20 2002-01-19 22:39:19 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.19  2002/01/07 11:40:40  mbickel
-//      Fixed some syntax errors
-//
-//     Revision 1.18  2001/12/19 17:16:29  mbickel
-//      Some include file cleanups
-//
-//     Revision 1.17  2001/07/30 17:43:13  mbickel
-//      Added Microsoft Visual Studio .net project files
-//      Fixed some warnings
-//
-//     Revision 1.16  2001/02/11 11:39:40  mbickel
-//      Some cleanup and documentation
-//
-//     Revision 1.15  2001/01/28 14:04:15  mbickel
-//      Some restructuring, documentation and cleanup
-//      The resource network functions are now it their own files, the dashboard
-//       as well
-//      Updated the TODO list
-//
-//     Revision 1.14  2000/10/18 14:14:16  mbickel
-//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
-//       fixed soon.
-//
-//     Revision 1.13  2000/08/12 12:52:50  mbickel
-//      Made DOS-Version compile and run again.
-//
-//     Revision 1.12  2000/06/09 10:50:59  mbickel
-//      Repaired keyboard control of pulldown menu
-//      Fixed compile errors at fieldlist with gcc
-//
-//     Revision 1.11  2000/05/23 20:40:48  mbickel
-//      Removed boolean type
-//
-//     Revision 1.10  2000/05/10 19:55:53  mbickel
-//      Fixed empty loops when waiting for mouse events
-//
-//     Revision 1.9  2000/05/06 20:25:23  mbickel
-//      Fixed: -recognition of a second mouse click when selection a pd menu item
-//             -movement: fields the unit can only pass, but not stand on them,
-//                        are marked darker
-//             -intedit/stredit: mouseclick outside is like hitting enter
-//
-//     Revision 1.8  2000/01/06 14:11:22  mbickel
-//      Fixed a graphic bug in PD and disabled fullscreen mode
-//
-//     Revision 1.7  2000/01/04 19:43:53  mbickel
-//      Continued Linux port
-//
-//     Revision 1.6  1999/12/30 20:30:37  mbickel
-//      Improved Linux port again.
-//
-//     Revision 1.5  1999/12/29 17:38:19  mbickel
-//      Continued Linux port
-//
-//     Revision 1.4  1999/12/28 21:03:17  mbickel
-//      Continued Linux port
-//      Added KDevelop project files
-//
-//     Revision 1.3  1999/11/22 18:27:48  mbickel
-//      Restructured graphics engine:
-//        VESA now only for DOS
-//        BASEGFX should be platform independant
-//        new interface for initialization
-//      Rewrote all ASM code in C++, but it is still available for the Watcom
-//        versions
-//      Fixed bugs in RLE decompression, BI map importer and the view calculation
-//
-//     Revision 1.2  1999/11/16 03:42:21  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
+    Copyright (C) 1994-2003  Martin Bickel  and  Marc Schellenberger
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

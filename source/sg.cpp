@@ -2,7 +2,7 @@
                            sg.cpp  -  description
                              -------------------
     begin                : a long time ago...
-    copyright            : (C) 1994-2001 by Martin Bickel
+    copyright            : (C) 1994-2003 by Martin Bickel
     email                : bickel@asc-hq.org
  ***************************************************************************/
 

@@ -5,227 +5,9 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.90 2003-02-27 16:12:01 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.89  2003/02/13 00:56:07  mbickel
-//      Updated weaponguide
-//      ASC compiles with gcc again
-//
-//     Revision 1.88  2003/02/02 13:04:56  mbickel
-//      Increased version of main.con
-//      Updated makefiles
-//
-//     Revision 1.87  2002/12/23 12:50:25  mbickel
-//      Fixed AI crash
-//      Minimap now working with partially defined graphic sets
-//
-//     Revision 1.86  2002/11/09 19:10:50  mbickel
-//      Fixed: invalid data return after EOF if file very small
-//      Resourceproduction of matter converter now working if not all resources could be stored
-//      mk1 V3 required
-//
-//     Revision 1.85  2002/10/12 17:28:04  mbickel
-//      Fixed "enemy unit loaded" bug.
-//      Changed map format
-//      Improved log messages
-//
-//     Revision 1.84  2002/10/09 16:58:46  mbickel
-//      Fixed to GrafikSet loading
-//      New item filter for mapeditor
-//
-//     Revision 1.83  2002/10/02 20:21:01  mbickel
-//      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
-//
-//     Revision 1.82  2002/04/10 21:12:13  mbickel
-//      Win32 version now searches registry for install path
-//
-//     Revision 1.81  2002/03/25 18:48:15  mbickel
-//      Applications can now specify which data checks to perform
-//
-//     Revision 1.80  2002/03/03 14:13:48  mbickel
-//      Some documentation updates
-//      Soundsystem update
-//      AI bug fixed
-//
-//     Revision 1.79  2002/03/02 23:04:01  mbickel
-//      Some cleanup of source code
-//      Improved Paragui Integration
-//      Updated documentation
-//      Improved Sound System
-//
-//     Revision 1.78  2001/12/19 17:16:29  mbickel
-//      Some include file cleanups
-//
-//     Revision 1.77  2001/12/19 11:46:36  mbickel
-//      Applied patches from Michael Moerz:
-//       - 64bit cleanup of demount.cpp, mount.cpp
-//       - removal of #ifdef converter and moved conveter specific functions
-//         to independant lib
-//
-//     Revision 1.76  2001/12/14 10:20:05  mbickel
-//      Cleanup and enhancements to configure.in
-//      Removed last remains of octagonal version from source files
-//
-//     Revision 1.75  2001/11/22 15:08:24  mbickel
-//      Added gameoption heightChangeMovement
-//
-//     Revision 1.74  2001/11/05 21:31:04  mbickel
-//      Fixed compilation errors
-//      new data version required
-//
-//     Revision 1.73  2001/11/05 21:10:42  mbickel
-//      Updated palette code
-//
-//     Revision 1.72  2001/10/31 18:34:33  mbickel
-//      Some adjustments and fixes for gcc 3.0.2
-//
-//     Revision 1.71  2001/10/16 19:58:19  mbickel
-//      Added title screen for mapeditor
-//      Updated source documentation
-//
-//     Revision 1.70  2001/10/11 10:22:50  mbickel
-//      Some cleanup and fixes for Visual C++
-//
-//     Revision 1.69  2001/08/26 20:55:04  mbickel
-//      bin2text can now load text files too
-//      LoadableItemType interface class added
-//
-//     Revision 1.68  2001/08/09 19:28:22  mbickel
-//      Started adding buildingtype text file functions
-//
-//     Revision 1.67  2001/08/09 15:58:59  mbickel
-//      Some usability improvements in the map editor
-//      More flexible BI3 map import
-//      Better textfile error messages
-//
-//     Revision 1.66  2001/08/09 14:50:37  mbickel
-//      Added palette.map to data directory
-//      Improved usability of terrain selection in mapeditor
-//      New terrain translation in bi3 import function
-//      Better error messages in text parser
-//      Better error message: duplicate ID
-//
-//     Revision 1.65  2001/08/06 20:54:43  mbickel
-//      Fixed lots of crashes related to the new text files
-//      Fixed delayed events
-//      Fixed crash in terrin change event
-//      Fixed visibility of mines
-//      Fixed crashes in event loader
-//
-//     Revision 1.64  2001/08/02 18:50:43  mbickel
-//      Corrected Error handling in Text parsers
-//      Improved version information
-//
-//     Revision 1.63  2001/08/02 15:33:02  mbickel
-//      Completed text based file formats
-//
-//     Revision 1.62  2001/07/30 17:43:13  mbickel
-//      Added Microsoft Visual Studio .net project files
-//      Fixed some warnings
-//
-//     Revision 1.61  2001/07/28 11:19:12  mbickel
-//      Updated weaponguide
-//      moved item repository from spfst to itemrepository
-//
-//     Revision 1.60  2001/07/27 21:13:35  mbickel
-//      Added text based file formats
-//      Terraintype and Objecttype restructured
-//
-//     Revision 1.59  2001/07/14 19:13:16  mbickel
-//      Rewrote sound system
-//      Moveing units make sounds
-//      Added sound files to data
-//
-//     Revision 1.58  2001/05/16 23:21:02  mbickel
-//      The data file is mounted using automake
-//      Added sgml documentation
-//      Added command line parsing functionality;
-//        integrated it into autoconf/automake
-//      Replaced command line parsing of ASC and ASCmapedit
-//
-//     Revision 1.57  2001/03/23 16:02:56  mbickel
-//      Some restructuring;
-//      started rewriting event system
-//
-//     Revision 1.56  2001/02/18 15:37:19  mbickel
-//      Some cleanup and documentation
-//      Restructured: vehicle and building classes into separate files
-//         tmap, tfield and helper classes into separate file (gamemap.h)
-//      basestrm : stream mode now specified by enum instead of int
-//
-//     Revision 1.55  2001/02/11 11:39:42  mbickel
-//      Some cleanup and documentation
-//
-//     Revision 1.54  2001/02/04 21:26:59  mbickel
-//      The AI status is written to savegames -> new savegame revision
-//      Lots of bug fixes
-//
-//     Revision 1.53  2001/02/01 22:48:48  mbickel
-//      rewrote the storing of units and buildings
-//      Fixed bugs in bi3 map importing routines
-//      Fixed bugs in AI
-//      Fixed bugs in mapeditor
-//
-//     Revision 1.52  2001/01/28 23:00:40  mbickel
-//      Made the small editors compilable with Watcom again
-//
-//     Revision 1.51  2001/01/28 20:42:15  mbickel
-//      Introduced a new string class, ASCString, which should replace all
-//        char* and std::string in the long term
-//      Split loadbi3.cpp into 3 different files (graphicselector, graphicset)
-//
-//     Revision 1.50  2001/01/28 14:04:19  mbickel
-//      Some restructuring, documentation and cleanup
-//      The resource network functions are now it their own files, the dashboard
-//       as well
-//      Updated the TODO list
-//
-//     Revision 1.49  2001/01/21 16:37:19  mbickel
-//      Moved replay code to own file ( replay.cpp )
-//      Fixed compile problems done by cleanup
-//
-//     Revision 1.48  2001/01/21 12:48:36  mbickel
-//      Some cleanup and documentation
-//
-//     Revision 1.47  2001/01/04 15:14:06  mbickel
-//      configure now checks for libSDL_image
-//      AI only conquers building that cannot be conquered back immediately
-//      tfindfile now returns strings instead of char*
-//
-//     Revision 1.46  2000/12/27 22:23:15  mbickel
-//      Fixed crash in loading message text
-//      Removed many unused variables
-//
-//     Revision 1.45  2000/11/29 09:40:25  mbickel
-//      The mapeditor has now two maps simultaneously active
-//      Moved memorychecking functions to its own file: memorycheck.cpp
-//      Rewrote password handling in ASC
-//
-//     Revision 1.44  2000/11/26 22:18:56  mbickel
-//      Added command line parameters for setting the verbosity
-//      Increased verbose output
-//
-//     Revision 1.43  2000/11/21 20:27:07  mbickel
-//      Fixed crash in tsearchfields (used by object construction for example)
-//      AI improvements
-//      configure.in: added some debug output
-//                    fixed broken check for libbz2
-//
-//     Revision 1.42  2000/11/14 20:36:41  mbickel
-//      The AI can now use supply vehicles
-//      Rewrote objecttype IO routines to make the structure independant of
-//       the memory layout
-//
-//     Revision 1.41  2000/11/08 19:31:13  mbickel
-//      Rewrote IO for the tmap structure
-//      Fixed crash when entering damaged building
-//      Fixed crash in AI
-//      Removed item CRCs
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
+    Copyright (C) 1994-2003  Martin Bickel  and  Marc Schellenberger
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -238,7 +20,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the 
+    along with this program; see the file COPYING. If not, write to the
     Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
@@ -1126,6 +908,7 @@ void checkDataVersion( )
    } else
       dataOk = false;
 
+      return;
 
    if ( !dataOk )
       fatalError("A newer version of the data file 'mk1.con' is required. \n"

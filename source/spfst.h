@@ -4,114 +4,7 @@
     spfst comes from german "Spielfeldsteuerung" :-)
 */
 
-
-//     $Id: spfst.h,v 1.52 2003-02-27 16:12:27 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.51  2002/11/17 11:43:23  mbickel
-//      Fixed replay errors when replaying the AI moves
-//
-//     Revision 1.50  2002/11/02 14:13:18  mbickel
-//      New net handling for objects
-//
-//     Revision 1.49  2002/10/09 16:58:46  mbickel
-//      Fixed to GrafikSet loading
-//      New item filter for mapeditor
-//
-//     Revision 1.48  2002/10/06 15:44:40  mbickel
-//      Completed inheritance of .asctxt files
-//      Speed up of replays
-//
-//     Revision 1.47  2002/03/18 21:42:17  mbickel
-//      Some cleanup and documentation in the Mine class
-//      The number of mines is now displayed in the field information window
-//
-//     Revision 1.46  2001/12/14 10:20:05  mbickel
-//      Cleanup and enhancements to configure.in
-//      Removed last remains of octagonal version from source files
-//
-//     Revision 1.45  2001/10/31 18:34:33  mbickel
-//      Some adjustments and fixes for gcc 3.0.2
-//
-//     Revision 1.44  2001/08/02 18:50:43  mbickel
-//      Corrected Error handling in Text parsers
-//      Improved version information
-//
-//     Revision 1.43  2001/07/28 11:19:12  mbickel
-//      Updated weaponguide
-//      moved item repository from spfst to itemrepository
-//
-//     Revision 1.42  2001/03/30 12:43:16  mbickel
-//      Added 3D pathfinding
-//      some cleanup and documentation
-//      splitted the ai into several files, now located in the ai subdirectory
-//      AI cares about airplane servicing and range constraints
-//
-//     Revision 1.41  2001/02/26 12:35:33  mbickel
-//      Some major restructuing:
-//       new message containers
-//       events don't store pointers to units any more
-//       tfield class overhauled
-//
-//     Revision 1.40  2001/02/18 15:37:20  mbickel
-//      Some cleanup and documentation
-//      Restructured: vehicle and building classes into separate files
-//         tmap, tfield and helper classes into separate file (gamemap.h)
-//      basestrm : stream mode now specified by enum instead of int
-//
-//     Revision 1.39  2001/02/01 22:48:51  mbickel
-//      rewrote the storing of units and buildings
-//      Fixed bugs in bi3 map importing routines
-//      Fixed bugs in AI
-//      Fixed bugs in mapeditor
-//
-//     Revision 1.38  2001/01/28 14:04:20  mbickel
-//      Some restructuring, documentation and cleanup
-//      The resource network functions are now it their own files, the dashboard
-//       as well
-//      Updated the TODO list
-//
-//     Revision 1.37  2001/01/25 23:45:06  mbickel
-//      Moved map displaying routins to own file (mapdisplay.cpp)
-//      Wrote program to create pcx images from map files (map2pcx.cpp)
-//      Fixed bug in repair function: too much resource consumption
-//      AI improvements and bug fixes
-//      The BI3 map import function now evaluates the player status (human/
-//       computer)
-//
-//     Revision 1.36  2001/01/23 21:05:22  mbickel
-//      Speed up of AI
-//      Lot of bugfixes in AI
-//      Moved Research to own files (research.*)
-//      Rewrote storing of developed technologies
-//      Some cleanup and documentation
-//
-//     Revision 1.35  2001/01/21 16:37:22  mbickel
-//      Moved replay code to own file ( replay.cpp )
-//      Fixed compile problems done by cleanup
-//
-//     Revision 1.34  2001/01/21 12:48:36  mbickel
-//      Some cleanup and documentation
-//
-//     Revision 1.33  2001/01/19 13:33:56  mbickel
-//      The AI now uses hemming
-//      Several bugfixes in Vehicle Actions
-//      Moved all view calculation to viewcalculation.cpp
-//      Mapeditor: improved keyboard support for item selection
-//
-//     Revision 1.32  2000/11/21 20:27:10  mbickel
-//      Fixed crash in tsearchfields (used by object construction for example)
-//      AI improvements
-//      configure.in: added some debug output
-//                    fixed broken check for libbz2
-//
-//     Revision 1.31  2000/11/08 19:31:15  mbickel
-//      Rewrote IO for the tmap structure
-//      Fixed crash when entering damaged building
-//      Fixed crash in AI
-//      Removed item CRCs
-//
-/*                       
+/*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
 
@@ -257,14 +150,14 @@ extern void  clearfahrspuren(void);
 
 /*! tests if the vehicle can move onto the field
 
-   \param uheight the level of height for which the check should be done. Use -1 to use the current height of the unit
+   \param uheight the level of height for which the check should be done. Use -2 to use the current height of the unit
    \retval 0 unit cannot move there
    \retval 1 unit can pass over the field
    \retval 2 unit can stop its movement there
 */
-extern int fieldaccessible( const pfield        field,
+extern int fieldAccessible( const pfield        field,
                             const pvehicle     vehicle,
-                            int  uheight = -1,
+                            int  uheight = -2,
                             const bool* attacked = NULL );
 
 //! returns the image of an (explosive) mine. The type of the mine is specified by num.

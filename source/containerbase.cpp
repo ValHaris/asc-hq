@@ -2,7 +2,7 @@
                           containerbase.cpp  -  description
                              -------------------
     begin                : Fri Sep 29 2000
-    copyright            : (C) 2000 by Martin Bickel
+    copyright            : (C) 2003 by Martin Bickel
     email                : bickel@asc-hq.org
  ***************************************************************************/
 

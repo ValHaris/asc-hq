@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: ai.h,v 1.14 2003-03-07 17:11:41 mbickel Exp $
+//     $Id: ai.h,v 1.15 2003-03-08 14:24:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2003/03/07 17:11:41  mbickel
+//      AI improvements
+//
 //     Revision 1.13  2002/12/12 11:34:19  mbickel
 //      Fixed: ai crashing when weapon has no ammo
 //      Fixed: ASC crashed when loading game with ID not found
@@ -347,6 +350,7 @@
                   bool neighbouringFieldsReachable[ sidenum ]; // used for the hemming tactic
                   float positionThreat;
             };
+            static bool moveVariantComp ( const AI::MoveVariant* mv1, const AI::MoveVariant* mv2 );
          private:
 
             typedef vector<MoveVariant> MoveVariantContainer;
@@ -384,12 +388,14 @@
              */
             int moveUnit ( pvehicle veh, const AStar3D::Path& path );
 
-            void getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBonus );
+            void getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBonus, bool justOne = false );
             void searchTargets ( pvehicle veh, const MapCoordinate3D& pos, TargetVector& tl, int moveDist, AStar3D& vm, int hemmingBonus );
+            bool targetsNear( pvehicle veh );
+
             AiResult executeMoveAttack ( pvehicle veh, TargetVector& tv );
             int getDirForBestTacticsMove ( const pvehicle veh, TargetVector& tv );
             MapCoordinate getDestination ( const pvehicle veh );
-            AiResult moveToSavePlace ( pvehicle veh, VehicleMovement& vm );
+            AiResult moveToSavePlace ( pvehicle veh, VehicleMovement& vm, int preferredHeight = -1 );
             int  getBestHeight ( const pvehicle veh );
             float getAttackValue ( const tfight& battle, const pvehicle attackingUnit, const pvehicle attackedUnit, float factor = 1 );
 
@@ -533,4 +539,5 @@
            void write ( tnstream& stream ) const ;
            ~AI ( );
     };
+
 

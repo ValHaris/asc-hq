@@ -2,38 +2,9 @@
     \brief The color palette and various color translation tables
 */
 
-//     $Id: palette.cpp,v 1.7 2001-10-31 18:34:33 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.6  2001/09/20 15:36:09  mbickel
-//      New object displaying mode
-//
-//     Revision 1.5  2001/01/28 20:42:14  mbickel
-//      Introduced a new string class, ASCString, which should replace all
-//        char* and std::string in the long term
-//      Split loadbi3.cpp into 3 different files (graphicselector, graphicset)
-//
-//     Revision 1.4  2001/01/28 14:04:15  mbickel
-//      Some restructuring, documentation and cleanup
-//      The resource network functions are now it their own files, the dashboard
-//       as well
-//      Updated the TODO list
-//
-//     Revision 1.3  2000/12/23 13:19:47  mbickel
-//      Made ASC compileable with Borland C++ Builder
-//
-//     Revision 1.2  1999/11/16 03:42:19  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
+    Copyright (C) 1994-2003  Martin Bickel  and  Marc Schellenberger
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

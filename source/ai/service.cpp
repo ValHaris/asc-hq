@@ -178,7 +178,7 @@ bool AI::ServiceOrder::execute1st ( pvehicle supplier )
              int y = targ->ypos;
              getnextfield ( x, y, i );
              pfield fld = getfield ( x, y );
-             if ( fld && fieldaccessible ( fld, supplier, 1<<h ) == 2 && !fld->building && !fld->vehicle ) {
+             if ( fld && fieldAccessible ( fld, supplier, 1<<h ) == 2 && !fld->building && !fld->vehicle ) {
                 bool result = false;
                 TemporaryContainerStorage tus ( supplier );
                 supplier->xpos = x;
@@ -263,10 +263,13 @@ bool AI::ServiceOrder::canWait( )
    if ( requiredService == VehicleService::srv_repair )
       return false;
 
-   if ( requiredService == VehicleService::srv_ammo )
+   if ( requiredService == VehicleService::srv_ammo ) {
       if ( getTargetUnit()->ammo[position] )
          return true;
 
+      if ( ai->targetsNear( getTargetUnit() ))
+         return true;
+   }
 
    bool fuelLack = requiredService == VehicleService::srv_resource && position == 2 ;
    bool couldWait = fuelLack || !timeOut();

@@ -1,81 +1,14 @@
 /*! \file newfont.cpp
-    \brief Handling the fonts of ASC. 
+    \brief Handling the fonts of ASC.
 
     The routines for displaying fonts can be found in #basegfx.cpp (function #showtext ).
-    Although the file name contains is called newfont, the time when this was actually the case is long past (1993)... 
-    
+    Although the file name contains is called newfont, the time when this was actually the case is long past (1993)...
+
 */
 
-//     $Id: newfont.cpp,v 1.15 2002-04-02 21:57:57 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.14  2001/12/19 17:16:29  mbickel
-//      Some include file cleanups
-//
-//     Revision 1.13  2001/12/14 10:20:05  mbickel
-//      Cleanup and enhancements to configure.in
-//      Removed last remains of octagonal version from source files
-//
-//     Revision 1.12  2001/10/31 18:34:31  mbickel
-//      Some adjustments and fixes for gcc 3.0.2
-//
-//     Revision 1.11  2001/02/11 11:39:40  mbickel
-//      Some cleanup and documentation
-//
-//     Revision 1.10  2000/12/27 22:23:12  mbickel
-//      Fixed crash in loading message text
-//      Removed many unused variables
-//
-//     Revision 1.9  2000/10/11 14:26:44  mbickel
-//      Modernized the internal structure of ASC:
-//       - vehicles and buildings now derived from a common base class
-//       - new resource class
-//       - reorganized exceptions (errors.h)
-//      Split some files:
-//        typen -> typen, vehicletype, buildingtype, basecontainer
-//        controls -> controls, viewcalculation
-//        spfst -> spfst, mapalgorithm
-//      bzlib is now statically linked and sources integrated
-//
-//     Revision 1.8  2000/08/12 12:52:49  mbickel
-//      Made DOS-Version compile and run again.
-//
-//     Revision 1.7  2000/01/04 19:43:53  mbickel
-//      Continued Linux port
-//
-//     Revision 1.6  1999/12/29 17:38:18  mbickel
-//      Continued Linux port
-//
-//     Revision 1.5  1999/12/28 21:03:13  mbickel
-//      Continued Linux port
-//      Added KDevelop project files
-//
-//     Revision 1.4  1999/11/25 22:00:06  mbickel
-//      Added weapon information window
-//      Added support for primary offscreen frame buffers to graphics engine
-//      Restored file time handling for DOS version
-//
-//     Revision 1.3  1999/11/22 18:27:44  mbickel
-//      Restructured graphics engine:
-//        VESA now only for DOS
-//        BASEGFX should be platform independant
-//        new interface for initialization
-//      Rewrote all ASM code in C++, but it is still available for the Watcom
-//        versions
-//      Fixed bugs in RLE decompression, BI map importer and the view calculation
-//
-//     Revision 1.2  1999/11/16 03:42:15  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
+    Copyright (C) 1994-2003  Martin Bickel  and  Marc Schellenberger
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

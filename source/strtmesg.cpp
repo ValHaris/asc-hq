@@ -1,8 +1,8 @@
-//     $Id: strtmesg.cpp,v 1.170 2003-02-27 16:12:32 mbickel Exp $
+//     $Id: strtmesg.cpp,v 1.171 2003-03-08 14:24:38 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
+    Copyright (C) 1994-2003  Martin Bickel  and  Marc Schellenberger
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 
 // These strings should be the same as the release tags in CVS !
-const char* asc_release="ASC1.12.4.0";
+const char* asc_release="ASC1.13.0.0";
 
 #include <stdio.h>
 #include "strtmesg.h"

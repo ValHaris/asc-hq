@@ -2,69 +2,9 @@
     \brief Changing the weather and the terrain on the map
 */
 
-//     $Id: weather.cpp,v 1.13 2003-02-19 19:47:26 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.12  2002/12/12 11:34:18  mbickel
-//      Fixed: ai crashing when weapon has no ammo
-//      Fixed: ASC crashed when loading game with ID not found
-//      Fixed: more ai problems
-//      AI now faster
-//      Fixed: removing objects overfill a units tank
-//
-//     Revision 1.11  2001/12/14 10:20:05  mbickel
-//      Cleanup and enhancements to configure.in
-//      Removed last remains of octagonal version from source files
-//
-//     Revision 1.10  2001/07/30 17:43:13  mbickel
-//      Added Microsoft Visual Studio .net project files
-//      Fixed some warnings
-//
-//     Revision 1.9  2001/07/28 11:19:12  mbickel
-//      Updated weaponguide
-//      moved item repository from spfst to itemrepository
-//
-//     Revision 1.8  2001/01/28 14:04:22  mbickel
-//      Some restructuring, documentation and cleanup
-//      The resource network functions are now it their own files, the dashboard
-//       as well
-//      Updated the TODO list
-//
-//     Revision 1.7  2000/11/21 19:13:27  mbickel
-//      libbzip2 can now be linked either statically or dynamically to ASC/linux
-//
-//     Revision 1.6  2000/10/18 14:14:22  mbickel
-//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
-//       fixed soon.
-//
-//     Revision 1.5  2000/10/14 13:07:01  mbickel
-//      Moved DOS version into own subdirectories
-//      Win32 version with Watcom compiles and links ! But doesn't run yet...
-//
-//     Revision 1.4  2000/10/12 22:24:03  mbickel
-//      Made the DOS part of the new platform system work again
-//
-//     Revision 1.3  1999/11/22 18:28:08  mbickel
-//      Restructured graphics engine:
-//        VESA now only for DOS
-//        BASEGFX should be platform independant
-//        new interface for initialization
-//      Rewrote all ASM code in C++, but it is still available for the Watcom
-//        versions
-//      Fixed bugs in RLE decompression, BI map importer and the view calculation
-//
-//     Revision 1.2  1999/11/16 03:42:51  tmwilson
-//      Added CVS keywords to most of the files.
-//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//      Wrote replacement routines for kbhit/getch for Linux
-//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//      Added autoconf/automake capabilities
-//      Added files used by 'automake --gnu'
-//
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
+    Copyright (C) 1994-2003  Martin Bickel  and  Marc Schellenberger
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

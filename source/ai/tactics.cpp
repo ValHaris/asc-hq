@@ -28,7 +28,9 @@ void AI :: searchTargets ( pvehicle veh, const MapCoordinate3D& pos, TargetVecto
    npush ( veh->ypos );
    npush ( veh->height );
 
-   veh->removeview();
+   bool unitRadarActivated = getMap()->getField(veh->getPosition())->unitHere(veh);
+   if ( unitRadarActivated )
+      veh->removeview();
    // int fieldsWithChangedVisibility = evaluateviewcalculation ( getMap(), veh->xpos, veh->ypos, veh->typ->view, 0xff );
    veh->xpos = pos.x;
    veh->ypos = pos.y;
@@ -135,7 +137,8 @@ void AI :: searchTargets ( pvehicle veh, const MapCoordinate3D& pos, TargetVecto
    npop ( veh->ypos );
    npop ( veh->xpos );
 
-   veh->addview();
+   if ( unitRadarActivated )
+      veh->addview();
 
    if ( fieldsWithChangedVisibility || 1 )  // viewbug.sav !!!!!
       evaluateviewcalculation ( getMap(), veh->getPosition(), veh->typ->view, 0xff );
@@ -156,19 +159,22 @@ bool operator < ( const AI::MoveVariant& mv1, const AI::MoveVariant& mv2 )
 }
 
 
-bool moveVariantComp ( const AI::MoveVariant* mv1, const AI::MoveVariant* mv2 )
+bool AI::moveVariantComp ( const AI::MoveVariant* mv1, const AI::MoveVariant* mv2 )
 {
    return *mv1 < *mv2;
    // return ( mv1->result < mv2->result || (mv1->result == mv2->result && mv1->moveDist > mv2->moveDist ));
 }
 
-void AI::getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBonus )
+void AI::getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBonus, bool justOne )
 {
    int orgxpos = veh->xpos ;
    int orgypos = veh->ypos ;
 
    if ( getfield ( veh->xpos, veh->ypos )->unitHere ( veh ) )  // unit not inside a building or transport
       searchTargets ( veh, veh->getPosition3D(), tv, 0, vm, hemmingBonus );
+
+   if ( tv.size() && justOne )
+      return;
 
    // Now we cycle through all fields that are reachable...
    if ( !veh->typ->wait ) {
@@ -182,9 +188,11 @@ void AI::getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBo
          if ( !ff->hasAttacked ) {
             pfield fld = getMap()->getField (ff->h);
             if ( !fld->vehicle && !fld->building ) {
-                if ( !apl || apl->returnFromPositionPossible ( ff->h ))
+                if ( !apl || apl->returnFromPositionPossible ( ff->h )) {
                    searchTargets ( veh, ff->h, tv, beeline ( ff->h.x, ff->h.y, orgxpos, orgypos ), vm, hemmingBonus );
-                else
+                   if ( tv.size() && justOne )
+                      return;
+                } else
                    fuelLacking++;
              }
          }
@@ -196,9 +204,7 @@ void AI::getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBo
 
       if ( !tv.size() && fuelLacking )
          issueRefuelOrder( veh, true );
-
    }
-
 }
 
 AI::AiResult AI::executeMoveAttack ( pvehicle veh, TargetVector& tv )
@@ -257,6 +263,19 @@ AI::AiResult AI::executeMoveAttack ( pvehicle veh, TargetVector& tv )
    return result;
 }
 
+bool AI::targetsNear( pvehicle veh )
+{
+   AStar3D ast ( getMap(), veh, false, veh->maxMovement() );
+   ast.findAllAccessibleFields ();
+   TargetVector tv;
+   getAttacks ( ast, veh, tv, 0, true );
+   if ( tv.size() )
+      return true;
+   else
+      return false;
+}
+
+
 int AI::getDirForBestTacticsMove ( const pvehicle veh, TargetVector& tv )
 {
    if ( tv.size() <= 0 )
@@ -293,7 +312,7 @@ MapCoordinate AI::getDestination ( const pvehicle veh )
 }
 
 
-AI::AiResult AI::moveToSavePlace ( pvehicle veh, VehicleMovement& vm3 )
+AI::AiResult AI::moveToSavePlace ( pvehicle veh, VehicleMovement& vm3, int preferredHeight )
 {
    int unitNetworkID = veh->networkid;
 

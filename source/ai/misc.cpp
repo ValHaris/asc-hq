@@ -308,78 +308,54 @@ AI::AiResult  AI :: container ( ccontainercontrols& cc )
 
       checkKeys();
 
-      int simplyMove = 0;
-      if ( getBestHeight ( *i ) != (*i)->height ) {
-         VehicleMovement* vm = cc.movement ( *i );
-         if ( vm ) {
-            int nwid = (*i)->networkid;
 
-            auto_ptr<VehicleMovement> avm ( vm );
-            int stat = changeVehicleHeight ( *i, vm );
-            if ( !getMap()->getUnit(nwid)  )
-               continue;
+      int preferredHeight = getBestHeight ( *i );
 
-            if ( stat == -1 ) {
-               result.unitsWaiting++;
-               (*i)->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_wait );
+      VehicleMovement* vm = cc.movement ( *i );
+      // auto_ptr<VehicleMovement> vm ( cc.movement ( *i ) );
+      if ( vm ) {
+         vm->registerMapDisplay ( mapDisplay );
+         auto_ptr<VehicleMovement> avm ( vm );
+
+         VehicleAttack va ( NULL, NULL );
+         int moved = 0;
+         if ( va.available ( *i )) {
+            TargetVector tv;
+
+            AStar3D ast ( getMap(), *i, false, (*i)->maxMovement() );
+            ast.findAllAccessibleFields ();
+
+            getAttacks ( ast, *i, tv, 0 );
+
+            if ( tv.size() ) {
+               AiResult res = executeMoveAttack ( *i, tv );
+               result += res;
+               if ( !res.unitsDestroyed )
+                  (*i)->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_tactics );
+
+               moved = 1;
             } else {
-               if ( stat== -2 ) {
-                  simplyMove = 1;
-               } else {
-                  result.unitsMoved++;
-                  (*i)->aiparam[ getPlayerNum() ]->resetTask( );
-                  if ( (*i)->getMovement() >= minmalq && !(*i)->attacked && (*i)->weapexist() )
-                     simplyMove = 1;
-                  else {
-                     VehicleMovement vm2 ( mapDisplay, NULL );
-                     if ( vm2.available ( *i ))
-                        moveToSavePlace ( *i, vm2 );
-                  }
-               }
-            }
-
-         }
-      } else
-         simplyMove = 2;
-
-      if ( simplyMove ) {
-         VehicleMovement* vm = cc.movement ( *i );
-         // auto_ptr<VehicleMovement> vm ( cc.movement ( *i ) );
-         if ( vm ) {
-            vm->registerMapDisplay ( mapDisplay );
-            auto_ptr<VehicleMovement> avm ( vm );
-
-            VehicleAttack va ( NULL, NULL );
-            int attack = 0;
-            if ( va.available ( *i )) {
-               TargetVector tv;
-
-               AStar3D ast ( getMap(), *i, false, (*i)->maxMovement() );
+               AStar3D ast ( getMap(), *i, false, (*i)->maxMovement()*3 );
                ast.findAllAccessibleFields ();
 
                getAttacks ( ast, *i, tv, 0 );
 
                if ( tv.size() ) {
-                  AiResult res = executeMoveAttack ( *i, tv );
-                  result += res;
-                  if ( !res.unitsDestroyed )
-                     (*i)->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_tactics );
-
-                  attack = 1;
+                  MoveVariant* mv = *max_element( tv.begin(), tv.end(), moveVariantComp );
+                  if ( moveUnit ( *i, mv->movePos ) )
+                     moved = 1;
                }
+            }
 
-            }
-            if ( !attack ) {
-               AiResult res =  moveToSavePlace ( *i, *vm );
-               result += res;
-               if ( !res.unitsDestroyed )
-                  (*i)->aiparam[ getPlayerNum() ]->resetTask();
-            }
          }
-
+         if ( !moved ) {
+            AiResult res =  moveToSavePlace ( *i, *vm, preferredHeight );
+            result += res;
+            if ( !res.unitsDestroyed )
+               (*i)->aiparam[ getPlayerNum() ]->resetTask();
+         }
       }
    }
-
    return result;
 }
 

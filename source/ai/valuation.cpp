@@ -562,7 +562,7 @@ int AI :: Section :: numberOfAccessibleFields ( const pvehicle veh )
    int num = 0;
    for ( int y = y1; y <= y2; y++ )
       for ( int x = x1; x <= x2; x++ )
-         if ( fieldaccessible ( getfield ( x, y ), veh ) == 2)
+         if ( fieldAccessible ( getfield ( x, y ), veh ) == 2)
             num++;
 
    return num;

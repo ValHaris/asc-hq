@@ -1,55 +1,6 @@
-//     $Id: unitctrl.cpp,v 1.101 2003-03-05 17:57:53 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.100  2003/02/27 16:12:45  mbickel
-//      Restructuring of new pathfinding code completed
-//
-//     Revision 1.99  2003/02/19 19:47:26  mbickel
-//      Completely rewrote Pathfinding code
-//      Wind not different any more on different levels of height
-//
-//     Revision 1.98  2003/02/12 20:11:53  mbickel
-//      Some significant changes to the Transportation code
-//
-//     Revision 1.97  2003/02/07 09:53:03  mbickel
-//      Fixed: building could not repair themself
-//
-//     Revision 1.96  2003/01/28 17:48:42  mbickel
-//      Added sounds
-//      Rewrote soundsystem
-//      Fixed: tank got stuck when moving from one transport ship to another
-//
-//     Revision 1.95  2003/01/06 16:52:04  mbickel
-//      Fixed: units inside transports got wrong movement when moved out
-//      Fixed: wind not displayed correctly
-//      Fixed: tribute displaying wrong values
-//      Fixed: constructing units with untis consumed energy when pipeline near
-//      The movement cost for building objects is no longer terrain dependant
-//
-//     Revision 1.94  2002/12/12 11:34:18  mbickel
-//      Fixed: ai crashing when weapon has no ammo
-//      Fixed: ASC crashed when loading game with ID not found
-//      Fixed: more ai problems
-//      AI now faster
-//      Fixed: removing objects overfill a units tank
-//
-//     Revision 1.93  2002/11/27 21:25:56  mbickel
-//      AI fixes
-//
-//     Revision 1.92  2002/11/27 10:38:49  mbickel
-//      Added movecost checks for fields
-//
-//     Revision 1.91  2002/11/01 14:06:53  mbickel
-//      Changing the height between floating and driving has no movecost any more
-//      submarines evalute the field properties, not the terrain type properties
-//
-//     Revision 1.90  2002/10/27 22:19:44  mbickel
-//      Added bridge terrain property
-//      Some restructuring of the graphic set code
-
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
+    Copyright (C) 1994-2003  Martin Bickel  and  Marc Schellenberger
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

@@ -94,7 +94,7 @@ void         SearchReconquerBuilding :: unitfound(pvehicle     eht)
 bool SearchReconquerBuilding :: canUnitCapture( pvehicle eht )
 {
    return ((eht->functions & cf_conquer ))
-           && fieldaccessible ( buildingToCapture->getEntryField(), eht) == 2 ;
+           && fieldAccessible ( buildingToCapture->getEntryField(), eht) == 2 ;
 
 }
 
@@ -178,7 +178,7 @@ void AI :: checkConquer( )
       pvehicle veh= getMap()->getUnit ( bi->second.unit );
       pbuilding bld = getMap()->getField( bi->first )->building;
       if ( getdiplomaticstatus2( bld->color, getPlayerNum()*8 ) != cawar
-           || !( veh && fieldaccessible ( getMap()->getField( bi->first ), veh ) == 2 )) {
+           || !( veh && fieldAccessible ( getMap()->getField( bi->first ), veh ) == 2 )) {
 
          if ( veh ) {
             veh->aiparam[getPlayerNum()]->resetTask ();
@@ -251,7 +251,7 @@ void AI :: checkConquer( )
          for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
             pvehicle veh = *vi;
             if ( veh->aiparam[getPlayerNum()]->getJob() != AiParameter::job_conquer || veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_nothing)
-               if ( fieldaccessible ( bld->getEntryField(), veh ) == 2 ) {
+               if ( fieldAccessible ( bld->getEntryField(), veh ) == 2 ) {
                   HiddenAStar ast ( this, veh );
                   vector<MapCoordinate> path;
                   ast.findPath ( path, bld->getEntry().x, bld->getEntry().y );
@@ -285,7 +285,7 @@ void AI :: checkConquer( )
       for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
          pvehicle veh = *vi;
          if ( veh->aiparam[getPlayerNum()]->getJob() != AiParameter::job_conquer || veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_nothing )
-            if ( fieldaccessible ( (*i)->getEntryField(), veh ) == 2 ) {
+            if ( fieldAccessible ( (*i)->getEntryField(), veh ) == 2 ) {
                HiddenAStar ast ( this, veh ) ;
                vector<MapCoordinate> path;
                ast.findPath ( path, (*i)->getEntry().x, (*i)->getEntry().y );
