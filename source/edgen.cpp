@@ -2,9 +2,17 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.16 2002-04-05 09:25:09 mbickel Exp $
+//     $Id: edgen.cpp,v 1.17 2002-04-17 22:41:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2002/04/05 09:25:09  mbickel
+//      Project files now for Borland C++ Builder 6
+//      Fixed: netcontrol not working
+//      Fixed: replay errors when constructing turrets
+//      Submarine require no fuel for sufacing
+//      Field info dialog extended
+//      Fixed several buffer overruns
+//
 //     Revision 1.15  2001/12/14 10:20:05  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -1148,9 +1156,9 @@ void tplasma::generateplasma(char resettile)
                return 1;
             }*/
             if(blocksize == sblocksize) {
-               colour = std::random(memblock->maxset + 1);
-               if( std::random(5000) > 3500)
-                  colour = 1 + memblock->maxset - std::random(memblock->maxset / (1 + std::random(8)));
+               colour = random(memblock->maxset + 1);
+               if( random(5000) > 3500)
+                  colour = 1 + memblock->maxset - random(memblock->maxset / (1 + random(8)));
                colour %= (memblock->maxset + 1);
             }
             else {
