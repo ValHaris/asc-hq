@@ -1,6 +1,9 @@
-//     $Id: keybp.cpp,v 1.2 2000-06-23 09:48:33 mbickel Exp $
+//     $Id: keybp.cpp,v 1.3 2000-10-16 14:34:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/06/23 09:48:33  mbickel
+//      Improved key handling in intedit/stredit
+//
 //     Revision 1.1  2000/05/30 18:39:28  mbickel
 //      Added support for multiple directories
 //      Moved DOS specific files to a separate directory
@@ -28,12 +31,12 @@
 //     Merged all the bug fixes in that I did last week
 //
 //     Revision 1.2  1999/11/16 03:41:51  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
+//      Added CVS keywords to most of the files.
+//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//      Wrote replacement routines for kbhit/getch for Linux
+//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//      Added autoconf/automake capabilities
+//      Added files used by 'automake --gnu'
 //
 //
 /*
@@ -56,19 +59,15 @@
     Boston, MA  02111-1307  USA
 */
 
-#ifdef _DOS_
 #include <dos.h>
 #include <conio.h>
-#endif
 
 #include <ctype.h>
 #include <stdio.h>
 #include "../keybp.h"
 
-#ifdef _DOS_
     void             (__interrupt __far *bioskeyboardhandler)();
     void             (__interrupt __far *keybpointer)()=NULL;
-#endif
     char             callbioshandler,keyboardinit=0;
     char             pufferpos,maxpufferkeys;
     long             oldticker,ticker;
@@ -287,7 +286,6 @@ void clearpuffer(void)
       "pop ax"                       \
       modify [ax dx];*/
 
-#ifdef _DOS_
 void keyintr( void )
 {
    key = inp(keyport);
@@ -346,9 +344,6 @@ void keyintr( void )
       } /* endif */
    } /* endif */
 }
-#endif
-
-#ifdef _DOS_
 static void __interrupt __far keyboard()
 { 
    int           ekey;
@@ -403,7 +398,6 @@ static void __interrupt __far keyboard()
    outp(0x20,0x20);
    _enable();
 } 
-#endif
 
 
 void shleft()
@@ -461,7 +455,6 @@ tkey r_key(void)
 }  
 
 
-#ifdef _DOS_
 int keypress(void)
 
 { 
@@ -479,7 +472,6 @@ int keypress(void)
                   return 0;
               }
 } 
-#endif
 
 void initkeyb(void)
 { 
@@ -514,7 +506,7 @@ void getkeysyms ( tkey* keysym, int* keyprnt )
       *keyprnt = k;
    } else {
       *keysym = r_key();
-      *keyprnt = cto_invvalue;
+      *keyprnt = *keysym;
    }
 }
 

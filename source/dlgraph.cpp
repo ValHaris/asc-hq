@@ -1,6 +1,9 @@
-//     $Id: dlgraph.cpp,v 1.8 2000-08-12 09:17:26 gulliver Exp $
+//     $Id: dlgraph.cpp,v 1.9 2000-10-16 14:34:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/08/12 09:17:26  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.7  2000/08/08 09:48:12  mbickel
 //
 //      speed up of dialog boxes in linux
@@ -124,7 +127,9 @@ void         tdialogbox::knopfdruck(int      xx1,
               knopfsuccessful = false; 
               kn = false; 
            } 
-           if (mouseparams.taste != mt) kn = false; 
+           if (mouseparams.taste != mt) 
+              kn = false; 
+           releasetimeslice();
      }  while (kn == true);
      mousevisible(false); 
 
@@ -189,7 +194,9 @@ void         tdialogbox::newknopfdruck2(integer      xx1,
               knopfsuccessful = false; 
               kn = false; 
            } 
-           if (mouseparams.taste != mt) kn = false; 
+           if (mouseparams.taste != mt) 
+              kn = false; 
+           releasetimeslice();
     }  while (kn == true);
     {
        collategraphicoperations cgo ( xx1 - 1, yy1 - 1, xx2 + 1, yy2 + 1 );
@@ -303,7 +310,9 @@ void         tdialogbox::newknopfdruck(integer      xx1,
               knopfsuccessful = false; 
               kn = false; 
            } 
-           if (mouseparams.taste != mt) kn = false; 
+           if (mouseparams.taste != mt) 
+              kn = false; 
+           releasetimeslice();
    }  while (kn == true);
    {
      collategraphicoperations cgo( xx1-1, yy1-1, xx2+1, yy2+1 );

@@ -1,6 +1,10 @@
-//     $Id: timer.cpp,v 1.8 2000-06-01 15:27:47 mbickel Exp $
+//     $Id: timer.cpp,v 1.9 2000-10-16 14:34:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/06/01 15:27:47  mbickel
+//      Some changes for the upcoming Win32 version of ASC
+//      Fixed error at startup: unable to load smalaril.fnt
+//
 //     Revision 1.7  2000/05/10 20:56:20  mbickel
 //      mouseparams and ticker now volatile under linux too
 //
@@ -96,35 +100,23 @@ Uint32 callback ( Uint32 interval )
 
 static Uint32 ticktock(Uint32 interval)
 {
-	++ticker;
-	return(interval++);
+        ++ticker;
+        return(interval++);
 }
 
 void inittimer(int frequence)
 {
 /*
    if (init != 0) return;
-	if ( SDL_Init(SDL_INIT_TIMER) < 0 ) {
-		fprintf(stderr, "Couldn't load SDL: %s\n", SDL_GetError());
-		exit(1);
-	}
-	SDL_SetTimer( 10, ticktock);
+        if ( SDL_Init(SDL_INIT_TIMER) < 0 ) {
+                fprintf(stderr, "Couldn't load SDL: %s\n", SDL_GetError());
+                exit(1);
+        }
+        SDL_SetTimer( 10, ticktock);
    init = 1;
 */
 } 
 
-
-int  releasetimeslice( void )
-{
-   #ifndef _DOS_
-    SDL_Delay(10);
-   #endif
-/*    union REGS inregs, outregs;
-    inregs.w.ax = 0x1680;
-    int386 (0x2f, &inregs, &outregs);
-    return outregs.w.ax == 0; */
-    return 0;
-}
 
 
 void closetimer(void)

@@ -1,6 +1,9 @@
-//     $Id: global_os.h,v 1.1 2000-10-14 10:52:57 mbickel Exp $
+//     $Id: global_os.h,v 1.2 2000-10-16 14:34:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/10/14 10:52:57  mbickel
+//      Some adjustments for a Win32 port
+//
 //     Revision 1.1  2000/10/12 21:37:58  mbickel
 //      Further restructured platform dependant routines
 //
@@ -28,8 +31,8 @@
     Boston, MA  02111-1307  USA
 */
 
-// this file takes care that the necessary header files for opendir / readdir
-// are being included in basestrm.cpp
+#error Visual C sucks ! Please read asc/doc/source.html
+
 
 #ifndef global_os_h_included
  #define global_os_h_included

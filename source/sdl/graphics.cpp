@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.14 2000-10-14 14:16:11 mbickel Exp $
+//     $Id: graphics.cpp,v 1.15 2000-10-16 14:34:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/10/14 14:16:11  mbickel
+//      Cleaned up includes
+//      Added mapeditor to win32 watcom project
+//
 //     Revision 1.13  2000/10/11 14:26:57  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -106,7 +110,7 @@ void setWindowCaption ( const char* s )
 
 int initgraphics ( int x, int y, int depth )
 {
-  if ( SDL_Init(SDL_INIT_VIDEO ) < 0 ) {
+  if ( SDL_Init(SDL_INIT_VIDEO  ) < 0 ) { // | SDL_INIT_NOPARACHUTE
      fprintf(stderr, "Couldn't initialize SDL: %s\n", SDL_GetError());
      return -1;
   }
@@ -148,7 +152,7 @@ int initgraphics ( int x, int y, int depth )
 
   *hgmp = *agmp;
 
-	graphicinitialized = 1;
+        graphicinitialized = 1;
    return 1;
 }
              // returns > 0  modenum to reestablish this mode
@@ -156,8 +160,8 @@ int initgraphics ( int x, int y, int depth )
 
 void  closegraphics ( void )
 {
-	SDL_FreeSurface ( screen );
-	screen = NULL;
+        SDL_FreeSurface ( screen );
+        screen = NULL;
 }
 
 
@@ -168,7 +172,7 @@ void  closegraphics ( void )
 int copy2screen( void )
 {
    SDL_UpdateRect ( screen , 0,0,0,0 );
-	return 0;
+        return 0;
 }
 
 int copy2screen( int x1, int y1, int x2, int y2 )
@@ -183,7 +187,7 @@ int copy2screen( int x1, int y1, int x2, int y2 )
             SDL_UpdateRect ( screen , x2, y1, x1-x2+1, y2-y1+1 );
          else
             SDL_UpdateRect ( screen , x1, y2, x2-x1+1, y1-y2+1 );
-	return 0;
+        return 0;
 }
 
 
@@ -193,10 +197,10 @@ void setdisplaystart( int x, int y)
 
 void set_vgapalette256 ( dacpalette256 pal )
 {
-	SDL_Color spal[256];
-	int col;
-	for ( int i = 0; i < 256; i++ ) {
-	   for ( int c = 0; c < 3; c++ ) {
+        SDL_Color spal[256];
+        int col;
+        for ( int i = 0; i < 256; i++ ) {
+           for ( int c = 0; c < 3; c++ ) {
          if ( pal[i][c] == 255 )
             col = activepalette[i][c];
          else {
@@ -209,8 +213,8 @@ void set_vgapalette256 ( dacpalette256 pal )
             case 2: spal[i].b = col * 4; break;
          };
      }
-	}	
-	SDL_SetColors ( screen, spal, 0, 256 );
+        }       
+        SDL_SetColors ( screen, spal, 0, 256 );
 }
 
 int dont_use_linear_framebuffer;

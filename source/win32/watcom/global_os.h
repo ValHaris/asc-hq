@@ -1,6 +1,10 @@
-//     $Id: global_os.h,v 1.2 2000-10-14 13:07:05 mbickel Exp $
+//     $Id: global_os.h,v 1.3 2000-10-16 14:34:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/10/14 13:07:05  mbickel
+//      Moved DOS version into own subdirectories
+//      Win32 version with Watcom compiles and links ! But doesn't run yet...
+//
 //     Revision 1.1  2000/10/14 10:55:06  mbickel
 //      Added ASC-Win32 project files for Watcom
 //
@@ -41,6 +45,7 @@
   #define HAVE_ITOA
   #define HAVE_EXCEPTION
   #define HAVE_LIMITS
+  #define HAVE_LOG2
   #define StaticClassVariable static
   namespace std {};
 

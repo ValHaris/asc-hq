@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.20 2000-10-14 13:07:04 mbickel Exp $
+//     $Id: events.cpp,v 1.21 2000-10-16 14:34:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/10/14 13:07:04  mbickel
+//      Moved DOS version into own subdirectories
+//      Win32 version with Watcom compiles and links ! But doesn't run yet...
+//
 //     Revision 1.19  2000/10/12 21:37:57  mbickel
 //      Further restructured platform dependant routines
 //
@@ -178,11 +182,11 @@ void callsubhandler ( void )
 
 const int mousetranslate[3] = { 0, 2,1 };  // in DOS  right button is 1 and center is 2
 
-int eventhandler ( void* nothing )
+
+int processEvents ( )
 {
-        SDL_Event event;
-        while ( !closethread ) {
-      if ( SDL_PollEvent ( &event ) == 1) {
+    SDL_Event event;
+    if ( SDL_PollEvent ( &event ) == 1) {
          switch ( event.type ) {
             case SDL_MOUSEBUTTONUP:
             case SDL_MOUSEBUTTONDOWN: {
@@ -233,9 +237,18 @@ int eventhandler ( void* nothing )
             case SDL_QUIT: exitprogram = 1;
             break;
          }
-      } else
-         SDL_Delay(10);
-      ticker = SDL_GetTicks() / 10;
+         return 1;
+    } else
+       return 0;
+
+}
+
+int eventhandler ( void* nothing )
+{
+   while ( !closethread ) {
+       // if ( !processEvents() )
+          SDL_Delay(10);
+       ticker = SDL_GetTicks() / 10;
    }
    return 0;
 }
@@ -267,6 +280,18 @@ int closeeventthread ( void )
    }
         return 0; 
 }
+
+
+
+
+int  releasetimeslice( void )
+{
+    if ( !processEvents())
+       SDL_Delay(10);
+    return 0;
+}
+
+
 
 
 int initmousehandler ( void* pic )
