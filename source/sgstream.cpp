@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.70 2001-10-11 10:22:50 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.71 2001-10-16 19:58:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.70  2001/10/11 10:22:50  mbickel
+//      Some cleanup and fixes for Visual C++
+//
 //     Revision 1.69  2001/08/26 20:55:04  mbickel
 //      bin2text can now load text files too
 //      LoadableItemType interface class added
@@ -1032,11 +1035,11 @@ void checkFileLoadability ( const char* filename )
       char temp5[10000];
       char temp2[1000];
       sprintf ( temp5, "Unable to access %s\n"
-                       "Make sure the data file 'main.con' is in one of the search paths specified\n"
-                       "in your config file !\n"
+                       "Make sure the data files (the primary one is called 'main.con') are in one of\n"
+                       "the search paths specified in your config file !\n"
                        "The configuration file that is used is: %s \n%s"
-                       "These pathes are being searched:\n%s\n"
-                       "If you don't have a file 'main.con' , get and install the data package from\n"
+                       "These paths are being searched:\n%s\n"
+                       "If you don't have a file 'main.con' , get and install the data files from\n"
                        "http://www.asc-hq.org\n",
                        filename, getConfigFileName(temp2), temp3, pathSearched.c_str() );
 

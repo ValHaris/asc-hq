@@ -34,8 +34,11 @@
      //! is the object displayed under fog of war
      bool visibleago;
 
-     //! some objects are graphically linked with others on neighbouring fields. See also #no_autonet
+     //! some objects are graphically linked with others on neighbouring fields. \sa no_autonet linkableTerrain
      vector<int> linkableObjects;
+
+     //! objects can be graphically linked to terrain, as if the terrain was an object of the same type. \sa no_autonet linkableObjects
+     vector<int> linkableTerrain;
 
      //! if an object should not be attackable, set armor to 0
      int armor;
@@ -75,6 +78,9 @@
 
      //! The movement points that are needed to remove this object
      int remove_movecost;
+
+     //! if a building is constructed on the field containing the object, will the object be removed or will it stay beneath the building.
+     bool canExistBeneathBuildings;
 
      //! The name of the object
      ASCString name;

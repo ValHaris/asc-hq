@@ -259,7 +259,14 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
       for ( int b = 0; b < 6; b++)
          if ( typ->getpicture ( BuildingType::LocalCoordinate( a , b ) )) {
             pfield field = getField( BuildingType::LocalCoordinate( a, b) );
-            field->objects.clear();
+
+            tfield::ObjectContainer::iterator i = field->objects.begin();
+            while ( i != field->objects.end()) {
+               if ( !i->typ->canExistBeneathBuildings )
+                  i = field->objects.erase ( i );
+               else
+                  i++;
+            };
 
             if ( field->vehicle ) {
                delete field->vehicle;

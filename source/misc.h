@@ -2,9 +2,12 @@
     miscellaneous functions which are used by ASC and all its tools
 */
 
-//     $Id: misc.h,v 1.17 2001-02-11 11:39:40 mbickel Exp $
+//     $Id: misc.h,v 1.18 2001-10-16 19:58:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2001/02/11 11:39:40  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.16  2000/12/26 14:46:00  mbickel
 //      Made ASC compilable (and runnable) with Borland C++ Builder
 //
@@ -128,6 +131,14 @@
    extern void beep( void );
 
    extern int  crc32buf( const void *vbuf, int len);
+
+#ifdef min
+#undef min
+#endif
+
+#ifdef max
+#undef max
+#endif
 
    extern int min ( int a, int b );
    extern int min ( int a, int b, int c );

@@ -33,6 +33,7 @@ ObjectType :: ObjectType ( void )
    dirlistnum = 0;
 
    displayMethod = 0;
+   canExistBeneathBuildings = false;
 }
 
 
@@ -126,7 +127,7 @@ void ObjectType :: display ( int x, int y )
 }
 
 
-const int object_version = 1;
+const int object_version = 2;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -145,7 +146,7 @@ void ObjectType :: read ( tnstream& stream )
        visibleago = stream.readInt();
        int  ___objectslinkablenum = stream.readInt();
        stream.readInt(); // ___objectsLinkable
-       stream.readInt(); // ___oldpicture 
+       stream.readInt(); // ___oldpicture
 
        int ___pictnum = stream.readInt();
        armor = stream.readInt();
@@ -275,6 +276,13 @@ void ObjectType :: read ( tnstream& stream )
          for ( int i = 0; i < ___objectslinkablenum; i++ )
              linkableObjects.push_back ( stream.readInt() );
       }
+
+      if ( version >= 2 ) {
+         int terrainLinkableNum = stream.readInt();
+         for ( int i = 0; i < terrainLinkableNum; i++ )
+             linkableTerrain.push_back ( stream.readInt() );
+      }
+
 
    #ifndef converter
     buildicon = generate_object_gui_build_icon ( this, 0 );
@@ -416,6 +424,10 @@ void ObjectType :: write ( tnstream& stream ) const
     for ( int i = 0; i < linkableObjects.size(); i++ )
         stream.writeInt( linkableObjects[i] );
 
+    stream.writeInt ( linkableTerrain.size() );
+    for ( int i = 0; i < linkableTerrain.size(); i++ )
+        stream.writeInt( linkableTerrain[i] );
+
 }
 
 
@@ -425,6 +437,12 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
    pc.addTagArray ( "Weather", weather, cwettertypennum-1, weatherTags ).evaluate();
    pc.addBool     ( "visible_in_fogOfWar", visibleago );
    pc.addIntegerArray ( "LinkableObjects", linkableObjects );
+   if ( pc.find ( "LinkableTerrain" ) || !pc.isReading() ) 
+      pc.addIntegerArray ( "LinkableTerrain", linkableTerrain );
+
+   if ( pc.find ( "canExistBeneathBuildings" ) || !pc.isReading() )
+      pc.addBool ( "canExistBeneathBuildings", canExistBeneathBuildings );
+
    pc.addInteger  ( "Armor", armor );
    pc.addIntegerArray ( "Movemalus_plus", movemalus_plus ).evaluate();
    int mm = movemalus_plus.size();

@@ -882,7 +882,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
                             fld->vehicle->putimage ( r + unitrightshift , yp + unitdownshift );
 
                   /* display streets, railroads and pipelines */
-                      if ( !fld->building || !fld->building->visible )
+                    //  if ( !fld->building || !fld->building->visible )
                          for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ ) {
                             int h = o->typ->height;
                             if (  h >= hgt*30 && h < 30 + hgt*30 )

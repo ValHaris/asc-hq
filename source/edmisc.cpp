@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.69 2001-10-11 10:41:06 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.70 2001-10-16 19:58:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.69  2001/10/11 10:41:06  mbickel
+//      Restructured platform fileio handling
+//      Added map archival information to mapeditor
+//
 //     Revision 1.68  2001/10/11 10:22:50  mbickel
 //      Some cleanup and fixes for Visual C++
 //
@@ -4244,6 +4248,7 @@ void transformMap ( )
 
    vector<int> terraintranslation;
    vector<int> objecttranslation;
+   vector<int> terrainobjtranslation;
    try {
       tnfilestream s ( filename, tnstream::reading );
 
@@ -4253,6 +4258,7 @@ void transformMap ( )
       PropertyReadingContainer pc ( "maptranslation", tpg );
 
       pc.addIntegerArray ( "TerrainTranslation", terraintranslation );
+      pc.addIntegerArray ( "TerrainObjTranslation", terrainobjtranslation );
       pc.addIntegerArray ( "ObjectTranslation", objecttranslation );
 
       pc.run();
@@ -4273,6 +4279,11 @@ void transformMap ( )
       return;
    }
 
+   if ( terrainobjtranslation.size() % 3 ) {
+      displaymessage ( "Map Translation : terrainobjtranslation - Invalid number of entries ", 1);
+      return;
+   }
+
    if ( objecttranslation.size() % 2 ) {
       displaymessage ( "Map Translation : objecttranslation - Invalid number of entries ", 1);
       return;
@@ -4290,6 +4301,17 @@ void transformMap ( )
                    fld->setparams();
                 }
              }
+
+          for ( int i = 0; i < terrainobjtranslation.size()/3; i++ )
+             if ( fld->typ->terraintype->id == terrainobjtranslation[i*3] ) {
+                TerrainType* tt = getterraintype_forid ( terrainobjtranslation[i*3+1] );
+                if ( tt ) {
+                   fld->addobject ( getobjecttype_forid ( terrainobjtranslation[i*3+2] ));
+                   fld->typ = tt->weather[fld->getweather()];
+                   fld->setparams();
+                }
+             }
+
 
           for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ )
              for ( int i = 0; i < objecttranslation.size(); i++ )

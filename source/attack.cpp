@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: attack.cpp,v 1.51 2001-10-03 20:56:06 mbickel Exp $
+//     $Id: attack.cpp,v 1.52 2001-10-16 19:58:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2001/10/03 20:56:06  mbickel
+//      Updated data files
+//      Updated online help
+//      Clean up of Pulldown menues
+//      Weapons can now have different efficiencies against different unit classes
+//
 //     Revision 1.50  2001/10/02 14:06:27  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -535,11 +541,11 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
             s = atw->strength[i];
             n = i;
          }
-   
+
       _weapon = atw->num[n];
-   
+
       delete atw;
-   
+
    } else
       _weapon  = weapon;
 
@@ -572,7 +578,7 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    }
 
 
-   if ( dist <= maxmalq  &&  respond ) {
+   if ( dist <= maxmalq  &&  respond  && !av.kamikaze ) {
       AttackWeap atw;
       attackpossible2n ( attackedunit, attackingunit, &atw );
       int n = -1;

@@ -145,7 +145,7 @@ int main(int argc, char *argv[] )
    catch ( tfileerror err ) {
       fatalError( "file error accessing file %s ", err.getFileName().c_str() );
    } /* endcatch */
-   catch ( ASCexception err) {
+   catch ( ASCexception) {
       fatalError( "unspecified error" );
    } /* endcatch */
    return 0;

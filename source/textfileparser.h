@@ -27,9 +27,13 @@ class ParsingError : public ASCmsgException {
        ParsingError ( const ASCString& msg ) : ASCmsgException ( msg ) {};
 };
 
-class TextPropertyGroup {
-      public:
+class TextPropertyGroup;
+typedef PointerList<TextPropertyGroup*> TextPropertyList;
 
+class TextPropertyGroup {
+         bool inheritanceBuild;
+      public:
+          TextPropertyGroup() : inheritanceBuild ( false ) {};
           class Entry {
             public:
                ASCString propertyName;
@@ -44,10 +48,12 @@ class TextPropertyGroup {
          ASCString fileName;
          ASCString location;
          ASCString typeName;
+
+         void buildInheritance( TextPropertyList& tpl );
+         Entries::iterator find( const ASCString& n );
 };
 
 
-typedef PointerList<TextPropertyGroup*> TextPropertyList;
 
 class TextFormatParser {
          tnstream *stream;

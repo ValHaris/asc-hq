@@ -240,11 +240,8 @@ bool PropertyContainer::find ( const ASCString& name )
       n += *i + ".";
    n += name;
    n.toLower();
-   for ( TextPropertyGroup::Entries::iterator i = textPropertyGroup->entries.begin(); i != textPropertyGroup->entries.end(); i++ )
-      if ( i->propertyName == n )
-         return true;
-         
-   return false;
+
+   return textPropertyGroup->find ( n ) != textPropertyGroup->entries.end();
 }
 
 
@@ -651,6 +648,26 @@ void PropertyContainer::ImageArrayProperty::evaluate_rw ( )
 }
 
 
+///////////////////// TextPropertyGroup //////////////////////////
+
+void TextPropertyGroup :: buildInheritance(TextPropertyList& tpl )
+{
+   if ( !inheritanceBuild ) {
+      if ( find ( "inherits") != entries.end()) {
+         
+      }
+   }
+}
+
+
+
+TextPropertyGroup::Entries::iterator  TextPropertyGroup :: find( const ASCString& n )
+{
+   for ( Entries::iterator i = entries.begin(); i != entries.end(); i++ )
+      if ( i->propertyName == n )
+         return i;
+   return entries.end();
+}
 
 ///////////////////// TextFormatParser //////////////////////////
 

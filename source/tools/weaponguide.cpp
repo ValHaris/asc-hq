@@ -346,13 +346,13 @@ int main(int argc, char *argv[] )
 
             // Spalten gfx
             fprintf ( detailed2, "<td></td>" );
-            for ( int i = 0; i < cbodenartennum ; i++ )
+            for ( i = 0; i < cbodenartennum ; i++ )
                fprintf ( detailed2, " <TD><IMG src=\"../gfx%d.gif\" alt=\"%s\"></TD>", i, cbodenarten[i]);
             fprintf( detailed2, "</TR>\n<TR>\n");
 
             // Spaltenwerte befahrbare Bodentypen
             fprintf ( detailed2, "<td>befahrbar</td>" );
-            for ( int i = 0; i < cbodenartennum ; i++) {
+            for ( i = 0; i < cbodenartennum ; i++) {
                if ( ft->terrainaccess.terrain.test(i) )
                   fprintf ( detailed2, "<td><img src=\"../hacken.gif\"></td>" );
                else
@@ -444,7 +444,7 @@ int main(int argc, char *argv[] )
                      fprintf ( detailed3, "<td></td>" );
 
                fprintf ( detailed3, "    <td nowrap>" );
-               for ( int i = 0; i < cwaffentypennum; i++ )
+               for ( i = 0; i < cwaffentypennum; i++ )
                   if ( ft->weapons.weapon[w].gettype() & ( 1 << i ) )
                      fprintf ( detailed3, "%s.", cwaffentypen[i] );
                fprintf ( detailed3, "</td></tr>\n" );
@@ -548,7 +548,7 @@ int main(int argc, char *argv[] )
             fprintf ( detailed4, "<table align=\"left\" id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">" );
             // Ueberschrift
             fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\">Merkmale der Einheit</td></tr>" );
-            for ( int i = 0; i<cvehiclefunctionsnum; i++)
+            for ( i = 0; i<cvehiclefunctionsnum; i++)
                if ( ft->functions & ( 1 << i ))
                   fprintf ( detailed4, "<tr><td>%s</td></tr>", cvehiclefunctions[i] );
             //Ende tabelle

@@ -1568,7 +1568,10 @@ int tfield :: getjamming ( void )
       else
          a += o->typ->basicjamming_plus;
    }
-   return a;
+   if ( a > 0 )
+      return a;
+   else
+      return 0;
 }
 
 int tfield :: getmovemalus ( const pvehicle veh )

@@ -2,9 +2,13 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.97 2001-10-11 10:41:06 mbickel Exp $
+//     $Id: spfst.cpp,v 1.98 2001-10-16 19:58:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.97  2001/10/11 10:41:06  mbickel
+//      Restructured platform fileio handling
+//      Added map archival information to mapeditor
+//
 //     Revision 1.96  2001/10/02 14:06:28  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -1480,24 +1484,28 @@ void         calculateobject( int       x,
                else
                   if ( isresourcenetobject ( obj ))
                      bld = 1;
-   
+
             }
-            if ( oi || bld ) { 
-               c |=  e << i ; 
+            if ( oi || bld ) {
+               c |=  e << i ;
                if ( mof && oi ) {
-                  d = i + sidenum/2; 
-                  if (d >= sidenum ) 
-                     d -= sidenum; 
-   
+                  d = i + sidenum/2;
+                  if (d >= sidenum )
+                     d -= sidenum;
+
                   if (e == 0)
                      oi->setdir ( oi->getdir() &  ~(1 << d));
                   else
                      oi->setdir ( oi->getdir() |  (1 << d));
-   
-               } 
-            } 
+
+               }
+            }
          }
-      } 
+         for ( unsigned int t = 0; t < obj->linkableTerrain.size(); t++ )
+            if ( fld2->typ->terraintype->id == obj->linkableTerrain[t] )
+               c |=  1 << i ;
+
+      }
       else { 
            /*    if i and 1 = 0 then
          c:=c or (1 shl i);  */ 

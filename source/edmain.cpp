@@ -2,9 +2,15 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.55 2001-10-16 15:33:03 mbickel Exp $
+//     $Id: edmain.cpp,v 1.56 2001-10-16 19:58:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2001/10/16 15:33:03  mbickel
+//      Added icons to data
+//      ASC displays icons
+//      Fixed crash when building icons
+//      Removed assembled datafiles
+//
 //     Revision 1.54  2001/10/02 18:08:52  mbickel
 //      Changed parser error handling to use exceptions
 //      Removed gfx2pcx project
@@ -292,6 +298,7 @@
 #include "gameoptions.h"
 #include "mapdisplay.h"
 #include "itemrepository.h"
+#include "loadimage.h"
 
 #include <signal.h>
 
@@ -960,18 +967,19 @@ int main(int argc, char *argv[] )
 
    virtualscreenbuf.init();
 
-   {
-       tnfilestream stream ( "logo640.pcx", tnstream::reading );
-       loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 ); 
-       int whitecol = 251;
-       activefontsettings.font = schriften.smallarial;
-       activefontsettings.background = 255;
-       activefontsettings.justify = centertext;
-       activefontsettings.color = whitecol;
-       activefontsettings.length = hgmp->resolutionx-20;
-       showtext2 ("Map Editor", 10, hgmp->resolutiony - activefontsettings.font->height - 2 );
-
+   int fs = loadFullscreenImage ( "title_mapeditor.jpg" );
+   if ( !fs ) {
+      tnfilestream stream ( "logo640.pcx", tnstream::reading );
+      loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 );
+      int whitecol = 251;
+      activefontsettings.font = schriften.smallarial;
+      activefontsettings.background = 255;
+      activefontsettings.justify = centertext;
+      activefontsettings.color = whitecol;
+      activefontsettings.length = hgmp->resolutionx-20;
+      showtext2 ("Map Editor", 10, hgmp->resolutiony - activefontsettings.font->height - 2 );
    }
+
    {
       int w;
       tnfilestream stream ("mausi.raw", tnstream::reading);

@@ -1,6 +1,13 @@
-//     $Id: misc.cpp,v 1.19 2001-08-09 14:50:37 mbickel Exp $
+//     $Id: misc.cpp,v 1.20 2001-10-16 19:58:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2001/08/09 14:50:37  mbickel
+//      Added palette.map to data directory
+//      Improved usability of terrain selection in mapeditor
+//      New terrain translation in bi3 import function
+//      Better error messages in text parser
+//      Better error message: duplicate ID
+//
 //     Revision 1.18  2001/08/06 20:54:43  mbickel
 //      Fixed lots of crashes related to the new text files
 //      Fixed delayed events
@@ -110,6 +117,11 @@
 #include <ctype.h>
 #include <stdarg.h>
 #include <iostream>
+
+#ifdef _WIN32_
+#include <windows.h>
+#endif
+
 #include "global.h"
 #include "tpascal.inc"
 #include "misc.h"

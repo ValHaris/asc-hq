@@ -266,6 +266,13 @@ void  loadalltextfiles ( )
       c = ff.getnextname();
    }
    displayLogMessage ( 4, "loadalltextfiles completed\n");
+   displayLogMessage ( 4, "Building inheritance...");
+   for ( TextFileRepository::iterator i = textFileRepository.begin(); i != textFileRepository.end(); i++ ) {
+      for ( TextPropertyList::iterator j = i->second.begin(); j != i->second.end(); j++ ) {
+         
+      }
+   }
+   displayLogMessage ( 4, "done\n");
 }
 
 

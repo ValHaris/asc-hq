@@ -56,7 +56,7 @@ AC_C_CONST
 AC_TYPE_SIZE_T
 
 dnl Checks for libraries.
-AC_CHECK_LIB( pthread, pthread_create, [ ] )
+AC_CHECK_LIB( pthread, pthread_create,  )
 AC_CHECK_LIB( SDL_image, IMG_LoadJPG_RW,,  AC_MSG_ERROR( ASC requires the SDL_image library. You can get it at www.libsdl.org ) )
 AC_CHECK_LIB( SDL_mixer, Mix_PlayChannelTimed,, AC_MSG_ERROR( ASC requires the SDL_mixer library. You can get it at www.libsdl.org ) )
 AC_LANG_SAVE
@@ -69,7 +69,7 @@ lib_bz2_static=no
 AC_ARG_ENABLE( libbz2-static, [  --enable-libbz2-static  compiles a static \
 libbz2 into the binary of asc.], [lib_bz2_static=$enableval], \
 [lib_bz2_usecache=yes] )
-AC_CHECK_LIB( bz2, BZ2_bzReadOpen, [ ], [checklib_bz2_static=yes] )
+AC_CHECK_LIB( bz2, BZ2_bzReadOpen, , [checklib_bz2_static=yes] )
 AC_CACHE_CHECK( [for static libbz2 flag state], [ac_cv_lib_bz2_static],
 [ ac_cv_lib_bz2_static=$lib_bz2_static ] )
 dnl ac_cv_lib_bz2_static holds cached flag state, checklib_bz2... holds check
@@ -158,4 +158,5 @@ AC_OUTPUT( Makefile source/Makefile source/docs/Makefile source/docs/en/Makefile
 	   source/libs/triangul/Makefile source/libs/Makefile \
 	   source/ai/Makefile source/unix/Makefile \
            source/unix/mapeditor/Makefile source/tools/Makefile \
-	   source/tools/linux/Makefile data/Makefile )
+	   source/tools/linux/Makefile data/Makefile doc/Makefile )
+
