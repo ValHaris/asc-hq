@@ -1,6 +1,12 @@
-//     $Id: edmisc.cpp,v 1.21 2000-08-03 13:12:11 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.22 2000-08-03 19:21:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/08/03 13:12:11  mbickel
+//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
+//      Repairing units now reduces their experience
+//      negative attack- and defenseboni possible
+//      changed attackformula
+//
 //     Revision 1.20  2000/08/02 15:52:56  mbickel
 //      New unit set definition files
 //      demount accepts now more than one container file
@@ -3090,22 +3096,25 @@ void         tladeraum::run(void)
       
       checkforadditionalkeys ( taste );
       int oldpos = cursorpos;
-      if ((taste == ct_4k) || (taste == ct_6k) || (taste == ct_8k) || (taste == ct_2k)) {
-         switch (taste) {
-            case ct_8k:   cursorpos -= itemsperline;
-               break;
-            case ct_4k:   cursorpos--;
-               break;
-            case ct_6k:   cursorpos++;
-               break;
-            case ct_2k:   cursorpos += itemsperline;
-               break;
-         } 
-         if ( cursorpos < 0 )
-            cursorpos = 0;
-         if ( cursorpos >= 32 )
-            cursorpos = 31;
-      } 
+      switch (taste) {
+         case ct_up:
+         case ct_8k:   cursorpos -= itemsperline;
+            break;
+         case ct_left:
+         case ct_4k:   cursorpos--;
+            break;
+         case ct_right:
+         case ct_6k:   cursorpos++;
+            break;
+         case ct_down:
+         case ct_2k:   cursorpos += itemsperline;
+            break;
+      }
+      if ( cursorpos < 0 )
+         cursorpos = 0;
+      if ( cursorpos >= 32 )
+         cursorpos = 31;
+
       if ( mouseparams.taste == 1) 
          for ( int i = 0; i < 32; i++ )
             if ( mouseoverfield ( i ))

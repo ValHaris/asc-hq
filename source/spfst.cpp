@@ -1,6 +1,11 @@
-//     $Id: spfst.cpp,v 1.43 2000-08-02 15:53:06 mbickel Exp $
+//     $Id: spfst.cpp,v 1.44 2000-08-03 19:21:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2000/08/02 15:53:06  mbickel
+//      New unit set definition files
+//      demount accepts now more than one container file
+//      Unitset information dialog added
+//
 //     Revision 1.42  2000/08/01 13:50:52  mbickel
 //      Chaning the height of airplanes is not affected by wind any more.
 //      Fixed: Airplanes could ascend onto buildings
@@ -1095,8 +1100,8 @@ byte         fieldaccessible( const pfield        field,
 
 void         generate_vehicle(pvehicletype fztyp,
                              byte         col,
-                             pvehicle &   vehicle)
-{ 
+                             pvehicle &   vehicle )
+{
    if ( col > 8 )
       displaymessage ( "internal error !\ngenerate_vehicle :: col must be between 0 and 8 !", 1 );
 
@@ -6295,7 +6300,7 @@ int tbuilding :: vehicleloadable ( pvehicle vehicle, int uheight )
          if ( (( typ->loadcapacity >= vehicle->size())               // the unit is physically able to get "through the door"
            && (vehiclegeparkt(this)+1 < maxloadableunits )
            && ( typ->loadcapability & hgt )
-           && ( typ->unitheightreq & vehicle->typ->height )
+           && (( typ->unitheightreq & vehicle->typ->height ) || !typ->unitheightreq)
            && !( typ->unitheight_forbidden & vehicle->typ->height) ) 
                    ||  
              (( vehicle->functions & cf_trooper ) 

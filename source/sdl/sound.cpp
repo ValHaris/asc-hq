@@ -124,54 +124,14 @@ void closeSound(void) {
 
 
 
-static int stream_read(SDL_RWops *context, void *ptr, int size, int maxnum)
-{
-	pnfilestream stream = (pnfilestream) context->hidden.unknown.data1;
-	size_t nread = stream->readdata ( ptr, size * maxnum, 0 );
-
-	if ( nread < 0 ) {
-		SDL_SetError("Error reading from datastream");
-	}
-	return(nread / size);
-}
-
-static int stream_close(SDL_RWops *context)
-{
-	if ( context ) {
-		if ( context->hidden.unknown.data1 ) {
-			pnfilestream stream = (pnfilestream) context->hidden.unknown.data1;
-			delete stream;
-		}
-		free(context);
-	}
-	return(0);
-}
-
-
-SDL_RWops *SDL_RWFromStream( pnstream stream )
-{
-	SDL_RWops *rwops;
-
-	rwops = SDL_AllocRW();
-	if ( rwops != NULL ) {
-	   rwops->seek = NULL;
-	   rwops->read = stream_read;
-	   rwops->write = NULL;
-	   rwops->close = stream_close;
-	   rwops->hidden.unknown.data1 = stream;
-	}
-	return(rwops);
-}
-
-
 SDL_AudioSpec* loadWave ( const char* name, SDL_AudioSpec *spec, Uint8 **audio_buf, Uint32 *audio_len)
 {
    if ( !exist ( name ))
       return NULL;
 
-   tnfilestream* stream = new tnfilestream ( name, 1 );
+   tnfilestream stream ( name, 1 );
    
-   return SDL_LoadWAV_RW( SDL_RWFromStream ( stream ), 1, spec, audio_buf, audio_len);
+   return SDL_LoadWAV_RW( SDL_RWFromStream ( &stream ), 1, spec, audio_buf, audio_len);
 }
 
 

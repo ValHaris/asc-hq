@@ -1,6 +1,12 @@
-//     $Id: building.cpp,v 1.34 2000-08-03 13:11:51 mbickel Exp $
+//     $Id: building.cpp,v 1.35 2000-08-03 19:21:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2000/08/03 13:11:51  mbickel
+//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
+//      Repairing units now reduces their experience
+//      negative attack- and defenseboni possible
+//      changed attackformula
+//
 //     Revision 1.33  2000/07/29 18:40:08  mbickel
 //      Fixed crash in ammo transfer window inside buildings/transports
 //
@@ -876,7 +882,7 @@ int   cbuildingcontrols :: moveavail ( pvehicle eht )
   if ( eht->movement < minmalq )
      return 0;
 
-  if ( eht->typ->height & building->typ->unitheightreq )
+  if ( (eht->typ->height & building->typ->unitheightreq) || !building->typ->unitheightreq )
     if ( eht->height & building->typ->loadcapability || eht->functions & cf_trooper)
        return 2;
     else
@@ -1114,6 +1120,19 @@ pvehicle cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt)
 {
    pvehicle    eht;
    generatevehicle_cl ( fzt, cc->getactplayer() , eht, cc->getxpos(), cc->getypos() );
+
+   for ( int h2 = 0; h2<8; h2++ )
+     if ( eht->typ->height & ( 1 << h2 ))
+        if ( cc_b->building->typ->loadcapability & ( 1 << h2))
+           eht->height = 1 << h2;
+
+   for ( int h1 = 0; h1<8; h1++ )
+     if ( eht->typ->height & ( 1 << h1 ))
+        if ( cc_b->building->typ->buildingheight & ( 1 << h1))
+           eht->height = 1 << h1;
+
+   eht->movement = eht->typ->movement[log2( eht->height )];
+
    int engot = cc->getenergy   ( fzt->production.energy,   1 );
    int magot = cc->getmaterial ( fzt->production.material, 1 );
 

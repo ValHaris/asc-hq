@@ -1,6 +1,11 @@
-//     $Id: basestrm.cpp,v 1.31 2000-08-02 15:52:38 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.32 2000-08-03 19:21:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/08/02 15:52:38  mbickel
+//      New unit set definition files
+//      demount accepts now more than one container file
+//      Unitset information dialog added
+//
 //     Revision 1.30  2000/08/02 10:28:23  mbickel
 //      Fixed: generator vehicle not working
 //      Streams can now report their name
@@ -173,6 +178,7 @@
 #ifdef _DOS_
  #include <direct.h> 
 #else
+ #include sdlheader
 
  #ifdef HAVE_SYS_DIRENT_H
   #include <sys/dirent.h>
@@ -374,6 +380,10 @@ tinvalidversion :: tinvalidversion ( const char* fn, int ex, int fnd )
 tnstream :: tnstream ( void ) 
           : devicename ( "-abstract tnstream-" ) {}
 
+void tnstream::seek ( int pos )
+{
+   throw tfileerror ( getDeviceName() );
+}
 
 void         tnstream::readrlepict( void** pnter, int allocated, int* size)
 { 
@@ -619,81 +629,144 @@ void         tnstream::writepchar(const char* pc)
 
 } 
 
-
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-
-class StreamReadBuffer : public tnstream {
-               pnstream stream;
-               char  minbuf;
-               int datalen;
-
-               char* zeiger;
-               int   actmempos;
-               int   memsize;
-               int   datasize;
-            public:
-               StreamReadBuffer ( pnstream s );
-               int readdata( void* buf, int size, int excpt  );
-          };
 
 
 
 
-StreamReadBuffer::StreamReadBuffer ( pnstream s )
+MemoryStreamCopy :: MemoryStreamCopy ( pnstream stream )
 {
-   stream = s;
+  buf = NULL;
+  int bufused = 0;
+  int memreserved = 0;
+  int blocksize = 500000;
+  int red;
+  do {
+    if ( bufused + blocksize > memreserved ) {
+       int newsize = memreserved + blocksize;
+       void* newbuf = malloc (newsize);
+       if ( buf ) {
+          memcpy ( newbuf, buf, bufused );
+          free ( buf );
+       }
+       buf = newbuf;
+       memreserved = newsize;
+    }
+    char* cp = (char*) buf;
+    red = stream->readdata ( cp + bufused, blocksize, 0 );
+    bufused += red;
 
-   datalen = 0;
+  } while ( red == blocksize );
+  size = bufused;
+  pos = 0;
 
-   memsize = 0x10000;
-   zeiger = new char [ memsize ];
-
-   datasize = 0;
-   actmempos = 0;
+  devicename = stream->getDeviceName();
+  devicename += " (memory bufferd)";
 }
 
 
-
-int          StreamReadBuffer::readdata( void* buf, int size, int excpt  )
+MemoryStreamCopy :: ~MemoryStreamCopy ( )
 {
-  char*        cpbuf = (char*) buf;
-  int          s, actpos2;
+   if ( buf )
+      free ( buf );
+}
 
-   actpos2 = 0;
 
-   while (actpos2 < size) {
-      if (datasize == 0)
-          if ( excpt )
-             throw treadafterend ( devicename );
-          else
-             return actpos2;
+void MemoryStreamCopy :: writedata ( const void* buf, int size )
+{
+   throw  tinvalidmode ( getDeviceName(), 1, 2 );
+}
 
-      s = datasize - actmempos;
-      if (s > size - actpos2)
-         s = size - actpos2;
-
-      memcpy ( cpbuf + actpos2, zeiger + actmempos, s );
-
-      actmempos += s;
-      if (actmempos >= datasize) {
-         readbuffer();
-         actmempos = 0;
+int MemoryStreamCopy :: readdata  ( void* buffer, int _size, int excpt = 1 )
+{
+   char* cp = (char*) buf;
+   if ( pos + _size > size ) {
+      if ( excpt )
+          throw treadafterend ( getDeviceName() );
+      else {
+         int tr = size-pos;
+         memcpy ( buffer, cp+pos, tr );
+         pos += tr;
+         return tr;
       }
-      actpos2 = actpos2 + s;
-   }
 
-   return actpos2;
+   } else {
+      memcpy ( buffer, cp+pos, _size );
+      pos += _size;
+      return _size;
+   }
 }
 
-*/
+void MemoryStreamCopy :: seek ( int newpos )
+{
+   pos = newpos;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef _DOS_
+
+static int stream_seek( struct SDL_RWops *context, int offset, int whence)
+{
+	MemoryStreamCopy* stream = (MemoryStreamCopy*) context->hidden.unknown.data1;
+	if ( whence == SEEK_SET )
+	   stream->seek ( offset );
+	else
+   	if ( whence == SEEK_CUR )
+	      stream->seek ( offset + stream->getPosition() );
+	   else
+         if ( whence == SEEK_SET )
+            stream->seek ( offset + stream->getSize() );
+}
 
 
+static int stream_read(SDL_RWops *context, void *ptr, int size, int maxnum)
+{
+	MemoryStreamCopy* stream = (MemoryStreamCopy*) context->hidden.unknown.data1;
+	size_t nread = stream->readdata ( ptr, size * maxnum, 0 );
+
+	/*
+	if ( nread < 0 ) {
+		SDL_SetError("Error reading from datastream");
+	}
+	*/
+	return(nread / size);
+}
+
+static int stream_close(SDL_RWops *context)
+{
+	if ( context ) {
+		if ( context->hidden.unknown.data1 ) {
+			MemoryStreamCopy* stream = (MemoryStreamCopy*) context->hidden.unknown.data1;
+			delete stream;
+		}
+		free(context);
+	}
+	return(0);
+}
+
+
+SDL_RWops *SDL_RWFromStream( pnstream stream )
+{
+   MemoryStreamCopy* msb = new MemoryStreamCopy ( stream );
+
+	SDL_RWops *rwops;
+
+	rwops = SDL_AllocRW();
+	if ( rwops != NULL ) {
+	   rwops->seek = stream_seek;
+	   rwops->read = stream_read;
+	   rwops->write = NULL;
+	   rwops->close = stream_close;
+	   rwops->hidden.unknown.data1 = msb;
+	}
+	return(rwops);
+}
+
+#endif
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 tnbufstream::tnbufstream (  )
@@ -851,7 +924,7 @@ tn_file_buf_stream::tn_file_buf_stream( const char* name, char mode)
 } 
 
 
-void tn_file_buf_stream::seekstream( int newpos )
+void tn_file_buf_stream::seek( int newpos )
 { 
    if ( modus == 2 ) {
       writebuffer();
@@ -929,7 +1002,7 @@ tncontainerstream :: tncontainerstream ( const char* containerfilename, Containe
    readdata ( &magic, sizeof(pos) );
    if ( magic == containermagic ) {
       readdata ( &pos, sizeof(pos) );
-      seekstream ( pos );
+      seek ( pos );
       readdata ( &num, sizeof (num) );
       index = new tcontainerindex[num];
       for ( int i = 0; i < num; i++ ) {
@@ -984,7 +1057,7 @@ void tncontainerstream :: opencontainerfile ( const char* name )
 
    actfile = &index[i];
    containerfilepos = 0;
-   seekstream ( actfile->start );
+   seek ( actfile->start );
 }
 
 int tncontainerstream :: readcontainerdata ( void* buf, int size, int excpt  )

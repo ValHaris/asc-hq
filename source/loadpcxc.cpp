@@ -1,6 +1,9 @@
-//     $Id: loadpcxc.cpp,v 1.4 2000-05-23 21:09:26 mbickel Exp $
+//     $Id: loadpcxc.cpp,v 1.5 2000-08-03 19:21:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/05/23 21:09:26  mbickel
+//      Removed boolean data type
+//
 //     Revision 1.3  1999/12/28 21:03:07  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -296,7 +299,7 @@ void writepcx ( char* name, int x1, int y1, int x2, int y2, dacpalette256 pal )
       stream.writedata ( &pal2, 768 );
       fsize += 768 ;
    }
-   stream.seekstream ( 0 );
+   stream.seek ( 0 );
    header.size = fsize;
    stream.writedata2 ( header );
 }

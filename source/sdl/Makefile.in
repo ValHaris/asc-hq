@@ -64,11 +64,14 @@ CXX = @CXX@
 MAKEINFO = @MAKEINFO@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
+SDL_CFLAGS = @SDL_CFLAGS@
+SDL_CONFIG = @SDL_CONFIG@
+SDL_LIBS = @SDL_LIBS@
 VERSION = @VERSION@
 
 noinst_LIBRARIES = libsdl.a
 
-libsdl_a_SOURCES = sound.cpp timer.cpp graphics.cpp events.cpp 
+libsdl_a_SOURCES = sound.cpp timer.cpp graphics.cpp events.cpp SDLStretch.cpp
 
 EXTRA_DIST = events.cpp graphics.cpp graphics.h timer.cpp sound.cpp sound.h 
 
@@ -86,7 +89,7 @@ CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 libsdl_a_LIBADD = 
-libsdl_a_OBJECTS =  sound.o timer.o graphics.o events.o
+libsdl_a_OBJECTS =  sound.o timer.o graphics.o events.o SDLStretch.o
 AR = ar
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 CXXLD = $(CXX)
@@ -98,7 +101,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/events.P .deps/graphics.P .deps/sound.P .deps/timer.P
+DEP_FILES =  .deps/SDLStretch.P .deps/events.P .deps/graphics.P \
+.deps/sound.P .deps/timer.P
 SOURCES = $(libsdl_a_SOURCES)
 OBJECTS = $(libsdl_a_OBJECTS)
 

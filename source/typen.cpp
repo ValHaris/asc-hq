@@ -1,6 +1,12 @@
-//     $Id: typen.cpp,v 1.29 2000-08-03 13:12:20 mbickel Exp $
+//     $Id: typen.cpp,v 1.30 2000-08-03 19:21:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/08/03 13:12:20  mbickel
+//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
+//      Repairing units now reduces their experience
+//      negative attack- and defenseboni possible
+//      changed attackformula
+//
 //     Revision 1.28  2000/08/02 10:28:27  mbickel
 //      Fixed: generator vehicle not working
 //      Streams can now report their name
@@ -1919,7 +1925,7 @@ tterrainbits cblargerocks ( 1<<23, 0 );
 
 int tvehicletype :: vehicleloadable ( pvehicletype fzt )
 {
-   if (( ( loadcapabilityreq & fzt->height || !loadcapabilityreq ) && 
+   if (( ( (loadcapabilityreq & fzt->height) || !loadcapabilityreq ) &&
          ((loadcapabilitynot & fzt->height) == 0))
         || (fzt->functions & cf_trooper)) 
 
@@ -1931,7 +1937,7 @@ int tvehicletype :: vehicleloadable ( pvehicletype fzt )
 
 int    tbuildingtype :: vehicleloadable ( pvehicletype fzt )
 {
-      if ( (loadcapacity >= fzt->maxsize()  &&  (unitheightreq & fzt->height) && !(unitheight_forbidden & fzt->height) )  || 
+      if ( (loadcapacity >= fzt->maxsize()  &&  ((unitheightreq & fzt->height) || !unitheightreq) && !(unitheight_forbidden & fzt->height)  && (loadcapability & fzt->height))  ||
            ( fzt->functions & cf_trooper ) )
            return 1;
       else

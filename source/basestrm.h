@@ -1,6 +1,11 @@
-//     $Id: basestrm.h,v 1.18 2000-08-02 15:52:40 mbickel Exp $
+//     $Id: basestrm.h,v 1.19 2000-08-03 19:21:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/08/02 15:52:40  mbickel
+//      New unit set definition files
+//      demount accepts now more than one container file
+//      Unitset information dialog added
+//
 //     Revision 1.17  2000/08/02 10:28:23  mbickel
 //      Fixed: generator vehicle not working
 //      Streams can now report their name
@@ -181,7 +186,7 @@ class tbufferoverflow : public terror {
 
 class tfileerror : public terror {
   public:
-   char filename[20];
+   char filename[2000];
    tfileerror ( const char* fn ) ;
    tfileerror ( void );
 //   ~tfileerror();
@@ -287,11 +292,31 @@ class tnstream {
            virtual void readrlepict( void** pnter, int allocated, int* size);
            virtual ~tnstream() {};
            virtual const char* getDeviceName ( void );
+           virtual void seek ( int newpos );
            tnstream ( );
          protected:
            string devicename; // will just contain "abstract" 
 
 };
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class MemoryStreamCopy : public tnstream {
+               void* buf;
+               int size;
+               int pos;
+
+
+             public:
+               MemoryStreamCopy ( pnstream stream );
+               ~MemoryStreamCopy ( );
+               void writedata ( const void* buf, int size );
+               int  readdata  ( void* buf, int size, int excpt = 1 );
+               void seek ( int newpos );
+               int getPosition ( void ) { return pos; };
+               int getSize ( void ) { return size; };
+         };
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   #ifndef pmemorystreambuf_defined
@@ -514,7 +539,7 @@ class tn_file_buf_stream : public tnbufstream {
 
         public:
             tn_file_buf_stream ( const char* name, char mode );
-            virtual void seekstream ( int newpos );
+            virtual void seek ( int newpos );
             virtual int getstreamsize ( void );
             virtual ~tn_file_buf_stream  ( );
             virtual time_t get_time ( void );
@@ -742,6 +767,11 @@ extern char* constructFileName( char* buf, int directoryLevel, const char* path,
 extern int directoryExist ( const char* path );
 extern char* extractPath ( char* buf, const char* filename );
 extern char* extractFileName ( char* buf, const char* filename );
+
+#ifndef _DOS_
+ #include sdlheader
+ extern SDL_RWops *SDL_RWFromStream( pnstream stream );
+#endif
 
 #endif
 

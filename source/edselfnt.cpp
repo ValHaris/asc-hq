@@ -1,6 +1,11 @@
-//     $Id: edselfnt.cpp,v 1.8 2000-06-28 19:26:16 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.9 2000-08-03 19:21:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/06/28 19:26:16  mbickel
+//      fixed bug in object generation by building removal
+//      Added artint.cpp to makefiles
+//      Some cleanup
+//
 //     Revision 1.7  2000/05/06 19:57:09  mbickel
 //      Mapeditor/linux is now running
 //
@@ -1340,21 +1345,36 @@ void selbuildingcargo( pbuilding bld )
       generatevehicle_ka ( newcargo, bld->color / 8, unit );
      
       int match = 0;
+      int poss = 0;
       for ( int i = 0; i < 8; i++ )
          if ( unit->typ->height & ( 1 << i )) {
             unit->height = 1 << i;
             if ( bld->vehicleloadable ( unit )) {
-               int p = 0;
-               while ( bld->loading[p] )
-                 p++;
-               bld->loading[p] = unit;
+               poss |= 1 << i;
                match = 1;
-               break;
-            }
-        }
-       if ( !match ) {
-          displaymessage("The unit could not be loaded !",1);
-          removevehicle ( &unit );
+         }
+
+       for ( int h2 = 0; h2<8; h2++ )
+         if ( unit->typ->height & ( 1 << h2 ))
+            if ( poss & ( 1 << h2 ))
+               if ( bld->typ->loadcapability & ( 1 << h2))
+                  unit->height = 1 << h2;
+
+       for ( int h1 = 0; h1<8; h1++ )
+         if ( unit->typ->height & ( 1 << h1 ))
+            if ( poss & ( 1 << h1 ))
+               if ( bld->typ->buildingheight & ( 1 << h1))
+                  unit->height = 1 << h1;
+
+       if ( match ) {
+          int p = 0;
+          while ( bld->loading[p] )
+            p++;
+          bld->loading[p] = unit;
+          unit->movement = unit->typ->movement[log2( unit->height)];
+       } else
+           displaymessage("The unit could not be loaded !",1);
+           removevehicle ( &unit );
        }
 
    }

@@ -3,7 +3,7 @@ AC_INIT(Makefile.am)
 
 AM_CONFIG_HEADER(config.h)
 
-AM_INIT_AUTOMAKE(asc,0.1)
+AM_INIT_AUTOMAKE(asc,1.2.0)
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -33,8 +33,14 @@ AC_TYPE_SIZE_T
 
 dnl Checks for libraries.
 AC_CHECK_LIB( pthread, pthread_create )
-AC_CHECK_LIB( SDL, SDL_EnableKeyRepeat, , AC_MSG_ERROR( ASC requires SDL 1.0.2 or newer to be installed ) )
+dnl AC_CHECK_LIB( SDL-1.1, SDL_EnableKeyRepeat, , AC_MSG_ERROR( ASC requires SDL 1.1.3 or newer to be installed ) )
 AC_CHECK_LIB( bz2, bzReadOpen )
+
+SDL_VERSION=1.1.3
+      AM_PATH_SDL($SDL_VERSION,
+                  :,
+                  AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!])
+      )
 
 dnl Checks for library functions.
 AC_CHECK_FUNCS(select)

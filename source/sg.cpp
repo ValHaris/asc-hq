@@ -1,6 +1,11 @@
-//     $Id: sg.cpp,v 1.66 2000-08-02 15:52:57 mbickel Exp $
+//     $Id: sg.cpp,v 1.67 2000-08-03 19:21:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.66  2000/08/02 15:52:57  mbickel
+//      New unit set definition files
+//      demount accepts now more than one container file
+//      Unitset information dialog added
+//
 //     Revision 1.65  2000/08/01 10:39:11  mbickel
 //      Updated documentation
 //      Refined configuration file handling
@@ -285,7 +290,10 @@
 
 #include "config.h"
 #ifdef _DOS_
-#include <conio.h>
+ #include <conio.h>
+#else
+ #include <SDL/SDL_image.h>
+ #include "sdl/SDLStretch.h"
 #endif
 
 #include <stdio.h>                                  
@@ -333,6 +341,7 @@
  #include "dos\memory.h"
 #endif
 
+extern SDL_Surface *screen;
 
 
 // #define MEMCHK
@@ -3211,6 +3220,45 @@ class tnewkeyb {
                };
           };
 
+
+/*
+extern SDL_Surface* SDL_GetRealVideoSurface ( void );
+
+void ASC_UpdateRects (SDL_Surface *screen, int numrects, SDL_Rect *rects)
+{
+	int i;
+
+			for ( i=0; i<numrects; ++i ) {
+				SDL_LowerBlit(screen, &rects[i],
+						SDL_GetRealVideoSurface(), &rects[i]);
+			}
+}
+
+
+void ASC_UpdateRect(SDL_Surface *screen, Sint32 x, Sint32 y, Uint32 w, Uint32 h)
+{
+	if ( screen ) {
+		SDL_Rect rect;
+
+		if ( w == 0 )
+			w = screen->w;
+		if ( h == 0 )
+			h = screen->h;
+		if ( (int)(x+w) > screen->w )
+			return;
+		if ( (int)(y+h) > screen->h )
+			return;
+
+		rect.x = x;
+		rect.y = y;
+		rect.w = w;
+		rect.h = h;
+		ASC_UpdateRects(screen, 1, &rect);
+	}
+}
+*/
+
+
 int main(int argc, char *argv[] )
 {  
    // dont_use_linear_framebuffer = 1;
@@ -3475,10 +3523,43 @@ int main(int argc, char *argv[] )
          truecoloravail = false;
 
          try {
+
             {
+            /*
+               tnfilestream s ( "helisun.jpg", 1 );
+            	SDL_Surface* image = IMG_Load_RW( SDL_RWFromStream ( &s ), 1 );
+            	
+               if ( image->format->palette )
+                  SDL_SetColors(screen, image->format->palette->colors, 0, image->format->palette->ncolors);
+
+               SDL_Surface* convimg =  SDL_DisplayFormat ( image );
+
+               SDL_StretchSurface( convimg,
+                                   0,0,convimg->w-1,convimg->h-1,
+                                   screen,
+                                   0,0,screen->w-1,screen->h-1);
+	
+               SDL_UpdateRect(screen, 0,0,0,0);
+*/
+
+/*               SDL_Rect srcrect,dstrect;
+               srcrect.x = 0;
+               srcrect.y = 0;
+               srcrect.w = image->w;
+               srcrect.h = image->h;
+               dstrect.x = (screen->w - image->w) / 2;
+               dstrect.y = (screen->h - image->h) / 2;
+               dstrect.w = image->w;
+               dstrect.h = image->h;
+               SDL_BlitSurface(convimg, &srcrect, screen, &dstrect);
+               SDL_UpdateRect(screen, 0, 0, 0, 0);
+            	SDL_FreeSurface ( convimg );
+            	SDL_FreeSurface ( image );
+*/            	
                tnfilestream stream ( "logo640.pcx", 1 );
                loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 );
             }
+
             loaddata( resolx, resoly, emailgame, mapname, savegame );
          } 
          catch ( tfileerror err ) {

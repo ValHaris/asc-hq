@@ -1,6 +1,11 @@
-//     $Id: loadbi3.cpp,v 1.22 2000-08-02 10:28:27 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.23 2000-08-03 19:21:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/08/02 10:28:27  mbickel
+//      Fixed: generator vehicle not working
+//      Streams can now report their name
+//      Field information shows units filename
+//
 //     Revision 1.21  2000/07/29 14:54:35  mbickel
 //      plain text configuration file implemented
 //
@@ -1092,7 +1097,7 @@ pfield InsertBiMap :: getfield ( int x, int y )
 void  tloadBImap ::  ReadMISSPart(void)
 { 
 
-  MissFile->seekstream ( Header.MissPos ); 
+  MissFile->seek ( Header.MissPos );
 
   MissFile->readdata2 ( OrgMissRec ); 
   if ( OrgMissRec.ID != MISSID ) {
@@ -1231,7 +1236,7 @@ void        tloadBImap ::   ReadACTNPart(void)
     TACTN        ACTNHead; 
     Word         Line[64]; 
   
-    MissFile->seekstream ( Header.ACTNPos ); 
+    MissFile->seek ( Header.ACTNPos );
     MissFile->readdata2( ACTNHead ); 
     if ( ACTNHead.ID != ACTNID ) {
        strcat ( missing, "\nFatal error: No Battle Isle mission; invalid ACTNID\n"  );
@@ -1425,7 +1430,7 @@ void       tloadBImap :: ReadSHOPPart( void )
  
  int firstmissingbuilding = 1;
  
-  MissFile->seekstream ( Header.ShopPos ); 
+  MissFile->seek ( Header.ShopPos );
    MissFile->readdata2 ( SHOPHead ); 
    if ( SHOPHead.ID != SHOPID ) {
       strcat ( missing, "\nFatal error: No Battle Isle mission; invalid ShopID\n"  );
