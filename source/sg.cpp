@@ -1541,7 +1541,7 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_aibench:
-         if ( maintainencecheck() || 1 ) {
+         if ( maintainencecheck() && 0 ) {
             if ( !actmap->player[ actmap->actplayer ].ai )
                actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 

@@ -4,7 +4,7 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.55 2004-07-12 18:15:04 mbickel Exp $
+//     $Id: controls.h,v 1.56 2005-01-06 19:39:37 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -174,6 +174,8 @@ extern void   generatevehicle_cl ( pvehicletype fztyp,
                                                 int               y );
 
 extern int searchexternaltransferfields ( pbuilding bld );
+
+extern Resources getDestructionCost( Building* bld, Vehicle* veh );
 
 
 class treactionfire {

@@ -1109,7 +1109,12 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
    pc.addInteger  ( "DefenseBonus_abs", defensebonus_abs );
    pc.addInteger  ( "DefenseBonus_plus", defensebonus_plus );
    pc.addInteger  ( "Jamming_abs", basicjamming_abs );
-   pc.addInteger  ( "Jammming_plus", basicjamming_plus );
+
+   if ( pc.find( "Jammming_plus"))
+      pc.addInteger  ( "Jammming_plus", basicjamming_plus );
+   else
+      pc.addInteger  ( "Jamming_plus", basicjamming_plus );
+
    pc.addInteger  ( "Height", imageHeight );
    if ( pc.find ( "PhysicalHeight" ) || !pc.isReading() ) {
       pc.addInteger  ( "PhysicalHeight", physicalHeight );

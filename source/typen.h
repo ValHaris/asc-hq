@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.154 2004-09-13 16:56:54 mbickel Exp $
+//     $Id: typen.h,v 1.155 2005-01-06 19:39:37 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -126,6 +126,7 @@ class Resources {
      bool operator< ( const Resources& res ) { return !(*this >= res); };
 //     Resources operator* ( double d );
      bool operator== ( const Resources& res ) { return energy==res.energy && material==res.material && fuel==res.fuel; };
+     bool operator!= ( const Resources& res ) { return energy!=res.energy || material!=res.material || fuel!=res.fuel; };
      Resources& operator+= ( const Resources& res ) { energy+=res.energy; material+=res.material; fuel+=res.fuel; return *this;};
      enum { Energy, Material, Fuel };
      void read ( tnstream& stream );

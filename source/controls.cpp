@@ -389,6 +389,13 @@ void         destructbuildinglevel1(int xp, int yp)
    sdbf.initdestructbuilding( xp, yp  );
 }
 
+Resources getDestructionCost( Building* bld, Vehicle* veh )
+{
+   Resources r;
+   r.material = - bld->typ->productionCost.material * (100 - bld->damage) / destruct_building_material_get / 100;
+   r.fuel = destruct_building_fuel_usage * veh->typ->fuelConsumption;
+   return r;
+}
 
 void         destructbuildinglevel2( int xp, int yp)
 {
@@ -402,19 +409,17 @@ void         destructbuildinglevel2( int xp, int yp)
 
 
          pbuilding bb = fld->building;
-
-         eht->putResource( bld->productionCost.material * (100 - bb->damage) / destruct_building_material_get / 100, Resources::Material, false);
+         eht->getResource( getDestructionCost( bb, eht ), false);
 
          eht->setMovement ( 0 );
          eht->attacked = 1;
-         eht->getResource( destruct_building_fuel_usage * eht->typ->fuelConsumption, Resources::Fuel, false );
 
          if ( bb->getCompletion() ) {
             bb->setCompletion ( bb->getCompletion()-1 );
          } else {
             delete bb;
          }
-         logtoreplayinfo ( rpl_removebuilding, xp, yp );
+         logtoreplayinfo ( rpl_removebuilding2, xp, yp, eht->networkid );
          computeview( actmap );
          displaymap();
          moveparams.movestatus = 0;
@@ -1205,8 +1210,11 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle, const AStar3D::Path
             while ( ul ) {
                punitlist next = ul->next;
                pattackweap atw = attackpossible ( ul->eht, vehicle->xpos, vehicle->ypos );
-               if ( atw->count )
-                  removeunit ( ul->eht );
+               for ( int j = 0; j < atw->count; ++j )
+                  if ( ul->eht->reactionfire.weaponShots[atw->num[j]] ) {
+                     removeunit ( ul->eht );
+                     break;
+                  }   
 
                delete atw;
                ul = next;

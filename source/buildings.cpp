@@ -143,6 +143,7 @@ void Building :: convert ( int player )
 
 
 
+
 void* Building :: getpicture ( const BuildingType::LocalCoordinate& localCoordinate )
 {
 //                      if ( bld->typ->id == 8 ) {          // Windkraftwerk
