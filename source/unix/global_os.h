@@ -1,6 +1,11 @@
-//     $Id: global_os.h,v 1.4 2001-08-07 21:24:36 mbickel Exp $
+//     $Id: global_os.h,v 1.5 2001-08-07 22:11:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2001/08/07 21:24:36  mbickel
+//      Fixed invalid height of planes inside carriers (mapeditor)
+//      Added namespace std usage to unix config
+//      Updated vehicles (provided by gamer)
+//
 //     Revision 1.3  2001/07/14 21:07:46  mbickel
 //      Sound works now under Win32 too
 //      Error reporting on Win32 during startup works again.
@@ -54,8 +59,10 @@
   
   #define StaticClassVariable
 
+  #ifdef __cplusplus
    #include <string>  // some Standard library include file to define the namespace std
    using namespace std;
+  #endif
 
 
   #ifndef HAVE_STRICMP

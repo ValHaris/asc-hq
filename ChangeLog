@@ -1,3 +1,266 @@
+2001-08-07 23:24  mbickel
+
+	* data/s_aa-shi.veh, data/s_battle.veh, data/s_cruisr.veh,
+	data/s_destro.veh, source/edselfnt.cpp, source/unix/global_os.h: 
+	Fixed invalid height of planes inside carriers (mapeditor)
+	 Added namespace std usage to unix config
+	 Updated vehicles (provided by gamer)
+
+2001-08-07 17:58  mbickel
+
+	* data/helpsys9.msg, source/attack.cpp, source/controls.cpp,
+	source/dlg_box.cpp, source/gamedlg.cpp, source/gui.cpp,
+	source/strtmesg.cpp:  Fixed crash in mail list
+	 Fixed crash in weapon info with mines
+	 Fixed cancel Button in object construction
+
+2001-08-06 23:38  mbickel
+
+	* source/: controls.cpp, sg.cpp:  Fixed: ghost icons remained after
+	vehicle construction canceled
+
+2001-08-06 22:54  mbickel
+
+	* asc.kdevprj, source/buildings.cpp, source/edmain.cpp,
+	source/gui.cpp, source/loaders.cpp, source/mapdisplay.cpp,
+	source/memorycheck.cpp, source/misc.cpp, source/objecttype.cpp,
+	source/sg.cpp, source/sgstream.cpp, source/sgstream.h,
+	source/spfst.cpp, source/textfileparser.cpp,
+	source/vehicletype.cpp, source/tools/demount.cpp,
+	source/tools/weaponguide.cpp:  Fixed lots of crashes related to the
+	new text files
+	 Fixed delayed events
+	 Fixed crash in terrin change event
+	 Fixed visibility of mines
+	 Fixed crashes in event loader
+
+2001-08-06 17:35  mbickel
+
+	* source/: buildingtype.h, itemrepository.cpp, sg.cpp,
+	strtmesg.cpp:  Fixed wrong resulution from config file
+	 Added duplicate ID checking
+
+2001-08-03 11:06  mbickel
+
+	* data/data.version:  Increased data version
+
+2001-08-03 10:53  mbickel
+
+	* source/: strtmesg.cpp, vehicletype.cpp, tools/weaponguide.cpp: 
+	Added missing construction cost to vehicletype text formats
+	 New version of weaponguide
+
+2001-08-02 20:50  mbickel
+
+	* data/bi3maptranslation.txt, source/edmain.cpp, source/sg.cpp,
+	source/sgstream.cpp, source/sgstream.h, source/spfst.cpp,
+	source/spfst.h, source/textfileparser.cpp:  Corrected Error
+	handling in Text parsers
+	 Improved version information
+
+2001-08-02 20:18  mbickel
+
+	* asc.kdevprj, configure, configure.in, data/bi3maptranslation.txt,
+	doc/manpages/Makefile.in, source/edmain.cpp, source/loadbi3.h,
+	source/objxlat.cpp, source/textfileparser.cpp,
+	source/tools/bi2pcx.cpp:  BI3 map translation tables now in
+	textfile too
+
+2001-08-02 17:33  mbickel
+
+	* source/: ascstring.cpp, ascstring.h, edglobal.cpp, edglobal.h,
+	edmain.cpp, itemrepository.cpp, itemrepository.h, loadpcx.h,
+	loadpcxc.cpp, map2pcx.cpp, replay.cpp, sg.cpp, sgstream.cpp,
+	strtmesg.cpp, terraintype.cpp, textfileparser.cpp,
+	textfileparser.h, textfiletags.cpp, textfiletags.h,
+	vehicletype.cpp, vehicletype.h, sdl/graphics.cpp,
+	tools/bin2text.cpp, tools/mount.cpp, tools/weaponguide.cpp: 
+	Completed text based file formats
+
+2001-07-31 22:16  mbickel
+
+	* asc.kdevprj, source/buildingtype.h, source/vehicletype.h: 
+	Changed headers to use common types
+
+2001-07-31 11:50  mbickel
+
+	* asc.kdevprj, source/ai/tactics.cpp:  Fixed crash in AI
+
+2001-07-30 20:18  mbickel
+
+	* doc/source.html:  Updated source.html to reflect Visual Studio
+	.net
+
+2001-07-30 20:03  mbickel
+
+	* source/: buildings.h, containerbase.cpp, containerbase.h,
+	mapdisplay.cpp, objecttype.cpp, unitctrl.cpp, vehicle.cpp,
+	vehicle.h, vehicletype.cpp, sdl/asc_IMG_jpg.c,
+	tools/weaponguide.cpp, win32/borland/asc.bpr, win32/msvc/fileio.h,
+	win32/msvc/global_os.h:  Fixed some more warnings
+
+2001-07-30 19:43  mbickel
+
+	* source/: dialog.cpp, dlg_box.cpp, dlgraph.cpp, pd.cpp, pd.h,
+	sg.cpp, sgstream.cpp, terraintype.cpp, terraintype.h,
+	textfiletags.h, weather.cpp, ai/misc.cpp, sdl/asc_IMG_jpg.c,
+	sdl/sound.h, win32/msvc/fileio.h, win32/msvc/global_os.h,
+	win32/msvc/ndir.c, win32/msvc/ndir.h, win32/msvc/ASC/ASC.sln,
+	win32/msvc/ASC/ASC.vcproj, win32/msvc/jpeglib/jpeglib.vcproj,
+	win32/msvc/libbzip2/libbzip2.vcproj:  Added Microsoft Visual Studio
+	.net project files
+	 Fixed some warnings
+
+2001-07-30 15:24  mbickel
+
+	* source/win32/borland/: asc.bpr, asc.mak, mapeditor/mapeditor.bpr,
+	mapeditor/mapeditor.mak:  Removed VCL from Borland Make- and
+	Project Files
+
+2001-07-30 10:50  mbickel
+
+	* source/tools/weaponguide.cpp:  Fixed bugs in weaponguide: wrong
+	file open for detailed6
+				    crash in output of buildable objects
+
+2001-07-29 23:26  mbickel
+
+	* source/: building.cpp, building_controls.h:  Fixed: Torpedo-units
+	could not leave submerged submarine
+
+2001-07-29 20:23  mbickel
+
+	* doc/source.html:  Updated win32 build instructions
+
+2001-07-29 20:11  mbickel
+
+	* doc/source.html:  Updated win32 build instructions again
+
+2001-07-29 20:07  mbickel
+
+	* doc/source.html:  Updated Win32 build instructions
+
+2001-07-28 23:09  mbickel
+
+	* source/: controls.cpp, dialog.cpp, edmisc.cpp, gui.cpp,
+	loadbi3.cpp, spfst.cpp, strtmesg.cpp, terraintype.cpp,
+	terraintype.h, typen.h, vehicle.cpp, vehicletype.cpp,
+	vehicletype.h, libs/bzlib/win/bzlib.bpr,
+	libs/triangul/win32/triangulation.bpr, tools/weaponguide.cpp,
+	tools/win/bin2text.bpr, tools/win/demount.bpr,
+	tools/win/gfx2pcx.bpr, tools/win/makegfx.bpr, tools/win/mount.bpr,
+	tools/win/tank2pcx.bpr, tools/win/tools.bpr, tools/win/viewid.bpr,
+	tools/win/weaponguide.bpr, win32/borland/asc.bpr,
+	win32/borland/mapeditor/mapeditor.bpr:	Prepared vehicletype
+	structure for textIO
+
+2001-07-28 15:40  mbickel
+
+	* source/: libs/bzlib/win/bzlib.bpr,
+	libs/triangul/win32/triangulation.bpr, tools/win/bin2text.bpr,
+	tools/win/demount.bpr, tools/win/gfx2pcx.bpr,
+	tools/win/makegfx.bpr, tools/win/mount.bpr, tools/win/tank2pcx.bpr,
+	tools/win/tools.bpr, tools/win/viewid.bpr,
+	tools/win/weaponguide.bpr, tools/win/weaponguide.mak,
+	win32/borland/asc.bpr, win32/borland/asc.mak,
+	win32/borland/mapeditor/mapeditor.bpr,
+	win32/borland/mapeditor/mapeditor.mak:	Updated BCC makefiles
+
+2001-07-28 15:26  mbickel
+
+	* asc.bpg, source/tools/weaponguide.cpp,
+	source/tools/win/weaponguide.mak:  Updated weaponguide again
+
+2001-07-28 15:18  mbickel
+
+	* asc.kdevprj, source/tools/weaponguide.cpp:  Merged changes into
+	weaponguide.cpp
+
+2001-07-28 13:54  mbickel
+
+	* asc.kdevprj, source/map2pcx.cpp, source/research.cpp,
+	source/research.h, source/clparser/Makefile.am,
+	source/clparser/Makefile.in, source/clparser/weaponguide.cpp,
+	source/clparser/weaponguide.gp, source/clparser/weaponguide.h,
+	source/tools/weaponguide.cpp, source/tools/linux/Makefile.am,
+	source/tools/linux/Makefile.in, source/unix/Makefile.in,
+	source/unix/mapeditor/Makefile.in:  Updated weaponguide
+
+2001-07-28 13:19  mbickel
+
+	* asc.bpg, source/basestreaminterface.h, source/basestrm.cpp,
+	source/basestrm.h, source/buildings.cpp, source/controls.cpp,
+	source/dialog.cpp, source/edevents.cpp, source/edgen.cpp,
+	source/edglobal.cpp, source/edmain.cpp, source/edmisc.cpp,
+	source/edselfnt.cpp, source/gamedlg.cpp, source/gamemap.cpp,
+	source/gui.cpp, source/itemrepository.cpp, source/itemrepository.h,
+	source/loadbi3.cpp, source/loaders.cpp, source/loaders.h,
+	source/missions.cpp, source/replay.cpp, source/sg.cpp,
+	source/sgstream.cpp, source/sgstream.h, source/spfst.cpp,
+	source/spfst.h, source/textfileparser.cpp, source/unitctrl.cpp,
+	source/vehicletype.cpp, source/vehicletype.h, source/weather.cpp,
+	source/ai/ai_common.h, source/tools/weaponguide.cpp,
+	source/tools/linux/Makefile.am, source/tools/win/weaponguide.bpf,
+	source/tools/win/weaponguide.bpr, source/unix/Makefile.am,
+	source/unix/mapeditor/Makefile.am, source/win32/borland/asc.bpf,
+	source/win32/borland/asc.bpr,
+	source/win32/borland/mapeditor/mapeditor.bpf,
+	source/win32/borland/mapeditor/mapeditor.bpr:  Updated weaponguide
+	 moved item repository from spfst to itemrepository
+
+2001-07-28 00:29  mbickel
+
+	* asc.bpg, bccmake.bat, data/coast137.trr, data/coast138.trr,
+	data/coast139.trr, data/coast140.trr, data/coast141.trr,
+	data/coast142.trr, data/coast143.trr, data/coast144.trr,
+	data/coast145.trr, data/coast146.trr, data/coast147.trr,
+	data/coast148.trr, data/wa_ro303.trr, data/wa_ro304.trr,
+	data/wa_ro305.trr, data/wa_ro306.trr, source/gui.cpp,
+	source/objecttype.cpp, source/pointers.h, source/strtmesg.cpp,
+	source/terraintype.cpp, source/tools/bin2text.cpp,
+	source/tools/weaponguide.cpp, source/tools/win/bin2text.bpf,
+	source/tools/win/bin2text.bpr, source/tools/win/bin2text.mak,
+	source/tools/win/tools.bpf, source/tools/win/tools.bpr,
+	source/tools/win/tools.mak, source/win32/borland/asc.bpf,
+	source/win32/borland/asc.bpr, source/win32/borland/asc.mak,
+	source/win32/borland/mapeditor/mapeditor.bpf,
+	source/win32/borland/mapeditor/mapeditor.bpr,
+	source/win32/borland/mapeditor/mapeditor.mak:  Updated some terrain
+	fields
+	 Added bin2text win32 project files
+	 Some improvement and bugfixes in text-file loading
+
+2001-07-27 23:38  mbickel
+
+	* source/clparser/bin2txt.h:  Added bin2txt.h
+
+2001-07-27 23:13  mbickel
+
+	* ChangeLog, asc.kdevprj, source/TODO, source/ascstring.cpp,
+	source/ascstring.h, source/basestreaminterface.h,
+	source/basestrm.cpp, source/basestrm.h, source/buildings.cpp,
+	source/buildingtype.h, source/controls.cpp, source/dialog.cpp,
+	source/edgen.cpp, source/edmisc.cpp, source/edselfnt.cpp,
+	source/gamedlg.cpp, source/gamemap.cpp, source/gamemap.h,
+	source/gui.cpp, source/loadbi3.cpp, source/loaders.cpp,
+	source/loadpcx.h, source/loadpcxc.cpp, source/mapdisplay.cpp,
+	source/objecttype.cpp, source/objecttype.h, source/pointers.h,
+	source/resourcenet.cpp, source/sg.cpp, source/sgstream.cpp,
+	source/sgstream.h, source/spfst.cpp, source/terraintype.cpp,
+	source/terraintype.h, source/textfileparser.cpp,
+	source/textfileparser.h, source/textfiletags.cpp,
+	source/textfiletags.h, source/typen.cpp, source/typen.h,
+	source/unitctrl.cpp, source/vehicletype.cpp, source/weather.h,
+	source/ai/ai.h, source/clparser/Makefile.am,
+	source/clparser/Makefile.in, source/clparser/bin2txt.cpp,
+	source/clparser/bin2txt.gp, source/tools/bi2pcx.cpp,
+	source/tools/bin2text.cpp, source/tools/viewid.cpp,
+	source/tools/linux/Makefile.am, source/tools/linux/Makefile.in,
+	source/unix/Makefile.am, source/unix/Makefile.in,
+	source/unix/mapeditor/Makefile.am,
+	source/unix/mapeditor/Makefile.in:  Added text based file formats
+	 Terraintype and Objecttype restructured
+
 2001-07-25 21:56  mbickel
 
 	* source/: attack.cpp, libs/bzlib/win/bzlib.bpr,

@@ -66,9 +66,9 @@ install_location=
 type=DATA
 [Workspace_1]
 browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/index.html
-cpp_file=/home/martin/asc/source/mapdisplay.cpp
-header_file=/home/martin/asc/source/spfst.h
-openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/basestrm.h,/home/martin/asc/source/tools/demount.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/memorycheck.cpp,/home/martin/asc/source/tools/weaponguide.cpp,/home/martin/asc/source/objecttype.cpp,/home/martin/asc/source/objecttype.h,/home/martin/asc/source/spfst.cpp,/home/martin/asc/source/sgstream.cpp,/home/martin/asc/source/sgstream.h,/home/martin/asc/source/buildings.cpp,/home/martin/asc/source/vehicletype.cpp,/home/martin/asc/source/gui.cpp,/home/martin/asc/source/textfileparser.cpp,/home/martin/asc/source/missions.cpp,/home/martin/asc/source/spfst.h,/home/martin/asc/source/loaders.cpp,/home/martin/asc/source/vehicle.cpp,/home/martin/asc/source/edmain.cpp,/home/martin/asc/source/mapdisplay.cpp
+cpp_file=Untitled.cpp
+header_file=/home/martin/asc/source/unix/global_os.h
+openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/unix/global_os.h,/home/martin/asc/source/ascstring.h,/home/martin/asc/source/win32/borland/global_os.h
 show_outputview=true
 show_treeview=true
 [asc.kdevprj]

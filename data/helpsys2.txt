@@ -77,7 +77,8 @@
 #pos10# 8  #pos70#: Place mine
 #pos10# F1 #pos70#: Help
 #pos10# F2  #pos70#: Editor
-#pos10# F3  #pos70#: Choose terrain
+#pos10# F3  #pos70#: Choose terrain from palette map
+#pos10# ctrl+F3  #pos70#: Choose terrain from list
 #pos10# F4  #pos70#: Choose unit
 #pos10# F5  #pos70#: Choose color
 #pos10# F6  #pos70#: Choose building
