@@ -202,6 +202,12 @@ int CGameOptions :: getSearchPathNum ( void )
    return searchPathNum;
 }
 
+void  CGameOptions ::  setSearchPath ( int i, const char* path )
+{
+   searchPath[i].setName( path );
+}
+
+
 Password CGameOptions :: getDefaultPassword ( )
 {
    Password pwd;

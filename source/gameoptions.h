@@ -44,6 +44,8 @@ class CGameOptions
       };
       int getSearchPathNum ( void );
 
+      void setSearchPath ( int i, const char* path );
+
       int version;
 
       //! the number of steps to perform a move: 0 -> 3 step; != 0 -> 2 steps

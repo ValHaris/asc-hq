@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.81 2002-03-25 18:48:15 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.82 2002-04-10 21:12:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.81  2002/03/25 18:48:15  mbickel
+//      Applications can now specify which data checks to perform
+//
 //     Revision 1.80  2002/03/03 14:13:48  mbickel
 //      Some documentation updates
 //      Soundsystem update
@@ -208,7 +211,8 @@
     Boston, MA  02111-1307  USA
 */
 
-                                               
+
+
 #include <malloc.h>
 #include <cstring>
 #include <stdlib.h>
@@ -218,6 +222,11 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fstream>
+
+#ifdef _WIN32_
+ #include <windows.h>
+ #include <winreg.h>
+#endif 
 
 
 #include "global.h"
@@ -816,17 +825,51 @@ int readgameoptions ( const char* filename )
 {
    displayLogMessage ( 4, "loading game options ... " );
 
-   const char* fn;
+   bool registryKeyFound = false;
+
+   ASCString fn;
+   ASCString installDir;
+
    if ( filename && filename[0] )
       fn = filename;
    else
-      if ( getenv ( asc_EnvironmentName )) 
+      if ( getenv ( asc_EnvironmentName ))
          fn = getenv ( asc_EnvironmentName );
-      else
-         fn = asc_configurationfile;
+      else {
+
+#ifdef _WIN32_
+          HKEY key;
+          if (  RegOpenKeyEx ( HKEY_LOCAL_MACHINE,
+                                    "SOFTWARE\\Advanced Strategic Command\\",
+                                    0,
+                                    KEY_READ,
+                                    &key ) == ERROR_SUCCESS) {
+
+             DWORD type;
+             const int size = 2000;
+             char  buf[size];
+             DWORD size2 = size;
+             if ( RegQueryValueEx ( key, "InstallDir", NULL, &type, buf, &size2 ) == ERROR_SUCCESS ) {
+                if ( type == REG_SZ	 ) {
+                   fn = buf;
+                   appendbackslash ( fn );
+                   installDir = fn;
+                   fn += asc_configurationfile;
+
+                   registryKeyFound = true;
+                }
+             }
+
+             RegCloseKey ( key );
+         }
+
+#endif
+         if ( !registryKeyFound )
+             fn = asc_configurationfile;
+      }
 
    char completeFileName[10000];
-   constructFileName ( completeFileName, -3, NULL, fn );
+   constructFileName ( completeFileName, -3, NULL, fn.c_str() );
 
    configFileNameToWrite = strdup ( completeFileName );
 
@@ -837,7 +880,14 @@ int readgameoptions ( const char* filename )
          loadableGameOptions = new CLoadableGameOptions (CGameOptions::Instance());
 
       std::ifstream is( completeFileName );
-      loadableGameOptions->Load(is);    
+      loadableGameOptions->Load(is);
+
+      if ( registryKeyFound ) {
+         ASCString primaryPath = CGameOptions::Instance()->getSearchPath(0);
+         if ( primaryPath == "." || primaryPath == ".\\" || primaryPath == "./" )
+            CGameOptions::Instance()->setSearchPath(0, installDir.c_str() );
+      }
+
    } else {
       CGameOptions::Instance()->setChanged(); // to generate a configuration file
       if ( exist ( "sg.cfg" ) ) {
@@ -897,7 +947,13 @@ int readgameoptions ( const char* filename )
 
          }
       }
+
+      if ( registryKeyFound )
+         CGameOptions::Instance()->setSearchPath(0, installDir.c_str() );
+
    }
+
+
    #ifdef sgmain
    if ( CGameOptions::Instance()->startupcount < 10 ) {
       CGameOptions::Instance()->startupcount++;
