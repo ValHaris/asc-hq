@@ -513,13 +513,9 @@ int beeline ( const MapCoordinate& a, const MapCoordinate& b )
 }
 
 
-int beeline ( int _x1, int _y1, int _x2, int _y2 )
+int beeline ( int x1, int y1, int x2, int y2 )
 {
 #ifdef HEXAGON
-   int x1 = _x1;
-   int y1 = _y1;
-   int x2 = _x2;
-   int y2 = _y2;
    int xdist = abs ( (x1 * 2 + (y1 & 1 )) - ( x2 * 2 + ( y2 & 1)) );
    int ydist = abs ( y2 - y1 );
    int num2;
@@ -527,7 +523,7 @@ int beeline ( int _x1, int _y1, int _x2, int _y2 )
       num2 = (ydist - xdist) / 2 + xdist;
    else
       num2 = max ( xdist, ydist );
-
+/*
    int num = 0;
    while ( x1 != x2  || y1 != y2 ) {
       num++;
@@ -536,7 +532,8 @@ int beeline ( int _x1, int _y1, int _x2, int _y2 )
 
    if ( num != num2 )
       printf("beeline inconsistent\n" );
-   return minmalq*num;
+*/
+   return minmalq*num2;
 
 #else
    return luftlinie8( x1, y1, x2, y2 );
