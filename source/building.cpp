@@ -2,9 +2,14 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.92 2003-01-21 18:46:15 mbickel Exp $
+//     $Id: building.cpp,v 1.93 2003-02-07 09:53:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.92  2003/01/21 18:46:15  mbickel
+//      Fixed: ships could not enter spaceship
+//      Fixed: efficiency of mining stations not correctly working
+//      Fixed: unit categories not being evaluated when entering building
+//
 //     Revision 1.91  2003/01/14 22:21:23  mbickel
 //      Fixed: crash when refuelling a weapon with maximum amount of 0
 //
@@ -3386,7 +3391,7 @@ int   ccontainer :: repairicon_c :: available    ( void )
    pvehicle eht = main->getmarkedunit();
    if ( eht && eht->color == actmap->actplayer * 8)
       if ( eht->damage > 0 )
-         return cc->baseContainer->canRepair();
+         return cc->baseContainer->canRepair( eht );
 
    return 0;
 }

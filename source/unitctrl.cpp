@@ -1,6 +1,11 @@
-//     $Id: unitctrl.cpp,v 1.96 2003-01-28 17:48:42 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.97 2003-02-07 09:53:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.96  2003/01/28 17:48:42  mbickel
+//      Added sounds
+//      Rewrote soundsystem
+//      Fixed: tank got stuck when moving from one transport ship to another
+//
 //     Revision 1.95  2003/01/06 16:52:04  mbickel
 //      Fixed: units inside transports got wrong movement when moved out
 //      Fixed: wind not displayed correctly
@@ -2123,7 +2128,7 @@ int VehicleService :: available ( pvehicle veh ) const
 {
    int av = 0;
    if ( veh && !veh->attacked ) {
-      if ( veh->canRepair() && (veh->functions & cfrepair))
+      if ( veh->canRepair( NULL ) && (veh->functions & cfrepair))
          for ( int i = 0; i < veh->typ->weapons.count; i++ )
             if ( veh->typ->weapons.weapon[i].service() )
                av++;
@@ -2160,7 +2165,7 @@ int VehicleService :: getServices ( pvehicle veh ) const
 {
    int res = 0;
    if ( veh ) {
-      if ( veh->canRepair() && (veh->functions & cfrepair))
+      if ( veh->canRepair( NULL ) && (veh->functions & cfrepair))
          for ( int i = 0; i < veh->typ->weapons.count; i++ )
             if ( veh->typ->weapons.weapon[i].service() )
                if ( !veh->attacked )
@@ -2270,7 +2275,7 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
                                        targ.service.push_back ( s );
                                     }
 
-                                 if ( veh->canRepair() && (veh->functions & cfrepair))
+                                 if ( veh->canRepair( targetUnit ) && (veh->functions & cfrepair))
                                     if ( veh->tank.fuel && veh->tank.material )
                                       // if ( targetUnit->getMovement() >= movement_cost_for_repaired_unit )
                                           if ( targetUnit->damage ) {
@@ -2368,7 +2373,7 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
       }
 
 
-   if ( bld->canRepair() )
+   if ( bld->canRepair( targetUnit ) )
       if ( targetUnit->damage ) {
          VehicleService::Target::Service s;
          s.type = VehicleService::srv_repair;

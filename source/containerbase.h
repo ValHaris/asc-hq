@@ -79,7 +79,7 @@ class ContainerBase {
       Resources putResource ( const Resources& res, int queryonly, int scope = 1 );
       Resources getResource ( const Resources& res, int queryonly, int scope = 1 );
 
-      virtual bool canRepair( void ) = 0;
+      virtual bool canRepair( const ContainerBase* item ) = 0;
       pmap getMap ( ) { return gamemap; };
 
       int getMaxRepair ( const ContainerBase* item );

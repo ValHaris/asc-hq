@@ -55,7 +55,7 @@ Resources ContainerBase :: getResource ( const Resources& res, int queryonly, in
 
 int ContainerBase :: repairItem   ( ContainerBase* item, int newDamage  )
 {
-   if ( !canRepair() )
+   if ( !canRepair( item ) )
       return item->damage;
 
    int orgdam = item->damage;
@@ -78,7 +78,7 @@ int ContainerBase :: getMaxRepair ( const ContainerBase* item )
 
 int ContainerBase :: getMaxRepair ( const ContainerBase* item, int newDamage, Resources& cost  )
 {
-   if ( !canRepair() )
+   if ( !canRepair( item ) )
       return item->damage;
 
    int i;
