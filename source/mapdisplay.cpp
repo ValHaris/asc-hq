@@ -77,11 +77,7 @@ int vfbscanlinelength;
 #define streetleftshift 0
 #define cursorrightshift -8
 #define unitdownshift 0
-#ifdef FREEMAPZOOM
- #define unitrightshift 0
-#else
-  #define unitrightshift -1
-#endif
+#define unitrightshift 0
 
 
 #define buildingdownshift  0
@@ -230,7 +226,6 @@ int   getfieldundermouse ( int* xf, int* yf )
             int yd = mouseparams.y - yp;
 
 
-           #ifdef FREEMAPZOOM
             static int actpictwidth = -1;
             static void* picture = NULL;
 
@@ -246,10 +241,6 @@ int   getfieldundermouse ( int* xf, int* yf )
                int h;
                getpicsize ( picture, actpictwidth, h );
             }
-
-           #else
-            void* picture = icons.fieldshape;
-           #endif
 
             int pix = getpixelfromimage ( picture, xd, yd );
             if ( pix >= 0 && pix < 255 )
@@ -274,7 +265,6 @@ int   getfieldundermouse ( int* xf, int* yf )
 
       } /* endfor */
    } /* endfor */
-   #ifdef FREEMAPZOOM
    /*
    if ( mouseinrect ( &idisplaymap.invmousewindow  )) {
       int stepx =   fielddistx * zoomlevel.getzoomlevel() / 100 ;
@@ -315,7 +305,6 @@ int   getfieldundermouse ( int* xf, int* yf )
       }
    }
    */
-   #endif
 
    return 0;
 }
@@ -323,7 +312,6 @@ int   getfieldundermouse ( int* xf, int* yf )
 
 tdisplaymap idisplaymap;
 
-#ifdef FREEMAPZOOM
 
 ZoomLevel zoomlevel;
 
@@ -371,8 +359,6 @@ void ZoomLevel :: setzoomlevel ( int newzoom )
   #endif
    CGameOptions::Instance()->setChanged();
 }
-
-#endif
 
 
 void tgeneraldisplaymapbase :: setmouseinvisible ( void )
@@ -1859,11 +1845,9 @@ void tbackgroundpict :: load ( void )
       tnfilestream stream ("amatur.raw", tnstream::reading);
       for ( int i = 0; i< 7; i++ )
          stream.readrlepict ( &dashboard[i], false, &w );
-     #ifdef FREEMAPZOOM
       #ifdef sgmain
       ::dashboard.zoom.pic = dashboard[6];
       #endif
-     #endif
    }
    {
       tnfilestream stream ("hxborder.raw", tnstream::reading);
@@ -1881,28 +1865,7 @@ void tbackgroundpict :: paintborder ( int dx, int dy )
 void tbackgroundpict :: paintborder ( int dx, int dy, int reinit )
 {
    if ( lastpaintmode < 1 ) {
-      #ifdef FREEMAPZOOM
-       paintrectangleborder (  );
-      #else
-
-      if ( !inited || reinit )
-           init( reinit );
-       putspriteimage ( borderpos[0].x + dx, borderpos[0].y + dy,  borderpicture[0] );
-       putspriteimage ( borderpos[2].x + dx, borderpos[2].y + dy,  borderpicture[2] );
-
-       for ( int x = 0; x < idisplaymap.getscreenxsize() -1; x++ ) {
-          putspriteimage ( borderpos[1].x + dx + x * fielddistx, borderpos[1].y + dy,  borderpicture[1] );
-          putspriteimage ( borderpos[6].x + dx + x * fielddistx, borderpos[6].y + dy,  borderpicture[6] );
-       }
-
-       for ( int y = 0; y < idisplaymap.getscreenysize() -2; y+=2 ) {
-          putspriteimage ( borderpos[3].x + dx, borderpos[3].y + y * fielddisty + dy,  borderpicture[3] );
-          putspriteimage ( borderpos[4].x + dx, borderpos[4].y + y * fielddisty + dy,  borderpicture[4] );
-       }
-
-       putspriteimage ( borderpos[5].x + dx, borderpos[5].y + dy,  borderpicture[5] );
-       putspriteimage ( borderpos[7].x + dx, borderpos[7].y + dy,  borderpicture[7] );
-      #endif
+      paintrectangleborder (  );
       lastpaintmode = 1;
    }
 }

@@ -1015,10 +1015,10 @@ Optional Features:
   --enable-genparse       enables recreation of the command line parsers
   --disable-sdltest       Do not try to compile and run a test SDL program
   --disable-sdlmmtest       Do not try to compile and run a test SDLmm program
-  --disable-paragui  Don't use paragui .
+  --disable-paragui       Don't use paragui .
   --disable-paraguitest       Do not try to compile and run a test PARAGUI program
-  --enable-libbz2-static  compiles a static libbz2 into the binary of asc.
-  --enable-debug       enables some debugging options
+  --enable-libbz2-static      compiles a static libbz2 into the binary of asc.
+  --enable-debug          enables some debugging options and output
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -9942,12 +9942,18 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
    *** PARAGUI version 1.0.1 not found! ASC requires the Paragui library.
    If you have a distribution supplied Paragui.RPM installed, perhaps the
    Paragui-devel.RPM is missing. If your distribution does not include the
-   Paragui library, you can get it from http://www.paragui.org/ " >&5
+   Paragui library, you can get it from http://www.paragui.org/
+   Alternatively, you can add \"--disable-paragui\" to \"configure\" to build
+   ASC without Paragui. Some not-so-important dialogs will be missing, but
+   you will be able to play ASC " >&5
 echo "$as_me: error:
    *** PARAGUI version 1.0.1 not found! ASC requires the Paragui library.
    If you have a distribution supplied Paragui.RPM installed, perhaps the
    Paragui-devel.RPM is missing. If your distribution does not include the
-   Paragui library, you can get it from http://www.paragui.org/ " >&2;}
+   Paragui library, you can get it from http://www.paragui.org/
+   Alternatively, you can add \"--disable-paragui\" to \"configure\" to build
+   ASC without Paragui. Some not-so-important dialogs will be missing, but
+   you will be able to play ASC " >&2;}
    { (exit 1); exit 1; }; }
   fi
 
@@ -12657,3 +12663,14 @@ Alternatively, you can download and install them manually anytime later,
 which is described in the documentation.
  " >&2;}
 fi
+
+
+{ echo "$as_me:$LINENO:  configure completed successfully. Now run \"make\" do build ASC.
+If the build process fails for any reason, take a look at
+http://asc-hq.sourceforge.net/show.php?ID=58
+ " >&5
+echo "$as_me:  configure completed successfully. Now run \"make\" do build ASC.
+If the build process fails for any reason, take a look at
+http://asc-hq.sourceforge.net/show.php?ID=58
+ " >&6;}
+

@@ -905,10 +905,10 @@ void         setspec( pobjecttype obj )
          int y = getypos();
          if ( !fld->checkforobject ( obj ) ) {
             getactfield() -> addobject ( obj );
-            logtoreplayinfo ( rpl_buildobj, x, y, obj->id );
+            logtoreplayinfo ( rpl_buildobj2, x, y, obj->id, eht->networkid );
          } else {
             getactfield() -> removeobject ( obj );
-            logtoreplayinfo ( rpl_remobj, x, y, obj->id );
+            logtoreplayinfo ( rpl_remobj2, x, y, obj->id, eht->networkid );
          }
 
          eht->tank -= cost;

@@ -54,12 +54,10 @@ void         loadcursor(void)
       stream.readrlepict ( &icons.fieldshape, false, &w );
   }
 
-   #ifdef FREEMAPZOOM 
    {
       tnfilestream stream ("mapbkgrb.raw", tnstream::reading);
       stream.readrlepict ( &icons.mapbackground, false, &w );
    }
-   #endif
 
   {
       tnfilestream stream ("hexfld_a.raw",tnstream::reading);

@@ -213,7 +213,6 @@ class tmousescrollproc : public tsubmousehandler {
 extern tmousescrollproc mousescrollproc ;
 extern const int mousehotspots[9][2];
 
-#ifdef FREEMAPZOOM
 class ZoomLevel {
          int zoom;
          int queried;
@@ -225,7 +224,6 @@ class ZoomLevel {
          ZoomLevel ( void );
       };
 extern ZoomLevel zoomlevel;
-#endif
 
 
 class MapDisplayInterface {

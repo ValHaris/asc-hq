@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.53 2003-04-23 18:31:09 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.54 2003-07-06 15:10:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2003/04/23 18:31:09  mbickel
+//      Fixed: AI problems
+//      Improved cheating detection in replay
+//
 //     Revision 1.52  2003/03/20 10:08:29  mbickel
 //      KI speed up
 //      mapeditor: added clipboard
@@ -1044,10 +1048,8 @@ void execaction(int code)
    case act_selectgraphicset: selectgraphicset();
                               showallchoices();
       break;
-  #ifdef FREEMAPZOOM    
    case act_setzoom : choosezoomlevel();
       break;
-  #endif
    case act_unitsettransformation: unitsettransformation();
       break;
    case act_unitSetInformation: viewUnitSetinfo();

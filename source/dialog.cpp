@@ -4819,7 +4819,6 @@ void tprogressbar :: writetostream ( pnstream stream )
 }
 
 
-#ifdef FREEMAPZOOM
 class tchoosezoomlevel : public tdialogbox {
              protected:
                 int zoom;
@@ -4882,9 +4881,6 @@ void choosezoomlevel ( void )
    displaymap();
    cursor.show();
 }
-#endif
-
-
 
 
 

@@ -377,6 +377,19 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( y );
          stream->writeInt ( id );
       }
+      if ( action == rpl_buildobj2 || action == rpl_remobj2 ) {
+         int x =  va_arg ( paramlist, int );
+         int y =  va_arg ( paramlist, int );
+         int id =  va_arg ( paramlist, int );
+         int unit = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 4;
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( id );
+         stream->writeInt ( unit );
+      }
       if ( action == rpl_buildtnk || action == rpl_buildtnk3 ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
@@ -918,11 +931,17 @@ void trunreplay :: execnextreplaymove ( void )
                        }
          break;
       case rpl_remobj:
-      case rpl_buildobj: {
+      case rpl_buildobj: 
+      case rpl_remobj2:
+      case rpl_buildobj2: {
                            stream->readInt();  // size
                            int x = stream->readInt();
                            int y = stream->readInt();
                            int id = stream->readInt();
+                           int unit = -1;
+                           if ( actaction == rpl_remobj2 || actaction == rpl_buildobj2 )
+                              unit = stream->readInt();
+
                            readnextaction();
 
                            pobjecttype obj = getobjecttype_forid ( id );
@@ -931,11 +950,30 @@ void trunreplay :: execnextreplaymove ( void )
                            if ( obj && fld ) {
                               displayActionCursor ( x, y );
 
-                              if ( actaction == rpl_remobj )
+                              Resources cost;
+                              
+                              if ( actaction == rpl_remobj || actaction == rpl_remobj2 ) {
+                                 cost = obj->removecost;
                                  fld->removeobject ( obj );
-                              else
+                              } else {
+                                 cost = obj->buildcost;
                                  fld->addobject ( obj );
+                              }
+                             
+                              if ( unit > 0 ) {
+                                 Vehicle* veh = actmap->getUnit(unit);
+                                 if ( veh ) {
+                                    Resources res2 =  static_cast<ContainerBase*>(veh)->getResource( cost, 0, 1  );
+                                    for ( int r = 0; r < 3; r++ )
+                                       if ( res2.resource(r) < cost.resource(r)  && cost.resource(r) > 0 )
+                                          displaymessage("Resource mismatch: not enough resources to construct/remove object !", 1 );
+                                       
 
+                                 } else
+                                    displaymessage("replay inconsistency:\nCannot find Unit to build/remove Object !", 1 );
+                              }
+                             
+                             
                               computeview( actmap );
                               displaymap();
                               wait(MapCoordinate(x,y));

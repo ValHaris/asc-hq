@@ -2,9 +2,14 @@
     \brief Interface for all the dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.h,v 1.24 2002-11-20 20:00:53 mbickel Exp $
+//     $Id: dialog.h,v 1.25 2003-07-06 15:10:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2002/11/20 20:00:53  mbickel
+//      New features: specify passwords when starting a game
+//      Better error messages when loading a game through command line parameters
+//      Fixed .ASCTXT problems with alias and inheritance
+//
 //     Revision 1.23  2002/03/14 18:14:37  mbickel
 //      Improved messages for proposing peace
 //      Fixed display error when enterering passwords
@@ -250,9 +255,7 @@ class tbasicshowmap {
 //! a dialog box that lets a user resize the active map. Should only be used in the mapeditor
 extern void resizemap ( void );
 
-#ifdef FREEMAPZOOM
- extern void choosezoomlevel ( void );
-#endif
+extern void choosezoomlevel ( void );
 
 extern void viewterraininfo ( void );
 

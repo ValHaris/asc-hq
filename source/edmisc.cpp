@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.103 2003-06-26 21:00:18 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.104 2003-07-06 15:10:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.103  2003/06/26 21:00:18  mbickel
+//      Fixed: land mines could not be carried on bridges
+//
 //     Revision 1.102  2003/06/03 19:55:37  mbickel
 //      Ground mines can be put onto bridges
 //      better AI production
@@ -1125,10 +1128,8 @@ void         pdsetup(void)
    pd.addbutton ( "~W~rite map to PCX-Fileõctrl+G", act_maptopcx);
     pd.addbutton ( "~I~mport BI mapõctrl-i", act_import_bi_map );
     pd.addbutton ( "Insert ~B~I map", act_insert_bi_map );
-   #ifdef FREEMAPZOOM
     pd.addbutton ( "seperator", -1 );
     pd.addbutton ( "set zoom level", act_setzoom );
-   #endif
    pd.addbutton ( "seperator", -1 );
    pd.addbutton ( "E~x~itõEsc", act_end);
 

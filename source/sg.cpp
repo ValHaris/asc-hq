@@ -558,12 +558,10 @@ void         loadMoreData(void)
       stream.readrlepict ( &icons.fieldshape, false, &w );
    }
 
-#ifdef FREEMAPZOOM
    {
       tnfilestream stream ("mapbkgr.raw", tnstream::reading);
       stream.readrlepict ( &icons.mapbackground, false, &w );
    }
-#endif
 
    {
       tnfilestream stream ("hex2oct.raw", tnstream::reading);

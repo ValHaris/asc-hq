@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.12 2003-02-13 00:56:08 mbickel Exp $
+## $Id: Makefile.am,v 1.13 2003-07-06 15:10:26 mbickel Exp $
 
 vpath %.cpp ../..
 
@@ -10,7 +10,7 @@ INCLUDES		= -I$(top_builddir) -I$(top_src_dir) \
 			  -I$(top_builddir)/source -I$(top_src_dir)/source
 
 AM_CXXFLAGS 		= @SDL_CFLAGS@ @SDLMM_CXXFLAGS@ \
--Dkarteneditor -DFREEMAPZOOM -DNEWKEYB @PARAGUI_CFLAGS@
+-Dkarteneditor -DNEWKEYB @PARAGUI_CFLAGS@
 
 bin_PROGRAMS 		= asc_mapedit asc_map2pcx
 

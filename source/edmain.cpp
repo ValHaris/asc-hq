@@ -2,9 +2,13 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.64 2003-04-23 18:31:09 mbickel Exp $
+//     $Id: edmain.cpp,v 1.65 2003-07-06 15:10:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.64  2003/04/23 18:31:09  mbickel
+//      Fixed: AI problems
+//      Improved cheating detection in replay
+//
 //     Revision 1.63  2003/03/20 10:08:29  mbickel
 //      KI speed up
 //      mapeditor: added clipboard
@@ -365,12 +369,10 @@ void         loadcursor(void)
       stream.readrlepict ( &icons.fieldshape, false, &w );
   }
 
-   #ifdef FREEMAPZOOM
-   {
+  {
       tnfilestream stream ("mapbkgrb.raw", tnstream::reading);
       stream.readrlepict ( &icons.mapbackground, false, &w );
-   }
-   #endif
+  }
 
   {
       tnfilestream stream ("hexfld_a.raw", tnstream::reading);
@@ -459,10 +461,6 @@ void loaddata( void )
 
    if ( actprogressbar )
       actprogressbar->startgroup();
-
-  #ifndef FREEMAPZOOM
-   idisplaymap.setup_map_mask ( );
-  #endif
 
    loadUnitSets();
 
