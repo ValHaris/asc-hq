@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: gui.cpp,v 1.81 2002-11-17 11:43:23 mbickel Exp $
+//     $Id: gui.cpp,v 1.82 2002-12-06 10:00:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.81  2002/11/17 11:43:23  mbickel
+//      Fixed replay errors when replaying the AI moves
+//
 //     Revision 1.80  2002/11/15 20:54:11  mbickel
 //      Added third snow-weather
 //      Added aliase in text files
@@ -1886,7 +1889,7 @@ int   tnsguiiconbuildany::available    ( void )
    pfield fld = getactfield();
    if ( fld->vehicle ) 
       if (fld->vehicle->color == actmap->actplayer * 8) 
-         if ( fld->vehicle->typ->objectsBuildable.size() )
+         if ( fld->vehicle->typ->objectsBuildable.size() || fld->vehicle->typ->objectsRemovable.size() || fld->vehicle->typ->objectGroupsBuildable.size() || fld->vehicle->typ->objectGroupsRemovable.size())
             if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
                if ( !fld->vehicle->attacked )
                   return true; 

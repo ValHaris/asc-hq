@@ -1646,8 +1646,8 @@ void  mainloop ( void )
 
             case ct_9: {
                 pfield fld = getactfield();
-                pvehicle v = fld->vehicle;
-                // displaymessage ( "%d", 1, fld->vehicle->typ->id);
+                // pobjecttype o = fld->objects.begin()->typ;
+                // displaymessage ( "%d", 1, o->groupID);
 
             }
                {

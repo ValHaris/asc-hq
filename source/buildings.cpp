@@ -98,7 +98,8 @@ void Building :: convert ( int player )
          }
 
    #endif
-   removeview();
+   if ( color < 8*8 )
+      removeview();
 
    gamemap->player[oldcol].queuedEvents++;
    gamemap->player[player].queuedEvents++;
@@ -109,9 +110,11 @@ void Building :: convert ( int player )
 
    gamemap->player[player].buildingList.push_back( this );
 
-   color = player << 3;
+   color = player * 8;
 
-   addview();
+   if ( player < 8 )
+      addview();
+
    for ( int i = 0; i < 32; i++)
       if ( loading[i] )
          loading[i]->convert ( player );

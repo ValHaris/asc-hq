@@ -1115,8 +1115,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
    if ( pc.find ( "LinkableTerrain" ) || !pc.isReading() )
       pc.addIntegerArray ( "LinkableTerrain", linkableTerrain );
 
-   if ( pc.find ( "canExistBeneathBuildings" ) || !pc.isReading() )
-      pc.addBool ( "canExistBeneathBuildings", canExistBeneathBuildings );
+   pc.addBool ( "canExistBeneathBuildings", canExistBeneathBuildings, false );
 
    pc.addInteger  ( "Armor", armor );
    pc.addDFloatArray ( "Movemalus_plus", movemalus_plus );
