@@ -601,14 +601,14 @@ void GuiHost<T>::reset ( void )
 
 void   tguihoststandard     :: init ( int resolutionx, int resolutiony )
 {
-   chainiconstohost ( &icons.movement );
+//   chainiconstohost ( &icons.movement );
    StandardBaseGuiHost::init ( resolutionx, resolutiony );
 }
 
 
 void   tguihoststandard :: bi2control (  )
 {
-   icons.cancel.display();
+//   icons.cancel.display();
    StandardBaseGuiHost::bi2control (  );
 }
 
@@ -941,7 +941,7 @@ tnguiicon:: ~tnguiicon (  )
 
 
 
-
+#if 0
 
 
 
@@ -1071,10 +1071,6 @@ void  tnsguiiconmove::display      ( void )
 
 
 
-
-
-
-
 tnsguiiconattack::tnsguiiconattack ( void )
                  :vehicleAttack ( NULL )
 {
@@ -1127,7 +1123,7 @@ void  tnsguiiconattack::exec         ( void )
 }
 
 
-
+#endif
 
 
 
@@ -1160,7 +1156,7 @@ int   tnsguiiconascent::available    ( void )
 void  tnsguiiconascent::exec         ( void )
 {
    if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
-      new IncreaseVehicleHeight ( &defaultMapDisplay, &pendingVehicleActions );
+      new IncreaseVehicleHeight ( &getDefaultMapDisplay(), &pendingVehicleActions );
 
       bool simpleMode = false;
       if (  skeypress( ct_lshift ) ||  skeypress ( ct_rshift ))
@@ -1282,7 +1278,7 @@ int   tnsguiicondescent::available    ( void )
 void  tnsguiicondescent::exec         ( void )
 {
    if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
-      new DecreaseVehicleHeight ( &defaultMapDisplay, &pendingVehicleActions );
+      new DecreaseVehicleHeight ( &getDefaultMapDisplay(), &pendingVehicleActions );
 
 
       bool simpleMode = false;
@@ -1421,7 +1417,7 @@ void  tnsguiiconinformation::display      ( void )
 
 
 
-
+#if 0
 
 tnsguiiconendturn::tnsguiiconendturn ( void )
 {
@@ -1464,7 +1460,7 @@ void  tnsguiiconendturn::exec         ( void )
       cursor.show();
    }
 }
-
+#endif
 
 tnsguiiconexternalloading::tnsguiiconexternalloading ( void )
 {
@@ -1486,7 +1482,7 @@ void  tnsguiiconexternalloading::exec         ( void )
 }
 
 
-
+#if 0
 
 tnsguiiconpoweron::tnsguiiconpoweron ( void )
 {
@@ -1540,6 +1536,8 @@ void  tnsguiiconpoweroff::exec         ( void )
 }
 
 
+
+#endif
 
 
 tnsguiiconconstructvehicle::tnsguiiconconstructvehicle ( void )
@@ -1817,7 +1815,7 @@ int   tnsguiiconrepair::available    ( void )
 void  tnsguiiconrepair::exec         ( void )
 {
    if ( pendingVehicleActions.actionType == vat_nothing ) {
-      VehicleService* vs = new VehicleService ( &defaultMapDisplay, &pendingVehicleActions );
+      VehicleService* vs = new VehicleService ( &getDefaultMapDisplay(), &pendingVehicleActions );
       vs->guimode = 1;
       int res = vs->execute ( getactfield()->vehicle, -1, -1, 0, -1, -1 );
       if ( res < 0 ) {
@@ -1916,7 +1914,7 @@ int   tnsguiiconrefuel::available    ( void )
 void  tnsguiiconrefuel::exec         ( void )
 {
    if ( pendingVehicleActions.actionType == vat_nothing ) {
-      VehicleService* vs = new VehicleService ( &defaultMapDisplay, &pendingVehicleActions );
+      VehicleService* vs = new VehicleService ( &getDefaultMapDisplay(), &pendingVehicleActions );
       pendingVehicleActions.service->guimode = 2;
       int res = vs->execute ( getactfield()->vehicle, getxpos(), getypos(), 0, -1, -1 );
       if ( res < 0 ) {

@@ -2,7 +2,7 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.67.2.5 2004-11-27 23:20:51 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67.2.6 2004-12-16 18:48:28 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -41,6 +41,7 @@
 #include "loadimage.h"
 #include "graphicset.h"
 #include "paradialog.h"
+#include "soundList.h"
 
 #include <signal.h>
 

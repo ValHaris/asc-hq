@@ -333,6 +333,10 @@ struct CommandBlock
 #endif
 
 
+
+MapDisplayPG* theMapDisplay = NULL;
+
+
 void benchMapDisplay()
 {
    int t = ticker;
@@ -340,10 +344,10 @@ void benchMapDisplay()
       repaintMap();
 
    int t2 = ticker;
-   /*
-      for ( int i = 0; i< 20; ++i)
-         theMapDisplay->Redraw();
-   */
+   
+   for ( int i = 0; i< 20; ++i)
+      theMapDisplay->Redraw();
+   
    int t3 = ticker;
 
    ASCString s;
@@ -372,7 +376,8 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
       Surface s = Surface::Wrap( ws );
       s.assignDefaultPalette();
    }
-
+   
+   theMapDisplay = this;
 }
 
 int fs[24][3] = {{ 16, 16, 16 },
@@ -502,6 +507,49 @@ void MapDisplayPG::eventDraw ( SDL_Surface* srf, const PG_Rect& rect)
    blitInternalSurface( srf, SPoint(0,0));
 }
 
+ class TargetPixelSelector_Rect {
+        PG_Rect rect; 
+        int x2,y2;
+        int w,h;
+        SPoint pos;
+     protected:
+        int skipTarget( int x, int y ) 
+        { 
+           x += pos.x;
+           y += pos.y;
+           if ( x >= rect.x && y >= rect.y && x < x2 && y < y2 )
+              return 0; 
+           else {
+              if ( y < rect.y )
+                 return 1;
+              else
+                 if ( x < rect.x )
+                    return rect.x - x;
+                 else   
+                    if (y >= y2 )
+                       return -1;
+                    else   
+                       return 1;     
+           }      
+        };
+        void init( const Surface& srv, const SPoint& position ) 
+        {
+           w = srv.w();
+           h = srv.h();
+           pos = position;
+        };
+        
+     public:
+        void setTargetRect( const PG_Rect& r  ) 
+        { 
+           rect = r; 
+           x2 = r.x + r.w; 
+           y2 = r.y + r.h;
+        };
+        TargetPixelSelector_Rect ( NullParamType npt = nullParam ) :w(0xffffff),h(0xffffff) {};   
+  };
+
+
 void MapDisplayPG::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& dst)
 {
    if ( !GetWidgetSurface ()) {
@@ -629,11 +677,21 @@ bool MapDisplayPG::eventMouseButtonUp (const SDL_MouseButtonEvent *button)
 
 
 
+bool MapDisplayPG::fieldInView(const MapCoordinate& mc )
+{
+   if ( mc.x < offset.x || mc.y < offset.y || mc.x > offset.x + field.numx || mc.y > offset.y +  field.numy )
+      return false;
+   else
+      return true;
+}
+
 
 
 Surface MapDisplayPG::createMovementBufferSurface()
 {
-   return Surface::createSurface( 2*surfaceBorder + 2 * fielddisthalfx + fieldsizex, 2*surfaceBorder + 3*fieldsizey, 8*colorDepth, 0x00000000 ) ;
+   Surface s = Surface::createSurface( 2*surfaceBorder + effectiveMovementSurfaceWidth, 2*surfaceBorder + effectiveMovementSurfaceHeight, 8*colorDepth, 0xffffffff ) ;
+   s.SetColorKey( SDL_SRCCOLORKEY, 0xffffff);
+   return s;
 }
 
 
@@ -660,7 +718,7 @@ void MapDisplayPG::initMovementStructure()
 
          pix.x += fieldsizex/2;
          pix.y += fieldsizey/2;
-         movementMask[dir].mask.SetColorKey( SDL_SRCCOLORKEY, movementMask[dir].mask.GetPixel( pix ));
+         movementMask[dir].mask.SetColorKey( SDL_SRCCOLORKEY, movementMask[dir].mask.GetPixel( pix ) & ~movementMask[dir].mask.GetPixelFormat().Amask());
       }
 }
 
@@ -686,15 +744,50 @@ void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
          }
 
    }
+   
+   
+   MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite> alphaBlitter;
+   alphaBlitter.blit( *movement.mask, *movement.surf, SPoint(0,0));
+   // movement.surf->Blit( *movement.mask );
+   
+   
+   MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,PixSel,TargetPixelSelector_Rect> blitter;
+   blitter.setZoom( zoom );
+   blitter.initSource( *movement.surf );
+   blitter.setRectangle( SPoint( getFieldPosX(0,0), getFieldPosY(0,0)), effectiveMovementSurfaceWidth, effectiveMovementSurfaceHeight );
+   blitter.setTargetRect ( *this );
+   Surface s = Surface::Wrap( PG_Application::GetScreen() );
+   blitter.blit( *movement.surf, s, movement.screenPos );
+   
+   
+   SDL_UpdateRect(PG_Application::GetScreen(), movement.screenUpdatePos.x, movement.screenUpdatePos.y, movement.screenWidth, movement.screenHeight); 
+   
+   
+   /*
+   SDL_BlitSurface( movement.surf->getBaseSurface(), NULL, PG_Application::GetScreen(), NULL );
+   SDL_UpdateRect(PG_Application::GetScreen(), 0, 0,PG_Application::GetScreen()->w, PG_Application::GetScreen()->h ); 
+   */
+   
 }
 
-inline bool compare( const pair<MapCoordinate, MapCoordinate>& a, const pair<MapCoordinate, MapCoordinate>& b )
+
+
+bool ccompare( const MapDisplayPG::TouchedField& a, const MapDisplayPG::TouchedField& b )
 {
-   return a.first.y < b.first.y;
+   return a.realMap.y < b.realMap.y || (a.realMap.y == b.realMap.y && a.realMap.x < b.realMap.x);
 }   
+
+bool MapDisplayPG::TouchedField::operator==( const MapDisplayPG::TouchedField& b )
+{
+  return b.realMap == realMap && b.tempMap == tempMap;
+}
+
 
 void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to )
 {
+   if ( !fieldInView( from ) && !fieldInView( to ))
+      return;
+
    int startTime = ticker;
    int duration = CGameOptions::Instance()->movespeed;
    int endTime = startTime + duration;
@@ -704,6 +797,8 @@ void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoor
 
    int dir = getdirection( from, to );
    
+   veh->direction = dir;
+   
    MapCoordinate tempStart;
    if ( dir >= 2 && dir <= 4 ) {
       tempStart = MapCoordinate( 1, 2 );
@@ -711,48 +806,189 @@ void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoor
       tempStart = MapCoordinate( 1, 4 );
    }   
 
-   vector< pair<MapCoordinate, MapCoordinate> > touchedFields;
+   typedef vector< TouchedField > TouchedFields;
+   TouchedFields touchedFields;
    
-   touchedFields.push_back ( make_pair( from, tempStart ));
+   touchedFields.push_back ( TouchedField( from, tempStart ));
    for ( int i = 0; i < sidenum; ++i ) 
-      touchedFields.push_back ( make_pair( getNeighbouringFieldCoordinate(from, i), getNeighbouringFieldCoordinate(tempStart, i) ));
+      touchedFields.push_back ( TouchedField( getNeighbouringFieldCoordinate(from, i), getNeighbouringFieldCoordinate(tempStart, i) ));
       
    MapCoordinate tempEnd = getNeighbouringFieldCoordinate( tempStart, dir );
-   touchedFields.push_back ( make_pair( to, tempEnd ));
+   touchedFields.push_back ( TouchedField( to, tempEnd ));
    for ( int i = 0; i < sidenum; ++i ) 
-      touchedFields.push_back ( make_pair( getNeighbouringFieldCoordinate(to, i), getNeighbouringFieldCoordinate(tempEnd, i) ));
+      touchedFields.push_back ( TouchedField( getNeighbouringFieldCoordinate(to, i), getNeighbouringFieldCoordinate(tempEnd, i) ));
    
 
    // now we have all fields that are touched during movement in a list
    // let's sort it
-   
-   sort(   touchedFields.begin(), touchedFields.end(), compare );
-   unique( touchedFields.begin(), touchedFields.end() );
 
+   sort(   touchedFields.begin(), touchedFields.end(), ccompare );
+   /*
+   TouchedFields::iterator u = unique( touchedFields.begin(), touchedFields.end() );
+   touchedFields.erase( u, touchedFields.end() );   
+   */
+        
+   
    Movement movement;
-   for ( int i = 0; i< 10; ++i ) {
-      movement.touchedFields[i].mapPos = touchedFields[i].first;
-      movement.touchedFields[i].surfPos = getFieldPos2( touchedFields[i].second );
+   int i = 0;
+   for ( TouchedFields::iterator j = touchedFields.begin(); j != touchedFields.end(); ++j )  {
+      if ( i == 0 || movement.touchedFields[i-1].mapPos != j->realMap ) {
+         movement.touchedFields[i].mapPos = j->realMap;
+         movement.touchedFields[i].surfPos = getFieldPos2( j->tempMap );
+         ++i;
+      }   
    }   
            
    movement.veh = veh;
    movement.from = getFieldPos2( tempStart );
    movement.to = getFieldPos2( tempEnd );
+   
+   movement.screenPos = widget2screen( internal2widget( mapPos2internalPos( MapCoordinate(0,0)) - mapPos2internalPos( tempStart ) + mapPos2internalPos( from ) ));
+   movement.screenUpdatePos = movement.screenPos;
+   
+   SPoint lowerRight = SPoint( int( float(effectiveMovementSurfaceWidth) * zoom) + movement.screenPos.x, int( float(effectiveMovementSurfaceHeight) * zoom)+ movement.screenPos.y);
+   
+   if ( movement.screenUpdatePos.x < 0 )
+      movement.screenUpdatePos.x = 0;
+   if ( movement.screenUpdatePos.y < 0 )
+      movement.screenUpdatePos.y = 0;   
+   if ( lowerRight.x >= PG_Application::GetScreen()->w )
+      lowerRight.x = PG_Application::GetScreen()->w - 1;
+   if ( lowerRight.y >= PG_Application::GetScreen()->h )  
+      lowerRight.y = PG_Application::GetScreen()->h - 1;
+      
+   movement.screenWidth = lowerRight.x - movement.screenUpdatePos.x + 1;
+   movement.screenHeight= lowerRight.y - movement.screenUpdatePos.y + 1;
+   
+     
    movement.actmap = actmap;
    
    static Surface surface;
    if ( !surface.valid() )
       surface = createMovementBufferSurface();
+   else
+      surface.Fill(0xffffffff );   
          
    movement.surf = &surface;
+   movement.mask = &movementMask[dir].mask;
    
    movement.playerView = actmap->playerView;
    
+   int loopCounter = 0;
+   int loopStartTicker = ticker;
    while ( ticker < endTime ) {
       displayMovementStep( movement, (ticker - startTime) * 100 / duration );
+      ++loopCounter;
    }
-      
+   cout << (float(loopCounter) / float(ticker - loopStartTicker) * 100) << " / " << (float(loopCounter) / float(ticker - startTime) * 100) << " fps \n";
 }
+
+
+
+
+
+class PG_MapDisplay : public MapDisplayInterface {
+           MapDisplayPG* mapDisplayWidget;
+         public:
+           PG_MapDisplay( MapDisplayPG* mapDisplayWidget_ ) : mapDisplayWidget( mapDisplayWidget_ ) {};
+           
+           int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback soundStart );
+           void deleteVehicle ( Vehicle* vehicle ) {};
+           void displayMap ( void );
+           void displayPosition ( int x, int y );
+           void resetMovement ( void ) {};
+           void startAction ( void );
+           void stopAction ( void );
+           void displayActionCursor ( int x1, int y1, int x2, int y2 ) {};
+           void removeActionCursor ( void ) {};
+           void updateDashboard ();
+           void repaintDisplay ();
+    };
+
+
+
+int  PG_MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback soundStart )
+{
+   if ( actmap->playerView < 0 )
+      return 0;
+
+   int height1 = start.getNumericalHeight();
+   int height2 = dest.getNumericalHeight();
+   if ( height2 == -1 )
+      height2 = height1;
+   else
+      if ( height1== -1 )
+         height1 = height2;
+
+   pfield fld1 = actmap->getField ( start );
+   int view1 = fieldVisibility ( fld1, actmap->playerView );
+
+   pfield fld2 = actmap->getField ( dest );
+   int view2 = fieldVisibility ( fld2, actmap->playerView );
+
+   if (  (view1 >= visible_now  &&  view2 >= visible_now ) || ( vehicle->getOwner() == actmap->playerView ))
+      if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) && ( view2 == visible_all )) || ( actmap->actplayer == actmap->playerView )) {
+         soundStart( 1 );
+         mapDisplayWidget->displayUnitMovement( actmap, vehicle, start, dest );
+      }
+
+
+   int result = 0;
+   if (view1 >= visible_now )
+      result +=1;
+
+   if ( view2 >= visible_now )
+      result +=2;
+
+   return result;
+}
+
+void PG_MapDisplay :: displayMap ( void )
+{
+   ::repaintMap();
+}
+
+void PG_MapDisplay :: displayPosition ( int x, int y )
+{
+   mapDisplayWidget->Update();
+}
+
+
+void PG_MapDisplay :: startAction ( void )
+{
+}
+
+void PG_MapDisplay :: stopAction ( void )
+{
+}
+
+void PG_MapDisplay :: updateDashboard ( void )
+{
+   updateFieldInfo();
+}
+
+void PG_MapDisplay :: repaintDisplay ()
+{
+   ::repaintDisplay();
+}
+
+    
+    
+
+MapDisplayInterface& getDefaultMapDisplay()
+{
+   static PG_MapDisplay* mapDisplay = NULL;
+   if ( !mapDisplay )
+      mapDisplay = new PG_MapDisplay( theMapDisplay );
+   return *mapDisplay;
+}
+
+
+
+
+
+
+
 
 
 
@@ -767,7 +1003,7 @@ int showresources = 0;
 
 int lockdisplaymap = 0;
 
-MapDisplay        defaultMapDisplay;
+
 tpaintmapborder* mapborderpainter = NULL;
 
 
@@ -2345,15 +2581,8 @@ void tmousescrollproc :: mouseaction ( void )
 }
 
 
-/*
-class MapDisplay {
-         public:
-           void displayMovingUnit ( int x1, int y1, int x2, int y2, Vehicle* veh );
- 
-    };
-*/
 
-int  MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundLoopManager* slm )
+int  MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback soundStart )
 {
    if ( actmap->playerView < 0 )
       return 0;
@@ -2374,7 +2603,7 @@ int  MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCo
 
    if (  (view1 >= visible_now  &&  view2 >= visible_now ) || ( vehicle->getOwner() == actmap->playerView ))
       if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) && ( view2 == visible_all )) || ( actmap->actplayer == actmap->playerView )) {
-         slm->activate(  );
+         soundStart( 1 );
          idisplaymap.movevehicle( start.x, start.y, dest.x, dest.y, vehicle, height1, height2, fieldnum, totalmove );
       }
 

@@ -1155,7 +1155,7 @@ void   tsavegameloaders::savegame( pnstream strm, pmap gamemap, bool writeReplay
 }
 
 
-void         tsavegameloaders::savegame( const char* name )
+void         tsavegameloaders::savegame( const ASCString& name)
 { 
    tnfilestream filestream ( name, tnstream::writing );
    savegame ( &filestream, actmap, true );
@@ -1164,7 +1164,7 @@ void         tsavegameloaders::savegame( const char* name )
 
 
 
-int   tsavegameloaders::loadgame( const char* filename )
+int   tsavegameloaders::loadgame( const ASCString& filename )
 {
    tnfilestream filestream ( filename, tnstream::reading );
 
@@ -1461,7 +1461,7 @@ void  loadmap( const char *       name )
 }
 
 
-void  savegame( const char *       name )
+void  savegame( const ASCString& name )
 {
    try {
       tsavegameloaders gl;

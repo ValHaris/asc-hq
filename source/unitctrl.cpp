@@ -173,7 +173,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
          if ( mapDisplay ) {
             if ( next == stop && to.x==next->x && to.y==next->y) // the unit will reach its destination
                slm.fadeOut ( CGameOptions::Instance()->movespeed * 10 );
-              mapDisplay->displayMovingUnit ( from, to, vehicle, pathStep, pathStepNum, &slm );
+              mapDisplay->displayMovingUnit ( from, to, vehicle, pathStep, pathStepNum, MapDisplayInterface::SoundStartCallback( &slm, &SoundLoopManager::activate ));
          }
          pathStep++;
 
@@ -320,10 +320,10 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
    if ( mapDisplay ) {
       mapDisplay->resetMovement();
-      if ( fieldschanged > 0 )
+      // if ( fieldschanged > 0 )
          mapDisplay->displayMap();
-      else
-         mapDisplay->displayPosition ( pos->x, pos->y );
+      // else
+      //   mapDisplay->displayPosition ( pos->x, pos->y );
    }
    return result;
 }
@@ -709,19 +709,14 @@ VehicleAttack :: VehicleAttack ( MapDisplayInterface* md, PPendingVehicleActions
 }
 
 
-int VehicleAttack :: available ( Vehicle* eht ) const
+bool VehicleAttack :: avail ( Vehicle* eht )
 {
-   if (eht != NULL)
-      if (eht->attacked == false)
+   if ( eht )
+      if ( eht->attacked == false )
          if ( eht->weapexist() )
             if (eht->typ->wait == false  ||  !eht->hasMoved() )
-//               if ( eht->reactionfire.getStatus() == Vehicle::ReactionFire::off ) {
-                  return 1;
-//               } else {
-//                  return 1;
-  //             }
-
-   return 0;
+                  return true;
+   return false;
 }
 
 

@@ -101,9 +101,9 @@ void ASC_PG_App :: reloadTheme()
 }
 
 
-void ASC_PG_App :: enableLegacyEventHandling( bool use )
+bool ASC_PG_App :: enableLegacyEventHandling( bool use )
 {
-   setEventRouting ( !use, use );
+   return !setEventRouting ( !use, use );
 }
 
 
@@ -164,7 +164,7 @@ ASC_PG_Dialog::~ASC_PG_Dialog ()
 int ASC_PG_Dialog::Run ( )
 {
 #ifndef sgmain
-   setEventRouting ( true, false );
+   bool eventQueue = setEventRouting ( true, false );
 #endif   
    
    while ( !quitModalLoopValue ) {
@@ -196,7 +196,7 @@ int ASC_PG_Dialog::Run ( )
          SDL_Delay ( 2 );
    }
 #ifndef sgmain
-   setEventRouting ( false, true );
+   setEventRouting ( eventQueue, !eventQueue );
 #endif   
    return quitModalLoopValue;
 }

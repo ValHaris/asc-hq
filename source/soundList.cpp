@@ -46,7 +46,7 @@ SoundLoopManager :: SoundLoopManager ( Sound* snd, bool _active )
 }
 
 
-void SoundLoopManager :: activate ( )
+void SoundLoopManager :: activate ( int dummy )
 {
    if ( !active && sound ) {
       sound->playLoop();

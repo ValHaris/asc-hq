@@ -1891,9 +1891,9 @@ void  mainloop ( void )
       /************************************************************************************************/
 
       while ( actmap->player[ actmap->actplayer ].queuedEvents )
-         checkevents( &defaultMapDisplay );
+         checkevents( &getDefaultMapDisplay() );
 
-      checktimedevents( &defaultMapDisplay );
+      checktimedevents( &getDefaultMapDisplay() );
 
       checkforvictory();
 
@@ -1996,8 +1996,6 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
    if ( actprogressbar ) actprogressbar->startgroup();
 
-   displayLogMessage ( 6, "loading gui icons..." );
-   gui.starticonload();
    displayLogMessage ( 6, "done\n" );
 
    if ( actprogressbar ) actprogressbar->startgroup();

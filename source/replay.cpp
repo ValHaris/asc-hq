@@ -179,7 +179,7 @@ int ReplayMapDisplay :: checkMapPosition ( int x, int y )
 }
 
 
-int ReplayMapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundLoopManager* slc )
+int ReplayMapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback startSound )
 {
    if ( actmap->playerView < 0 )
       return 0;
@@ -188,7 +188,7 @@ int ReplayMapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const 
       if ( checkMapPosition  ( start.x, start.y ))
          displayMap();
 
-      int fc = mapDisplay->displayMovingUnit ( start, dest, vehicle, fieldnum, totalmove, slc );
+      int fc = mapDisplay->displayMovingUnit ( start, dest, vehicle, fieldnum, totalmove, startSound );
       if ( fc == 1 ) {
          mapDisplay->resetMovement();
          mapDisplay->displayMap();
@@ -834,14 +834,14 @@ void trunreplay :: setcursorpos ( int x, int y )
 
 void trunreplay :: displayActionCursor ( int x1, int y1, int x2, int y2, int secondWait )
 {
-    ReplayMapDisplay rmd( &defaultMapDisplay );
+    ReplayMapDisplay rmd( &getDefaultMapDisplay() );
     rmd.setCursorDelay ( CGameOptions::Instance()->replayspeed );
     rmd.displayActionCursor ( x1, y1, x2, y2, secondWait );
 }
 
 void trunreplay :: removeActionCursor ( void )
 {
-    ReplayMapDisplay rmd( &defaultMapDisplay );
+    ReplayMapDisplay rmd( &getDefaultMapDisplay() );
     rmd.removeActionCursor (  );
 }
 
@@ -867,7 +867,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                         Vehicle* eht = actmap->getUnit ( x1, y1, nwid );
                         if ( eht ) {
-                           ReplayMapDisplay rmd ( &defaultMapDisplay );
+                           ReplayMapDisplay rmd ( &getDefaultMapDisplay() );
                            VehicleMovement vm ( &rmd, NULL );
                            vm.execute ( eht, -1, -1, 0 , -1, -1 );
 
@@ -904,7 +904,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                         Vehicle* eht = actmap->getUnit ( x1, y1, nwid );
                         if ( eht ) {
-                           ReplayMapDisplay rmd( &defaultMapDisplay );
+                           ReplayMapDisplay rmd( &getDefaultMapDisplay() );
                            VehicleMovement vm ( &rmd );
                            int t = ticker;
                            vm.execute ( eht, x2, y2, 0, -2, 0 );
@@ -1014,7 +1014,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                         Vehicle* eht = actmap->getUnit ( x1, y1, nwid );
                         if ( eht ) {
-                           ReplayMapDisplay rmd( &defaultMapDisplay );
+                           ReplayMapDisplay rmd( &getDefaultMapDisplay() );
                            VehicleAction* va;
                            if ( newheight > oldheight )
                               va = new IncreaseVehicleHeight ( &rmd, NULL );

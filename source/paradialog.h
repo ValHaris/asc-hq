@@ -59,7 +59,7 @@
        void reloadTheme();
        int ASC_PG_App::Run ();
        void quit() { quitModalLoopValue = 1; };
-       void enableLegacyEventHandling( bool use );
+       bool enableLegacyEventHandling( bool use );
       // PG_Theme* LoadTheme(const char* xmltheme, bool asDefault = true, const char* searchpath = NULL );
  };
 

@@ -30,7 +30,7 @@ AI :: AI ( pmap _map, int _player ) : activemap ( _map ) , sections ( this )
    fieldInformation = NULL;
 
    reset();
-   ReplayMapDisplay* r = new ReplayMapDisplay ( &defaultMapDisplay );
+   ReplayMapDisplay* r = new ReplayMapDisplay ( &getDefaultMapDisplay() );
    r->setCursorDelay (CGameOptions::Instance()->replayspeed + 30 );
    rmd = r;
    mapDisplay = rmd;

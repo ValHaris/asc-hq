@@ -211,6 +211,18 @@ public:
     return timeInterval;
   }
   
+  inline void setTimeInterval(int i){
+    timeInterval = i;
+  }
+  
+  inline void setWindSpeed2FieldRatio(float ratio){
+    windspeed2FieldRatio = ratio;
+  }
+  
+  inline void setSpawnAmount(int a){
+    areaSpawnAmount = a;
+  }
+  
   inline const WeatherSystemMode getEventMode() const{
     return currentMode;
   }
@@ -227,6 +239,14 @@ public:
   
   inline const int getWindDirPercentage(int i) const{
     return windDirPercentages[i];
+  }
+  
+  inline const float getLowerSizeLimit() const{
+    return lowerRandomSize;
+  }
+  
+  inline const float getUpperSizeLimit() const{
+    return upperRandomSize;
   }
 };
 

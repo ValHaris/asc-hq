@@ -22,7 +22,7 @@ class SoundLoopManager {
    public:
       SoundLoopManager ( Sound* snd, bool _active = true );
       // void setSound ( Sound* snd ) { sound = snd; };
-      void activate ( );
+      void activate ( int dummy );
       void fadeOut ( int ms ) { if ( sound && active ) sound->fadeOut( ms ); };
       ~SoundLoopManager() { if ( sound && active ) sound->stop(); };
 };

@@ -24,6 +24,31 @@
 /**
 @author Kevin Hirschmann
 */
+class ChanceSettingDialog :  public ASC_PG_Dialog {
+public:  
+  ChanceSettingDialog(const vector<string>& labelVec);
+  
+  ~ChanceSettingDialog();
+  
+  bool closeWindow() {
+    quitModalLoop(2);
+    return true;
+  };
+  
+  
+private:  
+  bool buttonEvent( PG_Button* button );
+  
+  vector<PG_LineEdit*> chances;
+  vector<PG_Label*> labels;
+  static const int xsize;
+  static const int ysize;
+};
+
+
+/**
+@author Kevin Hirschmann
+*/
 class WeatherDialog :  public ASC_PG_Dialog {
 public:
   WeatherDialog();
@@ -31,10 +56,7 @@ public:
 
   virtual ~WeatherDialog();
 
-  bool closeWindow() {
-    quitModalLoop(2);
-    return true;
-  };
+  
   
    static const char* int2String(int i) {
     stringstream s;
@@ -63,8 +85,23 @@ private:
   PG_Label* windSpeedFieldRatioLabel;
   PG_LineEdit* windSpeedFieldRatioValue;
   
+  PG_Label* upperSizeLimitsLabel;
+  PG_LineEdit* upperSizeLimitsValue;
+  
+  PG_Label* lowerSizeLimitsLabel;
+  PG_LineEdit* lowerSizeLimitsValue;
+  
+  PG_Label* fallOutLabel;
+  PG_Button* fallOutButton;
+  
+  bool editFallOut( PG_Button* button );
   
   bool buttonEvent( PG_Button* button );
+  
+  bool closeWindow() {
+    quitModalLoop(2);
+    return true;
+  };
 };
 
 extern void weatherConfigurationDialog();

@@ -48,7 +48,7 @@
  class TargetPixelSelector_All {
      protected:
         int skipTarget( int x, int y ) { return 0; };
-        void init( const Surface& srv ) {};
+        void init( const Surface& srv, const SPoint& pos ) {};
      public:
         TargetPixelSelector_All ( NullParamType npt = nullParam ) {};   
   };
@@ -66,7 +66,7 @@
               else
                  return 1;     
         };
-        void init( const Surface& srv ) 
+        void init( const Surface& srv, const SPoint& pos ) 
         {
            w = srv.w();
            h = srv.h();
@@ -176,13 +176,23 @@
 
  template<>
  class ColorConverter<1,4> {
-       SDL_Color* palette;
-       int rshift, gshift, bshift,ashift;
      public:
        typedef  PixelSize2Type<1>::PixelType SourcePixelType;
        typedef  PixelSize2Type<4>::PixelType TargetPixelType;
+     private:  
+       SDL_Color* palette;
+       int rshift, gshift, bshift,ashift;
+       bool hasColorKey;
+       TargetPixelType colorKey;
+     public:
 
        ColorConverter( const Surface& sourceSurface, Surface& targetSurface ) {
+         if ( targetSurface.flags() & SDL_SRCCOLORKEY ) {
+            hasColorKey = true;
+            colorKey = targetSurface.GetPixelFormat().colorkey();
+          } else
+            hasColorKey = false;
+               
           palette = sourceSurface.GetPixelFormat().palette()->colors;
           rshift = targetSurface.GetPixelFormat().Rshift();
           gshift = targetSurface.GetPixelFormat().Gshift();
@@ -195,9 +205,12 @@
        };
        
        TargetPixelType convert ( SourcePixelType sp ) { 
-            if ( sp == 0xff ) 
-               return Surface::transparent << ashift;
-            else {
+            if ( sp == 0xff ) {
+               if ( hasColorKey )
+                  return colorKey;
+               else   
+                  return Surface::transparent << ashift;
+            } else {
                TargetPixelType a = Surface::opaque;
                a <<= ashift;
                return TargetPixelType(palette[sp].r << rshift) + TargetPixelType(palette[sp].g << gshift) + TargetPixelType(palette[sp].b << bshift) + a;
@@ -248,7 +261,7 @@
 
            ColorMerger<BytesPerTargetPixel>::init( BytesPerSourcePixel == BytesPerTargetPixel ? src : dst );
            SourcePixelSelector<BytesPerSourcePixel>::init( src );
-           TargetPixelSelector::init( dst );
+           TargetPixelSelector::init( dst, dstPos );
            
            ColorConverter<BytesPerSourcePixel,BytesPerTargetPixel> colorConverter( src, dst );
 
@@ -265,12 +278,16 @@
            for ( int y = 0; y < h; ++y ) {
               for ( int x = 0; x < w; ++x ) {
                  int s = TargetPixelSelector::skipTarget(x,y);
-                 if ( !s ) {
+                 if ( s==0 ) {
                     ColorMerger<BytesPerTargetPixel>::assign ( colorConverter.convert( SourceColorTransform::transform( SourcePixelSelector<BytesPerSourcePixel>::nextPixel())), pix );
                     ++pix;
                  } else {
-                    SourcePixelSelector<BytesPerSourcePixel>::skipPixels( s );   
-                    pix += s;
+                    if ( s > 0 ) {
+                       SourcePixelSelector<BytesPerSourcePixel>::skipPixels( s );   
+                       pix += s;
+                       x += s - 1 ;
+                    } else
+                       return;   
                  }   
               }
               SourcePixelSelector<BytesPerSourcePixel>::nextLine();

@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.154.2.3 2004-11-27 23:20:53 mbickel Exp $
+//     $Id: typen.h,v 1.154.2.4 2004-12-16 18:48:30 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -189,6 +189,7 @@ class MapCoordinate {
             MapCoordinate ( int _x, int _y) : x(_x), y(_y) {};
             bool operator< ( const MapCoordinate& mc ) const { return y < mc.y || ( y == mc.y && x < mc.x );};
             bool operator== ( const MapCoordinate& mc ) const { return y == mc.y && x == mc.x;};
+            bool operator!= ( const MapCoordinate& mc ) const { return y != mc.y || x != mc.x;};
             void write( tnstream& stream ) const { stream.writeInt ( 3000 ); stream.writeInt ( x ); stream.writeInt ( y); };
             void read( tnstream& stream ) {
                int vers = stream.readInt ( );

@@ -1124,7 +1124,7 @@ void ccontainercontrols :: cmove_unit_in_container :: movedown ( Vehicle* eht, V
 
 VehicleMovement*   ccontainercontrols :: movement (  Vehicle* eht, bool simpleMode )
 {
-   VehicleMovement* vehicleMovement = new VehicleMovement ( &defaultMapDisplay, NULL );
+   VehicleMovement* vehicleMovement = new VehicleMovement ( &getDefaultMapDisplay(), NULL );
    int mode = 0;
    if ( simpleMode )
       mode |= VehicleMovement::DisableHeightChange;

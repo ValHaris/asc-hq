@@ -1,6 +1,10 @@
-//     $Id: gui.h,v 1.26.2.1 2004-10-26 16:35:04 mbickel Exp $
+//     $Id: gui.h,v 1.26.2.2 2004-12-16 18:48:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26.2.1  2004/10/26 16:35:04  mbickel
+//      Replaced graphic storage in buildings and objects
+//      cleaned up some names: pvehicle, pbuilding
+//
 //     Revision 1.26  2003/03/05 22:45:36  mbickel
 //      Fixed compilation problems
 //      Updated weaponguide
@@ -462,7 +466,7 @@ class tnsguiicon : public tnguiicon {
 
 
 
-
+#if 0
 class tnsguiiconmove : public tnsguiicon {
           VehicleMovement vehicleMovement;
         public:
@@ -482,7 +486,8 @@ class tnsguiiconattack : public tnsguiicon {
 
           tnsguiiconattack ( void );
        };
-
+#endif
+       
 class tnsguiiconascent : public tnsguiicon {
           IncreaseVehicleHeight increaseVehicleHeight;
         public:
@@ -512,6 +517,7 @@ class tnsguiiconinformation : public tnsguiicon {
           tnsguiiconinformation ( void );
        };
 
+#if 0       
 class tnsguiiconendturn : public tnsguiicon {
         public:
           virtual int   available    ( void ) ;
@@ -519,7 +525,9 @@ class tnsguiiconendturn : public tnsguiicon {
 
           tnsguiiconendturn ( void );
        };
-
+#endif
+       
+       
 class tnsguiiconexternalloading : public tnsguiicon {
         public:
           virtual int   available    ( void ) ;
@@ -528,6 +536,8 @@ class tnsguiiconexternalloading : public tnsguiicon {
           tnsguiiconexternalloading ( void );
        };
 
+       
+#if 0       
 class tnsguiiconpoweroff : public tnsguiicon {
         public:
           virtual int   available    ( void ) ;
@@ -542,7 +552,7 @@ class tnsguiiconpoweron : public tnsguiicon {
 
           tnsguiiconpoweron ( void );
        };
-
+#endif
 
 class tnsguiiconconstructvehicle : public tnsguiicon {
         public:
@@ -723,38 +733,6 @@ class tguihoststandard : public StandardBaseGuiHost {
 
    public: 
      void init ( int resolutionx, int resolutiony );
-
-     struct I{
-        tnsguiiconmove                 movement;
-        tnsguiiconattack               attack;
-        tnsguiicondescent              descent; 
-        tnsguiiconascent               ascent;
-        tnsguiiconinformation          information;
-        tnsguiiconendturn              endturn;
-        tnsguiiconputmine              putmine;
-        tnsguiiconputantitankmine      putantitankmine;
-        tnsguiiconputantipersonalmine  putantipersonalmine;
-        tnsguiiconputfloatingmine      putfloatingmine;
-        tnsguiiconputmooredmine        putmooredmine;
-        tnsguiiconremovemine           removemine;
-        tnsguiiconbuildany             buildany;
-        tnsguiiconrepair               repair;
-        tnsguiiconrefuel               refuel;
-        tnsguiiconrefueldialog         refueldialog;
-        tnsguiiconputbuilding          putbuilding;
-        tnsguiicondestructbuilding     destructbuilding;
-        tnsguiicondig                  dig;
-        tnsguiiconviewmap              viewmap;
-        tnsguiiconcontainer            container;
-        tnsguiiconenablereactionfire   reactionfireon;
-        tnsguiicondisablereactionfire  reactionfireoff;
-        tnsguiiconconstructvehicle     constructvehicle;
-        tnsguiiconexternalloading      externalloading;
-        tnsguiiconpoweroff             poweroff;
-        tnsguiiconpoweron              poweron;
-
-        tnsguiiconcancel               cancel;
-     } icons;
 
    };
 

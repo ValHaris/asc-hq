@@ -30,8 +30,9 @@
   Defines what happens with the SDL events
   \param queue   Events are queued to be extracted with getQueuedEvent
   \param legacy  Events are evaluated and the global legacy structures updated
+  \returns the previous state of the event queing 
 */    
-extern void setEventRouting( bool queue, bool legacy );
+extern bool setEventRouting( bool queue, bool legacy );
 
 extern void initializeEventHandling ( int (*fn)(void *) , void *data, void* mousepointer );
 

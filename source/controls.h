@@ -4,7 +4,7 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.55.2.1 2004-10-26 16:35:03 mbickel Exp $
+//     $Id: controls.h,v 1.55.2.2 2004-12-16 18:48:28 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -213,12 +213,12 @@ class tsearchreactionfireingunits : public treactionfire {
 extern void initNetworkGame( void );
 
 class ReplayMapDisplay : public MapDisplayInterface {
-           MapDisplay* mapDisplay;
+           MapDisplayInterface* mapDisplay;
            int cursorDelay;
            void wait ( int minTime = 0 );
          public:
-           ReplayMapDisplay ( MapDisplay* md ) { mapDisplay = md; cursorDelay = 20; };
-           int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundLoopManager* slm );
+           ReplayMapDisplay ( MapDisplayInterface* md ) { mapDisplay = md; cursorDelay = 20; };
+           int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback startSound );
            void displayPosition ( int x, int y );
            void deleteVehicle ( Vehicle* vehicle ) { mapDisplay->deleteVehicle ( vehicle ); };
            void displayMap ( void ) { mapDisplay->displayMap(); };

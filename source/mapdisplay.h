@@ -18,10 +18,13 @@
 #ifndef mapdisplayH
  #define mapdisplayH
 
+#include "libs/loki/Functor.h"
+
+ 
 #include "typen.h"
+#include "vehicle.h"
 #include "basegfx.h"
 #include "events.h"
-#include "soundList.h"
 
 
 
@@ -211,7 +214,8 @@ extern ZoomLevel zoomlevel;
 
 class MapDisplayInterface {
          public:
-           virtual int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundLoopManager* slm ) = 0;
+           typedef Loki::Functor<void, TYPELIST_1(int) > SoundStartCallback; 
+           virtual int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback startSound ) = 0;
            virtual void deleteVehicle ( Vehicle* vehicle ) = 0;
            virtual void displayMap ( void ) = 0;
            virtual void displayPosition ( int x, int y ) = 0;
@@ -229,7 +233,7 @@ class MapDisplay : public MapDisplayInterface {
            dynamic_array<int> cursorstat;
            int cursorstatnum;
          public:
-           int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundLoopManager* slm );
+           int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback soundStart );
            void deleteVehicle ( Vehicle* vehicle );
            void displayMap ( void );
            void displayPosition ( int x, int y );
@@ -242,7 +246,8 @@ class MapDisplay : public MapDisplayInterface {
            void repaintDisplay ();
     };
 
-extern MapDisplay defaultMapDisplay;
+
+extern MapDisplayInterface& getDefaultMapDisplay();
 
 //! return the screencoordinates of the upper left position of the displayed map
 extern int getmapposx ( void );

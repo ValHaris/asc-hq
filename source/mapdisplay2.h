@@ -138,13 +138,27 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       void blitInternalSurface( SDL_Surface* dest, const SPoint& pnt );
 
       
+      static const int effectiveMovementSurfaceWidth = 4 * fielddisthalfx + fieldsizex;
+      static const int effectiveMovementSurfaceHeight = 4*fieldsizey;
       
       struct {
          Surface mask;
          SPoint  startFieldPos;
       } movementMask[sidenum];
       static const int touchedFieldNum = 10;
+
+    public:        
+    
+      class TouchedField {
+         public:
+            TouchedField( const MapCoordinate& real, const MapCoordinate& temp) : realMap(real), tempMap(temp) {};
+            MapCoordinate realMap;
+            MapCoordinate tempMap;
+            bool operator==(const TouchedField& b );
+      };
       
+      
+    protected:  
 
       struct Movement {
          Vehicle* veh;
@@ -152,7 +166,17 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
          SPoint to;
          pmap actmap;
          Surface* surf;
+         Surface* mask;
          int playerView;
+         
+        
+         //! the area of the screen that is overwritten
+         SPoint screenPos;
+         SPoint screenUpdatePos;
+         
+         
+         int screenWidth,screenHeight;
+         int maxScreenWidth,maxScreenHeight;
          
          struct { 
             MapCoordinate mapPos;
@@ -170,6 +194,8 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       
       void displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to );
 
+      bool fieldInView(const MapCoordinate& mc );
+      
       //! repaints to the internal surface, but does not blit this surface the screen
       void updateMap( bool force = false );
       
@@ -177,7 +203,6 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       void updateWidget();
 
 };
-
 
 extern void benchMapDisplay();
 

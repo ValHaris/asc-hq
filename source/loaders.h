@@ -5,7 +5,7 @@
 
 */
 
-//     $Id: loaders.h,v 1.30.2.1 2004-12-12 19:58:45 mbickel Exp $
+//     $Id: loaders.h,v 1.30.2.2 2004-12-16 18:48:29 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -55,7 +55,7 @@ extern void  savemap( const char *       name );
 extern void  loadmap( const char *       name );
 
 //! saves the game located in #actmap to the savegame file name
-extern void  savegame( const char *       name );
+extern void  savegame( const ASCString& name );
 
 //! loads the game from the file name to  #actmap
 extern void  loadgame( const char *       name );
@@ -148,8 +148,8 @@ class tsavegameloaders : public tgameloaders {
            tmap*           loadgame ( pnstream strm );
            void            savegame ( pnstream strm, pmap gamemap, bool writeReplays = true );
 
-           int             loadgame ( const char* name );
-           void            savegame ( const char* name );
+           int             loadgame ( const ASCString& name );
+           void            savegame ( const ASCString& name );
 };
 
 /*

@@ -522,8 +522,10 @@ void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mou
    SDL_WaitThread ( secondThreadHandle, NULL );
 }
 
-void setEventRouting( bool queue, bool legacy )
+bool setEventRouting( bool queue, bool legacy )
 {
+  bool prev = _queueEvents;
+  
   _fillLegacyEventStructures = legacy;
   
   _queueEvents = queue;
@@ -534,6 +536,8 @@ void setEventRouting( bool queue, bool legacy )
          eventQueue.pop();
       SDL_mutexV( eventQueueMutex );
    }
+   
+   return prev;
 }
 
 
