@@ -2,7 +2,6 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.124.2.7 2004-11-27 23:20:51 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -2417,6 +2416,9 @@ void         EditAiParam::init(  )
 
    addbutton("~A~dded value",410,120,570,140,2,1,11,true);
    addeingabe( 11, &aiv.addedValue, minint, maxint );
+
+   addbutton("~R~eset task after completion",410,160,570,180,3,1,12,true);
+   addeingabe( 12, &aiv.resetAfterJobCompletion, black, dblue );
 
 
    addbutton("~S~elect Dest",50,240,250,260,0,1,22,true);

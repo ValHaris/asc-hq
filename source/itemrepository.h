@@ -50,7 +50,8 @@ extern void registerDataLoader( TextFileDataLoader& dataLoader );
 template<class T>
 class ItemRepository: public TextFileDataLoader {
    ASCString typeName;
-   vector<T*>   container;
+   typedef vector<T*> ItemContainerType;
+   ItemContainerType   container;
    typedef map<int,T*>  ObjectMap;
    ObjectMap hash;
 
@@ -67,7 +68,7 @@ class ItemRepository: public TextFileDataLoader {
       ASCString getTypeName() { return typeName; };
 
       vector<T*>& getVector() { return container; };
-
+      ~ItemRepository();
 };
 
 extern SigC::Signal0<void> dataLoaderTicker;

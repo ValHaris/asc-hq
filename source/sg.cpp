@@ -241,16 +241,16 @@ void* loadpcx2raw( const ASCString& file )
 void         loadMoreData(void)
 {
    int          w;
-   char         i; {
+   {
       tnfilestream stream ( "height2.raw", tnstream::reading );
-      for (i=0;i<3 ;i++ )
+      for (int i=0;i<3 ;i++ )
          for ( int j=0; j<8; j++)
             stream.readrlepict( &icons.height2[i][j], false, &w );
    }
 
    {
       tnfilestream stream ("windp.raw", tnstream::reading);
-      for (i=0;i<9 ;i++ )
+      for (int i=0;i<9 ;i++ )
          stream.readrlepict( &icons.wind[i], false, &w );
 
    }
@@ -262,13 +262,13 @@ void         loadMoreData(void)
 
    {
       tnfilestream stream ("farbe.raw",tnstream::reading);
-      for (i=0;i<8 ;i++ )
+      for (int i=0;i<8 ;i++ )
          stream.readrlepict( &icons.player[i], false, &w );
    }
 
    {
       tnfilestream stream ("allianc.raw",tnstream::reading);
-      for (i=0;i<8 ;i++ ) {
+      for ( int i=0;i<8 ;i++ ) {
          stream.readrlepict(   &icons.allianz[i][0], false, &w );
          stream.readrlepict(   &icons.allianz[i][1], false, &w );
          stream.readrlepict(   &icons.allianz[i][2], false, &w );
@@ -277,13 +277,13 @@ void         loadMoreData(void)
 
    {
       tnfilestream stream ("weapicon.raw",tnstream::reading);
-      for (i=0; i<14 ;i++ )
+      for ( int i=0; i<14 ;i++ )
          stream.readrlepict(   &icons.unitinfoguiweapons[i], false, &w );
    }
 
    {
       tnfilestream stream ("expicons.raw",tnstream::reading);
-      for (i=0; i<=maxunitexperience ;i++ )
+      for ( int i=0; i<=maxunitexperience ;i++ )
          stream.readrlepict(   &icons.experience[i], false, &w );
    }
 
@@ -379,7 +379,7 @@ void         loadMoreData(void)
 
       static int xlatselectweaponguiicons[12] = { 2, 7, 6, 3, 4, 9, 0, 5, 10, 11, 11, 11 };
 
-      for ( i = 0; i < num; i++ )
+      for ( int i = 0; i < num; i++ )
          stream.readrlepict(   &icons.selectweapongui[xlatselectweaponguiicons[i]], false, &w );
       stream.readrlepict(   &icons.selectweaponguicancel, false, &w );
       stream.readrlepict(   &icons.selectweapongui[12], false, &w );
@@ -397,14 +397,14 @@ void         loadMoreData(void)
 
    {
       tnfilestream stream ("pfeil-a0.raw",tnstream::reading);
-      for (i=0; i<8 ;i++ ) {
+      for (int i=0; i<8 ;i++ ) {
          stream.readrlepict(   &icons.pfeil2[i], false, &w );
       } /* endfor */
    }
 
    {
       tnfilestream stream ("gebasym2.raw",tnstream::reading);
-      for ( i = 0; i < 12; i++ )
+      for ( int i = 0; i < 12; i++ )
          for ( int j = 0; j < 2; j++ )
             stream.readrlepict(   &icons.container.lasche.sym[i][j], false, &w );
    }
@@ -421,7 +421,7 @@ void         loadMoreData(void)
       stream.readrlepict(   &icons.container.subwin.ammoproduction.start, false, &w );
       stream.readrlepict(   &icons.container.subwin.ammoproduction.button, false, &w );
       stream.readrlepict(   &icons.container.subwin.ammoproduction.buttonpressed, false, &w );
-      for ( i = 0; i < 4; i++ )
+      for ( int i = 0; i < 4; i++ )
          stream.readrlepict(   &icons.container.subwin.ammoproduction.schieber[i], false, &w );
       stream.readrlepict(   &icons.container.subwin.ammoproduction.schiene, false, &w );
    }
@@ -448,7 +448,7 @@ void         loadMoreData(void)
       stream.readrlepict(   &icons.container.subwin.ammotransfer.start, false, &w );
       stream.readrlepict(   &icons.container.subwin.ammotransfer.button, false, &w );
       stream.readrlepict(   &icons.container.subwin.ammotransfer.buttonpressed, false, &w );
-      for ( i = 0; i < 4; i++ )
+      for ( int i = 0; i < 4; i++ )
          stream.readrlepict(   &icons.container.subwin.ammotransfer.schieber[i], false, &w );
       stream.readrlepict(   &icons.container.subwin.ammotransfer.schieneinactive, false, &w );
       stream.readrlepict(   &icons.container.subwin.ammotransfer.schiene, false, &w );
@@ -485,9 +485,9 @@ void         loadMoreData(void)
    int m; {
       tnfilestream stream ( "bldinfo.raw", tnstream::reading );
       stream.readrlepict( &icons.container.subwin.buildinginfo.start, false, &m );
-      for ( i = 0; i < 8; i++ )
+      for ( int i = 0; i < 8; i++ )
          stream.readrlepict( &icons.container.subwin.buildinginfo.height1[i], false, &m );
-      for ( i = 0; i < 8; i++ )
+      for ( int i = 0; i < 8; i++ )
          stream.readrlepict( &icons.container.subwin.buildinginfo.height2[i], false, &m );
       stream.readrlepict( &icons.container.subwin.buildinginfo.repair, false, &m );
       stream.readrlepict( &icons.container.subwin.buildinginfo.repairpressed, false, &m );
@@ -528,9 +528,9 @@ void         loadMoreData(void)
    {
       tnfilestream stream ("traninfo.raw", tnstream::reading);
       stream.readrlepict(   &icons.container.subwin.transportinfo.start, false, &w );
-      for ( i = 0; i < 8; i++ )
+      for ( int i = 0; i < 8; i++ )
          stream.readrlepict(   &icons.container.subwin.transportinfo.height1[i], false, &w );
-      for ( i = 0; i < 8; i++ )
+      for ( int i = 0; i < 8; i++ )
          stream.readrlepict(   &icons.container.subwin.transportinfo.height2[i], false, &w );
       stream.readrlepict(   &icons.container.subwin.transportinfo.sum, false, &w );
    }
@@ -1102,7 +1102,7 @@ void viewPipeNet( tkey taste )
          for ( int y = 0; y < actmap->ysize; ++y ) {
              pfield fld = actmap->getField ( x, y );
              if ( fieldvisiblenow( fld ))
-                if ( (fld->bdt & tb).any() )
+                if ( (fld->bdt & tb).any() || fld->building )
                    fld->a.temp = 1;
          }
 

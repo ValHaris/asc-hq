@@ -1,6 +1,6 @@
 technology {
    Name = COMA
-   infotext = Research project finished! COMA avialable!
+   infotext = Reserach project finished! COMA avialable!
    id = 101002
    RelatedUnitID = 2
    parent = 101000

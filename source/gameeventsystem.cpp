@@ -289,7 +289,7 @@ void Event::execute( MapDisplayInterface* md )
             action->execute( md );
 
          executed();
-         
+
          if ( reArmNum > 0 ) {
             arm();
             --reArmNum;
@@ -343,6 +343,11 @@ void Event::arm()
 {
    for ( Trigger::iterator i = trigger.begin(); i != trigger.end(); ++i )
       (*i)->arm();
+
+   if ( status == Timed ) {
+      gamemap.eventTimes.push_back ( triggerTime );
+      sort( gamemap.eventTimes.begin(), gamemap.eventTimes.end(), GameTime::comp );
+   }
 }
 
 

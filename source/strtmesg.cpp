@@ -1,4 +1,3 @@
-//     $Id: strtmesg.cpp,v 1.266.2.2 2004-10-10 09:19:00 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de

@@ -74,7 +74,12 @@ AI::AiResult AI::strategy( void )
                }
             }
          } else {
-            runUnitTask ( veh );
+            int nwid = veh->networkid;
+            if ( runUnitTask ( veh ) )
+               if ( getMap()->getUnit( nwid ) ) {  // the unit still lives
+                  if ( veh->aiparam[getPlayerNum()]->resetAfterJobCompletion )
+                     veh->aiparam[getPlayerNum()]->reset( veh );
+               }
          }
 
          displaymessage2("strategy loop %d ; moved unit %d ... ", stratloop, localResult.unitsMoved );

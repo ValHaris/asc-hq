@@ -108,6 +108,7 @@ class AiParameter : public AiValue {
            MapCoordinate3D dest;
            int dest_nwid;
            int data;
+           bool resetAfterJobCompletion;
 
            void reset ( Vehicle* _unit );
            void resetTask ( );

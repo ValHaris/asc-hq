@@ -256,24 +256,31 @@ class Bi3MapTranslationTable {
 
 void Bi3MapTranslationTable :: read ( tnstream& stream )
 {
-   stream.readInt();
+   int version = stream.readInt();
    readClassContainer( terraintranslation, stream );
    readClassContainer( terrain2idTranslation, stream );
    readClassContainer( terraincombixlat, stream );
    readClassContainer( objecttranslate, stream );
    readClassContainer( object2IDtranslate, stream );
+   if ( version >= 2 ) {
+      filename = stream.readString();
+      location = stream.readString();
+   }
+
 }
 
 
 
 void Bi3MapTranslationTable :: write ( tnstream& stream ) const
 {
-   stream.writeInt ( 1 );
+   stream.writeInt ( 2 );
    writeClassContainer ( terraintranslation, stream );
    writeClassContainer ( terrain2idTranslation, stream );
    writeClassContainer ( terraincombixlat, stream );
    writeClassContainer ( objecttranslate, stream );
    writeClassContainer ( object2IDtranslate, stream );
+   stream.writeString( filename );
+   stream.writeString( location );
 }
 
 

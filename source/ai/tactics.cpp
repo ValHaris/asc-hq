@@ -165,7 +165,7 @@ bool AI::moveVariantComp ( const AI::MoveVariant* mv1, const AI::MoveVariant* mv
    // return ( mv1->result < mv2->result || (mv1->result == mv2->result && mv1->moveDist > mv2->moveDist ));
 }
 
-void AI::getAttacks ( AStar3D& vm, Vehicle* veh, TargetVector& tv, int hemmingBonus, bool justOne )
+void AI::getAttacks ( AStar3D& vm, Vehicle* veh, TargetVector& tv, int hemmingBonus, bool justOne, bool executeService )
 {
 
    //! first check
@@ -242,7 +242,7 @@ void AI::getAttacks ( AStar3D& vm, Vehicle* veh, TargetVector& tv, int hemmingBo
          apl = NULL;
       }
 
-      if ( !tv.size() && fuelLacking )
+      if ( !tv.size() && fuelLacking && executeService)
          issueRefuelOrder( veh, true );
    }
 }
@@ -278,6 +278,9 @@ AI::AiResult AI::executeMoveAttack ( Vehicle* veh, TargetVector& tv )
       return result;
    }
 
+   if ( veh->attacked )
+      return result;
+
    VehicleAttack va ( mapDisplay, NULL );
    va.execute ( veh, -1, -1, 0 , 0, -1 );
    if ( va.getStatus() != 2 )
@@ -312,7 +315,7 @@ bool AI::targetsNear( Vehicle* veh )
    AStar3D ast ( getMap(), veh, false, veh->getMovement() );
    ast.findAllAccessibleFields ();
    TargetVector tv;
-   getAttacks ( ast, veh, tv, 0, true );
+   getAttacks ( ast, veh, tv, 0, true, false );
    if ( tv.size() )
       return true;
    else
@@ -546,6 +549,16 @@ AI::AiResult AI::tactics( void )
          for ( int j = 0; j < tsk_num; j++ )
             if ( veh->aiparam[ getPlayerNum() ]->getTask() == tasks[j] )
                unitUsable = true;
+
+      if ( getMap()->getField(veh->getPosition())->vehicle != veh ) {
+         Vehicle* transport = getMap()->getField(veh->getPosition())->vehicle;
+         if ( transport ) {
+            const ContainerBaseType::TransportationIO* unloadSystem = transport->vehicleUnloadSystem( veh->typ, -1 );
+            if ( unloadSystem && unloadSystem->disableAttack )
+               continue;
+         }
+      }
+
 
       int maxWeapDist = minint;
       for ( int w = 0; w < veh->typ->weapons.count; w++ )

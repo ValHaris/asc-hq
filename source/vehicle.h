@@ -278,7 +278,7 @@
     /** generates a new unit, loads its parameters from the stream (where they have been
         previously written with #write) and returns this new unit.
     */
-    static Vehicle* newFromStream ( pmap gamemap, tnstream& stream );
+    static Vehicle* newFromStream ( pmap gamemap, tnstream& stream, int forceNetworkID = -1 );
 
     /** replaces the parameters of the unit by the ones form the stream. The VehicleType on
         the stream and the current one must be the same!

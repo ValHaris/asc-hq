@@ -126,7 +126,7 @@ tmap :: tmap ( void )
 }
 
 
-const int tmapversion = 6;
+const int tmapversion = 7;
 
 void tmap :: read ( tnstream& stream )
 {
@@ -304,7 +304,7 @@ void tmap :: read ( tnstream& stream )
           stream.readChar(); // dummy
     }
 
-    for (char w=0; w<9 ; w++ ) {
+    for ( int w=0; w<9 ; w++ ) {
        if (dummy_playername[w] )
           stream.readString();
 
@@ -815,10 +815,18 @@ Vehicle* tmap :: getUnit ( Vehicle* eht, int nwid )
 
 Vehicle* tmap :: getUnit ( int nwid )
 {
+   VehicleLookupCache::iterator i = vehicleLookupCache.find( nwid );
+   if ( i != vehicleLookupCache.end() )
+      return i->second;
+
+
    for ( int p = 0; p < 9; p++ )
       for ( Player::VehicleList::iterator i = player[p].vehicleList.begin(); i != player[p].vehicleList.end(); i++ )
-         if ( (*i)->networkid == nwid )
+         if ( (*i)->networkid == nwid ) {
+            displaymessage("warning: id not registered in VehicleLookupCache!",1);
             return *i;
+
+         }
 
    return NULL;
 }
@@ -1230,31 +1238,54 @@ bool tmap :: ResourceTribute :: empty ( )
    return true;
 }
 
+const int tributeVersion = 1;  // we are counting backwards, -2 is newer than -1
+
 void tmap :: ResourceTribute :: read ( tnstream& stream )
 {
-   int a,b,c;
-   for ( a = 0; a < 3; a++ )
-      for ( b = 0; b < 8; b++ )
-         for ( c = 0; c < 8; c++ )
-             avail[b][c].resource(a) = stream.readInt();
-   for ( a = 0; a < 3; a++ )
-      for ( b = 0; b < 8; b++ )
-         for ( c = 0; c < 8; c++ )
+   int version = stream.readInt();
+   bool noVersion;
+
+   if ( -version >= tributeVersion ) {
+      for ( int a = 0; a < 8; ++a )
+         for ( int b = 0; b < 8; ++b )
+            payStatusLastTurn[a][b].read( stream );
+      noVersion = false;
+   } else
+      noVersion = true;
+
+
+   for ( int a = 0; a < 3; a++ )
+      for ( int b = 0; b < 8; b++ )
+         for ( int c = 0; c < 8; c++ ) {
+             if ( noVersion ) {
+                avail[b][c].resource(a) = version;
+                noVersion = false;
+             } else
+                avail[b][c].resource(a) = stream.readInt();
+          }
+
+   for ( int a = 0; a < 3; a++ )
+      for ( int b = 0; b < 8; b++ )
+         for ( int c = 0; c < 8; c++ )
              paid[b][c].resource(a) = stream.readInt();
 }
 
 void tmap :: ResourceTribute :: write ( tnstream& stream )
 {
-   int a,b,c;
-   for ( a = 0; a < 3; a++ )
-      for ( b = 0; b < 8; b++ )
-         for ( c = 0; c < 8; c++ )
+   stream.writeInt ( -tributeVersion );
+   for ( int a = 0; a < 8; a++ )
+      for ( int b = 0; b < 8; b++ )
+         payStatusLastTurn[a][b].write( stream );
+
+   for ( int a = 0; a < 3; a++ )
+      for ( int b = 0; b < 8; b++ )
+         for ( int c = 0; c < 8; c++ )
              stream.writeInt ( avail[b][c].resource(a) );
 
 
-   for ( a = 0; a < 3; a++ )
-      for ( b = 0; b < 8; b++ )
-         for ( c = 0; c < 8; c++ )
+   for ( int a = 0; a < 3; a++ )
+      for ( int b = 0; b < 8; b++ )
+         for ( int c = 0; c < 8; c++ )
              stream.writeInt ( paid[b][c].resource(a) );
 }
 
@@ -2107,10 +2138,11 @@ void AiValue:: read ( tnstream& stream )
    }
 }
 
+const int aiParamVersion = 3002;
+
 void AiParameter::write ( tnstream& stream )
 {
-   const int version = 3001;
-   stream.writeInt ( version );
+   stream.writeInt ( aiParamVersion );
    stream.writeInt ( lastDamage );
    stream.writeInt ( damageTime.abstime );
    stream.writeInt ( dest.x );
@@ -2124,12 +2156,13 @@ void AiParameter::write ( tnstream& stream )
    stream.writeInt ( jobs.size() );
    for ( int i = 0; i < jobs.size(); i++ )
       stream.writeInt( jobs[i] );
+   stream.writeInt ( resetAfterJobCompletion );
 }
 
 void AiParameter::read ( tnstream& stream )
 {
    int version = stream.readInt();
-   if ( version >= 3000 && version <= 3001 ) {
+   if ( version >= 3000 && version <= aiParamVersion ) {
       lastDamage = stream.readInt();
       damageTime.abstime = stream.readInt();
       int x = stream.readInt();
@@ -2150,7 +2183,10 @@ void AiParameter::read ( tnstream& stream )
          for ( int i = 0; i < num; i++ )
             jobs.push_back ( Job( stream.readInt() ));
       }
-
+      if ( version >= 3002 )
+         resetAfterJobCompletion = stream.readInt();
+      else
+         resetAfterJobCompletion = false;
    }
 }
 
@@ -2211,6 +2247,7 @@ void AiParameter :: reset ( Vehicle* _unit )
 
    clearJobs();
    resetTask();
+   resetAfterJobCompletion = false;
 }
 
 void AiParameter :: setNextJob()

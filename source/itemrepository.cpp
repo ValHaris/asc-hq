@@ -114,6 +114,14 @@ void ItemRepository<T>::write( tnstream& stream )
    }
 }
 
+template<class T>
+ItemRepository<T>::~ItemRepository()
+{
+   for ( typename ItemContainerType::iterator i = container.begin(); i != container.end(); ++i )
+      delete *i;
+}
+
+
 
 ItemRepository<Vehicletype>  vehicleTypeRepository( "vehicletype" );
 ItemRepository<TerrainType>  terrainTypeRepository( "terraintype" );

@@ -63,6 +63,7 @@ Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player )
    gamemap->player[player].vehicleList.push_back ( this );
    gamemap->unitnetworkid++;
    networkid = gamemap->unitnetworkid;
+   gamemap->vehicleLookupCache[networkid] = this;
 }
 
 Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player, int networkID )
@@ -83,6 +84,9 @@ Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player, int networkI
       if ( networkID >= 0 ) {
          networkid = networkID;
       }
+
+   if ( networkID >= 0 )
+      gamemap->vehicleLookupCache[networkid] = this;
 }
 
 
@@ -112,6 +116,10 @@ Vehicle :: ~Vehicle (  )
       tmap::Player::VehicleList::iterator i = find ( gamemap->player[c].vehicleList.begin(), gamemap->player[c].vehicleList.end(), this );
       if ( i != gamemap->player[c].vehicleList.end() )
          gamemap->player[c].vehicleList.erase ( i );
+
+      tmap::VehicleLookupCache::iterator j = gamemap->vehicleLookupCache.find(networkid);
+      if ( j != gamemap->vehicleLookupCache.end() )
+         gamemap->vehicleLookupCache.erase(j);
    }
 
    for ( int i = 0; i < 32; i++ )
@@ -1112,7 +1120,7 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
     bm |= cem_material;
 
     if ( typ->weapons.count )
-       for (char m = 0; m < typ->weapons.count ; m++) {
+       for (int m = 0; m < typ->weapons.count ; m++) {
           if ( ammo[m] < typ->weapons.weapon[m].count )
              bm |= cem_ammunition2;
           if ( weapstrength[m] != typ->weapons.weapon[m].maxstrength )
@@ -1494,7 +1502,7 @@ void Vehicle::paint ( Surface& s, SPoint pos, int shadowDist ) const
 
 
 
-Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream )
+Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream, int forceNetworkID )
 {
    int id = stream.readWord ();
    pvehicletype fzt = gamemap->getvehicletype_byid ( id );
@@ -1507,15 +1515,17 @@ Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream )
 
    v->readData ( stream );
 
-   for ( int p = 0; p < 9; p++ )
-      for ( Player::VehicleList::iterator i = gamemap->player[p].vehicleList.begin(); i != gamemap->player[p].vehicleList.end(); ++i )
-          if ( *i != v )
-             if ( (*i)->networkid == v->networkid ) {
-                warning("duplicate network id detected !");
-                gamemap->unitnetworkid++;
-                v->networkid = gamemap->unitnetworkid;
-             }
+   if ( forceNetworkID > 0 )
+      v->networkid = forceNetworkID;
 
+   tmap::VehicleLookupCache::iterator j = gamemap->vehicleLookupCache.find( v->networkid);
+   if ( j != gamemap->vehicleLookupCache.end() ) {
+      // warning("duplicate network id detected !");
+      gamemap->unitnetworkid++;
+      v->networkid = gamemap->unitnetworkid;
+   }
+
+   gamemap->vehicleLookupCache[v->networkid] = v;
    return v;
 }
 

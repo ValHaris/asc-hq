@@ -625,10 +625,10 @@ AI::AiResult AI :: executeServices ( )
   AiResult res;
 
   vector<int> unitIds;
-  for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); ++vi ) 
+  for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); ++vi )
      unitIds.push_back ( (*vi)->networkid );
-  
-  
+
+
   for ( vector<int>::iterator vi = unitIds.begin(); vi != unitIds.end(); ++vi ) {
       Vehicle* veh = getMap()->getUnit( *vi );
       if ( veh ) {
@@ -640,7 +640,10 @@ AI::AiResult AI :: executeServices ( )
 
   removeServiceOrdersForUnit ( NULL );
   int counter = 0;
-  for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
+  for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end();  ) {
+      ServiceOrderContainer::iterator nxt = i;
+      ++nxt;
+
       if ( !i->canWait() ) {
          displaymessage2("executing priority service order %d", ++counter);
          Vehicle* veh = i->getTargetUnit();
@@ -651,7 +654,6 @@ AI::AiResult AI :: executeServices ( )
                veh->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_serviceRetreat );
             }
          } else {
-
             //! not all service tasks are refuelling; don't land immediately
             if ( (veh->height & ( chtieffliegend | chfliegend | chhochfliegend )) && veh->typ->fuelConsumption && false ) {
                RefuelConstraint apl ( *this, veh );
@@ -670,8 +672,9 @@ AI::AiResult AI :: executeServices ( )
                }
             }
          }
-
       }
+
+      i = nxt;
   }
 
 
@@ -705,6 +708,7 @@ AI::AiResult AI :: executeServices ( )
                     else
                        displaymessage ( "AI :: executeServices / Vehicle cannot be serviced (1) ", 1);
                  } else
+//                    if ( vc.getStatus() != -210 )
                     displaymessage ( "AI :: executeServices / Vehicle cannot be serviced (2) ", 1);
 
                  removeServiceOrdersForUnit ( veh );

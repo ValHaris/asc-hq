@@ -2,95 +2,6 @@
     \brief The interface for the artificial intelligence of ASC. 
 */
 
-
-//     $Id: ai.h,v 1.19.2.1 2004-10-26 16:35:05 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.19  2003/05/29 13:54:53  mbickel
-//      Fixed: unit could not enter container when having max size
-//      Added SDL_Delay() to movement loop (for FreeBSD)
-//      Added Lava_Barrier terrain bit
-//      AI logs unit success
-//      Replay have a much stricted consistency checking for refuelling
-//
-//     Revision 1.18  2003/04/23 18:31:11  mbickel
-//      Fixed: AI problems
-//      Improved cheating detection in replay
-//
-//     Revision 1.17  2003/03/31 20:29:16  mbickel
-//      Fixed AI bugs
-//      Fixed clipboard in mapeditor
-//
-//     Revision 1.16  2003/03/30 13:19:47  mbickel
-//      Fixed: ai warnings
-//      Fixed: wrong hotkey for seeting unit properties in containers
-//
-//     Revision 1.15  2003/03/08 14:24:38  mbickel
-//      Code cleanup
-//      AI fixes and improvements
-//
-//     Revision 1.14  2003/03/07 17:11:41  mbickel
-//      AI improvements
-//
-//     Revision 1.13  2002/12/12 11:34:19  mbickel
-//      Fixed: ai crashing when weapon has no ammo
-//      Fixed: ASC crashed when loading game with ID not found
-//      Fixed: more ai problems
-//      AI now faster
-//      Fixed: removing objects overfill a units tank
-//
-//     Revision 1.12  2002/03/19 20:38:57  mbickel
-//      Some cleanup and documentation in dlg_box
-//      Fixed some type assignment errors
-//
-//     Revision 1.11  2002/03/03 14:13:49  mbickel
-//      Some documentation updates
-//      Soundsystem update
-//      AI bug fixed
-//
-//     Revision 1.10  2001/11/29 17:34:18  mbickel
-//      AI can be used as benchmark
-//      Improved AI unit job determination mechanism
-//
-//     Revision 1.9  2001/10/31 20:10:26  mbickel
-//      Circumvented a bug in gcc
-//
-//     Revision 1.8  2001/10/02 14:06:29  mbickel
-//      Some cleanup and documentation
-//      Bi3 import tables now stored in .asctxt files
-//      Added ability to choose amoung different BI3 import tables
-//      Added map transformation tables
-//
-//     Revision 1.7  2001/08/27 21:03:55  mbickel
-//      Terraintype graphics can now be mounted from any number of PNG files
-//      Several AI improvements
-//
-//     Revision 1.6  2001/08/24 15:50:08  mbickel
-//      AI performs better services when there are no service units
-//
-//     Revision 1.5  2001/07/27 21:13:35  mbickel
-//      Added text based file formats
-//      Terraintype and Objecttype restructured
-//
-//     Revision 1.4  2001/05/24 15:37:51  mbickel
-//      Fixed: reaction fire could not be disabled when unit out of ammo
-//      Fixed several AI problems
-//
-//     Revision 1.3  2001/04/03 11:54:17  mbickel
-//      AI Improvements: production , servicing
-//
-//     Revision 1.2  2001/04/01 12:59:35  mbickel
-//      Updated win32 project files to new ai file structure
-//      Added viewid win32-project
-//      Improved AI : production and service path finding
-//
-//     Revision 1.1  2001/03/30 12:43:16  mbickel
-//      Added 3D pathfinding
-//      some cleanup and documentation
-//      splitted the ai into several files, now located in the ai subdirectory
-//      AI cares about airplane servicing and range constraints
-//
-
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -412,7 +323,7 @@
              */
             int moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings = true, bool intoTransports = true );
 
-            void getAttacks ( AStar3D& vm, Vehicle* veh, TargetVector& tv, int hemmingBonus, bool justOne = false );
+            void getAttacks ( AStar3D& vm, Vehicle* veh, TargetVector& tv, int hemmingBonus, bool justOne = false, bool executeService = true );
             void searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVector& tl, int moveDist, AStar3D& vm, int hemmingBonus );
             bool targetsNear( Vehicle* veh );
 

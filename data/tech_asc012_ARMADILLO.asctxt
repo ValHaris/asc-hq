@@ -1,10 +1,10 @@
 technology {
    Name = ARMADILLO
-   infotext = Research project finished! ARMADILLO avialable!
-   id = 101104
+   infotext = Reserach project finished! ARMADILLO avialable!
+   id = 101004
    RelatedUnitID = 4
    parent = 101000
    researchpoints *= 180
    techlevel = 3
-   TechnologiesRequired = 101000,101903,101100,101103 
+   TechnologiesRequired = 101000,101903,101100,101003 
 } Technology

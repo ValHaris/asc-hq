@@ -83,10 +83,17 @@ void    viewtextmessage ( int id, int player )
 // Trigger
 
 
+int versionTest( tnstream& stream, int min, int max )
+{
+   int version = stream.readInt();
+   if ( version < min || version > max )
+      throw tinvalidversion( stream.getLocation(), max, version );
+   return version;
+}      
 
 void TriggerNothing::readData( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
 }
 
 void TriggerNothing::writeData( tnstream& stream )
@@ -115,7 +122,7 @@ void TurnPassed::arm()
 
 void TurnPassed::readData( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    turn = stream.readInt();
    move = stream.readInt();
 }
@@ -226,7 +233,7 @@ void BuildingLost::arm()
 
 void PositionTrigger::readData( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    pos.read( stream );
 }
 
@@ -340,7 +347,7 @@ ASCString AllUnitsLost::getName() const
 
 void UnitTrigger::readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    unitID = stream.readInt();
 }
 
@@ -461,7 +468,7 @@ EventTrigger::State EventTriggered::getState( int player )
 
 void EventTriggered::readData ( tnstream& stream )
 {
-   stream.readInt();
+   versionTest(stream,1,1);
    eventID = stream.readInt();
 }
 
@@ -611,7 +618,7 @@ void SpecificUnitEntersPolygon::fieldOperator( const MapCoordinate& mc )
 
 void SpecificUnitEntersPolygon::readData ( tnstream& stream )
 {
-  stream.readInt();
+  versionTest(stream,1,1);
   readMapModificationData( stream );
   unitID = stream.readInt();
 }
@@ -694,7 +701,7 @@ void AnyUnitEntersPolygon::fieldOperator( const MapCoordinate& mc )
 
 void AnyUnitEntersPolygon::readData ( tnstream& stream )
 {
-  stream.readInt();
+  versionTest(stream,1,1);
   readMapModificationData( stream );
   player = stream.readInt();
 }
@@ -751,7 +758,7 @@ EventTrigger::State ResourceTribute::getState( int player )
 
 void ResourceTribute::readData ( tnstream& stream )
 {
-   stream.readInt();
+   versionTest(stream,1,1);
    payingPlayer = stream.readInt();
    demand.read ( stream );
 }
@@ -827,7 +834,7 @@ void WindChange::execute( MapDisplayInterface* md )
 
 void WindChange::readData( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    speed = stream.readInt();
    direction = stream.readInt();
 }
@@ -856,7 +863,7 @@ void ChangeGameParameter::execute( MapDisplayInterface* md )
 
 void ChangeGameParameter::readData( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    parameterNum = stream.readInt();
    parameterValue = stream.readInt();
 }
@@ -892,7 +899,7 @@ void DisplayMessage::execute( MapDisplayInterface* md )
 
 void DisplayMessage::readData( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    messageNum = stream.readInt();
 }
 
@@ -955,7 +962,7 @@ void FieldAddressing::setGlobal()
 
 void FieldAddressing::readMapModificationData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    addressingMode = AddressingMode ( stream.readInt() );
    if ( addressingMode == singleField )
       readClassContainer( fields, stream );
@@ -979,14 +986,14 @@ void FieldAddressing::setup ()
 
    addressingMode = AddressingMode( c );
 
-   switch ( addressingMode ) {
-      case singleField: selectFields( fields );
-                        break;
-      case poly: if ( !polygons.size() )
-                    polygons.push_back ( Poly_gon() );
-                 editpolygon ( polygons[0] );
-                 break;
-   }
+   if (  addressingMode == singleField )
+      selectFields( fields );
+   else
+      if ( addressingMode == poly ) {
+         if ( !polygons.size() )
+            polygons.push_back ( Poly_gon() );
+         editpolygon ( polygons[0] );
+      }
 }
 
 
@@ -1014,7 +1021,7 @@ void MapModificationEvent::execute( MapDisplayInterface* md )
 
 void WeatherChange :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    weather = stream.readInt();
    readMapModificationData ( stream );
 }
@@ -1049,7 +1056,7 @@ void WeatherChange :: setup ()
 
 void MapChange :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    terrainID = stream.readInt();
    readMapModificationData ( stream );
 }
@@ -1089,7 +1096,7 @@ void MapChange :: setup ()
 
 void AddObject :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    objectID = stream.readInt();
    readMapModificationData ( stream );
 }
@@ -1127,7 +1134,7 @@ void AddObject :: setup ()
 
 void RemoveAllObjects :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    readMapModificationData ( stream );
 }
 
@@ -1170,7 +1177,7 @@ void MapChangeCompleted :: execute( MapDisplayInterface* md )
 
 void ChangeBuildingDamage::readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    damage = stream.readInt();
    position.read ( stream );
 }
@@ -1211,7 +1218,7 @@ void ChangeBuildingDamage::setup()
 
 void NextMap::readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    mapID = stream.readInt();
 }
 
@@ -1244,7 +1251,7 @@ void LoseMap::execute( MapDisplayInterface* md )
 
 void DisplayEllipse::readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    x1 = stream.readInt();
    x2 = stream.readInt();
    y1 = stream.readInt();
@@ -1320,7 +1327,7 @@ void RemoveEllipse::execute( MapDisplayInterface* md )
 
 void ChangeBuildingOwner :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    pos.read( stream );
    newOwner = stream.readInt();
 }
@@ -1368,7 +1375,7 @@ void DisplayImmediateMessage::execute( MapDisplayInterface* md )
 
 void DisplayImmediateMessage::readData( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    message = stream.readString();
 }
 
@@ -1391,7 +1398,7 @@ void DisplayImmediateMessage::setup()
 
 void AddProductionCapability :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    pos.read( stream );
    vehicleTypeID = stream.readInt();
 }
@@ -1427,7 +1434,7 @@ void AddProductionCapability :: execute( MapDisplayInterface* md )
 
 void ChangeDiplomaticStatus :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    proposingPlayer = stream.readInt();
    targetPlayer = stream.readInt();
    proposal = Proposal(stream.readInt());
@@ -1472,7 +1479,7 @@ void ChangeDiplomaticStatus :: execute( MapDisplayInterface* md )
 
 void SetViewSharing :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    viewingPlayer = stream.readInt();
    providingPlayer = stream.readInt();
    enable = stream.readInt();
@@ -1523,7 +1530,7 @@ void SetViewSharing :: execute( MapDisplayInterface* md )
 
 void AddResources :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    res.read( stream );
    pos.read( stream );
 }
@@ -1556,7 +1563,7 @@ void AddResources :: execute( MapDisplayInterface* md )
 
 void Reinforcements :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    objectNum = stream.readInt();
    buf.readfromstream ( &stream );
 }
@@ -1648,11 +1655,7 @@ void Reinforcements :: execute( MapDisplayInterface* md )
    while ( cnt < objectNum ) {
       Type type = Type(stream.readInt());
       if ( type == ReinfVehicle ) {
-         Vehicle* veh = Vehicle::newFromStream( gamemap, stream );
-
-         gamemap->unitnetworkid++;
-         veh->networkid = gamemap->unitnetworkid;
-
+         Vehicle* veh = Vehicle::newFromStream( gamemap, stream, ++gamemap->unitnetworkid );
          FindUnitPlacementPos fupp( gamemap, veh );
       }
       if ( type == ReinfBuilding ) {

@@ -1,5 +1,5 @@
 Techadapter {
    Name = 3
    ;Bezeichnung der verknüpften Technologie: ASSAULT TANK
-   TechnologiesRequired = 101103
+   TechnologiesRequired = 101003
 } TechAdapter

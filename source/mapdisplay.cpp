@@ -70,25 +70,12 @@ int vfbscanlinelength;
 
 #define mapborderwidth 4
 
-// #define scrleftspace 21
 int scrleftspace = 21;
 
-#define scrxsize 417
-#define scrysize 417
-
-#define vfbbottomspace 25
-
 #define scrtopspace 22
-/*
-#define vfbfieldxdif 19
-#define vfbfirstpointxdif ( vfbfieldxdif - 3 )
-#define vfbfirstpointydif 0
-*/
 #define vfbleftspace 80
 #define vfbtopspace 80
 
-#define scrfirstpointxdif 9
-#define scrfirstpointydif 0
 
 
 void copyvfb2displaymemory_zoom ( void* parmbuf, int x1, int y1, int x2, int y2 )

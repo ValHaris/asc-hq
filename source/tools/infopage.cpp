@@ -581,6 +581,15 @@ void BuildingCargoPage::buildContent() {
         type ="";
       }
       *buildingInfStream << "</tr>" << endl;
+      *buildingInfStream << "<tr class=\"wg\"><th class=\"wg\">Building Height</th>";
+      for ( ContainerBaseType::EntranceSystems::const_iterator i = cbt.entranceSystems.begin(); i != cbt.entranceSystems.end(); i++ ) {
+        if ( i->mode & ContainerBaseType::TransportationIO::Docking ) {
+          addTDEntry(getHeightImgString( i->container_height));
+        } else {
+          addEmptyTD(1);
+        }
+      }
+      *buildingInfStream << "</tr>" << endl;
       *buildingInfStream << "<tr class=\"wg\"><th class=\"wg\">Unit can attack afterwards</th>";
       for ( ContainerBaseType::EntranceSystems::const_iterator i = cbt.entranceSystems.begin(); i != cbt.entranceSystems.end(); i++ ) {
         addTDEntry(i->disableAttack ? "No": "Yes");
@@ -786,6 +795,15 @@ void UnitCargoPage::buildContent() {
         }
       }
       *buildingInfStream << "</tr>" << endl;
+      *buildingInfStream << "<tr class=\"wg\"><th class=\"wg\">Transporter Height</th>";
+      for ( ContainerBaseType::EntranceSystems::const_iterator i = cbt.entranceSystems.begin(); i != cbt.entranceSystems.end(); i++ ) {
+        if ( i->mode & ContainerBaseType::TransportationIO::Docking ) {
+          addTDEntry(getHeightImgString( i->container_height));
+        } else {
+          addEmptyTD(1);
+        }
+      }      
+      *buildingInfStream << "</tr>" << endl;
       *buildingInfStream << "<tr class=\"wg\"><th class=\"wg\">Excluded Unit Groups</th>";
       for ( ContainerBaseType::EntranceSystems::const_iterator i = cbt.entranceSystems.begin(); i !=     cbt.entranceSystems.end(); i++ ) {
         ASCString s;
@@ -869,7 +887,8 @@ void UnitMainPage::buildContent() {
   addTREntry("Name", vt.name);
   addTREntry("ID", vt.id);
   addTREntry("Group", cmovemalitypes[vt.movemalustyp]);
-  addTREntry("Branch of Service", vt.description);
+  addTREntry("Task", vt.description);
+  addTREntry("Weight", vt.weight);
   addCapabilities();
   addTREntry("Default Armor", vt.armor);
   addTREntry("View", vt.view);
@@ -897,7 +916,7 @@ void UnitTerrainPage::buildContent() {
   startTable(1, RELATIVE, 100, RELATIVE, 100);
   addTREntry("Fuel tank", vt.tank.fuel );
   addTREntry("Fuel Consumption", vt.fuelConsumption);
-  addTREntry("Range", vt.fuelConsumption ? strrr(vt.tank.fuel/vt.fuelConsumption) : "None");
+  addTREntry("Range", vt.fuelConsumption ? strrr(vt.tank.fuel/vt.fuelConsumption) : "None");   
   endTable();
   addHeadline("Speed", 4);
   startTable(1, RELATIVE, 100, NONE, 0);
@@ -911,7 +930,7 @@ void UnitTerrainPage::buildContent() {
   addTitle("max. Speed");
   for(int i =0; i < vt.movement.size(); i++) {
     if(vt.movement[i] > 0) {
-      addTDEntry(vt.movement[i] / 10);
+      addTDEntry(vt.movement[i]);
     } else {
       addTDEntry("n.a.");
     }
@@ -997,6 +1016,16 @@ UnitWeaponPage::UnitWeaponPage(const VehicleType&  vt, ASCString filePath, UnitG
 
 void UnitWeaponPage::buildContent() {
   if(vt.weapons.count > 0) {
+    startTable(1, RELATIVE, 100, NONE, 100);
+    addHeadline("General", 3);
+    *buildingInfStream << "<tr>" << endl;
+    addTitle("Can shoot after movement");    
+    if(!vt.wait)
+      addTDEntry(constructImageLink(STDGFXPATH + ASCString("haken.gif"), "YES"));    
+    else
+      addTDEntry(constructImageLink(STDGFXPATH + ASCString("hakenrot.gif"), "NO"));    
+    *buildingInfStream << "</tr>";
+    endTable();
     IntVec iv;
     int k = div(100,  vt.weapons.count + 1).quot;
     for (int i = 0; i < vt.weapons.count + 1; i++) {
@@ -1319,7 +1348,7 @@ void UnitResearchPage::buildContent() {
   if ( res != 0 ) {
     cerr << "ERROR encountered at: " << sysCommand.c_str() << endl;
   }
-  // remove(dotFile.c_str());
+  remove(dotFile.c_str());
 
   TechTreePage ttp(vt, techedFileName, filePath, generator, techPicPath);
   ttp.buildPage();
@@ -1402,6 +1431,7 @@ void TechTreePage::buildPage() {
   endHTML();
 
 }
+
 
 
 
