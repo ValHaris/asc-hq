@@ -355,14 +355,17 @@ void generateaveragecolprt ( int x1, int y1, int x2, int y2, void* buf, char* pi
 char generateaveragecolprt ( int x1, int y1, int x2, int y2, const Surface& img )
 {
    int pixnum = 0;
-
-   int i,j;
    int r=0, g=0, b=0;
-   for (j=y1; j< y2 ; j++ ) {
-       for (i=x1; i< x2 ; i++ ) {
+   
+   SDLmm::Color ck = img.GetPixelFormat().colorkey();
+   bool noColorKey = !(img.flags() & SDL_SRCCOLORKEY);
+   
+   for ( int j=y1; j< y2 ; j++ ) {
+       for ( int i=x1; i< x2 ; i++ ) {
           Uint8 rr,gg,bb,aa;
-          img.GetPixelFormat().GetRGBA( img.GetPixel( i, j ), rr,gg,bb,aa);
-          if ( aa > 0x80) {
+          SDLmm::Color cl = img.GetPixel( i, j );
+          img.GetPixelFormat().GetRGBA( cl, rr,gg,bb,aa);
+          if ( aa > 0x80 && ( ck != cl || noColorKey ) ) {
              r+=rr;
              g+=gg;
              b+=bb;
@@ -376,22 +379,12 @@ char generateaveragecolprt ( int x1, int y1, int x2, int y2, const Surface& img 
       int g1 = g / pixnum;
       int b1 = b / pixnum;
 
-
-      int diff = 0xFFFFFFF;
-      int actdif;
-
-
-      int pix1;
-      for (i=0;i<256 ;i++ ) {
-         actdif = sqr( pal[i][0] - r1 ) + sqr( pal[i][1] - g1 ) + sqr( pal[i][2] - b1 );
-         if (actdif < diff) {
-            diff = actdif;
-            pix1 = i;
-         }
-      }
+      int sml = ( r1 >> 2) + (( g1 >> 2) << 6) + (( b1 >> 2) << 12);
+      return truecolor2pal_table[sml];
    } else {
       return 255;
    }
+  
 }
 
 

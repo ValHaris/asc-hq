@@ -127,6 +127,7 @@ void Surface::read ( tnstream& stream )
             }
 */
             assignDefaultPalette();
+            SetSurface( s );
 
          } else {
             int Rmask = stream.readInt();
