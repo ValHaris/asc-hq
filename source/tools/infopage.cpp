@@ -581,6 +581,15 @@ void BuildingCargoPage::buildContent() {
         type ="";
       }
       *buildingInfStream << "</tr>" << endl;
+      *buildingInfStream << "<tr class=\"wg\"><th class=\"wg\">Building Height</th>";
+      for ( ContainerBaseType::EntranceSystems::const_iterator i = cbt.entranceSystems.begin(); i != cbt.entranceSystems.end(); i++ ) {
+        if ( i->mode & ContainerBaseType::TransportationIO::Docking ) {
+          addTDEntry(getHeightImgString( i->container_height));
+        } else {
+          addEmptyTD(1);
+        }
+      }
+      *buildingInfStream << "</tr>" << endl;
       *buildingInfStream << "<tr class=\"wg\"><th class=\"wg\">Unit can attack afterwards</th>";
       for ( ContainerBaseType::EntranceSystems::const_iterator i = cbt.entranceSystems.begin(); i != cbt.entranceSystems.end(); i++ ) {
         addTDEntry(i->disableAttack ? "No": "Yes");
@@ -786,6 +795,15 @@ void UnitCargoPage::buildContent() {
         }
       }
       *buildingInfStream << "</tr>" << endl;
+      *buildingInfStream << "<tr class=\"wg\"><th class=\"wg\">Transporter Height</th>";
+      for ( ContainerBaseType::EntranceSystems::const_iterator i = cbt.entranceSystems.begin(); i != cbt.entranceSystems.end(); i++ ) {
+        if ( i->mode & ContainerBaseType::TransportationIO::Docking ) {
+          addTDEntry(getHeightImgString( i->container_height));
+        } else {
+          addEmptyTD(1);
+        }
+      }      
+      *buildingInfStream << "</tr>" << endl;
       *buildingInfStream << "<tr class=\"wg\"><th class=\"wg\">Excluded Unit Groups</th>";
       for ( ContainerBaseType::EntranceSystems::const_iterator i = cbt.entranceSystems.begin(); i !=     cbt.entranceSystems.end(); i++ ) {
         ASCString s;
@@ -869,7 +887,8 @@ void UnitMainPage::buildContent() {
   addTREntry("Name", vt.name);
   addTREntry("ID", vt.id);
   addTREntry("Group", cmovemalitypes[vt.movemalustyp]);
-  addTREntry("Branch of Service", vt.description);
+  addTREntry("Task", vt.description);
+  addTREntry("Weight", vt.weight);
   addCapabilities();
   addTREntry("Default Armor", vt.armor);
   addTREntry("View", vt.view);
@@ -1319,7 +1338,7 @@ void UnitResearchPage::buildContent() {
   if ( res != 0 ) {
     cerr << "ERROR encountered at: " << sysCommand.c_str() << endl;
   }
-  // remove(dotFile.c_str());
+  remove(dotFile.c_str());
 
   TechTreePage ttp(vt, techedFileName, filePath, generator, techPicPath);
   ttp.buildPage();
@@ -1402,6 +1421,7 @@ void TechTreePage::buildPage() {
   endHTML();
 
 }
+
 
 
 

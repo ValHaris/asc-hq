@@ -492,6 +492,9 @@ class tmap {
         public:
            Resources avail[8][8];
            Resources paid[8][8];
+
+           //! for the messages that are send each turn it is necessary to record how much of the transfer happend during the last turn
+           Resources payStatusLastTurn[8][8];
            bool empty ( );
            void read ( tnstream& stream );
            void write ( tnstream& stream );

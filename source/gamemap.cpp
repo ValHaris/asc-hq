@@ -125,7 +125,7 @@ tmap :: tmap ( void )
 }
 
 
-const int tmapversion = 6;
+const int tmapversion = 7;
 
 void tmap :: read ( tnstream& stream )
 {
@@ -1235,31 +1235,54 @@ bool tmap :: ResourceTribute :: empty ( )
    return true;
 }
 
+const tributeVersion = 1;  // we are counting backwards, -2 is newer than -1
+
 void tmap :: ResourceTribute :: read ( tnstream& stream )
 {
-   int a,b,c;
-   for ( a = 0; a < 3; a++ )
-      for ( b = 0; b < 8; b++ )
-         for ( c = 0; c < 8; c++ )
-             avail[b][c].resource(a) = stream.readInt();
-   for ( a = 0; a < 3; a++ )
-      for ( b = 0; b < 8; b++ )
-         for ( c = 0; c < 8; c++ )
+   int version = stream.readInt();
+   bool noVersion;
+
+   if ( -version >= tributeVersion ) {
+      for ( int a = 0; a < 8; ++a )
+         for ( int b = 0; b < 8; ++b )
+            payStatusLastTurn[a][b].read( stream );
+      noVersion = false;
+   } else
+      noVersion = true;
+
+
+   for ( int a = 0; a < 3; a++ )
+      for ( int b = 0; b < 8; b++ )
+         for ( int c = 0; c < 8; c++ ) {
+             if ( noVersion ) {
+                avail[b][c].resource(a) = version;
+                noVersion = false;
+             } else
+                avail[b][c].resource(a) = stream.readInt();
+          }
+
+   for ( int a = 0; a < 3; a++ )
+      for ( int b = 0; b < 8; b++ )
+         for ( int c = 0; c < 8; c++ )
              paid[b][c].resource(a) = stream.readInt();
 }
 
 void tmap :: ResourceTribute :: write ( tnstream& stream )
 {
-   int a,b,c;
-   for ( a = 0; a < 3; a++ )
-      for ( b = 0; b < 8; b++ )
-         for ( c = 0; c < 8; c++ )
+   stream.writeInt ( -tributeVersion );
+   for ( int a = 0; a < 8; a++ )
+      for ( int b = 0; b < 8; b++ )
+         payStatusLastTurn[a][b].write( stream );
+
+   for ( int a = 0; a < 3; a++ )
+      for ( int b = 0; b < 8; b++ )
+         for ( int c = 0; c < 8; c++ )
              stream.writeInt ( avail[b][c].resource(a) );
 
 
-   for ( a = 0; a < 3; a++ )
-      for ( b = 0; b < 8; b++ )
-         for ( c = 0; c < 8; c++ )
+   for ( int a = 0; a < 3; a++ )
+      for ( int b = 0; b < 8; b++ )
+         for ( int c = 0; c < 8; c++ )
              stream.writeInt ( paid[b][c].resource(a) );
 }
 

@@ -1536,7 +1536,7 @@ Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream, int forceNetwo
 
    tmap::VehicleLookupCache::iterator j = gamemap->vehicleLookupCache.find( v->networkid);
    if ( j != gamemap->vehicleLookupCache.end() ) {
-      warning("duplicate network id detected !");
+      // warning("duplicate network id detected !");
       gamemap->unitnetworkid++;
       v->networkid = gamemap->unitnetworkid;
    }

@@ -355,7 +355,7 @@ void GetResource :: checkbuilding ( pbuilding b )
 
             if ( !queryonly ) {
                actmap->tribute.avail[ b->color / 8 ][ player ].resource( resourcetype ) -= found;
-               actmap->tribute.paid [ b->color / 8 ][ player ].resource( resourcetype ) += found;
+               actmap->tribute.paid [ player ][ b->color / 8 ].resource( resourcetype ) += found;
                if ( found )
                   tributeTransferred();
             }
@@ -507,8 +507,8 @@ void transfer_all_outstanding_tribute ( void )
                int topay[3];
                int got[3];
                for ( int resourcetype = 0; resourcetype < 3; resourcetype++ ) {
-                  topay[ resourcetype ] = actmap->tribute.avail[ player ][ targplayer ].resource( resourcetype );
-                  got[ resourcetype ] = 0;
+                  got[ resourcetype ] = actmap->tribute.paid[ targplayer ][ player ].resource( resourcetype ) - actmap->tribute.payStatusLastTurn[ targplayer ][ player ].resource( resourcetype );
+                  topay[ resourcetype ] = actmap->tribute.avail[ player ][ targplayer ].resource( resourcetype ) + got[ resourcetype ];
 
                   if ( !actmap->isResourceGlobal (resourcetype) ) {
                      for ( tmap::Player::BuildingList::iterator j = actmap->player[player].buildingList.begin(); j != actmap->player[player].buildingList.end() &&  topay[resourcetype] > got[resourcetype] ; j++ ) {
@@ -521,17 +521,16 @@ void transfer_all_outstanding_tribute ( void )
                         i = actmap->bi_resource[ player ].resource(resourcetype);
                      else
                         i = topay[resourcetype];
-                     got [resourcetype ] = i;
+                     got [resourcetype ] += i;
                      actmap->bi_resource[ player ].resource(resourcetype) -= i;
                      actmap->bi_resource[ targplayer ].resource(resourcetype) += i;
 
                      actmap->tribute.avail[ player ][ targplayer ].resource( resourcetype ) -= got[resourcetype];
                      actmap->tribute.paid[ targplayer ][ player ].resource( resourcetype ) += got[resourcetype];
                   }
-
-
                }
-               if ( topay[0] || topay[1] || topay[2] ) {
+               actmap->tribute.payStatusLastTurn[ targplayer ][ player ] = actmap->tribute.paid[ targplayer ][ player ];
+               if ( topay[0] || topay[1] || topay[2] || got[0] || got[1] || got[2]) {
                   Resources tp ( topay[0], topay[1], topay[2] );
                   Resources gt ( got[0],   got[1],   got[2]   );
 
