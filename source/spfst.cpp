@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.21 2000-04-03 09:52:16 mbickel Exp $
+//     $Id: spfst.cpp,v 1.22 2000-04-17 16:27:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/04/03 09:52:16  mbickel
+//      Fixed crash in mine strength calculation
+//
 //     Revision 1.20  2000/03/11 18:22:09  mbickel
 //      Added support for multiple graphic sets
 //
@@ -414,7 +417,7 @@ void setvisibility ( word* visi, int valtoset, int actplayer )
    *visi = vis;
 }
 
-void copyvfb2displaymemory_zoom ( void* parmbuf )
+void copyvfb2displaymemory_zoom ( void* parmbuf, int x1, int y1, int x2, int y2 )
 {
    int tempdirectscreenaccess = agmp->directscreenaccess;
    if ( hgmp->directscreenaccess != agmp->directscreenaccess )
@@ -451,9 +454,15 @@ void copyvfb2displaymemory_zoom ( void* parmbuf )
 
    } while ( edx ); /* enddo */
 
-   copySurface2screen();
+   copySurface2screen( x1, y1, x2, y2 );
    agmp->directscreenaccess = tempdirectscreenaccess;
 }
+
+void copyvfb2displaymemory_zoom ( void* parmbuf )
+{
+   copyvfb2displaymemory_zoom ( parmbuf, idisplaymap.invmousewindow.x1, idisplaymap.invmousewindow.y1, idisplaymap.invmousewindow.x2, idisplaymap.invmousewindow.y2 );
+}
+
 
 #endif
 
@@ -651,48 +660,6 @@ void tweapdist::loaddata(void)
    stream.readdata ( &data, sizeof( data ));
 } 
 
-/*
-byte       tweapdist::getweapstrength2(word         typ,
-                                       word         pos,
-                                       byte         mindist,
-                                       byte         maxdist)
-{ 
-  byte         translat[31]  = { 6, 255, 1, 3, 2, 4, 0, 5, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-  255, 255, 255, 255, 255, 255}; 
-
-  byte         newmaxdist; 
-  byte         distdiff; 
-  int      w; 
-  word         v; 
-  byte         tp; 
-
-   tp = translat[ log2 (typ & cwweapon) ];
-   distdiff = maxdist - mindist; 
-   if (distdiff < 25) 
-      newmaxdist = maxdist + 16 / (15 * (distdiff - 4) / 20 + 1); 
-   else 
-      newmaxdist = maxdist; 
-   w = int(255) * int(pos - mindist * 16) / ((newmaxdist - mindist) * 16); 
-   if (w < 0) 
-      v = 0; 
-   else 
-      if (w > 0xFFFF )
-         v = 0xFFFF ;
-      else 
-         v = w; 
-   if ((tp < 0) || (tp >= 6) || (w < 0) || (w > 255)) {
-      displaymessage("tweapdist.getweapstrength2: invalid values: \n tp = %d ; w = %d ",1, tp, w);
-      if (tp >= 6)
-         tp = 5;
-      if (w > 255) 
-         w = 255; 
-      if (w < 0) 
-         w = 0; 
-   } 
-   return data[tp][w];
-} 
-
-*/
 
 char tweapdist::getweapstrength ( const SingleWeapon* weap, int dist, int attacker_height, int defender_height, int reldiff  )
 {
@@ -759,15 +726,6 @@ int getheightdelta ( int height1, int height2 )
    return hd;
 }
 
-/*
-byte       tweapdist::getweapstrength(word         typ,
-                                      byte         pos,
-                                      byte         mindist,
-                                      byte         maxdist)
-{ 
-   return getweapstrength2(typ,pos * 16,mindist,maxdist);
-} 
-*/
 
 
 
@@ -875,36 +833,7 @@ int  resizemap( int top, int bottom, int left, int right )  // positive: larger
 
 
   return 0;
-
-/*
-  integer      ox, oy, x, y; 
-  pfield        fld; 
-  int      l, m; 
-
-   ox = actmap->xsize; 
-   oy = actmap->ysize; 
-   for (x = 0; x <= ox - 1; x++) { 
-      for (y = 0; y <= oy - 1; y++) { 
-         if ((x >= xsize) || (y >= ysize)) { 
-            fld = getfield(x,y); 
-            if (fld->vehicle != NULL) 
-               removevehicle(&fld->vehicle); 
-            if (fld->building != NULL) 
-               removebuilding(&fld->building); 
-         } 
-      } 
-   } 
-   for (x = 0; x <= ox - 1; x++) { 
-      for (y = 0; y <= oy - 1; y++) { 
-         l = y * ox + x; 
-         m = y * ysize + x; 
-//         actmap->field[m >> 10][m & 1023] = actmap->field[l >> 10][l & 1023]; 
-      } 
-   } 
-   actmap->xsize = xsize; 
-   actmap->ysize = ysize; 
-   */
-} 
+}
 
 
 
@@ -4469,26 +4398,34 @@ void tdisplaymap :: cp_buf ( void )
    
        copyvfb2displaymemory_zoom ( &parm.src );
 
-/*
-       char* edi = (char*) (hgmp->linearaddress + windowx1 + windowy1 * hgmp->bytesperscanline );
-       char* esi = (char*) (agmp->linearaddress + vfbstartdif );
-   
-       char* destlinestart = edi;
-       char* esistart = esi;
-   
-       for ( int yp = 0; yp < window.ysize; yp++ ) {
-          for ( int xp = 0; xp < window.xsize; xp++ ) {
-             esi += copybufsteps[ xp ] + 1;
-              *(edi++) = *esi;
-          }
-          
-          edi = destlinestart + hgmp->bytesperscanline; 
-          destlinestart = edi;
-          esi = esistart + agmp->bytesperscanline * ( yp * 100 / zoom);
-       }
-*/
-
     }
+}
+
+
+void tdisplaymap :: cp_buf ( int x1, int y1, int x2, int y2 )
+{
+
+       struct {
+          int src;
+          int dst;
+          int x;
+          int y;
+          int* steps;
+          int srcdif;
+          int dstdif;
+          int* vfbsteps;
+       } parm;
+
+       parm.dst = hgmp->linearaddress + windowx1 + windowy1 * hgmp->bytesperscanline ;
+       parm.src = agmp->linearaddress + vfbstartdif;
+       parm.x = window.xsize;
+       parm.y = window.ysize;
+       parm.steps = copybufsteps;
+       parm.srcdif = agmp->bytesperscanline - vfbwidthused - 1;
+       parm.dstdif = hgmp->bytesperscanline - window.xsize;
+       parm.vfbsteps = copybufstepwidth;
+
+       copyvfb2displaymemory_zoom ( &parm.src );
 }
 
 #endif
@@ -5276,7 +5213,7 @@ void  tdisplaymap :: movevehicle(integer      x1,
             else
                putpicturemix ( r , yp , displaymovingunit.eht->typ->picture[displaymovingunit.eht->direction], displaymovingunit.eht->color, (char*) colormixbuf);
       
-            idisplaymap.cp_buf (  );
+            idisplaymap.cp_buf ( touchedfields->minx, touchedfields->miny, touchedfields->maxx, touchedfields->maxy );
          }
 
    

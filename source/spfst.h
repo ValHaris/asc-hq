@@ -1,6 +1,10 @@
-//     $Id: spfst.h,v 1.5 1999-12-28 21:03:24 mbickel Exp $
+//     $Id: spfst.h,v 1.6 2000-04-17 16:27:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/28 21:03:24  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.4  1999/11/25 22:00:14  mbickel
 //      Added weapon information window
 //      Added support for primary offscreen frame buffers to graphics engine
@@ -576,6 +580,7 @@ class tdisplaymap : public tgeneraldisplaymap {
 
 
           virtual void cp_buf ( void );
+          virtual void cp_buf ( int x1, int y1, int x2, int y2 );
 
           void  movevehicle(integer x1,  integer y1,  integer x2,  integer y2,  pvehicle eht);
           void  deletevehicle ( void ); 
