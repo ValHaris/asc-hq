@@ -1,8 +1,14 @@
 /*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.68 2001-07-04 16:53:28 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.69 2001-07-08 20:09:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.68  2001/07/04 16:53:28  mbickel
+//      Fixed bug in refuel dialog
+//      Fixed crash in mount (win32)
+//      Improved build process for Borland command line compiler
+//      Updated source documentation
+//
 //     Revision 1.67  2001/02/26 13:49:35  mbickel
 //      Fixed bug in message loading
 //      readString can now read strings that container \n
@@ -5073,11 +5079,12 @@ void         tverlademunition::run(void)
    getpicsize ( target->dest->typ->picture[0], ix, iy );
 
 //   if ( vehicle2 )
-      putrotspriteimage(x1 + 30 , y1 + 55, target->dest->typ->picture[0], actmap->actplayer * 8);
+   if ( source )
+      putrotspriteimage(startx+x1 - 60 , y1 + 55, source->typ->picture[0], actmap->actplayer * 8);
 //   else
 //      showtext2( building->typ->name , x1 + 50, y1 + 55);
 
-//   putrotspriteimage(x1 + xsize - 30 - ix , y1 + 55, vehicle->typ->picture[0], actmap->actplayer * 8);
+   putrotspriteimage(x1 + xsize - 30 - ix , y1 + 55, target->dest->typ->picture[0], actmap->actplayer * 8);
 
    int pos = 0;
    for (i = 0; i < target->service.size() ; i++)
@@ -5182,14 +5189,20 @@ void         tverlademunition::run(void)
       for (i = 0; i < displayed.size() ; i++) {
          if ((mouseparams.taste == 1) && mouseinrect ( x1 + startx - 10, y1 + firstliney + i * abstand, x1 + startx + llength + 10, y1 + firstliney + i * abstand + 20 )) {
             oldpos[i] = newpos[i];
-            int j = (target->service[displayed[i]].maxAmount - target->service[displayed[i]].minAmount) * (mx - (startx + x1)) / llength;
-            if (j < 0)
-               j = 0;
+            float p =  float(mx - (startx + x1)) / llength;
+            if (p < 0)
+               p = 0;
 
-            if (j > target->service[displayed[i]].maxAmount)
-               j = target->service[displayed[i]].maxAmount;
+            if ( p > 1 )
+               p = 1;
 
-            newpos[i] = j;
+            newpos[i] = p * target->service[displayed[i]].maxAmount;
+
+            if (newpos[i] > target->service[displayed[i]].maxAmount)
+               newpos[i] = target->service[displayed[i]].maxAmount;
+
+            if (newpos[i] < target->service[displayed[i]].minAmount)
+               newpos[i] = target->service[displayed[i]].minAmount;
 
             checkpossible(i);
 

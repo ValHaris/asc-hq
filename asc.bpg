@@ -9,7 +9,7 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = bzlib.lib libjpeg.lib triangulation.lib tools.lib mount.exe demount.exe weaponguide.exe gfx2pcx.exe makegfx.exe viewid.exe ai.lib mapeditor.exe asc.exe
+PROJECTS = bzlib.lib libjpeg.lib triangulation.lib tools.lib mount.exe demount.exe weaponguide.exe gfx2pcx.exe makegfx.exe viewid.exe tank2pcx.exe ai.lib mapeditor.exe asc.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -66,6 +66,10 @@ viewid.exe: source\tools\win\viewid.bpr
 
 ai.lib: source\ai\ai.bpr
   $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+tank2pcx.exe: SOURCE\TOOLS\WIN\tank2pcx.bpr
+  $(ROOT)\bin\bpr2mak $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 

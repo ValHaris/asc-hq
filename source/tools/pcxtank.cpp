@@ -19,21 +19,16 @@
 */
 
 
-#include <malloc.h>
 #include <stdio.h>
-#include <i86.h>
-#include <graph.h>
 #include <string.h>
-#include <conio.h>
 
-#include "..\tpascal.inc"
-#include "..\typen.h"
-#include "..\basestrm.h"
-#include "..\misc.h"
-#include "dos.h"
-#include "..\sgstream.h"
-#include "..\loadpcx.h"
-#include "..\basegfx.h"
+#include "../tpascal.inc"
+#include "../typen.h"
+#include "../basestrm.h"
+#include "../misc.h"
+#include "../sgstream.h"
+#include "../loadpcx.h"
+#include "../basegfx.h"
 #include "../buildingtype.h"
 #include "../vehicletype.h"
 #include "../graphicset.h"
@@ -48,7 +43,9 @@ int cat[100][200];
 void load_palette ( void )
 {
    loadpalette();
+   #ifdef _DOS_
    setvgapalette256 ( pal );
+   #endif
 }
 
 
@@ -58,7 +55,7 @@ int searchline ( int x1, int y1, int x2, int y2 )
       for ( int y = y1; y <= y2; y++ )
          if ( getpixel ( x1, y ) != 255 )
             return 1;
-         
+
       return 0;
    } else {
       for ( int x = x1; x <= x2; x++ )
@@ -97,45 +94,46 @@ main(int argc, char *argv[] )
       tfindfile ff ( wildcard );
     
       string cn = ff.getnextname();
-      
-      initgraphics ( 640, 480, 8 );
+
+      tvirtualdisplay vd ( 640, 480 );
+      // initgraphics ( 640, 480, 8 );
       gi = 1;
 
       load_palette();
       loadbi3graphics();
-    
-      while( !cn.empty() ) { 
-   
+
+      while( !cn.empty() ) {
+
          pvehicletype   ft;
          ft = loadvehicletype( cn.c_str() );
-   
+
          bar ( 0, 0, 120, 120, 255 );
-         putspriteimage(0,0,ft->picture[0]); 
-   
+         putspriteimage(0,0,ft->picture[0]);
+
          char m[100];
          strcpy ( m, cn.c_str() );
          char* d = m;
          while ( *d != '.' )
             d++;
-   
+
          strcpy ( d+1, "pcx" );
-   
-   
+
+
          int maxx = 100;
          while ( !searchline ( maxx, 0, maxx, 100 ))
             maxx--;
-      
-      
+
+
          int maxy = 100;
          while ( !searchline ( 0, maxy, 100, maxy ))
             maxy--;
-   
+
          writepcx ( m, 0, 0, maxx+5, maxy+5, pal );
          cn = ff.getnextname();
-   
+
          num++;
       }
-   
+
       closegraphics ( );
       gi = 0;
    } /* endtry */
@@ -143,7 +141,6 @@ main(int argc, char *argv[] )
       if ( gi )
          closegraphics();
       printf("error accessing file %s\n", err.getFileName().c_str() );
-      getch();
    } /* endcatch */
 
 
