@@ -1249,8 +1249,7 @@ void tvehicleinfo::showweaponsvariables( void )
 
             for (ii = 0; ii <= 255; ii++) {
                 xa = graphx1 + ii * dx / 255;
-                ya = int ( graphy2 - dy *
-                           weapDist.getWeapStrength(&aktvehicle->weapons.weapon[markweap], 0, -1, -1, ii ));
+                ya = int ( graphy2 - dy * weapDist.getWeapStrength(&aktvehicle->weapons.weapon[markweap], 0, -1, -1, ii ));
                 putpixel(xa,ya,14);
 
             }

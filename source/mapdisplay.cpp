@@ -975,7 +975,7 @@ void tdisplaymap :: displayadditionalunits ( int height )
                   if ( displaymovingunit.eht->height >= chschwimmend )
                      putrotspriteimage( r + unitrightshift + displaymovingunit.dx , yp + unitdownshift + displaymovingunit.dy, displaymovingunit.eht->typ->picture[displaymovingunit.eht->direction], displaymovingunit.eht->color);
                   else
-                     if ( b == visible_all )
+                     if ( b == visible_all || displaymovingunit.eht->getOwner() == playerview )
                         putpicturemix ( r + unitrightshift + displaymovingunit.dx , yp + unitdownshift + displaymovingunit.dy, displaymovingunit.eht->typ->picture[displaymovingunit.eht->direction], displaymovingunit.eht->color, (char*) colormixbuf);
          }
       }

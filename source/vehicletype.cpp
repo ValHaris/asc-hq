@@ -588,7 +588,7 @@ void Vehicletype:: write ( tnstream& stream ) const
    // if ( bipicture <= 0 )
       for (i=0;i<8  ;i++ )
          if ( picture[i] )
-            stream.writedata ( picture[i], getpicsize2 ( picture[i] ) );
+            stream.writerlepict ( picture[i] );
 
    for ( i = 0; i < objectsBuildable.size(); i++ ) {
       stream.writeInt ( objectsBuildable[i].from );
@@ -658,7 +658,7 @@ void Vehicletype:: write ( tnstream& stream ) const
 
    techDependency.write( stream );
 
-   stream.writedata( buildicon, getpicsize2 ( buildicon ) );
+   stream.writerlepict( buildicon );
 
    stream.writeInt ( cargoMovementDivisor );
 }

@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.117 2004-07-12 18:15:05 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.118 2004-07-14 19:26:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.117  2004/07/12 18:15:05  mbickel
+//      Lots of tweaks and fixed for more portability and compilation with mingw
+//
 //     Revision 1.116  2004/06/13 10:34:14  mbickel
 //      Fixed cut&paste in Mapeditor
 //
@@ -3014,8 +3017,8 @@ void         tunit::init(  )
 
    x1 = 20;
    xsize = 600;
-   y1 = 40;
-   ysize = 400;
+   y1 = 0;
+   ysize = 600;
    w = (xsize - 60) / 2;
    w2 = (xsize - 40) / 8;
    dirx= x1 + 300;
@@ -3043,7 +3046,7 @@ void         tunit::init(  )
    addbutton("AI Parameter", 50, 280, 250, 300, 0, 1, 115, true );
 
    int unitheights = 0;
-   heightxs = 320;
+   heightxs = 520;
    pfield fld = getfield ( unit->xpos, unit->ypos);
    if ( fld && fld->vehicle == unit ) {
       npush ( unit->height );
@@ -3067,7 +3070,7 @@ void         tunit::init(  )
    addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,31,true);
    addkey(31,ct_esc );
 
-   #define maxeditable 6
+   const int maxeditable = 10;
 
    for(i =0;i < unit->typ->weapons.count;i++) {
      if (i < maxeditable) {

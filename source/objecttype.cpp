@@ -1007,8 +1007,8 @@ void ObjectType :: write ( tnstream& stream ) const
 
     stream.writeInt ( displayMethod );
 
-    stream.writedata( buildicon,  getpicsize2 ( buildicon ) );
-    stream.writedata( removeicon, getpicsize2 ( removeicon ) );
+    stream.writerlepict( buildicon );
+    stream.writerlepict( removeicon );
 
     techDependency.write ( stream );
 
@@ -1024,7 +1024,7 @@ void ObjectType :: write ( tnstream& stream ) const
                 stream.writeInt ( weatherPicture[ww].bi3pic[l] );
              } else {
                 stream.writeInt ( 2 );
-                stream.writedata( weatherPicture[ww].images[l], getpicsize2 ( weatherPicture[ww].images[l] ) );
+                stream.writerlepict( weatherPicture[ww].images[l] );
              }
           }
        }

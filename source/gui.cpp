@@ -722,7 +722,17 @@ void   tnguiicon::loaddata ( void )
 void  tnguiicon::loadspecifics( pnstream stream )
 {
    tnguiiconfiledata  rawdata;
-   stream->readdata ( &rawdata, sizeof ( rawdata ));
+   for ( int i = 0; i < 8; ++i )
+      rawdata.picture[i] = (void*) stream->readInt();
+   for ( int i = 0; i < 8; ++i )
+      rawdata.picturepressed[i] = (void*) stream->readInt();
+
+   rawdata.infotext = (char*) stream->readInt();
+   for ( int i = 0; i < 6; ++i )
+      for ( int j = 0; j < 6; ++j )
+         rawdata.keys[i][j] = stream->readInt();
+   rawdata.priority = stream->readInt();
+
    if ( rawdata.infotext )
       stream->readTextString ( infotext );
 

@@ -260,7 +260,7 @@ int  evaluatevisibilityfield ( pmap actmap, pfield fld, int player, int add, int
          buildingSeen();
       #endif
 
-      if (( fld->vehicle  && ( fld->vehicle->color  == player * 8 )) ||
+      if (( fld->vehicle  && ( fld->vehicle->color  == player * 8 ) && false ) ||
           ( fld->vehicle  && ( fld->vehicle->height  < chschwimmend ) && sonar ) ||
           ( fld->building && ( fld->building->typ->buildingheight < chschwimmend ) && sonar ) ||
           ( !fld->mines.empty() && ( mine  ||  fld->mineowner() == player)) ||

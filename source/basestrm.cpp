@@ -209,7 +209,7 @@ void         tnstream::readrlepict( void** pnter, bool allocated, int* size)
       memcpy( *pnter, &hd, sizeof(hd));
       q = (char*) (*pnter) + sizeof(hd);
 
-      readdata( q, hd.size);
+      readdata( q, hd.size);  // endian ok ?
       *size = hd.size + sizeof(hd);
    }
    else {
@@ -218,7 +218,7 @@ void         tnstream::readrlepict( void** pnter, bool allocated, int* size)
         *pnter = new char [ w ];
       memcpy ( *pnter, &hd, sizeof ( hd ));
       q = (char*) (*pnter) + sizeof(hd);
-      readdata ( q, w - sizeof(hd) );
+      readdata ( q, w - sizeof(hd) ); // endian ok ?
       *size = w;
    }
 }
@@ -344,7 +344,7 @@ void         tnstream::readpchar(char** pc, int maxlength )
         
      loop++;
 
-     readdata( pch2, 1 );
+     readdata( pch2, 1 ); // endian ok !
 
    } while (*pch2 != 0   &&   actpos2 < maxav ); /* enddo */
 
@@ -355,7 +355,7 @@ void         tnstream::readpchar(char** pc, int maxlength )
       if ( pch2[0] ) {
          char temp;
          do {
-            readdata( &temp, 1 );
+            readdata( &temp, 1 ); // endian ok !
          } while ( temp ); /* enddo */
       }
    }
@@ -446,7 +446,7 @@ bool  tnstream::readTextString ( ASCString& s, bool includeCR  )
   int red;
   int end = 0;
   do {
-     red = readdata( &c, 1, 0 );
+     red = readdata( &c, 1, 0 ); // endian ok !
      if ( red < 1 ) {
         end = 2;
      } else
@@ -525,7 +525,7 @@ MemoryStreamCopy :: MemoryStreamCopy ( pnstream stream )
        memreserved = newsize;
     }
     char* cp = (char*) buf;
-    red = stream->readdata ( cp + bufused, blocksize, 0 );
+    red = stream->readdata ( cp + bufused, blocksize, 0 ); // endian ok !
     bufused += red;
 
   } while ( red == blocksize );
@@ -647,7 +647,7 @@ tncontainerstream :: tncontainerstream ( const char* containerfilename, Containe
 {
    num = 0;
    char magic[4];
-   readdata ( &magic, 4 );
+   readdata ( &magic, 4 ); // endian ok !
    if ( strncmp ( magic, containermagic, 4 ) == 0) {
       int pos = readInt();
       seek ( pos );

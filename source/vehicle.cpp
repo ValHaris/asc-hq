@@ -838,7 +838,7 @@ bool Vehicle :: buildingconstructable ( pbuildingtype building )
 
    int hd = getheightdelta ( log2 ( height ), log2 ( building->buildingheight ));
 
-   if ( hd != 0 && !(hd ==-11 && (height == chschwimmend || height == chfahrend)))
+   if ( hd != 0 ) // && !(hd ==-1 && (height == chschwimmend || height == chfahrend)) ???  what was that ??
       return 0;
 
 

@@ -234,7 +234,8 @@ void loadbi3graphics( void )
             absoluteMaxPicSize = gs->maxPicSize;
 
          int* picmode = new int[gs->picnum];
-         s.readdata ( picmode, gs->picnum * sizeof( int ) );
+         for ( int i = 0; i < gs->picnum; ++i )
+            picmode[i] = s.readInt();
          gs->pic.resize ( gs->picnum );
          gs->picmode.resize ( gs->picnum );
          for ( int i = 0; i < gs->picnum; i++ ) {

@@ -78,9 +78,9 @@ void expand(void* p1, void* q1, int size)
 }
 
 
-
+#if 0
 pfont        loadfont(char *       filename)
-{                
+{
    toldfont     *font1; 
    FILE         *fp;
    int          i; 
@@ -159,8 +159,8 @@ pfont        loadfont(char *       filename)
            font1->character[i].memposition = (char*) p;
         } /* endif */
      }
-   } 
-   fclose(fp); 
+   }
+   fclose(fp);
 
 
 
@@ -173,7 +173,7 @@ pfont        loadfont(char *       filename)
    font2->groundline = font1->groundline;
    font2->palette    = font1->palette;
    for (i = 0; i < 256 ;i++ ) {
-      font2->character[i].width     =  font1->character[i].width;    
+      font2->character[i].width     =  font1->character[i].width;
       font2->character[i].size      =  font1->character[i].size;
       font2->character[i].memposition =font1->character[i].memposition;
       for (int j = 0; j < 256 ; j++ ) {
@@ -188,8 +188,35 @@ pfont        loadfont(char *       filename)
 
    return font2;
 }
+#endif
 
 
+void toldfont::read ( tnstream& stream )
+{
+   stream.readdata ( &id, sizeof ( id ));
+   stream.readdata ( &name, sizeof ( name ));
+   number = stream.readChar();
+   color = stream.readChar();
+   for ( int i = 0; i < 256; ++i ) {
+      character[i].width = stream.readChar();
+      character[i].size = stream.readWord();
+      character[i].diskposition = stream.readInt();
+      character[i].memposition = (char*) stream.readInt();
+      character[i].dummy = stream.readChar();
+   }
+   height = stream.readWord();
+   for ( int i = 0; i < 256; ++i )
+      kernchartable[i] = stream.readChar();
+   for ( int i = 0; i < 101; ++i )
+      for ( int j = 0; j < 101; ++j )
+         kerning[i][j] = stream.readChar();
+
+   dummy = stream.readWord();
+   useems = stream.readChar();
+   caps = stream.readChar();
+   palette = (dacpalette256*) stream.readInt();
+   groundline = stream.readChar();
+}
 
 pfont        loadfont( pnstream stream )
 {
@@ -201,8 +228,7 @@ pfont        loadfont( pnstream stream )
    int i;
 
    font1 = new toldfont;
-
-   stream->readdata ( font1, sizeof(*font1) );
+   font1->read ( *stream );
 
    font1->id[47] = 0;
 
@@ -210,17 +236,17 @@ pfont        loadfont( pnstream stream )
       return (NULL);
 
    font1->useems = false;
-   font1->palette = NULL; 
+   font1->palette = NULL;
 
-   for (i = 0; i <= 255; i++) { 
-      if ( font1->character[i].size ) { 
-         ll2 = ( font1->character[i].size / 8 + 1) * 8; 
+   for (i = 0; i <= 255; i++) {
+      if ( font1->character[i].size ) {
+         ll2 = ( font1->character[i].size / 8 + 1) * 8;
          q = new char [ ll2+2 ];
-         font1->character[i].memposition = (char*) q; 
-        
-         if (font1->color == false) { 
-            ll = font1->character[i].size / 8 + 1;            
-            p = new char [ ll + 2 ]; 
+         font1->character[i].memposition = (char*) q;
+
+         if (font1->color == false) {
+            ll = font1->character[i].size / 8 + 1;
+            p = new char [ ll + 2 ];
             stream->readdata ( p, ll + 2 );
             expand( p, q, font1->character[i].size );
             delete[] p; 
@@ -244,17 +270,17 @@ pfont        loadfont( pnstream stream )
            font1->character[i].memposition = (char*) p;
         } /* endif */
      }
-   } 
+   }
 
 
-  if (font1->color) { 
+  if (font1->color) {
      if ( font1->palette ) {
         font1->palette = (dacpalette256*) new char [ sizeof ( dacpalette256 ) ];
         stream->readdata ( font1->palette, sizeof(dacpalette256));
      }
-   } else  
-      font1->palette = NULL; 
-   
+   } else
+      font1->palette = NULL;
+
 
 
    pfont font2   = new ( tfont );

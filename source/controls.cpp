@@ -1353,6 +1353,8 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, pve
       }
    }
    npop ( fld->vehicle );
+   for ( int i = 0; i < 8; i++ )
+      evaluatevisibilityfield ( actmap, fld, i, -1, actmap->getgameparameter ( cgp_initialMapVisibility ) );
 
    vehicle->height = oldheight;
 
@@ -1701,6 +1703,12 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
          if ( research.progress ) {
             choosetechnology();
          }
+      if (research.activetechnology  )
+         if( find ( research.developedTechnologies.begin(), research.developedTechnologies.end(), research.activetechnology->id ) != research.developedTechnologies.end()) {
+            research.progress = 0;
+            choosetechnology();
+         }
+         
       while ((research.activetechnology != NULL ) &&
              (research.progress >= research.activetechnology->researchpoints)) {
               int mx = research.progress - research.activetechnology->researchpoints;

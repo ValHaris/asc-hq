@@ -173,7 +173,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
          if ( mapDisplay ) {
             if ( next == stop && to.x==next->x && to.y==next->y) // the unit will reach its destination
                slm.fadeOut ( CGameOptions::Instance()->movespeed * 10 );
-            mapDisplay->displayMovingUnit ( from, to, vehicle, pathStep, pathStepNum, &slm );
+              mapDisplay->displayMovingUnit ( from, to, vehicle, pathStep, pathStepNum, &slm );
          }
          pathStep++;
 
@@ -197,11 +197,13 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             evaluateviewcalculation ( actmap, 0);
 
          if ( vehicle ) {
-            npush ( dest->vehicle );
-            dest->vehicle = vehicle;
+            // npush ( dest->vehicle );
+            // dest->vehicle = vehicle;
             if ( mapDisplay )
                mapDisplay->displayMap();
-            npop ( dest->vehicle );
+
+
+            // npop ( dest->vehicle );
 
             if ( rf->checkfield ( to, vehicle, mapDisplay )) {
                cancelmovement = 1;

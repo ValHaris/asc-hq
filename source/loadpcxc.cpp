@@ -20,8 +20,8 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    along with this program; see the file COPYING. If not, write to the
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
 
@@ -35,7 +35,7 @@
 
 #pragma pack(1)
 
-typedef struct tpcxheader{
+struct tpcxheader{
            char     manufacturer;
            char     version     ;
            char     encoding    ;
@@ -52,7 +52,56 @@ typedef struct tpcxheader{
            Uint16     vscreensize ;
            char     dummy[50]   ;
            int      size;            // patch to be able to read pcx files without seeking
-       }tpcxheader;
+
+          void read  ( tnstream* stream );
+          void write ( tnstream* stream );
+       };
+
+void tpcxheader::read ( tnstream* stream )
+{
+   manufacturer = stream->readChar();
+   version      = stream->readChar();
+   encoding     = stream->readChar();
+   bitsperpixel = stream->readChar();
+   xmin         = stream->readWord();
+   ymin         = stream->readWord();
+   xmax         = stream->readWord();
+   ymax         = stream->readWord();
+   hdpi         = stream->readWord();
+   vdpi         = stream->readWord();
+   stream->readdata ( colormap, 48);
+   reserved     = stream->readChar();
+   nplanes      = stream->readChar();
+   bytesperline= stream->readWord();
+   paletteinfo = stream->readWord();
+   hscreensize = stream->readWord();
+   vscreensize = stream->readWord();
+   stream->readdata ( dummy, 50 ) ;
+   size = stream->readInt();            // patch to be able to read pcx files without seeking
+}
+
+void tpcxheader::write ( tnstream* stream )
+{
+   stream->writeChar( manufacturer );
+   stream->writeChar( version );
+   stream->writeChar( encoding );
+   stream->writeChar( bitsperpixel );
+   stream->writeWord( xmin        );
+   stream->writeWord( ymin        );
+   stream->writeWord( xmax        );
+   stream->writeWord( ymax        );
+   stream->writeWord( hdpi        );
+   stream->writeWord( vdpi        );
+   stream->writedata ( colormap, 48);
+   stream->writeChar( reserved    );
+   stream->writeChar( nplanes     );
+   stream->writeWord( bytesperline);
+   stream->writeWord( paletteinfo );
+   stream->writeWord( hscreensize );
+   stream->writeWord( vscreensize );
+   stream->writedata ( dummy, 50 ) ;
+   stream->writeInt( size );            // patch to be able to read pcx files without seeking
+}
 
 #pragma pack()
 
@@ -62,8 +111,7 @@ int pcxGetColorDepth ( const ASCString& filename, int* width, int* height )
    tnfilestream stream ( filename.c_str(), tnstream::reading );
 
    tpcxheader header;
-
-   stream.readdata ( &header, sizeof(header) );
+   header.read ( &stream );
 
    if ( width )
       *width = header.xmax - header.xmin + 1 ;
@@ -84,26 +132,7 @@ char loadpcxxy( pnstream stream, int x, int y, bool setpalette, int* xsize, int*
 
    tpcxheader header;
 
-   header.manufacturer = stream->readChar();
-   header.version      = stream->readChar();
-   header.encoding     = stream->readChar();
-   header.bitsperpixel = stream->readChar();
-   header.xmin         = stream->readWord();
-   header.ymin         = stream->readWord();
-   header.xmax         = stream->readWord();
-   header.ymax         = stream->readWord();
-   header.hdpi         = stream->readWord();
-   header.vdpi         = stream->readWord();
-   stream->readdata ( header.colormap, 48);
-   header.reserved     = stream->readChar();
-   header.nplanes      = stream->readChar();
-   header.bytesperline= stream->readWord();
-   header.paletteinfo = stream->readWord();
-   header.hscreensize = stream->readWord();
-   header.vscreensize = stream->readWord();
-   stream->readdata ( header.dummy, 50 ) ;
-   header.size = stream->readInt();            // patch to be able to read pcx files without seeking
-
+   header.read( stream );
 
    read += sizeof(header);
 
@@ -235,7 +264,7 @@ char loadpcxxy( pnstream stream, int x, int y, bool setpalette, int* xsize, int*
 
    delete[] buf;
    return 0;
-} 
+}
 
 
 char loadpcxxy ( const ASCString& name, bool setpal, int xpos, int ypos, int* xsize, int* ysize )
@@ -274,7 +303,7 @@ void writepcx ( const ASCString& name, int x1, int y1, int x2, int y2, dacpalett
 
    tn_file_buf_stream stream ( name, tnstream::writing );
 
-   stream.writedata2 ( header );
+   header.write ( &stream );
 
    fsize += sizeof ( header );
 
@@ -292,11 +321,11 @@ void writepcx ( const ASCString& name, int x1, int y1, int x2, int y2, dacpalett
             else {
                if ( count > 1 || lastbyte >= 192 ) {
                   char d = 192 + count;
-                  stream.writedata2 ( d );
+                  stream.writeChar ( d );
                   fsize += sizeof ( d );
                }
                char lstbyte = lastbyte;
-               stream.writedata2 ( lstbyte );
+               stream.writeChar ( lstbyte );
                fsize += sizeof ( lstbyte );
                count = 1;
                lastbyte = c;
@@ -305,18 +334,18 @@ void writepcx ( const ASCString& name, int x1, int y1, int x2, int y2, dacpalett
          }
          if ( count > 1 || lastbyte >= 192 ) {
             char d = 192 + count;
-            stream.writedata2 ( d );
+            stream.writeChar ( d );
             fsize += sizeof ( d );
          }
          char lstbyte = lastbyte;
-         stream.writedata2 ( lstbyte );
+         stream.writeChar ( lstbyte );
          fsize += sizeof ( lstbyte );
    
       }
 
    if ( header.nplanes == 1 ) {
       char d = 12;
-      stream.writedata2 ( d );
+      stream.writeChar ( d );
       fsize += sizeof ( d );
 
       dacpalette256 pal2;
@@ -325,12 +354,12 @@ void writepcx ( const ASCString& name, int x1, int y1, int x2, int y2, dacpalett
           for ( int j = 0; j < 256; j++ )
               pal2[j][i] = pal[j][i] << 2;
 
-      stream.writedata ( &pal2, 768 );
+      stream.writedata ( &pal2, 768 ); // endian ok !!!
       fsize += 768 ;
    }
    stream.seek ( 0 );
    header.size = fsize;
-   stream.writedata2 ( header );
+   header.write ( &stream );
 }
 
 

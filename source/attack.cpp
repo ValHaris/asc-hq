@@ -1235,17 +1235,13 @@ bool vehicleplattfahrbar( const pvehicle     vehicle,
 */
 } 
 
-void WeapDist::loaddata(void)
-{ 
-   tnfilestream stream ( "weapons.dat", tnstream::reading );
-   stream.readdata ( &data, sizeof( data ));
-} 
-
 
 float WeapDist::getWeapStrength ( const SingleWeapon* weap, int dist, int attacker_height, int defender_height, int reldiff  )
 {
+/*
   int         translat[31]  = { 6, 255, 1, 3, 2, 4, 0, 5, 255, 255, 6, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-                                 255, 255, 255, 255, 255, 255}; 
+                                 255, 255, 255, 255, 255, 255};
+*/
 
    if ( !weap )
       return 0;
@@ -1257,11 +1253,13 @@ float WeapDist::getWeapStrength ( const SingleWeapon* weap, int dist, int attack
    if ( scalar == 1 )     // mine
       return 1;
 
+      /*
    int typ = translat[ scalar ];
    if ( typ == 255 ) {
       displaymessage("tweapdist::getweapstrength: invalid type ", 1 );
       return 1;
    }
+   */
 
 
    if ( weap->maxdistance == 0 )
@@ -1296,9 +1294,13 @@ float WeapDist::getWeapStrength ( const SingleWeapon* weap, int dist, int attack
 
    float relstrength = weap->maxstrength - relpos * ( weap->maxstrength - weap->minstrength );
 
-   int hd = getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ));
+   int heightEff = 100;
+   if ( attacker_height != -1 && defender_height != -1 ) {
+      int hd = getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ));
+      heightEff = weap->efficiency[6+hd];
+   }
 
-   return relstrength * weap->efficiency[6+hd] / float(weap->maxstrength * 100) ;
+   return relstrength * heightEff / float(weap->maxstrength * 100) ;
 
 /*   if ( attacker_height != -1 && defender_height!= -1 ) {
       int hd = getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ));

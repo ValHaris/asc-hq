@@ -1,6 +1,9 @@
-//     $Id: newfont.h,v 1.13 2004-07-12 18:15:08 mbickel Exp $
+//     $Id: newfont.h,v 1.14 2004-07-14 19:26:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2004/07/12 18:15:08  mbickel
+//      Lots of tweaks and fixed for more portability and compilation with mingw
+//
 //     Revision 1.12  2004/05/20 14:01:10  mbickel
 //      Many bugfixes and new features, among them:
 //        - Container.FillUnitsAutomatically = 2
@@ -116,6 +119,7 @@ struct toldfont {
          char             caps;
          dacpalette256*   palette;
          pascal_byte      groundline;
+         void read ( tnstream& stream );
       };
 
 
@@ -170,7 +174,7 @@ extern void showtext2c( const ASCString& TextToOutput, int x1, int x2 );
 
 extern tfontsettings activefontsettings;
 
-extern pfont loadfont(char* filename);
+// extern pfont loadfont(char* filename);
 extern pfont loadfont( pnstream stream );
 
 extern void showtext4 ( const char* TextToOutput, int x1, int y1, ... );

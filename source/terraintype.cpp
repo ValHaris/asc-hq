@@ -24,7 +24,7 @@
 #include "textfiletags.h"
 #include "textfile_evaluation.h"
 
-const char*  cbodenarten[cbodenartennum]  = {"shallow water , coast"       ,
+const char*  cbodenarten[cbodenartennum]  = {"shallow water"       ,
                                              "normal lowland",
                                              "swamp",
                                              "forest",
@@ -244,8 +244,9 @@ void TerrainType::read( tnstream& stream )
 */
             if ( pgbt->pict )
                if ( pgbt->bi_pict == -1 ) {
-                  pgbt->pict = asc_malloc ( fieldsize );
-                  stream.readdata ( pgbt->pict, fieldsize );
+                  int sze;
+                  stream.readrlepict ( &pgbt->pict, false, &sze );
+                  // stream.readdata ( pgbt->pict, fieldsize ); // endian ????
                 } else
                    loadbi3pict_double ( pgbt->bi_pict,
                                         &pgbt->pict,
@@ -269,11 +270,11 @@ void TerrainType::Weather::readQuickView ( tnstream& stream )
 {
    quickView = new FieldQuickView;
 
-   stream.readdata ( quickView, sizeof ( *quickView ));
+   stream.readdata ( quickView, sizeof ( *quickView )); // endian ok !!!
 
    FieldQuickView temp;
    for ( int i = 1; i < 8; i++ )
-      stream.readdata ( &temp, sizeof ( *quickView ));
+      stream.readdata ( &temp, sizeof ( *quickView )); // endian ok !!!
 }
 
 
@@ -315,12 +316,10 @@ void TerrainType::write ( tnstream& stream ) const
         for ( m = 1; m< 6; m++ )
            stream.writeInt ( -1 );
 
-
         weather[i]->move_malus.write ( stream );
 
-
         if ( weather[i]->pict && weather[i]->bi_pict == -1 )
-           stream.writedata ( ( char*) weather[i]->pict, fieldsize );
+           stream.writerlepict ( weather[i]->pict );
 
      }
    }

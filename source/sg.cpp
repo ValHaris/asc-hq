@@ -383,11 +383,10 @@ void         loadMoreData(void)
    if ( actprogressbar )
       actprogressbar->point(); {
       tnfilestream stream ("waffen.raw",tnstream::reading);
-      int num;
+      int num = stream.readInt();
 
       static int xlatselectweaponguiicons[12] = { 2, 7, 6, 3, 4, 9, 0, 5, 10, 11, 11, 11 };
 
-      stream.readdata ( (char*) &num, sizeof( num ));
       for ( i = 0; i < num; i++ )
          stream.readrlepict(   &icons.selectweapongui[xlatselectweaponguiicons[i]], false, &w );
       stream.readrlepict(   &icons.selectweaponguicancel, false, &w );

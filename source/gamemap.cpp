@@ -148,7 +148,7 @@ void tmap :: read ( tnstream& stream )
    ypos = stream.readWord();
    stream.readInt(); // dummy
    field = NULL;
-   stream.readdata ( codeword, 11 );
+   stream.readdata ( codeword, 11 ); // endian ok !
 
    if ( version < 2 )
       ___loadtitle = stream.readInt();

@@ -1759,9 +1759,7 @@ void         loadicons(void)
       for (i = 0; i <= 7; i++) 
          stream.readrlepict( &icons.height[i],false,w);
    }
-
-   weapDist.loaddata(); 
-} 
+}
 
 
 /*

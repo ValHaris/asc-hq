@@ -3,9 +3,16 @@
 */
 
 
-//     $Id: attack.h,v 1.22 2003-06-22 17:41:21 mbickel Exp $
+//     $Id: attack.h,v 1.23 2004-07-14 19:26:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2003/06/22 17:41:21  mbickel
+//      Updated campaign maps
+//      Fixed crash at 640*480
+//      Fixed: some units could not attack while reaction fire active
+//      Fixed: destruction of buildings not working
+//      New map parameters for customizing the effects of experience
+//
 //     Revision 1.21  2003/05/01 18:02:22  mbickel
 //      Fixed: no movement decrease for cargo when transport moved
 //      Fixed: reactionfire not working when descending into range
@@ -314,9 +321,7 @@ extern bool vehicleplattfahrbar( const pvehicle vehicle, const pfield field );
 
 //! Some very old system to calculate the weapon efficiency over a given distance.
 class WeapDist {
-            char         data[7][256];        /* mg,bomb,gmissile,amissile,torpedo,cannon,cruise missile  */ 
          public:
-            void loaddata ( void ) ;
             float getWeapStrength ( const SingleWeapon* weap, int dist =-1, int attacker_height =-1, int defender_height = -1, int reldiff = -1 );
          }; 
 

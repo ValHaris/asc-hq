@@ -685,8 +685,8 @@ void         putbuilding2( const MapCoordinate& entryPosition,
       Resources maxplus;
       Resources actplus;
       Resources biplus;
-      int maxresearch = 0;
       /*
+      int maxresearch = 0;
       bool found = false;
       for ( tmap::Player::BuildingList::iterator i = actmap->player[color/8].buildingList.begin(); i != actmap->player[ color/8].buildingList.end(); i++ ) {
          pbuilding bld = *i;
