@@ -352,7 +352,7 @@ class    ccontainer : public virtual ccontainercontrols
       void     run (void);
       void     done (void);
       void     movemark (int direction);
-      virtual pvehicle getmarkedunit (void) = NULL;
+      virtual pvehicle getmarkedunit (void) = 0;
       virtual pvehicletype getmarkedunittype ( void );
       void     displayloading ( int x, int y, int dx = 0, int dy = 0 );
       void     displayloading (void);

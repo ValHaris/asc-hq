@@ -36,7 +36,7 @@
 #ifndef basegfxH
 #define basegfxH
 
-#include <sdlmm.h>
+#include "libs/sdlmm/src/sdlmm.h"
 #include "tpascal.inc"
 #include "global.h"
 #include "palette.h"

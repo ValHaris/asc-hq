@@ -164,8 +164,6 @@ class TechAdapterDependency {
      ~Research ();
  };
 
-extern void doresearch ( tmap* actmap, int player );
-
 //! Calculates the resources that are needed to research the given number of research
 extern Resources returnResourcenUseForResearch ( const pbuilding bld, int research );
 

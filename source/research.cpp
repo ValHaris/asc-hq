@@ -26,7 +26,7 @@
 #include "vehicletype.h"
 #include "gamemap.h"
 #include "itemrepository.h"
-
+ 
 
 void TechDependency::read ( tnstream& stream )
 {
@@ -261,7 +261,7 @@ void Research :: read_struct ( tnstream& stream )
       techsAvail = true;
    } else {
       progress = stream.readInt();
-      activetechnology = map->gettechnology_byid(stream.readInt());
+      activetechnology = technologyRepository.getObject_byID( stream.readInt());
       int size = stream.readInt();
       for ( int i = 0; i < size; ++i )
          developedTechnologies.push_back ( stream.readInt());
@@ -298,7 +298,7 @@ void Research :: read_techs ( tnstream& stream )
    int w = stream.readInt ();
 
    while ( w ) {
-      const Technology* tec = map->gettechnology_byid ( w );
+      const Technology* tec = technologyRepository.getObject_byID( w );
       if ( !tec )
          throw InvalidID ( "technology", w );
 
@@ -310,7 +310,7 @@ void Research :: read_techs ( tnstream& stream )
    if ( ___loadActiveTech ) {
       w = stream.readInt ();
 
-      activetechnology = map->gettechnology_byid ( w );
+      activetechnology = technologyRepository.getObject_byID( w );
 
       if ( !activetechnology )
          throw InvalidID ( "technology", w );
@@ -384,8 +384,8 @@ void Research :: addtechnology ( void )
 void Research :: settechlevel ( int techlevel )
 {
    if ( techlevel > 0 ) {
-      for ( int j = 0; j < map->getTechnologyNum(); j++ ) {
-         const Technology* tech = map->gettechnology_bypos ( j );
+      for ( int j = 0; j < technologyRepository.getNum(); j++ ) {
+         const Technology* tech = technologyRepository.getObject_byPos ( j );
          if ( tech )
             if ( tech->techlevel <= techlevel )
                if ( !techResearched ( tech->id ))
@@ -440,7 +440,7 @@ Resources returnResourcenUseForResearch ( const pbuilding bld, int research )
    for ( int r = 0; r < 3; ++r )
       if ( bld->typ->maxplus.resource(r) < 0 ) {
          float a = -bld->typ->maxplus.resource(r) / pow(double(bld->typ->nominalresearchpoints),2);
-         res.resource(r) = pow(double(research),2) * a;
+         res.resource(r) = int(pow(double(research),2) * a );
       }
 
    return res;
@@ -473,82 +473,4 @@ void returnresourcenuseforresearch ( const pbuilding bld, int research, int* ene
   */
 }
 #endif
-
-   struct  ResearchEfficiency {
-               float eff;
-               pbuilding  bld;
-               bool operator<( const ResearchEfficiency& re) const { return eff > re.eff; };
-           };
-
-
-void doresearch ( tmap* actmap, int player )
-{
-
-   typedef vector<ResearchEfficiency> VRE;
-   VRE vre;
-
-   for ( tmap::Player::BuildingList::iterator bi = actmap->player[player].buildingList.begin(); bi != actmap->player[player].buildingList.end(); bi++ ) {
-      pbuilding bld = *bi;
-      if ( bld->typ->special & cgresearchb ) {
-         Resources res = returnResourcenUseForResearch ( bld, bld->researchpoints );
-
-         int m = max ( res.energy, max ( res.material, res.fuel));
-
-         ResearchEfficiency re;
-         if ( m )
-            re.eff = float(bld->researchpoints) / float(m);
-         else
-            re.eff = maxint;
-
-         re.bld = bld;
-
-         vre.push_back(re);
-      }
-   }
-   sort( vre.begin(), vre.end());
-
-   for ( VRE::iterator i = vre.begin(); i != vre.end(); ++i ) {
-      pbuilding bld = i->bld;
-      Resources r = returnResourcenUseForResearch ( bld, bld->researchpoints );
-      Resources got = bld->getResource ( r, 1 );
-
-      int res = bld->researchpoints;
-      if ( got < r ) {
-         int diff = bld->researchpoints / 2;
-         while ( got < r || diff > 1) {
-            if ( got < r  )
-               res -= diff;
-            else
-               res += diff;
-
-            if ( diff > 1 )
-               diff /=2;
-            else
-               diff = 1;
-
-            r = returnResourcenUseForResearch ( bld, res );
-         }
-
-         /*
-         res = returnResourcenUseForResearch ( bld, res+1 );
-
-         if ( ena >= energy  &&  maa >= material )
-            res++;
-         else
-            returnresourcenuseforresearch ( bld, res, &energy, &material );
-         */
-
-      }
-
-      got = bld->getResource ( r, 0 );
-
-      if ( got < r )
-         fatalError( "controls : doresearch : inconsistency in getting energy or material for building" );
-
-      actmap->player[player].research.progress += res;
-   }
-}
-
-
-
 

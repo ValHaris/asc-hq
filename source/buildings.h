@@ -153,10 +153,10 @@ class  Building : public ContainerBase {
     int         ammo[waffenanzahl];
 
     //! the maximum amount of research that the building can conduct every turn
-    word         maxresearchpoints;
+    int         maxresearchpoints;
 
     //! the current amount of research that the building conducts every turn
-    word         researchpoints;
+    int         researchpoints;
 
     //! the building's name
     ASCString    name;
@@ -309,6 +309,6 @@ class GetMiningInfo : public SearchFields {
          };
 
 
-
+extern void doresearch ( tmap* actmap, int player );
 
 #endif

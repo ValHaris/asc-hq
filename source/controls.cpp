@@ -2428,5 +2428,3 @@ void  checkforvictory ( )
    }
 }
 
-
- 

@@ -167,12 +167,12 @@ dnl ugly work around for this yet buggy SDLmm check
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
-AM_PATH_SDLMM(0.1.8, :, 
-              AC_MSG_ERROR([[
-*** SDLmm not found! ASC requires the SDLmm library. If you have a distribution
-supplied SDLmm.RPM installed, perhaps the SDLmm-devel.RPM is missing. 
-If your distribution does not include the SDLmm library, you can get it 
-from http://sdlmm.sf.net ]]))
+dnl AM_PATH_SDLMM(0.1.8, :, 
+dnl               AC_MSG_ERROR([[
+dnl *** SDLmm not found! ASC requires the SDLmm library. If you have a distribution
+dnl supplied SDLmm.RPM installed, perhaps the SDLmm-devel.RPM is missing. 
+dnl If your distribution does not include the SDLmm library, you can get it 
+dnl from http://sdlmm.sf.net ]]))
 
 
 AC_ARG_ENABLE( paragui, [  --disable-paragui       Don't use paragui .], useparagui=no )
@@ -401,6 +401,8 @@ AC_OUTPUT(  Makefile \
 	    source/docs/Makefile \
 	    source/docs/en/Makefile \
 	    source/libs/Makefile \
+	    source/libs/sdlmm/Makefile \
+	    source/libs/sdlmm/src/Makefile \
 	    source/libs/triangul/Makefile \
 	    source/sdl/Makefile \
 	    source/tools/Makefile \
@@ -417,8 +419,8 @@ if test "X$ENABLEDEBUG" = "X1"; then
    CXXFLAGS="$CXXFLAGS -g3"
    echo SDL_CFLAGS $SDL_CFLAGS
    echo SDL_LIBS $SDL_LIBS
-   echo SDLMM_CFLAGS $SDLMM_CXXFLAGS
-   echo SDLMM_LIBS $SDLMM_LIBS
+dnl   echo SDLMM_CFLAGS $SDLMM_CXXFLAGS
+dnl   echo SDLMM_LIBS $SDLMM_LIBS
    echo PARAGUI_CFLAGS $PARAGUI_CFLAGS
    echo PARAGUI_LIBS $PARAGUI_LIBS
    echo CFLAGS $CFLAGS

@@ -3,9 +3,15 @@
    STL. Should be scrapped and replaced by STL functions.
 */
 
-//     $Id: basetemp.h,v 1.6 2001-02-18 15:37:02 mbickel Exp $
+//     $Id: basetemp.h,v 1.7 2004-05-16 15:40:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2001/02/18 15:37:02  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.5  2001/01/28 14:04:04  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -173,10 +179,10 @@ template<class T> int dynamic_array<T> :: getlength( void )
 
 template<class T> void dynamic_initialized_array<T> :: resize ( int newsize )
 {
-   int oldsize = size;
+   int oldsize = T::size;
    dynamic_array<int> :: resize ( newsize );
    for ( int i = oldsize; i < newsize; i++ )
-      buf[i] = initval;
+      T::buf[i] = initval;
 }
 
 template<class T> dynamic_initialized_array<T> :: dynamic_initialized_array ( T ival )

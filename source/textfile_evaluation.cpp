@@ -699,8 +699,8 @@ ASCString StringArrayProperty::toString ( ) const
 template<class T>
 typename ValArrayProperty<T>::PropertyType ValArrayProperty<T>::operation_add ( const TextPropertyGroup::Entry& entry ) const
 {
-   PropertyType child = operation_eq( entry );
-   PropertyType parent = parse ( *entry.parent );
+   PropertyType child = this->operation_eq( entry );
+   PropertyType parent = this->parse ( *entry.parent );
 
    if ( child.size() == parent.size() ) {
       PropertyType res;
@@ -721,15 +721,15 @@ typename ValArrayProperty<T>::PropertyType ValArrayProperty<T>::operation_add ( 
       return res;
    }
 
-   propertyContainer->error ( name + ": array dimensions do not agree" );
+   this->propertyContainer->error ( this->name + ": array dimensions do not agree" );
    return child;
 }
 
 template<class T>
 typename ValArrayProperty<T>::PropertyType ValArrayProperty<T>::operation_mult ( const TextPropertyGroup::Entry& entry ) const
 {
-   PropertyType child = operation_eq( entry );
-   PropertyType parent = parse ( *entry.parent );
+   PropertyType child = this->operation_eq( entry );
+   PropertyType parent = this->parse ( *entry.parent );
 
    if ( child.size() == parent.size() ) {
       PropertyType res;
@@ -750,7 +750,7 @@ typename ValArrayProperty<T>::PropertyType ValArrayProperty<T>::operation_mult (
       return res;
    }
 
-   propertyContainer->error ( name + ": array dimensions do not agree" );
+   this->propertyContainer->error ( this->name + ": array dimensions do not agree" );
    return parent;
 }
 

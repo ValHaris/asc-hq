@@ -29,7 +29,7 @@
 template <class T> class PointerVector : public std::vector<T> {
    public:
      ~PointerVector() {
-        for ( typename std::vector<T>::iterator it=begin(); it!=end(); it++ )
+        for ( typename std::vector<T>::iterator it = std::vector<T>::begin(); it!=std::vector<T>::end(); it++ )
             delete *it;
      };
 };
@@ -39,7 +39,7 @@ template <class T> class PointerVector : public std::vector<T> {
 template <class T> class PointerList : public std::list<T> {
    public:
      ~PointerList() {
-        for ( typename std::list<T>::iterator it=begin(); it!=end(); it++ )
+        for ( typename std::list<T>::iterator it= std::list<T>::begin(); it!= std::list<T>::end(); it++ )
             delete *it;
      };
 };

@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # libtool - Provide generalized library-building support services.
-# Generated automatically by  (GNU asc 1.14.0.3)
+# Generated automatically by  (GNU asc 1.14.9.7)
 # NOTE: Changes made to this file will be lost: look at ltmain.sh.
 #
 # Copyright (C) 1996-2000 Free Software Foundation, Inc.
@@ -70,7 +70,7 @@ CC="gcc"
 with_gcc=yes
 
 # The linker used to build libraries.
-LD="/usr/i486-suse-linux/bin/ld"
+LD="/usr/bin/ld"
 
 # Whether we need hard or soft links.
 LN_S="ln -s"

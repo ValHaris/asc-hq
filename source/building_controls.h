@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: building_controls.h,v 1.17 2003-02-27 16:10:47 mbickel Exp $
+//     $Id: building_controls.h,v 1.18 2004-05-16 15:40:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2003/02/27 16:10:47  mbickel
+//      Restructuring of new pathfinding code completed
+//
 //     Revision 1.16  2003/02/19 19:47:25  mbickel
 //      Completely rewrote Pathfinding code
 //      Wind not different any more on different levels of height
@@ -168,7 +171,7 @@ class    ccontainercontrols
       virtual int    getmaterial ( int need, int abbuchen ) = 0;
       virtual int    getfuel ( int need, int abbuchen ) = 0;
 
-      virtual int    putammunition (int  weapontype, int  ammunition, int abbuchen) = NULL;
+      virtual int    putammunition (int  weapontype, int  ammunition, int abbuchen) = 0;
       virtual int    getammunition ( int weapontype, int num, int abbuchen, int produceifrequired = 0 ) = 0;
       virtual int    ammotypeavail ( int type ) = 0;
 
@@ -181,7 +184,7 @@ class    ccontainercontrols
 
       virtual int    getspecfunc ( tcontainermode mode ) = 0;
 
-      virtual pvehicle getloadedunit (int num) = NULL;
+      virtual pvehicle getloadedunit (int num) = 0;
 
       ContainerBase* baseContainer;
 };

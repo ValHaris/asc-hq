@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.145 2004-05-16 11:28:01 mbickel Exp $
+//     $Id: typen.h,v 1.146 2004-05-16 15:40:32 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -297,7 +297,7 @@ void readClassContainer ( C& c, tnstream& stream  )
 }
 
 template<>
-void writeClassContainer<> ( const vector<ASCString>& c, tnstream& stream  )
+inline void writeClassContainer<> ( const vector<ASCString>& c, tnstream& stream  )
 {
    stream.writeInt ( 1 );
    stream.writeInt ( c.size() );
@@ -308,7 +308,7 @@ void writeClassContainer<> ( const vector<ASCString>& c, tnstream& stream  )
 
 
 template<>
-void readClassContainer<> ( vector<ASCString>& c, tnstream& stream  )
+inline void readClassContainer<> ( vector<ASCString>& c, tnstream& stream  )
 {
    stream.readInt(); // version
    int num = stream.readInt();
@@ -317,7 +317,7 @@ void readClassContainer<> ( vector<ASCString>& c, tnstream& stream  )
 }
 
 template<>
-void writeClassContainer<> ( const vector<int>& c, tnstream& stream  )
+inline void writeClassContainer<> ( const vector<int>& c, tnstream& stream  )
 {
    stream.writeInt ( 1 );
    stream.writeInt ( c.size() );
@@ -328,7 +328,7 @@ void writeClassContainer<> ( const vector<int>& c, tnstream& stream  )
 
 
 template<>
-void readClassContainer<> ( vector<int>& c, tnstream& stream  )
+inline void readClassContainer<> ( vector<int>& c, tnstream& stream  )
 {
    stream.readInt(); // version
    int num = stream.readInt();
@@ -337,7 +337,7 @@ void readClassContainer<> ( vector<int>& c, tnstream& stream  )
 }
 
 template<>
-void writeClassContainer<> ( const vector<pair<int,int> >& c, tnstream& stream  )
+inline void writeClassContainer<> ( const vector<pair<int,int> >& c, tnstream& stream  )
 {
    stream.writeInt ( 1 );
    stream.writeInt ( c.size() );
@@ -350,7 +350,7 @@ void writeClassContainer<> ( const vector<pair<int,int> >& c, tnstream& stream  
 
 
 template<>
-void readClassContainer<> ( vector<pair<int,int> >& c, tnstream& stream  )
+inline void readClassContainer<> ( vector<pair<int,int> >& c, tnstream& stream  )
 {
    stream.readInt(); // version
    int num = stream.readInt();

@@ -91,9 +91,6 @@ PARAGUI_CONFIG = @PARAGUI_CONFIG@
 PARAGUI_LIBS = @PARAGUI_LIBS@
 PKG_CONFIG = @PKG_CONFIG@
 RANLIB = @RANLIB@
-SDLMM_CONFIG = @SDLMM_CONFIG@
-SDLMM_CXXFLAGS = @SDLMM_CXXFLAGS@
-SDLMM_LIBS = @SDLMM_LIBS@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
@@ -115,9 +112,7 @@ INCLUDES = -I$(top_builddir) -I$(top_src_dir) \
 
 SUBDIRS = mapeditor
 
-AM_CXXFLAGS = @SDL_CFLAGS@ @SDLMM_CXXFLAGS@ \
--Dsgmain  -DNEWKEYB @PARAGUI_CFLAGS@  @SIGC_CFLAGS@
-
+AM_CXXFLAGS = @SDL_CFLAGS@ -Dsgmain  -DNEWKEYB @PARAGUI_CFLAGS@  @SIGC_CFLAGS@
 
 bin_PROGRAMS = asc
 
@@ -138,7 +133,7 @@ gameevent_dialogs.cpp statisticdialog.cpp
 
 
 asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
-$(top_builddir)/source/ai/libai.la \
+$(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 $(top_builddir)/source/sdl/libsdl.la @PARAGUI_LIBS@ \
 @LDADDLIBBZ2@  @SIGC_LIBS@
 
@@ -178,6 +173,7 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) typen.$(OBJEXT) \
 asc_OBJECTS = $(am_asc_OBJECTS)
 asc_DEPENDENCIES = $(top_builddir)/source/libs/triangul/libtriangul.la \
 	$(top_builddir)/source/ai/libai.la \
+	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 	$(top_builddir)/source/sdl/libsdl.la
 asc_LDFLAGS =
 

@@ -1082,7 +1082,7 @@ bool Building::MiningStation :: run()
 
    if ( !justQuery) {
       for ( int r = 0; r < 3; ++r )
-         bld->getResource(consumed[r],r, 0 );
+         bld->getResource( int(consumed[r]), r, 0 );
       bld->putResource(actuallyExtracted, 0 );
    }
 
@@ -1130,19 +1130,19 @@ void Building::MiningStation :: testfield ( const MapCoordinate& mc )
                   perc = min  ( perc, float( double(powerAvail.resource(i)) / usageRatio[i] * toExtract_thisTurn.resource(r)));
 
             if ( !justQuery )
-               *fieldResource -= toExtract_thisTurn.resource(r) * perc * distEfficiency / resourceFactor ;
+               *fieldResource -= int( toExtract_thisTurn.resource(r) * perc * distEfficiency / resourceFactor );
 
-            int ex = ceil(toExtract_thisTurn.resource(r) * perc * distEfficiency);
+            int ex = int( ceil(toExtract_thisTurn.resource(r) * perc * distEfficiency));
             actuallyExtracted.resource(r) += ex;
             spaceAvail.resource(r) -= ex;
 
             for ( int i = 0; i < 3; i++ ) {
                float c = usageRatio[i] * toExtract_thisTurn.resource(r) * perc;
                consumed[i] += c;
-               powerAvail.resource(i) -= ceil(c);
+               powerAvail.resource(i) -= int( ceil(c) );
             }
 
-            toExtract_thisTurn.resource(r) -= toExtract_thisTurn.resource(r) * perc;
+            toExtract_thisTurn.resource(r) -= int( toExtract_thisTurn.resource(r) * perc);
 
 
             if ( !justQuery ) {
@@ -1174,7 +1174,7 @@ Resources Building::MiningStation :: getUsage()
 {
    Resources res;
    for ( int r = 0; r < 3; ++r)
-      res.resource(r) = ceil(consumed[r]);
+      res.resource(r) = int( ceil(consumed[r]));
    return res;
 }
 
@@ -1219,4 +1219,81 @@ void Building :: getresourceusage ( Resources* usage )
    }
 }
 */
+
+
+
+   struct  ResearchEfficiency {
+               float eff;
+               pbuilding  bld;
+               bool operator<( const ResearchEfficiency& re) const { return eff > re.eff; };
+           };
+
+
+void doresearch ( tmap* actmap, int player )
+{
+
+   typedef vector<ResearchEfficiency> VRE;
+   VRE vre;
+
+   for ( tmap::Player::BuildingList::iterator bi = actmap->player[player].buildingList.begin(); bi != actmap->player[player].buildingList.end(); bi++ ) {
+      pbuilding bld = *bi;
+      if ( bld->typ->special & cgresearchb ) {
+         Resources res = returnResourcenUseForResearch ( bld, bld->researchpoints );
+
+         int m = max ( res.energy, max ( res.material, res.fuel));
+
+         ResearchEfficiency re;
+         if ( m )
+            re.eff = float(bld->researchpoints) / float(m);
+         else
+            re.eff = maxint;
+
+         re.bld = bld;
+
+         vre.push_back(re);
+      }
+   }
+   sort( vre.begin(), vre.end());
+
+   for ( VRE::iterator i = vre.begin(); i != vre.end(); ++i ) {
+      pbuilding bld = i->bld;
+      Resources r = returnResourcenUseForResearch ( bld, bld->researchpoints );
+      Resources got = bld->getResource ( r, 1 );
+
+      int res = bld->researchpoints;
+      if ( got < r ) {
+         int diff = bld->researchpoints / 2;
+         while ( got < r || diff > 1) {
+            if ( got < r  )
+               res -= diff;
+            else
+               res += diff;
+
+            if ( diff > 1 )
+               diff /=2;
+            else
+               diff = 1;
+
+            r = returnResourcenUseForResearch ( bld, res );
+         }
+
+         /*
+         res = returnResourcenUseForResearch ( bld, res+1 );
+
+         if ( ena >= energy  &&  maa >= material )
+            res++;
+         else
+            returnresourcenuseforresearch ( bld, res, &energy, &material );
+         */
+
+      }
+
+      got = bld->getResource ( r, 0 );
+
+      if ( got < r )
+         fatalError( "controls : doresearch : inconsistency in getting energy or material for building" );
+
+      actmap->player[player].research.progress += res;
+   }
+}
 

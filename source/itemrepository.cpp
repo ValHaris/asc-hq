@@ -64,7 +64,7 @@ void duplicateIDError ( const ASCString& itemtype, int id, const ASCString& file
 template<class T>
 void ItemRepository<T>::add( T* obj )
 {
-   ObjectMap::iterator i = hash.find ( obj->id );
+   typename ObjectMap::iterator i = hash.find ( obj->id );
    if ( i != hash.end() && i->second )
      duplicateIDError ( typeName, obj->id, obj->location, obj->name, i->second->location, i->second->name );
 
@@ -112,7 +112,7 @@ void ItemRepository<T>::write( tnstream& stream )
 {
    stream.writeInt( 1 );
    stream.writeInt( container.size() );
-   for ( vector<T*>::iterator i = container.begin(); i != container.end(); ++i )
+   for ( typename vector<T*>::iterator i = container.begin(); i != container.end(); ++i )
        (*i)->write( stream );
 }
 
