@@ -9,7 +9,8 @@ Here are some libraries that are used by ASC:
            http://www.asc-hq.org/jpeg_ascdos_bin.zip
         and the source code at
            http://www.asc-hq.org/jpeg_ascdos_src.zip
- STL    is not included any more.
+ STL    is not included any more. For the DOS-Version, get STLPORT from
+        www.stlport.org
  triangul  a polygon triangulation library. Used by DOS and Linux version
  
  

@@ -1,16 +1,20 @@
 <HTML>
 <HEAD>
-<!-- This HTML file has been created by texi2html 1.51
-     from manual.texi on 22 October 1998 -->
+<!-- This HTML file has been created by texi2html 1.54
+     from manual.texi on 23 March 2000 -->
 
 <TITLE>bzip2 and libbzip2 - Programming with libbzip2</TITLE>
+<link href="manual_4.html" rel=Next>
+<link href="manual_2.html" rel=Previous>
+<link href="manual_toc.html" rel=ToC>
+
 </HEAD>
 <BODY>
-Go to the <A HREF="manual_1.html">first</A>, <A HREF="manual_2.html">previous</A>, <A HREF="manual_4.html">next</A>, <A HREF="manual_4.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<p>Go to the <A HREF="manual_1.html">first</A>, <A HREF="manual_2.html">previous</A>, <A HREF="manual_4.html">next</A>, <A HREF="manual_4.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
 <P><HR><P>
 
 
-<H1><A NAME="SEC3" HREF="manual_toc.html#TOC3">Programming with <CODE>libbzip2</CODE></A></H1>
+<H1><A NAME="SEC12" HREF="manual_toc.html#TOC12">Programming with <CODE>libbzip2</CODE></A></H1>
 
 <P>
 This chapter describes the programming interface to <CODE>libbzip2</CODE>.
@@ -24,7 +28,7 @@ as well.
 </P>
 
 
-<H2><A NAME="SEC4" HREF="manual_toc.html#TOC4">Top-level structure</A></H2>
+<H2><A NAME="SEC13" HREF="manual_toc.html#TOC13">Top-level structure</A></H2>
 
 <P>
 <CODE>libbzip2</CODE> is a flexible library for compressing and decompressing
@@ -40,9 +44,15 @@ that of Jean-loup Gailly's and Mark Adler's excellent <CODE>zlib</CODE>
 library.
 
 </P>
+<P>
+All externally visible symbols have names beginning <CODE>BZ2_</CODE>.
+This is new in version 1.0.  The intention is to minimise pollution
+of the namespaces of library clients.
+
+</P>
 
 
-<H3><A NAME="SEC5" HREF="manual_toc.html#TOC5">Low-level summary</A></H3>
+<H3><A NAME="SEC14" HREF="manual_toc.html#TOC14">Low-level summary</A></H3>
 
 <P>
 This interface provides services for compressing and decompressing
@@ -59,10 +69,10 @@ is therefore thread-safe.
 </P>
 <P>
 Six routines make up the low level interface: 
-<CODE>bzCompressInit</CODE>, <CODE>bzCompress</CODE>, and <BR> <CODE>bzCompressEnd</CODE>
+<CODE>BZ2_bzCompressInit</CODE>, <CODE>BZ2_bzCompress</CODE>, and <BR> <CODE>BZ2_bzCompressEnd</CODE>
 for compression,
-and a corresponding trio <CODE>bzDecompressInit</CODE>, <BR> <CODE>bzDecompress</CODE>
-and <CODE>bzDecompressEnd</CODE> for decompression.  
+and a corresponding trio <CODE>BZ2_bzDecompressInit</CODE>, <BR> <CODE>BZ2_bzDecompress</CODE>
+and <CODE>BZ2_bzDecompressEnd</CODE> for decompression.  
 The <CODE>*Init</CODE> functions allocate
 memory for compression/decompression and do other
 initialisations, whilst the <CODE>*End</CODE> functions close down operations
@@ -70,8 +80,8 @@ and release memory.
 
 </P>
 <P>
-The real work is done by <CODE>bzCompress</CODE> and <CODE>bzDecompress</CODE>.  
-These compress/decompress data from a user-supplied input buffer
+The real work is done by <CODE>BZ2_bzCompress</CODE> and <CODE>BZ2_bzDecompress</CODE>.  
+These compress and decompress data from a user-supplied input buffer
 to a user-supplied output buffer.  These buffers can be any size;
 arbitrary quantities of data are handled by making repeated calls
 to these functions.  This is a flexible mechanism allowing a 
@@ -82,7 +92,7 @@ both.
 
 
 
-<H3><A NAME="SEC6" HREF="manual_toc.html#TOC6">High-level summary</A></H3>
+<H3><A NAME="SEC15" HREF="manual_toc.html#TOC15">High-level summary</A></H3>
 
 <P>
 This interface provides some handy wrappers around the low-level
@@ -94,10 +104,10 @@ multiple <CODE>bzip2</CODE> data streams concatenated end-to-end.
 
 </P>
 <P>
-For reading files, <CODE>bzReadOpen</CODE>, <CODE>bzRead</CODE>, <CODE>bzReadClose</CODE>
-and <CODE>bzReadGetUnused</CODE> are supplied.  For writing files,
-<CODE>bzWriteOpen</CODE>, <CODE>bzWrite</CODE> and <CODE>bzWriteFinish</CODE> are
-available.
+For reading files, <CODE>BZ2_bzReadOpen</CODE>, <CODE>BZ2_bzRead</CODE>,
+<CODE>BZ2_bzReadClose</CODE> and <BR> <CODE>BZ2_bzReadGetUnused</CODE> are supplied.  For
+writing files, <CODE>BZ2_bzWriteOpen</CODE>, <CODE>BZ2_bzWrite</CODE> and
+<CODE>BZ2_bzWriteFinish</CODE> are available.
 
 </P>
 <P>
@@ -111,7 +121,7 @@ supports <CODE>errno</CODE> in a multithreaded environment.
 </P>
 <P>
 To make the library a little simpler and more portable,
-<CODE>bzReadOpen</CODE> and <CODE>bzWriteOpen</CODE> require you to pass them file
+<CODE>BZ2_bzReadOpen</CODE> and <CODE>BZ2_bzWriteOpen</CODE> require you to pass them file
 handles (<CODE>FILE*</CODE>s) which have previously been opened for reading or
 writing respectively.  That avoids portability problems associated with
 file operations and file attributes, whilst not being much of an
@@ -121,10 +131,10 @@ imposition on the programmer.
 
 
 
-<H3><A NAME="SEC7" HREF="manual_toc.html#TOC7">Utility functions summary</A></H3>
+<H3><A NAME="SEC16" HREF="manual_toc.html#TOC16">Utility functions summary</A></H3>
 <P>
-For very simple needs, <CODE>bzBuffToBuffCompress</CODE> and
-<CODE>bzBuffToBuffDecompress</CODE> are provided.  These compress
+For very simple needs, <CODE>BZ2_bzBuffToBuffCompress</CODE> and
+<CODE>BZ2_bzBuffToBuffDecompress</CODE> are provided.  These compress
 data in memory from one buffer to another buffer in a single
 function call.  You should assess whether these functions
 fulfill your memory-to-memory compression/decompression
@@ -136,12 +146,12 @@ general but more complex low-level interface.
 Yoshioka Tsuneo (<CODE>QWF00133@niftyserve.or.jp</CODE> /
 <CODE>tsuneo-y@is.aist-nara.ac.jp</CODE>) has contributed some functions to
 give better <CODE>zlib</CODE> compatibility.  These functions are
-<CODE>bzopen</CODE>, <CODE>bzread</CODE>, <CODE>bzwrite</CODE>, <CODE>bzflush</CODE>,
-<CODE>bzclose</CODE>,
-<CODE>bzerror</CODE> and <CODE>bzlibVersion</CODE>.  You may find these functions
+<CODE>BZ2_bzopen</CODE>, <CODE>BZ2_bzread</CODE>, <CODE>BZ2_bzwrite</CODE>, <CODE>BZ2_bzflush</CODE>,
+<CODE>BZ2_bzclose</CODE>,
+<CODE>BZ2_bzerror</CODE> and <CODE>BZ2_bzlibVersion</CODE>.  You may find these functions
 more convenient for simple file reading and writing, than those in the
 high-level interface.  These functions are not (yet) officially part of
-the library, and are not further documented here.  If they break, you
+the library, and are minimally documented here.  If they break, you
 get to keep all the pieces.  I hope to document them properly when time
 permits.
 
@@ -154,7 +164,7 @@ built as a Windows DLL.
 
 
 
-<H2><A NAME="SEC8" HREF="manual_toc.html#TOC8">Error handling</A></H2>
+<H2><A NAME="SEC17" HREF="manual_toc.html#TOC17">Error handling</A></H2>
 
 <P>
 The library is designed to recover cleanly in all situations, including
@@ -164,6 +174,17 @@ a signal handler to catch segmentation violations during decompression
 if you are feeling especially paranoid.  I would be interested in
 hearing more about the robustness of the library to corrupted
 compressed data.
+
+</P>
+<P>
+Version 1.0 is much more robust in this respect than
+0.9.0 or 0.9.5.  Investigations with Checker (a tool for 
+detecting problems with memory management, similar to Purify)
+indicate that, at least for the few files I tested, all single-bit
+errors in the decompressed data are caught properly, with no
+segmentation faults, no reads of uninitialised data and no 
+out of range reads or writes.  So it's certainly much improved,
+although I wouldn't claim it to be totally bombproof.
 
 </P>
 <P>
@@ -190,7 +211,7 @@ The requested action was completed successfully.
 <DD>
 <DT><CODE>BZ_FINISH_OK</CODE>
 <DD>
-In <CODE>bzCompress</CODE>, the requested flush/finish/nothing-special action
+In <CODE>BZ2_bzCompress</CODE>, the requested flush/finish/nothing-special action
 was completed successfully.
 <DT><CODE>BZ_STREAM_END</CODE>
 <DD>
@@ -202,6 +223,17 @@ detected during decompression.
 The following return values indicate an error of some kind.
 <DL COMPACT>
 
+<DT><CODE>BZ_CONFIG_ERROR</CODE>
+<DD>
+Indicates that the library has been improperly compiled on your
+platform -- a major configuration error.  Specifically, it means
+that <CODE>sizeof(char)</CODE>, <CODE>sizeof(short)</CODE> and <CODE>sizeof(int)</CODE>
+are not 1, 2 and 4 respectively, as they should be.  Note that the 
+library should still work properly on 64-bit platforms which follow
+the LP64 programming model -- that is, where <CODE>sizeof(long)</CODE>
+and <CODE>sizeof(void*)</CODE> are 8.  Under LP64, <CODE>sizeof(int)</CODE> is
+still 4, so <CODE>libbzip2</CODE>, which doesn't use the <CODE>long</CODE> type,
+is OK.
 <DT><CODE>BZ_SEQUENCE_ERROR</CODE>
 <DD>
 When using the library, it is important to call the functions in the
@@ -222,10 +254,10 @@ making.
 <DD>
 Returned when a request to allocate memory failed.  Note that the
 quantity of memory needed to decompress a stream cannot be determined
-until the stream's header has been read.  So <CODE>bzDecompress</CODE> and
-<CODE>bzRead</CODE> may return <CODE>BZ_MEM_ERROR</CODE> even though some of
+until the stream's header has been read.  So <CODE>BZ2_bzDecompress</CODE> and
+<CODE>BZ2_bzRead</CODE> may return <CODE>BZ_MEM_ERROR</CODE> even though some of
 the compressed data has been read.  The same is not true for
-compression; once <CODE>bzCompressInit</CODE> or <CODE>bzWriteOpen</CODE> have
+compression; once <CODE>BZ2_bzCompressInit</CODE> or <CODE>BZ2_bzWriteOpen</CODE> have
 successfully completed, <CODE>BZ_MEM_ERROR</CODE> cannot occur.
 <DT><CODE>BZ_DATA_ERROR</CODE>
 <DD>
@@ -240,42 +272,44 @@ know when the compressed stream does not start with the correct
 magic bytes (<CODE>'B' 'Z' 'h'</CODE>).  
 <DT><CODE>BZ_IO_ERROR</CODE>
 <DD>
-Returned by <CODE>bzRead</CODE> and <CODE>bzRead</CODE> when there is an error
-reading or writing in the compressed file, and by <CODE>bzReadOpen</CODE>
-and <CODE>bzWriteOpen</CODE> for attempts to use a file for which the
+Returned by <CODE>BZ2_bzRead</CODE> and <CODE>BZ2_bzWrite</CODE> when there is an error
+reading or writing in the compressed file, and by <CODE>BZ2_bzReadOpen</CODE>
+and <CODE>BZ2_bzWriteOpen</CODE> for attempts to use a file for which the
 error indicator (viz, <CODE>ferror(f)</CODE>) is set.
 On receipt of <CODE>BZ_IO_ERROR</CODE>, the caller should consult
 <CODE>errno</CODE> and/or <CODE>perror</CODE> to acquire operating-system
 specific information about the problem.
 <DT><CODE>BZ_UNEXPECTED_EOF</CODE>
 <DD>
-Returned by <CODE>bzRead</CODE> when the compressed file finishes
+Returned by <CODE>BZ2_bzRead</CODE> when the compressed file finishes
 before the logical end of stream is detected.
 <DT><CODE>BZ_OUTBUFF_FULL</CODE>
 <DD>
-Returned by <CODE>bzBuffToBuffCompress</CODE> and
-<CODE>bzBuffToBuffDecompress</CODE> to indicate that the output data
+Returned by <CODE>BZ2_bzBuffToBuffCompress</CODE> and
+<CODE>BZ2_bzBuffToBuffDecompress</CODE> to indicate that the output data
 will not fit into the output buffer provided.
 </DL>
 
 
 
-<H2><A NAME="SEC9" HREF="manual_toc.html#TOC9">Low-level interface</A></H2>
+<H2><A NAME="SEC18" HREF="manual_toc.html#TOC18">Low-level interface</A></H2>
 
 
 
-<H3><A NAME="SEC10" HREF="manual_toc.html#TOC10"><CODE>bzCompressInit</CODE></A></H3>
+<H3><A NAME="SEC19" HREF="manual_toc.html#TOC19"><CODE>BZ2_bzCompressInit</CODE></A></H3>
 
 <PRE>
 typedef 
    struct {
       char *next_in;
       unsigned int avail_in;
-      unsigned int total_in;
+      unsigned int total_in_lo32;
+      unsigned int total_in_hi32;
 
       char *next_out;
       unsigned int avail_out;
-      unsigned int total_out;
+      unsigned int total_out_lo32;
+      unsigned int total_out_hi32;
 
       void *state;
 
@@ -285,10 +319,10 @@ typedef
    } 
    bz_stream;
 
-int bzCompressInit ( bz_stream *strm, 
-                     int blockSize100k, 
-                     int verbosity,
-                     int workFactor );
+int BZ2_bzCompressInit ( bz_stream *strm, 
+                         int blockSize100k, 
+                         int verbosity,
+                         int workFactor );
 
 </PRE>
 
@@ -325,14 +359,19 @@ routines.
 
 </P>
 <P>
-Before calling <CODE>bzCompressInit</CODE>, fields <CODE>bzalloc</CODE>, 
+Before calling <CODE>BZ2_bzCompressInit</CODE>, fields <CODE>bzalloc</CODE>, 
 <CODE>bzfree</CODE> and <CODE>opaque</CODE> should
 be filled appropriately, as just described.  Upon return, the internal
-state will have been allocated and initialised, and <CODE>total_in</CODE> and 
-<CODE>total_out</CODE> will have been set to zero.  
-These last two fields are used by the library
+state will have been allocated and initialised, and <CODE>total_in_lo32</CODE>, 
+<CODE>total_in_hi32</CODE>, <CODE>total_out_lo32</CODE> and 
+<CODE>total_out_hi32</CODE> will have been set to zero.  
+These four fields are used by the library
 to inform the caller of the total amount of data passed into and out of
 the library, respectively.  You should not try to change them.
+As of version 1.0, 64-bit counts are maintained, even on 32-bit
+platforms, using the <CODE>_hi32</CODE> fields to store the upper 32 bits
+of the count.  So, for example, the total amount of data in
+is <CODE>(total_in_hi32 &#60;&#60; 32) + total_in_lo32</CODE>.
 
 </P>
 <P>
@@ -352,35 +391,47 @@ setting.
 </P>
 <P>
 Parameter <CODE>workFactor</CODE> controls how the compression phase behaves
-when presented with worst case, highly repetitive, input data.
-If compression runs into difficulties caused by repetitive data,
-some pseudo-random variations are inserted into the block, and
-compression is restarted.  Lower values of <CODE>workFactor</CODE>
-reduce the tolerance of compression to repetitive data.
-You should set this parameter carefully; too low, and 
-compression ratio suffers, too high, and your average-to-worst
-case compression times can become very large.  
-The default value of 30
-gives reasonable behaviour over a wide range of circumstances.
+when presented with worst case, highly repetitive, input data.  If
+compression runs into difficulties caused by repetitive data, the
+library switches from the standard sorting algorithm to a fallback
+algorithm.  The fallback is slower than the standard algorithm by
+perhaps a factor of three, but always behaves reasonably, no matter how
+bad the input.
 
 </P>
 <P>
-Allowable values range from 0 to 250 inclusive.  0 is a special
-case, equivalent to using the default value of 30.
+Lower values of <CODE>workFactor</CODE> reduce the amount of effort the
+standard algorithm will expend before resorting to the fallback.  You
+should set this parameter carefully; too low, and many inputs will be
+handled by the fallback algorithm and so compress rather slowly, too
+high, and your average-to-worst case compression times can become very
+large.  The default value of 30 gives reasonable behaviour over a wide
+range of circumstances.
 
 </P>
 <P>
-Note that the randomisation process is entirely transparent.  
-If the library decides to randomise and restart compression on a
-block, it does so without comment.  Randomised blocks are
-automatically de-randomised during decompression, so data
-integrity is never compromised.
+Allowable values range from 0 to 250 inclusive.  0 is a special case,
+equivalent to using the default value of 30.
+
+</P>
+<P>
+Note that the compressed output generated is the same regardless of
+whether or not the fallback algorithm is used.
+
+</P>
+<P>
+Be aware also that this parameter may disappear entirely in future
+versions of the library.  In principle it should be possible to devise a
+good way to automatically choose which algorithm to use.  Such a
+mechanism would render the parameter obsolete.
 
 </P>
 <P>
 Possible return values:
 
 <PRE>
+      <CODE>BZ_CONFIG_ERROR</CODE>
+         if the library has been mis-compiled
       <CODE>BZ_PARAM_ERROR</CODE> 
          if <CODE>strm</CODE> is <CODE>NULL</CODE> 
          or <CODE>blockSize</CODE> &#60; 1 or <CODE>blockSize</CODE> &#62; 9
@@ -396,29 +447,29 @@ Possible return values:
 Allowable next actions:
 
 <PRE>
-      <CODE>bzCompress</CODE> 
+      <CODE>BZ2_bzCompress</CODE> 
          if <CODE>BZ_OK</CODE> is returned
       no specific action needed in case of error
 </PRE>
 
 
 
-<H3><A NAME="SEC11" HREF="manual_toc.html#TOC11"><CODE>bzCompress</CODE></A></H3>
+<H3><A NAME="SEC20" HREF="manual_toc.html#TOC20"><CODE>BZ2_bzCompress</CODE></A></H3>
 
 <PRE>
-   int bzCompress ( bz_stream *strm, int action );
+   int BZ2_bzCompress ( bz_stream *strm, int action );
 </PRE>
 
 <P>
 Provides more input and/or output buffer space for the library.  The
-caller maintains input and output buffers, and calls <CODE>bzCompress</CODE> to
+caller maintains input and output buffers, and calls <CODE>BZ2_bzCompress</CODE> to
 transfer data between them.
 
 </P>
 <P>
-Before each call to <CODE>bzCompress</CODE>, <CODE>next_in</CODE> should point at
+Before each call to <CODE>BZ2_bzCompress</CODE>, <CODE>next_in</CODE> should point at
 the data to be compressed, and <CODE>avail_in</CODE> should indicate how many
-bytes the library may read.  <CODE>bzCompress</CODE> updates <CODE>next_in</CODE>,
+bytes the library may read.  <CODE>BZ2_bzCompress</CODE> updates <CODE>next_in</CODE>,
 <CODE>avail_in</CODE> and <CODE>total_in</CODE> to reflect the number of bytes it
 has read.
 
@@ -426,34 +477,34 @@ has read.
 <P>
 Similarly, <CODE>next_out</CODE> should point to a buffer in which the
 compressed data is to be placed, with <CODE>avail_out</CODE> indicating how
-much output space is available.  <CODE>bzCompress</CODE> updates
+much output space is available.  <CODE>BZ2_bzCompress</CODE> updates
 <CODE>next_out</CODE>, <CODE>avail_out</CODE> and <CODE>total_out</CODE> to reflect the
 number of bytes output.
 
 </P>
 <P>
 You may provide and remove as little or as much data as you like on each
-call of <CODE>bzCompress</CODE>.  In the limit, it is acceptable to supply and
+call of <CODE>BZ2_bzCompress</CODE>.  In the limit, it is acceptable to supply and
 remove data one byte at a time, although this would be terribly
 inefficient.  You should always ensure that at least one byte of output
 space is available at each call.
 
 </P>
 <P>
-A second purpose of <CODE>bzCompress</CODE> is to request a change of mode of the
+A second purpose of <CODE>BZ2_bzCompress</CODE> is to request a change of mode of the
 compressed stream.  
 
 </P>
 <P>
 Conceptually, a compressed stream can be in one of four states: IDLE,
 RUNNING, FLUSHING and FINISHING.  Before initialisation
-(<CODE>bzCompressInit</CODE>) and after termination (<CODE>bzCompressEnd</CODE>), a
+(<CODE>BZ2_bzCompressInit</CODE>) and after termination (<CODE>BZ2_bzCompressEnd</CODE>), a
 stream is regarded as IDLE.
 
 </P>
 <P>
-Upon initialisation (<CODE>bzCompressInit</CODE>), the stream is placed in the
-RUNNING state.  Subsequent calls to <CODE>bzCompress</CODE> should pass
+Upon initialisation (<CODE>BZ2_bzCompressInit</CODE>), the stream is placed in the
+RUNNING state.  Subsequent calls to <CODE>BZ2_bzCompress</CODE> should pass
 <CODE>BZ_RUN</CODE> as the requested action; other actions are illegal and
 will result in <CODE>BZ_SEQUENCE_ERROR</CODE>.
 
@@ -462,31 +513,31 @@ will result in <CODE>BZ_SEQUENCE_ERROR</CODE>.
 At some point, the calling program will have provided all the input data
 it wants to.  It will then want to finish up -- in effect, asking the
 library to process any data it might have buffered internally.  In this
-state, <CODE>bzCompress</CODE> will no longer attempt to read data from
+state, <CODE>BZ2_bzCompress</CODE> will no longer attempt to read data from
 <CODE>next_in</CODE>, but it will want to write data to <CODE>next_out</CODE>.
 Because the output buffer supplied by the user can be arbitrarily small,
 the finishing-up operation cannot necessarily be done with a single call
-of <CODE>bzCompress</CODE>.
+of <CODE>BZ2_bzCompress</CODE>.
 
 </P>
 <P>
 Instead, the calling program passes <CODE>BZ_FINISH</CODE> as an action to
-<CODE>bzCompress</CODE>.  This changes the stream's state to FINISHING.  Any
+<CODE>BZ2_bzCompress</CODE>.  This changes the stream's state to FINISHING.  Any
 remaining input (ie, <CODE>next_in[0 .. avail_in-1]</CODE>) is compressed and
-transferred to the output buffer.  To do this, <CODE>bzCompress</CODE> must be
+transferred to the output buffer.  To do this, <CODE>BZ2_bzCompress</CODE> must be
 called repeatedly until all the output has been consumed.  At that
-point, <CODE>bzCompress</CODE> returns <CODE>BZ_STREAM_END</CODE>, and the stream's
-state is set back to IDLE.  <CODE>bzCompressEnd</CODE> should then be
+point, <CODE>BZ2_bzCompress</CODE> returns <CODE>BZ_STREAM_END</CODE>, and the stream's
+state is set back to IDLE.  <CODE>BZ2_bzCompressEnd</CODE> should then be
 called.
 
 </P>
 <P>
 Just to make sure the calling program does not cheat, the library makes
 a note of <CODE>avail_in</CODE> at the time of the first call to
-<CODE>bzCompress</CODE> which has <CODE>BZ_FINISH</CODE> as an action (ie, at the
+<CODE>BZ2_bzCompress</CODE> which has <CODE>BZ_FINISH</CODE> as an action (ie, at the
 time the program has announced its intention to not supply any more
 input).  By comparing this value with that of <CODE>avail_in</CODE> over
-subsequent calls to <CODE>bzCompress</CODE>, the library can detect any
+subsequent calls to <CODE>BZ2_bzCompress</CODE>, the library can detect any
 attempts to slip in more data to compress.  Any calls for which this is
 detected will return <CODE>BZ_SEQUENCE_ERROR</CODE>.  This indicates a
 programming mistake which should be corrected.
@@ -494,13 +545,13 @@ programming mistake which should be corrected.
 </P>
 <P>
 Instead of asking to finish, the calling program may ask
-<CODE>bzCompress</CODE> to take all the remaining input, compress it and
+<CODE>BZ2_bzCompress</CODE> to take all the remaining input, compress it and
 terminate the current (Burrows-Wheeler) compression block.  This could
 be useful for error control purposes.  The mechanism is analogous to
-that for finishing: call <CODE>bzCompress</CODE> with an action of
+that for finishing: call <CODE>BZ2_bzCompress</CODE> with an action of
 <CODE>BZ_FLUSH</CODE>, remove output data, and persist with the
 <CODE>BZ_FLUSH</CODE> action until the value <CODE>BZ_RUN</CODE> is returned.  As
-with finishing, <CODE>bzCompress</CODE> detects any attempt to provide more
+with finishing, <CODE>BZ2_bzCompress</CODE> detects any attempt to provide more
 input data once the flush has begun.
 
 </P>
@@ -515,12 +566,12 @@ which shows which actions are allowable in each state, what action
 will be taken, what the next state is, and what the non-error return
 values are.  Note that you can't explicitly ask what state the
 stream is in, but nor do you need to -- it can be inferred from the
-values returned by <CODE>bzCompress</CODE>.
+values returned by <CODE>BZ2_bzCompress</CODE>.
 
 <PRE>
 IDLE/<CODE>any</CODE>           
-      Illegal.  IDLE state only exists after <CODE>bzCompressEnd</CODE> or
-      before <CODE>bzCompressInit</CODE>.
+      Illegal.  IDLE state only exists after <CODE>BZ2_bzCompressEnd</CODE> or
+      before <CODE>BZ2_bzCompressInit</CODE>.
       Return value = <CODE>BZ_SEQUENCE_ERROR</CODE>
 
 RUNNING/<CODE>BZ_RUN</CODE>     
@@ -572,29 +623,29 @@ That still looks complicated?  Well, fair enough.  The usual sequence
 of calls for compressing a load of data is:
 
 <UL>
-<LI>Get started with <CODE>bzCompressInit</CODE>.
+<LI>Get started with <CODE>BZ2_bzCompressInit</CODE>.
 
 <LI>Shovel data in and shlurp out its compressed form using zero or more
 
-calls of <CODE>bzCompress</CODE> with action = <CODE>BZ_RUN</CODE>.
+calls of <CODE>BZ2_bzCompress</CODE> with action = <CODE>BZ_RUN</CODE>.
 <LI>Finish up.
 
-Repeatedly call <CODE>bzCompress</CODE> with action = <CODE>BZ_FINISH</CODE>, 
+Repeatedly call <CODE>BZ2_bzCompress</CODE> with action = <CODE>BZ_FINISH</CODE>, 
 copying out the compressed output, until <CODE>BZ_STREAM_END</CODE> is returned.
-<LI>Close up and go home.  Call <CODE>bzCompressEnd</CODE>.
+<LI>Close up and go home.  Call <CODE>BZ2_bzCompressEnd</CODE>.
 
 </UL>
 
 <P>
 If the data you want to compress fits into your input buffer all
-at once, you can skip the calls of <CODE>bzCompress ( ..., BZ_RUN )</CODE> and 
-just do the <CODE>bzCompress ( ..., BZ_FINISH )</CODE> calls.
+at once, you can skip the calls of <CODE>BZ2_bzCompress ( ..., BZ_RUN )</CODE> and 
+just do the <CODE>BZ2_bzCompress ( ..., BZ_FINISH )</CODE> calls.
 
 </P>
 <P>
-All required memory is allocated by <CODE>bzCompressInit</CODE>.  The
+All required memory is allocated by <CODE>BZ2_bzCompressInit</CODE>.  The
 compression library can accept any data at all (obviously).  So you
-shouldn't get any error return values from the <CODE>bzCompress</CODE> calls.
+shouldn't get any error return values from the <CODE>BZ2_bzCompress</CODE> calls.
 If you do, they will be <CODE>BZ_SEQUENCE_ERROR</CODE>, and indicate a bug in
 your programming.
 
@@ -609,10 +660,10 @@ Trivial other possible return values:
 
 
 
-<H3><A NAME="SEC12" HREF="manual_toc.html#TOC12"><CODE>bzCompressEnd</CODE></A></H3>
+<H3><A NAME="SEC21" HREF="manual_toc.html#TOC21"><CODE>BZ2_bzCompressEnd</CODE></A></H3>
 
 <PRE>
-int bzCompressEnd ( bz_stream *strm );
+int BZ2_bzCompressEnd ( bz_stream *strm );
 </PRE>
 
 <P>
@@ -629,14 +680,14 @@ Possible return values:
 
 
 
-<H3><A NAME="SEC13" HREF="manual_toc.html#TOC13"><CODE>bzDecompressInit</CODE></A></H3>
+<H3><A NAME="SEC22" HREF="manual_toc.html#TOC22"><CODE>BZ2_bzDecompressInit</CODE></A></H3>
 
 <PRE>
-int bzDecompressInit ( bz_stream *strm, int verbosity, int small );
+int BZ2_bzDecompressInit ( bz_stream *strm, int verbosity, int small );
 </PRE>
 
 <P>
-Prepares for decompression.  As with <CODE>bzCompressInit</CODE>, a
+Prepares for decompression.  As with <CODE>BZ2_bzCompressInit</CODE>, a
 <CODE>bz_stream</CODE> record should be allocated and initialised before the
 call.  Fields <CODE>bzalloc</CODE>, <CODE>bzfree</CODE> and <CODE>opaque</CODE> should be
 set if a custom memory allocator is required, or made <CODE>NULL</CODE> for
@@ -646,7 +697,7 @@ state will have been initialised, and <CODE>total_in</CODE> and
 
 </P>
 <P>
-For the meaning of parameter <CODE>verbosity</CODE>, see <CODE>bzCompressInit</CODE>.
+For the meaning of parameter <CODE>verbosity</CODE>, see <CODE>BZ2_bzCompressInit</CODE>.
 
 </P>
 <P>
@@ -660,14 +711,16 @@ more information on memory management.
 <P>
 Note that the amount of memory needed to decompress
 a stream cannot be determined until the stream's header has been read,
-so even if <CODE>bzDecompressInit</CODE> succeeds, a subsequent
-<CODE>bzDecompress</CODE> could fail with <CODE>BZ_MEM_ERROR</CODE>.
+so even if <CODE>BZ2_bzDecompressInit</CODE> succeeds, a subsequent
+<CODE>BZ2_bzDecompress</CODE> could fail with <CODE>BZ_MEM_ERROR</CODE>.
 
 </P>
 <P>
 Possible return values:
 
 <PRE>
+      <CODE>BZ_CONFIG_ERROR</CODE>
+         if the library has been mis-compiled
       <CODE>BZ_PARAM_ERROR</CODE>
          if <CODE>(small != 0 &#38;&#38; small != 1)</CODE>
          or <CODE>(verbosity &#60; 0 || verbosity &#62; 4)</CODE>
@@ -679,7 +732,7 @@ Possible return values:
 Allowable next actions:
 
 <PRE>
-      <CODE>bzDecompress</CODE>
+      <CODE>BZ2_bzDecompress</CODE>
          if <CODE>BZ_OK</CODE> was returned
       no specific action required in case of error
 </PRE>
@@ -690,23 +743,23 @@ Allowable next actions:
 </P>
 
 
-<H3><A NAME="SEC14" HREF="manual_toc.html#TOC14"><CODE>bzDecompress</CODE></A></H3>
+<H3><A NAME="SEC23" HREF="manual_toc.html#TOC23"><CODE>BZ2_bzDecompress</CODE></A></H3>
 
 <PRE>
-int bzDecompress ( bz_stream *strm );
+int BZ2_bzDecompress ( bz_stream *strm );
 </PRE>
 
 <P>
 Provides more input and/out output buffer space for the library.  The
-caller maintains input and output buffers, and uses <CODE>bzDecompress</CODE>
+caller maintains input and output buffers, and uses <CODE>BZ2_bzDecompress</CODE>
 to transfer data between them.
 
 </P>
 <P>
-Before each call to <CODE>bzDecompress</CODE>, <CODE>next_in</CODE> 
+Before each call to <CODE>BZ2_bzDecompress</CODE>, <CODE>next_in</CODE> 
 should point at the compressed data,
 and <CODE>avail_in</CODE> should indicate how many bytes the library
-may read.  <CODE>bzDecompress</CODE> updates <CODE>next_in</CODE>, <CODE>avail_in</CODE> 
+may read.  <CODE>BZ2_bzDecompress</CODE> updates <CODE>next_in</CODE>, <CODE>avail_in</CODE> 
 and <CODE>total_in</CODE>
 to reflect the number of bytes it has read.
 
@@ -714,14 +767,14 @@ to reflect the number of bytes it has read.
 <P>
 Similarly, <CODE>next_out</CODE> should point to a buffer in which the uncompressed
 output is to be placed, with <CODE>avail_out</CODE> indicating how much output space
-is available.  <CODE>bzCompress</CODE> updates <CODE>next_out</CODE>,
+is available.  <CODE>BZ2_bzCompress</CODE> updates <CODE>next_out</CODE>,
 <CODE>avail_out</CODE> and <CODE>total_out</CODE> to reflect
 the number of bytes output.
 
 </P>
 <P>
 You may provide and remove as little or as much data as you like on
-each call of <CODE>bzDecompress</CODE>.  
+each call of <CODE>BZ2_bzDecompress</CODE>.  
 In the limit, it is acceptable to
 supply and remove data one byte at a time, although this would be
 terribly inefficient.  You should always ensure that at least one
@@ -729,23 +782,23 @@ byte of output space is available at each call.
 
 </P>
 <P>
-Use of <CODE>bzDecompress</CODE> is simpler than <CODE>bzCompress</CODE>.
+Use of <CODE>BZ2_bzDecompress</CODE> is simpler than <CODE>BZ2_bzCompress</CODE>.
 
 </P>
 <P>
 You should provide input and remove output as described above, and
-repeatedly call <CODE>bzDecompress</CODE> until <CODE>BZ_STREAM_END</CODE> is
+repeatedly call <CODE>BZ2_bzDecompress</CODE> until <CODE>BZ_STREAM_END</CODE> is
 returned.  Appearance of <CODE>BZ_STREAM_END</CODE> denotes that
-<CODE>bzDecompress</CODE> has detected the logical end of the compressed
-stream.  <CODE>bzDecompress</CODE> will not produce <CODE>BZ_STREAM_END</CODE> until
+<CODE>BZ2_bzDecompress</CODE> has detected the logical end of the compressed
+stream.  <CODE>BZ2_bzDecompress</CODE> will not produce <CODE>BZ_STREAM_END</CODE> until
 all output data has been placed into the output buffer, so once
 <CODE>BZ_STREAM_END</CODE> appears, you are guaranteed to have available all
-the decompressed output, and <CODE>bzDecompressEnd</CODE> can safely be
+the decompressed output, and <CODE>BZ2_bzDecompressEnd</CODE> can safely be
 called.
 
 </P>
 <P>
-If case of an error return value, you should call <CODE>bzDecompressEnd</CODE>
+If case of an error return value, you should call <CODE>BZ2_bzDecompressEnd</CODE>
 to clean up and release memory.
 
 </P>
@@ -773,18 +826,18 @@ Possible return values:
 Allowable next actions:
 
 <PRE>
-      <CODE>bzDecompress</CODE>
+      <CODE>BZ2_bzDecompress</CODE>
          if <CODE>BZ_OK</CODE> was returned
-      <CODE>bzDecompressEnd</CODE>
+      <CODE>BZ2_bzDecompressEnd</CODE>
          otherwise
 </PRE>
 
 
 
-<H3><A NAME="SEC15" HREF="manual_toc.html#TOC15"><CODE>bzDecompressEnd</CODE></A></H3>
+<H3><A NAME="SEC24" HREF="manual_toc.html#TOC24"><CODE>BZ2_bzDecompressEnd</CODE></A></H3>
 
 <PRE>
-int bzDecompressEnd ( bz_stream *strm );
+int BZ2_bzDecompressEnd ( bz_stream *strm );
 </PRE>
 
 <P>
@@ -810,7 +863,7 @@ Allowable next actions:
 
 
 
-<H2><A NAME="SEC16" HREF="manual_toc.html#TOC16">High-level interface</A></H2>
+<H2><A NAME="SEC25" HREF="manual_toc.html#TOC25">High-level interface</A></H2>
 
 <P>
 This interface provides functions for reading and writing 
@@ -836,17 +889,17 @@ This interface provides functions for reading and writing
 <LI>If <CODE>bzerror</CODE> indicates an error
 
   (ie, anything except <CODE>BZ_OK</CODE> and <CODE>BZ_STREAM_END</CODE>),
-  you should immediately call <CODE>bzReadClose</CODE> (or <CODE>bzWriteClose</CODE>,
+  you should immediately call <CODE>BZ2_bzReadClose</CODE> (or <CODE>BZ2_bzWriteClose</CODE>,
   depending on whether you are attempting to read or to write)
   to free up all resources associated
   with the stream.  Once an error has been indicated, behaviour of all calls
-  except <CODE>bzReadClose</CODE> (<CODE>bzWriteClose</CODE>) is undefined.  
+  except <CODE>BZ2_bzReadClose</CODE> (<CODE>BZ2_bzWriteClose</CODE>) is undefined.  
   The implication is that (1) <CODE>bzerror</CODE> should
   be checked after each call, and (2) if <CODE>bzerror</CODE> indicates an error, 
-  <CODE>bzReadClose</CODE> (<CODE>bzWriteClose</CODE>) should then be called to clean up.
+  <CODE>BZ2_bzReadClose</CODE> (<CODE>BZ2_bzWriteClose</CODE>) should then be called to clean up.
 <LI>The <CODE>FILE*</CODE> arguments passed to
 
-   <CODE>bzReadOpen</CODE>/<CODE>bzWriteOpen</CODE>  
+   <CODE>BZ2_bzReadOpen</CODE>/<CODE>BZ2_bzWriteOpen</CODE>  
   should be set to binary mode.
   Most Unix systems will do this by default, but other platforms,
   including Windows and Mac, will not.  If you omit this, you may
@@ -861,14 +914,14 @@ This interface provides functions for reading and writing
 
 
 
-<H3><A NAME="SEC17" HREF="manual_toc.html#TOC17"><CODE>bzReadOpen</CODE></A></H3>
+<H3><A NAME="SEC26" HREF="manual_toc.html#TOC26"><CODE>BZ2_bzReadOpen</CODE></A></H3>
 
 <PRE>
    typedef void BZFILE;
 
-   BZFILE *bzReadOpen ( int *bzerror, FILE *f, 
-                        int small, int verbosity,
-                        void *unused, int nUnused );
+   BZFILE *BZ2_bzReadOpen ( int *bzerror, FILE *f, 
+                            int small, int verbosity,
+                            void *unused, int nUnused );
 </PRE>
 
 <P>
@@ -880,7 +933,7 @@ speed.
 
 </P>
 <P>
-For reasons explained below, <CODE>bzRead</CODE> will decompress the
+For reasons explained below, <CODE>BZ2_bzRead</CODE> will decompress the
 <CODE>nUnused</CODE> bytes starting at <CODE>unused</CODE>, before starting to read
 from the file <CODE>f</CODE>.  At most <CODE>BZ_MAX_UNUSED</CODE> bytes may be
 supplied like this.  If this facility is not required, you should pass
@@ -890,20 +943,22 @@ respectively.
 </P>
 <P>
 For the meaning of parameters <CODE>small</CODE> and <CODE>verbosity</CODE>,
-see <CODE>bzDecompressInit</CODE>.
+see <CODE>BZ2_bzDecompressInit</CODE>.
 
 </P>
 <P>
 The amount of memory needed to decompress a file cannot be determined
 until the file's header has been read.  So it is possible that
-<CODE>bzReadOpen</CODE> returns <CODE>BZ_OK</CODE> but a subsequent call of
-<CODE>bzRead</CODE> will return <CODE>BZ_MEM_ERROR</CODE>.
+<CODE>BZ2_bzReadOpen</CODE> returns <CODE>BZ_OK</CODE> but a subsequent call of
+<CODE>BZ2_bzRead</CODE> will return <CODE>BZ_MEM_ERROR</CODE>.
 
 </P>
 <P>
 Possible assignments to <CODE>bzerror</CODE>:
 
 <PRE>
+      <CODE>BZ_CONFIG_ERROR</CODE>
+         if the library has been mis-compiled
       <CODE>BZ_PARAM_ERROR</CODE>
          if <CODE>f</CODE> is <CODE>NULL</CODE> 
          or <CODE>small</CODE> is neither <CODE>0</CODE> nor <CODE>1</CODE>                 
@@ -931,18 +986,18 @@ Possible return values:
 Allowable next actions:
 
 <PRE>
-      <CODE>bzRead</CODE>
+      <CODE>BZ2_bzRead</CODE>
          if <CODE>bzerror</CODE> is <CODE>BZ_OK</CODE>   
-      <CODE>bzClose</CODE> 
+      <CODE>BZ2_bzClose</CODE> 
          otherwise
 </PRE>
 
 
 
-<H3><A NAME="SEC18" HREF="manual_toc.html#TOC18"><CODE>bzRead</CODE></A></H3>
+<H3><A NAME="SEC27" HREF="manual_toc.html#TOC27"><CODE>BZ2_bzRead</CODE></A></H3>
 
 <PRE>
-   int bzRead ( int *bzerror, BZFILE *b, void *buf, int len );
+   int BZ2_bzRead ( int *bzerror, BZFILE *b, void *buf, int len );
 </PRE>
 
 <P>
@@ -957,7 +1012,7 @@ of bytes read is returned.  All other <CODE>bzerror</CODE> values denote an erro
 
 </P>
 <P>
-<CODE>bzRead</CODE> will supply <CODE>len</CODE> bytes,
+<CODE>BZ2_bzRead</CODE> will supply <CODE>len</CODE> bytes,
 unless the logical stream end is detected
 or an error occurs.  Because of this, it is possible to detect the 
 stream end by observing when the number of bytes returned is 
@@ -968,13 +1023,13 @@ instead check <CODE>bzerror</CODE> after every call and watch out for
 
 </P>
 <P>
-Internally, <CODE>bzRead</CODE> copies data from the compressed file in chunks
+Internally, <CODE>BZ2_bzRead</CODE> copies data from the compressed file in chunks
 of size <CODE>BZ_MAX_UNUSED</CODE> bytes
 before decompressing it.  If the file contains more bytes than strictly
-needed to reach the logical end-of-stream, <CODE>bzRead</CODE> will almost certainly
+needed to reach the logical end-of-stream, <CODE>BZ2_bzRead</CODE> will almost certainly
 read some of the trailing data before signalling <CODE>BZ_SEQUENCE_END</CODE>.
 To collect the read but unused data once <CODE>BZ_SEQUENCE_END</CODE> has 
-appeared, call <CODE>bzReadGetUnused</CODE> immediately before <CODE>bzReadClose</CODE>.
+appeared, call <CODE>BZ2_bzReadGetUnused</CODE> immediately before <CODE>BZ2_bzReadClose</CODE>.
 
 </P>
 <P>
@@ -984,7 +1039,7 @@ Possible assignments to <CODE>bzerror</CODE>:
       <CODE>BZ_PARAM_ERROR</CODE>
          if <CODE>b</CODE> is <CODE>NULL</CODE> or <CODE>buf</CODE> is <CODE>NULL</CODE> or <CODE>len &#60; 0</CODE>
       <CODE>BZ_SEQUENCE_ERROR</CODE> 
-         if <CODE>b</CODE> was opened with <CODE>bzWriteOpen</CODE>
+         if <CODE>b</CODE> was opened with <CODE>BZ2_bzWriteOpen</CODE>
       <CODE>BZ_IO_ERROR</CODE> 
          if there is an error reading from the compressed file
       <CODE>BZ_UNEXPECTED_EOF</CODE> 
@@ -1016,21 +1071,21 @@ Possible return values:
 Allowable next actions:
 
 <PRE>
-      collect data from <CODE>buf</CODE>, then <CODE>bzRead</CODE> or <CODE>bzReadClose</CODE>
+      collect data from <CODE>buf</CODE>, then <CODE>BZ2_bzRead</CODE> or <CODE>BZ2_bzReadClose</CODE>
          if <CODE>bzerror</CODE> is <CODE>BZ_OK</CODE> 
-      collect data from <CODE>buf</CODE>, then <CODE>bzReadClose</CODE> or <CODE>bzReadGetUnused</CODE> 
+      collect data from <CODE>buf</CODE>, then <CODE>BZ2_bzReadClose</CODE> or <CODE>BZ2_bzReadGetUnused</CODE> 
          if <CODE>bzerror</CODE> is <CODE>BZ_SEQUENCE_END</CODE>   
-      <CODE>bzReadClose</CODE> 
+      <CODE>BZ2_bzReadClose</CODE> 
          otherwise
 </PRE>
 
 
 
-<H3><A NAME="SEC19" HREF="manual_toc.html#TOC19"><CODE>bzReadGetUnused</CODE></A></H3>
+<H3><A NAME="SEC28" HREF="manual_toc.html#TOC28"><CODE>BZ2_bzReadGetUnused</CODE></A></H3>
 
 <PRE>
-   void bzReadGetUnused ( int* bzerror, BZFILE *b, 
-                          void** unused, int* nUnused );
+   void BZ2_bzReadGetUnused ( int* bzerror, BZFILE *b, 
+                              void** unused, int* nUnused );
 </PRE>
 
 <P>
@@ -1041,8 +1096,8 @@ be set to a value between <CODE>0</CODE> and <CODE>BZ_MAX_UNUSED</CODE> inclusiv
 
 </P>
 <P>
-This function may only be called once <CODE>bzRead</CODE> has signalled 
-<CODE>BZ_STREAM_END</CODE> but before <CODE>bzReadClose</CODE>.
+This function may only be called once <CODE>BZ2_bzRead</CODE> has signalled 
+<CODE>BZ_STREAM_END</CODE> but before <CODE>BZ2_bzReadClose</CODE>.
 
 </P>
 <P>
@@ -1054,7 +1109,7 @@ Possible assignments to <CODE>bzerror</CODE>:
          or <CODE>unused</CODE> is <CODE>NULL</CODE> or <CODE>nUnused</CODE> is <CODE>NULL</CODE>
       <CODE>BZ_SEQUENCE_ERROR</CODE> 
          if <CODE>BZ_STREAM_END</CODE> has not been signalled
-         or if <CODE>b</CODE> was opened with <CODE>bzWriteOpen</CODE>
+         or if <CODE>b</CODE> was opened with <CODE>BZ2_bzWriteOpen</CODE>
      <CODE>BZ_OK</CODE>
          otherwise
 </PRE>
@@ -1063,22 +1118,22 @@ Possible assignments to <CODE>bzerror</CODE>:
 Allowable next actions:
 
 <PRE>
-      <CODE>bzReadClose</CODE>
+      <CODE>BZ2_bzReadClose</CODE>
 </PRE>
 
 
 
-<H3><A NAME="SEC20" HREF="manual_toc.html#TOC20"><CODE>bzReadClose</CODE></A></H3>
+<H3><A NAME="SEC29" HREF="manual_toc.html#TOC29"><CODE>BZ2_bzReadClose</CODE></A></H3>
 
 <PRE>
-   void bzReadClose ( int *bzerror, BZFILE *b );
+   void BZ2_bzReadClose ( int *bzerror, BZFILE *b );
 </PRE>
 
 <P>
 Releases all memory pertaining to the compressed file <CODE>b</CODE>.  
-<CODE>bzReadClose</CODE> does not call <CODE>fclose</CODE> on the underlying file
+<CODE>BZ2_bzReadClose</CODE> does not call <CODE>fclose</CODE> on the underlying file
 handle, so you should do that yourself if appropriate.
-<CODE>bzReadClose</CODE> should be called to clean up after all error
+<CODE>BZ2_bzReadClose</CODE> should be called to clean up after all error
 situations.
 
 </P>
@@ -1087,7 +1142,7 @@ Possible assignments to <CODE>bzerror</CODE>:
 
 <PRE>
       <CODE>BZ_SEQUENCE_ERROR</CODE> 
-         if <CODE>b</CODE> was opened with <CODE>bzOpenWrite</CODE> 
+         if <CODE>b</CODE> was opened with <CODE>BZ2_bzOpenWrite</CODE> 
       <CODE>BZ_OK</CODE> 
          otherwise
 </PRE>
@@ -1101,12 +1156,12 @@ Allowable next actions:
 
 
 
-<H3><A NAME="SEC21" HREF="manual_toc.html#TOC21"><CODE>bzWriteOpen</CODE></A></H3>
+<H3><A NAME="SEC30" HREF="manual_toc.html#TOC30"><CODE>BZ2_bzWriteOpen</CODE></A></H3>
 
 <PRE>
-   BZFILE *bzWriteOpen ( int *bzerror, FILE *f, 
-                         int blockSize100k, int verbosity,
-                         int workFactor );
+   BZFILE *BZ2_bzWriteOpen ( int *bzerror, FILE *f, 
+                             int blockSize100k, int verbosity,
+                             int workFactor );
 </PRE>
 
 <P>
@@ -1119,19 +1174,21 @@ indicator (<CODE>ferror(f)</CODE>)is not set.
 <P>
 For the meaning of parameters <CODE>blockSize100k</CODE>,
 <CODE>verbosity</CODE> and <CODE>workFactor</CODE>, see
-<BR> <CODE>bzCompressInit</CODE>.
+<BR> <CODE>BZ2_bzCompressInit</CODE>.
 
 </P>
 <P>
 All required memory is allocated at this stage, so if the call
 completes successfully, <CODE>BZ_MEM_ERROR</CODE> cannot be signalled by a
-subsequent call to <CODE>bzWrite</CODE>.
+subsequent call to <CODE>BZ2_bzWrite</CODE>.
 
 </P>
 <P>
 Possible assignments to <CODE>bzerror</CODE>:
 
 <PRE>
+      <CODE>BZ_CONFIG_ERROR</CODE>
+         if the library has been mis-compiled
       <CODE>BZ_PARAM_ERROR</CODE> 
          if <CODE>f</CODE> is <CODE>NULL</CODE> 
          or <CODE>blockSize100k &#60; 1</CODE> or <CODE>blockSize100k &#62; 9</CODE>
@@ -1157,19 +1214,19 @@ Possible return values:
 Allowable next actions:
 
 <PRE>
-      <CODE>bzWrite</CODE> 
+      <CODE>BZ2_bzWrite</CODE> 
          if <CODE>bzerror</CODE> is <CODE>BZ_OK</CODE> 
-         (you could go directly to <CODE>bzWriteClose</CODE>, but this would be pretty pointless)
-      <CODE>bzWriteClose</CODE> 
+         (you could go directly to <CODE>BZ2_bzWriteClose</CODE>, but this would be pretty pointless)
+      <CODE>BZ2_bzWriteClose</CODE> 
          otherwise
 </PRE>
 
 
 
-<H3><A NAME="SEC22" HREF="manual_toc.html#TOC22"><CODE>bzWrite</CODE></A></H3>
+<H3><A NAME="SEC31" HREF="manual_toc.html#TOC31"><CODE>BZ2_bzWrite</CODE></A></H3>
 
 <PRE>
-   void bzWrite ( int *bzerror, BZFILE *b, void *buf, int len );
+   void BZ2_bzWrite ( int *bzerror, BZFILE *b, void *buf, int len );
 </PRE>
 
 <P>
@@ -1184,7 +1241,7 @@ Possible assignments to <CODE>bzerror</CODE>:
       <CODE>BZ_PARAM_ERROR</CODE> 
          if <CODE>b</CODE> is <CODE>NULL</CODE> or <CODE>buf</CODE> is <CODE>NULL</CODE> or <CODE>len &#60; 0</CODE>
       <CODE>BZ_SEQUENCE_ERROR</CODE> 
-         if b was opened with <CODE>bzReadOpen</CODE>
+         if b was opened with <CODE>BZ2_bzReadOpen</CODE>
       <CODE>BZ_IO_ERROR</CODE> 
          if there is an error writing the compressed file.
       <CODE>BZ_OK</CODE> 
@@ -1193,26 +1250,33 @@ Possible assignments to <CODE>bzerror</CODE>:
 
 
 
-<H3><A NAME="SEC23" HREF="manual_toc.html#TOC23"><CODE>bzWriteClose</CODE></A></H3>
+<H3><A NAME="SEC32" HREF="manual_toc.html#TOC32"><CODE>BZ2_bzWriteClose</CODE></A></H3>
 
 <PRE>
-   int bzWriteClose ( int *bzerror, BZFILE* f,
-                      int abandon,
-                      unsigned int* nbytes_in,
-                      unsigned int* nbytes_out );
+   void BZ2_bzWriteClose ( int *bzerror, BZFILE* f,
+                           int abandon,
+                           unsigned int* nbytes_in,
+                           unsigned int* nbytes_out );
+
+   void BZ2_bzWriteClose64 ( int *bzerror, BZFILE* f,
+                             int abandon,
+                             unsigned int* nbytes_in_lo32,
+                             unsigned int* nbytes_in_hi32,
+                             unsigned int* nbytes_out_lo32,
+                             unsigned int* nbytes_out_hi32 );
 </PRE>
 
 <P>
 Compresses and flushes to the compressed file all data so far supplied
-by <CODE>bzWrite</CODE>.  The logical end-of-stream markers are also written, so
-subsequent calls to <CODE>bzWrite</CODE> are illegal.  All memory associated 
+by <CODE>BZ2_bzWrite</CODE>.  The logical end-of-stream markers are also written, so
+subsequent calls to <CODE>BZ2_bzWrite</CODE> are illegal.  All memory associated 
 with the compressed file <CODE>b</CODE> is released.  
 <CODE>fflush</CODE> is called on the
 compressed file, but it is not <CODE>fclose</CODE>'d.
 
 </P>
 <P>
-If <CODE>bzWriteClose</CODE> is called to clean up after an error, the only
+If <CODE>BZ2_bzWriteClose</CODE> is called to clean up after an error, the only
 action is to release the memory.  The library records the error codes
 issued by previous calls, so this situation will be detected
 automatically.  There is no attempt to complete the compression
@@ -1224,15 +1288,20 @@ value to <CODE>abandon</CODE>.
 <P>
 If <CODE>nbytes_in</CODE> is non-null, <CODE>*nbytes_in</CODE> will be set to be the
 total volume of uncompressed data handled.  Similarly, <CODE>nbytes_out</CODE>
-will be set to the total volume of compressed data written.
+will be set to the total volume of compressed data written.  For 
+compatibility with older versions of the library, <CODE>BZ2_bzWriteClose</CODE>
+only yields the lower 32 bits of these counts.  Use
+<CODE>BZ2_bzWriteClose64</CODE> if you want the full 64 bit counts.  These
+two functions are otherwise absolutely identical.
 
 </P>
+
 <P>
 Possible assignments to <CODE>bzerror</CODE>:
 
 <PRE>
       <CODE>BZ_SEQUENCE_ERROR</CODE> 
-         if <CODE>b</CODE> was opened with <CODE>bzReadOpen</CODE>
+         if <CODE>b</CODE> was opened with <CODE>BZ2_bzReadOpen</CODE>
       <CODE>BZ_IO_ERROR</CODE> 
          if there is an error writing the compressed file
       <CODE>BZ_OK</CODE> 
@@ -1241,7 +1310,7 @@ Possible assignments to <CODE>bzerror</CODE>:
 
 
 
-<H3><A NAME="SEC24" HREF="manual_toc.html#TOC24">Handling embedded compressed data streams</A></H3>
+<H3><A NAME="SEC33" HREF="manual_toc.html#TOC33">Handling embedded compressed data streams</A></H3>
 
 <P>
 The high-level library facilitates use of
@@ -1257,27 +1326,27 @@ compressed data stream, using that same file handle.
 <LI>Reading is more complex, and the facilities are not as general
 
 as they could be since generality is hard to reconcile with efficiency.
-<CODE>bzRead</CODE> reads from the compressed file in blocks of size
+<CODE>BZ2_bzRead</CODE> reads from the compressed file in blocks of size
 <CODE>BZ_MAX_UNUSED</CODE> bytes, and in doing so probably will overshoot
 the logical end of compressed stream.
 To recover this data once decompression has
-ended, call <CODE>bzReadGetUnused</CODE> after the last call of <CODE>bzRead</CODE>
+ended, call <CODE>BZ2_bzReadGetUnused</CODE> after the last call of <CODE>BZ2_bzRead</CODE>
 (the one returning <CODE>BZ_STREAM_END</CODE>) but before calling
-<CODE>bzReadClose</CODE>.
+<CODE>BZ2_bzReadClose</CODE>.
 </UL>
 
 <P>
 This mechanism makes it easy to decompress multiple <CODE>bzip2</CODE>
-streams placed end-to-end.  As the end of one stream, when <CODE>bzRead</CODE>
-returns <CODE>BZ_STREAM_END</CODE>, call <CODE>bzReadGetUnused</CODE> to collect the
+streams placed end-to-end.  As the end of one stream, when <CODE>BZ2_bzRead</CODE>
+returns <CODE>BZ_STREAM_END</CODE>, call <CODE>BZ2_bzReadGetUnused</CODE> to collect the
 unused data (copy it into your own buffer somewhere).  
 That data forms the start of the next compressed stream.
-To start uncompressing that next stream, call <CODE>bzReadOpen</CODE> again,
+To start uncompressing that next stream, call <CODE>BZ2_bzReadOpen</CODE> again,
 feeding in the unused data via the <CODE>unused</CODE>/<CODE>nUnused</CODE>
 parameters.
 Keep doing this until <CODE>BZ_STREAM_END</CODE> return coincides with the
 physical end of file (<CODE>feof(f)</CODE>).  In this situation
-<CODE>bzReadGetUnused</CODE>
+<CODE>BZ2_bzReadGetUnused</CODE>
 will of course return no data.
 
 </P>
@@ -1289,7 +1358,7 @@ to grips with the low-level interface.
 </P>
 
 
-<H3><A NAME="SEC25" HREF="manual_toc.html#TOC25">Standard file-reading/writing code</A></H3>
+<H3><A NAME="SEC34" HREF="manual_toc.html#TOC34">Standard file-reading/writing code</A></H3>
 <P>
 Here's how you'd write data to a compressed file:
 
@@ -1305,22 +1374,22 @@ f = fopen ( "myfile.bz2", "w" );
 if (!f) {
    /* handle error */
 }
-b = bzWriteOpen ( &#38;bzerror, f, 9 );
+b = BZ2_bzWriteOpen ( &#38;bzerror, f, 9 );
 if (bzerror != BZ_OK) {
-   bzWriteClose ( b );
+   BZ2_bzWriteClose ( b );
    /* handle error */
 }
 
 while ( /* condition */ ) {
    /* get data to write into buf, and set nBuf appropriately */
-   nWritten = bzWrite ( &#38;bzerror, b, buf, nBuf );
+   nWritten = BZ2_bzWrite ( &#38;bzerror, b, buf, nBuf );
    if (bzerror == BZ_IO_ERROR) { 
-      bzWriteClose ( &#38;bzerror, b );
+      BZ2_bzWriteClose ( &#38;bzerror, b );
       /* handle error */
    }
 }
 
-bzWriteClose ( &#38;bzerror, b );
+BZ2_bzWriteClose ( &#38;bzerror, b );
 if (bzerror == BZ_IO_ERROR) {
    /* handle error */
 }
@@ -1341,42 +1410,42 @@ f = fopen ( "myfile.bz2", "r" );
 if (!f) {
    /* handle error */
 }
-b = bzReadOpen ( &#38;bzerror, f, 0, NULL, 0 );
+b = BZ2_bzReadOpen ( &#38;bzerror, f, 0, NULL, 0 );
 if (bzerror != BZ_OK) {
-   bzReadClose ( &#38;bzerror, b );
+   BZ2_bzReadClose ( &#38;bzerror, b );
    /* handle error */
 }
 
 bzerror = BZ_OK;
 while (bzerror == BZ_OK &#38;&#38; /* arbitrary other conditions */) {
-   nBuf = bzRead ( &#38;bzerror, b, buf, /* size of buf */ );
+   nBuf = BZ2_bzRead ( &#38;bzerror, b, buf, /* size of buf */ );
    if (bzerror == BZ_OK) {
       /* do something with buf[0 .. nBuf-1] */
    }
 }
 if (bzerror != BZ_STREAM_END) {
-   bzReadClose ( &#38;bzerror, b );
+   BZ2_bzReadClose ( &#38;bzerror, b );
    /* handle error */
 } else {
-   bzReadClose ( &#38;bzerror );
+   BZ2_bzReadClose ( &#38;bzerror );
 }
 </PRE>
 
 
 
-<H2><A NAME="SEC26" HREF="manual_toc.html#TOC26">Utility functions</A></H2>
+<H2><A NAME="SEC35" HREF="manual_toc.html#TOC35">Utility functions</A></H2>
 
 
-<H3><A NAME="SEC27" HREF="manual_toc.html#TOC27"><CODE>bzBuffToBuffCompress</CODE></A></H3>
+<H3><A NAME="SEC36" HREF="manual_toc.html#TOC36"><CODE>BZ2_bzBuffToBuffCompress</CODE></A></H3>
 
 <PRE>
-   int bzBuffToBuffCompress( char*         dest,
-                             unsigned int* destLen,
-                             char*         source,
-                             unsigned int  sourceLen,
-                             int           blockSize100k,
-                             int           verbosity,
-                             int           workFactor );
+   int BZ2_bzBuffToBuffCompress( char*         dest,
+                                 unsigned int* destLen,
+                                 char*         source,
+                                 unsigned int  sourceLen,
+                                 int           blockSize100k,
+                                 int           verbosity,
+                                 int           workFactor );
 </PRE>
 
 <P>
@@ -1398,7 +1467,7 @@ mechanism, use the low-level interface.
 </P>
 <P>
 For the meaning of parameters <CODE>blockSize100k</CODE>, <CODE>verbosity</CODE>
-and <CODE>workFactor</CODE>, <BR> see <CODE>bzCompressInit</CODE>.
+and <CODE>workFactor</CODE>, <BR> see <CODE>BZ2_bzCompressInit</CODE>.
 
 </P>
 <P>
@@ -1408,7 +1477,7 @@ six hundred extra bytes.
 
 </P>
 <P>
-<CODE>bzBuffToBuffDecompress</CODE> will not write data at or
+<CODE>BZ2_bzBuffToBuffDecompress</CODE> will not write data at or
 beyond <CODE>dest[*destLen]</CODE>, even in case of buffer overflow.
 
 </P>
@@ -1416,6 +1485,8 @@ beyond <CODE>dest[*destLen]</CODE>, even in case of buffer overflow.
 Possible return values:
 
 <PRE>
+      <CODE>BZ_CONFIG_ERROR</CODE>
+         if the library has been mis-compiled
       <CODE>BZ_PARAM_ERROR</CODE> 
          if <CODE>dest</CODE> is <CODE>NULL</CODE> or <CODE>destLen</CODE> is <CODE>NULL</CODE>
          or <CODE>blockSize100k &#60; 1</CODE> or <CODE>blockSize100k &#62; 9</CODE>
@@ -1431,15 +1502,15 @@ Possible return values:
 
 
 
-<H3><A NAME="SEC28" HREF="manual_toc.html#TOC28"><CODE>bzBuffToBuffDecompress</CODE></A></H3>
+<H3><A NAME="SEC37" HREF="manual_toc.html#TOC37"><CODE>BZ2_bzBuffToBuffDecompress</CODE></A></H3>
 
 <PRE>
-   int bzBuffToBuffDecompress ( char*         dest,
-                                unsigned int* destLen,
-                                char*         source,
-                                unsigned int  sourceLen,
-                                int           small,
-                                int           verbosity );
+   int BZ2_bzBuffToBuffDecompress ( char*         dest,
+                                    unsigned int* destLen,
+                                    char*         source,
+                                    unsigned int  sourceLen,
+                                    int           small,
+                                    int           verbosity );
 </PRE>
 
 <P>
@@ -1453,13 +1524,13 @@ is unchanged, and <CODE>BZ_OUTBUFF_FULL</CODE> is returned.
 </P>
 <P>
 <CODE>source</CODE> is assumed to hold a complete <CODE>bzip2</CODE> format
-data stream.  <CODE>bzBuffToBuffDecompress</CODE> tries to decompress
+data stream.  <BR> <CODE>BZ2_bzBuffToBuffDecompress</CODE> tries to decompress
 the entirety of the stream into the output buffer.
 
 </P>
 <P>
 For the meaning of parameters <CODE>small</CODE> and <CODE>verbosity</CODE>,
-see <CODE>bzDecompressInit</CODE>.
+see <CODE>BZ2_bzDecompressInit</CODE>.
 
 </P>
 <P>
@@ -1471,7 +1542,7 @@ the scope of this library.
 
 </P>
 <P>
-<CODE>bzBuffToBuffDecompress</CODE> will not write data at or
+<CODE>BZ2_bzBuffToBuffDecompress</CODE> will not write data at or
 beyond <CODE>dest[*destLen]</CODE>, even in case of buffer overflow.
 
 </P>
@@ -1479,6 +1550,8 @@ beyond <CODE>dest[*destLen]</CODE>, even in case of buffer overflow.
 Possible return values:
 
 <PRE>
+      <CODE>BZ_CONFIG_ERROR</CODE>
+         if the library has been mis-compiled
       <CODE>BZ_PARAM_ERROR</CODE> 
          if <CODE>dest</CODE> is <CODE>NULL</CODE> or <CODE>destLen</CODE> is <CODE>NULL</CODE>
          or <CODE>small != 0 &#38;&#38; small != 1</CODE>
@@ -1499,11 +1572,73 @@ Possible return values:
 
 
 
-<H2><A NAME="SEC29" HREF="manual_toc.html#TOC29">Using the library in a <CODE>stdio</CODE>-free environment</A></H2>
+<H2><A NAME="SEC38" HREF="manual_toc.html#TOC38"><CODE>zlib</CODE> compatibility functions</A></H2>
+<P>
+Yoshioka Tsuneo has contributed some functions to
+give better <CODE>zlib</CODE> compatibility.  These functions are
+<CODE>BZ2_bzopen</CODE>, <CODE>BZ2_bzread</CODE>, <CODE>BZ2_bzwrite</CODE>, <CODE>BZ2_bzflush</CODE>,
+<CODE>BZ2_bzclose</CODE>,
+<CODE>BZ2_bzerror</CODE> and <CODE>BZ2_bzlibVersion</CODE>.
+These functions are not (yet) officially part of
+the library.  If they break, you get to keep all the pieces.
+Nevertheless, I think they work ok.
+
+<PRE>
+typedef void BZFILE;
+
+const char * BZ2_bzlibVersion ( void );
+</PRE>
+
+<P>
+Returns a string indicating the library version.
+
+<PRE>
+BZFILE * BZ2_bzopen  ( const char *path, const char *mode );
+BZFILE * BZ2_bzdopen ( int        fd,    const char *mode );
+</PRE>
+
+<P>
+Opens a <CODE>.bz2</CODE> file for reading or writing, using either its name
+or a pre-existing file descriptor. 
+Analogous to <CODE>fopen</CODE> and <CODE>fdopen</CODE>.
+
+<PRE>
+int BZ2_bzread  ( BZFILE* b, void* buf, int len );
+int BZ2_bzwrite ( BZFILE* b, void* buf, int len );
+</PRE>
+
+<P>
+Reads/writes data from/to a previously opened <CODE>BZFILE</CODE>.
+Analogous to <CODE>fread</CODE> and <CODE>fwrite</CODE>.
+
+<PRE>
+int  BZ2_bzflush ( BZFILE* b );
+void BZ2_bzclose ( BZFILE* b );
+</PRE>
+
+<P>
+Flushes/closes a <CODE>BZFILE</CODE>.  <CODE>BZ2_bzflush</CODE> doesn't actually do
+anything.  Analogous to <CODE>fflush</CODE> and <CODE>fclose</CODE>.
+
+</P>
+
+<PRE>
+const char * BZ2_bzerror ( BZFILE *b, int *errnum )
+</PRE>
+
+<P>
+Returns a string describing the more recent error status of
+<CODE>b</CODE>, and also sets <CODE>*errnum</CODE> to its numerical value.
+
+</P>
 
 
 
-<H3><A NAME="SEC30" HREF="manual_toc.html#TOC30">Getting rid of <CODE>stdio</CODE></A></H3>
+<H2><A NAME="SEC39" HREF="manual_toc.html#TOC39">Using the library in a <CODE>stdio</CODE>-free environment</A></H2>
+
+
+
+<H3><A NAME="SEC40" HREF="manual_toc.html#TOC40">Getting rid of <CODE>stdio</CODE></A></H3>
 
 <P>
 In a deeply embedded application, you might want to use just
@@ -1514,9 +1649,9 @@ eight functions:
 
 </P>
 <P>
-<CODE>bzCompressInit</CODE>, <CODE>bzCompress</CODE>, <CODE>bzCompressEnd</CODE> <BR>
-<CODE>bzDecompressInit</CODE>, <CODE>bzDecompress</CODE>, <CODE>bzDecompressEnd</CODE> <BR>
-<CODE>bzBuffToBuffCompress</CODE>, <CODE>bzBuffToBuffDecompress</CODE>
+<CODE>BZ2_bzCompressInit</CODE>, <CODE>BZ2_bzCompress</CODE>, <CODE>BZ2_bzCompressEnd</CODE> <BR>
+<CODE>BZ2_bzDecompressInit</CODE>, <CODE>BZ2_bzDecompress</CODE>, <CODE>BZ2_bzDecompressEnd</CODE> <BR>
+<CODE>BZ2_bzBuffToBuffCompress</CODE>, <CODE>BZ2_bzBuffToBuffDecompress</CODE>
 
 </P>
 <P>
@@ -1526,7 +1661,7 @@ settings.
 </P>
 
 
-<H3><A NAME="SEC31" HREF="manual_toc.html#TOC31">Critical error handling</A></H3>
+<H3><A NAME="SEC41" HREF="manual_toc.html#TOC41">Critical error handling</A></H3>
 <P>
 <CODE>libbzip2</CODE> contains a number of internal assertion checks which
 should, needless to say, never be activated.  Nevertheless, if an
@@ -1538,14 +1673,14 @@ was compiled with <CODE>BZ_NO_STDIO</CODE> set.
 For a normal compile, an assertion failure yields the message
 
 <PRE>
-   bzip2/libbzip2, v0.9.0: internal error number N.
-   This is a bug in bzip2/libbzip2, v0.9.0.  Please report
-   it to me at: jseward@acm.org.  If this happened when
-   you were using some program which uses libbzip2 as a
+   bzip2/libbzip2: internal error number N.
+   This is a bug in bzip2/libbzip2, 1.0 of 21-Mar-2000.
+   Please report it to me at: jseward@acm.org.  If this happened
+   when you were using some program which uses libbzip2 as a
    component, you should also report this bug to the author(s)
    of that program.  Please make an effort to report this bug;
    timely and accurate bug reports eventually lead to higher
-   quality software.  Thx.  Julian Seward, 27 June 1998.
+   quality software.  Thanks.  Julian Seward, 21 March 2000.
 </PRE>
 
 <P>
@@ -1583,7 +1718,7 @@ and can be recovered from.
 
 
 
-<H2><A NAME="SEC32" HREF="manual_toc.html#TOC32">Making a Windows DLL</A></H2>
+<H2><A NAME="SEC42" HREF="manual_toc.html#TOC42">Making a Windows DLL</A></H2>
 <P>
 Everything related to Windows has been contributed by Yoshioka Tsuneo
 <BR> (<CODE>QWF00133@niftyserve.or.jp</CODE> /
@@ -1601,7 +1736,7 @@ If you can't
 open the project file for some reason, make a new one, naming these files:
 <CODE>blocksort.c</CODE>, <CODE>bzlib.c</CODE>, <CODE>compress.c</CODE>, 
 <CODE>crctable.c</CODE>, <CODE>decompress.c</CODE>, <CODE>huffman.c</CODE>, <BR>
-<CODE>randtable.c</CODE> and <CODE>libbz2.def</CODE>.  You might also need
+<CODE>randtable.c</CODE> and <CODE>libbz2.def</CODE>.  You will also need
 to name the header files <CODE>bzlib.h</CODE> and <CODE>bzlib_private.h</CODE>.
 
 </P>
@@ -1616,11 +1751,23 @@ project file, <CODE>dlltest.dsp</CODE>.
 
 </P>
 <P>
+If you just want a makefile for Visual C, have a look at
+<CODE>makefile.msc</CODE>.
+
+</P>
+<P>
+Be aware that if you compile <CODE>bzip2</CODE> itself on Win32, you must set
+<CODE>BZ_UNIX</CODE> to 0 and <CODE>BZ_LCCWIN32</CODE> to 1, in the file
+<CODE>bzip2.c</CODE>, before compiling.  Otherwise the resulting binary won't
+work correctly.
+
+</P>
+<P>
 I haven't tried any of this stuff myself, but it all looks plausible.
 
 </P>
 
 <P><HR><P>
-Go to the <A HREF="manual_1.html">first</A>, <A HREF="manual_2.html">previous</A>, <A HREF="manual_4.html">next</A>, <A HREF="manual_4.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
+<p>Go to the <A HREF="manual_1.html">first</A>, <A HREF="manual_2.html">previous</A>, <A HREF="manual_4.html">next</A>, <A HREF="manual_4.html">last</A> section, <A HREF="manual_toc.html">table of contents</A>.
 </BODY>
 </HTML>

@@ -8,7 +8,7 @@
   This file is a part of bzip2 and/or libbzip2, a program and
   library for lossless, block-sorting data compression.
 
-  Copyright (C) 1996-1998 Julian R Seward.  All rights reserved.
+  Copyright (C) 1996-2000 Julian R Seward.  All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions
@@ -41,9 +41,9 @@
   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-  Julian Seward, Guildford, Surrey, UK.
+  Julian Seward, Cambridge, UK.
   jseward@acm.org
-  bzip2/libbzip2 version 0.9.0c of 18 October 1998
+  bzip2/libbzip2 version 1.0 of 21 March 2000
 
   This program is based on (at least) the work of:
      Mike Burrows
@@ -83,22 +83,34 @@
 
 /*---------------------------------------------------*/
 #ifndef BZ_NO_STDIO
-void bz__AssertH__fail ( int errcode )
+void BZ2_bz__AssertH__fail ( int errcode )
 {
    fprintf(stderr, 
-      "\n\nbzip2/libbzip2, v0.9.0c: internal error number %d.\n"
-      "This is a bug in bzip2/libbzip2, v0.9.0c.  Please report\n"
-      "it to me at: jseward@acm.org.  If this happened when\n"
-      "you were using some program which uses libbzip2 as a\n"
+      "\n\nbzip2/libbzip2: internal error number %d.\n"
+      "This is a bug in bzip2/libbzip2, %s.\n"
+      "Please report it to me at: jseward@acm.org.  If this happened\n"
+      "when you were using some program which uses libbzip2 as a\n"
       "component, you should also report this bug to the author(s)\n"
       "of that program.  Please make an effort to report this bug;\n"
       "timely and accurate bug reports eventually lead to higher\n"
-      "quality software.  Thx.  Julian Seward, 18 October 1998.\n\n",
-      errcode
+      "quality software.  Thanks.  Julian Seward, 21 March 2000.\n\n",
+      errcode,
+      BZ2_bzlibVersion()
    );
    exit(3);
 }
 #endif
+
+
+/*---------------------------------------------------*/
+static
+int bz_config_ok ( void )
+{
+   if (sizeof(int)   != 4) return 0;
+   if (sizeof(short) != 2) return 0;
+   if (sizeof(char)  != 1) return 0;
+   return 1;
+}
 
 
 /*---------------------------------------------------*/
@@ -149,7 +161,7 @@ Bool isempty_RL ( EState* s )
 
 
 /*---------------------------------------------------*/
-int BZ_API(bzCompressInit) 
+int BZ_API(BZ2_bzCompressInit) 
                     ( bz_stream* strm, 
                      int        blockSize100k,
                      int        verbosity,
@@ -157,6 +169,8 @@ int BZ_API(bzCompressInit)
 {
    Int32   n;
    EState* s;
+
+   if (!bz_config_ok()) return BZ_CONFIG_ERROR;
 
    if (strm == NULL || 
        blockSize100k < 1 || blockSize100k > 9 ||
@@ -171,28 +185,22 @@ int BZ_API(bzCompressInit)
    if (s == NULL) return BZ_MEM_ERROR;
    s->strm = strm;
 
-   s->block    = NULL;
-   s->quadrant = NULL;
-   s->zptr     = NULL;
-   s->ftab     = NULL;
+   s->arr1 = NULL;
+   s->arr2 = NULL;
+   s->ftab = NULL;
 
-   n           = 100000 * blockSize100k;
-   s->block    = BZALLOC( (n + BZ_NUM_OVERSHOOT_BYTES) * sizeof(UChar) );
-   s->quadrant = BZALLOC( (n + BZ_NUM_OVERSHOOT_BYTES) * sizeof(Int16) );
-   s->zptr     = BZALLOC( n                            * sizeof(Int32) );
-   s->ftab     = BZALLOC( 65537                        * sizeof(Int32) );
+   n       = 100000 * blockSize100k;
+   s->arr1 = BZALLOC( n                  * sizeof(UInt32) );
+   s->arr2 = BZALLOC( (n+BZ_N_OVERSHOOT) * sizeof(UInt32) );
+   s->ftab = BZALLOC( 65537              * sizeof(UInt32) );
 
-   if (s->block == NULL || s->quadrant == NULL ||
-       s->zptr == NULL  || s->ftab == NULL) {
-      if (s->block    != NULL) BZFREE(s->block);
-      if (s->quadrant != NULL) BZFREE(s->quadrant);
-      if (s->zptr     != NULL) BZFREE(s->zptr);
-      if (s->ftab     != NULL) BZFREE(s->ftab);
-      if (s           != NULL) BZFREE(s);
+   if (s->arr1 == NULL || s->arr2 == NULL || s->ftab == NULL) {
+      if (s->arr1 != NULL) BZFREE(s->arr1);
+      if (s->arr2 != NULL) BZFREE(s->arr2);
+      if (s->ftab != NULL) BZFREE(s->ftab);
+      if (s       != NULL) BZFREE(s);
       return BZ_MEM_ERROR;
    }
-
-   s->szptr = (UInt16*)(s->zptr);
 
    s->blockNo           = 0;
    s->state             = BZ_S_INPUT;
@@ -202,10 +210,17 @@ int BZ_API(bzCompressInit)
    s->nblockMAX         = 100000 * blockSize100k - 19;
    s->verbosity         = verbosity;
    s->workFactor        = workFactor;
-   s->nBlocksRandomised = 0;
+
+   s->block             = (UChar*)s->arr2;
+   s->mtfv              = (UInt16*)s->arr1;
+   s->zbits             = NULL;
+   s->ptr               = (UInt32*)s->arr1;
+
    strm->state          = s;
-   strm->total_in       = 0;
-   strm->total_out      = 0;
+   strm->total_in_lo32  = 0;
+   strm->total_in_hi32  = 0;
+   strm->total_out_lo32 = 0;
+   strm->total_out_hi32 = 0;
    init_RL ( s );
    prepare_new_block ( s );
    return BZ_OK;
@@ -241,7 +256,7 @@ void add_pair_to_block ( EState* s )
          s->block[s->nblock] = (UChar)ch; s->nblock++;
          s->block[s->nblock] = (UChar)ch; s->nblock++;
          s->block[s->nblock] = (UChar)ch; s->nblock++;
-         s->block[s->nblock] = (UChar)(s->state_in_len-4);
+         s->block[s->nblock] = ((UChar)(s->state_in_len-4));
          s->nblock++;
          break;
    }
@@ -303,7 +318,8 @@ Bool copy_input_until_stop ( EState* s )
          ADD_CHAR_TO_BLOCK ( s, (UInt32)(*((UChar*)(s->strm->next_in))) ); 
          s->strm->next_in++;
          s->strm->avail_in--;
-         s->strm->total_in++;
+         s->strm->total_in_lo32++;
+         if (s->strm->total_in_lo32 == 0) s->strm->total_in_hi32++;
       }
 
    } else {
@@ -320,7 +336,8 @@ Bool copy_input_until_stop ( EState* s )
          ADD_CHAR_TO_BLOCK ( s, (UInt32)(*((UChar*)(s->strm->next_in))) ); 
          s->strm->next_in++;
          s->strm->avail_in--;
-         s->strm->total_in++;
+         s->strm->total_in_lo32++;
+         if (s->strm->total_in_lo32 == 0) s->strm->total_in_hi32++;
          s->avail_in_expect--;
       }
    }
@@ -343,12 +360,12 @@ Bool copy_output_until_stop ( EState* s )
       if (s->state_out_pos >= s->numZ) break;
 
       progress_out = True;
-      *(s->strm->next_out) = ((UChar*)(s->quadrant))[s->state_out_pos];
+      *(s->strm->next_out) = s->zbits[s->state_out_pos];
       s->state_out_pos++;
       s->strm->avail_out--;
       s->strm->next_out++;
-      s->strm->total_out++;
-      
+      s->strm->total_out_lo32++;
+      if (s->strm->total_out_lo32 == 0) s->strm->total_out_hi32++;
    }
 
    return progress_out;
@@ -382,12 +399,12 @@ Bool handle_compress ( bz_stream* strm )
          progress_in |= copy_input_until_stop ( s );
          if (s->mode != BZ_M_RUNNING && s->avail_in_expect == 0) {
             flush_RL ( s );
-            compressBlock ( s, s->mode == BZ_M_FINISHING );
+            BZ2_compressBlock ( s, (Bool)(s->mode == BZ_M_FINISHING) );
             s->state = BZ_S_OUTPUT;
          }
          else
          if (s->nblock >= s->nblockMAX) {
-            compressBlock ( s, False );
+            BZ2_compressBlock ( s, False );
             s->state = BZ_S_OUTPUT;
          }
          else
@@ -403,7 +420,7 @@ Bool handle_compress ( bz_stream* strm )
 
 
 /*---------------------------------------------------*/
-int BZ_API(bzCompress) ( bz_stream *strm, int action )
+int BZ_API(BZ2_bzCompress) ( bz_stream *strm, int action )
 {
    Bool progress;
    EState* s;
@@ -440,7 +457,8 @@ int BZ_API(bzCompress) ( bz_stream *strm, int action )
 
       case BZ_M_FLUSHING:
          if (action != BZ_FLUSH) return BZ_SEQUENCE_ERROR;
-         if (s->avail_in_expect != s->strm->avail_in) return BZ_SEQUENCE_ERROR;
+         if (s->avail_in_expect != s->strm->avail_in) 
+            return BZ_SEQUENCE_ERROR;
          progress = handle_compress ( strm );
          if (s->avail_in_expect > 0 || !isempty_RL(s) ||
              s->state_out_pos < s->numZ) return BZ_FLUSH_OK;
@@ -449,7 +467,8 @@ int BZ_API(bzCompress) ( bz_stream *strm, int action )
 
       case BZ_M_FINISHING:
          if (action != BZ_FINISH) return BZ_SEQUENCE_ERROR;
-         if (s->avail_in_expect != s->strm->avail_in) return BZ_SEQUENCE_ERROR;
+         if (s->avail_in_expect != s->strm->avail_in) 
+            return BZ_SEQUENCE_ERROR;
          progress = handle_compress ( strm );
          if (!progress) return BZ_SEQUENCE_ERROR;
          if (s->avail_in_expect > 0 || !isempty_RL(s) ||
@@ -462,7 +481,7 @@ int BZ_API(bzCompress) ( bz_stream *strm, int action )
 
 
 /*---------------------------------------------------*/
-int BZ_API(bzCompressEnd)  ( bz_stream *strm )
+int BZ_API(BZ2_bzCompressEnd)  ( bz_stream *strm )
 {
    EState* s;
    if (strm == NULL) return BZ_PARAM_ERROR;
@@ -470,10 +489,9 @@ int BZ_API(bzCompressEnd)  ( bz_stream *strm )
    if (s == NULL) return BZ_PARAM_ERROR;
    if (s->strm != strm) return BZ_PARAM_ERROR;
 
-   if (s->block    != NULL) BZFREE(s->block);
-   if (s->quadrant != NULL) BZFREE(s->quadrant);
-   if (s->zptr     != NULL) BZFREE(s->zptr);
-   if (s->ftab     != NULL) BZFREE(s->ftab);
+   if (s->arr1 != NULL) BZFREE(s->arr1);
+   if (s->arr2 != NULL) BZFREE(s->arr2);
+   if (s->ftab != NULL) BZFREE(s->ftab);
    BZFREE(strm->state);
 
    strm->state = NULL;   
@@ -487,12 +505,14 @@ int BZ_API(bzCompressEnd)  ( bz_stream *strm )
 /*---------------------------------------------------*/
 
 /*---------------------------------------------------*/
-int BZ_API(bzDecompressInit) 
+int BZ_API(BZ2_bzDecompressInit) 
                      ( bz_stream* strm, 
                        int        verbosity,
                        int        small )
 {
    DState* s;
+
+   if (!bz_config_ok()) return BZ_CONFIG_ERROR;
 
    if (strm == NULL) return BZ_PARAM_ERROR;
    if (small != 0 && small != 1) return BZ_PARAM_ERROR;
@@ -509,8 +529,10 @@ int BZ_API(bzDecompressInit)
    s->bsLive                = 0;
    s->bsBuff                = 0;
    s->calculatedCombinedCRC = 0;
-   strm->total_in           = 0;
-   strm->total_out          = 0;
+   strm->total_in_lo32      = 0;
+   strm->total_in_hi32      = 0;
+   strm->total_out_lo32     = 0;
+   strm->total_out_hi32     = 0;
    s->smallDecompress       = (Bool)small;
    s->ll4                   = NULL;
    s->ll16                  = NULL;
@@ -540,7 +562,8 @@ void unRLE_obuf_to_output_FAST ( DState* s )
             s->state_out_len--;
             s->strm->next_out++;
             s->strm->avail_out--;
-            s->strm->total_out++;
+            s->strm->total_out_lo32++;
+            if (s->strm->total_out_lo32 == 0) s->strm->total_out_hi32++;
          }
    
          /* can a new run be started? */
@@ -587,8 +610,9 @@ void unRLE_obuf_to_output_FAST ( DState* s )
       unsigned int  cs_avail_out         = s->strm->avail_out;
       /* end restore */
 
-      UInt32 avail_out_INIT = cs_avail_out;
-      Int32  s_save_nblockPP = s->save_nblock+1;
+      UInt32       avail_out_INIT = cs_avail_out;
+      Int32        s_save_nblockPP = s->save_nblock+1;
+      unsigned int total_out_lo32_old;
 
       while (True) {
 
@@ -642,7 +666,10 @@ void unRLE_obuf_to_output_FAST ( DState* s )
       }
 
       return_notr:
-      s->strm->total_out += (avail_out_INIT - cs_avail_out);
+      total_out_lo32_old = s->strm->total_out_lo32;
+      s->strm->total_out_lo32 += (avail_out_INIT - cs_avail_out);
+      if (s->strm->total_out_lo32 < total_out_lo32_old)
+         s->strm->total_out_hi32++;
 
       /* save */
       s->calculatedBlockCRC = c_calculatedBlockCRC;
@@ -661,7 +688,7 @@ void unRLE_obuf_to_output_FAST ( DState* s )
 
 
 /*---------------------------------------------------*/
-__inline__ Int32 indexIntoF ( Int32 indx, Int32 *cftab )
+__inline__ Int32 BZ2_indexIntoF ( Int32 indx, Int32 *cftab )
 {
    Int32 nb, na, mid;
    nb = 0;
@@ -693,7 +720,8 @@ void unRLE_obuf_to_output_SMALL ( DState* s )
             s->state_out_len--;
             s->strm->next_out++;
             s->strm->avail_out--;
-            s->strm->total_out++;
+            s->strm->total_out_lo32++;
+            if (s->strm->total_out_lo32 == 0) s->strm->total_out_hi32++;
          }
    
          /* can a new run be started? */
@@ -738,7 +766,8 @@ void unRLE_obuf_to_output_SMALL ( DState* s )
             s->state_out_len--;
             s->strm->next_out++;
             s->strm->avail_out--;
-            s->strm->total_out++;
+            s->strm->total_out_lo32++;
+            if (s->strm->total_out_lo32 == 0) s->strm->total_out_hi32++;
          }
    
          /* can a new run be started? */
@@ -770,7 +799,7 @@ void unRLE_obuf_to_output_SMALL ( DState* s )
 
 
 /*---------------------------------------------------*/
-int BZ_API(bzDecompress) ( bz_stream *strm )
+int BZ_API(BZ2_bzDecompress) ( bz_stream *strm )
 {
    DState* s;
    if (strm == NULL) return BZ_PARAM_ERROR;
@@ -802,7 +831,7 @@ int BZ_API(bzDecompress) ( bz_stream *strm )
          }
       }
       if (s->state >= BZ_X_MAGIC_1) {
-         Int32 r = decompress ( s );
+         Int32 r = BZ2_decompress ( s );
          if (r == BZ_STREAM_END) {
             if (s->verbosity >= 3)
                VPrintf2 ( "\n    combined CRCs: stored = 0x%x, computed = 0x%x", 
@@ -816,12 +845,13 @@ int BZ_API(bzDecompress) ( bz_stream *strm )
    }
 
    AssertH ( 0, 6001 );
-   /*notreached*/
+
+   return 0;  /*NOTREACHED*/
 }
 
 
 /*---------------------------------------------------*/
-int BZ_API(bzDecompressEnd)  ( bz_stream *strm )
+int BZ_API(BZ2_bzDecompressEnd)  ( bz_stream *strm )
 {
    DState* s;
    if (strm == NULL) return BZ_PARAM_ERROR;
@@ -875,7 +905,7 @@ static Bool myfeof ( FILE* f )
 
 
 /*---------------------------------------------------*/
-BZFILE* BZ_API(bzWriteOpen) 
+BZFILE* BZ_API(BZ2_bzWriteOpen) 
                     ( int*  bzerror,      
                       FILE* f, 
                       int   blockSize100k, 
@@ -910,8 +940,8 @@ BZFILE* BZ_API(bzWriteOpen)
    bzf->strm.opaque   = NULL;
 
    if (workFactor == 0) workFactor = 30;
-   ret = bzCompressInit ( &(bzf->strm), blockSize100k, 
-                          verbosity, workFactor );
+   ret = BZ2_bzCompressInit ( &(bzf->strm), blockSize100k, 
+                              verbosity, workFactor );
    if (ret != BZ_OK)
       { BZ_SETERR(ret); free(bzf); return NULL; };
 
@@ -923,7 +953,7 @@ BZFILE* BZ_API(bzWriteOpen)
 
 
 /*---------------------------------------------------*/
-void BZ_API(bzWrite)
+void BZ_API(BZ2_bzWrite)
              ( int*    bzerror, 
                BZFILE* b, 
                void*   buf, 
@@ -949,7 +979,7 @@ void BZ_API(bzWrite)
    while (True) {
       bzf->strm.avail_out = BZ_MAX_UNUSED;
       bzf->strm.next_out = bzf->buf;
-      ret = bzCompress ( &(bzf->strm), BZ_RUN );
+      ret = BZ2_bzCompress ( &(bzf->strm), BZ_RUN );
       if (ret != BZ_RUN_OK)
          { BZ_SETERR(ret); return; };
 
@@ -968,12 +998,26 @@ void BZ_API(bzWrite)
 
 
 /*---------------------------------------------------*/
-void BZ_API(bzWriteClose)
+void BZ_API(BZ2_bzWriteClose)
                   ( int*          bzerror, 
                     BZFILE*       b, 
                     int           abandon,
                     unsigned int* nbytes_in,
                     unsigned int* nbytes_out )
+{
+   BZ2_bzWriteClose64 ( bzerror, b, abandon, 
+                        nbytes_in, NULL, nbytes_out, NULL );
+}
+
+
+void BZ_API(BZ2_bzWriteClose64)
+                  ( int*          bzerror, 
+                    BZFILE*       b, 
+                    int           abandon,
+                    unsigned int* nbytes_in_lo32,
+                    unsigned int* nbytes_in_hi32,
+                    unsigned int* nbytes_out_lo32,
+                    unsigned int* nbytes_out_hi32 )
 {
    Int32   n, n2, ret;
    bzFile* bzf = (bzFile*)b;
@@ -985,14 +1029,16 @@ void BZ_API(bzWriteClose)
    if (ferror(bzf->handle))
       { BZ_SETERR(BZ_IO_ERROR); return; };
 
-   if (nbytes_in != NULL) *nbytes_in = 0;
-   if (nbytes_out != NULL) *nbytes_out = 0;
+   if (nbytes_in_lo32 != NULL) *nbytes_in_lo32 = 0;
+   if (nbytes_in_hi32 != NULL) *nbytes_in_hi32 = 0;
+   if (nbytes_out_lo32 != NULL) *nbytes_out_lo32 = 0;
+   if (nbytes_out_hi32 != NULL) *nbytes_out_hi32 = 0;
 
    if ((!abandon) && bzf->lastErr == BZ_OK) {
       while (True) {
          bzf->strm.avail_out = BZ_MAX_UNUSED;
          bzf->strm.next_out = bzf->buf;
-         ret = bzCompress ( &(bzf->strm), BZ_FINISH );
+         ret = BZ2_bzCompress ( &(bzf->strm), BZ_FINISH );
          if (ret != BZ_FINISH_OK && ret != BZ_STREAM_END)
             { BZ_SETERR(ret); return; };
 
@@ -1014,17 +1060,23 @@ void BZ_API(bzWriteClose)
          { BZ_SETERR(BZ_IO_ERROR); return; };
    }
 
-   if (nbytes_in != NULL) *nbytes_in = bzf->strm.total_in;
-   if (nbytes_out != NULL) *nbytes_out = bzf->strm.total_out;
+   if (nbytes_in_lo32 != NULL)
+      *nbytes_in_lo32 = bzf->strm.total_in_lo32;
+   if (nbytes_in_hi32 != NULL)
+      *nbytes_in_hi32 = bzf->strm.total_in_hi32;
+   if (nbytes_out_lo32 != NULL)
+      *nbytes_out_lo32 = bzf->strm.total_out_lo32;
+   if (nbytes_out_hi32 != NULL)
+      *nbytes_out_hi32 = bzf->strm.total_out_hi32;
 
    BZ_SETERR(BZ_OK);
-   bzCompressEnd ( &(bzf->strm) );
+   BZ2_bzCompressEnd ( &(bzf->strm) );
    free ( bzf );
 }
 
 
 /*---------------------------------------------------*/
-BZFILE* BZ_API(bzReadOpen) 
+BZFILE* BZ_API(BZ2_bzReadOpen) 
                    ( int*  bzerror, 
                      FILE* f, 
                      int   verbosity,
@@ -1067,7 +1119,7 @@ BZFILE* BZ_API(bzReadOpen)
       nUnused--;
    }
 
-   ret = bzDecompressInit ( &(bzf->strm), verbosity, small );
+   ret = BZ2_bzDecompressInit ( &(bzf->strm), verbosity, small );
    if (ret != BZ_OK)
       { BZ_SETERR(ret); free(bzf); return NULL; };
 
@@ -1080,7 +1132,7 @@ BZFILE* BZ_API(bzReadOpen)
 
 
 /*---------------------------------------------------*/
-void BZ_API(bzReadClose) ( int *bzerror, BZFILE *b )
+void BZ_API(BZ2_bzReadClose) ( int *bzerror, BZFILE *b )
 {
    bzFile* bzf = (bzFile*)b;
 
@@ -1092,13 +1144,13 @@ void BZ_API(bzReadClose) ( int *bzerror, BZFILE *b )
       { BZ_SETERR(BZ_SEQUENCE_ERROR); return; };
 
    if (bzf->initialisedOk)
-      (void)bzDecompressEnd ( &(bzf->strm) );
+      (void)BZ2_bzDecompressEnd ( &(bzf->strm) );
    free ( bzf );
 }
 
 
 /*---------------------------------------------------*/
-int BZ_API(bzRead) 
+int BZ_API(BZ2_bzRead) 
            ( int*    bzerror, 
              BZFILE* b, 
              void*   buf, 
@@ -1136,7 +1188,7 @@ int BZ_API(bzRead)
          bzf->strm.next_in = bzf->buf;
       }
 
-      ret = bzDecompress ( &(bzf->strm) );
+      ret = BZ2_bzDecompress ( &(bzf->strm) );
 
       if (ret != BZ_OK && ret != BZ_STREAM_END)
          { BZ_SETERR(ret); return 0; };
@@ -1158,7 +1210,7 @@ int BZ_API(bzRead)
 
 
 /*---------------------------------------------------*/
-void BZ_API(bzReadGetUnused) 
+void BZ_API(BZ2_bzReadGetUnused) 
                      ( int*    bzerror, 
                        BZFILE* b, 
                        void**  unused, 
@@ -1184,7 +1236,7 @@ void BZ_API(bzReadGetUnused)
 /*---------------------------------------------------*/
 
 /*---------------------------------------------------*/
-int BZ_API(bzBuffToBuffCompress) 
+int BZ_API(BZ2_bzBuffToBuffCompress) 
                          ( char*         dest, 
                            unsigned int* destLen,
                            char*         source, 
@@ -1207,8 +1259,8 @@ int BZ_API(bzBuffToBuffCompress)
    strm.bzalloc = NULL;
    strm.bzfree = NULL;
    strm.opaque = NULL;
-   ret = bzCompressInit ( &strm, blockSize100k, 
-                          verbosity, workFactor );
+   ret = BZ2_bzCompressInit ( &strm, blockSize100k, 
+                              verbosity, workFactor );
    if (ret != BZ_OK) return ret;
 
    strm.next_in = source;
@@ -1216,27 +1268,27 @@ int BZ_API(bzBuffToBuffCompress)
    strm.avail_in = sourceLen;
    strm.avail_out = *destLen;
 
-   ret = bzCompress ( &strm, BZ_FINISH );
+   ret = BZ2_bzCompress ( &strm, BZ_FINISH );
    if (ret == BZ_FINISH_OK) goto output_overflow;
    if (ret != BZ_STREAM_END) goto errhandler;
 
    /* normal termination */
    *destLen -= strm.avail_out;   
-   bzCompressEnd ( &strm );
+   BZ2_bzCompressEnd ( &strm );
    return BZ_OK;
 
    output_overflow:
-   bzCompressEnd ( &strm );
+   BZ2_bzCompressEnd ( &strm );
    return BZ_OUTBUFF_FULL;
 
    errhandler:
-   bzCompressEnd ( &strm );
+   BZ2_bzCompressEnd ( &strm );
    return ret;
 }
 
 
 /*---------------------------------------------------*/
-int BZ_API(bzBuffToBuffDecompress) 
+int BZ_API(BZ2_bzBuffToBuffDecompress) 
                            ( char*         dest, 
                              unsigned int* destLen,
                              char*         source, 
@@ -1256,7 +1308,7 @@ int BZ_API(bzBuffToBuffDecompress)
    strm.bzalloc = NULL;
    strm.bzfree = NULL;
    strm.opaque = NULL;
-   ret = bzDecompressInit ( &strm, verbosity, small );
+   ret = BZ2_bzDecompressInit ( &strm, verbosity, small );
    if (ret != BZ_OK) return ret;
 
    strm.next_in = source;
@@ -1264,27 +1316,27 @@ int BZ_API(bzBuffToBuffDecompress)
    strm.avail_in = sourceLen;
    strm.avail_out = *destLen;
 
-   ret = bzDecompress ( &strm );
+   ret = BZ2_bzDecompress ( &strm );
    if (ret == BZ_OK) goto output_overflow_or_eof;
    if (ret != BZ_STREAM_END) goto errhandler;
 
    /* normal termination */
    *destLen -= strm.avail_out;
-   bzDecompressEnd ( &strm );
+   BZ2_bzDecompressEnd ( &strm );
    return BZ_OK;
 
    output_overflow_or_eof:
    if (strm.avail_out > 0) {
-      bzDecompressEnd ( &strm );
+      BZ2_bzDecompressEnd ( &strm );
       return BZ_UNEXPECTED_EOF;
    } else {
-      bzDecompressEnd ( &strm );
+      BZ2_bzDecompressEnd ( &strm );
       return BZ_OUTBUFF_FULL;
    };      
 
    errhandler:
-   bzDecompressEnd ( &strm );
-   return BZ_SEQUENCE_ERROR;
+   BZ2_bzDecompressEnd ( &strm );
+   return ret; 
 }
 
 
@@ -1304,7 +1356,7 @@ int BZ_API(bzBuffToBuffDecompress)
 /*--
    return version like "0.9.0c".
 --*/
-const char * BZ_API(bzlibVersion)(void)
+const char * BZ_API(BZ2_bzlibVersion)(void)
 {
    return BZ_VERSION;
 }
@@ -1339,24 +1391,18 @@ BZFILE * bzopen_or_bzdopen
    int    smallMode     = 0;
    int    nUnused       = 0; 
 
-   if(mode==NULL){return NULL;}
-   while(*mode){
-      switch(*mode){
+   if (mode == NULL) return NULL;
+   while (*mode) {
+      switch (*mode) {
       case 'r':
-         writing = 0;break;
+         writing = 0; break;
       case 'w':
-         writing = 1;break;
+         writing = 1; break;
       case 's':
-         smallMode = 1;break;
+         smallMode = 1; break;
       default:
-         if(isdigit(*mode)){
-            blockSize100k = 0;
-            while(isdigit(*mode)){
-               blockSize100k = blockSize100k*10 + *mode-'0';
-               mode++;
-            }
-         }else{
-            /* ignore */
+         if (isdigit((int)(*mode))) {
+            blockSize100k = *mode-'0';
          }
       }
       mode++;
@@ -1364,29 +1410,34 @@ BZFILE * bzopen_or_bzdopen
    strcat(mode2, writing ? "w" : "r" );
    strcat(mode2,"b");   /* binary mode */
 
-   if(open_mode==0){
-      if(path==NULL || strcmp(path,"")==0){
+   if (open_mode==0) {
+      if (path==NULL || strcmp(path,"")==0) {
         fp = (writing ? stdout : stdin);
         SET_BINARY_MODE(fp);
-      }else{
+      } else {
         fp = fopen(path,mode2);
       }
-   }else{
+   } else {
 #ifdef BZ_STRICT_ANSI
       fp = NULL;
 #else
       fp = fdopen(fd,mode2);
 #endif
    }
-   if(fp==NULL){return NULL;}
+   if (fp == NULL) return NULL;
 
-   if(writing){
-      bzfp = bzWriteOpen(&bzerr,fp,blockSize100k,verbosity,workFactor);
-   }else{
-      bzfp = bzReadOpen(&bzerr,fp,verbosity,smallMode,unused,nUnused);
+   if (writing) {
+      /* Guard against total chaos and anarchy -- JRS */
+      if (blockSize100k < 1) blockSize100k = 1;
+      if (blockSize100k > 9) blockSize100k = 9; 
+      bzfp = BZ2_bzWriteOpen(&bzerr,fp,blockSize100k,
+                             verbosity,workFactor);
+   } else {
+      bzfp = BZ2_bzReadOpen(&bzerr,fp,verbosity,smallMode,
+                            unused,nUnused);
    }
-   if(bzfp==NULL){
-      if(fp!=stdin && fp!=stdout) fclose(fp);
+   if (bzfp == NULL) {
+      if (fp != stdin && fp != stdout) fclose(fp);
       return NULL;
    }
    return bzfp;
@@ -1399,7 +1450,7 @@ BZFILE * bzopen_or_bzdopen
       ex) bzopen("file","w9")
       case path="" or NULL => use stdin or stdout.
 --*/
-BZFILE * BZ_API(bzopen)
+BZFILE * BZ_API(BZ2_bzopen)
                ( const char *path,
                  const char *mode )
 {
@@ -1408,7 +1459,7 @@ BZFILE * BZ_API(bzopen)
 
 
 /*---------------------------------------------------*/
-BZFILE * BZ_API(bzdopen)
+BZFILE * BZ_API(BZ2_bzdopen)
                ( int fd,
                  const char *mode )
 {
@@ -1417,11 +1468,11 @@ BZFILE * BZ_API(bzdopen)
 
 
 /*---------------------------------------------------*/
-int BZ_API(bzread) (BZFILE* b, void* buf, int len )
+int BZ_API(BZ2_bzread) (BZFILE* b, void* buf, int len )
 {
    int bzerr, nread;
    if (((bzFile*)b)->lastErr == BZ_STREAM_END) return 0;
-   nread = bzRead(&bzerr,b,buf,len);
+   nread = BZ2_bzRead(&bzerr,b,buf,len);
    if (bzerr == BZ_OK || bzerr == BZ_STREAM_END) {
       return nread;
    } else {
@@ -1431,11 +1482,11 @@ int BZ_API(bzread) (BZFILE* b, void* buf, int len )
 
 
 /*---------------------------------------------------*/
-int BZ_API(bzwrite) (BZFILE* b, void* buf, int len )
+int BZ_API(BZ2_bzwrite) (BZFILE* b, void* buf, int len )
 {
    int bzerr;
 
-   bzWrite(&bzerr,b,buf,len);
+   BZ2_bzWrite(&bzerr,b,buf,len);
    if(bzerr == BZ_OK){
       return len;
    }else{
@@ -1445,7 +1496,7 @@ int BZ_API(bzwrite) (BZFILE* b, void* buf, int len )
 
 
 /*---------------------------------------------------*/
-int BZ_API(bzflush) (BZFILE *b)
+int BZ_API(BZ2_bzflush) (BZFILE *b)
 {
    /* do nothing now... */
    return 0;
@@ -1453,19 +1504,19 @@ int BZ_API(bzflush) (BZFILE *b)
 
 
 /*---------------------------------------------------*/
-void BZ_API(bzclose) (BZFILE* b)
+void BZ_API(BZ2_bzclose) (BZFILE* b)
 {
    int bzerr;
    FILE *fp = ((bzFile *)b)->handle;
    
-   if(b==NULL){return;}
+   if (b==NULL) {return;}
    if(((bzFile*)b)->writing){
-      bzWriteClose(&bzerr,b,0,NULL,NULL);
+      BZ2_bzWriteClose(&bzerr,b,0,NULL,NULL);
       if(bzerr != BZ_OK){
-         bzWriteClose(NULL,b,1,NULL,NULL);
+         BZ2_bzWriteClose(NULL,b,1,NULL,NULL);
       }
    }else{
-      bzReadClose(&bzerr,b);
+      BZ2_bzReadClose(&bzerr,b);
    }
    if(fp!=stdin && fp!=stdout){
       fclose(fp);
@@ -1487,6 +1538,7 @@ static char *bzerrorstrings[] = {
       ,"IO_ERROR"
       ,"UNEXPECTED_EOF"
       ,"OUTBUFF_FULL"
+      ,"CONFIG_ERROR"
       ,"???"   /* for future */
       ,"???"   /* for future */
       ,"???"   /* for future */
@@ -1496,7 +1548,7 @@ static char *bzerrorstrings[] = {
 };
 
 
-const char * BZ_API(bzerror) (BZFILE *b, int *errnum)
+const char * BZ_API(BZ2_bzerror) (BZFILE *b, int *errnum)
 {
    int err = ((bzFile *)b)->lastErr;
 

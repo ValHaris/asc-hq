@@ -1,16 +1,19 @@
 <HTML>
 <HEAD>
-<!-- This HTML file has been created by texi2html 1.51
-     from manual.texi on 22 October 1998 -->
+<!-- This HTML file has been created by texi2html 1.54
+     from manual.texi on 23 March 2000 -->
 
 <TITLE>bzip2 and libbzip2 - Miscellanea</TITLE>
+<link href="manual_3.html" rel=Previous>
+<link href="manual_toc.html" rel=ToC>
+
 </HEAD>
 <BODY>
-Go to the <A HREF="manual_1.html">first</A>, <A HREF="manual_3.html">previous</A>, next, last section, <A HREF="manual_toc.html">table of contents</A>.
+<p>Go to the <A HREF="manual_1.html">first</A>, <A HREF="manual_3.html">previous</A>, next, last section, <A HREF="manual_toc.html">table of contents</A>.
 <P><HR><P>
 
 
-<H1><A NAME="SEC33" HREF="manual_toc.html#TOC33">Miscellanea</A></H1>
+<H1><A NAME="SEC43" HREF="manual_toc.html#TOC43">Miscellanea</A></H1>
 
 <P>
 These are just some random thoughts of mine.  Your mileage may
@@ -19,9 +22,10 @@ vary.
 </P>
 
 
-<H2><A NAME="SEC34" HREF="manual_toc.html#TOC34">Limitations of the compressed file format</A></H2>
+<H2><A NAME="SEC44" HREF="manual_toc.html#TOC44">Limitations of the compressed file format</A></H2>
 <P>
-<CODE>bzip2-0.9.0</CODE> uses exactly the same file format as the previous
+<CODE>bzip2-1.0</CODE>, <CODE>0.9.5</CODE> and <CODE>0.9.0</CODE>
+use exactly the same file format as the previous
 version, <CODE>bzip2-0.1</CODE>.  This decision was made in the interests of
 stability.  Creating yet another incompatible compressed file format
 would create further confusion and disruption for users.
@@ -62,12 +66,11 @@ decompression and, in retrospect, are unnecessary.  These are:
       <CODE>bzip2-0.1</CODE>'s performance on repetitive data, so
       perhaps it isn't a problem for real inputs.
 
-      Probably the best long-term solution
+      Probably the best long-term solution,
+      and the one I have incorporated into 0.9.5 and above,
       is to use the existing sorting
       algorithm initially, and fall back to a O(N (log N)^2)
       algorithm if the standard algorithm gets into difficulties.
-      This can be done without much difficulty; I made
-      a prototype implementation of it some months now.
 <LI>The compressed file format was never designed to be
 
       handled by a library, and I have had to jump though
@@ -89,7 +92,7 @@ consequences of doing so.
 
 </P>
 <P>
-Improvements which I have been able to incorporate into
+Improvements which I was able to incorporate into
 0.9.0, despite using the same file format, are:
 
 <UL>
@@ -104,8 +107,7 @@ Improvements which I have been able to incorporate into
 <LI><CODE>bzip2-0.9.0</CODE> now reads and writes files with <CODE>fread</CODE>
 
       and <CODE>fwrite</CODE>; version 0.1 used <CODE>putc</CODE> and <CODE>getc</CODE>.
-      Duh! I'm embarrassed at my own moronicness (moronicity?) on this
-      one.
+      Duh!  Well, you live and learn.
 
 </UL>
 
@@ -118,10 +120,10 @@ require some careful design of compressed file formats.
 
 
 
-<H2><A NAME="SEC35" HREF="manual_toc.html#TOC35">Portability issues</A></H2>
+<H2><A NAME="SEC45" HREF="manual_toc.html#TOC45">Portability issues</A></H2>
 <P>
 After some consideration, I have decided not to use
-GNU <CODE>autoconf</CODE> to configure 0.9.0.
+GNU <CODE>autoconf</CODE> to configure 0.9.5 or 1.0.
 
 </P>
 <P>
@@ -142,8 +144,10 @@ if you have a version of GNU C available.
 </P>
 <P>
 There are a couple of <CODE>__inline__</CODE> directives in the code.  GNU C
-(<CODE>gcc</CODE>) should be able to handle them.  If your compiler doesn't
-like them, just <CODE>#define</CODE> <CODE>__inline__</CODE> to be null.  One
+(<CODE>gcc</CODE>) should be able to handle them.  If you're not using
+GNU C, your C compiler shouldn't see them at all.
+If your compiler does, for some reason, see them and doesn't
+like them, just <CODE>#define</CODE> <CODE>__inline__</CODE> to be <CODE>/* */</CODE>.  One
 easy way to do this is to compile with the flag <CODE>-D__inline__=</CODE>, 
 which should be understood by most Unix compilers.
 
@@ -165,10 +169,16 @@ avoids all sorts of library-version issues that others may encounter
 later on.
 
 </P>
+<P>
+If you build <CODE>bzip2</CODE> on Win32, you must set <CODE>BZ_UNIX</CODE> to 0 and
+<CODE>BZ_LCCWIN32</CODE> to 1, in the file <CODE>bzip2.c</CODE>, before compiling.
+Otherwise the resulting binary won't work correctly.
+
+</P>
 
 
 
-<H2><A NAME="SEC36" HREF="manual_toc.html#TOC36">Reporting bugs</A></H2>
+<H2><A NAME="SEC46" HREF="manual_toc.html#TOC46">Reporting bugs</A></H2>
 <P>
 I tried pretty hard to make sure <CODE>bzip2</CODE> is
 bug free, both by design and by testing.  Hopefully
@@ -197,7 +207,7 @@ If you get problems, try using the flags
 <CODE>-O2</CODE> <CODE>-fomit-frame-pointer</CODE> <CODE>-fno-strength-reduce</CODE>.
 You should specifically <EM>not</EM> use <CODE>-funroll-loops</CODE>.
 
-You may notice that the Makefile runs four tests as part of
+You may notice that the Makefile runs six tests as part of
 the build process.  If the program passes all of these, it's
 a pretty good (but not 100%) indication that the compiler has
 done its job correctly.
@@ -273,7 +283,7 @@ you should contact me before mailing me huge files.
 
 
 
-<H2><A NAME="SEC37" HREF="manual_toc.html#TOC37">Did you get the right package?</A></H2>
+<H2><A NAME="SEC47" HREF="manual_toc.html#TOC47">Did you get the right package?</A></H2>
 
 <P>
 <CODE>bzip2</CODE> is a resource hog.  It soaks up large amounts of CPU cycles
@@ -295,6 +305,9 @@ memory but gets pretty good compression, and has minimal latency,
 consider Jean-loup
 Gailly's and Mark Adler's work, <CODE>zlib-1.1.2</CODE> and
 <CODE>gzip-1.2.4</CODE>.  Look for them at
+
+</P>
+<P>
 <CODE>http://www.cdrom.com/pub/infozip/zlib</CODE> and
 <CODE>http://www.gzip.org</CODE> respectively.
 
@@ -318,7 +331,7 @@ I've made a special library tuned for that kind of use.  It's part of
 
 
 
-<H2><A NAME="SEC38" HREF="manual_toc.html#TOC38">Testing</A></H2>
+<H2><A NAME="SEC48" HREF="manual_toc.html#TOC48">Testing</A></H2>
 
 <P>
 A record of the tests I've done.
@@ -328,7 +341,7 @@ A record of the tests I've done.
 First, some data sets:
 
 <UL>
-<LI>B: a directory containing a 6001 files, one for every length in the
+<LI>B: a directory containing 6001 files, one for every length in the
 
       range 0 to 6000 bytes.  The files contain random lowercase
       letters.  18.7 megabytes.
@@ -336,15 +349,11 @@ First, some data sets:
 
       compressed data.  H contains B, and also a directory of 
       files designed as boundary cases for the sorting; mostly very
-      repetitive, nasty files.  445 megabytes.
+      repetitive, nasty files.  565 megabytes.
 <LI>A: directory tree holding various applications built from source:
 
-      <CODE>egcs-1.0.2</CODE>, <CODE>gcc-2.8.1</CODE>, KDE Beta 4, GTK, Octave, etc.
-      827 megabytes.
-<LI>P: directory tree holding large amounts of source code (<CODE>.tar</CODE>
-
-      files) of the entire GNU distribution, plus a couple of
-      Linux distributions.  2400 megabytes.
+      <CODE>egcs</CODE>, <CODE>gcc-2.8.1</CODE>, KDE, GTK, Octave, etc.
+      2200 megabytes.
 </UL>
 
 <P>
@@ -354,10 +363,10 @@ comparing it against the original.
 
 </P>
 <P>
-First, a bunch of tests with block sizes, internal buffer
-sizes and randomisation lengths set very small, 
+First, a bunch of tests with block sizes and internal buffer
+sizes set very small, 
 to detect any problems with the
-blocking, buffering and randomisation mechanisms.  
+blocking and buffering mechanisms.  
 This required modifying the source code so as to try to 
 break it.
 
@@ -367,7 +376,7 @@ break it.
       buffer size of 1 byte, and block size of 23 bytes.
 <LI>Data set B, buffer sizes 1 byte, block size 1 byte.
 
-<LI>As (2) but small-mode decompression (first 1700 files).
+<LI>As (2) but small-mode decompression.
 
 <LI>As (2) with block size 2 bytes.
 
@@ -379,13 +388,9 @@ break it.
 
 <LI>As (2) with block size 6 bytes and small-mode decompression.
 
-<LI>H with normal buffer sizes (5000 bytes), normal block
+<LI>H with buffer size of 1 byte, but normal block
 
-      size (up to 900000 bytes), but with randomisation
-      mechanism running intensely (randomising approximately every
-      third byte).
-<LI>As (9) with small-mode decompression.
-
+      size (up to 900000 bytes).
 </OL>
 
 <P>
@@ -402,32 +407,44 @@ Then some tests with unmodified source code.
 
 <LI>Forwards compatibility: H, <CODE>bzip2-0.1pl2</CODE> compressing,
 
-      <CODE>bzip2-0.9.0</CODE> decompressing, all settings normal.
-<LI>Backwards compatibility:  H, <CODE>bzip2-0.9.0</CODE> compressing,
+      <CODE>bzip2-0.9.5</CODE> decompressing, all settings normal.
+<LI>Backwards compatibility:  H, <CODE>bzip2-0.9.5</CODE> compressing,
 
       <CODE>bzip2-0.1pl2</CODE> decompressing, all settings normal.
 <LI>Bigger tests: A, all settings normal.
 
-<LI>P, all settings normal.
+<LI>As (7), using the fallback (Sadakane-like) sorting algorithm.
 
-<LI>Misc test: about 100 megabytes of <CODE>.tar</CODE> files with
+<LI>As (8), compress with flag <CODE>-1</CODE>, decompress with flag
 
-      <CODE>bzip2</CODE> compiled with Purify.
+      <CODE>-s</CODE>.
+<LI>H, using the fallback sorting algorithm.
+
+<LI>Forwards compatibility: A, <CODE>bzip2-0.1pl2</CODE> compressing,
+
+      <CODE>bzip2-0.9.5</CODE> decompressing, all settings normal.
+<LI>Backwards compatibility:  A, <CODE>bzip2-0.9.5</CODE> compressing,
+
+      <CODE>bzip2-0.1pl2</CODE> decompressing, all settings normal.
+<LI>Misc test: about 400 megabytes of <CODE>.tar</CODE> files with
+
+      <CODE>bzip2</CODE> compiled with Checker (a memory access error
+       detector, like Purify).
 <LI>Misc tests to make sure it builds and runs ok on non-Linux/x86
 
       platforms.
 </OL>
 
 <P>
-These tests were conducted on a 205 MHz Cyrix 6x86MX machine, running
-Linux 2.0.32.  They represent nearly a week of continuous computation.
+These tests were conducted on a 225 MHz IDT WinChip machine, running
+Linux 2.0.36.  They represent nearly a week of continuous computation.
 All tests completed successfully.
 
 </P>
 
 
 
-<H2><A NAME="SEC39" HREF="manual_toc.html#TOC39">Further reading</A></H2>
+<H2><A NAME="SEC49" HREF="manual_toc.html#TOC49">Further reading</A></H2>
 <P>
 <CODE>bzip2</CODE> is not research work, in the sense that it doesn't present
 any new ideas.  Rather, it's an engineering exercise based on existing
@@ -456,7 +473,7 @@ David J. Wheeler
    Program bred3.c and accompanying document bred3.ps.
    This contains the idea behind the multi-table Huffman
    coding scheme.
-   ftp://ftp.cl.cam.ac.uk/pub/user/djw3/
+   ftp://ftp.cl.cam.ac.uk/users/djw3/
 
 Jon L. Bentley and Robert Sedgewick
   "Fast Algorithms for Sorting and Searching Strings"
@@ -494,7 +511,18 @@ available from:
 http://www.cs.arizona.edu/people/gene/PAPERS/suffix.ps
 </PRE>
 
+<P>
+Finally, the following paper documents some recent investigations
+I made into the performance of sorting algorithms:
+
+<PRE>
+Julian Seward:
+   On the Performance of BWT Sorting Algorithms
+   Proceedings of the IEEE Data Compression Conference 2000
+     Snowbird, Utah.  28-30 March 2000.
+</PRE>
+
 <P><HR><P>
-Go to the <A HREF="manual_1.html">first</A>, <A HREF="manual_3.html">previous</A>, next, last section, <A HREF="manual_toc.html">table of contents</A>.
+<p>Go to the <A HREF="manual_1.html">first</A>, <A HREF="manual_3.html">previous</A>, next, last section, <A HREF="manual_toc.html">table of contents</A>.
 </BODY>
 </HTML>

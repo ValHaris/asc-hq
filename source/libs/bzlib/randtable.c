@@ -8,7 +8,7 @@
   This file is a part of bzip2 and/or libbzip2, a program and
   library for lossless, block-sorting data compression.
 
-  Copyright (C) 1996-1998 Julian R Seward.  All rights reserved.
+  Copyright (C) 1996-2000 Julian R Seward.  All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions
@@ -41,9 +41,9 @@
   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-  Julian Seward, Guildford, Surrey, UK.
+  Julian Seward, Cambridge, UK.
   jseward@acm.org
-  bzip2/libbzip2 version 0.9.0c of 18 October 1998
+  bzip2/libbzip2 version 1.0 of 21 March 2000
 
   This program is based on (at least) the work of:
      Mike Burrows
@@ -63,7 +63,7 @@
 
 
 /*---------------------------------------------*/
-Int32 rNums[512] = { 
+Int32 BZ2_rNums[512] = { 
    619, 720, 127, 481, 931, 816, 813, 233, 566, 247, 
    985, 724, 205, 454, 863, 491, 741, 242, 949, 214, 
    733, 859, 335, 708, 621, 574, 73, 654, 730, 472, 
