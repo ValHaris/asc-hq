@@ -1,4 +1,8 @@
 bi3maptranslation {
+
+    ;The first entry is the picture number that is going to be replaced by the 
+    ; picture number of the second entry.
+
     TerrainTranslation = [ 574  526 
                            575 1233
 			   577 1244
@@ -16,9 +20,25 @@ bi3maptranslation {
 			   466  452 
 			   237 1110 
 			   233 1094 ]
+
+    ; This is a special translation for the fields that must be translated to 
+    ; a terrain AND an additional object. Entries are:
+    ;       bigraph;
+    ;       terrainid;
+    ;       terrainweather;
+    ;       objectid;
+
 			   
     TerrainObjTranslation = [ 222 1011 0 1 
                               223 1012 0 1 ]
+
+
+   ; These BI object pictures can be translated to up to four ASC objects. 
+   ; The first entry is again the BI picture number, the following four the 
+   ;  pictures for the ASC objects. A -1 is used if the entry is not used. 
+   ; It does not matter if you  use " -1, 1500, -1  , -1 " or 
+   ; " 1500, -1  , -1,  -1" or any other order.
+
 			      
     ObjectTranslation =  [ 1264 1470 1500 -1 -1 
                            1265 1470 -1 1560 -1  

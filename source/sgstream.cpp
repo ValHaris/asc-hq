@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.63 2001-08-02 15:33:02 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.64 2001-08-02 18:50:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.63  2001/08/02 15:33:02  mbickel
+//      Completed text based file formats
+//
 //     Revision 1.62  2001/07/30 17:43:13  mbickel
 //      Added Microsoft Visual Studio .net project files
 //      Fixed some warnings
@@ -127,7 +130,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
 
@@ -166,7 +169,7 @@
 
 
 const char* asc_EnvironmentName = "ASC_CONFIGFILE";
-
+int dataVersion = 0;
 
 #ifdef logging
 FILE* logfile = NULL;
@@ -1237,6 +1240,18 @@ void initFileIO ( const char* configFileName )
    checkFileLoadability ( "palette.pal" );
 }
 
+void checkDataVersion( )
+{
+      if ( exist ( "data.version" )) {
+         tnfilestream s ( "data.version", tnstream::reading );
+         dataVersion = s.readInt();
+      } else
+         dataVersion = 0;
+
+      if ( dataVersion < 5 || dataVersion > 0xffff )
+         fatalError("A newer version of the data files is required. \n"
+                    "You can get a new data package at http://www.asc-hq.org", 2 );
+}
 
 //===================================================================================
 

@@ -2,9 +2,12 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.91 2001-07-28 21:09:08 mbickel Exp $
+//     $Id: spfst.cpp,v 1.92 2001-08-02 18:50:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.91  2001/07/28 21:09:08  mbickel
+//      Prepared vehicletype structure for textIO
+//
 //     Revision 1.90  2001/07/28 11:19:12  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -172,18 +175,10 @@
 #include "buildings.h"
 
 
-   int dataVersion = 0;
-
    tcursor            cursor;
    pmap              actmap;
 
-
-
-
    Schriften schriften;
-
-
-
 
 
 #ifdef _NOASM_

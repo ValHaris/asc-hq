@@ -228,7 +228,7 @@ void PropertyContainer::warning ( const ASCString& errmsg )
 
 void PropertyContainer::error ( const ASCString& errmsg )
 {
-   warning( errmsg );
+   fatalError ( errmsg.c_str() );
 }
 
 
@@ -725,11 +725,7 @@ TextPropertyGroup* TextFormatParser::run (  )
 
 void TextFormatParser::error ( const ASCString& errmsg )
 {
-   #ifdef converter
    fatalError ( errmsg.c_str() );
-   #else
-   displaymessage(errmsg, 1 );
-   #endif
 }
 
 

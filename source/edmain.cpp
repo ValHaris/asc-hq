@@ -2,9 +2,12 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.48 2001-08-02 18:18:02 mbickel Exp $
+//     $Id: edmain.cpp,v 1.49 2001-08-02 18:50:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2001/08/02 18:18:02  mbickel
+//      BI3 map translation tables now in textfile too
+//
 //     Revision 1.47  2001/08/02 15:33:01  mbickel
 //      Completed text based file formats
 //
@@ -873,10 +876,8 @@ int main(int argc, char *argv[] )
    if (  cl->w() )
       fullscreen = 0;
 
-   #ifdef HEXAGON
-    check_bi3_dir ();
-   #endif
-
+   checkDataVersion();
+   check_bi3_dir ();
 
    modenum8 = initgraphics( cl->x(), cl->y(), 8 );
    if ( modenum8 < 0 )

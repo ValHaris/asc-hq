@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: sg.cpp,v 1.157 2001-08-02 15:33:01 mbickel Exp $
+//     $Id: sg.cpp,v 1.158 2001-08-02 18:50:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.157  2001/08/02 15:33:01  mbickel
+//      Completed text based file formats
+//
 //     Revision 1.156  2001/07/30 17:43:13  mbickel
 //      Added Microsoft Visual Studio .net project files
 //      Fixed some warnings
@@ -2506,16 +2509,7 @@ int main(int argc, char *argv[] )
    initFileIO( cl->c().c_str() );  // passing the filename from the command line options
 
    try {
-      if ( exist ( "data.version" )) {
-         tnfilestream s ( "data.version", tnstream::reading );
-         dataVersion = s.readInt();
-      } else
-         dataVersion = 0;
-
-      if ( dataVersion < 4 || dataVersion > 0xffff )
-         displaymessage("A newer version of the data files is required. \n"
-                        "You can get a new data package at http://www.asc-hq.org", 2 );
-
+      checkDataVersion();
       check_bi3_dir ();
    }
    catch ( tfileerror err ) {

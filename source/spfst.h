@@ -5,9 +5,13 @@
 */
 
 
-//     $Id: spfst.h,v 1.43 2001-07-28 11:19:12 mbickel Exp $
+//     $Id: spfst.h,v 1.44 2001-08-02 18:50:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2001/07/28 11:19:12  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.42  2001/03/30 12:43:16  mbickel
 //      Added 3D pathfinding
 //      some cleanup and documentation
@@ -119,8 +123,6 @@
                pfont        monogui;
             } ; 
    extern Schriften schriften;
-
-   extern int dataVersion;
 
    class tcursor { 
            public:

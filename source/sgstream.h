@@ -3,9 +3,13 @@
   
 */
 
-//     $Id: sgstream.h,v 1.20 2001-07-28 11:19:12 mbickel Exp $
+//     $Id: sgstream.h,v 1.21 2001-08-02 18:50:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2001/07/28 11:19:12  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.19  2001/07/27 21:13:35  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -204,5 +208,9 @@ extern void loadUnitSets ( void );
 //! displays a message on the log. If msgVerbosity is greater than the game verbosity, the message is NOT printed
 extern void displayLogMessage ( int msgVerbosity, char* message, ... );
 extern void displayLogMessage ( int msgVerbosity, const ASCString& message );
+
+extern int dataVersion;
+extern void checkDataVersion( );
+
 
 #endif
