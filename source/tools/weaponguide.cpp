@@ -556,6 +556,18 @@ int main(int argc, char *argv[] )
             }
             fprintf ( detailed4, "</table>\n" );
 
+            for ( unsigned int i = 0; i < ft->objectsRemovable.size(); i++ ) {
+//               fprintf( detailed4, "<tr><td>es können die Objekte mit ids von %d bis %d gebaut werden</td></tr>\n", ft->objectsBuildable[i].from, ft->objectsBuildable[i].to );
+               for ( int b = 0; b < objecttypenum; b++ ) {
+                  pobjecttype obj = getobjecttype_forpos ( b );
+                  if (     obj->id >= ft->objectsRemovable[i].from
+                        && obj->id <= ft->objectsRemovable[i].to ) {
+                     fprintf ( detailed4, "<tr><td>ID %d </td><td align=\"center\"> %s </td></tr>\n", obj->id, obj->name.c_str() );
+                  }
+               }
+            }
+
+
 			// UNITS
             fprintf ( detailed4, "<table align=\"left\" id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">\n" );
             // Ueberschrift baubare Einheiten

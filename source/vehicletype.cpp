@@ -133,16 +133,17 @@ Vehicletype :: Vehicletype ( void )
 
 int Vehicletype :: vehicleloadable ( pvehicletype fzt ) const
 {
-   if (( ( (loadcapabilityreq & fzt->height) || !loadcapabilityreq ) &&
-         !(loadcapabilitynot & fzt->height) &&
-         (loadcapability & fzt->height))
-        || (fzt->functions & cf_trooper))
-      if ( maxunitweight >= fzt->weight ) {
-         if ( loadcapability & (   chtiefgetaucht | chgetaucht | chschwimmend | chfahrend | chsatellit ))
-            return 1;
-         else
-            return fzt->steigung <= 2;
-      }
+   if ( vehicleCategoriesLoadable & ( 1 << fzt->movemalustyp))
+      if (( ( (loadcapabilityreq & fzt->height) || !loadcapabilityreq ) &&
+            !(loadcapabilitynot & fzt->height) &&
+            (loadcapability & fzt->height))
+           || (fzt->functions & cf_trooper))
+         if ( maxunitweight >= fzt->weight ) {
+            if ( loadcapability & (   chtiefgetaucht | chgetaucht | chschwimmend | chfahrend | chsatellit ))
+               return 1;
+            else
+               return fzt->steigung <= 2;
+         }
    return 0;
 }
 
