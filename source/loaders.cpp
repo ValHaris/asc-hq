@@ -1,6 +1,9 @@
-//     $Id: loaders.cpp,v 1.29 2000-10-14 10:52:51 mbickel Exp $
+//     $Id: loaders.cpp,v 1.30 2000-10-14 13:07:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/10/14 10:52:51  mbickel
+//      Some adjustments for a Win32 port
+//
 //     Revision 1.28  2000/10/11 14:26:42  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -167,12 +170,11 @@
 #include <stdio.h>
 #include <malloc.h>
 
-#include "tpascal.inc"
+#include "typen.h"
 #include "misc.h"
 #include "keybp.h"
 #include "basegfx.h"
 #include "newfont.h"
-#include "typen.h"
 #include "buildingtype.h"
 #include "vehicletype.h"
 #include "spfst.h"

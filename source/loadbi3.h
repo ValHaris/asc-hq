@@ -1,6 +1,9 @@
-//     $Id: loadbi3.h,v 1.6 2000-09-16 11:47:29 mbickel Exp $
+//     $Id: loadbi3.h,v 1.7 2000-10-14 13:07:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/09/16 11:47:29  mbickel
+//      Some cleanup and documentation again
+//
 //     Revision 1.5  2000/07/29 14:54:37  mbickel
 //      plain text configuration file implemented
 //
@@ -12,12 +15,12 @@
 //      Added support for multiple graphic sets
 //
 //     Revision 1.2  1999/11/16 03:41:55  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
+//      Added CVS keywords to most of the files.
+//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//      Wrote replacement routines for kbhit/getch for Linux
+//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//      Added autoconf/automake capabilities
+//      Added files used by 'automake --gnu'
 //
 //
 /*
@@ -47,8 +50,8 @@
    Loading Battle Isle 3 maps and graphics
 */
 
-#include "sgstream.h"
 #include "typen.h"
+#include "sgstream.h"
 #include "palette.h"
 
 extern void loadbi3graphics( void );

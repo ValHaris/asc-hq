@@ -1,6 +1,9 @@
-//     $Id: weather.cpp,v 1.4 2000-10-12 22:24:03 mbickel Exp $
+//     $Id: weather.cpp,v 1.5 2000-10-14 13:07:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/10/12 22:24:03  mbickel
+//      Made the DOS part of the new platform system work again
+//
 //     Revision 1.3  1999/11/22 18:28:08  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -11,12 +14,12 @@
 //      Fixed bugs in RLE decompression, BI map importer and the view calculation
 //
 //     Revision 1.2  1999/11/16 03:42:51  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
+//      Added CVS keywords to most of the files.
+//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//      Wrote replacement routines for kbhit/getch for Linux
+//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//      Added autoconf/automake capabilities
+//      Added files used by 'automake --gnu'
 //
 //
 /*
@@ -42,12 +45,11 @@
 
 #include <math.h>
 #include <stdio.h>
-#include "tpascal.inc"
+#include "typen.h"
 #include "misc.h"
 #include "basegfx.h"
 #include "newfont.h"
 #include "keybp.h"
-#include "typen.h"
 #include "loaders.h"
 #include "spfst.h"
 #include "weather.h"
@@ -257,9 +259,9 @@ void   tfillpolygon::setpoint ( int x, int y )
 
 void   tfillpolygon :: paintline      ( int x1, int y1, int x2, int y2 )
 {
-	float           m, b;
-	int             w;
-	float           yy1, yy2, xx1, xx2;
+        float           m, b;
+        int             w;
+        float           yy1, yy2, xx1, xx2;
 
 
 
@@ -271,38 +273,38 @@ void   tfillpolygon :: paintline      ( int x1, int y1, int x2, int y2 )
           for (w=x1;w<=x2 ;w++ ) 
                setpoint( w, y1 );
        } else {
-        	yy1 = y1;
-        	yy2 = y2;
-        	xx1 = x1;
-        	xx2 = x2;
-        	m = (yy2 - yy1) / (xx2 - xx1);
-        	b = y1 - m * x1;
-        	if ((m <= 1) && (m >= -1)) {
-        		if (x2 < x1) {
-        			w = x2;
-        			x2 = x1;
-        			x1 = w;
-        			w = y2;
-        			y2 = y1;
-        			y1 = w;
-        		}
-        		for (w = x1; w <= x2; w++) 
-        			setpoint(w, (int) (m * w + b) );
-        		
-        	} else {
-        		if (y2 < y1) {
-        			w = x2;
-        			x2 = x1;
-        			x1 = w;
-        			w = y2;
-        			y2 = y1;
-        			y1 = w;
-        		}
-        		for (w = y1; w <= y2; w++) {
-        			setpoint( (int) ((w - b) / m), w );
-        		}
+                yy1 = y1;
+                yy2 = y2;
+                xx1 = x1;
+                xx2 = x2;
+                m = (yy2 - yy1) / (xx2 - xx1);
+                b = y1 - m * x1;
+                if ((m <= 1) && (m >= -1)) {
+                        if (x2 < x1) {
+                                w = x2;
+                                x2 = x1;
+                                x1 = w;
+                                w = y2;
+                                y2 = y1;
+                                y1 = w;
+                        }
+                        for (w = x1; w <= x2; w++) 
+                                setpoint(w, (int) (m * w + b) );
+                        
+                } else {
+                        if (y2 < y1) {
+                                w = x2;
+                                x2 = x1;
+                                x1 = w;
+                                w = y2;
+                                y2 = y1;
+                                y1 = w;
+                        }
+                        for (w = y1; w <= y2; w++) {
+                                setpoint( (int) ((w - b) / m), w );
+                        }
         
-        	}
+                }
          } /* endif */
     }
 }
@@ -487,11 +489,11 @@ ppolygon read_segments2(char* filename)
       first = i;
       last = first + npoints - 1;
       for (j = 0; j < npoints; j++, i++)
-	{
-	  fscanf(infile, "%lf%lf", &x, &y);
+        {
+          fscanf(infile, "%lf%lf", &x, &y);
           poly->vertex[j].x = (int) x*10;
           poly->vertex[j].y = (int) y*10;
-	}
+        }
 
       ccount++;
     }

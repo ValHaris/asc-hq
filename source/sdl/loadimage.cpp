@@ -23,6 +23,7 @@
 #include "../palette.h"
 #include "../loadpcx.h"
 
+#ifndef __WATCOM_CPLUSPLUS__
 extern "C" SDL_Surface *IMG_LoadJPG_RW_D(SDL_RWops *src, int depth);
 
 
@@ -33,13 +34,13 @@ void read_JPEG_file ( pnstream stream )
       SDL_RWclose(src);
 
       SDL_Surface* screen = SDL_GetVideoSurface();
-                   	
+                        
       if ( convimg->format->palette )
          SDL_SetColors(screen, convimg->format->palette->colors, 0, convimg->format->palette->ncolors);
 
       SDL_StretchSurface( convimg,0,0,convimg->w-1,convimg->h-1,
                           screen, 0,0,screen->w-1, screen->h-1);
-       	
+        
       SDL_UpdateRect(screen, 0,0,0,0);
 
       SDL_FreeSurface ( convimg );
@@ -94,5 +95,13 @@ void closeFullscreenImage ( void )
    setvgapalette256(pal);
 }
 
+
+#else
+int loadFullscreenImage ( const char* filename ){ return 0;}
+void read_JPEG_file ( pnstream stream ) {}
+void closeFullscreenImage ( void ) {}
+#endif
+
 void setFullscreenSetting ( FullscreenImageSettings setting, int value )
 {}
+

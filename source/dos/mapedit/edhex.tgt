@@ -22,8 +22,8 @@ MCommand
 wtouch ..\..\strtmesg.cpp
 5
 MCommand
-21
-\copyexecutable edhex
+46
+if exist \copyexecutable \copyexecutable edhex
 6
 MItem
 9
@@ -1162,8 +1162,8 @@ WVList
 0
 270
 MItem
-29
-..\..\libs\bzlib\libbzip2.lib
+33
+..\..\libs\bzlib\dos\libbzip2.lib
 271
 WString
 3
@@ -1198,8 +1198,8 @@ WVList
 0
 278
 MItem
-32
-..\..\libs\triangul\triangul.lib
+36
+..\..\libs\triangul\dos\triangul.lib
 279
 WString
 3

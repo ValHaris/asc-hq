@@ -1,6 +1,9 @@
-//     $Id: global_os.h,v 1.1 2000-10-14 10:55:06 mbickel Exp $
+//     $Id: global_os.h,v 1.2 2000-10-14 13:07:05 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/10/14 10:55:06  mbickel
+//      Added ASC-Win32 project files for Watcom
+//
 //     Revision 1.1  2000/10/12 21:37:56  mbickel
 //      Further restructured platform dependant routines
 //
@@ -40,11 +43,6 @@
   #define HAVE_LIMITS
   #define StaticClassVariable static
   namespace std {};
-
-  #ifndef converter
-   #define UseMemAvail
-   #define UseMemCheck
-  #endif
 
   #define sdlheader "sdl.h"
 #endif

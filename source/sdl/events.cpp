@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.19 2000-10-12 21:37:57 mbickel Exp $
+//     $Id: events.cpp,v 1.20 2000-10-14 13:07:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/10/12 21:37:57  mbickel
+//      Further restructured platform dependant routines
+//
 //     Revision 1.18  2000/10/11 14:26:57  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -119,7 +122,7 @@
 
 
 /* Data touched at mouse callback time -- they are in a structure to
-	simplify calculating the size of the region to lock.
+        simplify calculating the size of the region to lock.
 */
 
 
@@ -127,8 +130,10 @@ volatile tmousesettings mouseparams = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,
 
 SDL_mutex* keyboardmutex = NULL;
 
-std::queue<tkey>   keybuffer_sym;
-std::queue<Uint32> keybuffer_prnt;
+typedef deque<tkey> tkey_dqueue;
+std::queue<tkey,tkey_dqueue>   keybuffer_sym;
+typedef deque<Uint32> Uint32_dqueue;
+std::queue<Uint32,Uint32_dqueue> keybuffer_prnt;
 
 
 int eventthreadinitialized = 0;
@@ -175,8 +180,8 @@ const int mousetranslate[3] = { 0, 2,1 };  // in DOS  right button is 1 and cent
 
 int eventhandler ( void* nothing )
 {
-	SDL_Event event;
-	while ( !closethread ) {
+        SDL_Event event;
+        while ( !closethread ) {
       if ( SDL_PollEvent ( &event ) == 1) {
          switch ( event.type ) {
             case SDL_MOUSEBUTTONUP:
@@ -206,19 +211,19 @@ int eventhandler ( void* nothing )
             }
             break;
             case SDL_KEYDOWN: {
-            	int r = SDL_mutexP ( keyboardmutex );
-            	if ( !r ) {
-            	   tkey key = event.key.keysym.sym;
-            	   if ( event.key.keysym.mod & KMOD_ALT )
-            	      key |= ct_altp;
-            	   if ( event.key.keysym.mod & KMOD_CTRL )
-            	      key |= ct_stp;
-            	   if ( event.key.keysym.mod & KMOD_SHIFT )
-            	      key |= ct_shp;
-            	   keybuffer_sym.push ( key );
-            	   keybuffer_prnt.push ( event.key.keysym.unicode );
-            	   r = SDL_mutexV ( keyboardmutex );
-            	}
+                int r = SDL_mutexP ( keyboardmutex );
+                if ( !r ) {
+                   tkey key = event.key.keysym.sym;
+                   if ( event.key.keysym.mod & KMOD_ALT )
+                      key |= ct_altp;
+                   if ( event.key.keysym.mod & KMOD_CTRL )
+                      key |= ct_stp;
+                   if ( event.key.keysym.mod & KMOD_SHIFT )
+                      key |= ct_shp;
+                   keybuffer_sym.push ( key );
+                   keybuffer_prnt.push ( event.key.keysym.unicode );
+                   r = SDL_mutexV ( keyboardmutex );
+                }
             }
             break;
             case SDL_KEYUP: {
@@ -243,13 +248,13 @@ int initeventthread ( void )
       keyboardmutex = SDL_CreateMutex ();
       if ( !keyboardmutex ) {
          printf("creating keyboard mutex failed\n" );
-      	exit(1);
+        exit(1);
       }
       SDL_EnableUNICODE ( 1 );
       eventthread = SDL_CreateThread ( eventhandler, NULL );
    }
    eventthreadinitialized++;
-	return 0;
+        return 0;
 }
 
 int closeeventthread ( void )
@@ -260,7 +265,7 @@ int closeeventthread ( void )
          closethread = 1;
       }
    }
-	return 0; 
+        return 0; 
 }
 
 
@@ -394,70 +399,70 @@ tinitmousehandler :: tinitmousehandler ( void ) {
 int keypress( void )
 {
    int result = 0;
-  	int r = SDL_mutexP ( keyboardmutex );
-  	if ( !r ) {
-  		result = !keybuffer_sym.empty ( );
-  	   r = SDL_mutexV ( keyboardmutex );
-  	}
+        int r = SDL_mutexP ( keyboardmutex );
+        if ( !r ) {
+                result = !keybuffer_sym.empty ( );
+           r = SDL_mutexV ( keyboardmutex );
+        }
    return result;
 }
 
 
 tkey r_key(void)
 {
-	int found = 0;
+        int found = 0;
    tkey key;
-  	do {
+        do {
       int r = SDL_mutexP ( keyboardmutex );
-    	if ( !r ) {
-    	   if ( !keybuffer_sym.empty() ) {
+        if ( !r ) {
+           if ( !keybuffer_sym.empty() ) {
             key = keybuffer_sym.front();
             keybuffer_sym.pop();
             keybuffer_prnt.pop();
             found++;
          }
          r = SDL_mutexV ( keyboardmutex );
-    	}
-    	if (!found ) {
-      	int t = ticker;
-      	while ( t + 5 > ticker )
-      	   releasetimeslice();
-      }	
-   } while ( !found ); 	
+        }
+        if (!found ) {
+        int t = ticker;
+        while ( t + 5 > ticker )
+           releasetimeslice();
+      } 
+   } while ( !found );  
    return key;
 }
 
 int rp_key(void)
 {
-	int found = 0;
+        int found = 0;
    tkey key;
-  	do {
+        do {
       int r = SDL_mutexP ( keyboardmutex );
-    	if ( !r ) {
-    	   if ( !keybuffer_prnt.empty() ) {
+        if ( !r ) {
+           if ( !keybuffer_prnt.empty() ) {
             key = keybuffer_prnt.front();
             keybuffer_sym.pop();
             keybuffer_prnt.pop();
             found++;
          }
          r = SDL_mutexV ( keyboardmutex );
-    	}
-    	if (!found ) {
-      	int t = ticker;
-      	while ( t + 5 > ticker )
-      	   releasetimeslice();
-      }	
-   } while ( !found ); 	
+        }
+        if (!found ) {
+        int t = ticker;
+        while ( t + 5 > ticker )
+           releasetimeslice();
+      } 
+   } while ( !found );  
    return key;
 }
 
 void getkeysyms ( tkey* keysym, int* keyprnt )
 {
-	int found = 0;
-  	do {
+        int found = 0;
+        do {
       int r = SDL_mutexP ( keyboardmutex );
-    	if ( !r ) {
-    	   if ( !keybuffer_prnt.empty() ) {
+        if ( !r ) {
+           if ( !keybuffer_prnt.empty() ) {
             *keysym = keybuffer_sym.front();
             *keyprnt = keybuffer_prnt.front();
             keybuffer_sym.pop();
@@ -465,13 +470,13 @@ void getkeysyms ( tkey* keysym, int* keyprnt )
             found++;
          }
          r = SDL_mutexV ( keyboardmutex );
-    	}
-    	if (!found ) {
-      	int t = ticker;
-      	while ( t + 5 > ticker )
-      	   releasetimeslice();
-      }	
-   } while ( !found ); 	
+        }
+        if (!found ) {
+        int t = ticker;
+        while ( t + 5 > ticker )
+           releasetimeslice();
+      } 
+   } while ( !found );  
 }
 
 

@@ -1,6 +1,9 @@
-//     $Id: sgstream.cpp,v 1.34 2000-10-12 22:24:02 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.35 2000-10-14 13:07:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2000/10/12 22:24:02  mbickel
+//      Made the DOS part of the new platform system work again
+//
 //     Revision 1.33  2000/10/12 21:37:55  mbickel
 //      Further restructured platform dependant routines
 //
@@ -152,12 +155,12 @@
 //      Fixed bugs in RLE decompression, BI map importer and the view calculation
 //
 //     Revision 1.2  1999/11/16 03:42:28  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
+//      Added CVS keywords to most of the files.
+//      Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//      Wrote replacement routines for kbhit/getch for Linux
+//      Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//      Added autoconf/automake capabilities
+//      Added files used by 'automake --gnu'
 //
 //
 /*
@@ -364,22 +367,30 @@ void         tbufstream::init(void)
 
    devicename = "abstract"; 
 
+  #ifdef UseMemAvail 
   if (memavail() > maxmemsize)
       memsize = maxmemsize; 
    else 
-      memsize = memavail(); 
+      memsize = memavail();
+  #else
+   memsize = maxmemsize; 
+  #endif
 
 
    zeiger = (char*) asc_malloc( memsize );
 
    #ifdef dlg_box_h
    if (zeiger == NULL) 
-      displaymessage("tbufstream::init \ncould not allocate memory !\nmemavail = %d \n",2,memavail());
+      displaymessage("tbufstream::init \ncould not allocate memory !\nmemavail = %d \n",2,
+      #ifdef UseMemAvail
+       memavail()
+      #else
+       int(0)
+      #endif
+      );
    #endif
 
    datasize = 0; 
-
-//   logfile = fopen ( "D:\\SG.LOG", "wt");
 } 
 
 
@@ -437,10 +448,14 @@ void         tbufstream::readpchar(char** pc)
       displaymessage("attempt to read pchar from a file opened only for writing\nfile: %s\n", 2,devicename);
    #endif
 
+   #ifdef UseMemAvail 
    if (memavail() < 0xffff)
       ms = memavail(); 
-   else  
-      ms = 0xffff; 
+   else
+      ms = 0xffff;
+   #else 
+   ms = 0xffff;
+   #endif
 
    pch1 = (char*) asc_malloc ( 0xffff );
 
@@ -1198,8 +1213,8 @@ pvehicletype   loadvehicletype( pnstream stream )
                stream->readrlepict ( &fztn->picture[i], false, &size);
             else
                loadbi3pict_double ( fztn->bipicture, 
-									&fztn->picture[i], 
-									CGameOptions::Instance()->bi3.interpolate.units );
+                                                                        &fztn->picture[i], 
+                                                                        CGameOptions::Instance()->bi3.interpolate.units );
 
       if ( fztn->objectsbuildablenum ) {
          fztn->objectsbuildableid = new int [ fztn->objectsbuildablenum ];
@@ -1799,8 +1814,8 @@ pbuildingtype       loadbuildingtype( pnstream stream )
                        stream->readrlepict ( &pgbt->w_picture[w][k][i][j], false, &sz ); 
                      } else 
                         loadbi3pict_double ( pgbt->bi_picture[w][k][i][j],
-										&pgbt->w_picture[w][k][i][j],
-										CGameOptions::Instance()->bi3.interpolate.buildings );
+                                                                                &pgbt->w_picture[w][k][i][j],
+                                                                                CGameOptions::Instance()->bi3.interpolate.buildings );
                      
                   
        pgbt->terrain_access = &pgbt->terrainaccess; 
@@ -2102,8 +2117,8 @@ pterraintype      loadterraintype( pnstream stream )
                      stream->readdata ( pgbt->picture[j], fieldsize );
                    } else 
                       loadbi3pict_double ( pgbt->bi_picture[j], 
-											&pgbt->picture[j], 
-											CGameOptions::Instance()->bi3.interpolate.terrain );
+                                                                                        &pgbt->picture[j], 
+                                                                                        CGameOptions::Instance()->bi3.interpolate.terrain );
    
             pgbt->terraintype = bbt;
             if ( pgbt->quickview ) {
@@ -2222,8 +2237,8 @@ pobjecttype   loadobjecttype( pnstream stream )
                   stream->readdata2 ( fztn->picture[ww][n] );
                   if ( fztn->picture[ww][n].bi3pic != -1 ) 
                      loadbi3pict_double ( fztn->picture[ww][n].bi3pic,
-					 &fztn->picture[ww][n].picture, 
-					 CGameOptions::Instance()->bi3.interpolate.objects, 0 );
+                                         &fztn->picture[ww][n].picture, 
+                                         CGameOptions::Instance()->bi3.interpolate.objects, 0 );
                   else
                      stream->readrlepict ( &fztn->picture[ww][n].picture, false, &w);
 
@@ -2263,9 +2278,9 @@ pobjecttype   loadobjecttype( pnstream stream )
                   for ( int n = 0; n < fztn->pictnum; n++ ) 
                      if ( fztn->picture[ww][n].bi3pic != -1 ) {
                         asc_free ( fztn->picture[ww][n].picture );
-                        loadbi3pict_double (	fztn->picture[ww][n].bi3pic,
-												&fztn->picture[ww][n].picture,
-												CGameOptions::Instance()->bi3.interpolate.objects );
+                        loadbi3pict_double (    fztn->picture[ww][n].bi3pic,
+                                                                                                &fztn->picture[ww][n].picture,
+                                                                                                CGameOptions::Instance()->bi3.interpolate.objects );
                      }
 
      /*
@@ -2506,7 +2521,7 @@ char* getConfigFileName ( char* buffer )
 }
 
 
-CLoadableGameOptions* loadableGameOptions =	NULL;
+CLoadableGameOptions* loadableGameOptions =     NULL;
 
 int readgameoptions ( const char* filename )
 {
@@ -2529,10 +2544,10 @@ int readgameoptions ( const char* filename )
       configFileNameUsed = strdup ( completeFileName );
 
       if ( !loadableGameOptions )
-		  loadableGameOptions = new CLoadableGameOptions (CGameOptions::Instance());
+                  loadableGameOptions = new CLoadableGameOptions (CGameOptions::Instance());
 
       std::ifstream is( completeFileName );
-      loadableGameOptions->Load(is);	
+      loadableGameOptions->Load(is);    
    } else {
       CGameOptions::Instance()->setChanged(); // to generate a configuration file
       if ( exist ( "sg.cfg" ) ) {
@@ -2630,7 +2645,7 @@ void checkFileLoadability ( const char* filename )
       char temp[10000];
       temp[0] = 0;
       for ( int i = 0; i < 5; i++ )
-         if ( CGameOptions::Instance()->getSearchPath(i)	) {
+         if ( CGameOptions::Instance()->getSearchPath(i)        ) {
             strcat ( temp, "  " );
             strcat ( temp, CGameOptions::Instance()->getSearchPath(i) );
             strcat ( temp, "\n" );
@@ -2678,10 +2693,10 @@ void initFileIO ( const char* configFileName )
    readgameoptions( configFileName );
 
    for ( int i = 0; i < CGameOptions::Instance()->getSearchPathNum(); i++ )
-      if ( CGameOptions::Instance()->getSearchPath(i)	) {
+      if ( CGameOptions::Instance()->getSearchPath(i)   ) {
          if ( verbosity > 2 )
-            printf(	"adding search patch %s\n",
-					CGameOptions::Instance()->getSearchPath(i));
+            printf(     "adding search patch %s\n",
+                                        CGameOptions::Instance()->getSearchPath(i));
          addSearchPath ( CGameOptions::Instance()->getSearchPath(i) );
       }
    try {
@@ -2828,7 +2843,7 @@ void SingleUnitSet::read ( pnstream stream )
 
          int seppos = s2.find_first_of ( separator );
          if ( seppos >= 0 ) {
-			 std::string b = s2.substr(0, seppos);
+                         std::string b = s2.substr(0, seppos);
             std::string e = s2.substr( seppos+1 );
             if ( b == "NAME" )
                name = e;
@@ -2857,13 +2872,13 @@ void SingleUnitSet::read ( pnstream stream )
    } else {
       int seppos = s.find_first_of ( ';' );
       if ( seppos >= 0 ) {
-		  std::string b = s.substr(0, seppos);
-		  std::string e = s.substr( seppos+1 );
+                  std::string b = s.substr(0, seppos);
+                  std::string e = s.substr( seppos+1 );
          name = b;
          parseIDs ( e.c_str() );
 
          while ( data ) {
-			 std::string s2;
+                         std::string s2;
             data = stream->readTextString ( s2 );
             if ( s2.length() ) {
                TranslationTable* tt = new TranslationTable;
