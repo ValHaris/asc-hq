@@ -3,9 +3,14 @@
 */
 
 
-//     $Id: sg.cpp,v 1.142 2001-06-14 14:46:47 mbickel Exp $
+//     $Id: sg.cpp,v 1.143 2001-07-03 10:05:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.142  2001/06/14 14:46:47  mbickel
+//      The resolution of ASC can be specified in the configuration file
+//      The fileselect dialog box shows the file's location
+//      new ascmap2pcx param: outputdir
+//
 //     Revision 1.141  2001/05/21 12:46:19  mbickel
 //      Fixed infinite loop in AI::strategy
 //      Fixed bugs in mapeditor - event editing
@@ -360,18 +365,14 @@ tsgonlinemousehelpwind* onlinehelpwind = NULL;
 
 int  abortgame;
 
-#define keyinputbuffersize 12
-#define messagedisplaytime 300
-
-tkey         keyinput[keyinputbuffersize]; 
-int         keyinputptr; 
-
 int              modenum8;
 
 int videostartpos = 0;
 
 pprogressbar actprogressbar = NULL;
 cmousecontrol* mousecontrol = NULL;
+
+#define messagedisplaytime 300
 
 
 
@@ -1107,34 +1108,6 @@ void         showpalette(void)
 
 
 
-char      checkinput(char *       s)
-{
-   char* d   = s;
-   int ss;
-   if ( keyinputptr > 0 )
-     ss = keyinputptr-1 ;
-   else
-     ss = keyinputbuffersize -1;
-
-   char b = true;
-
-   while ( d[1] ) d++;
-
-   do {
-      if ( keyinput[ss] != char2key(*d))
-         b = false;
-
-      if ( ss )
-         ss--;
-      else
-         ss = keyinputbuffersize-1;
-
-      d--;
-
-   } while ( b && d>=s ); /* enddo */
-   return b;
-}
-
 
 
 
@@ -1676,10 +1649,6 @@ void mainloopgeneralkeycheck ( tkey& ch )
 {
     ch = r_key();
     checkpulldown( &ch );
-    keyinput[keyinputptr] = ch;
-    keyinputptr++;
-    if (keyinputptr >= keyinputbuffersize)
-       keyinputptr = 0;
 
     movecursor(ch);
     actgui->checkforkey ( ch );
@@ -2418,8 +2387,6 @@ int gamethread ( void* data )
 
       pd.init();
 
-      memset( keyinput, 0, sizeof(keyinput));
-      keyinputptr = 0;
       abortgame = 0;
 
       do {

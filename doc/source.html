@@ -46,14 +46,14 @@ As host platform for the development we use OS/2 and as target platform (you sho
 <H4>for building the Windows version</H4>
 We are building ASC/win with Borland C++ Builder 5. It should be possible to build ASC with other Windows compilers too, if they have some sufficient understanding of the C++ language. Microsoft Visual C++ has not, at least not the version 5 which I tested. Don't invest any time trying to make ASC compilable with MSVC, I'm not going to restrict my programming to Microsofts subset of C++. Period. There are more capable Win32 compilers around, even some free ones. 
 
-<A HREF="http://www.borland.com">Borland</A> C++ for example. The command line version of compiler and debugger are available for free download. Compiling ASC with it should just be a matter of writing Makefiles. <P>
+<A HREF="http://www.borland.com">Borland</A> C++ for example. The command line version of compiler and debugger are available for free download. <P>
 
-<H5>Borland C++ Builder</H5>
+<H5>Borland C++ Builder / free commandline compiler</H5>
 
 <UL>
 <LI>JPEG-lib by the <A HREF="http://www.ijg.org">Independant Jpeg Group</A>. On their homepage are links where you can download the source code.
 <LI>Uncompress the JPEG-lib source code into asc/source/libs/jpeg-6b/
-<LI>SDL. It can be downloaded from <A HREF="http://www.libsdl.org">www.libsdl.org</A>. You need the source code and the DLL file (version 1.1 or newer). 
+<LI>SDL. It can be downloaded from <A HREF="http://www.libsdl.org">www.libsdl.org</A>. You need the source code and the DLL file (version 1.2 or newer). 
 <LI>The project files assume there is a <TT>SDL</TT> directory located in the same directory where <TT>asc</TT> is placed. You need this directory structure:<BR>  <TT>
     asc\<BR>
     asc\source\<BR>
@@ -64,13 +64,16 @@ We are building ASC/win with Borland C++ Builder 5. It should be possible to bui
     </TT>
 <LI>Create a subdirectory called BIN in <TT>SDL\</TT> and put the SDL.DLL into it.
 <LI>Go to this directory and run: <TT>IMPLIB -a -c SDL.LIB SDL.DLL</TT>
+<H6>Borland C++ Builder</H6>
+<LI>Open <TT>asc/Asc.bpg</TT> and run "make all projects"
+<H6>Free Borland C++ command line compiler</H6>
+<LI>Execute <TT>asc/makebcc.bat</TT>
 </UL>
-The project files for the Borland C++ Builder are included in the asc/ directory. <P>
 
 
 <H5>Watcom C++</H5>
 
-Until December 2000 we built ASC/win with Watcom C/C++ , but since it is not fully ANSI C++ compliant, it cannot compile the AI which I'm writing at the time of writing (Dec. 2000). Perhaps some future version of Watcom C++ will understand all the C++, so here are the (old) instructions on how to build ASC with Watcom C++
+Until December 2000 we built ASC/win with Watcom C/C++ , but since it is not fully ANSI C++ compliant, it cannot compile the AI. Perhaps some future version of Watcom C++ will understand all the C++, so here are the (old) instructions on how to build ASC with Watcom C++
 <BLOCKQUOTE>
 To build ASC/win with Watcom, you need:
 <UL>
