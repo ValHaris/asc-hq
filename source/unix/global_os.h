@@ -1,6 +1,9 @@
-//     $Id: global_os.h,v 1.1 2000-10-12 21:37:57 mbickel Exp $
+//     $Id: global_os.h,v 1.2 2001-05-18 22:30:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/10/12 21:37:57  mbickel
+//      Further restructured platform dependant routines
+//
 //     Revision 1.1  2000/10/12 20:21:43  mbickel
 //      Restructuring operating system dependant files
 //
@@ -47,5 +50,9 @@
    #define strnicmp strncasecmp
    #define strncmpi strncasecmp
   #endif
+
+  #define CASE_SENSITIVE_FILE_NAMES 1
+  #define USE_HOME_DIRECTORY 1
+
 
 #endif

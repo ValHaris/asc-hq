@@ -166,3 +166,14 @@ int main (int argc, char *argv[])
   AC_SUBST(SDL_LIBS)
   rm -f conf.sdltest
 ])
+
+
+DNL Embedding the prefix dir into the ASC source
+AC_DEFUN(MY_EXPAND_DIR, [
+                $1=$2
+                $1=`(
+                     test "x$prefix" = xNONE && prefix="$ac_default_prefix"
+                     test "x$exec_prefix" = xNONE && exec_prefix="${prefix}"
+                     eval echo \""[$]$1"\"
+                    )`
+              ])

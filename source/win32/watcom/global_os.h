@@ -1,6 +1,10 @@
-//     $Id: global_os.h,v 1.5 2000-10-31 18:08:28 mbickel Exp $
+//     $Id: global_os.h,v 1.6 2001-05-18 22:30:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/10/31 18:08:28  mbickel
+//      Borland C now uses unsigned char ( tools/Makefile changed )
+//      Added header file for size_t to global_os.h
+//
 //     Revision 1.4  2000/10/17 13:04:16  mbickel
 //      New terrainaccess reading/writing
 //      Added Win32 project files
@@ -59,6 +63,9 @@
   #ifdef __WATCOM_CPLUSPLUS__      // and not Watcom C
   namespace std {};
   #endif
+
+  #define CASE_SENSITIVE_FILE_NAMES 0
+  #define USE_HOME_DIRECTORY 0
 
   #define sdlheader "sdl.h"
   #include <wchar.h>

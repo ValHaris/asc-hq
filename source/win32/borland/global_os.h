@@ -1,6 +1,11 @@
-//     $Id: global_os.h,v 1.4 2001-01-28 21:39:31 mbickel Exp $
+//     $Id: global_os.h,v 1.5 2001-05-18 22:30:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2001/01/28 21:39:31  mbickel
+//      Updated Borland C++ Building project files
+//      Fixed some compilation problems with Borland
+//      Made weaponguide compilable again
+//
 //     Revision 1.3  2000/12/28 11:12:48  mbickel
 //      Fixed: no redraw when restoring fullscreen focus in WIN32
 //      Better error message handing in WIN32
@@ -51,5 +56,9 @@
   #define HAVE_DIRENT_H
   #define StaticClassVariable
   #define NoStdio
+
+ #define CASE_SENSITIVE_FILE_NAMES 0
+ #define USE_HOME_DIRECTORY 0
+
 
 #endif

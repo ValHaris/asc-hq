@@ -66,9 +66,9 @@ install_location=
 type=DATA
 [Workspace_1]
 browser_file=file:/opt/kde2/share/doc/HTML/default/kdevelop/tutorial/index-7.html
-cpp_file=/home/martin/asc/source/loadbi3.cpp
-header_file=Untitled.h
-openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/source/edmain.cpp,/home/martin/asc/source/loadbi3.cpp
+cpp_file=/home/martin/asc/source/gameoptions.cpp
+header_file=/home/martin/asc/source/basestrm.h
+openfiles=Untitled.h,Untitled.cpp,/home/martin/asc/configure.in,/home/martin/asc/data/Makefile.am,/home/martin/asc/acinclude.m4,/home/martin/asc/config.h.in,/home/martin/asc/config.h,/home/martin/asc/acconfig.h,/home/martin/asc/source/basestrm.h,/home/martin/asc/source/basestrm.cpp,/home/martin/asc/source/basestreaminterface.h,/home/martin/asc/source/gameoptions.cpp,/home/martin/asc/source/global.h,/home/martin/asc/source/libs/triangul/trimisc.c,/home/martin/asc/source/unix/fileio.h,/home/martin/asc/source/unix/global_os.h,/home/martin/asc/source/win32/fileio.h,/home/martin/asc/source/win32/borland/fileio.h,/home/martin/asc/source/win32/borland/global_os.h,/home/martin/asc/source/win32/msvc/fileio.h,/home/martin/asc/source/win32/msvc/global_os.h,/home/martin/asc/source/win32/watcom/fileio.h,/home/martin/asc/source/win32/watcom/global_os.h,/home/martin/asc/source/dos/fileio.h,/home/martin/asc/source/dos/global_os.h
 show_outputview=true
 show_treeview=true
 [asc.kdevprj]

@@ -22,10 +22,10 @@
  #define global_h
 
  #ifdef _WIN32_
-  #include "WIN32/global_os.h"
+  #include "win32/global_os.h"
  #else
   #ifdef _DOS_
-   #include "DOS/global_os.h"
+   #include "dos/global_os.h"
   #else
    #ifdef _UNIX_
     #include "unix/global_os.h"

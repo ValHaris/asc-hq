@@ -1,6 +1,10 @@
-//     $Id: fileio.h,v 1.3 2001-02-26 21:14:31 mbickel Exp $
+//     $Id: fileio.h,v 1.4 2001-05-18 22:30:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2001/02/26 21:14:31  mbickel
+//      Added two small editors to the linux makefiles
+//      Added some more truecolor hacks to the graphics engine
+//
 //     Revision 1.2  2000/10/12 21:37:56  mbickel
 //      Further restructured platform dependant routines
 //
@@ -43,9 +47,6 @@
  const char* filewritemodetext = "wt";
  const char pathdelimitter = '\\';
  const char* pathdelimitterstring = "\\";
-
- #define CASE_SENSITIVE_FILE_NAMES 0
- #define USE_HOME_DIRECTORY 0
 
  const int maxfilenamelength = 8;
  const char* asc_configurationfile = "asc.ini";

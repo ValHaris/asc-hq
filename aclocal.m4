@@ -179,6 +179,16 @@ int main (int argc, char *argv[])
   rm -f conf.sdltest
 ])
 
+
+DNL Embedding the prefix dir into the ASC source
+AC_DEFUN(MY_EXPAND_DIR, [
+                $1=$2
+                $1=`(
+                     test "x$prefix" = xNONE && prefix="$ac_default_prefix"
+                     test "x$exec_prefix" = xNONE && exec_prefix="${prefix}"
+                     eval echo \""[$]$1"\"
+                    )`
+              ])
 # Like AC_CONFIG_HEADER, but automatically create stamp file.
 
 AC_DEFUN(AM_CONFIG_HEADER,

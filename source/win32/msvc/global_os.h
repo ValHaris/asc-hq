@@ -1,6 +1,11 @@
-//     $Id: global_os.h,v 1.2 2000-10-16 14:34:14 mbickel Exp $
+//     $Id: global_os.h,v 1.3 2001-05-18 22:30:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/10/16 14:34:14  mbickel
+//      Win32 port is now running fine.
+//      Removed MSVC project files and put them into a zip file in
+//        asc/source/win32/msvc/
+//
 //     Revision 1.1  2000/10/14 10:52:57  mbickel
 //      Some adjustments for a Win32 port
 //
@@ -50,5 +55,9 @@
   #define HAVE_LIMITS
 
   #define StaticClassVariable
+
+  #define CASE_SENSITIVE_FILE_NAMES 0
+  #define USE_HOME_DIRECTORY 0
+
 
 #endif

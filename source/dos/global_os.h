@@ -1,6 +1,9 @@
-//     $Id: global_os.h,v 1.4 2000-11-08 21:58:02 mbickel Exp $
+//     $Id: global_os.h,v 1.5 2001-05-18 22:30:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/11/08 21:58:02  mbickel
+//      brought the small editors up to date
+//
 //     Revision 1.3  2000/10/17 12:12:24  mbickel
 //      Improved vehicletype loading/saving routines
 //      documented some global variables
@@ -59,5 +62,9 @@
   #endif
 
   #include <wchar.h>
+
+  #define CASE_SENSITIVE_FILE_NAMES 0
+  #define USE_HOME_DIRECTORY 0
+
 
 #endif

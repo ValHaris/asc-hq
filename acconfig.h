@@ -7,3 +7,5 @@
 
 /* Define if you need the GNU extensions to compile */
 #undef _GNU_SOURCE
+
+#undef GAME_DATADIR

@@ -4,9 +4,16 @@
 */
 
 
-//     $Id: basestrm.h,v 1.40 2001-05-16 23:21:01 mbickel Exp $
+//     $Id: basestrm.h,v 1.41 2001-05-18 22:30:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2001/05/16 23:21:01  mbickel
+//      The data file is mounted using automake
+//      Added sgml documentation
+//      Added command line parsing functionality;
+//        integrated it into autoconf/automake
+//      Replaced command line parsing of ASC and ASCmapedit
+//
 //     Revision 1.39  2001/02/28 14:10:05  mbickel
 //      Added some small editors to linux makefiles
 //      Added even more dirty hacks to basegfx: some more truecolor functions
@@ -85,8 +92,6 @@
 extern "C" {
 #include "libs/bzlib/bzlib.h"
 }
-
-
 
 #pragma pack(1)
 

@@ -1,6 +1,8 @@
 MAINTAINERCLEANFILES    = Makefile.in
 
-data_DATA               = main.con
+pkgdata_DATA               = main.con
+
+pkgdatadir = $(datadir)/games/@PACKAGE@
 
 main.con: @MAINCONDATA@
 	../source/tools/linux/asc_mount @MAINCONDATA@ main.con

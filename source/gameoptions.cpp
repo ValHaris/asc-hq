@@ -18,8 +18,10 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+#include "global.h"
 #include "gameoptions.h"
 #include "CLoadable.h"
+#include "basestrm.h"
 
 CGameOptions* pStaticGameOptions=NULL;
 
@@ -100,18 +102,23 @@ void CGameOptions::setDefaults ( void )
 
    defaultSuperVisorPassword.setName ( "" );
 
+
   #if USE_HOME_DIRECTORY == 0
    searchPath[0].setName ( ".\\" );
    for ( int i = 1; i < getSearchPathNum(); i++ )
       searchPath[i].setName ( NULL );
   #else
+   for ( int i = 0; i < getSearchPathNum(); i++ )
+      searchPath[i].setName ( NULL );
    searchPath[0].setName ( "~/.asc/" );
    searchPath[1].setName ( "/var/local/games/asc/" );
    searchPath[2].setName ( "/var/games/asc/" );
    searchPath[3].setName ( "/usr/local/share/games/asc/" );
    searchPath[4].setName ( "/usr/share/games/asc/" );
-   for ( int i = 5; i < getSearchPathNum(); i++ )
-      searchPath[i].setName ( NULL );
+   ASCString s = GAME_DATADIR;
+   s += pathdelimitterstring;
+   if ( s != searchPath[3].getName() )
+      searchPath[5].setName ( s.c_str() );
   #endif
 
   setChanged();
