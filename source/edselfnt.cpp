@@ -2,9 +2,13 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.46 2004-07-22 20:14:51 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.47 2004-12-27 15:54:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2004/07/22 20:14:51  mbickel
+//      Updated campaign maps
+//      New weaponguide
+//
 //     Revision 1.45  2004/05/12 20:05:52  mbickel
 //      Restructured file loading routines for upcoming data cache
 //
@@ -1307,15 +1311,16 @@ void SelectItemContainer :: paintselections ( int num, int act )
 
    if ( y2 < agmp->resolutiony ) {
       showtext2 ( selector[num].name, x1, y1 );
-   
+
       y1 += activefontsettings.font->height;
-   
-   
+
+
       selector[num].selector->showactiteminfos ( x1, y1, x2, y2 );
-      bar ( x2, y1, x2 + keywidth, y2, backgroundcol ); 
-                                 
+      bar ( x2, y1, x2 + keywidth, y2, backgroundcol );
+
       selectionypos += selector[num].selector->getiteminfoheight() + freespace;
-      bar ( x1, y2+1, x2 + keywidth, y2 + freespace, black );
+      if (y2 + freespace < agmp->resolutiony )
+         bar ( x1, y2+1, x2 + keywidth, y2 + freespace, black );
       activefontsettings.background  = 255;
       activefontsettings.color = black;
       activefontsettings.length = keywidth;

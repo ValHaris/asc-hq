@@ -4573,13 +4573,14 @@ char ResizeMap :: checkvalue(int         id, void*      p)
             displaymessage ( "values must be even !", 1 );
             return 0;
          }
+         /*
       if ( (id == 3   &&  - ( *wp + bottom ) > actmap->ysize - idisplaymap.getscreenysize(1) ) ||
            (id == 6   &&  - ( top + *wp )    > actmap->ysize - idisplaymap.getscreenysize(1) ) ||
            (id == 4   &&  - ( *wp + right  ) > actmap->xsize - idisplaymap.getscreenxsize(1) ) ||
            (id == 5   &&  - ( left + *wp   ) > actmap->xsize - idisplaymap.getscreenxsize(1) ) ) {
          displaymessage ( "remaining size too small !", 1 );
          return 0;
-      }
+      }    */
 
       if ( (id == 3   &&   ( *wp + bottom ) + actmap->ysize > 32000 ) ||
            (id == 6   &&   ( top + *wp )    + actmap->ysize > 32000 ) ||

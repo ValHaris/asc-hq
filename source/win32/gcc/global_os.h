@@ -1,6 +1,9 @@
-//     $Id: global_os.h,v 1.1 2004-07-12 18:15:10 mbickel Exp $
+//     $Id: global_os.h,v 1.2 2004-12-27 15:54:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2004/07/12 18:15:10  mbickel
+//      Lots of tweaks and fixed for more portability and compilation with mingw
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -24,6 +27,8 @@
 
 #ifndef global_os_h_included
  #define global_os_h_included
+
+  typedef unsigned int PointerSizedInt;
 
   #ifndef minimalIO
    // #define sdlheader "SDL.h"

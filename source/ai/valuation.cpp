@@ -210,7 +210,7 @@ AiParameter::JobList AI::chooseJob ( const Vehicletype* typ, int functions )
       if ( typ->weapons.weapon[w].service() )
          service = true;
 
-   if ( ((functions & cfrepair) || service) && maxmove >= minmalq )
+   if ( ((functions & cfrepair) || service) && maxmove >= minmalq && maxstrength < 45)
       jobList.push_back ( AiParameter::job_supply );
 
 

@@ -1796,11 +1796,11 @@ void  mainloop ( void )
                break;
 
             case ct_f11: {
-            /*
-               getactfield()->objects.clear();
-               getactfield()->setparams();
-               displaymap();
-               */
+
+               // delete getactfield()->vehicle->aiparam[1];
+               // getactfield()->vehicle->aiparam[1] = NULL;
+               // displaymap();
+
             }
             break;
 
