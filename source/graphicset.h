@@ -37,23 +37,23 @@
  extern void loadbi3pict ( int num, void** pict );
 
  class ActiveGraphicPictures {
-   public:
      int activeId;
      int maxnum;
-     int currentnum;
      void** bi3graphics;
      int* bi3graphmode;        // 0: no picture available ( should not happen ingame )
                                // 1: picture has BI size
                                // 2: picture has ASC size
                                // +0xff : picture is dummy picture
      int absoluteMaxPicSize;
+   public:
      int setActive ( int id );
+     int getActiveID ( ) { return activeId; };
 
      ActiveGraphicPictures ( void ) {
         activeId = -1;
      };
 
-     void alloc ( void );
+     void alloc ( int maxNum, int maxSize );
      int picAvail ( int num ) const;
      void* getPic ( int num );
      int getMode ( int num ) const;

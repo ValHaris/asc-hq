@@ -143,6 +143,8 @@
     //! resets a units movement. This is called at the beginning of each turn.
     void resetMovement( void );
 
+    //! changes a units height and adjusts the movement so that the percentage of used movepoints remains constant
+    void setNewHeight( int height );
 
     int putResource ( int amount, int resourcetype, int queryonly, int scope = 1 );
     int getResource ( int amount, int resourcetype, int queryonly, int scope = 1 );

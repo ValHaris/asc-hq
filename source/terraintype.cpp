@@ -56,7 +56,8 @@ const char*  cbodenarten[cbodenartennum]  = {"shallow water , coast"       ,
                                              "Installation",
                                              "pack ice",
                                              "river",
-                                             "frozen water" };
+                                             "frozen water",
+                                             "bridge" };
 
 
 

@@ -15,10 +15,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef terraintype_h_included
- #define terraintype_h_included
+#ifndef terraintypeH
+ #define terraintypeH
 
  #include "typen.h"
+
+//! the number of bits that specify the terrain of a field
+const int cbodenartennum = 34;
+
 
   //! the properties of a terrain describing which units can move onto this field and which can't
  class TerrainBits : public BitSet {

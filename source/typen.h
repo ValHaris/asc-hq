@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.113 2002-10-02 20:21:01 mbickel Exp $
+//     $Id: typen.h,v 1.114 2002-10-27 22:19:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.113  2002/10/02 20:21:01  mbickel
+//      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
+//
 //     Revision 1.112  2002/10/01 09:23:42  mbickel
 //      Fixed many bugs
 //      Added inheritance to text files
@@ -298,8 +301,6 @@ const int maxbuildingpicnum  = 8;
 //! The maximum experience value of a #Vehicle
 const int maxunitexperience = 23;
 
-//! the number of bits that specify the terrain of a field
-const int cbodenartennum = 33;
 
 class IntRange {
      public:

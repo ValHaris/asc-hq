@@ -459,6 +459,15 @@ void Vehicle :: resetMovement ( void )
     */
 }
 
+
+void Vehicle :: setNewHeight( int newHeight )
+{
+  int oldperc = 1000 * getMovement ( false ) / maxMovement();
+  height = newHeight;
+  setMovement ( maxMovement() * oldperc / 1000 , 0 );
+}
+
+
 void Vehicle :: setMovement ( int newmove, int cargoDivisor )
 {
    if ( newmove < 0 )
@@ -503,11 +512,12 @@ int Vehicle :: getMovement ( bool checkFuel )
 
 void Vehicle :: decreaseMovement ( int amount )
 {
-  _movement -= amount;
-  if ( _movement < 0 )
-    _movement = 0;
-  if ( _movement > typ->movement[log2(height)] )
-    _movement = typ->movement[log2(height)];
+  int newMovement = _movement - amount;
+  if ( newMovement < 0 )
+    newMovement = 0;
+  if ( newMovement > typ->movement[log2(height)] )
+    newMovement = typ->movement[log2(height)];
+  setMovement ( newMovement );
 }
 
 

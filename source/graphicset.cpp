@@ -30,8 +30,10 @@
 
 #include "loadpcx.h"
 
-int bi3graphnum = 0;
 int keeporiginalpalette = 0;
+void* emptyfield = NULL;
+int emptyfieldsize = 0;
+bool graphicsLoaded = false;
 
 ActiveGraphicPictures activeGraphicPictures;
 
@@ -41,15 +43,21 @@ const ActiveGraphicPictures* getActiveGraphicSet()
 }
 
 
-void ActiveGraphicPictures :: alloc ( void )
+void ActiveGraphicPictures :: alloc ( int maxNum, int maxSize )
 {
+    maxnum = maxNum;
+    absoluteMaxPicSize = maxSize;
+
+    activeGraphicPictures.bi3graphics = new void*[maxNum];
+    activeGraphicPictures.bi3graphmode = new int[maxNum];
+
     for ( int i = 0; i < maxnum; i++ )
        bi3graphics[i] = asc_malloc ( absoluteMaxPicSize );
 }
 
 int ActiveGraphicPictures :: picAvail ( int num ) const
 {
-   if ( num < currentnum && bi3graphmode[num])
+   if ( bi3graphmode[num] && num < maxnum )
       return 1;
    else
       return 0;
@@ -79,14 +87,14 @@ class GraphicSet {
            int picnum;
            int singlepicsize;
            int maxPicSize;
-           dynamic_array<void*> pic;
-           dynamic_array<int>   picmode;
+           vector<void*> pic;
+           vector<int>   picmode;
      };
 
 
 
 
-dynamic_array<GraphicSet*> graphicSet;
+vector<GraphicSet*> graphicSet;
 int graphicSetNum = 0;
 
 
@@ -94,7 +102,6 @@ int ActiveGraphicPictures :: setActive ( int id )
 {
    if ( id == activeId )
       return id;
-
 
    GraphicSet* gs = NULL;
    int found = 0;
@@ -111,13 +118,21 @@ int ActiveGraphicPictures :: setActive ( int id )
       if ( !found )
          id = 0;
    }
+
    if ( activeId != id ) {
       for ( int i = 0; i < gs->picnum; i++ ) {
+         if ( absoluteMaxPicSize < getpicsize2 ( gs->pic[i] ) )
+            fatalError ( "ActiveGraphicPictures::setActive - image to large " );
          memcpy ( bi3graphics[i], gs->pic[i], getpicsize2 ( gs->pic[i] ));
          bi3graphmode[i] = gs->picmode[i];
       }
+
+      for ( int i = gs->picnum; i < maxnum; i++ ) {
+         memcpy ( bi3graphics[i], emptyfield, emptyfieldsize );
+         bi3graphmode[i] = 2+ 256;
+      }
+
       activeId = id;
-      currentnum = gs->picnum;
    }
    return id;
 }
@@ -134,11 +149,10 @@ int getGraphicSetIdFromFilename ( const char* filename )
        return 0;
 }
 
-void* emptyfield = NULL;
 
 void loadbi3graphics( void )
 {
-   if ( activeGraphicPictures.activeId >= 0 )
+   if ( activeGraphicPictures.getActiveID() >= 0 )
       return;
 
    #ifdef logging
@@ -148,8 +162,6 @@ void loadbi3graphics( void )
    loadpalette();
 
    int highestPicNum = 0;
-   bi3graphnum = maxint;
-
    int absoluteMaxPicSize = 0;
 
    {
@@ -163,7 +175,7 @@ void loadbi3graphics( void )
          emptyfield  = p;
       }
    }
-   int emptyfieldsize = getpicsize2 ( emptyfield );
+   emptyfieldsize = getpicsize2 ( emptyfield );
 
    #ifdef genimg
    void* mask;
@@ -198,7 +210,8 @@ void loadbi3graphics( void )
 
          int* picmode = new int[gs->picnum];
          s.readdata ( picmode, gs->picnum * sizeof( int ) );
-
+         gs->pic.resize ( gs->picnum );
+         gs->picmode.resize ( gs->picnum );
          for ( int i = 0; i < gs->picnum; i++ ) {
             if ( picmode[i] >= 1 ) {
                int o;
@@ -251,32 +264,18 @@ void loadbi3graphics( void )
 
          delete[] picmode;
 
-         graphicSet[graphicSetNum++] = gs;
+         graphicSet.push_back ( gs );
+         ++graphicSetNum;
       }
 
       filename = ff.getnextname();
    }
 
-   for ( int i = 0; i < graphicSetNum; i++ ) {
-       GraphicSet* gs = graphicSet[i];
-       for ( int j = gs->picnum; j < highestPicNum; j++ ) {
-           void* p = asc_malloc ( emptyfieldsize );
-           memcpy ( p, emptyfield, emptyfieldsize );
-           gs->pic[j] = p;
-           gs->picmode[j] = 256 + 2;
-       }
-       gs->picnum = highestPicNum;
-   }
-   bi3graphnum = highestPicNum;
-
-
-   activeGraphicPictures.bi3graphics = new void*[highestPicNum];
-   activeGraphicPictures.bi3graphmode = new int[highestPicNum];
-   activeGraphicPictures.maxnum = highestPicNum;
-   activeGraphicPictures.absoluteMaxPicSize = absoluteMaxPicSize;
-   activeGraphicPictures.alloc ( );
+   activeGraphicPictures.alloc (highestPicNum, absoluteMaxPicSize );
    activeGraphicPictures.setActive ( 0 );
 
+   graphicsLoaded = true;
+   
   /*
 
    else {
@@ -350,12 +349,12 @@ void loadbi3graphics( void )
 
 int activateGraphicSet ( int id  )
 {
-  return    activeGraphicPictures.setActive ( id );
+  return activeGraphicPictures.setActive ( id );
 }
 
 int  loadbi3pict_double ( int num, void** pict, int interpolate, int reference )
 {
-   if ( !bi3graphnum )
+   if ( !graphicsLoaded )
       loadbi3graphics();
 
    if ( ! activeGraphicPictures.picAvail ( num ) ) {
@@ -432,7 +431,7 @@ int  loadbi3pict_double ( int num, void** pict, int interpolate, int reference )
 
 void loadbi3pict ( int num, void** pict )
 {
-   if ( !bi3graphnum )
+   if ( !graphicsLoaded )
       loadbi3graphics();
 
    if ( !activeGraphicPictures.picAvail( num ) ) {

@@ -1,6 +1,11 @@
-//     $Id: unitctrl.cpp,v 1.89 2002-10-01 09:23:42 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.90 2002-10-27 22:19:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.89  2002/10/01 09:23:42  mbickel
+//      Fixed many bugs
+//      Added inheritance to text files
+//      updated graphics
+//
 //     Revision 1.88  2002/09/19 20:20:06  mbickel
 //      Cleanup and various bug fixes
 //
@@ -1073,7 +1078,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
 
       vehicle->setnewposition ( x, y );
       if ( newheight != -1 && vehicle->typ->height & newheight)
-         vehicle->height = newheight;
+         vehicle->setNewHeight ( newheight );
 
       if ( vehicle && rf->checkfield ( x, y, vehicle, mapDisplay )) {
          attackedByReactionFire = true;

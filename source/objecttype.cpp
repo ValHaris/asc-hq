@@ -204,11 +204,16 @@ void ObjectType :: read ( tnstream& stream )
                weatherPicture[ww].bi3pic[n] = stream.readInt();
                weatherPicture[ww].flip[n] = stream.readInt();
 
+               bool reference = true;
+               for ( int r = 0; r <  weatherPicture[ww].flip.size(); r++ )
+                  if ( weatherPicture[ww].flip[r] > 0 )
+                     reference = false;
+
                if ( weatherPicture[ww].bi3pic[n] != -1 )
                   loadbi3pict_double ( weatherPicture[ww].bi3pic[n],
                                       &weatherPicture[ww].images[n],
                                       1,  // CGameOptions::Instance()->bi3.interpolate.objects
-                                      0 );
+                                      reference );
                else
                   stream.readrlepict ( &weatherPicture[ww].images[n], false, &w);
 
@@ -297,7 +302,6 @@ void ObjectType :: read ( tnstream& stream )
        throw ASCmsgException ( "invalid object file format version");
 }
 
-
 void ObjectType :: setupImages()
 {
    int copycount = 0;
@@ -329,11 +333,13 @@ void ObjectType :: setupImages()
                copycount++;
             }
 
-            if ( weatherPicture[ww].bi3pic[n] == -1 )
-               weatherPicture[ww].flip[n] = 0;
+
+//            if ( weatherPicture[ww].bi3pic[n] == -1 )
+//               weatherPicture[ww].flip[n] = 0;
          }
    #endif
 
+   /*
    if ( copycount == 0 )
       for ( int ww = 0; ww < cwettertypennum; ww++ )
          if ( weather.test ( ww ) )
@@ -344,7 +350,7 @@ void ObjectType :: setupImages()
                                        &weatherPicture[ww].images[n],
                                        1 ); // CGameOptions::Instance()->bi3.interpolate.objects );
                }
-
+   */
 }
 
 
@@ -514,14 +520,23 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
          if ( bi3pics ) {
             pc.addIntegerArray ( "GFXpictures", weatherPicture[i].bi3pic );
             pc.addIntegerArray ( "FlipPictures", weatherPicture[i].flip );
+            int oldsize = weatherPicture[i].flip.size();
+            weatherPicture[i].flip.resize( weatherPicture[i].bi3pic.size() );
             weatherPicture[i].images.resize( weatherPicture[i].bi3pic.size() );
+            for ( int r = oldsize; r < weatherPicture[i].flip.size(); r++ )
+               weatherPicture[i].flip[r] = 0;
+
+            bool reference = true;
+            for ( int r = 0; r <  weatherPicture[i].flip.size(); r++ )
+               if ( weatherPicture[i].flip[r] > 0 )
+                  reference = false;
 
             if ( pc.isReading() )
                for ( int j = 0; j < weatherPicture[i].bi3pic.size(); j++ )
                    loadbi3pict_double (  weatherPicture[i].bi3pic[j],
                                         &weatherPicture[i].images[j],
                                         1,
-                                        0 );
+                                        reference );
 
          } else {
             ASCString s = extractFileName_withoutSuffix( filename );
