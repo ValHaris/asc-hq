@@ -1,31 +1,274 @@
+2005-02-14 15:13  mbickel
+
+	* libtool, data/dialog/Makefile.am, data/dialog/Makefile.in,
+	source/dlg_box.cpp, source/sg.cpp, source/strtmesg.cpp:  Fixed
+	compilation problems
+	 Fixed view problems when starting a map by command line
+
+2005-02-14 14:12  mbickel
+
+	* data/dialog/: Makefile.am, asc2_dlg.theme,
+	asc/dialog_background.png, asc/dialog_background2.png,
+	asc/drop_down.bmp, asc/font.ttf, asc/top_grey_panel.bmp,
+	asc/top_panel_close.bmp:  Merged dialog theme from ASC2
+
+2005-02-13 20:38  mbickel
+
+	* source/: attack.cpp, strtmesg.cpp, vehicle.cpp, vehicletype.cpp: 
+	Fixed: kamikaze units don't defend any more
+	 Fixed: ships could not build ground turrets
+	 Updated unit calculation cost
+
+2005-01-30 20:02  mbickel
+
+	* source/: vehicletype.cpp, clparser/asc.gp, tools/mount.cpp: 
+	Fixed misinformation in weaponguide
+	 made mount more portable
+
+2005-01-30 16:54  mbickel
+
+	* source/infopopup.h: file infopopup.h was initially added on
+	branch NewGraphics_branch.
+
+2005-01-30 16:54  mbickel
+
+	* source/infopopup.cpp: file infopopup.cpp was initially added on
+	branch NewGraphics_branch.
+
+2005-01-24 21:45  mbickel
+
+	* source/gamedialog.h: file gamedialog.h was initially added on
+	branch NewGraphics_branch.
+
+2005-01-24 21:45  mbickel
+
+	* source/weathercast.cpp: file weathercast.cpp was initially added
+	on branch NewGraphics_branch.
+
+2005-01-24 21:45  mbickel
+
+	* source/weathercast.h: file weathercast.h was initially added on
+	branch NewGraphics_branch.
+
+2005-01-24 21:45  mbickel
+
+	* source/gamedialog.cpp: file gamedialog.cpp was initially added on
+	branch NewGraphics_branch.
+
+2005-01-23 16:31  mbickel
+
+	* source/tools/mount.cpp:  Fixed endian dependent problems on mount
+
+2005-01-23 15:14  mbickel
+
+	* source/: replay.cpp, strtmesg.cpp:  Fixed replay bug
+
+2005-01-19 20:57  mbickel
+
+	* source/: controls.cpp, dialog.cpp, newfont.cpp, replay.cpp,
+	replay.h, sg.cpp, strtmesg.cpp:  Fixed replay bug
+
+2005-01-16 11:36  mbickel
+
+	* data/dialog/asc/drop_down.bmp: file drop_down.bmp was initially
+	added on branch NewGraphics_branch.
+
+2005-01-13 17:24  mbickel
+
+	* source/graphics/drawing.cpp: file drawing.cpp was initially added
+	on branch NewGraphics_branch.
+
+2005-01-13 17:24  mbickel
+
+	* source/graphics/drawing.h: file drawing.h was initially added on
+	branch NewGraphics_branch.
+
+2005-01-06 20:39  mbickel
+
+	* source/: building.cpp, buildings.cpp, controls.cpp, controls.h,
+	objecttype.cpp, replay.cpp, replay.h, sg.cpp, strtmesg.cpp,
+	typen.h:  Fixed replay bugs
+	 Fixed RF bug
+	 Updated campaign map
+
+2005-01-02 17:19  mbickel
+
+	* data/: asc001.map, asc002.map, asc003.map, asc004.map,
+	asc005.map, asc006.map, asc007.map, asc008.map, asc009.map,
+	asc010a.map, asc010b.map, asc011.map, asc012.map, asc013.map,
+	asc014.map, asc015.map:  Updated campaign maps
+
+2004-12-27 16:54  mbickel
+
+	* Advanced Strategic Command.layout, data/palette-gfx.map,
+	data/palette.map, source/dialog.cpp, source/edselfnt.cpp,
+	source/sg.cpp, source/strtmesg.cpp, source/ai/valuation.cpp,
+	source/win32/borland/mapeditor/mapeditor.bpr,
+	source/win32/gcc/global_os.h:  Fixed mapeditor crash and
+	limitations when resizing maps
+
+2004-12-21 12:53  mbickel
+
+	* data/dialog/asc/dialog_background2.png: file
+	dialog_background2.png was initially added on branch
+	NewGraphics_branch.
+
+2004-12-21 12:53  mbickel
+
+	* data/dialog/asc/dialog_background.png: file dialog_background.png
+	was initially added on branch NewGraphics_branch.
+
+2004-12-21 12:52  mbickel
+
+	* data/dialog/asc2_dlg.theme: file asc2_dlg.theme was initially
+	added on branch NewGraphics_branch.
+
+2004-12-17 13:27  mbickel
+
+	* source/: strtmesg.cpp, ai/strategy.cpp:  Fixed AI crash
+
+2004-12-17 12:19  mbickel
+
+	* data/dialog/asc/top_grey_panel.bmp: file top_grey_panel.bmp was
+	initially added on branch NewGraphics_branch.
+
+2004-12-17 12:19  mbickel
+
+	* data/dialog/asc/top_panel_close.bmp: file top_panel_close.bmp was
+	initially added on branch NewGraphics_branch.
+
+2004-12-16 12:13  mbickel
+
+	* ChangeLog, libtool:  Updated version information
+
+2004-12-16 11:22  mbickel
+
+	* source/: basegfx.cpp, basegfx.h, dlg_box.cpp, mapdisplay.cpp,
+	soundList.cpp, strtmesg.cpp, terraintype.cpp, ai/tactics.cpp,
+	sdl/graphics.cpp, unix/global_os.h, win32/borland/global_os.h: 
+	Fixed compilation problems on AMD64 platform
+
+2004-12-13 21:41  mbickel
+
+	* data/helpsyst.txt, source/replay.cpp, source/strtmesg.cpp:  Fixed
+	replay bug
+	 Updated credits
+
+2004-12-12 20:58  mbickel
+
+	* source/libs/loki/Makefile.am: file Makefile.am was initially
+	added on branch NewGraphics_branch.
+
+2004-12-12 20:58  mbickel
+
+	* source/libs/loki/Makefile.in: file Makefile.in was initially
+	added on branch NewGraphics_branch.
+
+2004-12-12 20:58  mbickel
+
+	* source/iconrepository.cpp: file iconrepository.cpp was initially
+	added on branch NewGraphics_branch.
+
+2004-12-12 20:58  mbickel
+
+	* source/iconrepository.h: file iconrepository.h was initially
+	added on branch NewGraphics_branch.
+
+2004-12-11 22:22  mbickel
+
+	* source/guifunctions.h: file guifunctions.h was initially added on
+	branch NewGraphics_branch.
+
+2004-12-11 22:22  mbickel
+
+	* source/guiiconhandler.cpp: file guiiconhandler.cpp was initially
+	added on branch NewGraphics_branch.
+
+2004-12-11 22:22  mbickel
+
+	* source/guifunctions.cpp: file guifunctions.cpp was initially
+	added on branch NewGraphics_branch.
+
+2004-12-11 22:22  mbickel
+
+	* source/guiiconhandler.h: file guiiconhandler.h was initially
+	added on branch NewGraphics_branch.
+
+2004-12-11 09:49  mbickel
+
+	* source/: controls.cpp, dialog.cpp, sg.cpp, strtmesg.cpp:  Fixed:
+	resource vanished after refuelling
+
+2004-12-08 21:55  mbickel
+
+	* source/guidimension.h: file guidimension.h was initially added on
+	branch NewGraphics_branch.
+
+2004-12-08 21:55  mbickel
+
+	* source/weatherarea.h: file weatherarea.h was initially added on
+	branch NewGraphics_branch.
+
+2004-12-08 21:55  mbickel
+
+	* source/weatherdialog.cpp: file weatherdialog.cpp was initially
+	added on branch NewGraphics_branch.
+
+2004-12-08 21:55  mbickel
+
+	* source/weatherarea.cpp: file weatherarea.cpp was initially added
+	on branch NewGraphics_branch.
+
+2004-12-08 21:55  mbickel
+
+	* source/weatherdialog.h: file weatherdialog.h was initially added
+	on branch NewGraphics_branch.
+
+2004-12-08 21:55  mbickel
+
+	* source/guidimension.cpp: file guidimension.cpp was initially
+	added on branch NewGraphics_branch.
+
+2004-12-08 19:38  mbickel
+
+	* source/geometry.cpp: file geometry.cpp was initially added on
+	branch NewGraphics_branch.
+
+2004-12-08 19:38  mbickel
+
+	* source/geometry.h: file geometry.h was initially added on branch
+	NewGraphics_branch.
+
+2004-12-05 18:58  mbickel
+
+	* source/mapdisplay2.h: file mapdisplay2.h was initially added on
+	branch NewGraphics_branch.
+
+2004-12-04 10:19  mbickel
+
+	* source/: resourcenet.cpp, strtmesg.cpp:  Fixed wrong resource
+	capacity display when resource input is disabled in buildings
+
+2004-12-03 16:14  mbickel
+
+	* source/: buildings.cpp, gamemap.cpp, resourcenet.cpp,
+	strtmesg.cpp:  Fixed: more resources in buildings that storage
+	capacity
+
+2004-11-28 19:50  mbickel
+
+	* data/: tech_asc015_BOLT.asctxt, tech_asc015_BURRO.asctxt,
+	tech_asc015_CALLANDOR.asctxt, tech_asc015_COMA II.asctxt,
+	tech_asc015_COMA III.asctxt, tech_asc015_EXP 5.asctxt,
+	tech_asc015_FLUX.asctxt, tech_asc015_GUNNER.asctxt,
+	tech_asc015_HEAVY GUN.asctxt, tech_asc015_HORNET II.asctxt,
+	tech_asc015_JUDY.asctxt, tech_asc015_PUNCH.asctxt,
+	tech_asc015_ROTOS.asctxt, tech_asc015_SPEAR.asctxt,
+	tech_asc015_base.asctxt:  Updated campaign techs
+
 2004-11-28 11:40  mbickel
 
 	* source/: sg.cpp, strtmesg.cpp:  Updated version number
-
-2004-11-28 00:20  mbickel
-
-	* configure, configure.in, data/dialog/asc_dlg.theme,
-	source/basestrm.h, source/buildings.cpp, source/clipboard.cpp,
-	source/controls.cpp, source/dialog.cpp, source/dlg_box.cpp,
-	source/edevents.cpp, source/edmain.cpp, source/edmisc.cpp,
-	source/gamedlg.cpp, source/gameevent_dialogs.cpp,
-	source/gameevents.h, source/gameeventsystem.cpp,
-	source/gameeventsystem.h, source/gamemap.cpp,
-	source/graphicset.cpp, source/itemrepository.cpp,
-	source/itemrepository.h, source/mapdisplay.cpp,
-	source/mapdisplay.h, source/mappolygons.cpp, source/objecttype.cpp,
-	source/paradialog.cpp, source/paradialog.h,
-	source/prehistoricevents.cpp, source/sg.cpp, source/sgstream.cpp,
-	source/sgstream.h, source/stringtokenizer.cpp,
-	source/terraintype.h, source/textfile_evaluation.cpp,
-	source/textfile_evaluation.h, source/typen.h, source/unitctrl.h,
-	source/vehicletype.cpp, source/ai/base.cpp,
-	source/ai/buildingcapture.cpp, source/ai/misc.cpp,
-	source/ai/service.cpp, source/graphics/blitter.cpp,
-	source/graphics/blitter.h, source/graphics/surface.cpp,
-	source/libs/sdlmm/src/sdlmm_surface.h:	Source code cleanup
-	 Fixed bug in blitter
-	 Continued migration to Paragui
 
 2004-11-26 23:11  mbickel
 
@@ -43,10 +286,6 @@
 	* data/asc015.map, source/tools/infopage.cpp:  Fixed missing fields
 	in weaponguide
 	 Updated campaign maps
-
-2004-11-21 18:35  mbickel
-
-	* source/edmain.cpp:  Removed graphic mode check
 
 2004-11-18 21:25  mbickel
 
@@ -91,22 +330,10 @@
 	* source/resourceplacementdialog.h: file resourceplacementdialog.h
 	was initially added on branch NewGraphics_branch.
 
-2004-11-14 16:47  mbickel
-
-	* source/: edglobal.cpp, edglobal.h, edmain.cpp, edmisc.cpp,
-	paradialog.cpp, paradialog.h, resourceplacementdialog.cpp,
-	resourceplacementdialog.h, unix/mapeditor/Makefile.am,
-	unix/mapeditor/Makefile.in:  Added new resource placement
-
 2004-11-14 13:49  mbickel
 
 	* source/resourceplacement.cpp: file resourceplacement.cpp was
 	initially added on branch NewGraphics_branch.
-
-2004-11-14 13:49  mbickel
-
-	* source/: resourceplacement.cpp, resourceplacement.h:	Added
-	resource placement to mapeditor
 
 2004-11-14 13:49  mbickel
 
@@ -122,26 +349,6 @@
 	resource transfer between players
 	 Updated campaign maps
 
-2004-11-10 21:22  mbickel
-
-	* source/: edmisc.cpp, objecttype.cpp, sgstream.cpp,
-	textfile_evaluation.cpp, graphics/blitter.h, graphics/surface.cpp,
-	graphics/surface.h, libs/sdlmm/src/sdlmm_pixelformat.h:  Graphics
-	engine starts to be working correctly...
-
-2004-11-04 23:22  mbickel
-
-	* source/: buildings.cpp, buildings.h, buildingtype.cpp,
-	buildingtype.h, containerbase.cpp, containerbase.h,
-	containerbasetype.cpp, dashboard.cpp, dialog.h, edmain.cpp,
-	gamemap.cpp, itemrepository.cpp, itemrepository.h, mapdisplay.cpp,
-	mapdisplay.h, objecttype.cpp, sg.cpp, sgstream.cpp,
-	textfile_evaluation.cpp, typen.h, vehicle.cpp, vehicle.h,
-	vehicletype.cpp, vehicletype.h, graphics/blitter.cpp,
-	graphics/blitter.h, graphics/surface.cpp, graphics/surface.h,
-	libs/sdlmm/src/sdlmm_basesurface.h, libs/sdlmm/src/sdlmm_surface.h,
-	sdl/graphics.cpp:  More integration of new graphics system
-
 2004-11-04 18:59  mbickel
 
 	* source/: gameevents.cpp, strtmesg.cpp, vehicle.cpp, vehicle.h: 
@@ -153,74 +360,12 @@
 	data/asc009.map, source/gameeventsystem.cpp, source/strtmesg.cpp: 
 	Fixed bug in event system
 
-2004-10-26 18:35  mbickel
-
-	* asc.kdevelop, source/astar2.cpp, source/astar2.h,
-	source/attack.cpp, source/attack.h, source/baseaiinterface.h,
-	source/building.cpp, source/building.h, source/building_controls.h,
-	source/buildings.cpp, source/buildings.h, source/buildingtype.cpp,
-	source/buildingtype.h, source/clipboard.cpp, source/clipboard.h,
-	source/containerbase.h, source/controls.cpp, source/controls.h,
-	source/dashboard.cpp, source/dashboard.h, source/dialog.cpp,
-	source/edmain.cpp, source/edmisc.cpp, source/edmisc.h,
-	source/edselfnt.cpp, source/edselfnt.h, source/events.h,
-	source/gamedlg.cpp, source/gameevent_dialogs.cpp,
-	source/gameevents.cpp, source/gamemap.cpp, source/gamemap.h,
-	source/graphicset.cpp, source/graphicset.h, source/gui.cpp,
-	source/gui.h, source/loadbi3.cpp, source/loadbi3.h,
-	source/loaders.cpp, source/mapalgorithms.cpp,
-	source/mapalgorithms.h, source/mapdisplay.cpp, source/mapdisplay.h,
-	source/objecttype.cpp, source/objecttype.h, source/paradialog.cpp,
-	source/paradialog.h, source/pointers.h,
-	source/prehistoricevents.cpp, source/replay.cpp, source/replay.h,
-	source/research.cpp, source/research.h, source/resourcenet.cpp,
-	source/resourcenet.h, source/sg.cpp, source/sgstream.cpp,
-	source/sgstream.h, source/spfst.cpp, source/spfst.h,
-	source/terraintype.cpp, source/textfile_evaluation.cpp,
-	source/textfile_evaluation.h, source/unitctrl.cpp,
-	source/unitctrl.h, source/vehicle.cpp, source/vehicle.h,
-	source/vehicletype.cpp, source/vehicletype.h,
-	source/viewcalculation.cpp, source/viewcalculation.h,
-	source/ai/ai.h, source/ai/ai_common.h, source/ai/base.cpp,
-	source/ai/buildingcapture.cpp, source/ai/misc.cpp,
-	source/ai/service.cpp, source/ai/strategy.cpp,
-	source/ai/tactics.cpp, source/ai/valuation.cpp,
-	source/graphics/blitter.h, source/graphics/surface.cpp,
-	source/graphics/surface.h, source/sdl/events.cpp,
-	source/tools/guidegenerator.cpp, source/tools/weaponguide.cpp: 
-	Replaced graphic storage in buildings and objects
-	 cleaned up some names: pvehicle, pbuilding
-
 2004-10-23 21:16  mbickel
 
 	* source/: gamedlg.cpp, gamemap.cpp, gamemap.h, strtmesg.cpp,
 	unitctrl.cpp, vehicle.cpp, ai/ai.h, ai/base.cpp, ai/service.cpp,
 	ai/tactics.cpp:  Fixed AI problems
 	 AI speed up
-
-2004-10-17 19:16  mbickel
-
-	* configure, configure.in, source/gamemap.h, source/paradialog.cpp:
-	 Updated paragui to 1.1.7
-
-2004-10-14 22:04  mbickel
-
-	* source/: basegfx.h, graphics/blitter.h:  Fixed compilation
-	problems with gcc
-
-2004-10-14 20:23  mbickel
-
-	* source/: basegfx.cpp, dashboard.cpp, graphics/blitter.h:  Fixed
-	graphic rotation problems
-
-2004-10-13 21:14  mbickel
-
-	* source/: dashboard.cpp, win32/borland/asc.bpr:  Updated dashboard
-	to use scaled unit picture
-
-2004-10-13 21:14  mbickel
-
-	* source/graphics/blitter.h:  Updated blitter
 
 2004-10-11 20:14  mbickel
 
@@ -232,56 +377,10 @@
 	* source/graphics/blitter.h: file blitter.h was initially added on
 	branch NewGraphics_branch.
 
-2004-10-11 20:14  mbickel
-
-	* configure, libtool, source/attack.cpp, source/basegfx.cpp,
-	source/basegfx.h, source/building.cpp, source/dashboard.cpp,
-	source/dialog.cpp, source/edmisc.cpp, source/edselfnt.cpp,
-	source/gamedlg.cpp, source/gameevent_dialogs.cpp,
-	source/mapdisplay.cpp, source/palette.cpp, source/palette.h,
-	source/sgstream.cpp, source/terraintype.cpp, source/vehicle.cpp,
-	source/vehicle.h, source/vehicletype.cpp, source/vehicletype.h,
-	source/graphics/Makefile.am, source/graphics/Makefile.in,
-	source/graphics/blitter.cpp, source/graphics/blitter.h,
-	source/graphics/surface.cpp, source/graphics/surface.h,
-	source/libs/sdlmm/src/sdlmm_basesurface.h,
-	source/tools/guidegenerator.cpp, source/tools/linux/Makefile.am,
-	source/tools/linux/Makefile.in:  Converted units to use new graphic
-	system
-	 Wrote new blitter
-
 2004-10-10 11:18  mbickel
 
 	* data/largehex.pcx: file largehex.pcx was initially added on
 	branch NewGraphics_branch.
-
-2004-10-10 11:18  mbickel
-
-	* data/largehex.pcx, source/itemrepository.cpp,
-	source/strtmesg.cpp, source/terraintype.cpp, source/terraintype.h,
-	source/typen.h, source/vehicle.cpp, source/vehicle.h,
-	source/vehicletype.cpp, source/vehicletype.h,
-	source/graphics/surface.cpp, source/graphics/surface.h:  Migrating
-	VehicleType to new image format
-
-2004-10-09 16:07  mbickel
-
-	* ChangeLog, README, asc.bpg, libtool, data/asc008.map,
-	data/asc010a.map, data/asc010b.map, doc/unitguide/asc.css,
-	doc/unitguide/exkl.gif, doc/unitguide/haken.gif,
-	doc/unitguide/hakenrot.gif, doc/unitguide/hoehe0.gif,
-	doc/unitguide/hoehe1.gif, doc/unitguide/hoehe2.gif,
-	doc/unitguide/hoehe3.gif, doc/unitguide/hoehe4.gif,
-	doc/unitguide/hoehe5.gif, doc/unitguide/hoehe6.gif,
-	doc/unitguide/hoehe7.gif, doc/unitguide/hoehetrans.gif,
-	doc/unitguide/menu.pl, doc/unitguide/pfeil_auf.gif,
-	doc/unitguide/pfeil_zu.gif, doc/unitguide/x.gif,
-	source/building.cpp, source/controls.cpp, source/edmisc.cpp,
-	source/replay.cpp, source/research.cpp, source/research.h,
-	source/resourcenet.cpp, source/sg.cpp, source/sgstream.cpp,
-	source/sgstream.h, source/strtmesg.cpp, source/viewcalculation.cpp,
-	source/tools/bi2pcx.cpp, source/tools/infopage.cpp,
-	source/tools/win/weaponguide.bpr:  Merged 1.15.1.0
 
 2004-10-09 14:05  mbickel
 
@@ -310,11 +409,6 @@
 	* data/asc008.map, data/asc010a.map, data/asc010b.map,
 	source/controls.cpp:  Updated campaign maps
 
-2004-10-05 20:51  mbickel
-
-	* source/: basestrm.cpp, sg.cpp, graphics/ascttfont.cpp:  patch
-	from Kevin Hirschmann: bugfix in stream seek; font loading update
-
 2004-10-04 22:34  mbickel
 
 	* source/: research.cpp, research.h, tools/infopage.cpp:  Updated
@@ -325,18 +419,6 @@
 	* source/: research.cpp, tools/win/weaponguide.bpr:  Fixed invalid
 	graphs in weaponguide
 
-2004-10-03 19:30  mbickel
-
-	* source/: sgstream.cpp, graphics/surface.cpp,
-	libs/sdlmm/src/sdlmm_basesurface.cpp:  Still more graphic fixes
-
-2004-10-03 17:35  mbickel
-
-	* source/: itemrepository.cpp, terraintype.cpp,
-	graphics/ascttfont.cpp, graphics/ascttfont.h, graphics/surface.cpp,
-	graphics/surface.h, tools/win/weaponguide.bpr,
-	win32/borland/asc.bpr:	Some more graphic modifications
-
 2004-10-03 14:35  mbickel
 
 	* ChangeLog, source/research.cpp:  Updated weaponguide
@@ -346,53 +428,6 @@
 	* asc.bpg, source/controls.cpp, source/replay.cpp,
 	source/resourcenet.cpp, source/sgstream.cpp, source/strtmesg.cpp,
 	source/tools/win/weaponguide.bpr:  Fixed replay bug
-
-2004-10-02 10:38  mbickel
-
-	* source/: basegfx.cpp, itemrepository.cpp, mapdisplay.cpp,
-	graphics/surface.cpp, graphics/surface.h:  Fixed graphic errors
-
-2004-10-01 23:05  mbickel
-
-	* source/: basegfx.cpp, dlg_box.cpp, itemrepository.cpp,
-	mapdisplay.cpp, terraintype.cpp, textfile_evaluation.cpp:  Fixed
-	some graphics problems
-
-2004-10-01 21:05  mbickel
-
-	* Makefile.in, asc.kdevelop, config.h.in, configure, configure.in,
-	data/Makefile.in, data/dialog/Makefile.in, data/music/Makefile.in,
-	doc/Makefile.in, doc/manpages/Makefile.in, source/Makefile.in,
-	source/textfile_evaluation.cpp, source/ai/Makefile.in,
-	source/clparser/Makefile.in, source/docs/Makefile.in,
-	source/docs/en/Makefile.in, source/graphics/Makefile.in,
-	source/graphics/ascttfont.h, source/graphics/surface.cpp,
-	source/graphics/surface.h, source/libs/Makefile.in,
-	source/libs/sdlmm/Makefile.in, source/libs/sdlmm/src/Makefile.in,
-	source/libs/triangul/Makefile.in, source/sdl/Makefile.in,
-	source/tools/Makefile.in, source/tools/lib/Makefile.in,
-	source/tools/linux/Makefile.in, source/unix/Makefile.am,
-	source/unix/Makefile.in, source/unix/mapeditor/Makefile.am,
-	source/unix/mapeditor/Makefile.in:  Added SDL_ttf to make system
-	 Worked on new graphics engine
-
-2004-10-01 16:59  mbickel
-
-	* source/graphics/: ascttfont.cpp, ascttfont.h:  Updated font files
-
-2004-09-26 22:03  mbickel
-
-	* source/graphics/: Makefile.am, Makefile.in:  Added makefiles
-
-2004-09-26 22:02  mbickel
-
-	* configure.in, source/Makefile.am, source/Makefile.in,
-	source/edmisc.cpp, source/sgstream.cpp, source/sgstream.h,
-	source/textfile_evaluation.h, source/graphics/ascttfont.cpp,
-	source/graphics/ascttfont.h, source/tools/linux/Makefile.am,
-	source/tools/linux/Makefile.in, source/unix/Makefile.am,
-	source/unix/Makefile.in, source/unix/mapeditor/Makefile.am,
-	source/unix/mapeditor/Makefile.in:  Made branch compilable
 
 2004-09-26 21:53  mbickel
 
@@ -441,11 +476,6 @@
 
 2004-09-25 22:35  mbickel
 
-	* source/graphics/: ascttfont.cpp, ascttfont.h, surface.cpp,
-	surface.h:  Added new files
-
-2004-09-25 22:35  mbickel
-
 	* source/graphics/ascttfont.cpp: file ascttfont.cpp was initially
 	added on branch NewGraphics_branch.
 
@@ -453,16 +483,6 @@
 
 	* source/graphics/ascttfont.h: file ascttfont.h was initially added
 	on branch NewGraphics_branch.
-
-2004-09-25 22:34  mbickel
-
-	* TODO, source/basegfx.cpp, source/basegfx.h,
-	source/mapdisplay.cpp, source/sgstream.cpp, source/sgstream.h,
-	source/terraintype.cpp, source/terraintype.h,
-	source/textfile_evaluation.cpp, source/textfile_evaluation.h,
-	source/sdl/graphics.cpp, source/sdl/graphics.h,
-	source/win32/borland/asc.bpr: started replacement of old graphics
-	system with SDLmm based one
 
 2004-09-25 22:30  mbickel
 
@@ -8466,36 +8486,6 @@
 	 Fixed bugs in RLE decompression, BI map importer and the view
 	calculation
 
-1999-11-20 21:33  tmwilson
-
-	* source/: timer.h, typen.cpp, typen.h, vesa.cpp, vesa.h, view.cpp,
-	weather.cpp, weather.h: Started a Linux(Unix)-only branch so the
-	DOS code can be removed without interfering with the other
-	development branch.  Started rewriting/removing code that is no
-	longer needed from DOS.
-
-1999-11-20 21:30  tmwilson
-
-	* source/: ChangeLog, Makefile.in, README, aclocal.m4, artint.cpp,
-	artint.h, attack.cpp, attack.h, basegui.h, basestrm.cpp,
-	basestrm.h, basetemp.h, building.cpp, building.h, cdrom.cpp,
-	cdrom.h, config.status, configure, configure.in, controls.cpp,
-	controls.h, dialog.cpp, dialog.h, dlg_box.cpp, dlg_box.h,
-	dlgraph.cpp, edevents.cpp, edevents.h, edgen.cpp, edgen.h,
-	edglobal.cpp, edglobal.h, edmain.cpp, edmisc.cpp, edmisc.h,
-	edselfnt.cpp, edselfnt.h, flview.cpp, flview.h, gamedlg.cpp,
-	gamedlg.h, global.h, gui.cpp, gui.h, history.cpp, kbhit.cpp,
-	keybp.cpp, keybp.h, loadbi3.cpp, loadbi3.h, loaders.cpp, loaders.h,
-	loadjpg.cpp, loadjpg.h, loadpcx.cpp, loadpcx.h, lzw.h, misc.cpp,
-	misc.h, missions.cpp, missions.h, mousehnd.cpp, mousehnd.h,
-	network.cpp, network.h, newfont.cpp, newfont.h, oldlzw.cpp,
-	palette.cpp, palette.h, pd.cpp, pd.h, realint.cpp, realint.h,
-	sg.cpp, sg.h, sgstream.cpp, sgstream.h, spfldutl.h, spfst.cpp,
-	spfst.h, stack.cpp, stack.h, strtmesg.cpp, strtmesg.h, timer.cpp:
-	Started a Linux(Unix)-only branch so the DOS code can be removed
-	without interfering with the other development branch.	Started
-	rewriting/removing code that is no longer needed from DOS.
-
 1999-11-18 18:30  mbickel
 
 	* source/: basestrm.cpp, building.cpp, controls.cpp, dialog.cpp,
@@ -8582,197 +8572,6 @@
 	unsigned char)
 		Added autoconf/automake capabilities
 		Added files used by 'automake --gnu'
-
-1999-11-15 20:36  mbickel
-
-	* doc/source.htm, source/artint.cpp, source/artint.h,
-	source/attack.cpp, source/attack.h, source/basegui.h,
-	source/basemacr.inc, source/basestrm.cpp, source/basestrm.h,
-	source/basetemp.h, source/basevesa.asm, source/basevesa.inc,
-	source/building.cpp, source/building.h, source/cdrom.cpp,
-	source/cdrom.h, source/controls.cpp, source/controls.h,
-	source/dialog.cpp, source/dialog.h, source/dispfont.asm,
-	source/dlg_box.cpp, source/dlg_box.h, source/dlgraph.cpp,
-	source/edevents.cpp, source/edevents.h, source/edgen.cpp,
-	source/edgen.h, source/edglobal.cpp, source/edglobal.h,
-	source/edmain.cpp, source/edmisc.cpp, source/edmisc.h,
-	source/edselfnt.cpp, source/edselfnt.h, source/flview.cpp,
-	source/flview.h, source/gamedlg.cpp, source/gamedlg.h,
-	source/gui.cpp, source/gui.h, source/history.cpp, source/keybp.cpp,
-	source/keybp.h, source/loadbi3.cpp, source/loadbi3.h,
-	source/loaders.cpp, source/loaders.h, source/loadjpg.cpp,
-	source/loadjpg.h, source/loadpcx.cpp, source/loadpcx.h,
-	source/lzw.h, source/misc.cpp, source/misc.h, source/missions.cpp,
-	source/missions.h, source/mouse.asm, source/mousehnd.cpp,
-	source/mousehnd.h, source/movecurs.inc, source/network.cpp,
-	source/network.h, source/newfont.cpp, source/newfont.h,
-	source/oldlzw.cpp, source/palette.cpp, source/palette.h,
-	source/pcx.asm, source/pd.cpp, source/pd.h, source/rdtsc.asm,
-	source/realint.cpp, source/realint.h, source/setpages.inc,
-	source/sg.cpp, source/sg.h, source/sg.wpj, source/sgstream.cpp,
-	source/sgstream.h, source/spfldutl.asm, source/spfldutl.h,
-	source/spfst.cpp, source/spfst.h, source/stack.cpp, source/stack.h,
-	source/strtmesg.cpp, source/strtmesg.h, source/timer.cpp,
-	source/timer.h, source/tpascal.inc, source/tsm.bat,
-	source/typen.cpp, source/typen.h, source/vesa.cpp, source/vesa.h,
-	source/view.cpp, source/weather.cpp, source/weather.h,
-	source/libs/bzlib/blocksort.c, source/libs/bzlib/bzip2.1,
-	source/libs/bzlib/bzip2.1.preformatted, source/libs/bzlib/bzip2.c,
-	source/libs/bzlib/CHANGES, source/libs/bzlib/bzip2.txt,
-	source/libs/bzlib/bzip2recover.c, source/libs/bzlib/bzlib.c,
-	source/libs/bzlib/bzlib.h, source/libs/bzlib/bzlib_private.h,
-	source/libs/bzlib/compress.c, source/libs/bzlib/crctable.c,
-	source/libs/bzlib/decompress.c, source/libs/bzlib/howbig.c,
-	source/libs/bzlib/huffman.c, source/libs/bzlib/libbz2.def,
-	source/libs/bzlib/libbzip2.tgt, source/libs/bzlib/LICENSE,
-	source/libs/bzlib/Makefile, source/libs/bzlib/libbzip2.wpj,
-	source/libs/bzlib/manual.ps, source/libs/bzlib/README,
-	source/libs/bzlib/manual.texi, source/libs/bzlib/manual_1.html,
-	source/libs/bzlib/manual_2.html, source/libs/bzlib/manual_3.html,
-	source/libs/bzlib/manual_4.html, source/libs/bzlib/manual_toc.html,
-	source/libs/bzlib/randtable.c, source/libs/bzlib/words1,
-	source/libs/bzlib/words2, source/libs/bzlib/words3,
-	source/libs/bzlib/os2/libbzip2.lb1,
-	source/libs/bzlib/os2/libbzip2.tgt, source/libs/jpeg/ansi2knr.1,
-	source/libs/jpeg/ansi2knr.cpp, source/libs/jpeg/cderror.h,
-	source/libs/jpeg/cdjpeg.cpp, source/libs/jpeg/cdjpeg.h,
-	source/libs/jpeg/change.log, source/libs/jpeg/cjpeg.1,
-	source/libs/jpeg/cjpeg.cpp, source/libs/jpeg/ckconfig.cpp,
-	source/libs/jpeg/config.sub, source/libs/jpeg/djpeg.1,
-	source/libs/jpeg/djpeg.cpp, source/libs/jpeg/example.cpp,
-	source/libs/jpeg/filelist.doc, source/libs/jpeg/install.doc,
-	source/libs/jpeg/jcapimin.cpp, source/libs/jpeg/jcapistd.cpp,
-	source/libs/jpeg/jccoefct.cpp, source/libs/jpeg/jccolor.cpp,
-	source/libs/jpeg/jcdctmgr.cpp, source/libs/jpeg/jchuff.cpp,
-	source/libs/jpeg/jchuff.h, source/libs/jpeg/jcinit.cpp,
-	source/libs/jpeg/jcmainct.cpp, source/libs/jpeg/jcmarker.cpp,
-	source/libs/jpeg/jcmaster.cpp, source/libs/jpeg/jcomapi.cpp,
-	source/libs/jpeg/jconfig.bcc, source/libs/jpeg/jconfig.cfg,
-	source/libs/jpeg/jconfig.dj, source/libs/jpeg/jconfig.doc,
-	source/libs/jpeg/jconfig.h, source/libs/jpeg/jconfig.mac,
-	source/libs/jpeg/jconfig.mc6, source/libs/jpeg/jconfig.sas,
-	source/libs/jpeg/jconfig.st, source/libs/jpeg/jconfig.vc,
-	source/libs/jpeg/jconfig.vms, source/libs/jpeg/jcparam.cpp,
-	source/libs/jpeg/jcphuff.cpp, source/libs/jpeg/jcprepct.cpp,
-	source/libs/jpeg/jcsample.cpp, source/libs/jpeg/jctrans.cpp,
-	source/libs/jpeg/jdapimin.cpp, source/libs/jpeg/jdapistd.cpp,
-	source/libs/jpeg/jdatadst.cpp, source/libs/jpeg/jdatasrc.cpp,
-	source/libs/jpeg/jdcoefct.cpp, source/libs/jpeg/jdcolor.cpp,
-	source/libs/jpeg/jdct.h, source/libs/jpeg/jddctmgr.cpp,
-	source/libs/jpeg/jdhuff.cpp, source/libs/jpeg/jdhuff.h,
-	source/libs/jpeg/jdinput.cpp, source/libs/jpeg/jdmainct.cpp,
-	source/libs/jpeg/jdmarker.cpp, source/libs/jpeg/jdmaster.cpp,
-	source/libs/jpeg/jdmerge.cpp, source/libs/jpeg/jdosaobj.doc,
-	source/libs/jpeg/jdphuff.cpp, source/libs/jpeg/jdpostct.cpp,
-	source/libs/jpeg/jdsample.cpp, source/libs/jpeg/jdtrans.cpp,
-	source/libs/jpeg/jerror.cpp, source/libs/jpeg/jerror.h,
-	source/libs/jpeg/jfdctflt.cpp, source/libs/jpeg/jfdctfst.cpp,
-	source/libs/jpeg/jfdctint.cpp, source/libs/jpeg/jidctflt.cpp,
-	source/libs/jpeg/jidctfst.cpp, source/libs/jpeg/jidctint.cpp,
-	source/libs/jpeg/jidctred.cpp, source/libs/jpeg/jinclude.h,
-	source/libs/jpeg/jmemansi.cpp, source/libs/jpeg/jmemdos.cpp,
-	source/libs/jpeg/jmemdosa.asm, source/libs/jpeg/jmemmac.cpp,
-	source/libs/jpeg/jmemmgr.cpp, source/libs/jpeg/jmemname.cpp,
-	source/libs/jpeg/jmemnobs.cpp, source/libs/jpeg/jmemsys.h,
-	source/libs/jpeg/jmorecfg.h, source/libs/jpeg/jpeg.lb1,
-	source/libs/jpeg/jpeg.tgt, source/libs/jpeg/jpeg.txt,
-	source/libs/jpeg/jpeg.wpj, source/libs/jpeg/jpegint.h,
-	source/libs/jpeg/jpeglib.h, source/libs/jpeg/jpegtran.1,
-	source/libs/jpeg/jpegtran.cpp, source/libs/jpeg/jquant1.cpp,
-	source/libs/jpeg/jquant2.cpp, source/libs/jpeg/jutils.cpp,
-	source/libs/jpeg/jversion.h, source/libs/jpeg/libjpeg.doc,
-	source/libs/jpeg/ltconfig, source/libs/jpeg/ltmain.sh,
-	source/libs/jpeg/makcjpeg.st, source/libs/jpeg/makdjpeg.st,
-	source/libs/jpeg/makeapps.ds, source/libs/jpeg/makefile.bcc,
-	source/libs/jpeg/makefile.cfg, source/libs/jpeg/makefile.dj,
-	source/libs/jpeg/makefile.mak, source/libs/jpeg/makefile.mc6,
-	source/libs/jpeg/makefile.mms, source/libs/jpeg/makefile.sas,
-	source/libs/jpeg/makefile.vc, source/libs/jpeg/makefile.vms,
-	source/libs/jpeg/makelib.ds, source/libs/jpeg/makeproj.mac,
-	source/libs/jpeg/makljpeg.st, source/libs/jpeg/maktjpeg.st,
-	source/libs/jpeg/makvms.opt, source/libs/jpeg/rdbmp.cpp,
-	source/libs/jpeg/rdcolmap.cpp, source/libs/jpeg/rdgif.cpp,
-	source/libs/jpeg/rdjpgcom.1, source/libs/jpeg/rdjpgcom.cpp,
-	source/libs/jpeg/rdppm.cpp, source/libs/jpeg/rdrle.cpp,
-	source/libs/jpeg/rdswitch.cpp, source/libs/jpeg/rdtarga.cpp,
-	source/libs/jpeg/readme, source/libs/jpeg/readme.dos,
-	source/libs/jpeg/transupp.cpp, source/libs/jpeg/transupp.h,
-	source/libs/jpeg/usage.doc, source/libs/jpeg/wizard.doc,
-	source/libs/jpeg/wrbmp.cpp, source/libs/jpeg/wrgif.cpp,
-	source/libs/jpeg/wrjpgcom.1, source/libs/jpeg/wrjpgcom.cpp,
-	source/libs/jpeg/wrppm.cpp, source/libs/jpeg/wrrle.cpp,
-	source/libs/jpeg/wrtarga.cpp, source/libs/triangul/construc.c,
-	source/libs/triangul/interfac.h, source/libs/triangul/monotone.c,
-	source/libs/triangul/readme.txt, source/libs/triangul/tri.c,
-	source/libs/triangul/triangul.h, source/libs/triangul/triangul.lb1,
-	source/libs/triangul/triangul.tgt,
-	source/libs/triangul/triangul.wpj, source/libs/triangul/trimisc.c,
-	source/tools/bi2pcx.cpp, source/tools/bi2pcx.wpj,
-	source/tools/bi2pcx2.cpp, source/tools/bi2pcx3.cpp,
-	source/tools/bi2pcx4.cpp, source/tools/bldhex.cpp,
-	source/tools/clearup.cpp, source/tools/convbdt.cpp,
-	source/tools/convbld.cpp, source/tools/convbld.tgt,
-	source/tools/convbld.wpj, source/tools/convbodn.wpj,
-	source/tools/convflic.cpp, source/tools/convobj.cpp,
-	source/tools/convobj.wpj, source/tools/convtank.cpp,
-	source/tools/convtank.wpj, source/tools/convtech.cpp,
-	source/tools/convtemp.cpp, source/tools/convtnk2.cpp,
-	source/tools/demount.cpp, source/tools/demount.tgt,
-	source/tools/demount.wpj, source/tools/dosmount.tgt,
-	source/tools/epm.log, source/tools/getcol.cpp,
-	source/tools/krkr.cpp, source/tools/krkr.h,
-	source/tools/lzwcomp.cpp, source/tools/lzwunc.cpp,
-	source/tools/makebdt.cpp, source/tools/makebdt2.cpp,
-	source/tools/makebdt3.cpp, source/tools/makebkgr.cpp,
-	source/tools/makebkgr.tgt, source/tools/makebkgr.wpj,
-	source/tools/makebuld.cpp, source/tools/makebuld.wpj,
-	source/tools/makeeis.cpp, source/tools/makefont.cpp,
-	source/tools/makefont.tgt, source/tools/makefont.wpj,
-	source/tools/makeicon.cpp, source/tools/makemask.cpp,
-	source/tools/makeobl.cpp, source/tools/makeobl.wpj,
-	source/tools/makeobl2.cpp, source/tools/makeobl3.cpp,
-	source/tools/makeobl4.cpp, source/tools/makeobl5.cpp,
-	source/tools/makepal.cpp, source/tools/makepal.tgt,
-	source/tools/makepal.wpj, source/tools/makepal2.cpp,
-	source/tools/maketank.cpp, source/tools/maketank.wpj,
-	source/tools/maketec.tgt, source/tools/maketech.cpp,
-	source/tools/maketech.tgt, source/tools/maketech.wpj,
-	source/tools/maketnk2.cpp, source/tools/maketrrn.wpj,
-	source/tools/mntgraph.cpp, source/tools/mntgraph.tgt,
-	source/tools/mount.cpp, source/tools/mount.tgt,
-	source/tools/mount.wpj, source/tools/mount_new_graphics.tgt,
-	source/tools/mount_new_graphics.wpj, source/tools/mountwin.tgt,
-	source/tools/patchpcx.cpp, source/tools/pcx2raw.cpp,
-	source/tools/pcx2raw.tgt, source/tools/pcx2raw.wpj,
-	source/tools/pcx2raw2.cpp, source/tools/pcxtank.cpp,
-	source/tools/picnrot.cpp, source/tools/printbdt.cpp,
-	source/tools/printbld.cpp, source/tools/printbld.wpj,
-	source/tools/printtnk.cpp, source/tools/prnttank.wpj,
-	source/tools/resizepcx.cpp, source/tools/resizpcx.cpp,
-	source/tools/reszepcx.tgt, source/tools/reszepcx.wpj,
-	source/tools/tank2pcx.tgt, source/tools/tank2pcx.wpj,
-	source/tools/testvesa.cpp, source/tools/testvesa.tgt,
-	source/tools/testvesa.wpj, source/tools/viewid.cpp,
-	source/tools/viewid.tgt, source/tools/viewid.wpj,
-	source/tools/viewtank.cpp, source/tools/winmount.tgt,
-	source/tools/hexagon/bi2pcx.tgt, source/tools/hexagon/bi2pcx2.tgt,
-	source/tools/hexagon/convbodn.tgt,
-	source/tools/hexagon/convobj.tgt,
-	source/tools/hexagon/convobj6.tgt,
-	source/tools/hexagon/convtank.tgt, source/tools/hexagon/hexids.tgt,
-	source/tools/hexagon/makebl6.tgt, source/tools/hexagon/makebld.tgt,
-	source/tools/hexagon/makeob6.tgt, source/tools/hexagon/makeobl.tgt,
-	source/tools/hexagon/maketk6.tgt, source/tools/hexagon/maketr6.tgt,
-	source/tools/hexagon/maketr6b.tgt,
-	source/tools/hexagon/maketrn6.tgt,
-	source/tools/hexagon/maketrr.tgt, source/tools/hexagon/makeveh.tgt,
-	source/tools/hexagon/printbl6.tgt,
-	source/tools/hexagon/printbld.tgt,
-	source/tools/hexagon/printveh.tgt,
-	source/tools/hexagon/prnttk6.tgt, source/tools/hexagon/prntveh.tgt,
-	source/tools/hexagon/viewid.tgt, source/tools/os2/os2mount.tgt,
-	source/tools/win/winmount.tgt: Imported source from Nov 8th into
-	repository
 
 1999-11-15 20:36  mbickel
 

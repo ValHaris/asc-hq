@@ -1100,6 +1100,11 @@ bool Building::MiningStation :: run()
 
    if ( !justQuery ) {
       powerAvail = bld->getResource( toConsume, 1 );
+      for ( int r = 0; r <3; ++r )
+         if ( powerAvail.resource(r) < 0 ) {
+            warning( ASCString("map corruption detected; available power for mining station is negative! ") + resourceNames[r] );
+            powerAvail.resource( r ) = 0;
+         }
    } else
       powerAvail = toConsume;
 
@@ -1156,6 +1161,11 @@ void Building::MiningStation :: testfield ( const MapCoordinate& mc )
                if ( usageRatio[i] * toExtract_thisTurn.resource(r) > 0 )
                   perc = min  ( perc, float( double(powerAvail.resource(i)) / usageRatio[i] * toExtract_thisTurn.resource(r)));
 
+            if ( perc < 0 ) {
+               warning("Warning: mining station inconsistency\n");
+               perc = 0;
+            }   
+                  
             if ( !justQuery )
                *fieldResource -= int( toExtract_thisTurn.resource(r) * perc * distEfficiency / resourceFactor );
 
@@ -1167,6 +1177,9 @@ void Building::MiningStation :: testfield ( const MapCoordinate& mc )
                float c = usageRatio[i] * toExtract_thisTurn.resource(r) * perc;
                consumed[i] += c;
                powerAvail.resource(i) -= int( ceil(c) );
+               if ( powerAvail.resource(i) < 0 )
+                  powerAvail.resource(i) = 0;
+                  
             }
 
             toExtract_thisTurn.resource(r) -= int( toExtract_thisTurn.resource(r) * perc);
