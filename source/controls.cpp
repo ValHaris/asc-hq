@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.23 2000-04-27 17:59:19 mbickel Exp $
+//     $Id: controls.cpp,v 1.24 2000-05-02 16:20:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/04/27 17:59:19  mbickel
+//      Updated Kdevelop project file
+//      Fixed some graphical errors
+//
 //     Revision 1.22  2000/04/27 16:25:16  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -3171,9 +3175,9 @@ void         tdashboard :: paintlargeweaponinfo ( void )
 
        count++;
 
-       setinvisiblemouserectanglestk ( x1, y1, x1 + 640, y1 + count * 25 + 40 );
-       void* imgbuf = asc_malloc ( imagesize ( x1, y1, x1 + 640, y1 + count * 25 + 40 ));
-       getimage ( x1, y1, x1 + 640, y1 + count * 25 + 40, imgbuf );
+       setinvisiblemouserectanglestk ( x1, y1, x1 + 640, y1 + count * 25 + 110 );
+       void* imgbuf = asc_malloc ( imagesize ( x1, y1, x1 + 640, y1 + count * 25 + 110 ));
+       getimage ( x1, y1, x1 + 640, y1 + count * 25 + 110, imgbuf );
 
        putimage ( x1, y1, icons.weaponinfo[0] );
 
@@ -3266,7 +3270,7 @@ void         tdashboard :: paintlargeweaponinfo ( void )
          }
          if ( topaint != lastpainted ) {
             if ( topaint == -1 )
-               paintlargeweaponefficiency ( i, NULL, first );
+               paintlargeweaponefficiency ( i, NULL, first, 0 );
             else {
                int effic[13];
                for ( int k = 0; k < 13; k++ )
@@ -3288,7 +3292,7 @@ void         tdashboard :: paintlargeweaponinfo ( void )
                for ( int b = maxdelta+1; b < 7; b++ )
                   effic[6+b] = -1;
    
-               paintlargeweaponefficiency ( i, effic, first );
+               paintlargeweaponefficiency ( i, effic, first, vt->weapons->weapon[topaint].targets_not_hittable );
             }
             lastpainted = topaint;
             first = 0;
@@ -3306,13 +3310,13 @@ void         tdashboard :: paintlargeweaponinfo ( void )
 
 }
 
-void         tdashboard::paintlargeweaponefficiency ( int pos, int* e, int first )
+void         tdashboard::paintlargeweaponefficiency ( int pos, int* e, int first, int nohit )
 {
    int x = (agmp->resolutionx - 640) / 2;
    int y = 150 + 28 + pos * 14;
 
    int height, width;
-   getpicsize ( icons.weaponinfo[1], width, height );
+   getpicsize ( icons.weaponinfo[3], width, height );
 
    setinvisiblemouserectanglestk ( x, y, x + width, y + height );
 
@@ -3343,7 +3347,21 @@ void         tdashboard::paintlargeweaponefficiency ( int pos, int* e, int first
          showtext2c ( "",  x + 88 + i * 42, y + 15 );
      }
 
-     getinvisiblemouserectanglestk ();
+   activefontsettings.length = 179;
+   // activefontsettings.background = white;
+   activefontsettings.color = 86;
+   activefontsettings.justify = lefttext;
+   // activefontsettings.color = black;
+   for ( int j = 0; j < cmovemalitypenum; j++ )
+      if ( nohit & (1 << j ) ) {
+         activefontsettings.font = schriften.guifont;
+         showtext2c ( cmovemalitypes[j],   x + 88 + (j % 3) * 180, y + 15 + 16 + (j / 3) * 12 );
+      } else {
+         activefontsettings.font = schriften.monogui;
+         showtext2  ( cmovemalitypes[j],   x + 88 + (j % 3) * 180, y + 15 + 16 + (j / 3) * 12 );
+      }
+      
+   getinvisiblemouserectanglestk ();
 }
 
 

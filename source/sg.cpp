@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.33 2000-04-27 17:59:23 mbickel Exp $
+//     $Id: sg.cpp,v 1.34 2000-05-02 16:20:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/04/27 17:59:23  mbickel
+//      Updated Kdevelop project file
+//      Fixed some graphical errors
+//
 //     Revision 1.32  2000/04/27 16:25:26  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -2629,6 +2633,7 @@ void loaddata( int resolx, int resoly ) {
                 activefontsettings.markfont = schriften.guicolfont;
                 shrinkfont ( schriften.guifont, -1 );
                 shrinkfont ( schriften.guicolfont, -1 );
+                shrinkfont ( schriften.monogui, -1 );
                 pulldownfont = schriften.smallarial ;
 
                 if ( actprogressbar )

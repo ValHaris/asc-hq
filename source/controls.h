@@ -1,6 +1,15 @@
-//     $Id: controls.h,v 1.8 2000-04-27 16:25:19 mbickel Exp $
+//     $Id: controls.h,v 1.9 2000-05-02 16:20:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/04/27 16:25:19  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.7  2000/01/31 16:08:39  mbickel
 //      Fixed crash in line
 //      Improved error handling in replays
@@ -108,7 +117,7 @@
                        void         paintsmallmap ( int repaint = 0  );
                        void         paintlargeweaponinfo ( void );
                        void         paintlargeweapon ( int pos, const char* name, int ammoact, int ammomax, int shoot, int refuel, int strengthmax, int strengthmin, int distmax, int distmin, int from, int to );
-                       void         paintlargeweaponefficiency ( int pos, int* e, int alreadypainted );
+                       void         paintlargeweaponefficiency ( int pos, int* e, int alreadypainted, int nohit );
                      #ifdef FREEMAPZOOM
                        void         paintzoom( void );
                      public:

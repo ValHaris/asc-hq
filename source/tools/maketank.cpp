@@ -44,6 +44,7 @@ char     mode50 = 1;
 
 int i;
 
+int usegraphics = 1;
 
 
 const char* bildnr[8] = { " 0   ( unit facing up ) ",
@@ -86,6 +87,15 @@ void readtextfile ( char* name, pchar &buf, int allocated )
 
 main (int argc, char *argv[] )
 { 
+   char cl_filename[1000];
+   cl_filename[0] = 0;
+
+   for ( int i = 1; i<argc; i++ ) 
+      if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
+         if ( strcmpi ( &argv[i][1], "nographics" ) == 0 ) 
+            usegraphics = 0;
+      } else
+         strcpy ( cl_filename, argv[i] );
 
    t_carefor_containerstream cfcst;
    try {
@@ -110,7 +120,7 @@ main (int argc, char *argv[] )
       _setbkcolor (0);
       clearscreen ();
       char   creat_edit ;
-      if ( argc < 2 ) {
+      if ( !cl_filename[0] ) {
          printf ("\n    Create a new unit or edit an existent one\n");
          creat_edit = 0;
          yn_switch (" Create ", " Edit ", 0, 1, creat_edit);
@@ -139,10 +149,10 @@ main (int argc, char *argv[] )
       else {                                                         // edit existing tank
    
          clearscreen ();
-         if ( argc < 2 ) 
+         if ( !cl_filename[0] ) 
             fileselect("*.veh", _A_NORMAL, datfile);
          else
-            strcpy ( datfile.name, argv[1] );
+            strcpy ( datfile.name, cl_filename );
    
          clearscreen ();
          ft = loadvehicletype(datfile.name);
@@ -169,13 +179,24 @@ main (int argc, char *argv[] )
              printf ("\n    use pictures of Battle Isle or own picture ?\n");
              yn_switch ("BI", "seperate picture" , 1, 0, battleisle);
              if ( battleisle ) {
-                initgraphics (640, 480, 8);
-                getbi3pict_double ( &ft->bipicture, &ft->picture[0] ); 
+                if ( usegraphics ) {
+                   initgraphics (640, 480, 8);
+                   getbi3pict_double ( &ft->bipicture, &ft->picture[0] ); 
+                } else {
+                   printf("\nSorry, you need graphics to select a BI picture !\n");
+                   return 0;
+                }
              } else {    
                 fileselect ("*.PCX", _A_NORMAL, pictfile);
                                           
-                initgraphics (640, 480, 8);
-                ft->picture[0] = loadpcx2(pictfile.name);
+                if ( usegraphics ) {
+                   initgraphics (640, 480, 8);
+                   ft->picture[0] = loadpcx2(pictfile.name);
+                } else {
+                   tvirtualdisplay vd ( 640, 480, 255 );
+                   ft->picture[0] = loadpcx2(pictfile.name);
+                }
+
                 ft->bipicture = -1;
                 for ( int i = 1;  i < 8; i++ )
                    ft->picture[i] = NULL;
@@ -187,39 +208,40 @@ main (int argc, char *argv[] )
              yn_switch (" YES, Go on ", " NO, repeat pictureselection ", 1,0, ok);
          }  while (!ok);
         
-      } else { 
-         void     *p, *q;
-         initgraphics (640, 480, 8);
-         setvgapalette256(pal);
-         p = ft->picture[0]; 
-         q = ft->picture[1]; 
-   
-         if (q == NULL)
-            q = p; 
-   
-         for (int i = 0; i <= 8; i++) {
-            putrotspriteimage(la + 50 * (i),50,p,i * 8); 
-            putrotspriteimage(la + 50 * (i),100,q,i * 8); 
-   
-            putrotspriteimage90(la + 50 * (i),150,p,i * 8); 
-            putrotspriteimage90(la + 50 * (i),200,q,i * 8); 
-   
-            putrotspriteimage180(la + 50 * (i),250,p,i * 8); 
-            putrotspriteimage180(la + 50 * (i),300,q,i * 8); 
-   
-            putrotspriteimage270(la + 50 * (i),350,p,i * 8); 
-            putrotspriteimage270(la + 50 * (i),400,q,i * 8); 
-         } 
-   
-         _wait();
-   
-         settxt50mode (); 
-         printf ("\n    Continue ? \n");
-         char  c=1;
-         yn_switch (" YES ", " NO, exit ", 1,0, c);
-         if (c==0) 
-            exit(0);
-      } 
+      } else 
+         if ( usegraphics ) { 
+             void     *p, *q;
+             initgraphics (640, 480, 8);
+             setvgapalette256(pal);
+             p = ft->picture[0]; 
+             q = ft->picture[1]; 
+       
+             if (q == NULL)
+                q = p; 
+       
+             for (int i = 0; i <= 8; i++) {
+                putrotspriteimage(la + 50 * (i),50,p,i * 8); 
+                putrotspriteimage(la + 50 * (i),100,q,i * 8); 
+       
+                putrotspriteimage90(la + 50 * (i),150,p,i * 8); 
+                putrotspriteimage90(la + 50 * (i),200,q,i * 8); 
+       
+                putrotspriteimage180(la + 50 * (i),250,p,i * 8); 
+                putrotspriteimage180(la + 50 * (i),300,q,i * 8); 
+       
+                putrotspriteimage270(la + 50 * (i),350,p,i * 8); 
+                putrotspriteimage270(la + 50 * (i),400,q,i * 8); 
+             } 
+       
+             _wait();
+       
+             settxt50mode (); 
+             printf ("\n    Continue ? \n");
+             char  c=1;
+             yn_switch (" YES ", " NO, exit ", 1,0, c);
+             if (c==0) 
+                exit(0);
+          } 
    
                    
    
@@ -785,7 +807,6 @@ void *       loadpcx2(char *       filestring)
   byte         b; 
 
 
-   initgraphics (640, 480, 8);
    bar ( 0, 0, 639, 479, 255 );
    b = loadpcxxy(filestring, 1, 0,0); 
    if (b == 0) { 

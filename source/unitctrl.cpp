@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.2 2000-04-27 17:59:24 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.3 2000-05-02 16:20:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/04/27 17:59:24  mbickel
+//      Updated Kdevelop project file
+//      Fixed some graphical errors
+//
 //     Revision 1.1  2000/04/27 16:25:31  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -108,7 +112,7 @@ VehicleAction :: VehicleAction ( VehicleActionType _actionType, PPendingVehicleA
 {
    if ( _pva ) {
       if ( _pva->action )
-         displaymessage ( " VehicleAction :: VehicleAction / another action is running !", 2 );
+         displaymessage ( " VehicleAction :: VehicleAction type %d / another action (type %d) is running !", 2 , _actionType, _pva->actionType );
 
       _pva->action = this;
       _pva->actionType = _actionType;
@@ -121,7 +125,7 @@ void VehicleAction :: registerPVA ( VehicleActionType _actionType, PPendingVehic
 {
    if ( _pva ) {
       if ( _pva->action )
-         displaymessage ( " VehicleAction :: VehicleAction / another action is running !", 2 );
+         displaymessage ( " VehicleAction :: VehicleAction type %d / another action (type %d) is running !", 2 , _actionType, _pva->actionType );
 
       _pva->action = this;
       _pva->actionType = _actionType;

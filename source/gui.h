@@ -1,6 +1,15 @@
-//     $Id: gui.h,v 1.6 2000-04-27 16:25:24 mbickel Exp $
+//     $Id: gui.h,v 1.7 2000-05-02 16:20:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/04/27 16:25:24  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.5  2000/03/11 18:22:06  mbickel
 //      Added support for multiple graphic sets
 //
@@ -483,7 +492,7 @@ class tnsguiiconputmine : public tnsguiicon {
         public:
           virtual int   available    ( void ) ;
           virtual void  exec         ( void ) ;
-
+          virtual void  loadspecifics( pnstream stream );
           tnsguiiconputmine ( void );
        };
 
@@ -545,6 +554,7 @@ class tnsguiiconrepair : public tnsguiicon {
         public:
           virtual int   available    ( void ) ;
           virtual void  exec         ( void ) ;
+          virtual void  loadspecifics( pnstream stream );
 
           tnsguiiconrepair ( void );
        };

@@ -1,6 +1,15 @@
-//     $Id: gui.cpp,v 1.13 2000-04-27 16:25:24 mbickel Exp $
+//     $Id: gui.cpp,v 1.14 2000-05-02 16:20:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/04/27 16:25:24  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.12  2000/01/24 17:35:43  mbickel
 //      Added dummy routines for sound under DOS
 //      Cleaned up weapon specification
@@ -1605,8 +1614,20 @@ void  tnsguiiconputmine::exec         ( void )
    displaymap();
 }
 
-
-
+void tnsguiiconputmine::loadspecifics ( pnstream stream )
+{  
+   char buf[1000];
+   char buf2[1000];
+   tnsguiicon::loadspecifics ( stream );
+   itoa ( mineputmovedecrease, buf2, 10 );
+   strcat ( buf2, "/10" );
+   sprintf( buf, infotext, buf2 );
+   
+   char* buf3 = new char[ strlen ( buf ) + 5 ];
+   strcpy ( buf3, buf );
+   delete[] infotext;
+   infotext = buf3;
+}
 
 
 int   tnsguiiconputgroundmine::available    ( void ) 
@@ -1761,8 +1782,6 @@ tnsguiiconrepair::tnsguiiconrepair ( void )
    strcpy ( filename, "repair" );
 }
 
-
-
 int   tnsguiiconrepair::available    ( void ) 
 {
    if (moveparams.movestatus == 0) { 
@@ -1791,6 +1810,20 @@ void  tnsguiiconrepair::exec         ( void )
    displaymap();
 }
 
+void tnsguiiconrepair::loadspecifics ( pnstream stream )
+{  
+   char buf[1000];
+   char buf2[1000];
+   tnsguiicon::loadspecifics ( stream );
+   itoa ( movement_cost_for_repairing_unit, buf2, 10 );
+   strcat ( buf2, "/10" );
+   sprintf( buf, infotext, buf2 );
+   
+   char* buf3 = new char[ strlen ( buf ) + 5 ];
+   strcpy ( buf3, buf );
+   delete[] infotext;
+   infotext = buf3;
+}
 
 
 
@@ -2128,7 +2161,7 @@ int tnsguiiconcontainer :: available    ( void )
 {
   pfield fld = getactfield();
   if ( fieldvisiblenow ( fld ))
-     if ( !containeractive && !moveparams.movestatus )
+     if ( !containeractive && !moveparams.movestatus && pendingVehicleActions.actionType == vat_nothing && !pendingVehicleActions.action )
         if ( fld->building  &&  ((fld->building->color == actmap->actplayer * 8) || (fld->building->color == 8*8) )) 
            if ( fld->building->completion == fld->building->typ->construction_steps-1 )
               return 1;
@@ -2389,6 +2422,7 @@ StaticClassVariable pnputobjectcontainerguiicon tnputobjectcontainerguiicon :: f
 StaticClassVariable int             tnputobjectcontainerguiicon :: buildnum = 0;
 #endif
 
+
 tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( pobjecttype obj, int bld )
 {
    next = first;
@@ -2415,6 +2449,7 @@ tnputobjectcontainerguiicon :: tnputobjectcontainerguiicon ( pobjecttype obj, in
 
 }
                                                                                                                              
+
 tnputobjectcontainerguiicon ::  ~tnputobjectcontainerguiicon ( )                                      
 {
    delete[] infotext;

@@ -1,6 +1,15 @@
-//     $Id: building.cpp,v 1.17 2000-04-27 16:25:15 mbickel Exp $
+//     $Id: building.cpp,v 1.18 2000-05-02 16:20:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/04/27 16:25:15  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.16  2000/01/25 19:28:07  mbickel
 //      Fixed bugs:
 //        invalid mouse buttons reported when moving the mouse
@@ -1218,11 +1227,10 @@ int   ctransportcontrols :: putammunition ( int weapontype, int ammunition, int 
       if ( ammo )
         if ( vehicle->typ->weapons->weapon[i].getScalarWeaponType() == weapontype ) {
           int dif = vehicle->typ->weapons->weapon[i].count - vehicle->ammo[i];
-          if ( dif > ammo )
-             dif = ammo;
+          if ( ammo > dif )
+             ammo = dif;
           if ( abbuchen )
-             vehicle->ammo[i] += dif;
-          ammo -= dif;
+             vehicle->ammo[i] += ammo;
         }
    return ammo;      
 };
@@ -2174,7 +2182,7 @@ void  ccontainer :: cammunitiontransfer_subwindow :: displayvariables ( void )
          char* buf;
          paintobj ( i, 0 );
          {
-            tvirtualdisplay vdp ( 100, 100, 255 );
+            tvirtualdisplay vdp ( 100, 100, bkgrcol );
 
             int x1 = 0;
             int y1 = 0;

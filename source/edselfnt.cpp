@@ -1,6 +1,15 @@
-//     $Id: edselfnt.cpp,v 1.5 2000-04-27 16:25:22 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.6 2000-05-02 16:20:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/04/27 16:25:22  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.4  2000/03/29 09:58:45  mbickel
 //      Improved memory handling for DOS version
 //      Many small changes I can't remember ;-)
@@ -882,62 +891,8 @@ class SelectItemContainer {
                       selectornum++;
              };
 
-                      
-
-
              int                  selectionypos;
-             void paintselections ( int num, int act )
-             {
-
-                int backgroundcol;
-                if ( num == act ) 
-                   backgroundcol = white;
-                else 
-                   backgroundcol = lightgray;
-
-
-                int freespace = 20;
-
-                npush ( activefontsettings );
-                activefontsettings.font = schriften.smallarial;
-                activefontsettings.background  = backgroundcol;
-                activefontsettings.justify = centertext;
-                activefontsettings.color = black;
-                activefontsettings.height = 0;
-                activefontsettings.length = selfontxsize;
-          
-                int keywidth = 20;
-
-                int x1 = selfontxanf;
-                int y1 = selectionypos;
-                int x2 = selfontxanf + selfontxsize - keywidth;
-                int y2 = selectionypos + activefontsettings.font->height + selector[num].selector->getiteminfoheight();
-
-                selector[num].pos.x1 = x1;
-                selector[num].pos.x2 = x2 + keywidth;
-                selector[num].pos.y1 = y1;
-                selector[num].pos.y2 = y2;
-
-                setinvisiblemouserectanglestk ( x1, y1, selector[num].pos.x2, y2 + freespace );
-                                                             
-                showtext2 ( selector[num].name, x1, y1 );
-
-                y1 += activefontsettings.font->height;
-
-
-                selector[num].selector->showactiteminfos ( x1, y1, x2, y2 );
-                bar ( x2, y1, x2 + keywidth, y2, backgroundcol ); 
-                                           
-                selectionypos += selector[num].selector->getiteminfoheight() + freespace;
-                bar ( x1, y2+1, x2 + keywidth, y2 + freespace, black );
-                activefontsettings.background  = 255;
-                activefontsettings.color = black;
-                activefontsettings.length = keywidth;
-                showtext2 ( selector[num].keyname, x2, y1 + ( y2 - y1 - activefontsettings.font->height ) / 2);
-
-                getinvisiblemouserectanglestk ();
-                npop ( activefontsettings );
-             };
+             void paintselections ( int num, int act );
 
          public:
              SelectItemContainer ( void ) {
@@ -1025,57 +980,118 @@ class SelectItemContainer {
              };
 
 
-             void paintallselections ( void ) {
-                  if ( !paintallselections_initialized ) {
-                     selectornum = 0;
-                     addselector ( getterrainselector(),   "Terrain", "F3" );
-                     addselector ( getvehicleselector(),   "Vehicle", "F4" );
-                     addselector ( getcolorselector(),     "Color",   "F5" );
-                     addselector ( getbuildingselector(),  "Building","F6" );
-                     addselector ( getobjectselector(),    "Object",  "F7" );
-                     addselector ( getmineselector(),      "Mine",    "F8" );
-                     addselector ( getweatherselector(),   "Weather", "F9" );
-                  }
-                  selectionypos = selfontyanf;
-                  for ( int i = 0; i < selectornum; i++ )
-                     paintselections ( i, lastselectiontype - 1 );
-
-                  int x1 = selfontxanf;
-                  int x2 = selfontxanf + selfontxsize;
-
-                  bar ( x1, selectionypos , x2, agmp->resolutiony-1 , black );
-             };
-
-             void checkformouse ( void ) {
-                if ( mouseparams.taste == 1 ) {
-                   int found = -1;
-                   for ( int i = 0; i < selectornum; i++ )
-                      if ( mouseinrect ( &selector[i].pos )) {
-                         found = i;
-                         while ( mouseparams.taste & 1 );
-                         break;   
-                      }
-
-                   switch ( found ) {
-                      case 0: selterraintype ( ct_invvalue );
-                         break;
-                      case 1: selvehicletype ( ct_invvalue );
-                         break;
-                      case 2: selcolor ( ct_invvalue );
-                         break;
-                      case 3: selbuilding ( ct_invvalue );
-                         break;
-                      case 4: selobject ( ct_invvalue );
-                         break;
-                      case 5: selmine ( ct_invvalue );
-                         break;
-                      case 6: selweather ( ct_invvalue );
-                         break;
-                   } /* endswitch */
-                }
-             };
-
+             void paintallselections ( void );
+             void checkformouse ( void );
       } selectitemcontainer;
+
+
+void SelectItemContainer :: paintselections ( int num, int act )
+{
+
+   int backgroundcol;
+   if ( num == act ) 
+      backgroundcol = white;
+   else 
+      backgroundcol = lightgray;
+
+
+   int freespace = 20;
+
+   npush ( activefontsettings );
+   activefontsettings.font = schriften.smallarial;
+   activefontsettings.background  = backgroundcol;
+   activefontsettings.justify = centertext;
+   activefontsettings.color = black;
+   activefontsettings.height = 0;
+   activefontsettings.length = selfontxsize;
+
+   int keywidth = 20;
+
+   int x1 = selfontxanf;
+   int y1 = selectionypos;
+   int x2 = selfontxanf + selfontxsize - keywidth;
+   int y2 = selectionypos + activefontsettings.font->height + selector[num].selector->getiteminfoheight();
+
+   selector[num].pos.x1 = x1;
+   selector[num].pos.x2 = x2 + keywidth;
+   selector[num].pos.y1 = y1;
+   selector[num].pos.y2 = y2;
+
+   if ( y2 < agmp->resolutiony ) {
+      setinvisiblemouserectanglestk ( x1, y1, selector[num].pos.x2, y2 + freespace );
+                                                   
+      showtext2 ( selector[num].name, x1, y1 );
+   
+      y1 += activefontsettings.font->height;
+   
+   
+      selector[num].selector->showactiteminfos ( x1, y1, x2, y2 );
+      bar ( x2, y1, x2 + keywidth, y2, backgroundcol ); 
+                                 
+      selectionypos += selector[num].selector->getiteminfoheight() + freespace;
+      bar ( x1, y2+1, x2 + keywidth, y2 + freespace, black );
+      activefontsettings.background  = 255;
+      activefontsettings.color = black;
+      activefontsettings.length = keywidth;
+      showtext2 ( selector[num].keyname, x2, y1 + ( y2 - y1 - activefontsettings.font->height ) / 2);
+   
+      getinvisiblemouserectanglestk ();
+   }
+   npop ( activefontsettings );
+}
+
+void SelectItemContainer :: paintallselections ( void ) 
+{
+     if ( !paintallselections_initialized ) {
+        selectornum = 0;
+        addselector ( getterrainselector(),   "Terrain", "F3" );
+        addselector ( getvehicleselector(),   "Vehicle", "F4" );
+        addselector ( getcolorselector(),     "Color",   "F5" );
+        addselector ( getbuildingselector(),  "Building","F6" );
+        addselector ( getobjectselector(),    "Object",  "F7" );
+        addselector ( getmineselector(),      "Mine",    "F8" );
+        addselector ( getweatherselector(),   "Weather", "F9" );
+     }
+     selectionypos = selfontyanf;
+     for ( int i = 0; i < selectornum; i++ )
+        paintselections ( i, lastselectiontype - 1 );
+
+     int x1 = selfontxanf;
+     int x2 = selfontxanf + selfontxsize;
+
+     if ( selectionypos < agmp->resolutiony-1 )
+        bar ( x1, selectionypos , x2, agmp->resolutiony-1 , black );
+}
+
+void SelectItemContainer :: checkformouse ( void ) 
+{
+   if ( mouseparams.taste == 1 ) {
+      int found = -1;
+      for ( int i = 0; i < selectornum; i++ )
+         if ( mouseinrect ( &selector[i].pos )) {
+            found = i;
+            while ( mouseparams.taste & 1 );
+            break;   
+         }
+
+      switch ( found ) {
+         case 0: selterraintype ( ct_invvalue );
+            break;
+         case 1: selvehicletype ( ct_invvalue );
+            break;
+         case 2: selcolor ( ct_invvalue );
+            break;
+         case 3: selbuilding ( ct_invvalue );
+            break;
+         case 4: selobject ( ct_invvalue );
+            break;
+         case 5: selmine ( ct_invvalue );
+            break;
+         case 6: selweather ( ct_invvalue );
+            break;
+      } /* endswitch */
+   }
+}
 
 
 void selterraintype( tkey ench )
