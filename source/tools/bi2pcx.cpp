@@ -18,7 +18,7 @@
     Boston, MA  02111-1307  USA
 */
 
-
+#include <stdlib.h>
 #include "..\loadbi3.h"
 #include "string.h"
 #include "..\basegfx.h"
@@ -50,6 +50,7 @@ int main(int argc, char *argv[] )
   int verbosity = 0;
   int scale = 0;
   int usage = 1;
+  int id = 0;
 
    for (int i = 1; i<argc; i++ ) {
       if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
@@ -74,22 +75,26 @@ int main(int argc, char *argv[] )
                      if ( strcmpi ( &argv[i][1], "verbosity" ) == 0 )
                         verbosity = 1;
                      else
-                       if ( ( strcmpi ( &argv[i][1], "?" ) == 0 ) || ( strcmpi ( &argv[i][1], "h" ) == 0 ) ){
-                          printf( " Parameters: \n"
-                                  "     /h          this page\n"
-                                  "     /index      output index\n"
-                                  "     /verbosity  increase verbosity level\n"
-                                  "     /wide       use wide output ( 10 columns ) \n"
-                                  "     /orgpal     keep Battle Isle palette\n"     
-                                  "     /nouseage   output just the pictures\n"     
-                                  "     /double     use scaled pictures without interpolation\n"     
-                                  "     /doublei    use scaled pictures with interpolation\n\n"     );
-                          return (0);
-         
-                       } else {
-                           printf ( "\nInvalid command line parameter: %s \n", argv[i] );
-                           return (1);
-                       }
+                        if ( strnicmp ( &argv[i][1], "id:" ,3 ) == 0  ||  strnicmp ( &argv[i][1], "id=" ,3 ) == 0) 
+                           id = atoi ( &argv[i][4] );
+                        else
+                           if ( ( strcmpi ( &argv[i][1], "?" ) == 0 ) || ( strcmpi ( &argv[i][1], "h" ) == 0 ) ){
+                              printf( " Parameters: \n"
+                                      "     /h          this page\n"
+                                      "     /index      output index\n"
+                                      "     /verbosity  increase verbosity level\n"
+                                      "     /wide       use wide output ( 10 columns ) \n"
+                                      "     /orgpal     keep Battle Isle palette\n"     
+                                      "     /nouseage   output just the pictures\n"     
+                                      "     /double     use scaled pictures without interpolation\n"     
+                                      "     /doublei    use scaled pictures with interpolation\n"
+                                      "     /id:x       use graphic set x\n\n"     );
+                              return (0);
+             
+                           } else {
+                               printf ( "\nInvalid command line parameter: %s \n", argv[i] );
+                               return (1);
+                           }
        } else {
            printf ( "\nInvalid command line parameter: %s \n", argv[i] );
            return (1);
@@ -316,7 +321,7 @@ int main(int argc, char *argv[] )
    
       printf("Generating image: \n" ) ;
       fflush ( stdout );
-   
+      activateGraphicSet ( id );
       for ( i = 0; i < bi3graphnum; i++ ) {
          void* v;
          if ( scale == 0 )

@@ -1,6 +1,10 @@
-//     $Id: loadbi3.cpp,v 1.12 2000-04-01 11:38:39 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.13 2000-04-01 16:54:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/04/01 11:38:39  mbickel
+//      Updated the small editors
+//      Added version numbering
+//
 //     Revision 1.11  2000/03/11 18:22:06  mbickel
 //      Added support for multiple graphic sets
 //
@@ -1831,11 +1835,10 @@ void insertbattleislemap ( int x, int y, char* path, char* filename  )
 }
 
 
+#endif
+
 int activateGraphicSet ( int id  )
 {
   return    activeGraphicPictures.setActive ( id );
 }
-
-
-#endif
 
