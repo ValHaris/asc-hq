@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.00"
-	Name="ASC"
-	ProjectGUID="{B7F902AB-FD64-48FB-B36A-50D48B03447F}"
+	Name="mapeditor"
+	ProjectGUID="{2610C66C-BB44-11D5-8156-00805F852A9B}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -20,29 +20,27 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;&quot;$(SDLmm)/src&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/getopt"
-				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_"
+				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON,_NOASM_,FREEMAPZOOM,NEWKEYB,_WIN32_,karteneditor,_SDL_"
 				MinimalRebuild="TRUE"
-				BasicRuntimeChecks="0"
+				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				DisableLanguageExtensions="FALSE"
 				DefaultCharIsUnsigned="TRUE"
 				UsePrecompiledHeader="0"
 				BrowseInformation="0"
 				WarningLevel="3"
+				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib"
-				ShowProgress="0"
-				OutputFile="$(OutDir)/bin/ASC.exe"
+				AdditionalDependencies="triangulate.lib libbzip2.lib sdlevent.lib SDL.lib SDLmain.lib SDLmm.lib SDL_image.lib SDL_mixer.lib"
+				OutputFile="$(OutDir)/bin/mapeditor.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(SDL_mixer)/lib;$(SDL)/lib;$(SDL_image)/lib;$(SDLmm)/lib;$(OutDir)/lib"
-				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/bin/ASC.pdb"
+				ProgramDatabaseFile="$(OutDir)/bin/mapeditor.pdb"
 				SubSystem="2"
 				TargetMachine="1"/>
 			<Tool
@@ -75,7 +73,7 @@
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="../.;$(SDL)/include;$(SDL_image)/include;$(SDLmm)/include;$(SDL_mixer)/include;../../../libs/getopt"
-				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;HEXAGON,_NOASM_,FREEMAPZOOM,NEWKEYB,_WIN32_,karteneditor,_SDL_"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
@@ -91,12 +89,12 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib"
-				OutputFile="$(OutDir)/bin/ASC.exe"
+				AdditionalDependencies="triangulate.lib libbzip2.lib sdlevent.lib SDL.lib SDLmain.lib SDLmm.lib SDL_image.lib SDL_mixer.lib"
+				OutputFile="$(OutDir)/bin/mapeditor.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SDL_mixer)/lib;$(SDL)/lib;$(SDL_image)/lib;$(SDLmm)/lib;$(OutDir)/lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/bin/ASC.pdb"
+				ProgramDatabaseFile="$(OutDir)/bin/mapeditor.pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -125,13 +123,7 @@
 				RelativePath="..\..\..\ascstring.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\astar2.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\attack.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\ai\base.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\basegfx.cpp">
@@ -143,14 +135,8 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						GeneratePreprocessedFile="0"
-						ShowIncludes="TRUE"/>
+						ShowIncludes="FALSE"/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\building.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\ai\buildingcapture.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\buildings.cpp">
@@ -165,19 +151,28 @@
 				RelativePath="..\..\..\containerbase.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\controls.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\dashboard.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\dialog.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\dlg_box.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\gamedlg.cpp">
+				RelativePath="..\..\..\edevents.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\edgen.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\edglobal.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\edmain.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\edmisc.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\edselfnt.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\gamemap.cpp">
@@ -193,9 +188,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\graphicset.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\gui.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\itemrepository.cpp">
@@ -216,34 +208,13 @@
 				RelativePath="..\..\..\mapdisplay.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ai\misc.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\misc.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\missions.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\Named.cpp">
 			</File>
 			<File
 				RelativePath="..\ndir.c">
-			</File>
-			<File
-				RelativePath="..\..\..\network.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\networkdata.cpp">
@@ -273,25 +244,13 @@
 				RelativePath="..\..\..\PropertyGroup.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\replay.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\research.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\resourcenet.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ai\service.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\sg.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\sgstream.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\soundList.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\spfst.cpp">
@@ -300,13 +259,7 @@
 				RelativePath="..\..\..\stack.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\ai\strategy.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\strtmesg.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\ai\tactics.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\terraintype.cpp">
@@ -319,12 +272,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\typen.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\unitctrl.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\ai\valuation.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\vehicle.cpp">
@@ -343,7 +290,154 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc">
 			<File
+				RelativePath="..\..\..\ascstring.h">
+			</File>
+			<File
+				RelativePath="..\..\..\attack.h">
+			</File>
+			<File
+				RelativePath="..\..\..\basegfx.h">
+			</File>
+			<File
+				RelativePath="..\..\..\basestrm.h">
+			</File>
+			<File
+				RelativePath="..\..\..\buildings.h">
+			</File>
+			<File
+				RelativePath="..\..\..\buildingtype.h">
+			</File>
+			<File
+				RelativePath="..\..\..\CLoadable.h">
+			</File>
+			<File
+				RelativePath="..\..\..\containerbase.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dialog.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dlg_box.h">
+			</File>
+			<File
+				RelativePath="..\..\..\edevents.h">
+			</File>
+			<File
+				RelativePath="..\..\..\edgen.h">
+			</File>
+			<File
+				RelativePath="..\..\..\edglobal.h">
+			</File>
+			<File
+				RelativePath="..\..\..\edmisc.h">
+			</File>
+			<File
+				RelativePath="..\..\..\edselfnt.h">
+			</File>
+			<File
+				RelativePath="..\..\..\gamemap.h">
+			</File>
+			<File
+				RelativePath="..\..\..\gameoptions.h">
+			</File>
+			<File
+				RelativePath="..\..\..\libs\getopt\getopt.h">
+			</File>
+			<File
+				RelativePath="..\..\..\graphicset.h">
+			</File>
+			<File
+				RelativePath="..\..\..\itemrepository.h">
+			</File>
+			<File
+				RelativePath="..\..\..\loadbi3.h">
+			</File>
+			<File
+				RelativePath="..\..\..\loaders.h">
+			</File>
+			<File
+				RelativePath="..\..\..\mapalgorithms.h">
+			</File>
+			<File
+				RelativePath="..\..\..\mapdisplay.h">
+			</File>
+			<File
+				RelativePath="..\..\..\misc.h">
+			</File>
+			<File
+				RelativePath="..\..\..\Named.h">
+			</File>
+			<File
 				RelativePath="..\ndir.h">
+			</File>
+			<File
+				RelativePath="..\..\..\networkdata.h">
+			</File>
+			<File
+				RelativePath="..\..\..\newfont.h">
+			</File>
+			<File
+				RelativePath="..\..\..\objecttype.h">
+			</File>
+			<File
+				RelativePath="..\..\..\palette.h">
+			</File>
+			<File
+				RelativePath="..\..\..\password.h">
+			</File>
+			<File
+				RelativePath="..\..\..\password_dialog.h">
+			</File>
+			<File
+				RelativePath="..\..\..\pd.h">
+			</File>
+			<File
+				RelativePath="..\..\..\Property.h">
+			</File>
+			<File
+				RelativePath="..\..\..\PropertyGroup.h">
+			</File>
+			<File
+				RelativePath="..\..\..\research.h">
+			</File>
+			<File
+				RelativePath="..\..\..\resourcenet.h">
+			</File>
+			<File
+				RelativePath="..\..\..\sgstream.h">
+			</File>
+			<File
+				RelativePath="..\..\..\spfst.h">
+			</File>
+			<File
+				RelativePath="..\..\..\stack.h">
+			</File>
+			<File
+				RelativePath="..\..\..\strtmesg.h">
+			</File>
+			<File
+				RelativePath="..\..\..\terraintype.h">
+			</File>
+			<File
+				RelativePath="..\..\..\textfileparser.h">
+			</File>
+			<File
+				RelativePath="..\..\..\textfiletags.h">
+			</File>
+			<File
+				RelativePath="..\..\..\typen.h">
+			</File>
+			<File
+				RelativePath="..\..\..\vehicle.h">
+			</File>
+			<File
+				RelativePath="..\..\..\vehicletype.h">
+			</File>
+			<File
+				RelativePath="..\..\..\viewcalculation.h">
+			</File>
+			<File
+				RelativePath="..\..\..\weather.h">
 			</File>
 		</Filter>
 		<Filter
