@@ -23,6 +23,7 @@ move.light_aircraft = move_air_jet.wav
 move.heavy_aircraft = move_air_jet.wav
 move.light_ship = 
 move.heavy_ship = 
+move.helicopter = move_air_chopper.wav
 menu.acknowledge = interface_click3.wav
 menu.fail = 
 building.conquer = 

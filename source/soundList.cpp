@@ -15,7 +15,7 @@
 
 SoundList* SoundList::instance = NULL;
 
-const int soundNum = 28;
+const int soundNum = 29;
 
 struct {
           SoundList::Sample sample;
@@ -47,6 +47,7 @@ struct {
                              { SoundList::moving,  13, "MOVE.HEAVY_AIRCRAFT", NULL },
                              { SoundList::moving,  14, "MOVE.LIGHT_SHIP", NULL },
                              { SoundList::moving,  15, "MOVE.HEAVY_SHIP", NULL },
+                             { SoundList::moving,  16, "MOVE.HELICOPTER", NULL },
                              { SoundList::menu_ack,  0, "MENU.ACKNOWLEDGE", NULL },
                              { SoundList::menu_fail, 0, "MENU.FAIL", NULL },
                              { SoundList::building_conq,  0, "BUILDING.CONQUER", NULL }
@@ -152,7 +153,8 @@ void SoundList::initialize(  )
          if ( soundFiles.find ( i->second ) == soundFiles.end() ) {
             s = new Sound ( i->second );
             soundFiles[i->second] = s;
-         }
+         } else
+            s = soundFiles[i->second];
 
       for ( int n = 0; n < soundNum; n++ )
          if ( i->first == ASCString( sounds[n].name ) )
