@@ -1,6 +1,10 @@
-//     $Id: artint.h,v 1.10 2000-09-02 13:59:48 mbickel Exp $
+//     $Id: artint.h,v 1.11 2000-09-07 15:42:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/09/02 13:59:48  mbickel
+//      Worked on AI
+//      Started using doxygen
+//
 //     Revision 1.9  2000/07/29 14:54:08  mbickel
 //      plain text configuration file implemented
 //
@@ -137,15 +141,57 @@
 
             void  calculateAllThreats( void );
             void  tactics( void );
+            void  strategy ( void );
             void  setup( void );
 
             void reset ( void );
 
+            class Section {
+                  AI* ai;
+               public:
+                  int x1,y1,x2,y2;
+                  int xp, yp;
+                  int centerx, centery;
+
+                  int numberOfFields;
+                  AiThreat absUnitThreat;
+                  AiThreat avgUnitThreat;
+                  AiThreat absFieldThreat;
+                  AiThreat avgFieldThreat;
+                  float value[ aiValueTypeNum ];
+
+                  int numberOfAccessibleFields ( const pvehicle veh );
+                  void init ( int _x, int _y, int xsize, int ysize, int _xp, int _yp );
+                  Section ( AI* _ai ) : ai ( _ai ) {};
+            };
+            friend class Section;
+
+            class Sections {
+                  AI* ai;
+                  Section* section;
+               public:
+                  int sizeX ;
+                  int sizeY ;
+                  int numX ;
+                  int numY ;
+                  void calculate ( void );
+                  Section& getForCoordinate ( int xc, int yc );         //!< returns the section whose center is nearest to x,y
+                  Section& getForPos ( int xn, int yn );                //!< returns the xth and yth section
+                  Section* getBest ( const pvehicle veh, int* xtogo, int* ytogo );
+                  Sections ( AI* _ai );
+                  void reset( void );
+            } sections;
+            friend class Sections;
+
+
+
+           AiThreat& getFieldThreat ( int x, int y );
+
         public:
            AI ( pmap _map ) ;
            void  run ( void );
-           int getplayer ( void ) { return activemap->actplayer; };
-           pmap getmap ( void ) { return activemap; };
+           pmap getMap ( void ) { return activemap; };
+           int getPlayer ( void ) { return activemap->actplayer; };
            void showFieldInformation ( int x, int y );
            bool isRunning ( void );
            ~AI ( );
