@@ -1,6 +1,10 @@
-//     $Id: edmain.cpp,v 1.28 2000-10-26 18:55:28 mbickel Exp $
+//     $Id: edmain.cpp,v 1.29 2000-10-26 19:17:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/10/26 18:55:28  mbickel
+//      Fixed crash when editing the properties of a vehicle inside a building
+//      Added mapeditorFullscreen switch to asc.ini
+//
 //     Revision 1.27  2000/10/24 15:35:10  schelli
 //     MapEd FullScreen support added
 //     weapons ammo now editable in MapEd
@@ -894,9 +898,6 @@ int main(int argc, char *argv[] )
 
       if ( strcmpi ( &argv[i][1], "SHOWMODES" ) == 0 ) {
          showmodes = 1; continue;
-      }
-      if ( strcmpi ( &argv[i][1], "8BITONLY" ) == 0 ) {
-         setFullscreenSetting ( FIS_noTrueColor, 0 ); continue;
       }
 #else
       // Added support for the -w and --window options

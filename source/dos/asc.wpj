@@ -42,8 +42,8 @@ VComponent
 WRect
 0
 0
-5208
-7170
+5200
+7158
 0
 0
 12
@@ -56,10 +56,10 @@ asc.tgt
 VComponent
 14
 WRect
-5297
+5288
 0
-4728
-7170
+4720
+7158
 0
 0
 15
@@ -73,9 +73,9 @@ VComponent
 17
 WRect
 880
-782
+770
 5680
-4183
+4171
 1
 0
 18
@@ -88,10 +88,10 @@ WFileName
 VComponent
 20
 WRect
-115
-4610
+106
+4598
 5680
-4207
+4195
 1
 0
 21
@@ -100,4 +100,4 @@ WFileName
 ..\libs\triangul\dos\triangul.tgt
 0
 4
-10
+13
