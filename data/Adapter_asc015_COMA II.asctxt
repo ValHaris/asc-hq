@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 103
+   ;Bezeichnung der verknüpften Technologie: COMA II
+   TechnologiesRequired = 101103
+} TechAdapter

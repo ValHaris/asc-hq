@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 57
+   ;Bezeichnung der verknüpften Technologie: PUNCH
+   TechnologiesRequired = 101057
+} TechAdapter

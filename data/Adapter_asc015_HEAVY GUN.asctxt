@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 110
+   ;Bezeichnung der verknüpften Technologie: HEAVY GUN
+   TechnologiesRequired = 101110
+} TechAdapter
