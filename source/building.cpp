@@ -984,7 +984,7 @@ void  ccontainercontrols :: crefill :: fuel (pvehicle eht, int newfuel)
    }
 
    // logtoreplayinfo ( rpl_refuel, eht->xpos, eht->ypos, eht->networkid, int(1002), newfuel );
-   logtoreplayinfo ( rpl_refuel2, eht->xpos, eht->ypos, eht->networkid, int(1002), newfuel, oldfuel );
+   logtoreplayinfo ( rpl_refuel2, eht->xpos, eht->ypos, eht->networkid, int(1002), eht->tank.fuel, oldfuel );
 };
 
 
@@ -1003,7 +1003,7 @@ void  ccontainercontrols :: crefill :: material (pvehicle eht, int newmaterial)
       delta = cc->putmaterial ( delta );
       eht->tank.material -= delta;
    }
-   logtoreplayinfo ( rpl_refuel2, eht->xpos, eht->ypos, eht->networkid, int(1001), newmaterial, oldmaterial );
+   logtoreplayinfo ( rpl_refuel2, eht->xpos, eht->ypos, eht->networkid, int(1001), eht->tank.material, oldmaterial );
 };
 
 

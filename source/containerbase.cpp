@@ -237,9 +237,13 @@ int  ContainerBase :: vehicleUnloadable ( const Vehicletype* vehicleType ) const
             if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
                if ( i->vehicleCategoriesLoadable & (1<<vehicleType->movemalustyp))
                   if ( (i->requireUnitFunction & vehicleType->functions) || i->requireUnitFunction == 0 )
-                     if ( i->height_abs != 0 && i->height_rel != -100 )
-                        height |= i->height_abs & (1 << (getPosition().getNumericalHeight() + i->height_rel ));
-                     else
+                     if ( i->height_abs != 0 && i->height_rel != -100 ) {
+                        int h = 0;
+                        for ( int hh = 0; hh < 8; ++hh)
+                           if ( getheightdelta(getPosition().getNumericalHeight(), hh) == i->height_rel )
+                              h += 1 << hh;
+                        height |= i->height_abs & h;
+                     } else
                        if ( i->height_rel != -100 )
                           height |= 1 << (getPosition().getNumericalHeight() + i->height_rel) ;
                        else
