@@ -283,7 +283,7 @@ void         loadMoreData(void)
 
    {
       tnfilestream stream ("weapicon.raw",tnstream::reading);
-      for (i=0; i<13 ;i++ )
+      for (i=0; i<14 ;i++ )
          stream.readrlepict(   &icons.unitinfoguiweapons[i], false, &w );
    }
 
