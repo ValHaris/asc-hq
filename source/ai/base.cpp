@@ -51,7 +51,7 @@ void AI :: reset ( void )
    config.wholeMapVisible = 1;
    config.lookIntoTransports = 1;
    config.lookIntoBuildings = 1;
-   config.aggressiveness  = 2;
+   config.aggressiveness  = 3;
    config.damageLimit = 70;
    config.resourceLimit = Resources ( 0, 5, 20 );
    config.ammoLimit= 10;
