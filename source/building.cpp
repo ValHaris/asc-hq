@@ -2,9 +2,12 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.71 2001-07-15 21:00:25 mbickel Exp $
+//     $Id: building.cpp,v 1.72 2001-07-29 21:26:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.71  2001/07/15 21:00:25  mbickel
+//      Some cleanup in the vehicletype class
+//
 //     Revision 1.70  2001/07/11 20:44:36  mbickel
 //      Removed some vehicles from the data file.
 //      Put all legacy units in into the data/legacy directory
@@ -2019,7 +2022,13 @@ int   ctransportcontrols :: moveavail ( pvehicle eht )
       if ( eht->functions & cf_trooper )
          return 2;
       else
-         return 0;
+         if ( eht->height & vehicle->height )
+            return 2;
+         else
+            if ( eht->typ->height & vehicle->height )
+               return 1;
+            else
+               return 0;
 
    if ( (vehicle->height < chtieffliegend) ) {
 

@@ -5,9 +5,14 @@
 */
 
 
-//     $Id: building_controls.h,v 1.7 2001-04-01 12:59:35 mbickel Exp $
+//     $Id: building_controls.h,v 1.8 2001-07-29 21:26:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2001/04/01 12:59:35  mbickel
+//      Updated win32 project files to new ai file structure
+//      Added viewid win32-project
+//      Improved AI : production and service path finding
+//
 //     Revision 1.6  2001/01/28 14:04:06  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -115,6 +120,12 @@ class    ccontainercontrols
 
       virtual char   getactplayer (void) = 0;
 
+      /**
+         \returns 0  unit can not move out
+                  1  unit could move out if it was on a different level of height
+                  2  unit can move out
+                  3  unit can move out, but cannot attack this turn
+      */
       virtual int    moveavail ( pvehicle eht ) = 0;
 
 
