@@ -1,6 +1,12 @@
-//     $Id: dlg_box.h,v 1.17 2000-11-21 20:27:01 mbickel Exp $
+//     $Id: dlg_box.h,v 1.18 2000-12-28 11:12:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/11/21 20:27:01  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.16  2000/10/18 14:14:04  mbickel
 //      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
 //       fixed soon.
@@ -374,7 +380,7 @@ class tdisplaymessage : public tdialogbox {
                         char status;
                         int  mode;
                     public:
-                        void init ( tstringa a, int md, int linenum );
+                        void init ( tstringa a, int md, int linenum, char* buttonText = NULL );
                         virtual void buttonpressed ( int id );
                         virtual void run ( void );
                    };

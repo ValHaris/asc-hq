@@ -15,9 +15,15 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.26 2000-11-08 19:31:20 mbickel Exp $
+//     $Id: events.cpp,v 1.27 2000-12-28 11:12:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/11/08 19:31:20  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.25  2000/10/18 15:10:07  mbickel
 //      Fixed event handling for windows and dos
 //
@@ -131,7 +137,7 @@
 
 #include "../events.h"
 #include "../stack.h"
-
+#include "../basegfx.h"
 #include "../global.h"
 #include sdlheader
 #ifdef _WIN32_
@@ -168,7 +174,7 @@ int exitprogram = 0;
 
 const int mouseprocnum = 10;
 tsubmousehandler* pmouseprocs[ mouseprocnum ];
-
+bool redrawScreen = false;
 
 int mouse_in_off_area ( void )
 {
@@ -434,6 +440,10 @@ char *get_key(tkey keynr)
 int  releasetimeslice( void )
 {
    SDL_Delay(10);
+   if ( redrawScreen ) {
+      redrawScreen = false;
+      copy2screen();
+   }
    return 0;
 }
 
@@ -557,12 +567,18 @@ int processEvents ( )
             break;
          case SDL_KEYUP:
          {}
-
             break;
 
          case SDL_QUIT:
             exitprogram = 1;
             break;
+#ifdef _WIN32_
+         case SDL_ACTIVEEVENT:
+              if ( event.active.state == SDL_APPACTIVE )
+                 if ( event.active.gain )
+                    redrawScreen = true;
+            break;
+#endif            
       }
       return 1;
    } else

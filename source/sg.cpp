@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.118 2000-12-27 22:23:13 mbickel Exp $
+//     $Id: sg.cpp,v 1.119 2000-12-28 11:12:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.118  2000/12/27 22:23:13  mbickel
+//      Fixed crash in loading message text
+//      Removed many unused variables
+//
 //     Revision 1.117  2000/12/26 21:04:36  mbickel
 //      Fixed: putimageprt not working (used for small map displaying)
 //      Fixed: mapeditor crashed on generating large maps
@@ -114,6 +118,7 @@
 #include <ctype.h>
 #include <signal.h>
 
+#include <windows.h>
 #ifdef _SDL_
 #include "SDL_byteorder.h"
 #endif
@@ -2182,6 +2187,8 @@ void  mainloop ( void )
                          }
                break;
 
+             case ct_f10:  displaymessage("this is the \nerror message",2);
+               break;
 
             case ct_1:  execuseraction ( ua_changeresourceview );
                break;

@@ -1,6 +1,9 @@
-//     $Id: global_os.h,v 1.2 2000-12-23 13:19:48 mbickel Exp $
+//     $Id: global_os.h,v 1.3 2000-12-28 11:12:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/12/23 13:19:48  mbickel
+//      Made ASC compileable with Borland C++ Builder
+//
 //     Revision 1.1  2000/10/12 21:37:58  mbickel
 //      Further restructured platform dependant routines
 //
@@ -42,5 +45,6 @@
   #define HAVE_ITOA
   #define HAVE_DIRENT_H
   #define StaticClassVariable
+  #define NoStdio
 
 #endif

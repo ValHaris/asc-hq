@@ -1,6 +1,10 @@
-//     $Id: dlg_box.cpp,v 1.42 2000-12-27 22:23:07 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.43 2000-12-28 11:12:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2000/12/27 22:23:07  mbickel
+//      Fixed crash in loading message text
+//      Removed many unused variables
+//
 //     Revision 1.41  2000/12/23 13:19:44  mbickel
 //      Made ASC compileable with Borland C++ Builder
 //
@@ -198,7 +202,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
 
@@ -224,7 +228,6 @@
 #ifdef sgmain
  #include "building.h"
 #endif
-
 
 char strrstring[200];
 
@@ -354,28 +357,7 @@ char         getletter( const char *       s)
   } else {
      return 0;
   } /* endif */
-} 
-
-
-
-
-void  gfree ( void *ptr )
-{
-   delete[] ptr;
 }
-
-
-void* gmalloc ( int size )
-{
-      
-   void* p = new char [ size ];
-   if ( p == NULL )
-      displaymessage ( "\n error allocating dispbuf for dialogbox. probably insufficent memory ! \n", 2 );
-      
-   return p;
-}
-
-
 
 
 collategraphicoperations* tdialogbox::pcgo = NULL;
@@ -1411,7 +1393,7 @@ void         tdialogbox::buildgraphics(void)
       mousevisible(false);
 
    if ( !(dlg_mode & 2) ) {
-      tp = gmalloc ( imagesize (x1,y1,x1 + xsize,y1 + ysize ) );
+      tp = asc_malloc ( imagesize (x1,y1,x1 + xsize,y1 + ysize ) );
       getimage(x1,y1,x1 + xsize,y1 + ysize,tp);
       imagesaved = true; 
    }
@@ -1451,7 +1433,7 @@ void         tdialogbox::done(void)
    
       if (imagesaved) { 
          putimage(x1,y1,tp); 
-         gfree ( tp );
+         asc_free ( tp );
       } 
       npop( activefontsettings );
       if (ms == 2) 
@@ -1897,8 +1879,11 @@ void         tdialogbox::rahmen3(char *       txt,
 
 
 
-void tdisplaymessage::init ( tstringa a, int md, int linenum )
+void tdisplaymessage::init ( tstringa a, int md, int linenum, char* buttonText )
 {
+   if ( !buttonText )
+      buttonText = "~O~K";
+
    tdialogbox::init();
 
    int i,j;
@@ -1912,22 +1897,22 @@ void tdisplaymessage::init ( tstringa a, int md, int linenum )
          a[i][strlen(a[i])-1] = 0;
          j = gettextwdth ( a[i], schriften.smallarial );
       }
-      if (maxlength < j) 
+      if (maxlength < j)
          maxlength = j;
    } /* endfor */
 
    x1 = 50;
    y1 = 50;
-   if (maxlength < 150) 
+   if (maxlength < 150)
      xsize = 200;
-   else 
+   else
      xsize = maxlength + 50;
 
    ysize = 55 + linenum * 20;
    windowstyle |= dlg_notitle;
    if (mode != 0) {
       ysize+=25;
-      addbutton ( "~O~K",10, ysize - 35 , xsize - 10 , ysize -  10 ,0,1,1,true );
+      addbutton ( buttonText, 10, ysize - 35 , xsize - 10 , ysize -  10 ,0,1,1,true );
       addkey(1, ct_enter);
       addkey(1, ct_esc);
       addkey(1, ct_enterk );
@@ -1971,9 +1956,9 @@ void tdisplaymessage::run ( void )
 char* exitmessage[20];
 
 
-// num   0: Box bleibt aufgeklappt, 
-//       1 box wird geschlossen , text rot (Fehler), 
-//       2 : Programm wird beendet; 
+// num   0: Box bleibt aufgeklappt,
+//       1 box wird geschlossen , text rot (Fehler),
+//       2 : Programm wird beendet;
 //       3 : normaler text ( OK)
 
 void displaymessage( const char* formatstring, int num, ... )
@@ -1987,6 +1972,17 @@ void displaymessage( const char* formatstring, int num, ... )
    int lng = vsprintf( tempbuf, formatstring, paramlist );
    if ( lng >= 1000 )
       displaymessage ( "dlg_box.cpp / displaymessage:   string to long !\nPlease report this error",1 );
+
+/*
+   #ifdef _WIN32_
+   if ( num == 2 ) {
+      MessageBox( NULL, tempbuf,
+                        "Fatal Error",
+                        MB_ICONERROR | MB_OK | MB_TASKMODAL );
+      exit ( 1 );
+   }
+   #endif
+*/
 
    char* a = tempbuf;
 
@@ -2016,17 +2012,17 @@ void displaymessage( const char* formatstring, int num, ... )
 
    va_end ( paramlist );
 
+   bool displayInternally = true;
 
-   if ( num == 2 ) {
+   #ifndef NoStdio
+   if ( num == 2 )
+      displayInternally = false;
+   #endif
+
+   if ( !displayInternally ) {
       for ( int i=0; i<= linenum ;i++ ) {
          exitmessage[i] = stringtooutput[i];
       } /* endfor */
-     #ifdef _DOS_
-      #ifdef NEWKEYB
-       closekeyb();
-      #endif
-     #endif
-      exit ( 1 );
    } else {
       static int messageboxopen = 0;
       if ( messageboxopen )
@@ -2039,24 +2035,34 @@ void displaymessage( const char* formatstring, int num, ... )
         delete messagebox;
         messagebox = NULL;
       }
-   
-      messagebox = new ( tdisplaymessage );
-      messagebox->init( stringtooutput, num, linenum);
 
-   
-       if (num == 1 || num == 3 ) {
-          messagebox->run();
-          messagebox->done();
-          delete messagebox;
-          messagebox = NULL;
-       }
+      messagebox = new tdisplaymessage;
 
-       messageboxopen--;
+      if ( num== 2 )
+         messagebox->init( stringtooutput, num, linenum, "~q~uit program");
+      else
+         messagebox->init( stringtooutput, num, linenum);
 
+      if (num != 0 ) {
+         messagebox->run();
+         messagebox->done();
+         delete messagebox;
+         messagebox = NULL;
+      }
+
+      messageboxopen--;
    } /* endif */
 
+   if ( num == 2 ) {
+     #ifdef _DOS_
+      #ifdef NEWKEYB
+       closekeyb();
+      #endif
+     #endif
+      exit ( 1 );
+   }
 
-   for ( int i=linenum; i>=0 ;i-- ) 
+   for ( int i=linenum; i>=0 ;i-- )
       delete[]  stringtooutput[i];
 }
 
