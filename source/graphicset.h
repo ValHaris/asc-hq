@@ -57,6 +57,7 @@
      int picAvail ( int num ) const;
      void* getPic ( int num );
      int getMode ( int num ) const;
+     int getNum ( ) { return maxnum; };
  };
 
  extern const ActiveGraphicPictures* getActiveGraphicSet();

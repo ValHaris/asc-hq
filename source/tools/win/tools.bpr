@@ -6,12 +6,12 @@
     <PROJECT value="tools.lib"/>
     <OBJFILES value="obj\basegfx.obj obj\basestrm.obj obj\buildingtype.obj obj\gameoptions.obj 
       obj\misc.obj obj\Named.obj obj\palette.obj obj\sgstream.obj obj\typen.obj 
-      obj\vehicletype.obj obj\graphicset.obj obj\ascstring.obj 
-      obj\graphicselector.obj obj\loadpcxc.obj obj\newfont.obj obj\CLoadable.obj 
-      obj\Property.obj obj\PropertyGroup.obj obj\graphics.obj obj\getopt1.obj 
-      obj\getopt.obj obj\strtmesg.obj obj\objecttype.obj obj\terraintype.obj 
-      obj\textfileparser.obj obj\textfiletags.obj obj\stringtokenizer.obj 
-      obj\errorout.obj obj\textfile_evaluation.obj"/>
+      obj\vehicletype.obj obj\graphicset.obj obj\ascstring.obj obj\loadpcxc.obj 
+      obj\newfont.obj obj\CLoadable.obj obj\Property.obj obj\PropertyGroup.obj 
+      obj\graphics.obj obj\getopt1.obj obj\getopt.obj obj\strtmesg.obj 
+      obj\objecttype.obj obj\terraintype.obj obj\textfileparser.obj 
+      obj\textfiletags.obj obj\stringtokenizer.obj obj\errorout.obj 
+      obj\textfile_evaluation.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -61,7 +61,6 @@
       <FILE FILENAME="..\..\..\..\sdl\bin\sdl.lib" FORMNAME="" UNITNAME="sdl" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\graphicset.cpp" FORMNAME="" UNITNAME="graphicset" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\ascstring.cpp" FORMNAME="" UNITNAME="ascstring" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\graphicselector.cpp" FORMNAME="" UNITNAME="graphicselector" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\loadpcxc.cpp" FORMNAME="" UNITNAME="loadpcxc" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\newfont.cpp" FORMNAME="" UNITNAME="newfont" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\CLoadable.cpp" FORMNAME="" UNITNAME="CLoadable" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>

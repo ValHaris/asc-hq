@@ -15,8 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef textfiletags_h_included
- #define textfiletags_h_included
+#ifndef textfiletagsH
+ #define textfiletagsH
 
  extern const char* weatherTags[];
  extern const char* bodenarten[];
@@ -28,6 +28,9 @@
  extern const char* buildingFunctionTags[];
 
  extern const char* objectDisplayingMethodTags[];
+
+ extern const char* AItasks[];
+ extern const char* AIjobs[];
 
 #endif
 

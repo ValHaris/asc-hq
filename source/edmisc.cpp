@@ -2,9 +2,14 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.87 2002-10-12 17:28:03 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.88 2002-10-30 12:10:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.87  2002/10/12 17:28:03  mbickel
+//      Fixed "enemy unit loaded" bug.
+//      Changed map format
+//      Improved log messages
+//
 //     Revision 1.86  2002/10/09 16:58:46  mbickel
 //      Fixed to GrafikSet loading
 //      New item filter for mapeditor
@@ -423,6 +428,7 @@
 #include "itemrepository.h"
 #include "textfileparser.h"
 #include "textfile_evaluation.h"
+#include "textfiletags.h"
 
 #ifdef _DOS_
  #include "dos\memory.h"
@@ -3820,6 +3826,7 @@ void         building_production( pbuilding bld )
 
 void movebuilding ( void )
 {
+   mapsaved = false;
    pfield fld = getactfield();
    if ( fld->vehicle ) {
       pvehicle v = fld->vehicle;

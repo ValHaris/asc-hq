@@ -58,26 +58,11 @@ const char*  cvehiclefunctions[cvehiclefunctionsnum]  = {
                    "jams only own field" };
 
 
-const char* AItasks[AiParameter::taskNum] = { "nothing",
-                         "tactics",
-                         "tactwait",
-                         "stratwait",
-                         "wait",
-                         "strategy",
-                         "serviceRetreat",
-                         "move" };
-
-const char* AIjobs[AiParameter::jobNum] = { "undefined",
-                       "fight",
-                       "supply",
-                       "conquer",
-                       "build",
-                       "recon",
-                       "guard" };
-
 
 Vehicletype :: Vehicletype ( void )
 {
+   recommendedAIJob = AiParameter::job_undefined;
+
    int i;
 
    armor = 0;
@@ -876,6 +861,10 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
     }
 
    pc.closeBracket();
+
+   int job = recommendedAIJob;
+   pc.addNamedInteger ( "RecommendedAIJob", job, AiParameter::jobNum, AIjobs, AiParameter::job_undefined );
+   recommendedAIJob = job;
 
    setupPictures();
    #ifndef converter

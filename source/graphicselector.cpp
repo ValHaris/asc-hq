@@ -80,7 +80,7 @@ void tgetbi3pict :: paint ( void )
          if ( marked == num )
             rectangle ( 50 + x * xs, 10 + y * ys, 80 + x * xs, 40 + y * ys, yellow );
 
-         if ( num < getActiveGraphicSet()->maxnum &&  getActiveGraphicSet()->picAvail ( num ) ) {
+         if ( getActiveGraphicSet()->picAvail ( num ) ) {
             void* buf;
             loadbi3pict ( num, &buf );
             putspriteimage ( 50 + x * xs + 30/2 - picsize/2, 10 + y * ys + 30/2 - picsize/2, buf );

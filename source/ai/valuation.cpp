@@ -190,6 +190,11 @@ AiParameter::JobList AI::chooseJob ( const Vehicletype* typ, int functions )
 {
    AiParameter::JobList jobList;
 
+   if ( typ->recommendedAIJob != AiParameter::job_undefined ) {
+      jobList.push_back ( typ->recommendedAIJob );
+      return jobList;
+   }
+
    int maxmove = minint;
    for ( int i = 0; i< 8; i++ )
       if ( typ->height & ( 1 << i ))

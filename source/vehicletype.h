@@ -57,10 +57,6 @@ extern const char*  cvehiclefunctions[];
 
  #define cfvehiclefunctionsanzeige 0xFFFFFFFF
 
-extern const char* AItasks[];
-extern const char* AIjobs[];
-
-
  //! A single weapon of a #Vehicletype
  class SingleWeapon {
      int          typ;
@@ -269,12 +265,14 @@ extern const char* AIjobs[];
         //! some information the AI stores about this unit
         AiValue* aiparam[8];
 
+        //! the recommended task for the unit, set by the unit creater
+        AiParameter::Job recommendedAIJob;
 
         //! returns the maximum weight of this unit including maximum fuel and material
-        int maxweight ( void ) const ;     
+        int maxweight ( void ) const ;
 
         //! returns the maximum weight of this unit without fuel and material
-        int maxsize   ( void ) const ;     
+        int maxsize   ( void ) const ;
 
         //! checks whether the given vehicletype can principially be loaded. 
         int vehicleloadable ( pvehicletype fzt ) const;

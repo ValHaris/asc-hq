@@ -82,6 +82,7 @@ class PropertyContainer {
          void addTagArray ( const ASCString& name, BitSet& property, int tagNum, const char** tags, bool inverted = false );
          void addTagInteger ( const ASCString& name, int& property, int tagNum, const char** tags, bool inverted = false );
          void addNamedInteger ( const ASCString& name, int& property, int tagNum, const char** tags );
+         void addNamedInteger ( const ASCString& name, int& property, int tagNum, const char** tags, int defaultValue );
          void addImage ( const ASCString& name, void* &property, const ASCString& fileName );
          void addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& fileName );
          void addBool  ( const ASCString& name, bool &property );

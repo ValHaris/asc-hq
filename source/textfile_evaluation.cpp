@@ -154,6 +154,7 @@
               ASCString toString ( ) const;
             public:
                NamedIntProperty ( int& property_, int tagNum_, const char** tags_ ) : PTNI ( property_ ), tagNum (tagNum_), tags ( tags_ ) {};
+               NamedIntProperty ( int& property_, int tagNum_, const char** tags_, int defaultValue_ ) : PTNI ( property_, defaultValue_ ), tagNum (tagNum_), tags ( tags_ ) {};
          };
 
 
@@ -346,6 +347,13 @@ void PropertyContainer::addNamedInteger ( const ASCString& name, int& property, 
    NamedIntProperty* ip = new NamedIntProperty ( property, tagNum, tags );
    setup ( ip, name );
 }
+
+void PropertyContainer::addNamedInteger ( const ASCString& name, int& property, int tagNum, const char** tags, int defaultValue )
+{
+   NamedIntProperty* ip = new NamedIntProperty ( property, tagNum, tags, defaultValue );
+   setup ( ip, name );
+}
+
 
 
 void PropertyContainer::addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& filename )

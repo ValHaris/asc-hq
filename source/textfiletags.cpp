@@ -172,3 +172,21 @@ const char*  buildingFunctionTags[cbuildingfunctionnum]  =
         "Translation" };
 
 
+const char* AItasks[AiParameter::taskNum] = { "nothing",
+                         "tactics",
+                         "tactwait",
+                         "stratwait",
+                         "wait",
+                         "strategy",
+                         "serviceRetreat",
+                         "move" };
+
+const char* AIjobs[AiParameter::jobNum] = { "undefined",
+                       "fight",
+                       "supply",
+                       "conquer",
+                       "build",
+                       "recon",
+                       "guard" };
+
+

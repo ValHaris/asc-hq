@@ -54,6 +54,7 @@
 #include "../building_controls.h"
 #include "../viewcalculation.h"
 #include "../replay.h"
+#include "../textfiletags.h"
 
 
 extern const int currentServiceOrderVersion;

@@ -287,7 +287,7 @@ int main(int argc, char *argv[] )
       printf("Generating image: \n" ) ;
       fflush ( stdout );
       activateGraphicSet ( id );
-      for ( i = 0; i < getActiveGraphicSet()->maxnum; i++ ) {
+      for ( i = 0; i < getActiveGraphicSet()->getNum(); i++ ) {
          void* v;
          if ( scale == 0 )
             loadbi3pict ( i, &v );
