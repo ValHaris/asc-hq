@@ -146,8 +146,8 @@ class AStar3D {
        int*          posHHops;
        int*          fieldAccess;
 
-       HexDirection& getPosDir ( const MapCoordinate3D& pos ) { return posDirs [(pos.y * actmap->xsize + pos.x) * 8 + 1+pos.getNumericalHeight()]; };
-       int& getPosHHop ( const MapCoordinate3D& pos )         { return posHHops[(pos.y * actmap->xsize + pos.x) * 8 + 1+pos.getNumericalHeight()]; };
+       HexDirection& getPosDir ( const MapCoordinate3D& pos ) { return posDirs [(pos.y * actmap->xsize + pos.x) * 9 + 1+pos.getNumericalHeight()]; };
+       int& getPosHHop ( const MapCoordinate3D& pos )         { return posHHops[(pos.y * actmap->xsize + pos.x) * 9 + 1+pos.getNumericalHeight()]; };
 
        DistanceType dist( const MapCoordinate3D& a, const MapCoordinate3D& b );
        DistanceType dist( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b );

@@ -675,8 +675,12 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
                          DistanceType k = getMoveCost( N.h, N2.h, veh, N2.canStop, N2.hasAttacked );
                          if ( k > veh->typ->movement[N2.h.getNumericalHeight()]  )
+                            if ( k < longestPath )
+                               k = longestPath;
+                               /*
                             if ( k < MAXIMUM_PATH_LENGTH )
                                k = MAXIMUM_PATH_LENGTH;
+                               */
 
                          if ( k >= longestPath || N.gval >= longestPath )
                             N2.gval = longestPath;
