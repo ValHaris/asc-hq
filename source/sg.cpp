@@ -2091,7 +2091,7 @@ int main(int argc, char *argv[] )
 
    PG_Application app;
    pgApp = &app;
-   app.SetSymlinkFollowing(true);
+   app.EnableSymlinks(true);
    app.LoadTheme("asc_dlg");
    int flags = SDL_SWSURFACE;
    if ( fullscreen )
