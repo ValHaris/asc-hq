@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.126 2004-09-26 19:53:21 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.127 2004-10-08 18:09:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.126  2004/09/26 19:53:21  mbickel
+//      Reversed merge of branch
+//
 //     Revision 1.124  2004/09/25 12:37:51  mbickel
 //      Fixed crash in mapeditor
 //      fixed graphical glitches when moving from one field to an invisible next
@@ -4999,8 +5002,9 @@ void generateTechTree()
 
             const Technology* t  = technologyRepository.getObject_byID(techIds[r.second]);
             vector<int> history;
+            vector<pair<int,int> > blockedPrintList;
             if ( t )
-               t->techDependency.writeInvertTreeOutput( t->name, f, history );
+               t->techDependency.writeInvertTreeOutput( t->name, f, history, blockedPrintList );
 
             ASCString stn2 = technologyRepository.getObject_byID(techIds[r.second])->name;
             while ( stn2.find ( "\"" ) != ASCString::npos )
