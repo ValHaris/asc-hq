@@ -87,6 +87,7 @@ class ContainerBase {
 
       virtual bool canRepair( const ContainerBase* item ) = 0;
       pmap getMap ( ) { return gamemap; };
+      const pmap getMap ( ) const { return gamemap; };
 
       int getMaxRepair ( const ContainerBase* item );
       int getMaxRepair ( const ContainerBase* item, int newDamage, Resources& cost  );

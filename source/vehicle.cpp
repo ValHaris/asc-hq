@@ -488,7 +488,7 @@ bool Vehicle::hasMoved ( void ) const
 }
 
 
-int Vehicle :: getMovement ( bool checkFuel )
+int Vehicle :: getMovement ( bool checkFuel ) const
 {
    if ( reactionfire.getStatus() != ReactionFire::off )
       return 0;

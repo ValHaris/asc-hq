@@ -1,6 +1,11 @@
-//     $Id: gui.h,v 1.25 2003-01-28 17:48:42 mbickel Exp $
+//     $Id: gui.h,v 1.26 2003-03-05 22:45:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2003/01/28 17:48:42  mbickel
+//      Added sounds
+//      Rewrote soundsystem
+//      Fixed: tank got stuck when moving from one transport ship to another
+//
 //     Revision 1.24  2002/12/17 22:02:17  mbickel
 //      Enemy mines can now be crossed even if visible
 //      submerged mines can not be placed on shallow water
@@ -869,11 +874,10 @@ class treplayguihost : public ReplayBaseGuiHost {
 
 extern treplayguihost replayGuiHost;
 
-class ContainerBaseGuiHost : public GuiHost<pgeneralicon_c> {
+class ContainerBaseGuiHost : public GuiHost<generalicon_c*> {
          public:
-            ContainerBaseGuiHost ( void ) { chainiconstohost(NULL); }; // just a hack to avoid some gcc bugs; chainiconstohost wouldn't be instantiated else ...
+            ContainerBaseGuiHost();
     };
-
 
 extern tguihoststandard          gui;
 extern tselectbuildingguihost    selectbuildinggui;
@@ -884,3 +888,4 @@ extern BasicGuiHost*                 actgui;
 extern void setguiposy ( int y );
 
 #endif
+

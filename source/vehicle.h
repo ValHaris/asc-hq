@@ -127,7 +127,7 @@
     bool canMove ( void ) const;
 
     //! returns the movement points the unit has left for this turn. CheckFuel should almost always be true.
-    int getMovement ( bool checkFuel = true );
+    int getMovement ( bool checkFuel = true ) const ;
 
     /** sets a new distance that the unit can move
         \param cargoDivisor : the cargo of this unit gets 1/cargodivisor the change that this unit is getting; if 0 the cargo is not touched

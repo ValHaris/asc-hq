@@ -718,89 +718,109 @@ int main(int argc, char *argv[] )
 
             fprintf ( transportPage, "<table %s>\n", tableParam );
             printMainLine ( transportPage, "Max.loadable units", ft->maxLoadableUnits );
-            printMainLine ( transportPage, "Max.total cargo weight", ft->maxLoadableWeight );
-            printMainLine ( transportPage, "Max.single cargo weight", ft->maxLoadableUnitSize );
+            if ( ft->maxLoadableUnits ) {
+               printMainLine ( transportPage, "Max.total cargo weight", ft->maxLoadableWeight );
+               printMainLine ( transportPage, "Max.single cargo weight", ft->maxLoadableUnitSize );
 
 
-            ASCString type;
-            for ( int h = 0; h < cmovemalitypenum; h++ )
-               if ( ft->vehicleCategoriesStorable & (1 << h)) {
-                  type += cmovemalitypes[h];
-                  type += "<br>";
+               ASCString type;
+               for ( int h = 0; h < cmovemalitypenum; h++ )
+                  if ( ft->vehicleCategoriesStorable & (1 << h)) {
+                     type += cmovemalitypes[h];
+                     type += "<br>";
+                  }
+               printMainLine ( transportPage, "Units from these groups can be loaded", type );
+
+               fprintf ( transportPage, "</table>\n" );
+
+
+               if ( !ft->entranceSystems.empty() ) {
+                  fprintf ( transportPage, "<h2>Entrance System</h2>\n" );
+                  fprintf ( transportPage, "<table %s>\n", tableParam );
+
+
+                  printIndex ( transportPage, "Mode" );
+                  for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ ) {
+                      ASCString s;
+                      if ( i->mode & ContainerBaseType::TransportationIO::In )
+                         s += "In<br>";
+                      if ( i->mode & ContainerBaseType::TransportationIO::Out )
+                         s += "Out<br>";
+                      if ( i->mode & ContainerBaseType::TransportationIO::Docking )
+                         s += "Docking<br>";
+                      printValue ( transportPage, s );
+                  }
+                  printLineEnd( transportPage );
+
+                  printIndex ( transportPage, "Absolute height of loadable units" );
+                  for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ )
+                      printValue ( transportPage, getHeightImgString( i->height_abs) );
+
+                  printLineEnd( transportPage );
+
+                  printIndex ( transportPage, "Relative height of loadable units" );
+                  for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ ) {
+                     if ( i->height_rel != -100 )
+                        printValue ( transportPage, strrr(i->height_rel) );
+                     else
+                        printValue ( transportPage, "-" );
+                  }
+                  printLineEnd( transportPage );
+
+                  printIndex ( transportPage, "The transport must be on this height" );
+                  for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ )
+                      printValue ( transportPage, getHeightImgString( i->height_abs) );
+                  printLineEnd( transportPage );
+
+
+                  printIndex ( transportPage, "Absolute docking height" );
+                  for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ )
+                     if ( i->mode & ContainerBaseType::TransportationIO::Docking )
+                         printValue ( transportPage, getHeightImgString( i->dockingHeight_abs) );
+                     else
+                         printValue ( transportPage, "" );
+                  printLineEnd( transportPage );
+
+                  printIndex ( transportPage, "Relative height of loadable units" );
+                  for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ ) {
+                     if ( i->mode & ContainerBaseType::TransportationIO::Docking &&  i->dockingHeight_rel != -100 )
+                        printValue ( transportPage, strrr(i->dockingHeight_rel) );
+                     else
+                        printValue ( transportPage, "" );
+                  }
+                  printLineEnd( transportPage );
+
+                  printIndex ( transportPage, "Excluded unit groups" );
+                  for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ ) {
+                      ASCString s;
+                      for ( int h = 0; h < cmovemalitypenum; h++ )
+                         if ( !(i->vehicleCategoriesLoadable & (1 << h))) {
+                            s += cmovemalitypes[h] ;
+                            s += "<br>";
+                         }
+
+                      printValue ( transportPage, s );
+                  }
+                  printLineEnd( transportPage );
+
+                  printIndex ( transportPage, "Unit can attack afterwards" );
+                  for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ )
+                     printValue ( transportPage, i->disableAttack ? "No": "Yes" );
+
+                  printLineEnd( transportPage );
+
+                  printIndex ( transportPage, "Require unit functions" );
+                  for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ ) {
+                     ASCString funcs;
+                     for ( int j = 0; j<cvehiclefunctionsnum; j++)
+                        if ( i->requireUnitFunction & ( 1 << j ))
+                           funcs += ASCString(cvehiclefunctions[j]) + "<br>";
+                     printValue ( transportPage, funcs );
+                  }
+
+                  printLineEnd( transportPage );
                }
-            printMainLine ( transportPage, "Units from these groups can be loaded", type );
-
-            fprintf ( transportPage, "</table>\n" );
-
-
-            if ( !ft->entranceSystems.empty() ) {
-               fprintf ( transportPage, "<h2>Entrance System</h2>\n" );
-               fprintf ( transportPage, "<table %s>\n", tableParam );
-
-
-               printIndex ( transportPage, "Mode" );
-               for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ ) {
-                   ASCString s;
-                   if ( i->mode & ContainerBaseType::TransportationIO::In )
-                      s += "In<br>";
-                   if ( i->mode & ContainerBaseType::TransportationIO::Out )
-                      s += "Out<br>";
-                   if ( i->mode & ContainerBaseType::TransportationIO::Docking )
-                      s += "Docking<br>";
-                   printValue ( transportPage, s );
-               }
-               printLineEnd( transportPage );
-
-               printIndex ( transportPage, "Absolute height of loadable units" );
-               for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ )
-                   printValue ( transportPage, getHeightImgString( i->height_abs) );
-
-               printLineEnd( transportPage );
-
-               printIndex ( transportPage, "Relative height of loadable units" );
-               for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ ) {
-                  if ( i->height_rel != -100 )
-                     printValue ( transportPage, strrr(i->height_rel) );
-                  else
-                     printValue ( transportPage, "-" );
-               }
-               printLineEnd( transportPage );
-
-               printIndex ( transportPage, "The transport must be on this height" );
-               for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ )
-                   printValue ( transportPage, getHeightImgString( i->height_abs) );
-               printLineEnd( transportPage );
-
-
-               printIndex ( transportPage, "Absolute docking height" );
-               for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ )
-                  if ( i->mode & ContainerBaseType::TransportationIO::Docking )
-                      printValue ( transportPage, getHeightImgString( i->dockingHeight_abs) );
-                  else
-                      printValue ( transportPage, "" );
-               printLineEnd( transportPage );
-
-               printIndex ( transportPage, "Relative height of loadable units" );
-               for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ ) {
-                  if ( i->mode & ContainerBaseType::TransportationIO::Docking &&  i->dockingHeight_rel != -100 )
-                     printValue ( transportPage, strrr(i->dockingHeight_rel) );
-                  else
-                     printValue ( transportPage, "" );
-               }
-               printLineEnd( transportPage );
-
-               printIndex ( transportPage, "Excluded unit groups" );
-               for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ ) {
-                   ASCString s;
-                   for ( int h = 0; h < cmovemalitypenum; h++ )
-                      if ( !(i->vehicleCategoriesLoadable & (1 << h))) {
-                         s += cmovemalitypes[h] ;
-                         s += "<br>";
-                      }
-
-                   printValue ( transportPage, s );
-               }
-               printLineEnd( transportPage );
+               fprintf ( transportPage, "</table>\n" );
 
 
             }

@@ -132,13 +132,18 @@ Sound* SoundList::getSound( Sample snd, int subType, const ASCString& label )
    if ( SoundSystem::getInstance()->isOff() )
       return NULL;
 
-   ASCString newlabel = copytoLower(label);
-   for ( vector<SoundAssignment>::iterator i = soundAssignments.begin(); i != soundAssignments.end(); i++ )
-      if ( snd == i->sample && subType == i->subType )
-         if ( newlabel.empty() || i->snd.find( newlabel ) == i->snd.end() )
-            return i->defaultSound;
-         else
-            return i->snd[newlabel];
+   if ( label.find ( "." ) != ASCString::npos ) {
+      return getSound ( label, 0 );
+   } else {
+      
+      ASCString newlabel = copytoLower(label);
+      for ( vector<SoundAssignment>::iterator i = soundAssignments.begin(); i != soundAssignments.end(); i++ )
+         if ( snd == i->sample && subType == i->subType )
+            if ( newlabel.empty() || i->snd.find( newlabel ) == i->snd.end() )
+               return i->defaultSound;
+            else
+               return i->snd[newlabel];
+   }
 
    return NULL;
 }

@@ -499,7 +499,7 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
             if ( fullfillableServices ) {
                AStar3D::Node* nde = astar.fieldVisited(buildingPos);
                if ( nde ) {
-                  int dist = nde->gval;
+                  int dist = int( nde->gval );
                   if ( dist < bestDistance ) {
                      bestDistance = dist;
                      bestBuilding = bld;
@@ -510,7 +510,7 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
                if ( partlyFullfillabelServices ) {
                   AStar3D::Node* nde = astar.fieldVisited(buildingPos);
                   if ( nde ) {
-                     int dist = nde->gval;
+                     int dist = int( nde->gval );
                      if ( dist < bestDistance_p ) {
                         bestDistance_p = dist;
                         bestBuilding_p = bld;

@@ -396,7 +396,7 @@ AStar3D :: AStar3D ( pmap actmap_, pvehicle veh_, bool markTemps_, int maxDistan
 
    MAXIMUM_PATH_LENGTH = maxDistance;
    if ( MAXIMUM_PATH_LENGTH > longestPath )
-     MAXIMUM_PATH_LENGTH = 2* longestPath;
+      MAXIMUM_PATH_LENGTH =  int(2* longestPath);
 
 
    if ( !veh->maxMovement() )
@@ -443,7 +443,7 @@ AStar3D :: ~AStar3D ( )
    delete[] fieldAccess;
 }
 
-int AStar3D::dist( const MapCoordinate3D& a, const MapCoordinate3D& b )
+AStar3D::DistanceType AStar3D::dist( const MapCoordinate3D& a, const MapCoordinate3D& b )
 {
    int heightDiff;
    if ( b.getNumericalHeight() >= 0 && a.getNumericalHeight() >= 0 )
@@ -460,9 +460,9 @@ int AStar3D::dist( const MapCoordinate3D& a, const MapCoordinate3D& b )
       return longestPath;
 }
 
-int AStar3D::dist ( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b )
+AStar3D::DistanceType AStar3D::dist ( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b )
 {
-   int d = longestPath;
+   DistanceType d = longestPath;
    for ( vector<MapCoordinate3D>::const_iterator i = b.begin(); i != b.end(); i++ ) {
       DistanceType e = dist(a,*i);
       if ( d > e )
@@ -801,7 +801,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
         MapCoordinate3D h = endpos;
 
-        path.insert ( path.begin(), PathPoint ( h, N.gval, N.enterHeight, N.hasAttacked ) );
+        path.insert ( path.begin(), PathPoint ( h, int(N.gval), N.enterHeight, N.hasAttacked ) );
         while( !(h == A) )
         {
             // pfield fld = actmap->getField ( h );
@@ -822,7 +822,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                 getnextfield ( h.x, h.y, dir );
 
             Node* n = fieldVisited ( h );
-            path.insert ( path.begin(), PathPoint(h,n->gval, n->enterHeight, n->hasAttacked) );
+            path.insert ( path.begin(), PathPoint(h, int(n->gval), n->enterHeight, n->hasAttacked) );
         }
     }
     else

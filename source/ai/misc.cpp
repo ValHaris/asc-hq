@@ -173,7 +173,7 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
                 pfield fld = getfield( x,y );
                 AStar3D::Node* node = ast->fieldVisited( MapCoordinate3D( x,y, 1 << h));
                 if ( node ) {
-                   int dist = node->gval;
+                   int dist = int(node->gval);
                    if ( fld->building && fld->building->color == veh->color )
                       reachableBuildings[ dist ] = fld->building;
 
@@ -229,7 +229,7 @@ bool AI::RefuelConstraint::returnFromPositionPossible ( const MapCoordinate3D& p
    if ( !ast->fieldVisited(pos) )
       return false;
 
-   int dist  = ast->fieldVisited(pos)->gval;
+   int dist  = int( ast->fieldVisited(pos)->gval );
    int dist2;
    if ( !reachableBuildings.empty() ) {
       ReachableBuildings::iterator rb = reachableBuildings.begin();

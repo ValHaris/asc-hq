@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: gui.cpp,v 1.89 2003-02-27 16:11:12 mbickel Exp $
+//     $Id: gui.cpp,v 1.90 2003-03-05 22:45:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.89  2003/02/27 16:11:12  mbickel
+//      Restructuring of new pathfinding code completed
+//
 //     Revision 1.88  2003/02/19 19:47:26  mbickel
 //      Completely rewrote Pathfinding code
 //      Wind not different any more on different levels of height
@@ -3214,6 +3217,14 @@ void   treplayguihost :: bi2control (  )
 
 treplayguihost replayGuiHost;
 
-ContainerBaseGuiHost Borland_Cpp_builder_sucks2;
+// ContainerBaseGuiHost Borland_Cpp_builder_sucks2;
+GuiHost<pgeneralicon_c> gcc_sucks;
+
+ContainerBaseGuiHost :: ContainerBaseGuiHost()
+{
+  chainiconstohost(NULL);
+}; // just a hack to avoid some gcc bugs; chainiconstohost wouldn't be instantiated else ...
+
+ContainerBaseGuiHost foobar;
 
 

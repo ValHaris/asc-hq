@@ -456,7 +456,7 @@ void Vehicletype :: read ( tnstream& stream )
      for ( int i = 0; i < heightChangeMethodNum; i++ )
         heightChangeMethod[i].read( stream );
    } else
-      heightChangeMethodNum = NULL;
+      heightChangeMethodNum = 0;
 }
 
 void Vehicletype::setupPictures()
