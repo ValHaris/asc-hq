@@ -179,8 +179,8 @@ WString
 1
 45
 WString
-24
-converter HEXAGON MEMCHK
+30
+converter HEXAGON MEMCHK _DOS_
 0
 46
 MRState

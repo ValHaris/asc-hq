@@ -1,6 +1,9 @@
-//     $Id: edglobal.cpp,v 1.5 2000-01-04 19:43:51 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.6 2000-02-02 20:48:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/01/04 19:43:51  mbickel
+//      Continued Linux port
+//
 //     Revision 1.4  1999/12/29 12:50:43  mbickel
 //      Removed a fatal error message in GUI.CPP
 //      Made some modifications to allow platform dependant path delimitters
@@ -313,7 +316,10 @@ char* getbipath ( void )
 {
    char* path = getbi3path();
    char filename[1000];
-   strcpy ( filename, path );
+   if ( path )
+      strcpy ( filename, path );
+   else
+      filename[0] = 0;
 
    char filename2[1000];
    strcpy ( filename2, filename );

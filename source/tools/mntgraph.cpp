@@ -22,32 +22,8 @@ int picmode[pcount];
 void* mask[2];
 
 int doublesize;
-
-#define MEMCHK
-
-
 int blank;
 int lockpalette;
-
-
-void new_new_handler ( void )
-{
-   printf("!");
-}
-
-
-  void* asc_malloc ( size_t size )
-  {
-     void* tmp = malloc ( size );
-     if ( tmp == NULL ) 
-        new_new_handler();
-     return tmp;
-  }
-
-  void asc_free ( void* p )
-  {
-     free ( p );
-  }
 
 
 
