@@ -1,6 +1,15 @@
-//     $Id: attack.h,v 1.5 2000-04-27 16:25:14 mbickel Exp $
+//     $Id: attack.h,v 1.6 2000-06-04 21:39:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/04/27 16:25:14  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.4  2000/01/24 08:16:49  steb
 //     Changes to existing files to implement sound.  This is the first munge into
 //     CVS.  It worked for me before the munge, but YMMV :)
@@ -91,9 +100,10 @@ class tunitattacksunit : public tfight {
            int _respond; 
            void paintimages ( int xa, int ya, int xd, int yd );
          public:
+           tunitattacksunit ( pvehicle &attackingunit, pvehicle &attackedunit, int respond, int weapon );
            void setup ( pvehicle &attackingunit, pvehicle &attackedunit, int respond, int weapon );
            void setresult ( void );
-	   virtual void calcdisplay(int ad = -1, int dd = -1);
+           virtual void calcdisplay(int ad = -1, int dd = -1);
 
       };
 
@@ -103,6 +113,7 @@ class tunitattacksbuilding : public tfight {
            int _x, _y;
            void paintimages ( int xa, int ya, int xd, int yd );
          public:
+           tunitattacksbuilding ( pvehicle attackingunit, int x, int y, int weapon );
            void setup ( pvehicle attackingunit, int x, int y, int weapon );
            void setresult ( void );
 
@@ -116,6 +127,7 @@ class tmineattacksunit : public tfight {
             pvehicle* _pattackedunit;
             void paintimages ( int xa, int ya, int xd, int yd );
          public:
+           tmineattacksunit ( pfield mineposition, int minenum, pvehicle &attackedunit );
            void setup ( pfield mineposition, int minenum, pvehicle &attackedunit );
            void setresult ( void );
 
@@ -128,6 +140,7 @@ class tunitattacksobject : public tfight {
            void paintimages ( int xa, int ya, int xd, int yd );
            int _x, _y;
          public:
+           tunitattacksobject ( pvehicle attackingunit, int obj_x, int obj_y, int weapon );
            void setup ( pvehicle attackingunit, int obj_x, int obj_y, int weapon );
            void setresult ( void );
       };

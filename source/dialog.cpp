@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.30 2000-05-30 18:39:23 mbickel Exp $
+//     $Id: dialog.cpp,v 1.31 2000-06-04 21:39:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/05/30 18:39:23  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.29  2000/05/23 20:40:40  mbickel
 //      Removed boolean type
 //
@@ -4871,7 +4875,7 @@ void         tviewanytext:: init( char* _title, const char* text , int xx1 , int
    xsize = xxsize; 
    ysize = yysize; 
    textstart = 42 ; 
-   textsizey = (ysize - textstart - 10); 
+   textsizey = (ysize - textstart - 40); 
    starty = starty + 10; 
    title = _title;
    windowstyle ^= dlg_in3d;
@@ -4880,7 +4884,11 @@ void         tviewanytext:: init( char* _title, const char* text , int xx1 , int
 
    txt = text;
                        
-   setparams ( x1 + 13, y1 + textstart, x1 + xsize - 41, y1 + ysize - 10, txt, black, dblue);
+   setparams ( x1 + 13, y1 + textstart, x1 + xsize - 41, y1 + ysize - 40, txt, black, dblue);
+   addbutton ( "~O~K", 10, ysize - 30, xsize - 10, ysize - 10, 0, 1, 10, true );
+   addkey ( 10, ct_space );
+   addkey ( 10, ct_enter );
+   addkey ( 10, ct_esc );
    tvt_dispactive = 0;
    displaytext(  );
    textsizeycomplete = tvt_yp;
@@ -4891,9 +4899,9 @@ void         tviewanytext:: init( char* _title, const char* text , int xx1 , int
       scrollbarvisible = true; 
 
       #ifdef NEWKEYB
-      addscrollbar(xsize - 30,starty,xsize - 15,ysize - 10,&textsizeycomplete, textsizey, &tvt_starty,1,0);
+      addscrollbar(xsize - 30,starty,xsize - 15,ysize - 35,&textsizeycomplete, textsizey, &tvt_starty,1,0);
       #else
-      addscrollbar(xsize - 30,starty,xsize - 15,ysize - 10,&textsizeycomplete, textsizey, &tvt_starty,1,1);
+      addscrollbar(xsize - 30,starty,xsize - 15,ysize - 35,&textsizeycomplete, textsizey, &tvt_starty,1,1);
       #endif
       setscrollspeed ( 1 , 1 );
 
@@ -4933,7 +4941,7 @@ void         tviewanytext::redraw(void)
 
    int xd = 15 - (rightspace - 10) / 2;
 
-   setpos ( x1 + 13 + xd, y1 + textstart, x1 + xsize - 41 + xd, y1 + ysize - 10 );
+   setpos ( x1 + 13 + xd, y1 + textstart, x1 + xsize - 41 + xd, y1 + ysize - 40 );
    displaytext(); 
 
 } 
@@ -4944,6 +4952,8 @@ void         tviewanytext::buttonpressed( char id )
    tdialogbox::buttonpressed(id);
    if (id == 1) 
       displaytext();
+   if ( id== 10 )
+      action = 11;
 } 
 
 
@@ -4953,8 +4963,6 @@ void         tviewanytext::run(void)
    do { 
       tdialogbox::run();
       checkscrolling ( );
-      if (taste == ct_esc) 
-         action = 11; 
    }  while (action < 10);
 } 
 

@@ -1,6 +1,10 @@
-//     $Id: attack.cpp,v 1.15 2000-05-30 18:39:19 mbickel Exp $
+//     $Id: attack.cpp,v 1.16 2000-06-04 21:39:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/05/30 18:39:19  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.14  2000/05/07 18:21:21  mbickel
 //      Speed of attack animation can now be specified
 //
@@ -452,7 +456,6 @@ void tfight :: calcdisplay ( int ad, int dd )
 
 
 
-
    int steps;
    if ( av.damage - avd > dv.damage - dvd )
       steps = av.damage - avd ;
@@ -484,10 +487,6 @@ void tfight :: calcdisplay ( int ad, int dd )
       cgo.off();
    }
 
-
-
-
-
    t = ticker;
    do {
       releasetimeslice();
@@ -498,15 +497,11 @@ void tfight :: calcdisplay ( int ad, int dd )
 
 
 
-/*
 
-class tunitattacksunit : public tfight {
-           void setup ( pvehicle attackingunit; pvehicle attackedunit; int respond; int weapon );
-           void setresult ( void );
-
-      };
-
-*/
+tunitattacksunit :: tunitattacksunit ( pvehicle &attackingunit, pvehicle &attackedunit, int respond, int weapon )
+{
+   setup ( attackingunit, attackedunit, respond, weapon );
+}
 
 void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit, int respond, int weapon )
 {
@@ -525,9 +520,6 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
       _weapon  = weapon;
 
    SingleWeapon* weap = attackingunit->getWeapon(_weapon);
-
-//     // Play sound for attacking weapon
-//     sound.weaponSound(weap->getScalarWeaponType())->playWait();
 
    av.strength   = attackingunit->weapstrength[_weapon] * weapdist->getweapstrength(weap, dist, attackingunit->height, attackedunit->height ) / 255;
    av.armor  = attackingunit->armor;
@@ -576,9 +568,6 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    if ( respond ) {
       weap = attackedunit->getWeapon( dv.weapnum );
 
-//        // Play defenders weapon sound
-//        sound.weaponSound(weap->getScalarWeaponType())->playWait();
-
       dv.strength  = attackedunit->weapstrength[ dv.weapnum ] * weapdist->getweapstrength(weap, dist, attackedunit->height, attackingunit->height ) / 255;
       field = getfield ( attackedunit->xpos, attackedunit->ypos );
       dv.attackbonus  = field->getattackbonus();
@@ -610,8 +599,6 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    dv.color      = attackedunit->color >> 3;
    dv.initiative = attackedunit->typ->initiative;
    dv.kamikaze = 0;
-
-
 }
 
 
@@ -621,10 +608,10 @@ void tunitattacksunit :: setresult ( void )
    _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
-/*
+  // This was commented out. Don't have a clue why I did this ...
    if ( _attackingunit->reactionfire_active >= 3 ) 
       _attackingunit->reactionfire ^= 1 <<  dv.color;
-*/
+  //  
 
    _attackingunit->attacked = true; 
    if ( !(_attackingunit->functions & cf_moveafterattack) )
@@ -670,6 +657,10 @@ void tunitattacksunit :: paintimages ( int xa, int ya, int xd, int yd )
 
 
 
+tunitattacksbuilding :: tunitattacksbuilding ( pvehicle attackingunit, int x, int y, int weapon )
+{
+   setup ( attackingunit, x, y, weapon );
+}
 
 
 void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int weapon )
@@ -766,16 +757,12 @@ void tunitattacksbuilding :: paintimages ( int xa, int ya, int xd, int yd )
 };
 
 
-/*
-class tmineattacksunit : public tfight {
-            pfield _mineposition;
-            pvehicle _attackedunit;
 
-           void setup ( pfield mineposition; pvehicle attackedunit );
-           void setresult ( void );
 
-      };
-*/
+tmineattacksunit :: tmineattacksunit ( pfield mineposition, int minenum, pvehicle &attackedunit )
+{
+   setup ( mineposition, minenum, attackedunit );
+}
 
 void tmineattacksunit :: setup ( pfield mineposition, int minenum, pvehicle &attackedunit )
 {
@@ -840,8 +827,6 @@ void tmineattacksunit :: setup ( pfield mineposition, int minenum, pvehicle &att
    dv.initiative = attackedunit->typ->initiative;
    dv.attackbonus = 0;
    dv.kamikaze = 0;
-
-
 }
 
 
@@ -880,16 +865,12 @@ void tmineattacksunit :: paintimages ( int xa, int ya, int xd, int yd )
 }
 
 
-/*
-class tunitattacksobject : public tfight {
-           pvehicle     _attackingunit; 
-           pobjectcontainer      _object; 
-         public:
-           void setup ( pvehicle attackingunit; pobjectcontainer      object; int weapon );
-           void setresult ( void );
-      };
-*/
 
+
+tunitattacksobject :: tunitattacksobject ( pvehicle attackingunit, int obj_x, int obj_y, int weapon )
+{
+   setup ( attackingunit, obj_x, obj_y, weapon );
+}
 
 void tunitattacksobject :: setup ( pvehicle attackingunit, int obj_x, int obj_y, int weapon )
 {

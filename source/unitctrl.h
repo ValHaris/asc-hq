@@ -1,6 +1,9 @@
-//     $Id: unitctrl.h,v 1.3 2000-05-23 20:40:53 mbickel Exp $
+//     $Id: unitctrl.h,v 1.4 2000-06-04 21:39:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/05/23 20:40:53  mbickel
+//      Removed boolean type
+//
 //     Revision 1.2  2000/05/06 20:25:26  mbickel
 //      Fixed: -recognition of a second mouse click when selection a pd menu item
 //             -movement: fields the unit can only pass, but not stand on them,
@@ -186,6 +189,20 @@ class DecreaseVehicleHeight : public ChangeVehicleHeight {
               int available ( pvehicle veh ) const;
               ~DecreaseVehicleHeight ( );
           };
+
+
+/*
+class VehicleAttack : public VehicleAction {
+              int status;
+           public:
+              int getStatus( void ) { return status; };
+              virtual int available ( pvehicle veh ) const = 0;
+              virtual int execute ( pvehicle veh, int x, int y, int step, int param1, int param2 ) = 0;
+              virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
+              VehicleAttack ( VehicleActionType _actionType, PPendingVehicleActions _pva  );
+              virtual ~VehicleAttack ( );
+         };
+*/
 
 
 class PendingVehicleActions {

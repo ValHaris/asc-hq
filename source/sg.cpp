@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.44 2000-06-01 15:27:46 mbickel Exp $
+//     $Id: sg.cpp,v 1.45 2000-06-04 21:39:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2000/06/01 15:27:46  mbickel
+//      Some changes for the upcoming Win32 version of ASC
+//      Fixed error at startup: unable to load smalaril.fnt
+//
 //     Revision 1.43  2000/06/01 15:03:55  mbickel
 //      New command line evaluation code and parameters:
 //        Maps, savegames and email games can now be loaded by passing an command
@@ -3274,11 +3278,13 @@ int main(int argc, char *argv[] )
                 //"\t/game:X\t\tSet gamepath to X \n\n");
         exit (0);
      }
-   } else {
-      printf ( "\nInvalid command line parameter: %s \n");
-      printf ( "Use /h to for help\n", argv[i] );
-      exit(1);
+
    }
+
+   printf ( "\nInvalid command line parameter: %s \n");
+   printf ( "Use /h to for help\n", argv[i] );
+   exit(1);
+   
   } /* endfor */
 
 

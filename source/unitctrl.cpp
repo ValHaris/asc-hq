@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.7 2000-05-18 14:14:50 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.8 2000-06-04 21:39:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/05/18 14:14:50  mbickel
+//      Fixed bug in movemalus calculation for movement
+//      Added "view movement range"
+//
 //     Revision 1.6  2000/05/10 19:15:18  mbickel
 //      Fixed invalid height when trying to change a units height
 //
@@ -752,8 +756,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1 )
       if ( vehicle ) {
          vehicle->removeview();
          if ( field3->mineattacks ( vehicle )) {
-            tmineattacksunit battle;
-            battle.setup ( field3, -1, vehicle );
+            tmineattacksunit battle ( field3, -1, vehicle );
 
             if ( mapDisplay && fieldvisiblenow ( getfield ( x, y ), actmap->playerview) || field3->mineowner() == actmap->playerview )
                battle.calcdisplay ();

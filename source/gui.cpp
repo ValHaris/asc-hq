@@ -1,6 +1,10 @@
-//     $Id: gui.cpp,v 1.21 2000-05-30 18:39:24 mbickel Exp $
+//     $Id: gui.cpp,v 1.22 2000-06-04 21:39:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/05/30 18:39:24  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.20  2000/05/18 17:48:39  mbickel
 //      When moving units out of buildings/transports, indirectly accessible
 //         fields are marked now too
@@ -2776,7 +2780,7 @@ tnweapselguiicon::tnweapselguiicon ( void )
    weapnum = -1;
    typ = -1;                   
    strength = -1;
-   infotext = new char[100];
+   infotext = new char[1000];
 }
 
 
@@ -2811,70 +2815,42 @@ int         tnweapselguiicon::available    ( void )
 char*       tnweapselguiicon::getinfotext  ( void )
 {
    if ( weapnum > -1 ) {
-      infotext[0] = '(';
-      infotext[1] = '~';
-      infotext[2] = 'A'+weapnum;
-      infotext[3] = '~';
-      infotext[4] = ')';
-      infotext[5] = ' ';
-      infotext[6] = 0;
-   
+      infotext[0] = 0;
+
       pvehicle eht = getfield ( moveparams.movesx, moveparams.movesy ) -> vehicle;
    
+      char weapname[100];
+      weapname[0] = 0;
+
       if ( typ == cwairmissilen   ||   typ == cwgroundmissilen ) {
          if ( eht->height >= chtieffliegend ) 
-            strcat( infotext, "air - ");
+            strcpy( weapname, "air-");
          else 
-            strcat( infotext, "ground -  ");
+            strcat( weapname, "ground-");
       } /* endif */
    
-      strcat( infotext, cwaffentypen[typ] );
+      strcat( weapname, cwaffentypen[typ] );
 
-/*
-      strcat( infotext, "; abs strength: " );
-      int strength = eht->weapstrength [ weapnum ];
-      strcat( infotext, strrr( strength ) );
-*/
-
-      strcat( infotext, "; eff strength: " );
-/*
-      int dist = beeline ( moveparams.movesx, moveparams.movesy , getxpos(), getypos() );
-      strength = eht->weapstrength [ weapnum ] * weapdist->getweapstrength ( &eht->typ->weapons->weapon[ weapnum ], dist  ) / 256;
-      strcat( infotext, strrr( strength ) );
-      strcat( infotext, "; expected enemy damage: " );
-*/   
       pfield fld = getactfield();
 
-      int dam = 0;
-      if ( fld->vehicle ) {
-         tunitattacksunit battle;
-         battle.setup ( eht, fld->vehicle, 1, weapnum );
-         battle.calc ( );
+      tfight* battle;
 
-         strcat( infotext, strrr ( battle.av.strength) );
-         strcat( infotext, "; expected enemy damage: " );
+      if ( fld->vehicle ) 
+         battle = new tunitattacksunit ( eht, fld->vehicle, 1, weapnum );
+      else
+      if ( fld->building ) 
+         battle = new tunitattacksbuilding ( eht, getxpos(), getypos(), weapnum );
+      else
+      if ( fld->object ) 
+         battle = new tunitattacksobject ( eht, getxpos(), getypos(), weapnum );
+      
 
-         dam = battle.dv.damage;
-      } else
-      if ( fld->building ) {
-         tunitattacksbuilding battle;
-         battle.setup ( eht, getxpos(), getypos(), weapnum );
-         battle.calc ( );
-         strcat( infotext, strrr ( battle.av.strength) );
-         strcat( infotext, "; expected enemy damage: " );
-         dam = battle.dv.damage;
-      } else
-      if ( fld->object ) {
-         tunitattacksobject battle;
-         battle.setup ( eht, getxpos(), getypos(), weapnum );
-         battle.calc ( );
-         strcat( infotext, strrr ( battle.av.strength) );
-         strcat( infotext, "; expected enemy damage: " );
-         dam = battle.dv.damage;
-      }
+      int dd = battle->dv.damage;
+      int ad = battle->av.damage;
+      battle->calc ( );
 
-      strcat( infotext, strrr( dam ) );
-   
+      sprintf(infotext, "(~%c~) %s; eff strength: %d; damage caused to enemy: %d, making a total of ~%d~; own damage will be +%d = %d", (int)('A'+weapnum), weapname, battle->av.strength, battle->dv.damage-dd, battle->dv.damage, battle->av.damage-ad, battle->av.damage );
+
       return infotext;
    } else
       return "cancel ( ~ESC~ )";

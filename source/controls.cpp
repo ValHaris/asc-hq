@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.32 2000-05-30 18:39:21 mbickel Exp $
+//     $Id: controls.cpp,v 1.33 2000-06-04 21:39:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/05/30 18:39:21  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.31  2000/05/23 20:40:37  mbickel
 //      Removed boolean type
 //
@@ -2212,8 +2216,7 @@ int  treactionfirereplay :: checkfield ( int x, int y, pvehicle &eht, MapDisplay
              }
              attacks++;
 
-             tunitattacksunit battle;
-             battle.setup ( fld->vehicle, targ->vehicle, 1, rpli->wpnum );
+             tunitattacksunit battle ( fld->vehicle, targ->vehicle, 1, rpli->wpnum );
              battle.av.damage = rpli->ad1;
              battle.dv.damage = rpli->dd1;
              if ( md && attackvisible  ) 
@@ -2426,8 +2429,7 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
                   cursor.hide();
                }
 
-               tunitattacksunit battle;
-               battle.setup ( ul->eht, fld->vehicle, 0, atw->num[num] );
+               tunitattacksunit battle ( ul->eht, fld->vehicle, 0, atw->num[num] );
 
                ad1 = battle.av.damage;
                dd1 = battle.dv.damage;
@@ -2697,8 +2699,7 @@ void         attack(char      kamikaze, int  weapnum )
           int ad1, ad2, dd1, dd2;
 
           if ( targ->vehicle ) {
-             tunitattacksunit battle;
-             battle.setup ( fld->vehicle, targ->vehicle, 1, weapnum );
+             tunitattacksunit battle ( fld->vehicle, targ->vehicle, 1, weapnum );
              ad1 = battle.av.damage;
              dd1 = battle.dv.damage;
              battle.calcdisplay ();
@@ -2708,8 +2709,7 @@ void         attack(char      kamikaze, int  weapnum )
              dashboard.x = 0xffff;
           } else 
           if ( targ->building ) {
-             tunitattacksbuilding battle;
-             battle.setup ( fld->vehicle, getxpos(), getypos() , weapnum );
+             tunitattacksbuilding battle ( fld->vehicle, getxpos(), getypos() , weapnum );
              ad1 = battle.av.damage;
              dd1 = battle.dv.damage;
              battle.calcdisplay ();
@@ -2719,8 +2719,7 @@ void         attack(char      kamikaze, int  weapnum )
              dashboard.x = 0xffff;
           } else
           if ( targ->object ) {
-             tunitattacksobject battle;
-             battle.setup ( fld->vehicle, getxpos(), getypos() , weapnum );
+             tunitattacksobject battle ( fld->vehicle, getxpos(), getypos() , weapnum );
              ad1 = battle.av.damage;
              dd1 = battle.dv.damage;
              battle.calcdisplay ();
@@ -7245,8 +7244,7 @@ void trunreplay :: execnextreplaymove ( void )
                           if ( fld && targ && fld->vehicle ) {
    
                              if ( targ->vehicle ) {
-                                tunitattacksunit battle;
-                                battle.setup ( fld->vehicle, targ->vehicle, 1, wpnum );
+                                tunitattacksunit battle ( fld->vehicle, targ->vehicle, 1, wpnum );
                                 battle.av.damage = ad1;
                                 battle.dv.damage = dd1;
                                 if ( attackvisible ) 
@@ -7260,8 +7258,7 @@ void trunreplay :: execnextreplaymove ( void )
                                 dashboard.x = 0xffff;
                              } else 
                              if ( targ->building ) {
-                                tunitattacksbuilding battle;
-                                battle.setup ( fld->vehicle, x2, y2 , wpnum );
+                                tunitattacksbuilding battle ( fld->vehicle, x2, y2 , wpnum );
                                 battle.av.damage = ad1;
                                 battle.dv.damage = dd1;
                                 if ( attackvisible ) 
@@ -7275,8 +7272,7 @@ void trunreplay :: execnextreplaymove ( void )
                                 dashboard.x = 0xffff;
                              } else
                              if ( targ->object ) {
-                                tunitattacksobject battle;
-                                battle.setup ( fld->vehicle, x2, y2, wpnum );
+                                tunitattacksobject battle ( fld->vehicle, x2, y2, wpnum );
                                 if ( attackvisible ) 
                                    battle.calcdisplay ( ad2, dd2 );
                                 else {
