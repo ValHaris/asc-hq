@@ -1,6 +1,10 @@
-//     $Id: UnitEditor.java,v 1.5 2000-10-29 21:06:04 mbickel Exp $
+//     $Id: UnitEditor.java,v 1.6 2000-10-31 18:06:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/10/29 21:06:04  mbickel
+//      Modified filename construction to run under Linux
+//      Started implementing a better directory choosing dialog
+//
 //     Revision 1.4  2000/10/17 17:28:27  schelli
 //     minor bugs fixed in lots of sources
 //     add & remove weapon works now
@@ -540,16 +544,16 @@ public class UnitEditor extends javax.swing.JFrame {
 
         if (tUnit.weapons.count > 0) {
             for (int i = 0 ; i < tUnit.weapons.count; i++)
-            jComboBoxWeapons.addItem("Weapon ".concat(new java.lang.Integer(i+1).toString()));        
+            jComboBoxWeapons.addItem("Weapon ".concat(new java.lang.Integer(i+1).toString()));
         } else {
-            jComboBoxWeapons.addItem("No weapons");        
+            jComboBoxWeapons.addItem("No weapons");
         }
         setUnitWeaponComboBox();
 
         showWeaponValues(0,WEAPON_NOSAVE);
 
         weaponMaxDistanceCheck();
-        
+
         jTextFieldMaxLoad.addActionListener (new java.awt.event.ActionListener () {
             public void actionPerformed (java.awt.event.ActionEvent evt) {
                 maxLoadCheck();
@@ -1225,9 +1229,9 @@ public class UnitEditor extends javax.swing.JFrame {
         int pos = jComboBoxWeapons.getSelectedIndex();
         for (int i = pos;i < tUnit.weapons.count-1;i++) {
             tUnit.weapons.weapon[i]=tUnit.weapons.weapon[i+1];
-        }        
-        if (tUnit.weapons.count == 1) jComboBoxWeapons.addItem("No weapons");        
-        jComboBoxWeapons.removeItemAt(tUnit.weapons.count-1); 
+        }
+        if (tUnit.weapons.count == 1) jComboBoxWeapons.addItem("No weapons");
+        jComboBoxWeapons.removeItemAt(tUnit.weapons.count-1);
         errMsg.showMessage("Weapon removed from position "+(pos+1)+" !");
         tUnit.weapons.count--;
         setUnitWeaponComboBox();
@@ -1237,17 +1241,17 @@ public class UnitEditor extends javax.swing.JFrame {
 
   private void jButtonAddWeaponActionPerformed (java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddWeaponActionPerformed
     // Add your handling code here:
-    if (initDone == 1) {        
+    if (initDone == 1) {
         if  (tUnit.weapons.count == 16) return;
         int pos = jComboBoxWeapons.getSelectedIndex();
         if (pos > -1) {
             for (int i = tUnit.weapons.count-1;i >= pos;i--) {
                 tUnit.weapons.weapon[i+1]=tUnit.weapons.weapon[i];
             }
-            tUnit.weapons.weapon[pos] = new SingleWeapon();            
-        }        
-        jComboBoxWeapons.addItem("Weapon ".concat(new java.lang.Integer(tUnit.weapons.count+1).toString()));                
-        if (tUnit.weapons.count == 0 ) jComboBoxWeapons.removeItemAt(tUnit.weapons.count);        
+            tUnit.weapons.weapon[pos] = new SingleWeapon();
+        }
+        jComboBoxWeapons.addItem("Weapon ".concat(new java.lang.Integer(tUnit.weapons.count+1).toString()));
+        if (tUnit.weapons.count == 0 ) jComboBoxWeapons.removeItemAt(tUnit.weapons.count);
         tUnit.weapons.count++;
         errMsg.showMessage("Weapon added at position "+(pos+1)+" !");
         setUnitWeaponComboBox();
@@ -1471,10 +1475,10 @@ public void showWeaponValues(int index,int save) {  //Weapon-Panel
     weaponLastIndex = index;
 }
 
-private void setUnitWeaponComboBox() { // Weapon-Panel    
-    if (tUnit.weapons.count > 0) {        
+private void setUnitWeaponComboBox() { // Weapon-Panel
+    if (tUnit.weapons.count > 0) {
         jComboBoxWeapons.setEnabled(true);
-        for (int i =0;i < tUnit.weapons.count;i++)        
+        for (int i =0;i < tUnit.weapons.count;i++)
         if (tUnit.weapons.count == 16) jButtonAddWeapon.setEnabled(false);
         else jButtonAddWeapon.setEnabled(true);
         jButtonRemoveWeapon.setEnabled(true);
@@ -1489,7 +1493,7 @@ private void setUnitWeaponComboBox() { // Weapon-Panel
         for (int i=0; i < cHeightLevel.length;i++) weaponAimSelectCheckBox[i].setEnabled(true);
         for (int i=0; i < cHeightLevel.length;i++) weaponSourceSelectCheckBox[i].setEnabled(true);
         for (int i=0; i < cMovemaliType.length;i++) weaponCanNotHitSelectCheckBox[i].setEnabled(true);
-        
+
         for (int i=0; i < cHeightLevel.length;i++) {
             if ( movementTableCheckBox[i].isSelected() == true ) {
                 weaponSourceSelectCheckBox[i].setEnabled(true);
@@ -1498,7 +1502,7 @@ private void setUnitWeaponComboBox() { // Weapon-Panel
             // if unit can move on this height it can fire from this height
             // movement -> weapon panel
         }
-    } else {        
+    } else {
         jComboBoxWeapons.setEnabled(false);
         jButtonRemoveWeapon.setEnabled(false);
         jTabbedPaneWeapons.setEnabled(false);
@@ -1511,7 +1515,7 @@ private void setUnitWeaponComboBox() { // Weapon-Panel
         for (int i=0; i < cWeaponType.length;i++) weaponTypeSelectCheckBox[i].setEnabled(false);
         for (int i=0; i < cHeightLevel.length;i++) weaponAimSelectCheckBox[i].setEnabled(false);
         for (int i=0; i < cHeightLevel.length;i++) weaponSourceSelectCheckBox[i].setEnabled(false);
-        for (int i=0; i < cMovemaliType.length;i++) weaponCanNotHitSelectCheckBox[i].setEnabled(false);        
+        for (int i=0; i < cMovemaliType.length;i++) weaponCanNotHitSelectCheckBox[i].setEnabled(false);
     }
 }
 

@@ -1,6 +1,10 @@
-//     $Id: MainWindow.java,v 1.6 2000-10-29 21:06:03 mbickel Exp $
+//     $Id: MainWindow.java,v 1.7 2000-10-31 18:06:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/10/29 21:06:03  mbickel
+//      Modified filename construction to run under Linux
+//      Started implementing a better directory choosing dialog
+//
 //     Revision 1.5  2000/10/24 15:35:13  schelli
 //     MapEd FullScreen support added
 //     weapons ammo now editable in MapEd
@@ -221,9 +225,17 @@ private void jButtonBrowsePathActionPerformed (java.awt.event.ActionEvent evt) {
     // Add your handling code here:
     String dir;
     if ( (dir = browsePath(paths[selection])) != null ) {
-        paths[selection] = dir;
-        jTextFieldPath.setText (paths[selection]);
-        selFiles();
+        
+       int i = dir.lastIndexOf(java.io.File.separator);
+       if(i>0 && i<dir.length()-1) {
+           paths[selection] =  dir.substring(0, i);
+        
+           //paths[selection] = dir;
+           jTextFieldPath.setText (paths[selection]);
+           selFiles();
+           fileList.setSelectedValue(dir.substring(i+1), true);
+
+       };
     }
   }//GEN-LAST:event_jButtonBrowsePathActionPerformed
 
@@ -253,13 +265,11 @@ private void pathAction() {
 
 private String browsePath(String startPath) {
     javax.swing.JFileChooser jFileCh;
-    ExampleFileFilter filter = new ExampleFileFilter();
-    for (int j = 0; j < extensions.length; j ++) 
-       filter.addExtension ( extensions[j] );
+    ExampleFileFilter filter = new ExampleFileFilter( extensions ); //extensions
     
     jFileCh = new javax.swing.JFileChooser(startPath);
-    //jFileCh.setFileFilter ( filter );
-    jFileCh.setFileSelectionMode(jFileCh.DIRECTORIES_ONLY);
+    jFileCh.setFileFilter ( filter );
+    //jFileCh.setFileSelectionMode(jFileCh.DIRECTORIES_ONLY);
     if ( jFileCh.showOpenDialog(jButtonBrowsePath) ==  jFileCh.APPROVE_OPTION ) {
         return jFileCh.getSelectedFile().getAbsolutePath();
     } else return null;

@@ -15,4 +15,5 @@ javac SgStream.java
 javac Unit.java
 javac UnitEditor.java
 javac MainWindow.java
+javac ExampleFileFilter.java
 pause;
