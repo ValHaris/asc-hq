@@ -2009,10 +2009,11 @@ int main(int argc, char *argv[] )
       exit(1);
    }
 
+   /*
    if ( cl->next_param() < argc ) {
       cerr << "invalid command line parameter\n";
       exit(1);
-   }
+   }*/
 
    if ( cl->v() ) {
       printf( getstartupmessage() );
@@ -2090,8 +2091,8 @@ int main(int argc, char *argv[] )
    GameThreadParams gtp;
    gtp.filename = cl->l();
 
-   if ( cl->next_param()+1 < argc )
-      for ( int i = cl->next_param()+1; i < argc; i++ )
+   if ( cl->next_param() < argc )
+      for ( int i = cl->next_param(); i < argc; i++ )
          gtp.filename = argv[i];
 
 

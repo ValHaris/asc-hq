@@ -242,14 +242,16 @@ Advanced Strategic Command and its utility programs use code of The Independent 
 
 The data compression is based on routines by Julian R Seward.
 
+The windows installer for this product was created using Installer VISE from MindVision Software.
+
 Some tutorial levels are based on Battle Isle maps by Steffen Fröhlich and Thomas Blaser.
 
 Karel Voracek created the experience symbols. 
 
 Some icons created by Michael Lange.
 
-
 Many thanks also to the numerous bug reporters, first to mention Torsten Maekler and Steffen Fröhlich.
+
 
 
 If I forgot anybody, please drop an email.
