@@ -21,6 +21,19 @@ We are going to improve this gradually. Don't hesitate to <A HREF="contact.htm">
 
 Another "historical" thing about the source code is the language (not the programming language) that was used for it. Since we did not intend to release the source code we used a mixture of German and English for variable- and function names and avoided writing comments and those that we have are mostly in German. We have now run several translation passes through the code to translate it to English. The global interfaces should be completely in English now, but several local variables may still be in German. Since we run the translation through the code by a source code wide "search and replace" there are now some comments and perhaps a few code elements that were negatively affected by it and sound quite funny.<P>
 
+<H3>Source code formatting</H3>
+Since there are many different source code formatting styles out there, it would be quite a mess if everybody used his own style and spends half his time undoing the formatting that others did. So we should agree on a common layout. 
+<A HREF="http://astyle.sourceforge.net/astyle/">Artistic Style</A> is a capable program for formatting source code.
+The settings <TT>--style=linux -s3 -C -S</TT> are recommended to be used for ASC. If you write these settings to a file <TT>~/.astylerc</TT>, you don't need to type them each time you call Astyle. The central setting there is the -s3, which tells Astyle to indent with 3 spaces.<P>
+
+<strong>Some nested and nasty #ifdefs can confuse Astyle. After using Astyle, check the last line of the source file and verify they are correctly indentend. If they are not, either fix the #ifdef or restore to the backup file that was created by Astyle!</strong><P>
+
+I personally don't like cutting breaking each line after 80 characters. The times when that was the upper limit of what a monitor could display at once are long passed. And since the first 120 characters (or whatever the size of your screen is) of a command are usually sufficient to get an idea what it is doing, I prefer to not have the next line cluttered with some coordinate calculations that nobody is interested in. 
+But, as always, there are exceptions where it helps to break a command into several lines...
+<P>
+
+
+
 <H3>Required Tools</H3>
 <H4>for building the DOS version</H4>
 We are developing the project with Watcom C/C++ Version 10.6 and Version 11.0b. The later should be preferred because we make use of the binary trees from the STL to speed up the access to certain items. The project files for the Watcom IDE are included.<P>
@@ -188,6 +201,6 @@ the mapeditor is placed in SPFST.CPP
 </DL>
 	
 <HR>
-<TT>$Id: source.html,v 1.1 2000-08-18 12:46:00 mbickel Exp $
+<TT>$Id: source.html,v 1.2 2000-09-17 15:18:21 mbickel Exp $
 </BODY>
 </HTML>
