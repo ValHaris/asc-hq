@@ -1,6 +1,6 @@
 libfiles = ..\basestrm.cpp ..\sgstream.cpp ..\misc.cpp ..\typen.cpp ..\vehicletype.cpp ..\buildingtype.cpp ..\libs\bzlib\libbz2.lib ..\loadbi3.cpp ..\palette.cpp ..\gameoptions.cpp ..\named.cpp ..\basegfx.cpp
 files = weaponguide.cpp 
-CC = c:\programme\bcc55\bin\bcc32 -DHEXAGON -D_WIN32_ -Dconverter -IC:\Programme\BCC55\Include\ -DminimalIO -D_NOASM_ -v -w-
+CC = bcc32 -DHEXAGON -D_WIN32_ -Dconverter -DminimalIO -D_NOASM_ -v -w-
 
 WeaponGuide.exe: $(files) $(libfiles)
 	$(CC) $(files) $(libfiles)
