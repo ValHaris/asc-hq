@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl AC_REVISION($Revision: 1.62 $)dnl
+dnl AC_REVISION($Revision: 1.63 $)dnl
 dnl AM_MAINTAINER_MODE
 AC_INIT(source/typen.h)
 
@@ -38,9 +38,8 @@ fi
 
 
 
-dnl AC_PROG_RANLIB
-AM_PROG_LIBTOOL
-AC_SUBST(LIBTOOL_DEPS)
+AC_DISABLE_SHARED
+AC_PROG_LIBTOOL
 
 dnl mikem: doesn't like this stuff - ugly right away
 CFLAGS="$CFLAGS -D_UNIX_ -D_SDL_"
@@ -150,7 +149,7 @@ if test "x$lib_bz2_static" = "xyes"; then
   LDADDLIBBZ2=\${top_builddir}/source/libs/bzlib/libbz2.a;
 else 
   LDADDLIBBZ2=-lbz2
-  AC_DEFINE_UNQUOTED( USE_SYSTEM_BZ2, 1 )
+  AC_DEFINE_UNQUOTED( USE_SYSTEM_BZ2, 1, [link against libbzip2] )
 fi
 
 
@@ -170,8 +169,8 @@ dnl Checks for other header files.
 AC_HEADER_DIRENT
 AC_HEADER_TIME
 
-MY_EXPAND_DIR(game_datadir, "$datadir/games/$PACKAGE")
-AC_DEFINE_UNQUOTED( GAME_DATADIR, "$game_datadir")
+MY_EXPAND_DIR(game_datadir, "$datadir/games/$PACKAGE" )
+AC_DEFINE_UNQUOTED( GAME_DATADIR, "$game_datadir",  [The directory in which the data files are going to be installed])
 
 dnl *************************************************************************
 dnl Checks for typedefs, structures, and compiler characteristics.
@@ -297,11 +296,6 @@ fi
 AC_SUBST([MUSICDIR])
 
 
-
-dnl for libtool to work LTLIBOJS is needed (currently bug of autoconf)
-dnl Xsed="sed -e s/^X//"
-dnl LTLIBOBJS=`echo X"$LIBOBJS"|[$Xsed -e "s,\.[^.]* ,.lo ,g;s,\.[^.]*$,.lo,"]`
-dnl AC_SUBST(LTLIBOBJS)
 
 AC_OUTPUT( Makefile source/Makefile source/docs/Makefile \
 	   source/docs/en/Makefile source/sdl/Makefile \

@@ -28,4 +28,4 @@ messages.cpp paradialog.cpp
 asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la \
 $(top_builddir)/source/sdl/libsdl.la @PARAGUI_LIBS@ \
-@LDADDLIBBZ2@ \
+@LDADDLIBBZ2@ 
