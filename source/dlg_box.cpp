@@ -1,6 +1,9 @@
-//     $Id: dlg_box.cpp,v 1.19 2000-05-23 20:40:42 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.20 2000-05-30 18:39:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/05/23 20:40:42  mbickel
+//      Removed boolean type
+//
 //     Revision 1.18  2000/05/10 19:55:47  mbickel
 //      Fixed empty loops when waiting for mouse events
 //
@@ -119,7 +122,6 @@
 #include "spfst.h"
 #include "loaders.h"
 #include "misc.h"
-#include "spfldutl.h"
 #include "mousehnd.h"
 #include "stack.h"
 #include "dlg_box.h"

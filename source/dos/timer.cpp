@@ -1,6 +1,9 @@
-//     $Id: timer.cpp,v 1.3 2000-05-07 12:53:59 mbickel Exp $
+//     $Id: timer.cpp,v 1.1 2000-05-30 18:39:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/05/07 12:53:59  mbickel
+//      some minor adjustments
+//
 //     Revision 1.2  1999/11/16 03:42:41  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -34,7 +37,7 @@
 #include <dos.h>
 #include <conio.h>
 #include <stdio.h>
-#include "timer.h"
+#include "../timer.h"
 #include <stdlib.h>
 
 #define timerintr 0x08

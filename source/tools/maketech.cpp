@@ -26,7 +26,6 @@
 #include "..\basegfx.h"
 #include "..\tpascal.inc"
 #include "..\typen.h"
-#include "..\vesa.h"
 #include "..\loadpcx.h"
 #include "krkr.h"
 #include "..\basestrm.h"

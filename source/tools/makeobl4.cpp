@@ -27,7 +27,6 @@
 #include "..\typen.h"
 #include "..\basegfx.h"
 #include "..\newfont.h"
-#include "..\vesa.h"
 #include "..\loadpcx.h"
 #include "krkr.h"
 #include "..\sgstream.h"

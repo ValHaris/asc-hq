@@ -1,6 +1,9 @@
-//     $Id: basegfx.cpp,v 1.14 2000-05-23 20:40:37 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.15 2000-05-30 18:39:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/05/23 20:40:37  mbickel
+//      Removed boolean type
+//
 //     Revision 1.13  2000/05/07 12:53:58  mbickel
 //      some minor adjustments
 //
@@ -44,7 +47,7 @@
 #include "misc.h"
 
 #ifdef _DOS_
- #include "vesa.h"
+ #include "dos/vesa.h"
 #else
  #include "sdl/graphics.h"
 #endif

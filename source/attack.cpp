@@ -1,6 +1,9 @@
-//     $Id: attack.cpp,v 1.14 2000-05-07 18:21:21 mbickel Exp $
+//     $Id: attack.cpp,v 1.15 2000-05-30 18:39:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/05/07 18:21:21  mbickel
+//      Speed of attack animation can now be specified
+//
 //     Revision 1.13  2000/04/27 17:59:19  mbickel
 //      Updated Kdevelop project file
 //      Fixed some graphical errors
@@ -95,7 +98,6 @@
 #include "keybp.h"
 #include "spfst.h"
 #include "dlg_box.h"
-#include "spfldutl.h"
 #include "sgstream.h"
 #include "mousehnd.h"
 #include "timer.h"

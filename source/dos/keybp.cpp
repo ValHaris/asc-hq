@@ -1,6 +1,9 @@
-//     $Id: keybp.cpp,v 1.9 2000-01-19 22:03:36 mbickel Exp $
+//     $Id: keybp.cpp,v 1.1 2000-05-30 18:39:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/01/19 22:03:36  mbickel
+//      Fixed a bug in the DOS keyboard code
+//
 //     Revision 1.8  2000/01/04 19:43:52  mbickel
 //      Continued Linux port
 //
@@ -56,7 +59,7 @@
 
 #include <ctype.h>
 #include <stdio.h>
-#include "keybp.h"
+#include "../keybp.h"
 
 #ifdef _DOS_
     void             (__interrupt __far *bioskeyboardhandler)();

@@ -29,7 +29,6 @@
 #include "..\basestrm.h"
 #include "..\misc.h"
 #include "..\sgstream.h"
-#include "..\vesa.h"
 #include "..\loadbi3.h"
 
 const int maxvehicles = 1000;

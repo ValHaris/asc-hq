@@ -32,7 +32,6 @@
 #include "..\misc.h"
 #include "dos.h"
 #include "..\sgstream.h"
-#include "..\vesa.h"
 #include "..\loadpcx.h"
 #include "..\basegfx.h"
 #include "..\loadbi3.h"

@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.29 2000-05-23 20:40:40 mbickel Exp $
+//     $Id: dialog.cpp,v 1.30 2000-05-30 18:39:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/05/23 20:40:40  mbickel
+//      Removed boolean type
+//
 //     Revision 1.28  2000/05/22 15:40:34  mbickel
 //      Included patches for Win32 version
 //
@@ -162,7 +165,6 @@
 #include "spfst.h"
 #include "loaders.h"
 #include "misc.h"
-#include "spfldutl.h"
 #include "mousehnd.h"
 #include "loadpcx.h"
 #include "stack.h"

@@ -1,6 +1,9 @@
-//     $Id: spfst.h,v 1.8 2000-05-23 20:40:52 mbickel Exp $
+//     $Id: spfst.h,v 1.9 2000-05-30 18:39:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/05/23 20:40:52  mbickel
+//      Removed boolean type
+//
 //     Revision 1.7  2000/04/27 16:25:30  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -705,6 +708,8 @@ extern MapDisplay defaultMapDisplay;
 #ifdef _NOASM_
  int  rol ( int valuetorol, int rolwidth );
  void setvisibility ( word* visi, int valtoset, int actplayer );
+#else
+ #include "dos/spfldutl.h"
 #endif
 
 #pragma pack()

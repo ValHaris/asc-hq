@@ -1,6 +1,9 @@
-//     $Id: edmisc.h,v 1.9 2000-05-23 20:40:45 mbickel Exp $
+//     $Id: edmisc.h,v 1.10 2000-05-30 18:39:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/05/23 20:40:45  mbickel
+//      Removed boolean type
+//
 //     Revision 1.8  2000/05/05 21:15:04  mbickel
 //      Added Makefiles for mount/demount and mapeditor
 //      mapeditor can now be compiled for linux, but is not running yet
@@ -87,7 +90,7 @@
 #include "dialog.h"
 #include "strtmesg.h"
 #include "pd.h"
-#include "cdrom.h"
+// #include "cdrom.h"
 #include "palette.h"
 
 #ifndef karteneditor
@@ -206,7 +209,7 @@
    extern char                mapsaved;
    extern tmycursor             mycursor;
    extern tpulldown              pd;
-   extern tcdrom                 cdrom;
+//   extern tcdrom                 cdrom;
 
 
 //* fÅr SelectNr

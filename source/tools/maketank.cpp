@@ -27,7 +27,6 @@
 #include "..\tpascal.inc"
 #include "..\typen.h"
 #include "..\basegfx.h"
-#include "..\vesa.h"
 #include "..\loadpcx.h"
 #include "..\sgstream.h"
 #include "..\misc.h"

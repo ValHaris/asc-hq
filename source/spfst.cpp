@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.29 2000-05-23 20:40:49 mbickel Exp $
+//     $Id: spfst.cpp,v 1.30 2000-05-30 18:39:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/05/23 20:40:49  mbickel
+//      Removed boolean type
+//
 //     Revision 1.28  2000/05/18 14:14:48  mbickel
 //      Fixed bug in movemalus calculation for movement
 //      Added "view movement range"
@@ -166,7 +169,6 @@
 #include "typen.h"
 #include "spfst.h"
 #include "mousehnd.h"
-#include "spfldutl.h"
 #include "dlg_box.h"
 #include "timer.h"
 #include "loaders.h"
@@ -492,7 +494,6 @@ void copyvfb2displaymemory_zoom ( void* parmbuf )
 {
    copyvfb2displaymemory_zoom ( parmbuf, idisplaymap.invmousewindow.x1, idisplaymap.invmousewindow.y1, idisplaymap.invmousewindow.x2, idisplaymap.invmousewindow.y2 );
 }
-
 
 #endif
 

@@ -1,6 +1,9 @@
-//     $Id: vesa.cpp,v 1.8 2000-05-23 20:40:53 mbickel Exp $
+//     $Id: vesa.cpp,v 1.1 2000-05-30 18:39:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/05/23 20:40:53  mbickel
+//      Removed boolean type
+//
 //     Revision 1.7  2000/01/07 13:20:07  mbickel
 //      DGA fullscreen mode now working
 //
@@ -61,20 +64,16 @@
 #include <stdlib.h>
 
 
-#include "tpascal.inc"
+#include "../tpascal.inc"
 #include "vesa.h"
-#include "misc.h"
-#include "basegfx.h"
+#include "../misc.h"
+#include "../basegfx.h"
 
 #ifndef minimal
- #include "loadpcx.h"
- #include "newfont.h"
+ #include "../loadpcx.h"
+ #include "../newfont.h"
 #endif
 
-
-#ifdef _NOASM_
-void setdisplaystart( int x, int y) {}
-#endif
 
 int fullscreen = 1;
 

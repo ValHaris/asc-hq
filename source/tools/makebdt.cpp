@@ -23,7 +23,6 @@
 
 #include "..\tpascal.inc"
 #include "..\typen.h"
-#include "..\vesa.h"
 #include "..\loadpcx.h"
 #include "krkr.h"
 #include "..\sgstream.h"

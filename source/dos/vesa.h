@@ -1,6 +1,9 @@
-//     $Id: vesa.h,v 1.5 2000-01-07 13:20:07 mbickel Exp $
+//     $Id: vesa.h,v 1.1 2000-05-30 18:39:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/01/07 13:20:07  mbickel
+//      DGA fullscreen mode now working
+//
 //     Revision 1.4  2000/01/02 20:23:39  mbickel
 //      Improved keyboard handling in dialog boxes under DOS
 //
@@ -45,9 +48,9 @@
 #ifndef vesa_h
 #define vesa_h
 
-#include "global.h"
-#include "tpascal.inc"
-#include "palette.h"
+#include "../global.h"
+#include "../tpascal.inc"
+#include "../palette.h"
 
 
 

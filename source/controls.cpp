@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.31 2000-05-23 20:40:37 mbickel Exp $
+//     $Id: controls.cpp,v 1.32 2000-05-30 18:39:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/05/23 20:40:37  mbickel
+//      Removed boolean type
+//
 //     Revision 1.30  2000/05/22 15:40:31  mbickel
 //      Included patches for Win32 version
 //
@@ -169,7 +172,6 @@
 #include "loaders.h"
 #include "misc.h"
 #include "controls.h"
-#include "spfldutl.h"
 #include "network.h"
 #include "mousehnd.h"
 #include "loadpcx.h"

@@ -22,7 +22,6 @@
 #include "..\loadbi3.h"
 #include "string.h"
 #include "..\basegfx.h"
-#include "..\vesa.h"
 #include "..\keybp.h"
 #include "..\loadpcx.h"
 #include "..\newfont.h"

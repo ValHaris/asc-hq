@@ -25,7 +25,7 @@
 #include "global.h"
 #include "palette.h"
 #ifdef _DOS_
- #include "vesa.h"
+ #include "dos/vesa.h"
 #else
  #include "sdl/graphics.h"
 #endif

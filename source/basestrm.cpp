@@ -1,6 +1,9 @@
-//     $Id: basestrm.cpp,v 1.21 2000-05-22 15:40:30 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.22 2000-05-30 18:39:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/05/22 15:40:30  mbickel
+//      Included patches for Win32 version
+//
 //     Revision 1.20  2000/05/06 19:57:08  mbickel
 //      Mapeditor/linux is now running
 //
@@ -153,32 +156,32 @@
 
 #endif
 
-// #define printexternfilenams
-// #define logfiles
 
 
-char* ascdirectory = ".";
+
 
 #if defined(_DOS_) | defined(WIN32)
-const char* filereadmode = "rb";
-const char* filewritemode = "wb";
+ const char* filereadmode = "rb";
+ const char* filewritemode = "wb";
+ const char pathdelimitter = '\\';
+ const char* pathdelimitterstring = "\\";
 #else
-const char* filereadmode = "r";
-const char* filewritemode = "w";
+ const char* filereadmode = "r";
+ const char* filewritemode = "w";
+ const char pathdelimitter = '/';
+ const char* pathdelimitterstring = "/";
 #endif
 
-#ifdef _DOS_
-const char pathdelimitter = '\\';
-const char* pathdelimitterstring = "\\";
-#else
-const char pathdelimitter = '/';
-const char* pathdelimitterstring = "/";
-#endif
+ const int maxSearchDirNum = 10;
+ int searchDirNum = 0;
+ char* ascDirectory[maxSearchDirNum] = { NULL, NULL, NULL, NULL, NULL, 
+                                         NULL, NULL, NULL, NULL, NULL };
+
 
 #ifdef _DOS_
-int verbosity = 0;
+ int verbosity = 0;
 #else
-int verbosity = 0;
+ int verbosity = 0;
 #endif
 
 #pragma pack(1)
@@ -215,45 +218,6 @@ const char* BZIP_SIGNATURE = "MBZLB2X!";
 #ifndef word
 typedef unsigned short int word;
 #endif
-
-/*
-twatchptr::twatchptr ( void )
-{
-    ptr = NULL;
-    pptr = NULL;
-}
-
-twatchptr::twatchptr ( void* pt )
-{
-   ptr = pt;
-   pptr = NULL;
-}
-
-twatchptr::twatchptr ( void** pt )
-{
-   ptr = NULL;
-   pptr = pt;
-}
-
-twatchptr::~twatchptr (  )
-{
-   if ( ptr ) {
-      ::delete ( ptr );
-      ptr = NULL;
-   }
-   if ( pptr )
-      if ( *pptr )
-        ::delete ( *pptr );
-}
-
-void twatchptr::free ( void )
-{
-    if ( ptr ) {
-      ::delete ( ptr );
-      ptr = NULL;
-    }
-}
-*/
 
 CharBuf :: CharBuf ( void )
          {
@@ -618,9 +582,7 @@ int          StreamReadBuffer::readdata( void* buf, int size, int excpt  )
 tnbufstream::tnbufstream (  )
 { 
    datalen = 0;
-
    modus = 0; 
- //  int maxmemsize = 0xffff;
 
    strcpy ( devicename , "abstract" ); 
 
@@ -640,15 +602,14 @@ tnbufstream::tnbufstream (  )
 
    datasize = 0; 
    actmempos = 0;
-
 } 
 
 
 
 int          tnbufstream::readdata( void* buf, int size, int excpt  )
 { 
-  char*        cpbuf = (char*) buf;
-  int          s, actpos2;
+   char*        cpbuf = (char*) buf;
+   int          s, actpos2;
 
    actpos2 = 0; 
 
@@ -688,8 +649,8 @@ int          tnbufstream::readdata( void* buf, int size, int excpt  )
 void         tnbufstream::writedata( const void* buf, int size )
 { 
    datalen += size;
-  int          s, actpos2;
-  char*        cpbuf = (char*) buf;
+   int          s, actpos2;
+   char*        cpbuf = (char*) buf;
 
    if (modus == 1) 
       throw  tinvalidmode ( devicename, modus, 2 );
@@ -773,7 +734,6 @@ tn_file_buf_stream::tn_file_buf_stream( const char* name, char mode)
 
    modus = mode; 
    
-
    if (mode == 1) {
       fp = fopen ( name, filereadmode );
    } else {
@@ -820,19 +780,16 @@ void tn_file_buf_stream::seekstream( int newpos )
 
       }
    }
-
 }           
 
 
 void tn_file_buf_stream::readbuffer( void )
 { 
    datasize = fread( zeiger, 1, memsize, fp);
-   if ( ferror ( fp ) ) {
+   if ( ferror ( fp ) ) 
       throw  tfileerror ( devicename );
-	}
 
    actfilepos += datasize;
-
 } 
 
 
@@ -840,11 +797,11 @@ void tn_file_buf_stream::readbuffer( void )
 
 void tn_file_buf_stream::writebuffer()
 { 
- fwrite( zeiger, 1, actmempos, fp );
- if ( ferror ( fp ) )
+   fwrite( zeiger, 1, actmempos, fp );
+   if ( ferror ( fp ) )
       throw  tfileerror ( devicename );
 
- actmempos = 0;
+   actmempos = 0;
 } 
 
 
@@ -867,7 +824,7 @@ tn_file_buf_stream::~tn_file_buf_stream()
 
 
 
-tncontainerstream :: tncontainerstream ( const char* containerfilename, ContainerIndexer* indexer )
+tncontainerstream :: tncontainerstream ( const char* containerfilename, ContainerIndexer* indexer, int dirLevel )
         : tn_file_buf_stream ( containerfilename, 1 )
 {
    int pos;
@@ -884,7 +841,7 @@ tncontainerstream :: tncontainerstream ( const char* containerfilename, Containe
          if ( index[i].name ) {
             readpchar ( &index[i].name );
 
-           #ifndef _DOS_
+           #if !(defined ( _DOS_ ) | defined ( WIN32 ))
             // quick hack to be able to use existing CON files.
             char *c = index[i].name;
             while ( *c ) {
@@ -893,7 +850,7 @@ tncontainerstream :: tncontainerstream ( const char* containerfilename, Containe
             }
            #endif
 
-            indexer->addfile ( index[i].name, this );
+            indexer->addfile ( index[i].name, this, dirLevel );
          }
       }
    }
@@ -985,6 +942,65 @@ tncontainerstream  :: ~tncontainerstream  ()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+ContainerCollector containercollector;
+
+char* constructFileName( char* buf, int directoryLevel, const char* path, const char* filename )
+{
+  if ( buf ) {
+
+     // this system could be extended to allow a relative path
+
+     if ( path ) 
+        strcpy ( buf, path);
+     else
+        strcpy ( buf, ascDirectory[ directoryLevel ]);
+
+     if ( strlen ( buf ) && buf[strlen ( buf ) -1] != pathdelimitter )
+        strcat ( buf, pathdelimitterstring );
+
+     strcat ( buf, filename );
+  }
+
+  return buf;
+}
+
+struct FileLocation {
+        int directoryLevel;
+        pncontainerstream container;
+        int found;
+     };
+
+void locateFile ( const char* filename, FileLocation* loc )
+{
+   loc->found = 0;
+   ContainerCollector::FileIndex* idx = containercollector.getfile ( filename );
+   int maxnum;
+   if ( idx ) {
+      maxnum = idx->directoryLevel;
+      loc->directoryLevel = idx->directoryLevel;
+      loc->found = 1;
+      loc->container = idx->container;
+   } else { 
+      maxnum = searchDirNum;
+      loc->container = NULL;
+      loc->directoryLevel = -1;
+   }
+
+   int localfound = 0;
+   for ( int i = 0; i < maxnum && !localfound; i++ ) {
+      char buf[2000];
+      FILE* fp = fopen ( constructFileName ( buf, i, NULL, filename), "r" );
+      if ( fp ) {
+         localfound = loc->found = 1;
+         fclose ( fp );
+         loc->container = NULL;
+         loc->directoryLevel = i;
+      }
+   }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 ContainerCollector :: ContainerCollector ( void )
@@ -994,51 +1010,72 @@ ContainerCollector :: ContainerCollector ( void )
 
 void ContainerCollector :: init ( const char* wildcard )
 {
-	DIR *dirp; 
-	struct dirent *direntp; 
+   for ( int i = 0; i < searchDirNum; i++ ) {
+      DIR *dirp; 
+      struct dirent *direntp; 
 
-	dirp = opendir( ascdirectory );
-	if( dirp != NULL ) { 
-      for(;;) { 
-			direntp = readdir( dirp ); 
-			if ( direntp == NULL ) {
-				break; 
-			}
-			if ( patimat ( wildcard, direntp->d_name ))
-				container[containernum++] = new tncontainerstream(direntp->d_name, this);
-		} 
-		closedir( dirp ); 
-	} 
-
+      dirp = opendir( ascDirectory[i] );
+      if( dirp != NULL ) { 
+         for(;;) { 
+            direntp = readdir( dirp ); 
+            if ( direntp == NULL ) {
+               break; 
+            }
+            if ( patimat ( wildcard, direntp->d_name )) {
+               char buf[2000];
+               container[containernum++] = new tncontainerstream( constructFileName ( buf, i, NULL, direntp->d_name), this, i);
+               if ( verbosity >= 2 )
+                  printf("container %s mounted\n", buf );
+            }
+         } 
+         closedir( dirp ); 
+      } 
+   }
 }
 
-void ContainerCollector :: addfile ( const char* filename, const pncontainerstream stream )
+void ContainerCollector :: addfile ( const char* filename, const pncontainerstream stream, int directoryLevel )
 {
+   int found = 0;
+   FileIndex* cci = NULL;
+
    int i1 = toupper ( filename[0] );
-   ContainerCollectorIndex* cci = &( index[i1][ index[i1].getlength()+1 ] );
+   for ( int i = 0; i <= index[i1].getlength(); i++ )
+      if ( stricmp ( index[i1][i].name, filename ) == 0 ) 
+         if ( index[i1][i].directoryLevel <= directoryLevel ) 
+            return;
+         else {
+            cci = &(index[i1][i]);
+            free ( cci->name );
+            found = 1;
+         }
+
+   if ( !found )
+      cci = &( index[i1][ index[i1].getlength()+1 ] );
+
    cci->name = strdup ( filename );
    cci->container = stream;
+   cci->directoryLevel = directoryLevel;
 }
 
-pncontainerstream ContainerCollector :: getfile ( const char* filename )
+ContainerCollector::FileIndex* ContainerCollector :: getfile ( const char* filename )
 {
    int i1 = toupper ( filename[0] );
    for ( int i = 0; i <= index[i1].getlength(); i++ )
       if ( stricmp ( index[i1][i].name, filename ) == 0 )
-         return index[i1][i].container;
+         return &index[i1][i];
 
    return NULL;
 }
 
 
-char* ContainerCollector :: getfirstname ( void )
+ContainerCollector::FileIndex* ContainerCollector :: getfirstname ( void )
 {
    namesearch.alpha = 0;
    namesearch.index = 0;
    return getnextname();
 }
 
-char* ContainerCollector :: getnextname ( void )
+ContainerCollector::FileIndex* ContainerCollector :: getnextname ( void )
 {
    while ( index[namesearch.alpha].getlength() < namesearch.index) {
       if ( namesearch.alpha == 255 )
@@ -1046,7 +1083,7 @@ char* ContainerCollector :: getnextname ( void )
       namesearch.alpha++;
       namesearch.index = 0;
    } /* endwhile */
-   return index[namesearch.alpha][namesearch.index++].name;
+   return &index[namesearch.alpha][namesearch.index++];
 }
 
 
@@ -1062,8 +1099,6 @@ ContainerCollector :: ~ContainerCollector()
 }
 
 
-
-ContainerCollector containercollector;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1454,16 +1489,16 @@ tn_lzw_file_buf_stream :: ~tn_lzw_file_buf_stream()
    tn_file_buf_stream :: close();
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 tn_c_lzw_filestream :: tn_c_lzw_filestream ( const char* name, char mode ) : tanycompression ( mode )
 {
    #ifdef logfiles
-   FILE* fp = fopen ( "files.lst", "at" );
-   fprintf ( fp, "%s\n", name );
-   fclose ( fp );
+    FILE* fp = fopen ( "files.lst", "at" );
+    fprintf ( fp, "%s\n", name );
+    fclose ( fp );
    #endif
 
    strm = NULL;
@@ -1471,24 +1506,26 @@ tn_c_lzw_filestream :: tn_c_lzw_filestream ( const char* name, char mode ) : tan
    inp = 0;
    containerstream = NULL;
 
-   int found = 0;
-   {
-      FILE* fp = fopen ( name, "r" );
-      if ( fp ) {
-         found = 1;
-         fclose ( fp );
-      }
+   FileLocation fl;
+   if ( mode == 1 ) {
+      locateFile ( name, &fl ); 
+
+      if ( !fl.found )
+         throw tfileerror ( name );
+            
+   } else {
+      fl.directoryLevel = 0;
+      fl.container = NULL;
    }
+     
 
-   if ( mode == 2   ||  found ) {
-      #ifdef printexternfilenams
-      fprintf(stdprn, "file %s loaded external \n", name );
-      #endif
+   if ( fl.container == NULL ) {
+      char string[2000];
 
-      strm = new tn_file_buf_stream ( name, mode );
+      strm = new tn_file_buf_stream ( constructFileName ( string, fl.directoryLevel, NULL, name), mode );
       inp = 1;
    } else {
-      containerstream = containercollector.getfile ( name );
+      containerstream = fl.container;
       if ( containerstream ) {
          containerstream->opencontainerfile ( name );
          inp = 2;
@@ -1498,7 +1535,6 @@ tn_c_lzw_filestream :: tn_c_lzw_filestream ( const char* name, char mode ) : tan
    fname = strdup ( name );
 
    tanycompression :: init (  ); 
-
 }
 
 
@@ -1692,30 +1728,35 @@ tfindfile :: tfindfile ( const char* name )
    if ( !name )
       return;
 
-   char* directory;
+   char* directory[maxSearchDirNum];
+   int dirNum;
    char wildcard[1000];
 
    if ( strchr ( name, pathdelimitter )) {
-      char buf[1000];
-      strcpy ( buf, name );
-      int i = strlen ( buf )-1;
-      while ( buf[i] != pathdelimitter )
+      char name2[1000];
+      strcpy ( name2, name );
+      int i = strlen ( name2 )-1;
+      while ( name2[i] != pathdelimitter )
          i--;
-      buf[i+1] = 0;
-      directory = buf;
+      name2[i+1] = 0;
+      directory[0] = name2;
+      dirNum = 1;
+
       strcpy ( wildcard, &name[i+1] );
 
    } else {
-      directory = ascdirectory;
+      for (int i = 0; i < searchDirNum; i++ ) 
+         directory[i] = ascDirectory[i];
+      dirNum = searchDirNum;
       strcpy ( wildcard, name );
    }
 
 
-   {
+   for ( int i = 0; i < dirNum; i++ ) {
       DIR *dirp; 
       struct dirent *direntp; 
   
-      dirp = opendir( directory );   
+      dirp = opendir( directory[i] );   
       if( dirp != NULL ) { 
         for(;;) { 
           direntp = readdir( dirp ); 
@@ -1723,9 +1764,18 @@ tfindfile :: tfindfile ( const char* name )
              break; 
              
           if ( patimat ( wildcard, direntp->d_name )) {
-             names[found] = strdup ( direntp->d_name );
-             namedupes[found] = 1;
-             found++;
+             int localfound = 0;
+             for ( int j = 0; j < found; j++ )
+                if ( strcmpi ( names[j], direntp->d_name ) == 0 )
+                   localfound++;
+
+             if ( !localfound ) {
+                names[found] = strdup ( direntp->d_name );
+                namedupes[found] = 1;
+                directoryLevel[found] = i;
+                isInContainer[found] = 0;
+                found++;
+             }
           }
         } 
         closedir( dirp ); 
@@ -1734,37 +1784,55 @@ tfindfile :: tfindfile ( const char* name )
 
 
 
-
    {
-      char* c = containercollector.getfirstname();
+      const ContainerCollector::FileIndex* c = containercollector.getfirstname();
       while ( c ) {
-          if ( patimat ( name, c ) ) {
+          if ( patimat ( name, c->name ) ) {
              int f = 0;
              for ( int i = 0; i < found; i++ )
-                if ( stricmp ( c, names[i] ) == 0 )
-                   f = 1;
-
+                if ( stricmp ( c->name, names[i] ) == 0 ) {
+                   if ( directoryLevel[i] <= c->directoryLevel ) 
+                      f = 1;
+                   else {
+                      if ( namedupes[i] )
+                         delete[] names[i];
+                      names[i] = strdup ( c->name );
+                      namedupes[i] = 1;
+                      isInContainer[i] = 1;
+                      directoryLevel[i] = c->directoryLevel;
+                      f = 1;
+                   }
+                }
+                
              if ( !f ) {
-                names[found] = c;
+                names[found] = c->name;
                 namedupes[found] = 0;
+                directoryLevel[found] = c->directoryLevel;
+                isInContainer[found] = 1;
                 found++;
              }
           }
-
           c = containercollector.getnextname();
-
       }
    }
-
 }
 
 
-char* tfindfile :: getnextname ( void )
+char* tfindfile :: getnextname ( int* loc, int* inContainer )
 {
-   if ( act < found )
+   if ( act < found ) {
+      if ( loc )
+         *loc = directoryLevel[act];
+
+      if ( inContainer )
+         *inContainer = isInContainer[act];
+
       return names[act++];
-   else
+   } else {
+      if ( loc )
+         *loc = -1;
       return NULL;
+   }
 }
 
 
@@ -1976,21 +2044,6 @@ char* getnextfilenumname ( const char* first, const char* suffix, int num )
 }
 
 
-time_t get_filetime ( char* devicename )
-{
-   struct stat buf;
-   if ( !stat (devicename, &buf) )
-      return (buf.st_mtime);
-   else {
-      pncontainerstream strm = containercollector.getfile( devicename );
-      if ( strm )
-         return strm->get_time();
-
-   }
-   return -1;
-}
-
-
 int exist ( const char* s )
 {
    tfindfile ff ( s );
@@ -2006,7 +2059,34 @@ void  tnbufstream :: writebuffer( void ) {
 
 void opencontainer ( const char* wildcard )
 {
+   if ( !searchDirNum )
+      addSearchPath(".");
+
    containercollector.init ( wildcard );
+}
+
+
+
+
+time_t get_filetime ( char* fileName )
+{
+   FileLocation fl;
+   locateFile ( fileName, &fl );
+
+   if ( fl.found ) {
+      char buf[2000];
+
+     if ( fl.container )
+        return fl.container->get_time();
+     else {
+        struct stat stbuf;
+        if ( !stat ( constructFileName ( buf, fl.directoryLevel, NULL, fileName), &stbuf) )
+           return ( stbuf.st_mtime);
+        else
+           return -1;
+     }
+   } else
+      return -1;
 }
 
 
@@ -2014,9 +2094,22 @@ int filesize( char *name)
 {
   struct stat buf;
 
-  stat (name, &buf);
-  return (buf.st_size);
+  if ( !stat (name, &buf))
+     return (buf.st_size);
+  else
+     return -1;
 }
 
 
-// #pragma library (libbzip2)
+void addSearchPath ( const char* path )
+{
+   char* string = new char[ strlen(path) + 10 ];
+   strcpy ( string, path );
+   if ( strlen ( string ) && string[strlen ( string ) -1] != pathdelimitter )
+      strcat ( string, pathdelimitterstring );
+
+   ascDirectory[ searchDirNum ] = string;
+   searchDirNum++;
+}
+
+

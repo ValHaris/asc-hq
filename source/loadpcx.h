@@ -1,6 +1,9 @@
-//     $Id: loadpcx.h,v 1.3 2000-05-23 20:40:47 mbickel Exp $
+//     $Id: loadpcx.h,v 1.4 2000-05-30 18:39:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/05/23 20:40:47  mbickel
+//      Removed boolean type
+//
 //     Revision 1.2  1999/11/16 03:42:03  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -34,6 +37,7 @@
 #define loadpcx_h
 
 #include "basestrm.h"
+#include "basegfx.h"
 
 extern char loadpcxxy (char *name, char setpal, word x, word y);
 extern char loadpcxxy( pnstream stream, int x, int y, int setpalette = 0 );

@@ -21,10 +21,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "basestrm.h"
-#include "tpascal.inc"
-#include "basegfx.h"
-#include "misc.h"
+#include "../basestrm.h"
+#include "../tpascal.inc"
+#include "../basegfx.h"
+#include "../misc.h"
 
 typedef struct tpcxheader{
            byte     manufacturer;

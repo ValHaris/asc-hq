@@ -1,6 +1,9 @@
-//     $Id: cdrom.h,v 1.4 2000-05-23 20:40:37 mbickel Exp $
+//     $Id: cdrom.h,v 1.1 2000-05-30 18:39:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/05/23 20:40:37  mbickel
+//      Removed boolean type
+//
 //     Revision 1.3  2000/04/27 16:25:16  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -48,7 +51,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "tpascal.inc"
+#include "../tpascal.inc"
 #include "realint.h"
 
      typedef char tdevname[8]; 

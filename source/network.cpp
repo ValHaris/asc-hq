@@ -1,6 +1,9 @@
-//     $Id: network.cpp,v 1.6 2000-05-22 15:40:36 mbickel Exp $
+//     $Id: network.cpp,v 1.7 2000-05-30 18:39:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/05/22 15:40:36  mbickel
+//      Included patches for Win32 version
+//
 //     Revision 1.5  2000/01/31 16:34:46  mbickel
 //      now standard hotkeys in dialog boxes
 //
@@ -54,7 +57,6 @@
 #include "dialog.h"
 #include "mousehnd.h"
 #include "sgstream.h"
-#include "spfldutl.h"
 #include "loadpcx.h"
 
 int netlevel;

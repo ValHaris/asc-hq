@@ -20,7 +20,6 @@
 
 #include "krkr.h"
 #include "..\basestrm.h"
-#include "..\vesa.h"
 
 
 #define write(a) cprintf(a)

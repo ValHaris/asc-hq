@@ -1,6 +1,9 @@
-//     $Id: realint.h,v 1.3 2000-05-23 20:40:48 mbickel Exp $
+//     $Id: realint.h,v 1.1 2000-05-30 18:39:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/05/23 20:40:48  mbickel
+//      Removed boolean type
+//
 //     Revision 1.2  1999/11/16 03:42:24  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -36,7 +39,7 @@
 #include <stdlib.h>
 #include <conio.h>
 
-#include "tpascal.inc"
+#include "../tpascal.inc"
 
 class call_real_int {
           short int memsize;

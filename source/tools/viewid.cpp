@@ -28,7 +28,6 @@
 #include "krkr.h"
 #include "..\sgstream.h"
 #include "..\misc.h"
-#include "..\vesa.h"
 #include "..\basestrm.h"
 #include "..\basegfx.h"
 #include "..\loadbi3.h"

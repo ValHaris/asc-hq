@@ -1,6 +1,15 @@
-//     $Id: basestrm.h,v 1.10 2000-04-27 16:25:15 mbickel Exp $
+//     $Id: basestrm.h,v 1.11 2000-05-30 18:39:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/04/27 16:25:15  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.9  2000/03/11 19:51:12  mbickel
 //      Removed file name length limitation under linux
 //      No weapon sound for attacked units any more (only attacker)
@@ -91,23 +100,9 @@ extern "C" {
  #define maxfilenamelength 255
 #endif
 
-// #pragma library (basestrm)
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////        Watchpointer
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*
-class twatchptr {
-       public:
-         void* ptr;
-         void** pptr;
-         twatchptr ( void );
-         twatchptr ( void* pt );
-         twatchptr ( void** pt );
-         ~twatchptr ();
-         void free ( void );
-      };
-*/
 
+
+enum FS_StreamMode { fs_undefined, fs_read, fs_write };
 
 
 class CharBuf {
@@ -258,11 +253,9 @@ class tnstream {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   #ifndef pmemorystreambuf_defined
-  #define pmemorystreambuf_defined
-
-  typedef class tmemorystreambuf* pmemorystreambuf;
-  typedef class tmemorystream* pmemorystream;
-
+   #define pmemorystreambuf_defined
+   typedef class tmemorystreambuf* pmemorystreambuf;
+   typedef class tmemorystream* pmemorystream;
   #endif
 
 class tmemorystreambuf {
@@ -581,7 +574,7 @@ typedef tnfilestream*  pnfilestream ;
 
 class ContainerIndexer {
        public:
-           virtual void addfile ( const char* filename, const pncontainerstream stream ) = 0;
+           virtual void addfile ( const char* filename, const pncontainerstream stream, int directoryLevel ) = 0;
      };
 
 
@@ -594,7 +587,7 @@ class tncontainerstream : public tn_file_buf_stream {
                  int actname;
 
                public:
-                 tncontainerstream ( const char* containerfilename, ContainerIndexer* indexer );
+                 tncontainerstream ( const char* containerfilename, ContainerIndexer* indexer, int directoryLevel );
                  void opencontainerfile ( const char* name );
                  int  getcontainerfilesize ( const char* name );
                  int readcontainerdata ( void* buf, int size, int excpt = 1 );
@@ -607,11 +600,15 @@ class tncontainerstream : public tn_file_buf_stream {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class ContainerCollector : public ContainerIndexer {
-           struct ContainerCollectorIndex {
+         public:
+           struct FileIndex {
               char* name;
               pncontainerstream container;
+              int directoryLevel;
            };
-           dynamic_array<ContainerCollectorIndex> index[256];    // not very efficient, but who cares :-)
+         protected:
+
+           dynamic_array<FileIndex> index[256];    // not very efficient, but who cares :-)
 
            dynamic_array<pncontainerstream> container;
            int containernum;
@@ -622,10 +619,11 @@ class ContainerCollector : public ContainerIndexer {
          public:
            ContainerCollector ( void );
            void init ( const char* wildcard );
-           void addfile ( const char* filename, const pncontainerstream stream );
-           pncontainerstream getfile ( const char* filename );
-           char* getfirstname ( void );
-           char* getnextname ( void );
+           void addfile ( const char* filename, const pncontainerstream stream, int directoryLevel );
+           // pncontainerstream getfile ( const char* filename );
+           FileIndex* getfile ( const char* filename );
+           FileIndex* getfirstname ( void );
+           FileIndex* getnextname ( void );
            virtual ~ContainerCollector();
         };
 
@@ -637,14 +635,27 @@ class ContainerCollector : public ContainerIndexer {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class tfindfile {
+       /*
+        class Node {
+                char* name;
+                int deletename;
+                int directoryLevel;
+              public:
+                Node ( char* _name, int _deletename, int _dirLevel );
+               ~Node();
+            };
+       */
+                   
         int found;
         int act;
         dynamic_array<char*> names;
         dynamic_array<char>  namedupes;
+        dynamic_array<int>   directoryLevel;   
+        dynamic_array<int>   isInContainer;   
 
       public:
         tfindfile ( const char* name );
-        char* getnextname ( void );
+        char* getnextname ( int* loc = NULL, int* inContainer = NULL );
         ~tfindfile();
 
      };
@@ -685,6 +696,7 @@ extern const char pathdelimitter;
 extern const char* pathdelimitterstring; 
 extern int filesize( char *name);
 
+extern void addSearchPath ( const char* path );
 
 #endif
 

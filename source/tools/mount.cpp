@@ -435,6 +435,13 @@ int main(int argc, char *argv[] )
    printf(" average compression is %d%% \noverhead is %d byte \n", 100 * compsize / uncompsize, filesize ( argv[2] ) - compsize );
 
    printf ( "completed \n" );
+   remove ( "temp.rle" );
+   remove ( "temp.mzl" );
+
+  #ifndef NOLZW
+   remove ( "temp.lzw" );
+  #endif
+
    return 0;
 }
 

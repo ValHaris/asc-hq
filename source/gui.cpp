@@ -1,6 +1,12 @@
-//     $Id: gui.cpp,v 1.20 2000-05-18 17:48:39 mbickel Exp $
+//     $Id: gui.cpp,v 1.21 2000-05-30 18:39:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/05/18 17:48:39  mbickel
+//      When moving units out of buildings/transports, indirectly accessible
+//         fields are marked now too
+//      The unit info display was not updated when changing the height of an
+//         helicopter
+//
 //     Revision 1.19  2000/05/11 15:45:12  mbickel
 //      No vehicle action icons are shown when another action is running
 //
@@ -119,7 +125,6 @@
 #include "keybp.h"
 #include "misc.h"
 #include "gui.h"
-#include "spfldutl.h"
 
 #include "spfst.h"
 #include "mousehnd.h"
