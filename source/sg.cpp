@@ -69,7 +69,6 @@
 #include <memory>
 #include <SDL_image.h>
 
-#include "smpeg/smpeg.h"
 #include "SDL_mixer.h"
 
 
