@@ -472,6 +472,9 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
 int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path )
 {
    AStar3D::Path::const_iterator pi = path.begin();
+   if ( pi == path.end() )
+      return 0;
+
    while ( pi != path.end() ) {
       if ( pi->z == veh->height ) {
          VehicleMovement vm ( mapDisplay, NULL );

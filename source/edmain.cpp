@@ -2,9 +2,13 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.43 2001-05-19 13:07:58 mbickel Exp $
+//     $Id: edmain.cpp,v 1.44 2001-05-21 12:46:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2001/05/19 13:07:58  mbickel
+//      ASC now compiles with Borland C++ Builder again
+//      Added getopt for use with BCB
+//
 //     Revision 1.42  2001/05/17 20:10:22  mbickel
 //      Fixed: mapeditor was unable to load maps
 //      Removed debugging output from bi3 map loader
@@ -680,22 +684,6 @@ void         editor(void)
 
 //* õS Diverse
 
-void dispmessageonexit ( void ) {
-   int i;
-   printf("\n");
-   if (exitmessage[0] != NULL) {
-      for (i=0;i<20 ;i++ ) {
-          if (exitmessage[i] != NULL) {
-             printf(exitmessage[i]);
-             printf("\n");
-          } /* endif */
-      }
-   } else {
-      printf("exiting ... \n \n");
-   } /* endif */
-}
-
-
 void closesvgamode( void )
 {
    closegraphics();
@@ -840,9 +828,6 @@ int main(int argc, char *argv[] )
    #endif
 
    signal ( SIGINT, SIG_IGN );
-
-   memset(exitmessage, 0, sizeof ( exitmessage ));
-   atexit ( dispmessageonexit );
 
    initFileIO( cl->c().c_str() );
 

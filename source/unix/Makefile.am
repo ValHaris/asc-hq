@@ -17,6 +17,4 @@ asc_LDADD   = ../ai/libai.a ../sdl/libsdl.a ../libs/triangul/libtriangul.a \
 
 SUBDIRS = mapeditor
 
-EXTRA_DIST = *.cpp *.h *.inc
-
 CXXFLAGS = @CXXFLAGS@ -I./ -Dsgmain -DFREEMAPZOOM -DNEWKEYB

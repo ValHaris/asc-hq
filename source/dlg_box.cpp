@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.47 2001-02-26 12:35:07 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.48 2001-05-21 12:46:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2001/02/26 12:35:07  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.46  2001/02/18 15:37:07  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -1979,8 +1985,6 @@ void tdisplaymessage::run ( void )
    } while ( status == 0 ); /* enddo */
 }
 
-char* exitmessage[20];
-
 
 // num   0: Box bleibt aufgeklappt,
 //       1 box wird geschlossen , text rot (Fehler),
@@ -2046,9 +2050,8 @@ void displaymessage( const char* formatstring, int num, ... )
    #endif
 
    if ( !displayInternally ) {
-      for ( int i=0; i<= linenum ;i++ ) {
-         exitmessage[i] = stringtooutput[i];
-      } /* endfor */
+      for ( int i=0; i<= linenum ;i++ )
+          fprintf(stderr,"%s\n",stringtooutput[i]);
    } else {
       static int messageboxopen = 0;
       if ( messageboxopen )
@@ -2080,11 +2083,6 @@ void displaymessage( const char* formatstring, int num, ... )
    } /* endif */
 
    if ( num == 2 ) {
-     #ifdef _DOS_
-      #ifdef NEWKEYB
-       closekeyb();
-      #endif
-     #endif
       exit ( 1 );
    }
 
@@ -2177,7 +2175,7 @@ void         tdialogbox::stredit(char *       s,
                  } 
             break; 
             
-            case cto_left:   if (position > 1)
+            case cto_left:   if (position >= 1)
                            position--;
             break; 
             
@@ -2232,7 +2230,7 @@ void         tdialogbox::stredit(char *       s,
                  } 
             break; 
             
-            case ct_left:   if (position > 1)
+            case ct_left:   if (position >= 1)
                            position--;
             break; 
             
@@ -2445,7 +2443,7 @@ void         tdialogbox::intedit(int *    st,
                      }
                 break;
 
-                case cto_left:   if (position > 1)
+                case cto_left:   if (position >= 1)
                                position--;
                 break;
 
@@ -2500,7 +2498,7 @@ void         tdialogbox::intedit(int *    st,
                      }
                 break;
 
-                case ct_left:   if (position > 1)
+                case ct_left:   if (position >= 1)
                                position--;
                 break;
 

@@ -225,17 +225,17 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          int dd2 =  va_arg ( paramlist, int );
          int wpnum =  va_arg ( paramlist, int );
          int size = 9;
-         stream->writedata2 ( action );
-         stream->writedata2 ( size );
-         stream->writedata2 ( x1 );
-         stream->writedata2 ( y1 );
-         stream->writedata2 ( x2 );
-         stream->writedata2 ( y2 );
-         stream->writedata2 ( ad1 );
-         stream->writedata2 ( ad2 );
-         stream->writedata2 ( dd1 );
-         stream->writedata2 ( dd2 );
-         stream->writedata2 ( wpnum );
+         stream->writeChar ( action );
+         stream->writeInt ( size );
+         stream->writeInt ( x1 );
+         stream->writeInt ( y1 );
+         stream->writeInt ( x2 );
+         stream->writeInt ( y2 );
+         stream->writeInt ( ad1 );
+         stream->writeInt ( ad2 );
+         stream->writeInt ( dd1 );
+         stream->writeInt ( dd2 );
+         stream->writeInt ( wpnum );
       }
 
       if ( action == rpl_move ) {
@@ -244,14 +244,14 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          int x2 =  va_arg ( paramlist, int );
          int y2 =  va_arg ( paramlist, int );
          int nwid = va_arg ( paramlist, int );
-         stream->writedata2 ( action );
+         stream->writeChar ( action );
          int size = 5;
-         stream->writedata2 ( size );
-         stream->writedata2 ( x1 );
-         stream->writedata2 ( y1 );
-         stream->writedata2 ( x2 );
-         stream->writedata2 ( y2 );
-         stream->writedata2 ( nwid );
+         stream->writeInt ( size );
+         stream->writeInt ( x1 );
+         stream->writeInt ( y1 );
+         stream->writeInt ( x2 );
+         stream->writeInt ( y2 );
+         stream->writeInt ( nwid );
       }
       if ( action == rpl_move2 ) {
          int x1 =  va_arg ( paramlist, int );
@@ -260,15 +260,15 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          int y2 =  va_arg ( paramlist, int );
          int nwid = va_arg ( paramlist, int );
          int height = va_arg ( paramlist, int );
-         stream->writedata2 ( action );
+         stream->writeChar ( action );
          int size = 6;
-         stream->writedata2 ( size );
-         stream->writedata2 ( x1 );
-         stream->writedata2 ( y1 );
-         stream->writedata2 ( x2 );
-         stream->writedata2 ( y2 );
-         stream->writedata2 ( nwid );
-         stream->writedata2 ( height );
+         stream->writeInt ( size );
+         stream->writeInt ( x1 );
+         stream->writeInt ( y1 );
+         stream->writeInt ( x2 );
+         stream->writeInt ( y2 );
+         stream->writeInt ( nwid );
+         stream->writeInt ( height );
       }
 
       if ( action == rpl_changeheight ) {
@@ -279,64 +279,64 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          int nwid = va_arg ( paramlist, int );
          int oldheight = va_arg ( paramlist, int );
          int newheight = va_arg ( paramlist, int );
-         stream->writedata2 ( action );
+         stream->writeChar ( action );
          int size = 7;
-         stream->writedata2 ( size );
-         stream->writedata2 ( x1 );
-         stream->writedata2 ( y1 );
-         stream->writedata2 ( x2 );
-         stream->writedata2 ( y2 );
-         stream->writedata2 ( nwid );
-         stream->writedata2 ( oldheight );
-         stream->writedata2 ( newheight );
+         stream->writeInt ( size );
+         stream->writeInt ( x1 );
+         stream->writeInt ( y1 );
+         stream->writeInt ( x2 );
+         stream->writeInt ( y2 );
+         stream->writeInt ( nwid );
+         stream->writeInt ( oldheight );
+         stream->writeInt ( newheight );
       }
       if ( action == rpl_convert ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
          int col =  va_arg ( paramlist, int );
-         stream->writedata2 ( action );
+         stream->writeChar ( action );
          int size = 3;
-         stream->writedata2 ( size );
-         stream->writedata2 ( x );
-         stream->writedata2 ( y );
-         stream->writedata2 ( col );
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( col );
       }
       if ( action == rpl_buildobj || action == rpl_remobj ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
          int id =  va_arg ( paramlist, int );
-         stream->writedata2 ( action );
+         stream->writeChar ( action );
          int size = 3;
-         stream->writedata2 ( size );
-         stream->writedata2 ( x );
-         stream->writedata2 ( y );
-         stream->writedata2 ( id );
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( id );
       }
       if ( action == rpl_buildtnk ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
          int id =  va_arg ( paramlist, int );
          int col =  va_arg ( paramlist, int );
-         stream->writedata2 ( action );
+         stream->writeChar ( action );
          int size = 4;
-         stream->writedata2 ( size );
-         stream->writedata2 ( x );
-         stream->writedata2 ( y );
-         stream->writedata2 ( id );
-         stream->writedata2 ( col );
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( id );
+         stream->writeInt ( col );
       }
       if ( action == rpl_putbuilding ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
          int id = va_arg ( paramlist, int );
          int col =  va_arg ( paramlist, int );
-         stream->writedata2 ( action );
+         stream->writeChar ( action );
          int size = 4;
-         stream->writedata2 ( size );
-         stream->writedata2 ( x );
-         stream->writedata2 ( y );
-         stream->writedata2 ( id );
-         stream->writedata2 ( col );
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( id );
+         stream->writeInt ( col );
       }
       if ( action == rpl_putmine ) {
          int x =  va_arg ( paramlist, int );
@@ -344,32 +344,32 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          int col =  va_arg ( paramlist, int );
          int typ = va_arg ( paramlist, int );
          int strength = va_arg ( paramlist, int );
-         stream->writedata2 ( action );
+         stream->writeChar ( action );
          int size = 5;
-         stream->writedata2 ( size );
-         stream->writedata2 ( x );
-         stream->writedata2 ( y );
-         stream->writedata2 ( col );
-         stream->writedata2 ( typ );
-         stream->writedata2 ( strength );
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( col );
+         stream->writeInt ( typ );
+         stream->writeInt ( strength );
       }
       if ( action == rpl_removemine ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
-         stream->writedata2 ( action );
+         stream->writeChar ( action );
          int size = 2;
-         stream->writedata2 ( size );
-         stream->writedata2 ( x );
-         stream->writedata2 ( y );
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
       }
       if ( action == rpl_removebuilding ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
-         stream->writedata2 ( action );
+         stream->writeChar ( action );
          int size = 2;
-         stream->writedata2 ( size );
-         stream->writedata2 ( x );
-         stream->writedata2 ( y );
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
       }
 
       if ( action == rpl_produceunit ) {
@@ -379,56 +379,60 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          int y =  va_arg ( paramlist, int );
          int cl = va_arg ( paramlist, int );
          int nwid = va_arg ( paramlist, int );
-         stream->writedata2 ( action );
+         stream->writeChar ( action );
          int size = 6;
-         stream->writedata2 ( size );
-         stream->writedata2 ( id );
-         stream->writedata2 ( col );
-         stream->writedata2 ( x );
-         stream->writedata2 ( y );
-         stream->writedata2 ( cl );
-         stream->writedata2 ( nwid );
+         stream->writeInt ( size );
+         stream->writeInt ( id );
+         stream->writeInt ( col );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( cl );
+         stream->writeInt ( nwid );
       }
       if ( action == rpl_removeunit ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
          int nwid = va_arg ( paramlist, int );
-         stream->writedata2 ( action );
+         stream->writeChar ( action );
          int size = 3;
-         stream->writedata2 ( size );
-         stream->writedata2 ( x );
-         stream->writedata2 ( y );
-         stream->writedata2 ( nwid );
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( nwid );
       }
       if ( action == rpl_trainunit ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
          int exp =  va_arg ( paramlist, int );
          int nwid = va_arg ( paramlist, int );
-         stream->writedata2 ( action );
+         stream->writeChar ( action );
          int size = 4;
-         stream->writedata2 ( size );
-         stream->writedata2 ( x );
-         stream->writedata2 ( y );
-         stream->writedata2 ( exp );
-         stream->writedata2 ( nwid );
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( exp );
+         stream->writeInt ( nwid );
       }
       if ( action == rpl_shareviewchange ) {
-         stream->writedata2 ( action );
+         stream->writeChar ( action );
          if ( actmap->shareview ) {
             int size = sizeof ( tmap::Shareview ) / sizeof ( int );
-            stream->writedata2 ( size );
-            stream->writedata2 ( *actmap->shareview );
+            stream->writeInt ( size );
+            for ( int a = 0; a < 8; a++ )
+               for ( int b = 0; b < 8; b++ )
+                   stream->writeChar ( actmap->shareview->mode[a][b] );
          } else {
             int size = 0;
-            stream->writedata2 ( size );
+            stream->writeInt ( size );
          }
       }
       if ( action == rpl_alliancechange ) {
-         stream->writedata2 ( action );
+         stream->writeChar ( action );
          int size = sizeof ( actmap->alliances ) / sizeof ( int );
-         stream->writedata2 ( size );
-         stream->writedata2 ( actmap->alliances );
+         stream->writeInt ( size );
+         for ( int a = 0; a < 8; a++ )
+            for ( int b = 0; b < 8; b++ )
+               stream->writeChar ( actmap->alliances[a][b] );
       }
       if ( action == rpl_refuel ) {
          int x =  va_arg ( paramlist, int );
@@ -436,27 +440,27 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          int nwid = va_arg ( paramlist, int );
          int pos = va_arg ( paramlist, int );
          int amnt = va_arg ( paramlist, int );
-         stream->writedata2 ( action );
+         stream->writeChar ( action );
          int size = 5;
-         stream->writedata2 ( size );
-         stream->writedata2 ( x );
-         stream->writedata2 ( y );
-         stream->writedata2 ( nwid );
-         stream->writedata2 ( pos );
-         stream->writedata2 ( amnt );
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( nwid );
+         stream->writeInt ( pos );
+         stream->writeInt ( amnt );
       }
       if ( action == rpl_bldrefuel ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
          int pos = va_arg ( paramlist, int );
          int amnt = va_arg ( paramlist, int );
-         stream->writedata2 ( action );
+         stream->writeChar ( action );
          int size = 4;
-         stream->writedata2 ( size );
-         stream->writedata2 ( x );
-         stream->writedata2 ( y );
-         stream->writedata2 ( pos );
-         stream->writedata2 ( amnt );
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( pos );
+         stream->writeInt ( amnt );
       }
 
       va_end ( paramlist );
@@ -575,13 +579,12 @@ void trunreplay :: execnextreplaymove ( void )
    if ( nextaction != rpl_finished ) {
       switch ( nextaction ) {
       case rpl_move: {
-                        int x1, y1, x2, y2, nwid, size;
-                        stream->readdata2 ( size );
-                        stream->readdata2 ( x1 );
-                        stream->readdata2 ( y1 );
-                        stream->readdata2 ( x2 );
-                        stream->readdata2 ( y2 );
-                        stream->readdata2 ( nwid );
+                        int size = stream->readInt();
+                        int x1 = stream->readInt();
+                        int y1 = stream->readInt();
+                        int x2 = stream->readInt();
+                        int y2 = stream->readInt();
+                        int nwid = stream->readInt();
                         readnextaction();
 
                         pvehicle eht = actmap->getUnit ( x1, y1, nwid );
@@ -604,14 +607,13 @@ void trunreplay :: execnextreplaymove ( void )
                      }
          break;
       case rpl_move2: {
-                        int x1, y1, x2, y2, nwid, size, height;
-                        stream->readdata2 ( size );
-                        stream->readdata2 ( x1 );
-                        stream->readdata2 ( y1 );
-                        stream->readdata2 ( x2 );
-                        stream->readdata2 ( y2 );
-                        stream->readdata2 ( nwid );
-                        stream->readdata2 ( height );
+                        int size = stream->readInt();
+                        int x1 = stream->readInt();
+                        int y1  = stream->readInt();
+                        int x2 = stream->readInt();
+                        int y2 = stream->readInt();
+                        int nwid = stream->readInt();
+                        int height = stream->readInt();
                         readnextaction();
 
                         pvehicle eht = actmap->getUnit ( x1, y1, nwid );
@@ -634,17 +636,16 @@ void trunreplay :: execnextreplaymove ( void )
                      }
          break;
       case rpl_attack: {
-                          int x1, y1, x2, y2, ad1, ad2, dd1, dd2, size, wpnum;
-                          stream->readdata2 ( size );
-                          stream->readdata2 ( x1 );
-                          stream->readdata2 ( y1 );
-                          stream->readdata2 ( x2 );
-                          stream->readdata2 ( y2 );
-                          stream->readdata2 ( ad1 );
-                          stream->readdata2 ( ad2 );
-                          stream->readdata2 ( dd1 );
-                          stream->readdata2 ( dd2 );
-                          stream->readdata2 ( wpnum );
+                          int size = stream->readInt();
+                          int x1 = stream->readInt();
+                          int y1 = stream->readInt();
+                          int x2 = stream->readInt();
+                          int y2 = stream->readInt();
+                          int ad1 = stream->readInt();
+                          int ad2 = stream->readInt();
+                          int dd1 = stream->readInt();
+                          int dd2 = stream->readInt();
+                          int wpnum = stream->readInt();
                           readnextaction();
 
                           pfield fld = getfield ( x1, y1 );
@@ -705,15 +706,14 @@ void trunreplay :: execnextreplaymove ( void )
                       }
          break;
       case rpl_changeheight: {
-                        int x1, y1, x2, y2, nwid, size, oldheight, newheight;
-                        stream->readdata2 ( size );
-                        stream->readdata2 ( x1 );
-                        stream->readdata2 ( y1 );
-                        stream->readdata2 ( x2 );
-                        stream->readdata2 ( y2 );
-                        stream->readdata2 ( nwid );
-                        stream->readdata2 ( oldheight );
-                        stream->readdata2 ( newheight );
+                        int size = stream->readInt();
+                        int x1 = stream->readInt();
+                        int y1 = stream->readInt();
+                        int x2 = stream->readInt();
+                        int y2 = stream->readInt();
+                        int nwid = stream->readInt();
+                        int oldheight = stream->readInt();
+                        int newheight = stream->readInt();
                         readnextaction();
 
                         pvehicle eht = actmap->getUnit ( x1, y1, nwid );
@@ -745,11 +745,10 @@ void trunreplay :: execnextreplaymove ( void )
                      }
          break;
       case rpl_convert: {
-                           int x, y, col, size;
-                           stream->readdata2 ( size );
-                           stream->readdata2 ( x );
-                           stream->readdata2 ( y );
-                           stream->readdata2 ( col );
+                           int size = stream->readInt();
+                           int x = stream->readInt();
+                           int y = stream->readInt();
+                           int col = stream->readInt();
                            readnextaction();
 
 
@@ -774,13 +773,11 @@ void trunreplay :: execnextreplaymove ( void )
          break;
       case rpl_remobj:
       case rpl_buildobj: {
-                           int x, y, id, size;
-                           stream->readdata2 ( size );
-                           stream->readdata2 ( x );
-                           stream->readdata2 ( y );
-                           stream->readdata2 ( id );
+                           int size = stream->readInt();
+                           int x = stream->readInt();
+                           int y = stream->readInt();
+                           int id = stream->readInt();
                            readnextaction();
-
 
                            pobjecttype obj = getobjecttype_forid ( id );
 
@@ -803,12 +800,11 @@ void trunreplay :: execnextreplaymove ( void )
                        }
          break;
       case rpl_buildtnk: {
-                           int x, y, id, size, col;
-                           stream->readdata2 ( size );
-                           stream->readdata2 ( x );
-                           stream->readdata2 ( y );
-                           stream->readdata2 ( id );
-                           stream->readdata2 ( col );
+                           int size = stream->readInt();
+                           int x = stream->readInt();
+                           int y = stream->readInt();
+                           int id = stream->readInt();
+                           int col = stream->readInt();
                            readnextaction();
 
                            pfield fld = getfield ( x, y );
@@ -832,14 +828,12 @@ void trunreplay :: execnextreplaymove ( void )
                        }
          break;
       case rpl_putbuilding : {
-                              int x, y, id, size, color;
-                               stream->readdata2 ( size );
-                               stream->readdata2 ( x );
-                               stream->readdata2 ( y );
-                               stream->readdata2 ( id );
-                               stream->readdata2 ( color );
+                               int size = stream->readInt();
+                               int x = stream->readInt();
+                               int y = stream->readInt();
+                               int id = stream->readInt();
+                               int color = stream->readInt();
                                readnextaction();
-
 
                                pfield fld = getfield ( x, y );
 
@@ -857,15 +851,13 @@ void trunreplay :: execnextreplaymove ( void )
                             }
          break;
       case rpl_putmine: {
-                           int x, y, col, typ, strength, size;
-                           stream->readdata2 ( size );
-                           stream->readdata2 ( x );
-                           stream->readdata2 ( y );
-                           stream->readdata2 ( col );
-                           stream->readdata2 ( typ );
-                           stream->readdata2 ( strength );
+                           int size = stream->readInt();
+                           int x = stream->readInt();
+                           int y = stream->readInt();
+                           int col = stream->readInt();
+                           int typ = stream->readInt();
+                           int strength = stream->readInt();
                            readnextaction();
-
 
                            pfield fld = getfield ( x, y );
                            if ( fld ) {
@@ -881,12 +873,10 @@ void trunreplay :: execnextreplaymove ( void )
                        }
          break;
       case rpl_removemine: {
-                           int x, y, size;
-                           stream->readdata2 ( size );
-                           stream->readdata2 ( x );
-                           stream->readdata2 ( y );
+                           int size = stream->readInt();
+                           int x = stream->readInt();
+                           int y = stream->readInt();
                            readnextaction();
-
 
                            pfield fld = getfield ( x, y );
                            if ( fld ) {
@@ -902,12 +892,10 @@ void trunreplay :: execnextreplaymove ( void )
                        }
          break;
       case rpl_removebuilding: {
-                           int x, y, size;
-                           stream->readdata2 ( size );
-                           stream->readdata2 ( x );
-                           stream->readdata2 ( y );
+                           int size = stream->readInt();
+                           int x = stream->readInt();
+                           int y = stream->readInt();
                            readnextaction();
-
 
                            pfield fld = getfield ( x, y );
                            if ( fld && fld->building ) {
@@ -928,14 +916,13 @@ void trunreplay :: execnextreplaymove ( void )
                        }
          break;
       case  rpl_produceunit : {
-                                 int id, col, x, y, cl, size, nwid;
-                                 stream->readdata2 ( size );
-                                 stream->readdata2 ( id );
-                                 stream->readdata2 ( col );
-                                 stream->readdata2 ( x );
-                                 stream->readdata2 ( y );
-                                 stream->readdata2 ( cl );
-                                 stream->readdata2 ( nwid );
+                                 int size = stream->readInt();
+                                 int id = stream->readInt();
+                                 int col = stream->readInt();
+                                 int x = stream->readInt();
+                                 int y = stream->readInt();
+                                 int cl = stream->readInt();
+                                 int nwid = stream->readInt();
                                  readnextaction();
 
                                  pfield fld = getfield ( x, y );
@@ -969,11 +956,10 @@ void trunreplay :: execnextreplaymove ( void )
                               }
          break;
       case rpl_removeunit : {
-                                 int x, y, size, nwid;
-                                 stream->readdata2 ( size );
-                                 stream->readdata2 ( x );
-                                 stream->readdata2 ( y );
-                                 stream->readdata2 ( nwid );
+                                 int size = stream->readInt();
+                                 int x = stream->readInt();
+                                 int y = stream->readInt();
+                                 int nwid = stream->readInt();
                                  readnextaction();
 
                                  if ( !removeunit ( x, y, nwid ))
@@ -981,14 +967,12 @@ void trunreplay :: execnextreplaymove ( void )
                               }
          break;
       case rpl_trainunit:{
-                                 int x, y, size, exp, nwid;
-                                 stream->readdata2 ( size );
-                                 stream->readdata2 ( x );
-                                 stream->readdata2 ( y );
-                                 stream->readdata2 ( exp );
-                                 stream->readdata2 ( nwid );
+                                 int size = stream->readInt();
+                                 int x = stream->readInt();
+                                 int y = stream->readInt();
+                                 int exp = stream->readInt();
+                                 int nwid = stream->readInt();
                                  readnextaction();
-
 
                                  pvehicle eht = actmap->getUnit ( x, y, nwid );
                                  if ( eht ) {
@@ -999,11 +983,15 @@ void trunreplay :: execnextreplaymove ( void )
                               }
          break;
       case rpl_shareviewchange: {
-                                 int size;
+                                 int size = stream->readInt();
                                  tmap::Shareview* sv = new tmap::Shareview;
-                                 stream->readdata2 ( size );
                                  if ( size ) {
-                                    stream->readdata2 ( *sv );
+                                    for ( int a = 0; a < 8; a++ )
+                                       for ( int b = 0; b < 8; b++)
+                                           sv->mode[a][b] = stream->readChar();
+                                    sv->recalculateview = stream->readInt();
+
+                                    // stream->readdata2 ( *sv );
                                     if ( actmap->shareview )
                                        delete actmap->shareview;
                                     actmap->shareview = sv;
@@ -1020,21 +1008,21 @@ void trunreplay :: execnextreplaymove ( void )
                               }
          break;
       case rpl_alliancechange: {
-                                 int size;
-                                 stream->readdata2 ( size );
-                                 stream->readdata2 ( actmap->alliances );
+                                 int size = stream->readInt();
+                                 for ( int a = 0; a < 8; a++ )
+                                    for ( int b = 0; b < 8; b++ )
+                                       actmap->alliances[a][b] = stream->readChar();
                                  readnextaction();
                                  dashboard.x = 0xffff;
                               }
          break;
       case rpl_refuel : {
-                                 int x, y, size, nwid, pos, amnt;
-                                 stream->readdata2 ( size );
-                                 stream->readdata2 ( x );
-                                 stream->readdata2 ( y );
-                                 stream->readdata2 ( nwid );
-                                 stream->readdata2 ( pos );
-                                 stream->readdata2 ( amnt );
+                                 int size = stream->readInt();
+                                 int x = stream->readInt();
+                                 int y = stream->readInt();
+                                 int nwid = stream->readInt();
+                                 int pos = stream->readInt();
+                                 int amnt = stream->readInt();
                                  readnextaction();
 
                                  pvehicle eht = actmap->getUnit ( x, y, nwid );
@@ -1056,12 +1044,11 @@ void trunreplay :: execnextreplaymove ( void )
                               }
          break;
       case rpl_bldrefuel : {
-                                 int x, y, size, pos, amnt;
-                                 stream->readdata2 ( size );
-                                 stream->readdata2 ( x );
-                                 stream->readdata2 ( y );
-                                 stream->readdata2 ( pos );
-                                 stream->readdata2 ( amnt );
+                                 int size = stream->readInt();
+                                 int x = stream->readInt();
+                                 int y = stream->readInt();
+                                 int pos = stream->readInt();
+                                 int amnt = stream->readInt();
                                  readnextaction();
 
                                  pbuilding bld = actmap->getField(x,y)->building;
@@ -1075,10 +1062,9 @@ void trunreplay :: execnextreplaymove ( void )
                               }
          break;
       default:{
-                 int size, temp;
-                 stream->readdata2 ( size );
+                 int size = stream->readInt();
                  for ( int i = 0; i< size; i++ )
-                    stream->readdata2 ( temp );
+                    stream->readInt();
 
                  readnextaction();
 
@@ -1096,7 +1082,7 @@ void trunreplay :: execnextreplaymove ( void )
 void trunreplay :: readnextaction ( void )
 {
       if ( stream->dataavail () )
-         stream->readdata2 ( nextaction );
+         nextaction = stream->readChar();
       else
          nextaction = rpl_finished;
 }
@@ -1106,18 +1092,17 @@ preactionfire_replayinfo trunreplay::getnextreplayinfo ( void )
 {
    if ( nextaction == rpl_reactionfire ) {
       preactionfire_replayinfo reac = new treactionfire_replayinfo;
-      int size;
-      stream->readdata2 ( size );
+      int size = stream->readInt();
 
-      stream->readdata2 ( reac->x1 );
-      stream->readdata2 ( reac->y1 );
-      stream->readdata2 ( reac->x2 );
-      stream->readdata2 ( reac->y2 );
-      stream->readdata2 ( reac->ad1 );
-      stream->readdata2 ( reac->ad2 );
-      stream->readdata2 ( reac->dd1 );
-      stream->readdata2 ( reac->dd2 );
-      stream->readdata2 ( reac->wpnum );
+      reac->x1 = stream->readInt();
+      reac->y1 = stream->readInt( );
+      reac->x2 = stream->readInt( );
+      reac->y2 = stream->readInt( );
+      reac->ad1 = stream->readInt( );
+      reac->ad2 = stream->readInt( );
+      reac->dd1 = stream->readInt( );
+      reac->dd2 = stream->readInt( );
+      reac->wpnum = stream->readInt( );
 
       readnextaction();
 
@@ -1150,7 +1135,7 @@ int  trunreplay :: run ( int player )
    stream = &guidatastream;
 
    if ( stream->dataavail () )
-      stream->readdata2 ( nextaction );
+      nextaction = stream->readChar();
    else
       nextaction = rpl_finished;
 

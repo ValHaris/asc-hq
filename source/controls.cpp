@@ -3,9 +3,15 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.101 2001-03-30 12:43:15 mbickel Exp $
+//     $Id: controls.cpp,v 1.102 2001-05-21 12:46:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.101  2001/03/30 12:43:15  mbickel
+//      Added 3D pathfinding
+//      some cleanup and documentation
+//      splitted the ai into several files, now located in the ai subdirectory
+//      AI cares about airplane servicing and range constraints
+//
 //     Revision 1.100  2001/03/23 16:02:55  mbickel
 //      Some restructuring;
 //      started rewriting event system
@@ -2990,8 +2996,10 @@ void initNetworkGame ( void )
 {
    while ( actmap->player[actmap->actplayer].stat != Player::human ) {
 
-     if ( actmap->player[actmap->actplayer].stat == Player::computer )
+     if ( actmap->player[actmap->actplayer].stat == Player::computer ) {
+        computeview( actmap );
         runai(-1);
+     }
      endTurn();
      nextPlayer();
    }

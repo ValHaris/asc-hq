@@ -74,7 +74,7 @@ SDL_LIBS = @SDL_LIBS@
 SGML2MAN = @SGML2MAN@
 VERSION = @VERSION@
 
-SUBDIRS = @GENCL@ docs sdl libs unix tools ai
+SUBDIRS = @GENCL@ docs sdl libs ai unix tools
 EXTRA_DIST = *.cpp *.h *.inc
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h

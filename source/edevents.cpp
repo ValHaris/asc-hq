@@ -2,9 +2,13 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.22 2001-03-23 16:02:56 mbickel Exp $
+//     $Id: edevents.cpp,v 1.23 2001-05-21 12:46:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2001/03/23 16:02:56  mbickel
+//      Some restructuring;
+//      started rewriting event system
+//
 //     Revision 1.21  2001/02/26 12:35:09  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -1759,7 +1763,7 @@ void         tcreateevent::buttonpressed(int         id)
                                    if ( !actmap->player[pp].buildingList.empty() )
                                       cnt++;
                                 if ( cnt ) {
-                                   if ( ae->trigger_data[nid]->building ) {
+                                   if ( ae->trigger_data[nid] && ae->trigger_data[nid]->building ) {
                                       MapCoordinate mc = ae->trigger_data[nid]->building->getEntry();
                                       x = mc.x;
                                       y = mc.y;
@@ -1776,11 +1780,14 @@ void         tcreateevent::buttonpressed(int         id)
                                        }
                                    }  while (!((x == 50000) || abb)); 
                                    redraw();
-                                   if ((x != 50000) && abb) { 
+                                   if ((x != 50000) && abb) {
+                                      if ( !ae->trigger_data[nid] )
+                                         ae->trigger_data[nid] = new tevent::LargeTriggerData;
                                       ae->trigger_data[nid]->building = pf->building; 
                                       ae->trigger[nid] = rnr; 
                                    } 
-                                   else ae->trigger[nid] = 0; 
+                                   else
+                                      ae->trigger[nid] = 0;
                                 } else {
                                    displaymessage("no buildings on map !", 1 );
                                    ae->trigger[nid] = 0;

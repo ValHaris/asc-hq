@@ -1,3 +1,3 @@
-SUBDIRS = @GENCL@ docs sdl libs unix tools ai
+SUBDIRS = @GENCL@ docs sdl libs ai unix tools
 EXTRA_DIST = *.cpp *.h *.inc
 

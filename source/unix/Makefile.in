@@ -83,8 +83,6 @@ asc_LDADD = ../ai/libai.a ../sdl/libsdl.a ../libs/triangul/libtriangul.a -lSDL -
 
 SUBDIRS = mapeditor
 
-EXTRA_DIST = *.cpp *.h *.inc
-
 CXXFLAGS = @CXXFLAGS@ -I./ -Dsgmain -DFREEMAPZOOM -DNEWKEYB
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h

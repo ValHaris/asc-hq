@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: sg.cpp,v 1.140 2001-05-19 13:07:58 mbickel Exp $
+//     $Id: sg.cpp,v 1.141 2001-05-21 12:46:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.140  2001/05/19 13:07:58  mbickel
+//      ASC now compiles with Borland C++ Builder again
+//      Added getopt for use with BCB
+//
 //     Revision 1.139  2001/05/17 14:23:19  mbickel
 //      Rewrote command line parameters of all programs
 //      Made manpages generation optional
@@ -2012,34 +2016,6 @@ void  mainloop ( void )
 
 
 
-void dispmessageonexit ( void ) {
-   int i;
-   if (exitmessage[0] != NULL) {
-      printf("\n");
-      for (i=0;i<20 ;i++ ) {
-          if (exitmessage[i] != NULL) {
-             #ifdef logging
-              logtofile(exitmessage[i]);
-             #endif
-             fprintf(stderr, "%s\n", exitmessage[i]);
-          } /* endif */
-      }
-      #if defined(_DOS_) | defined(_WIN32_)
-       printf("\npress enter to exit\n");
-       char tmp;
-       scanf("%c", &tmp );
-      #endif
-   } else {
-      #ifdef _DOS_
-       printf( getstartupmessage() );
-       printf("exiting ... \n \n");
-      #endif
-   } /* endif */
-}
-
-
-
-
 pfont load_font ( const char* name )
 {
    tnfilestream stream ( name , tnstream::reading );
@@ -2525,9 +2501,6 @@ int main(int argc, char *argv[] )
    mapborderpainter = &backgroundpict;
 
    initmissions();
-
-   memset(exitmessage, 0, sizeof ( exitmessage ));
-   atexit ( dispmessageonexit );
 
    initFileIO( cl->c().c_str() );  // passing the filename from the command line options
 

@@ -5,9 +5,16 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.50 2001-05-16 23:21:01 mbickel Exp $
+//     $Id: loaders.cpp,v 1.51 2001-05-21 12:46:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2001/05/16 23:21:01  mbickel
+//      The data file is mounted using automake
+//      Added sgml documentation
+//      Added command line parsing functionality;
+//        integrated it into autoconf/automake
+//      Replaced command line parsing of ASC and ASCmapedit
+//
 //     Revision 1.49  2001/04/03 11:54:16  mbickel
 //      AI Improvements: production , servicing
 //
@@ -483,8 +490,8 @@ void   tspfldloaders::writeevent ( pevent event )
            (event->trigger[j] == ceventt_buildingdestroyed) || 
            (event->trigger[j] == ceventt_building_seen )) { 
              if ( event->triggerstatus[j] != 2 ) {
-                stream->writedata2( event->trigger_data[j]->building->getEntry().x );
-                stream->writedata2( event->trigger_data[j]->building->getEntry().y );
+                stream->writeWord( event->trigger_data[j]->building->getEntry().x );
+                stream->writeWord( event->trigger_data[j]->building->getEntry().y );
              } else {
                 integer w = -1;
                 stream->writedata2( w );
@@ -2155,22 +2162,22 @@ void  loadreplay( pmemorystreambuf streambuf )
    }
    catch ( InvalidID err ) {
       displaymessage( err.getMessage().c_str(), 1 );
-      if ( actmap->xsize == 0)
+      if ( !actmap || actmap->xsize == 0)
          throw NoMapLoaded();
    } /* endcatch */
    catch ( tinvalidversion err ) {
       displaymessage( "Replay stream %s has invalid version.\nExpected version %d\nFound version %d\n", 1, err.getFileName().c_str(), err.expected, err.found );
-      if ( actmap->xsize == 0)
+      if ( !actmap || actmap->xsize == 0)
          throw NoMapLoaded();
    } /* endcatch */
    catch ( tfileerror err) {
       displaymessage( "error reading map filename %s ", 1, err.getFileName().c_str() );
-      if ( actmap->xsize == 0)
+      if ( !actmap || actmap->xsize == 0)
          throw NoMapLoaded();
    } /* endcatch */
    catch ( ASCexception ) {
       displaymessage( "error loading replay", 1 );
-      if ( actmap->xsize == 0)
+      if ( !actmap || actmap->xsize == 0)
          throw NoMapLoaded();
    } /* endcatch */
 }

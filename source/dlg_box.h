@@ -2,9 +2,15 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.20 2001-02-26 12:35:08 mbickel Exp $
+//     $Id: dlg_box.h,v 1.21 2001-05-21 12:46:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2001/02/26 12:35:08  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.19  2001/01/28 14:04:12  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -404,7 +410,6 @@ extern void displaymessage( const char* formatstring, int num, ... );   // num  
 extern void removemessage( void );
 
 extern tdisplaymessage* messagebox;
-extern char* exitmessage[20];
 
 
 extern void  help(word         id);
