@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.73 2001-12-14 10:20:05 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.74 2002-02-21 17:06:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.73  2001/12/14 10:20:05  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.72  2001/11/05 21:31:04  mbickel
 //      Fixed compilation errors
 //      new data version required
@@ -3888,20 +3892,6 @@ void selectunitsetfilter ( void )
    } else
       displaymessage ( " no unitsets defined !", 1 );
 }
-
-void selectgraphicset ( void )
-{
-   ASCString filename;
-   fileselectsvga( "*.gfx", filename, true );
-   if ( !filename.empty() ) {
-      int id = getGraphicSetIdFromFilename ( filename.c_str() );
-      if ( id != actmap->graphicset ) {
-         actmap->graphicset = id;
-         displaymap();
-      }
-   }
-}
-
 
 
 class UnitTypeTransformation {

@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.86 2001-12-19 17:16:29 mbickel Exp $
+//     $Id: typen.cpp,v 1.87 2002-02-21 17:06:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.86  2001/12/19 17:16:29  mbickel
+//      Some include file cleanups
+//
 //     Revision 1.85  2001/12/14 10:20:05  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -552,68 +555,6 @@ void Resources::runTextIO ( PropertyContainer& pc )
 
 
 ////////////////////////////////////////////////////////////////////
-
-
-
-
-#ifndef sgmain
-
-Message :: Message ( pmap spfld )
-{
-   from = 0;
-   to = 0;
-   time = 0;
-   id = 0;
-   gametime.set( 0, 0);
-}
-
-
-Message :: Message ( const ASCString& , pmap gamemap, int rec, int from )
-{
-   from = 0;
-   to = 0;
-   time = 0;
-   id = 0;
-   gametime.set( 0, 0);
-}
-
-#else
-
-Message :: Message ( pmap spfld  )
-{
-   from = 1 << spfld->actplayer;
-   gametime = spfld->time;
-   time = ::time( NULL );
-   to = 0;
-   spfld->messageid++;
-   id = spfld->messageid;
-
-   spfld->messages.push_back ( this );
-}
-
-
-Message :: Message ( const ASCString& msg, pmap gamemap, int rec, int _from )  // f?r Meldungen vom System
-{
-   from = _from;
-   gametime = gamemap->time;
-   time = ::time( NULL );
-   to = rec;
-   text = msg;
-   gamemap->messageid++;
-   id = gamemap->messageid;
-
-   gamemap->messages.push_back ( this );
-
-   for ( int i = 0; i < 8; i++ )
-      if ( to & ( 1 << i ))
-         actmap->player[i].unreadmessage.push_back ( this );
-}
-
-
-#endif
-
-
-
 
 
 

@@ -69,14 +69,13 @@
 #include <algorithm>
 #include <memory>
 #include <SDL_image.h>
-
-#include <paragui.h>
+#include <pgthemewidget.h>
+#include <pgeventobject.h>
 #include <pgapplication.h>
-#include <pgmessagebox.h>
-#include <pgdropdown.h>
-
 
 #include "SDL_mixer.h"
+
+#include "paradialog.h"
 
 #include "vehicletype.h"
 #include "buildingtype.h"
@@ -120,15 +119,17 @@
 
 
 
+
 // #define MEMCHK
 
 #include "memorycheck.cpp"
 
 
 
-class tsgonlinemousehelp : public tonlinemousehelp {
+class tsgonlinemousehelp : public tonlinemousehelp
+{
    public:
-     tsgonlinemousehelp ( void );
+      tsgonlinemousehelp ( void );
 };
 
 tsgonlinemousehelp :: tsgonlinemousehelp ( void )
@@ -136,17 +137,17 @@ tsgonlinemousehelp :: tsgonlinemousehelp ( void )
    helplist.num = 12;
 
    static tonlinehelpitem sghelpitems[12]  = {{{ 498, 26, 576, 36}, 20001 },
-                                              {{ 498, 41, 576, 51}, 20002 },
-                                              {{ 586, 26, 612, 51}, 20003 },
-                                              {{ 499, 57, 575, 69}, 20004 },
-                                              {{ 499, 70, 575, 81}, 20005 },
-                                              {{ 577, 58, 610, 68}, 20006 },
-                                              {{ 577, 70, 610, 80}, 20007 },
-                                              {{ 502, 92, 531,193}, 20008 },
-                                              {{ 465, 92, 485,194}, 20009 },
-                                              {{ 551, 92, 572,193}, 20010 },
-                                              {{ 586, 90, 612,195}, 20011 },
-                                              {{ 473,agmp->resolutiony - ( 480 - 449 ), 601,agmp->resolutiony - ( 480 - 460 )}, 20016 }};
+         {{ 498, 41, 576, 51}, 20002 },
+         {{ 586, 26, 612, 51}, 20003 },
+         {{ 499, 57, 575, 69}, 20004 },
+         {{ 499, 70, 575, 81}, 20005 },
+         {{ 577, 58, 610, 68}, 20006 },
+         {{ 577, 70, 610, 80}, 20007 },
+         {{ 502, 92, 531,193}, 20008 },
+         {{ 465, 92, 485,194}, 20009 },
+         {{ 551, 92, 572,193}, 20010 },
+         {{ 586, 90, 612,195}, 20011 },
+         {{ 473,agmp->resolutiony - ( 480 - 449 ), 601,agmp->resolutiony - ( 480 - 460 )}, 20016 }};
 
    for ( int i = 0; i< helplist.num; i++ ) {
       sghelpitems[i].rect.x1 = agmp->resolutionx - ( 640 - sghelpitems[i].rect.x1 );
@@ -161,18 +162,19 @@ tsgonlinemousehelp* onlinehelp = NULL;
 
 
 
-class tsgonlinemousehelpwind : public tonlinemousehelp {
-            public:
-                tsgonlinemousehelpwind ( void );
-          } ;
+class tsgonlinemousehelpwind : public tonlinemousehelp
+{
+   public:
+      tsgonlinemousehelpwind ( void );
+} ;
 
 tsgonlinemousehelpwind :: tsgonlinemousehelpwind ( void )
 {
    helplist.num = 3;
 
    static tonlinehelpitem sghelpitemswind[3]  = { {{ 501,224, 569,290}, 20013 },
-                                                  {{ 589,228, 609,289}, 20014 },
-                                                  {{ 489,284, 509,294}, 20015 }};
+         {{ 589,228, 609,289}, 20014 },
+         {{ 489,284, 509,294}, 20015 }};
 
    for ( int i = 0; i< helplist.num; i++ ) {
       sghelpitemswind[i].rect.x1 = agmp->resolutionx - ( 640 - sghelpitemswind[i].rect.x1 );
@@ -188,12 +190,9 @@ tsgonlinemousehelpwind* onlinehelpwind = NULL;
 
 int  abortgame;
 
-int              modenum8;
-
-int videostartpos = 0;
-
 pprogressbar actprogressbar = NULL;
 cmousecontrol* mousecontrol = NULL;
+PG_Application* pgApp = NULL;
 
 #define messagedisplaytime 300
 
@@ -203,35 +202,34 @@ cmousecontrol* mousecontrol = NULL;
 
 int maintainencecheck( void )
 {
-   #ifdef maintainence
-    int num = 0;
+#ifdef maintainence
+   int num = 0;
 
-    for ( int i = 0; i < 8; i++ )
-       if ( actmap->player[i].stat == Player::human )
-          num++;
+   for ( int i = 0; i < 8; i++ )
+      if ( actmap->player[i].stat == Player::human )
+         num++;
 
-    if ( actmap->campaign )
-       num++;
+   if ( actmap->campaign )
+      num++;
 
-    if ( actmap->network )
-       num++;
+   if ( actmap->network )
+      num++;
 
-    if ( num <= 1 )
-       return 1;
-    else
-       return 0;
+   if ( num <= 1 )
+      return 1;
+   else
+      return 0;
 
-   #else
-    return 0;
-   #endif
-}   
+#else
+   return 0;
+#endif
+}
 
 
-void         loadcursor(void)
-{ 
-  int          w;
-  char         i;
-
+void         loadMoreData(void)
+{
+   int          w;
+   char         i;
    {
       tnfilestream stream ( "height2.raw", tnstream::reading );
       for (i=0;i<3 ;i++ )
@@ -242,8 +240,8 @@ void         loadcursor(void)
    {
       tnfilestream stream ("windp.raw", tnstream::reading);
       for (i=0;i<9 ;i++ )
-          stream.readrlepict( &icons.wind[i], false, &w );
-                                                                                                                                                                                                                                                               
+         stream.readrlepict( &icons.wind[i], false, &w );
+
    }
 
    {
@@ -254,28 +252,28 @@ void         loadcursor(void)
    {
       tnfilestream stream ("farbe.raw",tnstream::reading);
       for (i=0;i<8 ;i++ )
-          stream.readrlepict( &icons.player[i], false, &w );
+         stream.readrlepict( &icons.player[i], false, &w );
    }
 
    {
       tnfilestream stream ("allianc.raw",tnstream::reading);
       for (i=0;i<8 ;i++ ) {
-          stream.readrlepict(   &icons.allianz[i][0], false, &w );
-          stream.readrlepict(   &icons.allianz[i][1], false, &w );
-          stream.readrlepict(   &icons.allianz[i][2], false, &w );
+         stream.readrlepict(   &icons.allianz[i][0], false, &w );
+         stream.readrlepict(   &icons.allianz[i][1], false, &w );
+         stream.readrlepict(   &icons.allianz[i][2], false, &w );
       } /* endfor */
    }
 
    {
       tnfilestream stream ("weapicon.raw",tnstream::reading);
       for (i=0; i<13 ;i++ )
-            stream.readrlepict(   &icons.unitinfoguiweapons[i], false, &w );
+         stream.readrlepict(   &icons.unitinfoguiweapons[i], false, &w );
    }
 
    {
       tnfilestream stream ("expicons.raw",tnstream::reading);
       for (i=0; i<=maxunitexperience ;i++ )
-            stream.readrlepict(   &icons.experience[i], false, &w );
+         stream.readrlepict(   &icons.experience[i], false, &w );
    }
 
    {
@@ -306,7 +304,6 @@ void         loadcursor(void)
    if ( actprogressbar )
       actprogressbar->point();
 
-
    {
       tnfilestream stream ("hexfld_a.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.mark.active, false, &w);
@@ -314,7 +311,6 @@ void         loadcursor(void)
 
    if ( actprogressbar )
       actprogressbar->point();
-
    {
       tnfilestream stream ("hexfld.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.mark.inactive, false, &w);
@@ -370,7 +366,6 @@ void         loadcursor(void)
 
    if ( actprogressbar )
       actprogressbar->point();
-
    {
       tnfilestream stream ("waffen.raw",tnstream::reading);
       int num;
@@ -379,7 +374,7 @@ void         loadcursor(void)
 
       stream.readdata ( (char*) &num, sizeof( num ));
       for ( i = 0; i < num; i++ )
-          stream.readrlepict(   &icons.selectweapongui[xlatselectweaponguiicons[i]], false, &w );
+         stream.readrlepict(   &icons.selectweapongui[xlatselectweaponguiicons[i]], false, &w );
       stream.readrlepict(   &icons.selectweaponguicancel, false, &w );
    }
 
@@ -396,7 +391,7 @@ void         loadcursor(void)
    {
       tnfilestream stream ("pfeil-a0.raw",tnstream::reading);
       for (i=0; i<8 ;i++ ) {
-            stream.readrlepict(   &icons.pfeil2[i], false, &w );
+         stream.readrlepict(   &icons.pfeil2[i], false, &w );
       } /* endfor */
    }
 
@@ -426,7 +421,6 @@ void         loadcursor(void)
 
    if ( actprogressbar )
       actprogressbar->point();
-
    {
       tnfilestream stream ("resorinf.raw",tnstream::reading);
       stream.readrlepict(   &icons.container.subwin.resourceinfo.start, false, &w );
@@ -477,6 +471,7 @@ void         loadcursor(void)
       stream.readrlepict(   &icons.container.subwin.conventionelpowerplant.schieber, false, &w );
       //stream.readrlepict(   &icons.container.subwin.conventionelpowerplant.button[1], false, &w );
    }
+
 
 
 
@@ -536,7 +531,6 @@ void         loadcursor(void)
 
    if ( actprogressbar )
       actprogressbar->point();
-
    {
       tnfilestream stream ("attack.raw", tnstream::reading);
       stream.readrlepict (   &icons.attack.bkgr, false, &w );
@@ -548,12 +542,12 @@ void         loadcursor(void)
       stream.readrlepict ( &icons.fieldshape, false, &w );
    }
 
-   #ifdef FREEMAPZOOM
+#ifdef FREEMAPZOOM
    {
       tnfilestream stream ("mapbkgr.raw", tnstream::reading);
       stream.readrlepict ( &icons.mapbackground, false, &w );
    }
-   #endif
+#endif
 
    {
       tnfilestream stream ("hex2oct.raw", tnstream::reading);
@@ -571,9 +565,9 @@ void         loadcursor(void)
 }
 
 enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_dispvehicleimprovement, ua_mainmenu, ua_mntnc_morefog,
-                    ua_mntnc_lessfog,   ua_mntnc_morewind,   ua_mntnc_lesswind, ua_mntnc_rotatewind, ua_changeresourceview, ua_heapcheck,
+                    ua_mntnc_lessfog,   ua_mntnc_morewind,   ua_mntnc_lesswind, ua_mntnc_rotatewind, ua_changeresourceview,
                     ua_benchgamewv,     ua_benchgamewov,     ua_viewterraininfo, ua_unitweightinfo,  ua_writemaptopcx,  ua_writescreentopcx,
-                    ua_scrolltodebugpage, ua_scrolltomainpage, ua_startnewsinglelevel, ua_changepassword, ua_gamepreferences, ua_bi3preferences,
+                    ua_startnewsinglelevel, ua_changepassword, ua_gamepreferences, ua_bi3preferences,
                     ua_exitgame,        ua_newcampaign,      ua_loadgame,  ua_savegame, ua_setupalliances, ua_settribute, ua_giveunitaway,
                     ua_vehicleinfo,     ua_researchinfo,     ua_unitstatistics, ua_buildingstatistics, ua_newmessage, ua_viewqueuedmessages,
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
@@ -582,14 +576,16 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_pauseResumeMusic, ua_soundDialog };
 
 
-class tsgpulldown : public tpulldown {
-          public:
-             void init ( void );
-} pd;
+class tsgpulldown : public tpulldown
+{
+   public:
+      void init ( void );
+}
+pd;
 
 void         tsgpulldown :: init ( void )
 {
-  addfield ( "Glo~b~al" );
+   addfield ( "Glo~b~al" );
    addbutton ( "toggle ~R~esourceviewõ1", ua_changeresourceview );
    addbutton ( "toggle unit shadingõ2", ua_toggleunitshading );
    addbutton ( "seperator", -1);
@@ -602,7 +598,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "Paragui Sound Dialog", ua_soundDialog );
 
 
-  addfield ("~G~ame");
+   addfield ("~G~ame");
    addbutton ( "New ~C~ampaign", ua_newcampaign);
    addbutton ( "~N~ew single Levelõctrl-n", ua_startnewsinglelevel );
 
@@ -619,7 +615,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "transfer ~U~nit control", ua_giveunitaway );
    addbutton ( "~T~ransfer resources", ua_settribute);
 
-  addfield ( "~I~nfo" );
+   addfield ( "~I~nfo" );
    addbutton ( "~V~ehicle types", ua_vehicleinfo );
    addbutton ( "~U~nit weapon rangeõ3", ua_viewunitweaponrange );
    addbutton ( "~U~nit movement rangeõ4", ua_viewunitmovementrange );
@@ -634,13 +630,13 @@ void         tsgpulldown :: init ( void )
    // addbutton ( "show game ~P~arameters", ua_GameParameterInfo );
 
 
-  addfield ( "~S~tatistics" );
+   addfield ( "~S~tatistics" );
    addbutton ( "~U~nits", ua_unitstatistics );
    addbutton ( "~B~uildings", ua_buildingstatistics );
    // addbutton ( "seperator");
    // addbutton ( "~H~istory");
 
-  addfield ( "~M~essage");
+   addfield ( "~M~essage");
    addbutton ( "~n~ew message", ua_newmessage );
    addbutton ( "view ~q~ueued messages", ua_viewqueuedmessages );
    addbutton ( "view ~s~end messages", ua_viewsentmessages );
@@ -649,17 +645,17 @@ void         tsgpulldown :: init ( void )
    addbutton ( "view ~j~ournal", ua_viewjournal );
    addbutton ( "~a~ppend to journal", ua_editjournal );
 
-  addfield ( "~T~ools" );
+   addfield ( "~T~ools" );
    addbutton ( "save ~M~ap as PCXõ9", ua_writemaptopcx );
    addbutton ( "save ~S~creen as PCXõ0", ua_writescreentopcx );
    addbutton ( "benchmark without view calc", ua_benchgamewov );
    addbutton ( "benchmark with view calc", ua_benchgamewv);
    addbutton ( "compiler benchmark (AI)", ua_aibench );
-   addbutton ( "test memory integrity", ua_heapcheck );
+   // addbutton ( "test memory integrity", ua_heapcheck );
    addbutton ( "seperator", -1 );
    addbutton ( "select graphic set", ua_selectgraphicset );
 
-  addfield ( "~H~elp" );
+   addfield ( "~H~elp" );
    addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
    addbutton ( "HowTo ~C~ontinue email games", ua_howtocontinuepbem );
    addbutton ( "seperator", -1);
@@ -672,16 +668,17 @@ void         tsgpulldown :: init ( void )
 }
 
 
-class MainMenuPullDown : public tpulldown {
-          public:
-             void init ( void );
+class MainMenuPullDown : public tpulldown
+{
+   public:
+      void init ( void );
 } ;
 
 void         MainMenuPullDown :: init ( void )
 {
-  alwaysOpen = true;
+   alwaysOpen = true;
 
-  addfield ( "Glo~b~al" );
+   addfield ( "Glo~b~al" );
    addbutton ( "~O~ptions", ua_gamepreferences );
    addbutton ( "~M~ouse options", ua_mousepreferences );
    addbutton ( "Select Music Play ~L~ist ", ua_selectPlayList );
@@ -690,7 +687,7 @@ void         MainMenuPullDown :: init ( void )
    addbutton ( "E~x~itõctrl-x", ua_exitgame );
 
 
-  addfield ("~G~ame");
+   addfield ("~G~ame");
    addbutton ( "New ~C~ampaign", ua_newcampaign);
    addbutton ( "~N~ew single Levelõctrl-n", ua_startnewsinglelevel );
 
@@ -698,7 +695,7 @@ void         MainMenuPullDown :: init ( void )
    addbutton ( "Continue network gameõF3", ua_continuenetworkgame);
    addbutton ( "supervise network game", ua_networksupervisor );
 
-  addfield ( "~H~elp" );
+   addfield ( "~H~elp" );
    addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
    addbutton ( "HowTo ~C~ontinue email games", ua_howtocontinuepbem );
    addbutton ( "seperator", -1);
@@ -749,15 +746,8 @@ void         repaintdisplay(void)
 
 }
 
-void         repaintdisplayhard(void)
-{
-   reinitgraphics( modenum8 );
-   setdisplaystart ( 0, videostartpos  );
-   repaintdisplay();
-}
 
-
-void         ladekarte(void)
+void loadMap()
 {
    ASCString s1;
 
@@ -787,7 +777,7 @@ void         ladekarte(void)
 }
 
 
-void         ladespiel(void)
+void loadGame()
 {
    mousevisible(false);
 
@@ -815,14 +805,13 @@ void         ladespiel(void)
 }
 
 
-void         speicherspiel( int as )
+void saveGame( bool as )
 {
    ASCString s1;
 
    int nameavail = 0;
    if ( !actmap->preferredFileNames.savegame[actmap->actplayer].empty() )
       nameavail = 1;
-
 
    if ( as || !nameavail ) {
       mousevisible(false);
@@ -867,8 +856,6 @@ void         showpalette(void)
 
 
 
-
-
 void         newcampaign(void)
 {
    tchoosenewcampaign tnc;
@@ -881,7 +868,7 @@ void         newcampaign(void)
 
 void         newsinglelevel(void)
 {
-  tchoosenewsinglelevel tnc;
+   tchoosenewsinglelevel tnc;
 
    tnc.init();
    tnc.run();
@@ -890,11 +877,11 @@ void         newsinglelevel(void)
 
 void         startnewsinglelevelfromgame(void)
 {
-    cursor.hide();
-    newsinglelevel();
-    computeview( actmap );
-    displaymap();
-    cursor.show();
+   cursor.hide();
+   newsinglelevel();
+   computeview( actmap );
+   displaymap();
+   cursor.show();
 }
 
 
@@ -914,7 +901,6 @@ void loadStartupMap ( const char *gameToLoad=NULL )
             tnetworkloaders nwl;
             nwl.loadnwgame( &gamefile );
          }
-
          catch ( tfileerror ) {
             fprintf ( stderr, "%s is not a legal email game. \n", gameToLoad );
             exit(-1);
@@ -924,8 +910,9 @@ void loadStartupMap ( const char *gameToLoad=NULL )
             fprintf( stderr, "The savegame %s is invalid. Aborting.\n", gameToLoad );
             exit( -1 );
          }
-         try { loadgame( gameToLoad ); }
-
+         try {
+            loadgame( gameToLoad );
+         }
          catch ( tfileerror ) {
             fprintf ( stderr, "%s is not a legal savegame. \n", gameToLoad );
             exit(-1);
@@ -937,8 +924,9 @@ void loadStartupMap ( const char *gameToLoad=NULL )
             exit(-1);
          }
 
-         try { loadmap( gameToLoad ); }
-         catch ( tfileerror ) {
+         try {
+            loadmap( gameToLoad );
+         } catch ( tfileerror ) {
             fprintf ( stderr, "%s is not a legal map. \n", gameToLoad );
             exit(-1);
          }
@@ -949,24 +937,23 @@ void loadStartupMap ( const char *gameToLoad=NULL )
 
    } else {  // resort to loading defaults
 
-     ASCString s = "first.map";
-     /*
-     if ( CGameOptions::Instance()->startupcount < 4 ) {
-        s = "tutor0" ;
-     } else {
-        s = "railstat";
-     }
-     s += &mapextension[1];
-     */
+      ASCString s = "first.map";
+      /*
+      if ( CGameOptions::Instance()->startupcount < 4 ) {
+         s = "tutor0" ;
+   } else {
+         s = "railstat";
+   }
+      s += &mapextension[1];
+      */
 
-     int maploadable;
-     {
-        tfindfile ff ( s );
-        string filename = ff.getnextname();
-        maploadable = validatemapfile ( filename.c_str() );
-     }
+      int maploadable; {
+         tfindfile ff ( s );
+         string filename = ff.getnextname();
+         maploadable = validatemapfile ( filename.c_str() );
+      }
 
-     if ( !maploadable ) {
+      if ( !maploadable ) {
 
          tfindfile ff ( mapextension );
          string filename = ff.getnextname();
@@ -981,15 +968,15 @@ void loadStartupMap ( const char *gameToLoad=NULL )
 
          }
          s = filename;
-     }
+      }
 
-     loadmap(s.c_str());
+      loadmap(s.c_str());
 
-     displayLogMessage ( 6, "initializing map..." );
-     actmap->startGame();
-     displayLogMessage ( 6, "done\n Setting up Resources..." );
-     actmap->setupResources();
-     displayLogMessage ( 6, "done\n" );
+      displayLogMessage ( 6, "initializing map..." );
+      actmap->startGame();
+      displayLogMessage ( 6, "done\n Setting up Resources..." );
+      actmap->setupResources();
+      displayLogMessage ( 6, "done\n" );
    }
 }
 
@@ -1005,7 +992,7 @@ void benchgame ( int mode )
             computeview( actmap );
          displaymap();
       } else
-        copy2screen();
+         copy2screen();
 
       n++;
       t2 = ticker;
@@ -1017,11 +1004,17 @@ void benchgame ( int mode )
    displaymessage2 ( " %s fps ", buf );
 }
 
-class WeaponRange : public SearchFields {
-       public:
-         int run ( const pvehicle veh );
-         void testfield ( const MapCoordinate& mc ) { gamemap->getField( mc )->tempw = 1; };
-         WeaponRange ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
+class WeaponRange : public SearchFields
+{
+   public:
+      int run ( const pvehicle veh );
+      void testfield ( const MapCoordinate& mc )
+      {
+         gamemap->getField( mc )->tempw = 1;
+      };
+      WeaponRange ( pmap _gamemap ) : SearchFields ( _gamemap )
+      {}
+      ;
 };
 
 int  WeaponRange :: run ( const pvehicle veh )
@@ -1046,10 +1039,6 @@ void viewunitweaponrange ( const pvehicle veh, tkey taste )
       int res = wr.run ( veh );
       if ( res ) {
          displaymap();
-
-         #ifndef NEWKEYB
-         taste = ct_invvalue;
-         #endif
 
          if ( taste != ct_invvalue ) {
             while ( skeypress ( taste )) {
@@ -1092,10 +1081,6 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
 
             displaymap();
 
-            #ifndef NEWKEYB
-            taste = ct_invvalue;
-            #endif
-
             if ( taste != ct_invvalue ) {
                while ( skeypress ( taste )) {
                   while ( keypress() )
@@ -1120,505 +1105,367 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
 }
 
 
-void selectgraphicset ( void )
-{
-   ASCString filename;
-   fileselectsvga("*.gfx", filename, true );
-   if ( !filename.empty() ) {
-      int id = getGraphicSetIdFromFilename ( filename.c_str() );
-      if ( id != actmap->graphicset ) {
-         actmap->graphicset = id;
-         displaymap();
-      }
-   }
-}
-
-
-void networksupervisor ( void )
-{
-   class tcarefordeletionofmap {
-            pmap tmp;
-          public:
-            tcarefordeletionofmap ()
-            {
-               tmp= actmap;
-               actmap = NULL;
-            }
-            ~tcarefordeletionofmap (  )
-            {
-                if ( actmap && (actmap->xsize > 0  ||  actmap->ysize > 0) )
-                     delete actmap;
-                actmap = tmp;
-            };
-         } carefordeletionofmap;
-
-
-   tlockdispspfld ldsf;
-
-   tnetwork network;
-/*
-   int stat;
-   do {
-      stat = setupnetwork( &network, 1+8 );
-      if ( stat == 1 )
-         return;
-
-   } while ( (network.computer[0].receive.transfermethod == 0) || (network.computer[0].receive.transfermethodid != network.computer[0].receive.transfermethod->getid()) ); 
-*/
-   int stat;
-   int go = 0;
-   do {
-      stat = network.computer[0].receive.transfermethod->setupforreceiving ( &network.computer[0].receive.data );
-      if ( stat == 0 )
-         return;
-
-      if ( network.computer[0].receive.transfermethod  &&
-           network.computer[0].receive.transfermethodid == network.computer[0].receive.transfermethod->getid()  &&
-           network.computer[0].receive.transfermethod->validateparams( &network.computer[0].receive.data, TN_RECEIVE ))
-           go = 1;
-   } while ( !go );
-
-   try {
-       displaymessage ( " starting data transfer ",0);
-
-       network.computer[0].receive.transfermethod->initconnection ( TN_RECEIVE );
-       network.computer[0].receive.transfermethod->inittransfer ( &network.computer[0].receive.data );
-
-       tnetworkloaders nwl;
-       nwl.loadnwgame ( network.computer[0].receive.transfermethod->stream );
-
-       network.computer[0].receive.transfermethod->closetransfer();
-       network.computer[0].receive.transfermethod->closeconnection();
-
-       removemessage();
-       if ( actmap->network )
-          setallnetworkpointers ( actmap->network );
-   } /* endtry */
-
-   catch ( tfileerror ) {
-      displaymessage ("a file error occured while loading game",1 );
-      delete actmap;
-      actmap = NULL;
-      return;
-   } /* endcatch */
-   catch ( ASCexception ) {
-      displaymessage ("error loading game",1 );
-      delete actmap;
-      actmap = NULL;
-      return;
-   } /* endcatch */
-
-
-   int ok = 0;
-   if ( !actmap->supervisorpasswordcrc.empty() ) {
-       ok = enterpassword ( actmap->supervisorpasswordcrc );
-   } else {
-      displaymessage ("no supervisor defined",1 );
-      delete actmap;
-      actmap = NULL;
-      return;
-   }
-
-   if ( ok ) {
-      npush ( actmap->actplayer );
-      actmap->actplayer = -1;
-      setupalliances( 1 );
-      npop ( actmap->actplayer );
-
-      do {
-         stat = setupnetwork( &network, 2+8 );
-         if ( stat == 1 ) {
-            displaymessage ("no changes were saved",1 );
-            delete actmap;
-            actmap = NULL;
-            return;
-         }
-
-      } while ( (network.computer[0].send.transfermethod == 0) || (network.computer[0].send.transfermethodid != network.computer[0].send.transfermethod->getid()) ); /* enddo */
-
-      tnetworkcomputer* compi = &network.computer[ 0 ];
-
-      displaymessage ( " starting data transfer ",0);
-
-      try {
-         compi->send.transfermethod->initconnection ( TN_SEND );
-         compi->send.transfermethod->inittransfer ( &compi->send.data );
-
-         tnetworkloaders nwl;
-         nwl.savenwgame ( compi->send.transfermethod->stream );
-
-         compi->send.transfermethod->closetransfer();
-         compi->send.transfermethod->closeconnection();
-      } /* endtry */
-      catch ( tfileerror ) {
-         displaymessage ( "a file error occured while saving file", 1 );
-      } /* endcatch */
-      catch ( ASCexception ) {
-         displaymessage ( "error saving file", 1 );
-      } /* endcatch */
-
-      delete actmap;
-      actmap = NULL;
-      displaymessage ( "data transfer finished",1);
-
-   } else {
-      displaymessage ("no supervisor defined or invalid password",1 );
-      delete actmap;
-      actmap = NULL;
-   }
-}
-
-
-
 
 void execuseraction ( tuseractions action )
 {
    switch ( action ) {
-            case ua_repainthard  :   repaintdisplayhard();
-            break;
-
-            case ua_repaint      :   repaintdisplay();
-            break;
-
-            case ua_help         :   help(20);
-            break;
-
-            case ua_howtostartpbem :   help(21);
-            break;
-
-            case ua_howtocontinuepbem :   help(22);
-            break;
-
-            case ua_showpalette  :   showpalette();
-            break;
-
-            case ua_dispvehicleimprovement    : displaymessage("Research:\n%s %d \n%s %d \n%s %d \n"
-                                                                          "%s %d \n%s %d \n%s %d \n"
-                                                                          "%s %d \n%s %d \n%s %d \n"
-                                                                          "%s %d",1,
-                                                  cwaffentypen[0], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[0]),
-                                                  cwaffentypen[1], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[1]),
-                                                  cwaffentypen[2], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[2]),
-                                                  cwaffentypen[3], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[3]),
-                                                  cwaffentypen[4], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[4]),
-                                                  cwaffentypen[5], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[5]),
-                                                  cwaffentypen[6], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[6]) ,
-                                                  cwaffentypen[7], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[7])  ,
-                                                  cwaffentypen[10], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[10])     ,
-                                                  "armor",         (actmap->player[actmap->actplayer].research.unitimprovement.armor));
-                                                  break;
-
-            case ua_mainmenu:  if (choice_dlg("do you really want to close the current game ?","~y~es","~n~o") == 1) {
-                                  delete actmap;
-                                   actmap = NULL;
-                                   throw NoMapLoaded();
-                               }
-                               break;
-
-            case ua_mntnc_morefog: if (actmap->weather.fog < 255   && maintainencecheck() ) {
-                                      actmap->weather.fog++;
-                                      computeview( actmap );
-                                      displaymessage2("fog intensity set to %d ", actmap->weather.fog);
-                                      displaymap();
-                                   }
-                        break;
-
-            case ua_mntnc_lessfog: if (actmap->weather.fog  && maintainencecheck()) {
-                                      actmap->weather.fog--;
-                                      computeview( actmap );
-                                      displaymessage2("fog intensity set to %d ", actmap->weather.fog);
-                                      displaymap();
-                                   }
-                        break;
-
-            case ua_mntnc_morewind: if ((actmap->weather.wind[0].speed < 254) &&  maintainencecheck()) {
-                                       actmap->weather.wind[0].speed+=2;
-                                       actmap->weather.wind[2].speed = actmap->weather.wind[1].speed = actmap->weather.wind[0].speed;
-                                       displaywindspeed (  );
-                                       dashboard.x = 0xffff;
-                                    }
-                         break;
-
-            case ua_mntnc_lesswind: if ((actmap->weather.wind[0].speed > 1)  && maintainencecheck() ) {
-                                       actmap->weather.wind[0].speed-=2;
-                                       actmap->weather.wind[2].speed = actmap->weather.wind[1].speed = actmap->weather.wind[0].speed;
-                                       displaywindspeed (  );
-                                       dashboard.x = 0xffff;
-                                    }
-                         break;
-
-            case ua_mntnc_rotatewind:  if ( maintainencecheck() ) {
-                                          if (actmap->weather.wind[0].direction < sidenum-1 )
-                                             actmap->weather.wind[0].direction++;
-                                          else
-                                             actmap->weather.wind[0].direction = 0;
-                                          actmap->weather.wind[2].direction = actmap->weather.wind[1].direction = actmap->weather.wind[0].direction;
-                                          displaymessage2("wind dir set to %d ", actmap->weather.wind[0].direction);
-                                          dashboard.x = 0xffff;
-                                          resetallbuildingpicturepointers();
-                                          displaymap();
-                                       }
-                                       break;
-
-            case ua_changeresourceview:  showresources++;
-                                         if ( showresources >= 3 )
-                                            showresources = 0;
-                                         displaymap();
-                             break;
-
-            case ua_heapcheck:
+      case ua_repainthard  :
+      case ua_repaint      :
+         repaintdisplay();
          break;
-#ifdef _DOS_
-            case ua_benchgamewov:  benchgame( 0 );
-#else
-            case ua_benchgamewov:  benchgame( 2 );
+
+      case ua_help         :
+         help(20);
+         break;
+
+      case ua_howtostartpbem :
+         help(21);
+         break;
+
+      case ua_howtocontinuepbem :
+         help(22);
+         break;
+
+      case ua_showpalette  :
+         showpalette();
+         break;
+
+      case ua_dispvehicleimprovement    :
+         displaymessage("Research:\n%s %d \n%s %d \n%s %d \n"
+                        "%s %d \n%s %d \n%s %d \n"
+                        "%s %d \n%s %d \n%s %d \n"
+                        "%s %d",1,
+                        cwaffentypen[0], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[0]),
+                        cwaffentypen[1], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[1]),
+                        cwaffentypen[2], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[2]),
+                        cwaffentypen[3], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[3]),
+                        cwaffentypen[4], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[4]),
+                        cwaffentypen[5], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[5]),
+                        cwaffentypen[6], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[6]) ,
+                        cwaffentypen[7], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[7])  ,
+                        cwaffentypen[10], (actmap->player[actmap->actplayer].research.unitimprovement.weapons[10])     ,
+                        "armor",         (actmap->player[actmap->actplayer].research.unitimprovement.armor));
+         break;
+
+      case ua_mainmenu:
+         if (choice_dlg("do you really want to close the current game ?","~y~es","~n~o") == 1) {
+            delete actmap;
+            actmap = NULL;
+            throw NoMapLoaded();
+         }
+         break;
+
+      case ua_mntnc_morefog:
+         if (actmap->weather.fog < 255   && maintainencecheck() ) {
+            actmap->weather.fog++;
+            computeview( actmap );
+            displaymessage2("fog intensity set to %d ", actmap->weather.fog);
+            displaymap();
+         }
+         break;
+
+      case ua_mntnc_lessfog:
+         if (actmap->weather.fog  && maintainencecheck()) {
+            actmap->weather.fog--;
+            computeview( actmap );
+            displaymessage2("fog intensity set to %d ", actmap->weather.fog);
+            displaymap();
+         }
+         break;
+
+      case ua_mntnc_morewind:
+         if ((actmap->weather.wind[0].speed < 254) &&  maintainencecheck()) {
+            actmap->weather.wind[0].speed+=2;
+            actmap->weather.wind[2].speed = actmap->weather.wind[1].speed = actmap->weather.wind[0].speed;
+            displaywindspeed (  );
+            dashboard.x = 0xffff;
+         }
+         break;
+
+      case ua_mntnc_lesswind:
+         if ((actmap->weather.wind[0].speed > 1)  && maintainencecheck() ) {
+            actmap->weather.wind[0].speed-=2;
+            actmap->weather.wind[2].speed = actmap->weather.wind[1].speed = actmap->weather.wind[0].speed;
+            displaywindspeed (  );
+            dashboard.x = 0xffff;
+         }
+         break;
+
+      case ua_mntnc_rotatewind:
+         if ( maintainencecheck() ) {
+            if (actmap->weather.wind[0].direction < sidenum-1 )
+               actmap->weather.wind[0].direction++;
+            else
+               actmap->weather.wind[0].direction = 0;
+            actmap->weather.wind[2].direction = actmap->weather.wind[1].direction = actmap->weather.wind[0].direction;
+            displaymessage2("wind dir set to %d ", actmap->weather.wind[0].direction);
+            dashboard.x = 0xffff;
+            resetallbuildingpicturepointers();
+            displaymap();
+         }
+         break;
+
+      case ua_changeresourceview:
+         showresources++;
+         if ( showresources >= 3 )
+            showresources = 0;
+         displaymap();
+         break;
+
+      case ua_benchgamewov:
+         benchgame( 2 );
+         break;
+
+      case ua_benchgamewv :
+         benchgame( 1 );
+         break;
+
+      case ua_viewterraininfo:
+         viewterraininfo();
+         break;
+
+      case ua_unitweightinfo:
+         if ( fieldvisiblenow  ( getactfield() )) {
+            pvehicle eht = getactfield()->vehicle;
+            if ( eht && getdiplomaticstatus ( eht->color ) == capeace )
+               displaymessage(" weight of unit: \n basic: %d\n+fuel: %d\n+material:%d\n+cargo:%d\n= %d",1 ,eht->typ->weight, eht->tank.fuel * resourceWeight[Resources::Fuel] / 1024 , eht->tank.material * resourceWeight[Resources::Material] / 1024, eht->cargo(), eht->weight() );
+         }
+         break;
+
+      case ua_writemaptopcx :
+         writemaptopcx ();
+         break;
+
+      case ua_writescreentopcx:
+         {
+            char* nm = getnextfilenumname ( "screen", "pcx", 0 );
+            writepcx ( nm, 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, pal );
+            displaymessage2( "screen saved to %s", nm );
+         }
+         break;
+
+      case ua_startnewsinglelevel:
+         startnewsinglelevelfromgame();
+         break;
+
+      case ua_changepassword:
+         {
+            bool success;
+            do {
+               Password oldpwd = actmap->player[actmap->actplayer].passwordcrc;
+               actmap->player[actmap->actplayer].passwordcrc.reset();
+               success = enterpassword ( actmap->player[actmap->actplayer].passwordcrc, true, true );
+               if ( !success )
+                  actmap->player[actmap->actplayer].passwordcrc = oldpwd;
+            } while ( actmap->player[actmap->actplayer].passwordcrc.empty() && success && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
+         }
+         break;
+
+      case ua_gamepreferences:
+         gamepreferences();
+         break;
+
+      case ua_mousepreferences:
+         mousepreferences();
+         break;
+
+      case ua_bi3preferences:
+         bi3preferences();
+         break;
+
+      case ua_exitgame:
+         if (choice_dlg("do you really want to quit ?","~y~es","~n~o") == 1)
+            abortgame = 1;
+         break;
+
+      case ua_newcampaign:
+         cursor.hide();
+         newcampaign();
+         computeview( actmap );
+         displaymap();
+         cursor.show();
+         break;
+
+      case ua_loadgame:
+         loadGame();
+         break;
+
+      case ua_savegame:
+         saveGame( true );
+         break;
+
+      case ua_setupalliances:
+         setupalliances();
+         logtoreplayinfo ( rpl_alliancechange );
+         logtoreplayinfo ( rpl_shareviewchange );
+
+         if ( actmap->shareview && actmap->shareview->recalculateview ) {
+            logtoreplayinfo ( rpl_shareviewchange );
+            computeview( actmap );
+            actmap->shareview->recalculateview = 0;
+            displaymap();
+         }
+         dashboard.x = 0xffff;
+         break;
+
+      case ua_settribute :
+         settributepayments ();
+         break;
+
+      case ua_giveunitaway:
+         giveunitaway ();
+         break;
+
+      case ua_vehicleinfo:
+         activefontsettings.font = schriften.smallarial;
+         vehicle_information();
+         break;
+
+      case ua_researchinfo:
+         researchinfo ();
+         break;
+
+      case ua_unitstatistics:
+         statisticarmies();
+         break;
+
+      case ua_buildingstatistics:
+         statisticbuildings();
+         break;
+
+      case ua_newmessage:
+         newmessage();
+         break;
+
+      case ua_viewqueuedmessages:
+         viewmessages( "queued messages", actmap->unsentmessage, 1, 0 );
+         break;
+
+      case ua_viewsentmessages:
+         viewmessages( "sent messages", actmap->player[ actmap->actplayer ].sentmessage, 0, 0 );
+         break;
+
+      case ua_viewreceivedmessages:
+         viewmessages( "received messages", actmap->player[ actmap->actplayer ].oldmessage, 0, 1 );
+         break;
+
+      case ua_viewjournal:
+         viewjournal();
+         break;
+
+      case ua_editjournal:
+         editjournal();
+         break;
+
+      case ua_viewaboutmessage:
+         {
+            help(30);
+            tviewanytext vat;
+            ASCString s = getstartupmessage();
+
+#ifdef _SDL_
+            char buf[1000];
+            SDL_version compiled;
+            SDL_VERSION(&compiled);
+            sprintf(buf, "\nCompiled with SDL version: %d.%d.%d\n", compiled.major, compiled.minor, compiled.patch);
+            s += buf;
+
+            sprintf(buf, "Linked with SDL version: %d.%d.%d\n", SDL_Linked_Version()->major, SDL_Linked_Version()->minor, SDL_Linked_Version()->patch);
+            s += buf;
 #endif
-            break;
 
-            case ua_benchgamewv :  benchgame( 1 );
-            break;
+            vat.init ( "about", s.c_str() );
+            vat.run();
+            vat.done();
+         }
+         break;
 
-            case ua_viewterraininfo:  viewterraininfo();
-                          break;
+      case ua_continuenetworkgame:
+         continuenetworkgame();
+         displaymap();
+         break;
 
-         case ua_unitweightinfo:  if ( fieldvisiblenow  ( getactfield() )) {
-                                     pvehicle eht = getactfield()->vehicle;
-                                     if ( eht && getdiplomaticstatus ( eht->color ) == capeace )
-                                       displaymessage(" weight of unit: \n basic: %d\n+fuel: %d\n+material:%d\n+cargo:%d\n= %d",1 ,eht->typ->weight, eht->tank.fuel * resourceWeight[Resources::Fuel] / 1024 , eht->tank.material * resourceWeight[Resources::Material] / 1024, eht->cargo(), eht->weight() );
-                                  }
-                         break;
+      case ua_toggleunitshading:
+         CGameOptions::Instance()->units_gray_after_move = !CGameOptions::Instance()->units_gray_after_move;
+         CGameOptions::Instance()->setChanged();
+         displaymap();
+         while ( mouseparams.taste )
+            releasetimeslice();
 
-        case ua_writemaptopcx : writemaptopcx ();
-                                break;
+         if ( CGameOptions::Instance()->units_gray_after_move )
+            displaymessage("units that can not move will now be displayed gray", 3);
+         else
+            displaymessage("units that can not move and cannot shoot will now be displayed gray", 3);
+         break;
 
-        case ua_writescreentopcx: {
-                                      char* nm = getnextfilenumname ( "screen", "pcx", 0 );
-                                      writepcx ( nm, 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, pal );
-                                      displaymessage2( "screen saved to %s", nm );
-                                   }
-                           break;
+      case ua_computerturn:
+         if ( maintainencecheck() || 1 ) {
+            displaymessage("This function is under development and for programmers only\n"
+                           "unpredictable things may happen ...",3 ) ;
 
-         case ua_scrolltodebugpage: if (videostartpos < 160) {
-                                          videostartpos += 20;
-                                          setdisplaystart ( 0, videostartpos  );
-                                       }
-                          break;
+            if (choice_dlg("do you really want to start the AI?","~y~es","~n~o") == 1) {
 
-         case ua_scrolltomainpage : if (videostartpos >  0) {
-                                       videostartpos -= 20;
-                                       setdisplaystart ( 0, videostartpos );
-                                    }
-                       break;
+               if ( !actmap->player[ actmap->actplayer ].ai )
+                  actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
-         case ua_startnewsinglelevel: startnewsinglelevelfromgame();
-                       break;
+               savegame ( "aistart.sav" );
+               actmap->player[ actmap->actplayer ].ai->run();
+            }
+         }
+         break;
+      case ua_setupnetwork:
+         if ( actmap->network )
+            setupnetwork ( actmap->network );
+         else
+            displaymessage("This map is not played across a network",3 );
+         break;
+      case ua_selectgraphicset:
+         selectgraphicset();
+         break;
+      case ua_UnitSetInfo:
+         viewUnitSetinfo();
+         break;
+      case ua_GameParameterInfo:
+         showGameParameters();
+         break;
+      case ua_GameStatus:
+         displaymessage ( "Current game time is:\n turn %d , move %d ", 3, actmap->time.turn(), actmap->time.move() );
+         break;
+      case ua_viewunitweaponrange:
+         viewunitweaponrange ( getactfield()->vehicle, ct_invvalue );
+         break;
 
-         case ua_changepassword:      {
-                                         bool success;
-                                         do {
-                                            Password oldpwd = actmap->player[actmap->actplayer].passwordcrc;
-                                            actmap->player[actmap->actplayer].passwordcrc.reset();
-                                            success = enterpassword ( actmap->player[actmap->actplayer].passwordcrc, true, true );
-                                            if ( !success )
-                                               actmap->player[actmap->actplayer].passwordcrc = oldpwd;
-                                         } while ( actmap->player[actmap->actplayer].passwordcrc.empty() && success && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
-                                      }
-                       break;
+      case ua_viewunitmovementrange:
+         viewunitmovementrange ( getactfield()->vehicle, ct_invvalue );
+         break;
 
-         case ua_gamepreferences:     gamepreferences();
-                       break;
+      case ua_aibench:
+         if ( maintainencecheck() || 1 ) {
+            if ( !actmap->player[ actmap->actplayer ].ai )
+               actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
-         case ua_mousepreferences:    mousepreferences();
-                       break;
+            if ( AI* ai = dynamic_cast<AI*>( actmap->player[ actmap->actplayer ].ai )) {
+               savegame ( "ai-bench-start.sav" );
+               ai->run( true );
+            }
+         }
+         break;
+      case ua_networksupervisor:
+         networksupervisor();
+         displaymap();
+         break;
 
-         case ua_bi3preferences:      bi3preferences();
-                       break;
+      case ua_selectPlayList:
+         selectPlayList();
+         break;
 
-         case ua_exitgame:            if (choice_dlg("do you really want to quit ?","~y~es","~n~o") == 1)
-                                         abortgame = 1;
-                       break;
+      case ua_pauseResumeMusic:
+         SoundSystem::getInstance()->resumePauseMusic();
+         break;
+      case ua_soundDialog: paraguiTest();
+         break;
 
-         case ua_newcampaign:         cursor.hide();
-                                      newcampaign();
-                                      computeview( actmap );
-                                      displaymap();
-                                      cursor.show();
-                       break;
-
-         case ua_loadgame:            ladespiel();
-                       break;
-
-        case ua_savegame:             speicherspiel( 1 );
-                       break;
-
-        case ua_setupalliances:       setupalliances();
-                                      logtoreplayinfo ( rpl_alliancechange );
-                                      logtoreplayinfo ( rpl_shareviewchange );
-
-                                      if ( actmap->shareview && actmap->shareview->recalculateview ) {
-                                         logtoreplayinfo ( rpl_shareviewchange );
-                                         computeview( actmap );
-                                         actmap->shareview->recalculateview = 0;
-                                         displaymap();
-                                      }
-                                      dashboard.x = 0xffff;
-                       break;
-
-        case ua_settribute :          settributepayments ();
-                       break;
-
-        case ua_giveunitaway:         giveunitaway ();
-                       break;
-
-        case ua_vehicleinfo:          activefontsettings.font = schriften.smallarial;
-                                      vehicle_information();
-                       break;
-
-        case ua_researchinfo:         researchinfo ();
-                       break;
-
-        case ua_unitstatistics:       statisticarmies();
-                       break;
-
-        case ua_buildingstatistics:   statisticbuildings();
-                       break;
-
-        case ua_newmessage:           newmessage();
-                       break;
-
-        case ua_viewqueuedmessages:   viewmessages( "queued messages", actmap->unsentmessage, 1, 0 );
-                       break;
-
-        case ua_viewsentmessages:     viewmessages( "sent messages", actmap->player[ actmap->actplayer ].sentmessage, 0, 0 );
-                       break;
-
-        case ua_viewreceivedmessages: viewmessages( "received messages", actmap->player[ actmap->actplayer ].oldmessage, 0, 1 );
-                       break;
-
-        case ua_viewjournal:          viewjournal();
-                       break;
-
-        case ua_editjournal:          editjournal();
-                       break;
-
-        case ua_viewaboutmessage:     {
-                                         help(30);
-                                         tviewanytext vat;
-                                         ASCString s = getstartupmessage();
-
-                                         #ifdef _SDL_
-                                         char buf[1000];
-                                         SDL_version compiled;
-                                         SDL_VERSION(&compiled);
-                                         sprintf(buf, "\nCompiled with SDL version: %d.%d.%d\n", compiled.major, compiled.minor, compiled.patch);
-                                         s += buf;
-                                         // #endif
-
-                                         sprintf(buf, "Linked with SDL version: %d.%d.%d\n", SDL_Linked_Version()->major, SDL_Linked_Version()->minor, SDL_Linked_Version()->patch);
-                                         s += buf;
-                                         #endif
-
-                                         vat.init ( "about", s.c_str() );
-                                         vat.run();
-                                         vat.done();
-                                      }
-                       break;
-
-        case ua_continuenetworkgame:   continuenetworkgame();
-                                       displaymap();
-                       break;
-
-        case ua_toggleunitshading:     CGameOptions::Instance()->units_gray_after_move = !CGameOptions::Instance()->units_gray_after_move;
-                                       CGameOptions::Instance()->setChanged();
-                                       displaymap();
-                                       while ( mouseparams.taste )
-                                          releasetimeslice();
-
-                                       if ( CGameOptions::Instance()->units_gray_after_move )
-                                          displaymessage("units that can not move will now be displayed gray", 3);
-                                       else
-                                          displaymessage("units that can not move and cannot shoot will now be displayed gray", 3);
-                       break;
-
-        case ua_computerturn:          if ( maintainencecheck() || 1 ) {
-                                          displaymessage("This function is under development and for programmers only\n"
-                                                         "unpredictable things may happen ...",3 ) ;
-
-                                          if (choice_dlg("do you really want to start the AI?","~y~es","~n~o") == 1) {
-
-                                             if ( !actmap->player[ actmap->actplayer ].ai )
-                                                actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
-
-                                             savegame ( "aistart.sav" );
-                                             actmap->player[ actmap->actplayer ].ai->run();
-                                          }
-                                       }
-                       break;
-        case ua_setupnetwork:       if ( actmap->network )
-                                       setupnetwork ( actmap->network );
-                                    else
-                                       displaymessage("This map is not played across a network",3 );
-                       break;
-        case ua_selectgraphicset:   selectgraphicset();
-                       break;
-        case ua_UnitSetInfo:        viewUnitSetinfo();
-                       break;
-        case ua_GameParameterInfo: showGameParameters();
-                       break;
-        case ua_GameStatus: displaymessage ( "Current game time is:\n turn %d , move %d ", 3, actmap->time.turn(), actmap->time.move() );
-                       break;
-        case ua_viewunitweaponrange: viewunitweaponrange ( getactfield()->vehicle, ct_invvalue );
-                       break;
-
-        case ua_viewunitmovementrange: viewunitmovementrange ( getactfield()->vehicle, ct_invvalue );
-                       break;
-
-        case ua_aibench: if ( maintainencecheck() || 1 ) {
-                            if ( !actmap->player[ actmap->actplayer ].ai )
-                               actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
-
-                            if ( AI* ai = dynamic_cast<AI*>( actmap->player[ actmap->actplayer ].ai )) {
-                               savegame ( "ai-bench-start.sav" );
-                               ai->run( true );
-                            }
-                         }
-                       break;
-        case ua_networksupervisor: networksupervisor();
-                                   displaymap();
-                       break;
-
-        case ua_selectPlayList: selectPlayList();
-                       break;
-                       
-        case ua_pauseResumeMusic: SoundSystem::getInstance()->resumePauseMusic();
-                       break;
-        case ua_soundDialog: {
-         SDL_mutexP ( eventHandlingMutex );
-        	PG_MessageBox *msgbox =new PG_MessageBox(
-		NULL,
-		PG_Rect(200,50,240,200),
-		"Modal Messagebox", "Click \"Ok\" to close me",
-		PG_Rect(90, 120, 50, 50),
-		"Ok",
-		PG_TA_CENTER);
-		
-	PG_DropDown* drop = new PG_DropDown(msgbox, 15, PG_Rect(5, 60, 200,25));
-	drop->SetIndent(5);
-	drop->AddItem("Under construction");
-	drop->AddItem("Item 1");
-	drop->AddItem("Item 2");
-	drop->AddItem("Item 3");
-
-	msgbox->Show();
-	msgbox->WaitForClick();
-
-	delete msgbox;
-         SDL_mutexV ( eventHandlingMutex );
-
-        }
-        break;
-
-    }
+   }
 
 
 }
@@ -1637,11 +1484,11 @@ void checkpulldown( tkey ch )
 
 void mainloopgeneralkeycheck ( tkey& ch )
 {
-    ch = r_key();
-    checkpulldown( ch );
+   ch = r_key();
+   checkpulldown( ch );
 
-    movecursor(ch);
-    actgui->checkforkey ( ch );
+   movecursor(ch);
+   actgui->checkforkey ( ch );
 }
 
 
@@ -1650,7 +1497,7 @@ void mainloopgeneralkeycheck ( tkey& ch )
 void mainloopgeneralmousecheck ( void )
 {
    if ( exitprogram )
-     execuseraction ( ua_exitgame );
+      execuseraction ( ua_exitgame );
 
    actgui->checkformouse();
 
@@ -1666,7 +1513,6 @@ void mainloopgeneralmousecheck ( void )
 
    if ( mousecontrol )
       mousecontrol->chkmouse();
-
    {
       int oldx = actmap->xpos;
       int oldy = actmap->ypos;
@@ -1684,17 +1530,15 @@ void mainloopgeneralmousecheck ( void )
    releasetimeslice();
 }
 
-void viewunreadmessages ( void )
-{
-   MessagePntrContainer::iterator mi = actmap->player[ actmap->actplayer ].unreadmessage.begin();
-   while ( mi != actmap->player[ actmap->actplayer ].unreadmessage.end()  ) {
-      viewmessage ( **mi );
-      actmap->player[ actmap->actplayer ].oldmessage.push_back ( *mi );
-      mi = actmap->player[ actmap->actplayer ].unreadmessage.erase ( mi );
-   }
-}
 
 
+
+
+
+
+//
+
+	
 
 
 
@@ -1715,144 +1559,160 @@ void  mainloop ( void )
 
          switch (ch) {
 
-            #ifndef NEWKEYB
-            case 'R':   execuseraction ( ua_repainthard );
+#ifndef NEWKEYB
+            case 'R':
+               execuseraction ( ua_repainthard );
                break;
-            #else
-            case ct_shp + ct_r:   execuseraction ( ua_repainthard );
+#else
+            case ct_shp + ct_r:
+               execuseraction ( ua_repainthard );
                break;
-            #endif
+#endif
 
-            case ct_stp + ct_l: execuseraction ( ua_loadgame );
-               break;
-
-            case ct_stp + ct_n: execuseraction ( ua_startnewsinglelevel );
-               break;
-
-            case ct_r:  execuseraction ( ua_repaint );
+            case ct_stp + ct_l:
+               execuseraction ( ua_loadgame );
                break;
 
-            case ct_f1:  execuseraction ( ua_help );
+            case ct_stp + ct_n:
+               execuseraction ( ua_startnewsinglelevel );
                break;
 
-            case ct_f2:  execuseraction ( ua_mainmenu );
+            case ct_r:
+               execuseraction ( ua_repaint );
                break;
 
-            case ct_f3:  execuseraction ( ua_continuenetworkgame );
+            case ct_f1:
+               execuseraction ( ua_help );
                break;
 
-            case ct_f4:  execuseraction ( ua_computerturn );
+            case ct_f2:
+               execuseraction ( ua_mainmenu );
                break;
 
-            case ct_f8:  {
-                            int color;
-                            if ( getactfield()->vehicle )
-                               color = getactfield()->vehicle->color / 8 ;
-                            else
-                               color = actmap->actplayer;
-
-                            if ( actmap->player[color].ai ) {
-                                AI* ai = (AI*) actmap->player[color].ai;
-                                ai->showFieldInformation ( getxpos(), getypos() );
-                            }
-                         }
+            case ct_f3:
+               execuseraction ( ua_continuenetworkgame );
                break;
 
-            case ct_1:  execuseraction ( ua_changeresourceview );
+            case ct_f4:
+               execuseraction ( ua_computerturn );
                break;
 
-            case ct_2:  execuseraction ( ua_toggleunitshading );
+            case ct_f8:
+               {
+                  int color;
+                  if ( getactfield()->vehicle )
+                     color = getactfield()->vehicle->color / 8 ;
+                  else
+                     color = actmap->actplayer;
+
+                  if ( actmap->player[color].ai ) {
+                     AI* ai = (AI*) actmap->player[color].ai;
+                     ai->showFieldInformation ( getxpos(), getypos() );
+                  }
+               }
                break;
 
-            case ct_3:  viewunitweaponrange ( getactfield()->vehicle, ct_3 );
+            case ct_1:
+               execuseraction ( ua_changeresourceview );
                break;
 
-            case ct_4:  viewunitmovementrange ( getactfield()->vehicle, ct_4 );
+            case ct_2:
+               execuseraction ( ua_toggleunitshading );
                break;
 
-            case ct_5:  execuseraction ( ua_GameStatus );
+            case ct_3:
+               viewunitweaponrange ( getactfield()->vehicle, ct_3 );
                break;
 
-            case ct_6:  execuseraction ( ua_UnitSetInfo );
+            case ct_4:
+               viewunitmovementrange ( getactfield()->vehicle, ct_4 );
                break;
 
-            case ct_7:  execuseraction ( ua_viewterraininfo );
+            case ct_5:
+               execuseraction ( ua_GameStatus );
                break;
 
-            case ct_8:  execuseraction ( ua_unitweightinfo );
+            case ct_6:
+               execuseraction ( ua_UnitSetInfo );
                break;
 
-            case ct_9: {
-                          // testtext ( getterraintype_forid ( 1011 ), getobjecttype_forid ( 1 ) );
-                                     /*
-                          static pvehicle veh = 0;
-                          if ( !veh ) {
-                             veh = getactfield()->vehicle;
-                          } else {
-                             actmap->cleartemps ( 15 );
-                             std::vector<MapCoordinate3D> path;
-                             AStar3D ast ( actmap, veh );
-                             ast.findAllAccessibleFields ( veh->tank.fuel / veh->typ->fuelConsumption * maxmalq );
-
-                             for ( int x = 0; x < actmap->xsize; x++ )
-                                for ( int y = 0; y < actmap->ysize; y++ )
-                                    if ( !(getfield( x,y )->a.temp & chfahrend) )
-                                        getfield( x,y )->a.temp = 0;
-                                       */
-/*
-                             int x = veh->xpos;
-                             int y = veh->ypos;
-                             actmap->cleartemps( 15 );
-                             for ( int i = 0; i < path.size(); i++ )
-                                actmap->getField ( path[i] )->a.temp = 1;
-
-                             AI ai ( actmap, actmap->actplayer );
-                             int res = ai.moveUnit ( veh, path );
-                             if ( res < 0 )
-                                displaymessage("error", 1 );
-                                */
-                             /*
-                                if ( !getfield ( x, y ))
-                                   break;
-
-                                getfield ( x, y )->a.temp = 1;
-                             } */
-
-                             /*
-                             for ( int xp = 0; xp < actmap->xsize; xp++ )
-                                for ( int yp = 0; yp < actmap->ysize; yp++ )
-                                   if ( ast.fieldVisited ( xp, yp ))
-                                      getfield ( xp, yp )->a.temp = 1;
-                             */
-                             /*
-                             displaymap();
-                             veh = NULL;
-
-                          }  */
-                          /*
-                          static AStar* ast = 0;
-                          if ( ast ) {
-                             delete ast;
-                             ast =  NULL;
-                          } else {
-                             ast = new AStar ( actmap, getactfield()->vehicle );
-                             ast->findAllAccessibleFields ( );
-                             displaymap();
-                          } */
-                          // testland();
-                       }
+            case ct_7:
+               execuseraction ( ua_viewterraininfo );
                break;
 
-            case ct_0:  execuseraction ( ua_writescreentopcx );
+            case ct_8:
+               execuseraction ( ua_unitweightinfo );
                break;
 
-            case ct_point: execuseraction ( ua_scrolltodebugpage );
+            case ct_9:
+               {
+                  // testtext ( getterraintype_forid ( 1011 ), getobjecttype_forid ( 1 ) );
+                  /*
+                  static pvehicle veh = 0;
+                  if ( !veh ) {
+                  veh = getactfield()->vehicle;
+               } else {
+                  actmap->cleartemps ( 15 );
+                  std::vector<MapCoordinate3D> path;
+                  AStar3D ast ( actmap, veh );
+                  ast.findAllAccessibleFields ( veh->tank.fuel / veh->typ->fuelConsumption * maxmalq );
+
+                  for ( int x = 0; x < actmap->xsize; x++ )
+                  for ( int y = 0; y < actmap->ysize; y++ )
+                  if ( !(getfield( x,y )->a.temp & chfahrend) )
+                     getfield( x,y )->a.temp = 0;
+                    */
+                  /*
+                                               int x = veh->xpos;
+                                               int y = veh->ypos;
+                                               actmap->cleartemps( 15 );
+                                               for ( int i = 0; i < path.size(); i++ )
+                                                  actmap->getField ( path[i] )->a.temp = 1;
+                   
+                                               AI ai ( actmap, actmap->actplayer );
+                                               int res = ai.moveUnit ( veh, path );
+                                               if ( res < 0 )
+                                                  displaymessage("error", 1 );
+                                                  */
+                  /*
+                     if ( !getfield ( x, y ))
+                        break;
+
+                     getfield ( x, y )->a.temp = 1;
+               } */
+
+                  /*
+                  for ( int xp = 0; xp < actmap->xsize; xp++ )
+                     for ( int yp = 0; yp < actmap->ysize; yp++ )
+                        if ( ast.fieldVisited ( xp, yp ))
+                           getfield ( xp, yp )->a.temp = 1;
+                  */
+                  /*
+                  displaymap();
+                  veh = NULL;
+
+               }  */
+                  /*
+                  static AStar* ast = 0;
+                  if ( ast ) {
+                     delete ast;
+                     ast =  NULL;
+               } else {
+                     ast = new AStar ( actmap, getactfield()->vehicle );
+                     ast->findAllAccessibleFields ( );
+                     displaymap();
+               } */
+                  // testland();
+               }
+
                break;
 
-            case ct_komma: execuseraction ( ua_scrolltomainpage );
+            case ct_0:
+               execuseraction ( ua_writescreentopcx );
                break;
 
-            case ct_x + ct_stp:   execuseraction ( ua_exitgame );
+            case ct_x + ct_stp:
+               execuseraction ( ua_exitgame );
                break;
          }
 
@@ -1862,14 +1722,14 @@ void  mainloop ( void )
 
       mainloopgeneralmousecheck ( );
 
-/************************************************************************************************/
-/*        Pulldown Men?                                                                       . */
-/************************************************************************************************/
+      /************************************************************************************************/
+      /*        Pulldown Men?                                                                       . */
+      /************************************************************************************************/
 
       checkpulldown( ch );
 
       while ( actmap->player[ actmap->actplayer ].queuedEvents )
-        checkevents( &defaultMapDisplay );
+         checkevents( &defaultMapDisplay );
 
       checktimedevents( &defaultMapDisplay );
 
@@ -1923,7 +1783,7 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
    if ( actprogressbar ) actprogressbar->startgroup();
 
-   loadcursor();
+   loadMoreData();
 
    if ( actprogressbar ) actprogressbar->startgroup();
 
@@ -1966,10 +1826,6 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
    selectobjectcontainergui.init( resolx, resoly );
    selectvehiclecontainergui.init( resolx, resoly );
 
-#ifndef FREEMAPZOOM
-   idisplaymap.setup_map_mask ( );
-#endif
-
    if ( actprogressbar ) actprogressbar->startgroup();
 
    loadStartupMap( gameToLoad );
@@ -2007,28 +1863,32 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
 void runmainmenu ( void )
 {
-    MainMenuPullDown pd;
-    pd.init();
-    backgroundpict.paint();
-    pd.baron();
-    // loadFullscreenImage ( "title.jpg" );
+   MainMenuPullDown pd;
+   pd.init();
+   backgroundpict.paint();
+   pd.baron();
+   // loadFullscreenImage ( "title.jpg" );
 
-    do {
-       tkey ch = ct_invvalue;
-       if (keypress()) {
+   do {
+      tkey ch = ct_invvalue;
+      if (keypress()) {
          ch = r_key();
 
          switch (ch) {
-            case ct_f3:  execuseraction ( ua_continuenetworkgame );
+            case ct_f3:
+               execuseraction ( ua_continuenetworkgame );
                break;
-            case 'R':   execuseraction ( ua_repainthard );
+            case 'R':
+               execuseraction ( ua_repainthard );
                break;
-            case ct_stp + ct_l: execuseraction ( ua_loadgame );
+            case ct_stp + ct_l:
+               execuseraction ( ua_loadgame );
                break;
-            case ct_x + ct_stp:   execuseraction ( ua_exitgame );
+            case ct_x + ct_stp:
+               execuseraction ( ua_exitgame );
                break;
          };
-       }
+      }
 
       pd.key = ch;
       pd.checkpulldown();
@@ -2040,119 +1900,114 @@ void runmainmenu ( void )
          pd.redraw();
       }
 
-       releasetimeslice();
-    } while ( !actmap && !abortgame ); /* enddo */
+      releasetimeslice();
+   } while ( !actmap && !abortgame ); /* enddo */
 
 }
 
 
 
-struct GameThreadParams {
+struct GameThreadParams
+{
    ASCString filename;
 };
 
 int gamethread ( void* data )
 {
-      GameThreadParams* gtp = (GameThreadParams*) data;
+   GameThreadParams* gtp = (GameThreadParams*) data;
 
-      initMapDisplay( );
+   initMapDisplay( );
 
-      int resolx = agmp->resolutionx;
-      int resoly = agmp->resolutiony;
-      gui.init ( resolx, resoly );
-      virtualscreenbuf.init();
+   int resolx = agmp->resolutionx;
+   int resoly = agmp->resolutiony;
+   gui.init ( resolx, resoly );
+   virtualscreenbuf.init();
 
+   try {
+      int fs = loadFullscreenImage ( "title.jpg" );
+      if ( !fs ) {
+         tnfilestream stream ( "logo640.pcx", tnstream::reading );
+         loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 );
+      }
+      loaddata( resolx, resoly, gtp->filename.c_str() );
+      if ( fs )
+         closeFullscreenImage ();
+
+   } catch ( tfileerror err ) {
+      displaymessage ( "unable to access file %s \n", 2, err.getFileName().c_str() );
+   }
+   catch ( ParsingError err ) {
+      displaymessage ( "Error parsing text file " + err.getMessage(), 2 );
+   }
+   catch ( ASCexception ) {
+      displaymessage ( "loading of game failed", 2 );
+   }
+
+   displayLogMessage ( 5, "loaddata completed successfully.\n" );
+   setvgapalette256(pal);
+
+   addmouseproc ( &mousescrollproc );
+
+   loadtexture();
+
+   startMusic();
+
+   onlinehelp = new tsgonlinemousehelp;
+   onlinehelpwind = new tsgonlinemousehelpwind;
+
+   pd.init();
+
+   abortgame = 0;
+   gameStartupComplete = true;
+
+
+   displayLogMessage ( 5, "entering outer main loop.\n" );
+   do {
       try {
-         int fs = loadFullscreenImage ( "title.jpg" );
-         if ( !fs ) {
-            tnfilestream stream ( "logo640.pcx", tnstream::reading );
-            loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 );
-         }
-         loaddata( resolx, resoly, gtp->filename.c_str() );
-         if ( fs )
-            closeFullscreenImage ();
-
-      }
-      catch ( tfileerror err ) {
-         displaymessage ( "unable to access file %s \n", 2, err.getFileName().c_str() );
-      }
-      catch ( ParsingError err ) {
-         displaymessage ( "Error parsing text file " + err.getMessage(), 2 );
-      }
-      catch ( ASCexception ) {
-         displaymessage ( "loading of game failed", 2 );
-      }
-
-      displayLogMessage ( 5, "loaddata completed successfully.\n" );
-      setvgapalette256(pal);
-
-      addmouseproc ( &mousescrollproc );
-
-      loadtexture();
-
-      startMusic();
-
-      onlinehelp = new tsgonlinemousehelp;
-      onlinehelpwind = new tsgonlinemousehelpwind;
-
-      pd.init();
-
-      abortgame = 0;
-      gameStartupComplete = true;
-
-
-      displayLogMessage ( 5, "entering outer main loop.\n" );
-      do {
-         try {
-            if ( !actmap || actmap->xsize <= 0 || actmap->ysize <= 0 ) {
-               displayLogMessage ( 8, "gamethread :: starting main menu.\n" );
-               runmainmenu();
-            } else {
-               if ( actmap->actplayer == -1 ) {
-                  displayLogMessage ( 8, "gamethread :: performing next_turn..." );
-                  next_turn();
-                  displayLogMessage ( 8, "done.\n" );
-               }
-
-               displayLogMessage ( 8, "gamethread :: Painting background pict..." );
-               backgroundpict.paint();
-
-               if ( !gtp->filename.empty() && patimat ( tournamentextension, gtp->filename.c_str() ) ) {
-                  displayLogMessage ( 5, "Initializing network game..." );
-                  initNetworkGame ( );
-                  displayLogMessage ( 5, "done\n" );
-               }
-
-               displayLogMessage ( 8, "gamethread :: displaying map..." );
-               displaymap();
+         if ( !actmap || actmap->xsize <= 0 || actmap->ysize <= 0 ) {
+            displayLogMessage ( 8, "gamethread :: starting main menu.\n" );
+            runmainmenu();
+         } else {
+            if ( actmap->actplayer == -1 ) {
+               displayLogMessage ( 8, "gamethread :: performing next_turn..." );
+               next_turn();
                displayLogMessage ( 8, "done.\n" );
-               cursor.show();
-
-               moveparams.movestatus = 0;
-
-               displayLogMessage ( 8, "gamethread :: painting gui icons..." );
-               actgui->painticons();
-               displayLogMessage ( 8, "done.\n" );
-               mousevisible(true);
-
-               dashboard.x = 0xffff;
-               dashboard.y = 0xffff;
-
-               /*
-               static int displayed = 0;
-               if ( !displayed )
-                  displaymessage2( "time for startup: %d * 1/100 sec", ticker-cntr );
-
-               displayed = 1;
-               */
-
-               displayLogMessage ( 5, "entering inner main loop.\n" );
-               mainloop();
-               mousevisible ( false );
             }
-         } /* endtry */
-         catch ( NoMapLoaded ) { } /* endcatch */
-      } while ( abortgame == 0);
+
+            displayLogMessage ( 8, "gamethread :: Painting background pict..." );
+            backgroundpict.paint();
+
+            if ( !gtp->filename.empty() && patimat ( tournamentextension, gtp->filename.c_str() ) ) {
+               displayLogMessage ( 5, "Initializing network game..." );
+               initNetworkGame ( );
+               displayLogMessage ( 5, "done\n" );
+            }
+
+            displayLogMessage ( 8, "gamethread :: displaying map..." );
+            displaymap();
+            displayLogMessage ( 8, "done.\n" );
+            cursor.show();
+
+            moveparams.movestatus = 0;
+
+            displayLogMessage ( 8, "gamethread :: painting gui icons..." );
+            actgui->painticons();
+            displayLogMessage ( 8, "done.\n" );
+            mousevisible(true);
+
+            dashboard.x = 0xffff;
+            dashboard.y = 0xffff;
+
+            setupMainScreenWidget();
+
+            displayLogMessage ( 5, "entering inner main loop.\n" );
+            mainloop();
+            mousevisible ( false );
+         }
+      } /* endtry */
+      catch ( NoMapLoaded ) { } /* endcatch */
+
+   } while ( abortgame == 0);
    return 0;
 }
 
@@ -2166,8 +2021,7 @@ int main(int argc, char *argv[] )
    auto_ptr<Cmdline> apcl ( cl );
    try {
       cl = new Cmdline ( argc, argv );
-   }
-   catch ( string s ) {
+   } catch ( string s ) {
       cerr << s.c_str();
       exit(1);
    }
@@ -2199,8 +2053,7 @@ int main(int argc, char *argv[] )
    try {
       checkDataVersion();
       check_bi3_dir ();
-   }
-   catch ( tfileerror err ) {
+   } catch ( tfileerror err ) {
       displaymessage ( "unable to access file %s \n", 2, err.getFileName().c_str() );
    }
    catch ( ... ) {
@@ -2216,9 +2069,8 @@ int main(int argc, char *argv[] )
       SDL_Surface *icn = IMG_LoadGIF_RW( SDL_RWFromStream ( &iconl ));
       SDL_SetColorKey(icn, SDL_SRCCOLORKEY, *((Uint8 *)icn->pixels));
       icon = new SDLmm::Surface ( icn );
-   }
-   catch ( ... ) {
-   }
+   } catch ( ... ) {}
+
 
 
 
@@ -2238,22 +2090,22 @@ int main(int argc, char *argv[] )
    SoundSystem soundSystem ( CGameOptions::Instance()->sound_mute, cl->q() || CGameOptions::Instance()->sound_off );
 
    PG_Application app;
-
-	app.LoadTheme("default");
-	int flags = SDL_SWSURFACE;
+   pgApp = &app;
+   app.SetSymlinkFollowing(true);
+   app.LoadTheme("asc_dlg");
+   int flags = SDL_SWSURFACE;
    if ( fullscreen )
       flags |= SDL_FULLSCREEN;
 
    setWindowCaption ( "Advanced Strategic Command" );
    SDL_WM_SetIcon( icon->GetSurface(), NULL );
 
-	app.InitScreen( xr, yr, 8, flags);
-	
+   app.InitScreen( xr, yr, 8, flags);
+
    initASCGraphicSubsystem ( app.GetScreen(), icon );
 
    GameThreadParams gtp;
    gtp.filename = cl->l();
-
    {
       int w;
       tnfilestream stream ("mausi.raw", tnstream::reading);

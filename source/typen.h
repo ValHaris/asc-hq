@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.106 2001-12-14 10:20:05 mbickel Exp $
+//     $Id: typen.h,v 1.107 2002-02-21 17:06:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.106  2001/12/14 10:20:05  mbickel
+//      Cleanup and enhancements to configure.in
+//      Removed last remains of octagonal version from source files
+//
 //     Revision 1.105  2001/10/31 20:30:38  mbickel
 //      Fixed strange problems with gcc
 //
@@ -371,38 +375,6 @@ struct GameTime {
 };
 
 
-//! A Message to a player. It may either be send by another player or by the system.
-class  Message {
-   public:
-     //! bitmapped variable showing the sender of the message. Bit 0 - 7 are the players, Bit 9 is the system.
-     int from;
-
-     //! bitmapped variable showing the recipients of the message.
-     int to;
-
-     //! the real world time the message was written
-     time_t time;
-
-     //! the body of the message
-     ASCString text;
-
-     //! an id that identifies the message. It is assigned automatically
-     int id;
-
-     //! the game time the messages was written
-     GameTime gametime;
-
-     Message ( pmap spfld );
-
-     /** Constructor.
-         \param msg      The message text
-         \param gamemap  The map that this message is currently being played
-         \param rec      The receipient. Bitmapped: each bit one player
-         \param from     The sender. Bitmapped too! 512 = system
-     */
-     Message ( const ASCString& msg, pmap gamemap,int rec, int from = 512 );
-};
-
 
 //! A vector that stores pointers, but deletes the objects (and not only the pointers) on destruction. The erase method does NOT delete the objects !
 template <class T> class PointerVector : public vector<T> {
@@ -423,9 +395,6 @@ template <class T> class PointerList : public list<T> {
      };
 };
 
-
-typedef PointerList<Message*> MessageContainer;
-typedef list<Message*> MessagePntrContainer;
 
 
 

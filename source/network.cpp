@@ -7,9 +7,12 @@
 */
 
 
-//     $Id: network.cpp,v 1.25 2001-12-19 17:16:29 mbickel Exp $
+//     $Id: network.cpp,v 1.26 2002-02-21 17:06:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.25  2001/12/19 17:16:29  mbickel
+//      Some include file cleanups
+//
 //     Revision 1.24  2001/10/02 14:06:28  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -145,6 +148,10 @@
 #include "events.h"
 #include "sgstream.h"
 #include "loadpcx.h"
+#include "mapdisplay.h"
+#include "password_dialog.h"
+#include "stack.h"
+#include "gamedlg.h"
 
 pbasenetworkconnection firstnetworkconnection = NULL;
 
@@ -488,3 +495,139 @@ void setallnetworkpointers ( pnetwork net )
    } /* endfor */
 }
 
+
+
+void networksupervisor ( void )
+{
+   class tcarefordeletionofmap {
+         pmap tmp;
+      public:
+         tcarefordeletionofmap ()
+         {
+            tmp= actmap;
+            actmap = NULL;
+         }
+         ~tcarefordeletionofmap (  )
+         {
+            if ( actmap && (actmap->xsize > 0  ||  actmap->ysize > 0) )
+               delete actmap;
+            actmap = tmp;
+         };
+   }
+   carefordeletionofmap;
+
+
+   tlockdispspfld ldsf;
+
+   tnetwork network;
+   /*
+      int stat;
+      do {
+         stat = setupnetwork( &network, 1+8 );
+         if ( stat == 1 )
+            return;
+
+      } while ( (network.computer[0].receive.transfermethod == 0) || (network.computer[0].receive.transfermethodid != network.computer[0].receive.transfermethod->getid()) );
+   */
+   int stat;
+   int go = 0;
+   do {
+      stat = network.computer[0].receive.transfermethod->setupforreceiving ( &network.computer[0].receive.data );
+      if ( stat == 0 )
+         return;
+
+      if ( network.computer[0].receive.transfermethod  &&
+            network.computer[0].receive.transfermethodid == network.computer[0].receive.transfermethod->getid()  &&
+            network.computer[0].receive.transfermethod->validateparams( &network.computer[0].receive.data, TN_RECEIVE ))
+         go = 1;
+   } while ( !go );
+
+   try {
+      displaymessage ( " starting data transfer ",0);
+
+      network.computer[0].receive.transfermethod->initconnection ( TN_RECEIVE );
+      network.computer[0].receive.transfermethod->inittransfer ( &network.computer[0].receive.data );
+
+      tnetworkloaders nwl;
+      nwl.loadnwgame ( network.computer[0].receive.transfermethod->stream );
+
+      network.computer[0].receive.transfermethod->closetransfer();
+      network.computer[0].receive.transfermethod->closeconnection();
+
+      removemessage();
+      if ( actmap->network )
+         setallnetworkpointers ( actmap->network );
+   } /* endtry */
+
+   catch ( tfileerror ) {
+      displaymessage ("a file error occured while loading game",1 );
+      delete actmap;
+      actmap = NULL;
+      return;
+   } /* endcatch */
+   catch ( ASCexception ) {
+      displaymessage ("error loading game",1 );
+      delete actmap;
+      actmap = NULL;
+      return;
+   } /* endcatch */
+
+
+   int ok = 0;
+   if ( !actmap->supervisorpasswordcrc.empty() ) {
+      ok = enterpassword ( actmap->supervisorpasswordcrc );
+   } else {
+      displaymessage ("no supervisor defined",1 );
+      delete actmap;
+      actmap = NULL;
+      return;
+   }
+
+   if ( ok ) {
+      npush ( actmap->actplayer );
+      actmap->actplayer = -1;
+      setupalliances( 1 );
+      npop ( actmap->actplayer );
+
+      do {
+         stat = setupnetwork( &network, 2+8 );
+         if ( stat == 1 ) {
+            displaymessage ("no changes were saved",1 );
+            delete actmap;
+            actmap = NULL;
+            return;
+         }
+
+      } while ( (network.computer[0].send.transfermethod == 0) || (network.computer[0].send.transfermethodid != network.computer[0].send.transfermethod->getid()) ); /* enddo */
+
+      tnetworkcomputer* compi = &network.computer[ 0 ];
+
+      displaymessage ( " starting data transfer ",0);
+
+      try {
+         compi->send.transfermethod->initconnection ( TN_SEND );
+         compi->send.transfermethod->inittransfer ( &compi->send.data );
+
+         tnetworkloaders nwl;
+         nwl.savenwgame ( compi->send.transfermethod->stream );
+
+         compi->send.transfermethod->closetransfer();
+         compi->send.transfermethod->closeconnection();
+      } /* endtry */
+      catch ( tfileerror ) {
+         displaymessage ( "a file error occured while saving file", 1 );
+      } /* endcatch */
+      catch ( ASCexception ) {
+         displaymessage ( "error saving file", 1 );
+      } /* endcatch */
+
+      delete actmap;
+      actmap = NULL;
+      displaymessage ( "data transfer finished",1);
+
+   } else {
+      displaymessage ("no supervisor defined or invalid password",1 );
+      delete actmap;
+      actmap = NULL;
+   }
+}

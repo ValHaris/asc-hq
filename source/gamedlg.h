@@ -1,6 +1,11 @@
-//     $Id: gamedlg.h,v 1.18 2001-07-18 18:15:52 mbickel Exp $
+//     $Id: gamedlg.h,v 1.19 2002-02-21 17:06:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2001/07/18 18:15:52  mbickel
+//      Fixed: invalid sender of mails
+//      Fixed: unmoveable units are moved by AI
+//      Some reformatting of source files
+//
 //     Revision 1.17  2001/07/18 16:05:47  mbickel
 //      Fixed: infinitive loop in displaying "player exterminated" msg
 //      Fixed: construction of units by units: wrong player
@@ -172,13 +177,6 @@ class   tshownewtanks : public tdialogbox {
 extern void  showtechnology(ptechnology  t);
 extern void researchinfo ( void );
 extern void choosetechlevel ( void );
-extern void editmessage ( Message& msg );
-extern void newmessage ( void );
-extern void viewmessages ( char* title, const MessagePntrContainer& msgc, bool editable, int md  ) ;   // mode : 0 verschickte ; 1 empfangene
-extern void viewmessage ( const Message& message );
-extern void editmessage ( Message& msg );
-extern void editjournal ( void );
-extern void viewjournal ( void );
 
 
 

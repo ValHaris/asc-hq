@@ -2,9 +2,12 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.105 2002-01-07 11:40:40 mbickel Exp $
+//     $Id: dialog.cpp,v 1.106 2002-02-21 17:06:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.105  2002/01/07 11:40:40  mbickel
+//      Fixed some syntax errors
+//
 //     Revision 1.104  2001/12/19 17:16:28  mbickel
 //      Some include file cleanups
 //
@@ -246,6 +249,7 @@
 #include "itemrepository.h"
 #include "mapdisplay.h"
 #include "networkdata.h"
+#include "graphicset.h"
 
 #ifndef karteneditor
  #include "gamedlg.h"
@@ -6110,3 +6114,17 @@ void MultilineEdit :: run ( void )
    }
 }
 
+
+
+void selectgraphicset ( void )
+{
+   ASCString filename;
+   fileselectsvga("*.gfx", filename, true );
+   if ( !filename.empty() ) {
+      int id = getGraphicSetIdFromFilename ( filename.c_str() );
+      if ( id != actmap->graphicset ) {
+         actmap->graphicset = id;
+         displaymap();
+      }
+   }
+}

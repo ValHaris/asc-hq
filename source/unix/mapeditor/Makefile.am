@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.8 2002-02-14 20:58:14 mbickel Exp $
+## $Id: Makefile.am,v 1.9 2002-02-21 17:06:54 mbickel Exp $
 
 vpath %.cpp ../..
 
@@ -10,7 +10,7 @@ INCLUDES		= -I$(top_builddir) -I$(top_src_dir) \
 			  -I$(top_builddir)/source -I$(top_src_dir)/source
 
 CXXFLAGS 		= @CXXFLAGS@ @SDL_CFLAGS@ @SDLMM_CXXFLAGS@ \
--Dkarteneditor -DFREEMAPZOOM -DNEWKEYB
+-Dkarteneditor -DFREEMAPZOOM -DNEWKEYB @PARAGUI_CFLAGS@
 
 bin_PROGRAMS 		= asc_mapedit asc_map2pcx
 
@@ -24,9 +24,10 @@ mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp \
 password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
-stringtokenizer.cpp music.cpp
+stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp
+
 asc_mapedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
-$(top_builddir)/source/libs/triangul/libtriangul.la @SDLMM_LIBS@ @LDADDLIBBZ2@
+$(top_builddir)/source/libs/triangul/libtriangul.la @SDLMM_LIBS@ @LDADDLIBBZ2@ $(PARAGUI_LIBS)
 
 asc_map2pcx_SOURCES	= map2pcx.cpp weather.cpp typen.cpp strtmesg.cpp \
 stack.cpp spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp \
@@ -37,10 +38,10 @@ mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp \
 password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
-stringtokenizer.cpp music.cpp
+stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp
 
 asc_map2pcx_LDADD   	= $(top_builddir)/source/libs/triangul/libtriangul.la \
-$(top_builddir)/source/sdl/libsdl.la @SDLMM_LIBS@ @LDADDLIBBZ2@
+$(top_builddir)/source/sdl/libsdl.la @SDLMM_LIBS@ @LDADDLIBBZ2@ $(PARAGUI_LIBS)
 
 # vim: noexpandtab ai
 

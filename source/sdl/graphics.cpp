@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.19 2002-02-14 20:58:14 mbickel Exp $
+//     $Id: graphics.cpp,v 1.20 2002-02-21 17:06:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2002/02/14 20:58:14  mbickel
+//      Started integration of paragui
+//
 //     Revision 1.18  2001/10/16 15:33:03  mbickel
 //      Added icons to data
 //      ASC displays icons
@@ -170,7 +173,6 @@ void initASCGraphicSubsystem ( SDL_Surface* _screen, SDLmm::Surface* icon )
   *hgmp = *agmp;
 
   graphicinitialized = 1;
-
 }
 
 
@@ -178,6 +180,11 @@ void  closegraphics ( void )
 {
         SDL_FreeSurface ( screen );
         screen = NULL;
+}
+
+SDL_Surface* getScreen()
+{
+   return screen;
 }
 
 

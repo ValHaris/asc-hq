@@ -1,6 +1,12 @@
-//     $Id: network.h,v 1.6 2001-02-26 12:35:25 mbickel Exp $
+//     $Id: network.h,v 1.7 2002-02-21 17:06:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2001/02/26 12:35:25  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.5  2000/08/12 12:52:49  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -137,4 +143,7 @@ class tfiletransfernetworkconnection : public tbasenetworkconnection {
 
 extern pbasenetworkconnection getconnectforid( int id );
 extern void setallnetworkpointers ( pnetwork net );
+
+extern void networksupervisor ( void );
+
 #endif

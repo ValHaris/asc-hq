@@ -53,4 +53,6 @@ extern int graphicinitialized;
 
 extern int isfullscreen ( void );
 
+extern SDL_Surface* getScreen();
+
 #endif

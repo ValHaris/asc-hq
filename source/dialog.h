@@ -2,9 +2,13 @@
     \brief Interface for all the dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.h,v 1.20 2001-10-11 10:41:06 mbickel Exp $
+//     $Id: dialog.h,v 1.21 2002-02-21 17:06:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2001/10/11 10:41:06  mbickel
+//      Restructured platform fileio handling
+//      Added map archival information to mapeditor
+//
 //     Revision 1.19  2001/10/02 14:06:28  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -337,6 +341,8 @@ class MultilineEdit : public tmessagedlg  {
                void run ( void );
                bool changed ( ) { return textchanged; };
        };
+
+extern void selectgraphicset ( void );
 
 
 #endif

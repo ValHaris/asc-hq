@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: sg.h,v 1.7 2001-01-28 14:04:19 mbickel Exp $
+//     $Id: sg.h,v 1.8 2002-02-21 17:06:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2001/01/28 14:04:19  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.6  2001/01/25 23:45:03  mbickel
 //      Moved map displaying routins to own file (mapdisplay.cpp)
 //      Wrote program to create pcx images from map files (map2pcx.cpp)
@@ -56,11 +62,11 @@
 #ifndef sg_h
 #define sg_h
 
-
+#include "dialog.h"
 
 extern void mainloopgeneralmousecheck ( void );
 extern void mainloopgeneralkeycheck ( tkey& ch );
-extern void         repaintdisplay(void);
+extern void repaintdisplay();
 
 #ifdef sgmain
  #include "controls.h"
@@ -69,7 +75,6 @@ extern void         repaintdisplay(void);
 
 extern pprogressbar actprogressbar ;
 
-extern void viewunreadmessages ( void );
 
 #endif
 

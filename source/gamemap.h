@@ -31,6 +31,7 @@
  #include "buildings.h"
  #include "basestrm.h"
  #include "time.h"
+ #include "messages.h"
 
 //! The number of game paramters that can be specified for each map.
 const int gameparameternum = 22;

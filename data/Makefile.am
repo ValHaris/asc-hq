@@ -1,3 +1,5 @@
+SUBDIRS 		= dialog
+
 MAINTAINERCLEANFILES    = Makefile.in
 # main.con buildings.con mk1.con trrobj.con trrobj2.con
 
