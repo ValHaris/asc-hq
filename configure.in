@@ -137,7 +137,7 @@ fi
 
 AC_MSG_CHECKING("broken c_str Unicode support")
 AC_TRY_COMPILE( [#include <string>], [
-   basic_string<wchar_t> test;
+   std::basic_string<wchar_t> test;
    test.c_str();
 ],, Unicode_broken=yes)
 

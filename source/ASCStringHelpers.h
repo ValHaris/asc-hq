@@ -8,6 +8,7 @@
 #include <string>
 #include <wchar.h>
 #include <stdio.h>
+#include <ctype.h>
 
 using std::auto_ptr;
 using std::string;

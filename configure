@@ -2831,7 +2831,7 @@ cat > conftest.$ac_ext <<EOF
 #include <string>
 int main() {
 
-   basic_string<wchar_t> test;
+   std::basic_string<wchar_t> test;
    test.c_str();
 
 ; return 0; }
