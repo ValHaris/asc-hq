@@ -21,28 +21,30 @@
 #include <stdio.h>
 
 
-#include "..\vesa.h"
+#include "..\basegfx.h"
 #include "..\loadpcx.h"
 #include "..\typen.h"
+#include "..\basestrm.h"
 #include "..\sgstream.h"
-#include "krkr.h"
 #include "..\misc.h"
 
 typedef char tmixbuf[256][256];
 
 tmixbuf mixbuf;
-tpixelxlattable hell,dunkel1,dunkel2,dunkel3,dunkel05;
 char bi2asc[256];
 
+#ifdef WIN32
+#undef main
+#endif
 
-int     abs( int a ) 
+
+int     abs( int a )
 {
    if ( a > 0 )
       return a;
    else
       return -a;
 }
-#pragma intrinsic ( abs );
 
 #define sqr(a) (a)*(a)
 #define cub(a) abs ((a)*(a)*(a))
@@ -56,29 +58,19 @@ int calcdiff ( int r1, int r2, int g1, int g2, int b1, int b2 )
 }
 
 
-int main(int argc, char *argv[], char *envp[])
+int main(int argc, char *argv[] )
 {
    if ( argc < 3) {
       printf("Syntax:  makepal <ascpic.pcx> <bi2pic.pcx> \n");
       return 1;
    }
 
-   int modenum8;
-
-   pavailablemodes avm = searchformode ( 800, 600, 8 );
-
-   if (avm->num > 0) {
-       modenum8 = avm->mode[0].num;
-       initsvga( modenum8 );
-   } else {
-      printf("\nno vesa mode found!\n");
-      return 1;
-   }
+   tvirtualdisplay vd ( 1200, 1200 );
    loadpcxxy( argv[1], 1,0,0);
-   getch();
-   settextmode ( 3 );
 
-
+   tn_file_buf_stream mainstream ("palette.pal", tnstream::writing);
+   memcpy ( pal, activepalette256, sizeof ( pal ));
+   mainstream.writedata( pal, sizeof ( pal ));
 
 
    int i,j,k;
@@ -102,144 +94,68 @@ int main(int argc, char *argv[], char *envp[])
                diff = actdif;
                pix1 = k;
             }
-         } 
+         }
 
         mixbuf[i][j] = pix1;
         mixbuf[j][i] = pix1;
 
-      }             
+      }
+   }
 
-      int diff2 = 0xFFFFFFF;
-      int actdif2;
+   mainstream.writedata( mixbuf, sizeof ( mixbuf ));
 
-      int r2 = (*activepalette256)[i][0] * 8 / 10;
-      int g2 = (*activepalette256)[i][1] * 8 / 10;
-      int b2 = (*activepalette256)[i][2] * 8 / 10;
 
-      for (k=0;k<256 ;k++ ) {
+   const int shadings[8] = { 9, 8, 6, 4, 11, 12, 14, 17 };
+   for ( int sh = 0; sh < 8; sh++ ) {
+      tpixelxlattable xl;
+      for (i=0;i<256 ;i++ ) {
 
-         // actdif2 = sqr( (*activepalette256)[k][0] - r2 ) + sqr( (*activepalette256)[k][1] -  g2 ) + sqr( (*activepalette256)[k][2] - b2 );
-         actdif2 = calcdiff( (*activepalette256)[k][0] , r2 ,
-                            (*activepalette256)[k][1] , g2 ,
-                            (*activepalette256)[k][2] , b2 );
-         if (actdif2 < diff2) {
-            diff2 = actdif2;
-            dunkel1[i] = k;
+         int diff2 = 0xFFFFFFF;
+         int actdif2;
+
+         int r2 = (*activepalette256)[i][0] * shadings[sh] / 10;
+         int g2 = (*activepalette256)[i][1] * shadings[sh] / 10;
+         int b2 = (*activepalette256)[i][2] * shadings[sh] / 10;
+
+         for (k=0;k<256 ;k++ ) {
+            actdif2 = calcdiff( (*activepalette256)[k][0] , r2 ,
+                               (*activepalette256)[k][1] , g2 ,
+                               (*activepalette256)[k][2] , b2 );
+            if (actdif2 < diff2) {
+               diff2 = actdif2;
+               xl[i] = k;
+            }
          }
-      } 
+      }
 
-      diff2 = 0xFFFFFFF;
-
-      r2 = (*activepalette256)[i][0] * 6 / 10;
-      g2 = (*activepalette256)[i][1] * 6 / 10;
-      b2 = (*activepalette256)[i][2] * 6 / 10;
-
-      for (k=0;k<256 ;k++ ) {
-
-         // actdif2 = sqr( (*activepalette256)[k][0] - r2 ) + sqr( (*activepalette256)[k][1] -  g2 ) + sqr( (*activepalette256)[k][2] - b2 );
-         actdif2 = calcdiff( (*activepalette256)[k][0] , r2 ,
-                            (*activepalette256)[k][1] , g2 ,
-                            (*activepalette256)[k][2] , b2 );
-         if (actdif2 < diff2) {
-            diff2 = actdif2;
-            dunkel2[i] = k;
-         }
-      } 
-
-// Dunkel 05
-
-      diff2 = 0xFFFFFFF;
-
-      r2 = (*activepalette256)[i][0] * 9 / 10;
-      g2 = (*activepalette256)[i][1] * 9 / 10;
-      b2 = (*activepalette256)[i][2] * 9 / 10;
-
-      for (k=0;k<256 ;k++ ) {
-
-         // actdif2 = sqr( (*activepalette256)[k][0] - r2 ) + sqr( (*activepalette256)[k][1] -  g2 ) + sqr( (*activepalette256)[k][2] - b2 );
-         actdif2 = calcdiff( (*activepalette256)[k][0] , r2 ,
-                             (*activepalette256)[k][1] , g2 ,
-                             (*activepalette256)[k][2] , b2 );
-         if (actdif2 < diff2) {
-            diff2 = actdif2;
-            dunkel05[i] = k;
-         }
-      } 
-
-
-
-      diff2 = 0xFFFFFFF;
-
-      r2 = (*activepalette256)[i][0] * 4 / 10;
-      g2 = (*activepalette256)[i][1] * 4 / 10;
-      b2 = (*activepalette256)[i][2] * 4 / 10;
-
-      for (k=0;k<256 ;k++ ) {
-
-         // actdif2 = sqr( (*activepalette256)[k][0] - r2 ) + sqr( (*activepalette256)[k][1] -  g2 ) + sqr( (*activepalette256)[k][2] - b2 );
-         actdif2 = calcdiff( (*activepalette256)[k][0] , r2 ,
-                             (*activepalette256)[k][1] , g2 ,
-                             (*activepalette256)[k][2] , b2 );
-         if (actdif2 < diff2) {
-            diff2 = actdif2;
-            dunkel3[i] = k;
-         }
-      } 
-
-
-
-      int diff3 = 0xFFFFFFF;
-      int actdif3;
-
-      int r3 = (*activepalette256)[i][0] * 13 / 10;
-      int g3 = (*activepalette256)[i][1] * 13 / 10;
-      int b3 = (*activepalette256)[i][2] * 13 / 10;
-
-      for (k=0;k<256 ;k++ ) {
-
-         // actdif3 = sqr( (*activepalette256)[k][0] - r3 ) + sqr( (*activepalette256)[k][1] -  g3 ) + sqr( (*activepalette256)[k][2] - b3 );
-         actdif3 = calcdiff( (*activepalette256)[k][0] , r3 ,
-                            (*activepalette256)[k][1] , g3 ,
-                            (*activepalette256)[k][2] , b3 );
-         if (actdif3 < diff3) {
-            diff3 = actdif3;
-            hell[i] = k;
-         }
-      } 
-
-   } /* endfor */
-
-   memcpy ( pal, activepalette256, sizeof ( pal ));
-
-   {
-         for ( int r = 0; r < 64; r++ ) {
-            printf("Generating truecolor2pal table %d \n", r);
-            for ( int g = 0; g < 64; g++ )
-               for ( int b = 0; b < 64; b++ ) {
-                     int sml = r  + ( g << 6) + ( b << 12 );
-      
-                     int diff = 0xFFFFFFF;
-                     int pix1;
-            
-                     for ( int k=0;k<256 ;k++ ) {
-                        int actdif = sqr( pal[k][0]  - r ) + sqr( pal[k][1]  - g ) + sqr( pal[k][2]  - b );
-            
-                        if (actdif < diff) {
-                           diff = actdif;
-                           pix1 = k;
-                        }
-                     } 
-                    truecolor2pal_table[sml] = pix1;
-               }
-          }
+      xl[255] = 255;
+      mainstream.writedata( xl, sizeof ( xl ));
    }
 
 
+   for ( int r = 0; r < 64; r++ ) {
+      printf("Generating truecolor2pal table %d \n", r);
+      for ( int g = 0; g < 64; g++ )
+         for ( int b = 0; b < 64; b++ ) {
+            int sml = r  + ( g << 6) + ( b << 12 );
 
-   initsvga( modenum8 );
+            int diff = 0xFFFFFFF;
+            int pix1;
+
+            for ( int k=0;k<256 ;k++ ) {
+               int actdif = calcdiff( pal[k][0]  , r , pal[k][1]  , g , pal[k][2]  , b );
+
+               if (actdif < diff) {
+                  diff = actdif;
+                  pix1 = k;
+               }
+            }
+            truecolor2pal_table[sml] = pix1;
+         }
+   }
+   mainstream.writedata( truecolor2pal_table, sizeof ( truecolor2pal_table ));
+
    loadpcxxy( argv[2], 1,0,0);
-   getch();
-   settextmode ( 3 );
 
    printf("Generating BattleIsle Translation table:\n");
 
@@ -261,34 +177,16 @@ int main(int argc, char *argv[], char *envp[])
             diff2 = actdif2;
             bi2asc[i] = k;
          }
-      } 
-//      bi2asc[255] = 255;
+      }
       printf(".");
       fflush ( stdout );
    } /* endfor */
 
-      bi2asc[0] = 255;
-      for ( k = 1; k < 8; k++ )
-         bi2asc[k] = 24-k;
+   bi2asc[0] = 255;
+   for ( k = 1; k < 8; k++ )
+      bi2asc[k] = 24-k;
 
-
-   { 
-      tn_file_buf_stream mainstream ("palette.pal",2);
-      mainstream.writedata( pal, sizeof ( pal ));
-      mainstream.writedata( mixbuf, sizeof ( mixbuf ));
-      dunkel05[255] = 255;
-      dunkel1[255] = 255;
-      dunkel2[255] = 255;
-      dunkel3[255] = 255;
-      hell[255] = 255;
-      mainstream.writedata( dunkel05, sizeof ( dunkel05 ));
-      mainstream.writedata( dunkel1, sizeof ( dunkel1 ));
-      mainstream.writedata( dunkel2, sizeof ( dunkel2 ));
-      mainstream.writedata( dunkel3, sizeof ( dunkel3 ));
-      mainstream.writedata( hell, sizeof ( hell ));
-      mainstream.writedata( truecolor2pal_table, sizeof ( truecolor2pal_table ));
-      mainstream.writedata( &bi2asc, 256 );
-   }
+   mainstream.writedata( &bi2asc, 256 );
 
    return 0;
 }

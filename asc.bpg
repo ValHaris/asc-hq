@@ -11,7 +11,7 @@ BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
 PROJECTS = bzlib.lib libjpeg.lib triangulation.lib tools.lib SDLmm.lib \
   mount.exe demount.exe weaponguide.exe bin2text.exe viewid.exe makegfx.exe \
-  tank2pcx.exe ai.lib mapeditor.exe asc.exe
+  makepal.exe tank2pcx.exe ai.lib mapeditor.exe asc.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -76,6 +76,10 @@ bin2text.exe: source\tools\win\bin2text.bpr
 
 SDLmm.lib: source\libs\sdlmm\SDLmm.bpr
   $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+makepal.exe: source\tools\win\makepal.bpr
+  $(ROOT)\bin\bpr2mak $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 

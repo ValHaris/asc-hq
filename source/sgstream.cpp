@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.72 2001-10-31 18:34:33 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.73 2001-11-05 21:10:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.72  2001/10/31 18:34:33  mbickel
+//      Some adjustments and fixes for gcc 3.0.2
+//
 //     Revision 1.71  2001/10/16 19:58:19  mbickel
 //      Added title screen for mapeditor
 //      Updated source documentation
@@ -823,9 +826,11 @@ void loadpalette ( void )
       colormixbuf = (pmixbuf) new char [ sizeof ( tmixbuf ) ];
       stream.readdata( colormixbuf,  sizeof ( *colormixbuf ));
 
-      stream.readdata( &xlattables.a.dark05, sizeof ( xlattables.a.dark05 ));
-      xlattables.a.dark05[255] = 255;
-
+      for ( int i= 0; i < 8; i++ ) {
+         stream.readdata( &xlattables.xl[i], sizeof ( xlattables.a.dark05 ));
+         xlattables.xl[i][255] = 255;
+      }
+/*
       stream.readdata( &xlattables.a.dark1,  sizeof ( xlattables.a.dark1 ));
       xlattables.a.dark1[255] = 255;
 
@@ -837,7 +842,7 @@ void loadpalette ( void )
 
       stream.readdata( &xlattables.light,  sizeof ( xlattables.light ));
       xlattables.light[255] = 255;
-
+  */
       stream.readdata( &truecolor2pal_table,  sizeof ( truecolor2pal_table ));
       #ifdef HEXAGON
       stream.readdata( &bi2asc_color_translation_table,  sizeof ( bi2asc_color_translation_table ));
@@ -1039,12 +1044,13 @@ void checkFileLoadability ( const char* filename )
       char temp5[10000];
       char temp2[1000];
       sprintf ( temp5, "Unable to access %s\n"
-                       "Make sure the data files (the primary one is called 'main.con') are in one of\n"
-                       "the search paths specified in your config file !\n"
+                       "Make sure the data files are in one of the search paths specified in your \n"
+                       "config file ! ASC requires these data files to be present:\n"
+                       " main.con ; mk1.con ; buildings.con ; trrobj.con ; trrobj2.con \n"
+                       "If you don't have these files , get and install them from http://www.asc-hq.org\n"
+                       "If you DO have these files, they are probably outdated. \n" 
                        "The configuration file that is used is: %s \n%s"
-                       "These paths are being searched:\n%s\n"
-                       "If you don't have a file 'main.con' , get and install the data files from\n"
-                       "http://www.asc-hq.org\n",
+                       "These paths are being searched for data files:\n%s\n",
                        filename, getConfigFileName(temp2), temp3, pathSearched.c_str() );
 
      fatalError ( temp5 );
@@ -1082,6 +1088,11 @@ void initFileIO ( const char* configFileName )
    }
 
    checkFileLoadability ( "palette.pal" );
+   checkFileLoadability ( "data.version" );
+   checkFileLoadability ( "mk1.version" );
+   checkFileLoadability ( "trrobj.version" );
+   checkFileLoadability ( "trrobj2.version" );
+   checkFileLoadability ( "buildings.version" );
 }
 
 void checkDataVersion( )

@@ -1953,9 +1953,9 @@ void tbackgroundpict :: paintrectangleborder ( void )
                for ( x = rectangleborder.x1 - p; x < rectangleborder.x2 + p; x++ )
                   putpixel ( x, rectangleborder.y1 - p, xlattables.a.dark2[ getpixel ( x, rectangleborder.y1-p )] );
                for ( y = rectangleborder.y1 - p; y < rectangleborder.y2 + p; y++ )
-                  putpixel ( rectangleborder.x2 + p, y, xlattables.light[ getpixel ( rectangleborder.x2 + p, y )] );
+                  putpixel ( rectangleborder.x2 + p, y, xlattables.a.light[ getpixel ( rectangleborder.x2 + p, y )] );
                for ( x = rectangleborder.x2 + p; x > rectangleborder.x1 - p; x-- )
-                  putpixel ( x, rectangleborder.y2 + p, xlattables.light[ getpixel ( x, rectangleborder.y2+p )] );
+                  putpixel ( x, rectangleborder.y2 + p, xlattables.a.light[ getpixel ( x, rectangleborder.y2+p )] );
                for ( y = rectangleborder.y2 + p; y > rectangleborder.y1 - p; y-- )
                   putpixel ( rectangleborder.x1 - p, y, xlattables.a.dark2[ getpixel ( rectangleborder.x1 - p, y )] );
 

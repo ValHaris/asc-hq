@@ -2,9 +2,12 @@
     \brief The color palette and various color translation tables
 */
 
-//     $Id: palette.h,v 1.6 2001-09-20 15:36:09 mbickel Exp $
+//     $Id: palette.h,v 1.7 2001-11-05 21:10:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2001/09/20 15:36:09  mbickel
+//      New object displaying mode
+//
 //     Revision 1.5  2001/01/28 20:42:14  mbickel
 //      Introduced a new string class, ASCString, which should replace all
 //        char* and std::string in the long term
@@ -70,12 +73,15 @@ typedef char dacpalettefst[256][4];
                    tpixelxlattable dark1;
                    tpixelxlattable dark2;
                    tpixelxlattable dark3;
+                   tpixelxlattable light;
+                   tpixelxlattable light2;
+                   tpixelxlattable light3;
+                   tpixelxlattable light4;
                 }a;
-                tpixelxlattable dark[4];
+                tpixelxlattable xl[8];
              };
-             tpixelxlattable light;
           };
-   
+
    extern txlattables xlattables;
 
 /*

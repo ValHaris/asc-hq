@@ -917,7 +917,7 @@ void         showpalette(void)
 
    for ( char a = 0; a <= 15; a++)
       for ( char b = 0; b <= 15; b++) {
-         bar(     a * 40, b * 20,a * 40 +  x,b * 20 + 20, xlattables.light    [a * 16 + b]);
+         bar(     a * 40, b * 20,a * 40 +  x,b * 20 + 20, xlattables.a.light    [a * 16 + b]);
          bar( x + a * 40, b * 20,a * 40 + 2*x,b * 20 + 20, xlattables.nochange [a * 16 + b]);
          bar(2*x + a * 40, b * 20,a * 40 + 3*x,b * 20 + 20, xlattables.a.dark1    [a * 16 + b]);
          bar(3*x + a * 40, b * 20,a * 40 + 4*x,b * 20 + 20, xlattables.a.dark2    [a * 16 + b]);
@@ -2165,7 +2165,7 @@ int gamethread ( void* data )
          displaymessage ( "loading of game failed due to insufficient memory", 2 );
       }
       catch ( ParsingError err ) {
-         displaymessage ( "Error parsing text file" + err.getMessage(), 2 );
+         displaymessage ( "Error parsing text file " + err.getMessage(), 2 );
       }
       catch ( ASCexception ) {
          displaymessage ( "loading of game failed", 2 );

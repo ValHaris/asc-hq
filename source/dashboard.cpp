@@ -178,7 +178,7 @@ void         tdashboard::paintweapon(int         h, int num, int strength,  cons
 {
       if ( weap->getScalarWeaponType() >= 0 )
          if ( weap->canRefuel() )
-            putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, xlatpict ( &xlattables.light, icons.unitinfoguiweapons[ weap->getScalarWeaponType() ] ));
+            putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, xlatpict ( &xlattables.a.light, icons.unitinfoguiweapons[ weap->getScalarWeaponType() ] ));
          else
             putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, icons.unitinfoguiweapons[ weap->getScalarWeaponType() ] );
       else
@@ -253,7 +253,7 @@ void         tdashboard::paintweapons(void)
                    serv = 1;
                    if ( materialdisplayed )
                       if ( vt->tank.fuel ) {
-                         putimage ( xp, 93 + k * 13, xlatpict ( &xlattables.light, icons.unitinfoguiweapons[ 8 ] ));
+                         putimage ( xp, 93 + k * 13, xlatpict ( &xlattables.a.light, icons.unitinfoguiweapons[ 8 ] ));
                          paintweaponammount ( k, ( vehicle ? vehicle->tank.fuel : vt->tank.fuel ), vt->tank.fuel );
                          k--;
                       }
@@ -264,7 +264,7 @@ void         tdashboard::paintweapons(void)
        if ( materialdisplayed ) {
           if ( vt->tank.material ) {
              if ( serv )
-                putimage ( xp, 93 + k * 13, xlatpict ( &xlattables.light, icons.unitinfoguiweapons[ 11 ] ));
+                putimage ( xp, 93 + k * 13, xlatpict ( &xlattables.a.light, icons.unitinfoguiweapons[ 11 ] ));
              else
                 putimage ( xp, 93 + k * 13, icons.unitinfoguiweapons[ 11 ] );
               paintweaponammount ( k, ( vehicle ? vehicle->tank.material : vt->tank.material ), vt->tank.material );
@@ -272,7 +272,7 @@ void         tdashboard::paintweapons(void)
           }
           if ( vt->tank.energy ) {
              if ( serv )
-                putimage ( xp, 93 + k * 13, xlatpict ( &xlattables.light, icons.unitinfoguiweapons[ 9 ] ));
+                putimage ( xp, 93 + k * 13, xlatpict ( &xlattables.a.light, icons.unitinfoguiweapons[ 9 ] ));
              else
                 putimage ( xp, 93 + k * 13, icons.unitinfoguiweapons[ 9 ] );
 

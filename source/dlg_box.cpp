@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.61 2001-10-31 18:34:31 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.62 2001-11-05 21:10:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2001/10/31 18:34:31  mbickel
+//      Some adjustments and fixes for gcc 3.0.2
+//
 //     Revision 1.60  2001/10/02 14:06:28  mbickel
 //      Some cleanup and documentation
 //      Bi3 import tables now stored in .asctxt files
@@ -1430,7 +1433,7 @@ void         tdialogbox::redraw(void)
                  if ( actmap && actmap->actplayer == 7 ) {
                     activefontsettings.color = xlattables.a.dark1[textcolor];
                     showtext2(title, x1 + 4, y1 + 4 );
-                    activefontsettings.color = xlattables.light[textcolor];
+                    activefontsettings.color = xlattables.a.light[textcolor];
                     showtext2(title, x1 + 6, y1 + 6 );
                  } else {
                     activefontsettings.color = textcolor + 2;
