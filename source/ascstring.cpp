@@ -89,3 +89,12 @@ ASCString  ASCString :: copyToUpper ( ) const
    s.toUpper();
    return s;
 }
+
+int ASCString :: compare ( int pos, int n, const ASCString& s )
+{
+   #ifdef _UNIX_
+    return inherited::compare ( s, pos, n );
+   #else
+    return inherited::compare (  pos, n, s );
+   #endif
+}

@@ -26,11 +26,13 @@
  #include <string>
 
  class ASCString : public std::string {
+       typedef std::string inherited;
      public:
         ASCString ( const std::string& s, size_type pos = 0, size_type n=npos ) : std::string ( s, pos, npos ) {};
         ASCString ( const char* ch, size_type n ) : std::string ( ch, n ) {};
         ASCString ( const char* ch ) : std::string ( ch ) {};
         ASCString ( ) {};
+        int compare ( int pos, int n, const ASCString& s );
 
        // ASCString& sprintf ( const std::string s,  ... );
         ASCString& toLower ( );
