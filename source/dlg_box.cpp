@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.58 2001-08-09 10:28:22 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.59 2001-08-19 10:48:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.58  2001/08/09 10:28:22  mbickel
+//      Fixed AI problems
+//      Mapeditor can edit a units AI parameter
+//
 //     Revision 1.57  2001/08/07 15:58:09  mbickel
 //      Fixed crash in mail list
 //      Fixed crash in weapon info with mines
@@ -3651,7 +3655,7 @@ void  loadtexture ( void )
       dialogtexture = (void*) agmp-> linearaddress;
       if ( dialogtexture ) 
          loadpcxxy( "texture.pcx", false, 0, 0 );
-      
+
       npop ( *agmp );
    }
 }
@@ -3671,10 +3675,12 @@ tstringselect :: tstringselect ( )
 void         tstringselect::init(void)
 {
    tdialogbox::init();
+   
    xsize = 570;
    ysize = 320;
    x1 = ( 640 -xsize ) / 2;
    y1 = ( 480 -ysize ) / 2;
+
    sy = 45;
 
    sx = 20;

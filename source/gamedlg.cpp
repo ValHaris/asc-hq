@@ -1,8 +1,13 @@
 /*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.78 2001-08-07 15:58:09 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.79 2001-08-19 10:48:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.78  2001/08/07 15:58:09  mbickel
+//      Fixed crash in mail list
+//      Fixed crash in weapon info with mines
+//      Fixed cancel Button in object construction
+//
 //     Revision 1.77  2001/07/28 11:19:10  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -1290,6 +1295,7 @@ void         tnewcampaignlevel::loadcampaignmap(void)
       if (loader.loadmap(mapname) == 0) {
          actmap->startGame();
          actmap->setupResources();
+         computeview( actmap );
 
          do {
            next_turn();

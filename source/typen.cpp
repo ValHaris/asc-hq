@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.79 2001-07-27 21:13:35 mbickel Exp $
+//     $Id: typen.cpp,v 1.80 2001-08-19 10:48:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.79  2001/07/27 21:13:35  mbickel
+//      Added text based file formats
+//      Terraintype and Objecttype restructured
+//
 //     Revision 1.78  2001/07/14 19:13:16  mbickel
 //      Rewrote sound system
 //      Moveing units make sounds
@@ -547,16 +551,6 @@ void Resources::runTextIO ( PropertyContainer& pc )
 
 
 
-
-/*
-Message :: Message ( void )
-{
-   from = 0;
-   to = 0;
-   time = 0;
-   id = 0;
-}
-*/
 #ifndef sgmain
 
 Message :: Message ( pmap spfld )

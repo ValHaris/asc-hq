@@ -2,9 +2,13 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.26 2001-08-09 10:28:22 mbickel Exp $
+//     $Id: edevents.cpp,v 1.27 2001-08-19 10:48:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2001/08/09 10:28:22  mbickel
+//      Fixed AI problems
+//      Mapeditor can edit a units AI parameter
+//
 //     Revision 1.25  2001/07/28 11:19:10  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -1963,8 +1967,8 @@ char      createevent(pevent ae, pevent orgevent )  /* True=Erfolgreich ausgefh
    } /* endfor */
    if (ce.ae->a.action == 255) b = false;
    if ((ce.taste == ct_esc) || (ce.action == 2) || ( ce.action == 255 ) || (b == false ) ) return false;
-   else return true; 
-} 
+   else return true;
+}
 
 // õS EventSel
 
@@ -1973,7 +1977,7 @@ class   teventsel : public tstringselect {
                  pevent pe,ae;
                  int oi;
                  void rebuildlines(void);
-                 virtual void setup(void);
+                 void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void gettext(word nr);
                  virtual void run(void);
@@ -1981,31 +1985,31 @@ class   teventsel : public tstringselect {
 
 
 void         teventsel::setup(void)
-{ 
+{
   pevent       e;
 
-   title = "Events"; 
+   title = "Events";
    numberoflines = 0;
-   e = actmap->firsteventtocome; 
-   while (e != NULL) { 
+   e = actmap->firsteventtocome;
+   while (e != NULL) {
       numberoflines++;
-      e = e->next; 
-   } 
-   numberoflines++; 
-   pe = NULL; 
-   xsize = 440; 
-   ysize = 360; 
-   x1 = 100;
+      e = e->next;
+   }
+   numberoflines++;
+   pe = NULL;
+   xsize = 570;
+   ysize = 360;
+   x1 = 35;
    y1 = 60;
 
-   sy = 120; 
-   ey = ysize - 20; 
-   addbutton("~N~ew",20,40,90,70,0,1,4,true); 
-   addbutton("~E~dit",110,40,180,70,0,1,5,true); 
-   addbutton("~C~hange",200,40,260,70,0,1,6,true); 
-   addbutton("~D~elete",280,40,340,70,0,1,7,true); 
-   addbutton("E~x~it",360,40,420,70,0,1,8,true); 
-} 
+   sy = 120;
+   ey = ysize - 20;
+   addbutton("~N~ew",20,40,90,70,0,1,4,true);
+   addbutton("~E~dit",110,40,180,70,0,1,5,true);
+   addbutton("~C~hange",200,40,260,70,0,1,6,true);
+   addbutton("~D~elete",280,40,340,70,0,1,7,true);
+   addbutton("E~x~it",360,40,420,70,0,1,8,true);
+}
 
 void   teventsel::gettext(word nr) //gibt in txt den string zurck
 {
@@ -2017,7 +2021,7 @@ void   teventsel::gettext(word nr) //gibt in txt den string zurck
       strcpy( txt, "Empty" );
       return;
    }
-   e = actmap->firsteventtocome; 
+   e = actmap->firsteventtocome;
    while ((e != NULL) && (count<nr)) {
       count++;
       e = e->next; 
@@ -2046,7 +2050,7 @@ void         teventsel::buttonpressed(int         id)
              if (!b) {
                 delete ae;
                 return;
-             } 
+             }
              i = 0;
              e = actmap->firsteventtocome;
              ne = NULL;
@@ -2073,7 +2077,7 @@ void         teventsel::buttonpressed(int         id)
                 }
              //ae->rawdata = NULL;
              //ae->datasize = 0;
-             viewtext(); 
+             viewtext();
           } 
       break; 
       case 5:   { 
@@ -2151,10 +2155,10 @@ void         teventsel::buttonpressed(int         id)
                 i++; 
              } 
              if (i == numberoflines-1 ) return;
-             if (ne == e) { 
+             if (ne == e) {
                 actmap->firsteventtocome = e->next; 
              } 
-             else { 
+             else {
                 ne->next = e->next; 
                 asc_free(e);
              }  
