@@ -126,6 +126,19 @@ int ContainerBase :: vehiclesLoaded ( void ) const
    return a;
 }
 
+bool ContainerBase :: searchAndRemove( Vehicle* veh )
+{
+   for ( int b = 0; b <= 31; b++)
+      if ( loading[b] == veh ) {
+         loading[b] = NULL;
+         return true;
+      } else
+         if ( loading[b] )
+            if ( loading[b]->searchAndRemove ( veh ))
+               return true;
+}
+
+
 
 int ContainerBase::cargo ( void ) const
 {

@@ -116,6 +116,7 @@ class ContainerBase {
 
 
       virtual MapCoordinate3D getPosition ( ) const = 0;
+      bool searchAndRemove( Vehicle* veh );
       virtual ~ContainerBase();
 };
 

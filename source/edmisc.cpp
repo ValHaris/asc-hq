@@ -2,9 +2,15 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.122 2004-09-13 16:56:54 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.123 2004-09-19 15:45:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.122  2004/09/13 16:56:54  mbickel
+//      Added many reset data functions to mapeditor
+//      cargomovecostdivisor for vehicles is now float
+//      Fixed: objects could not be attacked
+//      Filenames in cache
+//
 //     Revision 1.121  2004/09/08 19:34:31  mbickel
 //      Added multiple reaction fire
 //
@@ -5190,6 +5196,7 @@ void resetPlayerData()
    buttonsP.push_back ( "~c~lose" );
 
    pair<int,int> playerRes;
+   playerRes.second = -1;
    do {
       vector<ASCString> player;
       for ( int i = 0; i < 8; ++i ) {
@@ -5197,11 +5204,12 @@ void resetPlayerData()
          player.push_back ( s + " " + actmap->player[i].getName() );
       }
       player.push_back ( "all" );
+      player.push_back ( "all except " + actmap->player[0].getName() );
 
-      playerRes = chooseString ( "Choose Player", player, buttonsP );
+      playerRes = chooseString ( "Choose Player", player, buttonsP, playerRes.second );
 
       for ( int player = 0; player < 8; ++player )
-         if ( playerRes.second == player || playerRes.second == 8 ) {
+         if ( playerRes.second == player || playerRes.second == 8 || (playerRes.second == 9 && player != 0 )) {
             if ( playerRes.first == 0 ) {
                  for ( int x = 0; x < actmap->xsize; x++ )
                     for ( int y = 0; y < actmap->ysize; y++ ) {

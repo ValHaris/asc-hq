@@ -827,28 +827,6 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
 
    pc.addImage( "Picture", picture[0], fn );
 
-   pc.openBracket ( "ConstructionCost" );
-   productionCost.runTextIO ( pc );
-   int costCalcMethod;
-   pc.addNamedInteger( "CalculationMethod", costCalcMethod, productionCostCalculationMethodNum, productionCostCalculationMethod,  0 );
-   if ( pc.isReading() ) {
-      if ( !pc.find ( "material" ) && costCalcMethod == 0)
-         costCalcMethod = 1;
-   }
-
-   if ( costCalcMethod == 1 )
-      productionCost = calcProductionsCost();
-   if ( costCalcMethod == 2 )
-      productionCost += calcProductionsCost();
-
-   if ( costCalcMethod != 0 ) {
-      displayLogMessage ( 4, "unit %s id %d has a production cost of %d E; %d M;  %d F \n", name.c_str(), id, productionCost.energy, productionCost.material, productionCost.fuel );
-   }
-
-
-
-   pc.closeBracket ();
-
    pc.addTagInteger( "Height", height, choehenstufennum, heightTags );
    pc.addBool ( "WaitFortack", wait );
    pc.openBracket( "Tank" );
@@ -918,6 +896,29 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    }
 
    techDependency.runTextIO( pc, strrr(id) );
+
+
+   
+   pc.openBracket ( "ConstructionCost" );
+   productionCost.runTextIO ( pc );
+   int costCalcMethod;
+   pc.addNamedInteger( "CalculationMethod", costCalcMethod, productionCostCalculationMethodNum, productionCostCalculationMethod,  0 );
+   if ( pc.isReading() ) {
+      if ( !pc.find ( "material" ) && costCalcMethod == 0)
+         costCalcMethod = 1;
+   }
+
+   if ( costCalcMethod == 1 )
+      productionCost = calcProductionsCost();
+   if ( costCalcMethod == 2 )
+      productionCost += calcProductionsCost();
+
+   if ( costCalcMethod != 0 ) {
+      displayLogMessage ( 4, "unit %s id %d has a production cost of %d E; %d M;  %d F \n", name.c_str(), id, productionCost.energy, productionCost.material, productionCost.fuel );
+   }
+
+   pc.closeBracket ();
+
 
 
    setupPictures();
@@ -1071,24 +1072,23 @@ Resources Vehicletype :: calcProductionsCost()
 		if ( movemalustyp == MoveMalusType::trooper) {
 			typecoste += armor;
 			typecostm += armor;
-		}
+		} else
 		if ( movemalustyp == MoveMalusType::light_tracked_vehicle || movemalustyp == MoveMalusType::medium_tracked_vehicle || movemalustyp == MoveMalusType::heavy_tracked_vehicle || movemalustyp == MoveMalusType::light_wheeled_vehicle || movemalustyp == MoveMalusType::medium_wheeled_vehicle || movemalustyp == MoveMalusType::heavy_wheeled_vehicle || movemalustyp == MoveMalusType::rail_vehicle || movemalustyp == MoveMalusType::structure) {
 			typecoste += armor*8;
 			typecostm += armor*8;
-		}
-		if ( movemalustyp == movemalustyp == MoveMalusType::hoovercraft) {
+		} else
+		if ( movemalustyp == MoveMalusType::hoovercraft) {
 			typecoste += armor*9;
 			typecostm += armor*9;
-		}
+		} else
 		if ( movemalustyp == MoveMalusType::light_ship || movemalustyp == MoveMalusType::medium_ship || movemalustyp == MoveMalusType::heavy_ship ) {
 			typecoste += armor*10;
 			typecostm += armor*10;
-		}
+		} else
 		if ( movemalustyp == MoveMalusType::light_aircraft || movemalustyp == MoveMalusType::medium_aircraft || movemalustyp == MoveMalusType::heavy_aircraft || movemalustyp == MoveMalusType::helicopter ) {
 			typecoste += armor*16;
 			typecostm += armor*16;
-		}
-		if ( movemalustyp == movemalustyp == MoveMalusType::deflt) {
+		} else {
 			typecoste += armor*5;
 			typecostm += armor*5;
 		}
@@ -1111,7 +1111,7 @@ Resources Vehicletype :: calcProductionsCost()
 		// Zuschlag für hochfliegende Einheiten / Extra starke Triebwerke
 		if ( height & chhochfliegend ) {
 			typecoste += armor*2;
-			typecostm += armor*1;
+			typecostm += armor*2;
 		}
 		// Zuschlag für Transportkapazität
 		if ( entranceSystems.size() > 0 ) {

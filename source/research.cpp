@@ -696,10 +696,12 @@ Resources returnResourcenUseForResearch ( const pbuilding bld, int research )
 
 
    for ( int r = 0; r < 3; ++r )
-      if ( bld->typ->maxplus.resource(r) < 0 ) {
-         float a = -bld->typ->maxplus.resource(r) / pow(double(bld->typ->nominalresearchpoints),2);
-         res.resource(r) = int( pow(pow(double(research),2) * a, 0.98 + double(num)/50) );
-      }
+      if ( bld->typ->maxplus.resource(r) < 0 )
+         if(  research > bld->typ->nominalresearchpoints ) {
+            float a = -bld->typ->maxplus.resource(r) / pow(double(bld->typ->nominalresearchpoints),2);
+            res.resource(r) = int( pow(pow(double(research),2) * a, 0.98 + double(num)/50) );
+         } else
+            res.resource(r) = -bld->typ->maxplus.resource(r) * research / bld->typ->nominalresearchpoints;
 
    return res;
 }
