@@ -28,6 +28,7 @@
 
  extern void fatalError ( const char* formatstring, ... );
  extern void fatalError ( const ASCString& string );
+ extern void errorMessage ( const ASCString& string );
  extern void warning ( const ASCString& string );
 
 

@@ -35,7 +35,7 @@ enum trpl_actions { rpl_attack,
                     rpl_putbuilding,
                     rpl_removebuilding, 
                     rpl_putmine, 
-                    rpl_removemine, 
+                    rpl_removemine,
                     rpl_produceunit, 
                     rpl_removeunit,
                     rpl_trainunit,
@@ -59,7 +59,9 @@ enum trpl_actions { rpl_attack,
                     rpl_remobj2,
                     rpl_repairUnit,
                     rpl_repairUnit2,
-                    rpl_refuel3 };
+                    rpl_refuel3,
+                    rpl_produceAmmo,
+                    rpl_buildtnk4 };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 

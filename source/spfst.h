@@ -53,7 +53,8 @@
               int       color; 
 
               int  gotoxy (int x, int y, int disp = 1 );     // result: 0: map wurde nicht neu angezeigt     1: map wurde neu angezeigt
-              void show ( void );
+              //! \returns true if map repositioned
+              bool show ( void );
               void hide ( void );
               void setcolor ( int col );
               void init ( void );

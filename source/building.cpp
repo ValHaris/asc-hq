@@ -1489,6 +1489,7 @@ void cbuildingcontrols :: cproduceammunition :: produce ( int weaptype, int num 
    cc->getfuel     ( fuelneeded,     1 );
    cc->putammunition ( weaptype, n*weaponpackagesize, 1 );
 
+   logtoreplayinfo ( rpl_produceAmmo, cc_b->building->getPosition().x, cc_b->building->getPosition().y, weaptype, n );
 }
 
 
@@ -2532,10 +2533,6 @@ void  ccontainer :: cammunitiontransfer_subwindow :: reset ( pvehicle veh )
          weaps[num].type = 102;
          num++;
       }
-      for ( i = 0; i < num; i++ ) {
-         check(i);
-         objcoordinates[i].type = 3;
-      }
    }
    pagenum = (num-1) / 8;
    if ( page > pagenum )
@@ -2543,7 +2540,14 @@ void  ccontainer :: cammunitiontransfer_subwindow :: reset ( pvehicle veh )
 
    if ( page < 0 )
       page = 0;
+
+  for ( i = 0; i < num; i++ ) {
+      check(i);
+      objcoordinates[i].type = 3;
+   }
+
 }
+
 
 int   ccontainer :: cammunitiontransfer_subwindow :: gpres ( int i )
 {

@@ -97,7 +97,7 @@ class ItemFiltrationSystem {
                  ItemFilter( const ASCString& _name, const IntRangeArray& unitsetIDs, bool _active );
                  ASCString name;
                  bool isActive() { return active; };
-                 bool setActive( bool _active ) { active = _active; };
+                 void setActive( bool _active ) { active = _active; };
                  void runTextIO ( PropertyContainer& pc );
                  bool isContained ( ItemFiltrationSystem::Category cat, int id );
          };

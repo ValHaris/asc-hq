@@ -766,7 +766,7 @@ void Vehicle::convert ( int col )
    conquered();
 }
 
-void Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
+Vehicle* Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
 {
    if ( gamemap && vehicleconstructable( tnk, x, y )) {
       pvehicle v = new Vehicle( tnk, gamemap, color/8 );
@@ -804,7 +804,9 @@ void Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
             }
 
       v->attacked = 1;
-   }
+      return v;
+   } else
+      return NULL;
 }
 
 bool  Vehicle :: vehicleconstructable ( pvehicletype tnk, int x, int y )

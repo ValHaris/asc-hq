@@ -215,15 +215,13 @@ ADVANCED STRATEGIC COMMAND
 #color000##font0#
 (C) 1994 - 2004 by Martin Bickel and Marc Schellenberger.
 
-Christian Mayer created most of ASC's graphics including the ASC unit set, the game interface and some terrain.
+Graphics by Christian Mayer, Steffen Fr”hlich, Daniel Korbely and Frank Fiedler.
 
 The port to Linux was done by Tom Wilson, Simon Britnell and Martin Bickel
 
 Steffen Fröhlich maintains the standard unit set and has created several map graphics.
 
 Music composed by Michael Kievernagel.
-
-The ASC logo and the title screens were created by Frank Fiedler.
 
 Alexander Schäfer originally implemented the 'small editors' and created the first version of the ASC vehicle set.
 

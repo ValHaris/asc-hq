@@ -62,118 +62,120 @@
 FILE* out;
 int verbose = 1;
 
+const char* containerName = NULL;
+
 /*--- rle1.c ------------------------------ Listing 9-1 ---------
  *  Run-Length Encoding for files of all types
  *
  *-------------------------------------------------------------*/
 
 FILE *infile,
-     *outfile;
+*outfile;
 
 int rlemain ( char* argv1, char* argv2  )
 {
-    unsigned char *buffer;
-    unsigned char prev_char;
-    int  bytes_read,
-         count,
-         eof,
-         first_time,
-         i;
+   unsigned char *buffer;
+   unsigned char prev_char;
+   int  bytes_read,
+   count,
+   eof,
+   first_time,
+   i;
 
-    if (( infile = fopen ( argv1, "rb" )) == NULL )  {
-        fatalError ( "Error opening " + ASCString( argv1 ));
-        return ( EXIT_FAILURE );
-    }
+   if (( infile = fopen ( argv1, "rb" )) == NULL )  {
+      fatalError ( "Error opening " + ASCString( argv1 ));
+      return ( EXIT_FAILURE );
+   }
 
-    if (( outfile = fopen ( argv2, "wb" )) == NULL )  {
-        fatalError ( "Error opening " + ASCString( argv2 ));
-        return ( EXIT_FAILURE );
-    }
+   if (( outfile = fopen ( argv2, "wb" )) == NULL )  {
+      fatalError ( "Error opening " + ASCString( argv2 ));
+      return ( EXIT_FAILURE );
+   }
 
-    /* write the header to the output file */
+   /* write the header to the output file */
 
-    fprintf ( outfile, "%c%c%c%c%c%c%c%c%c%c", 0, 'M', 'B', 'R', 'L', 'E', '1', 0, 0, Sentinel );
+   fprintf ( outfile, "%c%c%c%c%c%c%c%c%c%c", 0, 'M', 'B', 'R', 'L', 'E', '1', 0, 0, Sentinel );
 
-    /* initialize the necessary variables */
+   /* initialize the necessary variables */
 
-    eof        = 0;
-    first_time = 1;
+   eof        = 0;
+   first_time = 1;
 
-    buffer = (unsigned char *) malloc ( BUFFER_SIZE );
-    if ( buffer == NULL ) {
-        fatalError ( "Unable to allocate " + ASCString(strrr ( BUFFER_SIZE)) + " bytes" );
-        return ( EXIT_FAILURE );
-    }
+   buffer = (unsigned char *) malloc ( BUFFER_SIZE );
+   if ( buffer == NULL ) {
+      fatalError ( "Unable to allocate " + ASCString(strrr ( BUFFER_SIZE)) + " bytes" );
+      return ( EXIT_FAILURE );
+   }
 
-    /* process the input file */
+   /* process the input file */
 
-    while ( ! eof ) {
-        bytes_read = fread ( buffer, 1, BUFFER_SIZE, infile );
-        if ( bytes_read == 0 ) {
-            eof = 1;
-            break;
-        }
+   while ( ! eof ) {
+      bytes_read = fread ( buffer, 1, BUFFER_SIZE, infile );
+      if ( bytes_read == 0 ) {
+         eof = 1;
+         break;
+      }
 
-        for ( i = 0; i < bytes_read; i++ ) {
-            /* first time through is a special case */
+      for ( i = 0; i < bytes_read; i++ ) {
+         /* first time through is a special case */
 
-            if ( first_time ) {
-                prev_char = buffer[i];
-                count = 1;
-                first_time = 0;
-                i++;
+         if ( first_time ) {
+            prev_char = buffer[i];
+            count = 1;
+            first_time = 0;
+            i++;
+         }
+
+         if ( buffer[i] == prev_char )   /* repeated char */
+         {
+            count += 1;
+            if ( count == 255 ) {
+               WriteCode ( Sentinel, count, prev_char );
+               first_time = 1;
             }
-
-            if ( buffer[i] == prev_char )   /* repeated char */
-            {
-                count += 1;
-                if ( count == 255 ) {
-                    WriteCode ( Sentinel, count, prev_char );
-                    first_time = 1;
-                }
-                continue;
+            continue;
+         }
+         else    /* a new char, so write out all known data */
+         {
+            if ( count < 3 ) {
+               if ( prev_char == Sentinel ) {
+                  fprintf ( outfile, "%c%c",
+                            Sentinel, count );
+               } else
+                  do {
+                     fputc ( prev_char, outfile );
+                  } while ( --count );
             }
-            else    /* a new char, so write out all known data */
-            {
-                if ( count < 3 ) {
-                    if ( prev_char == Sentinel ) {
-                        fprintf ( outfile, "%c%c",
-                                        Sentinel, count );
-                    } else
-                        do {
-                            fputc ( prev_char, outfile );
-                        } while ( --count );
-                }
-                else
-                    WriteCode ( Sentinel, count, prev_char );
+            else
+               WriteCode ( Sentinel, count, prev_char );
 
-                prev_char = buffer[i];
-                count = 1;
-            }
-        }
+            prev_char = buffer[i];
+            count = 1;
+         }
+      }
 
-        /* we're at end of bytes_read, is it EOF? */
+      /* we're at end of bytes_read, is it EOF? */
 
-        if ( bytes_read < BUFFER_SIZE )
-            eof = 1;
-    }
+      if ( bytes_read < BUFFER_SIZE )
+         eof = 1;
+   }
 
-    /* at EOF, so flush out any remaining bytes to be written */
+   /* at EOF, so flush out any remaining bytes to be written */
 
-    if ( count < 3 )  {
-        if ( prev_char == Sentinel )  {
-            fprintf ( outfile, "%c%c",  Sentinel, count );
-        } else
-            do {
-                fputc ( prev_char, outfile );
-            } while ( --count );
-    } else
-        WriteCode ( Sentinel, count, prev_char );
+   if ( count < 3 )  {
+      if ( prev_char == Sentinel )  {
+         fprintf ( outfile, "%c%c",  Sentinel, count );
+      } else
+         do {
+            fputc ( prev_char, outfile );
+         } while ( --count );
+   } else
+      WriteCode ( Sentinel, count, prev_char );
 
-    fclose ( infile );
-    fclose ( outfile );
+   fclose ( infile );
+   fclose ( outfile );
 
-    return ( EXIT_SUCCESS );
+   return ( EXIT_SUCCESS );
 }
 
 
@@ -181,20 +183,20 @@ int rlemain ( char* argv1, char* argv2  )
 int
 bzmain( char *argv1, char* argv2  )
 {
-    int size = filesize ( argv1 );
-    void* buf = malloc ( size );
+   int size = filesize ( argv1 );
+   void* buf = malloc ( size );
 
-    FILE* fp = fopen ( argv1, filereadmode );
-    fread ( buf, size, 1, fp );
-    fclose ( fp );
+   FILE* fp = fopen ( argv1, filereadmode );
+   fread ( buf, size, 1, fp );
+   fclose ( fp );
 
-    // tnfilestream instream ( argv1, 1 );
-    tnfilestream outstream ( argv2, tnstream::writing );
-    // instream.readdata ( buf, size, 0 );
-    outstream.writedata ( buf, size );
+   // tnfilestream instream ( argv1, 1 );
+   tnfilestream outstream ( argv2, tnstream::writing );
+   // instream.readdata ( buf, size, 0 );
+   outstream.writedata ( buf, size );
 
-    free ( buf );
-    return 0;
+   free ( buf );
+   return 0;
 }
 
 
@@ -240,6 +242,14 @@ char buf2[10000];
 /* mikem: seems to test a file for asc compression */
 void testcompress ( char* name, int size )
 {
+   if ( strcmp ( name, "temp.mzl") == 0
+     || strcmp ( name, "temp.rle") == 0
+     || strcmp ( name, containerName ) == 0 )
+      {
+        printf ( " skipped\n");
+        return;
+      }
+      
    char newname[1000];
    char* orgname = name;
    if ( patimat ( "*.pcx", name ) ) {
@@ -310,39 +320,39 @@ void testcompress ( char* name, int size )
 
       r = rlemain( name, "temp.rle");
       if ( r ) {
-        fatalError ( "error executing rle1; errno is " + ASCString(strrr (errno)) );
-        exit ( r );
+         fatalError ( "error executing rle1; errno is " + ASCString(strrr (errno)) );
+         exit ( r );
       }
       int rl = filesize ( "temp.rle" );
 
       fflush ( stdout );
       r = bzmain ( name, "temp.mzl" );
       if ( r ) {
-        fatalError ( "error executing mbzip; errno is " + ASCString ( strrr ( errno)));
-        exit ( r );
+         fatalError ( "error executing mbzip; errno is " + ASCString ( strrr ( errno)));
+         exit ( r );
       }
       int mz = filesize ( "temp.mzl" );
 
 
       if ( verbose )
-        printf ( "; rle: %3d%%; mzl: %3d%%", 100 * rl / size, 100 * mz / size );
+         printf ( "; rle: %3d%%; mzl: %3d%%", 100 * rl / size, 100 * mz / size );
       int compr = MIN ( rl, mz );
 
       if ( compr * 120 / 100 > size ) {
-        if ( verbose )
-           printf ( "not compressed" );
-        copyfile ( name, extractFileName ( buf2, name ), size );
+         if ( verbose )
+            printf ( "not compressed" );
+         copyfile ( name, extractFileName ( buf2, name ), size );
       } else
-      if ( compr == rl ) {
-        if ( verbose )
-           printf ( "rle compressed" );
-        copyfile ( "temp.rle", orgname, compr );
-      } else
-      if ( compr == mz ) {
-        if ( verbose )
-           printf ( "mzl compressed" );
-        copyfile ( "temp.mzl", orgname, compr );
-      }
+         if ( compr == rl ) {
+            if ( verbose )
+               printf ( "rle compressed" );
+            copyfile ( "temp.rle", orgname, compr );
+         } else
+            if ( compr == mz ) {
+               if ( verbose )
+                  printf ( "mzl compressed" );
+               copyfile ( "temp.mzl", orgname, compr );
+            }
    }
    if ( name == newname )
       remove ( newname );
@@ -373,6 +383,7 @@ int main(int argc, char *argv[] )
 
    addSearchPath(".");
 
+   containerName = argv[argc-1];
    out = fopen ( argv[argc-1], filewritemode );
    if ( !out ) {
       fatalError( "cannot open file " + ASCString( argv[argc-1] ) + "  for writing " );
@@ -383,45 +394,45 @@ int main(int argc, char *argv[] )
    pos += fwrite ( &i, 1, 4, out );
 
    for ( int df = cl.next_param(); df < argc-1; df++ ) {
-         int compress = 1;
+      int compress = 1;
 
-         DIR *dirp;
-         struct ASC_direct *direntp;
+      DIR *dirp;
+      struct ASC_direct *direntp;
 
-         dirp = opendir( "." );
-         if( dirp != NULL ) {
-           for(;;) {
-             direntp = readdir( dirp );
-             if ( direntp == NULL )
-                break;
+      dirp = opendir( "." );
+      if( dirp != NULL ) {
+         for(;;) {
+            direntp = readdir( dirp );
+            if ( direntp == NULL )
+               break;
 
-             if ( patimat ( argv[df] , direntp->d_name ) &&
+            if ( patimat ( argv[df] , direntp->d_name ) &&
                   strcmp ( direntp->d_name, "." ) != 0 &&
                   strcmp ( direntp->d_name, ".." ) != 0 ) {
-                int    fnd = 0;
-		int j   = 0;
+               int    fnd = 0;
+               int j   = 0;
 
-		while( !fnd && ( j < num ) ) {
-		  //                for ( int j = 0; j < num; j++ )
-                   if ( strcmpi ( nindex[j++].name, direntp->d_name ) == 0 )
-                      fnd = 1;
-		}
+               while( !fnd && ( j < num ) ) {
+                  //                for ( int j = 0; j < num; j++ )
+                  if ( strcmpi ( nindex[j++].name, direntp->d_name ) == 0 )
+                     fnd = 1;
+               }
 
-                if ( !fnd ) {
-                   if ( verbose )
-                      printf( direntp->d_name );
-                   if ( compress )
-                      testcompress ( direntp->d_name,  filesize(direntp->d_name) );
-                   else {
-                      if ( verbose )
-                         printf ( " is not compressed, " );
-                      copyfile ( direntp->d_name, direntp->d_name,  filesize(direntp->d_name)  );
-                   }
-                }
-             }
-           }
-           closedir( dirp );
+               if ( !fnd ) {
+                  if ( verbose )
+                     printf( direntp->d_name );
+                  if ( compress )
+                     testcompress ( direntp->d_name,  filesize(direntp->d_name) );
+                  else {
+                     if ( verbose )
+                        printf ( " is not compressed, " );
+                     copyfile ( direntp->d_name, direntp->d_name,  filesize(direntp->d_name)  );
+                  }
+               }
+            }
          }
+         closedir( dirp );
+      }
    } /* endwhile */
 
    if ( verbose )
@@ -441,7 +452,7 @@ int main(int argc, char *argv[] )
    fclose ( out );
 
    if ( verbose ) {
-     // printf(" average compression is %d%% \noverhead is %d byte \n", 100 * compsize / uncompsize, filesize ( argv[2] ) - compsize );
+      // printf(" average compression is %d%% \noverhead is %d byte \n", 100 * compsize / uncompsize, filesize ( argv[2] ) - compsize );
 
       printf ( "completed \n" );
    }

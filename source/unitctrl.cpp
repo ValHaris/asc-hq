@@ -180,7 +180,9 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
          if ( vehicle ) {
             vehicle->spawnMoveObjects( from, to );
-            vehicle->direction = getdirection( from, to );
+            int dir = getdirection( from, to );
+            if ( dir >= 0 && dir <= 5 )
+               vehicle->direction = dir;
             vehicle->xpos = to.x;
             vehicle->ypos = to.y;
             if ( inhibitAttack )

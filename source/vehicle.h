@@ -201,7 +201,7 @@
 
 
     //! constructs a vehicle at the given position.
-    void constructvehicle ( pvehicletype tnk, int x, int y );
+    Vehicle* constructvehicle ( pvehicletype tnk, int x, int y );
 
     //! checks whether the unit can construct a vehicle of the given type at the given position.
     bool vehicleconstructable ( pvehicletype tnk, int x, int y );

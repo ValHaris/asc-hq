@@ -210,7 +210,7 @@ int getmapposy ( void )
 
 int   getfieldundermouse ( int* xf, int* yf )
 {
-   for ( int i=0;i<idisplaymap.getscreenxsize();i++ ) {
+   for ( int i=0;i<=idisplaymap.getscreenxsize();i++ ) {
       for ( int j=0;j<idisplaymap.getscreenysize() ;j++ ) {
          int k;
 

@@ -985,10 +985,10 @@ void         constructvehicle( pvehicletype tnk )
          int oldmat = eht->tank.material;
          int oldfuel = eht->tank.fuel;
 
-         eht->constructvehicle ( tnk, x, y );
-         logtoreplayinfo ( rpl_buildtnk3, x, y, tnk->id, moveparams.vehicletomove->color/8, eht->getPosition().x, eht->getPosition().y );
-         logtoreplayinfo ( rpl_refuel2, eht->getPosition().x, eht->getPosition().y, eht->networkid, 1001, eht->tank.material, oldmat);
-         logtoreplayinfo ( rpl_refuel2, eht->getPosition().x, eht->getPosition().y, eht->networkid, 1002, eht->tank.fuel, oldfuel );
+         Vehicle* v = eht->constructvehicle ( tnk, x, y );
+         logtoreplayinfo ( rpl_buildtnk4, x, y, tnk->id, moveparams.vehicletomove->color/8, eht->getPosition().x, eht->getPosition().y, int(v->height) );
+//         logtoreplayinfo ( rpl_refuel2, eht->getPosition().x, eht->getPosition().y, eht->networkid, 1001, eht->tank.material, oldmat);
+//         logtoreplayinfo ( rpl_refuel2, eht->getPosition().x, eht->getPosition().y, eht->networkid, 1002, eht->tank.fuel, oldfuel );
 
          computeview( actmap );
 
@@ -1730,40 +1730,6 @@ void doresearch ( int i )
 
 
 
-void endRound ( void )
-{
-    actmap->actplayer = 0;
-    actmap->time.set ( actmap->time.turn()+1, 0 );
-    clearfahrspuren();
-
-    for (int i = 0; i <= 7; i++)
-       if (actmap->player[i].exist() ) {
-
-          for ( tmap::Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); j++ )
-             (*j)->endRound();
-
-          typedef PointerList<Building::Work*> BuildingWork;
-          BuildingWork buildingWork;
-
-          for ( tmap::Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); j++ ) {
-             Building::Work* w = (*j)->spawnWorkClasses( false );
-             if ( w )
-                buildingWork.push_back ( w );
-          }
-
-          bool didSomething;
-          do {
-             didSomething = false;
-             for ( BuildingWork::iterator j = buildingWork.begin(); j != buildingWork.end(); j++ ) 
-                if ( ! (*j)->finished() )
-                   if ( (*j)->run() )
-                      didSomething = true;
-          } while ( didSomething );
-          doresearch( i );
-       }
-}
-
-
 void initchoosentechnology( void )
 {
    Player& player = actmap->player[actmap->actplayer];
@@ -1932,88 +1898,8 @@ void endTurn ( void )
    /* *********************  vehicle ********************  */
 
    mousevisible(false);
-   if ( actmap->actplayer >= 0 ) {
-      actmap->cursorpos.position[actmap->actplayer].cx = getxpos();
-      actmap->cursorpos.position[actmap->actplayer].cy = getypos();
-      actmap->cursorpos.position[actmap->actplayer].sx = actmap->xpos;
-      actmap->cursorpos.position[actmap->actplayer].sy = actmap->ypos;
-      actmap->player[actmap->actplayer].ASCversion = getNumericVersion();
-      Player::PlayTime pt;
-      pt.turn = actmap->time.turn();
-      time ( &pt.date );
-      actmap->player[actmap->actplayer].playTime.push_back ( pt );
-
-      for ( tmap::Player::BuildingList::iterator b = actmap->player[actmap->actplayer].buildingList.begin(); b != actmap->player[actmap->actplayer].buildingList.end(); ++b )
-         (*b)->endTurn();
-
-
-      tmap::Player::VehicleList toRemove;
-      for ( tmap::Player::VehicleList::iterator v = actmap->player[actmap->actplayer].vehicleList.begin(); v != actmap->player[actmap->actplayer].vehicleList.end(); ++v ) {
-         pvehicle actvehicle = *v;
-
-         // Bei Žnderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
-
-         if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
-            if ( getmaxwindspeedforunit ( actvehicle ) < actmap->weather.windSpeed*maxwindspeed ){
-               ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x)+"/"+strrr((*v)->getPosition().y)+") crashed because of the strong wind";
-               new Message ( ident, actmap, 1<<(*v)->getOwner());
-               toRemove.push_back ( *v );
-            } else {
-
-               int j = actvehicle->tank.fuel - actvehicle->typ->fuelConsumption * nowindplanefuelusage;
-
-               if ( actvehicle->height <= chhochfliegend ) {
-                  int mo = actvehicle->typ->movement[log2(actvehicle->height)];
-                  if ( mo )
-                     j -= ( actvehicle->getMovement() * 64 / mo)
-                          * (actmap->weather.windSpeed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
-                  else
-                     j -= (actmap->weather.windSpeed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
-               }
-              //          movement * 64        windspeed * maxwindspeed         fuelConsumption
-              // j -=   ----------------- *  ----------------------------- *   -----------
-              //          typ->movement                 256                       64 * 8
-              //
-              //
-
-              //gek?rzt:
-              //
-              //             movement            windspeed * maxwindspeed
-              // j -= --------------------- *  ----------------------------   * fuelConsumption
-              //           typ->movement             256   *      8
-              //
-              //
-              //
-              // Falls eine vehicle sich nicht bewegt hat, bekommt sie soviel Sprit abgezogen, wie sie zum zur?cklegen der Strecke,
-              // die der Wind pro Runde zur?ckgelegt hat, fuelConsumptionen w?rde.
-              // Wenn die vehicle sich schon bewegt hat, dann wurde dieser Abzug schon beim movement vorgenommen, so daá er hier nur
-
-              // noch fuer das ?briggebliebene movement stattfinden muá.
-              //
-
-
-               if (j < 0) {
-                  ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x)+"/"+strrr((*v)->getPosition().y)+") crashed due to lack of fuel";
-                  new Message ( ident, actmap, 1<<(*v)->getOwner());
-                  toRemove.push_back ( *v );
-                  logtoreplayinfo( rpl_removeunit, actvehicle->getPosition().x, actvehicle->getPosition().y, actvehicle->networkid );
-               } else {
-                  logtoreplayinfo( rpl_refuel2, actvehicle->getPosition().x, actvehicle->getPosition().y, actvehicle->networkid, 1002, j, actvehicle->tank.fuel );
-                  actvehicle->tank.fuel = j;
-               }
-            }
-         }
-
-         if ( actvehicle )
-            actvehicle->endTurn();
-
-      }
-
-      for ( tmap::Player::VehicleList::iterator v = toRemove.begin(); v != toRemove.end(); v++ )
-         delete *v;
-
-      checkunitsforremoval ();
-   }
+   if ( actmap->actplayer >= 0 )
+      actmap->endTurn();
 
    closeReplayLogging();
 
@@ -2073,25 +1959,8 @@ void nextPlayer( void )
 {
    int oldplayer = actmap->actplayer;
 
-   int runde = 0;
-   do {
-      actmap->actplayer++;
-      actmap->time.set ( actmap->time.turn(), 0 );
-      if (actmap->actplayer > 7) {
-         endRound();
-         runde++;
-      }
 
-      if ( !actmap->player[actmap->actplayer].exist() )
-         if ( actmap->replayinfo )
-            if ( actmap->replayinfo->guidata[actmap->actplayer] ) {
-               delete actmap->replayinfo->guidata[actmap->actplayer];
-               actmap->replayinfo->guidata[actmap->actplayer] = NULL;
-            }
-
-   }  while (!(actmap->player[actmap->actplayer].exist()  || (runde > 2) ));
-
-   if (runde > 2) {
+   if ( !actmap->nextPlayer() ) {
       displaymessage("There are no players left any more !",1);
       delete actmap;
       actmap = NULL;
@@ -2487,7 +2356,7 @@ void cmousecontrol :: chkmouse ( void )
                dashboard.x = -1;
 
                mousevisible(true);
-            } 
+            }
       }
 
    if ( CGameOptions::Instance()->mouse.centerbutton )
@@ -2533,11 +2402,11 @@ void cmousecontrol :: chkmouse ( void )
 
    if ( CGameOptions::Instance()->mouse.smallguibutton )
       if ( mouseparams.taste == CGameOptions::Instance()->mouse.smallguibutton ) {
-         int x; 
+         int x;
          int y;
          int r = getfieldundermouse ( &x, &y );
-   
-         if ( r ) 
+
+         if ( r )
             if ( (cursor.posx != x || cursor.posy != y) && ( moveparams.movestatus == 0   ||  getfield(actmap->xpos + x , actmap->ypos + y)->a.temp == 0) ) {
                // collategraphicoperations cgo;
                mousestat = 1;
@@ -2545,9 +2414,14 @@ void cmousecontrol :: chkmouse ( void )
                cursor.hide();
                cursor.posx = x;
                cursor.posy = y;
-               cursor.show();
+               bool mapRespositioned = cursor.show();
+               if ( mapRespositioned )
+                  while ( mouseparams.taste == CGameOptions::Instance()->mouse.smallguibutton ) {
+                     releasetimeslice();
+                  }
+
                mousevisible(true);
-            } else 
+            } else
               if (    mousestat == 2
                   ||  mousestat == 0
                   ||  ((moveparams.movestatus || pendingVehicleActions.action) && getfield( actmap->xpos + x, actmap->ypos + y)->a.temp )
@@ -2559,9 +2433,13 @@ void cmousecontrol :: chkmouse ( void )
                        cursor.hide();
                        cursor.posx = x;
                        cursor.posy = y;
-                       cursor.show();
-
+                       bool mapRespositioned = cursor.show();
                        dashboard.paint( getactfield(), actmap-> playerView );
+                       if ( mapRespositioned )
+                          while ( mouseparams.taste == CGameOptions::Instance()->mouse.smallguibutton ) {
+                             releasetimeslice();
+                          }
+
 
                        mousevisible(true);
                     }
@@ -2577,13 +2455,13 @@ void cmousecontrol :: chkmouse ( void )
                  actgui->paintsmallicons( CGameOptions::Instance()->mouse.smallguibutton, !positionedUnderCursor );
                  mousestat = 0;
               }
-      } else 
+      } else
         if ( mousestat == 1 )
            mousestat = 2;
 
    if ( CGameOptions::Instance()->mouse.largeguibutton )
       if ( mouseparams.taste == CGameOptions::Instance()->mouse.largeguibutton ) {
-         int x; 
+         int x;
          int y;
          int r = getfieldundermouse ( &x, &y );
          if ( r && ( cursor.posx != x || cursor.posy != y) ) {
@@ -2591,7 +2469,11 @@ void cmousecontrol :: chkmouse ( void )
             cursor.hide();
             cursor.posx = x;
             cursor.posy = y;
-            cursor.show();
+            bool mapRespositioned = cursor.show();
+            if ( mapRespositioned )
+               while ( mouseparams.taste == CGameOptions::Instance()->mouse.smallguibutton ) {
+                  releasetimeslice();
+               }
             mousevisible(true);
          }
          actgui->painticons();
@@ -2601,7 +2483,7 @@ void cmousecontrol :: chkmouse ( void )
 
    if ( CGameOptions::Instance()->mouse.unitweaponinfo )
       if ( mouseparams.taste == CGameOptions::Instance()->mouse.unitweaponinfo ) {
-         int x; 
+         int x;
          int y;
          int r = getfieldundermouse ( &x, &y );
          if ( r && ( cursor.posx != x || cursor.posy != y) ) {
@@ -2621,7 +2503,7 @@ void cmousecontrol :: chkmouse ( void )
 
 /*
    if ( mouseparams.taste == minmenuekey ) {
-      int x; 
+      int x;
       int y;
       if (  getfieldundermouse ( &x, &y ) ) {
          actgui->paintsmallicons( minmenuekey );

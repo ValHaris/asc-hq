@@ -965,7 +965,7 @@ void loadStartupMap ( const char *gameToLoad=NULL )
          s= CGameOptions::Instance()->startupMap.getName();
 
       if ( s.empty() )
-         s = "first.map";
+         s = "asc001.map";
 
       int maploadable;
       {

@@ -573,10 +573,10 @@ int tcursor::gotoxy(int x, int y, int disp)
 
 
 
-void         tcursor::show(void)
+bool         tcursor::show(void)
 { 
    if ( !actmap || actmap->xsize == 0  || actmap->ysize == 0 )
-      return;
+      return false;
 
    int ms = getmousestatus (); 
    if (ms == 2) 
@@ -597,6 +597,8 @@ void         tcursor::show(void)
 
    if (ms == 2)
       mousevisible(true);
+
+   return poschange > 0;
 }
 
 

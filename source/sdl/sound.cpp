@@ -231,7 +231,7 @@ Mix_Chunk* SoundSystem::loadWave ( const ASCString& name )
       return NULL;
 
    if ( !exist ( name.c_str() )) {
-      fatalError ( " can't open sound file: " + name );
+      errorMessage ( " can't open sound file: " + name );
       return NULL;
    }
 

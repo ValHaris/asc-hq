@@ -20,6 +20,8 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <ctime>
+
 #include "global.h"
 #include "misc.h"
 #include "typen.h"
@@ -29,6 +31,7 @@
 #include "dlg_box.h"
 #include "dialog.h"
 #include "itemrepository.h"
+#include "strtmesg.h"
 
 #ifdef sgmain
  #include "network.h"
@@ -879,7 +882,7 @@ bool tmap :: compareResources( tmap* replaymap, int player, ASCString* log )
 {
    ASCString s;
    bool diff  = false;
-   for ( int r = 0; r < 3; ++r )
+   for ( int r = 0; r < 3; ++r ) {
       if ( isResourceGlobal( r )) {
          if ( bi_resource[player].resource(r) != replaymap-> bi_resource[player].resource(r) ) {
             diff = true;
@@ -909,30 +912,187 @@ bool tmap :: compareResources( tmap* replaymap, int player, ASCString* log )
                }
             }
          }
-         for ( Player::VehicleList::iterator v = this->player[player].vehicleList.begin(); v != this->player[player].vehicleList.end(); ++v ) {
-            Vehicle* v1 = *v;
-            Vehicle* v2 = replaymap->getUnit( v1->networkid );
-            if ( !v1 || !v2 ) {
+      }
+      for ( Player::VehicleList::iterator v = this->player[player].vehicleList.begin(); v != this->player[player].vehicleList.end(); ++v ) {
+         Vehicle* v1 = *v;
+         Vehicle* v2 = replaymap->getUnit( v1->networkid );
+         if ( !v1 || !v2 ) {
+            if ( log ) {
+               s.format ( "Vehicle missing! \n");
+               *log += s;
+            }
+         } else {
+            int av1 = v1->getResource( maxint, r, true );
+            int av2 = v2->getResource( maxint, r, true );
+            if ( av1 != av2 ) {
+               diff = true;
                if ( log ) {
-                  s.format ( "Vehicle missing! \n");
+                  s.format ( "Vehicle (%d,%d) resource mismatch: %d %s available after replay, but %d available in actual map\n", v1->getPosition().x, v1->getPosition().y, av2, resourceNames[r], av1 );
                   *log += s;
-               }
-            } else {
-               int av1 = v1->getResource( maxint, r, true );
-               int av2 = v2->getResource( maxint, r, true );
-               if ( av1 != av2 ) {
-                  diff = true;
-                  if ( log ) {
-                     s.format ( "Vehicle (%d,%d) resource mismatch: %d %s available after replay, but %d available in actual map\n", v1->getPosition().x, v1->getPosition().y, av1, resourceNames[r], av2 );
-                     *log += s;
-                  }
                }
             }
          }
       }
+
+   }
+   if ( this->player[player].vehicleList.size() != replaymap->player[player].vehicleList.size() ) {
+      diff = true;
+      if ( log ) {
+         s.format ( "The number of units differ. Replay: %d ; actual map: %d", replaymap->player[player].vehicleList.size(), this->player[player].vehicleList.size());
+         *log += s;
+      }
+   }
+   if ( this->player[player].buildingList.size() != replaymap->player[player].buildingList.size() ) {
+      diff = true;
+      if ( log ) {
+         s.format ( "The number of buildings differ. Replay: %d ; actual map: %d", replaymap->player[player].buildingList.size(), this->player[player].buildingList.size());
+         *log += s;
+      }
+   }
+
    return diff;
 }
 
+
+void tmap::endTurn()
+{
+   cursorpos.position[actplayer].cx = getxpos();
+   cursorpos.position[actplayer].cy = getypos();
+   cursorpos.position[actplayer].sx = xpos;
+   cursorpos.position[actplayer].sy = ypos;
+   player[actplayer].ASCversion = getNumericVersion();
+   Player::PlayTime pt;
+   pt.turn = time.turn();
+   ::time ( &pt.date );
+   player[actplayer].playTime.push_back ( pt );
+
+   for ( tmap::Player::BuildingList::iterator b = player[actplayer].buildingList.begin(); b != player[actplayer].buildingList.end(); ++b )
+      (*b)->endTurn();
+
+   tmap::Player::VehicleList toRemove;
+   for ( tmap::Player::VehicleList::iterator v = player[actplayer].vehicleList.begin(); v != player[actplayer].vehicleList.end(); ++v ) {
+      pvehicle actvehicle = *v;
+
+      // Bei Žnderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
+
+      if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
+         if ( getmaxwindspeedforunit ( actvehicle ) < weather.windSpeed*maxwindspeed ){
+            ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x)+"/"+strrr((*v)->getPosition().y)+") crashed because of the strong wind";
+            new Message ( ident, actmap, 1<<(*v)->getOwner());
+            toRemove.push_back ( *v );
+         } else {
+
+            int j = actvehicle->tank.fuel - actvehicle->typ->fuelConsumption * nowindplanefuelusage;
+
+            if ( actvehicle->height <= chhochfliegend ) {
+               int mo = actvehicle->typ->movement[log2(actvehicle->height)];
+               if ( mo )
+                  j -= ( actvehicle->getMovement() * 64 / mo)
+                       * (weather.windSpeed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
+               else
+                  j -= (weather.windSpeed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
+            }
+           //          movement * 64        windspeed * maxwindspeed         fuelConsumption
+           // j -=   ----------------- *  ----------------------------- *   -----------
+           //          typ->movement                 256                       64 * 8
+           //
+           //
+
+           //gek?rzt:
+           //
+           //             movement            windspeed * maxwindspeed
+           // j -= --------------------- *  ----------------------------   * fuelConsumption
+           //           typ->movement             256   *      8
+           //
+           //
+           //
+           // Falls eine vehicle sich nicht bewegt hat, bekommt sie soviel Sprit abgezogen, wie sie zum zur?cklegen der Strecke,
+           // die der Wind pro Runde zur?ckgelegt hat, fuelConsumptionen w?rde.
+           // Wenn die vehicle sich schon bewegt hat, dann wurde dieser Abzug schon beim movement vorgenommen, so daá er hier nur
+
+           // noch fuer das ?briggebliebene movement stattfinden muá.
+           //
+
+
+            if (j < 0) {
+               ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x)+"/"+strrr((*v)->getPosition().y)+") crashed due to lack of fuel";
+               new Message ( ident, actmap, 1<<(*v)->getOwner());
+               toRemove.push_back ( *v );
+               // logtoreplayinfo( rpl_removeunit, actvehicle->getPosition().x, actvehicle->getPosition().y, actvehicle->networkid );
+            } else {
+               // logtoreplayinfo( rpl_refuel2, actvehicle->getPosition().x, actvehicle->getPosition().y, actvehicle->networkid, 1002, j, actvehicle->tank.fuel );
+               actvehicle->tank.fuel = j;
+            }
+         }
+      }
+
+      if ( actvehicle )
+         actvehicle->endTurn();
+
+   }
+
+   for ( tmap::Player::VehicleList::iterator v = toRemove.begin(); v != toRemove.end(); v++ )
+      delete *v;
+
+   checkunitsforremoval();
+
+}
+
+void tmap::endRound()
+{
+    actplayer = 0;
+    time.set ( time.turn()+1, 0 );
+    clearfahrspuren();
+
+    for (int i = 0; i <= 7; i++)
+       if (player[i].exist() ) {
+
+          for ( tmap::Player::VehicleList::iterator j = player[i].vehicleList.begin(); j != player[i].vehicleList.end(); j++ )
+             (*j)->endRound();
+
+          typedef PointerList<Building::Work*> BuildingWork;
+          BuildingWork buildingWork;
+
+          for ( tmap::Player::BuildingList::iterator j = player[i].buildingList.begin(); j != player[i].buildingList.end(); j++ ) {
+             Building::Work* w = (*j)->spawnWorkClasses( false );
+             if ( w )
+                buildingWork.push_back ( w );
+          }
+
+          bool didSomething;
+          do {
+             didSomething = false;
+             for ( BuildingWork::iterator j = buildingWork.begin(); j != buildingWork.end(); j++ )
+                if ( ! (*j)->finished() )
+                   if ( (*j)->run() )
+                      didSomething = true;
+          } while ( didSomething );
+          // doresearch( i );
+       }
+}
+
+
+bool tmap::nextPlayer()
+{
+   int runde = 0;
+   do {
+      actplayer++;
+      time.set ( time.turn(), 0 );
+      if (actplayer > 7) {
+         endRound();
+         runde++;
+      }
+
+      if ( !player[actplayer].exist() )
+         if ( replayinfo )
+            if ( replayinfo->guidata[actplayer] ) {
+               delete replayinfo->guidata[actplayer];
+               replayinfo->guidata[actplayer] = NULL;
+            }
+
+   }  while ( (!player[actplayer].exist() || player[actplayer].stat == Player::off)  && (runde <= 2)  );
+   return runde <= 2;
+}
 
 tmap :: ~tmap ()
 {
@@ -1978,7 +2138,7 @@ void AiParameter::setJob ( Job j )
 
 bool AiParameter::hasJob ( AiParameter::Job j )
 {
-   find ( jobs.begin(), jobs.end(), j ) != jobs.end();
+   return find ( jobs.begin(), jobs.end(), j ) != jobs.end();
 }
 
 

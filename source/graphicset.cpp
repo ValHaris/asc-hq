@@ -155,8 +155,8 @@ const FieldQuickView* ActiveGraphicPictures::getQuickView( int id )
    } else {
       if ( !emptyFieldQuickView )
          emptyFieldQuickView = generateAverageCol ( emptyfield );
-      return emptyFieldQuickView;
    }
+   return emptyFieldQuickView;
 }
 
 

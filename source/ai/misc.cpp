@@ -898,10 +898,10 @@ void AI::production()
       bool produced;
       do {
           produced = false;
-          for ( int i = 0; i < UnitDistribution::groupCount; i++ ) {
-             if ( currentUnitDistribution.group[i] < originalUnitDistribution.group[i] ) {
+//           for ( int i = 0; i < UnitDistribution::groupCount; i++ ) {
+//              if ( currentUnitDistribution.group[i] < originalUnitDistribution.group[i] ) {
                 for ( Produceable::reverse_iterator p = produceable.rbegin(); p != produceable.rend(); p++ ) {
-                   if ( getUnitDistributionGroup ( p->second.vt) == i ) {
+//                    if ( getUnitDistributionGroup ( p->second.vt) == i ) {
                       ProductionRating& pr = p->second;
 
                       if ( find ( lockedBuildings.begin(), lockedBuildings.end(), pr.bld ) == lockedBuildings.end()) {
@@ -912,7 +912,7 @@ void AI::production()
                              pvehicle veh = bc.produceunit.produce( pr.vt, true );
                              calculateThreat ( veh );
                              container ( bc );
-                             currentUnitDistribution.group[i] += inc;
+                             // currentUnitDistribution.group[i] += inc;
                              produced = true;
                              break;  // exit produceable llop
                          } else {
@@ -930,11 +930,11 @@ void AI::production()
                             }
                          }
                       }
-                   } // else
+                   // } // else
                      //  printf(" %s \n", p->second.vt->description );
                 }
-             }
-          }
+             // }
+          // }
       } while ( produced );
    }
 

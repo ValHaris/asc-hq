@@ -604,6 +604,15 @@ class tmap {
       pfield getField ( const MapCoordinate& pos );
       void startGame ( );
 
+      //! called after a player ends his turn
+      void endTurn();
+
+      //! called between endTurn() of player 7 and the next turn of player 0
+      void endRound();
+
+      //! changes to the next player and calls endRound() if necessary. \Returns false if there are no players left
+      bool nextPlayer();
+
       VisibilityStates getInitialMapVisibility( int player );
 
       //! resizes the map. Positive numbers enlarge the map in that direction

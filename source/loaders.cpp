@@ -1527,8 +1527,10 @@ void  savereplay( int num )
    } /* endcatch */
 }
 
-void  loadreplay( pmemorystreambuf streambuf )
+tmap*  loadreplay( pmemorystreambuf streambuf )
 {
+   tmap* replaymap = NULL;
+
    try {
       char* name = "memorystream actmap->replayinfo";
       tmemorystream memstream ( streambuf, tnstream::reading );
@@ -1538,7 +1540,7 @@ void  loadreplay( pmemorystreambuf streambuf )
          throw tinvalidversion ( name, actreplayversion, version );
 
       tsavegameloaders sgl;
-      tmap* replaymap = sgl.loadgame ( &memstream );
+      replaymap = sgl.loadgame ( &memstream );
 
       version = memstream.readInt();
       if (version > actreplayversion || version < minreplayversion ) {
@@ -1546,33 +1548,28 @@ void  loadreplay( pmemorystreambuf streambuf )
          throw tinvalidversion ( name, actreplayversion, version );
       }
 
-      delete actmap;
-      actmap = replaymap;
-
    }
    catch ( InvalidID err ) {
       displaymessage( err.getMessage().c_str(), 1 );
-      if ( !actmap || actmap->xsize == 0)
-         throw NoMapLoaded();
+      replaymap = NULL;
    } /* endcatch */
    catch ( tinvalidversion err ) {
       if ( err.expected < err.found )
          displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nPlease install the latest version from www.asc-hq.org", 1, err.getFileName().c_str(), err.expected, err.found );
       else
          displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nThis is a bug, please report it!", 1, err.getFileName().c_str(), err.expected, err.found );
-      if ( !actmap || actmap->xsize == 0)
-         throw NoMapLoaded();
+      replaymap = NULL;
    } /* endcatch */
    catch ( tfileerror err) {
       displaymessage( "error reading map filename %s ", 1, err.getFileName().c_str() );
-      if ( !actmap || actmap->xsize == 0)
-         throw NoMapLoaded();
+      replaymap = NULL;
    } /* endcatch */
    catch ( ASCexception ) {
       displaymessage( "error loading replay", 1 );
-      if ( !actmap || actmap->xsize == 0)
-         throw NoMapLoaded();
+      replaymap = NULL;
    } /* endcatch */
+
+   return replaymap;
 }
 
 

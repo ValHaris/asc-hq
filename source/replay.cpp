@@ -390,7 +390,7 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( id );
          stream->writeInt ( unit );
       }
-      if ( action == rpl_buildtnk || action == rpl_buildtnk3 ) {
+      if ( action == rpl_buildtnk || action == rpl_buildtnk3 || action == rpl_buildtnk4 ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
          int id =  va_arg ( paramlist, int );
@@ -400,16 +400,21 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          if ( action == rpl_buildtnk )
             size = 4;
          else
-            size = 6;
+            if ( action == rpl_buildtnk4 )
+               size = 7;
+            else
+               size = 6;
 
          stream->writeInt ( size );
          stream->writeInt ( x );
          stream->writeInt ( y );
          stream->writeInt ( id );
          stream->writeInt ( col );
-         if ( action == rpl_buildtnk3 ) {
+         if ( action == rpl_buildtnk3 || action == rpl_buildtnk4 ) {
             stream->writeInt ( va_arg ( paramlist, int ) ); // constructor x
             stream->writeInt ( va_arg ( paramlist, int ) ); // constructor x
+            if ( action == rpl_buildtnk4  )
+               stream->writeInt ( va_arg ( paramlist, int ) ); // unit height
          }
       }
       if ( action == rpl_buildtnk2 ) {
@@ -631,6 +636,19 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( x );
          stream->writeInt ( y );
          stream->writeInt ( destnwid );
+         stream->writeInt ( amount );
+      }
+      if ( action == rpl_produceAmmo ) {
+         int x = va_arg ( paramlist, int );
+         int y = va_arg ( paramlist, int );
+         int type = va_arg ( paramlist, int );
+         int amount = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 4;
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( type );
          stream->writeInt ( amount );
       }
 
@@ -1026,7 +1044,8 @@ void trunreplay :: execnextreplaymove ( void )
          break;
       case rpl_buildtnk:
       case rpl_buildtnk2:
-      case rpl_buildtnk3: {
+      case rpl_buildtnk3:
+      case rpl_buildtnk4: {
                            stream->readInt();  // size
                            int x = stream->readInt();
                            int y = stream->readInt();
@@ -1035,12 +1054,15 @@ void trunreplay :: execnextreplaymove ( void )
                            int nwid = -1;
                            int constx = -1;
                            int consty = -1;
+                           int height = -1;
                            if ( nextaction == rpl_buildtnk2 )
-                              nwid == stream->readInt();
+                              nwid = stream->readInt();
 
-                           if ( nextaction == rpl_buildtnk3 ) {
-                              constx == stream->readInt();
-                              consty == stream->readInt();
+                           if ( nextaction == rpl_buildtnk3 || nextaction == rpl_buildtnk4 ) {
+                              constx = stream->readInt();
+                              consty = stream->readInt();
+                              if ( nextaction == rpl_buildtnk4 )
+                                 height = stream->readInt();
                            }
 
                            readnextaction();
@@ -1055,6 +1077,8 @@ void trunreplay :: execnextreplaymove ( void )
                               v->xpos = x;
                               v->ypos = y;
                               fld->vehicle = v;
+                              if ( height >= 0 )
+                                 v->height = height;
 
                               if ( constx >= 0 && consty >= 0 ) {
                                  pfield constructorField = getfield(constx, consty );
@@ -1445,6 +1469,24 @@ void trunreplay :: execnextreplaymove ( void )
                                     displaymessage("severe replay inconsistency:\nno vehicle for repair-unit command !", 1);
                               }
          break;
+      case rpl_produceAmmo : {
+                                 stream->readInt();  // size
+                                 int x = stream->readInt();
+                                 int y = stream->readInt();
+                                 int type = stream->readInt();
+                                 int amount = stream->readInt();
+                                 readnextaction();
+                                 pbuilding bld = getfield(x,y)->building;
+                                 if ( bld ) {
+                                    cbuildingcontrols bc;
+                                    bc.init ( bld );
+                                    bc.produceammunition.produce( type, amount );
+                                 } else
+                                    displaymessage("severe replay inconsistency:\nno building for produce ammo command !", 1);
+
+                              }
+         break;
+
 
 
       default:{
@@ -1511,9 +1553,7 @@ int  trunreplay :: run ( int player )
    actplayer = actmap->actplayer;
 
    orgmap = actmap;
-   actmap = NULL;
-
-   loadreplay ( orgmap->replayinfo->map[player]  );
+   actmap = loadreplay ( orgmap->replayinfo->map[player]  );
 
    actmap->playerView = actplayer;
 
@@ -1567,14 +1607,28 @@ int  trunreplay :: run ( int player )
           if ( !cursor.an )
              cursor.show();
           if ( nextaction == rpl_finished && !resourcesCompared ) {
+             actmap->endTurn();
+             actmap->nextPlayer();
              resourcesCompared = true;
              ASCString resourceComparisonResult;
-             if ( orgmap->compareResources( actmap, player, &resourceComparisonResult)) {
-                tviewanytext vat;
-                vat.init ( "warning", resourceComparisonResult.c_str() );
-                vat.run();
-                vat.done();
-             }
+             tmap* comparisonMap = NULL;
+             tmap* nextPlayerMap = NULL;
+             if ( actmap->actplayer == orgmap->actplayer )
+                comparisonMap = orgmap;
+             else
+                comparisonMap = nextPlayerMap = loadreplay ( orgmap->replayinfo->map[actmap->actplayer]  );
+
+             if ( comparisonMap ) {
+                if ( comparisonMap->compareResources( actmap, player, &resourceComparisonResult)) {
+                   tviewanytext vat;
+                   vat.init ( "warning", resourceComparisonResult.c_str() );
+                   vat.run();
+                   vat.done();
+                }
+             } else
+                displaymessage("Replay: no map to compare to!", 1 );
+
+             delete nextPlayerMap;
           }
        } else
           if ( cursor.an )

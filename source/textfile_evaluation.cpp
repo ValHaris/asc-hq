@@ -544,18 +544,21 @@ template <class T>
 T PropertyTemplate<T>::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
    operation_not_defined( entry );
+   return T();
 }
 
 template <class T>
 T PropertyTemplate<T>::operation_mult ( const TextPropertyGroup::Entry& entry ) const
 {
    operation_not_defined( entry );
+   return T();
 }
 
 template <class T>
 T PropertyTemplate<T>::operation_add ( const TextPropertyGroup::Entry& entry ) const
 {
    operation_not_defined( entry );
+   return T();
 }
 
 template <class T>

@@ -229,8 +229,8 @@ bool AI::ServiceOrder::execute1st ( pvehicle supplier )
          setServiceUnit ( supplier );
          return true;
       }
-   } else
-      return false;
+   }
+   return false;
 }
 
 void AI::ServiceOrder::setServiceUnit ( pvehicle veh )

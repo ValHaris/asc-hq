@@ -142,6 +142,7 @@ EventTrigger::State EventTrigger::state( int player )
                                     stateCache = finally_failed;
                                     return finally_failed;
         }
+        return unfulfilled;
      } else {
         if ( s == finally_fulfilled || s == finally_failed ) {
            stateCache = s;

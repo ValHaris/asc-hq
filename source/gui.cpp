@@ -2736,6 +2736,7 @@ void  tnweapselguiicon::exec         ( void )
       dashboard.x = 0xffff;
 
       actgui = &gui;
+      actgui->restorebackground();
    }
 }
 

@@ -3754,6 +3754,11 @@ void warning ( const ASCString& str )
 	fprintf(stderr, "ASC: %s \n", str.c_str());
 }
 
+void errorMessage ( const ASCString& string )
+{
+   displaymessage ( string.c_str(), 1 );
+}
+
 
 class   ChooseString : public tstringselect {
                  const vector<ASCString>& strings;
