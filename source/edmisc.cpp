@@ -2,9 +2,15 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.105 2003-12-27 18:27:01 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.106 2004-01-06 14:41:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.105  2003/12/27 18:27:01  mbickel
+//      New vehicle function: no reaction fire
+//      new map parameter: disable unit/building transfer
+//      fixed broken bridge in second campaign map
+//      container now display number of cargo slots
+//
 //     Revision 1.104  2003/07/06 15:10:26  mbickel
 //      Better configure messages
 //      code cleanup
@@ -2435,19 +2441,19 @@ void         BuildingValues::init(void)
    addbutton("~F~uel-Storage",15,170,215,190,2,1,3,true);
    addeingabe(3,&storage.fuel,0,gbde.gettank(2));
 
-   if ( gbde.typ->special & (cgconventionelpowerplantb | cgsolarkraftwerkb | cgwindkraftwerkb | cgminingstationb )) b = true;
+   if ( gbde.typ->special & (cgconventionelpowerplantb | cgsolarkraftwerkb | cgwindkraftwerkb | cgminingstationb | cgresourceSinkB)) b = true;
    else b = false;
 
    addbutton("Energy-Max-Plus",230,50,430,70,2,1,13,b);
    addeingabe(13,&mplus.energy,0,gbde.typ->maxplus.energy);
 
-   if ( gbde.typ->special & (cgconventionelpowerplantb | cgminingstationb )) b = true;
+   if ( gbde.typ->special & (cgconventionelpowerplantb | cgminingstationb | cgresourceSinkB )) b = true;
    else b = false;
 
    addbutton("Energ~y~-Plus",230,90,430,110,2,1,4,b);
    addeingabe(4,&plus.energy,0,mplus.energy);
 
-   if ( (gbde.typ->special & cgconventionelpowerplantb) || ((gbde.typ->special & cgminingstationb ) && gbde.typ->efficiencymaterial ))
+   if ( (gbde.typ->special & cgconventionelpowerplantb) || ((gbde.typ->special & cgminingstationb ) && gbde.typ->efficiencymaterial ) || (gbde.typ->special & cgresourceSinkB))
       b = true;
    else
       b = false;
@@ -2458,7 +2464,7 @@ void         BuildingValues::init(void)
    addbutton("M~a~terial-Plus",230,170,430,190,2,1,5,b);
    addeingabe(5,&plus.material,0,mplus.material);
 
-   if ( (gbde.typ->special & cgconventionelpowerplantb) || ((gbde.typ->special & cgminingstationb ) && gbde.typ->efficiencyfuel ))
+   if ( (gbde.typ->special & cgconventionelpowerplantb) || ((gbde.typ->special & cgminingstationb ) && gbde.typ->efficiencyfuel )|| (gbde.typ->special & cgresourceSinkB))
       b = true;
    else
       b = false;

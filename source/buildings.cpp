@@ -672,7 +672,7 @@ Building::Work* Building::spawnWorkClasses( bool justQuery )
          return new MiningStation ( this, justQuery );
 
       if ( typ->special & cgresourceSinkB )
-         return new MiningStation ( this, justQuery );
+         return new ResourceSink ( this );
    } else {
       return new BiResourceGeneration ( this );
    }

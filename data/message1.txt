@@ -34,6 +34,8 @@ No fields accessible
 Movement interrupted
 118 
 You must be outside to change a units height
+119
+Not enough movement to put or remove mines
 201
 This # won't attack anything
 202
