@@ -1,6 +1,9 @@
-//     $Id: gui.cpp,v 1.18 2000-05-10 19:55:53 mbickel Exp $
+//     $Id: gui.cpp,v 1.19 2000-05-11 15:45:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/05/10 19:55:53  mbickel
+//      Fixed empty loops when waiting for mouse events
+//
 //     Revision 1.17  2000/05/07 17:04:06  mbickel
 //      Fixed a bug in movement
 //
@@ -1165,7 +1168,7 @@ tnsguiiconattack::tnsguiiconattack ( void )
 
 int   tnsguiiconattack::available    ( void ) 
 {
-   if (moveparams.movestatus == 0) { 
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) { 
       pvehicle eht = getactfield()->vehicle; 
       if (eht != NULL) 
          if (eht->color == actmap->actplayer * 8) 
@@ -1414,7 +1417,7 @@ tnsguiiconinformation::tnsguiiconinformation ( void )
 int   tnsguiiconinformation::available    ( void ) 
 {
     pvehicle eht = getactfield()->vehicle; 
-    if (moveparams.movestatus == 0) 
+    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
     if (eht != NULL)      
        if (fieldvisiblenow(getactfield()))
           return 1; 
@@ -1467,7 +1470,7 @@ tnsguiiconendturn::tnsguiiconendturn ( void )
 
 int   tnsguiiconendturn::available    ( void ) 
 {
-   if (moveparams.movestatus == 0) 
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
       if (actmap->levelfinished == false) 
          return 1; 
    return 0;
@@ -1592,7 +1595,7 @@ int   tnsguiiconconstructvehicle::available    ( void )
       if ( fld->vehicle )
          if (fld->vehicle->color == actmap->actplayer * 8) 
             if ( fld->vehicle->typ->vehiclesbuildablenum )
-               if (moveparams.movestatus == 0) 
+               if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
                   if ( !fld->vehicle->attacked )
                      return 1;
 
@@ -1625,7 +1628,7 @@ tnsguiiconputmine::tnsguiiconputmine ( void )
 int   tnsguiiconputmine::available    ( void ) 
 {
    pfield fld = getactfield(); 
-   if (moveparams.movestatus == 0) 
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
       if ( fld->vehicle ) 
          if (fld->vehicle->color == actmap->actplayer * 8) 
             if (fld->vehicle->functions & cfminenleger ) 
@@ -1788,7 +1791,7 @@ int   tnsguiiconbuildany::available    ( void )
    if ( fld->vehicle ) 
       if (fld->vehicle->color == actmap->actplayer * 8) 
          if ( fld->vehicle->typ->objectsbuildablenum ) 
-            if (moveparams.movestatus == 0) 
+            if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
                if ( !fld->vehicle->attacked )
                   return true; 
    return 0;
@@ -1810,7 +1813,7 @@ tnsguiiconrepair::tnsguiiconrepair ( void )
 
 int   tnsguiiconrepair::available    ( void ) 
 {
-   if (moveparams.movestatus == 0) { 
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) { 
       pfield fld = getactfield(); 
       if ( fld->vehicle ) 
          if (fld->vehicle->color == actmap->actplayer * 8) 
@@ -1867,7 +1870,7 @@ tnsguiiconrefuel::tnsguiiconrefuel ( void )
 
 int   tnsguiiconrefuel::available    ( void ) 
 {
-   if (moveparams.movestatus == 0) { 
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) { 
       pfield fld = getactfield(); 
       if ( fld->vehicle ) 
          if ( !fld->vehicle->attacked )
@@ -1893,7 +1896,7 @@ int   tnsguiiconrefuel::available    ( void )
 
 void  tnsguiiconrefuel::exec         ( void ) 
 {
-   if ( moveparams.movestatus == 0 ) {
+   if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing) {
       refuelvehicle(3); 
       displaymap();
    } else
@@ -1912,7 +1915,7 @@ void  tnsguiiconrefuel::display      ( void )
       return;
 
    int pict = 1;
-   if (moveparams.movestatus == 0) { 
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) { 
       pfield fld = getactfield(); 
       if ( fld->vehicle ) 
          if ( fld->vehicle->functions & cffuelref  )
@@ -1975,7 +1978,7 @@ int   tnsguiiconputbuilding::available    ( void )
       return 0;
 
     pfield fld = getactfield();
-    if (moveparams.movestatus == 0) { 
+    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) { 
        if ( fld->vehicle )
           if ( fld->vehicle->attacked == false && fld->vehicle->movement == fld->vehicle->typ->movement[log2(fld->vehicle->height)]) 
              if (fld->vehicle->color == actmap->actplayer * 8)
@@ -1997,7 +2000,7 @@ int   tnsguiiconputbuilding::available    ( void )
 
 void  tnsguiiconputbuilding::exec         ( void ) 
 {
-   if (moveparams.movestatus == 0) {
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
       putbuildinglevel1(); 
       displaymap();
    }
@@ -2026,7 +2029,7 @@ tnsguiicondestructbuilding::tnsguiicondestructbuilding ( void )
 int   tnsguiicondestructbuilding::available    ( void ) 
 {
     pfield fld = getactfield();
-    if (moveparams.movestatus == 0) { 
+    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) { 
        if ( fld->vehicle )
           if ( fld->vehicle->attacked == false && fld->vehicle->movement == fld->vehicle->typ->movement[log2(fld->vehicle->height)]) 
              if (fld->vehicle->color == actmap->actplayer * 8)
@@ -2045,7 +2048,7 @@ int   tnsguiicondestructbuilding::available    ( void )
 
 void  tnsguiicondestructbuilding::exec         ( void ) 
 {
-   if (moveparams.movestatus == 0) {
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
       destructbuildinglevel1( getxpos(), getypos() ); 
       displaymap();
    }
@@ -2072,7 +2075,7 @@ int   tnsguiicondig::available    ( void )
    if (fld->vehicle != NULL) 
       if (fld->vehicle->color == actmap->actplayer * 8) 
          if ( (fld->vehicle->functions &  cfmanualdigger) && !(fld->vehicle->functions &  cfautodigger) )
-            if (moveparams.movestatus == 0) 
+            if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
                if ((fld->vehicle->typ->wait==false && fld->vehicle->movement >= searchforresorcesmovedecrease ) || fld->vehicle->movement == fld->vehicle->typ->movement[log2(fld->vehicle->height)])
                  return true;
    return 0;
@@ -2101,7 +2104,7 @@ tnsguiiconviewmap::tnsguiiconviewmap ( void )
 
 int   tnsguiiconviewmap::available    ( void ) 
 {
-   if ( moveparams.movestatus == 0 )
+   if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
       return true;
    return false;
 }
@@ -2127,7 +2130,7 @@ int   tnsguiiconenablereactionfire::available    ( void )
    if ( eht )
       if ( eht->color == actmap->actplayer * 8) 
          if ( !eht->reactionfire_active )
-            if ( moveparams.movestatus == 0 )
+            if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
                if ( weapexist ( eht ))
                   return 1;
 
@@ -2155,7 +2158,7 @@ int   tnsguiicondisablereactionfire::available    ( void )
    if ( eht )
       if ( eht->color == actmap->actplayer * 8) 
          if ( eht->reactionfire_active )
-            if ( moveparams.movestatus == 0 )
+            if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
                if ( weapexist ( eht ))
                   return 1;
 
