@@ -1,6 +1,10 @@
-//     $Id: fileio.h,v 1.4 2001-07-30 17:43:13 mbickel Exp $
+//     $Id: fileio.h,v 1.5 2001-07-30 18:03:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2001/07/30 17:43:13  mbickel
+//      Added Microsoft Visual Studio .net project files
+//      Fixed some warnings
+//
 //     Revision 1.3  2001/05/18 22:30:30  mbickel
 //      The data file is now installed in the correct directory
 //      If the installation directory is changed with configure, the new path
@@ -41,7 +45,6 @@
     Boston, MA  02111-1307  USA
 */
 
-// #error Visual C sucks ! Please read asc/doc/source.html
 
 #ifndef fileio_h_included
  #define fileio_h_included

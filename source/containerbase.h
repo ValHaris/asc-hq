@@ -45,6 +45,8 @@ class ContainerBase {
    protected:
       const pmap gamemap;
       virtual const ResourceMatrix& getRepairEfficiency ( void ) = 0;
+      //! is called after a repair is perfored
+      virtual void postRepair ( int oldDamage ) = 0;
    public:
       ContainerBase ( const ContainerBaseType* bt, pmap map, int player );
 

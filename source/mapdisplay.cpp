@@ -1015,9 +1015,11 @@ void tgeneraldisplaymap :: pnt_main ( void )
                if (b == visible_ago) {
                  #ifdef HEXAGON
                   for (int hgt = 0; hgt < 9 ;hgt++ ) {
+                     /*
                      int binaryheight = 0;
                      if ( hgt > 0 )
                         binaryheight = 1 << ( hgt-1);
+                     */
 
                       /* display objects */
                       if ( !fld->building )

@@ -588,7 +588,7 @@ int main(int argc, char *argv[] )
                if ( ft->vehicleCategoriesLoadable & (1 << c))
                   printf(" Kategorie %s kann geladen werden", cmovemalitypes[c] );
 
-            for ( i = 0; i < ft->buildingsBuildable.size(); i++ ) {
+            for ( unsigned int i = 0; i < ft->buildingsBuildable.size(); i++ ) {
                printf("es können die gebäude mit ids von %d bis %d gebaut werden\n", ft->buildingsBuildable[i].from, ft->buildingsBuildable[i].to );
                for ( int b = 0; b < buildingtypenum; b++ ) {
                   pbuildingtype bld = getbuildingtype_forpos ( b );
@@ -599,7 +599,7 @@ int main(int argc, char *argv[] )
                }
             }
 
-            for ( i = 0; i < ft->vehiclesBuildable.size(); i++ ) {
+            for ( unsigned int i = 0; i < ft->vehiclesBuildable.size(); i++ ) {
                printf("es können die einheiten mit ids von %d bis %d gebaut werden\n", ft->vehiclesBuildable[i].from, ft->vehiclesBuildable[i].to );
                for ( int b = 0; b < vehicletypenum; b++ ) {
                   pvehicletype veh = getvehicletype_forpos ( b );
@@ -610,7 +610,7 @@ int main(int argc, char *argv[] )
                }
             }
 
-            for ( i = 0; i < ft->objectsBuildable.size(); i++ ) {
+            for ( unsigned int i = 0; i < ft->objectsBuildable.size(); i++ ) {
                printf("es können die Objekte mit ids von %d bis %d gebaut werden\n", ft->objectsBuildable[i].from, ft->objectsBuildable[i].to );
                for ( int b = 0; b < objecttypenum; b++ ) {
                   pobjecttype obj = getobjecttype_forpos ( b );

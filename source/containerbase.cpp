@@ -58,10 +58,15 @@ int ContainerBase :: repairItem   ( ContainerBase* item, int newDamage  )
    if ( !canRepair() )
       return item->damage;
 
+   int orgdam = item->damage;
+
    Resources cost;
    newDamage = getMaxRepair ( item, newDamage, cost );
    item->damage = newDamage;
    getResource ( cost, 0 );
+
+   item->postRepair( orgdam );
+
    return newDamage;
 }
 

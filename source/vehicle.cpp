@@ -321,6 +321,14 @@ void Vehicle::transform ( const pvehicletype type )
    klasse = 255;
 }
 
+void Vehicle :: postRepair ( int oldDamage )
+{
+   for ( int i = 0; i < experienceDecreaseDamageBoundaryNum; i++)
+      if ( oldDamage > experienceDecreaseDamageBoundaries[i] && damage < experienceDecreaseDamageBoundaries[i] )
+         if ( experience > 0 )
+            experience-=1;
+}
+
 
 /*
 void Vehicle :: repairunit(pvehicle vehicle, int maxrepair )

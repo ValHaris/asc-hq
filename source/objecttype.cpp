@@ -155,8 +155,8 @@ void ObjectType :: read ( tnstream& stream )
 
        visibleago = stream.readInt();
        int  ___objectslinkablenum = stream.readInt();
-       bool ___objectsLinkable = stream.readInt();
-       bool ___oldpicture = stream.readInt();
+       stream.readInt(); // ___objectsLinkable
+       stream.readInt(); // ___oldpicture 
 
        int ___pictnum = stream.readInt();
        armor = stream.readInt();
@@ -192,10 +192,10 @@ void ObjectType :: read ( tnstream& stream )
        terrain_and.read ( stream );
        terrain_or.read ( stream );
 
-       bool ___buildicon = stream.readInt();
-       bool ___removeicon = stream.readInt();
+       stream.readInt(); // ___buildicon
+       stream.readInt(); // ___removeicon
 
-       bool ___dirlist = stream.readInt();
+       stream.readInt(); // ___dirlist
        dirlistnum = stream.readInt();
 
        bool _picture[cwettertypennum];

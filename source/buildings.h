@@ -180,6 +180,7 @@ class  Building : public ContainerBase {
   protected:
      ResourceMatrix repairEfficiency;
      const ResourceMatrix& getRepairEfficiency ( void ) { return repairEfficiency; };
+     virtual void postRepair ( int oldDamage ) {};
 };
 
  #pragma pack()

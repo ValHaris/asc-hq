@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.62 2001-07-28 11:19:12 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.63 2001-07-30 18:03:08 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2001/07/28 11:19:12  mbickel
+//      Updated weaponguide
+//      moved item repository from spfst to itemrepository
+//
 //     Revision 1.61  2001/07/27 21:13:35  mbickel
 //      Added text based file formats
 //      Terraintype and Objecttype restructured
@@ -2007,6 +2011,13 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
    else
       dist = beeline ( xp, yp , startPos.x, startPos.y );
 
+
+   const SingleWeapon* serviceWeapon = NULL;
+   for (int i = 0; i < veh->typ->weapons.count ; i++)
+      if ( veh->typ->weapons.weapon[i].service() )
+         serviceWeapon = &veh->typ->weapons.weapon[i];
+
+
    for (int i = 0; i < veh->typ->weapons.count ; i++) {
       const SingleWeapon& sourceWeapon = veh->typ->weapons.weapon[i];
       if ( (sourceWeapon.sourceheight & veh->height) || ( bypassChecks.height && (sourceWeapon.sourceheight & veh->typ->height)))
@@ -2018,10 +2029,10 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
                   if ( sourceWeapon.efficiency[ 6 + getheightdelta ( log2(veh->height), h ) ] )
                      targheight |= 1 << h;
 
-            if ( targetUnit )
+            if ( targetUnit && serviceWeapon )
                if ( !(targetUnit->functions & cfnoairrefuel) || targetUnit->height <= chfahrend )
                   if (getdiplomaticstatus2(veh->color, targetUnit->color) == capeace)
-                     if ( (sourceWeapon.maxdistance >= dist && sourceWeapon.mindistance <= dist) || bypassChecks.distance )
+                     if ( (serviceWeapon->maxdistance >= dist && serviceWeapon->mindistance <= dist) || bypassChecks.distance )
                         if (   targetUnit->height & targheight || ( bypassChecks.height && ( targetUnit->typ->height & targheight) )) {
                            if ( sourceWeapon.canRefuel() ) {
                               for ( int j = 0; j < targetUnit->typ->weapons.count ; j++) {

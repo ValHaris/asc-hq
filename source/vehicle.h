@@ -153,6 +153,9 @@
 
     const ResourceMatrix& getRepairEfficiency ( void ) { return repairEfficiency; };
 
+    virtual void postRepair ( int oldDamage );
+
+
   public:
 
     /** returns the free weight that can be used for cargo

@@ -251,10 +251,9 @@ void Vehicletype :: read ( tnstream& stream )
    digrange = stream.readChar();
    initiative = stream.readInt();
    int _terrainnot = 0;
-   int _terrainreq1 = 0;
    if ( version <= 4 ) {
       _terrainnot = stream.readInt();
-      _terrainreq1 = stream.readInt();
+      stream.readInt(); // _terrainreq1 
    }
    int objectsbuildablenum = stream.readInt();
    if ( version <= 4 )
