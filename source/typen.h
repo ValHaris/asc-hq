@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.24 2000-06-08 21:03:44 mbickel Exp $
+//     $Id: typen.h,v 1.25 2000-06-09 13:12:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/06/08 21:03:44  mbickel
+//      New vehicle action: attack
+//      wrote documentation for vehicle actions
+//
 //     Revision 1.23  2000/06/06 20:03:19  mbickel
 //      Fixed graphical error when transfering ammo in buildings
 //      Sound can now be disable by a command line parameter and the game options
@@ -342,12 +346,12 @@ struct tquickview {
   struct tresourcetribute {
     struct {
       union {
-	struct {
-	  int   energy[8][8];
-	  int   material[8][8];
-	  int   fuel[8][8];
-	}a;
-	int resource[3][8][8];
+         struct {
+           int   energy[8][8];
+           int   material[8][8];
+           int   fuel[8][8];
+         }a;
+         int resource[3][8][8];
       };
     } avail, paid;
   };
@@ -817,8 +821,8 @@ class  tbuilding {
     void execnetcontrol ( void );
     int  getmininginfo ( int res );
 
-    int  put_energy ( int      need,    int resourcetype, int queryonly  );
-    int  get_energy ( int      need,    int resourcetype, int queryonly );
+    int  put_energy ( int      need,    int resourcetype, int queryonly, int scope = 1 );
+    int  get_energy ( int      need,    int resourcetype, int queryonly, int scope = 1 );
 
     void getresourceusage ( tresources* usage );
     void changecompletion ( int d );

@@ -1,6 +1,10 @@
-//     $Id: building.cpp,v 1.22 2000-06-06 20:03:16 mbickel Exp $
+//     $Id: building.cpp,v 1.23 2000-06-09 13:12:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/06/06 20:03:16  mbickel
+//      Fixed graphical error when transfering ammo in buildings
+//      Sound can now be disable by a command line parameter and the game options
+//
 //     Revision 1.21  2000/05/22 15:40:30  mbickel
 //      Included patches for Win32 version
 //
@@ -1622,9 +1626,10 @@ void  ccontainer :: showresources ( void )
     activefontsettings.font = schriften.guifont;
 
     collategraphicoperations cgo ( nameposx + 18 , nameposy + 27, nameposx + 164 + activefontsettings.length, nameposy + 40 );
-    showtext2c ( strrr ( getenergy   ( maxint, 0 ) ), nameposx + 18, nameposy + 27 );
-    showtext2c ( strrr ( getmaterial ( maxint, 0 ) ), nameposx + 91, nameposy + 27 );
-    showtext2c ( strrr ( getfuel     ( maxint, 0 ) ), nameposx + 164, nameposy + 27 );
+    char buf[1000];
+    showtext2c ( int2string ( getenergy   ( maxint, 0 ), buf ), nameposx + 18, nameposy + 27 );
+    showtext2c ( int2string ( getmaterial ( maxint, 0 ), buf ), nameposx + 91, nameposy + 27 );
+    showtext2c ( int2string ( getfuel     ( maxint, 0 ), buf ), nameposx + 164, nameposy + 27 );
 
     repaintresources = 0;
    }

@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.31 2000-06-08 21:03:42 mbickel Exp $
+//     $Id: spfst.cpp,v 1.32 2000-06-09 13:12:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/06/08 21:03:42  mbickel
+//      New vehicle action: attack
+//      wrote documentation for vehicle actions
+//
 //     Revision 1.30  2000/05/30 18:39:25  mbickel
 //      Added support for multiple directories
 //      Moved DOS specific files to a separate directory
@@ -6313,8 +6317,8 @@ void tbuilding :: changecompletion ( int d ) {}
 int  tbuilding :: getresourceplus ( int mode, tresources* plus, int queryonly ) { return 0;};
 void tbuilding :: execnetcontrol ( void ) {}
 int  tbuilding :: processmining ( int res, int abbuchen ) { return 0; }
-int  tbuilding :: put_energy ( int      need,    int resourcetype, int queryonly  )  { return 0; }
-int  tbuilding :: get_energy ( int      need,    int resourcetype, int queryonly  )  { return 0; }
+int  tbuilding :: put_energy ( int      need,    int resourcetype, int queryonly, int scope  )  { return 0; }
+int  tbuilding :: get_energy ( int      need,    int resourcetype, int queryonly, int scope  )  { return 0; }
 void tbuilding :: getresourceusage ( tresources* usage ) { usage->a.energy = 0;
                                                            usage->a.material =  0;
                                                            usage->a.fuel = 0;

@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.28 2000-06-06 20:17:07 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.29 2000-06-09 13:12:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/06/06 20:17:07  mbickel
+//      Updated dummy sound headers for DOS
+//
 //     Revision 1.27  2000/06/06 20:03:17  mbickel
 //      Fixed graphical error when transfering ammo in buildings
 //      Sound can now be disable by a command line parameter and the game options
@@ -1677,7 +1680,7 @@ void  ttributepayments :: init ( void )
    status = 0;
    xsize = 550;
    ysize = 400;
-   title = "tributes";
+   title = "transfer resources";
 
    trib = *actmap->tribute;
 
@@ -1727,10 +1730,10 @@ void  ttributepayments :: init ( void )
    rahmen ( true,      x1 + 10,  y1 + starty,      x1 + xsize - 10, y1 + ysize - 50 );
    rahmen3 ( "player", x1 + 20,  y1 + starty + 10, x1 + 150,        y1 + ysize - 60, 1 );
 
-   rahmen3 ( "you pay",            x1 + 160, y1 + wind1y,      x1 + wind2x - 10, y1 + wind2y - 10, 1 );
-   rahmen3 ( "you have to get",    x1 + 160, y1 + wind2y,      x1 + wind2x - 10, y1 + ysize - 60 , 1 );
+   rahmen3 ( "you send",            x1 + 160, y1 + wind1y,      x1 + wind2x - 10, y1 + wind2y - 10, 1 );
+   rahmen3 ( "you still have outstanding",    x1 + 160, y1 + wind2y,      x1 + wind2x - 10, y1 + ysize - 60 , 1 );
 
-   rahmen3 ( "you paid",    x1 + wind2x - 5, y1 + wind1y,      x1 + xsize - 20, y1 + wind2y - 10, 1 );
+   rahmen3 ( "you have sent",    x1 + wind2x - 5, y1 + wind1y,      x1 + xsize - 20, y1 + wind2y - 10, 1 );
    rahmen3 ( "you got",     x1 + wind2x - 5, y1 + wind2y,      x1 + xsize - 20, y1 + ysize - 60 , 1 );
 
 

@@ -1,6 +1,10 @@
-//     $Id: controls.h,v 1.13 2000-06-08 21:03:41 mbickel Exp $
+//     $Id: controls.h,v 1.14 2000-06-09 13:12:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/06/08 21:03:41  mbickel
+//      New vehicle action: attack
+//      wrote documentation for vehicle actions
+//
 //     Revision 1.12  2000/06/05 18:21:23  mbickel
 //      Fixed a security hole which was opened with the new method of loading
 //        mail games by command line parameters
@@ -497,11 +501,13 @@ class MapNetwork {
                 virtual void searchfield ( int x, int y, int dir );
              public:
                 virtual void start ( int x, int y );
-                MapNetwork ( void );
+                MapNetwork ( int checkInstances = 1 );
                 virtual ~MapNetwork();
            };
 
 class ResourceNet : public MapNetwork {
+               public:
+                  ResourceNet ( int _scope = -1 ) : MapNetwork ( _scope != 0 ) {};
                protected:
                   int resourcetype;
                   int scope;
@@ -520,6 +526,7 @@ class StaticResourceNet : public ResourceNet {
                   virtual int searchfinished ( void );
 
               public:
+                  StaticResourceNet ( int scope = -1 ) : ResourceNet ( scope ) {};
                   int getresource ( int x, int y, int resource, int _need, int _queryonly, int _player, int _scope );
                        /* _scope:  0 : only this field
                                    1 : net
@@ -534,7 +541,7 @@ class GetResource : public StaticResourceNet {
                   virtual void checkbuilding ( pbuilding b );
                   virtual void start ( int x, int y );
               public:
-                  GetResource ( void );
+                  GetResource ( int scope = -1 );
    };
 
 class PutResource : public StaticResourceNet {
@@ -542,6 +549,8 @@ class PutResource : public StaticResourceNet {
                   virtual void checkbuilding ( pbuilding b );
                   virtual void checkvehicle ( pvehicle v ) {};
                   virtual void start ( int x, int y );
+               public:
+                   PutResource ( int scope = -1 ) : StaticResourceNet ( scope ) {};
    };
 
 class PutTribute : public StaticResourceNet {

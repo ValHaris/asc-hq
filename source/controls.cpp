@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.35 2000-06-08 21:03:39 mbickel Exp $
+//     $Id: controls.cpp,v 1.36 2000-06-09 13:12:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2000/06/08 21:03:39  mbickel
+//      New vehicle action: attack
+//      wrote documentation for vehicle actions
+//
 //     Revision 1.34  2000/06/05 18:21:21  mbickel
 //      Fixed a security hole which was opened with the new method of loading
 //        mail games by command line parameters
@@ -4214,17 +4218,17 @@ void tbuilding :: execnetcontrol ( void )
                                  */
 
 
-int  tbuilding :: put_energy ( int      need,    int resourcetype, int queryonly  ) 
+int  tbuilding :: put_energy ( int      need,    int resourcetype, int queryonly, int scope  ) 
 {
-   PutResource putresource;
-   return putresource.getresource ( xpos, ypos, resourcetype, need, queryonly, color/8, 1 );
+   PutResource putresource ( scope );
+   return putresource.getresource ( xpos, ypos, resourcetype, need, queryonly, color/8, scope );
 }
 
 
-int  tbuilding :: get_energy ( int      need,    int resourcetype, int queryonly  ) 
+int  tbuilding :: get_energy ( int      need,    int resourcetype, int queryonly, int scope ) 
 {
-   GetResource gr;
-   return gr.getresource ( xpos, ypos, resourcetype, need, queryonly, color/8, 1 );
+   GetResource gr ( scope );
+   return gr.getresource ( xpos, ypos, resourcetype, need, queryonly, color/8, scope );
 }
 
 
@@ -5884,11 +5888,13 @@ void MapNetwork :: searchbuilding ( int x, int y )
 
 int MapNetwork :: instancesrunning = 0;
 
-MapNetwork :: MapNetwork ( void )
+MapNetwork :: MapNetwork ( int checkInstances )
 {
-   if ( instancesrunning )
-      displaymessage(" fatal error at MapNetwork; there are other running instances ", 2 );
-
+   if ( checkInstances ) {
+      if ( instancesrunning )
+         displaymessage(" fatal error at MapNetwork; there are other running instances ", 2 );
+   } 
+   // else displaymessage("warning: Mapnetwork instance check disabled !", 1 );
 // this could be resolved by using the different bits of field->a.temp 
 
    instancesrunning++;
@@ -5943,7 +5949,6 @@ void MapNetwork :: start ( int x, int y )
 
 
 
-
 int ResourceNet :: fieldavail ( int x, int y )
 {
     pfield fld = getfield ( x, y );
@@ -5978,7 +5983,6 @@ int ResourceNet :: fieldavail ( int x, int y )
 }
 
 
-
 int StaticResourceNet :: getresource ( int x, int y, int resource, int _need, int _queryonly, int _player, int _scope )
 {
    if ( resource != 1   &&   actmap->resourcemode == 1 ) 
@@ -6009,7 +6013,8 @@ int StaticResourceNet :: searchfinished ( void )
 
 
 
-GetResource :: GetResource ( void )
+GetResource :: GetResource ( int scope )
+             : StaticResourceNet ( scope )
 {
    memset ( tributegot, 0, sizeof ( tributegot ));
 }
@@ -6177,12 +6182,12 @@ void PutTribute :: start ( int x, int y )
                      }
                
                   } else {
-                     int avail = startbuilding->get_energy ( need, resourcetype, 1 );
+                     int avail = startbuilding->get_energy ( need, resourcetype, 1, 0 );
                      if ( need > avail )
                         need = avail;
                      MapNetwork :: start ( x, y );
                      if ( !queryonly ) 
-                        startbuilding->get_energy ( got, resourcetype, queryonly );
+                        startbuilding->get_energy ( got, resourcetype, queryonly, 0 );
                      
                   }
                }
@@ -6216,6 +6221,7 @@ void transfer_all_outstanding_tribute ( void )
                      for ( int resourcetype = 0; resourcetype < 3; resourcetype++ ) {
                         topay[ resourcetype ] = actmap->tribute->avail.resource[ resourcetype ][ player ][ targplayer ];
                         got[ resourcetype ] = 0;
+
                         if ( resourcetype == 1 || actmap->resourcemode == 0 ) {
                            pbuilding bld = actmap->player[ player ].firstbuilding;
                            while ( bld  &&  topay[resourcetype] > got[resourcetype] ) {
@@ -6233,6 +6239,10 @@ void transfer_all_outstanding_tribute ( void )
                            actmap->bi_resource[ player ].resource[resourcetype] -= i;
                            actmap->bi_resource[ targplayer ].resource[resourcetype] += i;
                         }
+
+                        actmap->tribute->avail.resource[ resourcetype ][ player ][ targplayer ] -= got[resourcetype];
+                        actmap->tribute->paid.resource[ resourcetype ][ targplayer ][ player ] += got[resourcetype];
+
                      }   
                      if ( topay[0] || topay[1] || topay[2] ) {
                         char txt1b[1000];

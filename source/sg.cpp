@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.49 2000-06-09 10:50:59 mbickel Exp $
+//     $Id: sg.cpp,v 1.50 2000-06-09 13:12:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2000/06/09 10:50:59  mbickel
+//      Repaired keyboard control of pulldown menu
+//      Fixed compile errors at fieldlist with gcc
+//
 //     Revision 1.48  2000/06/06 20:03:18  mbickel
 //      Fixed graphical error when transfering ammo in buildings
 //      Sound can now be disable by a command line parameter and the game options
@@ -1528,8 +1532,8 @@ void         tsgpulldown :: init ( void )
    addbutton ( "Change ~P~assword", ua_changepassword ); 
    addbutton ( "seperator", -1 ); 
    addbutton ( "~P~layers", ua_setupalliances); 
-   addbutton ( "~T~ribute", ua_settribute); 
-   addbutton ( "~G~ive unit away", ua_giveunitaway ); 
+   addbutton ( "transfer ~U~nit control", ua_giveunitaway ); 
+   addbutton ( "~T~ransfer resources", ua_settribute); 
 
   addfield ( "~I~nfo" );
    addbutton ( "~V~ehicle types", ua_vehicleinfo ); 
