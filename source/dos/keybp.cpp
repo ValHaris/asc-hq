@@ -1,6 +1,10 @@
-//     $Id: keybp.cpp,v 1.1 2000-05-30 18:39:28 mbickel Exp $
+//     $Id: keybp.cpp,v 1.2 2000-06-23 09:48:33 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/05/30 18:39:28  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.9  2000/01/19 22:03:36  mbickel
 //      Fixed a bug in the DOS keyboard code
 //
@@ -502,7 +506,7 @@ void getkeysyms ( tkey* keysym, int* keyprnt )
 {
    if (keyboardinit == 0) {
       tkey k = r_key();
-     #ifdef NEW_KEYB
+     #ifdef NEW_KEYBB
       *keysym = ct_invvalue;
      #else
       *keysym = k;

@@ -1,6 +1,10 @@
-//     $Id: dlg_box.cpp,v 1.21 2000-06-23 09:24:16 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.22 2000-06-23 09:48:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/06/23 09:24:16  mbickel
+//      Fixed crash in replay
+//      enabled cursor movement in stredit
+//
 //     Revision 1.20  2000/05/30 18:39:23  mbickel
 //      Added support for multiple directories
 //      Moved DOS specific files to a separate directory
@@ -2106,7 +2110,6 @@ void tdialogbox::dispeditstring ( char* st, int x1, int y1 )
 }
 
 
-
 void         tdialogbox::stredit(char *       s,
                       int          x1,
                       int          y1,
@@ -2157,9 +2160,66 @@ void         tdialogbox::stredit(char *       s,
 
      if (cc != cto_invvalue ) {
        lne(x1,y1,ss,position,einfuegen);
+
+#ifdef _DOS_          // I hate this DOS keyboard stuff !!!!!!
        switch (symkey) {
-	 
-            case ct_einf: {
+            case cto_einf: 
+                 {
+                    if (einfuegen == false) 
+                       einfuegen = true; 
+                    else 
+                       einfuegen = false; 
+                 } 
+            break; 
+            
+            case cto_left:   if (position > 1)
+                           position--;
+            break; 
+            
+            case cto_right:  if (position < strlen ( ss ) )
+                         position++;
+            break; 
+            
+            case cto_pos1:  position = 0;
+            break; 
+            
+            case cto_ende:  position = strlen ( ss ) ;
+            break; 
+            
+            case cto_entf:  if ( ss[ position ] != 0 ) {
+                         for (i=0; i< position ;i++ ) {
+                            ss2[i] = ss[i];
+                         } /* endfor */
+                         while ( ss[i] != 0 ) {
+                            ss2[i] = ss [ i + 1 ];
+                            i++;
+                         } /* endwhile */
+                         ss3 = ss2;
+                         ss2 = ss;
+                         ss = ss3;
+
+                         dispeditstring (ss,x1,y1); /* ? */
+                       }
+            break; 
+            
+            case cto_right + cto_stp:  if ( position < strlen ( ss ) ) {
+                        do { 
+                           position++;
+                        }  while ( (ss[ position ] != ' ') && ( ss[ position ] != 0 ) );
+                     } 
+            break; 
+            
+            case cto_left + cto_stp:  if ( position > 0 ) {
+                        do { 
+                           position--;
+                        }  while ( ( position > 0 ) && ( ss [ position - 1 ] != ' ') );
+                     } 
+            break;
+         } 
+#else
+       switch (symkey) {
+            case ct_einf: 
+                 {
                     if (einfuegen == false) 
                        einfuegen = true; 
                     else 
@@ -2211,6 +2271,8 @@ void         tdialogbox::stredit(char *       s,
                      } 
             break;
          } 
+#endif
+
          lne(x1,y1,ss,position,einfuegen);
 
          if ( ( cc > 31 ) && ( cc < 256 ) && (strlen(ss) < max ) ) {       // plain ascii
@@ -2325,7 +2387,6 @@ void         tdialogbox::intedit(int *    st,
                      int          min,
                      int          max)
 { 
-   int  cc;
    char         *ss, *ss2, *ss3;
    char      einfuegen; 
    int          position;
@@ -2353,11 +2414,13 @@ void         tdialogbox::intedit(int *    st,
 
    ok = false;
 
+   int  cc;
+   tkey symkey;
    do {
       lne(x1,y1,ss,position,einfuegen); 
       do {
          if ( keypress() ) {
-           cc = rp_key();
+            getkeysyms ( &symkey, &cc );
          } else {
             cc = cto_invvalue;
             releasetimeslice();
@@ -2367,7 +2430,8 @@ void         tdialogbox::intedit(int *    st,
             collategraphicoperations cgo ( x1, y1, x1 + wdth, y1 + activefontsettings.height );
 
             lne(x1,y1,ss,position,einfuegen);
-            switch (cc) {
+#ifdef _DOS_
+            switch (symkey) {
     	
                 case cto_einf: {
                         if (einfuegen == false)
@@ -2421,7 +2485,62 @@ void         tdialogbox::intedit(int *    st,
                          }
                 break;
              }
+#else
+            switch (symkey) {
+    	
+                case ct_einf: {
+                        if (einfuegen == false)
+                           einfuegen = true;
+                        else
+                           einfuegen = false;
+                     }
+                break;
 
+                case ct_left:   if (position > 1)
+                               position--;
+                break;
+
+                case ct_right:  if (position < strlen ( ss ) )
+                             position++;
+                break;
+
+                case ct_pos1:  position = 0;
+                break;
+
+                case ct_ende:  position = strlen ( ss ) ;
+                break;
+
+                case ct_entf:  if ( ss[ position ] != 0 ) {
+                             for (i=0; i< position ;i++ ) {
+                                ss2[i] = ss[i];
+                             } /* endfor */
+                             while ( ss[i] != 0 ) {
+                                ss2[i] = ss [ i + 1 ];
+                                i++;
+                             } /* endwhile */
+                             ss3 = ss2;
+                             ss2 = ss;
+                             ss = ss3;
+
+                             dispeditstring (ss,x1,y1); /* ? */
+                           }
+                break;
+
+                case ct_right + ct_stp:  if ( position < strlen ( ss ) ) {
+                            do {
+                               position++;
+                            }  while ( (ss[ position ] != ' ') && ( ss[ position ] != 0 ) );
+                         }
+                break;
+
+                case ct_left + ct_stp:  if ( position > 0 ) {
+                            do {
+                               position--;
+                            }  while ( ( position > 0 ) && ( ss [ position - 1 ] != ' ') );
+                         }
+                break;
+             }
+#endif
              if ( (( cc >=  '0' &&  cc <= '9' ) || ( cc == '-' && !position)) && (strlen(ss) < ml-1 ) ) {
                 i=0;
                 while ( (ss[i] != 0) && ( i < position ) ) {
