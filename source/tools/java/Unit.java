@@ -1,6 +1,14 @@
-//     $Id: Unit.java,v 1.4 2000-10-17 17:28:27 schelli Exp $
+//     $Id: Unit.java,v 1.5 2000-10-31 10:41:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/10/17 17:28:27  schelli
+//     minor bugs fixed in lots of sources
+//     add & remove weapon works now
+//     revert to save button removed
+//     class-handling bugs fixed
+//     load & save routines fully implemented
+//     terrainacces added
+//
 //     Revision 1.3  2000/10/14 22:40:02  schelli
 //     AutoRepairRate added
 //     version will be updated to actual version when saved
@@ -335,7 +343,9 @@ public class Unit {   /*  vehicleart: z.B. Schwere Fuátruppe  */
             }
 
             if ( buildingsbuildablenum != 0 ) {
+                buildingsbuildable = new BuildRange[buildingsbuildablenum];
                 for ( int i = 0; i < buildingsbuildablenum; i++ ) {
+                    buildingsbuildable[i] = new BuildRange();
                     buildingsbuildable[i].from = stream.readInt();
                     buildingsbuildable[i].to = stream.readInt();
                 }
@@ -516,4 +526,4 @@ public class Unit {   /*  vehicleart: z.B. Schwere Fuátruppe  */
     }
 
     static int vehicle_version = 4;
-};
+}
