@@ -1,6 +1,9 @@
-//     $Id: fileio.h,v 1.2 2000-10-14 10:52:56 mbickel Exp $
+//     $Id: fileio.h,v 1.3 2003-11-21 19:25:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/10/14 10:52:56  mbickel
+//      Some adjustments for a Win32 port
+//
 //     Revision 1.1  2000/10/12 20:21:43  mbickel
 //      Restructuring operating system dependant files
 //
@@ -39,3 +42,5 @@
   #endif
  #endif
 #endif
+
+ extern const bool has_drive_letters;

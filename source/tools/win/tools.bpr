@@ -11,7 +11,7 @@
       obj\graphics.obj obj\getopt1.obj obj\getopt.obj obj\strtmesg.obj 
       obj\objecttype.obj obj\terraintype.obj obj\textfileparser.obj 
       obj\textfiletags.obj obj\stringtokenizer.obj obj\errorout.obj 
-      obj\textfile_evaluation.obj obj\containerbasetype.obj"/>
+      obj\textfile_evaluation.obj obj\containerbasetype.obj obj\simplestream.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -78,6 +78,7 @@
       <FILE FILENAME="..\lib\errorout.cpp" FORMNAME="" UNITNAME="errorout" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\textfile_evaluation.cpp" FORMNAME="" UNITNAME="textfile_evaluation" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\containerbasetype.cpp" FORMNAME="" UNITNAME="containerbasetype" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\simplestream.cpp" FORMNAME="" UNITNAME="simplestream" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
