@@ -1,3 +1,172 @@
+2002-10-15 18:52  mbickel
+
+	* source/: stringtokenizer.cpp, stringtokenizer.h, strtmesg.cpp,
+	win32/borland/asc.bpr:	Fixed update detection
+
+2002-10-14 20:57  mbickel
+
+	* data/asc.gfx:  Updated asc.gfx
+
+2002-10-14 20:54  mbickel
+
+	* source/: strtmesg.cpp, win32/borland/asc.bpr:  Updated version
+	number
+
+2002-10-14 20:17  mbickel
+
+	* data/: Makefile.am, asc.gfx:	Updated asc.gfx
+
+2002-10-14 19:24  mbickel
+
+	* asc.lsm, configure.in, getmusic:  Updated makefiles
+
+2002-10-14 12:50  mbickel
+
+	* source/: strtmesg.cpp, sdl/sound.cpp:  Improved error messages on
+	sound initialization
+
+2002-10-12 20:06  mbickel
+
+	* source/tools/linux/Makefile.am:  Updated Makefile for
+	mount/demount
+
+2002-10-12 19:28  mbickel
+
+	* source/: basestrm.cpp, controls.cpp, edglobal.cpp, edmain.cpp,
+	edmisc.cpp, gamedlg.cpp, gamemap.cpp, gamemap.h, graphicset.cpp,
+	itemrepository.cpp, loaders.cpp, sg.cpp, sgstream.cpp,
+	stringtokenizer.cpp, stringtokenizer.h, strtmesg.cpp, strtmesg.h,
+	textfile_evaluation.cpp, vehicle.cpp:  Fixed "enemy unit loaded"
+	bug.
+	 Changed map format
+	 Improved log messages
+
+2002-10-09 18:58  mbickel
+
+	* source/: controls.cpp, dialog.cpp, edmain.cpp, edmisc.cpp,
+	edmisc.h, edselfnt.cpp, edselfnt.h, graphicset.cpp, graphicset.h,
+	itemrepository.cpp, itemrepository.h, loaders.cpp, sg.cpp,
+	sgstream.cpp, sgstream.h, spfst.cpp, spfst.h, strtmesg.cpp,
+	textfile_evaluation.cpp:  Fixed to GrafikSet loading
+	 New item filter for mapeditor
+
+2002-10-06 18:26  mbickel
+
+	* config.h.in, source/textfile_evaluation.cpp:	Removed duplicate
+	methods from textfile_evaluation
+
+2002-10-06 17:44  mbickel
+
+	* source/: buildingtype.cpp, edmain.cpp, edmisc.cpp,
+	itemrepository.cpp, loadbi3.cpp, music.cpp, objecttype.cpp,
+	replay.cpp, replay.h, sg.cpp, spfst.h, strtmesg.cpp,
+	terraintype.cpp, textfile_evaluation.cpp, textfile_evaluation.h,
+	textfileparser.cpp, textfileparser.h, typen.cpp, vehicletype.cpp,
+	tools/bin2text.cpp, tools/linux/Makefile.am, tools/win/tools.bpf,
+	tools/win/tools.bpr, unix/Makefile.am, unix/mapeditor/Makefile.am,
+	win32/borland/asc.bpr, win32/borland/mapeditor/mapeditor.bpf,
+	win32/borland/mapeditor/mapeditor.bpr:	Completed inheritance of
+	.asctxt files
+	 Speed up of replays
+
+2002-10-05 23:22  mbickel
+
+	* source/: dlg_box.cpp, dlg_box.h, itemrepository.cpp,
+	textfileparser.cpp, textfileparser.h:  Added inheritance to
+	textfiles
+
+2002-10-05 21:14  mbickel
+
+	* bootstrap:  aclocal now called two times, since some versions of
+	libtool want it this way...
+
+2002-10-05 20:56  mbickel
+
+	* configure.in:  Fixed duplicate Makefile generation
+
+2002-10-05 19:41  mbickel
+
+	* config.h.in, source/textfileparser.cpp,
+	source/libs/triangul/triangul.h:  Fixes for compiling on gcc 2.95
+
+2002-10-04 23:11  mbickel
+
+	* bootstrap, config.h.in, configure.in, missing,
+	source/unix/Makefile.am, acconfig.h:  Fixes to the build system
+
+2002-10-02 22:21  mbickel
+
+	* asc.kdevprj, config.h.in, configure.in, doc/install.html,
+	source/basestrm.h, source/building.cpp, source/dialog.cpp,
+	source/dlg_box.cpp, source/dlg_box.h, source/edevents.cpp,
+	source/edmisc.cpp, source/gamedlg.cpp, source/mapalgorithms.cpp,
+	source/mousecontrol.h, source/music.cpp, source/objecttype.cpp,
+	source/sg.cpp, source/sgstream.cpp, source/textfiletags.h,
+	source/typen.h, source/ai/misc.cpp, source/ai/tactics.cpp,
+	source/ai/valuation.cpp, source/libs/triangul/construc.c,
+	source/libs/triangul/triangul.h:  Many tweaks to compile ASC with
+	gcc 3.2 (not completed yet)
+
+2002-10-01 11:23  mbickel
+
+	* asc.bpg, data/asc.gfx, source/TODO, source/basegfx.h,
+	source/building.cpp, source/buildings.cpp, source/buildings.h,
+	source/buildingtype.cpp, source/containerbase.h,
+	source/controls.cpp, source/edmisc.cpp, source/gamemap.cpp,
+	source/gamemap.h, source/graphicset.cpp, source/itemrepository.cpp,
+	source/itemrepository.h, source/music.cpp, source/objecttype.cpp,
+	source/objecttype.h, source/sg.cpp, source/strtmesg.cpp,
+	source/terraintype.cpp, source/textfileparser.cpp,
+	source/textfileparser.h, source/typen.h, source/unitctrl.cpp,
+	source/vehicle.cpp, source/vehicletype.cpp, source/vehicletype.h,
+	source/tools/bi2pcx.cpp, source/tools/win/demount.bpr,
+	source/tools/win/gfx2pcx.bpf, source/tools/win/gfx2pcx.bpr:  Fixed
+	many bugs
+	 Added inheritance to text files
+	 updated graphics
+
+2002-09-19 22:20  mbickel
+
+	* configure.in, data/helpsys2.txt, doc/asc.html, doc/editors.html,
+	doc/install.html, source/TODO, source/ascstring.cpp,
+	source/attack.cpp, source/basestrm.cpp, source/building.cpp,
+	source/building.h, source/building_controls.h, source/controls.cpp,
+	source/gamedlg.cpp, source/gamemap.cpp, source/gamemap.h,
+	source/gui.cpp, source/gui.h, source/loaders.cpp, source/loaders.h,
+	source/replay.cpp, source/replay.h, source/resourcenet.cpp,
+	source/resourcenet.h, source/spfst.cpp, source/strtmesg.cpp,
+	source/unitctrl.cpp, source/unitctrl.h, source/ai/ai.bpr,
+	source/ai/base.cpp, source/ai/buildingcapture.cpp,
+	source/ai/misc.cpp, source/ai/strategy.cpp, source/ai/tactics.cpp,
+	source/libs/bzlib/win/bzlib.bpr, source/libs/sdlmm/SDLmm.bpr,
+	source/libs/triangul/win32/triangulation.bpr,
+	source/tools/win/tools.bpr, source/win32/borland/asc.bpr,
+	source/win32/borland/mapeditor/mapeditor.bpr:  Cleanup and various
+	bug fixes
+
+2002-05-07 23:32  mbickel
+
+	* source/: buildings.cpp, loaders.cpp, loaders.h, sg.cpp,
+	strtmesg.cpp, win32/borland/mapeditor/mapeditor.bpr:  Fixed crash
+	in mapeditor
+	 Fixed: conquering of allied buildings
+	 Fixed: ambiguity in pulldown menu keys
+
+2002-05-07 22:11  mbickel
+
+	* ChangeLog, asc.kdevprj, configure.in, source/strtmesg.cpp,
+	source/textfileparser.h:  Some tweaks to make the code gcc
+	compatible
+
+2002-05-07 21:52  mbickel
+
+	* configure.in, doc/linux_faq.html, source/TODO,
+	source/paradialog.cpp, source/paradialog.h, source/sg.cpp,
+	source/sg.h, source/unitctrl.cpp, source/vehicle.h,
+	source/tools/weaponguide.cpp, source/win32/borland/asc.bpf,
+	source/win32/borland/asc.bpr:  Updated documentation
+	 Dialog themes can be reloaded during runtime.
+
 2002-04-27 16:32  mbickel
 
 	* data/evilisle.map:  Fixed: data bugs in Evil Island map
@@ -522,10 +691,6 @@
 	configure.in
 	 Removed last remains of octagonal version from source files
 
-2001-12-06 16:14  mbickel
-
-	* data/moredata/Makefile.am:  Removed moredata directory
-
 2001-12-05 18:05  mbickel
 
 	* Makefile.in, asc.kdevprj, configure, configure.in,
@@ -872,11 +1037,9 @@
 
 	* configure, configure.in, data/Makefile.am, data/Makefile.in,
 	data/icon_asc.gif, data/icon_mapeditor.gif,
-	data/moredata/buildings.con, data/moredata/mk1.con,
-	data/moredata/trrobj.con, source/buildingtype.cpp,
-	source/edmain.cpp, source/loadbi3.cpp, source/sg.cpp,
-	source/sdl/graphics.cpp, source/sdl/graphics.h:  Added icons to
-	data
+	source/buildingtype.cpp, source/edmain.cpp, source/loadbi3.cpp,
+	source/sg.cpp, source/sdl/graphics.cpp, source/sdl/graphics.h: 
+	Added icons to data
 	 ASC displays icons
 	 Fixed crash when building icons
 	 Removed assembled datafiles
@@ -931,11 +1094,9 @@
 
 2001-10-08 16:12  mbickel
 
-	* data/moredata/mk1.con, source/basestrm.cpp, source/basestrm.h,
-	source/edglobal.cpp, source/edglobal.h, source/edmisc.cpp,
-	source/gamemap.cpp, source/loadbi3.cpp, source/map2pcx.cpp,
-	source/strtmesg.cpp, source/ai/misc.cpp, source/ai/service.cpp: 
-	Fixed crash in AI
+	* source/: basestrm.cpp, basestrm.h, edglobal.cpp, edglobal.h,
+	edmisc.cpp, gamemap.cpp, loadbi3.cpp, map2pcx.cpp, strtmesg.cpp,
+	ai/misc.cpp, ai/service.cpp:  Fixed crash in AI
 	 Speedup of AI
 	 Map2PCX improvements
 	 Mapeditor usability improvements
@@ -949,7 +1110,6 @@
 2001-10-03 22:56  mbickel
 
 	* data/bi3maptranslation.txt, data/helpsys2.txt, data/helpsyst.txt,
-	data/moredata/buildings.con, data/moredata/trrobj.con,
 	source/attack.cpp, source/dashboard.cpp, source/dashboard.h,
 	source/dialog.cpp, source/gamemap.cpp, source/gamemap.h,
 	source/sg.cpp, source/strtmesg.cpp, source/typen.cpp,
@@ -993,11 +1153,6 @@
 2001-09-30 13:04  mbickel
 
 	* data/paybacktime.map:  Corrected alliances in paybacktime
-
-2001-09-30 11:46  mbickel
-
-	* data/moredata/mk1.con:  New version of unitset by Steffen
-	Fröhlich
 
 2001-09-29 22:44  mbickel
 
@@ -1240,9 +1395,7 @@
 	data/wat2_300.trr, data/wat2_308.trr, data/wat3_301.trr,
 	data/wat3_302.trr, data/wat3_309.trr, data/werft.bld,
 	data/windpow.bld, data/wreck076.obl, data/wreck077.obl,
-	data/wreck078.obl, data/moredata/Makefile.am,
-	data/moredata/buildings.con, data/moredata/mk1.con,
-	data/moredata/trrobj.con, doc/source.html, doc/source_borland.html,
+	data/wreck078.obl, doc/source.html, doc/source_borland.html,
 	source/dialog.cpp, source/sg.cpp, source/libs/bzlib/Makefile: 
 	Reorganized data files for coming ASC 1.9.0 release
 	 Improved field information dialog
@@ -5957,7 +6110,8 @@
 	source/tools/hexagon/printveh.tgt,
 	source/tools/hexagon/prnttk6.tgt, source/tools/hexagon/prntveh.tgt,
 	source/tools/hexagon/viewid.tgt, source/tools/os2/os2mount.tgt,
-	source/tools/win/winmount.tgt: Initial revision
+	source/tools/win/winmount.tgt: Imported source from Nov 8th into
+	repository
 
 1999-11-15 20:36  mbickel
 
@@ -6148,6 +6302,5 @@
 	source/tools/hexagon/printveh.tgt,
 	source/tools/hexagon/prnttk6.tgt, source/tools/hexagon/prntveh.tgt,
 	source/tools/hexagon/viewid.tgt, source/tools/os2/os2mount.tgt,
-	source/tools/win/winmount.tgt: Imported source from Nov 8th into
-	repository
+	source/tools/win/winmount.tgt: Initial revision
 
