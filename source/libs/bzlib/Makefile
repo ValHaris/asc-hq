@@ -45,32 +45,10 @@ test: bzip2
 	cmp sample3.tst sample3.ref
 	@cat words3
 
-
 	
 PREFIX=/usr
 
-install: bzip2 bzip2recover
-	if ( test ! -d $(PREFIX)/bin ) ; then mkdir $(PREFIX)/bin ; fi
-	if ( test ! -d $(PREFIX)/lib ) ; then mkdir $(PREFIX)/lib ; fi
-	if ( test ! -d $(PREFIX)/man ) ; then mkdir $(PREFIX)/man ; fi
-	if ( test ! -d $(PREFIX)/man/man1 ) ; then mkdir $(PREFIX)/man/man1 ; fi
-	if ( test ! -d $(PREFIX)/include ) ; then mkdir $(PREFIX)/include ; fi
-	cp -f bzip2 $(PREFIX)/bin/bzip2
-	cp -f bzip2 $(PREFIX)/bin/bunzip2
-	cp -f bzip2 $(PREFIX)/bin/bzcat
-	cp -f bzip2recover $(PREFIX)/bin/bzip2recover
-	chmod a+x $(PREFIX)/bin/bzip2
-	chmod a+x $(PREFIX)/bin/bunzip2
-	chmod a+x $(PREFIX)/bin/bzcat
-	chmod a+x $(PREFIX)/bin/bzip2recover
-	cp -f bzip2.1 $(PREFIX)/man/man1
-	chmod a+r $(PREFIX)/man/man1/bzip2.1
-	cp -f bzlib.h $(PREFIX)/include
-	chmod a+r $(PREFIX)/include/bzlib.h
-	cp -f libbz2.a $(PREFIX)/lib
-	chmod a+r $(PREFIX)/lib/libbz2.a
-
-clean: 
+clean:
 	rm -f *.o libbz2.a bzip2 bzip2recover \
 	sample1.rb2 sample2.rb2 sample3.rb2 \
 	sample1.tst sample2.tst sample3.tst

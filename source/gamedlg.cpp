@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.52 2000-11-11 11:05:17 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.53 2000-11-12 15:19:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2000/11/11 11:05:17  mbickel
+//      started AI service functions
+//
 //     Revision 1.51  2000/11/08 19:31:05  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -6650,7 +6653,11 @@ void         tgiveunitawaydlg :: init(void)
    addkey ( 2, ct_esc );
 
 
-   markedplayer = -1;
+   if ( num == 1 )
+      markedplayer = 0;
+   else
+      markedplayer = -1;
+
    status = 0;
 
 
@@ -6667,6 +6674,8 @@ void         tgiveunitawaydlg :: buttonpressed ( int id )
    if ( id == 1 )
       if ( markedplayer >= 0 )
          status = 12;
+      else
+         displaymessage ( "please select the player you want to give your unit to",1);
    if ( id == 2 )
       status = 10;
 }

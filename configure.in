@@ -13,7 +13,7 @@ CXXFLAGS="$CXXFLAGS -DHEXAGON -funsigned-char -D_UNIX_ -D_SDL_ -D_NOASM_"
 AC_PROG_RANLIB
 dnl Checks for libraries.
 
-dnl Checks for STL header files (which aren't available for gcc at the time of writing).
+dnl Checks for some STL header files (which aren't available for gcc at the time of writing).
 AC_CHECK_HEADERS( exception limits )
 
 dnl Checks for other header files.
@@ -28,7 +28,8 @@ dnl SDL distribution source directory isn't layed out correctly even after a mak
 AC_ARG_WITH( SDL-prefix,\
 [  --with-SDL-prefix=sdlp  Look for SDL libs in \${sdlp}/lib and headers in\
  \${sdlp}/include/],\
-CXXFLAGS="$CXXFLAGS -I$withval/include/SDL" ; LDFLAGS="$LDFLAGS -L$withval/lib" )
+CXXFLAGS="$CXXFLAGS -I$withval/include" ; CPPFLAGS="$CPPFLAGS -I$withval/include" ; LDFLAGS="$LDFLAGS -L$withval/lib" )
+
 
 AC_CHECK_HEADER( SDL/SDL.h, , AC_MSG_ERROR( ASC requires SDL headers to be present ) )
 
