@@ -358,9 +358,9 @@ void AI :: calculateFieldInformation ( void )
                   // The unit may have already moved this turn.
                   // So we give it the maximum movementrange
 
-                  int move = fld->vehicle->getMovement() ;
+                  TemporaryContainerStorage tus ( fld->vehicle );
 
-                  fld->vehicle->resetMovement ( );
+                  fld->vehicle->setMovement ( fld->vehicle->maxMovement(), 2);
 
                   VehicleMovement vm ( NULL, NULL );
                   if ( vm.available ( fld->vehicle )) {
@@ -380,7 +380,6 @@ void AI :: calculateFieldInformation ( void )
                         wr.run ( fld->vehicle, xp, yp, singleUnitThreat );
                      }
                   }
-                  fld->vehicle->setMovement ( move, 0 );
                } else
                   wr.run ( fld->vehicle, x, y, singleUnitThreat );
 

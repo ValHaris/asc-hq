@@ -3,8 +3,8 @@
 */
 
 
-#ifndef astar2_h_included
- #define astar2_h_included
+#ifndef astar2H
+ #define astar2H
 
  #include <vector>
 
@@ -118,6 +118,7 @@ class AStar3D {
        int& getPosHHop ( const MapCoordinate3D& pos )         { return posHHops[(pos.y * actmap->xsize + pos.x) * 8 + log2(pos.z)]; };
 
        int dist( const MapCoordinate3D& a, const MapCoordinate3D& b );
+       int dist ( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b );
 
        typedef std::vector<Node> Container;
        greater<Node> comp;
@@ -131,10 +132,13 @@ class AStar3D {
     public:
 
        //! searches for a path from A to B and stores it in path
-       void findPath( const MapCoordinate3D& A, const MapCoordinate3D& B, Path& path );
+       void findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>& B, Path& path );
 
        //! searches for a path from the units current position to dest and stores it in path
        void findPath( Path& path, const MapCoordinate3D& dest );
+
+       //! searches for a path from the units current position to one of the dest fields and stores it in path
+       void findPath( Path& path, const vector<MapCoordinate3D>& dest );
 
        /** searches for all fields that are within the range of maxDist and marks them.
            On each field one bit for each level of height will be set.

@@ -1,6 +1,11 @@
-//     $Id: typen.cpp,v 1.92 2002-12-17 22:02:17 mbickel Exp $
+//     $Id: typen.cpp,v 1.93 2002-12-19 20:22:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.92  2002/12/17 22:02:17  mbickel
+//      Enemy mines can now be crossed even if visible
+//      submerged mines can not be placed on shallow water
+//      new game parameter: objects destroyable by terrain
+//
 //     Revision 1.91  2002/11/15 20:54:11  mbickel
 //      Added third snow-weather
 //      Added aliase in text files
@@ -499,7 +504,7 @@ const int resourceWeight[ resourceTypeNum ] = { 0, 10, 4 };
 
 
 
-const int csolarkraftwerkleistung[cwettertypennum] = { 1024, 512, 256, 756, 384 }; // 1024 ist Maximum
+const int csolarkraftwerkleistung[cwettertypennum] = { 1024, 512, 256, 756, 384, 384 }; // 1024 ist Maximum
 
 
 

@@ -437,6 +437,15 @@ int AStar3D::dist( const MapCoordinate3D& a, const MapCoordinate3D& b )
     return beeline ( a, b ) + abs ( log2(b.z) - log2(a.z) ) * minmalq;
 }
 
+int AStar3D::dist ( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b )
+{
+   int d = maxint;
+   for ( vector<MapCoordinate3D>::const_iterator i = b.begin(); i != b.end(); i++ )
+      d = min(dist(a,*i), d);
+   return d;
+}
+
+
 int AStar3D::getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const pvehicle vehicle )
 {
     // since we are operating at different levels of height and the unit has different
@@ -524,7 +533,7 @@ void AStar3D :: nodeVisited ( pfield fld, const Node& N2, HexDirection direc, Co
 }
 
 
-void AStar3D::findPath( const MapCoordinate3D& A, const MapCoordinate3D& B, Path& path )
+void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>& B, Path& path )
 {
     _path = &path;
 
@@ -546,14 +555,23 @@ void AStar3D::findPath( const MapCoordinate3D& A, const MapCoordinate3D& B, Path
     // Remember which nodes we visited, so that we can clear the mark array
     // at the end.
 
+    bool found = false;
+    MapCoordinate3D endpos;
+
     // While there are still nodes to visit, visit them!
     while( !open.empty() )
     {
         get_first( open, N );
         visited.push_back( N );
         // If we're at the goal, then exit
-        if( N.h == B )
-            break;
+        for ( vector<MapCoordinate3D>::const_iterator i = B.begin(); i != B.end(); i++ )
+           if( N.h == *i ) {
+              found = true;
+              endpos = *i;
+              break;
+           }
+        if ( found )
+           break;
 
         // Every other column gets a different order of searching dirs
         // (Alternatively, you could pick one at random).  I don't want
@@ -590,7 +608,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const MapCoordinate3D& B, Path
             else
                N2.gval = N.gval + k;
 
-            N2.hval = dist( hn, B );
+            N2.hval = dist(A,B);
 
             pfield fld = actmap->getField(hn);
             nodeVisited ( fld, N2, d, open );
@@ -607,7 +625,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const MapCoordinate3D& B, Path
                     Node N2;
                     N2.h = mcres.second;
                     N2.gval = N.gval + mcres.first;
-                    N2.hval = dist ( mcres.second, B );
+                    N2.hval = dist(A,B);
                     pfield fld = actmap->getField(N2.h);
                     nodeVisited ( fld, N2, HexDirection(dir), open, (10 + beeline ( N2.h, N.h)) * heightDelta );
                  }
@@ -617,12 +635,12 @@ void AStar3D::findPath( const MapCoordinate3D& A, const MapCoordinate3D& B, Path
 
     }
 
-    if( N.h == B && N.gval < MAXIMUM_PATH_LENGTH ) {
+    if( found && N.gval < MAXIMUM_PATH_LENGTH ) {
         // We have found a path, so let's copy it into `path'
         std::vector<int> tempPath;
         std::vector<int> heightHops;
 
-        MapCoordinate3D h = B;
+        MapCoordinate3D h = endpos;
         while( !(h == A) )
         {
             // pfield fld = actmap->getField ( h );
@@ -674,8 +692,16 @@ void AStar3D::findPath( const MapCoordinate3D& A, const MapCoordinate3D& B, Path
 
 void AStar3D::findPath( Path& path, const MapCoordinate3D& dest )
 {
+  vector<MapCoordinate3D> d;
+  d.push_back ( dest );
+  findPath ( MapCoordinate3D ( veh->xpos, veh->ypos, veh->height ), d, path );
+}
+
+void AStar3D::findPath( Path& path, const vector<MapCoordinate3D>& dest )
+{
   findPath ( MapCoordinate3D ( veh->xpos, veh->ypos, veh->height ), dest, path );
 }
+
 
 void AStar3D::findAllAccessibleFields ( int maxDist )
 {
