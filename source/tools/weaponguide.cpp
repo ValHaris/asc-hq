@@ -51,7 +51,7 @@
 
 
 
-const char* tableParam = " class=\"WG\" border=\"1\" ";
+const char* tableParam = " class=\"wg\" border=\"1\" ";
 
 FILE* createFile ( const ASCString& filename )
 {
@@ -61,12 +61,12 @@ FILE* createFile ( const ASCString& filename )
 
 void printIndex ( FILE* fp, const ASCString& index, const ASCString& param = "" )
 {
-   fprintf ( fp, "<tr><th class=\"WG\" %s > %s  </th>" , param.c_str(), index.c_str() );
+   fprintf ( fp, "<tr><th class=\"wg\" %s > %s  </th>" , param.c_str(), index.c_str() );
 }
 
 void printValue ( FILE* fp, const ASCString& data, const ASCString& param = "" )
 {
-   fprintf( fp, "<td class=\"WG\" %s > %s </td>", param.c_str(), data.c_str() );
+   fprintf( fp, "<td class=\"wg\" %s > %s </td>", param.c_str(), data.c_str() );
 }
 
 void printValue ( FILE* fp, int data )
@@ -104,7 +104,52 @@ ASCString getHeightImgString( int height )
          s += s2;
       }
    return s;
-}   
+}
+
+   const int maxFileSize = 10000000;
+   char s[maxFileSize];
+   char d[maxFileSize];
+
+
+void copyFile( const ASCString& src, const ASCString& dst )
+{
+   FILE* i = fopen ( src.c_str(), filereadmode );
+   FILE* o = fopen ( dst.c_str(), filereadmode );
+   bool copy = false;
+
+   if ( !i )
+      fatalError ("copyFile :: Could not open input file " + src);
+
+   if ( !o ) {
+      copy = true;
+      fclose ( i );
+   } else {
+
+      int s1 = fread ( s, 1, maxFileSize, i );
+      int s2 = fread ( d, 1, maxFileSize, o );
+      if ( s1 != s2 )
+         copy = true;
+      else {
+         for ( int i = 0; i < s1; i++ )
+            if ( s[i] != d[i] ) {
+               copy = true;
+               break;
+            }
+      }
+      fclose( o );
+      fclose( i );
+   }
+   if ( copy ) {
+      i = fopen ( src.c_str(), filereadmode );
+      o = fopen ( dst.c_str(), filewritemode );
+      int s1 = fread ( s, 1, maxFileSize, i );
+      fwrite ( s, 1, s1, o );
+      fclose( o );
+      fclose( i );
+      printf("*");
+   }
+   remove ( src.c_str() );
+}
 
 int main(int argc, char *argv[] )
 {
@@ -121,6 +166,9 @@ int main(int argc, char *argv[] )
    ASCString prefixDir = cl.d();
    if ( !prefixDir.empty() )
       appendbackslash ( prefixDir );
+
+   ASCString tempPath = getenv("temp");
+   appendbackslash(tempPath);
 
    try {
 
@@ -149,8 +197,8 @@ int main(int argc, char *argv[] )
          // else use all verhicles
       }
 
-      FILE* overview  = createFile ( prefixDir+"overview.html" );
-      FILE* overview1 = createFile ( prefixDir+"overview1.html" );
+      FILE* overview  = createFile ( tempPath+"overview.html" );
+      FILE* overview1 = createFile ( tempPath+"overview1.html" );
       // opens a file for writing and assigns the file pointer overview to it
 
       // Beginn des HTML Files HEAD und BODY
@@ -165,8 +213,8 @@ int main(int argc, char *argv[] )
                 "<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"%s\">\n"
                 "</HEAD>\n"
                 "\n"
-                "<BODY class=\"WG\">\n"
-                "<table width=\"100%\"  class=\"WG\" >\n"
+                "<BODY class=\"wg\">\n"
+                "<table width=\"100%\"  class=\"wg\" >\n"
                 "<tr><td><a href=\"overview1.html\">SEE PICTURES</a></td></tr><tr><td></td></tr>\n", cl.t().c_str() );
 
       fprintf ( overview1 , "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\" \"http://www.w3.org/TR/REC-html40/loose.dtd\">\n"
@@ -177,7 +225,7 @@ int main(int argc, char *argv[] )
                 "<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"%s\">\n"
                 "</HEAD>\n"
                 "\n"
-                "<BODY class=\"WG\">\n", cl.t().c_str() );
+                "<BODY class=\"wg\">\n", cl.t().c_str() );
 
       for ( int unit = 0; unit < vehicletypenum; unit++ ) {
          pvehicletype  ft = getvehicletype_forpos ( unit );
@@ -199,13 +247,13 @@ int main(int argc, char *argv[] )
 
             printf(" processing unit %s , ID %d ... ", ft->description.c_str(), ft->id );
 
-            FILE* framePage = createFile ( prefixDir + fileName + ".html" );
-            FILE* generalPage = createFile ( prefixDir + fileName + "1.html" );
-            FILE* movePage = createFile ( prefixDir + fileName + "2.html" );
-            FILE* weaponPage = createFile ( prefixDir + fileName + "3.html" );
-            FILE* constructionPage = createFile ( prefixDir + fileName + "4.html" );
-            FILE* transportPage = createFile ( prefixDir + fileName + "5.html" );
-            FILE* infoPage = createFile ( prefixDir + fileName + "6.html" );
+            FILE* framePage = createFile ( tempPath + fileName + ".html" );
+            FILE* generalPage = createFile ( tempPath + fileName + "1.html" );
+            FILE* movePage = createFile ( tempPath + fileName + "2.html" );
+            FILE* weaponPage = createFile ( tempPath + fileName + "3.html" );
+            FILE* constructionPage = createFile ( tempPath + fileName + "4.html" );
+            FILE* transportPage = createFile ( tempPath + fileName + "5.html" );
+            FILE* infoPage = createFile ( tempPath + fileName + "6.html" );
 
             FILE* files[6] = { generalPage, movePage, weaponPage, constructionPage, transportPage, infoPage };
 
@@ -219,7 +267,7 @@ int main(int argc, char *argv[] )
                       "<frameset  cols=\"50%%,*\" border=0 >\n"
                       "<frame name=\"over\" src=\"%s1.html\" marginheight=\"0\">\n"
                       "<frame name=\"under\" src=\"%s6.html\" marginheight=\"2\">\n"
-                      "<noframes><body class=\"WG\"><p><A HREF=\"%s1.html\">General Information</A><p>\n<A HREF=\"%s2.html\">Movement </A><p>\n<A HREF=\"%s3.html\">Weapon systems</A><p>\n<A HREF=\"%s4.html\">Construction</A><p>\n<A HREF=\"%s5.html\">Transportation</A><p>\n<A HREF=\"%s6.html\">Infotext</A><p>\n </body></noframes>\n"
+                      "<noframes><body class=\"wg\"><p><A HREF=\"%s1.html\">General Information</A><p>\n<A HREF=\"%s2.html\">Movement </A><p>\n<A HREF=\"%s3.html\">Weapon systems</A><p>\n<A HREF=\"%s4.html\">Construction</A><p>\n<A HREF=\"%s5.html\">Transportation</A><p>\n<A HREF=\"%s6.html\">Infotext</A><p>\n </body></noframes>\n"
                       "</frameset>\n"
                       "</html>\n", fileName.c_str() , fileName.c_str(), fileName.c_str(), fileName.c_str(), fileName.c_str(), fileName.c_str(), fileName.c_str(), fileName.c_str() );
 
@@ -235,22 +283,22 @@ int main(int argc, char *argv[] )
                       "<BODY  class=\"%s\">\n";
 
             // UNIT GENERAL
-            fprintf ( generalPage, header, "general", cl.t().c_str(), "WGLEFT" );
+            fprintf ( generalPage, header, "general", cl.t().c_str(), "wgLEFT" );
 
             // UNIT TERRAIN
-            fprintf ( movePage, header, "movement", cl.t().c_str(), "WG" );
+            fprintf ( movePage, header, "movement", cl.t().c_str(), "wg" );
 
             // UNIT WEAPONS
-            fprintf ( weaponPage, header, "terrain", cl.t().c_str(), "WG" );
+            fprintf ( weaponPage, header, "terrain", cl.t().c_str(), "wg" );
 
             // UNIT FUNCTIONS
-            fprintf ( constructionPage, header, "unitguide functions", cl.t().c_str(), "WG" );
+            fprintf ( constructionPage, header, "unitguide functions", cl.t().c_str(), "wg" );
 
             // UNIT LOADING
-            fprintf ( transportPage, header, "transportation", cl.t().c_str(), "WG" );
+            fprintf ( transportPage, header, "transportation", cl.t().c_str(), "wg" );
 
             // UNIT DESCRIPTION
-            fprintf ( infoPage, header, "description", cl.t().c_str(), "WG" );
+            fprintf ( infoPage, header, "description", cl.t().c_str(), "wg" );
 
             // OVERVIEW LEFT
             fprintf ( overview, " <tr><td><A HREF=\"%s.html\">", fileName.c_str() );
@@ -258,11 +306,11 @@ int main(int argc, char *argv[] )
             fprintf ( overview, " </A></td></tr>\n" );
 
             // OVERVIEW RIGHT
-            fprintf ( overview1, "<table align=\"center\"  class=\"WG\" >\n"
+            fprintf ( overview1, "<table align=\"center\"  class=\"wg\" >\n"
                       " <tr><td rowspan=\"2\" width=\"50\">" );
             if ( exist ( fileName + ".gif" ))
                fprintf ( overview1, "<img src=\"%s\" border=\"0\" alt=\"image of unit\">", (fileName + ".gif").c_str() );
-            fprintf ( overview1, "</td><td width=\"140\"><A HREF=\"%s\">%s</A></td></tr><tr><td><a href=\"%s\">%s</a></td></tr></table>\n", fileName.c_str(), ft->name.c_str(), fileName.c_str(), ft->description.c_str() );
+            fprintf ( overview1, "</td><td width=\"140\"><A HREF=\"%s.html\">%s</A></td></tr><tr><td><a href=\"%s.html\">%s</a></td></tr></table>\n", fileName.c_str(), ft->name.c_str(), fileName.c_str(), ft->description.c_str() );
 
             // END OVERVIEW RIGHT
 
@@ -273,7 +321,7 @@ int main(int argc, char *argv[] )
 
             // UNIT GENERAL
             /*
-            fprintf ( generalPage, "<table width=\"100%\" border=\"1\" class=\"WG\"> \n"
+            fprintf ( generalPage, "<table width=\"100%\" border=\"1\" class=\"wg\"> \n"
                       "<tr><td colspan=\"2\"></td><td id=\"H9\" align=\"right\">UNIT GUIDE v2.1 </td></tr>"
                       "<tr><td width=\"50\">" );
 
@@ -283,8 +331,8 @@ int main(int argc, char *argv[] )
 
             fprintf ( generalPage, "</td>\n<td>" );
 
-            fprintf ( generalPage, "<table class=\"WG\"> \n" );
-            fprintf ( generalPage, "<tr>  <th class=\"WG\"> Name</th>  <td align=\"center\" colspan=\"4\">%s</td> </tr>\n", ft->name.c_str() );
+            fprintf ( generalPage, "<table class=\"wg\"> \n" );
+            fprintf ( generalPage, "<tr>  <th class=\"wg\"> Name</th>  <td align=\"center\" colspan=\"4\">%s</td> </tr>\n", ft->name.c_str() );
 
             */
             fprintf( generalPage, "<h2>General Information</h2>\n" );
@@ -320,7 +368,7 @@ int main(int argc, char *argv[] )
             fprintf ( generalPage, "</table>\n" );
 
             /*
-            fprintf ( generalPage, "</td>\n\n<td class=\"WG\">" );
+            fprintf ( generalPage, "</td>\n\n<td class=\"wg\">" );
             if ( exist ( b2.c_str() ))
                fprintf ( generalPage, "<img src=\"%s\">", b2.c_str() );
             fprintf ( generalPage, "</td></tr></table>\n" );
@@ -356,11 +404,11 @@ int main(int argc, char *argv[] )
             int i,w;
             // Tabellenbeginn
             fprintf( movePage, "<TABLE %s> \n<tr>", tableParam );
-            //  "<TR><th colspan=\"9\" class=\"WG\">Levels of height:</th></tr>\n<tr>");
+            //  "<TR><th colspan=\"9\" class=\"wg\">Levels of height:</th></tr>\n<tr>");
             // Spaltentitel
             fprintf ( movePage, "<td></td>" );
             for ( i = 0; i < 8; i++ ) {
-               fprintf ( movePage, " <Th class=\"WG\"><IMG src=\"../hoehe%d.gif\" alt=\"%s\"></th>", i, choehenstufen[i]);
+               fprintf ( movePage, " <Th class=\"wg\"><IMG src=\"../hoehe%d.gif\" alt=\"%s\"></th>", i, choehenstufen[i]);
             }
             fprintf( movePage, "</TR>\n<TR>");
 
@@ -401,7 +449,7 @@ int main(int argc, char *argv[] )
             fprintf( movePage, "\n<h3>Accessible Terrain</h3>\n" );
 
             fprintf( movePage, "<TABLE %s>\n", tableParam );
-            fprintf( movePage, "<tr><th class=\"WG\">terrain type</th><th class=\"WG\">accessible</th><th class=\"WG\">required</th><th class=\"WG\">not accessible</th><th class=\"WG\">fatal</th></tr>");
+            fprintf( movePage, "<tr><th class=\"wg\">terrain type</th><th class=\"wg\">accessible</th><th class=\"wg\">required</th><th class=\"wg\">not accessible</th><th class=\"wg\">fatal</th></tr>");
 
             for ( i = 0; i < cbodenartennum ; i++ ) {
                printIndex ( movePage, cbodenarten[i] );
@@ -439,7 +487,7 @@ int main(int argc, char *argv[] )
                
                printIndex ( movePage, "Method" );
                for ( int w = 0; w < ft->heightChangeMethodNum ; w++)
-                  fprintf ( movePage, "<th class=\"WG\">%d </th>", w);
+                  fprintf ( movePage, "<th class=\"wg\">%d </th>", w);
                printLineEnd ( movePage );
 
                printIndex ( movePage, "Starting height");
@@ -503,9 +551,9 @@ int main(int argc, char *argv[] )
 
 
                printIndex ( weaponPage, "Weapon system" );
-               // fprintf ( weaponPage, "<tr><th class=\"WG\">Weapon system </th>");
+               // fprintf ( weaponPage, "<tr><th class=\"wg\">Weapon system </th>");
                for ( int w = 0; w < ft->weapons.count ; w++)
-                  fprintf ( weaponPage, "<th class=\"WG\">%d </th>", w);
+                  fprintf ( weaponPage, "<th class=\"wg\">%d </th>", w);
                printLineEnd ( weaponPage );
 
 
@@ -599,7 +647,7 @@ int main(int argc, char *argv[] )
 
 
                for ( int h = 0; h < cmovemalitypenum; h++ ) {
-                  fprintf ( weaponPage, "<tr><th class=\"WG\" >%s </th>", cmovemalitypes[h] );
+                  fprintf ( weaponPage, "<tr><th class=\"wg\" >%s </th>", cmovemalitypes[h] );
                   for ( int w = 0; w < ft->weapons.count ; w++)
                      fprintf ( weaponPage, "<td>%d %% </td>", ft->weapons.weapon[w].targetingAccuracy[h] );
                   fprintf ( weaponPage, "</tr>");
@@ -608,7 +656,7 @@ int main(int argc, char *argv[] )
                fprintf(weaponPage, "<tr><th colspan=\"%d\"><h3>Targeting Accuracy: Altitude Difference</h3></th></tr>\n", ft->weapons.count+1 );
 
                for ( int h = 0; h < 13; h++ ) {
-                  fprintf ( weaponPage, "<tr><th class=\"WG\" >%i </th>", h-6 );
+                  fprintf ( weaponPage, "<tr><th class=\"wg\" >%i </th>", h-6 );
                   for ( int w = 0; w < ft->weapons.count ; w++)
                      if ( ft->weapons.weapon[w].efficiency[h] > 0 )
                         fprintf ( weaponPage, " <TD>%d %%</TD>", ft->weapons.weapon[w].efficiency[h] );
@@ -853,15 +901,13 @@ int main(int argc, char *argv[] )
                   printLineEnd( transportPage );
                }
                fprintf ( transportPage, "</table>\n" );
-
-
             }
 
 
 
 
             //BEGINN DESCRIPTION
-            fprintf ( infoPage, "<H2>Informationen about this Unit</H2>\n" );
+            fprintf ( infoPage, "<H2>Information about this Unit</H2>\n" );
 
 
             FILE* fp = fopen ( ASCString(prefixDir + fileName + ".jpg").c_str(), "r" );
@@ -924,6 +970,15 @@ int main(int argc, char *argv[] )
             fclose ( infoPage );
             // closing the file
 
+
+            for ( int i = 0; i <= 6; i++ ) {
+               ASCString nm = fileName;
+               if ( i > 0 )
+                 nm += strrr(i);
+               nm += ".html";
+               copyFile ( tempPath + nm, prefixDir + nm );
+            }
+
             if ( cl.i() ) {
                tvirtualdisplay sb(100,100,255);
                putspriteimage ( 0, 0, ft->picture[0] );
@@ -931,21 +986,21 @@ int main(int argc, char *argv[] )
                pal[255][1] = 253;
                pal[255][2] = 252;
                #ifdef _WIN32_
-               ASCString tmp = getenv("temp");
-               appendbackslash(tmp);
-               ASCString command = "convert " + tmp + "weaponguide.pcx -transparent \"#f8f4f0\" "; // -transparent 255
-               command += prefixDir + fileName;
+               ASCString command = "convert " + tempPath + "weaponguide.pcx -transparent \"#f8f4f0\" "; // -transparent 255
+               command += tempPath + fileName;
                command += ".gif";
-               writepcx ( tmp+"weaponguide.pcx", 0, 0, fieldsizex, fieldsizey, pal );
+               writepcx ( tempPath+"weaponguide.pcx", 0, 0, fieldsizex, fieldsizey, pal );
                #else
                ASCString command = "convert /tmp/weaponguide.pcx -transparent \"#f8f4f0\" "; // -transparent 255
-               command += prefixDir + fileName;
+               command += tempPath + fileName;
                command += ".gif";
                writepcx ( "/tmp/weaponguide.pcx", 0, 0, fieldsizex, fieldsizey, pal );
                #endif
                // printf("%s\n", command.c_str() );
                printf("creating image...");
                system( command.c_str() );
+               copyFile( tempPath + fileName+ ".gif", prefixDir + fileName+ ".gif" );
+               remove ( (tempPath+"weaponguide.pcx").c_str() );
             }
             
             printf(" done \n" );
@@ -963,6 +1018,8 @@ int main(int argc, char *argv[] )
       fclose ( overview );
       fclose ( overview1 );
 
+      copyFile ( tempPath + "overview.html", prefixDir + "overview.html" );
+      copyFile ( tempPath + "overview1.html", prefixDir + "overview1.html" );
 
       printf("Generating unit listings");
       

@@ -60,13 +60,14 @@ void BaseVehicleMovement :: PathFinder :: getMovementFields ( IntFieldList& reac
    for ( Container::iterator i = visited.begin(); i != visited.end(); ++i ) {
       if ( i->h.x != veh->getPosition().x || i->h.y != veh->getPosition().y || i->h.getNumericalHeight() != unitHeight ) {
          int h = i->h.getNumericalHeight();
-         if ( h == -1 )
-            h = i->enterHeight;
-         if ( h == -1 || height == -1 || h == height )
+         // if ( h == -1 )
+         //   h = i->enterHeight;
+         if ( h == -1 || height == -1 || h == height ) {
             if ( i->canStop )
                fields.insert(make_pair(MapCoordinate(i->h),  i));
             else
                reachableFieldsIndirect.addField ( i->h, i->h.getNumericalHeight() );
+         }
       }
       if ( i->h.getNumericalHeight() >= 0 )
          if ( i->gval < minMovement ) {

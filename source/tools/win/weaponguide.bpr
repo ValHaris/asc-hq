@@ -122,7 +122,7 @@ Item0=C:\Programme\ascsrc\games\asc\source\tools\win
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=-c C:\ugneu\asc.ini -d online/html -l html/
+RunParams=-c C:\ugneu\asc.ini  -s 100 -i -d online/html -l html/ -z 48
 Launcher=
 UseLauncher=0
 DebugCWD=
