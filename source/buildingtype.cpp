@@ -525,7 +525,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
        pc.closeBracket();
       pc.closeBracket ();
 
-      pc.openBracket( "DefaultResourceProduction" );
+      pc.openBracket( "DefaultProduction" );
        defaultProduction.runTextIO ( pc, Resources(0,0,0) );
       pc.closeBracket();
 

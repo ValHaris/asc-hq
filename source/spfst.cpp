@@ -2,9 +2,12 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.120 2003-02-27 16:12:19 mbickel Exp $
+//     $Id: spfst.cpp,v 1.121 2003-03-05 17:57:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.120  2003/02/27 16:12:19  mbickel
+//      Restructuring of new pathfinding code completed
+//
 //     Revision 1.119  2003/02/19 19:47:26  mbickel
 //      Completely rewrote Pathfinding code
 //      Wind not different any more on different levels of height
@@ -1009,9 +1012,12 @@ void         putbuilding2( const MapCoordinate& entryPosition,
       Resources actplus;
       Resources biplus;
       int maxresearch = 0;
+      /*
+      bool found = false;
       for ( tmap::Player::BuildingList::iterator i = actmap->player[color/8].buildingList.begin(); i != actmap->player[ color/8].buildingList.end(); i++ ) {
          pbuilding bld = *i;
          if ( bld->typ == gbde->typ  && bld != gbde ) {
+            found = true;
 
             for ( int r = 0; r < 3; r++ ) {
                if ( bld->maxplus.resource(r) > maxplus.resource(r) )
@@ -1030,21 +1036,29 @@ void         putbuilding2( const MapCoordinate& entryPosition,
       }
 
       gbde->damage = 0;
-      if ( actmap->_resourcemode == 1 ) {
-         gbde->plus.energy = biplus.energy;
-         gbde->plus.material = biplus.material;
-         gbde->plus.fuel = biplus.fuel;
+      if ( found ) {
+         if ( actmap->_resourcemode == 1 ) {
+            gbde->plus.energy = biplus.energy;
+            gbde->plus.material = biplus.material;
+            gbde->plus.fuel = biplus.fuel;
+         } else {
+            gbde->plus.energy = maxplus.energy;
+            gbde->plus.material = maxplus.material;
+            gbde->plus.fuel = maxplus.fuel;
+         }
+         gbde->maxplus = maxplus;
+         gbde->bi_resourceplus = biplus;
       } else {
-         gbde->plus.energy = maxplus.energy;
-         gbde->plus.material = maxplus.material;
-         gbde->plus.fuel = maxplus.fuel;
+         gbde->plus = gbde->defaultProduction;
+         gbde->maxplus = gbde->defaultProduction;
+         gbde->bi_resourceplus = gbde->defaultProduction;
       }
-      gbde->maxplus.energy = maxplus.energy;
-      gbde->maxplus.material = maxplus.material;
-      gbde->maxplus.fuel = maxplus.fuel;
-      gbde->bi_resourceplus.energy = biplus.energy;
-      gbde->bi_resourceplus.material = biplus.material;
-      gbde->bi_resourceplus.fuel = biplus.fuel;
+      */
+      
+      gbde->plus = gbde->typ->defaultProduction;
+      gbde->maxplus = gbde->typ->defaultProduction;
+      gbde->bi_resourceplus = gbde->typ->defaultProduction;
+
       gbde->actstorage.fuel = 0;
       gbde->actstorage.material = 0;
       gbde->actstorage.energy = 0;

@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.100 2003-02-27 16:12:45 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.101 2003-03-05 17:57:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.100  2003/02/27 16:12:45  mbickel
+//      Restructuring of new pathfinding code completed
+//
 //     Revision 1.99  2003/02/19 19:47:26  mbickel
 //      Completely rewrote Pathfinding code
 //      Wind not different any more on different levels of height
@@ -97,7 +100,11 @@ void BaseVehicleMovement :: PathFinder :: getMovementFields ( IntFieldList& reac
    if ( !actmap->getField ( veh->getPosition())->unitHere ( veh ))
       unitHeight = -1;
 
-   for ( Container::iterator i = visited.begin(); i != visited.end(); i++ ) {
+   // there are different entries for the same x/y coordinate but different height.
+   // Since the UI is only in xy, we need to find the height which is the easiest to reach
+   typedef multimap<MapCoordinate,Container::iterator > Fields;
+   Fields fields;
+   for ( Container::iterator i = visited.begin(); i != visited.end(); ++i ) {
 
       if ( i->h.x != veh->getPosition().x || i->h.y != veh->getPosition().y || i->h.getNumericalHeight() != unitHeight ) {
          int h = i->h.getNumericalHeight();
@@ -105,10 +112,22 @@ void BaseVehicleMovement :: PathFinder :: getMovementFields ( IntFieldList& reac
             h = i->enterHeight;
          if ( h == -1 || height == -1 || h == height )
             if ( i->canStop )
-               reachableFields.addField ( i->h, i->h.getNumericalHeight() );
+               fields.insert(make_pair(MapCoordinate(i->h),  i));
             else
                reachableFieldsIndirect.addField ( i->h, i->h.getNumericalHeight() );
       }
+   }
+   for ( Fields::iterator i = fields.begin(); i != fields.end();  ) {
+      int height = i->second->h.getNumericalHeight();
+      int move = i->second->gval;
+      Fields::key_type key = i->first;
+      ++i;
+      while ( i->first == key ) {
+         if ( i->second->gval  < move )
+            height = i->second->h.getNumericalHeight();
+         ++i;
+      }
+      reachableFields.addField ( key, height );
    }
 }
 
