@@ -1,6 +1,9 @@
-//     $Id: mousehnd.cpp,v 1.2 2000-08-12 12:52:56 mbickel Exp $
+//     $Id: mousehnd.cpp,v 1.3 2000-09-07 16:42:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/08/12 12:52:56  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.1  2000/06/19 20:05:09  mbickel
 //      Fixed crash when transfering ammo to vehicle with > 8 weapons
 //
@@ -275,9 +278,6 @@ int initmousehandler ( void* pic )
     struct SREGS sregs;
     union REGS inregs, outregs;
     int installed = 0;
-//    void (far *function_ptr)();
-    FILE *fp;
-    int pictsize;
     word *wp;
 
     segread(&sregs);
@@ -292,13 +292,15 @@ int initmousehandler ( void* pic )
     if (installed)
     {
        if ( !pic ) {
-          /* Load MousePointer iamge file */
+          exit(1);
+         /* Load MousePointer iamge file 
           char filename[] = "mouse1.RAW";
-          fp = fopen(filename, "rb");
-          pictsize = filesize ( filename );
+          FILE *fp = fopen(filename, "rb");
+          int pictsize = filesize ( filename );
           mouseparams.pictpointer = asc_malloc( pictsize );
           fread ( mouseparams.pictpointer, 1, pictsize , fp );
           fclose ( fp );
+         */
        } else
            mouseparams.pictpointer = pic;
 

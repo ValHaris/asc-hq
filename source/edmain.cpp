@@ -1,6 +1,9 @@
-//     $Id: edmain.cpp,v 1.21 2000-09-07 15:49:40 mbickel Exp $
+//     $Id: edmain.cpp,v 1.22 2000-09-07 16:42:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/09/07 15:49:40  mbickel
+//      some cleanup and documentation
+//
 //     Revision 1.20  2000/08/21 17:50:57  mbickel
 //      Fixed: crash when unit reaching max experience
 //      Fixed: crash when displaying research image
@@ -761,7 +764,7 @@ void showmemory ( void )
    int b = _memavl();
    showtext2( strrr ( a ), 210,410 );
    showtext2( strrr ( b+a ), 310,410 );
-   showtext2( strrr ( _memmax() ), 10,410 );
+   // showtext2( strrr ( _memmax() ), 10,410 );
    showtext2( strrr ( b  ), 110,480 );
    showtext2( strrr ( stackfree ()  ), 410,410 );
    if (mss == 2)

@@ -268,7 +268,7 @@ bool AStar::fieldVisited ( int x, int y)
 void AStar::findAllAccessibleFields ( pmap actmap, pvehicle veh )
 {
    actmap->cleartemps ( 1 );
-   vector<int> dummy;
+   std::vector<int> dummy;
    findPath ( actmap, dummy, veh, actmap->xsize, actmap->ysize );  //this field does not exist...
    for ( Container::iterator i = visited.begin(); i != visited.end(); i++ )
       getfield ( (*i).h.m, (*i).h.n )->a.temp = 1;

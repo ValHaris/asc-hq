@@ -1,6 +1,9 @@
-//     $Id: artint.h,v 1.11 2000-09-07 15:42:09 mbickel Exp $
+//     $Id: artint.h,v 1.12 2000-09-07 16:42:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/09/07 15:42:09  mbickel
+//     *** empty log message ***
+//
 //     Revision 1.10  2000/09/02 13:59:48  mbickel
 //      Worked on AI
 //      Started using doxygen
@@ -162,7 +165,9 @@
 
                   int numberOfAccessibleFields ( const pvehicle veh );
                   void init ( int _x, int _y, int xsize, int ysize, int _xp, int _yp );
+                  void init ( AI* _ai, int _x, int _y, int xsize, int ysize, int _xp, int _yp );
                   Section ( AI* _ai ) : ai ( _ai ) {};
+                  Section ( ) { ai = NULL; };    //
             };
             friend class Section;
 

@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.22 2000-09-07 15:42:09 mbickel Exp $
+//     $Id: artint.cpp,v 1.23 2000-09-07 16:42:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/09/07 15:42:09  mbickel
+//     *** empty log message ***
+//
 //     Revision 1.21  2000/09/02 13:59:47  mbickel
 //      Worked on AI
 //      Started using doxygen
@@ -600,6 +603,12 @@ AiThreat& AI :: getFieldThreat ( int x, int y )
 }
 
 
+void AI :: Section :: init ( AI* _ai, int _x, int _y, int xsize, int ysize, int _xp, int _yp )
+{
+   ai = _ai;
+   init ( _x, _y, xsize, ysize, _xp, _yp );
+}
+
 void AI :: Section :: init ( int _x, int _y, int xsize, int ysize, int _xp, int _yp )
 {
    x1 = _x;
@@ -677,10 +686,10 @@ void AI :: Sections :: reset ( void )
 void AI :: Sections :: calculate ( void )
 {
    if ( !section ) {
-      section = new Section[ numX*numY ] ( ai );
+      section = new Section[ numX*numY ]; //  ( ai );
       for ( int x = 0; x < numX; x++ )
          for ( int y = 0; y < numY; y++ )
-            section[ x + numX * y ].init ( x * ai->activemap->xsize / numX, y * ai->activemap->ysize / numY, sizeX, sizeY, x, y );
+            section[ x + numX * y ].init ( ai, x * ai->activemap->xsize / numX, y * ai->activemap->ysize / numY, sizeX, sizeY, x, y );
 
     }
 }
@@ -990,7 +999,7 @@ void AI::strategy( void )
             if ( sec ) {
                vm.execute ( veh, -1, -1, 0, -1, -1 );
 
-               vector<int> path;
+               std::vector<int> path;
                findPath ( getMap(), path, veh, x2, y2 );
                int x = veh->xpos;
                int y = veh->ypos;

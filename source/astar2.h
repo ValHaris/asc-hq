@@ -7,6 +7,7 @@
     finding a path with the A* algorithm
 */
 
+
  class AStar {
        pmap tempsMarked;
     protected:
@@ -42,6 +43,8 @@
        AStar ( void );
        ~AStar ( );
  };
+
+bool operator < ( const AStar::Node& a, const AStar::Node& b );
 
  //! finding a path for unit veh to position x, y on map actmap. The path is copied to path in REVERSE ORDER ! (path[0] is the last field)
  extern void findPath( pmap actmap, std::vector<int>& path, pvehicle veh, int x, int y );
