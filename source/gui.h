@@ -1,6 +1,9 @@
-//     $Id: gui.h,v 1.13 2000-08-30 14:45:08 mbickel Exp $
+//     $Id: gui.h,v 1.14 2000-08-30 16:26:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/08/30 14:45:08  mbickel
+//      ASC compiles and links with GCC again...
+//
 //     Revision 1.12  2000/08/29 20:21:07  mbickel
 //      Tried to make source GCC compliant, but some problems still remain
 //
@@ -793,7 +796,7 @@ class treplayguihost : public ReplayBaseGuiHost {
    public: 
      void init ( int resolutionx, int resolutiony );
 
-     struct {
+     struct I {
         trguiicon_play   play;
         trguiicon_pause  pause;
         trguiicon_slower slower;
