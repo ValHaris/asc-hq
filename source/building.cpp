@@ -1,6 +1,11 @@
-//     $Id: building.cpp,v 1.9 1999-12-14 20:23:46 mbickel Exp $
+//     $Id: building.cpp,v 1.10 1999-12-27 12:59:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  1999/12/14 20:23:46  mbickel
+//      getfiletime now works on containerfiles too
+//      improved BI3 map import tables
+//      various bugfixes
+//
 //     Revision 1.8  1999/12/07 22:13:13  mbickel
 //      Fixed various bugs
 //      Extended BI3 map import tables
@@ -2608,6 +2613,28 @@ ccontainer :: cmoveup_icon_c :: cmoveup_icon_c ( void )
    strcpy ( filename, "contnup" );
 }
 
+
+
+int ccontainer :: cunitinformation_icon :: available ( void )
+{
+   if ( main->getmarkedunittype() || main->getmarkedunit() )
+      return 1;
+   return 0;
+}
+
+void  ccontainer :: cunitinformation_icon :: exec ( void ) 
+{
+   if ( main->getmarkedunittype() )
+      vehicle_information ( main->getmarkedunittype() );
+   else
+      if ( main->getmarkedunit() )
+         vehicle_information ( main->getmarkedunit()->typ );
+}
+
+ccontainer :: cunitinformation_icon :: cunitinformation_icon ( void )
+{
+   strcpy ( filename, "informat" );
+}
 
 
 int ccontainer :: cmovedown_icon_c :: available ( void )

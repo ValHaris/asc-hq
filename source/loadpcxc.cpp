@@ -1,6 +1,15 @@
-//     $Id: loadpcxc.cpp,v 1.1 1999-11-22 18:27:40 mbickel Exp $
+//     $Id: loadpcxc.cpp,v 1.2 1999-12-27 13:00:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  1999/11/22 18:27:40  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:42:02  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -95,7 +104,7 @@ char loadpcxxy( pnstream stream, int x, int y, int setpalette )
                       
    } else {
       scanlineret[0]=0;
-      scanlineret[1]=agmp-> scanlinelength - header.bytesperline * agmp->byteperpix;
+      scanlineret[1]= -(agmp-> scanlinelength - header.bytesperline * agmp->byteperpix);
    }
 
    int totalbytes = header.nplanes * header.bytesperline;

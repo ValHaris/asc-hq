@@ -1,6 +1,15 @@
-//     $Id: vesa.cpp,v 1.4 1999-11-22 18:28:04 mbickel Exp $
+//     $Id: vesa.cpp,v 1.5 1999-12-27 13:00:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/11/22 18:28:04  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.3  1999/11/16 17:04:19  mbickel
 //     Made ASC compilable for DOS again :-)
 //     Merged all the bug fixes in that I did last week
@@ -569,12 +578,6 @@ getvesamodeavail(int modenum)
 
 }
 
-
-int
-imagesize(int x1, int y1, int x2, int y2)
-{
-	return ((x2 - x1 + 1) * (y2 - y1 + 1) + 4);
-}
 
 
 #ifdef _NOASM_

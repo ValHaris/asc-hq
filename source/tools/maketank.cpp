@@ -134,7 +134,6 @@ main (int argc, char *argv[] )
             exit (0);
          } 
    
-         ft->terrainaccess = new tterrainaccess;
       } 
       else {                                                         // edit existing tank
    
@@ -412,6 +411,8 @@ main (int argc, char *argv[] )
                    }
                 }
 
+               printf ("\n    The weapon can NOT hit :\n(this function is experimental and not yet implemented in the game itself)\n");
+               bitselect (ft->weapons->weapon[i].targets_not_hittable, cmovemalitypes, cmovemalitypenum);
 
                i++;
             } 

@@ -1,7 +1,11 @@
-//     $Id: dialog.h,v 1.3 1999-12-07 22:13:18 mbickel Exp $
+//     $Id: dialog.h,v 1.4 1999-12-27 12:59:51 mbickel Exp $
 
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/12/07 22:13:18  mbickel
+//      Fixed various bugs
+//      Extended BI3 map import tables
+//
 //     Revision 1.2  1999/11/16 03:41:21  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -79,7 +83,7 @@ class    tscrollbarn {
 
 
    
-extern void  vehicle(void);
+extern void  vehicle_information ( pvehicletype type = NULL);
    
 extern int   dispmessage2(int          id,
                           char *       st);

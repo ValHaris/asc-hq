@@ -1,6 +1,9 @@
-//     $Id: edmain.cpp,v 1.4 1999-12-07 22:05:08 mbickel Exp $
+//     $Id: edmain.cpp,v 1.5 1999-12-27 12:59:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/07 22:05:08  mbickel
+//      Added password verification for loading maps
+//
 //     Revision 1.3  1999/11/22 18:27:16  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -310,6 +313,54 @@ void         loadcursor(void)
 
 } 
 
+
+
+void loadUnitSets ( void )
+{
+   tfindfile ff ( "*.set" );
+   char* n = ff.getnextname();
+   int setnum = 0;
+   while ( n ) {
+      tnfilestream s ( n, 1 );
+      char buf[10000];
+      int read = s.readdata ( buf, 10000, 0 );
+      buf[read] = 0;
+
+      if ( buf[0] ) {
+         int rangenum = 0;
+
+         char* filename = strtok ( buf, ";\r\n");
+         unitSet.set[setnum].init ( filename );
+
+         char* piclist = strtok ( NULL, ";\r\n" );
+
+         char* pic = strtok ( piclist, "," );
+         while ( pic ) {
+            int from, to;
+            if ( strchr ( pic, '-' )) {
+               char* a = strchr ( pic, '-' );
+               *a = 0;
+               from = atoi ( pic );
+               to = atoi ( ++a );
+            } else 
+               from = to = atoi ( pic );
+
+            unitSet.set[setnum].ids[rangenum].from = from;
+            unitSet.set[setnum].ids[rangenum].to   = to;
+
+            rangenum ++;
+            pic = strtok ( NULL, "," );
+         }
+         setnum++;
+      }
+
+      n = ff.getnextname();
+   } /* endwhile */
+
+
+}
+
+
 void loaddata( void ) 
 {
 
@@ -359,6 +410,8 @@ void loaddata( void )
   #ifndef FREEMAPZOOM
    idisplaymap.setup_map_mask ( );
   #endif
+
+   loadUnitSets();
 
    if ( actprogressbar ) {
       actprogressbar->end();
@@ -456,7 +509,11 @@ void         editor(void)
                      break;
                   case ct_d + ct_stp : execaction(act_changeglobaldir);
                      break;
+                  case ct_f + ct_stp: execaction(act_createresources);
+                     break;
                   case ct_g + ct_stp: execaction(act_maptopcx);  
+                     break;
+                  case ct_h + ct_stp : execaction(act_setunitfilter);
                      break;
                   case ct_i + ct_stp: execaction (act_import_bi_map );
                      break;
@@ -483,8 +540,6 @@ void         editor(void)
                   case ct_a:   execaction(act_movebuilding);
                      break;
                   case ct_b:   execaction(act_changeresources);
-                     break;
-                  case ct_f + ct_stp: execaction(act_createresources);
                      break;
                   case ct_c:   execaction(act_changecargo); 
                      break;
@@ -675,6 +730,8 @@ pfont load_font(char* name)
 
 
 
+
+
 int main(int argc, char *argv[] )
 { 
    signal ( SIGINT, SIG_IGN );
@@ -851,6 +908,9 @@ int main(int argc, char *argv[] )
    editor();
    cursor.hide();
    writegameoptions ();
+  #ifdef MEMCHK
+   verifyallblocks();
+  #endif
    return 0;
 }
 

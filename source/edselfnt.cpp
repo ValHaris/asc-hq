@@ -1,6 +1,14 @@
-//     $Id: edselfnt.cpp,v 1.2 1999-11-16 03:41:40 tmwilson Exp $
+//     $Id: edselfnt.cpp,v 1.3 1999-12-27 12:59:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:40  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -128,6 +136,8 @@ template<class T> void SelectAnything<T> :: init ( vect<T> &v )
 
 template<class T> void SelectAnything<T> :: init ( vect<T> &v, int x1, int y1, int x2, int y2 ) 
 {
+   itemsavail.reset();
+
    for ( int i = 0; i <= v.getlength(); i++ )
       if ( isavailable ( v[i] ) )
          itemsavail[ itemsavail.getlength()+1 ] = v[i];
@@ -483,6 +493,13 @@ int SelectVehicleType :: isavailable ( pvehicletype item )
    if ( farbwahl == 8 ) {
       displaymessage("no neutral units allowed on map !\nswitching to red player!", 1 );
       farbwahl = 0;
+   }
+   if ( unitSet.set.getlength() >= 0 ) {
+      for ( int i = 0; i <= unitSet.set.getlength(); i++ )
+         for ( int j = 0; j <= unitSet.set[i].ids.getlength(); j++ )
+            if ( item->id >= unitSet.set[i].ids[j].from && 
+                 item->id <= unitSet.set[i].ids[j].to )
+                 return unitSet.set[i].active;
    }
    return 1;  
 }
@@ -1141,6 +1158,12 @@ void setnewvehicleselection ( pvehicletype v )
 //   showallchoices();
 }
 
+void resetvehicleselector ( void )
+{
+   selectitemcontainer.getvehicleselector()->init( getvehicletypevector() );
+}
+
+
 void setnewterrainselection ( pterraintype t )
 {
    selectitemcontainer.getterrainselector()->setnewselection( t );
@@ -1322,4 +1345,3 @@ void selbuildingproduction( pbuilding bld )
 
 
 
-

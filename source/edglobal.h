@@ -1,6 +1,14 @@
-//     $Id: edglobal.h,v 1.2 1999-11-16 03:41:35 tmwilson Exp $
+//     $Id: edglobal.h,v 1.3 1999-12-27 12:59:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:35  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -37,7 +45,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-#define execactionscount 64
+#define execactionscount 65
 
 extern const char*  execactionnames[execactionscount];
 
@@ -108,8 +116,49 @@ enum tuseractions {
      act_movebuilding,
      act_setactweatherglobal,
      act_setmapparameters, 
-     act_terraininfo };
+     act_terraininfo,
+     act_setunitfilter };
 
 extern void         execaction(int code);
 
-
+
+struct IdRange {
+        int from;
+        int to;
+       };
+
+class SingeUnitSet {
+      public:
+         int active;
+         char* name;
+         dynamic_array<IdRange> ids;
+
+         SingeUnitSet ( void ) 
+         { 
+            name = NULL;
+            active = 1;
+         }
+
+         void init ( char* _name )
+         {
+            name = (char*)asc_malloc ( strlen ( _name) + 2); 
+            strcpy ( name, _name );
+         };
+
+         ~SingeUnitSet () 
+         {
+            if ( name ) {
+               asc_free ( name );
+               name = NULL;
+            }
+         };
+     };
+
+class UnitSet {
+       public:
+        dynamic_array<SingeUnitSet> set;
+      } ;
+
+extern UnitSet unitSet;
+
+

@@ -1,6 +1,10 @@
-//     $Id: basestrm.h,v 1.3 1999-11-16 17:03:55 mbickel Exp $
+//     $Id: basestrm.h,v 1.4 1999-12-27 12:59:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/16 17:03:55  mbickel
+//     Made ASC compilable for DOS again :-)
+//     Merged all the bug fixes in that I did last week
+//
 //     Revision 1.2  1999/11/16 03:41:07  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -190,6 +194,7 @@ class dynamic_array {
               virtual ~dynamic_array();
               T& operator[]( int a );
               int getlength( void );
+              void reset ( void );
 };
 
 template<class T>

@@ -1,6 +1,9 @@
-//     $Id: edmisc.cpp,v 1.4 1999-12-07 22:05:09 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.5 1999-12-27 12:59:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/07 22:05:09  mbickel
+//      Added password verification for loading maps
+//
 //     Revision 1.3  1999/11/22 18:27:17  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -671,6 +674,7 @@ void         pdsetup(void)
     pd.addbutton ( "~B~I ResourceMode",            act_bi_resource ); 
     pd.addbutton ( "~A~sc ResourceMode",           act_asc_resource ); 
     pd.addbutton ( "edit map ~P~arameters",        act_setmapparameters );
+    pd.addbutton ( "setup unit ~F~iltersõctrl+h",  act_setunitfilter );
 
    pd.addfield ("~H~elp"); 
     pd.addbutton ( "~U~nit Informationctrl+U",    act_unitinfo );
@@ -3381,4 +3385,86 @@ void movebuilding ( void )
    }
 }
 
+
+
+class SelectUnitSet : public tdialogbox {
+               int* active;
+               int action;
+           public :
+               void init(void);
+               virtual void run(void);
+               virtual void buttonpressed(byte id);
+           };
+
+
+void         SelectUnitSet::init(void)
+{ 
+
+   tdialogbox::init();
+   action = 0; 
+   title = "Select Unit Sets";
+   x1 = 90;
+   xsize = 445;
+   y1 = 10;
+   ysize = 440;
+   int w = (xsize - 60) / 2; 
+   action = 0; 
+
+   windowstyle = windowstyle ^ dlg_in3d; 
+
+
+
+   active = new int [unitSet.set.getlength()+1];
+
+   for ( int i = 0; i <= unitSet.set.getlength(); i++ ) {
+      active[i] = unitSet.set[i].active;
+      addbutton ( unitSet.set[i].name, 30, 60 + i * 25, xsize - 50, 80 + i * 25, 3, 0, 10 + i, 1 );
+      addeingabe ( 10 + i, &active[i], black, dblue );
+   }
+
+   addbutton("~O~k",20,ysize - 40,20 + w,ysize - 10,0,1,7,true); 
+   addkey(7,ct_enter ); 
+
+   addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,8,true);
+   addkey(8, ct_esc ); 
+
+   buildgraphics(); 
+
+   mousevisible(true); 
+} 
+
+
+void         SelectUnitSet::run(void)
+{ 
+   do { 
+      tdialogbox::run();
+   }  while ( action == 0 ); 
+} 
+
+
+void         SelectUnitSet::buttonpressed(byte         id)
+{
+   switch(id) {
+       case 7: { 
+                  action = 1; 
+                  for ( int i = 0; i <= unitSet.set.getlength(); i++ ) 
+                      unitSet.set[i].active = active[i];
+                  resetvehicleselector();
+          } 
+          break;
+       case 8: action = 2; 
+          break;
+  } 
+} 
+
+void selectunitsetfilter ( void )
+{
+   if ( unitSet.set.getlength() >= 0 ) {
+      SelectUnitSet sus;
+      sus.init();
+      sus.run();
+      sus.done();
+   } else
+      displaymessage ( " no unitsets defined !", 1 );
+}
 

@@ -873,6 +873,12 @@ TrueColorImage* convertimage2tc ( void* buf, dacpalette256 pal )
    return zoomimage ( buf, x,y , pal, 0, 0 );
 }
 
+int
+imagesize(int x1, int y1, int x2, int y2)
+{
+	return ((x2 - x1 + 1) * (y2 - y1 + 1) + 4);
+}
+
 
 char* convertimage ( TrueColorImage* img, dacpalette256 pal )
 {

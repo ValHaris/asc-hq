@@ -1,6 +1,11 @@
-//     $Id: sg.cpp,v 1.6 1999-11-25 22:00:08 mbickel Exp $
+//     $Id: sg.cpp,v 1.7 1999-12-27 13:00:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/11/25 22:00:08  mbickel
+//      Added weapon information window
+//      Added support for primary offscreen frame buffers to graphics engine
+//      Restored file time handling for DOS version
+//
 //     Revision 1.5  1999/11/22 18:27:49  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -602,9 +607,11 @@ void new_new_handler ( void )
      return found;
   }
 
+  void verifyallblocks( void );
 
   void* memchkAlloc ( int tp, size_t amt )
   {
+     // verifyallblocks();
      int error;
      void* tmp = malloc ( amt + 53 * 4 );
      int* tmpi = (int*) tmp;
@@ -1311,9 +1318,11 @@ void         tsgpulldown :: init ( void )
    addbutton ( "toggle unit shadingõ2", ua_toggleunitshading ); 
    addbutton ( "seperator", -1); 
    addbutton ( "~O~ptions", ua_gamepreferences ); 
+/*
    #ifdef HEXAGON
     addbutton ( "~B~I options",ua_bi3preferences); 
    #endif
+*/
    addbutton ( "seperator", -1); 
    addbutton ( "~M~ain MenuõF2", ua_mainmenu );
    addbutton ( "E~x~itõctrl-x", ua_exitgame );
@@ -2012,7 +2021,7 @@ void execuseraction ( tuseractions action )
                        break;
                        
         case ua_vehicleinfo:          activefontsettings.font = schriften.smallarial; 
-                                      vehicle(); 
+                                      vehicle_information(); 
                        break;
                        
         case ua_researchinfo:         researchinfo ();

@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.5 1999-12-07 22:02:08 mbickel Exp $
+//     $Id: typen.cpp,v 1.6 1999-12-27 13:00:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/07 22:02:08  mbickel
+//      Added vehicle function "no air refuelling"
+//
 //     Revision 1.4  1999/11/23 21:07:38  mbickel
 //      Many small bugfixes
 //
@@ -307,6 +310,8 @@ void tfield :: setparams ( void )
             movemalus[i] += o->movemalus_plus[i];
             if ( o->movemalus_abs[i] && o->movemalus_abs[i] != -1 )
                movemalus[i] = o->movemalus_abs[i];
+            if ( movemalus[i] < minmalq )
+               movemalus[i] = minmalq;
          }
       } /* endfor */
 
@@ -832,8 +837,19 @@ int tvehicletype::maxsize ( void )
 }
 
 
+tvehicletype :: tvehicletype ( void )
+{
+   memset ( &name, 0, (int) ((char*) &dummy[2] - (char*)&name)  );
+   weapons = new UnitWeapon;
+   terrainaccess = new tterrainaccess;
+}
 
-
+UnitWeapon :: UnitWeapon ( void )
+{
+   count = 0;
+   memset ( weapon, 0, sizeof ( weapon ));
+   memset ( reserved, 0, sizeof ( reserved ));
+}
 
 
 void tvehicle :: repairunit(pvehicle vehicle, int maxrepair )

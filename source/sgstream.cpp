@@ -1,6 +1,15 @@
-//     $Id: sgstream.cpp,v 1.3 1999-11-22 18:27:54 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.4 1999-12-27 13:00:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/22 18:27:54  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:42:28  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -1752,6 +1761,14 @@ pobjecttype   loadobjecttype(char *       name)
 {
    tnfilestream stream ( name, 1 );
    return loadobjecttype ( &stream );
+/*
+   pobjecttype fztn = loadobjecttype ( &stream );
+   for ( int i = 0 ; i < cmovemalitypenum; i++) {
+       if ( fztn->movemalus_abs[i] > 0  && fztn->movemalus_abs[i] < 10 )
+          fprintf(stderr, "The object %s has invalid movemali\n", name );
+   }
+   return fztn;
+*/
 }
 
 

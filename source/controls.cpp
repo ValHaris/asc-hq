@@ -1,6 +1,11 @@
-//     $Id: controls.cpp,v 1.9 1999-12-14 20:23:49 mbickel Exp $
+//     $Id: controls.cpp,v 1.10 1999-12-27 12:59:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  1999/12/14 20:23:49  mbickel
+//      getfiletime now works on containerfiles too
+//      improved BI3 map import tables
+//      various bugfixes
+//
 //     Revision 1.8  1999/12/07 21:57:52  mbickel
 //      Fixed bugs in Weapon information window
 //      Added vehicle function "no air refuelling"
@@ -544,20 +549,25 @@ void         trefuelvehicle::testfield(void)
    pfield        fld;
 
    if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) { 
-      if (beeline(startx,starty,xp,yp) <= 15) 
+      if (beeline(startx,starty,xp,yp) <= 15) {
+         int targheight = 0;
          for (i = 0; i < actvehicle->typ->weapons->count ; i++) 
-            if ((actvehicle->typ->weapons->weapon[i].sourceheight & actvehicle->height) > 0)
-                 /* if ((actvehicle^.typ^.weapons->weapon[i].typ and cwrepairb > 0) and (mode = 1))   { ##  */ 
-                 /*   or ((actvehicle^.typ^.weapons->weapon[i].typ and (cwammunitionb or cwrefuellingb)  > 0)
-               and (mode in [2,3]))  */ 
-                 /*  ##  */ 
-               if ((((actvehicle->typ->weapons->weapon[i].typ & cwserviceb) > 0) && (mode == 1)) || (((actvehicle->typ->weapons->weapon[i].typ & (cwammunitionb | cwserviceb)) > 0) && ((mode==2)||(mode==3)))) {
+            if ( actvehicle->typ->weapons->weapon[i].sourceheight & actvehicle->height )
+               if ( actvehicle->typ->weapons->weapon[i].typ & cwserviceb)
+                  targheight = actvehicle->typ->weapons->weapon[i].targ;
+
+
+         for (i = 0; i < actvehicle->typ->weapons->count ; i++) 
+            if ( actvehicle->typ->weapons->weapon[i].sourceheight & actvehicle->height ) 
+
+               if (((actvehicle->typ->weapons->weapon[i].typ & cwserviceb)                    &&  mode == 1 ) || 
+                   ((actvehicle->typ->weapons->weapon[i].typ & (cwammunitionb | cwserviceb))  && ( mode==2 || mode==3 ))) {
                   fld = getfield(xp,yp); 
-                  if (fld->vehicle != NULL) 
+                  if ( fld->vehicle ) 
                      if ( !(fld->vehicle->functions & cfnoairrefuel) || fld->vehicle->height <= chfahrend )
                         if (getdiplomaticstatus(fld->vehicle->color) == capeace) 
-                           if ((fld->vehicle->height & actvehicle->typ->weapons->weapon[i].targ) > 0) {
-                              if ((actvehicle->typ->weapons->weapon[i].typ & cwammunitionb) > 0)
+                           if ( fld->vehicle->height & targheight ) {
+                              if ( actvehicle->typ->weapons->weapon[i].typ & cwammunitionb )
                                  if (fld->vehicle->typ->weapons->count > 0) 
                                     for (j = 0; j < fld->vehicle->typ->weapons->count ; j++) 
                                        if (((fld->vehicle->typ->weapons->weapon[j].typ & (cwweapon | cwmineb)) == (actvehicle->typ->weapons->weapon[i].typ & (cwweapon | cwmineb))) && ((actvehicle->typ->weapons->weapon[i].typ & (cwweapon | cwmineb)) > 0))
@@ -566,15 +576,15 @@ void         trefuelvehicle::testfield(void)
                                                 fld->a.temp = 2; 
                                                 numberoffields++;
                                              } 
-                              if ((actvehicle->typ->weapons->weapon[i].typ & cwserviceb) > 0) 
+                              if ( actvehicle->typ->weapons->weapon[i].typ & cwserviceb )
                                  if ( actvehicle->height <= chfahrend || (actvehicle->height == fld->vehicle->height)) {
                                     if ( ((actvehicle->typ->tank > 0) && (fld->vehicle->typ->tank > 0)
                                        && ((fld->vehicle->typ->tank > fld->vehicle->fuel) || (mode == 3))
-                                       &&  ((actvehicle->functions & cffuelref) > 0))
+                                       &&  (actvehicle->functions & cffuelref) )
                                        ||
                                        ((actvehicle->typ->material > 0) && (fld->vehicle->typ->material > 0)
                                        && ((fld->vehicle->typ->material > fld->vehicle->material) || (mode == 3))
-                                       && ((actvehicle->functions & cfmaterialref) > 0)) )
+                                       && (actvehicle->functions & cfmaterialref ) ) )
                                        { 
                                           fld->a.temp = 2; 
                                           numberoffields++;
@@ -591,7 +601,7 @@ void         trefuelvehicle::testfield(void)
                                  } 
                            } 
                } 
-
+      }
    } 
 } 
 
@@ -621,8 +631,8 @@ void         trefuelvehicle::initrefuelling( word xp1, word yp1, char md )   /* 
       if ((md == 2) || (md == 3)) { 
          f = 0; 
          for (a = 0; a < actvehicle->typ->weapons->count ; a++) { 
-            if ((actvehicle->typ->weapons->weapon[a].typ & cwserviceb) > 0) {
-               if ((actvehicle->typ->tank > 0) && ((actvehicle->functions & cffuelref) > 0)) {
+            if ( actvehicle->typ->weapons->weapon[a].typ & cwserviceb )  {
+               if ((actvehicle->typ->tank > 0) && (actvehicle->functions & cffuelref) ) {
                   if (md == 2) { 
                      if (actvehicle->fuel > 0) 
                         f++;
@@ -630,7 +640,7 @@ void         trefuelvehicle::initrefuelling( word xp1, word yp1, char md )   /* 
                   else 
                      f++;
                } 
-               if ((actvehicle->typ->material > 0) && ((actvehicle->functions & cfmaterialref) > 0)) {
+               if ((actvehicle->typ->material > 0) && (actvehicle->functions & cfmaterialref) ) {
                   if (md == 2) { 
                      if (actvehicle->material > 0) 
                         f++; 

@@ -1,6 +1,15 @@
-//     $Id: edmisc.h,v 1.3 1999-11-22 18:27:20 mbickel Exp $
+//     $Id: edmisc.h,v 1.4 1999-12-27 12:59:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/22 18:27:20  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:41:39  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -235,6 +244,7 @@ extern void putactthing ( void );
 
 extern int rightmousebox(void);
 extern int leftmousebox(void);
+extern void selectunitsetfilter ( void );
 extern void movebuilding();
 
 

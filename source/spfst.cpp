@@ -1,6 +1,11 @@
-//     $Id: spfst.cpp,v 1.8 1999-12-14 20:24:00 mbickel Exp $
+//     $Id: spfst.cpp,v 1.9 1999-12-27 13:00:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  1999/12/14 20:24:00  mbickel
+//      getfiletime now works on containerfiles too
+//      improved BI3 map import tables
+//      various bugfixes
+//
 //     Revision 1.7  1999/12/07 22:13:27  mbickel
 //      Fixed various bugs
 //      Extended BI3 map import tables
@@ -2006,20 +2011,21 @@ pattackweap  attackpossible( const pvehicle     angreifer,
          for (i = 0; i <= angreifer->typ->weapons->count - 1; i++) 
             if (angreifer->typ->weapons->weapon[i].typ & cwshootableb ) 
                if (angreifer->typ->weapons->weapon[i].typ & cwweapon ) 
-                  if ( efield->vehicle->height & angreifer->typ->weapons->weapon[i].targ )
-                     if (fieldvisiblenow(efield, angreifer->color/8)) { 
-                        d = beeline(angreifer->xpos,angreifer->ypos,x,y); 
-                        if (d <= angreifer->typ->weapons->weapon[i].maxdistance) 
-                           if (d >= angreifer->typ->weapons->weapon[i].mindistance) { 
-                              if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                                 if (angreifer->ammo[i] ) { 
-                                    atw->strength[atw->count] = angreifer->weapstrength[i]; 
-                                    atw->num[atw->count ] = i; 
-                                    atw->typ[atw->count ] = (angreifer->typ->weapons->weapon[i].typ & cwweapon );
-                                    atw->count++;
-                                 } 
-                           } 
-                     } 
+                  if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << efield->vehicle->typ->movemalustyp )))
+                     if ( efield->vehicle->height & angreifer->typ->weapons->weapon[i].targ )
+                        if (fieldvisiblenow(efield, angreifer->color/8)) { 
+                           d = beeline(angreifer->xpos,angreifer->ypos,x,y); 
+                           if (d <= angreifer->typ->weapons->weapon[i].maxdistance) 
+                              if (d >= angreifer->typ->weapons->weapon[i].mindistance) { 
+                                 if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
+                                    if (angreifer->ammo[i] ) { 
+                                       atw->strength[atw->count] = angreifer->weapstrength[i]; 
+                                       atw->num[atw->count ] = i; 
+                                       atw->typ[atw->count ] = (angreifer->typ->weapons->weapon[i].typ & cwweapon );
+                                       atw->count++;
+                                    } 
+                              } 
+                        } 
    } 
    else 
       if (efield->building != NULL) { 
@@ -2100,8 +2106,9 @@ boolean      attackpossible2u( const pvehicle     angreifer,
             if (angreifer->typ->weapons->weapon[i].typ & cwweapon ) 
                if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) 
                   if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                     if (angreifer->ammo[i] > 0) 
-                        return true;
+                     if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
+                        if (angreifer->ammo[i] > 0) 
+                           return true;
                   
             
    return false; 
@@ -2129,8 +2136,9 @@ boolean      attackpossible28( const pvehicle     angreifer,
                   if (minmalq <= angreifer->typ->weapons->weapon[i].maxdistance) 
                      if (minmalq >= angreifer->typ->weapons->weapon[i].mindistance) 
                         if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                           if (angreifer->ammo[i] > 0) 
-                              return true;
+                           if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
+                              if (angreifer->ammo[i] > 0) 
+                                 return true;
                   
             
    return false; 
@@ -2160,8 +2168,9 @@ boolean      attackpossible2n( const pvehicle     angreifer,
                         if (dist <= angreifer->typ->weapons->weapon[i].maxdistance) 
                            if (dist >= angreifer->typ->weapons->weapon[i].mindistance) 
                               if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                                 if (angreifer->ammo[i] > 0) 
-                                    return true;
+                                 if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
+                                    if (angreifer->ammo[i] > 0) 
+                                       return true;
                      
             
    return false; 
@@ -2195,12 +2204,13 @@ pattackweap   attackpossible3u( const pvehicle     angreifer,
             if (angreifer->typ->weapons->weapon[i].typ & cwweapon ) 
                if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) 
                   if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                     if (angreifer->ammo[i] > 0) {
-                        atw->strength[atw->count ] = angreifer->weapstrength[i];
-                        atw->num[atw->count ] = i;
-                        atw->typ[atw->count ] = (angreifer->typ->weapons->weapon[i].typ & cwweapon );
-                        atw->count++;
-                     }
+                     if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
+                        if (angreifer->ammo[i] > 0) {
+                           atw->strength[atw->count ] = angreifer->weapstrength[i];
+                           atw->num[atw->count ] = i;
+                           atw->typ[atw->count ] = (angreifer->typ->weapons->weapon[i].typ & cwweapon );
+                           atw->count++;
+                        }
                
    return atw; 
 } 
@@ -2231,12 +2241,13 @@ pattackweap   attackpossible38( const pvehicle     angreifer,
                   if (minmalq <= angreifer->typ->weapons->weapon[i].maxdistance) 
                      if (minmalq >= angreifer->typ->weapons->weapon[i].mindistance) { 
                         if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                           if (angreifer->ammo[i] > 0) {
-                              atw->strength[atw->count ] = angreifer->weapstrength[i];
-                              atw->num[atw->count ] = i;
-                              atw->typ[atw->count ] = (angreifer->typ->weapons->weapon[i].typ & cwweapon );
-                              atw->count++;
-                           }
+                           if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
+                              if (angreifer->ammo[i] > 0) {
+                                 atw->strength[atw->count ] = angreifer->weapstrength[i];
+                                 atw->num[atw->count ] = i;
+                                 atw->typ[atw->count ] = (angreifer->typ->weapons->weapon[i].typ & cwweapon );
+                                 atw->count++;
+                              }
                      } 
                } 
    return atw; 
@@ -2269,12 +2280,13 @@ pattackweap   attackpossible3n( const pvehicle     angreifer,
                   if (dist <= angreifer->typ->weapons->weapon[i].maxdistance) 
                      if (dist >= angreifer->typ->weapons->weapon[i].mindistance) { 
                         if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                           if (angreifer->ammo[i] > 0) {
-                              atw->strength[atw->count ] = angreifer->weapstrength[i];
-                              atw->num[atw->count ] = i;
-                              atw->typ[atw->count ] = (angreifer->typ->weapons->weapon[i].typ & cwweapon );
-                              atw->count++;
-                           }
+                           if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
+                              if (angreifer->ammo[i] > 0) {
+                                 atw->strength[atw->count ] = angreifer->weapstrength[i];
+                                 atw->num[atw->count ] = i;
+                                 atw->typ[atw->count ] = (angreifer->typ->weapons->weapon[i].typ & cwweapon );
+                                 atw->count++;
+                              }
                      } 
                } 
    return atw; 

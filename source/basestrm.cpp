@@ -1,6 +1,11 @@
-//     $Id: basestrm.cpp,v 1.7 1999-12-14 20:23:45 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.8 1999-12-27 12:59:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  1999/12/14 20:23:45  mbickel
+//      getfiletime now works on containerfiles too
+//      improved BI3 map import tables
+//      various bugfixes
+//
 //     Revision 1.6  1999/11/25 21:59:57  mbickel
 //      Added weapon information window
 //      Added support for primary offscreen frame buffers to graphics engine
@@ -1307,20 +1312,12 @@ tn_c_lzw_filestream :: tn_c_lzw_filestream ( const char* name, char mode ) : tan
 
    int found = 0;
    {
-      DIR *dirp; 
-      struct dirent *direntp; 
-  
-      dirp = opendir( name ); 
-      if( dirp != NULL ) { 
-        for(;;) { 
-          direntp = readdir( dirp ); 
-          if ( direntp == NULL ) 
-             break; 
-          found = 1;
-        } 
-        closedir( dirp ); 
-      } 
-    }
+      FILE* fp = fopen ( name, "r" );
+      if ( fp ) {
+         found = 1;
+         fclose ( fp );
+      }
+   }
 
    if ( mode == 2   ||  found ) {
       #ifdef printexternfilenams

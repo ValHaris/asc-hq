@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.6 1999-12-07 22:02:10 mbickel Exp $
+//     $Id: typen.h,v 1.7 1999-12-27 13:00:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/12/07 22:02:10  mbickel
+//      Added vehicle function "no air refuelling"
+//
 //     Revision 1.5  1999/11/25 22:00:15  mbickel
 //      Added weapon information window
 //      Added support for primary offscreen frame buffers to graphics engine
@@ -247,13 +250,16 @@ typedef tterrainaccess *pterrainaccess;
                int          maxstrength;    // Wenn der Waffentyp == Mine ist, dann ist hier die Minenst„rke als Produkt mit der Bassi 64 abgelegt.
                int          minstrength;
                int          efficiency[13]; // floating and driving are the same ; 0-5 is lower ; 6 is same height ; 7-12 is higher
-               int          reserved[10];
+               int          targets_not_hittable; // BM   <=  cmovemalitypes
+               int          reserved[9];
             };
 
-  struct UnitWeapon {
+  class  UnitWeapon {
+          public:
             int count;
             SingleWeapon weapon[16];
             int reserved[10];
+            UnitWeapon ( void );
          };
 
   class tvehicletype {   /*  vehicleart: z.B. Schwere Fuátruppe  */
@@ -315,6 +321,7 @@ typedef tterrainaccess *pterrainaccess;
                     int maxweight ( void );     // max. weight including fuel and material
                     int maxsize   ( void );     // without fuel and material
                     int vehicleloadable ( pvehicletype fzt );
+                    tvehicletype ( void );
                  }; 
 
   typedef class tmap*  pmap;

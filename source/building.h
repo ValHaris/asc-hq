@@ -1,6 +1,11 @@
-//     $Id: building.h,v 1.3 1999-11-25 22:00:00 mbickel Exp $
+//     $Id: building.h,v 1.4 1999-12-27 12:59:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/25 22:00:00  mbickel
+//      Added weapon information window
+//      Added support for primary offscreen frame buffers to graphics engine
+//      Restored file time handling for DOS version
+//
 //     Revision 1.2  1999/11/16 03:41:12  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -476,6 +481,13 @@ class    ccontainer : public virtual ccontainercontrols {
                           cmoveup_icon_c ( void );
                 };
 
+                class cunitinformation_icon : public generalicon_c { 
+                        public:
+                          virtual int   available    ( void ) ;
+                          virtual void  exec         ( void ) ;
+                          cunitinformation_icon ( void );
+                };
+
                 class cmovedown_icon_c : public generalicon_c, public cmove_unit_in_container { 
                         public:
                           virtual int   available    ( void ) ;
@@ -696,6 +708,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
                             container_icon_c    contain;
                             cmovedown_icon_c    movedown;
                             cmoveup_icon_c      moveup;
+                            cunitinformation_icon unitinformation;
                         } icons;
                 } hosticons_cb;
 
@@ -973,6 +986,7 @@ class    ccontainer_t : public ctransportcontrols , public ccontainer {
                             cmovedown_icon_c    movedown;
                             cmoveup_icon_c      moveup;
                             productioncancelicon_cb cancel;
+                            cunitinformation_icon unitinformation;
                          } icons;
                 } hosticons_ct;
 

@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.7 1999-12-07 22:13:15 mbickel Exp $
+//     $Id: dialog.cpp,v 1.8 1999-12-27 12:59:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  1999/12/07 22:13:15  mbickel
+//      Fixed various bugs
+//      Extended BI3 map import tables
+//
 //     Revision 1.6  1999/11/23 21:07:26  mbickel
 //      Many small bugfixes
 //
@@ -502,7 +506,7 @@ class  tvehicleinfo : public tdialogbox , public tviewtextwithscrolling {
                    char         action;
                    integer      i,j;
 
-                   void         init ( void );
+                   void         init ( pvehicletype type );
                    virtual void run  ( void );
                    void         lines( integer xp1, integer yp1, integer xp2, integer yp2, char* st);
                    void         zeigevehicle ( void );
@@ -690,8 +694,9 @@ void         tweaponinfo::run(void)
 
 
 
-void         tvehicleinfo::init(void)
+void         tvehicleinfo::init( pvehicletype type )
 { 
+   aktvehicle = type;
    tdialogbox::init();
    category = 0;
    x1 = 20; 
@@ -1568,13 +1573,19 @@ void         tvehicleinfo::run(void)
    pvehicle     eht; 
 
    i = 0; 
-   eht = getactfield()->vehicle;
-   if ( !fieldvisiblenow(getactfield()) )
-      eht = NULL; 
-   if ( eht ) { 
-      while (eht->typ != getvehicletype_forpos ( i )) 
-         i++;
-   } 
+   if ( !aktvehicle ) {
+      eht = getactfield()->vehicle;
+      if ( !fieldvisiblenow(getactfield()) )
+         eht = NULL; 
+      if ( eht ) { 
+         while (eht->typ != getvehicletype_forpos ( i )) 
+            i++;
+      } 
+   } else {
+      while ( aktvehicle != getvehicletype_forpos ( i )) 
+        i++;
+   }
+
    j = i;
    drk = 0; 
 
@@ -1624,10 +1635,10 @@ void         tvehicleinfo::run(void)
    }  while ( (taste != ct_esc) && (action < 20));
 } 
 
-void         vehicle(void)
+void         vehicle_information( pvehicletype type )
 { 
   tvehicleinfo eif; 
-   eif.init(); 
+   eif.init( type ); 
    eif.run(); 
    eif.done(); 
 } 
@@ -5450,8 +5461,8 @@ void         tverlademunition::run(void)
       */
       mx = vehicle2->typ->weapons->count; 
       for (i = 0; i < mx; i++) { 
-         if (vehicle2->typ->weapons->weapon[i].typ & cwserviceb  /* || ((fast & 2) == 0)  */ ) {
-            if ((vehicle->typ->tank > 0) && (vehicle2->typ->tank > 0)) { 
+         if ( vehicle2->typ->weapons->weapon[i].typ & cwserviceb  /* || ((fast & 2) == 0)  */ ) {
+            if ((vehicle->typ->tank > 0) && (vehicle2->typ->tank > 0) && ( vehicle2->functions & cffuelref)) { 
                   wp.weap[wp.count].typ = csprit; 
                   wp.weap[wp.count].sourcepos = csprit; 
                   wp.weap[wp.count].destpos = csprit; 
@@ -5463,6 +5474,7 @@ void         tverlademunition::run(void)
                
                wp.count++;
             } 
+            /*
             if ((vehicle->typ->energy > 0) && (vehicle2->typ->energy > 0)) { 
                   wp.weap[wp.count].typ = cenergy; 
                   wp.weap[wp.count].sourcepos = cenergy; 
@@ -5475,7 +5487,8 @@ void         tverlademunition::run(void)
                
                wp.count++;
             } 
-            if ((vehicle2->typ->material > 0) && (vehicle->typ->material > 0)) { 
+            */
+            if ((vehicle2->typ->material > 0) && (vehicle->typ->material > 0) && ( vehicle2->functions & cfmaterialref )) { 
                   wp.weap[wp.count].typ = cmaterial; 
                   wp.weap[wp.count].sourcepos = cmaterial; 
                   wp.weap[wp.count].destpos = cmaterial; 
@@ -5860,6 +5873,7 @@ void viewterraininfo ( void )
 {
    if ( fieldvisiblenow  ( getactfield() )) {
       displaymessage(" field->direction: %d \n field->id: %d ", 1, getactfield()->direction,getactfield()->typ->terraintype->id);
+      displaymessage(" defense bonus: %d/8 \n attack bonus: %d/8 ", 1, getactfield()->getdefensebonus(), getactfield()->getattackbonus());
       showbdtbits();
       char c[1000];
       c[0] = 0;

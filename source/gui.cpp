@@ -1,6 +1,10 @@
-//     $Id: gui.cpp,v 1.5 1999-12-07 22:13:19 mbickel Exp $
+//     $Id: gui.cpp,v 1.6 1999-12-27 13:00:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/07 22:13:19  mbickel
+//      Fixed various bugs
+//      Extended BI3 map import tables
+//
 //     Revision 1.4  1999/11/22 18:27:29  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -1242,7 +1246,7 @@ int   tnsguiiconinformation::available    ( void )
 void  tnsguiiconinformation::exec         ( void ) 
 {
  //  repositionmouse ();
-   vehicle(); 
+   vehicle_information(); 
 }
 
 void  tnsguiiconinformation::display      ( void ) 

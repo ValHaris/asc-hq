@@ -1,6 +1,14 @@
-//     $Id: edglobal.cpp,v 1.2 1999-11-16 03:41:33 tmwilson Exp $
+//     $Id: edglobal.cpp,v 1.3 1999-12-27 12:59:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:33  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -33,6 +41,7 @@
 #include "timer.h"
    
 mc_check mc;
+UnitSet unitSet;
 
 
    const char* execactionnames[execactionscount] = {"End MapEdit","Help","Goto EditMode","Select terrain","Select unit",
@@ -449,7 +458,7 @@ void execaction(int code)
        break;            
     case act_repaintdisplay :   repaintdisplay();
        break;
-    case act_unitinfo :  vehicle();
+    case act_unitinfo :  vehicle_information();
        break;
     case act_viewmap :  
              {
@@ -751,12 +760,14 @@ void execaction(int code)
       break;
    case act_terraininfo: viewterraininfo();
       break;
+   case act_setunitfilter: selectunitsetfilter();
+      break;
   #ifdef FREEMAPZOOM    
    case act_setzoom : choosezoomlevel();
       break;
   #endif
 
+
     }
 }
 
-

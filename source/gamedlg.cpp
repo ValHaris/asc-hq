@@ -1,6 +1,11 @@
-//     $Id: gamedlg.cpp,v 1.6 1999-12-14 20:23:52 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.7 1999-12-27 13:00:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/12/14 20:23:52  mbickel
+//      getfiletime now works on containerfiles too
+//      improved BI3 map import tables
+//      various bugfixes
+//
 //     Revision 1.5  1999/11/22 18:27:22  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -3912,7 +3917,10 @@ void tgamepreferences :: init ( void )
    actoptions = gameoptions;
 
    addbutton ( "~O~K", 10, ysize - 35, xsize / 2 - 5, ysize - 10, 0, 1, 1, true );
+   addkey ( 1, ct_enter );
+
    addbutton ( "~C~ancel", xsize / 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1, 2, true );
+   addkey ( 2, ct_esc );
 
    addbutton ( "", xsize -35, starty + 20, xsize - 20, starty + 35, 3, 0, 3, true );
    addeingabe ( 3, &actoptions.container.autoproduceammunition, 0, dblue );
@@ -3965,6 +3973,10 @@ void tgamepreferences :: init ( void )
    addeingabe ( 12, actgamepath, 0, 100 );
 */
 
+   addbutton ( "", r8.x1, r8.y1 + 120, r8.x2, r8.y2 + 120, 2, 1, 20, true );
+   addeingabe ( 20, &actoptions.movespeed , 0, 10000 );
+
+
    addbutton ( "", xsize - 35 , r8.y1 + 150, r8.x2, r8.y2 + 150, 3, 0, 13, true );
    addeingabe ( 13, &actoptions.endturnquestion, black, dblue );
 
@@ -4007,6 +4019,7 @@ void tgamepreferences :: init ( void )
    showtext2 ( "mousegui menu opens after movement", x1 + 25, y1 + r8.y1 + 60);
 
 //   showtext2 ( "game path", x1 + 25, y1 + r8.y1 + 120);
+   showtext2 ( "movement speed in 1/100 sec", x1 + 25, y1 + r8.y1 + 120);
 
    showtext2 ( "prompt for end of turn", x1 + 25, y1 + r8.y1 + 150 );
    status = 0;
@@ -5694,6 +5707,7 @@ void tmultiplayersettings :: init ( void )
 
    addbutton ( "use ~c~hecksums", 20, ysize - 80, 160, ysize - 65, 3, 0 , 5, true );
    addeingabe ( 5, &checksumsused, black, dblue );
+   disablebutton ( 5 );
 
    addbutton ( "enable ~r~eplays", 170, ysize - 80, xsize-5, ysize - 65, 3, 0 , 8, true );
    addeingabe ( 8, &replays, black, dblue );
