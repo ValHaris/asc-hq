@@ -1,3 +1,4 @@
+pkgdatadir 		= $(datadir)/games/@PACKAGE@
 
 pkgdata_DATA = asc_dlg.zip
 

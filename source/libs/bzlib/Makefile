@@ -121,3 +121,4 @@ tarfile:
 	   $(DISTNAME)/Makefile-libbz2_so
 
 install:
+uninstall:
