@@ -5,9 +5,12 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.60 2001-08-19 12:31:26 mbickel Exp $
+//     $Id: loaders.cpp,v 1.61 2001-08-19 12:50:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2001/08/19 12:31:26  mbickel
+//      Fixed several bugs in event and campaign handling
+//
 //     Revision 1.59  2001/08/15 13:47:51  mbickel
 //      Fixed crash when loading old vehicletypes
 //
@@ -568,7 +571,8 @@ void   tspfldloaders::writeevent ( pevent event )
        } 
        if ((event->trigger[j] == ceventt_event) ||
            (event->trigger[j] == ceventt_technologyresearched) ||
-           (event->trigger[j] == ceventt_allenemyunitsdestroyed )) {
+           (event->trigger[j] == ceventt_allenemyunitsdestroyed ) ||
+           (event->trigger[j] == ceventt_allenemybuildingsdestroyed )) {
           stream->writedata2( event->trigger_data[j]->id );
        } 
        if (event->trigger[j] == ceventt_turn ) {
@@ -671,7 +675,8 @@ void    tspfldloaders::readevent ( pevent& event1 )
            }
 
            if ( version >=2 )
-              if (event1->trigger[m] == ceventt_allenemyunitsdestroyed )
+              if (event1->trigger[m] == ceventt_allenemyunitsdestroyed ||
+                  event1->trigger[m] == ceventt_allenemybuildingsdestroyed )
                  stream->readdata2 ( event1->trigger_data[m]->id );
 
            if (event1->trigger[m] == ceventt_turn) {

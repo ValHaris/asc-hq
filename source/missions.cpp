@@ -2,9 +2,12 @@
     \brief The event handling of ASC
 */
 
-//     $Id: missions.cpp,v 1.26 2001-08-19 12:31:26 mbickel Exp $
+//     $Id: missions.cpp,v 1.27 2001-08-19 12:50:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2001/08/19 12:31:26  mbickel
+//      Fixed several bugs in event and campaign handling
+//
 //     Revision 1.25  2001/07/28 11:19:12  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -516,20 +519,21 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
    
                                                       ev->triggerstatus[b] = 1; 
                                                       for (i = 0; i <= 7; i++) 
-                                                         if ( ev->trigger_data[b]->id == 0 ) {
-                                                            if (i != sp ) 
-                                                               if (getdiplomaticstatus2(sp * 8, i * 8) == cawar) 
+                                                         if ( ev->trigger_data[b]->id == 1 ) {
+                                                            if (i != sp )
+                                                               if (getdiplomaticstatus2(sp * 8, i * 8) == cawar)
                                                                   if ( !actmap->player[i].buildingList.empty() )
-                                                                     ev->triggerstatus[b] = 0; 
+                                                                     ev->triggerstatus[b] = 0;
                                                          } else {
-                                                            if (i != sp ) 
-                                                               if ( !actmap->player[i].buildingList.empty())
-                                                                  ev->triggerstatus[b] = 0; 
+                                                            if (i != sp )
+                                                               if ( ev->trigger_data[b]->id & ( 1 << (2+i)))
+                                                                  if ( !actmap->player[i].buildingList.empty())
+                                                                     ev->triggerstatus[b] = 0;
                                                          }
-                                                   } 
-               break; 
-               
-               case ceventt_allbuildingslost:   { 
+                                                   }
+               break;
+
+               case ceventt_allbuildingslost:   {
                                             int sp = ev->player;
                                             if ( sp == 8 )
                                                sp = actmap->actplayer;

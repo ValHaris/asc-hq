@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.61 2001-08-09 19:28:22 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.62 2001-08-19 12:50:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2001/08/09 19:28:22  mbickel
+//      Started adding buildingtype text file functions
+//
 //     Revision 1.60  2001/08/09 10:28:22  mbickel
 //      Fixed AI problems
 //      Mapeditor can edit a units AI parameter
@@ -959,7 +962,7 @@ void         pdsetup(void)
     pd.addbutton ( "~M~ap valuesõctrl+M",          act_changemapvals );
     pd.addbutton ( "~C~hange playersõO",           act_changeplayers);
     pd.addbutton ( "~E~dit eventsõE",              act_events );
-    pd.addbutton ( "~S~etup Alliancesõctrl+A",     act_setupalliances );
+    pd.addbutton ( "~S~etup Player + Alliancesõctrl+A",     act_setupalliances );
     pd.addbutton ( "seperator",                    -1);
     pd.addbutton ( "~T~oggle ResourceViewõctrl+B", act_toggleresourcemode);
     pd.addbutton ( "~B~I ResourceMode",            act_bi_resource );

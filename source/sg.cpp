@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: sg.cpp,v 1.162 2001-08-19 12:31:26 mbickel Exp $
+//     $Id: sg.cpp,v 1.163 2001-08-19 12:50:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.162  2001/08/19 12:31:26  mbickel
+//      Fixed several bugs in event and campaign handling
+//
 //     Revision 1.161  2001/08/06 21:38:00  mbickel
 //      Fixed: ghost icons remained after vehicle construction canceled
 //
@@ -971,7 +974,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "setup Net~w~ork", ua_setupnetwork );
    addbutton ( "Change ~P~assword", ua_changepassword );
    addbutton ( "seperator", -1 );
-   addbutton ( "~P~layers", ua_setupalliances);
+   addbutton ( "~P~layers + Alliances", ua_setupalliances);
    addbutton ( "transfer ~U~nit control", ua_giveunitaway );
    addbutton ( "~T~ransfer resources", ua_settribute);
 
