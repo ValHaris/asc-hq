@@ -2,9 +2,15 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.53 2001-10-02 14:06:28 mbickel Exp $
+//     $Id: edmain.cpp,v 1.54 2001-10-02 18:08:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2001/10/02 14:06:28  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.52  2001/09/23 23:06:20  mbickel
 //      Fixed:
 //       - ascent/descent during reactionfire
@@ -816,6 +822,9 @@ int mapeditorMainThread ( void* _mapname )
       mapSwitcher.toggle();
 
    } /* end try */
+   catch ( ParsingError err ) {
+      displaymessage ( "Error parsing text file" + err.getMessage(), 2 );
+   }
    catch ( tfileerror err ) {
       displaymessage ( " error loading file %s ",2, err.getFileName().c_str() );
    } /* end catch */

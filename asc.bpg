@@ -10,8 +10,8 @@ DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
 PROJECTS = bzlib.lib libjpeg.lib triangulation.lib tools.lib SDLmm.lib \
-  mount.exe weaponguide.exe demount.exe gfx2pcx.exe bin2text.exe makegfx.exe \
-  viewid.exe tank2pcx.exe ai.lib mapeditor.exe asc.exe
+  mount.exe weaponguide.exe demount.exe bin2text.exe makegfx.exe viewid.exe \
+  tank2pcx.exe ai.lib mapeditor.exe asc.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -47,10 +47,6 @@ tools.lib: source\tools\win\tools.bpr
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
 demount.exe: source\tools\win\demount.bpr
-  $(ROOT)\bin\bpr2mak $**
-  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
-
-gfx2pcx.exe: source\tools\win\gfx2pcx.bpr
   $(ROOT)\bin\bpr2mak $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 

@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: sg.cpp,v 1.169 2001-10-02 14:06:28 mbickel Exp $
+//     $Id: sg.cpp,v 1.170 2001-10-02 18:08:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.169  2001/10/02 14:06:28  mbickel
+//      Some cleanup and documentation
+//      Bi3 import tables now stored in .asctxt files
+//      Added ability to choose amoung different BI3 import tables
+//      Added map transformation tables
+//
 //     Revision 1.168  2001/09/28 19:36:11  mbickel
 //      New startup map
 //
@@ -2437,6 +2443,9 @@ int gamethread ( void* data )
       }
       catch ( toutofmem ) {
          displaymessage ( "loading of game failed due to insufficient memory", 2 );
+      }
+      catch ( ParsingError err ) {
+         displaymessage ( "Error parsing text file" + err.getMessage(), 2 );
       }
       catch ( ASCexception ) {
          displaymessage ( "loading of game failed", 2 );
