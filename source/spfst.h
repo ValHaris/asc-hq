@@ -1,6 +1,10 @@
-//     $Id: spfst.h,v 1.12 2000-07-02 21:04:14 mbickel Exp $
+//     $Id: spfst.h,v 1.13 2000-07-06 11:07:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/07/02 21:04:14  mbickel
+//      Fixed crash in Replay
+//      Fixed graphic errors in replay
+//
 //     Revision 1.11  2000/06/28 19:26:18  mbickel
 //      fixed bug in object generation by building removal
 //      Added artint.cpp to makefiles
@@ -182,15 +186,14 @@
   class   tsearchfields {
                 public:
                     int         startx, starty;
-                    char     abbruch;
-                    word        maxdistance, mindistance;
+                    int         abbruch;
+                    int         maxdistance, mindistance;
                     int         xp, yp;
-                    word        dist;
+                    int         dist;
                     tsearchfields ( void );
                     virtual void testfield ( void ) = 0;
                     void initsuche ( int  sx, int  sy, word max, word min );
                     virtual void startsuche ( void );
-                    void done ( void );
                  };
 
 

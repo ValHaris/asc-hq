@@ -1,6 +1,9 @@
-//     $Id: controls.h,v 1.14 2000-06-09 13:12:25 mbickel Exp $
+//     $Id: controls.h,v 1.15 2000-07-06 11:07:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/06/09 13:12:25  mbickel
+//      Fixed tribute function and renamed it to "transfer resources"
+//
 //     Revision 1.13  2000/06/08 21:03:41  mbickel
 //      New vehicle action: attack
 //      wrote documentation for vehicle actions
@@ -150,7 +153,7 @@
                        } zoom;
                       #endif
                      public:
-                       void         checkformouse ( void );
+                       void         checkformouse ( int func = 0 );
                        void paint ( const pfield fld, int playerview );
                        tdashboard ( void );
                        void paintvehicleinfo( const pvehicle     vehicle,

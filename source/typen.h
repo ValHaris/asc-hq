@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.27 2000-07-05 09:24:01 mbickel Exp $
+//     $Id: typen.h,v 1.28 2000-07-06 11:07:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/07/05 09:24:01  mbickel
+//      New event action: change building damage
+//
 //     Revision 1.26  2000/06/28 18:31:03  mbickel
 //      Started working on AI
 //      Started making loaders independent of memory layout
@@ -458,11 +461,17 @@ struct teventstore {
   };
 
 
+class AiThreat {
+       public:
+         int threat[8];
+         void reset ( void );
+         AiThreat ( void ) { reset(); };
+};
 
-class AiParameter {
+
+class AiParameter : public AiThreat {
         public:
            int value;
-           int threat[8];
            enum { tsk_nothing } task;
 
            void reset ( void );
@@ -471,7 +480,6 @@ class AiParameter {
 
 class BaseAI { 
        public: 
-         BaseAI ( pmap map ) {};
          virtual void run ( void ) = 0;
          virtual ~BaseAI () {};
       };
@@ -990,15 +998,15 @@ class  tfield {
   public:
     pwterraintype typ;   
 
-    unsigned char         fuel, material; 
+    char         fuel, material; 
     Word         visible;   /*  BM  */ 
-    unsigned char         direction; 
+    char         direction; 
 
     void*      picture;   
     union  {
       struct { 
-	char         temp;      
-	char         temp2; 
+        char         temp;      
+        char         temp2; 
       }a;
       word tempw;
     };
@@ -1363,102 +1371,102 @@ class  tnetwork {
 
 
 class tmap { 
-  public:
-    word         xsize, ysize;   /*  Grî·e in fielder  */ 
-    word         xpos, ypos;     /*  aktuelle Dargestellte Position  */
-    pfield        field;           /*  die fielder selber */
-    char         codeword[11]; 
-    char*        title;
-    pcampaign    campaign; 
-
-    signed char  actplayer; 
-    tgametime    time;
-
-    struct tweather {
-       char fog;
-       twind wind[3];
-       char dummy[12];
-    } weather;
-
-    int resourcemode;  // 1 = Battle-Isle-Mode
-
-                 
-    char         alliances[8][8];
-    struct {
-       char      existent; 
-       pvehicle     firstvehicle; 
-       pbuilding    firstbuilding; 
- 
-       tresearch    research; 
-       BaseAI*      ai;
- 
-       char         stat;           // 0: human; 1: computer; 2: off
-       char         dummy;
-       char         *name;          // kein eigenstÑndiger string; zeigt entweder auf computernames oder playernames 
-       int          passwordcrc;
-       pdissectedunit dissectedunit;
-       pmessagelist  unreadmessage;
-       pmessagelist  oldmessage; 
-       pmessagelist  sentmessage; 
-    } player[9]; 
-
-    peventstore  oldevents; 
-    pevent       firsteventtocome; 
-    pevent       firsteventpassed; 
-
-    int eventpassed ( int saveas, int action, int mapid );
-    int eventpassed ( int id, int mapid );
-
-    int      unitnetworkid; 
-
-    char      levelfinished; 
-
-    pnetwork     network;
-
-    // char*        alliancenames[8];
-    int           alliance_names_not_used_any_more[8];
-
-    struct tcursorpos {
-      struct {
-        integer cx;
-        integer sx;
-        integer cy;
-        integer sy;
-      } position[8];
-    } cursorpos;
-
-    presourcetribute tribute;
-    pmessagelist  unsentmessage;
-    pmessage      message;
-    int           messageid;
-    char*         journal;
-    char*         newjournal;
-    char*         humanplayername[8];
-    char*         computerplayername[8];
-    int           supervisorpasswordcrc;
-    char          alliances_at_beginofturn[8];
-    pobjectcontainercrcs   objectcrc; 
-    pshareview    shareview;
-    int           continueplaying;         // als einzig Åbriggebliebener Spieler
-    treplayinfo*  replayinfo;
-    int           playerview;
-    tgametime     lastjournalchange;
-    tresources    bi_resource[8];
-    PreferredFilenames* preferredfilenames;
-    EllipseOnScreen* ellipse;
-    int           graphicset;
-    int           gameparameter_num;
-    int*          game_parameter;
    public:
-    int           dummy[29];
-    int           _oldgameparameter[ 8 ];
-    void chainunit ( pvehicle unit );
-    void chainbuilding ( pbuilding bld );
-    pvehicle getunit ( int x, int y, int nwid );
-    int getgameparameter ( int num );
-    void setgameparameter ( int num, int value );
-  private:
-    pvehicle getunit ( pvehicle eht, int nwid );
+      word         xsize, ysize;   /*  Grî·e in fielder  */ 
+      word         xpos, ypos;     /*  aktuelle Dargestellte Position  */
+      pfield        field;           /*  die fielder selber */
+      char         codeword[11]; 
+      char*        title;
+      pcampaign    campaign; 
+  
+      signed char  actplayer; 
+      tgametime    time;
+  
+      struct tweather {
+         char fog;
+         twind wind[3];
+         char dummy[12];
+      } weather;
+  
+      int resourcemode;  // 1 = Battle-Isle-Mode
+  
+                   
+      char         alliances[8][8];
+      struct {
+         char      existent; 
+         pvehicle     firstvehicle; 
+         pbuilding    firstbuilding; 
+   
+         tresearch    research; 
+         BaseAI*      ai;
+   
+         char         stat;           // 0: human; 1: computer; 2: off
+         char         dummy;
+         char         *name;          // kein eigenstÑndiger string; zeigt entweder auf computernames oder playernames 
+         int          passwordcrc;
+         pdissectedunit dissectedunit;
+         pmessagelist  unreadmessage;
+         pmessagelist  oldmessage; 
+         pmessagelist  sentmessage; 
+      } player[9]; 
+  
+      peventstore  oldevents; 
+      pevent       firsteventtocome; 
+      pevent       firsteventpassed; 
+  
+      int eventpassed ( int saveas, int action, int mapid );
+      int eventpassed ( int id, int mapid );
+  
+      int      unitnetworkid; 
+  
+      char      levelfinished; 
+  
+      pnetwork     network;
+  
+      // char*        alliancenames[8];
+      int           alliance_names_not_used_any_more[8];
+  
+      struct tcursorpos {
+        struct {
+          integer cx;
+          integer sx;
+          integer cy;
+          integer sy;
+        } position[8];
+      } cursorpos;
+  
+      presourcetribute tribute;
+      pmessagelist  unsentmessage;
+      pmessage      message;
+      int           messageid;
+      char*         journal;
+      char*         newjournal;
+      char*         humanplayername[8];
+      char*         computerplayername[8];
+      int           supervisorpasswordcrc;
+      char          alliances_at_beginofturn[8];
+      pobjectcontainercrcs   objectcrc; 
+      pshareview    shareview;
+      int           continueplaying;         // als einzig Åbriggebliebener Spieler
+      treplayinfo*  replayinfo;
+      int           playerview;
+      tgametime     lastjournalchange;
+      tresources    bi_resource[8];
+      PreferredFilenames* preferredfilenames;
+      EllipseOnScreen* ellipse;
+      int           graphicset;
+      int           gameparameter_num;
+      int*          game_parameter;
+    public:
+      int           dummy[29];
+      int           _oldgameparameter[ 8 ];
+      void chainunit ( pvehicle unit );
+      void chainbuilding ( pbuilding bld );
+      pvehicle getunit ( int x, int y, int nwid );
+      int getgameparameter ( int num );
+      void setgameparameter ( int num, int value );
+   private:
+      pvehicle getunit ( pvehicle eht, int nwid );
 
 }; 
 

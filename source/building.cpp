@@ -1,6 +1,10 @@
-//     $Id: building.cpp,v 1.27 2000-07-04 18:39:40 mbickel Exp $
+//     $Id: building.cpp,v 1.28 2000-07-06 11:07:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/07/04 18:39:40  mbickel
+//      Added weapon information in buildings
+//      Made buried pipeline darker
+//
 //     Revision 1.26  2000/06/28 19:26:14  mbickel
 //      fixed bug in object generation by building removal
 //      Added artint.cpp to makefiles
@@ -1713,8 +1717,6 @@ void   ccontainer :: checkformouse( void )
                getinvisiblemouserectanglestk ();
                mousestat = 1;
             }
-   
-        dashboard.checkformouse();
       }
 
    if ( gameoptions.mouse.smallguibutton )
@@ -1749,7 +1751,7 @@ void   ccontainer :: checkformouse( void )
         if ( mousestat == 1 )
            mousestat = 2;
 
-   dashboard.checkformouse();
+   dashboard.checkformouse( 1 );
 
 }
 

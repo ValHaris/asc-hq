@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.36 2000-07-02 21:04:13 mbickel Exp $
+//     $Id: spfst.cpp,v 1.37 2000-07-06 11:07:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2000/07/02 21:04:13  mbickel
+//      Fixed crash in Replay
+//      Fixed graphic errors in replay
+//
 //     Revision 1.35  2000/06/28 19:26:17  mbickel
 //      fixed bug in object generation by building removal
 //      Added artint.cpp to makefiles
@@ -5459,18 +5463,6 @@ tsearchfields :: tsearchfields ( void )
    abbruch = 0;
 }
 
-void         tsearchfields::done(void)
-{ 
-} 
-
-
-/*
-void         tsearchfields::testfield(void)
-{                         
-   getfield(xp,yp)->temp = (char) dist;
-} 
-
-*/
 
 
 void         tsearchfields::initsuche( int  sx, int  sy, word max, word min )
@@ -5491,14 +5483,13 @@ void         tsearchfields::startsuche(void)
   if ( abbruch )
      return;
 
-  word         strecke; 
-  shortint     step; 
+   int   step; 
 
    if (mindistance > maxdistance) 
       step = -1; 
    else 
       step = 1; 
-   strecke = mindistance; 
+   int strecke = mindistance; 
 
    do { 
       dist = strecke; 

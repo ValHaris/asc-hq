@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.55 2000-07-05 10:49:36 mbickel Exp $
+//     $Id: sg.cpp,v 1.56 2000-07-06 11:07:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2000/07/05 10:49:36  mbickel
+//      Fixed AI bugs
+//      setbuildingdamage event now updates the screen
+//
 //     Revision 1.54  2000/06/28 18:31:00  mbickel
 //      Started working on AI
 //      Started making loaders independent of memory layout
@@ -2625,22 +2629,30 @@ void  mainloop ( void )
             case ct_f7:  execuseraction ( ua_dispvehicleimprovement );
                break;
                            
+            case ct_f8:  if ( actmap->player[ actmap->actplayer].ai ) {
+                              AI* ai = (AI*) actmap->player[ actmap->actplayer].ai;
+                              ai->showFieldInformation ( getxpos(), getypos() );
+                         }
+               break;
+               
            /*
             case ct_plus: execuseraction ( ua_cheat_morefog );
                break;
                
             case ct_minus: execuseraction ( ua_cheat_lessfog );
                break;
-           */
+               
+            case ct_f8:  execuseraction ( ua_cheat_rotatewind );
+               break;
                
             case ct_f9: execuseraction ( ua_cheat_morewind );
                break;
                
             case ct_f10: execuseraction ( ua_cheat_lesswind );
                break;
+           */
                
-            case ct_f8:  execuseraction ( ua_cheat_rotatewind );
-               break;
+               
 
             case ct_1:  execuseraction ( ua_changeresourceview );
                break;

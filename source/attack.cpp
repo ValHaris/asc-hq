@@ -1,6 +1,10 @@
-//     $Id: attack.cpp,v 1.18 2000-07-02 21:04:10 mbickel Exp $
+//     $Id: attack.cpp,v 1.19 2000-07-06 11:07:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/07/02 21:04:10  mbickel
+//      Fixed crash in Replay
+//      Fixed graphic errors in replay
+//
 //     Revision 1.17  2000/06/08 21:03:39  mbickel
 //      New vehicle action: attack
 //      wrote documentation for vehicle actions
@@ -216,9 +220,25 @@ int  calc_sandwiched( int  ax,  int ay,  pvehicle d_eht )
 
 
 
+float AttackFormula :: damage ( int damage )
+{
+   float a = attackstrength( damage);
+   return a / 100;
+}
 
+float AttackFormula :: experience ( int experience )
+{
+   float e = experience;
+   if ( e < 1 )
+      e = 1;
+   return 1 + e/4;
+}
 
-
+float AttackFormula :: attackbonus ( int abonus )
+{
+   float a = abonus;
+   return 1 + a/8;
+}
 
 
 
@@ -235,9 +255,9 @@ void tfight :: calc ( void )
    if ( av.strength ) { 
       int w = (int)(dv.damage + 
             (  1000 * av.strength 
-               * (10 + av.experience*10 / 4) / 10
-               * attackstrength(av.damage) / 100
-               * ( 8 + av.attackbonus ) / 8
+               * experience ( av.experience )
+               * damage ( av.damage ) 
+               * attackbonus ( av.attackbonus ) 
                * ( 1 + dv.einkeilung * maxsandwichedfactor / maxsandwichedsum )
                  / (dv.armor / 4 
                     * (10 + dv.defensebonus*10 / 8) / 10 )
@@ -273,9 +293,9 @@ void tfight :: calc ( void )
    if ( dv.strength ) { 
       int w = av.damage + 
          ( 1000 * dv.strength 
-           * (10 + dv.experience*10 / 4) / 10
+           * experience ( dv.experience )
            * attackstrength(dv.damage) / 100
-           * ( 8 + dv.attackbonus ) / 8
+           * attackbonus ( dv.attackbonus )
              / (av.armor / 4 
                 * (10 + av.defensebonus*10 / 8) / 10)
            * 100 / damagefaktor )

@@ -1,6 +1,10 @@
-//     $Id: attack.h,v 1.7 2000-06-08 21:03:39 mbickel Exp $
+//     $Id: attack.h,v 1.8 2000-07-06 11:07:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/06/08 21:03:39  mbickel
+//      New vehicle action: attack
+//      wrote documentation for vehicle actions
+//
 //     Revision 1.6  2000/06/04 21:39:18  mbickel
 //      Added OK button to ViewText dialog (used in "About ASC", for example)
 //      Invalid command line parameters are now reported
@@ -68,7 +72,14 @@ struct   tattackresult {
 typedef struct tattackresult* pattackresult;
 
 
-class tfight {
+class AttackFormula {
+         public:
+            float experience ( int experience );
+            float damage ( int damage );
+            float attackbonus ( int abonus );
+        };
+
+class tfight : public AttackFormula {
            void paintbar ( int num, int val, int col );
            void paintline ( int num, int val, int col );
            virtual void paintimages ( int xa, int ya, int xd, int yd ) = 0;

@@ -1,6 +1,11 @@
-//     $Id: artint.h,v 1.5 2000-06-28 18:30:57 mbickel Exp $
+//     $Id: artint.h,v 1.6 2000-07-06 11:07:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/06/28 18:30:57  mbickel
+//      Started working on AI
+//      Started making loaders independent of memory layout
+//      Destroyed buildings can now leave objects behind.
+//
 //     Revision 1.4  2000/06/19 20:05:02  mbickel
 //      Fixed crash when transfering ammo to vehicle with > 8 weapons
 //
@@ -41,7 +46,7 @@
 #include <map.h>
 
 #include "typen.h"
-
+#include "spfst.h"
 
 #ifdef __WATCOM_CPLUSPLUS__
  typedef less<int> lessint;
@@ -50,11 +55,13 @@
 
 
     class AI : public BaseAI {
+          /*
            #ifdef __WATCOM_CPLUSPLUS__
             map< int, AiParameter, lessint>  unitai;
            #else
             map< int, AiParameter>  unitai;
            #endif
+          */
 
            int maxTrooperMove; 
            int maxTransportMove; 
@@ -63,12 +70,28 @@
 
            pmap activemap;
 
+           AiThreat* fieldThreats;
+           int fieldNum;
+
+           void calculateFieldThreats ( void );
+           void calculateFieldThreats_SinglePosition ( pvehicle eht, int x, int y );
+           class WeaponThreatRange : public tsearchfields {
+                     pvehicle veh;
+                     int weap, height;
+                     AiThreat* threat;
+                     AI*       ai;
+                  public:
+                     void run ( pvehicle _veh, int x, int y, AiThreat* _threat, AI* _ai );
+                     void testfield ( void );
+           };
+
 
            struct { 
-               int movesearchshortestway;   /*  krzesten oder nur irgendeinen  */ 
-               int lookintotransports;   /*  gegnerische transporter einsehen  */ 
-               int lookintobuildings; 
-            } aiconfig; 
+               // int movesearchshortestway;   /*  krzesten oder nur irgendeinen  */ 
+               int lookIntoTransports;   /*  gegnerische transporter einsehen  */ 
+               int lookIntoBuildings; 
+               int wholeMapVisible;
+            } config; 
 
             void  calculateThreat ( pvehicletype vt);
             void  calculateThreat ( pvehicle eht );
@@ -80,8 +103,11 @@
             void reset ( void );
 
         public:
-           AI ( pmap _map ) : BaseAI ( _map ) { reset(); activemap = _map; };
+           AI ( pmap _map ) ;
            void  run ( void );
            int getplayer ( void ) { return activemap->actplayer; };
+           pmap getmap ( void ) { return activemap; };
+           void showFieldInformation ( int x, int y );
+           ~AI ( );
     };
 

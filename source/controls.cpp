@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.41 2000-07-04 17:10:13 mbickel Exp $
+//     $Id: controls.cpp,v 1.42 2000-07-06 11:07:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2000/07/04 17:10:13  mbickel
+//      Fixed crash in replay with invalid removebuilding coordinates
+//
 //     Revision 1.40  2000/07/02 21:04:11  mbickel
 //      Fixed crash in Replay
 //      Fixed graphic errors in replay
@@ -371,7 +374,6 @@ void   searchforminablefields ( pvehicle eht )
 {
     tsearchforminablefields sfmf;
     sfmf.run( eht );
-    sfmf.done();
 }
 
 
@@ -493,10 +495,9 @@ void         putbuildinglevel1(void)
    npop ( actgui );
    mousevisible(false);
 
-   if ( selectbuildinggui.selectedbuilding ) {
+   if ( selectbuildinggui.selectedbuilding ) 
       spbf.initputbuilding( getxpos(), getypos(), selectbuildinggui.selectedbuilding );
-      spbf.done();
-   };
+
    mousevisible(true);
 } 
 
@@ -634,9 +635,8 @@ void         destructbuildinglevel1(int xp, int yp)
 { 
    tsearchdestructbuildingfields   sdbf;
    sdbf.initdestructbuilding( xp, yp  );
-   sdbf.done();
 } 
-
+        
 
 void         destructbuildinglevel2( int xp, int yp)
 { 
@@ -900,7 +900,6 @@ void  legemine( int typ, int delta )
          return;
       ptm.initpm(typ,eht); 
       ptm.run(); 
-      ptm.done(); 
    } 
    else 
       if (moveparams.movestatus == 90) { 
@@ -955,7 +954,6 @@ void         refuelvehicle(byte         b)
       trefuelvehicle rfe;
       rfe.initrefuelling(getxpos(),getypos(),b); 
       rfe.startsuche(); 
-      rfe.done(); 
    } 
    else { 
       if (moveparams.movestatus == 65) { 
@@ -1282,7 +1280,6 @@ void         setspec( pobjecttype obj )
 
       buildstreet.initbs(); 
       buildstreet.run(); 
-      buildstreet.done(); 
 
       if ( moveparams.movestatus == 72 ) {
            actgui->restorebackground();
@@ -1358,7 +1355,6 @@ void         constructvehicle( pvehicletype tnk )
 
       svcf.initbs(); 
       svcf.run(); 
-      svcf.done(); 
 
       if ( moveparams.movestatus == 120 ) {
            actgui->restorebackground();
@@ -1406,7 +1402,6 @@ void tvehicle :: addview ( void )
    tcomputevehicleview bes; 
    bes.init( this, +1 ); 
    bes.startsuche(); 
-   bes.done(); 
 }
                  
 void tvehicle :: removeview ( void )
@@ -1414,7 +1409,6 @@ void tvehicle :: removeview ( void )
    tcomputevehicleview bes; 
    bes.init( this, -1 ); 
    bes.startsuche(); 
-   bes.done(); 
 }
 
 
@@ -1423,7 +1417,6 @@ void tbuilding :: addview ( void )
    tcomputebuildingview bes; 
    bes.init( this, +1 ); 
    bes.startsuche(); 
-   bes.done(); 
 }
                  
 void tbuilding :: removeview ( void )
@@ -1431,7 +1424,6 @@ void tbuilding :: removeview ( void )
    tcomputebuildingview bes; 
    bes.init( this, -1 ); 
    bes.startsuche(); 
-   bes.done(); 
 }
 
 
@@ -3850,7 +3842,7 @@ void         tdashboard::paintsmallmap ( int repaint )
 
 }
 
-void         tdashboard::checkformouse ( void )
+void         tdashboard::checkformouse ( int func )
 {
 
     if ( mouseinrect ( agmp->resolutionx - ( 800 - 612), 213, agmp->resolutionx - ( 800 - 781), 305 ) && (mouseparams.taste == 2)) {
@@ -3877,23 +3869,49 @@ void         tdashboard::checkformouse ( void )
     }
     */
 
-    if ( smallmap  &&  gameoptions.smallmapactive )
-       smallmap->checkformouse();
+    if ( (func & 1) == 0 ) {
+       if ( smallmap  &&  gameoptions.smallmapactive )
+          smallmap->checkformouse();
+   
+       if ( !gameoptions.smallmapactive ) {
+          if ( mouseparams.x >= agmp->resolutionx - ( 640 - 588 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 610 )  &&   mouseparams.y >= 227   &&   mouseparams.y <= 290  && (mouseparams.taste & 1) ) {
+             displaywindspeed();
+             while ( mouseparams.x >= agmp->resolutionx - ( 640 - 588 )  &&   mouseparams.x <= agmp->resolutionx - ( 640 - 610 )  &&   mouseparams.y >= 227   &&   mouseparams.y <= 290  && (mouseparams.taste & 1) )
+                releasetimeslice();
+          }
+          if ( mouseinrect ( agmp->resolutionx - ( 640 - 489 ), 284, agmp->resolutionx - ( 640 - 509 ), 294 ) && (mouseparams.taste & 1)) {
+             dashboard.windheight++;
+             if ( dashboard.windheight > 2 )
+                dashboard.windheight = 0;
+             dashboard.x = 0xffff;
+             while ( mouseinrect ( agmp->resolutionx - ( 640 - 489 ), 284, agmp->resolutionx - ( 640 - 509 ), 294 ) && (mouseparams.taste & 1) )
+                releasetimeslice();
+          }
+       }
 
-    if ( !gameoptions.smallmapactive ) {
-       if ( mouseparams.x >= agmp->resolutionx - ( 640 - 588 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 610 )  &&   mouseparams.y >= 227   &&   mouseparams.y <= 290  && (mouseparams.taste & 1) ) {
-          displaywindspeed();
-          while ( mouseparams.x >= agmp->resolutionx - ( 640 - 588 )  &&   mouseparams.x <= agmp->resolutionx - ( 640 - 610 )  &&   mouseparams.y >= 227   &&   mouseparams.y <= 290  && (mouseparams.taste & 1) )
-             releasetimeslice();
-       }
-       if ( mouseinrect ( agmp->resolutionx - ( 640 - 489 ), 284, agmp->resolutionx - ( 640 - 509 ), 294 ) && (mouseparams.taste & 1)) {
-          dashboard.windheight++;
-          if ( dashboard.windheight > 2 )
-             dashboard.windheight = 0;
-          dashboard.x = 0xffff;
-          while ( mouseinrect ( agmp->resolutionx - ( 640 - 489 ), 284, agmp->resolutionx - ( 640 - 509 ), 294 ) && (mouseparams.taste & 1) )
-             releasetimeslice();
-       }
+      #ifdef FREEMAPZOOM
+       if ( mouseparams.taste == 1 )
+          if ( mouseinrect ( zoom.x1, zoom.y1, zoom.x2, zoom.y2 )) {
+             int pos = mouseparams.x - zoom.x1;
+             pos -= zoom.picwidth / 2;
+             int w = zoom.x2 - zoom.x1 - zoom.picwidth;
+             int perc = 1000 * pos / w;
+             if ( perc < 0 )
+                perc = 0;
+             if ( perc > 1000 )
+                perc = 1000;
+             int newzoom = zoomlevel.getminzoom() + (zoomlevel.getmaxzoom() - zoomlevel.getminzoom()) * ( 1000 - perc ) / 1000;
+             if ( newzoom != zoomlevel.getzoomlevel() ) {
+                cursor.hide();
+                zoomlevel.setzoomlevel( newzoom );
+                paintzoom();
+                cursor.show();
+                displaymap();
+                displaymessage2("new zoom level %d%%", newzoom );
+                dashboard.x = 0xffff;
+             }
+          }      
+       #endif
     }
 
     if ( mouseparams.x >= agmp->resolutionx - ( 640 - 578 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 609 )  &&   mouseparams.y >=  59   &&   mouseparams.y <=  67  && (mouseparams.taste & 1) ) {
@@ -3920,30 +3938,6 @@ void         tdashboard::checkformouse ( void )
    if ( (vehicle || vehicletype  ) && mouseinrect ( agmp->resolutionx - ( 640 - 461 ), 89, agmp->resolutionx - ( 640 - 577 ), 196 ) && (mouseparams.taste == 2)) 
       paintlargeweaponinfo();
     
-   #ifdef FREEMAPZOOM
-    if ( mouseparams.taste == 1 )
-       if ( mouseinrect ( zoom.x1, zoom.y1, zoom.x2, zoom.y2 )) {
-          int pos = mouseparams.x - zoom.x1;
-          pos -= zoom.picwidth / 2;
-          int w = zoom.x2 - zoom.x1 - zoom.picwidth;
-          int perc = 1000 * pos / w;
-          if ( perc < 0 )
-             perc = 0;
-          if ( perc > 1000 )
-             perc = 1000;
-          int newzoom = zoomlevel.getminzoom() + (zoomlevel.getmaxzoom() - zoomlevel.getminzoom()) * ( 1000 - perc ) / 1000;
-          if ( newzoom != zoomlevel.getzoomlevel() ) {
-             cursor.hide();
-             zoomlevel.setzoomlevel( newzoom );
-             paintzoom();
-             cursor.show();
-             displaymap();
-             displaymessage2("new zoom level %d%%", newzoom );
-             dashboard.x = 0xffff;
-          }
-       }      
-    #endif
-
 }
 
 
@@ -4678,7 +4672,6 @@ int  tbuilding :: processmining ( int res, int abbuchen )
 
 
    lastmineddist = pmf.setup ( this, maxmaterial, capmaterial, maxfuel, capfuel, abbuchen );
-   pmf.done();                                                                                 
 
    if ( abbuchen ) {
       put_energy ( maxmaterial, 1 , 0 );

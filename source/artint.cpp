@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.7 2000-07-05 13:26:06 mbickel Exp $
+//     $Id: artint.cpp,v 1.8 2000-07-06 11:07:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/07/05 13:26:06  mbickel
+//      AI
+//
 //     Revision 1.6  2000/07/05 10:49:35  mbickel
 //      Fixed AI bugs
 //      setbuildingdamage event now updates the screen
@@ -2727,13 +2730,27 @@ int compareinteger ( const void* op1, const void* op2 )
    return *a > *b;
 }
 
-void AiParameter :: reset ( void )
+void AiThreat :: reset ( void )
 {
-   value = 0;
    for ( int i = 0; i < 8; i++ )
       threat[i] = 0;
+}
 
+void AiParameter :: reset ( void )
+{
+   AiThreat :: reset ( );
+
+   value = 0;
    task = tsk_nothing;
+}
+
+AI :: AI ( pmap _map ) 
+{ 
+   fieldThreats = NULL;
+
+   reset(); 
+   activemap = _map; 
+
 }
 
 void AI :: reset ( void )
@@ -2743,6 +2760,17 @@ void AI :: reset ( void )
    for ( int i= 0; i < 8; i++ )
       maxWeapDist[i] = -1;  
    baseThreatsCalculated = 0;
+
+   if ( fieldThreats )
+      delete[] fieldThreats;
+
+   fieldThreats = NULL;
+   fieldNum = 0;
+
+   config.wholeMapVisible = 1;
+   config.lookIntoTransports = 1;
+   config.lookIntoBuildings = 1;
+
 }
 
 
@@ -2928,6 +2956,109 @@ void  AI :: calculateThreat ( pbuilding bld )
 
 
 
+void AI :: WeaponThreatRange :: run ( pvehicle _veh, int x, int y, AiThreat* _threat, AI* _ai )
+{
+   ai = _ai;
+   threat = _threat;
+   veh = _veh;
+   for ( height = 0; height < 8; height++ )
+      for ( weap = 0; weap < veh->typ->weapons->count; weap++ ) 
+         if ( veh->height & veh->typ->weapons->weapon[weap].sourceheight ) 
+            if ( (1 << height) & veh->typ->weapons->weapon[weap].targ ) 
+                if ( veh->typ->weapons->weapon[weap].shootable()  && veh->typ->weapons->weapon[weap].offensive() ) {
+                   initsuche ( x, y, veh->typ->weapons->weapon[weap].maxdistance/maxmalq, veh->typ->weapons->weapon[weap].mindistance/maxmalq );
+                   startsuche();
+                }
+}
+
+void AI :: WeaponThreatRange :: testfield ( void ) 
+{ 
+   if ( getfield ( xp, yp ))
+      if ( dist*maxmalq <= veh->typ->weapons->weapon[weap].maxdistance ) 
+         if ( dist*maxmalq >= veh->typ->weapons->weapon[weap].mindistance ) {
+            AttackFormula af;
+            int strength = weapdist->getweapstrength( &veh->typ->weapons->weapon[weap], dist*maxmalq, veh->height, 1 << height ) 
+                         * veh->typ->weapons->weapon[weap].maxstrength              
+                         * af.experience ( veh->experience ) 
+                         * af.attackbonus ( getfield(startx,starty)->getattackbonus() )
+                         * af.damage ( veh->damage )
+                         / 256;
+
+            if ( strength ) {
+               int pos = xp + yp * ai->getmap()->xsize;
+               if ( strength > threat[pos].threat[height] )
+                  threat[pos].threat[height] = strength;
+            }
+         }
+}
+
+
+void AI :: calculateFieldThreats ( void )
+{
+   if ( fieldNum && fieldNum != activemap->xsize * activemap->ysize ) {
+      delete[] fieldThreats;
+      fieldThreats = NULL;
+      fieldNum = 0;
+   }
+   if ( !fieldThreats ) {
+      fieldNum = activemap->xsize * activemap->ysize;
+      fieldThreats = new AiThreat[ fieldNum ];
+   } else
+      for ( int a = 0; a < fieldNum; a++ )
+         fieldThreats[ a ].reset();
+      
+   AiThreat*  singleUnitThreat = new AiThreat[fieldNum];
+
+   // we now check the whoe map
+   for ( int y = 0; y < activemap->ysize; y++ )
+      for ( int x = 0; x < activemap->xsize; x++ ) {
+         pfield fld = getfield ( x, y );
+         if ( config.wholeMapVisible || fieldvisiblenow ( fld, getplayer() ) )
+            if ( fld->vehicle && getdiplomaticstatus2 ( getplayer()*8, fld->vehicle->color) == cawar ) { 
+               WeaponThreatRange wr;
+               if ( !fld->vehicle->typ->wait ) {
+
+                  // The unit may have already moved this turn. 
+                  // So we give it the maximum movementrange
+   
+                  npush ( fld->vehicle->movement );
+                  fld->vehicle->movement = fld->vehicle->typ->movement [ log2 ( fld->vehicle->height )];
+   
+                  VehicleMovement vm ( NULL, NULL );
+                  if ( vm.available ( fld->vehicle )) {
+                     vm.execute ( fld->vehicle, -1, -1, 0, -1, -1 );
+
+                     // Now we cycle through all fields that are reachable...
+                     for ( int f = 0; f < vm.reachableFields.getFieldNum(); f++ ) {
+                        int xp, yp;
+                        vm.reachableFields.getFieldCoordinates ( f, &xp, &yp );
+                        // ... and check for each which fields are threatened if the unit was standing there
+                        wr.run ( fld->vehicle, xp, yp, singleUnitThreat, this );
+                     }
+
+                     for ( int g = 0; g < vm.reachableFieldsIndirect.getFieldNum(); g++ ) {
+                        int xp, yp;
+                        vm.reachableFieldsIndirect.getFieldCoordinates ( g, &xp, &yp );
+                        wr.run ( fld->vehicle, xp, yp, singleUnitThreat, this );
+                     }
+                  }
+                  npop  ( fld->vehicle->movement );
+               } else
+                  wr.run ( fld->vehicle, x, y, singleUnitThreat, this );
+
+
+               for ( int a = 0; a < fieldNum; a++ ) {
+                  for ( int b = 0; b < 8; b++ ) 
+                     fieldThreats[a].threat[b] += singleUnitThreat[a].threat[b];
+                  
+                  singleUnitThreat[ a ].reset();
+               }
+            }
+      }
+
+}
+
+
 void     AI :: calculateAllThreats( void )
 { 
    // Calculates the basethreats for all vehicle types
@@ -2992,6 +3123,7 @@ void     AI :: calculateAllThreats( void )
             else
                eht->aiparam[ getplayer() ]->reset();
 
+            calculateThreat ( eht );
             eht = eht->next; 
          } 
       } 
@@ -3001,10 +3133,10 @@ void     AI :: calculateAllThreats( void )
 
 void    AI :: setup (void)
 { 
-   tempsvisible = false; 
-
    displaymessage2("calculating all threats ... "); 
    calculateAllThreats (); 
+   displaymessage2("calculating field threats ... "); 
+   calculateFieldThreats();
 /*
    for (i = 0; i < 8; i++)
       if (actmap->player[i].existent) { 
@@ -3056,11 +3188,47 @@ void    AI :: setup (void)
    */
 
    // showthreats("init: threatvals generated"); 
+   displaymessage2("setup completed ... "); 
 } 
 
 void AI:: run ( void )
 {
+   tempsvisible = false; 
    setup();
+   tempsvisible = true; 
+}
+
+void AI :: showFieldInformation ( int x, int y )
+{
+   if ( fieldThreats ) {
+      const char* fieldinfo = "#font02#Field Information#font01##crtp10##aeinzug20##eeinzug10#"
+                              "threat orbit: %d\n"
+                              "threat high-level flight: %d\n"
+                              "threat flight: %d\n"
+                              "threat low-level flight: %d\n"
+                              "threat ground level: %d\n"
+                              "threat floating: %d\n"
+                              "threat submerged: %d\n"
+                              "threat deep submerged: %d\n";
+   
+      char text[1000];
+      int pos = x + y * activemap->xsize;
+      sprintf(text, fieldinfo, fieldThreats[pos].threat[7], fieldThreats[pos].threat[6], fieldThreats[pos].threat[5], 
+                               fieldThreats[pos].threat[4], fieldThreats[pos].threat[3], fieldThreats[pos].threat[2],
+                               fieldThreats[pos].threat[1], fieldThreats[pos].threat[0] );
+      tviewanytext vat;
+      vat.init ( "AI information", text );
+      vat.run();
+      vat.done();
+   }
 }
 
 
+AI :: ~AI ( )
+{
+   if ( fieldThreats ) {
+      delete[] fieldThreats;
+      fieldThreats = NULL;
+      fieldNum = 0;
+   }
+}
