@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.32 2000-08-05 13:38:42 mbickel Exp $
+//     $Id: typen.cpp,v 1.33 2000-08-05 15:30:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/08/05 13:38:42  mbickel
+//      Rewrote height checking for moving units in and out of
+//        transports / building
+//
 //     Revision 1.31  2000/08/04 15:11:24  mbickel
 //      Moving transports costs movement for units inside
 //      refuelled vehicles now have full movement in the same turn
@@ -436,7 +440,11 @@ int tfield :: getattackbonus ( void )
          else
             a += object->object[i]->typ->attackbonus_plus;
       }
-   return a;
+
+   if ( a > -8 )
+      return a;
+   else
+      return -7;
 }
 
 int tfield :: getdefensebonus ( void )
@@ -449,7 +457,11 @@ int tfield :: getdefensebonus ( void )
          else
             a += object->object[i]->typ->defensebonus_plus;
       }
-   return a;
+
+   if ( a > -8 )
+      return a;
+   else
+      return -7;
 }
 
 int tfield :: getjamming ( void )

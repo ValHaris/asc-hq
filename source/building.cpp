@@ -1,6 +1,10 @@
-//     $Id: building.cpp,v 1.37 2000-08-05 13:38:20 mbickel Exp $
+//     $Id: building.cpp,v 1.38 2000-08-05 15:30:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2000/08/05 13:38:20  mbickel
+//      Rewrote height checking for moving units in and out of
+//        transports / building
+//
 //     Revision 1.36  2000/08/04 15:10:49  mbickel
 //      Moving transports costs movement for units inside
 //      refuelled vehicles now have full movement in the same turn
@@ -1475,6 +1479,8 @@ int   ctransportcontrols :: moveavail ( pvehicle eht )
             return 2;
          else
             return 0;
+
+  return 0;
 }
 
 

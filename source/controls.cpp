@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.56 2000-08-05 13:38:21 mbickel Exp $
+//     $Id: controls.cpp,v 1.57 2000-08-05 15:30:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2000/08/05 13:38:21  mbickel
+//      Rewrote height checking for moving units in and out of
+//        transports / building
+//
 //     Revision 1.55  2000/08/04 15:10:50  mbickel
 //      Moving transports costs movement for units inside
 //      refuelled vehicles now have full movement in the same turn
@@ -24,7 +28,7 @@
 //      Field information shows units filename
 //
 //     Revision 1.51  2000/08/02 08:47:56  mbickel
-//      Fixed: Mineral resources where visible for all players
+//      Fixed: Mineral resources were visible for all players
 //
 //     Revision 1.50  2000/07/31 19:16:33  mbickel
 //      Improved handing of multiple directories
