@@ -265,11 +265,6 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
       vehicle->setnewposition ( pos->x, pos->y );
 
-      if ( vehicle && rf->checkfield ( *pos, vehicle, mapDisplay )) {
-         attackedByReactionFire = true;
-         vehicle = actmap->getUnit ( networkID );
-      }
-
       if ( vehicle ) {
          if ((fld->vehicle == NULL) && (fld->building == NULL)) {
             fld->vehicle = vehicle;
@@ -285,6 +280,11 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
                if ( fieldvisiblenow ( fld, actmap->playerView ) || actmap->playerView*8  == vehicle->color )
                   SoundList::getInstance().playSound ( SoundList::conquer_building, 0 );
            }
+         }
+
+         if ( rf->checkfield ( *pos, vehicle, mapDisplay )) {
+            attackedByReactionFire = true;
+            vehicle = actmap->getUnit ( networkID );
          }
 
          dashboard.x = 0xffff;
