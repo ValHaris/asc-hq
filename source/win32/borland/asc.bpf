@@ -53,6 +53,11 @@ USEUNIT("..\..\sdl\SDLStretch.cpp");
 USEUNIT("..\..\sdl\events.cpp");
 USEUNIT("..\..\research.cpp");
 USEUNIT("..\..\replay.cpp");
+USEUNIT("..\..\graphicset.cpp");
+USEUNIT("..\..\dashboard.cpp");
+USEUNIT("..\..\ascstring.cpp");
+USEUNIT("..\..\resourcenet.cpp");
+USEUNIT("..\..\mapdisplay.cpp");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 

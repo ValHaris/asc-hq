@@ -23,16 +23,17 @@
 
 #include <stdio.h>
 
-#include "..\tpascal.inc"
-#include "..\typen.h"
-#include "..\basestrm.h"
-#include "..\misc.h"
-#include "..\sgstream.h"
-#include "..\loadbi3.h"
+#include "../tpascal.inc"
+#include "../typen.h"
+#include "../basestrm.h"
+#include "../misc.h"
+#include "../sgstream.h"
+#include "../loadbi3.h"
 #include "../buildingtype.h"
 #include "../vehicletype.h"
 #include "../errors.h"
-
+#include "../graphicset.h"
+#include "../ascstring.h"
 
 int main(int argc, char *argv[] )
 {
@@ -84,21 +85,16 @@ int main(int argc, char *argv[] )
                            "<BODY bgcolor=\"#447744\" text=\"#ffffff\" background=\"../../bilder/asc-hin3.gif\" leftmargin=\"5\" topmargin=\"0\">\n" );
       
       tfindfile ff ( wildcard );
-      char* cn = ff.getnextname();
-      while( cn ) { 
+      ASCString cn = ff.getnextname();
+      while( !cn.empty() ) {
+         cn.toLower();
       	 // now we are cycling through all files that match wildcard
 
+         string s, s1, s2, s3, s4, s5, b1, b2;
+         s = s1 = s2 = s3 = s4 = s5 = b1 = b2 = cn;
          
-         string s = strlwr ( cn );
-         string s1 = strlwr ( cn );
-         string s2 = strlwr ( cn );
-         string s3 = strlwr ( cn );
-         string s4 = strlwr ( cn );
-         string s5 = strlwr ( cn );
-         string b1 = strlwr ( cn );
-         string b2 = strlwr ( cn );
          // this is a C++ string which is much more powerful than the standard C strings ( char* )
-         
+
          s.replace ( s.find ("veh"), 3, "html");
          s1.replace ( s1.find (".veh"), 4, "1.html");
          s2.replace ( s2.find (".veh"), 4, "2.html");
@@ -179,7 +175,7 @@ int main(int argc, char *argv[] )
                               "\n"
                               "<BODY bgcolor=\"#447744\" text=\"black\" background=\"../../bilder/asc-hin2.gif\">\n" );
         
-         pvehicletype  ft = loadvehicletype( cn );
+         pvehicletype  ft = loadvehicletype( cn.c_str() );
          // we are loading the vehicletype with the name in cn
 
 // OVERVIEW LEFT   

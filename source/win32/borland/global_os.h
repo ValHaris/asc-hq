@@ -1,6 +1,10 @@
-//     $Id: global_os.h,v 1.3 2000-12-28 11:12:48 mbickel Exp $
+//     $Id: global_os.h,v 1.4 2001-01-28 21:39:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/12/28 11:12:48  mbickel
+//      Fixed: no redraw when restoring fullscreen focus in WIN32
+//      Better error message handing in WIN32
+//
 //     Revision 1.2  2000/12/23 13:19:48  mbickel
 //      Made ASC compileable with Borland C++ Builder
 //
@@ -39,7 +43,8 @@
    #include sdlheader
   #endif
   #ifdef __cplusplus
-  using namespace std;
+   #include <string>  // some Standard library include file to define the namespace std
+   using namespace std;
   #endif
   #define HAVE_STRICMP
   #define HAVE_ITOA

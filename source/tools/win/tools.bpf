@@ -15,6 +15,8 @@ USEUNIT("..\..\typen.cpp");
 USEUNIT("..\..\vehicletype.cpp");
 USELIB("..\..\libs\bzlib\win\bzlib.lib");
 USELIB("..\..\..\..\sdl\bin\sdl.lib");
+USEUNIT("..\..\graphicset.cpp");
+USEUNIT("..\..\ascstring.cpp");
 //---------------------------------------------------------------------------
 #define Library
 

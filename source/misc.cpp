@@ -1,6 +1,13 @@
-//     $Id: misc.cpp,v 1.14 2000-10-12 19:51:44 mbickel Exp $
+//     $Id: misc.cpp,v 1.15 2001-01-28 21:39:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/10/12 19:51:44  mbickel
+//      Added a stub program for generating a weapon guide
+//      Added makefiles to compile this weaponguide with the free borland C++
+//        compiler
+//      Made some adjustments to basic IO file for compiling them with borland
+//        C++
+//
 //     Revision 1.13  2000/10/11 14:26:43  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -173,8 +180,6 @@ void beep ( void )
 }
 
 
-
-typedef unsigned int DWORD;
 typedef unsigned int UNS_32_BITS;
 
 
@@ -232,8 +237,8 @@ int  crc32buf(const void *vbuf, int len)
 {
       const char* buf = (const char*) vbuf;
 
-      DWORD crc;
-      DWORD oldcrc32;
+      unsigned int crc;
+      unsigned int oldcrc32;
 
       oldcrc32 = 0xFFFFFFFF;
 
@@ -243,10 +248,10 @@ int  crc32buf(const void *vbuf, int len)
       }
 
       return crc = oldcrc32 = ~oldcrc32;
-      
+
 }
 
-structure_size_tester :: structure_size_tester ( void ) 
+structure_size_tester :: structure_size_tester ( void )
 {
    if ( sizeof ( _test_structure ) != 47 ) {
       printf("This program had been compiled with invalid compiler option!\nThe structures had not benn packed !\n");
@@ -275,5 +280,16 @@ char* itoa ( int a, char* b, int c)
 {
    sprintf(b, "%d", a );
    return b;
+}
+#endif
+
+#ifdef converter
+void fatalError ( const char* formatstring, ... )
+{
+   va_list paramlist;
+   va_start ( paramlist, formatstring );
+
+   vfprintf ( stderr, formatstring, paramlist );
+   exit ( 1 );
 }
 #endif

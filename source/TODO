@@ -2,6 +2,9 @@ TODO list for ASC, programming department:
 
 Small tasks:
 
+-   write a platform independant wrapper around vsnprintf (used in 
+    ASCString.cpp)
+
 -   rewriting tdrawgettempline ( mapalgorithm.cpp ) which is way to slow
    
 -   Clean up the transportcargo routines in mapeditor ( cancel function etc )

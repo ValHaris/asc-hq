@@ -6,7 +6,8 @@
     <PROJECT value="tools.lib"/>
     <OBJFILES value="..\..\basegfx.obj ..\..\basestrm.obj ..\..\buildingtype.obj 
       ..\..\gameoptions.obj ..\..\loadbi3.obj ..\..\misc.obj ..\..\Named.obj 
-      ..\..\palette.obj ..\..\sgstream.obj ..\..\typen.obj ..\..\vehicletype.obj"/>
+      ..\..\palette.obj ..\..\sgstream.obj ..\..\typen.obj ..\..\vehicletype.obj 
+      ..\..\graphicset.obj ..\..\ascstring.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>

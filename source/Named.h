@@ -17,6 +17,7 @@
 #ifndef NAMED_H
 #define NAMED_H
 
+#include <string>
 #include "global.h"
 #include "ascstring.h"
 

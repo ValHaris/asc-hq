@@ -14,7 +14,8 @@
       obj\sgstream.obj obj\spfst.obj obj\stack.obj obj\strtmesg.obj 
       obj\typen.obj obj\attack.obj obj\sound.obj obj\graphics.obj 
       obj\loadimage.obj obj\SDLStretch.obj obj\events.obj obj\SDL_main.obj 
-      obj\weather.obj obj\buildingtype.obj obj\research.obj"/>
+      obj\weather.obj obj\buildingtype.obj obj\research.obj obj\graphicset.obj 
+      obj\ascstring.obj obj\mapdisplay.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
