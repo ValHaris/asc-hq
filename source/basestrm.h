@@ -4,9 +4,15 @@
 */
 
 
-//     $Id: basestrm.h,v 1.36 2001-02-18 15:37:02 mbickel Exp $
+//     $Id: basestrm.h,v 1.37 2001-02-26 21:14:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2001/02/18 15:37:02  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.35  2001/02/11 11:39:28  mbickel
 //      Some cleanup and documentation
 //
@@ -651,6 +657,8 @@ extern const char* containermagic;
 
 extern const char* filereadmode;
 extern const char* filewritemode;
+extern const char* filereadmodetext;
+extern const char* filewritemodetext;
 
 extern int verbosity;
 

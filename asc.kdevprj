@@ -35,11 +35,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/gamemap.cpp,/home/martin/asc/source/typen.h,/home/martin/asc/source/gamemap.h,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/loaders.cpp,/home/martin/asc/source/missions.cpp,/home/martin/asc/source/edevents.cpp,/home/martin/asc/source/typen.cpp,/home/martin/asc/source/artint.cpp,/home/martin/asc/source/unitctrl.cpp,/home/martin/asc/source/TODO,
+openfiles=Unbenannt.cpp,/home/martin/asc/source/tools/linux/Makefile.am,/home/martin/asc/source/tools/bi2pcx.cpp,/home/martin/asc/source/tools/bi2pcx2.cpp,/home/martin/asc/source/tools/bi2pcx3.cpp,/home/martin/asc/source/tools/bi2pcx4.cpp,/home/martin/asc/source/tools/dos/bi2pcx2.tgt,/home/martin/asc/source/basestrm.h,/home/martin/asc/source/buildingtype.h,/home/martin/asc/source/buildingtype.cpp,/home/martin/asc/source/tools/mntgraph.cpp,/home/martin/asc/source/basegfx.cpp,/home/martin/asc/source/basegfx.h,/home/martin/asc/source/loadpcxc.cpp,/home/martin/asc/source/unix/fileio.h,/home/martin/asc/source/win32/fileio.h,/home/martin/asc/source/win32/borland/fileio.h,/home/martin/asc/source/win32/watcom/fileio.h,/home/martin/asc/source/dos/fileio.h,/home/martin/asc/source/loadpcx.h,/home/martin/asc/source/sgstream.h,/home/martin/asc/source/sgstream.cpp,/home/martin/asc/source/sg.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/TODO
-cpp_file=/home/martin/asc/source/loaders.cpp
+header_file=/home/martin/asc/source/sgstream.h
+cpp_file=/home/martin/asc/source/sg.cpp
 browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/welcome/index.html
 [source/gui.h]
 install_location=

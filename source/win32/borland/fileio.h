@@ -1,6 +1,9 @@
-//     $Id: fileio.h,v 1.2 2000-10-12 21:37:57 mbickel Exp $
+//     $Id: fileio.h,v 1.3 2001-02-26 21:14:32 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/10/12 21:37:57  mbickel
+//      Further restructured platform dependant routines
+//
 //     Revision 1.1  2000/10/12 20:21:43  mbickel
 //      Restructuring operating system dependant files
 //
@@ -37,6 +40,8 @@
 
  const char* filereadmode = "rb";
  const char* filewritemode = "wb";
+ const char* filereadmodetext = "rt";
+ const char* filewritemodetext = "wt";
  const char pathdelimitter = '\\';
  const char* pathdelimitterstring = "\\";
  

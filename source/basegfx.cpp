@@ -2,9 +2,15 @@
     \brief Platform indepedant graphic functions. 
 */
 
-//     $Id: basegfx.cpp,v 1.24 2001-02-18 15:37:00 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.25 2001-02-26 21:14:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2001/02/18 15:37:00  mbickel
+//      Some cleanup and documentation
+//      Restructured: vehicle and building classes into separate files
+//         tmap, tfield and helper classes into separate file (gamemap.h)
+//      basestrm : stream mode now specified by enum instead of int
+//
 //     Revision 1.23  2001/02/06 17:15:09  mbickel
 //      Some changes for compilation by Borland C++ Builder
 //
@@ -1147,11 +1153,11 @@ tinitgfxengine::tinitgfxengine ( void )
 }
 
 
-void tvirtualdisplay :: init ( int x, int y, int color )
+void tvirtualdisplay :: init ( int x, int y, int color, int depth )
 {
    agmp = (tgraphmodeparameters *) & activegraphmodeparameters;
    oldparams = *agmp ;
-   char* cbuf = (char*) asc_malloc ( x * y );
+   char* cbuf = (char*) asc_malloc ( x * y * depth/8 );
    if ( !cbuf )
       throw fatalgraphicserror ( "could not allocate memory !");
 
@@ -1164,22 +1170,30 @@ void tvirtualdisplay :: init ( int x, int y, int color )
    agmp->windowstatus  = 100 ;
    agmp->scanlinelength  = x ;
    agmp->scanlinenumber  = y ;
-   agmp->bytesperscanline  = x;
-   agmp->byteperpix   = 1    ;
+   agmp->bytesperscanline  = x * depth/8;
+   agmp->byteperpix   = depth/8    ;
    agmp->linearaddress = (int) buf ;
-   agmp->bitperpix          = 8;
+   agmp->bitperpix          = depth;
    agmp->directscreenaccess = 1;
+   if ( depth ==24 || depth==32 ) {
+      agmp->redmasksize = 8;
+      agmp->greenmasksize = 8;
+      agmp->bluemasksize = 8;
+      agmp->redfieldposition = 0;
+      agmp->greenfieldposition = 8;
+      agmp->bluefieldposition = 16;
+   }
 
 }
 
 tvirtualdisplay :: tvirtualdisplay ( int x, int y )
 {
-   init ( x, y, 0 );
+   init ( x, y, 0, 8  );
 }
 
-tvirtualdisplay :: tvirtualdisplay ( int x, int y, int color )
+tvirtualdisplay :: tvirtualdisplay ( int x, int y, int color, int depth )
 {
-   init ( x, y, color );
+   init ( x, y, color, depth );
 }
 
 
@@ -1367,6 +1381,14 @@ void putimage ( int x1, int y1, void* img )
       }
    }
 
+}
+
+
+void putimage ( int x1, int y1, TrueColorImage* tci )
+{
+  for ( int y = 0; y < tci->getysize(); y++ )
+     for ( int x = 0; x < tci->getxsize(); x++ )
+        putpixel ( x1 + x, y1 + y, tci->getpix ( x,y ).rgb );
 }
 
 void putxlatfilter ( int x1, int y1, void* pic, char* xlattables )

@@ -54,24 +54,24 @@ struct  tgraphmodeparameters {
             int           resolutionx      ;       //!< the number of visible pixels in x direction
             int           resolutiony      ;       //!< the number of visible pixels in y direction
             int           actsetpage       ;       //!< only used in DOS where it may be necessary to access the graphic memory in 64 kB pages
-            int           windowstatus     ;      //!< determines whether the memory is a linear (windowstatus==100) or paged. When using SDL, the memory is always linear addressable.
-            int           granularity      ;        //!< the offset in graphics memory between two pages. Can be ignored nowadays
+            int           windowstatus     ;       //!< determines whether the memory is a linear (windowstatus==100) or paged. When using SDL, the memory is always linear addressable.
+            int           granularity      ;       //!< the offset in graphics memory between two pages. Can be ignored nowadays
             int           scanlinelength   ;       //!< the size of a line in pixel (may be larger than resolutionx due to offscreen memory)
-            int           scanlinenumber   ;      //!< the number of lines (may be larger than resolutiony due to offscreen memory)
+            int           scanlinenumber   ;       //!< the number of lines (may be larger than resolutiony due to offscreen memory)
             int           bytesperscanline ;       //!< the size of a line in byte
-            int           activegraphmode  ;      //!< the number of the active graphic mode. Can be ignored nowadays
-            int           videomemory      ;      //!< the amount of memory in the video card. Not used any more.
-            int           byteperpix       ;        //!< the distance between two pixel
-            int           linearaddress    ;        //!< the pointer to the actual memory (typecast to char* )
-            int           pagetoset        ;        //!< only used in DOS with paged graphic memory
+            int           activegraphmode  ;       //!< the number of the active graphic mode. Can be ignored nowadays
+            int           videomemory      ;       //!< the amount of memory in the video card. Not used any more.
+            int           byteperpix       ;       //!< the distance between two pixel
+            int           linearaddress    ;       //!< the pointer to the actual memory (typecast to char* )
+            int           pagetoset        ;       //!< only used in DOS with paged graphic memory
             char          redmasksize       ;      //!< RGB only: the number of bits in the red component
-            char          redfieldposition  ;       //!< RGB only: the position of the first red bit relative to the start of the pixel
+            char          redfieldposition  ;      //!< RGB only: the position of the first red bit relative to the start of the pixel
             char          greenmasksize     ;      //!< RGB only: the number of bits in the green component
-            char          greenfieldposition;       //!< RGB only: the position of the first green bit relative to the start of the pixel
+            char          greenfieldposition;      //!< RGB only: the position of the first green bit relative to the start of the pixel
             char          bluemasksize      ;      //!< RGB only: the number of bits in the blue component
             char          bluefieldposition ;      //!< RGB only: the position of the first blue bit relative to the start of the pixel
-            char          bitperpix         ;        //!< the size of a pixel(?) in bits
-            char          memorymodel;            //!< unused
+            char          bitperpix         ;      //!< the size of a pixel(?) in bits
+            char          memorymodel;             //!< unused
             int           directscreenaccess;      //!< if 0 no call to an update function (which copies the buffer to the screen) is performed
             int           reserved[9];
     };
@@ -141,7 +141,7 @@ extern "C" void*     xlatbuffer;
  //! puts the image pointed to by buffer to the screen
  extern void putimage(int x1, int y1, void *buffer);
 
- /** puts the image in pictbuffer on the screen performing a color translation. 
+ /** puts the image in pictbuffer on the screen performing a color translation.
       xlattables points to an array of n*256 byte. n must be equal or greater than the highest 
       pixel in pictbuffer.
       Example: you want to paint the tracks on the screen which are left by heavy vehicles.
@@ -324,10 +324,10 @@ class tdrawline {
 class tvirtualdisplay {
            void* buf;
            tgraphmodeparameters oldparams;
-           void init ( int x, int y, int col );
+           void init ( int x, int y, int col, int depth );
         public: 
            tvirtualdisplay ( int x, int y );
-           tvirtualdisplay ( int x, int y, int color );
+           tvirtualdisplay ( int x, int y, int color, int depth= 8 );
            ~tvirtualdisplay ();
         };
 
@@ -382,6 +382,9 @@ extern TrueColorImage* convertimage2tc ( void* buf, dacpalette256 pal );
 /** a table to speed up conversion from truecolor to 8bit palette. The 6 most significant bits
      of each color component (RGB) form the the index.       */
 extern char truecolor2pal_table[262144];
+
+//! puts the image pointed to by tci to the screen. Both must be truecolor images. This function is a quick and unoptimized hack!
+extern void putimage ( int x1, int y1, TrueColorImage* tci );
 
 
 //! a class that is thrown as exception. Should be moved to error.h ...

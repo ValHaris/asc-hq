@@ -19,10 +19,10 @@
 */
 
 #include <stdlib.h>
-#include "..\basegfx.h"
-#include "..\loadpcx.h"
-#include "..\newfont.h"
-#include "..\misc.h"
+#include "../basegfx.h"
+#include "../loadpcx.h"
+#include "../newfont.h"
+#include "../misc.h"
 #include "../buildingtype.h"
 #include "../vehicletype.h"
 #include "../graphicset.h"
@@ -43,9 +43,8 @@ struct tbipictparam {
 
 int main(int argc, char *argv[] )
 {
-
-   opencontainer ( "*.con" );
-
+  initFileIO( NULL );
+  opencontainer ( "*.con" );
 
   int index = 0;
   int wide = 0;
@@ -53,8 +52,9 @@ int main(int argc, char *argv[] )
   int scale = 0;
   int usage = 1;
   int id = 0;
+  int i;
 
-   for (int i = 1; i<argc; i++ ) {
+   for ( i = 1; i<argc; i++ ) {
       if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
          if ( strcmpi ( &argv[i][1], "WIDE" ) == 0 ) 
             wide = 1;
@@ -67,6 +67,13 @@ int main(int argc, char *argv[] )
                else
                   if ( strcmpi ( &argv[i][1], "NOUSAGE" ) == 0 )
                      usage = 0;
+               else
+                  if ( strcmpi ( &argv[i][1], "MAKEGFX" ) == 0 ) {
+                     usage = 0;
+                     scale = 2;
+                     keeporiginalpalette = 1;
+                     wide = 0;
+                  }
                else
                   if ( strcmpi ( &argv[i][1], "DOUBLEI" ) == 0 )
                      scale = 2;
@@ -90,6 +97,7 @@ int main(int argc, char *argv[] )
                                       "     /nouseage   output just the pictures\n"     
                                       "     /double     use scaled pictures without interpolation\n"     
                                       "     /doublei    use scaled pictures with interpolation\n"
+                                      "     /makegfx    use the settings required by makegfx\n"
                                       "     /id:x       use graphic set x\n\n"     );
                               return (0);
              
@@ -110,7 +118,7 @@ int main(int argc, char *argv[] )
    memset ( bipict, 0, sizeof ( 0 ) );
    try {
       if ( usage ) {
-         FILE* fp = fopen ("itemname.txt", "wt" );
+         FILE* fp = fopen ("itemname.txt", filewritemodetext );
 
          {
             for ( int i = 0; i < getterraintranslatenum(); i++ ) {
@@ -144,7 +152,7 @@ int main(int argc, char *argv[] )
                               int n = bdt->weather[i]->bi_picture[j];
                               int t = bipict[n].textnum++;
                               if ( (i == 0)  ||  (bdt->weather[0]->bi_picture[0] < 0) ) {
-                                 sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", c, bdt->id );
+                                 sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", c.c_str(), bdt->id );
                                  bipict [ n ].entry[ t ].color = 1;
                               } else {
                                  sprintf ( bipict [ n ].entry[ t ] .text, "-> %d ; w=%d", bdt->weather[0]->bi_picture[0],i );
@@ -191,7 +199,7 @@ int main(int argc, char *argv[] )
                             int t = bipict[n].textnum;
                             bipict[n].textnum += 2;
             
-                            sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", c, obj->id );
+                            sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", c.c_str(), obj->id );
                             sprintf ( bipict [ n ].entry[ t+1 ] .text, "    #%d ", i );
                             if ( obj->picture[w][i].flip & 1 )
                                strcat ( bipict [ n ].entry[ t+1 ] .text, "H" );
@@ -232,7 +240,7 @@ int main(int argc, char *argv[] )
                                  int t = bipict[n].textnum;
                                  bipict[n].textnum += 2;
                  
-                                 sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", c, bld->id );
+                                 sprintf ( bipict [ n ].entry[ t ] .text, "%s (%d)", c.c_str(), bld->id );
                                  sprintf ( bipict [ n ].entry[ t+1 ] .text, "    W=%d #%d X=%d Y=%d", i, j, k, l );
 
                                  fprintf( fp, "%d ", n );
@@ -284,16 +292,13 @@ int main(int argc, char *argv[] )
       char* name = "monogui.fnt";
       pfont fnt;
       {
-         tnfilestream stream ( name, 1 );
+         tnfilestream stream ( name, tnstream::reading );
          fnt = loadfont  ( &stream );
       }
       if ( !fnt ) {
          printf("error loading file %s \n", name );
          return 1;
       }
-   
-   
-   //   initsvga(0x101);
    
       int ys;
       int colnum;
@@ -388,7 +393,7 @@ int main(int argc, char *argv[] )
       printf ( "%s written\n", outputfilename );
    
       if ( index ) {
-         tnfilestream strm ( "bi_index.raw", 1 );
+         tnfilestream strm ( "bi_index.raw", tnstream::reading );
          int w;
          void* p;
          strm.readrlepict ( &p, false, &w );
@@ -400,7 +405,7 @@ int main(int argc, char *argv[] )
 
    } /* endtry */
    catch ( tfileerror err ) {
-      printf("\nfatal error accessing file %s \n", err.filename );
+      printf("\nfatal error accessing file %s \n", err.getFileName().c_str() );
       return 1;
    } /* endcatch */
    catch ( ASCexception ) {
@@ -409,7 +414,7 @@ int main(int argc, char *argv[] )
    } /* endcatch */
 
    if ( keeporiginalpalette )
-      printf("\n\nPlease setup the Battle Isle palette yourself !\n\n");
+      printf("\n\nPlease apply the correct palette yourself !\n\n");
 
    return 0;
 

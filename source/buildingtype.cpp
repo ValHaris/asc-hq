@@ -24,7 +24,6 @@
 #include "vehicletype.h"
 #include "buildingtype.h"
 
-#include "viewcalculation.h"
 #include "errors.h"
 
 #ifdef sgmain
