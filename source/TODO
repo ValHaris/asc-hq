@@ -1,39 +1,72 @@
-TODO list for ASC, programming department:
+Known Bugs:
+
+- aicraft take-off has inconsistent movement consumption 
+- duplicate gui icons in replay
+- replay doesn't work in certain etrongame
+- GeBeine: map load bug
+
+
+
+TODO list for ASC, programming department.
+
+-1- is very high priority
+-9- is very low  priority
+
 
 Small tasks:
 
--   writing a TPWM decoder for Battle Isle maps
+-3- fatalError() doesn't work on windows during the startup of ASC
 
--   writing a platform independant wrapper around vsnprintf (used in
+-7- writing a TPWM decoder for Battle Isle maps
+
+-5- writing a platform independant wrapper around vsnprintf (used in
     ASCString.cpp)
 
--   rewriting tdrawgettempline ( mapalgorithm.cpp ) which is way to slow
+-8- rewriting tdrawgettempline ( mapalgorithm.cpp ) which is way to slow
    
--   Replace tterainaccess class by a bitset
+-6- Replace tterainaccess class by a bitset
     The terrainbits and terrainaccess operators are quite a mess. Replacing 
     the system by a bitset (from STL) is probably the best solution
 
--   writing a script that makes an RPM package of ASC
+-7- writing a script that makes an RPM package of ASC
     I don't have a clue how RPM packages are created, but it would be nice
     if we could provide some...
     Since the whole release-process is a big collection of scripts on my
     system, the RPM creation process should be handled by some script which
     I can plug into the process.
 
--   direct invocation of and from mail clients to automate email games
+-7- direct invocation of and from mail clients to automate email games
 
--   replacing those ugly dynamic_array templates by std::vector
+-5- replacing those ugly dynamic_array templates by std::vector
 
--   Optimize  int VehicleMovement::getDistance ( int x, int y) in unitctrl.cpp
+-9- Optimize  int VehicleMovement::getDistance ( int x, int y) in unitctrl.cpp
     This function is pretty slow, but not called often enough to really 
     beeing a problem
     => not so important
 
--   Caching of fullscreen image ( file sdl/loadimage.c )
+-6- Caching of fullscreen image ( file sdl/loadimage.c )
     converting an image from 24 bitt to 8 bit and resizing it is quite slow.
     The image could be cached as PCX with 8 bit and correct resolution to be
     loaded faster the next time.
     -- not very important --
+
+-6- reaction fire doesn't fire on units which can suddenly be seen not because
+    they themselfes are moving, but because some jamming vehicle went away.
+
+-5- save date&time in email games
+
+-3- scrollable unit/building cargo (unlimited number of units)
+
+-8- new vehicletype property: Number of loadable units (not only limiting 
+    by weight)
+
+-6- displaying the cost for constructing buildings somewhere
+
+-7- movement cost for putObject action
+
+-3-  weapon efficiency = 0  --> weapon can not be chosen during attack
+
+-8-  kamikaze weapon
 
 
 Medium sized tasks
@@ -43,27 +76,43 @@ Medium sized tasks
  to make use of features modern operating system and even Windows provide:
 
 
-=   Introducing Truetype font support. 
+-3-  Introducing Truetype font support. 
      Although the current font handling routines are quite old, I still think 
      they are quite ok and relatively fast. But the creation of font files is 
      problematic. The tfont structures should be created on program start from
      TTF fonts. The SDL_TTF library provides the necessary background routines
 
-=   new Keyboard handling. 
+-2-  new Keyboard handling. 
      The handling of keyboard input was the biggest pain-in-the-ass under DOS.
      The keyboard routines should be completely redesigend. Searching for
      NEWKEYB will reveal all cruicial parts of the code which may be greatly
      simplified with a new key class that routines like rkey should return.
 
-=   new string handling
+-2-  new string handling
      replacing all occurances of c-style strings (char*) and c++ strings
      (std::string) by the new ASCString class (which is derived from
      std::string)
 
+-5-  new image storage for objects, so the images can be changed by graphic 
+     sets even when they were generated on runtime (mirroring)
+
+-5-  displaying objects on the small map
+
+-8-  embedding of units/objects/... in map
+     -> requires reinitialization of gui host
+
+-4-  check working condition of neutral events
+
+-5-  generalize height changing of units (needed for Sy-Set)
+     submarines, ascend, descent, behaviour is currently fixed for certain 
+     levels
+
+-8-  input/output of raw height information in mapgenerator
+     for usage by terragen or similar programs
 
 Larger Tasks:
 
-=   Rewriting the whole graphics engine
+-1-  Rewriting the whole graphics engine
      Currently is graphics engine is 8 bit depth only, cannot use hardware 
      acceleration and an image is just a void* pointer (resulting in all the
      delete void* warnings on compilation).
@@ -72,7 +121,7 @@ Larger Tasks:
      functions operate. 
      This class should probably be a wrapper around a SDL_image structure.
 
-=   maintaining and improving the mapeditor
+-2-  maintaining and improving the mapeditor
      Especially the user interface of the mapeditor has some room for
      improvements. This jobs involves asking the map-designers what they think
      should be improved there and then do it...
@@ -81,14 +130,9 @@ Larger Tasks:
      Or a function to make a diff between two maps and use it for a 
       map-change event...
 
-=   rewriting the "small editors", either in Java, or with 
-     WxWindows ( http://www.wxwindows.org )
-      
-     The Java version of the vehicle editor is almost complete, but the
-     other editors (for buildings, terrain, techology, objects) are still to 
-     be done.
+-1- text based file formats, to replace those small editors
 
-=   maintaining and improving the dialog engine together with the dialogs
+-3-  maintaining and improving the dialog engine together with the dialogs
     themselves. The VehicleInfo dialog for example is really outdated... 
     libu ( http://www.rhrk.uni-kl.de/~klaux/libu.html ) could be an 
     interesting GUI library for this.
@@ -103,3 +147,34 @@ Larger Tasks:
     description (implementing only a small subset of the functionality)
 
 
+
+Requested features (all low priority)
+
+-  A result screen in multiplayergames (who list how many units until now,
+    lost buildings, gained resources, ... )
+
+-  A confirmation setting screen 
+
+-  map parameter: increased airplane fuel usage to allow realistic maps
+   where airplanes can't 'stand' in midair for longer periods of time
+
+
+-  Guenter Beine on 2000-12-13 :
+   I like to make a proposal for the keybindings. Especially canceling an action
+   is handled in different ways according to the proposed action i. e. moving,
+   attacking, constructing etc. Canceling an activated attack is the best way. If
+   you want to renounce an attack you mark a field that can not be attacked or
+   simply the unit that you planed to make the attack and press the a-key again to
+   abort the action. Or you mark another unit and press the a-key to get the same
+   result. Pressing the key once more makes the marked unit ready to attack. I
+   think handling of the game would be more easy if every action would be enabled
+   and canceled by this way.
+
+- internationalization
+
+Requested features whos necessity should be discussed...
+
+-  loading of savegames in the mapeditor 
+-  different jamming power for a unit on different levels of height
+
+-  setting up new production facilities ingame 
