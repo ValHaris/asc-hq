@@ -27,6 +27,8 @@
  #include "ascstring.h"
  #include "terraintype.h"
  #include "objecttype.h"
+ #include "basestreaminterface.h"
+ #include "textfileparser.h"
 
 
 const int cbuildingfunctionnum = 18;
@@ -69,8 +71,11 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
               int x,y;
               LocalCoordinate ( int _x, int _y ) : x(_x), y(_y) {};
               LocalCoordinate ( ) : x(-1), y(-1) {};
+              LocalCoordinate ( const ASCString& s );
+              ASCString toString ( ) const;
         };
 
+        ASCString    name;
 
         void*        w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
         int          bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
@@ -80,7 +85,7 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
 
         int          id;
 
-        ASCString    name;
+
         ASCString    fileName;
         ASCString    location;
 
@@ -124,7 +129,6 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
         //! the picture for the GUI that is used for selecting a building that is going to be constructed by a unit
         void*        guibuildicon;
 
-        pterrainaccess terrain_access;
         Resources    _bi_maxstorage;
 
         //! bitmapped: the level of height that this building will reside on.
@@ -135,13 +139,15 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
 
         void*        getpicture ( const LocalCoordinate& localCoordinate );
 
-        BuildingType ( void ) {
-           terrain_access = &terrainaccess;
-           vehicleCategoriesLoadable = -1;
-        };
+        BuildingType ( void );
 
         bool          vehicleloadable ( pvehicletype fzt ) const ;
         MapCoordinate getFieldCoordinate( const MapCoordinate& entryOnMap, const LocalCoordinate& localCoordinate );
+
+        void read ( tnstream& stream ) ;
+        void write ( tnstream& stream ) const ;
+        void runTextIO ( PropertyContainer& pc );
+
 };
 
 

@@ -23,6 +23,9 @@
 
 #include "vehicletype.h"
 #include "buildingtype.h"
+#include "graphicset.h"
+#include "gameoptions.h"
+#include "textfiletags.h"
 
 #include "errors.h"
 
@@ -51,6 +54,12 @@ const char*  cbuildingfunctions[cbuildingfunctionnum]  =
                 "mining station",
                 "external loading",
                 "construct units that cannot move out" };
+
+
+BuildingType :: BuildingType ( void )
+{
+   vehicleCategoriesLoadable = -1;
+}
 
 
 
@@ -94,6 +103,355 @@ bool    BuildingType :: vehicleloadable ( pvehicletype fzt ) const
    return false;
 }
 
+const int building_version = 3;
+
+#ifndef converter
+extern void* generate_building_gui_build_icon ( pbuildingtype bld );
+#endif
+
+void BuildingType :: read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   if ( version <= building_version && version >= 1) {
+
+      for ( int v = 0; v < cwettertypennum; v++ )
+         for ( int w = 0; w < maxbuildingpicnum; w++ )
+            for ( int x = 0; x < 4; x++ )
+               for ( int y = 0; y < 6 ; y++ )
+                   w_picture[v][w][x][y] = (void*)stream.readInt( );
+
+      for ( int v = 0; v < cwettertypennum; v++ )
+         for ( int w = 0; w < maxbuildingpicnum; w++ )
+            for ( int x = 0; x < 4; x++ )
+               for ( int y = 0; y < 6 ; y++ )
+                   bi_picture[v][w][x][y] = stream.readInt( );
+
+      entry.x = stream.readInt( );
+      entry.y = stream.readInt( );
+
+      stream.readInt( ); // was: powerlineconnect.x
+      stream.readInt( ); // was: powerlineconnect.y
+      stream.readInt( ); // was: pipelineconnect.x
+      stream.readInt( ); // was: pipelineconnect.y
+
+      id = stream.readInt( );
+      bool __loadName = stream.readInt( );
+      _armor = stream.readInt( );
+      jamming = stream.readInt( );
+      view = stream.readInt( );
+      loadcapacity = stream.readInt( );
+      loadcapability = stream.readChar( );
+      unitheightreq = stream.readChar( );
+      productionCost.material = stream.readInt( );
+      productionCost.fuel = stream.readInt( );
+      special = stream.readInt( );
+      technologylevel = stream.readChar( );
+      researchid = stream.readChar( );
+
+      terrainaccess.read ( stream );
+
+      construction_steps = stream.readInt( );
+      maxresearchpoints = stream.readInt( );
+      _tank.energy = stream.readInt( );
+      _tank.material = stream.readInt( );
+      _tank.fuel = stream.readInt( );
+      maxplus.energy = stream.readInt( );
+      maxplus.material = stream.readInt( );
+      maxplus.fuel = stream.readInt( );
+      efficiencyfuel = stream.readInt( );
+      efficiencymaterial = stream.readInt( );
+      guibuildicon = (char*) stream.readInt( );
+      stream.readInt( ); // terrain_access = (pterrainaccess)
+
+      _bi_maxstorage.energy = stream.readInt( );
+      _bi_maxstorage.material = stream.readInt( );
+      _bi_maxstorage.fuel = stream.readInt( );
+
+      buildingheight = 1 << log2 ( stream.readInt() );
+      unitheight_forbidden = stream.readInt( );
+      externalloadheight = stream.readInt( );
+
+      if ( version >= 3)
+         vehicleCategoriesLoadable = stream.readInt();
+      else
+         vehicleCategoriesLoadable = -1;
 
 
+      if ( version >= 2 ) {
+         for ( int x = 0; x < 4; x++ )
+            for ( int y = 0; y < 6; y++ )
+                destruction_objects[x][y] = stream.readInt( );
+      } else {
+         for ( int w = 0; w < 9; w++ )
+             stream.readInt( );     // dummy
+
+         for ( int x = 0; x < 4; x++ )
+            for ( int y = 0; y < 6; y++ )
+                destruction_objects[x][y] = 0;
+      }
+
+      if ( __loadName )
+         name = stream.readString();
+
+      for ( int k = 0; k < maxbuildingpicnum ; k++)
+         for ( int j = 0; j <= 5; j++)
+            for ( int i = 0; i <= 3; i++)
+               for ( int w = 0; w < cwettertypennum; w++ )
+                 if ( w_picture[w][k][i][j] )
+                    if ( bi_picture[w][k][i][j] == -1 ) {
+                       int sz;
+                       stream.readrlepict ( &w_picture[w][k][i][j], false, &sz );
+                     } else
+                        loadbi3pict_double ( bi_picture[w][k][i][j],
+                                             &w_picture[w][k][i][j],
+                                             CGameOptions::Instance()->bi3.interpolate.buildings );
+
+
+     #ifdef converter
+      guibuildicon = NULL;
+     #else
+      guibuildicon = generate_building_gui_build_icon ( this );
+     #endif
+
+   } else {
+      ASCString s = "invalid version for reading buildingtype: ";
+      s += strrr ( version );
+      throw ASCmsgException ( s );
+   }
+
+}
+
+void BuildingType :: write ( tnstream& stream ) const
+{
+   stream.writeInt ( building_version );
+
+   for ( int v = 0; v < cwettertypennum; v++ )
+      for ( int w = 0; w < maxbuildingpicnum; w++ )
+         for ( int x = 0; x < 4; x++ )
+            for ( int y = 0; y < 6 ; y++ )
+                stream.writeInt ( w_picture[v][w][x][y] != NULL );
+
+   for ( int v = 0; v < cwettertypennum; v++ )
+      for ( int w = 0; w < maxbuildingpicnum; w++ )
+         for ( int x = 0; x < 4; x++ )
+            for ( int y = 0; y < 6 ; y++ )
+                stream.writeInt ( bi_picture[v][w][x][y] );
+
+   stream.writeInt ( entry.x );
+   stream.writeInt ( entry.y );
+   stream.writeInt ( -1 ); // was powerlineconnect.x
+   stream.writeInt ( -1 ); // was powerlineconnect.y
+   stream.writeInt ( -1 ); // was pipelineconnect.x
+   stream.writeInt ( -1 ); // was pipelineconnect.y
+
+   stream.writeInt ( id );
+   stream.writeInt ( !name.empty() );
+   stream.writeInt ( _armor );
+   stream.writeInt ( jamming );
+   stream.writeInt ( view );
+   stream.writeInt ( loadcapacity );
+   stream.writeChar ( loadcapability );
+   stream.writeChar ( unitheightreq );
+   stream.writeInt ( productionCost.material );
+   stream.writeInt ( productionCost.fuel );
+   stream.writeInt ( special );
+   stream.writeChar ( technologylevel );
+   stream.writeChar ( researchid );
+
+   terrainaccess.write ( stream );
+
+   stream.writeInt ( construction_steps );
+   stream.writeInt ( maxresearchpoints );
+   stream.writeInt ( _tank.energy );
+   stream.writeInt ( _tank.material );
+   stream.writeInt ( _tank.fuel );
+   stream.writeInt ( maxplus.energy );
+   stream.writeInt ( maxplus.material );
+   stream.writeInt ( maxplus.fuel );
+   stream.writeInt ( efficiencyfuel );
+   stream.writeInt ( efficiencymaterial );
+   stream.writeInt ( guibuildicon != NULL );
+   stream.writeInt ( 1 );
+
+   stream.writeInt ( _bi_maxstorage.energy );
+   stream.writeInt ( _bi_maxstorage.material );
+   stream.writeInt ( _bi_maxstorage.fuel );
+
+   stream.writeInt ( buildingheight );
+   stream.writeInt ( unitheight_forbidden );
+   stream.writeInt ( externalloadheight );
+
+   stream.writeInt ( vehicleCategoriesLoadable );
+
+   for ( int x = 0; x < 4; x++ )
+      for ( int y = 0; y < 6; y++ )
+          stream.writeInt ( destruction_objects[x][y] );
+
+   if ( !name.empty() )
+      stream.writeString ( name );
+
+    for (int k = 0; k < maxbuildingpicnum; k++)
+       for (int j = 0; j <= 5; j++)
+          for (int i = 0; i <= 3; i++)
+             for ( int w = 0; w < cwettertypennum; w++ )
+                if ( w_picture[w][k][i][j] )
+                   if ( bi_picture[w][k][i][j] == -1 )
+                       stream.writedata( w_picture[w][k][i][j],fieldsize);
+}
+
+
+ASCString BuildingType :: LocalCoordinate :: toString ( ) const
+{
+  ASCString s;
+  s += 'A'+x;
+  s += '1'+y;
+  return s;
+}
+
+BuildingType :: LocalCoordinate :: LocalCoordinate ( const ASCString& s )
+{
+  ASCString s2 = s;
+  s2.toUpper();
+  if ( s2.length() < 2 ) {
+     x = -1;
+     y = -1;
+  } else {
+     x = s2[0] - 'A';
+     y = s2[1] - '1';
+  }
+}
+
+
+void BuildingType :: runTextIO ( PropertyContainer& pc )
+{
+   pc.addString( "Name", name );
+   pc.addInteger ( "ConstructionStages", construction_steps ).evaluate();
+
+   BitSet weatherBits;
+
+   for ( int i = 0; i < cwettertypennum; i++ )
+      for ( int x = 0; x < 4; x++ )
+         for ( int y = 0; y < 6; y++ )
+            if ( w_picture[i][0][x][y] )
+               weatherBits.set(i);
+
+   pc.addTagArray( "Weather", weatherBits, cwettertypennum-1, weatherTags ).evaluate();
+
+
+   ASCString fieldNames;
+   for ( int a = 0; a < 4; a++ )
+      for ( int b = 0; b < 6; b++ )
+         if ( w_picture[0][0][a][b] ) {
+            fieldNames += LocalCoordinate( a, b).toString();
+            fieldNames += " ";
+         }
+
+   pc.addString( "Fields", fieldNames ).evaluate();
+
+   typedef vector<LocalCoordinate> Fields;
+   Fields fields;
+   if ( pc.isReading() ) {
+      StringTokenizer st ( fieldNames );
+      ASCString t = st.getNextToken();
+      while ( !t.empty() ) {
+         fields.push_back ( LocalCoordinate( t ));
+         t = st.getNextToken();
+      }
+   }
+
+
+   bool bi3pics = false;
+
+   for ( int i = 0; i < 4; i++ )
+      for ( int j = 0; j < 6; j++ )
+         if ( bi_picture[0][0][i][j] >= 0 )
+            bi3pics = true;
+
+   pc.addBool  ( "UseGFXpics", bi3pics ).evaluate();
+
+   if ( bi3pics ) {
+      pc.openBracket ( "GFXpictures");
+      for ( int w = 0; w < cwettertypennum; w++ )
+         if ( weatherBits.test(w) ) {
+            pc.openBracket (weatherTags[w] );
+
+            for ( int c = 0; c < construction_steps; c++ ) {
+               pc.openBracket ( ASCString("Stage")+strrr(c+1) );
+
+               for ( Fields::iterator i = fields.begin(); i != fields.end(); i++ )
+                  pc.addInteger ( i->toString(), bi_picture[w][c][i->x][i->y] );
+
+               pc.closeBracket();
+            }
+            pc.closeBracket();
+         }
+      pc.closeBracket();
+   }
+
+
+   bool rubble = false;
+   for ( int i = 0; i < 4; i++ )
+      for ( int j = 0; j < 6; j++ )
+         if ( destruction_objects[i][j] >= 0 )
+            rubble = true;
+
+   pc.addBool ( "RubbleObjects", rubble ).evaluate();
+   if ( rubble ) {
+      pc.openBracket ( "Rubble");
+      for ( Fields::iterator i = fields.begin(); i != fields.end(); i++ )
+         pc.addInteger ( i->toString(), destruction_objects[i->x][i->y] );
+      pc.closeBracket();
+   }
+
+
+   ASCString entryString = entry.toString();
+   pc.addString ( "Entry", entryString ).evaluate();
+   if ( pc.isReading() )
+      entry = LocalCoordinate ( entry );
+
+   pc.addInteger( "ID", id );
+   pc.addInteger( "Armor", _armor );
+   pc.addInteger( "View", view );
+   pc.addInteger( "Jaming", jamming );
+
+   pc.openBracket ( "Cargo" );
+    pc.addInteger( "MaxUnitSize", loadcapacity );
+    pc.addTagInteger( "EnterHeight", loadcapability, choehenstufennum, heightTags );
+    pc.addTagInteger( "Cargo_ReachableHeightReq", unitheightreq, choehenstufennum, heightTags );
+    pc.addTagInteger( "Cargo_ReachableHeightNot", unitheight_forbidden, choehenstufennum, heightTags );
+    pc.addTagInteger ( "CategoriesNOT", vehicleCategoriesLoadable, cmovemalitypenum, unitCategoryTags, true );
+   pc.closeBracket();
+
+   pc.addTagInteger ( "Functions", special, cbuildingfunctionnum, buildingFunctionTags );
+
+   pc.addInteger ( "Techlevel", technologylevel );
+
+   pc.openBracket("TerrainAccess" );
+    terrainaccess.runTextIO ( pc );
+   pc.closeBracket();
+
+
+   pc.addInteger ( "MaxResearch", maxresearchpoints );
+
+   pc.openBracket ( "ConstructionCost" );
+    productionCost.runTextIO ( pc );
+   pc.closeBracket ();
+
+   pc.openBracket ( "MaxResourceProduction" );
+    maxplus.runTextIO ( pc );
+   pc.closeBracket ();
+
+   pc.openBracket ( "StorageCapacity" );
+    pc.openBracket( "BImode" );
+     _bi_maxstorage.runTextIO ( pc );
+    pc.closeBracket();
+    pc.openBracket ( "ASCmode" );
+     _tank.runTextIO ( pc );
+    pc.closeBracket();
+   pc.closeBracket ();
+
+   pc.addTagInteger( "Height", buildingheight, choehenstufennum, heightTags );
+
+   pc.addTagInteger( "ExternalLoading", externalloadheight, choehenstufennum, heightTags );
+}
 

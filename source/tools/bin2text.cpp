@@ -104,6 +104,18 @@ int main(int argc, char *argv[] )
 
                delete vt;
             }
+            if ( patimat ( "*.bld", filename.c_str() )) {
+               BuildingType* bt = loadbuildingtype ( filename.c_str() );
+
+               PropertyWritingContainer pc ( "BuildingType", bt->fileName + ".asctxt" );
+               cout << "Writing file " << pc.getFilename() << "... ";
+               bt->runTextIO ( pc );
+               pc.run();
+
+               cout << "done \n";
+
+               delete bt;
+            }
             filename = ff.getnextname();
          }
       }

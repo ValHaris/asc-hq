@@ -25,6 +25,7 @@
  extern const char* vehicleAbilities[];
  extern const char* weaponTags[];
  extern const char* unitCategoryTags[];
+ extern const char* buildingFunctionTags[];
 
 #endif
  

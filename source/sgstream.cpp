@@ -5,9 +5,14 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.67 2001-08-09 15:58:59 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.68 2001-08-09 19:28:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.67  2001/08/09 15:58:59  mbickel
+//      Some usability improvements in the map editor
+//      More flexible BI3 map import
+//      Better textfile error messages
+//
 //     Revision 1.66  2001/08/09 14:50:37  mbickel
 //      Added palette.map to data directory
 //      Improved usability of terrain selection in mapeditor
@@ -306,7 +311,6 @@ char* rotatepict ( void* image, int organgle )
 
 
 
-const int building_version = 3;
 const int object_version = 1;
 const int technology_version = 1;
 
@@ -604,6 +608,7 @@ pbuildingtype       loadbuildingtype( const char *       name)
 
    tnfilestream stream ( name, tnstream::reading );
    pbuildingtype bt = loadbuildingtype ( &stream );
+   bt->fileName = extractFileName_withoutSuffix ( name );
 
    displayLogMessage ( 5, " done\n");
    return bt;
@@ -612,202 +617,16 @@ pbuildingtype       loadbuildingtype( const char *       name)
 
 pbuildingtype       loadbuildingtype( pnstream stream )
 {
-   int v, w, x, y;
-
-   int version;
-   stream->readdata2 ( version );
-   if ( version <= building_version && version >= 1) {
-
-      pbuildingtype pgbt = new BuildingType;
-
-      for ( v = 0; v < cwettertypennum; v++ )
-         for ( w = 0; w < maxbuildingpicnum; w++ )
-            for ( x = 0; x < 4; x++ )
-               for ( y = 0; y < 6 ; y++ )
-                   pgbt->w_picture[v][w][x][y] = (void*)stream->readInt( );
-
-      for ( v = 0; v < cwettertypennum; v++ )
-         for ( w = 0; w < maxbuildingpicnum; w++ )
-            for ( x = 0; x < 4; x++ )
-               for ( y = 0; y < 6 ; y++ ) 
-                   pgbt->bi_picture[v][w][x][y] = stream->readInt( );
-               
-      pgbt->entry.x = stream->readInt( );
-      pgbt->entry.y = stream->readInt( );
-
-      stream->readInt( ); // was: powerlineconnect.x
-      stream->readInt( ); // was: powerlineconnect.y
-      stream->readInt( ); // was: pipelineconnect.x
-      stream->readInt( ); // was: pipelineconnect.y
-
-      pgbt->id = stream->readInt( );
-      bool __loadName = stream->readInt( );
-      pgbt->_armor = stream->readInt( );
-      pgbt->jamming = stream->readInt( );
-      pgbt->view = stream->readInt( );
-      pgbt->loadcapacity = stream->readInt( );
-      pgbt->loadcapability = stream->readChar( );
-      pgbt->unitheightreq = stream->readChar( );
-      pgbt->productionCost.material = stream->readInt( );
-      pgbt->productionCost.fuel = stream->readInt( );
-      pgbt->special = stream->readInt( );
-      pgbt->technologylevel = stream->readChar( );
-      pgbt->researchid = stream->readChar( );
-
-      pgbt->terrainaccess.read ( *stream );
-
-      pgbt->construction_steps = stream->readInt( );
-      pgbt->maxresearchpoints = stream->readInt( );
-      pgbt->_tank.energy = stream->readInt( );
-      pgbt->_tank.material = stream->readInt( );
-      pgbt->_tank.fuel = stream->readInt( );
-      pgbt->maxplus.energy = stream->readInt( );
-      pgbt->maxplus.material = stream->readInt( );
-      pgbt->maxplus.fuel = stream->readInt( );
-      pgbt->efficiencyfuel = stream->readInt( );
-      pgbt->efficiencymaterial = stream->readInt( );
-      pgbt->guibuildicon = (char*) stream->readInt( );
-      pgbt->terrain_access = (pterrainaccess) stream->readInt( );
-
-      pgbt->_bi_maxstorage.energy = stream->readInt( );
-      pgbt->_bi_maxstorage.material = stream->readInt( );
-      pgbt->_bi_maxstorage.fuel = stream->readInt( );
-
-      pgbt->buildingheight = stream->readInt( );
-      pgbt->buildingheight = 1 << log2 (pgbt->buildingheight); // to make sure just one bit is set
-      pgbt->unitheight_forbidden = stream->readInt( );
-      pgbt->externalloadheight = stream->readInt( );
-
-      if ( version >= 3)
-         pgbt->vehicleCategoriesLoadable = stream->readInt();
-      else
-         pgbt->vehicleCategoriesLoadable = -1;
-
-
-      if ( version >= 2 ) {
-         for ( x = 0; x < 4; x++ )
-            for ( y = 0; y < 6; y++ )
-                pgbt->destruction_objects[x][y] = stream->readInt( );
-      } else {
-         for ( w = 0; w < 9; w++ )
-             stream->readInt( );     // dummy
-
-         for ( x = 0; x < 4; x++ )
-            for ( y = 0; y < 6; y++ )
-                pgbt->destruction_objects[x][y] = 0;
-      }
-
-      if ( __loadName )
-         pgbt->name = stream->readString();
-   
-      for ( int k = 0; k < maxbuildingpicnum ; k++)
-         for ( int j = 0; j <= 5; j++) 
-            for ( int i = 0; i <= 3; i++) 
-               for ( int w = 0; w < cwettertypennum; w++ )
-                 if ( pgbt->w_picture[w][k][i][j] ) 
-                    if ( pgbt->bi_picture[w][k][i][j] == -1 ) {
-                       int sz;
-                       stream->readrlepict ( &pgbt->w_picture[w][k][i][j], false, &sz ); 
-                     } else 
-                        loadbi3pict_double ( pgbt->bi_picture[w][k][i][j],
-                                                                                &pgbt->w_picture[w][k][i][j],
-                                                                                CGameOptions::Instance()->bi3.interpolate.buildings );
-                     
-                  
-       pgbt->terrain_access = &pgbt->terrainaccess;
-
-     #ifdef converter
-      pgbt->guibuildicon = NULL;
-     #else
-      pgbt->guibuildicon = generate_building_gui_build_icon ( pgbt );
-     #endif
-
-      pgbt->location = stream->getLocation();
-
-      return pgbt; 
-   } else
-      return NULL;
-} 
+  pbuildingtype bdt = new BuildingType;
+  bdt->read ( *stream );
+  bdt->location = stream->getLocation();
+  return bdt;
+}
 
 
 void writebuildingtype ( pbuildingtype bld, pnstream stream )
 {
-   int v,w,x,y;
-
-   stream->writedata2 ( building_version );
-
-   for ( v = 0; v < cwettertypennum; v++ )
-      for ( w = 0; w < maxbuildingpicnum; w++ )
-         for ( x = 0; x < 4; x++ )
-            for ( y = 0; y < 6 ; y++ ) 
-                stream->writeInt ( (int) bld->w_picture[v][w][x][y] );
-
-   for ( v = 0; v < cwettertypennum; v++ )
-      for ( w = 0; w < maxbuildingpicnum; w++ )
-         for ( x = 0; x < 4; x++ )
-            for ( y = 0; y < 6 ; y++ ) 
-                stream->writeInt ( bld->bi_picture[v][w][x][y] );
-
-   stream->writeInt ( bld->entry.x );
-   stream->writeInt ( bld->entry.y );
-   stream->writeInt ( -1 ); // was bld->powerlineconnect.x
-   stream->writeInt ( -1 ); // was bld->powerlineconnect.y
-   stream->writeInt ( -1 ); // was bld->pipelineconnect.x
-   stream->writeInt ( -1 ); // was bld->pipelineconnect.y
-
-   stream->writeInt ( bld->id );
-   stream->writeInt ( !bld->name.empty() );
-   stream->writeInt ( bld->_armor );
-   stream->writeInt ( bld->jamming );
-   stream->writeInt ( bld->view );
-   stream->writeInt ( bld->loadcapacity );
-   stream->writeChar ( bld->loadcapability );
-   stream->writeChar ( bld->unitheightreq );
-   stream->writeInt ( bld->productionCost.material );
-   stream->writeInt ( bld->productionCost.fuel );
-   stream->writeInt ( bld->special );
-   stream->writeChar ( bld->technologylevel );
-   stream->writeChar ( bld->researchid );
-
-   bld->terrainaccess.write ( *stream );
-
-   stream->writeInt ( bld->construction_steps );
-   stream->writeInt ( bld->maxresearchpoints );
-   stream->writeInt ( bld->_tank.energy );
-   stream->writeInt ( bld->_tank.material );
-   stream->writeInt ( bld->_tank.fuel );
-   stream->writeInt ( bld->maxplus.energy );
-   stream->writeInt ( bld->maxplus.material );
-   stream->writeInt ( bld->maxplus.fuel );
-   stream->writeInt ( bld->efficiencyfuel );
-   stream->writeInt ( bld->efficiencymaterial );
-   stream->writeInt ( (int) bld->guibuildicon );
-   stream->writeInt ( (int) bld->terrain_access );
-
-   stream->writeInt ( bld->_bi_maxstorage.energy );
-   stream->writeInt ( bld->_bi_maxstorage.material );
-   stream->writeInt ( bld->_bi_maxstorage.fuel );
-
-   stream->writeInt ( bld->buildingheight );
-   stream->writeInt ( bld->unitheight_forbidden );
-   stream->writeInt ( bld->externalloadheight );
-
-   stream->writeInt ( bld->vehicleCategoriesLoadable );
-
-   for ( x = 0; x < 4; x++ )
-      for ( y = 0; y < 6; y++ )
-          stream->writeInt ( bld->destruction_objects[x][y] );
-
-   if ( !bld->name.empty() )
-      stream->writeString ( bld->name );
-
-    for (int k = 0; k < maxbuildingpicnum; k++)
-       for (int j = 0; j <= 5; j++)
-          for (int i = 0; i <= 3; i++)
-             for ( int w = 0; w < cwettertypennum; w++ )
-                if (bld->w_picture[w][k][i][j] ) 
-                   if ( bld->bi_picture[w][k][i][j] == -1 )
-                       stream->writedata( bld->w_picture[w][k][i][j],fieldsize);
+  bld->write ( *stream );
 }
 
 

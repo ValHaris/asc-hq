@@ -3,9 +3,14 @@
 */
 
 
-//     $Id: loadbi3.cpp,v 1.51 2001-08-09 15:58:59 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.52 2001-08-09 19:28:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2001/08/09 15:58:59  mbickel
+//      Some usability improvements in the map editor
+//      More flexible BI3 map import
+//      Better textfile error messages
+//
 //     Revision 1.50  2001/08/09 14:50:37  mbickel
 //      Added palette.map to data directory
 //      Improved usability of terrain selection in mapeditor
@@ -958,7 +963,7 @@ void       tloadBImap :: ReadSHOPPart( void )
                                        if ( !fld2 )
                                           fail = true;
                                        else {
-                                          if ( bld->terrain_access->accessible ( fld2->bdt ) > 0 )
+                                          if ( bld->terrainaccess.accessible ( fld2->bdt ) > 0 )
                                              terrainmatch++;
                                           if ( bld->bi_picture[w][p][m][n] == fld2->tempw )
                                              objmatch++;

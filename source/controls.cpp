@@ -3,9 +3,14 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.110 2001-08-07 15:58:09 mbickel Exp $
+//     $Id: controls.cpp,v 1.111 2001-08-09 19:28:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.110  2001/08/07 15:58:09  mbickel
+//      Fixed crash in mail list
+//      Fixed crash in weapon info with mines
+//      Fixed cancel Button in object construction
+//
 //     Revision 1.109  2001/08/06 21:38:00  mbickel
 //      Fixed: ghost icons remained after vehicle construction canceled
 //
@@ -310,7 +315,7 @@ void         tsearchputbuildingfields::testfield(const MapCoordinate& mc)
                if (fld) {
                   if (fld->vehicle != NULL)
                      b = false;
-                  if ( bld->terrain_access->accessible ( fld->typ->art ) <= 0 )
+                  if ( bld->terrainaccess.accessible ( fld->typ->art ) <= 0 )
                      b = false;
                   if (fld->building != NULL) {
                      if (fld->building->typ != bld)

@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.60 2001-08-09 10:28:22 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.61 2001-08-09 19:28:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2001/08/09 10:28:22  mbickel
+//      Fixed AI problems
+//      Mapeditor can edit a units AI parameter
+//
 //     Revision 1.59  2001/07/28 21:09:08  mbickel
 //      Prepared vehicletype structure for textIO
 //
@@ -1558,7 +1562,7 @@ void         placebuilding(int               colorr,
          for ( int y = 0; y < 6; y++ )
             if ( buildingtyp->getpicture ( BuildingType::LocalCoordinate(x, y) )) {
                MapCoordinate mc = buildingtyp->getFieldCoordinate ( MapCoordinate (getxpos(), getypos()), BuildingType::LocalCoordinate (x, y) );
-               if ( buildingtyp->terrain_access->accessible ( actmap->getField (mc)->bdt ) <= 0 )
+               if ( buildingtyp->terrainaccess.accessible ( actmap->getField (mc)->bdt ) <= 0 )
                   f++;
             }
       if ( f )

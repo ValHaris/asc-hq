@@ -18,6 +18,7 @@
 #include "textfiletags.h"
 #include "typen.h"
 #include "vehicletype.h"
+#include "buildingtype.h"
 
 const char* weatherTags[cwettertypennum-1]
     = { "dry",
@@ -133,6 +134,25 @@ const char*  unitCategoryTags[cmovemalitypenum] =
      "helicopter"
    };
 
+const char*  buildingFunctionTags[cbuildingfunctionnum]  =
+              { "HeadQuarters",
+                "Training_Facility",
+                "__unused__",
+                "Vehicle_Production",
+                "Ammo_Production",
+                "__unused__",
+                "__unused__",
+                "__unused__",
+                "Repair_Facility",
+                "Recycling",
+                "Research",
+                "Sonar",
+                "Wind_Power_Plant",
+                "Solar_Power_Plant",
+                "Matter_Converter",
+                "Mining_Station",
+                "External_Loading",
+                "Produce_Units_that_cannot_leave" };
 
 
  const char* weatherAbbrev[cwettertypennum]

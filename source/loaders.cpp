@@ -5,9 +5,16 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.57 2001-08-06 20:54:43 mbickel Exp $
+//     $Id: loaders.cpp,v 1.58 2001-08-09 19:28:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2001/08/06 20:54:43  mbickel
+//      Fixed lots of crashes related to the new text files
+//      Fixed delayed events
+//      Fixed crash in terrin change event
+//      Fixed visibility of mines
+//      Fixed crashes in event loader
+//
 //     Revision 1.56  2001/07/28 11:19:12  mbickel
 //      Updated weaponguide
 //      moved item repository from spfst to itemrepository
@@ -831,7 +838,7 @@ void      tspfldloaders:: readmessagelist( MessagePntrContainer& lst )
 
 void      tspfldloaders:: readmessages ( void )
 {
-   int magic = stream->readInt();
+   stream->readInt(); // magic
 
    while ( spfld->__loadmessages ) {
       Message* msg = new Message ( spfld );
@@ -865,7 +872,7 @@ void      tspfldloaders:: readmessages ( void )
    if ( spfld->__loadunsentmessage )
       readmessagelist ( spfld->unsentmessage );
 
-   magic = stream->readInt();
+   stream->readInt(); // magic
 
    if ( spfld->journal )
       stream->readpchar ( &spfld->journal );
