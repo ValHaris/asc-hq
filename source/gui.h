@@ -1,6 +1,10 @@
-//     $Id: gui.h,v 1.8 2000-06-08 21:03:41 mbickel Exp $
+//     $Id: gui.h,v 1.9 2000-08-12 09:17:30 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/06/08 21:03:41  mbickel
+//      New vehicle action: attack
+//      wrote documentation for vehicle actions
+//
 //     Revision 1.7  2000/05/02 16:20:54  mbickel
 //      Fixed bug with several simultaneous vehicle actions running
 //      Fixed graphic error at ammo transfer in buildings
@@ -127,7 +131,7 @@ class tguihost {
         void   runpressedmouse ( int taste );
 
         void   reset ( void );
-        void   cleanup ( void );    // wird zum entfernen der kleinen guiicons aufgerufen, bevor das icon ausgefÅhrt wird
+        void   cleanup ( void );    // wird zum entfernen der kleinen guiicons aufgerufen, bevor das icon ausgef?hrt wird
         
         virtual void init ( int resolutionx, int resolutiony );
    };
@@ -204,7 +208,6 @@ class tselectvehiclecontainerguihost : public tguihost {
 
 
 
-
 class tnguiicon {
           pnguiicon next;
           static pnguiicon first;
@@ -253,7 +256,9 @@ class tnguiicon {
           virtual void  iconpressed  ( void );
           void          sort         ( pnguiicon last );
 	  //          friend void tnguiicon::sort( pnguiicon last );
-
+		
+		 // virtual void  setup        ( pattackweap atw, int n );
+     
           tnguiicon ( void );
           virtual ~tnguiicon ( );
           static pnguiicon firstguiicon;
@@ -264,9 +269,9 @@ class tnweapselguiicon : public tnguiicon {
           pnweapselguiicon        next;
           static pnweapselguiicon first;
         protected:
-          virtual pnweapselguiicon nxt      ( void );
+          virtual pnguiicon  nxt      ( void );
           virtual void      setnxt   ( pnguiicon ts );
-          virtual pnweapselguiicon frst     ( void );
+          virtual pnguiicon frst     ( void );
           virtual void      setfrst  ( pnguiicon ts );
 
           int iconnum;
@@ -292,7 +297,7 @@ class tselectweaponguihost : public tguihost {
          pattackweap        atw;
          int                x,y;
        protected:
-         virtual pnweapselguiicon getfirsticon();
+         virtual pnguiicon  getfirsticon();
          virtual void      setfirsticon( pnguiicon ic );
 
        public:

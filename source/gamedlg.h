@@ -1,6 +1,11 @@
-//     $Id: gamedlg.h,v 1.6 2000-08-07 16:29:21 mbickel Exp $
+//     $Id: gamedlg.h,v 1.7 2000-08-12 09:17:28 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/08/07 16:29:21  mbickel
+//      orbiting units don't consume fuel any more
+//      Fixed bug in attack formula; improved attack formula
+//      Rewrote reactionfire
+//
 //     Revision 1.5  2000/05/23 20:40:47  mbickel
 //      Removed boolean type
 //
@@ -112,7 +117,7 @@ class  tcontinuecampaign : public tnewcampaignlevel {
 class  tchoosenewmap    : public tnewcampaignlevel {
                      public:
                           void          init( char* ptitle );
-                          virtual void  buttonpressed( byte id );
+                          virtual void  buttonpressed( char id );
                           void          readmapinfo ( void );
                           virtual void  checkforcampaign( void ) = 0;
                       };

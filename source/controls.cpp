@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.62 2000-08-08 13:38:32 mbickel Exp $
+//     $Id: controls.cpp,v 1.63 2000-08-12 09:17:19 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2000/08/08 13:38:32  mbickel
+//      Fixed: construction of buildings doesn't consume resources
+//      Fixed: no unit information visible for satellites
+//
 //     Revision 1.61  2000/08/08 13:21:54  mbickel
 //      Added unitCategoriesLoadable property to buildingtypes and vehicletypes
 //      Added option: showUnitOwner
@@ -854,8 +858,8 @@ void         trefuelvehicle::testfield(void)
 
 
 void         trefuelvehicle::initrefuelling( word xp1, word yp1, char md )   /*  md: 1 reparieren    */ 
-{                                                                            /*      2 vollfÅllen    */
-  byte         f, a;                                                         /*      3 dialogfÅllen  */
+{                                                                            /*      2 vollf?llen    */
+  byte         f, a;                                                         /*      3 dialogf?llen  */
  
    mode = 0; 
    if (moveparams.movestatus == 0) { 
@@ -2157,7 +2161,7 @@ void         tcomputeview::testfield(void)
 
       int str = viewdist;
       if ( f )
-         if ( gameoptions.visibility_calc_algo == 1 ) {
+         if ( CGameOptions::Instance()->visibility_calc_algo == 1 ) {
             int x = startx ;
             int y = starty ;
             while ( x != xp || y != yp ) {
@@ -2732,8 +2736,8 @@ void         calcmovemalus(int          x1,
                            int          y2,
                            pvehicle     vehicle,
                            shortint     direc,
-                           int&         mm1,               // fÅr Spritfuelconsumption
-                           int&         mm2 )             //  fÅr movementdecrease
+                           int&         mm1,               // fuer Spritfuelconsumption
+                           int&         mm2 )             //  fuer movementdecrease
 { 
 #ifdef HEXAGON   
  static const  byte         movemalus[2][6]  = {{ 8, 6, 3, 0, 3, 6 }, {0, 0, 0, 0, 0, 0 }};
@@ -3679,7 +3683,7 @@ void         tdashboard::paintwind( int repaint )
 
    */
 
-   if ( !gameoptions.smallmapactive ) {
+   if ( !CGameOptions::Instance()->smallmapactive ) {
       setinvisiblemouserectanglestk ( agmp->resolutionx - ( 800 - 612), 213, agmp->resolutionx - ( 800 - 781), 305 );
 
       static int lastdir = -1;
@@ -3814,7 +3818,7 @@ void         tdashboard::paintimage(void)
 
 void         tdashboard::paintclasses ( void )
 {
-   if ( gameoptions.showUnitOwner ) {
+	if ( CGameOptions::Instance()->showUnitOwner ) {
       const char* owner = NULL;
       if ( vehicle )
          owner = actmap->getPlayerName(vehicle->color / 8);
@@ -3967,8 +3971,8 @@ void         tdashboard::paintsmallmap ( int repaint )
    setinvisiblemouserectanglestk ( agmp->resolutionx - ( 800 - 612), 213, agmp->resolutionx - ( 800 - 781), 305 );
    if ( !smallmap ) {
       smallmap = new tmainshowmap;
-      gameoptions.smallmapactive = 1;
-      gameoptions.changed = 1;
+      CGameOptions::Instance()->smallmapactive = 1;
+      CGameOptions::Instance()->setChanged();
       repaint = 1;
    }
 
@@ -3987,10 +3991,10 @@ void         tdashboard::checkformouse ( int func )
 {
 
     if ( mouseinrect ( agmp->resolutionx - ( 800 - 612), 213, agmp->resolutionx - ( 800 - 781), 305 ) && (mouseparams.taste == 2)) {
-       gameoptions.smallmapactive = !gameoptions.smallmapactive;
-       gameoptions.changed = 1;
+       CGameOptions::Instance()->smallmapactive = !CGameOptions::Instance()->smallmapactive;
+       CGameOptions::Instance()->setChanged();
 
-       if ( gameoptions.smallmapactive )
+       if ( CGameOptions::Instance()->smallmapactive )
           dashboard.paintsmallmap( 1 );
        else
           dashboard.paintwind( 1 );
@@ -4011,10 +4015,10 @@ void         tdashboard::checkformouse ( int func )
     */
 
     if ( (func & 1) == 0 ) {
-       if ( smallmap  &&  gameoptions.smallmapactive )
+       if ( smallmap  &&  CGameOptions::Instance()->smallmapactive )
           smallmap->checkformouse();
    
-       if ( !gameoptions.smallmapactive ) {
+       if ( !CGameOptions::Instance()->smallmapactive ) {
           if ( mouseparams.x >= agmp->resolutionx - ( 640 - 588 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 610 )  &&   mouseparams.y >= 227   &&   mouseparams.y <= 290  && (mouseparams.taste & 1) ) {
              displaywindspeed();
              while ( mouseparams.x >= agmp->resolutionx - ( 640 - 588 )  &&   mouseparams.x <= agmp->resolutionx - ( 640 - 610 )  &&   mouseparams.y >= 227   &&   mouseparams.y <= 290  && (mouseparams.taste & 1) )
@@ -4151,7 +4155,7 @@ void   tdashboard :: paintvehicleinfo( const pvehicle     vehicle,
    dashboard.paintmovement(); 
    dashboard.paintarmor(); 
 
-   if ( gameoptions.smallmapactive )
+   if ( CGameOptions::Instance()->smallmapactive )
       dashboard.paintsmallmap( dashboard.repainthard );
    else
       dashboard.paintwind( dashboard.repainthard );
@@ -4403,9 +4407,9 @@ void tbuilding :: execnetcontrol ( void )
                   
                                   +4         mit abbuchen                         /
                                   +8         nur Tributzahlungen kassieren       /  
-                                 +16         plus zurÅckliefern                 <  diese Bits schlie·en sich gegenseitig aus
-                                 +32         usage zurÅckliefern                 \
-                                 +64         tank zurÅckliefern                   \
+                                 +16         plus zur?ckliefern                 <  diese Bits schlie·en sich gegenseitig aus
+                                 +32         usage zur?ckliefern                 \
+                                 +64         tank zur?ckliefern                   \
                                  */
 
 
@@ -5240,7 +5244,7 @@ void newturnforplayer ( int forcepasswordchecking, char* password )
          tlockdispspfld ldsf;
          backgroundpict.paint();
 
-         if ( (actmap->player[actmap->actplayer].passwordcrc && actmap->player[actmap->actplayer].passwordcrc != gameoptions.defaultpassword && actmap->player[actmap->actplayer].passwordcrc != encodepassword ( password )) 
+         if ( (actmap->player[actmap->actplayer].passwordcrc && actmap->player[actmap->actplayer].passwordcrc != CGameOptions::Instance()->defaultpassword && actmap->player[actmap->actplayer].passwordcrc != encodepassword ( password )) 
             || actmap->time.a.turn == 1 || (actmap->network && actmap->network->globalparams.reaskpasswords) ) {
                if ( forcepasswordchecking < 0 ) {
                   erasemap( actmap );
@@ -5254,7 +5258,7 @@ void newturnforplayer ( int forcepasswordchecking, char* password )
    computeview(); 
 
 /*
-   // Wenn der allererste player zum ersten mal drankommt, mu· auch fÅr die anderen player die view computet werden
+   // Wenn der allererste player zum ersten mal drankommt, mu· auch fuer die anderen player die view computet werden
    if ( actmap->time.turn == 1 ) {
       int i = 0;
       while ( !actmap->player[i].existent )
@@ -5452,7 +5456,7 @@ void endTurn ( void )
                  //
                  //
       
-                 //gekÅrzt:
+                 //gek?rzt:
                  //
                  //             movement            windspeed * maxwindspeed        
                  // j -= --------------------- *  ----------------------------   * fuelConsumption
@@ -5460,10 +5464,10 @@ void endTurn ( void )
                  //
                  //
                  //
-                 // Falls eine vehicle sich nicht bewegt hat, bekommt sie soviel Sprit abgezogen, wie sie zum zurÅcklegen der Strecke,
-                 // die der Wind pro Runde zurÅckgelegt hat, fuelConsumptionen wÅrde.
+                 // Falls eine vehicle sich nicht bewegt hat, bekommt sie soviel Sprit abgezogen, wie sie zum zur?cklegen der Strecke,
+                 // die der Wind pro Runde zur?ckgelegt hat, fuelConsumptionen w?rde.
                  // Wenn die vehicle sich schon bewegt hat, dann wurde dieser Abzug schon beim movement vorgenommen, so da· er hier nur
-                 // noch fÅr das Åbriggebliebene movement stattfinden mu·.
+                 // noch fuer das ?briggebliebene movement stattfinden mu·.
                  //
       
       
@@ -5473,8 +5477,28 @@ void endTurn ( void )
                      actvehicle->fuel = j; 
                }
             } 
+            if (j >= 0)  {
+                  if ( actvehicle->reactionfire.getStatus()) {
+                     if ( actvehicle->reactionfire.getStatus()< 3 ) 
+                        actvehicle->reactionfire.status++;
 
-            if ( actvehicle )   
+                     if ( actvehicle->reactionfire.getStatus() == 3 )  {
+                        //actvehicle->reactionfire = 0xff;
+                        actvehicle->attacked = false; 
+                     } else {
+                        //actvehicle->reactionfire = 0;
+                        actvehicle->attacked = true; 
+                     }
+
+                     // actvehicle->setMovement ( 0 );
+                     actvehicle->resetmovement();
+                     actvehicle->attacked = false; 
+                  } else {
+                     actvehicle->resetmovement();
+                     actvehicle->attacked = false; 
+                  }
+               } 
+			if ( actvehicle )   
                actvehicle->endTurn();
 
             actvehicle = nxeht; 
@@ -5593,11 +5617,10 @@ void nextPlayer( void )
 
       tlockdispspfld ldsf;
 
-      int forcepwd;  // Wenn der aktuelle player gerade verloren hat, mu· fÅr den nÑchsten player die Passwortabfrage kommen, auch wenn er nur noch der einzige player ist !
-
-      if ( oldplayer >= 0  &&  !actmap->player[oldplayer].existent )
+   int forcepwd;  // Wenn der aktuelle player gerade verloren hat, mu· fuer den nÑchsten player die Passwortabfrage kommen, auch wenn er nur noch der einzige player ist !
+   if ( oldplayer >= 0  &&  !actmap->player[oldplayer].existent )
          forcepwd = 1;
-      else
+   else
          forcepwd = 0;
 
      newturnforplayer( forcepwd );
@@ -6588,178 +6611,13 @@ void testnet ( void )
 }
 
 
-cmousecontrol :: cmousecontrol ( void )
+
+
+/*cmousecontrol :: cmousecontrol ( void )
 {
    mousestat = 0;
 }
-
-void cmousecontrol :: chkmouse ( void )
-{
-   if ( gameoptions.mouse.fieldmarkbutton )
-      if ( mouseparams.taste == gameoptions.mouse.fieldmarkbutton ) {
-         int x; 
-         int y;
-         int r = getfieldundermouse ( &x, &y );
-   
-         if ( r ) 
-            if ( (cursor.posx != x || cursor.posy != y) && ( moveparams.movestatus == 0) ) {
-               // collategraphicoperations cgo;
-               mousestat = 1;
-               mousevisible(false);
-               cursor.hide();
-               cursor.posx = x;
-               cursor.posy = y;
-               cursor.show();
-
-               dashboard.paint( getactfield(), actmap-> playerview );
-
-               mousevisible(true);
-            } 
-      }
-
-   if ( gameoptions.mouse.centerbutton )
-      if ( mouseparams.taste == gameoptions.mouse.centerbutton ) {
-         int x; 
-         int y;
-         int r = getfieldundermouse ( &x, &y );
-         x += actmap->xpos;
-         y += actmap->ypos;
-   
-         if ( r ) {
-            int newx = x - idisplaymap.getscreenxsize() / 2;
-            int newy = y - idisplaymap.getscreenysize() / 2;
-
-            if ( newx < 0 )
-               newx = 0;
-            if ( newy < 0 )
-               newy = 0;
-            if ( newx > actmap->xsize - idisplaymap.getscreenxsize() )
-               newx = actmap->xsize - idisplaymap.getscreenxsize();
-            if ( newy > actmap->ysize - idisplaymap.getscreenysize() )
-               newy = actmap->ysize - idisplaymap.getscreenysize();
-   
-            if ( newy & 1 )
-               newy--;
-
-            if ( newx != actmap->xpos  || newy != actmap->ypos ) {
-               // collategraphicoperations cgo;
-               cursor.hide();
-               actmap->xpos = newx;
-               actmap->ypos = newy;
-               displaymap();
-               cursor.posx = x - actmap->xpos;
-               cursor.posy = y - actmap->ypos;
-
-               // cursor.gotoxy ( x, y );
-               cursor.show();
-            }
-            while ( mouseparams.taste == gameoptions.mouse.centerbutton )
-               releasetimeslice();
-         }
-      }
-
-   if ( gameoptions.mouse.smallguibutton )
-      if ( mouseparams.taste == gameoptions.mouse.smallguibutton ) {
-         int x; 
-         int y;
-         int r = getfieldundermouse ( &x, &y );
-   
-         if ( r ) 
-            if ( (cursor.posx != x || cursor.posy != y) && ( moveparams.movestatus == 0   ||  getfield(actmap->xpos + x , actmap->ypos + y)->a.temp == 0) ) {
-               // collategraphicoperations cgo;
-               mousestat = 1;
-               mousevisible(false);
-               cursor.hide();
-               cursor.posx = x;
-               cursor.posy = y;
-               cursor.show();
-               mousevisible(true);
-            } else 
-              if ( mousestat == 2  ||  mousestat == 0 ||  ((moveparams.movestatus || pendingVehicleActions.action) && getfield( actmap->xpos + x, actmap->ypos + y)->a.temp )  ) {
-                 {
-                    // collategraphicoperations cgo;
-                    if ( cursor.posx != x || cursor.posy != y ) {
-                       mousevisible(false);
-                       cursor.hide();
-                       cursor.posx = x;
-                       cursor.posy = y;
-                       cursor.show();
-
-                       dashboard.paint( getactfield(), actmap-> playerview );
-
-                       mousevisible(true);
-                    }
-
-                    actgui->painticons();
-                 }
-                 pfield fld = getactfield();
-                 actgui->paintsmallicons( gameoptions.mouse.smallguibutton, !fld->vehicle && !fld->building && !fld->a.temp );
-                 mousestat = 0;
-              }
-      } else 
-        if ( mousestat == 1 )
-           mousestat = 2;
-
-   if ( gameoptions.mouse.largeguibutton )
-      if ( mouseparams.taste == gameoptions.mouse.largeguibutton ) {
-         int x; 
-         int y;
-         int r = getfieldundermouse ( &x, &y );
-         if ( r && ( cursor.posx != x || cursor.posy != y) ) {
-            mousevisible(false);
-            cursor.hide();
-            cursor.posx = x;
-            cursor.posy = y;
-            cursor.show();
-            mousevisible(true);
-         }
-         actgui->painticons();
-
-         actgui->runpressedmouse ( mouseparams.taste );
-      }
-
-   if ( gameoptions.mouse.unitweaponinfo )
-      if ( mouseparams.taste == gameoptions.mouse.unitweaponinfo ) {
-         int x; 
-         int y;
-         int r = getfieldundermouse ( &x, &y );
-         if ( r && ( cursor.posx != x || cursor.posy != y) ) {
-            mousevisible(false);
-            cursor.hide();
-            cursor.posx = x;
-            cursor.posy = y;
-            cursor.show();
-            mousevisible(true);
-         }
-         actgui->painticons();
-         if ( getactfield()->vehicle ) {
-            dashboard.paintvehicleinfo( getactfield()->vehicle, NULL, NULL, NULL );
-            dashboard.paintlweaponinfo();
-         }
-      }
-
-/*
-   if ( mouseparams.taste == minmenuekey ) {
-      int x; 
-      int y;
-      if (  getfieldundermouse ( &x, &y ) ) {
-         actgui->paintsmallicons( minmenuekey );
-      }
-   }
 */
-
-}
-
-void cmousecontrol :: reset ( void )
-{                           
-   mousestat = 0;
-}
-
-
-
-
-
-
 
 int ReplayMapDisplay :: checkMapPosition ( int x, int y )
 {
@@ -7151,7 +7009,7 @@ int  trunreplay :: removeunit ( int x, int y, int nwid )
 void trunreplay :: wait ( int t )
 {
    if ( fieldvisiblenow ( getactfield(), actmap->playerview ))
-    while ( ticker < t + gameoptions.replayspeed  && !keypress()) {
+    while ( ticker < t + CGameOptions::Instance()->replayspeed  && !keypress()) {
        /*
        tkey input;
        while (keypress ()) {
@@ -7181,7 +7039,7 @@ void trunreplay :: setcursorpos ( int x, int y )
 void trunreplay :: displayActionCursor ( int x1, int y1, int x2, int y2, int secondWait )
 {
     ReplayMapDisplay rmd( &defaultMapDisplay );
-    rmd.setCursorDelay ( gameoptions.replayspeed );
+    rmd.setCursorDelay ( CGameOptions::Instance()->replayspeed );
     rmd.displayActionCursor ( x1, y1, x2, y2, secondWait );
 }
 
@@ -7807,5 +7665,163 @@ void trunreplay :: firstinit ( void )
     gui.starticonload();
     status = 0;
 }
+
+void cmousecontrol :: chkmouse ( void )
+{
+   if ( CGameOptions::Instance()->mouse.fieldmarkbutton )
+      if ( mouseparams.taste == CGameOptions::Instance()->mouse.fieldmarkbutton ) {
+         int x; 
+         int y;
+         int r = getfieldundermouse ( &x, &y );
+   
+         if ( r ) 
+            if ( (cursor.posx != x || cursor.posy != y) && ( moveparams.movestatus == 0) ) {
+               // collategraphicoperations cgo;
+               mousestat = 1;
+               mousevisible(false);
+               cursor.hide();
+               cursor.posx = x;
+               cursor.posy = y;
+               cursor.show();
+
+               dashboard.paint( getactfield(), actmap-> playerview );
+
+               mousevisible(true);
+            } 
+      }
+
+   if ( CGameOptions::Instance()->mouse.centerbutton )
+      if ( mouseparams.taste == CGameOptions::Instance()->mouse.centerbutton ) {
+         int x; 
+         int y;
+         int r = getfieldundermouse ( &x, &y );
+         x += actmap->xpos;
+         y += actmap->ypos;
+   
+         if ( r ) {
+            int newx = x - idisplaymap.getscreenxsize() / 2;
+            int newy = y - idisplaymap.getscreenysize() / 2;
+
+            if ( newx < 0 )
+               newx = 0;
+            if ( newy < 0 )
+               newy = 0;
+            if ( newx > actmap->xsize - idisplaymap.getscreenxsize() )
+               newx = actmap->xsize - idisplaymap.getscreenxsize();
+            if ( newy > actmap->ysize - idisplaymap.getscreenysize() )
+               newy = actmap->ysize - idisplaymap.getscreenysize();
+   
+            if ( newy & 1 )
+               newy--;
+
+            if ( newx != actmap->xpos  || newy != actmap->ypos ) {
+               // collategraphicoperations cgo;
+               cursor.hide();
+               actmap->xpos = newx;
+               actmap->ypos = newy;
+               displaymap();
+               cursor.posx = x - actmap->xpos;
+               cursor.posy = y - actmap->ypos;
+
+               // cursor.gotoxy ( x, y );
+               cursor.show();
+            }
+            while ( mouseparams.taste == CGameOptions::Instance()->mouse.centerbutton )
+               releasetimeslice();
+         }
+      }
+
+   if ( CGameOptions::Instance()->mouse.smallguibutton )
+      if ( mouseparams.taste == CGameOptions::Instance()->mouse.smallguibutton ) {
+         int x; 
+         int y;
+         int r = getfieldundermouse ( &x, &y );
+   
+         if ( r ) 
+            if ( (cursor.posx != x || cursor.posy != y) && ( moveparams.movestatus == 0   ||  getfield(actmap->xpos + x , actmap->ypos + y)->a.temp == 0) ) {
+               // collategraphicoperations cgo;
+               mousestat = 1;
+               mousevisible(false);
+               cursor.hide();
+               cursor.posx = x;
+               cursor.posy = y;
+               cursor.show();
+               mousevisible(true);
+            } else 
+              if ( mousestat == 2  ||  mousestat == 0 ||  ((moveparams.movestatus || pendingVehicleActions.action) && getfield( actmap->xpos + x, actmap->ypos + y)->a.temp )  ) {
+                 {
+                    // collategraphicoperations cgo;
+                    if ( cursor.posx != x || cursor.posy != y ) {
+                       mousevisible(false);
+                       cursor.hide();
+                       cursor.posx = x;
+                       cursor.posy = y;
+                       cursor.show();
+
+                       dashboard.paint( getactfield(), actmap-> playerview );
+
+                       mousevisible(true);
+                    }
+
+                    actgui->painticons();
+                 }
+                 pfield fld = getactfield();
+                 actgui->paintsmallicons( CGameOptions::Instance()->mouse.smallguibutton, !fld->vehicle && !fld->building && !fld->a.temp );
+                 mousestat = 0;
+              }
+      } else 
+        if ( mousestat == 1 )
+           mousestat = 2;
+
+   if ( CGameOptions::Instance()->mouse.largeguibutton )
+      if ( mouseparams.taste == CGameOptions::Instance()->mouse.largeguibutton ) {
+         int x; 
+         int y;
+         int r = getfieldundermouse ( &x, &y );
+         if ( r && ( cursor.posx != x || cursor.posy != y) ) {
+            mousevisible(false);
+            cursor.hide();
+            cursor.posx = x;
+            cursor.posy = y;
+            cursor.show();
+            mousevisible(true);
+         }
+         actgui->painticons();
+
+         actgui->runpressedmouse ( mouseparams.taste );
+      }
+
+   if ( CGameOptions::Instance()->mouse.unitweaponinfo )
+      if ( mouseparams.taste == CGameOptions::Instance()->mouse.unitweaponinfo ) {
+         int x; 
+         int y;
+         int r = getfieldundermouse ( &x, &y );
+         if ( r && ( cursor.posx != x || cursor.posy != y) ) {
+            mousevisible(false);
+            cursor.hide();
+            cursor.posx = x;
+            cursor.posy = y;
+            cursor.show();
+            mousevisible(true);
+         }
+         actgui->painticons();
+         if ( getactfield()->vehicle ) {
+            dashboard.paintvehicleinfo( getactfield()->vehicle, NULL, NULL, NULL );
+            dashboard.paintlweaponinfo();
+         }
+      }
+
+/*
+   if ( mouseparams.taste == minmenuekey ) {
+      int x; 
+      int y;
+      if (  getfieldundermouse ( &x, &y ) ) {
+         actgui->paintsmallicons( minmenuekey );
+      }
+   }
+*/
+
+}
+
 
 

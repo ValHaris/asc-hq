@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.76 2000-08-08 13:22:03 mbickel Exp $
+//     $Id: sg.cpp,v 1.77 2000-08-12 09:17:32 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.76  2000/08/08 13:22:03  mbickel
+//      Added unitCategoriesLoadable property to buildingtypes and vehicletypes
+//      Added option: showUnitOwner
+//
 //     Revision 1.75  2000/08/08 09:48:23  mbickel
 //
 //      speed up of dialog boxes in linux
@@ -472,7 +476,7 @@ pprogressbar actprogressbar = NULL;
 pchar mainmenuitems[6] = { "new map", "new campaign", "load game", "continue network game", "network supervisor", "exit" };
 
 
-cmousecontrol* mousecontrol = NULL;
+//cmousecontrol* mousecontrol = NULL;
 
 
 
@@ -2032,7 +2036,7 @@ void ladestartkarte( char *emailgame=NULL, char *mapname=NULL, char *savegame=NU
    } else {  // resort to loading defaults
 
 
-     if ( gameoptions.startupcount < 4 ) {
+	   if ( CGameOptions::Instance()->startupcount < 4 ) {
         strcpy ( s , "tutor0" );
      } else {
         strcpy ( s , "railstat" );
@@ -2421,13 +2425,13 @@ void execuseraction ( tuseractions action )
                                        displaymap();
                        break;
                        
-        case ua_toggleunitshading:     gameoptions.units_gray_after_move = !gameoptions.units_gray_after_move;
-                                       gameoptions.changed = 1;
+        case ua_toggleunitshading:     CGameOptions::Instance()->units_gray_after_move = !CGameOptions::Instance()->units_gray_after_move;
+                                       CGameOptions::Instance()->setChanged();
                                        displaymap();
                                        while ( mouseparams.taste )
                                           releasetimeslice();
 
-                                       if ( gameoptions.units_gray_after_move )
+                                       if ( CGameOptions::Instance()->units_gray_after_move )
                                           displaymessage("units that can not move will now be displayed gray", 3);
                                        else
                                           displaymessage("units that can not move and cannot shoot will now be displayed gray", 3);
@@ -2514,8 +2518,8 @@ void mainloopgeneralmousecheck ( void )
    if ( lastdisplayedmessageticker + messagedisplaytime < ticker ) 
       displaymessage2("");
 
-   if ( mousecontrol )
-      mousecontrol->chkmouse();
+  // if ( mousecontrol )
+  //    mousecontrol->chkmouse();
 
    // checkfieldsformouse();
 
@@ -2529,7 +2533,7 @@ void mainloopgeneralmousecheck ( void )
 
    if ( onlinehelp )
       onlinehelp->checkforhelp();
-   if ( onlinehelpwind && !gameoptions.smallmapactive )
+   if ( onlinehelpwind && !CGameOptions::Instance()->smallmapactive )
       onlinehelpwind->checkforhelp();
 
    releasetimeslice();
@@ -2760,7 +2764,7 @@ void  mainloop ( void )
       mainloopgeneralmousecheck ( );
 
 /************************************************************************************************/
-/*        Pulldown Men                                                                       . */
+/*        Pulldown Men?                                                                       . */
 /************************************************************************************************/
 
       checkpulldown( &ch );
@@ -2927,7 +2931,7 @@ void loaddata( int resolx, int resoly,
       logtofile ( tmpcbuf );
    }
 #endif     
-   mousecontrol = new cmousecontrol;
+  // mousecontrol = new cmousecontrol;
 
    if ( actprogressbar ) {
       actprogressbar->end();
@@ -3488,7 +3492,7 @@ int main(int argc, char *argv[] )
 
    initFileIO( configfile );
 
-   if ( gameoptions.disablesound )
+   if ( CGameOptions::Instance()->disablesound )
       useSound = 0;
 
    try {
@@ -3497,6 +3501,10 @@ int main(int argc, char *argv[] )
          dataVersion = s.readInt();
       } else
          dataVersion = 0;
+
+      readgameoptions( configfile );
+      if ( CGameOptions::Instance()->disablesound )
+         useSound = 0;
 
       check_bi3_dir ();
    }

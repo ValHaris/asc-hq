@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.41 2000-08-11 12:24:07 mbickel Exp $
+//     $Id: typen.h,v 1.42 2000-08-12 09:17:38 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2000/08/11 12:24:07  mbickel
+//      Fixed: no movement after refuelling unit
+//      Restructured reading/writing of units
+//
 //     Revision 1.40  2000/08/10 10:20:18  mbickel
 //      Added building function "produce all unit types"
 //
@@ -217,21 +221,21 @@
 
 typedef class tterrainaccess *pterrainaccess;
 typedef struct tcrc *pcrc;
-typedef struct tvehicle* pvehicle ;
-typedef struct tvehicle Vehicle;
-typedef struct tvehicletype* pvehicletype ;
+typedef class tvehicle* pvehicle ;
+typedef class tvehicle Vehicle;
+typedef class tvehicletype* pvehicletype ;
 typedef struct tbuildrange* pbuildrange;
 typedef class tobjecttype* pobjecttype;
 typedef class tmap*  pmap;
 typedef class tmap Map;
 typedef class  tbuildingtype* pbuildingtype;
-typedef struct tevent* pevent ;
+typedef class tevent* pevent ;
 typedef class  ttechnology* ptechnology ;
 typedef class tresearch* presearch ;
 typedef struct tdevelopedtechnologies*  pdevelopedtechnologies;
 typedef char* pchar;
 typedef class tbasenetworkconnection* pbasenetworkconnection;
-typedef struct tnetwork* pnetwork;
+typedef class tnetwork* pnetwork;
 typedef struct tquickview* pquickview;
 typedef struct tterraintype* pterraintype;
 typedef class  twterraintype* pwterraintype ;
@@ -342,7 +346,7 @@ extern tterrainbits& operator^ ( tterrainbits tb2, tterrainbits tb3 ) ;
 class tterrainaccess {
    public:
       tterrainaccess ( void ) ;
-      tterrainbits  terrain;      /*  BM     befahrbare terrain: z.B. Schiene, Wasser, Wald, ...  ; es mu· lediglich eins gesetzt sein */
+      tterrainbits  terrain;      /*  BM     befahrbare terrain: z.B. Schiene, Wasser, Wald, ...  ; es muss lediglich eins gesetzt sein */
       tterrainbits  terrainreq;   /*  BM     diese Bits MöSSEN ALLE in gesetzt sein */
       tterrainbits  terrainnot;   /*  BM     sobald eines dieser Bits gesetzt ist, kann die vehicle NICHT auf das field fahren  */
       tterrainbits  terrainkill;  /* falls das aktuelle field nicht befahrbar ist, und bei field->typ->art eine dieser Bits gesetzt ist, verschwindet die vehicle */
@@ -477,7 +481,7 @@ struct teventstore {
     pmessage next;
     tmessage ( void );
     tmessage ( pmap spfld );
-    tmessage ( char* txt, int rec );  // fÅr Meldungen vom System
+    tmessage ( char* txt, int rec );  // fuer Meldungen vom System
     ~tmessage();
   };
 
@@ -504,7 +508,7 @@ struct teventstore {
     int restricted;
     // restricted kennt 3 ZustÑnde: 0 = nicht limitiert, neue vehicle werden nicht aufgenommen; 
     //                              1 = nicht limitiert, neue vehicle werden aufgenommen
-    //                              2 = limitiert: es dÅrfen nur vehicle verwendet werden, deren CRCs bekannt sind
+    //                              2 = limitiert: es d?rfen nur vehicle verwendet werden, deren CRCs bekannt sind
     tcrcblock ( void );
   };
 
@@ -598,7 +602,7 @@ class tvehicletype {    // This structure does not have a fixed layout any more 
    public:
        char*        name;          /* z.B. Exterminator  */
        char*        description;   /* z.B. Jagdbomber    */
-       char*        infotext;      /* optional, kann sehr ausfÅhrlich sein. Empfehlenswert Åber eine Textdatei einzulesen */
+       char*        infotext;      /* optional, kann sehr ausf?hrlich sein. Empfehlenswert ?ber eine Textdatei einzulesen */
        struct tweapons {  
          char         weaponcount; 
          struct tweapon {
@@ -620,20 +624,20 @@ class tvehicletype {    // This structure does not have a fixed layout any more 
 
        Word         armor; 
        void*        picture[8];    /*  0¯  ,  45¯   */
-       char         height;        /*  BM  Besteht die Mîglichkeit zum Hîhenwechseln  */
-       word         researchid;    // inzwischen ÅberflÅssig, oder ?
+       char         height;        /*  BM  Besteht die Moeglichkeit zum Hoehenwechseln  */
+       word         researchid;    // inzwischen ?berfl?ssig, oder ?
        int          _terrain;    /*  BM     befahrbare terrain: z.B. Schiene, Wasser, Wald, ...  */
        int          _terrainreq; /*  BM     diese Bits MöSSEN in ( field->typ->art & terrain ) gesetzt sein */
        int          _terrainkill;  /* falls das aktuelle field nicht befahrbar ist, und bei field->typ->art eine dieser Bits gesetzt ist, verschwindet die vehicle */
-       char         steigung;      /*  max. befahrbare Hîhendifferenz zwischen 2 fieldern  */
-       char         jamming;      /*  StÑrke der Stîrstrahlen  */
+       char         steigung;      /*  max. befahrbare Hoehendifferenz zwischen 2 fieldern  */
+       char         jamming;      /*  StÑrke der Stoerstrahlen  */
        int          view;         /*  viewweite  */
-       char         wait;        /*  Kann vehicle nach movement sofort schie·en ?  */
-       Word         loadcapacity;      /*  Transportmîglichkeiten  */
+       char         wait;        /*  Kann vehicle nach movement sofort schiessen ?  */
+       Word         loadcapacity;      /*  Transportmoeglichkeiten  */
        word         maxunitweight; /*  maximales Gewicht einer zu ladenden vehicle */
-       char         loadcapability;     /*  BM     CHoehenStufen   die zu ladende vehicle mu· sich auf einer dieser Hîhenstufen befinden */
-       char         loadcapabilityreq;  /*  eine vehicle, die geladen werden soll, mu· auf eine diese Hîhenstufen kommen kînnen */
-       char         loadcapabilitynot;  /*  eine vehicle, die auf eine dieser Hîhenstufen kann, darf NICHT geladen werden. Beispiel: Flugzeuge in Transportflieger */
+       char         loadcapability;     /*  BM     CHoehenStufen   die zu ladende vehicle muss sich auf einer dieser Hoehenstufen befinden */
+       char         loadcapabilityreq;  /*  eine vehicle, die geladen werden soll, muss auf eine diese Hoehenstufen kommen koennen */
+       char         loadcapabilitynot;  /*  eine vehicle, die auf eine dieser Hoehenstufen kann, darf NICHT geladen werden. Beispiel: Flugzeuge in Transportflieger */
        Word         id; 
        int          tank; 
        Word         fuelConsumption; 
@@ -641,7 +645,7 @@ class tvehicletype {    // This structure does not have a fixed layout any more 
        int          material; 
        int          functions;
        char         movement[8];      /*  max. movementsstrecke  */
-       char         movemalustyp;     /*  wenn ein Bodentyp mehrere Movemali fÅr unterschiedliche vehiclearten, wird dieser genommen.  <= cmovemalitypes */
+       char         movemalustyp;     /*  wenn ein Bodentyp mehrere Movemali fuer unterschiedliche vehiclearten, wird dieser genommen.  <= cmovemalitypes */
        char         classnum;         /* Anzahl der Klassen, max 8, min 0 ;  Der EINZIGE Unterschied zwischen 0 und 1 ist der NAME ! */
        char*        classnames[8];    /* Name der einzelnen Klassen */
 
@@ -652,7 +656,7 @@ class tvehicletype {    // This structure does not have a fixed layout any more 
         word         techrequired[4];
         char         eventrequired;
         int          vehiclefunctions;
-      } classbound[8];    /* untergrenze (minimum), die zum erreichen dieser Klasse notwendig ist, classbound[0] gilt fÅr vehicletype allgemein*/
+      } classbound[8];    /* untergrenze (minimum), die zum erreichen dieser Klasse notwendig ist, classbound[0] gilt fuer vehicletype allgemein*/
 
        char         maxwindspeedonwater;
        char         digrange;        // Radius, um den nach bodenschÑtzen gesucht wird. 
@@ -686,11 +690,11 @@ class tvehicletype {    // This structure does not have a fixed layout any more 
 }; 
 
 
-class tvehicle { /*** Bei énderungen unbedingt Save/LoadGame und Konstruktor korrigieren !!! ***/
+class tvehicle { /*** Bei Aenderungen unbedingt Save/LoadGame und Konstruktor korrigieren !!! ***/
   private:
     pmap gamemap;
   public:
-    pvehicletype typ;          /*  vehicleart: z.B. Schwere Fu·truppe  */
+    pvehicletype typ;          /*  vehicleart: z.B. Schwere Fusstruppe  */
     char         color; 
     char         damage; 
     tmunition    munition;
@@ -703,9 +707,10 @@ class tvehicle { /*** Bei énderungen unbedingt Save/LoadGame und Konstruktor kor
     tvehicle*    loading[32]; 
     char         experience;    // 0 .. 15 
     char         attacked; 
-    char         height;       /* BM */   /*  aktuelle Hîhe: z.B. Hochfliegend  */
+    char         height;       /* BM */   /*  aktuelle Hoehe: z.B. Hochfliegend  */
+   // char         movement;     /*  ?briggebliebene movement fuer diese Runde  */
    private:
-    char         _movement;     /*  Åbriggebliebene movement fÅr diese Runde  */
+    char         _movement;     /*  ?briggebliebene movement fuer diese Runde  */
    public:
     char         direction;    /*  Blickrichtung  */
     Integer      xpos, ypos;   /*  Position auf map  */
@@ -713,7 +718,7 @@ class tvehicle { /*** Bei énderungen unbedingt Save/LoadGame und Konstruktor kor
     int          energy;       /*  energy  */
     int          energyUsed;
     pvehicle     next;
-    pvehicle     prev;         /*  fÅr lineare Liste der vehicle */
+    pvehicle     prev;         /*  fuer lineare Liste der vehicle */
                    
     short        dummy3;   
     word         dummy1[13]; 
@@ -731,7 +736,8 @@ class tvehicle { /*** Bei énderungen unbedingt Save/LoadGame und Konstruktor kor
          enum Status { off, init1, init2, ready };
          int enemiesAttackable;     // BM   ; gibt an, gegen welche Spieler die vehicle noch reactionfiren kann.
          int status;
-         void enable ( void );
+         int getStatus()	{	return status;};
+		 void enable ( void );
          void disable( void );
          void endTurn ( void ); // is called when the player hits the "end turn" button
     } reactionfire;
@@ -810,10 +816,10 @@ class  tbuildingtype {
         int          jamming; 
         int          view; 
         int          loadcapacity; 
-        char         loadcapability;   /*  BM => CHoehenstufen; aktuelle Hîhe der reinzufahrenden vehicle
-                                                                mu· hier enthalten sein  */ 
-        char         unitheightreq;   /*   "       , es dÅrfen nur Fahrzeuge ,
-                                                     die in eine dieser Hîhenstufen kînnen , geladen werden  */ 
+        char         loadcapability;   /*  BM => CHoehenstufen; aktuelle Hoehe der reinzufahrenden vehicle
+                                                                muss hier enthalten sein  */ 
+        char         unitheightreq;   /*   "       , es d?rfen nur Fahrzeuge ,
+                                                     die in eine dieser Hoehenstufen koennen , geladen werden  */ 
     
         struct  { 
           int          material; 
@@ -1143,7 +1149,7 @@ class  tfield {
 };
 
 
-typedef struct teventtrigger_polygonentered* peventtrigger_polygonentered;
+typedef class teventtrigger_polygonentered* peventtrigger_polygonentered;
 class  teventtrigger_polygonentered {
   public:
     int size;
@@ -1186,7 +1192,7 @@ class tevent {
       int      id;               /* Id-Nr      ==> Technology.Requireevent; Tevent.trigger; etc.  */ 
     } ;                                          
 
-    byte         player;   // 0..7  fÅr die normalen Spieler
+    pascal_byte         player;   // 0..7  fuer die normalen Spieler
     // 8 wenn das Event unabhÑngig vom Spieler sofort auftreten soll
               
     char         description[20]; 
@@ -1202,21 +1208,21 @@ class tevent {
     word         trigger[4];   /*  CEventReason  */ 
     PLargeTriggerData trigger_data[4];
 
-    byte         triggerconnect[4];   /*  CEventTriggerConn */ 
-    byte         triggerstatus[4];   /*  Nur im Spiel: 0: noch nicht erfÅllt
-					 1: erfÅllt, kann sich aber noch Ñndern
-					 2: unwiederruflich erfÅllt
-					 3: unerfÅllbar */ 
+    pascal_byte         triggerconnect[4];   /*  CEventTriggerConn */ 
+    pascal_byte         triggerstatus[4];   /*  Nur im Spiel: 0: noch nicht erf?llt
+					 1: erf?llt, kann sich aber noch Ñndern
+					 2: unwiederruflich erf?llt
+					 3: unerf?llbar */ 
     tgametime     triggertime;     // Im Karteneditor auf  -1 setzen !! 
-    // Werte ungleich -1 bedeuten automatisch, da· das event bereits erfÅllt ist und evt. nur noch die Zeit abzuwait ist
+    // Werte ungleich -1 bedeuten automatisch, dass das event bereits erf?llt ist und evt. nur noch die Zeit abzuwait ist
 
     struct {
       int turn;
       int move;   // negative Zahlen SIND hier zulÑssig !!! 
     } delayedexecution;
 
-    /* Funktionsweise der verzîgerten Events: 
-       Sobald die Trigger erfÅllt sind, wird triggertime[0] ausgefÅllt. Dadurch wird das event ausgelîst,
+    /* Funktionsweise der verzoegerten Events: 
+       Sobald die Trigger erf?llt sind, wird triggertime[0] ausgef?llt. Dadurch wird das event ausgeloest,
        sobald das Spiel diese Zeit erreicht ist, unabhÑngig vom Zustand des mapes 
        ( Trigger werden nicht erneut ausgewertet !)
     */
@@ -1241,16 +1247,16 @@ class tevent {
                           disk               ypos           xpos
      'technology researched',                                             Tech. ID
      'event',                                                             Event ID
-     'tribut required'                                                                                         Hîhe des Tributes      Spieler, von dem Tribut gefordert wird 
+     'tribut required'                                                                                         Hoehe des Tributes      Spieler, von dem Tribut gefordert wird 
      'all enemy *.*'                                                      Bit 0: alle nicht allierten
-                                                                          Bit 1: alle, die Åber die folgenden Bits festgelegt werden, ob alliiert oder nicht
+                                                                          Bit 1: alle, die ?ber die folgenden Bits festgelegt werden, ob alliiert oder nicht
                                                                             Bit 2 : Spieler 0
                                                                             ...
                                                                             Bit 9 : Spieler 7
 
      'unit enters polygon'  pointer auf teventtrigger_polygonentered
 
-     der Rest benîtigt keine weiteren Angaben
+     der Rest benoetigt keine weiteren Angaben
     */ 
 
 
@@ -1258,13 +1264,13 @@ class tevent {
      /*  DatenAufbau des Event-Data-Blocks:
 
       TLosecampaign, TEndCampaign, TWeatherchangeCompleted
-                 benîtigen keine weiteren Daten
+                 benoetigen keine weiteren Daten
 
 
       TNewTechnologyEvent :
                  data = NULL;
                  SaveAs = TechnologyID;
-              Gilt fÅr researched wie auch available
+              Gilt fuer researched wie auch available
 
       TMessageEvent
              Data = NULL;
@@ -1280,7 +1286,7 @@ class tevent {
 
       TeraseEvent:
              data[0] = ^int
-                       ID des zu lîschenden Events
+                       ID des zu loeschenden Events
              data[1] = mapid
 
       Tweatherchange     	( je ein int , alles unter Data )
@@ -1297,7 +1303,7 @@ class tevent {
                       ¿ƒƒƒƒƒ 1 ƒƒƒ|  
 
       Twindchange
-              intensitÑt[3]         ( fÅr tieffliegend, normalfliegend und hochfliegend ; -1 steht fÅr keine énderung )
+              intensitÑt[3]         ( fuer tieffliegend, normalfliegend und hochfliegend ; -1 steht fuer keine Aenderung )
               Richtung[3]           ( dito )
  
 
@@ -1314,7 +1320,7 @@ class tevent {
 
 
       TnewVehicleDeveloped
-            saveas  = ID des nun zur VerfÅgung stehenden vehicletypes
+            saveas  = ID des nun zur Verf?gung stehenden vehicletypes
 
 
       Tpalettechange
@@ -1323,8 +1329,8 @@ class tevent {
       Talliancechange
            Data : Array[8][8] of int                      // status der Allianzen. Sollte vorerst symetrisch bleiben, also nur jeweils 7 Werte abfragen.
                                                              Vorerst einfach Zahlwerte eingeben.
-                                                             256 steht fÅr unverÑndert,
-                                                             257 fÅr umkehrung
+                                                             256 steht fuer unverÑndert,
+                                                             257 fuer umkehrung
 
       TGameParameterchange    
            int nummer_des_parameters ( -> gameparametername[] )
@@ -1334,7 +1340,7 @@ class tevent {
            int x1 , y1, x2, y2, x orientation , y orientation
 
 
-    Wenn Data != NULL ist, MU· datasize die Grî·e des Speicherbereichs, auf den Data zeigt, beinhalten.
+    Wenn Data != NULL ist, MUss datasize die Groesse des Speicherbereichs, auf den Data zeigt, beinhalten.
 
  */
 
@@ -1363,9 +1369,9 @@ class  ttechnology {
       int      requiretechnologyid[6]; 
     };
 
-    int          techlevelget;  // sobald dieser technologylevel erreicht ist, ist die Technologie automatisch verfÅgbar
+    int          techlevelget;  // sobald dieser technologylevel erreicht ist, ist die Technologie automatisch verf?gbar
     char* pictfilename;
-    int lvl;     // wird nur im Spiel benîtigt: "Level" der benîtigten Techologie. Gibt an, wieviele Basistechnologien insgesamt benîtogt werden.
+    int lvl;     // wird nur im Spiel benoetigt: "Level" der benoetigten Techologie. Gibt an, wieviele Basistechnologien insgesamt benoetogt werden.
     int techlevelset;
     int dummy[7];
     int  getlvl( void );
@@ -1398,7 +1404,7 @@ struct tcampaign {
     word         prevmap;   /*  ID der vorigen Karte  */ 
     unsigned char         player;   /*  Farbenummer des Spielers: 0..7  */ 
     char      directaccess;   /*  Kann die Karte einzeln geladen werden oder nicht ?  */ 
-    unsigned char         dummy[21];   /*  fÅr zukÅnftige erweiterungen  */ 
+    unsigned char         dummy[21];   /*  fuer zuk?nftige erweiterungen  */ 
 }; 
 
 
@@ -1463,7 +1469,7 @@ class  tnetwork {
 
 class tmap { 
    public:
-      word         xsize, ysize;   /*  Grî·e in fielder  */ 
+      word         xsize, ysize;   /*  Groesse in fielder  */ 
       word         xpos, ypos;     /*  aktuelle Dargestellte Position  */
       pfield        field;           /*  die fielder selber */
       char         codeword[11]; 
@@ -1538,7 +1544,7 @@ class tmap {
       char          alliances_at_beginofturn[8];
       pobjectcontainercrcs   objectcrc; 
       pshareview    shareview;
-      int           continueplaying;         // als einzig Åbriggebliebener Spieler
+      int           continueplaying;         // als einzig ?briggebliebener Spieler
       treplayinfo*  replayinfo;
       int           playerview;
       tgametime     lastjournalchange;
@@ -1604,7 +1610,7 @@ class tgameoptions {
       int smallguibutton;
       int largeguibutton;
       int smalliconundermouse;  // 0: nie;  1: immer; 2: nur wenn vehicle, gebÑude, oder temp unter MAUS
-      int centerbutton;    // Maustaste zum zentrieren des fielder, Åber dem sich die Maus befindet;
+      int centerbutton;    // Maustaste zum zentrieren des fielder, ?ber dem sich die Maus befindet;
       int unitweaponinfo;
       int dragndropmovement;
       int dummy[7];
@@ -1654,8 +1660,8 @@ struct ticons {
      void      *pfeil1, *pfeil2; 
    } weapinfo; 
    void*      statarmy[3]; 
-   void*      height[8];      // fÅr vehicleinfo - DLG-Box
-   void*        height2[3][8];  // fÅr vehicleinfo am map
+   void*      height[8];      // fuer vehicleinfo - DLG-Box
+   void*        height2[3][8];  // fuer vehicleinfo am map
    void*        player[8];      // aktueller Spieler in der dashboard: FARBE.RAW 
    void*        allianz[8][3];  // Allianzen in der dashboard: ALLIANC.RAW 
    void*        diplomaticstatus[8]; 
@@ -1666,7 +1672,7 @@ struct ticons {
    void*        wind[9];
    void*        windarrow;
    void*        stellplatz;
-   void*        guiknopf;   // reingedrÅckter knopf
+   void*        guiknopf;   // reingedr?ckter knopf
    void*        computer;
    void*        windbackground;
    void*        smallmapbackground;
@@ -1780,7 +1786,7 @@ struct ticons {
      void* bkgr;
      void* orgbkgr;
    } attack;
-   void*        pfeil2[8];     // beispielsweise fÅr das Mouse-Scrolling 
+   void*        pfeil2[8];     // beispielsweise fuer das Mouse-Scrolling 
    void*        mousepointer;
    void*        fieldshape;
    void*        hex2octmask;
@@ -1876,8 +1882,7 @@ extern  const char*  choehenstufen[8] ;
  #define cwammunitionb ( 1 << cwammunitionn )
  #define cwservicen 8  
  #define cwserviceb ( 1 << cwservicen )
- extern const int cwaffenproduktionskosten[cwaffentypennum][3];  /*  Angabe: Waffentyp; energy - Material - Sprit ; jeweils fÅr 5er Pack */  
-
+ extern const int cwaffenproduktionskosten[cwaffentypennum][3];  /*  Angabe: Waffentyp; energy - Material - Sprit ; jeweils fuer 5er Pack */  
 
 
 const int cbuildingfunctionnum = 18;
@@ -2030,7 +2035,7 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
-#define maxloadableunits 27  // Mehr vehicle dÅrfen nicht in einen Transporter rein
+#define maxloadableunits 27  // Mehr vehicle d?rfen nicht in einen Transporter rein
 
 #define guiiconsizex 49  
 #define guiiconsizey 35  
@@ -2105,9 +2110,9 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 #define air_heightdecmovedecrease 0
 #define sub_heightincmovedecrease 12
 #define sub_heightdecmovedecrease 12
-#define helicopter_attack_after_ascent 1  // nach abheben angriff mîglich
-#define helicopter_attack_after_descent 0  // nach landen angriff mîglich
-#define helicopter_landing_move_cost 16   // zusÑtzlich zu den Kosten fÅr das Wechseln der Hîhenstufe 
+#define helicopter_attack_after_ascent 1  // nach abheben angriff moeglich
+#define helicopter_attack_after_descent 0  // nach landen angriff moeglich
+#define helicopter_landing_move_cost 16   // zusÑtzlich zu den Kosten fuer das Wechseln der Hoehenstufe 
 #define weaponpackagesize 5
 
 #define trainingexperienceincrease 2
@@ -2124,12 +2129,12 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 #define destructoutput 5
 #define nowindplanefuelusage 1      // herrscht kein Wind, braucht ein Flugzeug pro Runde soviel Sprit wie das fliegend dieser Anzahl fielder
   //   #define maxwindplainfuelusage 32   // beim nextturn: tank -= fuelconsumption * (maxwindplainfuelusage*nowindplainfuelusage + windspeed) / maxwindplainfuelusage     
-#define maxwindspeed 128          // Wind der StÑrke 256 legt pro Runde diese Strecke zurÅck: 128 entspricht 16 fieldern diagonal !
+#define maxwindspeed 128          // Wind der StÑrke 256 legt pro Runde diese Strecke zur?ck: 128 entspricht 16 fieldern diagonal !
 
 
-#define generatortruckefficiency 2  // FÅr jede vehicle Power wird soviel Sprit gebraucht !
+#define generatortruckefficiency 2  // fuer jede vehicle Power wird soviel Sprit gebraucht !
 
-#define researchenergycost 512      // fÅr 1000 researchpoints wird soviel energie benîtigt.
+#define researchenergycost 512      // fuer 1000 researchpoints wird soviel energie benoetigt.
 #define researchmaterialcost 200    //                                     material
 #define researchcostdouble 10000    // bei soviel researchpoints verdoppeln sich die Kosten
 #define minresearchcost 0.5
@@ -2145,7 +2150,7 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 #define tfieldtemp2min 0
 
 
-#define cnet_storeenergy        0x001           // es wird garantiert,  da· material immer das 2 und fuel das 4 fache von energy ist
+#define cnet_storeenergy        0x001           // es wird garantiert,  dass material immer das 2 und fuel das 4 fache von energy ist
 #define cnet_storematerial      0x002
 #define cnet_storefuel          0x004
 
@@ -2165,14 +2170,14 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 #define resource_fuel_factor 100         // die im boden liegenden BodenschÑtzen ergeben effektiv soviel mal mehr ( bei Bergwerkseffizienz 1024 )
 #define resource_material_factor 100     // "
 
-#define destruct_building_material_get 3 // beim Abrei·en erhÑlt man 1/3 des eingesetzten Materials zurÅck
-#define destruct_building_fuel_usage 10  // beim Abrei·en wird 10 * fuelconsumption Fuel fuelconsumptiont
+#define destruct_building_material_get 3 // beim Abreissen erhÑlt man 1/3 des eingesetzten Materials zur?ck
+#define destruct_building_fuel_usage 10  // beim Abreissen wird 10 * fuelconsumption Fuel fuelconsumptiont
 
 
 #define dissectunitresearchpointsplus  2    // Beim dissectn einer vehicle wird der sovielte Teil der Researchpoints jeder unbekannten Technologie gutgeschrieben
 
 #define dissectunitresearchpointsplus2 3    // Beim dissectn einer vehicle wird der sovielte Teil der Researchpoints jeder unbekannten Technologie gutgeschrieben.
-  // FÅr die Technologie existieren aber bereits von einem anderen sezierten vehicletype gutschriften.
+  // fuer die Technologie existieren aber bereits von einem anderen sezierten vehicletype gutschriften.
 
 #define maxminingrange 10     // soviele fielder such ein Bergwerk ab.
 

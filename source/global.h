@@ -23,8 +23,10 @@
 
  #ifdef WIN32
   #define sdlheader "SDL.h"
- #else
+	#include "SDL.h"
+#else
   #define sdlheader "SDL/SDL.h"
+  #include "SDL/SDL.h"
  #endif
 
  #include "config.h"

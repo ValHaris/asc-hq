@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.44 2000-08-11 11:38:28 mbickel Exp $
+//     $Id: dialog.cpp,v 1.45 2000-08-12 09:17:22 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2000/08/11 11:38:28  mbickel
+//      Enabled resource control subwindow in BI resource mode
+//
 //     Revision 1.43  2000/08/09 12:39:25  mbickel
 //      fixed invalid height when constructing vehicle with other vehicles
 //      fixed wrong descent icon being shown
@@ -2219,7 +2222,7 @@ void         tfileselectsvga::init( char sw  )
 
 
 
-void         tfileselectsvga::buttonpressed(byte         id)
+void         tfileselectsvga::buttonpressed(pascal_byte         id)
 { 
    tdialogbox::buttonpressed(id);
    switch (id) {
@@ -2687,7 +2690,7 @@ void         tfileselectsvga::run(void)
             searchstring[searchsize] = 0;
             displayspeedsearch(); 
          } 
-         if (prntkey == cto_esc ) {   /*  abbrechen / searchstring zurcksetze  */
+         if (prntkey == cto_esc ) {   /*  abbrechen / searchstring zur?cksetze  */
             if ((swtch == 1 ) || (searchstring[0] == 0))
                abrt = 1; 
             else
@@ -4373,9 +4376,9 @@ void         tsetalliances::setparams ( void )
 }
 
 
-void         tsetalliances::click(byte         bxx,
-                                byte         x,
-                                byte         y)
+void         tsetalliances::click(pascal_byte         bxx,
+                                pascal_byte         x,
+                                pascal_byte         y)
 { 
 
    mousevisible(false);
@@ -5046,7 +5049,7 @@ class tbi3preferences : public tdialogbox {
                         void init ( void );
                         void buttonpressed ( char id );
                         void run ( void );
-                        tbi3preferences ( ) : actoptions ( gameoptions ) {};
+                        tbi3preferences ( ) : actoptions ( *CGameOptions::Instance() ) {};
                     };
 
 
@@ -5119,7 +5122,7 @@ void tbi3preferences :: buttonpressed ( char id )
    tdialogbox :: buttonpressed ( id );
 
    if ( id == 1 ) {
-      gameoptions.copy ( actoptions );
+	   CGameOptions::Instance()->copy ( actoptions );
       status = 10;
    }
 
@@ -5479,7 +5482,7 @@ void choosezoomlevel ( void )
 
     struct tvweapon { 
                   byte         typ;   /*  position in cwaffentypen  */ 
-                  byte         sourcepos;   /*  position im munitionsarray des containers; cenergy .. gltig */ 
+                  byte         sourcepos;   /*  position im munitionsarray des containers; cenergy .. g?ltig */ 
                   byte         destpos;   /*  position im munitionsarray des gel. fahrzeugs  */ 
                   int          sourceamount;
                   int          maxsourceamount;
@@ -5955,7 +5958,7 @@ void         tverlademunition::setvariables(  pvehicle svehicle, pvehicle svehic
 
 
 
-void         tverlademunition::zeichneschieberegler(byte         b)
+void         tverlademunition::zeichneschieberegler(pascal_byte         b)
 { 
 //  collategraphicoperations cgo;
 
@@ -5987,7 +5990,7 @@ void         tverlademunition::zeichneschieberegler(byte         b)
 } 
 
 
-void         tverlademunition::checkpossible(byte         b)
+void         tverlademunition::checkpossible(pascal_byte         b)
 { 
       if (wp.weap[b].newdestamount - wp.weap[b].destamount > wp.weap[b].sourceamount) 
          wp.weap[b].newdestamount = wp.weap[b].destamount + wp.weap[b].sourceamount; 
@@ -6189,7 +6192,7 @@ void viewterraininfo ( void )
 
 void viewUnitSetinfo ( void )
 {
-   string s;
+	std::string s;
    pfield fld = getactfield();
    if ( fieldvisiblenow  ( fld ) && fld->vehicle ) {
 
@@ -6244,7 +6247,7 @@ void viewUnitSetinfo ( void )
    } else
       s += "\nNo unit selected";
 
-   while ( s.find ( "@" ) != string::npos )
+   while ( s.find ( "@" ) != std::string::npos )
       s.replace ( s.find ( "@" ), 1, "(at)"); // the default font has not @ character
 
    tviewanytext vat;
@@ -6374,7 +6377,7 @@ void tenterpassword :: init ( int* crc, int mode, char* ttl  )
 
    windowstyle ^= dlg_in3d;
    if ( mode == 0 ) {
-      if ( *crc == 0   &&  gameoptions.defaultpassword ) {
+	   if ( *crc == 0   &&  CGameOptions::Instance()->defaultpassword ) {
          addbutton ( "~O~k", 10, ysize - 35, xsize / 2 - 5, ysize - 10, 0, 1, 1, reask );
          addbutton ( "~D~efault", xsize / 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1,7, true );
       } else {
@@ -6383,7 +6386,7 @@ void tenterpassword :: init ( int* crc, int mode, char* ttl  )
       }
 
    } else {
-      if ( *crc == 0   &&  gameoptions.defaultpassword ) {
+	   if ( *crc == 0   &&  CGameOptions::Instance()->defaultpassword ) {
          addbutton ( "~O~k", 10, ysize - 35, xsize / 3 - 5, ysize - 10, 0, 1, 1, reask );
          addbutton ( "~D~efault", xsize / 3 + 5,   ysize - 35, 2 * xsize / 3 - 5, ysize - 10, 0, 1,7, true );
          addbutton ( "~C~ancel", 2 * xsize / 3 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1, 6, true );
@@ -6433,7 +6436,7 @@ void tenterpassword :: buttonpressed ( char id )
          status = 10;
       else
          if ( id == 7 ) {
-            *cr = gameoptions.defaultpassword;
+			 *cr = CGameOptions::Instance()->defaultpassword;
             status = 2;
          } else
             if ( id == 8 ) {

@@ -1,6 +1,13 @@
-//     $Id: artint.cpp,v 1.17 2000-08-08 09:47:52 mbickel Exp $
+//     $Id: artint.cpp,v 1.18 2000-08-12 09:17:13 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/08/08 09:47:52  mbickel
+//
+//      speed up of dialog boxes in linux
+//      fixed graphical errors in attack
+//      fixed graphical error in ammo transfer
+//      fixed reaction fire not allowing manual attack
+//
 //     Revision 1.16  2000/08/07 21:10:17  mbickel
 //      Fixed some syntax errors
 //
@@ -1435,7 +1442,7 @@ boolean      tlongdistmove :: passmarkedline(void)
   byte         d; 
 
    result = false; 
-     //*  berprfen, ob die mit cbmovetempv gezogene beeline berquert wird  
+     //*  ?berpr?fen, ob die mit cbmovetempv gezogene beeline ?berquert wird  
    if (field->special && (1 << cbmovetempv) > 0) 
       result = true; 
    else 
@@ -2800,8 +2807,7 @@ AI :: AI ( pmap _map )
 
    static ReplayMapDisplay* rmd = new ReplayMapDisplay ( &defaultMapDisplay );
    mapDisplay = rmd;
-   rmd->setCursorDelay ( gameoptions.replayspeed + 30 );
-
+   rmd->setCursorDelay (CGameOptions::Instance()->replayspeed + 30 );
 }
 
 void AI :: reset ( void )

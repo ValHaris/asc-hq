@@ -1,6 +1,13 @@
-//     $Id: building.h,v 1.10 2000-08-08 09:47:56 mbickel Exp $
+//     $Id: building.h,v 1.11 2000-08-12 09:17:18 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/08/08 09:47:56  mbickel
+//
+//      speed up of dialog boxes in linux
+//      fixed graphical errors in attack
+//      fixed graphical error in ammo transfer
+//      fixed reaction fire not allowing manual attack
+//
 //     Revision 1.9  2000/06/19 20:05:04  mbickel
 //      Fixed crash when transfering ammo to vehicle with > 8 weapons
 //
@@ -82,7 +89,7 @@
 
 
 #define   delayconst 10
-enum tonoff {off,on};      // fÅr scrollbar
+enum tonoff {off,on};      // f?r scrollbar
 
 enum tcontainermode { mbuilding, mtransport };
 
@@ -104,72 +111,69 @@ extern   ptransportcontrols         cc_t;
 
 
 class    ccontainercontrols {
+	public :
+	   class crepairanything {
+           public:
+             int      energycosts, materialcosts, fuelcosts;
+             int      checkto  ( int olddamage, int newdamage, int energycost, int materialcost, int fuelcost, int effizienz );
+       };
 
-            protected:
-               class crepairanything {
-                   public:
-                     int      energycosts, materialcosts, fuelcosts;
-                     int      checkto  ( int olddamage, int newdamage, int energycost, int materialcost, int fuelcost, int effizienz );
-               };
+       class    crepairunit : public crepairanything {                          // REPAIRUNIT
+          public :
+             virtual int  checkto  (pvehicle eht, char newdamage) = 0;
+             int          repairto (pvehicle eht, char newdamage);
+             int          available ( pvehicle eht );
+       };
 
-            public :
+       class    crefill {
+          public :
+             void     fuel (pvehicle eht, int newfuel);                     // der neue Werte darf durchaus ?ber dem Maximum liegen. Eine entsprechende Pr?fung wird durchgef?hrt.
+             void     material (pvehicle eht, int newmaterial);
+             void     ammunition (pvehicle eht, char weapon, int ammun );
+             void     filleverything ( pvehicle eht );
+             void     emptyeverything ( pvehicle eht );
+       } refill;
 
-               class    crepairunit : public crepairanything {                          // REPAIRUNIT
-                  public :
-                     virtual int  checkto  (pvehicle eht, char newdamage) = 0;
-                     int          repairto (pvehicle eht, char newdamage);
-                     int          available ( pvehicle eht );
-               };
+       class   cmove_unit_in_container {
+           public:
+             int      moveupavail ( pvehicle eht );
+             int      movedownavail ( pvehicle eht, pvehicle into );
+             void     moveup ( pvehicle eht );
+             void     movedown ( pvehicle eht, pvehicle into );
+             pvehicle unittomove;
+       } move_unit_in_container;
 
-               class    crefill {
-                  public :
-                     void     fuel (pvehicle eht, int newfuel);                     // der neue Werte darf durchaus Åber dem Maximum liegen. Eine entsprechende PrÅfung wird durchgefÅhrt.
-                     void     material (pvehicle eht, int newmaterial);
-                     void     ammunition (pvehicle eht, char weapon, int ammun );
-                     void     filleverything ( pvehicle eht );
-                     void     emptyeverything ( pvehicle eht );
-               } refill;
-
-               class   cmove_unit_in_container {
-                   public:
-                     int      moveupavail ( pvehicle eht );
-                     int      movedownavail ( pvehicle eht, pvehicle into );
-                     void     moveup ( pvehicle eht );
-                     void     movedown ( pvehicle eht, pvehicle into );
-                     pvehicle unittomove;
-               } move_unit_in_container;
-
-               ccontainercontrols (void);
+    ccontainercontrols (void);
                
-               virtual char   getactplayer (void) = 0;
+    virtual char   getactplayer (void) = 0;
 
-               virtual VehicleMovement*    movement ( pvehicle eht, int mode = 0 ) = 0;
-               virtual int    moveavail ( pvehicle eht ) = 0;
+    virtual VehicleMovement*    movement ( pvehicle eht, int mode = 0 ) = 0;
+    virtual int    moveavail ( pvehicle eht ) = 0;
 
 
-               virtual int    putenergy (int e, int abbuchen = 1 ) = 0;
-               virtual int    putmaterial (int m, int abbuchen = 1 ) = 0;
-               virtual int    putfuel (int f, int abbuchen = 1) = 0;
-               virtual int    getenergy ( int need, int abbuchen ) = 0;
-               virtual int    getmaterial ( int need, int abbuchen ) = 0;
-               virtual int    getfuel ( int need, int abbuchen ) = 0;
+    virtual int    putenergy (int e, int abbuchen = 1 ) = 0;
+    virtual int    putmaterial (int m, int abbuchen = 1 ) = 0;
+    virtual int    putfuel (int f, int abbuchen = 1) = 0;
+    virtual int    getenergy ( int need, int abbuchen ) = 0;
+    virtual int    getmaterial ( int need, int abbuchen ) = 0;
+    virtual int    getfuel ( int need, int abbuchen ) = 0;
 
-               virtual int    putammunition (int  weapontype, int  ammunition, int abbuchen) = NULL;
-               virtual int    getammunition ( int weapontype, int num, int abbuchen, int produceifrequired = 0 ) = 0;
-               virtual int    ammotypeavail ( int type ) = 0;
+    virtual int    putammunition (int  weapontype, int  ammunition, int abbuchen) = NULL;
+    virtual int    getammunition ( int weapontype, int num, int abbuchen, int produceifrequired = 0 ) = 0;
+    virtual int    ammotypeavail ( int type ) = 0;
 
-               virtual int    getxpos (void) = 0;
-               virtual int    getypos (void) = 0;
+    virtual int    getxpos (void) = 0;
+    virtual int    getypos (void) = 0;
 
-               virtual int    getspecfunc ( tcontainermode mode ) = 0;
+    virtual int    getspecfunc ( tcontainermode mode ) = 0;
 
-               virtual pvehicle getloadedunit (int num) = NULL;
+    virtual pvehicle getloadedunit (int num) = NULL;
 
-               struct { 
-                  int height;
-                  int movement;
-                  int attacked;
-                } movementparams;
+    struct { 
+       int height;
+       int movement;
+       int attacked;
+    } movementparams;
 
 };
  
@@ -199,7 +203,8 @@ class    cbuildingcontrols : public virtual ccontainercontrols {
 
                pbuilding   building;
 
-               class   crepairunitinbuilding : public virtual crepairunit {
+               class   crepairunitinbuilding 
+				   : public virtual ccontainercontrols::crepairunit {
                      public:
                        virtual int      checkto  (pvehicle eht, char newdamage);
                } repairunit;
@@ -238,7 +243,8 @@ class    cbuildingcontrols : public virtual ccontainercontrols {
                           void reset ( void );
                } netcontrol;
 
-               class    crepairbuilding : public crepairanything  {                          
+               class    crepairbuilding 
+				   : public ccontainercontrols::crepairanything  {                          
                   public :
                      int      checkto  ( char newdamage);
                      int      repairto ( char newdamage);
@@ -297,9 +303,11 @@ class    ctransportcontrols : public virtual ccontainercontrols {
 
                pvehicle vehicle;
 
-               class   crepairunitintransport : public virtual crepairunit {
-                     public:
-                       virtual int      checkto  (pvehicle eht, char newdamage);
+               class   crepairunitintransport 
+				   : public virtual ccontainercontrols::crepairunit 
+			   {
+				public:
+					virtual int      checkto  (pvehicle eht, char newdamage);
                } repairunit;
 
 
@@ -324,7 +332,7 @@ typedef class generalicon_c*   pgeneralicon_c;
 
 
     //0 tncguiicon 
-class generalicon_c : public tnguiicon {       // fÅr Container //grundlage f¸r jedes einzelne icon
+class generalicon_c : public tnguiicon {       // f?r Container //grundlage f¸r jedes einzelne icon
                         pgeneralicon_c next;
                         pgeneralicon_c *first;
                     protected:
@@ -446,18 +454,20 @@ class    ccontainer : public virtual ccontainercontrols {
               char*  name1;
               char*  name2;
               int mousestat;
-            protected :
+            public:
 //-------------------------------------------------------------------------icons
 
 
                         //0 cguihostcontainer 
-                class   hosticons_c: public tguihost { // basis fÅr icons ->struct mit allen icons
+                class   hosticons_c: public tguihost { // basis fuer icons ->struct mit allen icons
                     public: 
                         void seticonmains ( pcontainer maintemp );
                 };
 
 
-                class repairicon_c : public generalicon_c , public virtual crepairunit {
+                class repairicon_c 
+					:	public generalicon_c , 
+						public virtual ccontainercontrols::crepairunit {
                     public:
                         virtual int   available    ( void ) ;
                         virtual void  exec         ( void ) ;
@@ -481,7 +491,7 @@ class    ccontainer : public virtual ccontainercontrols {
                         fill_dialog_icon_c ( void );
                 };
 
-                class fill_icon_c  : public generalicon_c , public crefill {
+                class fill_icon_c  : public generalicon_c , public ccontainercontrols::crefill {
                     public:
                         virtual void  exec         ( void ) ;
                         fill_icon_c ( void );
@@ -502,7 +512,7 @@ class    ccontainer : public virtual ccontainercontrols {
                           container_icon_c ( void );
                 };
 
-                class cmoveup_icon_c : public generalicon_c, public cmove_unit_in_container { 
+                class cmoveup_icon_c : public generalicon_c, public ccontainercontrols::cmove_unit_in_container { 
                         public:
                           virtual int   available    ( void ) ;
                           virtual void  exec         ( void ) ;
@@ -516,14 +526,16 @@ class    ccontainer : public virtual ccontainercontrols {
                           cunitinformation_icon ( void );
                 };
 
-                class cmovedown_icon_c : public generalicon_c, public cmove_unit_in_container { 
+                class cmovedown_icon_c 
+					:	public generalicon_c, 
+						public ccontainercontrols::cmove_unit_in_container { 
                         public:
                           virtual int   available    ( void ) ;
                           virtual void  exec         ( void ) ;
                           cmovedown_icon_c ( void );
                 };
  
-               // auch fÅr "move in"
+               // auch f?r "move in"
                 class productioncancelicon_cb : public generalicon_c  { 
                     public:
                         virtual int   available    ( void ) ;
@@ -534,7 +546,10 @@ class    ccontainer : public virtual ccontainercontrols {
 
 //-------------------------------------------------------------------------subwindows
 
-               class  cammunitiontransfer_subwindow : public csubwindow,  public crefill {
+               class  cammunitiontransfer_subwindow 
+				   :	public csubwindow,  
+						public ccontainercontrols::crefill 
+			   {
                            protected:
                              struct {
                                    int maxnum;    
@@ -655,16 +670,18 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
 
             protected :
 
-                class repairicon_cb : public repairicon_c , public crepairunitinbuilding {
+                class repairicon_cb 
+					:	public ccontainer::repairicon_c ,
+						public cbuildingcontrols::crepairunitinbuilding {
                        virtual int      checkto  (pvehicle eht, char newdamage);
                 };
 
-                class fill_dialog_icon_cb  : public fill_dialog_icon_c {
+                class fill_dialog_icon_cb  : public ccontainer::fill_dialog_icon_c {
                     public:
                         virtual void  exec         ( void ) ;
                 };
 
-                class fill_icon_cb  : public fill_icon_c {
+                class fill_icon_cb  : public ccontainer::fill_icon_c {
                     public:
                         virtual int   available    ( void ) ;
                 };
@@ -680,7 +697,10 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
 */
 
                      //0 tnbcguiiconrecycling 
-                class recyclingicon_cb : public generalicon_c , public crecycling {
+                class recyclingicon_cb 
+					:	public generalicon_c ,
+						public cbuildingcontrols::crecycling
+				{
                     public:
                         virtual int   available    ( void ) ;
                         virtual void  exec         ( void ) ;
@@ -689,21 +709,30 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
                 };
 
 
-                class trainuniticon_cb : public generalicon_c , public ctrainunit {
+                class trainuniticon_cb 
+					:	public generalicon_c , 
+						public cbuildingcontrols::ctrainunit
+				{
                     public:
                         virtual int   available    ( void ) ;
                         virtual void  exec         ( void ) ;
                         trainuniticon_cb ( void );
                 };
 
-                class dissectuniticon_cb : public generalicon_c , public cdissectunit {
+                class dissectuniticon_cb 
+					:	public generalicon_c,
+						public cbuildingcontrols::cdissectunit
+				{
                     public:
                         virtual int   available    ( void ) ;
                         virtual void  exec         ( void ) ;
                         dissectuniticon_cb ( void );
                 };
 
-                class produceuniticon_cb : public generalicon_c, public cproduceunit {
+                class produceuniticon_cb 
+					:	public generalicon_c, 
+						public cbuildingcontrols::cproduceunit 
+				{
                     public:
                         virtual int   available    ( void ) ;
                         virtual void  exec         ( void ) ;
@@ -720,7 +749,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
 
 
                         //0 cguihostcontainerb 
-                class   chosticons_cb : public hosticons_c {
+                class   chosticons_cb : public ccontainer::hosticons_c {
                     public: 
                         void init ( int resolutionx, int resolutiony );
                         struct I1 {
@@ -750,7 +779,10 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
 
 //-------------------------------------------------------------------------subwindows
 
-               class  crepairbuilding_subwindow : public cbuildingsubwindow , public crepairbuilding  {
+               class  crepairbuilding_subwindow
+				   :	public cbuildingsubwindow , 
+						public cbuildingcontrols::crepairbuilding  
+			   {
                            public: 
                              crepairbuilding_subwindow ( void );
                              int  subwin_available ( void );
@@ -764,7 +796,10 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
                };
 
 
-               class  cnetcontrol_subwindow : public cbuildingsubwindow , public cnetcontrol {
+               class  cnetcontrol_subwindow
+				   :	public cbuildingsubwindow ,
+						public cbuildingcontrols::cnetcontrol 
+			   {
                            protected:
                              void checkformouse ( void );
                              void objpressed ( int num );
@@ -818,7 +853,10 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
                              void resetresources ( int mode );
                };
 
-               class  cammunitionproduction_subwindow : public cbuildingsubwindow , public cproduceammunition {
+               class  cammunitionproduction_subwindow
+				   :	public cbuildingsubwindow , 
+						public cbuildingcontrols::cproduceammunition 
+			   {
                              int toproduce[waffenanzahl];
                              double maxproduceablenum;
                              double grad;
@@ -936,10 +974,11 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
                              void paintobj ( int num, int stat );
                              ~cmineralresources_subwindow();
                };
-               class cammunitiontransferb_subwindow : public cammunitiontransfer_subwindow {
-                          protected:
-                             virtual int externalloadavailable ( void );
-                             virtual void execexternalload ( void );
+               class cammunitiontransferb_subwindow 
+				   :	public ccontainer::cammunitiontransfer_subwindow {
+							protected:
+								virtual int externalloadavailable ( void );
+								virtual void execexternalload ( void );
                };
 
                int    putenergy (int e, int abbuchen = 1 );
@@ -1014,21 +1053,28 @@ class    ccontainer_t : public ctransportcontrols , public ccontainer {
 
             protected :
 
-                class repairicon_ct : public repairicon_c , public virtual crepairunitintransport {
+                class repairicon_ct 
+					:	public ccontainer::repairicon_c , 
+						public virtual ctransportcontrols::crepairunitintransport 
+				{
                        virtual int      checkto  (pvehicle eht, char newdamage);
                 };
 
-                class fill_dialog_icon_ct  : public fill_dialog_icon_c {
+                class fill_dialog_icon_ct  : public ccontainer::fill_dialog_icon_c {
                     public:
                         virtual void  exec         ( void ) ;
                 };
 
-                class fill_icon_ct  : public fill_icon_c {
+                class fill_icon_ct  
+					:	public ccontainer::fill_icon_c 
+				{
                     public:
                         virtual int   available    ( void ) ;
                 };
 
-                class   chosticons_ct : public hosticons_c {
+                class   chosticons_ct 
+					:	public ccontainer::hosticons_c 
+				{
                     public: 
                         void init ( int resolutionx, int resolutiony );
                         struct I3 {

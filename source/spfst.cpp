@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.52 2000-08-10 11:18:05 mbickel Exp $
+//     $Id: spfst.cpp,v 1.53 2000-08-12 09:17:34 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2000/08/10 11:18:05  mbickel
+//      Fixed building: moveunitdown
+//      changed loadimage to use standard SDL_image
+//
 //     Revision 1.51  2000/08/09 12:39:32  mbickel
 //      fixed invalid height when constructing vehicle with other vehicles
 //      fixed wrong descent icon being shown
@@ -297,7 +301,7 @@ int showresources = 0;
 
    #define stepsizex 2  
    #define stepsizey 4  
-   #define fielddx 4    /*  verschiebung der ro ecke des bodentypes gegenÅber der vehicle etc  */ 
+   #define fielddx 4    /*  verschiebung der ro ecke des bodentypes gegen?ber der vehicle etc  */ 
    #define fielddy 4  
 
 
@@ -354,7 +358,7 @@ int showresources = 0;
 
    char godview, tempsvisible; 
    Schriften schriften; 
-   int lasttick;   /*  fÅr paintvehicleinfo  */ 
+   int lasttick;   /*  f?r paintvehicleinfo  */ 
 
    tpaintmapborder* mapborderpainter = NULL;
 
@@ -368,11 +372,11 @@ int showresources = 0;
    map< int, pbuildingtype, lessint>  buildingmap;
    map< int, ptechnology, lessint>  technologymap;
   #else
-   map< int, pterraintype>  terrainmap;
-   map< int, pobjecttype>  objectmap;
-   map< int, pvehicletype>  vehiclemap;
-   map< int, pbuildingtype>  buildingmap;
-   map< int, ptechnology>  technologymap;
+   std::map< int, pterraintype>  terrainmap;
+   std::map< int, pobjecttype>  objectmap;
+   std::map< int, pvehicletype>  vehiclemap;
+   std::map< int, pbuildingtype>  buildingmap;
+   std::map< int, ptechnology>  technologymap;
   #endif
 #endif
 
@@ -2564,7 +2568,7 @@ void         putbuilding(int          x,
 
 
    if ( color & 7 )
-      displaymessage("putbuilding mu· eine farbe aus 0,8,16,24,.. Åbergeben werden !",2); 
+      displaymessage("putbuilding mu· eine farbe aus 0,8,16,24,.. ?bergeben werden !",2); 
 
 
 //   recordaction4(cnetid_buildbuilding,1,color,x,y,buildingtyp->id); ##########
@@ -2648,7 +2652,7 @@ void         putbuilding2(integer      x,
 
 
    if ( color & 7 )
-      displaymessage("putbuilding mu· eine farbe aus 0,8,16,24,.. Åbergeben werden !",2); 
+      displaymessage("putbuilding mu· eine farbe aus 0,8,16,24,.. ?bergeben werden !",2); 
 
    orgx = x - buildingtyp->entry.x - (buildingtyp->entry.y & ~y & 1 );
    orgy = y - buildingtyp->entry.y; 
@@ -3101,9 +3105,9 @@ int ZoomLevel :: getzoomlevel ( void )
    if ( !queried ) {
       int mz;
      #ifdef sgmain 
-      mz = gameoptions.mapzoom;
+      mz = CGameOptions::Instance()->mapzoom;
      #else
-      mz = gameoptions.mapzoomeditor;
+      mz = CGameOptions::Instance()->mapzoomeditor;
      #endif
       if ( mz >= getminzoom()  && 
            mz <= getmaxzoom() ) 
@@ -3118,11 +3122,11 @@ void ZoomLevel :: setzoomlevel ( int newzoom )
    zoom = newzoom;
    idisplaymap.setnewsize ( zoom );
   #ifdef sgmain
-   gameoptions.mapzoom = newzoom;
+   CGameOptions::Instance()->mapzoom = newzoom;
   #else
-   gameoptions.mapzoomeditor = newzoom;
+   CGameOptions::Instance()->mapzoomeditor = newzoom;
   #endif
-   gameoptions.changed = 1;
+   CGameOptions::Instance()->setChanged();
 }
 
 #endif
@@ -4339,7 +4343,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
                   r = vfbleftspace + x * fielddistx;
                yp = vfbtopspace + y * fielddisty;
    
-               if ( viereck[x+2][y+2] )           // frÅher mal:   && (! (( x ==0) && ((y & 1) == 0)))   , aber da links genug Platz, mÅ·te es auch ohne klappen. Noch aus Vor-VFB-Zeiten
+               if ( viereck[x+2][y+2] )           // fr?her mal:   && (! (( x ==0) && ((y & 1) == 0)))   , aber da links genug Platz, m?·te es auch ohne klappen. Noch aus Vor-VFB-Zeiten
                   putspriteimage( r + viereckrightshift , yp + viereckdownshift , view.viereck[viereck[x+2][y+2]]);
             } 
          } 
@@ -4909,7 +4913,7 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
          r2++;
    
    
-         int tick =  gameoptions.movespeed - ( ticker - starttick );  
+         int tick =  CGameOptions::Instance()->movespeed - ( ticker - starttick );  
          if ( tick < 0 )
             tick = 0;
    
@@ -4917,7 +4921,9 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
          displaymovingunit.ypos = y2;
          displaymovingunit.dx = 0 ;// -dx;
          displaymovingunit.dy = 0 ;// -dy;
-         displaymovingunit.hgt = h2 - ( h2 - h1 ) * tick / gameoptions.movespeed;
+         displaymovingunit.hgt = 
+				h2 - ( h2 - h1 ) * tick /
+				( CGameOptions::Instance()->movespeed);
    
          int r;
          if ( displaymovingunit.ypos & 1 )   /*  ungerade reihennummern  */
@@ -4943,8 +4949,8 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
          }
 
    
-         dx = sdx * tick / gameoptions.movespeed;
-         dy = sdy * tick / gameoptions.movespeed;
+         dx = sdx * tick / CGameOptions::Instance()->movespeed;
+         dy = sdy * tick / CGameOptions::Instance()->movespeed;
 
          /*
          if ( dx > 0 )
@@ -5969,7 +5975,7 @@ void checkformousescrolling ( void )
 {
    if ( isfullscreen() )
       if ( !mouseparams.x  ||  !mouseparams.y   ||  mouseparams.x >= hgmp->resolutionx-1  ||   mouseparams.y >= hgmp->resolutiony-1 ) {
-         if ( mouseparams.taste == gameoptions.mouse.scrollbutton ) {
+         if ( mouseparams.taste == CGameOptions::Instance()->mouse.scrollbutton ) {
             if ( lastmousemapscrolltick + mousescrollspeed < ticker ) {
 
                int newx = actmap->xpos;

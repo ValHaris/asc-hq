@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.10 2000-06-01 15:27:47 mbickel Exp $
+//     $Id: graphics.cpp,v 1.11 2000-08-12 09:17:42 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/06/01 15:27:47  mbickel
+//      Some changes for the upcoming Win32 version of ASC
+//      Fixed error at startup: unable to load smalaril.fnt
+//
 //     Revision 1.9  2000/02/08 08:26:54  steb
 //     Changed SDL.h to SDL/SDL.h to make installation on the average users system
 //     easier.
@@ -140,6 +144,7 @@ void  closegraphics ( void )
 int copy2screen( void )
 {
    SDL_UpdateRect ( screen , 0,0,0,0 );
+	return 0;
 }
 
 int copy2screen( int x1, int y1, int x2, int y2 )
@@ -154,6 +159,7 @@ int copy2screen( int x1, int y1, int x2, int y2 )
             SDL_UpdateRect ( screen , x2, y1, x1-x2+1, y2-y1+1 );
          else
             SDL_UpdateRect ( screen , x1, y2, x2-x1+1, y1-y2+1 );
+	return 0;
 }
 
 

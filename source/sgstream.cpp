@@ -1,6 +1,10 @@
-//     $Id: sgstream.cpp,v 1.27 2000-08-08 13:22:09 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.28 2000-08-12 09:17:33 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/08/08 13:22:09  mbickel
+//      Added unitCategoriesLoadable property to buildingtypes and vehicletypes
+//      Added option: showUnitOwner
+//
 //     Revision 1.26  2000/08/05 13:38:36  mbickel
 //      Rewrote height checking for moving units in and out of
 //        transports / building
@@ -157,8 +161,10 @@
 #include <stdarg.h>
 #include <sys/types.h>
 
+#include <fstream>
 
-#ifdef _DOS_
+
+#if defined(_DOS_) | defined(WIN32)
  #include <direct.h> 
 #else
 
@@ -1209,7 +1215,9 @@ pvehicletype   loadvehicletype( pnstream stream )
             if ( fztn->bipicture <= 0 )
                stream->readrlepict ( &fztn->picture[i], false, &size);
             else
-               loadbi3pict_double ( fztn->bipicture, &fztn->picture[i], gameoptions.bi3.interpolate.units );
+               loadbi3pict_double ( fztn->bipicture, 
+									&fztn->picture[i], 
+									CGameOptions::Instance()->bi3.interpolate.units );
 
       if ( fztn->objectsbuildablenum ) {
          fztn->objectsbuildableid = new int [ fztn->objectsbuildablenum ];
@@ -1801,7 +1809,9 @@ pbuildingtype       loadbuildingtype( pnstream stream )
                        int sz;
                        stream->readrlepict ( &pgbt->w_picture[w][k][i][j], false, &sz ); 
                      } else 
-                        loadbi3pict_double ( pgbt->bi_picture[w][k][i][j], &pgbt->w_picture[w][k][i][j], gameoptions.bi3.interpolate.buildings );
+                        loadbi3pict_double ( pgbt->bi_picture[w][k][i][j],
+										&pgbt->w_picture[w][k][i][j],
+										CGameOptions::Instance()->bi3.interpolate.buildings );
                      
                   
        pgbt->terrain_access = &pgbt->terrainaccess; 
@@ -2102,7 +2112,9 @@ pterraintype      loadterraintype( pnstream stream )
                      pgbt->picture[j] = asc_malloc ( fieldsize );
                      stream->readdata ( pgbt->picture[j], fieldsize );
                    } else 
-                      loadbi3pict_double ( pgbt->bi_picture[j], &pgbt->picture[j], gameoptions.bi3.interpolate.terrain );
+                      loadbi3pict_double ( pgbt->bi_picture[j], 
+											&pgbt->picture[j], 
+											CGameOptions::Instance()->bi3.interpolate.terrain );
    
             pgbt->terraintype = bbt;
             if ( pgbt->quickview ) {
@@ -2220,7 +2232,9 @@ pobjecttype   loadobjecttype( pnstream stream )
                for ( int n = 0; n < fztn->pictnum; n++ ) {
                   stream->readdata2 ( fztn->picture[ww][n] );
                   if ( fztn->picture[ww][n].bi3pic != -1 ) 
-                     loadbi3pict_double ( fztn->picture[ww][n].bi3pic, &fztn->picture[ww][n].picture, gameoptions.bi3.interpolate.objects, 0 );
+                     loadbi3pict_double ( fztn->picture[ww][n].bi3pic,
+					 &fztn->picture[ww][n].picture, 
+					 CGameOptions::Instance()->bi3.interpolate.objects, 0 );
                   else
                      stream->readrlepict ( &fztn->picture[ww][n].picture, false, &w);
 
@@ -2260,7 +2274,9 @@ pobjecttype   loadobjecttype( pnstream stream )
                   for ( int n = 0; n < fztn->pictnum; n++ ) 
                      if ( fztn->picture[ww][n].bi3pic != -1 ) {
                         asc_free ( fztn->picture[ww][n].picture );
-                        loadbi3pict_double ( fztn->picture[ww][n].bi3pic, &fztn->picture[ww][n].picture, gameoptions.bi3.interpolate.objects );
+                        loadbi3pict_double (	fztn->picture[ww][n].bi3pic,
+												&fztn->picture[ww][n].picture,
+												CGameOptions::Instance()->bi3.interpolate.objects );
                      }
 
      /*
@@ -2474,7 +2490,7 @@ bool makeDirectory ( const char* path )
 
    if ( !existence ) {
       #if defined(_DOS_) | defined(WIN32)
-       int res = mkdir ( tmp );
+       int res = _mkdir ( tmp );
       #else
        int res = mkdir ( tmp, 0700 );
       #endif
@@ -2505,7 +2521,7 @@ char* getConfigFileName ( char* buffer )
 }
 
 
-CLoadableGameOptions* loadableGameOptions = NULL;
+CLoadableGameOptions* loadableGameOptions =	NULL;
 
 int readgameoptions ( const char* filename )
 {
@@ -2528,64 +2544,64 @@ int readgameoptions ( const char* filename )
       configFileNameUsed = strdup ( completeFileName );
 
       if ( !loadableGameOptions )
-         loadableGameOptions = new CLoadableGameOptions (&gameoptions);
+		  loadableGameOptions = new CLoadableGameOptions (CGameOptions::Instance());
 
       std::ifstream is( completeFileName );
       loadableGameOptions->Load(is);	
    } else {
-      gameoptions.changed = 1; // to generate a configuration file
+      CGameOptions::Instance()->setChanged(); // to generate a configuration file
       if ( exist ( "sg.cfg" ) ) {
          tnfilestream stream ( "sg.cfg", 1);
          int version = stream.readInt ( );
          if ( version == 102 ) {
-            gameoptions.fastmove = stream.readInt();
-            gameoptions.visibility_calc_algo = stream.readInt();
-            gameoptions.movespeed = stream.readInt();
-            gameoptions.endturnquestion = stream.readInt();
-            gameoptions.smallmapactive = stream.readInt();
-            gameoptions.units_gray_after_move = stream.readInt();
-            gameoptions.mapzoom = stream.readInt();
-            gameoptions.mapzoomeditor = stream.readInt();
-            gameoptions.startupcount = stream.readInt();
-            gameoptions.dontMarkFieldsNotAccessible_movement = stream.readInt();
-            gameoptions.attackspeed1 = stream.readInt();
-            gameoptions.attackspeed2 = stream.readInt();
-            gameoptions.attackspeed3 = stream.readInt();
-            gameoptions.disablesound = stream.readInt();
+            CGameOptions::Instance()->fastmove = stream.readInt();
+            CGameOptions::Instance()->visibility_calc_algo = stream.readInt();
+            CGameOptions::Instance()->movespeed = stream.readInt();
+            CGameOptions::Instance()->endturnquestion = stream.readInt();
+            CGameOptions::Instance()->smallmapactive = stream.readInt();
+            CGameOptions::Instance()->units_gray_after_move = stream.readInt();
+            CGameOptions::Instance()->mapzoom = stream.readInt();
+            CGameOptions::Instance()->mapzoomeditor = stream.readInt();
+            CGameOptions::Instance()->startupcount = stream.readInt();
+            CGameOptions::Instance()->dontMarkFieldsNotAccessible_movement = stream.readInt();
+            CGameOptions::Instance()->attackspeed1 = stream.readInt();
+            CGameOptions::Instance()->attackspeed2 = stream.readInt();
+            CGameOptions::Instance()->attackspeed3 = stream.readInt();
+            CGameOptions::Instance()->disablesound = stream.readInt();
             for ( int i = 0; i < 9; i++ )
                stream.readInt();  // dummy
 
-            gameoptions.mouse.scrollbutton = stream.readInt();
-            gameoptions.mouse.fieldmarkbutton = stream.readInt();
-            gameoptions.mouse.smallguibutton = stream.readInt();
-            gameoptions.mouse.largeguibutton = stream.readInt();
-            gameoptions.mouse.smalliconundermouse = stream.readInt();
-            gameoptions.mouse.centerbutton = stream.readInt();
-            gameoptions.mouse.unitweaponinfo = stream.readInt();
-            gameoptions.mouse.dragndropmovement = stream.readInt();
+            CGameOptions::Instance()->mouse.scrollbutton = stream.readInt();
+            CGameOptions::Instance()->mouse.fieldmarkbutton = stream.readInt();
+            CGameOptions::Instance()->mouse.smallguibutton = stream.readInt();
+            CGameOptions::Instance()->mouse.largeguibutton = stream.readInt();
+            CGameOptions::Instance()->mouse.smalliconundermouse = stream.readInt();
+            CGameOptions::Instance()->mouse.centerbutton = stream.readInt();
+            CGameOptions::Instance()->mouse.unitweaponinfo = stream.readInt();
+            CGameOptions::Instance()->mouse.dragndropmovement = stream.readInt();
             for ( int j = 0; j < 7; j++ )
                stream.readInt();
 
-            gameoptions.container.autoproduceammunition = stream.readInt();
-            gameoptions.container.filleverything = stream.readInt();
-            gameoptions.container.emptyeverything = stream.readInt();
+            CGameOptions::Instance()->container.autoproduceammunition = stream.readInt();
+            CGameOptions::Instance()->container.filleverything = stream.readInt();
+            CGameOptions::Instance()->container.emptyeverything = stream.readInt();
             for ( int k = 0; k < 10; k++ )
                stream.readInt();
 
-            gameoptions.onlinehelptime = stream.readInt();
-            gameoptions.smallguiiconopenaftermove = stream.readInt();
-            gameoptions.defaultpassword = stream.readInt();
-            gameoptions.replayspeed = stream.readInt();
+            CGameOptions::Instance()->onlinehelptime = stream.readInt();
+            CGameOptions::Instance()->smallguiiconopenaftermove = stream.readInt();
+            CGameOptions::Instance()->defaultpassword = stream.readInt();
+            CGameOptions::Instance()->replayspeed = stream.readInt();
             int bi3dir = stream.readInt();
-            gameoptions.bi3.interpolate.terrain = stream.readInt();
-            gameoptions.bi3.interpolate.units = stream.readInt();
-            gameoptions.bi3.interpolate.objects = stream.readInt();
-            gameoptions.bi3.interpolate.buildings = stream.readInt();
+            CGameOptions::Instance()->bi3.interpolate.terrain = stream.readInt();
+            CGameOptions::Instance()->bi3.interpolate.units = stream.readInt();
+            CGameOptions::Instance()->bi3.interpolate.objects = stream.readInt();
+            CGameOptions::Instance()->bi3.interpolate.buildings = stream.readInt();
 
             if ( bi3dir ) {
                char* tmp;
                stream.readpchar ( &tmp );
-               gameoptions.bi3.dir.setName( tmp );
+               CGameOptions::Instance()->bi3.dir.setName( tmp );
                delete[] tmp;
             }
 
@@ -2593,24 +2609,24 @@ int readgameoptions ( const char* filename )
       }
    }
    #ifdef sgmain
-   if ( gameoptions.startupcount < 10 ) {
-      gameoptions.startupcount++;
-      gameoptions.changed = 1;
+   if ( CGameOptions::Instance()->startupcount < 10 ) {
+      CGameOptions::Instance()->startupcount++;
+      CGameOptions::Instance()->setChanged();
    }
    #endif
 
-   makeDirectory ( gameoptions.searchPath[0].getName() );
+   makeDirectory ( CGameOptions::Instance()->getSearchPath(0) );
 
    return 0;
 }
 
 int writegameoptions ( void )
 {
-   if ( gameoptions.changed && configFileNameToWrite ) {
+   if ( CGameOptions::Instance()->isChanged() && configFileNameToWrite ) {
       char buf[10000];
       if ( makeDirectory ( extractPath ( buf, configFileNameToWrite ))) {
          if ( !loadableGameOptions )
-            loadableGameOptions = new CLoadableGameOptions (&gameoptions);
+            loadableGameOptions = new CLoadableGameOptions (CGameOptions::Instance());
          std::ofstream os( configFileNameToWrite );
          loadableGameOptions->Save(os);
          return 1;
@@ -2629,16 +2645,16 @@ void checkFileLoadability ( const char* filename )
       char temp[10000];
       temp[0] = 0;
       for ( int i = 0; i < 5; i++ )
-         if ( gameoptions.searchPath[i].getName() ) {
+         if ( CGameOptions::Instance()->getSearchPath(i)	) {
             strcat ( temp, "  " );
-            strcat ( temp, gameoptions.searchPath[i].getName() );
+            strcat ( temp, CGameOptions::Instance()->getSearchPath(i) );
             strcat ( temp, "\n" );
          }
 
       char temp3[1000];
       temp3[0] = 0;
       if ( !configFileNameUsed ) {
-         gameoptions.changed = 1;
+         CGameOptions::Instance()->setChanged();
          if ( writegameoptions())
             sprintf(temp3, "A configuration file has been written to %s\n", configFileNameToWrite );
       }
@@ -2667,11 +2683,12 @@ void initFileIO ( const char* configFileName )
 {
    readgameoptions( configFileName );
 
-   for ( int i = 0; i < gameoptions.getSearchPathNum(); i++ )
-      if ( gameoptions.searchPath[i].getName() ) {
+   for ( int i = 0; i < CGameOptions::Instance()->getSearchPathNum(); i++ )
+      if ( CGameOptions::Instance()->getSearchPath(i)	) {
          if ( verbosity > 2 )
-            printf("adding search patch %s\n", gameoptions.searchPath[i].getName() );
-         addSearchPath ( gameoptions.searchPath[i].getName() );
+            printf(	"adding search patch %s\n",
+					CGameOptions::Instance()->getSearchPath(i));
+         addSearchPath ( CGameOptions::Instance()->getSearchPath(i) );
       }
    try {
      opencontainer ( "*.con" );
@@ -2786,17 +2803,17 @@ void SingleUnitSet::read ( pnstream stream )
    if ( !stream )
       return;
    const char separator = '=';
-   string s;
+   std::string s;
    int data = stream->readTextString ( s );
    if ( s == "#V2#" ) {
       while ( data ) {
-         string s2;
+         std::string s2;
          data = stream->readTextString ( s2 );
 
          int seppos = s2.find_first_of ( separator );
          if ( seppos >= 0 ) {
-            string b = s2.substr(0, seppos);
-            string e = s2.substr( seppos+1 );
+			 std::string b = s2.substr(0, seppos);
+            std::string e = s2.substr( seppos+1 );
             if ( b == "NAME" )
                name = e;
 
@@ -2824,13 +2841,13 @@ void SingleUnitSet::read ( pnstream stream )
    } else {
       int seppos = s.find_first_of ( ';' );
       if ( seppos >= 0 ) {
-         string b = s.substr(0, seppos);
-         string e = s.substr( seppos+1 );
+		  std::string b = s.substr(0, seppos);
+		  std::string e = s.substr( seppos+1 );
          name = b;
          parseIDs ( e.c_str() );
 
          while ( data ) {
-            string s2;
+			 std::string s2;
             data = stream->readTextString ( s2 );
             if ( s2.length() ) {
                TranslationTable* tt = new TranslationTable;
@@ -2858,5 +2875,5 @@ void loadUnitSets ( void )
    } /* endwhile */
 }
 
-vector<SingleUnitSet*> unitSets;
+std::vector<SingleUnitSet*> unitSets;
 

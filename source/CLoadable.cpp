@@ -62,10 +62,10 @@ CLoadableGameOptions::CLoadableGameOptions(CGameOptions* pOptions)
 	add(new IntProperty("BI3.interpolate.objects"		,	&_pOptions->bi3.interpolate.objects));
 	add(new IntProperty("BI3.interpolate.buildings"		,	&_pOptions->bi3.interpolate.buildings));
 	
+	char buf[1000];
 	for ( int i = 0; i < _pOptions->getSearchPathNum(); i++ ) {
-	   char buf[1000];
-	   sprintf(buf,"SearchPath%d", i );
-      add(new TextProperty(buf							,	&_pOptions->searchPath[i]	)	);
+		sprintf(buf,"SearchPath%d", i );
+		add(new TextProperty(buf						,	&_pOptions->searchPath[i]	)	);
    }
 }
 

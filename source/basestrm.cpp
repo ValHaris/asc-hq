@@ -1,6 +1,10 @@
-//     $Id: basestrm.cpp,v 1.33 2000-08-03 19:45:13 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.34 2000-08-12 09:17:15 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/08/03 19:45:13  mbickel
+//      Fixed some bugs in DOS code
+//      Removed submarine.ascent != 0 hack
+//
 //     Revision 1.32  2000/08/03 19:21:15  mbickel
 //      Fixed: units had invalid height when produced in some buildings
 //      Fixed: units could not enter building if unitheightreq==0
@@ -181,10 +185,12 @@
 
 #include "basestrm.h"
 
-#ifdef _DOS_
- #include <direct.h> 
+#if defined(_DOS_) | defined(WIN32)
+ #include <direct.h>
+ #include "ndir.h"
+ 
 #else
- #include sdlheader
+// #include sdlheader
 
  #ifdef HAVE_SYS_DIRENT_H
   #include <sys/dirent.h>
@@ -594,7 +600,7 @@ void         tnstream::readpnchar(char** pc, int maxlength )
 }
 
 
-int  tnstream::readTextString ( string& s )
+int  tnstream::readTextString ( std::string& s )
 {
   char c;
   int red = 1;
@@ -711,7 +717,7 @@ void MemoryStreamCopy :: seek ( int newpos )
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef _DOS_
+#if !defined(_DOS_) & !defined(WIN32)
 
 static int stream_seek( struct SDL_RWops *context, int offset, int whence)
 {
@@ -1234,7 +1240,7 @@ void ContainerCollector :: init ( const char* wildcard )
 {
    for ( int i = 0; i < searchDirNum; i++ ) {
       DIR *dirp; 
-      struct dirent *direntp; 
+      struct direct *direntp; 
 
       char buf[ maxFileStringSize ];
       char buf2[ maxFileStringSize ];
@@ -1991,7 +1997,7 @@ tfindfile :: tfindfile ( const char* name )
 
    for ( int i = 0; i < dirNum; i++ ) {
       DIR *dirp; 
-      struct dirent *direntp; 
+      struct direct *direntp; 
   
       dirp = opendir( directory[i] );   
       if( dirp != NULL ) { 
@@ -2096,7 +2102,7 @@ int checkforvaliddirectory ( char* dir )
    int stat = 0;
 
       DIR *dirp; 
-      struct dirent *direntp; 
+      struct direct *direntp; 
   
 /*      char temp[200];
       int l = strlen(dir) - 1;

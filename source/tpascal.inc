@@ -1,7 +1,8 @@
 #define word unsigned short int
 #define Word word
-#define byte char
-#define Byte byte
+#define pascal_byte char
+//#define Byte byte
+//#define Byte byte
 typedef char* pchar;
 #define integer signed short int
 #define Integer integer

@@ -1,6 +1,11 @@
-//     $Id: controls.h,v 1.18 2000-08-02 10:28:25 mbickel Exp $
+//     $Id: controls.h,v 1.19 2000-08-12 09:17:21 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/08/02 10:28:25  mbickel
+//      Fixed: generator vehicle not working
+//      Streams can now report their name
+//      Field information shows units filename
+//
 //     Revision 1.17  2000/08/02 08:47:58  mbickel
 //      Fixed: Mineral resources where visible for all players
 //
@@ -105,6 +110,7 @@
 #include "gui.h"
 #include "typen.h"
 #include "timer.h"
+#include "mousecontrol.h"
 
 /* unit header for: controls.c -- made by tptc - translate pascal to c */
 
@@ -130,7 +136,7 @@
                        int          fuelbkgrread;
                        void*        imagebkgr;
                        int          imageshown;
-                       int          movedisp;   // 0: Movement fÅr Runde    1: movement mit Tank
+                       int          movedisp;   // 0: Movement f?r Runde    1: movement mit Tank
                        int          windheight; // 4 , 5 , 6 
                        int          windheightshown;
                        void*        windheightbackground;
@@ -300,7 +306,7 @@ enum tvisibilitytempbuf { vsight, vjamming, vfeatures };
                        void             run ( void );
               };
 
-    class tprotfzt   {          // ÅberprÅft, welche vehicletypeen neu verfÅgbar sind
+    class tprotfzt   {          // ?berpr?ft, welche vehicletypeen neu verf?gbar sind
                 public:
                     void initbuffer( void );
                     void evalbuffer( void );
@@ -330,8 +336,8 @@ extern void  calcmovemalus(int          x1,
                            int          y2,
                            pvehicle     vehicle,
                            shortint     direc,
-                           int&         mm1,               // fÅr Spritfuelconsumption
-                           int&         mm2 );            //  fÅr movementdecrease
+                           int&         mm1,               // f?r Spritfuelconsumption
+                           int&         mm2 );            //  f?r movementdecrease
 
 
 extern void  setspec( pobjecttype obj );
@@ -385,16 +391,16 @@ extern int getenergy(pbuilding    bld,    int      need,    byte         mode);
 
                 +4         mit abbuchen                         /
                 +8         nur Tributzahlungen kassieren       /  
-               +16         plus zurÅckliefern                 <  diese Bits schlie·en sich gegenseitig aus
-               +32         usage zurÅckliefern                 \
-               +64         tank zurÅckliefern                   \
+               +16         plus zur?ckliefern                 <  diese Bits schlie·en sich gegenseitig aus
+               +32         usage zur?ckliefern                 \
+               +64         tank zur?ckliefern                   \
                */
 
 
 struct tmininginfo {
          tresources avail[maxminingrange+2];
          int efficiency[maxminingrange+2];
-         tresources max[maxminingrange+2];            // soviel BodenschÑtze kînnten in der Entfernung untergebracht werden.
+         tresources max[maxminingrange+2];            // soviel Bodenschaetze kînnten in der Entfernung untergebracht werden.
 };                                          
 
 
@@ -412,15 +418,7 @@ extern void addanytechnology ( ptechnology tech, int player );
 
 
 
-class cmousecontrol {
-         protected:
 
-            int mousestat;
-         public:
-            cmousecontrol( void );
-            void chkmouse ( void );
-            void reset ( void );
-};
 
 enum trpl_actions { rpl_attack, rpl_move, rpl_changeheight, rpl_convert, rpl_remobj, rpl_buildobj, rpl_putbuilding, 
                     rpl_removebuilding, rpl_putmine, rpl_removemine, rpl_produceunit, rpl_removeunit, rpl_trainunit, 
@@ -488,7 +486,7 @@ extern void   generatevehicle_cl ( pvehicletype fztyp,
                                   int          x, 
                                   int          y );
 // Generiert eine LEERE vehicle. MIT abfrage, ob dies Mîglich ist, MIT auswerten der Klassen
-//  => Nur fÅrs Spiel
+//  => Nur f?rs Spiel
 
 extern void testnet ( void );
 
@@ -651,7 +649,7 @@ class tsearchreactionfireingunits : public treactionfire {
            protected:
 
 
-                static int maxshootdist[8];     // fÅr jede Hîhenstufe eine
+                static int maxshootdist[8];     // f?r jede Hîhenstufe eine
                 void addunit ( pvehicle vehicle );
                 void removeunit ( pvehicle vehicle );
            public:

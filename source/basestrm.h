@@ -1,6 +1,12 @@
-//     $Id: basestrm.h,v 1.19 2000-08-03 19:21:15 mbickel Exp $
+//     $Id: basestrm.h,v 1.20 2000-08-12 09:17:16 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/08/03 19:21:15  mbickel
+//      Fixed: units had invalid height when produced in some buildings
+//      Fixed: units could not enter building if unitheightreq==0
+//      Started adding SDL_image support
+//      Upgraded to SDL1.1.3 (for SDL_image)
+//
 //     Revision 1.18  2000/08/02 15:52:40  mbickel
 //      New unit set definition files
 //      demount accepts now more than one container file
@@ -277,7 +283,7 @@ class tnstream {
 
            virtual void readpchar( char** pc, int maxlength = 0) ;
            virtual void readpnchar( char** pc, int maxlength = 0) ;
-           virtual int readTextString ( string& s ); // return 0 if end of file is reached
+           virtual int readTextString ( std::string& s ); // return 0 if end of file is reached
            virtual void writepchar( const char* pc) ;
 
            virtual int  readInt  ( void );
@@ -295,7 +301,7 @@ class tnstream {
            virtual void seek ( int newpos );
            tnstream ( );
          protected:
-           string devicename; // will just contain "abstract" 
+           std::string devicename; // will just contain "abstract" 
 
 };
 

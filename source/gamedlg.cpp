@@ -1,6 +1,13 @@
-//     $Id: gamedlg.cpp,v 1.37 2000-08-08 09:48:13 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.38 2000-08-12 09:17:26 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2000/08/08 09:48:13  mbickel
+//
+//      speed up of dialog boxes in linux
+//      fixed graphical errors in attack
+//      fixed graphical error in ammo transfer
+//      fixed reaction fire not allowing manual attack
+//
 //     Revision 1.36  2000/08/07 16:29:20  mbickel
 //      orbiting units don't consume fuel any more
 //      Fixed bug in attack formula; improved attack formula
@@ -2329,7 +2336,7 @@ typedef class tparagraph* pparagraph;
 class  tparagraph {
         public:
           tparagraph ( void );
-          tparagraph ( pparagraph prv );   // fgt einen neuen paragraph hinter prv an
+          tparagraph ( pparagraph prv );   // f?gt einen neuen paragraph hinter prv an
 
           void join ( void );   // returnvalue : paragraph to delete;
           void changesize ( int newsize );
@@ -2539,7 +2546,7 @@ pparagraph tparagraph :: erasechar ( int c )
          if ( prev ) {
             pparagraph temp = prev;
             prev->join();
-            return temp;              //  !!!###!!!   gef„llt mir eigentlich berhauptnicht, wird aber wohl laufen. Sonst máte ich halt erasechar von auáen managen
+            return temp;              //  !!!###!!!   gef„llt mir eigentlich ?berhauptnicht, wird aber wohl laufen. Sonst m?áte ich halt erasechar von auáen managen
          }
 
    }
@@ -3945,8 +3952,8 @@ void tonlinemousehelp :: checklist ( tonlinehelplist* list )
 
 void tonlinemousehelp :: checkforhelp ( void )
 {
-   if ( gameoptions.onlinehelptime ) 
-      if ( ticker > lastmousemove+gameoptions.onlinehelptime )
+	if ( CGameOptions::Instance()->onlinehelptime ) 
+      if ( ticker > lastmousemove+CGameOptions::Instance()->onlinehelptime )
          if ( active == 1 )
             if ( mouseparams.taste == 0 )
                checklist ( &helplist );
@@ -3991,7 +3998,8 @@ class tgamepreferences : public tdialogbox {
                         void init ( void );
                         void buttonpressed ( char id );
                         void run ( void );
-                        tgamepreferences ( ) : actoptions ( gameoptions ) {};
+                        tgamepreferences ( ) 
+							: actoptions ( *CGameOptions::Instance() ) {};
                     };
 
 
@@ -4166,7 +4174,7 @@ void tgamepreferences :: buttonpressed ( char id )
    tdialogbox :: buttonpressed ( id );
 
    if ( id == 1 ) {
-      gameoptions.copy ( actoptions );
+      CGameOptions::Instance()->copy ( actoptions );
       status = 10;
    }
 
@@ -4215,7 +4223,7 @@ void tgamepreferences :: buttonpressed ( char id )
 */
 
    if ( id == 11 ) {
-      gameoptions.defaultpassword = 0;
+      CGameOptions::Instance()->defaultpassword = 0;
       enterpassword ( &actoptions.defaultpassword );
    }
 }
@@ -4231,13 +4239,13 @@ void tgamepreferences :: run ( void )
 
 void gamepreferences  ( void )
 {
-   int oldSoundStat = gameoptions.disablesound;
+   int oldSoundStat = CGameOptions::Instance()->disablesound;
    tgamepreferences prefs;
    prefs.init();
    prefs.run();
    prefs.done();
-   if ( oldSoundStat != gameoptions.disablesound )
-      if ( gameoptions.disablesound )
+   if ( oldSoundStat != CGameOptions::Instance()->disablesound )
+      if ( CGameOptions::Instance()->disablesound )
          disableSound();
       else
          enableSound();
@@ -4271,7 +4279,7 @@ class tmousepreferences : public tdialogbox {
                         void buttonpressed ( char id );
                         void paintbutt ( char id );
                         void run ( void );
-                        tmousepreferences ( ) : actoptions ( gameoptions ) {};
+                        tmousepreferences ( ) : actoptions ( *CGameOptions::Instance()) {};
                     };
 
 
@@ -4420,7 +4428,7 @@ void tmousepreferences :: buttonpressed ( char id )
    tdialogbox :: buttonpressed ( id );
 
    if ( id == 1 ) {
-      gameoptions.copy ( actoptions );
+      CGameOptions::Instance()->copy ( actoptions );
       status = 10;
    }
 
@@ -4461,7 +4469,7 @@ void mousepreferences  ( void )
 }
 
 
-void writeGameParametersToString ( string& s)
+void writeGameParametersToString ( std::string& s)
 {
    s = "The game has been set up with the following game parameters:\n";
    s += "(black line: parameter has default value)\n\n";
@@ -4483,7 +4491,7 @@ void writeGameParametersToString ( string& s)
 
 void sendGameParameterAsMail ( void )
 {
-   string s;
+	std::string s;
    writeGameParametersToString ( s );
    tmessage* msg = new tmessage ( strdup ( s.c_str()), 255 );
 }
@@ -4514,53 +4522,55 @@ class tbaseitemlist {
 
 typedef class tmountpicture* pmountpicture;
 
-            class  tmountpicture : public tbaseitemlist {
-                       protected:
-                         int outofmem;
-                         pfont fnt;
+class  tmountpicture : public tbaseitemlist {
+	protected:
+		int outofmem;
+        pfont fnt;
 
-                         tgraphmodeparameters gmp;
+        tgraphmodeparameters gmp;
 
-                         struct tb {
-                                      int x, y;
-                                      int xs, ys;
-                                      int xd;
-                                      int num;
-                                      char* name;
-                                      void* item;
-                                      int marked;
+        struct tb {
+			int x;
+			int y;
+            int xs;
+			int ys;
+            int xd;
+            int num;
+            char* name;
+            void* item;
+            int marked;
 
-                                      tb* next;
-                                   };
-                         typedef tb* pb ;
-
-                         pb  first;
-                         pb  last;
-
-
-                         int x1;
-                         int y1;
-                         int yspace;
-                         int xsize;
-                         void* buf;
-                         int bufsize;
-                         int itemnum;
-
-                         virtual void putpict ( int n, int y ) ;
-                         virtual void putpict ( pb n, int y ) = 0;
-
-                          pb getpbfornum ( int n );
+            tb* next;
+       };
+    
+		public:
+			typedef tb* pb ;
+		protected:
+			pb  first;
+			pb  last;
 
 
-                          void dispimage ( void );
+       int x1;
+       int y1;
+       int yspace;
+       int xsize;
+       void* buf;
+       int bufsize;
+       int itemnum;
 
-                          virtual pb add_item ( void* item );
-                          void markitem ( pb i , int y );
-                          void clearbuf ( void );
+       virtual void putpict ( int n, int y ) ;
+       virtual void putpict ( pb n, int y ) = 0;
 
+       pb getpbfornum ( int n );
 
-                       public:
-                          int piclen;
+		void dispimage ( void );
+
+       virtual pb add_item ( void* item );
+       void markitem ( pb i , int y );
+       void clearbuf ( void );
+
+		public:
+		              int piclen;
                           int ysize;
                           int ystart;
                           int effpiclen;
@@ -5185,9 +5195,10 @@ tmultiplayersettings :: tmountbuildingpictures :: ~tmountbuildingpictures (  )
 {
 }
 
-tmountpicture::pb tmultiplayersettings :: tmountbuildingpictures :: add_item ( void* item )
+tmountpicture::pb 
+tmultiplayersettings::tmountbuildingpictures :: add_item ( void* item )
 {
-   pb i = tmountpicture :: add_item ( item );
+   tmountpicture::pb i = tmountpicture :: add_item ( item );
 
    pbuildingtype bld = (pbuildingtype) item;
    i->name = bld->name;

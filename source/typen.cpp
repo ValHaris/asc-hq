@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.42 2000-08-11 12:24:07 mbickel Exp $
+//     $Id: typen.cpp,v 1.43 2000-08-12 09:17:37 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2000/08/11 12:24:07  mbickel
+//      Fixed: no movement after refuelling unit
+//      Restructured reading/writing of units
+//
 //     Revision 1.41  2000/08/10 10:20:18  mbickel
 //      Added building function "produce all unit types"
 //
@@ -283,10 +287,9 @@ const char* cgeneralnetcontrol[4] = {       "store",  "move out", "stop storing"
 const char*  cwettertypen[cwettertypennum] = {"dry (standard)","light rain", "heavy rain", "few snow", "lot of snow", "fog (don't use!!)"};
 const char*  resourceNames[3]  = {"energy", "material", "fuel"}; 
 const int  cwaffenproduktionskosten[cwaffentypennum][3]  = {{20, 15, 10}, {2, 2, 0}, {3, 2, 0}, {3, 3, 2}, {3, 3, 2}, {4, 3, 2},
-                                                            {1, 1, 0},    {1, 2, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}; // jeweils fÅr weaponpackagesize Pack !
+                                                            {1, 1, 0},    {1, 2, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}; // jeweils f?r weaponpackagesize Pack !
 // const int experienceDecreaseDamageBoundaryNum = 4;
 const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoundaryNum] = { 80, 60, 40, 20 };
-
 
 const int directionangle [ sidenum ] = 
 #ifdef HEXAGON
@@ -840,7 +843,7 @@ void*   tbuildingtype :: getpicture ( int x, int y )
    #ifdef HEXAGON
    return w_picture[0][0][x][y];
    #else
-   return picture[0][x][y];
+   return w_picture[0][x][y];
    #endif
 }
 
@@ -1521,7 +1524,7 @@ void tvehicle :: putimage ( int x, int y )
 {
  #ifndef converter
   #ifdef sgmain
-   int shaded = ( getMovement() < minmalq ) && ( color == actmap->actplayer*8) && (attacked || !typ->weapons->count || gameoptions.units_gray_after_move );
+	int shaded = ( getMovement() < minmalq ) && ( color == actmap->actplayer*8) && (attacked || !typ->weapons->count || CGameOptions::Instance()->units_gray_after_move );
   #else
    int shaded = 0;
   #endif
@@ -1642,7 +1645,7 @@ tmessage :: tmessage ( pmap spfld )
    move = 0;
 }
 
-tmessage :: tmessage ( char* txt, int rec )  // fÅr Meldungen vom System
+tmessage :: tmessage ( char* txt, int rec )  // f?r Meldungen vom System
 {
    from = 0;
    to = 0;
@@ -1679,7 +1682,7 @@ tmessage :: tmessage ( pmap spfld  )
 
 extern tmap map;
 
-tmessage :: tmessage ( char* txt, int rec )  // fÅr Meldungen vom System
+tmessage :: tmessage ( char* txt, int rec )  // f?r Meldungen vom System
 {
    from = 1 << 9;
    runde = actmap->time.a.turn;

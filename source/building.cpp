@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.42 2000-08-11 11:38:26 mbickel Exp $
+//     $Id: building.cpp,v 1.43 2000-08-12 09:17:16 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2000/08/11 11:38:26  mbickel
+//      Enabled resource control subwindow in BI resource mode
+//
 //     Revision 1.41  2000/08/09 13:18:09  mbickel
 //      Fixed: invalid movement cost for airplanes flying with wind
 //      Fixed: building mineral resource info: wrong lines for availability
@@ -559,7 +562,7 @@ void  ccontainercontrols :: crefill :: ammunition (pvehicle eht, char weapon, in
          newa = eht->typ->weapons->weapon[ weapon ].count;
 
       if ( newa > eht->ammo[weapon] ) 
-         eht->ammo[weapon]  +=  cc->getammunition ( eht->typ->weapons->weapon[ weapon ].getScalarWeaponType() , newa - eht->ammo[weapon], 1, gameoptions.container.autoproduceammunition );
+		  eht->ammo[weapon]  +=  cc->getammunition ( eht->typ->weapons->weapon[ weapon ].getScalarWeaponType() , newa - eht->ammo[weapon], 1, CGameOptions::Instance()->container.autoproduceammunition );
       else {
          cc->putammunition ( eht->typ->weapons->weapon[ weapon ].getScalarWeaponType() , eht->ammo[weapon]  - newa, 1 );
          eht->ammo[weapon] = newa;
@@ -949,7 +952,7 @@ void  cbuildingcontrols :: crecycling :: recycle (pvehicle eht)
    if (choice_dlg("do you really want to recycle this unit ?","~y~es","~n~o") == 1) { 
       resourceuse ( eht );
    
-      if ( gameoptions.container.emptyeverything )
+      if ( CGameOptions::Instance()->container.emptyeverything )
           cc->refill.emptyeverything ( eht );
    
    
@@ -996,20 +999,17 @@ void    cbuildingcontrols :: cnetcontrol :: reset ( void )
 
 int   cbuildingcontrols :: crepairbuilding :: available ( void )
 {
-   if ( cc_b->building->damage )
-      return 1;
-   else
-      return 0;
+	return ( cc_b->building->damage )	?	true	:	false;
 }
 
 
 int   cbuildingcontrols :: crepairbuilding :: checkto ( char newdamage )
 { 
-   return cbuildingcontrols :: crepairanything :: checkto ( cc_b->building->damage, newdamage, 
-                                                            cc_b->building->typ->productioncost.fuel      * actmap->getgameparameter(cgp_buildingrepairfactor) / 100 * actmap->getgameparameter(cgp_buildingarmor) / 100, 
-                                                            cc_b->building->typ->productioncost.material  * actmap->getgameparameter(cgp_buildingrepairfactor) / 100 * actmap->getgameparameter(cgp_buildingarmor) / 100, 
-                                                            0, repairefficiency_building );
-};
+	return crepairanything::checkto( cc_b->building->damage, newdamage, 
+					cc_b->building->typ->productioncost.fuel      * actmap->getgameparameter(cgp_buildingrepairfactor) / 100 * actmap->getgameparameter(cgp_buildingarmor) / 100, 
+                    cc_b->building->typ->productioncost.material  * actmap->getgameparameter(cgp_buildingrepairfactor) / 100 * actmap->getgameparameter(cgp_buildingarmor) / 100, 
+                    0, repairefficiency_building );
+}
 
 
 
@@ -1042,7 +1042,7 @@ int   cbuildingcontrols :: crepairbuilding :: repairto ( char newdamage)
 
 int   cbuildingcontrols :: crepairunitinbuilding :: checkto (pvehicle eht, char newdamage)
 {
-   return ccontainercontrols :: crepairanything :: checkto ( eht->damage, newdamage, eht->typ->production.energy, eht->typ->production.material, 0, repairefficiency_building );
+   return /*ccontainercontrols ::*/ crepairanything :: checkto ( eht->damage, newdamage, eht->typ->production.energy, eht->typ->production.material, 0, repairefficiency_building );
 };
 
 
@@ -1182,7 +1182,7 @@ pvehicle cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt)
 
    } /* endwhile */
 
-   if ( gameoptions.container.filleverything ) 
+   if ( CGameOptions::Instance()->container.filleverything ) 
       cc->refill.filleverything ( eht );
 
    return eht;
@@ -1264,7 +1264,7 @@ int   cbuildingcontrols :: cdissectunit :: available ( pvehicle eht )
 void   cbuildingcontrols :: cdissectunit :: dissectunit ( pvehicle eht )
 {
    if ( available ( eht ) ){
-      if ( gameoptions.container.emptyeverything )
+      if ( CGameOptions::Instance()->container.emptyeverything )
          cc->refill.emptyeverything ( eht );
       dissectvehicle ( eht );
       cc_b->removevehicle ( &eht );
@@ -1578,7 +1578,7 @@ void  ctransportcontrols :: removevehicle ( pvehicle *peht )
 
 int   ctransportcontrols :: crepairunitintransport :: checkto (pvehicle eht, char newdamage)
 {
-   return ccontainercontrols :: crepairanything :: checkto ( eht->damage, newdamage, 0, eht->typ->production.material, eht->typ->production.energy, repairefficiency_unit );
+   return /*ccontainercontrols ::*/ crepairanything :: checkto ( eht->damage, newdamage, 0, eht->typ->production.material, eht->typ->production.energy, repairefficiency_unit );
 };
 
 
@@ -1784,8 +1784,8 @@ int    ccontainer :: getfieldundermouse ( int* x, int* y )
 
 void   ccontainer :: checkformouse( void )
 {
-   if ( gameoptions.mouse.fieldmarkbutton )
-      if ( mouseparams.taste == gameoptions.mouse.fieldmarkbutton ) {
+   if ( CGameOptions::Instance()->mouse.fieldmarkbutton )
+      if ( mouseparams.taste == CGameOptions::Instance()->mouse.fieldmarkbutton ) {
          int i,j;
          if ( getfieldundermouse ( &i, &j ))
             if ( i != mark.x  ||  j != mark.y ) {
@@ -1803,8 +1803,8 @@ void   ccontainer :: checkformouse( void )
             }
       }
 
-   if ( gameoptions.mouse.smallguibutton )
-      if ( mouseparams.taste == gameoptions.mouse.smallguibutton ) {
+   if ( CGameOptions::Instance()->mouse.smallguibutton )
+      if ( mouseparams.taste == CGameOptions::Instance()->mouse.smallguibutton ) {
          int x; 
          int y;
          int r = getfieldundermouse ( &x, &y );
@@ -1826,7 +1826,7 @@ void   ccontainer :: checkformouse( void )
               if ( mousestat == 2 ) { //  ||  mousestat == 0 ||  (moveparams.movestatus && getfield( actmap->xpos + x, actmap->ypos + y)->temp )  ) {
                  if ( mark.x == x && mark.y == y ) {
                     int num = actgui->painticons();
-                    actgui->paintsmallicons( gameoptions.mouse.smallguibutton, num <= 1 );
+                    actgui->paintsmallicons( CGameOptions::Instance()->mouse.smallguibutton, num <= 1 );
                  }
    
                  mousestat = 1;
@@ -2727,7 +2727,7 @@ void  ccontainer :: moveicon_c :: exec         ( void )
        for ( int i = 0; i < vehicleMovement->reachableFields.getFieldNum(); i++ ) 
           vehicleMovement->reachableFields.getField( i ) ->a.temp = 1;
 
-       if ( !gameoptions.dontMarkFieldsNotAccessible_movement )
+       if ( !CGameOptions::Instance()->dontMarkFieldsNotAccessible_movement )
           for ( int j = 0; j < vehicleMovement->reachableFieldsIndirect.getFieldNum(); j++ )
              vehicleMovement->reachableFieldsIndirect.getField( j ) ->a.temp2 = 2;
 
@@ -2795,7 +2795,7 @@ int   ccontainer :: repairicon_c :: available    ( void )
     pvehicle eht = main->getmarkedunit(); 
     if ( eht && eht->color == actmap->actplayer * 8) 
         if ( eht->damage > 0 ) 
-           if ( ccontainercontrols :: crepairunit :: available ( eht ) )
+           if ( /*ccontainercontrols ::*/ crepairunit :: available ( eht ) )
               return 1; 
 
     return 0;
@@ -3420,7 +3420,7 @@ void ccontainer_b :: unitchanged( void )
          int ma = fzt->production.material;
          int fu = 0;
 
-         if ( gameoptions.container.filleverything ) {
+         if ( CGameOptions::Instance()->container.filleverything ) {
             int en1 = en;
             int ma1 = ma;
             int fu1 = fu;
@@ -4599,7 +4599,7 @@ void  ccontainer_b :: cammunitionproduction_subwindow :: display ( void )
 void ccontainer_b :: cammunitionproduction_subwindow :: produce( void )
 {
   for (int i = 0; i < waffenanzahl; i++) {
-     cbuildingcontrols :: cproduceammunition :: produce ( i, toproduce[i] );
+     /*cbuildingcontrols :: */cproduceammunition :: produce ( i, toproduce[i] );
      toproduce[i] = 0;
   }
 }
@@ -4860,7 +4860,7 @@ void  ccontainer_b :: cresourceinfo_subwindow :: display ( void )
    npop ( activefontsettings );
 
 }
-                                                                // frher X         frher: mode
+                                                                // fr?her X         fr?her: mode
 int  ccontainer_b :: cresourceinfo_subwindow :: getvalue ( int resourcetype, int y, int scope )
 {
   switch ( y ) {
@@ -5940,7 +5940,7 @@ ccontainer_b :: cmineralresources_subwindow :: ~cmineralresources_subwindow ()
 
 int      ccontainer_b :: repairicon_cb :: checkto  (pvehicle eht, char newdamage)
 {
-   return cbuildingcontrols :: crepairunitinbuilding :: checkto ( eht, newdamage );
+   return /*cbuildingcontrols ::*/ crepairunitinbuilding :: checkto ( eht, newdamage );
 }
 
 
@@ -5956,7 +5956,7 @@ int   ccontainer_b :: trainuniticon_cb :: available    ( void )
 
    pvehicle eht = main->getmarkedunit(); 
    if ( eht && eht->color == actmap->actplayer * 8 ) 
-      return cbuildingcontrols :: ctrainunit :: available ( eht );
+      return /*cbuildingcontrols ::*/ ctrainunit :: available ( eht );
 
    return 0;
 }
@@ -5980,7 +5980,7 @@ int   ccontainer_b :: dissectuniticon_cb :: available    ( void )
 {
    pvehicle eht = main->getmarkedunit(); 
    if ( eht && eht->color == actmap->actplayer * 8) 
-      return cbuildingcontrols :: cdissectunit :: available ( eht );
+      return /*cbuildingcontrols ::*/ cdissectunit :: available ( eht );
 
    return 0;
 }
@@ -6044,7 +6044,7 @@ int   ccontainer_b :: produceuniticon_cb :: available    ( void )
          } 
       } else 
          if ( main->getmarkedunittype() )
-            if (  cbuildingcontrols :: cproduceunit :: available ( main->getmarkedunittype() ) )
+            if (  /*cbuildingcontrols ::*/ cproduceunit :: available ( main->getmarkedunittype() ) )
                return 1;
    }
    return 0;
@@ -6077,7 +6077,7 @@ char* ccontainer_b :: produceuniticon_cb :: getinfotext  ( void )
       int ma = fzt->production.material;
       int fu = 0;
 
-      if ( gameoptions.container.filleverything ) {
+      if ( CGameOptions::Instance()->container.filleverything ) {
          int en1 = en;
          int ma1 = ma;
          int fu1 = fu;
@@ -6544,7 +6544,7 @@ int   ccontainer_t :: fill_icon_ct :: available    ( void )
 
 int      ccontainer_t :: repairicon_ct :: checkto  (pvehicle eht, char newdamage)
 {
-   return ctransportcontrols :: crepairunitintransport :: checkto ( eht, newdamage );
+   return /*ctransportcontrols ::*/ crepairunitintransport :: checkto ( eht, newdamage );
 }
 
 
@@ -6638,8 +6638,8 @@ generalicon_c:: ~generalicon_c ( )
 
 void tcontaineronlinemousehelp :: checkforhelp ( void )
 {
-   if ( gameoptions.onlinehelptime )
-      if ( (ticker > lastmousemove+gameoptions.onlinehelptime  && mouseparams.taste == 0 ) || mouseparams.taste == 2 )
+   if ( CGameOptions::Instance()->onlinehelptime )
+      if ( (ticker > lastmousemove+CGameOptions::Instance()->onlinehelptime  && mouseparams.taste == 0 ) || mouseparams.taste == 2 )
          if ( active == 1 )
                if ( hostcontainer->actsubwindow )
                   if ( hostcontainer->actsubwindow->helplist.num )

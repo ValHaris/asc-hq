@@ -1,6 +1,13 @@
-//     $Id: dlgraph.cpp,v 1.7 2000-08-08 09:48:12 mbickel Exp $
+//     $Id: dlgraph.cpp,v 1.8 2000-08-12 09:17:26 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/08/08 09:48:12  mbickel
+//
+//      speed up of dialog boxes in linux
+//      fixed graphical errors in attack
+//      fixed graphical error in ammo transfer
+//      fixed reaction fire not allowing manual attack
+//
 //     Revision 1.6  2000/05/23 20:40:43  mbickel
 //      Removed boolean type
 //
@@ -49,31 +56,27 @@
     Boston, MA  02111-1307  USA
 */
 
-void         tdialogbox::rahmen(char      invers,
+void         tdialogbox::rahmen(bool      invers,
                     int          x1,
                     int          y1,
                     int          x2,
                     int          y2)
 {
      collategraphicoperations cgs ( x1, y1, x2, y2 );
-     byte         col;
-
-     if (invers == false) 
-        col = white;
-     else 
-        col = darkgray;
-     line(x1,y1,x1,y2,col);
+     
+	 char col	=	(invers == false)	?	white	:	darkgray;
+     
+	 line(x1,y1,x1,y2,col);
      line(x1,y1,x2,y1,col); 
-     if (invers == true) 
-        col = white;
-     else 
-        col = darkgray;
-     line(x2,y1,x2,y2,col); 
+     
+	 col	=	(invers == true)	?	white	:	darkgray;
+    
+	 line(x2,y1,x2,y2,col); 
      line(x1,y2,x2,y2,col); 
 } 
 
-void                 tdialogbox::rahmen(char      invers,
-                                          tmouserect   rect )
+void                 tdialogbox::rahmen(	bool      invers,
+											tmouserect   rect )
 {
    rahmen ( invers, rect.x1, rect.y1, rect.x2,rect.y2 );
 }
@@ -223,7 +226,7 @@ void         tdialogbox::newknopfdruck3(integer      xx1,
 
    void*      p;
 
-     // vom reingedrÅckten in den Normalzustand
+     // vom reingedr?ckten in den Normalzustand
 
      p = asc_malloc ( imagesize ( xx1 + 4,yy1 + 4,xx2 - 2,yy2 - 2 ));
      getimage(xx1 + 4,yy1 + 4,xx2 - 2,yy2 - 2, p );
@@ -245,7 +248,7 @@ void         tdialogbox::newknopfdruck4(integer      xx1,
      collategraphicoperations cgs ( xx1, yy1, xx2, yy2 );
 
    void*      p;
-    // reindrÅcken
+    // reindr?cken
 
      p = asc_malloc ( imagesize ( xx1 + 2,yy1 + 2,xx2 - 4,yy2 - 4 )) ;
      getimage(xx1 + 2,yy1 + 2,xx2 - 4,yy2 - 4, p);

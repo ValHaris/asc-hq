@@ -1,6 +1,13 @@
-//     $Id: attack.cpp,v 1.27 2000-08-08 09:47:52 mbickel Exp $
+//     $Id: attack.cpp,v 1.28 2000-08-12 09:17:14 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/08/08 09:47:52  mbickel
+//
+//      speed up of dialog boxes in linux
+//      fixed graphical errors in attack
+//      fixed graphical error in ammo transfer
+//      fixed reaction fire not allowing manual attack
+//
 //     Revision 1.26  2000/08/07 21:10:18  mbickel
 //      Fixed some syntax errors
 //
@@ -224,17 +231,18 @@ float AttackFormula :: strength_damage ( int damage )
 
 float AttackFormula :: strength_experience ( int experience )
 {
-   float e = experience;
-   if ( e < 0 )
-      e = 0;
+	float e =		(experience < 0)
+				?	0	
+				:	experience ;
    return e/4;
 }
 
 float AttackFormula :: defense_experience ( int experience )
 {
-   float e = experience;
-   if ( e < 0 )
-      e = 0;
+   float e =		(experience < 0)
+				?	0	
+				:	experience ;
+   
    return e * 0.75 / 15;
 }
 
@@ -469,15 +477,15 @@ void tfight :: calcdisplay ( int ad, int dd )
    calc();
 
 
-   int time1 = gameoptions.attackspeed1;
+   int time1 = CGameOptions::Instance()->attackspeed1;
    if ( time1 <= 0 )
       time1 = 30;
 
-   int time2 = gameoptions.attackspeed2;
+   int time2 = CGameOptions::Instance()->attackspeed2;
    if ( time2 <= 0 )
       time2 = 50;
 
-   int time3 = gameoptions.attackspeed3;
+   int time3 = CGameOptions::Instance()->attackspeed3;
    if ( time3 <= 0 )
       time3 = 30;
 

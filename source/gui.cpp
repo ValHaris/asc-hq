@@ -1,6 +1,10 @@
-//     $Id: gui.cpp,v 1.32 2000-08-09 12:39:27 mbickel Exp $
+//     $Id: gui.cpp,v 1.33 2000-08-12 09:17:29 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/08/09 12:39:27  mbickel
+//      fixed invalid height when constructing vehicle with other vehicles
+//      fixed wrong descent icon being shown
+//
 //     Revision 1.31  2000/08/08 09:48:17  mbickel
 //
 //      speed up of dialog boxes in linux
@@ -343,7 +347,7 @@ int    tguihost::painticons ( void )
 }
 
 
-void   tguihost :: cleanup ( void )    // wird zum entfernen der kleinen guiicons aufgerufen, bevor das icon ausgefhrt wird
+void   tguihost :: cleanup ( void )    // wird zum entfernen der kleinen guiicons aufgerufen, bevor das icon ausgef?hrt wird
 {
    if ( smalliconpos.buf ) {
       setinvisiblemouserectanglestk ( smalliconpos.x, smalliconpos.y, smalliconpos.x + smalliconpos.xsize, smalliconpos.y + guismalliconsizey );
@@ -378,12 +382,13 @@ void   tguihost::paintsmallicons ( int taste, int up )
 
 
 
-      if ( (gameoptions.mouse.smalliconundermouse == 0)  || ((gameoptions.mouse.smalliconundermouse == 2) && up ))
+      if	(		(CGameOptions::Instance()->mouse.smalliconundermouse == 0)  
+				|| (CGameOptions::Instance()->mouse.smalliconundermouse == 2)
+				&&	up 
+			)
          smalliconpos.y = mouseparams.y - 5 - guismalliconsizey;
       else
          smalliconpos.y = mouseparams.y - guismalliconsizey / 2;
-
-
 
       if ( smalliconpos.y < 0 )
          smalliconpos.y = 0;
@@ -1093,10 +1098,10 @@ void tnguiicon::putpict ( void* buf )
 tnguiicon:: ~tnguiicon (  )
 {
    for (int i = 0; i < 8; i++) {
-      if ( picture[i] );
-         delete[] picture[i];
+      if ( picture[i] )
+         delete picture[i];
       if ( picturepressed[i] )
-         delete[] picturepressed[i];
+         delete picturepressed[i];
    } 
    if ( infotext )
       delete[] infotext;
@@ -1150,7 +1155,7 @@ void  tnsguiiconmove::exec         ( void )
       for ( int i = 0; i < pendingVehicleActions.move->reachableFields.getFieldNum(); i++ ) 
          pendingVehicleActions.move->reachableFields.getField( i ) ->a.temp = 1;
 
-      if ( !gameoptions.dontMarkFieldsNotAccessible_movement )
+      if ( !CGameOptions::Instance()->dontMarkFieldsNotAccessible_movement )
          for ( int j = 0; j < pendingVehicleActions.move->reachableFieldsIndirect.getFieldNum(); j++ )
             pendingVehicleActions.move->reachableFieldsIndirect.getField( j ) ->a.temp2 = 2;
       displaymap();
@@ -1160,7 +1165,7 @@ void  tnsguiiconmove::exec         ( void )
      if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_move &&  (ms == 2 || ms == 3 )) {
         int res;
         res = pendingVehicleActions.move->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.move->getStatus(), -1, 0 );
-        if ( res >= 0 && gameoptions.fastmove && ms == 2 ) {
+        if ( res >= 0 && CGameOptions::Instance()->fastmove && ms == 2 ) {
            actmap->cleartemps(7);
            displaymap();
            res = pendingVehicleActions.move->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.move->getStatus(), -1, 0 );
@@ -1185,9 +1190,9 @@ void  tnsguiiconmove::exec         ( void )
         if ( pendingVehicleActions.move->getStatus() == 1000 ) {
            delete pendingVehicleActions.move;
    
-           if ( gameoptions.smallguiiconopenaftermove ) {
+           if ( CGameOptions::Instance()->smallguiiconopenaftermove ) {
               actgui->painticons();
-              actgui->paintsmallicons ( gameoptions.mouse.smallguibutton, 0 );
+              actgui->paintsmallicons ( CGameOptions::Instance()->mouse.smallguibutton, 0 );
            }
         }
 
@@ -1337,7 +1342,7 @@ void  tnsguiiconascent::exec         ( void )
    } else
      if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_ascent &&  (pendingVehicleActions.ascent->getStatus() == 2 || pendingVehicleActions.ascent->getStatus() == 3 )) {
         int res = pendingVehicleActions.ascent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.ascent->getStatus(), -1, 0 );
-        if ( res >= 0 && gameoptions.fastmove )
+        if ( res >= 0 && CGameOptions::Instance()->fastmove )
            res = pendingVehicleActions.ascent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.ascent->getStatus(), -1, 0 );
         else {
            for ( int i = 0; i < pendingVehicleActions.ascent->path.getFieldNum(); i++ )
@@ -1355,9 +1360,9 @@ void  tnsguiiconascent::exec         ( void )
         if ( pendingVehicleActions.ascent->getStatus() == 1000 ) {
            delete pendingVehicleActions.ascent;
    
-           if ( gameoptions.smallguiiconopenaftermove ) {
+           if ( CGameOptions::Instance()->smallguiiconopenaftermove ) {
               actgui->painticons();
-              actgui->paintsmallicons ( gameoptions.mouse.smallguibutton, 0 );
+              actgui->paintsmallicons ( CGameOptions::Instance()->mouse.smallguibutton, 0 );
            }
         }
      }
@@ -1448,7 +1453,7 @@ void  tnsguiicondescent::exec         ( void )
    } else
      if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_descent &&  (pendingVehicleActions.descent->getStatus() == 2 || pendingVehicleActions.descent->getStatus() == 3 )) {
         int res = pendingVehicleActions.descent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.descent->getStatus(), -1, 0 );
-        if ( res >= 0 && gameoptions.fastmove )
+        if ( res >= 0 && CGameOptions::Instance()->fastmove )
            res = pendingVehicleActions.descent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.descent->getStatus(), -1, 0 );
         else {
            for ( int i = 0; i < pendingVehicleActions.descent->path.getFieldNum(); i++ )
@@ -1467,9 +1472,9 @@ void  tnsguiicondescent::exec         ( void )
         if ( pendingVehicleActions.descent->getStatus() == 1000 ) {
            delete pendingVehicleActions.descent;
    
-           if ( gameoptions.smallguiiconopenaftermove ) {
+           if ( CGameOptions::Instance()->smallguiiconopenaftermove ) {
               actgui->painticons();
-              actgui->paintsmallicons ( gameoptions.mouse.smallguibutton, 0 );
+              actgui->paintsmallicons ( CGameOptions::Instance()->mouse.smallguibutton, 0 );
            }
         }
      }
@@ -1577,7 +1582,7 @@ int autosave = 0;
 
 void  tnsguiiconendturn::exec         ( void ) 
 {
-   if ( !gameoptions.endturnquestion || (choice_dlg("do you really want to end your turn ?","~y~es","~n~o") == 1)) {
+   if ( !CGameOptions::Instance()->endturnquestion || (choice_dlg("do you really want to end your turn ?","~y~es","~n~o") == 1)) {
 
       cursor.hide();
 
@@ -2308,7 +2313,7 @@ int tnsguiiconcontainer :: available    ( void )
 void tnsguiiconcontainer :: exec         ( void ) 
 {
    containeractive++;
-   mousecontrol->reset();
+//   cmousecontrol::getInstance()->reset();
    pfield fld = getactfield ();
    /*
    if ( fld->vehicle && fld->building )
@@ -2782,7 +2787,8 @@ void tselectweaponguihost :: init ( int resolutionx, int resolutiony )
     if ( !atw ) 
        atw = pendingVehicleActions.attack->attackableObjects.getData( getxpos(), getypos() );
  
-    getfirsticon()->setup ( atw, 0 );
+	// ausgeblendet wg. fehlender Implementierung
+	//    getfirsticon()->setup ( atw, 0 );
     
     x = getxpos();
     y = getypos();
@@ -2815,7 +2821,7 @@ void    tselectweaponguihost ::  checkcoordinates ( void )
 }
 
 
-pnweapselguiicon tselectweaponguihost :: getfirsticon( void )
+pnguiicon tselectweaponguihost :: getfirsticon( void )
 {
    return first_icon;
 }
@@ -2873,7 +2879,7 @@ tnweapselguiicon::tnweapselguiicon ( void )
 }
 
 
-pnweapselguiicon   tnweapselguiicon::nxt( void )
+pnguiicon   tnweapselguiicon::nxt( void )
 {
    return next;
 }
@@ -2882,7 +2888,7 @@ void      tnweapselguiicon::setnxt   ( pnguiicon ts )
    next = (pnweapselguiicon) ts ;
 }
 
-pnweapselguiicon   tnweapselguiicon::frst( void )
+pnguiicon   tnweapselguiicon::frst( void )
 {
    return first;
 }
@@ -3129,7 +3135,7 @@ trguiicon_faster :: trguiicon_faster ( void )
 int trguiicon_faster :: available ( void )
 {
    if ( runreplay.status == 2 )
-      if ( gameoptions.replayspeed > 0 )
+      if ( CGameOptions::Instance()->replayspeed > 0 )
         return 1;
 
    return 0;
@@ -3137,13 +3143,14 @@ int trguiicon_faster :: available ( void )
 
 void trguiicon_faster :: exec ( void )
 {
-   if ( gameoptions.replayspeed > 20 )
-      gameoptions.replayspeed -= 20;
+   if ( CGameOptions::Instance()->replayspeed > 20 )
+      CGameOptions::Instance()->replayspeed -= 20;
    else
-      gameoptions.replayspeed = 0;
+      CGameOptions::Instance()->replayspeed = 0;
 
-   gameoptions.changed = 1;
-   displaymessage2 ( "delay set to %d / 100 sec", gameoptions.replayspeed );
+   CGameOptions::Instance()->setChanged();
+   displaymessage2 (	"delay set to %d / 100 sec", 
+						CGameOptions::Instance()->replayspeed );
    dashboard.x = -1;
 }
 
@@ -3163,9 +3170,10 @@ int trguiicon_slower :: available ( void )
 
 void trguiicon_slower :: exec ( void )
 {
-   gameoptions.replayspeed += 20;
-   gameoptions.changed = 1;
-   displaymessage2 ( "delay set to %d / 100 sec", gameoptions.replayspeed );
+   CGameOptions::Instance()->replayspeed += 20;
+   CGameOptions::Instance()->setChanged();
+   displaymessage2 (	"delay set to %d / 100 sec", 
+						CGameOptions::Instance()->replayspeed );
    dashboard.x = -1;
 }
 

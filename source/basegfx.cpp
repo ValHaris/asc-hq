@@ -1,6 +1,10 @@
-//     $Id: basegfx.cpp,v 1.15 2000-05-30 18:39:19 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.16 2000-08-12 09:17:15 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/05/30 18:39:19  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.14  2000/05/23 20:40:37  mbickel
 //      Removed boolean type
 //
@@ -58,7 +62,7 @@ tgraphmodeparameters *hgmp = (tgraphmodeparameters *) & hardwaregraphmodeparamet
 
 int xlatbuffersize = 66000;
 
-void generategrayxlattable( ppixelxlattable tab, byte offset, byte size)
+void generategrayxlattable( ppixelxlattable tab, char offset, char size)
 {
 	for ( int b = 0; b <= 255; b++) {
 //		(*tab)[b] = (char) (offset + size - 1 - ((*activepalette256)[b][0] + (*activepalette256)[b][1] + (*activepalette256)[b][2]) * size / 192);
@@ -96,25 +100,19 @@ int getpicsize2( void* hd2 )
 
 
 void 
-rahmen(char invers,
+rahmen(bool invers,
        integer x1,
        integer y1,
        integer x2,
        integer y2)
 {
-   collategraphicoperations cgo ( x1, y1, x2, y2 );
-   int col;
+	collategraphicoperations cgo ( x1, y1, x2, y2 );
+	int col	=	(invers == false)	?	white	:	darkgray;
 
-	if (invers == false)
-		col = white;
-	else
-		col = darkgray;
 	line(x1, y1, x1, y2, col);
 	line(x1, y1, x2, y1, col);
-	if (invers == true)
-		col = white;
-	else
-		col = darkgray;
+	
+	col	=		(invers == true)	?	white	:	darkgray;
 	line(x2, y1, x2, y2, col);
 	line(x1, y2, x2, y2, col);
 }
@@ -321,7 +319,7 @@ rectangle(int x1,
 	  int y1,
 	  int x2,
 	  int y2,
-	  byte color)
+	  char color)
 {
    collategraphicoperations cgs ( x1, y1, x2, y2 );
 
@@ -337,7 +335,7 @@ void xorrectangle(int x1,
 	     int y1,
 	     int x2,
 	     int y2,
-	     byte color)
+	     char color)
 {
    collategraphicoperations cgs ( x1, y1, x2, y2 );
 

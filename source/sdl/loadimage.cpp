@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <SDL/SDL_image.h>
+#include "SDL_video.h"
 #include "SDLStretch.h"
 #include "../basestrm.h"
 #include "../loadimage.h"

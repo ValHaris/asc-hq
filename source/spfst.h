@@ -1,6 +1,11 @@
-//     $Id: spfst.h,v 1.17 2000-08-02 10:28:27 mbickel Exp $
+//     $Id: spfst.h,v 1.18 2000-08-12 09:17:36 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/08/02 10:28:27  mbickel
+//      Fixed: generator vehicle not working
+//      Streams can now report their name
+//      Field information shows units filename
+//
 //     Revision 1.16  2000/07/23 17:59:53  mbickel
 //      various AI improvements
 //      new terrain information window
@@ -163,8 +168,8 @@
 
 
   extern tcursor cursor; 
-
   extern pmap actmap; 
+
 
   extern int  terraintypenum, vehicletypenum, buildingtypenum, technologynum, objecttypenum;
   extern int guiiconnum;
@@ -173,7 +178,7 @@
 
   extern char godview, tempsvisible; 
 
-  extern int lasttick;   /*  fÅr paintvehicleinfo  */ 
+  extern int lasttick;   /*  f?r paintvehicleinfo  */ 
 
 extern int getheightdelta ( int height1, int height2 );
 
@@ -215,8 +220,8 @@ extern void  removevehicle(pvehicle *   vehicle);
 extern void  generatevehicle_ka(pvehicletype fztyp,
                              byte         col,
                              pvehicle &   vehicle);
-// Die Einheit wird automatisch vollgefÅllt.
-//  => Nur fÅr Karteneditor
+// Die Einheit wird automatisch vollgef?llt.
+//  => Nur f?r Karteneditor
 
 
 extern void         generate_vehicle(pvehicletype fztyp,
@@ -229,12 +234,12 @@ extern void  putbuilding(int          x,
                          int          color,
                          pbuildingtype buildingtyp,
                          int          compl,
-                         int          ignoreunits = 0 ); // fÅr Kartened
+                         int          ignoreunits = 0 ); // f?r Kartened
 
 extern void  putbuilding2(integer      x,
                           integer      y,
                           byte         color,
-                          pbuildingtype buildingtyp);  // fÅr Spiel
+                          pbuildingtype buildingtyp);  // f?r Spiel
 
 
 extern void  removebuilding(pbuilding *  bld);
@@ -431,6 +436,8 @@ class tdisplaymap : public tgeneraldisplaymap {
 
           virtual void pnt_terrain ( void );
           virtual void cp_buf ( void );
+		
+		  virtual void cp_buf ( int x1, int y1, int x2, int y2 );
 
           void  movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, int height1, int height2, int fieldnum, int totalmove );
           void  deletevehicle ( void ); 

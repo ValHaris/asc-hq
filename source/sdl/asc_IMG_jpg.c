@@ -25,8 +25,7 @@
 /* This is a JPEG image file loading framework */
 
 #include <stdio.h>
-
-#include <SDL/SDL_image.h>
+#include <SDL.h>
 
 #include <jpeglib.h>
 

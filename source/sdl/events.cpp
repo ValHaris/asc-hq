@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.15 2000-06-09 10:51:01 mbickel Exp $
+//     $Id: events.cpp,v 1.16 2000-08-12 09:17:41 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/06/09 10:51:01  mbickel
+//      Repaired keyboard control of pulldown menu
+//      Fixed compile errors at fieldlist with gcc
+//
 //     Revision 1.14  2000/06/01 15:27:47  mbickel
 //      Some changes for the upcoming Win32 version of ASC
 //      Fixed error at startup: unable to load smalaril.fnt
@@ -105,8 +109,8 @@ volatile tmousesettings mouseparams = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,
 
 SDL_mutex* keyboardmutex = NULL;
 
-queue<tkey>   keybuffer_sym;
-queue<Uint32> keybuffer_prnt;
+std::queue<tkey>   keybuffer_sym;
+std::queue<Uint32> keybuffer_prnt;
 
 
 int eventthreadinitialized = 0;
@@ -134,7 +138,7 @@ int mouse_in_off_area ( void )
 void mousevisible( int an) {
 }
 
-byte getmousestatus ()
+pascal_byte getmousestatus ()
 {
    if ( eventthreadinitialized )
       return 2;
@@ -227,7 +231,7 @@ int initeventthread ( void )
       eventthread = SDL_CreateThread ( eventhandler, NULL );
    }
    eventthreadinitialized++;
-
+	return 0;
 }
 
 int closeeventthread ( void )
@@ -238,7 +242,7 @@ int closeeventthread ( void )
          closethread = 1;
       }
    }
-
+	return 0; 
 }
 
 

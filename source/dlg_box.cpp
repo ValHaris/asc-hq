@@ -1,6 +1,13 @@
-//     $Id: dlg_box.cpp,v 1.27 2000-08-08 09:48:02 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.28 2000-08-12 09:17:24 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/08/08 09:48:02  mbickel
+//
+//      speed up of dialog boxes in linux
+//      fixed graphical errors in attack
+//      fixed graphical error in ammo transfer
+//      fixed reaction fire not allowing manual attack
+//
 //     Revision 1.26  2000/08/06 13:14:16  mbickel
 //      Fixed crashes in mapeditor
 //
@@ -1185,7 +1192,7 @@ void         tdialogbox::disablebutton(byte         id)
   pbutton      pb; 
   int      *pl; 
   word         *pw, *pw2; 
-  byte         *pbt; 
+  pascal_byte         *pbt; 
   char      *pbl; 
   char*         s;
   char*         t;
@@ -1794,7 +1801,7 @@ void         tdialogbox::editfield(pbutton      pb)
   char         *ps;
   int      *pl; 
   word         *pw; 
-  byte         *pbt; 
+  pascal_byte         *pbt; 
   int      l; 
 
   activefontsettings.font = schriften.smallarial; 
@@ -3746,7 +3753,7 @@ void         tstringselect::resettextfield(void)
    rahmen(true,x1 + sx ,y1 + sy,x1 + ex,y1 + ey);
 }
 
-void   tstringselect::gettext(word nr) //gibt in txt den string zurÅck
+void   tstringselect::gettext(word nr) //gibt in txt den string zur?ck
 {
   strcpy(txt,"");
   nr = 0;

@@ -1,6 +1,14 @@
-//     $Id: loadbi3.cpp,v 1.24 2000-08-06 11:39:10 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.25 2000-08-12 09:17:30 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/08/06 11:39:10  mbickel
+//      New map paramter: fuel globally available
+//      Mapeditor can now filter buildings too
+//      Fixed unfreed memory in fullscreen image loading
+//      Fixed: wasted cpu cycles in building
+//      map parameters can be specified when starting a map
+//      map parameters are reported to all players in multiplayer games
+//
 //     Revision 1.23  2000/08/03 19:21:25  mbickel
 //      Fixed: units had invalid height when produced in some buildings
 //      Fixed: units could not enter building if unitheightreq==0
@@ -283,7 +291,7 @@ struct  TLIBFiles {
   }; ;
  TLIBFiles LIBFiles [ LIBFilesAnz ] = 
       {{"part000.lib",  0xC, 0x240,   0, 0x240, 1335},
-      {"unit000.lib",  0x4, 0x240,   0, 0x240, 128},   // 128 fr BI3   // 118 fr BI2 Scenery
+      {"unit000.lib",  0x4, 0x240,   0, 0x240, 128},   // 128 f?r BI3   // 118 f?r BI2 Scenery
       {"layr000.lib",  0x4, 0x240,   0, 0x240, 24},
       {"layr001.lib",  0x4, 0x240,   0, 0x240, 24},
       {"layr002.lib",  0x4, 0x240,   0, 0x240, 24},
@@ -307,7 +315,7 @@ void checkbi3dir ( void )
 {
    char temp[1000];
 
-   if ( !gameoptions.bi3.dir.getName() ) {
+   if ( !CGameOptions::Instance()->bi3.dir.getName() ) {
       readgameoptions();
       /*
       if ( !gameoptions.bi3.dir.getName() ) {
@@ -322,16 +330,16 @@ void checkbi3dir ( void )
       notfound = 0;
 
       for ( int i = 0; i < libs_to_load ; i++ ) {
-         if ( gameoptions.bi3.dir.getName() )
-            strcpy ( temp, gameoptions.bi3.dir.getName() );
+		  if ( CGameOptions::Instance()->bi3.dir.getName() )
+            strcpy ( temp, CGameOptions::Instance()->bi3.dir.getName() );
          else
             temp[0] = 0;
 
          strcat ( temp, LIBFiles[i].Name );
          
          if ( !exist ( temp ) ) {
-            if ( gameoptions.bi3.dir.getName() )
-               strcpy ( temp, gameoptions.bi3.dir.getName() );
+            if ( CGameOptions::Instance()->bi3.dir.getName() )
+               strcpy ( temp, CGameOptions::Instance()->bi3.dir.getName() );
             else
                temp[0] = 0;
 
@@ -339,7 +347,7 @@ void checkbi3dir ( void )
             strcat ( temp, pathdelimitterstring );
             strcat ( temp, LIBFiles[i].Name );
             if ( !exist ( temp ) ) {
-               printf("Battle Isle fle %s not found !\n", temp );
+               printf("Battle Isle file %s not found !\n", temp );
                notfound++;
             }
          }
@@ -352,8 +360,8 @@ void checkbi3dir ( void )
             if ( bi3path[ strlen ( bi3path )-1 ] != pathdelimitter )
                strcat ( bi3path, pathdelimitterstring );
 
-            gameoptions.bi3.dir.setName ( bi3path );
-            gameoptions.changed = 1;
+            CGameOptions::Instance()->bi3.dir.setName ( bi3path );
+            CGameOptions::Instance()->setChanged();
          } else {
             closegraphics();
             printf("\nplease run ASC first to create a config file !\n");
@@ -812,7 +820,7 @@ void loadbi3pict ( int num, void** pict )
 
 const char* getbi3path ( void )
 {
-   return gameoptions.bi3.dir.getName();
+	return CGameOptions::Instance()->bi3.dir.getName();
 }
 
 

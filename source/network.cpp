@@ -1,6 +1,10 @@
-//     $Id: network.cpp,v 1.9 2000-08-01 13:50:52 mbickel Exp $
+//     $Id: network.cpp,v 1.10 2000-08-12 09:17:32 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/08/01 13:50:52  mbickel
+//      Chaning the height of airplanes is not affected by wind any more.
+//      Fixed: Airplanes could ascend onto buildings
+//
 //     Revision 1.8  2000/07/29 14:54:39  mbickel
 //      plain text configuration file implemented
 //
@@ -185,7 +189,7 @@ void tfiletransfernetworkconnection::treceivesetup::init ( pnetworkconnectionpar
 
    title = ttl;
    strcpy ( ttl, "direct file transfer setup for receiving" );
-   tfiletransfernetworkconnection::tsetup::init (  );
+   /*tfiletransfernetworkconnection::*/tsetup::init (  );
 }
 
 void tfiletransfernetworkconnection::tsendsetup::init ( pnetworkconnectionparameters  d, int exitposs  )
@@ -203,7 +207,7 @@ void tfiletransfernetworkconnection::tsendsetup::init ( pnetworkconnectionparame
    pi[1] = 2;
    exitpossible = exitposs;
 
-   tfiletransfernetworkconnection::tsetup::init (  );
+   /*tfiletransfernetworkconnection::*/tsetup::init (  );
 }
 
 

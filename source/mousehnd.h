@@ -1,6 +1,9 @@
-//     $Id: mousehnd.h,v 1.6 2000-05-10 20:56:20 mbickel Exp $
+//     $Id: mousehnd.h,v 1.7 2000-08-12 09:17:31 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/05/10 20:56:20  mbickel
+//      mouseparams and ticker now volatile under linux too
+//
 //     Revision 1.5  1999/12/28 21:03:10  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -46,11 +49,11 @@
     Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
     Boston, MA  02111-1307  USA
 */
-
-#include <stdio.h>
-
 #ifndef mousehnd_h
 #define mousehnd_h
+
+#include <stdio.h>
+#include "tpascal.inc"
 
 class tmouserect {
      public:
@@ -62,12 +65,12 @@ class tmouserect {
 extern int initmousehandler ( void* pic = NULL );
 extern int removemousehandler ( void );
 extern void mousevisible( int an );
-extern byte getmousestatus ();
+extern pascal_byte getmousestatus ();
 
 extern void setmouseposition ( int x, int y );
 
 extern void setinvisiblemouserectangle ( int x1, int y1, int x2, int y2 );
-// -1, -1, -1, -1  schaltet die Maus wieder Åberall an
+// -1, -1, -1, -1  schaltet die Maus wieder ?berall an
 
 extern void setinvisiblemouserectanglestk ( int x1, int y1, int x2, int y2 );
 extern void setinvisiblemouserectanglestk ( tmouserect r1 );

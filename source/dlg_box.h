@@ -1,6 +1,13 @@
-//     $Id: dlg_box.h,v 1.12 2000-08-08 09:48:08 mbickel Exp $
+//     $Id: dlg_box.h,v 1.13 2000-08-12 09:17:25 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/08/08 09:48:08  mbickel
+//
+//      speed up of dialog boxes in linux
+//      fixed graphical errors in attack
+//      fixed graphical error in ammo transfer
+//      fixed reaction fire not allowing manual attack
+//
 //     Revision 1.11  2000/08/06 11:38:58  mbickel
 //      New map paramter: fuel globally available
 //      Mapeditor can now filter buildings too
@@ -126,8 +133,8 @@
                 tkey         markedkey[6]; 
                 int          scrollspeed;
                 char         pressed;
-                int          newpressed;     // nur fÅr Maus-"Dauerfeuer"
-                int          lasttick;      //  nur fÅr Maus-"Dauerfeuer"
+                int          newpressed;     // nur f?r Maus-"Dauerfeuer"
+                int          lasttick;      //  nur f?r Maus-"Dauerfeuer"
              };
 
 
@@ -251,7 +258,7 @@ typedef class tdialogbox* pdialogbox;
                       virtual void paint     ( void );    // komplettes zeichnen, mit framebuf, redraw und copy ...
                       virtual void redrawall ( void );    // lÑ·t die aktuelle und alle darunterliegenden Boxen sich neu zeichnen
                       virtual void redrawall2 ( int xx1, int yy1, int xx2, int yy2 );    // lÑ·t die aktuelle und bei Bedarf alle darunterliegenden Boxen sich neu zeichnen
-                      virtual int  getcapabilities ( void );  // Dann mu· REDRAW Åberladen werden
+                      virtual int  getcapabilities ( void );  // Dann mu· REDRAW ?berladen werden
                       void repaintdisplay( void );
               protected:
                       int virtualbufoffset;
@@ -260,7 +267,7 @@ typedef class tdialogbox* pdialogbox;
                       static pdialogbox first;
 
                       int dlg_mode;           /*            Bit 1 :  redraw funktionalitÑt 
-                                                                2 :  zugrunde liegende Dialogboxen unterstÅtzen redraw  */
+                                                                2 :  zugrunde liegende Dialogboxen unterst?tzen redraw  */
 
                       virtual void redraw ( void );       // Zeichner die dialogbox in den aktuellen Puffer
 
@@ -297,12 +304,12 @@ typedef class tdialogbox* pdialogbox;
                                                  integer      yy1,
                                                  integer      xx2,
                                                  integer      yy2);
-                      void         rahmen(char      invers,
+                      void         rahmen(bool      invers,
                                           int          x1,
                                           int          y1,
                                           int          x2,
                                           int          y2);
-                      void         rahmen(char      invers,
+                      void         rahmen(bool      invers,
                                           tmouserect   rect );
 
                       void         rahmen3(char *       txt,

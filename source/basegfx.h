@@ -62,7 +62,7 @@ struct  tgraphmodeparameters {
 struct trleheader {
    word id;
    word size;
-   byte rle;
+   pascal_byte rle;
    word x;
    word y;
 };
@@ -262,11 +262,11 @@ extern "C" void*     xlatbuffer;
 extern void* uncompress_rlepict ( void* pict );
 
 
-extern void         generategrayxlattable(ppixelxlattable tab,
-                                   byte         offset,
-                                   byte         size);
+extern void         generategrayxlattable(	ppixelxlattable tab,
+											char         offset,
+											char         size);
 
-extern void         rahmen(char      invers,
+extern void         rahmen(bool      invers,
                     integer      x1,
                     integer      y1,
                     integer      x2,
@@ -286,12 +286,12 @@ extern void         rectangle(int         x1,
                         int         y1,
                         int         x2,
                         int         y2,
-                        byte         color);
+                        char         color);
 extern void         xorrectangle(int         x1,
                           int         y1,
                           int         x2,
                           int         y2,
-                          byte         color);
+                          char		color);
 
 void putshadow ( int x1, int y1, void* ptr, ppixelxlattable xl  );
 void putinterlacedrotimage ( int x1, int y1, void* ptr, int rotation );

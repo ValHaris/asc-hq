@@ -1,6 +1,11 @@
-//     $Id: sgstream.h,v 1.8 2000-08-02 15:53:04 mbickel Exp $
+//     $Id: sgstream.h,v 1.9 2000-08-12 09:17:34 gulliver Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/08/02 15:53:04  mbickel
+//      New unit set definition files
+//      demount accepts now more than one container file
+//      Unitset information dialog added
+//
 //     Revision 1.7  2000/08/01 10:39:17  mbickel
 //      Updated documentation
 //      Refined configuration file handling
@@ -214,19 +219,19 @@ class SingleUnitSet {
 
          class TranslationTable {
                   public:
-                    vector<IdRange> translation;
-                    string name;
+					  std::vector<IdRange> translation;
+                     std::string name;
                      void parseString ( const char* s );
                };
 
 
          int active;
-         string name;
-         string maintainer;
-         string information;
+          std::string name;
+          std::string maintainer;
+          std::string information;
 
-         vector<IdRange> ids;
-         vector<TranslationTable*> transtab;
+         std::vector<IdRange> ids;
+         std::vector<TranslationTable*> transtab;
 
          SingleUnitSet ( void ) : active ( 1 ) {};
          int isMember ( int id );
@@ -235,7 +240,7 @@ class SingleUnitSet {
 
      };
 
-extern vector<SingleUnitSet*> unitSets;
+extern std::vector<SingleUnitSet*> unitSets;
 
 extern void loadUnitSets ( void );
 
