@@ -25,7 +25,7 @@
 /* This is a JPEG image file loading framework */
 
 #include <SDL.h>
-#include <cstring>
+#include <string.h>
 #include "../global.h"
 
 #ifdef _WIN32_
