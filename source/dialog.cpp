@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.51 2000-08-26 15:33:39 mbickel Exp $
+//     $Id: dialog.cpp,v 1.52 2000-08-28 19:49:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2000/08/26 15:33:39  mbickel
+//      Warning message displayed if empty password is entered
+//      pcxtank now displays error messages
+//
 //     Revision 1.50  2000/08/25 13:42:53  mbickel
 //      Fixed: zoom dialogbox in mapeditor was invisible
 //      Fixed: ammoproduction: no numbers displayed
@@ -5912,6 +5916,9 @@ void tenterpassword :: run ( int* result )
    pbutton pb2 = getbutton ( 1 );
    if ( pb2->active )
       execbutton ( pb2, false );
+
+   status = 2;
+   displaymessage("CHEAT", 1 );
 
    mousevisible ( true );
    while ( status == 0 ) {

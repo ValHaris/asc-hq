@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.70 2000-08-28 14:37:12 mbickel Exp $
+//     $Id: controls.cpp,v 1.71 2000-08-28 19:49:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.70  2000/08/28 14:37:12  mbickel
+//      Fixed: satellite not able to leave orbiter
+//      Restructured next-turn routines
+//
 //     Revision 1.69  2000/08/26 15:33:37  mbickel
 //      Warning message displayed if empty password is entered
 //      pcxtank now displays error messages
@@ -2762,8 +2766,8 @@ void         calcmovemalus(int          x1,
                            int          y2,
                            pvehicle     vehicle,
                            shortint     direc,
-                           int&         mm1,               // fuer Spritfuelconsumption
-                           int&         mm2 )             //  fuer movementdecrease
+                           int&         fuelcost,               // fuer Spritfuelconsumption
+                           int&         movecost )             //  fuer movementdecrease
 { 
 #ifdef HEXAGON   
  static const  int         movemalus[2][6]  = {{ 8, 6, 3, 0, 3, 6 }, {0, 0, 0, 0, 0, 0 }};
@@ -2799,17 +2803,17 @@ void         calcmovemalus(int          x1,
 
 
    if ( mode ) {
-      mm1 = minmalq;
+      fuelcost = minmalq;
       if (vehicle->height >= chtieffliegend)
-         mm2 = minmalq;
+         movecost = minmalq;
       else
-         mm2 = getfield(x2,y2)->getmovemalus( vehicle );
+         movecost = getfield(x2,y2)->getmovemalus( vehicle );
    } else {
-      mm1 = maxmalq;
+      fuelcost = maxmalq;
       if (vehicle->height >= chtieffliegend)
-         mm2 = maxmalq;
+         movecost = maxmalq;
       else
-         mm2 = getfield(x2,y2)->getmovemalus( vehicle ) * maxmalq / minmalq;
+         movecost = getfield(x2,y2)->getmovemalus( vehicle ) * maxmalq / minmalq;
    }
 
 
@@ -2840,7 +2844,7 @@ void         calcmovemalus(int          x1,
               fld2->vehicle = vehicle;
               atw = attackpossible(fld->vehicle,x2,y2);
               if (atw->count > 0)
-                 mm2 += movemalus[mode][d];
+                 movecost += movemalus[mode][d];
               npop( vehicle->ypos );
               npop( vehicle->xpos );
               npop( fld2->vehicle );
@@ -2855,8 +2859,8 @@ void         calcmovemalus(int          x1,
     /*    Wind calculation        ÿ */
     /*******************************/
    if (vehicle->height >= chtieffliegend && vehicle->height <= chhochfliegend && actmap->weather.wind[ getwindheightforunit ( vehicle ) ].speed  ) {
-      mm1 -=  windmovement[direc];
-      mm2 -=  windmovement[direc];
+      movecost -=  windmovement[direc];
+      fuelcost -=  windmovement[direc];
    }
 
 
@@ -3608,6 +3612,7 @@ void         tdashboard::paintdamage(void)
        } 
        else 
           if ( object ) {
+             c = darkgray;
              for ( int i = object->objnum-1; i >= 0; i-- )
                if ( object->object[ i ] -> typ->armor > 0 ) 
                   w = (x2 - x1 + 1) * ( 100 - object->object[ i ] -> damage ) / 100;
@@ -7617,6 +7622,7 @@ int  trunreplay :: run ( int player )
 
    npush (actgui);
    actgui = &gui;
+   actgui->restorebackground();
 
    actmap->xpos = orgmap.cursorpos.position[ actplayer ].sx;
    actmap->ypos = orgmap.cursorpos.position[ actplayer ].sy;

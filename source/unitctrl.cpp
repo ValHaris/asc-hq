@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.27 2000-08-13 11:55:11 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.28 2000-08-28 19:49:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/08/13 11:55:11  mbickel
+//      Attacking now decreases a units movement by 20% if it has the
+//        "move after attack" flag.
+//
 //     Revision 1.26  2000/08/12 15:03:26  mbickel
 //      Fixed bug in unit movement
 //      ASC compiles and runs under Linux again...
@@ -977,16 +981,26 @@ int ChangeVehicleHeight :: moveheight( void )
 
       int dist = 0;
       int mx = vehicle->getMovement();
-      while ( dist < vehicle->typ->steigung * minmalq  && mx > 0 ) {
+      while ( dist < vehicle->typ->steigung * minmalq  && mx > 0 && ok) {
+         int ox = x;
+         int oy = y;
          getnextfield( x, y, direc );
+         if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize))
+            ok = false;
+         else {
 
-         dist += minmalq ;// - windmovement[direc];
-         mx -= minmalq ; //- windmovement[direc];
+            int fuelcost, movecost;
+            calcmovemalus(ox,oy,x,y,vehicle,direc, fuelcost, movecost);
+            /*
+            dist += minmalq ;// - windmovement[direc];
+            mx -= minmalq ; //- windmovement[direc];
 
-         if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize)) 
-            ok = false; 
-         else { 
-            pfield fld = getfield(x,y); 
+            movecost += windmovement[direc]; // compensating for the wind which.
+            */
+            dist += movecost;
+            mx -= movecost;
+
+            pfield fld = getfield(x,y);
             if ( fieldaccessible(fld, vehicle, vehicle->height ) < 1) 
                ok = false; 
             if ( fieldaccessible(fld, vehicle, newheight ) < 1) 
@@ -1030,7 +1044,12 @@ int ChangeVehicleHeight :: moveunitxy ( int xt1, int yt1 )
          vehicle->fuel -= vehicle->typ->fuelConsumption * vehicle->typ->steigung;
          if ( vehicle->fuel < 0 )
             vehicle->fuel = 0;
-         vehicle->setMovement ( airplanemoveafterstart );
+
+         if ( vehicle->typ->steigung * minmalq <= airplanemoveafterstart )
+            vehicle->setMovement ( 0 );
+         else
+            vehicle->setMovement ( airplanemoveafterstart );
+
          vehicle->attacked = 1;
          vehicle->height = chtieffliegend;
       } else {
@@ -1050,7 +1069,12 @@ int ChangeVehicleHeight :: moveunitxy ( int xt1, int yt1 )
          // vehicle->fuel -= vehicle->typ->fuelconsumption * vehicle->typ->steigung;
          // if ( vehicle->fuel < 0 )
          //    vehicle->fuel = 0;
-         vehicle->setMovement ( airplanemoveafterlanding );
+
+         if ( vehicle->typ->steigung * minmalq <= airplanemoveafterlanding )
+            vehicle->setMovement ( 0 );
+         else
+            vehicle->setMovement ( airplanemoveafterlanding );
+
          vehicle->attacked = 1;
          vehicle->height = chfahrend;
       } else {

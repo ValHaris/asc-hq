@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.55 2000-08-13 09:54:03 mbickel Exp $
+//     $Id: spfst.cpp,v 1.56 2000-08-28 19:49:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2000/08/13 09:54:03  mbickel
+//      Refuelling is now logged for replays
+//
 //     Revision 1.54  2000/08/12 12:52:51  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -6147,6 +6150,11 @@ int tvehicle :: buildingconstructable ( pbuildingtype building )
 
    int mf = actmap->getgameparameter ( cgp_building_material_factor );
    int ff = actmap->getgameparameter ( cgp_building_fuel_factor );
+
+   if ( !mf )
+      mf = 100;
+   if ( !ff )
+      ff = 100;
 
    int hd = getheightdelta ( log2 ( height ), log2 ( building->buildingheight ));
 

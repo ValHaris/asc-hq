@@ -1,6 +1,10 @@
-//     $Id: building.cpp,v 1.46 2000-08-28 14:37:11 mbickel Exp $
+//     $Id: building.cpp,v 1.47 2000-08-28 19:49:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2000/08/28 14:37:11  mbickel
+//      Fixed: satellite not able to leave orbiter
+//      Restructured next-turn routines
+//
 //     Revision 1.45  2000/08/25 13:42:50  mbickel
 //      Fixed: zoom dialogbox in mapeditor was invisible
 //      Fixed: ammoproduction: no numbers displayed
@@ -705,6 +709,73 @@ void ccontainercontrols :: cmove_unit_in_container :: movedown ( pvehicle eht, p
    }   
 }
 
+VehicleMovement*   ccontainercontrols :: movement (  pvehicle eht, int mode )
+{
+   if ( eht->getMovement() < minmalq )
+      return NULL;
+
+
+   movementparams.height   = eht->height;
+   movementparams.movement = eht->getMovement();
+   movementparams.attacked = eht->attacked;
+   int perc = eht->getMovement() * 1024 / eht->typ->movement[log2 ( eht->height ) ];
+   int orgheight = eht->height;
+   int orgmove = eht->getMovement();
+
+   int heightToTest[20];
+   int heightToTestNum = 0;
+
+
+   if ( eht->functions & cf_trooper ) {
+      if ( getHeight() & (chfahrend | chschwimmend )) {
+         heightToTest[heightToTestNum++] = chfahrend;
+         heightToTest[heightToTestNum++] = chschwimmend;
+      } else
+         heightToTest[heightToTestNum++] = getHeight();
+   }
+
+   if ( getLoadCapability() & getHeight() & eht->typ->height )
+         heightToTest[heightToTestNum++] = getHeight();
+
+
+   for ( int h = 0; h < 8; h++)
+      if ( getLoadCapability() & (1 << h) )
+         heightToTest[heightToTestNum++] = (1 << h);
+
+
+
+
+   for ( int i = 0; i < heightToTestNum; i++ ) {
+
+      if ( eht->height != heightToTest[i]  && eht->typ->height & heightToTest[i] ) {
+         eht->height = heightToTest[i];
+         eht->setMovement( eht->typ->movement[log2 ( eht->height ) ] * perc / 1024 );
+      }
+
+      moveparams.movestatus = 0;
+      int ma = moveavail( eht );
+      if ( ma == 3 )
+         eht->attacked = 1;
+
+      if ( ma < 2 )
+         break;
+
+
+      VehicleMovement* vehicleMovement = new VehicleMovement ( &defaultMapDisplay, NULL );
+      int res = vehicleMovement->execute ( eht, -1, -1, 0, heightToTest[i], -1 );
+
+
+      if ( vehicleMovement->getStatus() > 0 )
+         return vehicleMovement;
+      else
+         delete vehicleMovement;
+   }
+
+   eht->height = orgheight;
+   eht->setMovement ( orgmove );
+   eht->attacked = movementparams.attacked;
+   return NULL;
+}
 
 
 
@@ -854,69 +925,18 @@ int   cbuildingcontrols :: getspecfunc ( tcontainermode mode )
 };
 
 
-VehicleMovement*   cbuildingcontrols :: movement (  pvehicle eht, int mode )
+
+int    cbuildingcontrols :: getHeight ( void )
 {
-   if ( eht->getMovement() < minmalq )
-      return NULL;
-
-
-   movementparams.height   = eht->height;
-   movementparams.movement = eht->getMovement();
-   movementparams.attacked = eht->attacked;
-   int perc = eht->getMovement() * 1024 / eht->typ->movement[log2 ( eht->height ) ];
-   int orgheight = eht->height;
-   int orgmove = eht->getMovement();
-
-   int heightToTest[10];
-   int heightToTestNum = 0;
-
-
-   if ( eht->functions & cf_trooper ) {
-      if ( building->typ->buildingheight & (chfahrend | chschwimmend )) {
-         heightToTest[heightToTestNum++] = chfahrend;
-         heightToTest[heightToTestNum++] = chschwimmend;
-      } else
-         heightToTest[heightToTestNum++] = building->typ->buildingheight;
-   }
-
-   for ( int h = 0; h < 8; h++)
-      if ( building->typ->loadcapability & (1 << h) )
-         heightToTest[heightToTestNum++] = (1 << h);
-
-
-
-
-   for ( int i = 0; i < heightToTestNum; i++ ) {
-
-      if ( eht->height != heightToTest[i]  && eht->typ->height & heightToTest[i] ) {
-         eht->height = heightToTest[i];
-         eht->setMovement( eht->typ->movement[log2 ( eht->height ) ] * perc / 1024 );
-      }
-
-      moveparams.movestatus = 0;
-      int ma = moveavail( eht );
-      if ( ma == 3 )
-         eht->attacked = 1;
-
-      if ( ma < 2 )
-         break;
-
-
-      VehicleMovement* vehicleMovement = new VehicleMovement ( &defaultMapDisplay, NULL );
-      int res = vehicleMovement->execute ( eht, -1, -1, 0, heightToTest[i], -1 );
-
-
-      if ( vehicleMovement->getStatus() > 0 )
-         return vehicleMovement;
-      else
-         delete vehicleMovement;
-   }
-
-   eht->height = orgheight;
-   eht->setMovement ( orgmove );
-   eht->attacked = movementparams.attacked;
-   return NULL;
+   return building->typ->buildingheight;
 }
+
+int    cbuildingcontrols :: getLoadCapability ( void )
+{
+   return building->typ->loadcapability;
+}
+
+
 
 int   cbuildingcontrols :: moveavail ( pvehicle eht )
 {
@@ -1305,6 +1325,15 @@ void  ctransportcontrols :: init (pvehicle eht)
    vehicle = eht;
 };
 
+int    ctransportcontrols :: getHeight ( void )
+{
+   return vehicle->height;
+}
+
+int    ctransportcontrols :: getLoadCapability ( void )
+{
+   return vehicle->typ->loadcapability;
+}
 
 
 char  ctransportcontrols :: getactplayer (void)
@@ -1524,7 +1553,7 @@ int   ctransportcontrols :: moveavail ( pvehicle eht )
   return 0;
 }
 
-
+/*
 VehicleMovement*  ctransportcontrols :: movement (  pvehicle eht, int mode )
 {
    if ( eht->getMovement() < minmalq )
@@ -1577,7 +1606,7 @@ VehicleMovement*  ctransportcontrols :: movement (  pvehicle eht, int mode )
 
    return vehicleMovement;
 }
-
+*/
 
 void  ctransportcontrols :: removevehicle ( pvehicle *peht )
 {

@@ -1,6 +1,9 @@
-//     $Id: building.h,v 1.11 2000-08-12 09:17:18 gulliver Exp $
+//     $Id: building.h,v 1.12 2000-08-28 19:49:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/08/12 09:17:18  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.10  2000/08/08 09:47:56  mbickel
 //
 //      speed up of dialog boxes in linux
@@ -147,7 +150,6 @@ class    ccontainercontrols {
                
     virtual char   getactplayer (void) = 0;
 
-    virtual VehicleMovement*    movement ( pvehicle eht, int mode = 0 ) = 0;
     virtual int    moveavail ( pvehicle eht ) = 0;
 
 
@@ -164,6 +166,11 @@ class    ccontainercontrols {
 
     virtual int    getxpos (void) = 0;
     virtual int    getypos (void) = 0;
+
+    virtual VehicleMovement*  movement ( pvehicle eht,  int mode = 0 );
+    virtual int    getHeight ( void ) = 0;
+    virtual int    getLoadCapability ( void ) = 0;
+
 
     virtual int    getspecfunc ( tcontainermode mode ) = 0;
 
@@ -200,6 +207,8 @@ class    cbuildingcontrols : public virtual ccontainercontrols {
                int    getspecfunc ( tcontainermode mode );
                int    getammunition ( int weapontype, int num, int abbuchen, int produceifrequired = 0 );
                int    ammotypeavail ( int type );
+               int    getHeight ( void );
+               int    getLoadCapability ( void );
 
                pbuilding   building;
 
@@ -267,7 +276,6 @@ class    cbuildingcontrols : public virtual ccontainercontrols {
 
 
                void  removevehicle ( pvehicle *peht );
-               VehicleMovement*  movement ( pvehicle eht,  int mode = 0 );
                int    moveavail ( pvehicle eht );
 
                pvehicle getloadedunit (int num);
@@ -299,7 +307,9 @@ class    ctransportcontrols : public virtual ccontainercontrols {
                int    getspecfunc ( tcontainermode mode );
                int    getammunition ( int weapontype, int num, int abbuchen, int produceifrequired = 0 );
                int    ammotypeavail ( int type );
-               
+               int    getHeight ( void );
+               int    getLoadCapability ( void );
+
 
                pvehicle vehicle;
 
@@ -312,7 +322,6 @@ class    ctransportcontrols : public virtual ccontainercontrols {
 
 
                void  removevehicle ( pvehicle *peht );
-               VehicleMovement* movement ( pvehicle eht,  int mode = 0 );
                int    moveavail ( pvehicle eht );
 
                pvehicle getloadedunit (int num);

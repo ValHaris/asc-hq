@@ -1,6 +1,10 @@
-//     $Id: controls.h,v 1.22 2000-08-28 14:37:14 mbickel Exp $
+//     $Id: controls.h,v 1.23 2000-08-28 19:49:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/08/28 14:37:14  mbickel
+//      Fixed: satellite not able to leave orbiter
+//      Restructured next-turn routines
+//
 //     Revision 1.21  2000/08/13 09:53:58  mbickel
 //      Refuelling is now logged for replays
 //
@@ -345,8 +349,8 @@ extern void  calcmovemalus(int          x1,
                            int          y2,
                            pvehicle     vehicle,
                            shortint     direc,
-                           int&         mm1,               // f?r Spritfuelconsumption
-                           int&         mm2 );            //  f?r movementdecrease
+                           int&         fuelcost,               // f?r Spritfuelconsumption
+                           int&         movecost );            //  f?r movementdecrease
 
 
 extern void  setspec( pobjecttype obj );
