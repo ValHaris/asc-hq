@@ -45,6 +45,8 @@ const int MineBasePunch[cminenum]  = { 60, 120, 180, 180 };
 
 tmap :: tmap ( void )
 {
+
+   __mapDestruction = false;
    int i;
 
    xsize = 0;
@@ -914,6 +916,8 @@ pvehicle tmap :: getUnit ( int x, int y, int nwid )
 
 tmap :: ~tmap ()
 {
+   __mapDestruction = true;
+
    if ( field )
 
       for ( int l=0 ;l < xsize * ysize ; l++ ) {
@@ -1711,6 +1715,12 @@ void tfield :: setparams ( void )
    }
 
    for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
+      if ( o->typ->terrainaccess.accessible( bdt ) == -1 ) {
+         objects.erase(o);
+         setparams();
+         return;
+      }
+
       bdt  &=  o->typ->terrain_and;
       bdt  |=  o->typ->terrain_or;
 

@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: building_controls.h,v 1.12 2002-09-19 20:20:04 mbickel Exp $
+//     $Id: building_controls.h,v 1.13 2002-12-12 11:34:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2002/09/19 20:20:04  mbickel
+//      Cleanup and various bug fixes
+//
 //     Revision 1.11  2001/11/15 20:46:05  mbickel
 //      Fixed: replay not working when moving units out of carriers
 //
@@ -229,7 +232,7 @@ class    cbuildingcontrols : public virtual ccontainercontrols
          public :
             //! lack : the reason why the unit is not produceable; bitmapped: bit 0 - 2  Resource N lacking; bit 10 : not researched yet
             int         available ( pvehicletype fzt, int* lack = NULL );
-            pvehicle    produce ( pvehicletype fzt );
+            pvehicle    produce ( pvehicletype fzt, bool forceRefill = false );
             pvehicle    produce_hypothetically ( pvehicletype fzt );
       }
       produceunit ;

@@ -430,6 +430,9 @@ int AI::changeVehicleHeight ( pvehicle veh, VehicleMovement* vm, int preferredDi
 
                if ( bestx != -1 && besty != -1 ) {
                   cvh->execute ( NULL, bestx, besty, 2, -1, -1 );
+                  if ( cvh->getStatus() == 1000 )
+                     return 1;
+
                   if ( cvh->getStatus() != 3 )
                      displaymessage ( "AI :: changeVehicleHeight \n error in changeHeight step 2 with unit %d", 1, veh->networkid );
 

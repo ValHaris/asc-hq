@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: ai.h,v 1.12 2002-03-19 20:38:57 mbickel Exp $
+//     $Id: ai.h,v 1.13 2002-12-12 11:34:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2002/03/19 20:38:57  mbickel
+//      Some cleanup and documentation in dlg_box
+//      Fixed some type assignment errors
+//
 //     Revision 1.11  2002/03/03 14:13:49  mbickel
 //      Some documentation updates
 //      Soundsystem update
@@ -416,7 +420,7 @@
             class  UnitDistribution {
                public:
                   static const int groupCount = 6;
-                  enum Group { other, recon, service, attack, rangeattack, conquer };
+                  enum Group { attack, rangeattack, conquer, other, recon, service };
                   bool calculated;
                   float group[groupCount];
                   UnitDistribution( ) : calculated ( false ) { for ( int i = 0; i < groupCount; i++ ) group[i] = 0; };

@@ -671,6 +671,14 @@ const ASCString& Vehicletype::getName( ) const
      return description;
 }
 
+int Vehicletype :: maxSpeed ( ) const
+{
+   int maxUnitMovement = 0;
+   for ( int i = 0; i < 8; i++ )
+      maxUnitMovement = max ( maxUnitMovement, movement[i] );
+   return maxUnitMovement;
+}
+
 
 Vehicletype :: ~Vehicletype ( )
 {
@@ -829,9 +837,9 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
          *i = 255;
           
    pc.addNamedInteger ( "Category", movemalustyp, cmovemalitypenum, unitCategoryTags );
-   pc.addInteger("MaxSurvivableStorm", maxwindspeedonwater );
-   pc.addInteger("ResourceDrillingRange", digrange );
-   pc.addInteger("SelfRepairRate", autorepairrate );
+   pc.addInteger("MaxSurvivableStorm", maxwindspeedonwater, 255 );
+   pc.addInteger("ResourceDrillingRange", digrange, 0 );
+   pc.addInteger("SelfRepairRate", autorepairrate, 0 );
    pc.addInteger("WreckageObject", wreckageObject, -1 );
 
 

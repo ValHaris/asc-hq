@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.93 2002-11-27 21:25:56 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.94 2002-12-12 11:34:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.93  2002/11/27 21:25:56  mbickel
+//      AI fixes
+//
 //     Revision 1.92  2002/11/27 10:38:49  mbickel
 //      Added movecost checks for fields
 //
@@ -2222,7 +2225,10 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
                                        s.maxAmount = min ( targetWeapon.count, s.curAmount+s.orgSourceAmount );
                                        int sourceSpace = sourceWeapon.count - veh->ammo[i];
                                        s.minAmount = max ( s.curAmount - sourceSpace, 0 );
-                                       s.maxPercentage = 100 * s.maxAmount/ targetWeapon.count;
+                                       if ( targetWeapon.count )
+                                          s.maxPercentage = 100 * s.maxAmount/ targetWeapon.count;
+                                       else
+                                          s.maxPercentage = 0;
                                        targ.service.push_back ( s );
                                     }
                                  }

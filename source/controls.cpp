@@ -3,9 +3,13 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.144 2002-12-08 21:53:39 mbickel Exp $
+//     $Id: controls.cpp,v 1.145 2002-12-12 11:34:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.144  2002/12/08 21:53:39  mbickel
+//      Fixed: mining station produces twice the resources
+//      Updated file version numbers
+//
 //     Revision 1.143  2002/11/27 21:25:51  mbickel
 //      AI fixes
 //
@@ -1189,6 +1193,13 @@ void         setspec( pobjecttype obj )
          }
 
          eht->tank -= cost;
+         for ( int i = 0; i < 3; i++ ) {
+            if ( eht->tank.resource(i) > eht->typ->tank.resource(i) )
+               eht->tank.resource(i) = eht->typ->tank.resource(i);
+            if ( eht->tank.resource(i) < 0 )
+               eht->tank.resource(i) = 0;
+         }
+
          eht->setMovement ( eht->getMovement() - movecost );
 
          build_objects_reset();

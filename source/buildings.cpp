@@ -299,9 +299,6 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
             }
 
             field->building = this;
-
-            // field->picture = gbde->typ->picture[compl][a - orgx][b - orgy];
-            field->bdt &= ~( cbstreet | cbrailroad | cbpipeline | cbpowerline );
            }
 
    for ( int i = 0; i < 32; i++ )
@@ -335,24 +332,19 @@ int  Building :: unchainbuildingfromfield ( void )
                // if ( fld->vehicle )
                //   removevehicle( &fld->vehicle );
 
-               TerrainBits t =   getTerrainBitType(cbstreet);
-               t |= getTerrainBitType(cbbuildingentry);
-               t |= getTerrainBitType(cbrailroad);
-               t |= getTerrainBitType(cbpowerline);
-               t |= getTerrainBitType(cbpipeline);
-
+               TerrainBits t = getTerrainBitType(cbbuildingentry);
                t.flip();
-
                fld->bdt &= t;
 
                #ifdef sgmain
-                if ( typ->destruction_objects[i][j] )
-                   fld->addobject ( getobjecttype_forid ( typ->destruction_objects[i][j] ), -1, true );
-
+                if ( !gamemap->__mapDestruction )
+                   if ( typ->destruction_objects[i][j] )
+                      fld->addobject ( getobjecttype_forid ( typ->destruction_objects[i][j] ), -1, true );
                #endif
 
             }
          }
+
    return set;
 }
 
@@ -421,6 +413,7 @@ void        Building :: resetPicturePointers ( void )
             if ( getpicture (lc) )
                 getField ( lc )->picture = getpicture ( lc );
          }
+
 }
 
 

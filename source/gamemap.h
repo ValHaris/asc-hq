@@ -250,7 +250,7 @@ class  tfield {
       \param valtoset the value that is going to be written into the visibility variable
       \param actplayer the player for which the view is changed
    */
-   void setVisibility ( int valtoset, int actplayer ) {
+   void setVisibility ( VisibilityStates valtoset, int actplayer ) {
        int newval = (valtoset ^ 3) << ( 2 * actplayer );
        int oneval = 3 << ( 2 * actplayer );
 
@@ -430,6 +430,9 @@ class tmap {
       char         levelfinished;
       pnetwork     network;
       // int          alliance_names_not_used_any_more[8];
+
+      //! only to be used by units and buildings. To speed up map destruction, the view won't be recalculated 
+      bool __mapDestruction;
 
       struct tcursorpos {
         struct {

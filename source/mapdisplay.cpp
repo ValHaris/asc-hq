@@ -873,87 +873,84 @@ void tgeneraldisplaymap :: pnt_main ( void )
          }
       }
       displayadditionalunits ( hgt );
-
    }
-      /****************************************************************************/
-      /*viewbehinderungen: Visible_Ago,  Visible_NOT  zeichnen  ...            ÿ */
-      /****************************************************************************/
-      for ( y=dispmapdata.disp.y1; y < dispmapdata.disp.y2; y++ ) {
-         for ( x=dispmapdata.disp.x1; x < dispmapdata.disp.x2; x++ ) {
-            fld = getfield ( actmap->xpos + x, actmap->ypos + y );
-            if ( fld ) {
-               b = fieldVisibility (fld, playerview );
 
-               if (y & 1 )   /*  ungerade reihennummern  */
-                  r = vfbleftspace + fielddisthalfx + x * fielddistx;
-               else
-                  r = vfbleftspace + x * fielddistx;
-               yp = vfbtopspace + y * fielddisty;
+   /****************************************************************************/
+   /*viewbehinderungen: Visible_Ago,  Visible_NOT  zeichnen  ...            ÿ */
+   /****************************************************************************/
+   for ( y=dispmapdata.disp.y1; y < dispmapdata.disp.y2; y++ ) {
+      for ( x=dispmapdata.disp.x1; x < dispmapdata.disp.x2; x++ ) {
+         fld = getfield ( actmap->xpos + x, actmap->ypos + y );
+         if ( fld ) {
+            b = fieldVisibility (fld, playerview );
 
-               if (b == visible_ago) {
-                  for (int hgt = 0; hgt < 9 ;hgt++ ) {
-                     /*
-                     int binaryheight = 0;
-                     if ( hgt > 0 )
-                        binaryheight = 1 << ( hgt-1);
-                     */
+            if (y & 1 )   /*  ungerade reihennummern  */
+               r = vfbleftspace + fielddisthalfx + x * fielddistx;
+            else
+               r = vfbleftspace + x * fielddistx;
+            yp = vfbtopspace + y * fielddisty;
 
-                      /* display objects */
-                      if ( !fld->building )
-                         for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ )
-                            if ( o->typ->visibleago ) {
-                               int h = o->typ->height;
-                               if (  h >= hgt*30 && h < 30 + hgt*30 )
-                                  o->display ( r - streetleftshift , yp - streettopshift );
-                            }
-                   }
+            if (b == visible_ago) {
+               for (int hgt = 0; hgt < 9 ;hgt++ ) {
+                  /*
+                  int binaryheight = 0;
+                  if ( hgt > 0 )
+                     binaryheight = 1 << ( hgt-1);
+                  */
 
+                   /* display objects */
+                   if ( !fld->building )
+                      for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ )
+                         if ( o->typ->visibleago ) {
+                            int h = o->typ->height;
+                            if (  h >= hgt*30 && h < 30 + hgt*30 )
+                               o->display ( r - streetleftshift , yp - streettopshift );
+                         }
+                }
 
-                   // putspriteimage( r + unitrightshift , yp + unitdownshift , view.va8);
-                   putshadow( r + unitrightshift , yp + unitdownshift , icons.view.nv8, &xlattables.a.dark2 );
+                // putspriteimage( r + unitrightshift , yp + unitdownshift , view.va8);
+                putshadow( r + unitrightshift , yp + unitdownshift , icons.view.nv8, &xlattables.a.dark2 );
 
-                   if ( fld->a.temp && tempsvisible )
-                      putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
-                   else
-                      if ( fld->a.temp2 && tempsvisible )
-                         putspriteimage(  r + unitrightshift , yp + unitdownshift , xlatpict ( &xlattables.a.dark2 , cursor.markfield));
+                if ( fld->a.temp && tempsvisible )
+                   putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
+                else
+                   if ( fld->a.temp2 && tempsvisible )
+                      putspriteimage(  r + unitrightshift , yp + unitdownshift , xlatpict ( &xlattables.a.dark2 , cursor.markfield));
 
-                   #ifdef showtempnumber
-                   activefontsettings.color = white;
-                   showtext2(strrr( fld->temp ), r + unitrightshift + 5, yp + unitdownshift + 5 );
-                   activefontsettings.color = black;
-                   showtext2(strrr( fld->temp2 ), r + unitrightshift + 5, yp + unitdownshift + 20 );
-                   #endif
+                #ifdef showtempnumber
+                activefontsettings.color = white;
+                showtext2(strrr( fld->temp ), r + unitrightshift + 5, yp + unitdownshift + 5 );
+                activefontsettings.color = black;
+                showtext2(strrr( fld->temp2 ), r + unitrightshift + 5, yp + unitdownshift + 20 );
+                #endif
 
-               } else
-                 if (b == visible_not) {
-                     putspriteimage( r + unitrightshift, yp + unitdownshift , icons.view.nv8 );
-                     if ( ( fld->a.temp || fld->a.temp2 ) && tempsvisible )
-                           putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
+            } else
+              if (b == visible_not) {
+                  putspriteimage( r + unitrightshift, yp + unitdownshift , icons.view.nv8 );
+                  if ( ( fld->a.temp || fld->a.temp2 ) && tempsvisible )
+                        putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
 
-                   #ifdef showtempnumber
-                   activefontsettings.color = white;
-                   showtext2(strrr( fld->temp ), r + unitrightshift + 5, yp + unitdownshift + 5 );
-                   activefontsettings.color = black;
-                   showtext2(strrr( fld->temp2 ), r + unitrightshift + 5, yp + unitdownshift + 20 );
-                   #endif
+                #ifdef showtempnumber
+                activefontsettings.color = white;
+                showtext2(strrr( fld->temp ), r + unitrightshift + 5, yp + unitdownshift + 5 );
+                activefontsettings.color = black;
+                showtext2(strrr( fld->temp2 ), r + unitrightshift + 5, yp + unitdownshift + 20 );
+                #endif
 
-                 }
-               /*
-                       activefontsettings.color = white;
-                       activefontsettings.font = schriften.guifont;
-                       activefontsettings.length = 0;
-                       activefontsettings.background = 255;
-                       showtext2(strrr( fld->view[1].view ), r + 10 + 5, yp + 10 + 5 );
-                       showtext2(strrr( fld->view[0].jamming ), r + 10 + 5, yp + 10 + 15 );
-                */
-            }
+              }
+            /*
+                    activefontsettings.color = white;
+                    activefontsettings.font = schriften.guifont;
+                    activefontsettings.length = 0;
+                    activefontsettings.background = 255;
+                    showtext2(strrr( fld->view[1].view ), r + 10 + 5, yp + 10 + 5 );
+                    showtext2(strrr( fld->view[0].jamming ), r + 10 + 5, yp + 10 + 15 );
+             */
          }
       }
-
-
-
+   }
 }
+
 
 void tgeneraldisplaymap :: displayadditionalunits ( int height )
 {

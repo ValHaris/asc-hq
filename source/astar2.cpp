@@ -387,7 +387,7 @@ bool operator == ( const AStar3D::Node& a, const AStar3D::Node& b )
 
 
 
-AStar3D :: AStar3D ( pmap actmap_, pvehicle veh_, bool markTemps_ )
+AStar3D :: AStar3D ( pmap actmap_, pvehicle veh_, bool markTemps_, int maxDistance )
 {
    markTemps = markTemps_;
    tempsMarked = NULL;
@@ -395,7 +395,7 @@ AStar3D :: AStar3D ( pmap actmap_, pvehicle veh_, bool markTemps_ )
    veh = veh_;
    actmap = actmap_;
 
-   MAXIMUM_PATH_LENGTH = maxint;
+   MAXIMUM_PATH_LENGTH = maxDistance;
 
    float maxVehicleSpeed = 0;
    for ( int i = 0; i < 8; i++ )
@@ -450,7 +450,10 @@ int AStar3D::getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& 
 
     int movecost, fuelcost;
     calcmovemalus ( start.x, start.y, dest.x, dest.y, vehicle, -1, fuelcost, movecost, dest.z );
-    return int(movecost / vehicleSpeedFactor[log2(dest.z)]);
+    if ( !vehicleSpeedFactor[log2(dest.z)] )
+       return MAXIMUM_PATH_LENGTH;
+    else
+       return int(movecost / vehicleSpeedFactor[log2(dest.z)]);
 }
 
 

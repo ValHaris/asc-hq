@@ -264,12 +264,10 @@ void  loadalltextfiles ( )
    for ( TextFileRepository::iterator i = textFileRepository.begin(); i != textFileRepository.end(); i++ ) {
       i->second.buildIDs();
       for ( TextPropertyList::iterator j = i->second.begin(); j != i->second.end(); j++ ) {
+          displayLogMessage( 9, "Building inheritance: " + (*j)->location + "\n");
           (*j)->buildInheritance( i->second );
-          if ( verbosity >= 10 ) {
-             printf("%s \n", (*j)->location.c_str() );
+          if ( verbosity >= 10 )
              (*j)->print();
-          }
-          // (*j)->resolveAllAlias();
       }
    }
    displayLogMessage ( 4, "done\n");

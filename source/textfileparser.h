@@ -57,7 +57,7 @@ class TextPropertyGroup {
           class Entry {
             public:
                ASCString propertyName;
-               enum Operator { eq, mult_eq, add_eq, alias, alias_all } op;
+               enum Operator { eq, mult_eq, add_eq, alias, alias_all, alias_all_resolved } op;
                ASCString value;
                Entry* parent;
                Entry ( const ASCString& propertyName_, Operator op_, const ASCString& value_ ) : propertyName ( propertyName_ ), op ( op_ ), value ( value_ ), parent ( NULL ) { propertyName.toLower(); };
@@ -68,14 +68,17 @@ class TextPropertyGroup {
          EntryCache entryCache;
          typedef list<Entry> Entries;
          Entries entries;
+
+         typedef list<Entry*> EntryPointerList;
+
       protected:
          void error ( const ASCString& msg );
-         bool processAlias( Entry& e, Entries& entriesToAdd );
+         bool processAlias( Entry& e, Entries& entriesToAdd, EntryPointerList& markAsResolved );
       public:
          void addEntry( const Entry& entry );
          Entry* find( const ASCString& n );
          typedef vector<Entry*> Matches;
-         void findMatches( const ASCString& n, Matches& matches );
+         void findMatches( const ASCString& name, const ASCString& name_without_dot, Matches& matches );
 
          typedef list<TextPropertyGroup*> Parents;
          Parents parents;
@@ -91,7 +94,7 @@ class TextPropertyGroup {
          void buildInheritance( TextPropertyList& tpl );
          void resolveAllAlias( );
          bool isAbstract() { return abstract; };
-         void print();
+         void print( int indent = 0 );
 };
 
 

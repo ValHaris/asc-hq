@@ -277,6 +277,8 @@ extern const char*  cvehiclefunctions[];
         //! checks whether the given vehicletype can principially be loaded. 
         int vehicleloadable ( pvehicletype fzt ) const;
 
+        int maxSpeed ( ) const;
+
         Vehicletype ( void );
         void read ( tnstream& stream ) ;
         void write ( tnstream& stream ) const ;

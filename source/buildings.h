@@ -31,7 +31,6 @@
 
 //! An actual building on the map, which references a #BuildingType
 class  Building : public ContainerBase {
-
     int  processmining ( int res, int abbuchen );
 
     MapCoordinate entryPosition;

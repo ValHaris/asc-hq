@@ -1408,7 +1408,7 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_computerturn:
-         if ( maintainencecheck() || 1 ) {
+         if ( maintainencecheck() || 1) {
             displaymessage("This function is under development and for programmers only\n"
                            "unpredictable things may happen ...",3 ) ;
 

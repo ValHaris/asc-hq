@@ -100,7 +100,7 @@ Vehicle :: ~Vehicle (  )
    }
    #endif
 
-   if ( viewOnMap && gamemap ) {
+   if ( viewOnMap && gamemap && !gamemap->__mapDestruction ) {
       removeview();
       viewOnMap = false;
    }
@@ -1314,9 +1314,11 @@ void   Vehicle::readData ( tnstream& stream )
     else
        damage = 0;
 
-    if ( bm & cem_fuel )
+    if ( bm & cem_fuel ) {
        tank.fuel = stream.readInt();
-    else
+       if ( tank.fuel > typ->tank.fuel )
+          tank.fuel = typ->tank.fuel;
+    } else
        tank.fuel = typ->tank.fuel;
 
     if ( bm & cem_ammunition ) {

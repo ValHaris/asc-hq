@@ -2,9 +2,14 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.116 2002-11-20 20:00:53 mbickel Exp $
+//     $Id: dialog.cpp,v 1.117 2002-12-12 11:34:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.116  2002/11/20 20:00:53  mbickel
+//      New features: specify passwords when starting a game
+//      Better error messages when loading a game through command line parameters
+//      Fixed .ASCTXT problems with alias and inheritance
+//
 //     Revision 1.115  2002/11/17 11:43:23  mbickel
 //      Fixed replay errors when replaying the AI moves
 //
@@ -2068,11 +2073,11 @@ int         choice_dlg(char *       title,
    if ( lng >= 1000 )
       displaymessage ( "dialog.cpp / choice_dlg:   string to long !\nPlease report this error",1 );
 
-  tchoice_dlg  c; 
+  tchoice_dlg  c;
   int a;
 
-  c.init(tempbuf,s1,s2); 
-  c.run(); 
+  c.init(tempbuf,s1,s2);
+  c.run();
   a = c.result;
   c.done(); 
   return a;
@@ -4333,10 +4338,23 @@ void         tsetalliances::buttonpressed( int id )
       case 116: {
                     ASCString filename;
                     fileselectsvga(mapextension, filename, false);
+                    for ( int i = 0; i < 8; i++ )
+                       if ( actmap->player[i].exist() ) {
+                          if (choice_dlg("do you want to reset the view for player %d ?","~y~es","~n~o", i) == 1)
+                             for ( int x = 0; x < actmap->xsize; x++ )
+                                for ( int y = 0; y < actmap->ysize; y++ )
+                                   actmap->getField(x,y)->setVisibility( visible_not, i );
+                          for ( Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); j++ )
+                             (*j)->resetMovement(); 
+                       }
+
                     if ( !filename.empty() )
                        savemap( filename.c_str() );
 
                     viewVisibilityStatistics();
+
+                    delete actmap;
+                    throw NoMapLoaded();
 
                 }
       #endif

@@ -312,9 +312,13 @@ AI::AiResult  AI :: container ( ccontainercontrols& cc )
       if ( getBestHeight ( *i ) != (*i)->height ) {
          VehicleMovement* vm = cc.movement ( *i );
          if ( vm ) {
+            int nwid = (*i)->networkid;
 
             auto_ptr<VehicleMovement> avm ( vm );
             int stat = changeVehicleHeight ( *i, vm );
+            if ( !getMap()->getUnit(nwid)  )
+               continue;
+
             if ( stat == -1 ) {
                result.unitsWaiting++;
                (*i)->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_wait );
@@ -389,6 +393,15 @@ AI::AiResult AI::buildings( int process )
 
       cbuildingcontrols bc;
       bc.init ( *bi );
+
+      for ( int j= 0; j < 32; j++ ) {
+         pvehicle veh = bc.getloadedunit ( j );
+         if ( veh )
+            if ( veh->aiparam[ getPlayerNum() ]->getJob() != AiParameter::job_supply )
+               bc.refill.fuel ( veh, maxint );
+            else
+               bc.refill.filleverything( veh );
+      }
 
       result += container ( bc );
 
@@ -472,6 +485,7 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
             if ( checkReConquer ( getfield ( xtogo, ytogo )->building, veh ))
                return false;
 
+         int nwid  = veh->networkid;
          vm.execute ( NULL, xtogo, ytogo, 2, -1, -1 );
          if ( vm.getStatus() != 3 )
             displaymessage ( "AI :: moveUnit \n error in movement step 2 with unit %d", 1, veh->networkid );
@@ -480,10 +494,11 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
          if ( vm.getStatus() != 1000 )
             displaymessage ( "AI :: moveUnit \n error in movement step 3 with unit %d", 1, veh->networkid );
 
-         if ( destination.x == xtogo && destination.y == ytogo )
-            if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer )
-               if ( getfield ( xtogo, ytogo)->building )
-                  veh->aiparam[getPlayerNum()]->clearJobs();
+         if ( getMap()->getUnit(nwid) )
+            if ( destination.x == xtogo && destination.y == ytogo )
+               if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer )
+                  if ( getfield ( xtogo, ytogo)->building )
+                     veh->aiparam[getPlayerNum()]->clearJobs();
 
 
          return true;
@@ -665,6 +680,8 @@ void AI ::  runReconUnits ( )
 
       pvehicle veh = *vi;
 
+      int maxUnitMovement = veh->typ->maxSpeed();
+
       // the threat posed should be enemy units should be considered for position choosing too...
       if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_recon ) {
          if ( reconPositions.find ( veh->getPosition()) == reconPositions.end()) {
@@ -675,7 +692,7 @@ void AI ::  runReconUnits ( )
                pfield fld = getMap()->getField( i->first );
                if ( !fld->vehicle && !fld->building ) {
                   AStar ast ( getMap(), veh );
-                  ast.findAllAccessibleFields();
+                  ast.findAllAccessibleFields( maxUnitMovement );
                   if ( fld->a.temp ) {
                      int vdist = beeline ( veh->getPosition(), i->first )*(1+i->second/2);
                      if( vdist < mindist ) {
@@ -872,7 +889,7 @@ void AI::production()
                          bc.init ( pr.bld );
                          int lack;
                          if  ( bc.produceunit.available( pr.vt, &lack ) ) {
-                             pvehicle veh = bc.produceunit.produce( pr.vt );
+                             pvehicle veh = bc.produceunit.produce( pr.vt, true );
                              calculateThreat ( veh );
                              container ( bc );
                              currentUnitDistribution.group[i] += inc;

@@ -154,7 +154,7 @@ class AStar3D {
        char& getFieldAccess ( int x, int y );
        char& getFieldAccess ( const MapCoordinate& mc );
 
-       AStar3D ( pmap actmap, pvehicle veh, bool markTemps_ = true );
+       AStar3D ( pmap actmap, pvehicle veh, bool markTemps_ = true, int maxDistance = maxint );
        virtual ~AStar3D ( );
  };
 

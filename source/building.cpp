@@ -2,9 +2,12 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.86 2002-11-30 18:04:48 mbickel Exp $
+//     $Id: building.cpp,v 1.87 2002-12-12 11:34:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.86  2002/11/30 18:04:48  mbickel
+//      Powerplant subwindow only displayed when building consumes resources
+//
 //     Revision 1.85  2002/11/05 09:05:16  mbickel
 //      Fixed: mining stations produced not enough output
 //      Changed default building properties in mapeditor
@@ -1737,7 +1740,7 @@ int   cbuildingcontrols :: cproduceunit :: available (pvehicletype fzt, int* lac
 
 
 
-pvehicle cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt)
+pvehicle cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt, bool forceRefill)
 {
    pvehicle    eht;
    generatevehicle_cl ( fzt, cc->getactplayer() , eht, cc->getxpos(), cc->getypos() );
@@ -1768,7 +1771,7 @@ pvehicle cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt)
          i++;
    } /* endwhile */
 
-   if ( CGameOptions::Instance()->container.filleverything )
+   if ( CGameOptions::Instance()->container.filleverything || forceRefill )
       cc->refill.filleverything ( eht );
 
    return eht;

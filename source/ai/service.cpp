@@ -183,7 +183,7 @@ bool AI::ServiceOrder::execute1st ( pvehicle supplier )
              pfield fld = getfield ( x, y );
              if ( fld && fieldaccessible ( fld, supplier, 1<<h ) == 2 && !fld->building && !fld->vehicle ) {
                 int d = beeline ( x, y, supplier->xpos, supplier->ypos);
-                AStar3D ast ( ai->getMap(), supplier );
+                AStar3D ast ( ai->getMap(), supplier, true, supplier->typ->maxSpeed()*10 );
                 vector<MapCoordinate3D> path;
                 ast.findPath(  path, MapCoordinate3D(x, y, h) );
                 if ( path.size() ) {
@@ -398,8 +398,12 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
       rc = new RefuelConstraint ( veh, this );
    */
 
+   int maxMovement = 0;
+   for ( int i = 0; i < 8; i++ )
+      maxMovement = max ( maxMovement, veh->typ->movement[i] );
+
    AStar3D astar ( getMap(), veh );
-   astar.findAllAccessibleFields (  );
+   astar.findAllAccessibleFields ( maxMovement*10 );
 
    pbuilding bestBuilding = NULL;
    int bestDistance = maxint;
