@@ -702,6 +702,7 @@ void tunitattacksbuilding :: setresult ( void )
 
    _attackingunit->postAttack();
 
+   _attackingunit->damage    = av.damage;
    _attackedbuilding->damage    = dv.damage;
 
    /* Remove the attacking unit if it was destroyed */
@@ -709,6 +710,7 @@ void tunitattacksbuilding :: setresult ( void )
       delete _attackingunit;
       _attackingunit = NULL;
    }
+
 
    /* Remove attacked building if it was destroyed */
    if ( _attackedbuilding->damage >= 100 ) {
@@ -946,6 +948,7 @@ void tunitattacksobject :: setresult ( void )
    _attackingunit->postAttack();
 
    _obji->damage    = dv.damage;
+   _attackingunit->damage    = av.damage;
 
    /* Remove the object if it was destroyed */
    if ( _obji->damage >= 100 ) {

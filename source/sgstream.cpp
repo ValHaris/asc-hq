@@ -886,31 +886,40 @@ void initFileIO ( const ASCString& configFileName, int skipChecks )
       checkFileLoadability ( "buildings.version" );
 }
 
+void versionError( const ASCString& filename, const ASCString& location )
+{
+   ASCString msg = "A newer version of the data file '";
+   msg += filename + "' is required. \nYou can get a new data package at http://www.asc-hq.org\n";
+   msg += "The old file is located at " + location;
+   fatalError( msg );
+}
+
 void checkDataVersion( )
 {
+   ASCString location;
    bool dataOk = true;
    if ( exist ( "data.version" )) {
       tnfilestream s ( "data.version", tnstream::reading );
       dataVersion = s.readInt();
+      location = s.getLocation();
    } else
       dataVersion = 0;
 
-   if ( dataVersion < 10 || dataVersion > 0xffff ) {
-      fatalError("A newer version of the data file 'main.con' is required. \n"
-                 "You can get a new data package at http://www.asc-hq.org", 2 );
-   }
+   if ( dataVersion < 10 || dataVersion > 0xffff )
+      versionError ( "main.con", location );
+
 
    if ( exist ( "mk1.version" )) {
       tnfilestream s ( "mk1.version", tnstream::reading );
       char v = s.readChar();
       if ( v < '4' )
          dataOk = false;
+      location = s.getLocation();
    } else
       dataOk = false;
 
    if ( !dataOk )
-      fatalError("A newer version of the data file 'mk1.con' is required. \n"
-                 "You can get a new data package at http://www.asc-hq.org", 2 );
+      versionError ( "mk1.con", location );
 
 
    if ( exist ( "buildings.version" )) {
@@ -918,12 +927,12 @@ void checkDataVersion( )
       char v = s.readChar();
       if ( v < '2' || v >= 0xffff)
          dataOk = false;
+      location = s.getLocation();
    } else
       dataOk = false;
 
    if ( !dataOk )
-      fatalError("A newer version of the data file 'buildings.con' is required. \n"
-                 "You can get a new data package at http://www.asc-hq.org", 2 );
+      versionError ( "buildings.con", location );
 
 
    if ( exist ( "trrobj.version" )) {
@@ -931,12 +940,12 @@ void checkDataVersion( )
       char v = s.readChar();
       if ( v < '7' )
          dataOk = false;
+      location = s.getLocation();
    } else
       dataOk = false;
 
    if ( !dataOk )
-      fatalError("A newer version of the data file 'trrobj.con' is required. \n"
-                 "You can get a new data package at http://www.asc-hq.org", 2 );
+      versionError ( "trrobj.con", location );
 
 }
 

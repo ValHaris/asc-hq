@@ -330,33 +330,35 @@ void GetResource :: checkbuilding ( pbuilding b )
             b->actstorage.resource( resourcetype ) -= toget;
          got += toget;
       }
-   } else {
-      // Codeguard reports "Pointer arithmetic in invalid memory". Whats wrong here ?
-      // Resources tttt = actmap->tribute.avail[ b->color / 8 ][ player ];
-      int gettable = actmap->tribute.avail[ b->color / 8 ][ player ].resource(resourcetype) - tributegot[ resourcetype ][ b->color / 8];
-      if ( gettable > 0 ) {
-         int toget = need-got;
-         if ( toget > gettable )
-            toget = gettable;
+   } else
+      if ( b->color/8 < 8 ) { // no neutral buildings
 
-         // int found = b->getResource( toget, resourcetype, queryonly );
-         int found = b->actstorage.resource(resourcetype);
-         if ( toget < found )
-            found = toget;
+         // Codeguard reports "Pointer arithmetic in invalid memory". Whats wrong here ?
+         // Resources tttt = actmap->tribute.avail[ b->color / 8 ][ player ];
+         int gettable = actmap->tribute.avail[ b->color / 8 ][ player ].resource(resourcetype) - tributegot[ resourcetype ][ b->color / 8];
+         if ( gettable > 0 ) {
+            int toget = need-got;
+            if ( toget > gettable )
+               toget = gettable;
 
-         if ( !queryonly )
-            b->actstorage.resource(resourcetype) -= found;
+            // int found = b->getResource( toget, resourcetype, queryonly );
+            int found = b->actstorage.resource(resourcetype);
+            if ( toget < found )
+               found = toget;
 
-         tributegot[ resourcetype ][ b->color / 8] += found;
+            if ( !queryonly )
+               b->actstorage.resource(resourcetype) -= found;
 
-         if ( !queryonly ) {
-            actmap->tribute.avail[ b->color / 8 ][ player ].resource( resourcetype ) -= found;
-            actmap->tribute.paid [ b->color / 8 ][ player ].resource( resourcetype ) += found;
+            tributegot[ resourcetype ][ b->color / 8] += found;
+
+            if ( !queryonly ) {
+               actmap->tribute.avail[ b->color / 8 ][ player ].resource( resourcetype ) -= found;
+               actmap->tribute.paid [ b->color / 8 ][ player ].resource( resourcetype ) += found;
+            }
+
+            got += found;
          }
-
-         got += found;
       }
-   }
 }
 
 void GetResource :: start ( int x, int y )
