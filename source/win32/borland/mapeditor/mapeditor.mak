@@ -33,15 +33,15 @@ MAINSOURCE = mapeditor.bpf
 RESDEPEN = $(RESFILES)
 LIBFILES = ..\..\..\..\..\sdl\bin\sdl.lib ..\..\..\libs\bzlib\win\bzlib.lib \
     ..\..\..\libs\triangul\win32\triangulation.lib \
-    ..\..\..\libs\jpeg-6b\libjpeg.lib
+    ..\..\..\libs\jpeg-6b\libjpeg.lib ..\..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB
 IDLFILES = 
 IDLGENFILES = 
-LIBRARIES = 
+LIBRARIES = VCL50.lib
 PACKAGES = VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi
 SPARELIBS = VCL50.lib
 DEFFILE = 
 # ---------------------------------------------------------------------------
-PATHCPP = .;..\..\..\..\source;..\..\..\sdl;..\..\..\..\..\sdl\src\main\win32;..\..\..\LIBS\getopt
+PATHCPP = .;..\..\..;..\..\..\sdl;..\..\..\..\..\sdl\src\main\win32;..\..\..\LIBS\getopt
 PATHASM = .;
 PATHPAS = .;
 PATHRC = .;
@@ -49,8 +49,8 @@ DEBUGLIBPATH = $(BCB)\lib\debug
 RELEASELIBPATH = $(BCB)\lib\release
 USERDEFINES = karteneditor;HEXAGON;FREEMAPZOOM;_WIN32_;WIN32;_SDL_;_NOASM_;NEWKEYB;_DEBUG
 SYSDEFINES = NO_STRICT;_NO_VCL
-INCLUDEPATH = ..\..\..;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..\..\win32;..\..\..\LIBS\getopt
-LIBPATH = ..\..\..;..\..\..\LIBS\getopt;..\..\..\..\source;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
+INCLUDEPATH = ..\..\..;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\sdl\include;..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl_mixer
+LIBPATH = ..\..\..;..\..\..\LIBS\getopt;..\..\..\..\..\sdl\src\main\win32;..\..\..\sdl;$(BCB)\lib\obj;$(BCB)\lib
 WARNINGS= -w-par -w-8027 -w-8026 -w-csu
 # ---------------------------------------------------------------------------
 CFLAG1 = -Od -Q -Vx -Ve -X- -r- -a1 -5 -b -k -y -v -vi- -tW -tWM -c -K

@@ -34,15 +34,15 @@ MAINSOURCE = asc.bpf
 RESDEPEN = $(RESFILES)
 LIBFILES = ..\..\libs\bzlib\win\bzlib.lib ..\..\libs\jpeg-6b\libjpeg.lib \
     ..\..\libs\triangul\win32\triangulation.lib ..\..\..\..\sdl\bin\sdl.lib \
-    ..\..\AI\ai.lib
+    ..\..\AI\ai.lib ..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB
 IDLFILES = 
 IDLGENFILES = 
-LIBRARIES = 
+LIBRARIES = VCL50.lib
 PACKAGES = VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi
 SPARELIBS = VCL50.lib
 DEFFILE = 
 # ---------------------------------------------------------------------------
-PATHCPP = .;..\..\..\source;..\..\..\..\sdl\src\main\win32;..\..\sdl;..\..\LIBS\getopt
+PATHCPP = .;..\..;..\..\..\..\sdl\src\main\win32;..\..\sdl;..\..\LIBS\getopt
 PATHASM = .;
 PATHPAS = .;
 PATHRC = .;
@@ -50,8 +50,8 @@ DEBUGLIBPATH = $(BCB)\lib\debug
 RELEASELIBPATH = $(BCB)\lib\release
 USERDEFINES = HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;WIN32;_DEBUG
 SYSDEFINES = NO_STRICT;_NO_VCL
-INCLUDEPATH = ..\..;..\..\..\source;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
-LIBPATH = ..\..;..\..\..\source;..\..\LIBS\getopt;..\..\AI;..\..\..\..\..\..\BORLAND\CBuilder5\Projects;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
+INCLUDEPATH = ..\..;..\..\LIBS\getopt;..\..\AI;C:\BORLAND\CBuilder5\Projects\;..\..\..\..\sdl\include;..\..\sdl;..\..\..\..\sdl_mixer;..\..\..\..\sdl\src\main\win32;$(BCB)\include;$(BCB)\include\vcl
+LIBPATH = ..\..;..\..\LIBS\getopt;..\..\AI;C:\BORLAND\CBuilder5\Projects\;..\..\sdl;..\..\..\..\sdl\src\main\win32;$(BCB)\lib\obj;$(BCB)\lib
 WARNINGS= -w-par -w-8027 -w-8026 -w-csu
 # ---------------------------------------------------------------------------
 CFLAG1 = -Od -Q -Vx -Ve -X- -r- -a1 -5 -b -k -y -v -vi- -tW -tWM -c -K
