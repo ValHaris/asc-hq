@@ -577,6 +577,26 @@
  };
 
 
+ template<int pixelSize>
+ class ColorTransform_Gray { };
+
+
+ template<>
+ class ColorTransform_Gray<4> {
+     protected:
+        ColorTransform_Gray() {};
+
+        Color transform( Color col)
+        {
+           int i = ((col & 0xff) + ((col >> 8) & 0xff) + ((col >> 16) & 0xff)) / 3;
+           return i + (i<<8) + (i <<16);
+        };
+
+     public:
+        ColorTransform_Gray ( NullParamType npt ) {};
+ };
+
+
 //////////////////////// Color Merger ////////////////////////////////////
 
  template<int pixelsize>
@@ -1046,6 +1066,11 @@ template<>
        SourcePixelSelector_CacheRotation( const Surface& srv, int degrees ) : surface(NULL), degrees(0), useCache(false),pixelStart(NULL), currentPixel(NULL),tableIndex(0),pitch(0), cacheIndex(NULL) 
        {
           setAngle ( srv, degrees );
+       };
+
+       SourcePixelSelector_CacheRotation( pair<const Surface*, int> p ) : surface(NULL), degrees(0), useCache(false),pixelStart(NULL), currentPixel(NULL),tableIndex(0),pitch(0), cacheIndex(NULL)
+       {
+          setAngle ( *(p.first), p.second );
        };
 
 

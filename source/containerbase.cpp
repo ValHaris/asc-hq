@@ -184,46 +184,72 @@ const ContainerBase* ContainerBase :: findUnit ( const Vehicle* veh ) const
 }
 
 
+ template<int pixelSize>
+ class ColorTransform_UnitGray { };
+
+ template<>
+ class ColorTransform_UnitGray<1> : public ColorTransform_XLAT<1> {
+    public:
+       ColorTransform_UnitGray( NullParamType npt  = nullParam ) {
+          setTranslationTable( *xlatpictgraytable );
+       };
+ };
+
+ template<>
+ class ColorTransform_UnitGray<4> : public ColorTransform_Gray<4> {
+     public:
+       ColorTransform_UnitGray( NullParamType npt  = nullParam ) {}
+ };
+
+
 void ContainerBase::paintField ( const Surface& img, Surface& dest, SPoint pos, int dir, bool shaded, int shadowDist ) const
 {
+
+    pair<const Surface*, int> dirpair = make_pair(&img, directionangle[dir]);
+
     int height = getHeight();
     if ( height <= chgetaucht ) {
         if ( shaded ) {
-           MegaBlitter<1,colorDepth,ColorTransform_XLAT, ColorMerger_AlphaMixer, SourcePixelSelector_CacheRotation> blitter;
-           blitter.setTranslationTable( *xlatpictgraytable );
-           blitter.setAngle( img, directionangle[dir] );
-           blitter.blit ( img, dest, pos );
+           megaBlitter< ColorTransform_UnitGray,
+                        ColorMerger_AlphaMixer,
+                        SourcePixelSelector_CacheRotation,
+                        TargetPixelSelector_All>
+                      ( img, dest, pos, nullParam,nullParam, dirpair, nullParam);
         } else {
-           MegaBlitter<1,colorDepth,ColorTransform_PlayerCol, ColorMerger_AlphaMixer, SourcePixelSelector_CacheRotation> blitter; 
-           blitter.setPlayer( getOwner() );
-           blitter.setAngle( img, directionangle[dir] );
-           blitter.blit ( img, dest, pos );
-        }   
+           megaBlitter< ColorTransform_PlayerCol,
+                        ColorMerger_AlphaMixer,
+                        SourcePixelSelector_CacheRotation,
+                        TargetPixelSelector_All>
+                      ( img, dest, pos, getOwner(),nullParam, dirpair, nullParam);
+        }
     } else {
-        if ( height >= chfahrend ) {  
+        if ( height >= chfahrend ) {
            if ( shadowDist == -1 )
               if ( height >= chtieffliegend ) {
                  shadowDist = 6 * ( log2 ( height) - log2 ( chfahrend ));
               } else
-                 shadowDist = 1; 
+                 shadowDist = 1;
 
-           MegaBlitter<1,colorDepth,ColorTransform_None, ColorMerger_AlphaShadow, SourcePixelSelector_CacheRotation> blitter; 
-           blitter.setAngle( img, directionangle[dir] );
-           blitter.blit ( img, dest, SPoint(pos.x+shadowDist, pos.y+shadowDist) );
-                
-        }        
-        
+           megaBlitter< ColorTransform_None,
+                        ColorMerger_AlphaShadow,
+                        SourcePixelSelector_CacheRotation,
+                        TargetPixelSelector_All>
+                      ( img, dest, SPoint(pos.x+shadowDist, pos.y+shadowDist), nullParam,nullParam, dirpair, nullParam);
+        }
+
         if ( shaded ) {
-           MegaBlitter<1,colorDepth,ColorTransform_XLAT, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter; 
-           blitter.setTranslationTable( *xlatpictgraytable );
-           blitter.setAngle( img, directionangle[dir] );
-           blitter.blit ( img, dest, pos );
+           megaBlitter< ColorTransform_UnitGray,
+                        ColorMerger_AlphaOverwrite,
+                        SourcePixelSelector_CacheRotation,
+                        TargetPixelSelector_All>
+                      ( img, dest, pos, nullParam,nullParam, dirpair, nullParam);
         } else {
-           MegaBlitter<1,colorDepth,ColorTransform_PlayerCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter; 
-           blitter.setPlayer( getOwner() );
-           blitter.setAngle( img, directionangle[dir] );
-           blitter.blit ( img, dest, pos );
-        }   
+           megaBlitter< ColorTransform_PlayerCol,
+                        ColorMerger_AlphaOverwrite,
+                        SourcePixelSelector_CacheRotation,
+                        TargetPixelSelector_All>
+                      ( img, dest, pos, getOwner(),nullParam, dirpair, nullParam);
+        }
     }
 }
 

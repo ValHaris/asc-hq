@@ -60,9 +60,9 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
    MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
 
    if ( name == "windarrow" ) {
-      if ( actmap && actmap->weather.windSpeed > 0 ) {
+      if ( actmap && actmap->weatherSystem->getCurrentWindSpeed() > 0 ) {
          MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Rotation> blitter;
-         blitter.setAngle( directionangle[actmap->weather.windDirection] );
+         blitter.setAngle( directionangle[actmap->weatherSystem->getCurrentWindDirection()] );
          blitter.blit ( IconRepository::getIcon("wind-arrow.png"), screen, SPoint(dst.x, dst.y) );
       }
       return;
@@ -158,9 +158,9 @@ void DashboardPanel::eval()
 
    int weaponsDisplayed = 0;
 
-   setBargraphValue( "winddisplay", float(actmap->weather.windSpeed) / 255  );
+   setBargraphValue( "winddisplay", float(actmap->weatherSystem->getCurrentWindSpeed()) / 255  );
 
-   setLabelText( "windspeed", actmap->weather.windSpeed );
+   setLabelText( "windspeed", actmap->weatherSystem->getCurrentWindSpeed() );
 
    if ( mc.valid() && fieldvisiblenow( fld )) {
       setLabelText( "terrain_harbour", fld->bdt.test(cbharbour) ? "YES" : "NO" );
@@ -177,8 +177,8 @@ void DashboardPanel::eval()
       else
          unitspeed = maxint;
 
-       int windspeed = actmap->weather.windSpeed*maxwindspeed ;
-       if ( unitspeed < 255*256 )
+       int windspeed = actmap->weatherSystem->getCurrentWindSpeed()*maxwindspeed ;
+       if ( unitspeed < 255*256 ) {
           if ( windspeed > unitspeed*9/10 )
              setBarGraphColor( "winddisplay", 0xff0000  );
           else
@@ -186,6 +186,8 @@ void DashboardPanel::eval()
                 setBarGraphColor( "winddisplay", 0xffff00  );
              else
                 setBarGraphColor( "winddisplay", 0x00ff00  );
+       } else
+          setBarGraphColor( "winddisplay", 0x00ff00  );
 
    } else {
       setLabelText( "terrain_harbour", "" );
