@@ -1,3 +1,45 @@
+2003-01-14 23:21  mbickel
+
+	* source/: building.cpp, strtmesg.cpp:	Fixed: crash when
+	refuelling a weapon with maximum amount of 0
+
+2003-01-12 20:37  mbickel
+
+	* source/: building.cpp, buildings.cpp, buildings.h,
+	buildingtype.cpp, containerbase.h, controls.cpp, controls.h,
+	edmain.cpp, gamemap.cpp, gamemap.h, loaders.cpp, messages.cpp,
+	resourcenet.cpp, sg.cpp, strtmesg.cpp, typen.cpp, typen.h,
+	ai/ai.bpf, ai/base.cpp, win32/borland/mapeditor/mapeditor.bpr: 
+	Rewrote resource production
+
+2003-01-06 17:52  mbickel
+
+	* source/: TODO, basegfx.cpp, basegfx.h, building.cpp,
+	controls.cpp, dashboard.cpp, dialog.cpp, gamemap.cpp, gamemap.h,
+	gui.cpp, resourcenet.cpp, unitctrl.cpp, vehicle.cpp:  Fixed: units
+	inside transports got wrong movement when moved out
+	 Fixed: wind not displayed correctly
+	 Fixed: tribute displaying wrong values
+	 Fixed: constructing units with untis consumed energy when pipeline
+	near
+	 The movement cost for building objects is no longer terrain
+	dependant
+
+2002-12-23 16:23  mbickel
+
+	* configure, configure.in, getdata:  Added check for mk3
+
+2002-12-23 15:10  mbickel
+
+	* config.guess, depcomp, libtool:  Added files for automake process
+
+2002-12-23 14:43  mbickel
+
+	* ChangeLog, source/dialog.cpp, source/gamedlg.cpp,
+	source/gamemap.cpp, source/graphicset.cpp, source/graphicset.h,
+	source/missions.cpp, source/textfileparser.cpp:  Fixed to compile
+	with gcc 3.2
+
 2002-12-23 13:50  mbickel
 
 	* source/: dialog.cpp, graphicset.cpp, graphicset.h, sgstream.cpp,
