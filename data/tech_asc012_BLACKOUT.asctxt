@@ -1,6 +1,6 @@
 technology {
    Name = BLACKOUT
-   infotext = Research project finished! BLACKOUT avialable!
+   infotext = Reserach project finished! BLACKOUT avialable!
    id = 101001
    RelatedUnitID = 1
    parent = 101000

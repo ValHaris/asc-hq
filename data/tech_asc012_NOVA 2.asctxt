@@ -1,6 +1,6 @@
 technology {
    Name = NOVA 2
-   infotext = Research project finished! NOVA 2 avialable!
+   infotext = Reserach project finished! NOVA 2 avialable!
    id = 101100
    RelatedUnitID = 100
    parent = 101000

@@ -2157,10 +2157,11 @@ void AiValue:: read ( tnstream& stream )
    }
 }
 
+const int aiParamVersion = 3002;
+
 void AiParameter::write ( tnstream& stream )
 {
-   const int version = 3001;
-   stream.writeInt ( version );
+   stream.writeInt ( aiParamVersion );
    stream.writeInt ( lastDamage );
    stream.writeInt ( damageTime.abstime );
    stream.writeInt ( dest.x );
@@ -2174,12 +2175,13 @@ void AiParameter::write ( tnstream& stream )
    stream.writeInt ( jobs.size() );
    for ( int i = 0; i < jobs.size(); i++ )
       stream.writeInt( jobs[i] );
+   stream.writeInt ( resetAfterJobCompletion );
 }
 
 void AiParameter::read ( tnstream& stream )
 {
    int version = stream.readInt();
-   if ( version >= 3000 && version <= 3001 ) {
+   if ( version >= 3000 && version <= aiParamVersion ) {
       lastDamage = stream.readInt();
       damageTime.abstime = stream.readInt();
       int x = stream.readInt();
@@ -2200,7 +2202,10 @@ void AiParameter::read ( tnstream& stream )
          for ( int i = 0; i < num; i++ )
             jobs.push_back ( Job( stream.readInt() ));
       }
-
+      if ( version >= 3002 )
+         resetAfterJobCompletion = stream.readInt();
+      else
+         resetAfterJobCompletion = false;
    }
 }
 
@@ -2261,6 +2266,7 @@ void AiParameter :: reset ( pvehicle _unit )
 
    clearJobs();
    resetTask();
+   resetAfterJobCompletion = false;
 }
 
 void AiParameter :: setNextJob()
