@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.20 2000-01-24 17:35:45 mbickel Exp $
+//     $Id: sg.cpp,v 1.21 2000-02-02 19:18:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/01/24 17:35:45  mbickel
+//      Added dummy routines for sound under DOS
+//      Cleaned up weapon specification
+//
 //     Revision 1.19  2000/01/24 08:16:49  steb
 //     Changes to existing files to implement sound.  This is the first munge into
 //     CVS.  It worked for me before the munge, but YMMV :)
@@ -588,24 +592,25 @@ int tbackgroundpict :: getlastpaintmode ( void )
 }
 
 
-void* reservememory = NULL;
-void* emergencymemory = NULL;
-#define reservememorysize 300000
-#define emergencymemorysize 4000 
+#ifdef _DOS_
+ void* reservememory = NULL;
+ void* emergencymemory = NULL;
+ #define reservememorysize 300000
+ #define emergencymemorysize 4000
 
-void emergency_new_handler ( void )
-{
-   displaymessage("run out of memory while in new_new_handler.\n please contact authors.\n",2 );
-}
+ void emergency_new_handler ( void )
+ {
+    displaymessage("run out of memory while in new_new_handler.\n please contact authors.\n",2 );
+ }
 
-void new_new_handler ( void )
-{
-   delete  ( reservememory );
-   set_new_handler ( emergency_new_handler );
-   savegame("rescue.sav","game saved while exiting game due to a lack of memory "); 
-   displaymessage("Not enough memory. Saved game to emergncy.sav. ",2 );
-}
-
+ void new_new_handler ( void )
+ {
+    delete  ( reservememory );
+    set_new_handler ( emergency_new_handler );
+    savegame("rescue.sav","game saved while exiting game due to a lack of memory ");
+    displaymessage("Not enough memory. Saved game to emergncy.sav. ",2 );
+ }
+#endif
 
 
 #ifdef MEMCHK
@@ -762,8 +767,10 @@ void new_new_handler ( void )
   void* asc_malloc ( size_t size )
   {
      void* tmp = malloc ( size );
+    #ifdef _DOS_
      if ( tmp == NULL ) 
         new_new_handler();
+    #endif
      return tmp;
   }
 
@@ -3068,10 +3075,11 @@ int main(int argc, char *argv[] )
 
         boolean          truecoloravail;
 
-
+       #ifdef _DOS_
         reservememory = malloc ( reservememorysize );
         emergencymemory = malloc ( emergencymemorysize );
         set_new_handler ( new_new_handler );
+       #endif
 
         #ifdef logging
         logtofile ( "sg.cpp / main / initmissions ");

@@ -30,11 +30,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/controls.h,/home/martin/asc/source/controls.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/dialog.cpp,/home/martin/asc/source/basestrm.h,/home/martin/asc/source/basestrm.cpp,/home/martin/asc/source/spfst.cpp,/home/martin/asc/source/typen.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/basestrm.h,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/sdl/sound.cpp,/usr/lib/SDL/src/audio/SDL_wave.h,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/source/basestrm.h
-cpp_file=/home/martin/asc/source/sg.cpp
+header_file=/usr/lib/SDL/src/audio/SDL_wave.h
+cpp_file=/home/martin/asc/source/sdl/sound.cpp
 browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/index-7.html#ss7.2
 [source/controls.cpp]
 install_location=

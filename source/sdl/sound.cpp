@@ -24,8 +24,10 @@
 #include <SDL/SDL_error.h>
 #include "sound.h"
 
-#define DEBUG( msg ) fprintf( stderr, "DEBUG SOUND: %s\n", msg )
-#define DEBUGS( msg ) fprintf( stderr, "DEBUG SOUND %s: %s\n", name, msg )
+#include "../basestrm.h"
+
+#define DEBUG( msg ) if ( verbosity > 8 ) fprintf( stderr, "DEBUG SOUND: %s\n", msg )
+#define DEBUGS( msg ) if ( verbosity > 8 ) fprintf( stderr, "DEBUG SOUND %s: %s\n", name, msg )
 
 /** How long should this process sleep while waiting for a sound to play
  */
@@ -107,6 +109,59 @@ void closeSound(void) {
   }
 }
 
+
+
+static int stream_read(SDL_RWops *context, void *ptr, int size, int maxnum)
+{
+	pnfilestream stream = (pnfilestream) context->hidden.unknown.data1;
+	size_t nread = stream->readdata ( ptr, size * maxnum, 0 );
+
+	if ( nread < 0 ) {
+		SDL_Error(SDL_EFREAD);
+	}
+	return(nread / size);
+}
+
+static int stream_close(SDL_RWops *context)
+{
+	if ( context ) {
+		if ( context->hidden.unknown.data1 ) {
+			pnfilestream stream = (pnfilestream) context->hidden.unknown.data1;
+			delete stream;
+		}
+		free(context);
+	}
+	return(0);
+}
+
+
+SDL_RWops *SDL_RWFromStream( pnstream stream )
+{
+	SDL_RWops *rwops;
+
+	rwops = SDL_AllocRW();
+	if ( rwops != NULL ) {
+	   rwops->seek = NULL;
+	   rwops->read = stream_read;
+	   rwops->write = NULL;
+	   rwops->close = stream_close;
+	   rwops->hidden.unknown.data1 = stream;
+	}
+	return(rwops);
+}
+
+
+SDL_AudioSpec* loadWave ( const char* name, SDL_AudioSpec *spec, Uint8 **audio_buf, Uint32 *audio_len)
+{
+   if ( !exist ( name ))
+      return NULL;
+
+   tnfilestream* stream = new tnfilestream ( name, 1 );
+   
+   return SDL_LoadWAV_RW( SDL_RWFromStream ( stream ), 1, spec, audio_buf, audio_len);
+}
+
+
 Sound::Sound( const char *filename ) {
   SDL_AudioSpec  sampleAudioSpec;
   Uint8         *tmpData;
@@ -118,7 +173,7 @@ Sound::Sound( const char *filename ) {
   /* Load wave file or set to silence on failure.  Also set for silence if
    * There is noAudio.
    */
-  if( noAudio || !SDL_LoadWAV( filename, &sampleAudioSpec, &tmpData, &tmpLen ) ) {
+  if( noAudio || !loadWave( filename, &sampleAudioSpec, &tmpData, &tmpLen ) ) {
     data=NULL;
     converted=0;
     len=0;
