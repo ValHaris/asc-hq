@@ -1,6 +1,12 @@
-//     $Id: dialog.cpp,v 1.33 2000-07-16 14:20:01 mbickel Exp $
+//     $Id: dialog.cpp,v 1.34 2000-07-23 17:59:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/07/16 14:20:01  mbickel
+//      AI has now some primitive tactics implemented
+//      Some clean up
+//        moved weapon functions to attack.cpp
+//      Mount doesn't modify PCX files any more.
+//
 //     Revision 1.32  2000/07/02 21:04:12  mbickel
 //      Fixed crash in Replay
 //      Fixed graphic errors in replay
@@ -6035,86 +6041,83 @@ void showbdtbits( void )
    displaymessage( m, 3 );
 }
 
+void appendTerrainBits ( char* text, tterrainbits* bdt )
+{
+   int num = 0;
+   for (int i = 0; i < cbodenartennum ; i++) {
+      tterrainbits bts;
+      if ( i < 32 )
+         bts.set ( 1 << i, 0 );
+      else
+         bts.set ( 0, 1 << ( i - 32));
+
+      if ( *bdt & bts) {
+         strcat ( text, "    " );
+         // if ( num )
+         ///   strcat ( text, ", " );
+         strcat ( text, cbodenarten[i] );
+         strcat  ( text, "\n" );
+         num++;
+      }
+   } /* endfor */
+}
+
 void viewterraininfo ( void )
 {
    if ( fieldvisiblenow  ( getactfield() )) {
-      displaymessage(" field->direction: %d \n field->id: %d ", 1, getactfield()->direction,getactfield()->typ->terraintype->id);
-      displaymessage(" defense bonus: %d/8 \n attack bonus: %d/8 ", 1, getactfield()->getdefensebonus(), getactfield()->getattackbonus());
-      showbdtbits();
-      char c[1000];
-      c[0] = 0;
+      const char* terraininfo = "#font02#Field Information#font01##aeinzug20##eeinzug20##crtp10#"
+                                            "direction: %d\n"
+                                            "ID: %d\n"
+                                            "attack bonus: %.1f\n"
+                                            "defense bonus: %.1f\n"
+                                            "base jamming: %d#aeinzug0##eeinzug0#\n\n"
+                                            "#font02#Terrain properties:#font01##aeinzug20##eeinzug20##crtp10#";
+
+      char text[10000];
+
+
+      pfield fld = getactfield();
+      float ab = fld->getattackbonus();
+      float db = fld->getdefensebonus();
+
+      sprintf(text, terraininfo, fld->direction, fld->typ->terraintype->id, ab/8, db/8, fld->getjamming() );
+
+      appendTerrainBits ( text, &fld->bdt );
+
+      strcat ( text, "#aeinzug0##eeinzug0#\n\n"
+                     "#font02#Movemali:#font01##aeinzug20##eeinzug20##crtp10#" );
+
       for ( int i = 0; i < cmovemalitypenum; i++ ) {
-        strcat ( c, strrr( getactfield()->getmovemalus(i) ));
-        strcat ( c, " / " );
+         char t2[1000];
+         sprintf(t2, "%s: %d\n",  cmovemalitypes[i], fld->getmovemalus(i) );
+         strcat ( text, t2 );
       }
-      displaymessage( c, 1 );
+
       if  ( getactfield()->vehicle ) {
+         strcat ( text, "#aeinzug0##eeinzug0#\n\n"
+                        "#font02#Vehicle Information:#font01##aeinzug20##eeinzug20##crtp10#" );
+
 
          pvehicletype typ = getactfield()->vehicle->typ;
-         int mx = cbodenartennum;
-         if ( cbodenartennum > 32 ) 
-            mx = 32;
 
-         int i;
-         strcpy ( c, "the unit can drive onto the following fields:\n" );
-         for ( i = 0; i < cbodenartennum; i++ ) {
-            tterrainbits bts;
-            if ( i < 32 )
-               bts.set ( 1 << i, 0 );
-            else
-               bts.set ( 0, 1 << ( i - 32 ));
+         strcat ( text, "the unit can drive onto the following fields:\n" );
+         appendTerrainBits ( text, &typ->terrainaccess->terrain );
 
-            if ( typ->terrainaccess->terrain & bts) {
-               strcat ( c, cbodenarten[i] );
-               strcat ( c, "\n" );
-            }
-         }
+         strcat ( text, "\n\nthese bits must be set:\n" );
+         appendTerrainBits ( text, &typ->terrainaccess->terrainreq );
 
-         displaymessage( c, 3 );
+         strcat ( text, "\n\nthese bits must NOT be set:\n" );
+         appendTerrainBits ( text, &typ->terrainaccess->terrainnot );
 
-         strcpy ( c, "these bits must be set:\n" );
-         for ( i = 0; i < cbodenartennum; i++ ) {
-            tterrainbits bts;
-            if ( i < 32 )
-               bts.set ( 1 << i, 0 );
-            else
-               bts.set ( 0, 1 << ( i - 32 ));
-            if ( typ->terrainaccess->terrainreq & bts) {
-               strcat ( c, cbodenarten[i] );
-               strcat ( c, "\n" );
-            }
-         }
-         displaymessage( c, 3 );
-
-         strcpy ( c, "these bits must NOT be set:\n" );
-         for ( i = 0; i < cbodenartennum; i++ ) {
-            tterrainbits bts;
-            if ( i < 32 )
-               bts.set ( 1 << i, 0 );
-            else
-               bts.set ( 0, 1 << ( i - 32 ));
-            if ( typ->terrainaccess->terrainnot & bts) {
-               strcat ( c, cbodenarten[i] );
-               strcat ( c, "\n" );
-            }
-         }
-         displaymessage( c, 3 );
-
-         strcpy ( c, "the unit ist killed by:\n" );
-         for ( i = 0; i < cbodenartennum; i++ ) {
-            tterrainbits bts;
-            if ( i < 32 )
-               bts.set ( 1 << i, 0 );
-            else
-               bts.set ( 0, 1 << ( i - 32 ));
-            if ( typ->terrainaccess->terrainkill & bts) {
-               strcat ( c, cbodenarten[i] );
-               strcat ( c, "\n" );
-            }
-         }
-         displaymessage( c, 3 );
+         strcat ( text, "\n\nthe unit ist killed by:\n" );
+         appendTerrainBits ( text, &typ->terrainaccess->terrainkill );
       }
-      displaymessage(" basejamming: %d ", 1, getactfield()->getjamming());
+
+      tviewanytext vat;
+      vat.init ( "Field information", text );
+      vat.run();
+      vat.done();
+
    }
 }
 

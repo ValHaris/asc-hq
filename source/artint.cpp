@@ -1,6 +1,12 @@
-//     $Id: artint.cpp,v 1.9 2000-07-16 14:19:58 mbickel Exp $
+//     $Id: artint.cpp,v 1.10 2000-07-23 17:59:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/07/16 14:19:58  mbickel
+//      AI has now some primitive tactics implemented
+//      Some clean up
+//        moved weapon functions to attack.cpp
+//      Mount doesn't modify PCX files any more.
+//
 //     Revision 1.8  2000/07/06 11:07:24  mbickel
 //      More AI work
 //      Started modularizing the attack formula
@@ -2725,6 +2731,7 @@ tartintconfig artintconfig;
 #define ccbt_hq 10000  
 #define ccbt_recycling 50  
 #define ccbt_training 150  
+#define attack_unitdestroyed_bonus 1.4
 
 
 void nop ( void )
@@ -2758,6 +2765,10 @@ AI :: AI ( pmap _map )
 
    reset(); 
    activemap = _map; 
+
+   static ReplayMapDisplay* rmd = new ReplayMapDisplay ( &defaultMapDisplay );
+   mapDisplay = rmd;
+   rmd->setCursorDelay ( gameoptions.replayspeed + 30 );
 
 }
 
@@ -3183,7 +3194,7 @@ void    AI :: setup (void)
    displaymessage2("setup completed ... "); 
 } 
 
-void AI :: searchTargets ( pvehicle veh, int x, int y, TargetList* tl )
+void AI :: searchTargets ( pvehicle veh, int x, int y, TargetList* tl, int moveDist )
 {
    npush ( veh->xpos );
    npush ( veh->ypos );
@@ -3237,6 +3248,7 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetList* tl )
          mv->attackx = xp;
          mv->attacky = yp;
          mv->weapNum = bestweap;
+         mv->moveDist = moveDist;
 
       }
    }
@@ -3248,6 +3260,8 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetList* tl )
 
 void AI::tactics( void )
 {
+   displaymessage2("starting tactics ... "); 
+
    pvehicle veh = getmap()->player[ getplayer() ].firstvehicle;
    while ( veh ) {
       if ( veh->weapexist() ) {
@@ -3261,7 +3275,7 @@ void AI::tactics( void )
 
             TargetList targetList;
 
-            searchTargets ( veh, veh->xpos, veh->ypos, &targetList );
+            searchTargets ( veh, veh->xpos, veh->ypos, &targetList, 0 );
 
             // Now we cycle through all fields that are reachable...
             if ( !veh->typ->wait )
@@ -3269,24 +3283,30 @@ void AI::tactics( void )
                   if ( !vm.reachableFields.getField( f )->vehicle ) {
                       int xp, yp;
                       vm.reachableFields.getFieldCoordinates ( f, &xp, &yp );
-                      searchTargets ( veh, xp, yp, &targetList );
+                      searchTargets ( veh, xp, yp, &targetList, beeline ( xp, yp, orgxpos, orgypos ) );
                    }
 
             int bestpos = -1;
             int bestres = -1;
-            for ( int i = 0; i < targetList.getlength(); i++ ) {
+            int bestmove = maxint;
+            for ( int i = 0; i <= targetList.getlength(); i++ ) {
                MoveVariant* mv = &targetList[i];
+
                mv->result = (mv->enemyDamage - mv->enemyOrgDamage) * mv->enemy->aiparam[getplayer()]->value - config.aggressiveness * (mv->damageAfterAttack - mv->orgDamage) * veh->aiparam[getplayer()]->value ;
-               if ( mv->result > bestres ) {
+               if ( mv->enemyDamage >= 100 )
+                  mv->result *= attack_unitdestroyed_bonus;
+
+               if ( mv->result > bestres || (mv->result == bestres && bestmove > mv->moveDist )) {
                   bestres = mv->result;
                   bestpos = i;
+                  bestmove = mv->moveDist;
                }
             }
             if ( bestpos >= 0 ) {
                MoveVariant* mv = &targetList[bestpos];
 
                if ( mv->movex != veh->xpos || mv->movey != veh->ypos ) {
-                  VehicleMovement vm2 ( &defaultMapDisplay, NULL );
+                  VehicleMovement vm2 ( mapDisplay, NULL );
                   vm2.execute ( veh, -1, -1, 0, -1, -1 );
                   if ( vm2.getStatus() != 2 )
                      displaymessage ( "AI :: tactics \n error in movement step 0 with unit %d", 1, veh->networkid );
@@ -3300,7 +3320,7 @@ void AI::tactics( void )
                      displaymessage ( "AI :: tactics \n error in movement step 3 with unit %d", 1, veh->networkid );
                }
 
-               VehicleAttack va ( &defaultMapDisplay, NULL );
+               VehicleAttack va ( mapDisplay, NULL );
                va.execute ( veh, -1, -1, 0 , 0, -1 );
                if ( va.getStatus() != 2 )
                   displaymessage ( "AI :: tactics \n error in attack step 2 with unit %d", 1, veh->networkid );
@@ -3314,6 +3334,7 @@ void AI::tactics( void )
       }
       veh = veh->next;
    }
+   displaymessage2("threats completed ... "); 
 }
 
 
@@ -3329,7 +3350,7 @@ void AI:: run ( void )
 void AI :: showFieldInformation ( int x, int y )
 {
    if ( fieldThreats ) {
-      const char* fieldinfo = "#font02#Field Information#font01##crtp10##aeinzug20##eeinzug10#"
+      const char* fieldinfo = "#font02#Field Information#font01##aeinzug20##eeinzug10##crtp10#"
                               "threat orbit: %d\n"
                               "threat high-level flight: %d\n"
                               "threat flight: %d\n"
@@ -3344,6 +3365,13 @@ void AI :: showFieldInformation ( int x, int y )
       sprintf(text, fieldinfo, fieldThreats[pos].threat[7], fieldThreats[pos].threat[6], fieldThreats[pos].threat[5], 
                                fieldThreats[pos].threat[4], fieldThreats[pos].threat[3], fieldThreats[pos].threat[2],
                                fieldThreats[pos].threat[1], fieldThreats[pos].threat[0] );
+
+      pfield fld = getfield (x, y );
+      if ( fld->vehicle && fieldvisiblenow ( fld )) {
+         char text2[1000];
+         sprintf(text2, "\nunit nwid: %d ; typeid: %d", fld->vehicle->networkid, fld->vehicle->typ->id );
+         strcat ( text, text2 );
+      }
       tviewanytext vat;
       vat.init ( "AI information", text );
       vat.run();

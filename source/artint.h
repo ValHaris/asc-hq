@@ -1,6 +1,12 @@
-//     $Id: artint.h,v 1.7 2000-07-16 14:19:59 mbickel Exp $
+//     $Id: artint.h,v 1.8 2000-07-23 17:59:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/07/16 14:19:59  mbickel
+//      AI has now some primitive tactics implemented
+//      Some clean up
+//        moved weapon functions to attack.cpp
+//      Mount doesn't modify PCX files any more.
+//
 //     Revision 1.6  2000/07/06 11:07:25  mbickel
 //      More AI work
 //      Started modularizing the attack formula
@@ -73,6 +79,7 @@
            int baseThreatsCalculated;
 
            pmap activemap;
+           MapDisplayInterface* mapDisplay;
 
            AiThreat* fieldThreats;
            int fieldNum;
@@ -109,11 +116,12 @@
                int enemyDamage;
                int weapNum;
                int result;
+               int moveDist;
             };
 
             typedef dynamic_array<MoveVariant> TargetList;
 
-            void searchTargets ( pvehicle veh, int x, int y, TargetList* tl );
+            void searchTargets ( pvehicle veh, int x, int y, TargetList* tl, int moveDist );
 
             void  calculateThreat ( pvehicletype vt);
             void  calculateThreat ( pvehicle eht );

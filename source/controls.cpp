@@ -1,6 +1,11 @@
-//     $Id: controls.cpp,v 1.47 2000-07-22 18:57:56 mbickel Exp $
+//     $Id: controls.cpp,v 1.48 2000-07-23 17:59:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2000/07/22 18:57:56  mbickel
+//      New message during save operation
+//      Weapon efficiency displayed did not correspond to mouse position when
+//        first weapon was service
+//
 //     Revision 1.46  2000/07/16 16:15:49  mbickel
 //      Building: ammotransfer improved
 //
@@ -6643,19 +6648,6 @@ void cmousecontrol :: reset ( void )
 
 
 
-class ReplayMapDisplay : public MapDisplayInterface {
-           MapDisplay* mapDisplay;
-         public:
-           ReplayMapDisplay ( MapDisplay* md ) { mapDisplay = md; };
-           int displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove );
-           void displayPosition ( int x, int y );
-           void deleteVehicle ( pvehicle vehicle ) { mapDisplay->deleteVehicle ( vehicle ); };
-           void displayMap ( void ) { mapDisplay->displayMap(); };
-           void resetMovement ( void ) { mapDisplay->resetMovement(); };
-           void startAction ( void ) { mapDisplay->startAction(); };
-           void stopAction ( void ) { mapDisplay->stopAction(); };
-           int checkMapPosition ( int x, int y );
-    };
 
 int ReplayMapDisplay :: checkMapPosition ( int x, int y )
 {
@@ -6728,7 +6720,32 @@ void ReplayMapDisplay :: displayPosition ( int x, int y )
 }
 
 
+void ReplayMapDisplay :: displayActionCursor ( int x1, int y1, int x2, int y2, int secondWait )
+{
+   if ( x1 >= 0 && y1 >= 0 ) {
+      int i = fieldvisiblenow ( getfield ( x1, y1 ), actmap->playerview );
+      if( i ) {
+         cursor.gotoxy ( x1, y1, i );
+         wait();
+      }
+   }
 
+   if ( x2 >= 0 && y2 >= 0 ) {
+      int i = fieldvisiblenow ( getfield ( x2, y2 ), actmap->playerview );
+      if( i ) {
+         cursor.gotoxy ( x2, y2, i );
+         if ( secondWait )
+            wait();
+      }
+   }
+}
+
+void ReplayMapDisplay :: wait ( void )
+{
+   int t = ticker;
+   while ( ticker < t + cursorDelay ) 
+      releasetimeslice();
+}
 
 
 
@@ -7036,6 +7053,7 @@ void trunreplay :: wait ( int t )
 
 }
 
+/*
 void trunreplay :: setcursorpos ( int x, int y )
 {
    int i = fieldvisiblenow ( getfield ( x, y ), actmap->playerview );
@@ -7044,7 +7062,15 @@ void trunreplay :: setcursorpos ( int x, int y )
       lastvisiblecursorpos.x = x;
       lastvisiblecursorpos.y = y;
    }
+}
+*/
 
+
+void trunreplay :: displayActionCursor ( int x1, int y1, int x2, int y2, int secondWait )
+{
+    ReplayMapDisplay rmd( &defaultMapDisplay );
+    rmd.setCursorDelay ( gameoptions.replayspeed );
+    rmd.displayActionCursor ( x1, y1, x2, y2, secondWait );
 }
 
 
@@ -7131,22 +7157,18 @@ void trunreplay :: execnextreplaymove ( void )
                           stream->readdata2 ( wpnum );
                           readnextaction();
 
-                          setcursorpos ( x1, y1 );
-                          wait ( );
-                          setcursorpos ( x2, y2 );
-
                           pfield fld = getfield ( x1, y1 );
                           pfield targ = getfield ( x2, y2 );
                           int attackvisible = fieldvisiblenow ( fld, actmap->playerview ) || fieldvisiblenow ( targ, actmap->playerview );
                           if ( fld && targ && fld->vehicle ) {
-   
                              if ( targ->vehicle ) {
                                 tunitattacksunit battle ( fld->vehicle, targ->vehicle, 1, wpnum );
                                 battle.av.damage = ad1;
                                 battle.dv.damage = dd1;
-                                if ( attackvisible ) 
+                                if ( attackvisible ) {
+                                   displayActionCursor ( x1, y1, x2, y2, 0 );
                                    battle.calcdisplay ( ad2, dd2 );
-                                else {
+                                } else {
                                    battle.calc ();
                                    battle.av.damage = ad2;
                                    battle.dv.damage = dd2;
@@ -7158,9 +7180,10 @@ void trunreplay :: execnextreplaymove ( void )
                                 tunitattacksbuilding battle ( fld->vehicle, x2, y2 , wpnum );
                                 battle.av.damage = ad1;
                                 battle.dv.damage = dd1;
-                                if ( attackvisible ) 
+                                if ( attackvisible ) {
+                                   displayActionCursor ( x1, y1, x2, y2, 0 );
                                    battle.calcdisplay ( ad2, dd2 );
-                                else {
+                                } else {
                                    battle.calc ();
                                    battle.av.damage = ad2;
                                    battle.dv.damage = dd2;
@@ -7170,9 +7193,10 @@ void trunreplay :: execnextreplaymove ( void )
                              } else
                              if ( targ->object ) {
                                 tunitattacksobject battle ( fld->vehicle, x2, y2, wpnum );
-                                if ( attackvisible ) 
+                                if ( attackvisible ) {
+                                   displayActionCursor ( x1, y1, x2, y2, 0 );
                                    battle.calcdisplay ( ad2, dd2 );
-                                else {
+                                } else {
                                    battle.calc ();
                                    battle.av.damage = ad2;
                                    battle.dv.damage = dd2;
@@ -7235,8 +7259,8 @@ void trunreplay :: execnextreplaymove ( void )
                            stream->readdata2 ( col );
                            readnextaction();
 
-                           setcursorpos ( x, y );
-                           wait();
+                           displayActionCursor ( x, y );
+
                            pfield fld = getfield ( x, y );
                            if ( fld ) {
                               if ( fld->vehicle )
@@ -7263,17 +7287,16 @@ void trunreplay :: execnextreplaymove ( void )
                            stream->readdata2 ( id );
                            readnextaction();
 
-                           setcursorpos ( x, y );
-                           wait();
-                           // pfield fld = getfield ( x, y );
+                           displayActionCursor ( x, y );
 
                            pobjecttype obj = getobjecttype_forid ( id );
 
-                           if ( obj ) {
+                           pfield fld = getfield ( x, y );
+                           if ( obj && fld ) {
                               if ( actaction == rpl_remobj )
-                                 getfield ( x, y ) -> removeobject ( obj );      
+                                 fld->removeobject ( obj );      
                               else
-                                 getfield ( x, y ) -> addobject ( obj );
+                                 fld->addobject ( obj );
 
                               computeview();
                               displaymap();
@@ -7292,8 +7315,7 @@ void trunreplay :: execnextreplaymove ( void )
                            stream->readdata2 ( col );
                            readnextaction();
 
-                           setcursorpos ( x, y );
-                           wait();
+                           displayActionCursor ( x, y );
                            pfield fld = getfield ( x, y );
 
                            pvehicletype tnk = getvehicletype_forid ( id );
@@ -7322,14 +7344,13 @@ void trunreplay :: execnextreplaymove ( void )
                                stream->readdata2 ( color );
                                readnextaction();
 
+                               displayActionCursor ( x, y );
 
-                               setcursorpos ( x, y );
-                               wait();
-                               // pfield fld = getfield ( x, y );
+                               pfield fld = getfield ( x, y );
     
                                pbuildingtype bld = getbuildingtype_forid ( id );
     
-                               if ( bld ) {
+                               if ( bld && fld ) {
                                   putbuilding2( x, y, color, bld ); 
                                   computeview();
                                   displaymap();
@@ -7348,8 +7369,8 @@ void trunreplay :: execnextreplaymove ( void )
                            stream->readdata2 ( strength );
                            readnextaction();
 
-                           setcursorpos ( x, y );
-                           wait();
+                           displayActionCursor ( x, y );
+
                            pfield fld = getfield ( x, y );
                            if ( fld ) {
                               fld -> putmine ( col, typ, strength );
@@ -7368,8 +7389,8 @@ void trunreplay :: execnextreplaymove ( void )
                            stream->readdata2 ( y );
                            readnextaction();
 
-                           setcursorpos ( x, y );
-                           wait();
+                           displayActionCursor ( x, y );
+
                            pfield fld = getfield ( x, y );
                            if ( fld ) {
                               fld -> removemine ( -1 );
@@ -7388,8 +7409,8 @@ void trunreplay :: execnextreplaymove ( void )
                            stream->readdata2 ( y );
                            readnextaction();
 
-                           setcursorpos ( x, y );
-                           wait();
+                           displayActionCursor ( x, y );
+
                            pfield fld = getfield ( x, y );
                            if ( fld && fld->building ) {
                               pbuilding bb = fld->building;
@@ -7439,8 +7460,7 @@ void trunreplay :: execnextreplaymove ( void )
                                           i++;
                                        fld->building->loading[i] = eht;
                                     } else {
-                                       setcursorpos ( x, y );
-                                       wait( t );
+                                       displayActionCursor ( x, y );
                                        fld->vehicle = eht;
                                        computeview();
                                        displaymap();
@@ -7458,10 +7478,6 @@ void trunreplay :: execnextreplaymove ( void )
                                  stream->readdata2 ( y );
                                  stream->readdata2 ( nwid );
                                  readnextaction();
-
-
-                                 // pfield fld = getfield ( x, y );
-
 
                                  if ( !removeunit ( x, y, nwid ))  
                                     displaymessage ( "severe replay inconsistency:\nCould not remove unit %d!", 1, nwid );
@@ -7607,8 +7623,8 @@ int  trunreplay :: run ( int player )
    actmap->ypos = orgmap.cursorpos.position[ actplayer ].sy;
 
    cursor.gotoxy ( orgmap.cursorpos.position[ actplayer ].cx, orgmap.cursorpos.position[ actplayer ].cy , 0);
-   lastvisiblecursorpos.x = orgmap.cursorpos.position[ actplayer ].cx;
-   lastvisiblecursorpos.y = orgmap.cursorpos.position[ actplayer ].cy;
+   // lastvisiblecursorpos.x = orgmap.cursorpos.position[ actplayer ].cx;
+   // lastvisiblecursorpos.y = orgmap.cursorpos.position[ actplayer ].cy;
 
 
    if ( stream->dataavail () )

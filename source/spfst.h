@@ -1,6 +1,9 @@
-//     $Id: spfst.h,v 1.15 2000-07-16 14:57:44 mbickel Exp $
+//     $Id: spfst.h,v 1.16 2000-07-23 17:59:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/07/16 14:57:44  mbickel
+//      Datafile versioning
+//
 //     Revision 1.14  2000/07/16 14:20:06  mbickel
 //      AI has now some primitive tactics implemented
 //      Some clean up
@@ -641,6 +644,7 @@ class MapDisplayInterface {
            virtual void resetMovement ( void ) = 0;
            virtual void startAction ( void ) = 0;
            virtual void stopAction ( void ) = 0;
+           virtual void displayActionCursor ( int x1, int y1, int x2, int y2 ) = 0;
            virtual ~MapDisplayInterface () {};
        };
 
@@ -655,6 +659,7 @@ class MapDisplay : public MapDisplayInterface {
            void resetMovement ( void );
            void startAction ( void );
            void stopAction ( void );
+           void displayActionCursor ( int x1, int y1, int x2, int y2 ) {};
     };
 
 extern MapDisplay defaultMapDisplay;

@@ -1,6 +1,12 @@
-//     $Id: unitctrl.cpp,v 1.13 2000-07-16 14:20:06 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.14 2000-07-23 17:59:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/07/16 14:20:06  mbickel
+//      AI has now some primitive tactics implemented
+//      Some clean up
+//        moved weapon functions to attack.cpp
+//      Mount doesn't modify PCX files any more.
+//
 //     Revision 1.12  2000/07/02 21:04:14  mbickel
 //      Fixed crash in Replay
 //      Fixed graphic errors in replay
@@ -1366,9 +1372,10 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
       int ad1 = battle->av.damage;
       int dd1 = battle->dv.damage;
 
-      if ( mapDisplay )
+      if ( mapDisplay ) {
+         mapDisplay->displayActionCursor ( vehicle->xpos, vehicle->ypos, x, y );
          battle->calcdisplay ();
-      else
+      } else
          battle->calc();
 
       int ad2 = battle->av.damage;

@@ -1,6 +1,10 @@
-//     $Id: controls.h,v 1.15 2000-07-06 11:07:27 mbickel Exp $
+//     $Id: controls.h,v 1.16 2000-07-23 17:59:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/07/06 11:07:27  mbickel
+//      More AI work
+//      Started modularizing the attack formula
+//
 //     Revision 1.14  2000/06/09 13:12:25  mbickel
 //      Fixed tribute function and renamed it to "transfer resources"
 //
@@ -445,15 +449,18 @@ class trunreplay {
             int removeunit ( pvehicle eht, int nwid );
             void wait ( int t = ticker );
             int actplayer;
+           /*
             void setcursorpos ( int x, int y );
             struct {
                int x;
                int y;
             } lastvisiblecursorpos;
+           */
 
             char nextaction;
 
             void readnextaction ( void );
+            void displayActionCursor ( int x1, int y1, int x2 = -1, int y2 = -1, int secondWait = 0 );
 
          public:
 
@@ -648,6 +655,26 @@ class tsearchreactionfireingunits : public treactionfire {
       };
 
 extern void newturnforplayer ( int forcepasswordchecking, char* password = NULL );
+
+class ReplayMapDisplay : public MapDisplayInterface {
+           MapDisplay* mapDisplay;
+           int cursorDelay;
+           void wait ( void );
+         public:
+           ReplayMapDisplay ( MapDisplay* md ) { mapDisplay = md; cursorDelay = 20; };
+           int displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove );
+           void displayPosition ( int x, int y );
+           void deleteVehicle ( pvehicle vehicle ) { mapDisplay->deleteVehicle ( vehicle ); };
+           void displayMap ( void ) { mapDisplay->displayMap(); };
+           void resetMovement ( void ) { mapDisplay->resetMovement(); };
+           void startAction ( void ) { mapDisplay->startAction(); };
+           void stopAction ( void ) { mapDisplay->stopAction(); };
+           void displayActionCursor ( int x1, int y1, int x2 , int y2 , int secondWait );
+           void displayActionCursor ( int x1, int y1 ) { displayActionCursor ( x1, y1, -1, -1, 0 ); };
+           void displayActionCursor ( int x1, int y1, int x2 , int y2 ) { displayActionCursor ( x1, y1, x2, y2, 0 ); };
+           int checkMapPosition ( int x, int y );
+           void setCursorDelay  ( int time ) { cursorDelay = time; };
+    };
 
 
 #endif
