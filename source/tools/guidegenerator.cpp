@@ -160,7 +160,7 @@ ASCString ImageConverter::createPic(const BuildingType&  bt, ASCString filePath)
 
 ASCString ImageConverter::createPic(const VehicleType&  vt, ASCString filePath) {
   tvirtualdisplay sb(100,100,255);
-  putspriteimage ( 0, 0, vt.picture[0] );
+  vt.paint( sb.getSurface(), SPoint(0,0), 0); 
   pal[255][0] = 254;
   pal[255][1] = 253;
   pal[255][2] = 252;

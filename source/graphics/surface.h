@@ -51,7 +51,9 @@
 
 
       //! tries to automatically detect the color key of the surface
-      void detectColorKey();
+      void detectColorKey( bool RLE = false );
+      
+     
    private:
       static SDLmm::PixelFormat* default8bit;
       static SDLmm::PixelFormat* default32bit;
@@ -59,13 +61,17 @@
  };
 
  void applyFieldMask( Surface& s, int x = 0, int y = 0 );
- void colorShift ( Surface& s, int startcolor, int colNum, int shift );
 
- Surface rotateSurface( Surface& s, double degrees );
+ Surface rotateSurface( Surface& s, int degrees );
 
- enum Palettes { GreyScale };
+class SurfaceLock {
+      Surface& surf;
+   public:
+      SurfaceLock( Surface& s ) : surf(s) { s.Lock(); };
+      ~SurfaceLock() { surf.Unlock(); };
+};
 
- SDL_Color* getPalette( Palettes pal );
-
+ 
+ 
 #endif
 

@@ -1,6 +1,3 @@
-/*! \file palette.cpp
-    \brief The color palette and various color translation tables
-*/
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -17,31 +14,19 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    along with this program; see the file COPYING. If not, write to the
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
 
-#include "palette.h"
-/*
-tpixelxlattable nochange;
-tpixelxlattable dark1;
-tpixelxlattable dark2;
-tpixelxlattable light;
-*/
+#include "blitter.h"
 
-dacpalette256 pal;
+ map<int,int*> RotationCache::cache;
+ int RotationCache::xsize = -1;
+ int RotationCache::ysize = -1;
+ 
 
-ppixelxlattable xlatpictgraytable;  
-
-txlattables xlattables;
-tmixbuf *colormixbuf;
-char* colormixbufchar;
-tpixelxlattable bi2asc_color_translation_table;
-
-bool asc_paletteloaded = 0;
-
-char* borland_c_sucks ( void )
-{
-   return "just some code";
-}
+ int foobar_func()
+ {
+    return 0;
+ }

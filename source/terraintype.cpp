@@ -109,14 +109,14 @@ TerrainType::TerrainType()
 
 }
 
-void      TerrainType::Weather::paint ( int x1, int y1 )
+void      TerrainType::Weather::paint ( SPoint pos )
 {
    if ( bi_pict == -1 )
-      getActiveSurface().Blit ( image, SPoint( x1, y1 ));
+      getActiveSurface().Blit ( image, pos);
    else {
       void* img;
       bool ref = loadbi3pict_double ( bi_pict, &img );
-      putspriteimage ( x1, y1, img );
+      putspriteimage ( pos.x, pos.y, img );
       if ( !ref )
          asc_free( img );
    }

@@ -915,22 +915,7 @@ void         tdashboard::paintimage(void)
        putimage ( x1, y1, imagebkgr );
 
     if ( vehicle ) {
-       TrueColorImage* zimg = zoomimage ( vehicle->typ->picture[0], fieldsizex/2, fieldsizey/2, pal, 0 );
-       char* pic = convertimage ( zimg, pal ) ;
-       putrotspriteimage ( x1+3, y1+3, pic, vehicle->color );
-       delete[] pic;
-       delete zimg;
-
-       /*
-       {
-          tvirtualdisplay vi ( 50, 50, 255 );
-          putrotspriteimage ( 0, 0, vehicle->typ->picture[0], vehicle->color );
-          putmask ( 0, 0, icons.hex2octmask, 0 );
-          getimage ( (fieldsizex-30) / 2, (fieldsizey-30) / 2, (fieldsizex-30) / 2 + 30, (fieldsizey-30) / 2 + 30, xlatbuffer );
-       }
-       putspriteimage( x1, y1, xlatbuffer );
-       */
-
+       vehicle->paint( getActiveSurface(), SPoint( x1, y1) );
        imageshown = 1;
     } else
        imageshown = 0;

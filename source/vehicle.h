@@ -286,7 +286,7 @@
     void write ( tnstream& stream, bool includeLoadedUnits = true );
 
     //! displays the unit at position spos on s
-    void paint ( Surface& s, SPoint pos );
+    void paint ( Surface& s, SPoint pos, int shadowDist = -1 );
 
 
   private:

@@ -600,7 +600,7 @@ void tgeneraldisplaymap :: pnt_terrain ( void )
                    r = vfbleftspace + x * fielddistx;
 
                 yp = vfbtopspace + y * fielddisty;
-                fld->typ->paint ( r, yp );
+                fld->typ->paint ( SPoint(r, yp) );
              }
           } else {
              int yp;
@@ -781,7 +781,7 @@ void tgeneraldisplaymap :: pnt_main ( void )
                   /* display units */
                    if ( fld->vehicle  &&  (fld->vehicle->height == binaryheight))
                       if ( ( fld->vehicle->color == playerview * 8 ) || (b == visible_all) || ((fld->vehicle->height >= chschwimmend) && (fld->vehicle->height <= chhochfliegend)))
-                         fld->vehicle->putimage ( r + unitrightshift , yp + unitdownshift );
+                         fld->vehicle->paint( getActiveSurface(), SPoint(r + unitrightshift , yp + unitdownshift ));
 
                 }
 
@@ -959,53 +959,34 @@ void tgeneraldisplaymap :: displayadditionalunits ( int height )
 
 void tdisplaymap :: displayadditionalunits ( int height )
 {
-   int r;
-   if ( height == 4 ) {
+  if( displaymovingunit.eht )
+   if ( height == 4 || height == 5 ) {
+               
+     if ( (height == 4 && displaymovingunit.eht->height <= chfahrend) || (height == 5 && displaymovingunit.eht->height > chfahrend )) {
 
-      if ( displaymovingunit.eht  &&  displaymovingunit.eht->height <= chfahrend ) {
-
+         int xp;
+         if (displaymovingunit.ypos & 1 )   /*  ungerade reihennummern  */
+                xp = vfbleftspace  + fielddisthalfx + (displaymovingunit.xpos - actmap->xpos) * fielddistx;
+         else
+                xp = vfbleftspace + (displaymovingunit.xpos - actmap->xpos) * fielddistx;
+         int yp = vfbtopspace + (displaymovingunit.ypos - actmap->ypos) * fielddisty;
+         
          pfield fld = getfield ( displaymovingunit.xpos, displaymovingunit.ypos);
          int b = fieldVisibility ( fld, playerview );
 
-         if ( displaymovingunit.hgt == 0 ) {
-               if (displaymovingunit.ypos & 1 )   /*  ungerade reihennummern  */
-                  r = vfbleftspace  + fielddisthalfx + (displaymovingunit.xpos - actmap->xpos) * fielddistx;
-               else
-                  r = vfbleftspace + (displaymovingunit.xpos - actmap->xpos) * fielddistx;
-               int yp = vfbtopspace + (displaymovingunit.ypos - actmap->ypos) * fielddisty;
-
-               if ( r >= 0 && yp >= 0 )
-                  if ( displaymovingunit.eht->height >= chschwimmend )
-                     putrotspriteimage( r + unitrightshift + displaymovingunit.dx , yp + unitdownshift + displaymovingunit.dy, displaymovingunit.eht->typ->picture[displaymovingunit.eht->direction], displaymovingunit.eht->color);
-                  else
-                     if ( b == visible_all || displaymovingunit.eht->getOwner() == playerview )
-                        putpicturemix ( r + unitrightshift + displaymovingunit.dx , yp + unitdownshift + displaymovingunit.dy, displaymovingunit.eht->typ->picture[displaymovingunit.eht->direction], displaymovingunit.eht->color, (char*) colormixbuf);
-         }
-      }
-   }
-   if ( height == 5 ) {
-      if ( displaymovingunit.eht && displaymovingunit.eht->height > chfahrend) {
-         pfield fld = getfield ( displaymovingunit.xpos, displaymovingunit.ypos);
-         int b = fieldVisibility (fld, playerview );
-
-          if (displaymovingunit.ypos & 1 )   /*  ungerade reihennummern  */
-             r = vfbleftspace  + fielddisthalfx + (displaymovingunit.xpos - actmap->xpos) * fielddistx;
-          else
-             r = vfbleftspace + (displaymovingunit.xpos - actmap->xpos) * fielddistx;
-          int yp = vfbtopspace + (displaymovingunit.ypos - actmap->ypos) * fielddisty;
-
-         if ( r >= 0 && yp >= 0 ) {
-            if ( (b == visible_all) || ( displaymovingunit.eht->height <= chhochfliegend ) || (displaymovingunit.eht->color / 8 == playerview )) {
-               if ( displaymovingunit.hgt > 0 ) {
-                  int d = 6 * displaymovingunit.hgt / 10 ;
-                  putshadow ( r + unitrightshift + d + displaymovingunit.dx, yp + unitdownshift + d + displaymovingunit.dy, displaymovingunit.eht->typ->picture[displaymovingunit.eht->direction] , &xlattables.a.dark3);
-               }
-               putrotspriteimage( r + unitrightshift + displaymovingunit.dx , yp + unitdownshift + displaymovingunit.dy, displaymovingunit.eht->typ->picture[displaymovingunit.eht->direction], displaymovingunit.eht->color);
-            }
-         }
-      }
-
-   }
+         int shadowdist = -1;
+         if ( displaymovingunit.hgt > 0 && displaymovingunit.eht->height > chfahrend ) 
+            shadowdist = 6 * displaymovingunit.hgt / 10 ;
+         
+         
+         if ( b == visible_all || 
+            (displaymovingunit.eht->height >= chschwimmend && displaymovingunit.eht->height <= chhochfliegend ) || 
+            displaymovingunit.eht->getOwner() == playerview )
+               displaymovingunit.eht->paint( getActiveSurface(), SPoint( xp + unitrightshift + displaymovingunit.dx , yp + unitdownshift + displaymovingunit.dy), shadowdist );
+               
+       }
+     }
+   
 }
 
 
@@ -1385,15 +1366,12 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
 
 
          if ( r >= 0  &&  yp >= 0 &&  yp+unitsizey <= dispmapdata.vfbheight && r+unitsizex <= dispmapdata.vfbwidth ) {
-            if ( displaymovingunit.hgt ) {
-               int d = 6 * displaymovingunit.hgt / 10 ;
-               putshadow ( r + d , yp + d , displaymovingunit.eht->typ->picture[displaymovingunit.eht->direction] , &xlattables.a.dark3);
-            }
-            if( eht->height >= chschwimmend )
-               putrotspriteimage( r , yp , displaymovingunit.eht->typ->picture[displaymovingunit.eht->direction], displaymovingunit.eht->color);
-            else
-               putpicturemix ( r , yp , displaymovingunit.eht->typ->picture[displaymovingunit.eht->direction], displaymovingunit.eht->color, (char*) colormixbuf);
+            int d = -1;
+            if ( displaymovingunit.hgt ) 
+               d = 6 * displaymovingunit.hgt / 10 ;
 
+            displaymovingunit.eht->paint( getActiveSurface(), SPoint(r,yp), d );
+               
             idisplaymap.cp_buf ( touchedfields->minx, touchedfields->miny, touchedfields->maxx, touchedfields->maxy );
          }
 

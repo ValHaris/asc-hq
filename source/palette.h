@@ -2,9 +2,12 @@
     \brief The color palette and various color translation tables
 */
 
-//     $Id: palette.h,v 1.7 2001-11-05 21:10:42 mbickel Exp $
+//     $Id: palette.h,v 1.7.2.1 2004-10-11 18:14:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2001/11/05 21:10:42  mbickel
+//      Updated palette code
+//
 //     Revision 1.6  2001/09/20 15:36:09  mbickel
 //      New object displaying mode
 //
@@ -91,6 +94,7 @@ extern tpixelxlattable dark2;
 extern tpixelxlattable light;
 */
 extern tmixbuf *colormixbuf;
+extern char* colormixbufchar;
 extern dacpalette256 pal;
 
 extern bool asc_paletteloaded;

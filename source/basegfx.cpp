@@ -1295,12 +1295,17 @@ void tvirtualdisplay :: init ( int x, int y, int color, int depth )
       agmp->redfieldposition = 0;
       agmp->greenfieldposition = 8;
       agmp->bluefieldposition = 16;
-      agmp->surface = new Surface (  Surface::CreateSurface( buf, x, y, depth, 0xff, 0xff00, 0xff0000) );
+      surface = agmp->surface = new Surface (  Surface::CreateSurface( buf, x, y, depth, 0xff, 0xff00, 0xff0000) );
    } else {
-      agmp->surface = new Surface ( Surface::CreateSurface( buf, x, y, depth, agmp->scanlinelength ) );
+      surface = agmp->surface = new Surface ( Surface::CreateSurface( buf, x, y, depth, agmp->scanlinelength ) );
       agmp->surface->assignDefaultPalette();
    }
 
+}
+
+Surface& tvirtualdisplay :: getSurface()
+{
+   return *surface;
 }
 
 tvirtualdisplay :: tvirtualdisplay ( int x, int y )
@@ -2159,4 +2164,38 @@ void* convertSurface ( SDLmm::Surface& s, bool paletteTranslation )
   return buf;
 }
 
+SPoint getPixelRotationLocation( SPoint pos, int width, int height, int degrees )
+{
+   const float pi = 3.14159265;
+   double angle = double(degrees) / 360 * 2 * pi + pi;
+
+   double dx = pos.x - width/2 ;
+   double dy = height/2 - pos.y;
+   float nx, ny;
+   if ( degrees == 0 ) {
+      nx = dx;
+      ny = dy;
+   } else
+      if ( degrees == 180 || degrees == -180) {
+         nx = -dx;
+         ny = -dy;
+      } else {
+         float wnk ;
+         if ( dx  )
+            wnk = atan2 ( dy, dx );
+         else
+            if ( dy > 0 )
+               wnk = pi/2;
+            else
+               wnk = -pi/2;
+
+            wnk -= angle;
+            float radius = sqrt ( dx * dx + dy * dy );
+
+            nx = radius * cos ( wnk );
+            ny = -radius * sin ( wnk );
+        }
+
+   return SPoint( int( width/2 + nx), int ( -ny + height/2));
+}
 

@@ -312,7 +312,7 @@ class    ccontainer : public virtual ccontainercontrols
 
    protected:
 
-      void*    picture[32];
+      Surface  picture[32];
       char     pictgray[32];
 
       void*    activefield;
@@ -2162,28 +2162,28 @@ void  ccontainer :: setpictures ( void )
    for ( int i = 0; i < 32; i++ ) {
       pvehicle unit = getloadedunit ( i );
       if ( unit ) {
-         picture[i] = unit->typ->picture[0] ;
+         picture[i] = unit->typ->getImage() ;
          if ( unit->getMovement() > 0 )
             pictgray[i] = 0;
          else
             pictgray[i] = 1;
       } else
-         picture[i] = NULL;
+         picture[i] = Surface();
    }
 }
 
 
 void  ccontainer :: displayloading ( int x, int y, int dx, int dy )
 {
-   void* pict = picture [ x+y*unitsshownx ];
-   if ( pict ) {
-      int w,h;
-      getpicsize ( pict, w, h);
+   Surface& pict = picture [ x+y*unitsshownx ];
+   if ( pict.valid() ) {
+      int w = pict.w();
+      int h = pict.h();
       collategraphicoperations cgo ( unitposx[x] - dx, unitposy[y] - dy, unitposx[x] - dx + w, unitposy[y] - dy + h );
       if ( pictgray[ x+y*unitsshownx ] )
-         putspriteimage (unitposx[x] - dx, unitposy[y] - dy, xlatpict(xlatpictgraytable, pict )  );
+         getActiveSurface().Blit( pict, SPoint (unitposx[x] - dx, unitposy[y] - dy)  ); //~~
       else
-         putrotspriteimage (unitposx[x] - dx, unitposy[y] - dy, pict, getactplayer()*8 );
+         getActiveSurface().Blit( pict, SPoint (unitposx[x] - dx, unitposy[y] - dy)  ); //~~
    }
 }
 
@@ -3574,7 +3574,7 @@ void  ccontainer_b :: setpictures ( void )
                   actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( building->production[i] )  &&
                   building->typ->vehicleFit( building->production[i] ) ) {
                produceableunits[num] = building->production[i];
-               picture[num] = building->production[i]->picture[0] ;
+               picture[num] = building->production[i]->getImage() ;
                int en = building->production[i]->productionCost.energy;
                int ma = building->production[i]->productionCost.material;
                if ( getResource ( en, Resources::Energy, true ) < en  ||  getResource(  ma, Resources::Material, true ) < ma )
@@ -3584,7 +3584,7 @@ void  ccontainer_b :: setpictures ( void )
                num++;
             };
          for ( i = num; i < 32; i++ ) {
-            picture[i] = NULL;
+            picture[i] = Surface();
             pictgray[i] = 0;
             produceableunits[i] = NULL;
          }
@@ -6575,7 +6575,7 @@ void  ccontainer_t :: init (pvehicle eht)
             cursor.show ();
       */
 
-      ccontainer :: init ( vehicle->typ->picture[0], vehicle->color, vehicle->name.empty()? vehicle->typ->name: vehicle->name, vehicle->typ->description );
+      ccontainer :: init ( NULL, vehicle->color, vehicle->name.empty()? vehicle->typ->name: vehicle->name, vehicle->typ->description );
       ccontainer :: displayloading ();
       ccontainer :: movemark (repaint);
 

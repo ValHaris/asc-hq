@@ -837,7 +837,7 @@ void         tvehicleinfo::zeigevehicle(void)
 
    bar(x1 + xsize/2 - 20 ,y1 + starty + 5, x1 + xsize/2 + 20, y1 + starty + 40,backgrnd2);
 
-   putimageprt ( x1 + xsize/2 - 20 ,y1 + starty + 5, x1 + xsize/2 + 20, y1 + starty + 40, aktvehicle->picture[0], (fieldxsize - 40) / 2, (fieldysize - 40) / 2 );
+   aktvehicle->paint( getActiveSurface(), SPoint( x1 + xsize/2 - 20 ,y1 + starty + 5 ), 0 );
 /*   TrueColorImage* zimg = zoomimage ( aktvehicle->picture[0], 30, 30, pal, 0 );
    void* pic = convertimage ( zimg, pal ) ;
    putrotspriteimage(x1 + xsize/2 - 15 ,y1 + starty + 7, pic, actmap->actplayer * 8);

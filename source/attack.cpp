@@ -600,8 +600,8 @@ void tunitattacksunit :: setresult ( void )
 
 void tunitattacksunit :: paintimages ( int xa, int ya, int xd, int yd )
 {
-   putrotspriteimage ( xa, ya, _attackingunit->typ->picture[0], _attackingunit->color );
-   putrotspriteimage ( xd, yd, _attackedunit ->typ->picture[0], _attackedunit->color  );
+   _attackingunit->paint( getActiveSurface(), SPoint(xa, ya));
+   _attackedunit->paint ( getActiveSurface(), SPoint(xd, yd));
 };
 
 
@@ -729,7 +729,7 @@ void tunitattacksbuilding :: setresult ( void )
 
 void tunitattacksbuilding :: paintimages ( int xa, int ya, int xd, int yd )
 {
-   putrotspriteimage ( xa, ya, _attackingunit->typ->picture[0], _attackingunit->color );
+   _attackingunit->paint( getActiveSurface(), SPoint(xa, ya));
    putrotspriteimage ( xd, yd, getfield ( _x, _y ) -> picture , _attackedbuilding->color  );
 };
 
@@ -849,7 +849,7 @@ void tmineattacksunit :: paintimages ( int xa, int ya, int xd, int yd )
    } else
       putspriteimage    ( xa, ya, getmineadress ( _mineposition->getMine(_minenum).type ));
 
-   putrotspriteimage ( xd, yd, _attackedunit->typ->picture[0], _attackedunit->color  );
+   _attackedunit->paint( getActiveSurface(), SPoint(xd, yd));   
 }
 
 
@@ -975,7 +975,7 @@ void tunitattacksobject :: setresult ( void )
 
 void tunitattacksobject :: paintimages ( int xa, int ya, int xd, int yd )
 {
-   putrotspriteimage ( xa, ya, _attackingunit->typ->picture[0], _attackingunit->color );
+   _attackingunit->paint( getActiveSurface(), SPoint(xa, ya));
    _obji->typ->display ( xd - 5, yd - 5 );
 }
 

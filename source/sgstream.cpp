@@ -85,7 +85,7 @@ void* generate_vehicle_gui_build_icon ( pvehicletype tnk )
 
    bar ( 0, 0, 450, 450, 255 );
 
-   putspriteimage ( 0, 0, tnk->picture[0] );
+   tnk->paint( getActiveSurface(), SPoint( 0, 0), 0 );
    maxx= fieldxsize;
    maxy= fieldysize;
 
@@ -433,7 +433,8 @@ void loadpalette ( void )
 
       tnfilestream stream ("palette.pal", tnstream::reading);
       stream.readdata( & pal, sizeof(pal));
-      colormixbuf = (pmixbuf) new char [ sizeof ( tmixbuf ) ];
+      colormixbufchar = new char [ sizeof ( tmixbuf ) ];
+      colormixbuf = (pmixbuf) colormixbufchar;
       stream.readdata( colormixbuf,  sizeof ( *colormixbuf ));
 
       for ( int i= 0; i < 8; i++ ) {

@@ -30,7 +30,7 @@
 #include "basegfx.h"
 #include "spfst.h"
 #include "itemrepository.h"
-
+#include "graphics/blitter.h"
 
 const float repairEfficiencyVehicle[resourceTypeNum*resourceTypeNum] = { 0,  0,  0,
                                                                          0,  0.5, 0,
@@ -443,7 +443,7 @@ void Vehicle :: setMovement ( int newmove, double cargoDivisor )
                if ( cargoDivisor )
                   lperc /= cargoDivisor;
 
-               loading[i]->decreaseMovement ( lperc * loading[i]->typ->movement[ log2 ( loading[i]->height)] );
+               loading[i]->decreaseMovement ( int( lperc * loading[i]->typ->movement[ log2 ( loading[i]->height)] ));
             }
          } /* endfor */
    }
@@ -1481,7 +1481,7 @@ const ASCString&  Vehicle::getName() const
       return name;
 }
 
-void Vehicle::paint ( Surface& s, SPoint pos )
+void Vehicle::paint ( Surface& s, SPoint pos, int shadowDist )
 {
 
   #ifdef sgmain
@@ -1489,29 +1489,49 @@ void Vehicle::paint ( Surface& s, SPoint pos )
   #else
    bool shaded = 0;
   #endif
-   Surface& img = typ->getImage( owner(), direction );
+   const Surface& img = typ->getImage();
 
 
     if ( height <= chgetaucht ) {
-       if ( shaded )
-          putpicturemix ( x, y, xlatpict(xlatpictgraytable,  typ->picture[  direction ]),  color, (char*) colormixbuf );
-       else
-          putpicturemix ( x, y,  typ->picture[ direction],  color, (char*) colormixbuf );
+        if ( shaded ) {
+           MegaBlitter<1,ColorTransform_XLAT, ColorMerger_AlphaMixer, SourcePixelSelector_CacheRotation> blitter; 
+           blitter.setTranslationTable( *xlatpictgraytable );
+           blitter.setAngle( img, directionangle[direction] );
+           blitter.blit ( img, getActiveSurface(), pos );
+        } else {
+           MegaBlitter<1,ColorTransform_PlayerCol, ColorMerger_AlphaMixer, SourcePixelSelector_CacheRotation> blitter; 
+           blitter.setPlayer( getOwner() );
+           blitter.setAngle( img, directionangle[direction] );
+           blitter.blit ( img, getActiveSurface(), pos );
+        }   
     } else {
-          if ( height >= chtieffliegend ) {
-             int d = 6 * ( log2 ( height) - log2 ( chfahrend ));
-             putshadow ( x + d, y + d, typ->picture[direction] , &xlattables.a.dark3);
-          } else
-             if ( height == chfahrend )
-                putshadow ( x + 1, y + 1,  typ->picture[ direction] , &xlattables.a.dark3);
+        if ( height >= chfahrend ) {  
+           if ( shadowDist == -1 )
+              if ( height >= chtieffliegend ) {
+                 shadowDist = 6 * ( log2 ( height) - log2 ( chfahrend ));
+              } else
+                 shadowDist = 1; 
 
-          if ( shaded )
-             putrotspriteimage( x, y, xlatpict(xlatpictgraytable,  typ->picture[  direction ]),  color);
-          else
-             putrotspriteimage( x, y,  typ->picture[ direction],  color);
+           MegaBlitter<1,ColorTransform_None, ColorMerger_AlphaShadow, SourcePixelSelector_CacheRotation> blitter; 
+           blitter.setAngle( img, directionangle[direction] );
+           blitter.blit ( img, getActiveSurface(), SPoint(pos.x+shadowDist, pos.y+shadowDist) );
+                
+        }        
+        
+        if ( shaded ) {
+           MegaBlitter<1,ColorTransform_XLAT, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter; 
+           blitter.setTranslationTable( *xlatpictgraytable );
+           blitter.setAngle( img, directionangle[direction] );
+           blitter.blit ( img, getActiveSurface(), pos );
+        } else {
+           MegaBlitter<1,ColorTransform_PlayerCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter; 
+           blitter.setPlayer( getOwner() );
+           blitter.setAngle( img, directionangle[direction] );
+           blitter.blit ( img, getActiveSurface(), pos );
+        }   
     }
 
-
+   // typ->paint(s, pos, getOwner(), direction );
 }
 
 

@@ -573,7 +573,7 @@ void  tshownewtanks :: init ( bool*      buf2 )
          pvehicletype tnk = vehicleTypeRepository.getObject_byPos ( i );
          if ( tnk ) {
             bar ( x1 + 25, y1 + 45 + num * 50, x1 + 65, y1 + 85 + num * 50, dblue );
-            putrotspriteimage (  x1 + 30, y1 + 50 + num * 50, tnk -> picture[0] , actmap->actplayer * 8);
+            tnk->paint( getActiveSurface(), SPoint (  x1 + 30, y1 + 50 + num * 50), actmap->actplayer );
             showtext2( tnk -> name, x1 + 70, y1 + 45 + num * 50 );
             showtext2( tnk -> description, x1 + 70, y1 + 45 + 40 + num * 50 - activefontsettings.font->height );
             num++;

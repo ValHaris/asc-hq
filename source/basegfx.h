@@ -182,7 +182,8 @@ extern void*     xlatbuffer;
  extern int loga2 ( int a );
  
 
-
+ //! transforms the coordinate for an image rotation
+ extern SPoint getPixelRotationLocation( SPoint pos, int width, int height, int degrees );
 
 
  //! sets the color palette in 8 bit mode
@@ -305,12 +306,14 @@ class tdrawline {
 /** A virtual screen is allocated and the agmp pointer set to it. All graphic operations will
      operate on this virtual display until it is deleted              */
 class tvirtualdisplay {
+           Surface* surface;
            void* buf;
            tgraphmodeparameters oldparams;
            void init ( int x, int y, int col, int depth );
         public: 
            tvirtualdisplay ( int x, int y );
            tvirtualdisplay ( int x, int y, int color, int depth= 8 );
+           Surface& getSurface();
            ~tvirtualdisplay ();
         };
 

@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.124.2.2 2004-10-09 14:07:13 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.124.2.3 2004-10-11 18:14:03 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -29,6 +29,7 @@
 #include <iostream>
 #include <math.h>
 
+#include "sdl/graphics.h"
 #include "vehicletype.h"
 #include "buildingtype.h"
 #include "edmisc.h"
@@ -1717,9 +1718,9 @@ void         tnewmap::init(void)
       if ( ! random ) {
          mousevisible(false);
          if ( tauswahl->weather[auswahlw] )
-            tauswahl->weather[auswahlw]->paint ( x1 + 440,y1 + 182 );
+            tauswahl->weather[auswahlw]->paint ( SPoint(x1 + 440,y1 + 182) );
          else
-            tauswahl->weather[0]->paint ( x1 + 440,y1 + 182 );
+            tauswahl->weather[0]->paint ( SPoint(x1 + 440,y1 + 182) );
          mousevisible(true);
       }
    rahmen(true,x1 + 10,y1 + starty,x1 + xsize - 10,y1 + ysize - 45);
@@ -1820,9 +1821,9 @@ void         tnewmap::buttonpressed(int id)
       npop ( lastselectiontype );
 
       if ( tauswahl->weather[auswahlw] )
-         tauswahl->weather[auswahlw]->paint( x1 + 440,y1 + 182 );
+         tauswahl->weather[auswahlw]->paint( SPoint(x1 + 440,y1 + 182) );
       else
-         tauswahl->weather[0]->paint ( x1 + 440,y1 + 182 );
+         tauswahl->weather[0]->paint ( SPoint(x1 + 440,y1 + 182) );
    }
    if (id == 11)
       if ( ! random) {
@@ -2588,7 +2589,7 @@ void         tunit::init(  )
       delete pic;
   } /*Buttons 14 - 14 +sidenum*/
 
-   putrotspriteimage(dirx + x1 - fieldsizex/2 ,diry + y1 - fieldsizey/2, unit->typ->picture[ unit->direction ],unit->color);
+   unit->paint( getActiveSurface(), SPoint( dirx + x1 - fieldsizex/2 ,diry + y1 - fieldsizey/2));
    mousevisible(true);
 }
 
@@ -2663,7 +2664,7 @@ void         tunit::buttonpressed(int         id)
    case 21 :  {
                   unit->direction = id-14;
                   bar(dirx + x1 -fieldsizex/2, diry + y1 - fieldsizey/2 ,dirx + x1 + fieldsizex/2 ,diry + y1 +fieldsizey/2,lightgray);
-                  putrotspriteimage(dirx + x1 - fieldsizex/2 ,diry + y1 - fieldsizey/2, unit->typ->picture[ unit->direction ],unit->color);
+                  unit->paint( getActiveSurface(), SPoint(dirx + x1 - fieldsizex/2 ,diry + y1 - fieldsizey/2));
                }
          break;
    case 30 : {
@@ -3111,7 +3112,7 @@ void UnitProductionLimitation :: displaysingleitem ( int pos, int x, int y )
    if ( ids.size() > pos ) {
       pvehicletype vt = actmap->getvehicletype_byid( ids[pos] );
       if ( vt )
-         putrotspriteimage ( x, y, vt->picture[0], farbwahl * 8 );
+         vt->paint( getActiveSurface(), SPoint ( x, y), farbwahl );
    }
 }
 
@@ -3202,7 +3203,7 @@ void tvehiclecargo :: init (  )
 void tvehiclecargo :: displaysingleitem ( int pos, int x, int y )
 {
    if ( transport->loading[ pos ] )
-      putrotspriteimage ( x, y, transport->loading[ pos ]->typ->picture[0], farbwahl * 8 );
+      transport->loading[ pos ]->typ->paint( getActiveSurface(), SPoint ( x, y), farbwahl );
 }
 
 void tvehiclecargo :: additem  ( void )
@@ -3307,7 +3308,7 @@ void SelectFromContainer :: init (  )
 void SelectFromContainer :: displaysingleitem ( int pos, int x, int y )
 {
    if ( transport->loading[ pos ] )
-      putrotspriteimage ( x, y, transport->loading[ pos ]->typ->picture[0], farbwahl * 8 );
+      transport->loading[ pos ]->typ->paint( getActiveSurface(), SPoint( x, y), farbwahl );
 }
 
 void SelectFromContainer :: additem  ( void )
@@ -3383,7 +3384,7 @@ class tbuildingcargo : public tbuildingcargoprod {
 void tbuildingcargo :: displaysingleitem ( int pos, int x, int y )
 {
    if ( building->loading[ pos ] )
-      putrotspriteimage ( x, y, building->loading[ pos ]->typ->picture[0], farbwahl * 8 );
+      building->loading[ pos ]->typ->paint( getActiveSurface(), SPoint( x, y), farbwahl );
 }
 
 void tbuildingcargo :: additem  ( void )
@@ -3466,7 +3467,7 @@ class tbuildingproduction : public tbuildingcargoprod {
 void tbuildingproduction :: displaysingleitem ( int pos, int x, int y )
 {
    if ( building->production[ pos ] )
-      putrotspriteimage ( x, y, building->production[ pos ]->picture[0], farbwahl * 8 );
+      building->production[ pos ]->paint( getActiveSurface(), SPoint ( x, y), farbwahl );
 }
 
 void tbuildingproduction :: additem  ( void )

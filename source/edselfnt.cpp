@@ -2,9 +2,13 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.46 2004-07-22 20:14:51 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.46.2.1 2004-10-11 18:14:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2004/07/22 20:14:51  mbickel
+//      Updated campaign maps
+//      New weaponguide
+//
 //     Revision 1.45  2004/05/12 20:05:52  mbickel
 //      Restructured file loading routines for upcoming data cache
 //
@@ -745,7 +749,8 @@ void SelectVehicleType :: displaysingleitem ( pvehicletype item, int x, int y )
 {
    bar ( x, y, x + getitemsizex(), y + getitemsizey(), black );
    if ( item )
-      putrotspriteimage ( x, y, item->picture[0], farbwahl*8 );
+      // putrotspriteimage ( x, y, item->picture[0], farbwahl*8 );
+      item->paint( getActiveSurface(), SPoint(x,y), farbwahl, 0 );
 }
 
 ASCString SelectVehicleType :: getItemName ( pvehicletype item )
@@ -809,9 +814,9 @@ void SelectTerrainType :: displaysingleitem ( pterraintype item, int x, int y )
 
    if ( item )
       if ( item->weather[auswahlw] )
-         item->weather[auswahlw]->paint ( x, y );
+         item->weather[auswahlw]->paint ( SPoint(x, y) );
       else
-         item->weather[0]->paint ( x, y );
+         item->weather[0]->paint ( SPoint(x, y) );
 }
 
 ASCString SelectTerrainType :: getItemName ( pterraintype item )
@@ -1077,10 +1082,10 @@ void SelectWeather :: showiteminfos ( pweathertype item, int x1, int y1, int x2,
    bar ( x1+1, y1+1, x2-1, y2-1, black );
    if ( item && auswahl ) 
       if ( auswahl->weather[ item->num ] ) {
-         auswahl->weather[item->num]->paint ( x1 + 10, (y1 + y2 - fieldsizey )/2 );
+         auswahl->weather[item->num]->paint ( SPoint(x1 + 10, (y1 + y2 - fieldsizey )/2) );
       } else {
 
-         auswahl->weather[0]->paint ( x1 + 10, (y1 + y2 - fieldsizey )/2 );
+         auswahl->weather[0]->paint ( SPoint(x1 + 10, (y1 + y2 - fieldsizey )/2) );
 
          npush ( activefontsettings );
          activefontsettings.font = schriften.smallarial;

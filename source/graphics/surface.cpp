@@ -179,18 +179,8 @@ void Surface::assignDefaultPalette()
    }
 }
 
-SDL_Color* getPalette( Palettes pal )
-{
-   static SDL_Color* grey = NULL;
 
-   if ( pal == GreyScale ) {
-      if ( !grey ) {
-         grey = new SDL_Color[256];
-
-   }
-}
-
-
+/*
 void Surface::assignDefaultPalette()
 {
    if ( me ) {
@@ -209,7 +199,7 @@ void Surface::assignDefaultPalette()
          SDL_SetColors ( me, spal, 0, 256 );
    }
 }
-
+*/
 
 
 void Surface::assignPalette(SDL_Color* colors, int startColor, int colorNum )
@@ -254,19 +244,34 @@ void Surface::write ( tnstream& stream ) const
 void Surface::strech ( int width, int height )
 {
    if ( width != w() || height != h() ) {
-      SDL_Surface* s = SDL_CreateRGBSurface ( SDL_SWSURFACE, width, height, 32, 0xff, 0xff00, 0xff0000, 0xff000000 );
+      SDL_Surface* s;
+      if( GetPixelFormat().BytesPerPixel() == 1 )
+         s = SDL_CreateRGBSurface ( SDL_SWSURFACE, width, height, 8, 0,0,0,0 );
+      else
+         s = SDL_CreateRGBSurface ( SDL_SWSURFACE, width, height, 32, 0xff, 0xff00, 0xff0000, 0xff000000 );
+         
       SDL_StretchSurface( me,0,0,w()-1,h()-1,
                           s, 0,0,width-1, height-1);
 
       SetSurface(s);
+      if( GetPixelFormat().BytesPerPixel() == 1 ) {
+         assignDefaultPalette();
+         detectColorKey();
+      }
    }
 }
 
 
-void Surface::detectColorKey (  )
+void Surface::detectColorKey ( bool RLE )
 {
+   int flags = SDL_SRCCOLORKEY;
+   if ( RLE )
+      flags |= SDL_RLEACCEL;
+      
    if ( GetPixelFormat().BitsPerPixel() > 8 )
-      SetColorKey( SDL_SRCCOLORKEY, GetPixel(0,0));
+      SetColorKey( flags, GetPixel(0,0));
+   else
+      SetColorKey( flags, 255 );
 }
 
 
@@ -312,14 +317,8 @@ void colorShift ( Surface& s, int startcolor, int colNum, int shift )
    s.assignPalette( spal, 0, 256 );
 }
 
-class SurfaceLock {
-      Surface& surf;
-   public:
-      SurfaceLock( Surface& s ) : surf(s) { s.Lock(); };
-      ~SurfaceLock() { surf.Unlock(); };
-};
 
-Surface rotateSurface( Surface& s, double degrees )
+Surface rotateSurface( Surface& s, int degrees )
 {
    const float pi = 3.14159265;
 
@@ -340,38 +339,10 @@ Surface rotateSurface( Surface& s, double degrees )
 
    for ( int y = 0; y < s.h(); y++ ) {
       for ( int x = 0; x < s.w(); x++ ) {
-         double dx = x - s.w()/2 ;
-         double dy = s.h()/2 - y;
-         float nx, ny;
-         if ( degrees != 0 && degrees != -180 && degrees != 180) {
-            float wnk ;
-            if ( dx  )
-               wnk = atan2 ( dy, dx );
-            else
-               if ( dy > 0 )
-                  wnk = pi/2;
-               else
-                  wnk = -pi/2;
+         SPoint newpos = getPixelRotationLocation( SPoint(x,y), s.w(),s.h(), degrees );
 
-            wnk -= angle;
-            float radius = sqrt ( dx * dx + dy * dy );
-
-            nx = -radius * cos ( wnk );
-            ny = radius * sin ( wnk );
-         } else
-            if ( degrees == 0 ) {
-               nx = dx;
-               ny = -dy;
-            } else
-               if ( degrees == 180 || degrees == -180) {
-                  nx = -dx;
-                  ny = dy;
-               }
-
-
-
-         if ( nx >= 0 && ny >= 0 && nx < s.w() && ny < s.h() )
-            dest.SetPixel( x, y, s.GetPixel ( int(nx), int(ny) ));
+         if ( newpos.x >= 0 && newpos.y >= 0 && newpos.x < s.w() && newpos.y < s.h() )
+            dest.SetPixel( x, y, s.GetPixel ( newpos ));
       }
    }
 

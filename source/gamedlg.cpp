@@ -3123,16 +3123,15 @@ void         tverlademunition::run(void)
    activefontsettings.font = schriften.smallarial;
    activefontsettings.length = 100;
 
-   int ix, iy;
-   getpicsize ( target->dest->typ->picture[0], ix, iy );
+   int ix = fieldsizex;
+   int iy = fieldsizey;
 
-//   if ( vehicle2 )
    if ( source )
-      putrotspriteimage(startx+x1 - 60 , y1 + 55, source->typ->picture[0], actmap->actplayer * 8);
+      source->paint( getActiveSurface(), SPoint(startx+x1 - 60 , y1 + 55));
 //   else
 //      showtext2( building->typ->name , x1 + 50, y1 + 55);
 
-   putrotspriteimage(x1 + xsize - 30 - ix , y1 + 55, target->dest->typ->picture[0], actmap->actplayer * 8);
+   target->dest->paint( getActiveSurface(), SPoint(x1 + xsize - 30 - ix , y1 + 55));
 
    int pos = 0;
    for (i = 0; i < target->service.size() ; i++)

@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include "global.h"
 #include "vehicletype.h"
 #include "errors.h"
 #include "graphicset.h"
@@ -32,6 +33,7 @@
 #include "textfileparser.h"
 #include "textfiletags.h"
 #include "textfile_evaluation.h"
+#include "graphics/blitter.h"
 
 
 const char*  cvehiclefunctions[cvehiclefunctionsnum+1]  = {
@@ -170,7 +172,10 @@ void Vehicletype :: read ( tnstream& stream )
 
    bool picture[8];
    for ( j = 0; j < 8; j++ )
-       picture[j] = stream.readInt();
+      if ( version <= 18 )
+         picture[j] = stream.readInt();
+      else
+         picture[j] = false;   
 
    height = stream.readChar();
    stream.readWord(); // was: researchID
@@ -313,9 +318,7 @@ void Vehicletype :: read ( tnstream& stream )
    if ( version <= 18 ) {
       int size;
       if ( picture[0] )
-         image[0][0].read ( stream );
-
-      setupPictures();
+         image.read ( stream );
 
       for ( int i=1;i<8  ;i++ ) {
          if ( picture[i] ) {
@@ -325,10 +328,7 @@ void Vehicletype :: read ( tnstream& stream )
          }
       }
    } else {
-      for ( int i = 0; i < playerNum; ++i )
-         image[i][0].read ( stream );
-
-      setupPictures();
+      image.read ( stream );
    }
 
 
@@ -491,33 +491,6 @@ void Vehicletype :: read ( tnstream& stream )
          cargoMovementDivisor = stream.readFloat();
 }
 
-void Vehicletype::setupPictures()
-{
-   #ifndef converter
-
-      // if ( bipicture <= 0 ) {
-         if ( !image[0][0].valid() )
-            fatalError ( "The vehicletype " + getName() + " (ID: " + strrr( id ) + ") has an invalid picture" );
-
-         image[0][0].strech ( fieldsizex, fieldsizey );
-         for ( int i = 1; i < playerNum; ++i ) {
-            if ( !image[i][0].valid() ) {
-               image[i][0] = image[0][0];
-               colorShift(image[i][0], 16,8, 8*i);
-            }
-            for ( int j = 1; j < 6; ++j)
-               if ( !image[i][j].valid())
-                  image[i][j] = rotateSurface ( image[i][0], directionangle[i] );
-         }
-      /*
-      } else {
-         for ( int i = 1; i < 6; i++ )
-            if ( !picture[i] )
-               picture[i] = rotatepict ( picture[0], directionangle[i] );
-      }
-      */
-   #endif
-}
 
 
 
@@ -594,8 +567,7 @@ void Vehicletype:: write ( tnstream& stream ) const
    if ( !infotext.empty() )
       stream.writeString( infotext );
 
-   for (i=0;i<playerNum  ;i++ )
-      image[i][0].write( stream );
+   image.write( stream );
 
    for ( i = 0; i < objectsBuildable.size(); i++ ) {
       stream.writeInt ( objectsBuildable[i].from );
@@ -813,7 +785,9 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    } else
       fn = extractFileName_withoutSuffix( filename );
 
-   pc.addImage( "Picture", image[0][0], fn );
+   pc.addImage( "Picture", image, fn );
+   if( image.w() < fieldsizex || image.h() < fieldsizey )
+      image.strech( fieldsizex, fieldsizey );
 
    pc.addTagInteger( "Height", height, choehenstufennum, heightTags );
    pc.addBool ( "WaitFortack", wait );
@@ -908,16 +882,16 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.closeBracket ();
 
 
-
-   setupPictures();
    #ifndef converter
    buildicon = generate_vehicle_gui_build_icon ( this );
    #endif
 }
 
-void  Vehicletype::paint ( Surface& s, SPoint pos, int player, int direction )
+void  Vehicletype::paint ( Surface& s, SPoint pos, int player, int direction ) const
 {
-   s.Blit( image[player][direction] , pos);
+   MegaBlitter<1,ColorTransform_PlayerCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain> blitter; 
+   blitter.setPlayer( player );
+   blitter.blit ( image, getActiveSurface(), pos );
 }
 
 

@@ -134,10 +134,10 @@ asc_weaponguide_SOURCES = weaponguide.cpp  basestrm.cpp simplestream.cpp misc.cp
 #asc_raw2pcx_SOURCES     = raw2pcx.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp CLoadable.cpp Named.cpp Property.cpp PropertyGroup.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
 asc_mount_LDADD = @SDL_LIBS@  @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
 asc_demount_LDADD = @SDL_LIBS@  @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_makegfx_LDADD = $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/graphics/libgraphics.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la
+asc_makegfx_LDADD = $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/graphics/libgraphics.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la $(top_builddir)/source/sdl/libsdl.la
 #asc_viewid_LDADD      = $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/graphics/libgraphics.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
 #asc_bin2text_LDADD    = $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/graphics/libgraphics.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_weaponguide_LDADD = $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/graphics/libgraphics.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la
+asc_weaponguide_LDADD = $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/graphics/libgraphics.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la $(top_builddir)/source/sdl/libsdl.la
 subdir = source/tools/linux
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
@@ -169,7 +169,8 @@ asc_makegfx_OBJECTS = $(am_asc_makegfx_OBJECTS)
 asc_makegfx_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/graphics/libgraphics.la \
 	$(top_builddir)/source/tools/lib/libasc_cmd.la \
-	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la
+	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
+	$(top_builddir)/source/sdl/libsdl.la
 asc_makegfx_LDFLAGS =
 am_asc_mount_OBJECTS = mount.$(OBJEXT) basestrm.$(OBJEXT) \
 	simplestream.$(OBJEXT) misc.$(OBJEXT) ascstring.$(OBJEXT) \
@@ -194,7 +195,8 @@ asc_weaponguide_OBJECTS = $(am_asc_weaponguide_OBJECTS)
 asc_weaponguide_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/graphics/libgraphics.la \
 	$(top_builddir)/source/tools/lib/libasc_cmd.la \
-	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la
+	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
+	$(top_builddir)/source/sdl/libsdl.la
 asc_weaponguide_LDFLAGS =
 
 DEFS = @DEFS@

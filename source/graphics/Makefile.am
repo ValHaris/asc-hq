@@ -5,6 +5,6 @@ AM_CXXFLAGS		= @SDL_CFLAGS@ @SIGC_CFLAGS@
 
 noinst_LTLIBRARIES 	= libgraphics.la
 
-libgraphics_la_SOURCES	= surface.cpp ascttfont.cpp
+libgraphics_la_SOURCES	= surface.cpp ascttfont.cpp blitter.cpp
 libgraphics_la_LIBADD		= @SDL_LIBS@ 
 
