@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.27 2000-05-10 19:15:17 mbickel Exp $
+//     $Id: spfst.cpp,v 1.28 2000-05-18 14:14:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/05/10 19:15:17  mbickel
+//      Fixed invalid height when trying to change a units height
+//
 //     Revision 1.26  2000/05/06 20:25:24  mbickel
 //      Fixed: -recognition of a second mouse click when selection a pd menu item
 //             -movement: fields the unit can only pass, but not stand on them,
@@ -4587,10 +4590,13 @@ void tgeneraldisplaymap :: pnt_main ( void )
 
                       // putspriteimage( r + unitrightshift , yp + unitdownshift , view.va8);
                       putshadow( r + unitrightshift , yp + unitdownshift , view.nv8, &xlattables.a.dark2 );
-      
-                      if ( ( fld->a.temp || fld->a.temp2 ) && tempsvisible ) 
-                          putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
-   
+
+                      if ( fld->a.temp && tempsvisible )
+                         putspriteimage(  r + unitrightshift , yp + unitdownshift ,cursor.markfield);
+                      else
+                         if ( fld->a.temp2 && tempsvisible )
+                            putspriteimage(  r + unitrightshift , yp + unitdownshift , xlatpict ( &xlattables.a.dark2 , cursor.markfield));
+
                       #ifdef showtempnumber   
                       activefontsettings.color = white;
                       showtext2(strrr( fld->temp ), r + unitrightshift + 5, yp + unitdownshift + 5 );

@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.6 2000-05-10 19:15:18 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.7 2000-05-18 14:14:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/05/10 19:15:18  mbickel
+//      Fixed invalid height when trying to change a units height
+//
 //     Revision 1.5  2000/05/07 17:04:07  mbickel
 //      Fixed a bug in movement
 //
@@ -194,8 +197,7 @@ int VehicleMovement :: available ( pvehicle veh ) const
 {
    if ( status == 0 )
      if ( veh ) 
-       if ( veh->color == actmap->actplayer * 8 ) 
-          if ( veh->movement >= minmalq ) 
+          if ( veh->movement >= minmalq )
              if ( terrainaccessible ( getfield ( veh->xpos, veh->ypos ), veh ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
                 return 1; 
 
@@ -802,8 +804,8 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1 )
                while ( fld->building->loading[i]  && (i < 31)) 
                   i++; 
                fld->building->loading[i] = vehicle; 
-               if (fld->building->color != (actmap->actplayer << 3)) 
-                  fld->building->convert( actmap->actplayer ); 
+               if (fld->building->color != vehicle->color )
+                  fld->building->convert( vehicle->color / 8 );
 
             } 
       } 

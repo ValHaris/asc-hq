@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.28 2000-05-10 21:13:42 mbickel Exp $
+//     $Id: controls.cpp,v 1.29 2000-05-18 14:14:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/05/10 21:13:42  mbickel
+//      Improved error messages for mail game loader
+//
 //     Revision 1.27  2000/05/10 19:55:42  mbickel
 //      Fixed empty loops when waiting for mouse events
 //
@@ -2825,10 +2828,16 @@ void         calcmovemalus(int          x1,
               fld2 = getfield(x2,y2);
 
               npush( fld2->vehicle );
+              npush( vehicle->xpos );
+              npush( vehicle->ypos );
+              vehicle->xpos = x2;
+              vehicle->ypos = y2;
               fld2->vehicle = vehicle;
               atw = attackpossible(fld->vehicle,x2,y2);
               if (atw->count > 0)
                  mm2 += movemalus[mode][d];
+              npop( vehicle->ypos );
+              npop( vehicle->xpos );
               npop( fld2->vehicle );
 
               delete atw ;

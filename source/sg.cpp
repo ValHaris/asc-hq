@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.39 2000-05-10 19:55:54 mbickel Exp $
+//     $Id: sg.cpp,v 1.40 2000-05-18 14:14:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2000/05/10 19:55:54  mbickel
+//      Fixed empty loops when waiting for mouse events
+//
 //     Revision 1.38  2000/05/08 20:56:27  mbickel
 //      Some cleanup
 //
@@ -2392,7 +2395,7 @@ int  WeaponRange :: run ( const pvehicle veh )
 
 void viewunitweaponrange ( const pvehicle veh, tkey taste )
 {
-   if ( veh && !moveparams.movestatus ) {
+   if ( veh && !moveparams.movestatus  ) {
       cleartemps ( 7 );
       WeaponRange wr;
       int res = wr.run ( veh );
@@ -2419,6 +2422,47 @@ void viewunitweaponrange ( const pvehicle veh, tkey taste )
       }
    }
 }
+
+void viewunitmovementrange ( pvehicle veh, tkey taste )
+{
+   if ( veh && !moveparams.movestatus && fieldvisiblenow ( getfield ( veh->xpos, veh->ypos ))) {
+      cleartemps ( 7 );
+      npush ( veh->movement );
+      veh->movement = veh->typ->movement[log2(veh->height)];
+      VehicleMovement vm ( NULL, NULL );
+      if ( vm.available ( veh )) {
+         vm.execute ( veh, -1, -1, 0, -1, -1 );
+         if ( vm.reachableFields.getFieldNum()) {
+            for  ( int i = 0; i < vm.reachableFields.getFieldNum(); i++ )
+               vm.reachableFields.getField ( i )->a.temp = 1;
+            for  ( int j = 0; j < vm.reachableFieldsIndirect.getFieldNum(); j++ )
+               vm.reachableFieldsIndirect.getField ( j )->a.temp = 1;
+
+            displaymap();
+
+            #ifndef NEWKEYB
+            taste = ct_invvalue;
+            #endif
+
+            if ( taste != ct_invvalue ) {
+               while ( skeypress ( taste )) {
+
+                  while ( keypress() )
+                     r_key();
+               }
+            } else {
+               int mb = mouseparams.taste;
+               while ( mouseparams.taste == mb )
+                  releasetimeslice();
+            }
+            cleartemps ( 7 );
+            displaymap();
+         }
+      }
+      npop ( veh->movement );
+   }
+}
+
 
 void  mainloop ( void )
 {
@@ -2495,10 +2539,7 @@ void  mainloop ( void )
             case ct_3:  viewunitweaponrange ( getactfield()->vehicle, ct_3 );
                break;
 
-            case ct_4:  /* selectgraphicset();
-                        displaymap(); */
-                        asc_malloc ( 200000000 );
-
+            case ct_4:  viewunitmovementrange ( getactfield()->vehicle, ct_4 );
                break;
 
             case ct_5:  execuseraction ( ua_benchgamewov );
