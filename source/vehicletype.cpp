@@ -585,7 +585,7 @@ void Vehicletype:: write ( tnstream& stream ) const
    // if ( bipicture <= 0 )
       for (i=0;i<8  ;i++ )
          if ( picture[i] )
-            stream.writerlepict ( picture[i] );
+            stream.writeImage ( picture[i], false );
 
    for ( i = 0; i < objectsBuildable.size(); i++ ) {
       stream.writeInt ( objectsBuildable[i].from );

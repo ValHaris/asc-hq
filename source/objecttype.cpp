@@ -70,6 +70,11 @@ bool  ObjectType :: buildable ( pfield fld )
    return true;
 }
 
+int ObjectType :: getEffectiveHeight()
+{
+  return (height - 15) / 30;
+}
+
 
 void* ObjectType :: getpic ( int i, int w )
 {
@@ -1024,7 +1029,7 @@ void ObjectType :: write ( tnstream& stream ) const
                 stream.writeInt ( weatherPicture[ww].bi3pic[l] );
              } else {
                 stream.writeInt ( 2 );
-                stream.writerlepict( weatherPicture[ww].images[l] );
+                stream.writeImage( weatherPicture[ww].images[l], false );
              }
           }
        }
@@ -1215,7 +1220,6 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
       setupImages();
 
    techDependency.runTextIO( pc );
-
 
    #ifndef converter
     buildicon = generate_object_gui_build_icon ( this, 0 );

@@ -319,7 +319,7 @@ void TerrainType::write ( tnstream& stream ) const
         weather[i]->move_malus.write ( stream );
 
         if ( weather[i]->pict && weather[i]->bi_pict == -1 )
-           stream.writerlepict ( weather[i]->pict );
+           stream.writeImage ( weather[i]->pict, false );
 
      }
    }

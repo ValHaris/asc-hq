@@ -130,7 +130,11 @@
            virtual void writeFloat ( float f );
 
            //! Writes an image to the stream and compresses it using RLE
-           virtual void writerlepict ( const void* pnter );
+           virtual void writerlepict ( const void* buf );
+
+           //! Writes an image to the stream
+           virtual void writeImage ( const void* buf, bool compress = true );
+
 
            /** Writes an RLE compressed or uncompressed image from the stream.
                \param pnter Pointer to a void* , which will contain the new image.

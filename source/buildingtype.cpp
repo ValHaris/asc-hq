@@ -36,6 +36,8 @@
  #include "spfst.h"
 #endif
 
+ #include "sgstream.h"
+
 
 
 const char*  cbuildingfunctions[cbuildingfunctionnum]  =

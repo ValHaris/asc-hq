@@ -223,14 +223,26 @@ void         tnstream::readrlepict( void** pnter, bool allocated, int* size)
    }
 }
 
+
+
 void tnstream :: writerlepict ( const void* buf )
 {
-   char* tempbuf = new char [ 0xffff ];
-   if ( tempbuf ){
-      int   size    = compressrle ( buf, tempbuf );
-      writedata ( tempbuf, size );
-      delete[] tempbuf;
-   } else {
+   writeImage( buf, true );
+}
+
+void tnstream :: writeImage ( const void* buf, bool compress )
+{
+   if ( compress ) {
+      char* tempbuf = new char [ 0xffff ];
+      if ( tempbuf ) {
+         int   size    = compressrle ( buf, tempbuf );
+         writedata ( tempbuf, size );
+         delete[] tempbuf;
+      } else
+         compress = false;
+   }
+
+   if ( !compress )  {
       Uint16* pw = (Uint16*) buf;
       writedata ( buf, ( pw[0] + 1 ) * ( pw[1] + 1 ) + 4 );
    }

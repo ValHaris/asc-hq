@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.118 2004-07-14 19:26:48 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.119 2004-07-23 20:33:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.118  2004/07/14 19:26:48  mbickel
+//      Fixed display glitches
+//      Rewrote some endian dependent parts
+//
 //     Revision 1.117  2004/07/12 18:15:05  mbickel
 //      Lots of tweaks and fixed for more portability and compilation with mingw
 //
@@ -1464,25 +1468,27 @@ void         tplayerchange::buttonpressed(int         id)
 
               // exchanging the players sel1 and sel2
 
-              typedef tmap::Player::VehicleList VL;
-              typedef tmap::Player::VehicleList::iterator VLI;
+              if ( sel2 != 8 && sel1 != 8 ) {
+                 typedef tmap::Player::VehicleList VL;
+                 typedef tmap::Player::VehicleList::iterator VLI;
 
-              VL vl;
-              for ( VLI i = actmap->player[sel1].vehicleList.begin(); i != actmap->player[sel1].vehicleList.end(); ) {
-                 (*i)->color = sel2*8;
-                 vl.push_back ( *i );
-                 i = actmap->player[sel1].vehicleList.erase( i );
-              }
+                 VL vl;
+                 for ( VLI i = actmap->player[sel1].vehicleList.begin(); i != actmap->player[sel1].vehicleList.end(); ) {
+                    (*i)->color = sel2*8;
+                    vl.push_back ( *i );
+                    i = actmap->player[sel1].vehicleList.erase( i );
+                 }
 
-              for ( VLI i = actmap->player[sel2].vehicleList.begin(); i != actmap->player[sel2].vehicleList.end(); ) {
-                 (*i)->color = sel1*8;
-                 actmap->player[sel1].vehicleList.push_back ( *i );
-                 i = actmap->player[sel2].vehicleList.erase( i );
-              }
+                 for ( VLI i = actmap->player[sel2].vehicleList.begin(); i != actmap->player[sel2].vehicleList.end(); ) {
+                    (*i)->color = sel1*8;
+                    actmap->player[sel1].vehicleList.push_back ( *i );
+                    i = actmap->player[sel2].vehicleList.erase( i );
+                 }
 
-              for ( VLI i = vl.begin(); i != vl.end(); ) {
-                 actmap->player[sel2].vehicleList.push_back ( *i );
-                 i = vl.erase( i );
+                 for ( VLI i = vl.begin(); i != vl.end(); ) {
+                    actmap->player[sel2].vehicleList.push_back ( *i );
+                    i = vl.erase( i );
+                 }
               }
 
 
@@ -1490,30 +1496,23 @@ void         tplayerchange::buttonpressed(int         id)
               typedef tmap::Player::BuildingList::iterator BLI;
 
               BL bl;
-              for ( BLI i = actmap->player[sel1].buildingList.begin(); i != actmap->player[sel1].buildingList.end(); ) {
-                 (*i)->color = sel2*8;
+              for ( BLI i = actmap->player[sel1].buildingList.begin(); i != actmap->player[sel1].buildingList.end(); ++i)
                  bl.push_back ( *i );
-                 i = actmap->player[sel1].buildingList.erase( i );
-              }
 
-              for ( BLI i = actmap->player[sel2].buildingList.begin(); i != actmap->player[sel2].buildingList.end(); ) {
-                 (*i)->color = sel1*8;
-                 actmap->player[sel1].buildingList.push_back ( *i );
-                 i = actmap->player[sel2].buildingList.erase( i );
-              }
+              BL bl2 = actmap->player[sel2].buildingList;
+              for ( BLI i = bl2.begin(); i != bl2.end(); ++i)
+                 (*i)->convert(sel1);
 
-              for ( BLI i = bl.begin(); i != bl.end(); ) {
-                 actmap->player[sel2].buildingList.push_back ( *i );
-                 i = bl.erase( i );
-              }
+              for ( BLI i = bl.begin(); i != bl.end(); ++i)
+                 (*i)->convert(sel2);
 
               for (int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
                  pfield fld = &actmap->field[i];
                  for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
-                    if ( i->player == sel1 )
+                    if ( i->player == sel1 && sel2 != 8 )
                        i->player = sel2;
                     else
-                       if ( i->player == sel2 )
+                       if ( i->player == sel2 && sel1 != 8 )
                           i->player = sel1;
 
 
@@ -1527,22 +1526,21 @@ void         tplayerchange::buttonpressed(int         id)
 
               // adding everything from player sel2 to sel1
 
-              for ( tmap::Player::VehicleList::iterator i = actmap->player[sel2].vehicleList.begin(); i != actmap->player[sel2].vehicleList.end(); ) {
-                 (*i)->color = sel1*8;
-                 actmap->player[sel1].vehicleList.push_back ( *i );
-                 i = actmap->player[sel2].vehicleList.erase( i );
-              }
+              if ( sel1 != 8 )
+                 for ( tmap::Player::VehicleList::iterator i = actmap->player[sel2].vehicleList.begin(); i != actmap->player[sel2].vehicleList.end(); ) {
+                    (*i)->color = sel1*8;
+                    actmap->player[sel1].vehicleList.push_back ( *i );
+                    i = actmap->player[sel2].vehicleList.erase( i );
+                 }
 
-              for ( tmap::Player::BuildingList::iterator i = actmap->player[sel2].buildingList.begin(); i != actmap->player[sel2].buildingList.end(); ) {
-                 (*i)->color = sel1*8;
-                 actmap->player[sel1].buildingList.push_back ( *i );
-                 i = actmap->player[sel2].buildingList.erase( i );
-              }
+              tmap::Player::BuildingList bl = actmap->player[sel2].buildingList;
+              for ( tmap::Player::BuildingList::iterator i = bl.begin(); i != bl.end(); ++i)
+                 (*i)->convert( sel1 );
 
               for (int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
                  pfield fld = &actmap->field[i];
                  for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
-                    if ( i->player == sel2 )
+                    if ( i->player == sel2 && sel1 != 8)
                        i->player = sel1;
 
               } /* endfor */

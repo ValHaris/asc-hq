@@ -1009,7 +1009,7 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
    }
    else
       if (efield->building != NULL) {
-         if (getdiplomaticstatus2(efield->building->color, angreifer->color) == cawar)
+         if (getdiplomaticstatus2(efield->building->color, angreifer->color) == cawar || efield->building->color == 8*8 )
             for (int i = 0; i < angreifer->typ->weapons.count ; i++)
                if (angreifer->typ->weapons.weapon[i].shootable() )
                   if (angreifer->typ->weapons.weapon[i].offensive() )
@@ -1082,7 +1082,7 @@ bool attackpossible2u( const pvehicle attacker, const pvehicle target, pattackwe
 {
    if ( uheight == -1 )
       uheight = target->height;
-      
+
    pvehicle angreifer = attacker;
    pvehicle verteidiger = target;
    int result = false;
@@ -1215,17 +1215,17 @@ bool attackpossible2n( const pvehicle attacker, const pvehicle target, pattackwe
 
 bool vehicleplattfahrbar( const pvehicle     vehicle,
                            const pfield        field)
-{ 
+{
    return false;
 /*
-   if (vehicle == NULL)  
+   if (vehicle == NULL)
       return ( false );
-   if (field == NULL) 
+   if (field == NULL)
       return ( false );
-   if (field->vehicle == NULL) 
+   if (field->vehicle == NULL)
       return ( false );
 
-   if ((vehicle->color != field->vehicle->color) && 
+   if ((vehicle->color != field->vehicle->color) &&
       (vehicle->height == chfahrend) && 
       (field->vehicle->height == chfahrend) && 
       (field->vehicle->functions & cftrooper) && 
