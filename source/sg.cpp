@@ -2187,6 +2187,8 @@ int gamethread ( void* data )
 
 int main(int argc, char *argv[] )
 {
+   assert ( sizeof(PointerSizedInt) == sizeof(int*));
+
    Cmdline* cl = NULL;
    auto_ptr<Cmdline> apcl ( cl );
    try {
