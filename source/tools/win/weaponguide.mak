@@ -14,7 +14,7 @@ BCB = $(MAKEDIR)\..
 VERSION = BCB.05.03
 # ---------------------------------------------------------------------------
 PROJECT = weaponguide.exe
-OBJFILES = ..\weaponguide.obj
+OBJFILES = ..\weaponguide.obj ..\..\itemrepository.obj
 RESFILES = 
 MAINSOURCE = weaponguide.bpf
 RESDEPEN = $(RESFILES)
@@ -26,7 +26,7 @@ PACKAGES = VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi
 SPARELIBS = 
 DEFFILE = 
 # ---------------------------------------------------------------------------
-PATHCPP = .;..\..\tools
+PATHCPP = .;..;..\..
 PATHASM = .;
 PATHPAS = .;
 PATHRC = .;
@@ -34,8 +34,8 @@ DEBUGLIBPATH = $(BCB)\lib\debug
 RELEASELIBPATH = $(BCB)\lib\release
 USERDEFINES = _DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_
 SYSDEFINES = NO_STRICT;_NO_VCL
-INCLUDEPATH = ..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt
-LIBPATH = ..\;..\..\tools;$(BCB)\lib\obj;$(BCB)\lib
+INCLUDEPATH = ..\..;..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt
+LIBPATH = ..\..;..\;..\..\tools;$(BCB)\lib\obj;$(BCB)\lib
 WARNINGS= -w-par
 # ---------------------------------------------------------------------------
 CFLAG1 = -Od -Q -Vx -Ve -X- -a1 -b -k -y -v -vi- -tWC -tWM -c -K

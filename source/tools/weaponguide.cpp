@@ -567,6 +567,43 @@ int main(int argc, char *argv[] )
             fprintf ( detailed6, "</table> \n" );
             //ENDE DESCRIPTION
 
+
+            // NEU - noch anzupassen
+            for ( int h = 0; h < 8; h++ ) {
+               if ( ft->loadcapability & (1 << h))
+                  printf("H÷henstufe kann geladen werden" );
+
+               if ( ft->loadcapabilityreq & (1 << h))
+                  printf("H÷henstufe mu¯ erreichbar sein, um geladen werden zu k÷nnen" );
+
+               if ( ft->loadcapability & (1 << h))
+                  printf("H÷henstufe darf nicht erreichbar sein" );
+            }
+
+            // ft->loadcapacity  ist maximale ladekapazitõt
+            for ( int c = 0; c < cmovemalitypenum; c++ )
+               if ( ft->vehicleCategoriesLoadable & (1 << c))
+                  printf(" Kategorie %s kann geladen werden", cmovemalitypes[c] );
+
+            for ( i = 0; i < ft->buildingsbuildablenum; i++ ) {
+               printf("es k÷nnen die gebõude mit ids von %d bis %d gebaut werden\n", ft->buildingsbuildable[i].from, ft->buildingsbuildable[i].to );
+               for ( int b = 0; b < buildingtypenum; b++ ) {
+                  pbuildingtype bld = getbuildingtype_forpos ( b );
+                  if (     bld->id >= ft->buildingsbuildable[i].from
+                           && bld->id <= ft->buildingsbuildable[i].to ) {
+                     printf( "das gebõude mit id %d und dem Namen %s kann gebaut werden\n", bld->id, bld->name.c_str() );
+                  }
+               }
+            }
+
+            for ( i = 0; i < ft->vehiclesbuildablenum; i++ ) {
+               printf("die Einheit mit ID %d kann gebaut werden\n", ft->vehiclesbuildableid[i] );
+               pvehicletype veh = getvehicletype_forid ( ft->vehiclesbuildableid[i] );
+               if ( veh )   // there is a vehicle with this ID
+                  printf( "die einheit mit id %d und dem Namen %s kann gebaut werden\n", veh->id, veh->getName().c_str() );
+            }
+
+
             // ABSCHLU˜ DER DOKUMENTE
 
             fprintf ( detailed1, "</body></html>\n");
