@@ -1,6 +1,11 @@
-//     $Id: typen.h,v 1.88 2001-04-01 12:59:35 mbickel Exp $
+//     $Id: typen.h,v 1.89 2001-07-08 22:54:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.88  2001/04/01 12:59:35  mbickel
+//      Updated win32 project files to new ai file structure
+//      Added viewid win32-project
+//      Improved AI : production and service path finding
+//
 //     Revision 1.87  2001/03/30 12:43:16  mbickel
 //      Added 3D pathfinding
 //      some cleanup and documentation
@@ -465,7 +470,10 @@ class MapCoordinate {
             bool operator== ( const MapCoordinate& mc ) const { return y == mc.y && x == mc.x;};
             void write( tnstream& stream ) const { stream.writeInt ( 3000 ); stream.writeInt ( x ); stream.writeInt ( y); };
             void read( tnstream& stream ) {
-               stream.readInt ( );
+               int vers = stream.readInt ( );
+               if ( vers == 3500 )
+                  fatalError ( " MapCoordinate::read - data was written by MapCoordinate3D ");
+
                x = stream.readInt ( );
                y = stream.readInt ( );
             };

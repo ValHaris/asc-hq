@@ -65,7 +65,7 @@ void AI :: ServiceOrder :: read ( tnstream& stream )
   if ( version >= 10001 ) {
      int i= stream.readInt();
      if ( i )  {
-        MapCoordinate mc;
+        MapCoordinate3D mc;
         mc.read ( stream );
         nextServiceBuilding = ai->getMap()->getField( mc )->building;
         nextServiceBuildingDistance = stream.readInt();
