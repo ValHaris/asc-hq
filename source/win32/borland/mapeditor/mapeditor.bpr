@@ -25,8 +25,8 @@
     <LIBFILES value="..\..\..\..\..\sdl\bin\sdl.lib ..\..\..\libs\bzlib\win\bzlib.lib 
       ..\..\..\libs\triangul\win32\triangulation.lib 
       ..\..\..\libs\jpeg-6b\libjpeg.lib ..\..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB"/>
-    <LIBRARIES value="VCL50.lib"/>
-    <SPARELIBS value="VCL50.lib"/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value=""/>
     <PACKAGES value="VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi"/>
     <PATHCPP value=".;..\..\..;..\..\..\sdl;..\..\..\..\..\sdl\src\main\win32;..\..\..\LIBS\getopt"/>
     <PATHPAS value=".;"/>
@@ -52,7 +52,7 @@
   <LINKER>
     <ALLOBJ value="c0w32.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
-    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cw32mt.lib"/>
+    <ALLLIB value="$(LIBFILES) import32.lib cw32mt.lib"/>
   </LINKER>
   <IDEOPTIONS>
 [Version Info]

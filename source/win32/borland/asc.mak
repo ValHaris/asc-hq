@@ -39,12 +39,12 @@ LIBFILES = ..\..\libs\bzlib\win\bzlib.lib ..\..\libs\jpeg-6b\libjpeg.lib \
     ..\..\AI\ai.lib ..\..\..\..\SDL_mixer\bin\SDL_mixer.LIB
 IDLFILES = 
 IDLGENFILES = 
-LIBRARIES = VCL50.lib
+LIBRARIES = 
 PACKAGES = VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi
-SPARELIBS = VCL50.lib
+SPARELIBS = 
 DEFFILE = 
 # ---------------------------------------------------------------------------
-PATHCPP = .;..\..\..\source;..\..\..\..\sdl\src\main\win32;..\..\sdl;..\..\LIBS\getopt
+PATHCPP = .;..\..;..\..\..\..\sdl\src\main\win32;..\..\sdl;..\..\LIBS\getopt
 PATHASM = .;
 PATHPAS = .;
 PATHRC = .;
@@ -65,7 +65,7 @@ LFLAGS = -Iobj -D"" -aa -Tpe -GD -s -Gn -M -v
 # ---------------------------------------------------------------------------
 ALLOBJ = c0w32.obj $(OBJFILES)
 ALLRES = $(RESFILES)
-ALLLIB = $(LIBFILES) $(LIBRARIES) import32.lib cw32mt.lib
+ALLLIB = $(LIBFILES) import32.lib cw32mt.lib
 # ---------------------------------------------------------------------------
 !ifdef IDEOPTIONS
 
