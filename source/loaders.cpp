@@ -1,6 +1,9 @@
-//     $Id: loaders.cpp,v 1.10 2000-05-06 19:57:09 mbickel Exp $
+//     $Id: loaders.cpp,v 1.11 2000-05-25 11:07:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/05/06 19:57:09  mbickel
+//      Mapeditor/linux is now running
+//
 //     Revision 1.9  2000/04/27 16:25:24  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -3391,7 +3394,10 @@ int validatemapfile ( char* s )
 
       tnfilestream stream ( s, 1 );
       stream.readpchar ( &description, 200 );
-      int desclen = strlen ( description ) + 7;
+      if ( description ) {
+         delete[]  description ;
+         description = NULL;
+      }
 
       word w;
       stream.readdata2 ( w );
@@ -3404,18 +3410,11 @@ int validatemapfile ( char* s )
       if (version > actmapversion || version < minmapversion ) 
          throw tinvalidversion ( s, actmapversion, version );
 
-
    } /* endtry */
 
    catch ( terror ) {
        return 0;
    } /* endcatch */
-
-
-   if ( description ) {
-      delete[]  description ;
-      description = NULL;
-   }
 
    return 1;
 } 
@@ -3424,7 +3423,75 @@ int validatemapfile ( char* s )
 
 
 
+int validateemlfile ( char* s )
+{
 
+   char* description = NULL;
+
+   try {
+
+      tnfilestream stream ( s, 1 );
+      stream.readpchar ( &description, 200 );
+      if ( description ) {
+         delete[]  description ;
+         description = NULL;
+      }
+      
+      word w;
+      stream.readdata2 ( w );
+      if ( w != fileterminator )
+         throw tinvalidversion ( s, fileterminator, (int) w );
+
+      int version;
+      stream.readdata2( version );
+   
+      if (version > actnetworkversion || version < minnetworkversion ) 
+         throw tinvalidversion ( s, actnetworkversion, version );
+
+   } /* endtry */
+
+   catch ( terror ) {
+       return 0;
+   } /* endcatch */
+
+
+   return 1;
+} 
+
+
+int validatesavfile ( char* s )
+{
+
+   char* description = NULL;
+
+   try {
+
+      tnfilestream stream ( s, 1 );
+      stream.readpchar ( &description, 200 );
+      if ( description ) {
+         delete[]  description ;
+         description = NULL;
+      }
+
+      word w;
+      stream.readdata2 ( w );
+      if ( w != fileterminator )
+         throw tinvalidversion ( s, fileterminator, (int) w );
+
+      int version;
+      stream.readdata2( version );
+   
+      if (version > actsavegameversion || version < minsavegameversion ) 
+         throw tinvalidversion ( s, actsavegameversion, version );
+
+   } /* endtry */
+
+   catch ( terror ) {
+       return 0;
+   } /* endcatch */
+
+   return 1;
+} 
 
 
 

@@ -1,6 +1,15 @@
-//     $Id: loaders.h,v 1.3 2000-04-27 16:25:26 mbickel Exp $
+//     $Id: loaders.h,v 1.4 2000-05-25 11:07:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/04/27 16:25:26  mbickel
+//      Attack functions cleanup
+//      New vehicle categories
+//      Rewrote resource production in ASC resource mode
+//      Improved mine system: several mines on a single field allowed
+//      Added unitctrl.* : Interface for vehicle functions
+//        currently movement and height change included
+//      Changed timer to SDL_GetTicks
+//
 //     Revision 1.2  1999/11/16 03:41:59  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -205,7 +214,9 @@ class treplayloaders : public tspfldloaders {
 };
 
 
-extern int validatemapfile ( char* s );
+extern int validatemapfile ( char* s );       //
+extern int validatesavfile ( char* s );       // result:   0  file invalid 
+extern int validateemlfile ( char* s );       //         > 0  file valid
 
 
 
