@@ -1080,8 +1080,8 @@ void trunreplay :: execnextreplaymove ( void )
                                     error("replay inconsistency:\nCannot find Unit to build/remove Object !");
                               }
                              
-                             
-                              computeview( actmap );
+                              if ( obj->basicjamming_plus || obj->basicjamming_abs != -1 || obj->viewbonus_plus || obj->viewbonus_abs != -1 )
+                                 computeview( actmap );
                               displaymap();
                               wait(MapCoordinate(x,y));
                               removeActionCursor();
@@ -1742,7 +1742,7 @@ int  trunreplay :: run ( int player, int viewingplayer )
              cursor.show();
           if ( nextaction == rpl_finished && !resourcesCompared ) {
 
-             displaymessage2("running final comparison \n" );
+             displaymessage2("running final comparison" );
 
              actmap->endTurn();
              actmap->nextPlayer();

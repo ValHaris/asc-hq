@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.115 2004-06-09 14:44:24 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.116 2004-06-13 10:34:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.115  2004/06/09 14:44:24  mbickel
+//      Replay fixes
+//      Updated maps
+//
 //     Revision 1.114  2004/05/29 15:07:37  mbickel
 //      Fixed maps
 //      Fixed crash with asc.cache
@@ -3862,8 +3866,10 @@ void tvehiclecargo :: checkforadditionalkeys ( tkey ch )
           unit_cargo( transport->loading[ cursorpos ] );
 
        if ( ch == ct_c + ct_stp )
-          if ( transport->loading[ cursorpos ] )
+          if ( transport->loading[ cursorpos ] ) {
+             clipBoard.clear();
              clipBoard.addUnit( transport->loading[ cursorpos ] );
+          }
    }
    if ( ch == ct_v + ct_stp ) {
       Vehicle* veh = clipBoard.pasteUnit();
@@ -3956,10 +3962,11 @@ void tbuildingcargo :: checkforadditionalkeys ( tkey ch )
        if ( ch == ct_c )
           unit_cargo( building->loading[ cursorpos ] );
 
-       if ( ch == ct_c + ct_stp ) {
-          clipBoard.clear();
-          clipBoard.addUnit( building->loading[ cursorpos ] );
-       }
+       if ( ch == ct_c + ct_stp )
+          if ( building->loading[ cursorpos ] ) {
+             clipBoard.clear();
+             clipBoard.addUnit( building->loading[ cursorpos ] );
+          }
    }
    if ( ch == ct_v + ct_stp ) {
       Vehicle* veh = clipBoard.pasteUnit();
