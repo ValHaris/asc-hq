@@ -3,7 +3,7 @@ sounds {
    shoot.mine.files = weapon01.wav
    shoot.bomb.files = weapon02.wav
    shoot.airmissile.files = weapon03.wav
-   shoot.groundmissile.files = Raketenari.wav
+   shoot.groundmissile.files = raketenari.wav
    shoot.torpedo.files = weapon05.wav
    shoot.machinegun.files = weapon06.wav
    shoot.cannon.files = weapon07.wav 
