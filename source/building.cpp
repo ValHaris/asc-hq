@@ -1,6 +1,11 @@
-//     $Id: building.cpp,v 1.26 2000-06-28 19:26:14 mbickel Exp $
+//     $Id: building.cpp,v 1.27 2000-07-04 18:39:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/06/28 19:26:14  mbickel
+//      fixed bug in object generation by building removal
+//      Added artint.cpp to makefiles
+//      Some cleanup
+//
 //     Revision 1.25  2000/06/28 18:30:57  mbickel
 //      Started working on AI
 //      Started making loaders independent of memory layout
@@ -1744,6 +1749,7 @@ void   ccontainer :: checkformouse( void )
         if ( mousestat == 1 )
            mousestat = 2;
 
+   dashboard.checkformouse();
 
 }
 

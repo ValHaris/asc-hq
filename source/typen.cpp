@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.23 2000-07-02 21:04:14 mbickel Exp $
+//     $Id: typen.cpp,v 1.24 2000-07-04 18:39:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/07/02 21:04:14  mbickel
+//      Fixed crash in Replay
+//      Fixed graphic errors in replay
+//
 //     Revision 1.22  2000/06/28 19:26:18  mbickel
 //      fixed bug in object generation by building removal
 //      Added artint.cpp to makefiles
@@ -558,15 +562,15 @@ void tobject :: display ( int x, int y, int weather )
            putspriteimage( x, y, typ->getpic ( i + 1 ) ); 
   } else
  #endif
-  if ( typ->id == 30 ) {
+  if ( typ->id == 30 ) {   // pipeline
         if ( dir < typ->pictnum )
-           putshadow  ( x, y,  typ->getpic ( dir, weather ) , &xlattables.a.dark05);
+           putshadow  ( x, y,  typ->getpic ( dir, weather ) , &xlattables.a.dark1);
         else
-           putshadow  ( x, y,  typ->getpic ( 0, weather ) , &xlattables.a.dark05);
+           putshadow  ( x, y,  typ->getpic ( 0, weather ) , &xlattables.a.dark1);
   } else 
      typ->display ( x, y, dir, weather );
 
-  #endif
+  #endif    //converter
 }
 
 
