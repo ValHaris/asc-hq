@@ -42,4 +42,5 @@ void Sound::playWait(void) {
 Sound::~Sound(void) {
 }
 
-
+void enableSound(){};
+void disableSound(){};

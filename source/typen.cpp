@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.18 2000-05-23 20:40:52 mbickel Exp $
+//     $Id: typen.cpp,v 1.19 2000-06-06 20:03:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/05/23 20:40:52  mbickel
+//      Removed boolean type
+//
 //     Revision 1.17  2000/05/22 15:40:37  mbickel
 //      Included patches for Win32 version
 //
@@ -1450,6 +1453,7 @@ void tgameoptions :: setdefaults ( void )
    dontMarkFieldsNotAccessible_movement = 0;
 
    mapzoom = 80;
+   disablesound = 0;
 }
 
 int twind::operator== ( const twind& b ) const

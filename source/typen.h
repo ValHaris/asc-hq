@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.22 2000-05-23 20:40:53 mbickel Exp $
+//     $Id: typen.h,v 1.23 2000-06-06 20:03:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/05/23 20:40:53  mbickel
+//      Removed boolean type
+//
 //     Revision 1.21  2000/05/22 15:40:37  mbickel
 //      Included patches for Win32 version
 //
@@ -1462,7 +1465,8 @@ class tgameoptions {
     int attackspeed1;
     int attackspeed2;
     int attackspeed3;
-    int dummy[10];
+    int disablesound;
+    int dummy[9];
 
     struct {
       int scrollbutton;

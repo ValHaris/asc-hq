@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.26 2000-05-23 20:40:46 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.27 2000-06-06 20:03:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/05/23 20:40:46  mbickel
+//      Removed boolean type
+//
 //     Revision 1.25  2000/05/22 15:40:34  mbickel
 //      Included patches for Win32 version
 //
@@ -158,6 +161,8 @@
 
 #ifdef _DOS_
  #include "dos/memory.h"
+#else
+ #include "sdl/sound.h"
 #endif
 
 class   tchoosetechnology : public tdialogbox {
@@ -3993,6 +3998,12 @@ void tgamepreferences :: init ( void )
    addbutton ( "", xsize -35, starty + 20, xsize - 20, starty + 35, 3, 0, 3, true );
    addeingabe ( 3, &actoptions.container.autoproduceammunition, 0, dblue );
 
+#ifndef _DOS_
+   addbutton ( "", xsize -35, starty + 50, xsize - 20, starty + 65, 3, 0, 4, true );
+   addeingabe ( 4, &actoptions.disablesound, 0, dblue );
+#endif
+
+
 /*
    r1.x1 = xsize - 150;
    r1.y1 = starty + 45;
@@ -4066,6 +4077,9 @@ void tgamepreferences :: init ( void )
    activefontsettings.background = 255;
 
    showtext2 ( "automatic ammunition production in buildings", x1 + 25, y1 + starty + 20 );
+#ifndef _DOS_
+   showtext2 ( "disable sound",                                 x1 + 25, y1 + starty + 50 );
+#endif
 
    dlgoffset.x1 = x1;
    dlgoffset.y1 = y1;
@@ -4205,10 +4219,16 @@ void tgamepreferences :: run ( void )
 
 void gamepreferences  ( void )
 {
+   int oldSoundStat = gameoptions.disablesound;
    tgamepreferences prefs;
    prefs.init();
    prefs.run();
    prefs.done();
+   if ( oldSoundStat != gameoptions.disablesound )
+      if ( gameoptions.disablesound )
+         disableSound();
+      else
+         enableSound();
 }
 
 

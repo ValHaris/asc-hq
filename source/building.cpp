@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.21 2000-05-22 15:40:30 mbickel Exp $
+//     $Id: building.cpp,v 1.22 2000-06-06 20:03:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/05/22 15:40:30  mbickel
+//      Included patches for Win32 version
+//
 //     Revision 1.20  2000/05/18 17:48:38  mbickel
 //      When moving units out of buildings/transports, indirectly accessible
 //         fields are marked now too
@@ -2245,6 +2248,7 @@ void  ccontainer :: cammunitiontransfer_subwindow :: unitchanged ( void )
    if ( !externalloadingactive ) {
       if ( hostcontainer->getmarkedunit() != eht )
          reset();
+      display();
       displayvariables();
    }
 }

@@ -15,11 +15,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/sg.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/building.cpp,/home/martin/asc/source/gamedlg.cpp,/home/martin/asc/source/typen.h,/home/martin/asc/source/typen.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/sdl/sound.cpp,/home/martin/asc/source/sdl/sound.h,/home/martin/asc/source/soundList.h,/home/martin/asc/source/unitctrl.cpp,/home/martin/asc/source/soundList.cpp,/home/martin/asc/source/dialog.cpp,/home/martin/asc/source/dos/sound.h,/home/martin/asc/source/dos/sound.cpp,
 show_outputview=true
 show_treeview=true
-header_file=Unbenannt.h
-cpp_file=/home/martin/asc/source/sg.cpp
+header_file=/home/martin/asc/source/dos/sound.h
+cpp_file=/home/martin/asc/source/dos/sound.cpp
 browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/reference/C/FUNCTIONS/format.html
 [source/gui.h]
 install_location=

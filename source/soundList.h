@@ -32,4 +32,4 @@ private:
 /** Due to initialisation ordering problems in some C++ implementations, you
  *  must always call initSoundList before using this object */
 extern tSoundList sound;
-void initSoundList();
+void initSoundList(int silent);

@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.47 2000-06-05 18:33:10 mbickel Exp $
+//     $Id: sg.cpp,v 1.48 2000-06-06 20:03:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2000/06/05 18:33:10  mbickel
+//      Refined password check for mail games
+//
 //     Revision 1.46  2000/06/05 18:21:23  mbickel
 //      Fixed a security hole which was opened with the new method of loading
 //        mail games by command line parameters
@@ -3202,6 +3205,7 @@ int main(int argc, char *argv[] )
 
    int cntr = ticker;
    char *emailgame = NULL, *mapname = NULL, *savegame = NULL;
+   int useSound = 1;
 
    for (i = 1; i<argc; i++ ) {
       if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
@@ -3222,6 +3226,12 @@ int main(int argc, char *argv[] )
           strcmpi ( &argv[i][1], "-WINDOW" ) == 0 ) {
         fullscreen = 0; continue;
       }
+
+      if ( strcmpi ( &argv[i][1], "NOSOUND" ) == 0 ||
+          strcmpi ( &argv[i][1], "NS" ) == 0 ) {
+        useSound = 0; continue;
+      }
+
 #endif
       if ( strcmpi ( &argv[i][1], "NOCD" ) == 0 ) {
          cdrom = 0; continue;
@@ -3278,7 +3288,8 @@ int main(int argc, char *argv[] )
                 "\t-8bitonly\tDisable truecolor graphic mode \n"
                 "\t-showmodes\tDisplay list of available graphic modes \n" );
 #else
-                "\t-window\t\tDisable fullscreen mode \n" );
+                "\t-window\t\tDisable fullscreen mode \n"
+                "\t-ns\n\t-nosound\tDisable sound \n" );
 #endif
                 //"\t/game:X\t\tSet gamepath to X \n\n");
         exit (0);
@@ -3286,8 +3297,8 @@ int main(int argc, char *argv[] )
 
    }
 
-   printf ( "\nInvalid command line parameter: %s \n");
-   printf ( "Use /h to for help\n", argv[i] );
+   printf ( "\nInvalid command line parameter: %s \n", argv[i]);
+   printf ( "Use /h to for help\n"  );
    exit(1);
    
   } /* endfor */
@@ -3339,6 +3350,9 @@ int main(int argc, char *argv[] )
 
    try {
       readgameoptions();
+      if ( gameoptions.disablesound )
+         useSound = 0;
+
       check_bi3_dir ();
    } 
    catch ( tfileerror err ) {
@@ -3352,7 +3366,7 @@ int main(int argc, char *argv[] )
 
    modenum8 = initgraphics ( resolx, resoly, 8 );
 
-   initSoundList();
+   initSoundList( useSound == 0 );
 
    if ( modenum8 > 0 ) {
       atexit ( returntotextmode );

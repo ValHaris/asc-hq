@@ -28,3 +28,6 @@ void initSound();
 
 /** Clean up after the sound system */
 void closeSound();
+
+void enableSound();
+void disableSound();

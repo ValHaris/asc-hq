@@ -53,6 +53,10 @@ static Uint32          audioDataLen=0;
  */
 static bool            noAudio=false;
 
+/* To disable any sound during the game
+ */
+static bool            setSilent=false;
+
 /* This flag exists to ensure that the sound module is
  * initialised once and only once before use.
  */
@@ -83,9 +87,14 @@ static void fill_audio(void *udata, Uint8 *stream, int len)
   audioDataLen -= len;
 }
 
-void initSound(void) {
+void initSound(int silent) {
   if(!needInit)
     return;
+
+  if ( silent ) {
+     noAudio = true;
+     return;
+  }
 
   DEBUG("initSound Start");
   SDL_AudioSpec wanted;
@@ -247,7 +256,7 @@ Sound::Sound( const char *filename ) {
 void Sound::play(void) {
   DEBUGS( "play" );
 
-  if( noAudio )
+  if( noAudio || setSilent )
     return;
 
   /* Set the sound buffer to play the current sound */
@@ -265,6 +274,9 @@ void Sound::play(void) {
  *  the sound has finished playing.
  */
 void Sound::playWait(void) {
+  if( noAudio || setSilent )
+    return;
+
   play();
 
   // This is not a very efficent way to wait for the sound to end,
@@ -295,4 +307,14 @@ Sound::~Sound(void) {
   }
 }
 
+
+void disableSound ( void )
+{
+   setSilent = true;
+}
+
+void enableSound ( void )
+{
+   setSilent = false;
+}
 

@@ -15,8 +15,8 @@ tSoundList sound;
  #define DEBUG( msg ) printf( "%s\n", msg )
 #endif
 
-void initSoundList(void) {
-  initSound();
+void initSoundList(int silent) {
+  initSound(silent);
   sound.init(WEAPON_SOUND_COUNT);
 }
 
