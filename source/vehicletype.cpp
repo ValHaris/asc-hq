@@ -423,6 +423,9 @@ void Vehicletype :: read ( tnstream& stream )
 void Vehicletype::setupPictures()
 {
    #ifndef converter
+      if ( !picture[0] )
+         fatalError ( "The vehicletype " + getName() + " (ID: " + strrr( id ) + ") has an invalid picture" );
+         
       if ( bipicture <= 0 ) {
          TrueColorImage* zimg = zoomimage ( picture[0], fieldxsize, fieldysize, pal, 0 );
          void* pic = convertimage ( zimg, pal ) ;
@@ -688,7 +691,7 @@ UnitWeapon :: UnitWeapon ( void )
 void Vehicletype::runTextIO ( PropertyContainer& pc )
 {
    pc.addString( "Name", name ).evaluate();
-   pc.addInteger( "ID", id );
+   pc.addInteger( "ID", id ).evaluate();
    pc.addString( "Description", description).evaluate();
    ASCString it = infotext;
 
@@ -777,24 +780,24 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
 
 void SingleWeapon::runTextIO ( PropertyContainer& pc )
 {
-        pc.addTagInteger( "Type", typ, cwaffentypennum, weaponTags );
-        pc.addTagInteger( "targets", targ, choehenstufennum, heightTags );
-        pc.addTagInteger( "shotFrom", sourceheight, choehenstufennum, heightTags );
-        pc.addInteger("MaxRange", maxdistance );
-        pc.addInteger("MinRange", mindistance );
-        pc.addInteger("Ammo", count );
-        pc.addInteger("Punch@MaxRange", minstrength ).evaluate();
-        pc.addInteger("Punch@MinRange", maxstrength ).evaluate();
-        pc.openBracket("HitAccuracy" ); {
-           for ( int j = 0; j < 13; j++ )
-              if ( j < 6 )
-                 pc.addInteger( ASCString("d")+strrr(abs(j-6)), efficiency[j] );
-              else
-                 if ( j == 6 )
-                    pc.addInteger( "0", efficiency[j] );
-                 else
-                    pc.addInteger( ASCString("u")+strrr(j-6), efficiency[j] );
-        } pc.closeBracket();
-        pc.addTagInteger( "cantHit", targets_not_hittable, cmovemalitypenum, unitCategoryTags );
+   pc.addTagInteger( "Type", typ, cwaffentypennum, weaponTags );
+   pc.addTagInteger( "targets", targ, choehenstufennum, heightTags );
+   pc.addTagInteger( "shotFrom", sourceheight, choehenstufennum, heightTags );
+   pc.addInteger("MaxRange", maxdistance );
+   pc.addInteger("MinRange", mindistance );
+   pc.addInteger("Ammo", count );
+   pc.addInteger("Punch@MaxRange", minstrength ).evaluate();
+   pc.addInteger("Punch@MinRange", maxstrength ).evaluate();
+   pc.openBracket("HitAccuracy" ); {
+     for ( int j = 0; j < 13; j++ )
+        if ( j < 6 )
+           pc.addInteger( ASCString("d")+strrr(abs(j-6)), efficiency[j] );
+        else
+           if ( j == 6 )
+              pc.addInteger( "0", efficiency[j] );
+           else
+              pc.addInteger( ASCString("u")+strrr(j-6), efficiency[j] );
+   } pc.closeBracket();
+   pc.addTagInteger( "cantHit", targets_not_hittable, cmovemalitypenum, unitCategoryTags );
 }
 

@@ -604,7 +604,7 @@ void PropertyContainer::ImageProperty::evaluate_rw ( )
             else
                property = NULL;
          } else
-            if ( fn.suffix() == ".pcx" ) {
+            if ( fn.suffix() == "pcx" ) {
                property = loadImage ( fn, 1 )[0];
             }
       }
