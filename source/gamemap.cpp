@@ -36,6 +36,7 @@
 #ifdef sgmain
  #include "network.h"
  #include "gameoptions.h"
+ #include "resourcenet.h"
 #endif
 
 
@@ -870,6 +871,7 @@ bool tmap :: compareResources( tmap* replaymap, int player, ASCString* log )
             }
          }
       } else {
+         GetConnectedBuildings::BuildingContainer cb;
          for ( Player::BuildingList::iterator b = this->player[player].buildingList.begin(); b != this->player[player].buildingList.end(); ++b ) {
             Building* b1 = *b;
             ContainerBase* b2 = replaymap->getContainer( b1->getIdentification() );
@@ -879,14 +881,21 @@ bool tmap :: compareResources( tmap* replaymap, int player, ASCString* log )
                   *log += s;
                }
             } else {
-               int ab1 = b1->getResource( maxint, r, true, 0 );
-               int ab2 = b2->getResource( maxint, r, true, 0 );
-               if ( ab1 != ab2 ) {
-                  diff = true;
-                  if ( log ) {
-                     s.format ( "Building (%d,%d) resource mismatch: %d %s available after replay, but %d available in actual map\n", b1->getPosition().x, b1->getPosition().y, ab1, resourceNames[r], ab2 );
-                     *log += s;
+               if ( find ( cb.begin(), cb.end(), b1 ) == cb.end()) {
+                  int ab1 = b1->getResource( maxint, r, true);
+                  int ab2 = b2->getResource( maxint, r, true);
+                  if ( ab1 != ab2 ) {
+                     diff = true;
+                     if ( log ) {
+                        s.format ( "Building (%d,%d) resource mismatch: %d %s available after replay, but %d available in actual map\n", b1->getPosition().x, b1->getPosition().y, ab1, resourceNames[r], ab2 );
+                        *log += s;
+                     }
                   }
+                  cb.push_back ( b1 );
+                  GetConnectedBuildings::BuildingContainer cbl;
+                  GetConnectedBuildings gcb ( cbl, b1->getMap(), r );
+                  gcb.start ( b1->getPosition().x, b1->getPosition().y );
+                  cb.splice ( cb.begin(), cbl );
                }
             }
          }

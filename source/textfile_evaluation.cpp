@@ -22,6 +22,7 @@
 #include "textfileparser.h"
 #include "textfile_evaluation.h"
 #include "stringtokenizer.h"
+#include "basicmessages.h"
 #ifdef ParserLoadImages
  #include <SDL_image.h>
  #include "loadpcx.h"
@@ -438,6 +439,7 @@ void PropertyContainer::warning ( const ASCString& errmsg )
 
 void PropertyContainer::error ( const ASCString& errmsg )
 {
+   displayLogMessage ( 0, getLocation() + " : " + errmsg  + "\n" );
    throw ParsingError ( getLocation() + " : " + errmsg );
 }
 

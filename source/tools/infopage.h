@@ -43,6 +43,7 @@
 #define ALTIMAGETEXT "Building graphic"
 #define STDGFXPATH "http://asc-hq.de/asc/unitguide/"
 #define TARGET "main"
+#define UNITINFOPICSUFFIX "u-big.jpg"
 
 #define MAINLINKSUFFIX "i0"
 #define MOVEMENTLINKSUFFIX "i1"
@@ -101,6 +102,8 @@ public:
   const ASCString getPageFileName() {
     return fullFileName;
   }
+  
+ virtual void addInfoPicture(ASCString path, ASCString fileName) = 0; 
 protected:
   /**
   *@brief The file name of the guiding page
@@ -171,9 +174,19 @@ protected:
   *@param fileName The path+fileName to the file where the stream writes to
   *@return A pointer to the stream
   */
-  ofstream* openFileStream(const ASCString& fileName);
-
-
+  ofstream* openOFileStream(const ASCString& fileName);  
+  /**
+  *@brief Opens a file stream for input
+  *@param fileName The path+fileName to the file where the stream reads from
+  *@return A pointer to the stream
+  */
+  ifstream* openIFileStream(const ASCString& fileName);      
+  /**
+  *@brief Tests if a file exists
+  *@param fileName The path+fileName to the file tested
+  *@return true if the file exists, false otherwise
+  */
+  bool fileExists(const ASCString& fileName) const;
   /**
   *@brief Creates a HTML header. 
   *@param cssPath The css-File used for the InfoPage. Default is empty.
@@ -358,7 +371,8 @@ protected:
   */
   virtual void addSectionLinks();
 
-
+private:
+ virtual void addInfoPicture(ASCString path, ASCString fileName);
 };
 
 
@@ -566,6 +580,9 @@ protected:
    *@brief Adds the links to all pages of this VehicleType to the info page
    */
   virtual void addSectionLinks();
+
+private:
+  virtual void addInfoPicture(ASCString path, ASCString fileName);
 };
 
 /**
@@ -757,6 +774,8 @@ public:
 private:  
   static const ASCString TITLE;
   ASCString techPicPath;
+  
+   virtual void addInfoPicture(ASCString path, ASCString fileName){};
 
 };
 

@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include <cmath>
+#include <iostream>
 #include "research.h"
 #include "errors.h"
 #include "typen.h"
@@ -171,7 +172,7 @@ void TechDependency::writeTreeOutput ( const ASCString& sourceTechName, tnstream
 }
 
 
-void TechDependency::writeInvertTreeOutput ( const ASCString& sourceTechName, tnstream& stream, vector<int>& history, const vector<IntRange>* onlyWithBaseTechs ) const
+void TechDependency::writeInvertTreeOutput ( const Technology* tech, tnstream& stream, vector<int>& history, const vector<IntRange>* onlyWithBaseTechs ) const
 {
    if ( onlyWithBaseTechs && !onlyWithBaseTechs->empty() ) {
       vector<int> inheritanceStack;
@@ -190,7 +191,56 @@ void TechDependency::writeInvertTreeOutput ( const ASCString& sourceTechName, tn
          const Technology* t = technologyRepository.getObject_byID( k );
          if ( t ) {
             ASCString s = "\"";
-            ASCString stn = sourceTechName;
+            ASCString stn = tech->name;
+
+            while ( stn.find ( "\"" ) != ASCString::npos )
+               stn.erase ( stn.find ( "\"" ),1 );
+
+            s += stn;
+            s += "\" -> \"";
+
+            ASCString stn2 = t->name;
+            while ( stn2.find ( "\"" ) != ASCString::npos )
+               stn2.erase ( stn2.find ( "\"" ),1 );
+
+            s += stn2 + "\"";
+
+            if ( !requireAllListedTechnologies )
+               s += "[style=dotted]";
+
+            s += "\n";
+
+            stream.writeString ( s, false );
+
+            stream.writeString ( "\"" + stn + "\" [color=black label=\"" + stn + "\\n" + strrr(tech->researchpoints) + " RP\"] \n", false );	    
+            if ( find ( history.begin(), history.end(), t->id) == history.end()) {
+               history.push_back ( t->id );	       
+               t->techDependency.writeInvertTreeOutput ( t, stream, history );
+            }
+         }
+      }
+}
+
+void TechDependency::writeInvertTreeOutput ( const ASCString techName, tnstream& stream, vector<int>& history, const vector<IntRange>* onlyWithBaseTechs ) const
+{
+   if ( onlyWithBaseTechs && !onlyWithBaseTechs->empty() ) {
+      vector<int> inheritanceStack;
+      bool found = false;
+      for ( vector<IntRange>::const_iterator i = onlyWithBaseTechs->begin(); i != onlyWithBaseTechs->end(); ++i )
+         for ( int j = i->from; j <= i->to; ++j )
+            if ( findInheritanceLevel ( j, inheritanceStack, "" ) >= 0 )
+               found = true;
+               
+      if ( !found )
+         return;
+   }
+
+   for ( RequiredTechnologies::const_iterator j = requiredTechnologies.begin(); j != requiredTechnologies.end(); ++j )
+      for ( int k = j->from; k <= j->to; ++k ) {
+         const Technology* t = technologyRepository.getObject_byID( k );
+         if ( t ) {
+            ASCString s = "\"";
+            ASCString stn = techName;
 
             while ( stn.find ( "\"" ) != ASCString::npos )
                stn.erase ( stn.find ( "\"" ),1 );
@@ -213,8 +263,8 @@ void TechDependency::writeInvertTreeOutput ( const ASCString& sourceTechName, tn
 
             stream.writeString ( "\"" + stn + "\" [color=black] \n", false );
             if ( find ( history.begin(), history.end(), t->id) == history.end()) {
-               history.push_back ( t->id );
-               t->techDependency.writeInvertTreeOutput ( t->name, stream, history );
+               history.push_back ( t->id );	       
+               t->techDependency.writeInvertTreeOutput ( t, stream, history );
             }
          }
       }
@@ -311,13 +361,13 @@ void TechAdapterDependency::runTextIO ( PropertyContainer& pc, const ASCString& 
    pc.addBool( "RequireAllListedTechAdapter", requireAllListedTechAdapter, true );
 }
 
-void TechAdapterDependency::writeInvertTreeOutput ( const ASCString& sourceTechName, tnstream& stream, const vector<IntRange>* onlyWithBaseTechs ) const
-{
+void TechAdapterDependency::writeInvertTreeOutput ( const ASCString& tech, tnstream& stream, const vector<IntRange>* onlyWithBaseTechs ) const
+{   
    vector<int> history;
    for ( RequiredTechAdapter::const_iterator r = requiredTechAdapter.begin(); r != requiredTechAdapter.end(); ++r )
       for ( TechAdapterContainer::iterator i = techAdapterContainer.begin(); i != techAdapterContainer.end(); ++i )
          if ( *r == (*i)->getName() )
-            (*i)->techDependency.writeInvertTreeOutput ( sourceTechName, stream, history, onlyWithBaseTechs );
+            (*i)->techDependency.writeInvertTreeOutput ( tech, stream, history, onlyWithBaseTechs );
 }
 
 
@@ -670,4 +720,5 @@ void returnresourcenuseforresearch ( const pbuilding bld, int research, int* ene
   */
 }
 #endif
+
 

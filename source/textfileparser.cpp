@@ -495,10 +495,15 @@ TextPropertyGroup* TextFormatParser::run (  )
 
 void TextFormatParser::error ( const ASCString& errmsg )
 {
+   ASCString msg;
    if ( stream )
-      throw ParsingError ( stream->getLocation() + " : " + errmsg );
+      msg =  stream->getLocation() + " : " + errmsg;
    else
-      throw ParsingError ( " : " + errmsg );
+      msg =  " : " + errmsg ;
+
+   displayLogMessage ( 0, msg + "\n" );
+
+   throw ParsingError ( msg );
 }
 
 

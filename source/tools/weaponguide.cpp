@@ -52,55 +52,6 @@
 #include "../clparser/weaponguide.cpp"
 
 
-
-const char* tableParam = " class=\"wg\" border=\"1\" ";
-
-FILE* createFile ( const ASCString& filename ) {
-  return fopen ( filename.c_str(), "w" );
-}
-
-
-void printIndex ( FILE* fp, const ASCString& index, const ASCString& param = "" ) {
-  fprintf ( fp, "<tr><th class=\"wg\" %s > %s  </th>" , param.c_str(), index.c_str() );
-}
-
-void printValue ( FILE* fp, const ASCString& data, const ASCString& param = "" ) {
-  fprintf( fp, "<td class=\"wg\" %s > %s </td>", param.c_str(), data.c_str() );
-}
-
-void printValue ( FILE* fp, int data ) {
-  printValue( fp, strrr(data)  );
-}
-
-
-void printLineEnd ( FILE* fp ) {
-  fprintf ( fp, "</tr>\n" );
-}
-
-
-void printMainLine ( FILE* fp, const ASCString& index, const ASCString& value ) {
-  printIndex ( fp, index );
-  printValue( fp, value );
-  printLineEnd ( fp );
-}
-
-void printMainLine ( FILE* fp, const ASCString& index, int value ) {
-  printMainLine ( fp, index, strrr ( value ));
-}
-
-
-ASCString getHeightImgString( int height ) {
-  ASCString s;
-  for ( int j = 0; j < 8 ; j++ )
-    if ( height & ( 1 << j)) {
-      ASCString s2;
-      s2.format("<img src=\"../hoehe%d.gif\" alt=\"%s\"><br>",j, choehenstufen[j]);
-      s += s2;
-    }
-  return s;
-}
-
-
 int main(int argc, char *argv[] ) {
   Cmdline cl ( argc, argv );
 
@@ -134,7 +85,7 @@ int main(int argc, char *argv[] ) {
   printf(".");
   loadUnitSets();
   printf(".");
-
+  
 
   char* wildcard;
 
@@ -148,10 +99,10 @@ int main(int argc, char *argv[] ) {
   }
 
 
-  BuildingGuideGen gen(prefixDir, cl.m(), cl.s(), cl.roottech(), cl.i(), false, true);
+  BuildingGuideGen gen(prefixDir, cl.m(), cl.s(), cl.roottech(), cl.i(), cl.l(), !cl.b(), !cl.writeall());
   gen.processSubjects();
   cout << "*******Buildings done*******" << endl;
-  UnitGuideGen unitGen(prefixDir, cl.m(), cl.s(), cl.roottech(), cl.i(), true, false);
+  UnitGuideGen unitGen(prefixDir, cl.m(), cl.s(), cl.roottech(), cl.i(), cl.l(), !cl.writeall());
   unitGen.processSubjects();
   cout << "*******Units done*******" << endl; 
   cout << "******Guide generated*******" << endl;

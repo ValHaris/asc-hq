@@ -39,6 +39,7 @@
 
 #define VehicleType Vehicletype
 #define RELATIVEIMGPATH "./"
+#define RELATIVEBUILDINGSPATH "./"
 
 typedef map<int, ASCString> Int2String;
 typedef map<int, Category*> GroupFileEntriesMap;
@@ -74,7 +75,7 @@ public:
   *@param setID The set of which the guide is created, if set to 0 guides for all sets will be created
   *@param createImg Determines if images shall be created.
   */
-  GuideGenerator(ASCString filePath, ASCString cssPath, int setID, ASCString techIDs, bool createImg, bool upload = false, int imageSize = 0);
+  GuideGenerator(ASCString filePath, ASCString cssPath, int setID, ASCString techIDs, bool createImg, ASCString relMenuPath, bool upload = false, int imageSize = 0);
   /**
   *@brief Destructor
   */
@@ -160,6 +161,12 @@ protected:
   *@brief Default-Constructor
   */    
   GuideGenerator() {};  
+    
+  /**
+  *@brief Determines the relative path from the menu to the single pages.
+  *       Is prefixed to filelink in GroupFile
+  */
+  ASCString relMenuPath;
 private:
 
 };
@@ -179,7 +186,7 @@ public:
   *@param buildingsUnique Determines if the pages for a building shall be created only once or for each
   *       of its occurence in the set (different directions, different weather) 
   */
-  BuildingGuideGen(ASCString filePath, ASCString cssPath, int setID, ASCString techIDs, bool createImg, bool buildingsUnique = false, bool upload = false, int imageSize = 0);
+  BuildingGuideGen(ASCString filePath, ASCString cssPath, int setID, ASCString techIDs, bool createImg,  ASCString relMenuPath, bool buildingsUnique = false, bool upload = false, int imageSize = 0);
   /*
   *@brief Destructor
   */
@@ -241,7 +248,7 @@ public:
   *@param createImg Determines if images shall be created.
   *@param imageSize Determines the width of the unit image in pix
   */
-  UnitGuideGen(ASCString filePath, ASCString cssPath, int setID, ASCString techIDs, bool createImg, bool upload = false, int imageSize = 0);
+  UnitGuideGen(ASCString filePath, ASCString cssPath, int setID, ASCString techIDs, bool createImg,  ASCString relMenuPath, bool upload = false, int imageSize = 0);
   /**
   *@brief Destructor
   */

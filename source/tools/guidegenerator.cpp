@@ -85,13 +85,13 @@ void InfoPageUtil::copyFile(const ASCString src, const ASCString dst) {
   auto_ptr<char> s ( new char[maxFileSize]);
   FILE* i = fopen ( src.c_str(), filereadmode );
   FILE* o = fopen ( dst.c_str(), filewritemode);
-  if(!i){
+  if(!i) {
     fclose( o );
     return;
   }
-  if ( !o ){
-   fclose( i );
-   return;
+  if ( !o ) {
+    fclose( i );
+    return;
   }
   int s1 = fread ( s.get(), 1, maxFileSize, i );
   fwrite ( s.get(), 1, s1, o );
@@ -108,7 +108,7 @@ bool InfoPageUtil::diffMove(const ASCString src, const ASCString dst) {
     InfoPageUtil::copyFile(src, dst);
     remove(src.c_str());
     return true;
-  }  
+  }
 }
 
 ASCString InfoPageUtil::getTmpPath() {
@@ -122,16 +122,16 @@ ASCString InfoPageUtil::getTmpPath() {
 
 }
 
-void InfoPageUtil::updateFile(ASCString fileName, ASCString exportPath) {  
-  ASCString destilledFileName = fileName; 
+void InfoPageUtil::updateFile(ASCString fileName, ASCString exportPath) {
+  ASCString destilledFileName = fileName;
 #ifdef _WIN32_
-  destilledFileName.erase(0, fileName.find_last_of("\\") + 1);  
+  destilledFileName.erase(0, fileName.find_last_of("\\") + 1);
 #else
-  destilledFileName.erase(0, fileName.find_last_of("/") + 1);  
+  destilledFileName.erase(0, fileName.find_last_of("/") + 1);
 #endif
   ASCString exportTarget = exportPath + destilledFileName ;
   ASCString tmpTarget = InfoPageUtil::getTmpPath() + destilledFileName;
-  bool updatedFile = InfoPageUtil::diffMove(tmpTarget, exportTarget);    
+  bool updatedFile = InfoPageUtil::diffMove(tmpTarget, exportTarget);
 }
 //*************************************************************************************************************
 ImageConverter::ImageConverter() {}
@@ -170,9 +170,9 @@ ASCString ImageConverter::createPic(const VehicleType&  vt, ASCString filePath) 
 
 
 void ImageConverter::convert(const ASCString&  fileName,  ASCString filePath, int xsize, int ysize) {
-  ASCString command;  
-  ASCString tempFileName = InfoPageUtil::getTmpPath() + "tempPic.pcx";  
-  command = "convert \"" + tempFileName + "\" -transparent \"#f8f4f0\" " + "\"" + filePath + fileName + "\"";  
+  ASCString command;
+  ASCString tempFileName = InfoPageUtil::getTmpPath() + "tempPic.pcx";
+  command = "convert \"" + tempFileName + "\" -transparent \"#f8f4f0\" " + "\"" + filePath + fileName + "\"";
   writepcx ( tempFileName, 0, 0, xsize, ysize, pal );
   cout << "creating image..." << fileName << endl;
   system( command.c_str() );
@@ -201,8 +201,7 @@ ASCString ImageConverter::constructImgFileName(const VehicleType&  vt) {
 
 //**************************************************************************************************************
 
-GuideGenerator::GuideGenerator(ASCString fp, ASCString css, int id, ASCString techIDs, bool imgCreate, bool upload,
-                               int imageSize):filePath(fp), cssFile(css), setID(id), techTreeIDs(String2IntRangeVector(techIDs)), createImg(imgCreate), createUpload(upload), imageWidth(imageSize) {}
+GuideGenerator::GuideGenerator(ASCString fp, ASCString css, int id, ASCString techIDs, bool imgCreate, ASCString relativeMenuPath, bool upload, int imageSize):filePath(fp), cssFile(css), setID(id), techTreeIDs(String2IntRangeVector(techIDs)), relMenuPath(relativeMenuPath), createImg(imgCreate), createUpload(upload), imageWidth(imageSize) {}
 
 const ASCString& GuideGenerator::getImagePath(int id) {
   return graphicRefs[id];
@@ -211,11 +210,9 @@ const ASCString& GuideGenerator::getImagePath(int id) {
 const ASCString& GuideGenerator::getCSSPath() const {
   return cssFile;
 }
-
-
 //******************************************************************************************************
-BuildingGuideGen::BuildingGuideGen(ASCString fp, ASCString css, int id, ASCString techIDs, bool imgCreate, bool bUnique,
-                                   bool upload, int imageSize): GuideGenerator(fp, css, id, techIDs, upload, imgCreate), buildingsUnique(bUnique) {}
+BuildingGuideGen::BuildingGuideGen(ASCString fp, ASCString css, int id, ASCString techIDs, bool imgCreate,  ASCString relativeMenuPath, bool bUnique, bool upload, int imageSize): GuideGenerator(fp, css, id, techIDs,
+    imgCreate, relativeMenuPath, upload), buildingsUnique(bUnique) {}
 
 
 ASCString BuildingGuideGen::constructFileName(const BuildingType& bType) {
@@ -228,20 +225,20 @@ void BuildingGuideGen::processBuilding(const BuildingType&  bt) {
   int buildingID = bt.id;
   ImageConverter ic;
   ASCString imgPath;
-  ASCString target;  
-  if(createUpload){
+  ASCString target;
+  if(createUpload) {
     target = InfoPageUtil::getTmpPath();
-  }else{
+  } else {
     target = filePath;
   }
   if(createImg) {
     imgPath = ic.createPic(bt, target);
-    if(createUpload){      
+    if(createUpload) {
       InfoPageUtil::updateFile(ic.constructImgPath(bt, filePath), filePath);
-    }    
+    }
   } else {
     imgPath = ic.constructImgPath(bt, filePath);
-  }  
+  }
   graphicRefs.insert(Int2String::value_type(buildingID, imgPath));
   InfoPageVector ipv;
   BuildingMainPage mp(bt, target, this);
@@ -256,7 +253,7 @@ void BuildingGuideGen::processBuilding(const BuildingType&  bt) {
   ipv.push_back(&rea);
   for(int i = 0; i < ipv.size(); i++) {
     ipv[i]->buildPage();
-    if(createUpload){          
+    if(createUpload) {      
       InfoPageUtil::updateFile(ipv[i]->getPageFileName(), filePath);
     }
   }
@@ -268,10 +265,10 @@ void BuildingGuideGen::generateCategories() const {
   try {
     for ( std::vector<SingleUnitSet*>::iterator i = unitSets.begin(); i != unitSets.end(); i++  ) {
       SingleUnitSet* s = (*i);
-      if((s->ID == setID)||(setID<=0)) {
-        ASCString fileName =  InfoPageUtil::getTmpPath() + s->name + APPENDIX + GROUPS;
+      if((s->ID == setID)||(setID<=0)) {        
+        ASCString fileName =  InfoPageUtil::getTmpPath() + "buildingset_id(" + strrr(s->ID) +")" + GROUPS;
         Category set(s->name, cssFile);
-
+	
         Category* hqCat = new Category(HQ, cssFile);
         Category* facCat = new Category(FACTORY, cssFile);
         Category* researchCat = new Category(RESEARCHFAC, cssFile);
@@ -296,7 +293,7 @@ void BuildingGuideGen::generateCategories() const {
         for ( int building = 0; building < buildingTypeRepository.getNum(); building++ ) {
           BuildingType*  bt = buildingTypeRepository.getObject_byPos ( building );
           if(s->isMember(bt->id, SingleUnitSet::building)) {
-            ASCString fileLink = strrr(bt->id) + APPENDIX + ASCString(MAINLINKSUFFIX) + HTML;
+            ASCString fileLink = relMenuPath + strrr(bt->id) + APPENDIX + ASCString(MAINLINKSUFFIX) + HTML;
             CategoryMember* dataEntry = new CategoryMember(bt->name.toUpper(), cssFile, fileLink, TARGET);
             if ( bt->special & cghqb ) {
               hqCat->addEntry(dataEntry);
@@ -337,7 +334,6 @@ void BuildingGuideGen::generateCategories() const {
 BuildingGuideGen::~BuildingGuideGen() {}
 
 
-
 void BuildingGuideGen::processSubjects() {
   cout << "Selected set-ID is " << setID << endl;
   for ( int building = 0; building < buildingTypeRepository.getNum(); building++ ) {
@@ -345,8 +341,8 @@ void BuildingGuideGen::processSubjects() {
     if(setID > 0) {
       for ( std::vector<SingleUnitSet*>::iterator i = unitSets.begin(); i != unitSets.end(); i++  ) {
         SingleUnitSet* s = (*i);
-        if((s->ID == setID) && (s->isMember(bt->id,SingleUnitSet::building))) {
-          if(buildingNames.end() != buildingNames.find(strrr(s->ID) +bt->name)||(!buildingsUnique)) {            
+        if((s->ID == setID) && (s->isMember(bt->id,SingleUnitSet::building))) {	  
+          if(buildingNames.end() == buildingNames.find(strrr(s->ID) +bt->name)||(!buildingsUnique)) {
             processBuilding(*bt);
             buildingNames.insert(strrr(s->ID) +bt->name);
           }
@@ -359,7 +355,7 @@ void BuildingGuideGen::processSubjects() {
   generateCategories();
 }
 //UnitGuideGen****************************************************************************************************
-UnitGuideGen::UnitGuideGen(ASCString fp, ASCString css, int id, ASCString techIDs, bool imgCreate, bool upload, int imageSize): GuideGenerator(fp, css, id, techIDs, imgCreate, upload, imageSize) {}
+UnitGuideGen::UnitGuideGen(ASCString fp, ASCString css, int id, ASCString techIDs, bool imgCreate,  ASCString relativeMenuPath, bool upload, int imageSize): GuideGenerator(fp, css, id, techIDs, imgCreate, relativeMenuPath, upload, imageSize) {}
 
 
 
@@ -394,21 +390,21 @@ void UnitGuideGen::processUnit(const VehicleType& vt) {
   ImageConverter ic;
   ASCString imgPath;
   ASCString target;
-  if(createUpload){
+  if(createUpload) {
     target = InfoPageUtil::getTmpPath();
-  }else{
+  } else {
     target = filePath;
   }
   if(createImg) {
     imgPath = ic.createPic(vt, target);
-    if(createUpload){      
+    if(createUpload) {
       InfoPageUtil::updateFile(ic.constructImgPath(vt, filePath), filePath);
     }
   } else {
     imgPath = ic.constructImgPath(vt, filePath);
   }
   graphicRefs.insert(Int2String::value_type(unitID, imgPath));
-  InfoPageVector ipv;  
+  InfoPageVector ipv;
   UnitMainPage mp(vt, target, this);
   ipv.push_back(&mp);
   UnitTerrainPage tp(vt, target, this);
@@ -423,88 +419,90 @@ void UnitGuideGen::processUnit(const VehicleType& vt) {
   ipv.push_back(&rp);
   for(int i = 0; i < ipv.size(); i++) {
     ipv[i]->buildPage();
+    if(createUpload) {      
     InfoPageUtil::updateFile(ipv[i]->getPageFileName(), filePath);
+    }
   }
 }
 
 void UnitGuideGen::generateCategories() const {
   try {
     for ( std::vector<SingleUnitSet*>::iterator i = unitSets.begin(); i != unitSets.end(); i++  ) {
-      SingleUnitSet* s = (*i);
-      if((s->ID == setID)||(setID<=0)) {
-        ASCString fileName =  InfoPageUtil::getTmpPath() + s->name + APPENDIX + GROUPS;
-        Category set(s->name, cssFile);
+      SingleUnitSet* s = (*i);      
+        if((s->ID == setID)||(setID<=0)) {
+          ASCString fileName =  InfoPageUtil::getTmpPath() + "unitset_id(" + strrr(s->ID) +")" + GROUPS;
+          Category set(s->name, cssFile);
 
-        Category* trooperCat = new Category(TROOPER, cssFile);
-        Category* groundCat = new Category(GROUNDUNIT, cssFile);
-        Category* airCat = new Category(AIRUNIT, cssFile);
-        Category* seaCat = new Category(SEAUNIT, cssFile);
-        Category* turretCat = new Category(TURRETUNIT, cssFile);
-        Category* miscCat = new Category(NOCATEGORY, cssFile);
-        Category* idCat = new Category(SORTID, cssFile);
+          Category* trooperCat = new Category(TROOPER, cssFile);
+          Category* groundCat = new Category(GROUNDUNIT, cssFile);
+          Category* airCat = new Category(AIRUNIT, cssFile);
+          Category* seaCat = new Category(SEAUNIT, cssFile);
+          Category* turretCat = new Category(TURRETUNIT, cssFile);
+          Category* miscCat = new Category(NOCATEGORY, cssFile);
+          Category* idCat = new Category(SORTID, cssFile);
 
 
 
-        set.addEntry(trooperCat);
-        set.addEntry(groundCat);
-        set.addEntry(airCat);
-        set.addEntry(seaCat);
-        set.addEntry(turretCat);
-        set.addEntry(miscCat);
+          set.addEntry(trooperCat);
+          set.addEntry(groundCat);
+          set.addEntry(airCat);
+          set.addEntry(seaCat);
+          set.addEntry(turretCat);
+          set.addEntry(miscCat);
 
-        for ( int unit = 0; unit < vehicleTypeRepository.getNum(); unit++ ) {
-          VehicleType*  vt = vehicleTypeRepository.getObject_byPos ( unit );
-          if(s->isMember(vt->id,SingleUnitSet::unit)) {
-            ASCString fileLink = strrr(vt->id) + APPENDIX + ASCString(MAINLINKSUFFIX) + HTML;
+          for ( int unit = 0; unit < vehicleTypeRepository.getNum(); unit++ ) {
+            VehicleType*  vt = vehicleTypeRepository.getObject_byPos ( unit );
+            if(s->isMember(vt->id,SingleUnitSet::unit)) {
+              ASCString fileLink = relMenuPath + strrr(vt->id) + APPENDIX + ASCString(MAINLINKSUFFIX) + HTML;
 
-            CategoryMember* dataEntry = new CategoryMember(vt->name.toUpper(), cssFile, fileLink, TARGET);
-            switch ( vt->movemalustyp ) {
-            case 7:  //   "trooper"
-              trooperCat->addEntry(dataEntry);
-              break;
-            case 1:  // "light tracked vehicle"
-            case 2:  // "medium tracked vehicle"
-            case 3:  // "heavy tracked vehicle",
-            case 4:  // "light wheeled vehicle",
-            case 5:  //  "medium wheeled vehicle",
-            case 6:  //  "heavy wheeled vehicle",
-            case 8:   // "rail vehicle",
-              groundCat->addEntry(dataEntry);
-              break;
-            case 9:   // "medium aircraft",
-            case 12:  // "light aircraft",
-            case 13:  // "heavy aircraft",
-            case 16:  //  "helicopter",
-              airCat->addEntry(dataEntry);
-              break;
-            case 10:  // "medium ship",
-            case 14:  // "light ship",
-            case 15:  // "heavy ship",
-              seaCat->addEntry(dataEntry);
-              break;
+              CategoryMember* dataEntry = new CategoryMember(vt->name.toUpper(), cssFile, fileLink, TARGET);
+              switch ( vt->movemalustyp ) {
+              case 7:  //   "trooper"
+                trooperCat->addEntry(dataEntry);
+                break;
+              case 1:  // "light tracked vehicle"
+              case 2:  // "medium tracked vehicle"
+              case 3:  // "heavy tracked vehicle",
+              case 4:  // "light wheeled vehicle",
+              case 5:  //  "medium wheeled vehicle",
+              case 6:  //  "heavy wheeled vehicle",
+              case 8:   // "rail vehicle",
+                groundCat->addEntry(dataEntry);
+                break;
+              case 9:   // "medium aircraft",
+              case 12:  // "light aircraft",
+              case 13:  // "heavy aircraft",
+              case 16:  //  "helicopter",
+                airCat->addEntry(dataEntry);
+                break;
+              case 10:  // "medium ship",
+              case 14:  // "light ship",
+              case 15:  // "heavy ship",
+                seaCat->addEntry(dataEntry);
+                break;
 
-            case 11:  // "building / turret / object",
-              turretCat->addEntry(dataEntry);
-              break;
+              case 11:  // "building / turret / object",
+                turretCat->addEntry(dataEntry);
+                break;
 
-            case 0:  // default",
-            case 17: // "hoovercraft"
-            default:
-              miscCat->addEntry(dataEntry);
-              break;
-            };
-            CategoryMember* idEntry = new CategoryMember(ASCString(strrr(vt->id)) + "(" + vt->name + ")", cssFile, fileLink, TARGET);
-            idCat->addEntry(idEntry);
+              case 0:  // default",
+              case 17: // "hoovercraft"
+              default:
+                miscCat->addEntry(dataEntry);
+                break;
+              };
+              CategoryMember* idEntry = new CategoryMember(ASCString(strrr(vt->id)) + "(" + vt->name + ")", cssFile, fileLink, TARGET);
+              idCat->addEntry(idEntry);
+            }
           }
+          set.sort();
+          idCat->sort();
+          set.addEntry(idCat);
+          GroupFile gf (fileName.c_str(), set);
+          gf.write();
+          InfoPageUtil::updateFile(fileName, filePath);
         }
-        set.sort();
-        idCat->sort();
-        set.addEntry(idCat);	
-        GroupFile gf (fileName.c_str(), set);
-        gf.write();
-        InfoPageUtil::updateFile(fileName, filePath);
-      }
-    }
+      }    
   } catch(ASCmsgException& e) {
     cout << e.getMessage() << endl;
   }

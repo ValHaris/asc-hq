@@ -5,7 +5,7 @@
     <VERSION value="BCB.06.00"/>
     <PROJECT value="weaponguide.exe"/>
     <OBJFILES value="obj\weaponguide.obj obj\itemrepository.obj obj\research.obj 
-      obj\groupfile.obj obj\guidegenerator.obj obj\infopage.obj"/>
+      obj\groupfile.obj obj\guidegenerator.obj obj\infopage.obj obj\sgstream.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -58,6 +58,7 @@
       <FILE FILENAME="..\groupfile.cpp" FORMNAME="" UNITNAME="groupfile.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\guidegenerator.cpp" FORMNAME="" UNITNAME="guidegenerator.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\infopage.cpp" FORMNAME="" UNITNAME="infopage.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\sgstream.cpp" FORMNAME="" UNITNAME="sgstream" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
@@ -137,7 +138,7 @@ Item1=C:\Programme\ascsrc\games\asc\source\tools\win
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
-RunParams=-c C:\Programme\ascdev\asc\source\win32\borland\asc.ini  -i -d C:\wg-test\online\html -l html/ -z 48 -s 100 -h 101000,101913
+RunParams=-c C:\Programme\ascdev\asc\source\win32\borland\asc.ini  -i -d C:\wg-test\online\html -l html/ -z 48 -s 1400 --roottech 101000,101913
 Launcher=
 UseLauncher=0
 DebugCWD=

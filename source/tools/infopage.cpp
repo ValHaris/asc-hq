@@ -106,7 +106,7 @@ InfoPage::~InfoPage() {}
 
 
 InfoPage::InfoPage(const ContainerBaseType&  baseType, ASCString fn, ASCString fp, ASCString in, ASCString title, GuideGenerator* gen):filePath(fp), fileName(fn), cbt(baseType), index(in), generator(gen), pageTitle(title), fullFileName(filePath + fileName + index + HTML) {
-  buildingInfStream = openFileStream(fullFileName);
+  buildingInfStream = openOFileStream(fullFileName);
 
 }
 
@@ -165,6 +165,7 @@ void InfoPage::buildPage() {
   endHTML();
   buildingInfStream->close();
 }
+
 void InfoPage::createHTMLHeader(ASCString cssPath) {
   *buildingInfStream << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">" << endl;
   *buildingInfStream << "<html>" << endl;
@@ -257,8 +258,6 @@ void InfoPage::endTD() {
   *buildingInfStream << "</td>";
 }
 
-
-
 ASCString InfoPage::addTREntryln(ASCString oldCap, ASCString toAddCap) {
   return (oldCap + toAddCap + "<br>") ;
 }
@@ -316,7 +315,7 @@ void InfoPage::buildLeftArea() {
   startTable(0, RELATIVE, 100, RELATIVE, 100);
   *buildingInfStream << "<tr>" << endl;
   *buildingInfStream << "<td align=\"center\">" << endl;
-  *buildingInfStream << "<p class=\"imgalign\">" << endl;
+  *buildingInfStream << "<p class=\"imgalign\">" << endl;    
   addImage(generator->getImagePath(cbt.id), "Container picture", generator->getImageWidth());
   *buildingInfStream << "</p>" << endl;
   addHeadline(cbt.name, 3);
@@ -330,7 +329,8 @@ void InfoPage::buildLeftArea() {
   endTable();
 }
 void InfoPage::addMainText() {
-  addHeadline("Description", 2);
+  addHeadline("Description", 2);  
+  addInfoPicture(generator->getFilePath(), strrr(cbt.id));
   if ( !cbt.infotext.empty() ) {
     ASCString text = cbt.infotext;
     while ( text.find ( "#crt#" ) != ASCString::npos )
@@ -362,8 +362,7 @@ void InfoPage::addMainText() {
     addParagraph("No information available: Do you  want to write an info text? Send it to gamer@gamershall.de" );
   }
 }
-ofstream* InfoPage::openFileStream(const ASCString& fileName) {
-
+ofstream* InfoPage::openOFileStream(const ASCString& fileName) {
   ofstream* buildingInfStream = new ofstream(fileName.c_str());
   if(!buildingInfStream->is_open()) {
     cerr << "File: " << fileName.c_str() << " could not be opened" << endl;
@@ -371,6 +370,18 @@ ofstream* InfoPage::openFileStream(const ASCString& fileName) {
   return buildingInfStream;
 }
 
+ifstream* InfoPage::openIFileStream(const ASCString& fileName) {
+  ifstream* inputStream = new ifstream(fileName.c_str());
+  if(!inputStream->is_open()) {
+    cerr << "File: " << fileName.c_str() << " could not be opened" << endl;
+  }
+  return inputStream;
+}
+
+bool InfoPage::fileExists(const ASCString& fileName) const{
+  ifstream inputStream(fileName.c_str());  
+  return(inputStream.good());
+}
 //***********************************************************************************************************
 
 BuildingInfoPage::BuildingInfoPage(const BuildingType&  buildingType, ASCString filePath, ASCString index, ASCString title, BuildingGuideGen* generator):InfoPage(buildingType, BuildingGuideGen::constructFileName(buildingType), filePath,  index, title, generator), bt(buildingType) {}
@@ -388,6 +399,9 @@ void BuildingInfoPage::addSectionLinks() {
   *buildingInfStream << "</p>" << endl;
   *buildingInfStream << "<hr>" << endl;
   *buildingInfStream << "</td>" << endl;
+}
+
+void BuildingInfoPage::addInfoPicture(ASCString path, ASCString fileName){
 
 }
 
@@ -768,6 +782,7 @@ void BuildingResourcePage::buildContent() {
 
 //*********************************************************************************************
 UnitInfoPage::UnitInfoPage(const VehicleType&  vType, ASCString filePath, ASCString index, ASCString title, UnitGuideGen* generator):InfoPage(vType, UnitGuideGen::constructFileName(vType), filePath, index, title, generator), vt(vType) {}
+
 UnitInfoPage::~UnitInfoPage() {}
 
 void UnitInfoPage::addSectionLinks() {
@@ -782,6 +797,13 @@ void UnitInfoPage::addSectionLinks() {
   *buildingInfStream << "</p>" << endl;
   *buildingInfStream << "<hr>" << endl;
   *buildingInfStream << "</td>" << endl;
+}
+
+
+void UnitInfoPage::addInfoPicture(ASCString filePath, ASCString fileName){
+  if(fileExists(filePath + fileName + UNITINFOPICSUFFIX)){
+    addImage(ASCString(RELATIVEIMGPATH) + fileName + UNITINFOPICSUFFIX, "InfoPic");
+  }
 }
 
 //*********************************************************************************************
@@ -925,7 +947,6 @@ void UnitMainPage::addCapabilities() {
   if ( vt.functions & cfsonar ) {
     cap = addTREntryln(cap, SONAR);
   }
-
   if ( vt.functions & cfparatrooper ) {
     cap = addTREntryln(cap, PARA );
   }
@@ -1411,7 +1432,7 @@ void UnitConstructionPage::buildContent() {
         if (     bld->id >= vt.buildingsBuildable[i].from
                  && bld->id <= vt.buildingsBuildable[i].to ) {
 
-          names = addTREntryln(names, constructLink(bld->name.c_str() + ASCString("(") + strrr(bld->id )+ ")", filePath + BuildingGuideGen::constructFileName(*bld) + MAINLINKSUFFIX + HTML));
+          names = addTREntryln(names, constructLink(bld->name.c_str() + ASCString("(") + strrr(bld->id )+ ")", RELATIVEBUILDINGSPATH + BuildingGuideGen::constructFileName(*bld) + MAINLINKSUFFIX + HTML));
 
         }
       }
@@ -1429,13 +1450,13 @@ void UnitConstructionPage::buildContent() {
         pvehicletype veh = vehicleTypeRepository.getObject_byPos ( b );
         if (     veh->id >= vt.vehiclesBuildable[i].from
                  && veh->id <= vt.vehiclesBuildable[i].to ) {
-          names = addTREntryln(names, constructLink(veh->name.c_str() + ASCString("(") + strrr(veh->id )+ ")", filePath + UnitGuideGen::constructFileName(*veh) + MAINLINKSUFFIX + HTML));
+          names = addTREntryln(names, constructLink(veh->name.c_str() + ASCString("(") + strrr(veh->id )+ ")", "./" + UnitGuideGen::constructFileName(*veh) + MAINLINKSUFFIX + HTML));
         }
       }
     }
     if ( !names.empty() ) {
       *buildingInfStream << "<tr>" << endl;
-      addTitle("Constructable Buildings");
+      addTitle("Constructable Units");
       addTDEntry(names);
       *buildingInfStream << "</tr>" << endl;
     }

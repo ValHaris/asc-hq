@@ -1897,13 +1897,21 @@ void displaymessage( const ASCString& text, int num  )
 
    bool displayInternally = true;
 
+   displayLogMessage ( 0, "fatal error" + text + "\n" );
+
+
    #ifndef NoStdio
    if ( num == 2 )
       displayInternally = false;
    #endif
 
+   if ( !graphicinitialized )
+      displayInternally = false;
+
+
    if ( num == 2 )
       displayLogMessage(1, text );
+
 
 
    if ( !displayInternally ) {
