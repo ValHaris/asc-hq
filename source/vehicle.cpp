@@ -1342,9 +1342,11 @@ void   Vehicle::readData ( tnstream& stream )
     else
        tank.material = typ->tank.material;
 
-    if ( bm & cem_energy )
+    if ( bm & cem_energy ) {
        tank.energy = stream.readInt();
-    else
+       if ( tank.energy < 0 )
+          tank.energy = 0;
+    } else
        tank.energy = typ->tank.energy;
 
     if ( bm & cem_class )

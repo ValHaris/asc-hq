@@ -1,8 +1,15 @@
 /*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.84 2001-10-28 20:42:17 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.85 2001-11-04 22:52:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.84  2001/10/28 20:42:17  mbickel
+//      Fixed AI crashes
+//      Fixed problems when next campaign map could not be found.
+//      Fixed forgotten events.
+//      Added several new experimental map parameters
+//      Some improvements to the campaign maps
+//
 //     Revision 1.83  2001/10/11 10:41:06  mbickel
 //      Restructured platform fileio handling
 //      Added map archival information to mapeditor
@@ -4354,9 +4361,9 @@ void         tverlademunition::run(void)
          newpos.push_back ( target->service[i].curAmount );
          displayed.push_back ( i );
 
-         showtext2( text,x1 + 20, y1 + firstliney + i * abstand);
+         showtext2( text,x1 + 20, y1 + firstliney + pos * abstand);
 
-         rahmen(true, x1 + startx - 11, y1 + firstliney - 2 + i * abstand, x1 + startx + llength + 11,y1 + firstliney + 18 + i * abstand);
+         rahmen(true, x1 + startx - 11, y1 + firstliney - 2 + pos * abstand, x1 + startx + llength + 11,y1 + firstliney + 18 + pos * abstand);
          zeichneschieberegler(pos);
          pos++;
       }
@@ -4543,7 +4550,7 @@ void         tverlademunition::checkpossible(int         b)
 
 void         tverlademunition::setloading( int pos )
 {
-   serviceAction->execute ( source, targetNWID, -1, 2, pos, newpos[pos] );
+   serviceAction->execute ( source, targetNWID, -1, 2, displayed[pos], newpos[pos] );
    zeichneschieberegler ( -1 );
 }
 

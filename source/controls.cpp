@@ -3,9 +3,16 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.119 2001-10-28 20:42:17 mbickel Exp $
+//     $Id: controls.cpp,v 1.120 2001-11-04 22:52:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.119  2001/10/28 20:42:17  mbickel
+//      Fixed AI crashes
+//      Fixed problems when next campaign map could not be found.
+//      Fixed forgotten events.
+//      Added several new experimental map parameters
+//      Some improvements to the campaign maps
+//
 //     Revision 1.118  2001/10/22 18:22:47  mbickel
 //      Reaction fire doesn't prevent units with the wait attribute from attacking
 //       manually
@@ -2775,18 +2782,15 @@ void endTurn ( void )
       actmap->cursorpos.position[actmap->actplayer].sx = actmap->xpos;
       actmap->cursorpos.position[actmap->actplayer].sy = actmap->ypos;
 
-      for ( tmap::Player::VehicleList::iterator v = actmap->player[actmap->actplayer].vehicleList.begin(); v != actmap->player[actmap->actplayer].vehicleList.end();  ) {
-         bool unitRemoved = false;
+      tmap::Player::VehicleList toRemove;
+      for ( tmap::Player::VehicleList::iterator v = actmap->player[actmap->actplayer].vehicleList.begin(); v != actmap->player[actmap->actplayer].vehicleList.end(); v++ ) {
          pvehicle actvehicle = *v;
 
          // Bei Žnderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
 
          if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
             if ( getmaxwindspeedforunit ( actvehicle ) < actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed*maxwindspeed ){
-               v = actmap->player[actmap->actplayer].vehicleList.erase ( v );
-               delete actvehicle;
-               actvehicle = NULL;
-               unitRemoved = true;
+               toRemove.push_back ( *v );
             } else {
 
                int j = actvehicle->tank.fuel - actvehicle->typ->fuelConsumption * nowindplanefuelusage;
@@ -2817,12 +2821,9 @@ void endTurn ( void )
               //
 
 
-               if (j < 0) {
-                  v = actmap->player[actmap->actplayer].vehicleList.erase ( v );
-                  delete actvehicle;
-                  actvehicle = NULL;
-                  unitRemoved = true;
-               } else
+               if (j < 0)
+                  toRemove.push_back ( *v );
+               else
                   actvehicle->tank.fuel = j;
             }
          }
@@ -2830,9 +2831,10 @@ void endTurn ( void )
          if ( actvehicle )
             actvehicle->endTurn();
 
-         if ( !unitRemoved )
-            v++;
       }
+
+      for ( tmap::Player::VehicleList::iterator v = toRemove.begin(); v != toRemove.end(); v++ )
+         delete *v;
 
       checkunitsforremoval ();
    }

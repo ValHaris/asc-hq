@@ -2,9 +2,13 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.101 2001-11-04 21:50:16 mbickel Exp $
+//     $Id: spfst.cpp,v 1.102 2001-11-04 22:52:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.101  2001/11/04 21:50:16  mbickel
+//      Fixed error messages in AI
+//      Fixed wrong displaying of objects in snow
+//
 //     Revision 1.100  2001/10/31 18:34:33  mbickel
 //      Some adjustments and fixes for gcc 3.0.2
 //
@@ -1375,6 +1379,9 @@ void smooth ( int what, pmap gamemap )
 
 void calculateforest( pmap actmap )
 {
+   if ( !CGameOptions::Instance()->specialForestChaining )
+      return;
+
    for ( int y = 0; y < actmap->ysize ; y++)
      for ( int x = 0; x < actmap->xsize ; x++) {
         pfield fld = actmap->getField(x,y);
@@ -1392,7 +1399,7 @@ void calculateforest( pmap actmap )
    int changed ;
    do {
       changed = 0;
-      for ( int y = 0; y < actmap->ysize ; y++) 
+      for ( int y = 0; y < actmap->ysize ; y++)
          for ( int x = 0; x < actmap->xsize ; x++) { 
             pfield fld = actmap->getField(x,y);
    
@@ -1550,7 +1557,8 @@ void         calculateallobjects( pmap actmap )
          fld->setparams();
       } 
 
-    calculateforest( actmap );
+    if ( CGameOptions::Instance()->specialForestChaining )
+       calculateforest( actmap );
 }
 
 
