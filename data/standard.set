@@ -1,6 +1,6 @@
 #V2#
 NAME=Standard Set
-ID=0-1099
+ID=0-999,1002
 MAINTAINER=Martin Bickel (martin@asc-hq.org)
 ACTIVE=1
 INFORMATION=This unit set is part of the ASC data package, which can be obtained at http://www.asc-hq.org . This unit set is going to be replaced by the Standard MKII set, once it is sufficiently tested and fine tuned.

@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: sg.cpp,v 1.143 2001-07-03 10:05:54 mbickel Exp $
+//     $Id: sg.cpp,v 1.144 2001-07-11 20:44:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.143  2001/07/03 10:05:54  mbickel
+//      Added Makefiles for Borland C++ command line compiler
+//
 //     Revision 1.142  2001/06/14 14:46:47  mbickel
 //      The resolution of ASC can be specified in the configuration file
 //      The fileselect dialog box shows the file's location
@@ -1276,7 +1279,7 @@ void  checkforvictory ( void )
             char* sp = getmessage( 10010 ); // Message "player has been terminated"
 
             sprintf ( txt, sp, actmap->player[i].getName().c_str() );
-            new Message ( txt, actmap, to );
+            new Message ( txt, actmap, to  );
 
             if ( i == actmap->actplayer ) {
                displaymessage ( getmessage ( 10011 ),1 );

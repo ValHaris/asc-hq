@@ -1,8 +1,12 @@
 /*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.69 2001-07-08 20:09:57 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.70 2001-07-11 20:44:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.69  2001/07/08 20:09:57  mbickel
+//      Added tank2pcx tool to project
+//      Fixed bug in refuel dialog
+//
 //     Revision 1.68  2001/07/04 16:53:28  mbickel
 //      Fixed bug in refuel dialog
 //      Fixed crash in mount (win32)
@@ -3234,10 +3238,10 @@ void tnewmessage :: run ( void )
 
    } while ( !ok ); /* enddo */
    if ( ok == 1 ) {
-      Message* message = new Message ( extracttext(), actmap, 0 );
+      Message* message = new Message ( extracttext(), actmap, 0, actmap->actplayer );
       for ( int i = 0; i < 8; i++ ) {
          if ( actmap->player[i].exist() )
-            if ( actmap->actplayer != i ) 
+            if ( actmap->actplayer != i )
                message->to |= to[i] << i;
       }
 

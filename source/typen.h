@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.89 2001-07-08 22:54:22 mbickel Exp $
+//     $Id: typen.h,v 1.90 2001-07-11 20:44:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.89  2001/07/08 22:54:22  mbickel
+//      Added version checking for coordinate loading
+//      Fixed crash when loading AI-savegames
+//
 //     Revision 1.88  2001/04/01 12:59:35  mbickel
 //      Updated win32 project files to new ai file structure
 //      Added viewid win32-project
@@ -444,9 +448,9 @@ class  Message {
      int id;
      int runde;  //  Zeitpunkt des abschickens
      int move;   //  "
-     Message ( void );
+     // Message ( void );
      Message ( pmap spfld );
-     Message ( const ASCString& msg, pmap gamemap,int rec );  // fuer Meldungen vom System
+     Message ( const ASCString& msg, pmap gamemap,int rec, int from = 512 );  // fuer Meldungen vom System
 };
 
 typedef PointerList<Message*> MessageContainer;

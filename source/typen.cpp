@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.75 2001-04-03 11:54:16 mbickel Exp $
+//     $Id: typen.cpp,v 1.76 2001-07-11 20:44:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.75  2001/04/03 11:54:16  mbickel
+//      AI Improvements: production , servicing
+//
 //     Revision 1.74  2001/03/23 16:02:56  mbickel
 //      Some restructuring;
 //      started rewriting event system
@@ -665,7 +668,7 @@ Resources Resources::operator* ( double d )
 
 
 
-
+/*
 Message :: Message ( void )
 {
    from = 0;
@@ -673,7 +676,7 @@ Message :: Message ( void )
    time = 0;
    id = 0;
 }
-
+*/
 #ifndef sgmain
 
 Message :: Message ( pmap spfld )
@@ -686,7 +689,8 @@ Message :: Message ( pmap spfld )
    move = 0;
 }
 
-Message :: Message ( const ASCString& , pmap gamemap, int rec )  // f?r Meldungen vom System
+
+Message :: Message ( const ASCString& , pmap gamemap, int rec, int from )
 {
    from = 0;
    to = 0;
@@ -711,9 +715,10 @@ Message :: Message ( pmap spfld  )
    spfld->messages.push_back ( this );
 }
 
-Message :: Message ( const ASCString& msg, pmap gamemap, int rec )  // f?r Meldungen vom System
+
+Message :: Message ( const ASCString& msg, pmap gamemap, int rec, int _from )  // f?r Meldungen vom System
 {
-   from = 1 << 9;
+   from = _from;
    runde = actmap->time.a.turn;
    move = actmap->time.a.move;
    time = ::time( NULL );
@@ -741,7 +746,7 @@ void      TerrainType::Weather::paint ( int x1, int y1 )
 {
  #ifndef converter
   #ifdef HEXAGON
-   putspriteimage ( x1, y1, picture[0] ); 
+   putspriteimage ( x1, y1, picture[0] );
   #else
    char* c = (char*) direcpict[0];
 

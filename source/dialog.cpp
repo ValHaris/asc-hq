@@ -2,9 +2,14 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.85 2001-07-09 17:01:43 mbickel Exp $
+//     $Id: dialog.cpp,v 1.86 2001-07-11 20:44:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.85  2001/07/09 17:01:43  mbickel
+//      Small map can now be even smaller
+//      fixed redraw problems on windows
+//      fixed no-font crash
+//
 //     Revision 1.84  2001/06/14 14:46:46  mbickel
 //      The resolution of ASC can be specified in the configuration file
 //      The fileselect dialog box shows the file's location
@@ -5000,11 +5005,13 @@ void tchoosezoomlevel :: run ( void )
 
 void choosezoomlevel ( void )
 {
+   cursor.hide();
    tchoosezoomlevel ctl;
    ctl.init();
    ctl.run();
    ctl.done();
    displaymap();
+   cursor.show();
 }
 #endif
 

@@ -7,9 +7,13 @@
 */
 
 
-//     $Id: network.cpp,v 1.19 2001-07-09 17:38:52 mbickel Exp $
+//     $Id: network.cpp,v 1.20 2001-07-11 20:44:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2001/07/09 17:38:52  mbickel
+//      New default email filename
+//      removed limitation for 8 character long email filenames
+//
 //     Revision 1.18  2001/02/26 12:35:24  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -330,7 +334,7 @@ void  tfiletransfernetworkconnection::mountfilename ( char* newname, char* oldna
 
       p = strlen ( newname );
       if ( !strchr ( newname, '.' ) ) {
-         while ( strlen ( newname ) > 8 ) {
+         while ( strlen ( newname ) > maxfilenamelength ) {
             p--;
             newname[p] = 0;
          }

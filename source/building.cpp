@@ -2,9 +2,16 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.69 2001-05-16 23:21:01 mbickel Exp $
+//     $Id: building.cpp,v 1.70 2001-07-11 20:44:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.69  2001/05/16 23:21:01  mbickel
+//      The data file is mounted using automake
+//      Added sgml documentation
+//      Added command line parsing functionality;
+//        integrated it into autoconf/automake
+//      Replaced command line parsing of ASC and ASCmapedit
+//
 //     Revision 1.68  2001/04/03 11:54:16  mbickel
 //      AI Improvements: production , servicing
 //
@@ -6318,14 +6325,15 @@ void  ccontainer_b :: cmineralresources_subwindow :: display ( void )
       bar ( hx1 + i * xd , y1, hx1 + i * xd + xd/2, hy2, materialcolor ); // 160 + 15 * mininginfo->avail[ i ].resource( 1 ) / mininginfo->max[ i ].resource( 1 ) );
       bar ( hx1 + i * xd + xd/2, y2, hx1 + (i+1) * xd, hy2, fuelcolor ); // 160 + 15 * mininginfo->avail[ i ].resource( 2 ) / mininginfo->max[ i ].resource( 2 ) );
 
-      y1 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource( 1 ) / maxa;
-      y2 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource( 2 ) / maxa;
+      if ( maxa ) {
+         y1 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource( 1 ) / maxa;
+         y2 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource( 2 ) / maxa;
 
-      // int ya = hy2 - ( hy2 - hy1 ) * mininginfo->max[ i ].resource( 2 ) / maxa;
+         // int ya = hy2 - ( hy2 - hy1 ) * mininginfo->max[ i ].resource( 2 ) / maxa;
 
-      line ( hx1 + i * xd , y1, hx1 + i * xd + xd/2, y1, materialcolor-2 ); // 160 + 15 * mininginfo->avail[ i ].resource( 1 ) / mininginfo->max[ i ].resource( 1 ) );
-      line ( hx1 + i * xd + xd/2, y2, hx1 + (i+1) * xd, y2, fuelcolor-2 ); // 160 + 15 * mininginfo->avail[ i ].resource( 2 ) / mininginfo->max[ i ].resource( 2 ) );
-
+         line ( hx1 + i * xd , y1, hx1 + i * xd + xd/2, y1, materialcolor-2 ); // 160 + 15 * mininginfo->avail[ i ].resource( 1 ) / mininginfo->max[ i ].resource( 1 ) );
+         line ( hx1 + i * xd + xd/2, y2, hx1 + (i+1) * xd, y2, fuelcolor-2 ); // 160 + 15 * mininginfo->avail[ i ].resource( 2 ) / mininginfo->max[ i ].resource( 2 ) );
+      }
       // line ( hx1 + i * xd , ya, hx1 + (i+1) * xd, ya, 16 + 8 * 16 + 4 ); // the maximum absolute amount
 
    }

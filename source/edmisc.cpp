@@ -2,9 +2,13 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.54 2001-05-24 15:37:51 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.55 2001-07-11 20:44:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2001/05/24 15:37:51  mbickel
+//      Fixed: reaction fire could not be disabled when unit out of ammo
+//      Fixed several AI problems
+//
 //     Revision 1.53  2001/03/30 12:43:15  mbickel
 //      Added 3D pathfinding
 //      some cleanup and documentation
@@ -3815,7 +3819,7 @@ void UnitTypeTransformation :: run ( void )
    tss.done();
 
    int translationsetnum = tss.redline;
-   if ( translationsetnum == -1 )
+   if ( translationsetnum == -1 || translationsetnum == 255 )
       return;
 
    unitstransformed = 0;
