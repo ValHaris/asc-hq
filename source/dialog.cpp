@@ -2,9 +2,13 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.95 2001-09-26 19:53:27 mbickel Exp $
+//     $Id: dialog.cpp,v 1.96 2001-10-02 14:06:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.95  2001/09/26 19:53:27  mbickel
+//      Reorganized data files for coming ASC 1.9.0 release
+//      Improved field information dialog
+//
 //     Revision 1.94  2001/08/09 10:28:22  mbickel
 //      Fixed AI problems
 //      Mapeditor can edit a units AI parameter
@@ -2596,12 +2600,12 @@ void         tfileselectsvga::setdata( const ASCString& _wildcard, ASCString* _r
 } 
 
 
-void         fileselectsvga( const ASCString& ext, ASCString* filename, char swtch )
+void         fileselectsvga( const ASCString& ext, ASCString& filename, bool load )
 {                           
    tfileselectsvga tss; 
 
-   tss.init(swtch); 
-   tss.setdata( ext, filename );
+   tss.init( load );
+   tss.setdata( ext, &filename );
    tss.run();          
    tss.done(); 
 } 

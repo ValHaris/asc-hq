@@ -2,9 +2,12 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.95 2001-09-25 09:35:12 mbickel Exp $
+//     $Id: spfst.cpp,v 1.96 2001-10-02 14:06:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.95  2001/09/25 09:35:12  mbickel
+//      Fixed disappearing building when resizing map
+//
 //     Revision 1.94  2001/09/24 17:22:12  mbickel
 //      Fixed crash in end of turn
 //      Improved documentation
@@ -1542,16 +1545,16 @@ void         clearfahrspuren(void)
             pobject i = actmap->field[l].checkforobject ( fahrspurobject );
             if ( i ) 
                if ( actmap->getgameparameter ( cgp_fahrspur ) > 0 )
-                  if ( i->time + actmap->getgameparameter ( cgp_fahrspur ) < actmap->time.a.turn )
+                  if ( i->time + actmap->getgameparameter ( cgp_fahrspur ) < actmap->time.turn() )
                      getfield ( x, y ) -> removeobject ( fahrspurobject );
 
             i = actmap->field[l].checkforobject ( eisbrecherobject );
             if ( i ) 
                if ( actmap->getgameparameter ( cgp_eis ) > 0 )
-                  if ( i->time + actmap->getgameparameter ( cgp_eis ) < actmap->time.a.turn )
+                  if ( i->time + actmap->getgameparameter ( cgp_eis ) < actmap->time.turn() )
                      getfield ( x, y ) -> removeobject ( eisbrecherobject );
 
-            getfield ( x, y )->checkminetime ( actmap->time.a.turn );
+            getfield ( x, y )->checkminetime ( actmap->time.turn() );
             l++;
          } 
 } 

@@ -3,9 +3,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.114 2001-09-26 19:44:09 mbickel Exp $
+//     $Id: controls.cpp,v 1.115 2001-10-02 14:06:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.114  2001/09/26 19:44:09  mbickel
+//      Fixed bugs in map resizing
+//
 //     Revision 1.113  2001/09/25 18:03:34  mbickel
 //      Move after attack doesn't reduce a units movement
 //
@@ -2535,9 +2538,9 @@ int  Building :: processwork ( void )
 void endRound ( void )
 {
 
-    actmap->actplayer = 0; 
-    actmap->time.a.turn++;
-    clearfahrspuren(); 
+    actmap->actplayer = 0;
+    actmap->time.set ( actmap->time.turn()+1, 0 );
+    clearfahrspuren();
 
     for (int i = 0; i <= 7; i++) 
        if (actmap->player[i].exist() ) {
@@ -2608,7 +2611,7 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
          tlockdispspfld ldsf;
          backgroundpict.paint();
 
-         bool firstRound = actmap->time.a.turn == 1;
+         bool firstRound = actmap->time.turn() == 1;
          if ( (!actmap->player[actmap->actplayer].passwordcrc.empty() && actmap->player[actmap->actplayer].passwordcrc != CGameOptions::Instance()->getDefaultPassword() ) // && actmap->player[actmap->actplayer].passwordcrc != encodepassword ( password )
             || firstRound || (actmap->network && actmap->network->globalparams.reaskpasswords) ) {
                if ( forcepasswordchecking < 0 ) {
@@ -2658,8 +2661,8 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
       }
 
       if ( actmap->lastjournalchange.abstime )
-         if ( (actmap->lastjournalchange.a.turn == actmap->time.a.turn ) ||
-              (actmap->lastjournalchange.a.turn == actmap->time.a.turn-1  &&  actmap->lastjournalchange.a.move > actmap->actplayer ) )
+         if ( (actmap->lastjournalchange.turn() == actmap->time.turn() ) ||
+              (actmap->lastjournalchange.turn() == actmap->time.turn()-1  &&  actmap->lastjournalchange.move() > actmap->actplayer ) )
                  viewjournal();
 
       dashboard.x = 0xffff;
@@ -2867,7 +2870,7 @@ void endTurn ( void )
 
      char tempstring[100];
      char tempstring2[50];
-     sprintf( tempstring, "#color0# %s ; turn %d #color0##crt##crt#", actmap->player[actmap->actplayer].getName().c_str(), actmap->time.a.turn );
+     sprintf( tempstring, "#color0# %s ; turn %d #color0##crt##crt#", actmap->player[actmap->actplayer].getName().c_str(), actmap->time.turn() );
      sprintf( tempstring2, "#color%d#", getplayercolor ( actmap->actplayer ));
 
      if ( actmap->journal ) {
@@ -2908,9 +2911,7 @@ void endTurn ( void )
      delete[] actmap->newjournal;
      actmap->newjournal = NULL;
 
-     actmap->lastjournalchange.a.turn = actmap->time.a.turn;
-     actmap->lastjournalchange.a.move = actmap->actplayer;
-
+     actmap->lastjournalchange.set ( actmap->time.turn(), actmap->actplayer );
   }
 }
 
@@ -2922,7 +2923,7 @@ void nextPlayer( void )
    int runde = 0;
    do {
       actmap->actplayer++;
-      actmap->time.a.move = 0;
+      actmap->time.set ( actmap->time.turn(), 0 );
       if (actmap->actplayer > 7) {
          endRound();
          runde++;
@@ -2977,11 +2978,11 @@ void runai( int playerView )
 
 void next_turn ( int playerView )
 {
-   int startTurn = actmap->time.a.turn;
+   int startTurn = actmap->time.turn();
 
    int pv;
    if ( playerView == -2 ) {
-      if ( actmap->time.a.turn == 0 )  // the game has just been started
+      if ( actmap->time.turn() == 0 )  // the game has just been started
          pv = -1;
       else
          if ( actmap->player[actmap->actplayer].stat != Player::human )
@@ -3002,7 +3003,7 @@ void next_turn ( int playerView )
      if ( actmap->player[actmap->actplayer].stat == Player::computer )
         runai( pv );
 
-     if ( actmap->time.a.turn >= startTurn+2 ) {
+     if ( actmap->time.turn() >= startTurn+2 ) {
         displaymessage("no human players found !", 1 );
         delete actmap;
         actmap = NULL;

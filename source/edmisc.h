@@ -1,6 +1,10 @@
-//     $Id: edmisc.h,v 1.19 2001-05-24 15:37:51 mbickel Exp $
+//     $Id: edmisc.h,v 1.20 2001-10-02 14:06:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2001/05/24 15:37:51  mbickel
+//      Fixed: reaction fire could not be disabled when unit out of ammo
+//      Fixed several AI problems
+//
 //     Revision 1.18  2001/03/30 12:43:16  mbickel
 //      Added 3D pathfinding
 //      some cleanup and documentation
@@ -317,6 +321,7 @@ extern void placeobject(void);
 extern void placemine(void);
 extern void putactthing ( void );
 
+//! The class that manages the switching between the primary map (for editing) and the secondary map (for selecting objects and terrain)
 class MapSwitcher {
         int active;
         class Mappntr {
@@ -336,3 +341,6 @@ class MapSwitcher {
 };
 
 extern MapSwitcher mapSwitcher;
+
+//! replaces the terrain and the objects on a map according to a translation table
+extern void transformMap();

@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.81 2001-09-13 17:43:12 mbickel Exp $
+//     $Id: typen.cpp,v 1.82 2001-10-02 14:06:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.81  2001/09/13 17:43:12  mbickel
+//      Many, many bug fixes
+//
 //     Revision 1.80  2001/08/19 10:48:49  mbickel
 //      Fixed display problems in event dlg in mapeditor
 //      Fixed error when starting campaign with AI as first player
@@ -564,8 +567,7 @@ Message :: Message ( pmap spfld )
    to = 0;
    time = 0;
    id = 0;
-   runde = 0;
-   move = 0;
+   gametime.set( 0, 0);
 }
 
 
@@ -575,8 +577,7 @@ Message :: Message ( const ASCString& , pmap gamemap, int rec, int from )
    to = 0;
    time = 0;
    id = 0;
-   runde = 0;
-   move = 0;
+   gametime.set( 0, 0);
 }
 
 #else
@@ -584,8 +585,7 @@ Message :: Message ( const ASCString& , pmap gamemap, int rec, int from )
 Message :: Message ( pmap spfld  )
 {
    from = 1 << spfld->actplayer;
-   runde = spfld->time.a.turn;
-   move = spfld->time.a.move;
+   gametime = spfld->time;
    time = ::time( NULL );
    to = 0;
    spfld->messageid++;
@@ -598,8 +598,7 @@ Message :: Message ( pmap spfld  )
 Message :: Message ( const ASCString& msg, pmap gamemap, int rec, int _from )  // f?r Meldungen vom System
 {
    from = _from;
-   runde = actmap->time.a.turn;
-   move = actmap->time.a.move;
+   gametime = gamemap->time;
    time = ::time( NULL );
    to = rec;
    text = msg;
@@ -709,8 +708,7 @@ tevent :: tevent ( void )
       trigger[i] = 0;
       triggerstatus[i] = 0;
       triggerconnect[i] = 0; 
-      triggertime.a.turn = -1;
-      triggertime.a.move = -1;
+      triggertime.set( -1, -1 );
       trigger_data[i] = new LargeTriggerData;
    }
    delayedexecution.turn = 0;

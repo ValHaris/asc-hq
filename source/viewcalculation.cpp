@@ -1,5 +1,5 @@
 /*! \file viewcalculation.cpp
-    \brief calculation the view of units and buildings
+    \brief functions for calculating the view of units and buildings
 */
 
 /***************************************************************************
@@ -210,12 +210,12 @@ int  evaluatevisibilityfield ( pmap actmap, pfield fld, int player, int add, int
 {
    int originalVisibility;
    if ( initial == 2 ) {
-      setvisibility(&fld->visible,visible_all, player);
+      fld->setVisibility(visible_all, player);
       return 0;
    } else {
       originalVisibility = (fld->visible >> (player * 2)) & 3;
       if ( originalVisibility >= visible_ago || initial == 1)
-           setvisibility(&fld->visible,visible_ago, player);
+           fld->setVisibility(visible_ago, player);
    }
 
    if ( add == -1 ) {
@@ -254,10 +254,10 @@ int  evaluatevisibilityfield ( pmap actmap, pfield fld, int player, int add, int
           ( fld->building && ( fld->building->typ->buildingheight < chschwimmend ) && sonar ) ||
           ( !fld->mines.empty() && ( mine  ||  fld->mineowner() == player)) ||
           ( fld->vehicle  && ( fld->vehicle->height  >= chsatellit )  && satellite )) {
-             setvisibility(&fld->visible,visible_all, player);
+             fld->setVisibility( visible_all, player);
              return originalVisibility != visible_all;
       } else {
-             setvisibility(&fld->visible,visible_now, player);
+             fld->setVisibility( visible_now, player);
              return originalVisibility != visible_now;
       }
    }
@@ -288,22 +288,22 @@ int  evaluateviewcalculation ( pmap actmap, int player_fieldcount_mask )
    return fieldsChanged;
 }
 
-int  evaluateviewcalculation ( pmap actmap, int x, int y, int distance, int player_fieldcount_mask )
+int  evaluateviewcalculation ( pmap actmap, const MapCoordinate& pos, int distance, int player_fieldcount_mask )
 {
    distance = (distance+maxmalq-1)/maxmalq;
-   int x1 = x - distance;
+   int x1 = pos.x - distance;
    if ( x1 < 0 )
       x1 = 0;
 
-   int y1 = y - distance*2;
+   int y1 = pos.y - distance*2;
    if ( y1 < 0 )
       y1 = 0;
 
-   int x2 = x + distance;
+   int x2 = pos.x + distance;
    if ( x2 >= actmap->xsize )
       x2 = actmap->xsize-1;
 
-   int y2 = y + distance*2;
+   int y2 = pos.y + distance*2;
    if ( y2 >= actmap->ysize )
       y2 = actmap->ysize-1;
 
@@ -356,14 +356,3 @@ int computeview( pmap actmap, int player_fieldcount_mask )
    return evaluateviewcalculation ( actmap, player_fieldcount_mask );
 }
 
-
-void setvisibility ( word* visi, int valtoset, int actplayer )
-{
-   int newval = (valtoset ^ 3) << ( 2 * actplayer );
-   int oneval = 3 << ( 2 * actplayer );
-
-   int vis = *visi;
-   vis |= oneval;
-   vis ^= newval;
-   *visi = vis;
-}

@@ -2,9 +2,12 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.28 2001-08-19 12:31:26 mbickel Exp $
+//     $Id: edevents.cpp,v 1.29 2001-10-02 14:06:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2001/08/19 12:31:26  mbickel
+//      Fixed several bugs in event and campaign handling
+//
 //     Revision 1.27  2001/08/19 10:48:49  mbickel
 //      Fixed display problems in event dlg in mapeditor
 //      Fixed error when starting campaign with AI as first player
@@ -775,21 +778,21 @@ void         tgettm::buttonpressed(int         id)
 } 
 
 
-char      gettm(signed short *       x, signed short *       y)  /* True : Erfolgreich ausgefhrt */
+bool gettm( GameTime& time  )  /* True : Erfolgreich ausgefhrt */
 { tgettm       ce; 
   char b;
 
-   ce.x = *x; 
-   ce.y = *y; 
-   ce.init(); 
-   ce.run(); 
-   b = false;
-   if (ce.x != 50000) { 
-      *x = ce.x; 
-      *y = ce.y; 
+  ce.x = time.turn();
+  ce.y = time.move();
+
+   ce.init();
+   ce.run();
+   if (ce.x != 50000) {
+      time.set ( ce.x , ce.y );
       b = true;
-   } 
-   ce.done(); 
+   }  else
+      b = false;
+   ce.done();
    return b;
 } 
 
@@ -1563,7 +1566,7 @@ void         tcreateevent::buttonpressed(int         id)
                 case cepalettechange: {
                     mousevisible(false);
                     ASCString filename;
-                    fileselectsvga("*.pal", &filename , 1);
+                    fileselectsvga("*.pal", filename , true);
                     mousevisible(true); 
                     freedata();
                     if ( !filename.empty() ) {
@@ -1580,7 +1583,7 @@ void         tcreateevent::buttonpressed(int         id)
                 case cerunscript: {
                     mousevisible(false); 
                     ASCString filename;
-                    fileselectsvga("*.scr", &filename , 1);
+                    fileselectsvga("*.scr", filename , true);
                     mousevisible(true);
                     freedata();
                     if ( !filename.empty() ) {
@@ -1782,8 +1785,9 @@ void         tcreateevent::buttonpressed(int         id)
                   rnr = getreason(ae->trigger[nid]);
                   switch (rnr) {
                      case ceventt_turn:   {
-                            abb = gettm(&ae->trigger_data[nid]->time.a.turn,&ae->trigger_data[nid]->time.a.move);
-                            if (abb == false) return;
+                            abb = gettm( ae->trigger_data[nid]->time );
+                            if (abb == false)
+                               return;
                             ae->trigger[nid] = rnr; 
                          } 
                          break;
@@ -1866,7 +1870,8 @@ void         tcreateevent::buttonpressed(int         id)
                              break;
                   case ceventt_energytribute :
                   case ceventt_materialtribute :
-                  case ceventt_fueltribute : {
+                  case ceventt_fueltribute : displaymessage(" event not supported at the moment !", 1 );
+                     /*{
                         nr = playerselect( ae->trigger_data[nid]->time.a.move );
                         if ((nr >= 0) && (nr <= 7)) {
                            ae->trigger[nid] = rnr; 
@@ -1877,6 +1882,7 @@ void         tcreateevent::buttonpressed(int         id)
                         }
                         else ae->trigger[nid] = 0; 
                      }
+                     */
                      break;
                   case 0:
                   case ceventt_allenemyunitsdestroyed:

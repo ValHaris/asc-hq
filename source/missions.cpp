@@ -2,9 +2,12 @@
     \brief The event handling of ASC
 */
 
-//     $Id: missions.cpp,v 1.27 2001-08-19 12:50:03 mbickel Exp $
+//     $Id: missions.cpp,v 1.28 2001-10-02 14:06:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2001/08/19 12:50:03  mbickel
+//      fixed event trigger allenemybuildings
+//
 //     Revision 1.26  2001/08/19 12:31:26  mbickel
 //      Fixed several bugs in event and campaign handling
 //
@@ -178,7 +181,7 @@ const  int    translatetriggerstatus[4]  = {0, 1, 1, 0};
 
 
    int         stt[4]; 
-   tgametime    nexttimedevent[8];
+   GameTime    nexttimedevent[8];
    char      eject; 
 
 
@@ -1081,10 +1084,9 @@ void execevent ( pevent ev, MapDisplayInterface* md )
       if ( ev->delayedexecution.move  || ev->delayedexecution.turn ) {
    
          if ( ev->triggertime.abstime == -1 ) {
-            ev->triggertime.a.turn = actmap->time.a.turn + ev->delayedexecution.turn;
-            ev->triggertime.a.move = actmap->time.a.move + ev->delayedexecution.move;
-            if ( ev->triggertime.a.move < 0 )
-               ev->triggertime.a.move = 0;
+            ev->triggertime.set ( actmap->time.turn() + ev->delayedexecution.turn, actmap->time.move() + ev->delayedexecution.move );
+            if ( ev->triggertime.move() < 0 )
+               ev->triggertime.set ( ev->triggertime.turn(), 0 );
          }
    
          if ( actmap->time.abstime >= ev->triggertime.abstime ) 

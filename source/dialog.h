@@ -2,9 +2,15 @@
     \brief Interface for all the dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.h,v 1.18 2001-02-01 22:48:36 mbickel Exp $
+//     $Id: dialog.h,v 1.19 2001-10-02 14:06:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2001/02/01 22:48:36  mbickel
+//      rewrote the storing of units and buildings
+//      Fixed bugs in bi3 map importing routines
+//      Fixed bugs in AI
+//      Fixed bugs in mapeditor
+//
 //     Revision 1.17  2001/01/31 14:52:35  mbickel
 //      Fixed crashes in BI3 map importing routines
 //      Rewrote memory consistency checking
@@ -59,10 +65,10 @@ const int dbluedark = 248;
 /*! Selects a file
 
   \param ext the wildcard to search ( *.map for example )
-  \param filename A pointer to an array where the selected filename will be written to. If string is empty, the dialog was canceled.
-  \param mode 1: open file for loading   0: select filename to write to
+  \param filename A string which will contain the selected filename. If it is empty, the dialog was canceled.
+  \param load  true for selecting an existing file for loading; false for entering a filename to save to
 */
-extern void   fileselectsvga( const ASCString& ext, ASCString* filename, char swtch );
+extern void   fileselectsvga( const ASCString& ext, ASCString& filename, bool load );
 
 extern void  startnextcampaignmap(word         id);
 

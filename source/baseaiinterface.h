@@ -98,7 +98,7 @@ class AiParameter : public AiValue {
 
 
            int lastDamage;
-           tgametime damageTime;
+           GameTime damageTime;
 
            MapCoordinate3D dest;
            int dest_nwid;

@@ -74,12 +74,6 @@ Vehicle :: ~Vehicle (  )
       viewOnMap = false;
    }
 
-   delete[] weapstrength;
-   weapstrength = NULL;
-
-   delete[] ammo;
-   ammo = NULL;
-
    if ( gamemap ) {
       int c = color/8;
 
@@ -112,8 +106,6 @@ void Vehicle :: init ( void )
    xpos = -1;
    ypos = -1;
 
-   weapstrength = new int[16];
-   ammo = new int[16];
    for ( int i = 0; i < 16; i++ ) {
       weapstrength[i] = 0;
       ammo[i] = 0;

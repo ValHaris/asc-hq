@@ -21,6 +21,12 @@
 #include <vector>
 #include "ascstring.h"
 
+
+class ParsingError : public ASCmsgException {
+    public:
+       ParsingError ( const ASCString& msg ) : ASCmsgException ( msg ) {};
+};
+
 class TextPropertyGroup {
       public:
 

@@ -3,9 +3,12 @@
 */
 
 
-//     $Id: sg.cpp,v 1.168 2001-09-28 19:36:11 mbickel Exp $
+//     $Id: sg.cpp,v 1.169 2001-10-02 14:06:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.168  2001/09/28 19:36:11  mbickel
+//      New startup map
+//
 //     Revision 1.167  2001/09/26 19:53:27  mbickel
 //      Reorganized data files for coming ASC 1.9.0 release
 //      Improved field information dialog
@@ -1097,7 +1100,7 @@ void         ladekarte(void)
    ASCString s1;
 
    mousevisible(false);
-   fileselectsvga(mapextension, &s1, 1 );
+   fileselectsvga(mapextension, s1, true );
 
    if ( !s1.empty() ) {
       mousevisible(false);
@@ -1127,7 +1130,7 @@ void         ladespiel(void)
    mousevisible(false);
 
    ASCString s1;
-   fileselectsvga(savegameextension, &s1, 1 );
+   fileselectsvga(savegameextension, s1, true );
 
    if ( !s1.empty() ) {
       mousevisible(false);
@@ -1161,7 +1164,7 @@ void         speicherspiel( int as )
 
    if ( as || !nameavail ) {
       mousevisible(false);
-      fileselectsvga(savegameextension, &s1, 0);
+      fileselectsvga(savegameextension, s1, false );
    } else
       s1 = actmap->preferredFileNames.savegame[actmap->actplayer];
 
@@ -1358,7 +1361,7 @@ void benchgame ( int mode )
 void selectgraphicset ( void )
 {
    ASCString filename;
-   fileselectsvga("*.gfx",&filename,1);
+   fileselectsvga("*.gfx", filename, true );
    if ( !filename.empty() ) {
       int id = getGraphicSetIdFromFilename ( filename.c_str() );
       if ( id != actmap->graphicset ) {
@@ -1669,7 +1672,7 @@ void execuseraction ( tuseractions action )
                        break;
         case ua_GameParameterInfo: showGameParameters();
                        break;
-        case ua_GameStatus: displaymessage ( "turn %d , move %d ", 3, actmap->time.a.turn, actmap->time.a.move );
+        case ua_GameStatus: displaymessage ( "turn %d , move %d ", 3, actmap->time.turn(), actmap->time.move() );
                        break;
     }
 

@@ -40,10 +40,10 @@
 
   class ASCmsgException : public ASCexception {
       protected:
-         string message;
+         ASCString message;
       public:
-         ASCmsgException ( string msg ) : message ( msg ) {};
-         const string& getMessage ( void ) const { return message; };
+         ASCmsgException ( ASCString msg ) : message ( msg ) {};
+         const ASCString& getMessage ( void ) const { return message; };
          virtual ~ASCmsgException() {};
   };
 

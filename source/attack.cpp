@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: attack.cpp,v 1.49 2001-09-25 15:13:07 mbickel Exp $
+//     $Id: attack.cpp,v 1.50 2001-10-02 14:06:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2001/09/25 15:13:07  mbickel
+//      New version number
+//      Fixed crash when reaction fire during ascend
+//
 //     Revision 1.48  2001/09/13 17:43:11  mbickel
 //      Many, many bug fixes
 //
@@ -650,7 +654,7 @@ void tunitattacksunit :: setresult ( void )
      delete *_pattackedunit;
      *_pattackedunit = NULL;
    }
-   actmap->time.a.move++;
+   actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 }
 
 void tunitattacksunit :: paintimages ( int xa, int ya, int xd, int yd )
@@ -779,7 +783,7 @@ void tunitattacksbuilding :: setresult ( void )
      _attackedbuilding = NULL;
    }
 
-   actmap->time.a.move++;
+   actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 }
 
 void tunitattacksbuilding :: paintimages ( int xa, int ya, int xd, int yd )
@@ -1018,7 +1022,7 @@ void tunitattacksobject :: setresult ( void )
      getfield ( _x, _y )-> removeobject ( _obji->typ );
    }
 
-   actmap->time.a.move++;
+   actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 
 }
 

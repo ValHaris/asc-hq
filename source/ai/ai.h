@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: ai.h,v 1.7 2001-08-27 21:03:55 mbickel Exp $
+//     $Id: ai.h,v 1.8 2001-10-02 14:06:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2001/08/27 21:03:55  mbickel
+//      Terraintype graphics can now be mounted from any number of PNG files
+//      Several AI improvements
+//
 //     Revision 1.6  2001/08/24 15:50:08  mbickel
 //      AI performs better services when there are no service units
 //
@@ -91,7 +95,7 @@
                   int serviceUnitID;
 
                   //! if service == ammo: weapon number ; if service == resource : resource type
-                  tgametime time;
+                  GameTime time;
                   int failure;
                   pbuilding nextServiceBuilding;
                   int nextServiceBuildingDistance;

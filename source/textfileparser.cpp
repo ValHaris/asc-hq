@@ -222,7 +222,7 @@ PropertyContainer::ImageProperty&   PropertyContainer::addImage ( const ASCStrin
 void PropertyContainer::warning ( const ASCString& errmsg )
 {
    #ifdef converter
-   fatalError ( errmsg.c_str() );
+   fatalError ( errmsg );
    #else
    displaymessage( "file " + textPropertyGroup->fileName+ ": " + errmsg, 1 );
    #endif
@@ -230,7 +230,7 @@ void PropertyContainer::warning ( const ASCString& errmsg )
 
 void PropertyContainer::error ( const ASCString& errmsg )
 {
-   fatalError ( getFileName() + " : " + errmsg );
+   throw ParsingError ( getFileName() + " : " + errmsg );
 }
 
 bool PropertyContainer::find ( const ASCString& name )
@@ -777,9 +777,9 @@ TextPropertyGroup* TextFormatParser::run (  )
 void TextFormatParser::error ( const ASCString& errmsg )
 {
    if ( stream )
-      fatalError ( stream->getLocation() + " : " + errmsg );
+      throw ParsingError ( stream->getLocation() + " : " + errmsg );
    else
-      fatalError ( " : " + errmsg );
+      throw ParsingError ( " : " + errmsg );
 
 }
 

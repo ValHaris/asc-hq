@@ -62,11 +62,6 @@ extern const char* AIjobs[];
 
  //! A single weapon of a #Vehicletype
  class SingleWeapon {
-   #ifdef converter
-    public:
-   #else
-    private:
-   #endif
      int          typ;
     public:
      int          targ;           /*  BM      <= CHoehenstufen  */
@@ -159,9 +154,6 @@ extern const char* AIjobs[];
         int          autorepairrate;
 
         AiValue* aiparam[8];
-
-        ASCString    filename;
-        ASCString    location;    // just for information purposes in the main program
 
         int          vehicleCategoriesLoadable;
 

@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: dlg_box.cpp,v 1.59 2001-08-19 10:48:49 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.60 2001-10-02 14:06:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.59  2001/08/19 10:48:49  mbickel
+//      Fixed display problems in event dlg in mapeditor
+//      Fixed error when starting campaign with AI as first player
+//
 //     Revision 1.58  2001/08/09 10:28:22  mbickel
 //      Fixed AI problems
 //      Mapeditor can edit a units AI parameter
@@ -3988,3 +3992,71 @@ void warning ( const ASCString& str )
 {
 	fprintf(stderr, "ASC: %s \n", str.c_str());
 }
+
+
+class   ChooseString : public tstringselect {
+                 const vector<ASCString>& strings;
+                 char buf[10000];
+           public :
+                 ChooseString ( const ASCString& _title, const vector<ASCString>& _strings );
+                 void setup( );
+                 virtual void buttonpressed(int id);
+                 void run(void);
+                 virtual void gettext(word nr);
+              };
+
+ChooseString :: ChooseString ( const ASCString& _title, const vector<ASCString>& _strings )
+              : strings ( _strings )
+{
+   strcpy ( buf, _title.c_str() );
+}
+
+
+void         ChooseString ::setup( )
+{
+   action = 0;
+   title = buf;
+   numberoflines = strings.size();
+   ey = ysize - 50;
+   addbutton("~O~k",20,ysize - 45,xsize-20,ysize - 20,0,1,12,true);
+}
+
+
+void         ChooseString ::buttonpressed(int         id)
+{
+   tstringselect::buttonpressed(id);
+   switch (id) {
+      case 12:  if ( redline >= 0 )
+                   action = id-10;
+                break;
+   }
+}
+
+
+void         ChooseString ::gettext(word nr)
+{
+   strcpy ( txt, strings[nr].c_str());
+}
+
+
+void         ChooseString ::run(void)
+{
+   do {
+      tstringselect::run();
+      if ( taste == ct_enter )
+         if ( redline >= 0 )
+            action = 2;
+   }  while ( action == 0 );
+}
+
+
+int chooseString ( const ASCString& title, const vector<ASCString>& entries )
+{
+   ChooseString  gps ( title, entries );
+
+   gps.init();
+   gps.run();
+   gps.done();
+   return gps.redline;
+}
+

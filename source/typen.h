@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.100 2001-09-25 18:03:35 mbickel Exp $
+//     $Id: typen.h,v 1.101 2001-10-02 14:06:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.100  2001/09/25 18:03:35  mbickel
+//      Move after attack doesn't reduce a units movement
+//
 //     Revision 1.99  2001/09/24 17:22:12  mbickel
 //      Fixed crash in end of turn
 //      Improved documentation
@@ -331,17 +334,6 @@ struct tquickview {
 };
 
 
-/*
-  //! an image, which may either be independant or part of a graphic set
-  struct thexpic {
-    void* picture;
-    //! the position of the image in a graphic set. < 0 if it is seperate pictureand not from a graphic set
-    int   bi3pic;
-
-    //! is the image a flipped version of an image from the graphic set. Bit 0 : flipped horizontally, bit 1: flipped vertically
-    int   flip;
-  };
-*/
 
 typedef struct teventstore* peventstore;
 struct teventstore {
@@ -351,18 +343,36 @@ struct teventstore {
     int      mapid[256];
 };
 
+//! the time in ASC, measured in turns and moves
+struct GameTime {
+  int move() { return abstime & 0xffff; };
+  int turn() { return abstime >> 16; };
+  int set ( int turn, int move ) { abstime = turn << 16 + move ; };
+  int abstime;
+};
 
 
-
+//! A Message to a player. It may either be send by another player or by the system.
 class  Message {
    public:
-     int from;      // BM ; Bit 9 ist system
-     int to;        // BM
+     //! bitmapped variable showing the sender of the message. Bit 0 - 7 are the players, Bit 9 is the system.
+     int from;
+
+     //! bitmapped variable showing the recipients of the message.
+     int to;
+
+     //! the real world time the message was written
      time_t time;
+
+     //! the body of the message
      ASCString text;
+
+     //! an id that identifies the message. It is assigned automatically
      int id;
-     int runde;  //  Zeitpunkt des abschickens
-     int move;   //  "
+
+     //! the game time the messages was written
+     GameTime gametime;
+
      Message ( pmap spfld );
 
      /** Constructor.
@@ -371,10 +381,21 @@ class  Message {
          \param rec      The receipient. Bitmapped: each bit one player
          \param from     The sender. Bitmapped too! 512 = system
      */
-     Message ( const ASCString& msg, pmap gamemap,int rec, int from = 512 );  // fuer Meldungen vom System
+     Message ( const ASCString& msg, pmap gamemap,int rec, int from = 512 );
 };
 
-//! A list that stores pointers, but deletes the objects (and not only the pointers) on destruction
+
+//! A vector that stores pointers, but deletes the objects (and not only the pointers) on destruction. The erase method does NOT delete the objects !
+template <class T> class PointerVector : public vector<T> {
+   public:
+     ~PointerVector() {
+        for ( iterator it=begin(); it!=end(); it++ )
+            delete *it;
+     };
+};
+
+
+//! A list that stores pointers, but deletes the objects (and not only the pointers) on destruction. The erase method does NOT delete the objects !
 template <class T> class PointerList : public list<T> {
    public:
      ~PointerList() {
@@ -387,11 +408,6 @@ template <class T> class PointerList : public list<T> {
 typedef PointerList<Message*> MessageContainer;
 typedef list<Message*> MessagePntrContainer;
 
-//! the time in ASC, measured in turns and moves
-union tgametime {
-  struct { signed short move, turn; }a ;
-  int abstime;
-};
 
 
 //! Coordinate on the twodimensional map
@@ -497,7 +513,7 @@ class tevent {
            ~PolygonEntered ( );
         };
 
-        tgametime time;
+        GameTime time;
         int xpos, ypos;
         int networkid;
         pbuilding    building;
@@ -518,7 +534,7 @@ class tevent {
                                          1: erf?llt, kann sich aber noch „ndern
                                          2: unwiederruflich erf?llt
                                          3: unerf?llbar */
-    tgametime     triggertime;     // Im Karteneditor auf  -1 setzen !!
+    GameTime     triggertime;     // Im Karteneditor auf  -1 setzen !!
     // Werte ungleich -1 bedeuten automatisch, dass das event bereits erf?llt ist und evt. nur noch die Zeit abzuwait ist
 
     struct {

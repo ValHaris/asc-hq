@@ -82,7 +82,7 @@ class MapEvent {
       } delayedexecution;
 
       //! the time when this event was trigger. If the event wasn't triggered yet, it will be set to -1 .
-      tgametime     triggered;
+      GameTime     triggered;
 
 }
 
@@ -110,7 +110,7 @@ class
            ~PolygonEntered ( );
         };
 
-        tgametime time;
+        GameTime time;
         int xpos, ypos;
         int networkid;
         pbuilding    building;
@@ -146,7 +146,7 @@ class
 
 class Trigger_Time : public MapEventTrigger {
    public:
-      tgametime time;
+      GameTime time;
 
       Trigger_Time ( Map* _gamemap ) : MapEventTrigger ( trig_Time, _gamemap ) {};
       Status getDirectStatus( );
@@ -159,7 +159,7 @@ class Trigger_Time : public MapEventTrigger {
 
 class Trigger_BuildingConquered : public MapEventTrigger {
    public:
-      tgametime time;
+      GameTime time;
 
       Trigger_Time ( Map* _gamemap ) : MapEventTrigger ( trig_Time, _gamemap ) {};
       Status getDirectStatus( );

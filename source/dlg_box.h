@@ -2,9 +2,13 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.24 2001-08-09 10:28:22 mbickel Exp $
+//     $Id: dlg_box.h,v 1.25 2001-10-02 14:06:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2001/08/09 10:28:22  mbickel
+//      Fixed AI problems
+//      Mapeditor can edit a units AI parameter
+//
 //     Revision 1.23  2001/07/15 21:00:25  mbickel
 //      Some cleanup in the vehicletype class
 //
@@ -546,6 +550,9 @@ class   tstringselect : public tdialogbox {
 
 extern int getid( char* title, int lval, int min, int max );
 
+
+
+extern int chooseString ( const ASCString& title, const vector<ASCString>& entries );
 
 #endif
 

@@ -458,7 +458,7 @@ int main(int argc, char *argv[] )
 
                fprintf ( detailed3, "    <td nowrap>" );
                for ( int i = 0; i < cwaffentypennum; i++ )
-                  if ( ft->weapons.weapon[w].typ & ( 1 << i ) )
+                  if ( ft->weapons.weapon[w].gettype() & ( 1 << i ) )
                      fprintf ( detailed3, "%s.", cwaffentypen[i] );
                fprintf ( detailed3, "</td></tr>\n" );
             }

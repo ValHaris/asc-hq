@@ -13,6 +13,8 @@ Bugs:
  
 Small tasks:
 
+-3- added check for SDLmm to configure.in
+
 -5- Message of crashed airplanes when they run out of fuel
 
 -7- writing a TPWM decoder for Battle Isle maps

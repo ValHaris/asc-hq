@@ -238,8 +238,6 @@ void addtechnology ( ptechnology tech )
 
 
 
-
-typedef map<ASCString,TextPropertyList> TextFileRepository;
 TextFileRepository textFileRepository;
 
 void  loadalltextfiles ( )

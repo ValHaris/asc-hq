@@ -2,9 +2,12 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.33 2001-09-20 15:36:09 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.34 2001-10-02 14:06:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2001/09/20 15:36:09  mbickel
+//      New object displaying mode
+//
 //     Revision 1.32  2001/08/26 20:55:04  mbickel
 //      bin2text can now load text files too
 //      LoadableItemType interface class added
@@ -1307,7 +1310,7 @@ void SelectItemContainer :: checkformouse ( void )
          }
 
       switch ( found ) {
-         case 0: if ( skeypress ( ct_lstrg ) || skeypress ( ct_rstrg ))
+         case 0: if ( skeypress ( ct_lstrg ) || skeypress ( ct_rstrg ) || skeypress ( ct_lshift ) || skeypress ( ct_rshift ))
                     selterraintype ( ct_invvalue );
                  else
                     execaction(act_switchmaps );

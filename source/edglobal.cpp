@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.37 2001-09-24 12:05:18 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.38 2001-10-02 14:06:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2001/09/24 12:05:18  mbickel
+//      Fixed: airplanes landing in wrong building for repairs
+//
 //     Revision 1.36  2001/09/23 23:06:20  mbickel
 //      Fixed:
 //       - ascent/descent during reactionfire
@@ -282,7 +285,8 @@ mc_check mc;
         "select graphic set",
         "unitset transformation",
         "Unitset Information",
-        "switch maps" };
+        "switch maps",
+        "transform map" };
 
 
 // õS Infomessage
@@ -950,7 +954,7 @@ void execaction(int code)
          strcat ( filename2, "*.dat");
 
          ASCString filename;
-         fileselectsvga ( filename2, &filename,1 );
+         fileselectsvga ( filename2, filename, true );
          if ( !filename.empty() ) {
             strcpy ( filename2, path );
             strcat ( filename2, "mis");
@@ -980,7 +984,7 @@ void execaction(int code)
          strcat ( filename2, "*.dat");
 
          ASCString filename;
-         fileselectsvga ( filename2, &filename,1 );
+         fileselectsvga ( filename2, filename, true );
          if ( !filename.empty() ) {
             strcpy ( filename2, path );
             strcat ( filename2, "mis");
@@ -1034,6 +1038,8 @@ void execaction(int code)
                         displaymap();
                         showStatusBar();
                         showallchoices();
+      break;
+   case act_transformMap: transformMap();
       break;
     }
 }

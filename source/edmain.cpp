@@ -2,9 +2,16 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.52 2001-09-23 23:06:20 mbickel Exp $
+//     $Id: edmain.cpp,v 1.53 2001-10-02 14:06:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2001/09/23 23:06:20  mbickel
+//      Fixed:
+//       - ascent/descent during reactionfire
+//       - movement with nearly empty fuel tank
+//       - production icon displayed although unit could not be produced
+//       - invisible building becoming visible in fog of war
+//
 //     Revision 1.51  2001/09/13 17:43:12  mbickel
 //      Many, many bug fixes
 //
@@ -586,6 +593,8 @@ void         editor(void)
                      break;
                   case ct_f3 : execaction(act_selbodentyp);
                      break;
+                  case ct_f3 + ct_shp :
+                  case ct_f3 + ct_altp :
                   case ct_f3 + ct_stp : execaction(act_selbodentypAll);
                      break;
                   case ct_f4 : execaction(act_selunit);

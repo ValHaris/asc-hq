@@ -1206,8 +1206,7 @@ int tmap :: getTechnologyNum ( )
 
 void tmap :: startGame ( )
 { 
-   time.a.turn = 1;
-   time.a.move = 0;
+   time.set ( 1, 0 );
 
    for ( int j = 0; j < 8; j++ )
       player[j].queuedEvents = 1;
@@ -1388,7 +1387,7 @@ void  tfield :: addobject( pobjecttype obj, int dir, int force )
 
      if ( buildable ) {
          Object o ( obj );
-         o.time = actmap->time.a.turn;
+         o.time = actmap->time.turn();
          if ( dir != -1 )
             o.dir = dir;
          else
@@ -1492,8 +1491,8 @@ bool  tfield :: putmine( int col, int typ, int strength )
    m.strength = strength ;
    m.color = col;
    m.type = typ;
-   if ( actmap && actmap->time.a.turn>= 0 )
-      m.time = actmap->time.a.turn;
+   if ( actmap && actmap->time.turn() >= 0 )
+      m.time = actmap->time.turn();
    else
       m.time = 0;
 

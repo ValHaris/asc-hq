@@ -77,5 +77,8 @@ extern int  buildingtypenum;
 extern int  technologynum;
 extern int  objecttypenum;
 
+typedef map<ASCString,TextPropertyList> TextFileRepository;
+extern TextFileRepository textFileRepository;
+
 
 #endif

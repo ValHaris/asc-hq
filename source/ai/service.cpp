@@ -257,8 +257,8 @@ void AI::ServiceOrder::releaseServiceUnit ( ServiceOrder& so )
 
 bool AI::ServiceOrder::timeOut ( )
 {
-  tgametime t = time;
-  t.a.turn += 2;
+  GameTime t = time;
+  t.set ( t.turn() + 2, t.move() );
   return ( t.abstime <= ai->getMap()->time.abstime );
 }
 

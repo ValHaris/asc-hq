@@ -7,9 +7,12 @@
 */
 
 
-//     $Id: network.cpp,v 1.23 2001-07-15 10:36:25 mbickel Exp $
+//     $Id: network.cpp,v 1.24 2001-10-02 14:06:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2001/07/15 10:36:25  mbickel
+//      Added explanation message in email game save dialog
+//
 //     Revision 1.22  2001/07/13 19:33:30  mbickel
 //      Fixed crashes in the dashboards experience display
 //      Fixed inconsistent movement cost calculation (which caused
@@ -223,7 +226,7 @@ void  tfiletransfernetworkconnection::tsetup::buttonpressed ( int id )
    tdialogbox::buttonpressed ( id );
    switch ( id ) {
       case 2:    mousevisible( false ); 
-                 fileselectsvga( tournamentextension, &s1, 1);
+                 fileselectsvga( tournamentextension, s1, true );
                  if ( !s1.empty() ) {
                     strcpy ( filename, s1.c_str() );
                     showbutton ( 1 );
@@ -349,7 +352,7 @@ void  tfiletransfernetworkconnection::mountfilename ( char* newname, char* oldna
       int r = p;
       newname[p] = 0;
       char temp[10];
-      itoa ( actmap->time.a.turn, temp, 10 );
+      itoa ( actmap->time.turn(), temp, 10 );
       while ( strlen ( temp ) + strlen ( newname ) > maxfilenamelength ) {
          p--;
          newname[p] = 0;

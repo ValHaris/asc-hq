@@ -1,6 +1,9 @@
-//     $Id: edglobal.h,v 1.8 2001-08-02 15:33:01 mbickel Exp $
+//     $Id: edglobal.h,v 1.9 2001-10-02 14:06:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2001/08/02 15:33:01  mbickel
+//      Completed text based file formats
+//
 //     Revision 1.7  2000/11/29 09:40:19  mbickel
 //      The mapeditor has now two maps simultaneously active
 //      Moved memorychecking functions to its own file: memorycheck.cpp
@@ -65,7 +68,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 70;
+const int execactionscount = 71;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -142,6 +145,7 @@ enum tuseractions {
      act_selectgraphicset,
      act_unitsettransformation,
      act_unitSetInformation,
-     act_switchmaps };
+     act_switchmaps,
+     act_transformMap };
 
 extern void         execaction(int code);

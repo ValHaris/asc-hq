@@ -1,8 +1,11 @@
 /*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-//     $Id: gamedlg.cpp,v 1.80 2001-09-13 17:43:12 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.81 2001-10-02 14:06:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.80  2001/09/13 17:43:12  mbickel
+//      Many, many bug fixes
+//
 //     Revision 1.79  2001/08/19 10:48:49  mbickel
 //      Fixed display problems in event dlg in mapeditor
 //      Fixed error when starting campaign with AI as first player
@@ -1303,7 +1306,7 @@ void         tnewcampaignlevel::loadcampaignmap(void)
 
          do {
            next_turn();
-           if ( actmap->time.a.turn == 2 ) {
+           if ( actmap->time.turn() == 2 ) {
               displaymessage("no human players found !", 1 );
               delete actmap;
               actmap = NULL;
@@ -1481,7 +1484,7 @@ void         tcontinuecampaign::buttonpressed(int         id)
       case 2:   {
             ASCString t;
 
-            fileselectsvga("*.rcy", &t, 2);
+            fileselectsvga("*.rcy", t, true );
             if ( !t.empty() )
                savecampaignrecoveryinformation ( t.c_str(), idsearched);
          }
@@ -1629,7 +1632,7 @@ void         tchoosenewmap::buttonpressed( int id )
    switch (id) {
 
       case 2:   {
-            fileselectsvga(mapextension, &t, 1);
+            fileselectsvga( mapextension, t, true );
             if ( !t.empty() ) {
                strcpy(mapname, t.c_str());
                readmapinfo();
@@ -1806,7 +1809,7 @@ void         tchoosenewsinglelevel::run(void)
 
          do {
            next_turn();
-           if ( actmap->time.a.turn == 2 ) {
+           if ( actmap->time.turn() == 2 ) {
               displaymessage("no human players found !", 1 );
               delete actmap;
               actmap = NULL;
@@ -3930,8 +3933,7 @@ void teditjournal :: run ( void )
          delete[] actmap->newjournal;
       actmap->newjournal = strdup ( c.c_str() );
 
-      actmap->lastjournalchange.a.turn = actmap->time.a.turn;
-      actmap->lastjournalchange.a.move = actmap->actplayer;
+      actmap->lastjournalchange.set ( actmap->time.turn(), actmap->actplayer );
    }
 }
 

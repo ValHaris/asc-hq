@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.70 2001-09-25 15:13:07 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.71 2001-10-02 14:06:29 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.70  2001/09/25 15:13:07  mbickel
+//      New version number
+//      Fixed crash when reaction fire during ascend
+//
 //     Revision 1.69  2001/09/23 23:06:20  mbickel
 //      Fixed:
 //       - ascent/descent during reactionfire
@@ -867,7 +871,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
                  if (   (fld1->bdt & getTerrainBitType(cbicebreaking) ).any()
                       || fld1->checkforobject ( eisbrecherobject ) ) {
                     fld1 -> addobject ( eisbrecherobject, 1 << dir );
-                    fld1->checkforobject ( eisbrecherobject )->time = actmap->time.a.turn;
+                    fld1->checkforobject ( eisbrecherobject )->time = actmap->time.turn();
                  }
 
       } 
@@ -893,7 +897,7 @@ int  BaseVehicleMovement :: moveunitxy(int xt1, int yt1, IntFieldList& pathToMov
                else
                  getfield ( x, y ) -> addobject ( eisbrecherobject, 1 << (dir + sidenum/2));
 
-                 field3->checkforobject ( eisbrecherobject )->time = actmap->time.a.turn;
+                 field3->checkforobject ( eisbrecherobject )->time = actmap->time.turn();
             }
 
       if ( vehicle ) {

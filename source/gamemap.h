@@ -186,6 +186,19 @@ class  tfield {
       char mine, satellite, sonar, direct;
     } view[8];
 
+   /** The visibility status for all players is stored in a bitmapped variable. This functions changes the status in this variable for a single player
+      \param valtoset the value that is going to be written into the visibility variable
+      \param actplayer the player for which the view is changed
+   */
+   void setVisibility ( int valtoset, int actplayer ) {
+       int newval = (valtoset ^ 3) << ( 2 * actplayer );
+       int oneval = 3 << ( 2 * actplayer );
+
+       visible |= oneval;
+       visible ^= newval;
+   };
+
+
     ~tfield();
   private:
     int getx( void );
@@ -252,7 +265,7 @@ class tmap {
       signed char  actplayer; 
 
       //! the time in the game, mesured in a turns and moves
-      tgametime    time;
+      GameTime    time;
 
       struct Weather {
          //! the idea of fog is to reduce the visibility, but this is currently not used
@@ -433,7 +446,7 @@ class tmap {
 
       //! the player which is currently viewing the map. During replays, for example, this will be different from the player that moves units
       int           playerView;
-      tgametime     lastjournalchange;
+      GameTime     lastjournalchange;
 
       //! in BI resource mode ( see #_resourcemode , #isResourceGlobal ) , this is where the globally available resources are stored. Note that not all resources are globally available.
       Resources     bi_resource[8];

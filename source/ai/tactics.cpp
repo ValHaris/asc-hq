@@ -32,7 +32,7 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int mov
    veh->xpos = x;
    veh->ypos = y;
    veh->addview();
-   int fieldsWithChangedVisibility = evaluateviewcalculation ( getMap(), veh->xpos, veh->ypos, veh->typ->view, 0xff );
+   int fieldsWithChangedVisibility = evaluateviewcalculation ( getMap(), veh->getPosition(), veh->typ->view, 0xff );
 
 
    VehicleAttack va ( NULL, NULL );
@@ -135,7 +135,7 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int mov
    veh->addview();
 
    if ( fieldsWithChangedVisibility || 1 )  // viewbug.sav !!!!!
-      evaluateviewcalculation ( getMap(), veh->xpos, veh->ypos, veh->typ->view, 0xff );
+      evaluateviewcalculation ( getMap(), veh->getPosition(), veh->typ->view, 0xff );
 }
 
 bool operator > ( const AI::MoveVariant& mv1, const AI::MoveVariant& mv2 )

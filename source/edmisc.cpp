@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.64 2001-09-13 17:43:12 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.65 2001-10-02 14:06:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.64  2001/09/13 17:43:12  mbickel
+//      Many, many bug fixes
+//
 //     Revision 1.63  2001/08/27 21:03:55  mbickel
 //      Terraintype graphics can now be mounted from any number of PNG files
 //      Several AI improvements
@@ -964,6 +967,7 @@ void         pdsetup(void)
     pd.addbutton ( "Sm~o~oth coasts",          act_smoothcoasts );
    #endif
    pd.addbutton ( "unitset transformation",    act_unitsettransformation );
+   pd.addbutton ( "map transformation",        act_transformMap );
 
    pd.addfield ("~O~ptions");
     pd.addbutton ( "~M~ap valuesõctrl+M",          act_changemapvals );
@@ -1508,7 +1512,7 @@ void         k_savemap(char saveas)
 
    mousevisible(false);
    if ( saveas || !nameavail ) {
-      fileselectsvga(mapextension,&filename,0);
+      fileselectsvga(mapextension, filename, false);
    } 
    if ( !filename.empty() ) {
       mapsaved = true;
@@ -1527,7 +1531,7 @@ void         k_loadmap(void)
    ASCString s1;
 
    mousevisible(false); 
-   fileselectsvga(mapextension, &s1, 1 );
+   fileselectsvga( mapextension, s1, true );
    if ( !s1.empty() ) {
       cursor.hide(); 
       displaymessage("loading map %s",0, s1.c_str() );
@@ -3849,7 +3853,7 @@ void selectunitsetfilter ( void )
 void selectgraphicset ( void )
 {
    ASCString filename;
-   fileselectsvga("*.gfx",&filename,1);
+   fileselectsvga( "*.gfx", filename, true );
    if ( !filename.empty() ) {
       int id = getGraphicSetIdFromFilename ( filename.c_str() );
       if ( id != actmap->graphicset ) {
@@ -4193,4 +4197,79 @@ void showStatusBar(void)
    x+=activefontsettings.length+2;
 
    npop ( activefontsettings );
+}
+
+
+void transformMap ( )
+{
+
+   ASCString filename;
+   fileselectsvga ( "*.ascmapxlat", filename, true );
+
+   if ( filename.empty() )
+      return;
+
+
+   vector<int> terraintranslation;
+   vector<int> objecttranslation;
+   try {
+      tnfilestream s ( filename, tnstream::reading );
+
+      TextFormatParser tfp ( &s );
+      TextPropertyGroup* tpg = tfp.run();
+
+      PropertyReadingContainer pc ( "maptranslation", tpg );
+
+      pc.addIntegerArray ( "TerrainTranslation", terraintranslation );
+      pc.addIntegerArray ( "ObjectTranslation", objecttranslation );
+
+      pc.run();
+
+      delete tpg;
+   }
+   catch ( ParsingError err ) {
+      displaymessage ( "Error parsing file : " + err.getMessage() , 1 );
+      return;
+   }
+   catch ( ASCexception err ) {
+      displaymessage ( "Error reading file " + filename , 1 );
+      return;
+   }
+
+   if ( terraintranslation.size() % 2 ) {
+      displaymessage ( "Map Translation : terraintranslation - Invalid number of entries ", 1);
+      return;
+   }
+
+   if ( objecttranslation.size() % 2 ) {
+      displaymessage ( "Map Translation : objecttranslation - Invalid number of entries ", 1);
+      return;
+   }
+
+
+   for ( int y = 0; y < actmap->ysize; y++ )
+      for ( int x = 0; x < actmap->xsize; x++ ) {
+          pfield fld = actmap->getField ( x, y );
+          for ( int i = 0; i < terraintranslation.size()/2; i++ )
+             if ( fld->typ->terraintype->id == terraintranslation[i*2] ) {
+                TerrainType* tt = getterraintype_forid ( terraintranslation[i*2+1] );
+                if ( tt ) {
+                   fld->typ = tt->weather[fld->getweather()];
+                   fld->setparams();
+                }
+             }
+
+          for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ )
+             for ( int i = 0; i < objecttranslation.size(); i++ )
+                if ( o->typ->id == objecttranslation[i*2] ) {
+                   ObjectType* ot = getobjecttype_forid ( objecttranslation[i*2+1] );
+                   if ( ot ) {
+                      o->typ = ot;
+                      fld->sortobjects();
+                      fld->setparams();
+                   }
+                }
+   }
+   calculateallobjects();
+   displaymap();
 }

@@ -26,7 +26,10 @@
  #pragma pack(1)
 
  class Vehicle : public ContainerBase {
+    //! a vehicle must not be created without a type or map
     Vehicle (  );
+
+    //! cloning of vehicles is not allowed too
     Vehicle ( const Vehicle& v );
 
     //! is  the vehicle currently viewing the map? if yes, the view has to be removed on destruction
@@ -54,8 +57,8 @@
 
 
     const Vehicletype* typ;
-    int*         ammo;
-    int*         weapstrength;
+    int          ammo[16];
+    int          weapstrength[16];
     int          experience;
 
     //! did the unit already attack this turn
@@ -86,6 +89,8 @@
     int          networkid;
     ASCString    name;
     int          functions;
+
+    //! The class that manages the reaction fire which causes a unit to attack approaching enemies even if it is not the unit's turn
     class  ReactionFire {
          friend class Vehicle;
 
@@ -133,7 +138,7 @@
         Don't use something like "setmovement ( getmovement() - amount )", because getmovement may return a lower amount due to lack of fuel. */
     void decreaseMovement ( int movement );
 
-
+    //! resets a units movement. This is called at the beginning of each turn.
     void resetMovement( void );
 
 
@@ -163,11 +168,12 @@
 
   public:
 
-    /** returns the free weight that can be used for cargo
-        \param what: 0=cargo ; 1=material/fuel
+    /** returns the free weight that can be used for cargo or for resources
+        \param what: 0=cargo ; 1=resources
     */
     int freeweight ( int what = 0 );
 
+    //! Returns the size of a unit. A size is equal to the weight of the unit without any cargo or carried resources.
     int size ( void );
 
     //! hook that is called when a turn ends
@@ -176,8 +182,10 @@
     //! hook that is called the next round begins ( active player switching from player8 to player1 )
     void endRound ( void );
 
+    //! constructs a vehicle at the given position.
+    void constructvehicle ( pvehicletype tnk, int x, int y );
 
-    void constructvehicle ( pvehicletype tnk, int x, int y );      // current cursor position will be used
+    //! checks whether the unit can construct a vehicle of the given type at the given position.
     bool vehicleconstructable ( pvehicletype tnk, int x, int y );
 
     //! displays the unit at position x/y on the screen
@@ -204,10 +212,22 @@
     void setGeneratorStatus( bool status );
     bool getGeneratorStatus () const { return generatoractive; };
 
+    /** adds the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( pmap, int)
+        \sa viewcalculation.cpp */
     void addview ( void );
+
+    /** removes the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( pmap, int)
+        \sa viewcalculation.cpp */
     void removeview ( void );
+
+    /** returns true if the units view is currently added to the maps global visibility.
+        \sa viewcalculation.cpp */
     bool isViewing ( ) const { return viewOnMap; };
     const SingleWeapon *getWeapon( unsigned weaponNum );
+
+    /** checks whether the unit can construct a building of the given type.
+        This method does not check if there is enough space around the unit to place
+        the building */
     bool buildingconstructable ( pbuildingtype bld );
 
     /** searches for mineral resources.
@@ -215,6 +235,7 @@
     */
     int searchForMineralResources( void );
 
+    //! returns the units position
     MapCoordinate3D getPosition ( );
 
     /** can the unit repair anything? This does not necessarily mean that the unit can repair

@@ -5,9 +5,12 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.62 2001-09-13 17:43:12 mbickel Exp $
+//     $Id: loaders.cpp,v 1.63 2001-10-02 14:06:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2001/09/13 17:43:12  mbickel
+//      Many, many bug fixes
+//
 //     Revision 1.61  2001/08/19 12:50:03  mbickel
 //      fixed event trigger allenemybuildings
 //
@@ -791,8 +794,8 @@ void      tspfldloaders:: writemessages ( void )
       stream->writeInt ( (*mi)->time );
       stream->writeInt ( 1 );
       stream->writeInt ( (*mi)->id );
-      stream->writeInt ( (*mi)->runde );
-      stream->writeInt ( (*mi)->move );
+      stream->writeInt ( (*mi)->gametime.turn() );
+      stream->writeInt ( (*mi)->gametime.move() );
 
 
       ASCString& t = (*mi)->text;
@@ -871,8 +874,9 @@ void      tspfldloaders:: readmessages ( void )
       msg->time    = stream->readInt();
       bool msgtext = stream->readInt();
       msg->id      = stream->readInt();
-      msg->runde   = stream->readInt();
-      msg->move    = stream->readInt();
+      int t = stream->readInt();
+      int m = stream->readInt();
+      msg->gametime.set ( t, m );
 
       spfld->__loadmessages = stream->readInt();
 
@@ -1754,8 +1758,7 @@ int          tmaploaders::loadmap( const char *       name )
    cursor.posx = 0;
    cursor.posy = 0;
 
-   actmap->time.a.turn = 1;
-   actmap->time.a.move = 0;
+   actmap->time.set ( 1, 0 );
    actmap->levelfinished = false;
 
    displayLogMessage ( 4, "done\n");
