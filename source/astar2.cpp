@@ -7,6 +7,7 @@
 #include "spfst.h"
 #include "controls.h"
 
+#include "astar2.h"
 
 // Path_div is used to modify the heuristic.  The lower the number,
 // the higher the heuristic value.  This gives us worse paths, but
@@ -28,48 +29,21 @@ int path_div = 8;
 enum HexDirection { DirN, DirNE, DirSE, DirS, DirSW, DirNW, DirNone };
 
 
-struct HexCoord
-{
-    int m, n;
-    HexCoord(): m(0), n(0) {}
-    HexCoord( int m_, int n_ ): m(m_), n(n_) {}
-    ~HexCoord() {}
-/*
-    int x() const { return m * fielddistx + (n&1) * fielddisthalfx; }
-    int y() const { return n * fielddisty ; }
-    
-    int left() const { return x() - HexWidth/2; }
-    int right() const { return x() + HexWidth/2; }
-    int bottom() const { return y() - HexHeight/2; }
-    int top() const { return y() + HexHeight/2; }
-    
-    // Rect rect() const { return Rect(left(),bottom(),right(),top()); }
-*/
-};
 
-
-struct Node
-{
-    HexCoord h;        // location on the map, in hex coordinates
-    int gval;        // g in A* represents how far we've already gone
-    int hval;        // h in A* represents an estimate of how far is left
-    Node(): h(0,0), gval(0), hval(0) {}
-};
-
-bool operator < ( const Node& a, const Node& b )
+bool operator < ( const AStar::Node& a, const AStar::Node& b )
 {
     // To compare two nodes, we compare the `f' value, which is the
     // sum of the g and h values.
     return (a.gval+a.hval) < (b.gval+b.hval);
 }
 
-bool operator == ( const HexCoord& a, const HexCoord& b )
+bool operator == ( const AStar::HexCoord& a, const AStar::HexCoord& b )
 {
    return (a.m == b.m) && (a.n == b.n );
 }
 
 
-bool operator == ( const Node& a, const Node& b )
+bool operator == ( const AStar::Node& a, const AStar::Node& b )
 {
     // Two nodes are equal if their components are equal
     return (a.h == b.h) && (a.gval == b.gval ) && (a.hval == b.hval );
@@ -86,8 +60,18 @@ HexDirection ReverseDirection( HexDirection d )
 }
 
 
+AStar :: AStar ( void )
+{
+   tempsMarked = NULL;
+}
 
-int dist( HexCoord a, HexCoord b )
+AStar :: ~AStar ( )
+{
+   if ( tempsMarked )
+      tempsMarked->cleartemps( 1 );
+}
+
+int AStar::dist( HexCoord a, HexCoord b )
 {
    /*
     // The **Manhattan** distance is what should be used in A*'s heuristic
@@ -114,30 +98,13 @@ int dist( HexCoord a, HexCoord b )
     return beeline ( a.m, a.n, b.m, b.n );
 }
 
-
-
-int kost( HexCoord a, HexDirection d, HexCoord b, pvehicle vehicle )
+int AStar::getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle )
 {
-    // This is the cost of moving one step.  To get completely accurate
-    // paths, this must be greater than or equal to the change in the
-    // distance function when you take a step.
-
-    /*
-    Terrain t = m.terrain(b);
-    // No walking through walls!
-    if( t == Wall || t == Tower )
-        return MAXIMUM_PATH_LENGTH;
-    // I take the difference in altitude and use that as a cost
-    int da = (m.altitude(b)-m.altitude(a)+ALTITUDE_SCALE/2)/ALTITUDE_SCALE;
-    // Roads are faster
-    int rd = int(t == Road);
-    return (2-rd) + (da>0?da:0);
-    */
-    if ( !fieldaccessible ( getfield ( b.m, b.n ), vehicle ))
+    if ( !fieldaccessible ( getfield ( x2, y2 ), vehicle ))
        return MAXIMUM_PATH_LENGTH;
 
     int movecost, fuelcost;
-    calcmovemalus ( a.m, a.n, b.m, b.n, vehicle, -1, movecost, fuelcost );
+    calcmovemalus ( x1, y1, x2, y2, vehicle, -1, movecost, fuelcost );
     return movecost;
 }
 
@@ -145,8 +112,6 @@ int kost( HexCoord a, HexDirection d, HexCoord b, pvehicle vehicle )
 
 // greater(Node) is an STL thing to create a 'comparison' object out of
 // the greater-than operator, and call it comp.
-typedef std::vector<Node> Container;
-std::greater<Node> comp;
 
 
 // I'm using a priority queue implemented as a heap.  STL has some nice
@@ -155,7 +120,7 @@ std::greater<Node> comp;
 // to traverse the entire data structure to update certain elements; the
 // abstraction layer on priority_queue wouldn't let me do that.
 
-inline void get_first( Container& v, Node& n )
+inline void AStar::get_first( Container& v, Node& n )
 {
     n = v.front();
     pop_heap( v.begin(), v.end(), comp );
@@ -168,7 +133,7 @@ inline void get_first( Container& v, Node& n )
 
 
 
-void AStar( pmap actmap, HexCoord A, HexCoord B, std::vector<int>& path, pvehicle veh )
+void AStar::findPath( pmap actmap, HexCoord A, HexCoord B, std::vector<int>& path, pvehicle veh )
 {
     for ( int y = actmap->xsize * actmap->ysize -1; y >= 0; y-- )
        actmap->field[y].temp3 = DirNone;
@@ -186,7 +151,6 @@ void AStar( pmap actmap, HexCoord A, HexCoord B, std::vector<int>& path, pvehicl
 
     // Remember which nodes we visited, so that we can clear the mark array
     // at the end.
-    Container visited;
 
     // While there are still nodes to visit, visit them!
     while( !open.empty() )
@@ -229,7 +193,7 @@ void AStar( pmap actmap, HexCoord A, HexCoord B, std::vector<int>& path, pvehicl
                 continue;
 
             // cursor.gotoxy ( hn.m, hn.n );
-            int k = kost( N.h, d, hn, veh );
+            int k = getMoveCost( N.h.m, N.h.n, hn.m, hn.n, veh );
             Node N2;
             N2.h = hn;
             N2.gval = N.gval + k;
@@ -291,11 +255,42 @@ void AStar( pmap actmap, HexCoord A, HexCoord B, std::vector<int>& path, pvehicl
     actmap->cleartemps ( 4 ); 
 }
 
-void AStar( pmap actmap, std::vector<int>& path, pvehicle veh, int x, int y )
+bool AStar::fieldVisited ( int x, int y)
 {
-//   int og = godview;
-//   godview = 1;
-   AStar ( actmap, HexCoord ( veh->xpos, veh->ypos ), HexCoord ( x, y ), path, veh );
-//   godview = og;
+   HexCoord hn ( x,y );
+   for( Container::iterator i = visited.begin(); i != visited.end(); i++ )
+       if( (*i).h == hn )
+          return true;
+
+   return false;
 }
 
+void AStar::findAllAccessibleFields ( pmap actmap, pvehicle veh )
+{
+   actmap->cleartemps ( 1 );
+   vector<int> dummy;
+   findPath ( actmap, dummy, veh, actmap->xsize, actmap->ysize );  //this field does not exist...
+   for ( Container::iterator i = visited.begin(); i != visited.end(); i++ )
+      getfield ( (*i).h.m, (*i).h.n )->a.temp = 1;
+
+   tempsMarked = actmap;
+}
+
+
+void AStar::findPath( pmap actmap, std::vector<int>& path, pvehicle veh, int x, int y )
+{
+  findPath ( actmap, AStar::HexCoord ( veh->xpos, veh->ypos ), AStar::HexCoord ( x, y ), path, veh );
+}
+
+
+
+
+void findPath( pmap actmap, std::vector<int>& path, pvehicle veh, int x, int y )
+{
+  AStar as;
+  as.findPath ( actmap, AStar::HexCoord ( veh->xpos, veh->ypos ), AStar::HexCoord ( x, y ), path, veh );
+//   int og = godview;
+//   godview = 1;
+//   AStar ( actmap, HexCoord ( veh->xpos, veh->ypos ), HexCoord ( x, y ), path, veh );
+//   godview = og;
+}
