@@ -1,6 +1,13 @@
-//     $Id: dialog.cpp,v 1.36 2000-07-31 19:16:34 mbickel Exp $
+//     $Id: dialog.cpp,v 1.37 2000-08-02 10:28:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2000/07/31 19:16:34  mbickel
+//      Improved handing of multiple directories
+//      Fixed: wind direction not displayed when cycling through wind heights
+//      Fixed: oil rig not working
+//      Fixed: resources becomming visible when checking mining station status
+//      Fixed: division by zero when moving unit without fuel consumption
+//
 //     Revision 1.35  2000/07/29 14:54:17  mbickel
 //      plain text configuration file implemented
 //
@@ -6113,8 +6120,13 @@ void viewterraininfo ( void )
                strcat( text, typ->description );
 
          char t3[1000];
-         sprintf(t3, "Unit ID: %d \n", typ->id );
+         sprintf(t3, "\nUnit ID: %d \n", typ->id );
          strcat ( text, t3 );
+
+         if ( typ->filename ) {
+            sprintf(t3, "file name: %s\n", typ->filename );
+            strcat ( text, t3 );
+         }
 
          strcat ( text, "the unit can drive onto the following fields:\n" );
          appendTerrainBits ( text, &typ->terrainaccess->terrain );

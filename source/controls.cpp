@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.51 2000-08-02 08:47:56 mbickel Exp $
+//     $Id: controls.cpp,v 1.52 2000-08-02 10:28:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2000/08/02 08:47:56  mbickel
+//      Fixed: Mineral resources where visible for all players
+//
 //     Revision 1.50  2000/07/31 19:16:33  mbickel
 //      Improved handing of multiple directories
 //      Fixed: wind direction not displayed when cycling through wind heights
@@ -5895,7 +5898,7 @@ void         generatevehicle_cl ( pvehicletype fztyp,
 
 
 
-void MapNetwork :: searchfield ( int x, int y, int dir, int nexttobuilding )
+void MapNetwork :: searchfield ( int x, int y, int dir )
 {
   int s;
 
@@ -5923,12 +5926,10 @@ void MapNetwork :: searchfield ( int x, int y, int dir, int nexttobuilding )
       fld->a.temp = 1;
 
       int d = fieldavail( x, y );
-      if ( d > 0 ) {
-         if ( fld->vehicle )
-            if ( pass == 2 )
-               checkvehicle ( fld->vehicle );
-      } else
+      if ( d <= 0 )
          return;
+
+      searchvehicle ( x, y );
 
       int olddir = dir + sidenum/2; 
       while (olddir >= sidenum ) 
@@ -5948,7 +5949,7 @@ void MapNetwork :: searchfield ( int x, int y, int dir, int nexttobuilding )
                int nx = x;
                int ny = y;
                getnextfield ( nx, ny, arr[s] );
-               searchfield( nx, ny, arr[s], 0 );
+               searchfield( nx, ny, arr[s] );
                if ( searchfinished() )
                   return ;
             } 
@@ -5965,6 +5966,19 @@ void MapNetwork :: searchfield ( int x, int y, int dir, int nexttobuilding )
    }  while ( 1 ); 
 
 }
+
+void MapNetwork :: searchvehicle ( int x, int y )
+{
+   if ( pass == 2 ) {
+      pfield newfield = getfield ( x, y );
+      if ( !newfield->a.temp2 ) 
+        if ( newfield->vehicle ) {
+           checkvehicle ( newfield->vehicle );
+           newfield->a.temp2 = 1;
+        }
+   }
+}
+
 
 void MapNetwork :: searchbuilding ( int x, int y )
 {
@@ -5994,7 +6008,10 @@ void MapNetwork :: searchbuilding ( int x, int y )
                   getnextfield ( xp2, yp2, d );
                   pfield newfield = getfield ( xp2, yp2 );
                   if ( newfield && newfield->building != bld  && !newfield->a.temp )
-                     searchfield ( xp2, yp2, d, 1 );
+                     searchfield ( xp2, yp2, d );
+
+                  searchvehicle ( xp2, yp2 );
+
                } /* endfor */
          }
 }
@@ -6032,19 +6049,29 @@ void MapNetwork :: start ( int x, int y )
                checkbuilding ( bld );
                bld = bld->next;
             } /* endwhile */
+
+            if ( !searchfinished() ) {
+               pass++;
+               pvehicle veh  = actmap->player[i].firstvehicle;
+               while ( veh ) {
+                  checkvehicle ( veh );
+                  veh = veh->next;
+               } /* endwhile */
+            }
+
          }
    } else 
       if ( globalsearch() == 1 ) {
          actmap->cleartemps(7);
          startposition.x = x;
          startposition.y = y;
-         searchfield ( x, y, -1, 0 );
+         searchfield ( x, y, -1 );
          actmap->cleartemps(7);
-         if ( searchfinished() ) {
+         if ( !searchfinished() ) {
             pass++;
             startposition.x = x;
             startposition.y = y;
-            searchfield ( x, y, -1, 0 );
+            searchfield ( x, y, -1 );
             actmap->cleartemps(7);
          }
       } else  
@@ -6465,7 +6492,8 @@ int ResourceChangeNet :: getresource ( int x, int y, int resource, int _player, 
 
 void GetResourcePlus :: checkvehicle ( pvehicle v )
 {
-   got += v->typ->energy;
+   if ( v->generatoractive )
+      got += v->typ->energy;
 }
 
 

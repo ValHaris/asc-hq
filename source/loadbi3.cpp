@@ -1,6 +1,9 @@
-//     $Id: loadbi3.cpp,v 1.21 2000-07-29 14:54:35 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.22 2000-08-02 10:28:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/07/29 14:54:35  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.20  2000/07/16 14:20:03  mbickel
 //      AI has now some primitive tactics implemented
 //      Some clean up
@@ -111,9 +114,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include "loadbi3.h"
 #include "newfont.h"
-#include "string.h"
 #include "basegfx.h"
 #include "keybp.h"
 #include "typen.h"

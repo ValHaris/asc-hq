@@ -1,6 +1,9 @@
-//     $Id: newfont.h,v 1.6 2000-05-23 20:40:48 mbickel Exp $
+//     $Id: newfont.h,v 1.7 2000-08-02 10:28:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/05/23 20:40:48  mbickel
+//      Removed boolean type
+//
 //     Revision 1.5  1999/12/28 21:03:14  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -50,10 +53,10 @@
 
 #ifndef newfont_h
 
-#define newfont_h 1
+#define newfont_h 
+#include "basestrm.h"
 #include "tpascal.inc"
 #include "palette.h"
-#include "basestrm.h"
 
 #pragma pack(1)
 

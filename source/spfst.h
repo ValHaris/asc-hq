@@ -1,6 +1,10 @@
-//     $Id: spfst.h,v 1.16 2000-07-23 17:59:53 mbickel Exp $
+//     $Id: spfst.h,v 1.17 2000-08-02 10:28:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/07/23 17:59:53  mbickel
+//      various AI improvements
+//      new terrain information window
+//
 //     Revision 1.15  2000/07/16 14:57:44  mbickel
 //      Datafile versioning
 //
@@ -96,8 +100,8 @@
 #ifndef spfst_h
   #define spfst_h
 
-  #include "keybp.h"
   #include "newfont.h"
+  #include "keybp.h"
   #include "basegfx.h"
   #include "mousehnd.h"
 

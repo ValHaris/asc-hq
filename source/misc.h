@@ -1,6 +1,9 @@
-//     $Id: misc.h,v 1.7 2000-05-07 12:53:59 mbickel Exp $
+//     $Id: misc.h,v 1.8 2000-08-02 10:28:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/05/07 12:53:59  mbickel
+//      some minor adjustments
+//
 //     Revision 1.6  2000/05/06 20:25:23  mbickel
 //      Fixed: -recognition of a second mouse click when selection a pd menu item
 //             -movement: fields the unit can only pass, but not stand on them,
@@ -94,26 +97,13 @@ class structure_size_tester {
        structure_size_tester ( void );
     };
 
-   #ifdef MEMCHK
-   #define __a
-   #endif
-   
-
-   #ifdef sgmain
-   #define __a
-   #endif
-
-   #ifdef karteneditor
-   #define __a
-   #endif
-
-
-   #ifdef __a
-   extern void* asc_malloc ( size_t size );
-   extern void asc_free ( void* p );
+   #if defined(MEMCHK) | defined(sgmain) | defined(karteneditor)
+    extern void* asc_malloc ( size_t size );
+    extern void asc_free ( void* p );
    #else
-   #define asc_malloc malloc
-   #define asc_free   free
+    #define asc_malloc malloc
+    #define asc_free   free
    #endif
+
    #pragma pack()
 #endif

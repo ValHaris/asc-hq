@@ -1,6 +1,9 @@
-//     $Id: controls.h,v 1.17 2000-08-02 08:47:58 mbickel Exp $
+//     $Id: controls.h,v 1.18 2000-08-02 10:28:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/08/02 08:47:58  mbickel
+//      Fixed: Mineral resources where visible for all players
+//
 //     Revision 1.16  2000/07/23 17:59:52  mbickel
 //      various AI improvements
 //      new terrain information window
@@ -512,7 +515,8 @@ class MapNetwork {
                 virtual int globalsearch ( void ) = 0;
 
                 virtual void searchbuilding ( int x, int y );
-                virtual void searchfield ( int x, int y, int dir, int nexttobuilding );
+                virtual void searchvehicle  ( int x, int y );
+                virtual void searchfield ( int x, int y, int dir );
              public:
                 virtual void start ( int x, int y );
                 MapNetwork ( int checkInstances = 1 );

@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.31 2000-07-29 14:54:54 mbickel Exp $
+//     $Id: typen.h,v 1.32 2000-08-02 10:28:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/07/29 14:54:54  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.30  2000/07/28 10:15:34  mbickel
 //      Fixed broken movement
 //      Fixed graphical artefacts when moving some airplanes
@@ -627,6 +630,7 @@ class tvehicletype {    // This structure does not have a fixed layout any more 
        int          autorepairrate;
 
        AiParameter* aiparam[8];
+       char*        filename;    // just for information purposes in the main program
 
        int maxweight ( void );     // max. weight including fuel and material
        int maxsize   ( void );     // without fuel and material

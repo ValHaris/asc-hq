@@ -1,6 +1,10 @@
-//     $Id: basestrm.cpp,v 1.29 2000-08-01 10:39:08 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.30 2000-08-02 10:28:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/08/01 10:39:08  mbickel
+//      Updated documentation
+//      Refined configuration file handling
+//
 //     Revision 1.28  2000/07/31 19:16:31  mbickel
 //      Improved handing of multiple directories
 //      Fixed: wind direction not displayed when cycling through wind heights
@@ -151,11 +155,11 @@
 
 #include "config.h"
 #include <stdio.h> 
-#include <string.h>
+// #include <string.h>
 #include <ctype.h>
 #include <malloc.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string>
 
 #include <sys/stat.h>
 
@@ -209,6 +213,8 @@
                                          NULL, NULL, NULL, NULL, NULL };
 
 
+
+
 #ifdef _DOS_
  int verbosity = 0;
 #else
@@ -241,6 +247,10 @@ const int containermagic = 'MBCN';
 const char* LZ_SIGNATURE  =  "MBLZW16";
 const char* RLE_SIGNATURE =  "MBRLE1";
 const char* BZIP_SIGNATURE = "MBZLB2X!";
+
+
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////        Watchpointer
@@ -356,6 +366,10 @@ tinvalidversion :: tinvalidversion ( const char* fn, int ex, int fnd )
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+tnstream :: tnstream ( void ) 
+          : devicename ( "-abstract tnstream-" ) {}
+
+
 void         tnstream::readrlepict( void** pnter, int allocated, int* size)
 { 
   trleheader   hd; 
@@ -395,6 +409,12 @@ void tnstream :: writerlepict ( const void* buf )
       word* pw = (word*) buf;
       writedata ( buf, ( pw[0] + 1 ) * ( pw[1] + 1 ) + 4 );
    }
+}
+
+
+const char* tnstream::getDeviceName ( void )
+{
+   return devicename.data();
 }
 
 
@@ -654,8 +674,6 @@ tnbufstream::tnbufstream (  )
    datalen = 0;
    modus = 0; 
 
-   strcpy ( devicename , "abstract" ); 
-
   zeiger = NULL;
   int maxav = 0x10000;
 
@@ -675,7 +693,6 @@ tnbufstream::tnbufstream (  )
 } 
 
 
-
 int          tnbufstream::readdata( void* buf, int size, int excpt  )
 { 
    char*        cpbuf = (char*) buf;
@@ -684,13 +701,13 @@ int          tnbufstream::readdata( void* buf, int size, int excpt  )
    actpos2 = 0; 
 
    if (modus == 2)  {
-      throw  tinvalidmode ( devicename, modus, 1 );
+      throw  tinvalidmode ( getDeviceName(), modus, 1 );
 	}
       
    while (actpos2 < size) { 
       if (datasize == 0) 
           if ( excpt ) {
-             throw treadafterend ( devicename );
+             throw treadafterend ( getDeviceName() );
 			}
           else
              return actpos2;
@@ -723,7 +740,7 @@ void         tnbufstream::writedata( const void* buf, int size )
    char*        cpbuf = (char*) buf;
 
    if (modus == 1) 
-      throw  tinvalidmode ( devicename, modus, 2 );
+      throw  tinvalidmode ( getDeviceName(), modus, 2 );
 
    actpos2 = 0; 
 
@@ -764,35 +781,17 @@ tnbufstream::~tnbufstream ()
 
 int tn_file_buf_stream::getstreamsize(void)
 { 
-          
-   int size = -1;
-   {
-      DIR *dirp; 
-      struct dirent *direntp; 
-  
-      dirp = opendir( devicename );  
-      if( dirp != NULL ) { 
-        for(;;) { 
-          direntp = readdir( dirp ); 
-          if ( direntp == NULL ) 
-             break; 
-#ifdef NAMLEN
-          size = NAMLEN(direntp);
-#else
-	  size = direntp->d_size;
-#endif
-        } 
-        closedir( dirp ); 
-      } 
-    }
-   return size;
-
+   struct stat buf;
+   if ( stat ( getDeviceName(), &buf) )
+      return -1;
+   else
+      return (buf.st_size );
 }                 
 
 time_t tn_file_buf_stream::get_time ( void )
 {
    struct stat buf;
-   if ( stat (devicename, &buf) )
+   if ( stat ( getDeviceName(), &buf) )
       return -1;
    else
       return (buf.st_mtime);
@@ -817,7 +816,7 @@ tn_file_buf_stream::tn_file_buf_stream( const char* name, char mode)
      if (mode == 1)
        readbuffer();
                 
-     strcpy ( devicename , name );
+     devicename = name;
 
    } else 
      throw tfileerror( name );
@@ -832,7 +831,7 @@ void tn_file_buf_stream::seekstream( int newpos )
 
       fseek( fp, newpos, SEEK_SET );
       if ( ferror ( fp ) )
-         throw  tfileerror ( devicename );
+         throw  tfileerror ( getDeviceName() );
    
       actmempos = 0; 
       actfilepos = newpos; 
@@ -842,7 +841,7 @@ void tn_file_buf_stream::seekstream( int newpos )
       else {
          fseek( fp, newpos, SEEK_SET );
          if ( ferror ( fp ) )
-            throw  tfileerror ( devicename );
+            throw  tfileerror ( getDeviceName() );
       
          actmempos = 0; 
          actfilepos = newpos; 
@@ -857,7 +856,7 @@ void tn_file_buf_stream::readbuffer( void )
 { 
    datasize = fread( zeiger, 1, memsize, fp);
    if ( ferror ( fp ) ) 
-      throw  tfileerror ( devicename );
+      throw  tfileerror ( getDeviceName() );
 
    actfilepos += datasize;
 } 
@@ -869,7 +868,7 @@ void tn_file_buf_stream::writebuffer()
 { 
    fwrite( zeiger, 1, actmempos, fp );
    if ( ferror ( fp ) )
-      throw  tfileerror ( devicename );
+      throw  tfileerror ( getDeviceName() );
 
    actmempos = 0;
 } 
@@ -1032,7 +1031,7 @@ char* constructFileName( char* buf, int directoryLevel, const char* path, const 
 
      appendbackslash ( buf );
 
-     char name2[10000];
+     char name2[ maxFileStringSize ];
      if ( filename && strchr ( filename, pathdelimitter )) {
         strcpy ( name2, filename );
         int i = strlen ( name2 )-1;
@@ -1052,7 +1051,7 @@ char* constructFileName( char* buf, int directoryLevel, const char* path, const 
      if ( buf[0] == '~' && buf[1] == pathdelimitter ) {
         char* home = getenv ( "HOME" );
         if ( home ) {
-           char temp[1000];
+           char temp[ maxFileStringSize ];
            strcpy ( temp, buf );
            strcpy ( buf, home );
            appendbackslash ( buf );
@@ -1641,10 +1640,17 @@ tn_c_lzw_filestream :: tn_c_lzw_filestream ( const char* name, char mode ) : tan
 
       strm = new tn_file_buf_stream ( constructFileName ( string, fl.directoryLevel, NULL, name), mode );
       inp = 1;
+      devicename = name;
+
    } else {
       containerstream = fl.container;
       if ( containerstream ) {
          containerstream->opencontainerfile ( name );
+
+         devicename = name;
+         devicename += " located inside ";
+         devicename += containerstream->getDeviceName() ;
+
          inp = 2;
       } else
          throw tfileerror ( name );
@@ -1847,10 +1853,10 @@ tfindfile :: tfindfile ( const char* name )
 
    char* directory[maxSearchDirNum];
    int dirNum;
-   char wildcard[1000];
+   char wildcard[ maxFileStringSize ];
 
    if ( strchr ( name, pathdelimitter )) {
-      char name2[1000];
+      char name2[ maxFileStringSize ];
       strcpy ( name2, name );
       int i = strlen ( name2 )-1;
       while ( name2[i] != pathdelimitter )
@@ -2133,10 +2139,11 @@ int tmemorystream :: dataavail ( void )
 }
 
 
-char tempstringbuf[260];
+char tempstringbuf[ maxFileStringSize ];
 
 char* getnextfilenumname ( const char* first, const char* suffix, int num )
 {
+
    int found = 0;
 
    if ( num < 0 )
@@ -2196,12 +2203,11 @@ time_t get_filetime ( char* fileName )
    locateFile ( fileName, &fl );
 
    if ( fl.found ) {
-      char buf[2000];
-
      if ( fl.container )
         return fl.container->get_time();
      else {
         struct stat stbuf;
+        char buf[ maxFileStringSize ];
         if ( !stat ( constructFileName ( buf, fl.directoryLevel, NULL, fileName), &stbuf) )
            return ( stbuf.st_mtime);
         else
@@ -2242,8 +2248,8 @@ int directoryExist ( const char* path )
 void addSearchPath ( const char* path )
 {
    if ( path ) {
-      char buf[1000];
-      char* string = new char[ strlen(path) + 1000 ];
+      char buf[ maxFileStringSize ];
+      char* string = new char[ strlen(path) +  maxFileStringSize ];
       strcpy ( string, constructFileName ( buf, -3, path, NULL ) );
 
       if ( directoryExist( buf )) {

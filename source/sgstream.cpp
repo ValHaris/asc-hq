@@ -1,6 +1,10 @@
-//     $Id: sgstream.cpp,v 1.20 2000-08-01 10:39:14 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.21 2000-08-02 10:28:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/08/01 10:39:14  mbickel
+//      Updated documentation
+//      Refined configuration file handling
+//
 //     Revision 1.19  2000/07/31 19:16:48  mbickel
 //      Improved handing of multiple directories
 //      Fixed: wind direction not displayed when cycling through wind heights
@@ -1029,7 +1033,7 @@ void* generate_vehicle_gui_build_icon ( pvehicletype tnk )
 
 
 
-pvehicletype   loadvehicletype(char *       name)
+pvehicletype   loadvehicletype( char* name)
 {
    tnfilestream stream ( name, 1 );
    return loadvehicletype ( &stream );
@@ -1269,6 +1273,9 @@ pvehicletype   loadvehicletype( pnstream stream )
       #else
        fztn->buildicon = NULL;
       #endif
+
+      fztn->filename = strdup ( stream->getDeviceName() );
+
       return fztn;
    } else
       return NULL;

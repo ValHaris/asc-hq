@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.27 2000-07-29 14:54:49 mbickel Exp $
+//     $Id: typen.cpp,v 1.28 2000-08-02 10:28:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/07/29 14:54:49  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.26  2000/07/05 10:49:37  mbickel
 //      Fixed AI bugs
 //      setbuildingdamage event now updates the screen
@@ -1140,6 +1143,7 @@ tvehicletype :: tvehicletype ( void )
 
    weapons = new UnitWeapon;
    terrainaccess = new tterrainaccess;
+   filename = NULL;
 }
 
 tvehicletype :: ~tvehicletype ( )

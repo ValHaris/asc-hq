@@ -1,6 +1,10 @@
-//     $Id: basestrm.h,v 1.16 2000-08-01 10:39:08 mbickel Exp $
+//     $Id: basestrm.h,v 1.17 2000-08-02 10:28:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/08/01 10:39:08  mbickel
+//      Updated documentation
+//      Refined configuration file handling
+//
 //     Revision 1.15  2000/07/31 19:16:32  mbickel
 //      Improved handing of multiple directories
 //      Fixed: wind direction not displayed when cycling through wind heights
@@ -95,6 +99,7 @@
 #ifndef basestream_h
 #define basestream_h
 
+#include <string>
 #include <stdio.h>
 #include <time.h>
 
@@ -106,15 +111,6 @@ extern "C" {
 
 #include "tpascal.inc"
 
-
-#ifndef MAX
- #define MAX(a,b)		((a) >= (b) ? (a) : (b))
-#endif
-#ifndef MIN
- #define MIN(a,b)		((a) <= (b) ? (a) : (b))
-#endif
-#define MAX3(a,b,c)		((a) >= (b) ? MAX(a,c) : MAX(b,c))
-#define MIN3(a,b,c)		((a) <= (b) ? MIN(a,c) : MIN(b,c))
 
 
 #pragma pack(1)
@@ -129,6 +125,8 @@ extern "C" {
 
 
 enum FS_StreamMode { fs_undefined, fs_read, fs_write };
+
+const int maxFileStringSize = 10000;    // is used for some character arrays
 
 
 class CharBuf {
@@ -282,6 +280,10 @@ class tnstream {
            virtual void writerlepict ( const void* pnter );
            virtual void readrlepict( void** pnter, int allocated, int* size);
            virtual ~tnstream() {};
+           virtual const char* getDeviceName ( void );
+           tnstream ( );
+         protected:
+           string devicename; // will just contain "abstract" 
 
 };
 
@@ -334,13 +336,11 @@ class tnbufstream  : public tnstream {
            char  modus;
            int   actmempos;
            int   memsize;
-           char devicename[100];
            int   datasize;
 
            virtual void readbuffer( void ) = 0;
            virtual void writebuffer( void ) = 0;
            virtual void close( void ) {};
-
        public:
            tnbufstream ( );
            virtual void writedata ( const void* buf, int size );
