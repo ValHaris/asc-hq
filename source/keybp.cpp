@@ -1,6 +1,9 @@
-//     $Id: keybp.cpp,v 1.6 1999-12-30 21:04:45 mbickel Exp $
+//     $Id: keybp.cpp,v 1.7 2000-01-02 20:23:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  1999/12/30 21:04:45  mbickel
+//      Restored DOS compatibility again.
+//
 //     Revision 1.5  1999/12/28 22:04:25  mbickel
 //      Had to make some changes again to compile it for DOS...
 //
@@ -482,6 +485,23 @@ void initkeyb(void)
    } 
    #endif   
 } 
+
+
+void getkeysyms ( tkey* keysym, int* keyprnt )
+{
+   if (keyboardinit == 0) {
+      tkey k = r_key();
+     #ifdef NEWKEYB
+      *keysym = ct_invvalue;
+     #else
+      *keysym = k;
+     #endif
+      *keyprnt = k;
+   } else {
+      *keysym = r_key();
+      *keyprnt = cto_invvalue;
+   }
+}
 
 
 void  closekeyb(void)

@@ -1,6 +1,15 @@
-//     $Id: vesa.h,v 1.3 1999-11-22 18:28:06 mbickel Exp $
+//     $Id: vesa.h,v 1.4 2000-01-02 20:23:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/11/22 18:28:06  mbickel
+//      Restructured graphics engine:
+//        VESA now only for DOS
+//        BASEGFX should be platform independant
+//        new interface for initialization
+//      Rewrote all ASM code in C++, but it is still available for the Watcom
+//        versions
+//      Fixed bugs in RLE decompression, BI map importer and the view calculation
+//
 //     Revision 1.2  1999/11/16 03:42:48  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -57,6 +66,7 @@ extern void  closegraphics ( void );
 
 
 extern int copy2screen( void );
+extern int copy2screen( int x1, int y1, int x2, int y2 );
 
 #ifdef _NOASM_
 extern int dpmscapabilities;

@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.11 2000-01-02 19:47:05 mbickel Exp $
+//     $Id: dialog.cpp,v 1.12 2000-01-02 20:23:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/01/02 19:47:05  mbickel
+//      Continued Linux port
+//      Fixed crash at program exit
+//
 //     Revision 1.10  1999/12/30 20:30:27  mbickel
 //      Improved Linux port again.
 //
@@ -2024,7 +2028,7 @@ void         tfileselectsvga::init( char sw  )
       addbutton("save",10,ysize - 45,110,ysize - 10,0,1,1,true);
 
    addbutton("cancel",120,ysize - 45,210,ysize - 10,0,1,2,true);
-   addkey ( 2, ct_esc );
+  // addkey ( 2, cto_esc );
 
    addbutton("sort by name",430,ysize - 45, xsize - 10, ysize - 30,3,1,3,true);
    addeingabe(3, &sort_name, black, dblue);
@@ -2471,7 +2475,7 @@ void         tfileselectsvga::run(void)
          tdialogbox::run();
 
          if ( numberoffiles ) {
-            switch ( taste ) {
+            switch ( prntkey ) {
             case cto_down:  markedfile++;
                             checkfsf( 1 );
                             fileausgabe(false,1);
@@ -2514,7 +2518,7 @@ void         tfileselectsvga::run(void)
                fileausgabe( false ,1);
          }
 
-         if (taste == cto_enter) {
+         if (prntkey == cto_enter) {
             if ( (swtch == 1 && ( markedfile >= 0) )   ||   ( swtch == 0) && searchstring[0]  )
                abrt = 2;
             else
@@ -2522,28 +2526,28 @@ void         tfileselectsvga::run(void)
                  abrt = 3;
          }
 
-         if ((taste >= ' ') && (taste < 256)) {   /* spedsearc */ 
+         if ((prntkey >= ' ') && (prntkey < 256)) {   /* spedsearc */ 
             if (swtch == 1) {
-               if (speedsearch(taste)) { 
+               if (speedsearch(prntkey)) { 
                   checkfsf( 1 );
                   fileausgabe(false,1); 
                } 
             } 
             else { 
                if ( searchsize <= 7 ) {
-                  searchstring[searchsize] = taste;
+                  searchstring[searchsize] = prntkey;
                   searchsize++;
                   searchstring[searchsize] = 0;
                   displayspeedsearch(); 
                }
             } 
          } 
-         if ((taste == cto_bspace) && (searchstring[0] != 0)) {   /* l”schen des letzten zeichens von searchstring */
+         if ((prntkey == cto_bspace) && (searchstring[0] != 0)) {   /* l”schen des letzten zeichens von searchstring */
             searchsize--;
             searchstring[searchsize] = 0;
             displayspeedsearch(); 
          } 
-         if (taste == cto_esc ) {   /*  abbrechen / searchstring zurcksetze  */
+         if (prntkey == cto_esc ) {   /*  abbrechen / searchstring zurcksetze  */
             if ((swtch == 1 ) || (searchstring[0] == 0))
                abrt = 1; 
             else

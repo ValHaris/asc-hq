@@ -1,6 +1,10 @@
-//     $Id: vesa.cpp,v 1.5 1999-12-27 13:00:18 mbickel Exp $
+//     $Id: vesa.cpp,v 1.6 2000-01-02 20:23:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/27 13:00:18  mbickel
+//      new vehicle function: each weapon can now be set to not attack certain
+//                            vehicles
+//
 //     Revision 1.4  1999/11/22 18:28:04  mbickel
 //      Restructured graphics engine:
 //        VESA now only for DOS
@@ -771,6 +775,10 @@ int copy2screen( void )
    return 0;
 };
 
+int copy2screen( int x1, int y1, int x2, int y2 ) 
+{
+   return 0;
+};
 
 
 #endif
