@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.43 2000-08-12 09:17:37 gulliver Exp $
+//     $Id: typen.cpp,v 1.44 2000-08-13 10:24:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2000/08/12 09:17:37  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.42  2000/08/11 12:24:07  mbickel
 //      Fixed: no movement after refuelling unit
 //      Restructured reading/writing of units
@@ -983,7 +986,7 @@ void tvehicle :: clone ( pvehicle src, pmap actmap )
    experience = src->experience;
    attacked = src->attacked; 
    height = src->height;
-   setMovement ( src->getMovement() );
+   _movement = src->_movement;
    direction = src->direction;
    xpos = src->xpos;
    ypos = src->ypos;

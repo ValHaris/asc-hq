@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.66 2000-08-13 09:53:57 mbickel Exp $
+//     $Id: controls.cpp,v 1.67 2000-08-13 10:24:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.66  2000/08/13 09:53:57  mbickel
+//      Refuelling is now logged for replays
+//
 //     Revision 1.65  2000/08/12 15:03:19  mbickel
 //      Fixed bug in unit movement
 //      ASC compiles and runs under Linux again...
@@ -7552,6 +7555,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  } else 
                                     displaymessage("severe replay inconsistency:\nno vehicle for refuel-unit command !", 1);
                               }
+         break;
       default:{
                  int size, temp;
                  stream->readdata2 ( size );
