@@ -1,6 +1,12 @@
-//     $Id: loadbi3.cpp,v 1.27 2000-10-12 19:00:21 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.28 2000-10-12 19:51:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/10/12 19:00:21  mbickel
+//      Fixed crash in building placement
+//      Replaced multi-character character constants by strings (there where
+//        problems with the byte order)
+//      Building ID and name are now correctly displayed in mapeditor
+//
 //     Revision 1.26  2000/10/11 14:26:41  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -152,7 +158,6 @@
 #include "loadbi3.h"
 #include "newfont.h"
 #include "basegfx.h"
-#include "keybp.h"
 #include "typen.h"
 #include "buildingtype.h"
 #include "vehicletype.h"
@@ -160,6 +165,10 @@
 #include "stack.h"
 #include "palette.h"
 #include "gameoptions.h"
+
+#ifndef minimalIO
+#include "keybp.h"
+#endif
 
 #ifndef converter
  #include "dlg_box.h"
@@ -576,6 +585,7 @@ void loadbi3graphics( void )
 
 }
 
+#ifndef minimalIO
 extern dacpalette256 pal;
 
 class tgetbi3pict {
@@ -711,6 +721,7 @@ void tgetbi3pict :: run ( int* num )
 
 }
 
+
 void getbi3pict ( int* num, void** picture )
 {
    tgetbi3pict gbi3p;
@@ -727,6 +738,7 @@ void getbi3pict_double ( int* num, void** picture )
    loadbi3pict_double ( *num, picture );
 
 }        
+#endif
          
 int  loadbi3pict_double ( int num, void** pict, int interpolate, int reference )
 {
@@ -832,7 +844,6 @@ void loadbi3pict ( int num, void** pict )
       } else
         *pict = NULL;
 }
-
 
 const char* getbi3path ( void )
 {

@@ -1,6 +1,12 @@
-//     $Id: basestrm.cpp,v 1.41 2000-10-12 19:00:20 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.42 2000-10-12 19:51:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2000/10/12 19:00:20  mbickel
+//      Fixed crash in building placement
+//      Replaced multi-character character constants by strings (there where
+//        problems with the byte order)
+//      Building ID and name are now correctly displayed in mapeditor
+//
 //     Revision 1.40  2000/10/11 14:26:16  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -206,7 +212,6 @@
     Boston, MA  02111-1307  USA
 */
 
-#include "config.h"
 #include <stdio.h> 
 #include <ctype.h>
 #include <malloc.h>
@@ -215,12 +220,14 @@
 
 #include <sys/stat.h>
 
+#include "global.h"
 #include "basestrm.h"
 
 #if defined(_DOS_) | defined(WIN32)
  #include <direct.h>
- #include "ndir.h"
- 
+ #include <dirent.h>
+  #include "ndir.h"
+  
 #else
 
  #ifdef HAVE_SYS_DIRENT_H
@@ -244,6 +251,7 @@
   #endif
  #endif
  #define direct dirent
+
 #endif
 
 
@@ -741,7 +749,7 @@ void MemoryStreamCopy :: seek ( int newpos )
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#if !defined(_DOS_) & !defined(WIN32)
+#if !( defined(_DOS_) | defined(WIN32))
 
 static int stream_seek( struct SDL_RWops *context, int offset, int whence)
 {
@@ -802,7 +810,6 @@ SDL_RWops *SDL_RWFromStream( pnstream stream )
 }
 
 #endif
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -2307,7 +2314,7 @@ char* getnextfilenumname ( const char* first, const char* suffix, int num )
    char tmp[260];
    do {
       strcpy ( tmp, first );
-      itoa ( num, tempstringbuf, 10 );
+      std::itoa ( num, tempstringbuf, 10 );
       while ( strlen ( tmp ) + strlen ( tempstringbuf ) < 8 )
          strcat ( tmp, "0" );
       strcat ( tmp, tempstringbuf );

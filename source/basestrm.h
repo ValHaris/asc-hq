@@ -1,6 +1,12 @@
-//     $Id: basestrm.h,v 1.24 2000-10-12 19:00:21 mbickel Exp $
+//     $Id: basestrm.h,v 1.25 2000-10-12 19:51:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/10/12 19:00:21  mbickel
+//      Fixed crash in building placement
+//      Replaced multi-character character constants by strings (there where
+//        problems with the byte order)
+//      Building ID and name are now correctly displayed in mapeditor
+//
 //     Revision 1.23  2000/10/11 14:26:17  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -791,7 +797,7 @@ extern int directoryExist ( const char* path );
 extern char* extractPath ( char* buf, const char* filename );
 extern char* extractFileName ( char* buf, const char* filename );
 
-#ifndef _DOS_
+#ifdef _SDL_
  #include sdlheader
  extern SDL_RWops *SDL_RWFromStream( pnstream stream );
 #endif

@@ -1,6 +1,17 @@
-//     $Id: sgstream.cpp,v 1.31 2000-10-11 14:26:47 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.32 2000-10-12 19:51:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/10/11 14:26:47  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.30  2000/09/20 15:05:10  mbickel
 //      Better error handling on startup.
 //
@@ -160,7 +171,6 @@
 */
 
                                                
-#include "config.h"
 #include <malloc.h>
 #ifdef _DOS_
 #include <dos.h> 
@@ -175,6 +185,7 @@
 
 #include <fstream>
 
+#include "global.h"
 
 #if defined(_DOS_) | defined(WIN32)
  #include <direct.h> 

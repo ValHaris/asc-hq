@@ -1,0 +1,16 @@
+CC=bcc32
+CFLAGS= -DWIN32 -D_FILE_OFFSET_BITS=64
+
+OBJS= blocksort.obj  \
+      huffman.obj    \
+      crctable.obj   \
+      randtable.obj  \
+      compress.obj   \
+      decompress.obj \
+      bzlib.obj
+
+all: lib
+
+lib: $(OBJS)
+	del libbz2.lib
+	tlib libbz2.lib /a $(OBJS)

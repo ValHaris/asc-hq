@@ -22,9 +22,14 @@
  #define global_h
 
  #ifdef WIN32
-  #define sdlheader "SDL.h"
-	#include "SDL.h"
-	using namespace std;
+  #ifndef minimalIO
+   #define sdlheader "SDL.h"
+   #include sdlheader
+  #endif 
+  using namespace std;
+  #define HAVE_STRICMP 
+  #define HAVE_ITOA
+  #define HAVE_DIRENT_H 
  #else
   #ifndef _DOS_
    #define sdlheader "SDL/SDL.h"
@@ -32,7 +37,9 @@
   #endif
  #endif
 
- #include "config.h"
+ #ifndef WIN32
+  #include "config.h"
+ #endif
 
  #ifdef __WATCOM_CPLUSPLUS__
   #define HAVE_STRICMP 

@@ -1,6 +1,17 @@
-//     $Id: misc.cpp,v 1.13 2000-10-11 14:26:43 mbickel Exp $
+//     $Id: misc.cpp,v 1.14 2000-10-12 19:51:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/10/11 14:26:43  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.12  2000/09/16 11:47:29  mbickel
 //      Some cleanup and documentation again
 //
@@ -68,14 +79,13 @@
     Boston, MA  02111-1307  USA
 */
 
-#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "global.h"
 #include "tpascal.inc"
 #include "misc.h"
-#include "global.h"
 
 const char* digit[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 const char* letter[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", 
