@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.26 2000-08-12 15:03:26 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.27 2000-08-13 11:55:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/08/12 15:03:26  mbickel
+//      Fixed bug in unit movement
+//      ASC compiles and runs under Linux again...
+//
 //     Revision 1.25  2000/08/09 13:18:11  mbickel
 //      Fixed: invalid movement cost for airplanes flying with wind
 //      Fixed: building mineral resource info: wrong lines for availability
@@ -1449,9 +1453,12 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
       int dd2 = battle->dv.damage;
       battle->setresult ();
 
-      if ( ad2 < 100 )
-         if ( !(vehicle->functions & cf_moveafterattack) )
+      if ( ad2 < 100 ) {
+         if ( vehicle->functions & cf_moveafterattack )
+            vehicle->setMovement ( vehicle->getMovement() - vehicle->typ->movement[log2(vehicle->height)]*attackmovecost / 100 );
+         else   
             vehicle->setMovement ( 0 );
+      }
 
       logtoreplayinfo ( rpl_attack, xp1, yp1, x, y, ad1, ad2, dd1, dd2, weapnum );
 

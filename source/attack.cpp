@@ -1,6 +1,10 @@
-//     $Id: attack.cpp,v 1.30 2000-08-12 15:03:18 mbickel Exp $
+//     $Id: attack.cpp,v 1.31 2000-08-13 11:55:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/08/12 15:03:18  mbickel
+//      Fixed bug in unit movement
+//      ASC compiles and runs under Linux again...
+//
 //     Revision 1.29  2000/08/12 12:52:41  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -240,7 +244,7 @@ float AttackFormula :: strength_experience ( int experience )
 	float e =		(experience < 0)
 				?	0	
 				:	experience ;
-   return e/4;
+   return e/maxunitexperience * 2.875;
 }
 
 float AttackFormula :: defense_experience ( int experience )
@@ -249,7 +253,7 @@ float AttackFormula :: defense_experience ( int experience )
 				?	0	
 				:	experience ;
    
-   return e * 0.75 / 15;
+   return e/maxunitexperience * 1.15;
 }
 
 float AttackFormula :: strength_attackbonus ( int abonus )
@@ -814,7 +818,9 @@ void tunitattacksbuilding :: setresult ( void )
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
    _attackingunit->attacked = true; 
-   if ( !(_attackingunit->functions & cf_moveafterattack) )
+   if ( _attackingunit->functions & cf_moveafterattack )
+      _attackingunit->setMovement ( _attackingunit->getMovement() - _attackingunit->typ->movement[log2(_attackingunit->height)]*attackmovecost / 100 );
+   else   
       _attackingunit->setMovement ( 0 );
 
 
@@ -1056,8 +1062,11 @@ void tunitattacksobject :: setresult ( void )
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
    _attackingunit->attacked = true; 
-   if ( !(_attackingunit->functions & cf_moveafterattack) )
-      _attackingunit->setMovement ( 0 ); 
+
+   if ( _attackingunit->functions & cf_moveafterattack )
+      _attackingunit->setMovement ( _attackingunit->getMovement() - _attackingunit->typ->movement[log2(_attackingunit->height)]*attackmovecost / 100 );
+   else   
+      _attackingunit->setMovement ( 0 );
 
 
    _obji->damage    = dv.damage;

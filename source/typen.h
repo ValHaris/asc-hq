@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.42 2000-08-12 09:17:38 gulliver Exp $
+//     $Id: typen.h,v 1.43 2000-08-13 11:55:10 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2000/08/12 09:17:38  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.41  2000/08/11 12:24:07  mbickel
 //      Fixed: no movement after refuelling unit
 //      Restructured reading/writing of units
@@ -285,6 +288,10 @@ const int cmovemalitypenum  = 16;
 const int gameparameternum = 18;
 
 #define maxobjectonfieldnum 16
+
+
+const int maxunitexperience = 23;
+
 
 
 class tterrainbits {
@@ -1668,7 +1675,7 @@ struct ticons {
    void*        selectweapongui[12];
    void*        selectweaponguicancel;
    void*        unitinfoguiweapons[13];
-   void*        experience[16];
+   void*        experience[maxunitexperience+1];
    void*        wind[9];
    void*        windarrow;
    void*        stellplatz;
@@ -2085,8 +2092,7 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
-
-#define maxunitexperience 15
+const int attackmovecost = 20;  // 20% movement decrease for attacking; only used for units that can move after attacking
 
 #define movement_cost_for_repaired_unit 24
 #define movement_cost_for_repairing_unit 12
