@@ -1,6 +1,12 @@
-//     $Id: building.cpp,v 1.56 2000-11-21 20:26:52 mbickel Exp $
+//     $Id: building.cpp,v 1.57 2000-12-21 11:00:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.56  2000/11/21 20:26:52  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.55  2000/11/08 19:30:54  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -749,7 +755,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer
             void dispresources ( Resources* res, int ypos, int sign );
 
          public:
-            tmininginfo* mininginfo;
+            tgetmininginfo::tmininginfo* mininginfo;
             cminingstation_subwindow ( void );
             int  subwin_available ( void );
             void display ( void ) ;

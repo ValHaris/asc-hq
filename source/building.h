@@ -1,6 +1,10 @@
-//     $Id: building.h,v 1.16 2000-09-17 15:20:29 mbickel Exp $
+//     $Id: building.h,v 1.17 2000-12-21 11:00:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/09/17 15:20:29  mbickel
+//      AI is now automatically invoked (depending on gameoptions)
+//      Some cleanup
+//
 //     Revision 1.15  2000/08/30 14:45:07  mbickel
 //      ASC compiles and links with GCC again...
 //
@@ -94,6 +98,15 @@
 
 #ifndef building_h
 #define building_h
+
+/*! \file building.h
+   Just the function for starting the dialog for handling buildings and 
+   transports.
+
+   #building.cpp contains the implementation of the user interface as well
+   as the implementation of the base logic, which is defined in 
+   #building_controls.h
+*/
 
 
 #include "gui.h"

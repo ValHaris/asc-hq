@@ -591,3 +591,10 @@ void    Building :: produceAmmo ( int type, int num )
 
    munition[type] += produceablePackages * 5;
 }
+
+void Building :: getpowerplantefficiency ( int* material, int* fuel )
+{
+   *material = bld->typ->efficiencymaterial;
+   *fuel = bld->typ->efficiencyfuel;
+}
+

@@ -6,6 +6,11 @@
     email                : bickel@asc-hq.org
  ***************************************************************************/
 
+/*! \file basestreaminterface.h
+   The interface for ASC stream. This is used for all kinds of stream:
+    normal files, compressed files, files inside containers, memory buffer, ... 
+*/
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *

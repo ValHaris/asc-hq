@@ -1,6 +1,11 @@
-//     $Id: typen.cpp,v 1.60 2000-11-14 20:36:44 mbickel Exp $
+//     $Id: typen.cpp,v 1.61 2000-12-21 11:00:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2000/11/14 20:36:44  mbickel
+//      The AI can now use supply vehicles
+//      Rewrote objecttype IO routines to make the structure independant of
+//       the memory layout
+//
 //     Revision 1.59  2000/11/08 19:37:39  mbickel
 //      Changed the terrain types (again): "lava" now replaces "small trench"
 //
@@ -485,7 +490,7 @@ int tfield :: minenum ( void )
      return 0;
 }
 
-int  tfield :: putmine( int col, int typ, int strength )
+bool  tfield :: putmine( int col, int typ, int strength )
 { 
   #ifndef converter
    if ( mineowner() >= 0  && mineowner() != col )

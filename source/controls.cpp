@@ -1,6 +1,11 @@
-//     $Id: controls.cpp,v 1.86 2000-11-29 09:40:13 mbickel Exp $
+//     $Id: controls.cpp,v 1.87 2000-12-21 11:00:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.86  2000/11/29 09:40:13  mbickel
+//      The mapeditor has now two maps simultaneously active
+//      Moved memorychecking functions to its own file: memorycheck.cpp
+//      Rewrote password handling in ASC
+//
 //     Revision 1.85  2000/11/21 20:26:56  mbickel
 //      Fixed crash in tsearchfields (used by object construction for example)
 //      AI improvements
@@ -3512,11 +3517,8 @@ void addanytechnology ( ptechnology tech, int player )
       resrch->activetechnology = NULL;
       if ( tech->techlevelset )
          settechlevel ( tech->techlevelset, 1 << player );
-
-
       actmap->player[player].queuedEvents++;
    }
-
 }
 
 void addtechnology ( void )
@@ -3581,15 +3583,6 @@ void    tprotfzt::evalbuffer( void )
 
 
 
-
-
-
-
-void getpowerplantefficiency (  const pbuilding bld, int* material, int* fuel )
-{
-   *material = bld->typ->efficiencymaterial;
-   *fuel = bld->typ->efficiencyfuel;
-}
 
 
 
@@ -4631,7 +4624,8 @@ void endTurn ( void )
                j = actvehicle->tank.fuel - actvehicle->typ->fuelConsumption * nowindplanefuelusage;
 
                if ( actvehicle->height <= chhochfliegend )
-                  j -= ( actvehicle->getMovement() * 64 / actvehicle->typ->movement[log2(actvehicle->height)] ) * (actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
+                  j -= ( actvehicle->getMovement() * 64 / actvehicle->typ->movement[log2(actvehicle->height)] ) 
+                       * (actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
 
               //          movement * 64        windspeed * maxwindspeed         fuelConsumption
               // j -=   ----------------- *  ----------------------------- *   -----------

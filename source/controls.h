@@ -1,6 +1,12 @@
-//     $Id: controls.h,v 1.32 2000-11-21 20:26:59 mbickel Exp $
+//     $Id: controls.h,v 1.33 2000-12-21 11:00:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.32  2000/11/21 20:26:59  mbickel
+//      Fixed crash in tsearchfields (used by object construction for example)
+//      AI improvements
+//      configure.in: added some debug output
+//                    fixed broken check for libbz2
+//
 //     Revision 1.31  2000/11/08 19:30:59  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -170,7 +176,9 @@
 
 
 /*! \file controls.h
-   Controlling units; unit information on the screen; ...
+   Controlling units (which is graudally moved to #vehicletype.cpp );
+   Onscreen information like the dashboard
+   
 */
 
 
@@ -287,12 +295,13 @@
                         int          movespeed;
                         int          uheight;
                      }; 
+  //! see #tmoveparams
   extern tmoveparams moveparams; 
 
 
 
 
-
+   //! looks up the fields a unit can put or remove a mine from
    class tputmine : public tsearchfields {
                        int player;
                 public:
@@ -317,8 +326,8 @@
     
                };
 
-
-extern int windmovement[8];
+// currently not used externally
+// extern int windmovement[8];
 
 
 /*! calculates the movement cost for moving vehicle from x1/y1 to x2/y2
@@ -393,35 +402,37 @@ extern void initwindmovement( const pvehicle vehicle );
 //! return the distance between x1/y1 and x2/y2 using the power of the wind factors calculated for a specific unit with #initwindmovement
 extern int windbeeline ( int x1, int y1, int x2, int y2 );
 
-extern tselectbuildingguihost    selectbuildinggui;
-
+//! continues a PBeM game; the current map is deleted
 extern void continuenetworkgame ( void );
+
 
 //! Move the technology that is currently being reseached to the list of discovered technologies
 extern void addtechnology ( void );
 
 //! Calculates the resources that are needed to research the given number of research
 extern void returnresourcenuseforresearch ( const pbuilding bld, int research, int* energy, int* material );
+
+//! Calculates the resources that are needed run a power plant
 extern void returnresourcenuseforpowerplant (  const pbuilding bld, int prod, Resources *usage, int percentagee_based_on_maxplus );
 
+//! dissects a vehicle; if you haven't researched this vehicle type you will get some research points for it.
 extern void dissectvehicle ( pvehicle eht );
 
 
-extern void getpowerplantefficiency ( const pbuilding bld, int* material, int* fuel );
 
 
 
-struct tmininginfo {
-         Resources avail[maxminingrange+2];
-         int efficiency[maxminingrange+2];
-         Resources max[maxminingrange+2];            // soviel Bodenschaetze k”nnten in der Entfernung untergebracht werden.
-};                                          
 
-
+//! calculates some mining statistics for a mining station
 class tgetmininginfo : public tsearchfields {
           protected:
              void testfield ( void );
           public:
+             struct tmininginfo {
+                      Resources avail[maxminingrange+2];
+                      int efficiency[maxminingrange+2];
+                      Resources max[maxminingrange+2];            // the theoretical maximum of the mineral resources in the given distance
+             };                                          
              tmininginfo* mininginfo;
              tgetmininginfo ( pmap _gamemap );
              void run ( const pbuilding bld );

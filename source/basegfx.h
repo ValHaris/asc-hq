@@ -21,6 +21,16 @@
 #ifndef basegfx_h
 #define basegfx_h
 
+/*! \file basegfx.h
+   basegfx.cpp contains the platform independant graphic routines.
+
+   basegfx.h additionally includes the definitions of routines, 
+    whose implementation is platform dependant, but whose interface
+    are the same on all platforms. Their implementation is in the various
+    various subdirectories for the platforms
+*/
+
+
 #include "tpascal.inc"
 #include "global.h"
 #include "palette.h"

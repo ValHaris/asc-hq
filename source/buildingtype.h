@@ -6,6 +6,11 @@
     email                : bickel@asc-hq.org
  ***************************************************************************/
 
+/*! \file building_controls.h
+   The interface for controlling the building functions for use by the AI.
+*/
+
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -211,6 +216,9 @@ class  Building : public ContainerBase {
 
     void resetPicturePointers ( void );
     MapCoordinate getPosition ( ) { return getEntry(); };
+
+    void getpowerplantefficiency ( int* material, int* fuel );
+
 
   protected:
      ResourceMatrix repairEfficiency;

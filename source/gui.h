@@ -1,6 +1,10 @@
-//     $Id: gui.h,v 1.16 2000-10-18 14:14:13 mbickel Exp $
+//     $Id: gui.h,v 1.17 2000-12-21 11:00:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/10/18 14:14:13  mbickel
+//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
+//       fixed soon.
+//
 //     Revision 1.15  2000/10/11 14:26:40  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -181,6 +185,7 @@ class GuiHost : public BasicGuiHost {
 
 
 typedef class tselectbuildingguihost* pselectbuildingguihost;
+extern tselectbuildingguihost    selectbuildinggui;
 
 class SelectBuildingBaseGuiHost: public GuiHost<pnputbuildingguiicon> { int foo; } ;
 class tselectbuildingguihost : public SelectBuildingBaseGuiHost {

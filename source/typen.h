@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.70 2000-11-29 11:05:31 mbickel Exp $
+//     $Id: typen.h,v 1.71 2000-12-21 11:00:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.70  2000/11/29 11:05:31  mbickel
+//      Improved userinterface of the mapeditor
+//      map::preferredfilenames uses now strings (instead of char*)
+//
 //     Revision 1.69  2000/11/29 09:40:25  mbickel
 //      The mapeditor has now two maps simultaneously active
 //      Moved memorychecking functions to its own file: memorycheck.cpp
@@ -623,6 +627,7 @@ class Resources {
 extern Resources operator- ( const Resources& res1, const Resources& res2 );
 
 
+//! A mathematical matrix that can be multiplied with a #Resources instance (which is mathematically a vector) to form a new #Resources vector
 class ResourceMatrix {
            float e[resourceTypeNum][resourceTypeNum];
         public:
@@ -777,7 +782,7 @@ class AiThreat {
          AiThreat& operator+= ( const AiThreat& t );
 };
 
-
+//! the time in ASC, measured in turns and moves
 union tgametime {
   struct { signed short move, turn; }a ;
   int abstime;
@@ -849,6 +854,7 @@ class BaseAI {
  typedef class  Vehicle*  pvehicle;
 
 
+//! A list that stores pointers, but deletes the objects (and not only the pointers) on destruction
 template <class T> class PointerList : public list<T> {
    public:
      ~PointerList() {
@@ -893,69 +899,123 @@ struct tterraintype {
 };
 
 
-
+//! An object that can be placed on fields. Roads, pipelines and ditches are examples of objects.
 class tobjecttype {
   public: 
+    //! the id of the object, used when referencing objects in files
     int id;
+
+    //! bitmapped variable containing the different weather types the objects exist for
     int weather;
+
+    //! is the object displayed under fog of war
     int visibleago;
 
+    //! some objects are graphically linked with others on neighbouring fields. This is the number of other object types that tis one links with. See #no_autonet
     int objectslinkablenum;
+    //! the array of object types that this one links with. See #objectslinkablenum
     union {
       int*            objectslinkableid;
       pobjecttype*    objectslinkable;
     };
 
+    //! the array of pictures; this is from an old definition of object types where the picture of an object could not vary with the weather. Today the images are stored in #picture
     thexpic* oldpicture;
 
+    //! the number of pictures for each weather. Objects which link graphically with neighbouring objects need more than one picture
     int pictnum;
+
+    //! if an object should not be attackable, set armor to 0
     int armor;
 
+    //! In the files and the small editors this variable may be smaller than #cmovemalitypenum, even 0; but the loader extends this to #cmovemalitypenum when an object is loaded ingame
     char  movemalus_plus_count;
+    //! the movemalus_plus is added to the current movemalus of the field to form the new movemalus. Negative values are ok.
     char* movemalus_plus;
 
+    //! In the files and the small editors this variable may be smaller than #cmovemalitypenum, even 0; but the loader extends this to #cmovemalitypenum when an object is loaded ingame.
     char  movemalus_abs_count;
+    //! The movemalus_abs replaces the current movemalus of the field by a new one. Values of 0 and -1 won't affect the movemalus of the field, and values ranging from 1 to 9 must not be used.
     char* movemalus_abs;
 
+    //! this is added to the current attackbonus of the field to form the new attackbonus. 
     int attackbonus_plus;
+    //! The attackbonus_abs replaces the current attackbonus of the field by a new one. A value of -1 won't affect the attackbonus of the field
     int attackbonus_abs;
 
+    //! this is added to the current defensebonus of the field to form the new defensebonus.
     int defensebonus_plus;
+    //! The defensebonus_abs replaces the current defensebonus of the field by a new one. A value of -1 won't affect the attackbonus of the field
     int defensebonus_abs;
 
+    //! this is added to the current basicjamming of the field to form the new jamming.
     int basicjamming_plus;
+    //! basicjamming_abs replaces the current basicjamming of the field by a new one. A value < 0 won't affect the jamming of the field
     int basicjamming_abs;
 
+    //! the level of height the object is on. This is not the simple system of 8 levels used for units and building, but one with 255 levels which are documented in docs/biimport.html
     int height;   
 
+    //! The resources required to construct the object with a unit; Note that units usually don't have any energy available
     Resources buildcost;
-    Resources removecost;
-    int build_movecost;  // basis 8 
-    int remove_movecost;  // basis 8 
 
+    //! The resources required to remove the object with a unit; Note that units usually don't have any energy available
+    Resources removecost;
+
+    //! The movement points that are needed to build this object
+    int build_movecost;  
+
+    //! The movement points that are needed to remove this object
+    int remove_movecost; 
+
+    //! The name of the object
     char* name;
+
+    //! if != 0 this object will not graphically connect to neighbouring objects
     int no_autonet;
 
+    //! The terrain on which this object can be placed
     tterrainaccess terrainaccess;
+
+    //! the terrain properties of the field will be AND-masked with this field and then OR-masked with terrain_or to form the new terrain properties
     tterrainbits terrain_and;
     tterrainbits terrain_or;
     tobjecttype ( void ) : terrain_and ( -1 ) , terrain_or ( 0 ) {};
                                   
+    //! the icon used for selecting the object when executing the "build object" function of a unit. The image is automatically generated at load time
     void* buildicon;
+    //! the icon used for selecting the object when executing the "remove object" function of a unit. The image is automatically generated at load time
     void* removeicon;
+
+    //! direction lists were an attempt to allow the graphical connection of this object with neighbouring ones without having an image for each possible connection layout. The attempt failed. Don't use it any more.
     int* dirlist;
     int dirlistnum;
+
+    //! the images of the objects
     thexpic* picture[cwettertypennum];
+
+    //! displays the objecttype at x/y on the screen
     void display ( int x, int y );
     void display ( int x, int y, int dir, int weather = 0 );
+
+    //! returns the pointer to the image i
     void* getpic ( int i, int weather = 0 );
+
+    //! can the object be build on the field fld
     int  buildable ( pfield fld );
+
+    //! if the object connects graphically with others, does it connect with buildings too
     int connectablewithbuildings ( void );
+
+
+    //! reads the objecttype from a stream
     void read ( tnstream& stream );
+    //! write the objecttype from a stream
     void write ( tnstream& stream );
 };
 
 
+//! an instance of an object type (#tobjecttype) on the map
 class tobject {
     public:
        pobjecttype typ;
@@ -1000,13 +1060,19 @@ class  tobjectcontainer {
     char    materialvisible[8];
   };
 
-
+//! a single field of the map
 class  tfield { 
   public:
+    //! the terraintype (#pwterraintype) of the field
     pwterraintype typ;   
 
+    //! mineral resources on this field (should be changed to #ResourcesType sometime...)
     char         fuel, material; 
+
+    //! can this field be seen be the player. Variable is bitmapped; two bits for each player
     Word         visible;   /*  BM  */ 
+
+    //! in the old octagonal version of ASC it was possible to rotate the terraintype; this is not used in the hexagonal version any more
     char         direction; 
 
     void*      picture;   
@@ -1019,41 +1085,88 @@ class  tfield {
     };
     int          temp3;
     int          temp4;
+    
     pvehicle     vehicle; 
     pbuilding    building; 
 
+    //! the mineral resources that were seen by a player on this field; since the actual amount may have decreased since the player looked, this value is not identical to the fuel and material fields.
     presourceview  resourceview;
+
+    //! objects and mines that may be placed on the field
     pobjectcontainer      object;
 
+    //! the terraintype properties. They determine which units can move over the field. This variable is recalculated from the terraintype and objects each time something on the field changes (#setparams)
     tterrainbits  bdt;
+
+    //! are any events connected to this field
     int connection;
              
+    //! the number of mines on the field
     int minenum ( void );
+
+    /** add an object to the field
+         \param obj The object type
+         \param dir The direction of the object type; -1 to use default direction 
+         \param force Put the object there even if it cannot normally be placed on this terrain 
+    **/
     void addobject ( pobjecttype obj, int dir = -1, int force = 0 );
+
+    //! removes all objects of the given type from the field
     void removeobject ( pobjecttype obj );
+
+    //! sorts the objects. Since objects can be on different levels of height, the lower one must be displayed first
     void sortobjects ( void );
+
+    //! deletes everything placed on the field
     void deleteeverything ( void );
 
+    //! recalculates the terrain properties, movemalus etc from the terraintype and the objects,
     void setparams ( void );
+
+    //! checks if there are objects from the given type on the field and returns them
     pobject checkforobject ( pobjecttype o );
+
+    //! the defense bonus that unit get when they are attacked 
     int getdefensebonus ( void );
+
+    //! the attack bonus that unit get when they are attacking
     int getattackbonus  ( void );
+
+    //! the weather that is on this field
     int getweather ( void );
+
+    //! the radar jamming that is on this field
     int getjamming ( void );
     int getmovemalus ( const pvehicle veh );
     int getmovemalus ( int type );
+
+    //! can any of the mines on this field attack this unit
     int mineattacks ( const pvehicle veh );
+
+    //! the player who placed the mines on this field.
     int mineowner ( void );
+
+    //! mines may have a limited lifetime. This methods removes all mines whose maxmimum lifetime is exeeded
     void checkminetime ( int time );
+
+    //! checks if the unit is standing on this field. Since units are being cloned for some checks, this method should be used instead of comparing the pointers to the unit
     bool unitHere ( const pvehicle veh );
 
-    int   putmine ( int col, int typ, int strength );   // return 1 on success
+    //! put a mine of type typ for player col (0..7) and a punch of strength on the field. Strength is an absolute value (unlike the basestrength of a mine or the punch of the mine-weapon, which are just factors)
+    bool  putmine ( int col, int typ, int strength );
+
+    /** removes a mine
+         \param num The position of the mine; if num is -1, the last mine is removed)
+    **/
     void  removemine ( int num ); // num == -1 : remove last mine
+
+    //! some variables for the viewcalculation algorithm. see #viewcalculation.cpp for details
     struct {
       int view;
       int jamming;
       char mine, satellite, sonar, direct;
     } view[8];
+
   private:
     int getx( void );
     int gety( void );
@@ -1385,67 +1498,129 @@ class  tnetwork {
   };
 
 
-
+//! the map. THE central structure of ASC
 class tmap { 
    public:
-      word         xsize, ysize;   /*  Groesse in fielder  */
-      word         xpos, ypos;     /*  aktuelle Dargestellte Position  */
-      pfield       field;           /*  die fielder selber */
+      //! the size of the map
+      word         xsize, ysize;   
+
+      //! the coordinate of the map that is displayed on upper left corner of the screen
+      word         xpos, ypos;     
+
+      //! the array of fields
+      pfield       field;           
+
+      //! the codeword for accessing a map in a campaign
       char         codeword[11]; 
+
+      //! the title of the map
       char*        title;
 
       struct Campaign {
+          //! an identification for identifying a map in the chain of maps that make up a campaign
           Word         id;
-          word         prevmap;   /*  ID der vorigen Karte  */
-          unsigned char         player;   /*  Farbenummer des Spielers: 0..7  */
-          char      directaccess;   /*  Kann die Karte einzeln geladen werden oder nicht ?  */
+
+          //! the id of the previous map in the campaign. This is only used as a fallback mechanism if the event based chaining fails. It will probably be discared sooner or later
+          word         prevmap;   
+
+          //! a campaign is usually designed to be played by a specific player
+          unsigned char         player;   
+
+          //! can the map be loaded just by knowing its filenmae? If 0, the codeword is required
+          char      directaccess;   
+
       };
 
+      //! the campaign properties of map
       Campaign*    campaign;
   
+      //! the player who is currently making his moves (may be human or AI)
       signed char  actplayer; 
+
+      //! the time in the game, mesured in a turns and moves
       tgametime    time;
   
       struct tweather {
+         //! the idea of fog is to reduce the visibility, but this is currently not used
          char fog;
+
+         //! the speed of wind, for the different levels of height ( 0=low level flight, ..., 2 = high level flight)
          twind wind[3];
       } weather;
   
-      int _resourcemode;  // 1 = Battle-Isle-Mode
+      /** how are Resources handled on this map
+             0= "ASC mode": complex system with mineral resources etc
+             1= "BI mode": simpler system like in Battle Isle
+      **/
+      int _resourcemode;  
   
-                   
+      //! the diplomatic status between the players
       char         alliances[8][8];
+
+      //! the different players in ASC. There may be 8 players (0..7) and neutral units (8)
       class Player {
          public:
+            //! does the player exist at all
             bool         existent;
+
+            //! the startpoint of the linked list of units
             pvehicle     firstvehicle;
+
+            //! the startpoint of the linked list of buildings
             pbuilding    firstbuilding;
 
+            //! the status of the scientific research
             tresearch    research;
+
+            //! if the player is run by an AI, this is the pointer to it
             BaseAI*      ai;
 
-            char         stat;           // 0: human; 1: computer; 2: off
+            //! the status of the player: 0=human ; 1=AI ; 2=off
+            char         stat;
+
+            //! the name of the player that is used if the player is human
             string       humanname;
+
+            //! the name of the player that is used if the player is the AI
             string       computername;
+
+            //! returns the name of the player depending on the status
             string       getName( ) { switch ( stat ) {
                                          case 0: return humanname;
                                          case 1: return computername;
                                          default: return "off";
                                        }
                                     };
+            //! the Password required for playing this player
             Password passwordcrc;
+
+            //! the container that stores the list of dissected units
             pdissectedunit dissectedunit;
+
+
+            //! the list of messages that haven't been read by the player yet
             pmessagelist  unreadmessage;
+
+            //! the list of messages that already have been read by the player yet
             pmessagelist  oldmessage;
+
+            //! the list of messages that have been sent yet
             pmessagelist  sentmessage;
+
+            //! if ASC should check all events for fullfilled triggers, this variable will be set to true. This does not mean that there really ARE events that are ready to be executed
             int queuedEvents;
       } player[9];
   
+      //! a container for events that were executed during previous maps of the campaign
       peventstore  oldevents; 
+
+      //! the list of events that haven't been triggered yet.
       pevent       firsteventtocome; 
+
+      //! the list of events that already have been triggered.
       pevent       firsteventpassed;
 
-      //! required for loading the old map file format; no usage outside the loading routine
+      // required for loading the old map file format; no usage outside the loading routine
       // bool loadeventstore,loadeventstocome,loadeventpassed;
 
       int eventpassed ( int saveas, int action, int mapid );
@@ -1466,6 +1641,11 @@ class tmap {
       } cursorpos;
 
 
+      /** The tribute can not only be used to demand resources from enemies but also to transfer resources to allies.
+            tribute.avail[a][b].energy is the ammount of energy that player b may (still) extract from the net of player a
+            tribute.paid[a][b].energy is the amount of energy that player b has already extracted from player a's net
+            a is source player, b is destination player
+       **/
       class ResourceTribute {
         public:
            Resources avail[8][8];
@@ -1474,23 +1654,32 @@ class tmap {
            void read ( tnstream& stream );
            void write ( tnstream& stream );
       } tribute;
-      //  resourcetribute.avail.energy[a][b] gibt an, wieviel energie spieler b aus dem netz von spieler a noch abbuchen darf
-      //  resourcetribute.paid.energy[a][b] gibt an, wieviel energie spieler b aus dem netz von spieler a bereits abgebucht hat
-      //  a ist spender, b empf„nger
 
+      //! the list of messages that were written this turn and are waiting to be processed at the end of the turn
       pmessagelist  unsentmessage;
+
+      //! these are the messages themselfs. A #pmessagelist only stores pointers to message body which are archived here
       pmessage      message;
+
+      //! each message has an identification number (which is incremented with each message) for referencing it in files. The id of the last message is stored here
       int           messageid;
       char*         journal;
       char*         newjournal;
       Password      supervisorpasswordcrc;
+
       char          alliances_at_beginofturn[8];
       // pobjectcontainercrcs   objectcrc;
       pshareview    shareview;
-      int           continueplaying;         // als einzig ?briggebliebener Spieler
+
+      //! if a player has won a singleplayer map, but wants to continue playing without any enemies, this will be set to 1
+      int           continueplaying;  
       treplayinfo*  replayinfo;
+
+      //! the player which is currently viewing the map. During replays, for example, this will be different from the player that moves units
       int           playerView;
       tgametime     lastjournalchange;
+
+      //! in BI resource mode ( see #_resourcemode , #isResourceGlobal ) , this is where the globally available resources are stored. Note that not all resources are globally available.
       Resources     bi_resource[8];
       PreferredFilenames preferredFileNames;
       EllipseOnScreen* ellipse;

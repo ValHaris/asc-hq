@@ -1,6 +1,11 @@
-//     $Id: basestrm.h,v 1.31 2000-11-09 17:48:46 mbickel Exp $
+//     $Id: basestrm.h,v 1.32 2000-12-21 11:00:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/11/09 17:48:46  mbickel
+//      The size of a stream can now be queried
+//      PCX loader (in C) can now load unpatched images provided they are not
+//        compressed
+//
 //     Revision 1.30  2000/10/14 15:31:52  mbickel
 //      Moved key symbols to separate files
 //      Moved tnstream to its own file
@@ -164,6 +169,11 @@
 
 #ifndef basestream_h
 #define basestream_h
+
+/*! \file basestrm.h
+   The various streams that ASC offers, like file and memory streams. 
+*/
+
 
 #include <string>
 #include <stdio.h>

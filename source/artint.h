@@ -1,6 +1,10 @@
-//     $Id: artint.h,v 1.22 2000-11-26 14:39:02 mbickel Exp $
+//     $Id: artint.h,v 1.23 2000-12-21 11:00:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.22  2000/11/26 14:39:02  mbickel
+//      Added Project Files for Borland C++
+//      Some modifications to compile source with BCC
+//
 //     Revision 1.21  2000/11/21 20:26:52  mbickel
 //      Fixed crash in tsearchfields (used by object construction for example)
 //      AI improvements
@@ -101,6 +105,10 @@
     along with this program; see the file COPYING. If not, write to the 
     Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
     Boston, MA  02111-1307  USA
+*/
+
+/*! \file artint.h
+   The artificial intelligence of ASC. 
 */
 
 
