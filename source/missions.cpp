@@ -2,9 +2,12 @@
     \brief The event handling of ASC
 */
 
-//     $Id: missions.cpp,v 1.33 2002-12-23 13:43:22 mbickel Exp $
+//     $Id: missions.cpp,v 1.34 2003-02-19 19:47:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2002/12/23 13:43:22  mbickel
+//      Fixed to compile with gcc 3.2
+//
 //     Revision 1.32  2002/11/01 12:40:50  mbickel
 //      Added supervisor-save-map function
 //
@@ -900,14 +903,13 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
 
       if (ev->a.action == cewindchange) {
          int* i = ev->intdata;
-         for ( int j = 0; j < 3; j++ ) {
-            if ( i[j] != -1 )
-               actmap->weather.wind[j].speed = i[j];
+         if ( i[0] != -1 )
+            actmap->weather.windSpeed = i[0];
 
-            if ( i[j+3] != -1 )
-               actmap->weather.wind[j].direction = i[j+3];
+          if ( i[3] != -1 )
+            actmap->weather.windDirection = i[3];
             
-         }
+         
          dashboard.x = 0xffff;
          resetallbuildingpicturepointers();
          if ( md )

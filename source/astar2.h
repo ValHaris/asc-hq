@@ -27,6 +27,7 @@
        //! returns the movement cost for the unit to travel from x1/y1 to x2/y2
        virtual int getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle );
     public:
+       AStar ( pmap actmap, pvehicle veh );
 
        //! A hexagonal Coordinate. This structure is used instead of MapCoordinate to reduce the amount of modifications to Amits path finding code.
        struct HexCoord{
@@ -75,7 +76,6 @@
        //! checks weather the field fld was among the visited fields during the last search
        bool fieldVisited ( int x, int y);
       
-       AStar ( pmap actmap, pvehicle veh );
        virtual ~AStar ( );
  };
 
@@ -95,7 +95,8 @@ class AStar3D {
            MapCoordinate3D h;        // location on the map, in hex coordinates
            int gval;        // g in A* represents how far we've already gone
            int hval;        // h in A* represents an estimate of how far is left
-           Node(): gval(0), hval(0) {}
+           bool canStop;
+           Node(): gval(0), hval(0), canStop(false) {}
            bool operator< ( const Node& a );
        };
 
@@ -107,34 +108,36 @@ class AStar3D {
        pmap actmap;
        float vehicleSpeedFactor[8];
        bool markTemps;
+       bool changeHeight;
 
 
-       virtual int getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const pvehicle vehicle );
+       virtual int getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const pvehicle vehicle, bool& canStop );
 
        HexDirection* posDirs;
        int*          posHHops;
-       char*         fieldAccess;
-       HexDirection& getPosDir ( const MapCoordinate3D& pos ) { return posDirs [(pos.y * actmap->xsize + pos.x) * 8 + pos.getNumericalHeight()]; };
-       int& getPosHHop ( const MapCoordinate3D& pos )         { return posHHops[(pos.y * actmap->xsize + pos.x) * 8 + pos.getNumericalHeight()]; };
+       int*         fieldAccess;
+       HexDirection& getPosDir ( const MapCoordinate3D& pos ) { return posDirs [(pos.y * actmap->xsize + pos.x) * 8 + 1+pos.getNumericalHeight()]; };
+       int& getPosHHop ( const MapCoordinate3D& pos )         { return posHHops[(pos.y * actmap->xsize + pos.x) * 8 + 1+pos.getNumericalHeight()]; };
 
        int dist( const MapCoordinate3D& a, const MapCoordinate3D& b );
-       int dist ( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b );
+       int dist( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b );
 
        typedef std::vector<Node> Container;
        greater<Node> comp;
 
        void get_first( Container& v, Node& n );
 
-       void nodeVisited ( pfield fld, const Node& n, HexDirection direc, Container& open, int heightDelta = 0 );
+       void nodeVisited ( const Node& n, HexDirection direc, Container& open, int prevHeight = -10, int heightChangeDist = 0 );
 
        Container visited;
 
     public:
+       AStar3D ( pmap actmap, pvehicle veh, bool markTemps_ = true, int maxDistance = maxint, bool changeHeight_= true );
 
        //! searches for a path from A to B and stores it in path
        void findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>& B, Path& path );
 
-       //! searches for a path from the units current position to dest and stores it in path
+       //! searches for a path from the unit's current position to dest and stores it in path
        void findPath( Path& path, const MapCoordinate3D& dest );
 
        //! searches for a path from the units current position to one of the dest fields and stores it in path
@@ -144,7 +147,7 @@ class AStar3D {
            On each field one bit for each level of height will be set.
            The Destructor removes all marks.
        */
-       void findAllAccessibleFields ( int maxDist = maxint );
+       void findAllAccessibleFields (  );
 
        //! returns the distance of the last found path, or -1 on any error
        int getDistance( );
@@ -155,10 +158,9 @@ class AStar3D {
        //! checks weather the field fld was among the visited fields during the last search
        Node* fieldVisited ( const MapCoordinate3D& fld );
 
-       char& getFieldAccess ( int x, int y );
-       char& getFieldAccess ( const MapCoordinate& mc );
+       int& getFieldAccess ( int x, int y );
+       int& getFieldAccess ( const MapCoordinate& mc );
 
-       AStar3D ( pmap actmap, pvehicle veh, bool markTemps_ = true, int maxDistance = maxint );
        virtual ~AStar3D ( );
  };
 

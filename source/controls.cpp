@@ -3,9 +3,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.149 2003-01-12 19:37:18 mbickel Exp $
+//     $Id: controls.cpp,v 1.150 2003-02-19 19:47:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.149  2003/01/12 19:37:18  mbickel
+//      Rewrote resource production
+//
 //     Revision 1.148  2003/01/06 16:52:03  mbickel
 //      Fixed: units inside transports got wrong movement when moved out
 //      Fixed: wind not displayed correctly
@@ -370,9 +373,7 @@
 #include "itemrepository.h"
 #include "strtmesg.h"
 
-         int             windmovement[8];
-
-         tmoveparams moveparams;
+tmoveparams moveparams;
 
 
 class InitControls {
@@ -1304,12 +1305,12 @@ void         constructvehicle( pvehicletype tnk )
 
 
 
-int windbeeline ( int x1, int y1, int x2, int y2 ) {
+int windbeeline ( int x1, int y1, int x2, int y2, WindMovement* wm ) {
    int dist = 0;
    while ( x1 != x2  || y1 != y2 ) {
       dist+= minmalq;
       int direc = getdirection ( x1, y1, x2, y2 );
-      dist -= windmovement[direc];
+      dist -= wm->getDist(direc);
       getnextfield ( x1, y1, direc );
    }
    return dist;
@@ -1333,7 +1334,7 @@ treactionfirereplay :: treactionfirereplay ( void )
    unit = NULL;
 }
 
-void treactionfirereplay :: init ( pvehicle eht, IntFieldList* fieldlist )
+void treactionfirereplay :: init ( pvehicle eht, const AStar3D::Path& fieldlist )
 {
    if ( runreplay.status > 0 ) {
       preactionfire_replayinfo rpli;
@@ -1440,7 +1441,7 @@ tsearchreactionfireingunits :: tsearchreactionfireingunits ( void )
       unitlist[i] = NULL;
 }
 
-void tsearchreactionfireingunits :: init ( pvehicle vehicle, IntFieldList* fieldlist )
+void tsearchreactionfireingunits :: init ( pvehicle vehicle, const AStar3D::Path& fieldlist )
 {
    int x1 = maxint;
    int y1 = maxint;
@@ -1464,18 +1465,16 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle, IntFieldList* field
       }
    }
 
-   for ( i = 0; i < fieldlist->getFieldNum(); i++) {
-      int xt, yt;
-      fieldlist->getFieldCoordinates ( i, &xt, &yt );
-      if ( xt > x2 )
-         x2 = xt ;
-      if ( yt > y2 )
-         y2 = yt ;
+   for ( AStar3D::Path::const_iterator i = fieldlist.begin(); i != fieldlist.end(); i++) {
+      if ( i->x > x2 )
+         x2 = i->x ;
+      if ( i->y > y2 )
+         y2 = i->y ;
 
-      if ( xt < x1 )
-         x1 = xt ;
-      if ( yt < y1 )
-         y1 = yt ;
+      if ( i->x < x1 )
+         x1 = i->x ;
+      if ( i->y < y1 )
+         y1 = i->y ;
    }
    int height = log2 ( vehicle->height );
 
@@ -1673,150 +1672,149 @@ float square ( float i )
    return i*i;
 }
 
-void         calcmovemalus(int          x1,
-                           int          y1,
-                           int          x2,
-                           int          y2,
-                           pvehicle     vehicle,
-                           int          direc,
-                           int&         fuelcost,               // fuer Spritfuelconsumption
-                           int&         movecost,              //  fuer movementdecrease
-                           int          uheight )
+
+pair<int,int> calcmovemalus( const MapCoordinate3D& start,
+                            const MapCoordinate3D& dest,
+                            pvehicle     vehicle,
+                            WindMovement* wm,
+                            bool*  inhibitAttack )
 {
- static const  int         movemalus[2][6]  = {{ 8, 6, 3, 0, 3, 6 }, {0, 0, 0, 0, 0, 0 }};
 
-  int          d;
-  int           x, y;
-  int         c;
-  pfield        fld;
-  pfield        fld2;
-  int         mode;
-  pattackweap  atw;
+   static const  int         movemalus[6]  = { 8, 6, 3, 0, 3, 6 };
+
+   int direc = getdirection ( start.x, start.y, dest.x, dest.y );
 
 
-   if (direc == -1) {
-      direc = getdirection ( x1, y1, x2, y2 );
-   }
-   else {
-      if (x2 == -1 && y2 == -1) {
-         x2 = x1;
-         y2 = y1;
-         getnextfield(x2,y2, direc);
+
+
+   int fuelcost = 1;
+   int movecost;
+   bool checkHemming = true;
+   bool checkWind = wm != NULL;
+
+   if ( start.getNumericalHeight() >= 0 && dest.getNumericalHeight() >= 0 ) {
+      // changing height
+      if ( start.getNumericalHeight() != dest.getNumericalHeight() ) {
+          const Vehicletype::HeightChangeMethod* hcm = vehicle->getHeightChange( start.getNumericalHeight() < dest.getNumericalHeight() ? 1 : -1, start.getBitmappedHeight());
+          if ( !hcm || hcm->dist != beeline ( start, dest )/maxmalq )
+             fatalError("Calcmovemalus called with invalid height change distance");
+          movecost = hcm->moveCost;
+          fuelcost = max(hcm->dist,1);
+          if ( inhibitAttack && !hcm->canAttack )
+            *inhibitAttack = !hcm->canAttack; 
+          checkHemming = false;
+          checkWind = false;
+      } else
+         // flying
+         if (start.getNumericalHeight() >= 4  )
+            movecost = maxmalq;
+         else {
+            // not flying
+            movecost = getfield( dest.x, dest.y )->getmovemalus( vehicle );
+            checkWind = false;
+         }
+
+   } else
+      if ( dest.getNumericalHeight() >= 0 ) {
+        // moving out of container
+        movecost = getfield( dest.x, dest.y )->getmovemalus( vehicle );
+      } else {
+        // moving from one container to another
+        movecost = maxmalq;
+        checkHemming = false;
+        checkWind = false;
       }
-   }
-
-   mode = 0;
-
-   if ( uheight == -1 )
-      uheight = vehicle->height;
-
-   if ( mode ) {
-      fuelcost = minmalq;
-      if (uheight >= chtieffliegend)
-         movecost = minmalq;
-      else
-         movecost = getfield(x2,y2)->getmovemalus( vehicle );
-   } else {
-      fuelcost = maxmalq;
-      if (uheight >= chtieffliegend)
-         movecost = maxmalq;
-      else
-         movecost = getfield(x2,y2)->getmovemalus( vehicle ) * maxmalq / minmalq;
-   }
 
 
-   for (c = 0; c < sidenum; c++) {
-      x = x2;
-      y = y2;
-      getnextfield( x,  y, c );
-      fld = getfield ( x, y );
-      if ( fld ) {
-        d = (c - direc);
+   if ( checkHemming )
+      for (int c = 0; c < sidenum; c++) {
+         int x = dest.x;
+         int y = dest.y;
+         getnextfield( x,  y, c );
+         pfield fld = getfield ( x, y );
+         if ( fld ) {
+           int d = (c - direc);
 
-        if (d >= sidenum)
-           d -= sidenum;
+           if (d >= sidenum)
+              d -= sidenum;
 
-        if (d < 0)
-           d += sidenum;
+           if (d < 0)
+              d += sidenum;
 
-        fld = getfield(x,y);
-        if ( fld->vehicle ) {
-           if ( getdiplomaticstatus(fld->vehicle->color) == cawar ) {
-              fld2 = getfield(x2,y2);
+           pfield fld = getfield(x,y);
+           if ( fld->vehicle && dest.getNumericalHeight() >= 0 ) {
+              if ( getdiplomaticstatus(fld->vehicle->color) == cawar ) {
 
-              npush( fld2->vehicle );
-              npush( vehicle->xpos );
-              npush( vehicle->ypos );
-              npush( vehicle->height );
+                 npush( vehicle->height );
 
-              vehicle->xpos = x2;
-              vehicle->ypos = y2;
-              vehicle->height = uheight;
-              fld2->vehicle = vehicle;
-              atw = attackpossible(fld->vehicle,x2,y2);
-              if (atw->count > 0)
-                 movecost += movemalus[mode][d];
-              npop( vehicle->height );
+                 vehicle->height = dest.getNumericalHeight();
+                 if ( attackpossible28(fld->vehicle,vehicle ))
+                    movecost += movemalus[d];
+                 npop( vehicle->height );
 
-              npop( vehicle->ypos );
-              npop( vehicle->xpos );
-              npop( fld2->vehicle );
-
-
-              delete atw ;
+              }
            }
-        }
+         }
       }
-   }
 
     /*******************************/
     /*    Wind calculation        ÿ */
     /*******************************/
-   if (uheight >= chtieffliegend && uheight <= chhochfliegend && actmap->weather.wind[ getwindheightforunit ( vehicle, uheight ) ].speed  ) {
-      movecost -=  windmovement[direc];
-      fuelcost -=  windmovement[direc];
-      if ( movecost < minmalq )
-        movecost = minmalq;
+   if ( wm && checkWind )
+      if (dest.getNumericalHeight() >= 4 && dest.getNumericalHeight() <= 6 &&
+          start.getNumericalHeight() >= 4 && start.getNumericalHeight() <= 6 &&
+          actmap->weather.windSpeed  ) {
+         movecost -=  wm->getDist( direc );
+         fuelcost -=  wm->getDist ( direc );
+         if ( movecost < minmalq )
+           movecost = minmalq;
 
-      if ( fuelcost <= 0 )
-        fuelcost = 0;
-   }
-
-
+         if ( fuelcost <= 0 )
+           fuelcost = 0;
+      }
+   return make_pair(movecost,fuelcost);
 }
 
 
-void initwindmovement(  const pvehicle vehicle )
+WindMovement::WindMovement ( const pvehicle vehicle )
 {
-   if ( vehicle->maxMovement() == 0 ) {
-      for ( int i = 0; i < sidenum; i++ )
-        windmovement[i] = 0;
-      return;
-   }
-   int direc;
-   tmap::Weather::Wind wind = actmap->weather.wind[ getwindheightforunit ( vehicle ) ];
-   for (direc = 0; direc < sidenum; direc++) {
-      float abswindspeed = ( wind.speed * maxwindspeed * minmalq / 256 );
+   for ( int i = 0; i < sidenum; i++ )
+      wm[i] = 0;
 
-      float relwindspeed  =  abswindspeed / vehicle->maxMovement();;
+   int movement = maxint;
+   for ( int height = 4; height <= 6; height++ )
+      if ( vehicle->typ->movement[height] )
+         if ( vehicle->typ->movement[height] < movement )
+            movement = vehicle->typ->movement[height];
 
-      float pi = 3.14159265;
 
-      float relwindspeedx = 10 * relwindspeed * sin ( 2 * pi * wind.direction / sidenum );
-      float relwindspeedy = -10 * relwindspeed * cos ( 2 * pi * wind.direction / sidenum );
+   if ( movement ) {
+      for ( int direc = 0; direc < sidenum; direc++) {
+         float abswindspeed = ( actmap->weather.windSpeed * maxwindspeed * minmalq / 256 );
 
-      float xtg = 120 * sin ( 2 * pi * direc / sidenum );
-      float ytg = -120 * cos ( 2 * pi * direc / sidenum );
+         float relwindspeed  =  abswindspeed / movement;
 
-      int disttofly = (int)sqrt ( square ( xtg - relwindspeedx) + square ( ytg - relwindspeedy ) );
+         float pi = 3.14159265;
 
-      windmovement[direc] =  (120 - disttofly) / 10;
+         float relwindspeedx = 10 * relwindspeed * sin ( 2 * pi * actmap->weather.windDirection / sidenum );
+         float relwindspeedy = -10 * relwindspeed * cos ( 2 * pi * actmap->weather.windDirection / sidenum );
+
+         float xtg = 120 * sin ( 2 * pi * direc / sidenum );
+         float ytg = -120 * cos ( 2 * pi * direc / sidenum );
+
+         int disttofly = (int)sqrt ( square ( xtg - relwindspeedx) + square ( ytg - relwindspeedy ) );
+
+         wm[direc] =  (120 - disttofly) / 10;
+      }
    }
 }
 
 
 
-
+int WindMovement::getDist ( int dir )
+{
+   return 0;
+}
 
 
 
@@ -2091,110 +2089,8 @@ void doresearch ( int i )
       a = a->next;
       delete b;
    }
-
-
 }
 
-/*
-void Building :: initwork ( void )
-{
-   repairedThisTurn = 0;
-
-   // lastmaterialavail = -1;
-   // lastfuelavail = -1;
-   // lastenergyavail = -1;
-
-   Resources nul;
-   nul.energy = 0; nul.material = 0; nul.fuel = 0;
-
-   work.mining.finished        = 3;
-   work.mining.did_something_atall      = 0;
-
-   work.mining.did_something_lastpass   = 0;
-   work.mining.touse = nul;
-   work.resource_production.finished        = 1;
-   work.resource_production.did_something_atall   = 0;
-   work.resource_production.did_something_lastpass   = 0;
-   work.resource_production.toproduce = nul;
-
-   //work.research.finished        = 1;
-   //work.research.did_something   = 0;
-   //work.research.toresearch = 0;
-
-   work.wind_done = 1;
-   work.solar_done = 1;
-   work.bimode_done = 1;
-
-
-   if ( getCompletion() == typ->construction_steps - 1 ) {
-      if ( actmap->_resourcemode == 0 ) {
-         if ( typ->special & cgwindkraftwerkb )
-            work.wind_done = 0;
-
-         if ( typ->special & cgsolarkraftwerkb )
-            work.solar_done = 0;
-
-         if ( typ->special & cgminingstationb ) {
-            for ( int r = 0; r < 3; r++ )
-               if ( plus.resource(r) < 0 )
-                  work.mining.touse.resource(r) = -plus.resource(r);
-               else
-                  work.mining.touse.resource(r) = 0;
-
-            work.mining.finished = 0;
-         }
-
-         if ( typ->special & cgconventionelpowerplantb ) {
-            for ( int r = 0; r < 3; r++ )
-               if ( plus.resource(r) > 0 )
-                  work.resource_production.toproduce.resource(r) = plus.resource(r);
-               else
-                  work.resource_production.toproduce.resource(r) = 0;
-
-            work.resource_production.finished = 0;
-         }
-
-      } else
-         work.bimode_done = 0;
-
-
-   }
-}
-*/
-
-/*
-int  Building :: processwork ( void )
-{
-   if ( (getCompletion() == typ->construction_steps - 1) ) {
-
-      if ( actmap->_resourcemode == 1 ) {
-         Resources plus;
-
-         int res = getresourceplus  ( -2, &plus, 0 );
-
-         execnetcontrol ();
-
-         return res;
-      } else {
-
-         Resources plus;
-         int res = getresourceplus  ( -2, &plus, 0 );
-
-         execnetcontrol ();
-
-         for ( int r = 0; r < 3; r++ )
-            if (  actstorage.resource(r) >  gettank(r) ) {
-               putResource ( gettank(r) -  actstorage.resource(r), r , 0 );
-               actstorage.resource(r) =  gettank(r);
-            }
-
-         return res;
-      }
-
-   }
-   return 0;
-}
-*/
 
 
 void endRound ( void )
@@ -2414,7 +2310,7 @@ void endTurn ( void )
          // Bei Žnderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
 
          if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
-            if ( getmaxwindspeedforunit ( actvehicle ) < actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed*maxwindspeed ){
+            if ( getmaxwindspeedforunit ( actvehicle ) < actmap->weather.windSpeed*maxwindspeed ){
                ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x)+"/"+strrr((*v)->getPosition().y)+") crashed because of the strong wind";
                new Message ( ident, actmap, 1<<(*v)->getOwner());
                toRemove.push_back ( *v );
@@ -2426,9 +2322,9 @@ void endTurn ( void )
                   int mo = actvehicle->typ->movement[log2(actvehicle->height)];
                   if ( mo )
                      j -= ( actvehicle->getMovement() * 64 / mo)
-                          * (actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
+                          * (actmap->weather.windSpeed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
                   else
-                     j -= (actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
+                     j -= (actmap->weather.windSpeed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
                }
               //          movement * 64        windspeed * maxwindspeed         fuelConsumption
               // j -=   ----------------- *  ----------------------------- *   -----------

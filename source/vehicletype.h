@@ -145,8 +145,8 @@ extern const char*  cvehiclefunctions[];
         //! not used any more
         int          researchid;
 
-        //! if the unit can change the level of height, this is the number of fields the unit must move to go from one level to the next
-        int          steigung;
+        // if the unit can change the level of height, this is the number of fields the unit must move to go from one level to the next
+        // int          steigung;
 
         //! the radar jamming power
         int          jamming;
@@ -256,6 +256,21 @@ extern const char*  cvehiclefunctions[];
 
         //! this label can select a special sound to be played when this unit is killed
         ASCString    killSoundLabel;
+
+        int heightChangeMethodNum;
+        class HeightChangeMethod{
+            public:
+              int startHeight;
+              int heightDelta;
+              int moveCost;
+              bool canAttack;
+              int dist;
+
+              void runTextIO ( PropertyContainer& pc );
+              void read ( tnstream& stream ) ;
+              void write ( tnstream& stream ) const ;
+        };
+        vector<HeightChangeMethod> heightChangeMethod;
 
         int maxSpeed ( ) const;
 

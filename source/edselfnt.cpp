@@ -2,9 +2,12 @@
     \brief Selecting units, buildings, objects, weather etc. in the mapeditor
 */
 
-//     $Id: edselfnt.cpp,v 1.42 2003-02-12 20:11:53 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.43 2003-02-19 19:47:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2003/02/12 20:11:53  mbickel
+//      Some significant changes to the Transportation code
+//
 //     Revision 1.41  2002/11/01 20:44:53  mbickel
 //      Added function to specify which units can be build by other units
 //
@@ -1543,27 +1546,24 @@ void SelectCargoVehicleType :: showiteminfos ( pvehicletype item, int x1, int y1
 
 
 
-class SelectVehicleTypeForTransportCargo : public SelectCargoVehicleType {
-         pvehicle transport;
+class SelectVehicleTypeForContainerCargo : public SelectCargoVehicleType {
+         ContainerBase* container;
       public:
-         SelectVehicleTypeForTransportCargo ( pvehicle _transport ) { transport = _transport; };
+         SelectVehicleTypeForContainerCargo ( ContainerBase* _container ) { container = _container; };
          bool isavailable ( pvehicletype item );
      };
 
-bool SelectVehicleTypeForTransportCargo :: isavailable ( pvehicletype item )
+bool SelectVehicleTypeForContainerCargo :: isavailable ( pvehicletype item )
 {
-    if ( transport->freeweight() < item->maxsize() )
-       return false;
-    else
-       return transport->typ->vehicleFit ( item ) && SelectVehicleType::isavailable ( item );
+   bool result = false;
+   if ( SelectVehicleType::isavailable ( item ) ) {
+      pvehicle unit = new Vehicle ( item, actmap, container->getOwner() );
+      if ( container->vehicleFit ( unit ))
+         result = true;
+      delete unit;
+   }
+   return result;
 }
-
-class SelectVehicleTypeForBuildingCargo : public SelectCargoVehicleType {
-         pbuilding building;
-      public:
-         SelectVehicleTypeForBuildingCargo ( pbuilding _building ) { building = _building; };
-         bool isavailable ( pvehicletype item ) {    return building->typ->vehicleFit ( item ) && SelectVehicleType::isavailable ( item ); };
-     };
 
 class SelectVehicleTypeForBuildingProduction : public SelectCargoVehicleType {
          pbuilding building;
@@ -1580,126 +1580,40 @@ class SelectVehicleTypeForBuildingProduction : public SelectCargoVehicleType {
 //* ıS Fahrzeuge fÅr Unit-Beloading
 
 
-void selunitcargo( pvehicle transport )
-{  
-   SelectVehicleTypeForTransportCargo svtftc ( transport );
+void selcargo( ContainerBase* container )
+{
+   SelectVehicleTypeForContainerCargo svtftc ( container );
    svtftc.init( getvehicletypevector() );
    pvehicletype newcargo = svtftc.selectitem ( NULL );
 
    if ( newcargo ) {
-      pvehicle unit = new Vehicle ( newcargo, actmap, transport->color / 8 );
+      pvehicle unit = new Vehicle ( newcargo, actmap, container->getOwner() );
       unit->fillMagically();
-      if ( transport )
-         unit->setnewposition ( transport->getPosition() );
-      // generatevehicle_ka ( newcargo, transport->color / 8, unit );
+      unit->setnewposition ( container->getPosition() );
+      unit->tank.material = 0;
+      unit->tank.fuel = 0;
+      if ( container->vehicleFit ( unit )) {
+         unit->tank.material = unit->typ->tank.material;
+         unit->tank.fuel = unit->typ->tank.fuel;
 
-      int match = 0;
-      for ( int i = 0; i < 8; i++ )
-         if ( unit->typ->height & ( 1 << i )) {
-            unit->height = 1 << i;
-            unit->tank.material = unit->typ->tank.material;
-            unit->tank.fuel = unit->typ->tank.fuel;
-
-            if ( transport->vehicleFit ( unit )) {
-               int p = 0;
-               while ( transport->loading[p] && p < 32)
-                  p++;
-               if ( p < 32 ) {
-                  transport->loading[p] = unit;
-                  match = 1;
-               }
-               break;
-            } else {
-               unit->tank.material = 0;
-               unit->tank.fuel = 0;
-               if ( transport->vehicleFit ( unit )) {
-                  int p = 0;
-                  while ( transport->loading[p] && p < 32 )
-                     p++;
-                  if ( p < 32 ) {
-                     transport->loading[p] = unit;
-                     displaymessage("Warning:\nThe unit you just set could not be loaded with full material and fuel\nPlease set these values manually",1);
-                     match = 1;
-                  }
-                  break;
-               }
-            }
+         if ( !container->vehicleFit ( unit )) {
+            unit->tank.material = 0;
+            unit->tank.fuel = 0;
+            displaymessage("Warning:\nThe unit you just set could not be loaded with full material and fuel\nPlease set these values manually",1);
          }
-      if ( !match ) {
+         int p = 0;
+         while ( container->loading[p] && p < 32 )
+            p++;
+         if ( p < 32 )
+            container->loading[p] = unit;
+
+      } else {
         delete unit;
         displaymessage("The unit could not be loaded !",1);
-      } else {
-         for ( int i = 0; i < 8; i++ )
-            if ( unit->typ->height & ( 1 << i )) {
-               int h = transport->height;
-               if ( h & (chschwimmend | chfahrend ))
-                  h |= (chschwimmend | chfahrend );
-
-               if ( h & ( 1 << i ))
-                  unit->height = 1 << i;
-            }
-         unit->resetMovement();
       }
    }
 }
 
-//* ıS Fahrzeuge fÅr GebÑude-loading
-
-
-void selbuildingcargo( pbuilding bld )
-{  
-   SelectVehicleTypeForBuildingCargo svtfbc ( bld );
-   svtfbc.init( getvehicletypevector() );
-   pvehicletype newcargo = svtfbc.selectitem ( NULL );
-   if ( newcargo ) {
-      pvehicle unit = new Vehicle ( newcargo, actmap, bld->color / 8 );
-      MapCoordinate mc = bld->getEntry();
-      unit->xpos = mc.x;
-      unit->ypos = mc.y;
-      unit->fillMagically();
-
-      int match = 0;
-      int poss = 0;
-      if ( unit ) {
-         for ( int i = 0; i < 8; i++ )
-            if ( unit->typ->height & ( 1 << i )) {
-               unit->height = 1 << i;
-               if ( bld->vehicleFit ( unit )) {
-                  poss |= 1 << i;
-                  match = 1;
-               }
-            }
-
-          for ( int h2 = 0; h2<8; h2++ )
-            if ( unit->typ->height & ( 1 << h2 ))
-               if ( poss & ( 1 << h2 ))
-                     unit->height = 1 << h2;
-
-          for ( int h1 = 0; h1<8; h1++ )
-            if ( unit->typ->height & ( 1 << h1 ))
-               if ( poss & ( 1 << h1 ))
-                  if ( bld->typ->buildingheight & ( 1 << h1))
-                     unit->height = 1 << h1;
-       }
-
-       if ( match ) {
-          int p = 0;
-          while ( bld->loading[p] && p < 32 )
-            p++;
-          if ( p < 32 ) {
-             bld->loading[p] = unit;
-             unit->setMovement ( unit->typ->movement[log2( unit->height)] );
-          } else
-             match = 0;
-       }
-       if ( !match ) {
-           displaymessage("The unit could not be loaded !",1);
-           delete unit;
-       }
-
-   }
-
-}
 
 
 //* ıS Fahrzeuge fÅr GebÑude-Production

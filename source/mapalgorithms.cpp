@@ -265,9 +265,9 @@ void         SearchFields::startsearch(void)
 int         ccmpheighchangemovedir[6]  = {0, 1, 5, 2, 4, 3 };
 
 
-MapCoordinate getNeighbouringFieldCoordinate( const MapCoordinate& pos, int direc)
+MapCoordinate3D getNeighbouringFieldCoordinate( const MapCoordinate3D& pos, int direc)
 {
-  MapCoordinate mc = pos;
+  MapCoordinate3D mc = pos;
   getnextfield ( mc.x, mc.y, direc );
   return mc;
 }
@@ -310,11 +310,16 @@ void         getnextfield(int&       x,
    }
 }
 
+
+int getdirection( const MapCoordinate& start, const MapCoordinate& dest )
+{
+   return getdirection(start.x, start.y, dest.x, dest.y );
+}
+
 int          getdirection(    int      x1,
                               int      y1,
                               int      x2,
                               int      y2)
-
 {
    int a;
    int dx = (2 * x2 + (y2 & 1)) - (2 * x1 + (y1 & 1));

@@ -71,7 +71,7 @@ extern void  getnextfield(int &    x,
                           int direc);
 
 //! returns the coordinate of the field that is adjecent to the given field in the direction of direc
-extern MapCoordinate  getNeighbouringFieldCoordinate( const MapCoordinate& pos, int direc);
+extern MapCoordinate3D  getNeighbouringFieldCoordinate( const MapCoordinate3D& pos, int direc);
 
 
 /** gets the direction from x1/y1 to x2/y2
@@ -81,6 +81,7 @@ extern int   getdirection(    int      x1,
                               int      y1,
                               int      x2,
                               int      y2);
+extern int   getdirection( const MapCoordinate& start, const MapCoordinate& dest );
 
 //! returns the distance between (x1/y1) and (x2/y2)
 extern int beeline ( int x1, int y1, int x2, int y2 );

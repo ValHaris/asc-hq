@@ -2,9 +2,12 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.118 2003-02-12 20:11:53 mbickel Exp $
+//     $Id: spfst.cpp,v 1.119 2003-02-19 19:47:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.118  2003/02/12 20:11:53  mbickel
+//      Some significant changes to the Transportation code
+//
 //     Revision 1.117  2002/12/17 22:02:17  mbickel
 //      Enemy mines can now be crossed even if visible
 //      submerged mines can not be placed on shallow water
@@ -313,18 +316,18 @@ int          terrainaccessible ( const pfield        field, const pvehicle     v
 }
 
 int          terrainaccessible2 ( const pfield        field, const pvehicle     vehicle, int uheight )
-{ 
+{
    if ( uheight == -1 )
       uheight = vehicle->height;
 
-   if ( !((uheight & vehicle->typ->height) || ((vehicle->functions & cfparatrooper) && (uheight & (chtieffliegend | chfliegend )))))
+   if ( !(uheight & vehicle->typ->height))
       return 0;
 
 
-   if ( uheight >= chtieffliegend) 
+   if ( uheight >= chtieffliegend)
       return 2;
    else {
-        if ( uheight == chtiefgetaucht ) 
+        if ( uheight == chtiefgetaucht )
            if ( (field->bdt & getTerrainBitType(cbwater3) ).any() )
               return 2;
            else
@@ -332,7 +335,7 @@ int          terrainaccessible2 ( const pfield        field, const pvehicle     
         else
            if ( uheight == chgetaucht )
               if ( (field->bdt & ( getTerrainBitType(cbwater3) | getTerrainBitType(cbwater2 )) ).any() )
-                 return 2; 
+                 return 2;
               else
                  return -2;
            else {
@@ -372,7 +375,7 @@ int         fieldaccessible( const pfield        field,
 */
 
 
-   if ( !field->vehicle && !field->building ) {
+   if ( (!field->vehicle || field->vehicle == vehicle) && !field->building ) {
       if ( vehicle->typ->height & uheight )
          return terrainaccessible ( field, vehicle, uheight );
       else
@@ -417,7 +420,7 @@ int         fieldaccessible( const pfield        field,
         if ((field->bdt & getTerrainBitType(cbbuildingentry) ).any() && field->building->vehicleLoadable ( vehicle, uheight ))
            return 2;
         else
-           if (uheight >= chtieffliegend)
+           if (uheight >= chtieffliegend || (field->building->typ->buildingheight <= chgetaucht && uheight >=  chschwimmend ))
               return 1;
            else
               return 0;
@@ -1018,39 +1021,19 @@ void         putbuilding2( const MapCoordinate& entryPosition,
          pbuilding bld = *i;
          if ( bld->typ == gbde->typ  && bld != gbde ) {
 
-            if ( bld->maxplus.energy > maxplus.energy )
-               maxplus.energy = bld->maxplus.energy;
+            for ( int r = 0; r < 3; r++ ) {
+               if ( bld->maxplus.resource(r) > maxplus.resource(r) )
+                 maxplus  = bld->maxplus;
 
-            if ( bld->maxplus.material > maxplus.material )
-               maxplus.material = bld->maxplus.material;
+               if ( bld->bi_resourceplus.resource(r) > biplus.resource(r) )
+                  biplus = bld->bi_resourceplus;
 
-            if ( bld->maxplus.fuel > maxplus.fuel )
-               maxplus.fuel = bld->maxplus.fuel;
-
-
-            if ( bld->bi_resourceplus.energy > biplus.energy )
-               biplus.energy = bld->bi_resourceplus.energy;
-
-            if ( bld->bi_resourceplus.material > biplus.material )
-               biplus.material = bld->bi_resourceplus.material;
-
-            if ( bld->bi_resourceplus.fuel > biplus.fuel )
-               biplus.fuel = bld->bi_resourceplus.fuel;
-
-
-            if ( bld->plus.energy > actplus.energy )
-               actplus.energy = bld->plus.energy;
-
-            if ( bld->plus.material > actplus.material )
-               actplus.material = bld->plus.material;
-
-            if ( bld->plus.fuel > actplus.fuel )
-               actplus.fuel = bld->plus.fuel;
-
+               if ( bld->plus.resource(r) > actplus.resource(r) )
+                  actplus = bld->plus;
+            }
 
             if ( bld->maxresearchpoints > maxresearch )
                maxresearch = bld->maxresearchpoints;
-
          }
       }
 
@@ -1079,15 +1062,14 @@ void         putbuilding2( const MapCoordinate& entryPosition,
       gbde->connection = 0;
       gbde->visible = true;
       gbde->setCompletion ( 0 );
-
    }
-   else { 
+   else {
       pbuilding gbde = actmap->getField(entryPosition)->building;
       if (gbde->getCompletion() < gbde->typ->construction_steps-1)
          gbde->setCompletion( gbde->getCompletion()+1 );
 
-   } 
-} 
+   }
+}
 
 
 
@@ -1183,7 +1165,7 @@ void  checkunitsforremoval ( void )
                    reason = "was swallowed by the ground";
                 }
              if ( eht )
-                if ( getmaxwindspeedforunit( eht ) < actmap->weather.wind[getwindheightforunit ( eht )].speed*maxwindspeed ) {
+                if ( getmaxwindspeedforunit( eht ) < actmap->weather.windSpeed*maxwindspeed ) {
                    reason = "was blown away by the wind";
                    erase = true;
                 }
@@ -1227,7 +1209,7 @@ int  getmaxwindspeedforunit ( const pvehicle eht )
       if (eht->height >= chtieffliegend && eht->height <= chhochfliegend ) //    || ((eht->height == chfahrend) && ( field->typ->art & cbwater ))) ) 
          return eht->typ->movement[log2(eht->height)] * 256 ;
 
-      if ( (field->bdt & getTerrainBitType(cbfestland)).none() && eht->height <= chfahrend && eht->height >= chschwimmend )
+      if ( (field->bdt & getTerrainBitType(cbfestland)).none() && eht->height <= chfahrend && eht->height >= chschwimmend && (field->bdt & getTerrainBitType(cbharbour)).none() && (field->bdt & getTerrainBitType(cbwater0)).none())
          return eht->typ->maxwindspeedonwater * maxwindspeed;
    }
    return maxint;

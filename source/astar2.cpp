@@ -1,5 +1,5 @@
 /*! \file astar2.cpp
-    \brief Pathfinding routines using the A* algorithm. 
+    \brief Pathfinding routines using the A* algorithm.
 */
 
 
@@ -15,6 +15,7 @@
 
 #include "astar2.h"
 
+const int longestPath = 10000000;
 
 // The mark array marks directions on the map.  The direction points
 // to the spot that is the previous spot along the path.  By starting
@@ -107,9 +108,7 @@ int AStar::getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle 
     if ( !fieldaccessible ( getfield ( x2, y2 ), vehicle ))
        return MAXIMUM_PATH_LENGTH;
 
-    int movecost, fuelcost;
-    calcmovemalus ( x1, y1, x2, y2, vehicle, -1, fuelcost, movecost );
-    return movecost;
+    return calcmovemalus ( MapCoordinate3D(x1, y1, vehicle->height), MapCoordinate3D(x2, y2, vehicle->height), vehicle ).first;
 }
 
 
@@ -387,8 +386,9 @@ bool operator == ( const AStar3D::Node& a, const AStar3D::Node& b )
 
 
 
-AStar3D :: AStar3D ( pmap actmap_, pvehicle veh_, bool markTemps_, int maxDistance )
+AStar3D :: AStar3D ( pmap actmap_, pvehicle veh_, bool markTemps_, int maxDistance, bool changeHeight_ )
 {
+   changeHeight = changeHeight_; 
    markTemps = markTemps_;
    tempsMarked = NULL;
    _path = NULL;
@@ -396,26 +396,28 @@ AStar3D :: AStar3D ( pmap actmap_, pvehicle veh_, bool markTemps_, int maxDistan
    actmap = actmap_;
 
    MAXIMUM_PATH_LENGTH = maxDistance;
+   if ( MAXIMUM_PATH_LENGTH > longestPath )
+     MAXIMUM_PATH_LENGTH = 2* longestPath;
 
-   float maxVehicleSpeed = 0;
-   for ( int i = 0; i < 8; i++ )
-      if ( veh->typ->movement[i] > maxVehicleSpeed )
-         maxVehicleSpeed = veh->typ->movement[i];
 
-   if ( !maxVehicleSpeed )
+   if ( !veh->maxMovement() )
       fatalError ( "AStar3D :: AStar3D  -  trying to move a immobile unit");
 
-   for ( int i = 0; i < 8; i++ )
-       vehicleSpeedFactor[i] = float(veh->typ->movement[i]) / maxVehicleSpeed;
+   if ( veh->getPosition().getNumericalHeight() >= 0 )
+      for ( int i = 0; i < 8; i++ )
+          vehicleSpeedFactor[i] = float(veh->typ->movement[i]) / veh->maxMovement();
+   else
+      for ( int i = 0; i < 8; i++ )
+          vehicleSpeedFactor[i] = float(veh->typ->movement[i]);
 
-   int cnt = actmap->xsize*actmap->ysize*8;
+   int cnt = actmap->xsize*actmap->ysize*9;
    posDirs = new HexDirection[cnt];
    posHHops = new int[cnt];
-   fieldAccess = new char[cnt];
+   fieldAccess = new int[cnt];
 
    for ( int i = 0; i < cnt; i++ ) {
       posDirs[i] = DirNone;
-      posHHops[i] = 0;
+      posHHops[i] = -20;
       fieldAccess[i] = 0;
    }
 
@@ -425,7 +427,7 @@ AStar3D :: AStar3D ( pmap actmap_, pvehicle veh_, bool markTemps_, int maxDistan
 AStar3D :: ~AStar3D ( )
 {
    if( tempsMarked )
-      tempsMarked->cleartemps ( 1 );
+      tempsMarked->cleartemps ( 3 );
 
    delete[] posDirs;
    delete[] posHHops;
@@ -434,7 +436,10 @@ AStar3D :: ~AStar3D ( )
 
 int AStar3D::dist( const MapCoordinate3D& a, const MapCoordinate3D& b )
 {
-    return beeline ( a, b ) + abs ( b.getNumericalHeight() - a.getNumericalHeight() ) * minmalq;
+   if ( b.valid() )
+      return beeline ( a, b ) + abs ( b.getNumericalHeight() - a.getNumericalHeight() ) * minmalq;
+   else
+      return maxint/2;
 }
 
 int AStar3D::dist ( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b )
@@ -446,7 +451,7 @@ int AStar3D::dist ( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b )
 }
 
 
-int AStar3D::getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const pvehicle vehicle )
+int AStar3D::getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const pvehicle vehicle, bool& canStop )
 {
     // since we are operating at different levels of height and the unit has different
     // speeds at different levels of height, we must not optimize for distance, but for
@@ -454,15 +459,19 @@ int AStar3D::getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& 
 
     int fa = fieldaccessible ( actmap->getField ( dest ), vehicle, dest.getBitmappedHeight() );
 
-    if ( !fa )
-       return MAXIMUM_PATH_LENGTH;
+    canStop = fa >= 2;
 
-    int movecost, fuelcost;
-    calcmovemalus ( start.x, start.y, dest.x, dest.y, vehicle, -1, fuelcost, movecost, dest.getBitmappedHeight() );
-    if ( !vehicleSpeedFactor[dest.getNumericalHeight()] )
-       return MAXIMUM_PATH_LENGTH;
+    if ( !fa )
+       return maxint;
+
+    int movecost = calcmovemalus ( start, dest, vehicle ).first;
+    if ( start.getNumericalHeight() < 0 )
+       return movecost;
     else
-       return int(movecost / vehicleSpeedFactor[dest.getNumericalHeight()]);
+       if ( !vehicleSpeedFactor[start.getNumericalHeight()] )
+          return maxint/2;
+       else
+          return int(movecost / vehicleSpeedFactor[start.getNumericalHeight()]);
 }
 
 
@@ -487,16 +496,16 @@ inline void AStar3D::get_first( Container& v, Node& n )
 }
 
 
-void AStar3D :: nodeVisited ( pfield fld, const Node& N2, HexDirection direc, Container& open, int heightDelta )
+void AStar3D :: nodeVisited ( const Node& N2, HexDirection direc, Container& open, int prevHeight, int heightChangeDist )
 {
    // If this spot (hn) hasn't been visited, its mark is DirNone
    if( getPosDir(N2.h) == DirNone ) {
 
        // The space is not marked
 
-       if ( N2.gval < MAXIMUM_PATH_LENGTH ) {
+       if ( N2.gval <= MAXIMUM_PATH_LENGTH && N2.gval <= longestPath ) {
           getPosDir(N2.h) = ReverseDirection(direc);
-          getPosHHop(N2.h) = heightDelta;
+          getPosHHop(N2.h) = 10 + prevHeight + 1000 * heightChangeDist;
           open.push_back( N2 );
           push_heap( open.begin(), open.end(), comp );
        }
@@ -521,7 +530,7 @@ void AStar3D :: nodeVisited ( pfield fld, const Node& N2, HexDirection direc, Co
            Node N3 = *find1;
            if( N3.gval > N2.gval ) {
                getPosDir(N2.h) = ReverseDirection(direc);
-               getPosHHop(N2.h) = heightDelta;
+               getPosHHop(N2.h) = 10 + prevHeight + 1000 * heightChangeDist;
                // Replace N3 with N2 in the open list
                Container::iterator last = open.end() - 1;
                *find1 = *last;
@@ -540,17 +549,21 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
     Node N;
     Container open;
 
-    if ( actmap->getField(A)->unitHere(veh) )
-       if ( !veh->canMove() )
-          return;
+    if ( !veh->canMove() )
+       return;
 
-
-    // insert the original node
-    N.h = A;
-    N.gval = 0;
-    N.hval = dist(A,B);
-    open.push_back(N);
-
+    if ( actmap->getField(A)->unitHere(veh) ) {
+       // insert the original node
+       N.h = A;
+       N.gval = 0;
+       N.hval = dist(A,B);
+       open.push_back(N);
+    } else {
+       N.h.setnum(A.x, A.y, -1 );
+       N.gval = 0;
+       N.hval = dist(A,B);
+       open.push_back(N);
+    }
 
     // Remember which nodes we visited, so that we can clear the mark array
     // at the end.
@@ -559,8 +572,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
     MapCoordinate3D endpos;
 
     // While there are still nodes to visit, visit them!
-    while( !open.empty() )
-    {
+    while( !open.empty() ) {
         get_first( open, N );
         visited.push_back( N );
         // If we're at the goal, then exit
@@ -573,115 +585,165 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
         if ( found )
            break;
 
-        // Every other column gets a different order of searching dirs
-        // (Alternatively, you could pick one at random).  I don't want
-        // to be too biased by my choice of order in which I look at the
-        // neighboring grid spots.
 
-        int directions1[6] = {0,1,2,3,4,5};
-        int directions2[6] = {5,4,3,2,1,0};
-        int *directions;
-        if( N.h.x % 2 == 0 )
-            directions = directions1;
-        else
-            directions = directions2;
+        if ( N.h.getNumericalHeight() == -1 ) {
+           // the unit is inside a container
 
-        // Look at your neighbors.
-        for( int dci = 0; dci < 6; dci++ ) {
+          for ( int dir = 0; dir < 6; dir++ ) {
+             MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N.h, dir );
+             int h = actmap->getField(N.h)->getContainer()->vehicleUnloadable(veh);
+             for ( int i = 0; i < 8; i++ )
+                if ( h & (1<<i)) {
+                   Node N2;
+                   N2.h.setnum ( pos.x, pos.y, i );
 
-            HexDirection d = HexDirection(directions[dci]);
-            MapCoordinate3D hn = N.h;
-            getnextfield ( hn.x, hn.y, d );
-            // If it's off the end of the map, then don't keep scanning
-            if( hn.x < 0 || hn.y < 0 || hn.x >= actmap->xsize || hn.y >= actmap->ysize || !fieldaccessible ( actmap->getField ( hn ), veh, hn.getBitmappedHeight() ))
-                continue;
+                   int k = getMoveCost( N.h, N2.h, veh, N2.canStop );
+                   if ( k > veh->typ->movement[N2.h.getNumericalHeight()]  )
+                      k = max(MAXIMUM_PATH_LENGTH,k);
 
-            // cursor.gotoxy ( hn.m, hn.n );
-            int k = getMoveCost( N.h, hn, veh );
-            if ( k > veh->typ->movement[hn.getNumericalHeight()]  )
-               k = MAXIMUM_PATH_LENGTH;
-            Node N2;
-            N2.h = hn;
+                   if ( k > maxint / 2 || N.gval > maxint/2 )
+                      N2.gval = maxint;
+                   else
+                      N2.gval = N.gval + k;
 
-            if ( k == MAXIMUM_PATH_LENGTH )
-               N2.gval = k;
-            else
-               N2.gval = N.gval + k;
+                   N2.hval = dist(pos,B);
 
-            N2.hval = dist(A,B);
+                   nodeVisited ( N2, dir, open, N.h.getNumericalHeight(), maxmalq );
+                }
 
-            pfield fld = actmap->getField(hn);
-            nodeVisited ( fld, N2, d, open );
-        }
+             int dock = actmap->getField(A)->getContainer()->vehicleDocking(veh);
+             if ( dock )
+                for ( int dir = 0; dir < 6; dir++ ) {
+                   MapCoordinate3D pos = getNeighbouringFieldCoordinate ( A, dir );
+                   pfield fld = actmap->getField( pos );
+                   if ( fld->getContainer() )
+                      if ( fld->getContainer()->vehicleDocking(veh) & dock ) {
+                        Node N2;
+                        N2.h.setnum ( pos.x, pos.y, -1);
+                        N2.canStop = true;
+                        N2.gval = N.gval + 10;
+                        N2.hval = dist ( pos, B );
+                        nodeVisited ( N2, HexDirection(dir), open );
+                      }
+                }
+          }
 
-        // and now change the units' height. That's only possible on fields where the unit can stop it's movement
 
-        if ( fieldaccessible ( actmap->getField(N.h), veh, N.h.getBitmappedHeight() ) == 2 ) {
-           for ( int heightDelta = -1; heightDelta <= 1; heightDelta += 2 ) {
-              for ( int dir = 0; (dir < 6 && veh->typ->steigung) || (dir < 1 && !veh->typ->steigung); dir++ ) {
-                 pair<int, MapCoordinate3D> mcres = ChangeVehicleHeight::getMoveCost ( veh, N.h, dir, heightDelta );
-                 if ( mcres.first >= 0 ) {
-                    // the operation was successfull; mcres->first now contains the moveCost
-                    Node N2;
-                    N2.h = mcres.second;
-                    N2.gval = N.gval + mcres.first;
-                    N2.hval = dist(A,B);
-                    pfield fld = actmap->getField(N2.h);
-                    nodeVisited ( fld, N2, HexDirection(dir), open, (10 + beeline ( N2.h, N.h)) * heightDelta );
-                 }
-              }
+        } else {
+           // the unit is not inside a container
+
+
+           // Every other column gets a different order of searching dirs
+           // (Alternatively, you could pick one at random).  I don't want
+           // to be too biased by my choice of order in which I look at the
+           // neighboring grid spots.
+
+           int directions1[6] = {0,1,2,3,4,5};
+           int directions2[6] = {5,4,3,2,1,0};
+           int *directions;
+           if( N.h.x % 2 == 0 )
+               directions = directions1;
+           else
+               directions = directions2;
+
+           // Look at your neighbors.
+           for( int dci = 0; dci < 6; dci++ ) {
+
+               HexDirection dir = HexDirection(directions[dci]);
+               MapCoordinate3D hn = getNeighbouringFieldCoordinate ( N.h, dir );
+
+               // If it's off the end of the map, then don't keep scanning
+               if( hn.x < 0 || hn.y < 0 || hn.x >= actmap->xsize || hn.y >= actmap->ysize || !fieldaccessible ( actmap->getField ( hn ), veh, hn.getBitmappedHeight() ))
+                   continue;
+
+               // cursor.gotoxy ( hn.m, hn.n );
+
+               Node N2;
+               int k = getMoveCost( N.h, hn, veh, N2.canStop );
+               if ( k > veh->typ->movement[hn.getNumericalHeight()]  )
+                  k = 10*longestPath;
+               N2.h = hn;
+
+               if ( k >= MAXIMUM_PATH_LENGTH )
+                  N2.gval = k;
+               else
+                  N2.gval = N.gval + k;
+
+               N2.hval = dist(hn,B);
+
+
+               if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
+                  // there's an container on the field that can be entered. This means, the unit can't stop 'over' the container...
+                  N2.canStop = false;
+                  nodeVisited ( N2, dir, open );
+
+                  // ... only inside it
+                  N2.canStop = true;
+                  N2.h.setnum ( N2.h.x, N2.h.y, -1 );
+                  nodeVisited ( N2, dir, open, N.h.getNumericalHeight(), maxmalq );
+               } else
+                  nodeVisited ( N2, dir, open );
            }
-        }
 
+           // and now change the units' height. That's only possible on fields where the unit can stop it's movement
+
+
+           if ( changeHeight )
+              if ( fieldaccessible ( actmap->getField(N.h), veh, N.h.getBitmappedHeight() ) == 2 )
+                 for ( int heightDelta = -1; heightDelta <= 1; heightDelta += 2 ) {
+                    const Vehicletype::HeightChangeMethod* hcm = veh->getHeightChange( heightDelta, N.h.getBitmappedHeight());
+                    if ( hcm ) {
+                       for ( int dir = 0; (dir < 6 && hcm->dist) || (dir < 1 && !hcm->dist); dir++ ) {
+                          MapCoordinate3D newpos = N.h;
+                          bool access = true;
+                          for ( int step = 0; step < hcm->dist; step++ ) {
+                             getnextfield ( newpos.x, newpos.y, dir );
+                             pfield fld = actmap->getField(newpos);
+                             if ( !fld || !fieldaccessible ( fld, veh, N.h.getBitmappedHeight() ) || !fieldaccessible( fld, veh, 1 << (N.h.getNumericalHeight() + hcm->heightDelta)) )
+                                access = false;
+                          }
+
+                          pfield fld = actmap->getField( newpos );
+                          if ( fld && access ) {
+                             Node N2;
+                             N2.h.setnum ( newpos.x, newpos.y, N.h.getNumericalHeight() + hcm->heightDelta );
+                             if ( fieldaccessible( fld, veh, N2.h.getBitmappedHeight() ) == 2 ) {
+                                N2.canStop = true;
+                                N2.gval = N.gval + getMoveCost( N.h, N2.h, veh, N2.canStop );
+                                N2.hval = dist(N2.h,B);
+                                nodeVisited ( N2, HexDirection(dir), open, N.h.getNumericalHeight() , hcm->dist * maxmalq );
+                             }
+                          }
+                       }
+                    }
+                 }
+
+
+        }
     }
 
-    if( found && N.gval < MAXIMUM_PATH_LENGTH ) {
+    if( found && N.gval <= MAXIMUM_PATH_LENGTH && N.gval <= longestPath ) {
         // We have found a path, so let's copy it into `path'
-        std::vector<int> tempPath;
-        std::vector<int> heightHops;
 
         MapCoordinate3D h = endpos;
+        path.insert ( path.begin(), h );
         while( !(h == A) )
         {
             // pfield fld = actmap->getField ( h );
             HexDirection dir = HexDirection ( getPosDir(h) );
-            tempPath.push_back( int( ReverseDirection( dir ) ) );
 
-            int heightDelta = getPosHHop(h);
-            heightHops.push_back ( heightDelta );
+            int prevHeight = getPosHHop(h);
+            int heightChangeDist = prevHeight / 1000;
+            prevHeight -= 10 + heightChangeDist * 1000;
 
-            if ( heightDelta ) {
-               for ( int i = 10; i < abs(heightDelta); i += maxmalq )
+            if ( prevHeight > -10  ) {
+               for ( int i = 0; i < heightChangeDist; i += maxmalq )
                   getnextfield ( h.x, h.y, dir );
 
-               if ( heightDelta > 0 )
-                  h = MapCoordinate3D ( h.x, h.y, h.getBitmappedHeight() >> 1 ) ;
-               else
-                  h = MapCoordinate3D ( h.x, h.y, h.getBitmappedHeight() << 1 );
+               h.setnum ( h.x, h.y, prevHeight );
             } else
-               getnextfield ( h.x, h.y, dir );
-        }
-
-        // tempPath now contains the directions the unit must travel .. backwards
-        // (like a stack)
-
-        h = A;
-
-        for ( int i = tempPath.size()-1; i >= 0 ; i-- ) {
-           if ( heightHops[i] ) {
-              for ( int j = 10; j < abs (heightHops[i]); j += maxmalq )
-                  getnextfield ( h.x, h.y, tempPath[i] );
-
-           } else
-              getnextfield ( h.x, h.y, tempPath[i] );
-
-           if ( heightHops[i] > 0 )
-              h = MapCoordinate3D ( h.x, h.y, h.getBitmappedHeight() << 1 );
-           else
-              if ( heightHops[i] < 0 )
-                 h = MapCoordinate3D ( h.x, h.y, h.getBitmappedHeight() >> 1 );
-
-           path.push_back ( h );
+                getnextfield ( h.x, h.y, dir );
+            path.insert ( path.begin(), h );
         }
     }
     else
@@ -703,22 +765,24 @@ void AStar3D::findPath( Path& path, const vector<MapCoordinate3D>& dest )
 }
 
 
-void AStar3D::findAllAccessibleFields ( int maxDist )
+void AStar3D::findAllAccessibleFields ( )
 {
-   actmap->cleartemps ( 1 );
-
-   MAXIMUM_PATH_LENGTH = maxDist;
+   if ( markTemps )
+      actmap->cleartemps ( 3 );
 
    Path dummy;
    findPath ( dummy, MapCoordinate3D(actmap->xsize, actmap->ysize, veh->height) );  //this field does not exist...
    for ( Container::iterator i = visited.begin(); i != visited.end(); i++ ) {
-      getFieldAccess( i->h ) |= i->h.getBitmappedHeight();
+      int& fa = getFieldAccess( i->h );
+      fa |= i->h.getBitmappedHeight();
       if ( markTemps )
          actmap->getField ( i->h )->a.temp  |= i->h.getBitmappedHeight();
    }
    if ( markTemps )
       tempsMarked = actmap;
 }
+
+
 
 AStar3D::Node* AStar3D::fieldVisited ( const MapCoordinate3D& pos )
 {
@@ -730,12 +794,12 @@ AStar3D::Node* AStar3D::fieldVisited ( const MapCoordinate3D& pos )
 }
 
 
-char& AStar3D::getFieldAccess ( int x, int y )
+int& AStar3D::getFieldAccess ( int x, int y )
 {
    return fieldAccess[x + y * actmap->xsize];
 }
 
-char& AStar3D::getFieldAccess ( const MapCoordinate& mc )
+int& AStar3D::getFieldAccess ( const MapCoordinate& mc )
 {
    return fieldAccess[mc.x + mc.y * actmap->xsize];
 }

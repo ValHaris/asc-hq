@@ -153,24 +153,6 @@ void* Building :: getpicture ( const BuildingType::LocalCoordinate& localCoordin
 }
 
 
-void Building::regroupUnits ()
-{
-   int num = 0;
-   for ( int i = 18; i < 32; i++ )
-      if ( loading[i] )
-         num++;
-
-   if ( num ) {
-      for ( int i = 0; i < 18; i++ )
-         if ( !loading[i] ) {
-            for ( int j = i+1; j < 32; j++ )
-               loading[j-1] = loading[j];
-            loading[31] = NULL;
-         }
-   }
-}
-
-
 #ifndef sgmain
 void Building :: execnetcontrol ( void ) {}
 int Building :: putResource ( int amount, int resourcetype, int queryonly, int scope ) { return 0; };
@@ -910,7 +892,7 @@ Resources Building::WindPowerplant :: getPlus()
 {
    Resources p;
    for ( int r = 0; r < 3; r++ )
-      p.resource(r) =  bld->maxplus.resource(r) * actmap->weather.wind[0].speed / 255;
+      p.resource(r) =  bld->maxplus.resource(r) * actmap->weather.windSpeed / 255;
    return p;
 }
 

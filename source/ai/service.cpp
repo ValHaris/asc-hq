@@ -395,8 +395,8 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
    for ( int i = 0; i < 8; i++ )
       maxMovement = max ( maxMovement, veh->typ->movement[i] );
 
-   AStar3D astar ( getMap(), veh );
-   astar.findAllAccessibleFields ( maxMovement*10 );
+   AStar3D astar ( getMap(), veh, true, maxMovement*10 );
+   astar.findAllAccessibleFields ( );
 
    pbuilding bestBuilding = NULL;
    int bestDistance = maxint;

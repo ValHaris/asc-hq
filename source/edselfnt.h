@@ -1,6 +1,9 @@
-//     $Id: edselfnt.h,v 1.7 2002-11-01 20:44:53 mbickel Exp $
+//     $Id: edselfnt.h,v 1.8 2003-02-19 19:47:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2002/11/01 20:44:53  mbickel
+//      Added function to specify which units can be build by other units
+//
 //     Revision 1.6  2002/10/09 16:58:46  mbickel
 //      Fixed to GrafikSet loading
 //      New item filter for mapeditor
@@ -61,8 +64,7 @@ extern void selobject( tkey ench );
 extern void selmine( tkey ench );
 extern void selweather( tkey ench );
 extern void selbuilding ( tkey ench );
-extern void selunitcargo( pvehicle transport );
-extern void selbuildingcargo( pbuilding eht );
+extern void selcargo( ContainerBase* container );
 extern void selbuildingproduction( pbuilding eht );
 extern void showallchoices(void);
 

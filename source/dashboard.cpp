@@ -44,7 +44,6 @@ tdashboard::tdashboard ( void )
    fuelbkgr  = NULL;
    imagebkgr = NULL;
    movedisp  = 0;
-   windheight = 0;
    windheightshown = 0;
    for ( int i = 0; i< 8; i++ )
       weaps[i].displayed = 0;
@@ -838,41 +837,26 @@ void         tdashboard::paintwind( int repaint )
 
 
       int unitspeed;
-      int height = windheight;
+      if ( vehicle )
+         unitspeed = getmaxwindspeedforunit ( vehicle );
+      else
+         unitspeed = maxint;
 
-      if ( vehicle ) {
-          unitspeed = getmaxwindspeedforunit ( vehicle );
-          if ( unitspeed < 255*256 )
-             height = getwindheightforunit ( vehicle );
-      }
-
-      if ( actmap->weather.wind[height].speed ) {
-          if ( lastdir != actmap->weather.wind[height].direction ) {
+      if ( actmap->weather.windSpeed ) {
+          if ( lastdir != actmap->weather.windDirection ) {
              putimage ( agmp->resolutionx - ( 640 - 506), 227, icons.wind[ 8 ] );
-             char* pic = rotatepict_grw ( icons.windarrow, directionangle[ actmap->weather.wind[height].direction ] );
+             char* pic = rotatepict_grw ( icons.windarrow, directionangle[ actmap->weather.windDirection ] );
              int h1,w1, h2, w2;
              getpicsize ( pic, w2, h2 );
              getpicsize ( icons.wind[ 8 ], w1, h1 );
              putspriteimage ( agmp->resolutionx - ( 640 - (506 + w1/2 - w2/2)), 227 + h1/2- h2/2, pic );
              delete[] pic;
-             lastdir = actmap->weather.wind[height].direction;
+             lastdir = actmap->weather.windDirection;
           }
       } else
          putimage ( agmp->resolutionx - ( 640 - 506), 227, icons.wind[ 8 ] );
 
-      if ( (actmap->weather.wind[0] == actmap->weather.wind[1]) && (actmap->weather.wind[1] == actmap->weather.wind[2]) ) {
-         if ( windheightshown == 2 ) {
-            putimage ( agmp->resolutionx - ( 640 - 489), 284, windheightbackground );
-            windheightshown = 1;
-         }
-      } else {
-         windheightshown = 2;
-         putimage ( agmp->resolutionx - ( 640 - 489), 284, icons.height2[0][ 3 - height] );
-      }
-
-      windheight = height;
-
-      for (i = 0; i < (actmap->weather.wind[height].speed+31) / 32 ; i++ ) {
+      for (i = 0; i < (actmap->weather.windSpeed+31) / 32 ; i++ ) {
          int color = green;
 
          if ( vehicle == NULL ) {
@@ -884,7 +868,7 @@ void         tdashboard::paintwind( int repaint )
                   color = yellow;
              */
          } else {
-             int windspeed = actmap->weather.wind[ height ].speed*maxwindspeed ;
+             int windspeed = actmap->weather.windSpeed*maxwindspeed ;
              if ( unitspeed < 255*256 )
                 if ( windspeed > unitspeed*9/10 )
                    color = red;
@@ -1180,15 +1164,6 @@ void         tdashboard::checkformouse ( int func )
           if ( mouseparams.x >= agmp->resolutionx - ( 640 - 588 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 610 )  &&   mouseparams.y >= 227   &&   mouseparams.y <= 290  && (mouseparams.taste & 1) ) {
              displaywindspeed();
              while ( mouseparams.x >= agmp->resolutionx - ( 640 - 588 )  &&   mouseparams.x <= agmp->resolutionx - ( 640 - 610 )  &&   mouseparams.y >= 227   &&   mouseparams.y <= 290  && (mouseparams.taste & 1) )
-                releasetimeslice();
-          }
-          if ( mouseinrect ( agmp->resolutionx - ( 640 - 489 ), 284, agmp->resolutionx - ( 640 - 509 ), 294 ) && (mouseparams.taste & 1)) {
-             dashboard.windheight++;
-             if ( dashboard.windheight > 2 )
-                dashboard.windheight = 0;
-             dashboard.x = 0xffff;
-             paintwind(1);
-             while ( mouseinrect ( agmp->resolutionx - ( 640 - 489 ), 284, agmp->resolutionx - ( 640 - 509 ), 294 ) && (mouseparams.taste & 1) )
                 releasetimeslice();
           }
        }

@@ -2,9 +2,16 @@
     \brief Changing the weather and the terrain on the map
 */
 
-//     $Id: weather.cpp,v 1.12 2002-12-12 11:34:18 mbickel Exp $
+//     $Id: weather.cpp,v 1.13 2003-02-19 19:47:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2002/12/12 11:34:18  mbickel
+//      Fixed: ai crashing when weapon has no ammo
+//      Fixed: ASC crashed when loading game with ID not found
+//      Fixed: more ai problems
+//      AI now faster
+//      Fixed: removing objects overfill a units tank
+//
 //     Revision 1.11  2001/12/14 10:20:05  mbickel
 //      Cleanup and enhancements to configure.in
 //      Removed last remains of octagonal version from source files
@@ -645,6 +652,6 @@ void setbdtfields ( int id, int fieldnum, int* coordinates )
 
 void displaywindspeed( void )
 {
-   displaymessage2("wind speed is %d; %d; %d ; effective speed on low level  is %d = %s fields.", actmap->weather.wind[0].speed, actmap->weather.wind[1].speed, actmap->weather.wind[2].speed, actmap->weather.wind[0].speed * maxwindspeed / 256, strrrd8d ( actmap->weather.wind[0].speed * maxwindspeed / 256 ));
+   displaymessage2("wind speed is %d which equals %s fields / turn", actmap->weather.windSpeed, strrrd8d ( actmap->weather.windSpeed * maxwindspeed / 256 ));
 }
 

@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.119 2003-02-13 00:56:07 mbickel Exp $
+//     $Id: typen.h,v 1.120 2003-02-19 19:47:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.119  2003/02/13 00:56:07  mbickel
+//      Updated weaponguide
+//      ASC compiles with gcc again
+//
 //     Revision 1.118  2003/02/12 20:11:53  mbickel
 //      Some significant changes to the Transportation code
 //
@@ -1071,17 +1075,9 @@ const int attackmovecost = 0;
 
 #define fusstruppenplattfahrgewichtsfaktor 2  
 #define mingebaeudeeroberungsbeschaedigung 80  
-#define flugzeugtraegerrunwayverkuerzung 2  
 
 #define autorepairdamagedecrease 10    // only for old units ; new one use autorepairrate
 
-#define air_heightincmovedecrease 18  
-#define air_heightdecmovedecrease 0
-#define sub_heightincmovedecrease 0
-#define sub_heightdecmovedecrease 12
-#define helicopter_attack_after_ascent 1  // nach abheben angriff moeglich
-#define helicopter_attack_after_descent 1  // nach landen angriff moeglich
-#define helicopter_landing_move_cost 16   // zus„tzlich zu den Kosten fuer das Wechseln der Hoehenstufe 
 #define weaponpackagesize 5
 
 #define trainingexperienceincrease 2
@@ -1108,8 +1104,6 @@ const int attackmovecost = 0;
 #define researchcostdouble 10000    // bei soviel researchpoints verdoppeln sich die Kosten
 #define minresearchcost 0.5
 #define maxresearchcost 4
-#define airplanemoveafterstart 12
-#define airplanemoveafterlanding (2*minmalq - 1 )
 
 #define mine_movemalus_increase 50   // percent
 

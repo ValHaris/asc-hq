@@ -44,7 +44,6 @@
                        void*        imagebkgr;
                        int          imageshown;
                        int          movedisp;   // 0: Movement f?r Runde    1: movement mit Tank
-                       int          windheight; // 4 , 5 , 6 
                        int          windheightshown;
                        void*        windheightbackground;
                        void         putheight(integer      i,   integer      sel);

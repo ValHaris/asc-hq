@@ -149,6 +149,9 @@
     //! changes a units height and adjusts the movement so that the percentage of used movepoints remains constant
     void setNewHeight( int height );
 
+    //! add the objects like tracks or broken ice
+    void spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest );
+
     int putResource ( int amount, int resourcetype, int queryonly, int scope = 1 );
     int getResource ( int amount, int resourcetype, int queryonly, int scope = 1 );
 
@@ -280,6 +283,12 @@
 
     //! to be used with EXTREME caution, and only in the mapeditor !!
     void transform ( const pvehicletype type );
+
+    /** returns the method for changing the height in the specified direction, or none if there is none.
+        \param dir  +1 is up;  -1 is down
+        \param height if != 0:  assume this level of height instead of the actual one
+    */
+    const Vehicletype::HeightChangeMethod* getHeightChange( int dir, int height = 0 ) const;
 
     //! Is the unit able to shoot ?
     bool weapexist ( void );

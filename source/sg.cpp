@@ -1173,18 +1173,16 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_mntnc_morewind:
-         if ((actmap->weather.wind[0].speed < 254) &&  maintainencecheck()) {
-            actmap->weather.wind[0].speed+=2;
-            actmap->weather.wind[2].speed = actmap->weather.wind[1].speed = actmap->weather.wind[0].speed;
+         if ((actmap->weather.windSpeed < 254) &&  maintainencecheck()) {
+            actmap->weather.windSpeed+=2;
             displaywindspeed (  );
             dashboard.x = 0xffff;
          }
          break;
 
       case ua_mntnc_lesswind:
-         if ((actmap->weather.wind[0].speed > 1)  && maintainencecheck() ) {
-            actmap->weather.wind[0].speed-=2;
-            actmap->weather.wind[2].speed = actmap->weather.wind[1].speed = actmap->weather.wind[0].speed;
+         if ((actmap->weather.windSpeed > 1)  && maintainencecheck() ) {
+            actmap->weather.windSpeed-=2;
             displaywindspeed (  );
             dashboard.x = 0xffff;
          }
@@ -1192,12 +1190,11 @@ void execuseraction ( tuseractions action )
 
       case ua_mntnc_rotatewind:
          if ( maintainencecheck() ) {
-            if (actmap->weather.wind[0].direction < sidenum-1 )
-               actmap->weather.wind[0].direction++;
+            if (actmap->weather.windDirection < sidenum-1 )
+               actmap->weather.windDirection++;
             else
-               actmap->weather.wind[0].direction = 0;
-            actmap->weather.wind[2].direction = actmap->weather.wind[1].direction = actmap->weather.wind[0].direction;
-            displaymessage2("wind dir set to %d ", actmap->weather.wind[0].direction);
+               actmap->weather.windDirection = 0;
+            displaymessage2("wind dir set to %d ", actmap->weather.windDirection);
             dashboard.x = 0xffff;
             resetallbuildingpicturepointers();
             displaymap();

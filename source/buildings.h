@@ -258,9 +258,6 @@ class  Building : public ContainerBase {
     //! returns the amount of resources that the net which the building is connected to produces each turn
     Resources netResourcePlus( ) const;
 
-    //! regroup units. This is necessary for the building dialog which only displays the first 18 units, although more than 18 can be inside ( for example, there are 18 inside, and then the enemy conquers it using a trooper)
-    void regroupUnits ();
-
     ~Building();
 
   protected:

@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.93 2003-02-12 20:11:53 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.94 2003-02-19 19:47:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.93  2003/02/12 20:11:53  mbickel
+//      Some significant changes to the Transportation code
+//
 //     Revision 1.92  2003/01/19 20:27:24  mbickel
 //      Mapeditor: Fixed unjustified warning messages during map transformation
 //
@@ -3753,7 +3756,7 @@ void tvehiclecargo :: displaysingleitem ( int pos, int x, int y )
 
 void tvehiclecargo :: additem  ( void )
 {
-   selunitcargo ( transport );
+   selcargo ( transport );
 }
 
 void tvehiclecargo :: removeitem ( int pos )
@@ -3832,7 +3835,7 @@ void tbuildingcargo :: displaysingleitem ( int pos, int x, int y )
 
 void tbuildingcargo :: additem  ( void )
 {
-   selbuildingcargo ( building );
+   selcargo ( building );
 }
 
 void tbuildingcargo :: removeitem ( int pos )

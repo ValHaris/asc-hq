@@ -138,7 +138,6 @@ class SaveUnitMovement {
 void AI::RefuelConstraint::findPath()
 {
    if ( !ast ) {
-      ast = new AStar3D ( ai.getMap(), veh );
 
       int dist;
       if ( maxMove == -1 ) {
@@ -151,7 +150,8 @@ void AI::RefuelConstraint::findPath()
       } else
          dist = maxMove;
 
-      ast->findAllAccessibleFields ( dist );
+      ast = new AStar3D ( ai.getMap(), veh, true, dist );
+      ast->findAllAccessibleFields ( );
       // tanker planes may have a very large range; that's why we top the distance at 5 times the turn-range
    }
 }
@@ -298,7 +298,7 @@ AI::AiResult  AI :: container ( ccontainercontrols& cc )
    for ( int j= 0; j < 32; j++ ) {
       pvehicle veh = cc.getloadedunit ( j );
       if ( veh )
-         if ( veh->aiparam[ getPlayerNum() ]->getTask() == AiParameter::tsk_nothing && cc.moveavail ( veh ))
+         if ( veh->aiparam[ getPlayerNum() ]->getTask() == AiParameter::tsk_nothing && veh->canMove() )
             idleUnits.push_back ( veh );
    }
    // move the most important unit first, to get the best position
@@ -578,9 +578,6 @@ int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path )
          // movement exhausted
          return 0;
       }
-
-      if ( ChangeVehicleHeight::getMoveCost ( veh, veh->getPosition(), getdirection( veh->xpos, veh->ypos, pi->x, pi->y), pi->getBitmappedHeight() > veh->height ? 1 : -1 ).first > veh->getMovement() )
-         return 0;
 
       ChangeVehicleHeight* cvh;
       if ( pi->getBitmappedHeight() > veh->height )

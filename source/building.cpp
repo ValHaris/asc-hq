@@ -2,9 +2,12 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.94 2003-02-12 20:11:53 mbickel Exp $
+//     $Id: building.cpp,v 1.95 2003-02-19 19:47:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.94  2003/02/12 20:11:53  mbickel
+//      Some significant changes to the Transportation code
+//
 //     Revision 1.93  2003/02/07 09:53:03  mbickel
 //      Fixed: building could not repair themself
 //
@@ -1324,69 +1327,15 @@ void ccontainercontrols :: cmove_unit_in_container :: movedown ( pvehicle eht, p
 
 VehicleMovement*   ccontainercontrols :: movement (  pvehicle eht )
 {
-   movementparams.height   = eht->height;
-   movementparams.movement = eht->getMovement();
-   movementparams.attacked = eht->attacked;
-   int perc = eht->getMovement() * 1024 / eht->typ->movement[log2 ( eht->height ) ];
-   int orgheight = eht->height;
-   int orgmove = eht->getMovement();
+   VehicleMovement* vehicleMovement = new VehicleMovement ( &defaultMapDisplay, NULL );
+   int status = vehicleMovement->execute ( eht, -1, -1, 0, -1, -1 );
 
-   int heightToTest[20];
-   int heightToTestNum = 0;
-
-
-   if ( eht->functions & cf_trooper ) {
-      if ( getHeight() & (chfahrend | chschwimmend )) {
-         heightToTest[heightToTestNum++] = chfahrend;
-         heightToTest[heightToTestNum++] = chschwimmend;
-      } else
-         heightToTest[heightToTestNum++] = getHeight();
+   if ( status > 0 )
+      return vehicleMovement;
+   else {
+      delete vehicleMovement;
+      return NULL;
    }
-
-   /*  ####TRANS
-   if ( getLoadCapability() & getHeight() & eht->typ->height )
-      heightToTest[heightToTestNum++] = getHeight();
-
-
-   for ( int h = 0; h < 8; h++)
-      if ( getLoadCapability() & (1 << h) )
-         heightToTest[heightToTestNum++] = (1 << h);
-
-
-  */
-
-   for ( int i = 0; i < heightToTestNum; i++ ) {
-
-   /*
-      if ( eht->height != heightToTest[i]  && eht->typ->height & heightToTest[i] ) {
-         eht->height = heightToTest[i];
-         eht->setMovement( eht->typ->movement[log2 ( eht->height ) ] * perc / 1024 );
-      }
-      */
-
-      moveparams.movestatus = 0;
-      int ma = moveavail( eht, heightToTest[i] );
-      if ( ma == 3 )
-         eht->attacked = 1;
-
-      if ( ma < 2 )
-         break;
-
-
-      VehicleMovement* vehicleMovement = new VehicleMovement ( &defaultMapDisplay, NULL );
-      vehicleMovement->execute ( eht, -1, -1, 0, heightToTest[i], -1 );
-
-
-      if ( vehicleMovement->getStatus() > 0 )
-         return vehicleMovement;
-      else
-         delete vehicleMovement;
-   }
-
-   eht->height = orgheight;
-   eht->setMovement ( orgmove );
-   eht->attacked = movementparams.attacked;
-   return NULL;
 }
 
 
@@ -1544,30 +1493,6 @@ int    cbuildingcontrols :: getHeight ( void )
    return building->typ->buildingheight;
 }
 
-
-int   cbuildingcontrols :: moveavail ( pvehicle eht, int height )
-{
-/* ####TRANS
-   if ( height == -1 )
-      height = eht->height;
-
-   if ( recursiondepth > 0 )
-      return 0;
-
-   if ( eht->getMovement() < minmalq )
-      return 0;
-
-   if ( (eht->typ->height & building->typ->unitheightreq) || !building->typ->unitheightreq )
-      if ( height & building->typ->loadcapability || eht->functions & cf_trooper)
-         return 2;
-      else
-         return 1;
-   else
-      if ( eht->functions & cf_trooper )
-         return 2;
-      else  */
-         return 0;
-}
 
 
 
@@ -2084,129 +2009,7 @@ int   ctransportcontrols :: getspecfunc ( tcontainermode mode )
 };
 
 
-int   ctransportcontrols :: moveavail ( pvehicle eht, int height )
-{
-/* ####TRANS
-   if ( height == -1 )
-      height = eht->height;
 
-   if ( recursiondepth > 0 )
-      return 0;
-
-   int maxm = 0;
-   for ( int i = 0; i < 8; i++ )
-      if ( eht->typ->height & (1 << i ))
-         if ( eht->typ->movement[i] > maxm )
-            maxm = eht->typ->movement[i];
-
-   if ( !eht->maxMovement() )
-      return 0;
-      
-   if ( eht->getMovement() * maxm / eht->maxMovement() < minmalq )
-      return 0;
-
-   if ( vehicle->height <= chgetaucht )
-      if ( eht->functions & cf_trooper )
-         return 2;
-      else
-         if ( height & vehicle->height )
-            return 2;
-         else
-            if ( eht->typ->height & vehicle->height )
-               return 1;
-            else
-               return 0;
-
-   if ( (vehicle->height < chtieffliegend) ) {
-
-      if (((eht->typ->height & vehicle->typ->loadcapabilityreq) || !vehicle->typ->loadcapabilityreq ) &&
-            ((eht->typ->height & vehicle->typ->loadcapabilitynot ) == 0 ) &&
-            ((eht->typ->steigung <= flugzeugtraegerrunwayverkuerzung ) || height <= chfahrend ))
-
-         if ( height  & vehicle->typ->loadcapability )
-            return 2;
-         else
-            return 1;
-      else
-         if ( eht->functions & cf_trooper )
-            return 2;
-         else
-            if ( vehicle->height & eht->typ->height )
-               return moveavail ( eht, vehicle->height );
-            else
-               return 0;
-   } else
-      if ( vehicle->height <= chfliegend)  {
-         if (((eht->typ->height & vehicle->typ->loadcapabilityreq) || !vehicle->typ->loadcapabilityreq ) &&
-               ((eht->typ->height & vehicle->typ->loadcapabilitynot ) == 0 ) &&
-               ( eht->functions & cfparatrooper))
-            return 3;
-         else
-            return 0;
-      } else
-         if ( vehicle->height == chsatellit )
-            if ( (vehicle->height & eht->typ->height) || (eht->functions & cf_trooper) )  // to be sure...
-               return 2;
-            else
-               return 0;
-*/
-   return 0;
-}
-
-/*
-VehicleMovement*  ctransportcontrols :: movement (  pvehicle eht, int mode )
-{
-   if ( eht->getMovement() < minmalq )
-      return NULL;
-
-   movementparams.height   = eht->height;
-   movementparams.movement = eht->getMovement();
-   movementparams.attacked = eht->attacked;
-
-   int unitheight = -1;
-   if ( vehicle->height <= chgetaucht || vehicle->height >= chtieffliegend )
-      unitheight = vehicle->height;
-
-   moveparams.movestatus = 0;
-   int ma = moveavail( eht );
-   if ( ma == 3 )
-      eht->attacked = 1;
-
-   VehicleMovement* vehicleMovement = new VehicleMovement ( &defaultMapDisplay, NULL );
-   if (  ma >= 2 ) {
-      vehicleMovement->execute ( eht, -1, -1, 0, unitheight, -1 );
-      if ( vehicleMovement->getStatus () <= 0 ) {
-         delete vehicleMovement;
-         return NULL;
-      }
-   } else {
-      if ( ma == 1 ) {
-         if ( ( eht->height << 1 ) & vehicle->typ->loadcapability ) {
-             eht->height <<=1;
-             if ( eht->typ->steigung )
-                eht->setMovement ( eht->typ->steigung * maxmalq );
-              else
-                eht->setMovement ( maxmalq * 3 / 2 );
-
-             vehicleMovement->execute ( eht, -1, -1, 0, unitheight, -1 );
-             if ( vehicleMovement->getStatus() <= 0 ) {
-                eht->height   = movementparams.height;
-                eht->setMovement ( movementparams.movement );
-                eht->attacked = movementparams.attacked;
-                delete vehicleMovement;
-                return NULL;
-             }
-         }
-
-      } else {
-         delete vehicleMovement;
-         return NULL;
-      }
-   }
-
-   return vehicleMovement;
-}
-*/
 
 void  ctransportcontrols :: removevehicle ( pvehicle *peht )
 {
@@ -3297,7 +3100,7 @@ int   ccontainer :: moveicon_c :: available    ( void )
    pvehicle eht = main->getmarkedunit();
 
    if ( eht && eht->color == actmap->actplayer * 8 )
-      return main->moveavail ( eht );
+      return eht->canMove();
 
    return 0;
 }
@@ -3357,12 +3160,6 @@ void  ccontainer :: moveicon_c :: exec         ( void )
       npop (actgui);
       actgui->restorebackground();
       dashboard.x = 0xffff;
-      pvehicle eht = main->getmarkedunit();
-      if ( eht ) {
-         eht->height   = main->movementparams.height;
-         eht->setMovement ( main->movementparams.movement );
-         eht->attacked = main->movementparams.attacked;
-      }
 
       if ( pendingVehicleActions.move )
          delete pendingVehicleActions.move;

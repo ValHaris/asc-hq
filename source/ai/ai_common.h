@@ -80,7 +80,8 @@ extern const int currentServiceOrderVersion;
     protected:
        virtual int getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const pvehicle vehicle )
        {
-          int cost = AStar3D::getMoveCost ( start, dest, vehicle );
+          bool canStop;
+          int cost = AStar3D::getMoveCost ( start, dest, vehicle, canStop );
           if ( ai->getMap()->getField ( dest )->vehicle && beeline ( vehicle->xpos, vehicle->ypos, dest.x, dest.y) < vehicle->getMovement())
              cost += 2;
           return cost;
@@ -123,7 +124,8 @@ extern const int currentServiceOrderVersion;
     protected:
        virtual int getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const pvehicle vehicle )
        {
-          int cost = AStar3D::getMoveCost ( start, dest, vehicle );
+          bool canStop;
+          int cost = AStar3D::getMoveCost ( start, dest, vehicle, canStop );
           int visibility = ai->getMap()->getField ( dest )->visible;
           int visnum = 0;
           int enemynum = 0;

@@ -445,7 +445,7 @@ void TextFormatParser::parseLine ( const ASCString& line )
 
       s2.toLower();
       if ( s2 != level.back() )
-         error ( "unmatching bracket closed");
+         error ( "unmatching close brackets: " + s2 );
 
       level.pop_back();
       levelDepth--;

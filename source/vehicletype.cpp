@@ -71,7 +71,6 @@ Vehicletype :: Vehicletype ( void )
       picture[i] = NULL;
    height     = 0;
    researchid = 0;
-   steigung = 0;
    jamming = 0;
    view = 0;
    wait = 0;
@@ -109,6 +108,8 @@ Vehicletype :: Vehicletype ( void )
    buildicon = NULL;
    autorepairrate = 0;
 
+   heightChangeMethodNum = 0;
+
    for ( i = 0; i < 8; i++ )
       aiparam[i] = NULL;
 
@@ -129,7 +130,7 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 9;
+const int vehicle_version = 10;
 
 
 
@@ -194,7 +195,7 @@ void Vehicletype :: read ( tnstream& stream )
       _terrainreq = stream.readInt();
       _terrainkill = stream.readInt();
    }
-   steigung = stream.readChar();
+   stream.readChar(); // steigung
    jamming = stream.readChar();
    view = stream.readWord();
    wait = stream.readChar();
@@ -448,6 +449,14 @@ void Vehicletype :: read ( tnstream& stream )
 
    if ( version >= 9 )
      ContainerBaseType::read ( stream );
+
+   if ( version >= 10 ) {
+     heightChangeMethodNum = stream.readInt();
+     heightChangeMethod.resize(heightChangeMethodNum );
+     for ( int i = 0; i < heightChangeMethodNum; i++ )
+        heightChangeMethod[i].read( stream );
+   } else
+      heightChangeMethodNum = NULL;
 }
 
 void Vehicletype::setupPictures()
@@ -506,7 +515,7 @@ void Vehicletype:: write ( tnstream& stream ) const
 
    stream.writeChar( height );
    stream.writeWord(researchid);
-   stream.writeChar(steigung);
+   stream.writeChar(0); // steigung
    stream.writeChar(jamming);
    stream.writeWord(view);
    stream.writeChar(wait);
@@ -639,6 +648,10 @@ void Vehicletype:: write ( tnstream& stream ) const
    }                            
 
    ContainerBaseType::write ( stream );
+
+   stream.writeInt( heightChangeMethodNum );
+   for ( int i = 0; i < heightChangeMethodNum; i++ )
+      heightChangeMethod[i].write( stream );
 
 }
 
@@ -802,7 +815,6 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.closeBracket ();
 
    pc.addTagInteger( "Height", height, choehenstufennum, heightTags );
-   pc.addInteger("HeightChangeDist", steigung );
    pc.addInteger("Jamming", jamming );
    pc.addBool ( "WaitFortack", wait );
    pc.openBracket( "Tank" );
@@ -861,6 +873,14 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.addString("MovementSound", movementSoundLabel, "" );
    pc.addString("KillSound", killSoundLabel, "" );
 
+   pc.addInteger("HeightChangeMethodNum", heightChangeMethodNum, 0 );
+   heightChangeMethod.resize( heightChangeMethodNum );
+   for ( int i = 0; i < heightChangeMethodNum; i++ ) {
+      pc.openBracket( ASCString("HeightChangeMethod")+strrr(i) );
+      heightChangeMethod[i].runTextIO ( pc );
+      pc.closeBracket();
+   }
+
    ContainerBaseType::runTextIO ( pc );
 
 
@@ -914,6 +934,46 @@ void SingleWeapon::runTextIO ( PropertyContainer& pc )
             pc.addInteger( unitCategoryTags[i], targetingAccuracy[i] );
       pc.closeBracket();
    }
+}
+
+
+void Vehicletype :: HeightChangeMethod :: runTextIO ( PropertyContainer& pc )
+{
+   pc.addTagInteger( "StartHeight", startHeight, choehenstufennum, heightTags );
+   pc.addInteger("HeightDelta", heightDelta );
+   pc.addInteger("MoveCost", moveCost, 0 );
+   pc.addBool ( "CanAttack", canAttack );
+   pc.addInteger("Dist", dist );
+}
+
+
+
+const int vehicleHeightChangeMethodVersion = 1;
+
+
+void Vehicletype :: HeightChangeMethod :: read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   if ( version > vehicleHeightChangeMethodVersion || version < 1 ) {
+      ASCString s = "invalid version for reading VehicleType :: HeightChangeMethod : ";
+      s += strrr ( version );
+      throw ASCmsgException ( s );
+   }
+   startHeight = stream.readInt();
+   heightDelta = stream.readInt();
+   moveCost = stream.readInt();
+   canAttack = stream.readInt();
+   dist = stream.readInt();
+}
+
+void Vehicletype :: HeightChangeMethod :: write ( tnstream& stream ) const 
+{
+   stream.writeInt ( vehicleHeightChangeMethodVersion );
+   stream.writeInt ( startHeight );
+   stream.writeInt ( heightDelta );
+   stream.writeInt ( moveCost );
+   stream.writeInt ( canAttack );
+   stream.writeInt ( dist );
 }
 
 

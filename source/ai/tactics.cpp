@@ -361,6 +361,7 @@ AI::AiResult AI::moveToSavePlace ( pvehicle veh, VehicleMovement& vm3 )
 
 int AI::changeVehicleHeight ( pvehicle veh, VehicleMovement* vm, int preferredDirection )
 {
+#if 0
    int bh = getBestHeight ( veh );
    if ( bh != veh->height && bh != -1 ) {
       ChangeVehicleHeight* cvh;
@@ -376,8 +377,6 @@ int AI::changeVehicleHeight ( pvehicle veh, VehicleMovement* vm, int preferredDi
 
       if ( newheight & veh->typ->height ) {
          if ( cvh->available ( veh ) ) {
-            if ( vm )
-               cvh->registerStartMovement ( *vm );
 
             int stat = cvh->execute ( veh, -1, -1, 0, newheight, 1 );
             if ( stat == 2 ) {   // if the unit could change its height vertically, or the height change is not available, skip this block
@@ -458,6 +457,7 @@ int AI::changeVehicleHeight ( pvehicle veh, VehicleMovement* vm, int preferredDi
       }
 
    }
+   #endif
    return 0;
 }
 

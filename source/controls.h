@@ -4,9 +4,14 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.45 2003-01-28 17:48:42 mbickel Exp $
+//     $Id: controls.h,v 1.46 2003-02-19 19:47:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.45  2003/01/28 17:48:42  mbickel
+//      Added sounds
+//      Rewrote soundsystem
+//      Fixed: tank got stuck when moving from one transport ship to another
+//
 //     Revision 1.44  2003/01/12 19:37:18  mbickel
 //      Rewrote resource production
 //
@@ -131,7 +136,7 @@
                                                                    */
 
                         word         movesx, movesy, moveerr; 
-                        pvehicle     vehicletomove; 
+                        pvehicle     vehicletomove;
                         int          newheight; 
                         int          oldheight; 
                         char         heightdir; 
@@ -167,27 +172,29 @@
 
                     //! checks, which vehicle are now available that where not available when initbuffer was called. The new ones are displayed by calling #tshownewtanks
                     void evalbuffer( void );
-    
+
                };
 
+//! caches some calculations for the effects that wind has on the movement of units
+class WindMovement {
+      int wm[6];
+   public:
+      WindMovement ( const pvehicle vehicle );
+      int getDist ( int dir );
+};
 
-/*! calculates the movement cost for moving vehicle from x1/y1 to x2/y2
 
-   \param direc If x2 and y2 are -1, they are assumend to be the field beeing next to x1/y1 in the direction of direc
-   \param fuelcost The fuelconsumption is written here
-   \param movecost The required movement points are written to this variable
+/*! calculates the movement cost for moving vehicle from start to dest.
+    \returns : first: movement ; second: fuel consumption
 */
-    
-extern void  calcmovemalus(int          x1,
-                           int          y1,
-                           int          x2,
-                           int          y2,
-                           pvehicle     vehicle,
-                           int          direc,
-                           int&         fuelcost,               
-                           int&         movecost,
-                           int          uheight = -1 );
+extern pair<int,int> calcmovemalus( const MapCoordinate3D& start,
+                                    const MapCoordinate3D& dest,
+                                    pvehicle     vehicle,
+                                    WindMovement* wm = NULL,
+                                    bool*  inhibitAttack = NULL );
 
+//! return the distance between x1/y1 and x2/y2 using the power of the wind factors calculated for a specific unit with #initwindmovement
+extern int windbeeline ( int x1, int y1, int x2, int y2, WindMovement* wm );
 
 
 /*! Ends the turn of the current player and runs AI until a player is human again
@@ -241,11 +248,7 @@ extern void         destructbuildinglevel2( int xp, int yp);
 //! An old procedure for removing a building with a vehicle
 extern void         destructbuildinglevel1( int xp, int yp);
 
-//! Initializes the wind calculations for moving vehicle
-extern void initwindmovement( const pvehicle vehicle );
 
-//! return the distance between x1/y1 and x2/y2 using the power of the wind factors calculated for a specific unit with #initwindmovement
-extern int windbeeline ( int x1, int y1, int x2, int y2 );
 
 //! continues a PBeM game; the current map is deleted
 extern void continuenetworkgame ( void );
@@ -293,8 +296,8 @@ extern int searchexternaltransferfields ( pbuilding bld );
 class treactionfire {
           public:
              virtual int  checkfield ( int x, int y, pvehicle &eht, MapDisplayInterface* md ) = 0;
-             virtual void init ( pvehicle eht, IntFieldList* fieldlist ) = 0;
-             virtual ~treactionfire() {};                           
+             virtual void init ( pvehicle eht, const AStar3D::Path&  fieldlist ) = 0;
+             virtual ~treactionfire() {};
         };
 
 class treactionfirereplay : public treactionfire {
@@ -306,7 +309,7 @@ class treactionfirereplay : public treactionfire {
              treactionfirereplay ( void );
              ~treactionfirereplay ( );
              virtual int checkfield ( int x, int y, pvehicle &eht, MapDisplayInterface* md );
-             virtual void init ( pvehicle eht, IntFieldList* fieldlist );
+             virtual void init ( pvehicle eht, const AStar3D::Path& fieldlist );
    };
 
 class tsearchreactionfireingunits : public treactionfire {
@@ -319,8 +322,8 @@ class tsearchreactionfireingunits : public treactionfire {
            public:
 
                 tsearchreactionfireingunits( void );
-                void init ( pvehicle eht, IntFieldList* fieldlist );
-                int  checkfield ( int x, int y, pvehicle &eht, MapDisplayInterface* md );  
+                void init ( pvehicle eht, const AStar3D::Path& fieldlist );
+                int  checkfield ( int x, int y, pvehicle &eht, MapDisplayInterface* md );
                 ~tsearchreactionfireingunits();
       };
 
@@ -332,7 +335,7 @@ class ReplayMapDisplay : public MapDisplayInterface {
            void wait ( int minTime = 0 );
          public:
            ReplayMapDisplay ( MapDisplay* md ) { mapDisplay = md; cursorDelay = 20; };
-           int displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove, SoundLoopManager* slc );
+           int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, pvehicle vehicle, int fieldnum, int totalmove, SoundLoopManager* slm );
            void displayPosition ( int x, int y );
            void deleteVehicle ( pvehicle vehicle ) { mapDisplay->deleteVehicle ( vehicle ); };
            void displayMap ( void ) { mapDisplay->displayMap(); };

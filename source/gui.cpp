@@ -4,9 +4,12 @@
 */
 
 
-//     $Id: gui.cpp,v 1.87 2003-02-12 20:11:53 mbickel Exp $
+//     $Id: gui.cpp,v 1.88 2003-02-19 19:47:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.87  2003/02/12 20:11:53  mbickel
+//      Some significant changes to the Transportation code
+//
 //     Revision 1.86  2003/01/28 17:48:42  mbickel
 //      Added sounds
 //      Rewrote soundsystem
@@ -1151,7 +1154,7 @@ int   tnsguiiconmove::available    ( void )
       if ( pendingVehicleActions.actionType == vat_move ) {
          switch ( pendingVehicleActions.move->getStatus() ) {
            case 2: return pendingVehicleActions.move->reachableFields.isMember ( getxpos(), getypos() );
-           case 3: return pendingVehicleActions.move->path.isMember ( getxpos(), getypos() );
+           case 3: return pendingVehicleActions.move->path.rbegin()->x == getxpos() && pendingVehicleActions.move->path.rbegin()->y == getypos();
          } /* endswitch */
       }
 
@@ -1192,8 +1195,8 @@ void  tnsguiiconmove::exec         ( void )
            res = pendingVehicleActions.move->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.move->getStatus(), -1, 0 );
         } else {
            if ( ms == 2 ) {
-              for ( int i = 0; i < pendingVehicleActions.move->path.getFieldNum(); i++ )
-                 pendingVehicleActions.move->path.getField( i ) ->a.temp = 1;
+              for ( int i = 0; i < pendingVehicleActions.move->path.size(); i++ )
+                 actmap->getField( pendingVehicleActions.move->path[i]) ->a.temp = 1;
               displaymap();
            } else {
               actmap->cleartemps(7);
@@ -1333,13 +1336,13 @@ int   tnsguiiconascent::available    ( void )
       if ( pendingVehicleActions.actionType == vat_ascent ) {
          switch ( pendingVehicleActions.ascent->getStatus() ) {
            case 2: return pendingVehicleActions.ascent->reachableFields.isMember ( getxpos(), getypos() );
-           case 3: return pendingVehicleActions.ascent->path.isMember ( getxpos(), getypos() );
+           case 3: return pendingVehicleActions.ascent->path.rbegin()->x == getxpos() && pendingVehicleActions.move->path.rbegin()->y == getypos();
          } /* endswitch */
       }
    return 0;
 }
 
-void  tnsguiiconascent::exec         ( void ) 
+void  tnsguiiconascent::exec         ( void )
 {
    if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
       new IncreaseVehicleHeight ( &defaultMapDisplay, &pendingVehicleActions );
@@ -1352,10 +1355,10 @@ void  tnsguiiconascent::exec         ( void )
          return;
       }
 
-      if ( res == 1000 ) 
+      if ( res == 1000 )
          delete pendingVehicleActions.action;
       else {
-         for ( int i = 0; i < pendingVehicleActions.ascent->reachableFields.getFieldNum(); i++ ) 
+         for ( int i = 0; i < pendingVehicleActions.ascent->reachableFields.getFieldNum(); i++ )
             pendingVehicleActions.ascent->reachableFields.getField( i ) ->a.temp = 1;
          displaymap();
       }
@@ -1366,12 +1369,15 @@ void  tnsguiiconascent::exec         ( void )
         int ydst = getypos();
         int res = pendingVehicleActions.ascent->execute ( NULL, xdst, ydst, pendingVehicleActions.ascent->getStatus(), -1, 0 );
         if ( res >= 0 && CGameOptions::Instance()->fastmove ) {
+           actmap->cleartemps(7);
+           displaymap();
            // if the status is 1000 at this position, the unit has been shot down by reactionfire before initiating the height change
            if ( res < 1000 )
               res = pendingVehicleActions.ascent->execute ( NULL, xdst, ydst, pendingVehicleActions.ascent->getStatus(), -1, 0 );
         } else {
-           for ( int i = 0; i < pendingVehicleActions.ascent->path.getFieldNum(); i++ )
-              pendingVehicleActions.ascent->path.getField( i ) ->a.temp = 1;
+           actmap->cleartemps(7);
+           for ( int i = 0; i < pendingVehicleActions.ascent->path.size(); i++ )
+              actmap->getField( pendingVehicleActions.ascent->path[i]) ->a.temp = 1;
            displaymap();
         }
 
@@ -1395,11 +1401,11 @@ void  tnsguiiconascent::exec         ( void )
    dashboard.x = 0xffff;
 }
 
-void  tnsguiiconascent::display      ( void ) 
+void  tnsguiiconascent::display      ( void )
 {
    host->returncoordinates ( this, &x, &y );
 
-   if ( x == -1   ||    y == -1 ) 
+   if ( x == -1   ||    y == -1 )
       return;
 
    int h = chfahrend;
@@ -1437,7 +1443,7 @@ tnsguiicondescent::tnsguiicondescent ( void )
 
 int   tnsguiicondescent::available    ( void ) 
 {
-   if ( moveparams.movestatus == 0 && !pendingVehicleActions.action ) { 
+   if ( moveparams.movestatus == 0 && !pendingVehicleActions.action ) {
       pvehicle eht = getactfield()->vehicle;
       if ( !eht )
          return 0;
@@ -1448,13 +1454,13 @@ int   tnsguiicondescent::available    ( void )
       if ( pendingVehicleActions.actionType == vat_descent ) {
          switch ( pendingVehicleActions.descent->getStatus() ) {
            case 2: return pendingVehicleActions.descent->reachableFields.isMember ( getxpos(), getypos() );
-           case 3: return pendingVehicleActions.descent->path.isMember ( getxpos(), getypos() );
+           case 3: return pendingVehicleActions.descent->path.rbegin()->x == getxpos() && pendingVehicleActions.move->path.rbegin()->y == getypos();
          } /* endswitch */
       }
    return 0;
 }
 
-void  tnsguiicondescent::exec         ( void ) 
+void  tnsguiicondescent::exec         ( void )
 {
    if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
       new DecreaseVehicleHeight ( &defaultMapDisplay, &pendingVehicleActions );
@@ -1467,10 +1473,10 @@ void  tnsguiicondescent::exec         ( void )
          return;
       }
 
-      if ( res == 1000 ) 
+      if ( res == 1000 )
          delete pendingVehicleActions.action;
       else {
-         for ( int i = 0; i < pendingVehicleActions.descent->reachableFields.getFieldNum(); i++ ) 
+         for ( int i = 0; i < pendingVehicleActions.descent->reachableFields.getFieldNum(); i++ )
             pendingVehicleActions.descent->reachableFields.getField( i ) ->a.temp = 1;
          displaymap();
       }
@@ -1479,12 +1485,15 @@ void  tnsguiicondescent::exec         ( void )
      if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_descent &&  (pendingVehicleActions.descent->getStatus() == 2 || pendingVehicleActions.descent->getStatus() == 3 )) {
         int res = pendingVehicleActions.descent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.descent->getStatus(), -1, 0 );
         if ( res >= 0 && CGameOptions::Instance()->fastmove )
+           actmap->cleartemps(7);
+           displaymap();
            // if the status is 1000 at this position, the unit has been shot down by reactionfire before initiating the height change
            if ( res < 1000 )
               res = pendingVehicleActions.descent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.descent->getStatus(), -1, 0 );
         else {
-           for ( int i = 0; i < pendingVehicleActions.descent->path.getFieldNum(); i++ )
-              pendingVehicleActions.descent->path.getField( i ) ->a.temp = 1;
+           actmap->cleartemps(7);
+           for ( int i = 0; i < pendingVehicleActions.descent->path.size(); i++ )
+              actmap->getField( pendingVehicleActions.descent->path[i]) ->a.temp = 1;
            displaymap();
         }
 
@@ -1498,7 +1507,7 @@ void  tnsguiicondescent::exec         ( void )
 
         if ( pendingVehicleActions.descent->getStatus() == 1000 ) {
            delete pendingVehicleActions.descent;
-   
+
            if ( CGameOptions::Instance()->smallguiiconopenaftermove ) {
               actgui->painticons();
               actgui->paintsmallicons ( CGameOptions::Instance()->mouse.smallguibutton, 0 );
@@ -1508,11 +1517,11 @@ void  tnsguiicondescent::exec         ( void )
    dashboard.x = 0xffff;
 }
 
-void  tnsguiicondescent::display      ( void ) 
+void  tnsguiicondescent::display      ( void )
 {
    host->returncoordinates ( this, &x, &y );
 
-   if ( x == -1   ||    y == -1 ) 
+   if ( x == -1   ||    y == -1 )
       return;
 
    int h = chfahrend;

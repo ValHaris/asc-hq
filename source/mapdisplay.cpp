@@ -1108,7 +1108,7 @@ int pointvisible ( int x, int y )
 
 pfieldlist generatelst ( int x1, int y1, int x2, int y2 )
 {
-  pfieldlist list = new ( tfieldlist );
+  pfieldlist list = new tfieldlist ;
   list->num = 2;
   list->x[0] = x1;
   list->y[0] = y1;
@@ -1116,41 +1116,44 @@ pfieldlist generatelst ( int x1, int y1, int x2, int y2 )
   list->y[1] = y2;
   list->visible = 0;
 
+  if ( x1 != x2 || y1 != y2 ) {
 
-  int dir = getdirection(x1,y1,x2,y2);
+     int dir = getdirection(x1,y1,x2,y2);
 
-  switch ( dir ) {
+     switch ( dir ) {
 
-     case 0: adddirpts ( x1, y1, list, 5 );
-             adddirpts ( x1, y1, list, 1 );
-             adddirpts ( x1, y1, list, 2 );
-             break;
+        case 0: adddirpts ( x1, y1, list, 5 );
+                adddirpts ( x1, y1, list, 1 );
+                adddirpts ( x1, y1, list, 2 );
+                break;
 
-     case 1: adddirpts ( x1, y1, list, 0 );
-             adddirpts ( x1, y1, list, 2 );
-             adddirpts ( x2, y2, list, 2 );
-             break;
+        case 1: adddirpts ( x1, y1, list, 0 );
+                adddirpts ( x1, y1, list, 2 );
+                adddirpts ( x2, y2, list, 2 );
+                break;
 
-     case 2: adddirpts ( x1, y1, list, 1 );
-             adddirpts ( x1, y1, list, 3 );
-             adddirpts ( x2, y2, list, 2 );
-             break;
+        case 2: adddirpts ( x1, y1, list, 1 );
+                adddirpts ( x1, y1, list, 3 );
+                adddirpts ( x2, y2, list, 2 );
+                break;
 
-     case 3: adddirpts ( x2, y2, list, 2 );
-             adddirpts ( x1, y1, list, 4 );
-             break;
+        case 3: adddirpts ( x2, y2, list, 2 );
+                adddirpts ( x1, y1, list, 4 );
+                break;
 
-     case 4: adddirpts ( x1, y1, list, 3 );
-             adddirpts ( x1, y1, list, 5 );
-             adddirpts ( x1+1, y1, list, 2 );
-             break;
+        case 4: adddirpts ( x1, y1, list, 3 );
+                adddirpts ( x1, y1, list, 5 );
+                adddirpts ( x1+1, y1, list, 2 );
+                break;
 
-     case 5: adddirpts ( x1, y1, list, 0 );
-             adddirpts ( x1, y1, list, 4 );
-             adddirpts ( x1, y1, list, 2 );
-             break;
+        case 5: adddirpts ( x1, y1, list, 0 );
+                adddirpts ( x1, y1, list, 4 );
+                adddirpts ( x1, y1, list, 2 );
+                break;
 
-  } /* endswitch */
+     } /* endswitch */
+
+     }
 
   list->minx = 0xffff;
   list->miny = 0xffff;
@@ -1194,8 +1197,12 @@ void  tdisplaymap :: resetmovement ( void )
 
 void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, int height1, int height2, int fieldnum, int totalmove )
 {
-   int dir = getdirection(x1,y1,x2,y2);
-   eht->direction = dir;
+   int dir;
+   if ( x1 != x2 || y1 != y2 ) {
+      dir = getdirection(x1,y1,x2,y2);
+      eht->direction = dir;
+   } else
+      dir = -1;
 
    displaymovingunit.eht = NULL;
 
@@ -1239,6 +1246,9 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
       int dy;
 
       switch ( dir ) {
+      case -1: dx = 0;
+               dy = 0;
+               break;
       case 0: dx = 0;
               dy = -fielddisty*2;
               break;
@@ -1279,18 +1289,18 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
      /************************************/
 
 
-      if ( height1 != height2  && ( height1 > chfahrend  || height2 > chfahrend )) {
+      if ( height1 != height2  && ( height1 > 3  || height2 > 3 ) ) {
 
          int completion = totalmove;
          int went = fieldnum;
          // int togo = totalmove - fieldnum;
 
-         int ht1 = 10 * ( log2 ( height1 ) - log2 ( chfahrend ) );
-         int ht2 = 10 * ( log2 ( height2 ) - log2 ( chfahrend ) );
+         int ht1 = 10 * ( height1 - log2 ( chfahrend ) );
+         int ht2 = 10 * ( height2 - log2 ( chfahrend ) );
          int htd = ht2- ht1;
 
          if ( height1 < height2 ) {
-            if ( height1 == chfahrend ) {
+            if ( height1 == 3 ) {
                int takeoff = completion * 2 / 3 ;
                int ascend = completion - takeoff;
                if ( went >=  takeoff ) {
@@ -1305,7 +1315,7 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
                h2 = ht1 + htd * (went + 1) / completion;
             }
          } else {
-            if ( height2 == chfahrend ) {
+            if ( height2 == 3 ) {
                int landpos = (completion+2) / 3;
 
                if ( went <  landpos ) {
@@ -1322,8 +1332,8 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
          }
 
       } else
-         if ( eht->height > chfahrend ) {
-            h1 = 10 * ( log2 ( eht->height ) - log2 ( chfahrend ) );
+         if ( height1 > log2(chfahrend) ) {
+            h1 = 10 * ( height1 - log2 ( chfahrend ) );
             h2 = h1;
          } else {
             h1 = 0;
@@ -1355,9 +1365,7 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
          displaymovingunit.ypos = y2;
          displaymovingunit.dx = 0 ;// -dx;
          displaymovingunit.dy = 0 ;// -dy;
-         displaymovingunit.hgt =
-				h2 - ( h2 - h1 ) * tick /
-				( CGameOptions::Instance()->movespeed);
+         displaymovingunit.hgt = h2 - ( h2 - h1 ) * tick / CGameOptions::Instance()->movespeed;
 
          int r;
          if ( displaymovingunit.ypos & 1 )   /*  ungerade reihennummern  */
@@ -1398,7 +1406,7 @@ void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, i
             if ( dy < 0 )
                dy+=step;
          */
-      } while ( dx!=0 || dy!=0  ); /* enddo */
+      } while ( dx!=0 || dy!=0 || displaymovingunit.hgt != h2 ); /* enddo */
 
       displaymovingunit.xpos = x2 + actmap->xpos;
       displaymovingunit.ypos = y2 + actmap->ypos;
@@ -1657,24 +1665,29 @@ class MapDisplay {
     };
 */
 
-int  MapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove, SoundLoopManager* slm )
+int  MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, pvehicle vehicle, int fieldnum, int totalmove, SoundLoopManager* slm )
 {
    if ( actmap->playerView < 0 )
       return 0;
 
+   int height1 = start.getNumericalHeight();
+   int height2 = dest.getNumericalHeight();
    if ( height2 == -1 )
       height2 = height1;
+   else
+     if ( height1== -1 )
+        height1 = height2;
 
-   pfield fld1 = getfield ( x1, y1 );
+   pfield fld1 = actmap->getField ( start );
    int view1 = fieldVisibility ( fld1, actmap->playerView );
 
-   pfield fld2 = getfield ( x2, y2 );
+   pfield fld2 = actmap->getField ( dest );
    int view2 = fieldVisibility ( fld2, actmap->playerView );
 
    if (  view1 >= visible_now  &&  view2 >= visible_now )
       if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) && ( view2 == visible_all )) || ( actmap->actplayer == actmap->playerView )) {
          slm->activate(  );
-         idisplaymap.movevehicle( x1, y1, x2, y2, vehicle, height1, height2, fieldnum, totalmove );
+         idisplaymap.movevehicle( start.x, start.y, dest.x, dest.y, vehicle, height1, height2, fieldnum, totalmove );
       }
 
 

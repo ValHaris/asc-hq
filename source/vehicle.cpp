@@ -28,7 +28,7 @@
 #include "gameoptions.h"
 #include "basegfx.h"
 #include "spfst.h"
-
+#include "itemrepository.h"
 
 
 
@@ -514,13 +514,62 @@ void Vehicle :: decreaseMovement ( int amount )
 
 bool Vehicle :: canMove ( void )
 {
-   if ( gamemap->getField ( xpos, ypos )->unitHere ( this ) )
-      if ( getMovement() >= minmalq && reactionfire.getStatus() == Vehicle::ReactionFire::off )
-         if ( terrainaccessible ( gamemap->getField ( xpos, ypos ), this ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
+   if ( getMovement() >= minmalq && reactionfire.getStatus() == ReactionFire::off  ) {
+      pfield fld = gamemap->getField ( getPosition() );
+      if ( fld->unitHere ( this ) ) {
+         if ( terrainaccessible ( fld, this ) || actmap->getgameparameter( cgp_movefrominvalidfields))
             return true;
+      } else {
+         ContainerBase* cnt = fld->getContainer();
+         if ( cnt )
+            for ( int i = 0; i < 32; i++ )
+               if ( cnt->loading[i] == this )
+                  if ( cnt->vehicleUnloadable( this ) > 0 || cnt->vehicleDocking( this ) > 0 )
+                     return true;
+      }
+   }
    return false;
 }
 
+void Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest )
+{
+   if ( start == dest )
+      return;
+      
+   if ((functions & ( cffahrspur | cficebreaker )) && (height == chfahrend || height == chschwimmend))  {
+     int dir = getdirection( start, dest );
+
+     pfield startField = gamemap->getField(start);
+     pfield destField = gamemap->getField(dest);
+     if ( functions & cffahrspur )
+        if ( fahrspurobject )
+           if ( (startField->bdt & getTerrainBitType(cbfahrspur)).any() )
+              startField->addobject ( fahrspurobject, 1 << dir );
+
+     if ( functions & cficebreaker )
+        if ( eisbrecherobject )
+              if (   (startField->bdt & getTerrainBitType(cbicebreaking) ).any()
+                   || startField->checkforobject ( eisbrecherobject ) ) {
+                 startField->addobject ( eisbrecherobject, 1 << dir );
+                 startField->checkforobject ( eisbrecherobject )->time = gamemap->time.turn();
+              }
+
+     dir = (dir + sidenum/2) % sidenum;
+
+     if ( functions & cffahrspur )
+        if ( fahrspurobject )
+           if ( (destField->bdt & getTerrainBitType(cbfahrspur)).any() )
+              destField->addobject ( fahrspurobject, 1 << dir );
+
+     if ( functions & cficebreaker )
+        if ( eisbrecherobject )
+              if (   (destField->bdt & getTerrainBitType(cbicebreaking) ).any()
+                   || destField->checkforobject ( eisbrecherobject ) ) {
+                 destField->addobject ( eisbrecherobject, 1 << dir );
+                 destField->checkforobject ( eisbrecherobject )->time = gamemap->time.turn();
+              }
+   }
+}
 
 
 int Vehicle::ReactionFire::enable ( void )
@@ -585,6 +634,25 @@ void Vehicle::ReactionFire::endTurn ( void )
          enemiesAttackable = 0;
    }
 }
+
+
+const Vehicletype::HeightChangeMethod* Vehicle::getHeightChange( int dir, int height ) const
+{
+   if ( reactionfire.getStatus() != ReactionFire::off )
+      return NULL;
+
+   if ( height == 0 )
+      height = this->height;
+
+   for ( int i = 0; i < typ->heightChangeMethodNum; i++ )
+      if ( typ->heightChangeMethod[i].startHeight & height )
+         if ( ( dir > 0 && typ->heightChangeMethod[i].heightDelta > 0) || ( dir < 0 && typ->heightChangeMethod[i].heightDelta < 0))
+            if ( (1 << (log2(height) + typ->heightChangeMethod[i].heightDelta)) & typ->height )
+               return &typ->heightChangeMethod[i];
+
+   return NULL;
+}
+
 
 
 bool Vehicle :: weapexist( void )

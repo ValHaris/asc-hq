@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: building_controls.h,v 1.15 2003-02-12 20:11:53 mbickel Exp $
+//     $Id: building_controls.h,v 1.16 2003-02-19 19:47:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2003/02/12 20:11:53  mbickel
+//      Some significant changes to the Transportation code
+//
 //     Revision 1.14  2003/01/28 17:48:42  mbickel
 //      Added sounds
 //      Rewrote soundsystem
@@ -151,15 +154,7 @@ class    ccontainercontrols
 
       virtual char   getactplayer (void) = 0;
 
-      /**
-         \returns 0  unit can not move out
-                  1  unit could move out if it was on a different level of height
-                  2  unit can move out
-                  3  unit can move out, but cannot attack this turn
-      */
-      virtual int    moveavail ( pvehicle eht, int height = -1 ) = 0;
-
-
+      
       virtual int    putenergy (int e, int abbuchen = 1 ) = 0;
       virtual int    putmaterial (int m, int abbuchen = 1 ) = 0;
       virtual int    putfuel (int f, int abbuchen = 1) = 0;
@@ -183,12 +178,6 @@ class    ccontainercontrols
       virtual int    getspecfunc ( tcontainermode mode ) = 0;
 
       virtual pvehicle getloadedunit (int num) = NULL;
-
-      struct {
-         int height;
-         int movement;
-         int attacked;
-      } movementparams;
 
       ContainerBase* baseContainer;
 };
@@ -283,10 +272,8 @@ class    cbuildingcontrols : public virtual ccontainercontrols
 
 
       void  removevehicle ( pvehicle *peht );
-      int    moveavail ( pvehicle eht, int height = -1 );
 
       pvehicle getloadedunit (int num);
-
 
       cbuildingcontrols (void);
       void  init (pbuilding bldng);
@@ -321,7 +308,6 @@ class    ctransportcontrols : public virtual ccontainercontrols
       pvehicle vehicle;
 
       void  removevehicle ( pvehicle *peht );
-      int    moveavail ( pvehicle eht, int height = -1 );
 
       pvehicle getloadedunit (int num);
 

@@ -50,7 +50,8 @@ enum trpl_actions { rpl_attack,
                     rpl_move3, 
                     rpl_changeheight2,
                     rpl_buildtnk2,
-                    rpl_moveUnitUpDown };
+                    rpl_moveUnitUpDown,
+                    rpl_move4 };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 

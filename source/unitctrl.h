@@ -1,6 +1,9 @@
-//     $Id: unitctrl.h,v 1.29 2002-09-19 20:20:06 mbickel Exp $
+//     $Id: unitctrl.h,v 1.30 2003-02-19 19:47:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2002/09/19 20:20:06  mbickel
+//      Cleanup and various bug fixes
+//
 //     Revision 1.28  2002/03/26 22:23:09  mbickel
 //      Fixed: music was started even if turned off in ini file
 //      Fixed: crash in reaction fire
@@ -175,6 +178,7 @@
 #include "spfst.h"
 #include "attack.h"
 #include "mapdisplay.h"
+#include "astar2.h"
 
 
 /** \file unitctrl.h
@@ -249,97 +253,52 @@ class VehicleAction {
 
 
 
-typedef int trichtungen[sidenum]; 
+typedef int trichtungen[sidenum];
 
 
 class BaseVehicleMovement : public VehicleAction {
            protected:
               MapDisplayInterface* mapDisplay;
+              int status;
            public:
-              BaseVehicleMovement ( VehicleActionType _actionType, PPendingVehicleActions _pva ) : VehicleAction ( _actionType, _pva ),attackedByReactionFire(false) {};
-              IntFieldList path;
+              BaseVehicleMovement ( VehicleActionType _actionType, PPendingVehicleActions _pva, MapDisplayInterface* md ) : VehicleAction ( _actionType, _pva ),attackedByReactionFire(false), mapDisplay(md), status(0) {};
+              AStar3D::Path path;
+              int execute ( pvehicle veh, int x, int y, int step, int height, int noInterrupt );
               bool attackedByReactionFire;
               pvehicle getVehicle ( void ) { return vehicle; };
               void registerMapDisplay ( MapDisplayInterface* _mapDisplay ) { mapDisplay = _mapDisplay; };
+              virtual int getStatus ( void ) { return status; };
+              int available ( pvehicle veh ) const;
 
 
             protected:
                pvehicle vehicle;
-               int newheight;
 
-               //! Moves the unit to xt1 / yt1 along #path
-               int moveunitxy ( int xt1, int yt1, IntFieldList& pathToMove, int noInterrupt = -1 );
+               int moveunitxy ( AStar3D::Path& pathToMove, int noInterrupt = -1 );
 
-                  //! finding the shortest path for a unit to a given position
-                  class FieldReachableRek {
+               class PathFinder : public AStar3D {
+                 public:
+                   PathFinder ( pmap actmap, pvehicle veh, int maxDistance, bool changeHeight_ ) : AStar3D(actmap, veh, false, maxDistance, changeHeight_ ) {};
 
-                       struct tstrecke {
-                                 vector<int> x;
-                                 vector<int> y;
-                                 int tiefe;
-                              }; 
-
-                        int          distance;
-                        int          fuelusage;
-                        int          maxwegstrecke; 
-                        tstrecke     shortestway; 
-                        tstrecke     strecke; 
-                        int          zielerreicht; 
-                        int          x1, y1, x2, y2;
-                        pvehicle     vehicle;
-                        int          height;
-                        void         move(int          x,
-                                          int          y,
-                                          int          direc,
-                                          int          streck,
-                                          int          fuel);
-                       public:
-                         void         run(int          x22,
-                                          int          y22,
-                                          pvehicle     eht,
-                                          int          _height,
-                                          IntFieldList* path,
-                                          int initialMovement );
-                  } fieldReachableRek;
+                   /** searches for all fields that are within the range of maxDist and marks them.
+                       On each field one bit for each level of height will be set.
+                       The Destructor removes all marks.
+                   */
+                   void getMovementFields ( IntFieldList& reachableFields, IntFieldList& reachableFieldsIndirect, int height );
+              };
           };
 
 
 class VehicleMovement : public BaseVehicleMovement {
-              int status;
-              int initialMovement;
            public:
               IntFieldList reachableFields;
               IntFieldList reachableFieldsIndirect;
               int available ( pvehicle veh ) const;
-              int getStatus ( void ) { return status; };
               int execute ( pvehicle veh, int x, int y, int step, int height, int noInterrupt );
-
-              //! returns the distance for the registered unit to x,y ; quite slow; could be optimized...
-              int getDistance ( int x, int y );
 
               virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
               VehicleMovement ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
               ~VehicleMovement ( );
-
-            // the calculation part
-            protected:
-
-               //! searches for all fields that are reachable and stores them in #reachableFields and #reachableFieldsIndirect
-               void searchstart( int x1, int y1, int hgt );
-
-               //! recursive method for searching all reachable fields; is called by #searchstart
-               void searchmove( int x,  int y, int direc, int streck, int fuelneeded );
-
-               struct {
-                  int  strck;
-                  int  fieldnum;
-   
-                  int  mode;
-                  int  tiefe;
-                  int  startx, starty;
-                  int  height;
-               } search;
-
           };
 
 /* VehicleMovement:
@@ -365,60 +324,26 @@ class VehicleMovement : public BaseVehicleMovement {
 
 
 class ChangeVehicleHeight : public BaseVehicleMovement {
-              int status;
-              MapCoordinate modechangePosition;
+              int newheight;
+              int dir;
            public:
-              struct StartPosition {
-                 int x;
-                 int y;
-                 int dist;
-              };
-              FieldList<StartPosition> reachableFields;
-              int getStatus ( void ) { return status; };
-              int execute ( pvehicle veh, int x, int y, int step, int height, int allFields );
-              ChangeVehicleHeight ( MapDisplayInterface* md, PPendingVehicleActions _pva , VehicleActionType vat );
-              ~ChangeVehicleHeight (  );
-
-              //! can the position ascent / descent be started on this position; only for
-              bool checkPosition ( const MapCoordinate& pos );
-
-              //! execute a movement before changing height; primarily used for AI; vm is destructed when ChangeVehicleHeight ends
-              void registerStartMovement ( VehicleMovement& vm ) { vmove = &vm; };
-           protected:
-              VehicleMovement* vmove;
-
-              // negative result : error
-              static int verticalHeightChangeMoveCost ( pvehicle vehicle, const MapCoordinate3D pos, int newheight );
-              int verticalHeightChange ( void );
-
-              int moveunitxy ( int xt1, int yt1, IntFieldList& pathToMove );
-              int execute_withmove ( int allFields );
-
-              // negative result : error
-              static int moveHeightMoveCost( pvehicle veh, const MapCoordinate3D& pos, int newheight, int direc, int& xstop, int& ystop );
-              int moveheight ( int allFields );
-
-           public:
-              // heightdir is either +1 or -1 , depending on whether the unit is ascending or descending
-              static pair<int,MapCoordinate3D> getMoveCost ( pvehicle veh, const MapCoordinate3D& pos, int direc, int heightdir );
+              IntFieldList reachableFields;
+              int execute ( pvehicle veh, int x, int y, int step, int noInterrupt, int dummy2 );
+              ChangeVehicleHeight ( MapDisplayInterface* md, PPendingVehicleActions _pva , VehicleActionType vat, int dir_ );
           };
 
 class IncreaseVehicleHeight : public ChangeVehicleHeight {
            public:
               IncreaseVehicleHeight ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
-              virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
               int available ( pvehicle veh ) const;
-              static pair<int,MapCoordinate3D> getMoveCost ( pvehicle veh, const MapCoordinate3D& pos, int direc );
-              ~IncreaseVehicleHeight ( );
+              ~IncreaseVehicleHeight();
           };
 
 class DecreaseVehicleHeight : public ChangeVehicleHeight {
            public:
               DecreaseVehicleHeight ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
-              virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
               int available ( pvehicle veh ) const;
-              static pair<int,MapCoordinate3D> getMoveCost ( pvehicle veh, const MapCoordinate3D& pos, int direc );
-              ~DecreaseVehicleHeight ( );
+              ~DecreaseVehicleHeight();
           };
 
 
@@ -431,7 +356,7 @@ class DecreaseVehicleHeight : public ChangeVehicleHeight {
  *                            <= 0 ; only fields are reported that the unit can reach changing its
  *                                   height without moving first
  *                 Depending of the units ability to change its height vertically (for example helicopter and submarine) or
- *                   by moving a distance ( normal airplanes ), execute will either immediatly change the units height and 
+ *                   by moving a distance ( normal airplanes ), execute will either immediatly change the units height and
  *                   finish (status == 1000), or follow the same procedure as VehicleMovement.
  *   (Step 2)  see VehicleMovement
  *               if a movement is executed prior to changing the height (allFields == 1 in step 0),

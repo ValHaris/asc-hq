@@ -2,9 +2,12 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.125 2003-02-12 20:11:53 mbickel Exp $
+//     $Id: dialog.cpp,v 1.126 2003-02-19 19:47:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.125  2003/02/12 20:11:53  mbickel
+//      Some significant changes to the Transportation code
+//
 //     Revision 1.124  2003/02/12 14:33:02  mbickel
 //      Fixed: color problems in alliance dialog
 //      Fixed: Umlauts not working
@@ -1182,7 +1185,7 @@ void tvehicleinfo::showgeneralinfos ( void )
    showtext2("height:", column1x + 10,  productioncosty + 220 );
    showtext2("distance:", column1x + 10,  productioncosty + 240 );
    showtext2("fuel usage:", column1x + 10,  productioncosty + 260 );
-   showtext2("ascent :", column1x + 10, productioncosty + 280 );
+   // showtext2("ascent :", column1x + 10, productioncosty + 280 );
 
 
    showtext2("sight", column2x, productioncosty );
@@ -1271,7 +1274,7 @@ void  tvehicleinfo::showgeneralinfovariables( void )
    showtext2( strrr(aktvehicle->tank.fuel), column1x + 100, productioncosty + 130);
    // ####TRANS showtext2( strrr(aktvehicle->loadcapacity), column1x + 100, productioncosty + 150);
    showtext2( strrr(aktvehicle->fuelConsumption), column1x + 100,  productioncosty + 260 );
-   showtext2( strrr(aktvehicle->steigung), column1x + 100, productioncosty + 280 );
+   // showtext2( strrr(aktvehicle->steigung), column1x + 100, productioncosty + 280 );
 
 
    showtext2( strrr(aktvehicle->view), column2x + 100, productioncosty + 20);

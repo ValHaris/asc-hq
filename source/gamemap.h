@@ -232,6 +232,9 @@ class  tfield {
     //! checks if the unit is standing on this field. Since units are being cloned for some checks, this method should be used instead of comparing the pointers to the unit
     bool unitHere ( const pvehicle veh );
 
+    //! returns a pointer to the #ContainerBase of the field or NULL if there is none
+    ContainerBase* getContainer() { if ( vehicle ) return vehicle; else return building; };
+
     //! put a mine of type typ for player col (0..7) and a punch of strength on the field. Strength is an absolute value (unlike the basestrength of a mine or the punch of the mine-weapon, which are just factors)
     bool  putmine ( int col, int typ, int strength );
 
@@ -317,17 +320,12 @@ class tmap {
       GameTime    time;
 
       struct Weather {
+         Weather():fog(0),windSpeed(0),windDirection(0){};
          //! the idea of fog is to reduce the visibility, but this is currently not used
-         char fog;
+         int fog;
 
-         //! the speed of wind, for the different levels of height ( 0=low level flight, ..., 2 = high level flight)
-         class Wind {
-            public:
-              char speed;
-              char direction;
-              bool operator== ( const Wind& b ) const;
-              Wind ( ) : speed ( 0 ), direction ( 0 ) {};
-         } wind[3];
+         int windSpeed;
+         int windDirection;
       } weather;
 
       /** how are Resources handled on this map

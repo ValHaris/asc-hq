@@ -158,10 +158,11 @@ void tmap :: read ( tnstream& stream )
    time.abstime = stream.readInt();
 
    weather.fog = stream.readChar();
-   for  ( i= 0; i < 3; i++ ) {
-      weather.wind[i].speed = stream.readChar();
-      weather.wind[i].direction  = stream.readChar();
-   }
+   weather.windSpeed = stream.readChar();
+   weather.windDirection  = stream.readChar();
+   for ( int j = 0; j < 4; j++ )
+      stream.readChar(); // was: different wind in different altitudes
+
    for ( i = 0; i< 12; i++ )
       stream.readChar(); // dummy
 
@@ -481,10 +482,11 @@ void tmap :: write ( tnstream& stream )
    stream.writeInt( time.abstime );
 
    stream.writeChar( weather.fog );
-   for  ( i= 0; i < 3; i++ ) {
-      stream.writeChar( weather.wind[i].speed );
-      stream.writeChar( weather.wind[i].direction );
-   }
+   stream.writeChar( weather.windSpeed );
+   stream.writeChar( weather.windDirection );
+
+   for  ( i= 0; i < 4; i++ )
+      stream.writeChar( 0 );
 
    for ( i = 0; i< 12; i++ )
       stream.writeChar( 0 ); // dummy
@@ -1815,12 +1817,6 @@ tfield::Resourceview :: Resourceview ( void )
    visible = 0;
    memset ( &fuelvisible, 0, sizeof ( fuelvisible ));
    memset ( &materialvisible, 0, sizeof ( materialvisible ));
-}
-
-bool tmap::Weather::Wind::operator== ( const tmap::Weather::Wind& b ) const
-{
-
-   return ( (speed == b.speed) && ( direction == b.direction));
 }
 
 tmap::Shareview :: Shareview ( const tmap::Shareview* org )

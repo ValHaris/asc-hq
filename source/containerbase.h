@@ -53,6 +53,7 @@ class ContainerBase {
       //! is called after a repair is perfored. Vehicles use this to reduce their experience.
       virtual void postRepair ( int oldDamage ) = 0;
       virtual bool isBuilding() const = 0;
+      const ContainerBase* findUnit ( const Vehicle* veh ) const;
    public:
       ContainerBase ( const ContainerBaseType* bt, pmap map, int player );
 
@@ -62,6 +63,10 @@ class ContainerBase {
       const ContainerBaseType*  baseType;
 
       Vehicle*     loading[32];
+
+      //! regroup units. This is necessary for the building dialog which only displays the first 18 units, although more than 18 can be inside ( for example, there are 18 inside, and then the enemy conquers it using a trooper)
+      void regroupUnits ();
+
       int damage;
       int color;
 
@@ -94,6 +99,12 @@ class ContainerBase {
           the height 'uheight' and not the actual level of height
       */
       bool vehicleLoadable ( const pvehicle vehicle, int uheight = -1 ) const;
+
+      //! returns the levels of height on which this unit can be unloaded; or 0 if no unloading is possible
+      int  vehicleUnloadable ( const pvehicle vehicle ) const;
+
+      //! returns the levels of height on which this unit can be transfered by docking; or 0 if no unloading is possible
+      int  vehicleDocking ( const pvehicle vehicle ) const;
 
       /** Does the vehicle fit into the container? This does not include checking if it can reach the entry
       */

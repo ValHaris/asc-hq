@@ -32,6 +32,8 @@ Not enough fuel to change height
 No fields accessible
 117
 Movement interrupted
+118 
+You must be outside to change a units height
 201
 This # won't attack anything
 202

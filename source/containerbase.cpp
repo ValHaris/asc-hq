@@ -145,12 +145,44 @@ int ContainerBase::cargo ( void ) const
    return w;
 }
 
+void ContainerBase::regroupUnits ()
+{
+   int num = 0;
+   for ( int i = 18; i < 32; i++ )
+      if ( loading[i] )
+         num++;
+
+   if ( num ) {
+      for ( int i = 0; i < 18; i++ )
+         if ( !loading[i] ) {
+            for ( int j = i+1; j < 32; j++ )
+               loading[j-1] = loading[j];
+            loading[31] = NULL;
+         }
+   }
+}
+
+
+const ContainerBase* ContainerBase :: findUnit ( const Vehicle* veh ) const
+{
+   for ( int i = 0; i < 32; i++ ) {
+      if ( loading[i] == veh )
+         return this;
+      else
+         if ( loading[i] )
+            if ( loading[i]->findUnit ( veh ) )
+               return loading[i];
+   }
+   return NULL;
+}
+
 
 bool ContainerBase :: vehicleFit ( const pvehicle vehicle ) const
 {
+
    if ( baseType->vehicleFit ( vehicle->typ )) // checks size and type
-      if ( vehiclesLoaded() < min ( 32, baseType->maxLoadableUnits ) || (vehicle->color != color ))
-         if ( cargo() + vehicle->weight() < baseType->maxLoadableWeight )
+      if ( vehiclesLoaded() < min ( 32, baseType->maxLoadableUnits ) || (vehicle->color != color ) )
+         if ( cargo() + vehicle->weight() < baseType->maxLoadableWeight || findUnit ( vehicle )) // if the unit is already  loaded, the container already bears its weight
             return true;
 
    return false;
@@ -185,6 +217,44 @@ bool  ContainerBase :: vehicleLoadable ( const pvehicle vehicle, int uheight ) c
                         }
                      }
    return false;
+}
+
+int  ContainerBase :: vehicleUnloadable ( const pvehicle vehicle ) const
+{
+   int height = 0;
+
+   if ( vehicleFit ( vehicle ))
+      for ( ContainerBaseType::EntranceSystems::const_iterator i = baseType->entranceSystems.begin(); i != baseType->entranceSystems.end(); i++ )
+         if ( i->mode & ContainerBaseType::TransportationIO::Out )
+            if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
+               if ( i->vehicleCategoriesLoadable & (1<<vehicle->typ->movemalustyp))
+                  if ( i->height_abs != 0 && i->height_rel != -100 )
+                     height |= i->height_abs & (1 << (getPosition().getNumericalHeight() + i->height_rel ));
+                  else
+                    if ( i->height_rel != -100 )
+                       height |= 1 << (getPosition().getNumericalHeight() + i->height_rel) ;
+                    else
+                       height |= i->height_abs ;
+   return height & vehicle->typ->height;
+}
+
+int  ContainerBase :: vehicleDocking ( const pvehicle vehicle ) const
+{
+   int height = 0;
+
+   if ( vehicleFit ( vehicle ))
+      for ( ContainerBaseType::EntranceSystems::const_iterator i = baseType->entranceSystems.begin(); i != baseType->entranceSystems.end(); i++ )
+         if ( i->mode & ContainerBaseType::TransportationIO::Docking )
+            if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
+               if ( i->vehicleCategoriesLoadable & (1<<vehicle->typ->movemalustyp))
+                  if ( i->dockingHeight_abs != 0 && i->dockingHeight_rel != -100 )
+                     height |= i->dockingHeight_abs & (1 << (getPosition().getNumericalHeight() + i->dockingHeight_rel ));
+                  else
+                    if ( i->dockingHeight_rel != -100 )
+                       height |= 1 << (getPosition().getNumericalHeight() + i->dockingHeight_rel) ;
+                    else
+                       height |= i->dockingHeight_abs ;
+   return height;
 }
 
 

@@ -172,16 +172,16 @@ int ReplayMapDisplay :: checkMapPosition ( int x, int y )
 }
 
 
-int  ReplayMapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove, SoundLoopManager* slc )
+int ReplayMapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, pvehicle vehicle, int fieldnum, int totalmove, SoundLoopManager* slc )
 {
    if ( actmap->playerView < 0 )
       return 0;
 
-   if ( fieldvisiblenow ( getfield ( x1, y1 ), actmap->playerView) || fieldvisiblenow ( getfield ( x2, y2 ), actmap->playerView)) {
-      if ( checkMapPosition  ( x1, y1 ))
+   if ( fieldvisiblenow ( getfield ( start.x, start.y ), actmap->playerView) || fieldvisiblenow ( getfield ( dest.x, dest.y ), actmap->playerView)) {
+      if ( checkMapPosition  ( start.x, start.y ))
          displayMap();
 
-      int fc = mapDisplay->displayMovingUnit ( x1, y1, x2, y2, vehicle, height1, height2, fieldnum, totalmove, slc );
+      int fc = mapDisplay->displayMovingUnit ( start, dest, vehicle, fieldnum, totalmove, slc );
       if ( fc == 1 ) {
          mapDisplay->resetMovement();
          mapDisplay->displayMap();
@@ -298,7 +298,7 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( y2 );
          stream->writeInt ( nwid );
       }
-      if ( action == rpl_move2 || action == rpl_move3 ) {
+      if ( action == rpl_move2 || action == rpl_move3 || action == rpl_move4 ) {
          int x1 =  va_arg ( paramlist, int );
          int y1 =  va_arg ( paramlist, int );
          int x2 =  va_arg ( paramlist, int );
@@ -320,7 +320,7 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( y2 );
          stream->writeInt ( nwid );
          stream->writeInt ( height );
-         if ( action == rpl_move3 ) {
+         if ( action == rpl_move3 || action == rpl_move4 ) {
             int nointerrupt = va_arg ( paramlist, int );
             stream->writeInt ( nointerrupt );
          }
@@ -707,6 +707,7 @@ void trunreplay :: execnextreplaymove ( void )
                            displaymessage("severe replay inconsistency:\nno vehicle for move1 command !", 1);
                      }
          break;
+      case rpl_move4:
       case rpl_move3:
       case rpl_move2: {
                         stream->readInt(); // size
@@ -717,7 +718,7 @@ void trunreplay :: execnextreplaymove ( void )
                         int nwid = stream->readInt();
                         int height = stream->readInt();
                         int noInterrupt;
-                        if ( nextaction == rpl_move3 )
+                        if ( nextaction == rpl_move3 || nextaction == rpl_move4 )
                            noInterrupt = stream->readInt();
                         else
                            noInterrupt = -1;
@@ -727,13 +728,11 @@ void trunreplay :: execnextreplaymove ( void )
                         pvehicle eht = actmap->getUnit ( x1, y1, nwid );
                         if ( eht ) {
                            ReplayMapDisplay rmd( &defaultMapDisplay );
-                           VehicleMovement vm ( &rmd, NULL );
-                           vm.execute ( eht, -1, -1, 0 , height, -1 );
-
+                           BaseVehicleMovement vm ( vat_move, NULL, &rmd );
                            int t = ticker;
-                           vm.execute ( NULL, x2, y2, 2, -1, -1 );
+                           vm.execute ( eht, x2, y2, 0, height, -1 );
                            wait( MapCoordinate(x1,y1), MapCoordinate(x2,y2), t );
-                           vm.execute ( NULL, x2, y2, 3, -1, noInterrupt );
+                           vm.execute ( NULL, x2, y2, 3, height, noInterrupt );
 
                            if ( vm.getStatus() != 1000 )
                               eht = NULL;
