@@ -312,9 +312,9 @@ int main(int argc, char *argv[] )
             fprintf ( overview, " </A></td></tr>\n" );
 
             // OVERVIEW RIGHT
-            fprintf ( overview1, " <tr><td rowspan=\"2\" class=\"wgov\">" );
+            fprintf ( overview1, " <tr><td class=\"wgov\">" );
             fprintf ( overview1, "<img src=\"%s\" alt=\"image of unit\" width=\"%d\" height=\"%d\"> </td>", (fileName + ".gif").c_str(), cl.z(), cl.z() );
-            fprintf ( overview1, "<td class=\"wgov\" ><A HREF=\"%s.html\">%s</A></td></tr><tr><td class=\"wgov\"><a href=\"%s.html\">%s</a></td></tr>\n", fileName.c_str(), ft->name.c_str(), fileName.c_str(), ft->description.c_str() );
+            fprintf ( overview1, "<td class=\"wgov\" ><A HREF=\"%s.html\">%s</A><br><a href=\"%s.html\">%s</a></td></tr>\n", fileName.c_str(), ft->name.c_str(), fileName.c_str(), ft->description.c_str() );
 
             // END OVERVIEW RIGHT
 
@@ -1127,8 +1127,8 @@ int main(int argc, char *argv[] )
             for ( map<int,Vehicletype*>::iterator j = byID.begin(); j != byID.end(); j++ ) {
                ASCString unitFileName = ASCString(extractFileName_withoutSuffix( j->second->filename )) + ".html";
                ASCString linkpref = cl.l();
-               if ( !linkpref.empty() )
-                  appendbackslash( linkpref );
+               if ( !linkpref.empty()  && linkpref[ linkpref.length() -1] != '/' )
+                  linkpref += '/' ;
 
                 fprintf(ff,"..%d (%s);asc.css;\"%s%s\" target=\"main\";\n", j->second->id, j->second->getName().c_str(), linkpref.c_str(), unitFileName.c_str());
             }

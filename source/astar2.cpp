@@ -652,29 +652,31 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
           if ( !operationLimiter || operationLimiter->allowLeavingContainer() ) {
              for ( int dir = 0; dir < 6; dir++ ) {
                 MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N.h, dir );
-                int h = actmap->getField(N.h)->getContainer()->vehicleUnloadable(veh);
-                for ( int i = 0; i < 8; i++ )
-                   if ( h & (1<<i)) {
-                      Node N2;
-                      N2.h.setnum ( pos.x, pos.y, i );
-                      N2.hasAttacked = N.hasAttacked;
-                      const ContainerBaseType::TransportationIO* tio = actmap->getField(N.h)->getContainer()->vehicleUnloadSystem( veh, 1<<i);
-                      if ( tio && tio->disableAttack )
-                         N2.hasAttacked = true;
+                if ( actmap->getField(pos)) {
+                   int h = actmap->getField(N.h)->getContainer()->vehicleUnloadable(veh);
+                   for ( int i = 0; i < 8; i++ )
+                      if ( h & (1<<i)) {
+                         Node N2;
+                         N2.h.setnum ( pos.x, pos.y, i );
+                         N2.hasAttacked = N.hasAttacked;
+                         const ContainerBaseType::TransportationIO* tio = actmap->getField(N.h)->getContainer()->vehicleUnloadSystem( veh, 1<<i);
+                         if ( tio && tio->disableAttack )
+                            N2.hasAttacked = true;
 
-                      DistanceType k = getMoveCost( N.h, N2.h, veh, N2.canStop, N2.hasAttacked );
-                      if ( k > veh->typ->movement[N2.h.getNumericalHeight()]  )
-                         k = max(MAXIMUM_PATH_LENGTH,k);
+                         DistanceType k = getMoveCost( N.h, N2.h, veh, N2.canStop, N2.hasAttacked );
+                         if ( k > veh->typ->movement[N2.h.getNumericalHeight()]  )
+                            k = max(MAXIMUM_PATH_LENGTH,k);
 
-                      if ( k >= longestPath || N.gval >= longestPath )
-                         N2.gval = longestPath;
-                      else
-                         N2.gval = N.gval + k;
+                         if ( k >= longestPath || N.gval >= longestPath )
+                            N2.gval = longestPath;
+                         else
+                            N2.gval = N.gval + k;
 
-                      N2.hval = dist(N2.h,B);
+                         N2.hval = dist(N2.h,B);
 
-                      nodeVisited ( N2, HexDirection(dir), open, N.h.getNumericalHeight(), maxmalq );
-                   }
+                         nodeVisited ( N2, HexDirection(dir), open, N.h.getNumericalHeight(), maxmalq );
+                      }
+                }
              }
           }
 
