@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.7 2002-01-19 23:10:27 mbickel Exp $
+## $Id: Makefile.am,v 1.8 2002-02-14 20:58:14 mbickel Exp $
 
 vpath %.cpp ../..
 
@@ -40,7 +40,7 @@ terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp
 
 asc_map2pcx_LDADD   	= $(top_builddir)/source/libs/triangul/libtriangul.la \
-$(top_builddir)/source/sdl/libsdl.la
+$(top_builddir)/source/sdl/libsdl.la @SDLMM_LIBS@ @LDADDLIBBZ2@
 
 # vim: noexpandtab ai
 

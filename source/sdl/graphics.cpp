@@ -15,9 +15,15 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.18 2001-10-16 15:33:03 mbickel Exp $
+//     $Id: graphics.cpp,v 1.19 2002-02-14 20:58:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2001/10/16 15:33:03  mbickel
+//      Added icons to data
+//      ASC displays icons
+//      Fixed crash when building icons
+//      Removed assembled datafiles
+//
 //     Revision 1.17  2001/08/02 15:33:02  mbickel
 //      Completed text based file formats
 //
@@ -138,16 +144,24 @@ int initgraphics ( int x, int y, int depth, SDLmm::Surface* icon )
   if ( fullscreen )
      flags |= SDL_FULLSCREEN;
 
-  screen = SDL_SetVideoMode(x, y, depth, flags ); // | SDL_FULLSCREEN
+  SDL_Surface* screen = SDL_SetVideoMode(x, y, depth, flags ); // | SDL_FULLSCREEN
   if ( !screen )
      fatalError ( "Couldn't set %dx%dx%d video mode: %s\n", x,y,depth, SDL_GetError());
 
-  agmp->resolutionx = x;
-  agmp->resolutiony = y;
+  initASCGraphicSubsystem ( screen, icon );
+
+  return 1;
+}
+
+void initASCGraphicSubsystem ( SDL_Surface* _screen, SDLmm::Surface* icon )
+{
+  screen = _screen;
+  agmp->resolutionx = screen->w;
+  agmp->resolutiony = screen->h;
   agmp->windowstatus = 100;
   agmp->scanlinelength = screen->w;
   agmp->scanlinenumber = screen->h;
-  agmp->bytesperscanline = x * depth/8;
+  agmp->bytesperscanline = screen->w * screen->format->BytesPerPixel;
   agmp->byteperpix = screen->format->BytesPerPixel ;
   agmp->linearaddress = (int) screen->pixels;
   agmp->bitperpix = screen->format->BitsPerPixel;
@@ -156,10 +170,9 @@ int initgraphics ( int x, int y, int depth, SDLmm::Surface* icon )
   *hgmp = *agmp;
 
   graphicinitialized = 1;
-  return 1;
+
 }
-             // returns > 0  modenum to reestablish this mode
-             //         < 0 : error
+
 
 void  closegraphics ( void )
 {

@@ -18,28 +18,11 @@
     Boston, MA  02111-1307  USA
 */
 
-#if HAVE_CONFIG_H
-#  include <config.h>
-#endif
+#include <config.h>
 
-#ifdef HAVE_STRING_H
-#  include <string.h>
-#else
-# ifdef HAVE_STRINGS_H
-#  include <strings.h>
-# endif
-#endif
-
-#ifdef HAVE_ERRNO_H
-#  include <errno.h>
-#endif
-
-#ifdef HAVE_STDIO_H
-#  include <stdio.h>
-#endif
-#ifdef HAVE_STDLIB_H
-#  include <stdlib.h>
-#endif
+#include <cstring>
+#include <cerrno>
+#include <cstdio>
 
 #include <SDL_types.h>
 

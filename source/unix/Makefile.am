@@ -8,7 +8,7 @@ INCLUDES		= -I$(top_builddir) -I$(top_src_dir) \
 SUBDIRS 		= mapeditor
 
 CXXFLAGS 		= @CXXFLAGS@ @SDL_CFLAGS@ @SDLMM_CXXFLAGS@ \
--Dsgmain -DFREEMAPZOOM -DNEWKEYB
+-Dsgmain -DFREEMAPZOOM -DNEWKEYB @PARAGUI_CFLAGS@
 
 bin_PROGRAMS		= asc
 
@@ -26,6 +26,5 @@ objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp
 
 asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la \
-$(top_builddir)/source/sdl/libsdl.la \
-@LDADDLIBBZ2@ 
-
+$(top_builddir)/source/sdl/libsdl.la -lparagui \
+@LDADDLIBBZ2@ \

@@ -4,9 +4,13 @@
 */
 
 
-//     $Id: basestrm.h,v 1.50 2002-01-29 20:42:16 mbickel Exp $
+//     $Id: basestrm.h,v 1.51 2002-02-14 20:58:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2002/01/29 20:42:16  mbickel
+//      Improved finding of files with relative path
+//      Added wildcards to music playlist files
+//
 //     Revision 1.49  2001/10/21 13:16:59  mbickel
 //      Cleanup and documentation
 //
@@ -126,9 +130,13 @@
 #include "errors.h"
 #include "tpascal.inc"
 
-extern "C" {
-#include "libs/bzlib/bzlib.h"
-}
+#ifdef USE_SYSTEM_BZ2
+ #include <bzlib.h>
+#else
+ extern "C" {
+  #include "libs/bzlib/bzlib.h"
+ }
+#endif
 
 #pragma pack(1)
 

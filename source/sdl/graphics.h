@@ -33,6 +33,8 @@ extern int initgraphics ( int x, int y, int depth, SDLmm::Surface* icon = NULL )
              // returns > 0  modenum to reestablish this mode
              //         < 0 : error
 
+extern void initASCGraphicSubsystem ( SDL_Surface* screen, SDLmm::Surface* icon );
+
 extern void  closegraphics ( void );
 
 

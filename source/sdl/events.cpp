@@ -15,9 +15,14 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.33 2001-07-09 17:01:44 mbickel Exp $
+//     $Id: events.cpp,v 1.34 2002-02-14 20:58:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2001/07/09 17:01:44  mbickel
+//      Small map can now be even smaller
+//      fixed redraw problems on windows
+//      fixed no-font crash
+//
 //     Revision 1.32  2001/06/25 15:36:11  mbickel
 //      Help on experience icon
 //
@@ -161,18 +166,16 @@
 
 
 #include <queue>
+#include <SDL.h>
+#include <SDL_thread.h>
+
 #include "ctype.h"
 
 #include "../events.h"
 #include "../stack.h"
 #include "../basegfx.h"
 #include "../global.h"
-#include sdlheader
-#ifdef _WIN32_
-#include "SDL_thread.h"
-#else
-#include "SDL/SDL_thread.h"
-#endif
+
 
 
 /* Data touched at mouse callback time -- they are in a structure to
@@ -183,6 +186,7 @@
 volatile tmousesettings mouseparams;
 
 SDL_mutex* keyboardmutex = NULL;
+SDL_mutex* eventHandlingMutex = NULL;
 
 queue<tkey>   keybuffer_sym;
 queue<Uint32> keybuffer_prnt;
@@ -515,19 +519,6 @@ char time_elapsed(int time)
 }
 
 
-/*
-Uint32 callback ( Uint32 interval )
-{
-   ticker++;
-   return ++interval;
-}
- 
-static Uint32 ticktock(Uint32 interval)
-{
-        ++ticker;
-        return(interval++);
-}
-*/
 
 /***************************************************************************
  *                                                                         *
@@ -543,7 +534,10 @@ int closeEventThread = 0;
 
 int processEvents ( )
 {
+   SDL_mutexP ( eventHandlingMutex );
+
    SDL_Event event;
+   int result;
    if ( SDL_PollEvent ( &event ) == 1) {
       switch ( event.type ) {
          case SDL_MOUSEBUTTONUP:
@@ -606,10 +600,12 @@ int processEvents ( )
             break;
 #endif            
       }
-      return 1;
+      result = 1;
    } else
-      return 0;
+      result = 0;
 
+   SDL_mutexV( eventHandlingMutex );
+   return result;
 }
 
 int eventthread ( void* nothing )
@@ -643,6 +639,13 @@ void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mou
       printf("creating keyboard mutex failed\n" );
       exit(1);
    }
+
+   eventHandlingMutex = SDL_CreateMutex ();
+   if ( !eventHandlingMutex ) {
+      printf("creating eventHandling mutex failed\n" );
+      exit(1);
+   }
+
    SDL_EnableUNICODE ( 1 );
    SDL_EnableKeyRepeat ( 250, 30 );
 

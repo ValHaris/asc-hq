@@ -57,6 +57,7 @@
  
 */
 
+#include "global_os.h"
 
 #include <stdio.h>
 #include <cstring>
@@ -69,8 +70,13 @@
 #include <memory>
 #include <SDL_image.h>
 
-#include "SDL_mixer.h"
+#include <paragui.h>
+#include <pgapplication.h>
+#include <pgmessagebox.h>
+#include <pgdropdown.h>
 
+
+#include "SDL_mixer.h"
 
 #include "vehicletype.h"
 #include "buildingtype.h"
@@ -140,11 +146,7 @@ tsgonlinemousehelp :: tsgonlinemousehelp ( void )
                                               {{ 465, 92, 485,194}, 20009 },
                                               {{ 551, 92, 572,193}, 20010 },
                                               {{ 586, 90, 612,195}, 20011 },
-#ifdef FREEMAPZOOM
                                               {{ 473,agmp->resolutiony - ( 480 - 449 ), 601,agmp->resolutiony - ( 480 - 460 )}, 20016 }};
-#else
-                                              {{ 473,agmp->resolutiony - ( 480 - 449 ), 601,agmp->resolutiony - ( 480 - 460 )}, 20012 }};
-#endif
 
    for ( int i = 0; i< helplist.num; i++ ) {
       sghelpitems[i].rect.x1 = agmp->resolutionx - ( 640 - sghelpitems[i].rect.x1 );
@@ -197,7 +199,7 @@ cmousecontrol* mousecontrol = NULL;
 
 
 
-#define maintainence
+#define maintainence2
 
 int maintainencecheck( void )
 {
@@ -223,44 +225,6 @@ int maintainencecheck( void )
     return 0;
    #endif
 }   
-
-
-
-
-void showmemory ( void )
-{
-  #ifdef _DOS_
-   npush ( activefontsettings );
-   activefontsettings.length = 99;
-   activefontsettings.background = 0;
-   activefontsettings.color = 14;
-   activefontsettings.justify = lefttext;
-   activefontsettings.font = schriften.smallarial;
-   int mss = getmousestatus();
-   if (mss == 2)
-      setinvisiblemouserectanglestk ( 0, agmp->resolutiony, 640, agmp->resolutiony + 80 ); 
-
-   int a = maxavail();
-   //   int b = _memavl();
-   //   showtext2( strrr ( _memmax() ), 10,agmp->resolutiony );
-   // showtext2( strrr ( b  ), 110,agmp->resolutiony );
-   showtext2( strrr ( a ), 210,agmp->resolutiony );
-   // showtext2( strrr ( b+a ), 310,agmp->resolutiony );
-   showtext2( strrr ( stackfree ()  ), 410,agmp->resolutiony );
-
-   showtext2( strrr ( getxpos()  ), 10,agmp->resolutiony + 30 );
-   showtext2( strrr ( getypos()  ), 110,agmp->resolutiony + 30 );
-
-   showtext2( strrr ( actmap->time.a.turn  ), 10,agmp->resolutiony + 60 );
-   showtext2( strrr ( actmap->time.a.move  ), 110,agmp->resolutiony + 60 );
-   if (mss == 2)
-      getinvisiblemouserectanglestk ();
-
-   npop  ( activefontsettings );
-  #endif
-};
-
-
 
 
 void         loadcursor(void)
@@ -615,7 +579,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
-                    ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_pauseResumeMusic };
+                    ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_pauseResumeMusic, ua_soundDialog };
 
 
 class tsgpulldown : public tpulldown {
@@ -635,6 +599,7 @@ void         tsgpulldown :: init ( void )
    addbutton ( "~P~ause / Resume Music", ua_pauseResumeMusic );
    addbutton ( "seperator", -1);
    addbutton ( "E~x~itõctrl-x", ua_exitgame );
+   addbutton ( "Paragui Sound Dialog", ua_soundDialog );
 
 
   addfield ("~G~ame");
@@ -1039,11 +1004,9 @@ void benchgame ( int mode )
          if ( mode == 1 )
             computeview( actmap );
          displaymap();
-      } else {
-        #ifndef _DOS_
+      } else
         copy2screen();
-        #endif
-      }
+
       n++;
       t2 = ticker;
    } while ( t + 1000 > t2 ); /* enddo */
@@ -1404,12 +1367,6 @@ void execuseraction ( tuseractions action )
                              break;
 
             case ua_heapcheck:
-#ifdef _DOS_
-         if ( _heapchk() == _HEAPOK )
-      displaymessage(" Heap OK", 3 );
-         else
-      displaymessage(" Heap not OK", 1 );
-#endif
          break;
 #ifdef _DOS_
             case ua_benchgamewov:  benchgame( 0 );
@@ -1620,7 +1577,7 @@ void execuseraction ( tuseractions action )
                             if ( !actmap->player[ actmap->actplayer ].ai )
                                actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
-                            if ( AI* ai = dynamic_cast<AI*>( actmap->player[ actmap->actplayer ].ai )) {
+                            if ( AI* ai = static_cast<AI*>( actmap->player[ actmap->actplayer ].ai )) {
                                savegame ( "ai-bench-start.sav" );
                                ai->run( true );
                             }
@@ -1635,6 +1592,31 @@ void execuseraction ( tuseractions action )
                        
         case ua_pauseResumeMusic: SoundSystem::getInstance()->resumePauseMusic();
                        break;
+        case ua_soundDialog: {
+         SDL_mutexP ( eventHandlingMutex );
+        	PG_MessageBox *msgbox =new PG_MessageBox(
+		NULL,
+		PG_Rect(200,50,240,200),
+		"Modal Messagebox", "Click \"Ok\" to close me",
+		PG_Rect(90, 120, 50, 50),
+		"Ok",
+		PG_TA_CENTER);
+		
+	PG_DropDown* drop = new PG_DropDown(msgbox, 15, PG_Rect(5, 60, 200,25));
+	drop->SetIndent(5);
+	drop->AddItem("Under construction");
+	drop->AddItem("Item 1");
+	drop->AddItem("Item 2");
+	drop->AddItem("Item 3");
+
+	msgbox->Show();
+	msgbox->WaitForClick();
+
+	delete msgbox;
+         SDL_mutexV ( eventHandlingMutex );
+
+        }
+        break;
 
     }
 
@@ -2255,38 +2237,42 @@ int main(int argc, char *argv[] )
 
    SoundSystem soundSystem ( CGameOptions::Instance()->sound_mute, cl->q() || CGameOptions::Instance()->sound_off );
 
-   modenum8 = initgraphics ( xr, yr, 8, icon );
+   PG_Application app;
 
-   /* Clean up on exit */
-   atexit(SDL_Quit);
+	app.LoadTheme("default");
+	int flags = SDL_SWSURFACE;
+   if ( fullscreen )
+      flags |= SDL_FULLSCREEN;
 
-   if ( modenum8 > 0 ) {
-      #ifdef _DOS_
-       setFullscreenSetting ( FIS_oldModeNum, modenum8 );
-      #endif
+   setWindowCaption ( "Advanced Strategic Command" );
+   SDL_WM_SetIcon( icon->GetSurface(), NULL );
 
-      GameThreadParams gtp;
-      gtp.filename = cl->l();
+	app.InitScreen( xr, yr, 8, flags);
+	
+   initASCGraphicSubsystem ( app.GetScreen(), icon );
 
-      {
-         SDL_Init ( SDL_INIT_VIDEO );
-         int w;
-         tnfilestream stream ("mausi.raw", tnstream::reading);
-         stream.readrlepict(   &icons.mousepointer, false, &w );
-      }
+   GameThreadParams gtp;
+   gtp.filename = cl->l();
 
-      initializeEventHandling ( gamethread, &gtp, icons.mousepointer );
+   {
+      int w;
+      tnfilestream stream ("mausi.raw", tnstream::reading);
+      stream.readrlepict(   &icons.mousepointer, false, &w );
+   }
 
-      closegraphics();
 
-      writegameoptions ( );
+   // this starts the gamethread procedure, whichs will run the entire game
+   initializeEventHandling ( gamethread, &gtp, icons.mousepointer );
 
-      delete onlinehelp;
-      onlinehelp = NULL;
-      
-      delete onlinehelpwind;
-      onlinehelpwind = NULL;
-   } // if 8 bit initialization successfull
+   closegraphics();
+
+   writegameoptions ( );
+
+   delete onlinehelp;
+   onlinehelp = NULL;
+
+   delete onlinehelpwind;
+   onlinehelpwind = NULL;
 
 #ifdef MEMCHK
    verifyallblocks();

@@ -9,3 +9,5 @@
 #undef _GNU_SOURCE
 
 #undef GAME_DATADIR
+
+#undef USE_SYSTEM_BZ2

@@ -39,7 +39,7 @@
         Note that the usable movement can be less due to lack of fuel.
         Use #getmovement to optain the usable movement
     */
-    char  _movement;
+    int  _movement;
 
     //! the amount of energy that the unit has spent this turn
     int   energyUsed;

@@ -28,7 +28,7 @@
 
 extern void initializeEventHandling ( int (*fn)(void *) , void *data, void* mousepointer );
 
-
+extern SDL_mutex* eventHandlingMutex;
 
 /***************************************************************************
  *                                                                         *

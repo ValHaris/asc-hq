@@ -2,7 +2,7 @@
 SHELL=/bin/sh
 CC=gcc
 BIGFILES=-D_FILE_OFFSET_BITS=64
-CFLAGS=-Wall -Winline -O2 -fomit-frame-pointer -fno-strength-reduce $(BIGFILES)
+CFLAGS=-Wall -Winline -O2 -fomit-frame-pointer -fno-strength-reduce $(BIGFILES) 
 
 OBJS= blocksort.o  \
       huffman.o    \
