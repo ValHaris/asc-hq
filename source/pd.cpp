@@ -1,6 +1,9 @@
-//     $Id: pd.cpp,v 1.7 2000-01-04 19:43:53 mbickel Exp $
+//     $Id: pd.cpp,v 1.8 2000-01-06 14:11:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/01/04 19:43:53  mbickel
+//      Continued Linux port
+//
 //     Revision 1.6  1999/12/30 20:30:37  mbickel
 //      Improved Linux port again.
 //
@@ -379,11 +382,11 @@ void         tpulldown::openpdfield(void)
       } 
 
    mousevisible(false);
-   collategraphicoperations cgo ( anf - 3, 0 ,ende + 3, pdb.pdbreite + 6 + pdb.field[pdfieldnr].height );
-   backgrnd = asc_malloc( imagesize(anf - 3, 0 ,ende + 3,pdb.pdbreite + 6 + pdb.field[pdfieldnr].height) );
-   getimage(anf - 3, 0 ,ende + 3, pdb.pdbreite + 6 + pdb.field[pdfieldnr].height,backgrnd);
+   collategraphicoperations   cgo ( anf - 3, 0 ,ende + 3, pdb.pdbreite + 6 + pdb.field[pdfieldnr].height );
+   backgrnd = asc_malloc( imagesize(anf - 3, 0 ,ende + 3, pdb.pdbreite + 6 + pdb.field[pdfieldnr].height) );
+   getimage(                        anf - 3, 0 ,ende + 3, pdb.pdbreite + 6 + pdb.field[pdfieldnr].height,backgrnd);
 
-   bar(anf - 3,pdb.pdbreite,ende + 3,pdb.pdbreite + 6 + pdb.field[pdfieldnr].height,bkgcolor);
+   bar( anf - 3,pdb.pdbreite,ende + 3,pdb.pdbreite + 6 + pdb.field[pdfieldnr].height,bkgcolor);
    lines(anf - 3,pdb.pdbreite,ende + 3,pdb.pdbreite + 6 + pdb.field[pdfieldnr].height);
    int lang = gettextwdth(pdb.field[pdfieldnr].name,pulldownfont) + 13;
    if (umbau == true)
@@ -426,7 +429,7 @@ void         tpulldown::closepdfield(void)
 {
    int w, h;
    getpicsize ( backgrnd, w,h );
-   collategraphicoperations cgo ( anf-3, 0, anf-3 + w, h);
+   collategraphicoperations cgo ( anf-3, 0, anf-3 + w-1, h);
    mousevisible(false);
    putimage(anf - 3,0,backgrnd);
    asc_free(backgrnd); 
