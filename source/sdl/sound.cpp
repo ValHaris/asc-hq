@@ -21,8 +21,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <SDL/SDL_audio.h>
-#include <SDL/SDL_error.h>
+//#include <SDL/SDL_audio.h>
+//#include <SDL/SDL_error.h>
+#include <SDL/SDL.h>
 #include "sound.h"
 
 #include "../basestrm.h"
@@ -118,7 +119,7 @@ static int stream_read(SDL_RWops *context, void *ptr, int size, int maxnum)
 	size_t nread = stream->readdata ( ptr, size * maxnum, 0 );
 
 	if ( nread < 0 ) {
-		SDL_Error(SDL_EFREAD);
+		SDL_SetError("Error reading from datastream");
 	}
 	return(nread / size);
 }
@@ -267,7 +268,7 @@ void Sound::playWait(void) {
   // This is not a very efficent way to wait for the sound to end,
   // but it's a lot simpler than setting up a semaphore.
   do {
-    usleep(WAIT_SLEEP_USEC);
+    SDL_Delay(WAIT_SLEEP_USEC);
   } while( currentSound==this );
 }
 

@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.27 2000-05-10 19:55:45 mbickel Exp $
+//     $Id: dialog.cpp,v 1.28 2000-05-22 15:40:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2000/05/10 19:55:45  mbickel
+//      Fixed empty loops when waiting for mouse events
+//
 //     Revision 1.26  2000/05/07 12:12:14  mbickel
 //      New mouse option dialog
 //      weapon info can now be displayed by clicking on a unit
@@ -3901,7 +3904,7 @@ void         tsetalliances::init( int supervis )
      else
         actmap->player[i].existent = false;
 
-      playermode[i] = actmap->player[i].stat;
+      playermode[i] = (enum tplayerstat) actmap->player[i].stat;
 
       if ( actmap->player[i].existent )  // ((playermode[i] == ps_human) || (playermode[i] == ps_computer)) &&
          playerpos[plnum++] = i;

@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.24 2000-05-18 14:39:56 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.25 2000-05-22 15:40:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/05/18 14:39:56  mbickel
+//      Changed version number to 1.1.4
+//
 //     Revision 1.23  2000/05/10 19:55:51  mbickel
 //      Fixed empty loops when waiting for mouse events
 //
@@ -720,7 +723,7 @@ pbasenetworkconnection tsetupnetwork ::  getmethod ( tnetworkchannel chan )
    tchoosetransfermethod ctm;
    pbasenetworkconnection *conn ;
    int xx1;
-   if ( chan == receive ) {
+   if ( chan == TN_RECEIVE ) {
       xx1 = 220;
       if ( network.computer[frstcompnum].receive.transfermethodid == 0 )
          network.computer[frstcompnum].receive.transfermethod = NULL;
@@ -736,7 +739,7 @@ pbasenetworkconnection tsetupnetwork ::  getmethod ( tnetworkchannel chan )
    ctm.run ( conn );
    ctm.done ();
 
-   if ( chan == receive ) {
+   if ( chan == TN_RECEIVE ) {
       if ( network.computer[frstcompnum].receive.transfermethod )
          network.computer[frstcompnum].receive.transfermethodid = network.computer[frstcompnum].receive.transfermethod->getid();
       else
@@ -757,12 +760,12 @@ void tsetupnetwork :: buttonpressed ( char id )
    switch ( id ) {
      case 1: if ( edit == 1 ) {
                 if ( network.computer[frstcompnum].receive.transfermethod )
-                   if ( network.computer[frstcompnum].receive.transfermethod->validateparams ( &network.computer[frstcompnum].receive.data, receive ) )
+                   if ( network.computer[frstcompnum].receive.transfermethod->validateparams ( &network.computer[frstcompnum].receive.data, TN_RECEIVE ) )
                       status = 2;
              } else
                if ( edit == 2 ) {
                   if ( network.computer[frstcompnum].send.transfermethod )
-                     if ( network.computer[frstcompnum].send.transfermethod->validateparams ( &network.computer[frstcompnum].send.data, send ) )
+                     if ( network.computer[frstcompnum].send.transfermethod->validateparams ( &network.computer[frstcompnum].send.data, TN_SEND ) )
                         status = 2;
                } else
                   status = 2;
@@ -811,11 +814,11 @@ void tsetupnetwork :: buttonpressed ( char id )
                   network.computer[frstcompnum].send.transfermethod->setupforsending ( &network.computer[frstcompnum].send.data );
              break;
 
-     case 8: getmethod ( receive );
+     case 8: getmethod ( TN_RECEIVE );
              paintransfermnames();
              break;
              
-     case 9: getmethod ( send );
+     case 9: getmethod ( TN_SEND );
              paintransfermnames();
              break;
               

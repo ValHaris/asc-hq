@@ -1,6 +1,14 @@
-//     $Id: sg.h,v 1.2 1999-11-16 03:42:27 tmwilson Exp $
+//     $Id: sg.h,v 1.3 2000-05-22 15:40:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:42:27  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -65,10 +73,6 @@ class tbackgroundpict : public tpaintmapborder {
                int getlastpaintmode ( void );
 };
 extern tbackgroundpict backgroundpict;
-
-extern void* asc_malloc ( size_t size );
-extern void asc_free ( void* p );
-
 
 extern void viewunreadmessages ( void );
 

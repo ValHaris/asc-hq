@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.40 2000-05-18 14:14:48 mbickel Exp $
+//     $Id: sg.cpp,v 1.41 2000-05-22 15:40:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2000/05/18 14:14:48  mbickel
+//      Fixed bug in movemalus calculation for movement
+//      Added "view movement range"
+//
 //     Revision 1.39  2000/05/10 19:55:54  mbickel
 //      Fixed empty loops when waiting for mouse events
 //
@@ -1297,14 +1301,14 @@ void         loadcursor(void)
 
    {
       tnfilestream stream ("netcontr.raw",1);
-      stream.readrlepict(   &icons.container.subwin.netcontrol.main, false, &w );
+      stream.readrlepict(   &icons.container.subwin.netcontrol.start, false, &w );
       stream.readrlepict(   &icons.container.subwin.netcontrol.inactive, false, &w );
       stream.readrlepict(   &icons.container.subwin.netcontrol.active, false, &w );
    }
 
    {
       tnfilestream stream ("ammoprod.raw",1);
-      stream.readrlepict(   &icons.container.subwin.ammoproduction.main, false, &w );
+      stream.readrlepict(   &icons.container.subwin.ammoproduction.start, false, &w );
       stream.readrlepict(   &icons.container.subwin.ammoproduction.button, false, &w );
       stream.readrlepict(   &icons.container.subwin.ammoproduction.buttonpressed, false, &w );
       for ( i = 0; i < 4; i++ )
@@ -1317,22 +1321,22 @@ void         loadcursor(void)
 
    {
       tnfilestream stream ("resorinf.raw",1);
-      stream.readrlepict(   &icons.container.subwin.resourceinfo.main, false, &w );
+      stream.readrlepict(   &icons.container.subwin.resourceinfo.start, false, &w );
    }
 
    {
       tnfilestream stream ("windpowr.raw",1);
-      stream.readrlepict(   &icons.container.subwin.windpower.main, false, &w );
+      stream.readrlepict(   &icons.container.subwin.windpower.start, false, &w );
    }
 
    {
       tnfilestream stream ("solarpwr.raw",1);
-      stream.readrlepict(   &icons.container.subwin.solarpower.main, false, &w );
+      stream.readrlepict(   &icons.container.subwin.solarpower.start, false, &w );
    }
 
    {
       tnfilestream stream ("ammotran.raw",1);
-      stream.readrlepict(   &icons.container.subwin.ammotransfer.main, false, &w );
+      stream.readrlepict(   &icons.container.subwin.ammotransfer.start, false, &w );
       stream.readrlepict(   &icons.container.subwin.ammotransfer.button, false, &w );
       stream.readrlepict(   &icons.container.subwin.ammotransfer.buttonpressed, false, &w );
       for ( i = 0; i < 4; i++ )
@@ -1343,7 +1347,7 @@ void         loadcursor(void)
 
    {
       tnfilestream stream ("research.raw",1);
-      stream.readrlepict(   &icons.container.subwin.research.main, false, &w );
+      stream.readrlepict(   &icons.container.subwin.research.start, false, &w );
       stream.readrlepict(   &icons.container.subwin.research.button[0], false, &w );
       stream.readrlepict(   &icons.container.subwin.research.button[1], false, &w );
       stream.readrlepict(   &icons.container.subwin.research.schieber, false, &w );
@@ -1351,7 +1355,7 @@ void         loadcursor(void)
 
    {
       tnfilestream stream ("pwrplnt2.raw",1);
-      stream.readrlepict(   &icons.container.subwin.conventionelpowerplant.main, false, &w );
+      stream.readrlepict(   &icons.container.subwin.conventionelpowerplant.start, false, &w );
       stream.readrlepict(   &icons.container.subwin.conventionelpowerplant.schieber, false, &w );
       //stream.readrlepict(   &icons.container.subwin.conventionelpowerplant.button[1], false, &w );
    }
@@ -1361,7 +1365,7 @@ void         loadcursor(void)
    int m;
    {
       tnfilestream stream ( "bldinfo.raw", 1 );
-      stream.readrlepict( &icons.container.subwin.buildinginfo.main, false, &m );
+      stream.readrlepict( &icons.container.subwin.buildinginfo.start, false, &m );
       for ( i = 0; i < 8; i++ )
          stream.readrlepict( &icons.container.subwin.buildinginfo.height1[i], false, &m );
       for ( i = 0; i < 8; i++ )
@@ -1374,7 +1378,7 @@ void         loadcursor(void)
 
    {
       tnfilestream stream ("mining2.raw",1);
-      stream.readrlepict(   &icons.container.subwin.miningstation.main, false, &w );
+      stream.readrlepict(   &icons.container.subwin.miningstation.start, false, &w );
       stream.readrlepict(   &icons.container.subwin.miningstation.zeiger, false, &w );
       /*
       for ( i = 0; i < 2; i++ )
@@ -1391,7 +1395,7 @@ void         loadcursor(void)
 
    {
       tnfilestream stream ("mineral.raw",1);
-      stream.readrlepict(   &icons.container.subwin.mineralresources.main, false, &w );
+      stream.readrlepict(   &icons.container.subwin.mineralresources.start, false, &w );
       stream.readrlepict(   &icons.container.subwin.mineralresources.zeiger, false, &w );
    }
 
@@ -1403,7 +1407,7 @@ void         loadcursor(void)
 
    {
       tnfilestream stream ("traninfo.raw",1);
-      stream.readrlepict(   &icons.container.subwin.transportinfo.main, false, &w );
+      stream.readrlepict(   &icons.container.subwin.transportinfo.start, false, &w );
       for ( i = 0; i < 8; i++ )
          stream.readrlepict(   &icons.container.subwin.transportinfo.height1[i], false, &w );
       for ( i = 0; i < 8; i++ )
@@ -1551,8 +1555,7 @@ void         tsgpulldown :: init ( void )
 void         repaintdisplay(void)
 {
    collategraphicoperations cgo;
-   int mapexist = actmap && actmap->xsize > 0  && actmap->ysize >= 0 ;
-
+   int mapexist = actmap && (actmap->xsize > 0) && (actmap->ysize >= 0);
 
 
    int ms = getmousestatus();
@@ -2819,7 +2822,7 @@ void networksupervisor ( void )
    try {
        displaymessage ( " starting network transfer ",0);
     
-       network.computer[0].receive.transfermethod->initconnection ( receive );
+       network.computer[0].receive.transfermethod->initconnection ( TN_RECEIVE );
        network.computer[0].receive.transfermethod->inittransfer ( &network.computer[0].receive.data );
     
        tnetworkloaders nwl;
@@ -2887,7 +2890,7 @@ void networksupervisor ( void )
       displaymessage ( " starting network transfer ",0);
 
       try {
-         compi->send.transfermethod->initconnection ( send );
+         compi->send.transfermethod->initconnection ( TN_SEND );
          compi->send.transfermethod->inittransfer ( &compi->send.data );
    
          char* desciption = NULL;

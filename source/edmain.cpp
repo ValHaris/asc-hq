@@ -1,6 +1,9 @@
-//     $Id: edmain.cpp,v 1.12 2000-05-10 19:55:49 mbickel Exp $
+//     $Id: edmain.cpp,v 1.13 2000-05-22 15:40:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/05/10 19:55:49  mbickel
+//      Fixed empty loops when waiting for mouse events
+//
 //     Revision 1.11  2000/05/06 19:57:08  mbickel
 //      Mapeditor/linux is now running
 //
@@ -79,7 +82,7 @@
 #include "edselfnt.h"
 #include "edglobal.h"
 #include <signal.h>
-#include <new.h>
+// #include <new.h>
 
 #ifdef _DOS_
  #include "dos\memory.h"

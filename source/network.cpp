@@ -1,6 +1,9 @@
-//     $Id: network.cpp,v 1.5 2000-01-31 16:34:46 mbickel Exp $
+//     $Id: network.cpp,v 1.6 2000-05-22 15:40:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/01/31 16:34:46  mbickel
+//      now standard hotkeys in dialog boxes
+//
 //     Revision 1.4  1999/12/07 22:13:24  mbickel
 //      Fixed various bugs
 //      Extended BI3 map import tables
@@ -298,7 +301,7 @@ int   tfiletransfernetworkconnection::validateparams ( pnetworkconnectionparamet
    if ( !filename[0] )
       return 0;
 
-   if ( chann == send ) {
+   if ( chann == TN_SEND ) {
       char tempfilename[200];
       mountfilename ( tempfilename, filename );
 
@@ -340,7 +343,7 @@ void  tfiletransfernetworkconnection::inittransfer  ( pnetworkconnectionparamete
       displaymessage ( "tfiletransfernetworkconnection::inittransfer ( pnetworkconnectionparameters ) \n orgstream bereits initialisiert !",2);
 
    while ( validateparams ( data, chann ) == 0 ) {
-      if ( chann == send )
+      if ( chann == TN_SEND )
         setupforsending ( data, 0 );
       else
         setupforreceiving ( data );
@@ -349,7 +352,7 @@ void  tfiletransfernetworkconnection::inittransfer  ( pnetworkconnectionparamete
    char tempfilename[200];
    mountfilename ( tempfilename, filename );
 
-   if ( chann == send )                            
+   if ( chann == TN_SEND )
       orgstream = new  tnfilestream ( tempfilename, 2 );
    else
       orgstream = new  tnfilestream ( tempfilename, 1 );

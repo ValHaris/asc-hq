@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.20 2000-05-07 18:21:22 mbickel Exp $
+//     $Id: typen.h,v 1.21 2000-05-22 15:40:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/05/07 18:21:22  mbickel
+//      Speed of attack animation can now be specified
+//
 //     Revision 1.19  2000/05/07 12:12:18  mbickel
 //      New mouse option dialog
 //      weapon info can now be displayed by clicking on a unit
@@ -595,7 +598,7 @@ class tvehicle { /*** Bei énderungen unbedingt Save/LoadGame und Konstruktor kor
     unsigned char         experience;    // 0 .. 15 
     boolean      attacked; 
     unsigned char         height;       /* BM */   /*  aktuelle Hîhe: z.B. Hochfliegend  */
-    char         movement;     /*  Åbriggebliebene movement fÅr diese Runde  */
+    unsigned char    movement;     /*  Åbriggebliebene movement fÅr diese Runde  */
     unsigned char         direction;    /*  Blickrichtung  */
     Integer      xpos, ypos;   /*  Position auf map  */
     int      material;     /*  aktuelle loading an Material und  */
@@ -1435,7 +1438,7 @@ class tmap {
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 
-enum tnetworkchannel { receive, send };
+enum tnetworkchannel { TN_RECEIVE, TN_SEND };
 
 
 class tgameoptions {
@@ -1543,28 +1546,28 @@ struct ticons {
      } mark;
      struct       {
          struct {
-           void* main;
+           void* start;
            void* active;
            void* inactive;
          } netcontrol;
          struct {
-           void* main;
+           void* start;
            void* button;
            void* buttonpressed;
            void* schieber[4];
            void* schiene;
          } ammoproduction;
          struct {
-           void* main;
+           void* start;
          } resourceinfo;
          struct {
-           void* main;
+           void* start;
          } windpower;
          struct {
-           void* main;
+           void* start;
          } solarpower;
          struct {
-           void* main;
+           void* start;
            void* button;
            void* buttonpressed;
            void* schieber[4];
@@ -1572,17 +1575,17 @@ struct ticons {
            void* schieneinactive;
          } ammotransfer;
          struct {
-           void* main;
+           void* start;
            void* button[2];
            void* schieber;
          } research;
          struct {
-           void* main;
+           void* start;
            // void* button[2];
            void* schieber;
          } conventionelpowerplant;
          struct {
-           void* main;
+           void* start;
            void* height1[8];
            void* height2[8];
            void* repair;
@@ -1590,7 +1593,7 @@ struct ticons {
            void* block;
          } buildinginfo;
          struct {
-           void* main;
+           void* start;
                   void* zeiger;
            void* button[2];
            void* resource[2];
@@ -1601,12 +1604,12 @@ struct ticons {
            void* schieber;
          } miningstation;
          struct {
-           void* main;
+           void* start;
                   void* zeiger;
            void* schieber;
          } mineralresources;
          struct {
-           void* main;
+           void* start;
            void* height1[8];
            void* height2[8];
            void* sum;

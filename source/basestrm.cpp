@@ -1,6 +1,9 @@
-//     $Id: basestrm.cpp,v 1.20 2000-05-06 19:57:08 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.21 2000-05-22 15:40:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/05/06 19:57:08  mbickel
+//      Mapeditor/linux is now running
+//
 //     Revision 1.19  2000/04/27 16:25:14  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -156,7 +159,7 @@
 
 char* ascdirectory = ".";
 
-#ifdef _DOS_
+#if defined(_DOS_) | defined(WIN32)
 const char* filereadmode = "rb";
 const char* filewritemode = "wb";
 #else
@@ -649,13 +652,15 @@ int          tnbufstream::readdata( void* buf, int size, int excpt  )
 
    actpos2 = 0; 
 
-   if (modus == 2) 
+   if (modus == 2)  {
       throw  tinvalidmode ( devicename, modus, 1 );
+	}
       
    while (actpos2 < size) { 
       if (datasize == 0) 
-          if ( excpt )
+          if ( excpt ) {
              throw treadafterend ( devicename );
+			}
           else
              return actpos2;
        
@@ -822,8 +827,9 @@ void tn_file_buf_stream::seekstream( int newpos )
 void tn_file_buf_stream::readbuffer( void )
 { 
    datasize = fread( zeiger, 1, memsize, fp);
-   if ( ferror ( fp ) )
+   if ( ferror ( fp ) ) {
       throw  tfileerror ( devicename );
+	}
 
    actfilepos += datasize;
 
@@ -988,20 +994,21 @@ ContainerCollector :: ContainerCollector ( void )
 
 void ContainerCollector :: init ( const char* wildcard )
 {
-    DIR *dirp; 
-    struct dirent *direntp; 
+	DIR *dirp; 
+	struct dirent *direntp; 
 
-    dirp = opendir( ascdirectory );
-    if( dirp != NULL ) { 
+	dirp = opendir( ascdirectory );
+	if( dirp != NULL ) { 
       for(;;) { 
-        direntp = readdir( dirp ); 
-        if ( direntp == NULL ) 
-           break; 
-        if ( patimat ( wildcard, direntp->d_name ))
-           container[containernum++] = new tncontainerstream (  direntp->d_name, this );
-      } 
-      closedir( dirp ); 
-    } 
+			direntp = readdir( dirp ); 
+			if ( direntp == NULL ) {
+				break; 
+			}
+			if ( patimat ( wildcard, direntp->d_name ))
+				container[containernum++] = new tncontainerstream(direntp->d_name, this);
+		} 
+		closedir( dirp ); 
+	} 
 
 }
 

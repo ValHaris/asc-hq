@@ -142,3 +142,19 @@ int math_N(n, h)
   
   return (int) ceil((double) 1.0*n/v);
 }
+
+
+
+double log2(
+	double v
+)
+{
+	static double tmp_log2 = -1.0;
+
+	if (tmp_log2 < 0.0) {
+		tmp_log2 = 1.0 / log(2.0);
+	}
+
+	return(log(v) * tmp_log2);
+}
+

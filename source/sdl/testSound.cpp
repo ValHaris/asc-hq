@@ -18,7 +18,7 @@
 #include <unistd.h>
 #include <sound.h>
 
-void main( int argc, char **argv ) {
+int main( int argc, char **argv ) {
   initSound();
   for( int i=1; i<argc; ++i ) {
     printf( "Loading %s.\n", argv[i] );

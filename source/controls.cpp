@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.29 2000-05-18 14:14:47 mbickel Exp $
+//     $Id: controls.cpp,v 1.30 2000-05-22 15:40:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/05/18 14:14:47  mbickel
+//      Fixed bug in movemalus calculation for movement
+//      Added "view movement range"
+//
 //     Revision 1.28  2000/05/10 21:13:42  mbickel
 //      Improved error messages for mail game loader
 //
@@ -5322,7 +5326,7 @@ void sendnetworkgametonextplayer ( int oldplayer, int newplayer )
       displaymessage ( " starting network transfer ",0);
 
       try {
-         compi->send.transfermethod->initconnection ( send );
+         compi->send.transfermethod->initconnection ( TN_SEND );
          compi->send.transfermethod->inittransfer ( &compi->send.data );
    
          char* desciption = NULL;
@@ -5634,7 +5638,7 @@ void continuenetworkgame ( void )
          if ( network.computer[0].receive.transfermethodid != network.computer[0].receive.transfermethod->getid() ) 
             displaymessage("please setup transfer method !", 1 );
          else
-            if ( !network.computer[0].receive.transfermethod->validateparams( &network.computer[0].receive.data, receive ))
+            if ( !network.computer[0].receive.transfermethod->validateparams( &network.computer[0].receive.data, TN_RECEIVE ))
                displaymessage("please setup transfer method !", 1 );
             else
                go = 1;
@@ -5650,7 +5654,7 @@ void continuenetworkgame ( void )
       
       if ( network.computer[0].receive.transfermethod  &&
            network.computer[0].receive.transfermethodid == network.computer[0].receive.transfermethod->getid()  &&
-           network.computer[0].receive.transfermethod->validateparams( &network.computer[0].receive.data, receive ))
+           network.computer[0].receive.transfermethod->validateparams( &network.computer[0].receive.data, TN_RECEIVE ))
            go = 1;
    } while ( !go ); 
    
@@ -5658,7 +5662,7 @@ void continuenetworkgame ( void )
    try {
        displaymessage ( " starting network transfer ",0);
     
-       network.computer[0].receive.transfermethod->initconnection ( receive );
+       network.computer[0].receive.transfermethod->initconnection ( TN_RECEIVE );
        network.computer[0].receive.transfermethod->inittransfer ( &network.computer[0].receive.data );
     
        tnetworkloaders nwl;

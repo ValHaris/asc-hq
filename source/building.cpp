@@ -1,6 +1,12 @@
-//     $Id: building.cpp,v 1.20 2000-05-18 17:48:38 mbickel Exp $
+//     $Id: building.cpp,v 1.21 2000-05-22 15:40:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/05/18 17:48:38  mbickel
+//      When moving units out of buildings/transports, indirectly accessible
+//         fields are marked now too
+//      The unit info display was not updated when changing the height of an
+//         helicopter
+//
 //     Revision 1.19  2000/05/10 19:55:40  mbickel
 //      Fixed empty loops when waiting for mouse events
 //
@@ -2165,7 +2171,7 @@ void  ccontainer :: cammunitiontransfer_subwindow :: display ( void )
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
    setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    npush ( activefontsettings );
-   putimage ( subwinx1, subwiny1, icons.container.subwin.ammotransfer.main );
+   putimage ( subwinx1, subwiny1, icons.container.subwin.ammotransfer.start );
    for ( int i = 0; i < 8; i++ )
       actdisp[i] = 0;
 
@@ -3444,7 +3450,7 @@ void  ccontainer_b :: crepairbuilding_subwindow :: display ( void )
    setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
    npush ( activefontsettings );
-   putimage ( subwinx1, subwiny1, icons.container.subwin.buildinginfo.main );
+   putimage ( subwinx1, subwiny1, icons.container.subwin.buildinginfo.start );
 
    csubwindow :: display();
 
@@ -3611,7 +3617,7 @@ void  ccontainer_b :: cnetcontrol_subwindow :: display ( void )
 {
    setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
-   putimage ( subwinx1, subwiny1, icons.container.subwin.netcontrol.main );
+   putimage ( subwinx1, subwiny1, icons.container.subwin.netcontrol.start );
 
    npush ( activefontsettings );
    csubwindow :: display();
@@ -3805,7 +3811,7 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: display ( void )
 
    npush ( activefontsettings );
 
-   putimage ( subwinx1, subwiny1, icons.container.subwin.conventionelpowerplant.main );
+   putimage ( subwinx1, subwiny1, icons.container.subwin.conventionelpowerplant.start );
 
    csubwindow :: display();
    activefontsettings.color = white;
@@ -4081,7 +4087,7 @@ void  ccontainer_b :: cwindpowerplant_subwindow :: display ( void )
    npush ( activefontsettings );
    setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
-   putimage ( subwinx1, subwiny1, icons.container.subwin.windpower.main );
+   putimage ( subwinx1, subwiny1, icons.container.subwin.windpower.start );
 
    csubwindow :: display();
    activefontsettings.length = 95;
@@ -4167,7 +4173,7 @@ void  ccontainer_b :: csolarpowerplant_subwindow :: display ( void )
    npush ( activefontsettings );
    setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
-   putimage ( subwinx1, subwiny1, icons.container.subwin.solarpower.main );
+   putimage ( subwinx1, subwiny1, icons.container.subwin.solarpower.start );
    csubwindow :: display();
 
    activefontsettings.length = 95;
@@ -4317,7 +4323,7 @@ void  ccontainer_b :: cammunitionproduction_subwindow :: display ( void )
    npush ( activefontsettings );
    setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
-   putimage ( subwinx1, subwiny1, icons.container.subwin.ammoproduction.main );
+   putimage ( subwinx1, subwiny1, icons.container.subwin.ammoproduction.start );
    csubwindow :: display();
    activefontsettings.color = white;
    activefontsettings.font = schriften.guifont;
@@ -4605,7 +4611,7 @@ void  ccontainer_b :: cresourceinfo_subwindow :: display ( void )
    npush ( activefontsettings );
    setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
-   putimage ( subwinx1, subwiny1, icons.container.subwin.resourceinfo.main );
+   putimage ( subwinx1, subwiny1, icons.container.subwin.resourceinfo.start );
    csubwindow :: display();
    activefontsettings.color = white;
    activefontsettings.font = schriften.guifont;
@@ -4752,7 +4758,7 @@ void  ccontainer_b :: cresearch_subwindow :: display ( void )
 
    npush ( activefontsettings );
 
-   putimage ( subwinx1, subwiny1, icons.container.subwin.research.main );
+   putimage ( subwinx1, subwiny1, icons.container.subwin.research.start );
 
    csubwindow :: display();
    activefontsettings.color = white;
@@ -5104,7 +5110,7 @@ void  ccontainer_b :: cminingstation_subwindow :: display ( void )
 
    npush ( activefontsettings );
 
-   putimage ( subwinx1, subwiny1, icons.container.subwin.miningstation.main );
+   putimage ( subwinx1, subwiny1, icons.container.subwin.miningstation.start );
 
    csubwindow :: display();
 
@@ -5435,7 +5441,7 @@ void  ccontainer_b :: cmineralresources_subwindow :: display ( void )
 
    npush ( activefontsettings );
 
-   putimage ( subwinx1, subwiny1, icons.container.subwin.mineralresources.main );
+   putimage ( subwinx1, subwiny1, icons.container.subwin.mineralresources.start );
    materialcolor = getpixel ( subwinx1 + 126, subwiny1 + 28 );
    fuelcolor = getpixel ( subwinx1 + 126, subwiny1 + 38 );
 
@@ -5972,7 +5978,7 @@ void  ccontainer_t :: ctransportinfo_subwindow :: display ( void )
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
 
    npush ( activefontsettings );
-   putimage ( subwinx1, subwiny1, icons.container.subwin.transportinfo.main );
+   putimage ( subwinx1, subwiny1, icons.container.subwin.transportinfo.start );
 
    csubwindow :: display();
 

@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.16 2000-05-07 12:12:18 mbickel Exp $
+//     $Id: typen.cpp,v 1.17 2000-05-22 15:40:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/05/07 12:12:18  mbickel
+//      New mouse option dialog
+//      weapon info can now be displayed by clicking on a unit
+//
 //     Revision 1.15  2000/05/06 20:25:25  mbickel
 //      Fixed: -recognition of a second mouse click when selection a pd menu item
 //             -movement: fields the unit can only pass, but not stand on them,
@@ -426,7 +430,7 @@ void tfield :: setparams ( void )
 
          for ( i = 0; i < cmovemalitypenum; i++ ) {
             _movemalus[i] += o->movemalus_plus[i];
-            if ( o->movemalus_abs[i] && o->movemalus_abs[i] != -1 )
+            if ( (o->movemalus_abs[i] != 0) && (o->movemalus_abs[i] != -1) )
                _movemalus[i] = o->movemalus_abs[i];
             if ( _movemalus[i] < minmalq )
                _movemalus[i] = minmalq;

@@ -20,6 +20,8 @@
 
 #ifndef global_h
  #define global_h
+ 
+ #include "config.h"
 
  #ifdef __WATCOM_CPLUSPLUS__
   #define HAVE_STRICMP 
