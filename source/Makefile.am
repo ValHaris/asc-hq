@@ -7,7 +7,8 @@ basestrm.cpp basegfx.cpp attack.cpp artint.cpp CLoadable.cpp Property.cpp \
 PropertyGroup.cpp gameoptions.cpp Named.cpp astar2.cpp vehicletype.cpp \
 buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp \
 gamemap.cpp password.cpp password_dialog.cpp replay.cpp research.cpp \
-mapdisplay.cpp resourcenet.cpp dashboard.cpp ascstring.cpp graphicset.cpp
+mapdisplay.cpp resourcenet.cpp dashboard.cpp ascstring.cpp graphicset.cpp \
+vehicle.cpp buildings.cpp
 
 asc_LDADD   = ./sdl/libsdl.a ./libs/triangul/libtriangul.a -lSDL -lpthread \
 -lSDL_image @LDADDLIBBZ2@
