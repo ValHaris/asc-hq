@@ -133,7 +133,7 @@ inline void AStar::get_first( Container& v, Node& n )
 
 
 
-void AStar::findPath( pmap actmap, HexCoord A, HexCoord B, std::vector<int>& path, pvehicle veh )
+void AStar::findPath( pmap actmap, HexCoord A, HexCoord B, std::vector<MapCoordinate>& path, pvehicle veh )
 {
     for ( int y = actmap->xsize * actmap->ysize -1; y >= 0; y-- )
        actmap->field[y].temp3 = DirNone;
@@ -237,15 +237,26 @@ void AStar::findPath( pmap actmap, HexCoord A, HexCoord B, std::vector<int>& pat
     if( N.h == B && N.gval < MAXIMUM_PATH_LENGTH )
     {
         // We have found a path, so let's copy it into `path'
+        std::vector<int> tempPath;
+
         HexCoord h = B;
         while( h != A )
         {
             HexDirection dir = HexDirection ( getfield (h.m, h.n)->temp3 );
-            path.push_back( int( ReverseDirection( dir ) ) );
+            tempPath.push_back( int( ReverseDirection( dir ) ) );
             getnextfield ( h.m, h.n, dir );
         }
-        // path now contains the directions the unit must travel .. backwards
+
+        // tempPath now contains the directions the unit must travel .. backwards
         // (like a stack)
+
+        int x = A.m;
+        int y = A.n;
+
+        for ( int i = tempPath.size()-1; i >= 0 ; i-- ) {
+           getnextfield ( x, y, tempPath[i] );
+           path.push_back ( MapCoordinate ( x, y ));
+        }
     }
     else
     {
@@ -268,7 +279,7 @@ bool AStar::fieldVisited ( int x, int y)
 void AStar::findAllAccessibleFields ( pmap actmap, pvehicle veh )
 {
    actmap->cleartemps ( 1 );
-   std::vector<int> dummy;
+   std::vector<MapCoordinate> dummy;
    findPath ( actmap, dummy, veh, actmap->xsize, actmap->ysize );  //this field does not exist...
    for ( Container::iterator i = visited.begin(); i != visited.end(); i++ )
       getfield ( (*i).h.m, (*i).h.n )->a.temp = 1;
@@ -277,7 +288,7 @@ void AStar::findAllAccessibleFields ( pmap actmap, pvehicle veh )
 }
 
 
-void AStar::findPath( pmap actmap, std::vector<int>& path, pvehicle veh, int x, int y )
+void AStar::findPath( pmap actmap, std::vector<MapCoordinate>& path, pvehicle veh, int x, int y )
 {
   findPath ( actmap, AStar::HexCoord ( veh->xpos, veh->ypos ), AStar::HexCoord ( x, y ), path, veh );
 }
@@ -285,7 +296,7 @@ void AStar::findPath( pmap actmap, std::vector<int>& path, pvehicle veh, int x, 
 
 
 
-void findPath( pmap actmap, std::vector<int>& path, pvehicle veh, int x, int y )
+void findPath( pmap actmap, std::vector<MapCoordinate>& path, pvehicle veh, int x, int y )
 {
   AStar as;
   as.findPath ( actmap, AStar::HexCoord ( veh->xpos, veh->ypos ), AStar::HexCoord ( x, y ), path, veh );

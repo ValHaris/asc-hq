@@ -1,6 +1,10 @@
-//     $Id: unitctrl.h,v 1.10 2000-09-25 13:25:55 mbickel Exp $
+//     $Id: unitctrl.h,v 1.11 2000-09-25 20:04:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/09/25 13:25:55  mbickel
+//      The AI can now change the height of units
+//      Heightchaning routines improved
+//
 //     Revision 1.9  2000/09/24 19:57:06  mbickel
 //      ChangeUnitHeight functions are now more powerful since they use
 //        UnitMovement on their own.
@@ -261,7 +265,7 @@ class VehicleMovement : public BaseVehicleMovement {
 
 class ChangeVehicleHeight : public BaseVehicleMovement {
               int status;
-              IntFieldList path1;
+              // IntFieldList path1;
            public:
               struct StartPosition {
                  int x;

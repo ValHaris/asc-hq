@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.59 2000-09-17 15:20:35 mbickel Exp $
+//     $Id: spfst.cpp,v 1.60 2000-09-25 20:04:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.59  2000/09/17 15:20:35  mbickel
+//      AI is now automatically invoked (depending on gameoptions)
+//      Some cleanup
+//
 //     Revision 1.58  2000/09/02 13:59:48  mbickel
 //      Worked on AI
 //      Started using doxygen
@@ -738,11 +742,14 @@ int          getdirection(    int      x1,
              a = 1; 
           else 
              a = 2; 
-       else 
+       else  // dx is 0
           if (dy < 0) 
              a = 0; 
-          else 
-             a = 3; 
+          else
+             if ( dy > 0 )
+                a = 3;
+             else
+                a = -1;
     return a; 
 
 

@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.33 2000-09-25 13:25:54 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.34 2000-09-25 20:04:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/09/25 13:25:54  mbickel
+//      The AI can now change the height of units
+//      Heightchaning routines improved
+//
 //     Revision 1.32  2000/09/24 19:57:06  mbickel
 //      ChangeUnitHeight functions are now more powerful since they use
 //        UnitMovement on their own.
@@ -191,7 +195,7 @@ int VehicleMovement :: available ( pvehicle veh ) const
 {
    if ( status == 0 )
      if ( veh )
-       if ( getfield ( veh->xpos, veh->ypos )->vehicle == veh )
+       if ( getfield ( veh->xpos, veh->ypos )->unitHere ( veh ) )
           if ( veh->getMovement() >= minmalq && veh->reactionfire.status == tvehicle::ReactionFire::off )
              if ( terrainaccessible ( getfield ( veh->xpos, veh->ypos ), veh ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
                 return 1;
@@ -1315,7 +1319,7 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int h
        npush ( newheight );
        newheight = vehicle->height;
        StartPosition& sp = reachableFields.getData ( x, y );
-       int stat = BaseVehicleMovement :: moveunitxy( sp.x, sp.y, path1 );
+       int stat = BaseVehicleMovement :: moveunitxy( sp.x, sp.y, path );
        npop ( newheight );
 
        stat = moveunitxy ( x, y, path );

@@ -1,6 +1,10 @@
-//     $Id: building_controls.h,v 1.1 2000-09-17 15:20:29 mbickel Exp $
+//     $Id: building_controls.h,v 1.2 2000-09-25 20:04:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/09/17 15:20:29  mbickel
+//      AI is now automatically invoked (depending on gameoptions)
+//      Some cleanup
+//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -119,6 +123,7 @@ class    ccontainercontrols
       }
       movementparams;
 
+      ContainerBase* baseContainer;
 };
 
 

@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.53 2000-09-25 13:25:54 mbickel Exp $
+//     $Id: typen.h,v 1.54 2000-09-25 20:04:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2000/09/25 13:25:54  mbickel
+//      The AI can now change the height of units
+//      Heightchaning routines improved
+//
 //     Revision 1.52  2000/09/24 19:57:06  mbickel
 //      ChangeUnitHeight functions are now more powerful since they use
 //        UnitMovement on their own.
@@ -595,7 +599,7 @@ class AiParameter {
            AiThreat threat;
            int value;
            int valueType;
-           enum { tsk_nothing, tsk_tactics, tsk_tactwait, tsk_stratwait, tsk_wait } task;
+           enum Task { tsk_nothing, tsk_tactics, tsk_tactwait, tsk_stratwait, tsk_wait, tsk_strategy } task;
 
            int xtogo;
            int ytogo;
@@ -623,10 +627,12 @@ class BaseAI {
 //////////////////////////////////////////////////////////////
 
 
-class Coordinate {
+class MapCoordinate {
          public:
             int x;
             int y;
+            MapCoordinate ( ) : x(-1), y(-1 ) {};
+            MapCoordinate ( int a, int b) : x(a), y(b ) {};
       };
 
 class SingleWeapon {
@@ -756,9 +762,19 @@ class tvehicletype {    // This structure does not have a fixed layout any more 
        ~tvehicletype ( );
 }; 
 
-class Vehicle { /*** Bei Aenderungen unbedingt Save/LoadGame und Konstruktor korrigieren !!! ***/
-  private:
-    pmap gamemap;
+/** The parent class of Vehicle and Building;
+    The name Container originates from Battle Isle, where everything that could load units
+    was a container
+*/
+class ContainerBase {
+   protected:
+      pmap gamemap;
+
+   public:
+      Vehicle*     loading[32];
+};
+
+class Vehicle : public ContainerBase {
   public:
     pvehicletype typ;          /*  vehicleart: z.B. Schwere Fusstruppe  */
     char         color; 
@@ -770,8 +786,7 @@ class Vehicle { /*** Bei Aenderungen unbedingt Save/LoadGame und Konstruktor kor
     int*         weapstrength;
     int          moredummy[3];
     Word         dummy;     
-    Vehicle*     loading[32];
-    char         experience;    // 0 .. 15 
+    char         experience;    // 0 .. 15
     char         attacked; 
     char         height;       /* BM */   /*  aktuelle Hoehe: z.B. Hochfliegend  */
    // char         movement;     /*  ?briggebliebene movement fuer diese Runde  */
@@ -930,7 +945,7 @@ class  tbuildingtype {
 }; 
 
 
-class  tbuilding {                         
+class  tbuilding : public ContainerBase {
     int lastenergyavail;
     int lastmaterialavail;
     int lastfuelavail;
@@ -939,8 +954,7 @@ class  tbuilding {
     tmunition         munitionsautoproduction; 
     unsigned char     color; 
     pvehicletype      production[32]; 
-    pvehicle          loading[32]; 
-    unsigned char     damage; 
+    unsigned char     damage;
 
     tresources   plus;
     tresources   maxplus;
@@ -1200,6 +1214,7 @@ class  tfield {
     int mineattacks ( const pvehicle veh );
     int mineowner ( void );
     void checkminetime ( int time );
+    bool unitHere ( const pvehicle veh );
 
     int   putmine ( int col, int typ, int strength );   // return 1 on success
     void  removemine ( int num ); // num == -1 : remove last mine
@@ -2054,7 +2069,9 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
  #define fielddistx 64
  #define fielddisty 24
  #define fielddisthalfx 32
- #define sidenum 6
+
+ //! the number of sides that a field has; is now fixed at 6;
+ const int sidenum = 6;
 #else
  #define maxmalq 12  
  #define minmalq 8

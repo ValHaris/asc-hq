@@ -6,7 +6,9 @@ TODO list for ASC:
     loaded faster the next time.
 3.  Clean up the transportcargo routines in mapeditor ( cancel function etc )
 5.  Optimize  int VehicleMovement :: getDistance ( int x, int y ) in unitctrl.cpp
-
+6.  Optimize beeline (shouldn't be iterative...)
+9.  Converting getfield()->vehicle == veh to getfield()->unitHere ( veh )
+    grep "> *vehicle *==" *.cpp
 11.  Fix comparisons between char and unsigned char that gcc warns about.
 13.  Fix delete[] void warnings 
      -> making a class for image data

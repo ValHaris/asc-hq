@@ -1,6 +1,10 @@
-//     $Id: artint.h,v 1.14 2000-09-25 13:25:52 mbickel Exp $
+//     $Id: artint.h,v 1.15 2000-09-25 20:04:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/09/25 13:25:52  mbickel
+//      The AI can now change the height of units
+//      Heightchaning routines improved
+//
 //     Revision 1.13  2000/09/17 15:17:44  mbickel
 //      some restructuring; moving units out of buildings
 //
@@ -79,6 +83,7 @@
 #include "typen.h"
 #include "spfst.h"
 #include "unitctrl.h"
+#include "building_controls.h"
 
 #ifdef __WATCOM_CPLUSPLUS__
  typedef less<int> lessint;
@@ -146,6 +151,21 @@
 
           private:
 
+            class AiResult {
+               public:
+                  int unitsMoved;
+                  int unitsWaiting;
+                  AiResult ( ) : unitsMoved ( 0 ), unitsWaiting ( 0 ) {};
+
+                  AiResult& operator+= ( const AiResult& a ) {
+                     unitsMoved += a.unitsMoved;
+                     unitsWaiting += a.unitsWaiting;
+                     return *this;
+                  };
+            };
+
+
+
             class TargetVector : public std::vector<MoveVariant*>	{
                public:
                   ~TargetVector() {
@@ -155,10 +175,12 @@
             };
 
 
-            void getAttacks ( const VehicleMovement& vm, pvehicle veh, TargetVector& tv );
+            void getAttacks ( VehicleMovement& vm, pvehicle veh, TargetVector& tv );
             void searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int moveDist );
-            void executeMoveAttack ( pvehicle veh, TargetVector& tv );
-            void moveToSavePlace ( pvehicle veh, VehicleMovement& vm );
+            AiResult executeMoveAttack ( pvehicle veh, TargetVector& tv );
+            int getDirForBestTacticsMove ( const pvehicle veh, TargetVector& tv );
+            MapCoordinate getDestination ( const pvehicle veh );
+            AiResult moveToSavePlace ( pvehicle veh, VehicleMovement& vm );
             int  getBestHeight ( const pvehicle veh );
 
             /** chenges a vehicles height
@@ -167,17 +189,24 @@
                          -1 = no space to change height
                          -2 = cannot change height here principially
             */
-            int changeVehicleHeight ( pvehicle veh, VehicleMovement* vm );
+            int changeVehicleHeight ( pvehicle veh, VehicleMovement* vm, int preferredDirection = -1 );
 
             void  calculateThreat ( pvehicletype vt);
             void  calculateThreat ( pvehicle eht );
             void  calculateThreat ( pbuilding bld );
 
             void  calculateAllThreats( void );
-            void  tactics( void );
-            void  strategy ( void );
-            void  buildings ( int process );
-            //void  container ( ccontainercontrols* cc );
+            AiResult  tactics( void );
+
+            /** a special path finding where fields occupied by units get an addidional movemalus.
+                This helps finding a path that is not thick with units and prevents units to queue all one after another
+            */
+            void findStratPath ( vector<MapCoordinate>& path, pvehicle veh, int x2, int y2 );
+
+            AiResult  strategy ( void );
+            AiResult  buildings ( int process );
+            AiResult  transports ( int process );
+            AiResult  container ( ccontainercontrols& cc );
             void  setup( void );
 
             void reset ( void );
@@ -215,12 +244,13 @@
                   void calculate ( void );
                   Section& getForCoordinate ( int xc, int yc );         //!< returns the section whose center is nearest to x,y
                   Section& getForPos ( int xn, int yn );                //!< returns the xth and yth section
-                  Section* getBest ( const pvehicle veh, int* xtogo, int* ytogo );
+                  Section* getBest ( const pvehicle veh, int* xtogo = NULL, int* ytogo = NULL );
                   Sections ( AI* _ai );
                   void reset( void );
             } sections;
             friend class Sections;
 
+            void checkKeys ( void );
 
 
            AiThreat& getFieldThreat ( int x, int y );

@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.29 2000-09-25 15:05:59 mbickel Exp $
+//     $Id: artint.cpp,v 1.30 2000-09-25 20:04:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/09/25 15:05:59  mbickel
+//      Some fixes for Watcom
+//
 //     Revision 1.28  2000/09/25 13:25:51  mbickel
 //      The AI can now change the height of units
 //      Heightchaning routines improved
@@ -180,13 +183,14 @@
 #include "attack.h"
 #include "gameoptions.h"
 #include "astar2.h"
+#include "sg.h"
 
 #include "building_controls.h"
 
 
 
 const int value_armorfactor = 100;
-const int value_weaponfactor = 70;
+const int value_weaponfactor = 3000;
 
 const int ccbt_repairfacility = 200;    //  basic threatvalues for buildings
 const int ccbt_hq = 10000;
@@ -312,7 +316,7 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( pvehiclety
                   for ( int e = (fzt->weapons->weapon[i].mindistance + maxmalq - 1)/ maxmalq; e <= fzt->weapons->weapon[i].maxdistance / maxmalq; e++ ) {    // the distance between two fields is maxmalq
                      d++; 
                      int n = int( weapDist.getWeapStrength( &fzt->weapons->weapon[i], e*maxmalq ) * fzt->weapons->weapon[i].maxstrength * af.strength_damage(getdamage()) * ( 1 + af.strength_experience(getexpirience())) );
-                     m += n / (2*(1+d)); 
+                     m += n / log10(10*d);
                   } 
                   if (getammunition(i) == 0) 
                      m /= 2; 
@@ -320,8 +324,10 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( pvehiclety
                   if ( (fzt->weapons->weapon[i].sourceheight & getheight()) == 0) 
                      m /= 2; 
 
+                  /*
                   if ( !(getheight() & ( 1 << j )))
                      m /= 2;
+                  */
 
                   if (m > weapthreat[j]) 
                      weapthreat[j] = m; 
@@ -347,7 +353,7 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( pvehiclety
 
 int          CalculateThreat_Vehicle :: getammunition( int i )
 {
-   return eht->munition[i];
+   return eht->ammo[i];
 }
 
 int          CalculateThreat_Vehicle :: getheight(void)
@@ -804,6 +810,7 @@ AI::Section* AI :: Sections :: getBest ( const pvehicle veh, int* xtogo, int* yt
 }
 
 
+
 int  AI :: getBestHeight ( const pvehicle veh )
 {
    int heightNum = 0;
@@ -815,19 +822,52 @@ int  AI :: getBestHeight ( const pvehicle veh )
 
    int bestHeight = -1;
    float bestHeightValue = minfloat;
+
+   float maxAvgFieldThreat = minfloat;
+   float minAvgFieldThreat = maxfloat;
+   float secminAvgFieldThreat = maxfloat;
+
+
+   for ( int k = 0; k < 8; k++ )
+      if ( veh->typ->height & ( 1 << k )) {
+         tvehicle v ( veh, NULL );
+         v.height = 1<<k;
+         float t = sections.getForCoordinate( v.xpos, v.ypos ).avgFieldThreat.threat[ v.aiparam[getPlayer()]->valueType ];
+
+         if ( maxAvgFieldThreat < t )
+            maxAvgFieldThreat = t;
+
+         if ( minAvgFieldThreat > t )
+            minAvgFieldThreat = t;
+
+         if ( t )
+           if ( secminAvgFieldThreat > t )
+              secminAvgFieldThreat = t;
+      }
+
+
    for ( int j = 0; j < 8; j++ )
       if ( veh->typ->height & ( 1 << j )) {
          tvehicle v ( veh, NULL );
          v.height = 1<<j;
          calculateThreat ( &v );
+         Section& sec = sections.getForCoordinate( v.xpos, v.ypos );
 
          float value = v.aiparam[getPlayer()]->value;
          if ( v.typ->movement[j] )
             value *=  log( v.typ->movement[j] );
 
-         float threat = sections.getForCoordinate( v.xpos, v.ypos ).avgFieldThreat.threat[ v.aiparam[getPlayer()]->valueType ];
-         if ( threat )
-            value /= threat;
+         float threat = sec.avgFieldThreat.threat[ v.aiparam[getPlayer()]->valueType ];
+         if ( minAvgFieldThreat ) {
+            if ( threat )
+               value *= ( log ( minAvgFieldThreat ) / log ( threat ) );
+         } else {
+            if ( secminAvgFieldThreat < maxfloat)
+               if ( threat )
+                  value *= ( log ( secminAvgFieldThreat ) / log ( threat ) );
+               else
+                  value *= 1.5; // no threat
+            }
 
          if ( value > bestHeightValue ) {
             bestHeightValue = value;
@@ -972,31 +1012,42 @@ bool operator > ( const AI::MoveVariant& mv1, const AI::MoveVariant& mv2 )
    return ( mv1.result > mv2.result || (mv1.result == mv2.result && mv1.moveDist < mv2.moveDist ));
 }
 
+
+
 bool moveVariantComp ( const AI::MoveVariant* mv1, const AI::MoveVariant* mv2 )
 {
    return ( mv1->result < mv2->result || (mv1->result == mv2->result && mv1->moveDist > mv2->moveDist ));
 }
 
-void AI::getAttacks ( const VehicleMovement& vm, pvehicle veh, TargetVector& tv )
+void AI::getAttacks ( VehicleMovement& vm, pvehicle veh, TargetVector& tv )
 {
+   if( vm.getStatus() != 0 && vm.getStatus() != 2 )
+      displaymessage ( "AI::getAttacks / invalid status of VehicleMovement !", 2 );
+
    int orgxpos = veh->xpos ;
    int orgypos = veh->ypos ;
 
-   if ( getfield ( veh->xpos, veh->ypos )->vehicle == veh )  // unit not inside a building or transport
+   if ( getfield ( veh->xpos, veh->ypos )->unitHere ( veh ) )  // unit not inside a building or transport
       searchTargets ( veh, veh->xpos, veh->ypos, tv, 0 );
 
    // Now we cycle through all fields that are reachable...
-   if ( !veh->typ->wait )
+   if ( !veh->typ->wait && vm.available ( veh ) ) {
+      if ( vm.getStatus() == 0 )
+         vm.execute ( veh, -1, -1, 0, -1, -1 );
+
       for ( int f = 0; f < vm.reachableFields.getFieldNum(); f++ )
          if ( !vm.reachableFields.getField( f )->vehicle && !vm.reachableFields.getField( f )->building ) {
              int xp, yp;
              vm.reachableFields.getFieldCoordinates ( f, &xp, &yp );
              searchTargets ( veh, xp, yp, tv, beeline ( xp, yp, orgxpos, orgypos ) );
           }
+   }
 }
 
-void AI::executeMoveAttack ( pvehicle veh, TargetVector& tv )
+AI::AiResult AI::executeMoveAttack ( pvehicle veh, TargetVector& tv )
 {
+   AiResult result;
+
    MoveVariant* mv = *max_element( tv.begin(), tv.end(), moveVariantComp );
 
    if ( mv->movex != veh->xpos || mv->movey != veh->ypos ) {
@@ -1023,14 +1074,55 @@ void AI::executeMoveAttack ( pvehicle veh, TargetVector& tv )
    if ( va.getStatus() != 1000 )
       displaymessage ( "AI :: tactics \n error in attack step 3 with unit %d", 1, veh->networkid );
 
+   result.unitsMoved ++;
+
    VehicleMovement vm3 ( mapDisplay, NULL );
    if ( vm3.available ( veh ))
-      moveToSavePlace ( veh, vm3 );
+      result += moveToSavePlace ( veh, vm3 );
+
+
+   return result;
+}
+
+int AI::getDirForBestTacticsMove ( const pvehicle veh, TargetVector& tv )
+{
+   if ( tv.size() <= 0 )
+      return -1;
+
+   MoveVariant* mv = *max_element( tv.begin(), tv.end(), moveVariantComp );
+   return getdirection ( veh->xpos, veh->ypos, mv->movex, mv->movey );
+}
+
+MapCoordinate AI::getDestination ( const pvehicle veh )
+{
+   AiParameter::Task task = veh->aiparam[ getPlayer() ]->task;
+   if ( task == AiParameter::tsk_nothing || task == AiParameter::tsk_tactics ) {
+      TargetVector tv;
+      VehicleMovement vm ( NULL, NULL );
+      getAttacks ( vm, veh, tv );
+
+      if ( tv.size() > 0 ) {
+
+         MoveVariant* mv = *max_element( tv.begin(), tv.end(), moveVariantComp );
+         return MapCoordinate ( mv->movex, mv->movey );
+      } else
+         task = AiParameter::tsk_strategy;
+   }
+
+   if ( task == AiParameter::tsk_strategy ) {
+      Section* sec = sections.getBest ( veh );
+      if ( sec )
+         return MapCoordinate ( sec->centerx, sec->centery );
+   }
+
+   return MapCoordinate ( veh->xpos, veh->ypos );
 }
 
 
-void AI::moveToSavePlace ( pvehicle veh, VehicleMovement& vm3 )
+AI::AiResult AI::moveToSavePlace ( pvehicle veh, VehicleMovement& vm3 )
 {
+   AiResult result;
+
    vm3.execute ( veh, -1, -1, 0, -1, -1 );
    if ( vm3.getStatus() != 2 )
       displaymessage ( "AI :: tactics \n error in movement3 step 0 with unit %d", 1, veh->networkid );
@@ -1039,8 +1131,8 @@ void AI::moveToSavePlace ( pvehicle veh, VehicleMovement& vm3 )
    int ytogo = veh->ypos;
    int threat = maxint;
 
-   if ( getfield ( veh->xpos, veh->ypos)->vehicle == veh ) {  // vehicle not in building / transport
-      threat = int( getFieldThreat ( veh->xpos, veh->ypos).threat[ veh->aiparam[ getPlayer()]->valueType] * 1.5 );
+   if ( getfield ( veh->xpos, veh->ypos)->unitHere ( veh ) ) {  // vehicle not in building / transport
+      threat = int( getFieldThreat ( veh->xpos, veh->ypos).threat[ veh->aiparam[ getPlayer()]->valueType] * 1.5 + 1);
        // multiplying with 1.5 to make this field a bit unattractive, to allow other units (for example buggies) to attack from this field to, since it is probably quite a good position (else it would not have been chosen)
    }
 
@@ -1068,11 +1160,14 @@ void AI::moveToSavePlace ( pvehicle veh, VehicleMovement& vm3 )
       vm3.execute ( NULL, xtogo, ytogo, 3, -1,  1 );
       if ( vm3.getStatus() != 1000 )
          displaymessage ( "AI :: tactics \n error in movement3 step 3 with unit %d", 1, veh->networkid );
+
+      result.unitsMoved++;
    }
+   return result;
 }
 
 
-int AI::changeVehicleHeight ( pvehicle veh, VehicleMovement* vm )
+int AI::changeVehicleHeight ( pvehicle veh, VehicleMovement* vm, int preferredDirection )
 {
    int bh = getBestHeight ( veh );
    if ( bh != veh->height && bh != -1 ) {
@@ -1098,11 +1193,43 @@ int AI::changeVehicleHeight ( pvehicle veh, VehicleMovement* vm )
                int bestx = -1;
                int besty = -1;
                int moveremain = minint;
-               for ( int i = 0; i < cvh->reachableFields.getFieldNum(); i++ )
-                  if ( cvh->reachableFields.getData ( i ).dist > moveremain ) {
-                     cvh->reachableFields.getFieldCoordinates ( i, &bestx, &besty );
-                     moveremain = cvh->reachableFields.getData( i ).dist;
+
+               if ( preferredDirection == -1 ) {
+                  tvehicle dummy ( veh, NULL );
+                  dummy.height = newheight;
+                  dummy.setMovement ( dummy.typ->movement[ log2 ( newheight )] );
+                  MapCoordinate mc = getDestination ( &dummy );
+                  preferredDirection = getdirection ( dummy.xpos, dummy.ypos, mc.x, mc.y );
+               }
+
+               for ( int i = 0; i < cvh->reachableFields.getFieldNum(); i++ ) {
+                  int newMoveRemain = cvh->reachableFields.getData ( i ).dist;
+
+                  // check if we move in the direction that should be moved to
+                  if ( preferredDirection != -1 ) {
+                     int xp, yp;
+                     cvh->reachableFields.getFieldCoordinates ( i, &xp, &yp );
+
+                     int dir = preferredDirection - getdirection ( veh->xpos, veh->ypos, xp, yp );
+                     if ( dir > sidenum/2 )
+                        dir -= sidenum;
+                     if ( dir < -sidenum/2 )
+                        dir += sidenum;
+
+                     dir = abs ( dir );
+                     // ok, now we have the directional difference in dir, with a range of 0 .. 3 ; 0 meaning moving in the preferred direction
+
+
+                     newMoveRemain -= (dir*2-3)* veh->typ->steigung*maxmalq / 3;
+                     // if dir==0, we subtract -steigung   => newMoveRemain is getting larger because we move in the right direction
+                     // if dir==3, we subtract +steigung
                   }
+
+                  if ( newMoveRemain > moveremain ) {
+                     cvh->reachableFields.getFieldCoordinates ( i, &bestx, &besty );
+                     moveremain = newMoveRemain;
+                  }
+               }
 
                if ( bestx != -1 && besty != -1 ) {
                   cvh->execute ( NULL, bestx, besty, 2, -1, -1 );
@@ -1135,12 +1262,11 @@ int AI::changeVehicleHeight ( pvehicle veh, VehicleMovement* vm )
 }
 
 
-void AI::tactics( void )
+AI::AiResult AI::tactics( void )
 {
-   displaymessage2("starting tactics ... ");
+   AiResult result;
 
-   int waitingUnits = 0;
-   int movedUnits = 0;
+   displaymessage2("starting tactics ... ");
 
    pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
    while ( veh ) {
@@ -1149,31 +1275,29 @@ void AI::tactics( void )
          displaymessage2("tact: unit %d moved", unitCounter );
 
          int stat = changeVehicleHeight ( veh, NULL );
-         if ( stat == -1 ) {
+         if ( stat == -1 ) { // couldn't change height due to blocked way or something similar
             veh->aiparam[ getPlayer() ]->task = AiParameter::tsk_wait;
-            waitingUnits++;
+            result.unitsWaiting++;
          } else {
 
             VehicleMovement vm ( NULL, NULL );
-            if ( vm.available ( veh )) {
-               vm.execute ( veh, -1, -1, 0, -1, -1 );
+            TargetVector tv;
+            getAttacks ( vm, veh, tv );
 
-               TargetVector tv;
-               getAttacks ( vm, veh, tv );
-
-               if ( tv.size() ) {
-                  executeMoveAttack ( veh, tv );
-                  veh->aiparam[ getPlayer() ]->task = AiParameter::tsk_tactics;
-                  movedUnits++;
-               } else
-                  veh->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
-
-            }
+            if ( tv.size() ) {
+               executeMoveAttack ( veh, tv );
+               veh->aiparam[ getPlayer() ]->task = AiParameter::tsk_tactics;
+               result.unitsMoved++;
+            } else
+               veh->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
          }
       }
       veh = veh->next;
+      checkKeys();
    }
    displaymessage2("tactics completed ... ");
+
+   return result;
 }
 
 /*
@@ -1189,12 +1313,82 @@ bool vehicleValueComp ( const pvehicle v1, const pvehicle v2 )
    return v1->aiparam[ v1->color/8 ]->value < v2->aiparam[ v1->color/8 ]->value;
 }
 
-void AI::buildings( int process )
+AI::AiResult  AI :: container ( ccontainercontrols& cc )
 {
-   displaymessage2("checking buildings ... ");
+   AiResult result;
 
-   int unitsMoved = 0;
-   int waitingUnits = 0;
+   // move idle units out
+   std::vector<pvehicle> idleUnits;
+   for ( int j= 0; j < 32; j++ ) {
+      pvehicle veh = cc.getloadedunit ( j );
+      if ( veh )
+         if ( veh->aiparam[ getPlayer() ]->task == AiParameter::tsk_nothing && cc.moveavail ( veh ))
+            idleUnits.push_back ( veh );
+   }
+   // move the most important unit first, to get the best position
+   sort ( idleUnits.begin(), idleUnits.end(), vehicleValueComp );
+
+   for ( std::vector<pvehicle>::iterator i = idleUnits.begin(); i != idleUnits.end(); i++ ) {
+      int simplyMove = 0;
+      if ( getBestHeight ( *i ) != (*i)->height ) {
+         VehicleMovement* vm = cc.movement ( *i );
+         int stat = changeVehicleHeight ( *i, vm );
+         if ( stat == -1 ) {
+            result.unitsWaiting++;
+            (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_wait;
+         } else {
+            if ( stat== -2 )
+               simplyMove = 1;
+            else {
+               result.unitsMoved++;
+               (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
+               if ( (*i)->getMovement() >= minmalq && !(*i)->attacked && (*i)->weapexist() )
+                  simplyMove = 1;
+               else {
+                  VehicleMovement vm ( mapDisplay, NULL );
+                  if ( vm.available ( *i ))
+                     moveToSavePlace ( *i, vm );
+               }
+            }
+         }
+      } else
+         simplyMove = 2;
+
+      if ( simplyMove ) {
+         // VehicleMovement* vm = bc.movement ( *i );
+         // auto_ptr<VehicleMovement> avm ( vm );
+         auto_ptr<VehicleMovement> vm ( cc.movement ( *i ) );
+
+         VehicleAttack va ( NULL, NULL );
+         int attack = 0;
+         if ( va.available ( *i )) {
+            TargetVector tv;
+            getAttacks ( *vm, *i, tv );
+
+            if ( tv.size() ) {
+               result += executeMoveAttack ( *i, tv );
+               (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_tactics;
+               attack = 1;
+            }
+
+         }
+         if ( !attack ) {
+            result += moveToSavePlace ( *i, *vm );
+            (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
+         }
+
+      }
+   }
+
+   return result;
+}
+
+
+AI::AiResult AI::buildings( int process )
+{
+   AiResult result;
+
+   displaymessage2("checking buildings ... ");
 
    int buildingCounter = 0;
    pbuilding bld = getMap()->player[ getPlayer() ].firstbuilding;
@@ -1205,86 +1399,76 @@ void AI::buildings( int process )
       cbuildingcontrols bc;
       bc.init ( bld );
 
-      // move idle units out of building
-      std::vector<pvehicle> idleUnits;
-      for ( int j= 0; j < 32; j++ ) {
-         pvehicle veh = bc.getloadedunit ( j );
-         if ( veh )
-            if ( veh->aiparam[ getPlayer() ]->task == AiParameter::tsk_nothing && bc.moveavail ( veh ))
-               idleUnits.push_back ( veh );
-      }
-      // move the most important unit first, to get the best position
-      sort ( idleUnits.begin(), idleUnits.end(), vehicleValueComp );
+      result += container ( bc );
 
-      for ( std::vector<pvehicle>::iterator i = idleUnits.begin(); i != idleUnits.end(); i++ ) {
-         int simplyMove = 0;
-         if ( getBestHeight ( *i ) != (*i)->height ) {
-            VehicleMovement* vm = bc.movement ( *i );
-            int stat = changeVehicleHeight ( *i, vm );
-            if ( stat == -1 ) {
-               waitingUnits++;
-               (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_wait;
-            } else {
-               if ( stat== -2 )
-                  simplyMove = 1;
-               else {
-                  unitsMoved++;
-                  (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
-                  if ( (*i)->getMovement() > minmalq && !(*i)->attacked )
-                     simplyMove = 1;
-                  else {
-                     VehicleMovement vm ( mapDisplay, NULL );
-                     if ( vm.available ( *i ))
-                        moveToSavePlace ( *i, vm );
-                  }
-               }
-            }
-         } else
-            simplyMove = 1;
-
-         if ( simplyMove ) {
-            // VehicleMovement* vm = bc.movement ( *i );
-            // auto_ptr<VehicleMovement> avm ( vm );
-            auto_ptr<VehicleMovement> vm ( bc.movement ( *i ) );
-
-            VehicleAttack va ( NULL, NULL );
-            int attack = 0;
-            if ( va.available ( *i )) {
-               TargetVector tv;
-               getAttacks ( *vm, *i, tv );
-
-               if ( tv.size() ) {
-                  executeMoveAttack ( *i, tv );
-                  (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_tactics;
-                  attack = 1;
-               }
-
-            }
-            if ( !attack ) {
-               moveToSavePlace ( *i, *vm );
-               (*i)->aiparam[ getPlayer() ]->task = AiParameter::tsk_nothing;
-            }
-
-         }
-      }
-
-
+      checkKeys();
       bld = bld->next;
    }
 
    displaymessage2("building check completed... ");
+   return result;
 }
 
 
-void AI::strategy( void )
+AI::AiResult AI::transports( int process )
 {
+   AiResult result;
+
+   displaymessage2("checking transports ... ");
+
+   int transportCounter = 0;
+   pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
+   while ( veh ) {
+      transportCounter++;
+      displaymessage2("processing transport %d", transportCounter );
+
+      ctransportcontrols tc;
+      tc.init ( veh );
+
+      result += container ( tc );
+
+      veh = veh->next;
+      checkKeys();
+   }
+
+   displaymessage2("transport check completed... ");
+   return result;
+}
+
+void AI::findStratPath ( vector<MapCoordinate>& path, pvehicle veh, int x, int y )
+{
+   class StratAStar : public AStar {
+         AI* ai;
+      protected:
+         virtual int getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle )
+         {
+            int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
+            if ( getfield ( x2, y2 )->vehicle && beeline ( vehicle->xpos, vehicle->ypos, x2, y2) < vehicle->getMovement())
+               cost += 2;
+            return cost;
+         };
+      public:
+         StratAStar ( AI* _ai ) : ai ( _ai ) {};
+   } stratAStar ( this );
+
+   stratAStar.findPath ( getMap(), AStar::HexCoord ( veh->xpos, veh->ypos ), AStar::HexCoord ( x, y ), path, veh );
+}
+
+
+AI::AiResult AI::strategy( void )
+{
+   AiResult result;
+
    int stratloop = 0;
-   int unitsMoved;
+   AiResult localResult;
    do {
-      unitsMoved = 0;
+      localResult.unitsMoved = 0;
+      localResult.unitsWaiting = 0;
+
       displaymessage2("starting strategy loop %d ... ", ++stratloop);
       pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
       while ( veh ) {
+
          if ( veh->weapexist() && veh->aiparam[ getPlayer() ]->task != AiParameter::tsk_tactics ) {
             int orgmovement = veh->getMovement();
             int orgxpos = veh->xpos ;
@@ -1298,15 +1482,14 @@ void AI::strategy( void )
                if ( sec ) {
                   vm.execute ( veh, -1, -1, 0, -1, -1 );
 
-                  std::vector<int> path;
-                  findPath ( getMap(), path, veh, x2, y2 );
-                  int x = veh->xpos;
-                  int y = veh->ypos;
-                  int xtogo = x;
-                  int ytogo = y;
+                  std::vector<MapCoordinate> path;
+                  findStratPath ( path, veh, x2, y2 );
+                  int xtogo = veh->xpos;
+                  int ytogo = veh->ypos;
 
-                  for ( int i = path.size()-1; i >= 0 ; i-- ) {
-                     getnextfield ( x, y, path[i] );
+                  for ( int i = 0; i < path.size(); i++ ) {
+                     int x = path[i].x;
+                     int y = path[i].y;
 
                      pfield fld = getfield ( x, y );
                      if ( !fld)
@@ -1322,9 +1505,6 @@ void AI::strategy( void )
                   if ( xtogo != veh->xpos || ytogo != veh->ypos ) {
                      AiParameter& aip = *veh->aiparam[getPlayer()];
 
-                     aip.xtogo = x;
-                     aip.ytogo = y;
-
                      vm.execute ( NULL, xtogo, ytogo, 2, -1, -1 );
                      if ( vm.getStatus() != 3 )
                         displaymessage ( "AI :: strategy \n error in movement step 2 with unit %d", 1, veh->networkid );
@@ -1333,22 +1513,43 @@ void AI::strategy( void )
                      if ( vm.getStatus() != 1000 )
                         displaymessage ( "AI :: strategy \n error in movement step 3 with unit %d", 1, veh->networkid );
 
-                     unitsMoved++;
+                     localResult.unitsMoved++;
+
                   }
 
                }
             }
          }
+
          veh = veh->next;
+         checkKeys();
       }
-   } while ( unitsMoved );
+      result += localResult;
+   } while ( localResult.unitsMoved );
 
    displaymessage2("strategy completed ... ");
+
+   return result;
+}
+
+
+void AI::checkKeys ( void )
+{
+   if ( keypress() ) {
+      tkey k = r_key();
+      if ( k == ct_esc ) {
+         mapDisplay = NULL;
+         tlockdispspfld a;
+         repaintdisplay();
+      }
+   }
 }
 
 
 void AI:: run ( void )
 {
+   cursor.hide();
+
    unitCounter = 0;
    _isRunning = true;
 
@@ -1357,10 +1558,14 @@ void AI:: run ( void )
    tempsvisible = true;
 
    buildings( 3 );
+   transports ( 3 );
    tactics();
    strategy();
    buildings( 1 );
+   transports ( 3 );
    _isRunning = false;
+   if ( !mapDisplay )
+      displaymap();
 }
 
 bool AI :: isRunning ( void )

@@ -1,6 +1,10 @@
-//     $Id: spfst.h,v 1.24 2000-09-17 15:20:37 mbickel Exp $
+//     $Id: spfst.h,v 1.25 2000-09-25 20:04:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/09/17 15:20:37  mbickel
+//      AI is now automatically invoked (depending on gameoptions)
+//      Some cleanup
+//
 //     Revision 1.23  2000/09/07 15:49:46  mbickel
 //      some cleanup and documentation
 //
@@ -326,6 +330,9 @@ extern void  getnextfielddir(int &    x,
                              int direc,
                              int sdir);
 
+/** gets the direction from x1/y1 to x2/y2
+  \returns -1 if the fields are identical
+*/
 extern int   getdirection(    int      x1,
                               int      y1,
                               int      x2,

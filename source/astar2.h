@@ -8,7 +8,7 @@
 */
 
 
- class AStar {
+class AStar {
        pmap tempsMarked;
     protected:
        virtual int getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle );
@@ -36,8 +36,8 @@
 
        Container visited;
 
-       void findPath( pmap actmap, HexCoord A, HexCoord B, std::vector<int>& path, pvehicle veh );
-       void findPath( pmap actmap, std::vector<int>& path, pvehicle veh, int x, int y );
+       void findPath( pmap actmap, HexCoord A, HexCoord B, std::vector<MapCoordinate>& path, pvehicle veh );
+       void findPath( pmap actmap, std::vector<MapCoordinate>& path, pvehicle veh, int x, int y );
        void findAllAccessibleFields ( pmap actmap, pvehicle veh );  // all accessible fields will have a.temp set to 1
        bool fieldVisited ( int x, int y);
        AStar ( void );
@@ -46,7 +46,7 @@
 
 bool operator < ( const AStar::Node& a, const AStar::Node& b );
 
- //! finding a path for unit veh to position x, y on map actmap. The path is copied to path in REVERSE ORDER ! (path[0] is the last field)
- extern void findPath( pmap actmap, std::vector<int>& path, pvehicle veh, int x, int y );
+ //! finding a path for unit veh to position x, y on map actmap.
+extern void findPath( pmap actmap, std::vector<MapCoordinate>& path, pvehicle veh, int x, int y );
 
 #endif

@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.49 2000-09-25 15:06:00 mbickel Exp $
+//     $Id: typen.cpp,v 1.50 2000-09-25 20:04:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.49  2000/09/25 15:06:00  mbickel
+//      Some fixes for Watcom
+//
 //     Revision 1.48  2000/09/25 13:25:53  mbickel
 //      The AI can now change the height of units
 //      Heightchaning routines improved
@@ -369,6 +372,15 @@ int  tobjectcontainer :: checkforemptyness ( void )
     return 1;
 */
 
+}
+
+bool tfield :: unitHere ( const pvehicle veh )
+{
+   if ( vehicle == veh )
+      return true;
+   if ( vehicle && veh && vehicle->networkid == veh->networkid )
+      return true;
+   return false;
 }
 
 int tfield :: getweather ( void )

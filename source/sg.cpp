@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.95 2000-09-24 19:57:04 mbickel Exp $
+//     $Id: sg.cpp,v 1.96 2000-09-25 20:04:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.95  2000/09/24 19:57:04  mbickel
+//      ChangeUnitHeight functions are now more powerful since they use
+//        UnitMovement on their own.
+//
 //     Revision 1.94  2000/09/17 15:20:34  mbickel
 //      AI is now automatically invoked (depending on gameoptions)
 //      Some cleanup
@@ -1499,14 +1503,18 @@ void         repaintdisplay(void)
    if ( ms == 2 )
       mousevisible ( false );
 
-   if ( mapexist )
+   int cv = cursor.an;
+
+   if ( mapexist && cv )
       cursor.hide(); 
    backgroundpict.paint(); 
    setvgapalette256(pal); 
 
    if ( mapexist ) {
-      displaymap(); 
-      cursor.show(); 
+      displaymap();
+
+      if ( cv )
+         cursor.show();
    }
 
    pd.barstatus = false;
@@ -2468,7 +2476,7 @@ void  mainloop ( void )
                              veh = getactfield()->vehicle;
                           } else {
                              actmap->cleartemps ( 7 );
-                             std::vector<int> path;
+                             std::vector<MapCoordinate> path;
                              AStar ast;
                              ast.findPath ( actmap, path, veh, getxpos(), getypos() );
                              int x = veh->xpos;

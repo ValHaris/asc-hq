@@ -1,6 +1,9 @@
-//     $Id: building.cpp,v 1.51 2000-09-17 15:16:10 mbickel Exp $
+//     $Id: building.cpp,v 1.52 2000-09-25 20:04:35 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.51  2000/09/17 15:16:10  mbickel
+//      reformatted the whole file with Astyle
+//
 //     Revision 1.50  2000/08/30 14:45:05  mbickel
 //      ASC compiles and links with GCC again...
 //
@@ -1456,6 +1459,7 @@ cbuildingcontrols :: cbuildingcontrols (void)
 void  cbuildingcontrols :: init (pbuilding bldng)
 {
    building = bldng;
+   baseContainer = bldng;
 };
 
 
@@ -1985,6 +1989,7 @@ ctransportcontrols :: ctransportcontrols (void)
 void  ctransportcontrols :: init (pvehicle eht)
 {
    vehicle = eht;
+   baseContainer = eht;
 };
 
 int    ctransportcontrols :: getHeight ( void )
