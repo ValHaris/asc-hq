@@ -1,6 +1,9 @@
-//     $Id: unitctrl.h,v 1.31 2003-02-27 16:12:46 mbickel Exp $
+//     $Id: unitctrl.h,v 1.32 2003-03-07 17:11:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2003/02/27 16:12:46  mbickel
+//      Restructuring of new pathfinding code completed
+//
 //     Revision 1.30  2003/02/19 19:47:26  mbickel
 //      Completely rewrote Pathfinding code
 //      Wind not different any more on different levels of height
@@ -266,6 +269,7 @@ class BaseVehicleMovement : public VehicleAction {
               int status;
            public:
               BaseVehicleMovement ( VehicleActionType _actionType, PPendingVehicleActions _pva, MapDisplayInterface* md ) : VehicleAction ( _actionType, _pva ),attackedByReactionFire(false), mapDisplay(md), status(0) {};
+              BaseVehicleMovement ( MapDisplayInterface* md ) : VehicleAction ( vat_move, NULL ),attackedByReactionFire(false), mapDisplay(md), status(0) {};
               AStar3D::Path path;
               int execute ( pvehicle veh, int x, int y, int step, int height, int noInterrupt );
               bool attackedByReactionFire;

@@ -158,10 +158,12 @@ class AStar3D {
 
        void nodeVisited ( const Node& n, HexDirection direc, Container& open, int prevHeight = -10, int heightChangeDist = 0 );
 
-       Container visited;
 
     public:
        AStar3D ( pmap actmap, pvehicle veh, bool markTemps_ = true, int maxDistance = maxint );
+
+       //! the reachable fields 
+       Container visited;
 
        //! the search can be restricted to certain operations
        void registerOperationLimiter( OperationLimiter* ol ) { operationLimiter = ol; };

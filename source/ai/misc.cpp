@@ -353,7 +353,11 @@ AI::AiResult  AI :: container ( ccontainercontrols& cc )
             int attack = 0;
             if ( va.available ( *i )) {
                TargetVector tv;
-               getAttacks ( *vm, *i, tv, 0 );
+
+               AStar3D ast ( getMap(), *i, false, (*i)->maxMovement() );
+               ast.findAllAccessibleFields ();
+
+               getAttacks ( ast, *i, tv, 0 );
 
                if ( tv.size() ) {
                   AiResult res = executeMoveAttack ( *i, tv );

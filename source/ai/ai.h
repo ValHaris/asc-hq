@@ -3,9 +3,16 @@
 */
 
 
-//     $Id: ai.h,v 1.13 2002-12-12 11:34:19 mbickel Exp $
+//     $Id: ai.h,v 1.14 2003-03-07 17:11:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2002/12/12 11:34:19  mbickel
+//      Fixed: ai crashing when weapon has no ammo
+//      Fixed: ASC crashed when loading game with ID not found
+//      Fixed: more ai problems
+//      AI now faster
+//      Fixed: removing objects overfill a units tank
+//
 //     Revision 1.12  2002/03/19 20:38:57  mbickel
 //      Some cleanup and documentation in dlg_box
 //      Fixed some type assignment errors
@@ -328,7 +335,7 @@
                   int orgDamage;
                   int damageAfterMove;
                   int damageAfterAttack;
-                  int movex, movey;
+                  MapCoordinate3D movePos;
                   int attackx, attacky;
                   pvehicle enemy;
                   pvehicle attacker;
@@ -377,8 +384,8 @@
              */
             int moveUnit ( pvehicle veh, const AStar3D::Path& path );
 
-            void getAttacks ( VehicleMovement& vm, pvehicle veh, TargetVector& tv, int hemmingBonus );
-            void searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int moveDist, VehicleMovement& vm, int hemmingBonus );
+            void getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBonus );
+            void searchTargets ( pvehicle veh, const MapCoordinate3D& pos, TargetVector& tl, int moveDist, AStar3D& vm, int hemmingBonus );
             AiResult executeMoveAttack ( pvehicle veh, TargetVector& tv );
             int getDirForBestTacticsMove ( const pvehicle veh, TargetVector& tv );
             MapCoordinate getDestination ( const pvehicle veh );

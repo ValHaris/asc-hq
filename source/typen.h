@@ -1,6 +1,9 @@
-//     $Id: typen.h,v 1.122 2003-02-27 16:12:45 mbickel Exp $
+//     $Id: typen.h,v 1.123 2003-03-07 17:11:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.122  2003/02/27 16:12:45  mbickel
+//      Restructuring of new pathfinding code completed
+//
 //     Revision 1.121  2003/02/19 21:18:26  mbickel
 //      Updated weaponguide
 //      compilation fixed
@@ -495,6 +498,7 @@ class MapCoordinate3D : public MapCoordinate {
             MapCoordinate3D ( const MapCoordinate& mc, int bitmappedHeight ) : MapCoordinate ( mc ), z ( log2(bitmappedHeight) ) {};
             void setnum ( int _x, int _y, int numericalz ) { x = _x; y = _y; z = numericalz; };
             bool operator== ( const MapCoordinate3D& mc ) const { return y == mc.y && x == mc.x && (z == mc.z || z == -2 || mc.z == -2);};
+            bool operator!= ( const MapCoordinate3D& mc ) const { return (mc.x != x) || (mc.y != y) || (mc.z != z); };
             void write( tnstream& stream ) const { stream.writeInt ( 3500 ); stream.writeInt ( z ); MapCoordinate::write( stream ); };
             void read( tnstream& stream ) {
                stream.readInt ( );
