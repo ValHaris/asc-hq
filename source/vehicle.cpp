@@ -945,6 +945,17 @@ void Vehicle :: removeview ( void )
 }
 
 
+void Vehicle :: postAttack()
+{
+   attacked = true;
+   if ( functions & cf_moveafterattack )
+      decreaseMovement ( maxMovement() * attackmovecost / 100 );
+   else
+      if ( reactionfire.getStatus() == ReactionFire::off )
+         setMovement ( 0 );
+}
+
+
 class tsearchforminablefields: public SearchFields {
       int shareview;
     public:

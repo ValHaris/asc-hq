@@ -172,6 +172,20 @@ MapNetwork :: ~MapNetwork ()
 }
 
 
+
+void MapNetwork :: searchAllVehiclesNextToBuildings ( int player )
+{
+   pass++;
+   for ( tmap::Player::VehicleList::iterator j = actmap->player[player].vehicleList.begin(); j != actmap->player[player].vehicleList.end(); j++ ) {
+      MapCoordinate mc = (*j)->getPosition();
+      for ( int s = 0; s < sidenum; s++ ) {
+         pbuilding bld = actmap->getField ( getNeighbouringFieldCoordinate ( mc, s ))->building;
+         if ( bld && bld->color == (*j)->color )
+            checkvehicle ( *j );
+      }
+   }
+}
+
 void MapNetwork :: start ( int x, int y )
 {
    if ( globalsearch() == 2 ) {
@@ -181,14 +195,8 @@ void MapNetwork :: start ( int x, int y )
             for ( tmap::Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); j++ )
                checkbuilding(*j);
 
-
-
-
-            if ( !searchfinished() ) {
-               pass++;
-               for ( tmap::Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); j++ )
-                  checkvehicle ( *j );
-            }
+            // if ( !searchfinished() )
+            searchAllVehiclesNextToBuildings ( i );
 
          }
    } else 
@@ -355,6 +363,9 @@ void GetResource :: start ( int x, int y )
 
       if ( !queryonly )
          actmap->bi_resource[player].resource( resourcetype ) -= got;
+
+      if ( resourcetype == 0 )
+         searchAllVehiclesNextToBuildings ( player );
 
    } else
       MapNetwork :: start ( x, y );
@@ -614,9 +625,11 @@ int ResourceChangeNet :: getresource ( int x, int y, int resource, int _player, 
 
 
 void GetResourcePlus :: checkvehicle ( pvehicle v )
-{
-   if ( v->getGeneratorStatus() )
-      got += v->typ->tank.energy;
+{/*
+   if ( resourcetype == 0 )
+      if ( v->getGeneratorStatus() )
+         got += v->typ->tank.energy;
+         */
 }
 
 

@@ -212,6 +212,9 @@
     void setGeneratorStatus( bool status );
     bool getGeneratorStatus () const { return generatoractive; };
 
+    //! callback that is called after the unit has attacked
+    void postAttack();
+
     /** adds the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( pmap, int)
         \sa viewcalculation.cpp */
     void addview ( void );
@@ -254,7 +257,6 @@
         previously written with #write) and returns this new unit.
     */
     static Vehicle* newFromStream ( pmap gamemap, tnstream& stream );
-
 
     /** replaces the parameters of the unit by the ones form the stream. The VehicleType on
         the stream and the current one must be the same!

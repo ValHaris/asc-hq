@@ -151,7 +151,7 @@ char*         tdashboard:: str_2 ( int num )
 }
 
 
-void         tdashboard::paintweaponammount(int h, int num, int max )
+void         tdashboard::paintweaponammount(int h, int num, int max, bool dash )
 {
       word         w;
 
@@ -167,7 +167,10 @@ void         tdashboard::paintweaponammount(int h, int num, int max )
       activefontsettings.background = 255;
       activefontsettings.length = 19;
 
-      showtext2c( str_2( num ), agmp->resolutionx - ( 640 - 552), 93 + h * 13);
+      if ( dash )
+         showtext2c( "-", agmp->resolutionx - ( 640 - 552), 93 + h * 13);
+      else
+         showtext2c( str_2( num ), agmp->resolutionx - ( 640 - 552), 93 + h * 13);
 }
 
 
@@ -272,7 +275,11 @@ void         tdashboard::paintweapons(void)
                 putimage ( xp, 93 + k * 13, xlatpict ( &xlattables.light, icons.unitinfoguiweapons[ 9 ] ));
              else
                 putimage ( xp, 93 + k * 13, icons.unitinfoguiweapons[ 9 ] );
-              paintweaponammount ( k, ( vehicle ? vehicle->tank.energy : vt->tank.energy ), vt->tank.energy );
+
+              if ( vehicle && vehicle->getGeneratorStatus() )
+                  paintweaponammount ( k, ( vehicle ? vehicle->tank.energy : vt->tank.energy ), vt->tank.energy );
+              else
+                  paintweaponammount ( k, 0, vt->tank.energy, true );
               k--;
           }
        }

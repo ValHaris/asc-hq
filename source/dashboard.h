@@ -52,7 +52,7 @@
                        void         painttank(void);
                        void         paintweapon( int h, int num, int strength, const SingleWeapon  *weap );
                        void         paintweapons(void);
-                       void         paintweaponammount( int h, int num, int max );
+                       void         paintweaponammount( int h, int num, int max, bool dash = false );
                        void         paintdamage(void);
                        void         paintexperience(void);
                        void         paintmovement(void);

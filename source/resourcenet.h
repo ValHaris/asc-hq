@@ -23,6 +23,7 @@
 #ifndef resourcenet_h_included
  #define resourcenet_h_included
 
+//! Base class for the management of resource networks and globally stored resources
 class MapNetwork {
                 static int instancesrunning;
              protected:
@@ -44,6 +45,7 @@ class MapNetwork {
                 virtual void searchbuilding ( int x, int y );
                 virtual void searchvehicle  ( int x, int y );
                 virtual void searchfield ( int x, int y, int dir );
+                void searchAllVehiclesNextToBuildings ( int player );
              public:
                 virtual void start ( int x, int y );
                 MapNetwork ( int checkInstances = 1 );

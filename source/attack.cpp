@@ -3,9 +3,13 @@
 */
 
 
-//     $Id: attack.cpp,v 1.52 2001-10-16 19:58:19 mbickel Exp $
+//     $Id: attack.cpp,v 1.53 2001-10-22 18:22:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2001/10/16 19:58:19  mbickel
+//      Added title screen for mapeditor
+//      Updated source documentation
+//
 //     Revision 1.51  2001/10/03 20:56:06  mbickel
 //      Updated data files
 //      Updated online help
@@ -645,11 +649,7 @@ void tunitattacksunit :: setresult ( void )
    if ( _attackingunit->reactionfire.getStatus() >= Vehicle::ReactionFire::ready )
       _attackingunit->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  dv.color );
 
-   _attackingunit->attacked = true;
-   if ( _attackingunit->functions & cf_moveafterattack )
-      _attackingunit->decreaseMovement ( _attackingunit->maxMovement() * attackmovecost / 100 );
-   else
-      _attackingunit->setMovement ( 0 );
+   _attackingunit->postAttack();
 
    _attackedunit->damage    = dv.damage;
    _attackingunit->damage    = av.damage;
@@ -781,12 +781,7 @@ void tunitattacksbuilding :: setresult ( void )
    // _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
-   _attackingunit->attacked = true;
-   if ( _attackingunit->functions & cf_moveafterattack )
-      _attackingunit->decreaseMovement ( _attackingunit->maxMovement() * attackmovecost / 100 );
-   else
-      _attackingunit->setMovement ( 0 );
-
+   _attackingunit->postAttack();
 
    _attackedbuilding->damage    = dv.damage;
 
@@ -1029,13 +1024,7 @@ void tunitattacksobject :: setresult ( void )
    // _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
-   _attackingunit->attacked = true;
-
-   if ( _attackingunit->functions & cf_moveafterattack )
-      _attackingunit->decreaseMovement ( _attackingunit->maxMovement() * attackmovecost / 100 );
-   else
-      _attackingunit->setMovement ( 0 );
-
+   _attackingunit->postAttack();
 
    _obji->damage    = dv.damage;
 

@@ -3,9 +3,13 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.117 2001-10-11 10:41:05 mbickel Exp $
+//     $Id: controls.cpp,v 1.118 2001-10-22 18:22:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.117  2001/10/11 10:41:05  mbickel
+//      Restructured platform fileio handling
+//      Added map archival information to mapeditor
+//
 //     Revision 1.116  2001/10/08 14:44:22  mbickel
 //      Some cleanup
 //
@@ -1421,6 +1425,8 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
             if ( atw->count && (ul->eht->reactionfire.enemiesAttackable & (1 << (vehicle->color / 8)))) {
 
                int ad1, ad2, dd1, dd2;
+               int ulex = ul->eht->xpos;
+               int uley = ul->eht->ypos;
 
                int strength = 0;
                int num;
@@ -1468,7 +1474,7 @@ int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
 
                battle.setresult();
 
-               logtoreplayinfo ( rpl_reactionfire, ul->eht->xpos, ul->eht->ypos, x, y, ad1, ad2, dd1, dd2, atw->num[num] );
+               logtoreplayinfo ( rpl_reactionfire, ulex, uley, x, y, ad1, ad2, dd1, dd2, atw->num[num] );
 
                dashboard.x = 0xffff;
                ul->eht->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  (vehicle->color / 8) );
@@ -2231,7 +2237,7 @@ int   tprocessminingfields :: setup ( pbuilding bld, int& mm, int cm, int& mf, i
    mm = materialgot * bld->typ->efficiencymaterial / 1024;
    mf = fuelgot     * bld->typ->efficiencyfuel     / 1024;
 
-   if ( abbuch ) {
+   if ( abbuch && orgworktodo ) {
       int perc = 1000 * ( workbeforestart - worktodo ) / orgworktodo;
       for ( int r = 0; r < 3; r++ )
          if ( bld->plus.resource(r) < 0 ) {
