@@ -1577,7 +1577,7 @@ void execuseraction ( tuseractions action )
                             if ( !actmap->player[ actmap->actplayer ].ai )
                                actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
-                            if ( AI* ai = static_cast<AI*>( actmap->player[ actmap->actplayer ].ai )) {
+                            if ( AI* ai = dynamic_cast<AI*>( actmap->player[ actmap->actplayer ].ai )) {
                                savegame ( "ai-bench-start.sav" );
                                ai->run( true );
                             }
