@@ -28,6 +28,36 @@
 	      <property name="blend" value="0"/>
       </object>
     </widget>    
+    <widget>
+      <type value="Emboss"/>
+	   <object>
+	      <name value="ThemeWidget"/>
+	      <filename name="background" value="none"/>
+	      <color name="textcolor" value="0x00FFFFFF"/>
+	      <property name="backmode" value="TILE"/>
+	      <property name="blend" value="150"/>     
+	       <gradient name="gradient"
+                                color0="0x00B0B1B6"
+                                color1="0x0083838D"
+                                color2="0x007B7B83"
+                                color3="0x00585765"/>
+	      <property name="bordersize" value="1"/>
+      </object>
+    </widget>    
+    <widget>
+      <type value="EmbossIn"/>
+	   <object>
+	      <name value="ThemeWidget"/>
+	      <filename name="background" value="none"/>
+	      <color name="textcolor" value="0x00FFFFFF"/>
+	      <property name="backmode" value="TILE"/>
+	      <property name="blend" value="150"/>     
+	      <property name="bordersize" value="1"/>
+	      <property name="bordercolor0" value="0x0000FF00"/>
+	      <property name="bordercolor1" value="0x00FFFFFF"/>
+      </object>
+    </widget>    
+
 
     <widget>
 	<type value="Button"/>
@@ -266,7 +296,7 @@
 	    <filename name="background" value="asc/top_grey.bmp"/>
 	    <property name="backmode" value="TILE"/>
 	    <property name="blend" value="0"/>
-	    <property name="bordersize" value="1"/>
+	    <property name="bordersize" value="10"/>
 	</object>
 	<object>
 	    <name value="CloseButton"/>
@@ -318,6 +348,14 @@
 	    <property name="transparency1" value="0"/>
 	    <property name="transparency2" value="0"/>
 	</object>
+ 	<object>
+	      <name value="ThemeWidget"/>
+	      <filename name="background" value="asc/dialog_background2.png"/>
+	      <color name="textcolor" value="0x00FFFFFF"/>
+	      <property name="backmode" value="TILE"/>
+	      <gradient name="gradient" color0="0x00FF7b56" color1="0x00737b56" color2="0x00737b56" color3="0x00737b56"/>
+	      <property name="blend" value="0"/>
+      </object>
      </widget>
 
 	<widget>

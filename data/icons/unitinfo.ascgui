@@ -1,0 +1,47 @@
+panel {
+   WidgetNum = 3
+   Widget0 {
+      type = area
+      x = 10
+      y = 20
+      x2 = -10
+      height = 60
+      
+      WidgetNum = 1
+      Widget0 {
+        x = 0
+	y = 0
+	type = specialInput
+	name = weapinfo
+      }	Widget0 
+   } Widget0
+
+   Widget1 {
+      type = statictext
+      x = 10
+      y = 100
+      text = Hallo Welt
+   } Widget1
+
+   Widget2 {
+      type = area
+      style = EmbossIn
+      x = 10
+      y = 90
+      x2 = -10
+      height = 30
+
+      WidgetNum = 1      
+      Widget0 {
+         type = textoutput
+         x = 5
+         y = 5
+	 x2 = -5
+	 y2 = -5
+         name = unittypename
+      } Widget0
+   } Widget2
+
+
+   
+} panel

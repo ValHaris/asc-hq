@@ -1,0 +1,18 @@
+panel {
+   WidgetNum = 1
+   Widget0 {
+      type = image
+      x = 10
+      y = 2
+      filename = windrose.png
+      
+      WidgetNum = 1
+      Widget0 {
+        x = 0
+	y = 0
+	type = specialDisplay
+	name = winddir
+      }	Widget0 
+   } Widget0
+   
+} panel

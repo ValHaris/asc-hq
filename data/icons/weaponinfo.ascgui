@@ -1,0 +1,6 @@
+panel {
+   width = 50
+   height = 300
+   WidgetNum = 0
+  
+} panel
