@@ -13,50 +13,27 @@
 <P>documentation<P>
 <H2>The Source</H2>
 </CENTER>
-I started writing the program and designed the basic game system in 1994 using Borland Pascal as the programming language. In 1995 I started using object orientated programming and in 1996 I converted the whole project to Watcom C/C++. If you look at the source you will "see" this history. If I started such a project now from scratch I would design it completely different (for example a client / server design and everything much more object oriented). But we have the project as it is and are trying to improve it in that direction without rewriting it from scratch.<P>
+I started writing the program and designed the basic game system in 1994 using Borland Pascal as the programming language. In 1995 I started using object orientated programming and in 1996 I converted the whole project to Watcom C/C++. We started the port to GCC and Linux in 1999. If you look at the source you will "see" this history. If I started such a project now from scratch I would design it completely different (for example a client / server design and everything much more object oriented). But we have the project as it is and are trying to improve it in that direction without rewriting it from scratch.<P>
 
-The source code is not very well structured and documented. I always preferred writing cool new features instead of cleaning up the code. This is no problem as long as I'm the only person working on the source code (except the map editor which is primarily written by Marc Schellenberger).
-But as soon as other people are joining the development I intend to change it. Don't hesitate to <A HREF="contact.htm">contact me</A> if you have any questions regarding the source code or anything else about the game.<P>
+The source code is not very well structured and documented. I always preferred writing cool new features instead of cleaning up the code :-) <BR>
+We are going to improve this gradually. Don't hesitate to <A HREF="contact.htm">contact us</A> if you have any questions regarding the source code or anything else about the game.<P>
 
 
 Another "historical" thing about the source code is the language (not the programming language) that was used for it. Since we did not intend to release the source code we used a mixture of German and English for variable- and function names and avoided writing comments and those that we have are mostly in German. We have now run several translation passes through the code to translate it to English. The global interfaces should be completely in English now, but several local variables may still be in German. Since we run the translation through the code by a source code wide "search and replace" there are now some comments and perhaps a few code elements that were negatively affected by it and sound quite funny.<P>
 
 <H3>Required Tools</H3>
+<H4>for building the DOS version</H4>
 We are developing the project with Watcom C/C++ Version 10.6 and Version 11.0b. The later should be preferred because we make use of the binary trees from the STL to speed up the access to certain items. The project files for the Watcom IDE are included.<P>
 The assembler files (with the exception of <TT>RDTSC.ASM</TT>) can not be assembled by WASM since it does not support the high level language interfaces that TASM provides. We are using TASM 3.2 and the file <TT>TSM.BAT</TT> that contains the necessary switches for it is included. But since the Assembler files are quite stable and usually do not need to be build again we also provide their assembled <TT>*.OBJ</TT> files to make the building of the project possible without having TASM.<P>
 
 As host platform for the development we use OS/2 and as target platform (you should have already noticed that) DOS with DOS4GW as 32bit extender. It should be no problem to develop with Win9x as host platform with Watcom C/C++ except that debugging might be a bit problematic, but that's neither our not Watcom's fault (why is Microsoft too stupid to implement DPMI 1.0 ??).<P>
 
+<H4>for building the Linux version</H4>
+Well, nothing special about that. We build ASC with the standard GNU development tools. Refer to INSTALL for (generic) build instructions.
+
+
 <H3>Porting ASC</H3>
-Although I have never programmed any graphical application for a platform other than DOS I believe it should be not very difficult to port ASC to another platform. Linux and OS/2 are the platforms that I would like to be supported and there are probably quite a lot of people who would prefer a Windows version.<P>
-
-The platform specific aspects of ASC are in independent source files:
-<DL>
-
-<DT><TT>KEYBP.CPP</TT>
-<DD>contains the keyboard input routines. For the DOS-Version we can compile ASC either without the definition of <VAR>NEWKEYB</VAR> so it uses simple BIOS input functions or with <VAR>NEWKEYB</VAR> which enables our own keyboard interrupt handler that takes care of multiple keys pressed at the same time and things like that. For the development we use BIOS input functions to enable debugging and the release versions are compiled with <VAR>NEWKEYB</VAR>.
-
-<DT><TT>TIMER.CPP</TT>
-<DD>contains our own timer which increases a global variable called <VAR>ticker</VAR> every 1/100 second.
-
-<DT><TT>VESA.CPP</TT>
-<DD>provides the graphic output functions that consist of two parts: the graphic initialization and the graphic output itself. The output functions just write data into a linear frame buffer (Vesa graphic modes that are banked are supported too but that should be of no interest for porting) that is described by the structures <VAR>agmp</VAR> and <VAR>hgmp</VAR> of type <VAR>tgraphmodeparameters</VAR>. For porting only the initialization needs to be rewritten and the above mentioned variables must be filled correctly.
-
-<DT><TT>MOUSEHND.CPP</TT>
-<DD>is our own mouse handler. Since Vesa 2 does not provide an interface for a hardware mouse cursor we must care about the mouse ourself. The interrupt handler draws the mouse onto the screen using the data of <TT>Vesa.cpp</TT> and puts the current mouse status into a structure called <VAR>mouseparams</VAR>.
-
-</DL>
-
-Perhaps <A HREF="http://www.scitechsoft.com">Scitech's</A> MGL library can be used to provide us with the platform specific functions for Linux, OS/2 and Windows which would make porting ASC to those platforms quite easy. I have not personally test MGL yet but it seems promising.<P>
-
-<H4>to another development environment</H4>
-The source of ASC is NOT ANSI compliant. We use several Watcom specific routines like <CODE>getch()</CODE>, <CODE>strdup()</CODE> and <CODE>strnicmp()</CODE> and other simple functions like that. Perhaps the libraries of other compiler offer these functions too. If that is not the case I can post their documentation from the Watcom help to help rewriting them.<P>
-
-No makefiles are included since the Watcom IDE does not depend on makefiles. To write them take a look at the target files (*.tgt). They contain all source files (you should be able to recognize them by their file name extension) and all Macro definitions among many other things.
-
-<H3>Revision control</H3>
-I have absolutely NO clue how to handle an internet wide development. Until now it was quite easy since I had my set of source files and Marc has his own and we simply did not modify the other one's sources. That will probably not work with many more developers .... <P>
-Before you start improving central parts of the game engine you should <A HREF="contact.htm">contact us</A> on the development mailing list so we can discuss how to do it. Since I don't think we are the first to develop a program with more than two people I'm sure there are some ways how to coordinate it. But I simply don't know them :-)
+Porting ASC to any platform supported by SDL should be farely easy (as long as it is 32 bit and has Intel byte order). 
 
 </BODY>
 </HTML>
