@@ -3024,9 +3024,14 @@ int   ccontainer :: repairicon_c :: available    ( void )
 void  ccontainer :: repairicon_c :: exec         ( void )
 {
    cc->baseContainer->repairItem ( main->getmarkedunit() , 0 );
+   Vehicle* v = dynamic_cast<Vehicle*>(cc->baseContainer);
+   if ( v )
+      logtoreplayinfo ( rpl_repairUnit, v->networkid, main->getmarkedunit()->networkid, 0, v->tank.material, v->tank.fuel );
+   Building* b = dynamic_cast<Building*>(cc->baseContainer);
+   if ( b )
+      logtoreplayinfo ( rpl_repairUnit2, b->getPosition().x, b->getPosition().y, main->getmarkedunit()->networkid, 0 );
    dashboard.x = 0xffff;
    main->repaintresources = 1;
-
 }
 
 const char* ccontainer :: repairicon_c :: getinfotext  ( void )

@@ -1327,7 +1327,7 @@ int VehicleService :: execute ( pvehicle veh, int targetNWID, int dummy, int ste
                               }
                               break;
            case srv_repair: vehicle->repairItem ( t.dest, amount );
-                            // logtoreplayinfo ( rpl_refuel, eht->xpos, eht->ypos, eht->networkid, int(1002), newfuel );
+                            logtoreplayinfo ( rpl_repairUnit, vehicle->networkid, t.dest->networkid, amount, vehicle->tank.material, vehicle->tank.fuel );
                             break;
            case srv_ammo: delta = amount - serv.curAmount;
                           t.dest->ammo[ serv.targetPos ] += delta;

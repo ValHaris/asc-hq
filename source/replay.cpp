@@ -593,6 +593,37 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( x );
          stream->writeInt ( y );
       }
+      if ( action == rpl_repairUnit ) {
+         int nwid = va_arg ( paramlist, int );
+         int destnwid = va_arg ( paramlist, int );
+         int amount = va_arg ( paramlist, int );
+         int matremain = va_arg ( paramlist, int );
+         int fuelremain = va_arg ( paramlist, int );
+
+         stream->writeChar ( action );
+         int size = 5;
+         stream->writeInt ( size );
+         stream->writeInt ( nwid );
+         stream->writeInt ( destnwid );
+         stream->writeInt ( amount );
+         stream->writeInt ( matremain );
+         stream->writeInt ( fuelremain );
+      }
+      if ( action == rpl_repairUnit2 ) {
+         int x = va_arg ( paramlist, int );
+         int y = va_arg ( paramlist, int );
+         int destnwid = va_arg ( paramlist, int );
+         int amount = va_arg ( paramlist, int );
+
+         stream->writeChar ( action );
+         int size = 4;
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( destnwid );
+         stream->writeInt ( amount );
+      }
+
 
       va_end ( paramlist );
    }
@@ -1256,7 +1287,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  int old = -2;
                                  if ( nextaction == rpl_refuel2 )
                                     old = stream->readInt();
-                                    
+
                                  readnextaction();
 
                                  pvehicle eht = actmap->getUnit ( x, y, nwid );
@@ -1351,6 +1382,43 @@ void trunreplay :: execnextreplaymove ( void )
                                     displaymessage("severe replay inconsistency: container for moveUpDown !", 1);
                               }
                               break;
+      case rpl_repairUnit : {
+                                 stream->readInt();  // size
+                                 int nwid = stream->readInt();
+                                 int destnwid = stream->readInt();
+                                 int amount = stream->readInt();
+                                 int matremain  = stream->readInt();
+                                 int fuelremain = stream->readInt();
+
+                                 readnextaction();
+
+                                 pvehicle eht = actmap->getUnit ( nwid );
+                                 pvehicle dest = actmap->getUnit ( destnwid );
+                                 if ( eht && dest ) {
+                                    eht->repairItem ( dest, amount );
+                                    if ( eht->tank.fuel != fuelremain || eht->tank.material != matremain )
+                                         displaymessage("severe replay inconsistency:\nthe resources of unit not matching for repair operation!", 1);
+                                 } else
+                                    displaymessage("severe replay inconsistency:\nno vehicle for repair-unit command !", 1);
+                              }
+         break;
+      case rpl_repairUnit2 : {
+                                 stream->readInt();  // size
+                                 int x = stream->readInt();
+                                 int y = stream->readInt();
+                                 int destnwid = stream->readInt();
+                                 int amount = stream->readInt();
+
+                                 readnextaction();
+
+                                 pbuilding bld = getfield(x,y)->building;
+                                 pvehicle dest = actmap->getUnit ( destnwid );
+                                 if ( bld && dest ) {
+                                    bld->repairItem ( dest, amount );
+                                 } else
+                                    displaymessage("severe replay inconsistency:\nno vehicle for repair-unit command !", 1);
+                              }
+         break;
 
 
       default:{
