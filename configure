@@ -9441,6 +9441,165 @@ fi
 
 
 
+echo "$as_me:$LINENO: checking for Mix_PlayChannelTimed in -lSDL_mixer" >&5
+echo $ECHO_N "checking for Mix_PlayChannelTimed in -lSDL_mixer... $ECHO_C" >&6
+if test "${ac_cv_lib_SDL_mixer_Mix_PlayChannelTimed+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lSDL_mixer  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+#include "confdefs.h"
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char Mix_PlayChannelTimed ();
+#ifdef F77_DUMMY_MAIN
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN() { return 1; }
+#endif
+int
+main ()
+{
+Mix_PlayChannelTimed ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_SDL_mixer_Mix_PlayChannelTimed=yes
+else
+  echo "$as_me: failed program was:" >&5
+cat conftest.$ac_ext >&5
+ac_cv_lib_SDL_mixer_Mix_PlayChannelTimed=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_SDL_mixer_Mix_PlayChannelTimed" >&5
+echo "${ECHO_T}$ac_cv_lib_SDL_mixer_Mix_PlayChannelTimed" >&6
+if test $ac_cv_lib_SDL_mixer_Mix_PlayChannelTimed = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBSDL_MIXER 1
+_ACEOF
+
+  LIBS="-lSDL_mixer $LIBS"
+
+else
+  { { echo "$as_me:$LINENO: error:
+ASC requires the SDL_mixer library. If you have a distribution supplied
+SDL_mixer.RPM installed, perhaps the SDL_mixer-devel.RPM is missing.
+If your distribution does not include the SDL_image library, you can get it
+from http://www.libsdl.org/projects/SDL_mixer/ " >&5
+echo "$as_me: error:
+ASC requires the SDL_mixer library. If you have a distribution supplied
+SDL_mixer.RPM installed, perhaps the SDL_mixer-devel.RPM is missing.
+If your distribution does not include the SDL_image library, you can get it
+from http://www.libsdl.org/projects/SDL_mixer/ " >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+
+
+
+echo "$as_me:$LINENO: checking for TTF_RenderText_Solid in -lSDL_ttf" >&5
+echo $ECHO_N "checking for TTF_RenderText_Solid in -lSDL_ttf... $ECHO_C" >&6
+if test "${ac_cv_lib_SDL_ttf_TTF_RenderText_Solid+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lSDL_ttf  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+#include "confdefs.h"
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char TTF_RenderText_Solid ();
+#ifdef F77_DUMMY_MAIN
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN() { return 1; }
+#endif
+int
+main ()
+{
+TTF_RenderText_Solid ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_SDL_ttf_TTF_RenderText_Solid=yes
+else
+  echo "$as_me: failed program was:" >&5
+cat conftest.$ac_ext >&5
+ac_cv_lib_SDL_ttf_TTF_RenderText_Solid=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_SDL_ttf_TTF_RenderText_Solid" >&5
+echo "${ECHO_T}$ac_cv_lib_SDL_ttf_TTF_RenderText_Solid" >&6
+if test $ac_cv_lib_SDL_ttf_TTF_RenderText_Solid = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBSDL_TTF 1
+_ACEOF
+
+  LIBS="-lSDL_ttf $LIBS"
+
+else
+  { { echo "$as_me:$LINENO: error:
+ASC requires the SDL_ttf library. If you have a distribution supplied
+SDL_ttf.RPM installed, perhaps the SDL_ttf-devel.RPM is missing.
+If your distribution does not include the SDL_ttf library, you can get it
+from http://www.libsdl.org/projects/SDL_ttfr/ " >&5
+echo "$as_me: error:
+ASC requires the SDL_ttf library. If you have a distribution supplied
+SDL_ttf.RPM installed, perhaps the SDL_ttf-devel.RPM is missing.
+If your distribution does not include the SDL_ttf library, you can get it
+from http://www.libsdl.org/projects/SDL_ttfr/ " >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+SDL_TTF_LDADD="-lSDL_ttf"
+
+
+
 
 # Check for libsigc++
 #AM_PATH_SIGC(1.0.0, , AC_MSG_ERROR( [[
@@ -11266,7 +11425,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile data/Makefile data/dialog/Makefile data/music/Makefile"
+ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/graphics/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile data/Makefile data/dialog/Makefile data/music/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -11771,6 +11930,7 @@ do
   "source/clparser/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/clparser/Makefile" ;;
   "source/docs/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/docs/Makefile" ;;
   "source/docs/en/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/docs/en/Makefile" ;;
+  "source/graphics/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/graphics/Makefile" ;;
   "source/libs/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/Makefile" ;;
   "source/libs/sdlmm/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/sdlmm/Makefile" ;;
   "source/libs/sdlmm/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES source/libs/sdlmm/src/Makefile" ;;
@@ -11928,6 +12088,7 @@ s,@GENCL@,$GENCL,;t t
 s,@SDL_CONFIG@,$SDL_CONFIG,;t t
 s,@SDL_CFLAGS@,$SDL_CFLAGS,;t t
 s,@SDL_LIBS@,$SDL_LIBS,;t t
+s,@SDL_TTF_LDADD@,$SDL_TTF_LDADD,;t t
 s,@PKG_CONFIG@,$PKG_CONFIG,;t t
 s,@SIGC_CFLAGS@,$SIGC_CFLAGS,;t t
 s,@SIGC_LIBS@,$SIGC_LIBS,;t t

@@ -94,6 +94,7 @@ RANLIB = @RANLIB@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
+SDL_TTF_LDADD = @SDL_TTF_LDADD@
 SGML2MAN = @SGML2MAN@
 SIGC_CFLAGS = @SIGC_CFLAGS@
 SIGC_LIBS = @SIGC_LIBS@
@@ -134,8 +135,8 @@ gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp
 
 asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-$(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/graphics/libgraphics.la @PARAGUI_LIBS@ \
-@LDADDLIBBZ2@  @SIGC_LIBS@
+$(top_builddir)/source/sdl/libsdl.la @PARAGUI_LIBS@ \
+@LDADDLIBBZ2@  @SIGC_LIBS@ $(top_builddir)/source/graphics/libgraphics.la @SDL_TTF_LDADD@
 
 subdir = source/unix
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

@@ -30,7 +30,7 @@
     public:
       explicit Surface( SDL_Surface *surface) : SDLmm::Surface(surface) {};
       Surface(const SDLmm::Surface& other) : SDLmm::Surface( other ) {};
-      Surface() {};
+      Surface() : SDLmm::Surface(NULL) {};
 
       /**
          Creates an image from an BGI image structure.
@@ -40,6 +40,12 @@
       void read ( tnstream& stream ) ;
       void write ( tnstream& stream ) const;
 
+      void writeDefaultPixelFormat ( tnstream& stream ) ;
+      static void readDefaultPixelFormat ( tnstream& stream );
+   private:
+      static SDLmm::PixelFormat* default8bit;
+      static SDLmm::PixelFormat* default32bit;
+      
  };
 
 
