@@ -42,6 +42,7 @@
 
       void writeDefaultPixelFormat ( tnstream& stream ) ;
       static void readDefaultPixelFormat ( tnstream& stream );
+      void assignDefaultPalette();
    private:
       static SDLmm::PixelFormat* default8bit;
       static SDLmm::PixelFormat* default32bit;

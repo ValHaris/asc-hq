@@ -148,6 +148,26 @@ void Surface::read ( tnstream& stream )
 
 }
 
+void Surface::assignDefaultPalette()
+{
+   if ( me ) { 
+        SDL_Color spal[256];
+        int col;
+        for ( int i = 0; i < 256; i++ ) {
+           for ( int c = 0; c < 3; c++ ) {
+              col = pal[i][c];
+              switch ( c ) {
+                 case 0: spal[i].r = col * 4; break;
+                 case 1: spal[i].g = col * 4; break;
+                 case 2: spal[i].b = col * 4; break;
+              };
+             }
+         }
+         SDL_SetColors ( me, spal, 0, 256 );
+   }
+}
+
+
 void Surface::write ( tnstream& stream ) const
 {
 
