@@ -223,7 +223,7 @@ int main(int argc, char *argv[] )
                       "<frameset  cols=\"50%%,*\" border=0 >\n"
                       "<frame name=\"over\" src=\"%s\" marginheight=\"0\">\n"
                       "<frame name=\"under\" src=\"%s\" marginheight=\"2\">\n"
-                      "<noframes><body class=\"WG\"><p>Diese Seite verwendet Frames. Frames werden von Ihrem Browser aber nicht unterstützt.</p></body></noframes>\n"
+                      "<noframes><body class=\"WG\"><p>This page uses frames, which are not supported by your browswer. </p></body></noframes>\n"
                       "</frameset>\n"
                       "</html>\n", (fileName+"1.html").c_str() , (fileName+"6.html").c_str() );
 
@@ -449,7 +449,7 @@ int main(int argc, char *argv[] )
                for ( int w = 0; w < ft->heightChangeMethodNum ; w++) {
                    ASCString hstring;
                    for ( int h = 0; h < 8; h++ )
-                      if ( ft->heightChangeMethod[w].startHeight & (1 << h )) {
+                      if ( ft->heightChangeMethod[w].startHeight & (1 << h ) & ft->height ) {
                          ASCString s;
                          s.format ( "<IMG src=\"../hoehe%d.gif\" alt=\"%s\"> <br>", h, choehenstufen[h] );
                          hstring += s;
@@ -776,7 +776,7 @@ int main(int argc, char *argv[] )
 
                   printIndex ( transportPage, "The transport must be on this height" );
                   for ( ContainerBaseType::EntranceSystems::iterator i = ft->entranceSystems.begin(); i != ft->entranceSystems.end(); i++ )
-                      printValue ( transportPage, getHeightImgString( i->height_abs) );
+                      printValue ( transportPage, getHeightImgString( i->height_abs & ft->height) );
                   printLineEnd( transportPage );
 
 
