@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.29 2000-06-09 13:12:25 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.30 2000-07-12 08:27:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.29  2000/06/09 13:12:25  mbickel
+//      Fixed tribute function and renamed it to "transfer resources"
+//
 //     Revision 1.28  2000/06/06 20:17:07  mbickel
 //      Updated dummy sound headers for DOS
 //
@@ -3289,7 +3292,7 @@ void tviewmessages :: init ( char* ttl, pmessagelist strt, int editable, int md 
       temp = strt;
       int i = 0;
       while ( temp ) {
-         message[i] = temp;
+         message[num-i-1] = temp;
          i++;
          temp = temp->next;
       }
