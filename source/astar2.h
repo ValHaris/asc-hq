@@ -11,13 +11,15 @@
 class AStar {
     public:
        typedef vector<MapCoordinate> Path;
+
+    protected:
+       int MAXIMUM_PATH_LENGTH;
        pmap tempsMarked;
        Path *_path;
        pvehicle _veh;
        pmap _actmap;
 
 
-    protected:
        virtual int getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle );
     public:
 
@@ -48,7 +50,7 @@ class AStar {
 
        void findPath( HexCoord A, HexCoord B, Path& path );
        void findPath( Path& path, int x, int y );
-       void findAllAccessibleFields ( );  // all accessible fields will have a.temp set to 1
+       void findAllAccessibleFields ( int maxDist = maxint );  // all accessible fields will have a.temp set to 1
        int getDistance( );
        int getTravelTime( );
        bool fieldVisited ( int x, int y);

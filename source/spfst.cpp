@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.78 2001-01-21 16:37:20 mbickel Exp $
+//     $Id: spfst.cpp,v 1.79 2001-01-23 21:05:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.78  2001/01/21 16:37:20  mbickel
+//      Moved replay code to own file ( replay.cpp )
+//      Fixed compile problems done by cleanup
+//
 //     Revision 1.77  2001/01/19 13:33:55  mbickel
 //      The AI now uses hemming
 //      Several bugfixes in Vehicle Actions
@@ -923,34 +927,6 @@ int         fieldaccessible( const pfield        field,
 } 
 
 
-
-
-void  stu_height ( pvehicle vehicle )
-{
-   char l;
-   pfield fld = getfield ( vehicle->xpos, vehicle->ypos );
-
-   vehicle->height = chfahrend;
-
-   for (l=chsatellit; l> chfahrend ;  ) {
-      if (vehicle->typ->height & l )
-         vehicle->height = l;
-      l>>=1;
-   } /* endfor */
-
-   for (l=chtiefgetaucht; l<= chschwimmend ;  ) {
-      if (vehicle->typ->height & l )
-        if (vehicle->typ->terrainaccess->accessible (  fld->bdt ) > 0 )
-           vehicle->height = l;
-      l<<=1;
-   }
-
-   if (vehicle->typ->height & chfahrend) 
-      if (vehicle->typ->terrainaccess->accessible ( fld->bdt ) > 0 )
-         vehicle->height = chfahrend;
-
-   vehicle->setMovement ( vehicle->typ->movement[log2( vehicle->height )] );
-}
 
 
 void         generatemap( TerrainType::Weather*   bt,

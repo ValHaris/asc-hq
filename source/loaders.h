@@ -1,6 +1,12 @@
-//     $Id: loaders.h,v 1.11 2000-11-08 19:31:10 mbickel Exp $
+//     $Id: loaders.h,v 1.12 2001-01-23 21:05:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/11/08 19:31:10  mbickel
+//      Rewrote IO for the tmap structure
+//      Fixed crash when entering damaged building
+//      Fixed crash in AI
+//      Removed item CRCs
+//
 //     Revision 1.10  2000/10/11 14:26:43  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -173,9 +179,6 @@ class  tspfldloaders {
 
            void            writenetwork ( void );
            void            readnetwork  ( void );
-
-           void            writetechnologies ( void );
-           void            readtechnologies  ( void );
 
            virtual void    initmap ( void ) = 0;
 

@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.64 2001-01-22 20:00:10 mbickel Exp $
+//     $Id: typen.cpp,v 1.65 2001-01-23 21:05:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.64  2001/01/22 20:00:10  mbickel
+//      Fixed bug that made savegamefrom campaign games unloadable
+//      Optimized the terrainAccess-checking
+//
 //     Revision 1.63  2001/01/21 16:37:22  mbickel
 //      Moved replay code to own file ( replay.cpp )
 //      Fixed compile problems done by cleanup
@@ -942,42 +946,6 @@ Resources operator- ( const Resources& res1, const Resources& res2 )
 ////////////////////////////////////////////////////////////////////
 
 
-void tresearch :: read( tnstream& stream ) {
-   progress = stream.readInt();
-   activetechnology = (ptechnology) stream.readInt();
-
-   for ( int i = 0; i < waffenanzahl; i++ )
-      unitimprovement.weapons[i] = stream.readWord();
-   unitimprovement.armor = stream.readWord();
-   for ( int j = 0; j < 44-waffenanzahl*2; j++ )
-       stream.readChar(); // dummy
-
-   techlevel = stream.readInt();
-   developedtechnologies = (pdevelopedtechnologies) stream.readInt();
-
-}
-
-void tresearch :: write( tnstream& stream ) {
-   stream.writeInt( progress );
-   if ( activetechnology )
-      stream.writeInt( 1 );
-   else
-      stream.writeInt ( 0 );
-
-   for ( int i = 0; i < waffenanzahl; i++ )
-      stream.writeWord ( unitimprovement.weapons[i] );
-
-   stream.writeWord ( unitimprovement.armor );
-   for ( int j = 0; j < 44-waffenanzahl*2; j++ )
-       stream.writeChar( 0 ); // dummy
-
-   stream.writeInt ( techlevel );
-   if ( developedtechnologies )
-      stream.writeInt ( 1 );
-   else
-      stream.writeInt ( 0 );
-}
-
 
 
 /*
@@ -1075,8 +1043,6 @@ tmessage :: tmessage ( pmap spfld  )
      spfld->message = this;
 
 }
-
-extern tmap map;
 
 tmessage :: tmessage ( char* txt, int rec )  // f?r Meldungen vom System
 {
@@ -1197,16 +1163,6 @@ tfieldarray :: ~tfieldarray()
 */
 
 
-int  ttechnology :: getlvl( void )
-{
-   if ( lvl == -1 ) {
-      lvl = 0;
-      for (int l = 0; l <= 5; l++) 
-         if ( requiretechnology[l] ) 
-            lvl += requiretechnology[l]->getlvl();
-   }
-   return lvl;
-}
 
 /*
 tgameoptions :: tgameoptions ( void )
@@ -1479,64 +1435,6 @@ tterrainbits cblargerocks ( 1<<23, 0 );
 
 
 
-int tresearch :: technologyresearched ( int id )
-{                                                        
-      pdevelopedtechnologies devtech = developedtechnologies;
-      while (devtech) {
-         if (devtech->tech->id == id )
-               return 1;
-         devtech = devtech->next;
-      } /* endwhile */
-
-      return 0;
-}
-
-
-
-
-
-int tresearch :: vehicleclassavailable ( const pvehicletype fztyp , int classnm, pmap map  )
-{
-   if ( fztyp->classbound[classnm].techlevel )
-      if ( fztyp->classbound[classnm].techlevel <= techlevel )
-         return true;
-
-
-   int  i;
-
-   #ifndef karteneditor
-   for (i=0;i<4 ;i++ ) 
-      if (fztyp->classbound[classnm].techrequired[i])
-         if ( !technologyresearched ( fztyp->classbound[classnm].techrequired[i] ))
-            return false;
-
-/*
-   if ( fztyp->classbound[classnm].eventrequired )
-      if (!map->eventpassed (fztyp->classbound[classnm].eventrequired ))
-         return false;
-*/
-   #endif
-
-   for (i=0; i< waffenanzahl; i++)
-      if ( fztyp->classbound[classnm].weapstrength[i] > unitimprovement.weapons[i] )
-         return false;
-
-
-   if ( fztyp->classbound[classnm].armor > unitimprovement.armor )
-      return false;
-
-   return true;
-
-}
-
-
-int tresearch :: vehicletypeavailable ( const pvehicletype fztyp, pmap map  )
-{
-   if ( !fztyp )
-      return 0;
-   else
-      return vehicleclassavailable( fztyp, 0, map );
-}
 
 
 tshareview :: tshareview ( const tshareview* org ) 

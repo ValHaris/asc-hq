@@ -1,6 +1,10 @@
-//     $Id: spfst.h,v 1.35 2001-01-21 16:37:22 mbickel Exp $
+//     $Id: spfst.h,v 1.36 2001-01-23 21:05:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.35  2001/01/21 16:37:22  mbickel
+//      Moved replay code to own file ( replay.cpp )
+//      Fixed compile problems done by cleanup
+//
 //     Revision 1.34  2001/01/21 12:48:36  mbickel
 //      Some cleanup and documentation
 //
@@ -488,7 +492,6 @@ class tlockdispspfld {
 extern int lockdisplaymap;
 
 extern void smooth ( int what );
-extern void  stu_height ( pvehicle vehicle );
 
 
 extern pterraintype getterraintype_forid ( int id, int crccheck = 1 );
@@ -610,8 +613,13 @@ class MapDisplay : public MapDisplayInterface {
 
 extern MapDisplay defaultMapDisplay;
 
+
+extern int isUnitNotFiltered ( int id ) ;
+extern int isBuildingNotFiltered ( int id ) ;
+
+
 #ifdef _NOASM_
- int  rol ( int valuetorol, int rolwidth );
+ extern int  rol ( int valuetorol, int rolwidth );
 #else
  #include "dos/spfldutl.h"
 #endif
@@ -621,5 +629,3 @@ extern MapDisplay defaultMapDisplay;
 #endif
 
 
-extern int isUnitNotFiltered ( int id ) ;
-extern int isBuildingNotFiltered ( int id ) ;

@@ -1867,19 +1867,13 @@ void   Vehicle::read ( pnstream stream )
 {
     int id = stream->readWord ();
 
-    pvehicletype fzt = gamemap->getVehicleType_byId ( id );
+    pvehicletype fzt = gamemap->getvehicletype_byid ( id );
 
     if ( !fzt )
        throw InvalidID ( "vehicle", id );
 
-
     typ = fzt;
     baseType = fzt;
-
-    /*
-    if ( spfld->objectcrc )
-       spfld->objectcrc->speedcrccheck->checkunit2 ( typ );
-    */
 
     color = stream->readChar ();
 
@@ -2021,7 +2015,7 @@ void   Vehicle::read ( pnstream stream )
     if (klasse == 255) {
        if ( typ->classnum ) {
           for (int i = 0; i < typ->classnum ; i++ )
-             if ( gamemap->player[ color/8 ].research.vehicleclassavailable( typ, i, gamemap ) )
+             if ( gamemap->player[ color/8 ].research.vehicleclassavailable( typ, i ) )
                 klasse = i;
              else
                 break;

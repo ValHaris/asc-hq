@@ -1,6 +1,10 @@
-//     $Id: controls.h,v 1.36 2001-01-21 16:37:16 mbickel Exp $
+//     $Id: controls.h,v 1.37 2001-01-23 21:05:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2001/01/21 16:37:16  mbickel
+//      Moved replay code to own file ( replay.cpp )
+//      Fixed compile problems done by cleanup
+//
 //     Revision 1.35  2001/01/21 12:48:35  mbickel
 //      Some cleanup and documentation
 //
@@ -415,8 +419,6 @@ extern int windbeeline ( int x1, int y1, int x2, int y2 );
 extern void continuenetworkgame ( void );
 
 
-//! Move the technology that is currently being reseached to the list of discovered technologies
-extern void addtechnology ( void );
 
 //! Calculates the resources that are needed to research the given number of research
 extern void returnresourcenuseforresearch ( const pbuilding bld, int research, int* energy, int* material );
@@ -443,12 +445,6 @@ class tgetmininginfo : public tsearchfields {
              tgetmininginfo ( pmap _gamemap );
              void run ( const pbuilding bld );
          };
-
-
-extern void addanytechnology ( ptechnology tech, int player );
-
-
-
 
 
 

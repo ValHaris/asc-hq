@@ -77,6 +77,7 @@ tmap :: tmap ( void )
          player[i].humanname += strrr( i );
          player[i].computername = "computer ";
          player[i].computername += strrr( i );
+         player[i].research.chainToMap ( this, i );
       }
 
       oldevents = NULL;
@@ -154,7 +155,7 @@ void tmap :: read ( tnstream& stream )
       player[i].existent = stream.readChar();
       player[i].firstvehicle = NULL; stream.readInt(); // dummy
       player[i].firstbuilding = NULL; stream.readInt(); // dummy
-      player[i].research.read ( stream );
+      player[i].research.read_struct ( stream );
       player[i].ai = (BaseAI*) stream.readInt();
       player[i].stat = stream.readChar();
       stream.readChar(); // dummy
@@ -406,13 +407,6 @@ void tmap :: read ( tnstream& stream )
        stream.readdata2 ( gpar );
        setgameparameter ( ii, gpar );
     }
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readmap / returning" );
-       #endif
-
-
-
 }
 
 
@@ -451,7 +445,7 @@ void tmap :: write ( tnstream& stream )
       stream.writeChar( player[i].existent );
       stream.writeInt( 1 ); // dummy
       stream.writeInt( 1 ); // dummy
-      player[i].research.write ( stream );
+      player[i].research.write_struct ( stream );
       stream.writeInt( player[i].ai != NULL );
       stream.writeChar( player[i].stat );
       stream.writeChar( 0 ); // dummy
@@ -561,10 +555,6 @@ void tmap :: write ( tnstream& stream )
              stream.writeString ( player[w].computername );
        }
 
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::writemap / names written" );
-       #endif
-
        if ( !tribute.empty() ) {
            stream.writeInt ( -1 );
            tribute.write ( stream );
@@ -582,17 +572,8 @@ void tmap :: write ( tnstream& stream )
         int h = 0;
         stream.writedata2 ( h );
 
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::writemap / vor crc" );
-       #endif
-
         if ( shareview )
            stream.writedata2 ( *(shareview) );
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::writemap / shareview written" );
-       #endif
 
         int p;
         for ( p = 0; p < 8; p++ )
@@ -888,16 +869,6 @@ pvehicle tmap :: getUnit ( int x, int y, int nwid )
 
 
 
-pvehicletype tmap :: getVehicleType_byId ( int id )
-{
-   #ifdef converter
-   return NULL;
-   #else
-   return getvehicletype_forid ( id, 0 );
-   #endif
-}
-
-
 void deletemessagelist ( pmessagelist list )
 {
    if ( list ) {
@@ -1085,3 +1056,105 @@ void tmap :: ResourceTribute :: write ( tnstream& stream )
          for ( c = 0; c < 8; c++ )
              stream.writeInt ( paid[b][c].resource(a) );
 }
+
+
+#ifdef converter
+pterraintype tmap :: getterraintype_byid ( int id )      { return NULL; }
+pobjecttype tmap :: getobjecttype_byid ( int id )        { return NULL; }
+pvehicletype tmap :: getvehicletype_byid ( int id )      { return NULL; }
+pbuildingtype tmap :: getbuildingtype_byid ( int id )    { return NULL; }
+ptechnology tmap :: gettechnology_byid ( int id )        { return NULL; }
+
+pterraintype tmap :: getterraintype_bypos ( int pos )    { return NULL; }
+pobjecttype tmap :: getobjecttype_bypos ( int pos )      { return NULL; }
+pvehicletype tmap :: getvehicletype_bypos ( int pos )    { return NULL; }
+pbuildingtype tmap :: getbuildingtype_bypos ( int pos )  { return NULL; }
+ptechnology tmap :: gettechnology_bypos ( int pos )      { return NULL; }
+
+int tmap :: getTerrainTypeNum ( ) { return 0; }
+int tmap :: getObjectTypeNum ( ) { return 0; }
+int tmap :: getVehicleTypeNum ( ) { return 0; }
+int tmap :: getBuildingTypeNum ( ) { return 0; }
+int tmap :: getTechnologyNum ( ) { return 0; }
+
+
+#else
+
+pterraintype tmap :: getterraintype_byid ( int id )
+{
+   return getterraintype_forid ( id );
+}
+
+pobjecttype tmap :: getobjecttype_byid ( int id )
+{
+   return getobjecttype_forid ( id );
+}
+
+pvehicletype tmap :: getvehicletype_byid ( int id )
+{
+   return getvehicletype_forid ( id );
+}
+
+pbuildingtype tmap :: getbuildingtype_byid ( int id )
+{
+   return getbuildingtype_forid ( id );
+}
+
+ptechnology tmap :: gettechnology_byid ( int id )
+{
+   return gettechnology_forid ( id );
+}
+
+
+pterraintype tmap :: getterraintype_bypos ( int pos )
+{
+   return getterraintype_forpos ( pos );
+}
+
+pobjecttype tmap :: getobjecttype_bypos ( int pos )
+{
+   return getobjecttype_forpos ( pos );
+}
+
+pvehicletype tmap :: getvehicletype_bypos ( int pos )
+{
+   return getvehicletype_forpos ( pos );
+}
+
+pbuildingtype tmap :: getbuildingtype_bypos ( int pos )
+{
+   return getbuildingtype_forpos ( pos );
+}
+
+ptechnology tmap :: gettechnology_bypos ( int pos )
+{
+   return gettechnology_forpos ( pos );
+}
+
+int tmap :: getTerrainTypeNum ( )
+{
+   return  terraintypenum;
+}
+
+int tmap :: getObjectTypeNum ( )
+{
+   return  vehicletypenum;
+}
+
+int tmap :: getVehicleTypeNum ( )
+{
+   return  buildingtypenum;
+}
+
+int tmap :: getBuildingTypeNum ( )
+{
+   return  technologynum;
+}
+
+int tmap :: getTechnologyNum ( )
+{
+   return  objecttypenum;
+}
+
+
+#endif

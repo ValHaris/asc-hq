@@ -1,6 +1,9 @@
-//     $Id: missions.cpp,v 1.18 2000-12-23 13:19:47 mbickel Exp $
+//     $Id: missions.cpp,v 1.19 2001-01-23 21:05:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/12/23 13:19:47  mbickel
+//      Made ASC compileable with Borland C++ Builder
+//
 //     Revision 1.17  2000/11/11 11:05:19  mbickel
 //      started AI service functions
 //
@@ -376,20 +379,12 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
                                                 ev->triggerstatus[b] = 0; 
                                                 if ( ev->player == 8 ) {
                                                    for ( int i = 0; i < 8; i++ ) {
-                                                       pdevelopedtechnologies devtech = actmap->player[i].research.developedtechnologies;
-                                                       while (devtech) {
-                                                          if (devtech->tech->id == ev->trigger_data[b]->id)
-                                                                ev->triggerstatus[b] = 2;   
-                                                          devtech = devtech->next;
-                                                       } /* endwhile */
+                                                       if ( actmap->player[i].research.technologyresearched ( ev->trigger_data[b]->id ))
+                                                          ev->triggerstatus[b] = 2;
                                                    }
                                                 } else {
-                                                   pdevelopedtechnologies devtech = actmap->player[ev->player].research.developedtechnologies;
-                                                   while (devtech) {
-                                                      if (devtech->tech->id == ev->trigger_data[b]->id)
-                                                            ev->triggerstatus[b] = 2;   
-                                                      devtech = devtech->next;
-                                                   } /* endwhile */
+                                                   if ( actmap->player[ev->player].research.technologyresearched ( ev->trigger_data[b]->id ))
+                                                      ev->triggerstatus[b] = 2;
                                                 }
                                              } 
                break; 
@@ -744,7 +739,7 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
                tprotfzt   pfzt;
                pfzt.initbuffer ();
    
-               addanytechnology( tech, ev->player );
+               actmap->player[ ev->player ].research.addanytechnology( tech );
    
                pfzt.evalbuffer ();
                if ( actmap->player[ ev->player ].research.activetechnology == tech )

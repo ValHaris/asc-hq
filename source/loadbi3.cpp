@@ -1,6 +1,10 @@
-//     $Id: loadbi3.cpp,v 1.33 2001-01-21 16:37:18 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.34 2001-01-23 21:05:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2001/01/21 16:37:18  mbickel
+//      Moved replay code to own file ( replay.cpp )
+//      Fixed compile problems done by cleanup
+//
 //     Revision 1.32  2001/01/04 15:13:57  mbickel
 //      configure now checks for libSDL_image
 //      AI only conquers building that cannot be conquered back immediately
@@ -1296,6 +1300,33 @@ void InsertBiMap :: preparemap ( int x, int y  )
    for ( int b = 0; b < y; b++ )
       for ( int a = 0; a < x; a++ )
          getfield ( a, b ) -> deleteeverything();
+}
+
+void  stu_height ( pvehicle vehicle )
+{
+   char l;
+   pfield fld = getfield ( vehicle->xpos, vehicle->ypos );
+
+   vehicle->height = chfahrend;
+
+   for (l=chsatellit; l> chfahrend ;  ) {
+      if (vehicle->typ->height & l )
+         vehicle->height = l;
+      l>>=1;
+   } /* endfor */
+
+   for (l=chtiefgetaucht; l<= chschwimmend ;  ) {
+      if (vehicle->typ->height & l )
+        if (vehicle->typ->terrainaccess->accessible (  fld->bdt ) > 0 )
+           vehicle->height = l;
+      l<<=1;
+   }
+
+   if (vehicle->typ->height & chfahrend)
+      if (vehicle->typ->terrainaccess->accessible ( fld->bdt ) > 0 )
+         vehicle->height = chfahrend;
+
+   vehicle->setMovement ( vehicle->typ->movement[log2( vehicle->height )] );
 }
 
 

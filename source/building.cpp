@@ -1,6 +1,10 @@
-//     $Id: building.cpp,v 1.60 2001-01-21 16:37:11 mbickel Exp $
+//     $Id: building.cpp,v 1.61 2001-01-23 21:05:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.60  2001/01/21 16:37:11  mbickel
+//      Moved replay code to own file ( replay.cpp )
+//      Fixed compile problems done by cleanup
+//
 //     Revision 1.59  2000/12/23 13:19:41  mbickel
 //      Made ASC compileable with Borland C++ Builder
 //
@@ -1718,7 +1722,7 @@ void cbuildingcontrols :: cproduceammunition :: produce ( int weaptype, int num 
 
 int   cbuildingcontrols :: cproduceunit :: available (pvehicletype fzt)
 {
-   if ( actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( fzt, actmap ) )
+   if ( actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( fzt ) )
       if (( cc->getenergy( fzt->productionCost.energy, 0 )     >= fzt->productionCost.energy)  &&
             ( cc->getmaterial( fzt->productionCost.material, 0 ) >= fzt->productionCost.material))
          return 1;
@@ -1835,8 +1839,8 @@ int   cbuildingcontrols :: cdissectunit :: available ( pvehicle eht )
 {
    if ( eht )
       if (  cc->getspecfunc ( mbuilding ) & cgresearchb )
-         if ( actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( eht->typ, actmap ) ) {
-            if ( !actmap->player[ cc->getactplayer() ].research.vehicleclassavailable( eht->typ, eht->klasse, actmap ) )
+         if ( actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( eht->typ ) ) {
+            if ( !actmap->player[ cc->getactplayer() ].research.vehicleclassavailable( eht->typ, eht->klasse ) )
                return 1;
 
          } else
@@ -4009,7 +4013,7 @@ void ccontainer_b :: unitchanged( void )
 {
    if ( unitmode == mproduction ) {
       pvehicletype fzt = getmarkedunittype();
-      if ( fzt  && actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( fzt, actmap ) ) {
+      if ( fzt  && actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( fzt ) ) {
          int en = fzt->productionCost.energy;
          int ma = fzt->productionCost.material;
          int fu = 0;
@@ -4043,7 +4047,7 @@ void  ccontainer_b :: setpictures ( void )
          int num = 0;
          for (i = 0; i < 32; i++ )
             if ( building->production[i]  &&
-                  actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( building->production[i], actmap )  &&
+                  actmap->player[ cc->getactplayer() ].research.vehicletypeavailable ( building->production[i] )  &&
                   building->typ->vehicleloadable( building->production[i] ) ) {
                produceableunits[num] = building->production[i];
                picture[num] = building->production[i]->picture[0] ;

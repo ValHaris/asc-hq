@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.77 2001-01-22 20:00:11 mbickel Exp $
+//     $Id: typen.h,v 1.78 2001-01-23 21:05:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.77  2001/01/22 20:00:11  mbickel
+//      Fixed bug that made savegamefrom campaign games unloadable
+//      Optimized the terrainAccess-checking
+//
 //     Revision 1.76  2001/01/21 16:37:22  mbickel
 //      Moved replay code to own file ( replay.cpp )
 //      Fixed compile problems done by cleanup
@@ -90,46 +94,18 @@
 #endif
 
 
+#include "pointers.h"
 #include "tpascal.inc"
 #include "misc.h"
 #include "basestrm.h"
 #include "errors.h"
 
 #include "password.h"
+#include "research.h"
 
 #pragma pack(1)
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/// Some boring pointer definitions
-///  The main structure start at line 440
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-
-typedef class tterrainaccess *pterrainaccess;
-typedef struct tcrc *pcrc;
-typedef class Vehicle  tvehicle ;
-typedef class Vehicle* pvehicle ;
-typedef struct tbuildrange* pbuildrange;
-typedef class tobjecttype* pobjecttype;
-typedef class tmap*  pmap;
-typedef class tmap Map;
-typedef class tevent* pevent ;
-typedef class  ttechnology* ptechnology ;
-typedef class tresearch* presearch ;
-typedef struct tdevelopedtechnologies*  pdevelopedtechnologies;
-typedef char* pchar;
-typedef class tbasenetworkconnection* pbasenetworkconnection;
-typedef class tnetwork* pnetwork;
-typedef struct tquickview* pquickview;
-typedef struct TerrainType* pterraintype;
-typedef class tfield* pfield ;
-typedef class tobjectcontainer* pobjectcontainer;
-typedef struct tresourceview* presourceview;
-typedef class tobject* pobject;
-typedef class tshareview *pshareview;
-                   
 //////////////////////////////////////////////////////////////
 ///    Some miscellaneous defintions. Not very intersting...
 //////////////////////////////////////////////////////////////
@@ -317,12 +293,12 @@ class tterrainaccess {
       
 };
 
-
+/*
 struct tcrc {
   int id;
   int crc;
 };
-
+*/
 
 struct tbuildrange {
   int from;
@@ -554,11 +530,6 @@ class BaseAI {
       };
 
 
- typedef class  Buildingtype* pbuildingtype;
- typedef class  Vehicletype*  pvehicletype ;
-
- typedef class  Building* pbuilding;
- typedef class  Vehicle*  pvehicle;
 
 
 //! A list that stores pointers, but deletes the objects (and not only the pointers) on destruction
@@ -1078,73 +1049,6 @@ class tevent {
  */
 
 
-class tresearchdatachange {
-   public:
-     word         weapons[waffenanzahl];   /*  Basis 1024  */
-     word         armor;         /*  Basis 1024  */
-     unsigned char         dummy[20+(12-waffenanzahl)*2];
-     tresearchdatachange ( void ) {
-        for ( int i = 0; i< waffenanzahl; i++ )
-           weapons[i] = 1024;
-        armor = 1024;
-        memset ( dummy, 0, sizeof(dummy ));
-     };
-}; 
-
-
-class  ttechnology { 
-  public:
-    void*      icon; 
-    char*        infotext; 
-    int          id; 
-    int          researchpoints; 
-    char*        name; 
-
-    tresearchdatachange unitimprovement; 
-
-    char      requireevent; 
-
-    union { 
-      ptechnology  requiretechnology[6]; 
-      int      requiretechnologyid[6]; 
-    };
-
-    int          techlevelget;  // sobald dieser technologylevel erreicht ist, ist die Technologie automatisch verf?gbar
-    char* pictfilename;
-    int lvl;     // wird nur im Spiel benoetigt: "Level" der benoetigten Techologie. Gibt an, wieviele Basistechnologien insgesamt benoetogt werden.
-    int techlevelset;
-    int dummy[7];
-    int  getlvl( void );
-};
-
-
-
-struct tdevelopedtechnologies {
-    ptechnology               tech;
-    pdevelopedtechnologies    next;
-};
-             
-class tresearch { 
-  public:
-    int                     progress;
-    ptechnology             activetechnology;
-    tresearchdatachange     unitimprovement;
-    int                     techlevel;
-    pdevelopedtechnologies  developedtechnologies;
-
-    int technologyresearched ( int id );
-    int vehicletypeavailable ( const pvehicletype fztyp, pmap map );       // The map should be saved as a pointer in TRESEARCH, but this will change the size of TMAP and make all existing savegames and maps invalid ....
-    int vehicleclassavailable ( const pvehicletype fztyp , int classnm, pmap map );
-    void read ( tnstream& stream );
-    void write ( tnstream& stream );
-    tresearch ( void ) {
-       progress = 0;
-       activetechnology = NULL;
-       techlevel = 0;
-       developedtechnologies = NULL;
-    };
-
-};
 
 
 class twind {
@@ -1419,9 +1323,28 @@ class tmap {
 
       void calculateAllObjects ( void );
 
-      pvehicletype getVehicleType_byId ( int id );
       void read ( tnstream& stream );
       void write ( tnstream& stream );
+
+
+      pterraintype getterraintype_byid ( int id );
+      pobjecttype getobjecttype_byid ( int id );
+      pvehicletype getvehicletype_byid ( int id );
+      pbuildingtype getbuildingtype_byid ( int id );
+      ptechnology gettechnology_byid ( int id );
+
+      pterraintype getterraintype_bypos ( int pos );
+      pobjecttype getobjecttype_bypos ( int pos );
+      pvehicletype getvehicletype_bypos ( int pos );
+      pbuildingtype getbuildingtype_bypos ( int pos );
+      ptechnology gettechnology_bypos ( int pos );
+
+      int getTerrainTypeNum ( );
+      int getObjectTypeNum ( );
+      int getVehicleTypeNum ( );
+      int getBuildingTypeNum ( );
+      int getTechnologyNum ( );
+
       ~tmap();
 
 

@@ -1,6 +1,11 @@
-//     $Id: gamedlg.h,v 1.14 2001-01-04 15:13:52 mbickel Exp $
+//     $Id: gamedlg.h,v 1.15 2001-01-23 21:05:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2001/01/04 15:13:52  mbickel
+//      configure now checks for libSDL_image
+//      AI only conquers building that cannot be conquered back immediately
+//      tfindfile now returns strings instead of char*
+//
 //     Revision 1.13  2000/11/08 19:31:07  mbickel
 //      Rewrote IO for the tmap structure
 //      Fixed crash when entering damaged building
@@ -140,8 +145,9 @@ class   tnewcampaignlevel : public tdialogbox {
 class  tcontinuecampaign : public tnewcampaignlevel {
                          word           idsearched;
                          peventstore    oldevent;
-                         pdevelopedtechnologies  tech[8];
-                         pdissectedunit dissectedunits[8]; 
+                         // pdevelopedtechnologies  tech[8];
+                         tmemorystreambuf memoryStreamBuffer;
+                         pdissectedunit dissectedunits[8];
                     public:
                          void           init ( void );
                          virtual void   evaluatemapinfo( const char* srname, tmap* spfld );
@@ -267,7 +273,6 @@ extern void multiplayersettings ( void );
 
 extern void giveunitaway ( void );
 
-extern void settechlevel ( int techlevel, int playerBM );
 extern void showGameParameters ( void );
 
 

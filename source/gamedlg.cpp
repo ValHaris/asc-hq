@@ -1,6 +1,10 @@
-//     $Id: gamedlg.cpp,v 1.59 2001-01-21 16:37:16 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.60 2001-01-23 21:05:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.59  2001/01/21 16:37:16  mbickel
+//      Moved replay code to own file ( replay.cpp )
+//      Fixed compile problems done by cleanup
+//
 //     Revision 1.58  2001/01/19 13:33:50  mbickel
 //      The AI now uses hemming
 //      Several bugfixes in Vehicle Actions
@@ -359,47 +363,24 @@ void         tchoosetechnology::check(void)
    for (i = 0; i < technologynum; i++) {
        ptechnology tech = gettechnology_forpos( i );
        if ( tech ) { 
-          int k = 0; 
-          pdevelopedtechnologies devtech = resrch->developedtechnologies;
-          while (devtech) {
-             if (devtech->tech == tech )
-                   k++;
-             devtech = devtech->next;
-          } /* endwhile */
+          if ( resrch->technologyresearched ( tech->id )) {
+             bool fail = false;
+             for (int j = 0; j < 6; j++) {
+                 if ( tech->requiretechnology[j] > 0 )
+                    if ( !resrch->technologyresearched ( tech->id ))
+                       fail = true;
 
-          if (k > 1) 
-             displaymessage( "choosetechnology: technology %s developed multiple times !", 2, tech->name );
-
-          int l = 0; 
-          if (k == 0) {   /*  technology not yet developed  */ 
-             // if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checktech2 ( tech, 0 )))
-                for (int j = 0; j <= 5; j++) { 
-                   int m = 0; 
-                   if ( tech->requiretechnology[j] ) { 
-                      pdevelopedtechnologies devtech = resrch->developedtechnologies;
-                      while (devtech) {
-                         if (devtech->tech == tech->requiretechnology[j])
-                               m++;
-                         devtech = devtech->next;
-                      } /* endwhile */
-   
-   
-                      if ( m )
-                         l++;
-                   } 
-                   else 
-                      l++;
-   
-                   if ( tech->requireevent) 
-                      if ( ! actmap->eventpassed(tech->id, cenewtechnologyresearchable) )
-                         l = 0; 
-   
-                } 
-
-          } 
-          if (l == 6) { 
-             techs[technum] = tech; 
-             technum++;
+                 if ( tech->requiretechnology[j] < 0 )
+                    if ( resrch->technologyresearched ( -tech->id ))
+                       fail = true;
+             }
+             if ( tech->requireevent)
+                if ( ! actmap->eventpassed(tech->id, cenewtechnologyresearchable) )
+                   fail = true;
+             if (!fail) {
+                techs[technum] = tech;
+                technum++;
+             }
           } 
 
        } 
@@ -1459,11 +1440,10 @@ void         tcontinuecampaign::regroupevents ( pmap map )
       ev = ev->next;
    }
 
+   tmemorystream  memoryStream ( &memoryStreamBuffer, 2 );
    for (int i = 0; i<8; i++) {
-      if ( map->player[i].existent )
-         tech[i] = map->player[i].research.developedtechnologies;
-      else
-         tech[i] = NULL;
+      map->player[i].research.write_struct ( memoryStream );
+      map->player[i].research.write_techs ( memoryStream );
 
       if ( map->player[i].existent )
          dissectedunits[i] = map->player[ i ].dissectedunit;
@@ -1491,14 +1471,16 @@ void         tcontinuecampaign::run(void)
 
       actmap->oldevents = NULL;
       for (i=0;i<8 ; i++) {
-         actmap->player[i].research.developedtechnologies = NULL;
          actmap->player[ i ].dissectedunit = NULL;
       }
 
       loadcampaignmap();
       actmap->oldevents = oldevent;
+      tmemorystream  memoryStream ( &memoryStreamBuffer, 1 );
+
       for (i=0;i<8 ; i++) {
-         actmap->player[i].research.developedtechnologies = tech[i];
+         actmap->player[i].research.read_struct ( memoryStream );
+         actmap->player[i].research.read_techs ( memoryStream );
          actmap->player[ i ].dissectedunit = dissectedunits[i];
       }
 
@@ -2349,24 +2331,6 @@ void         showtechnology(ptechnology  tech )
 } 
 
 
-void settechlevel ( int techlevel, int playerBM )
-{
-   if ( techlevel )               
-      for (int i = 0; i < 8; i++ ) {
-         if ( playerBM & ( 1 << i ))
-            if ( actmap->player[i].existent ) {
-               actmap->player[i].research.techlevel = techlevel;
-               for ( int j = 0; j < technologynum; j++ )
-                  if ( gettechnology_forpos ( j ) )
-                     if ( gettechnology_forpos(j)->techlevelget <= techlevel ) 
-                        addanytechnology ( gettechnology_forpos ( j ), i );
-      
-            }
-      }
-}
-
-
-
 class tchoosetechlevel : public tdialogbox {
              protected:
                 int techlevel; 
@@ -2410,7 +2374,8 @@ void tchoosetechlevel :: run ( void )
       tdialogbox::run();
    } while ( !ok ); 
    if ( techlevel > 0 )
-      settechlevel ( techlevel, 0xff );
+      for ( int i = 0; i < 8; i++ )
+         actmap->player[i].research.settechlevel ( techlevel );
 
 };
 
@@ -4645,7 +4610,8 @@ void tmultiplayersettings :: buttonpressed ( int id )
       status = 2;
 
       if ( techlevel )
-         settechlevel ( techlevel, 0xff );
+         for ( int i = 0; i < 8; i++ )
+             actmap->player[i].research.settechlevel ( techlevel );
 
       if ( replays )
          actmap->replayinfo = new treplayinfo;

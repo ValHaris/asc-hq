@@ -1,6 +1,10 @@
-//     $Id: controls.cpp,v 1.90 2001-01-21 16:37:14 mbickel Exp $
+//     $Id: controls.cpp,v 1.91 2001-01-23 21:05:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.90  2001/01/21 16:37:14  mbickel
+//      Moved replay code to own file ( replay.cpp )
+//      Fixed compile problems done by cleanup
+//
 //     Revision 1.89  2001/01/19 13:33:47  mbickel
 //      The AI now uses hemming
 //      Several bugfixes in Vehicle Actions
@@ -3385,33 +3389,6 @@ void checkalliances_at_beginofturn ( void )
 
 
 
-void addanytechnology ( ptechnology tech, int player )
-{
-   if ( tech ) {
-      presearch resrch = &actmap->player[player].research;
-      pdevelopedtechnologies devtech = new tdevelopedtechnologies;
-
-      devtech->tech = tech;
-      devtech->next = resrch->developedtechnologies;
-      resrch->developedtechnologies = devtech;
-      for ( int i = 0; i < waffenanzahl; i++)
-         resrch->unitimprovement.weapons[i] = resrch->unitimprovement.weapons[i] * tech->unitimprovement.weapons[i] / 1024;
-      resrch->unitimprovement.armor = resrch->unitimprovement.armor * tech->unitimprovement.armor / 1024;
-
-      resrch->activetechnology = NULL;
-      if ( tech->techlevelset )
-         settechlevel ( tech->techlevelset, 1 << player );
-      actmap->player[player].queuedEvents++;
-   }
-}
-
-void addtechnology ( void )
-{
-   presearch resrch = &actmap->player[actmap->actplayer].research;
-   if ( resrch->activetechnology )
-      addanytechnology ( resrch->activetechnology, actmap->actplayer );
-}
-
 
 void    tprotfzt::initbuffer( void )
 {
@@ -3419,7 +3396,7 @@ void    tprotfzt::initbuffer( void )
 
    int i;
    for ( i=0; i < vehicletypenum ; i++ )
-      buf[i] = actmap->player[ actmap->actplayer ].research.vehicletypeavailable ( getvehicletype_forpos ( i ), actmap );
+      buf[i] = actmap->player[ actmap->actplayer ].research.vehicletypeavailable ( getvehicletype_forpos ( i ) );
 
 }
 
@@ -3431,7 +3408,7 @@ void    tprotfzt::evalbuffer( void )
    int i, num = 0;
    for ( i=0; i < vehicletypenum ;i++ ) {
       if (buf[i] == 0) {
-          buf[i] = actmap->player[ actmap->actplayer ].research.vehicletypeavailable ( getvehicletype_forpos ( i ), actmap );
+          buf[i] = actmap->player[ actmap->actplayer ].research.vehicletypeavailable ( getvehicletype_forpos ( i ) );
           if ( buf[i] )
              num++;
       } else
@@ -4352,7 +4329,7 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
                  tprotfzt   pfzt;
                  pfzt.initbuffer ();
 
-                 addtechnology();
+                 actmap->player[actmap->actplayer].research.addtechnology();
 
                  pfzt.evalbuffer ();
 
@@ -4976,12 +4953,12 @@ void         generatevehicle_cl ( pvehicletype fztyp,
                                   int          x,
                                   int          y )
 { 
-   if ( actmap->player[ actmap->actplayer ].research.vehicletypeavailable ( fztyp, actmap ) ) {
+   if ( actmap->player[ actmap->actplayer ].research.vehicletypeavailable ( fztyp ) ) {
 
       vehicle = new Vehicle ( fztyp, actmap, col );
       if ( fztyp->classnum )
         for (int i = 0; i < fztyp->classnum ; i++ ) 
-           if ( actmap->player[ actmap->actplayer ].research.vehicleclassavailable( fztyp, i, actmap ) )
+           if ( actmap->player[ actmap->actplayer ].research.vehicleclassavailable( fztyp, i ) )
               vehicle->klasse = i;
            else
               break;

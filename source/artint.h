@@ -1,6 +1,9 @@
-//     $Id: artint.h,v 1.28 2001-01-21 12:48:35 mbickel Exp $
+//     $Id: artint.h,v 1.29 2001-01-23 21:05:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2001/01/21 12:48:35  mbickel
+//      Some cleanup and documentation
+//
 //     Revision 1.27  2001/01/19 13:33:46  mbickel
 //      The AI now uses hemming
 //      Several bugfixes in Vehicle Actions
@@ -224,24 +227,26 @@
                int damageLimit;
                Resources resourceLimit;
                int ammoLimit;
+               //! the maximum number of turns a unit may need to reach a town to capture
+               int maxCaptureTime;
             } config;
 
           public:
             class MoveVariant {
                public:
-               int orgDamage;
-               int damageAfterMove;
-               int damageAfterAttack;
-               int movex, movey;
-               int attackx, attacky;
-               pvehicle enemy;
-               pvehicle attacker;
-               int enemyOrgDamage;
-               int enemyDamage;
-               int weapNum;
-               int result;
-               int moveDist;
-               bool neighbouringFieldsReachable[ sidenum ]; // used for the hemming tactic
+                  int orgDamage;
+                  int damageAfterMove;
+                  int damageAfterAttack;
+                  int movex, movey;
+                  int attackx, attacky;
+                  pvehicle enemy;
+                  pvehicle attacker;
+                  int enemyOrgDamage;
+                  int enemyDamage;
+                  int weapNum;
+                  int result;
+                  int moveDist;
+                  bool neighbouringFieldsReachable[ sidenum ]; // used for the hemming tactic
             };
          private:
 

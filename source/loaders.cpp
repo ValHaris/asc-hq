@@ -1,6 +1,10 @@
-//     $Id: loaders.cpp,v 1.38 2001-01-22 20:00:09 mbickel Exp $
+//     $Id: loaders.cpp,v 1.39 2001-01-23 21:05:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2001/01/22 20:00:09  mbickel
+//      Fixed bug that made savegamefrom campaign games unloadable
+//      Optimized the terrainAccess-checking
+//
 //     Revision 1.37  2001/01/04 15:13:59  mbickel
 //      configure now checks for libSDL_image
 //      AI only conquers building that cannot be conquered back immediately
@@ -1210,77 +1214,6 @@ void        tspfldloaders::readnetwork ( void )
 
 
 
-
-/**************************************************************/
-/*     Technologien schreiben / lesen                       ÿ */
-/**************************************************************/
-
-void      tspfldloaders::writetechnologies ( void )
-{
-   for (int i = 0; i< 8 ; i++ ) {
-      pdevelopedtechnologies devtech = spfld->player[i].research.developedtechnologies;
-
-      while ( devtech ) {
-         stream->writedata2( devtech->tech->id );
-         devtech = devtech->next;
-      } /* endwhile */
-
-      int  w = 0;
-      stream->writedata2 ( w );
-
-      if ( spfld->player[i].research.activetechnology )
-         stream->writedata2 ( spfld->player[i].research.activetechnology->id );
-
-   } /* endfor */
-}
-
-void      tspfldloaders::readtechnologies ( void )
-{
-    for (int i = 0; i<8 ; i++ ) {
-       spfld->player[i].research.developedtechnologies = NULL;
-
-       int  w;
-       stream->readdata2 ( w );
-
-       pdevelopedtechnologies devtech;
-       while ( w ) {
-
-          ptechnology tec = gettechnology_forid ( w, 0 );
-          if ( !tec )
-             throw InvalidID ( "technology", w );
-
-          devtech = new ( tdevelopedtechnologies );
-          devtech->tech = tec;
-          /*
-          if ( spfld->objectcrc ) 
-             spfld->objectcrc->speedcrccheck->checktech2 ( devtech->tech );
-          */
-
-          devtech->next = spfld->player[i].research.developedtechnologies;
-          spfld->player[i].research.developedtechnologies = devtech;
-
-          stream->readdata2 ( w );
-
-       } /* endwhile */
-
-       if ( spfld->player[i].research.activetechnology ) {
-          stream->readdata2 ( w );
-
-          spfld->player[i].research.activetechnology = gettechnology_forid ( w, 0 );
-
-          if ( !spfld->player[i].research.activetechnology )
-             throw InvalidID ( "technology", w );
-
-          /*
-          if ( spfld->objectcrc ) 
-             spfld->objectcrc->speedcrccheck->checktech2 ( spfld->player[i].research.activetechnology );
-          */
-       }
-
-    } /* endfor */
- }
-
-
 /**************************************************************/
 /*     Replay Data  schreiben / lesen                       ÿ */
 /**************************************************************/
@@ -2020,7 +1953,9 @@ int          tsavegameloaders::savegame( const char* name )
 
    writenetwork ( );
 
-   writetechnologies ();
+   for ( int i = 0; i < 8; i++ )
+      spfld->player[i].research.write_techs ( *stream );
+
    writemessages();
    writeeventstocome ();
    writeeventspassed ();
@@ -2073,7 +2008,8 @@ int          tsavegameloaders::loadgame( const char *       name )
 
    readnetwork ();
 
-   readtechnologies ();
+   for ( int i = 0; i < 8; i++ )
+      spfld->player[i].research.read_techs ( *stream );
 
    readmessages();
 
@@ -2191,7 +2127,9 @@ int          tnetworkloaders::savenwgame( pnstream strm )
 
    writemap ();
 
-   writetechnologies ();
+   for ( int i = 0; i < 8; i++ )
+      spfld->player[i].research.write_techs ( *stream );
+
    writemessages();
 
    writenetwork ( );
@@ -2249,10 +2187,8 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
 
    readmap ();
 
-   #ifdef logging
-   logtofile ( "loaders / tnetworkloaders::loadnwgame / vor readtechnologies" );
-   #endif
-   readtechnologies ();
+   for ( int i = 0; i < 8; i++ )
+      spfld->player[i].research.read_techs ( *stream );
 
 
    #ifdef logging
@@ -2586,7 +2522,7 @@ void treplayloaders :: savereplay ( int num )
       replayfield->player[i].sentmessage = NULL;
       replayfield->player[i].ai = NULL;
       replayfield->player[i].research.activetechnology = NULL;
-      replayfield->player[i].research.developedtechnologies = NULL;
+      replayfield->player[i].research.____setDevTechToNULL ( );
       replayfield->player[i].humanname = "";
       replayfield->player[i].computername = "";
    }
@@ -2767,7 +2703,6 @@ void         __erasemap( pmap& spfld )
   int         i; 
   // pvehicle     aktvehicle;
   // pbuilding    aktbuilding;
-  pdevelopedtechnologies devtech1, devtech2;
 
 
    if (spfld->xsize == 0) 
@@ -2779,19 +2714,6 @@ void         __erasemap( pmap& spfld )
          delete spfld->player[i].ai;
          spfld->player[i].ai = NULL;
       }
-
-
-      #ifdef logging
-      logtofile ( "5/loaders.cpp / erasemap / deleting developed technologies ");
-      #endif
-      devtech1 = spfld->player[i].research.developedtechnologies;
-      while ( devtech1 ) {
-         devtech2 = devtech1->next;
-         delete   ( devtech1 );
-         devtech1 = devtech2;
-      } 
-      spfld->player[i].research.developedtechnologies = NULL;
-
    }
 
    delete spfld;
@@ -2817,17 +2739,6 @@ void         __erasemap_unchained( pmap& spfld )
          delete spfld->player[i].ai;
          spfld->player[i].ai = NULL;
       }
-
-
-      pdevelopedtechnologies devtech1, devtech2;
-
-      devtech1 = spfld->player[i].research.developedtechnologies;
-      while ( devtech1 ) {
-         devtech2 = devtech1->next;
-         delete     devtech1;
-         devtech1 = devtech2;
-      } 
-      spfld->player[i].research.developedtechnologies = NULL;
 
    }
 

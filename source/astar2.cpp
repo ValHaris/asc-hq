@@ -15,15 +15,6 @@
 
 #include "astar2.h"
 
-// Path_div is used to modify the heuristic.  The lower the number,
-// the higher the heuristic value.  This gives us worse paths, but
-// it finds them faster.  This is a variable instead of a constant
-// so that I can adjust this dynamically, depending on how much CPU
-// time I have.  The more CPU time there is, the better paths I should
-// search for.
-int path_div = 8;
-
-#define MAXIMUM_PATH_LENGTH 100000
 
 // The mark array marks directions on the map.  The direction points
 // to the spot that is the previous spot along the path.  By starting
@@ -78,6 +69,7 @@ AStar :: AStar ( pmap actmap, pvehicle veh )
    _path = NULL;
    _veh = veh;
    _actmap = actmap;
+   MAXIMUM_PATH_LENGTH = maxint;
 }
 
 AStar :: ~AStar ( )
@@ -142,6 +134,10 @@ inline void AStar::get_first( Container& v, Node& n )
     v.pop_back();
 }
 
+
+void nnop ()
+{
+}
 
 // Here's the algorithm.  I take a map, two points (A and B), and then
 // output the path in the `path' vector.
@@ -221,9 +217,14 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
             if( getfield (hn.m,hn.n)->temp3 == DirNone ) {
 
                 // The space is not marked
-                getfield (hn.m,hn.n)->temp3 = ReverseDirection(d);
-                open.push_back( N2 );
-                push_heap( open.begin(), open.end(), comp );
+
+                if ( N.gval < MAXIMUM_PATH_LENGTH ) {
+                   getfield (hn.m,hn.n)->temp3 = ReverseDirection(d);
+                   open.push_back( N2 );
+                   push_heap( open.begin(), open.end(), comp );
+                } else {
+                   nnop();
+                }
             }
             else
             {
@@ -319,9 +320,12 @@ bool AStar::fieldVisited ( int x, int y)
    return false;
 }
 
-void AStar::findAllAccessibleFields ( )
+void AStar::findAllAccessibleFields ( int maxDist )
 {
    _actmap->cleartemps ( 1 );
+
+   MAXIMUM_PATH_LENGTH = maxDist;
+
    Path dummy;
    findPath ( dummy, _actmap->xsize, _actmap->ysize );  //this field does not exist...
    for ( Container::iterator i = visited.begin(); i != visited.end(); i++ )
