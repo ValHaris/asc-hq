@@ -507,6 +507,9 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
       return false;
    } else {
    #endif
+      if ( veh->getPosition3D() == destination )
+         return true;
+         
       AStar3D* ast = NULL;
       if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer )
          ast = new HiddenAStar3D ( this, veh );
