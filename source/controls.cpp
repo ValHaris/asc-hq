@@ -926,7 +926,7 @@ void         setspec( pobjecttype obj )
 
          eht->getResource( cost, false );
 
-         eht->setMovement ( eht->getMovement() - movecost );
+         eht->decreaseMovement ( movecost );
 
          build_objects_reset();
       }
@@ -1647,7 +1647,7 @@ void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
 {
    checkalliances_at_beginofturn ();
    for ( int p = 0; p < 8; p++ )
-      actmap->player[p].existanceAtBeginOfTurn = actmap->player[p].exist();
+      actmap->player[p].existanceAtBeginOfTurn = actmap->player[p].exist() && actmap->player[p].stat != Player::off;
 
    if ( actmap->player[actmap->actplayer].stat == Player::human ) {
 
