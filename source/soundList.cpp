@@ -42,7 +42,7 @@ SoundList* SoundList::instance = NULL;
 SoundLoopManager :: SoundLoopManager ( Sound* snd, bool _active )
                   : sound( snd ), active ( _active )
 {
-	displayLogMessage ( 10, " Instantiating SoundLoopManager: sound = %x, active = %d \n", int(snd), int(_active) );
+	displayLogMessage ( 10, " Instantiating SoundLoopManager \n" ); // : sound = %x, active = %d \n", int(snd), int(_active) );
 }
 
 

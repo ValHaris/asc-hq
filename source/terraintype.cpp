@@ -294,7 +294,7 @@ void TerrainType::write ( tnstream& stream ) const
    stream.writeString( name );
    for (int i=0;i<cwettertypennum ;i++ ) {
      if ( weather[i] ) {
-        stream.writeInt ( int( weather[i]->pict ));
+        stream.writeInt ( weather[i]->pict == NULL ?  0 : 1 );
 
         for ( m = 1; m < 8; m++ )
            stream.writeInt ( 0 );

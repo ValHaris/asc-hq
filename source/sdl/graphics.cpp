@@ -84,7 +84,7 @@ void initASCGraphicSubsystem ( SDL_Surface* _screen, SDLmm::Surface* icon )
   agmp->scanlinenumber = screen->h;
   agmp->bytesperscanline = screen->w * screen->format->BytesPerPixel;
   agmp->byteperpix = screen->format->BytesPerPixel ;
-  agmp->linearaddress = (int) screen->pixels;
+  agmp->linearaddress = (PointerSizedInt) screen->pixels;
   agmp->bitperpix = screen->format->BitsPerPixel;
   agmp->directscreenaccess = 0;
 

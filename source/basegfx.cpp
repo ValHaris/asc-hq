@@ -387,7 +387,7 @@ void* halfpict ( void* vbuf )
                linecount++;
             }
          }
-         if ( (int)dest - (int)xlatbuffer > xlatbuffersize )
+         if ( (PointerSizedInt)dest - (PointerSizedInt)xlatbuffer > xlatbuffersize )
             throw fatalgraphicserror ( "halfpict : picture larger than buffer ! " );
 
       }
@@ -486,7 +486,7 @@ void putinterlacedrotimage ( int x1, int y1, void* ptr, int rotation )
       for ( int y = w[1] + 1; y > 0; y-- ) {
          for ( int x = w[0]+1; x > 0; x-- ) {
             if ( *c != 255 )
-               if ( ((int)(buf+y)) & 1 )
+               if ( ((PointerSizedInt)(buf+y)) & 1 )
                   if ( *c >= 16  && *c < 24 )
                      *buf = *c + rotation;
                   else
@@ -1086,7 +1086,7 @@ char* convertimage ( TrueColorImage* img, dacpalette256 pal )
             
                      for ( int k=0;k<256 ;k++ ) {
                         int actdif = sqr( pal[k][0]  - r ) + sqr( pal[k][1]  - g ) + sqr( pal[k][2]  - b );
-            
+
                         if (actdif < diff) {
                            diff = actdif;
                            pix1 = k;
@@ -1283,7 +1283,7 @@ void tvirtualdisplay :: init ( int x, int y, int color, int depth )
    agmp->scanlinenumber  = y ;
    agmp->bytesperscanline  = x * depth/8;
    agmp->byteperpix   = depth/8    ;
-   agmp->linearaddress = (int) buf ;
+   agmp->linearaddress = (PointerSizedInt) buf ;
    agmp->bitperpix          = depth;
    agmp->directscreenaccess = 1;
    if ( depth ==24 || depth==32 ) {

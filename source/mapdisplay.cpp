@@ -508,7 +508,7 @@ void tdisplaymap :: init ( int x1, int y1, int x2, int y2 )
    vfb.parameters.scanlinenumber = dispmapdata.vfbheight;
    vfb.parameters.bytesperscanline = dispmapdata.vfbwidth;
    vfb.parameters.byteperpix = 1;
-   vfb.parameters.linearaddress = (int) vfb.address;
+   vfb.parameters.linearaddress = (PointerSizedInt) vfb.address;
    vfb.parameters.directscreenaccess = 1;
 
 }

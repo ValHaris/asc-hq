@@ -1,6 +1,9 @@
-//     $Id: global_os.h,v 1.8 2003-06-01 15:03:16 mbickel Exp $
+//     $Id: global_os.h,v 1.9 2004-12-16 10:22:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2003/06/01 15:03:16  mbickel
+//      Some updates to the build system for FreeBSD
+//
 //     Revision 1.7  2001/12/19 17:16:29  mbickel
 //      Some include file cleanups
 //
@@ -54,6 +57,8 @@
 
 #ifndef global_os_h_included
  #define global_os_h_included
+
+  typedef unsigned int PointerSizedInt;
 
   #ifndef minimalIO
    // #define sdlheader "SDL.h"

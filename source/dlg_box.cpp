@@ -204,7 +204,7 @@ void          tdialogbox::repaintdisplay( void )
    npush ( *agmp );
    npush ( *hgmp );
 
-   hgmp->linearaddress = (int) virtualscreenbuf.buf;
+   hgmp->linearaddress = (PointerSizedInt) virtualscreenbuf.buf;
    hgmp->windowstatus = 100;
 
    *agmp = *hgmp;
@@ -254,7 +254,7 @@ pdialogbox tdialogbox::first = NULL;
 
 void          tdialogbox::setvirtualframebuf ( void )
 {
-   agmp->linearaddress = (int) virtualscreenbuf.buf;
+   agmp->linearaddress = (PointerSizedInt) virtualscreenbuf.buf;
    agmp->windowstatus = 100;
    agmp->scanlinelength = hgmp->scanlinelength;
 }
@@ -2747,7 +2747,7 @@ void tviewtext::displaytext ( void )
       pw++;
       *pw = tvt_firstlinebufheight;
       pw++;
-      tvt_firstlinebufparm.linearaddress = (int) pw;
+      tvt_firstlinebufparm.linearaddress = (PointerSizedInt) pw;
    }
 
 
