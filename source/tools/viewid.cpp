@@ -35,6 +35,11 @@
 #include "../graphicselector.h"
 #include "../strtmesg.h"
 
+#ifdef WIN32
+#undef main
+#endif
+
+
 #define vid(wildcard,structure,loader) printf("%s\n", wildcard );\
                                        maxid=0;\
                                        for ( int j = 0; j < 60; j++ )\

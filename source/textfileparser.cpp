@@ -16,9 +16,9 @@
  ***************************************************************************/
 
 #include <vector>
-#include <SDLmm/sdlmm.h>
 #include <SDL_image.h>
 #include "ascstring.h"
+#include "basegfx.h"
 #include "typen.h"
 #include "terraintype.h"
 #include "objecttype.h"

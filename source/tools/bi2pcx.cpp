@@ -31,6 +31,10 @@
 #include "../strtmesg.h"
 #include "../textfileparser.h"
 
+#ifdef WIN32
+#undef main
+#endif
+
 int background = 255;
 
 struct tbipictparam {

@@ -35,6 +35,11 @@
 #include "../graphicselector.h"
 #include "../strtmesg.h"
 
+#ifdef WIN32
+#undef main
+#endif
+
+
 char header[2][500];
 char text[200][500];
 char buf[500];

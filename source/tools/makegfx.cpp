@@ -14,6 +14,10 @@
 #include "../basegfx.h"
 #include "../strtmesg.h"
 
+#ifdef WIN32
+#undef main
+#endif
+
 
 typedef map<int,void*> IMGS;
 IMGS images;

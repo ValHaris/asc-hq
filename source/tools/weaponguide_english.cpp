@@ -102,7 +102,7 @@ int main(int argc, char *argv[] )
                 "<HEAD>\n"
                 "<TITLE>WEAPONGUIDE OVERVIEW PICTURES</TITLE>\n"
                 "<base target=\"base\">\n"
-                "<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"../ug.css\">\n"
+                "<LINK REL=\"stylesheet\" TYPE=\"text/css\" HREF=\"../../asc/asc.css\">\n"
                 "</HEAD>\n"
                 "\n"
                 "<BODY bgcolor=\"#447744\" text=\"#eabc1a\" link=\"#EABC1A\" vlink=\"#EABC1A\" alink=\"#EABC1A\" background=\"../ug-hin.gif\" leftmargin=\"5\" topmargin=\"0\">\n" );
@@ -148,7 +148,7 @@ int main(int argc, char *argv[] )
             fprintf ( detailed, "<html>\n"
                       "<HEAD>\n"
                       "<TITLE>UNITGUIDE FRAME</TITLE>\n"
-                      "<frameset  rows=\"220,*\" border=0 >\n"
+                      "<frameset  rows=\"207,*\" border=0 >\n"
                       "<frame name=\"over\" src=\"%s\" marginheight=\"0\">\n"
                       "<frame name=\"under\" src=\"%s\" marginheight=\"2\">\n"
                       "<noframes><body><p>Diese Seite verwendet Frames. Frames werden von Ihrem Browser aber nicht unterstützt.</p></body></noframes>\n"
@@ -236,32 +236,32 @@ int main(int argc, char *argv[] )
 
             // UNIT GENERAL
             fprintf ( detailed1, "<table width=\"100%\" id=\"H2\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n"
-                      "<tr><td colspan=\"2\"></td><td id=\"H9\" align=\"right\">UNIT GUIDE v1.9 german </td></tr>"
+                      "<tr><td colspan=\"2\"></td><td id=\"H9\" align=\"right\">UNIT GUIDE v1.8 </td></tr>"
                       "<tr><td width=\"50\">" );
             if ( exist ( b1.c_str() ))
                fprintf ( detailed1, "<img src=\"%s\">", b1.c_str() );
             fprintf ( detailed1, "</td>\n<td>" );
 
-            fprintf ( detailed1, "<table width=\"500\" id=\"H2\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
+            fprintf ( detailed1, "<table id=\"H2\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
             fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Name</td>         <td align=\"center\" colspan=\"4\">%s</td> </tr>\n", ft->name.c_str() );
             if ( !ft->description.empty() )
-               fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Kurzbeschreibung</td>  <td align=\"center\" colspan=\"4\">%s</td> </tr>\n", ft->description.c_str() );
+               fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Description</td>  <td align=\"center\" colspan=\"4\">%s</td> </tr>\n", ft->description.c_str() );
             else
-               fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Kurzbeschreibung</td>  <td align=\"center\" colspan=\"4\">--</td> </tr>\n" );
-            fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">ID</td>           <td align=\"center\">%i</td> <td></td><td bgcolor=\"#20483f\">Gewicht</td> <td align=\"center\">%d</td> <td bgcolor=\"#20483f\">Typ</td><td width=\"200\">%s</td> </tr>\n", ft->id, ft->weight, cmovemalitypes[ft->movemalustyp]  );
-            fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Panzerung</td>        <td align=\"center\">%i</td> <td></td><td bgcolor=\"#20483f\">Sicht</td>   <td align=\"center\">%d</td> </tr>\n", ft->armor, (ft->view/10) );
-            fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Kosten Energie</td>  <td align=\"center\">%i</td> <td></td><td bgcolor=\"#20483f\">St&ouml;rung</td><td align=\"center\">%d</td> </tr>\n", ft->productionCost.material, (ft->jamming/10) );
-            fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Kosten Material</td><td align=\"center\">%i</td> </tr>\n", ft->productionCost.energy );
+               fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Description</td>  <td align=\"center\" colspan=\"4\">--</td> </tr>\n" );
+            fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">ID</td>           <td align=\"center\">%i</td> <td></td><td bgcolor=\"#20483f\">Weight</td> <td align=\"center\">%d</td> <td bgcolor=\"#20483f\">Type</td><td>%s</td> </tr>\n", ft->id, ft->weight, cmovemalitypes[ft->movemalustyp]  );
+            fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Armor</td>        <td align=\"center\">%i</td> <td></td><td bgcolor=\"#20483f\">View</td>   <td align=\"center\">%d</td> </tr>\n", ft->armor, (ft->view/10) );
+            fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Cost energy</td>  <td align=\"center\">%i</td> <td></td><td bgcolor=\"#20483f\">Jamming</td><td align=\"center\">%d</td> </tr>\n", ft->productionCost.material, (ft->jamming/10) );
+            fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\">Cost material</td><td align=\"center\">%i</td> </tr>\n", ft->productionCost.energy );
 
             if ( ft->wait )
-               fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\" colspan=\"4\">Angriff nach Bewegung</td> <td>No</td> </tr>\n" );
+               fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\" colspan=\"4\">Attack after move</td> <td>No</td> </tr>\n" );
             else
-               fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\" colspan=\"4\">Angriff nach Bewegung</td> <td>Yes</td> </tr>\n" );
+               fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\" colspan=\"4\">Attack after move</td> <td>Yes</td> </tr>\n" );
 
             if ( ft->functions & cf_moveafterattack )
-               fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\" colspan=\"4\">Bewegung nach Angriff</td> <td>Yes</td></tr>\n" );
+               fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\" colspan=\"4\">Move after Attack</td> <td>Yes</td></tr>\n" );
             else
-               fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\" colspan=\"4\">Bewegung nach Angriff</td> <td>No</td></tr>\n" );
+               fprintf ( detailed1, "<tr><td bgcolor=\"#20483f\" colspan=\"4\">Move after Attack</td> <td>No</td></tr>\n" );
 
             fprintf ( detailed1, "</table>\n" );
             fprintf ( detailed1, "</td>\n\n<td width=\"150\">" );
@@ -269,11 +269,11 @@ int main(int argc, char *argv[] )
                fprintf ( detailed1, "<img src=\"%s\">", b2.c_str() );
             fprintf ( detailed1, "</td></tr></table>\n" );
             fprintf ( detailed1, "<table width=\"100%\" id=\"H2\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">\n<tr align=\"center\">" );
-            fprintf ( detailed1, "<td><a href=\"%s\">BEWEGUNG</a></td>", s2.c_str() );
-            fprintf ( detailed1, "<td><a href=\"%s\">WAFFEN</a></td>" , s3.c_str() );
-            fprintf ( detailed1, "<td><a href=\"%s\">FUNKTIONEN</a></td>" , s4.c_str() );
-            fprintf ( detailed1, "<td><a href=\"%s\">LADEKAPAZIT&Auml;TEN</a></td>" , s5.c_str() );
-            fprintf ( detailed1, "<td><a href=\"%s\">BESCHREIBUNG</a></td>" , s6.c_str() );
+            fprintf ( detailed1, "<td><a href=\"%s\">Movement</a></td>", s2.c_str() );
+            fprintf ( detailed1, "<td><a href=\"%s\">Weapons</a></td>" , s3.c_str() );
+            fprintf ( detailed1, "<td><a href=\"%s\">Functions</a></td>" , s4.c_str() );
+            fprintf ( detailed1, "<td><a href=\"%s\">Loading</a></td>" , s5.c_str() );
+            fprintf ( detailed1, "<td><a href=\"%s\">Description</a></td>" , s6.c_str() );
             //         fprintf ( detailed1, "<td><a href=\"%s\">Research</a></td>" , s4.c_str() );
             fprintf ( detailed1, "</tr></table>\n" );
             // END UNIT GENERAL
@@ -291,7 +291,7 @@ int main(int argc, char *argv[] )
             int i,w;
             // Tabellenbeginn
             fprintf( detailed2, "<TABLE align=\"left\" rules=\"rows\" id=\"H9\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">"
-                     "<TR><td colspan=\"9\" bgcolor=\"#20483f\" id=\"H2\" align=\"center\">Erreichbare H&ouml;henstufen:</td></tr>\n<tr>");
+                     "<TR><td colspan=\"9\" bgcolor=\"#20483f\" id=\"H2\">Reachable levels of height:</td></tr>\n<tr>");
             // Spaltentitel
             fprintf ( detailed2, "<td></td>" );
             for ( i = 0; i < 8; i++ )
@@ -328,21 +328,21 @@ int main(int argc, char *argv[] )
             // Einzelne Werte
             // Tabellenbeginn
             fprintf( detailed2, "<TABLE id=\"H2\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">\n" );
-            fprintf( detailed2, "<TR><td bgcolor=\"#20483f\">Treibstofftank</td>    <td align=\"center\">%d</td></tr>\n", ft->tank.fuel );
-            fprintf( detailed2, "<TR><td bgcolor=\"#20483f\">Materialtank</td><td align=\"center\">%d</td></tr>\n", ft->tank.material );
-            fprintf( detailed2, "<TR><td bgcolor=\"#20483f\">Energspeicher</td>  <td align=\"center\">%d</td></tr>\n", ft->tank.energy );
-            fprintf( detailed2, "<TR><td bgcolor=\"#20483f\">Verbrauch</td>  <td align=\"center\">%d</td></tr>\n", ft->fuelConsumption );
+            fprintf( detailed2, "<TR><td bgcolor=\"#20483f\">Fuel tank</td>    <td align=\"center\">%d</td></tr>\n", ft->tank.fuel );
+            fprintf( detailed2, "<TR><td bgcolor=\"#20483f\">Material tank</td><td align=\"center\">%d</td></tr>\n", ft->tank.material );
+            fprintf( detailed2, "<TR><td bgcolor=\"#20483f\">Energy tank</td>  <td align=\"center\">%d</td></tr>\n", ft->tank.energy );
+            fprintf( detailed2, "<TR><td bgcolor=\"#20483f\">Consumption</td>  <td align=\"center\">%d</td></tr>\n", ft->fuelConsumption );
             if ( ft->fuelConsumption > 0 )
-               fprintf( detailed2, "<tr><td bgcolor=\"#20483f\">max.Reichweite</td>   <TD align=\"center\">%d</TD></tr>\n", (ft->tank.fuel/ft->fuelConsumption) );
+               fprintf( detailed2, "<tr><td bgcolor=\"#20483f\">Max.Movem.</td>   <TD align=\"center\">%d</TD></tr>\n", (ft->tank.fuel/ft->fuelConsumption) );
             else
-               fprintf( detailed2, "<tr><td bgcolor=\"#20483f\">max.Reichweite</td>   <TD align=\"center\">--</TD></tr>\n" );
-            fprintf( detailed2, "<TR><td bgcolor=\"#20483f\">Hoehenstufenwechsel</td>   <td align=\"center\">%d</td></tr>\n", ft->steigung );
+               fprintf( detailed2, "<tr><td bgcolor=\"#20483f\">Max.Movem.</td>   <TD align=\"center\">--</TD></tr>\n" );
+            fprintf( detailed2, "<TR><td bgcolor=\"#20483f\">*Steigung*</td>   <td align=\"center\">%d</td></tr>\n", ft->steigung );
             fprintf( detailed2, "\n</TABLE>\n");
 
 
             // Bodentypen global
-            fprintf( detailed2,"<br><br>\n<table rules=\"rows\" id=\"H2\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"><tr><td colspan=\"34\" bgcolor=\"#20483f\" align=\"center\">" );
-            fprintf( detailed2,"Bodentypeneigenschaften der Einheit</td></tr>\n<tr>" );
+            fprintf( detailed2,"<br><br>\n<table rules=\"rows\" id=\"H2\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"><tr><td colspan=\"34\" bgcolor=\"#20483f\">" );
+            fprintf( detailed2,"Terraintypes for not flying units:</td></tr>\n<tr>" );
 
             // Spalten gfx
             fprintf ( detailed2, "<td></td>" );
@@ -351,7 +351,7 @@ int main(int argc, char *argv[] )
             fprintf( detailed2, "</TR>\n<TR>\n");
 
             // Spaltenwerte befahrbare Bodentypen
-            fprintf ( detailed2, "<td>befahrbar</td>" );
+            fprintf ( detailed2, "<td>can&nbsp;drive&nbsp;on</td>" );
             for ( int i = 0; i < cbodenartennum ; i++) {
                if ( ft->terrainaccess.terrain.test(i) )
                   fprintf ( detailed2, "<td><img src=\"../hacken.gif\"></td>" );
@@ -361,7 +361,7 @@ int main(int argc, char *argv[] )
             fprintf( detailed2, "</TR>\n<TR>\n");
 
             // Spaltenwerte stirbt auf
-            fprintf ( detailed2, "<td>Zerstörung</td>" );
+            fprintf ( detailed2, "<td>dies on</td>" );
             for ( i = 0; i < cbodenartennum ; i++) {
                if ( ft->terrainaccess.terrainkill.test(i))
                   fprintf ( detailed2, "<td><img src=\"../hacken.gif\"></td>" );
@@ -371,7 +371,7 @@ int main(int argc, char *argv[] )
             fprintf( detailed2, "</TR>\n<TR>\n");
 
             // Spaltenwerte can not drive on
-            fprintf ( detailed2, "<td>nicht befahrbar</td>" );
+            fprintf ( detailed2, "<td>not drive on</td>" );
             for ( i = 0; i < cbodenartennum ; i++) {
                if ( ft->terrainaccess.terrainnot.test(i) )
                   fprintf ( detailed2, "<td><img src=\"../hacken.gif\"></td>" );
@@ -381,7 +381,7 @@ int main(int argc, char *argv[] )
 
             fprintf ( detailed2, "</tr><tr>\n" );
             // Spaltenwerte can need terrain
-            fprintf ( detailed2, "<td>benoetigt immer</td>" );
+            fprintf ( detailed2, "<td>required</td>" );
             for ( i = 0; i < cbodenartennum ; i++) {
                if ( ft->terrainaccess.terrainreq.test(i) )
                   fprintf ( detailed2, "<td><img src=\"../hacken.gif\"></td>" );
@@ -400,11 +400,11 @@ int main(int argc, char *argv[] )
             fprintf ( detailed3, "<table id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
             // Überschriften
             fprintf ( detailed3, "<tr><td colspan=\"2\"></td>"
-                      "    <td bgcolor=\"#20483f\" colspan=\"4\" align=\"center\">Entfernung</td>"
-                      "    <td bgcolor=\"#20483f\" colspan=\"8\" align=\"center\">schiesst von</td>"
+                      "    <td bgcolor=\"#20483f\" colspan=\"4\" align=\"center\">Distance</td>"
+                      "    <td bgcolor=\"#20483f\" colspan=\"8\" align=\"center\"> can shot from: </td>"
                       "    <td></td>"
-                      "    <td bgcolor=\"#20483f\" colspan=\"8\" align=\"center\">schiesst auf</td>"
-                      "    <td bgcolor=\"#20483f\">Typ</td>"
+                      "    <td bgcolor=\"#20483f\" colspan=\"8\" align=\"center\"> attack to: </td>"
+                      "    <td bgcolor=\"#20483f\">Type</td>"
                       "</tr>\n" );
             // GFX
             fprintf ( detailed3, "<tr><td></td>"
@@ -459,7 +459,7 @@ int main(int argc, char *argv[] )
             //Weapon can hit:
             fprintf ( detailed3, "<table id=\"H9\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
             // Ueberschrift
-            fprintf ( detailed3, "<tr><td></td><td align=\"center\" colspan=\"17\" bgcolor=\"#20483f\">Waffe schiesst auf: </td></tr>" );
+            fprintf ( detailed3, "<tr><td></td><td align=\"center\" colspan=\"17\" bgcolor=\"#20483f\">The weapon can hit: </td></tr>" );
             // Spalten GFX
             fprintf ( detailed3, "<tr><td></td>" );
             for ( i = 0; i < cmovemalitypenum; i++ )
@@ -481,22 +481,17 @@ int main(int argc, char *argv[] )
             // Effizienz
             fprintf ( detailed3, "<table id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
             // Ueberschrift
-            fprintf ( detailed3, "<tr><td></td><td align=\"center\" colspan=\"14\" bgcolor=\"#20483f\" >Waffenstaerke ueber mehrere Hoehenstufen : </td></tr>\n" );
+            fprintf ( detailed3, "<tr><td></td><td align=\"center\" colspan=\"14\" bgcolor=\"#20483f\" >Efficiency over high difference: </td></tr>\n" );
             // Spalten Ueberschrift
             fprintf ( detailed3, "<tr><td></td>" );
             for ( i = 0; i < 13; i++ )
-               fprintf(detailed3, "<td align=\"center\">%d</td>", i-6 );
+               fprintf(detailed3, "<td>%d</td>", i-6 );
             fprintf ( detailed3, "</TR>\n");
             // Spaltenwerte
             for ( int w = 0; w < ft->weapons.count ; w++) {
                fprintf ( detailed3, "<TR><td>#%d</td>", w+1 );
                for ( i = 0; i < 13; i++ )
-                  if ( ft->weapons.weapon[w].efficiency[i] > 0 )
-                           fprintf ( detailed3, " <TD align=\"center\">%d%%</TD>", ft->weapons.weapon[w].efficiency[i] );
-                        else
-                           fprintf ( detailed3, " <TD></TD>"  );
-
-//                  fprintf ( detailed3, "<td align=\"center\">%d%%</td>", ft->weapons.weapon[w].efficiency[i] );
+                  fprintf ( detailed3, "<td>%d%%</td>", ft->weapons.weapon[w].efficiency[i] );
                fprintf ( detailed3, "</TR>\n");
             }
             //Ende tabelle
@@ -510,7 +505,7 @@ int main(int argc, char *argv[] )
             //BEGINN FUNCTIONS
             fprintf ( detailed4, "<table align=\"left\" id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">" );
             // Ueberschrift
-            fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\">Merkmale der Einheit</td></tr>" );
+            fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\">Special Unit functions</td></tr>" );
             for ( int i = 0; i<cvehiclefunctionsnum; i++)
                if ( ft->functions & ( 1 << i ))
                   fprintf ( detailed4, "<tr><td>%s</td></tr>", cvehiclefunctions[i] );
@@ -520,15 +515,16 @@ int main(int argc, char *argv[] )
 			//Einzelwerte
             fprintf ( detailed4, "<table id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">" );
             if ( ft->maxwindspeedonwater )
-               fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\">max.Windst&auml;rke</td> <td>%d</td> </tr>", ft->maxwindspeedonwater );
+               fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\">Max. windspeed on water</td> <td>%d</td> </tr>", ft->maxwindspeedonwater );
             else
-               fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\">max.Windst&auml;rke</td> <td>--</td> </tr>" );
-            fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\">Radius f&uuml;r Ressourcensuche</td><td>%d</td> </tr>", ft->digrange );
-            fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\">Autoreparaturrate </td> <td>%d%%</td> </tr>", ft->autorepairrate );
+               fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\">Max. windspeed on water</td> <td>--</td> </tr>" );
+            fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\">Ressource search range</td><td>%d</td> </tr>", ft->digrange );
+            fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\">Auto repair rate</td> <td>%d</td> </tr>", ft->autorepairrate );
+            //         fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\">Max. unit weight</td><td>%d</td> </tr>/n", ft->maxunitweight );
             fprintf ( detailed4, "</table>\n" );
 
             // Objekte
-            fprintf ( detailed4, "<table align=\"left\" id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">\n" );
+            fprintf ( detailed4, "<table align=\"left\" id=\"H9\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">\n" );
             // Ueberschrift baubare Objekte
             fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\" colspan=\"2\">baubare OBJEKTE</td></tr>\n" );
             for ( unsigned int i = 0; i < ft->objectsBuildable.size(); i++ ) {
@@ -648,8 +644,8 @@ int main(int argc, char *argv[] )
 			
 			} else {
                fprintf ( detailed5, "<table align}\"left\" id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">" );
-               fprintf ( detailed5, "<tr><td align=\"center\" bgcolor=\"#20483f\">&nbsp;</td></tr>" );
-               fprintf ( detailed5, "<tr><td align=\"center\" ><br>Keine Transporteinheit !<br></td></tr>" );
+               fprintf ( detailed5, "<tr><td align=\"center\" bgcolor=\"#20483f\">Loadable units</td></tr>" );
+               fprintf ( detailed5, "<tr><td align=\"center\" ><br>No transport unit!<br></td></tr>" );
                fprintf ( detailed5, "</table>" );
             }
             //ENDE LOADING
@@ -661,7 +657,7 @@ int main(int argc, char *argv[] )
 			
             //BEGINN DESCRIPTION
             fprintf ( detailed6, "<table align=\"left\" id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">" );
-            fprintf ( detailed6, "<tr><td align=\"center\" bgcolor=\"#20483f\">Informationen zur Einheit</td></tr>" );
+            fprintf ( detailed6, "<tr><td align=\"center\" bgcolor=\"#20483f\">Unit description</td></tr>" );
             if ( !ft->infotext.empty() ) {
                string text = ft->infotext;
                if ( text.find ( "#color0#" ) != string::npos )
@@ -686,7 +682,7 @@ int main(int argc, char *argv[] )
             }
             //            fprintf ( detailed6, "<tr><td><br><br>%s</td></tr>", ft->infotext );
             else {
-               fprintf ( detailed6, "<tr><td><br><br>keine Beschreibung verf&uumlgbar !<br><br></td></tr>" );
+               fprintf ( detailed6, "<tr><td><br><br>No description available !<br><br></td></tr>" );
             }
             //Ende tabelle
             fprintf ( detailed6, "</table> \n" );

@@ -25,8 +25,8 @@
     <USERDEFINES value="_DEBUG;HEXAGON;_WIN32_;WIN32;converter;_NOASM_;_SDL_"/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT"/>
     <MAINSOURCE value="tools.bpf"/>
-    <INCLUDEPATH value="..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include"/>
-    <LIBPATH value="..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;..\..\..\..\SDL_image"/>
+    <LIBPATH value="..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par -w-csu"/>
     <LISTFILE value=""/>
   </MACROS>
@@ -69,21 +69,27 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=8
-Item0=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include
-Item1=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;C:\Programme\ascsrc\games\SDL\include
-Item2=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
-Item3=..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
-Item4=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
-Item5=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\asc\source\win32
-Item6=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
-Item7=..\..;$(BCB)\include;$(BCB)\include\vcl
+Count=12
+Item0=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src;C:\Programme\ascdev\SDL_image
+Item1=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;..\..\..\..\SDLmm\src
+Item2=..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include;C:\Programme\ascdev\SDLmm\src
+Item3=..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include
+Item4=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;..\..\..\..\SDL\include
+Item5=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32;C:\Programme\ascsrc\games\SDL\include
+Item6=..\..;..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item7=..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item8=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;..\..\win32
+Item9=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ascsrc\games\asc\source\win32
+Item10=..\..\..\source;$(BCB)\include;$(BCB)\include\vcl
+Item11=..\..;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=3
-Item0=..\..;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
-Item1=..\..;$(BCB)\lib\obj;$(BCB)\lib
-Item2=..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
+Count=5
+Item0=..\..\LIBS\getopt;..\..\sdl;..\..;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\..\LIBS\getopt;..\..\sdl;..\..;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..\..;..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
+Item3=..\..;$(BCB)\lib\obj;$(BCB)\lib
+Item4=..\..\..\source;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1

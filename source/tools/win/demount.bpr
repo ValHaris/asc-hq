@@ -8,7 +8,8 @@
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
-    <LIBFILES value="tools.lib ..\..\libs\bzlib\win\bzlib.lib ..\..\..\..\SDL\bin\Sdl.lib"/>
+    <LIBFILES value="tools.lib ..\..\libs\bzlib\win\bzlib.lib ..\..\..\..\SDL\bin\Sdl.lib 
+      ..\..\..\..\SDLmm\SDLmm.lib"/>
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value="VCL50.bpi VCLX50.bpi bcbsmp50.bpi dclocx50.bpi"/>

@@ -69,6 +69,8 @@ USEUNIT("..\..\terraintype.cpp");
 USEUNIT("..\..\textfileparser.cpp");
 USEUNIT("..\..\textfiletags.cpp");
 USEUNIT("..\..\itemrepository.cpp");
+USELIB("..\..\..\..\SDLmm\SDLmm.lib");
+USELIB("..\..\..\..\SDL_image\bin\SDL_image.lib");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 

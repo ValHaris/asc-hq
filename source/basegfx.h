@@ -36,8 +36,11 @@
 #ifndef basegfx_h
 #define basegfx_h
 
-
+#ifdef WIN32
+#include <sdlmm.h>
+#else
 #include <SDLmm/sdlmm.h>
+#endif
 
 #include "tpascal.inc"
 #include "global.h"
