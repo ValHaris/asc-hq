@@ -20,11 +20,22 @@ The project's website is http://www.asc-hq.org
 
 An ASC installation consists of the executables and data files:
 
-Installing the data file(s)
-===========================
+Installing the data files
+=========================
 
-The basic data is stored in a file called main.con . If you don't have it, get 
-the data package from http://www.asc-hq.org 
+The basic data is stored in the files: mk1.con , trrobj2.con , buildings.con ,
+main.con , trrobj.con . If you got ASC using CVS, you will only have the data 
+that forms the main.con . Get the other files from 
+
+www.asc-hq.org/download_updates.html
+
+and place them in the asc/data/ . They are required for building ASC and will
+be installed by make install. Everything should work then.
+
+
+Installing the data files manually
+==================================
+
 By default, ASC searches for its files in these directories:
   ~/.asc/
   /var/local/games/asc/
@@ -52,11 +63,22 @@ Building and installing the games executables (source code required)
 FAQ :
 
 THE COMPILE COMPLAINS IT CAN'T FIND SDL.
+-----------------------------------------
 
 ./configure --with-SDL-prefix=<where>
 <where> should be the prefix you make installed SDL into.
 
---------------------------------------------------------------------
+
+THE COMPILE COMPLAINS IT DOESN'T KNOW HOW TO BUILD buildings.con
+(OR ANY OTHER *.CON FILE)
+-----------------------------------------------------------------
+
+You might need to download the files manually. Read the section
+"Installing the data files" above.
+
+
+
+=======================================================================
 
    These are generic installation instructions.
 

@@ -26,7 +26,7 @@ ldflags=
 [General]
 AMChanged=false
 author=Martin Bickel
-configure_args=--enable-genparse
+configure_args=
 debug_args=-window
 email=bickel@asc-hq.org
 execute_args=

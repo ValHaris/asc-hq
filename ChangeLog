@@ -1,3 +1,23 @@
+2001-11-22 16:08  mbickel
+
+	* source/: CLoadable.cpp, PropertyGroup.cpp, gameoptions.cpp,
+	gameoptions.h, gui.cpp, sgstream.cpp, strtmesg.cpp:  Added
+	gameoption heightChangeMovement
+
+2001-11-22 14:49  mbickel
+
+	* asc.bpg, source/edselfnt.cpp, source/gamemap.cpp,
+	source/typen.cpp, source/unitctrl.cpp, source/vehicle.cpp:  Fixed
+	crash in Mapeditor when selection color 9
+	 Fixed: turrets being displayed gray
+	 Fixed: division by 0 by AI movement
+
+2001-11-18 20:31  mbickel
+
+	* ChangeLog, data/Makefile.am, data/Makefile.in, source/gui.cpp,
+	source/unitctrl.cpp:  Fixed crash when reaction fire kills a unit
+	during height change
+
 2001-11-15 21:46  mbickel
 
 	* source/: building.cpp, building_controls.h, strtmesg.cpp,
