@@ -1,6 +1,11 @@
-//     $Id: typen.h,v 1.26 2000-06-28 18:31:03 mbickel Exp $
+//     $Id: typen.h,v 1.27 2000-07-05 09:24:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.26  2000/06/28 18:31:03  mbickel
+//      Started working on AI
+//      Started making loaders independent of memory layout
+//      Destroyed buildings can now leave objects behind.
+//
 //     Revision 1.25  2000/06/09 13:12:29  mbickel
 //      Fixed tribute function and renamed it to "transfer resources"
 //
@@ -1874,12 +1879,12 @@ extern const char* ceventtriggerconn[];
     */ 
 
 
-#define ceventactionnum 20
+#define ceventactionnum 21
 extern const char* ceventactions[ceventactionnum]; // not bitmapped 
  enum { cemessage,   ceweatherchange, cenewtechnology, celosecampaign, cerunscript,     cenewtechnologyresearchable, 
         cemapchange, ceeraseevent,    cecampaignend,   cenextmap,      cereinforcement, ceweatherchangecomplete, 
         cenewvehicledeveloped, cepalettechange, cealliancechange,      cewindchange,    cenothing, 
-        cegameparamchange, ceellipse, ceremoveellipse };
+        cegameparamchange, ceellipse, ceremoveellipse, cechangebuildingdamage };
 
 
 extern const char*  ceventtrigger[]; 

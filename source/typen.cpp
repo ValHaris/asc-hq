@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.24 2000-07-04 18:39:41 mbickel Exp $
+//     $Id: typen.cpp,v 1.25 2000-07-05 09:24:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/07/04 18:39:41  mbickel
+//      Added weapon information in buildings
+//      Made buried pipeline darker
+//
 //     Revision 1.23  2000/07/02 21:04:14  mbickel
 //      Fixed crash in Replay
 //      Fixed graphic errors in replay
@@ -144,7 +148,8 @@ const char* ceventtriggerconn[8]  = {"AND ", "OR ", "NOT ", "( ", "(( ", ")) ", 
 const char* ceventactions[ceventactionnum]  = {"message", "weather change", "new technology discovered", "lose campaign", "run script + next map",
                                                "new technology researchable", "map change", "discarded [ was erase event ]", "end campaign", "next map",
                                                "reinforcement","weather change completed", "new vehicle developed","palette change",
-                                               "alliance change","wind change", "nothing", "change game parameter","paint ellipse","remove ellipse"};
+                                               "alliance change","wind change", "nothing", "change game parameter","paint ellipse","remove ellipse",
+                                               "change building damage"};
 
 const char* ceventtrigger[ceventtriggernum]  = {"*NONE*", "turn/move >=", "building conquered", "building lost",
                                                  "building destroyed", "unit lost", "technology researched",

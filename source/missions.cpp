@@ -1,6 +1,9 @@
-//     $Id: missions.cpp,v 1.7 2000-05-23 20:40:47 mbickel Exp $
+//     $Id: missions.cpp,v 1.8 2000-07-05 09:24:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/05/23 20:40:47  mbickel
+//      Removed boolean type
+//
 //     Revision 1.6  2000/04/27 16:25:26  mbickel
 //      Attack functions cleanup
 //      New vehicle categories
@@ -885,6 +888,17 @@ void         executeevent(pevent       ev)
             actmap->ellipse->active = 0;
            repaintdisplay();
          }
+
+      if ( ev->a.action == cechangebuildingdamage ) {
+         pfield fld = getfield ( ev->intdata[0], ev->intdata[1] );
+         if ( fld && fld->building ) {
+            if ( ev->intdata[2] >= 100 )
+               removebuilding ( &fld->building );
+            else
+               fld->building->damage  = ev->intdata[2];
+         }
+      }
+
 
     
       if (actmap->firsteventtocome == ev) { 

@@ -1,6 +1,9 @@
-//     $Id: edevents.cpp,v 1.8 2000-05-23 20:40:43 mbickel Exp $
+//     $Id: edevents.cpp,v 1.9 2000-07-05 09:24:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/05/23 20:40:43  mbickel
+//      Removed boolean type
+//
 //     Revision 1.7  2000/05/10 19:55:47  mbickel
 //      Fixed empty loops when waiting for mouse events
 //
@@ -1961,6 +1964,19 @@ void         tcreateevent::buttonpressed(byte         id)
                          ae->intdata[4] = choice_dlg("x orientation","~l~eft","~r~ight") - 1;
                          ae->intdata[5] = choice_dlg("y orientation","~t~op","~b~ottom") - 1;
                       }
+                }
+                break;
+             case cechangebuildingdamage: {
+                      if ( !ae->intdata || ae->datasize != 3 * sizeof ( int )) {
+                         freedata();
+                         ae->intdata = new int[3];
+                         ae->datasize = 3 * sizeof ( int );
+                         ae->intdata[0] = 0;
+                         ae->intdata[1] = 0;
+                         ae->intdata[2] = 0;
+                      }
+                      getxy_building(&ae->intdata[0],&ae->intdata[1]); 
+                      ae->intdata[2] = getid("damage",ae->intdata[2],0,100); 
                 }
                 break;
              } 
