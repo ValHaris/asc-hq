@@ -1,7 +1,11 @@
-//     $Id: dialog.h,v 1.7 2000-06-08 21:03:41 mbickel Exp $
+//     $Id: dialog.h,v 1.8 2000-08-02 15:52:50 mbickel Exp $
 
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/06/08 21:03:41  mbickel
+//      New vehicle action: attack
+//      wrote documentation for vehicle actions
+//
 //     Revision 1.6  2000/05/23 20:40:42  mbickel
 //      Removed boolean type
 //
@@ -319,6 +323,7 @@ class taskforsupervisorpassword : public tenterpassword {
 
 extern void enterpassword ( int* cr );
 extern int encodepassword ( char* pw );
+extern void viewUnitSetinfo ( void );
 
 
 #endif

@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.42 2000-08-01 13:50:52 mbickel Exp $
+//     $Id: spfst.cpp,v 1.43 2000-08-02 15:53:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.42  2000/08/01 13:50:52  mbickel
+//      Chaning the height of airplanes is not affected by wind any more.
+//      Fixed: Airplanes could ascend onto buildings
+//
 //     Revision 1.41  2000/07/29 14:54:48  mbickel
 //      plain text configuration file implemented
 //
@@ -6648,7 +6652,7 @@ int tvehicle :: getstrongestweapon( int aheight, int distance)
           ( typ->weapons->weapon[i].maxdistance >= distance) &&
           ( typ->weapons->weapon[i].targ & aheight ) &&
           ( typ->weapons->weapon[i].sourceheight & height )) {
-            int astr = weapstrength[i] * weapDist.getWeapStrength( &typ->weapons->weapon[i], distance, height, aheight);
+            int astr = int( weapstrength[i] * weapDist.getWeapStrength( &typ->weapons->weapon[i], distance, height, aheight));
             if ( astr > str ) {
                str = astr;
                hw  = i;
@@ -6781,3 +6785,13 @@ void MapDisplay :: stopAction ( void )
 
 }
 
+int isUnitNotFiltered ( int id )
+{
+   if ( unitSets.size() > 0 ) {
+      for ( int i = 0; i < unitSets.size(); i++ )
+         if ( unitSets[i]->isMember ( id ))
+            if ( !unitSets[i]->active )
+                return 0;
+   }
+   return 1;
+}

@@ -1,6 +1,10 @@
-//     $Id: sgstream.h,v 1.7 2000-08-01 10:39:17 mbickel Exp $
+//     $Id: sgstream.h,v 1.8 2000-08-02 15:53:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/08/01 10:39:17  mbickel
+//      Updated documentation
+//      Refined configuration file handling
+//
 //     Revision 1.6  2000/07/31 18:02:54  mbickel
 //      New configuration file handling
 //      ASC searches its data files in all directories specified in ascrc
@@ -48,6 +52,8 @@
 
 #ifndef sgstream_h
 #define sgstream_h
+
+#include <vector>
 
 #include "basestrm.h"
 #include "typen.h"
@@ -195,6 +201,43 @@ extern void checkFileLoadability ( const char* filename );
 extern void initFileIO ( const char* configFileName );
 
 
+
+
+
+class SingleUnitSet {
+      public:
+         struct IdRange {
+                 int from;
+                 int to;
+                };
+
+
+         class TranslationTable {
+                  public:
+                    vector<IdRange> translation;
+                    string name;
+                     void parseString ( const char* s );
+               };
+
+
+         int active;
+         string name;
+         string maintainer;
+         string information;
+
+         vector<IdRange> ids;
+         vector<TranslationTable*> transtab;
+
+         SingleUnitSet ( void ) : active ( 1 ) {};
+         int isMember ( int id );
+         void read ( pnstream stream );
+         void parseIDs ( const char* s );
+
+     };
+
+extern vector<SingleUnitSet*> unitSets;
+
+extern void loadUnitSets ( void );
 
 
 #endif

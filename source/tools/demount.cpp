@@ -37,58 +37,66 @@ int main(int argc, char *argv[] )
       printf("usage: demount containerfile\n");
       return 2;
    }
-   FILE* fp = fopen ( argv[1], "rb" );
-#ifdef _DOS_
-   int magic;
-   fread ( &magic, 1, 4, fp );
-   if ( magic != 'MBCN' ) {
-#else
-   char magic[4];
-   fread(&magic,1,sizeof(magic),fp);
-   if (strncmp(magic,"NCBM",4) != 0) {
-#endif
-      printf("invalid containerfile\n");
-      return 1;
-   }
-   fread ( &pos, 1, 4, fp );
-   fseek ( fp, pos, SEEK_SET );
-
-   fread ( &num, 1, 4, fp );
-   tcontainerindex* index = new tcontainerindex[num];
-   int i;
-   for (i = 0; i < num; i++ ) {
-      fread ( &index[i], 1, sizeof ( index[i] ) , fp );
-      if ( index[i].name ) {
-         int p = -1;
-         index[i].name = new char[100];
-         do {
-            fread ( &index[i].name[++p], 1, 1, fp );
-         } while ( index[i].name[p] ); /* enddo */
-      }
-   }
-   fclose ( fp );
-   opencontainer ( argv[1] );
-
-   int bufsize = 1000000;
-   void* buf = malloc ( bufsize );
-
-   for ( i = 0; i < num; i++ ) {
-      try {
-         tnfilestream instream ( index[i].name, 1 );
-         tn_file_buf_stream outstream ( index[i].name, 2 );
-         int size ;
-         do {
-            size = instream.readdata ( buf, bufsize, 0 );
-            outstream.writedata ( buf, size );
-         } while ( size == bufsize );
-      } /* endtry */
-      catch ( tfileerror err) {
-         printf( "error writing file %s ", err.filename );
+   for ( int a = 1; a < argc; a++ ) {
+      FILE* fp = fopen ( argv[a], "rb" );
+   #ifdef _DOS_
+      int magic;
+      fread ( &magic, 1, 4, fp );
+      if ( magic != 'MBCN' ) {
+   #else
+      char magic[4];
+      fread(&magic,1,sizeof(magic),fp);
+      if (strncmp(magic,"NCBM",4) != 0) {
+   #endif
+         printf("invalid containerfile\n");
          return 1;
-      } /* endcatch */
-     
-   } /* endfor */
+      }
+      fread ( &pos, 1, 4, fp );
+      fseek ( fp, pos, SEEK_SET );
 
-   free ( buf );
+      fread ( &num, 1, 4, fp );
+      tcontainerindex* index = new tcontainerindex[num];
+      int i;
+      for (i = 0; i < num; i++ ) {
+         fread ( &index[i], 1, sizeof ( index[i] ) , fp );
+         if ( index[i].name ) {
+            int p = -1;
+            index[i].name = new char[100];
+            do {
+               fread ( &index[i].name[++p], 1, 1, fp );
+            } while ( index[i].name[p] ); /* enddo */
+         }
+      }
+      fclose ( fp );
+      opencontainer ( argv[a] );
+
+      int bufsize = 1000000;
+      void* buf = malloc ( bufsize );
+
+      for ( i = 0; i < num; i++ ) {
+         try {
+            tnfilestream instream ( index[i].name, 1 );
+            char namebuf[ maxFileStringSize ];
+            int j = -1;
+            do {
+               j++;
+               namebuf[j] = tolower ( index[i].name[j] );
+            } while ( namebuf[j] );
+            tn_file_buf_stream outstream ( namebuf, 2 );
+            int size ;
+            do {
+               size = instream.readdata ( buf, bufsize, 0 );
+               outstream.writedata ( buf, size );
+            } while ( size == bufsize );
+         } /* endtry */
+         catch ( tfileerror err) {
+            printf( "error writing file %s ", err.filename );
+            return 1;
+         } /* endcatch */
+
+      } /* endfor */
+
+      free ( buf );
+   }
    return 0;
 }

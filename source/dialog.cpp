@@ -1,6 +1,11 @@
-//     $Id: dialog.cpp,v 1.37 2000-08-02 10:28:25 mbickel Exp $
+//     $Id: dialog.cpp,v 1.38 2000-08-02 15:52:44 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2000/08/02 10:28:25  mbickel
+//      Fixed: generator vehicle not working
+//      Streams can now report their name
+//      Field information shows units filename
+//
 //     Revision 1.36  2000/07/31 19:16:34  mbickel
 //      Improved handing of multiple directories
 //      Fixed: wind direction not displayed when cycling through wind heights
@@ -734,7 +739,7 @@ void         tweaponinfo::run(void)
 
          for (i = 0; i <= 255; i++) { 
             xa = x1 + 325 + (510 - 325) * i / 256;
-            ya = y1 + starty + 260 - (260 - 140) * weapDist.getWeapStrength(&aktvehicle->weapons->weapon[weapnum], aktvehicle->weapons->weapon[weapnum].mindistance + ( aktvehicle->weapons->weapon[weapnum].maxdistance - aktvehicle->weapons->weapon[weapnum].mindistance) * i / 256, -1, -1 );
+            ya = int( y1 + starty + 260 - (260 - 140) * weapDist.getWeapStrength(&aktvehicle->weapons->weapon[weapnum], aktvehicle->weapons->weapon[weapnum].mindistance + ( aktvehicle->weapons->weapon[weapnum].maxdistance - aktvehicle->weapons->weapon[weapnum].mindistance) * i / 256, -1, -1 ) );
             putpixel(xa,ya,darkgray); 
          } 
       } 
@@ -1428,8 +1433,8 @@ void tvehicleinfo::showweaponsvariables( void )
    
             for (ii = 0; ii <= 255; ii++) {
                 xa = graphx1 + ii * dx / 255;
-                ya = graphy2 - dy *
-                      weapDist.getWeapStrength(&aktvehicle->weapons->weapon[markweap], 0, -1, -1, ii );
+                ya = int ( graphy2 - dy *
+                           weapDist.getWeapStrength(&aktvehicle->weapons->weapon[markweap], 0, -1, -1, ii ));
                 putpixel(xa,ya,14); 
              
             } 
@@ -6147,6 +6152,69 @@ void viewterraininfo ( void )
       vat.done();
 
    }
+}
+
+void viewUnitSetinfo ( void )
+{
+   string s;
+   pfield fld = getactfield();
+   if ( fieldvisiblenow  ( fld ) && fld->vehicle ) {
+
+         s += "#aeinzug0##eeinzug0#\n"
+              "#font02#Unit Information:#font01##aeinzug20##eeinzug20##crtp10#" ;
+
+         pvehicletype typ = getactfield()->vehicle->typ;
+
+
+         s += "Unit name: " ;
+         if ( typ->name && typ->name[0] )
+            s += typ->name ;
+         else
+            if ( typ->description  &&  typ->description[0] )
+               s += typ->description;
+
+         char t3[1000];
+         sprintf(t3, "\nUnit ID: %d \n", typ->id );
+         s += t3;
+
+         if ( typ->filename ) {
+            sprintf(t3, "file name: %s\n\n", typ->filename );
+            s += t3;
+
+         }
+
+         if ( unitSets.size() > 0 )
+            for ( int i = 0; i < unitSets.size(); i++ )
+               if ( unitSets[i]->isMember ( typ->id )) {
+                  s += "Unit is part of this unit set:";
+                  if ( unitSets[i]->name.length()) {
+                     s += "#aeinzug20##eeinzug20#\nName: #aeinzug60##eeinzug60#\n";
+                     s += unitSets[i]->name;
+                  }
+                  if ( unitSets[i]->maintainer.length()) {
+                     s += "#aeinzug20##eeinzug20#\nMaintainer: #aeinzug60##eeinzug60#\n";
+                     s += unitSets[i]->maintainer;
+                  }
+                  if ( unitSets[i]->information.length()) {
+                     s += "#aeinzug20##eeinzug20#\nInformation: #aeinzug60##eeinzug60#\n";
+                     s += unitSets[i]->information;
+                  }
+                  s += "#aeinzug0##eeinzug0#\n";
+               }
+
+
+   } else
+      s += "\nNo unit selected";
+
+   while ( s.find ( "@" ) != string::npos )
+      s.replace ( s.find ( "@" ), 1, " (at) "); // the default font has not @ character
+
+   tviewanytext vat;
+   vat.init ( "Unit information", s.c_str() );
+   vat.run();
+   vat.done();
+
+
 }
 
 

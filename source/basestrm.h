@@ -1,6 +1,11 @@
-//     $Id: basestrm.h,v 1.17 2000-08-02 10:28:23 mbickel Exp $
+//     $Id: basestrm.h,v 1.18 2000-08-02 15:52:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/08/02 10:28:23  mbickel
+//      Fixed: generator vehicle not working
+//      Streams can now report their name
+//      Field information shows units filename
+//
 //     Revision 1.16  2000/08/01 10:39:08  mbickel
 //      Updated documentation
 //      Refined configuration file handling
@@ -267,6 +272,7 @@ class tnstream {
 
            virtual void readpchar( char** pc, int maxlength = 0) ;
            virtual void readpnchar( char** pc, int maxlength = 0) ;
+           virtual int readTextString ( string& s ); // return 0 if end of file is reached
            virtual void writepchar( const char* pc) ;
 
            virtual int  readInt  ( void );
@@ -735,6 +741,7 @@ extern void appendbackslash ( char* string );
 extern char* constructFileName( char* buf, int directoryLevel, const char* path, const char* filename );
 extern int directoryExist ( const char* path );
 extern char* extractPath ( char* buf, const char* filename );
+extern char* extractFileName ( char* buf, const char* filename );
 
 #endif
 

@@ -1,6 +1,11 @@
-//     $Id: edglobal.cpp,v 1.15 2000-07-31 18:02:53 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.16 2000-08-02 15:52:55 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/07/31 18:02:53  mbickel
+//      New configuration file handling
+//      ASC searches its data files in all directories specified in ascrc
+//      Renamed all tools so they begin with asc
+//
 //     Revision 1.14  2000/07/29 14:54:25  mbickel
 //      plain text configuration file implemented
 //
@@ -89,7 +94,6 @@
 #include "gameoptions.h"   
 
 mc_check mc;
-UnitSet unitSet;
 
 
    const char* execactionnames[execactionscount] = {"End MapEdit","Help","Goto EditMode","Select terrain","Select unit",
@@ -103,7 +107,7 @@ UnitSet unitSet;
       "Place active thing","Delete Unit","Delete building","Delete special object","Delete mine","AboutBox","Save map as ...",
       "End PolygonMode","Smooth coasts","Import BI-Map","SEPERATOR","BI-Resource Mode","Insert BI map", "Set zoom level", 
       "Move Building", "set weather of whole map", "set map parameters", "terrain info", "set unit filter", "select graphic set",
-      "unitset transformation"};
+      "unitset transformation", "Unitset Information"};
 
 
 // õS Infomessage
@@ -824,7 +828,8 @@ void execaction(int code)
   #endif
    case act_unitsettransformation: unitsettransformation();
       break;
-
+   case act_unitSetInformation: viewUnitSetinfo();
+      break;
     }
 }
 

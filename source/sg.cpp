@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.65 2000-08-01 10:39:11 mbickel Exp $
+//     $Id: sg.cpp,v 1.66 2000-08-02 15:52:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.65  2000/08/01 10:39:11  mbickel
+//      Updated documentation
+//      Refined configuration file handling
+//
 //     Revision 1.64  2000/07/31 19:16:46  mbickel
 //      Improved handing of multiple directories
 //      Fixed: wind direction not displayed when cycling through wind heights
@@ -1572,7 +1576,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_vehicleinfo,     ua_researchinfo,     ua_unitstatistics, ua_buildingstatistics, ua_newmessage, ua_viewqueuedmessages, 
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
-                    ua_selectgraphicset };
+                    ua_selectgraphicset, ua_UnitSetInfo  };
 
 
 void         tsgpulldown :: init ( void )
@@ -1615,7 +1619,9 @@ void         tsgpulldown :: init ( void )
    addbutton ( "~T~errainõ7", ua_viewterraininfo ); 
    addbutton ( "seperator", -1 ); 
    addbutton ( "~R~esearch", ua_researchinfo ); 
-   addbutton ( "vehicle ~I~mprovementõF7", ua_dispvehicleimprovement); 
+   addbutton ( "vehicle ~I~mprovementõF7", ua_dispvehicleimprovement);
+   addbutton ( "unit ~S~et information", ua_UnitSetInfo );
+
 
   addfield ( "~S~tatistics" );
    addbutton ( "~U~nits", ua_unitstatistics ); 
@@ -2395,6 +2401,8 @@ void execuseraction ( tuseractions action )
                        break;
         case ua_selectgraphicset:   selectgraphicset();
                        break;
+        case ua_UnitSetInfo:        viewUnitSetinfo();
+                       break;
     }                                   
                        
 
@@ -2811,6 +2819,7 @@ void loaddata( int resolx, int resoly,
 
    if ( actprogressbar ) actprogressbar->startgroup();
    loadallvehicletypes();
+   loadUnitSets();
 
    if ( actprogressbar ) actprogressbar->startgroup();
    loadallbuildingtypes();

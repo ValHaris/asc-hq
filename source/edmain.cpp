@@ -1,6 +1,10 @@
-//     $Id: edmain.cpp,v 1.18 2000-08-01 10:39:09 mbickel Exp $
+//     $Id: edmain.cpp,v 1.19 2000-08-02 15:52:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/08/01 10:39:09  mbickel
+//      Updated documentation
+//      Refined configuration file handling
+//
 //     Revision 1.17  2000/07/31 19:16:42  mbickel
 //      Improved handing of multiple directories
 //      Fixed: wind direction not displayed when cycling through wind heights
@@ -106,7 +110,6 @@
 #include "edselfnt.h"
 #include "edglobal.h"
 #include <signal.h>
-// #include <new.h>
 
 #ifdef _DOS_
  #include "dos\memory.h"
@@ -390,83 +393,6 @@ void         loadcursor(void)
 
 
 
-void loadUnitSets ( void )
-{
-   tfindfile ff ( "*.set" );
-   char* n = ff.getnextname();
-   int setnum = 0;
-   while ( n ) {
-      tnfilestream s ( n, 1 );
-      char buf[10000];
-      char buf2[10000];
-      int read = s.readdata ( buf, 10000, 0 );
-      buf[read] = 0;
-
-      if ( buf[0] ) {
-         strcpy ( buf2, buf );
-         int rangenum = 0;
-
-         char* filename = strtok ( buf, ";\r\n");
-         unitSet.set[setnum].init ( filename );
-
-         char* piclist = strtok ( NULL, ";\r\n" );
-
-         char* pic = strtok ( piclist, "," );
-         while ( pic ) {
-            int from, to;
-            if ( strchr ( pic, '-' )) {
-               char* a = strchr ( pic, '-' );
-               *a = 0;
-               from = atoi ( pic );
-               to = atoi ( ++a );
-            } else 
-               from = to = atoi ( pic );
-
-            unitSet.set[setnum].ids[rangenum].from = from;
-            unitSet.set[setnum].ids[rangenum].to   = to;
-
-            rangenum ++;
-            pic = strtok ( NULL, "," );
-         }
-
-         strcpy ( buf, buf2 );
-
-         dynamic_array<char*> transtable;
-         int transtablenum = 0;
-         const char* sectionlabel = "#";
-         char* transstart  = strstr ( buf, sectionlabel );
-         if ( transstart ) {
-            char* pc = strtok ( transstart, "#\n\r" );
-            while ( pc ) {
-               transtable[transtablenum++] = pc;
-               pc = strtok ( NULL, "#\n\r" );
-            }
-         }
-         for ( int t = 0; t < transtablenum; t++ ) {
-            char* tname = strtok ( transtable[t], ";" );
-            char* trans = strtok ( NULL, ";" );
-            int entrynum = 0;
-            if ( trans ) 
-               strcpy ( unitSet.set[setnum].transtab[t].name , tname );
-            
-            while ( trans ) {
-               char* pc = strchr ( trans, ',' );
-               unitSet.set[setnum].transtab[t].translation[entrynum].to = atoi ( pc+1 );
-               *pc = 0;
-               unitSet.set[setnum].transtab[t].translation[entrynum].from = atoi ( trans );
-               entrynum++;
-
-               trans = strtok ( NULL, ";" );
-            } /* endwhile */
-
-         }
-
-         setnum++;
-      }
-
-      n = ff.getnextname();
-   } /* endwhile */
-}
 
 
 void loaddata( void ) 

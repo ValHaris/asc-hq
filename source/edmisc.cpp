@@ -1,6 +1,11 @@
-//     $Id: edmisc.cpp,v 1.19 2000-06-28 19:26:15 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.20 2000-08-02 15:52:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/06/28 19:26:15  mbickel
+//      fixed bug in object generation by building removal
+//      Added artint.cpp to makefiles
+//      Some cleanup
+//
 //     Revision 1.18  2000/05/23 20:40:44  mbickel
 //      Removed boolean type
 //
@@ -751,6 +756,7 @@ void         pdsetup(void)
 
    pd.addfield ("~H~elp");
     pd.addbutton ( "~U~nit Informationõctrl+U",    act_unitinfo );
+    pd.addbutton ( "unit~S~et Information",        act_unitSetInformation );
     pd.addbutton ( "~T~errain Information",        act_terraininfo );
     pd.addbutton ( "seperator",                    -1 );
     pd.addbutton ( "~H~elp SystemõF1",             act_help );
@@ -3456,11 +3462,11 @@ void         SelectUnitSet::init(void)
 
 
 
-   active = new int [unitSet.set.getlength()+1];
+   active = new int [unitSets.size()];
 
-   for ( int i = 0; i <= unitSet.set.getlength(); i++ ) {
-      active[i] = unitSet.set[i].active;
-      addbutton ( unitSet.set[i].name, 30, 60 + i * 25, xsize - 50, 80 + i * 25, 3, 0, 10 + i, 1 );
+   for ( int i = 0; i < unitSets.size(); i++ ) {
+      active[i] = unitSets[i]->active;
+      addbutton ( unitSets[i]->name.c_str(), 30, 60 + i * 25, xsize - 50, 80 + i * 25, 3, 0, 10 + i, 1 );
       addeingabe ( 10 + i, &active[i], black, dblue );
    }
 
@@ -3489,8 +3495,8 @@ void         SelectUnitSet::buttonpressed(byte         id)
    switch(id) {
        case 7: { 
                   action = 1; 
-                  for ( int i = 0; i <= unitSet.set.getlength(); i++ ) 
-                      unitSet.set[i].active = active[i];
+                  for ( int i = 0; i < unitSets.size(); i++ )
+                      unitSets[i]->active = active[i];
                   resetvehicleselector();
           } 
           break;
@@ -3501,7 +3507,7 @@ void         SelectUnitSet::buttonpressed(byte         id)
 
 void selectunitsetfilter ( void )
 {
-   if ( unitSet.set.getlength() >= 0 ) {
+   if ( unitSets.size() > 0 ) {
       SelectUnitSet sus;
       sus.init();
       sus.run();
@@ -3560,7 +3566,7 @@ void         UnitTypeTransformation :: UnitSetSelection::setup(void)
 { 
    action = 0;
    title = "Select UnitSet";
-   numberoflines = unitSet.set.getlength() + 1;
+   numberoflines = unitSets.size();
    ey = ysize - 60; 
    addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,2,true); 
    addkey(2,ct_enter); 
@@ -3580,7 +3586,7 @@ void         UnitTypeTransformation :: UnitSetSelection::buttonpressed(byte     
 
 void         UnitTypeTransformation :: UnitSetSelection::gettext(word nr)
 { 
-   strcpy(txt,unitSet.set[nr].name );
+   strcpy(txt,unitSets[nr]->name.c_str() );
 } 
 
 void         UnitTypeTransformation :: UnitSetSelection::run(void)
@@ -3599,7 +3605,7 @@ void         UnitTypeTransformation :: TranslationTableSelection::setup( void )
 { 
    action = 0;
    title = "Select Transformation Table";
-   numberoflines = unitSet.set[unitsetnum].transtab.getlength() + 1;
+   numberoflines = unitSets[unitsetnum]->transtab.size();
    ey = ysize - 60; 
    addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,2,true); 
    addkey(2,ct_enter); 
@@ -3619,7 +3625,7 @@ void         UnitTypeTransformation :: TranslationTableSelection::buttonpressed(
 
 void         UnitTypeTransformation :: TranslationTableSelection::gettext(word nr)
 { 
-   strcpy(txt, unitSet.set[unitsetnum].transtab[nr].name );
+   strcpy(txt, unitSets[unitsetnum]->transtab[nr]->name.c_str() );
 } 
 
 void         UnitTypeTransformation :: TranslationTableSelection::run(void)
@@ -3634,9 +3640,9 @@ void         UnitTypeTransformation :: TranslationTableSelection::run(void)
 
 pvehicletype UnitTypeTransformation :: transformvehicletype ( pvehicletype type, int unitsetnum, int translationnum )
 {
-   for ( int i = 0; i <= unitSet.set[unitsetnum].transtab[translationnum].translation.getlength(); i++ )
-      if ( unitSet.set[unitsetnum].transtab[translationnum].translation[i].from == type->id ) {
-         pvehicletype tp = getvehicletype_forid ( unitSet.set[unitsetnum].transtab[translationnum].translation[i].to );
+   for ( int i = 0; i < unitSets[unitsetnum]->transtab[translationnum]->translation.size(); i++ )
+      if ( unitSets[unitsetnum]->transtab[translationnum]->translation[i].from == type->id ) {
+         pvehicletype tp = getvehicletype_forid ( unitSets[unitsetnum]->transtab[translationnum]->translation[i].to );
          if ( tp ) 
             return tp;
       }
@@ -3736,7 +3742,7 @@ void UnitTypeTransformation :: run ( void )
        s += " units were NOT transformed\n (production included)";
 
        tviewanytext vat;
-       vat.init ( "warning", s.data() );
+       vat.init ( "warning", s.c_str() );
        vat.run();
        vat.done();
     } else 
@@ -3751,14 +3757,3 @@ void unitsettransformation( void )
    utt.run();
 }
 
-int isUnitNotFiltered ( int id )
-{
-   if ( unitSet.set.getlength() >= 0 ) {
-      for ( int i = 0; i <= unitSet.set.getlength(); i++ )
-         for ( int j = 0; j <= unitSet.set[i].ids.getlength(); j++ )
-            if ( id >= unitSet.set[i].ids[j].from && 
-                 id <= unitSet.set[i].ids[j].to )
-                 return unitSet.set[i].active;
-   }
-   return 1;  
-}

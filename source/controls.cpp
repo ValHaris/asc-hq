@@ -1,6 +1,11 @@
-//     $Id: controls.cpp,v 1.52 2000-08-02 10:28:23 mbickel Exp $
+//     $Id: controls.cpp,v 1.53 2000-08-02 15:52:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2000/08/02 10:28:23  mbickel
+//      Fixed: generator vehicle not working
+//      Streams can now report their name
+//      Field information shows units filename
+//
 //     Revision 1.51  2000/08/02 08:47:56  mbickel
 //      Fixed: Mineral resources where visible for all players
 //
@@ -3016,8 +3021,8 @@ void         tdashboard::paintweapon(byte         h, int num, int strength,  con
          showtext2c( strrr(strength), agmp->resolutionx - ( 640 - 503), 93 + h * 13);
 
          weaps[h].displayed = 1;
-         weaps[h].maxstrength = strength * weapDist.getWeapStrength(weap, weap->mindistance, -1, -1 );
-         weaps[h].minstrength = strength * weapDist.getWeapStrength(weap, weap->maxdistance, -1, -1 );
+         weaps[h].maxstrength = int(strength * weapDist.getWeapStrength(weap, weap->mindistance, -1, -1 ));
+         weaps[h].minstrength = int(strength * weapDist.getWeapStrength(weap, weap->maxdistance, -1, -1 ));
          weaps[h].mindist = weap->mindistance;
          weaps[h].maxdist = weap->maxdistance;
 
@@ -7789,11 +7794,6 @@ void trunreplay :: firstinit ( void )
     gui.init ( hgmp->resolutionx, hgmp->resolutiony );
     gui.starticonload();
     status = 0;
-}
-
-int isUnitNotFiltered ( int id )
-{
-   return 1;
 }
 
 

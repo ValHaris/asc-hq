@@ -1,6 +1,9 @@
-//     $Id: edglobal.h,v 1.5 2000-03-16 14:06:54 mbickel Exp $
+//     $Id: edglobal.h,v 1.6 2000-08-02 15:52:56 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/03/16 14:06:54  mbickel
+//      Added unitset transformation to the mapeditor
+//
 //     Revision 1.4  2000/03/11 18:22:04  mbickel
 //      Added support for multiple graphic sets
 //
@@ -52,7 +55,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-#define execactionscount 68
+#define execactionscount 69
 
 extern const char*  execactionnames[execactionscount];
 
@@ -126,56 +129,7 @@ enum tuseractions {
      act_terraininfo,
      act_setunitfilter,
      act_selectgraphicset,
-     act_unitsettransformation };
+     act_unitsettransformation,
+     act_unitSetInformation };
 
 extern void         execaction(int code);
-
-
-struct IdRange {
-        int from;
-        int to;
-       };
-
-class TranslationTable {
-         public:
-           dynamic_array<IdRange> translation;
-           char name[1000];
-           TranslationTable ( void ) { name[0] = 0; };
-      };
-
-class SingeUnitSet {
-      public:
-         int active;
-         char* name;
-         dynamic_array<IdRange> ids;
-         dynamic_array<TranslationTable> transtab;
-
-         SingeUnitSet ( void ) 
-         { 
-            name = NULL;
-            active = 1;
-         }
-
-         void init ( char* _name )
-         {
-            name = (char*)asc_malloc ( strlen ( _name) + 2); 
-            strcpy ( name, _name );
-         };
-
-         ~SingeUnitSet () 
-         {
-            if ( name ) {
-               asc_free ( name );
-               name = NULL;
-            }
-         };
-     };
-
-class UnitSet {
-       public:
-        dynamic_array<SingeUnitSet> set;
-      } ;
-
-extern UnitSet unitSet;
-
-

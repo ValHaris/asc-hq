@@ -1,6 +1,9 @@
-//     $Id: artint.cpp,v 1.11 2000-07-29 14:54:07 mbickel Exp $
+//     $Id: artint.cpp,v 1.12 2000-08-02 15:52:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/07/29 14:54:07  mbickel
+//      plain text configuration file implemented
+//
 //     Revision 1.10  2000/07/23 17:59:50  mbickel
 //      various AI improvements
 //      new terrain information window
@@ -3296,7 +3299,7 @@ void AI::tactics( void )
             for ( int i = 0; i <= targetList.getlength(); i++ ) {
                MoveVariant* mv = &targetList[i];
 
-               mv->result = (mv->enemyDamage - mv->enemyOrgDamage) * mv->enemy->aiparam[getplayer()]->value - config.aggressiveness * (mv->damageAfterAttack - mv->orgDamage) * veh->aiparam[getplayer()]->value ;
+               mv->result = int ((mv->enemyDamage - mv->enemyOrgDamage) * mv->enemy->aiparam[getplayer()]->value - config.aggressiveness * (mv->damageAfterAttack - mv->orgDamage) * veh->aiparam[getplayer()]->value );
                if ( mv->enemyDamage >= 100 )
                   mv->result *= attack_unitdestroyed_bonus;
 

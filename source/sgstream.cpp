@@ -1,6 +1,11 @@
-//     $Id: sgstream.cpp,v 1.21 2000-08-02 10:28:27 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.22 2000-08-02 15:53:01 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/08/02 10:28:27  mbickel
+//      Fixed: generator vehicle not working
+//      Streams can now report their name
+//      Field information shows units filename
+//
 //     Revision 1.20  2000/08/01 10:39:14  mbickel
 //      Updated documentation
 //      Refined configuration file handling
@@ -2673,3 +2678,231 @@ void initFileIO ( const char* configFileName )
 
    checkFileLoadability ( "palette.pal" );
 }
+
+
+//===================================================================================
+
+
+int SingleUnitSet :: isMember ( int id )
+{
+   for ( int i = 0; i < ids.size(); i++ )
+     if ( id >= ids[i].from && id <= ids[i].to )
+        return 1;
+   return 0;
+}
+
+/*
+         class IdRangeVector {
+                public:
+                   vector<IdRange> idRange;
+                   void parseString ( const char* s );
+         };
+*/
+
+void SingleUnitSet::parseIDs ( const char* s )
+{
+   char buf[10000];
+
+   if ( s && s[0] ) {
+
+      strcpy ( buf, s);
+
+      char* piclist = strtok ( buf, ";\r\n" );
+
+      char* pic = strtok ( piclist, "," );
+      while ( pic ) {
+         int from, to;
+         if ( strchr ( pic, '-' )) {
+            char* a = strchr ( pic, '-' );
+            *a = 0;
+            from = atoi ( pic );
+            to = atoi ( ++a );
+         } else
+            from = to = atoi ( pic );
+
+         IdRange ir;
+         ir.from = from;
+         ir.to = to;
+         ids.push_back ( ir );
+
+         pic = strtok ( NULL, "," );
+      }
+   }
+}
+
+void SingleUnitSet::TranslationTable::parseString ( const char* s )
+{
+   if ( s && s[0] && strchr ( s, ';' )) {
+      char buf[10000];
+      if ( s[0] == '#' )
+         strcpy ( buf, s+1 );
+      else
+         strcpy ( buf, s );
+
+      char* tname = strtok ( buf, ";\n\r");
+      if ( tname )
+         name = tname;
+
+
+      char* xl = strtok ( NULL, ";\n\r" );
+      while ( xl ) {
+         int from, to;
+         if ( strchr ( xl, ',' )) {
+            char* a = strchr ( xl, ',' );
+            *a = 0;
+            IdRange ir;
+            ir.from = atoi ( xl );
+            ir.to = atoi ( ++a );
+
+            translation.push_back ( ir );
+
+         }
+         xl = strtok ( NULL, ";\n\r" );
+      }
+
+   }
+}
+
+
+void SingleUnitSet::read ( pnstream stream )
+{
+   if ( !stream )
+      return;
+   const char separator = '=';
+   string s;
+   int data = stream->readTextString ( s );
+   if ( s == "#V2#" ) {
+      while ( data ) {
+         string s2;
+         data = stream->readTextString ( s2 );
+
+         int seppos = s2.find_first_of ( separator );
+         if ( seppos >= 0 ) {
+            string b = s2.substr(0, seppos);
+            string e = s2.substr( seppos+1 );
+            if ( b == "NAME" )
+               name = e;
+
+            if ( b == "ACTIVE" )
+               active = atoi ( e.c_str() );
+
+
+            if ( b == "TRANSLATION" ) {
+               TranslationTable* tt = new TranslationTable;
+               tt->parseString ( e.c_str() );
+               transtab.push_back ( tt );
+            }
+
+            if ( b == "MAINTAINER" )
+               maintainer = e;
+
+            if ( b == "INFORMATION" )
+               information = e;
+
+            if ( b == "ID" )
+               parseIDs ( e.c_str() );
+
+         }
+      }
+   } else {
+      int seppos = s.find_first_of ( ';' );
+      if ( seppos >= 0 ) {
+         string b = s.substr(0, seppos);
+         string e = s.substr( seppos+1 );
+         name = b;
+         parseIDs ( e.c_str() );
+
+         while ( data ) {
+            string s2;
+            data = stream->readTextString ( s2 );
+            if ( s2.length() ) {
+               TranslationTable* tt = new TranslationTable;
+               tt->parseString ( s2.c_str() );
+               transtab.push_back ( tt );
+            }
+         }
+      }
+   }
+}
+
+
+void loadUnitSets ( void )
+{
+   tfindfile ff ( "*.set" );
+   char* n = ff.getnextname();
+   while ( n ) {
+      tnfilestream stream ( n, 1 );
+
+      SingleUnitSet* set = new SingleUnitSet;
+      set->read ( &stream );
+      unitSets.push_back ( set );
+
+      n = ff.getnextname();
+   } /* endwhile */
+}
+
+vector<SingleUnitSet*> unitSets;
+
+/*
+      do
+
+      strcpy ( buf2, buf );
+      int rangenum = 0;
+
+      char* filename = strtok ( buf, ";\r\n");
+      unitSet.set[setnum].init ( filename );
+
+      char* piclist = strtok ( NULL, ";\r\n" );
+
+      char* pic = strtok ( piclist, "," );
+      while ( pic ) {
+         int from, to;
+         if ( strchr ( pic, '-' )) {
+            char* a = strchr ( pic, '-' );
+            *a = 0;
+            from = atoi ( pic );
+            to = atoi ( ++a );
+         } else
+            from = to = atoi ( pic );
+
+         unitSet.set[setnum].ids[rangenum].from = from;
+         unitSet.set[setnum].ids[rangenum].to   = to;
+
+         rangenum ++;
+         pic = strtok ( NULL, "," );
+      }
+
+      strcpy ( buf, buf2 );
+
+      dynamic_array<char*> transtable;
+      int transtablenum = 0;
+      const char* sectionlabel = "#";
+      char* transstart  = strstr ( buf, sectionlabel );
+      if ( transstart ) {
+         char* pc = strtok ( transstart, "#\n\r" );
+         while ( pc ) {
+            transtable[transtablenum++] = pc;
+            pc = strtok ( NULL, "#\n\r" );
+         }
+      }
+      for ( int t = 0; t < transtablenum; t++ ) {
+         char* tname = strtok ( transtable[t], ";" );
+         char* trans = strtok ( NULL, ";" );
+         int entrynum = 0;
+         if ( trans )
+            strcpy ( unitSet.set[setnum].transtab[t].name , tname );
+
+         while ( trans ) {
+            char* pc = strchr ( trans, ',' );
+            unitSet.set[setnum].transtab[t].translation[entrynum].to = atoi ( pc+1 );
+            *pc = 0;
+            unitSet.set[setnum].transtab[t].translation[entrynum].from = atoi ( trans );
+            entrynum++;
+
+            trans = strtok ( NULL, ";" );
+         } /* endwhile
+
+      }
+
+      setnum++;
+*/

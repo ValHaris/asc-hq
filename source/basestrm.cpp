@@ -1,6 +1,11 @@
-//     $Id: basestrm.cpp,v 1.30 2000-08-02 10:28:23 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.31 2000-08-02 15:52:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/08/02 10:28:23  mbickel
+//      Fixed: generator vehicle not working
+//      Streams can now report their name
+//      Field information shows units filename
+//
 //     Revision 1.29  2000/08/01 10:39:08  mbickel
 //      Updated documentation
 //      Refined configuration file handling
@@ -414,7 +419,7 @@ void tnstream :: writerlepict ( const void* buf )
 
 const char* tnstream::getDeviceName ( void )
 {
-   return devicename.data();
+   return devicename.c_str();
 }
 
 
@@ -572,6 +577,28 @@ void         tnstream::readpnchar(char** pc, int maxlength )
       *pc = strdup ( charbuf.buf );
 }
 
+
+int  tnstream::readTextString ( string& s )
+{
+  char c;
+  int red = 1;
+  int end = 0;
+  do {
+     red = readdata( &c, 1, 0 );
+     if ( red < 1 ) {
+        end = 2;
+     } else
+       if ( c == '\n' || c == 0 ) {
+          end = 1;
+       } else
+          if ( c != '\r' )
+             s += c;
+  } while ( red && !end );
+  if ( end == 2)
+     return 0;
+  else
+     return 1;
+}
 
 
 
@@ -1130,16 +1157,19 @@ void ContainerCollector :: init ( const char* wildcard )
       DIR *dirp; 
       struct dirent *direntp; 
 
-      dirp = opendir( ascDirectory[i] );
+      char buf[ maxFileStringSize ];
+      char buf2[ maxFileStringSize ];
+      char buf3 [ maxFileStringSize ];
+      dirp = opendir( extractPath ( buf2, constructFileName ( buf, i, NULL, wildcard )));
+      extractFileName ( buf3, buf );
       if( dirp != NULL ) { 
          for(;;) { 
             direntp = readdir( dirp ); 
             if ( direntp == NULL ) {
                break; 
             }
-            if ( patimat ( wildcard, direntp->d_name )) {
-               char buf[2000];
-               container[containernum++] = new tncontainerstream( constructFileName ( buf, i, NULL, direntp->d_name), this, i);
+            if ( patimat ( buf3, direntp->d_name )) {
+               container[containernum++] = new tncontainerstream( constructFileName ( buf, i, buf2, direntp->d_name), this, i);
                if ( verbosity >= 2 )
                   printf("container %s mounted\n", buf );
             }
@@ -2281,6 +2311,22 @@ char* extractPath ( char* buf, const char* filename )
    }
    return buf;
 }
+
+char* extractFileName ( char* buf, const char* filename )
+{
+   if ( buf && filename ) {
+      if ( strchr ( filename, pathdelimitter )) {
+         int i = strlen ( filename )-1;
+         while ( filename[i] != pathdelimitter )
+            i--;
+
+         strcpy ( buf, filename +i+1);
+      } else
+         strcpy ( buf, filename );
+   }
+   return buf;
+}
+
 
 void appendbackslash ( char* string )
 {
