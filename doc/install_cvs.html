@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+
+<TITLE>ASC documentation: Compiling and installing ASC on Unix systems</TITLE>
+<LINK REL="stylesheet" TYPE="text/css" HREF="asc.css">
+</HEAD>
+
+<BODY>
+
+<A HREF="index.html">Back to documentation index</A>
+<hr>
+
+<CENTER>
+<H1><A HREF="http://www.asc-hq.org">Advanced Strategic Command</A></H1>
+<P>documentation<P>
+<H2>Compiling and installing ASC on Unix systems</H2><p>
+</CENTER>
+
+<H2>Setting up ASC from CVS </h2>
+
+<H3>Getting and installing the data files</h3><A name="datainst">
+
+
+An ASC installation consists of the executables and data files. The basic data is stored in the files: 
+<tt>
+ <ul>
+  <li>main.con 
+  <li><i>buildings.con</i>
+  <li><i>mk1.con </i>
+  <li><i>trrobj.con</i>
+  <li><i>trrobj2.con </i>
+ </ul>
+</tt>
+
+Only the data that forms the <tt>main.con</tt> are checked into the CVS repository. To compile ASC you must get the files printed in itallic. To download them, just call the <tt>getdata</tt> script that is provided and run <tt>configure</tt> and <tt>make</tt>. Alternatively you 
+can download them manually from <A HREF="http://www.asc-hq.org/download_updates.html">www.asc-hq.org</a> and place them into <tt>asc/data/</tt>. <p>
+
+They are required for building ASC and will be installed by <tt>make install</tt>.  <p>
+
+
+<hr>
+
+More information can be found at the ASC Knowledge Base:
+
+<ul>
+<li><A HREF="http://asc-hq.sourceforge.net/show.php?ID=53">directory management of Linux version</A>
+<li><A HREF="http://asc-hq.sourceforge.net/show.php?ID=58">What to do if ASC/Linux doesn't compile</A>
+<li><A HREF="http://asc-hq.sourceforge.net/show.php?ID=71">What to do if ASC/Linux doesn't run</A>
+</ul>
+
+
+
+
+<hr>
+<i>
+$Id: install_cvs.html,v 1.1 2004-05-30 08:54:54 mbickel Exp $
+</i>
+</BODY>
+</HTML>
