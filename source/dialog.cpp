@@ -5025,8 +5025,10 @@ void viewterraininfo ( void )
                         "#font02#Building Information:#font01##aeinzug20##eeinzug20##crtp10#" );
          strcat ( text, fld->building->typ->location.c_str() );
          strcat ( text, "#crtp10#owner: " );
-         strcat ( text, actmap->player[fld->building->getOwner()].getName().c_str() );
-
+         if ( fld->building->getOwner() < 8 )
+            strcat ( text, actmap->player[fld->building->getOwner()].getName().c_str() );
+         else
+            strcat ( text, "neutral" );
       }
 
 

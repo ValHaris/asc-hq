@@ -1630,15 +1630,23 @@ void Building :: execnetcontrol ( void )
 
 int  Building :: putResource ( int      need,    int resourcetype, bool queryonly, int scope  )
 {
-   PutResource putresource ( getMap(), scope );
-   return putresource.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
+   if ( need < 0 )
+      return -getResource( -need, resourcetype, queryonly, scope );
+   else {
+      PutResource putresource ( getMap(), scope );
+      return putresource.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
+   }
 }
 
 
 int  Building :: getResource ( int      need,    int resourcetype, bool queryonly, int scope )
 {
-   GetResource gr ( getMap(), scope );
-   return gr.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
+   if ( need < 0 )
+      return -putResource( -need, resourcetype, queryonly, scope );
+   else {
+      GetResource gr ( getMap(), scope );
+      return gr.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
+   }
 }
 
 

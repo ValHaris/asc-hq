@@ -1306,7 +1306,7 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_benchgamewov:
-         benchgame( 2 );
+         benchgame( 0 );
          break;
 
       case ua_benchgamewv :
@@ -1796,7 +1796,11 @@ void  mainloop ( void )
                break;
 
             case ct_f11: {
-            // computeview ( actmap );
+            /*
+               getactfield()->objects.clear();
+               getactfield()->setparams();
+               displaymap();
+               */
             }
             break;
 
