@@ -18,7 +18,7 @@
     Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
     Boston, MA  02111-1307  USA
 */
-// Version v1.0 , change also GENERAL
+// Version v1.8 , change also GENERAL
 
 
 #include <stdio.h>
@@ -62,6 +62,8 @@ int main(int argc, char *argv[] )
       loadallobjecttypes();
       loadallbuildingtypes();
       loadallvehicletypes();
+      freetextdata();
+
 
       char* wildcard;
 
@@ -214,7 +216,7 @@ int main(int argc, char *argv[] )
                       "<BODY bgcolor=\"#447744\" text=\"#eabc1a\" link=\"#EABC1A\" vlink=\"#EABC1A\" alink=\"#EABC1A\" background=\"../ug-hin.gif\">\n" );
 
             // OVERVIEW LEFT
-            fprintf ( overview, " <tr><td><A HREF=\"%s\" target\"base\">", s.c_str() );
+            fprintf ( overview, " <tr><td><A HREF=\"%s\">", s.c_str() );
             fprintf ( overview, "%s", ft->getName().c_str() );
             fprintf ( overview, " </A></td></tr>\n" );
 
@@ -234,7 +236,7 @@ int main(int argc, char *argv[] )
 
             // UNIT GENERAL
             fprintf ( detailed1, "<table width=\"100%\" id=\"H2\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n"
-                      "<tr><td colspan=\"2\"></td><td id=\"H9\" align=\"right\">UNIT GUIDE v1.7 </td></tr>"
+                      "<tr><td colspan=\"2\"></td><td id=\"H9\" align=\"right\">UNIT GUIDE v1.8 </td></tr>"
                       "<tr><td width=\"50\">" );
             if ( exist ( b1.c_str() ))
                fprintf ( detailed1, "<img src=\"%s\">", b1.c_str() );
@@ -389,6 +391,10 @@ int main(int argc, char *argv[] )
             fprintf ( detailed2, "</tr></table>\n" );
             // ENDE MOVEMENT
 
+			
+			
+			
+			
             // BEGIN WEAPONS
             // Waffen NR-AMMO-DISTANCE-STRENGS-SHOT FROM-ATTACK TO-TYP
             fprintf ( detailed3, "<table id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
@@ -452,8 +458,8 @@ int main(int argc, char *argv[] )
 
             //Weapon can hit:
             fprintf ( detailed3, "<table id=\"H9\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
-            // šberschrift
-            fprintf ( detailed3, "<tr><td></td><td align=\"center\" colspan=\"16\" bgcolor=\"#20483f\">The weapon can hit: </td></tr>" );
+            // Ueberschrift
+            fprintf ( detailed3, "<tr><td></td><td align=\"center\" colspan=\"17\" bgcolor=\"#20483f\">The weapon can hit: </td></tr>" );
             // Spalten GFX
             fprintf ( detailed3, "<tr><td></td>" );
             for ( i = 0; i < cmovemalitypenum; i++ )
@@ -473,10 +479,10 @@ int main(int argc, char *argv[] )
             fprintf ( detailed3, "</table><br> \n" );
 
             // Effizienz
-            fprintf ( detailed3, "<table id=\"H9\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
-            // šberschrift
-            fprintf ( detailed3, "<tr><td></td><td align=\"center\" colspan=\"14\" bgcolor=\"#20483f\">Efficiency over high difference: </td></tr>\n" );
-            // Spalten šberschrift
+            fprintf ( detailed3, "<table id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
+            // Ueberschrift
+            fprintf ( detailed3, "<tr><td></td><td align=\"center\" colspan=\"14\" bgcolor=\"#20483f\" >Efficiency over high difference: </td></tr>\n" );
+            // Spalten Ueberschrift
             fprintf ( detailed3, "<tr><td></td>" );
             for ( i = 0; i < 13; i++ )
                fprintf(detailed3, "<td>%d</td>", i-6 );
@@ -490,24 +496,23 @@ int main(int argc, char *argv[] )
             }
             //Ende tabelle
             fprintf ( detailed3, "</table> \n" );
-
-
-
-
-
-
             //ENDE WAFFEN
 
+			
+			
+			
+			
             //BEGINN FUNCTIONS
-            fprintf ( detailed4, "<table align=\"left\" id=\"H9\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">" );
-            // šberschrift
+            fprintf ( detailed4, "<table align=\"left\" id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">" );
+            // Ueberschrift
             fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\">Special Unit functions</td></tr>" );
             for ( int i = 0; i<cvehiclefunctionsnum; i++)
                if ( ft->functions & ( 1 << i ))
                   fprintf ( detailed4, "<tr><td>%s</td></tr>", cvehiclefunctions[i] );
             //Ende tabelle
             fprintf ( detailed4, "</table>\n" );
-            //Einzelwerte
+            
+			//Einzelwerte
             fprintf ( detailed4, "<table id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">" );
             if ( ft->maxwindspeedonwater )
                fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\">Max. windspeed on water</td> <td>%d</td> </tr>", ft->maxwindspeedonwater );
@@ -517,20 +522,127 @@ int main(int argc, char *argv[] )
             fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\">Auto repair rate</td> <td>%d</td> </tr>", ft->autorepairrate );
             //         fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\">Max. unit weight</td><td>%d</td> </tr>/n", ft->maxunitweight );
             fprintf ( detailed4, "</table>\n" );
+
+            // Objekte
+            fprintf ( detailed4, "<table align=\"left\" id=\"H9\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">\n" );
+            // Ueberschrift baubare Objekte
+            fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\" colspan=\"2\">baubare OBJEKTE</td></tr>\n" );
+            for ( unsigned int i = 0; i < ft->objectsBuildable.size(); i++ ) {
+//               fprintf( detailed4, "<tr><td>es können die Objekte mit ids von %d bis %d gebaut werden</td></tr>\n", ft->objectsBuildable[i].from, ft->objectsBuildable[i].to );
+               for ( int b = 0; b < objecttypenum; b++ ) {
+                  pobjecttype obj = getobjecttype_forpos ( b );
+                  if (     obj->id >= ft->objectsBuildable[i].from
+                        && obj->id <= ft->objectsBuildable[i].to ) {
+                     fprintf ( detailed4, "<tr><td>ID %d </td><td align=\"center\"> %s </td></tr>\n", obj->id, obj->name.c_str() );
+                  }
+               }
+            }
+            fprintf ( detailed4, "</table>\n" );
+
+			// UNITS
+            fprintf ( detailed4, "<table align=\"left\" id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">\n" );
+            // Ueberschrift baubare Einheiten
+            fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\" colspan=\"2\">baubare UNITS</td></tr>\n" );
+            for ( unsigned int i = 0; i < ft->vehiclesBuildable.size(); i++ ) {
+//               fprintf( detailed4, "<tr><td colspan=\"2\">baubar ID %d bis %d </td></tr>\n", ft->vehiclesBuildable[i].from, ft->vehiclesBuildable[i].to );
+               for ( int b = 0; b < vehicletypenum; b++ ) {
+                  pvehicletype veh = getvehicletype_forpos ( b );
+                  if (     veh->id >= ft->vehiclesBuildable[i].from
+                        && veh->id <= ft->vehiclesBuildable[i].to ) {
+                     fprintf ( detailed4, "<tr><td>ID %d </td><td align=\"center\"> %s </td></tr>\n", veh->id, veh->getName().c_str() );
+                  }
+               }
+            }
+            fprintf ( detailed4, "</table>\n" );
+            
+			// Geb&auml;ude
+            fprintf ( detailed4, "<table align=\"left\" id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">\n" );
+            // Ueberschrift baubare Gebaeude
+            fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\" colspan=\"2\">baubare GEB&Auml;UDE</td></tr>\n" );
+            for ( unsigned int i = 0; i < ft->buildingsBuildable.size(); i++ ) {
+//               fprintf( detailed4, "<tr><td>baubar ID %d bis %d </td></tr>\n", ft->buildingsBuildable[i].from, ft->vehiclesBuildable[i].to );
+               for ( int b = 0; b < buildingtypenum; b++ ) {
+                  pbuildingtype bld = getbuildingtype_forpos ( b );
+                  if (     bld->id >= ft->buildingsBuildable[i].from
+                           && bld->id <= ft->buildingsBuildable[i].to ) {
+                     fprintf ( detailed4, "<tr><td>ID %d </td><td align=\"center\"> %s </td></tr>\n", bld->id, bld->name.c_str() );
+                  }
+               }
+            }
+            fprintf ( detailed4, "</table>\n" );
+
             //ENDE FUNKTIONS
 
+			
+			
+			
+			
+			
+			
+			
+			
+			
             //BEGINN LOADING
             if ( ft->loadcapacity ) {
                fprintf ( detailed5, "<table align=\"left\" id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> " );
-               fprintf ( detailed5, "<tr><td align=\"center\" bgcolor=\"#20483f\">Loadable units</td></tr>" );
-               fprintf ( detailed5, "<tr><td align=\"center\" >Not implemented jet</td></tr>" );
+               fprintf ( detailed5, "<tr><td align=\"center\" bgcolor=\"#20483f\">Einladbare UNITS</td></tr>" );
+			   
+			   for ( int c = 0; c < cmovemalitypenum; c++ )
+               if ( ft->vehicleCategoriesLoadable & (1 << c))
+                  fprintf ( detailed5, "<tr><td align=\"center\" > %s </td></tr>", cmovemalitypes[c] );
+			   
                fprintf ( detailed5, "</table>" );
 
                fprintf ( detailed5, "<table id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">" );
-               //         fprintf ( detailed5, "<tr><td align=\"center\" bgcolor=\"#20483f\">Maximum loading</td> <td>%d</td> </tr>", ft->maxsize );
-               fprintf ( detailed5, "<tr><td align=\"center\" bgcolor=\"#20483f\">Max. unit weight</td><td>%d</td> </tr>", ft->maxunitweight );
+               fprintf ( detailed5, "<tr><td align=\"center\" bgcolor=\"#20483f\">max. Zuladung</td> <td>%d</td> </tr>", ft->loadcapacity );
+               fprintf ( detailed5, "<tr><td align=\"center\" bgcolor=\"#20483f\">max. Gewicht einer Einheit</td><td>%d</td> </tr>", ft->maxunitweight );
                fprintf ( detailed5, "</table>" );
-            } else {
+			   
+			   // Ladbar von H&ouml;henstufen 
+               fprintf ( detailed5, "<table id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
+               // Überschriften
+               fprintf ( detailed5,
+                      "    <td bgcolor=\"#20483f\" colspan=\"9\" align=\"center\"> Voraussetzungen f&uuml;r das Ein- und Ausladen </td>"
+                      "</tr>\n" );
+               // GFX
+               fprintf ( detailed5, "<tr><td></td>\n");
+               // Höhenstufenzeichen einfügen für shoot from und target
+               for ( i = 0; i < 8; i++ )
+                  fprintf ( detailed5, " <TD><IMG src=\"../hoehe%d.gif\" ></TD>", i);
+               fprintf ( detailed5, "</tr>\n" );
+               
+			   // Höhenstufenzeichen einfügen für can load and unload from:
+               fprintf ( detailed5, "<tr><td>UNIT muss auf dieser Stufe sein</td>" );
+			   for ( int h = 0; h < 8; h++ ) {
+                  if ( ft->loadcapability & (1 << h))
+                     fprintf ( detailed5, "<td><img src=\"../hacken.gif\"></td> " );	
+			      else
+                     fprintf ( detailed5, "<td></td>" );
+			   }
+	           fprintf ( detailed5,	"</tr>\n" );	   
+			   
+			   // Höhenstufenzeichen einfügen für can load and unload from:
+               fprintf ( detailed5, "<tr><td>UNIT muss diese Stufe selbst erreichen</td>" );
+			   for ( int h = 0; h < 8; h++ ) {
+                  if ( ft->loadcapabilityreq & (1 << h))
+                     fprintf ( detailed5, "<td><img src=\"../hacken.gif\"></td> " );	
+			      else
+                     fprintf ( detailed5, "<td></td>" );
+			   }
+	           fprintf ( detailed5,	"</tr>\n" );
+	
+	           // Höhenstufenzeichen einfügen für can load and unload from:
+               fprintf ( detailed5, "<tr><td>UNIT darf diese Stufe selbst nicht erreichen</td>" );
+			   for ( int h = 0; h < 8; h++ ) {
+                  if ( ft->loadcapabilitynot & (1 << h))
+                     fprintf ( detailed5, "<td><img src=\"../hacken.gif\"></td> " );	
+			      else
+                     fprintf ( detailed5, "<td></td>" );
+			   }
+	           fprintf ( detailed5,	"</tr>\n" );
+			   fprintf ( detailed5, "</table>\n" );            
+			
+			} else {
                fprintf ( detailed5, "<table align}\"left\" id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">" );
                fprintf ( detailed5, "<tr><td align=\"center\" bgcolor=\"#20483f\">Loadable units</td></tr>" );
                fprintf ( detailed5, "<tr><td align=\"center\" ><br>No transport unit!<br></td></tr>" );
@@ -538,6 +650,11 @@ int main(int argc, char *argv[] )
             }
             //ENDE LOADING
 
+			
+			
+			
+			
+			
             //BEGINN DESCRIPTION
             fprintf ( detailed6, "<table align=\"left\" id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\">" );
             fprintf ( detailed6, "<tr><td align=\"center\" bgcolor=\"#20483f\">Unit description</td></tr>" );
@@ -572,7 +689,7 @@ int main(int argc, char *argv[] )
             //ENDE DESCRIPTION
 
 
-            // NEU - noch anzupassen
+/*           // NEU - noch anzupassen
             for ( int h = 0; h < 8; h++ ) {
                if ( ft->loadcapability & (1 << h))
                   printf("H÷henstufe kann geladen werden" );
@@ -589,7 +706,7 @@ int main(int argc, char *argv[] )
                if ( ft->vehicleCategoriesLoadable & (1 << c))
                   printf(" Kategorie %s kann geladen werden", cmovemalitypes[c] );
 
-            for ( unsigned int i = 0; i < ft->buildingsBuildable.size(); i++ ) {
+            for (  i = 0; i < ft->buildingsBuildable.size(); i++ ) {
                printf("es können die gebäude mit ids von %d bis %d gebaut werden\n", ft->buildingsBuildable[i].from, ft->buildingsBuildable[i].to );
                for ( int b = 0; b < buildingtypenum; b++ ) {
                   pbuildingtype bld = getbuildingtype_forpos ( b );
@@ -599,8 +716,8 @@ int main(int argc, char *argv[] )
                   }
                }
             }
-
-            for ( unsigned int i = 0; i < ft->vehiclesBuildable.size(); i++ ) {
+*/
+/*            for ( int i = 0; i  < ft->vehiclesBuildable.size(); i++ ) {
                printf("es können die einheiten mit ids von %d bis %d gebaut werden\n", ft->vehiclesBuildable[i].from, ft->vehiclesBuildable[i].to );
                for ( int b = 0; b < vehicletypenum; b++ ) {
                   pvehicletype veh = getvehicletype_forpos ( b );
@@ -610,8 +727,8 @@ int main(int argc, char *argv[] )
                   }
                }
             }
-
-            for ( unsigned int i = 0; i < ft->objectsBuildable.size(); i++ ) {
+*/
+/*            for ( int i = 0; i < ft->objectsBuildable.size(); i++ ) {
                printf("es können die Objekte mit ids von %d bis %d gebaut werden\n", ft->objectsBuildable[i].from, ft->objectsBuildable[i].to );
                for ( int b = 0; b < objecttypenum; b++ ) {
                   pobjecttype obj = getobjecttype_forpos ( b );
@@ -621,7 +738,7 @@ int main(int argc, char *argv[] )
                   }
                }
             }
-
+*/
             // ABSCHLU˜ DER DOKUMENTE
 
             fprintf ( detailed1, "</body></html>\n");

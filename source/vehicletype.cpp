@@ -696,6 +696,10 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
 
    pc.addImage( "Picture", picture[0], fn ).evaluate();
 
+   pc.openBracket ( "ConstructionCost" );
+   productionCost.runTextIO ( pc );
+   pc.closeBracket ();
+
    pc.addTagInteger( "Height", height, choehenstufennum, heightTags );
    pc.addInteger("HeightChangeDist", steigung );
    pc.addInteger("Jamming", jamming );
