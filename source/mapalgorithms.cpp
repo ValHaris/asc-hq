@@ -213,6 +213,7 @@ SearchFields :: SearchFields ( pmap _gamemap )
 
 void         SearchFields::initsearch( const MapCoordinate& startPosition, int _firstDistance, int _lastDistance )
 {
+   cancelSearch = false;
    startPos = startPosition;
    firstDistance = _firstDistance;
    lastDistance = _lastDistance;

@@ -61,6 +61,18 @@ class  Building : public ContainerBase {
           virtual Resources getUsage();
     };
 
+    class ResourceSink : public Work {
+          Building* bld;
+          Resources toGet;
+        public:
+          ResourceSink( Building* _bld ) ;
+          virtual bool finished();
+          virtual bool run();
+          virtual Resources getPlus();
+          virtual Resources getUsage();
+    };
+
+
     /*
     class Research : public Work {
           Building* bld;

@@ -650,6 +650,9 @@ Building::Work* Building::spawnWorkClasses( bool justQuery )
 
       if ( typ->special & cgminingstationb )
          return new MiningStation ( this, justQuery );
+
+      if ( typ->special & cgresourceSinkB )
+         return new MiningStation ( this, justQuery );
    } else {
       return new BiResourceGeneration ( this );
    }
@@ -792,6 +795,52 @@ Resources Building::MatterConverter :: getUsage()
         r.resource(i) = -bld->plus.resource(i);
   return r;
 }
+
+
+Building::ResourceSink :: ResourceSink( Building* _bld ) : bld ( _bld )
+{
+   toGet = bld->plus;
+   for ( int r = 0; r < 3; r++ )
+      if ( toGet.resource(r) < 0 )
+         toGet.resource(r)  = - toGet.resource(r) ;
+      else
+         toGet.resource(r) = 0;
+}
+
+bool Building::ResourceSink :: run()
+{
+   Resources got  = bld->getResource( toGet, 0 );
+   toGet -= got;
+   for ( int r = 0; r < 3; r++ )
+      if ( got.resource(r) > 0 )
+         return true;
+
+   return false;
+}
+
+
+bool Building::ResourceSink :: finished()
+{
+   for ( int r = 0; r < 3; r++ )
+      if ( toGet.resource(r) > 0 )
+         return true;
+   return false;
+}
+
+Resources Building::ResourceSink :: getPlus()
+{
+  return Resources();
+}
+
+Resources Building::ResourceSink :: getUsage()
+{
+  Resources r;
+  for ( int i = 0; i < 3; i++ )
+     if ( bld->plus.resource(i) < 0 )
+        r.resource(i) = -bld->plus.resource(i);
+  return r;
+}
+
 
 /*
 Research :: Research( Building* _bld ) : bld ( _bld ), percentage ( 100 )
@@ -978,7 +1027,7 @@ bool Building::MiningStation :: run()
 
    // check how much resources the production of toExtract_thisTurn would need
    Resources toConsume;
-   int absperc;
+   int absperc = 0; 
    for ( int r = 0; r < 3; r++ )
       if ( bld->plus.resource(r) > 0 )
          absperc = 1000 * toExtract_thisTurn.resource(r) / bld->plus.resource(r);

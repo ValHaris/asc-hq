@@ -213,7 +213,7 @@ Then enter or select a filename to which the game will be saved. If a % is used 
 #color004##font1#
 ADVANCED STRATEGIC COMMAND
 #color000##font0#
-(C) 1994 - 2002 by Martin Bickel and Marc Schellenberger.
+(C) 1994 - 2004 by Martin Bickel and Marc Schellenberger.
 
 Christian Mayer created most of ASC's graphics including the ASC unit set, the game interface and some terrain.
 
@@ -237,7 +237,7 @@ Many objects, terrain and buildings were contributed by Torsten Maekler.
 
 The pathfinding code is based on code by Amit Patel, who was very helpful helpful in pointing out that his code is correct (and my modifications were not :-)
 
-Thanks to Michael Moerz, Nicolas Raffenaud and Frank Landgraf for contributing code and general help.
+Thanks to Michael Moerz, Nicolas Raffenaud, Frank Landgraf, Bernhard Oemer and Shamada Diundra for contributing code and general help.
 
 Advanced Strategic Command and its utility programs use code of The Independent JPEG Group .
 
