@@ -50,55 +50,6 @@
 
 
 
-//! A Paragui widget that fills the whole screen and redraws it whenever Paragui wants to it.
-class MainScreenWidget : public PG_Widget {
-    bool gameInitialized;
-    bool dirtyFlag;
-public:
-    MainScreenWidget( )
-       : PG_Widget(NULL, PG_Rect ( 0, 0, ::getScreen()->w, ::getScreen()->h ), false),
-         gameInitialized (false), dirtyFlag(true) {};
-
-    //! to be called after ASC has completed loading and repaintdisplay() is available and working.
-    void gameReady() { gameInitialized = true; Show(); };
-
-    void setDirty() { dirtyFlag = true; };
-
-protected:
-//    void eventDraw (SDL_Surface* surface, const PG_Rect& rect);
-    void Blit ( bool recursive = true, bool restore = true );
-};
-
-/*
-void MainScreenWidget::eventDraw (SDL_Surface* surface, const PG_Rect& rect)
-{
-    PG_ThemeWidget::eventDraw(surface, rect);
-
-    if ( gameInitialized ) {
-       SDL_Surface* screen = ::getScreen();
-       initASCGraphicSubsystem( surface, NULL );
-       repaintdisplay();
-       initASCGraphicSubsystem( screen, NULL );
-    }
-}
-*/
-void MainScreenWidget::Blit ( bool recursive , bool restore )
-{
-/*
-    if ( gameInitialized && dirtyFlag ) {
-       SDL_Surface* screen = ::getScreen();
-       initASCGraphicSubsystem( srf, NULL );
-       repaintdisplay();
-       initASCGraphicSubsystem( screen, NULL );
-       dirtyFlag = false;
-    }
-    PG_ThemeWidget::eventBlit( srf, src, dst );
-    */
-}
-
-
- 
-
 ASC_PG_App* pgApp = NULL;
 
  ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )
@@ -133,10 +84,9 @@ ASC_PG_App* pgApp = NULL;
 bool ASC_PG_App:: InitScreen ( int w, int h, int depth, Uint32 flags )
 {
    bool result = PG_Application::InitScreen ( w, h, depth, flags  );
-   if ( result ) {
+   if ( result ) 
       initASCGraphicSubsystem ( GetScreen(), NULL );
-      new MainScreenWidget();
-   }
+   
    
    return result;
 }

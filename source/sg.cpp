@@ -1703,9 +1703,85 @@ void mainloopgeneralmousecheck ( void )
 }
 
 
+class Menu : public PG_MenuBar {
+
+    PG_PopupMenu file, game;
+
+   public:
+      Menu ( PG_Widget *parent, const PG_Rect &rect=PG_Rect::null);
+
+
+};
+
+
+Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
+    : PG_MenuBar( parent, rect, "MenuBar"),
+      file(NULL,0,0,""),
+      game(NULL,0,0,"")
+{
+   file.addMenuItem("Exit",1);
+
+   Add("File", &file);
+   Add("Game", &game);
+}    
+
+
+class MainScreenWidget : public PG_Widget {
+    PG_Application& app;
+public:
+    MainScreenWidget( PG_Application& application );
+
+protected:
+    MapDisplayPG* mapDisplay;
+    Menu* menu;
+//    void eventDraw (SDL_Surface* surface, const PG_Rect& rect);
+//    void Blit ( bool recursive = true, bool restore = true );
+};
+
+
+MainScreenWidget::MainScreenWidget( PG_Application& application )
+              : PG_Widget(NULL, PG_Rect ( 0, 0, app.GetScreen()->w, app.GetScreen()->h ), false),
+              app ( application ) 
+{
+   mapDisplay = new MapDisplayPG( this, PG_Rect(20,20,Width() - 200, Height() - 20));
+   menu = new Menu(this, PG_Rect(0,0,Width(),20));
+}
+
+
+/*
+void MainScreenWidget::eventDraw (SDL_Surface* surface, const PG_Rect& rect)
+{
+    PG_ThemeWidget::eventDraw(surface, rect);
+
+    if ( gameInitialized ) {
+       SDL_Surface* screen = ::getScreen();
+       initASCGraphicSubsystem( surface, NULL );
+       repaintdisplay();
+       initASCGraphicSubsystem( screen, NULL );
+    }
+}
+
+void MainScreenWidget::Blit ( bool recursive , bool restore )
+{
+
+    if ( gameInitialized && dirtyFlag ) {
+       SDL_Surface* screen = ::getScreen();
+       initASCGraphicSubsystem( srf, NULL );
+       repaintdisplay();
+       initASCGraphicSubsystem( screen, NULL );
+       dirtyFlag = false;
+    }
+    PG_ThemeWidget::eventBlit( srf, src, dst );
+    
+}
+
+*/
+
+
+
 void  mainloop2()
 {
-   (new MapDisplayPG( NULL, PG_Rect(10,10,400,300)))->Show();
+   (new MainScreenWidget( getPGApplication()))->Show();
    getPGApplication().Run();
 }
 
@@ -1980,6 +2056,7 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
 
 
+//! A Paragui widget that fills the whole screen and redraws it whenever Paragui wants to it.
 
 
 void runmainmenu ( void )

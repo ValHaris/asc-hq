@@ -1242,14 +1242,6 @@ void         repaintdisplay(void)
    showallchoices();
    cursor.show();
    mousevisible(true);
-   {
-     tnfilestream s ("test", tnstream::writing);
-     auswahl->write ( s );
-   }
-   {   
-     tnfilestream s ("test", tnstream::reading);
-     auswahl->read ( s );
-   }   
 }
 
 #ifndef pbpeditor

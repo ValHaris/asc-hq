@@ -146,9 +146,11 @@ void Surface::write ( tnstream& stream ) const
       stream.writeInt(pf.Gmask()) ;
       stream.writeInt(pf.Bmask()) ;
       stream.writeInt(pf.Amask()) ;
-      for ( int y = 0; y < h(); ++y )
+      for ( int y = 0; y < h(); ++y ) {
          for ( int x = 0; x < w(); ++x )
             stream.writeInt( GetPixel(x,y));
+            
+      }
    }
 
 }
@@ -208,9 +210,15 @@ void Surface::read ( tnstream& stream )
 
             SDL_Surface* s = SDL_CreateRGBSurface ( SDL_SWSURFACE, hd.x, hd.y, 32, Rmask, Gmask, Bmask, Amask );
             Uint32* p = (Uint32*)( s->pixels );
-            for ( int y = 0; y < hd.y; ++y )
+            for ( int y = 0; y < hd.y; ++y ) {
+              #ifdef SDL_LIL_ENDIAN
+               stream.readdata( p, hd.x * bytesPerPixel);
+               p += hd.x;
+              #else
                for ( int x = 0; x< hd.x; ++x )
                   *(p++) = stream.readInt();
+              #endif    
+            }
             SetSurface( s );
          }
          if ( flags & SDL_SRCCOLORKEY )
