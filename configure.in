@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl AC_REVISION($Revision: 1.63 $)dnl
+dnl AC_REVISION($Revision: 1.64 $)dnl
 dnl AM_MAINTAINER_MODE
 AC_INIT(source/typen.h)
 
@@ -301,10 +301,7 @@ AC_OUTPUT( Makefile source/Makefile source/docs/Makefile \
 	   source/docs/en/Makefile source/sdl/Makefile \
 	   source/libs/triangul/Makefile source/libs/Makefile \
 	   source/ai/Makefile source/unix/Makefile doc/manpages/Makefile \
-      source/Makefile source/docs/Makefile source/clparser/Makefile \
-      source/docs/en/Makefile source/sdl/Makefile \
-      source/libs/triangul/Makefile source/libs/Makefile \
-      source/ai/Makefile source/unix/Makefile \
+      source/Makefile source/clparser/Makefile \
       source/unix/mapeditor/Makefile source/tools/Makefile \
 	   source/tools/lib/Makefile source/tools/linux/Makefile \
 	   data/Makefile data/dialog/Makefile data/music/Makefile \
