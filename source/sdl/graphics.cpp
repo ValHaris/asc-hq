@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: graphics.cpp,v 1.11 2000-08-12 09:17:42 gulliver Exp $
+//     $Id: graphics.cpp,v 1.12 2000-08-21 17:51:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/08/12 09:17:42  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.10  2000/06/01 15:27:47  mbickel
 //      Some changes for the upcoming Win32 version of ASC
 //      Fixed error at startup: unable to load smalaril.fnt
@@ -79,6 +82,10 @@ int isfullscreen ( void )
       return screen->flags & SDL_FULLSCREEN;
 }
 
+void setWindowCaption ( const char* s )
+{
+   SDL_WM_SetCaption ( s, NULL );
+}
 
 int initgraphics ( int x, int y, int depth )
 {
@@ -90,7 +97,7 @@ int initgraphics ( int x, int y, int depth )
   /* Clean up on exit */
   atexit(SDL_Quit);
 
-  SDL_WM_SetCaption ( "Advanced Strategic Command", NULL );
+  setWindowCaption ( "Advanced Strategic Command" );
   /* Initialize the display in a 640x480 8-bit palettized mode */
   int flags = SDL_SWSURFACE;
   if ( fullscreen )

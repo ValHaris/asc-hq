@@ -1,6 +1,9 @@
-//     $Id: loaders.cpp,v 1.23 2000-08-12 12:52:48 mbickel Exp $
+//     $Id: loaders.cpp,v 1.24 2000-08-21 17:50:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/08/12 12:52:48  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.22  2000/08/11 12:24:03  mbickel
 //      Fixed: no movement after refuelling unit
 //      Restructured reading/writing of units
@@ -993,13 +996,17 @@ void   tspfldloaders::writeevent ( pevent event )
        if ((event->trigger[j] == ceventt_unitconquered) || 
            (event->trigger[j] == ceventt_unitlost) || 
            (event->trigger[j] == ceventt_unitdestroyed)) { 
-           int xp = event->trigger_data[j]->vehicle->xpos;
-           int yp = event->trigger_data[j]->vehicle->ypos;
-           int nwid = event->trigger_data[j]->vehicle->networkid;
+           int xp;
+           int yp;
+           int nwid;
            if ( event->triggerstatus[j] == 2 ) {
               xp = -1;
               yp = -1;
               nwid = -1;
+           } else {
+              xp = event->trigger_data[j]->vehicle->xpos;
+              yp = event->trigger_data[j]->vehicle->ypos;
+              nwid = event->trigger_data[j]->vehicle->networkid;
            }
            stream->writedata2( xp );
            stream->writedata2( yp );

@@ -1,6 +1,9 @@
-//     $Id: sgstream.cpp,v 1.28 2000-08-12 09:17:33 gulliver Exp $
+//     $Id: sgstream.cpp,v 1.29 2000-08-21 17:51:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/08/12 09:17:33  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.27  2000/08/08 13:22:09  mbickel
 //      Added unitCategoriesLoadable property to buildingtypes and vehicletypes
 //      Added option: showUnitOwner
@@ -1527,8 +1530,15 @@ ptechnology       loadtechnology( pnstream stream )
          stream->readpchar( &pt->infotext );
       if ( pt->icon )
          stream->readrlepict ( &pt->icon,false,&w);
-      if ( pt->pictfilename )
+      if ( pt->pictfilename ) {
          stream->readpchar( &pt->pictfilename );
+
+         char* pc = pt->pictfilename;
+         while ( *pc ) {
+            *pc = tolower( *pc );
+            pc++;
+         }
+      }
    
       pt->lvl = -1;
 

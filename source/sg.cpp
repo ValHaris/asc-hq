@@ -1,6 +1,10 @@
-//     $Id: sg.cpp,v 1.82 2000-08-13 15:22:40 mbickel Exp $
+//     $Id: sg.cpp,v 1.83 2000-08-21 17:51:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.82  2000/08/13 15:22:40  mbickel
+//      Improved data version control
+//      Fixed: not all experience symbols were loaded
+//
 //     Revision 1.81  2000/08/13 12:35:16  mbickel
 //
 //      Dataversion >= 3 is now required
@@ -1266,7 +1270,7 @@ void         loadcursor(void)
 
    {
       tnfilestream stream ("expicons.raw",1);
-      for (i=0; i<maxunitexperience ;i++ ) 
+      for (i=0; i<=maxunitexperience ;i++ )
             stream.readrlepict(   &icons.experience[i], false, &w );
    }
 

@@ -1,6 +1,11 @@
-//     $Id: edmain.cpp,v 1.19 2000-08-02 15:52:56 mbickel Exp $
+//     $Id: edmain.cpp,v 1.20 2000-08-21 17:50:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/08/02 15:52:56  mbickel
+//      New unit set definition files
+//      demount accepts now more than one container file
+//      Unitset information dialog added
+//
 //     Revision 1.18  2000/08/01 10:39:09  mbickel
 //      Updated documentation
 //      Refined configuration file handling
@@ -906,6 +911,7 @@ int main(int argc, char *argv[] )
       return 1;
    atexit ( closesvgamode ); 
 
+   setWindowCaption ( "Advanced Strategic Command : map editor ");
 
    inittimer(100);
    atexit ( closetimer );

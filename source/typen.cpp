@@ -1,6 +1,10 @@
-//     $Id: typen.cpp,v 1.44 2000-08-13 10:24:09 mbickel Exp $
+//     $Id: typen.cpp,v 1.45 2000-08-21 17:51:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.44  2000/08/13 10:24:09  mbickel
+//      Fixed: movement decrease when cloning units
+//      Fixed: refuel skipped next action in replay
+//
 //     Revision 1.43  2000/08/12 09:17:37  gulliver
 //     *** empty log message ***
 //
@@ -243,7 +247,7 @@ const char* ceventtrigger[ceventtriggernum]  = {"*NONE*", "turn/move >=", "build
                                                  "event", "unit conquered", "unit destroyed", "all enemy units destroyed",
                                                  "all units lost", "all enemy buildings destroyed/captured", "all buildings lost", 
                                                  "energy tribute <", "material tribute <", "fuel tribute <",
-                                                 "any unit enters polygon", "specific unit enters polygon", "building is seen"};
+                                                 "any unit enters polygon", "specific unit enters polygon", "building is seen", "irrelevant (used internally)"};
 const char*  cminentypen[cminenum]  = {"antipersonnel mine", "antitank mine", "moored mine", "floating mine"};
 const int cminestrength[cminenum]  = { 60, 120, 180, 180 };
 

@@ -1,6 +1,9 @@
-//     $Id: basestrm.cpp,v 1.36 2000-08-13 12:55:57 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.37 2000-08-21 17:50:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.36  2000/08/13 12:55:57  mbickel
+//      Fixed IO errors with very small files
+//
 //     Revision 1.35  2000/08/12 15:03:18  mbickel
 //      Fixed bug in unit movement
 //      ASC compiles and runs under Linux again...
@@ -918,14 +921,20 @@ time_t tn_file_buf_stream::get_time ( void )
 
 
 tn_file_buf_stream::tn_file_buf_stream( const char* name, char mode)
-{ 
+{
+   char buf[10000];
+   string s;
+   if ( strchr ( name, pathdelimitter ) == NULL )
+      s = constructFileName ( buf, 0, NULL, name);
+   else
+      s = name;
 
    modus = mode; 
    
    if (mode == 1) {
-      fp = fopen ( name, filereadmode );
+      fp = fopen ( s.c_str(), filereadmode );
    } else {
-      fp = fopen ( name, filewritemode );
+      fp = fopen ( s.c_str(), filewritemode );
    }
 
    if (fp != NULL && ferror ( fp ) == 0 ) {
@@ -935,10 +944,10 @@ tn_file_buf_stream::tn_file_buf_stream( const char* name, char mode)
      if (mode == 1)
        readbuffer();
                 
-     devicename = name;
+     devicename = s.c_str();
 
    } else 
-     throw tfileerror( name );
+     throw tfileerror( s.c_str() );
 
 } 
 

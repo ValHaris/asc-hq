@@ -31,10 +31,10 @@ int loadFullscreenImage ( const char* filename )
       } else {
          string s = filename;
          while ( s.find ( ".PCX" ) != string::npos )
-            s.replace ( s.find ( ".PCX" ), 1, ".JPG"); 
+            s.replace ( s.find ( ".PCX" ), 4, ".JPG"); 
 
          while ( s.find ( ".pcx" ) != string::npos )
-            s.replace ( s.find ( ".pcx" ), 1, ".jpg"); 
+            s.replace ( s.find ( ".pcx" ), 4, ".jpg"); 
    
          if ( exist ( s.c_str() )) {
             tnfilestream stream ( s.c_str(), 1 );

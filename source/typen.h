@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.43 2000-08-13 11:55:10 mbickel Exp $
+//     $Id: typen.h,v 1.44 2000-08-21 17:51:03 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.43  2000/08/13 11:55:10  mbickel
+//      Attacking now decreases a units movement by 20% if it has the
+//        "move after attack" flag.
+//
 //     Revision 1.42  2000/08/12 09:17:38  gulliver
 //     *** empty log message ***
 //
@@ -1995,7 +1999,7 @@ extern  const char* cconnections[6];
  //   lost      = an enemy conquered sth. from you
 
 
-#define ceventtriggernum 20
+const int ceventtriggernum = 21;
 extern const char* ceventtriggerconn[]; 
  #define ceventtrigger_and 1  
  #define ceventtrigger_or 2  
@@ -2026,7 +2030,7 @@ extern const char*  ceventtrigger[];
         ceventt_technologyresearched,    ceventt_event,             ceventt_unitconquered, ceventt_unitdestroyed,     
         ceventt_allenemyunitsdestroyed,  ceventt_allunitslost,      ceventt_allenemybuildingsdestroyed, 
         ceventt_allbuildingslost,        ceventt_energytribute,     ceventt_materialtribute, ceventt_fueltribute, 
-        ceventt_any_unit_enters_polygon, ceventt_specific_unit_enters_polygon, ceventt_building_seen };
+        ceventt_any_unit_enters_polygon, ceventt_specific_unit_enters_polygon, ceventt_building_seen, ceventt_irrelevant };
 
 
 extern const char*  cmovemalitypes[cmovemalitypenum];

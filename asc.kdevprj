@@ -15,11 +15,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/config.cache,/home/martin/asc/source/edselfnt.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/loadimage.h,/home/martin/asc/source/sdl/loadimage.cpp,/home/martin/asc/source/weather.h,/home/martin/asc/source/dlg_box.h,/home/martin/asc/source/libs/triangul/construc.c,/home/martin/asc/source/basestrm.h,/home/martin/asc/source/gamedlg.cpp,/home/martin/asc/source/sg.cpp,/home/martin/asc/source/palette.cpp,/home/martin/asc/source/palette.h,/home/martin/asc/source/sgstream.cpp,/home/martin/asc/source/basestrm.cpp,/home/martin/asc/source/basegfx.cpp,/home/martin/asc/source/attack.cpp,/home/martin/asc/source/typen.h,/home/martin/asc/source/building.cpp,/home/martin/asc/source/strtmesg.h,/home/martin/asc/source/strtmesg.cpp,/home/martin/asc/source/spfst.cpp,/home/martin/asc/source/missions.cpp,/home/martin/asc/source/typen.cpp,/home/martin/asc/source/loaders.cpp,/home/martin/asc/source/sdl/graphics.cpp,/home/martin/asc/source/dos/vesa.cpp,/home/martin/asc/source/basegfx.h,/home/martin/asc/source/edmain.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/martin/asc/config.cache
-cpp_file=/home/martin/asc/source/edselfnt.cpp
+header_file=/home/martin/asc/source/basegfx.h
+cpp_file=/home/martin/asc/source/edmain.cpp
 browser_file=file:/opt/kde/share/doc/HTML/de/kdevelop/welcome/index.html
 [source/gui.h]
 install_location=

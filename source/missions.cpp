@@ -1,6 +1,9 @@
-//     $Id: missions.cpp,v 1.10 2000-08-12 12:52:49 mbickel Exp $
+//     $Id: missions.cpp,v 1.11 2000-08-21 17:51:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/08/12 12:52:49  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.9  2000/07/05 10:49:36  mbickel
 //      Fixed AI bugs
 //      setbuildingdamage event now updates the screen
@@ -532,11 +535,13 @@ void         releaseevent(pvehicle     eht,
                      if (ev1->trigger[b] == ceventt_buildingdestroyed) {
                         ev1->triggerstatus[b] = 2;
                         quedevents[ev1->player]++;
+                        ev1->trigger[b] = ceventt_irrelevant;
                      }
                      else
                         if ((ev1->trigger[b] == ceventt_buildingconquered) || (ev1->trigger[b] == ceventt_buildinglost)) {
                            ev1->triggerstatus[b] = 3;
                            quedevents[ev1->player]++;
+                           ev1->trigger[b] = ceventt_irrelevant;
                         }
                   }
                   if (action == cconnection_conquer) {
@@ -592,11 +597,13 @@ void         releaseevent(pvehicle     eht,
                      if (ev1->trigger[b] == ceventt_unitdestroyed) {
                         ev1->triggerstatus[b] = 2;
                         quedevents[ev1->player]++;
+                        ev1->trigger[b] = ceventt_irrelevant;
                      }
                      else
                         if ((ev1->trigger[b] == ceventt_unitconquered) || (ev1->trigger[b] == ceventt_unitlost)) {
                            ev1->triggerstatus[b] = 3;
                            quedevents[ev1->player]++;
+                           ev1->trigger[b] = ceventt_irrelevant;
                         }
                   }
                   if (action == cconnection_conquer) {
@@ -756,9 +763,18 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
          } 
          else { 
            viewtext2(904); 
-           actmap->levelfinished = true; 
-         } 
-      } 
+           if (choice_dlg("Do you want to continue playing ?","~y~es","~n~o") == 2) {
+              erasemap();
+              throw tnomaploaded();
+           } else {
+              actmap->continueplaying = 1;
+              if ( actmap->replayinfo ) {
+                 delete actmap->replayinfo;
+                 actmap->replayinfo = 0;
+              }
+           }
+         }
+      }
    
 
       if (ev->a.action == cewindchange) {

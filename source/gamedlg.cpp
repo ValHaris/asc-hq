@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.41 2000-08-13 09:54:01 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.42 2000-08-21 17:50:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2000/08/13 09:54:01  mbickel
+//      Refuelling is now logged for replays
+//
 //     Revision 1.40  2000/08/12 15:03:22  mbickel
 //      Fixed bug in unit movement
 //      ASC compiles and runs under Linux again...
@@ -2207,7 +2210,13 @@ void         showtechnology(ptechnology  tech )
    
             closeFullscreenImage();
          }            
-
+         activefontsettings.length = agmp->resolutionx - 40;
+         activefontsettings.justify = centertext;
+         activefontsettings.background = 255;
+         activefontsettings.height = 0;
+         activefontsettings.font = schriften.large;
+         activefontsettings.color = white;
+         bar ( 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, 0 );
          showtext2 ( tech->name, 20, 20 );
 
          if ( tech->infotext ) {

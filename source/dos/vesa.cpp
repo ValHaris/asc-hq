@@ -1,6 +1,10 @@
-//     $Id: vesa.cpp,v 1.1 2000-05-30 18:39:29 mbickel Exp $
+//     $Id: vesa.cpp,v 1.2 2000-08-21 17:51:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/05/30 18:39:29  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.8  2000/05/23 20:40:53  mbickel
 //      Removed boolean type
 //
@@ -748,6 +752,12 @@ void  closegraphics ( void )
    }
 
 }
+
+void setWindowCaption ( const char* s )
+{
+
+}
+
 
 
 #ifdef _NOASM_

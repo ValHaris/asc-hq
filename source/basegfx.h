@@ -383,5 +383,7 @@ extern void copySurface2screen( int x1, int y1, int x2, int y2 );
 #pragma pack()
 
 extern int fullscreen;
+extern void setWindowCaption ( const char* s );
+
 
 #endif
