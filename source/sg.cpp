@@ -1622,7 +1622,13 @@ void  mainloop ( void )
                execuseraction ( ua_unitweightinfo );
                break;
 
-            case ct_9:
+            case ct_9: {
+                for ( int i = 0;i < 9; i++ )
+                   for ( tmap::Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); j++ )
+                      if ( (*j)->networkid == 29809 )
+                         displaymessage ( actmap->getPlayerName(i ), 1);
+
+            }
                {
                   // testtext ( getterraintype_forid ( 1011 ), getobjecttype_forid ( 1 ) );
                   /*
@@ -2048,8 +2054,6 @@ int main(int argc, char *argv[] )
       SDL_SetColorKey(icn, SDL_SRCCOLORKEY, *((Uint8 *)icn->pixels));
       icon = new SDLmm::Surface ( icn );
    } catch ( ... ) {}
-
-
 
 
 

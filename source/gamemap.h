@@ -373,18 +373,14 @@ class tmap {
             enum tplayerstat { human, computer, off } stat;
 
             //! the name of the player that is used if the player is human
-            string       humanname;
+            ASCString       humanname;
 
             //! the name of the player that is used if the player is the AI
-            string       computername;
+            ASCString       computername;
 
             //! returns the name of the player depending on the status
-            string       getName( ) { switch ( stat ) {
-                                         case 0: return humanname;
-                                         case 1: return computername;
-                                         default: return "off";
-                                       }
-                                    };
+            const ASCString& getName( );
+
             //! the Password required for playing this player
             Password passwordcrc;
 
@@ -548,7 +544,7 @@ class tmap {
       void cleartemps( int b, int value = 0 );
       bool isResourceGlobal ( int resource );
       void setupResources ( void );
-      const char* getPlayerName ( int playernum );
+      const ASCString& getPlayerName ( int playernum );
       pfield getField ( int x, int y );
       pfield getField ( const MapCoordinate& pos );
       void startGame ( );

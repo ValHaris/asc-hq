@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.79 2002-03-19 18:42:52 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.80 2002-04-09 22:19:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.79  2002/03/19 18:42:52  mbickel
+//      Fixed bug introduced by fixing the MAA-reaction-fire bug
+//
 //     Revision 1.78  2002/03/18 21:42:17  mbickel
 //      Some cleanup and documentation in the Mine class
 //      The number of mines is now displayed in the field information window
@@ -4442,6 +4445,7 @@ void resourceComparison ( )
       Resources plus;
       Resources have;
       for ( Player::BuildingList::iterator b = actmap->player[i].buildingList.begin(); b != actmap->player[i].buildingList.end(); ++b ) {
+         Building& bld = **b;
          if ( actmap->_resourcemode == 0 )
             plus += (*b)->plus;
          else
@@ -4449,8 +4453,11 @@ void resourceComparison ( )
 
          have += (*b)->actstorage;
       }
-      for ( int r = 0; r < resourceTypeNum; r++ )
-         s += ASCString(resourceNames[r]) + " " + strrr ( have.resource(r)) + " +" + strrr(plus.resource(r)) + "; ";
+      for ( int r = 0; r < resourceTypeNum; r++ ) {
+         s += ASCString(resourceNames[r]) + " " + strrr ( have.resource(r)) + " +";
+         s += strrr(plus.resource(r));
+         s += "; ";
+      }
 
       s += "\n\n";
    }

@@ -936,10 +936,10 @@ void         tdashboard::paintclasses ( void )
    if ( CGameOptions::Instance()->showUnitOwner ) {
       const char* owner = NULL;
       if ( vehicle )
-         owner = actmap->getPlayerName(vehicle->color / 8);
+         owner = actmap->getPlayerName(vehicle->color / 8).c_str();
       else
          if ( building )
-            owner = actmap->getPlayerName(building->color / 8);
+            owner = actmap->getPlayerName(building->color / 8).c_str();
 
       if ( owner ) {
          activefontsettings.justify = lefttext;

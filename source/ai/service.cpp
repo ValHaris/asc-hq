@@ -183,9 +183,9 @@ bool AI::ServiceOrder::execute1st ( pvehicle supplier )
              pfield fld = getfield ( x, y );
              if ( fld && fieldaccessible ( fld, supplier, 1<<h ) == 2 && !fld->building && !fld->vehicle ) {
                 int d = beeline ( x, y, supplier->xpos, supplier->ypos);
-                AStar ast ( ai->getMap(), supplier );
-                vector<MapCoordinate> path;
-                ast.findPath(  path, x, y );
+                AStar3D ast ( ai->getMap(), supplier );
+                vector<MapCoordinate3D> path;
+                ast.findPath(  path, MapCoordinate3D(x, y, h) );
                 if ( path.size() ) {
                    if ( abs ( currentHeight - h) < z_dist || ( abs( currentHeight - h) == z_dist && d < xy_dist )) {
                       TemporaryContainerStorage tus ( supplier );
@@ -555,6 +555,7 @@ void AI :: runServiceUnit ( pvehicle supplyUnit )
    typedef multimap<float,ServiceOrder*> ServiceMap;
    ServiceMap serviceMap;
 
+   // building a list of all fullfillable service tasks
    for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
        if ( !i->getServiceUnit() ) {
           int poss = i->possible( supplyUnit );
@@ -598,7 +599,7 @@ void AI :: runServiceUnit ( pvehicle supplyUnit )
          // search for next unit to be serviced
          runServiceUnit( supplyUnit );
       } else
-         displaymessage ("AI :: runServiceUnit ; inconsistency in VehicleService.execution level 0",1 );
+         displaymessage ("AI :: runServiceUnit ; inconsistency in VehicleService.execution level 0 ; unit is %d",1, supplyUnit->networkid  );
 
    }
 }

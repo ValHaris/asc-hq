@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.85 2002-04-05 19:01:45 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.86 2002-04-09 22:19:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.85  2002/04/05 19:01:45  mbickel
+//      Fixed: reaction fire attackes being replayed twice
+//      Fixed: crash when reaction fire during landing on carrier
+//
 //     Revision 1.84  2002/03/27 00:18:21  mbickel
 //      Changed the resource weight
 //
@@ -447,7 +451,7 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
       return -1;
 
    if ( status == 0 ) {
-      vehicle = veh ;
+        vehicle = veh ;
       if ( !vehicle ) {
          status = -101;
          return status;

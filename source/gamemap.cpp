@@ -757,12 +757,23 @@ void tmap :: setupResources ( void )
 }
 
 
-const char* tmap :: getPlayerName ( int playernum )
+const ASCString& tmap :: Player :: getName( )
+{
+   static ASCString off = "off";
+   switch ( stat ) {
+     case 0: return humanname;
+     case 1: return computername;
+     default: return off;
+   }
+}
+
+
+const ASCString& tmap :: getPlayerName ( int playernum )
 {
    if ( playernum >= 8 )
       playernum /= 8;
 
-   return player[playernum].getName().c_str();
+   return player[playernum].getName();
 }
 
 

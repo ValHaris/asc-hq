@@ -459,7 +459,10 @@ void PropertyContainer::TagArrayProperty::evaluate_rw ( )
          bool found = false;
          for ( int i = 0; i < tagNum; i++ )
             if ( s.compare_ci ( tags[i] )==0  ) {
-               property.flip ( i );
+               if ( inverted )
+                  property.reset ( i );
+               else
+                  property.set ( i );
                found = true;
                break;
             }
@@ -796,7 +799,7 @@ void TextFormatParser::startLevel ( const ASCString& levelName )
       textPropertyGroup->typeName = levelName;
       textPropertyGroup->typeName.toLower();
    }
-   
+
    int curlevel = ++levelDepth;
    level.push_back ( levelName );
 
@@ -821,7 +824,6 @@ void TextFormatParser::error ( const ASCString& errmsg )
       throw ParsingError ( stream->getLocation() + " : " + errmsg );
    else
       throw ParsingError ( " : " + errmsg );
-
 }
 
 

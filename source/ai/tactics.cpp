@@ -211,6 +211,10 @@ AI::AiResult AI::executeMoveAttack ( pvehicle veh, TargetVector& tv )
 
    if ( mv->movex != veh->xpos || mv->movey != veh->ypos ) {
       VehicleMovement vm2 ( mapDisplay, NULL );
+
+      VisibilityStates org_vision =  _vision ;
+      _vision = visible_now;
+
       vm2.execute ( veh, -1, -1, 0, -1, -1 );
       if ( vm2.getStatus() != 2 )
          displaymessage ( "AI :: executeMoveAttack \n error in movement step 0 with unit %d", 1, veh->networkid );
@@ -224,6 +228,7 @@ AI::AiResult AI::executeMoveAttack ( pvehicle veh, TargetVector& tv )
          displaymessage ( "AI :: executeMoveAttack \n error in movement step 3 with unit %d", 1, veh->networkid );
 
       result.unitsMoved ++;
+      _vision = org_vision;
    }
 
    // the unit may have been shot down due to reactionfire during movement

@@ -180,7 +180,10 @@ void AI :: checkConquer( )
             veh->aiparam[getPlayerNum()]->setNextJob();
          }
          buildingCapture.erase ( bi );
-      }
+      } else
+         if ( veh && veh->color != getPlayerNum()*8 )
+            buildingCapture.erase ( bi );
+
       bi = nxt;
    }
 
