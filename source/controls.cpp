@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.79 2000-10-14 10:52:45 mbickel Exp $
+//     $Id: controls.cpp,v 1.80 2000-10-18 14:13:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.79  2000/10/14 10:52:45  mbickel
+//      Some adjustments for a Win32 port
+//
 //     Revision 1.78  2000/10/11 14:26:22  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -126,7 +129,6 @@
 #include "vehicletype.h"
 #include "typen.h"
 
-#include "keybp.h"
 #include "basegfx.h"
 #include "newfont.h"
 #include "spfst.h"
@@ -134,7 +136,7 @@
 #include "misc.h"
 #include "controls.h"
 #include "network.h"
-#include "mousehnd.h"
+#include "events.h"
 #include "loadpcx.h"
 #include "stack.h"
 #include "dlg_box.h"
@@ -143,7 +145,6 @@
 #include "building.h"
 #include "gamedlg.h"
 #include "missions.h"
-#include "timer.h"
 #include "sg.h"
 #include "weather.h"
 #include "gameoptions.h"

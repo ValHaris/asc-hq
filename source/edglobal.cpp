@@ -1,6 +1,10 @@
-//     $Id: edglobal.cpp,v 1.20 2000-10-14 14:16:04 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.21 2000-10-18 14:14:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.20  2000/10/14 14:16:04  mbickel
+//      Cleaned up includes
+//      Added mapeditor to win32 watcom project
+//
 //     Revision 1.19  2000/10/11 14:26:30  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -119,8 +123,7 @@
 #include "edgen.h"
 #include "edselfnt.h"
 #include "edglobal.h"
-#include "timer.h"
-#include "gameoptions.h"   
+#include "gameoptions.h"
 
 mc_check mc;
 

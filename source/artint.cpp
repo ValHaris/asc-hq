@@ -1,6 +1,10 @@
-//     $Id: artint.cpp,v 1.34 2000-10-14 14:16:01 mbickel Exp $
+//     $Id: artint.cpp,v 1.35 2000-10-18 14:13:47 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2000/10/14 14:16:01  mbickel
+//      Cleaned up includes
+//      Added mapeditor to win32 watcom project
+//
 //     Revision 1.33  2000/10/11 14:26:14  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -186,8 +190,7 @@
 
 #include "misc.h"
 #include "newfont.h"
-#include "mousehnd.h"
-#include "keybp.h"
+#include "events.h"
 #include "spfst.h"
 #include "dlg_box.h"
 #include "stack.h"

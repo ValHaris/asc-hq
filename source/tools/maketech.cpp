@@ -30,7 +30,7 @@
 #include "krkr.h"
 #include "..\basestrm.h"
 #include "..\misc.h"
-#include "..\mousehnd.h"
+#include "..\events.h"
 #include "..\sgstream.h"
 
 

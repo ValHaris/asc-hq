@@ -1,6 +1,13 @@
-//     $Id: loadbi3.cpp,v 1.28 2000-10-12 19:51:44 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.29 2000-10-18 14:14:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/10/12 19:51:44  mbickel
+//      Added a stub program for generating a weapon guide
+//      Added makefiles to compile this weaponguide with the free borland C++
+//        compiler
+//      Made some adjustments to basic IO file for compiling them with borland
+//        C++
+//
 //     Revision 1.27  2000/10/12 19:00:21  mbickel
 //      Fixed crash in building placement
 //      Replaced multi-character character constants by strings (there where
@@ -167,7 +174,7 @@
 #include "gameoptions.h"
 
 #ifndef minimalIO
-#include "keybp.h"
+#include "events.h"
 #endif
 
 #ifndef converter

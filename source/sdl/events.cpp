@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.23 2000-10-18 12:40:48 mbickel Exp $
+//     $Id: events.cpp,v 1.24 2000-10-18 14:14:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/10/18 12:40:48  mbickel
+//      Rewrite event handling for windows
+//
 //     Revision 1.22  2000/10/17 10:46:39  mbickel
 //      Added log2 testing to configure.in
 //      Eventhandling now different between Win32 and Linux
@@ -119,18 +122,15 @@
 #include <queue>
 #include "ctype.h"
 
-#include "../misc.h"
-#include "../mousehnd.h"
-#include "../keybp.h"
-#include "../timer.h"
+#include "../events.h"
 #include "../stack.h"
 
 #include "../global.h"
 #include sdlheader
 #ifdef _WIN32_
- #include "SDL_thread.h"
+#include "SDL_thread.h"
 #else
- #include "SDL/SDL_thread.h"
+#include "SDL/SDL_thread.h"
 #endif
 
 
@@ -139,7 +139,7 @@
 */
 
 
-volatile tmousesettings mouseparams = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0, 0, 0, 0 };
+volatile tmousesettings mouseparams = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0,0,0,0}, 0, 0, 0 };
 
 SDL_mutex* keyboardmutex = NULL;
 
@@ -149,11 +149,17 @@ typedef deque<Uint32> Uint32_dqueue;
 std::queue<Uint32,Uint32_dqueue> keybuffer_prnt;
 
 
-int eventthreadinitialized = 0;
-int closethread = 0;
 int exitprogram = 0;
 
-#define mouseprocnum 10
+
+/***************************************************************************
+ *                                                                         *
+ *   Mouse handling routines                                               *
+ *                                                                         *
+ ***************************************************************************/
+
+
+const int mouseprocnum = 10;
 tsubmousehandler* pmouseprocs[ mouseprocnum ];
 
 
@@ -171,201 +177,60 @@ int mouse_in_off_area ( void )
 
 
 
-void mousevisible( int an) {
-}
+void mousevisible( int an)
+{}
+
 
 int getmousestatus ()
 {
-   if ( eventthreadinitialized )
-      return 2;
-   else
-      return 0;
+   return 2;
 }
 
 void callsubhandler ( void )
 {
-     for ( int i = 0; i < mouseprocnum; i++ )
-        if ( pmouseprocs[i] )
-           pmouseprocs[i]->mouseaction();
+   for ( int i = 0; i < mouseprocnum; i++ )
+      if ( pmouseprocs[i] )
+         pmouseprocs[i]->mouseaction();
 }
 
-const int mousetranslate[3] = { 0, 2,1 };  // in DOS  right button is 1 and center is 2
-
-
-int processEvents ( )
-{
-    SDL_Event event;
-    if ( SDL_PollEvent ( &event ) == 1) {
-         switch ( event.type ) {
-            case SDL_MOUSEBUTTONUP:
-            case SDL_MOUSEBUTTONDOWN: {
-               int taste = mousetranslate[event.button.button - 1];
-               int state = event.button.type == SDL_MOUSEBUTTONDOWN;
-               if ( state )
-                  mouseparams.taste |= (1 << taste);
-               else
-                  mouseparams.taste &= ~(1 << taste);
-               mouseparams.x = event.button.x;
-               mouseparams.y = event.button.y;
-               callsubhandler();
-            }
-            break;
-
-            case SDL_MOUSEMOTION: {
-               mouseparams.x = event.motion.x;
-               mouseparams.y = event.motion.y;
-               mouseparams.x1 = event.motion.x;
-               mouseparams.y1 = event.motion.y;
-               mouseparams.taste = 0;
-               for ( int i = 0; i < 3; i++ )
-                  if ( event.motion.state & (1 << i) )
-                     mouseparams.taste |= 1 << mousetranslate[i];
-               callsubhandler();
-            }
-            break;
-            case SDL_KEYDOWN: {
-                int r = SDL_mutexP ( keyboardmutex );
-                if ( !r ) {
-                   tkey key = event.key.keysym.sym;
-                   if ( event.key.keysym.mod & KMOD_ALT )
-                      key |= ct_altp;
-                   if ( event.key.keysym.mod & KMOD_CTRL )
-                      key |= ct_stp;
-                   if ( event.key.keysym.mod & KMOD_SHIFT )
-                      key |= ct_shp;
-                   keybuffer_sym.push ( key );
-                   keybuffer_prnt.push ( event.key.keysym.unicode );
-                   r = SDL_mutexV ( keyboardmutex );
-                }
-            }
-            break;
-            case SDL_KEYUP: {
-            }
-            break;
-
-            case SDL_QUIT: exitprogram = 1;
-            break;
-         }
-         return 1;
-    } else
-       return 0;
-
-}
-
-#ifdef _WIN32_
-int eventthread ( void* nothing )
-{
-   while ( !closethread ) {
-       if ( !processEvents() )
-          SDL_Delay(10);
+const int mousetranslate[3] =
+   {
+      0, 2,1
    }
-   return 0;
-}
-#endif
-
-
-int eventhandler ( void* nothing )
-{
-   while ( !closethread ) {
-       #ifndef _WIN32_
-       if ( !processEvents() )
-       #endif
-          SDL_Delay(10);
-       ticker = SDL_GetTicks() / 10;
-   }
-   return 0;
-}
-
-SDL_Thread* eventThreadHandler = NULL;
-
-int initeventthread ( void )
-{
-   if ( !eventthreadinitialized ) {
-      keyboardmutex = SDL_CreateMutex ();
-      if ( !keyboardmutex ) {
-         printf("creating keyboard mutex failed\n" );
-        exit(1);
-      }
-      SDL_EnableUNICODE ( 1 );
-      eventThreadHandler = SDL_CreateThread ( eventhandler, NULL );
-   }
-   eventthreadinitialized++;
-        return 0;
-}
-
-int closeeventthread ( void )
-{
-   if ( eventthreadinitialized ) {
-      eventthreadinitialized--;
-      if ( !eventthreadinitialized ) {
-         closethread = 1;
-      }
-   }
-   return 0; 
-}
+;  // in DOS  right button is 1 and center is 2
 
 
 
-
-int  releasetimeslice( void )
-{
-//    #ifdef _WIN32_
-    if ( !processEvents())
-//    #endif
-       SDL_Delay(10);
-    return 0;
-}
-
-
-
-
-int initmousehandler ( void* pic )
-{
-   initeventthread();
-   mouseparams.xsize = 10;
-   mouseparams.ysize = 10;
-   return(0);
-}
-
-
-int removemousehandler ( void )
-{
-    closeeventthread();
-    return(0);
-}
 
 void setmouseposition ( int x, int y )
-{
-}
+{}
+
 
 
 void setinvisiblemouserectanglestk ( int x1, int y1, int x2, int y2 )
-{
-}
+{}
+
 
 void setinvisiblemouserectanglestk ( tmouserect r1 )
-{
-}
+{}
+
 
 
 void checkformouseinchangingrectangles( int frst, int scnd )
-{
-}
+{}
+
 
 void getinvisiblemouserectanglestk ( void )
-{
-}
+{}
 
 
 void setinvisiblemouserectangle ( int x1, int y1, int x2, int y2 )
-{
-}
-
+{}
 
 
 void setnewmousepointer ( void* picture, int hotspotx, int hotspoty )
-{
-}
+{}
+
 
 int mouseinrect ( int x1, int y1, int x2, int y2 )
 {
@@ -382,7 +247,6 @@ int mouseinrect ( const tmouserect* rect )
    else
       return 0;
 }
-
 
 
 void addmouseproc ( tsubmousehandler* proc )
@@ -432,87 +296,83 @@ tmouserect tmouserect :: operator+ ( const tmouserect& b ) const
    return c;
 }
 
-#ifndef _NOASM_
 
-class tinitmousehandler {
-        public:
-           tinitmousehandler ( void );
-       } init_mousehandler;
 
-tinitmousehandler :: tinitmousehandler ( void ) {
-   memset ( &mouseparams, 0 , sizeof ( mouseparams ));
-};
+/***************************************************************************
+ *                                                                         *
+ *   Keyboard handling routines                                            *
+ *                                                                         *
+ ***************************************************************************/
 
-#endif
 
 
 int keypress( void )
 {
    int result = 0;
-        int r = SDL_mutexP ( keyboardmutex );
-        if ( !r ) {
-                result = !keybuffer_sym.empty ( );
-           r = SDL_mutexV ( keyboardmutex );
-        }
+   int r = SDL_mutexP ( keyboardmutex );
+   if ( !r ) {
+      result = !keybuffer_sym.empty ( );
+      r = SDL_mutexV ( keyboardmutex );
+   }
    return result;
 }
 
 
 tkey r_key(void)
 {
-        int found = 0;
+   int found = 0;
    tkey key;
-        do {
+   do {
       int r = SDL_mutexP ( keyboardmutex );
-        if ( !r ) {
-           if ( !keybuffer_sym.empty() ) {
+      if ( !r ) {
+         if ( !keybuffer_sym.empty() ) {
             key = keybuffer_sym.front();
             keybuffer_sym.pop();
             keybuffer_prnt.pop();
             found++;
          }
          r = SDL_mutexV ( keyboardmutex );
-        }
-        if (!found ) {
-        int t = ticker;
-        while ( t + 5 > ticker )
-           releasetimeslice();
-      } 
-   } while ( !found );  
+      }
+      if (!found ) {
+         int t = ticker;
+         while ( t + 5 > ticker )
+            releasetimeslice();
+      }
+   } while ( !found );
    return key;
 }
 
 int rp_key(void)
 {
-        int found = 0;
+   int found = 0;
    tkey key;
-        do {
+   do {
       int r = SDL_mutexP ( keyboardmutex );
-        if ( !r ) {
-           if ( !keybuffer_prnt.empty() ) {
+      if ( !r ) {
+         if ( !keybuffer_prnt.empty() ) {
             key = keybuffer_prnt.front();
             keybuffer_sym.pop();
             keybuffer_prnt.pop();
             found++;
          }
          r = SDL_mutexV ( keyboardmutex );
-        }
-        if (!found ) {
-        int t = ticker;
-        while ( t + 5 > ticker )
-           releasetimeslice();
-      } 
-   } while ( !found );  
+      }
+      if (!found ) {
+         int t = ticker;
+         while ( t + 5 > ticker )
+            releasetimeslice();
+      }
+   } while ( !found );
    return key;
 }
 
 void getkeysyms ( tkey* keysym, int* keyprnt )
 {
-        int found = 0;
-        do {
+   int found = 0;
+   do {
       int r = SDL_mutexP ( keyboardmutex );
-        if ( !r ) {
-           if ( !keybuffer_prnt.empty() ) {
+      if ( !r ) {
+         if ( !keybuffer_prnt.empty() ) {
             *keysym = keybuffer_sym.front();
             *keyprnt = keybuffer_prnt.front();
             keybuffer_sym.pop();
@@ -520,26 +380,13 @@ void getkeysyms ( tkey* keysym, int* keyprnt )
             found++;
          }
          r = SDL_mutexV ( keyboardmutex );
-        }
-        if (!found ) {
-        int t = ticker;
-        while ( t + 5 > ticker )
-           releasetimeslice();
-      } 
-   } while ( !found );  
-}
-
-
-void initkeyb(void)
-{
-   initeventthread();
-   SDL_EnableKeyRepeat ( 250, 30 );
-}
-
-
-void  closekeyb(void)
-{
-   closeeventthread();
+      }
+      if (!found ) {
+         int t = ticker;
+         while ( t + 5 > ticker )
+            releasetimeslice();
+      }
+   } while ( !found );
 }
 
 
@@ -553,19 +400,209 @@ char  skeypress(tkey keynr)
 
 
 void wait(void)
-{
-}
+{}
+
 
 
 tkey char2key(int c )
 {
-  if ( c < 128 )
-    return tolower(c);
-  else
-    return ct_invvalue;
+   if ( c < 128 )
+      return tolower(c);
+   else
+      return ct_invvalue;
 }
 
 char *get_key(tkey keynr)
 {
    return "not yet implemented";
 }
+
+
+int  releasetimeslice( void )
+{
+   SDL_Delay(10);
+   return 0;
+}
+
+
+
+
+
+
+
+
+/***************************************************************************
+ *                                                                         *
+ *   Timer routines                                                        *
+ *                                                                         *
+ ***************************************************************************/
+
+
+
+volatile int  ticker = 0; // was static, but I think this needs to be global somewhere
+
+void ndelay(int time)
+{
+   long l;
+
+   l = ticker;
+   do {
+      releasetimeslice();
+   }  while (ticker - l > time);
+}
+
+
+int tticker = 0;
+
+void starttimer(void)
+{
+   tticker = ticker;
+}
+
+char time_elapsed(int time)
+{
+   if (tticker + time <= ticker) return 1;
+   else return 0;
+}
+
+
+/*
+Uint32 callback ( Uint32 interval )
+{
+   ticker++;
+   return ++interval;
+}
+ 
+static Uint32 ticktock(Uint32 interval)
+{
+        ++ticker;
+        return(interval++);
+}
+*/
+
+/***************************************************************************
+ *                                                                         *
+ *   Event handling routines                                               *
+ *                                                                         *
+ ***************************************************************************/
+
+//! The handle for the second thread; depending on platform this could be the event handling thread or the game thread
+SDL_Thread* secondThreadHandle = NULL;
+
+
+int closeEventThread = 0;
+
+int processEvents ( )
+{
+   SDL_Event event;
+   if ( SDL_PollEvent ( &event ) == 1) {
+      switch ( event.type ) {
+         case SDL_MOUSEBUTTONUP:
+         case SDL_MOUSEBUTTONDOWN:
+            {
+               int taste = mousetranslate[event.button.button - 1];
+               int state = event.button.type == SDL_MOUSEBUTTONDOWN;
+               if ( state )
+                  mouseparams.taste |= (1 << taste);
+               else
+                  mouseparams.taste &= ~(1 << taste);
+               mouseparams.x = event.button.x;
+               mouseparams.y = event.button.y;
+               callsubhandler();
+            }
+            break;
+
+         case SDL_MOUSEMOTION:
+            {
+               mouseparams.x = event.motion.x;
+               mouseparams.y = event.motion.y;
+               mouseparams.x1 = event.motion.x;
+               mouseparams.y1 = event.motion.y;
+               mouseparams.taste = 0;
+               for ( int i = 0; i < 3; i++ )
+                  if ( event.motion.state & (1 << i) )
+                     mouseparams.taste |= 1 << mousetranslate[i];
+               callsubhandler();
+            }
+            break;
+         case SDL_KEYDOWN:
+            {
+               int r = SDL_mutexP ( keyboardmutex );
+               if ( !r ) {
+                  tkey key = event.key.keysym.sym;
+                  if ( event.key.keysym.mod & KMOD_ALT )
+                     key |= ct_altp;
+                  if ( event.key.keysym.mod & KMOD_CTRL )
+                     key |= ct_stp;
+                  if ( event.key.keysym.mod & KMOD_SHIFT )
+                     key |= ct_shp;
+                  keybuffer_sym.push ( key );
+                  keybuffer_prnt.push ( event.key.keysym.unicode );
+                  r = SDL_mutexV ( keyboardmutex );
+               }
+            }
+            break;
+         case SDL_KEYUP:
+         {}
+
+            break;
+
+         case SDL_QUIT:
+            exitprogram = 1;
+            break;
+      }
+      return 1;
+   } else
+      return 0;
+
+}
+
+int eventthread ( void* nothing )
+{
+   while ( !closeEventThread ) {
+      if ( !processEvents() )
+         SDL_Delay(10);
+      ticker = SDL_GetTicks() / 10;
+   }
+   return 0;
+}
+
+#ifdef _WIN32_
+int (*_gamethread)(void *);
+
+int gameThreadWrapper ( void* data )
+{
+   int res = _gamethread ( data );
+   closeEventThread = 1;
+   return res;
+}
+#endif
+
+void initializeEventHandling ( int (*gamethread)(void *) , void *data )
+{
+   mouseparams.xsize = 10;
+   mouseparams.ysize = 10;
+
+   keyboardmutex = SDL_CreateMutex ();
+   if ( !keyboardmutex ) {
+      printf("creating keyboard mutex failed\n" );
+      exit(1);
+   }
+   SDL_EnableUNICODE ( 1 );
+   SDL_EnableKeyRepeat ( 250, 30 );
+
+#ifdef _WIN32_
+   _gamethread = gamethread;
+   secondThreadHandle = SDL_CreateThread ( gameThreadWrapper, data );
+   eventthread( NULL );
+#else
+   secondThreadHandle = SDL_CreateThread ( eventthread, NULL );
+   gamethread( data );
+   closeEventThread = 1;
+#endif
+
+   SDL_WaitThread ( secondThreadHandle, NULL );
+
+}
+
+

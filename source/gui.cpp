@@ -1,6 +1,17 @@
-//     $Id: gui.cpp,v 1.40 2000-10-11 14:26:39 mbickel Exp $
+//     $Id: gui.cpp,v 1.41 2000-10-18 14:14:12 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2000/10/11 14:26:39  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.39  2000/09/24 19:57:04  mbickel
 //      ChangeUnitHeight functions are now more powerful since they use
 //        UnitMovement on their own.
@@ -202,12 +213,11 @@
 #include "basegfx.h"
 #include "typen.h"
 #include "newfont.h"
-#include "keybp.h"
 #include "misc.h"
 #include "gui.h"
 
 #include "spfst.h"
-#include "mousehnd.h"
+#include "events.h"
 #include "loaders.h"
 #include "controls.h"
 #include "dlg_box.h"

@@ -1,6 +1,10 @@
-//     $Id: spfst.h,v 1.28 2000-10-11 15:33:46 mbickel Exp $
+//     $Id: spfst.h,v 1.29 2000-10-18 14:14:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/10/11 15:33:46  mbickel
+//      Adjusted small editors to the new ASC structure
+//      Watcom compatibility
+//
 //     Revision 1.27  2000/10/11 14:26:50  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -158,10 +162,9 @@
 
 
   #include "newfont.h"
-  #include "keybp.h"
   #include "basegfx.h"
-  #include "mousehnd.h"
   #include "typen.h"
+  #include "events.h"
 
 #pragma pack(1)
 

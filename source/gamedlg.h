@@ -1,6 +1,17 @@
-//     $Id: gamedlg.h,v 1.11 2000-10-11 14:26:37 mbickel Exp $
+//     $Id: gamedlg.h,v 1.12 2000-10-18 14:14:11 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/10/11 14:26:37  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.10  2000/09/16 11:47:28  mbickel
 //      Some cleanup and documentation again
 //
@@ -72,13 +83,11 @@
 
 
 #include "typen.h"
-#include "keybp.h"
 #include "basegfx.h"
 #include "newfont.h"
 #include "spfst.h"
 #include "loaders.h"
 #include "misc.h"
-#include "mousehnd.h"
 
 
 #include "dialog.h"

@@ -1,6 +1,9 @@
-//     $Id: basegfx.cpp,v 1.16 2000-08-12 09:17:15 gulliver Exp $
+//     $Id: basegfx.cpp,v 1.17 2000-10-18 14:13:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/08/12 09:17:15  gulliver
+//     *** empty log message ***
+//
 //     Revision 1.15  2000/05/30 18:39:19  mbickel
 //      Added support for multiple directories
 //      Moved DOS specific files to a separate directory
@@ -62,11 +65,11 @@ tgraphmodeparameters *hgmp = (tgraphmodeparameters *) & hardwaregraphmodeparamet
 
 int xlatbuffersize = 66000;
 
-void generategrayxlattable( ppixelxlattable tab, char offset, char size)
+void generategrayxlattable( ppixelxlattable tab, char offset, char size, dacpalette256* pal )
 {
 	for ( int b = 0; b <= 255; b++) {
 //		(*tab)[b] = (char) (offset + size - 1 - ((*activepalette256)[b][0] + (*activepalette256)[b][1] + (*activepalette256)[b][2]) * size / 192);
-		(*tab)[b] = (char) (offset + size - 1 - ( 0.299 * (*activepalette256)[b][0] + 0.587 * (*activepalette256)[b][1] + 0.114 * (*activepalette256)[b][2]) * size / 64 );
+		(*tab)[b] = (char) (offset + size - 1 - ( 0.299 * (*pal)[b][0] + 0.587 * (*pal)[b][1] + 0.114 * (*pal)[b][2]) * size / 64 );
 	}
 }
 

@@ -1,6 +1,17 @@
-//     $Id: edevents.cpp,v 1.12 2000-10-11 14:26:29 mbickel Exp $
+//     $Id: edevents.cpp,v 1.13 2000-10-18 14:14:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/10/11 14:26:29  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.11  2000/08/12 12:52:45  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -76,7 +87,6 @@
 #include "edmisc.h"
 #include "edevents.h"
 #include "edselfnt.h"
-#include "timer.h"
 
 // õS TplayerSel
 

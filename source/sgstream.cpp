@@ -1,6 +1,10 @@
-//     $Id: sgstream.cpp,v 1.38 2000-10-17 13:04:13 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.39 2000-10-18 14:14:18 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2000/10/17 13:04:13  mbickel
+//      New terrainaccess reading/writing
+//      Added Win32 project files
+//
 //     Revision 1.37  2000/10/17 12:12:22  mbickel
 //      Improved vehicletype loading/saving routines
 //      documented some global variables
@@ -223,7 +227,6 @@
 #include "gameoptions.h"
 
 #ifndef converter
- #include "keybp.h"
  #include "dlg_box.h"
  #include "dialog.h"
 #endif
@@ -2486,6 +2489,13 @@ void loadpalette ( void )
    stream.readdata( &bi2asc_color_translation_table,  sizeof ( bi2asc_color_translation_table ));
    #endif
    asc_paletteloaded = 1;
+
+   xlatpictgraytable = (ppixelxlattable) asc_malloc( sizeof(*xlatpictgraytable) );
+   // xlatpictgraytable = new tpixelxlattable;
+   generategrayxlattable(xlatpictgraytable,160,16,&pal);
+
+   (*xlatpictgraytable)[255] = 255;
+
 }
 
 

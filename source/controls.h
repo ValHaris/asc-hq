@@ -1,6 +1,17 @@
-//     $Id: controls.h,v 1.28 2000-10-11 14:26:25 mbickel Exp $
+//     $Id: controls.h,v 1.29 2000-10-18 14:13:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.28  2000/10/11 14:26:25  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.27  2000/09/24 19:57:04  mbickel
 //      ChangeUnitHeight functions are now more powerful since they use
 //        UnitMovement on their own.
@@ -141,7 +152,6 @@
 #define controls_h
 #include "gui.h"
 #include "typen.h"
-#include "timer.h"
 #include "mousecontrol.h"
 
 

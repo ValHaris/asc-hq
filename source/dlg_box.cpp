@@ -1,6 +1,9 @@
-//     $Id: dlg_box.cpp,v 1.34 2000-10-16 09:37:35 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.35 2000-10-18 14:14:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.34  2000/10/16 09:37:35  mbickel
+//      Fixed Win32: not recognizing keys in dialog box
+//
 //     Revision 1.33  2000/10/14 14:16:03  mbickel
 //      Cleaned up includes
 //      Added mapeditor to win32 watcom project
@@ -175,16 +178,14 @@
 
 #include "tpascal.inc"
 #include "typen.h"
-#include "keybp.h"
 #include "basegfx.h"
 #include "newfont.h"
 #include "spfst.h"
 #include "loaders.h"
 #include "misc.h"
-#include "mousehnd.h"
+#include "events.h"
 #include "stack.h"
 #include "dlg_box.h"
-#include "timer.h"
 #include "loadpcx.h"
 
 

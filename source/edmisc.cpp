@@ -1,6 +1,10 @@
-//     $Id: edmisc.cpp,v 1.33 2000-10-14 15:31:53 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.34 2000-10-18 14:14:07 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/10/14 15:31:53  mbickel
+//      Moved key symbols to separate files
+//      Moved tnstream to its own file
+//
 //     Revision 1.32  2000/10/11 15:33:43  mbickel
 //      Adjusted small editors to the new ASC structure
 //      Watcom compatibility
@@ -183,7 +187,6 @@
 #include "edgen.h"
 #include "edselfnt.h"
 #include "edglobal.h"
-#include "timer.h"
 
 #ifdef _DOS_
  #include "dos\memory.h"

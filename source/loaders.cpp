@@ -1,6 +1,10 @@
-//     $Id: loaders.cpp,v 1.30 2000-10-14 13:07:00 mbickel Exp $
+//     $Id: loaders.cpp,v 1.31 2000-10-18 14:14:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.30  2000/10/14 13:07:00  mbickel
+//      Moved DOS version into own subdirectories
+//      Win32 version with Watcom compiles and links ! But doesn't run yet...
+//
 //     Revision 1.29  2000/10/14 10:52:51  mbickel
 //      Some adjustments for a Win32 port
 //
@@ -172,7 +176,6 @@
 
 #include "typen.h"
 #include "misc.h"
-#include "keybp.h"
 #include "basegfx.h"
 #include "newfont.h"
 #include "buildingtype.h"

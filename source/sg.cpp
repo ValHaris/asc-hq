@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.103 2000-10-18 12:40:46 mbickel Exp $
+//     $Id: sg.cpp,v 1.104 2000-10-18 14:14:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.103  2000/10/18 12:40:46  mbickel
+//      Rewrite event handling for windows
+//
 //     Revision 1.102  2000/10/14 14:16:06  mbickel
 //      Cleaned up includes
 //      Added mapeditor to win32 watcom project
@@ -225,9 +228,8 @@
 #include "misc.h"
 #include "loadpcx.h"
 #include "newfont.h"
-#include "mousehnd.h"
+#include "events.h"
 #include "typen.h"
-#include "keybp.h"
 #include "spfst.h"
 #include "loaders.h"
 #include "dlg_box.h"
@@ -237,7 +239,6 @@
 #include "dlg_box.h"
 #include "dialog.h"
 #include "gui.h"
-#include "timer.h"
 #include "pd.h"
 #include "strtmesg.h"
 #include "weather.h"
@@ -259,12 +260,6 @@
  #include "dos\memory.h"
 #endif
 
-#ifdef _WIN32_
- #include "sdl.h"
- #include "SDL_thread.h"
- extern int eventthread ( void * nothing );
- extern int closethread;
-#endif
 
 // #define MEMCHK
 
@@ -2600,9 +2595,6 @@ void dispmessageonexit ( void ) {
 }
 
 
-void returntotextmode ( void ) {
-   closegraphics();
-}
 
 
 pfont load_font ( const char* name )
@@ -2737,15 +2729,6 @@ void loaddata( int resolx, int resoly,
       actprogressbar = NULL;
    }
 }
-
-void closemouse ( void )
-{
-   removemousehandler();
-}
-
-
-
-
 
 
 
@@ -2990,66 +2973,59 @@ void runmainmenu ( void )
 
 
 
-void closecdrom( void )
+struct GameThreadParams {
+   char* mapname;
+   char* emailgame;
+   char* savegame;
+};
+
+int gamethread ( void* data )
 {
-//   end_real_int();
-//   freecdinfo();
-}
+      GameThreadParams* gtp = (GameThreadParams*) data;
 
-// int cdrom = 1;
+      initspfst( -1, -1 ); // 6, 16
+      int resolx = agmp->resolutionx;
+      int resoly = agmp->resolutiony;
+      gui.init ( resolx, resoly );
+      virtualscreenbuf.init();
 
+      try {
+         int fs = loadFullscreenImage ( "helisun.jpg" );
+         if ( !fs ) {
+            tnfilestream stream ( "logo640.pcx", 1 );
+            loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 );
+         }
+         loaddata( resolx, resoly, gtp->emailgame, gtp->mapname, gtp->savegame );
+         if ( fs )
+            closeFullscreenImage ();
 
-void startcdaudio ( char c )
-{
-   /*
-    if ( toupper( c ) < 'A' || toupper( c ) > 'Z' )
-       cdrom = 0;
+      }
+      catch ( tfileerror err ) {
+         displaymessage ( "unable to access file %s \n", 2, err.filename );
+      }
+      catch ( toutofmem err ) {
+         displaymessage (
+            "loading of game failed due to insufficient memory", 2 );
+      }
+      catch ( ASCexception err ) {
+         displaymessage ( "loading of game failed", 2 );
+      }
 
-    if ( cdrom ) {
-       init_real_int(cdromintmemsize);
-       atexit ( closecdrom );
-       if ( testcdrom()) {
-          getcdrominfo();
-          activecdrom = cdrominfo.driveletter[0];
-          if ( 'A' + activecdrom == toupper( c ))
-             cdrom = 0;
-          else {
-             readcdinfo();
-             if ( cdinfo.lasttrack >= 2 )
-                playaudiotrack(cdinfo.track[1]->start, cdinfo.size - cdinfo.track[0]->size);
-             else
-                cdrom = 0;
-          }
+      setvgapalette256(pal);
 
-       } else
-          cdrom = 0;
-    }
-    */
-}
+      addmouseproc ( &mousescrollproc );
 
+      loadtexture();
 
-class tnewkeyb {
-               public:
-               tnewkeyb ( void )
-               {
-                  #ifdef NEWKEYB
-                  initkeyb();
-                  #endif
-               };
+      onlinehelp = new tsgonlinemousehelp;
+      onlinehelpwind = new tsgonlinemousehelpwind;
 
-               ~tnewkeyb (  )
-               {
-                  #ifdef NEWKEYB
-                  closekeyb();
-                  #endif
-               };
-          };
+      pd.init();
 
+      memset( keyinput, 0, sizeof(keyinput));
+      keyinputptr = 0;
+      abortgame = 0;
 
-
-
-int gamethread ( void* emailgame )
-{
       do {
          try {
             if ( !actmap || actmap->xsize <= 0 || actmap->ysize <= 0 ) {
@@ -3059,7 +3035,7 @@ int gamethread ( void* emailgame )
 
                backgroundpict.paint();
 
-               if ( emailgame ) {
+               if ( gtp->emailgame ) {
                   initNetworkGame ( );
                }
 
@@ -3074,8 +3050,8 @@ int gamethread ( void* emailgame )
                dashboard.x = 0xffff;
                dashboard.y = 0xffff;
 
-               static int displayed = 0;
                /*
+               static int displayed = 0;
                if ( !displayed )
                   displaymessage2( "time for startup: %d * 1/100 sec", ticker-cntr );
                  
@@ -3088,53 +3064,17 @@ int gamethread ( void* emailgame )
          } /* endtry */
          catch ( NoMapLoaded ) { } /* endcatch */
       } while ( abortgame == 0);
-   closethread = 1; 
    return 0;
 }
 
 
 int main(int argc, char *argv[] )
 {
-   // dont_use_linear_framebuffer = 1;
 
-
-  if( sizeof(word) != 2 ||
-      sizeof(integer) != 2 ) {
-      printf("\n ASC was compiled with invalid structure sizes! Pack all structures ! \n\n" );
-      return 1;
-  }
-
-
-  #ifdef HEXAGON
    int resolx = 800;
    int resoly = 600;
-  #else
-   int resolx = 640;
-   int resoly = 480;
-  #endif
 
-
-   #ifdef logging
-    logtofile ( getstartupmessage() );
-    logtofile ( "\n\n new log started ");
-    #ifdef NEWKEYB
-     logtofile ( "new keyboard handler ist enabled" );
-    #else
-     logtofile ( "new keyboard handler ist disabled" );
-    #endif
-    #ifdef MEMCHK
-     logtofile ( "memory checking is enabled" );
-    #endif
-   #endif
-
-   #ifdef logging
-   logtofile ( "sg.cpp / main / initializing timer handler ");
-   #endif
-   inittimer(100);
-   atexit ( closetimer );
-
-
-    printf( getstartupmessage() );
+   printf( getstartupmessage() );
 
    #ifdef _DOS_
     int showmodes = 0;
@@ -3146,7 +3086,6 @@ int main(int argc, char *argv[] )
    #endif
 
 
-   int cntr = ticker;
    char *emailgame = NULL, *mapname = NULL, *savegame = NULL, *configfile = NULL;
    int useSound = 1;
    int forceFullScreen = 0;
@@ -3323,72 +3262,17 @@ int main(int argc, char *argv[] )
    initSoundList( useSound == 0 );
 
    if ( modenum8 > 0 ) {
-      atexit ( returntotextmode );
-
       #ifdef _DOS_
        setFullscreenSetting ( FIS_oldModeNum, modenum8 );
       #endif
 
-      initspfst( -1, -1 ); // 6, 16
+      GameThreadParams gtp;
+      gtp.mapname = mapname;
+      gtp.savegame = savegame;
+      gtp.emailgame = emailgame;
 
-      gui.init ( resolx, resoly );
-      virtualscreenbuf.init();
+      initializeEventHandling ( gamethread, &gtp );
 
-      tnewkeyb nkb;
-
-      try {
-         int fs = loadFullscreenImage ( "helisun.jpg" );
-         if ( !fs ) {
-            tnfilestream stream ( "logo640.pcx", 1 );
-            loadpcxxy( &stream, (hgmp->resolutionx - 640)/2, (hgmp->resolutiony-35)/2, 1 );
-         }
-         loaddata( resolx, resoly, emailgame, mapname, savegame );
-         if ( fs )
-            closeFullscreenImage ();
-
-      }
-      catch ( tfileerror err ) {
-         displaymessage ( "unable to access file %s \n", 2, err.filename );
-      }
-      catch ( toutofmem err ) {
-         displaymessage (
-            "loading of game failed due to insufficient memory", 2 );
-      }
-      catch ( ASCexception err ) {
-         displaymessage ( "loading of game failed", 2 );
-      }
-
-      if( initmousehandler( icons.mousepointer ))
-         displaymessage("mouse required", 2 );
-
-      atexit ( closemouse );
-
-      setvgapalette256(pal);
-      xlatpictgraytable =
-         (ppixelxlattable) asc_malloc( sizeof(*xlatpictgraytable) );
-      generategrayxlattable( xlatpictgraytable, 160, 16 );
-      (*xlatpictgraytable)[255] = 255;
-
-      addmouseproc ( &mousescrollproc );
-
-      loadtexture();
-
-      onlinehelp = new tsgonlinemousehelp;
-      onlinehelpwind = new tsgonlinemousehelpwind;
-
-      pd.init();
-
-      memset( keyinput, 0, sizeof(keyinput));
-      keyinputptr = 0;
-      abortgame = 0;
-
-
-     #ifdef _WIN32_  
-      SDL_CreateThread ( gamethread, emailgame );
-      eventthread( NULL );
-     #else
-      gamethread( NULL );
-     #endif 
 
       closegraphics();
       writegameoptions ( );

@@ -1,6 +1,10 @@
-//     $Id: edmisc.h,v 1.13 2000-10-14 14:16:04 mbickel Exp $
+//     $Id: edmisc.h,v 1.14 2000-10-18 14:14:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/10/14 14:16:04  mbickel
+//      Cleaned up includes
+//      Added mapeditor to win32 watcom project
+//
 //     Revision 1.12  2000/10/11 14:26:33  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -94,9 +98,8 @@
 #include "weather.h"
 #include "misc.h"
 #include "newfont.h"
-#include "mousehnd.h"
+#include "events.h"
 #include "loaders.h"
-#include "keybp.h"
 #include "dlg_box.h"
 #include "stack.h"
 #include "spfst.h"

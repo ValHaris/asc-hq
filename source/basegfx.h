@@ -264,7 +264,8 @@ extern void* uncompress_rlepict ( void* pict );
 
 extern void         generategrayxlattable(	ppixelxlattable tab,
 											char         offset,
-											char         size);
+											char         size,
+											dacpalette256* pal );
 
 extern void         rahmen(bool      invers,
                     integer      x1,

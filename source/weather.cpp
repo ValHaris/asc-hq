@@ -1,6 +1,10 @@
-//     $Id: weather.cpp,v 1.5 2000-10-14 13:07:01 mbickel Exp $
+//     $Id: weather.cpp,v 1.6 2000-10-18 14:14:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/10/14 13:07:01  mbickel
+//      Moved DOS version into own subdirectories
+//      Win32 version with Watcom compiles and links ! But doesn't run yet...
+//
 //     Revision 1.4  2000/10/12 22:24:03  mbickel
 //      Made the DOS part of the new platform system work again
 //
@@ -49,7 +53,6 @@
 #include "misc.h"
 #include "basegfx.h"
 #include "newfont.h"
-#include "keybp.h"
 #include "loaders.h"
 #include "spfst.h"
 #include "weather.h"

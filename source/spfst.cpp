@@ -1,6 +1,10 @@
-//     $Id: spfst.cpp,v 1.65 2000-10-14 14:16:09 mbickel Exp $
+//     $Id: spfst.cpp,v 1.66 2000-10-18 14:14:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.65  2000/10/14 14:16:09  mbickel
+//      Cleaned up includes
+//      Added mapeditor to win32 watcom project
+//
 //     Revision 1.64  2000/10/12 19:00:22  mbickel
 //      Fixed crash in building placement
 //      Replaced multi-character character constants by strings (there where
@@ -318,14 +322,12 @@
 #include "basestrm.h"
 #include "tpascal.inc"
 #include "misc.h"
-#include "keybp.h"
 #include "basegfx.h"
 #include "newfont.h"
 #include "typen.h"
 #include "spfst.h"
-#include "mousehnd.h"
+#include "events.h"
 #include "dlg_box.h"
-#include "timer.h"
 #include "loaders.h"
 #include "stack.h"
 #include "loadpcx.h"

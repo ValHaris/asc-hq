@@ -1,6 +1,17 @@
-//     $Id: gui.h,v 1.15 2000-10-11 14:26:40 mbickel Exp $
+//     $Id: gui.h,v 1.16 2000-10-18 14:14:13 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/10/11 14:26:40  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.14  2000/08/30 16:26:59  mbickel
 //     *** empty log message ***
 //
@@ -85,7 +96,6 @@
 #define gui_h
 
 #include "basestrm.h"
-#include "keybp.h"
 #include "basegui.h"
 #include "spfst.h"
 #include "unitctrl.h"

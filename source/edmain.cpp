@@ -1,6 +1,17 @@
-//     $Id: edmain.cpp,v 1.23 2000-10-11 14:26:30 mbickel Exp $
+//     $Id: edmain.cpp,v 1.24 2000-10-18 14:14:06 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/10/11 14:26:30  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.22  2000/09/07 16:42:28  mbickel
 //      Made some adjustments so that ASC compiles with Watcom again...
 //
@@ -122,7 +133,6 @@
 
 #include "edmisc.h"
 #include "loadpcx.h"
-#include "timer.h"
 #include "loadbi3.h"
 #include "edselfnt.h"
 #include "edglobal.h"
@@ -722,13 +732,6 @@ void         editor(void)
    }  while (! (ch == ct_esc) || (ch == ct_altp+ct_x ) );
 } 
 
-//* õS Close-Functions
-
-void closemouse ( void )
-{
-   removemousehandler();
-}
-
 
 //* õS Diverse
 
@@ -790,6 +793,59 @@ pfont load_font(char* name)
 
 
 
+
+int mapeditorMainThread ( void* _mapname )
+{
+   char* mapname = (char*) _mapname;
+   #ifdef HEXAGON
+    initspfst( -1, -1 );
+   #else
+    if ( resolx == 640  && resoly == 480 )
+       initspfst();
+    else
+       initspfst( -1, -1 );
+   #endif
+
+   try {
+      loaddata();
+      if ( mapname )
+         loadmap ( mapname );
+      else
+         buildemptymap();
+   } /* end try */
+   catch ( tfileerror err ) {
+      displaymessage ( " error loading file %s ",2,err.filename );
+   } /* end catch */
+
+   pulldownfont = schriften.smallarial;
+
+   activefontsettings.font = schriften.arial8;
+   activefontsettings.color =lightblue ;
+   activefontsettings.background =3;
+   activefontsettings.length =100;
+   activefontsettings.justify =lefttext;
+
+   cursor.init();
+
+   setstartvariables();
+
+   addmouseproc ( &mousescrollproc );
+
+   godview = true;
+
+   bar( 0, 0, hgmp->resolutionx-1, hgmp->resolutiony-1, 0 );
+   setvgapalette256(pal);
+
+   displaymap();
+   showallchoices();
+   pdsetup();
+   pdbaroff();
+
+   mousevisible(true);
+   cursor.show();
+
+   editor();
+}
 
 
 int main(int argc, char *argv[] )
@@ -926,9 +982,6 @@ int main(int argc, char *argv[] )
 
    setWindowCaption ( "Advanced Strategic Command : map editor ");
 
-   inittimer(100);
-   atexit ( closetimer );
-
    schriften.smallarial = load_font("smalaril.FNT");
    schriften.large = load_font("USABLACK.FNT");
    schriften.arial8 = load_font("ARIAL8.FNT");
@@ -950,76 +1003,11 @@ int main(int argc, char *argv[] )
        showtext2 ("Map Editor", 10, hgmp->resolutiony - activefontsettings.font->height - 2 );
 
    }
-   #ifdef HEXAGON
-    initspfst( -1, -1 );
-   #else
-    if ( resolx == 640  && resoly == 480 )
-       initspfst();
-    else
-       initspfst( -1, -1 );
-   #endif
 
-   #ifdef NEWKEYB
-    initkeyb();
-   #endif
+   initializeEventHandling ( mapeditorMainThread, mapname );
 
-
-   try {
-      loaddata();
-      if ( mapname )
-         loadmap ( mapname );
-      else
-         buildemptymap();
-   } /* end try */
-   catch ( tfileerror err ) {
-      displaymessage ( " error loading file %s ",2,err.filename );
-   } /* end catch */
-
-   if ( initmousehandler( icons.mousepointer )) 
-      displaymessage("mouse required", 2 );
-
-   pulldownfont = schriften.smallarial;
-
-   activefontsettings.font = schriften.arial8;
-   activefontsettings.color =lightblue ;
-   activefontsettings.background =3;
-   activefontsettings.length =100;
-   activefontsettings.justify =lefttext;
-
-   cursor.init();
-               
-   atexit( closemouse );
-      
-   xlatpictgraytable = (ppixelxlattable) malloc( sizeof(*xlatpictgraytable) );
-   generategrayxlattable(xlatpictgraytable,160,16); 
-
-   (*xlatpictgraytable)[255] = 255;
-
-   setstartvariables();
-   
-   addmouseproc ( &mousescrollproc );
-
-   godview = true; 
-
-   bar( 0, 0, hgmp->resolutionx-1, hgmp->resolutiony-1, 0 );
-   setvgapalette256(pal); 
-
-   displaymap();
-   showallchoices();
-   pdsetup();
-   pdbaroff();
-
-   mousevisible(true); 
-   cursor.show();
- 
-   editor();
    cursor.hide();
    writegameoptions ();
-
-  #ifdef NEWKEYB
-   closekeyb();
-  #endif
-
 
   #ifdef MEMCHK
    verifyallblocks();

@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.61 2000-10-14 14:16:02 mbickel Exp $
+//     $Id: dialog.cpp,v 1.62 2000-10-18 14:13:58 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.61  2000/10/14 14:16:02  mbickel
+//      Cleaned up includes
+//      Added mapeditor to win32 watcom project
+//
 //     Revision 1.60  2000/10/14 10:52:46  mbickel
 //      Some adjustments for a Win32 port
 //
@@ -296,19 +300,17 @@
 #include "typen.h"
 #include "buildingtype.h"
 #include "vehicletype.h"
-#include "keybp.h"
 #include "basegfx.h"
 #include "newfont.h"
 #include "spfst.h"
 #include "loaders.h"
 #include "misc.h"
-#include "mousehnd.h"
+#include "events.h"
 #include "loadpcx.h"
 #include "stack.h"
 #include "dlg_box.h"
 #include "dialog.h"
 #include "sgstream.h"
-#include "timer.h"
 #include "attack.h"
 #include "gameoptions.h"
 #include "errors.h"

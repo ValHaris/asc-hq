@@ -27,7 +27,7 @@
 #include "krkr.h"
 #include "..\sgstream.h"
 #include "..\newfont.h"
-#include "..\mousehnd.h"
+#include "..\events.h"
 #include "..\misc.h"
 #include "..\keybp.h"
 #include "..\basegfx.h"

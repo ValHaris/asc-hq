@@ -1,6 +1,10 @@
-//     $Id: network.cpp,v 1.13 2000-10-14 14:16:06 mbickel Exp $
+//     $Id: network.cpp,v 1.14 2000-10-18 14:14:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/10/14 14:16:06  mbickel
+//      Cleaned up includes
+//      Added mapeditor to win32 watcom project
+//
 //     Revision 1.12  2000/10/14 10:52:52  mbickel
 //      Some adjustments for a Win32 port
 //
@@ -74,7 +78,7 @@
 #include "network.h"
 #include "dlg_box.h"
 #include "dialog.h"
-#include "mousehnd.h"
+#include "events.h"
 #include "sgstream.h"
 #include "loadpcx.h"
 

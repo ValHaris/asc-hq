@@ -38,7 +38,7 @@
 #include "..\stack.h"
 #include "..\loadpcx.h"
 #include "..\sgstream.h"
-#include "..\mousehnd.h"
+#include "..\events.h"
 
 
 dacpalette256 pal;

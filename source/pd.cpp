@@ -1,6 +1,9 @@
-//     $Id: pd.cpp,v 1.13 2000-08-12 12:52:50 mbickel Exp $
+//     $Id: pd.cpp,v 1.14 2000-10-18 14:14:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/08/12 12:52:50  mbickel
+//      Made DOS-Version compile and run again.
+//
 //     Revision 1.12  2000/06/09 10:50:59  mbickel
 //      Repaired keyboard control of pulldown menu
 //      Fixed compile errors at fieldlist with gcc
@@ -79,11 +82,9 @@
 #include "tpascal.inc"
 #include "newfont.h"
 #include "basegfx.h"
-#include "keybp.h"
-#include "mousehnd.h"
+#include "events.h"
 #include "pd.h"
 #include "misc.h"
-#include "timer.h"
 
 
    pfont        pulldownfont;

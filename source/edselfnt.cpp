@@ -1,6 +1,12 @@
-//     $Id: edselfnt.cpp,v 1.15 2000-10-12 19:00:21 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.16 2000-10-18 14:14:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/10/12 19:00:21  mbickel
+//      Fixed crash in building placement
+//      Replaced multi-character character constants by strings (there where
+//        problems with the byte order)
+//      Building ID and name are now correctly displayed in mapeditor
+//
 //     Revision 1.14  2000/10/11 14:26:34  mbickel
 //      Modernized the internal structure of ASC:
 //       - vehicles and buildings now derived from a common base class
@@ -106,7 +112,6 @@
 #include "flview.h"
 #include "edselfnt.h"
 #include "edglobal.h"
-#include "timer.h"
 
 
 

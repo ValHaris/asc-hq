@@ -1,6 +1,17 @@
-//     $Id: attack.cpp,v 1.33 2000-10-11 14:26:15 mbickel Exp $
+//     $Id: attack.cpp,v 1.34 2000-10-18 14:13:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.33  2000/10/11 14:26:15  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.32  2000/09/16 11:47:21  mbickel
 //      Some cleanup and documentation again
 //
@@ -175,12 +186,10 @@
 #include "attack.h"
 #include "newfont.h"
 #include "basegfx.h"
-#include "keybp.h"
 #include "spfst.h"
 #include "dlg_box.h"
 #include "sgstream.h"
-#include "mousehnd.h"
-#include "timer.h"
+#include "events.h"
 #include "loaders.h"
 #include "gameoptions.h"
 

@@ -1,6 +1,10 @@
-//     $Id: dlg_box.h,v 1.15 2000-08-26 15:33:42 mbickel Exp $
+//     $Id: dlg_box.h,v 1.16 2000-10-18 14:14:04 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/08/26 15:33:42  mbickel
+//      Warning message displayed if empty password is entered
+//      pcxtank now displays error messages
+//
 //     Revision 1.14  2000/08/12 12:52:45  mbickel
 //      Made DOS-Version compile and run again.
 //
@@ -100,9 +104,8 @@
 #include <string.h>
 
 #include "newfont.h"
-#include "keybp.h"
+#include "events.h"
 #include "basegfx.h"
-#include "mousehnd.h"
 
   #define dlg_wintitle 1  
   #define dlg_in3d 2  

@@ -1,6 +1,17 @@
-//     $Id: building.cpp,v 1.53 2000-10-11 14:26:17 mbickel Exp $
+//     $Id: building.cpp,v 1.54 2000-10-18 14:13:50 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.53  2000/10/11 14:26:17  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.52  2000/09/25 20:04:35  mbickel
 //      AI improvements
 //
@@ -123,14 +134,12 @@
 #include "misc.h"
 #include "basegfx.h"
 #include "newfont.h"
-#include "keybp.h"
-#include "timer.h"
 #include "dlg_box.h"
 #include "spfst.h"
 #include "stdio.h"
 #include "string.h"
 #include "dialog.h"
-#include "mousehnd.h"
+#include "events.h"
 #include "building.h"
 #include "building_controls.h"
 #include "controls.h"

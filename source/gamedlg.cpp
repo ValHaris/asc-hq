@@ -1,6 +1,10 @@
-//     $Id: gamedlg.cpp,v 1.48 2000-10-14 14:16:05 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.49 2000-10-18 14:14:09 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.48  2000/10/14 14:16:05  mbickel
+//      Cleaned up includes
+//      Added mapeditor to win32 watcom project
+//
 //     Revision 1.47  2000/10/14 10:52:49  mbickel
 //      Some adjustments for a Win32 port
 //
@@ -242,11 +246,10 @@
 #include "basegfx.h"
 #include "gamedlg.h"
 #include "missions.h"
-#include "mousehnd.h"
+#include "events.h"
 #include "stack.h"
 #include "network.h"
 #include "controls.h"
-#include "timer.h"
 #include "sg.h"
 #include "gameoptions.h"
 #include "loadimage.h"

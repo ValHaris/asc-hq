@@ -1,6 +1,17 @@
-//     $Id: missions.cpp,v 1.13 2000-10-11 14:26:44 mbickel Exp $
+//     $Id: missions.cpp,v 1.14 2000-10-18 14:14:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/10/11 14:26:44  mbickel
+//      Modernized the internal structure of ASC:
+//       - vehicles and buildings now derived from a common base class
+//       - new resource class
+//       - reorganized exceptions (errors.h)
+//      Split some files:
+//        typen -> typen, vehicletype, buildingtype, basecontainer
+//        controls -> controls, viewcalculation
+//        spfst -> spfst, mapalgorithm
+//      bzlib is now statically linked and sources integrated
+//
 //     Revision 1.12  2000/09/17 15:20:33  mbickel
 //      AI is now automatically invoked (depending on gameoptions)
 //      Some cleanup
@@ -85,7 +96,6 @@
 #include "newfont.h"
 #include "typen.h"
 #include "basegfx.h"
-#include "keybp.h"
 
 #include "spfst.h"
 #include "loaders.h"

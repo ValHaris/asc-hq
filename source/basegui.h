@@ -1,6 +1,10 @@
-//     $Id: basegui.h,v 1.3 1999-12-28 21:02:36 mbickel Exp $
+//     $Id: basegui.h,v 1.4 2000-10-18 14:13:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/12/28 21:02:36  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.2  1999/11/16 03:41:05  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -34,7 +38,7 @@
 #ifndef basegui_h
 #define basegui_h
 
-#include "keybp.h"
+#include "events.h"
 
 #pragma pack(1)
 struct tnguiiconfiledata {

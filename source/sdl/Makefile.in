@@ -69,7 +69,7 @@ VERSION = @VERSION@
 
 noinst_LIBRARIES = libsdl.a
 
-libsdl_a_SOURCES = sound.cpp timer.cpp graphics.cpp events.cpp SDLStretch.cpp loadimage.cpp asc_IMG_jpg.c
+libsdl_a_SOURCES = sound.cpp graphics.cpp events.cpp SDLStretch.cpp loadimage.cpp asc_IMG_jpg.c
 
 EXTRA_DIST = events.cpp graphics.cpp graphics.h timer.cpp sound.cpp sound.h 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -83,8 +83,8 @@ CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 libsdl_a_LIBADD = 
-libsdl_a_OBJECTS =  sound.o timer.o graphics.o events.o SDLStretch.o \
-loadimage.o asc_IMG_jpg.o
+libsdl_a_OBJECTS =  sound.o graphics.o events.o SDLStretch.o loadimage.o \
+asc_IMG_jpg.o
 AR = ar
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -102,7 +102,7 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 TAR = tar
 GZIP_ENV = --best
 DEP_FILES =  .deps/SDLStretch.P .deps/asc_IMG_jpg.P .deps/events.P \
-.deps/graphics.P .deps/loadimage.P .deps/sound.P .deps/timer.P
+.deps/graphics.P .deps/loadimage.P .deps/sound.P
 SOURCES = $(libsdl_a_SOURCES)
 OBJECTS = $(libsdl_a_OBJECTS)
 

@@ -28,10 +28,9 @@
 #include "krkr.h"
 #include "..\sgstream.h"
 #include "..\newfont.h"
-#include "..\mousehnd.h"
+#include "..\events.h"
 #include "..\misc.h"
 
-#define maxint 1147483648
 
 
 
