@@ -55,14 +55,14 @@ bool    PolygonPainerSquareCoordinate::paintPolygon   ( const Poly_gon& poly )
 void Poly_gon::read ( tnstream& stream )
 {
    int version = stream.readInt();
-   readContainer ( vertex, stream );
+   readClassContainer ( vertex, stream );
 }
 
 
 void Poly_gon::write ( tnstream& stream ) const
 {
    stream.writeInt( 100 );
-   writeContainer ( vertex, stream );
+   writeClassContainer ( vertex, stream );
 }
 
 

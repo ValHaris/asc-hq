@@ -936,10 +936,10 @@ void FieldAddressing::readMapModificationData ( tnstream& stream )
    int version = stream.readInt();
    addressingMode = AddressingMode ( stream.readInt() );
    if ( addressingMode == singleField )
-      readContainer( fields, stream );
+      readClassContainer( fields, stream );
 
    if ( addressingMode == poly )
-      readContainer( polygons, stream );
+      readClassContainer( polygons, stream );
 }
 
 
@@ -974,10 +974,10 @@ void FieldAddressing::writeMapModificationData ( tnstream& stream )
    stream.writeInt ( addressingMode );
 
    if ( addressingMode == singleField )
-      writeContainer ( fields, stream );
+      writeClassContainer ( fields, stream );
 
    if ( addressingMode == poly )
-      writeContainer ( polygons, stream );
+      writeClassContainer ( polygons, stream );
 }
 
 void MapModificationEvent::execute( MapDisplayInterface* md )

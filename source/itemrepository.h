@@ -26,10 +26,27 @@
 #include "objecttype.h"
 #include "buildingtype.h"
 #include "research.h"
+#include "textfile_evaluation.h"
+
+
+class TextFileDataLoader {
+   public:
+      virtual void readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location ) = 0;
+      virtual void read ( tnstream& stream ) = 0;
+      virtual void write ( tnstream& stream ) = 0;
+      virtual ASCString getTypeName() = 0;
+};
+
+
+//! registers a dataLoader . The object is delete after use, so use: registerDataLoader( new MyDataLoader() )
+extern void registerDataLoader( TextFileDataLoader* dataLoader );
+
+//! registers a dataLoader .
+extern void registerDataLoader( TextFileDataLoader& dataLoader );
 
 
 template<class T>
-class ItemRepository {
+class ItemRepository: public TextFileDataLoader {
    ASCString typeName;
    vector<T*>   container;
    typedef map<int,T*>  ObjectMap;
@@ -42,11 +59,16 @@ class ItemRepository {
       T* getObject_byPos( int pos ) { return container[pos]; };
       T* getObject_byID( int id ) { return hash[id]; };
       int getNum() { return container.size(); };
-      void load();
+      void readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location );
+      void read( tnstream& stream );
+      void write( tnstream& stream );
+      ASCString getTypeName() { return typeName; };
 
       vector<T*>& getVector() { return container; };
 
 };
+
+
 
 extern ItemRepository<Vehicletype>  vehicleTypeRepository;
 extern ItemRepository<TerrainType>  terrainTypeRepository;
@@ -54,17 +76,12 @@ extern ItemRepository<ObjectType>   objectTypeRepository;
 extern ItemRepository<BuildingType> buildingTypeRepository;
 extern ItemRepository<Technology>   technologyRepository;
 
-extern void  loadalltextfiles();
-extern void  loadAllData();
-extern void  freetextdata();
+extern void  loadAllData( bool useCache = true );
 
 extern pobjecttype eisbrecherobject;
 extern pobjecttype fahrspurobject;
 
-typedef map<ASCString,TextPropertyList> TextFileRepository;
-extern TextFileRepository textFileRepository;
-
-typedef  vector<const TechAdapter*> TechAdapterContainer;
+typedef  vector<TechAdapter*> TechAdapterContainer;
 extern TechAdapterContainer techAdapterContainer;
 
 
@@ -89,11 +106,21 @@ class ItemFiltrationSystem {
                  bool isActive() { return active; };
                  void setActive( bool _active ) { active = _active; };
                  void runTextIO ( PropertyContainer& pc );
+                 void read ( tnstream& stream ) ;
+                 void write ( tnstream& stream ) ;
                  bool isContained ( ItemFiltrationSystem::Category cat, int id );
          };
          static vector<ItemFilter*> itemFilters;
 
-         static void read();
+         class DataLoader : public TextFileDataLoader {
+            public:
+               void readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location );
+               void read ( tnstream& stream ) ;
+               void write ( tnstream& stream ) ;
+               ASCString getTypeName() { return "itemfilter"; };
+         };
+
+
          static bool isFiltered ( Category cat, int id );
 };
 

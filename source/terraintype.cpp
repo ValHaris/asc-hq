@@ -136,18 +136,18 @@ void TerrainType::MoveMalus::read( tnstream& stream, int defaultValue, int moveM
    clear();
 
    int version;
-   if ( moveMalusCount < 0 ) {
+   if ( moveMalusCount <= 0 ) {
       version = stream.readInt();
       moveMalusCount = stream.readInt();
    } else
       version = 0;
 
    #ifndef converter
-    char mmcount = moveMalusCount;
+    int mmcount = moveMalusCount;
     if (mmcount < moveMalusCount )
        mmcount = moveMalusCount;
    #else
-    char mmcount = moveMalusCount ;
+    int mmcount = moveMalusCount ;
    #endif
 
    for ( int j=0; j< mmcount ; j++ ) {
@@ -195,6 +195,7 @@ void TerrainType::read( tnstream& stream )
             int j;
 
             pgbt->pict = (void*) stream.readInt();
+
             for ( j = 1; j < 8; j++ )
                stream.readInt(); // pgbt->picture[j]
 
@@ -216,11 +217,12 @@ void TerrainType::read( tnstream& stream )
             stream.readInt(); // pgbt->terraintype
             bool readQuickView = stream.readInt();
 
+            pgbt->art.read ( stream );
+
             pgbt->bi_pict = stream.readInt();
             for ( j = 1; j < 6; j++ )
                stream.readInt(); //pgbt->bi_picture[j] =
 
-            pgbt->art.read ( stream );
             pgbt->move_malus.read( stream, minmalq, move_maluscount );
 
 /*
@@ -247,8 +249,10 @@ void TerrainType::read( tnstream& stream )
 
             if ( readQuickView )
                pgbt->readQuickView( stream );
+
          } else
             weather[i] = NULL;
+
 
       } /* endfor */
 
@@ -285,6 +289,7 @@ void TerrainType::write ( tnstream& stream ) const
    for (int i=0;i<cwettertypennum ;i++ ) {
      if ( weather[i] ) {
         stream.writeInt ( int( weather[i]->pict ));
+
         for ( m = 1; m < 8; m++ )
            stream.writeInt ( 0 );
 
@@ -294,11 +299,12 @@ void TerrainType::write ( tnstream& stream ) const
         stream.writeInt ( weather[i]->defensebonus );
         stream.writeInt ( weather[i]->attackbonus );
         stream.writeInt ( weather[i]->basicjamming );
-        stream.writeChar ( weather[i]->move_malus.size() );
+        stream.writeChar ( 0 ); // was: movemalus count
         stream.writeInt ( 1 );
         stream.writeInt ( 1 );
         stream.writeInt ( 0); // was: quickview
         weather[i]->art.write ( stream );
+
 
         stream.writeInt ( weather[i]->bi_pict );
         for ( m = 1; m< 6; m++ )
@@ -306,6 +312,7 @@ void TerrainType::write ( tnstream& stream ) const
 
 
         weather[i]->move_malus.write ( stream );
+
 
         if ( weather[i]->pict && weather[i]->bi_pict == -1 )
            stream.writedata ( ( char*) weather[i]->pict, fieldsize );

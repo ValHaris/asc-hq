@@ -2,9 +2,12 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.66 2004-05-12 20:05:52 mbickel Exp $
+//     $Id: edmain.cpp,v 1.67 2004-05-16 11:28:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.66  2004/05/12 20:05:52  mbickel
+//      Restructured file loading routines for upcoming data cache
+//
 //     Revision 1.65  2003/07/06 15:10:26  mbickel
 //      Better configure messages
 //      code cleanup
@@ -433,23 +436,20 @@ void loaddata( void )
 
    loadguipictures();
 
-   loadalltextfiles();
-
-   readBI3translationTable();
-
-   ItemFiltrationSystem::read();
+   // ItemFiltrationSystem::read();
 
    if ( actprogressbar )
       actprogressbar->startgroup();
 
+   registerDataLoader ( new PlayListLoader() );
+   registerDataLoader ( new BI3TranslationTableLoader() );
+   
    loadAllData();
 
    if ( actprogressbar )
       actprogressbar->startgroup();
 
    loadUnitSets();
-
-   freetextdata();
 
    if ( actprogressbar ) {
       actprogressbar->end();

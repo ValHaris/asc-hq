@@ -1601,12 +1601,12 @@ bool patimat (const char *pat, const char *str)
 
 
 
-tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition )
+tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition, SearchTypes searchTypes )
 {
    convertPathDelimitters ( name );
 
-   if ( searchPosition == Default )
-      searchPosition = All;
+   if ( searchPosition == DefaultDir )
+      searchPosition = AllDirs;
 
    found = 0;
    act = 0;
@@ -1630,7 +1630,7 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition )
       if ( has_drive_letters && name.length() > 3 && name.find ( ":\\", 1 ) != name.npos )
          absolute = true;
 
-      if ( absolute || searchPosition == Current ) {
+      if ( absolute || searchPosition == CurrentDir ) {
          directory[0].assign ( name, 0, ppos );
          dirNum = 1;
       } else {
@@ -1646,7 +1646,7 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition )
          }
 
          int dirsToProcess;
-         if ( searchPosition == All )
+         if ( searchPosition == AllDirs )
             dirsToProcess = searchDirNum;
          else
             dirsToProcess = 1;
@@ -1686,62 +1686,84 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition )
       wildcard = name;
    }
 
+   if ( searchTypes == All || searchTypes == OutsideContainer )
+      for ( int i = 0; i < dirNum; i++ ) {
+         DIR *dirp;
+         struct ASC_direct *direntp;
 
-   for ( int i = 0; i < dirNum; i++ ) {
-      DIR *dirp; 
-      struct ASC_direct *direntp; 
-  
-      dirp = opendir( directory[i].c_str() );
-      if( dirp != NULL ) { 
-        for(;;) { 
-          direntp = readdir( dirp ); 
-          if ( direntp == NULL ) 
-             break; 
-             
-          if ( patimat ( wildcard.c_str(), direntp->d_name )) {
-             int localfound = 0;
-             for ( int j = 0; j < found; j++ )
-                if ( strcmpi ( names[j].c_str(), direntp->d_name ) == 0 )
-                   localfound++;
+         dirp = opendir( directory[i].c_str() );
+         if( dirp != NULL ) {
+           for(;;) {
+             direntp = readdir( dirp );
+             if ( direntp == NULL )
+                break;
 
-             if ( !localfound ) {
-                names.push_back ( ASCString (  direntp->d_name ));
-                directoryLevel.push_back ( i );
-                isInContainer.push_back ( false );
-                location.push_back ( directory[i] );
-                found++;
+             if ( patimat ( wildcard.c_str(), direntp->d_name )) {
+                int localfound = 0;
+                for ( int j = 0; j < found; j++ )
+                   if ( strcmpi ( fileInfo[j].name.c_str(), direntp->d_name ) == 0 )
+                      localfound++;
+
+                if ( !localfound ) {
+                   FileInfo fi;
+                   fi.name = direntp->d_name;
+                   fi.directoryLevel = i ;
+                   fi.isInContainer = false ;
+                   fi.location = directory[i];
+
+                   char buf[1000];
+                   ASCString fullName = constructFileName( buf, i, NULL, direntp->d_name );
+
+                   struct stat statbuf;
+                   stat( fullName.c_str(), &statbuf);
+
+                   fi.size = statbuf.st_size ;
+                   fi.date = statbuf.st_mtime;
+
+                   fileInfo.push_back ( fi );
+
+                   found++;
+                }
              }
-          }
-        } 
-        closedir( dirp ); 
-      } 
-   }
+           }
+           closedir( dirp );
+         }
+      }
 
 
 
-   {
+   if ( searchTypes == All || searchTypes == InsideContainer ) {
       const ContainerCollector::FileIndex* c = containercollector.getfirstname();
       while ( c ) {
           if ( patimat ( name.c_str(), c->name ) ) {
              int f = 0;
              for ( int i = 0; i < found; i++ )
-                if ( stricmp ( c->name, names[i].c_str() ) == 0 ) {
-                   if ( directoryLevel[i] <= c->directoryLevel ) 
+                if ( stricmp ( c->name, fileInfo[i].name.c_str() ) == 0 ) {
+                   if ( fileInfo[i].directoryLevel <= c->directoryLevel )
                       f = 1;
                    else {
-                      names[i] = c->name ;
-                      isInContainer[i] = true;
-                      directoryLevel[i] = c->directoryLevel;
-                      location[i] = c->container->getDeviceName();
+                      FileInfo& fi = fileInfo[i];
+                      fi.name = c->name ;
+                      fi.isInContainer = true;
+                      fi.directoryLevel = c->directoryLevel;
+                      fi.location = c->container->getDeviceName();
+
+                      fi.size = c->container->getstreamsize();
+                      fi.date = c->container->get_time();
                       f = 1;
                    }
                 }
-                
+
              if ( !f ) {
-                names.push_back ( c->name );
-                directoryLevel.push_back ( c->directoryLevel );
-                isInContainer.push_back ( true );
-                location.push_back ( c->container->getDeviceName() );
+                FileInfo fi;
+                fi.name = c->name ;
+                fi.directoryLevel = c->directoryLevel ;
+                fi.isInContainer = true ;
+                fi.location = c->container->getDeviceName() ;
+
+                fi.size = c->container->getstreamsize() ;
+                fi.date = c->container->get_time() ;
+                fileInfo.push_back ( fi );
                 found++;
              }
           }
@@ -1755,13 +1777,13 @@ ASCString tfindfile :: getnextname ( int* loc, bool* inContainer, ASCString* loc
 {
    if ( act < found ) {
       if ( loc )
-         *loc = directoryLevel[act];
+         *loc = fileInfo[act].directoryLevel;
 
       if ( inContainer )
-         *inContainer = isInContainer[act];
+         *inContainer = fileInfo[act].isInContainer;
 
       if ( location )
-         *location = this->location[act];
+         *location = fileInfo[act].location;
 
       /*
       if ( directoryLevel[act] >= 0 && this->location[act] != ascDirectory[directoryLevel[act]] ) {
@@ -1770,13 +1792,22 @@ ASCString tfindfile :: getnextname ( int* loc, bool* inContainer, ASCString* loc
          s += names[act++];
          return s;
       } else */
-         return names[act++];
+         return fileInfo[act++].name;
    } else {
       if ( loc )
          *loc = -1;
 
       return "";
    }
+}
+
+bool tfindfile :: getnextname ( FileInfo& fi )
+{
+   if ( act < found ) {
+      fi = fileInfo[act++];
+      return true;
+   } else
+      return false;
 }
 
 

@@ -4,9 +4,13 @@
 */
 
 
-//     $Id: basestrm.h,v 1.57 2004-01-25 19:44:16 mbickel Exp $
+//     $Id: basestrm.h,v 1.58 2004-05-16 11:28:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.57  2004/01/25 19:44:16  mbickel
+//      Many, many bugfixes
+//      Removed #pragma pack whereever possible
+//
 //     Revision 1.56  2003/11/16 21:46:39  mbickel
 //      Some cleanup and restructuring
 //      Fixed: newly produced units could not leave building
@@ -623,15 +627,46 @@ class ContainerCollector : public ContainerIndexer {
 //! Searching for files
 class tfindfile {
 
-        vector<string> names;
-        vector<int> directoryLevel;
-        vector<bool> isInContainer;
-        vector<ASCString> location;
+
+      public:
+        struct FileInfo {
+            ASCString name;
+            int directoryLevel;
+            bool isInContainer;
+            ASCString location;
+            int size;
+            int date;
+
+            void read ( tnstream& stream ) {
+               stream.readInt();
+               name = stream.readString();
+               directoryLevel = stream.readInt();
+               isInContainer = stream.readInt();
+               location = stream.readString();
+               size = stream.readInt();
+               date = stream.readInt();
+            };
+
+            void write ( tnstream& stream ) const {
+               stream.writeInt(1 ); // version
+               stream.writeString ( name );
+               stream.writeInt( directoryLevel );
+               stream.writeInt ( isInContainer );
+               stream.writeString ( location );
+               stream.writeInt ( size );
+               stream.writeInt ( date );
+            };
+
+        };
+
+      private:
+        vector<FileInfo> fileInfo;
         int found;
         int act;
 
       public:
-        enum SearchPosition { Default, Current, Primary, All };
+        enum SearchPosition { DefaultDir, CurrentDir, PrimaryDir, AllDirs };
+        enum SearchTypes { InsideContainer, OutsideContainer, All };
 
         /** Searches for files matching the wildcard name in all search paths specified for ASC and inside the ASC archive files.
 
@@ -639,7 +674,7 @@ class tfindfile {
             will be searched for the file. Note that "Current" may be problemativ in unix environments, because the program may be
             started from any directory.
         */
-        tfindfile ( ASCString name, SearchPosition searchPosition = Default );
+        tfindfile ( ASCString name, SearchPosition searchPosition = DefaultDir, SearchTypes searchTypes = All);
 
         /** Returns the next entry of the internal file list. Optionally, some additional information about the file can be returned:
            \param loc contains the number of the directory. ASC can search several directories for files. These directories are specified in the ASC configuration file and CGameOptions
@@ -647,6 +682,8 @@ class tfindfile {
            \param location contains the directory this file resides in
         */
         ASCString getnextname ( int* loc = NULL, bool* inContainer = NULL, ASCString* location = NULL );
+        bool getnextname ( FileInfo& fi );
+
      };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

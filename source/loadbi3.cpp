@@ -168,6 +168,19 @@ class Bi3MapTranslationTable {
            int BIpic;
            int terrainid;
            int weather;
+           void read ( tnstream& stream ) {
+               stream.readInt();
+               BIpic = stream.readInt();
+               terrainid = stream.readInt();
+               weather = stream.readInt();
+           };
+
+           void write ( tnstream& stream ) const {
+               stream.writeInt( 1 );
+               stream.writeInt( BIpic );
+               stream.writeInt( terrainid );
+               stream.writeInt( weather );
+           };
        };
        /** The first entry is the picture number that is going to be replaced by the
            terrain with the ID of the second number and the weather of the third
@@ -180,6 +193,22 @@ class Bi3MapTranslationTable {
                    int terrainid;
                    int terrainweather;
                    int objectid;
+                   void read ( tnstream& stream ) {
+                      stream.readInt();
+                      bigraph = stream.readInt();
+                      terrainid = stream.readInt();
+                      terrainweather = stream.readInt();
+                      objectid = stream.readInt();
+                   };
+
+                   void write ( tnstream& stream ) const {
+                      stream.writeInt( 1 );
+                      stream.writeInt( bigraph );
+                      stream.writeInt( terrainid );
+                      stream.writeInt( terrainweather );
+                      stream.writeInt( objectid );
+                   };
+
             };
         //! This is a special translation for the fields that must be translated to a terrain AND an additional object
         vector<Terraincombixlat> terraincombixlat;
@@ -190,7 +219,25 @@ class Bi3MapTranslationTable {
            int objects[4];
            int terrainID;
            int terrainWeather;
+           void read ( tnstream& stream ) {
+               stream.readInt();
+               BIpic = stream.readInt();
+               for ( int i = 0; i< 4; ++i )
+                  objects[i] = stream.readInt();
+               terrainID = stream.readInt();
+               terrainWeather = stream.readInt();
+           };
+
+           void write ( tnstream& stream ) const {
+               stream.writeInt( 1 );
+               stream.writeInt( BIpic );
+               for ( int i = 0; i< 4; ++i )
+                   stream.writeInt( objects[i] );
+               stream.writeInt( terrainID );
+               stream.writeInt( terrainWeather );
+           };
         };
+
         /** These BI object pictures can be translated to up to four ASC objects. The first entry is again the BI picture number,
             the following four the pictures for the ASC objects. A -1 is used if the entry is not used. It does not matter if you
             use " -1, 1500, -1  , -1 " or " 1500, -1  , -1,  -1" or any other order. */
@@ -203,8 +250,33 @@ class Bi3MapTranslationTable {
 
         void runTextIO ( PropertyContainer& pc );
 
+        void read ( tnstream& stream );
+        void write ( tnstream& stream ) const;
         ASCString filename, location;
 };
+
+
+void Bi3MapTranslationTable :: read ( tnstream& stream )
+{
+   stream.readInt();
+   readClassContainer( terraintranslation, stream );
+   readClassContainer( terrain2idTranslation, stream );
+   readClassContainer( terraincombixlat, stream );
+   readClassContainer( objecttranslate, stream );
+   readClassContainer( object2IDtranslate, stream );
+}
+
+
+
+void Bi3MapTranslationTable :: write ( tnstream& stream ) const
+{
+   stream.writeInt ( 1 );
+   writeClassContainer ( terraintranslation, stream );
+   writeClassContainer ( terrain2idTranslation, stream );
+   writeClassContainer ( terraincombixlat, stream );
+   writeClassContainer ( objecttranslate, stream );
+   writeClassContainer ( object2IDtranslate, stream );
+}
 
 
 void Bi3MapTranslationTable :: runTextIO ( PropertyContainer& pc )
@@ -303,21 +375,34 @@ void Bi3MapTranslationTable :: runTextIO ( PropertyContainer& pc )
 
 PointerVector<Bi3MapTranslationTable*> bi3ImportTables;
 
-void readBI3translationTable ( )
+
+void BI3TranslationTableLoader::read ( tnstream& stream )
 {
-    TextPropertyList& tpl = textFileRepository["bi3maptranslation"];
-    for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
+   stream.readInt();
+   readPointerContainer ( bi3ImportTables, stream );
+}
 
-      PropertyReadingContainer pc ( "bi3maptranslation", *i );
+void BI3TranslationTableLoader::write ( tnstream& stream )
+{
+   stream.writeInt( 1 );
+   writePointerContainer ( bi3ImportTables, stream );
+}
 
-      Bi3MapTranslationTable* bmtt = new Bi3MapTranslationTable;
-      bmtt->runTextIO ( pc );
-      pc.run();
 
-      bmtt->filename = (*i)->fileName;
-      bmtt->location = (*i)->location;
-      bi3ImportTables.push_back ( bmtt );
-   }
+ASCString BI3TranslationTableLoader::getTypeName()
+{
+   return "bi3maptranslation";
+}
+
+void BI3TranslationTableLoader::readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location )
+{
+   Bi3MapTranslationTable* bmtt = new Bi3MapTranslationTable;
+   bmtt->runTextIO ( prc );
+   prc.run();
+
+   bmtt->filename = fileName;
+   bmtt->location = location;
+   bi3ImportTables.push_back ( bmtt );
 }
 
 

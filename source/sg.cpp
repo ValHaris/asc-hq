@@ -1844,23 +1844,17 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
    if ( actprogressbar ) actprogressbar->startgroup();
 
-   loadalltextfiles();
-
-   if ( actprogressbar ) actprogressbar->startgroup();
-
-   loadAllMusicPlayLists();
-
-   if ( actprogressbar ) actprogressbar->startgroup();
+   registerDataLoader ( new PlayListLoader() );
+   registerDataLoader ( new BI3TranslationTableLoader() );
 
    loadguipictures();
    if ( actprogressbar ) actprogressbar->startgroup();
    loadAllData();
+
    if ( actprogressbar ) actprogressbar->startgroup();
    loadUnitSets();
 
    if ( actprogressbar ) actprogressbar->startgroup();
-
-   freetextdata();
 
    cursor.init();
    selectbuildinggui.init( resolx, resoly );

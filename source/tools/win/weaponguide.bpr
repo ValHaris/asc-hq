@@ -4,7 +4,7 @@
   <MACROS>
     <VERSION value="BCB.06.00"/>
     <PROJECT value="weaponguide.exe"/>
-    <OBJFILES value="..\weaponguide.obj ..\..\itemrepository.obj"/>
+    <OBJFILES value="..\weaponguide.obj ..\..\itemrepository.obj ..\..\research.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -51,6 +51,7 @@
       <FILE FILENAME="..\..\itemrepository.cpp" FORMNAME="" UNITNAME="itemrepository" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\..\SDL_image\bin\SDL_image.lib" FORMNAME="" UNITNAME="SDL_image" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\libs\sdlmm\SDLmm.lib" FORMNAME="" UNITNAME="SDLmm" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\research.cpp" FORMNAME="" UNITNAME="research" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

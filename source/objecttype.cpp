@@ -793,15 +793,19 @@ void         calculateallobjects( pmap actmap )
 
 
 
-const int object_version = 6;
+const int object_version = 7;
 
 void ObjectType :: read ( tnstream& stream )
 {
    int version = stream.readInt();
 
-   if ( version <= object_version && version >= 1 ) {
+   if ( version < 7 )
+      fatalError ( "sorry, the old file format for objects cannot be loaded any more" );
+
+   if ( version <= object_version && version >= 7 ) {
 
        id = stream.readInt();
+       groupID = stream.readInt();
 
        int ___weather = stream.readInt();
        weather.reset();
@@ -810,18 +814,18 @@ void ObjectType :: read ( tnstream& stream )
              weather.set ( i );
 
        visibleago = stream.readInt();
-       int  ___objectslinkablenum = stream.readInt();
-       stream.readInt(); // ___objectsLinkable
-       stream.readInt(); // ___oldpicture
 
-       int ___pictnum = stream.readInt();
+       readClassContainer( linkableObjects, stream );
+       readClassContainer( linkableTerrain, stream );
+
        armor = stream.readInt();
 
-       int ___movemalus_plus_count = stream.readChar();
-       stream.readInt();
+       for ( int i = 0; i < cwettertypennum; ++i ) {
+          fieldModification[i].terrainaccess.read( stream );
+          fieldModification[i].terrain_and.read ( stream );
+          fieldModification[i].terrain_or.read ( stream );
+       }
 
-       int ___movemalus_abs_count = stream.readChar();
-       stream.readInt();
 
        attackbonus_plus = stream.readInt();
        attackbonus_abs  = stream.readInt();
@@ -839,121 +843,44 @@ void ObjectType :: read ( tnstream& stream )
        build_movecost = stream.readInt();
        remove_movecost = stream.readInt();
 
-       bool ___name = stream.readInt();
-       name.erase();
+       canExistBeneathBuildings = stream.readInt();
 
-       int no_autonet = stream.readInt();
+       name = stream.readString();
 
-       if ( version <= 4 ) {
-          fieldModification[0].terrainaccess.read( stream );
-          fieldModification[0].terrain_and.read ( stream );
-          fieldModification[0].terrain_or.read ( stream );
-       } else {
-          for ( int i = 0; i < cwettertypennum; ++i ) {
-             fieldModification[i].terrainaccess.read( stream );
-             fieldModification[i].terrain_and.read ( stream );
-             fieldModification[i].terrain_or.read ( stream );
-          }
-       }
+       netBehaviour = stream.readInt();
 
-       stream.readInt(); // ___buildicon
-       stream.readInt(); // ___removeicon
-
-       stream.readInt(); // ___dirlist
-       int dirlistnum = stream.readInt();  
-
-       bool _picture[cwettertypennum];
-       for ( int aa = 0; aa < cwettertypennum; aa++ )
-          _picture[aa] = stream.readInt();
+       int w;
+       stream.readrlepict ( &buildicon,  false, &w);
+       stream.readrlepict ( &removeicon, false, &w);
 
 
-      int w;
-      for ( int ww = 0; ww < cwettertypennum; ww++ )
+       techDependency.read ( stream );
+
+       for ( int ww = 0; ww < cwettertypennum; ww++ )
          if ( weather.test ( ww ) ) {
-            weatherPicture[ww].bi3pic.resize(___pictnum);
-            weatherPicture[ww].flip.resize(___pictnum);
-            weatherPicture[ww].images.resize(___pictnum);
 
-            for ( int n = 0; n < ___pictnum; n++ ) {
-               stream.readInt(); // dummy
-               weatherPicture[ww].bi3pic[n] = stream.readInt();
-               weatherPicture[ww].flip[n] = stream.readInt();
+            int pictnum = stream.readInt();
 
-               bool reference = true;
-               for ( int r = 0; r <  weatherPicture[ww].flip.size(); r++ )
-                  if ( weatherPicture[ww].flip[r] > 0 )
-                     reference = false;
+            weatherPicture[ww].bi3pic.resize( pictnum );
+            weatherPicture[ww].flip.resize( pictnum );
+            weatherPicture[ww].images.resize( pictnum );
 
-               if ( weatherPicture[ww].bi3pic[n] != -1 )
+            for ( int n = 0; n < pictnum; n++ ) {
+               int bi3 = stream.readInt();
+               if ( bi3 == 1 ) {
+                  weatherPicture[ww].bi3pic[n] = stream.readInt();
+                  weatherPicture[ww].flip[n] = 0;
+
                   loadbi3pict_double ( weatherPicture[ww].bi3pic[n],
                                       &weatherPicture[ww].images[n],
-                                      1,  // CGameOptions::Instance()->bi3.interpolate.objects
-                                      reference );
-               else
+                                      1 );  // CGameOptions::Instance()->bi3.interpolate.objects
+               } else {
+                  weatherPicture[ww].bi3pic[n] = -1;
+                  weatherPicture[ww].flip[n] = 0;
                   stream.readrlepict ( &weatherPicture[ww].images[n], false, &w);
-
+               }
             }
          }
-
-       setupImages();
-
-       if ( version <= 4 ) {
-          fieldModification[0].movemalus_plus.read ( stream, 0, ___movemalus_plus_count );
-          fieldModification[0].movemalus_abs.read ( stream, 0, ___movemalus_abs_count );
-       } else {
-          for ( int i = 1; i < cwettertypennum; ++i ) {
-             fieldModification[i].movemalus_plus.read ( stream, 0 );
-             fieldModification[i].movemalus_abs.read ( stream, 0 );
-          }
-       }
-
-       if ( ___name )
-          name = stream.readString ( );
-
-       if ( version <= 4 ) {
-          for ( int i = 1; i < cwettertypennum; ++i )
-             fieldModification[i] = fieldModification[0];
-       }
-
-
-      if ( dirlistnum )
-         for ( int i = 0; i < dirlistnum; i++ )
-            stream.readInt();
-
-
-
-      if ( ___objectslinkablenum ) {
-         linkableObjects.clear();
-         for ( int i = 0; i < ___objectslinkablenum; i++ )
-             linkableObjects.push_back ( stream.readInt() );
-      }
-
-      if ( version >= 2 ) {
-         int terrainLinkableNum = stream.readInt();
-         for ( int i = 0; i < terrainLinkableNum; i++ )
-             linkableTerrain.push_back ( stream.readInt() );
-      }
-
-      if ( version >= 3 )
-         groupID = stream.readInt();
-
-      if ( version >= 4 ) {
-         netBehaviour = stream.readInt();
-      } else {
-         if ( !no_autonet )
-            netBehaviour |= NetToSelf;
-      }
-
-      if ( version >= 6 )
-         techDependency.read( stream );
-
-
-
-   #ifndef converter
-    buildicon = generate_object_gui_build_icon ( this, 0 );
-    removeicon = generate_object_gui_build_icon ( this, 1 );
-   #endif
-
 
    } else
        throw ASCmsgException ( "invalid object file format version");
@@ -1015,24 +942,27 @@ void ObjectType :: write ( tnstream& stream ) const
 {
     stream.writeInt ( object_version );
 
-    stream.writeInt ( id);
+    stream.writeInt ( id );
+    stream.writeInt ( groupID );
+
     int ___weather = 0;
     for ( int i = 0; i < cwettertypennum; i++ )
        if ( weather.test ( i ))
           ___weather |= 1 << i;
     stream.writeInt ( ___weather );
     stream.writeInt ( visibleago );
-    stream.writeInt ( linkableObjects.size() );
-    stream.writeInt ( -1 ); // was: objectslinkable
-    stream.writeInt ( -1 ); // was: oldpicture
-    stream.writeInt ( weatherPicture[0].images.size() );
+
+    writeClassContainer ( linkableObjects, stream );
+    writeClassContainer ( linkableTerrain, stream );
+
     stream.writeInt ( armor );
 
-    stream.writeChar ( 0 ); // was movemalus_plus_count
-    stream.writeInt ( -1 ); // was movemalus_plus
+    for ( int i = 0; i < cwettertypennum; i++ ) {
+       fieldModification[i].terrainaccess.write( stream );
+       fieldModification[i].terrain_and.write ( stream );
+       fieldModification[i].terrain_or.write ( stream );
+    }
 
-    stream.writeChar ( 0 ); // was movemalus_abs_count
-    stream.writeInt ( -1 ); // was movemalus_abs
 
     stream.writeInt ( attackbonus_plus );
     stream.writeInt ( attackbonus_abs );
@@ -1049,52 +979,32 @@ void ObjectType :: write ( tnstream& stream ) const
     stream.writeInt( build_movecost );
     stream.writeInt( remove_movecost );
 
-    stream.writeInt ( -1 ); // was name
-    stream.writeInt ( 0 );
-
-    for ( int i = 0; i < cwettertypennum; i++ ) {
-       fieldModification[i].terrainaccess.write( stream );
-       fieldModification[i].terrain_and.write ( stream );
-       fieldModification[i].terrain_or.write ( stream );
-    }
-
-    stream.writeInt( -1 ); // was buildicon
-    stream.writeInt( -1 ); // was removeicon
-
-    stream.writeInt( -1 ); // was dirlist
-
-    stream.writeInt ( 0 );
-    for ( int aa = 0; aa < cwettertypennum; aa++ )
-       stream.writeInt( -1 ); // was picture
-
-    for ( int ww = 0; ww < cwettertypennum; ww++ )
-       if ( weather.test( ww ) )
-          for ( int l = 0; l < weatherPicture[ww].images.size(); l++ ) {
-             stream.writeInt ( -1 );
-             stream.writeInt ( weatherPicture[ww].bi3pic[l] );
-             stream.writeInt ( weatherPicture[ww].flip[l] );
-             if ( weatherPicture[ww].bi3pic[l] == -1 )
-                stream.writedata( weatherPicture[ww].images[l], getpicsize2 ( weatherPicture[ww].images[l] ) );
-          }
-
-    for ( int i = 0; i < cwettertypennum; i++ ) {
-       fieldModification[i].movemalus_plus.write(stream);
-       fieldModification[i].movemalus_abs.write(stream);
-    }
+    stream.writeInt( canExistBeneathBuildings );
 
     stream.writeString ( name );
 
-    for ( int i = 0; i < linkableObjects.size(); i++ )
-        stream.writeInt( linkableObjects[i] );
-
-    stream.writeInt ( linkableTerrain.size() );
-    for ( int i = 0; i < linkableTerrain.size(); i++ )
-        stream.writeInt( linkableTerrain[i] );
-
-    stream.writeInt ( groupID );
     stream.writeInt ( netBehaviour );
-    techDependency.write( stream );
 
+    stream.writedata( buildicon,  getpicsize2 ( buildicon ) );
+    stream.writedata( removeicon, getpicsize2 ( removeicon ) );
+
+    techDependency.write ( stream );
+
+
+    for ( int ww = 0; ww < cwettertypennum; ww++ )
+       if ( weather.test( ww ) ) {
+          stream.writeInt( weatherPicture[ww].images.size() );
+
+          for ( int l = 0; l < weatherPicture[ww].images.size(); l++ ) {
+             if ( weatherPicture[ww].bi3pic[l] >= 0 && weatherPicture[ww].flip[l] == 0 ) {
+                stream.writeInt ( 1 );
+                stream.writeInt ( weatherPicture[ww].bi3pic[l] );
+             } else {
+                stream.writeInt ( 2 );
+                stream.writedata( weatherPicture[ww].images[l], getpicsize2 ( weatherPicture[ww].images[l] ) );
+             }
+          }
+       }
 }
 
 

@@ -1,5 +1,5 @@
-#ifndef music_h_included
-#define music_h_included
+#ifndef musicH
+#define musicH
 
 /*! \file soundList.h
     \brief The collection of all sounds used by ASC
@@ -10,9 +10,9 @@
 #include <SDL_mixer.h>
 
 #include "global.h"
-#include "sdl/sound.h"
 #include "ascstring.h"
 #include "textfile_evaluation.h"
+#include "itemrepository.h"
 
 
 /** A List containing several tracks of music.
@@ -35,14 +35,24 @@ class MusicPlayList {
 
       //! returns the filename of the next music track
       const ASCString& getNextTrack();
+
+      void read ( tnstream& stream );
+      void write ( tnstream& stream ) const;
+
 };
 
+class PlayListLoader : public TextFileDataLoader {
+    public:
+      virtual void readTextFiles(PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location);
+      virtual void read ( tnstream& stream );
+      virtual void write ( tnstream& stream );
+      virtual ASCString getTypeName() { return "playlist"; };
+};
 
 //! start playing the first playlist
 extern void startMusic ();
 
-//! loads all .asctxt files containing play lists
-extern void loadAllMusicPlayLists ( );
+
 
 
 //! opens a dialog to select a playlist

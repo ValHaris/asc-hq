@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.144 2004-05-12 20:05:53 mbickel Exp $
+//     $Id: typen.h,v 1.145 2004-05-16 11:28:01 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -250,7 +250,31 @@ class IntRange {
 
 
 template<typename C>
-void writeContainer ( const C& c, tnstream& stream  )
+void writePointerContainer ( const C& c, tnstream& stream  )
+{
+   stream.writeInt ( 1 );
+   stream.writeInt ( c.size() );
+   typedef typename C::const_iterator IT;
+   for ( IT i = c.begin(); i != c.end(); ++i )
+      (*i)->write ( stream );
+}
+
+template<typename BaseType>
+void readPointerContainer ( vector<BaseType*> v, tnstream& stream  )
+{
+   stream.readInt(); // version
+   int num = stream.readInt();
+   for ( int i = 0; i < num; ++i ) {
+      BaseType* bt = new BaseType;
+      bt->read( stream );
+      v.push_back( bt );
+   }
+}
+
+
+
+template<typename C>
+void writeClassContainer ( const C& c, tnstream& stream  )
 {
    stream.writeInt ( 1 );
    stream.writeInt ( c.size() );
@@ -260,7 +284,7 @@ void writeContainer ( const C& c, tnstream& stream  )
 }
 
 template<typename C>
-void readContainer ( C& c, tnstream& stream  )
+void readClassContainer ( C& c, tnstream& stream  )
 {
    int version = stream.readInt();
    int num = stream.readInt();
@@ -272,9 +296,70 @@ void readContainer ( C& c, tnstream& stream  )
    }
 }
 
+template<>
+void writeClassContainer<> ( const vector<ASCString>& c, tnstream& stream  )
+{
+   stream.writeInt ( 1 );
+   stream.writeInt ( c.size() );
+   typedef vector<ASCString>::const_iterator IT;
+   for ( IT i = c.begin(); i != c.end(); ++i )
+      stream.writeString(*i);
+}
 
 
+template<>
+void readClassContainer<> ( vector<ASCString>& c, tnstream& stream  )
+{
+   stream.readInt(); // version
+   int num = stream.readInt();
+   for ( int i = 0; i < num; ++i )
+      c.push_back( stream.readString() );
+}
 
+template<>
+void writeClassContainer<> ( const vector<int>& c, tnstream& stream  )
+{
+   stream.writeInt ( 1 );
+   stream.writeInt ( c.size() );
+   typedef vector<int>::const_iterator IT;
+   for ( IT i = c.begin(); i != c.end(); ++i )
+      stream.writeInt(*i);
+}
+
+
+template<>
+void readClassContainer<> ( vector<int>& c, tnstream& stream  )
+{
+   stream.readInt(); // version
+   int num = stream.readInt();
+   for ( int i = 0; i < num; ++i )
+      c.push_back( stream.readInt() );
+}
+
+template<>
+void writeClassContainer<> ( const vector<pair<int,int> >& c, tnstream& stream  )
+{
+   stream.writeInt ( 1 );
+   stream.writeInt ( c.size() );
+   typedef vector<pair<int,int> >::const_iterator IT;
+   for ( IT i = c.begin(); i != c.end(); ++i ) {
+      stream.writeInt(i->first);
+      stream.writeInt(i->second );
+   }
+}
+
+
+template<>
+void readClassContainer<> ( vector<pair<int,int> >& c, tnstream& stream  )
+{
+   stream.readInt(); // version
+   int num = stream.readInt();
+   for ( int i = 0; i < num; ++i ) {
+       int first = stream.readInt();
+       int second = stream.readInt();
+       c.push_back( make_pair(first,second) );
+   }
+}
 
 
 

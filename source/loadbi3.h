@@ -1,15 +1,15 @@
 /***************************************************************************
                           loadbi3.h  -  description
                              -------------------
-    begin                : 
+    begin                :
     copyright            : (C) 2001 by Martin Bickel
     email                : bickel@asc-hq.org
  ***************************************************************************/
 
 /*! \file loadbi3.h
-   \brief Loading Battle Isle 3 maps. 
-   The central BI3 map loading class is a straight conversion of 
-   Joerg Richter's code from his BI3 map editor. 
+   \brief Loading Battle Isle 3 maps.
+   The central BI3 map loading class is a straight conversion of
+   Joerg Richter's code from his BI3 map editor.
 */
 
 /***************************************************************************
@@ -21,13 +21,15 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef loadbi3_h
-#define loadbi3_h
+#ifndef loadbi3H
+#define loadbi3H
 
 #include "typen.h"
 #include "sgstream.h"
 #include "palette.h"
-#include "textfileparser.h"
+#include "textfile_evaluation.h"
+#include "itemrepository.h"
+
 
 #ifdef converter
  #error The small editors should not need to use LoadBi3
@@ -68,6 +70,13 @@ extern int getobjectcontainertranslatenum ( void );
 extern const int* getterraintranslate ( int pos );
 extern const int* getobjectcontainertranslate ( int pos );
 
-//! reads all map import tables. \sa loadalltextfiles()
-extern void readBI3translationTable();
+class BI3TranslationTableLoader: public TextFileDataLoader {
+   public:
+      virtual void readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location ) ;
+      virtual void read ( tnstream& stream ) ;
+      virtual void write ( tnstream& stream );
+      virtual ASCString getTypeName();
+};
+
+
 #endif

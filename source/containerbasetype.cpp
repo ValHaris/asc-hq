@@ -120,6 +120,7 @@ void ContainerBaseType :: write ( tnstream& stream ) const
    stream.writeInt( maxLoadableUnitSize );
    stream.writeInt( maxLoadableWeight );
    stream.writeInt( vehicleCategoriesStorable );
+   stream.writeInt( entranceSystems.size() );
    for ( int i = 0; i < entranceSystems.size(); i++ )
       entranceSystems[i].write( stream );
 }

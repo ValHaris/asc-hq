@@ -22,7 +22,7 @@
       obj\textfiletags.obj obj\typen.obj obj\vehicle.obj obj\vehicletype.obj 
       obj\viewcalculation.obj obj\soundList.obj obj\simplestream.obj 
       obj\prehistoricevents.obj obj\mappolygons.obj obj\gameeventsystem.obj 
-      obj\gameevent_dialogs.obj"/>
+      obj\gameevent_dialogs.obj obj\music.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -152,6 +152,7 @@
       <FILE FILENAME="..\..\..\mappolygons.cpp" FORMNAME="" UNITNAME="mappolygons" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\gameeventsystem.cpp" FORMNAME="" UNITNAME="gameeventsystem.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\..\gameevent_dialogs.cpp" FORMNAME="" UNITNAME="gameevent_dialogs.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\..\music.cpp" FORMNAME="" UNITNAME="music" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

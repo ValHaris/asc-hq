@@ -53,6 +53,12 @@ class tn_file_buf_stream : public tnbufstream {
             FILE* fp;
             int actfilepos;
 
+            bool sizeCached;
+            int sizeValue;
+            bool timeCached;
+            int timeValue;
+
+
         protected:
             void readbuffer( void );
             void writebuffer( void );

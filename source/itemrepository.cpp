@@ -35,11 +35,19 @@
        void point() {};
  };
 ProgressBar* actprogressbar = NULL;
-#endif 
+#endif
 
 pobjecttype eisbrecherobject = NULL;
 pobjecttype fahrspurobject = NULL;
 
+
+typedef vector<TextFileDataLoader*> DataLoaders;
+DataLoaders dataLoaders;
+DataLoaders dataLoadersToDelete;
+
+
+typedef map<ASCString,TextPropertyList> TextFileRepository;
+TextFileRepository textFileRepository;
 
 
 void duplicateIDError ( const ASCString& itemtype, int id, const ASCString& file1, const ASCString& name1, const ASCString&  file2, const ASCString& name2 )
@@ -66,26 +74,46 @@ void ItemRepository<T>::add( T* obj )
 
 
 template<class T>
-void ItemRepository<T>::load()
+void ItemRepository<T>::readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location )
 {
-   TextPropertyList& tpl = textFileRepository[typeName];
-   for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
+   T* t = new T;
+   t->runTextIO ( prc );
+   prc.run();
+
+   t->filename = fileName;
+   t->location = location;
+   add ( t );
+}
+
+
+template<class T>
+void ItemRepository<T>::read( tnstream& stream )
+{
+   int version = stream.readInt();
+   int num = stream.readInt();
+   for ( int i = 0; i< num; ++i ) {
       if ( actprogressbar )
         actprogressbar->point();
 
-      if ( !(*i)->isAbstract() ) {
-         PropertyReadingContainer pc ( typeName, *i );
+      T* t = new T;
+      t->read( stream );
 
-         T* t = new T;
-         t->runTextIO ( pc );
-         pc.run();
+      t->filename = stream.getDeviceName();
+      t->location = stream.getLocation();
 
-         t->filename = (*i)->fileName;
-         t->location = (*i)->location;
-         add ( t );
-    }
-  }
-  displayLogMessage ( 4, "loading all of " + typeName + "  completed\n");
+      add ( t );
+      // add ( T::newFromStream(stream ));
+   }
+}
+
+
+template<class T>
+void ItemRepository<T>::write( tnstream& stream )
+{
+   stream.writeInt( 1 );
+   stream.writeInt( container.size() );
+   for ( vector<T*>::iterator i = container.begin(); i != container.end(); ++i )
+       (*i)->write( stream );
 }
 
 
@@ -95,47 +123,201 @@ ItemRepository<ObjectType>   objectTypeRepository ( "objecttype" );
 ItemRepository<BuildingType> buildingTypeRepository ("buildingtype");
 ItemRepository<Technology>   technologyRepository ( "technology");
 
-void         loadalltechadapter()
+TechAdapterContainer techAdapterContainer;
+
+
+class TechAdapterLoader : public TextFileDataLoader {
+      void readTextFiles(PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location ) {
+           TechAdapter* ta = new TechAdapter;
+           ta->runTextIO ( prc );
+           prc.run();
+
+           ta->filename = fileName;
+           ta->location = location;
+           techAdapterContainer.push_back ( ta );
+      };
+
+      void read ( tnstream& stream ){
+         readPointerContainer( techAdapterContainer, stream );
+      };
+
+      void write ( tnstream& stream ){
+         writePointerContainer( techAdapterContainer, stream );
+      };
+      ASCString getTypeName() {
+         return "techadapter";
+      };
+};
+
+
+void  loadalltextfiles ( );
+
+
+class FileCache {
+      vector<tfindfile::FileInfo> actualFileInfo;
+      tnstream* stream;
+      bool current;
+      bool checkForModification ();
+   public:
+      FileCache( );
+      bool isCurrent() { return current; };
+      void load();
+      void write();
+
+      ~FileCache();
+};
+
+FileCache::FileCache( )
+          :stream(NULL)
 {
-   TextPropertyList& tpl = textFileRepository["techadapter"];
-   for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
-      if ( actprogressbar )
-        actprogressbar->point();
-
-      if ( !(*i)->isAbstract() ) {
-        PropertyReadingContainer pc ( "techadapter", *i );
-
-        TechAdapter* ta = new TechAdapter;
-        ta->runTextIO ( pc );
-        pc.run();
-
-        ta->filename = (*i)->fileName;
-        ta->location = (*i)->location;
-        techAdapterContainer.push_back ( ta );
-      }
+   tfindfile::FileInfo fi;
+   {
+      tfindfile f ( "*.con", tfindfile::AllDirs, tfindfile::OutsideContainer);
+      while ( f.getnextname( fi ))
+         actualFileInfo.push_back ( fi );
    }
-   displayLogMessage ( 4, "loadallTechAdapter completed\n");
+   {
+      tfindfile f ( "*.asctxt", tfindfile::AllDirs, tfindfile::OutsideContainer);
+      while ( f.getnextname( fi ))
+         actualFileInfo.push_back ( fi );
+   }
+
+   if ( exist ( "asc.cache" )) {
+      stream = new tnfilestream ( "asc.cache", tnstream::reading );
+      int version = stream->readInt();
+
+      current = checkForModification();
+   } else
+      current = false;
+}
+
+bool FileCache::checkForModification (  )
+{
+   vector<tfindfile::FileInfo> cacheFileInfo;
+   readClassContainer ( cacheFileInfo, *stream );
+
+   if ( cacheFileInfo.size() != actualFileInfo.size() )
+      return false;
+
+   for ( vector<tfindfile::FileInfo>::iterator i = actualFileInfo.begin(); i != actualFileInfo.end(); ++i ) {
+      bool found = false;
+      for ( vector<tfindfile::FileInfo>::iterator j = cacheFileInfo.begin(); j != cacheFileInfo.end(); ++j )
+         if ( i->name == j->name ) {
+            found = true;
+            if ( i->size != j->size )
+               return false;
+
+            if ( i->date != j->date )
+               return false;
+
+            break;
+         }
+
+      if ( !found)
+         return false;
+   }
+
+
+   return true;
 }
 
 
-void  loadAllData()
+void FileCache::load()
 {
-   vehicleTypeRepository.load();
-   terrainTypeRepository.load();
-   objectTypeRepository.load();
-   buildingTypeRepository.load();
-   technologyRepository.load();
-   loadalltechadapter();
+   for ( DataLoaders::iterator i = dataLoaders.begin(); i != dataLoaders.end(); ++i)
+      (*i)->read ( *stream );
+}
+
+void FileCache::write()
+{
+   if ( stream )
+      delete stream;
+
+   stream = new tn_file_buf_stream ( "asc.cache", tnstream::writing );
+
+   stream->writeInt ( 1 );
+   writeClassContainer ( actualFileInfo, *stream );
+
+   for ( DataLoaders::iterator i = dataLoaders.begin(); i != dataLoaders.end(); ++i)
+      (*i)->write ( *stream );
+
+}
+
+
+
+FileCache::~FileCache()
+{
+   if ( stream ) {
+      delete stream;
+      stream = NULL;
+   }
+   for ( DataLoaders::iterator i = dataLoadersToDelete.begin(); i != dataLoadersToDelete.end(); ++i)
+      delete *i;
+}
+
+
+
+void registerDataLoader( TextFileDataLoader* dataLoader )
+{
+   dataLoaders.push_back ( dataLoader );
+   dataLoadersToDelete.push_back ( dataLoader );
+}
+
+void registerDataLoader( TextFileDataLoader& dataLoader )
+{
+   dataLoaders.push_back ( &dataLoader );
+}
+
+
+void  loadAllData( bool useCache )
+{
+   FileCache cache;
+
+   registerDataLoader( vehicleTypeRepository );
+   registerDataLoader( terrainTypeRepository );
+   registerDataLoader( objectTypeRepository );
+   registerDataLoader( buildingTypeRepository );
+   registerDataLoader( technologyRepository );
+   registerDataLoader( new TechAdapterLoader() );
+   registerDataLoader( new ItemFiltrationSystem::DataLoader() );
+
+
+   if ( cache.isCurrent() && useCache )
+      cache.load();
+   else {
+
+      loadalltextfiles();
+
+      for ( DataLoaders::iterator dl = dataLoaders.begin(); dl != dataLoaders.end(); ++dl) {
+         TextPropertyList& tpl = textFileRepository[ (*dl)->getTypeName() ];
+         for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
+            if ( actprogressbar )
+              actprogressbar->point();
+
+            if ( !(*i)->isAbstract() ) {
+               PropertyReadingContainer pc ( (*dl)->getTypeName(), *i );
+
+               (*dl)->readTextFiles( pc, (*i)->fileName, (*i)->location );
+            }
+         }
+
+         displayLogMessage ( 4, "loading all of " + (*dl)->getTypeName() + "  completed\n");
+
+      }
+
+      if ( useCache )
+         cache.write();
+
+      textFileRepository.clear();
+   }
 
    eisbrecherobject = objectTypeRepository.getObject_byID( 6 );
    fahrspurobject   = objectTypeRepository.getObject_byID( 7 );
 }
 
-TechAdapterContainer techAdapterContainer;
 
 
 
-TextFileRepository textFileRepository;
 
 void  loadalltextfiles ( )
 {
@@ -180,10 +362,6 @@ void  loadalltextfiles ( )
 }
 
 
-void  freetextdata()
-{
-   textFileRepository.clear();
-}
 
 
 
@@ -208,6 +386,28 @@ void ItemFiltrationSystem::ItemFilter::runTextIO ( PropertyContainer& pc )
     pc.addIntRangeArray ( "Terrain", terrain );
     pc.addBool ( "activated", active, false );
     pc.addString ( "name", name );
+}
+
+void ItemFiltrationSystem::ItemFilter::read ( tnstream& stream )
+{
+   stream.readInt();
+   readClassContainer ( buildings, stream );
+   readClassContainer ( objects, stream );
+   readClassContainer ( units, stream );
+   readClassContainer ( terrain, stream );
+   active = stream.readInt();
+   name = stream.readString();
+}
+
+void ItemFiltrationSystem::ItemFilter::write ( tnstream& stream )
+{
+   stream.writeInt ( 1 );
+   writeClassContainer ( buildings, stream );
+   writeClassContainer ( objects, stream );
+   writeClassContainer ( units, stream );
+   writeClassContainer ( terrain, stream );
+   stream.writeInt ( active );
+   stream.writeString ( name );
 }
 
 
@@ -244,21 +444,26 @@ bool ItemFiltrationSystem::isFiltered ( ItemFiltrationSystem::Category cat, int 
 }
 
 
-void ItemFiltrationSystem::read ( )
+void ItemFiltrationSystem::DataLoader::readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location )
 {
-    TextPropertyList& tpl = textFileRepository["itemfilter"];
-    for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
+   ItemFilter* itf = new ItemFilter;
+   itf->runTextIO ( prc );
+   prc.run();
 
-      PropertyReadingContainer pc ( "itemfilter", *i );
-
-      ItemFilter* itf = new ItemFilter;
-      itf->runTextIO ( pc );
-      pc.run();
-
-      // bmtt->filename = (*i)->fileName;
-      // bmtt->location = (*i)->location;
-      itemFilters.push_back ( itf );
-   }
+   // bmtt->filename = (*i)->fileName;
+   // bmtt->location = (*i)->location;
+   ItemFiltrationSystem::itemFilters.push_back ( itf );
 }
 
+void ItemFiltrationSystem::DataLoader::read ( tnstream& stream )
+{
+   stream.readInt();
+   readPointerContainer( ItemFiltrationSystem::itemFilters, stream );
+}
+
+void ItemFiltrationSystem::DataLoader::write ( tnstream& stream )
+{
+   stream.writeInt ( 1 );
+   writePointerContainer( ItemFiltrationSystem::itemFilters, stream );
+}
 

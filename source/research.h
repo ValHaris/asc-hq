@@ -55,7 +55,7 @@ class TechAdapter: public LoadableItemType {
    public:
      TechAdapter();
      bool available( const Research& research ) const;
-     const ASCString& getName() { return name; };
+     const ASCString& getName() const { return name; } ;
 
      void read ( tnstream& stream );
      void write ( tnstream& stream ) const;
@@ -140,7 +140,7 @@ class TechAdapterDependency {
      void read_techs ( tnstream& stream );
 
      void evalTechAdapter();
-     bool techAdapterAvail( const ASCString& ta );
+     bool techAdapterAvail( const ASCString& ta ) const;
 
      void settechlevel ( int techlevel );
 

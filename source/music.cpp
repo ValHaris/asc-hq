@@ -5,8 +5,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifndef karteneditor
 #include "sdl/sound.h"
-#include "soundList.h"
+#endif
+
+
 #include "basestrm.h"
 #include "stringtokenizer.h"
 #include "music.h"
@@ -18,21 +21,27 @@
 typedef vector<MusicPlayList*> PlayLists;
 PlayLists playLists;
 
-void loadAllMusicPlayLists ( )
+void PlayListLoader::readTextFiles ( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location )
 {
-   TextPropertyList& tpl = textFileRepository["playlist"];
-   for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
-      PropertyReadingContainer pc ( "playlist", *i );
+   MusicPlayList* mpl = new MusicPlayList;
+   mpl->runTextIO ( prc );
+   prc.run();
 
-      MusicPlayList* mpl = new MusicPlayList;
-      mpl->runTextIO ( pc );
-      pc.run();
-
-      mpl->filename = (*i)->fileName;
-      mpl->location = (*i)->location;
-      playLists.push_back ( mpl );
-   }
+   mpl->filename = fileName;
+   mpl->location = location;
+   playLists.push_back ( mpl );
 }
+
+void PlayListLoader::read ( tnstream& stream )
+{
+   readPointerContainer( playLists, stream );
+}
+
+void PlayListLoader::write ( tnstream& stream )
+{
+   writePointerContainer( playLists, stream );
+}
+
 
 void MusicPlayList :: runTextIO ( PropertyContainer& pc )
 {
@@ -57,6 +66,26 @@ void MusicPlayList :: runTextIO ( PropertyContainer& pc )
 }
 
 
+void MusicPlayList :: read ( tnstream& stream )
+{
+   int version = stream.readInt(); // version
+   if ( version != 1 ) fatalError ("invalid version for MusicPlayList" );
+   name = stream.readString();
+   filename = stream.readString();
+   location = stream.readString();
+   readClassContainer( fileNameList, stream );
+}
+
+void MusicPlayList :: write ( tnstream& stream ) const
+{
+   stream.writeInt( 1 );
+   stream.writeString ( name );
+   stream.writeString ( filename );
+   stream.writeString ( location );
+   writeClassContainer( fileNameList, stream );
+}
+
+
 const ASCString& MusicPlayList :: getNextTrack()
 {
    if ( fileNameList.empty() ) {
@@ -78,9 +107,10 @@ void MusicPlayList :: reset ( )
 
 void startMusic ()
 {
+#ifndef karteneditor
   if ( !playLists.empty() )
      SoundSystem::getInstance()->playMusic ( playLists.front() );
-
+#endif
 }
 
 
@@ -119,8 +149,10 @@ void         PlayListSelector ::buttonpressed(int         id)
                 break;
 
       case 12:   if ( redline >= 0) {
+#ifndef karteneditor
                       SoundSystem::getInstance()->playMusic ( playLists[redline] );
                       action = 1;
+#endif
                  } else
                     displaymessage ( "Please select a play list", 3);
                  break;

@@ -183,19 +183,10 @@ int main(int argc, char *argv[] )
       loadbi3graphics();
       printf(".");
 
-      loadalltextfiles();
-      printf(".");
-      loadallobjecttypes();
-      printf(".");
-      loadallbuildingtypes();
-      printf(".");
-      loadallvehicletypes();
+      loadAllData( false );
       printf(".");
       loadUnitSets();
       printf(".");
-
-      freetextdata();
-      printf(".\n");
 
 
       char* wildcard;
@@ -240,8 +231,8 @@ int main(int argc, char *argv[] )
                 "<BODY class=\"wg\">\n"
                 "<table class=\"wgov\" align=\"center\">\n", cl.t().c_str() );
 
-      for ( int unit = 0; unit < vehicletypenum; unit++ ) {
-         pvehicletype  ft = getvehicletype_forpos ( unit );
+      for ( int unit = 0; unit < vehicleTypeRepository.getNum(); unit++ ) {
+         pvehicletype  ft = vehicleTypeRepository.getObject_byPos ( unit );
          ASCString fileName = extractFileName_withoutSuffix( ft->filename );
          fileName.toLower();
 
@@ -726,8 +717,8 @@ int main(int argc, char *argv[] )
 
             ASCString names;
             for ( unsigned int i = 0; i < ft->objectsBuildable.size(); i++ ) {
-               for ( int b = 0; b < objecttypenum; b++ ) {
-                  pobjecttype obj = getobjecttype_forpos ( b );
+               for ( int b = 0; b < objectTypeRepository.getNum(); b++ ) {
+                  pobjecttype obj = objectTypeRepository.getObject_byPos ( b );
                   if (     obj->id >= ft->objectsBuildable[i].from
                         && obj->id <= ft->objectsBuildable[i].to ) {
                      ASCString s;
@@ -743,8 +734,8 @@ int main(int argc, char *argv[] )
              // Objekte abreissbar
             names = "";
             for ( unsigned int i = 0; i < ft->objectsRemovable.size(); i++ ) {
-               for ( int b = 0; b < objecttypenum; b++ ) {
-                  pobjecttype obj = getobjecttype_forpos ( b );
+               for ( int b = 0; b < objectTypeRepository.getNum(); b++ ) {
+                  pobjecttype obj = objectTypeRepository.getObject_byPos ( b );
                   if (     obj->id >= ft->objectsRemovable[i].from
                         && obj->id <= ft->objectsRemovable[i].to ) {
                      ASCString s;
@@ -774,7 +765,7 @@ int main(int argc, char *argv[] )
             names = "";
             for ( vector<IntRange>::iterator i = ft->objectGroupsRemovable.begin(); i != ft->objectGroupsRemovable.end(); ++i ) {
                ASCString s;
-               if ( i->from != i->to ) 
+               if ( i->from != i->to )
                   s.format ( "%d - %d <br>", i->from, i->to );
                else
                   s.format ( "%d <br>", i->from );
@@ -788,8 +779,8 @@ int main(int argc, char *argv[] )
             // UNITS
             names = "";
             for ( unsigned int i = 0; i < ft->vehiclesBuildable.size(); i++ ) {
-               for ( int b = 0; b < vehicletypenum; b++ ) {
-                  pvehicletype veh = getvehicletype_forpos ( b );
+               for ( int b = 0; b < vehicleTypeRepository.getNum(); b++ ) {
+                  pvehicletype veh = vehicleTypeRepository.getObject_byPos ( b );
                   if (     veh->id >= ft->vehiclesBuildable[i].from
                         && veh->id <= ft->vehiclesBuildable[i].to ) {
                      ASCString filename = extractFileName_withoutSuffix( veh->filename ) + ".html";
@@ -806,8 +797,8 @@ int main(int argc, char *argv[] )
             // Geb&auml;ude
             names = "";
             for ( unsigned int i = 0; i < ft->buildingsBuildable.size(); i++ ) {
-               for ( int b = 0; b < buildingtypenum; b++ ) {
-                  pbuildingtype bld = getbuildingtype_forpos ( b );
+               for ( int b = 0; b < buildingTypeRepository.getNum(); b++ ) {
+                  pbuildingtype bld = buildingTypeRepository.getObject_byPos ( b );
                   if (     bld->id >= ft->buildingsBuildable[i].from
                            && bld->id <= ft->buildingsBuildable[i].to ) {
                      ASCString s;
@@ -1098,8 +1089,8 @@ int main(int argc, char *argv[] )
                fprintf(ff, ".%s;asc.css;-;\n", groupNames[j] );
                vector<ASCString> units;
 
-               for ( int unit = 0; unit < vehicletypenum; unit++ ) {
-                  pvehicletype  ft = getvehicletype_forpos ( unit );
+               for ( int unit = 0; unit < vehicleTypeRepository.getNum(); unit++ ) {
+                  pvehicletype  ft = vehicleTypeRepository.getObject_byPos ( unit );
                   if ( (*i)->isMember( ft->id )) {
                      int group;
                      switch ( ft->movemalustyp ) {
@@ -1163,8 +1154,8 @@ int main(int argc, char *argv[] )
 
             map<int,Vehicletype*> byID;
 
-            for ( int unit = 0; unit < vehicletypenum; unit++ ) {
-               pvehicletype  ft = getvehicletype_forpos ( unit );
+            for ( int unit = 0; unit < vehicleTypeRepository.getNum(); unit++ ) {
+               pvehicletype  ft = vehicleTypeRepository.getObject_byPos ( unit );
                if ( (*i)->isMember( ft->id ))
                   byID[ft->id] = ft;
             }

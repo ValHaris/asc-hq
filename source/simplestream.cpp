@@ -145,25 +145,38 @@ tnbufstream::~tnbufstream ()
 
 
 int tn_file_buf_stream::getstreamsize(void)
-{ 
-   struct stat buf;
-   if ( stat ( getDeviceName().c_str(), &buf) )
-      return -1;
-   else
-      return (buf.st_size );
-}                 
+{
+   if ( !sizeCached ) {
+      struct stat buf;
+      if ( stat ( getDeviceName().c_str(), &buf) )
+         sizeValue = -1;
+      else
+         sizeValue = buf.st_size ;
+
+      sizeCached = true;
+   }
+   return sizeValue;
+}
 
 time_t tn_file_buf_stream::get_time ( void )
 {
-   struct stat buf;
-   if ( stat ( getDeviceName().c_str(), &buf) )
-      return -1;
-   else
-      return (buf.st_mtime);
+   if ( !timeCached ) {
+      struct stat buf;
+      if ( stat ( getDeviceName().c_str(), &buf) )
+         timeValue = -1;
+      else
+         timeValue = buf.st_mtime;
+
+      timeCached = true;
+
+   }
+   return timeValue;
 }
 
 
 tn_file_buf_stream::tn_file_buf_stream( const ASCString& _fileName, IOMode mode)
+   : sizeCached ( false ), sizeValue ( -1 ), timeCached( false), timeValue( -1 )
+
 {
    char buf[10000];
    ASCString s;

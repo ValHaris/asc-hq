@@ -32,14 +32,14 @@ void TechDependency::read ( tnstream& stream )
 {
    stream.readInt();
    requireAllListedTechnologies = stream.readInt();
-   readContainer(requiredTechnologies, stream );
+   readClassContainer(requiredTechnologies, stream );
 }
 
 void TechDependency::write ( tnstream& stream ) const
 {
    stream.writeInt(1);
    stream.writeInt(requireAllListedTechnologies);
-   writeContainer(requiredTechnologies, stream );
+   writeClassContainer(requiredTechnologies, stream );
 }
 
 void TechDependency::runTextIO ( PropertyContainer& pc )
@@ -145,7 +145,7 @@ void TechAdapterDependency::runTextIO ( PropertyContainer& pc, const ASCString& 
    if ( pc.find( "TechAdapterRequired")) {
       pc.addStringArray ( "TechAdapterRequired", requiredTechAdapter );
       if ( pc.isReading())
-         for ( RequiredTechAdapter::const_iterator j = requiredTechAdapter.begin(); j != requiredTechAdapter.end(); ++j )
+         for ( RequiredTechAdapter::iterator j = requiredTechAdapter.begin(); j != requiredTechAdapter.end(); ++j )
             j->toLower();
 
    } else
@@ -178,17 +178,23 @@ void Technology::read( tnstream& stream )
    name = stream.readString();
    infotext = stream.readString();
    techDependency.read( stream );
+   if ( version >= 2 )
+      relatedUnitID = stream.readInt();
+   else
+      relatedUnitID = -1;
 }
 
 void Technology::write( tnstream& stream ) const
 {
-   stream.writeInt( 1 );
+   stream.writeInt( 2 );
+   stream.writeInt ( id );
    stream.writeInt( researchpoints );
    stream.writeInt( requireEvent );
    stream.writeInt( techlevel );
    stream.writeString( name );
    stream.writeString( infotext );
    techDependency.write( stream );
+   stream.writeInt ( relatedUnitID );
 }
 
 void Technology::runTextIO ( PropertyContainer& pc )
@@ -321,7 +327,7 @@ bool Research::techResearched ( int id ) const
 }
 
 
-bool Research::techAdapterAvail( const ASCString& ta )
+bool Research::techAdapterAvail( const ASCString& ta ) const
 {
    return triggeredTechAdapter.find ( ta ) != triggeredTechAdapter.end();
 }

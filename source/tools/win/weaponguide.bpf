@@ -1,11 +1,3 @@
-USEUNIT("..\weaponguide.cpp");
-USELIB("tools.lib");
-USELIB("..\..\..\..\sdl\bin\sdl.lib");
-USELIB("..\..\libs\bzlib\win\bzlib.lib");
-USEUNIT("..\..\itemrepository.cpp");
-USELIB("..\..\..\..\SDL_image\bin\SDL_image.lib");
-USELIB("..\..\libs\sdlmm\SDLmm.lib");
-//---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 
 main

@@ -136,7 +136,7 @@ int Vehicletype::maxsize ( void ) const
 extern void* generate_vehicle_gui_build_icon ( pvehicletype tnk );
 #endif
 
-const int vehicle_version = 12;
+const int vehicle_version = 13;
 
 
 
@@ -323,11 +323,14 @@ void Vehicletype :: read ( tnstream& stream )
 
    int size;
    for (i=0;i<8  ;i++ )
-      if ( picture[i] )
-         if ( bipicture <= 0 )
+      if ( picture[i] ) {
+         // if ( bipicture <= 0 )
             stream.readrlepict ( &picture[i], false, &size);
-         else
+            bipicture = 0;
+         /* else
             loadbi3pict_double ( bipicture, &picture[i], 1); // CGameOptions::Instance()->bi3.interpolate.units );
+            */
+      }
 
 
    if ( objectsbuildablenum )
@@ -448,13 +451,6 @@ void Vehicletype :: read ( tnstream& stream )
       }
 
 
-
-   #ifndef converter
-    buildicon = generate_vehicle_gui_build_icon ( this );
-   #else
-    buildicon = NULL;
-   #endif
-
    filename = stream.getDeviceName();
    location = stream.getLocation();
 
@@ -471,6 +467,17 @@ void Vehicletype :: read ( tnstream& stream )
 
    if ( version >= 12 )
       techDependency.read( stream );
+
+   if ( version >= 13 ) {
+      int w;
+      stream.readrlepict ( &buildicon,  false, &w);
+   } else {
+      #ifndef converter
+       buildicon = generate_vehicle_gui_build_icon ( this );
+      #else
+       buildicon = NULL;
+      #endif
+   }
 }
 
 void Vehicletype::setupPictures()
@@ -480,6 +487,14 @@ void Vehicletype::setupPictures()
          fatalError ( "The vehicletype " + getName() + " (ID: " + strrr( id ) + ") has an invalid picture" );
 
       if ( bipicture <= 0 ) {
+         int count = 0;
+         for ( int i = 0; i < 6; i++ )
+            if ( picture[i] )
+               ++count;
+               
+         if ( count == 6 )
+            return;
+
          TrueColorImage* zimg = zoomimage ( picture[0], fieldxsize, fieldysize, pal, 0 );
          void* pic = convertimage ( zimg, pal ) ;
          for ( int i = 1; i < 6; i++ )
@@ -489,7 +504,8 @@ void Vehicletype::setupPictures()
          delete zimg;
       } else {
          for ( int i = 1; i < 6; i++ )
-            picture[i] = rotatepict ( picture[0], directionangle[i] );
+            if ( !picture[i] )
+               picture[i] = rotatepict ( picture[0], directionangle[i] );
       }
    #endif
 }
@@ -601,7 +617,7 @@ void Vehicletype:: write ( tnstream& stream ) const
       if ( !classnames[i].empty() )
          stream.writeString( classnames[i] );
 
-   if ( bipicture <= 0 )
+   // if ( bipicture <= 0 )
       for (i=0;i<8  ;i++ )
          if ( picture[i] )
             stream.writedata ( picture[i], getpicsize2 ( picture[i] ) );
@@ -667,11 +683,14 @@ void Vehicletype:: write ( tnstream& stream ) const
 
    ContainerBaseType::write ( stream );
 
+
    stream.writeInt( heightChangeMethodNum );
    for ( int i = 0; i < heightChangeMethodNum; i++ )
       heightChangeMethod[i].write( stream );
 
    techDependency.write( stream );
+
+   stream.writedata( buildicon, getpicsize2 ( buildicon ) );
 
 }
 

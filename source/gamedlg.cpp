@@ -91,7 +91,7 @@ void         tchoosetechnology::init(void)
 
    check();
    if ( technum > dispnum )
-      addscrollbar  ( xsize - 40, 50, xsize - 20, ysize - 40, &technum, dispnum, &firstshowntech, 1, 0 );
+      addscrollbar  ( xsize - 40, 70, xsize - 20, ysize - 40, &technum, dispnum, &firstshowntech, 1, 0 );
 
    addbutton ( "~O~k", 10, ysize - 30, xsize - 10, ysize - 10 , 0, 1, 10, true );
    addkey ( 10, ct_enter );
@@ -134,7 +134,7 @@ int          tchoosetechnology::gx ( void )
 
 int          tchoosetechnology::gy ( int i )
 {
-   return y1 + starty + 10 + ( i - firstshowntech ) * 30;
+   return y1 + starty + 40 + ( i - firstshowntech ) * 25;
 }
 
 void         tchoosetechnology::disp(void)
@@ -151,8 +151,12 @@ void         tchoosetechnology::disp(void)
       int x = gx();
       int y = gy(i);
 
-      activefontsettings.length = 300;
-      showtext2(techs[i]->name.c_str(), x,y ) ;
+      activefontsettings.length = 250;
+      showtext2(techs[i]->name, x,y ) ;
+
+      activefontsettings.length = 60;
+      showtext2( strrr( techs[i]->researchpoints), x + 260,y ) ;
+
 
       /*
       if ( techs[i]->relatedUnitID > 0 ) {
@@ -163,12 +167,13 @@ void         tchoosetechnology::disp(void)
       }
       */
 
-      if ( techs[i]->relatedUnitID > 0 ) {
+
+      activefontsettings.length = 40;
+      if ( techs[i]->relatedUnitID > 0 && actmap->getvehicletype_byid( techs[i]->relatedUnitID )) {
          Vehicletype* vt = actmap->getvehicletype_byid( techs[i]->relatedUnitID );
-         activefontsettings.length = 70;
-         if ( vt )
-            showtext2("(unit info)", x1 + xsize - 130,y ) ;
-      }
+         showtext2("(O)", x1 + xsize - 90,y ) ;
+      } else
+         showtext2(" ", x1 + xsize - 90,y ) ;
 
    }
 }
@@ -185,7 +190,6 @@ void         tchoosetechnology::buttonpressed ( int id )
 void         tchoosetechnology::run(void)
 {
 
-
   if ( !technum && !actmap->player[actmap->actplayer].research.techsAvail )
      return;
 
@@ -194,6 +198,22 @@ void         tchoosetechnology::run(void)
   buildgraphics();
   markedbackgrnd = lightblue;
   disp();
+
+  npush ( activefontsettings.color );
+   activefontsettings.background = black;
+   activefontsettings.color = white;
+   activefontsettings.font = schriften.smallarial;
+   activefontsettings.justify = lefttext;
+   activefontsettings.length = xsize + x1 - gx() - 30;
+   showtext2( "Technology", gx(), y1+starty+10 ) ;
+
+   activefontsettings.background = 255;
+   showtext2( "Points", gx()+260, y1+starty+10 ) ;
+
+//   showtext2( "TechInfo", gx()+320, y1+starty+10 ) ;
+   showtext2( "UnitInfo", x1 + xsize - 110, y1+starty+10 ) ;
+
+  npop ( activefontsettings.color );
 
   mousevisible(true);
   if (technum == 0) {
