@@ -60,14 +60,22 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
 
 
 
- class  Buildingtype : public ContainerBaseType {
+ class  BuildingType : public ContainerBaseType {
    public:
+        class LocalCoordinate {
+           public:
+              int x,y;
+              LocalCoordinate ( int _x, int _y ) : x(_x), y(_y) {};
+              LocalCoordinate ( ) : x(-1), y(-1) {};
+        };
+
+
         void*        w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
         int          bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
         int          destruction_objects [4][6];
-        struct {
-          int     x, y;
-        } entry, powerlineconnect, pipelineconnect;
+        LocalCoordinate entry;
+        LocalCoordinate powerlineconnect;
+        LocalCoordinate pipelineconnect;
         int          id;
         char*        name;
         int          _armor;
@@ -102,15 +110,15 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
         int          unitheight_forbidden;
         int          externalloadheight;
         int          vehicleCategoriesLoadable;
-        void*        getpicture ( int x, int y );
+        void*        getpicture ( const LocalCoordinate& localCoordinate );
 
-        Buildingtype ( void ) {
+        BuildingType ( void ) {
            terrain_access = &terrainaccess;
            vehicleCategoriesLoadable = -1;
         };
 
         int          vehicleloadable ( pvehicletype fzt ) const ;
-        void getfieldcoordinates( int bldx, int bldy, int x, int y, int *xx, int *yy);
+        MapCoordinate getFieldCoordinate( const MapCoordinate& entryOnMap, const LocalCoordinate& localCoordinate );
 };
 
 
@@ -118,10 +126,14 @@ class  Building : public ContainerBase {
     int lastenergyavail;
     int lastmaterialavail;
     int lastfuelavail;
+
+    int  processmining ( int res, int abbuchen );
+
+    MapCoordinate entryPosition;
+
   public:
-    pbuildingtype     typ;
+    const pbuildingtype typ;
     int               munitionsautoproduction[waffenanzahl];
-    unsigned char     color;
     pvehicletype      production[32];
 
     Resources   plus;
@@ -135,10 +147,7 @@ class  Building : public ContainerBase {
     word         researchpoints;
 
     ASCString    name;
-    Integer      xpos, ypos;
-    pbuilding    next;
-    pbuilding    prev;
-    char         completion;
+    char         _completion;
     int          netcontrol;
     int          connection;
     char         visible;
@@ -150,8 +159,8 @@ class  Building : public ContainerBase {
 
     AiValue*      aiparam[8];
 
-    Building( pmap actmap = NULL );
-    Building ( pbuilding src, pmap actmap );
+    Building( pmap map, const MapCoordinate& entryPosition, const pbuildingtype type , int player, bool setupImages = true );
+
     int lastmineddist;
                                       /*
                                        int  getenergyplus( int mode );  // mode ( bitmapped ) : 1 : maximale energieproduktion ( ansonsten das, was gerade ins netz reingeht )
@@ -169,10 +178,6 @@ class  Building : public ContainerBase {
 
     bool canRepair ( void );
 
-  private:
-    int  processmining ( int res, int abbuchen );
-
-  public:
     struct Work {
        struct Mining {
           Resources touse;
@@ -191,6 +196,13 @@ class  Building : public ContainerBase {
        int bimode_done;
     } work;
 
+    static Building* newFromStream ( pmap gamemap, tnstream& stream );
+    void write ( tnstream& stream, bool includeLoadedUnits = true );
+    void read ( tnstream& stream );
+  private:
+    void readData ( tnstream& stream, int version );
+  public:
+
     void execnetcontrol ( void );
     int  getmininginfo ( int res );
 
@@ -200,35 +212,38 @@ class  Building : public ContainerBase {
     Resources getResource ( const Resources& res, int queryonly, int scope = 1 ) { return ContainerBase::getResource ( res, queryonly, scope ); };
 
     void getresourceusage ( Resources* usage );
-    void changecompletion ( int d );
     int vehicleloadable ( pvehicle eht, int uheight = -1 ) const;
-    void* getpicture ( int x, int y );
+    void* getpicture ( const BuildingType::LocalCoordinate& localCoordinate );
     void convert ( int col );
     void addview ( void );
     void removeview ( void );
-    int  chainbuildingtofield ( int x, int y );
-    int  unchainbuildingfromfield ( void );
     int  gettank ( int resource );
     int  getArmor( void );
-    pfield getField( int  x, int y);
+
     pfield getEntryField ( );
     MapCoordinate getEntry ( );
-    void  getFieldCoordinates( int x, int y, int &xx, int &yy);
+
+    pfield getField( const BuildingType::LocalCoordinate& localCoordinates );
+    MapCoordinate getFieldCoordinates( const BuildingType::LocalCoordinate& localCoordinates );
+
     void produceAmmo ( int type, int num );
 
     void resetPicturePointers ( void );
     MapCoordinate getPosition ( ) { return getEntry(); };
+    int  chainbuildingtofield ( const MapCoordinate& entryPos, bool setupImages = true );
+    int  unchainbuildingfromfield ( void );
 
     void getpowerplantefficiency ( int* material, int* fuel );
 
+    int getCompletion() const { return _completion; };
+    void setCompletion ( int d );
+
+    ~Building();
 
   protected:
      ResourceMatrix repairEfficiency;
      const ResourceMatrix& getRepairEfficiency ( void ) { return repairEfficiency; };
 };
-
-#define compensatebuildingcoordinateorgx (a) (dx & (~a))
-#define compensatebuildingcoordinatex ( + (dx & ~b) )
 
 
 #endif

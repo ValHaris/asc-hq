@@ -1,6 +1,11 @@
-//     $Id: edglobal.cpp,v 1.27 2001-01-31 14:52:35 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.28 2001-02-01 22:48:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.27  2001/01/31 14:52:35  mbickel
+//      Fixed crashes in BI3 map importing routines
+//      Rewrote memory consistency checking
+//      Fileselect dialog now uses ASCStrings
+//
 //     Revision 1.26  2001/01/25 23:44:57  mbickel
 //      Moved map displaying routins to own file (mapdisplay.cpp)
 //      Wrote program to create pcx images from map files (map2pcx.cpp)
@@ -547,7 +552,7 @@ void execaction(int code)
 
                              k_loadmap();   
  
-                             actmap->player[8].firstvehicle = NULL;
+                             // actmap->player[8].firstvehicle = NULL;
  
                              pdbaroff(); 
                           } 
@@ -642,7 +647,7 @@ void execaction(int code)
                   pfield fld = getactfield();
 
                   if ( fld->vehicle ) {
-                     auswahlf = fld->vehicle->typ;
+                     auswahlf = getvehicletype_forid ( fld->vehicle->typ->id );
                      altefarbwahl = farbwahl;
                      farbwahl = fld->vehicle->color/8;
                      lastselectiontype = cselunit;
@@ -673,12 +678,15 @@ void execaction(int code)
                          pf = getactfield();
                          mapsaved = false;
                          if (pf != NULL) {
-                            if (pf->vehicle != NULL) removevehicle(&pf->vehicle);
-                            else if (pf->building != NULL) removebuilding(&pf->building); 
-                            else {
-                                     pf->removeobject( actobject );
-                                     pf->removemine( -1 );
-                                   }
+                            if (pf->vehicle != NULL)
+                               delete pf->vehicle;
+                            else
+                               if (pf->building != NULL)
+                                  delete pf->building;
+                               else {
+                                  pf->removeobject( actobject );
+                                  pf->removemine( -1 );
+                                }
                             mapsaved = false;
                             displaymap();
                          }
@@ -688,7 +696,7 @@ void execaction(int code)
                          pf = getactfield();
                          if (pf != NULL) 
                             if (pf->vehicle != NULL) {
-                               removevehicle(&pf->vehicle);
+                               delete pf->vehicle;
                                mapsaved = false;
                                displaymap();
                             }
@@ -698,7 +706,7 @@ void execaction(int code)
                          pf = getactfield();
                          if (pf != NULL) 
                             if (pf->building != NULL) { 
-                               removebuilding(&pf->building); 
+                               delete pf->building;
                                mapsaved = false;
                                displaymap();
                             }

@@ -3,9 +3,14 @@
 */
 
 
-//     $Id: sg.cpp,v 1.129 2001-01-31 14:52:41 mbickel Exp $
+//     $Id: sg.cpp,v 1.130 2001-02-01 22:48:46 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.129  2001/01/31 14:52:41  mbickel
+//      Fixed crashes in BI3 map importing routines
+//      Rewrote memory consistency checking
+//      Fileselect dialog now uses ASCStrings
+//
 //     Revision 1.128  2001/01/28 20:42:14  mbickel
 //      Introduced a new string class, ASCString, which should replace all
 //        char* and std::string in the long term
@@ -301,14 +306,8 @@ int              modenum8;
 
 int videostartpos = 0;
 
-
 pprogressbar actprogressbar = NULL;
-
-
-
 cmousecontrol* mousecontrol = NULL;
-
-
 
 
 
@@ -1224,40 +1223,37 @@ void  checkforvictory ( void )
    if ( !actmap->continueplaying ) {
       int plnum = 0;
       for ( int i = 0; i < 8; i++ )
-         if ( actmap->player[i].existent )
-            if ( !actmap->player[i].firstvehicle && !actmap->player[i].firstbuilding ) {
-               actmap->player[i].existent = 0;
+         if ( !actmap->player[i].exist() && actmap->player[i].existanceAtBeginOfTurn ) {
+            int to = 0;
+            for ( int j = 0; j < 8; j++ )
+               if ( j != i )
+                  to |= 1 << j;
 
-               int to = 0;
+
+            char txt[1000];
+            char* sp = getmessage( 10010 ); // Message "player has been terminated"
+
+            sprintf ( txt, sp, actmap->player[i].getName().c_str() );
+            sp = strdup ( txt );
+            new tmessage ( sp, to );
+
+            if ( i == actmap->actplayer ) {
+               displaymessage ( getmessage ( 10011 ),1 );
+
+               int humannum=0;
                for ( int j = 0; j < 8; j++ )
-                  if ( j != i )
-                     to |= 1 << j;
-
-
-               char txt[1000];
-               char* sp = getmessage( 10010 ); // Message "player has been terminated"
-
-               sprintf ( txt, sp, actmap->player[i].getName().c_str() );
-               sp = strdup ( txt );
-               new tmessage ( sp, to );
-
-               if ( i == actmap->actplayer ) {
-                  displaymessage ( getmessage ( 10011 ),1 );
-
-                  int humannum=0;
-                  for ( int j = 0; j < 8; j++ )
-                     if (actmap->player[j].existent && actmap->player[j].stat == ps_human )
-                        humannum++;
-                  if ( humannum )
-                     next_turn();
-                  else {
-                     delete actmap;
-                     actmap = NULL;
-                     throw NoMapLoaded();
-                  }
+                  if (actmap->player[j].exist() && actmap->player[j].stat == ps_human )
+                     humannum++;
+               if ( humannum )
+                  next_turn();
+               else {
+                  delete actmap;
+                  actmap = NULL;
+                  throw NoMapLoaded();
                }
-            } else
-               plnum++;
+            }
+         } else
+            plnum++;
 
       if ( plnum <= 1 ) {
          displaymessage("Congratulations!\nYou won!",1);
@@ -1832,7 +1828,13 @@ void  mainloop ( void )
                                 int x = getxpos();
                                 int y = getypos();
                                 displaymessage("cursorposition: %d / %d", 3, x, y );
+
+                                if ( getactfield()->vehicle ) {
+                                   displaymessage("unitposition: %d / %d\nnetworkid: %d", 3, getactfield()->vehicle->xpos, getactfield()->vehicle->ypos, getactfield()->vehicle->networkid );
+                                   displaymessage("number of units: %d", 3, actmap->player[getactfield()->vehicle->color/8].vehicleList.size() );
+                                }
                             }
+
                          }
                break;
 

@@ -220,10 +220,6 @@ void         initMapDisplay( )
       actmap->xsize = 0;
       actmap->ysize = 0;
       actmap->field = NULL;
-      for (i = 0; i <= 7; i++) {
-          actmap->player[i].existent = false;
-          actmap->player[i].firstvehicle = NULL;
-      }
    }
 
    tempsvisible = true;

@@ -15,12 +15,15 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <algorithm>
+#include "research.h"
 #include "vehicletype.h"
 #include "buildingtype.h"
 #include "viewcalculation.h"
 #include "errors.h"
 #include "basegfx.h"
 #include "graphicset.h"
+#include "errors.h"
 
 #ifndef converter
  #include "basegfx.h"
@@ -150,12 +153,12 @@ int Vehicletype :: vehicleloadable ( pvehicletype fzt ) const
 }
 
 
-int Vehicletype::maxweight ( void )
+int Vehicletype::maxweight ( void ) const
 {
    return weight + tank.fuel * resourceWeight[Resources::Fuel] / 1024 + tank.material * resourceWeight[Resources::Material] / 1024;
 }
 
-int Vehicletype::maxsize ( void )
+int Vehicletype::maxsize ( void ) const
 {
    return weight;
 }
@@ -419,7 +422,7 @@ void Vehicletype :: read ( tnstream& stream )
 
 
 
-void Vehicletype:: write ( tnstream& stream )
+void Vehicletype:: write ( tnstream& stream ) const
 {
    int i,j;
 
@@ -675,36 +678,39 @@ const float repairEfficiencyVehicle[resourceTypeNum*resourceTypeNum] = { 0,  0, 
 
 
 
-
+/*
 Vehicle :: Vehicle ( Vehicletype* t )
          : ContainerBase ( t ), typ ( t ), reactionfire ( this ), repairEfficiency ( repairEfficiencyVehicle )
 {
    gamemap = NULL;
    init();
 }
+*/
+
+Vehicle :: Vehicle (  )
+          : ContainerBase ( NULL, NULL, 0 ), typ ( NULL ), reactionfire ( this ), repairEfficiency ( repairEfficiencyVehicle )
+{
+}
+
+Vehicle :: Vehicle ( const Vehicle& v )
+          : ContainerBase ( NULL, NULL, 0 ), typ ( NULL ), reactionfire ( this ), repairEfficiency ( repairEfficiencyVehicle )
+{
+}
 
 
-Vehicle :: Vehicle ( Vehicletype* t, pmap actmap, int player )
-          : ContainerBase ( t ), typ ( t ), reactionfire ( this ), repairEfficiency ( repairEfficiencyVehicle )
+Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player )
+          : ContainerBase ( t, actmap, player ), typ ( t ), reactionfire ( this ), repairEfficiency ( repairEfficiencyVehicle )
 {
    if ( player > 8 )
       fatalError ( "Vehicle :: Vehicle ; invalid player ");
 
-   gamemap = actmap;
    init();
-   color = player*8;
-   
-   if ( gamemap ) {
-      for ( int i = 0; i< 32; i++ )
-         if ( loading[i] == this )
-            fatalError ( "tmap::chainunit - unit carries itself as cargo !\nposition is %d / %d", xpos, ypos );
-      gamemap->chainunit ( this );
-      gamemap->unitnetworkid++;
-      networkid = gamemap->unitnetworkid;
-   }
-   
-}
 
+   gamemap->player[player].vehicleList.push_back ( this );
+   gamemap->unitnetworkid++;
+   networkid = gamemap->unitnetworkid;
+}
+/*
 Vehicle :: Vehicle ( pnstream strm, pmap actmap )
          : ContainerBase ( NULL ), typ ( NULL ), reactionfire ( this ), repairEfficiency ( repairEfficiencyVehicle )
 {
@@ -712,15 +718,18 @@ Vehicle :: Vehicle ( pnstream strm, pmap actmap )
    init();
    read ( strm );
 }
-
+*/
+/*
 Vehicle :: Vehicle ( pvehicle src, pmap actmap )
           : ContainerBase ( src->typ ), typ ( src->typ ), reactionfire ( this ), repairEfficiency ( repairEfficiencyVehicle )
 {
+   clone = false;
+
    gamemap = actmap;
    init();
    clone ( src, actmap );
 }
-
+*/
 
 
 Vehicle :: ~Vehicle (  )
@@ -730,6 +739,26 @@ Vehicle :: ~Vehicle (  )
 
    delete[] ammo;
    ammo = NULL;
+
+   if ( gamemap ) {
+      int c = color/8;
+
+      tmap::Player::VehicleList::iterator i = find ( gamemap->player[c].vehicleList.begin(), gamemap->player[c].vehicleList.end(), this );
+      if ( i != gamemap->player[c].vehicleList.end() )
+         gamemap->player[c].vehicleList.erase ( i );
+
+      for ( int i = 0; i < 8; i++ )
+         gamemap->player[i].queuedEvents++;
+   }
+
+   for ( int i = 0; i < 32; i++ )
+      if ( loading[i] )
+         delete loading[i];
+
+   pfield fld = gamemap->getField( xpos, ypos);
+   if ( fld && fld->vehicle  == this )
+     fld->vehicle = NULL;
+
 }
 
 
@@ -750,7 +779,6 @@ void Vehicle :: init ( void )
       ammo[i] = 0;
    }
 
-   color = 0;
    damage = 0;
 
    experience = 0;
@@ -784,8 +812,6 @@ void Vehicle :: init ( void )
    xpos = -1;
    ypos = -1;
    energyUsed = 0;
-   prev = 0;
-   next = 0;
    connection = 0;
    klasse = 0;
    networkid = -1;
@@ -830,7 +856,7 @@ int Vehicle :: getResource ( int amount, int resourcetype, int queryonly, int sc
 }
 
 
-
+/*
 void Vehicle :: clone ( pvehicle src, pmap actmap )
 {
 
@@ -875,6 +901,7 @@ void Vehicle :: clone ( pvehicle src, pmap actmap )
    if ( actmap )
       actmap->chainunit ( this );
 }
+*/
 
 void Vehicle :: setpower ( int status )
 {
@@ -1223,29 +1250,14 @@ void Vehicle::convert ( int col )
      fatalError("convertvehicle: \n color muá im bereich 0..8 sein ",2);
 
    int oldcol = color >> 3;
-   if ( !prev && !next ) {
-      gamemap->player[oldcol].firstvehicle = NULL;
-      gamemap->player[oldcol].queuedEvents++;
-   }
-   else {
-      if ( prev )
-         prev->next = next;
-      else
-         gamemap->player[oldcol].firstvehicle = next;
 
-      if ( next )
-         next->prev = prev;
+   tmap::Player::VehicleList::iterator i = find ( gamemap->player[oldcol].vehicleList.begin(), gamemap->player[oldcol].vehicleList.end(), this );
+   if ( i != gamemap->player[oldcol].vehicleList.end())
+      gamemap->player[oldcol].vehicleList.erase ( i );
 
-   }
+   gamemap->player[col].vehicleList.push_back( this );
 
    color = col << 3;
-
-   pvehicle pe = gamemap->player[ col ].firstvehicle;
-   gamemap->player[ col ].firstvehicle = this;
-   prev = NULL;
-   next = pe;
-   if ( pe )
-      pe->prev = this;
 
    for ( int i = 0; i < 32; i++)
       if ( loading[i] )
@@ -1463,9 +1475,11 @@ int Vehicle::getmaxmaterialforweight ( void )
 
 int  Vehicle :: vehicleloadable ( pvehicle vehicle, int uheight ) const
 {
+   #ifdef sgmain
    if ( gamemap->getField ( xpos, ypos )->vehicle == this ) // not standing in some other transport / building
       if ( height & (chtieffliegend | chfliegend | chhochfliegend ))
          return 0;
+   #endif
 
    if ( uheight == -1 )
       uheight = vehicle->height;
@@ -1579,7 +1593,7 @@ int  tsearchforminablefields::run( pvehicle eht )
    if ( gamemap->shareview )
       for ( int i = 0; i < 8; i++ )
          if ( i*8 != eht->color )
-            if ( gamemap->player[i].existent )
+            if ( gamemap->player[i].exist() )
                if ( gamemap->shareview->mode[eht->color/8][i] == sv_shareview )
                   shareview += 1 << i;
 
@@ -1713,16 +1727,18 @@ UnitWeapon :: UnitWeapon ( void )
 #define cem_weapstrength2 0x80000
 #define cem_ammunition2   0x100000
 #define cem_energyUsed    0x200000
+#define cem_position      0x400000
+#define cem_aiparam       0x800000
 
 
 
 
 
 
-void   Vehicle::write ( pnstream stream )
+void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 {
-    stream->writeWord ( typ->id );
-    stream->writeChar ( color );
+    stream.writeWord ( typ->id );
+    stream.writeChar ( color );
 
     int bm = 0;
 
@@ -1742,9 +1758,10 @@ void   Vehicle::write ( pnstream stream )
              bm |= cem_weapstrength2;
 
        }
-    for ( int i = 0; i < 32; i++ )
-       if ( loading[i] )
-           bm |= cem_loading;
+    if ( includeLoadedUnits )
+       for ( int i = 0; i < 32; i++ )
+          if ( loading[i] )
+              bm |= cem_loading;
 
     if ( attacked  )
        bm |= cem_attacked;
@@ -1786,25 +1803,33 @@ void   Vehicle::write ( pnstream stream )
     if ( generatoractive )
        bm |= cem_poweron;
 
+    if ( xpos != 0 || ypos != 0 )
+       bm |= cem_position;
 
-    stream->writeInt( bm );
+    for ( int i = 0; i < 8; i++ )
+       if ( aiparam[i] )
+          bm |= cem_aiparam;
+
+
+
+    stream.writeInt( bm );
 
     if ( bm & cem_experience )
-         stream->writeChar ( experience );
+         stream.writeChar ( experience );
 
     if ( bm & cem_damage )
-         stream->writeChar ( damage );
+         stream.writeChar ( damage );
 
     if ( bm & cem_fuel )
-         stream->writeInt ( tank.fuel );
+         stream.writeInt ( tank.fuel );
 
     if ( bm & cem_ammunition2 )
        for ( int j= 0; j < 16; j++ )
-         stream->writeInt ( ammo[j] );
+         stream.writeInt ( ammo[j] );
 
     if ( bm & cem_weapstrength2 )
        for ( int j = 0; j < 16; j++ )
-         stream->writeInt ( weapstrength[j] );
+         stream.writeInt ( weapstrength[j] );
 
     if ( bm & cem_loading ) {
        char c=0;
@@ -1812,7 +1837,7 @@ void   Vehicle::write ( pnstream stream )
           if ( loading[k] )
              c++;
 
-       stream->writeChar ( c );
+       stream.writeChar ( c );
 
        if ( c )
           for ( int k = 0; k <= 31; k++)
@@ -1821,87 +1846,99 @@ void   Vehicle::write ( pnstream stream )
     }
 
     if ( bm & cem_height )
-         stream->writeChar ( height );
+         stream.writeChar ( height );
 
     if ( bm & cem_movement )
-         stream->writeChar ( _movement );
+         stream.writeChar ( _movement );
 
     if ( bm & cem_direction )
-         stream->writeChar ( direction );
+         stream.writeChar ( direction );
 
     if ( bm & cem_material )
-         stream->writeInt ( tank.material );
+         stream.writeInt ( tank.material );
 
     if ( bm & cem_energy )
-         stream->writeInt ( tank.energy );
+         stream.writeInt ( tank.energy );
 
     if ( bm & cem_class )
-         stream->writeChar ( klasse );
+         stream.writeChar ( klasse );
 
     if ( bm & cem_armor )
-         stream->writeWord ( armor );
+         stream.writeWord ( armor );
 
     if ( bm & cem_networkid )
-         stream->writeInt ( networkid );
+         stream.writeInt ( networkid );
 
     if ( bm & cem_attacked )
-         stream->writeChar ( attacked );
+         stream.writeChar ( attacked );
 
     if ( bm & cem_name     )
-         stream->writeString ( name );
+         stream.writeString ( name );
 
     if ( bm & cem_reactionfire )
-       stream->writeChar ( reactionfire.status );
+       stream.writeChar ( reactionfire.status );
 
     if ( bm & cem_reactionfire2 )
-       stream->writeChar ( reactionfire.enemiesAttackable );
+       stream.writeChar ( reactionfire.enemiesAttackable );
 
     if ( bm & cem_poweron )
-       stream->writeInt ( generatoractive );
+       stream.writeInt ( generatoractive );
 
     if ( bm & cem_energyUsed )
-       stream->writeInt ( energyUsed );
+       stream.writeInt ( energyUsed );
+
+    if ( bm & cem_position ) {
+       stream.writeInt ( xpos );
+       stream.writeInt ( ypos );
+    }
+
+    if ( bm & cem_aiparam ) {
+       stream.writeInt( 0x23451234 );
+       for ( int i = 0; i < 8; i++ )
+          stream.writeInt ( aiparam[i] != NULL );
+
+       for ( int i = 0; i < 8; i++ )
+          if ( aiparam[i] )
+             aiparam[i]->write ( stream );
+
+       stream.writeInt( 0x23451234 );
+    }
 }
 
-
-void   Vehicle::read ( pnstream stream )
+void   Vehicle::read ( tnstream& stream )
 {
-    int id = stream->readWord ();
+    int id = stream.readWord ();
+    int color = stream.readChar ();
+    readData ( stream );
+}
 
-    pvehicletype fzt = gamemap->getvehicletype_byid ( id );
+void   Vehicle::readData ( tnstream& stream )
+{
 
-    if ( !fzt )
-       throw InvalidID ( "vehicle", id );
-
-    typ = fzt;
-    baseType = fzt;
-
-    color = stream->readChar ();
-
-    int bm = stream->readInt();
+    int bm = stream.readInt();
 
     if ( bm & cem_experience )
-       experience = stream->readChar();
+       experience = stream.readChar();
     else
        experience = 0;
 
     if ( bm & cem_damage )
-       damage = stream->readChar();
+       damage = stream.readChar();
     else
        damage = 0;
 
     if ( bm & cem_fuel )
-       tank.fuel = stream->readInt();
+       tank.fuel = stream.readInt();
     else
        tank.fuel = typ->tank.fuel;
 
     if ( bm & cem_ammunition ) {
        for ( int i = 0; i < 8; i++ )
-         ammo[i] = stream->readWord();
+         ammo[i] = stream.readWord();
     } else
      if ( bm & cem_ammunition2 ) {
         for ( int i = 0; i < 16; i++ ) {
-          ammo[i] = stream->readInt();
+          ammo[i] = stream.readInt();
           if ( ammo[i] > typ->weapons->weapon[i].count )
              ammo[i] = typ->weapons->weapon[i].count;
           if ( ammo[i] < 0 )
@@ -1915,27 +1952,30 @@ void   Vehicle::read ( pnstream stream )
 
     if ( bm & cem_weapstrength ) {
        for ( int i = 0; i < 8; i++ )
-         weapstrength[i] = stream->readWord();
+         weapstrength[i] = stream.readWord();
 
     } else
      if ( bm & cem_weapstrength2 ) {
         for ( int i = 0; i < 16; i++ )
-           weapstrength[i] = stream->readInt();
+           weapstrength[i] = stream.readInt();
      } else
        for (int i=0; i < typ->weapons->count ;i++ )
           weapstrength[i] = typ->weapons->weapon[i].maxstrength;
 
     if ( bm & cem_loading ) {
-       char c = stream->readChar();
+       char c = stream.readChar();
 
-       if ( c )
+       if ( c ) {
           for (int k = 0; k < c; k++)
-             loading[k] = new tvehicle ( stream, gamemap );
+             loading[k] = Vehicle::newFromStream ( gamemap, stream );
 
+          for ( int l = c; l < 32; l++ )
+             loading[l] = NULL;
+       }
     }
 
     if ( bm & cem_height )
-       height = stream->readChar();
+       height = stream.readChar();
     else
        height = chfahrend;
 
@@ -1943,53 +1983,53 @@ void   Vehicle::read ( pnstream stream )
        height = 1 << log2 ( typ->height );
 
     if ( bm & cem_movement )
-       setMovement ( stream->readChar ( ), 0 );
+       setMovement ( stream.readChar ( ), 0 );
     else
        setMovement ( typ->movement [ log2 ( height ) ], 0 );
 
     if ( bm & cem_direction )
-       direction = stream->readChar();
+       direction = stream.readChar();
     else
        direction = 0;
 
     if ( bm & cem_material )
-       tank.material = stream->readInt();
+       tank.material = stream.readInt();
     else
        tank.material = typ->tank.material;
 
     if ( bm & cem_energy )
-       tank.energy = stream->readInt();
+       tank.energy = stream.readInt();
     else
        tank.energy = typ->tank.energy;
 
     if ( bm & cem_class )
-       klasse = stream->readChar();
+       klasse = stream.readChar();
     else
        klasse = 0;
 
     if ( bm & cem_armor )
-       armor = stream->readWord();
+       armor = stream.readWord();
     else
        armor = typ->armor;
 
     if ( bm & cem_networkid )
-       networkid = stream->readInt();
+       networkid = stream.readInt();
     else
        networkid = 0;
 
     if ( bm & cem_attacked )
-       attacked = stream->readChar();
+       attacked = stream.readChar();
 
     if ( bm & cem_name )
-       name = stream->readString ( );
+       name = stream.readString ( );
 
     if ( bm & cem_reactionfire )
-       reactionfire.status = stream->readChar();
+       reactionfire.status = stream.readChar();
     else
        reactionfire.status = 0;
 
     if ( bm & cem_reactionfire2 )
-       reactionfire.enemiesAttackable = stream->readChar();
+       reactionfire.enemiesAttackable = stream.readChar();
     else
        reactionfire.enemiesAttackable = 0;
 
@@ -2001,14 +2041,40 @@ void   Vehicle::read ( pnstream stream )
     }
 
     if ( bm & cem_poweron )
-       generatoractive = stream->readInt();
+       generatoractive = stream.readInt();
     else
        generatoractive = 0;
 
     if ( bm & cem_energyUsed )
-       energyUsed =  stream->readInt ();
+       energyUsed =  stream.readInt ();
     else
        energyUsed = 0;
+
+    if ( bm & cem_position ) {
+       int x = stream.readInt ( );
+       int y = stream.readInt ( );
+       setnewposition ( x, y );
+    } else
+       setnewposition ( 0, 0 );
+
+    if ( bm & cem_aiparam ) {
+       int magic = stream.readInt();
+       if ( magic != 0x23451234 )
+          throw ASCmsgException ( "Vehicle::read() - inconsistent data stream" );
+       for ( int i = 0; i < 8; i++ ) {
+          bool b = stream.readInt ( );
+          if ( b )
+             aiparam[i] = new AiParameter ( this );
+       }
+
+       for ( int i = 0; i < 8; i++ )
+          if ( aiparam[i] )
+             aiparam[i]->read ( stream );
+
+       magic = stream.readInt();
+       if ( magic != 0x23451234 )
+          throw ASCmsgException ( "Vehicle::read() - inconsistent data stream" );
+    }
 
 
 
@@ -2052,3 +2118,19 @@ MapCoordinate Vehicle :: getPosition ( )
    mc.y = ypos;
    return mc;
 }
+
+Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream )
+{
+   int id = stream.readWord ();
+   pvehicletype fzt = gamemap->getvehicletype_byid ( id );
+   if ( !fzt )
+      throw InvalidID ( "vehicle", id );
+
+   int color = stream.readChar ();
+
+   Vehicle* v = new Vehicle ( fzt, gamemap, color/8 );
+
+   v->readData ( stream );
+   return v;
+}
+

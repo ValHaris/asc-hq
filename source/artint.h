@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: artint.h,v 1.31 2001-01-28 14:04:01 mbickel Exp $
+//     $Id: artint.h,v 1.32 2001-02-01 22:48:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2001/01/28 14:04:01  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.30  2001/01/25 23:44:52  mbickel
 //      Moved map displaying routins to own file (mapdisplay.cpp)
 //      Wrote program to create pcx images from map files (map2pcx.cpp)
@@ -135,6 +141,7 @@
                   void setServiceUnit ( pvehicle veh ) { serviceUnitID = veh->networkid; };
                   int possible ( pvehicle supplier );
                   bool execute1st ( pvehicle supplier );
+                  bool timeOut ( ) ;
 
                   static bool targetDestroyed ( const ServiceOrder& so )
                   {
@@ -322,7 +329,7 @@
             void  calculateAllThreats( void );
             AiResult  tactics( void );
             void tactics_findBestAttackOrder ( pvehicle* units, int* attackOrder, pvehicle enemy, int depth, int damage, int& finalDamage, int* finalOrder, int& finalAttackNum );
-            void tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, pvehicle* positions, float value, pvehicle* finalposition, float& finalvalue, int unitsPositioned );
+            void tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, pvehicle* positions, float value, pvehicle* finalposition, float& finalvalue, int unitsPositioned, int recursionDepth );
             /** a special path finding where fields occupied by units get an addidional movemalus.
                 This helps finding a path that is not thick with units and prevents units to queue all one after another
             */

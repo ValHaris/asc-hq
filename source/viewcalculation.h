@@ -48,7 +48,6 @@
 
   class tcomputebuildingview : public tcomputeview  {
                               pbuilding         building;
-                              integer           orgx, orgy, dx;
                            public:
                               tcomputebuildingview ( pmap actmap ) : tcomputeview ( actmap ) {};
                               void              init( const pbuilding    bld, int _mode );

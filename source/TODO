@@ -2,7 +2,9 @@ TODO list for ASC, programming department:
 
 Small tasks:
 
--   write a platform independant wrapper around vsnprintf (used in 
+-   writing a TPWM decoder for Battle Isle maps
+
+-   writing a platform independant wrapper around vsnprintf (used in
     ASCString.cpp)
 
 -   rewriting tdrawgettempline ( mapalgorithm.cpp ) which is way to slow
@@ -15,12 +17,6 @@ Small tasks:
 -   Replace tterainaccess class by a bitset
     The terrainbits and terrainaccess operators are quite a mess. Replacing 
     the system by a bitset (from STL) is probably the best solution
-
--   Converting getfield()->vehicle == veh to getfield()->unitHere ( veh )
-    Especially the AI makes heavy use of cloning of units for making 
-    experiments after which the clone is deleted. Comparing pointers fails 
-    here.
-    ( grep "> *vehicle *==" *.cpp ??? )
 
 -   writing a script that makes an RPM package of ASC
     I don't have a clue how RPM packages are created, but it would be nice
@@ -68,6 +64,11 @@ Medium sized tasks
      replacing all occurances of c-style strings (char*) and c++ strings
      (std::string) by the new ASCString class (which is derived from
      std::string)
+
+=  the events contain pointers to units. After deletion of a unit these
+    pointers may be left dangling. Replacing the pointers by the networkid
+    of the unit solves the problem.
+
 
 Larger Tasks:
 

@@ -156,7 +156,7 @@ void         tcomputebuildingview::init( const pbuilding    bld,  int _mode )
 
    int  c, j ;
 
-   if (bld->completion == bld->typ->construction_steps - 1) {
+   if (bld->getCompletion() == bld->typ->construction_steps - 1) {
       c = bld->typ->view;
       j = bld->typ->jamming;
    } else {
@@ -164,7 +164,7 @@ void         tcomputebuildingview::init( const pbuilding    bld,  int _mode )
       j = 0;
    }
 
-   initviewcalculation( c, j, bld->xpos, bld->ypos, _mode, bld->typ->buildingheight );
+   initviewcalculation( c, j, bld->getEntry().x, bld->getEntry().y, _mode, bld->typ->buildingheight );
    sonar = !!(bld->typ->special & cgsonarb);
 
    minenview = true;
@@ -172,19 +172,10 @@ void         tcomputebuildingview::init( const pbuilding    bld,  int _mode )
 
    building = bld;
 
-   orgx = bld->xpos - building->typ->entry.x;
-   orgy = bld->ypos - building->typ->entry.y;
-
-   dx = orgy & 1;
-
-   orgx = orgx + (dx & (~bld->typ->entry.y));
-
-   for ( int a = orgx; a <= orgx + 3; a++)
-      for (int b = orgy; b <= orgy + 5; b++)
-         if ( building->getpicture ( a - orgx, b - orgy )) {
-            int xp = a - (dx & b);
-            int yp = b;
-            pfield efield = gamemap->getField ( xp, yp );
+   for ( int a = 0; a < 4; a++)
+      for (int b = 0; b < 6; b++)
+         if ( building->getpicture ( BuildingType::LocalCoordinate( a, b ) )) {
+            pfield efield = building->getField ( BuildingType::LocalCoordinate( a, b ) );
             if ( minenview )
                efield->view[player].mine += _mode;
             efield->view[player].direct += _mode;
@@ -273,7 +264,7 @@ int  evaluateviewcalculation ( pmap actmap, int player_fieldcount_mask )
    int initial = actmap->getgameparameter ( cgp_initialMapVisibility );
    int fieldsChanged = 0;
    for ( int player = 0; player < 8; player++ )
-      if ( actmap->player[player].existent ) {
+      if ( actmap->player[player].exist() ) {
          int add = 0;
          if ( actmap->shareview )
             for ( int i = 0; i < 8; i++ )
@@ -313,7 +304,7 @@ int  evaluateviewcalculation ( pmap actmap, int x, int y, int distance, int play
    int initial = actmap->getgameparameter ( cgp_initialMapVisibility );
    int fieldsChanged = 0;
    for ( int player = 0; player < 8; player++ )
-      if ( actmap->player[player].existent ) {
+      if ( actmap->player[player].exist() ) {
          int add = 0;
          if ( actmap->shareview )
             for ( int i = 0; i < 8; i++ )
@@ -342,20 +333,16 @@ int computeview( pmap actmap, int player_fieldcount_mask )
    clearvisibility( actmap, 1 );
 
    for ( int a = 0; a < 8; a++)
-      if (actmap->player[a].existent ) {
-         pvehicle actvehicle = actmap->player[a].firstvehicle;
-         while ( actvehicle ) {
+      if (actmap->player[a].exist() ) {
+
+         for ( tmap::Player::VehicleList::iterator i = actmap->player[a].vehicleList.begin(); i != actmap->player[a].vehicleList.end(); i++ ) {
+            pvehicle actvehicle = *i;
             if ( actvehicle == actmap->getField(actvehicle->xpos,actvehicle->ypos)->vehicle)
                actvehicle->addview();
-
-            actvehicle = actvehicle->next;
          }
 
-         pbuilding actbuilding = actmap->player[a].firstbuilding;
-         while ( actbuilding ) {
-            actbuilding->addview();
-            actbuilding = actbuilding->next;
-         }
+         for ( tmap::Player::BuildingList::iterator i = actmap->player[a].buildingList.begin(); i != actmap->player[a].buildingList.end(); i++ )
+            (*i)->addview();
       }
 
 

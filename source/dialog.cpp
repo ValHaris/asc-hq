@@ -2,9 +2,14 @@
     \brief Many many dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.cpp,v 1.74 2001-01-31 14:52:33 mbickel Exp $
+//     $Id: dialog.cpp,v 1.75 2001-02-01 22:48:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.74  2001/01/31 14:52:33  mbickel
+//      Fixed crashes in BI3 map importing routines
+//      Rewrote memory consistency checking
+//      Fileselect dialog now uses ASCStrings
+//
 //     Revision 1.73  2001/01/28 17:19:04  mbickel
 //      The recent cleanup broke some source files; this is fixed now
 //
@@ -309,9 +314,10 @@ void         tstatisticarmies::count(void)
             if (getdiplomaticstatus(j * 8) == capeace) 
                b = 1; 
             else 
-               b = 2; 
-      actvehicle = actmap->player[j].firstvehicle; 
-      while (actvehicle != NULL) { 
+               b = 2;
+
+      for ( tmap::Player::VehicleList::iterator i = actmap->player[j].vehicleList.begin(); i != actmap->player[j].vehicleList.end(); i++ ) {
+         pvehicle actvehicle = *i;
          if (fieldvisiblenow(getfield(actvehicle->xpos,actvehicle->ypos))) {
             if (actvehicle->typ->height & (chtieffliegend | chfliegend | chhochfliegend | chsatellit)) { 
                l[0][b]++; 
@@ -327,18 +333,15 @@ void         tstatisticarmies::count(void)
                   m[1][j]++; 
                } 
          } 
-         actvehicle = actvehicle->next; 
-      } 
+      }
    } 
 } 
 
 
 void         tstatisticbuildings::count(void)
 { 
-  integer      j, b; 
-  pbuilding    actbuilding; 
-
-   for (j = 0; j <= 8; j++) { 
+   integer      j, b;
+   for (j = 0; j <= 8; j++) {
       if (j == 8) 
          b = 3; 
       else 
@@ -349,14 +352,13 @@ void         tstatisticbuildings::count(void)
                b = 1; 
             else 
                b = 2; 
-      actbuilding = actmap->player[j].firstbuilding; 
-      while (actbuilding != NULL) { 
-         if (fieldvisiblenow(getfield(actbuilding->xpos,actbuilding->ypos))) {
+      for ( tmap::Player::BuildingList::iterator i = actmap->player[j].buildingList.begin(); i != actmap->player[j].buildingList.end(); i++ ) {
+         pbuilding actbuilding = *i;
+         if (fieldvisiblenow( actbuilding->getEntryField() )) {
             l[0][b]++; 
             m[0][j]++; 
          } 
-         actbuilding = actbuilding->next; 
-      } 
+      }
    } 
 } 
 
@@ -538,7 +540,7 @@ class  tvehicleinfo : public tdialogbox , public tviewtextwithscrolling {
                    char         action;
                    integer      i,j;
 
-                   void         init ( pvehicletype type );
+                   void         init ( const Vehicletype* type );
                    virtual void run  ( void );
                    void         lines( integer xp1, integer yp1, integer xp2, integer yp2, char* st);
                    void         zeigevehicle ( void );
@@ -722,10 +724,10 @@ void         tweaponinfo::run(void)
 
 
 
-void         tvehicleinfo::init( pvehicletype type )
+void         tvehicleinfo::init( const Vehicletype* type )
 { 
 
-   aktvehicle = type;
+   aktvehicle = getvehicletype_forid ( type->id);
    tdialogbox::init();
    category = 0;
    x1 = 20; 
@@ -1693,7 +1695,7 @@ void         tvehicleinfo::run(void)
    }  while ( (taste != ct_esc) && (action < 20));
 } 
 
-void         vehicle_information( pvehicletype type )
+void         vehicle_information( const Vehicletype* type )
 { 
   tvehicleinfo eif; 
    eif.init( type ); 
@@ -3596,25 +3598,25 @@ const char   alliancecolors[]  = {0, 1, 2, 3, 4, 5, 6, 7};
 
 void         tsetalliances::init( int supervis )
 { 
-  #ifdef karteneditor
-  oninit = 1;
-  supervisor = 1;
-  mapeditor = true;
-  #else
-  mapeditor = false;
-  if ( actmap->actplayer == -1 ) {
-     oninit = 1;
-     supervisor = 1;
-  } else {
-    oninit = 0;
-    supervisor = 0;
-  }
-  #endif
+   #ifdef karteneditor
+   oninit = 1;
+   supervisor = 1;
+   mapeditor = true;
+   #else
+   mapeditor = false;
+   if ( actmap->actplayer == -1 ) {
+      oninit = 1;
+      supervisor = 1;
+   } else {
+     oninit = 0;
+     supervisor = 0;
+   }
+   #endif
 
-  if ( supervis )
+   if ( supervis )
      supervisor = 1;
 
-  shareview_changeable = actmap->actplayer >= 0   &&  !oninit ;
+   shareview_changeable = actmap->actplayer >= 0   &&  !oninit ;
 
    tdialogbox::init();
    title = "set alliances";
@@ -3641,24 +3643,17 @@ void         tsetalliances::init( int supervis )
 
    for (i = 0; i <= 7; i++) { 
 
-     if ( actmap->player[i].firstvehicle || actmap->player[i].firstbuilding )
-        actmap->player[i].existent = true;
-     else
-        actmap->player[i].existent = false;
-
-      // playermode[i] = (enum tplayerstat) actmap->player[i].stat;
-
-      if ( actmap->player[i].existent )  // ((playermode[i] == ps_human) || (playermode[i] == ps_computer)) &&
+      if ( actmap->player[i].exist() )  // ((playermode[i] == ps_human) || (playermode[i] == ps_computer)) &&
          playerpos[plnum++] = i;
 
-      if ( actmap->player[i].existent && actmap->network ) {
-        location[i] = actmap->network->player[i].compposition; 
-        lastcomppos = location[i];
+      if ( actmap->player[i].exist() && actmap->network ) {
+         location[i] = actmap->network->player[i].compposition;
+         lastcomppos = location[i];
       } else
-        location[i] = lastcomppos;
+         location[i] = lastcomppos;
 
-      if (actmap->player[i].existent) 
-        lastplayer = i; 
+      if (actmap->player[i].exist() )
+         lastplayer = i;
 
       for (j = 0; j < 8 ; j++) 
          if ( actmap->shareview ) 
@@ -3672,7 +3667,7 @@ void         tsetalliances::init( int supervis )
    else {
       if ( !mapeditor && !oninit )
           for ( int i = 0; i < 8; i++ )
-             if ( actmap->player[i].existent ) {
+             if ( actmap->player[i].exist() ) {
                 int x = x1 + 10 + ply_x1 + 2 * tsa_namelength;
                 int y = y1 + ply_y1 + i * 22 - 10;
                 addbutton ("reset passw.", x, y, x+ 90, y + 15, 0, 1, 70+i, true );
@@ -3694,17 +3689,7 @@ void         tsetalliances::init( int supervis )
                }
 
 
-   #ifdef karteneditor   
-   for (i = 0; i <= 7; i++) {
-         if ((actmap->player[i].firstvehicle != NULL) || (actmap->player[i].firstbuilding != NULL))  
-            actmap->player[i].existent = true; 
-         else 
-           actmap->player[i].existent = false;
-   } 
-   #endif   
-
-
-   playernum = 0; 
+   playernum = 0;
    playerexist = 0; 
 
    xp = 0; 
@@ -3770,7 +3755,7 @@ void         tsetalliances::buildhlgraphics(void)
    paintkeybar(); 
    playernum = 0; 
    for (i = 0; i <= 7; i++) { 
-      if (actmap->player[i].existent) { 
+      if (actmap->player[i].exist() ) {
          activefontsettings.color = 23 + i * 8; 
          activefontsettings.background = 17 + i * 8; 
          activefontsettings.length = tsa_namelength;
@@ -3854,7 +3839,7 @@ void          tsetalliances::checkfornetwork ( void )
   int i;
 
   for (i = 0; i < 8; i++) 
-     if ( actmap->player[i].existent )
+     if ( actmap->player[i].exist() )
         cmp |= 1 << location[i];
 
   int num = 0;
@@ -3891,11 +3876,11 @@ void         tsetalliances::setparams ( void )
          actmap->network->computer[i].existent = 0;
   }
   for (i = 0; i < 8; i++) {
-      
+
       for (j = 0; j < 8; j++)
          actmap->alliances[i][j] = alliancedata[i][j];
 
-      if ( actmap->player[i].existent ) {
+      if ( actmap->player[i].exist() ) {
          if ( actmap->network )
             actmap->network->computer[ location[i] ].existent = 1;
       }
@@ -3995,7 +3980,7 @@ void         tsetalliances::click(pascal_byte         bxx,
          nextplayer++;
          if ( nextplayer > 7 )
            nextplayer = 0;
-      } while ( !actmap->player[nextplayer].existent ); /* enddo */
+      } while ( !actmap->player[nextplayer].exist() ); /* enddo */
 
       if (x == 1 && ( y == actmap->actplayer || y == nextplayer || supervisor ) ) { 
          location[y]++;
@@ -4176,7 +4161,7 @@ void         tsetalliances::run(void)
       tdialogbox::run();
       if (mouseparams.taste == 1) { 
          for (i = 0; i <= 7; i++) { 
-            if (actmap->player[i].existent) { 
+            if (actmap->player[i].exist() ) {
                if ((mouseparams.x > x1 + ply_x1) && (mouseparams.x <= x1 + ply_x1 + tsa_namelength) && (mouseparams.y > y1 + ply_y1 + i * ply_lineheight) && (mouseparams.y <= y1 + ply_y1 + (i + 1) * ply_lineheight)) {
                   click(0,0,i); 
                   while ( mouseparams.taste != 0 )
@@ -5048,7 +5033,7 @@ void viewterraininfo ( void )
          strcat ( text, "#aeinzug0##eeinzug0#\n\n"
                         "#font02#Vehicle Information:#font01##aeinzug20##eeinzug20##crtp10#" );
 
-         pvehicletype typ = getactfield()->vehicle->typ;
+         const Vehicletype* typ = getactfield()->vehicle->typ;
 
 
          strcat ( text, "Unit name: " );
@@ -5097,7 +5082,7 @@ void viewUnitSetinfo ( void )
          s += "#aeinzug0##eeinzug0#\n"
               "#font02#Unit Information:#font01##aeinzug20##eeinzug20##crtp10#" ;
 
-         pvehicletype typ = getactfield()->vehicle->typ;
+         const Vehicletype* typ = getactfield()->vehicle->typ;
 /*
          s += "\nreactionfire.Status: ";
          s += strrr( getactfield()->vehicle->reactionfire.status );

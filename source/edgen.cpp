@@ -2,9 +2,15 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.8 2001-01-28 14:04:13 mbickel Exp $
+//     $Id: edgen.cpp,v 1.9 2001-02-01 22:48:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2001/01/28 14:04:13  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.7  2000/12/23 13:19:45  mbickel
 //      Made ASC compileable with Borland C++ Builder
 //
@@ -52,6 +58,7 @@
 
 #include "edmisc.h"
 #include "edgen.h"
+#include "vehicletype.h"
 
 #define layercount 5
 #define centerlayer 65000
@@ -592,8 +599,11 @@ void tmapgenerator::setmap(void)
                pf->setparams();
                if (initialized[clmaterial] == true ) setmaterial ( plasmalayernr );
                if (initialized[clfuel] ==true ) setfuel ( plasmalayernr );
-               if (pf->vehicle != NULL)
-                  if ( terrainaccessible(pf,pf->vehicle) == false ) removevehicle(&pf->vehicle); 
+               if ( pf->vehicle )
+                  if ( terrainaccessible(pf,pf->vehicle) == false ) {
+                     delete pf->vehicle;
+                     pf->vehicle = NULL;
+                  }
             } /* endfor */
          } /* endfor */
       } else {
@@ -606,8 +616,11 @@ void tmapgenerator::setmap(void)
                pf->setparams();
                if (initialized[clmaterial] == true ) setmaterial ( plasmalayernr );
                if (initialized[clfuel] ==true ) setfuel ( plasmalayernr );
-               if (pf->vehicle != NULL)
-                  if ( terrainaccessible(pf,pf->vehicle) == false ) removevehicle(&pf->vehicle); 
+               if ( pf->vehicle )
+                  if ( terrainaccessible(pf,pf->vehicle) == false ) {
+                     delete pf->vehicle;
+                     pf->vehicle = NULL;
+                  }
             } /* endfor */
          } /* endfor */
       } /* endif */

@@ -2,9 +2,14 @@
     \brief The event editing in the mapeditor
 */
 
-//     $Id: edevents.cpp,v 1.18 2001-01-31 14:52:35 mbickel Exp $
+//     $Id: edevents.cpp,v 1.19 2001-02-01 22:48:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2001/01/31 14:52:35  mbickel
+//      Fixed crashes in BI3 map importing routines
+//      Rewrote memory consistency checking
+//      Fileselect dialog now uses ASCStrings
+//
 //     Revision 1.17  2001/01/28 14:04:12  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -1392,7 +1397,7 @@ pvehicle selectunit ( pvehicle unit )
     int cnt = 0;
     int abb = 1;
     for ( int pp = 0; pp < 9; pp++ )
-       if ( actmap->player[pp].firstvehicle )
+       if ( !actmap->player[pp].vehicleList.empty() )
           cnt++;
     if ( cnt ) {
        if ( unit ) {
@@ -1728,12 +1733,13 @@ void         tcreateevent::buttonpressed(int         id)
                      case ceventt_buildingdestroyed:   {
                                 int cnt = 0;
                                 for ( int pp = 0; pp < 9; pp++ )
-                                   if ( actmap->player[pp].firstbuilding )
+                                   if ( !actmap->player[pp].buildingList.empty() )
                                       cnt++;
                                 if ( cnt ) {
                                    if ( ae->trigger_data[nid]->building ) {
-                                      x = ae->trigger_data[nid]->building->xpos;
-                                      y = ae->trigger_data[nid]->building->ypos;
+                                      MapCoordinate mc = ae->trigger_data[nid]->building->getEntry();
+                                      x = mc.x;
+                                      y = mc.y;
                                    } else {
                                       x = 0;
                                       y = 0;

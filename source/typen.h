@@ -1,6 +1,12 @@
-//     $Id: typen.h,v 1.79 2001-01-28 14:04:20 mbickel Exp $
+//     $Id: typen.h,v 1.80 2001-02-01 22:48:52 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.79  2001/01/28 14:04:20  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.78  2001/01/23 21:05:23  mbickel
 //      Speed up of AI
 //      Lot of bugfixes in AI
@@ -458,11 +464,14 @@ const int aiValueTypeNum = 8;
 
 class AiThreat {
        public:
-         const int threatTypes;
+         int threatTypes;
          int threat[aiValueTypeNum];
          void reset ( void );
          AiThreat ( void ) : threatTypes ( aiValueTypeNum ) { reset(); };
          AiThreat& operator+= ( const AiThreat& t );
+
+         void read ( tnstream& stream );
+         void write ( tnstream& stream );
 };
 
 //! the time in ASC, measured in turns and moves
@@ -501,13 +510,16 @@ class AiValue {
         public:
            AiThreat threat;
            int valueType;
-           void reset ( int _valueType ) { threat.reset(); value = 0; valueType = _valueType; addedValue = 0; };
 
+           void reset ( int _valueType ) { threat.reset(); value = 0; valueType = _valueType; addedValue = 0; };
            AiValue ( int _valueType ) { reset( _valueType ); };
            int getValue() { return value + addedValue; };
            void setValue ( int _value ) { value = _value; };
            void setAdditionalValue ( int _addedValue ) { addedValue = _addedValue; };
            void resetAdditionalValue (  ) { addedValue = 0; };
+
+           void read ( tnstream& stream );
+           void write ( tnstream& stream );
         };
 
 class AiParameter : public AiValue {
@@ -525,7 +537,9 @@ class AiParameter : public AiValue {
            void reset ( pvehicle _unit );
            void resetTask ( );
            AiParameter ( pvehicle _unit );
-           // AiParameter ( const AiParameter& aip );
+
+           void read ( tnstream& stream );
+           void write ( tnstream& stream );
  };
 
 class BaseAI { 
@@ -1180,13 +1194,18 @@ class tmap {
       class Player {
          public:
             //! does the player exist at all
-            bool         existent;
+            bool         exist();
 
-            //! the startpoint of the linked list of units
-            pvehicle     firstvehicle;
+            //! did the player exist when the turn started? Required for checking if a player has been terminated
+            bool existanceAtBeginOfTurn;
 
-            //! the startpoint of the linked list of buildings
-            pbuilding    firstbuilding;
+            typedef list<pvehicle> VehicleList;
+            //! a list of all units
+            VehicleList  vehicleList;
+
+            typedef list<pbuilding> BuildingList;
+            //! a list of all units
+            BuildingList  buildingList;
 
             //! the status of the scientific research
             tresearch    research;
@@ -1315,8 +1334,8 @@ class tmap {
 
       tmap ( void );
 
-      void chainunit ( pvehicle unit );
-      void chainbuilding ( pbuilding bld );
+      // void chainunit ( pvehicle unit );
+      // void chainbuilding ( pbuilding bld );
       pvehicle getUnit ( int x, int y, int nwid );
       pvehicle getUnit ( int nwid );
       int  getgameparameter ( int num );

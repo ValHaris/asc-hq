@@ -1,6 +1,9 @@
-//     $Id: gui.cpp,v 1.50 2001-01-28 17:19:11 mbickel Exp $
+//     $Id: gui.cpp,v 1.51 2001-02-01 22:48:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.50  2001/01/28 17:19:11  mbickel
+//      The recent cleanup broke some source files; this is fixed now
+//
 //     Revision 1.49  2001/01/24 11:53:13  mbickel
 //      Fixed some compilation problems with gcc
 //
@@ -2230,7 +2233,7 @@ int tnsguiiconcontainer :: available    ( void )
   if ( fieldvisiblenow ( fld ))
      if ( !containeractive && !moveparams.movestatus && pendingVehicleActions.actionType == vat_nothing && !pendingVehicleActions.action )
         if ( fld->building  &&  ((fld->building->color == actmap->actplayer * 8) || (fld->building->color == 8*8) )) 
-           if ( fld->building->completion == fld->building->typ->construction_steps-1 )
+           if ( fld->building->getCompletion() == fld->building->typ->construction_steps-1 )
               return 1;
            else
               return 0;

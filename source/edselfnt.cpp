@@ -1,6 +1,14 @@
-//     $Id: edselfnt.cpp,v 1.21 2001-01-25 23:44:59 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.22 2001-02-01 22:48:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2001/01/25 23:44:59  mbickel
+//      Moved map displaying routins to own file (mapdisplay.cpp)
+//      Wrote program to create pcx images from map files (map2pcx.cpp)
+//      Fixed bug in repair function: too much resource consumption
+//      AI improvements and bug fixes
+//      The BI3 map import function now evaluates the player status (human/
+//       computer)
+//
 //     Revision 1.20  2001/01/19 13:33:50  mbickel
 //      The AI now uses hemming
 //      Several bugfixes in Vehicle Actions
@@ -827,8 +835,8 @@ void SelectBuildingType :: displaysingleitem ( pbuildingtype item, int x, int y 
    if ( item )
       for ( int xp = 0; xp < buildingfieldsdisplayedx; xp++ )
          for ( int yp = 0; yp < buildingfieldsdisplayedy; yp++ )
-            if ( item->getpicture ( xp, yp ) )
-               putrotspriteimage ( x + xp * fielddistx + ( yp & 1 ) * fielddisthalfx, y + yp * fielddisty, item->getpicture( xp, yp ), farbwahl*8 );
+            if ( item->getpicture ( BuildingType::LocalCoordinate(xp,yp) ) )
+               putrotspriteimage ( x + xp * fielddistx + ( yp & 1 ) * fielddisthalfx, y + yp * fielddisty, item->getpicture( BuildingType::LocalCoordinate( xp, yp) ), farbwahl*8 );
 }
 
 void SelectBuildingType :: showiteminfos ( pbuildingtype item, int x1, int y1, int x2, int y2 )
@@ -836,7 +844,7 @@ void SelectBuildingType :: showiteminfos ( pbuildingtype item, int x1, int y1, i
    rectangle ( x1, y1, x2, y2, lightgray );
    bar ( x1+1, y1+1, x2-1, y2-1, black );
    if ( item ) {
-      putrotspriteimage ( x1 + 10, y1 + (y2 - y1 - fieldsizey )/2, item->getpicture ( item->entry.x, item->entry.y ), farbwahl*8 );
+      putrotspriteimage ( x1 + 10, y1 + (y2 - y1 - fieldsizey )/2, item->getpicture ( item->entry ), farbwahl*8 );
       npush ( activefontsettings );
       activefontsettings.font = schriften.smallarial;
       activefontsettings.background  = 255;
@@ -1475,33 +1483,33 @@ void selunitcargo( pvehicle transport )
     
       int match = 0;
       for ( int i = 0; i < 8; i++ )
-        if ( unit->typ->height & ( 1 << i )) {
-           unit->height = 1 << i;
-           unit->tank.material = unit->typ->tank.material;
-           unit->tank.fuel = unit->typ->tank.fuel;
-           if ( transport->vehicleloadable ( unit )) {
-              int p = 0;
-              while ( transport->loading[p] )
-                 p++;
-              transport->loading[p] = unit;
-              match = 1;
-              break;
-           } else {
-              unit->tank.material = 0;
-              unit->tank.fuel = 0;
-              if ( transport->vehicleloadable ( unit )) {
-                 int p = 0;
-                 while ( transport->loading[p] )
-                    p++;
-                 transport->loading[p] = unit;
-                 match = 1;
-                 displaymessage("Warning:\nThe unit you just set could not be loaded with full material and fuel\nPlease set these values manually",1);
-                 break;
-              } 
-           }
-       }
+         if ( unit->typ->height & ( 1 << i )) {
+            unit->height = 1 << i;
+            unit->tank.material = unit->typ->tank.material;
+            unit->tank.fuel = unit->typ->tank.fuel;
+            if ( transport->vehicleloadable ( unit )) {
+               int p = 0;
+               while ( transport->loading[p] )
+                  p++;
+               transport->loading[p] = unit;
+               match = 1;
+               break;
+            } else {
+               unit->tank.material = 0;
+               unit->tank.fuel = 0;
+               if ( transport->vehicleloadable ( unit )) {
+                  int p = 0;
+                  while ( transport->loading[p] )
+                     p++;
+                  transport->loading[p] = unit;
+                  match = 1;
+                  displaymessage("Warning:\nThe unit you just set could not be loaded with full material and fuel\nPlease set these values manually",1);
+                  break;
+               }
+            }
+         }
       if ( !match ) {
-        removevehicle ( &unit );
+        delete unit;
         displaymessage("The unit could not be loaded !",1);
       }
    }
@@ -1555,7 +1563,7 @@ void selbuildingcargo( pbuilding bld )
           unit->setMovement ( unit->typ->movement[log2( unit->height)] );
        } else {
            displaymessage("The unit could not be loaded !",1);
-           removevehicle ( &unit );
+           delete unit;
        }
 
    }

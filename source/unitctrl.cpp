@@ -1,6 +1,9 @@
-//     $Id: unitctrl.cpp,v 1.46 2001-01-28 17:19:16 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.47 2001-02-01 22:48:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.46  2001/01/28 17:19:16  mbickel
+//      The recent cleanup broke some source files; this is fixed now
+//
 //     Revision 1.45  2001/01/21 16:37:23  mbickel
 //      Moved replay code to own file ( replay.cpp )
 //      Fixed compile problems done by cleanup
@@ -1758,7 +1761,7 @@ int VehicleService :: available ( pvehicle veh ) const
                av++;
 
 
-      pvehicletype fzt = veh->typ;
+      const Vehicletype* fzt = veh->typ;
       for ( int i = 0; i < fzt->weapons->count; i++ ) {
          if ( fzt->weapons->weapon[i].service() ) {
 
@@ -1793,7 +1796,7 @@ int VehicleService :: getServices ( pvehicle veh ) const
                   res |= 1 << srv_repair;
 
 
-      pvehicletype fzt = veh->typ;
+      const Vehicletype* fzt = veh->typ;
       for ( int i = 0; i < fzt->weapons->count; i++ ) {
          if ( fzt->weapons->weapon[i].service() ) {
             if ( veh->functions & cfenergyref )

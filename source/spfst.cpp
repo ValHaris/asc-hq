@@ -2,9 +2,12 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.82 2001-01-28 23:00:41 mbickel Exp $
+//     $Id: spfst.cpp,v 1.83 2001-02-01 22:48:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.82  2001/01/28 23:00:41  mbickel
+//      Made the small editors compilable with Watcom again
+//
 //     Revision 1.81  2001/01/28 14:04:19  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -1219,142 +1222,20 @@ void         clearfahrspuren(void)
 } 
 
 
-void         removevehicle(pvehicle*   vehicle)
-{ 
-  pvehicle     p1; 
-  int         b; 
 
-   b = (*vehicle)->color; 
-   if (b >= 8) 
-      b >>= 3; 
-
-   p1 = *vehicle; 
-   if (p1->prev != NULL) { 
-      if (p1->next != NULL) { 
-         p1->prev->next = p1->next; 
-         p1->next->prev = p1->prev; 
-      } 
-      else 
-         p1->prev->next = NULL; 
-   } 
-   else { 
-      if (p1->next != NULL) { 
-         p1->next->prev = NULL; 
-         actmap->player[b].firstvehicle = p1->next; 
-      } 
-      else {
-         actmap->player[b].firstvehicle = NULL; 
-         for ( int i = 0; i < 8; i++ )
-            actmap->player[i].queuedEvents++;
-      }
-   } 
-
-   for ( int i = 0; i < 32; i++ )
-      if ( p1->loading[i] )
-         removevehicle (  &p1->loading[i] );
-
-   #ifndef karteneditor
-   if (p1->connection > 0) 
-      releaseevent(p1,NULL,cconnection_destroy);
-   #endif
-
-   pfield fld = getfield(p1->xpos,p1->ypos);
-   if ( fld->vehicle  == p1 )
-     fld->vehicle = NULL; 
-
-   delete p1;
-   *vehicle = NULL;
-} 
-
-
-void         removebuilding(pbuilding *  bld)
-{ 
-  pbuilding    p1; 
-  int         b; 
-  integer      i, j; 
-
-   pbuilding building = *bld; 
-   b = building->color; 
-   if (b >= 8) 
-      b >>= 3; 
-
-   p1 = building; 
-   if (p1->prev != NULL) { 
-      if (p1->next != NULL) 
-         p1->next->prev = p1->prev; 
-      p1->prev->next = p1->next; 
-   } 
-   else { 
-      if (p1->next != NULL) { 
-         p1->next->prev = NULL; 
-         actmap->player[b].firstbuilding = p1->next; 
-      } 
-      else {
-         actmap->player[b].firstbuilding = NULL; 
-         for ( int i = 0; i < 8; i++ )
-            actmap->player[i].queuedEvents++;
-      }
-   } 
-   int set = building->unchainbuildingfromfield();
-   if ( set ) 
-      for (i = building->xpos - 6; i <= building->xpos + 6; i++) 
-         for (j = building->ypos - 6; j <= building->ypos + 6; j++) 
-            if ((i >= 0) && (i < actmap->xsize)) 
-               if ((j >= 0) && (j < actmap->ysize)) { 
-                  calculateobject(i,j,0   , streetobjectcontainer ); 
-                  calculateobject(i,j,0   , railroadobject ); 
-                  // calculateobject(i,j,true, powerlineobject ); 
-                  // calculateobject(i,j,true, pipelineobject ); 
-               } 
-
-   for (i = 0; i <= 31; i++) 
-      if (building->loading[i] ) 
-         removevehicle(&building->loading[i]); 
-
-   delete building ;
-
-   #ifndef karteneditor
-   if (building->connection > 0) 
-      releaseevent(NULL,building,cconnection_destroy); 
-   #endif
-
-   *bld = NULL; 
-} 
-
-
-
-
-
-void         putbuilding(int          x,
-                         int          y,
+void         putbuilding( const MapCoordinate& entryPosition,
                          int          color,
                          pbuildingtype buildingtyp,
                          int          compl,
                          int          ignoreunits )
 { 
-  integer      a, b; 
-  pbuilding    gbde; 
-  pfield        field; 
-  integer      orgx, orgy; 
-  int         dx; 
-
-
-
    if ( color & 7 )
       displaymessage("putbuilding muá eine farbe aus 0,8,16,24,.. ?bergeben werden !",2); 
 
-
-//   recordaction4(cnetid_buildbuilding,1,color,x,y,buildingtyp->id); ##########
-
-   orgx = x - buildingtyp->entry.x - (buildingtyp->entry.y & ~y & 1 );
-   orgy = y - buildingtyp->entry.y; 
-
-   dx = orgy & 1; 
-
-   for (a = orgx; a <= orgx + 3; a++) 
-      for (b = orgy; b <= orgy + 5; b++) 
-         if (buildingtyp->getpicture ( a - orgx, b - orgy ) ) {
-            field = getfield(a + compensatebuildingcoordinatex, b);
+   for ( int a = 0; a < 4; a++)
+      for ( int b = 0; b < 6; b++ )
+         if ( buildingtyp->getpicture ( BuildingType::LocalCoordinate( a, b ) ) ) {
+            pfield field = actmap->getField( buildingtyp->getFieldCoordinate( entryPosition, BuildingType::LocalCoordinate(a,b) ));
             if (field == NULL) 
                return ;
             else {
@@ -1366,185 +1247,119 @@ void         putbuilding(int          x,
          } 
 
 
-   gbde = new Building ( actmap );
-   gbde->color = color; 
+   pbuilding gbde = new Building ( actmap , entryPosition, buildingtyp, color/8 );
 
-   actmap->chainbuilding ( gbde );
-   
-   gbde->xpos = x; 
-   gbde->ypos = y; 
-   gbde->typ = buildingtyp; 
    if (compl >= buildingtyp->construction_steps)
       compl = buildingtyp->construction_steps - 1;
 
-   memset( &gbde->production, 0, sizeof (gbde->production ));
-   memset( &gbde->productionbuyable, 0, sizeof (gbde->productionbuyable ));
-   memset( &gbde->loading    , 0, sizeof (gbde->loading     ));
-   memset( &gbde->munition  , 0, sizeof (gbde->munition   ));
-   memset( &gbde->munitionsautoproduction  , 0, sizeof (gbde->munitionsautoproduction   ));
-
-   gbde->damage = 0; 
-   gbde->plus.energy = 0;
-   gbde->plus.material = 0;
-   gbde->plus.fuel = 0;
-   gbde->maxplus.energy = gbde->typ->maxplus.energy;
-   gbde->maxplus.material = gbde->typ->maxplus.material;
-   gbde->maxplus.fuel = gbde->typ->maxplus.fuel;
-
-   gbde->actstorage.fuel = 0;
-   gbde->actstorage.material = 0;
-   gbde->actstorage.energy = 0;
-   gbde->maxresearchpoints = 0; 
+   gbde->damage = 0;
+   gbde->maxresearchpoints = 0;
    gbde->researchpoints = 0; 
    gbde->netcontrol = 0;
    gbde->connection = 0; 
    gbde->visible = true; 
-   gbde->completion = compl; 
-   
-   gbde->chainbuildingtofield ( x, y );
-
-} 
+   gbde->setCompletion ( compl );
+}
 
 
-void         putbuilding2(integer      x,
-                          integer      y,
-                          int         color,
-                          pbuildingtype buildingtyp)
+void         putbuilding2( const MapCoordinate& entryPosition,
+                           int         color,
+                           pbuildingtype buildingtyp)
 { 
-  integer      a, b; 
-  pbuilding    gbde; 
-  pfield        field; 
-  integer      orgx, orgy; 
-  int         dx; 
-
-/*
-  if ( actmap->objectcrc ) 
-     if ( !actmap->objectcrc->speedcrccheck->checkbuilding2 ( buildingtyp ))
-        return;
-*/
-
    if ( color & 7 )
       displaymessage("putbuilding muá eine farbe aus 0,8,16,24,.. ?bergeben werden !",2); 
 
-   orgx = x - buildingtyp->entry.x - (buildingtyp->entry.y & ~y & 1 );
-   orgy = y - buildingtyp->entry.y; 
-
-   dx = orgy & 1; 
-
-   /*    orgx:=orgx + (dx and (not buildingtyp^.entry.y));  */
-
-   for (a = orgx; a <= orgx + 3; a++) 
-      for (b = orgy; b <= orgy + 5; b++) 
-         if (buildingtyp->getpicture ( a - orgx , b - orgy ) ) {
-            field = getfield(a + compensatebuildingcoordinatex,b);
-            if (field == NULL) 
-               return;
+   for ( int a = 0; a < 4; a++)
+      for ( int b = 0; b < 6; b++ )
+         if ( buildingtyp->getpicture ( BuildingType::LocalCoordinate( a, b ) ) ) {
+            pfield field = actmap->getField( buildingtyp->getFieldCoordinate( entryPosition, BuildingType::LocalCoordinate(a,b) ));
+            if (field == NULL)
+               return ;
             else {
-               if (field->vehicle)
+               if ( field->vehicle )
                   return;
             }
-         } 
-                          
-   if (getfield(x,y)->building == NULL) { 
-      gbde = new Building;
-      gbde->color = color; 
-
-      actmap->chainbuilding ( gbde );
-       
-      
-      gbde->xpos = x; 
-      gbde->ypos = y; 
-      gbde->typ = buildingtyp; 
-
-      memset( &gbde->production, 0, sizeof (gbde->production ));
-      memset( &gbde->loading    , 0, sizeof (gbde->loading     ));
-      memset( &gbde->munition  , 0, sizeof (gbde->munition   ));
-      memset( &gbde->munitionsautoproduction  , 0, sizeof (gbde->munitionsautoproduction   ));
-      memset( &gbde->productionbuyable, 0, sizeof (gbde->productionbuyable ));
-
-      {
-         Resources maxplus;
-         Resources actplus;
-         Resources biplus;
-         int maxresearch = 0;
-
-         pbuilding bld = actmap->player[ color/8].firstbuilding;
-         while ( bld ) {
-            if ( bld->typ == gbde->typ  && bld != gbde ) {
-
-               if ( bld->maxplus.energy > maxplus.energy )
-                  maxplus.energy = bld->maxplus.energy;
-
-               if ( bld->maxplus.material > maxplus.material )
-                  maxplus.material = bld->maxplus.material;
-
-               if ( bld->maxplus.fuel > maxplus.fuel )
-                  maxplus.fuel = bld->maxplus.fuel;
-
-
-               if ( bld->bi_resourceplus.energy > biplus.energy )
-                  biplus.energy = bld->bi_resourceplus.energy;
-
-               if ( bld->bi_resourceplus.material > biplus.material )
-                  biplus.material = bld->bi_resourceplus.material;
-
-               if ( bld->bi_resourceplus.fuel > biplus.fuel )
-                  biplus.fuel = bld->bi_resourceplus.fuel;
-
-
-               if ( bld->plus.energy > actplus.energy )
-                  actplus.energy = bld->plus.energy;
-
-               if ( bld->plus.material > actplus.material )
-                  actplus.material = bld->plus.material;
-
-               if ( bld->plus.fuel > actplus.fuel )
-                  actplus.fuel = bld->plus.fuel;
-
-
-               if ( bld->maxresearchpoints > maxresearch )
-                  maxresearch = bld->maxresearchpoints;
-
-            }   
-            bld = bld->next;
          }
 
-         gbde->damage = 0; 
-         if ( actmap->_resourcemode == 1 ) {
-            gbde->plus.energy = biplus.energy;
-            gbde->plus.material = biplus.material;
-            gbde->plus.fuel = biplus.fuel;
-         } else {
-            gbde->plus.energy = maxplus.energy;
-            gbde->plus.material = maxplus.material;
-            gbde->plus.fuel = maxplus.fuel;
+   if ( !actmap->getField(entryPosition)->building ) {
+      pbuilding gbde = new Building ( actmap, entryPosition, buildingtyp, color/8 );
+
+      Resources maxplus;
+      Resources actplus;
+      Resources biplus;
+      int maxresearch = 0;
+      for ( tmap::Player::BuildingList::iterator i = actmap->player[color/8].buildingList.begin(); i != actmap->player[ color/8].buildingList.end(); i++ ) {
+         pbuilding bld = *i;
+         if ( bld->typ == gbde->typ  && bld != gbde ) {
+
+            if ( bld->maxplus.energy > maxplus.energy )
+               maxplus.energy = bld->maxplus.energy;
+
+            if ( bld->maxplus.material > maxplus.material )
+               maxplus.material = bld->maxplus.material;
+
+            if ( bld->maxplus.fuel > maxplus.fuel )
+               maxplus.fuel = bld->maxplus.fuel;
+
+
+            if ( bld->bi_resourceplus.energy > biplus.energy )
+               biplus.energy = bld->bi_resourceplus.energy;
+
+            if ( bld->bi_resourceplus.material > biplus.material )
+               biplus.material = bld->bi_resourceplus.material;
+
+            if ( bld->bi_resourceplus.fuel > biplus.fuel )
+               biplus.fuel = bld->bi_resourceplus.fuel;
+
+
+            if ( bld->plus.energy > actplus.energy )
+               actplus.energy = bld->plus.energy;
+
+            if ( bld->plus.material > actplus.material )
+               actplus.material = bld->plus.material;
+
+            if ( bld->plus.fuel > actplus.fuel )
+               actplus.fuel = bld->plus.fuel;
+
+
+            if ( bld->maxresearchpoints > maxresearch )
+               maxresearch = bld->maxresearchpoints;
+
          }
-         gbde->maxplus.energy = maxplus.energy;
-         gbde->maxplus.material = maxplus.material;
-         gbde->maxplus.fuel = maxplus.fuel;
-         gbde->bi_resourceplus.energy = biplus.energy;
-         gbde->bi_resourceplus.material = biplus.material;
-         gbde->bi_resourceplus.fuel = biplus.fuel;
-         gbde->actstorage.fuel = 0;
-         gbde->actstorage.material = 0;
-         gbde->actstorage.energy = 0;
-         gbde->maxresearchpoints = maxresearch; 
-         gbde->researchpoints = 0; 
-         gbde->netcontrol = 0;
-         gbde->connection = 0; 
-         gbde->visible = true; 
-         gbde->completion = 0;
-      
       }
-      gbde->chainbuildingtofield ( x, y ); 
 
-   } 
+      gbde->damage = 0;
+      if ( actmap->_resourcemode == 1 ) {
+         gbde->plus.energy = biplus.energy;
+         gbde->plus.material = biplus.material;
+         gbde->plus.fuel = biplus.fuel;
+      } else {
+         gbde->plus.energy = maxplus.energy;
+         gbde->plus.material = maxplus.material;
+         gbde->plus.fuel = maxplus.fuel;
+      }
+      gbde->maxplus.energy = maxplus.energy;
+      gbde->maxplus.material = maxplus.material;
+      gbde->maxplus.fuel = maxplus.fuel;
+      gbde->bi_resourceplus.energy = biplus.energy;
+      gbde->bi_resourceplus.material = biplus.material;
+      gbde->bi_resourceplus.fuel = biplus.fuel;
+      gbde->actstorage.fuel = 0;
+      gbde->actstorage.material = 0;
+      gbde->actstorage.energy = 0;
+      gbde->maxresearchpoints = maxresearch;
+      gbde->researchpoints = 0;
+      gbde->netcontrol = 0;
+      gbde->connection = 0;
+      gbde->visible = true;
+      gbde->setCompletion ( 0 );
+
+   }
    else { 
-      gbde = getfield(x,y)->building; 
-      if (gbde->completion < gbde->typ->construction_steps-1) {
-         gbde->completion++;
-         gbde->chainbuildingtofield ( x, y ); 
-      } 
+      pbuilding gbde = actmap->getField(entryPosition)->building;
+      if (gbde->getCompletion() < gbde->typ->construction_steps-1)
+         gbde->setCompletion( gbde->getCompletion()+1 );
+
    } 
 } 
 
@@ -1554,13 +1369,9 @@ void         putbuilding2(integer      x,
 
 void         resetallbuildingpicturepointers ( void )
 {
-   for (int s = 0; s < 8; s++) {
-      pbuilding bld = actmap->player[s].firstbuilding;
-      while ( bld ) {
-         bld->resetPicturePointers ();
-         bld = bld->next;
-      } /* endwhile */
-   } /* endfor */
+   for (int s = 0; s < 8; s++)
+      for ( tmap::Player::BuildingList::iterator i = actmap->player[s].buildingList.begin(); i != actmap->player[s].buildingList.end(); i++ )
+         (*i)->resetPicturePointers ();
 }
 
 
@@ -1632,26 +1443,25 @@ void checkobjectsforremoval ( void )
 
 void  checkunitsforremoval ( void )
 {
-   int i;
-   pvehicle eht, eht2;
-   for (i=0;i<8 ;i++ ) {
-      eht = actmap->player[i].firstvehicle;
-      while (eht != NULL) {
+   for ( int c=0; c<8 ;c++ )
+      for ( tmap::Player::VehicleList::iterator i = actmap->player[c].vehicleList.begin(); i != actmap->player[c].vehicleList.end();  ) {
+          pvehicle eht = *i;
           pfield field = getfield(eht->xpos,eht->ypos);
-          eht2 = eht->next;
+          bool erase = false;
+
           if (field->vehicle == eht) {
              if ( eht->height <= chfahrend )
                 if ( eht->typ->terrainaccess->accessible ( field->bdt ) < 0 )
-                   removevehicle ( &eht );
+                   erase = true;
              if ( eht )
                 if ( getmaxwindspeedforunit( eht ) < actmap->weather.wind[getwindheightforunit ( eht )].speed*maxwindspeed )
-                    removevehicle ( &eht );
-
+                   erase = true;
           }
-          eht = eht2;
-      } /* endwhile */
-
-   } /* endfor */
+          if ( erase )
+             i = actmap->player[c].vehicleList.erase ( i );
+          else
+             i++;
+      }
 }
 
 
@@ -1682,7 +1492,7 @@ int  getmaxwindspeedforunit ( const pvehicle eht )
 
 
 
-
+/*
 int getcrc ( const pvehicletype fzt )
 {
     if ( !fzt )
@@ -1837,7 +1647,7 @@ int getcrc ( const pbuildingtype bld )
     
     return crc32buf ( &b, sizeof ( b ));
 }
-
+*/
 
 
 
@@ -2289,28 +2099,6 @@ Smoothdaten
 
 
 
-void swapbuildings ( pbuilding building, pbuilding orgbuilding )
-{
-      npush ( orgbuilding->next );
-      npush ( orgbuilding->prev );
-
-      npush ( building->next );
-      npush ( building->prev );
-
-      Building temp = *orgbuilding;
-      *orgbuilding = *building;
-      *building = temp;
-
-      npop ( building->prev );
-      npop ( building->next );
-
-      npop ( orgbuilding->prev );
-      npop ( orgbuilding->next );
-}
-
-
-
-
 
 
 
@@ -2457,11 +2245,15 @@ void tfield :: removeobject( pobjecttype obj )
 
 void tfield :: deleteeverything ( void )
 {
-   if ( vehicle )
-      removevehicle ( &vehicle );
+   if ( vehicle ) {
+      delete vehicle;
+      vehicle = NULL;
+   }
 
-   if ( building )
-      removebuilding ( &building );
+   if ( building ) {
+      delete building;
+      building = NULL;
+   }
 
    if ( object ) {
       for ( int i = 0; i < object->objnum; i++) {

@@ -5,9 +5,12 @@
 */
 
 
-//     $Id: sgstream.cpp,v 1.52 2001-01-28 23:00:40 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.53 2001-02-01 22:48:48 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2001/01/28 23:00:40  mbickel
+//      Made the small editors compilable with Watcom again
+//
 //     Revision 1.51  2001/01/28 20:42:15  mbickel
 //      Introduced a new string class, ASCString, which should replace all
 //        char* and std::string in the long term
@@ -402,7 +405,7 @@ void* generate_building_gui_build_icon ( pbuildingtype bld )
   
     for (int y = 0; y <= 5; y++)
        for (int x = 0; x <= 3; x++)
-          if (bld->getpicture(x,y) ) {
+          if (bld->getpicture( BuildingType::LocalCoordinate(x,y) ) ) {
              int xp = fielddistx * x  + fielddisthalfx * ( y & 1);
              int yp = fielddisty * y ;
              if ( xp < minx )
@@ -414,7 +417,7 @@ void* generate_building_gui_build_icon ( pbuildingtype bld )
              if ( yp > maxy )
                 maxy = yp;
 
-             putspriteimage ( xp, yp, bld->getpicture(x,y) );
+             putspriteimage ( xp, yp, bld->getpicture(BuildingType::LocalCoordinate(x,y)) );
           }
    maxx += fieldxsize;
    maxy += fieldysize;
@@ -548,7 +551,7 @@ pbuildingtype       loadbuildingtype( pnstream stream )
    stream->readdata2 ( version );
    if ( version <= building_version && version >= 1) {
 
-      pbuildingtype pgbt = new Buildingtype;
+      pbuildingtype pgbt = new BuildingType;
    
       for ( v = 0; v < cwettertypennum; v++ )
          for ( w = 0; w < maxbuildingpicnum; w++ )

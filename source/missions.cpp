@@ -2,9 +2,12 @@
     \brief The event handling of ASC
 */
 
-//     $Id: missions.cpp,v 1.21 2001-01-28 17:19:13 mbickel Exp $
+//     $Id: missions.cpp,v 1.22 2001-02-01 22:48:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2001/01/28 17:19:13  mbickel
+//      The recent cleanup broke some source files; this is fixed now
+//
 //     Revision 1.20  2001/01/28 14:04:14  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -354,8 +357,8 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
                                                    for ( int x = 0; x < 4; x++ )
                                                       for ( int y = 0; y < 6; y++ ) {
                                                          pbuilding bld = ev->trigger_data[b]->building;
-                                                         if ( bld->typ->getpicture ( x, y ) ) {
-                                                            pfield fld = bld->getField ( x, y );
+                                                         if ( bld->typ->getpicture ( BuildingType::LocalCoordinate(x, y) ) ) {
+                                                            pfield fld = bld->getField ( BuildingType::LocalCoordinate( x, y) );
                                                             if ( fld ) {
                                                                int vis = (fld-> visible >> (p*2) ) & 3;
                                                                if ( bld->typ->buildingheight >= chschwimmend && bld->typ->buildingheight <= chhochfliegend ) {
@@ -447,11 +450,11 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
                                                      if ( ev->trigger_data[b]->id == 0 ) {
                                                         if (i != sp ) 
                                                            if (getdiplomaticstatus2(sp * 8, i * 8) == cawar) 
-                                                              if (actmap->player[i].firstvehicle != NULL) 
+                                                              if ( !actmap->player[i].vehicleList.empty() )
                                                                  ev->triggerstatus[b] = 0; 
                                                      } else {
                                                         if (i != sp ) 
-                                                           if (actmap->player[i].firstvehicle != NULL) 
+                                                           if ( !actmap->player[i].vehicleList.empty() )
                                                               ev->triggerstatus[b] = 0; 
                                                      }
                                                } 
@@ -462,10 +465,7 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
                                                if ( sp == 8 )
                                                    sp = actmap->actplayer;
    
-                                               if (actmap->player[sp].firstvehicle == NULL) 
-                                                  ev->triggerstatus[b] = 1; 
-                                               else 
-                                                  ev->triggerstatus[b] = 0; 
+                                               ev->triggerstatus[b] = actmap->player[sp].vehicleList.empty();
                                             } 
                break; 
                
@@ -479,11 +479,11 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
                                                          if ( ev->trigger_data[b]->id == 0 ) {
                                                             if (i != sp ) 
                                                                if (getdiplomaticstatus2(sp * 8, i * 8) == cawar) 
-                                                                  if (actmap->player[i].firstbuilding != NULL) 
+                                                                  if ( !actmap->player[i].buildingList.empty() )
                                                                      ev->triggerstatus[b] = 0; 
                                                          } else {
                                                             if (i != sp ) 
-                                                               if (actmap->player[i].firstbuilding != NULL) 
+                                                               if ( !actmap->player[i].buildingList.empty())
                                                                   ev->triggerstatus[b] = 0; 
                                                          }
                                                    } 
@@ -494,11 +494,8 @@ void         checksingleevent(pevent       ev, MapDisplayInterface* md )
                                             if ( sp == 8 )
                                                sp = actmap->actplayer;
    
-                                            if (actmap->player[sp].firstbuilding == NULL) 
-                                               ev->triggerstatus[b] = 1; 
-                                            else 
-                                               ev->triggerstatus[b] = 0; 
-                                         } 
+                                            ev->triggerstatus[b] = actmap->player[sp].buildingList.empty();
+                                         }
    
                break; 
                case ceventt_energytribute: {
@@ -974,7 +971,8 @@ void         executeevent ( pevent ev, MapDisplayInterface* md )
          pfield fld = getfield ( ev->intdata[0], ev->intdata[1] );
          if ( fld && fld->building ) {
             if ( ev->intdata[2] >= 100 ) {
-               removebuilding ( &fld->building );
+               delete fld->building;
+               fld->building = NULL;
                if ( md )
                  md->displayMap();
             } else

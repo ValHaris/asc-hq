@@ -4,9 +4,12 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.94 2001-01-28 17:18:58 mbickel Exp $
+//     $Id: controls.cpp,v 1.95 2001-02-01 22:48:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.94  2001/01/28 17:18:58  mbickel
+//      The recent cleanup broke some source files; this is fixed now
+//
 //     Revision 1.93  2001/01/28 14:04:07  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -162,12 +165,10 @@ void tsearchexternaltransferfields :: searchtransferfields( pbuilding building )
 {
    actmap->cleartemps( 7 );
    bld = building;
-   int x;
-   int y;
    numberoffields = 0;
    if ( bld->typ->special & cgexternalloadingb ) {
-      bld->getFieldCoordinates ( bld->typ->entry.x, bld->typ->entry.y, x, y );
-      initsearch( x, y, 1, 1 );
+      MapCoordinate mc = bld->getEntry( );
+      initsearch( mc.x, mc.y, 1, 1 );
    
       startsearch();
    }
@@ -235,20 +236,13 @@ void         tsearchputbuildingfields::initputbuilding( word x, word y, pbuildin
 
 void         tsearchputbuildingfields::testfield(void)
 {
-  int          x2, y2;
-  int         x1, y1;
-  pfield        fld;
-  char      b;
-
-
    if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) {
       startfield = getfield(xp,yp);
-      b = true;
-      for (y1 = 0; y1 <= 5; y1++)
-         for (x1 = 0; x1 <= 3; x1++)
-            if (bld->getpicture (x1, y1) ) {
-               bld->getfieldcoordinates(xp, yp,x1,y1, &x2, &y2);
-               fld = getfield(x2,y2);
+      bool b = true;
+      for ( int y1 = 0; y1 <= 5; y1++)
+         for ( int x1 = 0; x1 <= 3; x1++)
+            if (bld->getpicture ( BuildingType::LocalCoordinate(x1, y1)) ) {
+               pfield fld = actmap->getField ( bld->getFieldCoordinate( MapCoordinate(xp, yp), BuildingType::LocalCoordinate(x1,y1) ));
                if (fld) {
                   if (fld->vehicle != NULL)
                      b = false;
@@ -257,7 +251,7 @@ void         tsearchputbuildingfields::testfield(void)
                   if (fld->building != NULL) {
                      if (fld->building->typ != bld)
                         b = false;
-                     if (fld->building->completion == fld->building->typ->construction_steps - 1)
+                     if (fld->building->getCompletion() == fld->building->typ->construction_steps - 1)
                         b = false;
                      if ( ! (startfield->bdt & cbbuildingentry ) )
                         b = false;
@@ -336,29 +330,26 @@ void         putbuildinglevel2( const pbuildingtype bld,
                                integer      xp,
                                integer      yp)
 {
-  int          x1, y1, x2, y2;
-  pfield        fld;
-  char      b = true;
+  bool b = true;
 
    if (getfield(xp,yp)->a.temp == 20)
       if (moveparams.movestatus == 111) {
          actmap->cleartemps(7);
-         for (y1 = 0; y1 <= 5; y1++)
-            for (x1 = 0; x1 <= 3; x1++)
-               if ( bld->getpicture ( x1, y1 ) ) {
-                  bld->getfieldcoordinates(xp,yp,  x1, y1, &x2, &y2);
-
-                  fld = getfield(x2,y2);
+         for ( int y1 = 0; y1 <= 5; y1++)
+            for ( int x1 = 0; x1 <= 3; x1++)
+               if ( bld->getpicture ( BuildingType::LocalCoordinate(x1, y1) ) ) {
+                  MapCoordinate mc = bld->getFieldCoordinate(MapCoordinate(xp,yp),  BuildingType::LocalCoordinate(x1,y1));
+                  pfield fld = actmap->getField( mc );
                   if ( fld ) {
-                      if ( fld->vehicle || (fld->building && fld->building->completion == fld->building->typ->construction_steps-1 ))
+                      if ( fld->vehicle || (fld->building && fld->building->getCompletion() == fld->building->typ->construction_steps-1 ))
                          b = false;
 
                         /* if fld^.typ^.art and bld^.terrain = 0 then
                       b:=false; */
                       if ( b )
                            if ( x1 == bld->entry.x  && y1 == bld->entry.y ) {
-                              moveparams.movesx = x2;
-                              moveparams.movesy = y2;
+                              moveparams.movesx = mc.x;
+                              moveparams.movesy = mc.y;
                               fld->a.temp = 23;
                            } else
                               fld->a.temp = 22;
@@ -385,7 +376,7 @@ void         putbuildinglevel3(integer      x,
          actmap->cleartemps(7);
          bld = moveparams.buildingtobuild;
          eht = moveparams.vehicletomove;
-         putbuilding2(x,y,eht->color,bld);
+         putbuilding2( MapCoordinate(x,y), eht->color,bld);
 
          logtoreplayinfo ( rpl_putbuilding, (int) x, (int) y, (int) bld->id, (int) eht->color );
 
@@ -491,10 +482,10 @@ void         destructbuildinglevel2( int xp, int yp)
          eht->setMovement ( 0 );
          eht->attacked = 1;
          eht->tank.fuel -= destruct_building_fuel_usage * eht->typ->fuelConsumption;
-         if ( bb->completion ) {
-            bb->changecompletion ( -1 );
+         if ( bb->getCompletion() ) {
+            bb->setCompletion ( bb->getCompletion()-1 );
          } else {
-            removebuilding ( &bb );
+            delete bb;
          }
          logtoreplayinfo ( rpl_removebuilding, xp, yp );
          computeview( actmap );
@@ -598,7 +589,7 @@ void  legemine( int typ, int delta )
          if ( fld->a.temp ) {
 
             if ( (fld->a.temp & 1) && ( delta > 0 )) {
-               pvehicletype fzt = eht->typ;
+               const Vehicletype* fzt = eht->typ;
                int  strength = 64;
                for ( int i = 0; i < fzt->weapons->count ; i++)
                   if ((fzt->weapons->weapon[i].getScalarWeaponType() == cwminen) && fzt->weapons->weapon[i].shootable() )
@@ -1708,7 +1699,7 @@ void checkalliances_at_endofturn ( void )
 
 void checkalliances_at_beginofturn ( void )
 {
-  int i;
+   int i;
 
    int act = actmap->actplayer ;
    for (i = 0; i < 8; i++ ) {
@@ -1829,14 +1820,14 @@ void Building :: execnetcontrol ( void )
 int  Building :: putResource ( int      need,    int resourcetype, int queryonly, int scope  )
 {
    PutResource putresource ( scope );
-   return putresource.getresource ( xpos, ypos, resourcetype, need, queryonly, color/8, scope );
+   return putresource.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
 }
 
 
 int  Building :: getResource ( int      need,    int resourcetype, int queryonly, int scope )
 {
    GetResource gr ( scope );
-   return gr.getresource ( xpos, ypos, resourcetype, need, queryonly, color/8, scope );
+   return gr.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
 }
 
 
@@ -1873,8 +1864,8 @@ int  Building :: getresourceplus( int mode, Resources* gplus, int queryonly )
          int num = 0;
          for ( int x = 0; x < 4; x++ )
             for ( int y = 0; y < 6; y++)
-               if ( getpicture ( x, y ) ) {
-                  pfield fld = getField ( x, y );
+               if ( getpicture ( BuildingType::LocalCoordinate(x, y) ) ) {
+                  pfield fld = getField ( BuildingType::LocalCoordinate(x, y) );
                   int weather = 0;
                   while ( fld->typ != fld->typ->terraintype->weather[weather] )
                      weather++;
@@ -2056,9 +2047,9 @@ void tgetmininginfo :: testfield ( void )
 
 void tgetmininginfo :: run (  const pbuilding bld )
 {
-   initsearch ( bld->xpos, bld->ypos, maxminingrange, 0 );
-   xp = bld->xpos;
-   yp = bld->ypos;
+   initsearch ( bld->getEntry().x, bld->getEntry().y, maxminingrange, 0 );
+   xp = bld->getEntry().x;
+   yp = bld->getEntry().y;
    dist=0;
    testfield();
    startsearch();
@@ -2223,9 +2214,9 @@ int   tprocessminingfields :: setup ( pbuilding bld, int& mm, int cm, int& mf, i
    materialgot = 0;
    fuelgot = 0;
 
-   initsearch( bld->xpos, bld->ypos, maxminingrange, 0 );
-   xp = bld->xpos;
-   yp = bld->ypos;
+   initsearch( bld->getEntry().x, bld->getEntry().y, maxminingrange, 0 );
+   xp = bld->getEntry().x;
+   yp = bld->getEntry().y;
    dist = 0;
    testfield();
    startsearch();
@@ -2311,8 +2302,8 @@ void doresearch ( int i )
 
    tresbuild* first = NULL;
 
-   pbuilding bld = actmap->player[i].firstbuilding;
-   while ( bld ) {
+   for ( tmap::Player::BuildingList::iterator bi = actmap->player[i].buildingList.begin(); bi != actmap->player[i].buildingList.end(); bi++ ) {
+      pbuilding bld = *bi;
       if ( bld->typ->special & cgresearchb ) {
          int energy, material;
          returnresourcenuseforresearch ( bld, bld->researchpoints, &energy, &material );
@@ -2339,12 +2330,11 @@ void doresearch ( int i )
             first = a;
 
       }
-      bld = bld->next;
    }
 
    tresbuild*  a = first;
    while ( a ) {
-      bld = a->bld;
+      pbuilding bld = a->bld;
       int energy, material;
       returnresourcenuseforresearch ( bld, bld->researchpoints, &energy, &material );
       int ena = bld->getResource ( energy,   0, 1 );
@@ -2436,7 +2426,7 @@ void Building :: initwork ( void )
    work.bimode_done = 1;
 
 
-   if ( completion == typ->construction_steps - 1 ) {
+   if ( getCompletion() == typ->construction_steps - 1 ) {
       if ( actmap->_resourcemode == 0 ) {
          if ( typ->special & cgwindkraftwerkb ) 
             work.wind_done = 0;
@@ -2493,7 +2483,7 @@ int Building :: worktodo ( void )
 
 int  Building :: processwork ( void )
 {
-   if ( (completion == typ->construction_steps - 1) ) {
+   if ( (getCompletion() == typ->construction_steps - 1) ) {
 
       if ( actmap->_resourcemode == 1 ) {
          Resources plus;
@@ -2533,22 +2523,13 @@ void turnwrap ( void )
     clearfahrspuren(); 
 
     for (int i = 0; i <= 7; i++) 
-       if (actmap->player[i].existent) { 
-   
-          pvehicle eht = actmap->player[i].firstvehicle;
-          while ( eht ) {
-             eht->turnwrap();
-             eht = eht->next;
-          }
+       if (actmap->player[i].exist() ) {
 
+          for ( tmap::Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); j++ )
+             (*j)->turnwrap();
 
-          {
-             pbuilding actbuilding = actmap->player[i].firstbuilding; 
-             while (actbuilding )  {
-                actbuilding->initwork ();
-                actbuilding = actbuilding->next;
-             }
-          }
+          for ( tmap::Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); j++ )
+             (*j)->initwork();
 
           int pass = 0;
           int buildingwaiting = 0;
@@ -2558,17 +2539,13 @@ void turnwrap ( void )
              buildingwaiting = 0;
              buildingnum = 0;
 
-             pbuilding actbuilding = actmap->player[i].firstbuilding; 
-             while ( actbuilding ) { 
+             for ( tmap::Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); j++ ) {
 
-                if ( actbuilding->worktodo() ) 
-                   buildingwaiting += actbuilding->processwork();
+                if ( (*j)->worktodo() )
+                   buildingwaiting += (*j)->processwork();
 
-                
-
-                actbuilding = actbuilding->next; 
                 buildingnum++;
-             } /* end while */
+             }
    
           } while ( buildingwaiting && pass < 2*buildingnum ); /* enddo */
 
@@ -2609,12 +2586,14 @@ void initchoosentechnology( void )
 void newTurnForHumanPlayer ( int forcepasswordchecking = 0 )
 {
    checkalliances_at_beginofturn ();
+   for ( int p = 0; p < 8; p++ )
+      actmap->player[p].existanceAtBeginOfTurn = actmap->player[p].exist();
 
    if ( actmap->player[actmap->actplayer].stat == ps_human ) {
 
       int humannum = 0;
       for ( int i = 0; i < 8; i++ )
-         if ( actmap->player[i].existent )
+         if ( actmap->player[i].exist() )
             if ( actmap->player[i].stat == ps_human )
                humannum++;
 
@@ -2794,10 +2773,9 @@ void endTurn ( void )
       actmap->cursorpos.position[actmap->actplayer].sx = actmap->xpos;
       actmap->cursorpos.position[actmap->actplayer].sy = actmap->ypos;
 
-      pvehicle actvehicle = actmap->player[actmap->actplayer].firstvehicle;
-      while ( actvehicle ) {
-         pvehicle nxeht = actvehicle->next;
-
+      for ( tmap::Player::VehicleList::iterator v = actmap->player[actmap->actplayer].vehicleList.begin(); v != actmap->player[actmap->actplayer].vehicleList.end();  ) {
+         bool unitRemoved = false;
+         pvehicle actvehicle = *v;
 
          /* fuel and movement */
 
@@ -2808,7 +2786,10 @@ void endTurn ( void )
 
          if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
             if ( getmaxwindspeedforunit ( actvehicle ) < actmap->weather.wind[ getwindheightforunit ( actvehicle ) ].speed*maxwindspeed ){
-               removevehicle ( &actvehicle );
+               v = actmap->player[actmap->actplayer].vehicleList.erase ( v );
+               delete actvehicle;
+               actvehicle = NULL;
+               unitRemoved = true;
                j = -1;
             } else {
 
@@ -2839,13 +2820,16 @@ void endTurn ( void )
               //
 
 
-               if (j < 0)
-                  removevehicle(&actvehicle);
-               else
+               if (j < 0) {
+                  v = actmap->player[actmap->actplayer].vehicleList.erase ( v );
+                  delete actvehicle;
+                  actvehicle = NULL;
+                  unitRemoved = true;
+               } else
                   actvehicle->tank.fuel = j;
             }
          }
-         if (j >= 0)  {
+         if (j >= 0 && !unitRemoved)  {
                if ( actvehicle->reactionfire.getStatus()) {
                   if ( actvehicle->reactionfire.getStatus()< 3 )
                      actvehicle->reactionfire.status++;
@@ -2866,10 +2850,11 @@ void endTurn ( void )
                   actvehicle->attacked = false;
                }
             }
-                     if ( actvehicle )
+         if ( actvehicle )
             actvehicle->endTurn();
 
-         actvehicle = nxeht;
+         if ( !unitRemoved )
+            v++;
       }
 
       checkunitsforremoval ();
@@ -2957,9 +2942,6 @@ void endTurn ( void )
 void nextPlayer( void )
 {
    int oldplayer = actmap->actplayer;
-   if ( oldplayer >= 0)
-      if ( !actmap->player[oldplayer].firstvehicle && !actmap->player[oldplayer].firstbuilding )
-         actmap->player[oldplayer].existent = 0;
 
    int runde = 0;
    do {
@@ -2969,7 +2951,7 @@ void nextPlayer( void )
          turnwrap();
          runde++;
       }
-   }  while (!(actmap->player[actmap->actplayer].firstvehicle  || actmap->player[actmap->actplayer].firstbuilding  || (runde > 2)));
+   }  while (!(actmap->player[actmap->actplayer].exist()  || (runde > 2) ));
 
    if (runde > 2) {
       displaymessage("There are no players left any more !",2);
@@ -3257,7 +3239,7 @@ void dissectvehicle ( pvehicle eht )
    
             du2->next = NULL;
             du2->tech = techs[i];
-            du2->fzt = eht->typ;
+            du2->fzt = getvehicletype_forid ( eht->typ->id );
    
             if ( found & 1 )
                du2->orgpoints = du2->tech->researchpoints / dissectunitresearchpointsplus2;
@@ -3301,12 +3283,11 @@ void         generatevehicle_cl ( pvehicletype fztyp,
 
       if ( actmap->getgameparameter(cgp_bi3_training) >= 1 ) {
          int cnt = 0;
-         pbuilding bld = actmap->player[ actmap->actplayer ].firstbuilding;
-         while ( bld ) {
-            if ( bld->typ->special & cgtrainingb )
+
+         for ( tmap::Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ )
+            if ( (*bi)->typ->special & cgtrainingb )
                cnt++;
-            bld = bld->next;
-         }
+
          vehicle->experience += cnt * actmap->getgameparameter(cgp_bi3_training);
          if ( vehicle->experience > maxunitexperience )
             vehicle->experience = maxunitexperience;

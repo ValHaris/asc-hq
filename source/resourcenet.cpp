@@ -118,7 +118,7 @@ void MapNetwork :: searchbuilding ( int x, int y )
    if ( !bld )
       return;
 
-   pfield entry = bld->getField ( bld->typ->entry.x, bld->typ->entry.y );
+   pfield entry = bld->getEntryField();
    if ( entry->a.temp )
       return;
 
@@ -130,13 +130,12 @@ void MapNetwork :: searchbuilding ( int x, int y )
    if ( !searchfinished() ) 
       for( int i = 0; i < 4; i++ )
          for ( int j = 0; j < 6; j++ ) {
-            int xp, yp;
-            bld->getFieldCoordinates ( i, j, xp, yp );
-            pfield fld2 = getfield ( xp, yp );
+            MapCoordinate mc = bld->getFieldCoordinates ( BuildingType::LocalCoordinate(i, j) );
+            pfield fld2 = actmap->getField ( mc );
             if ( fld2 && fld2->building == bld )
                for ( int d = 0; d < sidenum; d++ ) {
-                  int xp2 = xp;
-                  int yp2 = yp;
+                  int xp2 = mc.x;
+                  int yp2 = mc.y;
                   getnextfield ( xp2, yp2, d );
                   pfield newfield = getfield ( xp2, yp2 );
                   if ( newfield && newfield->building != bld  && !newfield->a.temp )
@@ -175,20 +174,16 @@ void MapNetwork :: start ( int x, int y )
 {
    if ( globalsearch() == 2 ) {
       for ( int i = 0; i < 8; i++ )
-         if ( actmap->player[i].existent ) {
-            pbuilding bld  = actmap->player[i].firstbuilding;
-            while ( bld ) {
-               checkbuilding ( bld );
-               bld = bld->next;
-            } /* endwhile */
+         if ( actmap->player[i].exist() ) {
+
+            for ( tmap::Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); j++ )
+               checkbuilding(*j);
+
 
             if ( !searchfinished() ) {
                pass++;
-               pvehicle veh  = actmap->player[i].firstvehicle;
-               while ( veh ) {
-                  checkvehicle ( veh );
-                  veh = veh->next;
-               } /* endwhile */
+               for ( tmap::Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); j++ )
+                  checkvehicle ( *j );
             }
 
          }
@@ -429,7 +424,7 @@ void PutTribute :: start ( int x, int y )
 
    do {
       if ( targplayer != player )
-         if ( actmap->player[targplayer].existent ) {
+         if ( actmap->player[targplayer].exist() ) {
             need = actmap->tribute.avail[ player ][ targplayer ].resource( resourcetype );
             if ( need > 0 ) {
                if ( scope == 3 ) {
@@ -468,7 +463,7 @@ int PutTribute :: puttribute ( pbuilding start, int resource, int _queryonly, in
 {
    startbuilding = start;
    targplayer = _forplayer;
-   return getresource ( startbuilding->xpos, startbuilding->ypos, resource, 0, _queryonly, _fromplayer, _scope );
+   return getresource ( startbuilding->getEntry().x, startbuilding->getEntry().y, resource, 0, _queryonly, _fromplayer, _scope );
 }
 
 
@@ -476,13 +471,13 @@ void transfer_all_outstanding_tribute ( void )
 {
    int targplayer = actmap->actplayer;
      // for ( int player = 0; player < 8; player++ )
-   if ( actmap->player[targplayer].existent ) {
+   if ( actmap->player[targplayer].exist() ) {
       char text[10000];
       text[0] = 0;
 
       for ( int player = 0; player < 8; player++ ) {
          if ( targplayer != player )
-            if ( actmap->player[player].existent ) {
+            if ( actmap->player[player].exist() ) {
                int topay[3];
                int got[3];
                for ( int resourcetype = 0; resourcetype < 3; resourcetype++ ) {
@@ -490,11 +485,9 @@ void transfer_all_outstanding_tribute ( void )
                   got[ resourcetype ] = 0;
 
                   if ( !actmap->isResourceGlobal (resourcetype) ) {
-                     pbuilding bld = actmap->player[ player ].firstbuilding;
-                     while ( bld  &&  topay[resourcetype] > got[resourcetype] ) {
+                     for ( tmap::Player::BuildingList::iterator j = actmap->player[player].buildingList.begin(); j != actmap->player[player].buildingList.end() &&  topay[resourcetype] > got[resourcetype] ; j++ ) {
                         PutTribute pt;
-                        got[resourcetype] += pt.puttribute ( bld, resourcetype, 0, targplayer, player, 1 );
-                        bld = bld->next;
+                        got[resourcetype] += pt.puttribute ( *j, resourcetype, 0, targplayer, player, 1 );
                      }
                   } else {
                      int i;

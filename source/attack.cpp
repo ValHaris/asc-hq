@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: attack.cpp,v 1.37 2001-01-28 14:04:01 mbickel Exp $
+//     $Id: attack.cpp,v 1.38 2001-02-01 22:48:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.37  2001/01/28 14:04:01  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.36  2001/01/21 12:48:35  mbickel
 //      Some cleanup and documentation
 //
@@ -582,16 +588,16 @@ void tunitattacksunit :: setresult ( void )
    /* If the attacking vehicle was destroyed, remove it */
    if ( _attackingunit->damage >= 100 ) {
      // DEBUG("Attacker Destroyed");
-     removevehicle ( _pattackingunit );
+     delete *_pattackingunit;
+     *_pattackingunit = NULL;
    }
 
    /* If the attacked vehicle was destroyed, remove it */
    if ( _attackedunit->damage >= 100 ) {
      // DEBUG("Target Destroyed");
-     removevehicle ( _pattackedunit );
+     delete *_pattackedunit;
+     *_pattackedunit = NULL;
    }
-
-
    actmap->time.a.move++;
 }
 
@@ -711,12 +717,14 @@ void tunitattacksbuilding :: setresult ( void )
 
    /* Remove the attacking unit if it was destroyed */
    if ( _attackingunit->damage >= 100 ) {
-      removevehicle ( &_attackingunit );
+      delete _attackingunit;
+      _attackingunit = NULL;
    }
 
    /* Remove attacked building if it was destroyed */
    if ( _attackedbuilding->damage >= 100 ) {
-     removebuilding ( &_attackedbuilding );
+     delete _attackedbuilding ;
+     _attackedbuilding = NULL;
    }
 
    actmap->time.a.move++;
@@ -830,7 +838,8 @@ void tmineattacksunit :: setresult ( void )
 
    /* Remove the mined vehicle if it was destroyed */
    if ( _attackedunit->damage >= 100 ) {
-     removevehicle ( _pattackedunit );
+     delete *_pattackedunit;
+     *_pattackedunit = NULL;
    }
 
 }

@@ -93,8 +93,8 @@
      int                     techlevel;
 
      bool technologyresearched ( int id );
-     int vehicletypeavailable ( const pvehicletype fztyp );
-     int vehicleclassavailable ( const pvehicletype fztyp , int classnm );
+     int vehicletypeavailable ( const Vehicletype* fztyp );
+     int vehicleclassavailable ( const Vehicletype* fztyp , int classnm );
 
      void read ( tnstream& stream );
      void write ( tnstream& stream );

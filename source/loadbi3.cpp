@@ -1,6 +1,11 @@
-//     $Id: loadbi3.cpp,v 1.39 2001-01-31 14:52:39 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.40 2001-02-01 22:48:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2001/01/31 14:52:39  mbickel
+//      Fixed crashes in BI3 map importing routines
+//      Rewrote memory consistency checking
+//      Fileselect dialog now uses ASCStrings
+//
 //     Revision 1.38  2001/01/28 23:00:40  mbickel
 //      Made the small editors compilable with Watcom again
 //
@@ -923,11 +928,9 @@ void       tloadBImap :: ReadSHOPPart( void )
                               bool fail = false;
                               for ( int m = 0; m < 4; m++ )
                                  for ( int n = 0; n < 6; n++ )
-                                    if ( bld->getpicture( m , n ) ) {
-                                       int xpos;
-                                       int ypos;
-                                       bld->getfieldcoordinates ( newx, newy, m, n, &xpos, &ypos );
-                                       pfield fld2 = getfield ( xpos, ypos );
+                                    if ( bld->getpicture( BuildingType::LocalCoordinate(m , n) ) ) {
+                                       MapCoordinate pos = bld->getFieldCoordinate ( MapCoordinate(newx, newy), BuildingType::LocalCoordinate(m, n) );
+                                       pfield fld2 = getfield ( pos.x, pos.y );
                                        if ( !fld2 )
                                           fail = true;
                                        else {
@@ -972,11 +975,9 @@ void       tloadBImap :: ReadSHOPPart( void )
                             for ( int m = 0; m < 4; m++ )
                                for ( int n = 0; n < 6; n++ )
                                   if ( bld->w_picture[w][p][ m ] [ n ] )
-                                     if ( bld->getpicture( m , n ) ) {
-                                        int x;
-                                        int y;
-                                        bld->getfieldcoordinates ( newx, newy, m, n, &x, &y );
-                                        pfield fld2 = getfield ( xoffset + x, yoffset + y );
+                                     if ( bld->getpicture( BuildingType::LocalCoordinate(m , n) ) ) {
+                                        MapCoordinate pos = bld->getFieldCoordinate ( MapCoordinate(newx, newy), BuildingType::LocalCoordinate(m, n) );
+                                        pfield fld2 = getfield ( xoffset + pos.x, yoffset + pos.y );
                                         if ( fld2->tempw != bld->bi_picture[w][p][ m ] [ n ] )
                                            match = 0;
                                      }
@@ -988,13 +989,13 @@ void       tloadBImap :: ReadSHOPPart( void )
               actpos--;
 
               if ( found ) {
-                 putbuilding ( xoffset + newx, yoffset + newy, 0, bldlist[actpos].bld, bldlist[actpos].bld->construction_steps - 1, 1 );
+                 putbuilding ( MapCoordinate(xoffset + newx, yoffset + newy), 0, bldlist[actpos].bld, bldlist[actpos].bld->construction_steps - 1, 1 );
                  if ( fld->building ) {
                     
                     for ( int m = 0; m < 4; m++ )
                        for ( int n = 0; n < 6; n++ )
-                          if ( fld->building->getpicture( m , n ) ) {
-                             fld->building->getField ( m, n )->temp3 = 0;
+                          if ( fld->building->getpicture( BuildingType::LocalCoordinate(m , n) ) ) {
+                             fld->building->getField ( BuildingType::LocalCoordinate(m, n) )->temp3 = 0;
                           }
 
                        /*
@@ -1371,7 +1372,8 @@ void importbattleislemap ( const char* path, const char* filename, TerrainType::
     activateGraphicSet ( 1 );
     try {
        ImportBiMap lbim ;
-       lbim.____fakeMap____();
+       if ( fakemap )
+          lbim.____fakeMap____();
        lbim.LoadFromFile ( path, filename, trrn, errorOutput );
        actmap->_resourcemode = 1;
        actmap->cleartemps ( 7 );

@@ -40,11 +40,11 @@ dist=true
 install=false
 type=HEADER
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/martin/asc/source/edmain.cpp,/home/martin/asc/source/loadbi3.cpp,
+openfiles=Unbenannt.h,Unbenannt.cpp,
 show_outputview=true
-show_treeview=true
+show_treeview=false
 header_file=Unbenannt.h
-cpp_file=/home/martin/asc/source/loadbi3.cpp
+cpp_file=Unbenannt.cpp
 browser_file=file:/home/martin/.kde/share/apps/kdevelop/search_result.html
 [source/astar2.h]
 install_location=
@@ -189,11 +189,6 @@ type=HEADER
 files=source/docs/en/index-1.html,source/docs/en/index-2.html,source/docs/en/index-3.html,source/docs/en/index-4.html,source/docs/en/index-5.html,source/docs/en/index-6.html,source/docs/en/index.html,
 type=normal
 sub_dirs=
-[source/basegui.h]
-install_location=
-dist=true
-install=false
-type=HEADER
 [source/ascstring.cpp]
 install_location=
 dist=true
@@ -455,7 +450,7 @@ dist=true
 install=false
 type=SOURCE
 [source/Makefile.am]
-files=source/attack.cpp,source/basegfx.cpp,source/basestrm.cpp,source/building.cpp,source/controls.cpp,source/dialog.cpp,source/dlg_box.cpp,source/gamedlg.cpp,source/gui.cpp,source/loadbi3.cpp,source/loaders.cpp,source/loadpcxc.cpp,source/misc.cpp,source/missions.cpp,source/network.cpp,source/newfont.cpp,source/palette.cpp,source/pd.cpp,source/sg.cpp,source/sgstream.cpp,source/spfst.cpp,source/stack.cpp,source/strtmesg.cpp,source/typen.cpp,source/weather.cpp,source/attack.h,source/basegfx.h,source/basegui.h,source/basestrm.h,source/basetemp.h,source/building.h,source/controls.h,source/dialog.h,source/dlg_box.h,source/gamedlg.h,source/global.h,source/gui.h,source/loadbi3.h,source/loaders.h,source/loadpcx.h,source/misc.h,source/missions.h,source/network.h,source/newfont.h,source/palette.h,source/pd.h,source/sg.h,source/sgstream.h,source/spfst.h,source/stack.h,source/strtmesg.h,source/typen.h,source/weather.h,source/soundList.cpp,source/soundList.h,source/unitctrl.cpp,source/unitctrl.h,source/artint.cpp,source/artint.h,source/gameoptions.cpp,source/gameoptions.h,source/CLoadable.cpp,source/CLoadable.h,source/Named.cpp,source/Named.h,source/Property.cpp,source/Property.h,source/PropertyGroup.h,source/PropertyGroup.cpp,source/PropertyIF.h,source/loadimage.h,source/astar2.cpp,source/astar2.h,source/building_controls.h,source/buildingtype.h,source/buildingtype.cpp,source/vehicletype.cpp,source/vehicletype.h,source/containerbase.h,source/containerbase.cpp,source/viewcalculation.h,source/viewcalculation.cpp,source/mapalgorithms.h,source/mapalgorithms.cpp,source/errors.h,source/basestreaminterface.h,source/events.h,source/edevents.h,source/gamemap.cpp,source/password.h,source/password.cpp,source/password_dialog.h,source/password_dialog.cpp,source/memorycheck.cpp,source/replay.h,source/replay.cpp,source/research.h,source/research.cpp,source/pointers.h,source/mapdisplay.h,source/mapdisplay.cpp,source/resourcenet.cpp,source/resourcenet.h,source/dashboard.cpp,source/dashboard.h,source/ascstring.h,source/ascstring.cpp,source/graphicset.h,source/graphicset.cpp,source/graphicselector.h,source/graphicselector.cpp,
+files=source/attack.cpp,source/basegfx.cpp,source/basestrm.cpp,source/building.cpp,source/controls.cpp,source/dialog.cpp,source/dlg_box.cpp,source/gamedlg.cpp,source/gui.cpp,source/loadbi3.cpp,source/loaders.cpp,source/loadpcxc.cpp,source/misc.cpp,source/missions.cpp,source/network.cpp,source/newfont.cpp,source/palette.cpp,source/pd.cpp,source/sg.cpp,source/sgstream.cpp,source/spfst.cpp,source/stack.cpp,source/strtmesg.cpp,source/typen.cpp,source/weather.cpp,source/attack.h,source/basegfx.h,source/basestrm.h,source/basetemp.h,source/building.h,source/controls.h,source/dialog.h,source/dlg_box.h,source/gamedlg.h,source/global.h,source/gui.h,source/loadbi3.h,source/loaders.h,source/loadpcx.h,source/misc.h,source/missions.h,source/network.h,source/newfont.h,source/palette.h,source/pd.h,source/sg.h,source/sgstream.h,source/spfst.h,source/stack.h,source/strtmesg.h,source/typen.h,source/weather.h,source/soundList.cpp,source/soundList.h,source/unitctrl.cpp,source/unitctrl.h,source/artint.cpp,source/artint.h,source/gameoptions.cpp,source/gameoptions.h,source/CLoadable.cpp,source/CLoadable.h,source/Named.cpp,source/Named.h,source/Property.cpp,source/Property.h,source/PropertyGroup.h,source/PropertyGroup.cpp,source/PropertyIF.h,source/loadimage.h,source/astar2.cpp,source/astar2.h,source/building_controls.h,source/buildingtype.h,source/buildingtype.cpp,source/vehicletype.cpp,source/vehicletype.h,source/containerbase.h,source/containerbase.cpp,source/viewcalculation.h,source/viewcalculation.cpp,source/mapalgorithms.h,source/mapalgorithms.cpp,source/errors.h,source/basestreaminterface.h,source/events.h,source/edevents.h,source/gamemap.cpp,source/password.h,source/password.cpp,source/password_dialog.h,source/password_dialog.cpp,source/memorycheck.cpp,source/replay.h,source/replay.cpp,source/research.h,source/research.cpp,source/pointers.h,source/mapdisplay.h,source/mapdisplay.cpp,source/resourcenet.cpp,source/resourcenet.h,source/dashboard.cpp,source/dashboard.h,source/ascstring.h,source/ascstring.cpp,source/graphicset.h,source/graphicset.cpp,source/graphicselector.h,source/graphicselector.cpp,
 type=prog_main
 sub_dirs=docs,sdl,libs,
 [source/PropertyGroup.h]

@@ -230,7 +230,7 @@ void         tdashboard::paintweapons(void)
    i = 0;
    int k = 7;
 
-   pvehicletype vt;
+   const Vehicletype* vt;
    if ( vehicle )
       vt = vehicle->typ;
    else
@@ -295,7 +295,7 @@ void         tdashboard :: paintlargeweaponinfo ( void )
       largeWeaponsDisplayPos[lw] = -1;
 
    int serv = -1;
-   pvehicletype vt;
+   const Vehicletype* vt;
    if ( vehicle )
       vt = vehicle->typ;
    else
@@ -984,7 +984,7 @@ void         tdashboard::paintname ( void )
       activefontsettings.font = schriften.guifont;
       activefontsettings.length = 75;
       activefontsettings.height = 9;
-      pvehicletype vt;
+      const Vehicletype* vt;
       if ( vehicle )
          vt = vehicle->typ;
       else
@@ -1025,7 +1025,7 @@ void         tdashboard::paintalliances ( void )
    int j = 0;
    for (int i = 0; i< 8 ; i++ ) {
       if ( i != actmap->actplayer ) {
-         if ( actmap->player[i].existent ) {
+         if ( actmap->player[i].exist() ) {
             if ( getdiplomaticstatus ( i*8 ) == capeace )
                putimage ( agmp->resolutionx - ( 640 - 476) + j * 19, agmp->resolutiony - ( 480 - 452), icons.allianz[i][0] );
             else

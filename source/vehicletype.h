@@ -172,21 +172,22 @@ extern const char*  cvehiclefunctions[];
         char*        filename;    // just for information purposes in the main program
         int          vehicleCategoriesLoadable;
 
-        int maxweight ( void );     // max. weight including fuel and material
-        int maxsize   ( void );     // without fuel and material
+        int maxweight ( void ) const ;     // max. weight including fuel and material
+        int maxsize   ( void ) const ;     // without fuel and material
         int vehicleloadable ( pvehicletype fzt ) const;
         Vehicletype ( void );
-        void read ( tnstream& stream );
-        void write ( tnstream& stream );
+        void read ( tnstream& stream ) ;
+        void write ( tnstream& stream ) const ;
         ~Vehicletype ( );
  };
 
 
 
  class Vehicle : public ContainerBase {
-  public:
-    Vehicletype* typ;          /*  vehicleart: z.B. Schwere Fusstruppe  */
-    char         color;
+    Vehicle (  );
+    Vehicle ( const Vehicle& v );
+   public:
+    const Vehicletype* typ;          /*  vehicleart: z.B. Schwere Fusstruppe  */
     int*         ammo;
     int*         weapstrength;
     char         experience;    // 0 .. 15
@@ -199,8 +200,6 @@ extern const char*  cvehiclefunctions[];
     Integer      xpos, ypos;   /*  Position auf map  */
     Resources    tank;
     int          energyUsed;
-    Vehicle      *next;
-    Vehicle      *prev;         /*  fuer lineare Liste der vehicle */
 
     int          connection;
     char         klasse;
@@ -216,7 +215,7 @@ extern const char*  cvehiclefunctions[];
          int enemiesAttackable;     // BM   ; gibt an, gegen welche Spieler die vehicle noch reactionfiren kann.
          int status;
          int getStatus()	{	return status;};
-		 void enable ( void );
+         void enable ( void );
          void disable( void );
          void endTurn ( void ); // is called when the player hits the "end turn" button
     } reactionfire;
@@ -232,8 +231,6 @@ extern const char*  cvehiclefunctions[];
     int hasMoved ( void );
     void resetMovement( void );
 
-    void read ( pnstream stream );
-    void write ( pnstream stream );
 
     int putResource ( int amount, int resourcetype, int queryonly, int scope = 1 );
     int getResource ( int amount, int resourcetype, int queryonly, int scope = 1 );
@@ -277,12 +274,15 @@ extern const char*  cvehiclefunctions[];
     void fillMagically( void );
 
 
-    Vehicle ( Vehicletype* t );
-    Vehicle ( Vehicletype* t, pmap actmap, int player );
-    Vehicle ( pvehicle src, pmap actmap ); // if actmap == NULL  ==> unit will not be chained
-    Vehicle ( pnstream strm, pmap actmap );
+    Vehicle ( const Vehicletype* t, pmap actmap, int player );
+    static Vehicle* newFromStream ( pmap gamemap, tnstream& stream );
+    void read ( tnstream& stream );
+    void write ( tnstream& stream, bool includeLoadedUnits = true );
+  private:
+    void readData ( tnstream& stream );
+  public:
 
-    void clone ( pvehicle src, pmap actmap ); // if actmap == NULL  ==> unit will not be chained
+
     void transform ( const pvehicletype type );     //!< to be used with EXTREME caution, and only in the mapeditor !!
     int weapexist ( void );     // Is the unit able to shoot ?
     ~Vehicle ( );

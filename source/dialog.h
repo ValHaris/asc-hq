@@ -2,9 +2,14 @@
     \brief Interface for all the dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.h,v 1.17 2001-01-31 14:52:35 mbickel Exp $
+//     $Id: dialog.h,v 1.18 2001-02-01 22:48:36 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2001/01/31 14:52:35  mbickel
+//      Fixed crashes in BI3 map importing routines
+//      Rewrote memory consistency checking
+//      Fileselect dialog now uses ASCStrings
+//
 //     Revision 1.16  2001/01/28 14:04:11  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -67,7 +72,7 @@ extern void  setupalliances( int supervisor = 0 );
 
 
    
-extern void  vehicle_information ( pvehicletype type = NULL);
+extern void  vehicle_information ( const Vehicletype* type = NULL);
    
 //! displays a message in the message line
 extern int   dispmessage2(int          id,

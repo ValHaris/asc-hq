@@ -19,6 +19,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <algorithm>
+
 #include "vehicletype.h"
 #include "buildingtype.h"
 
@@ -53,39 +55,52 @@ const char*  cbuildingfunctions[cbuildingfunctionnum]  =
 
 
 
-void*   Buildingtype :: getpicture ( int x, int y )
+void*   BuildingType :: getpicture ( const LocalCoordinate& localCoordinate )
 {
    #ifdef HEXAGON
-   return w_picture[0][0][x][y];
+   return w_picture[0][0][localCoordinate.x][localCoordinate.y];
    #else
-   return w_picture[0][x][y];
+   return w_picture[0][localCoordinate.x][localCoordinate.y];
    #endif
 }
 
 
-void  Buildingtype :: getfieldcoordinates ( int          bldx,
-                                             int          bldy,
-                                             int          x,
-                                             int          y,
-                                             int     *    xx,
-                                             int     *    yy)
+#define compensatebuildingcoordinateorgx (a) (dx & (~a))
+#define compensatebuildingcoordinatex ( + (dx & ~b) )
 
+
+
+MapCoordinate  BuildingType :: getFieldCoordinate ( const MapCoordinate& entryPosition, const LocalCoordinate& localCoordinates )
 {
 
-   int      orgx, orgy;
-   int      dx;
+   int orgx = entryPosition.x - entry.x - (entry.y & ~entryPosition.y & 1 );
+   int orgy = entryPosition.y - entry.y;
 
-   orgx=bldx - entry.x;
-   orgy=bldy - entry.y;
+   int dx = orgy & 1;
 
-   dx =orgy & 1;
-   orgx = orgx + (dx & (~ entry.y));
+/*   int a;
+   for ( a = orgx; a <= orgx + 3; a++)
+      for ( int b = orgy; b <= orgy + 5; b++)
+         if ( typ->getpicture ( a - orgx, b - orgy )) {
+            pfield f = gamemap->getField(a + compensatebuildingcoordinatex, b );
 
-   *yy = orgy + y;
-   *xx = orgx + x - (dx & *yy);
+
+   ======
+
+   int orgx= entryPosition.x - entry.x;
+   int orgy= entryPosition.y - entry.y;
+
+   int dx =orgy & 1; */
+//   orgx = orgx + (dx & (~ entry.y));
+
+   int yy = orgy + localCoordinates.y;
+   int xx = orgx + localCoordinates.x + (dx & ~yy);
+   // int xx = orgx + localCoordinates.x - (dx & yy);
+   MapCoordinate mc ( xx, yy );
+   return mc;
 }
 
-int    Buildingtype :: vehicleloadable ( pvehicletype fzt ) const
+int    BuildingType :: vehicleloadable ( pvehicletype fzt ) const
 {
    if ( special & cgproduceAllUnitsB )
       return 1;
@@ -105,14 +120,14 @@ const float repairEfficiencyBuilding[resourceTypeNum*resourceTypeNum] = { 1./3.,
                                                                           0,     1./3., 0,
                                                                           0,     0,     0 };
 
-Building :: Building ( pmap actmap )
-           : ContainerBase ( NULL ), repairEfficiency ( repairEfficiencyBuilding )
+Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const pbuildingtype type, int player, bool setupImages )
+           : ContainerBase ( type, actmap, player ), repairEfficiency ( repairEfficiencyBuilding ), typ ( type )
 {
    int i;
    for ( i = 0; i < 8; i++ )
       aiparam[i] = NULL;
-   color = 0;
-   completion = 0;
+
+   _completion = 0;
    connection = 0;
 
    lastenergyavail = 0;
@@ -125,8 +140,6 @@ Building :: Building ( pmap actmap )
       munitionsautoproduction[i] = 0;
    }
    netcontrol = 0;
-   next = NULL;
-   prev = NULL;
 
    for ( i = 0; i< 32; i++ ) {
       production[i] = 0;
@@ -136,16 +149,19 @@ Building :: Building ( pmap actmap )
 
    repairedThisTurn = 0;
    researchpoints = 0;
-   typ = NULL;
    visible = 1;
-   xpos = -1;
-   ypos = -1;
 
-   chainToMap ( actmap );
+   entryPosition = _entryPosition;
+
+   gamemap->player[player].buildingList.push_back ( this );
+
+   chainbuildingtofield ( entryPosition, setupImages );
 }
 
+
+/*
 Building :: Building ( pbuilding src, tmap* actmap )
-           : ContainerBase ( NULL ), repairEfficiency ( repairEfficiencyBuilding )
+           : ContainerBase ( NULL ), isClone ( false ), repairEfficiency ( repairEfficiencyBuilding )
 {
    chainToMap ( actmap );
 
@@ -195,29 +211,12 @@ Building :: Building ( pbuilding src, tmap* actmap )
       actmap->chainbuilding ( this );
 
 }
+*/
 
 bool Building::canRepair ( void )
 {
    return typ->special & cgrepairfacilityn;
 }
-
-
-
-
-#ifdef converter
-//int Building :: vehicleloadable ( pvehicle vehicle, int uheight )
-//{
-//   return 0;
-//}
-
-//void* Building :: getpicture ( int x, int y )
-//{
-//   return NULL;
-//}
-
-#endif
-
-
 
 
 
@@ -240,63 +239,46 @@ void Building :: convert ( int col )
 
    #endif
 
-   if ( !prev && !next ) {
-      gamemap->player[oldcol].firstbuilding = NULL;
-      gamemap->player[oldcol].queuedEvents++;
-   }
-   else {
+   gamemap->player[oldcol].queuedEvents++;
 
-      if ( prev )
-         prev->next = next;
-      else
-         gamemap->player[oldcol].firstbuilding = next;
+   tmap::Player::BuildingList::iterator i = find ( gamemap->player[oldcol].buildingList.begin(), gamemap->player[oldcol].buildingList.end(), this );
+   if ( i != gamemap->player[oldcol].buildingList.end())
+      gamemap->player[oldcol].buildingList.erase ( i );
 
-      if ( next )
-         next->prev = prev;
+   gamemap->player[col].buildingList.push_back( this );
 
-   }
    color = col << 3;
 
-   pbuilding pe = gamemap->player[col].firstbuilding;
-   gamemap->player[ col ].firstbuilding = this;
-   prev = NULL;
-   next = pe;
-   if ( pe )
-      pe->prev = this;
-
    for ( int i = 0; i < 32; i++)
-      if ( loading[i] ) {
+      if ( loading[i] )
          loading[i]->convert ( col );
-//         loading[i]->cmpchecked = 0;
-      }
 
-      if ( connection & cconnection_conquer )
-         gamemap->player[oldcol].queuedEvents++;
-         // releaseevent(NULL,this,cconnection_conquer);
+   if ( connection & cconnection_conquer )
+      gamemap->player[oldcol].queuedEvents++;
+      // releaseevent(NULL,this,cconnection_conquer);
 
-      if ( connection & cconnection_lose )
-         gamemap->player[oldcol].queuedEvents++;
-         // releaseevent(NULL,this,cconnection_lose);
-
+   if ( connection & cconnection_lose )
+      gamemap->player[oldcol].queuedEvents++;
+      // releaseevent(NULL,this,cconnection_lose);
 }
 
 
 
-void* Building :: getpicture ( int x, int y )
+void* Building :: getpicture ( const BuildingType::LocalCoordinate& localCoordinate )
 {
 //                      if ( bld->typ->id == 8 ) {          // Windkraftwerk
 
-   pfield fld = getField ( x, y );
+   pfield fld = getField ( localCoordinate );
    if ( fld ) {
       int w = fld->getweather();
 
       #ifdef HEXAGON
-       if ( typ->w_picture[w][completion][x][y] )
-          return typ->w_picture[w][completion][x][y];
+       if ( typ->w_picture[w][_completion][localCoordinate.x][localCoordinate.y] )
+          return typ->w_picture[w][_completion][localCoordinate.x][localCoordinate.y];
        else
-          return typ->w_picture[0][completion][x][y];
+          return typ->w_picture[0][_completion][localCoordinate.x][localCoordinate.y];
       #else
-       return typ->picture[completion][x][y];
+       return typ->picture[_completion][localCoordinate.x][localCoordinate.y];
       #endif
    } else
       return NULL;
@@ -312,7 +294,7 @@ int Building :: vehicleloadable ( pvehicle vehicle, int uheight ) const
       if ( uheight & (chschwimmend | chfahrend ))
          uheight |= (chschwimmend | chfahrend );  //these heights are effectively the same
 
-   if ( completion ==  typ->construction_steps - 1 )
+   if ( getCompletion() ==  typ->construction_steps - 1 )
       if ( typ->loadcapability & uheight ) {
          if ( (( typ->loadcapacity >= vehicle->size())               // the unit is physically able to get "through the door"
            && ( vehiclesLoaded()+1 < maxloadableunits )
@@ -376,7 +358,6 @@ int Building :: vehicleloadable ( pvehicle vehicle, int uheight ) const
 
 
 #ifndef sgmain
-void Building :: changecompletion ( int d ) {}
 int  Building :: getresourceplus ( int mode, Resources* plus, int queryonly ) { return 0;};
 void Building :: execnetcontrol ( void ) {}
 int  Building :: processmining ( int res, int abbuchen ) { return 0; }
@@ -386,43 +367,36 @@ void Building :: getresourceusage ( Resources* usage ) {  usage->energy = 0;
                                                          }
 int Building :: putResource ( int amount, int resourcetype, int queryonly, int scope ) { return 0; };
 int Building :: getResource ( int amount, int resourcetype, int queryonly, int scope ) { return 0; };
-#else
-void Building :: changecompletion ( int d )
+#endif
+void Building :: setCompletion ( int d )
 {
-  completion += d;
+  _completion += d;
   resetPicturePointers ( );
 }
 
-#endif
 
 
 
 
-int  Building :: chainbuildingtofield ( int x, int y )
+int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setupImages )
 {
+   MapCoordinate oldpos = entryPosition;
+   entryPosition = entryPos;
 
-   int orgx = x - typ->entry.x - (typ->entry.y & ~y & 1 );
-   int orgy = y - typ->entry.y;
-
-   int dx = orgy & 1;
-
-
-   int a;
-   for ( a = orgx; a <= orgx + 3; a++)
-      for ( int b = orgy; b <= orgy + 5; b++)
-         if ( typ->getpicture ( a - orgx, b - orgy )) {
-            pfield f = gamemap->getField(a + compensatebuildingcoordinatex, b );
-            if ( !f )
+   for ( int a = 0; a < 4; a++)
+      for ( int b = 0; b < 6; b++)
+         if ( typ->getpicture ( BuildingType::LocalCoordinate( a, b) )) {
+            pfield f = getField( BuildingType::LocalCoordinate( a, b) );
+            if ( !f || f->building ) {
+               entryPosition = oldpos;
                return 1;
-
-            if ( f->building )
-               return 1;
+            }
          }
 
-   for ( a = orgx; a <= orgx + 3; a++)
-      for ( int b = orgy; b <= orgy + 5; b++)
-         if ( typ->getpicture ( a - orgx, b - orgy )) {
-            pfield field = gamemap->getField(a + compensatebuildingcoordinatex, b );
+   for ( int a = 0; a < 4; a++)
+      for ( int b = 0; b < 6; b++)
+         if ( typ->getpicture ( BuildingType::LocalCoordinate( a , b ) )) {
+            pfield field = getField( BuildingType::LocalCoordinate( a, b) );
             if ( field->object ) {
                for ( int n = 0; n < field->object->objnum; n++ )
                   delete field->object->object[n];
@@ -434,30 +408,24 @@ int  Building :: chainbuildingtofield ( int x, int y )
                field->vehicle = NULL;
             }
 
-            field = gamemap->getField(a + compensatebuildingcoordinatex, b );
             field->building = this;
 
             // field->picture = gbde->typ->picture[compl][a - orgx][b - orgy];
             field->bdt &= ~( cbstreet | cbrailroad | cbpipeline | cbpowerline );
            }
 
-   xpos = x;
-   ypos = y;
-
    for ( int i = 0; i < 32; i++ )
       if ( loading[i] )
-         loading[i]->setnewposition ( x, y );
+         loading[i]->setnewposition ( entryPos.x, entryPos.y );
 
-
-   pfield field = getField( typ->entry.x, typ->entry.y );
+   pfield field = getField( typ->entry );
    if ( field )
       field->bdt |= cbbuildingentry ;
 
-   resetPicturePointers ();
-
-   if ( gamemap )
+   if ( setupImages ) {
+      resetPicturePointers ();
       gamemap->calculateAllObjects();
-
+   }
 
    return 0;
 }
@@ -468,12 +436,12 @@ int  Building :: unchainbuildingfromfield ( void )
    int set = 0;
    for (int i = 0; i <= 3; i++)
       for (int j = 0; j <= 5; j++)
-         if ( typ->getpicture ( i, j ) ) {
-            pfield fld = getField( i, j );
+         if ( typ->getpicture ( BuildingType::LocalCoordinate(i,j) ) ) {
+            pfield fld = getField( BuildingType::LocalCoordinate(i,j) );
             if ( fld && fld->building == this ) {
                set = 1;
                fld->building = NULL;
-               fld->picture = fld->typ->picture[0];
+               fld->picture = NULL;
                // if ( fld->vehicle )
                //   removevehicle( &fld->vehicle );
 
@@ -524,53 +492,39 @@ int Building :: gettank ( int resource )
 
 
 
-pfield        Building :: getField( int  x, int y)
+pfield        Building :: getField( const BuildingType::LocalCoordinate& lc )
 {
-  int      x1, y1;
-  getFieldCoordinates ( x, y, x1, y1 );
-  return gamemap->getField(x1,y1);
+  return gamemap->getField ( getFieldCoordinates ( lc ));
 }
 
 
 pfield        Building :: getEntryField( )
 {
-  return getField ( typ->entry.x, typ->entry.y );
+  return getField ( typ->entry );
 }
 
 MapCoordinate Building :: getEntry( )
 {
-  MapCoordinate e;
-  getFieldCoordinates ( typ->entry.x, typ->entry.y, e.x, e.y );
-  return e;
+  return entryPosition;
 }
 
 
 
-void         Building :: getFieldCoordinates( int x, int y, int &xx, int &yy)
+MapCoordinate Building :: getFieldCoordinates ( const BuildingType::LocalCoordinate& lc )
 {
-  int      orgx, orgy;
-  int     dx;
-
-   orgx = xpos - typ->entry.x;
-   orgy = ypos - typ->entry.y;
-
-   dx = orgy & 1;
-
-   orgx += (dx & (~ typ->entry.y));
-
-   yy=orgy+y;
-   xx=orgx+x-(dx & yy);
+  return typ->getFieldCoordinate ( entryPosition, lc );
 }
 
 void        Building :: resetPicturePointers ( void )
 {
    if ( visible )
       for (int x = 0; x < 4; x++)
-         for ( int y = 0; y < 6; y++ )
-            if ( getpicture ( x, y ) )
-                getField ( x, y )->picture = getpicture ( x, y );
+         for ( int y = 0; y < 6; y++ ) {
+            BuildingType::LocalCoordinate lc ( x,y );
+            if ( getpicture (lc) )
+                getField ( lc )->picture = getpicture ( lc );
+         }
 }
-
 
 
 void    Building :: produceAmmo ( int type, int num )
@@ -602,3 +556,255 @@ void Building :: getpowerplantefficiency ( int* material, int* fuel )
    *fuel = typ->efficiencyfuel;
 }
 
+
+
+Building :: ~Building ()
+{
+   if ( gamemap ) {
+      int c = color/8;
+
+      tmap::Player::BuildingList::iterator i = find ( gamemap->player[c].buildingList.begin(), gamemap->player[c].buildingList.end(), this );
+      if ( i != gamemap->player[c].buildingList.end() )
+         gamemap->player[c].buildingList.erase ( i );
+
+      for ( int j = 0; j < 8; j++ )
+         gamemap->player[j].queuedEvents++;
+   }
+
+   for ( int i = 0; i < 32; i++ )
+      if ( loading[i] )
+         delete loading[i] ;
+
+   int set = unchainbuildingfromfield();
+
+   /*
+   if ( set )
+      for ( int i = xpos - 6; i <= xpos + 6; i++)
+         for (j = ypos - 6; j <= ypos + 6; j++)
+            if ((i >= 0) && (i < gamemap->xsize))
+               if ((j >= 0) && (j < gamemap->ysize)) {
+                  calculateobject(i,j,0   , streetobjectcontainer );
+                  calculateobject(i,j,0   , railroadobject );
+                  // calculateobject(i,j,true, powerlineobject );
+                  // calculateobject(i,j,true, pipelineobject );
+               }
+   */
+
+}
+
+
+const int buildingstreamversion = -2;
+
+
+void Building :: write ( tnstream& stream, bool includeLoadedUnits )
+{
+    stream.writeInt ( buildingstreamversion );
+
+    stream.writeInt ( typ->id );
+    int i;
+    for ( i = 0; i< resourceTypeNum; i++ )
+       stream.writeInt ( bi_resourceplus.resource(i) );
+    stream.writeChar ( color );
+    stream.writeWord ( getEntry().x );
+    stream.writeWord ( getEntry().y );
+    stream.writeChar ( getCompletion() );
+    for ( i = 0; i < waffenanzahl; i++ )
+       stream.writeWord ( munitionsautoproduction[i] );
+
+    for ( i = 0; i< resourceTypeNum; i++ )
+       stream.writeInt ( plus.resource(i) );
+
+    for ( i = 0; i< resourceTypeNum; i++ )
+       stream.writeInt ( maxplus.resource(i) );
+
+    for ( i = 0; i< resourceTypeNum; i++ )
+       stream.writeInt ( actstorage.resource(i) );
+
+    for ( i = 0; i< waffenanzahl; i++ )
+       stream.writeWord ( munition[i] );
+
+    stream.writeWord ( maxresearchpoints );
+    stream.writeWord ( researchpoints );
+    stream.writeChar ( visible );
+    stream.writeChar ( damage );
+    stream.writeInt  ( netcontrol );
+    stream.writeString ( name );
+
+    stream.writeInt ( repairedThisTurn );
+
+    char c = 0;
+
+    if ( includeLoadedUnits )
+       if (typ->loadcapacity )
+          for ( int k = 0; k <= 31; k++)
+             if (loading[k] )
+                c++;
+
+    stream.writeChar ( c );
+    if ( c )
+       for ( int k = 0; k <= 31; k++)
+          if ( loading[k] )
+             loading[k]->write ( stream );
+
+
+    c = 0;
+    if (typ->special & cgvehicleproductionb )
+       for (int k = 0; k <= 31; k++)
+          if ( production[k] )
+             c++;
+
+    stream.writeChar ( c );
+    if ( c )
+       for (int k = 0; k <= 31; k++)
+          if (production[k] )
+             stream.writeWord( production[k]->id );
+
+
+    c = 0;
+    if (typ->special & cgvehicleproductionb )
+       for (int k = 0; k <= 31; k++)
+          if ( productionbuyable[k] )
+             c++;
+
+    stream.writeChar ( c );
+    if ( c )
+       for ( int k = 0; k <= 31; k++)
+          if ( productionbuyable[k] )
+             stream.writeWord( productionbuyable[k]->id );
+
+}
+
+
+Building* Building::newFromStream ( pmap gamemap, tnstream& stream )
+{
+    int version = stream.readInt();
+    int xpos, ypos, color;
+    Resources res;
+
+    pbuildingtype typ;
+
+
+    if ( version == buildingstreamversion || version == -1 ) {
+
+       int id = stream.readInt ();
+       typ = gamemap->getbuildingtype_byid ( id );
+       if ( !typ )
+          throw InvalidID ( "building", id );
+
+       for ( int i = 0; i < 3; i++ )
+          res.resource(i) = stream.readInt();
+
+       color = stream.readChar();
+       xpos = stream.readWord() ;
+    } else {
+       int id = version;
+
+       typ = gamemap->getbuildingtype_byid ( id );
+       if ( !typ )
+          throw InvalidID ( "building", id );
+
+       color = stream.readChar();
+       xpos  = stream.readWord();
+    }
+
+    ypos = stream.readWord();
+
+    Building* bld = new Building ( gamemap, MapCoordinate(xpos,ypos), typ, color/8, false );
+    bld->bi_resourceplus = res;
+    bld->readData ( stream, version );
+    return bld;
+}
+
+
+
+void Building:: read ( tnstream& stream )
+{
+    int version = stream.readInt();
+
+    if ( version == buildingstreamversion || version == -1 ) {
+       int id = stream.readInt ();
+       for ( int i = 0; i < 3; i++ )
+          bi_resourceplus.resource(i) = stream.readInt();
+
+       int color = stream.readChar();
+       int xpos = stream.readWord() ;
+    } else {
+       int id = version;
+       int color = stream.readChar();
+       int xpos  = stream.readWord();
+       bi_resourceplus = Resources ( 0, 0, 0);
+    }
+
+    int ypos = stream.readWord();
+    readData ( stream, version );
+}
+
+
+void Building :: readData ( tnstream& stream, int version )
+{
+    setCompletion ( stream.readChar() );
+
+    int i;
+    for ( i = 0; i < waffenanzahl; i++)
+       munitionsautoproduction[i] = stream.readWord();
+
+    for ( i = 0; i< 3; i++ )
+       plus.resource(i) = stream.readInt();
+
+    for ( i = 0; i< 3; i++ )
+       maxplus.resource(i) = stream.readInt();
+
+    for ( i = 0; i< 3; i++ )
+       actstorage.resource(i) = stream.readInt();
+
+    for ( i = 0; i < waffenanzahl; i++)
+       munition[i] = stream.readWord();
+
+    maxresearchpoints = stream.readWord();
+    researchpoints = stream.readWord();
+
+    visible = stream.readChar();
+    damage = stream.readChar();
+    netcontrol = stream.readInt();
+    name = stream.readString ();
+
+    if ( version == -2 )
+       repairedThisTurn = stream.readInt ( );
+    else
+       repairedThisTurn = 0;
+
+    char c = stream.readChar();
+    if ( c ) {
+       for ( int k = 0; k < c; k++) {
+          loading[k] = Vehicle::newFromStream ( gamemap, stream );
+          loading[k]->setnewposition ( getEntry().x, getEntry().y );
+       }
+       for ( int l = c; l < 32; l++ )
+          loading[l] = NULL;
+    }
+
+    c = stream.readChar();
+    if ( c ) {
+       for ( int k = 0; k < c ; k++) {
+           word id = stream.readWord();
+           production[k] = gamemap->getvehicletype_byid ( id ) ;
+           if ( !production[k] )
+              throw InvalidID ( "unit", id );
+       }
+       for ( int l = c; l < 32; l++ )
+          production[l] = NULL;
+    }
+
+    c = stream.readChar();
+    if ( c ) {
+       for ( int k = 0; k < c ; k++) {
+           word id = stream.readWord();
+           productionbuyable[k] = gamemap->getvehicletype_byid ( id );
+
+           if ( !productionbuyable[k] )
+              throw InvalidID ( "unit", id );
+       }
+       for ( int l = c; l < 32; l++ )
+          productionbuyable[l] = NULL;
+    }
+}

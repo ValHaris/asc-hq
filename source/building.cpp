@@ -2,9 +2,12 @@
     \brief The implementation of basic logic and the UI of buildings&transports  
 */
 
-//     $Id: building.cpp,v 1.64 2001-01-28 17:18:52 mbickel Exp $
+//     $Id: building.cpp,v 1.65 2001-02-01 22:48:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.64  2001/01/28 17:18:52  mbickel
+//      The recent cleanup broke some source files; this is fixed now
+//
 //     Revision 1.63  2001/01/28 14:04:04  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -1416,14 +1419,14 @@ int    cbuildingcontrols :: ammotypeavail ( int type )
 
 int   cbuildingcontrols :: getxpos (void)
 {
-   return   building->xpos;
+   return   building->getEntry().x;
 };
 
 
 
 int   cbuildingcontrols :: getypos (void)
 {
-   return   building->ypos;
+   return   building->getEntry().y;
 };
 
 
@@ -1477,8 +1480,9 @@ void  cbuildingcontrols :: removevehicle ( pvehicle *peht )
       if ( *peht == building->loading[i] )
          building->loading[i]=NULL;
    };
-   logtoreplayinfo ( rpl_removeunit, building->xpos, building->ypos, (*peht)->networkid );
-   ::removevehicle ( peht );
+   logtoreplayinfo ( rpl_removeunit, building->getEntry().x, building->getEntry().y, (*peht)->networkid );
+   delete *peht;
+   *peht = NULL;
 }
 
 
@@ -1674,13 +1678,6 @@ pvehicle cbuildingcontrols :: cproduceunit :: produce (pvehicletype fzt)
          n = 0;
       } else
          i++;
-      if ( i >= 32 ) {
-         dispmessage2 ( 400, NULL );
-         cc->putenergy ( engot );
-         cc->putenergy ( magot );
-         ::removevehicle ( &eht );
-      }
-
    } /* endwhile */
 
    if ( CGameOptions::Instance()->container.filleverything )
@@ -2081,7 +2078,8 @@ void  ctransportcontrols :: removevehicle ( pvehicle *peht )
          vehicle->loading[i]=NULL;
    };
    logtoreplayinfo ( rpl_removeunit, vehicle->xpos, vehicle->ypos, (*peht)->networkid );
-   ::removevehicle ( peht );
+   delete *peht;
+   *peht = NULL;
 }
 
 
@@ -3905,11 +3903,11 @@ void  ccontainer_b :: init ( pbuilding bld )
 
       setpictures();
 
-      int x,y;                                           // setzen des mapcursors auf den Geb„udeeingang
-      building->getFieldCoordinates (building->typ->entry.x, building->typ->entry.y, x, y);
-      cursor.gotoxy ( x , y );
+      // setzen des mapcursors auf den Geb„udeeingang
+      MapCoordinate mc = building->getEntry();
+      cursor.gotoxy ( mc.x , mc.y );
 
-      ccontainer :: init ( building->getpicture ( building->typ->entry.x , building->typ->entry.y ),
+      ccontainer :: init ( building->getpicture ( building->typ->entry ),
                            building->color, building->name.c_str(), building->typ->name);
       ccontainer :: displayloading ();
       ccontainer :: movemark (repaint);
@@ -4635,13 +4633,11 @@ void ccontainer_b :: cconventionelpowerplant_subwindow :: setnewpower ( int pwr 
       power = 1024;
 
    if ( allbuildings ) {
-      pbuilding bld = actmap->player[actmap->actplayer].firstbuilding;
-      while ( bld ) {
+      for ( tmap::Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ ) {
+         pbuilding bld = *bi;
          if ( bld->typ->special & cgconventionelpowerplantb )
             for ( int r = 0; r < 3; r++ )
                bld->plus.resource(r) = bld->maxplus.resource(r) * power/1024;
-
-         bld=bld->next;
       }
    } else {
       pbuilding bld = cc_b->building;
@@ -5413,22 +5409,22 @@ int  ccontainer_b :: cresourceinfo_subwindow :: getvalue ( int resourcetype, int
       case 0:
          {  // avail
             GetResource gr;
-            return gr.getresource ( cc_b->building->xpos, cc_b->building->ypos, resourcetype, maxint, 1, cc_b->building->color/8, scope );
+            return gr.getresource ( cc_b->building->getEntry().x, cc_b->building->getEntry().y, resourcetype, maxint, 1, cc_b->building->color/8, scope );
          }
       case 1:
          {  // tank
             GetResourceCapacity grc;
-            return grc.getresource ( cc_b->building->xpos, cc_b->building->ypos, resourcetype, maxint, 1, cc_b->building->color/8, scope );
+            return grc.getresource ( cc_b->building->getEntry().x, cc_b->building->getEntry().y, resourcetype, maxint, 1, cc_b->building->color/8, scope );
          }
       case 2:
          {  // plus
             GetResourcePlus grp;
-            return grp.getresource ( cc_b->building->xpos, cc_b->building->ypos, resourcetype, cc_b->building->color/8, scope );
+            return grp.getresource ( cc_b->building->getEntry().x, cc_b->building->getEntry().y, resourcetype, cc_b->building->color/8, scope );
          }
       case 3:
          {  // usage
             GetResourceUsage gru;
-            return gru.getresource ( cc_b->building->xpos, cc_b->building->ypos, resourcetype, cc_b->building->color/8, scope );
+            return gru.getresource ( cc_b->building->getEntry().x, cc_b->building->getEntry().y, resourcetype, cc_b->building->color/8, scope );
          }
    } /* endswitch */
    return -1;
@@ -5613,14 +5609,13 @@ void ccontainer_b :: cresearch_subwindow :: setnewresearch ( int res )
    research = res;
 
    if ( allbuildings ) {
-      pbuilding bld = actmap->player[actmap->actplayer].firstbuilding;
-      while ( bld ) {
+      for ( tmap::Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ ) {
+         pbuilding bld = *bi;
          if ( bld->typ->special & cgresearchb ) {
             bld->researchpoints = bld->maxresearchpoints * research/1024;
             if ( bld->researchpoints > bld->maxresearchpoints )
                bld->researchpoints = bld->maxresearchpoints;
          }
-         bld=bld->next;
       }
    } else {
       pbuilding bld = cc_b->building;
@@ -5656,11 +5651,8 @@ void  ccontainer_b :: cresearch_subwindow :: displayvariables ( void )
    showtext2c ( "avail in:",        subwinx1 + 8, subwiny1 + 79 );
 
    int rppt = 0;
-   pbuilding bld = actmap->player[actmap->actplayer].firstbuilding;
-   while ( bld ) {
-      rppt += bld->researchpoints;
-      bld=bld->next;
-   } /* endwhile */
+   for ( tmap::Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ )
+       rppt += (*bi)->researchpoints;
 
    if ( rppt  && actmap->player[actmap->actplayer].research.activetechnology ) {
       showtext2c ( strrr( (actmap->player[actmap->actplayer].research.activetechnology->researchpoints - actmap->player[actmap->actplayer].research.progress + rppt-1) / rppt ),  subwinx1 + 115, subwiny1 + 79 );
@@ -5953,13 +5945,12 @@ void ccontainer_b :: cminingstation_subwindow :: setnewextraction ( int res )
    extraction = res;
 
    if ( allbuildings ) {
-      pbuilding bld = actmap->player[actmap->actplayer].firstbuilding;
-      while ( bld ) {
+      for ( tmap::Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ ) {
+         pbuilding bld = *bi;
          if ( bld->typ->special & cgminingstationb ) {
             for ( int r = 0; r < 3; r++ )
                bld->plus.resource(r) = bld->maxplus.resource(r) * extraction/1024;
          }
-         bld=bld->next;
       }
    } else {
       pbuilding bld = cc_b->building;

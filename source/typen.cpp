@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.67 2001-01-28 23:00:42 mbickel Exp $
+//     $Id: typen.cpp,v 1.68 2001-02-01 22:48:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.67  2001/01/28 23:00:42  mbickel
+//      Made the small editors compilable with Watcom again
+//
 //     Revision 1.66  2001/01/28 20:42:16  mbickel
 //      Introduced a new string class, ASCString, which should replace all
 //        char* and std::string in the long term
@@ -486,6 +489,8 @@ bool tfield :: unitHere ( const pvehicle veh )
 
 int tfield :: getweather ( void )
 {
+   if ( !typ )
+      return 0;
    for ( int w = 0; w < cwettertypennum; w++ )
       if ( typ == typ->terraintype->weather[w] )
          return w;
@@ -706,17 +711,15 @@ void tfield :: setparams ( void )
 
    #ifndef converter
    if ( building ) {
-      if ( this == building->getField( building->typ->entry.x, building->typ->entry.y))
+      if ( this == building->getField( building->typ->entry ))
          bdt |= cbbuildingentry; 
 
-     #ifdef HEXAGON
       if ( building )
          for (int x = 0; x < 4; x++) 
             for ( int y = 0; y < 6; y++ ) 
-               if ( building->getField ( x, y ) == this )
-                  if ( building->getpicture ( x, y ) )
-                     picture = building->getpicture ( x, y );
-     #endif
+               if ( building->getField ( BuildingType::LocalCoordinate(x, y) ) == this )
+                  if ( building->getpicture ( BuildingType::LocalCoordinate(x, y) ) )
+                     picture = building->getpicture ( BuildingType::LocalCoordinate(x, y) );
    }
    #endif
 }
@@ -1907,4 +1910,108 @@ void tobjecttype :: write ( tnstream& stream )
        for ( int i = 0; i < objectslinkablenum; i++ )
            stream.writeInt( objectslinkableid[i] );
 
+}
+
+
+void AiThreat :: write ( tnstream& stream )
+{
+   const int version = 1000;
+   stream.writeInt ( version );
+   stream.writeInt ( threatTypes );
+   for ( int i = 0; i < threatTypes; i++ )
+      stream.writeInt ( threat[i] );
+}
+
+void AiThreat:: read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   if ( version == 1000 ) {
+      threatTypes = stream.readInt();
+      for ( int i = 0; i < threatTypes; i++ )
+         threat[i] = stream.readInt();
+   }
+}
+
+
+void AiValue :: write ( tnstream& stream )
+{
+   const int version = 2000;
+   stream.writeInt ( version );
+   stream.writeInt ( value );
+   stream.writeInt ( addedValue );
+   threat.write ( stream );
+   stream.writeInt ( valueType );
+}
+
+void AiValue:: read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   if ( version == 2000 ) {
+      value = stream.readInt (  );
+      addedValue= stream.readInt (  );
+      threat.read ( stream );
+      valueType = stream.readInt (  );
+   }
+}
+
+void AiParameter::write ( tnstream& stream )
+{
+   const int version = 3000;
+   stream.writeInt ( version );
+   stream.writeInt ( lastDamage );
+   stream.writeInt ( damageTime.abstime );
+   stream.writeInt ( dest.x );
+   stream.writeInt ( dest.y );
+   stream.writeInt ( dest.z );
+   stream.writeInt ( dest_nwid );
+   stream.writeInt ( data );
+   AiValue::write( stream );
+   stream.writeInt ( task );
+   stream.writeInt ( job );
+}
+
+void AiParameter::read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   if ( version == 3000 ) {
+      lastDamage = stream.readInt();
+      damageTime.abstime = stream.readInt();
+      dest.x = stream.readInt();
+      dest.y = stream.readInt();
+      dest.z = stream.readInt();
+      dest_nwid = stream.readInt();
+      data = stream.readInt();
+      AiValue::read( stream );
+      task = (Task) stream.readInt();
+      job = (Job) stream.readInt();
+   }
+}
+
+void AiThreat :: reset ( void )
+{
+   for ( int i = 0; i < aiValueTypeNum; i++ )
+      threat[i] = 0;
+}
+
+AiParameter :: AiParameter ( pvehicle _unit ) : AiValue ( log2( _unit->height ))
+{
+   reset( _unit );
+}
+
+void AiParameter :: resetTask ( )
+{
+   dest.y = -1;
+   dest.z = -1;
+   dest_nwid = 1;
+   task = tsk_nothing;
+}
+
+void AiParameter :: reset ( pvehicle _unit )
+{
+   unit = _unit;
+   AiValue::reset ( log2( _unit->height ) );
+
+   dest.x = -1;
+   job = job_undefined;
+   resetTask();
 }

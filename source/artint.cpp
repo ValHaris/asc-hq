@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: artint.cpp,v 1.55 2001-01-28 14:04:00 mbickel Exp $
+//     $Id: artint.cpp,v 1.56 2001-02-01 22:48:25 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2001/01/28 14:04:00  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.54  2001/01/25 23:44:50  mbickel
 //      Moved map displaying routins to own file (mapdisplay.cpp)
 //      Wrote program to create pcx images from map files (map2pcx.cpp)
@@ -196,37 +202,6 @@ int compareinteger ( const void* op1, const void* op2 )
        StratAStar ( AI* _ai, pvehicle veh ) : AStar ( _ai->getMap(), veh ), ai ( _ai ) {};
  };
 
-
-void AiThreat :: reset ( void )
-{
-   for ( int i = 0; i < aiValueTypeNum; i++ )
-      threat[i] = 0;
-}
-
-AiParameter :: AiParameter ( pvehicle _unit ) : AiValue ( log2( _unit->height ))
-{
-   reset( _unit );
-}
-
-void AiParameter :: resetTask ( )
-{
-   dest.y = -1;
-   dest.z = -1;
-   dest_nwid = 1;
-   task = tsk_nothing;
-}
-
-
-void AiParameter :: reset ( pvehicle _unit )
-{
-   unit = _unit;
-   AiValue::reset ( log2( _unit->height ) );
-
-   dest.x = -1;
-   job = job_undefined;
-   resetTask();
-}
-
 AI :: AI ( pmap _map, int _player ) : activemap ( _map ) , sections ( this )
 {
 
@@ -292,8 +267,8 @@ void AI :: issueServices ( )
 {
    remove_if ( serviceOrders.begin(), serviceOrders.end(), ServiceOrder::targetDestroyed );
 
-   pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
-   while ( veh ) {
+   for ( tmap::Player::VehicleList::iterator vi = getMap()->player[ getPlayer() ].vehicleList.begin(); vi != getMap()->player[ getPlayer() ].vehicleList.end(); vi++ ) {
+      pvehicle veh = *vi;
       if ( veh->damage > config.damageLimit )
          serviceOrders.push_back ( ServiceOrder ( this, VehicleService::srv_repair, veh->networkid ) );
 
@@ -307,7 +282,6 @@ void AI :: issueServices ( )
             if ( veh->ammo[w] <= veh->typ->weapons->weapon[w].count * config.ammoLimit / 100 )
                serviceOrders.push_back ( ServiceOrder ( this, VehicleService::srv_ammo, veh->networkid, w));
 
-      veh = veh->next;
    }
 }
 
@@ -315,7 +289,6 @@ void AI :: issueServices ( )
 pbuilding AI :: findServiceBuilding ( const ServiceOrder& so )
 {
    pvehicle veh = so.getTargetUnit();
-   pbuilding bld = getMap()->player[ getPlayer() ].firstbuilding;
 
    AStar astar ( getMap(), veh );
    astar.findAllAccessibleFields (  );
@@ -323,8 +296,8 @@ pbuilding AI :: findServiceBuilding ( const ServiceOrder& so )
    pbuilding bestBuilding = NULL;
    int bestDistance = maxint;
 
-   while ( bld ) {
-
+   for ( tmap::Player::BuildingList::iterator bi = getMap()->player[ getPlayer() ].buildingList.begin(); bi != getMap()->player[ getPlayer() ].buildingList.end(); bi++ ) {
+      pbuilding bld = *bi;
       if ( bld->getEntryField()->a.temp ) {
          // the unit can reach the building
 
@@ -403,8 +376,6 @@ pbuilding AI :: findServiceBuilding ( const ServiceOrder& so )
             }
          }
       }
-
-      bld = bld->next;
    }
 
    return bestBuilding;
@@ -428,34 +399,39 @@ int AI::ServiceOrder::possible ( pvehicle supplier )
          serviceAmount += target.service[j].maxPercentage;
          if ( target.service[j].type == requiredService ) {
             bool enoughResources = false;
-            if ( requiredService == VehicleService::srv_repair )
-               if ( target.service[j].maxAmount - target.service[j].curAmount > 5 )
-                  enoughResources = true;
-
-            if ( requiredService == VehicleService::srv_resource ) {
-               if ( target.service[j].targetPos == Resources::Fuel ) { // fuel
-                   if ( target.service[j].maxAmount - target.service[j].curAmount < target.service[j].orgSourceAmount - supplier->typ->fuelConsumption * 30 )
-                      enoughResources = true;
-               } else {
-                   if ( getTargetUnit()->aiparam[ai->getPlayer()]->job == AiParameter::job_supply ) {
-                      if ( target.service[j].orgSourceAmount > target.service[j].maxAmount - target.service[j].curAmount )
-                         enoughResources = true;
-                   } else
-                      if ( target.service[j].maxPercentage > 80 )
-                         enoughResources = true;
-               }
-            }
-            if ( requiredService == VehicleService::srv_ammo ) {
-               if ( getTargetUnit()->aiparam[ai->getPlayer()]->job == AiParameter::job_supply ) {
-                  if ( target.service[j].orgSourceAmount > target.service[j].maxAmount - target.service[j].curAmount )
+            int requiredAmount = target.service[j].maxAmount - target.service[j].curAmount;
+            if ( requiredAmount > 0 ) {
+               if ( requiredService == VehicleService::srv_repair ) {
+                  if ( target.service[j].maxAmount - target.service[j].curAmount > 5 )
                      enoughResources = true;
                } else
-                  if ( target.service[j].maxPercentage > 80 )
-                     enoughResources = true;
-            }
+                  if ( target.service[j].targetPos == position ) {  // is this stuff the one we need
+                     if ( requiredService == VehicleService::srv_resource ) {
+                        if ( target.service[j].targetPos == Resources::Fuel ) { // fuel  ; 30 fields requiredForHome
+                            if ( requiredAmount < target.service[j].orgSourceAmount - supplier->typ->fuelConsumption * 30 )
+                               enoughResources = true;
+                        } else {
+                            if ( getTargetUnit()->aiparam[ai->getPlayer()]->job == AiParameter::job_supply ) {
+                               if ( target.service[j].orgSourceAmount > requiredAmount )
+                                  enoughResources = true;
+                            } else
+                               if ( target.service[j].maxPercentage > 80 )
+                                  enoughResources = true;
+                        }
+                     }
+                     if ( requiredService == VehicleService::srv_ammo ) {
+                        if ( getTargetUnit()->aiparam[ai->getPlayer()]->job == AiParameter::job_supply ) {
+                           if ( target.service[j].orgSourceAmount > requiredAmount )
+                              enoughResources = true;
+                        } else
+                           if ( target.service[j].maxPercentage > 80 )
+                              enoughResources = true;
+                     }
+                  }
 
-            if ( enoughResources )
-               result = true;
+               if ( enoughResources )
+                  result = true;
+            }
          }
       }
 
@@ -489,7 +465,7 @@ bool AI::ServiceOrder::execute1st ( pvehicle supplier )
                 ast.findPath(  path, x, y );
                 if ( path.size() ) {
                    if ( abs ( currentHeight - h) < z_dist || ( abs( currentHeight - h) == z_dist && d < xy_dist )) {
-                      tvehicle tmp ( supplier, NULL );
+                      TemporaryContainerStorage tus ( supplier );
                       supplier->xpos = x;
                       supplier->ypos = y;
                       supplier->height = 1 << h;
@@ -505,7 +481,8 @@ bool AI::ServiceOrder::execute1st ( pvehicle supplier )
                             if ( target.service[j].type == requiredService )
                                result = true;
                       }
-                      supplier->clone ( &tmp, NULL );
+
+                      tus.restore();
 
                       if ( result ) {
                          meet.x = x;
@@ -529,8 +506,16 @@ bool AI::ServiceOrder::execute1st ( pvehicle supplier )
       return true;
    } else
       return false;
-
 }
+
+
+bool AI::ServiceOrder::timeOut ( )
+{
+  tgametime t = time;
+  t.a.turn += 2;
+  return ( t.abstime <= ai->getMap()->time.abstime );
+}
+
 
 void AI::removeServiceOrdersForUnit ( const pvehicle veh )
 {
@@ -612,27 +597,25 @@ AI::AiResult AI :: executeServices ( )
 
   AiResult res;
 
-  pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
-  while ( veh ) {
-     checkKeys();
-     if ( veh->aiparam[getPlayer()]->job == AiParameter::job_supply )
-        runServiceUnit ( veh );
-
-     veh = veh->next;
+  for ( tmap::Player::VehicleList::iterator vi = getMap()->player[ getPlayer() ].vehicleList.begin(); vi != getMap()->player[ getPlayer() ].vehicleList.end(); vi++ ) {
+      pvehicle veh = *vi;
+      checkKeys();
+      if ( veh->aiparam[getPlayer()]->job == AiParameter::job_supply )
+         runServiceUnit ( veh );
   }
-
-  return res;
 
   for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
-      pvehicle veh = i->getTargetUnit();
-      veh->aiparam[getPlayer()]->task = AiParameter::tsk_serviceRetreat;
-      pbuilding bld = findServiceBuilding( *i );
-      if ( bld )
-         veh->aiparam[ getPlayer() ]->dest = bld->getEntry ( );
+      if ( i->timeOut() ) {
+         pvehicle veh = i->getTargetUnit();
+         veh->aiparam[getPlayer()]->task = AiParameter::tsk_serviceRetreat;
+         pbuilding bld = findServiceBuilding( *i );
+         if ( bld )
+            veh->aiparam[ getPlayer() ]->dest = bld->getEntry ( );
+      }
   }
 
-  veh = getMap()->player[ getPlayer() ].firstvehicle;
-  while ( veh ) {
+  for ( tmap::Player::VehicleList::iterator vi = getMap()->player[ getPlayer() ].vehicleList.begin(); vi != getMap()->player[ getPlayer() ].vehicleList.end(); vi++ ) {
+     pvehicle veh = *vi;
      checkKeys();
 
      if ( veh->aiparam[getPlayer()]->task == AiParameter::tsk_serviceRetreat ) {
@@ -666,7 +649,6 @@ AI::AiResult AI :: executeServices ( )
            veh->aiparam[getPlayer()]->task = AiParameter::tsk_nothing;
         }
      }
-     veh = veh->next;
   }
   return res;
 
@@ -797,8 +779,8 @@ void AI :: checkConquer( )
 {
    displaymessage2("check for capturing enemy towns ... ");
 
-   pvehicle veh = getMap()->player[getPlayer()].firstvehicle;
-   while ( veh ) {
+   for ( tmap::Player::VehicleList::iterator vi = getMap()->player[ getPlayer() ].vehicleList.begin(); vi != getMap()->player[ getPlayer() ].vehicleList.end(); vi++ ) {
+      pvehicle veh = *vi;
       if ( veh->aiparam[getPlayer()]->job == AiParameter::job_conquer && veh->aiparam[getPlayer()]->task == AiParameter::tsk_nothing ) {
 
          HiddenAStar ast ( this, veh );
@@ -808,9 +790,9 @@ void AI :: checkConquer( )
          float bestBuildingCaptureValue = minfloat;
 
          for ( int c = 0; c <= 8; c++ )
-            if ( getMap()->player[c].existent && getdiplomaticstatus2 ( getPlayer()*8, c*8 ) == cawar ) {
-               pbuilding bld = getMap()->player[c].firstbuilding;
-               while ( bld ) {
+            if ( getMap()->player[c].exist() && getdiplomaticstatus2 ( getPlayer()*8, c*8 ) == cawar ) {
+               for ( tmap::Player::BuildingList::iterator bi = getMap()->player[ c ].buildingList.begin(); bi != getMap()->player[ c ].buildingList.end(); bi++ ) {
+                  pbuilding bld = *bi;
                   if ( bld->getEntryField()->a.temp  && buildingCapture[bld->getEntry()].state == BuildingCapture::conq_noUnit ) {
                      float v = getCaptureValue ( bld, veh );
                      if ( v > bestBuildingCaptureValue ) {
@@ -818,7 +800,6 @@ void AI :: checkConquer( )
                         bestBuilding = bld;
                      }
                   }
-                  bld = bld->next;
                }
             }
 
@@ -836,7 +817,6 @@ void AI :: checkConquer( )
 
 
       }
-      veh = veh->next;
    }
 
 
@@ -846,16 +826,16 @@ void AI :: checkConquer( )
    typedef vector<pbuilding> BuildingList;
    BuildingList buildingList;
 
-   pbuilding bld = getMap()->player[8].firstbuilding;
-   while ( bld ) {
+   for ( tmap::Player::BuildingList::iterator bi = getMap()->player[8].buildingList.begin(); bi != getMap()->player[8].buildingList.end(); bi++ ) {
+      pbuilding bld = *bi;
       if ( buildingCapture[ bld->getEntry() ].state == BuildingCapture::conq_noUnit ) {
          buildingList.push_back ( bld );
 
          int travelTime = maxint;
          pvehicle conquerer = NULL;
 
-         pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
-         while ( veh ) {
+         for ( tmap::Player::VehicleList::iterator vi = getMap()->player[ getPlayer() ].vehicleList.begin(); vi != getMap()->player[ getPlayer() ].vehicleList.end(); vi++ ) {
+            pvehicle veh = *vi;
             if ( veh->aiparam[getPlayer()]->job != AiParameter::job_conquer || veh->aiparam[getPlayer()]->task == AiParameter::tsk_nothing)
                if ( fieldaccessible ( bld->getEntryField(), veh ) == 2 ) {
                   HiddenAStar ast ( this, veh );
@@ -867,7 +847,6 @@ void AI :: checkConquer( )
                      travelTime = time;
                   }
                }
-            veh = veh->next;
          }
          if ( conquerer ) {
             BuildingCapture& bc = buildingCapture[ bld->getEntry() ];
@@ -880,19 +859,17 @@ void AI :: checkConquer( )
          }
 
       }
-
-      bld = bld->next;
    }
 
    sort ( buildingList.begin(), buildingList.end(), BuildingValueComp ( this ));
 
    for ( BuildingList::iterator i = buildingList.begin(); i != buildingList.end(); i++ ) {
-      pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
 
       int travelTime = maxint;
       pvehicle conquerer = NULL;
 
-      while ( veh ) {
+      for ( tmap::Player::VehicleList::iterator vi = getMap()->player[ getPlayer() ].vehicleList.begin(); vi != getMap()->player[ getPlayer() ].vehicleList.end(); vi++ ) {
+         pvehicle veh = *vi;
          if ( veh->aiparam[getPlayer()]->job != AiParameter::job_conquer || veh->aiparam[getPlayer()]->task == AiParameter::tsk_nothing )
             if ( fieldaccessible ( (*i)->getEntryField(), veh ) == 2 ) {
                HiddenAStar ast ( this, veh ) ;
@@ -904,7 +881,6 @@ void AI :: checkConquer( )
                   travelTime = time;
                }
             }
-         veh = veh->next;
       }
 
       if ( conquerer ) {
@@ -930,7 +906,7 @@ void AI :: checkConquer( )
                          protected:
                               AI*               ai;
 
-                              pvehicletype      fzt;
+                              Vehicletype*      fzt;
                               int               weapthreat[8];
                               int               value;
 
@@ -939,7 +915,7 @@ void AI :: checkConquer( )
                               virtual int       getammunition( int i )  { return 1;   };
                               virtual int       getheight ( void )      { return 255; };
                           public:
-                              void              calc_threat_vehicletype ( pvehicletype _fzt );
+                              void              calc_threat_vehicletype ( Vehicletype* _fzt );
                               CalculateThreat_VehicleType ( AI* _ai ) { ai = _ai; };
                        };
 
@@ -956,40 +932,40 @@ void AI :: checkConquer( )
                        };
 
 
-void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( pvehicletype _fzt )
-{ 
+void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( Vehicletype* _fzt )
+{
    fzt = _fzt;
 
    for ( int j = 0; j < 8; j++ )
       weapthreat[j] = 0;
 
-   for ( int i = 0; i < fzt->weapons->count; i++) 
-      if ( fzt->weapons->weapon[i].shootable() ) 
-         if ( fzt->weapons->weapon[i].offensive() ) 
-            for ( int j = 0; j < 8; j++) 
-               if ( fzt->weapons->weapon[i].targ & (1 << j) ) { 
-                  int d = 0; 
-                  int m = 0; 
+   for ( int i = 0; i < fzt->weapons->count; i++)
+      if ( fzt->weapons->weapon[i].shootable() )
+         if ( fzt->weapons->weapon[i].offensive() )
+            for ( int j = 0; j < 8; j++)
+               if ( fzt->weapons->weapon[i].targ & (1 << j) ) {
+                  int d = 0;
+                  int m = 0;
                   AttackFormula af;
                   for ( int e = (fzt->weapons->weapon[i].mindistance + maxmalq - 1)/ maxmalq; e <= fzt->weapons->weapon[i].maxdistance / maxmalq; e++ ) {    // the distance between two fields is maxmalq
-                     d++; 
+                     d++;
                      int n = int( weapDist.getWeapStrength( &fzt->weapons->weapon[i], e*maxmalq ) * fzt->weapons->weapon[i].maxstrength * af.strength_damage(getdamage()) * ( 1 + af.strength_experience(getexpirience())) );
                      m += int( n / log10(10*d));
-                  } 
-                  if (getammunition(i) == 0) 
-                     m /= 2; 
+                  }
+                  if (getammunition(i) == 0)
+                     m /= 2;
 
-                  if ( (fzt->weapons->weapon[i].sourceheight & getheight()) == 0) 
-                     m /= 2; 
+                  if ( (fzt->weapons->weapon[i].sourceheight & getheight()) == 0)
+                     m /= 2;
 
                   /*
                   if ( !(getheight() & ( 1 << j )))
                      m /= 2;
                   */
 
-                  if (m > weapthreat[j]) 
-                     weapthreat[j] = m; 
-               } 
+                  if (m > weapthreat[j])
+                     weapthreat[j] = m;
+               }
 
 
    if ( !fzt->aiparam[ai->getPlayer()] )
@@ -1045,7 +1021,7 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
 {
 
    eht = _eht;
-   calc_threat_vehicletype ( eht->typ );
+   calc_threat_vehicletype ( getvehicletype_forid ( eht->typ->id ) );
 
    if ( !eht->aiparam[ai->getPlayer()] )
       eht->aiparam[ai->getPlayer()] = new AiParameter ( eht );
@@ -1095,7 +1071,7 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
    for ( int w = 0; w < eht->typ->weapons->count; w++ )
       if ( eht->typ->weapons->weapon[w].service() )
          service = true;
-   if ( (eht->functions & cfrepair) || service )
+   if ( ((eht->functions & cfrepair) || service) && eht->typ->movement[log2(eht->height)] >= minmalq )
       aip->job = AiParameter::job_supply;
 
 /*
@@ -1326,23 +1302,18 @@ void     AI :: calculateAllThreats( void )
 
    // There are only 8 players in ASC, but there may be neutral units (player == 8)
    for ( int v = 0; v < 9; v++)
-      if (activemap->player[v].existent || v == 8) {
+      if (activemap->player[v].exist() || v == 8) {
 
          // Now we cycle through all units of this player
-         pvehicle eht = activemap->player[v].firstvehicle;
-         while ( eht ) {
-            if ( !eht->aiparam[ getPlayer() ] )
-               calculateThreat ( eht );
-
-            eht = eht->next;
+         for ( tmap::Player::VehicleList::iterator vi = getMap()->player[v].vehicleList.begin(); vi != getMap()->player[v].vehicleList.end(); vi++ ) {
+            pvehicle veh = *vi;
+            if ( !veh->aiparam[ getPlayer() ] )
+               calculateThreat ( veh );
          }
 
          // Now we cycle through all buildings
-         pbuilding bld = activemap->player[v].firstbuilding;
-         while ( bld ) {
-            calculateThreat ( bld );
-            bld = bld->next;
-         }
+         for ( tmap::Player::BuildingList::iterator bi = getMap()->player[v].buildingList.begin(); bi != getMap()->player[v].buildingList.end(); bi++ )
+            calculateThreat ( *bi );
       }
 
 }
@@ -1528,7 +1499,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, int* xtog
              f = t;
           */
 
-          int dist = beeline ( veh->xpos, veh->ypos, sec.centerx, sec.centery );
+          int dist = beeline ( veh->xpos, veh->ypos, sec.centerx, sec.centery ) + 3 * veh->typ->movement[log2(veh->height)];
           if ( dist )
              f /= log(dist);
 
@@ -1551,7 +1522,9 @@ AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, int* xtog
                       ai->_vision = visible_all;
 
                       ac++;
-                      tvehicle v ( veh, NULL );
+
+                      TemporaryContainerStorage tus ( veh );
+
                       veh->resetMovement(); // to make sure the wait-for-attack flag doesn't hinder the attack
                       veh->attacked = 0;
                       veh->xpos = xp;
@@ -1562,7 +1535,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, int* xtog
                          va.execute ( veh, -1, -1, 0, 0, -1 );
                          targets += va.attackableVehicles.getFieldNum();
                       }
-                      veh->clone ( &v, NULL );
+                      tus.restore();
                       ai->_vision = visible_ago;
                    } else
                       nac++;
@@ -1609,9 +1582,10 @@ int  AI :: getBestHeight ( const pvehicle veh )
 
    for ( int k = 0; k < 8; k++ )
       if ( veh->typ->height & ( 1 << k )) {
-         tvehicle v ( veh, NULL );
-         v.height = 1<<k;
-         float t = sections.getForCoordinate( v.xpos, v.ypos ).avgFieldThreat.threat[ v.aiparam[getPlayer()]->valueType ];
+         TemporaryContainerStorage tus ( veh );
+         veh->height = 1<<k;
+         float t = sections.getForCoordinate( veh->xpos, veh->ypos ).avgFieldThreat.threat[ veh->aiparam[getPlayer()]->valueType ];
+         tus.restore();
 
          if ( maxAvgFieldThreat < t )
             maxAvgFieldThreat = t;
@@ -1627,16 +1601,16 @@ int  AI :: getBestHeight ( const pvehicle veh )
 
    for ( int j = 0; j < 8; j++ )
       if ( veh->typ->height & ( 1 << j )) {
-         tvehicle v ( veh, NULL );
-         v.height = 1<<j;
-         calculateThreat ( &v );
-         Section& sec = sections.getForCoordinate( v.xpos, v.ypos );
+         TemporaryContainerStorage tus (veh);
+         veh->height = 1<<j;
+         calculateThreat ( veh );
+         Section& sec = sections.getForCoordinate( veh->xpos, veh->ypos );
 
-         float value = v.aiparam[getPlayer()]->getValue();
-         if ( v.typ->movement[j] )
-            value *=  log( v.typ->movement[j] );
+         float value = veh->aiparam[getPlayer()]->getValue();
+         if ( veh->typ->movement[j] )
+            value *=  log( veh->typ->movement[j] );
 
-         float threat = sec.avgFieldThreat.threat[ v.aiparam[getPlayer()]->valueType ];
+         float threat = sec.avgFieldThreat.threat[ veh->aiparam[getPlayer()]->valueType ];
          if ( minAvgFieldThreat ) {
             if ( threat )
                value *= ( log ( minAvgFieldThreat ) / log ( threat ) );
@@ -1652,6 +1626,7 @@ int  AI :: getBestHeight ( const pvehicle veh )
             bestHeightValue = value;
             bestHeight = 1 << j;
          }
+         tus.restore();
       }
 
    return bestHeight;
@@ -1793,7 +1768,7 @@ void AI :: searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int mov
 
             MapCoordinate mc = getNeighbouringFieldCoordinate ( MapCoordinate ( mv->attackx, mv->attacky), (attackerDirection+checkDir)%sidenum );
             pfield fld = getMap()->getField(mc);
-            if ( !fld->building && !fld->vehicle )
+            if ( fld && !fld->building && !fld->vehicle )
                hemmingFactor += AttackFormula::getHemmingFactor ( checkDir - attackerDirection );
          }
 
@@ -2041,12 +2016,12 @@ int AI::changeVehicleHeight ( pvehicle veh, VehicleMovement* vm, int preferredDi
 
                if ( preferredDirection == -1 ) {
                   // making a backup
-                  tvehicle dummy ( veh, NULL );
+                  TemporaryContainerStorage tus ( veh );
                   veh->height = newheight;
                   veh->resetMovement ( );
                   MapCoordinate mc = getDestination ( veh );
                   preferredDirection = getdirection ( veh->xpos, veh->ypos, mc.x, mc.y );
-                  veh->clone ( &dummy, NULL );
+                  tus.restore();
                }
 
                for ( int i = 0; i < cvh->reachableFields.getFieldNum(); i++ ) {
@@ -2120,12 +2095,12 @@ AI::AiResult AI::tactics( void )
 
    displaymessage2("starting tactics ... ");
 
-   pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
-
    typedef list<pvehicle> TactVehicles;
    TactVehicles tactVehicles;
 
-   while ( veh ) {
+   for ( tmap::Player::VehicleList::iterator vi = getMap()->player[ getPlayer() ].vehicleList.begin(); vi != getMap()->player[ getPlayer() ].vehicleList.end(); vi++ ) {
+      pvehicle veh = *vi;
+
       bool unitUsable = false;
       if ( veh->aiparam[ getPlayer() ]->job == AiParameter::job_fight || veh->aiparam[ getPlayer() ]->job == AiParameter::job_undefined )
          for ( int j = 0; j < tsk_num; j++ )
@@ -2158,8 +2133,6 @@ AI::AiResult AI::tactics( void )
 
       if ( unitUsable && enemiesNear)
          tactVehicles.push_back ( veh );
-
-      veh = veh->next;
    }
 
    int hemmingBonus = 5;
@@ -2173,7 +2146,7 @@ AI::AiResult AI::tactics( void )
       do {
          directAttackNum = 0;
          for ( TactVehicles::iterator i = tactVehicles.begin(); i != tactVehicles.end(); ) {
-            veh = *i;
+            pvehicle veh = *i;
 
             unitCounter++;
             displaymessage2("tact: processing operation %d", unitCounter );
@@ -2273,7 +2246,7 @@ AI::AiResult AI::tactics( void )
                }
                float finalValue = 0;
 
-               tactics_findBestAttackUnits ( attacker, mvci, positions, 0, finalPositions, finalValue, 0 );
+               tactics_findBestAttackUnits ( attacker, mvci, positions, 0, finalPositions, finalValue, 0, 0 );
 
                for ( int i = 0; i < sidenum; i++ )
                   if ( finalPositions[i] ) {
@@ -2389,9 +2362,9 @@ void AI :: tactics_findBestAttackOrder ( pvehicle* units, int* attackOrder, pveh
 }
 
 
-void AI :: tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, pvehicle* positions, float value, pvehicle* finalPosition, float& finalValue, int unitsPositioned )
+void AI :: tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, pvehicle* positions, float value, pvehicle* finalPosition, float& finalValue, int unitsPositioned, int recursionDepth )
 {
-   if ( m == mvc.end() || unitsPositioned >= 6 ) {
+   if ( m == mvc.end() || unitsPositioned >= 6 || recursionDepth >= 8 ) {
       if ( value > finalValue ) {
          for ( int i = 0; i < sidenum; i++ )
             finalPosition[i] = positions[i] ;
@@ -2406,13 +2379,13 @@ void AI :: tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVa
             else
                value += 1;
             m++;
-            tactics_findBestAttackUnits ( mvc, m, positions, value, finalPosition, finalValue, unitsPositioned+1 );
+            tactics_findBestAttackUnits ( mvc, m, positions, value, finalPosition, finalValue, unitsPositioned+1, recursionDepth+1 );
             m--;
             value -= m->result;
             positions[i] = NULL;
          } else {
             m++;
-            tactics_findBestAttackUnits ( mvc, m, positions, value, finalPosition, finalValue, unitsPositioned );
+            tactics_findBestAttackUnits ( mvc, m, positions, value, finalPosition, finalValue, unitsPositioned, recursionDepth+1 );
             m--;
          }
       }
@@ -2526,18 +2499,16 @@ AI::AiResult AI::buildings( int process )
    displaymessage2("checking buildings ... ");
 
    int buildingCounter = 0;
-   pbuilding bld = getMap()->player[ getPlayer() ].firstbuilding;
-   while ( bld ) {
+   for ( tmap::Player::BuildingList::iterator bi = getMap()->player[ getPlayer() ].buildingList.begin(); bi != getMap()->player[ getPlayer() ].buildingList.end(); bi++ ) {
       buildingCounter++;
       displaymessage2("processing building %d", buildingCounter );
 
       cbuildingcontrols bc;
-      bc.init ( bld );
+      bc.init ( *bi );
 
       result += container ( bc );
 
       checkKeys();
-      bld = bld->next;
    }
 
    displaymessage2("building check completed... ");
@@ -2552,8 +2523,8 @@ AI::AiResult AI::transports( int process )
    displaymessage2("checking transports ... ");
 
    int transportCounter = 0;
-   pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
-   while ( veh ) {
+   for ( tmap::Player::VehicleList::iterator vi = getMap()->player[ getPlayer() ].vehicleList.begin(); vi != getMap()->player[ getPlayer() ].vehicleList.end(); vi++ ) {
+      pvehicle veh = *vi;
       transportCounter++;
       displaymessage2("processing unit %d for transportation ", transportCounter );
 
@@ -2562,7 +2533,6 @@ AI::AiResult AI::transports( int process )
 
       result += container ( tc );
 
-      veh = veh->next;
       checkKeys();
    }
 
@@ -2646,8 +2616,8 @@ AI::AiResult AI::strategy( void )
       localResult.unitsWaiting = 0;
       stratloop++;
 
-      pvehicle veh = getMap()->player[ getPlayer() ].firstvehicle;
-      while ( veh ) {
+      for ( tmap::Player::VehicleList::iterator vi = getMap()->player[ getPlayer() ].vehicleList.begin(); vi != getMap()->player[ getPlayer() ].vehicleList.end(); vi++ ) {
+         pvehicle veh = *vi;
          if ( veh->aiparam[ getPlayer() ]->job == AiParameter::job_fight ) {
             if ( veh->weapexist() && veh->aiparam[ getPlayer() ]->task != AiParameter::tsk_tactics ) {
                /*
@@ -2679,7 +2649,6 @@ AI::AiResult AI::strategy( void )
 
          displaymessage2("strategy loop %d ; moved unit %d ... ", stratloop, localResult.unitsMoved );
 
-         veh = veh->next;
          checkKeys();
       }
       result += localResult;

@@ -5,9 +5,15 @@
 */
 
 
-//     $Id: spfst.h,v 1.38 2001-01-28 14:04:20 mbickel Exp $
+//     $Id: spfst.h,v 1.39 2001-02-01 22:48:51 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.38  2001/01/28 14:04:20  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.37  2001/01/25 23:45:06  mbickel
 //      Moved map displaying routins to own file (mapdisplay.cpp)
 //      Wrote program to create pcx images from map files (map2pcx.cpp)
@@ -171,26 +177,19 @@ extern int getdiplomaticstatus( int b );
 //! returns the diplomatic status between the players with color c and b (note that the color is playernum*8 ) 
 extern int getdiplomaticstatus2( int c, int b);
 
-extern void  removevehicle(pvehicle *   vehicle);
-
-extern void  putbuilding(int          x,
-                         int          y,
+extern void  putbuilding( const MapCoordinate& entryPosition,
                          int          color,
                          pbuildingtype buildingtyp,
                          int          compl,
                          int          ignoreunits = 0 ); // f?r Kartened
 
-extern void  putbuilding2(integer      x,
-                          integer      y,
+extern void  putbuilding2( const MapCoordinate& entryPosition,
                           int color,
                           pbuildingtype buildingtyp);  // f?r Spiel
 
 
-extern void  removebuilding(pbuilding *  bld);
-
-
 //! recalculates the connection (like road interconnections) of all objects on the map
-extern void  calculateallobjects(void);
+extern void  calculateallobjects( );
 
 /** recalculates the connection (like road interconnections) of an object
       \param x The x coordinate of the field
@@ -309,10 +308,6 @@ extern BuildingTypeVector& getbuildingtypevector ( void );
 
 typedef dynamic_array<pobjecttype> ObjectTypeVector;
 extern ObjectTypeVector& getobjecttypevector ( void );
-
-
-extern void swapbuildings ( pbuilding orgbuilding, pbuilding building );
-
 
 
 class tdrawline8 : public tdrawline {

@@ -1,6 +1,11 @@
-//     $Id: loaders.cpp,v 1.40 2001-01-31 14:52:39 mbickel Exp $
+//     $Id: loaders.cpp,v 1.41 2001-02-01 22:48:43 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.40  2001/01/31 14:52:39  mbickel
+//      Fixed crashes in BI3 map importing routines
+//      Rewrote memory consistency checking
+//      Fileselect dialog now uses ASCStrings
+//
 //     Revision 1.39  2001/01/23 21:05:18  mbickel
 //      Speed up of AI
 //      Lot of bugfixes in AI
@@ -246,49 +251,6 @@ ticons icons;
 
 
 
-void         setbuildingsonmap(void)
-{ 
-   int         i;
-   integer      dx, a, b;
-   pbuilding    aktbuilding[9];   /*  leseposition der linearen liste der buildingen  */ 
-   integer      orgx, orgy; 
-   pfield        field; 
-
-   for (i = 0; i <= 8; i++) { 
-      aktbuilding[i] = actmap->player[i].firstbuilding; 
-      while (aktbuilding[i] != NULL) { 
-         orgx = aktbuilding[i]->xpos - aktbuilding[i]->typ->entry.x; 
-         orgy = aktbuilding[i]->ypos - aktbuilding[i]->typ->entry.y; 
-
-         dx = orgy & 1; 
-
-         orgx += dx & (~aktbuilding[i]->typ->entry.y);
-
-
-         if (aktbuilding[i]->completion >= aktbuilding[i]->typ->construction_steps)
-             aktbuilding[i]->completion = aktbuilding[i]->typ->construction_steps - 1;
-
-
-         for (a = orgx; a <= orgx + 3; a++) 
-            for (b = orgy; b <= orgy + 5; b++) {
-               void* pnt = aktbuilding[i]->getpicture ( a - orgx , b - orgy );
-               if ( pnt ) {
-                    field = getfield(a - (dx & b), b);
-                    field->building = aktbuilding[i];
-
-                    field->picture = pnt; 
-                    field->setparams();
-                } 
-            }      
-
-        aktbuilding[i] = aktbuilding[i]->next; 
-      } 
-   } 
-} 
-
-
-
-
 void         seteventtriggers(void)
 { 
   pevent       event;
@@ -418,201 +380,6 @@ void         seteventtriggers(void)
 
 
 
-
-
-/**************************************************************/
-/*     einzelnes Geb„ude schreiben / lesen                  ÿ */
-/**************************************************************/
-
-
-const int buildingstreamversion = -2;
-
-void         tspfldloaders::writebuilding ( pbuilding bld )
-{
-    stream->writeInt ( buildingstreamversion );
-
-    stream->writeInt ( bld->typ->id );
-    int i;
-    for ( i = 0; i< resourceTypeNum; i++ )
-       stream->writeInt ( bld->bi_resourceplus.resource(i) );
-    stream->writeChar ( bld->color );
-    stream->writeWord ( bld->xpos );
-    stream->writeWord ( bld->ypos );
-    stream->writeChar ( bld->completion );
-    for ( i = 0; i < waffenanzahl; i++ )
-       stream->writeWord ( bld->munitionsautoproduction[i] );
-
-    for ( i = 0; i< resourceTypeNum; i++ )
-       stream->writeInt ( bld->plus.resource(i) );
-
-    for ( i = 0; i< resourceTypeNum; i++ )
-       stream->writeInt ( bld->maxplus.resource(i) );
-
-    for ( i = 0; i< resourceTypeNum; i++ )
-       stream->writeInt ( bld->actstorage.resource(i) );
-
-    for ( i = 0; i< waffenanzahl; i++ )
-       stream->writeWord ( bld->munition[i] );
-
-    stream->writeWord ( bld->maxresearchpoints );
-    stream->writeWord ( bld->researchpoints );
-    stream->writeChar ( bld->visible );
-    stream->writeChar ( bld->damage );
-    stream->writeInt  ( bld->netcontrol );
-    stream->writeString ( bld->name );
-
-    stream->writeInt ( bld->repairedThisTurn );
-
-    char c = 0;
-
-    if (bld->typ->loadcapacity )  
-       for ( int k = 0; k <= 31; k++)
-          if (bld->loading[k] ) 
-             c++;
-    stream->writeChar ( c );
-    if ( c )
-       for ( int k = 0; k <= 31; k++)
-          if ( bld->loading[k] )
-             bld->loading[k]->write ( stream );
-
-
-    c = 0;
-    if (bld->typ->special & cgvehicleproductionb ) 
-       for (int k = 0; k <= 31; k++)
-          if ( bld->production[k] )
-             c++;
-    stream->writeChar ( c );
-    if ( c )
-       for (int k = 0; k <= 31; k++)
-          if (bld->production[k] )
-             stream->writeWord( bld->production[k]->id );
-
-
-    c = 0;
-    if (bld->typ->special & cgvehicleproductionb ) 
-       for (int k = 0; k <= 31; k++)
-          if ( bld->productionbuyable[k] )
-             c++;
-    stream->writeChar ( c );
-    if ( c )
-       for ( int k = 0; k <= 31; k++)
-          if ( bld->productionbuyable[k] )
-             stream->writeWord( bld->productionbuyable[k]->id );
-}
-
-void         tspfldloaders::readbuilding ( pbuilding &bld )
-{
-    bld = new Building ( spfld );
-
-    int version = stream->readInt();
-    if ( version == buildingstreamversion || version == -1 ) {
-
-       int id = stream->readInt ();
-       bld->typ = getbuildingtype_forid ( id, 0 );
-       if ( !bld->typ )
-          throw InvalidID ( "building", id );
-
-       bld->baseType = bld->typ;
-       for ( int i = 0; i < 3; i++ )
-          bld->bi_resourceplus.resource(i) = stream->readInt();
-
-       /*
-       if ( spfld->objectcrc )
-          spfld->objectcrc->speedcrccheck->checkbuilding2 ( bld->typ );
-       */
-   
-       bld->color = stream->readChar();
-       bld->xpos = stream->readWord() ;
-    } else {
-       int id = version;
-
-       bld->typ = getbuildingtype_forid ( id, 0 );
-       if ( !bld->typ )
-          throw InvalidID ( "building", id );
-
-       /*
-       if ( spfld->objectcrc ) 
-         spfld->objectcrc->speedcrccheck->checkbuilding2 ( bld->typ );
-       */
-
-       bld->color = stream->readChar();
-       bld->xpos  = stream->readWord();
-    }
-
-    bld->ypos = stream->readWord();
-    bld->completion = stream->readChar();
-
-    int i;
-    for ( i = 0; i < waffenanzahl; i++)
-       bld->munitionsautoproduction[i] = stream->readWord();
-
-    for ( i = 0; i< 3; i++ )
-       bld->plus.resource(i) = stream->readInt();
-
-    for ( i = 0; i< 3; i++ )
-       bld->maxplus.resource(i) = stream->readInt();
-
-    for ( i = 0; i< 3; i++ )
-       bld->actstorage.resource(i) = stream->readInt();
-
-    for ( i = 0; i < waffenanzahl; i++)
-       bld->munition[i] = stream->readWord();
-
-    bld->maxresearchpoints = stream->readWord();
-    bld->researchpoints = stream->readWord();
-
-    bld->visible = stream->readChar();
-    bld->damage = stream->readChar();
-    bld->netcontrol = stream->readInt();
-    bld->name = stream->readString ();
-
-    if ( version == -2 )
-       bld->repairedThisTurn = stream->readInt ( );
-    else
-       bld->repairedThisTurn = 0;
-
-
-
-    char c = stream->readChar();
-    if ( c )
-       for ( int k = 0; k < c; k++)
-          bld->loading[k] = new tvehicle ( stream, spfld );
-
-
-    c = stream->readChar();
-    if ( c )
-       for ( int k = 0; k < c ; k++) {
-           word id = stream->readWord();
-           bld->production[k] = getvehicletype_forid ( id, 0 ) ;
-           if ( !bld->production[k] )
-              throw InvalidID ( "unit", id );
-
-           /*
-           if ( spfld->objectcrc ) 
-              spfld->objectcrc->speedcrccheck->checkunit2 ( bld->production[k] );
-           */
-
-       }
-
-    c = stream->readChar();
-    if ( c )
-       for ( int k = 0; k < c ; k++) {
-           word id = stream->readWord();
-           bld->productionbuyable[k] = getvehicletype_forid ( id, 0 );
-
-           if ( !bld->productionbuyable[k] )
-              throw InvalidID ( "unit", id );
-           /*
-           if ( spfld->objectcrc ) 
-              spfld->objectcrc->speedcrccheck->checkunit2 ( bld->productionbuyable[k] );
-           */
-       }
-
-}
-
-
-
-
 /**************************************************************/
 /*     einzelnes Event schreiben / lesen                    ÿ */
 /**************************************************************/
@@ -635,8 +402,8 @@ void   tspfldloaders::writeevent ( pevent event )
            (event->trigger[j] == ceventt_buildingdestroyed) || 
            (event->trigger[j] == ceventt_building_seen )) { 
              if ( event->triggerstatus[j] != 2 ) {
-                stream->writedata2( event->trigger_data[j]->building->xpos );
-                stream->writedata2( event->trigger_data[j]->building->ypos );
+                stream->writedata2( event->trigger_data[j]->building->getEntry().x );
+                stream->writedata2( event->trigger_data[j]->building->getEntry().y );
              } else {
                 integer w = -1;
                 stream->writedata2( w );
@@ -969,33 +736,9 @@ void      tspfldloaders:: readmessages ( void )
 
 void   tspfldloaders::writeeventstocome ( void )
 {
-       #ifdef logging
-       {
-           char tmpcbuf[200];
-           sprintf(tmpcbuf,"loaders / tspfldloaders::writeeventstocome;" );
-           logtofile ( tmpcbuf );
-       }    
-       #endif
- 
     int      j = 0;
     pevent   event = spfld->firsteventtocome;
     while ( event ) {
-
-       #ifdef logging
-       {
-           char tmpcbuf[2000];
-           sprintf(tmpcbuf,"loaders / tspfldloaders::writeeventstocome; #%d addr=%x id=%x player=%d desc=%s data=%x next=%x datasize=%d conn=%x timer=%d delay=%d/%d ", j, event, event->id, event->player, event->description, event->rawdata, event->next, event->datasize, event->conn, event->triggertime.abstime, event->delayedexecution.turn, event->delayedexecution.move );
-           logtofile ( tmpcbuf );
-           for ( int i = 0; i < 4; i++ ) {
-              if ( event->trigger_data[i] )
-                 sprintf(tmpcbuf,"  trigger %d : trig=%d addr=%x time=%x xp=%d yp=%d nwid=%d bld=%x veh=%x mapid=%d id=%d unitpoly=%x", i, event->trigger[i], event->trigger_data[i], event->trigger_data[i]->time.abstime, event->trigger_data[i]->xpos, event->trigger_data[i]->ypos, event->trigger_data[i]->networkid, event->trigger_data[i]->building, event->trigger_data[i]->vehicle, event->trigger_data[i]->mapid, event->trigger_data[i]->id, event->trigger_data[i]->unitpolygon );
-              else
-                 sprintf(tmpcbuf,"  trigger %d : trig=%d addr=%x ", i, event->trigger[i], event->trigger_data[i]);
-              logtofile ( tmpcbuf );
-           }
-       }    
-       #endif
-
        j++;
        event = event->next; 
     } 
@@ -1149,18 +892,7 @@ void    tspfldloaders::writemap ( void )
 
 void     tmaploaders::initmap ( void )
 {
-   int i,j;
-
-    for (i = 0; i <= 8; i++) { 
-       spfld->player[i].firstvehicle = NULL; 
-       spfld->player[i].firstbuilding = NULL; 
-       spfld->player[i].research.progress = 0; 
-       spfld->player[i].research.activetechnology = NULL; 
-       for (j = 0; j <= 11; j++) 
-          spfld->player[i].research.unitimprovement.weapons[j] = 1024; 
-       spfld->player[i].research.unitimprovement.armor = 1024; 
-    } 
-    spfld->oldevents = NULL; 
+    spfld->oldevents = NULL;
     spfld->firsteventtocome = NULL; 
     spfld->firsteventpassed = NULL; 
     spfld->network          = NULL;
@@ -1170,10 +902,6 @@ void     tmaploaders::initmap ( void )
 
 void     tgameloaders::initmap ( void )
 {
-    for ( int i = 0; i <= 8; i++) { 
-       spfld->player[i].firstvehicle = NULL; 
-       spfld->player[i].firstbuilding = NULL; 
-    } 
     spfld->game_parameter = NULL;
 }
 
@@ -1183,8 +911,6 @@ void     tspfldloaders::readmap ( void )
     spfld = new tmap;
 
     spfld->read ( *stream );
-
-    // initmap();
 }
 
 
@@ -1367,11 +1093,11 @@ void   tspfldloaders::writefields ( void )
          stream->writedata2 ( fld->direction );
 
       if (b1 & csm_vehicle ) 
-         fld->vehicle->write ( stream );
+         fld->vehicle->write ( *stream );
 
 
       if (b1 & csm_building ) 
-         writebuilding ( fld->building  );
+         fld->building->write ( *stream );
 
       if (b3 & csm_material ) 
          stream->writedata2 ( fld->material );
@@ -1414,21 +1140,16 @@ void   tspfldloaders::writefields ( void )
 void tspfldloaders::readfields ( void )
 {
    int cnt2 = 0;
-        
    int cnt1 = spfld->xsize * spfld->ysize;
 
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readfields / vor memalloc" );
-       #endif
-
    spfld->field = new tfield [ cnt1 ];
-
-       #ifdef logging
-       logtofile ( "loaders / tspfldloaders::readfields / nach memalloc" );
-       #endif
-
    if (spfld->field == NULL)
       displaymessage ( "Could not allocate memory for map ",2);
+
+   for ( int i = 0; i < cnt1; i++ ) {
+      spfld->field[i].building = NULL;
+      spfld->field[i].picture = NULL;
+   }
 
    int l = 0;
    do { 
@@ -1437,21 +1158,11 @@ void tspfldloaders::readfields ( void )
 
       if (cnt2 == 0) { 
 
-       #ifdef loggging
-       {
-           char tmpcbuf[200];
-           sprintf(tmpcbuf,"loaders / tspfldloaders::readfields  / reading field %d", l );
-           logtofile ( tmpcbuf );
-       }    
-       #endif
-
          fld2 = & spfld->field[l];
 
          fld2->a.temp = 0;
          fld2->a.temp2 = 0; 
-         fld2->picture = NULL;
-         fld2->vehicle = NULL; 
-         fld2->building = NULL;
+         fld2->vehicle = NULL;
          fld2->object = NULL;
          fld2->resourceview = NULL; 
          fld2->connection = 0;
@@ -1500,27 +1211,21 @@ void tspfldloaders::readfields ( void )
          if ( !fld2->typ ) 
             throw InvalidID ( "terrain", k );
 
-         /*
-         if ( spfld->objectcrc )
-            spfld->objectcrc->speedcrccheck->checkterrain2 ( fld2->typ->terraintype );
-         */
-
-
-         if (b1 & csm_direction ) 
+         if (b1 & csm_direction )
             stream->readdata2 ( fld2->direction );
          else                                              
             fld2->direction = 0; 
 
 
-         if (b1 & csm_vehicle )
-            fld2->vehicle = new Vehicle ( stream, spfld );
-
+         if (b1 & csm_vehicle ) {
+             fld2->vehicle = Vehicle::newFromStream ( spfld, *stream );
+             fld2->vehicle->setnewposition ( l%spfld->xsize, l/spfld->xsize );
+         }
 
          if (b1 & csm_building ) {
-            readbuilding ( fld2->building   );
+            fld2->building = Building::newFromStream ( spfld, *stream );
             fld2->bdt |= cbbuildingentry;
-         } else
-            fld2->building = NULL;
+         }
 
          if (b3 & csm_material) 
             stream->readdata2 ( fld2->material );
@@ -1650,36 +1355,15 @@ void tspfldloaders::readfields ( void )
 
 void   tspfldloaders::chainitems ( void )
 {
-   pbuilding bld;
-
    int i = 0;
    for (int y = 0; y < actmap->ysize; y++)
       for (int x = 0; x < actmap->xsize; x++) {
-          if ( actmap->field[i].bdt & cbbuildingentry ) {
-             bld = actmap->field[i].building;
-             actmap->chainbuilding ( bld );
-             bld->xpos = x;
-             bld->ypos = y;
- 
-             for ( int k = 0; k <= 31 ; k++ ) 
-                if ( bld->loading[ k ] ) {
-                   actmap->chainunit ( bld->loading[ k ] );
- 
-                   bld->loading[ k ] -> setnewposition ( x, y );
-
-                }
-          }
-
-
-          pvehicle eht = actmap->field[i].vehicle;
-          if ( eht ) {
-             eht->setnewposition ( x, y );
-             actmap->chainunit ( eht );
-          }
-             
-          actmap->field[i].setparams();
+          pfield fld = &actmap->field[i];
+          fld->setparams();
+          if ( fld->bdt & cbbuildingentry )
+             fld->building->resetPicturePointers();
           i++;
-      } /* endfor x */
+      }
 }
 
 
@@ -1690,27 +1374,9 @@ void   tspfldloaders::chainitems ( void )
 
 void   tspfldloaders::setplayerexistencies ( void )
 {
-   int num = 0;
-   for (int sp = 7; sp >= 0; sp--) {
-         if ( actmap->player[sp].firstvehicle || actmap->player[sp].firstbuilding ) {
-            actmap->player[sp].existent = true;
-            actmap->actplayer = sp;
-            num++;
-         } 
-         else 
-            actmap->player[sp].existent = false;
-   } 
-
-/*
-   int anum = 0;
-   for ( sp = 0; sp < 8; sp++ )
-     if ( actmap->player[sp].existent ) {
-        if ( actmap->player[sp].alliance > num )
-           actmap->player[sp].alliance = anum;
-        anum++;
-     }
-*/
-
+   for ( int sp = 7; sp >= 0; sp--)
+      if ( actmap->player[sp].exist() )
+         actmap->actplayer = sp;
 }
 
 
@@ -1893,7 +1559,6 @@ int          tmaploaders::loadmap( const char *       name )
    displayLogMessage ( 10, "chainItems, ");
    chainitems ();
 
-   setbuildingsonmap();
    setplayerexistencies ();
 
    displayLogMessage ( 10, "setEventTriggers, ");
@@ -2053,8 +1718,6 @@ int          tsavegameloaders::loadgame( const char *       name )
    spfld = NULL;
  
    chainitems ();
-
-   setbuildingsonmap();
 
    seteventtriggers();
 
@@ -2241,8 +1904,6 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
    spfld = NULL;
 
   chainitems ();
-
-  setbuildingsonmap();
 
   seteventtriggers();
 
@@ -2445,10 +2106,6 @@ void  loadreplay( pmemorystreambuf streambuf )
 
 void treplayloaders :: initmap ( void )
 {
-    for ( int i = 0; i <= 8; i++) { 
-       spfld->player[i].firstvehicle = NULL; 
-       spfld->player[i].firstbuilding = NULL; 
-    } 
     spfld->game_parameter = NULL;
 }
 
@@ -2482,16 +2139,9 @@ void treplayloaders :: loadreplay ( pmemorystreambuf streambuf )
    spfld = NULL;
 
 
+  chainitems ();
 
-
-
-   chainitems ();
-
-   setbuildingsonmap(); 
-
-//   setplayerexistencies ();
-
-  seteventtriggers(); 
+  seteventtriggers();
 
   calculateallobjects(); 
 

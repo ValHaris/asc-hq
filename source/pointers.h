@@ -46,7 +46,8 @@
  typedef struct tresourceview* presourceview;
  typedef class tobject* pobject;
  typedef class tshareview *pshareview;
- typedef class  Buildingtype* pbuildingtype;
+ typedef class  BuildingType* pbuildingtype;
+ class Vehicletype;
  typedef class  Vehicletype*  pvehicletype ;
  typedef class  Building* pbuilding;
  typedef class  Vehicle*  pvehicle;

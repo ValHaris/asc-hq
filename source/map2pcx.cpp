@@ -174,7 +174,7 @@ int mapeditorMainThread ( void* _mapname )
              int playernum = 0;
              int ainum = 0;
              for ( int i = 0; i < 8; i++ )
-               if ( actmap->player[i].firstvehicle || actmap->player[i].firstbuilding ) {
+               if ( actmap->player[i].exist() ) {
                   if ( actmap->player[i].stat == 0 )
                      playernum++;
                   if ( actmap->player[i].stat == 1 )

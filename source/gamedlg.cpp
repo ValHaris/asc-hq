@@ -1,6 +1,11 @@
-//     $Id: gamedlg.cpp,v 1.62 2001-01-31 14:52:38 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.63 2001-02-01 22:48:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.62  2001/01/31 14:52:38  mbickel
+//      Fixed crashes in BI3 map importing routines
+//      Rewrote memory consistency checking
+//      Fileselect dialog now uses ASCStrings
+//
 //     Revision 1.61  2001/01/28 17:19:09  mbickel
 //      The recent cleanup broke some source files; this is fixed now
 //
@@ -796,7 +801,7 @@ void  tsetupnetwork :: init ( tnetwork* nw, int edt, int playr )
          int fp = actmap->actplayer;
          if ( fp == -1 ) {
             fp = 0;
-            while ( actmap->player[ fp ].existent == 0 )
+            while ( !actmap->player[ fp ].exist() )
                fp++;
          }
          frstcompnum = actmap->network->player[ fp ].compposition;
@@ -1455,7 +1460,7 @@ void         tcontinuecampaign::regroupevents ( pmap map )
       map->player[i].research.write_struct ( memoryStream );
       map->player[i].research.write_techs ( memoryStream );
 
-      if ( map->player[i].existent )
+      if ( map->player[i].exist() )
          dissectedunits[i] = map->player[ i ].dissectedunit;
       else
          dissectedunits[i] = NULL;
@@ -1701,7 +1706,7 @@ void         tchoosenewsinglelevel::run(void)
          int human = 0;
          for ( int i = 0; i < 8; i++ )
             if ( actmap->player[i].stat == ps_human )
-               if ( actmap->player[i].existent )
+               if ( actmap->player[i].exist() )
                   human++;
 
          if ( !human ) {
@@ -1719,6 +1724,9 @@ void         tchoosenewsinglelevel::run(void)
          }
 
          actmap->setupResources();
+         tlockdispspfld lock;
+         repaintdisplay();
+         computeview( actmap );
 
          do {
            next_turn();
@@ -1822,7 +1830,7 @@ void  ttributepayments :: init ( void )
 
    int pos = 0;
    for ( i = 0; i < 8; i++ )
-      if ( actmap->player[i].existent )
+      if ( actmap->player[i].exist() )
          if ( i != actmap->actplayer )
             players[pos++] = i;
 
@@ -2114,11 +2122,8 @@ void tresearchinfo::init ( void )
 
 void tresearchinfo::count ( void )
 {
-   pbuilding bld = actmap->player[actmap->actplayer].firstbuilding;
-   while ( bld ) {
-      rppt += bld->researchpoints;
-      bld=bld->next;
-   } /* endwhile */
+   for ( tmap::Player::BuildingList::iterator i = actmap->player[actmap->actplayer].buildingList.begin(); i != actmap->player[actmap->actplayer].buildingList.end(); i++ )
+      rppt += (*i)->researchpoints;
 }
 
 void tresearchinfo::buttonpressed ( int id )
@@ -3113,7 +3118,7 @@ void tmessagedlg :: setup ( void )
 
    int num = 0;
    for ( int i = 0; i < 8; i++ ) {
-      if ( actmap->player[i].existent )
+      if ( actmap->player[i].exist() )
          if ( actmap->actplayer != i ) {
             int x = 20 + ( num % 2 ) * 200;
             int y = ty2 + 10 + ( num / 2 ) * 20;
@@ -3148,7 +3153,7 @@ void tnewmessage :: init ( void )
    tdialogbox :: init ( );
    title = rtitle;
    for ( int i = 0; i < 8; i++ ) 
-      if ( actmap->player[i].existent &&  actmap->actplayer != i ) 
+      if ( actmap->player[i].exist() &&  actmap->actplayer != i )
          to[i] = 1;
       else
          to[i] = 0;
@@ -3210,7 +3215,7 @@ void tnewmessage :: run ( void )
       pmessage message = new tmessage ( actmap );
       message->text = c;
       for ( int i = 0; i < 8; i++ ) {
-         if ( actmap->player[i].existent )
+         if ( actmap->player[i].exist() )
             if ( actmap->actplayer != i ) 
                message->to |= to[i] << i;
       }
@@ -3307,7 +3312,7 @@ void teditmessage :: run ( void )
       message->text = c;
       message->to = 0;
       for ( int i = 0; i < 8; i++ ) {
-         if ( actmap->player[i].existent )
+         if ( actmap->player[i].exist() )
             if ( actmap->actplayer != i ) 
                message->to |= to[i] << i;
       }
@@ -3407,7 +3412,7 @@ void tviewmessages :: init ( char* ttl, pmessagelist strt, int editable, int md 
    int b = 0;
 
    for ( int i = 0; i < 8; i++ )
-      if ( actmap->player[i].existent  &&  actmap->actplayer != i ) 
+      if ( actmap->player[i].exist()  &&  actmap->actplayer != i )
             player[i] = b++;
       else
             player[i] = -1;
@@ -3706,7 +3711,7 @@ void         tviewmessage::redraw(void)
 
    int n = 0;
    for (i = 0; i < 8; i++ )
-      if ( actmap->player[i].existent  && i != actmap->actplayer )
+      if ( actmap->player[i].exist()  && i != actmap->actplayer )
          if ( cc & ( 1 << i ))
             n++;
    if ( n ) {
@@ -3714,7 +3719,7 @@ void         tviewmessage::redraw(void)
    
       n = 0;
       for ( i = 0; i < 8; i++ )
-         if ( actmap->player[i].existent  && i != actmap->actplayer )
+         if ( actmap->player[i].exist()  && i != actmap->actplayer )
             if ( cc & ( 1 << i )) {
                activefontsettings.color = 20 + 8 * i;
                //activefontsettings.background = 17 + 8 * i;
@@ -4827,7 +4832,7 @@ void         tgiveunitawaydlg :: init(void)
 
    num = 0;
    for ( int i = 0; i < 8; i++ )
-      if ( actmap->player[i].existent )
+      if ( actmap->player[i].exist() )
          if ( i != actmap->actplayer && getdiplomaticstatus ( i*8 ) == capeace ) 
             ply[num++] = i;
 

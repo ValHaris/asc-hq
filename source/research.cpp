@@ -184,7 +184,7 @@ bool tresearch :: technologyresearched ( int id )
 
 
 
-int tresearch :: vehicleclassavailable ( const pvehicletype fztyp , int classnm )
+int tresearch :: vehicleclassavailable ( const Vehicletype* fztyp , int classnm )
 {
    if ( fztyp->classbound[classnm].techlevel )
       if ( fztyp->classbound[classnm].techlevel <= techlevel )
@@ -219,7 +219,7 @@ int tresearch :: vehicleclassavailable ( const pvehicletype fztyp , int classnm 
 }
 
 
-int tresearch :: vehicletypeavailable ( const pvehicletype fztyp )
+int tresearch :: vehicletypeavailable ( const Vehicletype* fztyp )
 {
    if ( !fztyp )
       return 0;

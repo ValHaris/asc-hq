@@ -479,8 +479,8 @@ int    trunreplay :: removeunit ( pvehicle eht, int nwid )
     for ( int i = 0; i < 32; i++ )
        if ( eht->loading[i] )
           if ( eht->loading[i]->networkid == nwid ) {
-             removevehicle ( &eht->loading[i] );
-             // eht->loading[i] = NULL;
+             delete eht->loading[i];
+             eht->loading[i] = NULL;
              return 1;
           } else {
              int ld = removeunit ( eht->loading[i], nwid );
@@ -497,8 +497,8 @@ int  trunreplay :: removeunit ( int x, int y, int nwid )
       if ( fld->building ) {
          for ( int i = 0; i < 32; i++ ) {
             if ( fld->building->loading[i]->networkid == nwid ) {
-               removevehicle ( &fld->building->loading[i] );
-               // eht->loading[i] = NULL;
+               delete fld->building->loading[i];
+               fld->building->loading[i] = NULL;
                return 1;
             } else {
                int ld = removeunit ( fld->building->loading[i], nwid );
@@ -511,7 +511,8 @@ int  trunreplay :: removeunit ( int x, int y, int nwid )
          return 0;
    else
       if ( fld->vehicle->networkid == nwid ) {
-         removevehicle ( &fld->vehicle );
+         delete fld->vehicle ;
+         fld->vehicle = NULL;
          return 1;
       } else
          return removeunit ( fld->vehicle, nwid );
@@ -845,7 +846,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                                if ( bld && fld ) {
                                   displayActionCursor ( x, y );
-                                  putbuilding2( x, y, color, bld );
+                                  putbuilding2( MapCoordinate(x, y), color, bld );
                                   computeview( actmap );
                                   displaymap();
                                   wait();
@@ -911,10 +912,10 @@ void trunreplay :: execnextreplaymove ( void )
                            if ( fld && fld->building ) {
                               displayActionCursor ( x, y );
                               pbuilding bb = fld->building;
-                              if ( bb->completion ) {
-                                 bb->changecompletion ( -1 );
+                              if ( bb->getCompletion() ) {
+                                 bb->setCompletion( bb->getCompletion()-1);
                               } else {
-                                 removebuilding ( &bb );
+                                 delete bb;
                               }
                               computeview( actmap );
                               displaymap();

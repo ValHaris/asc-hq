@@ -19,14 +19,17 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <algorithm>
 #include "typen.h"
 #include "containerbase.h"
+#include "vehicletype.h"
 
-ContainerBase ::  ContainerBase ( ContainerBaseType* bt ) : baseType ( bt)
+ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, pmap map, int player ) : gamemap ( map ), baseType (bt)
 {
    for ( int i = 0; i< 32; i++ )
       loading[i] = NULL;
    damage = 0;
+   color = player*8;
 }
 
 
@@ -112,3 +115,51 @@ int ContainerBase :: vehiclesLoaded ( void ) const
 
    return a;
 }
+
+void ContainerBase :: addEventHook ( EventHook* eventHook )
+{
+   eventHooks.push_back ( eventHook );
+}
+
+void ContainerBase :: removeEventHook ( const EventHook* eventHook )
+{
+   list<EventHook*>::iterator i = find ( eventHooks.begin(), eventHooks.end(), eventHook );
+   if ( i != eventHooks.end() )
+      eventHooks.erase ( i );
+}
+
+
+ContainerBase :: ~ContainerBase ( )
+{
+   for ( list<EventHook*>::iterator i = eventHooks.begin(); i != eventHooks.end(); i++ )
+      (*i)->receiveEvent( EventHook::removal, 0 );
+}
+
+
+TemporaryContainerStorage :: TemporaryContainerStorage ( ContainerBase* _cb, bool storeCargo )
+{
+   cb = _cb;
+   tmemorystream stream ( &buf, 2 );
+   cb->write ( stream, false );
+   _storeCargo = storeCargo;
+}
+
+void TemporaryContainerStorage :: restore (  )
+{
+   if ( _storeCargo )
+      for ( int i = 0; i < 32; i++ )
+         if ( cb->loading[i] ) {
+            delete cb->loading[i];
+            cb->loading[i] = NULL;
+         }
+
+   tmemorystream stream ( &buf, 1 );
+   cb->read ( stream );
+}
+
+void TemporaryContainerStorage :: receiveEvent ( Events ev, int data )
+{
+   if ( ev == removal )
+      fatalError ( " TemporaryContainerStorage::restore - unit deleted");
+}
+

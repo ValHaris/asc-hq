@@ -1,6 +1,11 @@
-//     $Id: edmisc.cpp,v 1.47 2001-01-31 14:52:36 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.48 2001-02-01 22:48:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2001/01/31 14:52:36  mbickel
+//      Fixed crashes in BI3 map importing routines
+//      Rewrote memory consistency checking
+//      Fileselect dialog now uses ASCStrings
+//
 //     Revision 1.46  2001/01/28 20:42:11  mbickel
 //      Introduced a new string class, ASCString, which should replace all
 //        char* and std::string in the long term
@@ -647,7 +652,10 @@ void placebodentyp(void)
                   pf->direction = auswahld;
                   pf->setparams();
                   if (pf->vehicle != NULL) 
-                     if ( terrainaccessible(pf,pf->vehicle) == false ) removevehicle(&pf->vehicle); 
+                     if ( terrainaccessible(pf,pf->vehicle) == false ) {
+                        delete pf->vehicle;
+                        pf->vehicle = NULL;
+                     }
                }
             } 
          displaymap(); 
@@ -662,7 +670,10 @@ void placebodentyp(void)
          pf->direction = auswahld;
          pf->setparams();
          if (pf->vehicle != NULL) 
-            if ( terrainaccessible(pf,pf->vehicle) == false ) removevehicle(&pf->vehicle); 
+            if ( terrainaccessible(pf,pf->vehicle) == false ) {
+               delete pf->vehicle;
+               pf->vehicle = NULL;
+            }
       } 
    } /* endif */
    displaymap(); 
@@ -710,9 +721,10 @@ void placeunit(void)
             if ( !( pf->building             ) && ( accessible || actmap->getgameparameter( cgp_movefrominvalidfields)) ) {
                int set = 1;
                if ( pf->vehicle ) {
-                  if ( pf->vehicle->typ != auswahlf )
-                     removevehicle(&pf->vehicle);
-                   else {
+                  if ( pf->vehicle->typ != auswahlf ) {
+                     delete pf->vehicle;
+                     pf->vehicle = NULL;
+                   } else {
                       set = 0;
                       pf->vehicle->color = farbwahl * 8;
                    }
@@ -730,8 +742,10 @@ void placeunit(void)
                         while ( !(pf->vehicle->height & pf->vehicle->typ->height) && pf->vehicle->height )
                            pf->vehicle->height = pf->vehicle->height * 2;
                      }
-                     if (pf->vehicle->height == 0 )
-                        removevehicle(&pf->vehicle);
+                     if (pf->vehicle->height == 0 ) {
+                        delete pf->vehicle;
+                        pf->vehicle = NULL;
+                     }
                   }
                   if ( pf->vehicle ) {
                      pf->vehicle->setMovement ( pf->vehicle->typ->movement[log2(pf->vehicle->height)] );
@@ -739,7 +753,12 @@ void placeunit(void)
                   }
                }
             } 
-            else if (auswahlf == NULL) if (pf->vehicle != NULL) removevehicle(&pf->vehicle); 
+            else
+               if (auswahlf == NULL)
+                  if (pf->vehicle != NULL) {
+                     delete pf->vehicle;
+                     pf->vehicle = NULL;
+                  }
          displaymap(); 
          mousevisible(true); 
          cursor.show(); 
@@ -1063,18 +1082,8 @@ void         tplayerchange::anzeige(void)
       if (i == sel1 ) rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, 20 );
       else if ( i == sel2 ) rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, 28 );
       else rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, bkgcolor );
-      pvehicle fe = actmap->player[i].firstvehicle; 
-      pbuilding fb = actmap->player[i].firstbuilding; 
-      b = 0;
-      e = 0;
-      while (fe != NULL) {
-         e++;
-         fe = fe->next;
-      } /* endwhile */
-      while (fb != NULL) {
-         b++;
-         fb = fb->next;
-      } /* endwhile */
+      e = actmap->player[i].vehicleList.size();
+      b = actmap->player[i].buildingList.size();
       activefontsettings.justify = righttext;
       showtext2(strrr(e),x1+200,y1+56+i*30);
       showtext2(strrr(b),x1+255,y1+56+i*30);
@@ -1113,32 +1122,52 @@ void         tplayerchange::buttonpressed(int         id)
         break; */
      case 4: {
            if ( ( sel1 != 255) && ( sel2 != sel1 ) && ( sel2 != 255 ) ) {
-              pvehicle fe = actmap->player[sel1].firstvehicle; 
-              pbuilding fb = actmap->player[sel1].firstbuilding; 
-              while (fe != NULL) {
-                 fe->color = sel2 * 8;
-                 fe = fe->next;
-              } /* endwhile */
-              while (fb != NULL) {
-                 fb->color = sel2 * 8;
-                 fb = fb->next;
-              } /* endwhile */
-              fe = actmap->player[sel2].firstvehicle; 
-              fb = actmap->player[sel2].firstbuilding; 
-              while (fe != NULL) {
-                 fe->color = sel1 * 8;
-                 fe = fe->next;
-              } /* endwhile */
-              while (fb != NULL) {
-                 fb->color = sel1 * 8;
-                 fb = fb->next;
-              } /* endwhile */
-              fe = actmap->player[sel1].firstvehicle; 
-              fb = actmap->player[sel1].firstbuilding; 
-              actmap->player[sel1].firstvehicle = actmap->player[sel2].firstvehicle; 
-              actmap->player[sel1].firstbuilding = actmap->player[sel2].firstbuilding; ; 
-              actmap->player[sel2].firstvehicle = fe; 
-              actmap->player[sel2].firstbuilding = fb; 
+
+              // exchanging the players sel1 and sel2
+
+              typedef tmap::Player::VehicleList VL;
+              typedef tmap::Player::VehicleList::iterator VLI;
+
+              VL vl;
+              for ( VLI i = actmap->player[sel1].vehicleList.begin(); i != actmap->player[sel1].vehicleList.end(); ) {
+                 (*i)->color = sel2*8;
+                 vl.push_back ( *i );
+                 i = actmap->player[sel1].vehicleList.erase( i );
+              }
+
+              for ( VLI i = actmap->player[sel2].vehicleList.begin(); i != actmap->player[sel2].vehicleList.end(); ) {
+                 (*i)->color = sel1*8;
+                 actmap->player[sel1].vehicleList.push_back ( *i );
+                 i = actmap->player[sel2].vehicleList.erase( i );
+              }
+
+              for ( VLI i = vl.begin(); i != vl.end(); ) {
+                 actmap->player[sel2].vehicleList.push_back ( *i );
+                 i = vl.erase( i );
+              }
+
+
+              typedef tmap::Player::BuildingList BL;
+              typedef tmap::Player::BuildingList::iterator BLI;
+
+              BL bl;
+              for ( BLI i = actmap->player[sel1].buildingList.begin(); i != actmap->player[sel1].buildingList.end(); ) {
+                 (*i)->color = sel2*8;
+                 bl.push_back ( *i );
+                 i = actmap->player[sel1].buildingList.erase( i );
+              }
+
+              for ( BLI i = actmap->player[sel2].buildingList.begin(); i != actmap->player[sel2].buildingList.end(); ) {
+                 (*i)->color = sel1*8;
+                 actmap->player[sel1].buildingList.push_back ( *i );
+                 i = actmap->player[sel2].buildingList.erase( i );
+              }
+
+              for ( BLI i = bl.begin(); i != bl.end(); ) {
+                 actmap->player[sel2].buildingList.push_back ( *i );
+                 i = bl.erase( i );
+              }
+
               for (int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
                  pfield fld = &actmap->field[i];
                  if  ( fld->object  ) 
@@ -1157,32 +1186,21 @@ void         tplayerchange::buttonpressed(int         id)
         break;
      case 5: {
            if ( ( sel1 != 255) && ( sel2 != sel1 ) && ( sel2 != 255 ) ) {
-              pvehicle fe = actmap->player[sel1].firstvehicle; 
-              pbuilding fb = actmap->player[sel1].firstbuilding; 
-              if (fe == NULL) {
-                 actmap->player[sel1].firstvehicle = actmap->player[sel2].firstvehicle; 
-                 actmap->player[sel2].firstvehicle = NULL; 
-              } else {
-                 while (fe->next != NULL) fe = fe->next;
-                 fe->next = actmap->player[sel2].firstvehicle; 
-                 actmap->player[sel2].firstvehicle = NULL; 
-              } /* endif */
-              if (fb == NULL) {
-                 actmap->player[sel1].firstbuilding = actmap->player[sel2].firstbuilding; 
-                 actmap->player[sel2].firstbuilding = NULL; 
-              } else {
-                 while (fb->next != NULL) fb = fb->next;
-                 fb->next = actmap->player[sel2].firstbuilding; 
-                 actmap->player[sel2].firstbuilding = NULL; 
-              } /* endif */
-              while (fe != NULL) {
-                 fe->color = sel1 * 8;
-                 fe = fe->next;
-              } /* endwhile */
-              while (fb != NULL) {
-                 fb->color = sel1 * 8;
-                 fb = fb->next;
-              } /* endwhile */
+
+              // adding everything from player sel2 to sel1
+
+              for ( tmap::Player::VehicleList::iterator i = actmap->player[sel2].vehicleList.begin(); i != actmap->player[sel2].vehicleList.end(); ) {
+                 (*i)->color = sel1*8;
+                 actmap->player[sel1].vehicleList.push_back ( *i );
+                 i = actmap->player[sel2].vehicleList.erase( i );
+              }
+
+              for ( tmap::Player::BuildingList::iterator i = actmap->player[sel2].buildingList.begin(); i != actmap->player[sel2].buildingList.end(); ) {
+                 (*i)->color = sel1*8;
+                 actmap->player[sel1].buildingList.push_back ( *i );
+                 i = actmap->player[sel2].buildingList.erase( i );
+              }
+
               for (int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
                  pfield fld = &actmap->field[i];
                  if  ( fld->object  ) 
@@ -1488,19 +1506,16 @@ void         placebuilding(int               colorr,
    if (choose == true) {
       for ( int x = 0; x < 4; x++ )
          for ( int y = 0; y < 6; y++ )
-            if ( buildingtyp->getpicture ( x, y )) {
-               int xpos;
-               int ypos;
-               buildingtyp->getfieldcoordinates ( getxpos(), getypos(), x, y, &xpos, &ypos );
-               pfield fld = getfield ( xpos, ypos );
-               if ( buildingtyp->terrain_access->accessible ( fld->bdt ) <= 0 )
+            if ( buildingtyp->getpicture ( BuildingType::LocalCoordinate(x, y) )) {
+               MapCoordinate mc = buildingtyp->getFieldCoordinate ( MapCoordinate (getxpos(), getypos()), BuildingType::LocalCoordinate (x, y) );
+               if ( buildingtyp->terrain_access->accessible ( actmap->getField (mc)->bdt ) <= 0 )
                   f++;
             }
       if ( f )
          if (choice_dlg("Invalid terrain for building !","~i~gnore","~c~ancel") == 2) 
             return;
 
-      putbuilding(getxpos(),getypos(),colorr * 8,buildingtyp,buildingtyp->construction_steps); 
+      putbuilding( MapCoordinate( getxpos(),getypos()), colorr * 8,buildingtyp,buildingtyp->construction_steps);
    }
 
    gbde = getactfield()->building;
@@ -1587,35 +1602,46 @@ int  selectfield(int * cx ,int  * cy)
    tkey ch = ct_invvalue;
    do {
       if (keypress()) {
-            ch = r_key(); 
-            switch (ch) {
-               case ct_1k:
-               case ct_2k:   
-               case ct_3k:   
-               case ct_4k:   
-               case ct_5k:   
-               case ct_6k:   
-               case ct_7k:   
-               case ct_8k:   
-               case ct_9k:   
-               case ct_1k + ct_stp:   
-               case ct_2k + ct_stp:   
-               case ct_3k + ct_stp:   
-               case ct_4k + ct_stp:   
-               case ct_5k + ct_stp:   
-               case ct_6k + ct_stp:   
-               case ct_7k + ct_stp:   
-               case ct_8k + ct_stp:   
-               case ct_9k + ct_stp:   { 
-                                 mousevisible(false); 
-                                 movecursor(ch); 
-                                 cursor.show(); 
-                                 showStatusBar();
-                                 mousevisible(true); 
-                              } 
-                              break; 
-                } /* endswitch */
-      }
+         ch = r_key();
+         switch (ch) {
+            #ifdef NEWKEYB
+            case ct_up:
+            case ct_down:
+            case ct_left:
+            case ct_right:
+            case ct_up + ct_stp:
+            case ct_down + ct_stp:
+            case ct_left + ct_stp:
+            case ct_right + ct_stp:
+            #endif
+            case ct_1k:
+            case ct_2k:
+            case ct_3k:
+            case ct_4k:
+            case ct_5k:
+            case ct_6k:
+            case ct_7k:
+            case ct_8k:
+            case ct_9k:
+            case ct_1k + ct_stp:
+            case ct_2k + ct_stp:
+            case ct_3k + ct_stp:
+            case ct_4k + ct_stp:
+            case ct_5k + ct_stp:
+            case ct_6k + ct_stp:
+            case ct_7k + ct_stp:
+            case ct_8k + ct_stp:
+            case ct_9k + ct_stp:   {
+                              mousevisible(false);
+                              movecursor(ch);
+                              cursor.show();
+                              showStatusBar();
+                              mousevisible(true);
+                           }
+                           break;
+             } /* endswitch */
+      } else
+         releasetimeslice();
    } while ( ch!=ct_enter  &&  ch!=ct_space  && ch!=ct_esc); /* enddo */
    cursor.hide();
    *cx=cursor.posx+actmap->xpos;
@@ -1672,7 +1698,10 @@ void tfillpolygonbodentyp::setpointabs    ( int x,  int y  )
            ffield->direction = auswahld;
            ffield->setparams();
            if (ffield->vehicle != NULL) 
-              if ( terrainaccessible(ffield,ffield->vehicle) == false ) removevehicle(&ffield->vehicle); 
+              if ( terrainaccessible(ffield,ffield->vehicle) == false ) {
+                 delete ffield->vehicle;
+                 ffield->vehicle = NULL;
+              }
        }
 }
 
@@ -1688,7 +1717,10 @@ void tfillpolygonunit::setpointabs    ( int x,  int y  )
        if (ffield) {
           if ( terrainaccessible(ffield,ffield->vehicle) ) 
                { 
-                  if (ffield->vehicle != NULL) removevehicle(&ffield->vehicle); 
+                  if (ffield->vehicle != NULL) {
+                     delete ffield->vehicle;
+                     ffield->vehicle = NULL;
+                  }
                   if (auswahlf != NULL) {
                      ffield->vehicle = new Vehicle ( auswahlf,actmap, farbwahl );
                      ffield->vehicle->fillMagically();
@@ -1696,12 +1728,20 @@ void tfillpolygonunit::setpointabs    ( int x,  int y  )
                      while ( ! ( ( ( ( ffield->vehicle->height & ffield->vehicle->typ->height ) > 0) && (terrainaccessible(ffield,ffield->vehicle) == 2) ) ) && (ffield->vehicle->height != 0) )
                         ffield->vehicle->height = ffield->vehicle->height * 2;
                      for (i = 0; i <= 31; i++) ffield->vehicle->loading[i] = NULL;
-                     if (ffield->vehicle->height == 0 ) removevehicle(&ffield->vehicle); 
+                     if (ffield->vehicle->height == 0 ) {
+                        delete ffield->vehicle;
+                        ffield->vehicle = NULL;
+                     }
                      else ffield->vehicle->setMovement ( ffield->vehicle->typ->movement[log2(ffield->vehicle->height)] );
                      ffield->vehicle->direction = auswahld;
                   } 
             } 
-            else if (auswahlf == NULL) if (ffield->vehicle != NULL) removevehicle(&ffield->vehicle); 
+            else
+               if (auswahlf == NULL)
+                  if (ffield->vehicle != NULL) {
+                     delete ffield->vehicle;
+                     ffield->vehicle=NULL;
+                  }
             ffield->a.temp = tempvalue;
        }
 }
@@ -2580,42 +2620,41 @@ int        getpolygon(ppolygon *poly) //return Fehlerstatus
 
 
      class tunit: public tdialogbox {
+                TemporaryContainerStorage tus;
                 word        dirx,diry;
                 int        action;
-                pvehicle    unit, orgunit;
+                pvehicle    unit;
                 int         w2, heightxs;
                 char        namebuffer[1000];
               public:
                // char     checkvalue( char id, char* p );
-                void        init( pvehicle v );
+                tunit ( pvehicle v ) : tus ( v ), unit ( v ) {};
+                void        init( void );
                 void        run( void );
                 void        buttonpressed( int id );
      };
 
 
-void         tunit::init( pvehicle v )
-{ 
-   orgunit = new tvehicle ( v, NULL );
-   unit = v;
-
+void         tunit::init(  )
+{
    word         w;
    char *weaponammo;
 
    tdialogbox::init();
-   action = 0; 
+   action = 0;
    title = "Unit-Values";
 
-   windowstyle = windowstyle ^ dlg_in3d; 
+   windowstyle = windowstyle ^ dlg_in3d;
 
    x1 = 20;
    xsize = 600;
    y1 = 40;
    ysize = 400;
-   w = (xsize - 60) / 2; 
+   w = (xsize - 60) / 2;
    w2 = (xsize - 40) / 8;
    dirx= x1 + 300;
    diry= y1 + 100;
-   action = 0; 
+   action = 0;
 
 
    strcpy ( namebuffer, unit->name.c_str() );
@@ -2628,7 +2667,7 @@ void         tunit::init( pvehicle v )
 
    addbutton("~D~amage of Unit",50,160,250,180,2,1,2,true);
    addeingabe(2, &unit->damage, 0, 100 );
- 
+
    addbutton("~F~uel of Unit",50,200,250,220,2,1,3,true);
    addeingabe( 3, &unit->tank.fuel, 0, unit->typ->tank.fuel );
 
@@ -2638,8 +2677,8 @@ void         tunit::init( pvehicle v )
 
    int unitheights = 0;
    heightxs = 320;
-   pfield fld = getfield ( orgunit->xpos, orgunit->ypos);
-   /*if ( fld->vehicle == orgunit ) {*/
+   pfield fld = getfield ( unit->xpos, unit->ypos);
+   if ( fld->vehicle == unit ) {
       npush ( unit->height );
       for (i=0;i<=7 ;i++) {
           unit->height = 1 << i;
@@ -2650,7 +2689,7 @@ void         tunit::init( pvehicle v )
           unitheights |= 1 << i;
       } /* endfor  Buttons 4-11*/
       npop ( unit->height );
-   //}
+   }
 
    if ( unit->typ->classnum > 0 ) addbutton("C~h~ange Class",280,280,450,300,0,1,32,true);
 
@@ -2661,9 +2700,9 @@ void         tunit::init( pvehicle v )
    addkey(30,ct_enter );
    addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,31,true);
    addkey(31,ct_esc );
-   
+
    #define maxeditable 6
-   
+
    for(i =0;i < unit->typ->weapons->count;i++) {   	
      if (i < maxeditable) {
         weaponammo = new(char[25]);
@@ -2677,15 +2716,15 @@ void         tunit::init( pvehicle v )
    	
    }
 
-   buildgraphics(); 
- 
+   buildgraphics();
+
    mousevisible(false);
 
-   if ( unitheights ) 
+   if ( unitheights )
        for (i=0;i<=7 ;i++) {
-           if ( unit->height == (1 << i) ) 
+           if ( unit->height == (1 << i) )
               bar(x1 + 25+( i * w2),y1 + heightxs-5,x1 + w2 * (i +1 ) - 5,y1 + heightxs-3,red);
-    
+
            if ( unitheights & ( 1 << i ))
               putimage(x1 + 28+( i * w2), y1 + heightxs + 2 ,icons.height[i]);
        }
@@ -2694,7 +2733,7 @@ void         tunit::init( pvehicle v )
    float radius = 50;
    float pi = 3.14159265;
    for ( int i = 0; i < sidenum; i++ ) {
-                              
+
       int x = (int) (dirx + radius * sin ( 2 * pi * (float) i / (float) sidenum ));
       int y = (int) (diry - radius * cos ( 2 * pi * (float) i / (float) sidenum ));
 
@@ -2708,12 +2747,12 @@ void         tunit::init( pvehicle v )
   } /*Buttons 14 - 14 +sidenum*/
 
    putrotspriteimage(dirx + x1 - fieldsizex/2 ,diry + y1 - fieldsizey/2, unit->typ->picture[ unit->direction ],unit->color);
-   mousevisible(true); 
-} 
+   mousevisible(true);
+}
 
 /*
 char      tunit::checkvalue( char id, void* p)
-{ 
+{
    if ( id == 3 ) {
    }
    addbutton("~F~uel of Unit",50,200,250,220,2,1,3,true);
@@ -2722,26 +2761,26 @@ char      tunit::checkvalue( char id, void* p)
    addbutton("~M~aterial",50,240,250,260,2,1,12,true);
    addeingabe(12,&unit->material, 0, unit->getmaxmaterialforweight() );
    return  true;
-} 
+}
 */
 
 void         tunit::run(void)
-{ 
-   do { 
+{
+   do {
       tdialogbox::run();
-   }  while ( !action ); 
-} 
+   }  while ( !action );
+}
 
 
 void         tunit::buttonpressed(int         id)
-{ 
+{
    int ht;
- 
+
    switch (id) {
    case 3:  addeingabe(12,&unit->tank.material, 0, unit->putResource(maxint, Resources::Material, 1 ) );
       break;
-      
-   case 4 : 
+
+   case 4 :
    case 5 :
    case 6 :
    case 7 :
@@ -2762,12 +2801,12 @@ void         tunit::buttonpressed(int         id)
    break;
    case 12: addeingabe( 3, &unit->tank.fuel, 0, unit->putResource(maxint, Resources::Fuel, 1 ) );
       break;
-   
-   case 14 : 
-   case 15 : 
+
+   case 14 :
+   case 15 :
    case 16 :
    case 17 :
-   case 18 :                 
+   case 18 :
    case 19 :
    case 20 :
    case 21 :  {
@@ -2780,35 +2819,33 @@ void         tunit::buttonpressed(int         id)
          break;
    case 30 : {
          mapsaved = false;
-         action = 1; 
+         action = 1;
          if ( unit->reactionfire.status ) {
             unit->reactionfire.status = tvehicle::ReactionFire::ready;
             unit->reactionfire.enemiesAttackable = 0xff;
          }
          unit->name = namebuffer;
-         delete orgunit ;
         }
         break;
     case 31 : action = 1;
-          unit->clone ( orgunit, actmap );
-          delete orgunit;
+              tus.restore();
         break;
     case 32: class_change( unit );
         break;
    } /* endswitch */
-} 
+}
 
 
 void         changeunitvalues(pvehicle ae)
-{ 
-   if ( !ae ) 
+{
+   if ( !ae )
       return;
 
-   tunit units;
-   units.init( ae ); 
-   units.run(); 
-   units.done(); 
-} 
+   tunit units ( ae );
+   units.init();
+   units.run();
+   units.done();
+}
 
 
 //* õS Resource
@@ -2825,68 +2862,68 @@ void         changeunitvalues(pvehicle ae)
 
 
 void         tres::init(void)
-{ word         w; 
+{ word         w;
 
    tdialogbox::init();
-   action = 0; 
+   action = 0;
    title = "Resources";
    x1 = 170;
-   xsize = 200; 
-   y1 = 70; 
-   ysize = 200; 
-   w = (xsize - 60) / 2; 
-   action = 0; 
+   xsize = 200;
+   y1 = 70;
+   ysize = 200;
+   w = (xsize - 60) / 2;
+   action = 0;
    pf = getactfield();
-   fuel = pf->fuel; 
-   material = pf->material; 
+   fuel = pf->fuel;
+   material = pf->material;
 
-   windowstyle = windowstyle ^ dlg_in3d; 
+   windowstyle = windowstyle ^ dlg_in3d;
 
    activefontsettings.length = 200;
- 
-   addbutton("~F~uel (0-255)",50,70,150,90,2,1,1,true); 
+
+   addbutton("~F~uel (0-255)",50,70,150,90,2,1,1,true);
    addeingabe(1,&fuel,0,255);
-   addbutton("~M~aterial (0-255)",50,110,150,130,2,1,2,true); 
+   addbutton("~M~aterial (0-255)",50,110,150,130,2,1,2,true);
    addeingabe(2,&material,0,255);
 
-   addbutton("~S~et Vals",20,ysize - 40,20 + w,ysize - 10,0,1,7,true); 
-   addkey(7,ct_enter); 
-   addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,8,true); 
+   addbutton("~S~et Vals",20,ysize - 40,20 + w,ysize - 10,0,1,7,true);
+   addkey(7,ct_enter);
+   addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,8,true);
 
-   buildgraphics(); 
+   buildgraphics();
 
-   mousevisible(true); 
-} 
+   mousevisible(true);
+}
 
 
 void         tres::run(void)
-{ 
-   do { 
+{
+   do {
       tdialogbox::run();
-   }  while (!((taste == ct_esc) || (action == 1))); 
-} 
+   }  while (!((taste == ct_esc) || (action == 1)));
+}
 
 
 void         tres::buttonpressed(int         id)
-{ 
-   if (id == 7) { 
+{
+   if (id == 7) {
       mapsaved = false;
-      action = 1; 
-      pf->fuel = fuel; 
-      pf->material = material; 
-   } 
-   if (id == 8) action = 1; 
-} 
+      action = 1;
+      pf->fuel = fuel;
+      pf->material = material;
+   }
+   if (id == 8) action = 1;
+}
 
 
 void         changeresource(void)
-{ 
+{
    tres         resource;
 
-   resource.init(); 
-   resource.run(); 
-   resource.done(); 
-} 
+   resource.init();
+   resource.run();
+   resource.done();
+}
 
 //* õS MineStrength
 
@@ -2902,58 +2939,58 @@ void         changeresource(void)
 
 
 void         tminestrength::init(void)
-{ word         w; 
+{ word         w;
 
    tdialogbox::init();
-   action = 0; 
+   action = 0;
    title = "Minestrength";
    x1 = 170;
-   xsize = 200; 
-   y1 = 70; 
+   xsize = 200;
+   y1 = 70;
    ysize = 160;
-   w = (xsize - 60) / 2; 
-   action = 0; 
+   w = (xsize - 60) / 2;
+   action = 0;
    pf = getactfield();
    strength = pf->object->mine[0]->strength;
 
-   windowstyle = windowstyle ^ dlg_in3d; 
+   windowstyle = windowstyle ^ dlg_in3d;
 
    activefontsettings.length = 200;
- 
+
    addbutton("~S~trength (0-255)",30,70,170,90,2,1,1,true);
    addeingabe(1,&strength,0,255);
 
-   addbutton("~S~et Vals",20,ysize - 40,20 + w,ysize - 10,0,1,7,true); 
-   addkey(7,ct_enter); 
-   addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,8,true); 
+   addbutton("~S~et Vals",20,ysize - 40,20 + w,ysize - 10,0,1,7,true);
+   addkey(7,ct_enter);
+   addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,8,true);
 
-   buildgraphics(); 
+   buildgraphics();
 
-   mousevisible(true); 
-} 
+   mousevisible(true);
+}
 
 
 void         tminestrength::run(void)
-{ 
-   do { 
+{
+   do {
       tdialogbox::run();
-   }  while (!((taste == ct_esc) || (action == 1))); 
-} 
+   }  while (!((taste == ct_esc) || (action == 1)));
+}
 
 
 void         tminestrength::buttonpressed(int         id)
-{ 
-   if (id == 7) { 
+{
+   if (id == 7) {
       mapsaved = false;
-      action = 1; 
+      action = 1;
       pf->object->mine[0]->strength = strength;
-   } 
-   if (id == 8) action = 1; 
-} 
+   }
+   if (id == 8) action = 1;
+}
 
 
 void         changeminestrength(void)
-{ 
+{
    tminestrength  ms;
 
    pf =  getactfield();
@@ -2961,23 +2998,23 @@ void         changeminestrength(void)
    ms.init();
    ms.run();
    ms.done();
-} 
+}
 
 
 //* õS Pulldown
 
 void         pulldown( void )
 
-{ 
+{
    pd.checkpulldown();
    if ( pd.action2execute >= 0 ) {
       execaction ( pd.action2execute );
 
-      if (mouseparams.y <= pd.pdb.pdbreite ) 
+      if (mouseparams.y <= pd.pdb.pdbreite )
          pd.baron();
       pd.action2execute = -1;
-   } 
-} 
+   }
+}
 
 //* õS Laderaum Unit-Cargo
 
@@ -3013,10 +3050,10 @@ void tladeraum::redraw ( void )
    tdialogbox::redraw();
    displayallitems();
 }
-   
+
 
 void         tladeraum::init( char* ttl )
-{ 
+{
    #ifdef HEXAGON
     maxusable = 18;
    #else
@@ -3031,28 +3068,28 @@ void         tladeraum::init( char* ttl )
    tdialogbox::init();
    title = ttl;
    x1 = 20;
-   xsize = 600; 
-   y1 = 50; 
-   ysize = 400; 
-   int w = (xsize - 60) / 2; 
-   action = 0; 
+   xsize = 600;
+   y1 = 50;
+   ysize = 400;
+   int w = (xsize - 60) / 2;
+   action = 0;
 
-   windowstyle = windowstyle ^ dlg_in3d; 
+   windowstyle = windowstyle ^ dlg_in3d;
 
    addbutton("~N~ew",20,40,100,70,0,1,1,true);
    addbutton("~E~rase",120,40,220,70,0,1,2,true);
 
    addbutton("~O~K",20,ysize - 40,20 + w,ysize - 10,0,1,7,true);
-   addkey(7,ct_enter); 
-   addbutton("Cancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,8,true); 
+   addkey(7,ct_enter);
+   addbutton("Cancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,8,true);
    addkey(8,ct_esc );
 
-   buildgraphics(); 
+   buildgraphics();
 
-   displayallitems(); 
+   displayallitems();
    displayinfotext();
 
-} 
+}
 
 void tladeraum :: displayallitems ( void )
 {
@@ -3096,7 +3133,7 @@ void         tladeraum::displayinfotext ( void )
 {
    npush ( activefontsettings );
    activefontsettings.background = lightgray;
-   activefontsettings.color = red; 
+   activefontsettings.color = red;
    activefontsettings.length = 185;
    activefontsettings.font = schriften.smallarial;
    const char* it = getinfotext( cursorpos );
@@ -3106,11 +3143,11 @@ void         tladeraum::displayinfotext ( void )
 }
 
 void         tladeraum::run(void)
-{ 
+{
    mousevisible( true );
-   do { 
+   do {
       tdialogbox::run();
-      
+
       checkforadditionalkeys ( taste );
       int oldpos = cursorpos;
       switch (taste) {
@@ -3140,57 +3177,57 @@ void         tladeraum::run(void)
       if ( cursorpos >= 32 )
          cursorpos = 31;
 
-      if ( mouseparams.taste == 1) 
+      if ( mouseparams.taste == 1)
          for ( int i = 0; i < 32; i++ )
             if ( mouseoverfield ( i ))
                cursorpos = i;
-       
+
       if ( cursorpos != oldpos ) {
          displaysingleitem ( oldpos );
          displaysingleitem ( cursorpos );
          displayinfotext();
-      }                 
+      }
 
    }  while ( !action );
    finish ( action == 1 );
 
-} 
+}
 
 
 void         tladeraum::buttonpressed( int id )
-{ 
-   if (id == 1) { 
+{
+   if (id == 1) {
       additem ();
       redraw();
-   } 
-   if (id == 2) { 
+   }
+   if (id == 2) {
       removeitem ( cursorpos );
       displayallitems();
-   } 
-   if (id == 7) { 
+   }
+   if (id == 7) {
       mapsaved = false;
-      action = 2; 
-   } 
-   if (id == 8) 
-      action = 1; 
+      action = 2;
+   }
+   if (id == 8)
+      action = 1;
 
-} 
+}
 
 
 void         tladeraum::done(void)
-{ 
-   tdialogbox::done(); 
+{
+   tdialogbox::done();
    npop ( farbwahl );
-   ch = 0; 
-} 
+   ch = 0;
+}
 
 
 
 
 class tvehiclecargo : public tladeraum {
+                    TemporaryContainerStorage tus;
                protected:
                     pvehicle transport;
-                    pvehicle orgvehicle;
                     virtual const char* getinfotext ( int pos );
                     virtual void additem ( void );
                     virtual void removeitem ( int pos );
@@ -3199,7 +3236,8 @@ class tvehiclecargo : public tladeraum {
                     virtual void finish ( int cancel );
 
                 public:
-                    void init ( pvehicle unit );
+                    tvehiclecargo ( pvehicle unit ) : tus ( unit, true ), transport ( unit ) {};
+                    void init (  );
 
 
 };
@@ -3219,12 +3257,9 @@ const char* tvehiclecargo :: getinfotext ( int pos )
 }
 
 
-void tvehiclecargo :: init ( pvehicle unit )
+void tvehiclecargo :: init (  )
 {
-   transport = unit;       // if the other way round, freeweight() does not work any more
-   orgvehicle = new tvehicle ( unit, NULL );
    tladeraum::init ( "cargo" );
-   disablebutton ( 8 );
 }
 
 void tvehiclecargo :: displaysingleitem ( int pos, int x, int y )
@@ -3240,8 +3275,10 @@ void tvehiclecargo :: additem  ( void )
 
 void tvehiclecargo :: removeitem ( int pos )
 {
-   if ( transport->loading[ pos ] )
-      removevehicle ( &transport->loading[ pos ] );
+   if ( transport->loading[ pos ] ) {
+      delete transport->loading[ pos ] ;
+      transport->loading[ pos ] = NULL;
+   }
 }
 
 void tvehiclecargo :: checkforadditionalkeys ( tkey ch )
@@ -3257,18 +3294,16 @@ void tvehiclecargo :: checkforadditionalkeys ( tkey ch )
 
 void tvehiclecargo :: finish ( int cancel )
 {
-   if ( cancel ) 
-      transport->clone ( orgvehicle, NULL );
-   
-   delete orgvehicle;
+   if ( cancel )
+      tus.restore();
 }
 
 
 void         unit_cargo( pvehicle vh )
 { 
    if ( vh && vh->typ->loadcapacity ) {
-      tvehiclecargo laderaum; 
-      laderaum.init( vh ); 
+      tvehiclecargo laderaum ( vh );
+      laderaum.init();
       laderaum.run(); 
       laderaum.done(); 
    }
@@ -3278,30 +3313,19 @@ void         unit_cargo( pvehicle vh )
 //* õS Laderaum2 Building-Cargo
 
 class tbuildingcargoprod : public tladeraum {
+                    TemporaryContainerStorage tus;
                protected:
                     pbuilding building;
-                    pbuilding orgbuilding;
                     void finish ( int cancel );
                 public:
-                    void init ( pbuilding bld, char* title );
+                    tbuildingcargoprod ( pbuilding bld ) : tus ( bld, true ), building ( bld ) {};
        };
 
 
-void tbuildingcargoprod :: init ( pbuilding bld, char* title )
-{
-   building = bld; 
-   orgbuilding = new Building ( bld, actmap );
-   tladeraum::init ( title );
-}
-
 void tbuildingcargoprod :: finish ( int cancel )
 {
-   if ( cancel ) {
-      swapbuildings ( orgbuilding, building );
-      removebuilding ( &orgbuilding );
-   } else {
-      removebuilding ( &orgbuilding );
-   }
+   if ( cancel )
+      tus.restore();
 }
 
 class tbuildingcargo : public tbuildingcargoprod {
@@ -3311,6 +3335,8 @@ class tbuildingcargo : public tbuildingcargoprod {
                     virtual void removeitem ( int pos );
                     virtual void checkforadditionalkeys ( tkey ch );
                     void displaysingleitem ( int pos, int x, int y );
+               public:
+                    tbuildingcargo ( pbuilding bld ) : tbuildingcargoprod ( bld ) {};
    };
 
 
@@ -3328,8 +3354,10 @@ void tbuildingcargo :: additem  ( void )
 
 void tbuildingcargo :: removeitem ( int pos )
 {
-   if ( building->loading[ pos ] )
-      removevehicle ( &building->loading[ pos ] );
+   if ( building->loading[ pos ] ) {
+      delete building->loading[ pos ] ;
+      building->loading[ pos ] = NULL;
+   }
 }
 
 void tbuildingcargo :: checkforadditionalkeys ( tkey ch )
@@ -3359,8 +3387,8 @@ const char* tbuildingcargo :: getinfotext ( int pos )
 void         building_cargo( pbuilding bld )
 {
    if ( bld  ) {
-      tbuildingcargo laderaum; 
-      laderaum.init( bld, "cargo" ); 
+      tbuildingcargo laderaum ( bld );
+      laderaum.init( "cargo" );
       laderaum.run(); 
       laderaum.done(); 
    }
@@ -3374,6 +3402,8 @@ class tbuildingproduction : public tbuildingcargoprod {
                     virtual void additem ( void );
                     virtual void removeitem ( int pos );
                     void displaysingleitem ( int pos, int x, int y );
+               public:
+                    tbuildingproduction ( pbuilding bld ) : tbuildingcargoprod ( bld ) {};
    };
 
 void tbuildingproduction :: displaysingleitem ( int pos, int x, int y )
@@ -3406,8 +3436,8 @@ const char* tbuildingproduction :: getinfotext ( int pos )
 void         building_production( pbuilding bld )
 {
    if ( bld  && (bld->typ->special & cgvehicleproductionb ) ) {
-      tbuildingproduction laderaum; 
-      laderaum.init( bld, "production" ); 
+      tbuildingproduction laderaum ( bld );
+      laderaum.init( "production" );
       laderaum.run(); 
       laderaum.done(); 
    }
@@ -3443,14 +3473,14 @@ void movebuilding ( void )
       pbuilding bld = fld->building;
  
       bld->unchainbuildingfromfield ();
-   
-      int x = bld->xpos;
-      int y = bld->ypos;
+
+      MapCoordinate mc = bld->getEntry();
+      MapCoordinate oldPosition = mc;
       int res2 = -1;
       do {
-         res2 = selectfield ( &x, &y );
+         res2 = selectfield ( &mc.x, &mc.y );
          if ( res2 > 0 ) {
-            int res = bld->chainbuildingtofield ( x, y );
+            int res = bld->chainbuildingtofield ( mc );
             if ( res ) {
                displaymessage ( "you cannot place the building here", 1 );
                res2 = -1;
@@ -3458,7 +3488,7 @@ void movebuilding ( void )
          }
       } while ( res2 < 0  );
       if ( res2 == 0 ) {   // operation canceled
-         if ( bld->chainbuildingtofield ( bld->xpos, bld->ypos ))
+         if ( bld->chainbuildingtofield ( oldPosition ))
             displaymessage ( "severe inconsistency in movebuilding !", 1 );
       } 
       displaymap();
@@ -3586,7 +3616,7 @@ class UnitTypeTransformation {
                 int unitstransformed;
                 int unitsnottransformed;
 
-                pvehicletype transformvehicletype ( pvehicletype type, int unitsetnum, int translationnum );
+                pvehicletype transformvehicletype ( const Vehicletype* type, int unitsetnum, int translationnum );
                 void transformvehicle ( pvehicle veh, int unitsetnum, int translationnum );
                 dynamic_array<int> vehicleTypesNotTransformed;
                 int vehicleTypesNotTransformedNum ;
@@ -3671,7 +3701,7 @@ void         UnitTypeTransformation :: TranslationTableSelection::run(void)
       redline = -1;
 } 
 
-pvehicletype UnitTypeTransformation :: transformvehicletype ( pvehicletype type, int unitsetnum, int translationnum )
+pvehicletype UnitTypeTransformation :: transformvehicletype ( const Vehicletype* type, int unitsetnum, int translationnum )
 {
    for ( int i = 0; i < unitSets[unitsetnum]->transtab[translationnum]->translation.size(); i++ )
       if ( unitSets[unitsetnum]->transtab[translationnum]->translation[i].from == type->id ) {
@@ -3811,11 +3841,13 @@ string MapSwitcher :: getName ()
   string s;
   s = name[active];
 
-  if ( !actmap->preferredFileNames.mapname[0].empty() ) {
-     s += " ( ";
-     s += actmap->preferredFileNames.mapname[0];
-     s += " ) ";
-  }
+  if ( actmap )
+     if ( !actmap->preferredFileNames.mapname[0].empty() ) {
+        s += " ( ";
+        s += actmap->preferredFileNames.mapname[0];
+        s += " ) ";
+     }
+
   return s;
 }
 
@@ -3836,7 +3868,9 @@ void showStatusBar(void)
    npush ( activefontsettings );
 
    char       s[200];
-   sprintf(s, "X:%d/%d Y:%d/%d", getxpos(), int(actmap->xsize), getypos(), int(actmap->ysize));
+   s[0] = 0;
+   if ( actmap )
+      sprintf(s, "X:%d/%d Y:%d/%d", getxpos(), int(actmap->xsize), getypos(), int(actmap->ysize));
 
    int y = agmp->resolutiony - 45;
 

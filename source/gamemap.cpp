@@ -58,10 +58,6 @@ tmap :: tmap ( void )
              alliances[i][j] = 0;
 
       for ( i = 0; i< 9; i++ ) {
-         player[i].existent = 0;
-         player[i].firstvehicle = NULL;
-         player[i].firstbuilding = NULL;
-
          player[i].ai = NULL;
 
          if ( i == 0 )
@@ -153,9 +149,9 @@ void tmap :: read ( tnstream& stream )
 
    int dummy_playername[9];
    for ( i = 0; i< 9; i++ ) {
-      player[i].existent = stream.readChar();
-      player[i].firstvehicle = NULL; stream.readInt(); // dummy
-      player[i].firstbuilding = NULL; stream.readInt(); // dummy
+      player[i].existanceAtBeginOfTurn = stream.readChar();
+      stream.readInt(); // dummy
+      stream.readInt(); // dummy
       player[i].research.read_struct ( stream );
       player[i].ai = (BaseAI*) stream.readInt();
       player[i].stat = stream.readChar();
@@ -443,7 +439,7 @@ void tmap :: write ( tnstream& stream )
          stream.writeChar( alliances[j][i] );
 
    for ( i = 0; i< 9; i++ ) {
-      stream.writeChar( player[i].existent );
+      stream.writeChar( player[i].existanceAtBeginOfTurn );
       stream.writeInt( 1 ); // dummy
       stream.writeInt( 1 ); // dummy
       player[i].research.write_struct ( stream );
@@ -721,16 +717,18 @@ void tmap :: setupResources ( void )
 
      #ifdef sgmain
 
-      for ( pbuilding bld = player[n].firstbuilding; bld ; bld = bld->next )
+      for ( Player::BuildingList::iterator i = player[n].buildingList.begin(); i != player[n].buildingList.end(); i++ )
          for ( int r = 0; r < 3; r++ )
             if ( isResourceGlobal( r )) {
-               bi_resource[n].resource(r) += bld->actstorage.resource(r);
-               bld->actstorage.resource(r) = 0;
+               bi_resource[n].resource(r) += (*i)->actstorage.resource(r);
+               (*i)->actstorage.resource(r) = 0;
             }
      #endif
    }
   #endif
 }
+
+/*
 
 void tmap :: chainunit ( pvehicle eht )
 {
@@ -767,6 +765,8 @@ void tmap :: chainbuilding ( pbuilding bld )
       bld->chainToMap ( this );
    }
 }
+
+*/
 
 const char* tmap :: getPlayerName ( int playernum )
 {
@@ -838,14 +838,11 @@ pvehicle tmap :: getUnit ( pvehicle eht, int nwid )
 
 pvehicle tmap :: getUnit ( int nwid )
 {
-   for ( int i = 0; i < 9; i++ ) {
-      pvehicle veh = player[i].firstvehicle;
-      while ( veh ) {
-         if ( veh->networkid == nwid )
-            return veh;
-         veh = veh->next;
-      };
-   }
+   for ( int p = 0; p < 9; p++ )
+      for ( Player::VehicleList::iterator i = player[p].vehicleList.begin(); i != player[p].vehicleList.end(); i++ )
+         if ( (*i)->networkid == nwid )
+            return *i;
+
    return NULL;
 }
 
@@ -897,23 +894,14 @@ tmap :: ~tmap ()
 {
    if ( field )
       for ( int l=0 ;l < xsize * ysize ; l++ ) {
-         if ( field[l].bdt & cbbuildingentry ) {
-            pbuilding aktbuilding = field[l].building;
-            for ( int i=0; i<31 ; i++ )
-               if (aktbuilding->loading[i])
-                  delete aktbuilding->loading[i] ;
+         if ( field[l].bdt & cbbuildingentry )
+            delete field[l].building;
 
-            delete aktbuilding ;
-         }
 
          pvehicle aktvehicle = field[l].vehicle;
-         if ( aktvehicle ) {
-            for ( int i=0; i<31 ; i++ )
-               if (aktvehicle->loading[i])
-                  delete aktvehicle->loading[i] ;
-
+         if ( aktvehicle )
             delete aktvehicle;
-         }
+
       } /* endfor */
 
    int i;
@@ -1177,6 +1165,10 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
   return 0;
 }
 
+bool tmap::Player::exist()
+{
+  return !(buildingList.empty() && vehicleList.empty());
+}
 
 
 #ifdef converter
@@ -1296,7 +1288,7 @@ void tmap :: startGame ( )
    memset ( cols, 0, sizeof ( cols ));
    int i;
    for ( i = 0; i < 8 ; i++) {
-      if ( player[i].existent ) {
+      if ( player[i].exist() ) {
          num++;
          cols[ i * 8 ] = 1;
       } else
@@ -1320,16 +1312,14 @@ void tmap :: startGame ( )
 
       if ( field[i].building && field[i].building->color < 64 ) 
          if ( cols[ field[i].building->color] ) {
-            cursorpos.position[ field[i].building->color / 8 ].cx = field[i].building->xpos;
-            cursorpos.position[ field[i].building->color / 8 ].cy = field[i].building->ypos;
+            cursorpos.position[ field[i].building->color / 8 ].cx = field[i].building->getEntry().x;
+            cursorpos.position[ field[i].building->color / 8 ].cy = field[i].building->getEntry().y;
             num--;
             cols[ field[i].building->color] = 0;
          }
       i++;
    } while ( num   &&   i <= sze ); /* enddo */
-   i = 0;
-   while ( !player[i].existent )
-      i++;
+
 
    for ( int n = 0; n< 8; n++ ) {
       bi_resource[n].energy = 0;

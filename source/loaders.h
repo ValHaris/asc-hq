@@ -1,6 +1,11 @@
-//     $Id: loaders.h,v 1.13 2001-01-31 14:52:41 mbickel Exp $
+//     $Id: loaders.h,v 1.14 2001-02-01 22:48:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2001/01/31 14:52:41  mbickel
+//      Fixed crashes in BI3 map importing routines
+//      Rewrote memory consistency checking
+//      Fileselect dialog now uses ASCStrings
+//
 //     Revision 1.12  2001/01/23 21:05:19  mbickel
 //      Speed up of AI
 //      Lot of bugfixes in AI
@@ -164,10 +169,6 @@ class  tspfldloaders {
        public:
            pnstream        stream;
            tmap*     spfld;
-
-
-           void            writebuilding  ( pbuilding bld );
-           void            readbuilding ( pbuilding &bld );
 
            void            writeevent  ( pevent event );
            void            readevent ( pevent& event1 );
