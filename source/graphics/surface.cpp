@@ -103,6 +103,22 @@ void Surface::convert()
          s.SetColorKey( SDL_SRCCOLORKEY, GetPixelFormat().colorkey() );
       *this = s;   
    }
+   
+   if ( default32bit && GetPixelFormat().BytesPerPixel() == 4 )  {
+      if ( default32bit->Rmask() != GetPixelFormat().Rmask() || default32bit->Gmask() != GetPixelFormat().Gmask() || default32bit->Bmask() != GetPixelFormat().Bmask() ) {
+         SDL_Surface *tmp;
+         if ( flags() & SDL_SRCALPHA )
+            tmp  = SDL_DisplayFormatAlpha(me);
+         else   
+            tmp  = SDL_DisplayFormat(me);
+            
+         if ( !tmp )
+            return;   
+            
+         SetSurface(tmp);
+      }
+   }
+  
 }
 
 Surface::Surface(const SDLmm::Surface& other) : SDLmm::Surface ( other )
@@ -238,23 +254,28 @@ void Surface::read ( tnstream& stream )
             SetAlpha ( 0, SDL_ALPHA_OPAQUE);
             
       } else {
-         int w =  (hd.id + 1) * (hd.size + 1) + 4 ;
-         char  *pnter = new char [ w ];
-         memcpy ( pnter, &hd, sizeof ( hd ));
-         char* q = pnter + sizeof(hd);
-         stream.readdata ( q, w - sizeof(hd) ); // endian ok ?
+         int w =  (hd.id + 1) * (hd.size + 1) ;
+         
+         char* pntr = (char*) asc_malloc( w );
+         memcpy ( pntr, ((char*)&hd) + 4, sizeof ( hd ) - 4);
+         char* q = pntr + sizeof(hd) - 4;
+         stream.readdata ( q, w - sizeof(hd) + 4 ); // endian ok ?
 
-         SetSurface( SDL_CreateRGBSurfaceFrom(pnter+4, hd.id+1, hd.size+1, 8, hd.id+1, 0, 0, 0, 0 ));
+         SDL_Surface* s = SDL_CreateRGBSurfaceFrom(pntr, hd.id+1, hd.size+1, 8, hd.id+1, 0, 0, 0, 0 );
+         s->flags &= ~SDL_PREALLOC;
+         
+         SetSurface( s );
          SetColorKey( SDL_SRCCOLORKEY, 255 );
          assignDefaultPalette();
       }
    }
-
+   convert();
 }
 
 void Surface::readImageFile( tnstream& stream )
 {
    SetSurface( IMG_Load_RW( SDL_RWFromStream ( &stream ), true ));
+   convert();
 }
 
 

@@ -224,8 +224,8 @@
   template<
      int BytesPerSourcePixel,
      int BytesPerTargetPixel,
-     template<int> class SourceColorTransform,
-     template<int> class ColorMerger,
+     template<int> class SourceColorTransform, // = ColorTransform_None,
+     template<int> class ColorMerger, // = ColorMerger_PlainOverwrite,
      template<int> class SourcePixelSelector = SourcePixelSelector_Plain,
      class TargetPixelSelector = TargetPixelSelector_All
   >
@@ -416,13 +416,13 @@
   class ColorTransform_PlayerCol {
         typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
     protected:
-        ColorTransform_PlayerCol() : shift(0) {};
+        ColorTransform_PlayerCol() {};
 
         PixelType transform( PixelType col) { return col; };
 
      public:
         ColorTransform_PlayerCol( int player ) {};
-        ColorTransform_PlayerCol ( NullParamType npt ) : shift(0) {};
+        ColorTransform_PlayerCol ( NullParamType npt ) {};
 
         void setPlayer( int player ){};
  };

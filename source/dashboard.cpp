@@ -94,30 +94,37 @@ void UnitInfoPanel::registerSpecialDisplay( const ASCString& name )
   class ColorTransform_PlayerTrueCol {
         typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
         PixelType refColor;
+        int refr, refg, refb;
     protected:
-        ColorTransform_PlayerTrueCol() : recfolor(0) {};
+        ColorTransform_PlayerTrueCol() : refColor(0),refr(0),refg(0),refb(0) {};
 
         PixelType transform( PixelType col) {
            int r = (col >> 16) & 0xff;
            int g = (col >> 8) & 0xff;
            int b = (col ) & 0xff;
            if ( g==0 && b==0) {
-              return lightenColor( col, float(r)/255);
+              return ((refr * r / 256) << 16) + ((refg * r / 256) << 8) + (refb * r / 256);
            } else
               if ( r==255 && g==b ) {
-                 return lightenColor( col, float(g)/16);
-
+                 return ((refr + ( 255-refr) * g / 255) << 16) + ((refg + ( 255-refg) * g / 255) << 8) + (refb + ( 255-refb) * g / 255);
               } else
                  return col;
         };
+        
+        void init( Surface& src ) {
+          
+        }
 
      public:
         ColorTransform_PlayerTrueCol( PixelType color ) { setColor(color); };
-        ColorTransform_PlayerTrueCol ( NullParamType npt ) : refColor(0) {};
+        ColorTransform_PlayerTrueCol ( NullParamType npt ) : refColor(0),refr(0),refg(0),refb(0) {};
 
         void setColor( PixelType color )
         {
            refColor = color;
+           refr = (color >> 16) & 0xff;
+           refg = (color >> 8) & 0xff;
+           refb = (color ) & 0xff;
         };
  };
 
@@ -128,7 +135,10 @@ void UnitInfoPanel::painter ( const PG_Rect &src, const ASCString& name, const P
    Surface screen = Surface::Wrap( PG_Application::GetScreen() );
    
    if( name == "showplayercolor0" || name == "showplayercolor1" ) {
-      screen.Blit( IconRepository::getIcon("show_playercolor.png"), SPoint(dst.x, dst.y) );
+      MegaBlitter<4,4,ColorTransform_PlayerTrueCol,ColorMerger_PlainOverwrite> blitter;
+      blitter.setColor( actmap->player[actmap->actplayer].getColor() );
+      blitter.blit( IconRepository::getIcon("show_playercolor.png"), screen, SPoint(dst.x, dst.y));
+      // screen.Blit( IconRepository::getIcon("show_playercolor.png"),  );
       return;
    }
 
@@ -155,11 +165,14 @@ void UnitInfoPanel::painter ( const PG_Rect &src, const ASCString& name, const P
          }
 
          for ( int i = 0; i < 8; ++i ) {
-            if ( height1 & (1 << i ))
-               screen.Blit( IconRepository::getIcon("height-b" + ASCString::toString(i) + ".png"), SPoint(dst.x, dst.y + (7-i) * 13) );
-            else
+            if ( height1 & (1 << i )) {
+               MegaBlitter<4,4,ColorTransform_PlayerTrueCol,ColorMerger_PlainOverwrite> blitter;
+               blitter.setColor( actmap->player[actmap->actplayer].getColor() );
+               blitter.blit( IconRepository::getIcon("height-b" + ASCString::toString(i) + ".png"), screen, SPoint(dst.x, dst.y + (7-i) * 13));
+            } else
                if ( height2 & (1 << i ))
                   screen.Blit( IconRepository::getIcon("height-a" + ASCString::toString(i) + ".png"), SPoint(dst.x, dst.y + (7-i) * 13 ) );
+                  
          }
       }
 
@@ -236,7 +249,7 @@ void UnitInfoPanel::eval()
             if ( !veh->typ->weapons.weapon[i].service() && pos < 10 ) {
                 ASCString ps = ASCString::toString(pos);
                 setLabelText( "punch_weapon" + ps, veh->typ->weapons.weapon[i].maxstrength );
-                if ( veh->typ->functions & cfno_reactionfire )
+                if ( (veh->typ->functions & cfno_reactionfire) || !veh->typ->weapons.weapon[i].shootable() || veh->typ->weapons.weapon[i].getScalarWeaponType() == cwminen )
                    setLabelText( "RF_weapon" + ps, "-" );
                 else
                    setLabelText( "RF_weapon" + ps, veh->typ->weapons.weapon[i].reactionFireShots );
