@@ -1,6 +1,6 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = asc
-asc_SOURCES = soundList.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp newfont.cpp network.cpp missions.cpp misc.cpp loadpcxc.cpp loadjpg.cpp loaders.cpp loadbi3.cpp gui.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp building.cpp basestrm.cpp basegfx.cpp attack.cpp 
+asc_SOURCES = soundList.cpp weather.cpp typen.cpp strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp newfont.cpp network.cpp missions.cpp misc.cpp loadpcxc.cpp loadjpg.cpp loaders.cpp loadbi3.cpp gui.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp building.cpp basestrm.cpp basegfx.cpp attack.cpp unitctrl.cpp
 asc_LDADD   = ./sdl/libsdl.a ./libs/triangul/libtriangul.a -lSDL -lpthread -lbz2
 
 SUBDIRS = docs sdl libs 

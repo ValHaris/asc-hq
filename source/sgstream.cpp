@@ -1,6 +1,10 @@
-//     $Id: sgstream.cpp,v 1.9 2000-03-29 09:58:48 mbickel Exp $
+//     $Id: sgstream.cpp,v 1.10 2000-04-27 16:25:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/03/29 09:58:48  mbickel
+//      Improved memory handling for DOS version
+//      Many small changes I can't remember ;-)
+//
 //     Revision 1.8  2000/03/11 18:22:08  mbickel
 //      Added support for multiple graphic sets
 //
@@ -317,7 +321,7 @@ void         tbufstream::init(void)
 
 void         tbufstream::readdata( char* buf, int size )
 { 
-  pointer      p; 
+  void*      p; 
   int          s, actpos2; 
 
    if (status != 0) return;
@@ -1009,6 +1013,13 @@ pvehicletype   loadvehicletype( pnstream stream )
          if ( fztn->classnames[i] )
             stream->readpchar( &(fztn->classnames[i]) );
    
+      if ( fztn->functions & cfautorepair )
+         if ( !fztn->autorepairrate )
+            fztn->autorepairrate = autorepairdamagedecrease;
+            
+
+
+
       int w;
    
       for (i=0;i<8  ;i++ ) 

@@ -34,8 +34,11 @@
     #ifdef logging
      logtofile ( "invoking new_new_handler" );
     #endif
-    savegame("rescue.sav","game saved while exiting game due to a lack of memory ");
-    displaymessage("Not enough memory. Saved game to emergncy.sav. ",2 );
+    if ( actmap && actmap->xsize > 0 && actmap->ysize > 0 ) {
+       savegame("rescue.sav","game saved while exiting game due to a lack of memory ");
+       displaymessage("Not enough memory. Saved game to emergncy.sav. ",2 );
+    } else
+       displaymessage("Not enough memory.",2 );
  }
 
  void initmemory( int plus ) 

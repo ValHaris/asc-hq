@@ -7,8 +7,8 @@ typedef char* pchar;
 #define Integer integer
 #define nil NULL
 #define NIL nil
-#define pointer void*
-#define Pointer pointer
+// #define pointer void*
+// #define Pointer pointer
 #define boolean char
 #define Boolean boolean
 #define shortint signed char

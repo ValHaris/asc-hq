@@ -1,6 +1,10 @@
-//     $Id: cdrom.cpp,v 1.3 2000-03-29 09:58:42 mbickel Exp $
+//     $Id: cdrom.cpp,v 1.4 2000-04-27 16:25:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/03/29 09:58:42  mbickel
+//      Improved memory handling for DOS version
+//      Many small changes I can't remember ;-)
+//
 //     Revision 1.2  1999/11/16 03:41:13  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -684,7 +688,7 @@ void tcdrom::getsectortime(int sector,byte *m,byte *s,byte *f)
    *s = v % 60; 
 } 
 
-pointer tcdrom::getdevheaderadress(void)
+void* tcdrom::getdevheaderadress(void)
 { tgetdevheader *dh;
 
    ioctl = ( tioctlo *) ri.protectedsegment;

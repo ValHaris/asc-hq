@@ -1,6 +1,9 @@
-//     $Id: loadbi3.cpp,v 1.14 2000-04-02 21:51:08 mbickel Exp $
+//     $Id: loadbi3.cpp,v 1.15 2000-04-27 16:25:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/04/02 21:51:08  mbickel
+//      Fixed bugs graphic set loading routines
+//
 //     Revision 1.13  2000/04/01 16:54:29  mbickel
 //      Updated BI2PCX to use the new interchangeable graphic sets
 //      Tagged ASC1-0-0
@@ -1125,7 +1128,7 @@ pvehicle tloadBImap :: getunit ( int tp, int col )
 void ImportBiMap :: preparemap ( int x, int y  )
 {
     generatemap ( defaultterraintype, x, y ); 
-    actmap->gameparameter[ cgp_movefrominvalidfields] = 1;
+    actmap->setgameparameter( cgp_movefrominvalidfields, 1);
 }
 
 void InsertBiMap :: preparemap ( int x, int y  )

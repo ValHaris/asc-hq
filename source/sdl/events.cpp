@@ -15,9 +15,13 @@
  *                                                                         *
  ***************************************************************************/
 
-//     $Id: events.cpp,v 1.10 2000-02-05 12:13:46 steb Exp $
+//     $Id: events.cpp,v 1.11 2000-04-27 16:25:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/02/05 12:13:46  steb
+//     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
+//     startup due to actmap being null when trying to report errors.
+//
 //     Revision 1.9  2000/01/25 19:28:20  mbickel
 //      Fixed bugs:
 //        invalid mouse buttons reported when moving the mouse
@@ -178,6 +182,7 @@ int eventhandler ( void* nothing )
          }
       } else
          SDL_Delay(10);
+      ticker = SDL_GetTicks() / 10;
    }
    return 0;
 }

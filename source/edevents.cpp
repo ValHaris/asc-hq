@@ -1,6 +1,9 @@
-//     $Id: edevents.cpp,v 1.3 2000-03-16 14:06:54 mbickel Exp $
+//     $Id: edevents.cpp,v 1.4 2000-04-27 16:25:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/03/16 14:06:54  mbickel
+//      Added unitset transformation to the mapeditor
+//
 //     Revision 1.2  1999/11/16 03:41:28  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -1351,9 +1354,9 @@ void         tgameparamsel ::setup(void)
    numberoflines = gameparameternum;
    ey = ysize - 60; 
    startpos = lastchoice;
-   addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,2,true); 
+   addbutton("~s~elect",20,ysize - 40,170,ysize - 20,0,1,12,true); 
    addkey(2,ct_enter); 
-   addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,3,true); 
+   addbutton("e~x~it",190,ysize - 40,340,ysize - 20,0,1,13,true); 
 } 
 
 
@@ -1362,8 +1365,8 @@ void         tgameparamsel ::buttonpressed(byte         id)
    tstringselect::buttonpressed(id);
    switch (id) {
       
-      case 2:   
-      case 3:   action = id; 
+      case 12:   
+      case 13:   action = id-10; 
    break; 
    } 
 } 
@@ -1910,18 +1913,12 @@ void         tcreateevent::buttonpressed(byte         id)
                       oldval = ae->intdata[0] ;
                    int nr = selectgameparameter( oldval );
                    if ( (nr >= 0) && ( nr < gameparameternum) ) {
-                      switch (nr) {
-                         case cgp_fahrspur:
-                         case cgp_eis: {
-                               int newval = getid("Parameter Val",gameparameterdefault[nr],0,255); // !!!
-                               freedata();
-                               ae->intdata = new int[2];
-                               ae->datasize = 2 * sizeof ( int );
-                               ae->intdata[0] = nr;
-                               ae->intdata[1] = newval;
-                            }
-                            break;
-                      } /* endswitch */
+                      int newval = getid("Parameter Val",gameparameterdefault[nr],minint,maxint); // !!!
+                      freedata();
+                      ae->intdata = new int[2];
+                      ae->datasize = 2 * sizeof ( int );
+                      ae->intdata[0] = nr;
+                      ae->intdata[1] = newval;
                    } else ae->a.action = 255;
                 }
                 break;
@@ -2404,7 +2401,7 @@ void setmapparameters ( void )
    do {
       param = selectgameparameter( -1 );
       if ( param >= 0 && param < gameparameternum ) 
-         actmap->gameparameter[ param ] = getid("Parameter Val",actmap->gameparameter[ param ],0,maxint);
+         actmap->setgameparameter( param , getid("Parameter Val",actmap->getgameparameter( param ),0,maxint));
    } while ( param >= 0 && param < gameparameternum );      
 }
 

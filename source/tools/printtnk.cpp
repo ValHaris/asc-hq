@@ -30,6 +30,7 @@
 #include "..\misc.h"
 #include "..\sgstream.h"
 #include "..\vesa.h"
+#include "..\loadbi3.h"
 
 const int maxvehicles = 1000;
 
@@ -45,9 +46,8 @@ main(int argc, char *argv[] )
 
    try {
 
-      #ifdef HEXAGON
       loadpalette();
-      #endif
+      loadbi3graphics();
 
       memset ( text, 0, sizeof(text));
       memset ( header, 0, sizeof(header));

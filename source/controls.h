@@ -1,6 +1,10 @@
-//     $Id: controls.h,v 1.7 2000-01-31 16:08:39 mbickel Exp $
+//     $Id: controls.h,v 1.8 2000-04-27 16:25:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/01/31 16:08:39  mbickel
+//      Fixed crash in line
+//      Improved error handling in replays
+//
 //     Revision 1.6  2000/01/01 19:04:16  mbickel
 //     /tmp/cvsVhJ4Z3
 //
@@ -143,6 +147,36 @@
 
                     }; 
 
+   struct tmoveparams { 
+                        unsigned char         movestatus;       /*  Folgende Modi sind definiert : 
+                                                                             0:  garnichts, standard
+                                                                             1:  movement l1
+                                                                             2:  movement l2
+                                                                             10: angriff
+                                                                             11: movement l1 mit hîhe-wechseln
+                                                                             12: movement l2 mit hîhe-wechseln
+                                                                             65: refuel
+                                                                             66: reparieren
+                                                                             72: putstreet
+                                                                             90: putmine
+                                                                             111: putbuilding l1
+                                                                             112: putbuilding l2
+                                                                             115: removebuilding
+                                                                             120: construct vehicle
+                                                                             130: external loading
+                                                                   */
+
+                        word         movesx, movesy, moveerr; 
+                        pvehicle     vehicletomove; 
+                        byte         newheight; 
+                        byte         oldheight; 
+                        char         heightdir; 
+                        pbuildingtype buildingtobuild;   /*  nur bei movestatus = 111  */ 
+                        int          movespeed;
+                        int          uheight;
+                     }; 
+
+
 enum tvisibilitytempbuf { vsight, vjamming, vfeatures };
 
            struct trectangle {
@@ -231,6 +265,7 @@ enum tvisibilitytempbuf { vsight, vjamming, vfeatures };
                     };
 
    class tputmine : public tsearchfields {
+                       int player;
                 public:
                        char             mienentyp;
                        boolean          mienenlegen, mienenraeumen;
@@ -254,17 +289,15 @@ enum tvisibilitytempbuf { vsight, vjamming, vfeatures };
   extern tmoveparams moveparams; 
   extern tmoveview moveview; 
   extern tdashboard dashboard; 
+  extern int windmovement[8];
 
 
 
-extern void  movement(pvehicle     vehicle, int unitheight = -1);
 
-extern void  computeview( void );
+extern void  _td_movement(pvehicle     vehicle, int unitheight = -1);
 
 
 extern void  attack(boolean      kamikaze, int  weapnum = 0);
-
-extern void  moveheight(pvehicle     vehicle);
 
 extern void  calcmovemalus(int          x1,
                            int          y1,
@@ -276,15 +309,6 @@ extern void  calcmovemalus(int          x1,
                            int&         mm2 );            //  fÅr movementdecrease
 
 
-extern int   changeheight(pvehicle     vehicle,
-                          char         ch,
-                          int        mode);
-
-extern void  fieldreachablerek(integer      x2,
-                               integer      y2,
-                                const pvehicle     vehicle,
-                               byte         mode);
-
 extern void  setspec( pobjecttype obj );
 extern void         constructvehicle( pvehicletype tnk );
 extern int  object_constructable ( int x, int y, pobjecttype obj );
@@ -294,7 +318,7 @@ extern void build_vehicles_reset( void );
 
 extern void  refuelvehicle(byte         b);
 
-extern void  legemine(byte         typ);
+extern void  legemine( int typ, int delta );
 
 
 extern void  putbuildinglevel1(void);
@@ -318,7 +342,8 @@ extern tselectbuildingguihost    selectbuildinggui;
 extern void continuenetworkgame ( void );
 extern void addtechnology ( void );
 extern void returnresourcenuseforresearch ( const pbuilding bld, int research, int* energy, int* material );
-extern void returnresourcenuseforpowerplant ( const pbuilding bld, int prod, int* material, int* fuel );
+extern void returnresourcenuseforpowerplant (  const pbuilding bld, int prod, tresources *usage, int percentagee_based_on_maxplus );
+
 extern void dissectvehicle ( pvehicle eht );
 
 
@@ -564,5 +589,43 @@ class GetResourceUsage : public ResourceChangeNet {
 extern int searchexternaltransferfields ( pbuilding bld );
 extern void transfer_all_outstanding_tribute( void );
 
+
+extern int computeview( int player_fieldcount_mask = 0 );
+extern int  evaluateviewcalculation ( int player_fieldcount_mask = 0 );     // playermask determines, which players should be counted when the view has changed
+                                                                // returns the number which have changed visibilitystatus
+
+class treactionfire {
+          public:
+             virtual int  checkfield ( int x, int y, pvehicle &eht, MapDisplayInterface* md ) = 0;
+             virtual void init ( pvehicle eht, FieldList* fieldlist ) = 0;
+             virtual ~treactionfire() {};                           
+        };
+
+class treactionfirereplay : public treactionfire {
+          protected:
+             int num;
+             dynamic_array<preactionfire_replayinfo> replay;
+             pvehicle unit;
+          public:
+             treactionfirereplay ( void );
+             ~treactionfirereplay ( );
+             virtual int checkfield ( int x, int y, pvehicle &eht, MapDisplayInterface* md );
+             virtual void init ( pvehicle eht, FieldList* fieldlist );
+   };
+
+class tsearchreactionfireingunits : public treactionfire {
+           protected:
+
+
+                static int maxshootdist[8];     // fÅr jede Hîhenstufe eine
+                void addunit ( pvehicle vehicle );
+                void removeunit ( pvehicle vehicle );
+           public:
+
+                tsearchreactionfireingunits( void );
+                void init ( pvehicle eht, FieldList* fieldlist );
+                int  checkfield ( int x, int y, pvehicle &eht, MapDisplayInterface* md );  
+                ~tsearchreactionfireingunits();
+      };
 
 #endif

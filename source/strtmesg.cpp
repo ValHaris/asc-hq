@@ -1,6 +1,9 @@
-//     $Id: strtmesg.cpp,v 1.9 2000-04-17 18:30:47 mbickel Exp $
+//     $Id: strtmesg.cpp,v 1.10 2000-04-27 16:25:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/04/17 18:30:47  mbickel
+//      Even more SDL speed improvements
+//
 //     Revision 1.8  2000/04/17 16:27:23  mbickel
 //      Optimized vehicle movement for SDL version
 //
@@ -51,7 +54,7 @@
 
 
 // These strings should be the same as the release tags in CVS !
-const char* asc_release="ASC1.0.5b";
+const char* asc_release="ASC1.1.0beta1";
 
 #include <stdio.h>
 

@@ -1,6 +1,9 @@
-//     $Id: spfst.cpp,v 1.24 2000-04-17 18:55:25 mbickel Exp $
+//     $Id: spfst.cpp,v 1.25 2000-04-27 16:25:27 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.24  2000/04/17 18:55:25  mbickel
+//      Fixed the DOS version
+//
 //     Revision 1.23  2000/04/17 18:30:46  mbickel
 //      Even more SDL speed improvements
 //
@@ -180,14 +183,13 @@ int showresources = 0;
        } doubleclickparams ;
 
 
-tmoveparams moveparams;
-          
-
    int lockdisplaymap = 0;
 
    tcursor            cursor;
    tview             view;
    pmap              actmap;
+
+   MapDisplay        defaultMapDisplay;
 
   TerrainTypeVector terrain;
   TerrainTypeVector& getterraintypevector ( void ) 
@@ -496,7 +498,6 @@ void         initmap( void )
   #endif
   
    actmap->levelfinished = false; 
-   memset ( (void*) &moveparams, 0, sizeof ( moveparams ));
    actmap->firsteventpassed = NULL;
    actmap->network = NULL;
    int num = 0;
@@ -1054,16 +1055,13 @@ byte         fieldaccessible( const pfield        field,
       return 0;
 
    if ( c == visible_all)
-      if ( field->object && field->object->mine ) 
-         if ((vehicle->height <= chfahrend)) 
+      if ( field->minenum() ) 
+         if (vehicle->height <= chfahrend && getdiplomaticstatus2 ( vehicle->color, field->mineowner()*8 ) == cawar )  
             return 0;
+      
 
-   if ((field->vehicle == NULL) && (field->building == NULL)) { 
-      if ( uheight != vehicle->height )
-         return 0;
-      else
-         return terrainaccessible ( field, vehicle );
-   } 
+   if ( !field->vehicle && !field->building ) 
+      return terrainaccessible ( field, vehicle, uheight );
    else { 
       int m1 = vehicle->weight(); 
       int mx = vehicle->weight(); 
@@ -1079,32 +1077,26 @@ byte         fieldaccessible( const pfield        field,
 
 
       if (field->building == NULL) {   
-         if (field->vehicle->color == actmap->actplayer << 3) { 
+         if (field->vehicle->color == vehicle->color) { 
             int ldbl = field->vehicle->vehicleloadable ( vehicle, uheight );
             if ( ldbl )
                return 2;
             else 
-               if ( uheight != vehicle->height )
-                  return 0;
-               else
-                  if ( terrainaccessible ( field, vehicle ))
-                     return 1; 
-                  else 
-                     return 0; 
+               if ( terrainaccessible ( field, vehicle, uheight ))
+                  return 1; 
+               else 
+                  return 0; 
          } 
          else   ///////   keine eigene vehicle
-            if ( uheight != vehicle->height )
-               return 0;
-            else
-               if ( terrainaccessible ( field, vehicle ) )
-                  if (vehicleplattfahrbar(vehicle,field)) 
-                     return 2; 
-                  else 
-                     if ((attackpossible28(field->vehicle,vehicle) == false) || (getdiplomaticstatus(field->vehicle->color) == capeace)) 
-                       if ( terrainaccessible ( field, vehicle ) )
-                          return 1; 
-                       else 
-                          return 0; 
+           if ( terrainaccessible ( field, vehicle, uheight ) )
+              if (vehicleplattfahrbar(vehicle,field)) 
+                 return 2; 
+              else 
+                 if ((attackpossible28(field->vehicle,vehicle) == false) || (getdiplomaticstatus(field->vehicle->color) == capeace)) 
+                   if ( terrainaccessible ( field, vehicle, uheight ) )
+                      return 1; 
+                   else 
+                      return 0; 
              
       } 
       else {   /*  geb„ude  */ 
@@ -1248,7 +1240,7 @@ void         generatemap( const pwterraintype   bt,
    for (int k = 1; k < 8; k++) 
       actmap->player[k].stat = ps_computer;
 
-   actmap->title = strdup( "random map" );
+   actmap->title = strdup( "new map" );
    actmap->codeword[0] = 0;
 
    actmap->field = new tfield[ xsize * ysize];
@@ -1296,7 +1288,7 @@ void         generatemap( const pwterraintype   bt,
 
 
    for ( i = 0; i < gameparameternum; i++ )
-      actmap->gameparameter[i] = gameparameterdefault[i];
+      actmap->setgameparameter(i, gameparameterdefault[i] );
 
    #ifdef HEXAGON
    actmap->resourcemode = 1;
@@ -1677,16 +1669,20 @@ void         getbuildingfieldcoordinates( const pbuilding    bld,
 
 
 
+void* uncompressedMinePictures[4] = { NULL, NULL, NULL, NULL };
 
 
-
-pointer      getmineadress( byte         num )
+void*      getmineadress(  int num , int uncompressed )
 { 
-   #ifdef HEXAGON
-   return streets.mineposition[num-1].position; 
-   #else
-   return streets.mineposition[num].position; 
-   #endif
+   if ( !uncompressed ) 
+      return streets.mineposition[num-1].position; 
+   else {
+      int type = num-1;
+      if ( !uncompressedMinePictures[type] ) 
+         uncompressedMinePictures[type] = uncompress_rlepict ( streets.mineposition[num-1].position );
+
+      return uncompressedMinePictures[type];
+   }
 } 
 
 
@@ -1996,10 +1992,6 @@ pattackweap  attackpossible( const pvehicle     angreifer,
                             integer      x,
                             integer      y)
 { 
-  integer      d; 
-  int          i; 
-  byte         tm; 
-
   pattackweap atw = new tattackweap;
            
   memset(atw, 0, sizeof(*atw));
@@ -2015,37 +2007,20 @@ pattackweap  attackpossible( const pvehicle     angreifer,
    pfield efield = getfield(x,y);
                        
    if ( efield->vehicle ) {
-      if (getdiplomaticstatus2(efield->vehicle->color, angreifer->color) == cawar) 
-         for (i = 0; i <= angreifer->typ->weapons->count - 1; i++) 
-            if (angreifer->typ->weapons->weapon[i].shootable() ) 
-               if (angreifer->typ->weapons->weapon[i].offensive()  ) 
-                  if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << efield->vehicle->typ->movemalustyp )))
-                     if ( efield->vehicle->height & angreifer->typ->weapons->weapon[i].targ )
-                        if (fieldvisiblenow(efield, angreifer->color/8)) { 
-                           d = beeline(angreifer->xpos,angreifer->ypos,x,y); 
-                           if (d <= angreifer->typ->weapons->weapon[i].maxdistance) 
-                              if (d >= angreifer->typ->weapons->weapon[i].mindistance) { 
-                                 if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                                    if (angreifer->ammo[i] ) { 
-                                       atw->strength[atw->count] = angreifer->weapstrength[i]; 
-                                       atw->num[atw->count ] = i; 
-                                       atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType() ;
-                                       atw->count++;
-                                    } 
-                              } 
-                        } 
+      if (fieldvisiblenow(efield, angreifer->color/8)) 
+         attackpossible2n ( angreifer, efield->vehicle, atw );
    } 
    else 
       if (efield->building != NULL) { 
          if (getdiplomaticstatus2(efield->building->color, angreifer->color) == cawar) 
-            for (i = 0; i < angreifer->typ->weapons->count ; i++) 
+            for (int i = 0; i < angreifer->typ->weapons->count ; i++) 
                if (angreifer->typ->weapons->weapon[i].shootable() ) 
                   if (angreifer->typ->weapons->weapon[i].offensive() ) 
-                     { 
-                        tm = efield->building->typ->buildingheight;
+                     if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << cmm_building ))) { 
+                        int tm = efield->building->typ->buildingheight;
                         if (tm & angreifer->typ->weapons->weapon[i].targ) {
                            if (fieldvisiblenow(efield, angreifer->color/8)) { 
-                              d = beeline(angreifer->xpos,angreifer->ypos,x,y); 
+                              int d = beeline(angreifer->xpos,angreifer->ypos,x,y); 
                               if (d <= angreifer->typ->weapons->weapon[i].maxdistance) 
                                  if (d >= angreifer->typ->weapons->weapon[i].mindistance) { 
                                     if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight) 
@@ -2063,32 +2038,33 @@ pattackweap  attackpossible( const pvehicle     angreifer,
       } 
    if ( efield->object ) {
       int n = 0;
-      for ( i = 0; i < efield->object->objnum; i++ )
-         if ( efield->object->object[i]->typ->armor > 0 )
+      for ( int j = 0; j < efield->object->objnum; j++ )
+         if ( efield->object->object[j]->typ->armor > 0 )
             n++;
 
       if ( n > 0 ) 
          if ((efield->vehicle == NULL) && ( efield->building == NULL)) {
-            for (i = 0; i <= angreifer->typ->weapons->count - 1; i++) 
+            for ( int i = 0; i <= angreifer->typ->weapons->count - 1; i++) 
                if (angreifer->typ->weapons->weapon[i].shootable() ) 
                   if ( angreifer->typ->weapons->weapon[i].getScalarWeaponType() == cwcannonn ||  
                        angreifer->typ->weapons->weapon[i].getScalarWeaponType() == cwbombn ) { 
-                     if (chfahrend & angreifer->typ->weapons->weapon[i].targ ) { 
-                        if (fieldvisiblenow(efield, angreifer->color/8)) { 
-                           d = beeline(angreifer->xpos,angreifer->ypos,x,y); 
-                           if (d <= angreifer->typ->weapons->weapon[i].maxdistance) 
-                              if (d >= angreifer->typ->weapons->weapon[i].mindistance) { 
-                                 if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                                    if (angreifer->ammo[i] > 0) { 
-                                       atw->strength[atw->count ] = angreifer->weapstrength[i];
-                                       atw->num[atw->count ] = i;
-                                       atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
-                                       atw->count++;
-                                    } 
-   
-                              } 
+                     if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << cmm_building ))) 
+                        if (chfahrend & angreifer->typ->weapons->weapon[i].targ ) { 
+                           if (fieldvisiblenow(efield, angreifer->color/8)) { 
+                              int d = beeline(angreifer->xpos,angreifer->ypos,x,y); 
+                              if (d <= angreifer->typ->weapons->weapon[i].maxdistance) 
+                                 if (d >= angreifer->typ->weapons->weapon[i].mindistance) { 
+                                    if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
+                                       if (angreifer->ammo[i] > 0) { 
+                                          atw->strength[atw->count ] = angreifer->weapstrength[i];
+                                          atw->num[atw->count ] = i;
+                                          atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
+                                          atw->count++;
+                                       } 
+      
+                                 } 
+                           } 
                         } 
-                     } 
                   } 
          } 
    }
@@ -2098,12 +2074,16 @@ pattackweap  attackpossible( const pvehicle     angreifer,
 
 
 boolean      attackpossible2u( const pvehicle     angreifer,
-                               const pvehicle     verteidiger)
+                               const pvehicle     verteidiger, pattackweap atw )
 { 
-   if (angreifer == NULL) 
+   int result = false;
+   if ( atw ) 
+      atw->count = 0;
+
+   if ( !angreifer ) 
      return false ;
 
-   if (verteidiger == NULL) 
+   if ( !verteidiger ) 
      return false ;
 
    if (angreifer->typ->weapons->count == 0) 
@@ -2116,18 +2096,29 @@ boolean      attackpossible2u( const pvehicle     angreifer,
                if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) 
                   if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
                      if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
-                        if (angreifer->ammo[i] > 0) 
-                           return true;
+                        if (angreifer->ammo[i] > 0) {
+                           result = true;
+                           if ( atw ) {
+                              atw->strength[atw->count] = angreifer->weapstrength[i];
+                              atw->num[atw->count ] = i;
+                              atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
+                              atw->count++;
+                           }
+                        }
                   
             
-   return false; 
+   return result; 
 } 
 
 
 
 boolean      attackpossible28( const pvehicle     angreifer,
-                               const pvehicle     verteidiger)
+                               const pvehicle     verteidiger, pattackweap atw )
 { 
+   int result = false;
+   if ( atw ) 
+      atw->count = 0;
+
    if (angreifer == NULL) 
      return false ;
 
@@ -2146,17 +2137,28 @@ boolean      attackpossible28( const pvehicle     angreifer,
                      if (minmalq >= angreifer->typ->weapons->weapon[i].mindistance) 
                         if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
                            if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
-                              if (angreifer->ammo[i] > 0) 
-                                 return true;
+                              if (angreifer->ammo[i] > 0) {
+                                 result =  true;
+                                 if ( atw ) {
+                                    atw->strength[atw->count] = angreifer->weapstrength[i];
+                                    atw->num[atw->count ] = i;
+                                    atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
+                                    atw->count++;
+                                 }
+                              }
                   
             
-   return false; 
+   return result; 
 } 
 
 
 boolean      attackpossible2n( const pvehicle     angreifer,
-                               const pvehicle     verteidiger)
+                               const pvehicle     verteidiger, pattackweap atw )
 { 
+   int result = false;
+   if ( atw ) 
+      atw->count = 0;
+
    if (angreifer == NULL) 
      return false ;
 
@@ -2178,127 +2180,18 @@ boolean      attackpossible2n( const pvehicle     angreifer,
                            if (dist >= angreifer->typ->weapons->weapon[i].mindistance) 
                               if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
                                  if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
-                                    if (angreifer->ammo[i] > 0) 
-                                       return true;
+                                    if (angreifer->ammo[i] > 0) {
+                                       result = true;
+                                       if ( atw ) {
+                                          atw->strength[atw->count] = angreifer->weapstrength[i];
+                                          atw->num[atw->count ] = i;
+                                          atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
+                                          atw->count++;
+                                       }
+                                    }
                      
             
-   return false; 
-} 
-
-
-
-
-
-
-pattackweap   attackpossible3u( const pvehicle     angreifer,
-                                const pvehicle     verteidiger)
-{ 
-  boolean      s = 0; 
-  byte         i; 
-
-  pattackweap atw = new tattackweap;
-           
-  memset(atw, 0, sizeof(*atw));
-
-
-   if ( !angreifer ) 
-     return atw ;
-   if ( !verteidiger ) 
-     return atw ;
-   if (angreifer->typ->weapons->count == 0) 
-     return atw ;
-   if ( getdiplomaticstatus2(angreifer->color, verteidiger->color ) == cawar )
-      for (i = 0; i < angreifer->typ->weapons->count ; i++) 
-         if (angreifer->typ->weapons->weapon[i].shootable() ) 
-            if (angreifer->typ->weapons->weapon[i].offensive() ) 
-               if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) 
-                  if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                     if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
-                        if (angreifer->ammo[i] > 0) {
-                           atw->strength[atw->count ] = angreifer->weapstrength[i];
-                           atw->num[atw->count ] = i;
-                           atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
-                           atw->count++;
-                        }
-               
-   return atw; 
-} 
-
-
-pattackweap   attackpossible38( const pvehicle     angreifer,
-                               const pvehicle     verteidiger)
-{ 
-  boolean      s = 0; 
-  byte         i; 
-
-  pattackweap atw = new tattackweap;
-           
-  memset(atw, 0, sizeof(*atw));
-
-
-   if ( !angreifer ) 
-     return atw ;
-   if ( !verteidiger ) 
-     return atw ;
-   if (angreifer->typ->weapons->count == 0) 
-     return atw ;
-   if ( getdiplomaticstatus2(angreifer->color, verteidiger->color ) == cawar )
-      for (i = 0; i < angreifer->typ->weapons->count ; i++) 
-         if (angreifer->typ->weapons->weapon[i].shootable() ) 
-            if (angreifer->typ->weapons->weapon[i].offensive() ) 
-               if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) { 
-                  if (minmalq <= angreifer->typ->weapons->weapon[i].maxdistance) 
-                     if (minmalq >= angreifer->typ->weapons->weapon[i].mindistance) { 
-                        if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                           if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
-                              if (angreifer->ammo[i] > 0) {
-                                 atw->strength[atw->count ] = angreifer->weapstrength[i];
-                                 atw->num[atw->count ] = i;
-                                 atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
-                                 atw->count++;
-                              }
-                     } 
-               } 
-   return atw; 
-} 
-
-pattackweap   attackpossible3n( const pvehicle     angreifer,
-                               const pvehicle     verteidiger)
-{ 
-  boolean      s = 0; 
-  byte         i; 
-
-  pattackweap atw = new tattackweap;
-           
-  memset(atw, 0, sizeof(*atw));
-
-
-   if ( !angreifer ) 
-     return atw ;
-   if ( !verteidiger ) 
-     return atw ;
-   if (angreifer->typ->weapons->count == 0) 
-     return atw ;
-
-   int dist = beeline ( angreifer, verteidiger );
-   if ( getdiplomaticstatus2(angreifer->color, verteidiger->color ) == cawar )
-      for (i = 0; i < angreifer->typ->weapons->count ; i++) 
-         if (angreifer->typ->weapons->weapon[i].shootable() ) 
-            if (angreifer->typ->weapons->weapon[i].offensive() ) 
-               if (verteidiger->height & angreifer->typ->weapons->weapon[i].targ ) { 
-                  if (dist <= angreifer->typ->weapons->weapon[i].maxdistance) 
-                     if (dist >= angreifer->typ->weapons->weapon[i].mindistance) { 
-                        if (angreifer->height & angreifer->typ->weapons->weapon[i].sourceheight ) 
-                           if (!( angreifer->typ->weapons->weapon[i].targets_not_hittable & ( 1 << verteidiger->typ->movemalustyp )))
-                              if (angreifer->ammo[i] > 0) {
-                                 atw->strength[atw->count ] = angreifer->weapstrength[i];
-                                 atw->num[atw->count ] = i;
-                                 atw->typ[atw->count ] = 1 << angreifer->typ->weapons->weapon[i].getScalarWeaponType();
-                                 atw->count++;
-                              }
-                     } 
-               } 
-   return atw; 
+   return result; 
 } 
 
 
@@ -2614,15 +2507,17 @@ void         clearfahrspuren(void)
          for ( int x = 0; x < actmap->xsize ; x++) {
             pobject i = actmap->field[l].checkforobject ( fahrspurobject );
             if ( i ) 
-               if ( actmap->gameparameter [ cgp_fahrspur ] > 0 )
-                  if ( i->time + actmap->gameparameter [ cgp_fahrspur ] < actmap->time.a.turn )
+               if ( actmap->getgameparameter ( cgp_fahrspur ) > 0 )
+                  if ( i->time + actmap->getgameparameter ( cgp_fahrspur ) < actmap->time.a.turn )
                      getfield ( x, y ) -> removeobject ( fahrspurobject );
 
             i = actmap->field[l].checkforobject ( eisbrecherobject );
             if ( i ) 
-               if ( actmap->gameparameter [ cgp_eis ] > 0 )
-                  if ( i->time + actmap->gameparameter [ cgp_eis ] < actmap->time.a.turn )
+               if ( actmap->getgameparameter ( cgp_eis ) > 0 )
+                  if ( i->time + actmap->getgameparameter ( cgp_eis ) < actmap->time.a.turn )
                      getfield ( x, y ) -> removeobject ( eisbrecherobject );
+
+            getfield ( x, y )->checkminetime ( actmap->time.a.turn );
             l++;
          } 
 } 
@@ -3462,7 +3357,6 @@ int tgeneraldisplaymap :: getfieldposx ( int x, int y )
 {
      if ( x < 0 )
         x = 0;
-
 
      if ( y & 1 )   /*  gerade reihennummern  */
         return scrleftspace + fielddisthalfx + x * fielddistx + cursorrightshift;
@@ -4548,11 +4442,13 @@ void tgeneraldisplaymap :: pnt_main ( void )
    
                   /* display mines */
                       if ((b == visible_all) || godview) 
-                           if (fld->object && fld->object->mine && hgt == 4 ) {
-                              putrotspriteimage( r + unitrightshift , yp + unitdownshift ,getmineadress(fld->object->mine >> 4), (fld->object->mine & 6) >> 2);
-                              #ifdef karteneditor
-                              if  ( ( ( fld->object->mine >> 1 ) & 7 ) < 8 ) 
-                                 bar ( r + unitrightshift + 5 , yp + unitdownshift +5, r + unitrightshift + 15 , yp + unitdownshift +10, 20 + ( ( ( fld->object->mine >> 1 ) & 7 ) << 3 ) );
+                           if (fld->minenum() && hgt == 2 ) {
+                              if ( fld->object->mine[0]->type != cmmooredmine )
+                                 putspriteimage( r + unitrightshift , yp + unitdownshift ,getmineadress(fld->object->mine[0]->type) );
+                              else
+                                 putpicturemix ( r + unitrightshift , yp + unitdownshift ,getmineadress(fld->object->mine[0]->type, 1 ) ,  0, (char*) colormixbuf );
+                              #ifdef karteneditor                                                                                                   
+                              bar ( r + unitrightshift + 5 , yp + unitdownshift +5, r + unitrightshift + 15 , yp + unitdownshift +10, 20 + fld->mineowner() * 8 );
                               #endif
                            }
    
@@ -5003,11 +4899,7 @@ void  tdisplaymap :: resetmovement ( void )
 }
 
 
-void  tdisplaymap :: movevehicle(integer      x1,
-                                       integer      y1,
-                                       integer      x2,
-                                       integer      y2,
-                                       pvehicle     eht)
+void  tdisplaymap :: movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, int height1, int height2, int fieldnum, int totalmove )
 { 
    byte         dir; 
 
@@ -5132,24 +5024,18 @@ void  tdisplaymap :: movevehicle(integer      x1,
      /************************************/
    
    
-      if ( moveparams.movestatus == 12  && ( moveparams.oldheight > chfahrend  || moveparams.newheight > chfahrend )) {
+      if ( height1 != height2  && ( height1 > chfahrend  || height2 > chfahrend )) {
    
-         int actdist ;
-         if ( dir & 1 )
-            actdist = minmalq;
-         else
-            actdist = maxmalq;
+         int compl = totalmove;
+         int went = fieldnum;
+         int togo = totalmove - fieldnum;
    
-         int compl = beeline ( moveparams.movesx, moveparams.movesy, getxpos(), getypos() ) / actdist;
-         int went = beeline  ( moveparams.movesx, moveparams.movesy, x1+actmap->xpos, y1+actmap->ypos ) / actdist;
-         int togo = beeline ( x2+actmap->xpos, y2+actmap->ypos, getxpos(), getypos() ) / actdist;
-   
-         int ht1 = 10 * ( log2 ( moveparams.oldheight ) - log2 ( chfahrend ) );
-         int ht2 = 10 * ( log2 ( moveparams.newheight ) - log2 ( chfahrend ) );
+         int ht1 = 10 * ( log2 ( height1 ) - log2 ( chfahrend ) );
+         int ht2 = 10 * ( log2 ( height2 ) - log2 ( chfahrend ) );
          int htd = ht2- ht1;
    
-         if ( moveparams.oldheight < moveparams.newheight ) {
-            if ( moveparams.oldheight == chfahrend ) {
+         if ( height1 < height2 ) {
+            if ( height1 == chfahrend ) {
                int takeoff = compl * 2 / 3 ;
                int ascend = compl - takeoff;
                if ( went >=  takeoff ) {
@@ -5164,7 +5050,7 @@ void  tdisplaymap :: movevehicle(integer      x1,
                h2 = ht1 + htd * (went + 1) / compl;
             }
          } else {
-            if ( moveparams.newheight == chfahrend ) {
+            if ( height2 == chfahrend ) {
                int landpos = (compl+2) / 3;
    
                if ( went <  landpos ) {
@@ -6404,12 +6290,7 @@ void tmousescrollproc :: mouseaction ( void )
 
 #ifndef sgmain
 void tbuilding :: changecompletion ( int d ) {}
-int  tbuilding :: getenergyplus(  int mode  ) { return 0; }
-int  tbuilding :: getmaterialplus(  int mode  ) { return 0; }
-int  tbuilding :: getfuelplus(  int mode  ) { return 0; }
-void tbuilding :: produceenergy( void ) { }
-void tbuilding :: producematerial( void ) {}
-void tbuilding :: producefuel( void ) {}
+int  tbuilding :: getresourceplus ( int mode, tresources* plus, int queryonly ) { return 0;};
 void tbuilding :: execnetcontrol ( void ) {}
 int  tbuilding :: processmining ( int res, int abbuchen ) { return 0; }
 int  tbuilding :: put_energy ( int      need,    int resourcetype, int queryonly  )  { return 0; }
@@ -6446,19 +6327,12 @@ int tvehicle :: buildingconstructable ( pbuildingtype building )
    if ( !building )
       return 0;
 
-   int mf = 100;
-   int ff = 100;
 
-   if ( actmap->gameparameter ) {
-      if ( actmap->gameparameter[cgp_forbid_building_construction] )
-         return 0;
+   if ( actmap->getgameparameter(cgp_forbid_building_construction) )
+       return 0;
 
-      if ( actmap->gameparameter[cgp_building_material_factor] )
-         mf = actmap->gameparameter[cgp_building_material_factor];
-
-      if ( actmap->gameparameter[cgp_building_fuel_factor] )
-         ff = actmap->gameparameter[cgp_building_fuel_factor];
-   }
+   int mf = actmap->getgameparameter ( cgp_building_material_factor );
+   int ff = actmap->getgameparameter ( cgp_building_fuel_factor );
 
    int hd = getheightdelta ( log2 ( height ), log2 ( building->buildingheight ));
 
@@ -6715,6 +6589,42 @@ int tbuilding :: vehicleloadable ( pvehicle vehicle, int uheight )
 }
 
 
+int tmine :: attacksunit ( const pvehicle veh )
+{
+     if  (!( ( veh->functions & cfmineimmune ) || 
+              ( veh->height > chfahrend ) ||
+              ( getdiplomaticstatus2 ( veh->color, color*8 ) == capeace ) || 
+              ( (veh->functions & cf_trooper) && (type != cmantipersonnelmine)) || 
+              ( veh->height <= chgetaucht && type != cmmooredmine ) || 
+              ( veh->height == chschwimmend && type != cmfloatmine ) ||
+              ( veh->height == chfahrend && type != cmantipersonnelmine  && type != cmantitankmine )
+            ))
+         return 1;
+     return 0;
+}
+
+
+void tfield :: checkminetime ( int time )
+{
+   if ( minenum() ) 
+      for ( int i = minenum()-1; i >= 0; i-- ) {
+         int lt = actmap->getgameparameter ( cgp_antipersonnelmine_lifetime + object->mine[i]->type - 1);
+         if ( lt )
+            if ( object->mine[i]->time + lt < time )
+               removemine ( i );
+      }
+}
+
+
+int tfield :: mineattacks ( const pvehicle veh )
+{
+   int mn = minenum();
+   for ( int i = 0; i < mn; i++ ) 
+      if ( object->mine[i]->attacksunit ( veh ))
+         return 1+i;
+
+   return 0;
+}
 
 
 void  tfield :: addobject( pobjecttype obj, int dir, int force )
@@ -7025,3 +6935,76 @@ void EllipseOnScreen :: paint ( void )
    if ( active ) 
       ellipse ( x1, y1, x2, y2, color, precision );
 }
+
+
+/*
+class MapDisplay {
+         public:
+           void displayMovingUnit ( int x1, int y1, int x2, int y2, pvehicle veh );
+
+    };
+*/
+
+void MapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove )
+{
+   if ( height2 == -1 )
+      height2 = height1;
+
+   pfield fld1 = getfield ( x1, y1 );
+   int view1 = (fld1->visible >> ( actmap->playerview * 2)) & 3; 
+   if ( godview ) 
+      view1 = visible_all; 
+
+   pfield fld2 = getfield ( x2, y2 );
+   int view2 = (fld2->visible >> ( actmap->playerview * 2)) & 3; 
+   if ( godview ) 
+      view2 = visible_all; 
+
+   if (  view1 >= visible_now  &&  view2 >= visible_now ) 
+      if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) && ( view2 == visible_all )) || ( actmap->actplayer == actmap->playerview ))
+         idisplaymap.movevehicle( x1, y1, x2, y2, vehicle, height1, height2, fieldnum, totalmove );
+
+}
+
+void MapDisplay :: deleteVehicle ( pvehicle vehicle )
+{
+   idisplaymap.deletevehicle();
+}
+
+void MapDisplay :: displayMap ( void )
+{
+   displaymap();
+}
+
+void MapDisplay :: displayPosition ( int x, int y )
+{
+   displaymap();
+}
+
+
+void MapDisplay :: resetMovement ( void )
+{
+   idisplaymap.resetmovement();
+}
+   
+void MapDisplay :: startAction ( void )
+{
+   int bb = cursor.an;
+
+   if ( bb )  
+      cursor.hide();
+   cursorstat[cursorstatnum++] = bb;
+}
+
+void MapDisplay :: stopAction ( void )
+{
+   int b;
+   b = cursorstat[--cursorstatnum];
+   if(  cursorstatnum < 0 )
+      displaymessage ( "void MapDisplay :: stopAction / underflow !", 2 );
+
+   if ( b )  
+      cursor.show();
+
+}
+

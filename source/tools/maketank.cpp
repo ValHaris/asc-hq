@@ -99,6 +99,7 @@ main (int argc, char *argv[] )
     
    
       loadpalette();
+      loadbi3graphics();
    
       ft = new tvehicletype;
 
@@ -423,6 +424,9 @@ main (int argc, char *argv[] )
          printf ("\n    functions (if the unit has different classes: max functions): \n");
          bitselect (ft->functions, cvehiclefunctions, cvehiclefunctionsnum);
    
+         printf ("\n    autorepairrate \n " );
+         num_ed (ft->autorepairrate, 0, 100);
+
          if (ft->functions & (cfautodigger | cfmanualdigger)) {
          	  printf ("\n    radius to check for resources : \n The radius is specified in 'number of fields', not distance !\n For a radius of 5 fields enter 5 here.\n");
    	  num_ed (ft->digrange, 0,255);

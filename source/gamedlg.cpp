@@ -1,6 +1,9 @@
-//     $Id: gamedlg.cpp,v 1.19 2000-04-04 08:31:40 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.20 2000-04-27 16:25:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.19  2000/04/04 08:31:40  mbickel
+//      Fixed a bug that exited ASC when trying to give units to your allies.
+//
 //     Revision 1.18  2000/03/29 09:58:46  mbickel
 //      Improved memory handling for DOS version
 //      Many small changes I can't remember ;-)
@@ -968,18 +971,8 @@ void         tnewcampaignlevel::searchmapinfo(void)
           int version;
           spfldloader.stream->readdata2( version );
        
-          if (version != mapversion) { 
-             if (  desclen < 31 ) {
-                char tempbuf[32];
-                spfldloader.stream->readdata ( tempbuf, 31 - desclen );
-             }
-      
-             spfldloader.stream->readdata2( version );
-       
-             if (version != mapversion) 
-                throw tinvalidversion ( filename, w, fileterminator );
-
-          } 
+         if (version > actmapversion || version < minmapversion ) 
+            throw tinvalidversion ( filename, version, actmapversion );
          
           spfldloader.readmap ();
           spfld = spfldloader.spfld;
@@ -1379,18 +1372,8 @@ void         tchoosenewmap::readmapinfo(void)
        int version;
        spfldloader.stream->readdata2( version );
     
-       if (version != mapversion) { 
-          if (  desclen < 31 ) {
-             char tempbuf[32];
-             spfldloader.stream->readdata ( tempbuf, 31 - desclen );
-          }
-   
-          spfldloader.stream->readdata2( version );
-    
-          if (version != mapversion) 
-             throw tinvalidversion ( mapname, w, fileterminator );
-
-       } 
+         if (version > actmapversion || version < minmapversion ) 
+            throw tinvalidversion ( mapname, version, actmapversion );
       
        spfldloader.readmap ();
        spfld = spfldloader.spfld;
@@ -1722,8 +1705,8 @@ void  ttributepayments :: init ( void )
    activefontsettings.height = 0;
 
    for ( i = 0; i < 3; i++) {
-      showtext2 ( cdnames[i], x1 + 170, y1 + wind1y + 15 + i * 40 );
-      showtext2 ( cdnames[i], x1 + 170, y1 + wind2y + 15 + i * 40 );
+      showtext2 ( resourceNames[i], x1 + 170, y1 + wind1y + 15 + i * 40 );
+      showtext2 ( resourceNames[i], x1 + 170, y1 + wind2y + 15 + i * 40 );
 
       rectangle ( x1 + wind2x, y1 + wind1y + 15 + i * 40, x1 + xsize - 30 , y1 + wind1y + 32 + i * 40, black );
       rectangle ( x1 + wind1x, y1 + wind2y + 15 + i * 40, x1 + wind2x - 15, y1 + wind2y + 32 + i * 40, black );
@@ -3811,7 +3794,7 @@ void tonlinemousehelp :: displayhelp ( int messagenum )
       char* str = getmessage ( messagenum );
       if ( str ) {
 
-         char strarr[maxonlinehelplinenum][100];
+         char strarr[maxonlinehelplinenum][10000];
          for (i = 0; i < maxonlinehelplinenum; i++ )
             strarr[i][0] = 0;
    
@@ -3893,13 +3876,14 @@ void tonlinemousehelp :: removehelp ( void )
 
 void tonlinemousehelp :: checklist ( tonlinehelplist* list )
 {
+     int mbut = mouseparams.taste;
      for ( int i = 0; i < list->num; i++ )
         if ( mouseinrect ( &list->item[i].rect )) {
           #ifdef _DOS_
            displayhelp( list->item[i].messagenum );
           #else
            displayhelp( list->item[i].messagenum );
-           while ( mouseinrect ( &list->item[i].rect ) && mouseparams.taste == 0 && !keypress());
+           while ( mouseinrect ( &list->item[i].rect ) && mouseparams.taste == mbut && !keypress());
            removehelp();
           #endif
         }

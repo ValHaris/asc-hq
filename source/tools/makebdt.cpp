@@ -57,6 +57,7 @@ int main(int argc, char *argv[] )
 
    try {
       loadpalette();
+      loadbi3graphics();
    
       settxt50mode (); 
    

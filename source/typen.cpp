@@ -1,6 +1,9 @@
-//     $Id: typen.cpp,v 1.12 2000-03-16 14:06:56 mbickel Exp $
+//     $Id: typen.cpp,v 1.13 2000-04-27 16:25:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/03/16 14:06:56  mbickel
+//      Added unitset transformation to the mapeditor
+//
 //     Revision 1.11  2000/01/31 16:08:39  mbickel
 //      Fixed crash in line
 //      Improved error handling in replays
@@ -100,19 +103,20 @@ const char* ceventtrigger[ceventtriggernum]  = {"*NONE*", "turn/move >=", "build
                                                  "energy tribute <", "material tribute <", "fuel tribute <",
                                                  "any unit enters polygon", "specific unit enters polygon", "building is seen"};
 const char*  cminentypen[cminenum]  = {"antipersonnel mine", "antitank mine", "moored mine", "floating mine"};
-const unsigned char cminestrength[cminenum]  = { 60, 120, 180, 180 };
+const int cminestrength[cminenum]  = { 60, 120, 180, 180 };
 
-const char*  cbuildingfunctions[cbuildingfunctionnum]  = {"HQ",                "training",             "refinery",           "vehicle production", "ammunition production", 
-                                                      "energy production", "material production",  "fuel production",    "repair facility",    "recycling",
-                                                      "research",          "sonar",                "wind power plant (req. energy production)",     "solar power plant (req. energy production)",    "conventional power plant (req. energy production)",
-                                                      "mining station (req. material or fuel production)",    "external loading" };
+const char*  cbuildingfunctions[cbuildingfunctionnum]  = {"HQ",                "training",             "unused (was: refinery)",           "vehicle production", "ammunition production", 
+                                                      "unused (was: energy prod)", "unused (was: material prod)",  "unused (was: fuel prod)",    "repair facility",    "recycling",
+                                                      "research",          "sonar",                "wind power plant",     "solar power plant",    "matter converter (was: power plant)",
+                                                      "mining station",    "external loading" };
 
 const char*  cvehiclefunctions[cvehiclefunctionsnum]  = {"sonar",             "paratrooper",       "mine-layer",        "trooper",               "repair vehicle",
                                                          "conquer buildings", "move after attack","view satellites",   "construct ALL buildings", "view mines", 
-                                                         "construct vehicles","construct specific buildings", "refuel units",      "icebreaker",  "no refueling in air", 
+                                                         "construct vehicles","construct specific buildings", "refuel units",      "icebreaker",  "cannot be refuelled in air", 
                                                             "refuels material", "!",               "makes tracks",   "drill for mineral resources manually",  "sailing",
                                                                                                     // ?? Fahrspurenleger 
-                                                            "auto repair",        "generator",        "search for mineral resources automatically", "Kamikaze only"  };
+                                                            "auto repair",        "generator",        "search for mineral resources automatically", "Kamikaze only",
+                                                            "immune to mines" };
                                                             
 const char*  cbodenarten[cbodenartennum]  = {"shallow water , coast"       ,    "normal lowland",   "swamp thick",       "forest",       
                                              "high mountains",                  "road",             "railroad",    "entry of building (not to be used for terrain)" ,
@@ -129,8 +133,9 @@ const char*  cwaffentypen[cwaffentypennum]  = {"cruise missile", "mine",    "bom
 
 const char*  cmovemalitypes[cmovemalitypenum] = { "default",
                                                  "light tracked vehicle", "medium tracked vehicle", "heavy tracked vehicle",
-                                                 "light wheeled vehicle",    "medium wheeled vehicle",    "heavy wheeled vehicle",
-                                                 "trooper",               "rail vehicle" };
+                                                 "light wheeled vehicle", "medium wheeled vehicle", "heavy wheeled vehicle",
+                                                 "trooper",               "rail vehicle",           "aircraft",
+                                                 "ships",                 "building / turret / object" };
 
 const char* cnetcontrol[cnetcontrolnum] = { "store energy",           "store material",           "store fuel",           
                                             "move out all energy",           "move out all material",           "move out all fuel", 
@@ -140,8 +145,8 @@ const char* cgeneralnetcontrol[4] = {       "store",  "move out", "stop storing"
                                           // Functionen in Geb„uden ....
 
 const char*  cwettertypen[cwettertypennum] = {"dry (standard)","light rain", "heavy rain", "few snow", "lot of snow", "fog (don't use!!)"};
-const char*  cdnames[3]  = {"energy", "material", "fuel"}; 
-const Word cwaffenproduktionskosten[cwaffentypennum][3]  = {{20, 15, 10}, {2, 2, 0}, {3, 2, 0}, {3, 3, 2}, {3, 3, 2}, {4, 3, 2},
+const char*  resourceNames[3]  = {"energy", "material", "fuel"}; 
+const int  cwaffenproduktionskosten[cwaffentypennum][3]  = {{20, 15, 10}, {2, 2, 0}, {3, 2, 0}, {3, 3, 2}, {3, 3, 2}, {4, 3, 2},
                                                             {1, 1, 0},    {1, 2, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}}; // jeweils fr weaponpackagesize Pack !
 
 const int directionangle [ sidenum ] = 
@@ -154,7 +159,7 @@ const int directionangle [ sidenum ] =
 
 tgameoptions gameoptions;
 
-const int gameparameterdefault [ gameparameternum ] = { 1, 2, 0, 100, 100, 0, 0, 0 };
+const int gameparameterdefault [ gameparameternum ] = { 1, 2, 0, 100, 100, 0, 0, 0, 1, 0, 0, 0, 0 };
 const char* gameparametername[ gameparameternum ] = { "lifetime of tracks", 
                                                       "freezing time of broken ice cover ( icebreaker )",
                                                       "move vehicles from unaccessible fields",
@@ -162,15 +167,21 @@ const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
                                                       "building construction fuel factor ( in percent )",
                                                       "forbid construction of buildings",
                                                       "forbid units to build units",
-                                                      "use BI3 style training factor "};
+                                                      "use BI3 style training factor ",
+                                                      "maximum number of mines on a single field",
+                                                      "lifetime of antipersonnel mine",
+                                                      "lifetime of antitank mine",
+                                                      "lifetime of moored mine",
+                                                      "lifetime of floating mine" };
 
 
 const int csolarkraftwerkleistung[cwettertypennum] = { 1024, 512, 256, 756, 384 }; // 1024 ist Maximum 
 
 tobjectcontainer :: tobjectcontainer ( void )
 {
-   mine = 0;   /*  BM  */ 
-   minestrength = 0;  
+   minenum = 0;
+   for ( int i = 0; i < maxminesonfield; i++ )
+      mine[ i ] = NULL;
 
    objnum = 0;
 }
@@ -216,43 +227,82 @@ void tfield :: sortobjects ( void )
 }
 
 
-int tfield :: mineexist ( void )
+int tfield :: minenum ( void )
 {
-  if ( object && object->mine )
-     return object->mine;
+  if ( object ) 
+     return object->minenum;
   else
      return 0;
 }
 
-void tfield :: putmine( int col, int typ, int strength )
+int  tfield :: putmine( int col, int typ, int strength )
 { 
-   int tp = 1 | (col << 1) | (typ << 4);
+  #ifndef converter
+   if ( mineowner() >= 0  && mineowner() != col )
+      return 0;
 
    if ( !object )
       object = new tobjectcontainer;
 
-   object->mine = tp; 
-   object->minestrength = strength ;
+   if ( object->minenum >= maxminesonfield )
+      return 0;
+
+   /*
+   if ( object->minenum >= actmap->getgameparameter ( cgp_maxminesonfield ))
+      return 0;
+   */
+
+   object->mine[ object->minenum ] = new tmine; 
+   object->mine[ object->minenum ]->strength = strength ;
+   object->mine[ object->minenum ]->color = col;
+   object->mine[ object->minenum ]->type = typ;
+   object->mine[ object->minenum ]->time = actmap->time.a.turn;
+   object->minenum++;
+   return 1;
+  #else
+   return 0;
+  #endif
 } 
 
+int tfield :: mineowner( void )
+{
+   if ( !object )
+      return -1;
+   if ( !object->minenum )
+      return -1;
 
-void tfield :: removemine( void )
+   return object->mine[0]->color;
+}
+
+
+void tfield :: removemine( int num )
 { 
-   object->mine = 0;
-   object->minestrength = 0;
+   if ( !object )
+      return;
+
+   if ( num == -1 )
+      num = object->minenum - 1;
+
+   if ( num >= object->minenum )
+      return;
+
+   delete object->mine[num];
+
+   for ( int i = num+1; i < object->minenum; i++ )
+      object->mine[i-1] = object->mine[i];
+
+   object->minenum--;
+   object->mine[object->minenum] = NULL;
 } 
+
 
 
 #ifdef converter
-int tfield :: getx( void )
-{
-   return 0;
-}
 
-int tfield :: gety( void )
-{
-   return 0;
-}
+int tfield :: mineattacks ( const pvehicle veh ) { return 0; }
+void tfield :: checkminetime ( int time ) { }
+int tfield :: getx( void ) { return 0; }
+int tfield :: gety( void ) { return 0; }
 
 void  tfield :: addobject( pobjecttype obj, int dir, int force )
 { 
@@ -318,6 +368,24 @@ int tfield :: getjamming ( void )
    return a;
 }
 
+int tfield :: getmovemalus ( const pvehicle veh )
+{       
+   int mnum = minenum();
+   if ( mnum ) {
+      int movemalus = _movemalus[veh->typ->movemalustyp];
+      int col = mineowner();
+      if ( veh->color == col*8 ) 
+         movemalus += movemalus * mine_movemalus_increase * mnum / 100;
+
+      return movemalus;
+   } else
+      return _movemalus[veh->typ->movemalustyp];
+}
+
+int tfield :: getmovemalus ( int type )
+{
+  return _movemalus[type];
+}
 
 void tfield :: setparams ( void )
 {
@@ -325,7 +393,7 @@ void tfield :: setparams ( void )
    bdt = typ->art;
 
    for ( i = 0; i < cmovemalitypenum; i++ )
-      movemalus[i] = typ->movemalus[i];
+      _movemalus[i] = typ->movemalus[i];
 
    if ( object ) 
       for ( int j = 0; j < object->objnum; j++ ) {
@@ -335,11 +403,11 @@ void tfield :: setparams ( void )
          bdt  |=  o->terrain_or;
 
          for ( i = 0; i < cmovemalitypenum; i++ ) {
-            movemalus[i] += o->movemalus_plus[i];
+            _movemalus[i] += o->movemalus_plus[i];
             if ( o->movemalus_abs[i] && o->movemalus_abs[i] != -1 )
-               movemalus[i] = o->movemalus_abs[i];
-            if ( movemalus[i] < minmalq )
-               movemalus[i] = minmalq;
+               _movemalus[i] = o->movemalus_abs[i];
+            if ( _movemalus[i] < minmalq )
+               _movemalus[i] = minmalq;
          }
       } /* endfor */
 
@@ -561,8 +629,7 @@ tbuilding :: tbuilding ( void )
 
 tbuilding :: tbuilding ( pbuilding src, tmap* actmap )
 {
-   turnstatus = src-> turnstatus;
-   turnminestatus = src->turnminestatus;
+   work = src->work;
    lastenergyavail = src->lastenergyavail;
    lastmaterialavail = src->lastmaterialavail;
    lastfuelavail = src->lastfuelavail;
@@ -929,7 +996,7 @@ int tvehicletype::maxsize ( void )
 
 tvehicletype :: tvehicletype ( void )
 {
-   memset ( &name, 0, (int) ((char*) &dummy[2] - (char*)&name)  );
+   memset ( &name, 0, (int) ((char*) &dummy[1] - (char*)&name)  );
    weapons = new UnitWeapon;
    terrainaccess = new tterrainaccess;
 }
@@ -998,9 +1065,9 @@ void tvehicle :: repairunit(pvehicle vehicle, int maxrepair )
 
 void tvehicle :: nextturn( void )
 {
-   if ( functions & cfautorepair ) 
+   if ( typ->autorepairrate > 0 ) 
       if ( damage ) 
-         repairunit ( this, autorepairdamagedecrease );
+         repairunit ( this, typ->autorepairrate );
 
 }
 
@@ -1647,6 +1714,53 @@ tmap :: ~tmap ( )
 {
 }
 */
+
+int tmap :: getgameparameter ( int num )
+{
+  if ( game_parameter && num < gameparameter_num ) {
+
+     if ( num == cgp_maxminesonfield ) 
+        if ( game_parameter[num] > maxminesonfield )
+           return maxminesonfield;
+
+     return game_parameter[num];
+  } else 
+     if ( num < gameparameternum )
+        return gameparameterdefault[ num ];
+     else
+        return 0;
+}
+
+void tmap :: setgameparameter ( int num, int value )
+{
+   if ( game_parameter ) {
+     if ( num < gameparameter_num ) 
+        game_parameter[num] = value;
+     else {
+        int* oldparam = game_parameter;
+        game_parameter = new int[num+1];
+        for ( int i = 0; i < gameparameter_num; i++ )
+           game_parameter[i] = oldparam[i];
+        for ( int j = gameparameter_num; j < num; j++ )
+           if ( j < gameparameternum )
+              game_parameter[j] = gameparameterdefault[j];
+           else
+              game_parameter[j] = 0;
+        game_parameter[num] = value;
+        gameparameter_num = num + 1;
+        delete[] oldparam;
+     }
+   } else {
+       game_parameter = new int[num+1];
+       for ( int j = 0; j < num; j++ )
+          if ( j < gameparameternum )
+             game_parameter[j] = gameparameterdefault[j];
+          else
+             game_parameter[j] = 0;
+       game_parameter[num] = value;
+       gameparameter_num = num + 1;
+   }
+}
 
 void tmap :: chainunit ( pvehicle eht )
 {

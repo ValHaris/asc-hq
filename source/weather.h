@@ -1,6 +1,10 @@
-//     $Id: weather.h,v 1.3 1999-12-28 21:03:29 mbickel Exp $
+//     $Id: weather.h,v 1.4 2000-04-27 16:25:31 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  1999/12/28 21:03:29  mbickel
+//      Continued Linux port
+//      Added KDevelop project files
+//
 //     Revision 1.2  1999/11/16 03:42:52  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
@@ -33,13 +37,8 @@
 #ifndef weather_h
  #define weather_h
 
-#ifdef _DOS_
-#include "libs\triangul\interfac.h"
-#include "libs\triangul\triangul.h"
-#else
 #include "libs/triangul/interfac.h"
 #include "libs/triangul/triangul.h"
-#endif
 
 #include "typen.h"
 

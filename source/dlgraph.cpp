@@ -1,6 +1,9 @@
-//     $Id: dlgraph.cpp,v 1.4 1999-12-30 20:30:32 mbickel Exp $
+//     $Id: dlgraph.cpp,v 1.5 2000-04-27 16:25:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  1999/12/30 20:30:32  mbickel
+//      Improved Linux port again.
+//
 //     Revision 1.3  1999/12/28 21:02:52  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -83,7 +86,7 @@ void         tdialogbox::knopfdruck(int      xx1,
 
      collategraphicoperations cgs;
 
-    pointer      p;
+    void*      p;
     boolean      kn, kn2; 
     integer      mt; 
 
@@ -141,7 +144,7 @@ void         tdialogbox::newknopfdruck2(integer      xx1,
                             integer      yy2)
 {
 
-    pointer      p;
+    void*      p;
     boolean      kn; 
     integer      mt; 
     {
@@ -206,7 +209,7 @@ void         tdialogbox::newknopfdruck3(integer      xx1,
 {
      collategraphicoperations cgs;
 
-   pointer      p;
+   void*      p;
 
      // vom reingedrÅckten in den Normalzustand
 
@@ -229,7 +232,7 @@ void         tdialogbox::newknopfdruck4(integer      xx1,
 {
      collategraphicoperations cgs;
 
-   pointer      p;
+   void*      p;
     // reindrÅcken
 
      p = asc_malloc ( imagesize ( xx1 + 2,yy1 + 2,xx2 - 4,yy2 - 4 )) ;
@@ -247,7 +250,7 @@ void         tdialogbox::newknopfdruck(integer      xx1,
                            integer      yy2)
 {
 
-   pointer      p;
+   void*      p;
    boolean      kn;
    integer      mt;
    void*    pq ;

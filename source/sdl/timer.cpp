@@ -1,6 +1,10 @@
-//     $Id: timer.cpp,v 1.3 2000-02-05 12:13:47 steb Exp $
+//     $Id: timer.cpp,v 1.4 2000-04-27 16:25:34 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/02/05 12:13:47  steb
+//     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
+//     startup due to actmap being null when trying to report errors.
+//
 //     Revision 1.2  2000/01/04 19:43:55  mbickel
 //      Continued Linux port
 //
@@ -77,7 +81,8 @@ static Uint32 ticktock(Uint32 interval)
 }
 
 void inittimer(int frequence)
-{ 
+{
+/*
    if (init != 0) return;
 	if ( SDL_Init(SDL_INIT_TIMER) < 0 ) {
 		fprintf(stderr, "Couldn't load SDL: %s\n", SDL_GetError());
@@ -85,11 +90,14 @@ void inittimer(int frequence)
 	}
 	SDL_SetTimer( 10, ticktock);
    init = 1;
+*/
 } 
 
 
 void closetimer(void)
-{ 
+{
+/*
    if (init == 0) return;
    SDL_SetTimer ( 0, NULL );
+*/
 }

@@ -1,6 +1,15 @@
-//     $Id: loaders.cpp,v 1.8 2000-01-25 19:28:14 mbickel Exp $
+//     $Id: loaders.cpp,v 1.9 2000-04-27 16:25:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/01/25 19:28:14  mbickel
+//      Fixed bugs:
+//        invalid mouse buttons reported when moving the mouse
+//        missing service weapon in weapon information
+//        invalid text displayed in ammo production
+//        undamaged units selected in repair vehicle function
+//
+//      speed up when playing weapon sound
+//
 //     Revision 1.7  2000/01/24 17:35:45  mbickel
 //      Added dummy routines for sound under DOS
 //      Cleaned up weapon specification
@@ -328,6 +337,7 @@ void         renumevents(void)
 
   #define csm_resources  1     /* b4 */
   #define csm_connection 2     // b4
+  #define csm_newobject  4     // b4
 
 
 
@@ -1526,6 +1536,9 @@ void    tspfldloaders::writemap ( void )
         if ( spfld->ellipse )
            stream->writedata2 ( *(spfld->ellipse) );
 
+        for ( int ii = 0 ; ii < spfld->gameparameter_num; ii++ )
+           stream->writedata2 ( spfld->game_parameter[ii] );
+
 }
 
 
@@ -1546,7 +1559,7 @@ void     tmaploaders::initmap ( void )
     spfld->firsteventtocome = NULL; 
     spfld->firsteventpassed = NULL; 
     spfld->network          = NULL;
- 
+    spfld->game_parameter = NULL;
 }
 
 
@@ -1556,6 +1569,7 @@ void     tgameloaders::initmap ( void )
        spfld->player[i].firstvehicle = NULL; 
        spfld->player[i].firstbuilding = NULL; 
     } 
+    spfld->game_parameter = NULL;
 }
 
 
@@ -1750,6 +1764,17 @@ void     tspfldloaders::readmap ( void )
        stream->writedata2 ( *(spfld->ellipse) );
     }
 
+    int orggpnum = spfld->gameparameter_num;
+    spfld->gameparameter_num = 0;
+    for ( int gp = 0; gp < 8; gp ++ )
+       spfld->setgameparameter ( gp, spfld->_oldgameparameter[gp] );
+
+    for ( int ii = 0 ; ii < orggpnum; ii++ ) {
+       int gpar;
+       stream->readdata2 ( gpar );
+       spfld->setgameparameter ( ii, gpar );
+    }
+
        #ifdef logging
        logtofile ( "loaders / tspfldloaders::readmap / returning" );
        #endif
@@ -1921,6 +1946,8 @@ void            tspfldloaders::readreplayinfo ( void )
 /*     fielder schreiben / lesen                             ÿ */
 /**************************************************************/
 
+const int objectstreamversion = 1;
+
 void   tspfldloaders::writefields ( void )
 {
    int l = 0;
@@ -1970,7 +1997,7 @@ void   tspfldloaders::writefields ( void )
       if (fld->visible)
          b3 |= csm_visible;
       if (fld->object )
-         b3 |= csm_object;
+         b4 |= csm_newobject;
 
       if ( fld->resourceview )
          b4 |= csm_resources;
@@ -2033,8 +2060,19 @@ void   tspfldloaders::writefields ( void )
       if (b3 & csm_visible )
          stream->writedata2( fld->visible );
 
-      if (b3 & csm_object ) {
-         stream->writedata2 ( *fld->object );
+      if ( b4 & csm_newobject ) {
+         stream->writedata2 ( objectstreamversion );
+
+         stream->writedata2 ( fld->object->minenum );
+         for ( int i = 0; i < fld->object->minenum; i++ ) {
+            stream->writedata2 ( fld->object->mine[i]->type );
+            stream->writedata2 ( fld->object->mine[i]->strength );
+            stream->writedata2 ( fld->object->mine[i]->time );
+            stream->writedata2 ( fld->object->mine[i]->color );
+         }
+
+         stream->writedata2 ( fld->object->objnum );
+
          for ( int n = 0; n < fld->object->objnum; n++ ) {
             stream->writedata2 ( *fld->object->object[n] );
             stream->writedata2 ( fld->object->object[n]->typ->id );
@@ -2178,10 +2216,85 @@ void tspfldloaders::readfields ( void )
 
 
          if (b3 & csm_object ) {
+
+                     /*
+                         class  tobjectcontainer {
+                         public:
+                           char         mine;   
+                           char         minestrength;  
+                       
+                           int objnum;
+                           pobject object[ maxobjectonfieldnum ];
+                       
+                           tobjectcontainer ( void );
+                           int checkforemptyness ( void );
+                           pobject checkforobject ( pobjecttype o );
+                         };
+                     */
+
             if ( !fld2->object ) 
                fld2->object = new tobjectcontainer;
 
-            stream->readdata2 ( *fld2->object );
+            char minetype;
+            char minestrength;
+            stream->readdata2 ( minetype );
+            stream->readdata2 ( minestrength );
+
+            if ( minetype >> 4 ) {
+               fld2->object->minenum = 1;
+               fld2->object->mine[0]->strength = minestrength;
+               fld2->object->mine[0]->type = minetype >> 4;
+               fld2->object->mine[0]->color = (minetype >> 1) & 7;
+               fld2->object->mine[0]->time = 0;
+            } else
+               fld2->object->minenum = 0;
+
+            int objnum;
+            stream->readdata2 ( objnum );
+            fld2->object->objnum = objnum;
+                                                 
+            pobject object[ 16 ];
+            stream->readdata ( object, sizeof ( pobject ) * 16 ); 
+         }
+
+         if ( b4 & csm_newobject ) {
+            int objectversion;
+            stream->readdata2 ( objectversion );
+
+            if ( objectversion != objectstreamversion )
+               throw tinvalidversion ( "object", objectstreamversion, objectversion );
+
+
+            if ( !fld2->object ) 
+               fld2->object = new tobjectcontainer;
+
+            int minenum;
+            fld2->object->minenum = 0;
+            stream->readdata2 ( minenum );
+            for ( int i = 0; i < minenum; i++ ) {
+               int type;
+               int strength;
+               int time;
+               int color;
+               stream->readdata2 ( type );
+               stream->readdata2 ( strength );
+               stream->readdata2 ( time );
+               stream->readdata2 ( color );
+
+               if ( type ) {
+                  fld2->object->mine[fld2->object->minenum] = new tmine;
+                  fld2->object->mine[fld2->object->minenum]->type = type;
+                  fld2->object->mine[fld2->object->minenum]->strength = strength;
+                  fld2->object->mine[fld2->object->minenum]->time = time;
+                  fld2->object->mine[fld2->object->minenum]->color = color;
+                  fld2->object->minenum++;
+               }
+            }
+
+            stream->readdata2 ( fld2->object->objnum );
+         }
+
+         if ( (b3 & csm_object) || (b4 & csm_newobject )) {
             for ( int n = 0; n < fld2->object->objnum; n++ ) {
                fld2->object->object[n] = new tobject;
                stream->readdata2 ( *fld2->object->object[n] );
@@ -2367,12 +2480,9 @@ int          tmaploaders::savemap(char *       name,
    /********************************************************************************/
    {
     
-       stream->writepchar ( description );
+       stream->writepchar ( description    );
        stream->writedata2 ( fileterminator );
-
-       int w = mapversion;
-    
-       stream->writedata2( w );
+       stream->writedata2 ( actmapversion  );
 
 
        writemap ( );
@@ -2394,8 +2504,7 @@ int          tmaploaders::savemap(char *       name,
    logtofile ( "loaders / tmaploaders::savemap / nach writefields" );
    #endif
 
-   int w = mapversion;
-   stream->writedata2 ( w );
+   stream->writedata2 ( actmapversion );
 
    spfld = NULL;
 
@@ -2447,18 +2556,8 @@ int          tmaploaders::loadmap(char *       name )
     int version;
     stream->readdata2( version );
  
-    if (version != mapversion) { 
-       if (  desclen < 31 ) {
-          char tempbuf[32];
-          stream->readdata ( tempbuf, 31 - desclen );
-       }
-
-       stream->readdata2( version );
- 
-       if (version != mapversion) 
-          throw tinvalidversion ( name, mapversion, version );
-
-    } 
+    if ( version > actmapversion || version < minmapversion )
+       throw tinvalidversion ( name, actmapversion, version );
    
 
    #ifdef logging
@@ -2482,9 +2581,9 @@ int          tmaploaders::loadmap(char *       name )
   /*****************************************************************************************************/
 
    stream->readdata( &version, sizeof(version)); 
-   if (version != mapversion) { 
+   if (version > actmapversion || version < minmapversion ) { 
       erasemap_unchained ( spfld );
-      throw tinvalidversion ( name, mapversion, version );
+      throw tinvalidversion ( name, actmapversion, version );
    } 
 
    #ifdef logging
@@ -2590,8 +2689,7 @@ int          tsavegameloaders::savegame(char *       name,
    stream->writepchar ( description );
    stream->writedata2 ( fileterminator );
 
-   int w = savegameversion;
-   stream->writedata2( w );
+   stream->writedata2( actsavegameversion );
    writemap ();
 
    writenetwork ( );
@@ -2607,8 +2705,7 @@ int          tsavegameloaders::savegame(char *       name,
    writedissections();
    writereplayinfo ();
 
-   w = savegameversion;
-   stream->writedata2 ( w );
+   stream->writedata2 ( actsavegameversion );
 
    spfld = NULL;
 
@@ -2643,18 +2740,8 @@ int          tsavegameloaders::loadgame(char *       name )
    int version;
    stream->readdata2( version );
 
-   if (version != savegameversion ) { 
-      if (  desclen < 31 ) {
-         char tempbuf[32];
-         stream->readdata ( tempbuf, 31 - desclen );
-      }
-
-      stream->readdata2( version );
-
-      if (version != savegameversion ) 
-         throw tinvalidversion ( name, savegameversion, version );
-
-   } 
+   if (version > actsavegameversion || version < minsavegameversion ) 
+      throw tinvalidversion ( name, actsavegameversion, version );
    
 
    readmap ();
@@ -2687,9 +2774,9 @@ int          tsavegameloaders::loadgame(char *       name )
    readreplayinfo ();
  
     stream->readdata( &version, sizeof(version));
-    if (version != savegameversion) {
+    if (version > actsavegameversion || version < minsavegameversion ) {
        erasemap_unchained ( spfld );
-       throw tinvalidversion ( name, savegameversion, version );
+       throw tinvalidversion ( name, actsavegameversion, version );
     } 
  
     erasemap();
@@ -2793,9 +2880,7 @@ int          tnetworkloaders::savenwgame( pnstream strm, char* description )
    stream->writepchar ( description );
    stream->writedata2 ( fileterminator );
  
-   int w = networkversion;
-
-   stream->writedata2( w );
+   stream->writedata2( actnetworkversion );
 
    writemap ();
 
@@ -2804,7 +2889,7 @@ int          tnetworkloaders::savenwgame( pnstream strm, char* description )
 
    writenetwork ( );
 
-   stream->writedata2 ( w );
+   stream->writedata2 ( actnetworkversion );
 
    writeeventstocome ();
    writeeventspassed ();
@@ -2816,7 +2901,7 @@ int          tnetworkloaders::savenwgame( pnstream strm, char* description )
    writedissections();
    writereplayinfo ();
 
-   stream->writedata2 ( w );
+   stream->writedata2 ( actnetworkversion );
 
    spfld = NULL;
 
@@ -2848,10 +2933,10 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
    int version;
    stream->readdata2( version );
 
-   if (version != networkversion) 
-      throw tinvalidversion ( name, networkversion, version );
+   if (version > actnetworkversion || version < minnetworkversion ) 
+      throw tinvalidversion ( name, actnetworkversion, version );
    
-   #ifdef logging
+   #ifdef logging 
    logtofile ( "loaders / tnetworkloaders::loadnwgame / vor readmap" );
    #endif
 
@@ -2876,8 +2961,8 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
 
    stream->readdata2( version );
 
-   if (version != networkversion) 
-      throw tinvalidversion ( name, networkversion, version );
+   if (version > actnetworkversion || version < minnetworkversion ) 
+      throw tinvalidversion ( name, actnetworkversion, version );
 
 
    #ifdef logging
@@ -2897,9 +2982,9 @@ int          tnetworkloaders::loadnwgame( pnstream strm )
 
 
    stream->readdata2( version );
-   if (version != networkversion) {
+   if (version > actnetworkversion || version < minnetworkversion ) {
       erasemap_unchained ( spfld );
-      throw tinvalidversion ( name, networkversion, version );
+      throw tinvalidversion ( name, actnetworkversion, version );
    } 
 
    #ifdef logging
@@ -3175,6 +3260,7 @@ void treplayloaders :: initmap ( void )
        spfld->player[i].firstvehicle = NULL; 
        spfld->player[i].firstbuilding = NULL; 
     } 
+    spfld->game_parameter = NULL;
 }
 
 
@@ -3190,18 +3276,18 @@ void treplayloaders :: loadreplay ( pmemorystreambuf streambuf )
    int version;
    stream->readdata2( version );
 
-   if ( version != replayversion ) 
-      throw tinvalidversion ( name, replayversion, version );
+   if (version > actreplayversion || version < minreplayversion ) 
+      throw tinvalidversion ( name, actreplayversion, version );
 
-
+                   
    readmap ();
 
    readfields ( );
  
    stream->readdata2( version );
-   if (version != replayversion ) {
+   if (version > actreplayversion || version < minreplayversion ) {
       erasemap_unchained ( spfld );
-      throw tinvalidversion ( name, replayversion, version );
+      throw tinvalidversion ( name, actreplayversion, version );
    } 
 
    actmap = spfld;
@@ -3281,14 +3367,12 @@ void treplayloaders :: savereplay ( int num )
 
    spfld = &replayfield;
 
-   int w = replayversion;
-   stream->writedata2( w );
+   stream->writedata2( actreplayversion );
    writemap ();
-
+           
    writefields ( );
 
-   w = replayversion;
-   stream->writedata2 ( w );
+   stream->writedata2 ( actreplayversion );
 
    spfld = NULL;
 
@@ -3326,18 +3410,8 @@ int validatemapfile ( char* s )
       int version;
       stream.readdata2( version );
    
-      if (version != mapversion) { 
-         if (  desclen < 31 ) {
-            char tempbuf[32];
-            stream.readdata ( tempbuf, 31 - desclen );
-         }
-  
-         stream.readdata2( version );
-   
-         if (version != mapversion) 
-            throw tinvalidversion ( s, mapversion, version );
-         
-      } 
+      if (version > actmapversion || version < minmapversion ) 
+         throw tinvalidversion ( s, actmapversion, version );
 
 
    } /* endtry */
@@ -3602,6 +3676,11 @@ void         erasemap( pmap spfld )
       spfld->replayinfo = NULL;
    }
 
+   if ( spfld->game_parameter ) {
+      delete[] spfld->game_parameter;
+      spfld->game_parameter = NULL;
+   }
+
 
    #ifdef logging
    logtofile ( "loaders.cpp / erasemap / deleting fields ");
@@ -3801,6 +3880,10 @@ void         erasemap_unchained( tmap* spfld )
       delete spfld->replayinfo;
       spfld->replayinfo = NULL;
    }
+   if ( spfld->game_parameter ) {
+      delete[] spfld->game_parameter;
+      spfld->game_parameter = NULL;
+   }
 
 
    delete[] spfld->field;
@@ -3850,7 +3933,11 @@ void         loadallvehicletypes(void)
           if ( actprogressbar )
              actprogressbar->point();
     
-          addvehicletype ( loadvehicletype( c ));
+          pvehicletype t = loadvehicletype( c );
+          if ( t->steigung && ((t->height & 6 ) == 6 )) 
+             t->steigung = 0;
+
+          addvehicletype ( t );
 
           if ( verbosity >= 2)
             printf("vehicletype %s loaded\n", c );

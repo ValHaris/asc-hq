@@ -1,6 +1,9 @@
-//     $Id: sg.cpp,v 1.31 2000-04-17 18:55:23 mbickel Exp $
+//     $Id: sg.cpp,v 1.32 2000-04-27 16:25:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.31  2000/04/17 18:55:23  mbickel
+//      Fixed the DOS version
+//
 //     Revision 1.30  2000/04/15 15:52:00  mbickel
 //      Updated linux documentation
 //
@@ -288,7 +291,7 @@ class tsgpulldown : public tpulldown {
           protected:
              void* menubackground;
           public:
-             int  barvisi;
+//             int  barvisi;
              tsgpulldown ( void );
              void init ( void );
 //             void baron(void);
@@ -299,11 +302,11 @@ class tsgpulldown : public tpulldown {
 
 tsgpulldown :: tsgpulldown ( void )
 {
-   barvisi = 0;
    menubackground = NULL;
 }
 /*
 void tsgpulldown :: baron ( void )
+
 {
    if ( !barvisi ) {
       if ( !menubackground ) 
@@ -353,6 +356,7 @@ int checkforcheats( void )
    #ifdef CHEATS
 
     int num = 0;
+
     for ( int i = 0; i < 8; i++ )
        if ( actmap->player[i].stat == ps_human )
           num++;
@@ -630,6 +634,7 @@ int tbackgroundpict :: getlastpaintmode ( void )
 
 
 
+
 #ifdef MEMCHK
 
   int blocknum = 0;
@@ -844,7 +849,6 @@ void showmemory ( void )
       setinvisiblemouserectanglestk ( 0, agmp->resolutiony, 640, agmp->resolutiony + 80 ); 
 
    int a = maxavail();
-   int b;
    //   int b = _memavl();
    //   showtext2( strrr ( _memmax() ), 10,agmp->resolutiony );
    // showtext2( strrr ( b  ), 110,agmp->resolutiony );
@@ -1250,7 +1254,7 @@ void         loadcursor(void)
 
    {
       tnfilestream stream ("gebasym2.raw",1);
-      for ( i = 0; i < 11; i++ )
+      for ( i = 0; i < 12; i++ )
          for ( int j = 0; j < 2; j++ )
             stream.readrlepict(   &icons.container.lasche.sym[i][j], false, &w );
    }
@@ -1310,10 +1314,10 @@ void         loadcursor(void)
    }
 
    {
-      tnfilestream stream ("pwrplant.raw",1);
+      tnfilestream stream ("pwrplnt2.raw",1);
       stream.readrlepict(   &icons.container.subwin.conventionelpowerplant.main, false, &w );
-      stream.readrlepict(   &icons.container.subwin.conventionelpowerplant.button[0], false, &w );
-      stream.readrlepict(   &icons.container.subwin.conventionelpowerplant.button[1], false, &w );
+      stream.readrlepict(   &icons.container.subwin.conventionelpowerplant.schieber, false, &w );
+      //stream.readrlepict(   &icons.container.subwin.conventionelpowerplant.button[1], false, &w );
    }
 
    
@@ -1333,8 +1337,9 @@ void         loadcursor(void)
    
 
    {
-      tnfilestream stream ("mining.raw",1);
+      tnfilestream stream ("mining2.raw",1);
       stream.readrlepict(   &icons.container.subwin.miningstation.main, false, &w );
+      stream.readrlepict(   &icons.container.subwin.miningstation.zeiger, false, &w );
       /*
       for ( i = 0; i < 2; i++ )
          stream.readrlepict(   &icons.container.subwin.miningstation.button[i], false, &w );
@@ -1346,6 +1351,12 @@ void         loadcursor(void)
          stream.readrlepict(   &icons.container.subwin.miningstation.pageturn[i], false, &w );
       stream.readrlepict(   &icons.container.subwin.miningstation.graph, false, &w );
       */
+   }
+
+   {
+      tnfilestream stream ("mineral.raw",1);
+      stream.readrlepict(   &icons.container.subwin.mineralresources.main, false, &w );
+      stream.readrlepict(   &icons.container.subwin.mineralresources.zeiger, false, &w );
    }
 
    {
@@ -1434,6 +1445,7 @@ void         tsgpulldown :: init ( void )
   addfield ("~G~ame");
    addbutton ( "New ~C~ampaign", ua_newcampaign); 
    addbutton ( "~N~ew single Levelõctrl-n", ua_startnewsinglelevel ); 
+
    addbutton ( "seperator", -1); 
    addbutton ( "~L~oad gameõctrl-l", ua_loadgame ); 
    addbutton ( "~S~ave game", ua_savegame ); 
@@ -1505,6 +1517,7 @@ void         repaintdisplay(void)
    int mapexist = actmap && actmap->xsize > 0  && actmap->ysize >= 0 ;
 
 
+
    int ms = getmousestatus();
    if ( ms == 2 )
       mousevisible ( false );
@@ -1519,7 +1532,8 @@ void         repaintdisplay(void)
       cursor.show(); 
    }
 
-//   pd.barvisi = 0;
+   pd.barstatus = false;
+
    if ( ms == 2 )
       mousevisible ( true );
    dashboard.x = 0xffff;
@@ -1527,6 +1541,7 @@ void         repaintdisplay(void)
    if ( actmap && actmap->ellipse )
       actmap->ellipse->paint();
    if ( actgui && actmap && actmap->xsize>0)
+
       actgui->painticons();
 
 } 
@@ -2043,7 +2058,7 @@ void execuseraction ( tuseractions action )
             
          case ua_unitweightinfo:  if ( fieldvisiblenow  ( getactfield() )) {
                                      pvehicle eht = getactfield()->vehicle;
-                                     if ( eht && eht->color == actmap->playerview*8 )
+                                     if ( eht && getdiplomaticstatus ( eht->color ) == capeace )
                                        displaymessage(" weight of unit: \n basic: %d\n+fuel: %d\n+material:%d\n+cargo:%d\n= %d",1 ,eht->typ->weight, eht->fuel * fuelweight / 1024 , eht->material * materialweight / 1024, eht->cargo(), eht->weight() );
                                   }
                          break;
@@ -2335,6 +2350,57 @@ void selectgraphicset ( void )
    }
 }
 
+
+class WeaponRange : public tsearchfields {
+       public:
+         int run ( const pvehicle veh );
+         void testfield ( void ) { if ( getfield ( xp, yp )) getfield ( xp, yp )->tempw = 1; };
+};
+
+int  WeaponRange :: run ( const pvehicle veh )
+{
+   int found = 0;
+   if ( fieldvisiblenow ( getfield ( veh->xpos, veh->ypos )))
+      for ( int i = 0; i < veh->typ->weapons->count; i++ ) {
+         if ( veh->typ->weapons->weapon[i].shootable() ) {
+            initsuche ( veh->xpos, veh->ypos, veh->typ->weapons->weapon[i].maxdistance/maxmalq, veh->typ->weapons->weapon[i].mindistance/maxmalq );
+            startsuche();
+            found++;
+         }
+      }
+   return found;
+}
+
+
+void viewunitweaponrange ( const pvehicle veh, tkey taste )
+{
+   if ( veh && !moveparams.movestatus ) {
+      cleartemps ( 7 );
+      WeaponRange wr;
+      int res = wr.run ( veh );
+      if ( res ) {
+         displaymap();
+
+         #ifndef NEWKEYB
+         taste = ct_invvalue;
+         #endif
+
+         if ( taste != ct_invvalue ) {
+            while ( skeypress ( taste )) {
+
+               while ( keypress() )
+                  r_key();
+            }
+         } else {
+            int mb = mouseparams.taste;
+            while ( mouseparams.taste == mb );
+         }
+         cleartemps ( 7 );
+         displaymap();
+      }
+   }
+}
+
 void  mainloop ( void )
 {
    tkey ch;
@@ -2407,7 +2473,7 @@ void  mainloop ( void )
             case ct_2:  execuseraction ( ua_toggleunitshading );
                break;
                
-            case ct_3:  execuseraction ( ua_heapcheck );
+            case ct_3:  viewunitweaponrange ( getactfield()->vehicle, ct_3 );
                break;
 
             case ct_4:  /* selectgraphicset();
@@ -2845,6 +2911,7 @@ void runmainmenu ( void )
 
        if (keypress()) {
          tkey ch = r_key(); 
+
          switch ( ch ) {
             case ct_down: if ( pos < mainmenuitemnum-1 )
                              pos++;
@@ -2941,6 +3008,7 @@ void startcdaudio ( char c )
              else
                 cdrom = 0;
           }
+
        } else
           cdrom = 0;
     }
@@ -3011,6 +3079,9 @@ int main(int argc, char *argv[] )
    inittimer(100);
    atexit ( closetimer );
 
+
+    printf( getstartupmessage() );
+
    #ifdef _DOS_
     #ifdef MEMCHK
      initmemory( 5000000 );
@@ -3022,7 +3093,6 @@ int main(int argc, char *argv[] )
 
        int cntr = ticker;
 
-        printf( getstartupmessage() );
 
 
         for (i = 1; i<argc; i++ ) {
@@ -3102,7 +3172,6 @@ int main(int argc, char *argv[] )
            return 0;
        }
       #endif
-
 
         #ifdef logging
         logtofile ( "sg.cpp / main / allocating reserved memory ");

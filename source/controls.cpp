@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.21 2000-03-16 14:06:51 mbickel Exp $
+//     $Id: controls.cpp,v 1.22 2000-04-27 16:25:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.21  2000/03/16 14:06:51  mbickel
+//      Added unitset transformation to the mapeditor
+//
 //     Revision 1.20  2000/02/24 10:54:07  mbickel
 //      Some cleanup and bugfixes
 //
@@ -146,6 +149,18 @@
          trunreplay runreplay;
 
          int startreplaylate = 0;
+         tmoveparams moveparams;
+
+
+class InitControls {
+  public:
+   InitControls ( void ) 
+   {
+      memset ( (void*) &moveparams, 0, sizeof ( moveparams ));
+   };
+} initControls;
+
+
 
 
   class   tsearchexternaltransferfields : public tsearchfields {
@@ -464,18 +479,9 @@ void         putbuildinglevel3(integer      x,
 
          logtoreplayinfo ( rpl_putbuilding, (int) x, (int) y, (int) bld->id, (int) eht->color );
 
-         int mf = 100;
-         int ff = 100;
+         int mf = actmap->getgameparameter ( cgp_building_material_factor );
+         int ff = actmap->getgameparameter ( cgp_building_fuel_factor );
       
-         if ( actmap->gameparameter ) {
-            if ( actmap->gameparameter[cgp_building_material_factor] )
-               mf = actmap->gameparameter[cgp_building_material_factor];
-      
-            if ( actmap->gameparameter[cgp_building_fuel_factor] )
-               ff = actmap->gameparameter[cgp_building_fuel_factor];
-         }
-
-
          if (eht->material < bld->produktionskosten.material * mf / 100 ) { 
             displaymessage("not enough material!",1); 
             eht->material = 0; 
@@ -742,15 +748,15 @@ void         tputmine::testfield(void)
    if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) { 
       fld = getfield(xp,yp); 
       if ( !fld->vehicle  &&  !fld->building ) { 
+         fld->a.temp = 0;
          if (fld->object && fld->object->mine ) { 
-            fld->a.temp = 2; 
+            fld->a.temp += 2; 
             numberoffields++; 
          } 
-         else 
-            if (mienenlegen) { 
-               fld->a.temp = 1; 
-               numberoffields++; 
-            } 
+         if (mienenlegen && (!fld->minenum() || fld->mineowner() == player)) { 
+            fld->a.temp += 1; 
+            numberoffields++; 
+         } 
       } 
    } 
 } 
@@ -772,6 +778,7 @@ void         tputmine::initpm(  char mt, const pvehicle eht )
             if (eht->ammo[i] > 0) 
                mienenlegen = true; 
          } 
+   player = eht->color / 8;
    mienentyp = mt; 
    if (eht->movement < mineputmovedecrease) { 
       mienenlegen = false; 
@@ -800,15 +807,11 @@ void         tputmine::run(void)
 
 
 
-void  legemine(byte         typ)
+void  legemine( int typ, int delta )
 { 
-  pvehicle     eht; 
-  tputmine     ptm; 
-  byte         i; 
-  pvehicletype fzt; 
-
    if (moveparams.movestatus == 0) { 
-      eht = getactfield()->vehicle; 
+      tputmine ptm; 
+      pvehicle eht = getactfield()->vehicle; 
       moveparams.vehicletomove = eht; 
       if (eht == NULL) 
          return;
@@ -820,40 +823,39 @@ void  legemine(byte         typ)
    } 
    else 
       if (moveparams.movestatus == 90) { 
-         netlevel += 10;
-         eht = moveparams.vehicletomove; 
-         if (getactfield()->a.temp ) { 
-            int mn = 0;
-            pfield fld = getactfield();
-            if ( fld->object && fld->object->mine )
-               mn = 1;
-            if ( mn == 0) { 
-               fzt = eht->typ; 
+         pvehicle eht = moveparams.vehicletomove; 
+         pfield fld = getactfield();
+         if ( fld->a.temp ) { 
+
+            if ( (fld->a.temp & 1) && ( delta > 0 )) { 
+               pvehicletype fzt = eht->typ; 
                int  strength = 64;
-               for (i = 0; i < fzt->weapons->count ; i++) 
-                  if ((fzt->weapons->weapon[i].getScalarWeaponType() == cwminen) && fzt->weapons->weapon[i].shootable() ) {
-                     eht->ammo[i]--; 
-                     eht->movement -= mineputmovedecrease;
-                     strength = eht->weapstrength[i];
-                     break; 
-                  } 
-               int x = getxpos();
-               int y = getypos();
-               getactfield() -> putmine( actmap->actplayer, typ, cminestrength[typ-1] * strength / 64 );
-               logtoreplayinfo ( rpl_putmine, x, y, (int) actmap->actplayer, (int) typ, (int) cminestrength[typ-1] * strength / 64 );
+               for ( int i = 0; i < fzt->weapons->count ; i++) 
+                  if ((fzt->weapons->weapon[i].getScalarWeaponType() == cwminen) && fzt->weapons->weapon[i].shootable() ) 
+                     if ( fld-> putmine( actmap->actplayer, typ, cminestrength[typ-1] * strength / 64 )) {
+                        eht->ammo[i]--; 
+                        eht->movement -= mineputmovedecrease;
+                        strength = eht->weapstrength[i];
+                        int x = getxpos();
+                        int y = getypos();
+                        logtoreplayinfo ( rpl_putmine, x, y, (int) actmap->actplayer, (int) typ, (int) cminestrength[typ-1] * strength / 64 );
+                        break; 
+                     } 
+                  
 
             } 
-            else { 
+
+            if ( (fld->a.temp & 2) && ( delta < 0 )) { 
                int x = getxpos();
                int y = getypos();
-               getactfield() -> removemine( );
+               pfield fld = getactfield();
+               fld -> removemine( -1 );
                logtoreplayinfo ( rpl_removemine, x, y );
             } 
             cleartemps(7); 
             computeview(); 
             moveparams.movestatus = 0; 
          } 
-         netlevel -= 10;
       } 
 } 
 
@@ -1072,7 +1074,7 @@ void    getobjbuildcosts ( pobjecttype obj, pfield fld, tresources* resource, in
       #endif
    }
 
-   *movecost =  ( 8 + ( fld->movemalus[0] - 8 ) / ( objectbuildmovecost / 8 ) ) * mvcost  / 8  *  bridgemultiple / 8;
+   *movecost =  ( 8 + ( fld->getmovemalus( 0 ) - 8 ) / ( objectbuildmovecost / 8 ) ) * mvcost  / 8  *  bridgemultiple / 8;
 }
 
 void         tbuildstreet::testfield(void)
@@ -1080,6 +1082,7 @@ void         tbuildstreet::testfield(void)
 
    if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) { 
       pfield fld = getfield(xp,yp); 
+
 
       pobjectcontainers_buildable_on_field obj = new tobjectcontainers_buildable_on_field ( xp, yp );
 
@@ -1363,20 +1366,14 @@ void         clearvisibility( int  reset )
          for ( int y = 0; y < actmap->ysize ; y++) {
             pfield fld = &actmap->field[l];
             memset ( fld->view, 0, sizeof ( fld->view ));
-
-/*            if ( reset )
-               for ( int p = 0; p < 8; p++ )
-                 if (actmap->player[p].existent) {
-                   if (((fld->visible >> (p * 2)) & 3) >= visible_ago) 
-                        setvisibility(&fld->visible,visible_ago, p);
-               } */
             l++;
          } 
 } 
 
-void evaluatevisibilityfield ( pfield fld, int player, int add )
+int  evaluatevisibilityfield ( pfield fld, int player, int add )
 {
-   if (((fld->visible >> (player * 2)) & 3) >= visible_ago) 
+   int originalVisibility = (fld->visible >> (player * 2)) & 3;
+   if ( originalVisibility >= visible_ago) 
         setvisibility(&fld->visible,visible_ago, player);
 
    if ( add == -1 ) {
@@ -1410,24 +1407,32 @@ void evaluatevisibilityfield ( pfield fld, int player, int add )
 
 
       if ( fld->object && fld->object->mine ) {
-         if ( mine  ||  ( ((fld->object->mine >> 1) & 7 ) == player))
-            setvisibility(&fld->visible,visible_all, player);
-         else
+         if ( mine  ||  fld->mineowner() == player) {
+            setvisibility(&fld->visible, visible_all, player);
+            return originalVisibility != visible_all;
+         } else {
             setvisibility(&fld->visible,visible_now, player);
+            return originalVisibility != visible_now;
+         }
       } else
         if (( fld->vehicle  && ( fld->vehicle->color  == player * 8 )) ||
             ( fld->vehicle  && ( fld->vehicle->height  < chschwimmend ) && sonar ) ||
             ( fld->building && ( fld->building->typ->buildingheight < chschwimmend ) && sonar ) ||
-            ( fld->vehicle  && ( fld->vehicle->height  >= chsatellit )  && satellite ))
+            ( fld->vehicle  && ( fld->vehicle->height  >= chsatellit )  && satellite )) {
                setvisibility(&fld->visible,visible_all, player);
-        else
+               return originalVisibility != visible_all;
+        } else { 
                setvisibility(&fld->visible,visible_now, player);
+               return originalVisibility != visible_now;
+        }
    }
+   return 0;
 }
 
 
-void evaluateviewcalculation ( void )
+int  evaluateviewcalculation ( int player_fieldcount_mask )
 {
+   int fieldsChanged = 0;
    for ( int player = 0; player < 8; player++ )
       if ( actmap->player[player].existent ) {
          int add = 0;
@@ -1437,17 +1442,22 @@ void evaluateviewcalculation ( void )
                   add |= 1 << i;
       
          int nm = actmap->xsize * actmap->ysize;
-         for ( int i = 0; i < nm; i++ )
-             evaluatevisibilityfield ( &actmap->field[i], player, add );
+         if ( player_fieldcount_mask & (1 << player ))
+            for ( int i = 0; i < nm; i++ )
+                fieldsChanged += evaluatevisibilityfield ( &actmap->field[i], player, add );
+         else
+            for ( int i = 0; i < nm; i++ )
+                evaluatevisibilityfield ( &actmap->field[i], player, add );
       }
+   return fieldsChanged;
 }
 
 
 
-void         computeview( void )
+int computeview( int player_fieldcount_mask )
 { 
    if ((actmap->xsize == 0) || (actmap->ysize == 0)) 
-      return;
+      return 0;
 
    clearvisibility( 1 );
 
@@ -1469,436 +1479,12 @@ void         computeview( void )
       } 
    
 
-   evaluateviewcalculation (  );
+   return evaluateviewcalculation ( player_fieldcount_mask );
 } 
 
 
 
 
-  class tsucheerreichbarefielder {
-                public:
-                               int              strck;
-                               int              fieldnum;
-
-                               char             mode;
-                               char             tiefe;
-                               word             startx, starty;
-                               pvehicle         vehicle;
-                               int              height;
-
-
-                               void             init( integer x1, integer y1, const pvehicle evehicle, int hgt );
-                               void             start ( void );
-                               void             move( int x, int y, int direc, int streck, int fuelneeded );
-                               void             done ( void );
-                               virtual void     testfield( int  x1, int  y1);
-                            };
-
-
-#ifdef HEXAGON
- int sef_dirnum = 3;
- static const  byte         sef_directions[3]  = {0, 1, 5 };
- static const  byte         sef_searchorder[6]  = {0, 1, 2, 3, 4, 5 };
-#else
- int sef_dirnum = 5;
- static const  byte         sef_directions[5]  = {0, 1, 7, 2, 6};
- static const  byte         sef_searchorder[8]  = {0, 2, 4, 6, 1, 3, 5, 7};
-#endif
-
-
-/* static const  signed char  windmovementdecrease[5] = { -50, -30, 20, 90, 128 };
-                            Basis 64 */
-
-void         tsucheerreichbarefielder::move(int         x,
-                                            int         y,
-                                            int         direc,
-                                            int         streck,
-                                            int         fuelneeded)
-{ 
-
-   byte         b, c; 
-   pfield        fld; 
-   integer      ox, oy;
-
-
-   tiefe++;
-
-   ox = x; 
-   oy = y; 
-
-   getnextfield(x, y, direc);
-
-
-   if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize)) 
-      return;
-   if ((x == startx) && (y == starty)) 
-      return;
-
-   fld = getfield(x,y); 
-   c = fieldaccessible(fld,vehicle, height ); 
-
-
-   if (c == 0) 
-      return;
-   else { 
-      int mm1;   // Spritfuelconsumption
-      int mm2;   // movementfuelconsumption
-
-      calcmovemalus(ox,oy,x,y,vehicle,direc, mm1, mm2);
-
-      streck -= mm2;
-      fuelneeded   += mm1;
-   } 
-   if (streck < 0) return;
-   if ( fuelneeded * vehicle->typ->fuelconsumption / 8 > vehicle->fuel)   return;
-
-   if (mode == 1) { 
-
-      #ifdef fastsearch   
-      if ((fld->special & cbmovetempb) != 0) {
-         if ((((fld->special & cbmovetempb) >> cbmovetempv) != maindir / 2 + 1) || ((maindir & 1) == 0))
-            return;
-      } 
-      #endif   
-
-      if ((fld->a.temp < streck + 1)) { 
-           /*     if ((tiefe > 1) or (mode = 1)) then  */ 
-         fld->a.temp = streck + 1; 
-         fieldnum++;
-      } 
-      else 
-         return;
-   } 
-   else { 
-      displaymessage (" was soll denn der K„se hier ?? ", 2 );
-      /*
-      fld->special |= ((direc / 2 + 1) << cbmovetempv);
-      fld->a.temp = 1; 
-      fieldnum++;
-      */
-   } 
-   testfield(x,y); 
-   if (mode == 1) { 
-      for (b = 0; b < sef_dirnum; b++) { 
-         c = sef_directions[b] + direc; 
-
-         if (c >= sidenum ) c -= sidenum; 
-
-         move(x,y,c,streck,fuelneeded); 
-         tiefe--; 
-      } 
-   } 
-   else { 
-      move(x,y,direc,streck, fuelneeded); 
-      tiefe--; 
-   } 
-} 
-
-
-
-void         tsucheerreichbarefielder::init( integer x1, integer y1, const pvehicle evehicle, int hgt )
-{ 
-   startx = x1; 
-   starty = y1; 
-   vehicle = evehicle; 
-   fieldnum = 0;
-   height = hgt;
-} 
-
-
-
-
-void         tsucheerreichbarefielder::done(void)
-{ 
-} 
-
-
-void         tsucheerreichbarefielder::start(void)
-{ 
-      byte         maindir; 
-
-
-   cleartemps(5); 
-   initwindmovement( vehicle );
-
-
-   tiefe = 0; 
-
-
-   #ifdef fastsearch   
-   mode = 0; 
-   strck = vehicle->movement(); 
-   for (maindir = 0; maindir <= 3; maindir++) { 
-      move(startx,starty,maindir * 2 + 1,strck);
-      tiefe--; 
-   } 
-   #endif   
-
-
-   mode = 1; 
-   strck = vehicle->movement; 
-
-   for (maindir = 0; maindir < sidenum; maindir++) { 
-
-      move(startx,starty,sef_searchorder[maindir],strck, 0);
-      tiefe--;
-   } 
-   // displaymap(); 
-} 
-
-
-void     tsucheerreichbarefielder :: testfield( int  x1, int  y1) 
-{
-   x1 += y1;
-}
-
-int          sucheerreichbarefielder(integer      x1,
-                                    integer      y1,
-                                    pvehicle     vehicle,
-                                    int          height )
-
-{ 
-  tsucheerreichbarefielder sebf; 
-
-   sebf.init( x1, y1, vehicle, height ); 
-   sebf.start(); 
-   sebf.done(); 
-   return sebf.fieldnum;
-} 
-
- typedef byte trichtungen[sidenum]; 
-
-#ifdef HEXAGON
-  static const trichtungen  directions[3][3]  = {{{5, 0, 4, 1, 3, 2 }, {0, 1, 5, 2, 4, 3 }, {1, 0, 2, 5, 3, 4 }},
-                                                 {{5, 4, 0, 3, 1, 2 }, {0, 1, 2, 3, 4, 5 }, {1, 2, 0, 3, 5, 4 }}, 
-                                                 {{4, 3, 5, 2, 0, 1 }, {3, 4, 2, 5, 1, 0 }, {2, 3, 1, 4, 0, 5 }}}; 
-#else
-  static const trichtungen  directions[3][3]  = {{{7, 6, 0, 5, 1, 4, 2, 3}, {0, 1, 7, 2, 6, 3, 5, 4}, {1, 0, 2, 7, 3, 6, 4, 5}},
-                                                 {{6, 7, 5, 0, 4, 1, 3, 2}, {0, 1, 2, 3, 4, 5, 6, 7}, {2, 1, 3, 0, 4, 7, 5, 6}}, 
-                                                 {{5, 6, 4, 7, 3, 0, 2, 1}, {4, 3, 5, 2, 6, 1, 7, 0}, {3, 2, 4, 1, 5, 0, 6, 7}}}; 
-#endif
-
-class tfieldreachablerek {
-
-      int          distance;
-      int          fuelusage;
-      integer      maxwegstrecke; 
-      tstrecke     shortestway; 
-      tstrecke     strecke; 
-      byte         c; 
-      word         mm, ll; 
-      byte         a, b; 
-      trichtungen  direc; 
-      int          dx, dy;
-      boolean      zielerreicht; 
-      integer      x1, y1, x2, y2;
-      integer      ox, oy, oex, oey;
-      pvehicle     oeht;
-      pvehicle     vehicle;
-
-      char          mode;
-             void         move(int          x,
-                                 int          y,
-                                 integer      direc,
-                                 int          streck,
-                                 int          fuel);
-    public:
-         void         run(integer      x22,
-                          integer      y22,
-                          pvehicle     eht,
-                          byte         md);
- };
-
-
- 
-void   tfieldreachablerek::move(int          x,
-                                  int          y,
-                                  integer      direc,
-                                  int          streck,
-                                  int          fuel )
-{ 
-   byte         b, c; 
-   pfield        fld; 
-   trichtungen  direc2; 
- 
-    //displaymap();
-    //wait();
-
-    ox = x; 
-    oy = y; 
-    strecke.tiefe++;
-    if ( zielerreicht ) 
-       return;
-
-    if (mode == 1)
-       if (streck > vehicle->movement)
-          return;                      
-
-    mm = minmalq; 
-    getnextfield ( x, y, direc);
-
-   #ifndef HEXAGON
-    if ( (direc & 1) == 0 )
-       mm = maxmalq; 
-   #endif
-
-    if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize)) 
-       return;
-
-    if (actmap->weather.wind[ getwindheightforunit ( vehicle ) ].speed && vehicle->height >= chtieffliegend && vehicle->height <= chhochfliegend) {
-       ll = windbeeline(x,y,x2,y2);
-       if (ll > maxwegstrecke - streck) 
-          return; 
-    } else {
-       ll = beeline(x2,y2,x,y);
-       if (ll > maxwegstrecke - streck) 
-          return; 
-    }
-
-    fld = getfield(x,y); 
-    for (b = 1; b < strecke.tiefe ; b++)
-       if ((strecke.field[b].x == x) && (strecke.field[b].y == y)) return;
-
-    c = fieldaccessible(fld,vehicle,moveparams.uheight); 
-
-    if (c == 0) 
-       return;
-    else { 
-       int mm1;      // fuelusage
-       int mm2;      // movementusage
-
-       calcmovemalus(ox, oy, x, y, vehicle, direc, mm1, mm2);
-
-       fuel += mm1;
-       streck += mm2;
-    } 
-    if (streck > maxwegstrecke) 
-       return;
-
-    if (fuel * vehicle->typ->fuelconsumption / minmalq  > vehicle->fuel) 
-       return;
-
-    if (mode == 1) 
-       if ((fld->a.temp > 0) && (streck > fld->a.temp)) return;
-
-    if ((fld->a.temp > streck) || (fld->a.temp == 0)) 
-        fld->a.temp = streck;
-
-    strecke.field[strecke.tiefe].x = x; 
-    strecke.field[strecke.tiefe].y = y; 
-    if ((x == x2) && (y == y2)) { 
-       distance = streck; 
-       strecke.fuelremaining = vehicle->fuel - fuel * vehicle->typ->fuelconsumption / minmalq  ;
-       if ( strecke.fuelremaining < 0 )
-          strecke.fuelremaining = 0;
-
-       strecke.distance = distance;
-       shortestway = strecke; 
-       if (actmap->weather.wind[ getwindheightforunit ( vehicle ) ].speed && vehicle->height >= chtieffliegend && vehicle->height <= chhochfliegend) {
-          if ((mode == 2) || ((mode == 1) && (streck == windbeeline(x1,y1,x2,y2))))
-             zielerreicht = true;
-       } else {
-          if ((mode == 2) || ((mode == 1) && (streck == beeline(x2,y2,x1,y1))))
-             zielerreicht = true;
-       }
-    } 
-    else { 
-       dx = (2 * x2 + (y2 & 1)) - (2 * x + (y & 1)); 
-       dy = y2 - y; 
-       if (dx < 0) a = 0; 
-       else 
-          if (dx == 0) a = 1; 
-          else a = 2; 
-       if (dy < 0) b = 0; 
-       else 
-          if (dy == 0) b = 1; 
-          else b = 2; 
-       memcpy( direc2, directions[b][a], sizeof ( direc2)); 
-       for (b = 0; b <= 4; b++) { 
-          move(x,y,direc2[b],streck, fuel);
-          strecke.tiefe--;
-          if (zielerreicht) return;
-       } 
-    } 
- } 
-
-
-void         fieldreachablerek(integer      x2,
-                               integer      y2,
-                               const pvehicle     vehicle,
-                               byte         mode) 
-{
-   tfieldreachablerek ferb;
-
-   ferb.run( x2, y2, vehicle, mode );
-}
-
-
-
-void         tfieldreachablerek::run(integer      x22,
-                                    integer      y22,
-                                    pvehicle     eht,
-                                    byte         md)
-
-/*  mode :  1 krzesten weg finden
-            2 irgendeinen weg finden  */ 
-{ 
-
-   x2 = x22;
-   y2 = y22;
-   mode = md;
-   vehicle = eht;
-
-   moveparams.movedist = 0; 
-   x1 = vehicle->xpos; 
-   y1 = vehicle->ypos; 
-
-   maxwegstrecke = vehicle->movement; 
-   zielerreicht = false; 
-   distance = 0; 
-
-   dx = (2 * x2 + (y2 & 1)) - (2 * x1 + (y1 & 1)); 
-   dy = y2 - y1; 
-   if (dx < 0) 
-      a = 0;
-   else 
-      if (dx == 0) 
-         a = 1;
-      else 
-         a = 2;
-   if (dy < 0) 
-      b = 0;
-   else 
-      if (dy == 0) 
-         b = 1;
-      else 
-         b = 2;
-
-   memcpy (direc, directions[b][a], sizeof (direc)); 
-   for (c = 0; c < sidenum; c++) { 
-      strecke.tiefe = 0; 
-      move(x1,y1,direc[c],0, 0 );
-      if ((mode == 2) && zielerreicht) 
-         /* if (distance <= maxwegstrecke) {
-            moveparams.movepath = shortestway; 
-            moveparams.movedist = distance; 
-            return;
-         }  */
-      if ((mode == 1) && zielerreicht) break; 
-   } 
-   if (mode == 1) { 
-      cleartemps(5); 
-      if (distance > 0) 
-         for (c = 1; c <= shortestway.tiefe; c++) { 
-            if ((shortestway.field[c].x >= actmap->xsize) || (shortestway.field[c].y >= actmap->ysize)) { 
-               displaymessage("a severe error occured !\nplease switch immediately into debug-mode and check why shortestway.field[c] has invalid values !\n", 1);
-            } 
-            getfield(shortestway.field[c].x,shortestway.field[c].y)->a.temp = 2; 
-         } 
-   } 
-   moveparams.movedist = distance; 
-   moveparams.movepath = shortestway; 
-} 
 
   /* 
 
@@ -1951,6 +1537,7 @@ begin
          else begin
 
             dx:=(2*x2+(y2 and 1)) -(2*x+(y and 1));  { ????????
+
             dy:=y2-y;
             if dy > 0 then
                if dy > 1 then begin
@@ -2492,24 +2079,6 @@ void         tcomputebuildingview::init( const pbuilding    bld,  int _mode )
 
 
 
-class treactionfire {
-          public:
-             virtual void checkfield ( int x, int y, pvehicle &eht ) = 0;
-             virtual void init ( pvehicle eht ) = 0;
-             virtual ~treactionfire() {};
-        };
-
-class treactionfirereplay : public treactionfire {
-          protected:
-             int num;
-             dynamic_array<preactionfire_replayinfo> replay;
-             pvehicle unit;
-          public:
-             treactionfirereplay ( void );
-             ~treactionfirereplay ( );
-             virtual void checkfield ( int x, int y, pvehicle &eht );
-             virtual void init ( pvehicle eht );
-   };
 
 treactionfirereplay :: treactionfirereplay ( void )
 {
@@ -2517,7 +2086,7 @@ treactionfirereplay :: treactionfirereplay ( void )
    unit = NULL;
 }
 
-void treactionfirereplay :: init ( pvehicle eht )
+void treactionfirereplay :: init ( pvehicle eht, FieldList* fieldlist )
 {
    if ( runreplay.status > 0 ) {
       preactionfire_replayinfo rpli;
@@ -2532,8 +2101,10 @@ void treactionfirereplay :: init ( pvehicle eht )
    }
 }
 
-void treactionfirereplay :: checkfield ( int x, int y, pvehicle &eht )
+int  treactionfirereplay :: checkfield ( int x, int y, pvehicle &eht, MapDisplayInterface* md )
 {
+   int attacks = 0;
+
    if ( eht == unit ) {
       for ( int i = 0; i < num; i++ ) {
          preactionfire_replayinfo rpli = replay[ i ];
@@ -2550,7 +2121,7 @@ void treactionfirereplay :: checkfield ( int x, int y, pvehicle &eht )
              int attackvisible = fieldvisiblenow ( fld ) || fieldvisiblenow ( targ );
 
 
-             if ( attackvisible ) {
+             if ( md && attackvisible ) {
                cursor.setcolor ( 8 );  
 
                cursor.gotoxy ( rpli->x1, rpli->y1 );
@@ -2564,12 +2135,13 @@ void treactionfirereplay :: checkfield ( int x, int y, pvehicle &eht )
                cursor.setcolor ( 0 );  
                cursor.hide();
              }
+             attacks++;
 
              tunitattacksunit battle;
              battle.setup ( fld->vehicle, targ->vehicle, 1, rpli->wpnum );
              battle.av.damage = rpli->ad1;
              battle.dv.damage = rpli->dd1;
-             if ( attackvisible ) 
+             if ( md && attackvisible  ) 
                 battle.calcdisplay ( rpli->ad2, rpli->dd2 );
              else {
                 battle.calc ();
@@ -2591,6 +2163,7 @@ void treactionfirereplay :: checkfield ( int x, int y, pvehicle &eht )
          }
       }
    }
+   return attacks;
 }
 
 treactionfirereplay :: ~treactionfirereplay ( )
@@ -2610,21 +2183,6 @@ treactionfirereplay :: ~treactionfirereplay ( )
                 punitlist unitlist[8];
 
 
-class tsearchreactionfireingunits : public treactionfire {
-           protected:
-
-
-                static int maxshootdist[8];     // fr jede H”henstufe eine
-                void addunit ( pvehicle vehicle );
-                void removeunit ( pvehicle vehicle );
-           public:
-
-                tsearchreactionfireingunits( void );
-                void init ( pvehicle eht );
-                void checkfield ( int x, int y, pvehicle &eht );  
-                ~tsearchreactionfireingunits();
-      };
-
 int tsearchreactionfireingunits :: maxshootdist[8] = { -1, -1, -1, -1, -1, -1, -1, -1 };
 
 tsearchreactionfireingunits :: tsearchreactionfireingunits ( void )
@@ -2633,7 +2191,7 @@ tsearchreactionfireingunits :: tsearchreactionfireingunits ( void )
       unitlist[i] = NULL;
 }
 
-void tsearchreactionfireingunits :: init ( pvehicle vehicle )
+void tsearchreactionfireingunits :: init ( pvehicle vehicle, FieldList* fieldlist )
 {
    int x1 = maxint;
    int y1 = maxint;
@@ -2656,17 +2214,19 @@ void tsearchreactionfireingunits :: init ( pvehicle vehicle )
                            maxshootdist[h] = fzt->weapons->weapon[j].maxdistance;
       }
    }
+                                
+   for ( i = 0; i < fieldlist->getFieldNum(); i++) { 
+      int xt, yt;
+      fieldlist->getFieldCoordinates ( i, &xt, &yt );
+      if ( xt > x2 )
+         x2 = xt ;
+      if ( yt > y2 )
+         y2 = yt ;
 
-   for ( i = 0; i <= moveparams.movepath.tiefe; i++) { 
-      if ( moveparams.movepath.field[i].x > x2 )
-         x2 = moveparams.movepath.field[i].x ;
-      if ( moveparams.movepath.field[i].y > y2 )
-         y2 = moveparams.movepath.field[i].y ;
-
-      if ( moveparams.movepath.field[i].x < x1 )
-         x1 = moveparams.movepath.field[i].x ;
-      if ( moveparams.movepath.field[i].y < y1 )
-         y1 = moveparams.movepath.field[i].y ;
+      if ( xt < x1 )
+         x1 = xt ;
+      if ( yt < y1 )
+         y1 = yt ;
    }
    int height = log2 ( vehicle->height );
 
@@ -2742,8 +2302,9 @@ void tsearchreactionfireingunits :: removeunit ( pvehicle vehicle )
 }
 
 
-void tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle )
+int  tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle, MapDisplayInterface* md )
 {
+   int attacks = 0;
    int result = 0;
 
    pfield fld = getfield( x, y );
@@ -2772,28 +2333,37 @@ void tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
                      num = j;
                   }
 
-               displaymessage2 ( "attacking with weapon %d ", atw->num[num] );
-               cursor.setcolor ( 8 );  
-
-               cursor.gotoxy ( ul->eht->xpos, ul->eht->ypos );
-               int t = ticker;
-               while ( t + 15 > ticker );
-
-               cursor.gotoxy ( x, y );
-               t = ticker;
-               while ( t + 15 > ticker );
-
-               cursor.setcolor ( 0 );  
-               cursor.hide();
+               if ( md ) {
+                  displaymessage2 ( "attacking with weapon %d ", atw->num[num] );
+                  cursor.setcolor ( 8 );  
+   
+                  cursor.gotoxy ( ul->eht->xpos, ul->eht->ypos );
+                  int t = ticker;
+                  while ( t + 15 > ticker );
+   
+                  cursor.gotoxy ( x, y );
+                  t = ticker;
+                  while ( t + 15 > ticker );
+   
+                  cursor.setcolor ( 0 );  
+                  cursor.hide();
+               }
 
                tunitattacksunit battle;
                battle.setup ( ul->eht, fld->vehicle, 0, atw->num[num] );
 
                ad1 = battle.av.damage;
                dd1 = battle.dv.damage;
-               battle.calcdisplay ();
+
+               if ( md )
+                  battle.calcdisplay ();
+               else
+                  battle.calc();
+
                ad2 = battle.av.damage;
                dd2 = battle.dv.damage;
+
+               attacks++;
 
                if ( battle.dv.damage >= 100 )
                   result = 1;
@@ -2817,6 +2387,8 @@ void tsearchreactionfireingunits :: checkfield ( int x, int y, pvehicle &vehicle
 
    if ( result )
       vehicle = NULL;
+
+   return attacks;
 }
 
 tsearchreactionfireingunits :: ~tsearchreactionfireingunits()
@@ -2831,473 +2403,6 @@ tsearchreactionfireingunits :: ~tsearchreactionfireingunits()
    }
 }
                                    
-void         moveunitxy(pvehicle     vehicle,
-                        word         xt1,
-                        word         yt1)
-{ 
-       #ifdef logging
-       {
-           char tmpcbuf[200];
-           logtofile ( "controls / moveunitxy / entering moveunitxy");
-       }    
-       #endif
-
-  cursor.hide();
-
-  pfield        oldfield;
-  pfield        field3;
-  word         i; 
-  word         x, y; 
-  byte         dir; 
-
-
-   pfield fld = getfield(xt1,yt1); 
-   for (i = 1; i <= moveparams.movepath.tiefe; i++) { 
-      if ((moveparams.movepath.field[i].x == xt1) && (moveparams.movepath.field[i].y == yt1)) 
-         break; 
-   } 
-
-   if (fld->a.temp == 0) { 
-      dispmessage2(105,""); 
-      return;
-   } 
-   if (fieldaccessible(fld,vehicle, moveparams.uheight) < 2) { 
-      dispmessage2(106,""); 
-      return;
-   } 
-
-   if (i < moveparams.movepath.tiefe) { 
-      cleartemps(5); 
-      fieldreachablerek(xt1,yt1,vehicle,1); 
-      if (moveparams.movedist < 0) 
-         moveparams.movedist = 0; 
-      displaymap(); 
-      moveparams.moveerr = 0; 
-      return;
-   } 
-
-   oldfield = getfield(moveparams.movesx,moveparams.movesy); 
-
-   netlevel += 10;
-
-   moveparams.moveerr = 0; 
-   npush( tempsvisible );
-   tempsvisible = false; 
-
-
-   moveparams.movepath.field[0].x = moveparams.movesx; 
-   moveparams.movepath.field[0].y = moveparams.movesy; 
-
-   x = moveparams.movepath.field[0].x; 
-   y = moveparams.movepath.field[0].y; 
-
-   tsearchreactionfireingunits srfu;
-   treactionfirereplay rfr;
-
-   treactionfire* rf;
-   if ( runreplay.status > 0  )
-      rf = &rfr;
-   else
-      rf = &srfu;
-
-   rf->init( vehicle );
-
-
-     /*  herkunft der vehicle ermitteln und auf NULL setzen  */ 
-
-   if (oldfield->vehicle == vehicle) {
-      vehicle->removeview();
-      oldfield->vehicle = NULL; 
-   } else { 
-      if ( oldfield->vehicle ) { 
-         i = 0; 
-         while (oldfield->vehicle->loading[i] != vehicle) 
-            i++; 
-         oldfield->vehicle->loading[i] = NULL; 
-      } 
-      else 
-         if ( oldfield->building ) { 
-            i = 0; 
-            while (oldfield->building->loading[i] != vehicle) 
-               i++; 
-            oldfield->building->loading[i] = NULL; 
-         } 
-   } 
-
-//   displaymap();
-
-
-   /*  vehicle moven  */ 
-
-
-   i = 0; 
-   while (((x != xt1) || (y != yt1)) && (vehicle != NULL)) { 
-
-      pfield fld1 = getfield ( moveparams.movepath.field[i].x,   moveparams.movepath.field[i].y );
-      pfield fld2 = getfield ( moveparams.movepath.field[i+1].x, moveparams.movepath.field[i+1].y );
-
-      int view1 = (fld1->visible >> ( actmap->playerview * 2)) & 3; 
-      if ( godview ) 
-         view1 = visible_all; 
-
-      int view2 = (fld2->visible >> ( actmap->playerview * 2)) & 3; 
-      if ( godview ) 
-         view2 = visible_all; 
-
-      if (  view1 >= visible_now  &&  view2 >= visible_now ) 
-         if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) && ( view2 == visible_all )) || ( actmap->actplayer == actmap->playerview ))
-            idisplaymap.movevehicle(moveparams.movepath.field[i].x, moveparams.movepath.field[i].y, moveparams.movepath.field[i + 1].x, moveparams.movepath.field[i + 1].y, vehicle);
-
-      if (vehicle->functions & ( cffahrspur | cficebreaker ))  {
-        dir = getdirection(moveparams.movepath.field[i].x, moveparams.movepath.field[i].y, moveparams.movepath.field[i + 1].x, moveparams.movepath.field[i + 1].y);
-        field3 = getfield(x,y);
-      
-        if ( vehicle->functions & cffahrspur )
-           if ( fahrspurobject )
-              if ( field3->bdt & cbfahrspur )
-                 if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checkobj2 ( fahrspurobject, 2 ))) 
-                    field3 -> addobject ( fahrspurobject, 1 << dir );
-
-        if ( vehicle->functions & cficebreaker )
-           if ( eisbrecherobject )
-              if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checkobj2 ( eisbrecherobject, 2 ))) 
-                 if ( (field3->bdt & cbsnow1 )  || ( field3->bdt & cbsnow2 ) || field3->checkforobject ( eisbrecherobject ) ) {
-                    getfield ( x, y ) -> addobject ( eisbrecherobject, 1 << dir );
-                    field3->checkforobject ( eisbrecherobject )->time = actmap->time.a.turn;
-                 }
-
-      } 
-
-      i++;
-      x = moveparams.movepath.field[i].x; 
-      y = moveparams.movepath.field[i].y; 
-
-      field3 = getfield(x,y); 
-      if (vehicle->functions & cffahrspur) {
-         if ( fahrspurobject )
-            if ( field3->bdt & cbfahrspur )
-               if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checkobj2 ( fahrspurobject, 2 ))) 
-                  if (dir >= sidenum/2) 
-                    getfield ( x, y ) -> addobject ( fahrspurobject, 1 << (dir - sidenum/2));
-                  else 
-                    getfield ( x, y ) -> addobject ( fahrspurobject, 1 << (dir + sidenum/2));
-      } 
-      if ( vehicle->functions & cficebreaker )
-         if ( eisbrecherobject )
-            if ( ! (actmap->objectcrc   &&   !actmap->objectcrc->speedcrccheck->checkobj2 ( eisbrecherobject, 2 ))) 
-                 if ( (field3->bdt & cbsnow1 )  || ( field3->bdt & cbsnow2 ) || field3->checkforobject ( eisbrecherobject ) ) {
-                  if (dir >= sidenum/2) 
-                    getfield ( x, y ) -> addobject ( eisbrecherobject, 1 << (dir - sidenum/2));
-                  else 
-                    getfield ( x, y ) -> addobject ( eisbrecherobject, 1 << (dir + sidenum/2));
-      
-                    field3->checkforobject ( eisbrecherobject )->time = actmap->time.a.turn;
-      
-               }
-
-      if ( vehicle ) {
-         vehicle->xpos = x;
-         vehicle->ypos = y;
-         vehicle->addview();
-      }
-
-      evaluateviewcalculation (  );
-
-      rf->checkfield ( x, y, vehicle );
-
-      if ( !vehicle )
-         idisplaymap.deletevehicle();
-
-      displaymap(); 
-
-
-      /*
-      if ( vehicle ) 
-         if ( vehicleplattfahrbar(vehicle,field3) ) 
-            bulldoze_trooper.fight( &vehicle, &field3->vehicle);
-      */
-
-      if ( vehicle ) {
-         vehicle->removeview();
-         if ( field3->object && field3->object->mine && (vehicle->height <= chfahrend) && (( !(vehicle->functions & cf_trooper) ) ||  ((field3->object->mine >> 4 ) == cmantipersonnelmine ))) {
-            tmineattacksunit battle;
-            battle.setup ( field3, vehicle );
-
-            if ( fieldvisiblenow ( getfield ( x, y ), actmap->playerview) || ((field3->object->mine >> 1) % 7) == actmap->playerview )
-               battle.calcdisplay ();
-            else
-               battle.calc();
-
-            battle.setresult ();
-            dashboard.x = 0xffff;
-        }
-      }
-      if ( vehicle ) {
-         npush ( field3->vehicle );
-         field3->vehicle = vehicle;
-         if ( field3->connection & cconnection_areaentered_anyunit )
-            releaseevent ( vehicle, NULL, cconnection_areaentered_anyunit );
-
-         if ((field3->connection & cconnection_areaentered_specificunit ) && ( vehicle->connection & cconnection_areaentered_specificunit ))
-            releaseevent ( vehicle, NULL, cconnection_areaentered_specificunit );
-         npop ( field3->vehicle );
-      }
-   }                           
-
-   if ( vehicle ) { 
-      if ((fld->vehicle == NULL) && (fld->building == NULL)) {
-         fld->vehicle = vehicle; 
-         vehicle->addview();
-      } else { 
-         if ( fld->vehicle  &&  fld->vehicle->typ->loadcapacity ) { 
-            i = 0; 
-            while ((fld->vehicle->loading[i] != NULL) && (i < 31)) 
-              i++; 
-            fld->vehicle->loading[i] = vehicle; 
-
-           /*      Umladen der geladenen vehicle in den Transporter
-            if (vehicle->typ->loadcapacity > 0) { 
-               for (j = 0; j <= 31; j++) 
-                  if (vehicle->loading[j] != NULL) { 
-                     while ((fld->building->loading[i] != NULL) && (i < 31)) 
-                        i++;               
-                     vehicle->loading[j]->xpos = getxpos();
-                     vehicle->loading[j]->ypos = getypos();
-                     fld->vehicle->loading[i] = vehicle->loading[j]; 
-                     vehicle->loading[j] = NULL; 
-                  } 
-            } 
-            */
-                                            
-         }                                                           
-         else 
-            if ( fld->building ) { 
-               i = 0; 
-               while ( fld->building->loading[i]  && (i < 31)) 
-                  i++; 
-               fld->building->loading[i] = vehicle; 
-               if (fld->building->color != (actmap->actplayer << 3)) 
-                  fld->building->convert( actmap->actplayer ); 
-
-            } 
-      } 
-
-
-      vehicle->fuel = moveparams.movepath.fuelremaining;
-
-         if (fld->vehicle == vehicle) { 
-            i = vehicle->movement - moveparams.movedist;
-            if (i > 0) 
-              vehicle->movement = i;
-            else 
-              vehicle->movement = 0;
-
-            if ( (vehicle->movement >> 3) > (vehicle->fuel / vehicle->typ->fuelconsumption) )
-               vehicle->movement = (vehicle->fuel << 3) / vehicle->typ->fuelconsumption;
-         } 
-         else { 
-            vehicle->movement = 0;
-            vehicle->attacked = true; 
-            if (vehicle->height == chtieffliegend) 
-               vehicle->height = chfahrend; 
-         } 
-
-         vehicle->setnewposition ( xt1, yt1 );
-
-      
-      dashboard.x = 0xffff; 
-      if (moveparams.movestatus == 12) { 
-         moveparams.movestatus = 0; 
-         int res = changeheight(vehicle,moveparams.heightdir, 100 ); 
-         if ( res )
-            dispmessage2( res, NULL );
-      } 
-   } 
-   netlevel -= 10;
-   idisplaymap.resetmovement();
-   computeview(); 
-   displaymap(); 
-   cleartemps(7); 
-   moveparams.movestatus = 0; 
-   moveparams.uheight = -1;
-   npop( tempsvisible );
-
-   if ( fieldvisiblenow ( getactfield(), actmap->playerview ))
-      cursor.show();
-
-} 
-
-
-
-void         movement(pvehicle     vehicle, int height )
-{ 
-   pfield        fld;
-   pfield        oldfield;
-
-   if (moveparams.moveerr >= 5) { 
-      cleartemps(7); 
-      displaymap(); 
-      moveparams.movestatus = 0; 
-      moveparams.moveerr = 0; 
-      moveparams.vehicletomove = NULL; 
-      moveparams.uheight = -1;
-   } 
-   else 
-      if (moveparams.movestatus == 0) { 
-         cleartemps(7); 
-         if ( vehicle ) { 
-            moveparams.movesx = vehicle->xpos; 
-            moveparams.movesy = vehicle->ypos; 
-            if (vehicle->movement >= minmalq) { 
-               if (vehicle->color == (actmap->actplayer << 3)) { 
-                  moveparams.vehicletomove = vehicle; 
-                  int fieldnum = sucheerreichbarefielder(vehicle->xpos,vehicle->ypos,vehicle, height ); 
-                    /*             move(vehicle,vehicle^.movement shr 3+1,0,vehicle^.movement);  */ 
-                  if ( fieldnum ) {
-                     moveparams.moveerr = 0; 
-                     moveparams.movestatus = 1; 
-                     moveparams.uheight = height;
-                  } else
-                     dispmessage2( 107, NULL );
-               } 
-               else 
-                  dispmessage2(101,""); 
-            } 
-            else 
-               if (vehicle->typ->movement[log2(vehicle->height)] < minmalq ) 
-                  dispmessage2(102,""); 
-               else 
-                  dispmessage2(103,""); 
-         } 
-         else 
-            dispmessage2(104,""); 
-      } 
-      else 
-         if ((moveparams.movestatus == 1) || (moveparams.movestatus == 11)) {
-            vehicle = moveparams.vehicletomove; 
-            fld = getactfield(); 
-            if ( height == -1)
-               height = moveparams.uheight;
-            else
-               moveparams.uheight = height;
-
-            oldfield = getfield(moveparams.movesx,moveparams.movesy); 
-            if ((fieldaccessible(fld,vehicle, height) == 2) && (fld->a.temp > 0)) { 
-               moveparams.movestatus++;
-               if (moveparams.movestatus == 1) 
-                  cleartemps(7); 
-               else 
-                  cleartemps(5); 
-               cursor.hide(); 
-                 /*  displaymap;  */ 
-               fieldreachablerek(getxpos(),getypos(),vehicle,1); 
-               if (moveparams.movedist < 0) {
-                  displaymessage("WARNING !\n void movement \n negative movedist !",1);
-                  moveparams.movedist = 0; 
-               }
-               displaymap(); 
-               cursor.show(); 
-               moveparams.moveerr = 0; 
-            } 
-            else { 
-               if (fld->a.temp == 0) 
-                  dispmessage2(105,""); 
-               else 
-                  dispmessage2(106,""); 
-               moveparams.moveerr++;
-            } 
-         } 
-         else 
-            if (( moveparams.movestatus == 2) || (moveparams.movestatus == 12))
-               if (getactfield()->a.temp > 0) { 
-
-       #ifdef logging
-       {
-           char tmpcbuf[200];
-           logtofile ( "controls / movement / movementmode 2|12 ");
-       }    
-       #endif
-                  int x1 = moveparams.vehicletomove->xpos;
-                  int y1 = moveparams.vehicletomove->ypos;
-                  int x2 = getxpos();
-                  int y2 = getypos();
-
-                  if ( moveparams.movestatus == 2 )
-                     logtoreplayinfo ( rpl_move2, x1, y1, x2, y2, moveparams.vehicletomove->networkid, (int) moveparams.vehicletomove->height );
-                  else
-                     logtoreplayinfo ( rpl_changeheight, x1, y1, x2, y2, moveparams.vehicletomove->networkid, (int) moveparams.oldheight, (int) moveparams.newheight );
-
-                  moveunitxy(moveparams.vehicletomove, x2, y2 );
-                  actmap->time.a.move++;
-               } 
-               else 
-                  moveparams.moveerr++; 
-            else 
-               moveparams.moveerr++; 
-} 
-
-
-
-void         moveheight(pvehicle     vehicle)
-{ 
-   pfield        fld; 
-   int          x, xx, y, yy; 
-   byte         direc; 
-   boolean      ok, ok2; 
-
-   initwindmovement( vehicle );
-
-   ok2 = false; 
-   cleartemps(7); 
-   x = getxpos();
-   xx = x; 
-   y = getypos();
-   yy = y; 
-   for (direc = 0; direc < sidenum; direc++) { 
-      ok = true; 
-      x = xx; 
-      y = yy; 
-
-      int dist = 0;
-      int mx = vehicle->movement;
-      while ( dist < vehicle->typ->steigung * minmalq  && mx > 0 ) {
-         getnextfield( x, y, direc );
-
-         dist += minmalq - windmovement[direc];
-         mx -= minmalq - windmovement[direc];
-
-         if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize)) 
-            ok = false; 
-         else { 
-            fld = getfield(x,y); 
-            if (fieldaccessible(fld,vehicle) < 1) 
-               ok = false; 
-         } 
-      } 
-      if ( mx < 0 )
-         ok = false;
-
-/*
-      if ( fieldaccessible( getfield(x,y), vehicle ) < 2) 
-         ok = false;
-*/
-      if ( ok )
-         if ( fld->building || fld->vehicle )
-            ok = false;
-
-      if (ok) { 
-         fld->a.temp = 2; 
-         fld->a.temp2 = 2; 
-         ok2 = true; 
-      } 
-
-   } 
-   if ( ok2 ) {
-      moveparams.movestatus = 11; 
-      moveparams.uheight = -1;
-   }
-} 
-
 
 
 
@@ -3337,6 +2442,7 @@ void         tsearchattackablevehicles::initattacksearch(void)
    if (angreifer == NULL) { 
       if (messages) 
          dispmessage2(201,getactfield()->typ->terraintype->name); 
+
       return;
    } 
 
@@ -3624,13 +2730,13 @@ void         calcmovemalus(int          x1,
       if (vehicle->height >= chtieffliegend)
          mm2 = minmalq;
       else
-         mm2 = getfield(x2,y2)->movemalus[ vehicle->typ->movemalustyp ];
+         mm2 = getfield(x2,y2)->getmovemalus( vehicle );
    } else {
       mm1 = maxmalq;
       if (vehicle->height >= chtieffliegend)
          mm2 = maxmalq;
       else
-         mm2 = getfield(x2,y2)->movemalus[ vehicle->typ->movemalustyp ] * maxmalq / minmalq;
+         mm2 = getfield(x2,y2)->getmovemalus( vehicle ) * maxmalq / minmalq;
    }
 
 
@@ -3909,6 +3015,7 @@ void         tdashboard::paintweapon(byte         h, int num, int strength,  con
 
       paintweaponammount( h, num, weap->count );
 
+
       activefontsettings.background = 172;
       activefontsettings.justify = righttext;
       activefontsettings.font = schriften.guifont;
@@ -4091,16 +3198,16 @@ void         tdashboard :: paintlargeweaponinfo ( void )
           i++; 
        }
        if ( vt->energy ) { 
-          paintlargeweapon(i, cdnames[ 0 ], ( vehicle ? vehicle->energy : vt->energy ), vt->energy, -1, -1, -1, -1, -1, -1, -1, -1 );
+          paintlargeweapon(i, resourceNames[ 0 ], ( vehicle ? vehicle->energy : vt->energy ), vt->energy, -1, -1, -1, -1, -1, -1, -1, -1 );
           i++; 
        } 
 
        if ( (serv>= 0 || (funcs & cfmaterialref)) && vt->material ) { 
-          paintlargeweapon(i, cdnames[ 1 ], ( vehicle ? vehicle->material : vt->material ), vt->material, -1, -1, -1, -1, -1, -1, -1, -1 );
+          paintlargeweapon(i, resourceNames[ 1 ], ( vehicle ? vehicle->material : vt->material ), vt->material, -1, -1, -1, -1, -1, -1, -1, -1 );
           i++; 
        } 
        if ( (serv>= 0 || (funcs & cffuelref)) && vt->tank ) { 
-          paintlargeweapon(i, cdnames[ 2 ], ( vehicle ? vehicle->fuel : vt->tank ), vt->tank, -1, -1, -1, -1, -1, -1, -1, -1 );
+          paintlargeweapon(i, resourceNames[ 2 ], ( vehicle ? vehicle->fuel : vt->tank ), vt->tank, -1, -1, -1, -1, -1, -1, -1, -1 );
           i++; 
        } 
        
@@ -4237,6 +3344,7 @@ void         tdashboard::paintlargeweapon ( int pos, const char* name, int ammoa
    getpicsize ( icons.weaponinfo[1], width, height );
 
 
+
    int x = (agmp->resolutionx - 640) / 2;
    int y = 150 + 28 + pos * 14;
 
@@ -4307,6 +3415,7 @@ void         tdashboard::paintlargeweapon ( int pos, const char* name, int ammoa
       activefontsettings.justify = righttext;
       showtext2c ( strrrd8d( distmax ), x + 237, y );
    }
+
 
    if ( from > 0 ) 
       for ( int i = 0; i < 8; i++ )
@@ -4929,254 +4038,6 @@ void   tdashboard :: paintvehicleinfo( const pvehicle     vehicle,
 
 
 
-int          changeheight(pvehicle     vehicle,
-                          char         ch,
-                          int          mode ) // nur interessant fr Flugzeuge mit Steigung:
-                                              //      mode = 1 : test auf H”henwechsel, fielder markieren
-                                              //      mode = 100 : wirklich setzen
-{ 
-  int      v, w; 
-  byte         b; 
-  byte         md; 
-  byte         steigung; 
-
-   if (moveparams.movestatus != 0) 
-      return unspecified_error;
-
-   if ( !vehicle ) 
-      return unspecified_error;
-   pfield fld = getfield(vehicle->xpos,vehicle->ypos); 
-
-   steigung = vehicle->typ->steigung; 
-
-
-   b = (vehicle->color >> 3);
-   if (b != actmap->actplayer) 
-      return 101;
-
-   if ( vehicle ) { 
-      if (vehicle->typ->height & (chtieffliegend | chfliegend | chhochfliegend)) {
-         if (steigung == 0) { 
-            if (ch == 'h') 
-               w = (vehicle->height << 1);
-            else 
-               w = (vehicle->height >> 1);
-            if ( w & vehicle->typ->height ) {
-
-               if ((ch == 't') && (w == chfahrend)) { 
-                  if ( !terrainaccessible ( fld, vehicle, w ))
-                     return 109;
-
-                  int newmovement = vehicle->typ->movement[log2(w)] * (vehicle->movement - (helicopter_landing_move_cost + air_heightdecmovedecrease)) / vehicle->typ->movement[log2(vehicle->height)];
-                  if ( newmovement < 0)                      
-                     return 111;
-
-                  int fuelcost = vehicle->typ->fuelconsumption * (helicopter_landing_move_cost + air_heightdecmovedecrease) / 8;
-                  if ( fuelcost > vehicle->fuel )
-                     return 115;
-
-
-                  vehicle->movement = newmovement ; 
-                  if ( !helicopter_attack_after_descent )
-                     vehicle->attacked = 0; 
-                  vehicle->fuel -= fuelcost;
-
-               } else
-               if (ch == 't') { 
-                  int newmovement = vehicle->typ->movement[log2(w)] * vehicle->movement / vehicle->typ->movement[log2(vehicle->height)];
-                  if ( newmovement < air_heightdecmovedecrease )
-                     return 111;
-                  int fuelcost = vehicle->typ->fuelconsumption * air_heightdecmovedecrease / 8;
-                  if ( fuelcost > vehicle->fuel )
-                     return 115;
-
-
-                  vehicle->movement = newmovement - air_heightdecmovedecrease; 
-                  vehicle->fuel -= fuelcost;
-               } else
-               if ((ch == 'h') && (w > chtieffliegend)) { 
-                  int newmovement = vehicle->typ->movement[log2(w)] * vehicle->movement / vehicle->typ->movement[log2(vehicle->height)];
-                  if (newmovement < air_heightincmovedecrease) 
-                     return 110;
-                  int fuelcost = vehicle->typ->fuelconsumption * air_heightincmovedecrease / 8;
-                  if ( fuelcost > vehicle->fuel )
-                     return 115;
-
-                  vehicle->movement = newmovement - air_heightincmovedecrease ; 
-                  vehicle->fuel -= fuelcost;
-
-                  if ((w == chtieffliegend) && helicopter_attack_after_ascent ) 
-                     vehicle->attacked = 1; 
-               } else
-                  if (ch == 'h'  &&  w == chtieffliegend ) {
-                     int newmovement = vehicle->typ->movement[log2(w)] * vehicle->movement / vehicle->typ->movement[log2(vehicle->height)];
-                     if ( newmovement < air_heightincmovedecrease )
-                        return 110;
-
-                     if ( helicopter_attack_after_ascent ) 
-                        vehicle->attacked = 1; 
-
-                     vehicle->movement = newmovement - air_heightincmovedecrease;
-                  }
-                  
-               dashboard.x = 0xffff; 
-               logtoreplayinfo ( rpl_changeheight, (int) vehicle->xpos, (int) vehicle->ypos, 
-                                                   (int) vehicle->xpos, (int) vehicle->ypos, vehicle->networkid, (int) vehicle->height, (int) w );
-               vehicle->height = w; 
-            } 
-         } 
-         else {   /* steigung > 0 */ 
-            if ( mode == 1 ) {
-               if (ch == 'h') { 
-                  w = (vehicle->height << 1);
-                  if ( w != chtieffliegend) { 
-                     if (vehicle->movement < steigung * maxmalq + air_heightincmovedecrease) 
-                        return 110;
-   
-                  } 
-                  else { 
-                     if (vehicle->movement < steigung * maxmalq) 
-                        return 110;
-                  } 
-   
-               } 
-               else { 
-                  w = (vehicle->height >> 1);
-                  if (vehicle->movement < steigung * maxmalq) 
-                     return 111;
-   
-               } 
-               if ((w & vehicle->typ->height) == 0)
-                  return 112;
-
-               v = vehicle->height; 
-               if (ch == 't') 
-                  vehicle->height = w;   // fr moveheight
-               moveheight(vehicle); 
-               displaymap(); 
-               vehicle->height = (char) v; 
-               moveparams.newheight = (char) w; 
-               moveparams.oldheight = (char) v;
-               moveparams.heightdir = ch; 
-               moveparams.vehicletomove = vehicle; 
-               moveparams.movesx = vehicle->xpos; 
-               moveparams.movesy = vehicle->ypos; 
-            } else {
-               if ( ch == 'h' ) {
-                  if ( vehicle->height == chfahrend ) {
-                     vehicle->fuel -= vehicle->typ->fuelconsumption * vehicle->typ->steigung;
-                     if ( vehicle->fuel < 0 )
-                        vehicle->fuel = 0;
-                     vehicle->movement = airplanemoveafterstart;
-                     vehicle->attacked = 1;
-                     vehicle->height = chtieffliegend;
-                  } else {
-                      w = vehicle->height << 1;
- 
-                     vehicle->movement -= air_heightincmovedecrease;
-                     if ( vehicle->movement < 0 )
-                        vehicle->movement = 0;
-
-                     vehicle->fuel -= vehicle->typ->fuelconsumption * air_heightincmovedecrease / 8;
-                     if ( vehicle->fuel < 0 )
-                        vehicle->fuel = 0;
-
-                     int newmovement = vehicle->typ->movement[log2(w)] * vehicle->movement / vehicle->typ->movement[log2(vehicle->height)];
-                     vehicle->movement = newmovement;
-                     if ( vehicle->movement < 0 )
-                        vehicle->movement = 0;
-
-                     vehicle->height = w;
-                  }
-               } else {
-                  if ( vehicle->height == chtieffliegend ) {
-                     // vehicle->fuel -= vehicle->typ->fuelconsumption * vehicle->typ->steigung;
-                     // if ( vehicle->fuel < 0 )
-                     //    vehicle->fuel = 0;
-                     vehicle->movement = airplanemoveafterlanding;
-                     vehicle->attacked = 1;
-                     vehicle->height = chfahrend;
-                  } else {
-                     w = vehicle->height >> 1;
-
-                     vehicle->movement -= air_heightdecmovedecrease;
-                     if ( vehicle->movement < 0 )
-                        vehicle->movement = 0;
-
-                     vehicle->fuel -= vehicle->typ->fuelconsumption * air_heightdecmovedecrease / 8;
-                     if ( vehicle->fuel < 0 )
-                        vehicle->fuel = 0;
-
-                     int newmovement = vehicle->typ->movement[log2(w)] * vehicle->movement / vehicle->typ->movement[log2(vehicle->height)];
-                     vehicle->movement = newmovement;
-                     if ( vehicle->movement < 0 )
-                        vehicle->movement = 0;
-
-                     vehicle->height = w;
-                  }
-               }
-            }
-         } 
-      } 
-      else {   /*  kein flugzeug  */ 
-
-         if (ch == 'h') { 
-            w = (vehicle->height << 1);
-            md = sub_heightincmovedecrease; 
-            if ( vehicle->movement < md )
-               return 110;
-         } 
-         else { 
-            w = (vehicle->height >> 1);
-            md = sub_heightdecmovedecrease; 
-            if ( vehicle->movement < md )
-               return 111;
-         } 
-         if (( w & vehicle->typ->height ) && (vehicle->movement >= md)) {
-
-            int newmovement = vehicle->typ->movement[log2(w)] * (vehicle->movement - md ) / vehicle->typ->movement[log2(vehicle->height)];
-
-            npush ( vehicle->height );
-            vehicle->height = w;
-            int res = terrainaccessible2 ( fld, vehicle );
-            if ( res <= 0 ) {
-               npop ( vehicle->height );
-               if ( w > vehicle->height ) 
-                  return 108;
-               else {
-                  if ( res == -1 )
-                     return 113;
-                  else
-                     if ( res == -2 )
-                        return 114;
-                     else
-                        return 109;
-               }
-            }
-            npop ( vehicle->height );
-            int fuelcost = vehicle->typ->fuelconsumption * md / 8;
-            if ( fuelcost > vehicle->fuel )
-               return 115;
-
-            vehicle->movement = newmovement;
-            vehicle->fuel -= fuelcost; 
-            dashboard.x = 0xffff; 
-
-            logtoreplayinfo ( rpl_changeheight, (int) vehicle->xpos, (int) vehicle->ypos, 
-                                                (int) vehicle->xpos, (int) vehicle->ypos, vehicle->networkid, (int) vehicle->height, (int) w );
-
-            vehicle->height = w; 
-
-         } 
-      } 
-   } 
-   return 0;
-} 
-
-
-
-
-
 void checkalliances_at_endofturn ( void )
 {
    for ( int i = 0; i < 8; i++ ) {
@@ -5264,6 +4125,7 @@ void addanytechnology ( ptechnology tech, int player )
    if ( tech ) {   
       presearch resrch = &actmap->player[player].research;
       pdevelopedtechnologies devtech = new tdevelopedtechnologies;
+
       devtech->tech = tech;
       devtech->next = resrch->developedtechnologies;
       resrch->developedtechnologies = devtech;
@@ -5357,12 +4219,19 @@ void getpowerplantefficiency (  const pbuilding bld, int* material, int* fuel )
 
 
 
-void returnresourcenuseforpowerplant (  const pbuilding bld, int prod, int* material, int* fuel )
+void returnresourcenuseforpowerplant (  const pbuilding bld, int prod, tresources *usage, int percentagee_based_on_maxplus )
 {
-    getpowerplantefficiency ( bld, material, fuel );
- 
-    *material = *material * prod / 256 * bld->typ->efficiencymaterial / ( 4 * 1024 );
-    *fuel     = *fuel     * prod / 256 * bld->typ->efficiencyfuel     / ( 4 * 1024 );
+   tresources res;
+   if ( percentagee_based_on_maxplus )
+      res = bld->maxplus;
+   else
+      res = bld->plus;
+
+   for ( int r = 0; r < 3; r++ )
+      if ( res.resource[r] > 0 )
+         usage->resource[r] = 0;
+      else
+         usage->resource[r] = -res.resource[r] * prod / 100;
 }
 
 
@@ -5401,257 +4270,49 @@ void tbuilding :: execnetcontrol ( void )
 
 int  tbuilding :: put_energy ( int      need,    int resourcetype, int queryonly  ) 
 {
-   /*
-  if ( actmap->resourcemode == 1 ) {
-     if ( mode & 64 ) 
-        return 1000000000;
-     else
-     if ( mode & 32 ) {       // usage
-        tresources res,usg;
-        if (( mode & 3) == 1 ) {
-           getresourceusage ( &res );
-           return res.resource[1];
-         } else {
-           usg.energy = 0;
-           usg.material = 0;
-           usg.fuel = 0;
-           for ( pbuilding bld = actmap->player[ color/8 ].firstbuilding; bld ; bld = bld->next ) {
-              bld->getresourceusage ( &res );
-              usg.energy   +=  res.energy;
-              usg.material +=  res.material;
-              usg.fuel     +=  res.fuel;
-           }
-           return usg.resource[mode & 3 ];
-         }
-     } else
-     if ( mode & 16 ) {  // plus
-        if ( (mode & 3 ) == 1 )
-           return bi_resourceplus.resource[1];
-        else {
-           int p = 0;
-           for ( pbuilding bld = actmap->player[ color/8 ].firstbuilding; bld ; bld = bld->next ) 
-              p += bi_resourceplus.resource[mode & 3];
-           
-           return p;
-        }
-     } else
-     if ( mode & 8 ) // tribute
-        return 0;
-     else {
-        if (( mode & 3) == 1 ) {
-           int mx = need;
-           if ( mx > typ->gettank(mode & 3) - actstorage.resource[mode & 3] )
-              mx = typ->gettank(mode & 3) - actstorage.resource[mode & 3];
-           if ( mode & 4 )
-              actstorage.resource[mode & 3] += mx;
-
-           return mx;
-        } else {
-           if ( mode & 4 )
-              actmap->bi_resource[ color / 8].resource[ mode & 3] += need;
-           return need;
-        }
-     }
-  } else
-     return ::putenergy ( this, need, mode );
-
-   */
-
    PutResource putresource;
    return putresource.getresource ( xpos, ypos, resourcetype, need, queryonly, color/8, 1 );
-
-
 }
 
 
 int  tbuilding :: get_energy ( int      need,    int resourcetype, int queryonly  ) 
 {
-   /*
-  if ( actmap->resourcemode == 1 ) {
-     if ( mode & 64 ) 
-        return 1000000000;
-     else
-     if ( mode & 32 ) 
-        return 0;
-     else
-     if ( mode & 16 ) {
-        if ( (mode & 3 ) == 1 )
-           return bi_resourceplus.resource[1];
-        else {
-           int p = 0;
-           for ( pbuilding bld = actmap->player[ color/8 ].firstbuilding; bld ; bld = bld->next ) 
-              p += bi_resourceplus.resource[mode & 3];
-           
-           return p;
-        }
-     } else
-     if ( mode & 8 ) 
-        return 0;
-     else {
-        if (( mode & 3) == 1 ) {
-           int mx = need;
-           if ( mx > actstorage.resource[mode & 3] )
-              mx = actstorage.resource[mode & 3];
-           if ( mode & 4 )
-              actstorage.resource[mode & 3] -= mx;
-
-           return mx;
-        } else {
-           int mx = need;
-           if ( actmap->bi_resource[ color / 8].resource[ mode & 3] < mx )
-              mx = actmap->bi_resource[ color / 8].resource[ mode & 3];
-           if ( mode & 4 )
-              actmap->bi_resource[ color / 8].resource[ mode & 3] -= mx;
-           return mx;
-        }
-     }
-  } else
-     return ::getenergy ( this, need, mode );
-   */
-
    GetResource gr;
    return gr.getresource ( xpos, ypos, resourcetype, need, queryonly, color/8, 1 );
-
 }
 
 
 
-int  tbuilding :: getenergyplus( int mode )
+int  tbuilding :: getresourceplus( int mode, tresources* gplus, int queryonly )
 {
+   int did_something = 0;
+
+   if ( !queryonly && (mode & 1))
+      mode -= 1;
+
    if ( actmap->resourcemode != 1 ) {
-      int plus = 0;
-      if ( typ->special & cgenergyproductionb ) {
-         if ( (typ->special & cgwindkraftwerkb) && ( mode & 2 ) ) {
-            int eplus =  maxplus.a.energy * actmap->weather.wind[0].speed / 256;
+      gplus->resource[0] = 0;
+      gplus->resource[1] = 0;
+      gplus->resource[2] = 0;
+
+      if ( (typ->special & cgwindkraftwerkb ) && ( mode & 2 ) ) 
+         for ( int r = 0; r < 3; r++ ) {
+            int eplus =  maxplus.resource[r] * actmap->weather.wind[0].speed / 255;
             if ( ! (mode & 1 )) {
-               int putable = put_energy ( eplus + plus, 0, 1 ) - plus;
+               int putable = put_energy ( eplus + gplus->resource[r]*queryonly, r, 1 ) - gplus->resource[r]*queryonly;
                if ( putable < eplus )
                   eplus = putable; 
             }
-            plus += eplus;
-         } 
-      
-         if ( (typ->special & cgsolarkraftwerkb) && ( mode & 4 ) ) {
-            int sum = 0;
-            int num = 0;
-            for ( int x = 0; x < 4; x++ )
-               for ( int y = 0; y < 6; y++) 
-                  if ( getpicture ( x, y ) ) {
-                     pfield fld = getbuildingfield ( this, x, y );
-                     int weather = 0;
-                     while ( fld->typ != fld->typ->terraintype->weather[weather] )
-                        weather++;                
-      
-                     sum += csolarkraftwerkleistung[weather];
-                     num ++;
-                  }
-               
-      
-            int eplus = maxplus.a.energy * sum / ( num * 1024 );
-            if ( ! (mode & 1 )) {
-               int putable = put_energy ( eplus + plus, 0, 1 ) - plus;
-               if ( putable < eplus )
-                  eplus = putable; 
+            gplus->resource[r] += eplus;
+            if ( !queryonly && !work.wind_done ) {
+               put_energy ( eplus, r, 0 );
+               work.wind_done = 1;
+               did_something++;
             }
-            plus += eplus;
-         } 
-   
-         if ( (typ->special & cgconventionelpowerplantb) && ( mode & 8 ) ) {
-            int material;
-            int fuel;
-   
-            int eplus = this->plus.a.energy;
-   
-            returnresourcenuseforpowerplant ( this, eplus, &material, &fuel );
-            int maa = get_energy ( material, 1, 1 );
-            int fua = get_energy ( fuel    , 2, 1 );
-      
-            if ( maa < material ||  fua < fuel   ) {
-               int diff = eplus / 2;
-               while ( maa < material ||  fua < fuel  || diff > 1) {
-                  if ( maa < material ||  fua < fuel   ) 
-                     eplus -= diff;
-                  else
-                     eplus += diff;
-      
-                  if ( diff > 1 )
-                     diff /=2;
-                  else
-                     diff = 1;
-      
-                  returnresourcenuseforpowerplant ( this, eplus, &material, &fuel );
-               }
-      
-               returnresourcenuseforpowerplant ( this, eplus+1, &material, &fuel );
-               if ( maa >= material  &&  fua >= fuel )
-                  eplus++;
-               else
-                  returnresourcenuseforpowerplant ( this, eplus, &material, &fuel );
-               
-            }
-      
-            if ( maa < material || fua < fuel )
-               displaymessage( "controls : int tbuilding :: getenergyplus( void ) : inconsistency in getting material or fuel for energyproduction", 2 );
-      
-            if ( ! (mode & 1 )) {
-               int putable = put_energy ( eplus + plus, 0, 1 ) - plus;
-               if ( putable < eplus )
-                  eplus = putable; 
-            }
-            plus += eplus;
-   
          }
-      }
-      return plus;
-   } else
-      return bi_resourceplus.a.energy;
-}
-
-
-int  tbuilding :: getmaterialplus( int mode )
-{
-   if ( actmap->resourcemode != 1 ) {
-      int pl = 0;
-      if ( typ->special & cgmaterialproductionb ) {
-         if ( typ->special & cgminingstationb ) {
-            pl += processmining ( 1, 0 );
-         } else
-            pl += plus.a.material;
+      
    
-      }
-      return pl;
-   } else
-      return bi_resourceplus.a.material;
-
-}
-
-int  tbuilding :: getfuelplus( int mode )
-{
-   if ( actmap->resourcemode != 1 ) {
-      int pl = 0;
-      if ( typ->special & cgfuelproductionb ) {
-         if ( typ->special & cgminingstationb ) {
-            pl += processmining ( 2, 0 );
-         } else
-            pl += plus.a.fuel;
-      } 
-      return pl;
-   } else 
-      return bi_resourceplus.a.fuel;
-
-}
-
-
-
-void tbuilding :: produceenergy( void )
-{
-   if ( turnstatus & cgenergyproductionb ) {
-      if ( turnstatus & cgwindkraftwerkb ) {
-         put_energy ( maxplus.a.energy * actmap->weather.wind[0].speed / 256, 0, 0 );
-         turnstatus ^= cgwindkraftwerkb;
-      }
-   
-      if ( turnstatus & cgsolarkraftwerkb ) {
+      if ( (typ->special & cgsolarkraftwerkb) && ( mode & 4 ) ) {
          int sum = 0;
          int num = 0;
          for ( int x = 0; x < 4; x++ )
@@ -5666,67 +4327,137 @@ void tbuilding :: produceenergy( void )
                   num ++;
                }
             
-   
-         put_energy ( maxplus.a.energy * sum / ( num * 1024 ), 0, 0 );
-
-         turnstatus ^= cgsolarkraftwerkb;
-      }
-
-      if ( turnstatus & cgconventionelpowerplantb ) {
-         int material;
-         int fuel;
-
-         int eplus = this->plus.a.energy;
-         int putable = put_energy ( eplus, 0, 1 );
-         if ( putable < eplus )
-            eplus = putable;
-
-         returnresourcenuseforpowerplant ( this, eplus, &material, &fuel );
-         int maa = get_energy ( material, 1, 1 );
-         int fua = get_energy ( fuel    , 2, 1 );
-   
-         if ( maa < material ||  fua < fuel   ) {
-            if ( maa > lastmaterialavail  ||  fua > lastfuelavail ) {
-               lastmaterialavail = maa;
-               lastfuelavail = fua;
-               return;
+         tresources rplus;
+         for ( int r = 0; r < 3; r++ ) {
+            rplus.resource[r] = maxplus.resource[r] * sum / ( num * 1024 );
+            if ( ! (mode & 1 )) {
+               int putable = put_energy ( rplus.resource[r] + gplus->resource[r]*queryonly, r, 1 ) - gplus->resource[r]*queryonly;
+               if ( putable < rplus.resource[r] )
+                  rplus.resource[r] = putable; 
             }
-               
+            gplus->resource[r] += rplus.resource[r];
+         }
 
-            int diff = eplus / 2;
-            while ( maa < material ||  fua < fuel  || diff > 1) {
-               if ( maa < material ||  fua < fuel   ) 
-                  eplus -= diff;
+         if ( !queryonly && !work.solar_done ) {
+            for ( int s = 0; s < 3; s++ )
+               put_energy ( rplus.resource[s], s, 0 );
+            work.solar_done = 1;
+            did_something++;
+         }
+      } 
+
+
+
+      if ( (typ->special & cgconventionelpowerplantb) && ( mode & 8 ) ) {
+
+         int perc = 100;
+         tresources toproduce;
+         if ( !queryonly )
+            toproduce = work.resource_production.toproduce;
+         else
+            toproduce = plus;
+
+         for ( int r = 0; r < 3; r++ )
+            if ( plus.resource[r] > 0 ) {
+               int p = plus.resource[r];
+               if ( !(mode & 1))
+                  p = put_energy ( plus.resource[r] + p, 0, 1 );
+
+               if ( perc > 100 * p / maxplus.resource[r] )
+                  perc = 100 * p / maxplus.resource[r] ;
+            }
+
+
+         tresources usage;
+         returnresourcenuseforpowerplant ( this, perc, &usage, 0 );
+         int ena ;
+         int maa ;
+         int fua ;
+         if ( !queryonly ) {
+            ena = get_energy ( usage.a.energy  , 0, 1 );
+            maa = get_energy ( usage.a.material, 1, 1 );
+            fua = get_energy ( usage.a.fuel    , 2, 1 );
+         } else {
+            ena = usage.a.energy;
+            maa = usage.a.material;
+            fua = usage.a.fuel;
+         }
+   
+
+         // This calculation is done iteratively because the resourcenusage may be nonlinear
+         if ( maa < usage.a.material ||  fua < usage.a.fuel  || ena < usage.a.energy  ) {
+            int diff = perc / 2;
+            while ( maa < usage.a.material ||  fua < usage.a.fuel  || ena < usage.a.energy  || diff > 1) {
+               if ( maa < usage.a.material ||  fua < usage.a.fuel  || ena < usage.a.energy ) 
+                  perc -= diff;
                else
-                  eplus += diff;
+                  perc += diff;
    
                if ( diff > 1 )
                   diff /=2;
                else
                   diff = 1;
    
-               returnresourcenuseforpowerplant ( this, eplus, &material, &fuel );
+               returnresourcenuseforpowerplant ( this, perc, &usage, 0 );
             }
-   
-            returnresourcenuseforpowerplant ( this, eplus+1, &material, &fuel );
-            if ( maa >= material  &&  fua >= fuel )
-               eplus++;
-            else
-               returnresourcenuseforpowerplant ( this, eplus, &material, &fuel );
-            
          }
    
-         maa = get_energy ( material, 1, 0 );
-         fua = get_energy ( fuel    , 2, 0 );
-   
-         if ( maa < material || fua < fuel )
+         if ( maa < usage.a.material ||  fua < usage.a.fuel  || ena < usage.a.energy  ) 
             displaymessage( "controls : int tbuilding :: getenergyplus( void ) : inconsistency in getting material or fuel for energyproduction", 2 );
    
-         put_energy ( eplus, 0, 0 );
-         turnstatus ^= cgconventionelpowerplantb;
+         if ( !queryonly ) {
+            work.resource_production.did_something_lastpass = 0;
+            work.resource_production.finished = 1;
+            for ( int r = 0; r < 3; r++ ) {
+               get_energy ( usage.resource[r]  , r, 0 );
+               put_energy ( toproduce.resource[r] * perc / 100, r, 0 );
+               work.resource_production.toproduce.resource[r] -= toproduce.resource[r] * perc / 100;
+               if ( toproduce.resource[r] * perc / 100  > 0 ) {
+                  work.resource_production.did_something_lastpass = 1;
+                  work.resource_production.did_something_atall = 1;
+                  did_something++;
+               }
+
+               if ( work.resource_production.toproduce.resource[r] > 0 )
+                  work.resource_production.finished = 0;
+            }
+         }
+         
+
+         for ( int s = 0; s < 3; s++ ) 
+            if ( toproduce.resource[s] * perc / 100  > 0 ) 
+               gplus->resource[s] += toproduce.resource[s] * perc / 100;
+      }
+
+      if ( (typ->special & cgminingstationb) && ( mode & 16 ) ) 
+         if ( queryonly || !work.mining.finished ) {
+            int mp = 0;
+            int fp = 0;
+            if ( queryonly )
+               initwork();
+            mp = processmining ( 1, !queryonly );
+            fp = processmining ( 2, !queryonly );
+            gplus->a.material += mp;
+            gplus->a.fuel     += fp;
+            if ( mp || fp )
+               did_something++;
+         }
+      
+
+   } else {
+      *gplus = bi_resourceplus;
+      if ( !queryonly && !work.bimode_done ) {
+         work.bimode_done = 1;
+         for ( int r = 0; r < 3; r++ ) {
+            put_energy ( bi_resourceplus.resource[r], r, 0 );
+            if ( bi_resourceplus.resource[r] > 0 )
+               did_something++;
+         }
       }
    }
+   return did_something;
 }
+
 
 
 int  getminingstationeficency ( int dist )
@@ -5867,6 +4598,12 @@ void tprocessminingfields :: testfield ( void )
 
 int   tprocessminingfields :: setup ( pbuilding bld, int& mm, int cm, int& mf, int cf, int abbuch )  // mm: maxmaterial, cm: capacity material
 {
+   if ( bld->work.mining.finished ) {
+      mm =0;
+      mf =0;
+      return 0;
+   }
+
    color = bld->color/8;
    abbuchen = abbuch;
    range = 0;
@@ -5891,7 +4628,36 @@ int   tprocessminingfields :: setup ( pbuilding bld, int& mm, int cm, int& mf, i
       worktodo += mf * 1024 / bld->typ->efficiencyfuel;
 
 
+   if ( !abbuchen ) {
+      for ( int r = 0; r < 3; r++ )
+         if ( bld->plus.resource[r] < 0 )
+            bld->work.mining.touse.resource[r] = -bld->plus.resource[r];
+         else
+            bld->work.mining.touse.resource[r] = 0;
+   }
 
+   int perc = 1000;
+   int resourcesrequired = 0;
+   if ( abbuch ) 
+      for ( int r = 0; r < 3; r++ )
+         if ( bld->work.mining.touse.resource[r] > 0 ) {
+            resourcesrequired = 1;
+            int g = bld->get_energy ( bld->work.mining.touse.resource[r], r, 1 );
+            if ( g * 1000 / (-bld->plus.resource[r]) < perc )
+               perc = g * 1000 / (-bld->plus.resource[r]);
+         }     
+                       
+   if ( abbuch ) 
+      if ( perc ) {
+          bld->work.mining.did_something_atall = 1;
+          bld->work.mining.did_something_lastpass = 1;
+      } else
+          bld->work.mining.did_something_lastpass = 0;
+
+
+   int orgworktodo = worktodo;
+   worktodo = worktodo * perc/1000;
+   int workbeforestart = worktodo;
 
    materialgot = 0;
    fuelgot = 0;
@@ -5906,6 +4672,17 @@ int   tprocessminingfields :: setup ( pbuilding bld, int& mm, int cm, int& mf, i
    mm = materialgot * bld->typ->efficiencymaterial / 1024;
    mf = fuelgot     * bld->typ->efficiencyfuel     / 1024;
 
+   if ( abbuch ) {
+      int perc = 1000 * ( workbeforestart - worktodo ) / orgworktodo;
+      for ( int r = 0; r < 3; r++ )
+         if ( bld->plus.resource[r] < 0 ) {
+            int g = bld->get_energy ( -bld->plus.resource[r] * perc / 1000, r, 0 );
+            bld->work.mining.touse.resource[r] -= g;
+         }
+      if ( !resourcesrequired )
+         bld->work.mining.finished = 1;
+
+   }
    return range;
 }
 
@@ -5945,61 +4722,16 @@ int  tbuilding :: processmining ( int res, int abbuchen )
 
 }
 
-void tbuilding :: producematerial( void )
-{
-   if ( turnstatus & cgmaterialproductionb ) {
-      if ( turnminestatus & cgmaterialproductionb ) {
-         processmining ( 1 );
-         turnminestatus ^= cgmaterialproductionb;
-
-         if ( !turnminestatus )
-           turnstatus ^= cgminingstationb;
-      } 
-      /* else
-         if ( plus.material )
-             putenergy ( plus.material, 1 + 4 );
-      */
-      turnstatus ^= cgmaterialproductionb;
-   }
-}
-
-void tbuilding :: producefuel( void )
-{
-   if ( turnstatus & cgfuelproductionb ) {
-      if ( turnminestatus & cgfuelproductionb ) {
-         processmining ( 2 );
-         turnminestatus ^= cgfuelproductionb;
-
-         if ( !turnminestatus )
-           turnstatus ^= cgminingstationb;
-      } 
-      /* else
-        if ( plus.fuel )
-           putenergy ( plus.fuel, 2 + 4 );
-      */
-      turnstatus ^= cgfuelproductionb;
-   }
-}
-
-
 void tbuilding :: getresourceusage ( tresources* usage )
 {
-   usage->a.energy = 0;
-   usage->a.material =  0;
-   usage->a.fuel = 0;   
-   if ( typ->special & cgconventionelpowerplantb ) {
-      int material;
-      int fuel;
-      returnresourcenuseforpowerplant ( this, plus.a.energy, &material, &fuel );
-      usage->a.material += material;
-      usage->a.fuel     += fuel;
-   }
+   returnresourcenuseforpowerplant ( this, 100, usage, 0 );
    if ( typ->special & cgresearchb ) {
       int material;
       int energy;
       returnresourcenuseforresearch ( this, researchpoints, &energy, &material );
       usage->a.material += material;
       usage->a.energy   += energy;
+      usage->a.fuel  = 0;
    }
 }
 
@@ -6075,6 +4807,7 @@ void doresearch ( int i )
          }
 
          returnresourcenuseforresearch ( bld, res+1, &energy, &material );
+
          if ( ena >= energy  &&  maa >= material )
             res++;
          else
@@ -6118,96 +4851,99 @@ void tbuilding :: initwork ( void )
    lastfuelavail = -1;
    lastenergyavail = -1;
 
-   turnminestatus = 0;
-   if ( (completion == typ->construction_steps - 1) ) {
-      turnstatus = 0;
+   tresources nul;
+   nul.a.energy = 0; nul.a.material = 0; nul.a.fuel = 0;
+
+   work.mining.finished        = 1;
+   work.mining.did_something_atall      = 0;
+
+   work.mining.did_something_lastpass   = 0;
+   work.mining.touse = nul;
+   work.resource_production.finished        = 1;
+   work.resource_production.did_something_atall   = 0;
+   work.resource_production.did_something_lastpass   = 0;
+   work.resource_production.toproduce = nul;
+  /*
+   work.research.finished        = 1;
+   work.research.did_something   = 0;
+   work.research.toresearch = 0;
+  */
+   work.wind_done = 1;
+   work.solar_done = 1;
+   work.bimode_done = 1;
+
+
+   if ( completion == typ->construction_steps - 1 ) {
       if ( actmap->resourcemode == 0 ) {
-         if ( typ->special & cgenergyproductionb ) 
-            turnstatus |= typ->special & ( cgwindkraftwerkb | cgsolarkraftwerkb | cgconventionelpowerplantb ); // cgresearchb 
-         if ( typ->special & ( cgmaterialproductionb | cgfuelproductionb ))
-            turnstatus |=  typ->special & cgminingstationb ; 
-      
-         turnstatus |= typ->special & ( cgrefineryb | cgenergyproductionb | cgmaterialproductionb | cgfuelproductionb ); // cgresearchb 
-                   
-         if ( (typ->special & cgmaterialproductionb) && (typ->special & cgminingstationb))
-            turnminestatus |= cgmaterialproductionb;
-         if ( (typ->special & cgfuelproductionb) && (typ->special & cgminingstationb))
-            turnminestatus |= cgfuelproductionb;
-      } else {
-         if ( bi_resourceplus.a.energy || bi_resourceplus.a.material || bi_resourceplus.a.fuel )
-            turnstatus |= cgenergyproductionb | cgmaterialproductionb | cgfuelproductionb;
-      }
-   } else
-      turnstatus = 0;
+         if ( typ->special & cgwindkraftwerkb ) 
+            work.wind_done = 0;
+
+         if ( typ->special & cgsolarkraftwerkb ) 
+            work.solar_done = 0;
+
+         if ( typ->special & cgminingstationb ) {
+            for ( int r = 0; r < 3; r++ )
+               if ( plus.resource[r] < 0 )
+                  work.mining.touse.resource[r] = -plus.resource[r];
+               else
+                  work.mining.touse.resource[r] = 0;
+
+            work.mining.finished = 0;
+         }
+
+         if ( typ->special & cgconventionelpowerplantb ) {
+            for ( int r = 0; r < 3; r++ )
+               if ( plus.resource[r] > 0 )
+                  work.resource_production.toproduce.resource[r] = plus.resource[r];
+               else
+                  work.resource_production.toproduce.resource[r] = 0;
+
+            work.resource_production.finished = 0;
+         }
+
+      } else 
+         work.bimode_done = 0;
+
+
+   }
 }
 
 int tbuilding :: worktodo ( void )
 {
-   return turnstatus;
+   if ( actmap->resourcemode == 1 ) {
+      return !work.bimode_done;
+   }
+   if ( !work.wind_done  || !work.solar_done )
+      return 1;
+
+   if ( !work.mining.finished  )
+      return 1;
+
+   if ( !work.resource_production.finished  )
+      return 1;
+
+   return 0;
 }
 
 
-void tbuilding :: processwork ( void )
+
+
+int  tbuilding :: processwork ( void )
 {
    if ( (completion == typ->construction_steps - 1) ) {
 
       if ( actmap->resourcemode == 1 ) {
-         if ( turnstatus & cgmaterialproductionb ) {
-            actstorage.a.material += bi_resourceplus.a.material;
-            turnstatus ^= cgmaterialproductionb;
-         }
-                          
-         if ( turnstatus & cgenergyproductionb ) {
-            actmap->bi_resource[ color / 8].a.energy += bi_resourceplus.a.energy;
-            turnstatus ^= cgenergyproductionb;
-         }
-   
-         if ( turnstatus & cgfuelproductionb ) {
-            actmap->bi_resource[ color / 8].a.fuel += bi_resourceplus.a.fuel;
-            turnstatus ^= cgfuelproductionb;
-         }
+         tresources plus;
+
+         int res = getresourceplus  ( -2, &plus, 0 );
 
          execnetcontrol ();
-       /*
-       #ifdef HEXAGON
-         if (  actstorage.energy >  typ->bi_maxstorage.energy ) {
-            putenergy ( typ->bi_maxstorage.energy -  actstorage.energy, 0 + 4 );
-            actstorage.energy =  typ->bi_maxstorage.energy;
-         }
-         if (  actstorage.material >  typ->bi_maxstorage.material ) {
-            putenergy ( typ->bi_maxstorage.material -  actstorage.material, 1 + 4 );
-            actstorage.material =  typ->bi_maxstorage.material;
-         }
-         if (  actstorage.fuel >  typ->bi_maxstorage.fuel ) {
-            putenergy ( typ->bi_maxstorage.fuel -  actstorage.fuel, 2 + 4 );
-            actstorage.fuel =  typ->bi_maxstorage.fuel;
-         }
-       #endif
-       */
+
+         return res;
       } else {
 
-         if ( turnstatus & cgmaterialproductionb )
-            if ( ! ( turnstatus & cgminingstationb))
-               turnstatus ^= cgmaterialproductionb;
-                          
-         if ( turnstatus & cgmaterialproductionb )
-            producematerial ();
-   
-   
-         if ( turnstatus & cgfuelproductionb )
-            if ( !( turnstatus & cgminingstationb))
-               turnstatus ^= cgfuelproductionb;
-   
-         if ( turnstatus & cgfuelproductionb )
-            producefuel ();
-    
-   
-         if ( turnstatus & cgenergyproductionb )
-            if ( !(turnstatus & (cgwindkraftwerkb | cgsolarkraftwerkb | cgconventionelpowerplantb)))
-               turnstatus ^= cgenergyproductionb;
-   
-         if ( turnstatus & cgenergyproductionb )
-            produceenergy ();
+         tresources plus;
+         int res = getresourceplus  ( -2, &plus, 0 );
 
          execnetcontrol ();
 
@@ -6216,16 +4952,12 @@ void tbuilding :: processwork ( void )
                put_energy ( typ->gettank(r) -  actstorage.resource[r], r , 0 );
                actstorage.resource[r] =  typ->gettank(r);
             }
-      }
 
+         return res;
+      }
  
-      if (  typ->special & cgrefineryb )  {
-          actstorage.a.fuel += ( actstorage.a.material * refineryefficiency / 8);
-          actstorage.a.material = 0; 
-         turnstatus ^= cgrefineryb;
-      } 
-      
    }
+   return 0;
 }      
 
 
@@ -6263,23 +4995,27 @@ void turnwrap ( void )
              }
           }
 
+          int pass = 0;
           int buildingwaiting = 0;
+          int buildingnum;  
           do {
+             pass++;
              buildingwaiting = 0;
+             buildingnum = 0;
 
              pbuilding actbuilding = actmap->player[i].firstbuilding; 
              while ( actbuilding ) { 
 
-                if ( actbuilding->worktodo() ) {
-                   actbuilding->processwork();
-                   if ( actbuilding->worktodo() ) 
-                      buildingwaiting = 1;
-                }
+                if ( actbuilding->worktodo() ) 
+                   buildingwaiting += actbuilding->processwork();
+
+                
 
                 actbuilding = actbuilding->next; 
+                buildingnum++;
              } /* end while */
    
-          } while ( buildingwaiting ); /* enddo */
+          } while ( buildingwaiting && pass < 2*buildingnum ); /* enddo */
 
           doresearch( i );
 
@@ -6396,6 +5132,7 @@ void newturnforplayer ( int forcepasswordchecking )
 
          npop ( actmap->playerview );
       }
+
 
    }
 */
@@ -6912,6 +5649,7 @@ void checkforreplay ( void )
                  s = 0;
           }
 
+
       }
 }
 
@@ -6943,8 +5681,8 @@ void returnresourcenuseforresearch ( const pbuilding bld, int research, int* ene
 
    double m = 1 / log ( minresearchcost + maxresearchcost );
 
-   *energy   = (int)researchenergycost   * research * ( exp ( deg / m ) - ( 1 - minresearchcost ) ) / 1000 * (researchcostdouble+res)/researchcostdouble;
-   *material = (int)researchmaterialcost * research * ( exp ( deg / m ) - ( 1 - minresearchcost ) ) / 1000 * (researchcostdouble+res)/researchcostdouble;
+   *energy   = (int)(researchenergycost   * research * ( exp ( deg / m ) - ( 1 - minresearchcost ) ) / 1000 * (researchcostdouble+res)/researchcostdouble);
+   *material = (int)(researchmaterialcost * research * ( exp ( deg / m ) - ( 1 - minresearchcost ) ) / 1000 * (researchcostdouble+res)/researchcostdouble);
 /*
    if ( bld->typ->maxresearchpoints > 0 ) {
       *material = researchmaterialcost * research * 
@@ -7069,7 +5807,7 @@ void         generatevehicle_cl ( pvehicletype fztyp,
       vehicle->ypos = y;
       vehicle->setup_classparams_after_generation ();
 
-      if ( actmap->gameparameter[cgp_bi3_training] >= 1 ) {
+      if ( actmap->getgameparameter(cgp_bi3_training) >= 1 ) {
          int cnt = 0;
          pbuilding bld = actmap->player[ actmap->actplayer ].firstbuilding;
          while ( bld ) {
@@ -7077,7 +5815,7 @@ void         generatevehicle_cl ( pvehicletype fztyp,
                cnt++;
             bld = bld->next;
          }
-         vehicle->experience += cnt * actmap->gameparameter[cgp_bi3_training];
+         vehicle->experience += cnt * actmap->getgameparameter(cgp_bi3_training);
          if ( vehicle->experience > maxunitexperience )
             vehicle->experience = maxunitexperience;
       }
@@ -7563,7 +6301,7 @@ void transfer_all_outstanding_tribute ( void )
                            if ( topay[r] ) {
                               ps++;
                               char txt3[100];
-                              sprintf( txt3, "%d %s", topay[r], cdnames[r] );
+                              sprintf( txt3, "%d %s", topay[r], resourceNames[r] );
                               if ( ps>1 && ps < cnt )
                                  strcat ( txt_topay, ", ");
                               if ( ps>1 && ps == cnt )
@@ -7583,7 +6321,7 @@ void transfer_all_outstanding_tribute ( void )
                            if ( got[r] ) {
                               ps++;
                               char txt3[100];
-                              sprintf( txt3, "%d %s", got[r], cdnames[r] );
+                              sprintf( txt3, "%d %s", got[r], resourceNames[r] );
                               if ( ps>1  && ps < cnt )
                                  strcat ( txt_got, ", ");
                               if ( ps>1 && ps == cnt )
@@ -7662,13 +6400,9 @@ void GetResourcePlus :: checkvehicle ( pvehicle v )
 void GetResourcePlus :: checkbuilding ( pbuilding bld )
 {
    if ( bld->color/8 == player ) {
-      if ( resourcetype == 0) 
-         got += bld->getenergyplus ( -1 ); 
-       else 
-          if ( resourcetype == 1) 
-             got += bld->getmaterialplus ( -1 ); 
-          else 
-             got += bld->getfuelplus ( -1 ); 
+      tresources plus;
+      bld->getresourceplus ( -1, &plus, 1 );
+      got += plus.resource[resourcetype];
    }
 }
 
@@ -7694,10 +6428,10 @@ void testnet ( void )
   static int resource = 0;
 
   GetResource net1;
-  displaymessage ( "%d %s available", 1, net1.getresource ( getxpos(), getypos(), resource, maxint, 0, actmap->actplayer, 1 ), cdnames[resource]);
+  displaymessage ( "%d %s available", 1, net1.getresource ( getxpos(), getypos(), resource, maxint, 0, actmap->actplayer, 1 ), resourceNames[resource]);
 
   PutResource net2;
-  displaymessage ( "%d %s space available", 1, net2.getresource ( getxpos(), getypos(), resource, maxint, 0, actmap->actplayer, 1 ), cdnames[resource]);
+  displaymessage ( "%d %s space available", 1, net2.getresource ( getxpos(), getypos(), resource, maxint, 0, actmap->actplayer, 1 ), resourceNames[resource]);
 
   resource++;
   if ( resource > 2 )
@@ -7717,6 +6451,7 @@ int tvehicle::enablereactionfire( void )
           reactionfire_active  = 2;
 
       movement = 0;
+
       attacked = 1;
    }
    return 0;
@@ -7822,7 +6557,7 @@ void cmousecontrol :: chkmouse ( void )
                cursor.show();
                mousevisible(true);
             } else 
-              if ( mousestat == 2  ||  mousestat == 0 ||  (moveparams.movestatus && getfield( actmap->xpos + x, actmap->ypos + y)->a.temp )  ) {
+              if ( mousestat == 2  ||  mousestat == 0 ||  ((moveparams.movestatus || pendingVehicleActions.action) && getfield( actmap->xpos + x, actmap->ypos + y)->a.temp )  ) {
                  {
                     // collategraphicoperations cgo;
                     if ( cursor.posx != x || cursor.posy != y ) {
@@ -7852,20 +6587,15 @@ void cmousecontrol :: chkmouse ( void )
          int x; 
          int y;
          int r = getfieldundermouse ( &x, &y );
-         {
-
-            // collategraphicoperations cgo;
-
-            if ( r && ( cursor.posx != x || cursor.posy != y) ) {
-               mousevisible(false);
-               cursor.hide();
-               cursor.posx = x;
-               cursor.posy = y;
-               cursor.show();
-               mousevisible(true);
-            }
-            actgui->painticons();
+         if ( r && ( cursor.posx != x || cursor.posy != y) ) {
+            mousevisible(false);
+            cursor.hide();
+            cursor.posx = x;
+            cursor.posy = y;
+            cursor.show();
+            mousevisible(true);
          }
+         actgui->painticons();
 
          actgui->runpressedmouse ( mouseparams.taste );
       }
@@ -7886,6 +6616,91 @@ void cmousecontrol :: reset ( void )
 {                           
    mousestat = 0;
 }
+
+
+
+
+
+
+class ReplayMapDisplay : public MapDisplayInterface {
+           MapDisplay* mapDisplay;
+         public:
+           ReplayMapDisplay ( MapDisplay* md ) { mapDisplay = md; };
+           void displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove );
+           void displayPosition ( int x, int y );
+           void deleteVehicle ( pvehicle vehicle ) { mapDisplay->deleteVehicle ( vehicle ); };
+           void displayMap ( void ) { mapDisplay->displayMap(); };
+           void resetMovement ( void ) { mapDisplay->resetMovement(); };
+           void startAction ( void ) { mapDisplay->startAction(); };
+           void stopAction ( void ) { mapDisplay->stopAction(); };
+           int checkMapPosition ( int x, int y );
+    };
+
+int ReplayMapDisplay :: checkMapPosition ( int x, int y )
+{
+   if ( x >= actmap->xsize )
+      x = actmap->xsize - 1;
+   if ( y >= actmap->ysize )
+      y = actmap->ysize - 1;
+
+   int result = 0;
+   int a = actmap->xpos;
+   int b = actmap->ypos;
+   int xss = idisplaymap.getscreenxsize();
+   int yss = idisplaymap.getscreenysize();
+
+   if ((x < a) || (x >= a + xss )) {
+      if (x >= xss / 2)
+         actmap->xpos = (x - xss / 2);
+      else
+         actmap->xpos = 0;
+
+      result++;
+   }
+
+   if (y < b   ||   y >= b + yss  ) {
+      if (y >= yss / 2)
+         actmap->ypos = (y - yss / 2);
+      else
+         actmap->ypos = 0;
+      if ( actmap->ypos & 1 )
+         actmap->ypos--;
+
+      result++;
+   }
+
+   if (actmap->xpos + xss > actmap->xsize)
+      actmap->xpos = actmap->xsize - xss ;
+   if (actmap->ypos + yss  > actmap->ysize)
+      actmap->ypos = actmap->ysize - yss ;
+
+   if ((actmap->xpos != a) || (actmap->ypos != b))
+      return 1;
+   else
+      return 0;
+}
+
+
+void ReplayMapDisplay :: displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove )
+{
+   if ( fieldvisiblenow ( getfield ( x1, y1 ), actmap->playerview) || fieldvisiblenow ( getfield ( x2, y2 ), actmap->playerview)) {
+      checkMapPosition  ( x1, y1 );
+      mapDisplay->displayMovingUnit ( x1, y1, x2, y2, vehicle, height1, height2, fieldnum, totalmove );
+   }
+}
+
+void ReplayMapDisplay :: displayPosition ( int x, int y )
+{
+   if ( fieldvisiblenow ( getfield ( x, y ), actmap->playerview )) {
+      checkMapPosition  ( x, y );
+      mapDisplay->displayPosition ( x, y );
+   }
+}
+
+
+
+
+
 
 
 void logtoreplayinfo ( trpl_actions _action, ... )
@@ -8222,23 +7037,21 @@ void trunreplay :: execnextreplaymove ( void )
 
                         pvehicle eht = actmap->getunit ( x1, y1, nwid );
                         if ( eht ) {
-                           moveparams.uheight = -1;
-                           moveparams.movesx = x1;
-                           moveparams.movesy = y1;
-                           moveparams.vehicletomove = eht;
-   
-                           setcursorpos ( x1, y1 );
+                           ReplayMapDisplay rmd ( &defaultMapDisplay );
+                           VehicleMovement vm ( &rmd, NULL );
+                           vm.execute ( eht, -1, -1, 0 , -1, -1 );
+
                            int t = ticker;
-                           fieldreachablerek(x2, y2, eht, 1);
+                           vm.execute ( NULL, x2, y2, 2, -1, -1 );
                            wait( t );
-   
-                           setcursorpos ( x2, y2 );
-                           // wait();
-   
-                           moveunitxy ( eht, x2, y2 );
-                           // status = 1;
-                        } else 
-                           displaymessage("severe replay inconsistency:\nno vehicle for move command !", 1);
+                           vm.execute ( NULL, x2, y2, 3, -1, -1 );
+
+                           if ( vm.getStatus() != 1000 )
+                              eht = NULL;
+                        }  
+
+                        if ( !eht )
+                           displaymessage("severe replay inconsistency:\nno vehicle for move1 command !", 1);
                      }
          break;
       case rpl_move2: {
@@ -8254,28 +7067,20 @@ void trunreplay :: execnextreplaymove ( void )
 
                         pvehicle eht = actmap->getunit ( x1, y1, nwid );
                         if ( eht ) {
-                           moveparams.uheight = -1;
-                           moveparams.movesx = x1;
-                           moveparams.movesy = y1;
-                           moveparams.vehicletomove = eht;
-                           eht->height = height;
-   
-                           setcursorpos ( x1, y1 );
-// !!! debug
-/*                           int fieldnum = sucheerreichbarefielder(eht->xpos,eht->ypos,eht, height ); 
-                           displaymap();
-                           getch();
-  */
+                           ReplayMapDisplay rmd( &defaultMapDisplay );
+                           VehicleMovement vm ( &rmd, NULL );
+                           vm.execute ( eht, -1, -1, 0 , height, -1 );
+
                            int t = ticker;
-                           fieldreachablerek(x2, y2, eht, 1);
+                           vm.execute ( NULL, x2, y2, 2, -1, -1 );
                            wait( t );
-   
-                           setcursorpos ( x2, y2 );
-                           // wait();
-   
-                           moveunitxy ( eht, x2, y2 );
-                           // status = 1;
-                        } else 
+                           vm.execute ( NULL, x2, y2, 3, -1, -1 );
+
+                           if ( vm.getStatus() != 1000 )
+                              eht = NULL;
+                        }  
+
+                        if ( !eht )
                            displaymessage("severe replay inconsistency:\nno vehicle for move2 command !", 1);
                      }
          break;
@@ -8366,39 +7171,29 @@ void trunreplay :: execnextreplaymove ( void )
 
                         pvehicle eht = actmap->getunit ( x1, y1, nwid );
                         if ( eht ) {
-                           moveparams.oldheight = oldheight;
-                           moveparams.newheight = newheight;
-                           moveparams.uheight = -1;
-                           moveparams.movesx = x1;
-                           moveparams.movesy = y1;
-                           moveparams.vehicletomove = eht;
-                           moveparams.movestatus = 11;
-                           if ( oldheight < newheight )
-                              moveparams.heightdir = 'h';
+                           ReplayMapDisplay rmd( &defaultMapDisplay );
+                           VehicleAction* va;
+                           if ( newheight > oldheight )
+                              va = new IncreaseVehicleHeight ( &rmd, NULL );
                            else
-                              moveparams.heightdir = 't';
-   
-                           if ( x1 != x2 || y1 != y2 ) {
-                              setcursorpos ( x1, y1 );
-                              int t = ticker;
-                              fieldreachablerek(x2, y2, eht, 1);
-                              wait( t );
-      
-                              setcursorpos ( x2, y2 );
-                              // wait();
-      
-                              moveparams.movestatus = 12;
-                              moveunitxy ( eht, x2, y2 );
-                           } else {
-                              setcursorpos ( x1, y1 );
-                              eht->height = moveparams.newheight;
-                              computeview();
-                              displaymap();
-                              wait();
-                           }
-                        } else 
+                              va = new DecreaseVehicleHeight ( &rmd, NULL );
+
+                           va->execute ( eht, -1, -1, 0 , newheight, -1 );
+
+                           int t = ticker;
+                           va->execute ( NULL, x2, y2, 2, -1, -1 );
+                           wait( t );
+                           va->execute ( NULL, x2, y2, 3, -1, -1 );
+
+                           if ( va->getStatus() != 1000 )
+                              eht = NULL;
+
+                           delete va;
+                        }  
+
+                        if ( !eht )
                            displaymessage("severe replay inconsistency:\nno vehicle for changeheight command !", 1);
-                        
+
 
                      }
          break;
@@ -8547,7 +7342,7 @@ void trunreplay :: execnextreplaymove ( void )
                            wait();
                            pfield fld = getfield ( x, y );
                            if ( fld ) {
-                              fld -> removemine ( );
+                              fld -> removemine ( -1 );
                               computeview();
                               displaymap();
                               wait();
@@ -8796,7 +7591,7 @@ int  trunreplay :: run ( int player )
 
    dashboard.x = 0xffff;
    mousevisible( true );
-   cursor.show();
+//   cursor.show();
 
 
    do {
@@ -8808,6 +7603,9 @@ int  trunreplay :: run ( int player )
 
        if ( nextaction == rpl_finished   &&  !cursor.an )
           cursor.show();
+       else
+          if ( nextaction != rpl_finished   &&  cursor.an )
+             cursor.hide();
 
 
        tkey input;
@@ -8847,6 +7645,11 @@ void trunreplay :: firstinit ( void )
     gui.init ( hgmp->resolutionx, hgmp->resolutiony );
     gui.starticonload();
     status = 0;
+}
+
+int isUnitNotFiltered ( int id )
+{
+   return 1;
 }
 
 

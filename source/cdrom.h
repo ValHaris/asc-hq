@@ -1,6 +1,14 @@
-//     $Id: cdrom.h,v 1.2 1999-11-16 03:41:14 tmwilson Exp $
+//     $Id: cdrom.h,v 1.3 2000-04-27 16:25:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:14  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -46,7 +54,7 @@
 
      struct tgetdevheader {
                      byte         controlblockcode; 
-                     pointer      adress; 
+                     void*      adress; 
                   } ;
 
      struct tioctlo { 
@@ -186,7 +194,7 @@ class tcdrom {
       tcdrom(void);
       ~tcdrom(void);
 
-      pointer getdevheaderadress(void);
+      void* getdevheaderadress(void);
       boolean testcdromavailable(void);
       byte geterror( void );
       byte checkerror( void );

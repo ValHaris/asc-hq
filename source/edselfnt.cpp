@@ -1,6 +1,10 @@
-//     $Id: edselfnt.cpp,v 1.4 2000-03-29 09:58:45 mbickel Exp $
+//     $Id: edselfnt.cpp,v 1.5 2000-04-27 16:25:22 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/03/29 09:58:45  mbickel
+//      Improved memory handling for DOS version
+//      Many small changes I can't remember ;-)
+//
 //     Revision 1.3  1999/12/27 12:59:59  mbickel
 //      new vehicle function: each weapon can now be set to not attack certain
 //                            vehicles
@@ -34,7 +38,7 @@
     Boston, MA  02111-1307  USA
 */
 
-#include "edmisc.h";
+#include "edmisc.h"
 #include "flview.h"
 #include "edselfnt.h"
 #include "edglobal.h"
@@ -492,6 +496,7 @@ class SelectVehicleType : public SelectAnything< pvehicletype > {
                        virtual void showiteminfos ( pvehicletype item, int x1, int y1, int x2, int y2 );
 };
 
+
 int SelectVehicleType :: isavailable ( pvehicletype item )
 {
    /*
@@ -501,14 +506,7 @@ int SelectVehicleType :: isavailable ( pvehicletype item )
    }
    */
 
-   if ( unitSet.set.getlength() >= 0 ) {
-      for ( int i = 0; i <= unitSet.set.getlength(); i++ )
-         for ( int j = 0; j <= unitSet.set[i].ids.getlength(); j++ )
-            if ( item->id >= unitSet.set[i].ids[j].from && 
-                 item->id <= unitSet.set[i].ids[j].to )
-                 return unitSet.set[i].active;
-   }
-   return 1;  
+   return isUnitNotFiltered ( item->id );  
 }
 
 

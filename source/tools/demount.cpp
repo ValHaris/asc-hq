@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <malloc.h>
 
-#include "..\sgstream.h"
+#include "..\basestrm.h"
 
 int main(int argc, char *argv[] )
 {

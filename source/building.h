@@ -1,6 +1,10 @@
-//     $Id: building.h,v 1.7 2000-01-02 19:47:05 mbickel Exp $
+//     $Id: building.h,v 1.8 2000-04-27 16:25:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2000/01/02 19:47:05  mbickel
+//      Continued Linux port
+//      Fixed crash at program exit
+//
 //     Revision 1.6  1999/12/30 20:30:23  mbickel
 //      Improved Linux port again.
 //
@@ -127,7 +131,7 @@ class    ccontainercontrols {
                
                virtual char   getactplayer (void) = 0;
 
-               virtual int    movement ( pvehicle eht, int mode = 0 ) = 0;
+               virtual VehicleMovement*    movement ( pvehicle eht, int mode = 0 ) = 0;
                virtual int    moveavail ( pvehicle eht ) = 0;
 
 
@@ -245,7 +249,7 @@ class    cbuildingcontrols : public virtual ccontainercontrols {
 
 
                void  removevehicle ( pvehicle *peht );
-               int    movement ( pvehicle eht,  int mode = 0 );
+               VehicleMovement*  movement ( pvehicle eht,  int mode = 0 );
                int    moveavail ( pvehicle eht );
 
                pvehicle getloadedunit (int num);
@@ -288,7 +292,7 @@ class    ctransportcontrols : public virtual ccontainercontrols {
 
 
                void  removevehicle ( pvehicle *peht );
-               int    movement ( pvehicle eht,  int mode = 0 );
+               VehicleMovement* movement ( pvehicle eht,  int mode = 0 );
                int    moveavail ( pvehicle eht );
 
                pvehicle getloadedunit (int num);
@@ -766,8 +770,9 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
                              void setnewpower ( int pwr );
                              void displayvariables ( void );
                              void paintobj ( int num, int stat );
+                             void dispresources ( tresources* res, int ypos, int sign );
 
-                             int materialcolor, fuelcolor;
+                             int resourcecolor[3];
                              int power;
                              int gx1, gy1, gx2, gy2;
                            public: 
@@ -877,11 +882,12 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
                class  cminingstation_subwindow : public cbuildingsubwindow {
                            protected:
                              static int allbuildings;
-                             int mode;          // 1: material; 2 : fuel
                              int extraction;    // 1024 ist maximale Production
                              void checkformouse ( void );
                              int gx1, gy1, gx2, gy2;
                              int materialcolor, energycolor, fuelcolor;
+                             int resourcecolor[3];
+                             void dispresources ( tresources* res, int ypos, int sign );
 
                            public: 
                              tmininginfo* mininginfo;
@@ -893,6 +899,28 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
                              void setnewextraction ( int res );
                              void paintobj ( int num, int stat );
                              ~cminingstation_subwindow();
+               };
+               class  cmineralresources_subwindow : public cbuildingsubwindow {
+                           protected:
+                             static int allbuildings;
+                             int extraction;    // 1024 ist maximale Production
+                             void checkformouse ( void );
+                             int gx1, gy1, gx2, gy2;
+                             int hx1, hy1, hx2, hy2;
+                             int materialcolor, energycolor, fuelcolor;
+                             int resourcecolor[3];
+                             void dispresources ( tresources* res, int ypos, int sign );
+
+                           public: 
+                             tmininginfo* mininginfo;
+                             cmineralresources_subwindow ( void );
+                             int  subwin_available ( void );
+                             void display ( void ) ;
+                             void displayvariables ( void );
+                             void checkforkey ( tkey taste );
+                             void setnewextraction ( int res );
+                             void paintobj ( int num, int stat );
+                             ~cmineralresources_subwindow();
                };
                class cammunitiontransferb_subwindow : public cammunitiontransfer_subwindow {
                           protected:
@@ -927,6 +955,7 @@ class    ccontainer_b : public cbuildingcontrols , public ccontainer {
                     cresourceinfo_subwindow               resourceinfo_subwindow;
                     cresearch_subwindow                   research_subwindow;
                     cminingstation_subwindow              miningstation_subwindow;
+                    cmineralresources_subwindow           mineralresources_subwindow;
                } subwindows;
 
 

@@ -1,6 +1,15 @@
-//     $Id: building.cpp,v 1.16 2000-01-25 19:28:07 mbickel Exp $
+//     $Id: building.cpp,v 1.17 2000-04-27 16:25:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/01/25 19:28:07  mbickel
+//      Fixed bugs:
+//        invalid mouse buttons reported when moving the mouse
+//        missing service weapon in weapon information
+//        invalid text displayed in ammo production
+//        undamaged units selected in repair vehicle function
+//
+//      speed up when playing weapon sound
+//
 //     Revision 1.15  2000/01/24 17:35:39  mbickel
 //      Added dummy routines for sound under DOS
 //      Cleaned up weapon specification
@@ -112,6 +121,7 @@
 #include "stack.h"
 #include "gamedlg.h"
 #include "basestrm.h"
+#include "unitctrl.h"
 #ifdef _DOS_
 #include <conio.h>
 #endif
@@ -696,10 +706,11 @@ int   cbuildingcontrols :: getspecfunc ( tcontainermode mode )
 };
 
 
-int   cbuildingcontrols :: movement (  pvehicle eht, int mode )
+VehicleMovement*   cbuildingcontrols :: movement (  pvehicle eht, int mode )
 {
    if ( eht->movement < minmalq )
-      return 0;
+      return NULL;
+
    movementparams.height   = eht->height;
    movementparams.movement = eht->movement;
    movementparams.attacked = eht->attacked;
@@ -713,16 +724,24 @@ int   cbuildingcontrols :: movement (  pvehicle eht, int mode )
    if ( ma == 3 ) 
       eht->attacked = 1;
 
-   if ( ma  >= 2 )
-     ::movement( eht, unitheight );
+   if ( ma < 2 )
+      return 0;
 
+   VehicleMovement* vehicleMovement = new VehicleMovement ( &defaultMapDisplay, NULL );
+   int res = vehicleMovement->execute ( eht, -1, -1, 0, unitheight, -1 );
+/*
+   if ( ma  >= 2 ) 
+     ::movement( eht, unitheight );
+*/
 
    int check = 0;
    int orgheight = eht->height;
    int orgmove = eht->movement;
 
    int perc = eht->movement * 1024 / eht->typ->movement[log2 ( eht->height ) ];
-   while ( moveparams.movestatus == 0  && check < 2) {
+
+   // if the unit could not move, trying to increase and decrease its height
+   while ( vehicleMovement->getStatus() <= 0   && check < 2) {
       if ( check == 0 ) {
          int h = eht->height << 1;
          if ( eht->typ->height & h ) {
@@ -731,9 +750,11 @@ int   cbuildingcontrols :: movement (  pvehicle eht, int mode )
             ma = moveavail ( eht );
             if ( ma == 3 ) 
                eht->attacked = 1;
+           /*
             if ( ma >= 2 ) 
                ::movement( eht, unitheight );
-            
+           */
+           res = vehicleMovement->execute ( eht, -1, -1, 0, unitheight, -1 );
          } else
             check = 1;
 
@@ -746,8 +767,11 @@ int   cbuildingcontrols :: movement (  pvehicle eht, int mode )
             ma = moveavail ( eht );
             if ( ma == 3 ) 
                eht->attacked = 1;
+           /*
             if ( ma >= 2 ) 
                ::movement( eht, unitheight );
+            */
+           res = vehicleMovement->execute ( eht, -1, -1, 0, unitheight, -1 );
             
          } else
             check = 2;
@@ -755,12 +779,13 @@ int   cbuildingcontrols :: movement (  pvehicle eht, int mode )
       }
 
    }
-   if ( moveparams.movestatus == 0 ) {
+   if ( vehicleMovement->getStatus() <= 0 ) {
      eht->height = orgheight;
      eht->movement = orgmove;
-   }
-
-   return moveparams.movestatus != 0;
+     delete vehicleMovement;
+     return NULL;
+   } else
+     return vehicleMovement;
 }
 
 int   cbuildingcontrols :: moveavail ( pvehicle eht )
@@ -1049,7 +1074,7 @@ pvehicle cbuildingcontrols :: cproduceunit :: produce_hypothetically (pvehiclety
 
 int   cbuildingcontrols :: ctrainunit :: available ( pvehicle eht )
 {
-   if ( actmap->gameparameter[cgp_bi3_training] )
+   if ( actmap->getgameparameter( cgp_bi3_training ) )
       return 0;
 
    if ( eht->experience <= maxunitexperience - trainingexperienceincrease )  
@@ -1349,10 +1374,10 @@ int   ctransportcontrols :: moveavail ( pvehicle eht )
 }
 
 
-int   ctransportcontrols :: movement (  pvehicle eht, int mode )
+VehicleMovement*  ctransportcontrols :: movement (  pvehicle eht, int mode )
 {
    if ( eht->movement < minmalq )
-      return 0;
+      return NULL;
 
    movementparams.height   = eht->height;
    movementparams.movement = eht->movement;
@@ -1366,9 +1391,15 @@ int   ctransportcontrols :: movement (  pvehicle eht, int mode )
    int ma = moveavail( eht );
    if ( ma == 3 ) 
       eht->attacked = 1;
-   if (  ma >= 2 )
-      ::movement( eht, unitheight );
-   else {
+
+   VehicleMovement* vehicleMovement = new VehicleMovement ( &defaultMapDisplay, NULL );
+   if (  ma >= 2 ) {
+      vehicleMovement->execute ( eht, -1, -1, 0, unitheight, -1 );
+      if ( vehicleMovement->getStatus () <= 0 ) {
+         delete vehicleMovement;
+         return NULL;
+      }
+   } else {
       if ( ma == 1 ) {
          if ( ( eht->height << 1 ) & vehicle->typ->loadcapability ) {
              eht->height <<=1;
@@ -1377,20 +1408,23 @@ int   ctransportcontrols :: movement (  pvehicle eht, int mode )
               else
                 eht->movement = maxmalq * 3 / 2;
 
-             ::movement( eht, unitheight );
-             if ( moveparams.movestatus == 0 ) {
+             vehicleMovement->execute ( eht, -1, -1, 0, unitheight, -1 );
+             if ( vehicleMovement->getStatus() <= 0 ) {
                 eht->height   = movementparams.height;
                 eht->movement = movementparams.movement;
                 eht->attacked = movementparams.attacked;
+                delete vehicleMovement;
+                return NULL;
              }
          }
 
-      } else 
-          return 0;
-
+      } else {
+         delete vehicleMovement;
+         return NULL;
+      }
    }
 
-   return moveparams.movestatus !=0;
+   return vehicleMovement;
 }
 
 
@@ -2043,7 +2077,7 @@ void  ccontainer :: cammunitiontransfer_subwindow :: reset ( pvehicle veh )
          }
       } /* endfor */
       if ( eht->typ->material ) {
-            weaps[num].name = cdnames [ 1 ];
+            weaps[num].name = resourceNames [ 1 ];
             weaps[num].maxnum = eht->typ->material;
             weaps[num].orgnum = eht->material;
             weaps[num].actnum = weaps[num].orgnum;
@@ -2053,7 +2087,7 @@ void  ccontainer :: cammunitiontransfer_subwindow :: reset ( pvehicle veh )
             num++;
       }
       if ( eht->typ->tank ) {
-            weaps[num].name = cdnames [ 2 ];
+            weaps[num].name = resourceNames [ 2 ];
             weaps[num].maxnum = eht->typ->tank;
             weaps[num].orgnum = eht->fuel;
             weaps[num].actnum = weaps[num].orgnum;
@@ -2450,9 +2484,8 @@ int   ccontainer :: moveicon_c :: available    ( void )
 
 void  ccontainer :: moveicon_c :: exec         ( void ) 
 {
-    int stat = main->movement ( main->getmarkedunit() ); 
-
-    if ( stat ) {
+    VehicleMovement* vehicleMovement = main->movement ( main->getmarkedunit() ); 
+    if ( vehicleMovement ) {
        int ms = getmousestatus();
        if (ms == 2) 
           mousevisible(false); 
@@ -2464,7 +2497,11 @@ void  ccontainer :: moveicon_c :: exec         ( void )
        int cursorx = cursor.posx;
        int cursory = cursor.posy;
 
-       displaymap ();
+       vehicleMovement->registerPVA ( vat_move, &pendingVehicleActions );
+       for ( int i = 0; i < vehicleMovement->reachableFields.getFieldNum(); i++ ) 
+          vehicleMovement->reachableFields.getField( i ) ->a.temp = 1;
+       displaymap();
+
        dashboard.x = 0xffff;
        mousevisible( true );
        addmouseproc ( &mousescrollproc );
@@ -2478,7 +2515,7 @@ void  ccontainer :: moveicon_c :: exec         ( void )
    
            mainloopgeneralmousecheck ();
    
-       } while ( moveparams.movestatus) ;
+       } while ( pendingVehicleActions.actionType == vat_move ) ;
        removemouseproc ( &mousescrollproc );
        if ( mouseparams.pictpointer != icons.mousepointer ) 
           setnewmousepointer ( icons.mousepointer, 0,0 );
@@ -2501,6 +2538,9 @@ void  ccontainer :: moveicon_c :: exec         ( void )
            eht->movement = main->movementparams.movement;
            eht->attacked = main->movementparams.attacked;
        }
+
+       if ( pendingVehicleActions.move )
+          delete pendingVehicleActions.move;
 
        if (ms == 2) 
           mousevisible(true); 
@@ -3359,7 +3399,7 @@ ccontainer_b :: crepairbuilding_subwindow :: crepairbuilding_subwindow ( void )
                                                           { 26 + subwinx1 , 71 + subwiny1 ,  92 + subwinx1, 81 + subwiny1, 20104 },
                                                           { 26 + subwinx1 , 83 + subwiny1 ,  92 + subwinx1, 93 + subwiny1, 20105 },
                                                           { 26 + subwinx1 , 95 + subwiny1 ,  92 + subwinx1,105 + subwiny1, 20106 },
-                                                          {113 + subwinx1 , 71 + subwiny1 , 153 + subwinx1, 81 + subwiny1, 20107 },
+                                                          {113 + subwinx1 , 71 + subwiny1 , 165 + subwinx1, 81 + subwiny1, 20107 },
                                                           {277 + subwinx1 , 22 + subwiny1 , 297 + subwinx1,108 + subwiny1, 20108 },
                                                           {308 + subwinx1 , 22 + subwiny1 , 328 + subwinx1,108 + subwiny1, 20109 }};
 
@@ -3696,8 +3736,20 @@ ccontainer_b :: cconventionelpowerplant_subwindow :: cconventionelpowerplant_sub
    laschpic1 = icons.container.lasche.a.powerplant[0];
    laschpic2 = icons.container.lasche.a.powerplant[1];
 
-   materialcolor = 232;
-   fuelcolor = 125;
+   helplist.num = 5;
+
+   static tonlinehelpitem powerplanthelpitems[5]   = {{ 11 + subwinx1 , 48 + subwiny1 , 164 + subwinx1, 58 + subwiny1, 20120 },
+                                                          { 11 + subwinx1 , 61 + subwiny1 , 164 + subwinx1, 71 + subwiny1, 20121 },
+                                                          { 11 + subwinx1 , 74 + subwiny1 , 164 + subwinx1, 84 + subwiny1, 20122 },
+                                                          { 11 + subwinx1 , 87 + subwiny1 , 164 + subwinx1, 97 + subwiny1, 20123 },
+                                                          { 178+ subwinx1 , 23 + subwiny1 , 343 + subwinx1, 108 + subwiny1, 20125 }};
+
+   helplist.item = powerplanthelpitems;
+
+
+   resourcecolor[0] = 16+4;
+   resourcecolor[1] = 232;
+   resourcecolor[2] = 27; // 125;
    objcoordinates[0].x1 = subwinx1 + 316;
    objcoordinates[0].y1 = subwiny1 +   3;
    objcoordinates[0].x2 = subwinx1 + 343;
@@ -3738,6 +3790,12 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: display ( void )
    activefontsettings.length = 0;
    activefontsettings.justify = lefttext;
    activefontsettings.height = 0;
+   showtext2c ( "max plus",     subwinx1 + 12, subwiny1 + 56 -7);
+   showtext2c ( "max usage",     subwinx1 + 12, subwiny1 + 69 -7);
+   showtext2c ( "plus",     subwinx1 + 12, subwiny1 + 82 -7);
+   showtext2c ( "usage",     subwinx1 + 12, subwiny1 + 95 -7);
+
+
 /*   showtext2c ( "energy plus:", subwinx1 + 8, subwiny1 + 25 );
 
    showtext2c ( "fuel     cost:",     subwinx1 + 8, subwiny1 + 43 );
@@ -3746,7 +3804,7 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: display ( void )
 //   showtext2c ( "avail in:",        subwinx1 + 8, subwiny1 + 79 );
 
 //   showtext2 ( "act. technology:", subwinx1 + 195, subwiny1 + 4 );
-   showtext2c ( "change all buildings:",subwinx1+179,subwiny1 + 5 );
+//   showtext2c ( "change all buildings:",subwinx1+179,subwiny1 + 5 );
 
 
 
@@ -3781,24 +3839,46 @@ void ccontainer_b :: cconventionelpowerplant_subwindow :: setnewpower ( int pwr 
    line( x, gy1, x, gy2-1, cl );
 
    power = pwr;
+   if ( power > 1024 )
+      power = 1024;
 
    if ( allbuildings ) {
       pbuilding bld = actmap->player[actmap->actplayer].firstbuilding;
       while ( bld ) {
-         if ( bld->typ->special & cgconventionelpowerplantb ) {
-            bld->plus.a.energy = bld->maxplus.a.energy * power/1024;
-            if ( bld->plus.a.energy  > bld->maxplus.a.energy )
-               bld->plus.a.energy = bld->maxplus.a.energy;
-          }
+         if ( bld->typ->special & cgconventionelpowerplantb ) 
+            for ( int r = 0; r < 3; r++ ) 
+               bld->plus.resource[r] = bld->maxplus.resource[r] * power/1024;
+          
           bld=bld->next;
       }
    } else {
       pbuilding bld = cc_b->building;
-      bld->plus.a.energy = bld->maxplus.a.energy * power/1024;
-      if ( bld->plus.a.energy  > bld->maxplus.a.energy )
-         bld->plus.a.energy = bld->maxplus.a.energy;
+      for ( int r = 0; r < 3; r++ ) 
+         bld->plus.resource[r] = bld->maxplus.resource[r] * power/1024;
    }
 
+}
+
+void  ccontainer_b :: cconventionelpowerplant_subwindow :: dispresources ( tresources* res, int ypos, int sign )
+{
+   npush ( activefontsettings );
+   activefontsettings.font = schriften.monogui;
+   activefontsettings.length = 29;
+   activefontsettings.justify = righttext;
+   activefontsettings.height = 0;
+   activefontsettings.background = bkgrdarkcol;
+
+   char buf[100];
+
+   int r;
+   for ( r = 0; r < 3; r++ )
+      if( res->resource[r] * sign > 0 ) {
+         activefontsettings.color = resourcecolor[r];
+         showtext2 ( int2string ( res->resource[r] * sign, buf ), subwinx1 + 68 + r * 33, subwiny1 + 48 + ypos * 13 );
+      } else
+         bar ( subwinx1 + 68 + r * 33, subwiny1 + 48 + ypos * 13, subwinx1 + 68 + r * 33 + activefontsettings.length, subwiny1 + 48 + ypos * 13 + activefontsettings.font->height - 1, activefontsettings.background );
+
+   npop ( activefontsettings );
 }
 
 void  ccontainer_b :: cconventionelpowerplant_subwindow :: displayvariables ( void )
@@ -3808,51 +3888,37 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: displayvariables ( vo
    npush ( activefontsettings );
    activefontsettings.color = white;
    activefontsettings.font = schriften.guifont;
-   activefontsettings.length = 51;
+   activefontsettings.length = 30;
    activefontsettings.justify = righttext;
    activefontsettings.height = 0;
    activefontsettings.background = 201;
 
-   int fuel;
-   int material;
-   returnresourcenuseforpowerplant ( cc_b->building, cc_b->building->plus.a.energy, &material, &fuel );
-
-   showtext2c ( strrr( cc_b->building->plus.a.energy ), subwinx1 + 63, subwiny1 + 25 );
-
-   showtext2c ( strrr( material ), subwinx1 +  63, subwiny1 + 43 );
-   showtext2c ( strrr( fuel ), subwinx1 +  63, subwiny1 + 61 );
-
-   activefontsettings.length = 25;
-   int em,ef;
-   getpowerplantefficiency ( cc_b->building, &em, &ef );
-
-   showtext2c ( strrr( em ), subwinx1 + 120, subwiny1 + 81 );
-   showtext2c ( strrr( ef ), subwinx1 + 120, subwiny1 + 99 );
+   dispresources ( &cc_b->building->maxplus, 0, 1 );
+   dispresources ( &cc_b->building->maxplus, 1, -1 );
+   dispresources ( &cc_b->building->plus, 2, 1 );
 
 
-   activefontsettings.justify = centertext;
-   activefontsettings.length = 22;
-   activefontsettings.background = 255;
+   tresources usage;
+   returnresourcenuseforpowerplant ( cc_b->building, 100,  &usage, 0 );
 
-   paintobj ( 0,0 );
+   dispresources ( &usage, 3, 1 );
 
+   int max = 0;
+   for ( int r = 0; r < 3; r++ )
+      if ( abs ( cc_b->building->maxplus.resource[r] ) > max )
+         max = abs ( cc_b->building->maxplus.resource[r] );
 
-   returnresourcenuseforpowerplant ( cc_b->building, cc_b->building->maxplus.a.energy, &material, &fuel );
-   int max;
-   if ( fuel > material )
-      max = fuel * 17/16;
-   else
-      max = material * 17/16;
+   max = max * 17 / 16;
 
    int dist = gx2-gx1;
    for (x = dist; x >0 ; x--) {
-       int res = cc_b->building->maxplus.a.energy * x / dist;
-       returnresourcenuseforpowerplant ( cc_b->building, res, &material, &fuel );
+       // returnresourcenuseforpowerplant ( cc_b->building, 100 * x / dist, &usage, 1 );
 
-       if ( max ) {
-          putpixel ( gx1 + x, gy2 - ( gy2-gy1 ) * fuel / max, fuelcolor );
-          putpixel ( gx1 + x, gy2 - ( gy2-gy1 ) * material / max, materialcolor );
-       }
+       if ( max ) 
+          for ( int r = 0; r < 3; r++ )
+             if ( cc_b->building->maxplus.resource[r] != 0 )
+                if ( !(x % 3) || cc_b->building->maxplus.resource[r] >= 0 )
+                   putpixel ( gx1 + x, gy2 - ( gy2-gy1 ) * abs ( cc_b->building->maxplus.resource[r] * x / dist ) / max, resourcecolor[r] );
 
    } /* endfor */
    x = gx1 + ( gx2 - gx1 ) * power / 1024;
@@ -3909,7 +3975,7 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: paintobj ( int num, i
      activefontsettings.justify = centertext;
      activefontsettings.length = 22;
      activefontsettings.background = 255;
-
+/*
      if ( stat == 0 ) {
         putimage ( objcoordinates[0].x1, objcoordinates[0].y1, icons.container.subwin.conventionelpowerplant.button[0] );
         if ( allbuildings ) 
@@ -3923,7 +3989,7 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: paintobj ( int num, i
         else 
            showtext2c ( "no",  subwinx1+319, subwiny1 +  6 );
      }
-
+*/
      getinvisiblemouserectanglestk ( );
   }
 }
@@ -3931,6 +3997,7 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: paintobj ( int num, i
 
 void  ccontainer_b :: cconventionelpowerplant_subwindow :: checkforkey ( tkey taste )
 {
+   /*
   if ( taste == ct_space  ||  taste == ct_a ) {
      allbuildings = !allbuildings;
      setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
@@ -3938,6 +4005,7 @@ void  ccontainer_b :: cconventionelpowerplant_subwindow :: checkforkey ( tkey ta
      displayvariables();
      getinvisiblemouserectanglestk ( );
   }
+  */
   int keyspeed = 50;
   if ( (taste == ct_left || taste==ct_4k) && power > 0 ) {
      setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
@@ -3997,14 +4065,19 @@ void  ccontainer_b :: cwindpowerplant_subwindow :: display ( void )
    activefontsettings.justify = lefttext;
    activefontsettings.background = 201;
    activefontsettings.font = schriften.guifont;
-   showtext2c ( " act power : ", subwinx1 + 9, subwiny1 + 38 );
+   showtext2c ( " current power : ", subwinx1 + 9, subwiny1 + 38 );
    showtext2c ( " power storable: ", subwinx1 + 9, subwiny1 + 62 );
    showtext2c ( " max power : ", subwinx1 + 9, subwiny1 + 86 );
 
    activefontsettings.length = 53;
    activefontsettings.justify = righttext;
-   int prod = cc_b->building->getenergyplus( -2 );
-   int storable = cc_b->building->getenergyplus( -1 );
+
+   tresources plus;
+   cc_b->building->getresourceplus( -2, &plus, 1 );
+   int prod = plus.a.energy;
+   cc_b->building->getresourceplus( -1, &plus, 1 );
+   int storable = plus.a.energy;
+
    showtext2c ( strrr ( prod ), subwinx1 + 117, subwiny1 + 38 );
 
    char buf[100];
@@ -4078,14 +4151,19 @@ void  ccontainer_b :: csolarpowerplant_subwindow :: display ( void )
    activefontsettings.justify = lefttext;
    activefontsettings.background = 201;
    activefontsettings.font = schriften.guifont;
-   showtext2c ( " act power : ", subwinx1 + 9, subwiny1 + 38 );
+   showtext2c ( " current power : ", subwinx1 + 9, subwiny1 + 38 );
    showtext2c ( " power storable: ", subwinx1 + 9, subwiny1 + 62 );
    showtext2c ( " max power : ", subwinx1 + 9, subwiny1 + 86 );
 
    activefontsettings.length = 53;
    activefontsettings.justify = righttext;
-   int prod = cc_b->building->getenergyplus( -2 );
-   int storable = cc_b->building->getenergyplus( -1 );
+
+   tresources plus;
+   cc_b->building->getresourceplus( -2, &plus, 1 );
+   int prod = plus.a.energy;
+   cc_b->building->getresourceplus( -1, &plus, 1 );
+   int storable = plus.a.energy;
+
    showtext2c ( strrr ( prod ), subwinx1 + 117, subwiny1 + 38 );
 
    char buf[100];
@@ -4530,95 +4608,6 @@ void  ccontainer_b :: cresourceinfo_subwindow :: display ( void )
                                                                 // frher X         frher: mode
 int  ccontainer_b :: cresourceinfo_subwindow :: getvalue ( int resourcetype, int y, int scope )
 {
-   /*
-   if ( mode == 0 ) {
-      switch ( y ) {
-      case 0: if ( x == 0 )
-                 return cc_b->building->actstorage.energy;
-              if ( x == 1 )
-                 return cc_b->building->actstorage.material;
-              if ( x == 2 )
-                 return cc_b->building->actstorage.fuel;
-         break;
-      case 1: return cc_b->building->typ->gettank(x);
-      case 2: if ( x == 0 )
-                 return cc_b->building->getenergyplus ( -2 );
-              if ( x == 1 )
-                 return cc_b->building->getmaterialplus ( -2 );
-              if ( x == 2 )
-                 return cc_b->building->getfuelplus ( -2 );
-         break;
-      case 3: {
-                 tresources res;
-                 cc_b->building->getresourceusage ( &res );
-                 return res.resource[x];
-              }
-      } 
-   }
-   if ( mode == 1 ) {
-      switch ( y ) {
-         case 0: return cc_b->building->get_energy ( maxint, x );
-         case 1: {  // tank
-                    GetResourceCapacity grc;
-                    return grc.getresource ( 
-                   return cc_b->building->getenergy ( maxint, x+64 );      
-         case 2: {  // plus
-                    return cc_b->building->getenergy ( maxint, x+16 );      
-         case 3: {  // usage
-                     return cc_b->building->getenergy ( maxint, x+32 );      
-      } 
-   }
-   if ( mode == 2 ) {
-      if ( recalc ) {
-         memset ( &resource, 0, sizeof( resource ));
-         pbuilding bld = actmap->player[actmap->actplayer].firstbuilding;
-         while ( bld ) {
-           comment on
-            resource.avail.energy += bld->energy;
-            resource.avail.material += bld->material;
-            resource.avail.fuel += bld->sprit;
-
-            resource.tank.energy += bld->typ->energytank;
-            resource.tank.material += bld->typ->materialtank;
-            resource.tank.fuel += bld->typ->fueltank;
-
-            resource.plus.a.energy   += bld->plus.a.energy;
-            resource.plus.a.material += bld->plus.a.material;
-            resource.plus.a.fuel     += bld->plus.a.fuel;
-           comment off 
-
-            resource.r[0][0] += bld->actstorage.energy;
-            resource.r[0][1] += bld->actstorage.material;
-            resource.r[0][2] += bld->actstorage.fuel;
-
-            resource.r[1][0] += bld->typ->gettank(0);
-            resource.r[1][1] += bld->typ->gettank(1);
-            resource.r[1][2] += bld->typ->gettank(2);
-
-            resource.r[2][0] += bld->getenergyplus ( -2 );
-            resource.r[2][1] += bld->getmaterialplus ( -2 );
-            resource.r[2][2] += bld->getfuelplus ( -2 );
-
-            tresources res;
-            bld->getresourceusage ( &res );
-            resource.r[3][0] += res.resource[0];
-            resource.r[3][1] += res.resource[1];
-            resource.r[3][2] += res.resource[2];
-
-            for ( int i = 0; i < 4; i++ )
-               for ( int j = 0; j < 3; j++ )
-                  if ( resource.r[i][j] < 0 )
-                     resource.r[i][j] = maxint;
-
-            bld = bld->next;
-         }
-         recalc = 0;
-      }
-      return resource.r[y][x];
-   }
-   return 0;
-   */
-
   switch ( y ) {
          case 0: {  // avail 
                         GetResource gr;
@@ -5022,34 +5011,31 @@ ccontainer_b :: cminingstation_subwindow :: cminingstation_subwindow ( void )
    objcoordinates[0].type = 17;
    mininginfo = NULL;
 
+   resourcecolor[0] = 16+4;
+   resourcecolor[1] = 232;
+   resourcecolor[2] = 27; // 125;
 
 
-   helplist.num =  5;
 
-   static tonlinehelpitem miningstationhelpitems[ 5]   = {{ 37 + subwinx1 , 23 + subwiny1 , 119 + subwinx1, 35 + subwiny1, 20120 },
-                                                          { 37 + subwinx1 , 41 + subwiny1 , 119 + subwinx1, 53 + subwiny1, 20121 },
-                                                          { 37 + subwinx1 , 59 + subwiny1 , 119 + subwinx1, 71 + subwiny1, 20122 },
-                                                          { 37 + subwinx1 , 77 + subwiny1 , 119 + subwinx1, 89 + subwiny1, 20123 },
-                                                          {178 + subwinx1 , 23 + subwiny1 , 344 + subwinx1,108 + subwiny1, 20124 }};
+   helplist.num =  6;
+
+   static tonlinehelpitem miningstationhelpitems[ 6]   = {{ 14 + subwinx1 , 41 + subwiny1 , 167 + subwinx1, 51 + subwiny1, 20120 },
+                                                          { 14 + subwinx1 , 54 + subwiny1 , 167 + subwinx1, 64 + subwiny1, 20121 },
+                                                          { 14 + subwinx1 , 67 + subwiny1 , 167 + subwinx1, 77 + subwiny1, 20122 },
+                                                          { 14 + subwinx1 , 80 + subwiny1 , 167 + subwinx1, 90 + subwiny1, 20123 },
+                                                          { 14 + subwinx1 , 93 + subwiny1 , 167 + subwinx1, 103 + subwiny1, 20124 },
+                                                          { 178+ subwinx1 , 23 + subwiny1 , 343 + subwinx1, 108 + subwiny1, 20125 }};
+                                                          
 
    helplist.item = miningstationhelpitems;
-
-
-
 }
 
 int  ccontainer_b :: cminingstation_subwindow :: subwin_available ( void )
 {
 
-   mode = 0;
-   if ( hostcontainer->getspecfunc ( mbuilding ) & cgminingstationb )  {
-      if ( hostcontainer->getspecfunc ( mbuilding ) & cgmaterialproductionb )
-         mode = 1;
-      if ( hostcontainer->getspecfunc ( mbuilding ) & cgfuelproductionb )
-         mode = 2;
-      if ( mode )
-         cbuildingsubwindow :: subwin_available ( );
-   }
+   if ( hostcontainer->getspecfunc ( mbuilding ) & cgminingstationb )  
+      cbuildingsubwindow :: subwin_available ( );
+   
 
    if ( next )
       next->subwin_available ();
@@ -5057,20 +5043,38 @@ int  ccontainer_b :: cminingstation_subwindow :: subwin_available ( void )
    return 0;
 }
 
+void  ccontainer_b :: cminingstation_subwindow :: dispresources ( tresources* res, int ypos, int sign )
+{
+   npush ( activefontsettings );
+   activefontsettings.font = schriften.monogui;
+   activefontsettings.length = 29;
+   activefontsettings.justify = righttext;
+   activefontsettings.height = 0;
+   activefontsettings.background = bkgrdarkcol;
+
+   char buf[100];
+
+   int r;
+   for ( r = 0; r < 3; r++ )
+      if( res->resource[r] * sign > 0 ) {
+         activefontsettings.color = resourcecolor[r];
+         showtext2 ( int2string ( res->resource[r] * sign, buf ), subwinx1 + 71 + r * 33, subwiny1 + 41 + ypos * 13 );
+      } else
+         bar ( subwinx1 + 71 + r * 33, subwiny1 + 41 + ypos * 13, subwinx1 + 71 + r * 33 + activefontsettings.length, subwiny1 + 41 + ypos * 13 + activefontsettings.font->height - 1, activefontsettings.background );
+
+   npop ( activefontsettings );
+}
+
+
 void  ccontainer_b :: cminingstation_subwindow :: display ( void )
 {
-
-   if ( mode == 1 ) {
-      if ( cc_b->building->maxplus.a.material )
-         extraction = 1024 * cc_b->building->plus.a.material / cc_b->building->maxplus.a.material;
-      else
-         extraction = 0;
-   } else {
-      if ( cc_b->building->maxplus.a.fuel )
+   extraction = 0;
+   if ( cc_b->building->maxplus.a.material > 0 )
+      extraction = 1024 * cc_b->building->plus.a.material / cc_b->building->maxplus.a.material;
+   else
+      if ( cc_b->building->maxplus.a.fuel > 0 )
          extraction = 1024 * cc_b->building->plus.a.fuel / cc_b->building->maxplus.a.fuel;
-      else
-         extraction = 0;
-   }
+
 
    setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
    collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
@@ -5081,24 +5085,16 @@ void  ccontainer_b :: cminingstation_subwindow :: display ( void )
 
    csubwindow :: display();
 
-   putimage( subwinx1 + 39, subwiny1 + 25, icons.container.subwin.miningstation.resource[2 - mode ] );
-
-/*   activefontsettings.color = white;
+   activefontsettings.color = white;
    activefontsettings.font = schriften.guifont;
-   activefontsettings.length = 0;
+   activefontsettings.length = 53;
    activefontsettings.justify = lefttext;
    activefontsettings.height = 0;
-   showtext2c ( "extraction:",      subwinx1 + 63, subwiny1 + 25 );
-
-//   showtext2c ( "energy cost:",     subwinx1 + 8, subwiny1 + 43 );
-//   showtext2c ( "material cost:",   subwinx1 + 8, subwiny1 + 61 );
-
-   showtext2c ( "distance:",        subwinx1 + 63, subwiny1 + 81 );
-
-//   showtext2 ( "act. technology:", subwinx1 + 195, subwiny1 + 4 );
-
-   showtext2c ( "change buildings:", subwinx1 + 180, subwiny1 + 5 );
-*/
+   showtext2c ( "max plus",       subwinx1 + 15, subwiny1 + 42 );
+   showtext2c ( "max usage",      subwinx1 + 15, subwiny1 + 55 );
+   showtext2c ( "plus",           subwinx1 + 15, subwiny1 + 68 );
+   showtext2c ( "usage",          subwinx1 + 15, subwiny1 + 81 );
+   showtext2c ( "efficiency",     subwinx1 + 15, subwiny1 + 94 );
 
 
    gx1 = subwinx1 + 181;
@@ -5106,34 +5102,10 @@ void  ccontainer_b :: cminingstation_subwindow :: display ( void )
    gx2 = subwinx1 + 181 + 150;
    gy2 = subwiny1 + 104;
 
-
-   activefontsettings.justify = lefttext;
-   activefontsettings.height = 0;
-   activefontsettings.background = 255;
+   displayvariables();
 
    npop ( activefontsettings );
-
-
-
-   if ( !mininginfo ) {
-
-      tgetmininginfo gmi;
-
-      gmi.run ( cc_b->building );
-
-      mininginfo = gmi.mininginfo;
-   }
-
-
-   int max = mininginfo->efficiency[0] * 11 / 10;
-   for ( int i = 0; i < maxminingrange; i++ ) {
-      int y = gy2 - ( gy2 - gy1 ) * mininginfo->efficiency[i] / max;
-      int xd = (gx2-gx1) / maxminingrange ;
-      bar ( gx1 + i * xd , y, gx1 + (i+1) * xd, gy2, 160 + 15 * mininginfo->avail[ i ].resource[ mode ] / mininginfo->max[ i ].resource[ mode ] );
-   }
-   
-   displayvariables();
-   getinvisiblemouserectanglestk();
+   getinvisiblemouserectanglestk ( );
 
 }
 
@@ -5158,24 +5130,372 @@ void ccontainer_b :: cminingstation_subwindow :: setnewextraction ( int res )
    if ( allbuildings ) {
       pbuilding bld = actmap->player[actmap->actplayer].firstbuilding;
       while ( bld ) {
-         if ( (bld->typ->special & cgminingstationb) && (( bld->typ->special & cgmaterialproductionb && mode == 1) || ( bld->typ->special & cgfuelproductionb && mode == 2))) {
-            bld->plus.resource[mode] = bld->maxplus.resource[mode] * extraction/1024;
-            if ( bld->plus.resource[mode] > bld->maxplus.resource[mode] )
-               bld->plus.resource[mode] = bld->maxplus.resource[mode];
+         if ( bld->typ->special & cgminingstationb ) {
+            for ( int r = 0; r < 3; r++ )
+               bld->plus.resource[r] = bld->maxplus.resource[r] * extraction/1024;
           }
           bld=bld->next;
       }
    } else {
       pbuilding bld = cc_b->building;
-      bld->plus.resource[mode] = bld->maxplus.resource[mode] * extraction/1024;
-      if ( bld->plus.resource[mode] > bld->maxplus.resource[mode] )
-         bld->plus.resource[mode] = bld->maxplus.resource[mode];
+      for ( int r = 0; r < 3; r++ )
+         bld->plus.resource[r] = bld->maxplus.resource[r] * extraction/1024;
    }
 }
 
 
 void  ccontainer_b :: cminingstation_subwindow :: displayvariables ( void )
 {
+  int x;
+
+
+
+   dispresources ( &cc_b->building->maxplus, 0, 1 );
+   dispresources ( &cc_b->building->maxplus, 1, -1 );
+
+   tresources plus;
+   cc_b->building->getresourceplus ( 16, &plus, 1 );
+   dispresources ( &plus, 2, 1 );
+
+   tresources usage;
+   cc_b->building->getresourceusage ( &usage );
+   dispresources ( &usage, 3, 1 );
+
+   tresources effic;
+   effic.a.energy = 0;
+   effic.a.material = cc_b->building->typ->efficiencymaterial;
+   effic.a.fuel = cc_b->building->typ->efficiencyfuel;
+   dispresources ( &effic, 4, 1 );
+
+
+   npush ( activefontsettings );
+   activefontsettings.color = white;
+   activefontsettings.font = schriften.guifont;
+   activefontsettings.length = 30;
+   activefontsettings.justify = righttext;
+   activefontsettings.height = 0;
+   activefontsettings.background = 201;
+
+   int max = 0;
+   for ( int r = 0; r < 3; r++ )
+      if ( abs ( cc_b->building->maxplus.resource[r] ) > max )
+         max = abs ( cc_b->building->maxplus.resource[r] );
+
+   max = max * 17 / 16;
+
+   int dist = gx2-gx1;
+   if ( max ) 
+      for (x = dist; x >0 ; x--) 
+          for ( int r = 0; r < 3; r++ )
+             if ( cc_b->building->maxplus.resource[r] != 0 )
+                if ( !(x % 3) || cc_b->building->maxplus.resource[r] >= 0 )
+                   putpixel ( gx1 + x, gy2 - ( gy2-gy1 ) * abs ( cc_b->building->maxplus.resource[r] * x / dist ) / max, resourcecolor[r] );
+
+   x = gx1 + ( gx2 - gx1 ) * extraction / 1024;
+
+   line( x, gy1, x, gy2-1, white );
+
+   npop ( activefontsettings );
+}
+
+
+void  ccontainer_b :: cminingstation_subwindow :: checkformouse ( void )
+{
+   if ( mouseparams.taste == 1 ) {
+      if ( mouseinrect ( gx1, gy1, gx2, gy2 ) ) {
+         int newresearch = 1024 * (mouseparams.x-gx1) / (gx2-gx1);
+         if ( newresearch < 0 )
+            newresearch = 0;
+         if ( newresearch > 1024 )
+            newresearch = 1024;
+         if ( newresearch != extraction ) {
+            setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
+
+            int x = gx1 + ( gx2 - gx1 ) * extraction/ 1024;
+
+            int cl ;
+            if ( x == gx1 )
+               cl = 247;
+            else
+               if ( x == gx1+1 )
+                  cl = 244;
+               else
+                  cl = 201;
+            line( x, gy1, x, gy2-1, cl );
+
+            setnewextraction( newresearch );
+
+            displayvariables();
+
+            getinvisiblemouserectanglestk ( );
+
+         }
+      }
+      
+      if ( objpressedbymouse(0) ) {
+         if ( allbuildings < 2 )
+            allbuildings++;
+         else
+            allbuildings = 0;
+
+         paintobj( 0, 0 );
+      }
+   }
+}
+
+void  ccontainer_b :: cminingstation_subwindow :: paintobj ( int num, int stat )
+{
+   /*
+  if ( objcoordinates[0].type == 17 ) {
+
+     setinvisiblemouserectanglestk ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
+
+     activefontsettings.font = schriften.guifont;
+     activefontsettings.height = 0;
+     activefontsettings.justify = centertext;
+     activefontsettings.length = 22;
+     activefontsettings.background = 255;
+
+     int x;
+     int y;
+     if ( stat == 0 ) {
+        putimage ( objcoordinates[0].x1, objcoordinates[0].y1, icons.container.subwin.miningstation.button[0] );
+        x = 319;
+        y =   5;
+     } else {
+        putimage ( objcoordinates[0].x1, objcoordinates[0].y1, icons.container.subwin.miningstation.button[1] );
+        x = 320;
+        y =   6;
+     }
+
+     if ( allbuildings == 0 ) 
+        showtext2c ( "all", subwinx1+x, subwiny1 + y );
+     else 
+        if ( allbuildings == 1 )
+           if ( mode == 1 )
+              showtext2c ( "mat.", subwinx1+x, subwiny1 + y );
+           else
+              showtext2c ( "fuel", subwinx1+x, subwiny1 + y );
+        else
+           showtext2c ( "this", subwinx1+x, subwiny1 + y );
+
+     getinvisiblemouserectanglestk ( );
+  }
+  */
+}
+
+
+void  ccontainer_b :: cminingstation_subwindow :: checkforkey ( tkey taste )
+{
+   /*
+  if ( taste == ct_space  ||  taste == ct_a ) {
+     if ( allbuildings < 2 )
+        allbuildings++;
+     else
+        allbuildings = 0;
+
+     paintobj( 0, 0 );
+  } */
+  
+  int keyspeed = 50;
+  if ( (taste == ct_left || taste==ct_4k)  && extraction > 0 ) {
+     setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
+     if ( extraction > keyspeed )
+        setnewextraction ( extraction - keyspeed );
+     else
+        setnewextraction ( 0 );
+
+     displayvariables();
+     getinvisiblemouserectanglestk ( );
+  }
+  if ( (taste == ct_right || taste==ct_6k) && extraction < 1024 ) {
+     setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
+     if ( extraction+keyspeed < 1024 )
+        setnewextraction ( extraction + keyspeed );
+     else
+        setnewextraction ( 1024 );
+
+     displayvariables();
+     getinvisiblemouserectanglestk ( );
+  }
+  
+}
+
+ccontainer_b :: cminingstation_subwindow :: ~cminingstation_subwindow ()
+{
+  if ( mininginfo ) {
+     delete mininginfo;
+     mininginfo = NULL;
+  }
+}
+
+
+//............................................................................................
+
+int ccontainer_b :: cmineralresources_subwindow :: allbuildings = 0;
+
+ccontainer_b :: cmineralresources_subwindow :: cmineralresources_subwindow ( void )
+{
+   strcpy ( name, "mineral resources" );
+   laschpic1 = icons.container.lasche.a.mineralresources[0];
+   laschpic2 = icons.container.lasche.a.mineralresources[1];
+   objcoordinates[0].x1 = subwinx1 + 316;
+   objcoordinates[0].y1 = subwiny1 +   2;
+   objcoordinates[0].x2 = subwinx1 + 344;
+   objcoordinates[0].y2 = subwiny1 +  17;
+   objcoordinates[0].type = 17;
+   mininginfo = NULL;
+
+   resourcecolor[0] = 16+4;
+   resourcecolor[1] = 232;
+   resourcecolor[2] = 27; // 125;
+
+
+
+   helplist.num =  2;
+
+   static tonlinehelpitem mineralresourceshelpitems[2] = {{  6 + subwinx1 , 23 + subwiny1 , 171 + subwinx1, 108+ subwiny1, 20128 },
+                                                          { 178+ subwinx1 , 23 + subwiny1 , 343 + subwinx1, 108+ subwiny1, 20129 }};
+
+   helplist.item = mineralresourceshelpitems;
+
+
+
+}
+
+int  ccontainer_b :: cmineralresources_subwindow :: subwin_available ( void )
+{
+   if ( hostcontainer->getspecfunc ( mbuilding ) & cgminingstationb )  
+      cbuildingsubwindow :: subwin_available ( );
+
+   if ( next )
+      next->subwin_available ();
+
+   return 0;
+}
+
+void  ccontainer_b :: cmineralresources_subwindow :: dispresources ( tresources* res, int ypos, int sign )
+{
+   npush ( activefontsettings );
+   activefontsettings.font = schriften.monogui;
+   activefontsettings.length = 29;
+   activefontsettings.justify = righttext;
+   activefontsettings.height = 0;
+   activefontsettings.background = 201;
+
+   char buf[100];
+
+   int r;
+   for ( r = 0; r < 3; r++ )
+      if( res->resource[r] * sign > 0 ) {
+         activefontsettings.color = resourcecolor[r];
+         showtext2 ( int2string ( res->resource[r] * sign, buf ), subwinx1 + 71 + r * 33, subwiny1 + 41 + ypos * 13 );
+      } else
+         bar ( subwinx1 + 71 + r * 33, subwiny1 + 41 + ypos * 13, subwinx1 + 71 + r * 33 + activefontsettings.length, subwiny1 + 41 + ypos * 13 + activefontsettings.font->height - 1, activefontsettings.background );
+
+   npop ( activefontsettings );
+}
+
+
+void  ccontainer_b :: cmineralresources_subwindow :: display ( void )
+{
+   extraction = 0;
+   if ( cc_b->building->maxplus.a.material > 0 )
+      extraction = 1024 * cc_b->building->plus.a.material / cc_b->building->maxplus.a.material;
+   else
+      if ( cc_b->building->maxplus.a.fuel > 0 )
+         extraction = 1024 * cc_b->building->plus.a.fuel / cc_b->building->maxplus.a.fuel;
+
+
+   setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
+   collategraphicoperations cgo ( subwinx1, subwiny1, subwinx2, subwiny2 );
+
+   npush ( activefontsettings );
+
+   putimage ( subwinx1, subwiny1, icons.container.subwin.mineralresources.main );
+   materialcolor = getpixel ( subwinx1 + 126, subwiny1 + 28 );
+   fuelcolor = getpixel ( subwinx1 + 126, subwiny1 + 38 );
+
+   csubwindow :: display();
+
+   gx1 = subwinx1 + 9;
+   gy1 = subwiny1 + 104 - 70;
+   gx2 = subwinx1 + 9 + 150;
+   gy2 = subwiny1 + 104;
+
+
+   if ( !mininginfo ) {
+
+      tgetmininginfo gmi;
+
+      gmi.run ( cc_b->building );
+
+      mininginfo = gmi.mininginfo;
+   }
+
+
+   int max = mininginfo->efficiency[0] * 11 / 10;
+   int i;
+   for ( i = 0; i < maxminingrange; i++ ) {
+      int y = gy2 - ( gy2 - gy1 ) * mininginfo->efficiency[i] / max;
+      int xd = (gx2-gx1) / maxminingrange ;
+      bar ( gx1 + i * xd , y, gx1 + i * xd + xd/2, gy2, materialcolor ); // 160 + 15 * mininginfo->avail[ i ].resource[ 1 ] / mininginfo->max[ i ].resource[ 1 ] );
+      bar ( gx1 + i * xd + xd/2, y, gx1 + (i+1) * xd, gy2, fuelcolor ); // 160 + 15 * mininginfo->avail[ i ].resource[ 2 ] / mininginfo->max[ i ].resource[ 2 ] );
+   }
+   
+
+   hx1 = subwinx1 + 181;
+   hy1 = subwiny1 + 104 - 70;
+   hx2 = subwinx1 + 181 + 150;
+   hy2 = subwiny1 + 104;
+
+
+   max = 0;
+   for ( i = 0; i < maxminingrange; i++ )
+      if ( mininginfo->max[ i ].resource[ 1 ] > max )
+         max = mininginfo->max[ i ].resource[ 2 ];
+
+   max = max * 17 / 16;
+
+   for ( i = 0; i < maxminingrange; i++ ) {
+      int y1 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource[ 1 ] / mininginfo->max[ i ].resource[ 1 ];
+      int y2 = hy2 - ( hy2 - hy1 ) * mininginfo->avail[ i ].resource[ 2 ] / mininginfo->max[ i ].resource[ 2 ];
+
+      int xd = (hx2-hx1) / maxminingrange ;
+      bar ( hx1 + i * xd , y1, hx1 + i * xd + xd/2, hy2, materialcolor ); // 160 + 15 * mininginfo->avail[ i ].resource[ 1 ] / mininginfo->max[ i ].resource[ 1 ] );
+      bar ( hx1 + i * xd + xd/2, y2, hx1 + (i+1) * xd, hy2, fuelcolor ); // 160 + 15 * mininginfo->avail[ i ].resource[ 2 ] / mininginfo->max[ i ].resource[ 2 ] );
+
+      y1 = hy2 - ( hy2 - hy1 ) * mininginfo->max[ i ].resource[ 1 ] / max;
+      y2 = hy2 - ( hy2 - hy1 ) * mininginfo->max[ i ].resource[ 2 ] / max;
+
+      line ( hx1 + i * xd , y1, hx1 + i * xd + xd/2, y1, materialcolor-1 ); // 160 + 15 * mininginfo->avail[ i ].resource[ 1 ] / mininginfo->max[ i ].resource[ 1 ] );
+      line ( hx1 + i * xd + xd/2, y2, hx1 + (i+1) * xd, y2, fuelcolor-1 ); // 160 + 15 * mininginfo->avail[ i ].resource[ 2 ] / mininginfo->max[ i ].resource[ 2 ] );
+
+   }
+
+
+   displayvariables();
+
+   activefontsettings.justify = lefttext;
+   activefontsettings.height = 0;
+   activefontsettings.background = 255;
+   activefontsettings.font = schriften.guifont;
+
+   showtext2c ( "dist", subwinx1 + 169-19, subwiny1 + 96 );
+   showtext2c ( "dist", subwinx1 + 341-19, subwiny1 + 96 );
+
+   npop ( activefontsettings );
+
+   getinvisiblemouserectanglestk();
+
+}
+
+
+void  ccontainer_b :: cmineralresources_subwindow :: displayvariables ( void )
+{
+
+
+/*
   int i;
 
    npush ( activefontsettings );
@@ -5188,10 +5508,11 @@ void  ccontainer_b :: cminingstation_subwindow :: displayvariables ( void )
 
    char c[100];
 
+
    if ( mode == 1 )
-      strcpy ( c, strrr ( cc_b->building->getmaterialplus( 0 ) ));
+      strcpy ( c, strrr ( plus.a.material ));
    else
-      strcpy ( c, strrr ( cc_b->building->getfuelplus( 0 ) ));         // aktualle F”rderung
+      strcpy ( c, strrr ( plus.a.fuel ));         // aktualle F”rderung
 
    strcat ( c , " / ");
    strcat ( c, strrr ( cc_b->building->plus.resource[mode] ));         // maximale F”rderung
@@ -5210,6 +5531,7 @@ void  ccontainer_b :: cminingstation_subwindow :: displayvariables ( void )
    strcat ( c, strrr ( dist ));
    showtext2c ( c ,                                                 subwinx1 + 63, subwiny1 + 43 );
 
+/*
    if ( mode == 1 ) {
       if ( !cc_b->building->typ->efficiencymaterial )
          displaymessage(" the %s has a material efficiency of 0 !", 2, cc_b->building->typ->name );
@@ -5219,7 +5541,8 @@ void  ccontainer_b :: cminingstation_subwindow :: displayvariables ( void )
          displaymessage(" the %s has a fuel efficiency of 0 !", 2, cc_b->building->typ->name );
       i = cc_b->building->getmininginfo ( mode ) * 1024 / cc_b->building->typ->efficiencyfuel;
    }
- 
+*/ 
+/*
    int t = 0;
    if ( i ) 
        t = mininginfo->avail [ dist ].resource[ mode ] / i;         // in wieviel Runden wird n„chste Entfernung erreicht 
@@ -5294,142 +5617,31 @@ void  ccontainer_b :: cminingstation_subwindow :: displayvariables ( void )
 
    line( x, gy1, x, gy2-1, yellow );
 
-   */
-   npop ( activefontsettings );
+   
+   npop ( activefontsettings ); */
 }
 
 
-void  ccontainer_b :: cminingstation_subwindow :: checkformouse ( void )
+void  ccontainer_b :: cmineralresources_subwindow :: checkformouse ( void )
 {
-   if ( mouseparams.taste == 1 ) {
-      /*
-      if ( mouseinrect ( gx1, gy1, gx2, gy2 ) ) {
-         int newresearch = 1024 * (mouseparams.x-gx1) / (gx2-gx1);
-         if ( newresearch < 0 )
-            newresearch = 0;
-         if ( newresearch > 1024 )
-            newresearch = 1024;
-         if ( newresearch != research ) {
-            setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
-
-            int x = gx1 + ( gx2 - gx1 ) * research/ 1024;
-
-            int cl ;
-            if ( x == gx1 )
-               cl = 247;
-            else
-               if ( x == gx1+1 )
-                  cl = 244;
-               else
-                  cl = 201;
-            line( x, gy1, x, gy2-1, cl );
-
-            setnewresearch( newresearch );
-
-            displayvariables();
-
-            getinvisiblemouserectanglestk ( );
-
-         }
-      }
-      */
-      if ( objpressedbymouse(0) ) {
-         if ( allbuildings < 2 )
-            allbuildings++;
-         else
-            allbuildings = 0;
-
-         paintobj( 0, 0 );
-      }
-   }
 }
 
-void  ccontainer_b :: cminingstation_subwindow :: paintobj ( int num, int stat )
+void  ccontainer_b :: cmineralresources_subwindow :: paintobj ( int num, int stat )
 {
-   /*
-  if ( objcoordinates[0].type == 17 ) {
-
-     setinvisiblemouserectanglestk ( objcoordinates[num].x1,   objcoordinates[num].y1,   objcoordinates[num].x2+10,   objcoordinates[num].y2 );
-
-     activefontsettings.font = schriften.guifont;
-     activefontsettings.height = 0;
-     activefontsettings.justify = centertext;
-     activefontsettings.length = 22;
-     activefontsettings.background = 255;
-
-     int x;
-     int y;
-     if ( stat == 0 ) {
-        putimage ( objcoordinates[0].x1, objcoordinates[0].y1, icons.container.subwin.miningstation.button[0] );
-        x = 319;
-        y =   5;
-     } else {
-        putimage ( objcoordinates[0].x1, objcoordinates[0].y1, icons.container.subwin.miningstation.button[1] );
-        x = 320;
-        y =   6;
-     }
-
-     if ( allbuildings == 0 ) 
-        showtext2c ( "all", subwinx1+x, subwiny1 + y );
-     else 
-        if ( allbuildings == 1 )
-           if ( mode == 1 )
-              showtext2c ( "mat.", subwinx1+x, subwiny1 + y );
-           else
-              showtext2c ( "fuel", subwinx1+x, subwiny1 + y );
-        else
-           showtext2c ( "this", subwinx1+x, subwiny1 + y );
-
-     getinvisiblemouserectanglestk ( );
-  }
-  */
 }
 
 
-void  ccontainer_b :: cminingstation_subwindow :: checkforkey ( tkey taste )
+void  ccontainer_b :: cmineralresources_subwindow :: checkforkey ( tkey taste )
 {
-   /*
-  if ( taste == ct_space  ||  taste == ct_a ) {
-     if ( allbuildings < 2 )
-        allbuildings++;
-     else
-        allbuildings = 0;
-
-     paintobj( 0, 0 );
-  }
-  
-  int keyspeed = 50;
-  if ( (taste == ct_left || taste==ct_4k)  && research > 0 ) {
-     setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
-     if ( research > keyspeed )
-        setnewresearch ( research - keyspeed );
-     else
-        setnewresearch ( 0 );
-
-     displayvariables();
-     getinvisiblemouserectanglestk ( );
-  }
-  if ( (taste == ct_right || taste==ct_6k) && research < 1024 ) {
-     setinvisiblemouserectanglestk ( subwinx1, subwiny1, subwinx2, subwiny2 );
-     if ( research+keyspeed < 1024 )
-        setnewresearch ( research + keyspeed );
-     else
-        setnewresearch ( 1024 );
-
-     displayvariables();
-     getinvisiblemouserectanglestk ( );
-  }
-  */
 }
 
-ccontainer_b :: cminingstation_subwindow :: ~cminingstation_subwindow ()
+ccontainer_b :: cmineralresources_subwindow :: ~cmineralresources_subwindow ()
 {
   if ( mininginfo ) {
      delete mininginfo;
      mininginfo = NULL;
   }
 }
-
 
 
 // GUI
@@ -5761,7 +5973,7 @@ void  ccontainer_t :: ctransportinfo_subwindow :: display ( void )
    activefontsettings.justify = lefttext;
    activefontsettings.length = 0;
    showtext3c ( "~Transport:~",  subwinx1 + 8,  subwiny1 + 25 );
-   showtext2c ( "act load:",        subwinx1 + 70,  subwiny1 + 25 );
+   showtext2c ( "current load:",        subwinx1 + 70,  subwiny1 + 25 );
    showtext2c ( "max (single / total):",        subwinx1 + 70,  subwiny1 + 33 );
    showtext2c ( "free:",            subwinx1 + 70,  subwiny1 + 41 );
 
@@ -6142,13 +6354,12 @@ generalicon_c:: ~generalicon_c ( )
 void tcontaineronlinemousehelp :: checkforhelp ( void )
 {
    if ( gameoptions.onlinehelptime )
-      if ( ticker > lastmousemove+gameoptions.onlinehelptime )
+      if ( (ticker > lastmousemove+gameoptions.onlinehelptime  && mouseparams.taste == 0 ) || mouseparams.taste == 2 )
          if ( active == 1 )
-            if ( mouseparams.taste == 0 ) {
                if ( hostcontainer->actsubwindow )
                   if ( hostcontainer->actsubwindow->helplist.num )
                       checklist ( &hostcontainer->actsubwindow->helplist );
-            }
+            
    
 }
 

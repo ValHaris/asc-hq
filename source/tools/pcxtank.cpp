@@ -35,6 +35,7 @@
 #include "..\vesa.h"
 #include "..\loadpcx.h"
 #include "..\basegfx.h"
+#include "..\loadbi3.h"
 
 char header[2][500];
 char text[200][500];
@@ -95,6 +96,7 @@ main(int argc, char *argv[] )
    
    initgraphics ( 640, 480, 8 );
    load_palette();
+   loadbi3graphics();
  
    while( cn ) { 
 

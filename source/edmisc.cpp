@@ -1,6 +1,9 @@
-//     $Id: edmisc.cpp,v 1.13 2000-04-06 09:07:46 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.14 2000-04-27 16:25:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13  2000/04/06 09:07:46  mbickel
+//      Fixed a bug in the mapeditor that prevented transports from being loaded
+//
 //     Revision 1.12  2000/04/01 11:38:38  mbickel
 //      Updated the small editors
 //      Added version numbering
@@ -529,7 +532,7 @@ void placeunit(void)
          pf = getactfield(); 
          if (pf != NULL) 
               // !( pf->bdt & cbbuildingentry)
-            if ( !( pf->building             ) && ( terrainaccessible(pf,pf->vehicle) || actmap->gameparameter[ cgp_movefrominvalidfields]) ) 
+            if ( !( pf->building             ) && ( terrainaccessible(pf,pf->vehicle) || actmap->getgameparameter( cgp_movefrominvalidfields)) ) 
                { 
                   int set = 1;
                   if ( pf->vehicle ) {
@@ -546,7 +549,7 @@ void placeunit(void)
                      while ( ! ( ( ( ( pf->vehicle->height & pf->vehicle->typ->height ) > 0) && (terrainaccessible(pf,pf->vehicle) == 2) ) ) && (pf->vehicle->height != 0) )
                         pf->vehicle->height = pf->vehicle->height * 2;
                      if (pf->vehicle->height == 0 ) {
-                        if ( actmap->gameparameter[ cgp_movefrominvalidfields] ) {
+                        if ( actmap->getgameparameter( cgp_movefrominvalidfields) ) {
                            pf->vehicle->height=1;
                            while ( !(pf->vehicle->height & pf->vehicle->typ->height) && pf->vehicle->height )
                               pf->vehicle->height = pf->vehicle->height * 2;
@@ -946,12 +949,9 @@ void         tplayerchange::anzeige(void)
    int e,b,m[9];
    for (i=0;i<=8 ;i++ ) m[i] =0;
    for (int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
-      int color;
-      pfield fld = &actmap->field[i];
-      if  ( ( fld->object ) && (fld->object && fld->object->mine ) ) {
-         color = ( fld->object->mine >> 1 ) & 7; // typ l”schen;
+      int color = actmap->field[i].mineowner();
+      if ( color >= 0 )
          m[color]++;
-      }
    }
    activefontsettings.length = 40;
    activefontsettings.background = lightgray;
@@ -1043,20 +1043,16 @@ void         tplayerchange::buttonpressed(byte         id)
               actmap->player[sel2].firstvehicle = fe; 
               actmap->player[sel2].firstbuilding = fb; 
               for (int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
-                 int color,typ;
                  pfield fld = &actmap->field[i];
-                 if  ( ( fld->object ) && (fld->object && fld->object->mine ) ) {
-                    typ = fld->object->mine >> 4;
-                    color = ( fld->object->mine >> 1 ) & 7; // typ l”schen;
-                    if (color == sel1) { 
-                       color = sel2;
-                       fld->object->mine = 1 | (color << 1) | (typ << 4);
-                    }
-                    else if ( color == sel2 ) {
-                       color = sel1;
-                       fld->object->mine = 1 | (color << 1) | (typ << 4);
-                    }
-                 }
+                 if  ( fld->object  ) 
+                    for ( int i = 0; i < fld->object->minenum; i++ ) 
+                       if ( fld->object->mine[i]->color == sel1 )
+                          fld->object->mine[i]->color = sel2;
+                       else
+                          if ( fld->object->mine[i]->color == sel2 )
+                             fld->object->mine[i]->color = sel1;
+                    
+                 
               } /* endfor */
               anzeige();
            }
@@ -1091,16 +1087,12 @@ void         tplayerchange::buttonpressed(byte         id)
                  fb = fb->next;
               } /* endwhile */
               for (int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
-                 int color,typ;
                  pfield fld = &actmap->field[i];
-                 if  ( ( fld->object ) && (fld->object && fld->object->mine ) ) {
-                    typ = fld->object->mine >> 4;
-                    color = ( fld->object->mine >> 1 ) & 7; // typ l”schen;
-                    if (color == sel2) { 
-                       color = sel1;
-                       fld->object->mine = 1 | (color << 1) | (typ << 4);
-                    }
-                 }
+                 if  ( fld->object  ) 
+                    for ( int i = 0; i < fld->object->minenum; i++ ) 
+                       if ( fld->object->mine[i]->color == sel2 )
+                          fld->object->mine[i]->color = sel1;
+
               } /* endfor */
               anzeige();
            }
@@ -2065,13 +2057,15 @@ void         changemapvalues(void)
                void init(void);
                virtual void run(void);
                virtual void buttonpressed(byte id);
-               int dummy;
-               };
+               int lockmaxproduction;
+            };
 
 
 void         tsel::init(void)
 { word         w; 
   boolean      b;
+
+   lockmaxproduction = 1;
 
    tdialogbox::init();
    action = 0; 
@@ -2111,34 +2105,39 @@ void         tsel::init(void)
    addbutton("~F~uel-Storage",15,170,215,190,2,1,3,true); 
    addeingabe(3,&f,0,gbde->typ->gettank(2));
 
-   if ( ( gbde->typ->special & cgenergyproductionb ) > 0) b = true;
+   if ( gbde->typ->special & (cgconventionelpowerplantb | cgsolarkraftwerkb | cgwindkraftwerkb | cgminingstationb )) b = true;
    else b = false;
 
    addbutton("Energy-Max-Plus",230,50,430,70,2,1,13,b);
    addeingabe(13,&mplus.a.energy,0,gbde->typ->maxplus.a.energy);
    
-//   addbutton("Energ~y~-Plus",230,90,430,110,2,1,4,b);
-//   addeingabe(4,&plus.energy,0,mplus.energy);
-   
-   if ( ( gbde->typ->special & cgmaterialproductionb ) > 0 ) b = true;
+   if ( gbde->typ->special & (cgconventionelpowerplantb | cgminingstationb )) b = true;
    else b = false;
+
+   addbutton("Energ~y~-Plus",230,90,430,110,2,1,4,b);
+   addeingabe(4,&plus.a.energy,0,mplus.a.energy);
+   
+   if ( (gbde->typ->special & cgconventionelpowerplantb) || ((gbde->typ->special & cgminingstationb ) && gbde->typ->efficiencymaterial ))
+      b = true;
+   else 
+      b = false;
 
    addbutton("Material-Max-Plus",230,130,430,150,2,1,14,b);
    addeingabe(14,&mplus.a.material,0,gbde->typ->maxplus.a.material);
 
-//   addbutton("M~a~terial-Plus",230,170,430,190,2,1,5,b);
-//   addeingabe(5,&plus.material,0,mplus.material);
+   addbutton("M~a~terial-Plus",230,170,430,190,2,1,5,b);
+   addeingabe(5,&plus.a.material,0,mplus.a.material);
 
-   if ( ( gbde->typ->special & cgfuelproductionb ) > 0) b = true;
-   else b = false;
+   if ( (gbde->typ->special & cgconventionelpowerplantb) || ((gbde->typ->special & cgminingstationb ) && gbde->typ->efficiencyfuel ))
+      b = true;
+   else 
+      b = false;
 
    addbutton("Fuel-Max-Plus",230,210,430,230,2,1,15,b);
    addeingabe(15,&mplus.a.fuel,0,gbde->typ->maxplus.a.fuel);
-   dummy=2000;
-//   addeingabe(15,&dummy,0,gbde->typ->maxplus.fuel);
 
-//   addbutton("F~u~el-Plus",230,250,430,270,2,1,6,b);
-//   addeingabe(6,&plus.fuel,0,mplus.fuel);
+   addbutton("F~u~el-Plus",230,250,430,270,2,1,6,b);
+   addeingabe(6,&plus.a.fuel, 0, mplus.a.fuel);
 
    if ( (  ( gbde->typ->special & cgresearchb ) > 0) && ( gbde->typ->maxresearchpoints > 0)) b = true;
    else b = false;
@@ -2153,7 +2152,11 @@ void         tsel::init(void)
    addbutton("~V~isible",15,290,215,300,3,1,12,true);
    addeingabe(12,&tvisible,0,lightgray);
 
-   addbutton("~C~olor",230,280,430,300,2,1,104,true);
+   addbutton("~L~ock MaxPlus ratio",230,290,430,300,3,1,120,true);
+   addeingabe(120,&lockmaxproduction,0,lightgray);
+
+
+   addbutton("~C~olor",230,370,430,390,2,1,104,true);
    addeingabe(104,&col,0,8);
 
 
@@ -2167,9 +2170,14 @@ void         tsel::init(void)
    addeingabe(103,&biplus.a.fuel,0,maxint);
 
 
-   addbutton("~S~et Values",20,ysize - 40,20 + w,ysize - 10,0,1,7,true); 
+   addbutton("~S~et Values",10,ysize - 40, xsize/3-5,ysize - 10,0,1,7,true); 
    addkey(7,ct_enter); 
-   addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,8,true);
+
+   addbutton("Help (~F1~)", xsize/3+5, ysize - 40, xsize/3*2-5, ysize-10, 0, 1, 110, true );
+   addkey(110, ct_f1 );
+
+   addbutton("~C~ancel",xsize/3*2+5,ysize - 40,xsize-10,ysize - 10,0,1,8,true);
+   addkey(8, ct_esc );
 
    buildgraphics(); 
 
@@ -2188,63 +2196,105 @@ void         tsel::run(void)
 void         tsel::buttonpressed(byte         id)
 {
    switch(id) {
-case 7: { 
-      mapsaved = false;
-      action = 1; 
-      gbde->actstorage.a.energy = e; 
-      gbde->actstorage.a.material = m; 
-      gbde->actstorage.a.fuel = f;
-      gbde->plus = plus;
-      gbde->maxplus = mplus; 
-      if ( col != gbde->color/8 )
-         gbde->convert ( col );
-   
-      gbde->researchpoints = rs; 
-      gbde->maxresearchpoints = mrs;
-      gbde->visible = tvisible;
-      gbde->bi_resourceplus = biplus;
-      if ( strlen(name) > 0 ) {
-         gbde->name = (char * ) realloc ( gbde->name ,strlen(name) +1 );
-         strcpy(gbde->name,name);
-      }
-      else 
-        if ( gbde->name ) {
-           asc_free(gbde->name);
-           gbde->name = NULL;
-        }
-   } 
-   break;
-case 8: action = 1; 
-   break;
-   
-/*
+   case 4:            // energy, material & fuel plus
+   case 5:
+   case 6: {
+              int changed_resource = id - 4;
+              for ( int r = 0; r < 3; r++ )
+                 if ( r != changed_resource ) 
+                    if ( mplus.resource[changed_resource] ) {
+                       int a = mplus.resource[r] * plus.resource[changed_resource] / mplus.resource[changed_resource];
+                       if ( a != plus.resource[r] ) {
+                          plus.resource[r] = a;
+                          showbutton ( 4 + r );
+                       }
+                    }
+            }
+      break;
+   case 13:        // energy, material and fuel maxplus
+   case 14:
+   case 15: {
+              int changed_resource = id - 13;
+              if ( lockmaxproduction ) 
+                 for ( int r = 0; r < 3; r++ )
+                    if ( r != changed_resource ) 
+                       if ( gbde->typ->maxplus.resource[changed_resource] ) {
+                          int a = gbde->typ->maxplus.resource[r] * mplus.resource[changed_resource] / gbde->typ->maxplus.resource[changed_resource];
+                          if ( a != mplus.resource[r] ) {
+                             mplus.resource[r] = a;
+                             showbutton ( 13 + r );
+                          }
+                       }
 
-case 13: {
-                addeingabe(4,&plus.energy,0,mplus.energy);
-                if (mplus.energy < plus.energy ) {
-                   plus.energy = mplus.energy;
-                   enablebutton(4);
-                } 
-             }
-   break;
-case 14: {
-              addeingabe(5,&plus.material,0,mplus.material);
-                 if (mplus.material < plus.material) {
-                    plus.material =mplus.material;
-                    enablebutton(5);
-                 } 
+              for ( int r = 0; r < 3; r++ ) {
+                 if ( (mplus.resource[r] >= 0 && plus.resource[r] > mplus.resource[r] ) || 
+                      (mplus.resource[r] <  0 && plus.resource[r] < mplus.resource[r] )) {
+                         plus.resource[r] = mplus.resource[r];
+                         showbutton ( 4 + r );
+                 }
+                 addeingabe(4+r, &plus.resource[r], 0, mplus.resource[r] );
               }
-
-   break;
-case 15: {
-              addeingabe(6,&plus.fuel,0,mplus.fuel);
-                 if (plus.fuel > mplus.fuel) {
-                    plus.fuel = mplus.fuel;
-                    enablebutton(6);
-                 } 
-              } 
-   break;
-*/   
+            }
+      break;
+     case 7: { 
+           mapsaved = false;
+           action = 1; 
+           gbde->actstorage.a.energy = e; 
+           gbde->actstorage.a.material = m; 
+           gbde->actstorage.a.fuel = f;
+           gbde->plus = plus;
+           gbde->maxplus = mplus; 
+           if ( col != gbde->color/8 )
+              gbde->convert ( col );
+        
+           gbde->researchpoints = rs; 
+           gbde->maxresearchpoints = mrs;
+           gbde->visible = tvisible;
+           gbde->bi_resourceplus = biplus;
+           if ( strlen(name) > 0 ) {
+              gbde->name = (char * ) realloc ( gbde->name ,strlen(name) +1 );
+              strcpy(gbde->name,name);
+           }
+           else 
+             if ( gbde->name ) {
+                asc_free(gbde->name);
+                gbde->name = NULL;
+             }
+        } 
+        break;
+     case 8: action = 1; 
+        break;
+        
+     /*
+     
+     case 13: {
+                     addeingabe(4,&plus.energy,0,mplus.energy);
+                     if (mplus.energy < plus.energy ) {
+                        plus.energy = mplus.energy;
+                        enablebutton(4);
+                     } 
+                  }
+        break;
+     case 14: {
+                   addeingabe(5,&plus.material,0,mplus.material);
+                      if (mplus.material < plus.material) {
+                         plus.material =mplus.material;
+                         enablebutton(5);
+                      } 
+                   }
+     
+        break;
+     case 15: {
+                   addeingabe(6,&plus.fuel,0,mplus.fuel);
+                      if (plus.fuel > mplus.fuel) {
+                         plus.fuel = mplus.fuel;
+                         enablebutton(6);
+                      } 
+                   } 
+        break;
+     */   
+  case 110: help ( 41 );
+     break;
 
   }
 } 
@@ -2884,7 +2934,7 @@ void         tminestrength::init(void)
    w = (xsize - 60) / 2; 
    action = 0; 
    pf = getactfield();
-   strength = pf->object->minestrength;
+   strength = pf->object->mine[0]->strength;
 
    windowstyle = windowstyle ^ dlg_in3d; 
 
@@ -2916,7 +2966,7 @@ void         tminestrength::buttonpressed(byte         id)
    if (id == 7) { 
       mapsaved = false;
       action = 1; 
-      pf->object->minestrength = strength;
+      pf->object->mine[0]->strength = strength;
    } 
    if (id == 8) action = 1; 
 } 
@@ -3748,3 +3798,14 @@ void unitsettransformation( void )
    utt.run();
 }
 
+int isUnitNotFiltered ( int id )
+{
+   if ( unitSet.set.getlength() >= 0 ) {
+      for ( int i = 0; i <= unitSet.set.getlength(); i++ )
+         for ( int j = 0; j <= unitSet.set[i].ids.getlength(); j++ )
+            if ( id >= unitSet.set[i].ids[j].from && 
+                 id <= unitSet.set[i].ids[j].to )
+                 return unitSet.set[i].active;
+   }
+   return 1;  
+}

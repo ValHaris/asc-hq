@@ -1,6 +1,10 @@
-//     $Id: dlg_box.h,v 1.6 2000-03-29 09:58:45 mbickel Exp $
+//     $Id: dlg_box.h,v 1.7 2000-04-27 16:25:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/03/29 09:58:45  mbickel
+//      Improved memory handling for DOS version
+//      Many small changes I can't remember ;-)
+//
 //     Revision 1.5  2000/01/04 19:43:51  mbickel
 //      Continued Linux port
 //
@@ -80,8 +84,8 @@
                 byte         status;                      /*  4: schieberegler    */
                 pbutton      next;                        /*  5: scrollbar        */
                 const char*  text;
-                pointer      data;
-                pointer      data2;
+                void*      data;
+                void*      data2;
                 int      min, max;   // max = itemsvisible bei scrollbar
                 boolean      active; 
                 byte         keynum; 
@@ -140,9 +144,10 @@
 
 
                      void         addeingabe(byte         lid,
-                        pointer      data,
+                        void*      data,
                         int      min,
                         int      max);
+
                      void         addscrollbar(int          lx1,
                           int          ly1,
                           int          lx2,
@@ -176,7 +181,7 @@ typedef class tdialogbox* pdialogbox;
                      byte             textcolor;
                      integer          starty;
                      byte           ms;
-                     pointer      tp;
+                     void*      tp;
                      boolean      imagesaved; 
                      char*        title;
                      word         windowstyle; 
@@ -196,7 +201,7 @@ typedef class tdialogbox* pdialogbox;
                      void         done(void);
 
 
-                      virtual boolean      checkvalue(byte         id, pointer      p)  ;
+                      virtual boolean      checkvalue(byte         id, void*      p)  ;
                       void                 editfield(pbutton      pb);
                       void                 editfield( int id );
                       void                 toggleswitch(pbutton      pb);
@@ -431,6 +436,7 @@ extern char*  strrrd8d(int  l);           // abrunden
 extern char*  strrrd8n(int  l);           // mathematisch korrekt runden
 
 extern char*  readtextmessage( int id );
+extern int isUnitNotFiltered ( int id ) ;
 
 
 

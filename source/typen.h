@@ -1,6 +1,10 @@
-//     $Id: typen.h,v 1.16 2000-04-01 11:38:39 mbickel Exp $
+//     $Id: typen.h,v 1.17 2000-04-27 16:25:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2000/04/01 11:38:39  mbickel
+//      Updated the small editors
+//      Added version numbering
+//
 //     Revision 1.15  2000/03/16 14:06:57  mbickel
 //      Added unitset transformation to the mapeditor
 //
@@ -85,7 +89,6 @@
 
 #ifndef typen_h                                                                            
 #define typen_h
-/* Unit header for: TYPEN.C -- Made by TPTC - Translate Pascal to C */
 
 #include <time.h>
 #include "global.h"
@@ -95,32 +98,79 @@
 
 #pragma pack(1)
 
-#define maxint 0x7ffffffe
-#define minint -0x7ffffffe
+
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/// Some boring pointer definitions
+///  The main structure start at line 440
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+typedef class tterrainaccess *pterrainaccess;
+typedef struct tcrc *pcrc;
+typedef struct tvehicle* pvehicle ;
+typedef struct tvehicletype* pvehicletype ;
+typedef struct tbuildrange* pbuildrange;
+typedef class tobjecttype* pobjecttype;
+typedef class tmap*  pmap;
+typedef class  tbuildingtype* pbuildingtype;
+typedef struct tevent* pevent ;
+typedef class  ttechnology* ptechnology ;
+typedef class tresearch* presearch ;
+typedef struct tdevelopedtechnologies*  pdevelopedtechnologies;
+typedef char* pchar;
+typedef class tbasenetworkconnection* pbasenetworkconnection;
+typedef struct tnetwork* pnetwork;
+typedef struct tquickview* pquickview;
+typedef struct tterraintype* pterraintype;
+typedef class  twterraintype* pwterraintype ;
+typedef struct tresourcetribute* presourcetribute ;
+typedef class tfield* pfield ;
+typedef class tobjectcontainer* pobjectcontainer;
+typedef struct tresourceview* presourceview;
+typedef class tbuilding* pbuilding;
+typedef class tobject* pobject;
+typedef struct tcampaign* pcampaign;
+typedef class tshareview *pshareview;
+                   
+
+//////////////////////////////////////////////////////////////
+///    Some miscellaneous defintions. Not very intersting...
+//////////////////////////////////////////////////////////////
+
+  enum tshareviewmode { sv_none, sv_shareview };
+
+
+  struct PreferredFilenames {
+    char* mapname[8];
+    char* mapdescription[8];
+    char* savegame[8];
+    char* savegamedescription[8];
+  };
+
+  class  EllipseOnScreen {
+  public:
+    int x1, y1, x2, y2;
+    int color;
+    float precision;
+    int active;
+    EllipseOnScreen ( void ) { active = 0; };
+    void paint ( void );
+  };
+
 
 #define waffenanzahl 8
 #define cwettertypennum 6
-#define cmovemalitypenum 9
-#define ceventactionnum 20
-#define ceventtriggernum 20
-#define cbuildingfunctionnum 17
-#define choehenstufennum 8
-#define cvehiclefunctionsnum 25
-#define maxbuildingpicnum 8
-#define cbodenartennum 33
-#define cnetcontrolnum 12
+#define cmovemalitypenum 12
+ #define cmm_building 11
 
-#define gameparameternum 8
-#define maxgameparameternum 8
+#define choehenstufennum 8
+#define maxbuildingpicnum 8
+#define maxminesonfield 20
+
+#define gameparameternum 13
 
 #define maxobjectonfieldnum 16
-
-#define maxunitexperience 15
-
-
-#define maxloadableunits 27  // Mehr vehicle dÅrfen nicht in einen Transporter rein
-  
-
 
 
 class tterrainbits {
@@ -130,59 +180,48 @@ class tterrainbits {
   int terrain1;
   int terrain2;
  public:
-  tterrainbits ( int i = 0 ) 
-    { 
+  tterrainbits ( int i = 0 ) { 
       set ( i ); 
-    };
-
-  tterrainbits ( int i , int j ) 
-    { 
+  };
+  tterrainbits ( int i , int j ) { 
       terrain1 = i; 
       terrain2 = j; 
-    };
-
-  tterrainbits ( tterrainbits &bts ) 
-    { 
+  };
+  tterrainbits ( tterrainbits &bts ) { 
       terrain1 = bts.terrain1; 
       terrain2 = bts.terrain2; 
-    };
-
-  void set ( int i = 0, int j = 0 ) { terrain1 = i; terrain2 = j; };
+  };
+  void set ( int i = 0, int j = 0 ) { 
+     terrain1 = i; 
+     terrain2 = j; 
+  };
   int toand ( tterrainbits bts );
+  int existall ( tterrainbits bdt ) {
+      return  ((terrain1 & bdt.terrain1) == bdt.terrain1) && ((terrain2 & bdt.terrain2) == bdt.terrain2);
+  };
 
-  int existall ( tterrainbits bdt )
-    {
-      return  ((terrain1 & bdt.terrain1) == bdt.terrain1) &&
-	((terrain2 & bdt.terrain2) == bdt.terrain2);
-    };
-
-  tterrainbits& operator|= ( tterrainbits tb ) 
-  { 
+  tterrainbits& operator|= ( tterrainbits tb )  { 
     terrain1 |= tb.terrain1; 
     terrain2 |= tb.terrain2; 
     return *this;
   };
 
-  tterrainbits& operator&= ( tterrainbits tb ) 
-  { 
+  tterrainbits& operator&= ( tterrainbits tb ) { 
     terrain1 &= tb.terrain1; 
     terrain2 &= tb.terrain2; 
     return *this;
   };
 
-  tterrainbits& operator^= ( tterrainbits tb ) 
-  { 
+  tterrainbits& operator^= ( tterrainbits tb ) { 
     terrain1 ^= tb.terrain1; 
     terrain2 ^= tb.terrain2; 
     return *this;
   };
 
   friend tterrainbits& operator~ ( tterrainbits &tb );
-
   int getcrc ( void ) {
     return crc32buf ( &terrain1, 2 * sizeof ( int ));
   }
-
 };
 
 extern tterrainbits& operator~ ( tterrainbits &tb );
@@ -204,59 +243,20 @@ class tterrainaccess {
   };
 };
 
-
-typedef tterrainaccess *pterrainaccess;
-
 union tgametime {
   struct { signed short move, turn; }a ;
   int abstime;
 };
 
-
-
 typedef word tthreatvar; 
-
-struct tweapon {
-  word         typ;            /*  BM      <= CWaffentypen  */
-  unsigned char         targ;           /*  BM      <= CHoehenstufen  */
-  unsigned char         sourceheight;   /*  BM  "  */
-  Word         maxdistance;
-  Word         mindistance;
-  unsigned char         count;
-  char         maxstrength;    // Wenn der Waffentyp == Mine ist, dann ist hier die MinenstÑrke als Produkt mit der Bassi 64 abgelegt.
-  char         minstrength;
-} ;
-
-
-//  #if sizeof ( tweapon ) != 11 error ( "invalid compiler options; enable packing !" )
-   
-
-
-struct tweapons { 
-  unsigned char         weaponcount; 
-  tweapon      waffe[8]; 
-}; 
-
-
-struct tpk { 
-  Word         energy; 
-  Word         material; 
-};
-
 
 struct tcrc {
   int id;
   int crc;
 };
-typedef struct tcrc *pcrc;
-
-typedef struct tvehicle* pvehicle ;
-typedef struct tvehicletype* pvehicletype ;
-
 
 typedef word tmunition[waffenanzahl];
 typedef tmunition* pmunition ;
-
 
 struct tclassbound { 
   word         weapstrength[waffenanzahl]; 
@@ -270,13 +270,176 @@ struct tclassbound {
 };
 
 
-typedef class tobjecttype* pobjecttype;
-
 struct tbuildrange {
   int from;
   int to;
 };
-typedef tbuildrange* pbuildrange;
+
+
+union tresources {
+  struct {
+    int energy, material, fuel;
+  }a;
+  int resource[3];
+} ;
+
+
+class tbuildingtype_bi_picture {
+ public:
+  int num [ maxbuildingpicnum ][4][6];
+
+  tbuildingtype_bi_picture ( void ) {
+    for ( int i = 0; i < maxbuildingpicnum; i++ )
+      for ( int j = 0; j < 4; j++ )
+	for ( int k = 0; j < 6; j++ )
+	  num[i][j][k] = -1;
+  };
+};
+
+
+struct tquickview {
+   struct {
+      char p1;
+      char p3[3][3];
+      char p5[5][5];
+   } dir[8];
+};
+
+
+
+  struct tresourcetribute {
+    struct {
+      union {
+	struct {
+	  int   energy[8][8];
+	  int   material[8][8];
+	  int   fuel[8][8];
+	}a;
+	int resource[3][8][8];
+      };
+    } avail, paid;
+  };
+  //  resourcetribute.avail.energy[a][b] gibt an, wieviel energie spieler b aus dem netz von spieler a noch abbuchen darf
+  //  resourcetribute.paid.energy[a][b] gibt an, wieviel energie spieler b aus dem netz von spieler a bereits abgebucht hat
+  //  a ist spender, b empfÑnger
+
+
+  struct thexpic {
+    void* picture;
+    int   bi3pic;
+    int   flip;  // Bit 1: Horizontal ; Bit 2: Vertikal
+  };
+
+
+typedef struct taiparams* paiparams;
+struct taiparams {
+    char    dummy[128];
+};
+
+
+typedef struct teventstore* peventstore;
+struct teventstore { 
+    int          num; 
+    peventstore  next; 
+    int      eventid[256]; 
+    int      mapid[256];
+};
+
+  enum tplayerstat { ps_human, ps_computer, ps_off };
+
+  class  tshareview {
+  public:
+    tshareview ( void ) { recalculateview = 0; };
+    tshareview ( const tshareview* org );
+    char mode[8][8];
+    int recalculateview;
+  };
+  // mode[1][6] = visible_all    =>  Spieler 1 gibt Spieler 6 die view frei
+
+
+
+#ifndef pmemorystreambuf_defined
+  #define pmemorystreambuf_defined
+  typedef class tmemorystreambuf* pmemorystreambuf;
+  typedef class tmemorystream* pmemorystream;
+#endif
+
+  class treplayinfo {
+  public:
+    pmemorystreambuf guidata[8];
+    pmemorystreambuf map[8];
+    pmemorystream    actmemstream;
+    treplayinfo ( void );
+    ~treplayinfo ( );
+  };
+
+  typedef class  tmessage* pmessage;
+  class  tmessage {
+  public:
+    int from;      // BM ; Bit 9 ist system
+    int to;        // BM
+    time_t time;
+    char* text;
+    int id;
+    int runde;  //  Zeitpunkt des abschickens
+    int move;   //  "
+    pmessage next;
+    tmessage ( void );
+    tmessage ( pmap spfld );
+    tmessage ( char* txt, int rec );  // fÅr Meldungen vom System
+    ~tmessage();
+  };
+
+
+  typedef class tmessagelist* pmessagelist;
+  class tmessagelist {
+  public:
+    pmessage message;
+    pmessagelist next;
+    pmessagelist prev;
+    tmessagelist( pmessagelist* prv );
+    ~tmessagelist(  );
+    int getlistsize ( void );  // liefert 1 falls noch weitere Glieder in der Liste existieren, sonst 0;
+  };
+
+
+  typedef class tspeedcrccheck* pspeedcrccheck;
+  typedef class tcrcblock* pcrcblock;
+
+  class tcrcblock {
+  public:
+    int  crcnum;
+    pcrc crc;
+    int restricted;
+    // restricted kennt 3 ZustÑnde: 0 = nicht limitiert, neue vehicle werden nicht aufgenommen; 
+    //                              1 = nicht limitiert, neue vehicle werden aufgenommen
+    //                              2 = limitiert: es dÅrfen nur vehicle verwendet werden, deren CRCs bekannt sind
+    tcrcblock ( void );
+  };
+
+  typedef class tobjectcontainercrcs *pobjectcontainercrcs;
+  class tobjectcontainercrcs {
+  public:
+    tcrcblock unit;
+    tcrcblock building;
+    tcrcblock object;
+    tcrcblock terrain;
+    tcrcblock technology;
+
+    pspeedcrccheck speedcrccheck;
+
+    tobjectcontainercrcs ( void );
+
+    int dummy[40];
+  };
+
+
+
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+///    Now, these are the main structures ASC consists of
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
 
 
 class SingleWeapon {
@@ -285,8 +448,7 @@ class SingleWeapon {
   #else
    private:
   #endif
-    int          typ; /* BM <= CWaffentypen.  This is a hirisute bit pattern, so we should wrap it and
-  		     *                      make it private ASAP - STEB */
+    int          typ; 
    public:
     int          targ;           /*  BM      <= CHoehenstufen  */
     int          sourceheight;   /*  BM  "  */
@@ -310,321 +472,253 @@ class SingleWeapon {
 };
 
 class  UnitWeapon {
- public:
-  int count;
-  SingleWeapon weapon[16];
-  int reserved[10];
-  UnitWeapon ( void );
+  public:
+    int count;
+    SingleWeapon weapon[16];
+    int reserved[10];
+    UnitWeapon ( void );
 };
 
 class tvehicletype {   /*  vehicleart: z.B. Schwere Fu·truppe  */
- public:
-  char*        name;          /* z.B. Exterminator  */
-  char*        description;   /* z.B. Jagdbomber    */
-  char*        infotext;      /* optional, kann sehr ausfÅhrlich sein. Empfehlenswert Åber eine Textdatei einzulesen */
-  tweapons     oldattack;        /*  AngriffsstÑrke der einzelnen Waffen  */
-  tpk          production;    /*  Produktionskosten der vehicle  */
-  Word         armor; 
-  Pointer      picture[8];    /*  0¯  ,  45¯   */
-  unsigned char         height;        /*  BM  Besteht die Mîglichkeit zum Hîhenwechseln  */
-  word         researchid;    // inzwischen ÅberflÅssig, oder ?
-  int          _terrain;    /*  BM     befahrbare terrain: z.B. Schiene, Wasser, Wald, ...  */
-  int          _terrainreq; /*  BM     diese Bits MöSSEN in ( field->typ->art & terrain ) gesetzt sein */
-  int          _terrainkill;  /* falls das aktuelle field nicht befahrbar ist, und bei field->typ->art eine dieser Bits gesetzt ist, verschwindet die vehicle */
-  unsigned char         steigung;      /*  max. befahrbare Hîhendifferenz zwischen 2 fieldern  */
-  unsigned char         jamming;      /*  StÑrke der Stîrstrahlen  */
-  Word         view;         /*  viewweite  */
-  char         wait;        /*  Kann vehicle nach movement sofort schie·en ?  */
-  char         dummy2;
-  Word         loadcapacity;      /*  Transportmîglichkeiten  */
-  word         maxunitweight; /*  maximales Gewicht einer zu ladenden vehicle */
-  char         loadcapability;     /*  BM     CHoehenStufen   die zu ladende vehicle mu· sich auf einer dieser Hîhenstufen befinden */
-  char         loadcapabilityreq;  /*  eine vehicle, die geladen werden soll, mu· auf eine diese Hîhenstufen kommen kînnen */
-  char         loadcapabilitynot;  /*  eine vehicle, die auf eine dieser Hîhenstufen kann, darf NICHT geladen werden. Beispiel: Flugzeuge in Transportflieger */
-  Word         id; 
-  int      tank; 
-  Word         fuelconsumption; 
-  int      energy; 
-  int      material; 
-  int      functions;
-  char         movement[8];      /*  max. movementsstrecke  */
-  char         movemalustyp;     /*  wenn ein Bodentyp mehrere Movemali fÅr unterschiedliche vehiclearten, wird dieser genommen.  <= cmovemalitypes */
-  tthreatvar   generalthreatvalue;   /*  Wird von ArtInt benîtigt, au·erhalb keine Bedeutung  */ 
-  tthreatvar   threatvalue[8];       /*  dito                                                 */
-  char         classnum;         /* Anzahl der Klassen, max 8, min 0 ;  Der EINZIGE Unterschied zwischen 0 und 1 ist der NAME ! */
-  char*        classnames[8];    /* Name der einzelnen Klassen */
-  tclassbound  classbound[8];    /* untergrenze (minimum), die zum erreichen dieser Klasse notwendig ist, classbound[0] gilt fÅr vehicletype allgemein*/
-  char         maxwindspeedonwater;
-  char         digrange;        // Radius, um den nach bodenschÑtzen gesucht wird. 
-  int          initiative;      // 0 ist ausgeglichen // 256 ist verdoppelung
-  int          _terrainnot;    /*  BM     sobald eines dieser Bits gesetzt ist, kann die vehicle NICHT auf das field fahren  */
-  int          _terrainreq1;  // wie terrainreq, es braucht aber nur 1 bit gesetzt zu sein
-  int          objectsbuildablenum;
-  int*         objectsbuildableid;
+   public:
+       char*        name;          /* z.B. Exterminator  */
+       char*        description;   /* z.B. Jagdbomber    */
+       char*        infotext;      /* optional, kann sehr ausfÅhrlich sein. Empfehlenswert Åber eine Textdatei einzulesen */
+       struct tweapons { 
+         unsigned char         weaponcount; 
+         struct tweapon {
+           word         typ;            /*  BM      <= CWaffentypen  */
+           unsigned char         targ;           /*  BM      <= CHoehenstufen  */
+           unsigned char         sourceheight;   /*  BM  "  */
+           Word         maxdistance;
+           Word         mindistance;
+           unsigned char         count;
+           char         maxstrength;    // Wenn der Waffentyp == Mine ist, dann ist hier die MinenstÑrke als Produkt mit der Bassi 64 abgelegt.
+           char         minstrength;
+         } waffe[8];
+       } oldattack;
 
-  int          weight;           // basic weight, without fuel etc. 
-  pterrainaccess terrainaccess;
-  int          bipicture;
-  int          vehiclesbuildablenum;
-  int*         vehiclesbuildableid;
+       struct { 
+          Word         energy; 
+          Word         material; 
+       } production;    /*  Produktionskosten der vehicle  */
 
-  void*        buildicon;
-  int          buildingsbuildablenum;
-  pbuildrange  buildingsbuildable;
-  UnitWeapon*  weapons;
-  int          dummy[2];
-  int maxweight ( void );     // max. weight including fuel and material
-  int maxsize   ( void );     // without fuel and material
-  int vehicleloadable ( pvehicletype fzt );
-  tvehicletype ( void );
+       Word         armor; 
+       void*        picture[8];    /*  0¯  ,  45¯   */
+       unsigned char height;        /*  BM  Besteht die Mîglichkeit zum Hîhenwechseln  */
+       word         researchid;    // inzwischen ÅberflÅssig, oder ?
+       int          _terrain;    /*  BM     befahrbare terrain: z.B. Schiene, Wasser, Wald, ...  */
+       int          _terrainreq; /*  BM     diese Bits MöSSEN in ( field->typ->art & terrain ) gesetzt sein */
+       int          _terrainkill;  /* falls das aktuelle field nicht befahrbar ist, und bei field->typ->art eine dieser Bits gesetzt ist, verschwindet die vehicle */
+       unsigned char         steigung;      /*  max. befahrbare Hîhendifferenz zwischen 2 fieldern  */
+       unsigned char         jamming;      /*  StÑrke der Stîrstrahlen  */
+       Word         view;         /*  viewweite  */
+       char         wait;        /*  Kann vehicle nach movement sofort schie·en ?  */
+       char         dummy2;
+       Word         loadcapacity;      /*  Transportmîglichkeiten  */
+       word         maxunitweight; /*  maximales Gewicht einer zu ladenden vehicle */
+       char         loadcapability;     /*  BM     CHoehenStufen   die zu ladende vehicle mu· sich auf einer dieser Hîhenstufen befinden */
+       char         loadcapabilityreq;  /*  eine vehicle, die geladen werden soll, mu· auf eine diese Hîhenstufen kommen kînnen */
+       char         loadcapabilitynot;  /*  eine vehicle, die auf eine dieser Hîhenstufen kann, darf NICHT geladen werden. Beispiel: Flugzeuge in Transportflieger */
+       Word         id; 
+       int      tank; 
+       Word         fuelconsumption; 
+       int      energy; 
+       int      material; 
+       int      functions;
+       char         movement[8];      /*  max. movementsstrecke  */
+       char         movemalustyp;     /*  wenn ein Bodentyp mehrere Movemali fÅr unterschiedliche vehiclearten, wird dieser genommen.  <= cmovemalitypes */
+       tthreatvar   generalthreatvalue;   /*  Wird von ArtInt benîtigt, au·erhalb keine Bedeutung  */ 
+       tthreatvar   threatvalue[8];       /*  dito                                                 */
+       char         classnum;         /* Anzahl der Klassen, max 8, min 0 ;  Der EINZIGE Unterschied zwischen 0 und 1 ist der NAME ! */
+       char*        classnames[8];    /* Name der einzelnen Klassen */
+       tclassbound  classbound[8];    /* untergrenze (minimum), die zum erreichen dieser Klasse notwendig ist, classbound[0] gilt fÅr vehicletype allgemein*/
+       char         maxwindspeedonwater;
+       char         digrange;        // Radius, um den nach bodenschÑtzen gesucht wird. 
+       int          initiative;      // 0 ist ausgeglichen // 256 ist verdoppelung
+       int          _terrainnot;    /*  BM     sobald eines dieser Bits gesetzt ist, kann die vehicle NICHT auf das field fahren  */
+       int          _terrainreq1;  // wie terrainreq, es braucht aber nur 1 bit gesetzt zu sein
+       int          objectsbuildablenum;
+       int*         objectsbuildableid;
+     
+       int          weight;           // basic weight, without fuel etc. 
+       pterrainaccess terrainaccess;
+       int          bipicture;
+       int          vehiclesbuildablenum;
+       int*         vehiclesbuildableid;
+     
+       void*        buildicon;
+       int          buildingsbuildablenum;
+       pbuildrange  buildingsbuildable;
+       UnitWeapon*  weapons;
+       int          autorepairrate;
+       int          dummy[1];
+       int maxweight ( void );     // max. weight including fuel and material
+       int maxsize   ( void );     // without fuel and material
+       int vehicleloadable ( pvehicletype fzt );
+       tvehicletype ( void );
 }; 
 
-typedef class tmap*  pmap;
 
-typedef class  tbuildingtype* pbuildingtype;
-
-/*  
-   typedef word tweapstrength[8]; 
-   typedef tweapstrength* pweapstrength ;
-*/
 class tvehicle { /*** Bei énderungen unbedingt Save/LoadGame und Konstruktor korrigieren !!! ***/ 
- public:
-  pvehicletype typ;          /*  vehicleart: z.B. Schwere Fu·truppe  */
-  unsigned char         color; 
-  unsigned char         damage; 
-  tmunition munition;
-  int      fuel; 
-  int*         ammo; 
-  int          evenmoredummy[3];
-  int*         weapstrength;
-  int          moredummy[3];
-  Word         dummy;     /*  Laderaum, der momentan gebraucht wird  */
-  tvehicle*    loading[32]; 
-  unsigned char         experience;    // 0 .. 15 
-  boolean      attacked; 
-  unsigned char         height;       /* BM */   /*  aktuelle Hîhe: z.B. Hochfliegend  */
-  char         movement;     /*  Åbriggebliebene movement fÅr diese Runde  */
-  unsigned char         direction;    /*  Blickrichtung  */
-  Integer      xpos, ypos;   /*  Position auf map  */
-  int      material;     /*  aktuelle loading an Material und  */
-  int      energy;       /*  energy  */
-  pvehicle     next;
-  pvehicle     prev;         /*  fÅr lineare Liste der vehicle */
-                 
-  short          cmpchecked;   /*  fÅr Computerintelligenz  */ 
-
-  tthreatvar   completethreatvaluesurr; 
-  tthreatvar   completethreatvalue;   /*  Wird von ArtInt benîtigt, au·erhalb keine Bedeutung  */ 
-  tthreatvar   threatvalue[8]; 
-  int          threats;   /* BM  => CCA_Threats  */ 
-  word         order; 
-  int      connection; 
-  unsigned char         klasse;
-  word         armor; 
-  int      networkid; 
-  char*        name;
-  int          functions;
-  char         reactionfire;     // BM   ; gibt an, gegen welche Spieler die vehicle noch reactionfiren kann.
-  char         reactionfire_active;
-  int          generatoractive;
-
-  int enablereactionfire( void );
-  int disablereactionfire ( void );
-  int weight( void );   // weight of unit including cargo, fuel and material
-  int cargo ( void );   // return weight of all loaded units
-  int getmaxfuelforweight ( void );       
-  int getmaxmaterialforweight ( void );
-  int freeweight ( int what = 0 );      // what: 0 = cargo ; 1 = material/fuel
-  int size ( void );
-  void nextturn( void );
-  void repairunit ( pvehicle vehicle, int maxrepair = 100 );
-  void constructvehicle ( pvehicletype tnk, int x, int y );      // current cursor position will be used
-  int  vehicleconstructable ( pvehicletype tnk, int x, int y );
-  void resetmovement( void );
-  void putimage ( int x, int y );
-  int  vehicleloadable ( pvehicle vehicle, int uheight = -1 );
-  void setnewposition ( int x, int y );
-  void setup_classparams_after_generation ( void );
-  void convert ( int col );
-  void setpower( int status );
-  void addview ( void );
-  void removeview ( void );
-  SingleWeapon *getWeapon( unsigned weaponNum );
-  int buildingconstructable ( pbuildingtype bld );
-
-  // int attackpossible ( int x, int y );
-  int getstrongestweapon( int aheight, int distance );
-
-  int searchstackforfreeweight( pvehicle eht, int what ); // what: 0=cargo ; 1=material/fuel
-  // should not be called except from freeweight
-  tvehicle ( void );
-  tvehicle ( pvehicle src, pmap actmap ); // if actmap == NULL  ==> unit will not be chained
-  void clone ( pvehicle src, pmap actmap ); // if actmap == NULL  ==> unit will not be chained
-  void transform ( pvehicletype type );     // to be used with extreme caution, and only in the mapeditor !!
-  ~tvehicle ( ); 
- private:
-  void init ( void );
+  public:
+    pvehicletype typ;          /*  vehicleart: z.B. Schwere Fu·truppe  */
+    unsigned char         color; 
+    unsigned char         damage; 
+    tmunition munition;
+    int      fuel; 
+    int*         ammo; 
+    int          evenmoredummy[3];
+    int*         weapstrength;
+    int          moredummy[3];
+    Word         dummy;     /*  Laderaum, der momentan gebraucht wird  */
+    tvehicle*    loading[32]; 
+    unsigned char         experience;    // 0 .. 15 
+    boolean      attacked; 
+    unsigned char         height;       /* BM */   /*  aktuelle Hîhe: z.B. Hochfliegend  */
+    char         movement;     /*  Åbriggebliebene movement fÅr diese Runde  */
+    unsigned char         direction;    /*  Blickrichtung  */
+    Integer      xpos, ypos;   /*  Position auf map  */
+    int      material;     /*  aktuelle loading an Material und  */
+    int      energy;       /*  energy  */
+    pvehicle     next;
+    pvehicle     prev;         /*  fÅr lineare Liste der vehicle */
+                   
+    short          cmpchecked;   /*  fÅr Computerintelligenz  */ 
+  
+    tthreatvar   completethreatvaluesurr; 
+    tthreatvar   completethreatvalue;   /*  Wird von ArtInt benîtigt, au·erhalb keine Bedeutung  */ 
+    tthreatvar   threatvalue[8]; 
+    int          threats;   /* BM  => CCA_Threats  */ 
+    word         order; 
+    int      connection; 
+    unsigned char         klasse;
+    word         armor; 
+    int      networkid; 
+    char*        name;
+    int          functions;
+    char         reactionfire;     // BM   ; gibt an, gegen welche Spieler die vehicle noch reactionfiren kann.
+    char         reactionfire_active;
+    int          generatoractive;
+  
+    int enablereactionfire( void );
+    int disablereactionfire ( void );
+    int weight( void );   // weight of unit including cargo, fuel and material
+    int cargo ( void );   // return weight of all loaded units
+    int getmaxfuelforweight ( void );       
+    int getmaxmaterialforweight ( void );
+    int freeweight ( int what = 0 );      // what: 0 = cargo ; 1 = material/fuel
+    int size ( void );
+    void nextturn( void );
+    void repairunit ( pvehicle vehicle, int maxrepair = 100 );
+    void constructvehicle ( pvehicletype tnk, int x, int y );      // current cursor position will be used
+    int  vehicleconstructable ( pvehicletype tnk, int x, int y );
+    void resetmovement( void );
+    void putimage ( int x, int y );
+    int  vehicleloadable ( pvehicle vehicle, int uheight = -1 );
+    void setnewposition ( int x, int y );
+    void setup_classparams_after_generation ( void );
+    void convert ( int col );
+    void setpower( int status );
+    void addview ( void );
+    void removeview ( void );
+    SingleWeapon *getWeapon( unsigned weaponNum );
+    int buildingconstructable ( pbuildingtype bld );
+  
+    // int attackpossible ( int x, int y );
+    int getstrongestweapon( int aheight, int distance );
+  
+    int searchstackforfreeweight( pvehicle eht, int what ); // what: 0=cargo ; 1=material/fuel
+    // should not be called except from freeweight
+    tvehicle ( void );
+    tvehicle ( pvehicle src, pmap actmap ); // if actmap == NULL  ==> unit will not be chained
+    void clone ( pvehicle src, pmap actmap ); // if actmap == NULL  ==> unit will not be chained
+    void transform ( pvehicletype type );     // to be used with extreme caution, and only in the mapeditor !!
+    ~tvehicle ( ); 
+  private:
+    void init ( void );
 }; 
 
-typedef pvehicle (tloading[32]);
-typedef tloading* ploading ;
-typedef pvehicletype (tproduction[32]);
 
 
-union tresources {
-  struct {
-    int energy, material, fuel;
-  }a;
-  int resource[3];
-} ;
 
 
-class tbuildingtype_bi_picture {
- public:
-  int num [ maxbuildingpicnum ][4][6];
-
-  tbuildingtype_bi_picture ( void ) {
-    for ( int i = 0; i < maxbuildingpicnum; i++ )
-      for ( int j = 0; j < 4; j++ )
-	for ( int k = 0; j < 6; j++ )
-	  num[i][j][k] = -1;
-  };
-};
-
-#ifdef HEXAGON
-class  tgeneral_old_building { 
-#else
-  class  tbuildingtype { 
-#endif
-  public:                         
-    Pointer      picture[ maxbuildingpicnum ][4][6];
-    struct { 
-      Shortint     x, y; 
-    } entry; 
-    Word         id; 
-    char*        name; 
-    Word         armor; 
-    unsigned char         jamming; 
-    unsigned char         view; 
-    Word         loadcapacity; 
-    unsigned char         loadcapability;   /*  BM => CHoehenstufen; aktuelle Hîhe der reinzufahrenden vehicle
-						mu· hier enthalten sein  */ 
-    unsigned char         unitheightreq;   /*   "       , es dÅrfen nur Fahrzeuge ,
-						die in eine dieser Hîhenstufen kînnen , geladen werden  */ 
-
-    struct  { 
-      word         material; 
-      word         sprit; 
-    } produktionskosten; 
-    int      special;   /*  HQ, Trainingslager, ...  */ 
 
 
-    unsigned char         technologylevel; 
-    unsigned char         researchid; 
-    struct  { 
-      shortint     x, y; 
-    } powerlineconnect, pipelineconnect; 
-
-    int      terrain;   /*  BM  */   /*  befahrbare terrain: z.B. Schiene, Wasser, Wald, ...  */ 
-    byte         construction_steps;  // 1 .. 8
-    int          maxresearchpoints; 
-
-    tresources   _tank;
-    tresources   maxplus;
-
-    int          efficiencyfuel;       // Basis 1024
-    int          efficiencymaterial;   // dito
-
-    void*        guibuildicon;
-
-    pterrainaccess terrain_access;
-    int          buildingheight;
-    int          unitheight_forbidden;
-    int          externalloadheight;
-    int          dummy[12];
-    void*        getpicture ( int x, int y );
-    int          vehicleloadable ( pvehicletype fzt );
-    int          gettank ( int resource );
-    void getfieldcoordinates( int bldx, int bldy, int x, int y, int *xx, int *yy);
-
-  }; 
-
-#ifdef HEXAGON
-  class  tbuildingtype { 
-  public:                         
-    void*        w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
-    int          bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
-    struct { 
-      int     x, y; 
-    } entry, powerlineconnect, pipelineconnect; 
-    int          id; 
-    char*        name; 
-    int          armor; 
-    int          jamming; 
-    int          view; 
-    int          loadcapacity; 
-    unsigned char         loadcapability;   /*  BM => CHoehenstufen; aktuelle Hîhe der reinzufahrenden vehicle
-						mu· hier enthalten sein  */ 
-    unsigned char         unitheightreq;   /*   "       , es dÅrfen nur Fahrzeuge ,
-						die in eine dieser Hîhenstufen kînnen , geladen werden  */ 
-
-    struct  { 
-      int          material; 
-      int          sprit; 
-    } produktionskosten; 
-    int          special;   /*  HQ, Trainingslager, ...  */ 
 
 
-    unsigned char         technologylevel; 
-    unsigned char         researchid; 
-
-    tterrainaccess terrainaccess;
-
-    int          construction_steps;  // 1 .. 8
-    int          maxresearchpoints; 
-
-    tresources   _tank;
-    tresources   maxplus;
-
-    int          efficiencyfuel;       // Basis 1024
-    int          efficiencymaterial;   // dito
-
-    void*        guibuildicon;
-
-    pterrainaccess terrain_access;
-    tresources   _bi_maxstorage;
-    int          buildingheight;
-    int          unitheight_forbidden;
-    int          externalloadheight;
-    int          dummy[9];
-    void*        getpicture ( int x, int y );
-
-    tbuildingtype ( void ) 
-      {
-	terrain_access = &terrainaccess;
-      };
-    int          vehicleloadable ( pvehicletype fzt );
-    int          gettank ( int resource );
-    void getfieldcoordinates( int bldx, int bldy, int x, int y, int *xx, int *yy);
-  }; 
-#endif
 
 
-  typedef class  tbuilding* pbuilding;
+class  tbuildingtype { 
+   public:                         
+        void*        w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
+        int          bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
+        struct { 
+          int     x, y; 
+        } entry, powerlineconnect, pipelineconnect; 
+        int          id; 
+        char*        name; 
+        int          armor; 
+        int          jamming; 
+        int          view; 
+        int          loadcapacity; 
+        unsigned char         loadcapability;   /*  BM => CHoehenstufen; aktuelle Hîhe der reinzufahrenden vehicle
+    						mu· hier enthalten sein  */ 
+        unsigned char         unitheightreq;   /*   "       , es dÅrfen nur Fahrzeuge ,
+    						die in eine dieser Hîhenstufen kînnen , geladen werden  */ 
+    
+        struct  { 
+          int          material; 
+          int          sprit; 
+        } produktionskosten; 
+        int          special;   /*  HQ, Trainingslager, ...  */ 
+    
+    
+        unsigned char         technologylevel; 
+        unsigned char         researchid; 
+    
+        tterrainaccess terrainaccess;
+    
+        int          construction_steps;  // 1 .. 8
+        int          maxresearchpoints; 
+    
+        tresources   _tank;
+        tresources   maxplus;
+    
+        int          efficiencyfuel;       // Basis 1024
+        int          efficiencymaterial;   // dito
+    
+        void*        guibuildicon;
+    
+        pterrainaccess terrain_access;
+        tresources   _bi_maxstorage;
+        int          buildingheight;
+        int          unitheight_forbidden;
+        int          externalloadheight;
+        int          dummy[9];
+        void*        getpicture ( int x, int y );
+    
+        tbuildingtype ( void ) {
+           terrain_access = &terrainaccess;
+        };
 
-  class  tbuilding {                         
-    int turnstatus;
-    int turnminestatus;
+        int          vehicleloadable ( pvehicletype fzt );
+        int          gettank ( int resource );
+        void getfieldcoordinates( int bldx, int bldy, int x, int y, int *xx, int *yy);
+}; 
+
+
+class  tbuilding {                         
     int lastenergyavail;
     int lastmaterialavail;
     int lastfuelavail;
   public:
-    pbuildingtype typ; 
-    tmunition    munitionsautoproduction; 
-    unsigned char         color; 
-    tproduction  production; 
-    tloading      loading; 
-    unsigned char         damage; 
+    pbuildingtype     typ; 
+    tmunition         munitionsautoproduction; 
+    unsigned char     color; 
+    pvehicletype      production[32]; 
+    pvehicle          loading[32]; 
+    unsigned char     damage; 
 
     tresources   plus;
     tresources   maxplus;
@@ -645,31 +739,48 @@ class  tgeneral_old_building {
     int          netcontrol; 
     int      connection; 
     boolean      visible; 
-    tproduction  productionbuyable;
+    pvehicletype  productionbuyable[32];
 
     tresources bi_resourceplus;
 
-
     tbuilding( void );
     int lastmineddist;
-    int  getenergyplus( int mode );  // mode ( bitmapped ) : 1 : maximale energieproduktion ( ansonsten das, was gerade ins netz reingeht )
-    //                      2 : windkraftwerk
-    //                      4 : solarkraftwerk
-    //                      8 : konventionelles Kraftwerk
-    int  getmaterialplus( int mode );  // mode ( bitmapped ) : 1 : maximale energieproduktion ( ansonsten das, was gerade ins netz reingeht )
-    int  getfuelplus( int mode );  // mode ( bitmapped )     : 1 : maximale energieproduktion ( ansonsten das, was gerade ins netz reingeht )
-
+                                      /*
+                                       int  getenergyplus( int mode );  // mode ( bitmapped ) : 1 : maximale energieproduktion ( ansonsten das, was gerade ins netz reingeht )
+                                       //                      2 : windkraftwerk
+                                       //                      4 : solarkraftwerk
+                                       //                      8 : konventionelles Kraftwerk
+                                       //                     16 : mining station
+                                       int  getmaterialplus( int mode );  // mode ( bitmapped ) : 1 : maximale energieproduktion ( ansonsten das, was gerade ins netz reingeht )
+                                       int  getfuelplus( int mode );  // mode ( bitmapped )     : 1 : maximale energieproduktion ( ansonsten das, was gerade ins netz reingeht )
+                                      */
+    int  getresourceplus ( int mode, tresources* plus, int queryonly ); // returns a positive value when the building did actually something
     void initwork ( void );           
     int  worktodo ( void );
-    void processwork ( void );
+    int  processwork ( void );    // returns a positive value when the building did actually something
 
   private:
-    void produceenergy( void );   
-    void producematerial( void );
-    void producefuel( void );
-    int  processmining ( int res, int abbuchen = 1 );
+    int  processmining ( int res, int abbuchen );
 
   public:
+    struct {
+       struct {
+          tresources touse;
+          int did_something_atall;
+          int did_something_lastpass;
+          int finished;
+       } mining;
+       struct {
+          tresources toproduce;
+          int did_something_atall;
+          int did_something_lastpass;
+          int finished;
+       } resource_production;
+       int wind_done;   
+       int solar_done;   
+       int bimode_done;
+    } work;
+
     void execnetcontrol ( void );
     int  getmininginfo ( int res );
 
@@ -686,29 +797,14 @@ class  tgeneral_old_building {
     void removeview ( void );
     int  chainbuildingtofield ( int x, int y );
     int  unchainbuildingfromfield ( void );
-  };
+};
 
-  struct tquickview {
-    struct {
-      char p1;
-      char p3[3][3];
-      char p5[5][5];
-    } dir[8];
-  };
 
-  typedef struct tquickview* pquickview;
-  typedef struct tterraintype* pterraintype;
-  typedef class  twterraintype* pwterraintype ;
-
-  class  twterraintype {
+class  twterraintype {
   public:
-    Pointer        picture[8];
-    pointer        direcpict[8];
-#ifdef HEXAGON
+    void*        picture[8];
+    void*        direcpict[8];
     int            dummy1;
-#else
-    int            art;  
-#endif
     Word           defensebonus;
     word           attackbonus;
     char           basicjamming;
@@ -717,50 +813,20 @@ class  tgeneral_old_building {
     pterraintype  terraintype;
     pquickview     quickview;
     void           paint ( int x1, int y1 );
-#ifdef HEXAGON
     int            bi_picture[6]; 
     tterrainbits   art; 
-#endif
-  };
+};
 
-  struct tterraintype {
+struct tterraintype {
     char*              name;
     int                id;
     pwterraintype   weather[cwettertypennum];
     int                neighbouringfield[8];   
-  };
+};
 
 
 
-  struct tresourcetribute {
-    struct {
-      union {
-	struct {
-	  int   energy[8][8];
-	  int   material[8][8];
-	  int   fuel[8][8];
-	}a;
-	int resource[3][8][8];
-      };
-    } avail, paid;
-  };
-  //  resourcetribute.avail.energy[a][b] gibt an, wieviel energie spieler b aus dem netz von spieler a noch abbuchen darf
-  //  resourcetribute.paid.energy[a][b] gibt an, wieviel energie spieler b aus dem netz von spieler a bereits abgebucht hat
-  //  a ist spender, b empfÑnger
-  typedef tresourcetribute* presourcetribute ;
-
-  typedef class tfield* pfield ;
-
-
-#ifdef HEXAGON
-  struct thexpic {
-    void* picture;
-    int   bi3pic;
-    int   flip;  // Bit 1: Horizontal ; Bit 2: Vertikal
-  };
-
-
-  class tobjecttype {
+class tobjecttype {
   public: 
     int id;
     int weather;
@@ -817,85 +883,37 @@ class  tgeneral_old_building {
     void* getpic ( int i, int weather = 0 );
     int  buildable ( pfield fld );
     int connectablewithbuildings ( void );
-  };
+};
 
-#else
 
-  class tobjecttype {
-  public: 
-    int id;
-    int terrain_and;
-    int terrain_or;
-    int objectslinkablenum;
-    union {
-      int*            objectslinkableid;
-      pobjecttype*    objectslinkable;
-    };
+class tobject {
+    public:
+       pobjecttype typ;
+       int damage;
+       int dir;
+       int time;
+       int dummy[4];
+       tobject ( void );
+       tobject ( pobjecttype t );
+       void display ( int x, int y, int weather = 0 );
+       void setdir ( int dir );
+       int  getdir ( void );
+};
 
-    void** picture;
+class tmine {
+   public:
+      int type;
+      int strength;
+      int time;
+      int color;
+      int attacksunit ( const pvehicle veh );
+};
 
-    int pictnum;
-    int armor;
 
-    char  movemalus_plus_count;
-    char* movemalus_plus;
-
-    char  movemalus_abs_count;
-    char* movemalus_abs;
-
-    int attackbonus_plus;
-    int attackbonus_abs;
-
-    int defensebonus_plus;
-    int defensebonus_abs;
-
-    int basicjamming_plus;
-    int basicjamming_abs;
-
-    int height;   
-
-    tresources buildcost;
-    tresources removecost;
-    int movecost;  // basis 8 
-
-    char* name;
-    int no_autonet;
-
-    void* buildicon;
-    void* removeicon;
-    int* dirlist;
-    int dirlistnum;
-    int dummy[6];
-    void display ( int x, int y );
-    void display ( int x, int y, int dir, int weather = 0 );
-    void* getpic ( int i, int weather = 0 );
-    int  buildable ( pfield fld );
-    int connectablewithbuildings ( void );
-  };
-#endif
-
-  typedef class tobject* pobject;
-  class tobject {
+class  tobjectcontainer {
   public:
-    pobjecttype typ;
-    int damage;
-    int dir;
-    int time;
-    int dummy[4];
-    //void* picture;
-    tobject ( void );
-    tobject ( pobjecttype t );
-    void display ( int x, int y, int weather = 0 );
-    void setdir ( int dir );
-    int  getdir ( void );
-  };
-
-
-  typedef class  tobjectcontainer* pobjectcontainer;
-  class  tobjectcontainer {
-  public:
-    char         mine;   /*  BM  */ 
-    char         minestrength;  
+    int minenum;
+    tmine* mine[ maxminesonfield ];
 
     int objnum;
     pobject object[ maxobjectonfieldnum ];
@@ -903,9 +921,8 @@ class  tgeneral_old_building {
     tobjectcontainer ( void );
     int checkforemptyness ( void );
     pobject checkforobject ( pobjecttype o );
-  };
+};
 
-  typedef struct tresourceview* presourceview;
   struct tresourceview {
     tresourceview ( void );
     char    visible;      // BM
@@ -914,7 +931,7 @@ class  tgeneral_old_building {
   };
 
 
-  class  tfield { 
+class  tfield { 
   public:
     pwterraintype typ;   
 
@@ -922,8 +939,7 @@ class  tgeneral_old_building {
     Word         visible;   /*  BM  */ 
     unsigned char         direction; 
 
-    Pointer      picture;   
-    unsigned char         movemalus[cmovemalitypenum];
+    void*      picture;   
     union  {
       struct { 
 	char         temp;      
@@ -941,7 +957,7 @@ class  tgeneral_old_building {
     tterrainbits  bdt;
     int connection;
              
-    int mineexist ( void );
+    int minenum ( void );
     void addobject ( pobjecttype obj, int dir = -1, int force = 0 );
     void removeobject ( pobjecttype obj );
     void sortobjects ( void );
@@ -953,9 +969,14 @@ class  tgeneral_old_building {
     int getattackbonus  ( void );
     int getweather ( void );
     int getjamming ( void );
+    int getmovemalus ( const pvehicle veh );
+    int getmovemalus ( int type );
+    int mineattacks ( const pvehicle veh );
+    int mineowner ( void );
+    void checkminetime ( int time );
 
-    void  putmine ( int col, int typ, int strength );
-    void  removemine ( void );
+    int   putmine ( int col, int typ, int strength );   // return 1 on success
+    void  removemine ( int num ); // num == -1 : remove last mine
     struct {
       int view;
       int jamming;
@@ -964,11 +985,12 @@ class  tgeneral_old_building {
   private:
     int getx( void );
     int gety( void );
-  };
+    unsigned char         _movemalus[cmovemalitypenum];
+};
 
-  typedef struct tevent* pevent ;
 
-  class  teventtrigger_polygonentered {
+typedef struct teventtrigger_polygonentered* peventtrigger_polygonentered;
+class  teventtrigger_polygonentered {
   public:
     int size;
     pvehicle vehicle;
@@ -982,10 +1004,11 @@ class  tgeneral_old_building {
     teventtrigger_polygonentered ( void );
     teventtrigger_polygonentered ( const teventtrigger_polygonentered& poly );
     ~teventtrigger_polygonentered ( );
-  };
-  typedef struct teventtrigger_polygonentered* peventtrigger_polygonentered;
+};
 
-  class  LargeTriggerData {
+
+typedef class LargeTriggerData* PLargeTriggerData;
+class  LargeTriggerData {
   public:
     tgametime time;
     int xpos, ypos;
@@ -999,27 +1022,10 @@ class  tgeneral_old_building {
     LargeTriggerData ( void );
     LargeTriggerData ( const LargeTriggerData& data );
     ~LargeTriggerData();
-  };
-  typedef LargeTriggerData* PLargeTriggerData;
-
-/*
-   struct ttriggerdata { 
-                     union {                        
-                       tgametime time;
-                       struct {  word         xpos, ypos;  };
-                       struct {  pbuilding    building;  };
-                       struct {  pvehicle     vehicle;  };
-                       struct {  pevent       event;  };
-                       struct {  int      id;  };
-                       struct {  peventtrigger_polygonentered unitpolygon;  };
-                       PLargeTriggerData largedata;
-                     };
-                  };
-
-*/
+};
 
 
-  class tevent { 
+class tevent { 
   public:
     union { 
       struct {  word         saveas; char action, num;  }a;  /*  CEventActions  */
@@ -1063,16 +1069,16 @@ class  tgeneral_old_building {
     tevent ( void );
     tevent ( const tevent& event );
     ~tevent ( void );
-  }; 
+}; 
 
-
+/*
   struct teventact { 
     union { 
-      struct {  word         saveas, action;  }a;  /* Id-Nr */   /*  ==> Technology.Requireevent; Tevent.trigger; etc.  */ 
-      int      ID;    /*  CEventActions  */ 
+      struct {  word         saveas, action;  }a;  // Id-Nr   ==> Technology.Requireevent; Tevent.trigger; etc.  
+      int      ID;    //   CEventActions  
     };
   };
-
+*/
 
 
   /*  Datenaufbau des triggerData fieldes: [ hi 16 Bit ] [ low 16 Bit ] [ 32 bit Integer ] [ Pointer ]      [ low 24 Bit       ]  [ high 8 Bit ]
@@ -1176,20 +1182,19 @@ class  tgeneral_old_building {
 
     Wenn Data != NULL ist, MU· datasize die Grî·e des Speicherbereichs, auf den Data zeigt, beinhalten.
 
-    */
+ */
 
 
-  struct tresearchdatachange { 
+struct tresearchdatachange { 
     word         weapons[waffenanzahl];   /*  Basis 1024  */
     word         armor;         /*  Basis 1024  */
     unsigned char         dummy[20+(12-waffenanzahl)*2];
-  }; 
+}; 
 
-  typedef class  ttechnology* ptechnology ;
 
-  class  ttechnology { 
+class  ttechnology { 
   public:
-    pointer      icon; 
+    void*      icon; 
     char*        infotext; 
     int          id; 
     int          researchpoints; 
@@ -1210,18 +1215,16 @@ class  tgeneral_old_building {
     int techlevelset;
     int dummy[7];
     int  getlvl( void );
-  };
+};
 
 
-  typedef class tresearch* presearch ;
 
-  typedef struct tdevelopedtechnologies*  pdevelopedtechnologies;
-  struct tdevelopedtechnologies {
+struct tdevelopedtechnologies {
     ptechnology               tech;
     pdevelopedtechnologies    next;
-  };
+};
              
-  class tresearch { 
+class tresearch { 
   public:
     int                     progress;
     ptechnology             activetechnology;
@@ -1233,87 +1236,32 @@ class  tgeneral_old_building {
     int vehicletypeavailable ( const pvehicletype fztyp, pmap map );       // The map should be saved as a pointer in TRESEARCH, but this will change the size of TMAP and make all existing savegames and maps invalid ....
     int vehicleclassavailable ( const pvehicletype fztyp , int classnm, pmap map );
 
-  };
+};
 
 
-
-  struct tcampaign { 
+struct tcampaign { 
     Word         id; 
     word         prevmap;   /*  ID der vorigen Karte  */ 
     unsigned char         player;   /*  Farbenummer des Spielers: 0..7  */ 
     boolean      directaccess;   /*  Kann die Karte einzeln geladen werden oder nicht ?  */ 
     unsigned char         dummy[21];   /*  fÅr zukÅnftige erweiterungen  */ 
-  }; 
+}; 
 
 
-
-  typedef struct tcampaign* pcampaign ;
-
-  struct taiparams {
-    char    dummy[128];
-  };
-  typedef struct taiparams* paiparams;
-
-  typedef struct teventstore* peventstore ;
-
-
-  /*
-   typedef struct tfieldresourcesshown* pfieldresourcesshown;
-   struct tfieldresourcesshown {
-                         int fieldnum;
-                         word  xp,yp;
-                         char  player;   // BM
-                         int material[8];
-                         int fuel[8];
-                         int turn[8];
-                    };
-
-
-
-   typedef struct tfieldresourcearray* pfieldresourcearray;
-                                       
-   struct tfieldresourcearray {
-               int                     min, max;
-               int                     num;
-               pfieldresourcearray     next;
-               pfieldresourcearray     prev;
-               tfieldresourcesshown    data[1024];
-           };
-
-*/
-
-  struct teventstore { 
-    int          num; 
-    peventstore  next; 
-    int      eventid[256]; 
-    int      mapid[256];
-  };
-
-  class twind {
+class twind {
   public:
     char speed;
     char direction;
     int operator== ( const twind& b ) const;
-  };
+};
 
-  struct tweather {
-    char fog;
-    twind wind[3];
-    char dummy[12];
-  };
-
-  typedef char* pchar;
-
-  typedef class tbasenetworkconnection* pbasenetworkconnection;
 
 #define tnetworkdatasize 100
+typedef char tnetworkconnectionparameters[ tnetworkdatasize ];
+typedef tnetworkconnectionparameters* pnetworkconnectionparameters;
 
-  typedef char tnetworkconnectionparameters[ tnetworkdatasize ];
-  typedef tnetworkconnectionparameters* pnetworkconnectionparameters;
 
-  enum tnetworkchannel { receive, send };
-
-  class tnetworkcomputer {
+class tnetworkcomputer {
   public:
     char*        name;
     struct {
@@ -1324,10 +1272,10 @@ class  tgeneral_old_building {
     int          existent;
     tnetworkcomputer ( void );
     ~tnetworkcomputer ( );
-  } ;
+};
 
 
-  class  tnetwork {
+class  tnetwork {
   public:
     struct {
       char         compposition;   // Nr. des Computers, an dem der SPieler spielt    => network.computernames
@@ -1344,18 +1292,7 @@ class  tgeneral_old_building {
       int dummy[48];
     } globalparams;
     tnetwork ( void );
-  };
-  typedef struct tnetwork* pnetwork;
-
-
-  struct tcursorpos {
-    struct {
-      integer cx;
-      integer sx;
-      integer cy;
-      integer sy;
-    } position[8];
-  };
+};
 
 
   typedef struct tdissectedunit* pdissectedunit;
@@ -1370,138 +1307,7 @@ class  tgeneral_old_building {
 
 
 
-#ifndef pmemorystreambuf_defined
-#define pmemorystreambuf_defined
-
-  typedef class tmemorystreambuf* pmemorystreambuf;
-  typedef class tmemorystream* pmemorystream;
-
-#endif
-
-  class treplayinfo {
-  public:
-    pmemorystreambuf guidata[8];
-    pmemorystreambuf map[8];
-    pmemorystream    actmemstream;
-    treplayinfo ( void );
-    ~treplayinfo ( );
-  };
-
-  typedef class  tmessage* pmessage;
-  class  tmessage {
-  public:
-    int from;      // BM ; Bit 9 ist system
-    int to;        // BM
-    time_t time;
-    char* text;
-    int id;
-    int runde;  //  Zeitpunkt des abschickens
-    int move;   //  "
-    pmessage next;
-    tmessage ( void );
-    tmessage ( pmap spfld );
-    tmessage ( char* txt, int rec );  // fÅr Meldungen vom System
-    ~tmessage();
-  };
-
-
-  typedef class tmessagelist* pmessagelist;
-  class tmessagelist {
-  public:
-    pmessage message;
-    pmessagelist next;
-    pmessagelist prev;
-    tmessagelist( pmessagelist* prv );
-    ~tmessagelist(  );
-    int getlistsize ( void );  // liefert 1 falls noch weitere Glieder in der Liste existieren, sonst 0;
-  };
-
-
-  typedef class tspeedcrccheck* pspeedcrccheck;
-  typedef class tcrcblock* pcrcblock;
-
-  class tcrcblock {
-  public:
-    int  crcnum;
-    pcrc crc;
-    int restricted;
-    // restricted kennt 3 ZustÑnde: 0 = nicht limitiert, neue vehicle werden nicht aufgenommen; 
-    //                              1 = nicht limitiert, neue vehicle werden aufgenommen
-    //                              2 = limitiert: es dÅrfen nur vehicle verwendet werden, deren CRCs bekannt sind
-    tcrcblock ( void );
-  };
-
-
-  typedef class tobjectcontainercrcs *pobjectcontainercrcs;
-  class tobjectcontainercrcs {
-  public:
-    tcrcblock unit;
-    tcrcblock building;
-    tcrcblock object;
-    tcrcblock terrain;
-    tcrcblock technology;
-
-    pspeedcrccheck speedcrccheck;
-
-    tobjectcontainercrcs ( void );
-
-    int dummy[40];
-  };
-
-
-  /*
-   class tfieldarray {
-           struct { tfield fieldl1[1024] };
-
-           fieldl1* fieldl2;
-
-         public:
-           tfieldarray ( int size );
-           tfieldarray ( void );
-           void alloc ( int size );
-           void free ( void );
-           tfield& operator[] ( int a ) { return fieldl2[ a >> 10 ].field[ a & 1023 ]; }
-           ~tfieldarray();
-
-
-    };
-*/
-
-
-  enum tplayerstat { ps_human, ps_computer, ps_off };
-
-  enum tshareviewmode { sv_none, sv_shareview };
-
-  class  tshareview {
-  public:
-    tshareview ( void ) { recalculateview = 0; };
-    tshareview ( const tshareview* org );
-    char mode[8][8];
-    int recalculateview;
-  };
-  // mode[1][6] = visible_all    =>  Spieler 1 gibt Spieler 6 die view frei
-
-  typedef tshareview *pshareview;
-
-  struct PreferredFilenames {
-    char* mapname[8];
-    char* mapdescription[8];
-    char* savegame[8];
-    char* savegamedescription[8];
-  };
-
-  class  EllipseOnScreen {
-  public:
-    int x1, y1, x2, y2;
-    int color;
-    float precision;
-    int active;
-    EllipseOnScreen ( void ) { active = 0; };
-    void paint ( void );
-  };
-
-
-  class tmap { 
+class tmap { 
   public:
     word         xsize, ysize;   /*  Grî·e in fielder  */ 
     word         xpos, ypos;     /*  aktuelle Dargestellte Position  */
@@ -1513,7 +1319,11 @@ class  tgeneral_old_building {
     signed char  actplayer; 
     tgametime    time;
 
-    tweather     weather;
+    struct tweather {
+       char fog;
+       twind wind[3];
+       char dummy[12];
+    } weather;
 
     int resourcemode;  // 1 = Battle-Isle-Mode
 
@@ -1554,7 +1364,15 @@ class  tgeneral_old_building {
     // char*        alliancenames[8];
     int           alliance_names_not_used_any_more[8];
 
-    tcursorpos   cursorpos;
+    struct tcursorpos {
+      struct {
+        integer cx;
+        integer sx;
+        integer cy;
+        integer sy;
+      } position[8];
+    } cursorpos;
+
     presourcetribute tribute;
     pmessagelist  unsentmessage;
     pmessage      message;
@@ -1575,589 +1393,33 @@ class  tgeneral_old_building {
     PreferredFilenames* preferredfilenames;
     EllipseOnScreen* ellipse;
     int           graphicset;
-    int           dummy[31];
-    int           gameparameter[ maxgameparameternum ];
-    /*
-      tmap ( void );
-      tmap ( const tmap &map );
-      ~tmap ( );
-    */
+    int           gameparameter_num;
+    int*          game_parameter;
+    int           dummy[29];
+    int           _oldgameparameter[ 8 ];
     void chainunit ( pvehicle unit );
     void chainbuilding ( pbuilding bld );
     pvehicle getunit ( int x, int y, int nwid );
+    int getgameparameter ( int num );
+    void setgameparameter ( int num, int value );
   private:
     pvehicle getunit ( pvehicle eht, int nwid );
 
-  }; 
+}; 
 
 
 
 
-  typedef struct tguiicon* pguiicon ;
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/// Even more miscellaneous structures...
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 
-  struct tguiicon { 
-    Pointer      picture[2]; 
-    char         txt[31]; 
-    unsigned char         id; 
-    char         key[4]; 
-    word         realkey[4]; 
-    unsigned char         order; 
-  };
+enum tnetworkchannel { receive, send };
 
-  struct ticons { 
-    struct { 
-      void      *pfeil1, *pfeil2; 
-    } weapinfo; 
-    Pointer      statarmy[3]; 
-    Pointer      height[8];      // fÅr vehicleinfo - DLG-Box
-    void*        height2[3][8];  // fÅr vehicleinfo am map
-    void*        player[8];      // aktueller Spieler in der dashboard: FARBE.RAW 
-    void*        allianz[8][3];  // Allianzen in der dashboard: ALLIANC.RAW 
-    void*        diplomaticstatus[8]; 
-    void*        selectweapongui[12];
-    void*        selectweaponguicancel;
-    void*        unitinfoguiweapons[13];
-    void*        experience[16];
-    void*        wind[9];
-    void*        windarrow;
-    void*        stellplatz;
-    void*        guiknopf;   // reingedrÅckter knopf
-    void*        computer;
-    void*        windbackground;
-    void*        smallmapbackground;
-    void*        weaponinfo[5];
-    void*        X;
-    struct {
-      struct       {
-	void* active;
-	void* inactive;
-	void* repairactive;
-	void* repairinactive;
-	void* movein_active;
-	void* movein_inactive;
-      } mark;
-      struct       {
-	struct {
-	  void* main;
-	  void* active;
-	  void* inactive;
-	} netcontrol;
-	struct {
-	  void* main;
-	  void* button;
-	  void* buttonpressed;
-	  void* schieber[4];
-	  void* schiene;
-	} ammoproduction;
-	struct {
-	  void* main;
-	} resourceinfo;
-	struct {
-	  void* main;
-	} windpower;
-	struct {
-	  void* main;
-	} solarpower;
-	struct {
-	  void* main;
-	  void* button;
-	  void* buttonpressed;
-	  void* schieber[4];
-	  void* schiene;
-	  void* schieneinactive;
-	} ammotransfer;
-	struct {
-	  void* main;
-	  void* button[2];
-	  void* schieber;
-	} research;
-	struct {
-	  void* main;
-	  void* button[2];
-	  void* schieber;
-	} conventionelpowerplant;
-	struct {
-	  void* main;
-	  void* height1[8];
-	  void* height2[8];
-	  void* repair;
-	  void* repairpressed;
-	  void* block;
-	} buildinginfo;
-	struct {
-	  void* main;
-	  void* button[2];
-	  void* resource[2];
-	  void* graph;
-	  void* axis[3];
-	  void* pageturn[2];
 
-	  void* schieber;
-	} miningstation;
-	struct {
-	  void* main;
-	  void* height1[8];
-	  void* height2[8];
-	  void* sum;
-	} transportinfo;
-
-      } subwin;
-      union        {
-	void* sym[11][2];
-	struct {
-	  void*  ammotransfer[2];
-	  void*  research[2];
-	  void*  resourceinfo[2];
-	  void*  netcontrol[2];
-	  void*  solar[2];
-	  void*  ammoproduction[2];
-	  void*  wind[2];
-	  void*  powerplant[2];
-	  void*  buildinginfo[2];
-	  void*  miningstation[2];
-	  void*  transportinfo[2];
-	} a;
-      } lasche;
-    
-      void* tabmark[2];
-      void* container_window;
-    } container;
-    struct {
-      void* bkgr;
-      void* orgbkgr;
-    } attack;
-    void*        pfeil2[8];     // beispielsweise fÅr das Mouse-Scrolling 
-    void*        mousepointer;
-    void*        fieldshape;
-    void*        hex2octmask;
-    void*        mapbackground;
-  }; 
-
-
-
-
-  class tnomaploaded {
-  };
-
-
-
-
-
-
-
-  /*  conquered = You conquered sth.
-          lost = an enemy conquered sth.   */ 
-
-
-     /* Zeigt an, bei welchen aktionen die dazugehîrige Mission/Event abgecheckt werden soll.
-     bitmapped */ 
-
-
-
-
-  extern  const char* cconnections[6];
-#define cconnection_destroy 1  
-#define cconnection_conquer 2  
-#define cconnection_lose 4  
-#define cconnection_seen 8
-#define cconnection_areaentered_anyunit 16
-#define cconnection_areaentered_specificunit 32
-
-  extern const char* ceventtriggerconn[]; 
-#define ceventtrigger_and 1  
-#define ceventtrigger_or 2  
-#define ceventtrigger_not 4  
-#define ceventtrigger_klammerauf 8  
-#define ceventtrigger_2klammerauf 16  
-#define ceventtrigger_2klammerzu 32  
-#define ceventtrigger_klammerzu 64  
-  /*  reihenfolgenprioritÑt: in der Reihenfolge von oben nach unten wird der TriggerCon ausgewertet
-               AND   OR
-               NOT
-               (
-               eigentliches event
-               )
-    */ 
-
-  extern const char* ceventactions[ceventactionnum]  ; 
-  /*  NICHT gebitmapped  */ 
-#define cemessage 0  
-#define ceweatherchange 1  
-#define cenewtechnology 2  
-#define celosecampaign 3  
-#define cerunscript  4  
-#define cenewtechnologyresearchable 5  
-#define cemapchange 6  
-#define ceeraseevent 7  
-#define cecampaignend 8  
-#define cenextmap 9   
-#define cereinforcement 10
-#define ceweatherchangecomplete 11
-#define cenewvehicledeveloped 12
-#define cepalettechange 13
-#define cealliancechange 14
-#define cewindchange 15
-#define cenothing 16
-#define cegameparamchange 17
-#define ceellipse 18
-#define ceremoveellipse 19
-
-  /*  Event-Auslîser:  */ 
-  extern const char*  ceventtrigger[]; 
-
-#define ceventt_turn 1  
-#define ceventt_buildingconquered 2  
-#define ceventt_buildinglost 3  
-#define ceventt_buildingdestroyed 4  
-#define ceventt_unitlost 5  
-#define ceventt_technologyresearched 6  
-#define ceventt_event 7  
-#define ceventt_unitconquered 8  
-#define ceventt_unitdestroyed 9  
-#define ceventt_allenemyunitsdestroyed 10  
-#define ceventt_allunitslost 11  
-#define ceventt_allenemybuildingsdestroyed 12  
-#define ceventt_allbuildingslost 13  
-#define ceventt_energytribute 14
-#define ceventt_materialtribute 15
-#define ceventt_fueltribute 16
-#define ceventt_any_unit_enters_polygon 17
-#define ceventt_specific_unit_enters_polygon 18
-#define ceventt_building_seen 19
-
-
-#define guiiconsizex 49  
-#define guiiconsizey 35  
-
-
-#define constfieldsize 16  
-#define maxguiiconnumber 100
-
-#define cminenum 4
-  extern const char*  cminentypen[cminenum] ;
-#define cmantipersonnelmine 1  
-#define cmantitankmine 2  
-#define cmmooredmine 3  
-#define cmfloatmine 4  
-
-  extern const unsigned char cminestrength[cminenum]  ;
-
-
-  extern const char*  cbuildingfunctions[cbuildingfunctionnum]; 
-#define cghqn 0  
-#define cghqb ( 1 << cghqn  )
-#define cgtrainingn 1  
-#define cgtrainingb ( 1 << cgtrainingn  )
-#define cgrefineryn 2  
-#define cgrefineryb ( 1 << cgrefineryn  )
-#define cgvehicleproductionn 3  
-#define cgvehicleproductionb ( 1 << cgvehicleproductionn  )
-#define cgammunitionproductionn 4  
-#define cgammunitionproductionb ( 1 << cgammunitionproductionn  )
-#define cgenergyproductionn 5  
-#define cgenergyproductionb ( 1 << cgenergyproductionn  )
-#define cgmaterialproductionn 6  
-#define cgmaterialproductionb ( 1 << cgmaterialproductionn  )
-#define cgfuelproductionn 7  
-#define cgfuelproductionb ( 1 << cgfuelproductionn  )
-#define cgrepairfacilityn 8  
-#define cgrepairfacilityb ( 1 << cgrepairfacilityn  )
-#define cgrecyclingplantn 9  
-#define cgrecyclingplantb ( 1 << cgrecyclingplantn  )
-#define cgresearchn 10  
-#define cgresearchb ( 1 << cgresearchn  )
-#define cgsonarn 11  
-#define cgsonarb ( 1 << cgsonarn )
-#define cgwindkraftwerkn 12
-#define cgwindkraftwerkb ( 1 << cgwindkraftwerkn )
-#define cgsolarkraftwerkn 13
-#define cgsolarkraftwerkb ( 1 << cgsolarkraftwerkn )
-#define cgconventionelpowerplantn 14
-#define cgconventionelpowerplantb ( 1 << cgconventionelpowerplantn )
-#define cgminingstationn 15
-#define cgminingstationb ( 1 << cgminingstationn )
-#define cgexternalloadingn 16
-#define cgexternalloadingb ( 1 << cgexternalloadingn )
-
-
-
-  extern const char*  cvehiclefunctions[]; 
-#define cfsonar 1  
-#define cfparatrooper 2  
-#define cfminenleger 4  
-#define cf_trooper 8  
-#define cfrepair 16  
-#define cf_conquer 32
-#define cf_moveafterattack 64
-#define cfsatellitenview 128  
-#define cfputbuilding 256  
-#define cfmineview 512  
-#define cfvehicleconstruction 1024  
-#define cfspecificbuildingconstruction 2048  
-#define cffuelref 4096  
-#define cficebreaker 8192  
-#define cfnoairrefuel 16384
-#define cfmaterialref 32768  
-  // #define cfenergyref 65536  
-#define cffahrspur ( 1 << 17 )   /*  !!  */
-#define cfmanualdigger ( 1 << 18 )
-#define cfwindantrieb ( 1 << 19 )
-#define cfautorepair ( 1 << 20 )
-#define cfgenerator ( 1 << 21 )
-#define cfautodigger ( 1 << 22 )
-#define cfkamikaze ( 1 << 23 )
-
-#define cfvehiclefunctionsanzeige 0xFFFFFFFF  
-
-
-  extern const char*  cbodenarten[]  ; 
-
-
-  extern tterrainbits cbwater0 ;
-  extern tterrainbits cbwater1 ;
-  extern tterrainbits cbwater2 ;
-  extern tterrainbits cbwater3 ;
-  extern tterrainbits cbwater  ;
-
-  extern tterrainbits cbstreet ;
-  extern tterrainbits cbrailroad ;
-  extern tterrainbits cbbuildingentry ;
-  extern tterrainbits cbharbour ;
-  extern tterrainbits cbrunway ;
-  extern tterrainbits cbrunway ;
-  extern tterrainbits cbpipeline ;
-  extern tterrainbits cbpowerline;
-  extern tterrainbits cbfahrspur ;
-  extern tterrainbits cbfestland ;
-  extern tterrainbits cbsnow1 ;
-  extern tterrainbits cbsnow2 ;
-  extern tterrainbits cbhillside ;
-  extern tterrainbits cbsmallrocks ;
-  extern tterrainbits cblargerocks ;
-
-  extern  const char*  choehenstufen[8] ;
-#define chtiefgetaucht 1  
-#define chgetaucht 2  
-#define chschwimmend 4  
-#define chfahrend 8  
-#define chtieffliegend 16  
-#define chfliegend 32  
-#define chhochfliegend 64  
-#define chsatellit 128  
-
-#define cwaffentypennum 12
-  extern const char*  cwaffentypen[cwaffentypennum] ; 
-
-#define cwcruisemissile 0
-#define cwcruisemissileb ( 1 << cwcruisemissile )
-#define cwminen 1  
-#define cwmineb ( 1 << cwminen   )
-#define cwbombn 2  
-#define cwbombb ( 1 << cwbombn  )
-#define cwairmissilen 3  
-#define cwairmissileb ( 1 << cwairmissilen  )
-#define cwgroundmissilen 4  
-#define cwgroundmissileb ( 1 << cwgroundmissilen  )
-#define cwtorpedon 5  
-#define cwtorpedob ( 1 << cwtorpedon  )
-#define cwmachinegunn 6  
-#define cwmachinegunb ( 1 << cwmachinegunn )
-#define cwcannonn 7  
-#define cwcannonb ( 1 << cwcannonn )
-#define cwweapon ( cwcruisemissileb | cwbombb | cwairmissileb | cwgroundmissileb | cwtorpedob | cwmachinegunb | cwcannonb )
-#define cwshootablen 11  
-#define cwshootableb ( 1 << cwshootablen  )
-#define cwammunitionn 9  
-#define cwammunitionb ( 1 << cwammunitionn )
-#define cwservicen 8  
-#define cwserviceb ( 1 << cwservicen )
-
-  extern const char*  cdnames[3];
-  /* CDmaterialN = 1;
-     CDmaterialB = 1 shl CDMaterialN;
-     CDfuelN = 2;
-     CDfuelB = 1 shl CDfuelN;
-     CDenergyN = 0;
-     CDenergyB = 1 shl CDenergyN;  */ 
-
-     /* CWmaterialN=8;
-   CWmaterialB=1 shl CWmaterialN;
-   CWenergyN=12;
-   CWenergyB=1 shl CWenergyN; */ 
-
-     /*  Angabe: Waffentyp; energy - Material - Sprit ; jeweils fÅr 5er Pack */         
-  extern const Word  cwaffenproduktionskosten[cwaffentypennum][3];
-  /*
-   extern const byte cstreetproductioncosts[3];
-   extern const byte crailroadproductioncosts[3];
-   extern const byte cpipelineproductioncosts[3];
-   extern const byte cpowerlineproductioncosts[3];
-   #define streetbuildmovedecrease 16
-   */
-
-
-#define movement_cost_for_repaired_unit 24
-#define movement_cost_for_repairing_unit 12
-#define attack_after_repair 1       // Can the unit that is beeing repaired attack afterwards? 
-
-#define mineputmovedecrease 8  
-  extern const unsigned char     cstreetdestructioncosts[3];
-#define streetmovemalus 8  
-#define railroadmovemalus 8  
-#define searchforresorcesmovedecrease 8
-
-#define capeace 0  
-#define cawar 1  
-#define cawarannounce 2
-#define capeaceproposal 3
-#define canewsetwar1 4
-#define canewsetwar2 5
-#define canewpeaceproposal 6
-#define capeace_with_shareview 7
-
-#define diplomaticstatnum 1  
-
-
-#ifdef HEXAGON
-#define maxmalq 10  
-#define minmalq 10
-#else
-#define maxmalq 12  
-#define minmalq 8
-#endif
-
-#define visible_not 0  
-#define visible_ago 1  
-#define visible_now 2  
-#define visible_all 3  
-
-  /*   #define stoerwidth 24  
-   #define stoerstaerkenfaktor 6  */
-
-#ifdef HEXAGON
-#define fieldxsize 48    /*  Breite eines terrainbildes  */ 
-#define fieldysize 48  
-#define fielddistx 64
-#define fielddisty 24
-#define fielddisthalfx 32
-#define sidenum 6
-#else
-#define fieldxsize 40    /*  Breite eines terrainbildes  */ 
-#define fieldysize 39  
-#define fielddirecpictsize 800
-#define fielddistx 40
-#define fielddisty 20
-#define fielddisthalfx 20
-#define sidenum 8
-#endif
-
-#define fieldsizex fieldxsize
-#define fieldsizey fieldysize
-
-  extern const int directionangle [ sidenum ];
-
-
-#define fieldsize (fieldxsize * fieldysize + 4 )
-  //   #define oldfieldsize (31 * 40 + 4  )
-#define unitsizex 30
-#define unitsizey 30
-#define tanksize (( unitsizex+1 ) * ( unitsizey+1 ) + 4 )
-#define unitsize tanksize
-#define fusstruppenplattfahrgewichtsfaktor 2  
-#define mingebaeudeeroberungsbeschaedigung 80  
-#define flugzeugtraegerrunwayverkuerzung 2  
-  /* flugzeugstartmovefaktor = 2; */ 
-#define repairefficiency_unit 2  
-#define repairefficiency_building 3
-
-#define autorepairdamagedecrease 10    // => in 10 Runden kann sich eine vehicle komplett selbst reparieren
-
-#define refineryefficiency 8  
-#define air_heightincmovedecrease 18  
-#define air_heightdecmovedecrease 0
-#define sub_heightincmovedecrease 12
-#define sub_heightdecmovedecrease 12
-#define helicopter_attack_after_ascent 1  // nach abheben angriff mîglich
-#define helicopter_attack_after_descent 0  // nach landen angriff mîglich
-#define helicopter_landing_move_cost 16   // zusÑtzlich zu den Kosten fÅr das Wechseln der Hîhenstufe 
-#define weaponpackagesize 5
-
-#define trainingexperienceincrease 2
-
-#define brigde1buildcostincrease 12       // jeweils Basis 8; flaches Wasser
-#define brigde2buildcostincrease 16       // jeweils Basis 8; mitteltiefes Wasser
-#define brigde3buildcostincrease 36       // jeweils Basis 8; tiefes Wasser
-
-  /* submovedecfactor =  6; */ 
-  /* aircraftlandedmovedecrease = 3; */ 
-
-
-#define lookintoenemytransports false  
-#define lookintoenemybuildings false  
-
-#define recyclingoutput 2    /*  Material div RecyclingOutput  */ 
-#define destructoutput 5
-#define nowindplanefuelusage 1      // herrscht kein Wind, braucht ein Flugzeug pro Runde soviel Sprit wie das fliegend dieser Anzahl fielder
-  //   #define maxwindplainfuelusage 32   // beim nextturn: tank -= fuelconsumption * (maxwindplainfuelusage*nowindplainfuelusage + windspeed) / maxwindplainfuelusage     
-#define maxwindspeed 128          // Wind der StÑrke 256 legt pro Runde diese Strecke zurÅck: 128 entspricht 16 fieldern diagonal !
-
-
-#define chainsawpossibility 16000    // Basis ist 32768
-
-#define generatortruckefficiency 2  // FÅr jede vehicle Power wird soviel Sprit gebraucht !
-
-#define researchenergycost 512      // fÅr 1000 researchpoints wird soviel energie benîtigt.
-#define researchmaterialcost 200    //                                     material
-#define researchcostdouble 10000    // bei soviel researchpoints verdoppeln sich die Kosten
-#define minresearchcost 0.5
-#define maxresearchcost 4
-#define airplanemoveafterstart 12
-#define airplanemoveafterlanding (2*minmalq - 1 )
-
-#define  viewadditiv 1
-
-#define tfieldtemp2max 255
-#define tfieldtemp2min 0
-
-
-#define cnet_storeenergy        0x001           // es wird garantiert,  da· material immer das 2 und fuel das 4 fache von energy ist
-#define cnet_storematerial      0x002
-#define cnet_storefuel          0x004
-
-#define cnet_moveenergyout      0x008
-#define cnet_movematerialout    0x010
-#define cnet_movefuelout        0x020
-
-#define cnet_stopenergyinput    0x040
-#define cnet_stopmaterialinput  0x080
-#define cnet_stopfuelinput      0x100
-
-#define cnet_stopenergyoutput   0x200
-#define cnet_stopmaterialoutput 0x400
-#define cnet_stopfueloutput     0x800
-
-
-#define resource_fuel_factor 100         // die im boden liegenden BodenschÑtzen ergeben effektiv soviel mal mehr ( bei Bergwerkseffizienz 1024 )
-#define resource_material_factor 100     // "
-
-#define destruct_building_material_get 3 // beim Abrei·en erhÑlt man 1/3 des eingesetzten Materials zurÅck
-#define destruct_building_fuel_usage 10  // beim Abrei·en wird 10 * fuelconsumption Fuel fuelconsumptiont
-
-
-#define dissectunitresearchpointsplus  2    // Beim dissectn einer vehicle wird der sovielte Teil der Researchpoints jeder unbekannten Technologie gutgeschrieben
-
-#define dissectunitresearchpointsplus2 3    // Beim dissectn einer vehicle wird der sovielte Teil der Researchpoints jeder unbekannten Technologie gutgeschrieben.
-  // FÅr die Technologie existieren aber bereits von einem anderen sezierten vehicletype gutschriften.
-
-#define maxminingrange 10     // soviele fielder such ein Bergwerk ab.
-
-#define fuelweight  4         // 1024 fuel wiegen soviel
-#define materialweight 12     // 1024 material wiegen soviel
-
-#define objectbuildmovecost 16  // vehicle->movement -= (8 + ( fld->movemalus[0] - 8 ) / ( objectbuildmovecost / 8 ) ) * kosten des obj
-
-
-  class tgameoptions {
+class tgameoptions {
   public:
     tgameoptions ( void );
     void setdefaults ( void );
@@ -2204,34 +1466,544 @@ class  tgeneral_old_building {
     int dummy2[41];
     int changed;
     char filename[20];
+};
+
+extern tgameoptions gameoptions;
+
+
+
+
+typedef struct tguiicon* pguiicon ;
+struct tguiicon { 
+  void*      picture[2]; 
+  char         txt[31]; 
+  unsigned char         id; 
+  char         key[4]; 
+  word         realkey[4]; 
+  unsigned char         order; 
+};
+
+
+struct ticons { 
+   struct { 
+     void      *pfeil1, *pfeil2; 
+   } weapinfo; 
+   void*      statarmy[3]; 
+   void*      height[8];      // fÅr vehicleinfo - DLG-Box
+   void*        height2[3][8];  // fÅr vehicleinfo am map
+   void*        player[8];      // aktueller Spieler in der dashboard: FARBE.RAW 
+   void*        allianz[8][3];  // Allianzen in der dashboard: ALLIANC.RAW 
+   void*        diplomaticstatus[8]; 
+   void*        selectweapongui[12];
+   void*        selectweaponguicancel;
+   void*        unitinfoguiweapons[13];
+   void*        experience[16];
+   void*        wind[9];
+   void*        windarrow;
+   void*        stellplatz;
+   void*        guiknopf;   // reingedrÅckter knopf
+   void*        computer;
+   void*        windbackground;
+   void*        smallmapbackground;
+   void*        weaponinfo[5];
+   void*        X;
+   struct {
+     struct       {
+         void* active;
+         void* inactive;
+         void* repairactive;
+         void* repairinactive;
+         void* movein_active;
+         void* movein_inactive;
+     } mark;
+     struct       {
+         struct {
+           void* main;
+           void* active;
+           void* inactive;
+         } netcontrol;
+         struct {
+           void* main;
+           void* button;
+           void* buttonpressed;
+           void* schieber[4];
+           void* schiene;
+         } ammoproduction;
+         struct {
+           void* main;
+         } resourceinfo;
+         struct {
+           void* main;
+         } windpower;
+         struct {
+           void* main;
+         } solarpower;
+         struct {
+           void* main;
+           void* button;
+           void* buttonpressed;
+           void* schieber[4];
+           void* schiene;
+           void* schieneinactive;
+         } ammotransfer;
+         struct {
+           void* main;
+           void* button[2];
+           void* schieber;
+         } research;
+         struct {
+           void* main;
+           // void* button[2];
+           void* schieber;
+         } conventionelpowerplant;
+         struct {
+           void* main;
+           void* height1[8];
+           void* height2[8];
+           void* repair;
+           void* repairpressed;
+           void* block;
+         } buildinginfo;
+         struct {
+           void* main;
+                  void* zeiger;
+           void* button[2];
+           void* resource[2];
+           void* graph;
+           void* axis[3];
+           void* pageturn[2];
+         
+           void* schieber;
+         } miningstation;
+         struct {
+           void* main;
+                  void* zeiger;
+           void* schieber;
+         } mineralresources;
+         struct {
+           void* main;
+           void* height1[8];
+           void* height2[8];
+           void* sum;
+         } transportinfo;
+     } subwin;
+     union {
+        void* sym[11][2];
+        struct {
+          void*  ammotransfer[2];
+          void*  research[2];
+          void*  resourceinfo[2];
+          void*  netcontrol[2];
+          void*  solar[2];
+          void*  ammoproduction[2];
+          void*  wind[2];
+          void*  powerplant[2];
+          void*  buildinginfo[2];
+          void*  miningstation[2];
+          void*  transportinfo[2];
+          void*  mineralresources[2];
+        } a;
+     } lasche;
+   
+     void* tabmark[2];
+     void* container_window;
+   } container;
+   struct {
+     void* bkgr;
+     void* orgbkgr;
+   } attack;
+   void*        pfeil2[8];     // beispielsweise fÅr das Mouse-Scrolling 
+   void*        mousepointer;
+   void*        fieldshape;
+   void*        hex2octmask;
+   void*        mapbackground;
+}; 
+
+
+
+
+  class tnomaploaded {       // this is used as an exception
   };
 
-  extern tgameoptions gameoptions;
+
+
+
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/// Structure field naming constants 
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+
+#define cminenum 4
+extern const char*  cminentypen[cminenum] ;
+extern const int cminestrength[cminenum]  ;
+ #define cmantipersonnelmine 1  
+ #define cmantitankmine 2  
+ #define cmmooredmine 3  
+ #define cmfloatmine 4  
+
+
+
+enum { capeace, cawar, cawarannounce, capeaceproposal, canewsetwar1, canewsetwar2, canewpeaceproposal, capeace_with_shareview };
+enum { visible_not, visible_ago, visible_now, visible_all };
 
 
   extern const char*  cwettertypen[];
 
-  extern const char* gameparametername[ gameparameternum ];
-  extern const int gameparameterdefault [ gameparameternum ];
-#define cgp_fahrspur  0
-#define cgp_eis  1
-#define cgp_movefrominvalidfields 2
-#define cgp_building_material_factor 3
-#define cgp_building_fuel_factor 4
-#define cgp_forbid_building_construction 5
-#define cgp_forbid_unitunit_construction 6
-#define cgp_bi3_training 7
+extern const char* gameparametername[ gameparameternum ];
+extern const int gameparameterdefault [ gameparameternum ];
+enum { cgp_fahrspur, cgp_eis, cgp_movefrominvalidfields, cgp_building_material_factor, cgp_building_fuel_factor,
+       cgp_forbid_building_construction, cgp_forbid_unitunit_construction, cgp_bi3_training, cgp_maxminesonfield,
+       cgp_antipersonnelmine_lifetime, cgp_antitankmine_lifetime, cgp_mooredmine_lifetime, cgp_floatingmine_lifetime };
 
 
-  extern const char*  cmovemalitypes[cmovemalitypenum];
-  extern const int csolarkraftwerkleistung[];
-  extern const char* cnetcontrol[cnetcontrolnum];
-  extern const char* cgeneralnetcontrol[];
+
+extern  const char*  choehenstufen[8] ;
+ #define chtiefgetaucht 1  
+ #define chgetaucht 2  
+ #define chschwimmend 4  
+ #define chfahrend 8  
+ #define chtieffliegend 16  
+ #define chfliegend 32  
+ #define chhochfliegend 64  
+ #define chsatellit 128  
+
+
+#define cwaffentypennum 12
+ extern const char*  cwaffentypen[cwaffentypennum] ; 
+ #define cwcruisemissile 0
+ #define cwcruisemissileb ( 1 << cwcruisemissile )
+ #define cwminen 1  
+ #define cwmineb ( 1 << cwminen   )
+ #define cwbombn 2  
+ #define cwbombb ( 1 << cwbombn  )
+ #define cwairmissilen 3  
+ #define cwairmissileb ( 1 << cwairmissilen  )
+ #define cwgroundmissilen 4  
+ #define cwgroundmissileb ( 1 << cwgroundmissilen  )
+ #define cwtorpedon 5  
+ #define cwtorpedob ( 1 << cwtorpedon  )
+ #define cwmachinegunn 6  
+ #define cwmachinegunb ( 1 << cwmachinegunn )
+ #define cwcannonn 7  
+ #define cwcannonb ( 1 << cwcannonn )
+ #define cwweapon ( cwcruisemissileb | cwbombb | cwairmissileb | cwgroundmissileb | cwtorpedob | cwmachinegunb | cwcannonb )
+ #define cwshootablen 11  
+ #define cwshootableb ( 1 << cwshootablen  )
+ #define cwammunitionn 9  
+ #define cwammunitionb ( 1 << cwammunitionn )
+ #define cwservicen 8  
+ #define cwserviceb ( 1 << cwservicen )
+ extern const int cwaffenproduktionskosten[cwaffentypennum][3];  /*  Angabe: Waffentyp; energy - Material - Sprit ; jeweils fÅr 5er Pack */  
+
+
+
+#define cbuildingfunctionnum 17
+extern const char*  cbuildingfunctions[cbuildingfunctionnum]; 
+ #define cghqn 0  
+ #define cghqb ( 1 << cghqn  )
+ #define cgtrainingn 1  
+ #define cgtrainingb ( 1 << cgtrainingn  )
+ #define cgvehicleproductionn 3  
+ #define cgvehicleproductionb ( 1 << cgvehicleproductionn  )
+ #define cgammunitionproductionn 4  
+ #define cgammunitionproductionb ( 1 << cgammunitionproductionn  )
+ #define cgrepairfacilityn 8  
+ #define cgrepairfacilityb ( 1 << cgrepairfacilityn  )
+ #define cgrecyclingplantn 9  
+ #define cgrecyclingplantb ( 1 << cgrecyclingplantn  )
+ #define cgresearchn 10  
+ #define cgresearchb ( 1 << cgresearchn  )
+ #define cgsonarn 11  
+ #define cgsonarb ( 1 << cgsonarn )
+ #define cgwindkraftwerkn 12
+ #define cgwindkraftwerkb ( 1 << cgwindkraftwerkn )
+ #define cgsolarkraftwerkn 13
+ #define cgsolarkraftwerkb ( 1 << cgsolarkraftwerkn )
+ #define cgconventionelpowerplantn 14
+ #define cgconventionelpowerplantb ( 1 << cgconventionelpowerplantn )
+ #define cgminingstationn 15
+ #define cgminingstationb ( 1 << cgminingstationn )
+ #define cgexternalloadingn 16
+ #define cgexternalloadingb ( 1 << cgexternalloadingn )
+
+
+
+#define cvehiclefunctionsnum 26
+extern const char*  cvehiclefunctions[]; 
+ #define cfsonar 1  
+ #define cfparatrooper 2  
+ #define cfminenleger 4  
+ #define cf_trooper 8  
+ #define cfrepair 16  
+ #define cf_conquer 32
+ #define cf_moveafterattack 64
+ #define cfsatellitenview 128  
+ #define cfputbuilding 256  
+ #define cfmineview 512  
+ #define cfvehicleconstruction 1024  
+ #define cfspecificbuildingconstruction 2048  
+ #define cffuelref 4096  
+ #define cficebreaker 8192  
+ #define cfnoairrefuel 16384
+ #define cfmaterialref 32768  
+ #define cffahrspur ( 1 << 17 )   /*  !!  */
+ #define cfmanualdigger ( 1 << 18 )
+ #define cfwindantrieb ( 1 << 19 )
+ #define cfautorepair ( 1 << 20 )
+ #define cfgenerator ( 1 << 21 )
+ #define cfautodigger ( 1 << 22 )
+ #define cfkamikaze ( 1 << 23 )
+ #define cfmineimmune ( 1 << 24 )
+
+ #define cfvehiclefunctionsanzeige 0xFFFFFFFF  
+
+
+#define cbodenartennum 33
+extern const char*  cbodenarten[]  ; 
+  extern tterrainbits cbwater0 ;
+  extern tterrainbits cbwater1 ;
+  extern tterrainbits cbwater2 ;
+  extern tterrainbits cbwater3 ;
+  extern tterrainbits cbwater  ;
+  extern tterrainbits cbstreet ;
+  extern tterrainbits cbrailroad ;
+  extern tterrainbits cbbuildingentry ;
+  extern tterrainbits cbharbour ;
+  extern tterrainbits cbrunway ;
+  extern tterrainbits cbrunway ;
+  extern tterrainbits cbpipeline ;
+  extern tterrainbits cbpowerline;
+  extern tterrainbits cbfahrspur ;
+  extern tterrainbits cbfestland ;
+  extern tterrainbits cbsnow1 ;
+  extern tterrainbits cbsnow2 ;
+  extern tterrainbits cbhillside ;
+  extern tterrainbits cbsmallrocks ;
+  extern tterrainbits cblargerocks ;
+
+
+extern const char*  resourceNames[3];
+
+
+
+extern  const char* cconnections[6];
+ #define cconnection_destroy 1  
+ #define cconnection_conquer 2  
+ #define cconnection_lose 4  
+ #define cconnection_seen 8
+ #define cconnection_areaentered_anyunit 16
+ #define cconnection_areaentered_specificunit 32
+ //   conquered = You conquered sth.      
+ //   lost      = an enemy conquered sth. from you
+
+
+#define ceventtriggernum 20
+extern const char* ceventtriggerconn[]; 
+ #define ceventtrigger_and 1  
+ #define ceventtrigger_or 2  
+ #define ceventtrigger_not 4  
+ #define ceventtrigger_klammerauf 8  
+ #define ceventtrigger_2klammerauf 16  
+ #define ceventtrigger_2klammerzu 32  
+ #define ceventtrigger_klammerzu 64  
+  /*  reihenfolgenprioritÑt: in der Reihenfolge von oben nach unten wird der TriggerCon ausgewertet
+               AND   OR
+               NOT
+               (
+               eigentliches event
+               )
+    */ 
+
+
+#define ceventactionnum 20
+extern const char* ceventactions[ceventactionnum]; // not bitmapped 
+ enum { cemessage,   ceweatherchange, cenewtechnology, celosecampaign, cerunscript,     cenewtechnologyresearchable, 
+        cemapchange, ceeraseevent,    cecampaignend,   cenextmap,      cereinforcement, ceweatherchangecomplete, 
+        cenewvehicledeveloped, cepalettechange, cealliancechange,      cewindchange,    cenothing, 
+        cegameparamchange, ceellipse, ceremoveellipse };
+
+
+extern const char*  ceventtrigger[]; 
+ enum { ceventt_turn = 1 ,               ceventt_buildingconquered, ceventt_buildinglost,  ceventt_buildingdestroyed, ceventt_unitlost, 
+        ceventt_technologyresearched,    ceventt_event,             ceventt_unitconquered, ceventt_unitdestroyed,     
+        ceventt_allenemyunitsdestroyed,  ceventt_allunitslost,      ceventt_allenemybuildingsdestroyed, 
+        ceventt_allbuildingslost,        ceventt_energytribute,     ceventt_materialtribute, ceventt_fueltribute, 
+        ceventt_any_unit_enters_polygon, ceventt_specific_unit_enters_polygon, ceventt_building_seen };
+
+
+extern const char*  cmovemalitypes[cmovemalitypenum];
+
+
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/// Constants that specify the layout of ASC
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+#define maxloadableunits 27  // Mehr vehicle dÅrfen nicht in einen Transporter rein
+
+#define guiiconsizex 49  
+#define guiiconsizey 35  
+
+
+#ifdef HEXAGON
+ #define maxmalq 10  
+ #define minmalq 10
+ #define fieldxsize 48    /*  Breite eines terrainbildes  */ 
+ #define fieldysize 48  
+ #define fielddistx 64
+ #define fielddisty 24
+ #define fielddisthalfx 32
+ #define sidenum 6
+#else
+ #define maxmalq 12  
+ #define minmalq 8
+ #define fieldxsize 40    /*  Breite eines terrainbildes  */ 
+ #define fieldysize 39  
+ #define fielddirecpictsize 800
+ #define fielddistx 40
+ #define fielddisty 20
+ #define fielddisthalfx 20
+ #define sidenum 8
+#endif
+
+#define fieldsizex fieldxsize
+#define fieldsizey fieldysize
+
+  extern const int directionangle [ sidenum ];
+
+
+#define fieldsize (fieldxsize * fieldysize + 4 )
+#define unitsizex 30
+#define unitsizey 30
+#define tanksize (( unitsizex+1 ) * ( unitsizey+1 ) + 4 )
+#define unitsize tanksize
+
+
+#define maxint 0x7ffffffe
+#define minint -0x7ffffffe
+
+
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/// Constants that define the behaviour of units and buildings
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+
+#define maxunitexperience 15
+
+#define movement_cost_for_repaired_unit 24
+#define movement_cost_for_repairing_unit 12
+#define attack_after_repair 1       // Can the unit that is beeing repaired attack afterwards? 
+
+#define mineputmovedecrease 8  
+#define streetmovemalus 8  
+#define railroadmovemalus 8  
+#define searchforresorcesmovedecrease 8
+
+
+#define fusstruppenplattfahrgewichtsfaktor 2  
+#define mingebaeudeeroberungsbeschaedigung 80  
+#define flugzeugtraegerrunwayverkuerzung 2  
+#define repairefficiency_unit 2  
+#define repairefficiency_building 3
+
+#define autorepairdamagedecrease 10    // only for old units ; new one use autorepairrate
+
+#define air_heightincmovedecrease 18  
+#define air_heightdecmovedecrease 0
+#define sub_heightincmovedecrease 12
+#define sub_heightdecmovedecrease 12
+#define helicopter_attack_after_ascent 1  // nach abheben angriff mîglich
+#define helicopter_attack_after_descent 0  // nach landen angriff mîglich
+#define helicopter_landing_move_cost 16   // zusÑtzlich zu den Kosten fÅr das Wechseln der Hîhenstufe 
+#define weaponpackagesize 5
+
+#define trainingexperienceincrease 2
+
+#define brigde1buildcostincrease 12       // jeweils Basis 8; flaches Wasser
+#define brigde2buildcostincrease 16       // jeweils Basis 8; mitteltiefes Wasser
+#define brigde3buildcostincrease 36       // jeweils Basis 8; tiefes Wasser
+
+
+#define lookintoenemytransports false  
+#define lookintoenemybuildings false  
+
+#define recyclingoutput 2    /*  Material div RecyclingOutput  */ 
+#define destructoutput 5
+#define nowindplanefuelusage 1      // herrscht kein Wind, braucht ein Flugzeug pro Runde soviel Sprit wie das fliegend dieser Anzahl fielder
+  //   #define maxwindplainfuelusage 32   // beim nextturn: tank -= fuelconsumption * (maxwindplainfuelusage*nowindplainfuelusage + windspeed) / maxwindplainfuelusage     
+#define maxwindspeed 128          // Wind der StÑrke 256 legt pro Runde diese Strecke zurÅck: 128 entspricht 16 fieldern diagonal !
+
+
+#define generatortruckefficiency 2  // FÅr jede vehicle Power wird soviel Sprit gebraucht !
+
+#define researchenergycost 512      // fÅr 1000 researchpoints wird soviel energie benîtigt.
+#define researchmaterialcost 200    //                                     material
+#define researchcostdouble 10000    // bei soviel researchpoints verdoppeln sich die Kosten
+#define minresearchcost 0.5
+#define maxresearchcost 4
+#define airplanemoveafterstart 12
+#define airplanemoveafterlanding (2*minmalq - 1 )
+
+#define mine_movemalus_increase 50   // percent
+
+#define  viewadditiv 1
+
+#define tfieldtemp2max 255
+#define tfieldtemp2min 0
+
+
+#define cnet_storeenergy        0x001           // es wird garantiert,  da· material immer das 2 und fuel das 4 fache von energy ist
+#define cnet_storematerial      0x002
+#define cnet_storefuel          0x004
+
+#define cnet_moveenergyout      0x008
+#define cnet_movematerialout    0x010
+#define cnet_movefuelout        0x020
+
+#define cnet_stopenergyinput    0x040
+#define cnet_stopmaterialinput  0x080
+#define cnet_stopfuelinput      0x100
+
+#define cnet_stopenergyoutput   0x200
+#define cnet_stopmaterialoutput 0x400
+#define cnet_stopfueloutput     0x800
+
+
+#define resource_fuel_factor 100         // die im boden liegenden BodenschÑtzen ergeben effektiv soviel mal mehr ( bei Bergwerkseffizienz 1024 )
+#define resource_material_factor 100     // "
+
+#define destruct_building_material_get 3 // beim Abrei·en erhÑlt man 1/3 des eingesetzten Materials zurÅck
+#define destruct_building_fuel_usage 10  // beim Abrei·en wird 10 * fuelconsumption Fuel fuelconsumptiont
+
+
+#define dissectunitresearchpointsplus  2    // Beim dissectn einer vehicle wird der sovielte Teil der Researchpoints jeder unbekannten Technologie gutgeschrieben
+
+#define dissectunitresearchpointsplus2 3    // Beim dissectn einer vehicle wird der sovielte Teil der Researchpoints jeder unbekannten Technologie gutgeschrieben.
+  // FÅr die Technologie existieren aber bereits von einem anderen sezierten vehicletype gutschriften.
+
+#define maxminingrange 10     // soviele fielder such ein Bergwerk ab.
+
+#define fuelweight  4         // 1024 fuel wiegen soviel
+#define materialweight 12     // 1024 material wiegen soviel
+
+#define objectbuildmovecost 16  // vehicle->movement -= (8 + ( fld->movemalus[0] - 8 ) / ( objectbuildmovecost / 8 ) ) * kosten des obj
+
+
+extern const int csolarkraftwerkleistung[];
+
+#define cnetcontrolnum 12
+extern const char* cnetcontrol[cnetcontrolnum];
+
+extern const char* cgeneralnetcontrol[];
 
 #define unspecified_error 9999
 
 #define greenbackgroundcol 156
-
 
 #pragma pack()
 

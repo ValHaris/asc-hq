@@ -21,11 +21,9 @@
 #include <malloc.h>
 #include <stdio.h>
 #include <i86.h>
-//#include <conio.h>
 #include <graph.h>
-//#include <stdio.h>
-//#include <stdlib.h>
 
+#include "..\basegfx.h"
 #include "..\tpascal.inc"
 #include "..\typen.h"
 #include "..\vesa.h"
@@ -102,7 +100,7 @@ void fexisterror (char *name)
    _outtext ( s );
    _wait ();
    nosound ();
-   settextmode ( 3 );
+   closegraphics ( );
    exit (0);
 };
 
@@ -285,7 +283,7 @@ void *       loadpcx2(char *       filestring)
   byte         b; 
 
 
-   initsvga(0x101);
+   initgraphics (640, 480, 8);
    b = loadpcxxy(filestring, 1, 0,0); 
    if (b == 0) { 
       p = malloc( 1800 ); 
@@ -338,7 +336,7 @@ void  selecttechnology(int num, int &id)
 
 void     loadicon (char *filename, void **icon)
 {
-   initsvga ( 0x103 );
+   initgraphics (800, 600, 8);
    bar( 0, 0, 799, 599, 255 );
    loadpcxxy( filename, 1, 20, 20 );
 

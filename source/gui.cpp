@@ -1,6 +1,10 @@
-//     $Id: gui.cpp,v 1.12 2000-01-24 17:35:43 mbickel Exp $
+//     $Id: gui.cpp,v 1.13 2000-04-27 16:25:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2000/01/24 17:35:43  mbickel
+//      Added dummy routines for sound under DOS
+//      Cleaned up weapon specification
+//
 //     Revision 1.11  2000/01/04 19:43:51  mbickel
 //      Continued Linux port
 //
@@ -116,28 +120,6 @@ void setguiposy ( int y )
    guiypos = y;
 }
 
-void         repositionmouse ( void )
-{
-   /*
-   if (doubleclickparams.stat == 3) {
-      char ms = getmousestatus();
-      if (ms == 2)
-         mousevisible ( false );
-      setmouseposition ( doubleclickparams.mx, doubleclickparams.my );
-      if (ms == 2)
-         mousevisible ( true );
-   }
-   */
-}
-
-void setmouseongui( void )
-{
-   /*
-   setmouseposition ( guixpos + guiiconsizex / 2, guiypos + guiiconsizey / 2);
-
-   while (mouseparams.taste & 1) ;
-   */
-}
 
 #ifndef _NoStaticClassMembers_
 StaticClassVariable void*    tguihost::background[30][30];
@@ -507,6 +489,7 @@ void   tguihost::checkforkey ( tkey key )
 
 void   tguihost::bi2control (  )
 {
+
       int xp = 0;
       int yp = 0;
 
@@ -904,6 +887,7 @@ void  tnguiicon::checkforkey  ( tkey key )
 {
    if ( available () )
       for (int i = 0; i < 6 ; i++ ) 
+
          if ( keys[0][i] )
            if ( char2key( keys[0][i] ) == key ) {
               exec();
@@ -1026,7 +1010,8 @@ tnguiicon:: ~tnguiicon (  )
 
 
 
-tnsguiiconmove::tnsguiiconmove ( void )
+tnsguiiconmove::tnsguiiconmove  ( void ) 
+               :vehicleMovement ( NULL )
 {
    strcpy ( filename, "movement" );
 }
@@ -1034,41 +1019,71 @@ tnsguiiconmove::tnsguiiconmove ( void )
 
 int   tnsguiiconmove::available    ( void ) 
 {
-   if (moveparams.movestatus == 0) { 
+   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
       pvehicle eht = getactfield()->vehicle; 
       if ( eht ) 
          if ( eht->color == actmap->actplayer * 8) 
-            if ( eht->movement >= minmalq ) 
-               if ( terrainaccessible ( getfield ( eht->xpos, eht->ypos ), eht ) || actmap->gameparameter[ cgp_movefrominvalidfields] )
-                  return 1; 
+            if ( vehicleMovement.available ( eht ))
+               return 1; 
    } 
    else 
-     if (((moveparams.movestatus >= 0) && (moveparams.movestatus <= 2)) ||
-         ((moveparams.movestatus >=11) && (moveparams.movestatus <=12))) {
-         if ( getactfield()->a.temp ) 
-            return 1; 
-      } 
-   return 0;
+      if ( pendingVehicleActions.actionType == vat_move ) {
+         switch ( pendingVehicleActions.move->getStatus() ) {
+           case 2: return pendingVehicleActions.move->reachableFields.isMember ( getxpos(), getypos() );
+           case 3: return pendingVehicleActions.move->path.isMember ( getxpos(), getypos() );
+         } /* endswitch */
+      }
 
+   return 0;
 }
 
 void  tnsguiiconmove::exec         ( void ) 
 {
-   if (((moveparams.movestatus >= 0) && (moveparams.movestatus <= 2)) ||
-       ((moveparams.movestatus >=11) && (moveparams.movestatus <=12)))
-      movement(getactfield()->vehicle); 
-      displaymap();
-      if ( (moveparams.movestatus == 2  ||  moveparams.movestatus == 12 ) && gameoptions.fastmove ) {
-         movement(getactfield()->vehicle); 
-         displaymap();
-      }
+   if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
+      new VehicleMovement ( &defaultMapDisplay, &pendingVehicleActions );
 
-      if (moveparams.movestatus == 0 )
-         // repositionmouse ();
-         if ( gameoptions.smallguiiconopenaftermove ) {
-            actgui->painticons();
-            actgui->paintsmallicons ( gameoptions.mouse.smallguibutton, 0 );
-         }
+      int res;
+      res = pendingVehicleActions.move->execute ( getactfield()->vehicle, -1, -1, 0, -1, 0 );
+      if ( res < 0 ) {
+         dispmessage2 ( -res, NULL );
+         delete pendingVehicleActions.action;
+         return;
+      }
+      for ( int i = 0; i < pendingVehicleActions.move->reachableFields.getFieldNum(); i++ ) 
+         pendingVehicleActions.move->reachableFields.getField( i ) ->a.temp = 1;
+      displaymap();
+
+   } else
+     if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_move &&  (pendingVehicleActions.move->getStatus() == 2 || pendingVehicleActions.move->getStatus() == 3 )) {
+        int res;
+        res = pendingVehicleActions.move->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.move->getStatus(), -1, 0 );
+        if ( res >= 0 && gameoptions.fastmove )
+           res = pendingVehicleActions.move->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.move->getStatus(), -1, 0 );
+        else {
+           for ( int i = 0; i < pendingVehicleActions.move->path.getFieldNum(); i++ )
+              pendingVehicleActions.move->path.getField( i ) ->a.temp = 1;
+           displaymap();
+        }
+
+
+        if ( res < 0 ) {
+           dispmessage2 ( -res, NULL );
+           delete pendingVehicleActions.action;
+           return;
+        }
+
+        if ( pendingVehicleActions.move->getStatus() == 1000 ) {
+           delete pendingVehicleActions.move;
+   
+           if ( gameoptions.smallguiiconopenaftermove ) {
+              actgui->painticons();
+              actgui->paintsmallicons ( gameoptions.mouse.smallguibutton, 0 );
+           }
+        }
+
+        return;
+     }
+
    dashboard.x = 0xffff;
 }
 
@@ -1079,11 +1094,12 @@ void  tnsguiiconmove::display      ( void )
    if ( x == -1   ||    y == -1 ) 
       return;
 
-   int h;
-   if ( moveparams.movestatus == 0)
-      h = getactfield()->vehicle->typ->height ;
-   else
-      h = moveparams.vehicletomove->typ->height ;
+   int h = chfahrend;
+   if ( !pendingVehicleActions.move  ) {
+      if ( getactfield()->vehicle )
+         h = getactfield()->vehicle->typ->height ;
+   } else
+      h = pendingVehicleActions.move->getVehicle()->typ->height ;
 
    if ( h >= chtieffliegend )
       putpict ( picture[1] );
@@ -1130,7 +1146,6 @@ int   tnsguiiconattack::available    ( void )
 void  tnsguiiconattack::exec         ( void ) 
 {
    attack(false); 
-   // repositionmouse ();
 }
 
 
@@ -1143,31 +1158,78 @@ void  tnsguiiconattack::exec         ( void )
 
 
 tnsguiiconascent::tnsguiiconascent ( void )
+                 :increaseVehicleHeight ( NULL )
 {
    strcpy ( filename, "ascent" );
 }
 
 int   tnsguiiconascent::available    ( void ) 
 {
-   if (moveparams.movestatus == 0) { 
-      pvehicle eht = getactfield()->vehicle; 
-       if ( eht ) 
-          if ( eht->movement )
-             if (eht->color == actmap->actplayer * 8) 
-                if (eht->height < 128) 
-                   if ((eht->height << 1) & eht->typ->height ) 
-                      return 1; 
-   } 
+   if ( moveparams.movestatus == 0 && !pendingVehicleActions.action ) { 
+      pvehicle eht = getactfield()->vehicle;
+      if ( !eht )
+         return 0;
+      if (eht->color == actmap->actplayer * 8)
+         return increaseVehicleHeight.available ( eht );
+   } else
+      if ( pendingVehicleActions.actionType == vat_ascent ) {
+         switch ( pendingVehicleActions.ascent->getStatus() ) {
+           case 2: return pendingVehicleActions.ascent->reachableFields.isMember ( getxpos(), getypos() );
+           case 3: return pendingVehicleActions.ascent->path.isMember ( getxpos(), getypos() );
+         } /* endswitch */
+      }
    return 0;
 }
 
 void  tnsguiiconascent::exec         ( void ) 
 {
-   int res = changeheight(getactfield()->vehicle,'h', 1 ); 
-   if ( res )
-      dispmessage2( res, NULL );
-   displaymap();
-   // repositionmouse ();
+   if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
+      new IncreaseVehicleHeight ( &defaultMapDisplay, &pendingVehicleActions );
+
+      int res;
+      res = pendingVehicleActions.ascent->execute ( getactfield()->vehicle, -1, -1, 0, getactfield()->vehicle->height << 1, 0 );
+      if ( res < 0 ) {
+         dispmessage2 ( -res, NULL );
+         delete pendingVehicleActions.action;
+         return;
+      }
+
+      if ( res == 1000 ) 
+         delete pendingVehicleActions.action;
+      else {
+         for ( int i = 0; i < pendingVehicleActions.ascent->reachableFields.getFieldNum(); i++ ) 
+            pendingVehicleActions.ascent->reachableFields.getField( i ) ->a.temp = 1;
+         displaymap();
+      }
+
+   } else
+     if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_ascent &&  (pendingVehicleActions.ascent->getStatus() == 2 || pendingVehicleActions.ascent->getStatus() == 3 )) {
+        int res = pendingVehicleActions.ascent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.ascent->getStatus(), -1, 0 );
+        if ( res >= 0 && gameoptions.fastmove )
+           res = pendingVehicleActions.ascent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.ascent->getStatus(), -1, 0 );
+        else {
+           for ( int i = 0; i < pendingVehicleActions.ascent->path.getFieldNum(); i++ )
+              pendingVehicleActions.ascent->path.getField( i ) ->a.temp = 1;
+           displaymap();
+        }
+
+        if ( res < 0 ) {
+           dispmessage2 ( -res, NULL );
+           delete pendingVehicleActions.action;
+           return;
+        }
+
+        if ( pendingVehicleActions.ascent->getStatus() == 1000 ) {
+           delete pendingVehicleActions.ascent;
+   
+           if ( gameoptions.smallguiiconopenaftermove ) {
+              actgui->painticons();
+              actgui->paintsmallicons ( gameoptions.mouse.smallguibutton, 0 );
+           }
+        }
+     }
+
+   dashboard.x = 0xffff;
 }
 
 void  tnsguiiconascent::display      ( void ) 
@@ -1177,11 +1239,12 @@ void  tnsguiiconascent::display      ( void )
    if ( x == -1   ||    y == -1 ) 
       return;
 
-   int h;
-   if ( moveparams.movestatus == 0)
-      h = getactfield()->vehicle->typ->height ;
-   else
-      h = moveparams.vehicletomove->typ->height ;
+   int h = chfahrend;
+   if ( !pendingVehicleActions.ascent ) {
+      if ( getactfield()->vehicle )
+         h = getactfield()->vehicle->typ->height ;
+   } else
+      h = pendingVehicleActions.ascent->getVehicle()->typ->height ;
 
    if ( h >= chtieffliegend )
       putpict ( picture[0] );
@@ -1202,6 +1265,7 @@ void  tnsguiiconascent::display      ( void )
 
 
 tnsguiicondescent::tnsguiicondescent ( void )
+                 : decreaseVehicleHeight ( NULL )
 {
    strcpy ( filename, "descent" );
 }
@@ -1210,26 +1274,71 @@ tnsguiicondescent::tnsguiicondescent ( void )
 
 int   tnsguiicondescent::available    ( void ) 
 {
-   if (moveparams.movestatus == 0) { 
-      pvehicle eht = getactfield()->vehicle; 
-      if ( eht ) 
-         if ( eht->movement )
-            if (eht->color == actmap->actplayer * 8) 
-               if (eht->height > 1) 
-                  if ((eht->height >> 1) & eht->typ->height ) 
-                     return 1;
- 
-   } 
+   if ( moveparams.movestatus == 0 && !pendingVehicleActions.action ) { 
+      pvehicle eht = getactfield()->vehicle;
+      if ( !eht )
+         return 0;
+
+      if (eht->color == actmap->actplayer * 8) 
+         return decreaseVehicleHeight.available ( eht );
+   } else
+      if ( pendingVehicleActions.actionType == vat_descent ) {
+         switch ( pendingVehicleActions.descent->getStatus() ) {
+           case 2: return pendingVehicleActions.descent->reachableFields.isMember ( getxpos(), getypos() );
+           case 3: return pendingVehicleActions.descent->path.isMember ( getxpos(), getypos() );
+         } /* endswitch */
+      }
    return 0;
 }
 
 void  tnsguiicondescent::exec         ( void ) 
 {
-   int res = changeheight(getactfield()->vehicle,'t', 1 ); 
-   if ( res )
-      dispmessage2( res, NULL );
-   displaymap();
-   // repositionmouse ();
+   if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
+      new DecreaseVehicleHeight ( &defaultMapDisplay, &pendingVehicleActions );
+
+      int res;
+      res = pendingVehicleActions.descent->execute ( getactfield()->vehicle, -1, -1, 0, getactfield()->vehicle->height >> 1, 0 );
+      if ( res < 0 ) {
+         dispmessage2 ( -res, NULL );
+         delete pendingVehicleActions.action;
+         return;
+      }
+
+      if ( res == 1000 ) 
+         delete pendingVehicleActions.action;
+      else {
+         for ( int i = 0; i < pendingVehicleActions.descent->reachableFields.getFieldNum(); i++ ) 
+            pendingVehicleActions.descent->reachableFields.getField( i ) ->a.temp = 1;
+         displaymap();
+      }
+
+   } else
+     if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_descent &&  (pendingVehicleActions.descent->getStatus() == 2 || pendingVehicleActions.descent->getStatus() == 3 )) {
+        int res = pendingVehicleActions.descent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.descent->getStatus(), -1, 0 );
+        if ( res >= 0 && gameoptions.fastmove )
+           res = pendingVehicleActions.descent->execute ( NULL, getxpos(), getypos(), pendingVehicleActions.descent->getStatus(), -1, 0 );
+        else {
+           for ( int i = 0; i < pendingVehicleActions.descent->path.getFieldNum(); i++ )
+              pendingVehicleActions.descent->path.getField( i ) ->a.temp = 1;
+           displaymap();
+        }
+
+
+        if ( res < 0 ) {
+           dispmessage2 ( -res, NULL );
+           delete pendingVehicleActions.action;
+           return;
+        }
+
+        if ( pendingVehicleActions.descent->getStatus() == 1000 ) {
+           delete pendingVehicleActions.descent;
+   
+           if ( gameoptions.smallguiiconopenaftermove ) {
+              actgui->painticons();
+              actgui->paintsmallicons ( gameoptions.mouse.smallguibutton, 0 );
+           }
+        }
+     }
 }
 
 void  tnsguiicondescent::display      ( void ) 
@@ -1239,11 +1348,12 @@ void  tnsguiicondescent::display      ( void )
    if ( x == -1   ||    y == -1 ) 
       return;
 
-   int h;
-   if ( moveparams.movestatus == 0)
-      h = getactfield()->vehicle->typ->height ;
+   int h = chfahrend;
+   if ( !pendingVehicleActions.descent )
+      if ( getactfield()->vehicle )
+         h = getactfield()->vehicle->typ->height ;
    else
-      h = moveparams.vehicletomove->typ->height ;
+      h = pendingVehicleActions.descent->getVehicle()->typ->height ;
 
    if ( h >= chtieffliegend )
       putpict ( picture[0] );
@@ -1251,7 +1361,6 @@ void  tnsguiicondescent::display      ( void )
       putpict ( picture[1] );
 
 }
-
 
 
 
@@ -1279,7 +1388,6 @@ int   tnsguiiconinformation::available    ( void )
 
 void  tnsguiiconinformation::exec         ( void ) 
 {
- //  repositionmouse ();
    vehicle_information(); 
 }
 
@@ -1294,6 +1402,7 @@ void  tnsguiiconinformation::display      ( void )
 
    if ( h >= chtieffliegend )
       putpict ( picture[1] );
+
    else
       if ( h & ( chschwimmend | chgetaucht | chtiefgetaucht ) )
          putpict ( picture[2] );
@@ -1439,9 +1548,8 @@ tnsguiiconconstructvehicle::tnsguiiconconstructvehicle ( void )
 
 int   tnsguiiconconstructvehicle::available    ( void ) 
 {
-   if ( actmap->gameparameter ) 
-      if ( actmap->gameparameter[cgp_forbid_unitunit_construction] )
-         return 0;
+  if ( actmap->getgameparameter(cgp_forbid_unitunit_construction) )
+      return 0;
 
 
    pfield fld = getactfield();
@@ -1493,15 +1601,9 @@ int   tnsguiiconputmine::available    ( void )
 
 void  tnsguiiconputmine::exec         ( void ) 
 {
-   legemine(0); 
+   legemine(0, 0); 
    displaymap();
- // repositionmouse ();
 }
-
-
-
-
-
 
 
 
@@ -1513,7 +1615,7 @@ int   tnsguiiconputgroundmine::available    ( void )
       pfield fld = getactfield(); 
       if ((fld->typ->art & cbwater) == 0)
          if ( fld->a.temp ) 
-            if ( !fld->mineexist() ) 
+            if ( fld->minenum() < actmap->getgameparameter( cgp_maxminesonfield ) && ( !fld->minenum() || fld->mineowner() == actmap->actplayer )) 
                return true; 
    } 
    return 0;
@@ -1528,17 +1630,9 @@ tnsguiiconputantitankmine::tnsguiiconputantitankmine ( void )
 
 void  tnsguiiconputantitankmine::exec         ( void ) 
 {
-   legemine(cmantitankmine); 
+   legemine(cmantitankmine, 1 ); 
    displaymap();
- // repositionmouse ();
 }
-
-
-
-
-
-
-
 
 
 
@@ -1550,17 +1644,8 @@ tnsguiiconputantipersonalmine::tnsguiiconputantipersonalmine ( void )
 
 void  tnsguiiconputantipersonalmine::exec         ( void ) 
 {
-   legemine(cmantipersonnelmine); 
-   displaymap();
- // repositionmouse ();
+   legemine(cmantipersonnelmine, 1); 
 }
-
-
-
-
-
-
-
 
 
 
@@ -1570,7 +1655,7 @@ int   tnsguiiconputseamine::available    ( void )
       pfield fld = getactfield(); 
       if (fld->typ->art & cbwater ) 
          if (fld->a.temp ) 
-            if ( !fld->mineexist() ) 
+            if ( fld->minenum() < actmap->getgameparameter( cgp_maxminesonfield ) && ( !fld->minenum() || fld->mineowner() == actmap->actplayer )) 
                return true; 
    } 
    return 0;
@@ -1585,21 +1670,9 @@ tnsguiiconputfloatingmine::tnsguiiconputfloatingmine ( void )
 
 void  tnsguiiconputfloatingmine::exec         ( void ) 
 {
-   legemine(cmfloatmine); 
+   legemine(cmfloatmine, 1); 
    displaymap();
- // repositionmouse ();
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 tnsguiiconputmooredmine::tnsguiiconputmooredmine ( void )
@@ -1609,9 +1682,8 @@ tnsguiiconputmooredmine::tnsguiiconputmooredmine ( void )
 
 void  tnsguiiconputmooredmine::exec         ( void ) 
 {
-   legemine(cmmooredmine); 
+   legemine(cmmooredmine,1 ); 
    displaymap();
- // repositionmouse ();
 }
 
 
@@ -1637,7 +1709,7 @@ int   tnsguiiconremovemine::available    ( void )
    if (moveparams.movestatus == 90) { 
       pfield fld = getactfield(); 
       if ( fld->a.temp ) 
-         if ( fld->mineexist() ) 
+         if ( fld->minenum() ) 
             return true; 
    } 
    return 0;
@@ -1645,9 +1717,8 @@ int   tnsguiiconremovemine::available    ( void )
 
 void  tnsguiiconremovemine::exec         ( void ) 
 {
-   legemine(0);  
+   legemine(0, -1);  
    displaymap();
- // repositionmouse ();
 }
 
 
@@ -1680,7 +1751,6 @@ void  tnsguiiconbuildany::exec         ( void )
 {
    setspec(0); 
    displaymap();
- // repositionmouse ();
 }
 
 
@@ -1719,7 +1789,6 @@ void  tnsguiiconrepair::exec         ( void )
 {
    refuelvehicle(1); 
    displaymap();
- // repositionmouse ();
 }
 
 
@@ -1772,7 +1841,6 @@ void  tnsguiiconrefuel::exec         ( void )
      if (moveparams.movestatus == 65)  {
         refuelvehicle(2); 
         displaymap();
-      // repositionmouse ();
      }
 }
 
@@ -1826,7 +1894,6 @@ void  tnsguiiconrefueldialog::exec         ( void )
 {
    refuelvehicle(3); 
    displaymap();
- // repositionmouse ();
 }
 
 
@@ -1845,9 +1912,8 @@ tnsguiiconputbuilding::tnsguiiconputbuilding ( void )
 
 int   tnsguiiconputbuilding::available    ( void ) 
 {
-   if ( actmap->gameparameter ) 
-      if ( actmap->gameparameter[cgp_forbid_building_construction] )
-         return 0;
+   if ( actmap->getgameparameter(cgp_forbid_building_construction) )
+      return 0;
 
     pfield fld = getactfield();
     if (moveparams.movestatus == 0) { 
@@ -1875,7 +1941,6 @@ void  tnsguiiconputbuilding::exec         ( void )
    if (moveparams.movestatus == 0) {
       putbuildinglevel1(); 
       displaymap();
-    // repositionmouse ();
    }
    else 
       if (moveparams.movestatus == 111) {
@@ -1886,7 +1951,6 @@ void  tnsguiiconputbuilding::exec         ( void )
             putbuildinglevel3( getxpos(), getypos()); 
             displaymap();
             dashboard.x = 0xffff;
-          // repositionmouse ();
          }
 }
 
@@ -1961,7 +2025,6 @@ void  tnsguiicondig::exec         ( void )
     showresources = 1;
     dashboard.x = 0xffff;
     displaymap();
-  // repositionmouse ();
 }
 
 
@@ -2076,6 +2139,7 @@ int tnsguiiconcontainer :: available    ( void )
               return 1;
            else
               return 0;
+
   return 0;
 }
 
@@ -2107,7 +2171,7 @@ tnsguiiconcancel::tnsguiiconcancel ( void )
 
 int   tnsguiiconcancel::available    ( void ) 
 {
-   if ( moveparams.movestatus )
+   if ( moveparams.movestatus || pendingVehicleActions.action )
       return 1;
    if ( forcedeneable )
       return 2;
@@ -2116,8 +2180,11 @@ int   tnsguiiconcancel::available    ( void )
 
 void  tnsguiiconcancel::exec         ( void ) 
 {
-   if ( moveparams.movestatus ) {
+   if ( moveparams.movestatus || pendingVehicleActions.action ) {
       moveparams.movestatus = 0; 
+      if ( pendingVehicleActions.action ) 
+         delete pendingVehicleActions.action;
+      
       cleartemps(7); 
       dashboard.x = 0xffff;
       displaymap(); 
@@ -2609,6 +2676,7 @@ void      tselectobjectcontainerguihost :: setfirsticon( pnguiicon ic )
 {
    first_icon = ic;
 }
+
 
 
 pnguiicon tselectvehiclecontainerguihost :: getfirsticon( void )

@@ -1,6 +1,10 @@
-//     $Id: basestrm.cpp,v 1.18 2000-03-29 09:58:41 mbickel Exp $
+//     $Id: basestrm.cpp,v 1.19 2000-04-27 16:25:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.18  2000/03/29 09:58:41  mbickel
+//      Improved memory handling for DOS version
+//      Many small changes I can't remember ;-)
+//
 //     Revision 1.17  2000/02/05 12:13:44  steb
 //     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
 //     startup due to actmap being null when trying to report errors.
@@ -106,11 +110,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef _DOS_
- #include <sys\stat.h>
-#else
- #include <sys/stat.h>
-#endif
+#include <sys/stat.h>
 
 #include "basestrm.h"
 

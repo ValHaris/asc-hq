@@ -1,6 +1,10 @@
-//     $Id: attack.cpp,v 1.11 2000-03-11 19:51:12 mbickel Exp $
+//     $Id: attack.cpp,v 1.12 2000-04-27 16:25:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.11  2000/03/11 19:51:12  mbickel
+//      Removed file name length limitation under linux
+//      No weapon sound for attacked units any more (only attacker)
+//
 //     Revision 1.10  2000/03/11 18:22:04  mbickel
 //      Added support for multiple graphic sets
 //
@@ -256,6 +260,7 @@ void tfight :: calc ( void )
       else 
          av.damage = w; 
 
+
       if ( dv.weapcount > 0 )
          dv.weapcount--;
       else
@@ -303,6 +308,7 @@ void tfight :: paintline ( int num, int val, int col )
 }
 
 
+
 #define maxdefenseshown 24
 #define maxattackshown 24
 
@@ -320,7 +326,7 @@ void tunitattacksunit::calcdisplay( int ad, int dd ) {
   
 void tfight :: calcdisplay ( int ad, int dd )
 {
-   collategraphicoperations cgo;
+   collategraphicoperations cgo ( agmp->resolutionx - ( 640 - 450), 211, agmp->resolutionx - ( 640 - 623 ), 426 );
 
    setinvisiblemouserectanglestk ( agmp->resolutionx - ( 640 - 450), 211, agmp->resolutionx - ( 640 - 623 ), 426 );
    if ( !icons.attack.orgbkgr ) {
@@ -415,7 +421,7 @@ void tfight :: calcdisplay ( int ad, int dd )
       dv.damage = dd;
 
 
-                             
+
    int steps;
    if ( av.damage - avd > dv.damage - dvd )
       steps = av.damage - avd ;
@@ -426,20 +432,31 @@ void tfight :: calcdisplay ( int ad, int dd )
    if ( steps < 20 )
       tme = 2;
       
+   int time = 50 + steps;
 
-   for ( int i = 0; i < steps; i++ ) {
-      t = ticker;
-      collategraphicoperations cgo2;
-      {
-         if ( i < av.damage - avd )
-           paintline ( 4, 100 - ( avd + i ), bk );
+   int d1 = avd;
+   int d2 = dvd;
 
-         if ( i < dv.damage - dvd )
-           paintline ( 5, 100 - ( dvd + i ), bk );
-      }
-      do {
+   int starttime = ticker;
+   while ( ticker < starttime + time ) {
+      int finished = 1000 * (ticker - starttime) / time;
+      int newpos1 = avd + steps * finished / 1000;
+      int newpos2 = dvd + steps * finished / 1000;
+      cgo.on();
 
-      } while ( t + tme > ticker ); /* enddo */
+      int i;
+      for ( i = d1; i <= newpos1 && i <= av.damage; i++ )
+         paintline ( 4, 100 - i, bk );
+
+      d1 = i;
+
+      int j;
+      for ( j = d2; j <= newpos2 && j <= dv.damage; j++ )
+         paintline ( 5, 100 - j, bk );
+
+      d2 = j;
+
+      cgo.off();
    }
 
 
@@ -513,21 +530,20 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
 
 
    if ( dist <= maxmalq  &&  respond ) {
-      pattackweap atw = attackpossible3n ( attackedunit, attackingunit );
+      tattackweap atw;
+      attackpossible2n ( attackedunit, attackingunit, &atw );
       int n = -1;
       int s = 0;
-      for ( int i = 0; i < atw->count; i++ )
-         if ( atw->strength[i] > s ) {
-            s = atw->strength[i];
+      for ( int i = 0; i < atw.count; i++ )
+         if ( atw.strength[i] > s ) {
+            s = atw.strength[i];
             n = i;
          }
 
       if ( n < 0 )
          respond = 0;
       else
-         dv.weapnum = atw->num [ n ];
-
-      delete atw;
+         dv.weapnum = atw.num [ n ];
 
    } else
       respond = 0;
@@ -736,7 +752,7 @@ class tmineattacksunit : public tfight {
       };
 */
 
-void tmineattacksunit :: setup ( pfield mineposition, pvehicle &attackedunit )
+void tmineattacksunit :: setup ( pfield mineposition, int minenum, pvehicle &attackedunit )
 {
    if ( !mineposition->object || !mineposition->object->mine )
       displaymessage(" tmineattacksunit :: setup \n no mine to attack !\n",2 );
@@ -749,9 +765,31 @@ void tmineattacksunit :: setup ( pfield mineposition, pvehicle &attackedunit )
    _attackedunit = attackedunit;
    _pattackedunit = &attackedunit;
 
-   av.strength = mineposition->object->minestrength;
-   if ( (mineposition->object->mine >> 4 ) == cmantipersonnelmine   &&  (attackedunit->functions & cf_trooper ) )
-      av.strength *= 2;
+
+   _minenum = minenum;
+
+   if ( minenum == -1 ) {
+      int cnt = 1;
+      av.strength = 0;
+      for ( int i = 0; i < mineposition->minenum(); i++ )
+         if ( mineposition->object->mine[i]->attacksunit ( attackedunit )) {
+            int strength = mineposition->object->mine[i]->strength;
+            if ( mineposition->object->mine[i]->type  == cmantipersonnelmine   &&  (attackedunit->functions & cf_trooper ) )
+               strength *= 2;
+
+            for ( int j = 1; j < cnt; j++ )
+               strength = strength * 2 / 3;
+
+            av.strength += strength;
+            cnt++;
+         }
+   } else {
+     av.strength = mineposition->object->mine[minenum]->strength;
+     if ( mineposition->object->mine[minenum]->type  == cmantipersonnelmine   &&  (attackedunit->functions & cf_trooper ) )
+        av.strength *= 2;
+   }
+
+
 
    av.armor = 1;
    av.damage = 0;
@@ -784,8 +822,16 @@ void tmineattacksunit :: setup ( pfield mineposition, pvehicle &attackedunit )
 
 void tmineattacksunit :: setresult ( void )
 {
-   _mineposition->object->mine = 0;
-   _mineposition->object->minestrength = 0;
+   if ( _minenum == -1 ) {
+      for ( int i = 0; i < _mineposition->minenum(); ) {
+         if ( _mineposition->object->mine[i]->attacksunit ( _attackedunit )) {
+            _mineposition->removemine ( i );
+            i = 0;
+         } else
+            i++;
+      }
+   } else
+      _mineposition->removemine ( _minenum );
 
    _attackedunit->damage = dv.damage;
 
@@ -799,7 +845,12 @@ void tmineattacksunit :: setresult ( void )
 
 void tmineattacksunit :: paintimages ( int xa, int ya, int xd, int yd ) 
 {
-   putspriteimage    ( xa, ya, getmineadress ( _mineposition->object->mine >> 4 ));
+   if ( _minenum == -1 ) {
+      int num = _mineposition->mineattacks ( _attackedunit )-1;
+      putspriteimage    ( xa, ya, getmineadress ( _mineposition->object->mine[num]->type ));
+   } else
+      putspriteimage    ( xa, ya, getmineadress ( _mineposition->object->mine[0]->type ));
+
    putrotspriteimage ( xd, yd, _attackedunit ->typ->picture[0], _attackedunit->color  );
 }
 

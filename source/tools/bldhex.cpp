@@ -33,8 +33,6 @@
 #include "..\keybp.h"
 #include "..\basegfx.h"
 
-#define maxint 1147483648
-
 #ifdef HEXAGON
 #include "..\loadbi3.h"
 #endif
@@ -306,6 +304,7 @@ main ()
       }
 
       loadpalette();
+      loadbi3graphics();
 
       {
          tnfilestream stream ( "USABLACK.FNT", 1 );
@@ -578,13 +577,13 @@ main ()
                                                                        
    
          printf ("\n    fuel maxplus    \n");
-         num_ed (bld->maxplus.a.fuel, 0, maxint );
+         num_ed (bld->maxplus.a.fuel, minint, maxint );
                                                                        
          printf ("\n    material maxplus    \n");
-         num_ed (bld->maxplus.a.material, 0, maxint );
+         num_ed (bld->maxplus.a.material, minint, maxint );
                                                                        
          printf ("\n    energy maxplus    \n");
-         num_ed (bld->maxplus.a.energy, 0, maxint );
+         num_ed (bld->maxplus.a.energy, minint, maxint );
    
    
          printf ("\n    efficiency material    \n");

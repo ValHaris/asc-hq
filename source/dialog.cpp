@@ -1,6 +1,10 @@
-//     $Id: dialog.cpp,v 1.23 2000-03-29 09:58:42 mbickel Exp $
+//     $Id: dialog.cpp,v 1.24 2000-04-27 16:25:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2000/03/29 09:58:42  mbickel
+//      Improved memory handling for DOS version
+//      Many small changes I can't remember ;-)
+//
 //     Revision 1.22  2000/03/11 19:51:12  mbickel
 //      Removed file name length limitation under linux
 //      No weapon sound for attacked units any more (only attacker)
@@ -1020,7 +1024,7 @@ void  tvehicleinfo::showgeneralinfovariables( void )
 {
   collategraphicoperations cgo ( x1, y1, x1 + xsize, y1 + ysize );;
  int          ii, kk;
- pointer      q; 
+ void*      q; 
  char         strng[100];
 
       activefontsettings.length = 50;
@@ -1559,29 +1563,31 @@ void         tvehicleinfo::buttonpressed( char id )
    tdialogbox::buttonpressed ( id );
    if (id == 1) 
       action = 20; 
+
    if (( id == 2 ) || ( id == 3)) {
+      pvehicletype type;
       if (id == 2) { 
          do {
             if ( i > 0 )
                i--;
             else
                i = vehicletypenum - 1;
-
-         } while ( !getvehicletype_forpos ( i )  ); /* enddo */
+            type = getvehicletype_forpos ( i );
+         } while ( !type || !isUnitNotFiltered ( type->id ) ); /* enddo */
          markweap = 0; 
       } 
              
       if (id == 3) { 
-
          do {
             if ( i < vehicletypenum - 1 )
                i++;
             else
                i = 0;
-         } while ( !getvehicletype_forpos ( i )  ); /* enddo */
+            type = getvehicletype_forpos ( i );
+         } while ( !type || !isUnitNotFiltered ( type->id ) ); /* enddo */
 
          markweap = 0;
-      } 
+      }                     
       checknextunit(); 
    } 
    if (id == 5 && category != 1) {
@@ -1646,11 +1652,10 @@ void         tvehicleinfo::run(void)
    tweaponinfo  weapinf; 
    byte         k; 
    byte         drk; 
-   pvehicle     eht; 
 
    i = 0; 
    if ( !aktvehicle ) {
-      eht = getactfield()->vehicle;
+      pvehicle eht = getactfield()->vehicle;
       if ( !fieldvisiblenow(getactfield()) )
          eht = NULL; 
       if ( eht ) { 
@@ -1661,6 +1666,18 @@ void         tvehicleinfo::run(void)
       while ( aktvehicle != getvehicletype_forpos ( i )) 
         i++;
    }
+
+   pvehicletype type = getvehicletype_forpos ( i );
+   while ( !type || !isUnitNotFiltered ( type->id ) ) {
+      if ( i < vehicletypenum - 1 )
+         i++;
+      else {
+         displaymessage ( "no vehicle type to display; check unitset filters ", 1);
+         return;
+      }
+      type = getvehicletype_forpos ( i );
+   } ;
+
 
    j = i;
    drk = 0; 
@@ -5025,11 +5042,11 @@ class ResizeMap : public tdialogbox {
                         void init ( void );
                         void buttonpressed ( char id );
                         void run ( void );
-                        boolean checkvalue( byte         id, pointer      p);
+                        boolean checkvalue( byte         id, void*      p);
                     };
 
 
-boolean ResizeMap :: checkvalue(byte         id, pointer      p)  
+boolean ResizeMap :: checkvalue(byte         id, void*      p)  
 {
    if ( id >= 3 && id <= 6 ) {
       int* wp = (int*) p;
@@ -5643,7 +5660,7 @@ void         tverlademunition::run(void)
          for (i = 0; i < wp.count ; i++) {
             activefontsettings.length = (x1 + startx - numlength - 10 ) - (x1 + 20 );
             if ((wp.weap[i].typ >= 100) && (wp.weap[i].typ <= 110))
-               showtext2( cdnames[wp.weap[i].typ - 100],x1 + 20, y1 + firstliney + i * abstand);
+               showtext2( resourceNames[wp.weap[i].typ - 100],x1 + 20, y1 + firstliney + i * abstand);
             else
                showtext2( cwaffentypen[wp.weap[i].typ],x1 + 20, y1 + firstliney + i * abstand);
 
@@ -5970,7 +5987,7 @@ void viewterraininfo ( void )
       char c[1000];
       c[0] = 0;
       for ( int i = 0; i < cmovemalitypenum; i++ ) {
-        strcat ( c, strrr( getactfield()->movemalus[i] ));
+        strcat ( c, strrr( getactfield()->getmovemalus(i) ));
         strcat ( c, " / " );
       }
       displaymessage( c, 1 );

@@ -1,6 +1,10 @@
-//     $Id: attack.h,v 1.4 2000-01-24 08:16:49 steb Exp $
+//     $Id: attack.h,v 1.5 2000-04-27 16:25:14 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/01/24 08:16:49  steb
+//     Changes to existing files to implement sound.  This is the first munge into
+//     CVS.  It worked for me before the munge, but YMMV :)
+//
 //     Revision 1.3  2000/01/20 16:52:09  mbickel
 //      Added Kamikaze attack
 //
@@ -108,10 +112,11 @@ class tunitattacksbuilding : public tfight {
 class tmineattacksunit : public tfight {
             pfield _mineposition;
             pvehicle _attackedunit;
+            int _minenum;
             pvehicle* _pattackedunit;
             void paintimages ( int xa, int ya, int xd, int yd );
          public:
-           void setup ( pfield mineposition, pvehicle &attackedunit );
+           void setup ( pfield mineposition, int minenum, pvehicle &attackedunit );
            void setresult ( void );
 
       };

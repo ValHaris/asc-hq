@@ -103,6 +103,7 @@ int main(int argc, char *argv[] )
 
 
    loadpalette();
+   loadbi3graphics();
 
    memset ( bipict, 0, sizeof ( 0 ) );
    try {

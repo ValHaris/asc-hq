@@ -1,6 +1,9 @@
-//     $Id: gui.h,v 1.5 2000-03-11 18:22:06 mbickel Exp $
+//     $Id: gui.h,v 1.6 2000-04-27 16:25:24 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/03/11 18:22:06  mbickel
+//      Added support for multiple graphic sets
+//
 //     Revision 1.4  2000/01/02 19:47:07  mbickel
 //      Continued Linux port
 //      Fixed crash at program exit
@@ -50,6 +53,7 @@
 #include "keybp.h"
 #include "basegui.h"
 #include "spfst.h"
+#include "unitctrl.h"
 
    #define guismalliconsizex 24
    #define guismalliconsizey 17  
@@ -388,6 +392,7 @@ class tnsguiicon : public tnguiicon {
 
 
 class tnsguiiconmove : public tnsguiicon {
+          VehicleMovement vehicleMovement;
         public:
           virtual int   available    ( void ) ;
           virtual void  exec         ( void ) ;
@@ -406,6 +411,7 @@ class tnsguiiconattack : public tnsguiicon {
        };
 
 class tnsguiiconascent : public tnsguiicon {
+          IncreaseVehicleHeight increaseVehicleHeight;
         public:
           virtual int   available    ( void ) ;
           virtual void  exec         ( void ) ;
@@ -415,6 +421,7 @@ class tnsguiiconascent : public tnsguiicon {
        };
 
 class tnsguiicondescent : public tnsguiicon {
+          DecreaseVehicleHeight decreaseVehicleHeight;
         public:
           virtual int   available    ( void ) ;
           virtual void  exec         ( void ) ;
@@ -775,18 +782,6 @@ class treplayguihost : public tguihost {
         trguiicon_cancel cancel;
      } icons;  
    };
-
-
-
-extern void         setmouseongui( void );
-
-
-
-
-
-
-
-
 
 
 

@@ -48,7 +48,6 @@
            } 
            return -1;
          } 
-*/
 
 
 
@@ -75,6 +74,7 @@ int filesize ( char* name )
    return sze;
 }
 
+*/
 
 
 

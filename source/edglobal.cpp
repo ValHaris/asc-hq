@@ -1,6 +1,10 @@
-//     $Id: edglobal.cpp,v 1.9 2000-04-01 11:38:37 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.10 2000-04-27 16:25:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/04/01 11:38:37  mbickel
+//      Updated the small editors
+//      Added version numbering
+//
 //     Revision 1.8  2000/03/16 14:06:54  mbickel
 //      Added unitset transformation to the mapeditor
 //
@@ -577,7 +581,7 @@ void execaction(int code)
                             else if (pf->building != NULL) removebuilding(&pf->building); 
                             else {
                                      pf->removeobject( actobject );
-                                     pf->removemine();
+                                     pf->removemine( -1 );
                                    }
                             mapsaved = false;
                             displaymap();
@@ -617,7 +621,7 @@ void execaction(int code)
                          pf = getactfield();
                          if (pf != NULL) {
                             mapsaved = false; 
-                            pf->removemine();
+                            pf->removemine( -1 );
                             displaymap();
                          }
                       }

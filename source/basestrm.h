@@ -1,6 +1,10 @@
-//     $Id: basestrm.h,v 1.9 2000-03-11 19:51:12 mbickel Exp $
+//     $Id: basestrm.h,v 1.10 2000-04-27 16:25:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2000/03/11 19:51:12  mbickel
+//      Removed file name length limitation under linux
+//      No weapon sound for attacked units any more (only attacker)
+//
 //     Revision 1.8  2000/02/05 12:13:44  steb
 //     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
 //     startup due to actmap being null when trying to report errors.
@@ -63,12 +67,7 @@
 #include "global.h"
 #include "lzw.h"
 extern "C" {
-#ifdef _DOS_
- #include "libs\bzlib\bzlib.h"
-#else
  #include "libs/bzlib/bzlib.h"
-#endif
-
 }
 
 
@@ -684,6 +683,7 @@ extern int verbosity;
 
 extern const char pathdelimitter; 
 extern const char* pathdelimitterstring; 
+extern int filesize( char *name);
 
 
 #endif

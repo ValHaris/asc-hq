@@ -1,6 +1,9 @@
-//     $Id: spfst.h,v 1.6 2000-04-17 16:27:23 mbickel Exp $
+//     $Id: spfst.h,v 1.7 2000-04-27 16:25:30 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/04/17 16:27:23  mbickel
+//      Optimized vehicle movement for SDL version
+//
 //     Revision 1.5  1999/12/28 21:03:24  mbickel
 //      Continued Linux port
 //      Added KDevelop project files
@@ -71,7 +74,7 @@
    struct tstreet { 
                 struct { 
                                                byte         page; 
-                                               pointer      position; 
+                                               void*      position; 
                                             } mineposition[8]; 
              } ; 
 
@@ -96,40 +99,7 @@
    struct tstrecke {
                  tstpunkt       field[31]; 
                  byte         tiefe; 
-                 int          fuelremaining;
-                 int          distance;
               }; 
-   struct tmoveparams { 
-                        unsigned char         movestatus;       /*  Folgende Modi sind definiert : 
-                                                                             0:  garnichts, standard
-                                                                             1:  movement l1
-                                                                             2:  movement l2
-                                                                             10: angriff
-                                                                             11: movement l1 mit hîhe-wechseln
-                                                                             12: movement l2 mit hîhe-wechseln
-                                                                             65: refuel
-                                                                             66: reparieren
-                                                                             72: putstreet
-                                                                             90: putmine
-                                                                             111: putbuilding l1
-                                                                             112: putbuilding l2
-                                                                             115: removebuilding
-                                                                             120: construct vehicle
-                                                                             130: external loading
-                                                                   */
-
-                        word         movesx, movesy, moveerr; 
-                        integer      movedist; 
-                        tstrecke     movepath; 
-                        pvehicle     vehicletomove; 
-                        byte         newheight; 
-                        byte         oldheight; 
-                        char         heightdir; 
-                        pbuildingtype buildingtobuild;   /*  nur bei movestatus = 111  */ 
-                        int          movespeed;
-                        int          uheight;
-                     }; 
-
 
 
    class tweapdist { 
@@ -144,10 +114,10 @@
    typedef class tweapdist* pweapdist ;
 
    struct tattackweap { 
-                    byte         count; 
-                    word         strength[8]; 
-                    byte         num[8]; 
-                    word         typ[8];
+                    int          count; 
+                    int          strength[16]; 
+                    int          num[16]; 
+                    int          typ[16];
                  }; 
 
    typedef struct tattackweap* pattackweap ;
@@ -176,7 +146,7 @@
               virtual void putimg  ( void );
               virtual void putbkgr ( void );
               int          oposx, oposy;
-              pointer      backgrnd; 
+              void*      backgrnd; 
               virtual void checksize ( void );
    };
 
@@ -327,20 +297,13 @@ extern pattackweap attackpossible( const pvehicle     angreifer,
                             integer      y);
 
 extern boolean attackpossible2u( const pvehicle     angreifer,
-                                 const pvehicle     verteidiger);      // Entfernung wird nicht berÅcksichtigt !!
+                                 const pvehicle     verteidiger, pattackweap attackweap = NULL);      // Entfernung wird nicht berÅcksichtigt !!
 
 extern boolean attackpossible28( const pvehicle     angreifer,
-                                 const pvehicle     verteidiger);       // Als Entfernung wird 8 angenommen
+                                 const pvehicle     verteidiger, pattackweap attackweap = NULL);       // Als Entfernung wird 8 angenommen
 
 extern boolean attackpossible2n( const pvehicle     angreifer,
-                                 const pvehicle     verteidiger);       // Als Entfernung wird die tatsÑchliche angenommen
-
-extern pattackweap   attackpossible3u( const pvehicle     angreifer,
-                                       const pvehicle     verteidiger);
-extern pattackweap   attackpossible38( const pvehicle     angreifer,
-                                       const pvehicle     verteidiger);
-extern pattackweap   attackpossible3n( const pvehicle     angreifer,
-                                       const pvehicle     verteidiger);
+                                 const pvehicle     verteidiger, pattackweap attackweap = NULL );       // Als Entfernung wird die tatsÑchliche angenommen
 
 extern boolean vehicleplattfahrbar( const pvehicle     vehicle,
                                     const pfield        field);
@@ -354,23 +317,12 @@ extern boolean weapexist( const pvehicle     eht);
   /*  sonstiges  */ 
 
 
-extern pointer getmineadress( byte         num );
+extern void* getmineadress( int num , int uncompressed = 0 );
 
 extern void         initspfst( int x = 10, int y = 20 );
 
 extern void generatespfdspaces();
 
-extern void         movevehiclexy(pvehicle     eht,
-                           integer      x1,
-                           integer      y1,
-                           integer      x2,
-                           integer      y2);
-
-extern void         movevehicle(integer      x1,
-                         integer      y1,
-                         integer      x2,
-                         integer      y2,
-                         pvehicle     eht);
 extern void         checkfieldsformouse ( void );
 
 extern void  checkunitsforremoval ( void );
@@ -509,7 +461,7 @@ class tdisplaymap : public tgeneraldisplaymap {
           virtual void pnt_terrain ( void );
           virtual void cp_buf ( void );
 
-          void  movevehicle(integer x1,  integer y1,  integer x2,  integer y2,  pvehicle eht);
+          void  movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, int height1, int height2, int fieldnum, int totalmove );
           void  deletevehicle ( void ); 
 
           void resetmovement ( void );
@@ -582,7 +534,7 @@ class tdisplaymap : public tgeneraldisplaymap {
           virtual void cp_buf ( void );
           virtual void cp_buf ( int x1, int y1, int x2, int y2 );
 
-          void  movevehicle(integer x1,  integer y1,  integer x2,  integer y2,  pvehicle eht);
+          void  movevehicle( int x1,int y1, int x2, int y2, pvehicle eht, int height1, int height2, int fieldnum, int totalmove );
           void  deletevehicle ( void ); 
 
           void resetmovement ( void );
@@ -715,6 +667,31 @@ class tdrawline8 : public tdrawline {
            virtual void putpix8 ( int x, int y ) = 0;
        };
 
+class MapDisplayInterface {
+         public:
+           virtual void displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove ) = 0;
+           virtual void deleteVehicle ( pvehicle vehicle ) = 0;
+           virtual void displayMap ( void ) = 0;
+           virtual void displayPosition ( int x, int y ) = 0;
+           virtual void resetMovement ( void ) = 0;
+           virtual void startAction ( void ) = 0;
+           virtual void stopAction ( void ) = 0;
+       };
+
+class MapDisplay : public MapDisplayInterface {
+           dynamic_array<int> cursorstat;
+           int cursorstatnum;
+         public:
+           void displayMovingUnit ( int x1,int y1, int x2, int y2, pvehicle vehicle, int height1, int height2, int fieldnum, int totalmove );
+           void deleteVehicle ( pvehicle vehicle );
+           void displayMap ( void );
+           void displayPosition ( int x, int y );
+           void resetMovement ( void );
+           void startAction ( void );
+           void stopAction ( void );
+    };
+
+extern MapDisplay defaultMapDisplay;
 
 #ifdef _NOASM_
  int  rol ( int valuetorol, int rolwidth );

@@ -1,6 +1,10 @@
-//     $Id: dlg_box.cpp,v 1.14 2000-03-29 09:58:44 mbickel Exp $
+//     $Id: dlg_box.cpp,v 1.15 2000-04-27 16:25:20 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14  2000/03/29 09:58:44  mbickel
+//      Improved memory handling for DOS version
+//      Many small changes I can't remember ;-)
+//
 //     Revision 1.13  2000/02/05 12:13:44  steb
 //     Sundry tidying up to get a clean compile and run.  Presently tending to SEGV on
 //     startup due to actmap being null when trying to report errors.
@@ -966,7 +970,7 @@ void         tdialogbox::setscrollspeed(char        id , int  speed)
 
 
 void         tdlgengine::addeingabe(byte         lid,
-                                  pointer      data,
+                                  void*      data,
                                   int      min,
                                   int      max)
 { 
@@ -976,14 +980,20 @@ void         tdlgengine::addeingabe(byte         lid,
    while (pb != NULL) { 
       if (pb->id == lid) { 
          pb->data = data; 
-         pb->min = min; 
-         pb->max = max; 
+         if ( min > max ) {
+            pb->min = max; 
+            pb->max = min; 
+         } else {
+            pb->min = min; 
+            pb->max = max; 
+         }
          addmarkedkey(pb->id,ct_enter); 
          addmarkedkey(pb->id,ct_space); 
       } 
       pb = pb->next; 
    } 
 } 
+
 
 
 void         tdialogbox::enablebutton(byte         id)
@@ -1040,13 +1050,13 @@ void         tdialogbox::enablebutton(byte         id)
          showtext2((char*) pb->data , x1 + pb->x1 + 5,y1 + pb->y1 + 2);
       
       if (pb->art == 2) { 
-         if (pb->max <= 255) { 
+         if (pb->max <= 255 && pb->min >= 0) { 
             char* pbt = (char*) pb->data;
             itoa ( *pbt, strng, 10 );
             showtext2( strng, x1 + pb->x1 + 5,y1 + pb->y1 + 2);
          } 
          else 
-            if (pb->max <= 65535) { 
+            if (pb->max <= 65535 && pb->min >= 0) { 
                word* pw = (word*) pb->data;
                itoa ( *pw, strng, 10 );
                showtext2(strng, x1 + pb->x1 + 5,y1 + pb->y1 + 2);
@@ -1188,13 +1198,13 @@ void         tdialogbox::disablebutton(byte         id)
          showtext2( (char*)pb->data,x1 + pb->x1 + 5,y1 + pb->y1 + 2);
       } 
       if (pb->art == 2) { 
-         if (pb->max <= 255) { 
+         if (pb->max <= 255 && pb->min >= 0) { 
             pbt = (char*) pb->data;
             itoa ( *pbt, s, 10 );
             showtext2(s,x1 + pb->x1 + 5,y1 + pb->y1 + 2); 
          } 
          else 
-            if (pb->max <= 65535) { 
+            if (pb->max <= 65535 && pb->min >= 0) { 
                pw = (word*) pb->data;
                itoa ( *pw, s , 10);
                showtext2(s, x1 + pb->x1 + 5,y1 + pb->y1 + 2);
@@ -1714,7 +1724,7 @@ void         tdialogbox::toggleswitch(pbutton      pb)
 
 
 boolean      tdialogbox::checkvalue(byte         id,
-                                  pointer      p)
+                                  void*      p)
 { 
    return  true;
 } 
@@ -1753,12 +1763,12 @@ void         tdialogbox::editfield(pbutton      pb)
       mousevisible(true); 
    } 
    if (pb->art == 2) { 
-      if (pb->max <= 255) { 
+      if (pb->max <= 255 && pb->min >= 0) { 
          pbt = (char*) pb->data;
          l = *pbt; 
       } 
       else 
-         if (pb->max <= 65535) { 
+         if (pb->max <= 65535 && pb->min >= 0) { 
             pw = (word*)  pb->data;
             l = *pw; 
          } 
@@ -1771,11 +1781,11 @@ void         tdialogbox::editfield(pbutton      pb)
          intedit( &l,x1 + pb->x1 + 5,y1 + pb->y1 + 2,pb->x2 - pb->x1 - 10,pb->min,pb->max);
       }  while ( !checkvalue(pb->id, &l) );
       mousevisible(true); 
-      if (pb->max <= 255) { 
+      if (pb->max <= 255 && pb->min >= 0) { 
          *pbt = l; 
       } 
       else 
-         if (pb->max <= 65535) { 
+         if (pb->max <= 65535 && pb->min >= 0) { 
             *pw = l; 
          } 
          else { 

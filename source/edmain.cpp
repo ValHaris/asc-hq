@@ -1,6 +1,9 @@
-//     $Id: edmain.cpp,v 1.8 2000-03-16 14:06:54 mbickel Exp $
+//     $Id: edmain.cpp,v 1.9 2000-04-27 16:25:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2000/03/16 14:06:54  mbickel
+//      Added unitset transformation to the mapeditor
+//
 //     Revision 1.7  2000/02/24 10:54:08  mbickel
 //      Some cleanup and bugfixes
 //
@@ -81,7 +84,7 @@ const char* progressbarfilename = "progress.8me";
 #endif
 
 
-// #define MEMCHK
+//  #define MEMCHK
 
 
 #ifdef MEMCHK
@@ -131,11 +134,18 @@ const char* progressbarfilename = "progress.8me";
      return found;
   }
 
+  void verifyallblocks( void );
 
   void* memchkAlloc ( int tp, size_t amt )
   {
+     // verifyallblocks();
      int error;
      void* tmp = malloc ( amt + 53 * 4 );
+    #ifdef _DOS_
+     if ( !tmp )
+        new_new_handler();
+    #endif
+
      int* tmpi = (int*) tmp;
      /*
      if ( (int) tmpi == 0x1bb2138 || (int) tmpi == 0x1bcf178 ) 
@@ -165,18 +175,36 @@ const char* progressbarfilename = "progress.8me";
         if ( tmpi[0] != tp )
            error++;
 
-     if ( tmpi[1] != (int) tmpi)
+     if ( tmpi[1] != (int) tmpi) {
         error++;
+        #ifdef logging
+         logtofile ( "memory check: verifyblock : error A at address %x", p );
+        #endif
+     }
 
      int amt = tmpi[2];
 
      for ( int i = 0; i < 25; i++ ) {
 
         if ( tmpi[3 + i] != 0x12345678)
-           error++;
+           if ( i == 1  &&  tmpi[3 + i] == -2) {
+              error++;  // deallocated twice 
+              #ifdef logging
+               logtofile ( "memory check: verifyblock : error B at address %x", p );
+              #endif
+           } else {
+              error++;
+              #ifdef logging
+               logtofile ( "memory check: verifyblock : error C at address %x", p );
+              #endif
+           }
 
-        if ( tmpi[3 + i + (amt+3)/4 + 25] != 0x87654321 )
+        if ( tmpi[3 + i + (amt+3)/4 + 25] != 0x87654321 ) {
            error++;
+           #ifdef logging
+            logtofile ( "memory check: verifyblock : error D at address %x", p );
+           #endif
+        }
      }
      return tmpi;
   }
@@ -191,6 +219,12 @@ const char* progressbarfilename = "progress.8me";
   {
      if ( removeblock ( buf )) {
         void* tmpi = verifyblock ( tp, buf );
+
+        int* tmpi2 = (int*) buf;
+        tmpi2 -= 28;
+        tmpi2[4] = -2;
+
+
         free ( tmpi );
      } else
        free ( buf );
@@ -777,6 +811,10 @@ int main(int argc, char *argv[] )
    logtofile ( "\n new log started \n ");
    #endif
 
+   #ifdef _DOS_
+    initmemory();
+   #endif
+
 
       for (i = 1; i<argc; i++ ) {
            if ( argv[i][0] == '/'  ||  argv[i][0] == '-' ) {
@@ -828,10 +866,6 @@ int main(int argc, char *argv[] )
    memset(exitmessage, 0, sizeof ( exitmessage ));
    atexit ( dispmessageonexit );
         
-   #ifdef _DOS_
-    initmemory();
-   #endif
-   
    modenum8 = initgraphics( resolx, resoly, 8 );
    if ( modenum8 < 0 )
       return 1;

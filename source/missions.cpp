@@ -1,6 +1,9 @@
-//     $Id: missions.cpp,v 1.5 1999-12-29 17:38:17 mbickel Exp $
+//     $Id: missions.cpp,v 1.6 2000-04-27 16:25:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  1999/12/29 17:38:17  mbickel
+//      Continued Linux port
+//
 //     Revision 1.4  1999/11/23 21:07:34  mbickel
 //      Many small bugfixes
 //
@@ -838,7 +841,7 @@ void         executeevent(pevent       ev)
        
       if ( ev->a.action == cegameparamchange ) {
          int* i = ev->intdata;
-         actmap->gameparameter[ i[0] ] = i[1];
+         actmap->setgameparameter( i[0] , i[1] );
       }
 
       if ( ev->a.action == ceellipse ) {

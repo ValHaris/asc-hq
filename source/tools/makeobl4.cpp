@@ -90,6 +90,7 @@ main (int argc, char *argv[] )
       strcpy (datfile.name, "");
    
       loadpalette();
+      loadbi3graphics();
    
       activefontsettings.font = fnt; 
       activefontsettings.color = black; 

@@ -1,6 +1,14 @@
-//     $Id: loaders.h,v 1.2 1999-11-16 03:41:59 tmwilson Exp $
+//     $Id: loaders.h,v 1.3 2000-04-27 16:25:26 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  1999/11/16 03:41:59  tmwilson
+//     	Added CVS keywords to most of the files.
+//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
+//     	Wrote replacement routines for kbhit/getch for Linux
+//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
+//     	Added autoconf/automake capabilities
+//     	Added files used by 'automake --gnu'
+//
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -79,10 +87,15 @@ extern void         erasemap( tmap* spfld = actmap );
 extern void         erasemap_unchained( tmap* spfld = actmap );
 
 
-#define       savegameversion   0xff31
-#define       mapversion        0xfe24
-#define       networkversion    0x0004
-#define       replayversion     0x0001
+
+const int actsavegameversion  = 0xff32;
+const int minsavegameversion  = 0xff31;
+const int actmapversion       = 0xfe25;
+const int minmapversion       = 0xfe24;
+const int actnetworkversion   = 0x0005;
+const int minnetworkversion   = 0x0004;
+const int actreplayversion    = 0x0001;
+const int minreplayversion    = 0x0001;
   
 
 
