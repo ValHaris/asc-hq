@@ -267,7 +267,7 @@
         other units, because a service weapon is additionally needed for that. It may be the
         case that the unit can only repair itself.
     */
-    bool canRepair( const ContainerBase* item );
+    bool canRepair( const ContainerBase* item ) const;
 
     /** fills a unit with all resources it can carry and sets it class to "to be determined on map load".
         This function should only be called in the mapeditor !

@@ -84,7 +84,7 @@ Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const p
 }
 
 
-bool Building::canRepair ( const ContainerBase* item )
+bool Building::canRepair ( const ContainerBase* item ) const
 {
    if ( (typ->special & cgrepairfacilityb) || item == this )
       return true;

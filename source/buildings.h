@@ -170,7 +170,7 @@ class  Building : public ContainerBase {
 
     int lastmineddist;
 
-    bool canRepair ( const ContainerBase* item );
+    bool canRepair ( const ContainerBase* item ) const;
 
     static Building* newFromStream ( pmap gamemap, tnstream& stream, bool chainToField = true );
     void write ( tnstream& stream, bool includeLoadedUnits = true );

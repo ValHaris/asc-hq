@@ -199,7 +199,7 @@ void Vehicle :: init ( void )
 }
 
 
-bool Vehicle :: canRepair( const ContainerBase* item )
+bool Vehicle :: canRepair( const ContainerBase* item ) const
 {
    return (typ->functions & cfrepair) || (item == this && typ->autorepairrate ) ;
 }
