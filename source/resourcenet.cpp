@@ -179,9 +179,12 @@ void MapNetwork :: searchAllVehiclesNextToBuildings ( int player )
    for ( tmap::Player::VehicleList::iterator j = actmap->player[player].vehicleList.begin(); j != actmap->player[player].vehicleList.end(); j++ ) {
       MapCoordinate mc = (*j)->getPosition();
       for ( int s = 0; s < sidenum; s++ ) {
-         pbuilding bld = actmap->getField ( getNeighbouringFieldCoordinate ( mc, s ))->building;
-         if ( bld && bld->color == (*j)->color )
-            checkvehicle ( *j );
+         pfield fld = actmap->getField ( getNeighbouringFieldCoordinate ( mc, s ));
+         if ( fld ) {
+            pbuilding bld = fld->building;
+            if ( bld && bld->color == (*j)->color )
+               checkvehicle ( *j );
+         }
       }
    }
 }

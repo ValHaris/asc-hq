@@ -13,7 +13,7 @@ Bugs:
  
 Small tasks:
 
--3- added check for SDLmm to configure.in
+-3- add check for SDLmm to configure.in
 
 -5- Message of crashed airplanes when they run out of fuel
 
@@ -132,7 +132,7 @@ Larger Tasks:
      Or a function to make a diff between two maps and use it for a 
       map-change event...
 
--1- text based file formats, to replace those small editors
+-2- adding inheritance to the text file formats
 
 -3-  maintaining and improving the dialog engine together with the dialogs
     themselves. The VehicleInfo dialog for example is really outdated... 
