@@ -47,7 +47,7 @@ LFLAGS = -D"" -ap -Tpe -x -Gn -v
 # ---------------------------------------------------------------------------
 ALLOBJ = c0x32.obj $(OBJFILES)
 ALLRES = $(RESFILES)
-ALLLIB = $(LIBFILES) $(LIBRARIES) import32.lib cw32.lib
+ALLLIB = $(LIBFILES) $(LIBRARIES) import32.lib cw32mt.lib
 # ---------------------------------------------------------------------------
 !ifdef IDEOPTIONS
 

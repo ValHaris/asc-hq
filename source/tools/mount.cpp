@@ -317,6 +317,10 @@ void testcompress ( char* name, int size )
    {
       char buf[100];
       FILE* in = fopen ( name, "rb" );
+      if ( !in ) {
+         printf("cannot access file %s \n", name );
+         exit(1);
+      }
       if ( fread ( buf, 1, 10, in ) == 10 ) {
          if ( strncmp ( &buf[1], "MBLZW16", 7) == 0 )
             comp = 1;
@@ -430,6 +434,10 @@ int main(int argc, char *argv[] )
    addSearchPath(".");
 
    out = fopen ( argv[argc-1], filewritemode );
+   if ( !out ) {
+      fprintf(stderr, "cannot open file %s for writing \n", argv[argc-1] );
+      exit(1);
+   }
 
    int i = 0;
    pos += fwrite ( containermagic, 1, 4, out );
@@ -468,7 +476,9 @@ int main(int argc, char *argv[] )
              if ( direntp == NULL )
                 break;
 
-             if ( patimat ( argv[df] , direntp->d_name ) ) {
+             if ( patimat ( argv[df] , direntp->d_name ) &&
+                  strcmp ( direntp->d_name, "." ) != 0 &&
+                  strcmp ( direntp->d_name, ".." ) != 0 ) {
                 int fnd = 0;
 
                 for ( int j = 0; j < num; j++ )

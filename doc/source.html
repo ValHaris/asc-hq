@@ -63,12 +63,24 @@ We are building ASC/win with Borland C++ Builder 5. It should be possible to bui
     SDL\src\
     </TT>
 <LI>Create a subdirectory called BIN in <TT>SDL\</TT> and put the SDL.DLL into it.
-<LI>Go to this directory and run: <TT>IMPLIB -a -c SDL.LIB SDL.DLL</TT>
+<LI>Go to this directory and run: <TT>IMPLIB -a -c SDL.LIB SDL.DLL</TT> 
+
 <H6>Borland C++ Builder</H6>
+<UL>
 <LI>Open <TT>asc/Asc.bpg</TT> and run "make all projects"
-<H6>Free Borland C++ command line compiler</H6>
-<LI>Execute <TT>asc/makebcc.bat</TT>
+<LI>If you want to run ASC from within Borland C++ Builder, place a file <TT>ASC.INI</TT> in <TT>asc\soure\win32\borland\</TT> that contains the following line: <BR>
+<TT>SearchPath0=c:\somewhere\</TT><BR>
+replace c:\somewhere by the directory where you want ASC to place its files (savegames, etc.). 
+<LI>Get the datafile (main.con) from the <A HREF="http://www.asc-hq.org/download.html">website</A> and put it in this directory.
 </UL>
+<H6>Free Borland C++ command line compiler</H6>
+<UL>
+<LI>Execute <TT>asc/makebcc.bat</TT> <P>
+
+All files will be placed in the <TT>asc\game\</TT> directory that is going to be created.
+</UL>
+</UL>
+
 
 
 <H5>Watcom C++</H5>
@@ -92,18 +104,6 @@ The project files for the Watcom IDE are included in the asc/source/win32 direct
 Well, nothing special about that. We build ASC with the standard GNU development tools. Refer to INSTALL for (generic) build instructions.
 
 
-<H3>Source code formatting</H3>
-Since there are many different source code formatting styles out there, it would be quite a mess if everybody used his own style and spends half his time undoing the formatting that others did. I don't want to force everybody to use exactly the same formatting, but if some source is <B>re</B>formatted, then to a well defined layout.
-<A HREF="http://astyle.sourceforge.net/astyle/">Artistic Style</A> is a capable program for formatting source code.
-The settings <TT>--style=linux -s3 -C -S</TT> are recommended to be used for ASC. If you write these settings to a file <TT>~/.astylerc</TT>, you don't need to type them each time you call Astyle. The central setting there is the -s3, which tells Astyle to indent with 3 spaces.<P>
-
-<strong>Some nested and nasty #ifdefs can confuse Astyle. After using Astyle, check the last line of the source file and verify they are correctly indented. If they are not, either fix the #ifdef or restore to the backup file that was created by Astyle!</strong><P>
-
-I personally don't like cutting breaking each line after 80 characters. The times when that was the upper limit of what a monitor could display at once are long passed. And since the first 120 characters (or whatever the size of your screen is) of a command are usually sufficient to get an idea what it is doing, I prefer to not have the next line cluttered with some coordinate calculations that nobody is really interested in.
-But, as always, there are exceptions where it helps to break a command into several lines...
-<P>
-
-
 <H3>Porting ASC</H3>
 Porting ASC to any platform supported by SDL should be farely easy (as long as it is 32 bit and has Intel byte order). 
 
@@ -118,6 +118,17 @@ Every building and unit is of a certain 'type'. The <CODE>vehicletypes</CODE> an
 The <CODE>Vehicle</CODE>, <CODE>Vehicletype</CODE> and <CODE>Buildingtype</CODE> classes are defined in files having the same name as the class, while the <CODE>Building</CODE> class is defined in <TT>building<B>s</B>.h</TT>, since <TT>building.*</TT> was already used for something different. <P>
 The primary content of a map are its fields. Each field has again a pointer to a certain weather of a <CODE>terraintype</CODE>. Each terraintype (can currently be found in <TT>typen.h</TT>, but will be moved to its own file sooner of later) has up to 5 different weathers ("dry (standard)","light rain", "heavy rain", "few snow", "lot of snow"). If there is a unit or a building standing on a field, it has a pointer to it. <P>
 On the field can be several <CODE>Objects</CODE>. Objects are another central class of ASC. Roads, pipleines, trenches and woods are examples of objects.
+
+<H3>Source code formatting</H3>
+Since there are many different source code formatting styles out there, it would be quite a mess if everybody used his own style and spends half his time undoing the formatting that others did. I don't want to force everybody to use exactly the same formatting, but if some source is <B>re</B>formatted, then to a well defined layout.
+<A HREF="http://astyle.sourceforge.net/astyle/">Artistic Style</A> is a capable program for formatting source code.
+The settings <TT>--style=linux -s3 -C -S</TT> are recommended to be used for ASC. If you write these settings to a file <TT>~/.astylerc</TT>, you don't need to type them each time you call Astyle. The central setting there is the -s3, which tells Astyle to indent with 3 spaces.<P>
+
+<strong>Some nested and nasty #ifdefs can confuse Astyle. After using Astyle, check the last line of the source file and verify they are correctly indented. If they are not, either fix the #ifdef or restore to the backup file that was created by Astyle!</strong><P>
+
+I personally don't like cutting breaking each line after 80 characters. The times when that was the upper limit of what a monitor could display at once are long passed. And since the first 120 characters (or whatever the size of your screen is) of a command are usually sufficient to get an idea what it is doing, I prefer to not have the next line cluttered with some coordinate calculations that nobody is really interested in.
+But, as always, there are exceptions where it helps to break a command into several lines...
+<P>
 
 
 </BODY>

@@ -1,17 +1,18 @@
-/*! \file gamedlg.cpp
-    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
+/*! \file gamedlg.cpp    \brief Tons of dialog boxes which are used in ASC only (and not in the mapeditor)
 */
-
-//     $Id: gamedlg.cpp,v 1.67 2001-02-26 13:49:35 mbickel Exp $
+//     $Id: gamedlg.cpp,v 1.68 2001-07-04 16:53:28 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.67  2001/02/26 13:49:35  mbickel
+//      Fixed bug in message loading
+//      readString can now read strings that container \n
+//
 //     Revision 1.66  2001/02/26 12:35:12  mbickel
 //      Some major restructuing:
 //       new message containers
 //       events don't store pointers to units any more
 //       tfield class overhauled
-//
-//     Revision 1.65  2001/02/18 15:37:10  mbickel
+////     Revision 1.65  2001/02/18 15:37:10  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
 //         tmap, tfield and helper classes into separate file (gamemap.h)
@@ -171,6 +172,7 @@
 //     Revision 1.33  2000/08/05 20:17:57  mbickel
 //      Restructured Fullscreen Image loading
 //
+
 //     Revision 1.32  2000/07/29 14:54:30  mbickel
 //      plain text configuration file implemented
 //
@@ -5052,7 +5054,7 @@ void         tverlademunition::run(void)
       return;
    }
 
-   y1 = 160 - 13*target->service.size();
+   y1 = 150 - 13*target->service.size();
    ysize = 480 - 2 * y1; 
 
    int i;
@@ -5109,7 +5111,7 @@ void         tverlademunition::run(void)
    mousevisible(true);
    abbruch = 0;
 
-   int mp = -1;
+   int mp = 0;
    do {
       int op = mp;
       tmunitionsbox::run();
@@ -5287,4 +5289,5 @@ void         verlademunition( VehicleService* serv, int targetNWID )
    vlm.run();
    vlm.done(); 
 }
+
 
