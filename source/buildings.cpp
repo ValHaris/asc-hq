@@ -353,9 +353,9 @@ pfield        Building :: getEntryField( )
   return getField ( typ->entry );
 }
 
-MapCoordinate Building :: getEntry( )
+MapCoordinate3D Building :: getEntry( )
 {
-  return entryPosition;
+  return MapCoordinate3D( entryPosition, typ->buildingheight);
 }
 
 

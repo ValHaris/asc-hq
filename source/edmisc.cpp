@@ -2,9 +2,12 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.52 2001-03-07 21:40:51 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.53 2001-03-30 12:43:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2001/03/07 21:40:51  mbickel
+//      Lots of bugfixes in the mapeditor
+//
 //     Revision 1.51  2001/02/26 12:35:10  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -545,21 +548,17 @@ int leftmousebox(void)
 
 void tputresources :: init ( int sx, int sy, int dst, int restype, int resmax, int resmin )
 {
-   initsearch(sx,sy,dst,0);
+   initsearch( MapCoordinate(sx,sy),dst,0);
    resourcetype = restype;
    maxresource = resmax;
    minresource = resmin;
-   dist = 0;
-   xp = sx;
-   yp = sy;
-   testfield();
    startsearch();
 }
 
-void tputresources :: testfield ( void )
+void tputresources :: testfield ( const MapCoordinate& mc )
 {
-   int m = maxresource - dist * ( maxresource - minresource ) / maxdistance;
-   pfield fld = getfield(xp,yp);
+   int m = maxresource - dist * ( maxresource - minresource ) / lastDistance;
+   pfield fld = gamemap->getField ( mc );
    if ( resourcetype == 1 )
       fld->material = m;
    else

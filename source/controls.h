@@ -4,9 +4,15 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.h,v 1.39 2001-02-26 12:35:04 mbickel Exp $
+//     $Id: controls.h,v 1.40 2001-03-30 12:43:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.39  2001/02/26 12:35:04  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.38  2001/01/28 14:04:09  mbickel
 //      Some restructuring, documentation and cleanup
 //      The resource network functions are now it their own files, the dashboard
@@ -113,16 +119,16 @@
 
 
    //! looks up the fields a unit can put or remove a mine from
-   class tputmine : public tsearchfields {
+   class tputmine : public SearchFields {
                        int player;
                 public:
                        char             mienentyp;
-                       char          mienenlegen, mienenraeumen;
+                       char             mienenlegen, mienenraeumen;
                        char             numberoffields;
-                       virtual void     testfield ( void );
+                       virtual void     testfield ( const MapCoordinate& mc );
                        void             initpm( char mt, const pvehicle eht );
                        void             run ( void );
-                       tputmine ( pmap _gamemap ) : tsearchfields ( _gamemap ) {};
+                       tputmine ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
               };
 
     //! checks, which vehicle types are newly available 
@@ -152,7 +158,8 @@ extern void  calcmovemalus(int          x1,
                            pvehicle     vehicle,
                            int          direc,
                            int&         fuelcost,               
-                           int&         movecost );            
+                           int&         movecost,
+                           int          uheight = -1 );
 
 
 
@@ -227,9 +234,9 @@ extern void dissectvehicle ( pvehicle eht );
 
 
 //! calculates some mining statistics for a mining station
-class tgetmininginfo : public tsearchfields {
+class tgetmininginfo : public SearchFields {
           protected:
-             void testfield ( void );
+             void testfield ( const MapCoordinate& mc );
           public:
              struct tmininginfo {
                       Resources avail[maxminingrange+2];

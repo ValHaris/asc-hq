@@ -31,6 +31,7 @@ class EventHook {
         public:
           enum Events { removal, conversion };
           virtual void receiveEvent ( Events ev, int data ) = 0;
+          virtual ~EventHook() {};
        };
 
 
@@ -79,7 +80,7 @@ class ContainerBase {
       int repairItem   ( ContainerBase* item, int newDamage = 0 );
 
 
-      virtual MapCoordinate getPosition ( ) = 0;
+      virtual MapCoordinate3D getPosition ( ) = 0;
       virtual ~ContainerBase();
 };
 

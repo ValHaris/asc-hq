@@ -23,7 +23,7 @@
  #include "mapalgorithms.h"
  #include "gamemap.h"
 
-  class tcomputeview : public tsearchfields {
+  class tcomputeview : public SearchFields {
                 protected:
                       // pmap gamemap;
                       int actView;
@@ -34,11 +34,11 @@
                       int sonar,satellitenview,minenview;
                       int        viewdist;
                       int        jamdist;
-                      virtual void       initviewcalculation( int view, int jamming, int sx, int sy, int _mode, int _height   );   // mode: +1 = add view  ;  -1 = remove view
-                      virtual void  testfield ( void );
+                      virtual void  initviewcalculation( int view, int jamming, int sx, int sy, int _mode, int _height   );   // mode: +1 = add view  ;  -1 = remove view
+                      virtual void  testfield ( const MapCoordinate& mc );
 
                 public:
-                      tcomputeview ( pmap _actmap ) : tsearchfields ( _actmap ) { actView = _actmap->playerView; };
+                      tcomputeview ( pmap _actmap ) : SearchFields ( _actmap ) { actView = _actmap->playerView; };
                  };
 
   class tcomputevehicleview : public tcomputeview {

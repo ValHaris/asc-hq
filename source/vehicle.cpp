@@ -906,34 +906,31 @@ void Vehicle :: removeview ( void )
 }
 
 
-class tsearchforminablefields: public tsearchfields {
+class tsearchforminablefields: public SearchFields {
       int shareview;
     public:
       int numberoffields;
-      int  run ( pvehicle     eht );
-      virtual void            testfield ( void );
-      tsearchforminablefields ( pmap _gamemap ) : tsearchfields ( _gamemap ) {};
+      int run ( pvehicle     eht );
+      virtual void testfield ( const MapCoordinate& mc );
+      tsearchforminablefields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
   };
 
 
-void         tsearchforminablefields::testfield(void)
+void         tsearchforminablefields::testfield( const MapCoordinate& mc )
 {
+    pfield fld = gamemap->getField ( mc );
+    if ( !fld->building  ||  fld->building->color == gamemap->actplayer*8  ||  fld->building->color == 8*8)
+       if ( !fld->vehicle  ||  fld->vehicle->color == gamemap->actplayer*8 ||  fld->vehicle->color == 8*8) {
+          if ( !fld->resourceview )
+             fld->resourceview = new tfield::Resourceview;
 
-     if ( beeline ( xp, yp, startx, starty ) <= maxdistance * minmalq ) {
-        pfield fld = gamemap->getField ( xp, yp );
-        if ( !fld->building  ||  fld->building->color == gamemap->actplayer*8  ||  fld->building->color == 8*8)
-           if ( !fld->vehicle  ||  fld->vehicle->color == gamemap->actplayer*8 ||  fld->vehicle->color == 8*8) {
-              if ( !fld->resourceview )
-                 fld->resourceview = new tfield::Resourceview;
-
-              for ( int c = 0; c < 8; c++ )
-                 if ( shareview & (1 << c) ) {
-                    fld->resourceview->visible |= ( 1 << c );
-                    fld->resourceview->fuelvisible[c] = fld->fuel;
-                    fld->resourceview->materialvisible[c] = fld->material;
-                 }
-           }
-     }
+          for ( int c = 0; c < 8; c++ )
+             if ( shareview & (1 << c) ) {
+                fld->resourceview->visible |= ( 1 << c );
+                fld->resourceview->fuelvisible[c] = fld->fuel;
+                fld->resourceview->materialvisible[c] = fld->material;
+             }
+       }
 }
 
 
@@ -956,14 +953,9 @@ int  tsearchforminablefields::run( pvehicle eht )
                   shareview += 1 << i;
 
    numberoffields = 0;
-   initsearch( eht->xpos, eht->ypos,eht->typ->digrange,1);
+   initsearch( eht->getPosition(), eht->typ->digrange, 0 );
    if ( eht->typ->digrange )
       startsearch();
-
-   xp = eht->xpos;
-   yp = eht->ypos;
-   dist = 0;
-   testfield();
 
    if ( (eht->functions & cfmanualdigger) && !(eht->functions & cfautodigger) )
       eht->setMovement ( eht->getMovement() - searchforresorcesmovedecrease );
@@ -1413,11 +1405,12 @@ void   Vehicle::readData ( tnstream& stream )
     #endif
 }
 
-MapCoordinate Vehicle :: getPosition ( )
+MapCoordinate3D Vehicle :: getPosition ( )
 {
-   MapCoordinate mc;
+   MapCoordinate3D mc;
    mc.x = xpos;
    mc.y = ypos;
+   mc.z = height;
    return mc;
 }
 

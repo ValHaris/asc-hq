@@ -1,97 +1,12 @@
-/*! \file artint.h
+/*! \file ai.h
     \brief The interface for the artificial intelligence of ASC. 
 */
 
 
-//     $Id: artint.h,v 1.37 2001-02-26 12:34:59 mbickel Exp $
+//     $Id: ai.h,v 1.1 2001-03-30 12:43:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
-//     Revision 1.36  2001/02/15 21:57:06  mbickel
-//      The AI doesn't try to attack with recon units any more
-//
-//     Revision 1.35  2001/02/08 21:21:02  mbickel
-//      AI attacks and services more sensibly
-//
-//     Revision 1.34  2001/02/06 16:27:41  mbickel
-//      bugfixes, bugfixes and bugfixes
-//
-//     Revision 1.33  2001/02/04 21:26:53  mbickel
-//      The AI status is written to savegames -> new savegame revision
-//      Lots of bug fixes
-//
-//     Revision 1.32  2001/02/01 22:48:27  mbickel
-//      rewrote the storing of units and buildings
-//      Fixed bugs in bi3 map importing routines
-//      Fixed bugs in AI
-//      Fixed bugs in mapeditor
-//
-//     Revision 1.31  2001/01/28 14:04:01  mbickel
-//      Some restructuring, documentation and cleanup
-//      The resource network functions are now it their own files, the dashboard
-//       as well
-//      Updated the TODO list
-//
-//     Revision 1.30  2001/01/25 23:44:52  mbickel
-//      Moved map displaying routins to own file (mapdisplay.cpp)
-//      Wrote program to create pcx images from map files (map2pcx.cpp)
-//      Fixed bug in repair function: too much resource consumption
-//      AI improvements and bug fixes
-//      The BI3 map import function now evaluates the player status (human/
-//       computer)
-//
-//     Revision 1.29  2001/01/23 21:05:09  mbickel
-//      Speed up of AI
-//      Lot of bugfixes in AI
-//      Moved Research to own files (research.*)
-//      Rewrote storing of developed technologies
-//      Some cleanup and documentation
-//
-//     Revision 1.28  2001/01/21 12:48:35  mbickel
-//      Some cleanup and documentation
-//
-//     Revision 1.27  2001/01/19 13:33:46  mbickel
-//      The AI now uses hemming
-//      Several bugfixes in Vehicle Actions
-//      Moved all view calculation to viewcalculation.cpp
-//      Mapeditor: improved keyboard support for item selection
-//
-//     Revision 1.26  2001/01/04 15:13:27  mbickel
-//      configure now checks for libSDL_image
-//      AI only conquers building that cannot be conquered back immediately
-//      tfindfile now returns strings instead of char*
-//
-//     Revision 1.25  2000/12/31 15:25:25  mbickel
-//      The AI now conqueres neutral buildings
-//      Removed "reset password" buttons when starting a game
-//
-//     Revision 1.24  2000/12/28 16:58:36  mbickel
-//      Fixed bugs in AI
-//      Some cleanup
-//      Fixed crash in building construction
-//
-//     Revision 1.23  2000/12/21 11:00:44  mbickel
-//      Added some code documentation
-//
-//     Revision 1.22  2000/11/26 14:39:02  mbickel
-//      Added Project Files for Borland C++
-//      Some modifications to compile source with BCC
-//
-//     Revision 1.21  2000/11/21 20:26:52  mbickel
-//      Fixed crash in tsearchfields (used by object construction for example)
-//      AI improvements
-//      configure.in: added some debug output
-//                    fixed broken check for libbz2
-//
-//     Revision 1.20  2000/11/15 19:28:33  mbickel
-//      AI improvements
-//
-//     Revision 1.19  2000/11/14 20:36:38  mbickel
-//      The AI can now use supply vehicles
-//      Rewrote objecttype IO routines to make the structure independant of
-//       the memory layout
-//
-//     Revision 1.18  2000/11/11 11:05:15  mbickel
-//      started AI service functions
+
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -119,11 +34,12 @@
 #include <vector>
 #include <list>
 
-#include "typen.h"
-#include "spfst.h"
-#include "unitctrl.h"
-#include "building_controls.h"
-#include "buildingtype.h"
+#include "../typen.h"
+#include "../spfst.h"
+#include "../unitctrl.h"
+#include "../building_controls.h"
+#include "../buildingtype.h"
+#include "../astar2.h"
 
 
     class AI : public BaseAI {
@@ -159,6 +75,7 @@
                   ServiceOrder ( ) : ai ( NULL ), targetUnitID ( 0 ), serviceUnitID ( 0 ), failure ( 0 ), nextServiceBuilding ( 0 ) {};
                   ServiceOrder ( AI* _ai, VehicleService::Service _requiredService, int UnitID, int _pos = -1 );
                   ServiceOrder ( AI* _ai, tnstream& stream );
+                  AStar3D::Path::iterator lastmatchServiceOrder ( AI* _ai, tnstream& stream );
                   pvehicle getTargetUnit ( ) const { return ai->getMap()->getUnit ( targetUnitID );};
                   pvehicle getServiceUnit ( ) const { return ai->getMap()->getUnit ( serviceUnitID );};
                   void setServiceUnit ( pvehicle veh ) { serviceUnitID = veh->networkid; };
@@ -203,6 +120,25 @@
            void issueServices ( );
            void runServiceUnit ( pvehicle supplyUnit );
 
+           class AirplaneLanding {
+                   AI& ai;
+                   pvehicle veh;
+                   AStar3D* ast;
+                   typedef map<int, pbuilding> ReachableBuildings;
+                   ReachableBuildings reachableBuildings;
+
+                   typedef map<int, MapCoordinate3D> LandingPositions;
+                   LandingPositions landingPositions;
+                   void findPath();
+                   bool positionsCalculated;
+                public:
+                   AirplaneLanding ( AI& ai_, pvehicle veh_ ) : ai ( ai_ ), veh ( veh_ ), ast(NULL), positionsCalculated(false) {};
+                   MapCoordinate3D getNearestLandingPosition ( bool buildingRequired, bool refuel, bool repair );
+                   bool returnFromPositionPossible ( const MapCoordinate3D& pos );
+                   ~AirplaneLanding() { if (ast) delete ast; };
+           };
+           friend class AirplaneLanding;
+
            bool runUnitTask ( pvehicle veh );
            // void searchServices ( );
 
@@ -220,9 +156,9 @@
            AiThreat& getFieldThreat ( int x, int y );
            FieldInformation& getFieldInformation ( int x, int y );
 
-           class CheckFieldRecon : public tsearchfields {
+           class CheckFieldRecon : public SearchFields {
                 protected:
-                   void testfield ( ) ;
+                   void testfield ( const MapCoordinate& mc ) ;
                    int ownFields[3];
                    int enemyFields[3];
                    int player;
@@ -241,7 +177,6 @@
 
            //! checks whether a building can be conquered by the enemy during the next turn
            bool checkReConquer ( pbuilding bld, pvehicle veh );
-           void conquerBuilding ( pvehicle veh );
            float getCaptureValue ( const pbuilding bld, int travelTime );
            float getCaptureValue ( const pbuilding bld, const pvehicle veh );
 
@@ -284,15 +219,15 @@
 
            void calculateFieldInformation ( void );
            void calculateFieldThreats_SinglePosition ( pvehicle eht, int x, int y );
-           class WeaponThreatRange : public tsearchfields {
+           class WeaponThreatRange : public SearchFields {
                      pvehicle veh;
                      int weap, height;
                      AiThreat* threat;
                      AI*       ai;
+                     void testfield ( const MapCoordinate& mc );
                   public:
                      void run ( pvehicle _veh, int x, int y, AiThreat* _threat );
-                     void testfield ( void );
-                     WeaponThreatRange( AI* _ai ) : tsearchfields ( _ai->getMap()), ai ( _ai ) {};
+                     WeaponThreatRange( AI* _ai ) : SearchFields ( _ai->getMap()), ai ( _ai ) {};
            };
 
 
@@ -328,6 +263,7 @@
                   int result;
                   int moveDist;
                   bool neighbouringFieldsReachable[ sidenum ]; // used for the hemming tactic
+                  float positionThreat;
             };
          private:
 
@@ -358,7 +294,8 @@
                   };
             };
 
-            bool moveUnit ( pvehicle veh, const MapCoordinate& destination, bool intoBuildings = false, bool intoTransports = false );
+            bool moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool intoBuildings = false, bool intoTransports = false );
+            int moveUnit ( pvehicle veh, const AStar3D::Path& path );
 
             void getAttacks ( VehicleMovement& vm, pvehicle veh, TargetVector& tv, int hemmingBonus );
             void searchTargets ( pvehicle veh, int x, int y, TargetVector& tl, int moveDist, VehicleMovement& vm, int hemmingBonus );
@@ -392,7 +329,15 @@
             */
             void findStratPath ( vector<MapCoordinate>& path, pvehicle veh, int x2, int y2 );
 
+
+            struct ProductionRating {
+               Vehicletype* vt;
+               pbuilding    bld;
+               float        rating;
+               bool operator< ( const ProductionRating& pr ) { return rating < pr.rating; };
+            };
             void      production();
+
             AiResult  strategy();
             AiResult  buildings ( int process );
             AiResult  transports ( int process );

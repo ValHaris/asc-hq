@@ -203,7 +203,7 @@
     */
     int searchForMineralResources( void );
 
-    MapCoordinate getPosition ( );
+    MapCoordinate3D getPosition ( );
 
     /** can the unit repair anything? This does not necessarily mean that the unit can repair
         other units, because a service weapon is additionally needed for that. It may be the
@@ -232,6 +232,12 @@
   private:
     void readData ( tnstream& stream );
   public:
+
+    //! For the AI: calculating the ValueType if the unit was on the height uheight
+    int getValueType ( int uheight ) { return log2(uheight); };
+
+    //! For the AI: calculating the ValueType
+    int getValueType ( ) { return log2(height); };
 
 
     //! to be used with EXTREME caution, and only in the mapeditor !!

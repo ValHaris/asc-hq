@@ -5,9 +5,15 @@
 */
 
 
-//     $Id: spfst.h,v 1.41 2001-02-26 12:35:33 mbickel Exp $
+//     $Id: spfst.h,v 1.42 2001-03-30 12:43:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.41  2001/02/26 12:35:33  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.40  2001/02/18 15:37:20  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -255,8 +261,9 @@ extern void checkobjectsforremoval ( void );
 extern int          getmaxwindspeedforunit ( const pvehicle eht );
 
 /** Wind may be different at different heights. This function returns the index 
-    for the wind array  */
-extern int          getwindheightforunit   ( const pvehicle eht );
+    for the wind array. If uheight != -1 it is assumed the unit was uheight instead
+    the actual level of height */
+extern int          getwindheightforunit   ( const pvehicle eht, int uheight = -1 );
 
 /** Each field that has a building on it stores a pointer to the picture of the 
     buildings' part for faster displaying. This function refreshes these pointers

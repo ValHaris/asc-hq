@@ -5,9 +5,13 @@
 
 */
 
-//     $Id: loaders.cpp,v 1.47 2001-03-23 16:02:56 mbickel Exp $
+//     $Id: loaders.cpp,v 1.48 2001-03-30 12:43:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.47  2001/03/23 16:02:56  mbickel
+//      Some restructuring;
+//      started rewriting event system
+//
 //     Revision 1.46  2001/02/26 13:49:36  mbickel
 //      Fixed bug in message loading
 //      readString can now read strings that container \n
@@ -276,7 +280,7 @@
 
 #ifdef sgmain
 #include "missions.h"
-#include "artint.h"
+#include "ai/ai.h"
 #endif
 
 
@@ -1118,7 +1122,6 @@ void   tspfldloaders::writefields ( void )
    int l = 0;
    int cnt1 = spfld->xsize * spfld->ysize;
    int cnt2;
-   int l2;
 
    pfield fld, fld2;
 
@@ -1660,6 +1663,9 @@ int          tmaploaders::loadmap( const char *       name )
    
    actmap = spfld;
    spfld = NULL;
+
+   cursor.posx = 0;
+   cursor.posy = 0;
 
    actmap->time.a.turn = 1;
    actmap->time.a.move = 0;

@@ -22,20 +22,19 @@
 
   /** searches fields in hexagonal "circles" around a field and calls testfield for each field
   */
-  class   tsearchfields {
+  class   SearchFields {
                 protected:
                     pmap gamemap;
-                public:
-                    int         startx, starty;
-                    int         abbruch;
-                    int         maxdistance, mindistance;
-                    int         xp, yp;
+                    MapCoordinate startPos;
+                    bool        cancelSearch;
+                    int         firstDistance, lastDistance;
                     int         dist;
-                    tsearchfields ( pmap _gamemap );
-                    virtual void testfield ( void ) = 0;
-                    void initsearch ( int sx, int sy, int max, int min );
+                    virtual void testfield ( const MapCoordinate& pos ) = 0;
+                public:
+                    SearchFields ( pmap _gamemap );
+                    void initsearch ( const MapCoordinate& startPosition, int _firstDistance, int _lastDistance );
                     virtual void startsearch ( void );
-                    virtual ~tsearchfields() {};
+                    virtual ~SearchFields() {};
                  };
 
   /** draws a straight line on the hexagonal map and calls putpix8 for each field.

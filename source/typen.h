@@ -1,6 +1,12 @@
-//     $Id: typen.h,v 1.86 2001-02-26 12:35:34 mbickel Exp $
+//     $Id: typen.h,v 1.87 2001-03-30 12:43:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.86  2001/02/26 12:35:34  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.85  2001/02/18 15:37:21  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -453,7 +459,7 @@ class MapCoordinate {
             bool operator== ( const MapCoordinate& mc ) const { return y == mc.y && x == mc.x;};
             void write( tnstream& stream ) const { stream.writeInt ( 3000 ); stream.writeInt ( x ); stream.writeInt ( y); };
             void read( tnstream& stream ) {
-               int version = stream.readInt ( );
+               stream.readInt ( );
                x = stream.readInt ( );
                y = stream.readInt ( );
             };
@@ -466,9 +472,18 @@ class MapCoordinate3D : public MapCoordinate {
             int z;
             int getBitmappedHeight ( ) { return 1<<z; };
             int getNumericalHeight ( ) { return z; };
+            // MapCoordinate3D& operator= ( const MapCoordinate& mc ) { x = mc.x; y = mc.y; z = -1 );
             MapCoordinate3D ( ) : MapCoordinate(), z(-1) {};
             MapCoordinate3D ( int _x, int _y, int _z) : MapCoordinate ( _x, _y ), z ( _z ) {};
             MapCoordinate3D ( const MapCoordinate& mc ) : MapCoordinate ( mc ), z ( -1 ) {};
+            MapCoordinate3D ( const MapCoordinate& mc, int height ) : MapCoordinate ( mc ), z ( height ) {};
+            bool operator== ( const MapCoordinate3D& mc ) const { return y == mc.y && x == mc.x && (z == mc.z || z == -1 || mc.z == -1);};
+            void write( tnstream& stream ) const { stream.writeInt ( 3500 ); stream.writeInt ( z ); MapCoordinate::write( stream ); };
+            void read( tnstream& stream ) {
+               stream.readInt ( );
+               z = stream.readInt ( );
+               MapCoordinate::read ( stream );
+            };
       };
 
 

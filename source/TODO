@@ -2,10 +2,6 @@ TODO list for ASC, programming department:
 
 Small tasks:
 
--   extending the A* path finding algorithm to work in 3-dimensional space.
-    This is an interesting task that requires practically no knowlegde of
-    ASC.
-
 -   writing a TPWM decoder for Battle Isle maps
 
 -   writing a platform independant wrapper around vsnprintf (used in
@@ -92,7 +88,7 @@ Larger Tasks:
      other editors (for buildings, terrain, techology, objects) are still to 
      be done.
 
-=   maintaining and improving the dialog engine together with the dialogs 
+=   maintaining and improving the dialog engine together with the dialogs
     themselves. The VehicleInfo dialog for example is really outdated... 
     libu ( http://www.rhrk.uni-kl.de/~klaux/libu.html ) could be an 
     interesting GUI library for this.

@@ -1,0 +1,98 @@
+/***************************************************************************
+                          ai_common.h  -  description
+                             -------------------
+    begin                : Fri Mar 30 2001
+    copyright            : (C) 2001 by Martin Bickel
+    email                : bickel@asc-hq.org
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef ai_common_h_included
+ #define ai_common_h_included
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <malloc.h>
+#include <math.h>
+#include <algorithm>
+#include <memory>
+
+#include "ai.h"
+
+#include "../typen.h"
+#include "../vehicletype.h"
+#include "../buildingtype.h"
+#include "../misc.h"
+#include "../newfont.h"
+#include "../events.h"
+#include "../spfst.h"
+#include "../dlg_box.h"
+#include "../stack.h"
+#include "../missions.h"
+#include "../controls.h"
+#include "../dialog.h"
+#include "../gamedlg.h"
+#include "../attack.h"
+#include "../gameoptions.h"
+#include "../astar2.h"
+#include "../sg.h"
+
+#include "../building_controls.h"
+#include "../viewcalculation.h"
+
+
+extern const int currentServiceOrderVersion;
+
+
+  class StratAStar : public AStar {
+       AI* ai;
+    protected:
+       virtual int getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle )
+       {
+          int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
+          if ( getfield ( x2, y2 )->vehicle && beeline ( vehicle->xpos, vehicle->ypos, x2, y2) < vehicle->getMovement())
+             cost += 2;
+          return cost;
+       };
+    public:
+       StratAStar ( AI* _ai, pvehicle veh ) : AStar ( _ai->getMap(), veh ), ai ( _ai ) {};
+ };
+
+ class HiddenAStar : public AStar {
+       AI* ai;
+    protected:
+       virtual int getMoveCost ( int x1, int y1, int x2, int y2, const pvehicle vehicle )
+       {
+          int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
+          int visibility = getfield ( x2, y2 )->visible;
+          int visnum = 0;
+          int enemynum = 0;
+          for ( int i = 0; i< 8; i++ )
+             if ( getdiplomaticstatus2 ( i*8, ai->getPlayerNum()*8 ) != capeace ) {
+                enemynum++;
+                int v = (visibility >> ( 2*i)) & 3;
+                if ( v >= visible_now )
+                   visnum++;
+             }
+          if ( enemynum )
+             cost += 12 * visnum / enemynum;
+
+          return cost;
+       };
+    public:
+       HiddenAStar ( AI* _ai, pvehicle veh ) : AStar ( _ai->getMap(), veh ), ai ( _ai ) {};
+ };
+
+
+
+
+#endif

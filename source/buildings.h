@@ -149,7 +149,7 @@ class  Building : public ContainerBase {
     int  getArmor( void );
 
     pfield getEntryField ( );
-    MapCoordinate getEntry ( );
+    MapCoordinate3D getEntry ( );
 
     pfield getField( const BuildingType::LocalCoordinate& localCoordinates );
     MapCoordinate getFieldCoordinates( const BuildingType::LocalCoordinate& localCoordinates );
@@ -159,7 +159,7 @@ class  Building : public ContainerBase {
 
     //! updates the pointers to the pictures , which are part of tfield (to speed up displaying)
     void resetPicturePointers ( void );
-    MapCoordinate getPosition ( ) { return getEntry(); };
+    MapCoordinate3D getPosition ( ) { return getEntry(); };
     int  chainbuildingtofield ( const MapCoordinate& entryPos, bool setupImages = true );
     int  unchainbuildingfromfield ( void );
 

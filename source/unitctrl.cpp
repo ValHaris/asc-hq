@@ -1,6 +1,10 @@
-//     $Id: unitctrl.cpp,v 1.52 2001-03-23 16:02:56 mbickel Exp $
+//     $Id: unitctrl.cpp,v 1.53 2001-03-30 12:43:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.52  2001/03/23 16:02:56  mbickel
+//      Some restructuring;
+//      started rewriting event system
+//
 //     Revision 1.51  2001/02/18 17:52:38  mbickel
 //      Fixed some compilation problems on Linux
 //
@@ -1024,6 +1028,69 @@ int ChangeVehicleHeight :: execute_withmove ( int allFields )
 }
 
 
+int ChangeVehicleHeight :: moveHeightMoveCost( pvehicle vehicle, const MapCoordinate3D& pos, int newheight, int direc, int& xstop, int& ystop )
+{
+   int ok = true;
+
+   int& x = xstop;
+   int& y = ystop;
+
+   x = pos.x;
+   y = pos.y;
+
+   int dist = 0;
+
+   while ( dist < vehicle->typ->steigung * minmalq  && ok) {
+      int ox = x;
+      int oy = y;
+      getnextfield( x, y, direc );
+      if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize))
+         ok = false;
+      else {
+         npush ( vehicle->height );
+         vehicle->height = pos.z;
+
+         int fuelcost, movecost;
+
+         calcmovemalus(ox,oy,x,y,vehicle,direc, fuelcost, movecost);
+         npop ( vehicle->height );
+
+         /*
+         dist += minmalq ;// - windmovement[direc];
+         mx -= minmalq ; //- windmovement[direc];
+
+         movecost += windmovement[direc]; // compensating for the wind which.
+         */
+         dist += movecost;
+
+         pfield fld = getfield(x,y);
+
+         if ( fieldaccessible(fld, vehicle, pos.z ) < 1)
+            ok = false;
+
+         if ( fieldaccessible(fld, vehicle, newheight ) < 1)
+            ok = false;
+
+         if ( dist < vehicle->typ->steigung * minmalq )
+            if ( fld->building )
+               ok = false;
+      }
+   }
+
+   if ( ok && fieldaccessible( getfield(x,y), vehicle, newheight ) < 2)
+      ok = false;
+/*
+   if ( ok )
+      if ( fld->building || fld->vehicle )
+         ok = false;
+*/
+
+   if ( ok )
+      return dist;
+   else
+      return -1;
+}
+
 int ChangeVehicleHeight :: moveheight( int allFields )
 { 
    initwindmovement( vehicle );
@@ -1048,6 +1115,12 @@ int ChangeVehicleHeight :: moveheight( int allFields )
           sp.dist = vmove->getDistance ( sp.x, sp.y);
           startpos.addField ( sp.x, sp.y, sp );
       }
+   } else {
+      StartPosition sp;
+      sp.x = vehicle->xpos;
+      sp.y = vehicle->ypos;
+      sp.dist = 0;
+      startpos.addField ( vehicle->xpos, vehicle->ypos, sp );
    }
 
    int ok2 = false; 
@@ -1058,61 +1131,15 @@ int ChangeVehicleHeight :: moveheight( int allFields )
       int yy;
       startpos.getFieldCoordinates ( i, &xx, &yy );
       for ( int direc = 0; direc < sidenum; direc++) {
-         int ok = true;
-         int x = xx;
-         int y = yy;
 
-         int dist = 0;
-         int mx = vehicle->getMovement()- sp.dist;
+         int x, y;
+         int dist = moveHeightMoveCost ( vehicle, MapCoordinate3D( xx, yy, vehicle->height), newheight, direc, x, y );
 
-         if ( mx <= 0 )
-            ok = false;
-
-         while ( dist < vehicle->typ->steigung * minmalq  && mx > 0 && ok) {
-            int ox = x;
-            int oy = y;
-            getnextfield( x, y, direc );
-            if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize))
-               ok = false;
-            else {
-
-               int fuelcost, movecost;
-               calcmovemalus(ox,oy,x,y,vehicle,direc, fuelcost, movecost);
-               /*
-               dist += minmalq ;// - windmovement[direc];
-               mx -= minmalq ; //- windmovement[direc];
-
-               movecost += windmovement[direc]; // compensating for the wind which.
-               */
-               dist += movecost;
-               mx -= movecost;
-
-               pfield fld = getfield(x,y);
-
-               if ( fieldaccessible(fld, vehicle, vehicle->height ) < 1)
-                  ok = false;
-
-               if ( fieldaccessible(fld, vehicle, newheight ) < 1)
-                  ok = false;
-
-               if ( dist < vehicle->typ->steigung * minmalq )
-                  if ( fld->building )
-                     ok = false;
-            }
-         }
+         int mx = vehicle->getMovement() - sp.dist - dist;
          if ( mx < 0 )
-            ok = false;
+            dist = -1;
 
-
-         if ( ok && fieldaccessible( getfield(x,y), vehicle, newheight ) < 2)
-            ok = false;
-   /*
-         if ( ok )
-            if ( fld->building || fld->vehicle )
-               ok = false;
-   */
-
-         if (ok) {
+         if ( dist >= 0 ) {
             if ( reachableFields.isMember ( x, y )) {
                StartPosition& sp = reachableFields.getData ( x, y );
                if ( sp.dist < mx ) {
@@ -1208,97 +1235,37 @@ int ChangeVehicleHeight :: moveunitxy ( int xt1, int yt1, IntFieldList& pathToMo
 }
 
 
-int ChangeVehicleHeight :: verticalHeightChange ( void )
+int ChangeVehicleHeight :: verticalHeightChangeMoveCost ( pvehicle vehicle, const MapCoordinate3D pos, int newheight )
 {
-   if ( !vehicle ) 
-      return -unspecified_error;
+   pfield fld = getfield( pos.x, pos.y );
 
-   pfield fld = getfield(vehicle->xpos,vehicle->ypos); 
+   int oldheight = pos.z;
 
-   int oldheight = vehicle->height;
-
-   if (vehicle->typ->height & (chtieffliegend | chfliegend | chhochfliegend)) {
-      if ( (newheight < oldheight) && (newheight == chfahrend) ) { 
+   if ( pos.z & (chtieffliegend | chfliegend | chhochfliegend)) {
+      if ( (newheight < oldheight) && (newheight == chfahrend) ) {
          if ( !terrainaccessible ( fld, vehicle, newheight ))
             return -109;
 
-         int newmovement = vehicle->typ->movement[log2(newheight)] * (vehicle->getMovement() - (helicopter_landing_move_cost + air_heightdecmovedecrease)) / vehicle->typ->movement[log2(vehicle->height)];
-         if ( newmovement < 0)                      
-            return -111;
-
-         int fuelcost = vehicle->typ->fuelConsumption * (helicopter_landing_move_cost + air_heightdecmovedecrease) / 8;
-         if ( fuelcost > vehicle->tank.fuel )
-            return -115;
-
-
-         vehicle->setMovement ( newmovement ); 
-         if ( !helicopter_attack_after_descent )
-            vehicle->attacked = 0; 
-         vehicle->tank.fuel -= fuelcost;
+         return helicopter_landing_move_cost + air_heightdecmovedecrease;
 
       } else
-      if ( newheight < oldheight ) { 
-         int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->getMovement() / vehicle->typ->movement[log2(vehicle->height)];
-         if ( newmovement < air_heightdecmovedecrease )
-            return -111;
+         if ( newheight < oldheight ) {
+            return air_heightdecmovedecrease;
+         } else
+            return air_heightincmovedecrease;
 
-         int fuelcost = vehicle->typ->fuelConsumption * air_heightdecmovedecrease / 8;
-         if ( fuelcost > vehicle->tank.fuel )
-            return -115;
-
-
-         vehicle->setMovement ( newmovement - air_heightdecmovedecrease ); 
-         vehicle->tank.fuel -= fuelcost;
-      } else
-      if (( newheight > oldheight ) && (newheight > chtieffliegend)) { 
-         int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->getMovement() / vehicle->typ->movement[log2(vehicle->height)];
-         if (newmovement < air_heightincmovedecrease) 
-            return -110;
-         int fuelcost = vehicle->typ->fuelConsumption * air_heightincmovedecrease / 8;
-         if ( fuelcost > vehicle->tank.fuel )
-            return -115;
-
-         vehicle->setMovement ( newmovement - air_heightincmovedecrease ); 
-         vehicle->tank.fuel -= fuelcost;
-
-         if ((newheight == chtieffliegend) && helicopter_attack_after_ascent ) 
-            vehicle->attacked = 1; 
-      } else
-         if ( newheight > oldheight  &&  newheight == chtieffliegend ) {
-            int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->getMovement() / vehicle->typ->movement[log2(vehicle->height)];
-            if ( newmovement < air_heightincmovedecrease )
-               return -110;
-
-            if ( helicopter_attack_after_ascent ) 
-               vehicle->attacked = 1; 
-
-            vehicle->setMovement ( newmovement - air_heightincmovedecrease);
-         }
-         
-      logtoreplayinfo ( rpl_changeheight, (int) vehicle->xpos, (int) vehicle->ypos, 
-                                          (int) vehicle->xpos, (int) vehicle->ypos, vehicle->networkid, (int) vehicle->height, (int) newheight );
-      vehicle->height = newheight; 
-   } 
-   else {   /*  not an aircraft */ 
+   } else {   /*  not an aircraft */
 
       int md;
 
-      if ( newheight > oldheight ) { 
-         md = sub_heightincmovedecrease; 
-         if ( vehicle->getMovement() < md )
-            return -110;
-      } 
-      else { 
-         md = sub_heightdecmovedecrease; 
-         if ( vehicle->getMovement() < md )
-            return -111;
-      } 
-
-      int newmovement = vehicle->typ->movement[log2(newheight)] * (vehicle->getMovement() - md ) / vehicle->typ->movement[log2(vehicle->height)];
+      if ( newheight > oldheight )
+         md = sub_heightincmovedecrease;
+      else
+         md = sub_heightdecmovedecrease;
 
       int res = terrainaccessible2 ( fld, vehicle, newheight );
       if ( res <= 0 ) {
-         if ( newheight > vehicle->height ) 
+         if ( newheight > vehicle->height )
             return -108;
          else {
             if ( res == -1 )
@@ -1311,7 +1278,100 @@ int ChangeVehicleHeight :: verticalHeightChange ( void )
          }
       }
 
-      int fuelcost = vehicle->typ->fuelConsumption * md / 8;
+      return md;
+
+   }
+   return -unspecified_error;
+}
+
+
+int ChangeVehicleHeight :: verticalHeightChange ( void )
+{
+   if ( !vehicle ) 
+      return -unspecified_error;
+
+   pfield fld = getfield(vehicle->xpos,vehicle->ypos); 
+
+   int oldheight = vehicle->height;
+
+   int moveCost = verticalHeightChangeMoveCost ( vehicle, MapCoordinate3D( vehicle->xpos, vehicle->ypos, vehicle->height ), newheight );
+   if ( moveCost < 0 )
+      return moveCost;
+
+   if (vehicle->typ->height & (chtieffliegend | chfliegend | chhochfliegend)) {
+      if ( (newheight < oldheight) && (newheight == chfahrend) ) { 
+
+         int newmovement = vehicle->typ->movement[log2(newheight)] * (vehicle->getMovement() - moveCost ) / vehicle->typ->movement[log2(vehicle->height)];
+         if ( newmovement < 0)                      
+            return -111;
+
+         int fuelcost = vehicle->typ->fuelConsumption * moveCost / 8;
+         if ( fuelcost > vehicle->tank.fuel )
+            return -115;
+
+
+         vehicle->setMovement ( newmovement ); 
+         if ( !helicopter_attack_after_descent )
+            vehicle->attacked = 0; 
+         vehicle->tank.fuel -= fuelcost;
+
+      } else
+      if ( newheight < oldheight ) { 
+         int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->getMovement() / vehicle->typ->movement[log2(vehicle->height)];
+         if ( newmovement < moveCost )
+            return -111;
+
+         int fuelcost = vehicle->typ->fuelConsumption * moveCost / 8;
+         if ( fuelcost > vehicle->tank.fuel )
+            return -115;
+
+
+         vehicle->setMovement ( newmovement - moveCost );
+         vehicle->tank.fuel -= fuelcost;
+      } else
+      if (( newheight > oldheight ) && (newheight > chtieffliegend)) { 
+         int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->getMovement() / vehicle->typ->movement[log2(vehicle->height)];
+         if (newmovement < moveCost)
+            return -110;
+         int fuelcost = vehicle->typ->fuelConsumption * moveCost / 8;
+         if ( fuelcost > vehicle->tank.fuel )
+            return -115;
+
+         vehicle->setMovement ( newmovement - moveCost );
+         vehicle->tank.fuel -= fuelcost;
+
+         if ((newheight == chtieffliegend) && helicopter_attack_after_ascent ) 
+            vehicle->attacked = 1; 
+      } else
+         if ( newheight > oldheight  &&  newheight == chtieffliegend ) {
+            int newmovement = vehicle->typ->movement[log2(newheight)] * vehicle->getMovement() / vehicle->typ->movement[log2(vehicle->height)];
+            if ( newmovement < moveCost )
+               return -110;
+
+            if ( helicopter_attack_after_ascent ) 
+               vehicle->attacked = 1; 
+
+            vehicle->setMovement ( newmovement - moveCost);
+         }
+         
+      logtoreplayinfo ( rpl_changeheight, (int) vehicle->xpos, (int) vehicle->ypos, 
+                                          (int) vehicle->xpos, (int) vehicle->ypos, vehicle->networkid, (int) vehicle->height, (int) newheight );
+      vehicle->height = newheight; 
+   } 
+   else {   /*  not an aircraft */ 
+
+      if ( newheight > oldheight ) {
+         if ( vehicle->getMovement() < moveCost )
+            return -110;
+      } 
+      else { 
+         if ( vehicle->getMovement() < moveCost )
+            return -111;
+      } 
+
+      int newmovement = vehicle->typ->movement[log2(newheight)] * (vehicle->getMovement() - moveCost ) / vehicle->typ->movement[log2(vehicle->height)];
+
+      int fuelcost = vehicle->typ->fuelConsumption * moveCost / 8;
       if ( fuelcost > vehicle->tank.fuel )
          return -115;
 
@@ -1433,6 +1493,15 @@ int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int h
 }
 
 
+pair<int,MapCoordinate3D> ChangeVehicleHeight :: getMoveCost ( pvehicle veh, const MapCoordinate3D& pos, int direc, int heightdir )
+{
+   if ( heightdir == 1 )
+      return IncreaseVehicleHeight::getMoveCost ( veh, pos, direc );
+   else
+      return DecreaseVehicleHeight::getMoveCost ( veh, pos, direc );
+}
+
+
 IncreaseVehicleHeight :: IncreaseVehicleHeight ( MapDisplayInterface* md, PPendingVehicleActions _pva )
                  : ChangeVehicleHeight ( md, _pva, vat_ascent )
 {
@@ -1462,6 +1531,21 @@ int IncreaseVehicleHeight :: available ( pvehicle veh ) const
                   else
                      return 2;
    return 0;
+}
+
+pair<int,MapCoordinate3D> IncreaseVehicleHeight :: getMoveCost ( pvehicle veh, const MapCoordinate3D& pos, int direc )
+{
+   int dist = -1;
+   MapCoordinate3D dest = pos;
+   if ( pos.z < 128) {
+      dest.z <<= 1;
+      if ( dest.z & veh->typ->height )
+         if ( veh->typ->steigung ) {
+            dist = moveHeightMoveCost ( veh, pos, dest.z, direc, dest.x, dest.y  );
+         } else
+            dist = verticalHeightChangeMoveCost ( veh, pos, dest.z );
+   }
+   return make_pair( dist, dest );
 }
 
 
@@ -1503,6 +1587,22 @@ int DecreaseVehicleHeight :: available ( pvehicle veh ) const
                   else
                      return 2;
    return 0;
+}
+
+pair<int,MapCoordinate3D> DecreaseVehicleHeight :: getMoveCost ( pvehicle veh, const MapCoordinate3D& pos, int direc )
+{
+   int dist = -1;
+   MapCoordinate3D dest = pos;
+   if ( pos.z ) {
+       dest.z >>= 1;
+       if ( dest.z & veh->typ->height )
+          if ( veh->typ->steigung ) {
+             dist = moveHeightMoveCost ( veh, pos, dest.z, direc, dest.x, dest.y  );
+          } else
+             dist = verticalHeightChangeMoveCost ( veh, pos, dest.z );
+   }
+
+   return make_pair( dist, dest );
 }
 
 DecreaseVehicleHeight :: ~DecreaseVehicleHeight ( )
@@ -1659,32 +1759,33 @@ void     VehicleAttack :: tsearchattackablevehicles :: init( const pvehicle eht,
 
 
 
-void     VehicleAttack :: tsearchattackablevehicles::testfield( void )
+void     VehicleAttack :: tsearchattackablevehicles::testfield( const MapCoordinate& mc )
 { 
-   if ( fieldvisiblenow(getfield(xp,yp)) ) { 
+   if ( fieldvisiblenow( gamemap->getField(mc)) ) {
       if ( !kamikaze ) {
-         pattackweap atw = attackpossible( angreifer, xp, yp ); 
+         pattackweap atw = attackpossible( angreifer, mc.x, mc.y );
          if (atw->count > 0) { 
             switch ( atw->target ) {
-               case AttackWeap::vehicle:  va->attackableVehicles.addField  ( xp, yp, *atw );
+               case AttackWeap::vehicle:  va->attackableVehicles.addField  ( mc, *atw );
                   break;                                    
-               case AttackWeap::building: va->attackableBuildings.addField ( xp, yp, *atw );
+               case AttackWeap::building: va->attackableBuildings.addField ( mc, *atw );
                   break;
-               case AttackWeap::object:   va->attackableObjects.addField   ( xp, yp, *atw );
+               case AttackWeap::object:   va->attackableObjects.addField   ( mc, *atw );
                   break;
             } /* endswitch */
             anzahlgegner++;
          } 
          delete atw;
       } else {
-          if (fieldvisiblenow(getfield(xp,yp))) { 
-             pvehicle eht = getfield(xp,yp)->vehicle; 
+          pfield fld = gamemap->getField(mc);
+          if (fieldvisiblenow( fld )) {
+             pvehicle eht = fld->vehicle;
              if (eht != NULL) 
                 if (((angreifer->height >= chtieffliegend) && (eht->height <= angreifer->height) && (eht->height >= chschwimmend)) 
                   || ((angreifer->height == chfahrend) && (eht->height == chfahrend)) 
                   || ((angreifer->height == chschwimmend) && (eht->height == chschwimmend))
                   || ((angreifer->height == chgetaucht) && (eht->height >=  chgetaucht) && (eht->height <= chschwimmend))) {
-                   getfield(xp,yp)->a.temp = dist; 
+                   fld->a.temp = dist;
                    anzahlgegner++; 
                 } 
           } 
@@ -1730,7 +1831,7 @@ int      VehicleAttack :: tsearchattackablevehicles::run( void )
    if (d == 0) 
       return -204;
    
-   initsearch( angreifer->xpos,angreifer->ypos, maxdist, mindist );
+   initsearch( angreifer->getPosition(), maxdist, mindist );
    startsearch();
 
    return 0;
@@ -1842,14 +1943,14 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
    VehicleService::Target targ;
    targ.dest = targetUnit;
 
-   if ( xp == startx && yp == starty )
+   if ( xp == startPos.x && yp == startPos.y )
       return;
 
    int dist;
    if ( bypassChecks.distance )
       dist = maxmalq;
    else
-      dist = beeline ( xp, yp , startx, starty );
+      dist = beeline ( xp, yp , startPos.x, startPos.y );
 
    for (int i = 0; i < veh->typ->weapons->count ; i++) {
       SingleWeapon& sourceWeapon = veh->typ->weapons->weapon[i];
@@ -2019,17 +2120,17 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
 }
 
 
-void  VehicleService :: FieldSearch :: testfield(void)
+void  VehicleService :: FieldSearch :: testfield( const MapCoordinate& mc )
 {
-   pfield fld = getfield ( xp, yp );
+   pfield fld = gamemap->getField ( mc );
    if ( fld && veh && fld->vehicle ) {
       if ( fld->vehicle == veh ) {
          for ( int i = 0; i < 32; i++ )
             if ( veh->loading[i] )
-              checkVehicle2Vehicle ( veh->loading[i], xp, yp );
+              checkVehicle2Vehicle ( veh->loading[i], mc.x, mc.y );
       }
       if ( fld->vehicle )
-         checkVehicle2Vehicle ( fld->vehicle, xp, yp );
+         checkVehicle2Vehicle ( fld->vehicle, mc.x, mc.y );
    }
 
    if ( fld && bld ) {
@@ -2059,28 +2160,17 @@ bool  VehicleService :: FieldSearch ::initrefuelling( int xp1, int yp1 )
    }
 
    if ( bld ) {
-      maxdist = 1;
-      mindist = 1;
+      if ( bld->typ->special & cgexternalloadingb )
+         maxdist = 1;
+      else
+         maxdist = 0;
+      mindist = 0;
    }
 
-   initsearch(xp1,yp1,mindist,maxdist);
+   initsearch( MapCoordinate( xp1,yp1),mindist,maxdist);
    return true;
-
 }
 
-void  VehicleService :: FieldSearch ::startsuche( void )
-{
-  if ( veh )
-     tsearchfields :: startsearch();
-
-  if ( bld ) {
-     if ( bld->typ->special & cgexternalloadingb )
-        tsearchfields :: startsearch();
-     xp = startx;
-     yp = starty;
-     testfield (  );
-  }
-}
 
 
 void VehicleService :: FieldSearch :: init ( pvehicle _veh, pbuilding _bld )
@@ -2102,7 +2192,7 @@ void VehicleService :: FieldSearch :: init ( pvehicle _veh, pbuilding _bld )
 
 void VehicleService :: FieldSearch :: run (  )
 {
-   startsuche();
+   startsearch();
 }
 
 

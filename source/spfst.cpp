@@ -2,9 +2,15 @@
     \brief map accessing and usage routines used by ASC and the mapeditor
 */
 
-//     $Id: spfst.cpp,v 1.86 2001-02-26 12:35:31 mbickel Exp $
+//     $Id: spfst.cpp,v 1.87 2001-03-30 12:43:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.86  2001/02/26 12:35:31  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.85  2001/02/18 15:37:19  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -421,7 +427,7 @@ int         fieldaccessible( const pfield        field,
         if ((field->bdt & cbbuildingentry) && field->building->vehicleloadable ( vehicle, uheight ))
            return 2; 
         else 
-           if (vehicle->height >= chtieffliegend) 
+           if (uheight >= chtieffliegend)
               return 1;
            else 
               return 0;
@@ -1892,12 +1898,15 @@ void  checkunitsforremoval ( void )
 }
 
 
-int  getwindheightforunit ( const pvehicle eht )
+int  getwindheightforunit ( const pvehicle eht, int uheight )
 {
-   if ( eht -> height == chfliegend )
+   if ( uheight == -1 )
+      uheight = eht->height;
+
+   if ( uheight == chfliegend )
       return 1;
    else
-      if ( eht -> height == chhochfliegend )
+      if ( uheight == chhochfliegend )
          return 2;
       else
          return 0;

@@ -207,58 +207,62 @@ void tdrawgettempline :: start ( int x1, int y1, int x2, int y2 )
 
 
 
-tsearchfields :: tsearchfields ( pmap _gamemap )
+SearchFields :: SearchFields ( pmap _gamemap )
 {
    gamemap = _gamemap;
-   abbruch = 0;
+   cancelSearch = false;
 }
 
-void         tsearchfields::initsearch( int  sx, int  sy, int max, int min )
+void         SearchFields::initsearch( const MapCoordinate& startPosition, int _firstDistance, int _lastDistance )
 {
-   maxdistance = max;
-   mindistance = min;
-   if (mindistance == 0) mindistance = 1;
-   if (maxdistance == 0) maxdistance = 1;
-   startx = sx;
-   starty = sy;
+   startPos = startPosition;
+   firstDistance = _firstDistance;
+   lastDistance = _lastDistance;
 }
 
 
 #ifdef HEXAGON
 
-void         tsearchfields::startsearch(void)
+void         SearchFields::startsearch(void)
 {
-   if ( abbruch )
+   if ( cancelSearch )
       return;
 
    int   step;
 
-   if (mindistance > maxdistance)
+   if (firstDistance > lastDistance)
       step = -1;
    else
       step = 1;
-   int strecke = mindistance;
+
+   dist = firstDistance;
 
    do {
-      dist = strecke;
+      MapCoordinate mc ( startPos.x, startPos.y - 2 * dist );
+      if ( dist == 0 ) {
+         if ((mc.x >= 0) && (mc.y >= 0) && (mc.x < gamemap->xsize) && (mc.y < gamemap->ysize))
+            testfield( mc );
 
-      xp = startx;
-      yp = starty - 2*strecke;
-      for ( int e = 0; e < 6; e++ ) {
-         int dir = (e + 2) % sidenum;
-         for ( int c = 0; c < strecke; c++) {
-            if ((xp >= 0) && (yp >= 0) && (xp < gamemap->xsize) && (yp < gamemap->ysize))
-               testfield();
-            getnextfield ( xp, yp, dir );
-         }
-
-         if ( abbruch )
+         if ( cancelSearch )
             return;
+
+      } else {
+         for ( int e = 0; e < 6; e++ ) {
+            int dir = (e + 2) % sidenum;
+            for ( int c = 0; c < dist; c++) {
+               if ((mc.x >= 0) && (mc.y >= 0) && (mc.x < gamemap->xsize) && (mc.y < gamemap->ysize))
+                  testfield( mc );
+               getnextfield ( mc.x, mc.y, dir );
+            }
+
+            if ( cancelSearch )
+               return;
+         }
       }
 
-      strecke += step;
+      dist += step;
 
-   }  while (!((strecke - step == maxdistance) || abbruch));
+   }  while (!((dist - step == lastDistance) || cancelSearch));
 }
 
 #else

@@ -1,6 +1,10 @@
-//     $Id: edmisc.h,v 1.17 2000-11-29 11:05:28 mbickel Exp $
+//     $Id: edmisc.h,v 1.18 2001-03-30 12:43:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2000/11/29 11:05:28  mbickel
+//      Improved userinterface of the mapeditor
+//      map::preferredfilenames uses now strings (instead of char*)
+//
 //     Revision 1.16  2000/11/29 09:40:21  mbickel
 //      The mapeditor has now two maps simultaneously active
 //      Moved memorychecking functions to its own file: memorycheck.cpp
@@ -191,14 +195,14 @@
              virtual void setpointabs ( int x,  int y  );
    };
 
-   class tputresources : public tsearchfields {
+   class tputresources : public SearchFields {
                               int resourcetype;
                               int maxresource;
                               int minresource;
                            public:
                                void            init ( int sx , int sy, int dst, int restype, int resmax, int resmin );
-                               virtual void    testfield ( void );
-                               tputresources ( pmap _gamemap ) : tsearchfields ( _gamemap ) {};
+                               virtual void    testfield ( const MapCoordinate& mc );
+                               tputresources ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
                             };
 
    class tputresourcesdlg : public tdialogbox {

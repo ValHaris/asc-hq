@@ -3,9 +3,13 @@
    Things that are run when starting and ending someones turn   
 */
 
-//     $Id: controls.cpp,v 1.100 2001-03-23 16:02:55 mbickel Exp $
+//     $Id: controls.cpp,v 1.101 2001-03-30 12:43:15 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.100  2001/03/23 16:02:55  mbickel
+//      Some restructuring;
+//      started rewriting event system
+//
 //     Revision 1.99  2001/02/26 12:35:01  mbickel
 //      Some major restructuing:
 //       new message containers
@@ -138,7 +142,7 @@
 #include "sg.h"
 #include "weather.h"
 #include "gameoptions.h"
-#include "artint.h"
+#include "ai/ai.h"
 #include "errors.h"
 #include "password_dialog.h"
 #include "viewcalculation.h"
@@ -161,27 +165,24 @@ class InitControls {
 
 
 
-  class   tsearchexternaltransferfields : public tsearchfields {
+  class   tsearchexternaltransferfields : public SearchFields {
                       public:
                                 pbuilding            bld;
                                 char                    numberoffields;
                                 void                    searchtransferfields( pbuilding building );
-                                virtual void            testfield ( void );
-                                tsearchexternaltransferfields ( pmap _gamemap ) : tsearchfields ( _gamemap ) {};
+                                virtual void            testfield ( const MapCoordinate& mc );
+                                tsearchexternaltransferfields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
                              };
 
-void         tsearchexternaltransferfields :: testfield( void )
+void         tsearchexternaltransferfields :: testfield( const MapCoordinate& mc )
 { 
-
-  if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) {
-     pfield fld  = getfield ( xp, yp );
+     pfield fld  = gamemap->getField ( mc );
      if ( fld && fld->vehicle )
         if ( fld->vehicle->height & bld->typ->externalloadheight ) {
            numberoffields++;
            fld->a.temp = 123;
         }
-  }
-} 
+}
 
 
 void tsearchexternaltransferfields :: searchtransferfields( pbuilding building )
@@ -190,9 +191,7 @@ void tsearchexternaltransferfields :: searchtransferfields( pbuilding building )
    bld = building;
    numberoffields = 0;
    if ( bld->typ->special & cgexternalloadingb ) {
-      MapCoordinate mc = bld->getEntry( );
-      initsearch( mc.x, mc.y, 1, 1 );
-   
+      initsearch( bld->getEntry(), 1, 1 );
       startsearch();
    }
    if ( numberoffields )
@@ -209,23 +208,23 @@ int searchexternaltransferfields ( pbuilding bld )
           
 // #define netdebug 
 
-  class   tsearchputbuildingfields : public tsearchfields {
+  class   tsearchputbuildingfields : public SearchFields {
                       public:
                                 pbuildingtype        bld;
                                 char                    numberoffields;
                                 pfield                   startfield;
                                 void                    initputbuilding( word x, word y, pbuildingtype building );
-                                virtual void            testfield ( void );
-                                tsearchputbuildingfields ( pmap _gamemap ) : tsearchfields ( _gamemap ) {};
+                                virtual void            testfield ( const MapCoordinate& mc );
+                                tsearchputbuildingfields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
                              };
 
-  class   tsearchdestructbuildingfields : public tsearchfields {
+  class   tsearchdestructbuildingfields : public SearchFields {
                       public:
                                 char                    numberoffields;
-                                pfield                   startfield;
+                                pfield                  startfield;
                                 void                    initdestructbuilding( int x, int y );
-                                virtual void            testfield ( void );
-                                tsearchdestructbuildingfields ( pmap _gamemap ) : tsearchfields ( _gamemap ) {};
+                                virtual void            testfield ( const MapCoordinate& mc );
+                                tsearchdestructbuildingfields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
                              };
 
 
@@ -241,7 +240,7 @@ void         tsearchputbuildingfields::initputbuilding( word x, word y, pbuildin
    } 
 
    actmap->cleartemps(7); 
-   initsearch(x,y,1,1);
+   initsearch( MapCoordinate(x,y),1,1);
    bld = building;
    numberoffields = 0;
    startfield = getfield(x,y);
@@ -257,15 +256,14 @@ void         tsearchputbuildingfields::initputbuilding( word x, word y, pbuildin
 }
 
 
-void         tsearchputbuildingfields::testfield(void)
+void         tsearchputbuildingfields::testfield(const MapCoordinate& mc)
 {
-   if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) {
-      startfield = getfield(xp,yp);
+      startfield = gamemap->getField(mc);
       bool b = true;
       for ( int y1 = 0; y1 <= 5; y1++)
          for ( int x1 = 0; x1 <= 3; x1++)
             if (bld->getpicture ( BuildingType::LocalCoordinate(x1, y1)) ) {
-               pfield fld = actmap->getField ( bld->getFieldCoordinate( MapCoordinate(xp, yp), BuildingType::LocalCoordinate(x1,y1) ));
+               pfield fld = actmap->getField ( bld->getFieldCoordinate( mc, BuildingType::LocalCoordinate(x1,y1) ));
                if (fld) {
                   if (fld->vehicle != NULL)
                      b = false;
@@ -287,10 +285,8 @@ void         tsearchputbuildingfields::testfield(void)
       if (b) {
 
          numberoffields++;
-         getfield(xp,yp)->a.temp = 20;
+         gamemap->getField(mc)->a.temp = 20;
       }
-
-   }
 }
 
 
@@ -450,7 +446,7 @@ void         tsearchdestructbuildingfields::initdestructbuilding( int x, int y )
       return;
    }
    actmap->cleartemps(7);
-   initsearch(x,y,1,1);
+   initsearch( MapCoordinate(x,y), 1, 1 );
    numberoffields = 0;
    startfield = getfield(x,y);
    startsearch();
@@ -464,16 +460,12 @@ void         tsearchdestructbuildingfields::initdestructbuilding( int x, int y )
 }
 
 
-void         tsearchdestructbuildingfields::testfield(void)
+void         tsearchdestructbuildingfields::testfield(const MapCoordinate& mc)
 {
-   if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) {
-      startfield = getfield(xp,yp);
-      if (startfield->building) {
-
-         numberoffields++;
-         startfield->a.temp = 20;
-      }
-
+   startfield = gamemap->getField(mc);
+   if (startfield->building) {
+      numberoffields++;
+      startfield->a.temp = 20;
    }
 }
 
@@ -529,22 +521,18 @@ void         destructbuildinglevel2( int xp, int yp)
 
 
 
-void         tputmine::testfield(void)
+void         tputmine::testfield(const MapCoordinate& mc)
 {
-   pfield        fld;
-
-   if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) {
-      fld = getfield(xp,yp);
-      if ( !fld->vehicle  &&  !fld->building ) {
-         fld->a.temp = 0;
-         if ( !fld->mines.empty() ) {
-            fld->a.temp += 2;
-            numberoffields++;
-         }
-         if (mienenlegen && (fld->mines.empty() || fld->mineowner() == player)) {
-            fld->a.temp += 1;
-            numberoffields++;
-         }
+   pfield fld = gamemap->getField(mc);
+   if ( !fld->vehicle  &&  !fld->building ) {
+      fld->a.temp = 0;
+      if ( !fld->mines.empty() ) {
+         fld->a.temp += 2;
+         numberoffields++;
+      }
+      if (mienenlegen && (fld->mines.empty() || fld->mineowner() == player)) {
+         fld->a.temp += 1;
+         numberoffields++;
       }
    }
 }
@@ -573,7 +561,7 @@ void         tputmine::initpm(  char mt, const pvehicle eht )
       mienenraeumen = false;
    }
    if (mienenlegen || mienenraeumen)
-      initsearch( getxpos(),getypos(),1,1);
+      initsearch( MapCoordinate( getxpos(),getypos()), 1, 1 );
 }
 
 
@@ -795,28 +783,25 @@ void build_objects_reset( void )
    actgui = &gui;
 }
 
-   class tbuildstreet : public tsearchfields {
+   class tbuildstreet : public SearchFields {
                 public:
                        pvehicle         actvehicle;
                        word             numberoffields;
 
-                       virtual void     testfield ( void );
+                       virtual void     testfield ( const MapCoordinate& mc );
                        void             initbs ( void );
                        void             run ( void );
-                       tbuildstreet ( pmap _gamemap ) : tsearchfields ( _gamemap ) {};
+                       tbuildstreet ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
                   };
 
 
 void         tbuildstreet::initbs(void)
 {
-   startx = getxpos();
-   starty = getypos();
-   actvehicle = getfield(startx,starty)->vehicle;
+   initsearch ( MapCoordinate ( getxpos(), getypos()), 1, 1 );
+   actvehicle = getactfield()->vehicle;
 
-   moveparams.movesx = startx;
-   moveparams.movesy = starty;
-   mindistance = 1;
-   maxdistance = 1;
+   moveparams.movesx = getxpos();
+   moveparams.movesy = getypos();
    numberoffields = 0;
 }
 
@@ -865,41 +850,36 @@ void    getobjbuildcosts ( pobjecttype obj, pfield fld, Resources* resource, int
    *movecost =  ( 8 + ( fld->getmovemalus( 0 ) - 8 ) / ( objectbuildmovecost / 8 ) ) * mvcost  / 8  *  bridgemultiple / 8;
 }
 
-void         tbuildstreet::testfield(void)
+void         tbuildstreet::testfield( const MapCoordinate& mc )
 {
+   pfield fld = gamemap->getField(mc);
 
-   if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) {
-      pfield fld = getfield(xp,yp);
+   pobjectcontainers_buildable_on_field obj = new tobjectcontainers_buildable_on_field ( mc.x, mc.y );
 
+   objects_buildable.field[ objects_buildable.fieldnum++ ] = obj;
 
-      pobjectcontainers_buildable_on_field obj = new tobjectcontainers_buildable_on_field ( xp, yp );
+   if ( !fld->vehicle ) {
+      if ( !fld->building ) {
 
-      objects_buildable.field[ objects_buildable.fieldnum++ ] = obj;
+         for ( int i = 0; i < actvehicle->typ->objectsbuildablenum; i++ ) {
+            pobjecttype objtype = getobjecttype_forid ( actvehicle->typ->objectsbuildableid[i] );
+            if ( objtype )
+                if ( objtype->terrainaccess.accessible( fld->bdt ) > 0 || fld->checkforobject ( objtype ) ) {
+                   int movecost;
+                   Resources cost;
+                   getobjbuildcosts ( objtype, fld, &cost, &movecost );
+                   if ( actvehicle->tank >= cost && actvehicle->getMovement() >= movecost ) {
+                      if ( !fld->checkforobject ( objtype ) ) {
+                         obj->objects_buildable[ obj->objects_buildable_num++ ] = objtype;
+                      } else
+                         obj->objects_removable[ obj->objects_removable_num++ ] = objtype;
 
-      if ( !fld->vehicle ) {
-         if ( !fld->building ) {
-
-            for ( int i = 0; i < actvehicle->typ->objectsbuildablenum; i++ ) {
-               pobjecttype objtype = getobjecttype_forid ( actvehicle->typ->objectsbuildableid[i] );
-               if ( objtype )
-                   if ( objtype->terrainaccess.accessible( fld->bdt ) > 0 || fld->checkforobject ( objtype ) ) {
-                      int movecost;
-                      Resources cost;
-                      getobjbuildcosts ( objtype, fld, &cost, &movecost );
-                      if ( actvehicle->tank >= cost && actvehicle->getMovement() >= movecost ) {
-
-                              if ( !fld->checkforobject ( objtype ) ) {
-                                 obj->objects_buildable[ obj->objects_buildable_num++ ] = objtype;
-                              } else
-                                 obj->objects_removable[ obj->objects_removable_num++ ] = objtype;
-
-                              fld->a.temp = 1;
-                              numberoffields++;
-                      }
+                      fld->a.temp = 1;
+                      numberoffields++;
                    }
-            }
-
+                }
          }
+
       }
    }
 }
@@ -910,55 +890,40 @@ void         tbuildstreet::run(void)
    startsearch();
    if (numberoffields > 0)
       moveparams.movestatus = 72;
-
 }
 
 
 
-class SearchVehicleConstructionFields : public tsearchfields {
+class SearchVehicleConstructionFields : public SearchFields {
                        pvehicle         actvehicle;
                 public:
                        word             numberoffields;
 
-                       virtual void     testfield ( void );
+                       virtual void     testfield ( const MapCoordinate& mc );
                        void             initbs ( void );
                        void             run ( void );
-                       SearchVehicleConstructionFields ( pmap _gamemap ) : tsearchfields ( _gamemap ) {};
+                       SearchVehicleConstructionFields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
                   };
 
 
 void         SearchVehicleConstructionFields::initbs(void)
 {
-   startx = getxpos();
-   starty = getypos();
-   actvehicle = getfield(startx,starty)->vehicle;
+   initsearch ( MapCoordinate( getxpos(), getypos()), 1, 1);
+   actvehicle = getactfield()->vehicle;
 
-   moveparams.movesx = startx;
-   moveparams.movesy = starty;
-   mindistance = 1;
-   maxdistance = 1;
    numberoffields = 0;
 }
 
 
-void         SearchVehicleConstructionFields::testfield(void)
+void         SearchVehicleConstructionFields::testfield(const MapCoordinate& mc)
 {
-
-   if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) {
-      pfield fld = getfield(xp,yp);
-
-      if ( !fld->vehicle ) {
-         if ( !fld->building ) {
-
-            for ( int i = 0; i < actvehicle->typ->vehiclesbuildablenum; i++ ) {
-               pvehicletype v = getvehicletype_forid (  actvehicle->typ->vehiclesbuildableid[i] );
-               if ( v )
-                   if ( actvehicle->vehicleconstructable ( v, xp, yp )) {
-                      fld->a.temp = 1;
-                      numberoffields++;
-                   }
-            }
-
+   pfield fld = gamemap->getField(mc);
+   if ( !fld->vehicle && !fld->building ) {
+      for ( int i = 0; i < actvehicle->typ->vehiclesbuildablenum; i++ ) {
+         pvehicletype v = getvehicletype_forid (  actvehicle->typ->vehiclesbuildableid[i] );
+         if ( v && actvehicle->vehicleconstructable ( v, mc.x, mc.y )) {
+            fld->a.temp = 1;
+            numberoffields++;
          }
       }
    }
@@ -970,8 +935,6 @@ void         SearchVehicleConstructionFields::run(void)
    startsearch();
    if (numberoffields > 0)
       moveparams.movestatus = 120;
-
-
 }
 
 
@@ -1515,7 +1478,8 @@ void         calcmovemalus(int          x1,
                            pvehicle     vehicle,
                            int          direc,
                            int&         fuelcost,               // fuer Spritfuelconsumption
-                           int&         movecost )             //  fuer movementdecrease
+                           int&         movecost,              //  fuer movementdecrease
+                           int          uheight )
 {
 #ifdef HEXAGON
  static const  int         movemalus[2][6]  = {{ 8, 6, 3, 0, 3, 6 }, {0, 0, 0, 0, 0, 0 }};
@@ -1549,16 +1513,18 @@ void         calcmovemalus(int          x1,
    mode = 0;
   #endif
 
+   if ( uheight == -1 )
+      uheight = vehicle->height;
 
    if ( mode ) {
       fuelcost = minmalq;
-      if (vehicle->height >= chtieffliegend)
+      if (uheight >= chtieffliegend)
          movecost = minmalq;
       else
          movecost = getfield(x2,y2)->getmovemalus( vehicle );
    } else {
       fuelcost = maxmalq;
-      if (vehicle->height >= chtieffliegend)
+      if (uheight >= chtieffliegend)
          movecost = maxmalq;
       else
          movecost = getfield(x2,y2)->getmovemalus( vehicle ) * maxmalq / minmalq;
@@ -1587,12 +1553,17 @@ void         calcmovemalus(int          x1,
               npush( fld2->vehicle );
               npush( vehicle->xpos );
               npush( vehicle->ypos );
+              npush( vehicle->height );
+
               vehicle->xpos = x2;
               vehicle->ypos = y2;
+              vehicle->height = uheight;
               fld2->vehicle = vehicle;
               atw = attackpossible(fld->vehicle,x2,y2);
               if (atw->count > 0)
                  movecost += movemalus[mode][d];
+              npop( vehicle->height );
+
               npop( vehicle->ypos );
               npop( vehicle->xpos );
               npop( fld2->vehicle );
@@ -1607,7 +1578,7 @@ void         calcmovemalus(int          x1,
     /*******************************/
     /*    Wind calculation        ÿ */
     /*******************************/
-   if (vehicle->height >= chtieffliegend && vehicle->height <= chhochfliegend && actmap->weather.wind[ getwindheightforunit ( vehicle ) ].speed  ) {
+   if (uheight >= chtieffliegend && uheight <= chhochfliegend && actmap->weather.wind[ getwindheightforunit ( vehicle, uheight ) ].speed  ) {
       movecost -=  windmovement[direc];
       fuelcost -=  windmovement[direc];
    }
@@ -2051,39 +2022,32 @@ d          =     6.1111109 ;
 
 
 
-tgetmininginfo :: tgetmininginfo ( pmap _gamemap ) : tsearchfields ( _gamemap )
+tgetmininginfo :: tgetmininginfo ( pmap _gamemap ) : SearchFields ( _gamemap )
 {
    mininginfo = new tmininginfo;
    memset ( mininginfo, 0, sizeof ( *mininginfo ));
 }
 
-void tgetmininginfo :: testfield ( void )
+void tgetmininginfo :: testfield ( const MapCoordinate& mc )
 {
-  if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) {
-        pfield fld = getfield ( xp, yp );
-        if ( mininginfo->efficiency[ dist ] == 0 )
-           mininginfo->efficiency[ dist ] = getminingstationeficency ( dist );
+   pfield fld = gamemap->getField ( mc );
+   if ( mininginfo->efficiency[ dist ] == 0 )
+      mininginfo->efficiency[ dist ] = getminingstationeficency ( dist );
 
-        mininginfo->avail[dist].material += fld->material * resource_material_factor;
-        mininginfo->avail[dist].fuel     += fld->fuel     * resource_fuel_factor;
-        mininginfo->max[dist].material   += 255 * resource_material_factor;
-        mininginfo->max[dist].fuel       += 255 * resource_fuel_factor;
-  }
-
+   mininginfo->avail[dist].material += fld->material * resource_material_factor;
+   mininginfo->avail[dist].fuel     += fld->fuel     * resource_fuel_factor;
+   mininginfo->max[dist].material   += 255 * resource_material_factor;
+   mininginfo->max[dist].fuel       += 255 * resource_fuel_factor;
 }
 
 
 void tgetmininginfo :: run (  const pbuilding bld )
 {
-   initsearch ( bld->getEntry().x, bld->getEntry().y, maxminingrange, 0 );
-   xp = bld->getEntry().x;
-   yp = bld->getEntry().y;
-   dist=0;
-   testfield();
+   initsearch ( bld->getEntry(), maxminingrange, 0 );
    startsearch();
 }
 
-class tprocessminingfields : public tsearchfields {
+class tprocessminingfields : public SearchFields {
              int maxfuel;
              int maxmaterial;
              int materialtoget;
@@ -2096,81 +2060,79 @@ class tprocessminingfields : public tsearchfields {
              int color;
 
           public:
-             void testfield ( void );
+             void testfield ( const MapCoordinate& mc );
              int  setup ( pbuilding bld, int& mm, int cm, int& mf, int cf, int abbuch, int resource );  // mm: maxmaterial, cm: capacity material
-             tprocessminingfields ( pmap _gamemap ) : tsearchfields ( _gamemap ) {};
+             tprocessminingfields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
           };
 
-void tprocessminingfields :: testfield ( void )
+void tprocessminingfields :: testfield ( const MapCoordinate& mc )
 {
-  if ((xp >= 0) && (yp >= 0) && (xp < actmap->xsize) && (yp < actmap->ysize)) {
-     if ( worktodo == 0    ||  ( materialgot >= materialtoget && fuelgot >= fueltoget ) )
-        abbruch = true;
-     else {
-        pfield fld = getfield ( xp, yp );
-        int efz = getminingstationeficency ( dist /* beeline ( startx, starty, xp, yp ) */ );
+   if ( worktodo == 0    ||  ( materialgot >= materialtoget && fuelgot >= fueltoget ) )
+      cancelSearch = true;
+   else {
+      pfield fld = gamemap->getField ( mc );
+      int efz = getminingstationeficency ( dist /* beeline ( startx, starty, xp, yp ) */ );
 
 
-        if ( materialtoget > materialgot ) {
-           range = dist;
-           int matavail = fld->material * resource_material_factor;
-           int wtg = (materialtoget - materialgot) * 1024 / efz;
-           if ( wtg > worktodo )
-              wtg = worktodo;
-           int mtg = (wtg * efz + 1023 ) / 1024;
-           if ( mtg > matavail )
-              mtg = matavail;
+      if ( materialtoget > materialgot ) {
+         range = dist;
+         int matavail = fld->material * resource_material_factor;
+         int wtg = (materialtoget - materialgot) * 1024 / efz;
+         if ( wtg > worktodo )
+            wtg = worktodo;
+         int mtg = (wtg * efz + 1023 ) / 1024;
+         if ( mtg > matavail )
+            mtg = matavail;
 
-           materialgot += mtg;
-           worktodo -= (mtg * 1024 + efz-1) / efz;
-           matavail -= mtg;
-           if ( matavail < 0 )
-              matavail = 0;
-           if ( worktodo < 0 )
-              worktodo = 0;
-           if( materialgot > materialtoget )
-              materialgot = materialtoget;
+         materialgot += mtg;
+         worktodo -= (mtg * 1024 + efz-1) / efz;
+         matavail -= mtg;
+         if ( matavail < 0 )
+            matavail = 0;
+         if ( worktodo < 0 )
+            worktodo = 0;
+         if( materialgot > materialtoget )
+            materialgot = materialtoget;
 
-           if ( abbuchen )
-              fld->material =  matavail / resource_material_factor;
+         if ( abbuchen )
+            fld->material =  matavail / resource_material_factor;
 
-        }
+      }
 
-        if ( fueltoget > fuelgot ) {
-           range = dist;
-           int fuelavail = fld->fuel * resource_fuel_factor;
-           int wtg = (fueltoget - fuelgot) * 1024 / efz;
-           if ( wtg > worktodo )
-              wtg = worktodo;
-           int ftg = (wtg * efz + 1023 ) / 1024;
-           if ( ftg > fuelavail )
-              ftg = fuelavail;
+      if ( fueltoget > fuelgot ) {
+         range = dist;
+         int fuelavail = fld->fuel * resource_fuel_factor;
+         int wtg = (fueltoget - fuelgot) * 1024 / efz;
+         if ( wtg > worktodo )
+            wtg = worktodo;
+         int ftg = (wtg * efz + 1023 ) / 1024;
+         if ( ftg > fuelavail )
+            ftg = fuelavail;
 
-           fuelgot += ftg;
-           worktodo -= (ftg * 1024 + efz - 1) / efz;
-           fuelavail -= ftg;
-           if ( fuelavail < 0 )
-              fuelavail = 0;
-           if ( worktodo < 0 )
-              worktodo = 0;
-           if( fuelgot > fueltoget )
-              fuelgot = fueltoget;
+         fuelgot += ftg;
+         worktodo -= (ftg * 1024 + efz - 1) / efz;
+         fuelavail -= ftg;
+         if ( fuelavail < 0 )
+            fuelavail = 0;
+         if ( worktodo < 0 )
+            worktodo = 0;
+         if( fuelgot > fueltoget )
+            fuelgot = fueltoget;
 
-           if ( abbuchen )
-              fld->fuel =  fuelavail / resource_fuel_factor;
-        }
+         if ( abbuchen )
+            fld->fuel =  fuelavail / resource_fuel_factor;
+      }
 
-        if ( abbuchen ) {
-           if ( !fld->resourceview )
-              fld->resourceview = new tfield::Resourceview;
-           fld->resourceview->visible |= 1 << color;
-           fld->resourceview->fuelvisible[color] = fld->fuel;
-           fld->resourceview->materialvisible[color] = fld->material;
-        }
+      if ( abbuchen ) {
+         if ( !fld->resourceview )
+            fld->resourceview = new tfield::Resourceview;
+         fld->resourceview->visible |= 1 << color;
+         fld->resourceview->fuelvisible[color] = fld->fuel;
+         fld->resourceview->materialvisible[color] = fld->material;
+      }
 
 
-     }
-  }
+   }
 }
 
 
@@ -2242,11 +2204,7 @@ int   tprocessminingfields :: setup ( pbuilding bld, int& mm, int cm, int& mf, i
    materialgot = 0;
    fuelgot = 0;
 
-   initsearch( bld->getEntry().x, bld->getEntry().y, maxminingrange, 0 );
-   xp = bld->getEntry().x;
-   yp = bld->getEntry().y;
-   dist = 0;
-   testfield();
+   initsearch( bld->getEntry(), maxminingrange, 0 );
    startsearch();
 
    mm = materialgot * bld->typ->efficiencymaterial / 1024;

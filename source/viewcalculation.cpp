@@ -45,88 +45,84 @@ void         tcomputeview::initviewcalculation(  int view, int jamming, int sx, 
    else
       md = jamdist / minmalq + 1;
 
-   initsearch( sx, sy, md, 1 );
+   initsearch( MapCoordinate(sx, sy), md, 1 );
 }
 
 
 
-void         tcomputeview::testfield(void)
+void         tcomputeview::testfield( const MapCoordinate& mc )
 {
+   int f = beeline(startPos, mc);
+   pfield efield = gamemap->getField(mc);
 
-   if ((xp >= 0) && (yp >= 0) && (xp < gamemap->xsize) && (yp < gamemap->ysize)) {
+   if ( viewdist && ( f <= 15 ))
+      efield->view[player].direct += mode;
 
-      int f = beeline(startx,starty,xp,yp);
-      pfield efield = gamemap->getField(xp,yp);
-
-      if ( viewdist && ( f <= 15 ))
-         efield->view[player].direct += mode;
-
-      int str = viewdist;
-      if ( f ) {
-         /*
-         if ( CGameOptions::Instance()->visibility_calc_algo == 1 ) {
-            int x = startx ;
-            int y = starty ;
-            while ( x != xp || y != yp ) {
-               int d = getdirection ( x, y, xp, yp );
-               getnextfield ( x, y, d );
-               str -= getfield(x,y)->typ->basicjamming + actmap->weather.fog ;
-               if ( d & 1 )
-                  str-=8;
-               else
-                  str-=12;
-            };
-         } else {
-         */
-            int freefields = 0;
-            if ( height > chhochfliegend )
-               freefields = 5;
+   int str = viewdist;
+   if ( f ) {
+      /*
+      if ( CGameOptions::Instance()->visibility_calc_algo == 1 ) {
+         int x = startx ;
+         int y = starty ;
+         while ( x != xp || y != yp ) {
+            int d = getdirection ( x, y, xp, yp );
+            getnextfield ( x, y, d );
+            str -= getfield(x,y)->typ->basicjamming + actmap->weather.fog ;
+            if ( d & 1 )
+               str-=8;
             else
-            if ( height == chhochfliegend )
-               freefields = 3;
-            else
-            if ( height == chfliegend )
-               freefields = 2;
-            else
-            if ( height == chtieffliegend )
-               freefields = 1;
-           tdrawgettempline lne ( freefields, gamemap );
+               str-=12;
+         };
+      } else {
+      */
+         int freefields = 0;
+         if ( height > chhochfliegend )
+            freefields = 5;
+         else
+         if ( height == chhochfliegend )
+            freefields = 3;
+         else
+         if ( height == chfliegend )
+            freefields = 2;
+         else
+         if ( height == chtieffliegend )
+            freefields = 1;
+        tdrawgettempline lne ( freefields, gamemap );
 
-           if ( startx == -1 || starty == -1 )
-              fatalError("error in tcomputeview::testfield" );
+        if ( startPos.x == -1 || startPos.y == -1 )
+           fatalError("error in tcomputeview::testfield" );
 
-           lne.start ( startx, starty, xp, yp );
-           str -= f;
-           str -= lne.tempsum;
-        // }
+        lne.start ( startPos.x, startPos.y, mc.x, mc.y );
+        str -= f;
+        str -= lne.tempsum;
+     // }
 
-      }
-
-      if ( str > 0 ) {
-         efield->view[player].view += str * mode;
-
-         if ( sonar )
-            efield->view[player].sonar += mode;
-
-         if ( satellitenview )
-            efield->view[player].satellite += mode;
-
-         if ( minenview )
-            efield->view[player].mine += mode;
-      }
-
-      if ( jamdist >= f )
-         efield->view[player].jamming += (jamdist - f) * mode;
-
-      #ifdef DEBUGVIEW
-        if ( efield->view[player].view      < 0 ||
-             efield->view[player].sonar     < 0 ||
-             efield->view[player].satellite < 0 ||
-             efield->view[player].jamming   < 0 ||
-             efield->view[player].mine      < 0 )
-           displaymessage ( "Warning: inconsistency in view calculation !!\n Please report this bug !", 1 );
-      #endif
    }
+
+   if ( str > 0 ) {
+      efield->view[player].view += str * mode;
+
+      if ( sonar )
+         efield->view[player].sonar += mode;
+
+      if ( satellitenview )
+         efield->view[player].satellite += mode;
+
+      if ( minenview )
+         efield->view[player].mine += mode;
+   }
+
+   if ( jamdist >= f )
+      efield->view[player].jamming += (jamdist - f) * mode;
+
+   #ifdef DEBUGVIEW
+     if ( efield->view[player].view      < 0 ||
+          efield->view[player].sonar     < 0 ||
+          efield->view[player].satellite < 0 ||
+          efield->view[player].jamming   < 0 ||
+          efield->view[player].mine      < 0 )
+        displaymessage ( "Warning: inconsistency in view calculation !!\n Please report this bug !", 1 );
+   #endif
 }
 
 
@@ -146,10 +142,8 @@ void         tcomputevehicleview::init( const pvehicle eht, int _mode  )   // mo
    if ( (eht->functions & cfautodigger) && mode == 1 )
       eht->searchForMineralResources();
 
-   xp = eht->xpos;
-   yp = eht->ypos;
    tcomputeview::initviewcalculation( eht->typ->view+1, eht->typ->jamming, eht->xpos, eht->ypos, _mode, eht->height );
-   testfield();
+   testfield( eht->getPosition() );
 
 }
 
@@ -350,6 +344,7 @@ int computeview( pmap actmap, int player_fieldcount_mask )
          for ( tmap::Player::VehicleList::iterator i = actmap->player[a].vehicleList.begin(); i != actmap->player[a].vehicleList.end(); i++ ) {
             pvehicle actvehicle = *i;
             if ( actvehicle == actmap->getField(actvehicle->xpos,actvehicle->ypos)->vehicle)
+
                actvehicle->addview();
          }
 

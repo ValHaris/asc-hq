@@ -3,9 +3,15 @@
 */
 
 
-//     $Id: sg.cpp,v 1.135 2001-02-26 12:35:28 mbickel Exp $
+//     $Id: sg.cpp,v 1.136 2001-03-30 12:43:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.135  2001/02/26 12:35:28  mbickel
+//      Some major restructuing:
+//       new message containers
+//       events don't store pointers to units any more
+//       tfield class overhauled
+//
 //     Revision 1.134  2001/02/18 15:37:17  mbickel
 //      Some cleanup and documentation
 //      Restructured: vehicle and building classes into separate files
@@ -201,7 +207,7 @@
 
 #include "vehicletype.h"
 #include "buildingtype.h"
-#include "artint.h"
+#include "ai/ai.h"
 #include "basegfx.h"
 #include "misc.h"
 #include "loadpcx.h"
@@ -1694,11 +1700,11 @@ void viewunreadmessages ( void )
 
 
 
-class WeaponRange : public tsearchfields {
+class WeaponRange : public SearchFields {
        public:
          int run ( const pvehicle veh );
-         void testfield ( void ) { if ( getfield ( xp, yp )) getfield ( xp, yp )->tempw = 1; };
-         WeaponRange ( pmap _gamemap ) : tsearchfields ( _gamemap ) {};
+         void testfield ( const MapCoordinate& mc ) { gamemap->getField( mc )->tempw = 1; };
+         WeaponRange ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
 };
 
 int  WeaponRange :: run ( const pvehicle veh )
@@ -1707,7 +1713,7 @@ int  WeaponRange :: run ( const pvehicle veh )
    if ( fieldvisiblenow ( getfield ( veh->xpos, veh->ypos )))
       for ( int i = 0; i < veh->typ->weapons->count; i++ ) {
          if ( veh->typ->weapons->weapon[i].shootable() ) {
-            initsearch ( veh->xpos, veh->ypos, veh->typ->weapons->weapon[i].maxdistance/minmalq, (veh->typ->weapons->weapon[i].mindistance+maxmalq-1)/maxmalq );
+            initsearch ( veh->getPosition(), veh->typ->weapons->weapon[i].maxdistance/minmalq, (veh->typ->weapons->weapon[i].mindistance+maxmalq-1)/maxmalq );
             startsearch();
             found++;
          }
@@ -1786,6 +1792,7 @@ void viewunitmovementrange ( pvehicle veh, tkey taste )
    }
 }
 
+extern void testland();
 
 void  mainloop ( void )
 {
@@ -1880,35 +1887,50 @@ void  mainloop ( void )
             case ct_8:  execuseraction ( ua_unitweightinfo );
                break;
 
-            case ct_9: {  /*
+            case ct_9: {
                           static pvehicle veh = 0;
                           if ( !veh ) {
                              veh = getactfield()->vehicle;
                           } else {
-                             actmap->cleartemps ( 7 );
-                             std::vector<MapCoordinate> path;
-                             AStar ast;
-                             ast.findPath ( actmap, path, veh, getxpos(), getypos() );
-                             /*
+                             actmap->cleartemps ( 15 );
+                             std::vector<MapCoordinate3D> path;
+                             AStar3D ast ( actmap, veh );
+                             ast.findAllAccessibleFields ( veh->tank.fuel / veh->typ->fuelConsumption * maxmalq );
+
+                             for ( int x = 0; x < actmap->xsize; x++ )
+                                for ( int y = 0; y < actmap->ysize; y++ )
+                                    if ( !(getfield( x,y )->a.temp & chfahrend) )
+                                        getfield( x,y )->a.temp = 0;
+
+/*
                              int x = veh->xpos;
                              int y = veh->ypos;
-                             for ( int i = path.size()-1; i >= 0 ; i-- ) {
-                                getnextfield ( x, y, path[i] );
+                             actmap->cleartemps( 15 );
+                             for ( int i = 0; i < path.size(); i++ )
+                                actmap->getField ( path[i] )->a.temp = 1;
 
+                             AI ai ( actmap, actmap->actplayer );
+                             int res = ai.moveUnit ( veh, path );
+                             if ( res < 0 )
+                                displaymessage("error", 1 );
+                                */
+                             /*
                                 if ( !getfield ( x, y ))
                                    break;
 
                                 getfield ( x, y )->a.temp = 1;
-                             }
+                             } */
 
+                             /*
                              for ( int xp = 0; xp < actmap->xsize; xp++ )
                                 for ( int yp = 0; yp < actmap->ysize; yp++ )
                                    if ( ast.fieldVisited ( xp, yp ))
                                       getfield ( xp, yp )->a.temp = 1;
-
+                             */
                              displaymap();
                              veh = NULL;
-                          }*/
+                          }
+                          /*
                           static AStar* ast = 0;
                           if ( ast ) {
                              delete ast;
@@ -1917,7 +1939,8 @@ void  mainloop ( void )
                              ast = new AStar ( actmap, getactfield()->vehicle );
                              ast->findAllAccessibleFields ( );
                              displaymap();
-                          }
+                          } */
+                          // testland();
                        }
                break;
 

@@ -23,9 +23,6 @@
 
 // mark -> temp3
 
-enum HexDirection { DirN, DirNE, DirSE, DirS, DirSW, DirNW, DirNone };
-
-
 
 bool operator < ( const AStar::Node& a, const AStar::Node& b )
 {
@@ -135,9 +132,6 @@ inline void AStar::get_first( Container& v, Node& n )
 }
 
 
-void nnop ()
-{
-}
 
 // Here's the algorithm.  I take a map, two points (A and B), and then
 // output the path in the `path' vector.
@@ -222,8 +216,6 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
                    getfield (hn.m,hn.n)->temp3 = ReverseDirection(d);
                    open.push_back( N2 );
                    push_heap( open.begin(), open.end(), comp );
-                } else {
-                   nnop();
                 }
             }
             else
@@ -351,4 +343,326 @@ void findPath( pmap actmap, AStar::Path& path, pvehicle veh, int x, int y )
 //   godview = 1;
 //   AStar ( actmap, HexCoord ( veh->xpos, veh->ypos ), HexCoord ( x, y ), path, veh );
 //   godview = og;
+}
+
+
+
+
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+
+
+bool operator < ( const AStar3D::Node& a, const AStar3D::Node& b )
+{
+    // To compare two nodes, we compare the `f' value, which is the
+    // sum of the g and h values.
+    return (a.gval+a.hval) < (b.gval+b.hval);
+}
+
+bool operator > ( const AStar3D::Node& a, const AStar3D::Node& b )
+{
+    return (a.gval+a.hval) > (b.gval+b.hval);
+}
+
+
+bool operator == ( const AStar3D::Node& a, const AStar3D::Node& b )
+{
+    // Two nodes are equal if their components are equal
+    return (a.h == b.h) && (a.gval == b.gval ) && (a.hval == b.hval );
+}
+
+
+
+AStar3D :: AStar3D ( pmap actmap_, pvehicle veh_ )
+{
+   tempsMarked = NULL;
+   _path = NULL;
+   veh = veh_;
+   actmap = actmap_;
+   MAXIMUM_PATH_LENGTH = maxint;
+
+   float maxVehicleSpeed = 0;
+   for ( int i = 0; i < 8; i++ )
+      if ( veh->typ->movement[i] > maxVehicleSpeed )
+         maxVehicleSpeed = veh->typ->movement[i];
+
+   if ( !maxVehicleSpeed )
+      fatalError ( "AStar3D :: AStar3D  -  trying to move a immobile unit");
+
+   for ( int i = 0; i < 8; i++ )
+       vehicleSpeedFactor[i] = float(veh->typ->movement[i]) / maxVehicleSpeed;
+
+   int cnt = actmap->xsize*actmap->ysize*8;
+   posDirs = new HexDirection[cnt];
+   posHHops = new int[cnt];
+
+   for ( int i = 0; i < cnt; i++ ) {
+      posDirs[i] = DirNone;
+      posHHops[i] = 0;
+   }
+
+}
+
+
+AStar3D :: ~AStar3D ( )
+{
+   if ( tempsMarked )
+      tempsMarked->cleartemps( 1 );
+   delete[] posDirs;
+   delete[] posHHops;
+}
+
+int AStar3D::dist( const MapCoordinate3D& a, const MapCoordinate3D& b )
+{
+    return beeline ( a, b ) + abs ( log2(b.z) - log2(a.z) ) * minmalq;
+}
+
+int AStar3D::getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const pvehicle vehicle )
+{
+    // since we are operating at different levels of height and the unit has different
+    // speeds at different levels of height, we must not optimize for distance, but for
+    // travel time.
+
+    int fa = fieldaccessible ( actmap->getField ( dest ), vehicle, dest.z );
+
+    if ( !fa )
+       return MAXIMUM_PATH_LENGTH;
+
+    int movecost, fuelcost;
+    calcmovemalus ( start.x, start.y, dest.x, dest.y, vehicle, -1, movecost, fuelcost, dest.z );
+    return int(movecost / vehicleSpeedFactor[log2(dest.z)]);
+}
+
+
+
+// greater(Node) is an STL thing to create a 'comparison' object out of
+// the greater-than operator, and call it comp.
+
+
+// I'm using a priority queue implemented as a heap.  STL has some nice
+// heap manipulation functions.  (Look at the source to `priority_queue'
+// for details.)  I didn't use priority_queue because later on, I need
+// to traverse the entire data structure to update certain elements; the
+// abstraction layer on priority_queue wouldn't let me do that.
+
+// Wouldn't maps be fast ?? [MB]
+
+inline void AStar3D::get_first( Container& v, Node& n )
+{
+    n = v.front();
+    pop_heap( v.begin(), v.end(), comp );
+    v.pop_back();
+}
+
+
+void AStar3D :: nodeVisited ( pfield fld, const Node& N2, HexDirection direc, Container& open, int heightDelta )
+{
+   // If this spot (hn) hasn't been visited, its mark is DirNone
+   if( getPosDir(N2.h) == DirNone ) {
+
+       // The space is not marked
+
+       if ( N2.gval < MAXIMUM_PATH_LENGTH ) {
+          getPosDir(N2.h) = ReverseDirection(direc);
+          getPosHHop(N2.h) = heightDelta;
+          open.push_back( N2 );
+          push_heap( open.begin(), open.end(), comp );
+       }
+
+       /* some debug code
+       fld->a.temp = 1;
+       cursor.gotoxy ( N2.h.x, N2.h.y );
+       displaymap();
+       */
+
+   } else {
+       // Search for hn in open
+       Container::iterator find1 = open.end();
+       for( Container::iterator i = open.begin(); i != open.end(); i++ )
+           if( i->h == N2.h ) {
+               find1 = i;
+               break;
+           }
+
+       // if found, call it N3
+       if( find1 != open.end() ) {
+           Node N3 = *find1;
+           if( N3.gval > N2.gval ) {
+               getPosDir(N2.h) = ReverseDirection(direc);
+               getPosHHop(N2.h) = heightDelta;
+               // Replace N3 with N2 in the open list
+               Container::iterator last = open.end() - 1;
+               *find1 = *last;
+               *last = N2;
+               push_heap( open.begin(), open.end(), comp );
+           }
+       }
+   }
+}
+
+
+void AStar3D::findPath( const MapCoordinate3D& A, const MapCoordinate3D& B, Path& path )
+{
+    _path = &path;
+
+    Node N;
+    Container open;
+
+    // insert the original node
+    N.h = A;
+    N.gval = 0;
+    N.hval = dist(A,B);
+    open.push_back(N);
+
+
+    // Remember which nodes we visited, so that we can clear the mark array
+    // at the end.
+
+    // While there are still nodes to visit, visit them!
+    while( !open.empty() )
+    {
+        get_first( open, N );
+        visited.push_back( N );
+        // If we're at the goal, then exit
+        if( N.h == B )
+            break;
+
+        // Every other column gets a different order of searching dirs
+        // (Alternatively, you could pick one at random).  I don't want
+        // to be too biased by my choice of order in which I look at the
+        // neighboring grid spots.
+
+        int directions1[6] = {0,1,2,3,4,5};
+        int directions2[6] = {5,4,3,2,1,0};
+        int *directions;
+        if( N.h.x % 2 == 0 )
+            directions = directions1;
+        else
+            directions = directions2;
+
+        // Look at your neighbors.
+        for( int dci = 0; dci < 6; dci++ ) {
+
+            HexDirection d = HexDirection(directions[dci]);
+            MapCoordinate3D hn = N.h;
+            getnextfield ( hn.x, hn.y, d );
+            // If it's off the end of the map, then don't keep scanning
+            if( hn.x < 0 || hn.y < 0 || hn.x >= actmap->xsize || hn.y >= actmap->ysize || !fieldaccessible ( actmap->getField ( hn ), veh, hn.z ))
+                continue;
+
+            // cursor.gotoxy ( hn.m, hn.n );
+            int k = getMoveCost( N.h, hn, veh );
+            Node N2;
+            N2.h = hn;
+            N2.gval = N.gval + k;
+            N2.hval = dist( hn, B );
+
+            pfield fld = actmap->getField(hn);
+            nodeVisited ( fld, N2, d, open );
+        }
+
+        // and now change the units' height. That's only possible on fields where the unit can stop it's movement
+
+        if ( fieldaccessible ( actmap->getField(N.h), veh, N.h.z ) == 2 ) {
+           for ( int heightDelta = -1; heightDelta <= 1; heightDelta += 2 ) {
+              for ( int dir = 0; (dir < 6 && veh->typ->steigung) || (dir < 1 && !veh->typ->steigung); dir++ ) {
+                 pair<int, MapCoordinate3D> mcres = ChangeVehicleHeight::getMoveCost ( veh, N.h, dir, heightDelta );
+                 if ( mcres.first >= 0 ) {
+                    // the operation was successfull; mcres->first now contains the moveCost
+                    Node N2;
+                    N2.h = mcres.second;
+                    N2.gval = N.gval + mcres.first;
+                    N2.hval = dist ( mcres.second, B );
+                    pfield fld = actmap->getField(N2.h);
+                    nodeVisited ( fld, N2, HexDirection(dir), open, (10 + beeline ( N2.h, N.h)) * heightDelta );
+                 }
+              }
+           }
+        }
+
+    }
+
+    if( N.h == B && N.gval < MAXIMUM_PATH_LENGTH ) {
+        // We have found a path, so let's copy it into `path'
+        std::vector<int> tempPath;
+        std::vector<int> heightHops;
+
+        MapCoordinate3D h = B;
+        while( !(h == A) )
+        {
+            pfield fld = actmap->getField ( h );
+            HexDirection dir = HexDirection ( getPosDir(h) );
+            tempPath.push_back( int( ReverseDirection( dir ) ) );
+
+            int heightDelta = getPosHHop(h);
+            heightHops.push_back ( heightDelta );
+
+            if ( heightDelta ) {
+               for ( int i = 10; i < abs(heightDelta); i += maxmalq )
+                  getnextfield ( h.x, h.y, dir );
+
+               if ( heightDelta > 0 )
+                  h.z >>= 1;
+               else
+                  h.z <<= 1;
+            } else
+               getnextfield ( h.x, h.y, dir );
+        }
+
+        // tempPath now contains the directions the unit must travel .. backwards
+        // (like a stack)
+
+        h = A;
+
+        for ( int i = tempPath.size()-1; i >= 0 ; i-- ) {
+           if ( heightHops[i] ) {
+              for ( int j = 10; j < abs (heightHops[i]); j += maxmalq )
+                  getnextfield ( h.x, h.y, tempPath[i] );
+
+           } else
+              getnextfield ( h.x, h.y, tempPath[i] );
+
+           if ( heightHops[i] > 0 )
+              h.z <<= 1;
+           else
+              if ( heightHops[i] < 0 )
+                 h.z >>= 1;
+
+           path.push_back ( h );
+        }
+    }
+    else
+    {
+        // No path
+    }
+}
+
+void AStar3D::findPath( Path& path, const MapCoordinate3D& dest )
+{
+  findPath ( MapCoordinate3D ( veh->xpos, veh->ypos, veh->height ), dest, path );
+}
+
+void AStar3D::findAllAccessibleFields ( int maxDist )
+{
+   actmap->cleartemps ( 1 );
+
+   MAXIMUM_PATH_LENGTH = maxDist;
+
+   Path dummy;
+   findPath ( dummy, MapCoordinate3D(actmap->xsize, actmap->ysize, veh->height) );  //this field does not exist...
+   for ( Container::iterator i = visited.begin(); i != visited.end(); i++ )
+      actmap->getField ( i->h )->a.temp |= i->h.z;
+
+   tempsMarked = actmap;
+}
+
+AStar3D::Node* AStar3D::fieldVisited ( const MapCoordinate3D& pos )
+{
+   for( Container::iterator i = visited.begin(); i != visited.end(); i++ )
+       if( i->h == pos  )
+          return &(*i);
+
+   return NULL;
 }

@@ -1,6 +1,10 @@
-//     $Id: unitctrl.h,v 1.23 2001-02-04 21:27:02 mbickel Exp $
+//     $Id: unitctrl.h,v 1.24 2001-03-30 12:43:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.23  2001/02/04 21:27:02  mbickel
+//      The AI status is written to savegames -> new savegame revision
+//      Lots of bug fixes
+//
 //     Revision 1.22  2001/01/25 23:45:06  mbickel
 //      Moved map displaying routins to own file (mapdisplay.cpp)
 //      Wrote program to create pcx images from map files (map2pcx.cpp)
@@ -171,7 +175,9 @@ class FieldList {
        T& getData ( int x, int y );
        void getFieldCoordinates ( int num, int* x, int* y ) const;
        void addField ( int x, int y, T& _data );
+       void addField ( const MapCoordinate& mc, T& _data );
        void addField ( int x, int y );
+       void addField ( const MapCoordinate& mc );
        void setMap ( pmap map );
        pmap getMap ( void );
        bool isMember ( int x, int y );
@@ -347,17 +353,28 @@ class ChangeVehicleHeight : public BaseVehicleMovement {
               ChangeVehicleHeight ( MapDisplayInterface* md, PPendingVehicleActions _pva , VehicleActionType vat );
               ~ChangeVehicleHeight (  );
 
+              //! can the position ascent / descent be started on this position; only for
+              bool checkPosition ( const MapCoordinate& pos );
+
               //! execute a movement before changing height; primarily used for AI; vm is destructed when ChangeVehicleHeight ends
               void registerStartMovement ( VehicleMovement& vm ) { vmove = &vm; };
            protected:
               VehicleMovement* vmove;
 
+              // negative result : error
+              static int verticalHeightChangeMoveCost ( pvehicle vehicle, const MapCoordinate3D pos, int newheight );
               int verticalHeightChange ( void );
 
               int moveunitxy ( int xt1, int yt1, IntFieldList& pathToMove );
               int execute_withmove ( int allFields );
+
+              // negative result : error
+              static int moveHeightMoveCost( pvehicle veh, const MapCoordinate3D& pos, int newheight, int direc, int& xstop, int& ystop );
               int moveheight ( int allFields );
 
+           public:
+              // heightdir is either +1 or -1 , depending on whether the unit is ascending or descending
+              static pair<int,MapCoordinate3D> getMoveCost ( pvehicle veh, const MapCoordinate3D& pos, int direc, int heightdir );
           };
 
 class IncreaseVehicleHeight : public ChangeVehicleHeight {
@@ -365,6 +382,7 @@ class IncreaseVehicleHeight : public ChangeVehicleHeight {
               IncreaseVehicleHeight ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
               virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
               int available ( pvehicle veh ) const;
+              static pair<int,MapCoordinate3D> getMoveCost ( pvehicle veh, const MapCoordinate3D& pos, int direc );
               ~IncreaseVehicleHeight ( );
           };
 
@@ -373,6 +391,7 @@ class DecreaseVehicleHeight : public ChangeVehicleHeight {
               DecreaseVehicleHeight ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
               virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
               int available ( pvehicle veh ) const;
+              static pair<int,MapCoordinate3D> getMoveCost ( pvehicle veh, const MapCoordinate3D& pos, int direc );
               ~DecreaseVehicleHeight ( );
           };
 
@@ -380,7 +399,7 @@ class DecreaseVehicleHeight : public ChangeVehicleHeight {
 /* IncreaseVehicleHeight / DecreaseVehicleHeight:
  *
  *   Step 0:   execute ( vehicle, -1, -1, step = 0 , newheight, allFields );
- *                 newheight should be vehicle->height >> 1 for DecreaseVehicleHeight and 
+ *                 newheight should be vehicle->height >> 1 for DecreaseVehicleHeight and
  *                                     vehicle->height << 1 for IncreaseVehicleHeight.
  *                 allFields: 1 all fields are reported that can be reached with moving the unit first
  *                            <= 0 ; only fields are reported that the unit can reach changing its
@@ -400,16 +419,16 @@ class VehicleAttack : public VehicleAction {
               pvehicle vehicle;
               int status;
               int kamikaze;
-              class tsearchattackablevehicles : public tsearchfields {
+              class tsearchattackablevehicles : public SearchFields {
                                   VehicleAttack* va;
                                public:
                                   int       anzahlgegner;
                                   pvehicle  angreifer;
                                   int       kamikaze;
                                   void            init ( const pvehicle eht, int _kamikaze, VehicleAttack* _va );
-                                  virtual void    testfield ( void );
+                                  virtual void    testfield ( const MapCoordinate& mc );
                                   int             run ( void );
-                                  tsearchattackablevehicles ( pmap _gamemap ) : tsearchfields ( _gamemap ) {};
+                                  tsearchattackablevehicles ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
                           } search;
 
            protected:
@@ -450,7 +469,7 @@ class VehicleService : public VehicleAction {
               int status;
 
           public:
-              class FieldSearch : public tsearchfields {
+              class FieldSearch : public SearchFields {
                      VehicleService& vs;
                      pvehicle        veh;
                      pbuilding       bld;
@@ -459,14 +478,13 @@ class VehicleService : public VehicleAction {
                        bool distance;
                        bool height;
                      } bypassChecks;
-                     virtual void     testfield ( void );
+                     virtual void     testfield ( const MapCoordinate& mc );
                      void             checkVehicle2Vehicle ( pvehicle veh, int xp, int yp );
                      void             checkBuilding2Vehicle ( pvehicle veh );
                      bool             initrefuelling( int xp1, int yp1 );
-                     void             startsuche ( void );
                      void             init ( pvehicle _veh, pbuilding _bld );
                      void             run (  );
-                     FieldSearch ( VehicleService& _vs, pmap _gamemap ) : tsearchfields ( _gamemap ), vs ( _vs ) { bypassChecks.distance = false; bypassChecks.height = false; };
+                     FieldSearch ( VehicleService& _vs, pmap _gamemap ) : SearchFields ( _gamemap ), vs ( _vs ) { bypassChecks.distance = false; bypassChecks.height = false; };
                   } fieldSearch;
 
 
@@ -600,6 +618,12 @@ template<class T> void FieldList<T> :: getFieldCoordinates ( int num, int* x, in
    }
 }
 
+
+template<class T> void FieldList<T> :: addField ( const MapCoordinate& mc, T& _data )
+{
+   addField ( mc.x, mc.y, _data );
+}
+
 template<class T> void FieldList<T> :: addField ( int x, int y, T& _data )
 {
    int found = 0;
@@ -613,6 +637,13 @@ template<class T> void FieldList<T> :: addField ( int x, int y, T& _data )
 
       fieldnum++;
    }
+}
+
+
+
+template<class T> void FieldList<T> :: addField ( const MapCoordinate& mc )
+{
+   addField ( mc.x, mc.y );
 }
 
 template<class T> void FieldList<T> :: addField ( int x, int y )
