@@ -329,5 +329,29 @@ void soundSettings( )
 
 
  
+void Panel::setup()
+{/*
+      tnfilestream s ( panelName + ".ascgui", tnstream::reading );
+
+      TextFormatParser tfp ( &s );
+      TextPropertyGroup* tpg = tfp.run();
+
+      PropertyReadingContainer pc ( "panel", tpg );
+      
+      int objectNum;
+      pc.addInteger( "ObjectNum", objectNum, 0 );
+      
+      int widgetNum;
+      pc.addInteger( "ObjectNum", objectNum, 0 );
+      
+      
+      pc.addIntegerArray ( "TerrainObjTranslation", terrainobjtranslation );
+      pc.addIntegerArray ( "ObjectTranslation", objecttranslation );
+
+      pc.run();
+
+      delete tpg;
+  */
+}
 
 

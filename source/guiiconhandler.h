@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.3 2004-12-12 19:58:45 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.4 2004-12-17 11:19:20 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -101,7 +101,7 @@ class GuiIconHandler {
 };
 
 
-class NewGuiHost : public PG_Window {
+class NewGuiHost : public Panel {
         GuiIconHandler* handler;
      public:
         NewGuiHost (PG_Widget *parent, const PG_Rect &r ) ;

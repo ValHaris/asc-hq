@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.154.2.4 2004-12-16 18:48:30 mbickel Exp $
+//     $Id: typen.h,v 1.154.2.5 2004-12-17 11:19:21 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -202,6 +202,11 @@ class MapCoordinate {
             bool valid() const { return x >= 0 && y >= 0 ; } ;
       };
 
+inline MapCoordinate operator-( const MapCoordinate& a, const MapCoordinate& b )
+{
+  return MapCoordinate(a.x - b.x, a.y - b.y );
+}  
+      
 
 //! Coordinate on the map including height
 class MapCoordinate3D : public MapCoordinate {

@@ -46,6 +46,7 @@ GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent,
   SetBackground( PRESSED, IconRepository::getIcon("empty-pressed.png").getBaseSurface() );
   SetBackground( HIGHLITED, IconRepository::getIcon("empty-high.png").getBaseSurface() );
   SetBackground( UNPRESSED, IconRepository::getIcon("empty.png").getBaseSurface() );
+  SetBorderSize(0,0,0);
 }
 
 bool GuiButton::exec() 
@@ -111,7 +112,7 @@ GuiIconHandler::~GuiIconHandler()
 
 
 NewGuiHost :: NewGuiHost (PG_Widget *parent, const PG_Rect &r )
-         : PG_Window( parent, r ) , handler(NULL)
+         : Panel( parent, r ) , handler(NULL)
 {
    updateFieldInfo.connect ( SigC::slot( *this, &NewGuiHost::eval ));
 }         
@@ -133,7 +134,7 @@ GuiButton* NewGuiHost::getButton( int i )
 {
    while ( i >= buttons.size() ) {
       int w = (Width() - 4 * guiIconSpace) / guiIconColumnNum;
-      GuiButton* b = new GuiButton ( this, PG_Rect( guiIconSpace + i%3 * w, guiIconSpace + i/3 * (guiIconSpace + guiIconSizeY), guiIconSizeX, guiIconSizeY));
+      GuiButton* b = new GuiButton ( this, PG_Rect( guiIconSpace + i%3 * (w + guiIconSpace), 10 + guiIconSpace + i/3 * (guiIconSpace + guiIconSizeY), guiIconSizeX, guiIconSizeY));
       buttons.push_back ( b );
       b->Hide();
    }

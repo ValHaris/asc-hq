@@ -297,67 +297,6 @@
 
 };
 
-/*
-  template<
-     class Src, 
-     class Dst,
-     class SourceColorTransform,
-     template<int> class ColorMerger,
-     template<int> class SourcePixelSelector = SourcePixelSelector_Plain
-  >
-  class MegaBlitter2 : public MegaBlitter< Src::colorDepth,
-                                           Dst::colorDepth,
-                                           SourceColorTransform,
-                                           ColorMerger,
-                                           SourcePixelSelector
-                                         > {
-        Src src;
-        Dst dst;
-    public:
-        MegaBlitter2( Src s, Dst d ) : src(s), dst(d) { };
-
-        MegaBlitter2( Src s, Dst d, const SourceColorTransform& scm, const ColorMerger<Dst::colorDepth>& cm, const SourcePixelSelector<Src::colorDepth>& sps  ) :
-                     MegaBlitter< Src::colorDepth,
-                                  Dst::colorDepth,
-                                  SourceColorTransform,
-                                  ColorMerger,
-                                  SourcePixelSelector
-                                >( scm, cm, sps ), src(s), dst(d) { };
-                
-        
-        void blit( SPoint dstPos ) {
-           blit( src, dst, dstPos );
-        };   
-  };      
-*/
-/*
-   template<
-     class Src, 
-     class Dst,
-     class SourceColorTransform,
-     template<int> class ColorMerger,
-     template<int> class SourcePixelSelector = SourcePixelSelector_Plain
-  >
-  void megaBlitter3 ( const Src& src, 
-                      Dst& dst, 
-                      const SPoint& pos,
-                      const SourceColorTransform& scm, 
-                      const ColorMerger& cm, 
-                      const SourcePixelSelector& sps )
-{
-   MegaBlitter2<Src,Dst,SourceColorTransform,ColorMerger,SourcePixelSelector> mb ( src, dst, scm, cm, sps );
-   mb.Blit( pos );
-}
-*/
-
-/*
- template<class T> class ParameterProvider() {};
- template<> class ParameterProvider<ColorMerger> {
-                       int param;
-                    Public:
-                       ParameterProvider<ColorMerger>( int i ) {};
-  */
-
  
   template<
      class SourceColorTransform,
@@ -593,6 +532,7 @@
  template<>
  class ColorMerger_AlphaHandler<4> {
        typedef PixelSize2Type<4>::PixelType PixelType;
+    protected:   
        int amask, ashift;
        PixelType colorKey;
        bool hasColorKey;
@@ -644,23 +584,69 @@
  };
 
  
- 
-  template<int pixelsize>
-  class ColorMerger_AlphaShadow {}; /* : public ColorMerger_AlphaHandler<pixelsize> {
-  
+ template<int pixelsize>
+ class ColorMerger_AlphaMerge : public ColorMerger_AlphaHandler<pixelsize> {
          typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
       protected:
+
          void assign ( PixelType src, PixelType* dest )
          {
-            if ( isNotAlpha(src ) ) 
+            if ( isOpaque(src ) ) {
                *dest = src;
+            }   
          };
-      public:
-         ColorMerger_AlphaShadow ( NullParamType npt = nullParam) : table ( xlattables.a.dark1 ) {};   
          
+      public:   
+         ColorMerger_AlphaMerge( NullParamType npt = nullParam ) {};
  };
-*/
+
+ template<>
+ class ColorMerger_AlphaMerge<4> : public ColorMerger_AlphaHandler<4>
+ {
+      typedef  PixelSize2Type<4>::PixelType PixelType;
+   protected:
+
+      void assign ( PixelType src, PixelType* dest )
+      {
+         if ( hasColorKey ) {
+            if ( (src & ckmask) != colorKey )
+               *dest = src;
+         } else {
+            PixelType alpha = PixelType((src & amask ) >> ashift);
+            if ( alpha == PixelType(Surface::opaque))
+               *dest = src;
+            else
+               if ( alpha != PixelType(Surface::transparent)) {
+                  // copied from SDL
+                  
+                  /*
+                   * take out the middle component (green), and process
+                   * the other two in parallel. One multiply less.
+                   */
+                  PixelType d = *dest;
+                  PixelType dalpha = d & 0xff000000;
+                  PixelType s1 = src & 0xff00ff;
+                  PixelType d1 = d & 0xff00ff;
+                  d1 = (d1 + ((s1 - d1) * alpha >> 8)) & 0xff00ff;
+                  src &= 0xff00;
+                  d &= 0xff00;
+                  d = (d + ((src - d) * alpha >> 8)) & 0xff00;
+                  *dest = d1 | d | dalpha;
+               }
+
+         }
+      };
+
+   public:
+      ColorMerger_AlphaMerge( NullParamType npt = nullParam ) {} ;
+ };
+
+
  
+ 
+  template<int pixelsize>
+  class ColorMerger_AlphaShadow {}; 
+   
  
   template<>
   class ColorMerger_AlphaShadow<1> : public ColorMerger_AlphaHandler<1> {
@@ -706,22 +692,8 @@
  
 
  template<int pixelsize>
- class ColorMerger_AlphaMixer {}; /* : public ColorMerger_AlphaHandler<pixelsize> {
+ class ColorMerger_AlphaMixer {}; 
  
-         typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
-      protected:
-         void assign ( PixelType src, PixelType* dest )
-         {
-            // STATIC_CHECK ( pixelsize == 1, wrong_pixel_size );
-            if ( isNotAlpha(src ) ) {
-               *dest = colormixbufchar[*dest + src*256 ];
-            }   
-         };
-      public:
-         ColorMerger_AlphaMixer ( NullParamType npt = nullParam ) {};   
-         
- };
- */
 
 template<>
  class ColorMerger_AlphaMixer<1> : public ColorMerger_AlphaHandler<1> {

@@ -62,6 +62,7 @@ void MapRenderer::readData()
       icons.notVisible    = IconRepository::getIcon("hexinvis.raw");
       icons.markField     = IconRepository::getIcon("markedfield.pcx");
       icons.markField.detectColorKey();
+      icons.markFieldDark = IconRepository::getIcon("markedfielddark.png");
    }
 }
 
@@ -71,18 +72,32 @@ void MapRenderer::readData()
     0: terrain
     1: below everything objects
     2: deep submerged units and building
-        :
-        :
-    9  orbiting units
-   10  view obstructions
+    3: deep submerged objects
+    4: submerged units and buildings
+    5: submerged objects
+    6: floating  units and buildings
+    7: floating  objects
+    8: ground    units and buildings
+    9: ground    objects
+   10: low flying units and buildings
+   11: low flying objects
+   12: flying units and buildings
+   13: flying objects
+   14: high flying units and buildings
+   15: high flying objects
+   16: orbiting units
+   17: orbiting objects
+   18  view obstructions
 */
 
 void MapRenderer::paintSingleField( Surface& surf, int playerView, pfield fld, int layer, const SPoint& pos, const MapCoordinate& mc )
 {
 
-   int binaryheight = 0;
-   if ( layer > 1 )
-      binaryheight = 1 << ( layer-2);
+   int binaryUnitHeight = 0;
+   if ( layer > 1 ) 
+      if ( !(layer & 1 ))
+         binaryUnitHeight = 1 << (( layer-2)/2);
+   
 
    VisibilityStates visibility = fieldVisibility ( fld, playerView );
 
@@ -93,23 +108,24 @@ void MapRenderer::paintSingleField( Surface& surf, int playerView, pfield fld, i
    if ( visibility > visible_ago ) {
 
       /* display buildings */
-      if ( fld->building  &&  (fld->building->typ->buildingheight & binaryheight) )
+      if ( fld->building  &&  (fld->building->typ->buildingheight & binaryUnitHeight) )
          if ((visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerView*8 ))
             fld->building->paintSingleField( surf, pos, fld->building->getLocalCoordinate( mc ));
 
 
       /* display units */
-      if ( fld->vehicle  &&  (fld->vehicle->height == binaryheight))
+      if ( fld->vehicle  &&  (fld->vehicle->height == binaryUnitHeight))
          if ( ( fld->vehicle->color == playerView * 8 ) || (visibility == visible_all) || ((fld->vehicle->height >= chschwimmend) && (fld->vehicle->height <= chhochfliegend)))
             fld->vehicle->paint( surf, pos );
 
    }
 
    // display objects
+   if ( layer & 1 )
    for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ ) {
       int h = o->typ->imageHeight;
       if ( visibility > visible_ago || (o->typ->visibleago && visibility >= visible_ago ))
-         if (  h >= (layer-1)*30 && h < layer*30 )
+         if (  h >= ((layer-1)/2)*30 && h < (layer-1)/2*30+30 )
             o->display ( surf, pos, fld->getweather() );
    }
 
@@ -134,21 +150,18 @@ void MapRenderer::paintSingleField( Surface& surf, int playerView, pfield fld, i
 
       /* display marked fields */
 
-      if ( layer == 9 ) {
-
+      if ( layer == 18 ) {
          if ( fld->a.temp && tempsvisible )
             surf.Blit( icons.markField, pos );
          else
             if ( fld->a.temp2 && tempsvisible )
-               surf.Blit( icons.markField, pos );
-         // putspriteimage(  r, yp, xlatpict ( &xlattables.a.dark2 , cursor.markfield));
-
+               surf.Blit( icons.markFieldDark, pos );
       }
 
 
    } else {
       if (visibility == visible_ago) {
-         if ( fld->building  &&  (fld->building->typ->buildingheight & binaryheight) )
+         if ( fld->building  &&  (fld->building->typ->buildingheight & binaryUnitHeight) )
             if ((visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == playerView*8 ))
                fld->building->paintSingleField( surf, pos, fld->building->getLocalCoordinate( mc ));
 
@@ -191,7 +204,7 @@ void MapRenderer::paintSingleField( Surface& surf, int playerView, pfield fld, i
 
 
    // display view obstructions
-   if ( layer == 10 ) {
+   if ( layer == 18 ) {
       if ( visibility == visible_ago) {
          MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaShadow> blitter;
          // PG_Point pnt = ClientToScreen( 0,0 );
@@ -226,7 +239,7 @@ void MapRenderer::paintTerrain( Surface& surf, tmap* actmap, int playerView, con
 {
    GraphicSetManager::Instance().setActive ( actmap->graphicset );
 
-   for (int pass = 0; pass <= 10 ;pass++ ) {
+   for (int pass = 0; pass <= 18 ;pass++ ) {
       for (int y= viewPort.y1; y < viewPort.y2; ++y )
          for ( int x=viewPort.x1; x < viewPort.x2; ++x ) {
             SPoint pos = getFieldPos(x,y);
@@ -239,98 +252,12 @@ void MapRenderer::paintTerrain( Surface& surf, tmap* actmap, int playerView, con
                   surf.Blit( icons.mapBackground, pos );
 
          }
-      additionalItemDisplayHook( surf, pass, PositionCalculator(this, &MapRenderer::getFieldPos ));
+      // additionalItemDisplayHook( surf, pass, PositionCalculator(this, &MapRenderer::getFieldPos ));
    }
 }
 
 
 
-#if 0
-class ZoomCache
-{
-   public:
-      int width;
-      int* buffer
-
-      ZoomCache() : buff(NULL)
-      {}
-      ;
-
-      void setZoom( float factor )
-      {}
-      ;
-
-      ~ZoomCache()
-      {
-         delete buffer;
-      };
-};
-
-
-
-template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pixelsize> >
-class SourcePixelSelector_CacheZoom: public SourcePixelSelector
-{
-      typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
-      float zoomFactor;
-      int x,y;
-      int cachePos;
-   public:
-
-
-
-   protected:
-
-      int getWidth()
-      {
-         return int( zoomFactor * SourcePixelSelector::getWidth()  );
-      };
-      int getHeight()
-      {
-         return int( zoomFactor * SourcePixelSelector::getHeight() );
-      };
-
-      PixelType getPixel(int x, int y)
-      {
-         return SourcePixelSelector::getPixel( int(float(x) / zoomFactor), int(float(y) / zoomFactor));
-      };
-
-      PixelType nextPixel()
-      {
-         return getPixel(x++, y);
-      };
-
-      void nextLine()
-      {
-         x= 0;
-         ++y;
-      };
-
-   public:
-      void setZoom( float factor )
-      {
-         this->zoomFactor = factor;
-      };
-      void setSize( int sourceWidth, int sourceHeight, int targetWidth, int targetHeight )
-      {
-         float zw = float(targetWidth) / float(sourceWidth);
-         float zh = float(targetHeight)/ float(sourceHeight);
-         setZoom( min ( zw,zh));
-      };
-
-      SourcePixelSelector_Zoom( NullParamType npt = nullParam) : zoomFactor(1),x(0),y(0)
-      {}
-      ;
-
-};
-
-struct CommandBlock
-{
-   int targetPixels;
-   int fx,fy;
-};
-
-#endif
 
 
 
@@ -378,33 +305,6 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
    }
    
    theMapDisplay = this;
-}
-
-int fs[24][3] = {{ 16, 16, 16 },
-                 { 14, 20, 14 },
-                 { 12, 24, 12 },
-                 { 10, 28, 10 },
-                 {  8, 32,  8 },
-                 {  6, 36,  6 },
-                 {  4, 40,  4 },
-                 {  2, 44,  2 },
-                 {  0, 48,  0 },
-                 {  0, 48,  0 },
-                 {  2, 44,  2 },
-                 {  4, 40,  4 },
-                 {  6, 36,  6 },
-                 {  8, 32,  8 },
-                 { 10, 28, 10 },
-                 { 12, 24, 12 },
-                 { 14, 20, 14 },
-                 { 16, 16, 16 }};
-
-
-void setupFastBlitterCommands()
-{
-#if 0
-#endif
-
 }
 
 
@@ -470,8 +370,6 @@ template<int pixelSize>
 class PixSel : public SourcePixelSelector_CacheZoom<pixelSize, SourcePixelSelector_DirectRectangle<pixelSize> >
 {}
 ;
-// template<int pixelSize> class PixSel : public SourcePixelSelector_CacheZoom<pixelSize, SourcePixelSelector_Rectangle<pixelSize> > {};
-// template<int pixelSize> class PixSel : public SourcePixelSelector_Zoom<pixelSize, SourcePixelSelector_Rectangle<pixelSize> > {};
 
 
 void MapDisplayPG::updateMap(bool force )
@@ -725,25 +623,26 @@ void MapDisplayPG::initMovementStructure()
 
 void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
 {
-   for ( int i = 0; i < touchedFieldNum; ++i ) {
-      SPoint pos = movement.touchedFields[i].surfPos;
-      const MapCoordinate& mc = movement.touchedFields[i].mapPos;
+   for (int pass = 0; pass <= 18 ;pass++ )
+      for ( int i = 0; i < touchedFieldNum; ++i ) {
+         SPoint pos = movement.touchedFields[i].surfPos;
+         const MapCoordinate& mc = movement.touchedFields[i].mapPos;
 
-      pfield fld = movement.actmap->getField ( mc );
-      for (int pass = 0; pass <= 10 ;pass++ )
+         pfield fld = movement.actmap->getField ( mc );
          if ( fld ) {
             paintSingleField( *movement.surf, movement.playerView, fld, pass, pos, mc );
 
-            if ( pass >= 2 && pass < 10 )
-               if ( movement.veh->height & (1 << ( pass-2))) {
-                  SPoint pos;
-                  pos.x = movement.from.x + (movement.to.x - movement.from.x) * percentage/100;
-                  pos.y = movement.from.y + (movement.to.y - movement.from.y) * percentage/100;
-                  movement.veh->paint( *movement.surf, pos );
-               }
+            if ( pass >= 2 && pass < 18 )
+              if ( !(pass & 1 ))
+                 if ( movement.veh->height & (1 << (( pass-2)/2))) {
+                    SPoint pos;
+                    pos.x = movement.from.x + (movement.to.x - movement.from.x) * percentage/100;
+                    pos.y = movement.from.y + (movement.to.y - movement.from.y) * percentage/100;
+                    movement.veh->paint( *movement.surf, pos );
+                 }
          }
 
-   }
+      }
    
    
    MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite> alphaBlitter;
@@ -843,7 +742,7 @@ void MapDisplayPG::displayUnitMovement( pmap actmap, Vehicle* veh, const MapCoor
    movement.from = getFieldPos2( tempStart );
    movement.to = getFieldPos2( tempEnd );
    
-   movement.screenPos = widget2screen( internal2widget( mapPos2internalPos( MapCoordinate(0,0)) - mapPos2internalPos( tempStart ) + mapPos2internalPos( from ) ));
+   movement.screenPos = widget2screen( internal2widget( mapPos2internalPos( MapCoordinate(0,0)) - mapPos2internalPos( tempStart ) + mapPos2internalPos( from - offset ) ));
    movement.screenUpdatePos = movement.screenPos;
    
    SPoint lowerRight = SPoint( int( float(effectiveMovementSurfaceWidth) * zoom) + movement.screenPos.x, int( float(effectiveMovementSurfaceHeight) * zoom)+ movement.screenPos.y);

@@ -37,6 +37,7 @@ class MapRenderer {
          Surface mapBackground;
          Surface notVisible;
          Surface markField;
+         Surface markFieldDark;
       };
       static Icons icons;
 

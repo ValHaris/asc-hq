@@ -287,6 +287,38 @@
 	    <property name="transparency2" value="0"/>
 	</object>
      </widget>
+     
+    <widget>
+	<type value="Panel"/>
+	<object>
+	    <name value="Titlebar"/>
+	    <color name="textcolor" value="0x00303030"/>
+	    <property name="bordersize" value="0"/>
+	    <property name="height" value="9"/>
+	    <filename name="background" value="asc/top_grey_panel.bmp"/>
+	    <property name="backmode" value="TILE"/>
+	    <property name="blend" value="0"/>
+	    <property name="bordersize" value="0"/>
+	</object>
+	<object>
+	    <name value="CloseButton"/>
+	    <filename name="background0" value="asc/top_panel_close.bmp"/>
+	    <filename name="background1" value="asc/top_panel_close.bmp"/>
+	    <filename name="background2" value="asc/top_panel_close.bmp"/>
+	    <property name="backmode0" value="TILE"/>
+	    <property name="backmode1" value="TILE"/>
+	    <property name="backmode2" value="TILE"/>
+	    <property name="blend0" value="0"/>
+	    <property name="blend1" value="0"/>
+	    <property name="blend2" value="0"/>
+	    <property name="bordersize0" value="0"/>
+	    <property name="bordersize1" value="0"/>
+	    <property name="bordersize2" value="0"/>
+	    <property name="transparency0" value="0"/>
+	    <property name="transparency1" value="0"/>
+	    <property name="transparency2" value="0"/>
+	</object>
+     </widget>
 
 	<widget>
 		<type value="ListBox"/>

@@ -241,6 +241,54 @@ void* loadpcx2raw( const ASCString& file )
    return img;
 }
 
+
+
+
+class Menu : public PG_MenuBar {
+
+    PG_PopupMenu* currentMenu;
+    typedef list<PG_PopupMenu*> Categories;
+    Categories categories;
+
+   public:
+      Menu ( PG_Widget *parent, const PG_Rect &rect=PG_Rect::null);
+      ~Menu();
+      
+   protected:
+      void setup();   
+
+   private:
+      void addbutton(const char* name, int id );
+      void addfield ( const char* name );
+     
+};
+
+
+
+class MainScreenWidget : public PG_Widget {
+    PG_Application& app;
+public:
+    MainScreenWidget( PG_Application& application );
+    enum Panels { ButtonPanel };
+    void spawnPanel ( Panels panel );
+
+protected:
+    MapDisplayPG* mapDisplay;
+    NewGuiHost* guiHost;
+    Menu* menu;
+//    void eventDraw (SDL_Surface* surface, const PG_Rect& rect);
+//    void Blit ( bool recursive = true, bool restore = true );
+    ~MainScreenWidget() { };
+};
+
+MainScreenWidget* mainScreenWidget = NULL;
+
+
+
+
+
+
+
 void         loadMoreData(void)
 {
    int          w;
@@ -580,7 +628,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_dispvehicleimpro
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
                     ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme, ua_showPlayerSpeed, ua_renameunit,
-                    ua_statisticdialog, ua_viewPipeNet, ua_cancelResearch, ua_showResearchStatus, ua_exportUnitToFile };
+                    ua_statisticdialog, ua_viewPipeNet, ua_cancelResearch, ua_showResearchStatus, ua_exportUnitToFile, ua_viewButtonPanel };
 
 
 
@@ -635,7 +683,7 @@ void loadMap()
       mousevisible(false);
       cursor.hide();
       displaymessage("loading map %s",0, s1.c_str() );
-      loadmap(s1.c_str());
+      loadmap( s1.c_str() );
       actmap->startGame();
 
       next_turn();
@@ -770,6 +818,7 @@ void loadStartupMap ( const char *gameToLoad=NULL )
 
             try {
                loadgame( gameToLoad );
+               computeview( actmap );
             } catch ( tfileerror ) {
                fatalError ( "%s is not a legal savegame. ", gameToLoad );
             }
@@ -1493,6 +1542,8 @@ void execuseraction2 ( tuseractions action )
              getPGApplication().reloadTheme();
              soundSettings();
          break;
+      case ua_viewButtonPanel:  mainScreenWidget->spawnPanel( MainScreenWidget::ButtonPanel );
+         break;
       default:
          break;
    }
@@ -1556,26 +1607,6 @@ bool execUserActionI  (PG_PopupMenu::MenuItem* menuItem )
    execuseraction2( tuseractions( menuItem->getId() ));
    return true;
 }
-
-
-class Menu : public PG_MenuBar {
-
-    PG_PopupMenu* currentMenu;
-    typedef list<PG_PopupMenu*> Categories;
-    Categories categories;
-
-   public:
-      Menu ( PG_Widget *parent, const PG_Rect &rect=PG_Rect::null);
-      ~Menu();
-      
-   protected:
-      void setup();   
-
-   private:
-      void addbutton(const char* name, int id );
-      void addfield ( const char* name );
-     
-};
 
 
 Menu::~Menu()
@@ -1686,6 +1717,10 @@ void Menu::setup()
    addbutton ( "select graphic set", ua_selectgraphicset );
    addbutton ( "reload dialog theme", ua_reloadDlgTheme );
 
+   addfield ( "~V~iew" );
+   addbutton ( "Button Panel", ua_viewButtonPanel );
+   
+   
    addfield ( "~H~elp" );
    addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
    addbutton ( "HowTo ~C~ontinue email games", ua_howtocontinuepbem );
@@ -1715,35 +1750,24 @@ pfield        getactfield(void)
 
 
 
-class MainScreenWidget : public PG_Widget {
-    PG_Application& app;
-public:
-    MainScreenWidget( PG_Application& application );
-
-protected:
-    MapDisplayPG* mapDisplay;
-    NewGuiHost* guiHost;
-    Menu* menu;
-//    void eventDraw (SDL_Surface* surface, const PG_Rect& rect);
-//    void Blit ( bool recursive = true, bool restore = true );
-    ~MainScreenWidget() { };
-};
-
-
-
-MainScreenWidget* mainScreenWidget = NULL;
-
-
 MainScreenWidget::MainScreenWidget( PG_Application& application )
               : PG_Widget(NULL, PG_Rect ( 0, 0, app.GetScreen()->w, app.GetScreen()->h ), false),
               app ( application ) 
 {
    mapDisplay = new MapDisplayPG( this, PG_Rect(20,20,Width() - 200, Height() - 20));
    menu = new Menu(this, PG_Rect(0,0,Width(),20));
-   guiHost = new NewGuiHost( this, PG_Rect(Width()-180, 20, 170, Height()-60));
    
-   guiHost->pushIconHandler( &GuiFunctions::primaryGuiIcons );
+   spawnPanel ( ButtonPanel );
+}
 
+
+void MainScreenWidget::spawnPanel ( Panels panel )
+{
+   if ( panel == ButtonPanel ) {
+      guiHost = new NewGuiHost( this, PG_Rect(Width()-180, 20, 170, Height()-60));
+      guiHost->pushIconHandler( &GuiFunctions::primaryGuiIcons );
+      guiHost->Show();
+   }
 }
 
 

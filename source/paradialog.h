@@ -79,11 +79,13 @@ class ASC_PG_Dialog : public PG_Window {
 };
 
 class Panel : public  PG_Window {
-      
+     ASCString panelName;     
+        
    public:  
-      Panel ( PG_Widget *parent, const PG_Rect &r=PG_Rect::null, const ASCString& windowtext = "", WindowFlags flags=DEFAULT, const ASCString& style="Panel", int heightTitlebar=0)
-           : PG_Window ( parent, r, windowtext, flags, style, heightTitlebar ) {};
-           
+      Panel ( PG_Widget *parent, const PG_Rect &r=PG_Rect::null, const ASCString& panelName_ = "" )
+           : PG_Window ( parent, r, "", DEFAULT, "Panel", 9 ), panelName( panelName_ ) {};
+
+      void setup();               
 
 };
 

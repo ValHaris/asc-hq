@@ -48,6 +48,7 @@ ObjectType :: ObjectType ( void )
    viewbonus_plus = 0;
    imageHeight = 0;
    physicalHeight = 0;
+   imageUsesAlpha = false;
 }
 
 ObjectType::FieldModification&  ObjectType::getFieldModification ( int weather )
@@ -92,36 +93,38 @@ Surface& ObjectType :: getPicture ( int i, int w )
 }
 
 
-
-
 void ObjectType :: display ( Surface& surface, SPoint pos, int dir, int weather )
 {
    if ( !this->weather.test( weather) )
       weather = 0;
 
-   vector<int> dirsToDisplay;
-   
    if ( id == 4 ) {
      switch ( dir ) {
-        case  68 : dirsToDisplay.push_back(  9 ); break;
-        case  34 : dirsToDisplay.push_back( 10 ); break;
-        case  17 : dirsToDisplay.push_back( 11 ); break;
-        case 136 : dirsToDisplay.push_back( 12 ); break;
-        case   0 : dirsToDisplay.push_back(  0 ); break;
+        case  68 : realDisplay( surface, pos,  9, weather ); break;
+        case  34 : realDisplay( surface, pos, 10, weather ); break;
+        case  17 : realDisplay( surface, pos, 11, weather ); break;
+        case 136 : realDisplay( surface, pos, 12, weather ); break;
+        case   0 : realDisplay( surface, pos,  0, weather ); break;
         default  : {
            for (int i = 0; i <= 7; i++)
               if ( dir & (1 << i))
-                 dirsToDisplay.push_back( i+1 );
-        
+                 realDisplay( surface, pos,  i+1, weather ); 
         }
      }
    } else
-      dirsToDisplay.push_back( dir );
+      realDisplay( surface, pos, dir, weather ); 
+
+}
+
+
+
+
+void ObjectType :: realDisplay ( Surface& surface, SPoint pos, int dir, int weather )
+{
  
-   for ( vector<int>::iterator i = dirsToDisplay.begin(); i != dirsToDisplay.end(); ++i ) {
       int flip = 0;
-      if ( *i < weatherPicture[weather].flip.size() )
-         flip = weatherPicture[weather].flip[*i];
+      if ( dir < weatherPicture[weather].flip.size() )
+         flip = weatherPicture[weather].flip[dir];
          
       if ( id == 7 || id == 30 || displayMethod==1 ) { // buried pipeline,
          megaBlitter<ColorTransform_None, ColorMerger_AlphaShadow, SourcePixelSelector_Flip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
@@ -138,14 +141,20 @@ void ObjectType :: display ( Surface& surface, SPoint pos, int dir, int weather 
                   disp = false;
                #endif
                if ( disp ) {
-                  if ( flip )
-                     megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Flip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
-                  else   
-                     megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
-                     // surface.Blit(getPicture(dir,weather),pos );
+                  if ( flip ) {
+                     if ( imageUsesAlpha )
+                        megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_Flip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
+                     else   
+                        megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Flip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
+                  } else {  
+                     if ( imageUsesAlpha )
+                        megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
+                     else
+                        megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
+                  }   
                }
             }   
-   }
+   
 }
 
 
