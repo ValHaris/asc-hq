@@ -1,6 +1,9 @@
-//     $Id: global_os.h,v 1.7 2001-12-19 17:16:29 mbickel Exp $
+//     $Id: global_os.h,v 1.8 2003-06-01 15:03:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.7  2001/12/19 17:16:29  mbickel
+//      Some include file cleanups
+//
 //     Revision 1.6  2001/07/14 21:07:47  mbickel
 //      Sound works now under Win32 too
 //      Error reporting on Win32 during startup works again.
@@ -53,9 +56,9 @@
  #define global_os_h_included
 
   #ifndef minimalIO
-   #define sdlheader "SDL.h"
-   #define sdlmixerheader "SDL_mixer.h"
-   #include sdlheader
+   // #define sdlheader "SDL.h"
+   // #define sdlmixerheader "SDL_mixer.h"
+   // #include sdlheader
   #endif
   #ifdef __cplusplus
    #include <string>  // some Standard library include file to define the namespace std

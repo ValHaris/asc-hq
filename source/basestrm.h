@@ -4,9 +4,15 @@
 */
 
 
-//     $Id: basestrm.h,v 1.54 2003-05-01 18:02:22 mbickel Exp $
+//     $Id: basestrm.h,v 1.55 2003-06-01 15:03:16 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.54  2003/05/01 18:02:22  mbickel
+//      Fixed: no movement decrease for cargo when transport moved
+//      Fixed: reactionfire not working when descending into range
+//      Fixed: objects not sorted
+//      New map event: add object
+//
 //     Revision 1.53  2003/03/20 10:08:29  mbickel
 //      KI speed up
 //      mapeditor: added clipboard
@@ -783,7 +789,7 @@ extern ASCString getSearchPath ( int i );
 extern void convertPathDelimitters ( ASCString& path );
 
 #ifdef _SDL_
- #include sdlheader
+ #include <SDL.h>
  extern SDL_RWops *SDL_RWFromStream( pnstream stream );
 #endif
 

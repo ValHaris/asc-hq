@@ -18,12 +18,12 @@
 
 
 #include <stdlib.h>
+#include <SDL.h>
 #include "graphics.h"
 #include "../basegfx.h"
 #include "../global.h"
 #include "../ascstring.h"
 #include "../errors.h"
-#include sdlheader
 
 
 

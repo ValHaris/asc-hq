@@ -20,7 +20,7 @@
 
 
    #include "../global.h"
-   #include sdlheader
+   #include <SDL.h>
 
    #define ct_invvalue   -1
    #define ct_shp  2048

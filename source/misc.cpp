@@ -24,6 +24,7 @@
 #include <ctype.h>
 #include <stdarg.h>
 #include <iostream>
+#include <SDL.h>
 
 #ifdef _WIN32_
 #include <windows.h>

@@ -24,8 +24,8 @@
 #ifndef INCLUDE_SDLSTRETCH
 #define INCLUDE_SDLSTRETCH
 
+#include <SDL.h>
 #include "../global.h"
-#include sdlheader
 
 #define sign(x) ((x)>0 ? 1:-1)
 

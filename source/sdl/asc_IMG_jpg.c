@@ -24,8 +24,8 @@
 
 /* This is a JPEG image file loading framework */
 
+#include <SDL.h>
 #include "../global.h"
-#include sdlheader
 
 #ifdef _WIN32_
 #include "../libs/jpeg-6b/jpeglib.h"

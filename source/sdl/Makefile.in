@@ -107,6 +107,7 @@ install_sh = @install_sh@
 MAINTAINERCLEANFILES = Makefile.in
 
 AM_CXXFLAGS = @SDL_CFLAGS@ @SDLMM_CXXFLAGS@
+AM_CFLAGS = @SDL_CFLAGS@ @SDLMM_CXXFLAGS@
 
 noinst_LTLIBRARIES = libsdl.la
 

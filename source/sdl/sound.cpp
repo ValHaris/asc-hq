@@ -11,9 +11,10 @@
 #include <stdlib.h>
 
 
+#include <SDL.h>
+#include <SDL_mixer.h>
+
 #include "../global.h"
-#include sdlheader
-#include sdlmixerheader
 
 #include "sound.h"
 
