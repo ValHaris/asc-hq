@@ -1,6 +1,9 @@
-//     $Id: controls.cpp,v 1.15 2000-01-04 19:43:47 mbickel Exp $
+//     $Id: controls.cpp,v 1.16 2000-01-19 22:14:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/01/04 19:43:47  mbickel
+//      Continued Linux port
+//
 //     Revision 1.14  2000/01/01 19:04:15  mbickel
 //     /tmp/cvsVhJ4Z3
 //
@@ -7853,8 +7856,9 @@ void cmousecontrol :: reset ( void )
 }
 
 
-void logtoreplayinfo ( trpl_actions action, ... )
+void logtoreplayinfo ( trpl_actions _action, ... )
 {
+   char action = _action;
    if ( actmap->replayinfo && actmap->replayinfo->actmemstream ) {
       pnstream stream = actmap->replayinfo->actmemstream;
 

@@ -1,6 +1,9 @@
-//     $Id: basegfx.cpp,v 1.10 2000-01-04 19:43:46 mbickel Exp $
+//     $Id: basegfx.cpp,v 1.11 2000-01-19 22:14:17 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/01/04 19:43:46  mbickel
+//      Continued Linux port
+//
 //     Revision 1.9  2000/01/02 19:47:03  mbickel
 //      Continued Linux port
 //      Fixed crash at program exit
@@ -1808,7 +1811,7 @@ void showtext ( const char* text, int x, int y, int textcol )
        } else
        if ( activefontsettings.justify == 1 ) {
           if ( activefontsettings.length > length ) {
-             leftextralength = (activefontsettings.length - length)/2;
+             leftextralength = (activefontsettings.length - length+2)/2;
              rightextralength = activefontsettings.length - length - leftextralength;
           } else {
              rightextralength = 0;

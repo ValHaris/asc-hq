@@ -1,6 +1,9 @@
-//     $Id: dialog.cpp,v 1.15 2000-01-19 22:03:34 mbickel Exp $
+//     $Id: dialog.cpp,v 1.16 2000-01-19 22:14:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2000/01/19 22:03:34  mbickel
+//      Fixed a bug in the DOS keyboard code
+//
 //     Revision 1.14  2000/01/06 11:19:11  mbickel
 //      Worked on the Linux-port again...
 //
@@ -6231,6 +6234,8 @@ void tenterpassword :: buttonpressed ( char id )
 
 void tenterpassword :: run ( int* result )
 {
+   tdialogbox::run ();
+
    pbutton pb = firstbutton;
    while ( pb &&  (pb->id != 2)) 
       pb = pb->next;
