@@ -207,6 +207,9 @@ class  Building : public ContainerBase {
 
     Resources getResourcePlus ( );
 
+    int getIdentification();
+
+
     //! returns the picture of the building. It may depend on the current weather of the fields the building is standing on 
     void* getpicture ( const BuildingType::LocalCoordinate& localCoordinate );
     

@@ -1,6 +1,10 @@
-//     $Id: edglobal.h,v 1.15 2003-04-23 18:31:09 mbickel Exp $
+//     $Id: edglobal.h,v 1.16 2004-01-21 14:43:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.15  2003/04/23 18:31:09  mbickel
+//      Fixed: AI problems
+//      Improved cheating detection in replay
+//
 //     Revision 1.14  2003/03/20 10:08:29  mbickel
 //      KI speed up
 //      mapeditor: added clipboard
@@ -96,7 +100,7 @@ extern mc_check mc;
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 83;
+const int execactionscount = 84;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -167,7 +171,7 @@ enum tuseractions {
      act_setzoom,
      act_movebuilding,
      act_setactweatherglobal,
-     act_setmapparameters, 
+     act_setmapparameters,
      act_terraininfo,
      act_setunitfilter,
      act_selectgraphicset,
@@ -183,6 +187,7 @@ enum tuseractions {
      act_cutToClipboard,
      act_saveClipboard,
      act_readClipBoard,
-     act_setTurnNumber };
+     act_setTurnNumber,
+     act_showPipeNet};
 
 extern void         execaction(int code);

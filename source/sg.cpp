@@ -118,7 +118,7 @@
 #include "itemrepository.h"
 #include "music.h"
 #include "messagedlg.h"
-
+#include "statisticdialog.h"
 
 
 // #define MEMCHK
@@ -585,7 +585,8 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_showpalette, ua_
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, ua_mousepreferences,
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
-                    ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme, ua_showPlayerSpeed, ua_renameunit };
+                    ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme, ua_showPlayerSpeed, ua_renameunit,
+                    ua_statisticdialog };
 
 
 class tsgpulldown : public tpulldown
@@ -647,6 +648,7 @@ void         tsgpulldown :: init ( void )
    addfield ( "~S~tatistics" );
    addbutton ( "~U~nits", ua_unitstatistics );
    addbutton ( "~B~uildings", ua_buildingstatistics );
+   addbutton ( "~R~esources ", ua_statisticdialog );
    // addbutton ( "seperator");
    // addbutton ( "~H~istory");
 
@@ -1506,6 +1508,9 @@ void execuseraction ( tuseractions action )
       case ua_selectPlayList:
          selectPlayList();
          break;
+      case ua_statisticdialog:
+         statisticDialog();
+         break;
 
       case ua_soundDialog:
          soundSettings();
@@ -1669,11 +1674,6 @@ void  mainloop ( void )
             case ct_f11: execuseraction ( ua_mntnc_rotatewind );
                break;
             case ct_f12: {
-                   // if ( maintainencecheck() )
-                      if ( getactfield()->vehicle->attacked )
-                         displaymessage("attacked", 1);
-                      else
-                         displaymessage("not attacked", 1);
             }
             break;
                
@@ -1710,7 +1710,6 @@ void  mainloop ( void )
                break;
 
             case ct_9: {
-               displaymessage ( "tribute.avail[0][1] %d  tribute.paid[0][1] : %d \n tribute.avail[1][0] %d  tribute.paid[1][0] : %d", 1, actmap->tribute.avail[0][1].energy, actmap->tribute.paid[0][1].energy, actmap->tribute.avail[1][0].energy, actmap->tribute.paid[1][0].energy ); 
 
             }
                {
@@ -2248,7 +2247,6 @@ int main(int argc, char *argv[] )
 #ifdef MEMCHK
    verifyallblocks();
 #endif
-exit(0);
    return(0);
 }
 

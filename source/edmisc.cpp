@@ -2,9 +2,27 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.107 2004-01-16 15:33:46 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.108 2004-01-21 14:43:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.107  2004/01/16 15:33:46  mbickel
+//     Completely rewritten game event system
+//     TPWM-decoding-Patch
+//     Fixed: swallog message: wrong coordinates
+//     Autotraining for units with max ammo only
+//     Movement required for clearing mines
+//     Unit names can be edited
+//     weather dependen object properties
+//     Unit swallowed by ground -> unified message
+//     units cannot enter enemy transports
+//     Building entry has constant movemalus
+//     Message for resource transfer for providing player
+//     increased ammo production cost
+//     Fixed: unit could attack after movement (with RF on) although "no attack after move" property was set
+//     Buildings: new properties: "ExternalResourceTransfer", "ExternalAmmoTransfer"
+//     Container: Movemalus override for unloading
+//     Startup map specified in ASC.INI
+//
 //     Revision 1.106  2004/01/06 14:41:09  mbickel
 //      Fixed: resource sink not working
 //
@@ -1170,6 +1188,7 @@ void         pdsetup(void)
    pd.addbutton ( "~U~nitset transformation",    act_unitsettransformation );
    pd.addbutton ( "map ~t~ransformation",        act_transformMap );
    pd.addbutton ( "Com~p~are Resources ", act_displayResourceComparison );
+   pd.addbutton ( "Show Pipeline Net", act_showPipeNet ); 
 
    pd.addfield ("~O~ptions");
     pd.addbutton ( "~M~ap valuesõctrl+M",          act_changemapvals );

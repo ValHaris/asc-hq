@@ -180,6 +180,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
          if ( vehicle ) {
             vehicle->spawnMoveObjects( from, to );
+            vehicle->direction = getdirection( from, to );
             vehicle->xpos = to.x;
             vehicle->ypos = to.y;
             if ( inhibitAttack )
@@ -193,19 +194,27 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
          else
             evaluateviewcalculation ( actmap, 0);
 
-         if ( rf->checkfield ( to, vehicle, mapDisplay )) {
-            cancelmovement = 1;
-            attackedByReactionFire = true;
-            vehicle = actmap->getUnit ( networkID );
-         }
-
-         if ( mapDisplay ) {
-            if ( !vehicle )
-               mapDisplay->deleteVehicle( vehicle );
-
-            if ( fieldschanged > 0 )
+         if ( vehicle ) {
+            npush ( dest->vehicle );
+            dest->vehicle = vehicle;
+            if ( mapDisplay )
                mapDisplay->displayMap();
-        }
+            npop ( dest->vehicle );
+
+           if ( rf->checkfield ( to, vehicle, mapDisplay )) {
+              cancelmovement = 1;
+              attackedByReactionFire = true;
+              vehicle = actmap->getUnit ( networkID );
+           }
+           if ( !vehicle && mapDisplay ) {
+              mapDisplay->deleteVehicle( vehicle );
+              mapDisplay->displayMap();
+           }
+         } else
+            if ( mapDisplay ) {
+               mapDisplay->deleteVehicle( vehicle );
+               mapDisplay->displayMap();
+            }
 
          if ( vehicle ) {
             vehicle->removeview();

@@ -593,6 +593,7 @@ class tmap {
 
       pvehicle getUnit ( int x, int y, int nwid );
       pvehicle getUnit ( int nwid );
+      ContainerBase* getContainer ( int nwid );
       int  getgameparameter ( GameParameter num );
       void setgameparameter ( GameParameter num, int value );
       void cleartemps( int b = -1, int value = 0 );
@@ -608,6 +609,7 @@ class tmap {
       //! resizes the map. Positive numbers enlarge the map in that direction
       int  resize( int top, int bottom, int left, int right );
 
+      bool compareResources( tmap* replaymap, int player, ASCString* log = NULL );
 
       void calculateAllObjects ( void );
 
@@ -634,7 +636,6 @@ class tmap {
       int getTechnologyNum ( );
 
       ~tmap();
-
 
       //! just a helper variable for loading the map; no function outside;
       bool loadOldEvents;

@@ -987,6 +987,7 @@ void  ccontainercontrols :: crefill :: fuel (pvehicle eht, int newfuel)
 
    // logtoreplayinfo ( rpl_refuel, eht->xpos, eht->ypos, eht->networkid, int(1002), newfuel );
    logtoreplayinfo ( rpl_refuel2, eht->xpos, eht->ypos, eht->networkid, int(1002), eht->tank.fuel, oldfuel );
+   logtoreplayinfo ( rpl_refuel3, cc->baseContainer->getIdentification(), int(1002), eht->tank.fuel - oldfuel );
 };
 
 
@@ -1006,6 +1007,7 @@ void  ccontainercontrols :: crefill :: material (pvehicle eht, int newmaterial)
       eht->tank.material -= delta;
    }
    logtoreplayinfo ( rpl_refuel2, eht->xpos, eht->ypos, eht->networkid, int(1001), eht->tank.material, oldmaterial );
+   logtoreplayinfo ( rpl_refuel3, cc->baseContainer->getIdentification(), int(1001), eht->tank.material - oldmaterial );
 };
 
 
@@ -2777,24 +2779,24 @@ void  ccontainer :: cammunitiontransfer_subwindow :: checkforkey ( tkey taste )
       }
 
       if ( taste == ct_up  ||  taste == ct_down || taste==ct_8k  || taste==ct_2k ) {
-         int st = getstepwidth ( weaps[actschieber].maxnum );
+         int st = getstepwidth ( weaps[actschieber+page*8].maxnum );
          int n ;
          if ( taste == ct_up  || taste==ct_8k ) {
-            if ( weaps[actschieber].actnum + st <= weaps[actschieber].maxnum  )
-               n = weaps[actschieber].actnum + st;
+            if ( weaps[actschieber+page*8].actnum + st <= weaps[actschieber+page*8].maxnum  )
+               n = weaps[actschieber+page*8].actnum + st;
             else
-               n = weaps[actschieber].maxnum;
+               n = weaps[actschieber+page*8].maxnum;
          }
          if ( taste == ct_down  || taste==ct_2k ) {
-            if ( weaps[actschieber].actnum > st   )
-               n = weaps[actschieber].actnum - st;
+            if ( weaps[actschieber+page*8].actnum > st   )
+               n = weaps[actschieber+page*8].actnum - st;
             else
                n = 0;
          }
-         int oldnum = weaps[actschieber].actnum;
-         weaps[actschieber].actnum = n;
-         check ( actschieber );
-         if ( weaps[actschieber].actnum != oldnum ) {
+         int oldnum = weaps[actschieber+page*8].actnum;
+         weaps[actschieber+page*8].actnum = n;
+         check ( actschieber+page*8 );
+         if ( weaps[actschieber+page*8].actnum != oldnum ) {
             paintobj ( actschieber, 0 );
             transfer();
          }

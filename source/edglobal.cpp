@@ -2,9 +2,27 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edglobal.cpp,v 1.55 2004-01-16 15:33:46 mbickel Exp $
+//     $Id: edglobal.cpp,v 1.56 2004-01-21 14:43:00 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.55  2004/01/16 15:33:46  mbickel
+//     Completely rewritten game event system
+//     TPWM-decoding-Patch
+//     Fixed: swallog message: wrong coordinates
+//     Autotraining for units with max ammo only
+//     Movement required for clearing mines
+//     Unit names can be edited
+//     weather dependen object properties
+//     Unit swallowed by ground -> unified message
+//     units cannot enter enemy transports
+//     Building entry has constant movemalus
+//     Message for resource transfer for providing player
+//     increased ammo production cost
+//     Fixed: unit could attack after movement (with RF on) although "no attack after move" property was set
+//     Buildings: new properties: "ExternalResourceTransfer", "ExternalAmmoTransfer"
+//     Container: Movemalus override for unloading
+//     Startup map specified in ASC.INI
+//
 //     Revision 1.54  2003/07/06 15:10:26  mbickel
 //      Better configure messages
 //      code cleanup
@@ -371,7 +389,8 @@ mc_check mc;
         "Cut",
         "Save Clipboard",
         "Load Clipboard",
-        "Set Turn Number" };
+        "Set Turn Number",
+        "Show Pipeline Net" };
 
 
 // õS Infomessage
@@ -473,7 +492,7 @@ void         GetString::init(char* _title)
 { 
    tdialogbox::init();
    title = _title; 
-   x1 = 120; 
+   x1 = 120;
    xsize = 400; 
    y1 = 150; 
    ysize = 140; 
@@ -524,7 +543,7 @@ void         GetString::buttonpressed(int         id)
       case 2:   action = id;
    break; 
    } 
-} 
+}
 
 
 char*    getstring( char*  title, char* orgval )
@@ -582,6 +601,28 @@ char* getbipath ( void )
    CGameOptions::Instance()->bi3.dir.setName( filename );
 
    return buf;
+}
+
+
+void showPipeNet()
+{
+   static bool isShown = false;
+
+   if ( isShown ) {
+      actmap->cleartemps();
+      displaymap();
+      isShown = false;
+   } else {
+      TerrainBits tb = getTerrainBitType(cbpipeline);
+      for ( int x = 0; x < actmap->xsize; ++x )
+         for ( int y = 0; y < actmap->ysize; ++y ) {
+             pfield fld = actmap->getField ( x, y );
+             if ( (fld->bdt & tb).any() )
+                fld->a.temp = 1;
+         }
+      displaymap();
+   }
+   isShown = true;
 }
 
 // õS ExecAction
@@ -749,7 +790,7 @@ void execaction(int code)
                          }
        break;
     case act_changecargo :   {
-                 cursor.hide(); 
+                 cursor.hide();
                  if ( getactfield()->building )                    
                     building_cargo( getactfield()->building );
                  else 
@@ -1121,6 +1162,8 @@ void execaction(int code)
    case act_readClipBoard:  readClipboard();
       break;
    case act_setTurnNumber:  actmap->time.set ( getid("Turn",actmap->time.turn(),0,maxint), 0 );
+      break;
+   case act_showPipeNet: showPipeNet();
       break;
 
     }

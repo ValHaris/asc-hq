@@ -89,6 +89,10 @@ bool Building::canRepair ( const ContainerBase* item )
       return false;
 }
 
+int Building::getIdentification()
+{
+   return -(getPosition().x + (getPosition().y << 16));
+}
 
 void Building :: convert ( int player )
 {

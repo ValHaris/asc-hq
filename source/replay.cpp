@@ -550,6 +550,16 @@ void logtoreplayinfo ( trpl_actions _action, ... )
              stream->writeInt( old );
          }
       }
+      if ( action == rpl_refuel3 ) {
+         int id =  va_arg ( paramlist, int );
+         int resource = va_arg ( paramlist, int );
+         int delta = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         stream->writeInt ( 3 );
+         stream->writeInt ( id );
+         stream->writeInt ( resource );
+         stream->writeInt ( delta );
+      }
       if ( action == rpl_bldrefuel ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
@@ -1314,6 +1324,22 @@ void trunreplay :: execnextreplaymove ( void )
                                     displaymessage("severe replay inconsistency:\nno vehicle for refuel-unit command !", 1);
                               }
          break;
+      case rpl_refuel3 : {
+                                 stream->readInt();  // size
+                                 int id = stream->readInt();
+                                 int type = stream->readInt();
+                                 int delta = stream->readInt();
+                                 readnextaction();
+
+                                 ContainerBase* cb = actmap->getContainer ( id );
+                                 if ( cb ) {
+                                    int d = cb->getResource(delta, type-1000, false);
+                                    if ( d != delta )
+                                       displaymessage("severe replay inconsistency:\nthe resources of container not matching. \nrequired: %d , available: %d !", 1, delta, d);
+                                 } else
+                                    displaymessage("severe replay inconsistency:\nno vehicle for refuel3 command !", 1);
+                              }
+         break;
       case rpl_bldrefuel : {
                                  stream->readInt();  // size
                                  int x = stream->readInt();
@@ -1526,6 +1552,7 @@ int  trunreplay :: run ( int player )
 //   cursor.show();
 
    cursor.checkposition( getxpos(), getypos() );
+   bool resourcesCompared = false;
    do {
        if ( status == 2 ) {
           execnextreplaymove ( );
@@ -1539,6 +1566,16 @@ int  trunreplay :: run ( int player )
        if (nextaction == rpl_finished  || status != 2) {
           if ( !cursor.an )
              cursor.show();
+          if ( nextaction == rpl_finished && !resourcesCompared ) {
+             resourcesCompared = true;
+             ASCString resourceComparisonResult;
+             if ( orgmap->compareResources( actmap, player, &resourceComparisonResult)) {
+                tviewanytext vat;
+                vat.init ( "warning", resourceComparisonResult.c_str() );
+                vat.run();
+                vat.done();
+             }
+          }
        } else
           if ( cursor.an )
              cursor.hide();

@@ -58,7 +58,7 @@ extern const char*  cbuildingfunctions[cbuildingfunctionnum];
  #define cgminingstationn 15
  #define cgminingstationb ( 1 << cgminingstationn )
  #define cgexternalloadingn 16
- #define cgexternalloadingb ( 1 << cgexternalresourceloadingn )
+ #define cgexternalloadingb ( 1 << cgexternalloadingn )
  #define cgproduceAllUnitsN 17
  #define cgproduceAllUnitsB ( 1 << cgproduceAllUnitsN )
  #define cgresourceSinkN 18

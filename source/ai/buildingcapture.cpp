@@ -224,6 +224,8 @@ void AI :: checkConquer( )
    
    CaptureList captureList;
 
+   int buildingCounter = 0;
+
    for ( int c = 0; c <= 8; c++ ) {
       if ( c<8 ) {
          if ( !getPlayer(c).exist() ) continue;
@@ -234,28 +236,31 @@ void AI :: checkConquer( )
          int reachable = 0;
          if ( buildingCapture[ bld->getEntry() ].state != BuildingCapture::conq_noUnit ) continue;
          bool enemyNear = checkReConquer ( bld, 0 );
-         
+
+         ++buildingCounter;
+         displaymessage2("check for capturing building %d ", buildingCounter);
+
          for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
             pvehicle veh = *vi;
             if ( !veh->canMove() ) continue;
             if ( fieldAccessible ( bld->getEntryField(), veh ) != 2 ) continue;
             if ( c!=8 && !(veh->typ->functions & cf_conquer) ) continue;
-            if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer && 
+            if ( veh->aiparam[getPlayerNum()]->hasJob( AiParameter::job_conquer)  &&
                  veh->aiparam[getPlayerNum()]->getTask() != AiParameter::tsk_nothing ) continue;
-            
+
             // here, units can be excluded from capturing
             if ( c!=8 ) {
-                if( veh->aiparam[getPlayerNum()]->getJob() != AiParameter::job_conquer ) continue;
+                if( !veh->aiparam[getPlayerNum()]->hasJob(AiParameter::job_conquer)  ) continue;
                 if( veh->aiparam[getPlayerNum()]->getTask() != AiParameter::tsk_nothing ) continue;
             }
-            
+
             // any further factors should be incorporated into getCaptureValue
             float val=getCaptureValue( bld, veh );
-            
+
             // malus if enemy is near (relevant if we are short of capture-units
             // or building is practically worthless)
             // TODO: should be made an optional parameter to getCaptureValue
-            if ( val>0 && enemyNear ) val -= 0.1*veh->aiparam[getPlayerNum()]->getValue(); 
+            if ( val>0 && enemyNear ) val -= 0.1*veh->aiparam[getPlayerNum()]->getValue();
 
 
             if ( val > 0 ) {
@@ -267,22 +272,22 @@ void AI :: checkConquer( )
                reachable = true;
             }
          }
-         if ( reachable==0 ) 
+         if ( reachable==0 )
             buildingCapture[ bld->getEntry() ].state = BuildingCapture::conq_unreachable;
       }
    }
-      
-   sort ( captureList.begin(), captureList.end(), CaptureTripleComp() );  
-      
+
+   sort ( captureList.begin(), captureList.end(), CaptureTripleComp() );
+
    for ( CaptureList::iterator i = captureList.begin(); i != captureList.end(); i++ ) {
       pbuilding bld = (*i)->bld;
       pvehicle veh = (*i)->veh;
       float val = (*i)->val;
       delete (*i);
-      
+
       // check whether bld and veh are still available
       if ( buildingCapture[ bld->getEntry() ].state != BuildingCapture::conq_noUnit ) continue;
-      if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer && 
+      if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer &&
            veh->aiparam[getPlayerNum()]->getTask() != AiParameter::tsk_nothing ) continue;
 
       // dispatch capture order
@@ -292,10 +297,11 @@ void AI :: checkConquer( )
       else
          bc.state = BuildingCapture::conq_unitNotConq;
       bc.unit = veh->networkid;
-      veh->aiparam[getPlayerNum()]->addJob ( AiParameter::job_conquer, true );
+      
+      veh->aiparam[getPlayerNum()]->setJob ( AiParameter::job_conquer );
       veh->aiparam[getPlayerNum()]->setTask ( AiParameter::tsk_move );
       veh->aiparam[getPlayerNum()]->dest = bld->getEntry();
-   }     
+   }
 
    // execute capture orders
    for ( BuildingCaptureContainer::iterator bi = buildingCapture.begin(); bi != buildingCapture.end(); ) {
@@ -315,6 +321,13 @@ void AI :: checkConquer( )
       checkKeys();
       bi = nxt;
    }
+
+   // do something useful with units that are not used for capturing buildings
+   for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ )
+      if ( (*vi)->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer &&
+           (*vi)->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_nothing )
+           (*vi)->aiparam[getPlayerNum()]->setNextJob();
+
 }
 
 

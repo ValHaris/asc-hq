@@ -885,6 +885,12 @@ void AI::production()
          }
    }
 
+   for ( Produceable::iterator i = produceable.begin(); i != produceable.end(); ++i ) {
+      float f = i->first;
+      const char* d = i->second.vt->description.c_str();
+      printf(" typ: %s  ; rating: %e \n", d, f );
+   }
+
    if ( !produceable.empty() ) {
 
       GetConnectedBuildings::BuildingContainer lockedBuildings;

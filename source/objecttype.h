@@ -115,10 +115,6 @@
      //! the icon used for selecting the object when executing the "remove object" function of a unit. The image is automatically generated at load time
      void* removeicon;
 
-     //! direction lists were an attempt to allow the graphical connection of this object with neighbouring ones without having an image for each possible connection layout. The attempt failed. Don't use it any more.
-     int* dirlist;
-     int dirlistnum;
-
      //! the images of the objects
      struct WeatherPicture {
         vector<void*> images;

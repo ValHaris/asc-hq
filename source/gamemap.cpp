@@ -864,7 +864,74 @@ pvehicle tmap :: getUnit ( int x, int y, int nwid )
          return getUnit ( fld->vehicle, nwid );
 }
 
+ContainerBase* tmap::getContainer ( int nwid )
+{
+   if ( nwid > 0 )
+      return getUnit(nwid);
+   else {
+      int x = (-nwid) & 0xffff;
+      int y = (-nwid) >> 16;
+      return getfield(x,y)->building;
+   }
+}
 
+bool tmap :: compareResources( tmap* replaymap, int player, ASCString* log )
+{
+   ASCString s;
+   bool diff  = false;
+   for ( int r = 0; r < 3; ++r )
+      if ( isResourceGlobal( r )) {
+         if ( bi_resource[player].resource(r) != replaymap-> bi_resource[player].resource(r) ) {
+            diff = true;
+            if ( log ) {
+               s.format ( "Global resource mismatch: %d %s available after replay, but %d available in actual map\n", replaymap-> bi_resource[player].resource(r), resourceNames[r], bi_resource[player].resource(r) );
+               *log += s;
+            }
+         }
+      } else {
+         for ( Player::BuildingList::iterator b = this->player[player].buildingList.begin(); b != this->player[player].buildingList.end(); ++b ) {
+            Building* b1 = *b;
+            ContainerBase* b2 = replaymap->getContainer( b1->getIdentification() );
+            if ( !b1 || !b2 ) {
+               if ( log ) {
+                  s.format ( "Building missing! \n");
+                  *log += s;
+               }
+            } else {
+               int ab1 = b1->getResource( maxint, r, true );
+               int ab2 = b2->getResource( maxint, r, true );
+               if ( ab1 != ab2 ) {
+                  diff = true;
+                  if ( log ) {
+                     s.format ( "Building (%d,%d) resource mismatch: %d %s available after replay, but %d available in actual map\n", b1->getPosition().x, b1->getPosition().y, ab1, resourceNames[r], ab2 );
+                     *log += s;
+                  }
+               }
+            }
+         }
+         for ( Player::VehicleList::iterator v = this->player[player].vehicleList.begin(); v != this->player[player].vehicleList.end(); ++v ) {
+            Vehicle* v1 = *v;
+            Vehicle* v2 = replaymap->getUnit( v1->networkid );
+            if ( !v1 || !v2 ) {
+               if ( log ) {
+                  s.format ( "Vehicle missing! \n");
+                  *log += s;
+               }
+            } else {
+               int av1 = v1->getResource( maxint, r, true );
+               int av2 = v2->getResource( maxint, r, true );
+               if ( av1 != av2 ) {
+                  diff = true;
+                  if ( log ) {
+                     s.format ( "Vehicle (%d,%d) resource mismatch: %d %s available after replay, but %d available in actual map\n", v1->getPosition().x, v1->getPosition().y, av1, resourceNames[r], av2 );
+                     *log += s;
+                  }
+               }
+            }
+         }
+      }
+   return diff;
+}
 
 
 tmap :: ~tmap ()
@@ -1894,6 +1961,24 @@ void AiParameter::addJob ( Job j, bool front )
 void AiParameter::setJob ( const JobList& jobs )
 {
    this->jobs = jobs;
+}
+
+void AiParameter::setJob ( Job j )
+{
+   int pos = 0;
+   for ( JobList::iterator i = jobs.begin(); i != jobs.end(); ++i, ++pos )
+      if ( *i == j ) {
+         jobPos = pos;
+         return;
+      }
+
+   addJob ( j, true );
+}
+
+
+bool AiParameter::hasJob ( AiParameter::Job j )
+{
+   find ( jobs.begin(), jobs.end(), j ) != jobs.end();
 }
 
 

@@ -40,8 +40,6 @@ ObjectType :: ObjectType ( void )
 {
    buildicon = NULL;
    removeicon = NULL;
-   dirlist = NULL;
-   dirlistnum = 0;
    groupID = -1;
 
    displayMethod = 0;
@@ -115,6 +113,7 @@ void ObjectType :: display ( int x, int y, int dir, int weather )
   if (  id == 5 ) {
      putspriteimage  ( x, y,  getpic ( 0, weather ) );
   } else
+  /*
       if ( dirlistnum ) {
          for ( int i = 0; i < dirlistnum; i++ )
             if ( dirlist [ i ] == dir ) {
@@ -131,6 +130,7 @@ void ObjectType :: display ( int x, int y, int dir, int weather )
          putspriteimage ( x, y, getpic ( 0, weather ) );
 
       } else
+      */
          putspriteimage ( x, y, getpic ( dir, weather ) );
 
   #endif
@@ -860,7 +860,7 @@ void ObjectType :: read ( tnstream& stream )
        stream.readInt(); // ___removeicon
 
        stream.readInt(); // ___dirlist
-       dirlistnum = stream.readInt();
+       int dirlistnum = stream.readInt();  
 
        bool _picture[cwettertypennum];
        for ( int aa = 0; aa < cwettertypennum; aa++ )
@@ -916,11 +916,10 @@ void ObjectType :: read ( tnstream& stream )
        }
 
 
-      if ( dirlistnum ) {
-         dirlist = new int[ dirlistnum ];
+      if ( dirlistnum )
          for ( int i = 0; i < dirlistnum; i++ )
-            dirlist[i] = stream.readInt();
-      }
+            stream.readInt();
+
 
 
       if ( ___objectslinkablenum ) {
@@ -1061,7 +1060,7 @@ void ObjectType :: write ( tnstream& stream ) const
 
     stream.writeInt( -1 ); // was dirlist
 
-    stream.writeInt ( dirlistnum );
+    stream.writeInt ( 0 );
     for ( int aa = 0; aa < cwettertypennum; aa++ )
        stream.writeInt( -1 ); // was picture
 
@@ -1081,10 +1080,6 @@ void ObjectType :: write ( tnstream& stream ) const
     }
 
     stream.writeString ( name );
-
-    if ( dirlistnum )
-       for ( int i = 0; i < dirlistnum; i++ )
-          stream.writeInt ( dirlist[i] );
 
     for ( int i = 0; i < linkableObjects.size(); i++ )
         stream.writeInt( linkableObjects[i] );

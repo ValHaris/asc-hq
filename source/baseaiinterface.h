@@ -96,6 +96,8 @@ class AiParameter : public AiValue {
            void restartJobs();
            void clearJobs();
            void setJob ( const JobList& jobs );
+           void setJob ( Job j );
+           bool hasJob ( Job j );
 
 
            int lastDamage;

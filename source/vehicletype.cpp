@@ -886,7 +886,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.closeBracket();
 
    int job = recommendedAIJob;
-   pc.addNamedInteger ( "RecommendedAIJob", job, AiParameter::jobNum, AIjobs, AiParameter::job_undefined );
+   pc.addNamedInteger ( "AIJobOverride", job, AiParameter::jobNum, AIjobs, AiParameter::job_undefined );
    recommendedAIJob = AiParameter::Job(job);
 
    pc.addString("MovementSound", movementSoundLabel, "" );

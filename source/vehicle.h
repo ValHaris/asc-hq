@@ -197,6 +197,9 @@
     //! hook that is called the next round begins ( active player switching from player8 to player1 )
     void endRound ( void );
 
+    int getIdentification() { return networkid; };
+
+
     //! constructs a vehicle at the given position.
     void constructvehicle ( pvehicletype tnk, int x, int y );
 

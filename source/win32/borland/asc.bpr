@@ -24,7 +24,8 @@
       obj\typen.obj obj\unitctrl.obj obj\vehicle.obj obj\vehicletype.obj 
       obj\viewcalculation.obj obj\messagedlg.obj obj\simplestream.obj 
       obj\gameevents.obj obj\Singleton.obj obj\prehistoricevents.obj 
-      obj\mappolygons.obj obj\gameeventsystem.obj obj\gameevent_dialogs.obj"/>
+      obj\mappolygons.obj obj\gameeventsystem.obj obj\gameevent_dialogs.obj 
+      obj\statisticdialog.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
@@ -159,6 +160,7 @@
       <FILE FILENAME="..\..\mappolygons.cpp" FORMNAME="" UNITNAME="mappolygons" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\gameeventsystem.cpp" FORMNAME="" UNITNAME="gameeventsystem.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\gameevent_dialogs.cpp" FORMNAME="" UNITNAME="gameevent_dialogs.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\statisticdialog.cpp" FORMNAME="" UNITNAME="statisticdialog" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

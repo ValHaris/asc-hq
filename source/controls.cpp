@@ -1929,8 +1929,6 @@ void sendnetworkgametonextplayer ( int oldplayer, int newplayer )
 
 void endTurn ( void )
 {
-   closeReplayLogging();
-
    /* *********************  vehicle ********************  */
 
    mousevisible(false);
@@ -1995,12 +1993,14 @@ void endTurn ( void )
 
 
                if (j < 0) {
-                   ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x)+"/"+strrr((*v)->getPosition().y)+") crashed due to lack of fuel";
-                   new Message ( ident, actmap, 1<<(*v)->getOwner());
-
+                  ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x)+"/"+strrr((*v)->getPosition().y)+") crashed due to lack of fuel";
+                  new Message ( ident, actmap, 1<<(*v)->getOwner());
                   toRemove.push_back ( *v );
-               } else
+                  logtoreplayinfo( rpl_removeunit, actvehicle->getPosition().x, actvehicle->getPosition().y, actvehicle->networkid );
+               } else {
+                  logtoreplayinfo( rpl_refuel2, actvehicle->getPosition().x, actvehicle->getPosition().y, actvehicle->networkid, 1002, j, actvehicle->tank.fuel );
                   actvehicle->tank.fuel = j;
+               }
             }
          }
 
@@ -2014,6 +2014,8 @@ void endTurn ( void )
 
       checkunitsforremoval ();
    }
+
+   closeReplayLogging();
 
      /* *********************  allianzen ********************  */
 

@@ -84,6 +84,8 @@ class ContainerBase {
       int getMaxRepair ( const ContainerBase* item, int newDamage, Resources& cost  );
       int repairItem   ( ContainerBase* item, int newDamage = 0 );
 
+      virtual int getIdentification() = 0;
+
       //! returns the player this vehicle/building belongs to
       int getOwner() const { return color >> 3; };
 
