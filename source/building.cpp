@@ -2218,7 +2218,7 @@ void  ccontainer :: movemark (int direction)
 
          for ( int y = 0; y < unitsshowny; y++ )
             for ( int x = 0; x < unitsshownx; x++ )
-               putFieldImage ( mark.x, mark.y, inactivefield);
+               putFieldImage ( x, y, inactivefield);
          displayloading();
       }
    }
